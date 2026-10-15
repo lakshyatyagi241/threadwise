@@ -12,6 +12,7 @@ import {
   type WizardCsvReport,
 } from '@crm/contracts';
 import { Alert, Button, Spinner, cn } from '@crm/ui';
+import { ImportConsent } from '@/features/contact-consent';
 import { downloadBlob, downloadCsv } from '@/features/contacts-attributes-tags/lib/download';
 import { ApiError } from '@/lib/api/errors';
 import { downloadCsvErrors, uploadCsv, useCsvReport } from '../api/wizard';
@@ -81,6 +82,9 @@ export function CsvUpload({
     detail?: string;
   } | null>(null);
   const [downloading, setDownloading] = useState(false);
+  // "I have consent to message these numbers": decided before the file goes up, because the server keeps it with the upload.
+  const [consent, setConsent] = useState(false);
+  const [notice, setNotice] = useState({ text: '', version: '' });
   const stored = useCsvReport(csv && fresh?.id !== csv.id ? csv.id : null);
   const report = csv ? (fresh?.id === csv.id ? fresh : (stored.data ?? null)) : null;
 
@@ -91,7 +95,13 @@ export function CsvUpload({
     if (!/\.(csv|txt)$/i.test(file.name)) return setProblem({ kind: 'type' });
     setBusy(true);
     try {
-      const out = await uploadCsv(file);
+      const out = await uploadCsv(file, {
+        ...(consent ? { consentConfirmed: true } : {}),
+        ...(consent && notice.text.trim() ? { consentNoticeText: notice.text.trim() } : {}),
+        ...(consent && notice.version.trim()
+          ? { consentNoticeVersion: notice.version.trim() }
+          : {}),
+      });
       setFresh(out);
       onCsv(refOf(out));
     } catch (e) {
@@ -181,6 +191,13 @@ export function CsvUpload({
               }}
             />
           </label>
+          <ImportConsent
+            scope="numbers"
+            checked={consent}
+            onChange={setConsent}
+            notice={notice}
+            onNotice={setNotice}
+          />
           <p className="text-xs text-muted-foreground">
             {t('csvLimits', { mb: MB, rows: nf(WIZARD_CSV_MAX_ROWS), days: WIZARD_CSV_TTL_DAYS })}
           </p>
@@ -269,6 +286,14 @@ export function CsvUpload({
           <p className="text-xs text-muted-foreground">
             {t('csvNote', { existing: report.existing, fresh: report.newContacts })}
           </p>
+          {report.consentConfirmed && (
+            <Alert tone="info" data-testid="csv-consent-on">
+              {t('csvConsentOn')}
+              {report.consentNoticeVersion
+                ? ` ${t('csvConsentVersion', { version: report.consentNoticeVersion })}`
+                : ''}
+            </Alert>
+          )}
 
           <div className="overflow-hidden rounded-lg border border-border">
             <div className="bg-muted px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">

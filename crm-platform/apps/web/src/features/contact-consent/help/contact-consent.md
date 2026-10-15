@@ -113,3 +113,14 @@ On the chat widget's settings, on a booking type and on your Shopify or WooComme
 - **Store**: the store's own marketing choice (Shopify's email and SMS consent) is recorded when a customer is synced or orders. Write what that checkbox tells your customers; tick "also count it as WhatsApp consent" only if the wording says so.
 
 You need the permission to manage consent settings to edit these lines.
+
+## Proof that comes with leads, files and forms
+
+A lead, an uploaded file or a form submission never counts as consent by itself. A consent is recorded only when the person agreed, and the record keeps where, the wording they saw, its version and when.
+
+- **Leads**: when your form tool or ad platform sends the person's agreement together with the lead (a yes, plus the wording, its version, the form or the ad), it is recorded with the source **Lead capture**. A lead that carries no such proof records nothing, and a test lead never records anything. See [Lead sources](help:lead-sources).
+- **Click-to-WhatsApp ads**: when someone writes to you from an ad, the ad is kept on their contact as the way they reached you. It is not consent: you may reply, and you may not send them marketing until they agree.
+- **Contact import and Broadcast via CSV**: ticking **I have consent to message these contacts** records a consent for each person in the file, with the file name and, if you typed it, the notice or lawful basis and its version. Columns for SMS and email consent record those channels, only for the rows that say yes.
+- **Forms**: a ticked marketing box records marketing consent. A ticked box that is not marketing (for example "I agree to be contacted about my request") is recorded as agreement to **service messages** only, and the Consent card shows it that way, not as a subscription. A box left unticked records nothing.
+
+Nobody who opted out is turned back on by any of these.

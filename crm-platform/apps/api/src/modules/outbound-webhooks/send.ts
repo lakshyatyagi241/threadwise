@@ -1,4 +1,5 @@
 import { WEBHOOK_HEADERS, type WebhookEnvelope } from '@crm/contracts';
+import { guardedRequest } from '../../infra/net/guarded-http';
 import { assertPublicTarget } from '../webhook-fanout';
 import { sign } from './signing';
 
@@ -56,14 +57,19 @@ export async function send(
   if (secret) headers[WEBHOOK_HEADERS.signature] = sign(secret, timestamp, body);
 
   try {
-    const res = await fetch(url, {
+    // The address is checked inside the socket's own DNS lookup, so the address that was checked is the address that is connected to:
+    // a name repointed at an internal host between the check above and this call cannot be reached (DNS rebinding), and redirects are
+    // never followed.
+    const res = await guardedRequest({
       method: 'POST',
+      url: new URL(url),
       headers,
       body,
-      redirect: 'manual',
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+      timeoutMs: TIMEOUT_MS,
+      allowPrivate: false,
+      maxBytes: SNIPPET_BYTES,
     });
-    const snippet = await readSnippet(res);
+    const snippet = res.body.slice(0, SNIPPET_BYTES) || null;
     const ok = res.status >= 200 && res.status < 300;
     return {
       ok,
@@ -79,27 +85,8 @@ export async function send(
     };
   } catch (err) {
     const e = err as Error;
-    const timedOut = e.name === 'TimeoutError' || e.name === 'AbortError';
+    const timedOut =
+      e.name === 'TimeoutError' || e.name === 'AbortError' || e.message === 'timed out';
     return fail(timedOut ? `Timed out after ${TIMEOUT_MS / 1000} s` : 'Could not connect');
-  }
-}
-
-async function readSnippet(res: Response): Promise<string | null> {
-  try {
-    const reader = res.body?.getReader();
-    if (!reader) return null;
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    while (size < SNIPPET_BYTES) {
-      const { done, value } = await reader.read();
-      if (done || !value) break;
-      chunks.push(value);
-      size += value.byteLength;
-    }
-    void reader.cancel().catch(() => undefined);
-    const text = Buffer.concat(chunks).subarray(0, SNIPPET_BYTES).toString('utf8');
-    return text === '' ? null : text;
-  } catch {
-    return null;
   }
 }

@@ -1,6 +1,6 @@
 name: Security
 
-# Security scans (QA tasks 28, 27, 39): secrets in the whole git history, known vulnerabilities in dependencies, and the two Docker images.
+# Security scans (QA tasks 28, 27, 39) and the security regression specs (29, 35, 37): secrets in the whole git history, known vulnerabilities in dependencies, and the two Docker images.
 #
 # Manual on purpose. The automatic check workflows were removed in #328 because GitHub Actions jobs do not start on this account, so
 # nothing here runs on a pull request, a push or a schedule. Start it from the Actions tab when the account is paid up, or run the same
@@ -21,6 +21,24 @@ env:
   TRIVY_IMAGE: aquasec/trivy:0.75.0
 
 jobs:
+  specs:
+    name: Security regression specs (SSRF, encryption, session and token security)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+      - name: Run the security specs
+        run: bash tools/quality/security-specs.sh
+
   secrets:
     name: Secrets in the git history
     runs-on: ubuntu-latest

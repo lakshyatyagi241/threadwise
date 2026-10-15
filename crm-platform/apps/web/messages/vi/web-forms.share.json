@@ -145,6 +145,10 @@
         "privacyUrl": "Liên kết chính sách quyền riêng tư",
         "privacyUrlHint": "Không bắt buộc. Hiển thị cạnh nội dung đồng ý. Phải bắt đầu bằng https://.",
         "privacyUrlHttps": "Dùng địa chỉ bắt đầu bằng https://.",
+        "termsUrl": "Liên kết điều khoản",
+        "termsUrlHint": "Tùy chọn. Hiển thị bên cạnh nội dung đồng ý và liên kết quyền riêng tư. Phải bắt đầu bằng https://.",
+        "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+        "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
         "required": "Phải đánh dấu để gửi",
         "requiredHint": "Tắt tùy chọn này nếu việc đồng ý là không bắt buộc.",
         "marketing": "Đăng ký nhận tiếp thị",
@@ -152,10 +156,9 @@
         "whatsappHint": "Bạn có định nhắn tin cho các liên hệ này qua WhatsApp không? Hãy dùng nội dung nói rõ điều đó và cách hủy đăng ký. Ô đã chọn được lưu làm bằng chứng, kèm đúng nội dung này và phiên bản của nó.",
         "whatsappInsert": "Dùng nội dung đồng ý nhận tin WhatsApp",
         "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
-        "termsUrl": "Liên kết điều khoản",
-        "termsUrlHint": "Tùy chọn. Hiển thị bên cạnh nội dung đồng ý và liên kết quyền riêng tư. Phải bắt đầu bằng https://.",
-        "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
-        "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc"
+        "coversSms": "Nội dung bao gồm SMS",
+        "coversSmsHint": "Chỉ bật khi nội dung phía trên cho biết có thể liên hệ qua SMS. Khi thu thập số điện thoại, SMS được ghi nhận cùng với WhatsApp và email.",
+        "serviceHint": "Dòng này không phải tiếp thị. Ô được chọn được lưu làm bằng chứng người đó đồng ý được liên hệ về yêu cầu của họ (chỉ tin nhắn dịch vụ), với đúng nội dung này và phiên bản của nó. Không bao giờ đăng ký ai vào tiếp thị."
       },
       "crm": {
         "title": "Trong CRM",

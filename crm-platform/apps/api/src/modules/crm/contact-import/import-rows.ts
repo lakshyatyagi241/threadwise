@@ -37,6 +37,13 @@ export interface ParsedRow {
   consentColumn?: boolean;
   /** The cell as written, kept only when it was neither yes nor no (the preview shows a few). */
   consentRaw?: string;
+  /** The same for the SMS and email consent columns (BL-170); read only when a column is mapped. */
+  consentSms?: Exclude<ImportConsentValue, 'blank'>;
+  consentSmsColumn?: boolean;
+  consentSmsRaw?: string;
+  consentEmail?: Exclude<ImportConsentValue, 'blank'>;
+  consentEmailColumn?: boolean;
+  consentEmailRaw?: string;
 }
 
 export type RowResult =
@@ -144,6 +151,10 @@ export function extractRow(
   const opt = (v: string, max: number): string | undefined => (v ? v.slice(0, max) : undefined);
   const consentColumn = mapping.consent !== undefined;
   const consent = consentColumn ? parseImportConsent(cell('consent')) : undefined;
+  const smsColumn = mapping.consentSms !== undefined;
+  const consentSms = smsColumn ? parseImportConsent(cell('consentSms')) : undefined;
+  const emailColumn = mapping.consentEmail !== undefined;
+  const consentEmail = emailColumn ? parseImportConsent(cell('consentEmail')) : undefined;
   return {
     ok: true,
     row: {
@@ -165,6 +176,14 @@ export function extractRow(
       ...(consentColumn ? { consentColumn } : {}),
       ...(consent && consent !== 'blank' ? { consent } : {}),
       ...(consent === 'unrecognised' ? { consentRaw: cell('consent').slice(0, 40) } : {}),
+      ...(smsColumn ? { consentSmsColumn: true } : {}),
+      ...(consentSms && consentSms !== 'blank' ? { consentSms } : {}),
+      ...(consentSms === 'unrecognised' ? { consentSmsRaw: cell('consentSms').slice(0, 40) } : {}),
+      ...(emailColumn ? { consentEmailColumn: true } : {}),
+      ...(consentEmail && consentEmail !== 'blank' ? { consentEmail } : {}),
+      ...(consentEmail === 'unrecognised'
+        ? { consentEmailRaw: cell('consentEmail').slice(0, 40) }
+        : {}),
     },
   };
 }

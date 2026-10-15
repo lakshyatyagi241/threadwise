@@ -145,6 +145,10 @@
         "privacyUrl": "Link naar privacybeleid",
         "privacyUrlHint": "Optioneel. Wordt naast de toestemmingstekst getoond. Moet beginnen met https://.",
         "privacyUrlHttps": "Gebruik een adres dat begint met https://.",
+        "termsUrl": "Link naar voorwaarden",
+        "termsUrlHint": "Optioneel. Wordt getoond naast de toestemmingstekst en de privacylink. Moet beginnen met https://.",
+        "useWorkspacePrivacy": "Privacylink van mijn werkruimte gebruiken",
+        "useWorkspaceTerms": "Voorwaardenlink van mijn werkruimte gebruiken",
         "required": "Moet worden aangevinkt om te verzenden",
         "requiredHint": "Zet dit uit als toestemming optioneel is.",
         "marketing": "Opt-in voor marketing",
@@ -152,10 +156,9 @@
         "whatsappHint": "Ga je deze contacten via WhatsApp berichten sturen? Gebruik tekst die dat zegt en uitlegt hoe je je kunt afmelden. Het aangevinkte vakje wordt als bewijs bewaard, met precies deze tekst en de versie ervan.",
         "whatsappInsert": "Gebruik de WhatsApp-opt-in-tekst",
         "whatsappWording": "Ik ga akkoord met het ontvangen van updates en aanbiedingen via WhatsApp. Ik kan me altijd afmelden door STOP te antwoorden.",
-        "termsUrl": "Link naar voorwaarden",
-        "termsUrlHint": "Optioneel. Wordt getoond naast de toestemmingstekst en de privacylink. Moet beginnen met https://.",
-        "useWorkspacePrivacy": "Privacylink van mijn werkruimte gebruiken",
-        "useWorkspaceTerms": "Voorwaardenlink van mijn werkruimte gebruiken"
+        "coversSms": "De tekst dekt sms",
+        "coversSmsHint": "Zet dit alleen aan als de tekst hierboven zegt dat mensen via sms benaderd kunnen worden. Als een telefoonnummer wordt verzameld, wordt sms samen met WhatsApp en e-mail vastgelegd.",
+        "serviceHint": "Deze regel is geen marketing. Een aangevinkt vakje wordt bewaard als bewijs dat de persoon akkoord ging met contact over zijn of haar verzoek (alleen serviceberichten), met precies deze tekst en de versie. Het meldt nooit iemand aan voor marketing."
       },
       "crm": {
         "title": "In het CRM",

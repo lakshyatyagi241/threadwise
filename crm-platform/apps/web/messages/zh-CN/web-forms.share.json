@@ -145,6 +145,10 @@
         "privacyUrl": "隐私政策链接",
         "privacyUrlHint": "可选。显示在同意文本旁边。必须以 https:// 开头。",
         "privacyUrlHttps": "请使用以 https:// 开头的地址。",
+        "termsUrl": "条款链接",
+        "termsUrlHint": "可选。显示在同意文字和隐私链接旁。必须以 https:// 开头。",
+        "useWorkspacePrivacy": "使用我的工作区隐私链接",
+        "useWorkspaceTerms": "使用我的工作区条款链接",
         "required": "必须勾选才能提交",
         "requiredHint": "如果同意是可选的，请关闭此项。",
         "marketing": "营销订阅",
@@ -152,10 +156,9 @@
         "whatsappHint": "你是否会通过 WhatsApp 给这些联系人发消息？请使用明确说明这一点并告知如何退订的措辞。勾选的复选框会连同这段准确文字及其版本一起作为证明保存。",
         "whatsappInsert": "使用 WhatsApp 订阅同意文案",
         "whatsappWording": "我同意通过 WhatsApp 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
-        "termsUrl": "条款链接",
-        "termsUrlHint": "可选。显示在同意文字和隐私链接旁。必须以 https:// 开头。",
-        "useWorkspacePrivacy": "使用我的工作区隐私链接",
-        "useWorkspaceTerms": "使用我的工作区条款链接"
+        "coversSms": "文案涵盖短信",
+        "coversSmsHint": "仅当上方文案告知用户可能通过短信联系时才开启。收集手机号码时,短信会与 WhatsApp 和邮件一起被记录。",
+        "serviceHint": "此行不属于营销。勾选的复选框会作为证据保存,表明此人同意就其请求被联系(仅限服务消息),并附上这段确切文案及其版本。它绝不会让任何人订阅营销。"
       },
       "crm": {
         "title": "在 CRM 中",

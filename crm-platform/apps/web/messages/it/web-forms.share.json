@@ -145,6 +145,10 @@
         "privacyUrl": "Link all’informativa sulla privacy",
         "privacyUrlHint": "Facoltativo. Mostrato accanto al testo del consenso. Deve iniziare con https://.",
         "privacyUrlHttps": "Usa un indirizzo che inizi con https://.",
+        "termsUrl": "Link ai termini",
+        "termsUrlHint": "Facoltativo. Mostrato accanto al testo del consenso e al link alla privacy. Deve iniziare con https://.",
+        "useWorkspacePrivacy": "Usa il link alla privacy del mio spazio di lavoro",
+        "useWorkspaceTerms": "Usa il link ai termini del mio spazio di lavoro",
         "required": "Da spuntare per inviare",
         "requiredHint": "Disattiva se il consenso è facoltativo.",
         "marketing": "Adesione al marketing",
@@ -152,10 +156,9 @@
         "whatsappHint": "Invierai messaggi a questi contatti su WhatsApp? Usa un testo che lo dica e spieghi come annullare l'iscrizione. La casella spuntata viene conservata come prova, con questo testo esatto e la sua versione.",
         "whatsappInsert": "Usa il testo di adesione WhatsApp",
         "whatsappWording": "Accetto di ricevere aggiornamenti e offerte su WhatsApp. Posso rispondere STOP in qualsiasi momento per annullare l'iscrizione.",
-        "termsUrl": "Link ai termini",
-        "termsUrlHint": "Facoltativo. Mostrato accanto al testo del consenso e al link alla privacy. Deve iniziare con https://.",
-        "useWorkspacePrivacy": "Usa il link alla privacy del mio spazio di lavoro",
-        "useWorkspaceTerms": "Usa il link ai termini del mio spazio di lavoro"
+        "coversSms": "Il testo copre gli SMS",
+        "coversSmsHint": "Attivalo solo se il testo sopra dice che si può essere contattati via SMS. Quando viene raccolto un telefono, l'SMS viene registrato insieme a WhatsApp ed email.",
+        "serviceHint": "Questa riga non è marketing. Una casella selezionata viene conservata come prova che la persona ha accettato di essere contattata per la sua richiesta (solo messaggi di servizio), con questo testo esatto e la sua versione. Non iscrive mai nessuno al marketing."
       },
       "crm": {
         "title": "Nel CRM",

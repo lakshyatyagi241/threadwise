@@ -10,6 +10,9 @@ TRIVY_IMAGE="${TRIVY_IMAGE:-aquasec/trivy:0.75.0}"
 OUT="$(mktemp -d)"
 step() { printf '\n==> %s\n' "$*"; }
 
+step "Security regression specs (SSRF, encryption, session and token security)"
+bash "$ROOT/crm-platform/tools/quality/security-specs.sh"
+
 step "Secrets in the whole git history"
 docker run --rm -v "$ROOT:/repo" "$GITLEAKS_IMAGE" detect --source /repo --log-opts="--all" \
   --config /repo/.gitleaks.toml --redact --no-banner

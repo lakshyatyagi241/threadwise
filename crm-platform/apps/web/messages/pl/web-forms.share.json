@@ -145,6 +145,10 @@
         "privacyUrl": "Link do polityki prywatności",
         "privacyUrlHint": "Opcjonalne. Pokazywane obok tekstu zgody. Musi zaczynać się od https://.",
         "privacyUrlHttps": "Użyj adresu zaczynającego się od https://.",
+        "termsUrl": "Link do regulaminu",
+        "termsUrlHint": "Opcjonalne. Wyświetlany obok tekstu zgody i linku do polityki prywatności. Musi zaczynać się od https://.",
+        "useWorkspacePrivacy": "Użyj linku do polityki prywatności przestrzeni roboczej",
+        "useWorkspaceTerms": "Użyj linku do regulaminu przestrzeni roboczej",
         "required": "Aby wysłać, trzeba zaznaczyć",
         "requiredHint": "Wyłącz, jeśli zgoda jest dobrowolna.",
         "marketing": "Zgoda marketingowa",
@@ -152,10 +156,9 @@
         "whatsappHint": "Czy będziesz wysyłać do tych kontaktów wiadomości na WhatsApp? Użyj treści, która to mówi i wyjaśnia, jak zrezygnować. Zaznaczone pole jest zachowywane jako dowód, wraz z tym dokładnym tekstem i jego wersją.",
         "whatsappInsert": "Użyj tekstu zgody na WhatsApp",
         "whatsappWording": "Zgadzam się na otrzymywanie aktualności i ofert przez WhatsApp. Mogę w każdej chwili odpowiedzieć STOP, aby zrezygnować.",
-        "termsUrl": "Link do regulaminu",
-        "termsUrlHint": "Opcjonalne. Wyświetlany obok tekstu zgody i linku do polityki prywatności. Musi zaczynać się od https://.",
-        "useWorkspacePrivacy": "Użyj linku do polityki prywatności przestrzeni roboczej",
-        "useWorkspaceTerms": "Użyj linku do regulaminu przestrzeni roboczej"
+        "coversSms": "Treść obejmuje SMS",
+        "coversSmsHint": "Włącz tylko wtedy, gdy powyższy tekst informuje, że można się kontaktować przez SMS. Gdy zbierany jest numer telefonu, SMS jest zapisywany razem z WhatsApp i e-mailem.",
+        "serviceHint": "Ten wiersz nie jest marketingiem. Zaznaczone pole jest zapisywane jako dowód, że osoba zgodziła się na kontakt w sprawie swojego zapytania (tylko wiadomości serwisowe), z tą dokładną treścią i jej wersją. Nigdy nie zapisuje nikogo na marketing."
       },
       "crm": {
         "title": "W CRM",

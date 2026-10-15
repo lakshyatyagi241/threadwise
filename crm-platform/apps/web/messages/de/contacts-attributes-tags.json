@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Quelle",
-        "consent": "Marketing-Einverständnis (ja / nein)"
+        "consent": "Marketing-Einverständnis (ja / nein)",
+        "consentSms": "SMS-Marketing-Einwilligung (ja / nein)",
+        "consentEmail": "E-Mail-Marketing-Einwilligung (ja / nein)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",

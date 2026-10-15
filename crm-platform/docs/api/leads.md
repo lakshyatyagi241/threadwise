@@ -300,3 +300,30 @@ a mapping can be fixed and the lead retried. A connector source (`kind: connecto
 ## Flow of a source (`defaults.flowId`)
 
 A source may name a flow (uuid, validated against the workspace, 422 `unknown_flow`). `lead.created` / `lead.updated` carry `flowId`; the flow runtime enrols the contact once (source `webhook_lead`). Test leads start nothing.
+
+## Proof of consent with a lead (BL-168)
+
+A lead grants no marketing consent by itself. If the sender already holds the person's agreement, the body of the webhook may carry it as a
+top-level `consent` object (or flat `consent_*` keys):
+
+```json
+{
+  "name": "Ada",
+  "phone": "+919876543210",
+  "email": "ada@example.com",
+  "consent": {
+    "given": true,
+    "text": "I agree to receive offers on WhatsApp and email.",
+    "version": "lp-3",
+    "at": "2026-10-01T08:00:00Z",
+    "form_id": "FORM-9",
+    "ad_id": "AD-5",
+    "channels": ["whatsapp", "email"]
+  }
+}
+```
+
+A grant is written only when `given` is a yes (true, yes, 1, accepted...) and at least one of `text`, `version`, `form_id`, `ad_id` is
+present. Without `channels` a phone is WhatsApp and an address is email; SMS only when named. The grant is in the ledger with source `lead`;
+a test lead from the source screen never grants; an opt-out of the person is never overridden. Marketplace recipes map the same block with
+`mapping.consent` (explicit mode). The stored raw lead keeps the block for the source's retention period.

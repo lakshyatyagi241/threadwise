@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { LEAD_INGEST } from './lead-ingest.port';
@@ -16,7 +17,7 @@ import { LeadSourcesRepository } from './lead-sources.repository';
  * and no controller. The consumer injects the tokens and imports only the two leaf port files, never a class from here.
  */
 @Module({
-  imports: [CrmModule, PlansCoreModule],
+  imports: [CrmModule, PlansCoreModule, ContactConsentModule],
   providers: [
     LeadSourcesRepository,
     LeadEventsRepository,

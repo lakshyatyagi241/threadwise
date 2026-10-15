@@ -456,7 +456,9 @@
         "memo": "메모",
         "status": "상태",
         "source": "출처",
-        "consent": "마케팅 동의(예 / 아니요)"
+        "consent": "마케팅 동의(예 / 아니요)",
+        "consentSms": "SMS 마케팅 동의(예 / 아니요)",
+        "consentEmail": "이메일 마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",

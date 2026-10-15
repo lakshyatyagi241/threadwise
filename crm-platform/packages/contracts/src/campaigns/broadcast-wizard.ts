@@ -422,6 +422,18 @@ export type WizardContactsPage = z.infer<typeof wizardContactsPageSchema>;
 export const WIZARD_CSV_REJECT_REASONS = ['missing_phone', 'invalid_phone', 'duplicate'] as const;
 export type WizardCsvRejectReason = (typeof WIZARD_CSV_REJECT_REASONS)[number];
 
+/**
+ * The `options` field of the CSV upload (a JSON string beside the file, like the contact import's). BL-170: "I have consent to message
+ * these numbers" and, optionally, the notice or lawful basis the file's contacts agreed under with its version. Without the confirmation
+ * the upload records no consent, as before.
+ */
+export const wizardCsvUploadOptionsSchema = z.object({
+  consentConfirmed: z.boolean().default(false),
+  consentNoticeText: z.string().trim().max(2000).optional(),
+  consentNoticeVersion: z.string().trim().max(64).optional(),
+});
+export type WizardCsvUploadOptions = z.infer<typeof wizardCsvUploadOptionsSchema>;
+
 export const wizardCsvReportSchema = z.object({
   /** The stored upload: what `audience.csv.id` carries. */
   id: uuidSchema,
@@ -458,6 +470,10 @@ export const wizardCsvReportSchema = z.object({
   ),
   issuesTotal: z.number().int(),
   expiresAt: z.string().datetime().nullable(),
+  /** The person who uploaded the file confirmed they hold consent for its numbers (BL-170): they are granted when the broadcast launches. */
+  consentConfirmed: z.boolean(),
+  /** The version of the notice they stated the file's contacts agreed under, when they gave one. */
+  consentNoticeVersion: z.string().nullable(),
 });
 export type WizardCsvReport = z.infer<typeof wizardCsvReportSchema>;
 

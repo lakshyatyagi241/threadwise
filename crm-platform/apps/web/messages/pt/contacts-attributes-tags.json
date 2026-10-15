@@ -456,7 +456,9 @@
         "memo": "Memorando",
         "status": "Status",
         "source": "Origem",
-        "consent": "Consentimento de marketing (sim / não)"
+        "consent": "Consentimento de marketing (sim / não)",
+        "consentSms": "Consentimento de marketing por SMS (sim / não)",
+        "consentEmail": "Consentimento de marketing por e-mail (sim / não)"
       },
       "notInFile": "Não está no arquivo",
       "columnN": "Coluna {n}",

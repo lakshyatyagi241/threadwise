@@ -72,6 +72,7 @@ export function isBlockedAddress(address: string): boolean {
   if (g[0] === 0x2001 && g[1] === 0xdb8) return true; // documentation
   if ((g[0]! & 0xfe00) === 0xfc00) return true; // unique local
   if ((g[0]! & 0xffc0) === 0xfe80) return true; // link local
+  if ((g[0]! & 0xffc0) === 0xfec0) return true; // site local (deprecated)
   if ((g[0]! & 0xff00) === 0xff00) return true; // multicast
   return false;
 }

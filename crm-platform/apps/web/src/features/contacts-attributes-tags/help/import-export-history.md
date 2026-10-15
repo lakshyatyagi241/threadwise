@@ -40,3 +40,7 @@ The imports list needs the permission to import contacts, and the exports list n
 ## Marketing consent column
 
 If your file has a column that says whether each person agreed to marketing, map it to **Marketing consent (yes / no)**. Only the rows that say yes get a recorded consent, and only when you tick **I have consent to message these contacts**. See "Consent, STOP and START replies" for what is recorded.
+
+## Consent notice and SMS or email consent
+
+When you tick **I have consent to message these contacts**, two optional boxes appear: the notice or lawful basis the contacts agreed under (for example "Opted in at checkout, privacy notice v3") and its version. They are kept with each recorded consent as proof. If your file has columns for SMS consent or email consent (headers such as "SMS consent" or "Email opt-in"), map them to **SMS marketing consent (yes / no)** and **Email marketing consent (yes / no)**. Those channels are recorded only for rows that say yes; email also needs an email address on the row. A file with no such column records WhatsApp only.

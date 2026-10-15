@@ -1278,7 +1278,9 @@
           "invalid_phone": "Número inválido",
           "duplicate": "Duplicado"
         },
-        "csvIssuesMore": "Mais {count} estão no download."
+        "csvIssuesMore": "Mais {count} estão no download.",
+        "csvConsentOn": "Confirmou o consentimento destes números. Ficam registados como aceites quando a difusão for lançada.",
+        "csvConsentVersion": "Versão do aviso: {version}."
       },
       "review": {
         "intro": "Confira o custo, diga com o que cada variável do modelo é preenchida e revise a transmissão.",

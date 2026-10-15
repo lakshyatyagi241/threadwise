@@ -28,6 +28,7 @@ import {
   wizardAudienceCountRequestSchema,
   wizardContactsQuerySchema,
   wizardCreditCheckRequestSchema,
+  wizardCsvUploadOptionsSchema,
   wizardLaunchRequestSchema,
   wizardTestSendRequestSchema,
   wizardVariablePreviewRequestSchema,
@@ -38,11 +39,13 @@ import {
   type WizardAudienceCountRequest,
   type WizardContactsQuery,
   type WizardCreditCheckRequest,
+  type WizardCsvUploadOptions,
   type WizardLaunchRequest,
   type WizardTestSendRequest,
   type WizardVariablePreviewRequest,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
+import { AppError } from '../../../common/errors/app-error';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { type UploadedCsv } from '../../crm';
 import { Throttle } from '../../platform-infrastructure';
@@ -60,6 +63,26 @@ import { WizardTestSendService } from './wizard-test-send.service';
  * own route base (`broadcast-wizard`) so none of it can be shadowed by `campaigns/:id`. Creating and launching ride on
  * `camp.campaigns.create`, the test send has its own key, and the controls reuse `camp.campaigns.control`.
  */
+/** The `options` field of the CSV upload form: a JSON string, validated with the contract schema (the contact import does the same). */
+function parseCsvOptions(raw: unknown): WizardCsvUploadOptions {
+  let value: unknown = {};
+  if (typeof raw === 'string' && raw.trim() !== '') {
+    try {
+      value = JSON.parse(raw);
+    } catch {
+      throw AppError.validation('options must be a JSON object');
+    }
+  }
+  const parsed = wizardCsvUploadOptionsSchema.safeParse(value);
+  if (!parsed.success) {
+    throw AppError.validation(
+      'Invalid upload options',
+      parsed.error.issues.map((i) => ({ path: `options.${i.path.join('.')}`, message: i.message })),
+    );
+  }
+  return parsed.data;
+}
+
 const csvUpload = FileInterceptor('file', { limits: { fileSize: WIZARD_CSV_MAX_BYTES, files: 1 } });
 
 @ApiTags('campaigns')
@@ -148,12 +171,12 @@ export class WizardController {
     summary:
       'Upload a CSV of numbers for "Broadcast via CSV": parsed, validated and stored for this workspace',
     description:
-      'Form field `file`. Numbers are normalised to E.164, repeated numbers kept once, invalid rows reported with their line. Nothing is ' +
+      'Form fields: `file`, and optionally `options` (JSON: consentConfirmed, consentNoticeText, consentNoticeVersion; the uploader confirms they hold consent for the numbers, which are then granted when the broadcast launches). Numbers are normalised to E.164, repeated numbers kept once, invalid rows reported with their line. Nothing is ' +
       'written to the contacts: numbers that are not contacts yet become contacts when the broadcast is launched. 422 CON_IMPORT_FILE_INVALID, ' +
       '413 CON_IMPORT_TOO_LARGE.',
   })
-  uploadCsv(@UploadedFile() file: UploadedCsv | undefined) {
-    return this.csv.upload(file);
+  uploadCsv(@UploadedFile() file: UploadedCsv | undefined, @Body() body: { options?: string }) {
+    return this.csv.upload(file, parseCsvOptions(body?.options));
   }
 
   @Get('csv/:id')

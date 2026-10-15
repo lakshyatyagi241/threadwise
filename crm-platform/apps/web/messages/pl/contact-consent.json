@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "zapisany",
-        "withdrawn": "wypisany"
+        "withdrawn": "wypisany",
+        "utilityGranted": "zgoda na wiadomości serwisowe",
+        "utilityWithdrawn": "wiadomości serwisowe wstrzymane"
       },
       "action": {
         "granted": "Zapisany",
-        "withdrawn": "Wypisany"
+        "withdrawn": "Wypisany",
+        "utilityGranted": "Zgoda na kontakt w sprawie zapytania",
+        "utilityWithdrawn": "Wstrzymał wiadomości serwisowe"
       },
       "source": {
         "form": "Formularz",
@@ -134,7 +138,8 @@
         "legacy": "Sprzed historii zgód",
         "widget": "Czat na stronie",
         "booking": "Strona rezerwacji",
-        "commerce": "Kasa sklepu"
+        "commerce": "Kasa sklepu",
+        "lead": "Pozyskanie leada"
       },
       "by": "przez {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "Widżet czatu",
         "bookingTypeId": "Strona rezerwacji",
         "integrationId": "Sklep",
-        "storeFlag": "Ustawienie sklepu"
+        "storeFlag": "Ustawienie sklepu",
+        "leadSourceId": "Źródło leada",
+        "leadFormId": "Formularz leada",
+        "adId": "Reklama"
       },
       "dialog": {
         "titleGranted": "Oznacz jako zapisanego",
@@ -187,7 +195,14 @@
       "hintColumn": "Kolumna przypisana do zgody marketingowej decyduje, kto zostanie zapisany: tylko wiersze z odpowiedzią tak otrzymują zgodę, z nazwą pliku jako dowodem. Odpowiedź nie, pusta komórka lub nieznane słowo nie zapisuje niczego. Kontakty, które zrezygnowały, pozostają wypisane.",
       "columnSummary": "{granted} wierszy ma odpowiedź tak i zostanie zapisanych. {notGranted} ma odpowiedź nie lub jest pustych i nie otrzyma rekordu zgody.",
       "unrecognised": "{count, plural, one {# wiersz ma} other {# wierszy ma}} wartość zgody, która nie jest tak ani nie ({values}). {count, plural, one {Jest ona traktowana} other {Są one traktowane}} jako niewyrażona. Użyj tak / nie, true / false lub 1 / 0.",
-      "columnIgnored": "Kolumna zgody nie działa, dopóki nie zaznaczysz pola powyżej."
+      "columnIgnored": "Kolumna zgody nie działa, dopóki nie zaznaczysz pola powyżej.",
+      "noticeText": "Informacja lub podstawa prawna (opcjonalnie)",
+      "noticeTextHint": "Na co zgodzili się ci kontakci i gdzie, np. zapisali się przy kasie według informacji o prywatności v3. Zapisywane jako dowód przy każdej zarejestrowanej zgodzie.",
+      "noticeVersion": "Wersja informacji (opcjonalnie)",
+      "smsSummary": "Kolumna zgody na SMS: {granted} wierszy mówi tak i zostanie zapisanych jako zgoda na SMS. {notGranted} mówi nie lub jest puste.",
+      "emailSummary": "Kolumna zgody na e-mail: {granted} wierszy mówi tak i zostanie zapisanych jako zgoda na e-mail (wiersz musi też mieć adres e-mail). {notGranted} mówi nie lub jest puste.",
+      "labelNumbers": "Mam zgodę na wysyłanie wiadomości na te numery",
+      "hintNumbers": "Po zaznaczeniu każdy numer z pliku jest zapisywany jako zgadzający się na marketing przy uruchomieniu wysyłki, a dowodem jest nazwa pliku. Bez zaznaczenia zgoda nie jest zapisywana. Osoby, które zrezygnowały, pozostają wypisane."
     },
     "systemLine": {
       "withdrawn": "Kontakt odpowiedział {keyword}: wypisany z marketingu",

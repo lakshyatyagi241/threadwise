@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "subscribed",
-        "withdrawn": "opted out"
+        "withdrawn": "opted out",
+        "utilityGranted": "agreed to service messages",
+        "utilityWithdrawn": "service messages stopped"
       },
       "action": {
         "granted": "Subscribed",
-        "withdrawn": "Opted out"
+        "withdrawn": "Opted out",
+        "utilityGranted": "Agreed to be contacted about their request",
+        "utilityWithdrawn": "Stopped service messages"
       },
       "source": {
         "form": "Form",
@@ -134,7 +138,8 @@
         "legacy": "Before the consent history",
         "widget": "Website chat",
         "booking": "Booking page",
-        "commerce": "Store checkout"
+        "commerce": "Store checkout",
+        "lead": "Lead capture"
       },
       "by": "by {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "Chat widget",
         "bookingTypeId": "Booking page",
         "integrationId": "Store",
-        "storeFlag": "Store setting"
+        "storeFlag": "Store setting",
+        "leadSourceId": "Lead source",
+        "leadFormId": "Lead form",
+        "adId": "Ad"
       },
       "dialog": {
         "titleGranted": "Mark as subscribed",
@@ -187,7 +195,14 @@
       "hintColumn": "The column mapped to marketing consent decides who is recorded: only the rows that say yes get a consent, with the file name as proof. A no, a blank cell or an unknown word records nothing. Contacts who opted out stay opted out.",
       "columnSummary": "{granted} rows say yes and will be recorded. {notGranted} say no or are blank and get no consent record.",
       "unrecognised": "{count, plural, one {# row has} other {# rows have}} a consent value that is not a yes or a no ({values}). {count, plural, one {It is} other {They are}} treated as not granted. Use yes / no, true / false or 1 / 0.",
-      "columnIgnored": "The consent column does nothing until you tick the box above."
+      "columnIgnored": "The consent column does nothing until you tick the box above.",
+      "noticeText": "Notice or lawful basis (optional)",
+      "noticeTextHint": "What these contacts agreed to and where, for example: opted in at checkout under privacy notice v3. It is kept as proof with each recorded consent.",
+      "noticeVersion": "Notice version (optional)",
+      "smsSummary": "SMS consent column: {granted} rows say yes and will be recorded as SMS consent. {notGranted} say no or are blank.",
+      "emailSummary": "Email consent column: {granted} rows say yes and will be recorded as email consent (a row also needs an email address). {notGranted} say no or are blank.",
+      "labelNumbers": "I have consent to message these numbers",
+      "hintNumbers": "Ticked, every number in the file is recorded as having agreed to marketing when you launch the broadcast, with the file name as proof. Unticked, no consent is recorded. People who opted out stay opted out."
     },
     "systemLine": {
       "withdrawn": "Contact replied {keyword}: unsubscribed from marketing",
