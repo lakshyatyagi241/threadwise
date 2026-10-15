@@ -31,14 +31,14 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
     label: 'Contacts',
     desc: 'Your audience and their details',
     url: '/contacts',
-    icon: 'users',
+    icon: 'contacts',
   },
   {
     key: 'campaigns',
     label: 'Campaigns',
     desc: 'Plan and send campaigns',
     url: '/campaigns',
-    icon: 'megaphone',
+    icon: 'campaign',
   },
   {
     key: 'broadcasts',
@@ -67,7 +67,7 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
     label: 'Catalog',
     desc: 'Products you sell on WhatsApp',
     url: '/catalog',
-    icon: 'bag',
+    icon: 'catalog',
   },
   {
     key: 'store',
@@ -131,7 +131,7 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
     label: 'Message Log',
     desc: 'Every message sent and received',
     url: '/message-history',
-    icon: 'list',
+    icon: 'history',
   },
   {
     key: 'account',
