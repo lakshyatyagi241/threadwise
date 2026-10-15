@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Canales que cubre este consentimiento",
         "channelsHint": "El visitante solo se suscribe en los canales marcados aquí, y el texto del consentimiento los nombra. Un canal se usa solo si el formulario recoge el teléfono o el correo correspondiente.",
-        "channelsUse": "Actualizar el texto con estos canales"
+        "channelsUse": "Actualizar el texto con estos canales",
+        "channelNeedsPhone": "Este formulario no tiene campo de teléfono, así que nadie se suscribe en este canal desde él.",
+        "channelNeedsEmail": "Este formulario no tiene campo de correo electrónico, así que nadie se suscribe en este canal desde él."
       },
       "crm": {
         "title": "En el CRM",

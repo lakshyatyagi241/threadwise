@@ -73,11 +73,14 @@ function WaLinkBuilderForm({
   const [utmMedium, setUtmMedium] = useState(initial?.utmMedium ?? '');
   const [utmCampaign, setUtmCampaign] = useState(initial?.utmCampaign ?? '');
   const [notice, setNotice] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
-  const [minted, setMinted] = useState<WaChatLink | null>(mode === 'edit' ? (initial ?? null) : null);
+  const [minted, setMinted] = useState<WaChatLink | null>(
+    mode === 'edit' ? (initial ?? null) : null,
+  );
 
   const stepIndex = STEPS.indexOf(step);
   const stepValid = (s: Step): boolean => {
-    if (s === 'destination') return name.trim().length > 0 && phoneNumber.replace(/\D/g, '').length >= 4;
+    if (s === 'destination')
+      return name.trim().length > 0 && phoneNumber.replace(/\D/g, '').length >= 4;
     if (s === 'tracking') return slug === '' || /^[a-z0-9-]*$/.test(slug);
     return true;
   };
@@ -127,14 +130,16 @@ function WaLinkBuilderForm({
       <a href="/wa-links" className="text-sm text-muted-foreground hover:underline">
         {t('builder.back')}
       </a>
-      <h1 className="mt-1 text-2xl font-semibold">{mode === 'create' ? t('builder.newHeading') : name}</h1>
+      <h1 className="mt-1 text-2xl font-semibold">
+        {mode === 'create' ? t('builder.newHeading') : name}
+      </h1>
 
       <div className="mt-4 flex items-center gap-2">
         {STEPS.map((s, i) => (
           <button
             key={s}
             type="button"
-            onClick={() => i <= stepIndex || stepValid(step) ? setStep(s) : undefined}
+            onClick={() => (i <= stepIndex || stepValid(step) ? setStep(s) : undefined)}
             className={`flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-medium ${
               s === step ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
             }`}
@@ -157,17 +162,28 @@ function WaLinkBuilderForm({
               <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={140} />
             </Field>
             <Field label={t('builder.status')}>
-              <Select value={status} onChange={(e) => setStatus(e.target.value as WaChatLinkStatus)}>
+              <Select
+                value={status}
+                onChange={(e) => setStatus(e.target.value as WaChatLinkStatus)}
+              >
                 <option value="active">{t('status.live')}</option>
                 <option value="paused">{t('status.paused')}</option>
               </Select>
             </Field>
             <div className="grid grid-cols-[100px_1fr] gap-3">
               <Field label={t('builder.countryCode')}>
-                <Input value={countryCode} onChange={(e) => setCountryCode(e.target.value)} maxLength={8} />
+                <Input
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  maxLength={8}
+                />
               </Field>
               <Field label={t('builder.phoneNumber')}>
-                <Input value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} maxLength={24} />
+                <Input
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  maxLength={24}
+                />
               </Field>
             </div>
           </>
@@ -200,13 +216,25 @@ function WaLinkBuilderForm({
               <Input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
             </Field>
             <Field label={t('builder.utmSource')}>
-              <Input value={utmSource} onChange={(e) => setUtmSource(e.target.value)} maxLength={80} />
+              <Input
+                value={utmSource}
+                onChange={(e) => setUtmSource(e.target.value)}
+                maxLength={80}
+              />
             </Field>
             <Field label={t('builder.utmMedium')}>
-              <Input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} maxLength={80} />
+              <Input
+                value={utmMedium}
+                onChange={(e) => setUtmMedium(e.target.value)}
+                maxLength={80}
+              />
             </Field>
             <Field label={t('builder.utmCampaign')}>
-              <Input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} maxLength={80} />
+              <Input
+                value={utmCampaign}
+                onChange={(e) => setUtmCampaign(e.target.value)}
+                maxLength={80}
+              />
             </Field>
           </>
         )}
@@ -235,14 +263,19 @@ function WaLinkBuilderForm({
         <Card className="mt-6 space-y-3 p-5">
           <h2 className="text-sm font-semibold">{t('builder.mintedHeading')}</h2>
           <Field label={t('builder.shortUrl')}>
-            <Input readOnly value={`${typeof window !== 'undefined' ? window.location.origin : ''}${minted.shortPath}`} />
+            <Input
+              readOnly
+              value={`${typeof window !== 'undefined' ? window.location.origin : ''}${minted.shortPath}`}
+            />
           </Field>
           <Field label={t('builder.waUrl')}>
             <Input readOnly value={minted.waUrl} />
           </Field>
           <img
             src={`https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(
-              typeof window !== 'undefined' ? `${window.location.origin}${minted.shortPath}` : minted.shortPath,
+              typeof window !== 'undefined'
+                ? `${window.location.origin}${minted.shortPath}`
+                : minted.shortPath,
             )}`}
             alt={t('builder.qrAlt')}
             width={160}

@@ -5,7 +5,20 @@ summary: Confirm your sign-in with your fingerprint, face, screen lock or a secu
 area: account
 order: 41
 documents: [tile:account-security]
-keywords: [passkey, passkeys, webauthn, fingerprint, face, security key, yubikey, two-factor, 2fa, second step, sign in]
+keywords:
+  [
+    passkey,
+    passkeys,
+    webauthn,
+    fingerprint,
+    face,
+    security key,
+    yubikey,
+    two-factor,
+    2fa,
+    second step,
+    sign in,
+  ]
 ---
 
 ## What it is for

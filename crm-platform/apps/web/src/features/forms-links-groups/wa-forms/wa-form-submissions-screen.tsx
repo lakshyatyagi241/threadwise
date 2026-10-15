@@ -40,7 +40,11 @@ export function WaFormSubmissionsScreen({ id }: { id: string }) {
             {t('builder.back')}
           </a>
           <h1 className="mt-1 text-2xl font-semibold">{t('submissions.heading')}</h1>
-          {metaFlowId && <p className="text-xs text-muted-foreground">{t('submissions.metaFlowId', { id: metaFlowId })}</p>}
+          {metaFlowId && (
+            <p className="text-xs text-muted-foreground">
+              {t('submissions.metaFlowId', { id: metaFlowId })}
+            </p>
+          )}
         </div>
         {canExport && items.length > 0 && (
           <a
@@ -54,7 +58,10 @@ export function WaFormSubmissionsScreen({ id }: { id: string }) {
 
       <div className="mt-6">
         {items.length === 0 ? (
-          <EmptyState title={t('submissions.empty.title')} message={t('submissions.empty.description')} />
+          <EmptyState
+            title={t('submissions.empty.title')}
+            message={t('submissions.empty.description')}
+          />
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-sm">

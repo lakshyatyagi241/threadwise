@@ -6,7 +6,21 @@ area: settings
 order: 20
 documents: [tile:whatsapp-customers]
 routes: [/store/customers]
-keywords: [customers, address, delivery, order, store, whatsapp order, saved customer, company, lifetime total, crm contact, no saved address, buyer]
+keywords:
+  [
+    customers,
+    address,
+    delivery,
+    order,
+    store,
+    whatsapp order,
+    saved customer,
+    company,
+    lifetime total,
+    crm contact,
+    no saved address,
+    buyer,
+  ]
 ---
 
 ## What it is for

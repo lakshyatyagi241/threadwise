@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Canali coperti da questo consenso",
         "channelsHint": "Il visitatore viene iscritto solo ai canali selezionati qui e il testo del consenso li indica. Un canale viene usato solo se il modulo raccoglie il telefono o l’e-mail corrispondente.",
-        "channelsUse": "Aggiorna il testo con questi canali"
+        "channelsUse": "Aggiorna il testo con questi canali",
+        "channelNeedsPhone": "Questo modulo non ha un campo telefono, quindi nessuno viene iscritto a questo canale tramite esso.",
+        "channelNeedsEmail": "Questo modulo non ha un campo e-mail, quindi nessuno viene iscritto a questo canale tramite esso."
       },
       "crm": {
         "title": "Nel CRM",

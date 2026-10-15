@@ -5,7 +5,8 @@ summary: Connect a WhatsApp Business number to your workspace, check that it is 
 area: getting-started
 order: 10
 documents: [tile:whatsapp]
-keywords: [whatsapp, connect, first number, facebook, meta, token, health, inbound, test message, setup]
+keywords:
+  [whatsapp, connect, first number, facebook, meta, token, health, inbound, test message, setup]
 ---
 
 ## What it is for

@@ -19,7 +19,11 @@ const form = (over: Partial<WaForm> = {}): WaForm => ({
   capReachedNote: null,
   sendButtonLabel: 'Send',
   thankYouNote: null,
-  definition: { screens: [{ id: 'A', fields: [{ id: 'name', kind: 'short_text', label: 'Name', required: true }] }] },
+  definition: {
+    screens: [
+      { id: 'A', fields: [{ id: 'name', kind: 'short_text', label: 'Name', required: true }] },
+    ],
+  },
   status: 'published',
   isLive: true,
   publishedAt: '2026-10-08T00:00:00.000Z',
@@ -62,9 +66,12 @@ function render(forms: WaForm[], opts: { locale?: 'en' | 'ar' } = {}) {
 describe('the WhatsApp Forms list screen', () => {
   for (const locale of ['en', 'ar'] as const) {
     it(`draws the KPI tiles and the forms table in ${locale}`, () => {
-      const html = render([form(), form({ id: '4444', title: 'Survey', status: 'draft', isLive: false })], {
-        locale,
-      });
+      const html = render(
+        [form(), form({ id: '4444', title: 'Survey', status: 'draft', isLive: false })],
+        {
+          locale,
+        },
+      );
       expect(html).toContain('Lead capture');
       expect(html).toContain('Survey');
     });

@@ -135,7 +135,8 @@ export function retentionAfterToggle(keepForever: boolean, lastDays: number | nu
 // --- consent ------------------------------------------------------------------------------------------------------------------------
 
 /**
- * Submissions keep the consent version they saw, so once the form has been published a changed wording must be a new version.
+ * Submissions keep the consent version they saw, so once the form has been published a changed wording, or a changed set of channels,
+ * must be a new version.
  * The version is derived from the saved copy, not incremented per keystroke: edit back to the saved text and the number returns.
  */
 export function consentWithText(
@@ -144,7 +145,9 @@ export function consentWithText(
   saved: FormConsent,
   published: boolean,
 ): FormConsent {
-  const changed = text.trim() !== saved.text.trim();
+  const changed =
+    text.trim() !== saved.text.trim() ||
+    consentChannels(current).join() !== consentChannels(saved).join();
   const version = published && changed ? Math.min(saved.version + 1, 10_000) : saved.version;
   return { ...current, text, version };
 }
