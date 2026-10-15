@@ -52,15 +52,13 @@ describe('POST /v2/auth/signup/start', () => {
     // (not the new one this task adds) — this creates a real org+user row, simulating "someone
     // already signed up" without depending on the new verify/set-password endpoints Tasks 6-7
     // haven't landed yet.
-    const seed = await api()
-      .post('/v2/auth/signup')
-      .send({
-        orgName: 'Existing Org',
-        fullName: 'Existing User',
-        email,
-        password: 'Str0ngPassw0rd#1',
-        acceptTerms: true,
-      });
+    const seed = await api().post('/v2/auth/signup').send({
+      orgName: 'Existing Org',
+      fullName: 'Existing User',
+      email,
+      password: 'Str0ngPassw0rd#1',
+      acceptTerms: true,
+    });
     expect(seed.status, JSON.stringify(seed.body)).toBe(201);
 
     const res = await api().post('/v2/auth/signup/start').send({ fullName: 'Dup User', email });
@@ -74,15 +72,13 @@ describe('POST /v2/auth/signup/start', () => {
     // Don't verify, don't set a password — confirm via the existing /v2/auth/signup endpoint's
     // own duplicate behavior: re-signing up fully with this exact email should succeed (201),
     // proving no row was created by the abandoned /start call alone.
-    const res = await api()
-      .post('/v2/auth/signup')
-      .send({
-        orgName: 'Fresh Org',
-        fullName: 'Abandoned User',
-        email,
-        password: 'Str0ngPassw0rd#1',
-        acceptTerms: true,
-      });
+    const res = await api().post('/v2/auth/signup').send({
+      orgName: 'Fresh Org',
+      fullName: 'Abandoned User',
+      email,
+      password: 'Str0ngPassw0rd#1',
+      acceptTerms: true,
+    });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
   });
 });
@@ -97,7 +93,9 @@ describe('POST /v2/auth/signup/verify-email-code', () => {
 
   it('rejects a wrong code', async () => {
     const { token } = await startAndReadCode('Ada', uniqueEmail('w'));
-    const res = await api().post('/v2/auth/signup/verify-email-code').send({ token, code: '000000' });
+    const res = await api()
+      .post('/v2/auth/signup/verify-email-code')
+      .send({ token, code: '000000' });
     expect(res.status, JSON.stringify(res.body)).toBe(400);
     expect(res.body.code).toBe('AUTH_OTP_INVALID');
   });
@@ -131,5 +129,46 @@ describe('POST /v2/auth/signup/resend-email-code', () => {
     // overwritten the stage's hash, attempts or cooldown timer.
     const verify = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
     expect(verify.status, JSON.stringify(verify.body)).toBe(200);
+  });
+});
+
+describe('POST /v2/auth/signup/set-password', () => {
+  async function startAndVerify(fullName: string, email: string) {
+    const { token, code } = await startAndReadCode(fullName, email);
+    const res = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return token;
+  }
+
+  it('creates the account once verified, with an auto-generated workspace name', async () => {
+    const token = await startAndVerify('Ada Lovelace', uniqueEmail('sp'));
+    const res = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.status).toBe('authenticated');
+    expect(res.body.orgSlug).toMatch(/^ada-s-workspace/);
+  });
+
+  it('rejects when the email was never verified', async () => {
+    const { token } = await startAndReadCode('Ada', uniqueEmail('nv'));
+    const res = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(res.status, JSON.stringify(res.body)).toBe(403);
+    expect(res.body.code).toBe('AUTH_EMAIL_NOT_VERIFIED');
+  });
+
+  it('is single-use: a second set-password with the same token is refused', async () => {
+    const token = await startAndVerify('Ada', uniqueEmail('once'));
+    const first = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(first.status, JSON.stringify(first.body)).toBe(201);
+    const second = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(second.status, JSON.stringify(second.body)).toBe(400);
+    expect(second.body.code).toBe('AUTH_SIGNUP_EXPIRED');
   });
 });

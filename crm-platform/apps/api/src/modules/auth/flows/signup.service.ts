@@ -14,6 +14,7 @@ import {
   type SignupVerifyEmailCodeResponse,
   type SignupResendEmailCodeRequest,
   type SignupResendEmailCodeResponse,
+  type SignupSetPasswordRequest,
   type Authenticated,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -67,6 +68,8 @@ interface StagedSignup {
   /** Read only by the resend cooldown. Wrong guesses are counted in `triesKey`, atomically. */
   lastSentAt: number;
   ip: string | null;
+  /** Set when the staged sign-up came from the three-step flow, whose email code was already confirmed. */
+  emailVerified?: boolean;
 }
 
 /**
@@ -380,12 +383,105 @@ export class SignupService {
     const { slug, explicit } = await this.chooseSlug(req);
     const passwordHash = await this.passwords.hash(req.password);
 
+    return this.createOrChallenge(
+      {
+        orgName: req.orgName,
+        slug,
+        slugExplicit: explicit,
+        fullName: req.fullName,
+        email: req.email,
+        phoneE164: req.phone ?? null,
+        passwordHash,
+        referralCode: req.referralCode ?? null,
+      },
+      registration,
+      ip,
+      meta,
+      false,
+    );
+  }
+
+  /**
+   * Step 3 of the three-step sign-up: the email code was confirmed, now take the password and
+   * create the account (or, with registration OTP active, stage it behind the phone code exactly as
+   * `signup()` does). The workspace name is provisional ("Ada's Workspace"); the person renames it
+   * during onboarding.
+   */
+  async setPassword(req: SignupSetPasswordRequest, meta: ClientMeta): Promise<SignupResponse> {
+    const key = AuthKeys.signupEmailStage(req.token);
+    const raw = await this.redis.get(key);
+    if (!raw) throw this.signupExpired();
+    const stage = JSON.parse(raw) as EmailStage;
+    if (stage.verified !== true) {
+      throw new AppError(
+        ERROR_CODES.AUTH_EMAIL_NOT_VERIFIED,
+        'Please verify your email first.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    const registration = await this.policy.registration();
+    if (!registration.publicRegistration) {
+      throw new AppError(
+        ERROR_CODES.AUTH_SIGNUP_CLOSED,
+        'Registration is closed. Ask an administrator for an invitation.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    // Policy check BEFORE the stage is consumed, so a rejected password can simply be retried.
+    await this.passwords.assertAcceptable(req.password, {
+      email: stage.email,
+      fullName: stage.fullName,
+    });
+
+    // Single use from here on, whichever branch follows. DEL's count makes it race-safe: of any
+    // number of parallel posts with the same token only one gets 1 and goes on to create.
+    if ((await this.redis.del(key)) !== 1) throw this.signupExpired();
+
+    const passwordHash = await this.passwords.hash(req.password);
+    const fullName = stage.fullName.trim();
+    const firstName = fullName.split(/\s+/)[0] || fullName;
+    const orgName = `${firstName}'s Workspace`;
+    const ip = normalizeIp(meta.ip) ?? 'unknown';
+
+    return this.createOrChallenge(
+      {
+        orgName,
+        slug: slugify(orgName),
+        slugExplicit: false,
+        fullName: stage.fullName,
+        email: stage.email,
+        phoneE164: stage.phoneE164,
+        passwordHash,
+        referralCode: req.referralCode ?? null,
+      },
+      registration,
+      ip,
+      meta,
+      true,
+    );
+  }
+
+  /**
+   * The shared tail of `signup()` and `setPassword()`: create the account straight away, or, with
+   * registration OTP active, stage it and send the phone code. `emailVerified` is carried through
+   * the staged record so an email already confirmed by code is not asked to verify again.
+   */
+  private async createOrChallenge(
+    data: SignupData,
+    registration: Awaited<ReturnType<SecurityPolicyService['registration']>>,
+    ip: string,
+    meta: ClientMeta,
+    emailVerified: boolean,
+  ): Promise<SignupResponse> {
     // The real activation rule: enabled, a sender that can deliver and, for a WhatsApp Business
     // sender, an approved template. Otherwise sign-up silently skips the code (TW-AUTH-006).
     const otpActive = (await this.otp.statusFor(registration)).active;
     if (!otpActive && registration.requirePhoneVerification) {
       // Mandatory means fail closed: never create an account whose number was not verified.
-      this.logger.error('sign-up refused: phone verification is required but the code step is not active');
+      this.logger.error(
+        'sign-up refused: phone verification is required but the code step is not active',
+      );
       throw new AppError(
         ERROR_CODES.AUTH_OTP_SEND_FAILED,
         'Sign-up is temporarily unavailable. Please try again later.',
@@ -394,30 +490,22 @@ export class SignupService {
     }
     if (!otpActive) {
       return this.create(
-        {
-          orgName: req.orgName,
-          slug,
-          slugExplicit: explicit,
-          fullName: req.fullName,
-          email: req.email,
-          phoneE164: req.phone ?? null,
-          passwordHash,
-          referralCode: req.referralCode ?? null,
-        },
-        { phoneVerified: false },
+        data,
+        emailVerified ? { phoneVerified: false, emailVerified: true } : { phoneVerified: false },
         meta,
       );
     }
 
     // OTP path: the number is required and is the one thing we must not let
     // be turned into a free SMS cannon.
-    if (!req.phone) {
+    const phone = data.phoneE164;
+    if (!phone) {
       throw AppError.validation('A mobile number is required to verify your account.', [
         { path: 'phone', message: 'A mobile number is required.' },
       ]);
     }
     if (
-      !(await this.rate.allow(AuthKeys.otpPhone(req.phone), OTP_SENDS_PER_NUMBER_PER_HOUR, 3600)) ||
+      !(await this.rate.allow(AuthKeys.otpPhone(phone), OTP_SENDS_PER_NUMBER_PER_HOUR, 3600)) ||
       !(await this.rate.allow(AuthKeys.ipThrottle('otp', ip), OTP_SENDS_PER_IP_PER_HOUR, 3600))
     ) {
       throw new AppError(
@@ -430,29 +518,21 @@ export class SignupService {
     const challengeId = randomToken(24);
     const code = randomNumericCode(registration.otp.length);
     const staged: StagedSignup = {
-      data: {
-        orgName: req.orgName,
-        slug,
-        slugExplicit: explicit,
-        fullName: req.fullName,
-        email: req.email,
-        phoneE164: req.phone,
-        passwordHash,
-        referralCode: req.referralCode ?? null,
-      },
+      data: { ...data, phoneE164: phone },
       otpHash: await hash(code),
       expiresAt: Date.now() + registration.otp.ttlMinutes * 60_000,
       lastSentAt: Date.now(),
       ip,
+      ...(emailVerified ? { emailVerified: true } : {}),
     };
 
-    await this.sendCode(req.phone, code, registration.otp.ttlMinutes);
+    await this.sendCode(phone, code, registration.otp.ttlMinutes);
     await this.redis.setex(AuthKeys.signup(challengeId), STAGE_TTL_SECONDS, JSON.stringify(staged));
 
     return {
       status: 'otp_required',
       challengeId,
-      maskedPhone: maskPhone(req.phone),
+      maskedPhone: maskPhone(phone),
       expiresInSeconds: registration.otp.ttlMinutes * 60,
       resendCooldownSeconds: registration.otp.resendCooldownSec,
       codeLength: registration.otp.length,
@@ -509,9 +589,14 @@ export class SignupService {
 
     // The code is spent, so the person cannot be sent back to fix the address: a taken one falls
     // back to a free variant instead of stranding them.
+    const consumed = JSON.parse(claimed) as StagedSignup;
     const result = await this.create(
-      (JSON.parse(claimed) as StagedSignup).data,
-      { phoneVerified: true, slugFallback: true },
+      consumed.data,
+      {
+        phoneVerified: true,
+        slugFallback: true,
+        ...(consumed.emailVerified === true ? { emailVerified: true } : {}),
+      },
       meta,
     );
     if (result.status !== 'authenticated')
