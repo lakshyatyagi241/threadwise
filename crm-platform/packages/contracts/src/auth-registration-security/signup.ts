@@ -25,6 +25,59 @@ export const signupRequestSchema = z.object({
 });
 export type SignupRequest = z.infer<typeof signupRequestSchema>;
 
+// --- the three-step signup flow (email-code verification, password last) ---
+
+export const signupStartRequestSchema = z.object({
+  fullName: z.string().trim().min(1).max(120),
+  email: emailSchema,
+  /** Optional; required only when the admin also has phone/WhatsApp OTP active (checked server-side). */
+  phone: phoneSchema.optional(),
+  captchaToken: z.string().max(4096).optional(),
+});
+export type SignupStartRequest = z.infer<typeof signupStartRequestSchema>;
+
+export const signupStartResponseSchema = z.object({
+  token: z.string(),
+  /** "a••••a@example.com" — never the full address. */
+  maskedEmail: z.string(),
+  expiresInSeconds: z.number().int().positive(),
+  resendCooldownSeconds: z.number().int().nonnegative(),
+  codeLength: z.number().int().min(4).max(8),
+});
+export type SignupStartResponse = z.infer<typeof signupStartResponseSchema>;
+
+export const signupVerifyEmailCodeRequestSchema = z.object({
+  token: z.string().min(1),
+  code: z.string().trim().min(4).max(8),
+});
+export type SignupVerifyEmailCodeRequest = z.infer<typeof signupVerifyEmailCodeRequestSchema>;
+
+/** Same token, now marked verified server-side; nothing else changes client-side. */
+export const signupVerifyEmailCodeResponseSchema = z.object({ token: z.string() });
+export type SignupVerifyEmailCodeResponse = z.infer<typeof signupVerifyEmailCodeResponseSchema>;
+
+export const signupResendEmailCodeRequestSchema = z.object({ token: z.string().min(1) });
+export type SignupResendEmailCodeRequest = z.infer<typeof signupResendEmailCodeRequestSchema>;
+
+export const signupResendEmailCodeResponseSchema = z.object({
+  expiresInSeconds: z.number().int().positive(),
+  resendCooldownSeconds: z.number().int().nonnegative(),
+});
+export type SignupResendEmailCodeResponse = z.infer<typeof signupResendEmailCodeResponseSchema>;
+
+export const signupSetPasswordRequestSchema = z.object({
+  token: z.string().min(1),
+  password: passwordSchema,
+  acceptTerms: z.literal(true, { errorMap: () => ({ message: 'You must accept the terms.' }) }),
+  referralCode: z
+    .string()
+    .trim()
+    .max(16)
+    .regex(/^[A-Za-z0-9]*$/)
+    .optional(),
+});
+export type SignupSetPasswordRequest = z.infer<typeof signupSetPasswordRequestSchema>;
+
 export const otpRequiredSchema = z.object({
   status: z.literal('otp_required'),
   challengeId: z.string(),
