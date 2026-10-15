@@ -1461,7 +1461,10 @@ export function FeatureBento({ ctx, def }: P) {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="w-9 h-9 rounded-full bg-paper-100 flex items-center justify-center">
+                    <div
+                      aria-hidden="true"
+                      className="w-9 h-9 rounded-full bg-paper-100 flex items-center justify-center"
+                    >
                       <svg
                         viewBox="0 0 16 16"
                         className="w-4 h-4 text-ink-700"
@@ -1472,15 +1475,18 @@ export function FeatureBento({ ctx, def }: P) {
                         <rect x="6" y="2" width="4" height="8" rx="2" />
                         <path d="M3 8a5 5 0 0010 0M8 13v2" />
                       </svg>
-                    </button>
-                    <button className="w-9 h-9 rounded-full bg-accent-coral flex items-center justify-center text-paper-0">
+                    </div>
+                    <div
+                      aria-hidden="true"
+                      className="w-9 h-9 rounded-full bg-accent-coral flex items-center justify-center text-paper-0"
+                    >
                       <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
                         <path
                           d="M3 5C5 3.5 11 3.5 13 5c1 .8 1 2 0 3l-2 .5c-.6 0-1-.5-1-1V6c-1.3-.4-2.7-.4-4 0v1.5c0 .5-.4 1-1 1L3 8c-1-1-1-2.2 0-3z"
                           transform="rotate(135 8 8)"
                         />
                       </svg>
-                    </button>
+                    </div>
                   </div>
                 </div>
               </div>
