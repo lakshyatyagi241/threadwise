@@ -11,13 +11,15 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import type { CountryCode } from 'libphonenumber-js';
 import { callApi } from './bff';
-import { mapAuthError, type MappedError } from './errors';
+import { useCaptcha } from './captcha';
+import { captchaMissing, mapAuthError, type MappedError } from './errors';
 import { dropKey, focusFirstInvalid } from './focus';
 import { FormError } from './form-error';
 import { FormField } from './form-field';
 import { PhoneInput, type PhoneValue } from './phone-input';
 import { evaluatePhone, pickDefaultCountry } from './phone';
 import { saveSignupStage, toStoredSignupStage } from './signup-challenge';
+import { SocialButtons } from './social-buttons';
 import { Alert, ArrowIcon, Button, Input, LINK, Spinner } from './ui';
 import { failedFields } from './zod-fields';
 
@@ -35,6 +37,7 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
   const te = useTranslations('auth-registration-security.guest.errors');
   const router = useRouter();
   const form = useRef<HTMLFormElement>(null);
+  const captcha = useCaptcha(config.captcha, 'register');
 
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<MappedError | null>(null);
@@ -90,14 +93,17 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
 
     setPending(true);
     try {
+      if (captcha.needsInteraction) throw captchaMissing();
+      const captchaToken = await captcha.token();
       const res = await callApi('/auth/signup/start', {
         method: 'POST',
-        body: parsed.data,
+        body: { ...parsed.data, ...(captchaToken ? { captchaToken } : {}) },
         schema: signupStartResponseSchema,
       });
       saveSignupStage(toStoredSignupStage(res, Date.now()));
       router.push('/signup/verify-email');
     } catch (err) {
+      captcha.reset();
       const mapped = mapAuthError(err);
       setError(mapped);
       const messages: Record<string, ReactNode> = {};
@@ -130,6 +136,15 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
 
   return (
     <div>
+      <SocialButtons
+        social={config.social}
+        mode="signup"
+        compact
+        onError={setError}
+        onNeedInput={() => undefined}
+        disabled={pending}
+      />
+
       <form
         method="post"
         ref={form}
@@ -191,6 +206,8 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
             />
           )}
         </FormField>
+
+        <div className="empty:hidden">{captcha.widget}</div>
 
         <Button type="submit" className="mt-1 w-full py-3" disabled={pending}>
           {pending ? <Spinner label={t('submitting')} /> : null}

@@ -624,6 +624,24 @@ describe('social sign-in', () => {
     expect(login.rows[0].delta).toMatchObject({ method: 'social', remember: true });
   });
 
+  it('starts and completes a social sign-up with no workspace name at all, naming it from the profile', async () => {
+    // The three-step sign-up redesign collects no workspace name up front (TW-AUTH-006): `start` no
+    // longer requires one for mode=signup, and `callback` falls back to a provisional name.
+    const email = uniqueEmail('soc-noorg');
+    h.socialProfiles.set('no-org', profile('g-no-org', { email, emailVerified: true, name: 'Nia Noorg' }));
+    const started = await start({ mode: 'signup' });
+    expect(started.status, JSON.stringify(started.body)).toBe(200);
+    const done = await callback(stateOf(started.body.url), 'no-org');
+    expect(done.status, JSON.stringify(done.body)).toBe(201);
+    expect(done.body.landing).toBe('onboarding');
+    const session = await api().get('/v2/auth/session').set(bearer(done.body.tokens.accessToken));
+    expect(session.body.org.name).toBe('Nia Noorg workspace');
+
+    // a normal callback still completes afterwards: the provisional workspace is a real, usable one
+    const again = await api().get('/v2/auth/session').set(bearer(done.body.tokens.accessToken));
+    expect(again.status).toBe(200);
+  });
+
   describe('profile picture', () => {
     const social = () => h.app.get(SocialAuthService);
     let original: SocialAuthService['avatarFetch'];
