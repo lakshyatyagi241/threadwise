@@ -267,6 +267,30 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 
 - List, detail (runs, retry summary), pause, resume, cancel of a one-off or a series (`/campaigns/wizard/broadcasts/:id`). Cancel of a series also stops the runs it started.
 
+### TW-CAMP-036: follow-up steps after a campaign message (ADDITION)
+
+- **Source:** the meeting's "Add a follow-up" (react to a reply or a read, start a flow, send several messages in sequence on conditions). Reference's campaign screens and code have no follow-up step, so there is nothing to compare; the behaviour below is the decision recorded here.
+- **Builds on:** TW-CAMP-025 (a flow campaign starts a flow per recipient through `CampaignFlowStarter`), TW-CAMP-021 (delivery and read reports), TW-CAMP-034 (the worker pattern of claim, log before the provider, record).
+- **Rules:** 0 to 3 steps on the guided draft, Cloud API numbers only. Each: trigger (replied, read, not replied, not read), wait (1 minute to 7 days), action (an approved template, or start a published flow). Step 1 is measured from the campaign message, later steps from the previous step's message. A watching trigger (replied, read) fires the moment the event happens and ends the chain when the time runs out; a waiting trigger (not replied, not read) fires after the wait if the event did not happen and ends the chain if it did. A step happens at most once per recipient; an opt-out, a lost consent, a failed message or an empty wallet ends the chain. A resend restarts it. A recurring series copies the steps to every run.
+- **Acceptance:** Given a campaign with a "not read after 1 hour" step, when a recipient has not read the message after an hour, then the follow-up template is sent once and the log says `sent`; when they read it first, nothing is sent and the log says `skipped`. Given a "replied" step, when the contact writes in the inbox inside the watch time, then the step fires within a minute and the recipient's response is recorded; when no reply comes, the step lapses. A second step looks at whether the first step's message was read. A flow step starts the flow and sends no message. A follow-up message is charged by the wallet once delivered.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-follow-ups.e2e.spec.ts`, `apps/api/test/unit/campaigns/wizard-follow-up-rules.spec.ts`, and the web `follow-ups*` tests.
+- **Not verified:** nothing was run against the real WhatsApp Cloud API; read reports come from Meta's webhook and are reported as the sandbox does not make them by itself.
+
+### TW-CAMP-037: A/B auto-winner (ADDITION, pending)
+
+- **Source:** the meeting's "ship A/B now, rebuild the auto-winner later". Reference has the A/B split (TW-CAMP-007) and per-variant results but no auto-winner either, so this is new behaviour, not built yet.
+- **State today:** the split slider (`abSplit`, default 50) and per-variant results exist on the guided campaign and the classic builder. The campaign never picks a winner: both variants keep their fixed share for the whole send.
+- **To decide before building:** the winning measure (read rate, reply rate, click rate), the test share and how long it runs before the rest is sent, what a tie does, whether the person confirms the winner, and whether it applies to a recurring series' every run.
+- **Status:** pending (tracker `todo`).
+
+### TW-CAMP-038: Build with AI in the guided wizard, and the picture (ADDITION)
+
+- **Source:** the meeting's "Build with AI ... campaign AI message generation, with images and content, creating templates. Needs mapping." The classic builder had text generation (TW-CAMP-002/026) but a verified Meta number always opens the guided wizard, which had no AI button, so the feature looked unwired.
+- **Mapping:** the wizard sends an approved **template**, never free text, so its "Build with AI" drafts a **template** (TW-TPL-016, `POST /v2/templates/ai-generate`), hands it to the template form for review, and the person picks it in the wizard once Meta approves it. The classic builder keeps the text generation and gains an optional **picture** (`POST /v2/campaigns/ai-image`, OpenAI image model, stored as a marketing upload and attached as the campaign's image).
+- **Not built:** carousel drafts (TW-TPL-016's carousel mode), a picture as a template header example (Meta needs the file uploaded through the template media endpoint), image models of other vendors.
+- **Tests:** `apps/api/test/e2e/campaigns/campaigns-ai-build.e2e.spec.ts`, `test/unit/campaigns/http-campaign-ai-image.adapter.spec.ts`, `test/unit/message-templates/template-ai-rules.spec.ts`, and the web tests of the modal, the wizard button and the picture option.
+- **Not verified:** nothing was run against a real OpenAI, Anthropic or Gemini key, or Meta's review of an AI-written template.
+
 ### Reference comparison (live Reference, read-only)
 
 See [parity/campaigns.md](../parity/campaigns.md#broadcast-wizard-addition): Reference's create flow, and what the wizard does the same or differently.

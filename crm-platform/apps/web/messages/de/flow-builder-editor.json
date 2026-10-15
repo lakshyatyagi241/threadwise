@@ -717,7 +717,8 @@
             "ask": "Den Kunden fragen",
             "handoff": "Übergeben",
             "logic": "Entscheiden",
-            "answer": "Antwort"
+            "answer": "Antwort",
+            "action": "Aktionen"
           },
           "blockedTitle": "Schaltflächen und Listen beenden einen Flow, daher können sie nur am Ende stehen.",
           "blockedTitleFaq": "„Antwort aus FAQ“ hat zwei Ausgänge und kann daher nur als Letztes stehen."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "Beantwortet",
             "no_match": "Kein Treffer"
-          }
+          },
+          "close": "Schließen",
+          "clickToEdit": "Zum Bearbeiten klicken",
+          "outsideToSave": "Klicke irgendwo außerhalb, um die Änderungen zu speichern",
+          "addCondition": "Eine Bedingung nach diesem Schritt hinzufügen",
+          "conditionLast": "Eine Bedingung beendet diesen Teil, sie kann also nur ans Ende.",
+          "duplicateTitle": "Diesen Schritt duplizieren?",
+          "duplicateBody": "Eine Kopie wird direkt danach eingefügt.",
+          "deleteTitle": "Diesen Schritt löschen?",
+          "deleteBody": "Der Schritt wird aus dem Flow entfernt.",
+          "stage": "Stufe {stage}",
+          "storedIn": "Werte werden in der Eigenschaft <b>{property}</b> des Kontakts gespeichert",
+          "actions": "Aktionen",
+          "actionsHint": "Einen Schritt hinzufügen, der direkt nach diesem läuft.",
+          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen."
         },
         "editors": {
           "linkLabel": "Wohin das führt",
@@ -1968,6 +1983,42 @@
         "label": "Symbol (optional)",
         "add": "Symbol hinzufügen",
         "saveFirst": "Speichere den Bot einmal, um ein Symbol hinzuzufügen."
+      },
+      "buttonAction": {
+        "label": "Aktion beim Tippen auf die Schaltfläche",
+        "kind": {
+          "none": "Zum nächsten Schritt",
+          "flow": "Flow verbinden",
+          "live_agent": "Live-Agent",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Flow wählen",
+        "loadingFlows": "Flows werden geladen…",
+        "flowMissing": "Flow {id} (nicht gefunden)",
+        "hint": {
+          "flow": "Startet den gewählten Flow für diesen Kontakt, und das Gespräch läuft dort weiter. Nach dieser Schaltfläche wird nichts verbunden.",
+          "live_agent": "Übergibt das Gespräch an das gewählte Team. Nach dieser Schaltfläche wird nichts verbunden.",
+          "opt_in": "Markiert den Kontakt als Abonnent von Marketingnachrichten und geht dann zum nachfolgend verbundenen Schritt weiter.",
+          "opt_out": "Markiert den Kontakt als abgemeldet von Marketingnachrichten und geht dann zum nachfolgend verbundenen Schritt weiter."
+        }
+      },
+      "messageTools": {
+        "format": "Textformatierung",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "strike": "Durchgestrichen",
+        "mono": "Monospace",
+        "bullet": "Aufzählung",
+        "numbered": "Nummerierte Liste",
+        "emoji": "Emoji",
+        "emojiSearch": "Emoji suchen",
+        "emojiNone": "Kein Emoji gefunden",
+        "variable": "Variable einfügen",
+        "variableSearch": "Variablen suchen",
+        "groupContact": "Kontakteigenschaften",
+        "groupFlow": "In diesem Flow gespeichert",
+        "variableNone": "Keine Variablen gefunden"
       }
     },
     "contracts": {
@@ -2487,6 +2538,14 @@
         "faq": {
           "label": "Antwort aus FAQ",
           "help": "Die Nachricht des Kunden mit Ihren FAQs abgleichen. Beendet diesen Flow: ein Ausgang, wenn eine FAQ geantwortet hat, ein anderer, wenn nicht"
+        },
+        "apiLibrary": {
+          "label": "API-Aufruf",
+          "help": "Einen API aus deiner API-Bibliothek aufrufen"
+        },
+        "code": {
+          "label": "JS-Funktion",
+          "help": "Ein kleines Stück JavaScript ausführen"
         }
       },
       "typeLabel": {
@@ -2504,7 +2563,9 @@
         "assign": "Einem Agenten zuweisen",
         "carousel": "Karussell",
         "condition": "Bedingung",
-        "faq": "Antwort aus FAQ"
+        "faq": "Antwort aus FAQ",
+        "api_library": "API-Aufruf",
+        "code": "JS-Funktion"
       },
       "stepLabel": {
         "questionOf": "Frage · {kind}"
@@ -2545,7 +2606,10 @@
         "carouselCards": "Schritt {stage}: Fügen Sie mindestens eine Karte hinzu und geben Sie jeder Karte einen Titel.",
         "carouselButtons": "Schritt {stage}: Geben Sie jeder Schaltfläche einen Namen sowie einen Link, eine Nummer oder eine Adresse, wo sie etwas öffnet.",
         "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert).",
-        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows."
+        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows.",
+        "chooseFlow": "Schritt {stage}: Wähle den Flow, den die Schaltfläche startet.",
+        "chooseApi": "Schritt {stage}: Wähle die API, die aufgerufen wird.",
+        "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird."
       },
       "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
     },

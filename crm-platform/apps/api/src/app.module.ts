@@ -47,6 +47,9 @@ import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { ChannelLineModule } from './modules/channel-line';
+import { ChannelViberModule } from './modules/channel-viber';
+import { ChannelWechatModule } from './modules/channel-wechat';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
@@ -85,6 +88,7 @@ import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { PrivacyModule } from './modules/privacy';
+import { ComplianceCenterModule } from './modules/compliance-center';
 import { AuditLogModule } from './modules/audit-log';
 import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
@@ -220,6 +224,9 @@ import { HealthModule } from './health/health.module';
     CampaignsModule,
     CallingVoiceModule,
     ChannelTelegramModule,
+    ChannelLineModule,
+    ChannelViberModule,
+    ChannelWechatModule,
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
@@ -245,6 +252,7 @@ import { HealthModule } from './health/health.module';
     GrowthPilotModule,
     ContactConsentModule,
     PrivacyModule,
+    ComplianceCenterModule,
     AuditLogModule,
     ContactsPqlModule,
     WabaModule,

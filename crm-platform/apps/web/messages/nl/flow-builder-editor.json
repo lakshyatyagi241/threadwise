@@ -1110,7 +1110,8 @@
             "ask": "Vraag de klant",
             "handoff": "Doorgeven",
             "logic": "Beslissen",
-            "answer": "Antwoord"
+            "answer": "Antwoord",
+            "action": "Acties"
           },
           "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen.",
           "blockedTitleFaq": "Antwoord uit FAQ heeft twee uitgangen en kan daarom alleen als laatste staan."
@@ -1126,7 +1127,21 @@
           "faqExits": {
             "matched": "Beantwoord",
             "no_match": "Geen match"
-          }
+          },
+          "close": "Sluiten",
+          "clickToEdit": "Klik om te bewerken",
+          "outsideToSave": "Klik ergens buiten de stap om de wijzigingen op te slaan",
+          "addCondition": "Een voorwaarde toevoegen na deze stap",
+          "conditionLast": "Een voorwaarde sluit dit deel af, dus hij kan alleen als laatste.",
+          "duplicateTitle": "Deze stap dupliceren?",
+          "duplicateBody": "Direct erna wordt een kopie toegevoegd.",
+          "deleteTitle": "Deze stap verwijderen?",
+          "deleteBody": "De stap wordt uit de flow verwijderd.",
+          "stage": "Fase {stage}",
+          "storedIn": "Waarden worden opgeslagen in de eigenschap <b>{property}</b> van het contact",
+          "actions": "Acties",
+          "actionsHint": "Een stap toevoegen die direct na deze draait.",
+          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen."
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
@@ -1826,6 +1841,42 @@
         "label": "Pictogram (optioneel)",
         "add": "Pictogram toevoegen",
         "saveFirst": "Sla de bot één keer op om een pictogram toe te voegen."
+      },
+      "buttonAction": {
+        "label": "Actie bij indrukken van de knop",
+        "kind": {
+          "none": "Ga naar de volgende stap",
+          "flow": "Flow koppelen",
+          "live_agent": "Live agent",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Kies een flow",
+        "loadingFlows": "Flows laden…",
+        "flowMissing": "Flow {id} (niet gevonden)",
+        "hint": {
+          "flow": "Start de gekozen flow voor dit contact en het gesprek gaat daar verder. Na deze knop wordt niets gekoppeld.",
+          "live_agent": "Draagt het gesprek over aan het team dat je kiest. Na deze knop wordt niets gekoppeld.",
+          "opt_in": "Markeert het contact als geabonneerd op marketingberichten en gaat daarna door naar de gekoppelde stap.",
+          "opt_out": "Markeert het contact als afgemeld voor marketingberichten en gaat daarna door naar de gekoppelde stap."
+        }
+      },
+      "messageTools": {
+        "format": "Tekstopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "strike": "Doorgehaald",
+        "mono": "Monospace",
+        "bullet": "Opsommingslijst",
+        "numbered": "Genummerde lijst",
+        "emoji": "Emoji",
+        "emojiSearch": "Emoji zoeken",
+        "emojiNone": "Geen emoji gevonden",
+        "variable": "Variabele invoegen",
+        "variableSearch": "Variabelen zoeken",
+        "groupContact": "Contacteigenschappen",
+        "groupFlow": "Opgeslagen in deze flow",
+        "variableNone": "Geen variabelen gevonden"
       }
     },
     "contracts": {
@@ -2345,6 +2396,14 @@
         "faq": {
           "label": "Antwoord uit FAQ",
           "help": "Koppel het bericht van de klant aan je FAQ's. Beëindigt deze flow: één uitgang als een FAQ heeft geantwoord, een andere zo niet"
+        },
+        "apiLibrary": {
+          "label": "API-aanroep",
+          "help": "Een API uit je API-bibliotheek aanroepen"
+        },
+        "code": {
+          "label": "JS-functie",
+          "help": "Een klein stukje JavaScript uitvoeren"
         }
       },
       "typeLabel": {
@@ -2362,7 +2421,9 @@
         "assign": "Toewijzen aan een medewerker",
         "carousel": "Carrousel",
         "condition": "Voorwaarde",
-        "faq": "Antwoord uit FAQ"
+        "faq": "Antwoord uit FAQ",
+        "api_library": "API-aanroep",
+        "code": "JS-functie"
       },
       "stepLabel": {
         "questionOf": "Vraag · {kind}"
@@ -2403,7 +2464,10 @@
         "carouselCards": "Stap {stage}: voeg minstens één kaart toe en geef elke kaart een titel.",
         "carouselButtons": "Stap {stage}: geef elke knop een naam, en een link, nummer of adres waar hij iets opent.",
         "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde).",
-        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow."
+        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow.",
+        "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
+        "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
+        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },

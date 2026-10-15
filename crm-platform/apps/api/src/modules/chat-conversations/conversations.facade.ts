@@ -126,6 +126,8 @@ export type OutboundContent =
       variables: Record<string, string>;
       body: string;
       templateId?: number | null;
+      /** The provider's component list (header media, button values) already built for this recipient; sent as it is. */
+      components?: Record<string, unknown>[];
     };
 
 export interface EnqueueOutboundInput {

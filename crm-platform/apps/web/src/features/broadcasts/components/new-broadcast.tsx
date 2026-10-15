@@ -18,7 +18,7 @@ const CARD =
 
 /**
  * "New campaign" / "New broadcast" (TW-BCAST-003). With only WhatsApp connected it goes straight to the campaign builder; when a Telegram
- * bot is on, a Facebook Page is connected, an Instagram account is linked or an SMS sender is on it opens the channel chooser, one card
+ * bot is on, a Facebook Page is connected, an Instagram account is linked, an SMS sender is on or a Viber channel is on it opens the channel chooser, one card
  * per available channel, as Reference does. `label` and `variant` let the Campaigns screen use it as its "New campaign" button (a
  * filled button) or as a text link in the side rail; the legacy broadcasts list keeps its own wording.
  */

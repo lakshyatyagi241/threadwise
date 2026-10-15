@@ -24,7 +24,10 @@ export const waFormsApi = {
   duplicate: (id: string) =>
     apiFetch(`${base}/${id}/duplicate`, { method: 'POST', schema: waFormSchema }),
   remove: (id: string) => apiFetch(`${base}/${id}`, { method: 'DELETE' }),
-  submissions: (id: string, query: WaFormSubmissionListQuery = { limit: 25 }, signal?: AbortSignal) =>
-    apiFetch(`${base}/${id}/submissions`, { schema: waFormSubmissionListSchema, query, signal }),
+  submissions: (
+    id: string,
+    query: WaFormSubmissionListQuery = { limit: 25 },
+    signal?: AbortSignal,
+  ) => apiFetch(`${base}/${id}/submissions`, { schema: waFormSubmissionListSchema, query, signal }),
   exportUrl: (id: string) => `/api/v2${base}/${id}/submissions/export`,
 };

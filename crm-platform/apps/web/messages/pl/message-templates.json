@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Kopiuj kod",
       "buttonUnnamed": "Przycisk",
-      "moreButtons": "{count, plural, one {+# kolejny przycisk} few {+# kolejne przyciski} many {+# kolejnych przycisków} other {+# kolejnego przycisku}}"
+      "moreButtons": "{count, plural, one {+# kolejny przycisk} few {+# kolejne przyciski} many {+# kolejnych przycisków} other {+# kolejnego przycisku}}",
+      "live": "Podgląd na żywo",
+      "business": "Bloomly",
+      "online": "online"
     },
     "card": {
       "rejected": "Odrzucone: {reason}",
       "view": "Wyświetl",
       "edit": "Edytuj",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "curl": "cURL: wyślij ten szablon przez API",
+      "curlNamed": "cURL do wysłania {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standardowy",
+        "media": "Multimedia",
+        "auth": "Uwierzytelnianie",
+        "carousel": "Karuzela",
+        "catalog": "Katalog",
+        "limited_time_offer": "Oferta czasowa"
+      },
+      "rejectedLabel": "Odrzucono:",
+      "viewTitle": "Zobacz szczegóły i status weryfikacji Meta",
+      "deleteNamed": "Usuń {name}"
     },
     "library": {
       "title": "Biblioteka szablonów",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Brak pasujących szablonów",
       "emptyFilteredBody": "Zmień lub wyczyść filtry, aby zobaczyć więcej szablonów.",
       "clearFilters": "Wyczyść filtry",
-      "loadMore": "Wczytaj więcej"
+      "loadMore": "Wczytaj więcej",
+      "crumb": "Kampanie / Szablony",
+      "titleA": "Szablon",
+      "titleB": "biblioteka",
+      "tipTitle": "Wskazówka",
+      "tip": "Przesyłaj szablony z jasną treścią przyjazną zmiennym ('{{name}}', '{{order_id}}'). Zatwierdzenie trwa poniżej 24 godz., gdy treść unika wyzwalaczy promocyjnych i pasuje do wybranej kategorii Meta.",
+      "statusTitle": "Status",
+      "statusTab": {
+        "all": "Wszystkie",
+        "approved": "Zatwierdzone",
+        "pending": "W weryfikacji",
+        "rejected": "Odrzucone"
+      },
+      "quickStartTitle": "Szybki start",
+      "quickStart": "Przeczytaj <link>Wytyczne dotyczące szablonów</link> przed wysłaniem do Meta, aby zatwierdzenie trwało poniżej 24 godz.",
+      "createTemplate": "Utwórz szablon",
+      "syncFailedLabel": "Synchronizacja z Meta nie powiodła się:",
+      "categories": "Kategorie",
+      "tabAll": "Wszystkie",
+      "sortLabel": "Sortuj szablony",
+      "sort": {
+        "newest": "Najnowsze",
+        "oldest": "Najstarsze",
+        "name-asc": "Nazwa A→Z",
+        "name-desc": "Nazwa Z→A"
+      },
+      "showing": "Wyświetlono",
+      "of": "z",
+      "filteredTemplates": "przefiltrowanych szablonów",
+      "showingRange": "Wyświetlono 1-{shown} z {total} szablonów",
+      "legend": {
+        "approved": "Zatwierdzone",
+        "pending": "W weryfikacji",
+        "rejected": "Odrzucone"
+      },
+      "helpLabel": "Pomoc - 0{n}",
+      "help": {
+        "one": {
+          "title": "Czym jest szablon wiadomości?",
+          "body": "Wstępnie zatwierdzony format wiadomości wymagany przez Meta do rozpoczynania nowych rozmów z klientami poza 24-godzinnym oknem obsługi."
+        },
+        "two": {
+          "title": "Jak skrócić czas zatwierdzenia?",
+          "body": "Pisz treść jasno, unikaj zbyt promocyjnego języka w kategorii Utility i zawsze podawaj przykładowe wartości zmiennych."
+        },
+        "three": {
+          "title": "Dlaczego mój szablon został odrzucony?",
+          "body": "Typowe powody to niepoprawne formatowanie, niezgodna kategoria lub treści obraźliwe. Sprawdź powód odrzucenia i edytuj szablon, aby wysłać go ponownie."
+        }
+      }
     },
     "delete": {
       "title": "Usuń szablon",
@@ -289,6 +355,11 @@
         "saved": "Zapisano jako wersję roboczą.",
         "warnings": "Warto sprawdzić przed weryfikacją przez Meta:",
         "open": "Otwórz szablon"
+      },
+      "ai": {
+        "open": "Utwórz z AI",
+        "applied": "Szablon został uzupełniony przez AI. Sprawdź go przed wysłaniem do weryfikacji.",
+        "authHint": "Szablony uwierzytelniania mają stały tekst, więc nie ma czego przygotowywać."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Wstrzymane przez Meta. Nie można go wysłać, dopóki Meta nie zniesie wstrzymania.",
         "pausedUntil": "Wstrzymane przez Meta do {when}.",
         "disabled": "Wyłączone przez Meta. Nie można go wysłać.",
-        "deleted": "Meta nie wymienia już tego szablonu. Jest zachowany tutaj; zsynchronizuj ponownie lub go usuń."
+        "deleted": "Meta nie wymienia już tego szablonu. Jest zachowany tutaj; zsynchronizuj ponownie lub go usuń.",
+        "notSubmitted": "Jeszcze nie wysłano do Meta",
+        "notSubmittedBody": "Ten szablon jest zapisany tutaj, ale nie ma identyfikatora szablonu Meta: Meta go nie przyjęła, dlatego nie można go zweryfikować ani wysłać. Prześlij go, aby rozpocząć weryfikację.",
+        "notSubmittedNoWaba": "Ten szablon nie ma identyfikatora szablonu Meta. Połącz konto WhatsApp Business (WABA), a następnie prześlij go do weryfikacji.",
+        "pendingBody": "Większość szablonów jest zatwierdzana w ciągu kilku minut; Meta dopuszcza do 48 godzin. Ta strona odświeża się automatycznie co 30 sekund, gdy status jest oczekujący.",
+        "submittedAgo": "Przesłano {when}",
+        "checkedAgo": "ostatnio sprawdzono {when}",
+        "code": "Kod:",
+        "pausedBody": "Powtarzające się negatywne opinie (blokady lub zgłoszenia spamu) wstrzymały ten szablon. Jego ocena jakości musi się poprawić, zanim będzie można go znów wysłać."
       },
       "facts": {
         "title": "Synchronizacja z Meta",
@@ -354,7 +433,171 @@
         "title": "Dane wysyłane do Meta",
         "hint": "Co dokładnie jest wysyłane do Meta do weryfikacji, w postaci zbudowanej.",
         "empty": "Nic jeszcze nie zbudowano."
+      },
+      "curl": {
+        "title": "Wyślij przez API (cURL)",
+        "intro": "Wyślij ten zatwierdzony szablon na jeden numer. Zamień przykładowe wartości na własne.",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano",
+        "copyFailed": "Nie udało się skopiować. Zaznacz tekst i skopiuj go ręcznie.",
+        "keyHint": "Zamień YOUR_API_KEY na swój klucz API.",
+        "keyLink": "Pobierz klucz API",
+        "loading": "Sprawdzanie kluczy API…",
+        "noKey": "Ta przestrzeń robocza nie ma jeszcze klucza API. Najpierw utwórz klucz API, a potem użyj tego cURL.",
+        "keysUnknown": "Nie udało się sprawdzić kluczy API. Otwórz stronę Deweloperzy, aby utworzyć lub przejrzeć klucz, a potem użyj tego cURL.",
+        "createKey": "Utwórz klucz API"
+      },
+      "refreshNow": "Odśwież teraz",
+      "editTemplate": "Edytuj szablon",
+      "editResubmit": "Edytuj i wyślij ponownie",
+      "submitToMeta": "Prześlij do Meta",
+      "wabaAccount": "Konto WhatsApp Business",
+      "noWaba": "Brak połączonego konta WABA.",
+      "connectOne": "Połącz je",
+      "noWabaTail": "aby przesyłać szablony do Meta.",
+      "related": "Powiązane",
+      "useInBroadcast": "Użyj w wysyłce masowej",
+      "crumbTemplates": "Szablony",
+      "crumbDetail": "Szczegóły",
+      "notSubmittedPill": "Nie przesłano",
+      "qualityPill": "Jakość · {quality}",
+      "preview": {
+        "title": "Podgląd",
+        "hint": "Tak wygląda w WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Treść oznaczono jako obraźliwą lub zawierającą groźby.",
+        "INVALID_FORMAT": "Format narusza zasady szablonów Meta (symbole zastępcze, podziały wierszy, długość).",
+        "PROMOTIONAL": "Język marketingowy jest niedozwolony w tej kategorii.",
+        "TAG_CONTENT_MISMATCH": "Kategoria nie pasuje do treści (np. treść promocyjna w szablonie UTILITY).",
+        "SCAM": "Meta oznaczyła szablon jako potencjalne oszustwo. Sprawdź twierdzenia i język."
       }
+    },
+    "ai": {
+      "eyebrow": "Szablony / AI",
+      "title": "Utwórz z",
+      "titleAccent": "AI",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "generate": "Generuj szablon",
+      "intro": "Przygotuj szablon WhatsApp na podstawie krótkiego briefu: nazwa, nagłówek, treść, stopka i przyciski. Nic nie zostanie wysłane, dopóki nie zrobisz tego samodzielnie.",
+      "model": "Model AI",
+      "modelsError": "Nie udało się wczytać modeli.",
+      "noModels": "Dla tego obszaru roboczego nie jest włączony żaden dostawca AI. Poproś administratora o włączenie jednego.",
+      "loadingModels": "Wczytywanie modeli…",
+      "pickModel": "Wybierz model",
+      "yourKey": "Twój klucz",
+      "business": "Nazwa firmy",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Branża",
+      "pickIndustry": "Wybierz branżę",
+      "occasion": "Okazja",
+      "pickOccasion": "Wybierz okazję",
+      "purpose": "Cel",
+      "pickPurpose": "Wybierz cel",
+      "action": "Główne działanie",
+      "pickAction": "Wybierz główne działanie",
+      "tone": "Ton",
+      "pickTone": "Wybierz ton",
+      "language": "Język",
+      "languageHint": "Szkic jest pisany w języku formularza.",
+      "notes": "Własna instrukcja",
+      "notesNote": "opcjonalnie / maks. 2000",
+      "notesPlaceholder": "Wszystko, co ma się znaleźć w treści: zmienne, linki, obowiązkowe sformułowania, czego unikać…",
+      "industries": {
+        "retail": "Handel detaliczny / e-commerce",
+        "food": "Żywność i napoje",
+        "healthcare": "Opieka zdrowotna",
+        "education": "Edukacja",
+        "travel": "Podróże i hotelarstwo",
+        "finance": "Finanse i bankowość",
+        "realEstate": "Nieruchomości",
+        "beauty": "Uroda i wellness",
+        "logistics": "Logistyka i dostawy",
+        "services": "Usługi profesjonalne",
+        "nonprofit": "Organizacja non-profit",
+        "other": "Inne"
+      },
+      "occasions": {
+        "launch": "Premiera produktu",
+        "sale": "Wyprzedaż / rabat",
+        "orderConfirmation": "Potwierdzenie zamówienia",
+        "shipping": "Informacja o wysyłce",
+        "appointment": "Przypomnienie o wizycie",
+        "welcome": "Powitanie / wdrożenie",
+        "feedback": "Prośba o opinię",
+        "abandonedCart": "Porzucony koszyk",
+        "reengage": "Ponowne zaangażowanie",
+        "event": "Zaproszenie na wydarzenie",
+        "festival": "Życzenia świąteczne",
+        "other": "Inne"
+      },
+      "purposes": {
+        "inform": "Poinformuj",
+        "promote": "Promuj",
+        "confirm": "Potwierdź",
+        "remind": "Przypomnij",
+        "collectFeedback": "Zbierz opinie",
+        "reengage": "Zaangażuj ponownie",
+        "purchase": "Skłoń do zakupu",
+        "booking": "Skłoń do rezerwacji"
+      },
+      "actions": {
+        "website": "Odwiedź stronę",
+        "call": "Zadzwoń do nas",
+        "book": "Umów wizytę",
+        "order": "Złóż zamówienie",
+        "catalog": "Zobacz katalog",
+        "code": "Odpowiedz kodem",
+        "other": "Inne"
+      },
+      "tones": {
+        "friendly": "Przyjazny",
+        "professional": "Profesjonalny",
+        "concise": "Zwięzły",
+        "empathetic": "Empatyczny",
+        "excited": "Entuzjastyczny",
+        "formal": "Formalny"
+      },
+      "errors": {
+        "businessRequired": "Nazwa firmy jest wymagana.",
+        "noKey": "Dla tego obszaru roboczego nie jest włączony żaden dostawca AI. Poproś administratora o dodanie klucza.",
+        "limitReached": "Ten obszar roboczy wykorzystał miesięczny limit AI.",
+        "providerFailed": "Dostawca AI nie odpowiedział. Spróbuj ponownie za chwilę.",
+        "badJson": "Odpowiedź modelu nie była użytecznym szablonem. Spróbuj ponownie lub doprecyzuj brief.",
+        "invalid": "Sprawdź brief: nazwa firmy jest wymagana, a niektóre pola są zbyt długie.",
+        "forbidden": "Nie masz uprawnień do tworzenia szablonów.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "failed": "Nie udało się wygenerować szablonu. Spróbuj ponownie."
+      }
+    },
+    "gallery": {
+      "title": "Galeria szablonów",
+      "intro": "Gotowe szablony WhatsApp według zastosowania. Wybierz jeden, a otworzy się jako nowy szablon, który możesz zmienić przed zapisaniem.",
+      "search": "Szukaj w galerii",
+      "categoryFilter": "Kategorie galerii",
+      "all": "Wszystkie",
+      "loading": "Wczytywanie galerii",
+      "loadError": "Nie udało się wczytać galerii.",
+      "retry": "Spróbuj ponownie",
+      "empty": "Żaden szablon nie pasuje",
+      "emptyHint": "Spróbuj innego słowa lub wybierz inną kategorię.",
+      "use": "Użyj tego szablonu",
+      "useNamed": "Użyj szablonu {name}",
+      "count": "{count, plural, one {# szablon} few {# szablony} many {# szablonów} other {# szablonu}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Dostawa jedzenia",
+        "festival_season": "Okres świąt",
+        "education": "Edukacja",
+        "travel": "Podróże",
+        "others": "Inne"
+      }
+    },
+    "home": {
+      "label": "Widoki szablonów",
+      "saved": "Zapisane szablony",
+      "gallery": "Galeria szablonów"
     }
   }
 }

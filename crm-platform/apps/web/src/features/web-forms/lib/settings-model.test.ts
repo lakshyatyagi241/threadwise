@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   checkEmail,
   checkTag,
+  consentStatement,
   consentWithText,
+  toggleConsentChannel,
   emailsIssue,
   ownerRuleForMode,
   ownerRuleIssue,
@@ -134,5 +136,28 @@ describe('after submit', () => {
     expect(submitLabelIssue('  ')).toBe('empty');
     expect(submitLabelIssue('x'.repeat(61))).toBe('too_long');
     expect(submitLabelIssue('Send')).toBeNull();
+  });
+});
+
+describe('consent channels', () => {
+  const names = { whatsapp: 'WhatsApp', sms: 'SMS', email: 'email' };
+  const line = 'I agree to receive updates on {channels}.';
+
+  it('writes the chosen channels into the sentence, in a fixed order', () => {
+    expect(consentStatement(line, ['whatsapp'], names, 'en')).toBe(
+      'I agree to receive updates on WhatsApp.',
+    );
+    expect(consentStatement(line, ['email', 'whatsapp'], names, 'en')).toBe(
+      'I agree to receive updates on WhatsApp and email.',
+    );
+    expect(consentStatement(line, ['email', 'sms', 'whatsapp'], names, 'en')).toBe(
+      'I agree to receive updates on WhatsApp, SMS, and email.',
+    );
+  });
+
+  it('never unticks the last channel', () => {
+    expect(toggleConsentChannel(['whatsapp'], 'whatsapp', false)).toEqual(['whatsapp']);
+    expect(toggleConsentChannel(['whatsapp'], 'email', true)).toEqual(['whatsapp', 'email']);
+    expect(toggleConsentChannel(['whatsapp', 'email'], 'whatsapp', false)).toEqual(['email']);
   });
 });

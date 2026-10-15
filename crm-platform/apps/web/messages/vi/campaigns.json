@@ -647,8 +647,43 @@
         "notes": "Ghi chú thêm",
         "notesNote": "không bắt buộc / tối đa 2000",
         "notesPlaceholder": "Bất kỳ điều gì cụ thể — cụm từ bắt buộc, điều cần tránh, giọng thương hiệu…",
-        "failed": "Không thể tạo chiến dịch. Vui lòng thử lại.",
-        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục."
+        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục.",
+        "pictureApplied": "Đã đính kèm ảnh vào chiến dịch. Hãy kiểm tra trong thẻ Tệp đính kèm.",
+        "errors": {
+          "noKey": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên thêm khóa.",
+          "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+          "providerFailed": "Nhà cung cấp AI không phản hồi. Vui lòng thử lại sau giây lát.",
+          "badJson": "Không đọc được câu trả lời của mô hình. Hãy thử lại hoặc thay đổi bản tóm tắt.",
+          "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+          "forbidden": "Bạn không có quyền tạo chiến dịch.",
+          "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+          "failed": "Không thể tạo chiến dịch. Vui lòng thử lại."
+        },
+        "picture": {
+          "label": "Tạo cả ảnh",
+          "hint": "Vẽ một ảnh từ cùng bản tóm tắt và đính kèm vào chiến dịch. Sử dụng hạn mức OpenAI của bạn.",
+          "needsOpenAi": "Tạo ảnh cần khóa OpenAI. Hãy chọn một mô hình OpenAI để bật tính năng này.",
+          "noAttachment": "Số bạn đã chọn chỉ gửi văn bản nên không có chỗ để đính kèm ảnh.",
+          "size": "Hình dạng ảnh",
+          "sizes": {
+            "square": "Vuông",
+            "landscape": "Ngang",
+            "portrait": "Dọc"
+          },
+          "textKept": "Đã điền nội dung chiến dịch. Chỉ còn thiếu ảnh.",
+          "retry": "Thử tạo lại ảnh",
+          "errors": {
+            "noKey": "Tạo ảnh cần khóa OpenAI, nhưng không gian làm việc này chưa bật khóa nào.",
+            "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+            "providerFailed": "Dịch vụ tạo ảnh không phản hồi. Vui lòng thử lại sau giây lát.",
+            "badJson": "Dịch vụ tạo ảnh trả về dữ liệu không mong đợi. Vui lòng thử lại.",
+            "imageRefused": "OpenAI từ chối vẽ ảnh này. Hãy thay đổi sản phẩm, ưu đãi hoặc ghi chú rồi thử lại.",
+            "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+            "forbidden": "Bạn không có quyền tạo chiến dịch.",
+            "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+            "failed": "Không thể tạo ảnh. Vui lòng thử lại."
+          }
+        }
       },
       "switch": {
         "title": "Dùng luồng hướng dẫn?",
@@ -1126,7 +1161,10 @@
         "auto_end_in_past": "Ngày tự động kết thúc đã qua.",
         "auto_end_before_send": "Ngày tự động kết thúc phải sau thời điểm gửi.",
         "auto_end_recurring": "Chiến dịch lặp lại kết thúc theo quy tắc riêng: hãy xóa ngày tự động kết thúc.",
-        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi."
+        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi.",
+        "follow_up_template_required": "Chọn mẫu mà mỗi tin theo dõi sẽ gửi.",
+        "follow_up_flow_required": "Chọn luồng mà mỗi tin theo dõi sẽ bắt đầu.",
+        "follow_up_cloud_api_only": "Tin theo dõi chỉ hoạt động với số WhatsApp Cloud API. Hãy chọn một số ở bước 1 hoặc xóa các tin theo dõi."
       },
       "template": {
         "previewOnline": "trực tuyến",
@@ -1160,7 +1198,9 @@
         "senderLabel": "Gửi từ",
         "senderHint": "Số WhatsApp dùng để gửi đợt gửi hàng loạt này.",
         "pickSender": "Chọn một số",
-        "classicOption": "trình tạo cổ điển"
+        "classicOption": "trình tạo cổ điển",
+        "buildWithAi": "Tạo bằng AI",
+        "aiNote": "Soạn mẫu mới bằng AI. Bạn xem lại trên trang mẫu; sau đó Meta sẽ xét duyệt trước khi mẫu được gửi đi, vì vậy hãy quay lại chọn mẫu khi đã được phê duyệt."
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",
@@ -1382,7 +1422,8 @@
         "sumCsv": "Tệp CSV {name}: {count, plural, other {# số hợp lệ}}",
         "estimatedCostFull": "Chi phí ước tính (đầy đủ)",
         "chargedPlan": "Trừ vào ví của bạn ngay bây giờ: {amount} (gói của bạn chi trả {covered} trong số các tin nhắn này)",
-        "chargedWallet": "Trừ vào ví của bạn: {amount}"
+        "chargedWallet": "Trừ vào ví của bạn: {amount}",
+        "sumFollowUps": "Tin theo dõi"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1587,7 +1628,25 @@
         "exportFailed": "Không tải được tệp xuất.",
         "deleteTitle": "Xóa chiến dịch gửi này?",
         "deleteOne": "Xóa chiến dịch gửi này và người nhận của nó. Không thể hoàn tác.",
-        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác."
+        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác.",
+        "followUps": {
+          "title": "Tin theo dõi",
+          "step": "Theo dõi {step}",
+          "count": {
+            "waiting": "{count} đang chờ",
+            "sent": "{count} đã gửi",
+            "delivered": "{count} đã nhận",
+            "read": "{count} đã đọc",
+            "flowsStarted": "{count} luồng đã bắt đầu",
+            "skipped": "{count} đã bỏ qua",
+            "lapsed": "{count} đã hết hạn",
+            "failed": "{count} thất bại"
+          },
+          "hint": {
+            "skipped": "Điều kiện không được đáp ứng khi kiểm tra nên chuỗi kết thúc tại đó.",
+            "lapsed": "Thời gian theo dõi đã hết trước khi liên hệ trả lời hoặc đọc nên chuỗi kết thúc tại đó."
+          }
+        }
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",
@@ -1618,6 +1677,72 @@
         "body": "{number} ({engine}) được gửi từ trình tạo cổ điển, bắt đầu lại từ đầu. Chiến dịch này được lưu thành bản nháp và vẫn nằm trong danh sách Chiến dịch của bạn, nên bạn có thể quay lại sau.",
         "confirm": "Mở trình tạo cổ điển",
         "cancel": "Ở lại đây"
+      },
+      "followUps": {
+        "title": "Tin theo dõi",
+        "intro": "Gửi thêm một tin nhắn hoặc bắt đầu một luồng, tùy theo hành động của liên hệ sau tin nhắn chiến dịch. Tối đa 3 bước liên tiếp.",
+        "cloudOnly": "Tin theo dõi cần số WhatsApp Cloud API vì dựa trên báo cáo đã đọc và trả lời của Meta. Hãy chọn một số ở bước 1.",
+        "add": "Thêm tin theo dõi",
+        "count": "{used}/{max} tin theo dõi",
+        "limitReached": "Đã đạt giới hạn: {max} tin theo dõi.",
+        "stepTitle": "Theo dõi {step}",
+        "measuredFromCampaign": "Tính từ tin nhắn chiến dịch.",
+        "measuredFromStep": "Tính từ tin nhắn của tin theo dõi {step}.",
+        "remove": "Xóa tin theo dõi {step}",
+        "removeShort": "Xóa",
+        "triggerLabel": "Khi liên hệ",
+        "trigger": {
+          "replied": "Trả lời",
+          "read": "Đọc tin nhắn",
+          "not_replied": "Chưa trả lời",
+          "not_read": "Chưa đọc tin nhắn"
+        },
+        "triggerHelp": {
+          "replied": "Kích hoạt ngay khi họ trả lời, nếu việc đó xảy ra trong thời gian bạn đặt. Nếu không, chuỗi kết thúc.",
+          "read": "Kích hoạt ngay khi họ đọc, nếu việc đó xảy ra trong thời gian bạn đặt. Nếu không, chuỗi kết thúc.",
+          "not_replied": "Chờ trong thời gian bạn đặt, rồi kích hoạt nếu họ chưa trả lời. Nếu họ đã trả lời, chuỗi kết thúc.",
+          "not_read": "Chờ trong thời gian bạn đặt, rồi kích hoạt nếu họ chưa đọc. Nếu họ đã đọc, chuỗi kết thúc."
+        },
+        "watchLabel": "Theo dõi tối đa",
+        "waitLabel": "Chờ",
+        "unitLabel": "Đơn vị thời gian",
+        "duration": {
+          "minutes": "{count, plural, other {# phút}}",
+          "hours": "{count, plural, other {# giờ}}",
+          "days": "{count, plural, other {# ngày}}"
+        },
+        "actionLabel": "Sau đó",
+        "action": {
+          "template": "Gửi một mẫu",
+          "flow": "Bắt đầu một luồng"
+        },
+        "templateLabel": "Mẫu cần gửi",
+        "flowLabel": "Luồng cần bắt đầu",
+        "pickTemplate": "Chọn một mẫu",
+        "pickFlow": "Chọn một luồng",
+        "loading": "Đang tải...",
+        "unavailable": "Không còn khả dụng",
+        "noTemplates": "Chưa có mẫu nào được duyệt.",
+        "createTemplate": "Tạo mẫu",
+        "noFlows": "Chưa có luồng nào.",
+        "createFlow": "Tạo luồng",
+        "flowsError": "Không thể tải các luồng. Vui lòng thử lại sau.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Nếu họ trả lời trong {wait}",
+          "read": "Nếu họ đọc trong {wait}",
+          "not_replied": "Nếu chưa trả lời sau {wait}",
+          "not_read": "Nếu chưa đọc sau {wait}"
+        },
+        "does": {
+          "template": "gửi {name}",
+          "flow": "bắt đầu luồng {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, other {phút}}",
+          "hours": "{count, plural, other {giờ}}",
+          "days": "{count, plural, other {ngày}}"
+        }
       }
     },
     "history": {

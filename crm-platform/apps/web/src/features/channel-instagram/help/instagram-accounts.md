@@ -5,7 +5,8 @@ summary: Link your Instagram Business or Creator account so its messages reach y
 area: settings
 order: 30
 documents: [tile:instagram]
-keywords: [instagram, business account, creator account, link, unlink, direct messages, inbox, dm, connect]
+keywords:
+  [instagram, business account, creator account, link, unlink, direct messages, inbox, dm, connect]
 ---
 
 ## What it is for

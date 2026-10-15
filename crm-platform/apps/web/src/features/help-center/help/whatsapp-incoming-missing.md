@@ -5,7 +5,18 @@ summary: Check that WhatsApp is delivering customer messages and delivery update
 area: troubleshooting
 order: 40
 documents: [tile:whatsapp]
-keywords: [incoming, inbound, webhook, callback url, verify token, fix inbound, subscribe, signature, meta app]
+keywords:
+  [
+    incoming,
+    inbound,
+    webhook,
+    callback url,
+    verify token,
+    fix inbound,
+    subscribe,
+    signature,
+    meta app,
+  ]
 ---
 
 ## What it is for

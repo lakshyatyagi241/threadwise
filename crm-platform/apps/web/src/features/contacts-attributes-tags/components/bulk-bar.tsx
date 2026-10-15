@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, Input, Popover, Select, Spinner } from '@crm/ui';
+import { Button, Checkbox, Input, Popover, Select, Spinner } from '@crm/ui';
 import { useGroups } from '../api/groups';
 import { sameTagName, TAG_NAME_MAX, useTags } from '../api/tags';
 import { errorKind } from '../lib/errors';
@@ -31,7 +31,7 @@ export function BulkPickers({
   canCreateTags: boolean;
   onClose: () => void;
   onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
-  onTag: (action: 'add' | 'remove', choice: TagChoice) => Promise<boolean>;
+  onTag: (action: 'add' | 'remove', choices: TagChoice[]) => Promise<boolean>;
 }) {
   return (
     <>
@@ -48,8 +48,8 @@ export function BulkPickers({
         action={picker === 'tagRemove' ? 'remove' : 'add'}
         canCreate={canCreateTags}
         onClose={onClose}
-        onApply={async (action, choice) => {
-          if (await onTag(action, choice)) onClose();
+        onApply={async (action, choices) => {
+          if (await onTag(action, choices)) onClose();
         }}
       />
     </>
@@ -138,31 +138,36 @@ function TagPicker({
   action: 'add' | 'remove';
   canCreate: boolean;
   onClose: () => void;
-  onApply: (action: 'add' | 'remove', choice: TagChoice) => Promise<void>;
+  onApply: (action: 'add' | 'remove', choices: TagChoice[]) => Promise<void>;
 }) {
   const t = useTranslations('contacts-attributes-tags.bulk');
   const tags = useTags(open);
-  const [tagId, setTagId] = useState('');
+  const [picked, setPicked] = useState<string[]>([]);
   const [name, setName] = useState('');
   const [problem, setProblem] = useState<'pick' | 'none' | null>(null);
   const [pending, setPending] = useState(false);
   const list = tags.data ?? [];
-  const chosen = tagId || list[0]?.id || '';
 
   async function apply() {
     const typed = action === 'add' ? name.trim() : '';
     if (action === 'remove' && list.length === 0) return setProblem('none');
-    if (!typed && !chosen) return setProblem('pick');
+    if (!typed && picked.length === 0) return setProblem('pick');
     setProblem(null);
     setPending(true);
     try {
+      const choices: TagChoice[] = picked.map((tagId) => ({ tagId }));
       // Typing a name that already exists reuses that tag.
-      const existing = typed ? list.find((x) => sameTagName(x.name, typed)) : undefined;
-      await onApply(
-        action,
-        typed && !existing ? { name: typed } : { tagId: existing?.id ?? chosen },
-      );
+      if (typed) {
+        const existing = list.find((x) => sameTagName(x.name, typed));
+        if (existing) {
+          if (!picked.includes(existing.id)) choices.push({ tagId: existing.id });
+        } else {
+          choices.push({ name: typed });
+        }
+      }
+      await onApply(action, choices);
       setName('');
+      setPicked([]);
     } finally {
       setPending(false);
     }
@@ -172,17 +177,21 @@ function TagPicker({
     <Popover open={open} onClose={onClose} label={action === 'add' ? t('addTag') : t('removeTag')}>
       <div className="text-xs font-semibold">{action === 'add' ? t('addTag') : t('removeTag')}</div>
       {list.length > 0 ? (
-        <Select
-          aria-label={t('tagSelect')}
-          value={chosen}
-          onChange={(e) => setTagId(e.target.value)}
-        >
+        <ul aria-label={t('tagSelect')} className="thin-scrollbar max-h-48 space-y-1 overflow-auto">
           {list.map((x) => (
-            <option key={x.id} value={x.id}>
-              {x.contactCount === undefined ? x.name : `${x.name} (${x.contactCount})`}
-            </option>
+            <li key={x.id}>
+              <Checkbox
+                label={x.contactCount === undefined ? x.name : `${x.name} (${x.contactCount})`}
+                checked={picked.includes(x.id)}
+                onChange={() =>
+                  setPicked((cur) =>
+                    cur.includes(x.id) ? cur.filter((id) => id !== x.id) : [...cur, x.id],
+                  )
+                }
+              />
+            </li>
           ))}
-        </Select>
+        </ul>
       ) : (
         <p className="text-sm text-muted-foreground">
           {tags.isPending ? t('loading') : action === 'add' ? t('noTagsType') : t('noTagsToRemove')}

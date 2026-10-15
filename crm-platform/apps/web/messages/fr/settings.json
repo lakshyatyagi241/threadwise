@@ -369,6 +369,11 @@
         "label": "Demandes de données",
         "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",
         "keywords": "confidentialité, RGPD, GDPR, demande de données, DSR, droit d'accès, exporter les données, effacer, droit à l'oubli, supprimer des données personnelles, blocage légal"
+      },
+      "compliance-center": {
+        "label": "Centre de conformité",
+        "description": "Des outils pour vous aider à respecter vos obligations en matière de vie privée : les lois auxquelles vous êtes soumis, les contacts vie privée, les avis et liens, les sous-traitants ultérieurs, les heures de silence et une liste de contrôle de ce qui est en place.",
+        "keywords": "conformité, vie privée, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, délégué à la protection des données, responsable des réclamations, sous-traitant ultérieur, dpa, conditions, politique de confidentialité, heures de silence, do not call, liste de contrôle, enfants"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

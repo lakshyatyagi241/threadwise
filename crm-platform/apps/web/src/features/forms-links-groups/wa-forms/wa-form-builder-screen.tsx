@@ -10,7 +10,11 @@ import type {
   WaFormField,
   WaFormFieldKind,
 } from '@crm/contracts';
-import { WA_FORM_AUDIENCE_TYPES, WA_FORM_CHOICE_FIELD_KINDS, WA_FORM_FIELD_KINDS } from '@crm/contracts';
+import {
+  WA_FORM_AUDIENCE_TYPES,
+  WA_FORM_CHOICE_FIELD_KINDS,
+  WA_FORM_FIELD_KINDS,
+} from '@crm/contracts';
 import { Alert, Button, Card, Checkbox, Field, Input, Select, Spinner, Textarea } from '@crm/ui';
 import { useSaveWaForm, usePublishWaForm, useWaForm } from '../api/wa-forms-hooks';
 import { useErrorText } from '../components/use-error-text';
@@ -46,7 +50,13 @@ export function WaFormBuilderScreen({ id }: { id: string }) {
 
   // Keyed by (id, rowVersion): a fresh mount re-seeds local state from the server record without ever calling
   // setState from inside an effect. Local edits survive background refetches of the same version.
-  return <WaFormBuilderForm key={`${form.data.id}:${form.data.rowVersion}`} id={id} initial={form.data} />;
+  return (
+    <WaFormBuilderForm
+      key={`${form.data.id}:${form.data.rowVersion}`}
+      id={id}
+      initial={form.data}
+    />
+  );
 }
 
 function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
@@ -108,7 +118,13 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
     setDefinition((d) => ({
       screens: d.screens.map((s, i) =>
         i === screenIndex
-          ? { ...s, fields: [...s.fields, { id: randomFieldId(), kind, label: t('builder.newFieldLabel'), required: false }] }
+          ? {
+              ...s,
+              fields: [
+                ...s.fields,
+                { id: randomFieldId(), kind, label: t('builder.newFieldLabel'), required: false },
+              ],
+            }
           : s,
       ),
     }));
@@ -183,7 +199,10 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
           <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={140} />
         </Field>
         <Field label={t('builder.audienceType')}>
-          <Select value={audienceType} onChange={(e) => setAudienceType(e.target.value as WaFormAudienceType)}>
+          <Select
+            value={audienceType}
+            onChange={(e) => setAudienceType(e.target.value as WaFormAudienceType)}
+          >
             {WA_FORM_AUDIENCE_TYPES.map((a) => (
               <option key={a} value={a}>
                 {t(`audience.${a}`)}
@@ -192,13 +211,27 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
           </Select>
         </Field>
         <Field label={t('builder.purpose')}>
-          <Textarea value={purpose} onChange={(e) => setPurpose(e.target.value)} maxLength={2000} rows={2} />
+          <Textarea
+            value={purpose}
+            onChange={(e) => setPurpose(e.target.value)}
+            maxLength={2000}
+            rows={2}
+          />
         </Field>
         <Field label={t('builder.sendButtonLabel')}>
-          <Input value={sendButtonLabel} onChange={(e) => setSendButtonLabel(e.target.value)} maxLength={40} />
+          <Input
+            value={sendButtonLabel}
+            onChange={(e) => setSendButtonLabel(e.target.value)}
+            maxLength={40}
+          />
         </Field>
         <Field label={t('builder.thankYouNote')}>
-          <Textarea value={thankYouNote} onChange={(e) => setThankYouNote(e.target.value)} maxLength={500} rows={2} />
+          <Textarea
+            value={thankYouNote}
+            onChange={(e) => setThankYouNote(e.target.value)}
+            maxLength={500}
+            rows={2}
+          />
         </Field>
       </Card>
 
@@ -213,9 +246,15 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
         {definition.screens.map((screen, screenIndex) => (
           <div key={screen.id} className="rounded-lg border border-border p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">{t('builder.screenN', { n: screenIndex + 1 })}</h3>
+              <h3 className="text-sm font-medium">
+                {t('builder.screenN', { n: screenIndex + 1 })}
+              </h3>
               {definition.screens.length > 1 && (
-                <button type="button" className="text-xs text-danger hover:underline" onClick={() => removeScreen(screenIndex)}>
+                <button
+                  type="button"
+                  className="text-xs text-danger hover:underline"
+                  onClick={() => removeScreen(screenIndex)}
+                >
                   {t('builder.removeScreen')}
                 </button>
               )}
@@ -228,7 +267,11 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                     <Field label={t('builder.fieldKind')} className="w-40">
                       <Select
                         value={field.kind}
-                        onChange={(e) => updateField(screenIndex, fieldIndex, { kind: e.target.value as WaFormFieldKind })}
+                        onChange={(e) =>
+                          updateField(screenIndex, fieldIndex, {
+                            kind: e.target.value as WaFormFieldKind,
+                          })
+                        }
                       >
                         {WA_FORM_FIELD_KINDS.map((k) => (
                           <option key={k} value={k}>
@@ -240,22 +283,34 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                     <Field label={t('builder.fieldLabel')} className="min-w-[200px] flex-1">
                       <Input
                         value={field.label}
-                        onChange={(e) => updateField(screenIndex, fieldIndex, { label: e.target.value })}
+                        onChange={(e) =>
+                          updateField(screenIndex, fieldIndex, { label: e.target.value })
+                        }
                         maxLength={300}
                       />
                     </Field>
                     {field.kind !== 'heading' && (
                       <Checkbox
                         checked={field.required}
-                        onChange={(e) => updateField(screenIndex, fieldIndex, { required: e.target.checked })}
+                        onChange={(e) =>
+                          updateField(screenIndex, fieldIndex, { required: e.target.checked })
+                        }
                         label={t('builder.required')}
                       />
                     )}
                     <div className="flex gap-1">
-                      <button type="button" className="rounded border px-2 py-1 text-xs" onClick={() => moveField(screenIndex, fieldIndex, -1)}>
+                      <button
+                        type="button"
+                        className="rounded border px-2 py-1 text-xs"
+                        onClick={() => moveField(screenIndex, fieldIndex, -1)}
+                      >
                         ↑
                       </button>
-                      <button type="button" className="rounded border px-2 py-1 text-xs" onClick={() => moveField(screenIndex, fieldIndex, 1)}>
+                      <button
+                        type="button"
+                        className="rounded border px-2 py-1 text-xs"
+                        onClick={() => moveField(screenIndex, fieldIndex, 1)}
+                      >
                         ↓
                       </button>
                       <button
@@ -273,7 +328,10 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                         value={(field.options ?? []).join(', ')}
                         onChange={(e) =>
                           updateField(screenIndex, fieldIndex, {
-                            options: e.target.value.split(',').map((o) => o.trim()).filter(Boolean),
+                            options: e.target.value
+                              .split(',')
+                              .map((o) => o.trim())
+                              .filter(Boolean),
                           })
                         }
                         placeholder={t('builder.optionsPlaceholder')}

@@ -17,6 +17,16 @@ import { PaymentWebhookController } from '../../../src/modules/storefront-builde
 import { BotsController } from '../../../src/modules/channel-telegram/bots.controller';
 import { TgBroadcastsController } from '../../../src/modules/channel-telegram/tg-broadcasts.controller';
 import { WebhookController as TelegramWebhookController } from '../../../src/modules/channel-telegram/webhook.controller';
+import { ChannelsController as LineChannelsController } from '../../../src/modules/channel-line/channels.controller';
+import { LineBroadcastsController } from '../../../src/modules/channel-line/line-broadcasts.controller';
+import { WebhookController as LineWebhookController } from '../../../src/modules/channel-line/webhook.controller';
+import { ChannelsController as ViberChannelsController } from '../../../src/modules/channel-viber/channels.controller';
+import { InsightsController as ViberInsightsController } from '../../../src/modules/channel-viber/insights.controller';
+import { VibBroadcastsController } from '../../../src/modules/channel-viber/vib-broadcasts.controller';
+import { WebhookController as ViberWebhookController } from '../../../src/modules/channel-viber/webhook.controller';
+import { BroadcastsController as WechatBroadcastsController } from '../../../src/modules/channel-wechat/broadcasts.controller';
+import { ChannelsController as WechatChannelsController } from '../../../src/modules/channel-wechat/channels.controller';
+import { WebhookController as WechatWebhookController } from '../../../src/modules/channel-wechat/webhook.controller';
 import { SmsSendersController } from '../../../src/modules/channel-sms/sms-senders.controller';
 import { SmsPlatformController } from '../../../src/modules/channel-sms/sms-platform.controller';
 import { SmsStatusController } from '../../../src/modules/channel-sms/sms-status.controller';
@@ -74,6 +84,13 @@ describe('whole-controller plan features', () => {
     ['public api', PublicApiController, 'public_api'],
     ['telegram bots', BotsController, 'extra_channels'],
     ['telegram broadcasts', TgBroadcastsController, 'extra_channels'],
+    ['line channels', LineChannelsController, 'extra_channels'],
+    ['line broadcasts', LineBroadcastsController, 'extra_channels'],
+    ['viber channels', ViberChannelsController, 'extra_channels'],
+    ['viber broadcasts', VibBroadcastsController, 'extra_channels'],
+    ['viber insights', ViberInsightsController, 'extra_channels'],
+    ['wechat channels', WechatChannelsController, 'extra_channels'],
+    ['wechat broadcasts', WechatBroadcastsController, 'extra_channels'],
     ['sms senders', SmsSendersController, 'sms'],
     ['facebook broadcasts', FbBroadcastsController, 'extra_channels'],
     ['facebook insights', InsightsController, 'extra_channels'],
@@ -114,6 +131,9 @@ describe('write-route plan features', () => {
 describe('routes that must stay open (third parties, visitors, paywall rendering)', () => {
   const open: Array<[string, Ctor]> = [
     ['telegram inbound webhook', TelegramWebhookController],
+    ['line inbound webhook', LineWebhookController],
+    ['viber inbound webhook', ViberWebhookController],
+    ['wechat inbound webhook', WechatWebhookController],
     ['sms delivery reports', SmsStatusController],
     ['sms platform switch (operator console)', SmsPlatformController],
     ['facebook webhook', FacebookPublicController],

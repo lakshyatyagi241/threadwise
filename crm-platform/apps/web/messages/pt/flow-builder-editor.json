@@ -717,7 +717,8 @@
             "ask": "Perguntar ao cliente",
             "handoff": "Transferir",
             "logic": "Decidir",
-            "answer": "Responder"
+            "answer": "Responder",
+            "action": "Ações"
           },
           "blockedTitle": "Botões e listas encerram um fluxo, então só podem ficar por último.",
           "blockedTitleFaq": "Responder com FAQ tem duas saídas, por isso só pode ficar por último."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "Respondida",
             "no_match": "Sem correspondência"
-          }
+          },
+          "close": "Fechar",
+          "clickToEdit": "Clique para editar",
+          "outsideToSave": "Clique em qualquer lugar fora do passo para salvar as alterações",
+          "addCondition": "Adicionar uma condição depois deste passo",
+          "conditionLast": "Uma condição encerra esta parte, então só pode ficar no final.",
+          "duplicateTitle": "Duplicar este passo?",
+          "duplicateBody": "Uma cópia é adicionada logo depois.",
+          "deleteTitle": "Excluir este passo?",
+          "deleteBody": "O passo é removido do fluxo.",
+          "stage": "Etapa {stage}",
+          "storedIn": "Os valores serão salvos na propriedade <b>{property}</b> do contato",
+          "actions": "Ações",
+          "actionsHint": "Adicione um passo que roda logo depois deste.",
+          "actionsBlocked": "Um passo que encerra sua parte não pode ter outro depois."
         },
         "editors": {
           "linkLabel": "Para onde isto leva",
@@ -1968,6 +1983,42 @@
         "label": "Ícone (opcional)",
         "add": "Adicionar ícone",
         "saveFirst": "Salve o bot uma vez para adicionar um ícone."
+      },
+      "buttonAction": {
+        "label": "Ação ao tocar no botão",
+        "kind": {
+          "none": "Ir para o próximo passo",
+          "flow": "Conectar fluxo",
+          "live_agent": "Agente ao vivo",
+          "opt_in": "Aceitar (opt-in)",
+          "opt_out": "Cancelar (opt-out)"
+        },
+        "pickFlow": "Escolha um fluxo",
+        "loadingFlows": "Carregando fluxos…",
+        "flowMissing": "Fluxo {id} (não encontrado)",
+        "hint": {
+          "flow": "Inicia o fluxo escolhido para este contato e a conversa continua lá. Nada é conectado após este botão.",
+          "live_agent": "Passa a conversa para a equipe que você escolher. Nada é conectado após este botão.",
+          "opt_in": "Marca o contato como inscrito nas mensagens de marketing e depois segue para o passo conectado.",
+          "opt_out": "Marca o contato como descadastrado das mensagens de marketing e depois segue para o passo conectado."
+        }
+      },
+      "messageTools": {
+        "format": "Formatação do texto",
+        "bold": "Negrito",
+        "italic": "Itálico",
+        "strike": "Tachado",
+        "mono": "Monoespaçado",
+        "bullet": "Lista com marcadores",
+        "numbered": "Lista numerada",
+        "emoji": "Emoji",
+        "emojiSearch": "Buscar emoji",
+        "emojiNone": "Nenhum emoji encontrado",
+        "variable": "Inserir uma variável",
+        "variableSearch": "Buscar variáveis",
+        "groupContact": "Propriedades do contato",
+        "groupFlow": "Salvas neste fluxo",
+        "variableNone": "Nenhuma variável encontrada"
       }
     },
     "contracts": {
@@ -2487,6 +2538,14 @@
         "faq": {
           "label": "Responder com FAQ",
           "help": "Compara a mensagem do cliente com suas FAQs. Encerra este fluxo: uma saída se uma FAQ respondeu, outra se não"
+        },
+        "apiLibrary": {
+          "label": "Chamada de API",
+          "help": "Chame uma API da sua biblioteca de APIs"
+        },
+        "code": {
+          "label": "Função JS",
+          "help": "Execute um pequeno trecho de JavaScript"
         }
       },
       "typeLabel": {
@@ -2504,7 +2563,9 @@
         "assign": "Atribuir a um atendente",
         "carousel": "Carrossel",
         "condition": "Condição",
-        "faq": "Responder com FAQ"
+        "faq": "Responder com FAQ",
+        "api_library": "Chamada de API",
+        "code": "Função JS"
       },
       "stepLabel": {
         "questionOf": "Pergunta · {kind}"
@@ -2545,7 +2606,10 @@
         "carouselCards": "Passo {stage}: adicione pelo menos um cartão e dê um título a cada cartão.",
         "carouselButtons": "Passo {stage}: dê um nome a cada botão, e um link, número ou endereço onde ele abre algo.",
         "conditionIncomplete": "Passo {stage}: complete as regras da condição (uma variável e um valor em cada).",
-        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do fluxo."
+        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do fluxo.",
+        "chooseFlow": "Passo {stage}: escolha o fluxo que o botão inicia.",
+        "chooseApi": "Passo {stage}: escolha a API a chamar.",
+        "writeCode": "Passo {stage}: escreva o código a executar."
       },
       "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },

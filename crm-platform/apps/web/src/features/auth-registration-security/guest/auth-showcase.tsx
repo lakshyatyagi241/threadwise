@@ -204,7 +204,7 @@ export function GetaMark({
       <span
         className={cn(
           'text-[21px] font-extrabold tracking-[-0.01em]',
-          tone === 'dark' ? 'text-white' : 'text-(--auth-geta-ink)',
+          tone === 'dark' ? 'text-white' : 'text-foreground',
         )}
       >
         {name}
@@ -228,31 +228,94 @@ const GETA_SHAPES = [
   },
 ] as const;
 
+const GETA_STARS = [
+  ['8%', '12%', 2, '0s'],
+  ['14%', '58%', 3, '1.2s'],
+  ['22%', '40%', 2, '2.1s'],
+  ['31%', '8%', 3, '0.6s'],
+  ['40%', '72%', 2, '1.8s'],
+  ['47%', '28%', 2, '2.6s'],
+  ['55%', '90%', 3, '0.9s'],
+  ['63%', '14%', 2, '1.5s'],
+  ['71%', '52%', 2, '2.9s'],
+  ['86%', '34%', 3, '0.3s'],
+  ['92%', '78%', 2, '2.3s'],
+] as const;
+
+const WAVE_A =
+  'M0 60 C 150 20, 300 100, 450 60 S 750 20, 900 60 S 1200 100, 1350 60 S 1650 20, 1800 60 V120 H0 Z';
+const WAVE_B = 'M0 70 C 200 110, 350 30, 600 70 S 950 110, 1200 70 S 1500 30, 1800 70 V120 H0 Z';
+
+/** Design 6's moving backdrop: orbit rings round the big amber square, twinkling stars, large arcs and waves along the bottom. */
+export function GetaSky() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="absolute size-10" style={{ top: '13%', right: '18%' }}>
+        <span className="auth-geta-ring absolute -inset-[26px] rounded-full border border-white/15" />
+        <span className="auth-geta-ring auth-geta-ring--dashed absolute -inset-[44px] rounded-full border border-dashed border-white/15" />
+        <span className="auth-geta-orbit absolute -inset-[26px]">
+          <span className="absolute left-1/2 top-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-400 shadow-[0_0_12px_3px_rgb(167_139_250/0.7)]" />
+        </span>
+        <span className="auth-geta-orbit auth-geta-orbit--rev absolute -inset-[44px]">
+          <span className="absolute bottom-0 left-1/2 size-1.5 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-300 shadow-[0_0_10px_2px_rgb(249_168_212/0.6)]" />
+        </span>
+      </div>
+      {GETA_STARS.map(([top, left, size, delay], i) => (
+        <span
+          key={i}
+          className="auth-geta-star absolute rounded-full bg-white"
+          style={{ top, left, width: size, height: size, animationDelay: delay }}
+        />
+      ))}
+      <span className="absolute -bottom-[300px] -right-[300px] size-[760px] rounded-full border border-white/10" />
+      <span className="absolute -bottom-[210px] -right-[210px] size-[580px] rounded-full border border-white/10" />
+      <div className="absolute inset-x-0 bottom-0 h-28 overflow-hidden">
+        <svg
+          viewBox="0 0 1800 120"
+          preserveAspectRatio="none"
+          className="auth-geta-wave absolute bottom-0 left-0 h-full w-[200%] fill-white/[0.06]"
+        >
+          <path d={WAVE_A} />
+        </svg>
+        <svg
+          viewBox="0 0 1800 120"
+          preserveAspectRatio="none"
+          className="auth-geta-wave auth-geta-wave--rev absolute bottom-0 left-0 h-[78%] w-[200%] fill-violet-400/[0.12]"
+        >
+          <path d={WAVE_B} />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 /** The three drifting amber/orange squares scattered over design 6's panel, Geta's own shapes. */
 export function GetaShapes() {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
       {GETA_SHAPES.map((shape, i) => (
-        <span key={i} className={cn('absolute rounded-[4px] shadow-lg', shape.className)} style={shape.style} />
+        <span
+          key={i}
+          className={cn('absolute rounded-[4px] shadow-lg', shape.className)}
+          style={shape.style}
+        />
       ))}
     </div>
   );
 }
 
 /** Design 6's stat column (sign-in and sign-up only): three number/label rows stacked above the corner orb. */
-export function GetaStats({
-  page,
-  extra,
-}: {
-  page: AuthPageName;
-  extra?: Record<string, string>;
-}) {
+export function GetaStats({ page, extra }: { page: AuthPageName; extra?: Record<string, string> }) {
   const copy = useShowcaseCopy(page, extra);
   if (page === 'forgot') return null;
   return (
     <div className="relative z-10 mt-8 space-y-3">
       {STAT_INDEXES.map((i) => (
-        <div key={i} className="flex items-baseline justify-between border-t border-white/15 pt-3">
+        <div
+          key={i}
+          className="auth-geta-rise auth-geta-stat flex items-baseline justify-between border-t border-white/15 pt-3"
+          style={{ ['--d' as string]: `${0.45 + i * 0.12}s` }}
+        >
           <dt className="text-[22px] font-extrabold leading-none">{copy(`stat${i}_num`)}</dt>
           <dd className="text-[12px] text-white/70">{copy(`stat${i}_label`)}</dd>
         </div>

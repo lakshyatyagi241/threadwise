@@ -106,10 +106,10 @@ A grant never overrides a STOP the contact sent: to bring an opted-out contact b
 
 ## The consent line of the chat widget, a booking page or a store
 
-On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy, and switch the line on. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
+On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy and one to your terms, and switch the line on. If you stored your links and a default wording in the [Compliance center](help:compliance-center), a button offers them; nothing is filled in on its own. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
 
-- **Chat widget**: shown under the details form, only when the widget asks for a phone number or an email. A visitor who ticks it is recorded as agreeing on the channels they gave (WhatsApp for a phone, email for an address).
-- **Booking page**: an optional tick box on the booking form. Booking never needs it.
+- **Chat widget**: shown under the details form, only when the widget asks for a phone number or an email. Tick the channels the wording covers (WhatsApp, SMS, email); the sentence is written for you. A visitor who ticks the line is recorded only on those channels, and only where they gave a phone number or an email address.
+- **Booking page**: an optional tick box on the booking form. Booking never needs it. It has the same channel boxes as the chat widget.
 - **Store**: the store's own marketing choice (Shopify's email and SMS consent) is recorded when a customer is synced or orders. Write what that checkbox tells your customers; tick "also count it as WhatsApp consent" only if the wording says so.
 
 You need the permission to manage consent settings to edit these lines.
@@ -121,6 +121,6 @@ A lead, an uploaded file or a form submission never counts as consent by itself.
 - **Leads**: when your form tool or ad platform sends the person's agreement together with the lead (a yes, plus the wording, its version, the form or the ad), it is recorded with the source **Lead capture**. A lead that carries no such proof records nothing, and a test lead never records anything. See [Lead sources](help:lead-sources).
 - **Click-to-WhatsApp ads**: when someone writes to you from an ad, the ad is kept on their contact as the way they reached you. It is not consent: you may reply, and you may not send them marketing until they agree.
 - **Contact import and Broadcast via CSV**: ticking **I have consent to message these contacts** records a consent for each person in the file, with the file name and, if you typed it, the notice or lawful basis and its version. Columns for SMS and email consent record those channels, only for the rows that say yes.
-- **Forms**: a ticked marketing box records marketing consent. A ticked box that is not marketing (for example "I agree to be contacted about my request") is recorded as agreement to **service messages** only, and the Consent card shows it that way, not as a subscription. A box left unticked records nothing.
+- **Forms**: in the form's settings you tick the channels the consent line covers (WhatsApp, SMS, email) and the sentence is written for you. A ticked marketing box records marketing consent on those channels only, and only where the form collected a phone number or an email address. A channel the form has no field for is flagged. A ticked box that is not marketing (for example "I agree to be contacted about my request") is recorded as agreement to **service messages** only, and the Consent card shows it that way, not as a subscription. A box left unticked records nothing.
 
 Nobody who opted out is turned back on by any of these.

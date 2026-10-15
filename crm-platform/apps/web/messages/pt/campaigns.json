@@ -647,8 +647,43 @@
         "notes": "Observações adicionais",
         "notesNote": "opcional / máx. 2000",
         "notesPlaceholder": "Qualquer detalhe — frases obrigatórias, o que evitar, tom da marca…",
-        "failed": "Não foi possível gerar a campanha. Tente novamente.",
-        "applied": "O texto da campanha foi preenchido. Revise antes de continuar."
+        "applied": "O texto da campanha foi preenchido. Revise antes de continuar.",
+        "pictureApplied": "A imagem foi anexada à campanha. Confira no cartão Anexo.",
+        "errors": {
+          "noKey": "Nenhum provedor de IA está ativado neste workspace. Peça a um administrador para adicionar uma chave.",
+          "limitReached": "Este workspace usou a cota de IA do mês.",
+          "providerFailed": "O provedor de IA não respondeu. Tente novamente em instantes.",
+          "badJson": "Não foi possível ler a resposta do modelo. Tente novamente ou altere o briefing.",
+          "invalid": "Verifique o briefing: o nome da empresa é obrigatório e alguns campos estão longos demais.",
+          "forbidden": "Você não tem permissão para criar campanhas.",
+          "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+          "failed": "Não foi possível gerar a campanha. Tente novamente."
+        },
+        "picture": {
+          "label": "Criar também uma imagem",
+          "hint": "Gera uma imagem a partir do mesmo briefing e a anexa à campanha. Usa a sua cota da OpenAI.",
+          "needsOpenAi": "As imagens exigem uma chave da OpenAI. Escolha um modelo da OpenAI para ativar esta opção.",
+          "noAttachment": "O número selecionado envia apenas texto, então não há onde anexar uma imagem.",
+          "size": "Formato da imagem",
+          "sizes": {
+            "square": "Quadrado",
+            "landscape": "Paisagem",
+            "portrait": "Retrato"
+          },
+          "textKept": "O texto da campanha foi preenchido. Só falta a imagem.",
+          "retry": "Tentar a imagem novamente",
+          "errors": {
+            "noKey": "As imagens exigem uma chave da OpenAI, e nenhuma está ativada neste workspace.",
+            "limitReached": "Este workspace usou a cota de IA do mês.",
+            "providerFailed": "O serviço de imagens não respondeu. Tente novamente em instantes.",
+            "badJson": "O serviço de imagens enviou uma resposta inesperada. Tente novamente.",
+            "imageRefused": "A OpenAI se recusou a gerar esta imagem. Altere o produto, a oferta ou as observações e tente novamente.",
+            "invalid": "Verifique o briefing: o nome da empresa é obrigatório e alguns campos estão longos demais.",
+            "forbidden": "Você não tem permissão para criar campanhas.",
+            "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+            "failed": "Não foi possível criar a imagem. Tente novamente."
+          }
+        }
       },
       "switch": {
         "title": "Usar o fluxo guiado?",
@@ -1126,7 +1161,10 @@
         "auto_end_in_past": "A data de encerramento automático já passou.",
         "auto_end_before_send": "A data de encerramento automático deve ser posterior ao horário de envio.",
         "auto_end_recurring": "Uma campanha recorrente termina pela própria regra: limpe a data de encerramento automático.",
-        "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido."
+        "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido.",
+        "follow_up_template_required": "Escolha o modelo que cada acompanhamento envia.",
+        "follow_up_flow_required": "Escolha o fluxo que cada acompanhamento inicia.",
+        "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos."
       },
       "template": {
         "previewOnline": "online",
@@ -1160,7 +1198,9 @@
         "senderLabel": "Enviar de",
         "senderHint": "O número do WhatsApp de onde esta transmissão é enviada.",
         "pickSender": "Escolha um número",
-        "classicOption": "editor clássico"
+        "classicOption": "editor clássico",
+        "buildWithAi": "Criar com IA",
+        "aiNote": "Crie um rascunho de modelo com IA. Você o revisa na página do modelo; depois a Meta o analisa antes de ele poder ser enviado, então volte e selecione-o quando for aprovado."
       },
       "audience": {
         "selectionTitle": "Escolhidos no Hub de Contatos",
@@ -1382,7 +1422,8 @@
         "sumCsv": "Arquivo CSV {name}: {count, plural, one {# número válido} other {# números válidos}}",
         "estimatedCostFull": "Custo estimado (total)",
         "chargedPlan": "Cobrado agora da sua carteira: {amount} (seu plano cobre {covered} destas mensagens)",
-        "chargedWallet": "Cobrado da sua carteira: {amount}"
+        "chargedWallet": "Cobrado da sua carteira: {amount}",
+        "sumFollowUps": "Acompanhamentos"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1587,7 +1628,25 @@
         "exportFailed": "Não foi possível baixar a exportação.",
         "deleteTitle": "Excluir esta transmissão?",
         "deleteOne": "Exclui esta transmissão e seus destinatários. Não é possível desfazer.",
-        "deleteSeries": "Exclui esta transmissão recorrente e as execuções que ela tinha planejadas. Nada foi enviado, então nenhum histórico é perdido. Não é possível desfazer."
+        "deleteSeries": "Exclui esta transmissão recorrente e as execuções que ela tinha planejadas. Nada foi enviado, então nenhum histórico é perdido. Não é possível desfazer.",
+        "followUps": {
+          "title": "Acompanhamentos",
+          "step": "Acompanhamento {step}",
+          "count": {
+            "waiting": "{count} aguardando",
+            "sent": "{count} enviados",
+            "delivered": "{count} entregues",
+            "read": "{count} lidos",
+            "flowsStarted": "{count} fluxos iniciados",
+            "skipped": "{count} ignorados",
+            "lapsed": "{count} expirados",
+            "failed": "{count} com falha"
+          },
+          "hint": {
+            "skipped": "A condição não foi atendida quando foi verificada, então a sequência terminou ali.",
+            "lapsed": "O tempo de monitoramento acabou antes de o contato responder ou ler, então a sequência terminou ali."
+          }
+        }
       },
       "panel": {
         "title": "Criadas com Criar transmissão",
@@ -1618,6 +1677,72 @@
         "body": "{number} ({engine}) é enviado pelo editor clássico, que começa do zero. Esta campanha é salva como rascunho e continua na sua lista de Campanhas, para você voltar a ela.",
         "confirm": "Abrir o editor clássico",
         "cancel": "Ficar aqui"
+      },
+      "followUps": {
+        "title": "Acompanhamentos",
+        "intro": "Envie outra mensagem ou inicie um fluxo conforme o que o contato fizer depois da mensagem da campanha. Até 3 etapas seguidas.",
+        "cloudOnly": "Os acompanhamentos exigem um número do WhatsApp Cloud API, pois dependem dos relatórios de leitura e resposta da Meta. Escolha um na etapa 1.",
+        "add": "Adicionar acompanhamento",
+        "count": "{used} de {max} acompanhamentos",
+        "limitReached": "Limite atingido: {max} acompanhamentos.",
+        "stepTitle": "Acompanhamento {step}",
+        "measuredFromCampaign": "Contado a partir da mensagem da campanha.",
+        "measuredFromStep": "Contado a partir da mensagem do acompanhamento {step}.",
+        "remove": "Remover acompanhamento {step}",
+        "removeShort": "Remover",
+        "triggerLabel": "Quando o contato",
+        "trigger": {
+          "replied": "Responde",
+          "read": "Lê a mensagem",
+          "not_replied": "Não respondeu",
+          "not_read": "Não leu a mensagem"
+        },
+        "triggerHelp": {
+          "replied": "Dispara no momento em que o contato responde, se isso acontecer dentro do tempo definido. Caso contrário, a sequência termina.",
+          "read": "Dispara no momento em que o contato lê, se isso acontecer dentro do tempo definido. Caso contrário, a sequência termina.",
+          "not_replied": "Aguarda o tempo definido e dispara se o contato não tiver respondido. Se tiver respondido, a sequência termina.",
+          "not_read": "Aguarda o tempo definido e dispara se o contato não tiver lido. Se tiver lido, a sequência termina."
+        },
+        "watchLabel": "Monitorar por até",
+        "waitLabel": "Aguardar",
+        "unitLabel": "Unidade de tempo",
+        "duration": {
+          "minutes": "{count, plural, one {# minuto} many {# minutos} other {# minutos}}",
+          "hours": "{count, plural, one {# hora} many {# horas} other {# horas}}",
+          "days": "{count, plural, one {# dia} many {# dias} other {# dias}}"
+        },
+        "actionLabel": "Então",
+        "action": {
+          "template": "Enviar um modelo",
+          "flow": "Iniciar um fluxo"
+        },
+        "templateLabel": "Modelo a enviar",
+        "flowLabel": "Fluxo a iniciar",
+        "pickTemplate": "Escolher um modelo",
+        "pickFlow": "Escolher um fluxo",
+        "loading": "Carregando...",
+        "unavailable": "Não está mais disponível",
+        "noTemplates": "Ainda não há modelos aprovados.",
+        "createTemplate": "Criar um modelo",
+        "noFlows": "Ainda não há fluxos.",
+        "createFlow": "Criar um fluxo",
+        "flowsError": "Não foi possível carregar os fluxos. Tente novamente mais tarde.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Se responder em até {wait}",
+          "read": "Se ler em até {wait}",
+          "not_replied": "Se não responder após {wait}",
+          "not_read": "Se não ler após {wait}"
+        },
+        "does": {
+          "template": "enviar {name}",
+          "flow": "iniciar o fluxo {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuto} many {minutos} other {minutos}}",
+          "hours": "{count, plural, one {hora} many {horas} other {horas}}",
+          "days": "{count, plural, one {dia} many {dias} other {dias}}"
+        }
       }
     },
     "history": {

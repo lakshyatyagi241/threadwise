@@ -12,7 +12,7 @@ import {
   type WidgetPublicConfig,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
-import type { ConsentChannel } from '@crm/contracts';
+import { noticeGrantChannels, type ConsentChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { ChannelIngestPublisher } from '../chat-conversations';
 import { ConsentIntakeService, ConsentNoticeService } from '../contact-consent';
@@ -431,9 +431,10 @@ export class WidgetPublicService {
           phone: visitor.phone,
         });
         if (contactId === null) return;
-        const channels: ConsentChannel[] = [];
-        if (phoneDigits(visitor.phone) !== '') channels.push('whatsapp');
-        if (visitor.email) channels.push('email');
+        const channels: ConsentChannel[] = noticeGrantChannels(notice, {
+          phone: phoneDigits(visitor.phone) !== '',
+          email: Boolean(visitor.email),
+        });
         if (channels.length === 0) return;
         await this.consentIntake.grant(sp as Tx, orgId, {
           contactId,

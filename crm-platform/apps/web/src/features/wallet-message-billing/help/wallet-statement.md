@@ -5,7 +5,8 @@ summary: Your message balance, what was spent and earned in the last 30 days, an
 area: settings
 order: 30
 documents: [tile:wallet-message-billing]
-keywords: [wallet, balance, statement, expenses, spending, messages, charges, costs, export, csv, ledger]
+keywords:
+  [wallet, balance, statement, expenses, spending, messages, charges, costs, export, csv, ledger]
 ---
 
 ## What it is for

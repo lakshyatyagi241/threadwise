@@ -717,7 +717,8 @@
             "ask": "询问客户",
             "handoff": "转交",
             "logic": "判断",
-            "answer": "回答"
+            "answer": "回答",
+            "action": "操作"
           },
           "blockedTitle": "按钮和列表会结束流程，因此只能放在最后。",
           "blockedTitleFaq": "“FAQ 回答”有两个出口，因此只能放在最后。"
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "已回答",
             "no_match": "无匹配"
-          }
+          },
+          "close": "关闭",
+          "clickToEdit": "点击编辑",
+          "outsideToSave": "点击步骤外任意位置即可保存更改",
+          "addCondition": "在此步骤后添加条件",
+          "conditionLast": "条件会结束这一部分，所以只能放在最后。",
+          "duplicateTitle": "复制此步骤？",
+          "duplicateBody": "副本会添加在它之后。",
+          "deleteTitle": "删除此步骤？",
+          "deleteBody": "该步骤将从流程中移除。",
+          "stage": "阶段 {stage}",
+          "storedIn": "值将保存到联系人的 <b>{property}</b> 属性中",
+          "actions": "操作",
+          "actionsHint": "添加一个紧接在此步骤之后运行的步骤。",
+          "actionsBlocked": "结束本部分的步骤后面不能再接其他步骤。"
         },
         "editors": {
           "linkLabel": "后续去向",
@@ -1968,6 +1983,42 @@
         "label": "图标(可选)",
         "add": "添加图标",
         "saveFirst": "请先保存一次机器人,再添加图标。"
+      },
+      "buttonAction": {
+        "label": "点击按钮时的操作",
+        "kind": {
+          "none": "进入下一步",
+          "flow": "连接流程",
+          "live_agent": "在线客服",
+          "opt_in": "订阅",
+          "opt_out": "退订"
+        },
+        "pickFlow": "选择流程",
+        "loadingFlows": "正在加载流程…",
+        "flowMissing": "流程 {id}（未找到）",
+        "hint": {
+          "flow": "为该联系人启动所选流程，对话将在该流程中继续。此按钮之后不连接任何步骤。",
+          "live_agent": "把对话转交给你选择的团队。此按钮之后不连接任何步骤。",
+          "opt_in": "将联系人标记为已订阅营销消息，然后继续执行此按钮之后连接的步骤。",
+          "opt_out": "将联系人标记为已退订营销消息，然后继续执行此按钮之后连接的步骤。"
+        }
+      },
+      "messageTools": {
+        "format": "文字格式",
+        "bold": "粗体",
+        "italic": "斜体",
+        "strike": "删除线",
+        "mono": "等宽",
+        "bullet": "项目符号列表",
+        "numbered": "编号列表",
+        "emoji": "表情",
+        "emojiSearch": "搜索表情",
+        "emojiNone": "没有找到表情",
+        "variable": "插入变量",
+        "variableSearch": "搜索变量",
+        "groupContact": "联系人属性",
+        "groupFlow": "本流程中已保存的",
+        "variableNone": "没有找到变量"
       }
     },
     "contracts": {
@@ -2487,6 +2538,14 @@
         "faq": {
           "label": "FAQ 回答",
           "help": "将客户消息与你的 FAQ 匹配。结束此流程：有 FAQ 已回答走一个出口，否则走另一个"
+        },
+        "apiLibrary": {
+          "label": "API 调用",
+          "help": "调用 API 库中的 API"
+        },
+        "code": {
+          "label": "JS 函数",
+          "help": "运行一小段 JavaScript"
         }
       },
       "typeLabel": {
@@ -2504,7 +2563,9 @@
         "assign": "分配给客服",
         "carousel": "轮播",
         "condition": "条件",
-        "faq": "FAQ 回答"
+        "faq": "FAQ 回答",
+        "api_library": "API 调用",
+        "code": "JS 函数"
       },
       "stepLabel": {
         "questionOf": "提问 · {kind}"
@@ -2545,7 +2606,10 @@
         "carouselCards": "步骤 {stage}：请至少添加一张卡片，并为每张卡片设置标题。",
         "carouselButtons": "步骤 {stage}：请为每个按钮命名，并为会打开内容的按钮填写链接、号码或地址。",
         "conditionIncomplete": "步骤 {stage}：请完善条件的规则（每条规则都要有变量和值）。",
-        "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。"
+        "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。",
+        "chooseFlow": "步骤 {stage}：请选择该按钮启动的流程。",
+        "chooseApi": "步骤 {stage}：请选择要调用的 API。",
+        "writeCode": "步骤 {stage}：请编写要运行的代码。"
       },
       "faqSummary": "{hasCategory, select, true {来自你的 FAQ · {category}} other {来自你的 FAQ}}"
     },

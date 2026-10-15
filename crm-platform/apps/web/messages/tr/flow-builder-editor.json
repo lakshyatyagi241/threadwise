@@ -717,7 +717,8 @@
             "ask": "Müşteriye sor",
             "handoff": "Devret",
             "logic": "Karar ver",
-            "answer": "Yanıt"
+            "answer": "Yanıt",
+            "action": "Eylemler"
           },
           "blockedTitle": "Düğmeler ve listeler akışı sonlandırır, bu yüzden yalnızca en sona konabilirler.",
           "blockedTitleFaq": "FAQ ile yanıtla adımının iki çıkışı vardır, bu yüzden yalnızca en sona konabilir."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "Yanıtlandı",
             "no_match": "Eşleşme yok"
-          }
+          },
+          "close": "Kapat",
+          "clickToEdit": "Düzenlemek için tıklayın",
+          "outsideToSave": "Değişiklikleri kaydetmek için adımın dışında herhangi bir yere tıklayın",
+          "addCondition": "Bu adımdan sonra bir koşul ekle",
+          "conditionLast": "Koşul bu bölümü bitirir, bu yüzden yalnızca en sona konabilir.",
+          "duplicateTitle": "Bu adım çoğaltılsın mı?",
+          "duplicateBody": "Hemen ardına bir kopya eklenir.",
+          "deleteTitle": "Bu adım silinsin mi?",
+          "deleteBody": "Adım akıştan kaldırılır.",
+          "stage": "Aşama {stage}",
+          "storedIn": "Değerler kişinin <b>{property}</b> özelliğine kaydedilecek",
+          "actions": "Eylemler",
+          "actionsHint": "Bu adımdan hemen sonra çalışan bir adım ekleyin.",
+          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez."
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
@@ -1968,6 +1983,42 @@
         "label": "Simge (isteğe bağlı)",
         "add": "Simge ekle",
         "saveFirst": "Simge eklemek için botu bir kez kaydedin."
+      },
+      "buttonAction": {
+        "label": "Düğmeye basılınca eylem",
+        "kind": {
+          "none": "Sonraki adıma geç",
+          "flow": "Akış bağla",
+          "live_agent": "Canlı temsilci",
+          "opt_in": "Abone ol",
+          "opt_out": "Abonelikten çık"
+        },
+        "pickFlow": "Bir akış seçin",
+        "loadingFlows": "Akışlar yükleniyor…",
+        "flowMissing": "Akış {id} (bulunamadı)",
+        "hint": {
+          "flow": "Bu kişi için seçilen akışı başlatır ve konuşma orada devam eder. Bu düğmeden sonra hiçbir şey bağlanmaz.",
+          "live_agent": "Konuşmayı seçtiğiniz ekibe devreder. Bu düğmeden sonra hiçbir şey bağlanmaz.",
+          "opt_in": "Kişiyi pazarlama mesajlarına abone olarak işaretler, ardından bağlı adıma geçer.",
+          "opt_out": "Kişiyi pazarlama mesajlarından çıkmış olarak işaretler, ardından bağlı adıma geçer."
+        }
+      },
+      "messageTools": {
+        "format": "Metin biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "strike": "Üstü çizili",
+        "mono": "Eş aralıklı",
+        "bullet": "Madde işaretli liste",
+        "numbered": "Numaralı liste",
+        "emoji": "Emoji",
+        "emojiSearch": "Emoji ara",
+        "emojiNone": "Emoji bulunamadı",
+        "variable": "Değişken ekle",
+        "variableSearch": "Değişken ara",
+        "groupContact": "Kişi özellikleri",
+        "groupFlow": "Bu akışta kayıtlı",
+        "variableNone": "Değişken bulunamadı"
       }
     },
     "contracts": {
@@ -2487,6 +2538,14 @@
         "faq": {
           "label": "FAQ ile yanıtla",
           "help": "Müşterinin mesajını FAQ'larınızla eşleştirir. Bu akışı bitirir: bir FAQ yanıtladıysa bir çıkış, yanıtlamadıysa başka bir çıkış"
+        },
+        "apiLibrary": {
+          "label": "API çağrısı",
+          "help": "API kitaplığınızdan bir API çağırın"
+        },
+        "code": {
+          "label": "JS işlevi",
+          "help": "Küçük bir JavaScript parçası çalıştırın"
         }
       },
       "typeLabel": {
@@ -2504,7 +2563,9 @@
         "assign": "Bir temsilciye ata",
         "carousel": "Karusel",
         "condition": "Koşul",
-        "faq": "FAQ ile yanıtla"
+        "faq": "FAQ ile yanıtla",
+        "api_library": "API çağrısı",
+        "code": "JS işlevi"
       },
       "stepLabel": {
         "questionOf": "Soru · {kind}"
@@ -2545,7 +2606,10 @@
         "carouselCards": "Adım {stage}: en az bir kart ekleyin ve her karta bir başlık verin.",
         "carouselButtons": "Adım {stage}: her düğmeye bir ad verin, bir şey açan düğmeye de bağlantı, numara veya adres girin.",
         "conditionIncomplete": "Adım {stage}: koşulun kurallarını tamamlayın (her birinde bir değişken ve bir değer).",
-        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı."
+        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı.",
+        "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
+        "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
+        "writeCode": "Adım {stage}: çalıştırılacak kodu yazın."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },

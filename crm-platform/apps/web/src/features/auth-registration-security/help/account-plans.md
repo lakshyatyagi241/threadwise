@@ -5,7 +5,28 @@ summary: See your plan and usage, compare the plans on offer, upgrade or switch,
 area: account
 order: 20
 documents: [tile:plans]
-keywords: [plan, plans, usage, limits, meters, quota, upgrade, downgrade, pricing, subscription, trial, renew, compare, billing, features, validity, add-ons, addons, unlimited]
+keywords:
+  [
+    plan,
+    plans,
+    usage,
+    limits,
+    meters,
+    quota,
+    upgrade,
+    downgrade,
+    pricing,
+    subscription,
+    trial,
+    renew,
+    compare,
+    billing,
+    features,
+    validity,
+    add-ons,
+    addons,
+    unlimited,
+  ]
 ---
 
 ## What it is for

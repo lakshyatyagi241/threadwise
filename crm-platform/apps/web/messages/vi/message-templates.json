@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Sao chép mã",
       "buttonUnnamed": "Nút",
-      "moreButtons": "{count, plural, other {+# nút khác}}"
+      "moreButtons": "{count, plural, other {+# nút khác}}",
+      "live": "Xem trước trực tiếp",
+      "business": "Bloomly",
+      "online": "trực tuyến"
     },
     "card": {
       "rejected": "Bị từ chối: {reason}",
       "view": "Xem",
       "edit": "Chỉnh sửa",
-      "delete": "Xóa"
+      "delete": "Xóa",
+      "curl": "cURL: gửi mẫu này bằng API",
+      "curlNamed": "cURL để gửi {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Tiêu chuẩn",
+        "media": "Đa phương tiện",
+        "auth": "Xác thực",
+        "carousel": "Băng chuyền",
+        "catalog": "Danh mục",
+        "limited_time_offer": "Ưu đãi có thời hạn"
+      },
+      "rejectedLabel": "Bị từ chối:",
+      "viewTitle": "Xem chi tiết và trạng thái duyệt của Meta",
+      "deleteNamed": "Xóa {name}"
     },
     "library": {
       "title": "Thư viện mẫu",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Không có mẫu nào khớp",
       "emptyFilteredBody": "Thay đổi hoặc xóa bộ lọc để xem thêm mẫu.",
       "clearFilters": "Xóa bộ lọc",
-      "loadMore": "Tải thêm"
+      "loadMore": "Tải thêm",
+      "crumb": "Chiến dịch / Mẫu tin",
+      "titleA": "Mẫu tin",
+      "titleB": "thư viện",
+      "tipTitle": "Mẹo",
+      "tip": "Hãy gửi mẫu tin với nội dung rõ ràng, thân thiện với biến ('{{name}}', '{{order_id}}'). Thời gian duyệt dưới 24 giờ khi nội dung tránh các yếu tố quảng cáo và khớp với danh mục Meta đã chọn.",
+      "statusTitle": "Trạng thái",
+      "statusTab": {
+        "all": "Tất cả",
+        "approved": "Đã duyệt",
+        "pending": "Đang xem xét",
+        "rejected": "Bị từ chối"
+      },
+      "quickStartTitle": "Bắt đầu nhanh",
+      "quickStart": "Hãy đọc <link>Hướng dẫn về mẫu tin</link> trước khi gửi lên Meta để thời gian duyệt dưới 24 giờ.",
+      "createTemplate": "Tạo mẫu tin",
+      "syncFailedLabel": "Đồng bộ từ Meta thất bại:",
+      "categories": "Danh mục",
+      "tabAll": "Tất cả",
+      "sortLabel": "Sắp xếp mẫu tin",
+      "sort": {
+        "newest": "Mới nhất",
+        "oldest": "Cũ nhất",
+        "name-asc": "Tên A→Z",
+        "name-desc": "Tên Z→A"
+      },
+      "showing": "Hiển thị",
+      "of": "trong",
+      "filteredTemplates": "mẫu tin đã lọc",
+      "showingRange": "Hiển thị 1-{shown} trong {total} mẫu tin",
+      "legend": {
+        "approved": "Đã duyệt",
+        "pending": "Đang xem xét",
+        "rejected": "Bị từ chối"
+      },
+      "helpLabel": "Trợ giúp - 0{n}",
+      "help": {
+        "one": {
+          "title": "Mẫu tin nhắn là gì?",
+          "body": "Định dạng tin nhắn được duyệt trước mà Meta yêu cầu để bắt đầu cuộc trò chuyện mới với khách hàng ngoài khung dịch vụ 24 giờ."
+        },
+        "two": {
+          "title": "Làm sao để rút ngắn thời gian duyệt?",
+          "body": "Giữ nội dung tin nhắn rõ ràng, tránh ngôn từ quảng cáo quá mức trong nhóm Tiện ích, và luôn cung cấp giá trị mẫu cho các biến."
+        },
+        "three": {
+          "title": "Vì sao mẫu tin của tôi bị từ chối?",
+          "body": "Nguyên nhân thường gặp gồm định dạng sai, danh mục không khớp hoặc nội dung lạm dụng. Hãy xem lý do từ chối và chỉnh sửa để gửi lại."
+        }
+      }
     },
     "delete": {
       "title": "Xóa mẫu",
@@ -289,6 +355,11 @@
         "saved": "Đã lưu dưới dạng bản nháp.",
         "warnings": "Nên xem lại trước khi Meta xét duyệt:",
         "open": "Mở mẫu"
+      },
+      "ai": {
+        "open": "Tạo bằng AI",
+        "applied": "Bản nháp mẫu đã được AI điền sẵn. Hãy xem lại trước khi gửi duyệt.",
+        "authHint": "Mẫu xác thực có nội dung cố định nên không cần soạn."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Bị Meta tạm dừng. Không thể gửi cho đến khi Meta gỡ tạm dừng.",
         "pausedUntil": "Bị Meta tạm dừng đến {when}.",
         "disabled": "Bị Meta vô hiệu hóa. Không thể gửi.",
-        "deleted": "Meta không còn liệt kê mẫu này. Mẫu được giữ lại đây; hãy đồng bộ lại hoặc xóa."
+        "deleted": "Meta không còn liệt kê mẫu này. Mẫu được giữ lại đây; hãy đồng bộ lại hoặc xóa.",
+        "notSubmitted": "Chưa gửi lên Meta",
+        "notSubmittedBody": "Mẫu tin này được lưu ở đây nhưng chưa có ID mẫu Meta: Meta chưa từng chấp nhận nên không thể duyệt hoặc gửi. Hãy gửi lên để bắt đầu duyệt.",
+        "notSubmittedNoWaba": "Mẫu tin này chưa có ID mẫu Meta. Hãy kết nối tài khoản WhatsApp Business (WABA), rồi gửi để duyệt.",
+        "pendingBody": "Hầu hết mẫu tin được duyệt trong vài phút; Meta cho phép tối đa 48 giờ. Trang tự làm mới mỗi 30 giây khi trạng thái còn đang chờ.",
+        "submittedAgo": "Đã gửi {when}",
+        "checkedAgo": "kiểm tra lần cuối {when}",
+        "code": "Mã:",
+        "pausedBody": "Phản hồi tiêu cực lặp lại (chặn hoặc báo cáo spam) đã khiến mẫu tin này bị tạm dừng. Điểm chất lượng phải phục hồi thì mới có thể gửi lại."
       },
       "facts": {
         "title": "Đồng bộ Meta",
@@ -354,7 +433,171 @@
         "title": "Dữ liệu gửi Meta",
         "hint": "Nội dung gửi Meta để xét duyệt, đúng như đã tạo.",
         "empty": "Chưa tạo gì."
+      },
+      "curl": {
+        "title": "Gửi bằng API (cURL)",
+        "intro": "Gửi mẫu đã được duyệt này đến một số. Thay các giá trị mẫu bằng giá trị của bạn.",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "copyFailed": "Không thể sao chép. Hãy chọn văn bản và sao chép thủ công.",
+        "keyHint": "Thay YOUR_API_KEY bằng khóa API của bạn.",
+        "keyLink": "Lấy khóa API",
+        "loading": "Đang kiểm tra khóa API của bạn…",
+        "noKey": "Không gian làm việc này chưa có khóa API. Hãy tạo khóa API trước, rồi dùng cURL này.",
+        "keysUnknown": "Không thể kiểm tra khóa API của bạn. Mở trang Nhà phát triển để tạo hoặc xem khóa, rồi dùng cURL này.",
+        "createKey": "Tạo khóa API"
+      },
+      "refreshNow": "Làm mới ngay",
+      "editTemplate": "Sửa mẫu tin",
+      "editResubmit": "Sửa và gửi lại",
+      "submitToMeta": "Gửi lên Meta",
+      "wabaAccount": "Tài khoản WhatsApp Business",
+      "noWaba": "Chưa kết nối tài khoản WABA.",
+      "connectOne": "Kết nối ngay",
+      "noWabaTail": "để gửi mẫu tin lên Meta.",
+      "related": "Liên quan",
+      "useInBroadcast": "Dùng trong chiến dịch gửi hàng loạt",
+      "crumbTemplates": "Mẫu tin",
+      "crumbDetail": "Chi tiết",
+      "notSubmittedPill": "Chưa gửi",
+      "qualityPill": "Chất lượng · {quality}",
+      "preview": {
+        "title": "Xem trước",
+        "hint": "Hiển thị trên WhatsApp như thế nào"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Nội dung bị gắn cờ là lạm dụng hoặc đe dọa.",
+        "INVALID_FORMAT": "Định dạng vi phạm quy tắc mẫu tin của Meta (biến, ngắt dòng, độ dài).",
+        "PROMOTIONAL": "Ngôn từ quảng cáo không được phép trong danh mục này.",
+        "TAG_CONTENT_MISMATCH": "Danh mục không khớp với nội dung (ví dụ: nội dung khuyến mãi trong mẫu tin UTILITY).",
+        "SCAM": "Meta gắn cờ mẫu tin này có khả năng lừa đảo. Hãy xem lại các tuyên bố và ngôn từ."
       }
+    },
+    "ai": {
+      "eyebrow": "Mẫu / AI",
+      "title": "Tạo bằng",
+      "titleAccent": "AI",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "generate": "Tạo mẫu",
+      "intro": "Soạn mẫu WhatsApp từ một bản tóm tắt ngắn: tên, tiêu đề, nội dung, chân trang và nút. Sẽ không có gì được gửi đi cho đến khi bạn tự thực hiện.",
+      "model": "Mô hình AI",
+      "modelsError": "Không thể tải danh sách mô hình.",
+      "noModels": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên bật một nhà cung cấp.",
+      "loadingModels": "Đang tải mô hình…",
+      "pickModel": "Chọn mô hình",
+      "yourKey": "khóa của bạn",
+      "business": "Tên doanh nghiệp",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Ngành",
+      "pickIndustry": "Chọn ngành",
+      "occasion": "Dịp",
+      "pickOccasion": "Chọn dịp",
+      "purpose": "Mục đích",
+      "pickPurpose": "Chọn mục đích",
+      "action": "Hành động chính",
+      "pickAction": "Chọn hành động chính",
+      "tone": "Giọng điệu",
+      "pickTone": "Chọn giọng điệu",
+      "language": "Ngôn ngữ",
+      "languageHint": "Bản nháp được viết bằng ngôn ngữ của biểu mẫu.",
+      "notes": "Yêu cầu tùy chỉnh",
+      "notesNote": "tùy chọn / tối đa 2000",
+      "notesPlaceholder": "Bất kỳ điều gì bạn muốn đưa vào: biến, liên kết, cách diễn đạt bắt buộc, điều cần tránh…",
+      "industries": {
+        "retail": "Bán lẻ / Thương mại điện tử",
+        "food": "Ăn uống",
+        "healthcare": "Y tế",
+        "education": "Giáo dục",
+        "travel": "Du lịch & Khách sạn",
+        "finance": "Tài chính & Ngân hàng",
+        "realEstate": "Bất động sản",
+        "beauty": "Làm đẹp & Chăm sóc sức khỏe",
+        "logistics": "Logistics & Giao hàng",
+        "services": "Dịch vụ chuyên nghiệp",
+        "nonprofit": "Phi lợi nhuận",
+        "other": "Khác"
+      },
+      "occasions": {
+        "launch": "Ra mắt sản phẩm",
+        "sale": "Khuyến mãi / giảm giá",
+        "orderConfirmation": "Xác nhận đơn hàng",
+        "shipping": "Cập nhật vận chuyển",
+        "appointment": "Nhắc lịch hẹn",
+        "welcome": "Chào mừng / hướng dẫn làm quen",
+        "feedback": "Yêu cầu phản hồi",
+        "abandonedCart": "Giỏ hàng bị bỏ quên",
+        "reengage": "Kích hoạt lại khách hàng",
+        "event": "Mời tham dự sự kiện",
+        "festival": "Lời chúc lễ hội",
+        "other": "Khác"
+      },
+      "purposes": {
+        "inform": "Thông báo",
+        "promote": "Quảng bá",
+        "confirm": "Xác nhận",
+        "remind": "Nhắc nhở",
+        "collectFeedback": "Thu thập phản hồi",
+        "reengage": "Kích hoạt lại",
+        "purchase": "Thúc đẩy mua hàng",
+        "booking": "Thúc đẩy đặt lịch"
+      },
+      "actions": {
+        "website": "Truy cập trang web",
+        "call": "Gọi cho chúng tôi",
+        "book": "Đặt lịch hẹn",
+        "order": "Đặt hàng",
+        "catalog": "Xem danh mục sản phẩm",
+        "code": "Trả lời bằng mã",
+        "other": "Khác"
+      },
+      "tones": {
+        "friendly": "Thân thiện",
+        "professional": "Chuyên nghiệp",
+        "concise": "Ngắn gọn",
+        "empathetic": "Đồng cảm",
+        "excited": "Hào hứng",
+        "formal": "Trang trọng"
+      },
+      "errors": {
+        "businessRequired": "Tên doanh nghiệp là bắt buộc.",
+        "noKey": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên thêm khóa.",
+        "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+        "providerFailed": "Nhà cung cấp AI không phản hồi. Vui lòng thử lại sau giây lát.",
+        "badJson": "Câu trả lời của mô hình không phải là mẫu dùng được. Hãy thử lại hoặc chỉnh lại bản tóm tắt.",
+        "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+        "forbidden": "Bạn không có quyền tạo mẫu.",
+        "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+        "failed": "Không thể tạo mẫu. Vui lòng thử lại."
+      }
+    },
+    "gallery": {
+      "title": "Thư viện mẫu",
+      "intro": "Các mẫu WhatsApp làm sẵn theo mục đích sử dụng. Chọn một mẫu, nó mở ra như một mẫu mới để bạn sửa trước khi lưu.",
+      "search": "Tìm trong thư viện",
+      "categoryFilter": "Danh mục thư viện",
+      "all": "Tất cả",
+      "loading": "Đang tải thư viện",
+      "loadError": "Không thể tải thư viện.",
+      "retry": "Thử lại",
+      "empty": "Không có mẫu nào phù hợp",
+      "emptyHint": "Thử từ khác hoặc chọn danh mục khác.",
+      "use": "Dùng mẫu này",
+      "useNamed": "Dùng mẫu {name}",
+      "count": "{count, plural, other {# mẫu}}",
+      "categories": {
+        "ecommerce": "Thương mại điện tử",
+        "food_delivery": "Giao đồ ăn",
+        "festival_season": "Mùa lễ hội",
+        "education": "Giáo dục",
+        "travel": "Du lịch",
+        "others": "Khác"
+      }
+    },
+    "home": {
+      "label": "Kiểu xem mẫu",
+      "saved": "Mẫu đã lưu",
+      "gallery": "Thư viện mẫu"
     }
   }
 }

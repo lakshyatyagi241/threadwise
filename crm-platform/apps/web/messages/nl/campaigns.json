@@ -647,8 +647,43 @@
         "notes": "Aanvullende opmerkingen",
         "notesNote": "optioneel / max. 2000",
         "notesPlaceholder": "Alles wat specifiek is — verplichte zinnen, wat je moet vermijden, kenmerken van de merkstem…",
-        "failed": "De campagne kon niet worden gegenereerd. Probeer het opnieuw.",
-        "applied": "De campagnetekst is ingevuld. Controleer deze voordat je verdergaat."
+        "applied": "De campagnetekst is ingevuld. Controleer deze voordat je verdergaat.",
+        "pictureApplied": "De afbeelding is aan de campagne toegevoegd. Controleer deze in de kaart Bijlage.",
+        "errors": {
+          "noKey": "Voor deze werkruimte is geen AI-provider ingeschakeld. Vraag een beheerder om een sleutel toe te voegen.",
+          "limitReached": "Deze werkruimte heeft het AI-tegoed voor deze maand opgebruikt.",
+          "providerFailed": "De AI-provider reageerde niet. Probeer het zo meteen opnieuw.",
+          "badJson": "Het antwoord van het model kon niet worden gelezen. Probeer het opnieuw of pas de briefing aan.",
+          "invalid": "Controleer de briefing: de bedrijfsnaam is verplicht en sommige velden zijn te lang.",
+          "forbidden": "U hebt geen toestemming om campagnes aan te maken.",
+          "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
+          "failed": "De campagne kon niet worden gegenereerd. Probeer het opnieuw."
+        },
+        "picture": {
+          "label": "Ook een afbeelding maken",
+          "hint": "Tekent één afbeelding op basis van dezelfde briefing en voegt deze toe aan de campagne. Gebruikt uw OpenAI-tegoed.",
+          "needsOpenAi": "Voor afbeeldingen is een OpenAI-sleutel nodig. Kies een OpenAI-model om dit in te schakelen.",
+          "noAttachment": "Het gekozen nummer verstuurt alleen tekst, dus er is niets om een afbeelding aan toe te voegen.",
+          "size": "Vorm van de afbeelding",
+          "sizes": {
+            "square": "Vierkant",
+            "landscape": "Liggend",
+            "portrait": "Staand"
+          },
+          "textKept": "De campagnetekst is ingevuld. Alleen de afbeelding ontbreekt nog.",
+          "retry": "Afbeelding opnieuw proberen",
+          "errors": {
+            "noKey": "Voor afbeeldingen is een OpenAI-sleutel nodig, en er is er geen ingeschakeld voor deze werkruimte.",
+            "limitReached": "Deze werkruimte heeft het AI-tegoed voor deze maand opgebruikt.",
+            "providerFailed": "De afbeeldingsservice reageerde niet. Probeer het zo meteen opnieuw.",
+            "badJson": "De afbeeldingsservice stuurde een onverwacht antwoord. Probeer het opnieuw.",
+            "imageRefused": "OpenAI weigerde deze afbeelding te tekenen. Pas het product, de aanbieding of de notities aan en probeer het opnieuw.",
+            "invalid": "Controleer de briefing: de bedrijfsnaam is verplicht en sommige velden zijn te lang.",
+            "forbidden": "U hebt geen toestemming om campagnes aan te maken.",
+            "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
+            "failed": "De afbeelding kon niet worden gemaakt. Probeer het opnieuw."
+          }
+        }
       },
       "switch": {
         "title": "De begeleide flow gebruiken?",
@@ -1126,7 +1161,10 @@
         "auto_end_in_past": "De automatische einddatum is al verstreken.",
         "auto_end_before_send": "De automatische einddatum moet na het verzendmoment liggen.",
         "auto_end_recurring": "Een terugkerende campagne eindigt volgens haar eigen regel: wis de automatische einddatum.",
-        "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld."
+        "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld.",
+        "follow_up_template_required": "Kies de sjabloon die elke follow-up verstuurt.",
+        "follow_up_flow_required": "Kies de flow die elke follow-up start.",
+        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups."
       },
       "template": {
         "previewOnline": "online",
@@ -1160,7 +1198,9 @@
         "senderLabel": "Verzenden vanaf",
         "senderHint": "Het WhatsApp-nummer waarvanaf deze broadcast wordt verzonden.",
         "pickSender": "Kies een nummer",
-        "classicOption": "klassieke builder"
+        "classicOption": "klassieke builder",
+        "buildWithAi": "Bouwen met AI",
+        "aiNote": "Maak met AI een concept voor een nieuwe sjabloon. U controleert het op de sjabloonpagina; daarna beoordeelt Meta het voordat het kan worden verzonden, dus kom terug en kies het zodra het is goedgekeurd."
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -1382,7 +1422,8 @@
         "sumCsv": "CSV-bestand {name}: {count, plural, one {# geldig nummer} other {# geldige nummers}}",
         "estimatedCostFull": "Geschatte kosten (volledig)",
         "chargedPlan": "Nu van je portemonnee afgeschreven: {amount} (je abonnement dekt {covered} van deze berichten)",
-        "chargedWallet": "Van je portemonnee afgeschreven: {amount}"
+        "chargedWallet": "Van je portemonnee afgeschreven: {amount}",
+        "sumFollowUps": "Follow-ups"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1587,7 +1628,25 @@
         "exportFailed": "De export kon niet worden gedownload.",
         "deleteTitle": "Deze verzending verwijderen?",
         "deleteOne": "Verwijdert deze verzending en de ontvangers. Dit kan niet ongedaan worden gemaakt.",
-        "deleteSeries": "Verwijdert deze terugkerende verzending en de geplande runs. Er is niets verstuurd, dus er gaat geen geschiedenis verloren. Dit kan niet ongedaan worden gemaakt."
+        "deleteSeries": "Verwijdert deze terugkerende verzending en de geplande runs. Er is niets verstuurd, dus er gaat geen geschiedenis verloren. Dit kan niet ongedaan worden gemaakt.",
+        "followUps": {
+          "title": "Follow-ups",
+          "step": "Follow-up {step}",
+          "count": {
+            "waiting": "{count} in afwachting",
+            "sent": "{count} verzonden",
+            "delivered": "{count} afgeleverd",
+            "read": "{count} gelezen",
+            "flowsStarted": "{count} flows gestart",
+            "skipped": "{count} overgeslagen",
+            "lapsed": "{count} verlopen",
+            "failed": "{count} mislukt"
+          },
+          "hint": {
+            "skipped": "Er werd niet aan de voorwaarde voldaan toen deze werd gecontroleerd, dus de reeks eindigde daar.",
+            "lapsed": "De bewakingstijd was verstreken voordat het contact reageerde of las, dus de reeks eindigde daar."
+          }
+        }
       },
       "panel": {
         "title": "Gemaakt met Broadcast maken",
@@ -1618,6 +1677,72 @@
         "body": "{number} ({engine}) verstuurt via de klassieke builder, die opnieuw begint. Deze campagne wordt als concept opgeslagen en blijft in je campagnelijst staan, zodat je er later op terug kunt komen.",
         "confirm": "Klassieke builder openen",
         "cancel": "Hier blijven"
+      },
+      "followUps": {
+        "title": "Follow-ups",
+        "intro": "Verstuur nog een bericht of start een flow, afhankelijk van wat het contact doet na het campagnebericht. Maximaal 3 stappen achter elkaar.",
+        "cloudOnly": "Follow-ups vereisen een WhatsApp Cloud API-nummer, omdat ze gebruikmaken van de lees- en antwoordrapporten van Meta. Kies er een in stap 1.",
+        "add": "Follow-up toevoegen",
+        "count": "{used} van {max} follow-ups",
+        "limitReached": "Limiet bereikt: {max} follow-ups.",
+        "stepTitle": "Follow-up {step}",
+        "measuredFromCampaign": "Geteld vanaf het campagnebericht.",
+        "measuredFromStep": "Geteld vanaf het bericht van follow-up {step}.",
+        "remove": "Follow-up {step} verwijderen",
+        "removeShort": "Verwijderen",
+        "triggerLabel": "Wanneer het contact",
+        "trigger": {
+          "replied": "Antwoordt",
+          "read": "Het bericht leest",
+          "not_replied": "Niet heeft geantwoord",
+          "not_read": "Het bericht niet heeft gelezen"
+        },
+        "triggerHelp": {
+          "replied": "Wordt direct uitgevoerd zodra het contact antwoordt, als dat binnen de ingestelde tijd gebeurt. Anders eindigt de reeks.",
+          "read": "Wordt direct uitgevoerd zodra het contact het bericht leest, als dat binnen de ingestelde tijd gebeurt. Anders eindigt de reeks.",
+          "not_replied": "Wacht de ingestelde tijd en wordt dan uitgevoerd als het contact niet heeft geantwoord. Als het wel heeft geantwoord, eindigt de reeks.",
+          "not_read": "Wacht de ingestelde tijd en wordt dan uitgevoerd als het contact het bericht niet heeft gelezen. Als het dat wel heeft gedaan, eindigt de reeks."
+        },
+        "watchLabel": "Bewaken tot maximaal",
+        "waitLabel": "Wachten",
+        "unitLabel": "Tijdseenheid",
+        "duration": {
+          "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+          "hours": "{count, plural, one {# uur} other {# uur}}",
+          "days": "{count, plural, one {# dag} other {# dagen}}"
+        },
+        "actionLabel": "Dan",
+        "action": {
+          "template": "Een sjabloon versturen",
+          "flow": "Een flow starten"
+        },
+        "templateLabel": "Te versturen sjabloon",
+        "flowLabel": "Te starten flow",
+        "pickTemplate": "Kies een sjabloon",
+        "pickFlow": "Kies een flow",
+        "loading": "Laden...",
+        "unavailable": "Niet meer beschikbaar",
+        "noTemplates": "Nog geen goedgekeurde sjablonen.",
+        "createTemplate": "Een sjabloon maken",
+        "noFlows": "Nog geen flows.",
+        "createFlow": "Een flow maken",
+        "flowsError": "De flows konden niet worden geladen. Probeer het later opnieuw.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Als het contact binnen {wait} antwoordt",
+          "read": "Als het contact het binnen {wait} leest",
+          "not_replied": "Als er na {wait} niet is geantwoord",
+          "not_read": "Als het na {wait} niet is gelezen"
+        },
+        "does": {
+          "template": "{name} versturen",
+          "flow": "flow {name} starten"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuut} other {minuten}}",
+          "hours": "{count, plural, one {uur} other {uur}}",
+          "days": "{count, plural, one {dag} other {dagen}}"
+        }
       }
     },
     "history": {

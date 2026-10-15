@@ -365,6 +365,21 @@
         "name": "Email",
         "hint": "Send a message as an email from a connected mailbox, with an unsubscribe link.",
         "cta": "Create email campaign"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Send a message to the people who already chat with your LINE account.",
+        "cta": "Create LINE broadcast"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Send a message to the people who already chat with your Viber account.",
+        "cta": "Create Viber broadcast"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Mass-send a message to all followers, a tag or picked users of your Official Account.",
+        "cta": "Create WeChat broadcast"
       }
     }
   }

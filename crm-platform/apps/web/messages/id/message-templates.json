@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Salin kode",
       "buttonUnnamed": "Tombol",
-      "moreButtons": "{count, plural, other {+# tombol lainnya}}"
+      "moreButtons": "{count, plural, other {+# tombol lainnya}}",
+      "live": "Pratinjau langsung",
+      "business": "Bloomly",
+      "online": "daring"
     },
     "card": {
       "rejected": "Ditolak: {reason}",
       "view": "Lihat",
       "edit": "Edit",
-      "delete": "Hapus"
+      "delete": "Hapus",
+      "curl": "cURL: kirim templat ini dengan API",
+      "curlNamed": "cURL untuk mengirim {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standar",
+        "media": "Media",
+        "auth": "Otentikasi",
+        "carousel": "Carousel",
+        "catalog": "Katalog",
+        "limited_time_offer": "Penawaran terbatas"
+      },
+      "rejectedLabel": "Ditolak:",
+      "viewTitle": "Lihat detail & status tinjauan Meta",
+      "deleteNamed": "Hapus {name}"
     },
     "library": {
       "title": "Pustaka templat",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Tidak ada templat yang cocok",
       "emptyFilteredBody": "Ubah atau hapus filter untuk melihat lebih banyak templat.",
       "clearFilters": "Hapus filter",
-      "loadMore": "Muat lebih banyak"
+      "loadMore": "Muat lebih banyak",
+      "crumb": "Kampanye / Template",
+      "titleA": "Template",
+      "titleB": "pustaka",
+      "tipTitle": "Tips",
+      "tip": "Kirim template dengan teks yang jelas dan ramah variabel ('{{name}}', '{{order_id}}'). Waktu persetujuan tetap di bawah 24 jam jika isi pesan menghindari pemicu promosi dan sesuai dengan kategori Meta yang dipilih.",
+      "statusTitle": "Status",
+      "statusTab": {
+        "all": "Semua",
+        "approved": "Disetujui",
+        "pending": "Dalam tinjauan",
+        "rejected": "Ditolak"
+      },
+      "quickStartTitle": "Mulai cepat",
+      "quickStart": "Baca <link>Panduan Template</link> sebelum mengirim ke Meta agar waktu persetujuan tetap di bawah 24 jam.",
+      "createTemplate": "Buat template",
+      "syncFailedLabel": "Sinkronisasi dari Meta gagal:",
+      "categories": "Kategori",
+      "tabAll": "Semua",
+      "sortLabel": "Urutkan template",
+      "sort": {
+        "newest": "Terbaru",
+        "oldest": "Terlama",
+        "name-asc": "Nama A→Z",
+        "name-desc": "Nama Z→A"
+      },
+      "showing": "Menampilkan",
+      "of": "dari",
+      "filteredTemplates": "template yang difilter",
+      "showingRange": "Menampilkan 1-{shown} dari {total} template",
+      "legend": {
+        "approved": "Disetujui",
+        "pending": "Dalam tinjauan",
+        "rejected": "Ditolak"
+      },
+      "helpLabel": "Bantuan - 0{n}",
+      "help": {
+        "one": {
+          "title": "Apa itu pesan template?",
+          "body": "Format pesan yang disetujui sebelumnya, diwajibkan oleh Meta untuk memulai percakapan baru dengan pelanggan di luar jendela layanan 24 jam."
+        },
+        "two": {
+          "title": "Bagaimana mempercepat persetujuan?",
+          "body": "Buat isi pesan jelas, hindari bahasa yang terlalu promosi pada kategori Utilitas, dan selalu sertakan contoh nilai untuk variabel."
+        },
+        "three": {
+          "title": "Mengapa template saya ditolak?",
+          "body": "Alasan umum meliputi format yang salah, kategori tidak sesuai, atau konten kasar. Periksa alasan penolakan lalu edit untuk mengirim ulang."
+        }
+      }
     },
     "delete": {
       "title": "Hapus templat",
@@ -289,6 +355,11 @@
         "saved": "Disimpan sebagai draf.",
         "warnings": "Perlu diperiksa sebelum Meta meninjau:",
         "open": "Buka templat"
+      },
+      "ai": {
+        "open": "Buat dengan AI",
+        "applied": "Draf templat diisi dari AI. Tinjau sebelum Anda mengirimkannya.",
+        "authHint": "Templat autentikasi memiliki teks tetap, jadi tidak ada yang perlu dibuat."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Dijeda oleh Meta. Tidak dapat dikirim sampai Meta mencabut jeda.",
         "pausedUntil": "Dijeda oleh Meta sampai {when}.",
         "disabled": "Dinonaktifkan oleh Meta. Tidak dapat dikirim.",
-        "deleted": "Meta tidak lagi mencantumkan templat ini. Templat tetap disimpan di sini; sinkronkan lagi atau hapus."
+        "deleted": "Meta tidak lagi mencantumkan templat ini. Templat tetap disimpan di sini; sinkronkan lagi atau hapus.",
+        "notSubmitted": "Belum dikirim ke Meta",
+        "notSubmittedBody": "Template ini tersimpan di sini tetapi tidak memiliki ID Template Meta: Meta belum pernah menerimanya, sehingga tidak dapat ditinjau atau dikirim. Kirim untuk memulai tinjauan.",
+        "notSubmittedNoWaba": "Template ini tidak memiliki ID Template Meta. Hubungkan akun WhatsApp Business (WABA), lalu kirim untuk ditinjau.",
+        "pendingBody": "Sebagian besar template disetujui dalam hitungan menit; Meta memberi waktu hingga 48 jam. Halaman ini otomatis menyegarkan setiap 30 detik selama status masih menunggu.",
+        "submittedAgo": "Dikirim {when}",
+        "checkedAgo": "terakhir diperiksa {when}",
+        "code": "Kode:",
+        "pausedBody": "Umpan balik negatif yang berulang (pemblokiran atau laporan spam) menjeda template ini. Skor kualitasnya harus pulih sebelum dapat dikirim lagi."
       },
       "facts": {
         "title": "Sinkronisasi Meta",
@@ -354,7 +433,171 @@
         "title": "Payload Meta",
         "hint": "Yang dikirim ke Meta untuk peninjauan, persis seperti yang dibuat.",
         "empty": "Belum ada yang dibuat."
+      },
+      "curl": {
+        "title": "Kirim dengan API (cURL)",
+        "intro": "Kirim templat yang sudah disetujui ini ke satu nomor. Ganti nilai contoh dengan nilai Anda.",
+        "copy": "Salin",
+        "copied": "Tersalin",
+        "copyFailed": "Gagal menyalin. Pilih teksnya lalu salin secara manual.",
+        "keyHint": "Ganti YOUR_API_KEY dengan kunci API Anda.",
+        "keyLink": "Dapatkan kunci API",
+        "loading": "Memeriksa kunci API Anda…",
+        "noKey": "Ruang kerja ini belum punya kunci API. Buat kunci API terlebih dahulu, lalu gunakan cURL ini.",
+        "keysUnknown": "Kunci API Anda tidak dapat diperiksa. Buka halaman Pengembang untuk membuat atau meninjau kunci, lalu gunakan cURL ini.",
+        "createKey": "Buat kunci API"
+      },
+      "refreshNow": "Segarkan sekarang",
+      "editTemplate": "Edit template",
+      "editResubmit": "Edit & kirim ulang",
+      "submitToMeta": "Kirim ke Meta",
+      "wabaAccount": "Akun WhatsApp Business",
+      "noWaba": "Belum ada akun WABA yang terhubung.",
+      "connectOne": "Hubungkan satu",
+      "noWabaTail": "untuk mengirim template ke Meta.",
+      "related": "Terkait",
+      "useInBroadcast": "Gunakan dalam siaran",
+      "crumbTemplates": "Template",
+      "crumbDetail": "Detail",
+      "notSubmittedPill": "Belum dikirim",
+      "qualityPill": "Kualitas · {quality}",
+      "preview": {
+        "title": "Pratinjau",
+        "hint": "Tampilannya di WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Konten ditandai sebagai kasar atau mengancam.",
+        "INVALID_FORMAT": "Format melanggar aturan template Meta (placeholder, jeda baris, panjang).",
+        "PROMOTIONAL": "Bahasa pemasaran tidak diizinkan dalam kategori ini.",
+        "TAG_CONTENT_MISMATCH": "Kategori tidak sesuai dengan konten (mis. teks promosi dalam template UTILITY).",
+        "SCAM": "Meta menandai template ini sebagai potensi penipuan. Tinjau klaim dan bahasanya."
       }
+    },
+    "ai": {
+      "eyebrow": "Templat / AI",
+      "title": "Buat dengan",
+      "titleAccent": "AI",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "generate": "Buat templat",
+      "intro": "Buat draf templat WhatsApp dari brief singkat: nama, header, isi, footer, dan tombol. Tidak ada yang dikirim sampai Anda melakukannya sendiri.",
+      "model": "Model AI",
+      "modelsError": "Tidak dapat memuat model.",
+      "noModels": "Tidak ada penyedia AI yang diaktifkan untuk ruang kerja ini. Minta admin untuk mengaktifkannya.",
+      "loadingModels": "Memuat model…",
+      "pickModel": "Pilih model",
+      "yourKey": "kunci Anda",
+      "business": "Nama bisnis",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Industri",
+      "pickIndustry": "Pilih industri",
+      "occasion": "Momen",
+      "pickOccasion": "Pilih momen",
+      "purpose": "Tujuan",
+      "pickPurpose": "Pilih tujuan",
+      "action": "Aksi utama",
+      "pickAction": "Pilih aksi utama",
+      "tone": "Nada",
+      "pickTone": "Pilih nada",
+      "language": "Bahasa",
+      "languageHint": "Draf ditulis dalam bahasa formulir.",
+      "notes": "Prompt kustom",
+      "notesNote": "opsional / maks. 2000",
+      "notesPlaceholder": "Hal spesifik yang ingin disertakan: variabel, tautan, frasa wajib, hal yang harus dihindari…",
+      "industries": {
+        "retail": "Ritel / E-commerce",
+        "food": "Makanan & Minuman",
+        "healthcare": "Kesehatan",
+        "education": "Pendidikan",
+        "travel": "Perjalanan & Perhotelan",
+        "finance": "Keuangan & Perbankan",
+        "realEstate": "Properti",
+        "beauty": "Kecantikan & Kebugaran",
+        "logistics": "Logistik & Pengiriman",
+        "services": "Jasa Profesional",
+        "nonprofit": "Nirlaba",
+        "other": "Lainnya"
+      },
+      "occasions": {
+        "launch": "Peluncuran produk",
+        "sale": "Obral / diskon",
+        "orderConfirmation": "Konfirmasi pesanan",
+        "shipping": "Info pengiriman",
+        "appointment": "Pengingat janji temu",
+        "welcome": "Sambutan / orientasi",
+        "feedback": "Permintaan masukan",
+        "abandonedCart": "Keranjang terlupakan",
+        "reengage": "Pelibatan ulang",
+        "event": "Undangan acara",
+        "festival": "Ucapan hari raya",
+        "other": "Lainnya"
+      },
+      "purposes": {
+        "inform": "Memberi informasi",
+        "promote": "Promosi",
+        "confirm": "Konfirmasi",
+        "remind": "Mengingatkan",
+        "collectFeedback": "Mengumpulkan masukan",
+        "reengage": "Melibatkan kembali",
+        "purchase": "Mendorong pembelian",
+        "booking": "Mendorong pemesanan"
+      },
+      "actions": {
+        "website": "Kunjungi situs web",
+        "call": "Hubungi kami",
+        "book": "Buat janji temu",
+        "order": "Buat pesanan",
+        "catalog": "Lihat katalog",
+        "code": "Balas dengan kode",
+        "other": "Lainnya"
+      },
+      "tones": {
+        "friendly": "Ramah",
+        "professional": "Profesional",
+        "concise": "Ringkas",
+        "empathetic": "Empatik",
+        "excited": "Antusias",
+        "formal": "Formal"
+      },
+      "errors": {
+        "businessRequired": "Nama bisnis wajib diisi.",
+        "noKey": "Tidak ada penyedia AI yang diaktifkan untuk ruang kerja ini. Minta admin untuk menambahkan kunci.",
+        "limitReached": "Ruang kerja ini telah menggunakan seluruh kuota AI bulan ini.",
+        "providerFailed": "Penyedia AI tidak merespons. Coba lagi sebentar lagi.",
+        "badJson": "Jawaban model bukan templat yang dapat digunakan. Coba lagi atau perbaiki brief.",
+        "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
+        "forbidden": "Anda tidak memiliki izin untuk membuat templat.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+        "failed": "Tidak dapat membuat templat. Coba lagi."
+      }
+    },
+    "gallery": {
+      "title": "Galeri templat",
+      "intro": "Templat WhatsApp siap pakai menurut kegunaan. Pilih satu, lalu terbuka sebagai templat baru yang bisa Anda ubah sebelum menyimpannya.",
+      "search": "Cari di galeri",
+      "categoryFilter": "Kategori galeri",
+      "all": "Semua",
+      "loading": "Memuat galeri",
+      "loadError": "Galeri tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": "Tidak ada templat yang cocok",
+      "emptyHint": "Coba kata lain atau pilih kategori lain.",
+      "use": "Gunakan templat ini",
+      "useNamed": "Gunakan templat {name}",
+      "count": "{count, plural, other {# templat}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Pesan antar makanan",
+        "festival_season": "Musim perayaan",
+        "education": "Pendidikan",
+        "travel": "Perjalanan",
+        "others": "Lainnya"
+      }
+    },
+    "home": {
+      "label": "Tampilan templat",
+      "saved": "Templat tersimpan",
+      "gallery": "Galeri templat"
     }
   }
 }

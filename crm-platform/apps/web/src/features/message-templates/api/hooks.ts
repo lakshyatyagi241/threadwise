@@ -10,11 +10,12 @@ import {
   type SubmitTemplateInput,
   type SyncTemplatesInput,
   type TemplateDetail,
+  type TemplateGalleryQuery,
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { useCursorList } from '@/lib/api/use-cursor-list';
 import { DETAIL_POLL_MS, isAwaitingReview } from '../lib/status-model';
-import { connectionsApi, templatesApi } from './service';
+import { aiApi, apiKeysApi, connectionsApi, templatesApi } from './service';
 
 export const KEYS = {
   all: ['tpl'] as const,
@@ -22,9 +23,26 @@ export const KEYS = {
   detail: (id: string) => ['tpl', 'detail', id] as const,
   connections: ['tpl', 'connections'] as const,
   lint: ['tpl', 'lint'] as const,
+  apiKeys: ['tpl', 'api-keys'] as const,
+  aiModels: ['tpl', 'ai-models'] as const,
 };
 
 export const PAGE_SIZE_LIBRARY = 8;
+
+/** The default templates (the Saved templates tab). The same for every workspace, so kept for a while and refetched when the filters change. */
+export function useTemplateGallery(
+  query: TemplateGalleryQuery = {},
+  opts: { enabled?: boolean } = {},
+) {
+  return useQuery({
+    enabled: opts.enabled ?? true,
+    queryKey: ['tpl', 'gallery', query.category ?? 'all', query.q ?? ''] as const,
+    queryFn: ({ signal }) => templatesApi.gallery(query, signal),
+    staleTime: 5 * 60_000,
+    placeholderData: keepPreviousData,
+    retry: false,
+  });
+}
 
 export type LibraryFilters = Pick<
   ListTemplatesQuery,
@@ -137,3 +155,26 @@ export const useSubmitTemplate = () =>
 export const useRefreshTemplate = () => useAction((id: string) => templatesApi.refresh(id));
 export const useSyncTemplates = () =>
   useAction((input: SyncTemplatesInput) => templatesApi.sync(input));
+
+/** True/false once known, undefined while loading or when the keys cannot be read. A live key is active and not revoked. */
+export function useHasApiKey(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.apiKeys,
+    queryFn: ({ signal }) => apiKeysApi.list(signal),
+    select: (r) => r.data.some((k) => k.status === 'active' && k.revokedAt === null),
+    enabled,
+    staleTime: 60_000,
+    retry: false,
+  });
+}
+
+/** The text models this workspace may use for "Build with AI" (the platform's enabled ones and any provider it added its own key for). */
+export function useAiModels(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.aiModels,
+    queryFn: ({ signal }) => aiApi.models(signal),
+    select: (r) => r.data,
+    enabled,
+    staleTime: 60_000,
+  });
+}

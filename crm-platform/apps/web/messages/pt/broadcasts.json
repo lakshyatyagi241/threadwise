@@ -365,6 +365,21 @@
         "name": "E-mail",
         "hint": "Envie uma mensagem como e-mail a partir de uma caixa de correio conectada, com um link para cancelar a inscrição.",
         "cta": "Criar campanha de e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envie uma mensagem às pessoas que já conversam com sua conta do LINE.",
+        "cta": "Criar transmissão do LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envie uma mensagem para as pessoas que já conversam com a sua conta do Viber.",
+        "cta": "Criar transmissão do Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envie uma mensagem em massa para todos os seguidores, uma tag ou usuários selecionados da sua Conta Oficial.",
+        "cta": "Criar transmissão do WeChat"
       }
     }
   }

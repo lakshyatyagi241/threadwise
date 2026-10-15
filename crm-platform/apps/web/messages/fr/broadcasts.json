@@ -365,6 +365,21 @@
         "name": "E-mail",
         "hint": "Envoyez un message sous forme d'e-mail depuis une boîte mail connectée, avec un lien de désabonnement.",
         "cta": "Créer une campagne e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte LINE.",
+        "cta": "Créer une diffusion LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte Viber.",
+        "cta": "Créer une diffusion Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envoyez un message de masse à tous les abonnés, à un tag ou à des utilisateurs sélectionnés de votre compte officiel.",
+        "cta": "Créer une diffusion WeChat"
       }
     }
   }

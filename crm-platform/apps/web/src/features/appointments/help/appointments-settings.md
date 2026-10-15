@@ -5,7 +5,20 @@ summary: Set your Google Calendar link, time zone, business hours, booking rules
 area: settings
 order: 11
 documents: [tile:appointment-settings, tile:google-calendar]
-keywords: [google calendar, meet, busy times, time zone, business hours, reminders, buffer, notice, cancellation, messages, booking page]
+keywords:
+  [
+    google calendar,
+    meet,
+    busy times,
+    time zone,
+    business hours,
+    reminders,
+    buffer,
+    notice,
+    cancellation,
+    messages,
+    booking page,
+  ]
 ---
 
 ## What it is for

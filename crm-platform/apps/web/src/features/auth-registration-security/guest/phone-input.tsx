@@ -163,7 +163,7 @@ export function PhoneInput({
         // A phone number reads left to right whatever the page language: flag, dial code, digits.
         dir="ltr"
         className={cn(
-          'flex w-full items-stretch rounded-lg border bg-background text-[13px] text-foreground',
+          'flex w-full items-stretch rounded-lg border bg-background text-[14px] text-foreground',
           'focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10',
           invalid ? 'border-danger' : 'border-border',
         )}

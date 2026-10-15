@@ -38,6 +38,10 @@ export const QUEUES = {
   WEBHOOK_DELIVER: 'webhook-deliver',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (TW-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
+  /** One job per LINE broadcast run: pushes to its pending people in batches of 40, paced under LINE's rate limits. */
+  LINE_BROADCAST: 'line-broadcast',
+  /** One job per Viber broadcast run: sends its pending users in calls of up to 300 (TW-VIB-013). */
+  VIBER_BROADCAST: 'viber-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */
   FB_BACKFILL: 'fb-backfill',
   /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (TW-FB-013). */
@@ -82,6 +86,8 @@ export const QUEUES = {
   CALLING_READINESS: 'calling-readiness',
   /** One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message. */
   CALENDAR_RECONCILE: 'calendar-reconcile',
+  /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
+  WECHAT_BROADCAST: 'wechat-broadcast',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

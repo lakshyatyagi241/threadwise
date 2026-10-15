@@ -717,7 +717,8 @@
             "ask": "Tanya pelanggan",
             "handoff": "Serahkan",
             "logic": "Putuskan",
-            "answer": "Jawaban"
+            "answer": "Jawaban",
+            "action": "Aksi"
           },
           "blockedTitle": "Tombol dan daftar mengakhiri alur, sehingga hanya boleh di posisi terakhir.",
           "blockedTitleFaq": "Jawab dari FAQ punya dua jalur keluar, jadi hanya bisa di posisi terakhir."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "Terjawab",
             "no_match": "Tidak cocok"
-          }
+          },
+          "close": "Tutup",
+          "clickToEdit": "Klik untuk mengedit",
+          "outsideToSave": "Klik di mana saja di luar untuk menyimpan perubahan",
+          "addCondition": "Tambahkan kondisi setelah langkah ini",
+          "conditionLast": "Kondisi mengakhiri bagian ini, jadi hanya bisa di paling akhir.",
+          "duplicateTitle": "Duplikat langkah ini?",
+          "duplicateBody": "Salinan ditambahkan tepat setelahnya.",
+          "deleteTitle": "Hapus langkah ini?",
+          "deleteBody": "Langkah dihapus dari flow.",
+          "stage": "Tahap {stage}",
+          "storedIn": "Nilai akan disimpan di properti <b>{property}</b> milik kontak",
+          "actions": "Aksi",
+          "actionsHint": "Tambahkan langkah yang berjalan tepat setelah langkah ini.",
+          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain."
         },
         "editors": {
           "linkLabel": "Tujuan",
@@ -1968,6 +1983,42 @@
         "label": "Ikon (opsional)",
         "add": "Tambah ikon",
         "saveFirst": "Simpan bot sekali untuk menambahkan ikon."
+      },
+      "buttonAction": {
+        "label": "Aksi saat tombol ditekan",
+        "kind": {
+          "none": "Lanjut ke langkah berikutnya",
+          "flow": "Hubungkan flow",
+          "live_agent": "Agen langsung",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Pilih flow",
+        "loadingFlows": "Memuat flow…",
+        "flowMissing": "Flow {id} (tidak ditemukan)",
+        "hint": {
+          "flow": "Memulai flow yang dipilih untuk kontak ini, dan percakapan berlanjut di sana. Tidak ada yang terhubung setelah tombol ini.",
+          "live_agent": "Menyerahkan percakapan ke tim yang Anda pilih. Tidak ada yang terhubung setelah tombol ini.",
+          "opt_in": "Menandai kontak sebagai berlangganan pesan pemasaran, lalu lanjut ke langkah yang terhubung setelah tombol ini.",
+          "opt_out": "Menandai kontak sebagai berhenti berlangganan pesan pemasaran, lalu lanjut ke langkah yang terhubung setelah tombol ini."
+        }
+      },
+      "messageTools": {
+        "format": "Format teks",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "strike": "Coret",
+        "mono": "Monospasi",
+        "bullet": "Daftar poin",
+        "numbered": "Daftar bernomor",
+        "emoji": "Emoji",
+        "emojiSearch": "Cari emoji",
+        "emojiNone": "Emoji tidak ditemukan",
+        "variable": "Sisipkan variabel",
+        "variableSearch": "Cari variabel",
+        "groupContact": "Properti kontak",
+        "groupFlow": "Tersimpan di flow ini",
+        "variableNone": "Variabel tidak ditemukan"
       }
     },
     "contracts": {
@@ -2487,6 +2538,14 @@
         "faq": {
           "label": "Jawab dari FAQ",
           "help": "Cocokkan pesan pelanggan dengan FAQ Anda. Mengakhiri alur ini: satu jalur keluar jika FAQ menjawab, satu lagi jika tidak"
+        },
+        "apiLibrary": {
+          "label": "Panggilan API",
+          "help": "Panggil API dari pustaka API Anda"
+        },
+        "code": {
+          "label": "Fungsi JS",
+          "help": "Jalankan potongan kecil JavaScript"
         }
       },
       "typeLabel": {
@@ -2504,7 +2563,9 @@
         "assign": "Tugaskan ke agen",
         "carousel": "Carousel",
         "condition": "Kondisi",
-        "faq": "Jawab dari FAQ"
+        "faq": "Jawab dari FAQ",
+        "api_library": "Panggilan API",
+        "code": "Fungsi JS"
       },
       "stepLabel": {
         "questionOf": "Pertanyaan · {kind}"
@@ -2545,7 +2606,10 @@
         "carouselCards": "Langkah {stage}: tambahkan minimal satu kartu dan beri setiap kartu judul.",
         "carouselButtons": "Langkah {stage}: beri setiap tombol nama, serta tautan, nomor, atau alamat di tempat tombol membuka sesuatu.",
         "conditionIncomplete": "Langkah {stage}: lengkapi aturan kondisi (variabel dan nilai di setiap aturan).",
-        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur."
+        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur.",
+        "chooseFlow": "Langkah {stage}: pilih flow yang dimulai tombol.",
+        "chooseApi": "Langkah {stage}: pilih API yang dipanggil.",
+        "writeCode": "Langkah {stage}: tulis kode yang dijalankan."
       },
       "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
     },

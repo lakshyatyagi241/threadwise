@@ -58,7 +58,8 @@
         "tryAgain": "重新支付",
         "missingTitle": "找不到此笔付款",
         "missingBody": "链接可能有误或已过旧。"
-      }
+      },
+      "termsOfService": "条款"
     }
   }
 }

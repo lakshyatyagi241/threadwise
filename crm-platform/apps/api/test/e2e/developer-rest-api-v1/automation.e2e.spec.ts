@@ -56,13 +56,17 @@ describe('customer API v1: automation', () => {
     createdAt?: string;
     metaCategory?: string;
     type?: string;
+    header?: string;
+    attachment?: string;
+    sample?: string;
   }
   /** A template straight into the table. Sendable by default (approved on Meta, with a Meta id). */
   async function seedTemplate(t: Tenant, spec: TplSpec = {}) {
     const res = await h.owner.query(
       `INSERT INTO wa_templates (org_id, template_name, language, status, meta_status, meta_template_id, template_body, footer, buttons,
-                                 meta_category, category, template_type, provider_config_id, channel, quality_score, paused_until, created_at, submitted_at)
-       VALUES ($1,$2,'en_US',$3,$4,$5,$6,$7,$8::jsonb,$9,lower($9),$10,$11,'waba',$12,$13::timestamptz, COALESCE($14::timestamptz, now()), now())
+                                 meta_category, category, template_type, provider_config_id, channel, quality_score, paused_until, created_at, submitted_at,
+                                 header, attachment_type, header_sample_url)
+       VALUES ($1,$2,'en_US',$3,$4,$5,$6,$7,$8::jsonb,$9,lower($9),$10,$11,'waba',$12,$13::timestamptz, COALESCE($14::timestamptz, now()), now(), $15, $16, $17)
        RETURNING id, uuid`,
       [
         t.orgId,
@@ -79,6 +83,9 @@ describe('customer API v1: automation', () => {
         spec.quality ?? null,
         spec.pausedUntil ?? null,
         spec.createdAt ?? null,
+        spec.header ?? null,
+        spec.attachment ?? 'none',
+        spec.sample ?? null,
       ],
     );
     return { id: Number(res.rows[0].id), uuid: String(res.rows[0].uuid) };
@@ -756,7 +763,7 @@ describe('customer API v1: automation', () => {
       expect(res.body.error.details).toHaveProperty('to');
     });
 
-    it('POST /templates/{id}/send says plainly that header files, header text and button values are not sendable yet (TW-API-036)', async () => {
+    it('POST /templates/{id}/send refuses header values the template has no slot for, and an inline header file (TW-API-036)', async () => {
       const { tenant, call } = await tenantWithKey(api, 'tpl-send-unsup');
       const num = await seedNumber(tenant);
       await seedChannel(tenant, num);
@@ -764,12 +771,67 @@ describe('customer API v1: automation', () => {
       for (const [body, field] of [
         [{ to: '919811200560', header_text: 'Hi' }, 'header_text'],
         [{ to: '919811200560', header_media_url: 'https://a.test/x.png' }, 'header_media_url'],
-        [{ to: '919811200560', buttons: [{ index: 0, value: 'abc' }] }, 'buttons'],
       ] as const) {
         const res = await call.post(`/templates/${t.uuid}/send`, body);
         expect(res.status).toBe(422);
         expect(res.body.error.details).toHaveProperty(field);
       }
+    });
+
+    it('POST /templates/{id}/send carries header text, a media header and dynamic button values into the queued message (TW-API-036)', async () => {
+      const { tenant, call } = await tenantWithKey(api, 'tpl-send-parts');
+      const num = await seedNumber(tenant);
+      await seedChannel(tenant, num);
+      const metaOf = async (id: string) =>
+        (
+          await h.owner.query(`SELECT meta FROM messages WHERE org_id = $1 AND uuid = $2`, [
+            tenant.orgId,
+            id,
+          ])
+        ).rows[0].meta;
+
+      const text = await seedTemplate(tenant, {
+        conn: num,
+        header: 'Order {{1}}',
+        body: 'Hi {{1}}',
+        buttons: [{ type: 'URL', text: 'Track', url: 'https://a.test/{{1}}' }],
+      });
+      const r1 = await call.post(`/templates/${text.uuid}/send`, {
+        to: '919811200561',
+        body: ['Ana'],
+        header_text: 'B-42',
+        buttons: [{ index: 0, sub_type: 'url', value: 'B-42' }],
+      });
+      expect(r1.status, JSON.stringify(r1.body)).toBe(202);
+      const m1 = await metaOf(r1.body.data.message_id);
+      expect(m1.templateComponents).toEqual(
+        expect.arrayContaining([
+          { type: 'header', parameters: [{ type: 'text', text: 'B-42' }] },
+          { type: 'body', parameters: [{ type: 'text', text: 'Ana' }] },
+          {
+            type: 'button',
+            sub_type: 'url',
+            index: 0,
+            parameters: [{ type: 'text', text: 'B-42' }],
+          },
+        ]),
+      );
+
+      const media = await seedTemplate(tenant, { conn: num, attachment: 'image', body: 'Look' });
+      const none = await call.post(`/templates/${media.uuid}/send`, { to: '919811200562' });
+      expect(none.status).toBe(422);
+      expect(none.body.error.code).toBe('missing_header_media');
+      const r2 = await call.post(`/templates/${media.uuid}/send`, {
+        to: '919811200562',
+        header_media_url: 'https://a.test/x.png',
+      });
+      expect(r2.status, JSON.stringify(r2.body)).toBe(202);
+      expect((await metaOf(r2.body.data.message_id)).templateComponents).toEqual([
+        {
+          type: 'header',
+          parameters: [{ type: 'image', image: { link: 'https://a.test/x.png' } }],
+        },
+      ]);
     });
 
     it('POST /templates/{id}/send with an inline header file runs the upload guard: .php and disguised HTML are 422 unsupported_media_type (TW-API-037)', async () => {

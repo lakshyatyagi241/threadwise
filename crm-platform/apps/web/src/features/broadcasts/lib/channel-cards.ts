@@ -1,6 +1,15 @@
 import { createPath } from '@/features/campaigns/lib/create-flow';
 
-export type ChannelCardId = 'whatsapp' | 'sms' | 'email' | 'telegram' | 'facebook' | 'instagram';
+export type ChannelCardId =
+  | 'whatsapp'
+  | 'sms'
+  | 'email'
+  | 'telegram'
+  | 'facebook'
+  | 'instagram'
+  | 'line'
+  | 'viber'
+  | 'wechat';
 
 export interface ChannelCard {
   id: ChannelCardId;
@@ -16,6 +25,9 @@ export function channelCards(c: {
   telegram: boolean;
   facebook: boolean;
   instagram: boolean;
+  line: boolean;
+  viber: boolean;
+  wechat: boolean;
   sms: string | null;
   email: string | null;
 }): ChannelCard[] {
@@ -25,5 +37,8 @@ export function channelCards(c: {
   if (c.telegram) cards.push({ id: 'telegram', href: '/telegram/broadcasts' });
   if (c.facebook) cards.push({ id: 'facebook', href: '/facebook/broadcasts' });
   if (c.instagram) cards.push({ id: 'instagram', href: '/instagram/broadcast' });
+  if (c.line) cards.push({ id: 'line', href: '/line/broadcasts' });
+  if (c.viber) cards.push({ id: 'viber', href: '/viber/broadcasts' });
+  if (c.wechat) cards.push({ id: 'wechat', href: '/wechat/broadcasts' });
   return cards;
 }

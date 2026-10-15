@@ -365,6 +365,21 @@
         "name": "E-mail",
         "hint": "Wyślij wiadomość jako e-mail z połączonej skrzynki, z linkiem do rezygnacji z subskrypcji.",
         "cta": "Utwórz kampanię e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem LINE.",
+        "cta": "Utwórz wysyłkę LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem Viber.",
+        "cta": "Utwórz wysyłkę Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Wyślij wiadomość masowo do wszystkich obserwujących, do tagu lub do wybranych użytkowników Twojego Konta oficjalnego.",
+        "cta": "Utwórz broadcast WeChat"
       }
     }
   }

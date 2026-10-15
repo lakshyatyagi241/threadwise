@@ -369,6 +369,11 @@
         "label": "Permintaan data",
         "description": "Jawab orang yang menanyakan data apa yang Anda simpan tentang mereka: pemeriksaan identitas, ekspor, penghapusan dengan pratinjau, dan bukti yang dapat Anda simpan.",
         "keywords": "privasi, gdpr, permintaan data, dsar, akses subjek, ekspor data, hapus, hak untuk dilupakan, hapus data pribadi, penahanan hukum"
+      },
+      "compliance-center": {
+        "label": "Pusat kepatuhan",
+        "description": "Alat untuk membantu Anda memenuhi kewajiban privasi: hukum yang berlaku bagi Anda, kontak privasi, pemberitahuan dan tautan, sub-pemroses, jam tenang, dan daftar periksa tentang apa yang sudah tersedia.",
+        "keywords": "kepatuhan, privasi, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, petugas pelindungan data, petugas pengaduan, sub-pemroses, dpa, ketentuan, kebijakan privasi, jam tenang, jangan hubungi, daftar periksa, anak-anak"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

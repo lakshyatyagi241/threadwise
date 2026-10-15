@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "复制验证码",
       "buttonUnnamed": "按钮",
-      "moreButtons": "{count, plural, other {另有 # 个按钮}}"
+      "moreButtons": "{count, plural, other {另有 # 个按钮}}",
+      "live": "实时预览",
+      "business": "Bloomly",
+      "online": "在线"
     },
     "card": {
       "rejected": "已拒绝:{reason}",
       "view": "查看",
       "edit": "编辑",
-      "delete": "删除"
+      "delete": "删除",
+      "curl": "cURL：通过 API 发送此模板",
+      "curlNamed": "发送 {name} 的 cURL",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "标准",
+        "media": "媒体",
+        "auth": "验证",
+        "carousel": "轮播",
+        "catalog": "商品目录",
+        "limited_time_offer": "限时优惠"
+      },
+      "rejectedLabel": "已拒绝：",
+      "viewTitle": "查看详情和 Meta 审核状态",
+      "deleteNamed": "删除 {name}"
     },
     "library": {
       "title": "模板库",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "没有匹配的模板",
       "emptyFilteredBody": "更改或清除筛选条件以查看更多模板。",
       "clearFilters": "清除筛选",
-      "loadMore": "加载更多"
+      "loadMore": "加载更多",
+      "crumb": "营销活动 / 模板",
+      "titleA": "模板",
+      "titleB": "库",
+      "tipTitle": "提示",
+      "tip": "提交模板时请使用清晰且便于使用变量的文案（'{{name}}'、'{{order_id}}'）。如果正文避免促销性触发词并与所选 Meta 类别相符，审核时间可控制在 24 小时以内。",
+      "statusTitle": "状态",
+      "statusTab": {
+        "all": "全部",
+        "approved": "已批准",
+        "pending": "审核中",
+        "rejected": "已拒绝"
+      },
+      "quickStartTitle": "快速入门",
+      "quickStart": "提交到 Meta 之前请阅读<link>模板指南</link>，以便将审核时间控制在 24 小时以内。",
+      "createTemplate": "创建模板",
+      "syncFailedLabel": "从 Meta 同步失败：",
+      "categories": "类别",
+      "tabAll": "全部",
+      "sortLabel": "模板排序",
+      "sort": {
+        "newest": "最新",
+        "oldest": "最早",
+        "name-asc": "名称 A→Z",
+        "name-desc": "名称 Z→A"
+      },
+      "showing": "显示",
+      "of": "/",
+      "filteredTemplates": "个已筛选模板",
+      "showingRange": "显示第 1-{shown} 个，共 {total} 个模板",
+      "legend": {
+        "approved": "已批准",
+        "pending": "审核中",
+        "rejected": "已拒绝"
+      },
+      "helpLabel": "帮助 - 0{n}",
+      "help": {
+        "one": {
+          "title": "什么是模板消息？",
+          "body": "Meta 要求的预先批准的消息格式，用于在 24 小时服务窗口之外向客户发起新对话。"
+        },
+        "two": {
+          "title": "如何缩短审核时间？",
+          "body": "保持消息正文清晰，在实用类别中避免过度促销的措辞，并始终为变量提供示例值。"
+        },
+        "three": {
+          "title": "我的模板为什么被拒绝？",
+          "body": "常见原因包括格式不正确、类别不匹配或内容违规。请查看拒绝原因并编辑后重新提交。"
+        }
+      }
     },
     "delete": {
       "title": "删除模板",
@@ -289,6 +355,11 @@
         "saved": "已保存为草稿。",
         "warnings": "在 Meta 审核前值得留意:",
         "open": "打开模板"
+      },
+      "ai": {
+        "open": "使用 AI 生成",
+        "applied": "已由 AI 填写模板草稿。提交前请先检查。",
+        "authHint": "验证类模板的文本是固定的，无需起草。"
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "已被 Meta 暂停。在 Meta 解除暂停之前无法发送。",
         "pausedUntil": "已被 Meta 暂停,直至 {when}。",
         "disabled": "已被 Meta 禁用。无法发送。",
-        "deleted": "Meta 已不再列出此模板。此处将保留该模板;请重新同步或删除它。"
+        "deleted": "Meta 已不再列出此模板。此处将保留该模板;请重新同步或删除它。",
+        "notSubmitted": "尚未提交到 Meta",
+        "notSubmittedBody": "此模板已保存在这里，但没有 Meta 模板 ID：Meta 从未接受它，因此无法审核或发送。请提交以开始审核。",
+        "notSubmittedNoWaba": "此模板没有 Meta 模板 ID。请连接 WhatsApp Business (WABA) 账号，然后提交审核。",
+        "pendingBody": "大多数模板几分钟内即可获批；Meta 最长可能需要 48 小时。状态待处理期间，此页面每 30 秒自动刷新一次。",
+        "submittedAgo": "提交于 {when}",
+        "checkedAgo": "上次检查于 {when}",
+        "code": "代码：",
+        "pausedBody": "多次负面反馈（屏蔽或垃圾信息举报）导致此模板被暂停。其质量评分必须恢复后才能再次发送。"
       },
       "facts": {
         "title": "Meta 同步",
@@ -354,7 +433,171 @@
         "title": "Meta 请求内容",
         "hint": "按原样构建后发送给 Meta 审核的内容。",
         "empty": "尚未生成任何内容。"
+      },
+      "curl": {
+        "title": "通过 API 发送 (cURL)",
+        "intro": "将这个已获批准的模板发送到一个号码。请把示例值换成你自己的值。",
+        "copy": "复制",
+        "copied": "已复制",
+        "copyFailed": "无法复制。请选中文本后手动复制。",
+        "keyHint": "请把 YOUR_API_KEY 换成你的 API 密钥。",
+        "keyLink": "获取 API 密钥",
+        "loading": "正在检查你的 API 密钥…",
+        "noKey": "此工作区还没有 API 密钥。请先创建 API 密钥，再使用此 cURL。",
+        "keysUnknown": "无法检查你的 API 密钥。请打开“开发者”页面创建或查看密钥，再使用此 cURL。",
+        "createKey": "创建 API 密钥"
+      },
+      "refreshNow": "立即刷新",
+      "editTemplate": "编辑模板",
+      "editResubmit": "编辑并重新提交",
+      "submitToMeta": "提交到 Meta",
+      "wabaAccount": "WhatsApp Business 账号",
+      "noWaba": "未连接 WABA 账号。",
+      "connectOne": "立即连接",
+      "noWabaTail": "以向 Meta 提交模板。",
+      "related": "相关",
+      "useInBroadcast": "用于群发",
+      "crumbTemplates": "模板",
+      "crumbDetail": "详情",
+      "notSubmittedPill": "未提交",
+      "qualityPill": "质量 · {quality}",
+      "preview": {
+        "title": "预览",
+        "hint": "在 WhatsApp 上的显示效果"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "内容被标记为辱骂或威胁。",
+        "INVALID_FORMAT": "格式违反 Meta 的模板规则（占位符、换行、长度）。",
+        "PROMOTIONAL": "此类别不允许使用营销用语。",
+        "TAG_CONTENT_MISMATCH": "类别与内容不符（例如在 UTILITY 模板中使用促销文案）。",
+        "SCAM": "Meta 将此模板标记为潜在诈骗。请检查声明和措辞。"
       }
+    },
+    "ai": {
+      "eyebrow": "模板 / AI",
+      "title": "使用",
+      "titleAccent": "AI 生成",
+      "close": "关闭",
+      "cancel": "取消",
+      "generate": "生成模板",
+      "intro": "根据简短的简介起草 WhatsApp 模板：名称、页眉、正文、页脚和按钮。在您亲自提交之前不会提交任何内容。",
+      "model": "AI 模型",
+      "modelsError": "无法加载模型。",
+      "noModels": "此工作区未启用任何 AI 服务商。请联系管理员启用。",
+      "loadingModels": "正在加载模型…",
+      "pickModel": "选择模型",
+      "yourKey": "您的密钥",
+      "business": "商家名称",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "行业",
+      "pickIndustry": "选择行业",
+      "occasion": "场景",
+      "pickOccasion": "选择场景",
+      "purpose": "目的",
+      "pickPurpose": "选择目的",
+      "action": "主要操作",
+      "pickAction": "选择主要操作",
+      "tone": "语气",
+      "pickTone": "选择语气",
+      "language": "语言",
+      "languageHint": "草稿将使用表单所用的语言撰写。",
+      "notes": "自定义提示",
+      "notesNote": "选填 / 最多 2000 字",
+      "notesPlaceholder": "您希望包含的具体内容：变量、链接、必须使用的措辞、需要避免的内容…",
+      "industries": {
+        "retail": "零售 / 电商",
+        "food": "餐饮",
+        "healthcare": "医疗健康",
+        "education": "教育",
+        "travel": "旅游与酒店",
+        "finance": "金融与银行",
+        "realEstate": "房地产",
+        "beauty": "美容与保健",
+        "logistics": "物流与配送",
+        "services": "专业服务",
+        "nonprofit": "非营利组织",
+        "other": "其他"
+      },
+      "occasions": {
+        "launch": "新品发布",
+        "sale": "促销 / 折扣",
+        "orderConfirmation": "订单确认",
+        "shipping": "物流更新",
+        "appointment": "预约提醒",
+        "welcome": "欢迎 / 新用户引导",
+        "feedback": "反馈征集",
+        "abandonedCart": "购物车挽回",
+        "reengage": "重新激活",
+        "event": "活动邀请",
+        "festival": "节日问候",
+        "other": "其他"
+      },
+      "purposes": {
+        "inform": "通知",
+        "promote": "推广",
+        "confirm": "确认",
+        "remind": "提醒",
+        "collectFeedback": "收集反馈",
+        "reengage": "重新激活",
+        "purchase": "促进购买",
+        "booking": "促进预订"
+      },
+      "actions": {
+        "website": "访问网站",
+        "call": "致电我们",
+        "book": "预约",
+        "order": "下单",
+        "catalog": "查看商品目录",
+        "code": "回复验证码",
+        "other": "其他"
+      },
+      "tones": {
+        "friendly": "友好",
+        "professional": "专业",
+        "concise": "简洁",
+        "empathetic": "体贴",
+        "excited": "热情",
+        "formal": "正式"
+      },
+      "errors": {
+        "businessRequired": "商家名称为必填项。",
+        "noKey": "此工作区未启用任何 AI 服务商。请联系管理员添加密钥。",
+        "limitReached": "此工作区本月的 AI 额度已用完。",
+        "providerFailed": "AI 服务商未响应。请稍后重试。",
+        "badJson": "模型返回的内容不是可用的模板。请重试或完善简介。",
+        "invalid": "请检查简介：商家名称为必填项，部分字段过长。",
+        "forbidden": "您没有创建模板的权限。",
+        "network": "无法连接服务器。请检查网络连接后重试。",
+        "failed": "无法生成模板。请重试。"
+      }
+    },
+    "gallery": {
+      "title": "模板库",
+      "intro": "按用途分类的现成 WhatsApp 模板。选择一个，它会作为新模板打开，保存前可以修改。",
+      "search": "搜索模板库",
+      "categoryFilter": "模板库分类",
+      "all": "全部",
+      "loading": "正在加载模板库",
+      "loadError": "无法加载模板库。",
+      "retry": "重试",
+      "empty": "没有匹配的模板",
+      "emptyHint": "换个词试试，或选择其他分类。",
+      "use": "使用此模板",
+      "useNamed": "使用模板 {name}",
+      "count": "{count, plural, other {# 个模板}}",
+      "categories": {
+        "ecommerce": "电商",
+        "food_delivery": "外卖配送",
+        "festival_season": "节日季",
+        "education": "教育",
+        "travel": "旅行",
+        "others": "其他"
+      }
+    },
+    "home": {
+      "label": "模板视图",
+      "saved": "已保存的模板",
+      "gallery": "模板库"
     }
   }
 }

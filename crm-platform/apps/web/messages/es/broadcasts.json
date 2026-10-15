@@ -365,6 +365,21 @@
         "name": "Correo electrónico",
         "hint": "Envía un mensaje como correo electrónico desde un buzón conectado, con un enlace para darse de baja.",
         "cta": "Crear campaña de correo"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de LINE.",
+        "cta": "Crear difusión de LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de Viber.",
+        "cta": "Crear difusión de Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envía un mensaje masivo a todos los seguidores, a una etiqueta o a usuarios elegidos de tu Cuenta oficial.",
+        "cta": "Crear difusión de WeChat"
       }
     }
   }

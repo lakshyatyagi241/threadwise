@@ -344,7 +344,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-TPL-013 | todo |  |  |
 | TW-TPL-014 | todo |  |  |
 | TW-TPL-015 | todo |  |  |
-| TW-TPL-016 | todo |  |  |
+| TW-TPL-016 | done |  | Build with AI on the template form: standard drafts only (no carousel, no copy-code button); real LLM vendors unverified |
 | TW-TPL-017 | todo |  |  |
 | TW-TPL-018 | todo |  |  |
 | TW-TPL-019 | todo |  |  |
@@ -439,6 +439,9 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
 | TW-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
 | TW-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
+| TW-CAMP-036 | done |  | ADDITION: follow-up steps after a campaign message (replied, read, not replied, not read; template or flow; up to 3); not in Reference, built from the meeting; sandbox only, real Meta read reports unverified |
+| TW-CAMP-037 | todo |  | ADDITION, pending: A/B auto-winner (pick the better variant and send it to the rest). Not in Reference; meeting said "ship A/B now, rebuild auto-winner later". Needs decisions on measure, test share, duration, ties |
+| TW-CAMP-038 | done |  | ADDITION: Build with AI in the guided wizard (template draft handed to the template form) and a generated picture in the classic builder; real vendors unverified |
 
 ## scheduled-queue-warmer (sched)
 

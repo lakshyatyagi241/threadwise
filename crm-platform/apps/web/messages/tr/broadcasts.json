@@ -365,6 +365,21 @@
         "name": "E-posta",
         "hint": "Bağlı bir posta kutusundan mesajı e-posta olarak gönderin, abonelikten çıkma bağlantısıyla.",
         "cta": "E-posta kampanyası oluştur"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "LINE hesabınızla zaten yazışan kişilere mesaj gönderin.",
+        "cta": "LINE toplu mesajı oluştur"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Viber hesabınızla zaten sohbet eden kişilere mesaj gönderin.",
+        "cta": "Viber toplu gönderimi oluştur"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Resmi Hesabınızın tüm takipçilerine, bir etikete veya seçtiğiniz kullanıcılara toplu mesaj gönderin.",
+        "cta": "WeChat toplu mesajı oluştur"
       }
     }
   }

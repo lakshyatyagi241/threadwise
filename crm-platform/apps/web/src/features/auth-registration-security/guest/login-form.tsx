@@ -299,7 +299,7 @@ export function LoginForm({
           label={t('password')}
           error={fieldErrors.password}
           labelEnd={
-            <Link href={forgotHref} className={cn(LINK, 'text-[11px]')}>
+            <Link href={forgotHref} className={cn(LINK, 'text-[13px]')}>
               {t('forgot')}
             </Link>
           }
@@ -355,14 +355,14 @@ export function LoginForm({
         </Button>
 
         {config.registrationOpen && (
-          <p className="mt-4 text-center text-[12.5px] text-(--auth-ink-600)">
+          <p className="mt-4 text-center text-[13.5px] text-(--auth-ink-600)">
             {t('newHere')}{' '}
             <Link href="/signup" className={LINK}>
               {t('createAccount')}
             </Link>
           </p>
         )}
-        <p className="text-center text-[12.5px] text-(--auth-ink-600)">
+        <p className="text-center text-[13.5px] text-(--auth-ink-600)">
           {t('lostWorkspace')}{' '}
           <Link href="/find-workspace" className={LINK}>
             {t('findWorkspace')}

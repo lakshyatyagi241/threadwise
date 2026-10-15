@@ -369,6 +369,11 @@
         "label": "Richieste sui dati",
         "description": "Rispondi a chi chiede cosa conservi su di loro: verifica dell'identità, esportazione, cancellazione con anteprima e una prova da conservare.",
         "keywords": "privacy, gdpr, richiesta sui dati, dsar, accesso ai dati, esportare dati, cancellare, diritto all'oblio, eliminare dati personali, blocco legale"
+      },
+      "compliance-center": {
+        "label": "Centro di conformità",
+        "description": "Strumenti che ti aiutano a rispettare i tuoi obblighi in materia di privacy: le leggi a cui sei soggetto, contatti privacy, informative e link, sub-responsabili, orari di silenzio e una checklist di ciò che è già attivo.",
+        "keywords": "conformità, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, responsabile dei reclami, sub-responsabile, dpa, termini, informativa sulla privacy, orari di silenzio, do not call, checklist, minori"
       }
     },
     "backToMarketplace": "Torna al Marketplace"
