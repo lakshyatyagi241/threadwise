@@ -587,3 +587,18 @@ describe('export', () => {
     expect((await A(t.admin).get(`/v2/audit-log/exports/${expired.id}/download`)).status).toBe(409);
   });
 });
+
+describe('append-only', () => {
+  // The trigger applies to every role, the table owner included, so the owner connection is the strictest place to prove it.
+  it('an audit row cannot be updated or deleted outside a privileged transaction', async () => {
+    const id = await insert(t.orgId, { module: 'append-only', recordId: 1, action: 'create' });
+    await expect(
+      p.h.owner.query(`UPDATE audit_log SET action = 'tampered' WHERE id = $1`, [id]),
+    ).rejects.toThrow(/append-only/);
+    await expect(p.h.owner.query(`DELETE FROM audit_log WHERE id = $1`, [id])).rejects.toThrow(
+      /append-only/,
+    );
+    const row = await p.h.owner.query(`SELECT action FROM audit_log WHERE id = $1`, [id]);
+    expect(row.rows[0].action).toBe('create');
+  });
+});

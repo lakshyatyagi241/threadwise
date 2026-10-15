@@ -5,6 +5,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage, decodeCursor } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
+import { AuditService } from '../../kernel/audit/audit.service';
 import { ContactsService } from '../crm';
 
 interface PartnerLeadRow {
@@ -41,6 +42,7 @@ export class PartnerService {
   constructor(
     private readonly db: DatabaseService,
     private readonly contacts: ContactsService,
+    private readonly audit: AuditService,
   ) {}
 
   /**
@@ -83,20 +85,39 @@ export class PartnerService {
       );
       const contactId = (idRow.rows[0] as { id: number }).id;
 
-      await tx.execute(sql`
+      const link = await tx.execute(sql`
         INSERT INTO partner_agent_leads (org_id, agent_id, contact_id, college_tag, submitted_payload)
         VALUES (${ctx.orgId}, ${agentId}, ${contactId}, ${input.collegeTag ?? null}, ${JSON.stringify(input)}::jsonb)
         ON CONFLICT (org_id, agent_id, contact_id) DO NOTHING
+        RETURNING 1
       `);
+      // Only a new agent -> contact link is an event; a repeat submission changed nothing.
+      if (link.rows.length > 0) {
+        await this.audit.record(tx, {
+          module: 'partner_agent_leads',
+          recordId: contactId,
+          action: 'insert',
+          delta: { agent_id: { old: null, new: agentId } },
+        });
+      }
 
       // Attribution. Set only if unclaimed — the FIRST agent to submit a lead
       // owns it, and a second agent submitting the same person must not
       // silently steal the attribution.
-      await tx.execute(sql`
+      const claimed = await tx.execute(sql`
         UPDATE contacts
         SET submitted_by_agent_id = ${agentId}
         WHERE org_id = ${ctx.orgId} AND id = ${contactId} AND submitted_by_agent_id IS NULL
+        RETURNING 1
       `);
+      if (claimed.rows.length > 0) {
+        await this.audit.record(tx, {
+          module: 'contacts',
+          recordId: contactId,
+          action: 'update',
+          delta: { submitted_by_agent_id: { old: null, new: agentId } },
+        });
+      }
     });
 
     this.logger.log({ orgId: ctx.orgId, agentId }, 'partner lead submitted');
