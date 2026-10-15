@@ -1,11 +1,13 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   UNOFFICIAL_ENGINE,
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { ConsentGate, ConsentPolicyService } from '../contact-consent';
+import { SendWindowService } from '../compliance-center';
+import { ConsentGate, ConsentPolicyService, purposeOfCategory } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
@@ -91,7 +93,7 @@ export type CampaignRunResult =
   'skipped' | 'busy' | 'finished' | 'rearmed' | 'halted' | 'expired' | 'failed';
 
 /** `rate`: the sender's own cap (a mailbox's sends per hour) is spent for now; the campaign is scheduled again when a slot frees. */
-type Stop = 'cap' | 'window' | 'wallet' | 'rate' | null;
+type Stop = 'cap' | 'window' | 'wallet' | 'rate' | 'quiet' | null;
 
 const PERMANENT_SENDER_MESSAGES = {
   waba: 'WhatsApp Cloud (Official API) campaigns must use an approved template. This campaign sends a custom message, which Meta only permits inside an open 24-hour customer session.',
@@ -135,6 +137,8 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
     @Optional() private readonly consentPolicy?: ConsentPolicyService,
     @Optional() private readonly consentGate?: ConsentGate,
+    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
+    @Optional() private readonly sendWindow?: SendWindowService,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -224,7 +228,7 @@ export class CampaignDispatchService {
       await this.failRun(orgId, c, (setup as { failed: string }).failed);
       return 'failed';
     }
-    const { sender, opened, bundles, pacing, warm, base } = setup;
+    const { sender, opened, bundles, pacing, warm, base, marketing } = setup;
 
     const senderKey = SenderLease.key(orgId, sender.engine, sender.id);
     const senderToken = await this.lease.acquire(senderKey);
@@ -242,6 +246,7 @@ export class CampaignDispatchService {
         pacing,
         warm,
         base,
+        marketing,
         locks: [
           [key, token],
           [senderKey, senderToken],
@@ -253,6 +258,34 @@ export class CampaignDispatchService {
   }
 
   // ---------------------------------------------------------------- setup
+
+  /**
+   * Is this campaign marketing for the quiet hours (BL-177)? A message of your own is. A template campaign is when either of its
+   * templates is a MARKETING one (or cannot be found: the gate treats the unknown as marketing); a campaign of utility and
+   * authentication templates only is a notice the person needs and is never held.
+   */
+  private async isMarketing(
+    t: Parameters<TemplateDirectory['find']>[0],
+    orgId: number,
+    c: CampaignRow,
+  ): Promise<boolean> {
+    if (c.type !== 'template') return true;
+    const ids = [c.templateId, c.abTesting ? c.templateIdB : null].filter(
+      (x): x is number => x !== null,
+    );
+    if (ids.length === 0) return true;
+    const res = await t.execute(sql`
+      SELECT id, lower(coalesce(meta_category, category)) AS category FROM wa_templates
+      WHERE org_id = ${orgId} AND id IN (${sql.join(
+        ids.map((id) => sql`${id}::bigint`),
+        sql`, `,
+      )})`);
+    const rows = res.rows as Array<{ category: string | null }>;
+    return (
+      rows.length < ids.length ||
+      rows.some((r) => purposeOfCategory(r.category) === 'marketing_messaging')
+    );
+  }
 
   private async deadlineOf(
     orgId: number,
@@ -300,7 +333,15 @@ export class CampaignDispatchService {
       // The warm-up profile belongs to a WhatsApp number; a mailbox's id would read another table's row.
       const warm = sender.engine === 'email' ? null : await this.warmer.gap(t, sender);
       const base = await this.merge.baseContext(t, orgId);
-      return { sender, opened, bundles: { a, b } as Bundles, pacing, warm, base };
+      return {
+        sender,
+        opened,
+        bundles: { a, b } as Bundles,
+        pacing,
+        warm,
+        base,
+        marketing: await this.isMarketing(t, orgId, c),
+      };
     });
   }
 
@@ -375,6 +416,8 @@ export class CampaignDispatchService {
     pacing: PacingSettings;
     warm: { min: number; max: number } | null;
     base: Omit<MergeContext, 'contact'>;
+    /** A MARKETING campaign is held for the quiet hours; one that sends only utility templates is not (BL-177). */
+    marketing: boolean;
     locks: Array<[string, string]>;
   }): Promise<CampaignRunResult> {
     const { orgId, c, maxAttempts } = o;
@@ -400,12 +443,25 @@ export class CampaignDispatchService {
     let halted = false;
     let expired = false;
     let rateWaitMs = 0;
+    // Recipients the quiet hours keep back, and the first instant one of them opens (BL-177).
+    let heldCount = 0;
+    let quietUntil: Date | null = null;
 
     batches: for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
         this.repo.claim(t, orgId, c.id, c.retryFailed ? maxAttempts : 0, BATCH),
       );
       if (batch.length === 0) break;
+
+      // One statement for the slice: whose local time is inside the workspace's quiet hours.
+      const windows =
+        o.marketing && this.sendWindow
+          ? await this.sendWindow.checkMany(
+              orgId,
+              'message',
+              batch.map((x) => x.contactId),
+            )
+          : null;
 
       for (const [i, r] of batch.entries()) {
         const putBack = (rest: readonly ClaimedRecipient[]) =>
@@ -439,6 +495,16 @@ export class CampaignDispatchService {
           stop = 'cap';
           await putBack(batch.slice(i));
           break batches;
+        }
+
+        // Held, not denied: back to the queue with the instant it may go; the rest of the audience carries on.
+        const hold = windows?.held.get(r.contactId);
+        if (hold) {
+          await this.db.txAs({ orgId }, (t) => this.repo.hold(t, orgId, r.id, hold));
+          heldCount++;
+          const at = new Date(hold.until);
+          if (quietUntil === null || at.getTime() < quietUntil.getTime()) quietUntil = at;
+          continue;
         }
 
         // The gap before every recipient after the first. Official engines need none: Meta and Twilio limit themselves.
@@ -481,7 +547,9 @@ export class CampaignDispatchService {
       }
     }
 
-    return this.finish({ ...o, stop, halted, expired, rateWaitMs });
+    // Everyone who could go has gone: with only held recipients left the campaign sleeps until the first of them opens.
+    if (stop === null && heldCount > 0) stop = 'quiet';
+    return this.finish({ ...o, stop, halted, expired, rateWaitMs, quietUntil });
   }
 
   /** One recipient. Returns true when it counted toward the daily limit (a real attempt, not bad data). */
@@ -769,6 +837,7 @@ export class CampaignDispatchService {
       halted: boolean;
       expired: boolean;
       rateWaitMs: number;
+      quietUntil?: Date | null;
     },
   ): Promise<CampaignRunResult> {
     const { orgId, c, maxAttempts, settings } = o;
@@ -811,7 +880,10 @@ export class CampaignDispatchService {
         const slot =
           stop === 'rate'
             ? this.slotAt(new Date(now.getTime() + o.rateWaitMs + 60_000), c.timezone ?? 'UTC')
-            : nextRunSlot(c, stop, now);
+            : stop === 'quiet'
+              ? // The schedule is kept to the minute: the minute the first held recipient opens in, with a margin so the run is never early.
+                this.slotAt(new Date((o.quietUntil ?? now).getTime() + 59_000), c.timezone ?? 'UTC')
+              : nextRunSlot(c, stop, now);
         await this.repo.setSchedule(t, orgId, c.id, { scheduleType: 'scheduled', ...slot });
         await this.repo.setStatus(t, orgId, c.id, 'scheduled');
         result = 'rearmed';

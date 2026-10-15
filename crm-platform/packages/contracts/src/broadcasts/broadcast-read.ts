@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
+import { sendHoldReasonSchema } from '../compliance/send-window';
 import { broadcastResponseSchema } from './broadcast';
 
 /**
@@ -82,6 +83,8 @@ export const broadcastLiveStatsSchema = z.object({
   read: z.number().int(),
   failed: z.number().int(),
   queued: z.number().int(),
+  /** Of `queued`, the recipients waiting for the end of the workspace's quiet hours (BL-177). */
+  held: z.number().int().optional(),
   pct: pctSchema,
   inFlight: z.boolean(),
   fetchedAt: z.string().datetime(),
@@ -113,6 +116,8 @@ export const broadcastDetailSchema = z.object({
     read: z.number().int(),
     failed: z.number().int(),
     queued: z.number().int(),
+    /** Of `queued`, the recipients held for the quiet hours: not failed, not lost, they go when the hours open (BL-177). */
+    held: z.number().int().optional(),
     /** Contacts who tapped a tracked link (TW-BCAST-042). */
     clicked: z.number().int(),
   }),
@@ -133,10 +138,10 @@ export const broadcastDetailSchema = z.object({
   }),
   /** Top 8 failure reasons by count, the rest summed into `Other`. */
   failureReasons: z.array(z.object({ reason: z.string(), count: z.number().int() })),
-  /** Why a paused broadcast stopped, and when it can resume by itself (a daily cap); null when it is not paused. */
+  /** Why a paused broadcast stopped, and when it can resume by itself (a daily cap, the quiet hours); null when it is not paused. */
   pause: z
     .object({
-      reason: z.enum(['daily_cap', 'halt', 'manual']),
+      reason: z.enum(['daily_cap', 'halt', 'quiet_hours', 'manual']),
       at: z.string().datetime(),
       resumeAfter: z.string().datetime().nullable(),
     })
@@ -169,6 +174,9 @@ export const broadcastRecipientSchema = z.object({
   error: z.string().nullable(),
   providerMessageId: z.string().nullable(),
   queuedAt: z.string().datetime(),
+  /** While the recipient waits for the quiet hours to end (BL-177): when it may go and why. Null otherwise. */
+  heldUntil: z.string().datetime().nullable().optional(),
+  heldReason: sendHoldReasonSchema.nullable().optional(),
   sentAt: z.string().datetime().nullable(),
   deliveredAt: z.string().datetime().nullable(),
   readAt: z.string().datetime().nullable(),

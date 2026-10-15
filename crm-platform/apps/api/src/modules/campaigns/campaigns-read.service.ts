@@ -318,6 +318,7 @@ export class CampaignsReadService {
         inFlight: (CAMPAIGN_IN_FLIGHT_STATUSES as readonly string[]).includes(c.status),
         counts: n,
         queued: held.queued ?? 0,
+        held: await this.repo.heldCount(tx, orgId, c.id),
         processing: held.pending ?? 0,
         rates: {
           delivered: pct(n.delivered, n.recipients),
@@ -409,6 +410,8 @@ export class CampaignsReadService {
           readAt: r.readAt?.toISOString() ?? null,
           respondedAt: r.respondedAt?.toISOString() ?? null,
           error: r.error,
+          heldUntil: r.heldUntil?.toISOString() ?? null,
+          heldReason: (r.heldReason as 'quiet_hours' | 'calling_window' | null) ?? null,
         })),
         page: { page: q.page, perPage: RECIPIENT_PAGE_SIZE, total: page.total },
       };

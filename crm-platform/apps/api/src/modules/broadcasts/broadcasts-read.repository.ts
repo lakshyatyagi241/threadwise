@@ -109,6 +109,9 @@ export interface RecipientReadRow {
   updatedAt: Date;
   clicks: number;
   lastClickAt: Date | null;
+  /** Held for the quiet hours (BL-177): when this recipient may go and why; null when it is not held. */
+  heldUntil: Date | null;
+  heldReason: string | null;
 }
 
 /**
@@ -293,7 +296,7 @@ export class BroadcastsReadRepository {
       SELECT bc.id, bc.created_at, to_char(bc.created_at AT TIME ZONE 'UTC', ${ISO}) AS created_at_iso,
              c.uuid AS contact_uuid, c.name AS contact_name, c.first_name, c.last_name, c.phone, c.country_code,
              bc.status, bc.error_message AS error, bc.whatsapp_message_id AS provider_message_id,
-             bc.sent_at, bc.delivered_at, bc.read_at, bc.updated_at,
+             bc.sent_at, bc.delivered_at, bc.read_at, bc.updated_at, bc.held_until, bc.held_reason,
              coalesce(k.clicks, 0)::int AS clicks, k.last_click_at
       FROM broadcast_contacts bc
       JOIN contacts c ON c.org_id = bc.org_id AND c.id = bc.contact_id
@@ -324,6 +327,17 @@ export class BroadcastsReadRepository {
       updatedAt: new Date(r.updated_at as string),
       clicks: Number(r.clicks),
       lastClickAt: d(r.last_click_at),
+      // Only a recipient still waiting is "held": once it is sent or failed the hold is history.
+      heldUntil: r.status === 'pending' ? d(r.held_until) : null,
+      heldReason: r.status === 'pending' ? ((r.held_reason as string | null) ?? null) : null,
     }));
+  }
+
+  /** The recipients waiting for the end of the quiet hours (BL-177): `pending` with a hold. */
+  async heldCount(tx: Tx, orgId: number, broadcastId: number): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM broadcast_contacts
+      WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND status = 'pending' AND held_until IS NOT NULL`);
+    return Number((res.rows[0] as { n: number } | undefined)?.n ?? 0);
   }
 }
