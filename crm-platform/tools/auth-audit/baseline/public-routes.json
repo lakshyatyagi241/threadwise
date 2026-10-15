@@ -47,6 +47,7 @@
     "POST /v2/google/form-response",
     "GET /v2/health",
     "POST /v2/instaflow/inbound",
+    "GET /v2/l/:slug",
     "ALL /v2/payments/return/:slug",
     "POST /v2/payments/webhook/:slug",
     "POST /v2/platform/auth/login",

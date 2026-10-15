@@ -736,7 +736,10 @@
         "telegram": "تيليجرام",
         "facebook": "فيسبوك ماسنجر",
         "instagram": "إنستجرام",
-        "email": "البريد الإلكتروني"
+        "email": "البريد الإلكتروني",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "جهة الاتصال",

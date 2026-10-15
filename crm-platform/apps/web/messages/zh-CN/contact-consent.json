@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "网页聊天",
         "voice": "语音通话",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "已订阅",

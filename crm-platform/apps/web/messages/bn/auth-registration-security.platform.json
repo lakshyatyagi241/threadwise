@@ -1433,7 +1433,7 @@
             "storefront_builder": "অনলাইন স্টোরফ্রন্ট বিল্ডার।",
             "invoicing": "ইনভয়েস, ক্রেডিট নোট, পেমেন্ট, সেলস অর্ডার ও কর হার।",
             "forms_and_links": "লিড ক্যাপচার ফর্ম ও শেয়ারযোগ্য লিংক।",
-            "extra_channels": "Telegram, Facebook ও Instagram চ্যানেল।",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ও WeChat চ্যানেল।",
             "form_builder": "CRM-এ কন্টাক্ট তৈরি করা হোস্টেড ও এমবেডেড ওয়েব ফর্ম। এই সুইচটি পেইড ফর্ম অ্যাপের নিয়ন্ত্রণে।",
             "waba_groups": "Cloud API নম্বর থেকে WhatsApp গ্রুপ তৈরি ও পরিচালনা: ইনভাইট লিংক, যোগদানের অনুরোধ, সদস্য। নম্বরটি অবশ্যই অফিসিয়াল বিজনেস অ্যাকাউন্ট হতে হবে।",
             "sms": "Twilio বা MSG91-এর মাধ্যমে শুধু পাঠানোর SMS: প্রেরক সংযুক্ত করুন, SMS ব্রডকাস্ট ও ক্যাম্পেইন পাঠান।",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "প্রতি মাসে ফর্ম সাবমিশন",
             "ai_form_generations_monthly": "প্রতি মাসে এআই ফর্ম বিল্ডার জেনারেশন",
             "sms_monthly": "মাসে SMS",
-            "email_mailboxes": "ইমেল মেলবক্স"
+            "email_mailboxes": "ইমেল মেলবক্স",
+            "email_monthly": "মাসে ইমেল"
           },
           "featureGroups": {
             "messaging": "মেসেজিং",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "স্টোরফ্রন্ট ও ওয়েবসাইট বিল্ডার",
             "invoicing": "ইনভয়েসিং (ইনভয়েস, ক্রেডিট নোট, পুনরাবৃত্ত ইনভয়েস)",
             "forms_and_links": "ফর্ম, ক্লিক-টু-চ্যাট লিংক ও গ্রুপ",
-            "extra_channels": "Telegram, Facebook ও Instagram চ্যানেল",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ও WeChat চ্যানেল",
             "form_builder": "ফর্ম (ওয়েব ফর্ম বিল্ডার)",
             "waba_groups": "WhatsApp গ্রুপ (Cloud API)",
             "sms": "SMS চ্যানেল",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "ক্যালেন্ডার মাসে গৃহীত ফর্ম সাবমিশন, স্প্যাম বাদে। সীমা ছাড়ালেও সাবমিশন পর্যালোচনার জন্য সংরক্ষিত হয়, বাদ যায় না। ০ = সীমাহীন।",
             "ai_form_generations_monthly": "ক্যালেন্ডার মাসে এআই ফর্ম বিল্ডার জেনারেশন, মেরামতের পুনঃচেষ্টাসহ। ০ = সীমাহীন।",
             "sms_monthly": "ক্যালেন্ডার মাসে পাঠানো আউটবাউন্ড SMS বার্তা। 0 = সীমাহীন।",
-            "email_mailboxes": "সংযুক্ত Gmail মেলবক্স (সংযোগ বিচ্ছিন্ন মেলবক্স তার জায়গা খালি করে)। 0 = সীমাহীন।"
+            "email_mailboxes": "সংযুক্ত Gmail মেলবক্স (সংযোগ বিচ্ছিন্ন মেলবক্স তার জায়গা খালি করে)। 0 = সীমাহীন।",
+            "email_monthly": "ক্যালেন্ডার মাসে পাঠানো ইমেল, উত্তর ও ক্যাম্পেইন ইমেল মিলিয়ে। 0 = সীমাহীন।"
           }
         }
       },

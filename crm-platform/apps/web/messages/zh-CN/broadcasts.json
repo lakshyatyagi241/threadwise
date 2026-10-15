@@ -296,7 +296,9 @@
       "media": "{kind}预览",
       "contactsDenied": "您没有联系人列表的访问权限。请通过分组或标签选择联系人。",
       "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
-      "previewLabel": "模板预览"
+      "previewLabel": "模板预览",
+      "colEmail": "电子邮件",
+      "noEmail": "没有邮箱地址"
     },
     "overrides": {
       "title": "填写本次发送内容",
@@ -353,6 +355,16 @@
         "name": "Instagram",
         "hint": "向已在您 Instagram 私信中的用户发送消息——无需模板审核。",
         "cta": "创建 Instagram 群发"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "向过去 24 小时内给你的主页发过消息的人发送 Messenger 消息。",
+        "cta": "创建 Facebook 群发"
+      },
+      "email": {
+        "name": "电子邮件",
+        "hint": "通过已连接的邮箱将消息作为电子邮件发送，并附带退订链接。",
+        "cta": "创建邮件营销活动"
       }
     }
   }

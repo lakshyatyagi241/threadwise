@@ -46,6 +46,9 @@ export const CAMPAIGN_RECIPIENT_STATUSES = [
 ] as const;
 export type CampaignRecipientStatus = (typeof CAMPAIGN_RECIPIENT_STATUSES)[number];
 
+/** The subject of an email campaign is the builder's Header field, capped at 150 characters (Reference's email builder). */
+export const CAMPAIGN_EMAIL_SUBJECT_MAX = 150;
+
 /** Reference's CSV upload limit, applied to the text of the file. */
 export const CAMPAIGN_CSV_MAX_CHARS = 5_000_000;
 

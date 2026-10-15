@@ -16,11 +16,6 @@
       "reason": "Plan feature added with the plan limits work. Invoicing is now gated by this key; the plan guide is written once the plan editor copy for it settles."
     },
     {
-      "unit": "feature:forms_and_links",
-      "owner": "lakshya",
-      "reason": "Plan feature added with the plan limits work. Forms and links is now gated by this key; the plan guide is written once the plan editor copy for it settles."
-    },
-    {
       "unit": "feature:extra_channels",
       "owner": "lakshya",
       "reason": "Plan feature added with the plan limits work. The Telegram, Facebook and Instagram channels is now gated by this key; the plan guide is written once the plan editor copy for it settles."

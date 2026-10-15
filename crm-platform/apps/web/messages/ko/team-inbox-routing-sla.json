@@ -11,7 +11,10 @@
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
       "instagram": "Instagram",
-      "email": "이메일 (Gmail)"
+      "email": "이메일 (Gmail)",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
     },
     "page": {
       "back": "자동화 및 AI",

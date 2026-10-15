@@ -26,7 +26,7 @@ starts.
 | Method and path                 | What it returns                                                                                                                                                                                                                                                                                 |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /campaigns`                | `data` (12 a page), `page`, `stats`, `statusCounts`, `messageTypes`, `deliveryHealth`, `queueHealth`. Query `status`, `type`, `range`, `q`, `page`                                                                                                                                              |
-| `GET /campaigns/builder`        | `senders`, `templates`, `groups` and `tags` with member counts, `flows`, `requiresApprovedTemplates`                                                                                                                                                                                            |
+| `GET /campaigns/builder`        | `senders`, `templates`, `groups` and `tags` with member counts, `flows`, `requiresApprovedTemplates`. `?channel=sms` or `?channel=email` scopes the senders and templates to that channel (see Email campaigns)                                                                                 |
 | `GET /campaigns/sample-csv`     | `campaign-recipients-sample.csv`: `name,country_code,phone` and two rows                                                                                                                                                                                                                        |
 | `GET /campaigns/:id/config`     | The whole campaign for the edit form, with `recipientContactIds` and the end date as typed (`expiresAtLocal`)                                                                                                                                                                                   |
 | `GET /campaigns/:id`            | Rates, funnel, hourly and daily charts, outcomes, per-variant results, preview, audience, failures, replies, opt-outs                                                                                                                                                                           |
@@ -56,7 +56,7 @@ people messaged, how many received it, read it, **wrote back** and **filled an a
 
 `GET /v2/broadcasts/:id/summary` and `/summary/people` answer the same shapes for the legacy broadcasts (`kind: 'broadcast'`, from
 `broadcast_contacts`, permission `bcast.broadcasts.read`). A wizard campaign, a recurring run and an SMS campaign are campaign rows, so the
-campaign route covers them.
+campaign route covers them. So does an email campaign.
 
 ```json
 {
@@ -166,6 +166,46 @@ the tokens are written to the usage ledger either way. The key is never returned
 - 422 `CAMP_AI_LIMIT_REACHED`: the monthly allowance on the platform's key is used up.
 - 502 `CAMP_AI_PROVIDER_FAILED`: the vendor errored, timed out or answered nothing.
 - 422 `CAMP_AI_BAD_JSON`: the answer was not a JSON object (a code fence around it is tolerated); `errors[0].message` carries the first 600 characters.
+
+## Email campaigns
+
+A campaign whose sender is a connected mailbox (`senderKey` `email:<mailbox uuid>`, stored as `provider` `email` and `deviceId` the mailbox id) is an
+email campaign, as Reference's `?channel=email`. It reuses the builder, the audience, the schedule (send now, scheduled, recurring), pause, resume,
+cancel and resend, the reports and the auto-end date; only the transport and what a mail can carry differ. The engine is `EmailEngineSender`
+(`modules/channel-email`), registered in the engine registry in the API and the worker like the SMS one.
+
+**The sender.** `GET /campaigns/builder?channel=email` lists the connected mailboxes the caller may send from as `senders` (`key`, `label` the
+mailbox's display name, `phone` the address, `engine` `email`, `engineLabel` `Email`), no templates, and `hidden` counts the mailboxes that cannot send
+(`error`: needs reconnecting; `not_connected`: disconnected). It lists nothing when the plan has no Email add-on. A shared mailbox may be picked by anyone
+who may send a campaign; a personal mailbox only by its owner. The default builder (no `channel`) never lists a mailbox, and a template broadcast
+(`POST /broadcasts`) refuses an `email:` sender with a 422 on `senderKeys`.
+
+**The form.** A typed message only. `customHeader` is the **subject** (at most 150 characters, `CAMPAIGN_EMAIL_SUBJECT_MAX`; blank falls back to the campaign name; the
+`{{...}}` tags are merged per contact). 422 `VALIDATION_FAILED` on the field: `type` (not `custom` or `text`), `templateId` (a template), `flowId`, `abTesting`, `mediaUrl`
+(Reference hides the template picker, the flow choice, the A/B test and the attachment on this channel), `customHeader` (over 150). Plan: 422 `PLAN_FEATURE_LOCKED` without the
+`email_channel` feature. What a mail does not use is cleared whatever the form says, so the saved campaign equals what is sent: `customFooter`, buttons and quick
+replies, `throttleMinSec`, `throttleMaxSec`, `batchSize`, `batchPauseMin`, `dailyLimit`, `windowStart`, `windowEnd`, and `trackingEnabled` (Reference's mail runner honours the auto-end date alone).
+The wallet is never asked (no launch precheck, no per-recipient charge): email has its own plan caps.
+
+**The run** (the order of Reference's `EmailCampaignRunner`):
+
+1. A lock per campaign (the run lock) so two runs never mail anyone twice; a heartbeat keeps the sweeper away.
+2. Recipients: opted-out contacts are stamped `unsubscribed` (the contact flag, and a withdrawal on the `email` channel in the consent ledger); a contact with no address is `skipped` ("No email address on this contact");
+   the same address on two contacts (compared lower-cased) is mailed once, the later rows are `skipped` ("Duplicate email address — already sent on this run"). None of these is a failure.
+3. The mailbox: still connected, else the run fails ("no sender"); it is never swapped for another. The plan has the Email add-on, else the run fails ("Your plan does not include Email.").
+   The plan's `email_monthly` cap (mails sent this calendar month, replies and campaign mail together, 0 = unlimited) is checked once at the start (the run fails with the plan sentence when the month is spent)
+   and again per mail, so a run cannot overshoot it: the recipients past the cap fail for good with the plan sentence.
+4. Per recipient: the end date and Pause/Cancel are read before each mail; the address must look like an address ("Invalid email address or empty message" otherwise); the ConsentGate is asked for the `email` channel and purpose
+   `marketing_messaging` (a withdrawn contact is refused for good); the mailbox's send guard (`MailSendGuard`): an address that hard-bounced within `MAIL_BOUNCE_BLOCK_DAYS` is refused for good with the reason,
+   and the mailbox's hourly cap (its own `send_limit_per_hour`, else `MAIL_SEND_LIMIT_PER_HOUR`) **stops the run and schedules the campaign again after a slot frees** (the rest stays `queued`, nobody fails), so a long campaign spreads over the hours the mailbox allows.
+5. The mail: subject = merged Header (line breaks turned into spaces: a CR or LF that arrives through a contact value cannot open a second header; cut at 255; "Message" when empty), the body HTML-escaped with a plain-text part,
+   the signed unsubscribe link (text and HTML) and the RFC 8058 headers `List-Unsubscribe` and `List-Unsubscribe-Post`; a unique Message-ID per mail (a recurring run mails the same contact again). Sent through the mailbox's driver (Gmail, Microsoft or IMAP/SMTP)
+   with the mailbox's own token handling. A provider failure is recorded on the recipient and retried under the campaign's retry settings (`retryFailed`).
+6. The mail is written as a message of the mailbox's inbox thread (`source` `campaign`, `meta.email` with the subject), linked to the contact, so their reply lands beside it. Reference keyed the thread by the address; here each mail opens a thread of the provider's own thread id, and a reply joins it.
+   A mailbox with no inbox channel yet (before its first sync) is sent from but not mirrored.
+7. The campaign ends `completed`, or `failed` when nothing was sent and some failed, or is scheduled again for retries and the mailbox's hourly cap. The platform's default end date (24 hours after the first send) does not apply to a mail: only the operator's `expiresAt` does.
+
+The recipients list and the export show the contact's address where other campaigns show the phone. Reports, receipts and the wallet: a mail has no delivery receipt (Gmail only says `sent`), the outbox's delivery report is not emitted for it and nothing is charged.
 
 ## Run
 

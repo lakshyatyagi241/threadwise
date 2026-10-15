@@ -1433,7 +1433,7 @@
             "storefront_builder": "Der Builder für den Online-Shop.",
             "invoicing": "Rechnungen, Gutschriften, Zahlungen, Verkaufsaufträge und Steuersätze.",
             "forms_and_links": "Formulare zur Lead-Erfassung und teilbare Links.",
-            "extra_channels": "Die Kanäle Telegram, Facebook und Instagram.",
+            "extra_channels": "Die Kanäle Telegram, Facebook, Instagram, LINE, Viber und WeChat.",
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
             "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
             "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Formulareinsendungen pro Monat",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat",
             "sms_monthly": "SMS pro Monat",
-            "email_mailboxes": "E-Mail-Postfächer"
+            "email_mailboxes": "E-Mail-Postfächer",
+            "email_monthly": "E-Mails pro Monat"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "Storefront- und Website-Builder",
             "invoicing": "Rechnungsstellung (Rechnungen, Gutschriften, wiederkehrende Rechnungen)",
             "forms_and_links": "Formulare, Click-to-Chat-Links und Gruppen",
-            "extra_channels": "Telegram-, Facebook- und Instagram-Kanäle",
+            "extra_channels": "Telegram-, Facebook-, Instagram-, LINE-, Viber- und WeChat-Kanäle",
             "form_builder": "Formulare (Webformular-Builder)",
             "waba_groups": "WhatsApp-Gruppen (Cloud API)",
             "sms": "SMS-Kanal",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Im Kalendermonat angenommene Formulareinsendungen, ohne Spam. Über dem Limit wird eine Einsendung weiterhin zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt.",
             "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
-            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt."
+            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
+            "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt."
           }
         }
       },

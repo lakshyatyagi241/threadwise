@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "Obrolan web",
         "voice": "Panggilan suara",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "berlangganan",

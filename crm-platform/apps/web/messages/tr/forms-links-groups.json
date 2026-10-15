@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp Formları",
+      "links": "WhatsApp Bağlantıları"
+    },
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Formları kullanmak için bir WhatsApp Cloud API numarası bağlayın.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Bağlı WhatsApp Cloud API numaralarının hiçbirinde geçerli kimlik bilgisi yok.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta form tanımını reddetti.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Formları yayınlayabilmeniz için WhatsApp Business hesabınızın Meta doğrulamasından geçmesi gerekir.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta bu formu yayınlayamadı.",
+      "WFL_LINK_NOT_LIVE": "Bu bağlantı duraklatılmış veya süresi dolmuş.",
+      "ROW_VERSION_CONFLICT": "Bu öğe başka bir yerde değiştirildi. Sayfayı yenileyip tekrar deneyin.",
+      "VALIDATION_FAILED": "Vurgulanan alanları kontrol edip tekrar deneyin.",
+      "PLAN_FEATURE_LOCKED": "Bu özelliği kullanmak için planınızı yükseltin."
+    },
+    "forms": {
+      "heading": "WhatsApp Formları",
+      "intro": "Müşterilerin doğrudan WhatsApp içinde doldurduğu formlar oluşturun, bir akıştan gönderin ve yanıtları buradan inceleyin.",
+      "loading": "Formlar yükleniyor…",
+      "retry": "Tekrar dene",
+      "create": {
+        "cta": "Yeni form",
+        "creating": "Oluşturuluyor…",
+        "defaultTitle": "Başlıksız form",
+        "defaultField": "Ad Soyad"
+      },
+      "stats": {
+        "all": "Tüm formlar",
+        "published": "Yayınlanan",
+        "draft": "Taslaklar",
+        "submissions": "Gönderimler"
+      },
+      "empty": {
+        "title": "Henüz form yok",
+        "description": "Bir form oluşturun, ardından bir akıştaki WhatsApp Form adımından gönderin."
+      },
+      "table": {
+        "form": "Form",
+        "type": "Tür",
+        "fields": "Alanlar",
+        "submissions": "Gönderimler"
+      },
+      "status": {
+        "draft": "Taslak",
+        "published": "Yayınlandı",
+        "paused": "Duraklatıldı"
+      },
+      "audience": {
+        "lead_capture": "Potansiyel müşteri toplama",
+        "survey": "Anket",
+        "appointment_booking": "Randevu alma",
+        "customer_support": "Müşteri desteği",
+        "sign_up": "Kayıt",
+        "other": "Diğer"
+      },
+      "row": {
+        "edit": "Düzenle",
+        "duplicate": "Kopyala",
+        "delete": "Sil"
+      },
+      "confirm": {
+        "deleteTitle": "Bu form silinsin mi?",
+        "deleteMessage": "Buna referans veren etkin akış düğümleri çalışmayı durduracak.",
+        "deleteConfirm": "Sil",
+        "cancel": "Vazgeç"
+      },
+      "notice": {
+        "saved": "Kaydedildi.",
+        "published": "WhatsApp'ta yayınlandı."
+      },
+      "builder": {
+        "back": "Formlara dön",
+        "untitled": "Başlıksız form",
+        "saving": "Kaydediliyor…",
+        "saveDraft": "Taslağı kaydet",
+        "savePublish": "Kaydet ve yayınla",
+        "publishing": "Yayınlanıyor…",
+        "basics": "Form temel bilgileri",
+        "title": "Başlık",
+        "audienceType": "Tür",
+        "purpose": "Amaç",
+        "sendButtonLabel": "Gönder düğmesi etiketi",
+        "thankYouNote": "Teşekkür notu",
+        "screens": "Ekranlar",
+        "addScreen": "Ekran ekle",
+        "removeScreen": "Ekranı kaldır",
+        "screenN": "Ekran {n}",
+        "defaultField": "Ad Soyad",
+        "newFieldLabel": "Yeni alan",
+        "fieldKind": "Alan türü",
+        "fieldLabel": "Etiket",
+        "required": "Zorunlu",
+        "removeField": "Kaldır",
+        "options": "Seçenekler (virgülle ayrılmış)",
+        "optionsPlaceholder": "Seçenek 1, Seçenek 2, Seçenek 3"
+      },
+      "fieldKind": {
+        "heading": "Başlık",
+        "short_text": "Kısa metin",
+        "paragraph": "Paragraf",
+        "email": "E-posta",
+        "phone_number": "Telefon numarası",
+        "number": "Sayı",
+        "date": "Tarih",
+        "dropdown": "Açılır liste",
+        "radio_buttons": "Radyo düğmeleri",
+        "checkbox": "Onay kutuları"
+      },
+      "submissions": {
+        "heading": "Gönderimler",
+        "metaFlowId": "Meta Flow Kimliği: {id}",
+        "export": "CSV olarak dışa aktar",
+        "empty": {
+          "title": "Henüz gönderim yok",
+          "description": "Bu form bir akıştan gönderilip biri tarafından doldurulduğunda gönderimler burada görünür."
+        },
+        "table": {
+          "submitted": "Gönderildi",
+          "contact": "Kişi",
+          "phone": "Telefon"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp Bağlantıları",
+      "intro": "Önceden doldurulmuş bir mesajla WhatsApp'ı açan izlenebilir bir bağlantı oluşturun — reklamlar, biyografiler ve QR kodları için.",
+      "loading": "Bağlantılar yükleniyor…",
+      "retry": "Tekrar dene",
+      "searchPlaceholder": "Ada veya bağlantıya göre ara",
+      "create": { "cta": "Yeni bağlantı" },
+      "stats": {
+        "all": "Tüm bağlantılar",
+        "live": "Aktif",
+        "totalClicks": "Toplam tıklama",
+        "avgClicks": "Ort. tıklama / bağlantı"
+      },
+      "tabs": { "all": "Tümü", "live": "Aktif", "paused": "Duraklatıldı" },
+      "status": { "live": "Aktif", "paused": "Duraklatıldı" },
+      "empty": {
+        "title": "Henüz bağlantı yok",
+        "description": "Reklamlarda, biyografilerde veya bir QR kodunda paylaşmak için bir bağlantı oluşturun."
+      },
+      "table": {
+        "link": "Bağlantı",
+        "destination": "Hedef",
+        "clicks": "Tıklamalar",
+        "lastClicked": "Son tıklama"
+      },
+      "row": {
+        "open": "Aç",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı!",
+        "edit": "Düzenle",
+        "duplicate": "Kopyala",
+        "delete": "Sil"
+      },
+      "confirm": {
+        "deleteTitle": "Bu bağlantı silinsin mi?",
+        "deleteMessage": "Kısa bağlantı hemen çalışmayı durduracak.",
+        "deleteConfirm": "Sil",
+        "cancel": "Vazgeç"
+      },
+      "notice": {
+        "saved": "Kaydedildi.",
+        "copyFailed": "Bağlantı kopyalanamadı."
+      },
+      "builder": {
+        "back": "Bağlantılara dön",
+        "newHeading": "Yeni bağlantı",
+        "step": { "destination": "Hedef", "message": "Başlangıç mesajı", "tracking": "Takip" },
+        "name": "Ad",
+        "status": "Durum",
+        "countryCode": "Ülke kodu",
+        "phoneNumber": "Telefon numarası",
+        "welcomeMessage": "Başlangıç mesajı",
+        "welcomeMessageHint": "Biri bağlantıya dokunduğunda sohbete önceden doldurulur.",
+        "slug": "Kısa bağlantı",
+        "slugHint": "Yalnızca harf, rakam ve tire. Otomatik oluşturmak için boş bırakın.",
+        "slugPlaceholder": "yaz-indirimi",
+        "expiresAt": "Sona erme",
+        "utmSource": "UTM kaynağı",
+        "utmMedium": "UTM aracı",
+        "utmCampaign": "UTM kampanyası",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "mint": "Bağlantı oluştur",
+        "save": "Kaydet",
+        "saving": "Kaydediliyor…",
+        "fixErrors": "Hedef ve kısa bağlantı alanlarını kontrol edin.",
+        "mintedHeading": "Bağlantınız",
+        "shortUrl": "Kısa bağlantı",
+        "waUrl": "WhatsApp bağlantısı",
+        "qrAlt": "Bu bağlantı için QR kodu"
+      }
+    }
+  }
+}

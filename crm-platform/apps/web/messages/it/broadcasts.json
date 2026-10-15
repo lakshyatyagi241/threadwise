@@ -296,7 +296,9 @@
       "media": "Anteprima {kind}",
       "contactsDenied": "Non hai accesso all'elenco contatti. Scegli i contatti tramite gruppi o tag.",
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
-      "previewLabel": "Anteprima template"
+      "previewLabel": "Anteprima template",
+      "colEmail": "E-mail",
+      "noEmail": "Nessun indirizzo e-mail"
     },
     "overrides": {
       "title": "Compila questo invio",
@@ -353,6 +355,16 @@
         "name": "Instagram",
         "hint": "Scrivi alle persone già presenti nei tuoi DM di Instagram: nessuna approvazione del template.",
         "cta": "Crea broadcast Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Invia un messaggio Messenger a chi ha scritto alla tua Pagina nelle ultime 24 ore.",
+        "cta": "Crea una trasmissione Facebook"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Invia un messaggio come e-mail da una casella connessa, con un link per annullare l'iscrizione.",
+        "cta": "Crea campagna e-mail"
       }
     }
   }

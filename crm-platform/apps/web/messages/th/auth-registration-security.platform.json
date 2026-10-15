@@ -1433,7 +1433,7 @@
             "storefront_builder": "ตัวสร้างหน้าร้านออนไลน์",
             "invoicing": "ใบแจ้งหนี้ ใบลดหนี้ การชำระเงิน ใบสั่งขาย และอัตราภาษี",
             "forms_and_links": "แบบฟอร์มรวบรวมลีดและลิงก์ที่แชร์ได้",
-            "extra_channels": "ช่องทาง Telegram, Facebook และ Instagram",
+            "extra_channels": "ช่องทาง Telegram, Facebook, Instagram, LINE, Viber และ WeChat",
             "form_builder": "แบบฟอร์มเว็บแบบโฮสต์และแบบฝังที่สร้างผู้ติดต่อใน CRM แอปแบบฟอร์มแบบเสียเงินเป็นเจ้าของสวิตช์นี้",
             "waba_groups": "สร้างและจัดการกลุ่ม WhatsApp จากหมายเลข Cloud API: ลิงก์เชิญ คำขอเข้าร่วม สมาชิก หมายเลขต้องเป็น Official Business Account",
             "sms": "SMS แบบส่งออกอย่างเดียวผ่าน Twilio หรือ MSG91: เชื่อมต่อผู้ส่ง ส่งบรอดแคสต์และแคมเปญ SMS",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "การส่งแบบฟอร์มต่อเดือน",
             "ai_form_generations_monthly": "การสร้างด้วยตัวสร้างแบบฟอร์ม AI ต่อเดือน",
             "sms_monthly": "SMS ต่อเดือน",
-            "email_mailboxes": "กล่องจดหมายอีเมล"
+            "email_mailboxes": "กล่องจดหมายอีเมล",
+            "email_monthly": "อีเมลต่อเดือน"
           },
           "featureGroups": {
             "messaging": "การส่งข้อความ",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "ตัวสร้างหน้าร้านและเว็บไซต์",
             "invoicing": "การออกใบแจ้งหนี้ (ใบแจ้งหนี้ ใบลดหนี้ ใบแจ้งหนี้ประจำ)",
             "forms_and_links": "แบบฟอร์ม ลิงก์คลิกเพื่อแชท และกลุ่ม",
-            "extra_channels": "ช่องทาง Telegram, Facebook และ Instagram",
+            "extra_channels": "ช่องทาง Telegram, Facebook, Instagram, LINE, Viber และ WeChat",
             "form_builder": "แบบฟอร์ม (ตัวสร้างแบบฟอร์มเว็บ)",
             "waba_groups": "กลุ่ม WhatsApp (Cloud API)",
             "sms": "ช่องทาง SMS",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "การส่งแบบฟอร์มที่รับในเดือนปฏิทิน ไม่รวมสแปม เมื่อเกินเพดาน การส่งยังคงถูกบันทึกไว้ให้ตรวจสอบ ไม่ถูกทิ้ง 0 = ไม่จำกัด",
             "ai_form_generations_monthly": "การสร้างด้วยตัวสร้างแบบฟอร์ม AI ในเดือนปฏิทิน รวมการลองซ่อมแซมซ้ำ 0 = ไม่จำกัด",
             "sms_monthly": "ข้อความ SMS ขาออกที่ส่งในเดือนตามปฏิทิน 0 = ไม่จำกัด",
-            "email_mailboxes": "กล่องจดหมาย Gmail ที่เชื่อมต่ออยู่ (กล่องที่ตัดการเชื่อมต่อจะคืนโควตา) 0 = ไม่จำกัด"
+            "email_mailboxes": "กล่องจดหมาย Gmail ที่เชื่อมต่ออยู่ (กล่องที่ตัดการเชื่อมต่อจะคืนโควตา) 0 = ไม่จำกัด",
+            "email_monthly": "อีเมลที่ส่งในเดือนตามปฏิทิน รวมทั้งอีเมลตอบกลับและอีเมลแคมเปญ 0 = ไม่จำกัด"
           }
         }
       },

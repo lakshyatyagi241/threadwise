@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -10,6 +9,7 @@ import type { Campaign } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { pageWindow } from '@/features/broadcasts/components/broadcasts-pagination';
+import { NewBroadcast } from '@/features/broadcasts/components/new-broadcast';
 import {
   bulkDeleteCampaigns,
   cancelCampaign,
@@ -27,7 +27,6 @@ import { CampaignsRail } from './campaigns-rail';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  PlusIcon,
   RefreshIcon,
   SearchIcon,
   TrashIcon,
@@ -238,15 +237,7 @@ export function CampaignsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && (
-                <Link
-                  href="/campaigns/create"
-                  className="inline-flex h-10 items-center gap-2 rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
-                >
-                  <PlusIcon className="size-3.5" />
-                  {t('newCampaign')}
-                </Link>
-              )}
+              {canCreate && <NewBroadcast label={t('newCampaign')} />}
             </div>
           </div>
 
@@ -387,14 +378,7 @@ export function CampaignsScreen() {
                 >
                   {t('reset')}
                 </Button>
-                {canCreate && (
-                  <Link
-                    href="/campaigns/create"
-                    className="inline-flex h-10 items-center rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90"
-                  >
-                    {t('createCampaign')}
-                  </Link>
-                )}
+                {canCreate && <NewBroadcast label={t('createCampaign')} />}
               </div>
             </div>
           ) : view === 'list' ? (

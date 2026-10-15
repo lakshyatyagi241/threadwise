@@ -11,6 +11,8 @@ import { PlanEntitlementService } from '../plans-subscriptions-trials';
  */
 export const MAIL_FEATURE = 'email_channel' satisfies PlanFeatureKey;
 export const MAIL_MAILBOX_LIMIT_KEY = 'email_mailboxes' satisfies PlanLimitKey;
+/** Mails sent per calendar month, replies and campaign mail together (Reference's `email_monthly_limit`); 0 = unlimited. */
+export const MAIL_MONTHLY_LIMIT_KEY = 'email_monthly' satisfies PlanLimitKey;
 
 @Injectable()
 export class MailPlan {
@@ -23,5 +25,10 @@ export class MailPlan {
   /** The plan's mailbox cap; 0 = unlimited. */
   mailboxLimit(orgId: number): Promise<number> {
     return this.entitlements.limit(orgId, MAIL_MAILBOX_LIMIT_KEY);
+  }
+
+  /** The plan's cap on mails sent in a calendar month; 0 = unlimited. */
+  monthlyLimit(orgId: number): Promise<number> {
+    return this.entitlements.limit(orgId, MAIL_MONTHLY_LIMIT_KEY);
   }
 }

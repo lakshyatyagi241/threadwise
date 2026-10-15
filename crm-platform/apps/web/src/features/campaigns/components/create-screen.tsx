@@ -79,16 +79,21 @@ export function CreateScreen({
   const guidedKeys = new Set(senders.filter((s) => s.guided).map((s) => s.key));
   const initial =
     senders.find((s) => s.isDefault && s.guided) ?? senders.find((s) => s.isDefault) ?? senders[0];
-  // An SMS number is not in the WhatsApp number list (it has its own card, TW-SMS-018): its key comes from the address.
+  // An SMS number or a mailbox is not in the WhatsApp number list (each has its own card, TW-SMS-018, TW-MAIL-036): its key comes from
+  // the address.
   const key =
-    state.key && (engineOf(state.key) === 'sms' || senders.some((s) => s.key === state.key))
+    state.key &&
+    (engineOf(state.key) === 'sms' ||
+      engineOf(state.key) === 'email' ||
+      senders.some((s) => s.key === state.key))
       ? state.key
       : (initial?.key ?? '');
 
   if (state.draft) {
     return <Resume draftId={state.draft} senders={senders} hidden={hidden} onClassic={open} />;
   }
-  if (flowFor(senders, key) === 'wizard') {
+  // The guided flow is WhatsApp's (a verified Meta number); a mailbox never opens it.
+  if (engineOf(key) !== 'email' && flowFor(senders, key) === 'wizard') {
     return (
       <GuidedCampaign
         key={`guided-${key}`}

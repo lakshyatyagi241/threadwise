@@ -1433,7 +1433,7 @@
             "storefront_builder": "آن لائن اسٹور فرنٹ بلڈر۔",
             "invoicing": "انوائسز، کریڈٹ نوٹس، ادائیگیاں، سیلز آرڈرز اور ٹیکس ریٹس۔",
             "forms_and_links": "لیڈ کیپچر فارمز اور شیئر کرنے والے لنکس۔",
-            "extra_channels": "Telegram، Facebook اور Instagram چینلز۔",
+            "extra_channels": "Telegram، Facebook، Instagram، LINE، Viber اور WeChat چینلز۔",
             "form_builder": "ہوسٹڈ اور ایمبیڈڈ ویب فارمز جو CRM میں رابطے بناتے ہیں۔ یہ سوئچ ادا شدہ Forms ایپ کے پاس ہے۔",
             "waba_groups": "Cloud API نمبر سے WhatsApp گروپس بنائیں اور منظم کریں: دعوتی لنک، شمولیت کی درخواستیں، اراکین۔ نمبر کا Official Business Account ہونا ضروری ہے۔",
             "sms": "Twilio یا MSG91 کے ذریعے صرف بھیجنے والا SMS: بھیجنے والے جوڑیں، SMS براڈکاسٹ اور مہمات بھیجیں۔",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "ماہانہ فارم جمع کرائیاں",
             "ai_form_generations_monthly": "ماہانہ AI فارم بلڈر جنریشنز",
             "sms_monthly": "ماہانہ SMS",
-            "email_mailboxes": "ای میل میل باکس"
+            "email_mailboxes": "ای میل میل باکس",
+            "email_monthly": "ماہانہ ای میل"
           },
           "featureGroups": {
             "messaging": "میسجنگ",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "اسٹور فرنٹ اور ویب سائٹ بلڈر",
             "invoicing": "انوائسنگ (انوائسز، کریڈٹ نوٹس، بار بار آنے والی انوائسز)",
             "forms_and_links": "فارمز، کلک ٹو چیٹ لنکس اور گروپس",
-            "extra_channels": "Telegram، Facebook اور Instagram چینلز",
+            "extra_channels": "Telegram، Facebook، Instagram، LINE، Viber اور WeChat چینلز",
             "form_builder": "فارمز (ویب فارم بلڈر)",
             "waba_groups": "WhatsApp گروپس (Cloud API)",
             "sms": "SMS چینل",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "کیلنڈر ماہ میں قبول کی گئی فارم جمع کرائیاں، اسپام کے علاوہ۔ حد سے اوپر بھی جمع کرائی جائزے کے لیے محفوظ ہوتی ہے، کبھی ضائع نہیں ہوتی۔ 0 = لامحدود۔",
             "ai_form_generations_monthly": "کیلنڈر ماہ میں AI فارم بلڈر جنریشنز، مرمت کی دوبارہ کوشش سمیت۔ 0 = لامحدود۔",
             "sms_monthly": "کیلنڈر مہینے میں بھیجے گئے آؤٹ باؤنڈ SMS پیغامات۔ 0 = لامحدود۔",
-            "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔"
+            "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔",
+            "email_monthly": "کیلنڈر مہینے میں بھیجی گئی ای میلز، جوابات اور مہم کی ای میلز ملا کر۔ 0 = لامحدود۔"
           }
         }
       },

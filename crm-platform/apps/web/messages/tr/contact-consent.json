@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "Web sohbeti",
         "voice": "Sesli arama",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "abone",

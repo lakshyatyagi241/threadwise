@@ -86,6 +86,7 @@ const stored: PlanAdminItem = {
     ai_form_generations_monthly: 0,
     sms_monthly: 0,
     email_mailboxes: 0,
+    email_monthly: 0,
   },
   features: {
     automation: true,
