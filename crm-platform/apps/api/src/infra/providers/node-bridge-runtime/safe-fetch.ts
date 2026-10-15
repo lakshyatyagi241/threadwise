@@ -230,6 +230,7 @@ export class SafeFetch {
     const pinned = addresses[0]!;
     const open = target.protocol === 'https:' ? httpsRequest : httpRequest;
     return new Promise<IncomingMessage>((resolve, reject) => {
+      let deadline: NodeJS.Timeout | undefined;
       const req = open(
         target,
         {
@@ -242,10 +243,19 @@ export class SafeFetch {
               ? (cb as unknown as (e: null, a: unknown[]) => void)(null, [pinned])
               : cb(null, pinned.address, pinned.family),
         },
-        resolve,
+        (res) => {
+          res.once('close', () => clearTimeout(deadline));
+          resolve(res);
+        },
       );
+      // `timeout` only fires when the socket goes quiet; a host that trickles a byte at a time would hold the worker for as long as it
+      // likes. This is the overall deadline, covering the answer and the body that the caller reads after this resolves.
+      deadline = setTimeout(() => req.destroy(new Error('Media host timed out.')), timeoutMs);
       req.on('timeout', () => req.destroy(new Error('Media host timed out.')));
-      req.on('error', reject);
+      req.on('error', (e) => {
+        clearTimeout(deadline);
+        reject(e);
+      });
       req.end(init.body);
     });
   }

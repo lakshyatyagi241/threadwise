@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSRF, CORS and Security Headers Report</title>
+<style>
+  :root { --bg:#fff; --fg:#1b1f24; --muted:#5b6570; --line:#d8dee4; --card:#f6f8fa; --ok:#1a7f37; --warn:#9a6700; --bad:#cf222e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0d1117; --fg:#e6edf3; --muted:#8b949e; --line:#30363d; --card:#161b22; --ok:#3fb950; --warn:#d29922; --bad:#f85149; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:26px; margin:0 0 4px; } h2 { font-size:19px; margin:32px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  p, li { max-width:75ch; } .muted { color:var(--muted); }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:8px 0; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; } th { background:var(--card); }
+  code { background:var(--card); padding:1px 5px; border-radius:4px; font-size:13px; }
+  .pill { display:inline-block; padding:1px 9px; border-radius:99px; font-size:12px; font-weight:600; border:1px solid currentColor; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:12px 0; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px; } .stat b { font-size:24px; display:block; }
+</style>
+</head>
+<body>
+<main>
+<h1>CSRF, CORS and security headers report</h1>
+<p class="muted">QA sheet 3, item 32 &middot; P1 &middot; owner Vedant &middot; run 2026-10-15 &middot; branch <code>vedant/security/csrf-cors-headers</code> from main 076ba0562</p>
+
+<p><b>Target:</b> automated on PR, daily and pre-release; zero Critical/High release blockers.
+<b>Sheet said:</b> Completed. <b>Verified result:</b> <span class="pill ok">No Critical or High</span> &nbsp;<span class="pill warn">mostly right, with one real gap and two hardening fixes</span></p>
+
+<div class="grid">
+  <div class="stat"><b>95</b>new tests (53 API + 42 web)</div>
+  <div class="stat"><b>0 / 0</b>Critical / High</div>
+  <div class="stat"><b>3</b>Low issues fixed</div>
+  <div class="stat"><b>2</b>open decisions</div>
+</div>
+
+<h2>1. How the product defends against CSRF (what I verified)</h2>
+<ul>
+  <li><b>The API is bearer-only.</b> A login is the <code>Authorization</code> header, never a cookie, so a forged cross-site request has no credential to ride on. A test now fails if any API file starts reading a request cookie outside a reviewed list (only the public chat widget's anonymous visitor id does).</li>
+  <li><b>The web app holds the cookie</b> (<code>httpOnly</code>, <code>SameSite=Lax</code>, <code>Secure</code> in production) and forwards calls to the API through <code>/api/v2/*</code> and <code>/api/platform/*</code>. Those proxies refuse a cross-site write with <code>isSameOrigin</code> before anything is sent upstream.</li>
+  <li><b>Every route handler that can change state</b> was listed and checked: the auth routes, impersonation stop, the public forms / invoices / sales-docs / consent / appointments proxies, the storefront forms, and the two proxies. Two have no guard on purpose (section 4). A test now fails when a new writer is added without a guard.</li>
+</ul>
+
+<h2>2. What was tested</h2>
+<table>
+<tr><th>Area</th><th>How</th></tr>
+<tr><td>Security headers</td><td>Real Nest server with the real middleware, probed over HTTP on 10 routes: nosniff, referrer policy, permissions policy, no framing with a closed CSP, widget and form-embed exemptions, no-store on auth/account/platform/onboarding, HSTS only on a secure connection</td></tr>
+<tr><td>Staff CORS</td><td>Real <code>cors</code> handling with the production options: the allowed origin is echoed with credentials; 12 hostile origins are not (<code>null</code>, suffix and prefix look-alikes, other scheme, other port, subdomain, case change, userinfo, <code>*</code>); preflight; never a credentialed wildcard; production with no list is closed</td></tr>
+<tr><td>Customer API CORS</td><td>Every origin answered with <code>*</code> and never with credentials; look-alike paths (<code>/v2/api/v1</code>, <code>/api/v10</code>, <code>/API/V1</code>) keep the staff policy</td></tr>
+<tr><td>CSRF guard</td><td>16 request shapes through <code>isSameOrigin</code>; the proxy refuses cross-site <code>POST/PUT/PATCH/DELETE</code> for both identity pools without calling upstream; a same-origin write goes through</td></tr>
+<tr><td>Route handlers</td><td>Scan of every <code>route.ts</code>: each writer must call a guard or be on the reviewed list</td></tr>
+<tr><td>Cookie flags and API cookie use</td><td>Static checks</td></tr>
+</table>
+
+<h2>3. Findings</h2>
+<table>
+<tr><th>#</th><th>Finding</th><th>Severity</th><th>Status</th></tr>
+<tr><td>1</td><td>The staff and operator CSRF guard looked only at <code>Origin</code>. The storefront guard also checks <code>Sec-Fetch-Site</code>; this one did not, and a write with no <code>Origin</code> header passed whatever the browser said about its source. <code>SameSite=Lax</code> already stops the cookie on cross-site posts, so this was a missing second layer, not an open hole. With the old code 3 of the 42 new web tests fail; with the fix all pass.</td><td><span class="pill warn">Low</span></td><td class="ok">Fixed: a write whose <code>Sec-Fetch-Site</code> is not <code>same-origin</code> or <code>none</code> is refused</td></tr>
+<tr><td>2</td><td>No <code>Permissions-Policy</code> header on the API or the web app.</td><td><span class="pill warn">Low</span></td><td class="ok">Fixed: camera, microphone and location stay with the product's own pages; USB, serial, Bluetooth and interest-cohort are off</td></tr>
+<tr><td>3</td><td>The staff CORS options were written inline in <code>main.ts</code>, so they could not be tested without starting the whole app and could drift from what the tests check.</td><td><span class="pill warn">Low (testability)</span></td><td class="ok">Fixed: now <code>staffCorsOptions()</code> in <code>cors-policy.ts</code>, used by both <code>main.ts</code> and the tests</td></tr>
+<tr><td>4</td><td>The web app has no script CSP; its only policy is <code>frame-ancestors</code>. A script-injection bug would not be contained by the browser.</td><td><span class="pill warn">Medium</span></td><td class="warn">Open decision (section 5)</td></tr>
+<tr><td>5</td><td>With no origins listed and <code>NODE_ENV</code> not <code>production</code>, the staff API echoes any origin with credentials (a development convenience, logged loudly at boot). Safe only while every shared server sets <code>NODE_ENV=production</code>; the earlier audit checked that staging does.</td><td><span class="pill warn">Low, documented</span></td><td>Pinned by a test so it cannot change silently</td></tr>
+</table>
+
+<h2>4. Reviewed and left as they are</h2>
+<ul>
+  <li><b><code>GET/POST /logout</code></b> ends a session without a same-origin check, as Reference did. A forged call can only sign someone out. Listed in the route test with this reason.</li>
+  <li><b><code>POST /webhooks/storefront-pay</code></b> is called by Razorpay server to server; the API verifies the signature and no cookie is involved.</li>
+  <li><b><code>GET /impersonate?code=</code></b> needs a one-time secret code from an operator, so it cannot be forged cross-site.</li>
+  <li>The chat widget visitor cookie is <code>SameSite=None</code> on secure connections by design (it must work inside customers' pages) and carries an anonymous id only.</li>
+</ul>
+
+<h2>5. Open decisions</h2>
+<ul>
+  <li><b>Script CSP for the web app (finding 4).</b> The right fix is a nonce-based policy rolled out in <i>Report-Only</i> mode first, because Next.js inline scripts, the embedded sign-up popups and the Shopify and widget embeds can all break. It is not safe to add blindly, so it is not in this change. Overlaps with item 31 (XSS).</li>
+  <li><b>Cross-Origin-Opener-Policy</b> was not added: the WhatsApp embedded sign-up and OAuth popups may depend on <code>window.opener</code>.</li>
+</ul>
+
+<h2>6. Limits of this test</h2>
+<ul>
+  <li>The headers and CORS tests run a small Nest app with the product's real middleware and options, not the full app with its database. The real boot sequence in <code>main.ts</code> is covered only through the shared options and the middleware.</li>
+  <li>Next.js response headers (<code>next.config.ts</code>) were changed but not asserted over HTTP in this run, because that needs a built web server. The Permissions-Policy value is the same string as the API's.</li>
+  <li>Browser behaviour for <code>Sec-Fetch-Site</code> is taken from the specification; no browser matrix was run (that is item 19).</li>
+</ul>
+
+<h2>7. Files</h2>
+<p>Changed: <code>apps/web/src/lib/auth/proxy.ts</code>, <code>apps/web/next.config.ts</code>, <code>apps/api/src/main.ts</code>, <code>modules/platform-infrastructure/cors/cors-policy.ts</code> and its <code>index.ts</code>, <code>modules/auth/middleware-security-headers.ts</code>. New: <code>apps/api/test/unit/security/headers-cors.spec.ts</code>, <code>apps/web/src/lib/auth/csrf.test.ts</code>.</p>
+</main>
+</body>
+</html>

@@ -1,7 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Readable } from 'node:stream';
-import { gunzipSync, gzipSync } from 'node:zlib';
+import { promisify } from 'node:util';
+import { gunzip, gzip } from 'node:zlib';
 import { and, eq, sql } from 'drizzle-orm';
 import {
   BULK_FILTER_MAX,
@@ -42,6 +43,12 @@ const { fields, contactExports } = schema;
 const FAILED_LIST_MAX = 100;
 const DELETE_BATCH = 500;
 const EXPORT_BATCH = 2000;
+
+// The whole export file is compressed once and read back whole. Synchronous zlib holds the event loop for the full call (about 14 ms
+// per MB to compress on the benchmark machine, tools/event-loop-audit/measure-zlib.mjs); the async form does the same work on the
+// libuv pool and returns the same bytes.
+const gzipAsync = promisify(gzip);
+const gunzipAsync = promisify(gunzip);
 
 type Selection = {
   ids?: string[];
@@ -387,7 +394,7 @@ export class ContactBulkService {
     scope: RecordScope,
   ): Promise<{ csv: Buffer; fileName: string }> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
+    const found = await this.db.tx(async (tx) => {
       const [row] = await tx
         .select()
         .from(contactExports)
@@ -409,8 +416,10 @@ export class ContactBulkService {
         action: 'read',
         delta: { exportId: { old: null, new: fileId }, rows: { old: null, new: row.rowCount } },
       });
-      return { csv: gunzipSync(row.csvGz), fileName: row.fileName };
+      return { csvGz: row.csvGz, fileName: row.fileName };
     });
+    // Outside the transaction: inflating a large file must not keep a connection checked out.
+    return { csv: await gunzipAsync(found.csvGz), fileName: found.fileName };
   }
 
   /**
@@ -551,7 +560,7 @@ export class ContactBulkService {
     }
 
     const save = async () => {
-      const gz = gzipSync(Buffer.concat(keep));
+      const gz = await gzipAsync(Buffer.concat(keep));
       await db.txAs({ orgId, userId }, async (tx) => {
         // Expired files of this workspace go with the next export; there is no separate sweep.
         await tx

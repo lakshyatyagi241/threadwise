@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-10-15",
+  "method": "Read apps/api/src/main.ts, worker.ts, worker.module.ts, package.json scripts, deploy/hostinger/docker-compose.yml, and grepped for worker_threads. Nothing was run in production.",
+  "processes": [
+    {
+      "id": "api",
+      "entry": "apps/api/src/main.ts (dist/src/main.js)",
+      "kind": "http-api",
+      "hosts": [
+        "Express HTTP API",
+        "Socket.IO realtime gateway (apps/api/src/realtime/realtime.gateway.ts, Redis adapter)",
+        "webhook receivers (WhatsApp, store, channel, payment)"
+      ],
+      "container": {
+        "service": "api",
+        "mem_limit": "1g",
+        "NODE_OPTIONS": "--max-old-space-size=640",
+        "cpuQuota": "none set in compose",
+        "replicasInCompose": 1
+      },
+      "monitored": true,
+      "how": "startRuntimeMonitor('api') in main.ts + httpMetricsMiddleware",
+      "meaningOfLoopBlock": "Every HTTP request, every WebSocket event and every webhook acknowledgement in this process waits."
+    },
+    {
+      "id": "worker",
+      "entry": "apps/api/src/worker.ts (dist/src/worker.js)",
+      "kind": "bullmq-worker",
+      "hosts": [
+        "BullMQ processors (see QUEUES in apps/api/src/infra/queue/queues.ts and the *.processor.ts files)",
+        "outbox drain (workers/outbox-drain.service.ts)",
+        "partition maintenance",
+        "worker heartbeat (observability/worker-heartbeat.service.ts)"
+      ],
+      "container": {
+        "service": "worker",
+        "mem_limit": "1g",
+        "NODE_OPTIONS": "--max-old-space-size=640 (x-api-env)",
+        "cpuQuota": "none set in compose",
+        "replicasInCompose": 1
+      },
+      "monitored": true,
+      "how": "startRuntimeMonitor('worker') in worker.ts",
+      "meaningOfLoopBlock": "Every queue's jobs and the outbox drain in this process wait; interactive API traffic is NOT affected (separate process).",
+      "gaps": [
+        "Job wait/duration/outcome are fed by JobMetricsModule (one hook on every WorkerHost). Verified on a real BullMQ worker against Redis; not yet seen from the booted app worker with its real processors. Retried attempts are invisible (BullMQ reports final states only)."
+      ]
+    },
+    {
+      "id": "web",
+      "entry": "apps/web (Next.js, next start -p 3001)",
+      "kind": "nextjs-server",
+      "container": {
+        "service": "web",
+        "mem_limit": "768m",
+        "NODE_OPTIONS": "--max-old-space-size=512",
+        "cpuQuota": "none set in compose",
+        "replicasInCompose": 1
+      },
+      "monitored": false,
+      "reason": "Needs apps/web/instrumentation.ts importing a shared monitor; the monitor currently lives in apps/api. Tracked in the backlog (EL-B07)."
+    },
+    {
+      "id": "cli-and-seed-scripts",
+      "entry": "apps/api package.json scripts: seed:*, secrets:reencrypt, operator:create, backfill:*; offsite-backup.cli.ts; rotate-keys.cli.ts",
+      "kind": "short-lived",
+      "monitored": false,
+      "reason": "By design: they exit; their synchronous work cannot block live traffic."
+    }
+  ],
+  "workerThreads": "One place: apps/api/src/infra/sandbox/code-sandbox.ts starts a node:worker_threads Worker per run of the flow Code node (author JavaScript in a node:vm context, wall-clock timeout, hard kill, heap cap). It is short-lived and killed on timeout, so it is not given a long-running monitor; its cost shows up as the calling process's job duration. The first version of this inventory said there were none: that grep used a pathspec that matched nothing, and was corrected on 2026-10-15 with a plain `git grep` inside apps/api.",
+  "scheduledTasks": "@nestjs/schedule and BullMQ repeatable jobs run inside api/worker above; there is no separate scheduler process.",
+  "existingTelemetryBeforeThisChange": [
+    "Sentry (@sentry/node) error and span reporting",
+    "worker heartbeat + outbox lag in Redis, surfaced in /ready",
+    "pino-style JSON logs with redaction"
+  ],
+  "notPresentBeforeThisChange": [
+    "OpenTelemetry",
+    "prom-client or any Prometheus exposition",
+    "Prometheus/Grafana services in any compose file",
+    "k6/autocannon/artillery or any load tool in the repo",
+    "any event-loop or runtime metric"
+  ],
+  "containerLimits": "deploy/hostinger/docker-compose.yml sets mem_limit but no cpus: or cpu quota, so cgroup CPU throttling is not expected there; crm_container_cpu_throttled_* is wired for environments that do set one."
+}

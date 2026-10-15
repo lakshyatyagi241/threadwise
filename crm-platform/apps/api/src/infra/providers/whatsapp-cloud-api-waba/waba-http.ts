@@ -166,7 +166,14 @@ export class WabaHttp {
       throw WabaApiError.network(cause);
     }
 
-    const text = await res.text().catch(() => '');
+    // A 200 whose body never arrived (a timeout, a reset, a cut-off) is not "sent": the caller reads the message id out of the body.
+    // An error status keeps its status error, so only a read failure on a success is raised here.
+    let readFailure: unknown;
+    const text = await res.text().catch((cause: unknown) => {
+      readFailure = cause;
+      return '';
+    });
+    if (readFailure !== undefined && res.ok) throw WabaApiError.network(readFailure);
     let body: unknown = {};
     if (text) {
       try {

@@ -22,10 +22,12 @@ command below runs on a laptop.
 | Do the end-to-end journeys pass?                                                                                                                                                                                           | `pnpm --filter @crm/api exec vitest run test/e2e/journeys` (Docker)                 |                                                                                              |
 | Is the repository free of secrets, vulnerable packages and image findings?                                                                                                                                                 | `bash tools/quality/security-scan.sh`                                               | [../runbooks/dependency-audit.md](../runbooks/dependency-audit.md)                           |
 | Where does each QA-plan task stand (UI scenarios, regression, session expiry, SAST, injection, XSS, audit log, DB indexing, slow queries, plans, N+1, pool, transactions, constraints, integrity, retention, stress, CPU)? | `pnpm qa` (`pnpm qa 30 31`, `pnpm qa -- --fail`)                                    | [../../tools/qa-suite/README.md](../../tools/qa-suite/README.md)                             |
+| Do the public pages and the browser-sensitive flows work in Firefox and WebKit?                                                                                                                                            | `CROSS_BROWSER=1 npx playwright test e2e/cross-browser` (in `apps/web`)             | [cross-browser-testing.md](cross-browser-testing.md)                                         |
+| Does every e2e folder have a browser priority?                                                                                                                                                                             | `node tools/quality/check-browser-priority.mjs`                                     | [cross-browser-testing.md](cross-browser-testing.md)                                         |
 
 "Docker" means Testcontainers starts a Postgres and a Redis per test file.
 
 ## Reports
 
 Phase 1 and Phase 2 reports are in this folder (`Phase_2_QA_Report.html`; Phase 1's was handed over separately). Phase 3's is
-`Phase_3_QA_Report.html`.
+`Phase_3_QA_Report.html`. Phase 4's is `Phase_4_QA_Report.html`.

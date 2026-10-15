@@ -30,7 +30,13 @@ export {
   installBodyLimits,
   type BodyLimitClass,
 } from './body-limits/body-limits';
-export { corsIsClosedInProduction, corsOriginFor, type CorsOrigin } from './cors/cors-policy';
+export {
+  corsIsClosedInProduction,
+  corsOriginFor,
+  staffCorsOptions,
+  STAFF_EXPOSED_HEADERS,
+  type CorsOrigin,
+} from './cors/cors-policy';
 export {
   isDone,
   listColumns,
@@ -55,3 +61,20 @@ export {
 } from './observability/sentry';
 export { createFatalHandler, installProcessHandlers } from './observability/process-handlers';
 export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability/log-redaction';
+export {
+  EventLoopSampler,
+  JobMetricsModule,
+  RuntimeMonitor,
+  attachJobMetrics,
+  classifySnapshot,
+  getRuntimeMonitor,
+  httpMetricsMiddleware,
+  jobTimings,
+  startMetricsServer,
+  startRuntimeMonitor,
+  stopRuntimeMonitor,
+  type EventLoopSnapshot,
+  type LoopLevel,
+  type RuntimeMonitorOptions,
+  type RuntimeService,
+} from './observability/event-loop';

@@ -1,0 +1,60 @@
+name: Browsers
+
+# Cross-browser run (QA task 19): the public-page route matrix and the engine-sensitive spec on Chromium, Firefox and WebKit (plus
+# mobile Safari for the cross-browser spec). Manual for the same reason as the Quality and Security workflows: Actions jobs do not start
+# on this account. The same steps are in crm-platform/docs/quality/cross-browser-testing.md and were run locally; this file has not run on
+# GitHub yet.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  public-pages:
+    name: Public pages and cross-browser spec
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: crm-platform/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - name: Every e2e folder has a priority
+        run: node tools/quality/check-browser-priority.mjs
+      - name: Install the three engines
+        run: pnpm --filter @crm/web exec playwright install --with-deps chromium firefox webkit
+      - name: Build the web app
+        run: pnpm --filter @crm/web build
+      - name: Start the stand-in API and the web app
+        run: |
+          node apps/web/e2e/_matrix/stub-api.mjs &
+          pnpm --filter @crm/web exec next start -p 3001 &
+          npx --yes wait-on http://localhost:3001 http://localhost:3000/health
+      - name: Cross-browser spec on all four projects
+        run: pnpm --filter @crm/web exec playwright test e2e/cross-browser
+        env:
+          CROSS_BROWSER: "1"
+          HEADLESS: "1"
+      - name: Public route matrix on each engine
+        run: |
+          for p in chromium firefox webkit; do
+            CROSS_BROWSER=1 HEADLESS=1 QA_MATRIX_SCOPE=public pnpm --filter @crm/web exec playwright test e2e/_matrix --project=$p
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            crm-platform/apps/web/playwright-report/
+            crm-platform/apps/web/test-results/

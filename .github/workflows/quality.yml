@@ -59,6 +59,28 @@ jobs:
             crm-platform/docs/quality/acceptance/REPORT.md
             crm-platform/reports/qa-suite/latest/
 
+  event-loop:
+    name: Event-loop static gate (no new blocking suspect on a runtime path)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - name: Scan (fails on a runtime-path suspect that is not in tools/event-loop-audit/baseline.json)
+        run: node tools/event-loop-audit/scan.mjs --check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-loop-hotspots
+          path: crm-platform/reports/event-loop/blocking-hotspots.json
+
   unit:
     name: Unit tests with coverage (API, web)
     runs-on: ubuntu-latest
