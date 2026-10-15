@@ -8,4 +8,6 @@ export const COMPLIANCE_ERROR_CODES = {
   COMPLIANCE_SUBPROCESSOR_DUPLICATE: 'COMPLIANCE_SUBPROCESSOR_DUPLICATE',
   /** The workspace has no public trust page (the switch is off or the workspace does not exist). 404. */
   COMPLIANCE_TRUST_PAGE_NOT_FOUND: 'COMPLIANCE_TRUST_PAGE_NOT_FOUND',
+  /** An outbound call was refused because the workspace's calling window is closed for this contact. A call is live and cannot wait, so it is refused (BL-177); the answer says when the window opens. 422. */
+  COMPLIANCE_CALL_OUTSIDE_WINDOW: 'COMPLIANCE_CALL_OUTSIDE_WINDOW',
 } as const;
