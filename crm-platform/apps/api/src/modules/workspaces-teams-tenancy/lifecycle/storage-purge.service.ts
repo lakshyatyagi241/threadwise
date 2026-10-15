@@ -1,6 +1,7 @@
 import { Injectable, Logger, Optional } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
+import { storageKeyIsOwnedBy } from '../../../common/storage-key-owner';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ChatMediaStore } from '../../../infra/providers/chat-conversations/media';
 import { MediaStorageService } from '../../platform-settings-branding-storage';
@@ -66,6 +67,14 @@ export class StoragePurgeService {
       }>;
       for (const r of rows) {
         try {
+          // TI-022: the key was written by the tenant; never delete an object that is not under this workspace's own prefix.
+          if (!storageKeyIsOwnedBy(Number(r.org_id), r.storage_key)) {
+            // Not a transient failure: park it at the attempt limit so it is never retried, with the reason for an operator.
+            await tx.execute(sql`
+              UPDATE storage_purge_queue SET attempts = ${MAX_ATTEMPTS}, last_error = 'key is not under this workspace; not deleted'
+               WHERE id = ${r.id}`);
+            continue;
+          }
           await this.chat?.remove(Number(r.org_id), r.storage_key);
           await this.media.remove(r.storage_key);
           await tx.execute(

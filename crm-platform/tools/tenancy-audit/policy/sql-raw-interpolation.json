@@ -93,5 +93,30 @@
     "status": "reviewed",
     "reason": "interpolates a module constant (a fixed column list or format string), never request text (US() timestamp formatter on a fixed column)",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/campaigns/campaigns.repository.ts": {
+    "status": "reviewed",
+    "reason": "the list() cast argument is typed uuid|bigint|text and every call site passes a literal; values are bind parameters; AGG fragments are module constants",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/campaigns/summary/campaign-summary.repository.ts": {
+    "status": "reviewed",
+    "reason": "every sql.raw argument is a code-chosen literal (fixed regexp/status fragments, two fixed strings off a typed SummarySource, fixed aliases); cursor values and ids are bound parameters and the cursor is shape-validated",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/chat-conversations/message-history.query.ts": {
+    "status": "reviewed",
+    "reason": "column names come from the COLUMNS table, aliases are literals, the volume bucket unit is hour/day/week via a zod enum with a constant fallback; teams, ids and timezone are bound",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/scheduled-queue-warmer/schedule-engagement.service.ts": {
+    "status": "reviewed",
+    "reason": "the date_trunc unit is hour or day, chosen in code from the schedule's own timestamps",
+    "reviewedOn": "2026-10-14"
+  },
+  "common/workspace-calendar.ts": {
+    "status": "reviewed",
+    "reason": "onLeaveOnSql interpolates only the table alias, both callers pass the literal u; today is a bound ::date parameter and the timezone is checked against Intl",
+    "reviewedOn": "2026-10-14"
   }
 }

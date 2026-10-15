@@ -210,6 +210,18 @@ const e2e = {
   87: ['widget-public'],
   88: ['ai-training'],
   90: ['ai-keys'],
+  39: ['lock-scoping'],
+  64: ['media-purge-isolation', 'storage-key-owner'],
+  66: ['typeahead-scoping'],
+  71: ['media-purge-isolation', 'storage-key-owner'],
+};
+
+// What a unit-spec-backed control does NOT cover, appended to its basis so a PASSED is never read as the whole boundary.
+const scope = {
+  39: 'Redis leases (SenderLease) and every Postgres advisory-lock call site by static scan; not the BullMQ job locks.',
+  64: 'chat-media keys, temporary links and the erase purge; the audit-log / consent export files and report jobs are NOT exercised here.',
+  66: 'the contacts and companies pickers only; other pickers (deals, users, tags, templates) are NOT exercised.',
+  71: 'the erase purge and chat-media removal only; per-module retention sweeps are reviewed by the privileged() allowlist, not run.',
 };
 
 // Requirements the audit found NOT met: recorded as FAILED with the finding, never as NOT_RUN.
@@ -248,6 +260,7 @@ titles.forEach((title, i) => {
     e.basis =
       (e.evidence === 'authz' ? e.basis + '; ' : '') + 'executed e2e suites: ' + e2e[n].join(', ');
   }
+  if (scope[n]) e.basis += ' Scope: ' + scope[n];
   if (unmet[n]) {
     e.status = 'FAILED';
     e.basis = 'requirement not met: ' + unmet[n];
