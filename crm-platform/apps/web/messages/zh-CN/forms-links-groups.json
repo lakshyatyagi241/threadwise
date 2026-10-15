@@ -130,15 +130,24 @@
       "loading": "正在加载链接…",
       "retry": "重试",
       "searchPlaceholder": "按名称或链接搜索",
-      "create": { "cta": "新建链接" },
+      "create": {
+        "cta": "新建链接"
+      },
       "stats": {
         "all": "全部链接",
         "live": "生效中",
         "totalClicks": "总点击数",
         "avgClicks": "平均点击数 / 链接"
       },
-      "tabs": { "all": "全部", "live": "生效中", "paused": "已暂停" },
-      "status": { "live": "生效中", "paused": "已暂停" },
+      "tabs": {
+        "all": "全部",
+        "live": "生效中",
+        "paused": "已暂停"
+      },
+      "status": {
+        "live": "生效中",
+        "paused": "已暂停"
+      },
       "empty": {
         "title": "暂无链接",
         "description": "生成一个链接，用于分享在广告、个人简介或二维码中。"
@@ -170,7 +179,11 @@
       "builder": {
         "back": "返回链接列表",
         "newHeading": "新建链接",
-        "step": { "destination": "目标号码", "message": "起始消息", "tracking": "追踪设置" },
+        "step": {
+          "destination": "目标号码",
+          "message": "起始消息",
+          "tracking": "追踪设置"
+        },
         "name": "名称",
         "status": "状态",
         "countryCode": "国家代码",
@@ -194,6 +207,14 @@
         "shortUrl": "短链接",
         "waUrl": "WhatsApp 链接",
         "qrAlt": "该链接的二维码"
+      },
+      "public": {
+        "missingTitle": "未找到链接",
+        "missingBody": "此链接不存在或已被删除。",
+        "goneTitle": "链接已失效",
+        "goneBody": "此链接已暂停或已过期。",
+        "errorTitle": "出了点问题",
+        "errorBody": "无法打开此链接。请重试。"
       }
     }
   }
