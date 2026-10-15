@@ -16,9 +16,11 @@ import {
 import {
   corsIsClosedInProduction,
   corsOriginFor,
+  httpMetricsMiddleware,
   initSentry,
   installBodyLimits,
   installProcessHandlers,
+  startRuntimeMonitor,
 } from './modules/platform-infrastructure';
 import { buildOpenApiDocument } from './common/openapi';
 import type { Env } from './config/env.schema';
@@ -27,6 +29,8 @@ async function bootstrap(): Promise<void> {
   // First, so a failure while the application is still being built is reported too (TW-INFRA-018).
   installProcessHandlers('api');
   initSentry('api');
+  // Event-loop delay, utilization, GC and request latency for this process (docs/performance/event-loop). Before Nest builds, so boot is measured too.
+  const runtimeMonitor = startRuntimeMonitor('api');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
@@ -49,6 +53,9 @@ async function bootstrap(): Promise<void> {
         ? trust.split(',').map((s) => s.trim())
         : trust,
   );
+
+  // Times every response by route template, so a loop stall can be matched to the requests that were running.
+  if (runtimeMonitor) app.use(httpMetricsMiddleware(runtimeMonitor));
 
   // Body-size limits per route class (TW-INFRA-020): before anything reads a body.
   installBodyLimits(app);

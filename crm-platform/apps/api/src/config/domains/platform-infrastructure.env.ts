@@ -60,6 +60,27 @@ export const infraEnvSchema = z.object({
     blankToUndefined,
     z.coerce.number().int().min(1).max(86_400).default(60),
   ),
+  /** Event-loop and runtime monitoring in every API and worker process. On by default; off only to rule it out while debugging. */
+  OBS_RUNTIME_MONITOR: z.preprocess(blankToUndefined, booleanish.default(true)),
+  /** Reporting window. 10 s is the standard: long enough for stable percentiles, short enough to see a stall. */
+  OBS_RUNTIME_INTERVAL_SECONDS: z.preprocess(
+    blankToUndefined,
+    z.coerce.number().int().min(1).max(60).default(10),
+  ),
+  /** Port of the `GET /metrics` listener (own server, not an API route). 0, the default, collects but does not listen. */
+  OBS_METRICS_PORT: z.preprocess(
+    blankToUndefined,
+    z.coerce.number().int().min(0).max(65_535).default(0),
+  ),
+  /** Bind address of that listener. Loopback unless the deployment puts the scraper on the container network. */
+  OBS_METRICS_HOST: z.preprocess(blankToUndefined, z.string().min(1).default('127.0.0.1')),
+  /** Optional bearer token for scrapes. Set it whenever the host is not loopback. */
+  OBS_METRICS_TOKEN: z.preprocess(blankToUndefined, z.string().min(16).optional()),
+  /** A window whose worst loop delay reaches this many ms is logged once with the slowest requests of that window. */
+  OBS_BLOCKED_LOG_THRESHOLD_MS: z.preprocess(
+    blankToUndefined,
+    z.coerce.number().int().min(10).max(60_000).default(250),
+  ),
 });
 
 export type InfraEnv = z.output<typeof infraEnvSchema>;
