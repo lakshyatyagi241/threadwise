@@ -255,6 +255,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         savePropertyKey: str(data.savePropertyKey),
         keepMenuOpen: data.keepMenuOpen !== false,
         handoffs: cleanHandoffs(data.handoffs, opts.length),
+        actions: cleanButtonActions(data.optionActions, opts.length),
       };
     }
     case 'ask':
@@ -388,6 +389,30 @@ function cleanHandoffs(
   return out;
 }
 
+/**
+ * What a button does when tapped, besides leading to the next step. `live_agent` is the `handoffs` above, not an action here. A `flow`
+ * action hands the conversation to that flow; the opt actions carry on to the step wired after the button.
+ */
+export type ButtonAction =
+  { type: 'flow'; flow: string } | { type: 'opt_in' } | { type: 'opt_out' };
+
+/**
+ * "Button pressed action" on a button: `{ "<exit index>": { type: "flow" | "opt_in" | "opt_out", flow? } }`, only for exits that exist.
+ * The compiler gives such an exit its own step (Run sub-flow, or Opt in / Opt out of marketing) in front of whatever is wired after it.
+ */
+export function cleanButtonActions(raw: unknown, exits: number): Record<string, ButtonAction> {
+  const out: Record<string, ButtonAction> = {};
+  for (const [k, v] of Object.entries(obj(raw))) {
+    const i = Number(k);
+    if (!Number.isInteger(i) || i < 0 || i >= exits) continue;
+    const a = obj(v);
+    if (a.type === 'opt_in' || a.type === 'opt_out') out[String(i)] = { type: a.type };
+    else if (a.type === 'flow' && str(a.flow).trim() !== '')
+      out[String(i)] = { type: 'flow', flow: str(a.flow).trim() };
+  }
+  return out;
+}
+
 export function compileGraph(input: unknown): RuntimeGraph {
   const g = obj(input) as BuilderGraph;
   const raw = [...arr(g.flowNodes)].map(obj) as BuilderNode[];
@@ -452,6 +477,35 @@ export function compileGraph(input: unknown): RuntimeGraph {
         ),
       });
       edges.push({ from, to: id });
+    }
+  }
+  // A button with an action runs that step first (a sub-flow, or the contact's marketing opt-in / opt-out), then goes on to whatever the
+  // author wired to the button, if anything.
+  for (const n of [...nodes]) {
+    for (const [idx, action] of Object.entries(
+      n.type === 'InteractiveButtons' ? (obj(n.props.actions) as Record<string, ButtonAction>) : {},
+    )) {
+      const from = `${n.id}_${portOf(typeById.get(n.id) ?? '', `p${idx}`)}`;
+      const id = `${n.id}__action_${idx}`;
+      nodes.push(
+        action.type === 'flow'
+          ? {
+              id,
+              type: 'SubFlow',
+              props: shapeNode(
+                'subflow',
+                flbToRuntimeData({ type: 'subflow', data: { flow: action.flow } }),
+              ),
+            }
+          : { id, type: 'ContactConsent', props: { data: { action: action.type } } },
+      );
+      const wiredEdge = edges.find((e) => e.from === from);
+      if (wiredEdge) {
+        // A sub-flow takes the run over for good (the engine does not return to this flow), so nothing carries on after it; the opt
+        // steps do carry on to what the author wired.
+        if (action.type !== 'flow') edges.push({ from: `${id}_1`, to: wiredEdge.to });
+        wiredEdge.to = id;
+      } else edges.push({ from, to: id });
     }
   }
   return { nodes, edges, vars: obj(g.vars) };

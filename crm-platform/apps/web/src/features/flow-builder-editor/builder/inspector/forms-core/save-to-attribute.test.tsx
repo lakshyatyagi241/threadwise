@@ -38,7 +38,7 @@ const html = (
       setMany={noop}
       addOption={noop}
       removeOption={noop}
-      env={{} as never}
+      env={{ ctx: { flows: [], teams: [] }, loading: false, flowId: null } as never}
     />,
   );
 };
