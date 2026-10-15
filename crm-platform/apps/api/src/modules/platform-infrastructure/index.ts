@@ -30,7 +30,13 @@ export {
   installBodyLimits,
   type BodyLimitClass,
 } from './body-limits/body-limits';
-export { corsIsClosedInProduction, corsOriginFor, type CorsOrigin } from './cors/cors-policy';
+export {
+  corsIsClosedInProduction,
+  corsOriginFor,
+  staffCorsOptions,
+  STAFF_EXPOSED_HEADERS,
+  type CorsOrigin,
+} from './cors/cors-policy';
 export {
   isDone,
   listColumns,

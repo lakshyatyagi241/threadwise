@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
     const security = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      {
+        key: 'Permissions-Policy',
+        value:
+          'camera=(self), microphone=(self), geolocation=(self), usb=(), serial=(), bluetooth=(), interest-cohort=()',
+      },
       { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
       { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
       { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },

@@ -7,6 +7,9 @@ import type { NextFunction, Request, Response } from 'express';
  * `/form-embed/*` script is listed here so it carries no blanket frame policy of its own.
  */
 const FRAMEABLE = /^\/(?:v\d+\/)?(?:widget|form-embed)(?:\/|$)/;
+/** Browser features this product never needs are off; the ones it uses (voice notes, location, camera) stay available to its own pages only. */
+export const PERMISSIONS_POLICY =
+  'camera=(self), microphone=(self), geolocation=(self), usb=(), serial=(), bluetooth=(), interest-cohort=()';
 /** Responses that carry credentials, tokens or personal data must never sit in a shared cache. */
 const NO_STORE = /^\/v\d+\/(?:auth|account|platform|onboarding)(?:\/|$)/;
 
@@ -23,6 +26,7 @@ export class SecurityHeadersMiddleware implements NestMiddleware {
     const path = req.originalUrl.split('?')[0] ?? '';
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', PERMISSIONS_POLICY);
 
     if (!FRAMEABLE.test(path)) {
       res.setHeader('X-Frame-Options', 'SAMEORIGIN');
