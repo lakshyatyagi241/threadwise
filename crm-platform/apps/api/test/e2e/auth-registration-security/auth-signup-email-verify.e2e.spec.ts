@@ -1,5 +1,9 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import {
+  MAIL_PORT,
+  type MailPort,
+} from '../../../src/infra/providers/auth-registration-security/mail.port';
 import { startHarness, type Harness } from './harness';
 
 /**
@@ -107,5 +111,25 @@ describe('POST /v2/auth/signup/resend-email-code', () => {
     const second = await api().post('/v2/auth/signup/resend-email-code').send({ token });
     expect(second.status, JSON.stringify(second.body)).toBe(429);
     expect(second.body.code).toBe('AUTH_OTP_RESEND_COOLDOWN');
+  });
+
+  it('leaves the old code still verifiable when the resend mail fails to send', async () => {
+    const { token, code } = await startAndReadCode('Ada', uniqueEmail('resend-fail'));
+    const port = h.app.get<MailPort>(MAIL_PORT);
+    const realSend = port.send.bind(port);
+    port.send = async () => {
+      throw new Error('simulated mail outage');
+    };
+    try {
+      const res = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+      expect(res.status, JSON.stringify(res.body)).toBe(502);
+      expect(res.body.code).toBe('AUTH_OTP_SEND_FAILED');
+    } finally {
+      port.send = realSend;
+    }
+    // The old code must still be the one that works: the failed resend must not have
+    // overwritten the stage's hash, attempts or cooldown timer.
+    const verify = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
+    expect(verify.status, JSON.stringify(verify.body)).toBe(200);
   });
 });

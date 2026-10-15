@@ -317,13 +317,32 @@ export class SignupService {
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
+    // Generate the new code/hash and attempt delivery BEFORE touching the stage in Redis: if the
+    // send fails, the old code, old attempts and old cooldown timer must stay exactly as they were
+    // (mirroring `start()`'s own rollback-on-failed-send behavior), otherwise the client gets a 201
+    // for a code that was never delivered and the still-good old code is invalidated for nothing.
     const code = randomNumericCode(EMAIL_CODE_LENGTH);
-    stage.codeHash = await hash(code);
+    const codeHash = await hash(code);
+    const sent = await this.mail.sendSignupCode(
+      stage.email,
+      stage.fullName,
+      code,
+      EMAIL_CODE_TTL_SECONDS / 60,
+    );
+    if (!sent) {
+      this.logger.error('sign-up code resend mail could not be sent');
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_SEND_FAILED,
+        'We could not send the verification code. Please try again.',
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
+
+    stage.codeHash = codeHash;
     stage.codeExpiresAt = Date.now() + EMAIL_CODE_TTL_SECONDS * 1000;
     stage.attempts = 0;
     stage.lastSentAt = Date.now();
     await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
-    await this.mail.sendSignupCode(stage.email, stage.fullName, code, EMAIL_CODE_TTL_SECONDS / 60);
 
     return {
       expiresInSeconds: EMAIL_CODE_TTL_SECONDS,
