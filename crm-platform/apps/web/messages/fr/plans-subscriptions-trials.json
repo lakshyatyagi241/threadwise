@@ -45,7 +45,8 @@
       "form_submissions_monthly": "Soumissions de formulaire par mois",
       "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois",
       "sms_monthly": "SMS par mois",
-      "email_mailboxes": "Boîtes e-mail"
+      "email_mailboxes": "Boîtes e-mail",
+      "email_monthly": "E-mails par mois"
     },
     "features": {
       "automation": "Automatisation",
@@ -74,12 +75,13 @@
       "storefront_builder": "Créateur de vitrine",
       "invoicing": "Facturation",
       "forms_and_links": "Formulaires et liens",
-      "extra_channels": "Telegram, Facebook et Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber et WeChat",
       "form_builder": "Formulaires",
       "waba_groups": "Groupes WhatsApp",
       "sms": "Canal SMS",
       "help_agent": "Assistant d’aide",
-      "email_channel": "Canal e-mail (Gmail)"
+      "email_channel": "Canal e-mail (Gmail)",
+      "personal_history_full": "Import complet de l'historique (WhatsApp personnel)"
     },
     "limitGroups": {
       "messaging": "Messagerie",
@@ -131,7 +133,8 @@
       "form_submissions_monthly": "Soumissions de formulaire acceptées au cours du mois civil, spam exclu. Au-delà du plafond, une soumission reste enregistrée pour examen et n’est jamais supprimée. 0 = illimité.",
       "ai_form_generations_monthly": "Générations du créateur de formulaires IA au cours du mois civil, nouvelles tentatives de réparation incluses. 0 = illimité.",
       "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
-      "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité."
+      "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
+      "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité."
     },
     "planAddons": {
       "title": "Modules complémentaires disponibles avec votre forfait",

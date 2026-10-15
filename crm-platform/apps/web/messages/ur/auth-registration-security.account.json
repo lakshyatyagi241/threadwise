@@ -552,12 +552,13 @@
             "storefront_builder": "اسٹور فرنٹ بلڈر",
             "invoicing": "انوائسنگ",
             "forms_and_links": "فارمز اور لنکس",
-            "extra_channels": "Telegram، Facebook اور Instagram",
+            "extra_channels": "Telegram، Facebook، Instagram، LINE، Viber اور WeChat",
             "form_builder": "فارمز",
             "waba_groups": "WhatsApp گروپس",
             "sms": "SMS",
             "help_agent": "مددگار اسسٹنٹ",
-            "email_channel": "ای میل (Gmail) چینل"
+            "email_channel": "ای میل (Gmail) چینل",
+            "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

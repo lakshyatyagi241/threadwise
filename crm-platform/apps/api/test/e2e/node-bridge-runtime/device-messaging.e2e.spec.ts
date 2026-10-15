@@ -7,6 +7,7 @@ import type { GroupAction } from '../../../src/infra/providers/node-bridge-runti
 import { UnsupportedSendError } from '../../../src/infra/providers/node-bridge-runtime/outbound.port';
 import type { Normalized } from '../../../src/infra/providers/node-bridge-runtime/inbound-normalizer';
 import { BroadcastReceiptsService } from '../../../src/modules/broadcasts';
+import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import { OutboundRegistry, SenderResolver } from '../../../src/modules/node-bridge-runtime';
 import { TwilioTransport } from '../../../src/modules/node-bridge-runtime/outbound/twilio.transport';
 import type { DeviceRuntimeService } from '../../../src/modules/node-bridge-runtime/runtime/device-runtime.service';
@@ -627,7 +628,7 @@ describe('delivery receipts (TW-NODE-020)', () => {
   });
   const wire = (router: ReceiptRouter) => {
     const bc = h.app.get(BroadcastReceiptsService, { strict: false });
-    const sc = new ScheduledReceiptsService(r.db);
+    const sc = new ScheduledReceiptsService(r.db, h.app.get(OutboxService));
     router.register((x) => bc.handle(x));
     router.register((x) => sc.handle(x));
   };
@@ -675,7 +676,7 @@ describe('delivery receipts (TW-NODE-020)', () => {
   it('a report for a message nobody owns is claimed by nobody, and a failed recipient is not resurrected', async () => {
     const receipts = new ReceiptRouter();
     wire(receipts);
-    const sc = new ScheduledReceiptsService(r.db);
+    const sc = new ScheduledReceiptsService(r.db, h.app.get(OutboxService));
     expect(
       await sc.handle({
         orgId: 1,

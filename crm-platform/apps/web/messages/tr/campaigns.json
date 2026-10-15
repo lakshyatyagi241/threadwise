@@ -160,6 +160,17 @@
             "body": "Bir şablon güncellemesi veya yeniden etkileşim toplu gönderimiyle başlayın; ölçeklendirmeden önce iletilen, okunan ve başarısız sayılarını karşılaştırın."
           }
         }
+      },
+      "view": {
+        "label": "Görünüm",
+        "list": "Liste",
+        "blocks": "Bloklar"
+      },
+      "col": {
+        "name": "Kampanya",
+        "status": "Durum",
+        "schedule": "Zamanlama",
+        "actions": "İşlemler"
       }
     },
     "builder": {
@@ -192,7 +203,22 @@
         "typeLabel": "Tür",
         "ab": "A/B",
         "off": "Kapalı",
-        "step": "Adım {n} / {total}"
+        "step": "Adım {n} / {total}",
+        "broadcastTitle": "Yayın önizlemesi",
+        "templateMessage": "Şablon mesajı",
+        "customMessage": "Özel mesaj",
+        "flowTitle": "Akış",
+        "variants": "Gösterilen varyant",
+        "variant": "Varyant {v}",
+        "typeEmail": "E-posta",
+        "emailTitle": "E-posta önizlemesi",
+        "emailFrom": "Gönderen",
+        "emailSubject": "Konu",
+        "emailNoSender": "Bir gönderen seçin",
+        "emailNoSubject": "(konu yok)",
+        "emailEmpty": "Mesaj gövdesini yazın, burada görünür.",
+        "emailUnsubscribe": "Her e-postanın en altına abonelikten çıkma bağlantısı eklenir.",
+        "emailNote": "Kampanyanız her alıcının gelen kutusunda böyle görünecek."
       },
       "previewEmpty": "Mesaj önizlemeniz…",
       "previewTemplate": "Şablon",
@@ -211,7 +237,8 @@
         "throttle": "En uzun aralık en az en kısa aralık kadar olmalıdır.",
         "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi hâlde kampanya hiç gönderilmeden süresi dolar.",
         "media": "http:// veya https:// ile başlayan tam bir adres girin.",
-        "sender": "Bir gönderici seçin."
+        "sender": "Bir gönderici seçin.",
+        "subject": "Konuyu 150 karakter veya daha kısa tutun."
       },
       "submit": {
         "save": "Değişiklikleri kaydet",
@@ -247,7 +274,8 @@
         "abHint": "Alıcıları iki mesaj varyantı arasında bölün.",
         "split": "Varyant A payı {a}%",
         "splitHint": "Varyant B kalan kitleye gönderilir. Varyant B içeriğini Oluştur adımında ayarlayın.",
-        "pickSender": "— Gönderici seçin —"
+        "pickSender": "— Gönderici seçin —",
+        "notVerified": "Henüz doğrulanmadı: yönlendirmeli akış, numara doğrulandıktan sonra kullanılabilir."
       },
       "audience": {
         "title": "Kitle",
@@ -275,7 +303,10 @@
         },
         "csvRows": "Dosyada {count} numara",
         "numbersPlaceholder": "Her satırda bir numara — ülke kodunu ekleyin, artı işareti olmadan",
-        "numbersCount": "{count} numara"
+        "numbersCount": "{count} numara",
+        "emailNote": "E-postalar her kişinin adresine gider. E-posta adresi olmayan kişiler, yinelenen adresler ve abonelikten çıkmış kişiler atlanır.",
+        "emailSkipped": "E-posta adresi olmadığı için atlanacak seçili alıcılar: {count}",
+        "emailNoAddress": "Elle yazılan numaraların ve CSV satırlarının e-posta adresi yoktur, bu yüzden atlanırlar. Bunun yerine kişileri, grupları, etiketleri veya segmentleri seçin."
       },
       "message": {
         "title": "Mesaj",
@@ -385,7 +416,9 @@
         "smartIntro": "Çalışma alanının varsayılan hızını kullanmak için boş bırakın. Bu kurallar gönderimleri aralıklandırır; böylece büyük bir liste insan gibi görünür ve WhatsApp'ın engelleme radarının altında kalır.",
         "smartZone": "Saatler: {zone}.",
         "throttleMaxHint": "Bir mesajdan önceki en uzun bekleme.",
-        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika)."
+        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika).",
+        "retryFailed": "Başarısız mesajları otomatik olarak yeniden dene",
+        "retryFailedHint": "Geçici bir nedenle başarısız olan mesaj, denemeler arasında bekleyerek birkaç kez yeniden denenir. Her mesajı yalnızca bir kez göndermek için kapatın."
       },
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "draftChip": "Taslak / kaydedilmemiş",
@@ -506,7 +539,13 @@
           "baileys": "Henüz Unofficial API şablonu yok. Şablonlar sayfasında bir tane oluşturun."
         },
         "templateIntroApproved": "Onaylı bir Meta şablonu seçin. Kişiye özgü değişken değerleri gönderim anında kişi özniteliklerinden doldurulur.",
-        "templateApproved": "Onaylı şablon"
+        "templateApproved": "Onaylı şablon",
+        "subject": "Konu",
+        "subjectNote": "Konu, en fazla 150",
+        "subjectPlaceholder": "örn. Mayıs fırsatınız başladı",
+        "subjectHint": "E-posta konusu olarak kullanılır. Boş bırakırsanız kampanya adı kullanılır.",
+        "emailNote": "Bu kampanya, seçtiğiniz posta kutusundan e-posta olarak gönderilir. Her e-postanın en altına abonelikten çıkma bağlantısı eklenir.",
+        "emailBodyHint": "Düz metin. Kişiselleştirmek için '{{name}}' veya '{{first_name}}' kullanın. E-posta adresi olmayan kişiler atlanır."
       },
       "review": {
         "title": "Gözden geçir",
@@ -548,8 +587,14 @@
           "throttle": "En uzun aralık en kısa aralıktan az olamaz.",
           "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi halde kampanya hiç gönderilmeden sona erer.",
           "media": "http:// veya https:// ile başlayan tam bir adres girin.",
-          "sender": "Bir gönderici seçin."
-        }
+          "sender": "Bir gönderici seçin.",
+          "subject": "Konuyu 150 karakter veya daha kısa tutun."
+        },
+        "from": "Gönderen",
+        "subject": "Konu",
+        "subjectFallback": "Kampanya adı",
+        "skippedNoEmail": "Atlananlar (e-posta adresi yok)",
+        "estimateEmail": "Bu bir tahmindir: iki grupta olan kişi iki kez sayılır. Gruplardaki, etiketlerdeki ve segmentlerdeki e-posta adresi olmayan kişiler kampanya çalışırken atlanır."
       },
       "ai": {
         "open": "Yapay zeka ile oluştur",
@@ -604,6 +649,35 @@
         "notesPlaceholder": "Belirli bir şey — mutlaka geçmesi gereken ifadeler, kaçınılacaklar, marka dili ipuçları…",
         "failed": "Kampanya oluşturulamadı. Tekrar deneyin.",
         "applied": "Kampanya metni dolduruldu. Devam etmeden önce gözden geçirin."
+      },
+      "switch": {
+        "title": "Yönlendirmeli akış kullanılsın mı?",
+        "body": "Doğrulanmış bir WhatsApp Cloud API (Meta) numarası, sıfırdan başlayan dört adımlı yönlendirmeli akıştan gönderilir. Burada girdiğiniz bilgiler kaydedilmez ve aktarılmaz. Saklamak istiyorsanız önce Taslağı kaydet'i kullanın.",
+        "confirm": "Yönlendirmeli akışı aç",
+        "cancel": "Burada kal"
+      },
+      "guided": {
+        "template": "Şablon",
+        "pickTemplate": "— Şablon seçin —",
+        "templateHint": "Yalnızca seçilen numaranın onaylı şablonları. Değişkenleri aşağıda doldurulur.",
+        "noTemplates": "Bu numaranın henüz onaylı şablonu yok. Bir şablon oluşturun ve onaylanmasını bekleyin.",
+        "deliveryTitle": "Gönderim",
+        "deliveryTag": "ne zaman",
+        "typeBlocked": "WhatsApp Cloud API (Meta) üzerinde bir kampanyadan yalnızca onaylı şablon gönderilebilir: özel mesaj veya akış, yalnızca son 24 saatte size yazan kişilere ulaşır ve Cloud API bunları toplu olarak gönderemez. Bir şablon kullanın ya da başka türde bir numara seçin.",
+        "templateA": "A varyantı şablonu",
+        "templateB": "B varyantı şablonu",
+        "variablesA": "A varyantı değişkenleri",
+        "variablesB": "B varyantı değişkenleri",
+        "splitNote": "A varyantı alıcıların %{a} kadarına, B varyantı geri kalanına gönderilir.",
+        "costTitle": "Tahmini maliyet",
+        "costNoTemplate": "Maliyeti görmek için bir şablon seçin.",
+        "costNoAudience": "Maliyeti görmek için alıcıları seçin.",
+        "costLoading": "Maliyet kontrol ediliyor",
+        "costError": "Bakiye kontrol edilemedi.",
+        "balanceOk": "Bakiye, {full} tutarındaki tam maliyet için yeterli",
+        "balanceShort": "Bakiye yeterli değil: {shortfall} daha gerekiyor.",
+        "balanceLowFull": "Bakiye, {full} tutarındaki tam maliyetin altında: planınız şimdilik karşılıyor, ancak plan bittiğinde karşılamayacak.",
+        "chargedNowLabel": "Şimdi cüzdanınızdan tahsil edilen"
       }
     },
     "detail": {
@@ -640,7 +714,8 @@
         "edit": "Düzenle",
         "resendAll": "Tümüne yeniden gönder",
         "export": "Satırları dışa aktar",
-        "delete": "Sil"
+        "delete": "Sil",
+        "broadcastStatus": "Yayın durumu"
       },
       "kpi": {
         "recipients": "Alıcılar",
@@ -659,7 +734,9 @@
         "engagement": "Etkileşim",
         "replies": "Yanıtlar ({count})",
         "failures": "Hatalar ({count})",
-        "optouts": "Çıkanlar ({count})"
+        "optouts": "Çıkanlar ({count})",
+        "summary": "Özet",
+        "statistics": "İstatistikler"
       },
       "cancel": "İptal",
       "deleted": "Kampanya silindi.",
@@ -770,6 +847,186 @@
         "replies": "Yanıtlar",
         "optOuts": "Çıkanlar",
         "readRate": "Okunma oranı"
+      },
+      "summary": {
+        "title": "Özet",
+        "intro": "Sade bir dille: mesajınızı kimler aldı, kimler yanıt yazdı ve kimler başvuru formu doldurdu.",
+        "loading": "Özetiniz yükleniyor",
+        "headline": {
+          "none": "Henüz hiç mesaj gönderilmedi.",
+          "messaged": "{count, plural, one {# kişiye mesaj gönderdiniz.} other {# kişiye mesaj gönderdiniz.}}",
+          "notReceived": "{messaged} Henüz kimse almadı.",
+          "received": "{count, plural, =0 {henüz kimse almadı} one {# kişi aldı} other {# kişi aldı}}",
+          "opened": "{count, plural, =0 {henüz kimse açmadı} one {# kişi açtı} other {# kişi açtı}}",
+          "wroteBack": "{count, plural, =0 {henüz kimse {days, plural, one {# gün} other {# gün}} içinde yanıt yazmadı} one {# kişi {days, plural, one {# gün} other {# gün}} içinde yanıt yazdı} other {# kişi {days, plural, one {# gün} other {# gün}} içinde yanıt yazdı}}",
+          "filledForm": "{count, plural, =0 {henüz kimse başvuru formu doldurmadı} one {# kişi başvuru formu doldurdu} other {# kişi başvuru formu doldurdu}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Yanıtlar ve formlar şu süre içinde sayılır",
+          "hint": "Mesajı gönderdiğiniz andan itibaren sayılır.",
+          "option": "{days, plural, one {# gün} other {# gün}} içinde"
+        },
+        "forms": {
+          "label": "Hangi formlar başvuru sayılsın?",
+          "hint": "Boş bırakırsanız tüm web formları ve WhatsApp formları sayılır.",
+          "placeholder": "Tüm formlar",
+          "empty": "Form bulunamadı",
+          "clear": "Tüm formları say",
+          "remove": "{name} öğesini kaldır",
+          "web": "{name} (web formu)",
+          "whatsapp": "{name} (WhatsApp formu)",
+          "loadError": "Formlarınız yüklenemedi. Şimdilik tüm formlar sayılıyor."
+        },
+        "tile": {
+          "listLabel": "Rakamlar",
+          "unit": "{count, plural, one {kişi} other {kişi}}",
+          "messaged": {
+            "label": "Mesaj gönderilen",
+            "explain": "Mesajınızı gönderdiğimiz kişiler.",
+            "pct": "Mesaj göndermeyi seçtiğiniz kişiler"
+          },
+          "received": {
+            "label": "Alan",
+            "explain": "Telefonuna mesaj ulaşan kişiler."
+          },
+          "opened": {
+            "label": "Açan",
+            "explain": "Mesajı açıp okuyan kişiler."
+          },
+          "wroteBack": {
+            "label": "Yanıt yazan",
+            "explain": "Gönderimden sonraki {days, plural, one {# gün} other {# gün}} içinde size mesaj yazan kişiler."
+          },
+          "filledForm": {
+            "label": "Form dolduran",
+            "explainAll": "Başvuru formlarınızdan herhangi birini dolduran kişiler.",
+            "explainSome": "{count, plural, one {Seçtiğiniz formu dolduran kişiler.} other {Seçtiğiniz # formdan birini dolduran kişiler.}}"
+          }
+        },
+        "pct": {
+          "of": "Mesaj gönderdiğiniz kişilerin oranı: %{pct}",
+          "less": "Mesaj gönderdiğiniz kişilerin oranı: %1'den az",
+          "zero": "Mesaj gönderdiğiniz kişilerden hiçbiri",
+          "everyone": "Mesaj gönderdiğiniz herkes"
+        },
+        "funnel": {
+          "title": "Mesajdan başvuru formuna",
+          "alt": "Mesaj gönderilenlerden form dolduranlara kadar her adımdaki kişi sayısı",
+          "note": "Kişiler bir adımı atlayabilir. Biri mesajı açmadan yanıt yazmış olabilir; bu yüzden bir çubuk üstündekinden uzun olabilir."
+        },
+        "daily": {
+          "title": "Her gün yanıt yazan kişiler",
+          "series": "Yanıt yazan kişiler",
+          "empty": "Henüz kimse yanıt yazmadı.",
+          "alt": "{total, plural, one {Toplam # kişi yanıt yazdı} other {Toplam # kişi yanıt yazdı}}. En yoğun gün {day} oldu; {count, plural, one {# kişi} other {# kişi}} yanıt yazdı."
+        },
+        "people": {
+          "title": "Kimler olduğunu gör",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Yanıt yazan",
+            "hint": "Mesajınız gittikten sonra size mesaj yazan kişiler."
+          },
+          "filled_form": {
+            "title": "Form dolduran",
+            "hint": "Başvuru formu dolduran kişiler."
+          },
+          "not_reached": {
+            "title": "Ulaşılamayan",
+            "hint": "Mesajınızın ulaşmadığı kişiler."
+          },
+          "table": "Bu listedeki kişiler",
+          "name": "Ad",
+          "phone": "Telefon",
+          "when": "Zaman",
+          "form": "Form",
+          "unknown": "Adı bilinmiyor",
+          "noContact": "Kayıtlı bir kişiyle eşleşmedi",
+          "open": "{name} kaydını aç",
+          "empty": "Bu listede henüz kimse yok.",
+          "shown": "{total} kişiden {shown} tanesi gösteriliyor",
+          "more": "Daha fazla göster",
+          "loading": "Liste yükleniyor",
+          "error": "Bu liste yüklenemedi.",
+          "retry": "Tekrar dene",
+          "forbidden": "Bu isimleri görme yetkiniz yok."
+        },
+        "download": {
+          "button": "İsimleri indir",
+          "busy": "Dosya hazırlanıyor",
+          "failed": "İsim dosyası hazırlanamadı.",
+          "done": "İsim dosyası hazır.",
+          "truncated": "Dosyada her listenin ilk {count} kişisi bulunuyor.",
+          "none": "Henüz indirilecek isim yok.",
+          "csv": {
+            "group": "Liste",
+            "name": "Ad",
+            "phone": "Telefon",
+            "when": "Zaman",
+            "form": "Form"
+          }
+        },
+        "print": {
+          "button": "Özeti yazdır",
+          "sent": "Gönderim: {date}",
+          "notSent": "Henüz gönderilmedi",
+          "window": "Gönderimden sonraki {days, plural, one {# gün} other {# gün}} içindeki yanıtlar ve formlar sayılıyor",
+          "printed": "Yazdırma: {date}"
+        },
+        "caveats": {
+          "title": "Bilmekte fayda var",
+          "recipients_without_contact": "{count, plural, one {# kişi kayıtlı bir kişiyle eşleştirilemedi; bu yüzden yanıt yazıp yazmadığını bilemiyoruz.} other {# kişi kayıtlı bir kişiyle eşleştirilemedi; bu yüzden yanıt yazıp yazmadıklarını bilemiyoruz.}}",
+          "contact_match_only": "Kişileri, kayıtlı kişilerinizle telefon numarasına göre eşleştiriyoruz. Farklı bir numaradan yazan kişi sayılmaz.",
+          "opted_out_excluded": "Mesaj almak istemediğini bildiren kişiler sayılmaz.",
+          "counted_in_other_campaigns": "Birden fazla kampanyada mesaj gönderdiğiniz bir kişi, her birinde ayrı sayılabilir."
+        },
+        "notSent": {
+          "title": "Henüz hiçbir şey gönderilmedi",
+          "body": "Mesajlar gönderildiğinde, kimlerin aldığını, kimlerin yanıt yazdığını ve kimlerin başvuru formu doldurduğunu burada göreceksiniz."
+        },
+        "sending": "Gönderim sürüyor, bu yüzden rakamlar artmaya devam edecek.",
+        "error": {
+          "title": "Bu özet yüklenemedi.",
+          "retry": "Tekrar dene"
+        },
+        "latestRun": "{occurrence}. gönderim gösteriliyor; bu serinin en yenisi."
+      },
+      "live": {
+        "badge": "Canlı",
+        "updated": "güncellendi {time}",
+        "queued": "{count} gönderim bekliyor",
+        "processing": "{count} şu anda gönderiliyor"
+      },
+      "statistics": {
+        "loadFailed": "İstatistikler yüklenemedi.",
+        "rates": {
+          "delivered": "Teslim oranı",
+          "deliveredHint": "hedef kitlenin",
+          "read": "Okunma oranı",
+          "readHint": "teslim edilenlerin",
+          "replies": "Yanıt oranı",
+          "clicks": "Tıklama oranı",
+          "failed": "Hata oranı"
+        },
+        "breakdown": {
+          "title": "Herkes şu anda nerede",
+          "hint": "{total} alıcının her biri bulunduğu durumda bir kez sayılır.",
+          "empty": "Bu kampanyada henüz alıcı yok."
+        },
+        "timeline": {
+          "title": "Zaman çizelgesi",
+          "created": "Oluşturuldu",
+          "scheduled": "Başlama zamanı",
+          "firstSent": "İlk mesaj gönderildi",
+          "lastRun": "Son çalıştırma",
+          "finished": "Tamamlandı",
+          "notYet": "Henüz yok"
+        },
+        "live": "Canlı takip ediliyor",
+        "atRest": "Nihai rakamlar",
+        "updated": "Güncellendi {time}"
       }
     },
     "wizard": {
@@ -864,7 +1121,15 @@
         "insufficient_balance": "Cüzdan bakiyeniz bu toplu gönderim için çok düşük.",
         "checking_balance": "Cüzdan bakiyeniz kontrol ediliyor...",
         "sender_required": "Gönderilecek WhatsApp numarasını seçin.",
-        "balance_unavailable": "Cüzdan bakiyeniz kontrol edilemedi. Göndermeden önce tekrar deneyin."
+        "balance_unavailable": "Cüzdan bakiyeniz kontrol edilemedi. Göndermeden önce tekrar deneyin.",
+        "template_b_required": "A/B testinin B varyantı şablonunu seçin.",
+        "auto_end_in_past": "Otomatik bitiş tarihi geçti.",
+        "auto_end_before_send": "Otomatik bitiş tarihi gönderim zamanından sonra olmalıdır.",
+        "auto_end_recurring": "Yinelenen bir kampanya kendi kuralıyla sona erer: otomatik bitiş tarihini temizleyin.",
+        "pacing_range": "Smart Delivery'yi kontrol edin: en uzun gecikme en kısadan kısa ya da iki gönderim saatinden yalnızca biri ayarlı.",
+        "follow_up_template_required": "Her takip mesajının göndereceği şablonu seçin.",
+        "follow_up_flow_required": "Her takip mesajının başlatacağı akışı seçin.",
+        "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın."
       },
       "template": {
         "previewOnline": "çevrimiçi",
@@ -897,7 +1162,8 @@
         "previewEmpty": "Mesajın nasıl göründüğünü görmek için bir şablon seçin.",
         "senderLabel": "Gönderen",
         "senderHint": "Bu toplu gönderimin gönderildiği WhatsApp numarası.",
-        "pickSender": "Bir numara seçin"
+        "pickSender": "Bir numara seçin",
+        "classicOption": "klasik oluşturucu"
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",
@@ -1040,7 +1306,9 @@
           "invalid_phone": "Geçerli bir numara değil",
           "duplicate": "Yinelenen"
         },
-        "csvIssuesMore": "{count} tane daha indirmede."
+        "csvIssuesMore": "{count} tane daha indirmede.",
+        "csvConsentOn": "Bu numaralar için onayı doğruladınız. Yayın başlatıldığında kabul etmiş olarak kaydedilecekler.",
+        "csvConsentVersion": "Bildirim sürümü: {version}."
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",
@@ -1057,6 +1325,7 @@
         "messages": "Mesajlar",
         "modePlan": "{count, plural, one {Planınız ilk mesajları karşılar; bunların ötesindeki # mesajı cüzdan öder.} other {Planınız ilk mesajları karşılar; bunların ötesindeki # mesajı cüzdan öder.}}",
         "modeWallet": "{count, plural, one {İletilen her mesaj cüzdanınızdan ücretlendirilir: # mesaj.} other {İletilen her mesaj cüzdanınızdan ücretlendirilir: # mesaj.}}",
+        "platformOwned": "Bu çalışma alanında gönderimler ücretlendirilmez, bu yüzden cüzdanınızdan hiçbir şey düşülmez.",
         "breakdown": "Ülkeye göre maliyet",
         "country": "Ülke",
         "unitPrice": "Mesaj başına",
@@ -1113,7 +1382,11 @@
         "sumContacts": "{count, plural, one {Tabloda # kişi seçildi} other {Tabloda # kişi seçildi}}",
         "sumAllMatching": "{what} ile eşleşen tüm kişiler",
         "sumAllContacts": "Tüm kişiler",
-        "sumCsv": "CSV dosyası {name}: {count, plural, one {# geçerli numara} other {# geçerli numara}}"
+        "sumCsv": "CSV dosyası {name}: {count, plural, one {# geçerli numara} other {# geçerli numara}}",
+        "estimatedCostFull": "Tahmini maliyet (tam)",
+        "chargedPlan": "Şimdi cüzdanınızdan tahsil edilen: {amount} (planınız bu mesajların {covered} tanesini karşılıyor)",
+        "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}",
+        "sumFollowUps": "Takip mesajları"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1283,12 +1556,17 @@
         "action": {
           "pause": "Duraklat",
           "resume": "Devam et",
-          "cancel": "Toplu gönderimi iptal et"
+          "cancel": "Toplu gönderimi iptal et",
+          "retryFailed": "Başarısızları yeniden dene ({count})",
+          "export": "Satırları dışa aktar",
+          "delete": "Sil"
         },
         "done": {
           "pause": "Toplu gönderim duraklatıldı.",
           "resume": "Toplu gönderim devam ettirildi.",
-          "cancel": "Toplu gönderim iptal edildi."
+          "cancel": "Toplu gönderim iptal edildi.",
+          "retryFailed": "{count, plural, other {# başarısız alıcı}} için yeniden deneniyor.",
+          "delete": "Yayın silindi."
         },
         "failed": "İşlem başarısız oldu. Tekrar deneyin.",
         "noControl": "Toplu gönderimleri duraklatma, devam ettirme veya iptal etme izniniz yok.",
@@ -1307,6 +1585,30 @@
           "cancelled": "İptal edildi",
           "active": "Etkin",
           "ended": "Sona erdi"
+        },
+        "retryTitle": "Başarısız mesajlar yeniden denensin mi?",
+        "retryMessage": "Mesajı başarısız olan {count, plural, other {# alıcıya}} yeniden gönderir. Mesajı zaten alanlara dokunulmaz ve mesaj yalnızca teslim edildiğinde ücretlendirilir.",
+        "exportFailed": "Dışa aktarma indirilemedi.",
+        "deleteTitle": "Bu yayın silinsin mi?",
+        "deleteOne": "Bu yayını ve alıcılarını siler. Geri alınamaz.",
+        "deleteSeries": "Bu yinelenen yayını ve planlanan çalıştırmalarını siler. Hiçbir şey gönderilmediği için geçmiş kaybolmaz. Geri alınamaz.",
+        "followUps": {
+          "title": "Takip mesajları",
+          "step": "Takip {step}",
+          "count": {
+            "waiting": "{count} bekliyor",
+            "sent": "{count} gönderildi",
+            "delivered": "{count} iletildi",
+            "read": "{count} okundu",
+            "flowsStarted": "{count} akış başlatıldı",
+            "skipped": "{count} atlandı",
+            "lapsed": "{count} süresi doldu",
+            "failed": "{count} başarısız"
+          },
+          "hint": {
+            "skipped": "Koşul kontrol edildiğinde sağlanmamıştı, bu yüzden dizi orada sona erdi.",
+            "lapsed": "Kişi yanıtlamadan veya okumadan izleme süresi doldu, bu yüzden dizi orada sona erdi."
+          }
         }
       },
       "panel": {
@@ -1332,6 +1634,78 @@
         "pm": "ÖS",
         "hour": "Saat",
         "minute": "Dakika"
+      },
+      "switch": {
+        "title": "Klasik oluşturucu kullanılsın mı?",
+        "body": "{number} ({engine}) sıfırdan başlayan klasik oluşturucudan gönderilir. Bu kampanya taslak olarak kaydedilir ve Kampanyalar listenizde kalır, böylece sonra geri dönebilirsiniz.",
+        "confirm": "Klasik oluşturucuyu aç",
+        "cancel": "Burada kal"
+      },
+      "followUps": {
+        "title": "Takip mesajları",
+        "intro": "Kişinin kampanya mesajından sonra ne yaptığına göre başka bir mesaj gönderin veya bir akış başlatın. Arka arkaya en fazla 3 adım.",
+        "cloudOnly": "Takip mesajları, Meta'nın okundu ve yanıt raporlarına dayandığı için WhatsApp Cloud API numarası gerektirir. 1. adımda bir numara seçin.",
+        "add": "Takip ekle",
+        "count": "{used} / {max} takip",
+        "limitReached": "Sınıra ulaşıldı: {max} takip.",
+        "stepTitle": "Takip {step}",
+        "measuredFromCampaign": "Kampanya mesajından itibaren sayılır.",
+        "measuredFromStep": "Takip {step} mesajından itibaren sayılır.",
+        "remove": "Takip {step} öğesini kaldır",
+        "removeShort": "Kaldır",
+        "triggerLabel": "Kişi şunu yaptığında",
+        "trigger": {
+          "replied": "Yanıtlar",
+          "read": "Mesajı okur",
+          "not_replied": "Yanıtlamamıştır",
+          "not_read": "Mesajı okumamıştır"
+        },
+        "triggerHelp": {
+          "replied": "Belirlediğiniz süre içinde yanıt verirse yanıtladığı anda tetiklenir. Aksi halde dizi sona erer.",
+          "read": "Belirlediğiniz süre içinde okursa okuduğu anda tetiklenir. Aksi halde dizi sona erer.",
+          "not_replied": "Belirlediğiniz süre kadar bekler, ardından yanıt vermemişse tetiklenir. Yanıt verdiyse dizi sona erer.",
+          "not_read": "Belirlediğiniz süre kadar bekler, ardından okumamışsa tetiklenir. Okuduysa dizi sona erer."
+        },
+        "watchLabel": "En fazla şu süre izle",
+        "waitLabel": "Bekle",
+        "unitLabel": "Zaman birimi",
+        "duration": {
+          "minutes": "{count, plural, one {# dakika} other {# dakika}}",
+          "hours": "{count, plural, one {# saat} other {# saat}}",
+          "days": "{count, plural, one {# gün} other {# gün}}"
+        },
+        "actionLabel": "Ardından",
+        "action": {
+          "template": "Şablon gönder",
+          "flow": "Akış başlat"
+        },
+        "templateLabel": "Gönderilecek şablon",
+        "flowLabel": "Başlatılacak akış",
+        "pickTemplate": "Şablon seçin",
+        "pickFlow": "Akış seçin",
+        "loading": "Yükleniyor...",
+        "unavailable": "Artık kullanılamıyor",
+        "noTemplates": "Henüz onaylı şablon yok.",
+        "createTemplate": "Şablon oluştur",
+        "noFlows": "Henüz akış yok.",
+        "createFlow": "Akış oluştur",
+        "flowsError": "Akışlar yüklenemedi. Daha sonra tekrar deneyin.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "{wait} içinde yanıtlarsa",
+          "read": "{wait} içinde okursa",
+          "not_replied": "{wait} sonra yanıtlamamışsa",
+          "not_read": "{wait} sonra okumamışsa"
+        },
+        "does": {
+          "template": "{name} gönder",
+          "flow": "{name} akışını başlat"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {dakika} other {dakika}}",
+          "hours": "{count, plural, one {saat} other {saat}}",
+          "days": "{count, plural, one {gün} other {gün}}"
+        }
       }
     },
     "history": {
@@ -1403,7 +1777,14 @@
         "runs": "Çalıştırmalar",
         "noRuns": "Henüz çalıştırma başlamadı.",
         "cancel": "Seriyi iptal et"
-      }
+      },
+      "view": {
+        "label": "Görünüm",
+        "list": "Liste",
+        "blocks": "Bloklar"
+      },
+      "showing": "{count} kampanya gösteriliyor",
+      "legacy": "Eski yayınlar ({count})"
     },
     "senderEmpty": {
       "loading": "Numaralarınız yükleniyor…",
@@ -1438,7 +1819,29 @@
         "title": "Kişisel numaralar bu çalışma alanı için kapalı",
         "body": "Bu seçenek kapalıyken {count} kişisel (QR) numara kampanya gönderemez. Bir platform yöneticisi bunu bu çalışma alanı için açabilir veya resmi bir WhatsApp Business numarası bağlayabilirsiniz.",
         "action": "Resmi numara bağla"
+      },
+      "email": {
+        "none": {
+          "title": "Bağlı posta kutusu yok",
+          "body": "Bu kampanyanın hangi adresten gönderileceğini seçmek için E-posta sayfasından bir posta kutusu bağlayın.",
+          "action": "Posta kutusu bağla"
+        },
+        "disconnected": {
+          "title": "Bağlantısı kesilen posta kutuları: {count}",
+          "body": "Bu posta kutusundan kampanya göndermek için E-posta sayfasında yeniden bağlayın.",
+          "action": "E-posta sayfasını aç"
+        },
+        "error": {
+          "title": "Yeniden bağlanması gereken posta kutuları: {count}",
+          "body": "Son oturum açma başarısız oldu. E-posta sayfasından yeniden bağlayın, burada görünecektir.",
+          "action": "E-posta sayfasını aç"
+        }
       }
+    },
+    "create": {
+      "loading": "Numaralarınız yükleniyor",
+      "noAccessTitle": "Kampanya oluşturamazsınız",
+      "noAccess": "Kampanya oluşturma izni için çalışma alanı yöneticisine başvurun."
     }
   }
 }

@@ -227,6 +227,22 @@ describe('the personal-number Groups types', () => {
     });
   });
 
+  it('knows the test notification: System group, pop-up and ping on, no push, opens nothing', () => {
+    expect(typeMeta('test')).toMatchObject({
+      group: 'system',
+      icon: 'generic',
+      tone: 'info',
+      toast: true,
+      sound: true,
+      push: false,
+    });
+    expect(notificationHref({ type: 'test', link: null, data: null })).toBeNull();
+    // The server names the screen to open; it is kept.
+    expect(notificationHref({ type: 'test', link: '/account/notifications', data: null })).toBe(
+      '/account/notifications',
+    );
+  });
+
   it('opens the Groups tab of /devices on the number, and plain /devices/groups when the row names none', () => {
     expect(
       notificationHref({ type: 'device_group_join_request', link: null, data: { deviceId: dev } }),

@@ -4,6 +4,8 @@ import { ApiError } from '@/lib/api/errors';
 export const ERROR_KINDS = [
   'conflict',
   'windowClosed',
+  'contactOptedOut',
+  'consentRequired',
   'planLimit',
   'channelDisconnected',
   'sendHalted',
@@ -43,6 +45,8 @@ export type ErrorKind = (typeof ERROR_KINDS)[number];
 const BY_CODE: Record<string, ErrorKind> = {
   ROW_VERSION_CONFLICT: 'conflict',
   SERVICE_WINDOW_CLOSED: 'windowClosed',
+  CONSENT_OPTED_OUT: 'contactOptedOut',
+  CONSENT_SEND_DENIED: 'consentRequired',
   PLAN_LIMIT_REACHED: 'planLimit',
   CHANNEL_DISCONNECTED: 'channelDisconnected',
   AUTH_SEND_HALTED: 'sendHalted',

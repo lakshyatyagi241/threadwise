@@ -707,7 +707,8 @@
           "wordsPlaceholder": "hi, hello, menu",
           "whatsappNumber": "WhatsApp 号码",
           "noNumberHint": "尚未连接任何 WhatsApp 号码：请先在“设置”下连接一个，然后在此选择。",
-          "chooseNumber": "选择号码…"
+          "chooseNumber": "选择号码…",
+          "connectedNumber": "通过您已连接的 WhatsApp 号码回复：{number}"
         },
         "add": {
           "addStep": "添加步骤",
@@ -715,7 +716,9 @@
             "send": "发送",
             "ask": "询问客户",
             "handoff": "转交",
-            "answer": "回答"
+            "logic": "判断",
+            "answer": "回答",
+            "action": "操作"
           },
           "blockedTitle": "按钮和列表会结束流程，因此只能放在最后。",
           "blockedTitleFaq": "“FAQ 回答”有两个出口，因此只能放在最后。"
@@ -731,7 +734,21 @@
           "faqExits": {
             "matched": "已回答",
             "no_match": "无匹配"
-          }
+          },
+          "close": "关闭",
+          "clickToEdit": "点击编辑",
+          "outsideToSave": "点击步骤外任意位置即可保存更改",
+          "addCondition": "在此步骤后添加条件",
+          "conditionLast": "条件会结束这一部分，所以只能放在最后。",
+          "duplicateTitle": "复制此步骤？",
+          "duplicateBody": "副本会添加在它之后。",
+          "deleteTitle": "删除此步骤？",
+          "deleteBody": "该步骤将从流程中移除。",
+          "stage": "阶段 {stage}",
+          "storedIn": "值将保存到联系人的 <b>{property}</b> 属性中",
+          "actions": "操作",
+          "actionsHint": "添加一个紧接在此步骤之后运行的步骤。",
+          "actionsBlocked": "结束本部分的步骤后面不能再接其他步骤。"
         },
         "editors": {
           "linkLabel": "后续去向",
@@ -763,7 +780,8 @@
             "placeholder": "按钮 {n}",
             "remove": "移除按钮",
             "add": "添加按钮",
-            "saveIn": "将点击的按钮保存到"
+            "saveIn": "将点击的按钮保存到",
+            "handoff": "转交真人（人工客服）"
           },
           "list": {
             "above": "列表上方的消息",
@@ -795,7 +813,9 @@
             "dateFormat": "日期格式",
             "dateFormatHint": "客户书写日期的方式。按输入原样保存，并在 _iso 变量中保存一份年-月-日格式的副本。",
             "saveIn": "将回答保存到",
-            "retriesHint": "0 表示一直询问，直到回答正确。"
+            "retriesHint": "0 表示一直询问，直到回答正确。",
+            "verifyOtp": "用一次性验证码验证号码",
+            "verifyOtpHint": "验证码会发送到该号码（需要国家区号），访客在聊天中输入。仅当验证码正确时才保存号码；以 _verified 结尾的变量表示是或否。"
           },
           "askFile": {
             "accepted": "接受的文件",
@@ -846,7 +866,45 @@
           },
           "cta": {
             "buttonText": "按钮文字",
-            "opens": "打开（链接）"
+            "opens": "打开（链接）",
+            "type": "打开",
+            "kinds": {
+              "url": "网页",
+              "phone": "电话",
+              "email": "电子邮件"
+            },
+            "add": "再添加一个按钮",
+            "remove": "删除按钮",
+            "opensPhone": "电话号码",
+            "opensEmail": "电子邮件地址"
+          },
+          "carousel": {
+            "intro": "卡片上方的消息",
+            "card": "卡片 {n}",
+            "image": "图片链接（可选）",
+            "title": "标题",
+            "text": "文本",
+            "buttons": "按钮（最多 2 个）",
+            "label": "按钮文字",
+            "addCard": "添加卡片",
+            "removeCard": "删除卡片",
+            "addButton": "添加按钮",
+            "removeButton": "删除按钮",
+            "btnKinds": {
+              "reply": "在聊天中回复",
+              "url": "打开网页",
+              "phone": "拨打号码",
+              "email": "发送电子邮件",
+              "agent": "与真人交谈"
+            }
+          },
+          "condition": {
+            "info": "添加规则（变量、比较和值）。用 AND 或 OR 连接，需要时可嵌套分组。",
+            "yes": "规则成立时转到",
+            "no": "规则不成立时转到"
+          },
+          "handoff": {
+            "hint": "访客会连同您的备注转交给该团队。此按钮之后无需连接任何内容。"
           },
           "faq": {
             "exits": {
@@ -859,6 +917,7 @@
             }
           }
         },
+        "branchAdd": "为“{title}”添加步骤",
         "faqEnds": "此步骤会结束这一部分：接下来发送什么取决于是否有 FAQ 已回答。"
       },
       "formsCore": {
@@ -1894,13 +1953,56 @@
       },
       "webBot": {
         "aria": "流程分区",
-        "faqs": "FAQ",
-        "saveFirst": "请先保存流程。",
         "build": "构建",
         "customize": "自定义",
-        "install": "安装",
+        "saveFirst": "请先保存流程。",
         "needsCustomizing": "小组件仍在使用默认外观。请打开“自定义”。",
-        "customizeFirst": "发布前请先自定义聊天小组件并保存一次。"
+        "customizeFirst": "发布前请先自定义聊天小组件并保存一次。",
+        "deploy": "部署",
+        "customizeFirstWhatsapp": "发布前，请先自定义 WhatsApp 按钮并保存一次。",
+        "faqs": "FAQ",
+        "install": "安装"
+      },
+      "buttonIcon": {
+        "label": "图标(可选)",
+        "add": "添加图标",
+        "saveFirst": "请先保存一次机器人,再添加图标。"
+      },
+      "buttonAction": {
+        "label": "点击按钮时的操作",
+        "kind": {
+          "none": "进入下一步",
+          "flow": "连接流程",
+          "live_agent": "在线客服",
+          "opt_in": "订阅",
+          "opt_out": "退订"
+        },
+        "pickFlow": "选择流程",
+        "loadingFlows": "正在加载流程…",
+        "flowMissing": "流程 {id}（未找到）",
+        "hint": {
+          "flow": "为该联系人启动所选流程，对话将在该流程中继续。此按钮之后不连接任何步骤。",
+          "live_agent": "把对话转交给你选择的团队。此按钮之后不连接任何步骤。",
+          "opt_in": "将联系人标记为已订阅营销消息，然后继续执行此按钮之后连接的步骤。",
+          "opt_out": "将联系人标记为已退订营销消息，然后继续执行此按钮之后连接的步骤。"
+        }
+      },
+      "messageTools": {
+        "format": "文字格式",
+        "bold": "粗体",
+        "italic": "斜体",
+        "strike": "删除线",
+        "mono": "等宽",
+        "bullet": "项目符号列表",
+        "numbered": "编号列表",
+        "emoji": "表情",
+        "emojiSearch": "搜索表情",
+        "emojiNone": "没有找到表情",
+        "variable": "插入变量",
+        "variableSearch": "搜索变量",
+        "groupContact": "联系人属性",
+        "groupFlow": "本流程中已保存的",
+        "variableNone": "没有找到变量"
       }
     },
     "contracts": {
@@ -2177,6 +2279,10 @@
           "label": "API（来自 API 库）",
           "description": "调用 API 库中已保存的 API"
         },
+        "carousel": {
+          "label": "轮播",
+          "description": "带图片和按钮的可滚动卡片"
+        },
         "faq": {
           "label": "FAQ 回答",
           "description": "将消息与你的 FAQ 匹配"
@@ -2404,9 +2510,25 @@
           "label": "其位置",
           "help": "等待客户分享位置"
         },
+        "carousel": {
+          "label": "轮播",
+          "help": "带图片和按钮的可滚动卡片"
+        },
+        "condition": {
+          "label": "条件",
+          "help": "根据客户所说或保存的内容分支，使用 AND / OR 规则"
+        },
         "faq": {
           "label": "FAQ 回答",
           "help": "将客户消息与你的 FAQ 匹配。结束此流程：有 FAQ 已回答走一个出口，否则走另一个"
+        },
+        "apiLibrary": {
+          "label": "API 调用",
+          "help": "调用 API 库中的 API"
+        },
+        "code": {
+          "label": "JS 函数",
+          "help": "运行一小段 JavaScript"
         }
       },
       "typeLabel": {
@@ -2422,7 +2544,11 @@
         "template": "模板",
         "cta": "链接按钮",
         "assign": "分配给客服",
-        "faq": "FAQ 回答"
+        "carousel": "轮播",
+        "condition": "条件",
+        "faq": "FAQ 回答",
+        "api_library": "API 调用",
+        "code": "JS 函数"
       },
       "stepLabel": {
         "questionOf": "提问 · {kind}"
@@ -2460,7 +2586,13 @@
         "rowTitle": "第 {stage} 步：每行都需要不超过 {max} 个字符的标题。",
         "rowDescriptionTooLong": "第 {stage} 步：行描述超过 {max} 个字符。",
         "variableUsed": "第 {stage} 步：\"{name}\" 已被第 {other} 步使用；请为每个回答设置不同的名称。",
-        "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。"
+        "carouselCards": "步骤 {stage}：请至少添加一张卡片，并为每张卡片设置标题。",
+        "carouselButtons": "步骤 {stage}：请为每个按钮命名，并为会打开内容的按钮填写链接、号码或地址。",
+        "conditionIncomplete": "步骤 {stage}：请完善条件的规则（每条规则都要有变量和值）。",
+        "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。",
+        "chooseFlow": "步骤 {stage}：请选择该按钮启动的流程。",
+        "chooseApi": "步骤 {stage}：请选择要调用的 API。",
+        "writeCode": "步骤 {stage}：请编写要运行的代码。"
       },
       "faqSummary": "{hasCategory, select, true {来自你的 FAQ · {category}} other {来自你的 FAQ}}"
     },
@@ -2470,7 +2602,11 @@
         "buttonNoTarget": "“{type}”按钮（\"{text}\"）在简易模式中没有目标。",
         "skippedStep": "已跳过“{sub}”步骤：简易模式中没有对应功能。",
         "leadsOutside": "\"{text}\" 指向本文件中不存在的流程；在您关联之前，它会在此结束。",
-        "connectsOutside": "某一步连接到本文件中不存在的节点（{id}）；它将保持未连接状态。"
+        "connectsOutside": "某一步连接到本文件中不存在的节点（{id}）；它将保持未连接状态。",
+        "dateLimits": "日期问题保留格式，但不保留限制（最早、最晚、排除日）。",
+        "tooManyButtons": "一条按钮消息的选项超出容量；多余的按钮已略去。",
+        "agentTeam": "已保留真人客服按钮：请选择接收会话的团队。",
+        "tooManySlides": "一个轮播有超过 10 张卡片；多余的卡片已略去。"
       },
       "reasons": {
         "notExport": "此文件不是流程导出文件。请使用从 Flows 导出的 .json 文件，或从 wabo 控制台导出的流程。",

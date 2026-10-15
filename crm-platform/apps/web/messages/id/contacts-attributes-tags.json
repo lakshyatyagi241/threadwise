@@ -187,7 +187,29 @@
       "ownerFormer": "Mantan anggota",
       "reassignView": "Tetapkan ulang kontak milik {name}...",
       "smsNamed": "SMS {name}",
-      "noSms": "Tidak ada nomor telepon untuk SMS"
+      "noSms": "Tidak ada nomor telepon untuk SMS",
+      "pqlLabel": "Cari kontak dengan bahasa biasa",
+      "pqlAsk": "Tanya",
+      "pqlAsking": "Menanyakan...",
+      "pqlIgnored": "Tidak dipahami: {parts}",
+      "pqlNothing": "Tidak ada bagian pencarian itu yang bisa dijadikan filter.",
+      "pqlFailed": "Pencarian bahasa biasa sedang tidak tersedia. Coba lagi.",
+      "filter": "Filter",
+      "filterAi": "Filter dengan AI",
+      "filterAiHint": "Jelaskan siapa yang Anda cari",
+      "filterAdvanced": "Tambah filter lanjutan",
+      "quickFilters": "Filter cepat",
+      "sortButton": "Urutkan",
+      "back": "Kembali",
+      "pqlPromptPlaceholder": "Jelaskan kontak yang Anda inginkan...",
+      "pqlTry": "Coba salah satu",
+      "pqlExample2": "Tidak aktif 30 hari",
+      "pqlExample3": "Dibuat dalam 7 hari terakhir",
+      "clearFilter": "Hapus filter",
+      "conditionsChip": "Kondisi: {count}",
+      "pqlExampleTag": "Kontak dengan tag {tag} yang tidak aktif 30 hari",
+      "pqlExampleStage": "Kontak {stage} yang dibuat dalam 7 hari terakhir",
+      "pqlExampleNoOwner": "Kontak tanpa pemilik"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Tambah atau pilih tag...",
       "addLabel": "Nama tag",
       "add": "Tambah tag",
-      "failed": "Tag tidak dapat diubah. Coba lagi."
+      "failed": "Tag tidak dapat diubah. Coba lagi.",
+      "quickPlaceholder": "Cari atau buat tag",
+      "create": "Buat tag “{name}”",
+      "noMatch": "Tidak ada tag yang cocok",
+      "quickHint": "Pilih beberapa tag, atau ketik nama lalu tekan Enter untuk membuat tag baru.",
+      "quickHintPick": "Pilih beberapa tag dari daftar."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Sumber",
-        "consent": "Persetujuan pemasaran (ya / tidak)"
+        "consent": "Persetujuan pemasaran (ya / tidak)",
+        "consentSms": "Persetujuan pemasaran SMS (ya / tidak)",
+        "consentEmail": "Persetujuan pemasaran email (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Pilih Semua",
         "reorder": "Seret untuk mengurutkan ulang kolom",
         "remove": "Hapus {name}"
+      },
+      "presets": {
+        "myContacts": "Kontak saya",
+        "newThisWeek": "Baru minggu ini",
+        "newLastWeek": "Baru minggu lalu",
+        "recentlyCreated": "Baru dibuat",
+        "recentlyModified": "Baru diubah",
+        "recentlyImported": "Baru diimpor",
+        "neverContacted": "Belum pernah dihubungi",
+        "needsFollowUp": "Perlu tindak lanjut",
+        "active": "Aktif",
+        "inactive": "Tidak aktif",
+        "unsubscribed": "Berhenti berlangganan"
       }
+    },
+    "erase": {
+      "scope": "Menghapus kontak juga menghapus percakapan, pesan, media, file, rekaman panggilan, dan log panggilan mereka. Prospek, transaksi, tugas, dan faktur tetap ada.",
+      "scopeMany": "Menghapus kontak juga menghapus percakapan, pesan, media, file, rekaman panggilan, dan log panggilan mereka. Prospek, transaksi, tugas, dan faktur tetap ada.",
+      "keepHistory": "Simpan riwayat percakapan tanpa identitas orang tersebut",
+      "keepHistoryHint": "Percakapan tetap tersimpan sebagai arsip Anda tetapi tidak lagi mengarah ke orang tersebut."
     }
   }
 }

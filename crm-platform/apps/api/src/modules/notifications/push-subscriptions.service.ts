@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import {
@@ -16,6 +16,7 @@ import { webPushConfig } from '../../config/domains/web-push.env';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { deviceLabel } from './device-label';
+import { NotificationFanout } from './notification-fanout';
 import { buildTestPayload } from './push-payload';
 import { PushSubscriptionsRepository, type PushDeviceRow } from './push-subscriptions.repository';
 import { WebPushSender } from './web-push.sender';
@@ -47,6 +48,7 @@ export class PushSubscriptionsService {
     private readonly repo: PushSubscriptionsRepository,
     private readonly sender: WebPushSender,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly fanout: NotificationFanout,
   ) {}
 
   private caller(): { orgId: number; userId: number } {
@@ -104,7 +106,14 @@ export class PushSubscriptionsService {
     if (!removed) throw AppError.notFound('Device', uuid);
   }
 
-  /** Sends a test notification to every one of my devices now, ignoring preferences and whether a tab is open. */
+  /**
+   * The "Send a test notification" button: one press goes through every way a person is told. It writes a real bell row of the harmless
+   * `test` type for the caller (and nobody else), announces it live through the normal publisher (the bell number, the toast, the ping
+   * and the tab title follow, as the person's preferences allow), and sends a Web Push to every one of their devices now, ignoring
+   * whether a tab is open. The answer says which channels fired: `inApp` (a row was written) and `sent` / `failed` devices.
+   *
+   * It carries no throttle key (the burst throttle is for chats), but the person still gets one test per ten seconds.
+   */
   async test(): Promise<PushTestResponse> {
     const { orgId, userId } = this.caller();
     this.requireEnabled();
@@ -118,10 +127,23 @@ export class PushSubscriptionsService {
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
+    // The bell row first, committed, then announced (a rolled-back row must never be announced).
+    const pending = await this.db.tx((tx) =>
+      this.fanout.write(tx, orgId, 'test', [userId], () => ({
+        title: 'Test notification',
+        body: 'If you can read this, live notifications are working.',
+        link: '/account/notifications',
+        data: null,
+        dedupeKey: `test:${randomUUID()}`,
+      })),
+    );
+    await this.fanout.publish(orgId, pending);
+
     const targets = await this.db.tx((tx) => this.repo.liveTargets(tx, orgId, userId));
     const report = await this.sender.send(targets, buildTestPayload());
     await this.sender.record(orgId, userId, report, targets);
     return {
+      inApp: pending.length > 0,
       sent: report.sent.length,
       failed: report.gone.length + report.refused.length + report.retry.length,
     };

@@ -738,7 +738,9 @@
           "link": "Usa un percorso del sito come /legal/terms oppure un indirizzo http o https completo.",
           "senderFormat": "Scegli uno dei mittenti dell'elenco.",
           "countryFormat": "Usa un codice paese di due lettere.",
-          "senderRequired": "Scegli un canale mittente prima di creare il template."
+          "senderRequired": "Scegli un canale mittente prima di creare il template.",
+          "domainFormat": "{entry} non è un dominio valido. Usa un nome come esempio.it.",
+          "tooMany": "Non più di {max} domini."
         },
         "policy": {
           "kicker": "Registrazione",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Massimo di tentativi"
+          },
+          "businessEmailOnly": {
+            "label": "Solo indirizzi e-mail aziendali",
+            "hintOn": "I provider gratuiti come Gmail, Outlook e Yahoo vengono rifiutati alla registrazione.",
+            "hintOff": "Chiunque può registrarsi con un indirizzo personale gratuito."
+          },
+          "blockDisposableEmail": {
+            "label": "Blocca le e-mail temporanee",
+            "hintOn": "I domini usa e getta e temporanei, e i domini senza server di posta, vengono rifiutati.",
+            "hintOff": "Gli indirizzi temporanei sono accettati."
+          },
+          "requirePhoneVerification": {
+            "label": "Richiedi un numero di cellulare verificato",
+            "hintOn": "Ogni registrazione deve confermare un codice monouso. Se il codice non può essere inviato, la registrazione si ferma invece di saltare il controllo.",
+            "hintOff": "Il passaggio del codice viene eseguito solo quando il codice di registrazione qui sotto è attivo."
+          },
+          "blockedEmailDomains": {
+            "label": "Domini sempre bloccati",
+            "hint": "Un dominio per riga. Anche i sottodomini sono bloccati. Vengono rifiutati anche con «Solo indirizzi e-mail aziendali» disattivato.",
+            "placeholder": "esempio.it"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Il piè di pagina non è stato accettato.",
             "unexpected": "Impossibile salvare il piè di pagina. Riprova tra un momento."
           }
+        },
+        "guard": {
+          "kicker": "Protezione della registrazione",
+          "title": "Controllo di e-mail aziendale e cellulare",
+          "description": "Tiene fuori gli indirizzi usa e getta e personali e assicura che ogni nuovo account abbia un cellulare verificato. Vale per la registrazione via e-mail e social.",
+          "phoneOffWarning": "Con il controllo del cellulare disattivato si possono creare account senza un numero verificato, il che facilita le registrazioni false in massa."
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "Il generatore di vetrine online.",
             "invoicing": "Fatture, note di credito, pagamenti, ordini di vendita e aliquote fiscali.",
             "forms_and_links": "Moduli di acquisizione dei lead e link condivisibili.",
-            "extra_channels": "I canali Telegram, Facebook e Instagram.",
+            "extra_channels": "I canali Telegram, Facebook, Instagram, LINE, Viber e WeChat.",
             "form_builder": "Moduli web ospitati e incorporati che creano contatti nel CRM. L'app a pagamento Moduli controlla questo interruttore.",
             "waba_groups": "Crea e gestisci gruppi WhatsApp da un numero Cloud API: link di invito, richieste di adesione, membri. Il numero deve essere un Official Business Account.",
             "sms": "SMS solo in invio tramite Twilio o MSG91: collega i mittenti, invia broadcast e campagne SMS.",
             "help_agent": "L'assistente di aiuto nell'app: le persone chiedono un'attività con parole semplici e lui le guida o la svolge nella loro sessione, chiedendo prima di qualsiasi azione rischiosa. Consuma token AI.",
-            "email_channel": "Collega caselle Gmail e Google Workspace alla posta in arrivo del team. L'app a pagamento E-mail controlla questo interruttore."
+            "email_channel": "Collega caselle Gmail e Google Workspace alla posta in arrivo del team. L'app a pagamento E-mail controlla questo interruttore.",
+            "personal_history_full": "Consente a un numero WhatsApp personale di importare l'intera cronologia delle chat al primo collegamento. L'importazione delle chat recenti è disponibile in tutti i piani che includono numeri personali."
           },
           "units": {
             "days": "Giorni",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "Invii di moduli al mese",
             "ai_form_generations_monthly": "Generazioni del creatore di moduli AI al mese",
             "sms_monthly": "SMS al mese",
-            "email_mailboxes": "Caselle e-mail"
+            "email_mailboxes": "Caselle e-mail",
+            "email_monthly": "E-mail al mese"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "Creatore di vetrine e siti web",
             "invoicing": "Fatturazione (fatture, note di credito, fatture ricorrenti)",
             "forms_and_links": "Moduli, link click-to-chat e gruppi",
-            "extra_channels": "Canali Telegram, Facebook e Instagram",
+            "extra_channels": "Canali Telegram, Facebook, Instagram, LINE, Viber e WeChat",
             "form_builder": "Moduli (generatore di moduli web)",
             "waba_groups": "Gruppi WhatsApp (Cloud API)",
             "sms": "Canale SMS",
             "help_agent": "Assistente di aiuto (AI, consuma token)",
-            "email_channel": "Canale e-mail (Gmail)"
+            "email_channel": "Canale e-mail (Gmail)",
+            "personal_history_full": "Importazione completa della cronologia chat (WhatsApp personale)"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "Invii di moduli accettati nel mese di calendario, spam escluso. Oltre il limite un invio viene comunque salvato per la revisione, mai scartato. 0 = illimitato.",
             "ai_form_generations_monthly": "Generazioni del creatore di moduli AI nel mese di calendario, inclusi i nuovi tentativi di correzione. 0 = illimitato.",
             "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
-            "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato."
+            "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
+            "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato."
           }
         }
       },

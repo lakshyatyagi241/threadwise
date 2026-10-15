@@ -9,7 +9,7 @@ import {
 } from '../../infra/providers/catalog-products/catalog-provider.port';
 import { asMeta, readAutomation } from './catalog-automation';
 import { CatalogBindings } from './catalog-bindings';
-import { digitsOf, retailerIdOf } from './catalog-rules';
+import { digitsOf } from './catalog-rules';
 import {
   CONCIERGE_COOLDOWN_SECONDS,
   CONCIERGE_DEFAULT_EMPTY,
@@ -21,7 +21,13 @@ import {
   type Intent,
 } from './concierge-rules';
 import { CatalogsRepository } from './catalogs.repository';
-import { PRODUCT_SELECT, toProductRow, type ProductRow } from './products.repository';
+import { shareRetailerId } from './catalog-variants';
+import {
+  PRODUCT_SELECT,
+  ProductsRepository,
+  toProductRow,
+  type ProductRow,
+} from './products.repository';
 
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, (c) => `\\${c}`);
 
@@ -44,6 +50,7 @@ export class CatalogConciergeService {
     private readonly db: DatabaseService,
     private readonly catalogs: CatalogsRepository,
     private readonly bindings: CatalogBindings,
+    private readonly productsRepo: ProductsRepository,
     @Inject(CATALOG_PROVIDER) private readonly provider: CatalogProvider,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
@@ -96,7 +103,12 @@ export class CatalogConciergeService {
         to,
         settings.conciergeHeader ?? CONCIERGE_DEFAULT_HEADER,
         conciergeBody(products.length, text),
-        [{ title: 'Top matches', productRetailerIds: products.map(retailerIdOf) }],
+        [
+          {
+            title: 'Top matches',
+            productRetailerIds: products.map((p) => shareRetailerId(p, p.variants)),
+          },
+        ],
         footer,
       );
       return true;
@@ -119,7 +131,9 @@ export class CatalogConciergeService {
     if (intent.keywords.length > 0) {
       const any = intent.keywords.map((kw) => {
         const like = `%${escapeLike(kw)}%`;
-        return sql`(p.name ILIKE ${like} OR p.description ILIKE ${like} OR p.category ILIKE ${like} OR p.brand ILIKE ${like})`;
+        return sql`(p.name ILIKE ${like} OR p.description ILIKE ${like} OR p.category ILIKE ${like} OR p.brand ILIKE ${like}
+          OR EXISTS (SELECT 1 FROM wa_product_variants v WHERE v.org_id = p.org_id AND v.product_id = p.id AND v.active
+                       AND (v.title ILIKE ${like} OR v.sku ILIKE ${like})))`;
       });
       conditions.push(sql`AND (${sql.join(any, sql` OR `)})`);
     }
@@ -130,7 +144,11 @@ export class CatalogConciergeService {
         WHERE p.org_id = ${orgId} AND p.status = 'active' ${sql.join(conditions, sql` `)}
         ORDER BY p.id
         LIMIT ${Math.max(limit * 3, 60)}`);
-      return (res.rows as Array<Record<string, unknown>>).map(toProductRow);
+      return this.productsRepo.withVariants(
+        tx,
+        orgId,
+        (res.rows as Array<Record<string, unknown>>).map(toProductRow),
+      );
     });
     return rankProducts(rows, intent.keywords, limit);
   }

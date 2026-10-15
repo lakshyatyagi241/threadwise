@@ -39,8 +39,13 @@ function flatten(tree: Tree, prefix = ''): Record<string, string> {
 const placeholders = (message: string) =>
   [...new Set([...message.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)].map((m) => m[1]!))].sort();
 
-const en = flatten(load('en'));
-const ar = flatten(load('ar'));
+/** The "Imported" marker strings are a slice of their own (messages/<locale>/team-inbox-conversations.imported.json), merged at runtime. */
+const loadSlice = (locale: string): Tree =>
+  JSON.parse(
+    readFileSync(join(WEB, 'messages', locale, 'team-inbox-conversations.imported.json'), 'utf8'),
+  ) as Tree;
+const en = { ...flatten(load('en')), ...flatten(loadSlice('en')) };
+const ar = { ...flatten(load('ar')), ...flatten(loadSlice('ar')) };
 
 describe('team-inbox-conversations messages', () => {
   it('Arabic has exactly the keys English has', () => {

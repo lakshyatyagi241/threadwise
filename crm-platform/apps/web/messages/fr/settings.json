@@ -310,6 +310,11 @@
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
       },
+      "web": {
+        "label": "Chat du site web",
+        "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
+        "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
+      },
       "message-logs": {
         "label": "Journaux des messages",
         "description": "Exportez le journal de livraison de vos messages, jusqu'à un an en arrière, sous forme de fichier envoyé à votre e-mail.",
@@ -319,11 +324,6 @@
         "label": "Abonnements",
         "description": "Ce qui se renouvelle, jusqu'à quand c'est payé, et résiliation.",
         "keywords": "abonnement, renouvellement, renouvellement automatique, résilier, prélèvement automatique, paiement échoué, paiements"
-      },
-      "web": {
-        "label": "Chat du site web",
-        "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
-        "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
       },
       "lead-scoring": {
         "label": "Scoring des leads par IA",
@@ -359,6 +359,21 @@
         "label": "Performance de l'équipe",
         "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
         "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
+      },
+      "contact-assignment": {
+        "label": "Attribution des contacts",
+        "description": "Attribuez automatiquement les nouveaux contacts et affaires à la bonne personne, en ignorant les personnes en congé.",
+        "keywords": "attribuer, propriétaire, round robin, tourniquet, nouveau contact, nouvelle affaire, congé, absence, routage des leads"
+      },
+      "privacy-requests": {
+        "label": "Demandes de données",
+        "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",
+        "keywords": "confidentialité, RGPD, GDPR, demande de données, DSR, droit d'accès, exporter les données, effacer, droit à l'oubli, supprimer des données personnelles, blocage légal"
+      },
+      "compliance-center": {
+        "label": "Centre de conformité",
+        "description": "Des outils pour vous aider à respecter vos obligations en matière de vie privée : les lois auxquelles vous êtes soumis, les contacts vie privée, les avis et liens, les sous-traitants ultérieurs, les heures de silence et une liste de contrôle de ce qui est en place.",
+        "keywords": "conformité, vie privée, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, délégué à la protection des données, responsable des réclamations, sous-traitant ultérieur, dpa, conditions, politique de confidentialité, heures de silence, do not call, liste de contrôle, enfants"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

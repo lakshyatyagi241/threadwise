@@ -191,3 +191,20 @@ Not run: the API e2e suite after the contract change (API unit tests, tsc and th
 ## Backend
 
 <!-- The backend agent adds its section here. -->
+
+## Product variants (intended deviation, 2026-10-13)
+
+Reference has no product variants: `wa_products` is flat (one price, one stock). The owner asked for variants that work for any kind of store
+(for example a t-shirt in XS, S, M, L, XL), so this is an **intended** extension, not a defect. Products without variants behave exactly as before.
+
+- Model: up to 3 named options per product (any name), up to 100 variants (each its own SKU, price, stock, image, active flag). Migration
+  `20261128090000_product_variants.sql` (`wa_products.options_json`, `wa_product_variants`, `wa_stock_reservations.variant_id`).
+- The product row stays the aggregate for older readers: lowest active variant price, summed stock (null when any variant is unlimited).
+  Kept by `recomputeProductAggregate` in the same transaction as every variant write or stock move.
+- Surfaces: product form (Variants section), public shop (option picker, "From" price, variant cart lines), checkout and order lines
+  (`variant_id`, `variant_title`), stock holds per variant, Meta catalog sync (one item per variant, `item_group_id` = product retailer id),
+  WhatsApp cart orders, AI ordering (asks for a missing option), Shopify and WooCommerce import/mirror.
+- Not verified: no browser run of the admin or public UI, no twin run against Reference (it has no variants to compare), no live Meta,
+  Shopify or WooCommerce call (fixtures only), API e2e and testcontainers integration suites not run.
+- Known gaps: WhatsApp cart orders never reserved stock (before or after); Shopify `inventory_levels` webhooks are not handled; renaming a store
+  option value on Shopify/Woo reads as remove plus add; Woo variation SKU lookup in `line_items.sku` unconfirmed.

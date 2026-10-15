@@ -34,7 +34,10 @@
       "sendFailed": "Die Nachricht konnte nicht gesendet werden: {detail}",
       "collectionProducts": "Keines der ausgewählten Produkte gehört zu diesem Workspace.",
       "providerFailed": "WhatsApp oder Meta konnte die Anfrage nicht abschließen: {detail}",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+      "alreadyConnected": "Es ist bereits ein Katalog verbunden. Trennen Sie ihn zuerst, um einen neuen zu erstellen.",
+      "confirmMismatch": "Die eingegebene Katalog-ID stimmt nicht mit dem verbundenen Katalog überein.",
+      "setNotSyncable": "Diese Kollektion hat keine aktiven Produkte für ein Meta-Produktset."
     },
     "paywall": {
       "kicker": "Premium-Funktion",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "Die Beschreibung ist zu lang.",
           "noProducts": "Wählen Sie mindestens ein Produkt aus."
         }
+      },
+      "meta": {
+        "onMeta": "Bei Meta",
+        "notOnMeta": "Nicht bei Meta",
+        "push": "An Meta senden",
+        "update": "Bei Meta aktualisieren",
+        "remove": "Von Meta entfernen",
+        "pushed": "Kollektion an Meta gesendet.",
+        "removed": "Kollektion von Meta entfernt."
       }
     },
     "activity": {
@@ -446,7 +458,8 @@
       "cancel": "Abbrechen",
       "deleted": "Produkt entfernt.",
       "deleteTitle": "Dieses Produkt löschen?",
-      "deleteBody": "„{name}“ wird gelöscht. Es bleibt bei Meta, bis Sie es dort entfernen."
+      "deleteBody": "„{name}“ wird gelöscht. Es bleibt bei Meta, bis Sie es dort entfernen.",
+      "variantsBadge": "{count, plural, one {# Variante} other {# Varianten}}"
     },
     "share": {
       "eyebrow": "Produkt teilen",
@@ -551,6 +564,91 @@
         "badUrl": "Geben Sie einen vollständigen Link ein, der mit https:// beginnt",
         "outOfRange": "Diese Zahl liegt außerhalb des zulässigen Bereichs.",
         "tooMany": "Zu viele Bilder."
+      },
+      "variants": {
+        "title": "Varianten",
+        "hint": "Verkaufe dieses Produkt in mehreren Ausführungen, etwa Größe oder Farbe. Jede Kombination hat eigene SKU, eigenen Preis und eigenen Bestand.",
+        "toggle": "Dieses Produkt hat Varianten",
+        "removeOnSave": "Die Varianten dieses Produkts werden beim Speichern entfernt.",
+        "optionName": "Name der Option {n}",
+        "optionNamePlaceholder": "Größe, Farbe...",
+        "suggest": {
+          "size": "Größe",
+          "colour": "Farbe",
+          "material": "Material",
+          "style": "Stil"
+        },
+        "values": "Werte",
+        "valuesHint": "Drücke die Eingabetaste oder tippe nach jedem Wert ein Komma. Je höchstens {max} Zeichen.",
+        "valuesPlaceholder": "Wert eingeben, zum Beispiel M",
+        "valuesMore": "Weiteren Wert hinzufügen",
+        "quickAdd": "Schnell hinzufügen:",
+        "preset": {
+          "clothing": "Kleidergrößen ({values})",
+          "shoes": "Schuhgrößen ({values})"
+        },
+        "addOption": "Option hinzufügen",
+        "maxOptions": "Höchstens {max} Optionen.",
+        "removeOption": "Option {n} entfernen",
+        "moveOptionUp": "Option {n} nach oben",
+        "moveOptionDown": "Option {n} nach unten",
+        "removeValue": "Wert {value} entfernen",
+        "moveValueEarlier": "{value} nach vorn",
+        "moveValueLater": "{value} nach hinten",
+        "refused": {
+          "tooLong": "Dieser Wert ist zu lang.",
+          "dup": "Dieser Wert steht bereits in der Liste.",
+          "tooMany": "Das Limit an Werten für diese Option ist erreicht."
+        },
+        "tableTitle": "Varianten",
+        "count": "{count, plural, one {# Variante} other {# Varianten}}",
+        "tableEmpty": "Gib jeder Option einen Namen und mindestens einen Wert an, um die Varianten zu erzeugen.",
+        "totalStock": "Gesamtbestand",
+        "fromPrice": "Ab-Preis",
+        "fromPreview": "Ab {price}",
+        "unlimited": "Unbegrenzt",
+        "priceHint": "Der niedrigste Preis der aktiven Varianten. Varianten ohne eigenen Preis verwenden diesen.",
+        "stockHint": "Die Summe der aktiven Varianten, festgelegt in der Tabelle oben.",
+        "bulkPrice": "Preis für alle Varianten",
+        "bulkStock": "Bestand für alle Varianten",
+        "bulkApplyPrice": "Preis anwenden",
+        "bulkApplyStock": "Bestand anwenden",
+        "pricePlaceholder": "Produktpreis",
+        "stockPlaceholder": "Unbegrenzt",
+        "col": {
+          "variant": "Variante",
+          "sku": "SKU",
+          "price": "Preis",
+          "stock": "Bestand",
+          "image": "Bildlink",
+          "active": "Aktiv"
+        },
+        "rowSku": "SKU für {title}",
+        "rowPrice": "Preis für {title}",
+        "rowStock": "Bestand für {title}",
+        "rowImage": "Bildlink für {title}",
+        "rowActive": "{title} ist aktiv",
+        "confirm": {
+          "title": "Varianten entfernen?",
+          "body": "{count, plural, one {# Variante mit Daten wird} other {# Varianten mit Daten werden}} entfernt, weil diese Kombination nicht mehr existiert.",
+          "remove": "Entfernen",
+          "keep": "Behalten"
+        },
+        "problem": {
+          "required": "Dieses Feld ist erforderlich.",
+          "tooLong": "Dieser Text ist zu lang.",
+          "dupName": "Zwei Optionen haben denselben Namen.",
+          "dupValue": "Dieser Wert kommt doppelt vor.",
+          "needOption": "Füge mindestens eine Option hinzu.",
+          "needValue": "Füge mindestens einen Wert hinzu.",
+          "tooManyValues": "Zu viele Werte für diese Option.",
+          "tooManyVariants": "Diese Optionen ergeben zu viele Varianten. Das Limit liegt bei 100.",
+          "notNumber": "Gib eine Zahl ein, etwa 499 oder 499.50.",
+          "tooBig": "Der Betrag ist zu groß.",
+          "notWhole": "Gib eine ganze Zahl ein.",
+          "outOfRange": "Diese Zahl liegt außerhalb des Bereichs.",
+          "badUrl": "Gib einen vollständigen Link ein, der mit https:// beginnt"
+        }
       }
     },
     "reviews": {
@@ -723,6 +821,33 @@
           "goods": "Keine Alkohol-, Erwachsenen- oder regulierten Waren",
           "verification": "Business-Verifizierung für den Produktivbetrieb erforderlich"
         }
+      }
+    },
+    "manage": {
+      "title": "Katalog bei Meta verwalten",
+      "create": {
+        "title": "Neuen Katalog bei Meta erstellen",
+        "intro": "Erstellt einen leeren Katalog in Ihrem WhatsApp-Business-Konto, verknüpft ihn und verbindet ihn hier.",
+        "name": "Katalogname",
+        "placeholder": "z. B. Mein Shop",
+        "button": "Katalog erstellen",
+        "needName": "Geben Sie einen Katalognamen ein.",
+        "done": "Katalog erstellt und verbunden."
+      },
+      "rename": {
+        "label": "Katalogname",
+        "button": "Bei Meta umbenennen",
+        "done": "Katalog bei Meta umbenannt."
+      },
+      "delete": {
+        "title": "Katalog bei Meta löschen",
+        "warning": "Löscht den Katalog und seine Produkte bei Meta dauerhaft. Das lässt sich nicht rückgängig machen.",
+        "confirmLabel": "Zur Bestätigung die Katalog-ID {id} eingeben",
+        "button": "Bei Meta löschen",
+        "dialogTitle": "Katalog bei Meta löschen?",
+        "dialogMessage": "Der Katalog wird bei Meta gelöscht und hier getrennt. Das lässt sich nicht rückgängig machen.",
+        "cancel": "Abbrechen",
+        "done": "Katalog bei Meta gelöscht."
       }
     }
   }

@@ -80,6 +80,9 @@ export function OrderTracking({ data }: { data: PublicOrder }) {
                 )}
                 <div>
                   <div className="sf-ot-nm">{item.name || '—'}</div>
+                  {item.variantTitle ? (
+                    <div className="sf-ot-variant">{item.variantTitle}</div>
+                  ) : null}
                   <div className="sf-ot-qty">
                     {t('order.qty', { qty: item.qty, price: money(item.priceMinor) })}
                   </div>

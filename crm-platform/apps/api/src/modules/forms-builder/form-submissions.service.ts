@@ -20,7 +20,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ContactsRepository } from '../crm';
-import { buildCsv } from './form-csv';
+import { buildCsv } from '../../common/csv';
 import { asText, type StoredAnswer } from './form-rules';
 import { FormPaymentsService, toAttempt } from './form-payments.service';
 import { FormSubmitService } from './form-submit.service';

@@ -19,6 +19,7 @@ import { WALLET_GATE, type WalletGate } from '../broadcasts';
 import { CampaignEvents } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
 import { csvSafe } from './campaign-rules';
+import { isWalletFree } from './email-campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
 import { MODULE_KEY } from './campaigns.service';
 
@@ -66,8 +67,8 @@ export class CampaignsActionsService {
     orgId: number,
     c: { provider: string | null; totalRecipients: number; counts: { sent: number } },
   ) {
-    // SMS is never charged to the wallet (TW-SMS-027).
-    if (c.provider === 'sms') return Promise.resolve();
+    // SMS and email are never charged to the wallet (TW-SMS-027).
+    if (isWalletFree(c.provider)) return Promise.resolve();
     return this.wallet.precheck(orgId, Math.max(0, c.totalRecipients - c.counts.sent), {
       source: 'campaign',
     });
@@ -186,7 +187,7 @@ export class CampaignsActionsService {
             : 'Nothing to resend — no matching recipients.',
         );
       }
-      if (c.provider !== 'sms') await this.wallet.precheck(orgId, n, { source: 'campaign' });
+      if (!isWalletFree(c.provider)) await this.wallet.precheck(orgId, n, { source: 'campaign' });
       await this.repo.recount(tx, orgId, c.id);
       // `now` campaigns run at once for the reset rows; the others go back to the schedule.
       const next: CampaignStatus = c.scheduleType === 'now' ? 'running' : 'scheduled';
@@ -239,7 +240,20 @@ export class CampaignsActionsService {
     const { orgId } = RequestContextStore.require();
     const c = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
     if (!c) throw AppError.notFound('Campaign', uuid);
-    const zone = c.timezone ?? 'UTC';
+    return this.exportRuns([{ id: c.id, run: null }], c.timezone ?? 'UTC', `campaign-${c.uuid}`);
+  }
+
+  /**
+   * The recipients of one or more runs as one CSV, streamed in pages. `run` is the run's number (a recurring broadcast's occurrence);
+   * when any run has one the file starts with a `Run` column, so a series is one file and a one-off campaign keeps its columns exactly.
+   * Runs are written in the order given, each newest recipient first. The caller has already checked the runs belong to the workspace.
+   */
+  async exportRuns(
+    runs: ReadonlyArray<{ id: number; run: number | null }>,
+    zone: string,
+    fileBase: string,
+  ): Promise<{ stream: Readable; fileName: string }> {
+    const { orgId } = RequestContextStore.require();
     const fmt = (d: Date | null) =>
       d
         ? new Intl.DateTimeFormat('sv-SE', {
@@ -251,46 +265,50 @@ export class CampaignsActionsService {
             minute: '2-digit',
           }).format(d)
         : '';
+    const withRun = runs.some((r) => r.run !== null);
 
     const db = this.db;
     const repo = this.repo;
     async function* lines(): AsyncGenerator<string> {
-      yield csvLine(EXPORT_HEADER);
-      let before: number | null = null;
-      for (;;) {
-        const page = await db.txAs({ orgId }, (tx) =>
-          repo.recipientsAfter(tx, orgId, c!.id, before, EXPORT_PAGE),
-        );
-        if (page.length === 0) return;
-        for (const r of page) {
-          const last = r.respondedAt
-            ? 'Reply'
-            : r.clickedAt
-              ? 'Button tap'
-              : r.readAt
-                ? 'Read'
-                : r.deliveredAt
-                  ? 'Delivered'
-                  : r.sentAt
-                    ? 'Sent'
-                    : 'Queued';
-          yield csvLine([
-            csvSafe(r.name || (r.contactId ? `Contact #${r.contactId}` : '')),
-            csvSafe(r.phone ?? ''),
-            csvSafe(r.variant ?? ''),
-            r.status.charAt(0).toUpperCase() + r.status.slice(1),
-            r.clicked ? 'Yes' : 'No',
-            fmt(r.createdAt),
-            fmt(r.sentAt),
-            fmt(r.deliveredAt),
-            fmt(r.readAt),
-            fmt(r.respondedAt),
-            last,
-            csvSafe(r.error ?? ''),
-          ]);
+      yield csvLine(withRun ? ['Run', ...EXPORT_HEADER] : EXPORT_HEADER);
+      for (const run of runs) {
+        let before: number | null = null;
+        for (;;) {
+          const page = await db.txAs({ orgId }, (tx) =>
+            repo.recipientsAfter(tx, orgId, run.id, before, EXPORT_PAGE),
+          );
+          if (page.length === 0) break;
+          for (const r of page) {
+            const last = r.respondedAt
+              ? 'Reply'
+              : r.clickedAt
+                ? 'Button tap'
+                : r.readAt
+                  ? 'Read'
+                  : r.deliveredAt
+                    ? 'Delivered'
+                    : r.sentAt
+                      ? 'Sent'
+                      : 'Queued';
+            const cells = [
+              csvSafe(r.name || (r.contactId ? `Contact #${r.contactId}` : '')),
+              csvSafe(r.phone ?? ''),
+              csvSafe(r.variant ?? ''),
+              r.status.charAt(0).toUpperCase() + r.status.slice(1),
+              r.clicked ? 'Yes' : 'No',
+              fmt(r.createdAt),
+              fmt(r.sentAt),
+              fmt(r.deliveredAt),
+              fmt(r.readAt),
+              fmt(r.respondedAt),
+              last,
+              csvSafe(r.error ?? ''),
+            ];
+            yield csvLine(withRun ? [String(run.run ?? ''), ...cells] : cells);
+          }
+          before = page[page.length - 1]!.id;
+          if (page.length < EXPORT_PAGE) break;
         }
-        before = page[page.length - 1]!.id;
-        if (page.length < EXPORT_PAGE) return;
       }
     }
 
@@ -301,7 +319,7 @@ export class CampaignsActionsService {
       .replace(/^(\d{8})(\d{6})$/, '$1-$2');
     return {
       stream: Readable.from(lines()),
-      fileName: `campaign-${c.uuid}-recipients-${stamp}.csv`,
+      fileName: `${fileBase}-recipients-${stamp}.csv`,
     };
   }
 }

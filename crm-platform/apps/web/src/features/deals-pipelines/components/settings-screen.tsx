@@ -38,7 +38,7 @@ import {
   TrashIcon,
 } from './icons';
 import { ErrorLine, useDealsCan, useErrorText } from './parts';
-import { StageRow } from './stage-row';
+import { STAGE_GRID_COLS, StageRow } from './stage-row';
 
 /** `/deals/settings` (TW-DEAL-041/042/021): pipelines, their stages, and the auto-deal-from-orders switch. */
 export function SettingsScreen() {
@@ -136,7 +136,12 @@ export function SettingsScreen() {
                     </span>
                   )}
                 </span>
-                <span className="mt-0.5 block text-xs text-muted-foreground">
+                <span
+                  className={cn(
+                    'mt-0.5 block text-xs',
+                    p.id === pipeline.id ? 'text-foreground/75' : 'text-muted-foreground',
+                  )}
+                >
                   {p.currency} · {t('stageCount', { count: p.stages.length })}
                 </span>
               </button>
@@ -361,6 +366,14 @@ function StagesEditor({
           {t('stages')}
         </h2>
         <p className="mt-0.5 text-sm text-muted-foreground">{t('stagesHint')}</p>
+      </div>
+      <div
+        aria-hidden="true"
+        className={`hidden items-end px-[calc(0.75rem+1px)] text-xs font-medium text-muted-foreground ${STAGE_GRID_COLS}`}
+      >
+        <span className="col-start-3">{t('stageName')}</span>
+        <span>{t('kind')}</span>
+        <span>{t('probability')}</span>
       </div>
       <ol className="space-y-2">
         {stages.map((s, i) => (

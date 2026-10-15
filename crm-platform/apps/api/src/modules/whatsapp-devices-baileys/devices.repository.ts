@@ -31,6 +31,16 @@ export interface DeviceRow {
   assigned_user_id: number | null;
   assignee_uuid: string | null;
   assignee_name: string | null;
+  hi_state: string | null;
+  hi_mode: string | null;
+  hi_chats: number | null;
+  hi_contacts: number | null;
+  hi_messages: number | null;
+  hi_progress: number | null;
+  hi_window_days: number | null;
+  hi_started_at: Date | null;
+  hi_finished_at: Date | null;
+  hi_error: string | null;
   creator_uuid: string | null;
   creator_name: string | null;
 }
@@ -41,12 +51,20 @@ const SELECT = sql.raw(`
   d.proxy_enabled, d.proxy_status, d.proxy_egress_ip, d.sent_24h, d.failed_24h,
   (d.warmer_config IS NOT NULL AND d.warmer_config <> 'null'::jsonb AND d.warmer_config <> '{}'::jsonb) AS warmer_configured,
   d.created_at, d.row_version, d.assigned_user_id,
-  au.uuid AS assignee_uuid, au.full_name AS assignee_name, cu.uuid AS creator_uuid, cu.full_name AS creator_name`);
+  au.uuid AS assignee_uuid, au.full_name AS assignee_name, cu.uuid AS creator_uuid, cu.full_name AS creator_name,
+  hi.state AS hi_state, hi.mode AS hi_mode, hi.chats_count AS hi_chats, hi.contacts_count AS hi_contacts,
+  hi.messages_count AS hi_messages, hi.progress AS hi_progress, hi.window_days AS hi_window_days,
+  hi.started_at AS hi_started_at, hi.finished_at AS hi_finished_at, hi.error_code AS hi_error`);
 
 const FROM = sql.raw(`
   FROM devices d
   LEFT JOIN users au ON au.org_id = d.org_id AND au.id = d.assigned_user_id
-  LEFT JOIN users cu ON cu.org_id = d.org_id AND cu.id = d.user_id`);
+  LEFT JOIN users cu ON cu.org_id = d.org_id AND cu.id = d.user_id
+  LEFT JOIN LATERAL (
+    SELECT h.state, h.mode, h.chats_count, h.contacts_count, h.messages_count, h.progress, h.window_days,
+           h.started_at, h.finished_at, h.error_code
+      FROM wa_device_history_imports h WHERE h.org_id = d.org_id AND h.device_id = d.id ORDER BY h.id DESC LIMIT 1
+  ) hi ON true`);
 
 const toRow = (r: Record<string, unknown>): DeviceRow => ({
   id: Number(r.id),
@@ -74,6 +92,16 @@ const toRow = (r: Record<string, unknown>): DeviceRow => ({
   assigned_user_id: r.assigned_user_id == null ? null : Number(r.assigned_user_id),
   assignee_uuid: (r.assignee_uuid as string | null) ?? null,
   assignee_name: (r.assignee_name as string | null) ?? null,
+  hi_state: (r.hi_state as string | null) ?? null,
+  hi_mode: (r.hi_mode as string | null) ?? null,
+  hi_chats: r.hi_chats == null ? null : Number(r.hi_chats),
+  hi_contacts: r.hi_contacts == null ? null : Number(r.hi_contacts),
+  hi_messages: r.hi_messages == null ? null : Number(r.hi_messages),
+  hi_progress: r.hi_progress == null ? null : Number(r.hi_progress),
+  hi_window_days: r.hi_window_days == null ? null : Number(r.hi_window_days),
+  hi_started_at: r.hi_started_at ? new Date(r.hi_started_at as string) : null,
+  hi_finished_at: r.hi_finished_at ? new Date(r.hi_finished_at as string) : null,
+  hi_error: (r.hi_error as string | null) ?? null,
   creator_uuid: (r.creator_uuid as string | null) ?? null,
   creator_name: (r.creator_name as string | null) ?? null,
 });

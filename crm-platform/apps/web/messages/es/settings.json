@@ -310,6 +310,11 @@
         "description": "Asigna las conversaciones nuevas al agente adecuado automáticamente, por turnos o según reglas.",
         "keywords": "enrutamiento, round robin, asignar, agentes, reglas de la bandeja, distribuir, responsable"
       },
+      "web": {
+        "label": "Chat del sitio web",
+        "description": "Bots creados para el chat de tu sitio web y el widget en el que se ejecuta cada uno.",
+        "keywords": "web, sitio web, widget, chatbot, incrustar, chat en vivo"
+      },
       "message-logs": {
         "label": "Registros de mensajes",
         "description": "Exporta el registro de entrega de tus mensajes, hasta un año atrás, como un archivo enviado a tu correo.",
@@ -319,11 +324,6 @@
         "label": "Suscripciones",
         "description": "Qué se renueva, hasta cuándo está pagado y cancelar.",
         "keywords": "suscripción, renovar, renovación automática, cancelar, pago automático, pago fallido, cargos"
-      },
-      "web": {
-        "label": "Chat del sitio web",
-        "description": "Bots creados para el chat de tu sitio web y el widget en el que se ejecuta cada uno.",
-        "keywords": "web, sitio web, widget, chatbot, incrustar, chat en vivo"
       },
       "lead-scoring": {
         "label": "Puntuación de leads con IA",
@@ -359,6 +359,21 @@
         "label": "Rendimiento del equipo",
         "description": "Mira qué tan rápido respondió y resolvió cada agente hoy, esta semana o este mes.",
         "keywords": "informes, analítica, agentes, tiempo de respuesta, primera respuesta, resueltas, carga, rendimiento"
+      },
+      "contact-assignment": {
+        "label": "Asignación de contactos",
+        "description": "Asigna automáticamente los contactos y negocios nuevos a la persona adecuada, sin contar a quienes están de baja o vacaciones.",
+        "keywords": "asignar, propietario, round robin, rotación, nuevo contacto, nuevo negocio, ausencia, vacaciones, enrutamiento de leads"
+      },
+      "privacy-requests": {
+        "label": "Solicitudes de datos",
+        "description": "Responde a quienes preguntan qué datos tienes de ellos: comprobación de identidad, exportación, supresión con vista previa y una prueba que puedes conservar.",
+        "keywords": "privacidad, gdpr, solicitud de datos, dsar, derecho de acceso, exportar datos, borrar, derecho al olvido, eliminar datos personales, retención legal"
+      },
+      "compliance-center": {
+        "label": "Centro de cumplimiento normativo",
+        "description": "Herramientas que te ayudan a cumplir tus obligaciones de privacidad: las leyes que te afectan, contactos de privacidad, avisos y enlaces, subencargados, horas de silencio y una lista de verificación de lo que ya tienes en marcha.",
+        "keywords": "cumplimiento, privacidad, rgpd, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, delegado de protección de datos, responsable de reclamaciones, subencargado, dpa, términos, política de privacidad, horas de silencio, no llamar, lista de verificación, menores"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

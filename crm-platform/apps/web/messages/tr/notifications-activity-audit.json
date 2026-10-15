@@ -159,6 +159,11 @@
         "title": "Numaranız {name} grubundan çıkarıldı",
         "titleNoName": "Numaranız bir WhatsApp grubundan çıkarıldı",
         "body": "Biri kişisel numaranızı bu gruptan çıkardı. Grup burada salt okunur olarak saklanıyor."
+      },
+      "test": {
+        "title": "Test bildirimi",
+        "titleNoName": "Test bildirimi",
+        "bodyNoActor": "Bunu okuyabiliyorsanız canlı bildirimler çalışıyor."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "WhatsApp grubu askıya alındı",
         "waba_group_suspension_cleared": "WhatsApp grubu yeniden etkin",
         "device_group_join_request": "Gruba katılma isteği",
-        "device_group_removed": "Bir WhatsApp grubundan çıkarıldınız"
-      }
+        "device_group_removed": "Bir WhatsApp grubundan çıkarıldınız",
+        "test": "Test bildirimi"
+      },
+      "generic": "Yeni bir bildiriminiz var",
+      "paused": "Canlı güncellemeler duraklatıldı, bu yüzden yeni uyarılar bir dakikaya kadar geç gelebilir. Yeniden bağlanmak için sayfayı yenileyin."
     },
     "prefs": {
       "title": "Bildirim tercihleri",
@@ -212,7 +220,8 @@
         "broadcasts": "Toplu gönderimler ve kampanyalar",
         "team_chat": "Ekip sohbeti",
         "whatsapp_groups": "WhatsApp grupları",
-        "billing": "Faturalama ve abonelikler"
+        "billing": "Faturalama ve abonelikler",
+        "system": "Sistem"
       },
       "types": {
         "new_chat": {
@@ -358,6 +367,18 @@
         "sla_breached": {
           "label": "SLA aşıldı",
           "hint": "Sahibi olduğunuz bir görüşme ilk yanıt veya çözüm hedefini kaçırdı."
+        },
+        "member_leave_started": {
+          "label": "Bir üye izne çıktı",
+          "hint": "Ekibinizden bir üye izne çıktı. Üzerindeki işleri ve yeniden atama bağlantısını gösterir."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Kimsenin alamadığı sohbet",
+          "hint": "Seçilen kişiler izinde olduğu için yönlendirme yeni sohbet için kimseyi bulamadı. Elle atayın."
+        },
+        "test": {
+          "label": "Test bildirimi",
+          "hint": "Tarayıcı bildirimleri bölümünden gönderdiğiniz test; zilin, açılır pencerenin ve sekme başlığının çalıştığını görmenizi sağlar."
         }
       },
       "loading": "Tercihleriniz yükleniyor",
@@ -437,6 +458,11 @@
           "neverUsed": "henüz bildirim yok",
           "remove": "Kaldır",
           "removeFor": "{device} cihazını kaldır"
+        },
+        "testInApp": {
+          "watch": "Bir açılır pencere görmeniz, zil sayısının ve sekme başlığının değişmesi gerekir.",
+          "notConnected": "Bu sayfada canlı güncellemeler bağlı değil, bu yüzden açılır pencere burada görünemez. Sayfayı yenileyip tekrar deneyin.",
+          "off": "Zilde bildirim oluşturulmadı: aşağıdaki tabloda \"Test bildirimi\" için zil kapalı ya da çalışma alanı sahibiniz tarafından kapatılmış."
         }
       }
     },

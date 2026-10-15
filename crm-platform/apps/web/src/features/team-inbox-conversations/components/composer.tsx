@@ -42,6 +42,7 @@ import {
   type RichEditorHandle,
 } from '@/features/channel-email/components/rich-editor';
 import { SignaturePicker } from '@/features/channel-email/components/signature-picker';
+import { EmailTemplatePicker, type AppliedTemplate } from '@/features/email-templates';
 import {
   EmailComposerFooter,
   EmailEditorHint,
@@ -189,6 +190,10 @@ export function Composer(props: ComposerProps) {
   const [rich, setRich] = useState(true);
   const [editorKey, setEditorKey] = useState(0);
   const [signature, setSignature] = useState<SignatureChoice>(AUTO_SIGNATURE);
+  // The email template the box was last filled from: the reply names it, so the server can apply its rules and count the use.
+  const [template, setTemplate] = useState<{ id: string; name: string; marketing: boolean } | null>(
+    null,
+  );
   const [dragging, setDragging] = useState(false);
   const [bodyTooLong, setBodyTooLong] = useState(false);
   const [picker, setPicker] = useState<PickerState>({
@@ -233,6 +238,7 @@ export function Composer(props: ComposerProps) {
     setHtml(HTML_DRAFTS.get(conversationId) ?? '');
     setEditorKey((k) => k + 1);
     setSignature(AUTO_SIGNATURE);
+    setTemplate(null);
     setBodyTooLong(false);
     setUnfilled([]);
     setPicked([]);
@@ -323,6 +329,20 @@ export function Composer(props: ComposerProps) {
     return true;
   }
 
+  /** Puts a template that was filled in for this conversation in the box (never sends it): the message, and the subject if it has one. */
+  function applyTemplate(filled: AppliedTemplate) {
+    if (richEmail) {
+      changeHtml(filled.html);
+      setEditorKey((k) => k + 1);
+    } else {
+      change(filled.text);
+    }
+    if (filled.subject.trim() !== '') setExtras((e) => ({ ...e, subject: filled.subject }));
+    setTemplate({ id: filled.id, name: filled.name, marketing: filled.purpose === 'marketing' });
+    // Variables the contact has no value for stay as written: the same notice as a saved reply that could not be filled.
+    setUnfilled(filled.issues.map((i) => i.token));
+  }
+
   async function submit() {
     if (!canSubmit) return;
     if (isNote) {
@@ -355,6 +375,7 @@ export function Composer(props: ComposerProps) {
         ...(richEmail ? { bodyHtml: html } : {}),
         ...(staged.ids.length > 0 ? { attachmentIds: staged.ids } : {}),
         ...signatureExtras(signature),
+        ...(template ? { templateId: template.id } : {}),
       };
     }
     // A mention rides only with text: a file's caption keeps the `@Name` as typed.
@@ -378,6 +399,7 @@ export function Composer(props: ComposerProps) {
       setEditorKey((k) => k + 1);
       staged.clear();
       setSignature(AUTO_SIGNATURE);
+      setTemplate(null);
     }
     change('');
     setFile(null);
@@ -614,6 +636,16 @@ export function Composer(props: ComposerProps) {
       )}
       {isEmail && !isNote && !groupBlocked && (
         <EmailSendProblem problem={props.email?.sendProblem ?? null} bodyTooLong={bodyTooLong} />
+      )}
+      {isEmail && !isNote && !groupBlocked && (
+        <EmailTemplatePicker
+          conversationId={conversationId}
+          hasDraft={richEmail ? !emailBodyBlank : trimmed.length > 0}
+          disabled={disabled}
+          applied={template}
+          onApply={applyTemplate}
+          onForget={() => setTemplate(null)}
+        />
       )}
       {isEmail && !isNote && !groupBlocked && (
         <EmailExtrasFields

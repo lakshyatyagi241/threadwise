@@ -1,0 +1,86 @@
+{
+  "module": "inbox",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-inbox-001",
+      "feature": "saved reply shortcut",
+      "category": "input",
+      "scenario": "a value of 65 (one past SAVED_REPLY_SHORTCUT_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-002",
+      "feature": "saved reply title",
+      "category": "input",
+      "scenario": "a value of 129 (one past SAVED_REPLY_TITLE_MAX = 128) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-003",
+      "feature": "saved reply body",
+      "category": "input",
+      "scenario": "a value of 4001 (one past SAVED_REPLY_BODY_MAX = 4000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-004",
+      "feature": "saved reply category",
+      "category": "input",
+      "scenario": "a value of 65 (one past SAVED_REPLY_CATEGORY_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-005",
+      "feature": "saved reply list",
+      "category": "input",
+      "scenario": "a value of 101 (one past SAVED_REPLY_LIST_MAX = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-006",
+      "feature": "saved reply channel kinds",
+      "category": "input",
+      "scenario": "a value of 21 (one past SAVED_REPLY_CHANNEL_KINDS_MAX = 20) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-007",
+      "feature": "saved reply import",
+      "category": "input",
+      "scenario": "a value of 1001 (one past SAVED_REPLY_IMPORT_MAX_ROWS = 1000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/saved-replies.ts"
+    },
+    {
+      "id": "EC-inbox-008",
+      "feature": "inbox tag name",
+      "category": "input",
+      "scenario": "a value of 65 (one past INBOX_TAG_NAME_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-conversations/tags.ts"
+    }
+  ]
+}

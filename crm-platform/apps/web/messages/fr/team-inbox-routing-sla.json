@@ -11,7 +11,10 @@
       "telegram": "Telegram",
       "facebook": "Messenger Facebook",
       "instagram": "Instagram",
-      "email": "E-mail (Gmail)"
+      "email": "E-mail (Gmail)",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
     },
     "page": {
       "back": "Automatisation et IA",
@@ -182,7 +185,9 @@
         "offOption": "{name} (désactivé)",
         "goneOption": "Un flux qui n'existe plus",
         "loadFailed": "Les flux n’ont pas pu être chargés, la liste est peut-être incomplète."
-      }
+      },
+      "onLeave": "en congé",
+      "onLeaveUntil": "en congé jusqu’au {date}"
     },
     "sla": {
       "back": "Retour aux paramètres",
@@ -275,6 +280,123 @@
         "busy": "Occupé",
         "offline": "Hors ligne"
       }
+    },
+    "contactAssignment": {
+      "back": "Automatisation",
+      "title": "Attribution des contacts",
+      "intro": "Attribuez automatiquement les nouveaux contacts et affaires sans propriétaire à la bonne personne.",
+      "howTitle": "Comment ça marche",
+      "how1": "Activez la fonction. Elle est désactivée tant que vous ne le faites pas.",
+      "how2": "Les règles sont testées de haut en bas. La première règle qui correspond et trouve quelqu’un de disponible désigne le propriétaire du contact ou de l’affaire.",
+      "how3": "Les personnes en congé sont ignorées (une personne fixe est remplacée par son suppléant). Les personnes hors ligne sont ignorées, sauf si la règle en décide autrement.",
+      "how4": "Un propriétaire défini par quelqu’un n’est jamais remplacé.",
+      "enable": "Attribuer automatiquement les nouveaux contacts et affaires",
+      "enableHint": "S’applique aux contacts issus des formulaires, des sources de leads, des conversations et de l’API, ainsi qu’aux nouvelles affaires.",
+      "imports": "Attribuer aussi les contacts importés",
+      "importsHint": "Désactivé par défaut pour qu’un gros import ne change pas qui possède quoi.",
+      "turnedOn": "L’attribution automatique est activée.",
+      "turnedOff": "L’attribution automatique est désactivée.",
+      "newContactRule": "Règle pour les nouveaux contacts",
+      "newDealRule": "Règle pour les nouvelles affaires",
+      "editTitle": "Modifier la règle",
+      "name": "Nom de la règle",
+      "strategyLabel": "Qui la prend",
+      "strategy": {
+        "fixed": "Une personne",
+        "round_robin": "Round robin",
+        "least_busy": "Le moins occupé"
+      },
+      "people": "Personnes et équipes",
+      "peopleHint": "Une règle fixe désigne une personne. Round robin et le moins occupé choisissent parmi les personnes et équipes cochées.",
+      "onLeave": "en congé",
+      "teamOption": "Équipe : {name}",
+      "skipOffline": "Ignorer les personnes hors ligne",
+      "skipOfflineHint": "Les personnes en congé sont toujours ignorées.",
+      "conditions": "Conditions",
+      "conditionsHint": "Toutes les conditions renseignées doivent correspondre. Laissez vide pour tout accepter.",
+      "f": {
+        "sources": "La source est l’une des suivantes",
+        "listHint": "Séparez par des virgules.",
+        "countryCodes": "Le pays est l’un des suivants",
+        "phonePrefixes": "Le téléphone commence par",
+        "phoneHint": "Chiffres de l’indicatif du pays, par exemple 91.",
+        "lifecycleStages": "L’étape du cycle de vie est l’une des suivantes",
+        "origins": "Arrivé par",
+        "properties": "Propriétés personnalisées égales à",
+        "propertiesHint": "Une par ligne, sous la forme clé=valeur.",
+        "pipelines": "Pipeline",
+        "valueMin": "Valeur de l’affaire au moins",
+        "valueMax": "Valeur de l’affaire au plus"
+      },
+      "origin": {
+        "manual": "Ajouté par une personne",
+        "import": "Import",
+        "inbound": "Premier message",
+        "form": "Formulaire",
+        "lead": "Source de leads",
+        "api": "API"
+      },
+      "cond": {
+        "sources": "source",
+        "countryCodes": "pays",
+        "phonePrefixes": "indicatif",
+        "lifecycleStages": "étape",
+        "tagIds": "étiquette",
+        "origins": "arrivé par",
+        "properties": "propriétés",
+        "pipelineIds": "pipeline",
+        "value": "valeur"
+      },
+      "catchAll": "correspond à tout",
+      "problems": {
+        "name": "Donnez un nom à la règle.",
+        "people": "Choisissez au moins une personne ou une équipe.",
+        "fixedOne": "Une règle fixe désigne exactement une personne.",
+        "prefix": "Utilisez uniquement des chiffres, par exemple 91.",
+        "value": "Utilisez des nombres ; la valeur maximale ne peut pas être inférieure à la valeur minimale."
+      },
+      "save": "Enregistrer la règle",
+      "cancel": "Annuler",
+      "saved": "Règle enregistrée.",
+      "created": "Règle ajoutée.",
+      "deleted": "Règle supprimée.",
+      "conflict": "Quelqu’un d’autre a modifié cette règle. Rechargez la page et réessayez.",
+      "failed": "Une erreur s’est produite. Réessayez.",
+      "contactRules": "Règles des contacts",
+      "dealRules": "Règles des affaires",
+      "emptyTitle": "Aucune règle pour le moment",
+      "emptyContacts": "Les nouveaux contacts gardent le propriétaire avec lequel ils sont créés.",
+      "emptyDeals": "Les nouvelles affaires gardent le propriétaire avec lequel elles sont créées.",
+      "off": "Désactivée",
+      "fired": "{count, plural, one {Utilisée # fois} other {Utilisée # fois}}",
+      "activeFor": "La règle {name} est active",
+      "moveUp": "Monter {name}",
+      "moveDown": "Descendre {name}",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleteTitle": "Supprimer cette règle ?",
+      "deleteMessage": "La règle {name} n’attribuera plus rien. Les contacts déjà attribués gardent leur propriétaire.",
+      "unknownPerson": "Ancien membre",
+      "unknownTeam": "Équipe supprimée",
+      "testTitle": "Tester les règles",
+      "testHint": "Décrivez un contact ou une affaire pour voir quelle règle s’appliquerait et qui en hériterait. Rien n’est modifié.",
+      "testSubject": "Tester un(e)",
+      "subjectContact": "Contact",
+      "subjectDeal": "Affaire",
+      "testPhone": "Numéro de téléphone",
+      "testValue": "Valeur de l’affaire",
+      "testRun": "Tester",
+      "testWould": "La règle {rule} l’attribuerait à {name}.",
+      "testOutcome": {
+        "would_assign": "Il serait attribué.",
+        "disabled": "L’attribution automatique est désactivée.",
+        "has_owner": "Il a déjà un propriétaire, donc rien ne changerait.",
+        "no_rule": "Aucune règle ne correspond.",
+        "nobody_available": "Une règle correspond, mais personne n’est disponible (en congé ou hors ligne).",
+        "plan": "Votre offre n’inclut pas l’attribution automatique."
+      },
+      "testSkipped": "Ignoré faute de personne disponible : {names}",
+      "testOff": "Le commutateur ci-dessus est désactivé : voici seulement ce qui se passerait une fois activé."
     }
   }
 }

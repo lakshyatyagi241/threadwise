@@ -552,12 +552,13 @@
             "storefront_builder": "Mağaza vitrini oluşturucu",
             "invoicing": "Faturalama",
             "forms_and_links": "Formlar ve bağlantılar",
-            "extra_channels": "Telegram, Facebook ve Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat",
             "form_builder": "Formlar",
             "waba_groups": "WhatsApp grupları",
             "sms": "SMS",
             "help_agent": "Yardım asistanı",
-            "email_channel": "E-posta (Gmail) kanalı"
+            "email_channel": "E-posta (Gmail) kanalı",
+            "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

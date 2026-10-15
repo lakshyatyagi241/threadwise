@@ -60,7 +60,9 @@
       "rejected": "Odrzucone: {reason}",
       "view": "Wyświetl",
       "edit": "Edytuj",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "curl": "cURL: wyślij ten szablon przez API",
+      "curlNamed": "cURL do wysłania {name}"
     },
     "library": {
       "title": "Biblioteka szablonów",
@@ -354,6 +356,15 @@
         "title": "Dane wysyłane do Meta",
         "hint": "Co dokładnie jest wysyłane do Meta do weryfikacji, w postaci zbudowanej.",
         "empty": "Nic jeszcze nie zbudowano."
+      },
+      "curl": {
+        "title": "Wyślij przez API (cURL)",
+        "intro": "Wyślij ten zatwierdzony szablon na jeden numer. Zamień przykładowe wartości na własne.",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano",
+        "copyFailed": "Nie udało się skopiować. Zaznacz tekst i skopiuj go ręcznie.",
+        "keyHint": "Zamień YOUR_API_KEY na swój klucz API.",
+        "keyLink": "Pobierz klucz API"
       }
     }
   }

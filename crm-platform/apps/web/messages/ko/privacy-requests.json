@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "닫기",
+      "retry": "다시 시도",
+      "loading": "로드 중...",
+      "cancel": "취소",
+      "back": "뒤로",
+      "next": "다음",
+      "close": "닫기",
+      "save": "저장"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "notFound": "이 요청은 더 이상 존재하지 않습니다.",
+      "subjectNotFound": "해당 사람은 이 워크스페이스에 더 이상 없습니다.",
+      "stateInvalid": "이 요청은 해당 작업을 수행할 수 있는 상태가 아닙니다. 새로고침하고 상태를 확인하세요.",
+      "notVerified": "먼저 본인 확인을 진행하세요.",
+      "legalHold": "이 요청은 법적 보존 상태입니다. 삭제하기 전에 보존을 해제하세요.",
+      "confirmationRequired": "먼저 미리보기를 실행하고 확인 문구를 정확히 입력하세요.",
+      "exportInProgress": "이 요청의 내보내기가 이미 준비 중입니다.",
+      "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 내보내기를 준비하세요.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "validation": "일부 값이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요."
+    },
+    "type": {
+      "access": "열람",
+      "export": "내보내기",
+      "erasure": "삭제(Erasure)",
+      "rectification": "정정",
+      "restriction": "처리 제한",
+      "objection": "이의 제기",
+      "withdrawal": "동의 철회",
+      "portability": "이동성"
+    },
+    "typeHint": {
+      "access": "본인이 우리가 보유한 자신의 데이터를 문의합니다. 파일로 종료됩니다.",
+      "export": "본인 데이터의 사본입니다. 파일로 종료됩니다.",
+      "erasure": "본인의 데이터를 삭제합니다. 먼저 미리보기를 확인합니다.",
+      "rectification": "잘못된 데이터를 바로잡습니다. 직접 수정한 후 요청을 종료합니다.",
+      "restriction": "데이터 사용을 일시 중단합니다. 직접 처리한 후 요청을 종료합니다.",
+      "objection": "본인이 데이터 사용에 이의를 제기합니다. 직접 처리한 후 요청을 종료합니다.",
+      "withdrawal": "본인이 동의를 철회합니다. 직접 처리한 후 요청을 종료합니다.",
+      "portability": "다른 곳으로 옮길 수 있는 기계 판독 가능한 사본입니다. 파일로 종료됩니다."
+    },
+    "status": {
+      "received": "접수됨",
+      "verifying": "본인 확인 중",
+      "in_progress": "진행 중",
+      "completed": "완료됨",
+      "rejected": "거부됨",
+      "expired": "만료됨"
+    },
+    "channel": {
+      "email": "이메일",
+      "whatsapp": "WhatsApp",
+      "phone": "전화",
+      "in_person": "대면",
+      "portal": "포털",
+      "staff": "직원이 입력함",
+      "other": "기타"
+    },
+    "method": {
+      "channel_code": "본인의 채널로 코드 전송됨",
+      "email_link": "이메일로 링크 전송됨",
+      "known_contact": "보유 중인 번호 또는 이메일로 연락함",
+      "existing_session": "본인 계정에 로그인함",
+      "id_document_checked": "신분증 확인됨",
+      "other": "기타"
+    },
+    "disposition": {
+      "deleted": "삭제됨",
+      "anonymised": "익명 처리됨",
+      "cascaded": "연쇄 삭제됨",
+      "retained": "보관됨",
+      "unlinked": "연결 해제됨"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {#일 남음} other {#일 남음}}",
+      "dueToday": "오늘 마감",
+      "overdue": "{count, plural, one {#일 지연} other {#일 지연}}",
+      "closed": "종료됨",
+      "dueOn": "마감 {date}"
+    },
+    "list": {
+      "title": "데이터 요청",
+      "subtitle": "보유 중인 개인 데이터에 대해 사람들이 보내는 요청입니다: 열람, 내보내기, 삭제 등. 각 요청에는 기한과 처리 기록이 있습니다.",
+      "newRequest": "새 요청",
+      "settings": "설정",
+      "empty": "아직 데이터 요청이 없습니다.",
+      "emptyFiltered": "이 필터와 일치하는 요청이 없습니다.",
+      "loadMore": "더 보기",
+      "loadingMore": "로드 중...",
+      "columns": {
+        "reference": "참조 번호",
+        "type": "유형",
+        "subject": "대상자",
+        "status": "상태",
+        "due": "기한"
+      },
+      "filters": {
+        "label": "필터",
+        "status": "상태",
+        "type": "유형",
+        "any": "전체",
+        "overdue": "기한 초과만"
+      },
+      "open": "요청 {reference} 열기"
+    },
+    "settings": {
+      "title": "기한",
+      "slaDays": "요청 응답 기한(일)",
+      "slaHint": "요청이 접수된 후 며칠 이내에 처리해야 하는지 설정합니다. 기본값은 30일입니다.",
+      "saved": "설정이 저장되었습니다.",
+      "invalid": "1에서 90 사이의 정수로 일수를 입력하세요."
+    },
+    "wizard": {
+      "title": "새 데이터 요청",
+      "step": "{total}단계 중 {current}단계",
+      "person": {
+        "title": "대상자 찾기",
+        "search": "이름, 전화번호 또는 이메일로 검색",
+        "searchHint": "2자 이상 입력하세요.",
+        "searching": "검색 중...",
+        "none": "검색 결과가 없습니다. 아래에 전화번호나 이메일을 사용할 수 있습니다.",
+        "pick": "{name} 선택",
+        "unnamed": "이름 없음",
+        "kindContact": "연락처",
+        "kindLead": "리드",
+        "selected": "선택됨: {name}",
+        "other": "연락처에 없음",
+        "otherValue": "전화번호 또는 이메일",
+        "otherHint": "저장되지 않은 사람용입니다. 이 값으로 해당 데이터를 찾습니다.",
+        "useOther": "이 값 사용",
+        "clear": "다른 사람 선택"
+      },
+      "kind": {
+        "title": "무엇을 요청하나요?"
+      },
+      "details": {
+        "title": "상세 정보",
+        "channel": "요청이 어떻게 접수되었나요?",
+        "note": "내부 메모",
+        "noteHint": "선택 사항입니다. 팀원에게만 표시됩니다. 개인 정보를 적지 마세요.",
+        "history": "대화 기록",
+        "historyHint": "데이터가 삭제될 때 해당 사람의 대화를 어떻게 처리할지 설정합니다.",
+        "historyDelete": "대화, 메시지, 파일 삭제",
+        "historyAnonymise": "본인 식별 정보 없이 대화 유지"
+      },
+      "create": "요청 만들기",
+      "creating": "만드는 중...",
+      "created": "요청 {reference}이(가) 생성되었습니다."
+    },
+    "detail": {
+      "back": "데이터 요청",
+      "loading": "로드 중...",
+      "received": "접수일 {date}",
+      "channel": "채널: {channel}",
+      "history": {
+        "delete": "삭제 시: 대화가 삭제됩니다",
+        "anonymise": "삭제 시: 본인 식별 정보 없이 대화가 유지됩니다"
+      },
+      "note": "내부 메모",
+      "legalHoldBadge": "법적 보존",
+      "timeline": {
+        "title": "타임라인",
+        "empty": "아직 기록이 없습니다.",
+        "by": "{actor}",
+        "system": "시스템",
+        "event": {
+          "created": "요청 생성됨",
+          "verification_started": "본인 확인 시작됨",
+          "verified": "본인 확인 완료",
+          "verification_failed": "본인 확인 실패",
+          "hold_set": "법적 보존 설정됨",
+          "hold_released": "법적 보존 해제됨",
+          "rejected": "요청 거부됨",
+          "export_requested": "내보내기 요청됨",
+          "export_downloaded": "내보내기 다운로드됨",
+          "erase_previewed": "삭제 미리보기 실행됨",
+          "erased": "데이터 삭제됨",
+          "completed": "요청 완료됨",
+          "other": "업데이트"
+        }
+      },
+      "verify": {
+        "title": "본인 확인",
+        "intro": "내보내기나 삭제를 하기 전에 요청한 사람이 본인이 맞는지 확인하세요.",
+        "state": {
+          "none": "아직 확인되지 않았습니다.",
+          "verified": "{date}에 확인됨 ({method}).",
+          "evidence": "증빙 참조: {ref}"
+        },
+        "method": "어떻게 확인했나요?",
+        "evidence": "증빙 참조 ID",
+        "evidenceHint": "참조 ID만 입력하고 문서는 절대 업로드하지 마세요. 티켓 번호나 메시지 ID를 사용하세요.",
+        "note": "메모",
+        "outcome": "결과",
+        "pending": "확인 시작됨",
+        "verified": "확인됨",
+        "notVerified": "확인 안 됨",
+        "submit": "결과 기록",
+        "notVerifiedWarn": "본인 확인이 되지 않은 사람의 요청은 거부됩니다.",
+        "saved": "확인 결과가 기록되었습니다."
+      },
+      "hold": {
+        "title": "법적 보존",
+        "intro": "보존이 설정되어 있는 동안에는 삭제가 거부됩니다. 법률이나 분쟁으로 데이터를 보관해야 할 때 사용하세요.",
+        "toggle": "법적 보존",
+        "reason": "사유",
+        "reasonHint": "3자 이상 입력하세요.",
+        "apply": "보존 설정",
+        "release": "보존 해제",
+        "active": "보존 중: {reason}",
+        "saved": "보존 설정이 업데이트되었습니다."
+      },
+      "export": {
+        "title": "내보내기",
+        "intro": "이 사람에 대해 보유한 데이터가 담긴 ZIP 파일을 준비합니다.",
+        "expiry": "완성된 파일은 {days}일 동안 사용할 수 있으며 이후 삭제됩니다.",
+        "noEmail": "본인에게는 아무것도 전송되지 않습니다. 파일을 다운로드하여 안전한 경로로 전달하세요.",
+        "request": "내보내기 준비",
+        "requesting": "준비 중...",
+        "requested": "내보내기가 시작되었습니다.",
+        "none": "아직 내보내기가 없습니다.",
+        "download": "다운로드",
+        "size": "{size} KB",
+        "expires": "만료 {date}",
+        "status": {
+          "queued": "대기 중",
+          "running": "생성 중",
+          "ready": "준비됨",
+          "failed": "실패",
+          "expired": "만료됨"
+        }
+      },
+      "erase": {
+        "title": "삭제",
+        "intro": "모든 모듈에서 해당 사람의 데이터를 삭제합니다. 먼저 미리보기를 하세요. 확인하기 전에는 아무것도 바뀌지 않습니다.",
+        "preview": "미리보기",
+        "previewing": "집계 중...",
+        "previewTitle": "실행 시 변경 내용",
+        "previewNote": "미리보기 전용입니다. 변경된 내용은 없습니다.",
+        "files": "{count, plural, one {저장된 파일 #개가 삭제 대기 중} other {저장된 파일 #개가 삭제 대기 중}}",
+        "totals": "삭제 {deleted}건, 익명 처리 {anonymised}건, 보관 {retained}건",
+        "colTable": "테이블",
+        "colWhat": "처리 내용",
+        "colCount": "행 수",
+        "colReason": "사유",
+        "confirmLabel": "확인하려면 {phrase}을(를) 입력하세요",
+        "confirmHint": "이 작업은 되돌릴 수 없습니다.",
+        "execute": "지금 삭제",
+        "executing": "삭제 중...",
+        "done": "삭제가 완료되었습니다.",
+        "blocked": "본인 확인이 완료되고 법적 보존이 없을 때 삭제할 수 있습니다."
+      },
+      "proof": {
+        "title": "삭제 증명",
+        "executedAt": "실행일 {date}",
+        "executedBy": "실행자: {actor}",
+        "totals": "삭제 {deleted}건, 익명 처리 {anonymised}건, 보관 {retained}건, 파일 {files}개",
+        "registryDigest": "레지스트리 다이제스트",
+        "sha256": "SHA-256",
+        "notes": "이 삭제의 한계",
+        "download": "증명서 다운로드"
+      },
+      "close": {
+        "title": "요청 종료",
+        "complete": "완료로 표시",
+        "completeHint": "본인에게 답변했거나 작업을 직접 처리했을 때 사용하세요.",
+        "completed": "요청이 완료되었습니다.",
+        "rejectReason": "거부 사유",
+        "reject": "요청 거부",
+        "rejectConfirm": "거부",
+        "rejected": "요청이 거부되었습니다.",
+        "rejectedWith": "거부됨: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "개인정보",
+      "export": "이 사람의 데이터 내보내기",
+      "erase": "이 사람 삭제",
+      "created": "요청 {reference}이(가) 생성되었습니다.",
+      "failed": "요청을 만들 수 없습니다."
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
+import { NOT_REQUESTED_STATUS } from '@crm/contracts';
 import type {
   ListDevicesResponse,
   PersonalDevice,
@@ -43,6 +44,7 @@ const device = (over: Partial<PersonalDevice> = {}): PersonalDevice => ({
   assignee: null,
   createdBy: null,
   proxy: { enabled: false, status: null, egressIp: null },
+  historyImport: NOT_REQUESTED_STATUS,
   sent24h: 0,
   failed24h: 0,
   createdAt: '2026-10-06T09:00:00.000Z',
@@ -122,6 +124,7 @@ const devices = (data: PersonalDevice[]): ListDevicesResponse => ({
     noticeVersion: '2026-10-07.1',
     noticeAccepted: true,
     workerRunning: true,
+    historyFullAllowed: true,
   },
 });
 

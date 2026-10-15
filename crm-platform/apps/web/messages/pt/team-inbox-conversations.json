@@ -152,7 +152,9 @@
       "savedReplyGone": "Esta resposta salva não existe mais.",
       "savedReplyChannel": "Esta resposta salva não se destina a este tipo de canal.",
       "shortcutTaken": "Outra resposta salva já usa esse atalho.",
-      "importInvalid": "Não é possível ler este arquivo como respostas salvas. Ele precisa de uma primeira linha com as colunas title, shortcut e body, e no máximo 1.000 linhas."
+      "importInvalid": "Não é possível ler este arquivo como respostas salvas. Ele precisa de uma primeira linha com as colunas title, shortcut e body, e no máximo 1.000 linhas.",
+      "contactOptedOut": "Este contato cancelou a inscrição nas mensagens de marketing, por isso a mensagem não foi enviada.",
+      "consentRequired": "Este espaço de trabalho exige um consentimento registrado para mensagens de marketing e este contato não tem, por isso a mensagem não foi enviada."
     },
     "bubble": {
       "kind": {
@@ -448,7 +450,9 @@
         "unassign": "Remover atribuição",
         "open": "{count} em aberto",
         "pickTeam": "Escolha uma equipe para esta conversa",
-        "noTeam": "Sem equipe"
+        "noTeam": "Sem equipe",
+        "onLeave": "De licença",
+        "onLeaveUntil": "De licença até {date}"
       },
       "presence": {
         "online": "Online",
@@ -600,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Enviar um modelo",
       "close": "Fechar",
-      "cancel": "Cancelar",
-      "back": "Voltar para os modelos",
       "search": "Pesquisar por nome ou texto",
       "searchLabel": "Pesquisar modelos",
       "loading": "Carregando modelos",
@@ -610,9 +612,7 @@
       "empty": "Ainda não há modelos aprovados para este número do WhatsApp. Crie um em Modelos e aguarde a aprovação da Meta.",
       "noResults": "Nenhum modelo corresponde à sua pesquisa.",
       "windowHint": "Um modelo funciona mesmo quando a janela de resposta de 24 horas já foi encerrada.",
-      "variables": "Preencha as variáveis",
       "preview": "O que o cliente vai ler",
-      "send": "Enviar modelo",
       "sending": "Enviando",
       "sent": "Modelo enviado",
       "problem": {
@@ -627,7 +627,31 @@
         "authentication": "Modelos de senha de uso único são enviados pelo sistema, não pela caixa de entrada.",
         "named_variables": "Usa variáveis nomeadas, que a caixa de entrada ainda não suporta."
       },
-      "hasMore": "Mostrando os primeiros {count} modelos. Pesquise por nome ou texto para encontrar os demais."
+      "hasMore": "Mostrando os primeiros {count} modelos. Pesquise por nome ou texto para encontrar os demais.",
+      "previewEmpty": "Aponte para um modelo para ver como ele ficará no telefone do cliente.",
+      "previewCustomer": "Cliente",
+      "noVariables": "Este modelo não tem nada para preencher. Confira o telefone e envie.",
+      "sendTo": "Enviar para {name}",
+      "refresh": "Atualizar lista",
+      "device": "Pré-visualização do telefone",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configurar variáveis do corpo",
+      "or": "ou",
+      "mapField": "Mapear um campo para {key}",
+      "mapNone": "Este contato não tem detalhes para mapear.",
+      "typeMessage": "Digite uma mensagem",
+      "fields": {
+        "name": "Nome",
+        "phone": "Telefone",
+        "email": "E-mail"
+      },
+      "create": "Criar novo modelo",
+      "actions": "Ações do modelo",
+      "edit": "Editar modelo",
+      "duplicate": "Duplicar modelo"
     },
     "log": {
       "title": "Registro de entrega",
@@ -712,7 +736,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-mail"
+        "email": "E-mail",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Contato",
@@ -933,7 +960,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Adicionar tag",
-      "tagRemove": "Remover tag"
+      "tagRemove": "Remover tag",
+      "onLeave": "de licença",
+      "onLeaveUntil": "de licença até {date}"
     },
     "tags": {
       "tag": "Tag",

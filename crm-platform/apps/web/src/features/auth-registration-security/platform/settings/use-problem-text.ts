@@ -14,6 +14,10 @@ export function useProblemText(): (p: RegistrationProblem) => string {
         return tp('range', { min: p.min, max: p.max });
       case 'tooLong':
         return tp('tooLong', { max: p.max });
+      case 'tooMany':
+        return tp('tooMany', { max: p.max });
+      case 'domainFormat':
+        return tp('domainFormat', { entry: p.entry });
       default:
         return tp(p.code);
     }

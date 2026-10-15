@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Planınıza dahil değil. Tüm geçmişi içe aktarmak için planınızı yükseltin.",
+        "fullLockedLink": "Planları gör"
+      }
+    }
+  }
+}

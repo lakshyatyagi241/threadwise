@@ -187,7 +187,29 @@
       "ownerFormer": "Former member",
       "reassignView": "Reassign the contacts of {name}...",
       "smsNamed": "SMS {name}",
-      "noSms": "No phone number for SMS"
+      "noSms": "No phone number for SMS",
+      "pqlLabel": "Search contacts in plain English",
+      "pqlAsk": "Ask",
+      "pqlAsking": "Asking...",
+      "pqlIgnored": "Not understood: {parts}",
+      "pqlNothing": "Nothing in that search could be turned into a filter.",
+      "pqlFailed": "English search is unavailable right now. Try again.",
+      "filter": "Filter",
+      "filterAi": "Filter with AI",
+      "filterAiHint": "Describe who you are looking for",
+      "filterAdvanced": "Add advanced filter",
+      "quickFilters": "Quick filters",
+      "sortButton": "Sort",
+      "back": "Back",
+      "pqlPromptPlaceholder": "Describe the contacts you want...",
+      "pqlTry": "Try one of these",
+      "pqlExample2": "Not active for 30 days",
+      "pqlExample3": "Created in the last 7 days",
+      "clearFilter": "Clear filter",
+      "conditionsChip": "Conditions: {count}",
+      "pqlExampleTag": "Contacts tagged {tag} not active for 30 days",
+      "pqlExampleStage": "{stage} contacts created in the last 7 days",
+      "pqlExampleNoOwner": "Contacts nobody owns"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Add or pick a tag...",
       "addLabel": "Tag name",
       "add": "Add tag",
-      "failed": "The tag could not be changed. Try again."
+      "failed": "The tag could not be changed. Try again.",
+      "quickPlaceholder": "Search or create a tag",
+      "create": "Create tag “{name}”",
+      "noMatch": "No matching tags",
+      "quickHint": "Pick several tags, or type a name and press Enter to create a new one.",
+      "quickHintPick": "Pick several tags from the list."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Source",
-        "consent": "Marketing consent (yes / no)"
+        "consent": "Marketing consent (yes / no)",
+        "consentSms": "SMS marketing consent (yes / no)",
+        "consentEmail": "Email marketing consent (yes / no)"
       },
       "notInFile": "Not in file",
       "columnN": "Column {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Select All",
         "reorder": "Drag to re-order columns",
         "remove": "Remove {name}"
+      },
+      "presets": {
+        "myContacts": "My contacts",
+        "newThisWeek": "New this week",
+        "newLastWeek": "New last week",
+        "recentlyCreated": "Recently created",
+        "recentlyModified": "Recently modified",
+        "recentlyImported": "Recently imported",
+        "neverContacted": "Never contacted",
+        "needsFollowUp": "Needs follow-up",
+        "active": "Active",
+        "inactive": "Inactive",
+        "unsubscribed": "Unsubscribed"
       }
+    },
+    "erase": {
+      "scope": "Deleting a contact also erases their conversations, messages, media, files, call recordings and call logs. Leads, deals, tasks and invoices stay.",
+      "scopeMany": "Deleting contacts also erases their conversations, messages, media, files, call recordings and call logs. Leads, deals, tasks and invoices stay.",
+      "keepHistory": "Keep conversation history without the person identity",
+      "keepHistoryHint": "The conversations stay for your records but no longer point to the person."
     }
   }
 }

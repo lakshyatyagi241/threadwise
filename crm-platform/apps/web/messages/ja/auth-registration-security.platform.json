@@ -738,7 +738,9 @@
           "link": "/legal/termsのようなサイト内パス、または完全なhttpまたはhttpsのアドレスを使用してください。",
           "senderFormat": "一覧から送信元を選択してください。",
           "countryFormat": "2文字の国コードを使用してください。",
-          "senderRequired": "テンプレートを作成する前に、送信元チャネルを選択してください。"
+          "senderRequired": "テンプレートを作成する前に、送信元チャネルを選択してください。",
+          "domainFormat": "{entry} は有効なドメインではありません。example.com のような名前を使ってください。",
+          "tooMany": "ドメインは {max} 件までです。"
         },
         "policy": {
           "kicker": "登録",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "最大試行回数"
+          },
+          "businessEmailOnly": {
+            "label": "業務用メールアドレスのみ",
+            "hintOn": "Gmail、Outlook、Yahoo などの無料プロバイダーは登録時に拒否されます。",
+            "hintOff": "無料の個人用アドレスでも誰でも登録できます。"
+          },
+          "blockDisposableEmail": {
+            "label": "一時メールをブロック",
+            "hintOn": "使い捨て・一時的なドメインと、メールサーバーのないドメインは拒否されます。",
+            "hintOff": "一時的なアドレスも受け付けます。"
+          },
+          "requirePhoneVerification": {
+            "label": "認証済みの携帯番号を必須にする",
+            "hintOn": "すべての登録でワンタイムコードの確認が必要です。コードを送信できない場合は、確認を省略せずに登録を停止します。",
+            "hintOff": "コードの手順は、下の登録コードがオンのときだけ実行されます。"
+          },
+          "blockedEmailDomains": {
+            "label": "常にブロックするドメイン",
+            "hint": "1 行に 1 ドメイン。サブドメインもブロックされます。「業務用メールアドレスのみ」がオフでも拒否されます。",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "そのフッターは受け付けられませんでした。",
             "unexpected": "フッターを保存できませんでした。しばらくしてからもう一度お試しください。"
           }
+        },
+        "guard": {
+          "kicker": "登録の保護",
+          "title": "業務用メールと携帯の確認",
+          "description": "使い捨てや個人用のアドレスを防ぎ、新しいアカウントすべてに認証済みの携帯番号を持たせます。メールとソーシャルの登録に適用されます。",
+          "phoneOffWarning": "携帯の確認をオフにすると、認証済みの番号なしでアカウントを作成でき、大量の偽登録が容易になります。"
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "オンラインストアフロントビルダー。",
             "invoicing": "請求書、貸方票、支払い、受注、税率。",
             "forms_and_links": "リード獲得フォームと共有可能なリンク。",
-            "extra_channels": "Telegram、Facebook、Instagramのチャネル。",
+            "extra_channels": "Telegram、Facebook、Instagram、LINE、Viber、WeChatのチャネル。",
             "form_builder": "CRMに連絡先を作成する、ホスト型および埋め込み型のウェブフォーム。このスイッチは有料のフォームアプリが管理します。",
             "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。",
             "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。",
             "help_agent": "アプリ内のヘルプアシスタント。やりたいことを普通の言葉で伝えると、本人のセッションで案内または代行し、リスクのある操作の前には必ず確認します。AIトークンを消費します。",
-            "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。"
+            "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。",
+            "personal_history_full": "個人用WhatsApp番号を初めて連携する際に、チャット履歴をすべてインポートできます。最近のチャットのインポートは、個人用番号を含むすべてのプランで利用できます。"
           },
           "units": {
             "days": "日",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "月間フォーム送信数",
             "ai_form_generations_monthly": "月間AIフォームビルダー生成回数",
             "sms_monthly": "月間SMS数",
-            "email_mailboxes": "メールボックス数"
+            "email_mailboxes": "メールボックス数",
+            "email_monthly": "月間メール数"
           },
           "featureGroups": {
             "messaging": "メッセージ",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "ストアフロントとウェブサイトビルダー",
             "invoicing": "請求書発行（請求書、貸方票、定期請求書）",
             "forms_and_links": "フォーム、クリックしてチャットのリンク、グループ",
-            "extra_channels": "Telegram、Facebook、Instagramチャネル",
+            "extra_channels": "Telegram、Facebook、Instagram、LINE、Viber、WeChatチャネル",
             "form_builder": "フォーム（ウェブフォームビルダー）",
             "waba_groups": "WhatsAppグループ（Cloud API）",
             "sms": "SMSチャネル",
             "help_agent": "ヘルプアシスタント（AI、トークンを消費）",
-            "email_channel": "メール(Gmail)チャネル"
+            "email_channel": "メール(Gmail)チャネル",
+            "personal_history_full": "チャット全履歴のインポート(個人用WhatsApp)"
           },
           "problems": {
             "required": "この項目は必須です。",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "暦月内に受け付けたフォーム送信数（スパムを除く）。上限を超えた送信も、破棄されず確認用に保存されます。0＝無制限。",
             "ai_form_generations_monthly": "暦月内のAIフォームビルダーの生成回数（修復の再試行を含む）。0＝無制限。",
             "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。",
-            "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。"
+            "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。",
+            "email_monthly": "暦月に送信したメールの数(返信とキャンペーンメールの合計)。0 = 無制限。"
           }
         }
       },

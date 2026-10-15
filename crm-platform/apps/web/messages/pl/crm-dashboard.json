@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "Panel CRM"
+    },
+    "title": "Twój CRM",
+    "subtitle": "Transakcje, faktury, płatności i zadania — cała firma w jednym widoku.",
+    "period": "{from} do {to} · strefa czasowa {zone}",
+    "openBoard": "Otwórz tablicę transakcji",
+    "loading": "Wczytywanie panelu",
+    "retry": "Spróbuj ponownie",
+    "stale": "Odświeżanie nie powiodło się. To ostatnie dane, które mamy.",
+    "empty": {
+      "title": "Na razie nie ma nic do pokazania",
+      "message": "Dodaj kontakty i transakcje, a ta strona się wypełni: lejek sprzedaży, kto wygrywa, skąd pochodzą leady, zadania i to, co jest Ci winne.",
+      "deals": "Przejdź do transakcji",
+      "contacts": "Przejdź do kontaktów"
+    },
+    "filters": {
+      "label": "Filtry panelu",
+      "period": "Okres",
+      "range": {
+        "month": "Ten miesiąc",
+        "7d": "7 dni",
+        "30d": "30 dni",
+        "90d": "90 dni",
+        "custom": "Własny"
+      },
+      "from": "Od",
+      "to": "Do",
+      "pipeline": "Lejek",
+      "allPipelines": "Wszystkie lejki",
+      "owner": "Właściciel",
+      "everyone": "Wszyscy",
+      "team": "Zespół",
+      "allTeams": "Wszystkie zespoły",
+      "reset": "Resetuj filtry"
+    },
+    "kpi": {
+      "title": "Kluczowe liczby",
+      "vsPrevious": "W porównaniu z poprzednim okresem o tej samej długości",
+      "open": "Otwarty lejek",
+      "openHint": "{count, plural, one {# transakcja} few {# transakcje} many {# transakcji} other {# transakcji}} · prognoza {forecast}",
+      "won": "Wygrane",
+      "wonHint": "{count, plural, one {# transakcja zamknięta} few {# transakcje zamknięte} many {# transakcji zamkniętych} other {# transakcji zamkniętych}}",
+      "collected": "Pobrano",
+      "collectedHint": "Otrzymane płatności",
+      "outstanding": "Należności",
+      "outstandingHint": "{count, plural, one {# otwarta faktura} few {# otwarte faktury} many {# otwartych faktur} other {# otwartych faktur}}",
+      "winRate": "Wskaźnik wygranych",
+      "winRateHint": "{won} wygranych, {lost} przegranych",
+      "avgSize": "Średnia wartość transakcji",
+      "avgSizeHint": "Z wygranych transakcji",
+      "avgCycle": "Średni cykl sprzedaży",
+      "avgCycleHint": "Od utworzenia do wygranej",
+      "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+      "lost": "Przegrane transakcje",
+      "lateClose": "Po planowanym zamknięciu",
+      "lateCloseHint": "Otwarte transakcje, których termin minął",
+      "contacts": "Kontakty",
+      "contactsHint": "W Twoim widoku dzisiaj",
+      "newContacts": "Nowe kontakty",
+      "newLeads": "Nowe leady",
+      "newLeadsHint": "Kontakty, które przyszły ze źródłem",
+      "paid": "Opłacone faktury",
+      "paidHint": "Opłacone w tym okresie",
+      "tasksOpen": "Otwarte zadania",
+      "tasksOpenHint": "{count} do wykonania później dzisiaj",
+      "tasksOverdue": "Zaległe zadania"
+    },
+    "funnel": {
+      "title": "Lejek sprzedaży",
+      "subtitle": "{pipeline} · {count, plural, one {# transakcja utworzona} few {# transakcje utworzone} many {# transakcji utworzonych} other {# transakcji utworzonych}} w okresie",
+      "noPipeline": "Nie ma jeszcze żadnego lejka.",
+      "empty": "W tym okresie nie utworzono żadnych transakcji.",
+      "conversion": "{percent}% przeszło dalej",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} dotarło do tego etapu, teraz otwartych: {open}. Otwórz je.",
+      "openNow": "{count, plural, one {# otwarta teraz} few {# otwarte teraz} many {# otwartych teraz} other {# otwartych teraz}} · {value}"
+    },
+    "trend": {
+      "title": "Wygrane i przegrane transakcje",
+      "subtitle": {
+        "day": "Dziennie · wygrano {value}",
+        "week": "Tygodniowo · wygrano {value}",
+        "month": "Miesięcznie · wygrano {value}"
+      },
+      "chartLabel": "Wygrane i przegrane transakcje w okresie",
+      "won": "Wygrane",
+      "lost": "Przegrane"
+    },
+    "leaderboard": {
+      "title": "Ranking właścicieli",
+      "subtitle": "Według wygranej wartości w okresie",
+      "empty": "Brak transakcji do uszeregowania w tym widoku.",
+      "owner": "Właściciel",
+      "won": "Wygrane",
+      "value": "Wartość",
+      "lost": "Przegrane",
+      "open": "Otwarte",
+      "activities": "Aktywności",
+      "unowned": "Bez właściciela"
+    },
+    "sources": {
+      "title": "Źródła leadów",
+      "subtitle": "Kontakty, które pojawiły się w okresie, i jak daleko zaszły",
+      "empty": "W tym okresie nie pojawił się żaden kontakt ze źródłem.",
+      "source": "Źródło",
+      "leads": "Leady",
+      "toDeal": "Do transakcji",
+      "toWon": "Do wygranej",
+      "wonValue": "Wygrana wartość",
+      "none": "Brak źródła"
+    },
+    "tasks": {
+      "title": "Zadania",
+      "subtitle": "{open} otwartych · {overdue} zaległych · {today} do wykonania później dzisiaj",
+      "all": "Wszystkie zadania",
+      "empty": "Brak otwartych zadań.",
+      "byAssignee": "Otwarte zadania według osoby przypisanej",
+      "assignee": "Przypisany",
+      "open": "Otwarte",
+      "overdue": "Zaległe",
+      "dueToday": "Później dzisiaj",
+      "unassigned": "Nieprzypisane",
+      "upcoming": "Nadchodzące zadania",
+      "overdueTag": "Zaległe"
+    },
+    "aging": {
+      "title": "Wiekowanie należności",
+      "open": "Płatności",
+      "empty": "Nic nie jest należne.",
+      "bucket": {
+        "current": "Jeszcze nie przeterminowane",
+        "d1_30": "Po terminie 1–30 dni",
+        "d31_60": "Po terminie 31–60 dni",
+        "d61_90": "Po terminie 61–90 dni",
+        "d90_plus": "Po terminie ponad 90 dni"
+      }
+    },
+    "payments": {
+      "title": "Ostatnie płatności",
+      "empty": "Brak płatności."
+    },
+    "activity": {
+      "title": "Ostatnia aktywność",
+      "empty": "Brak aktywności.",
+      "stageMoved": "Przeniesiono z {from} do {to}",
+      "stagePlaced": "Umieszczono w {to}",
+      "by": "przez {name}",
+      "system": "przez system",
+      "type": {
+        "note": "Notatka",
+        "stage_change": "Zmiana etapu",
+        "call": "Rozmowa",
+        "message": "Wiadomość",
+        "email": "E-mail",
+        "meeting": "Spotkanie",
+        "task": "Zadanie"
+      }
+    }
+  }
+}

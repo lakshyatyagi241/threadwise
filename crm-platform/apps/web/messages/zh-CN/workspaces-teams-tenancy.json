@@ -11,7 +11,8 @@
       "copied": "已复制",
       "retry": "重试",
       "loadMore": "加载更多",
-      "loadingMore": "加载中"
+      "loadingMore": "加载中",
+      "loading": "加载中"
     },
     "tiers": {
       "owner": "所有者",
@@ -95,7 +96,11 @@
       "linkReset": "此服务器未配置邮件，请直接将此链接发送给对方。该链接只能使用一次。",
       "linkInvite": "此服务器未配置邮件，请直接将此链接发送给对方。该链接只能使用一次，并在 {days, plural, other {# 天}} 后过期。",
       "linkLabel": "一次性链接",
-      "linkEmail": "邮箱"
+      "linkEmail": "邮箱",
+      "onLeaveUntil": "休假至 {date}",
+      "onLeaveOpen": "休假中",
+      "leaveFrom": "从 {date} 起休假",
+      "leaveAction": "休假与代理"
     },
     "invite": {
       "eyebrow": "工作区",
@@ -214,7 +219,13 @@
       "teamNameTaken": "已存在同名团队。",
       "teamMemberUnknown": "您选择的某人不在此工作区中。",
       "orgSuspended": "该工作区已暂停。",
-      "unexpected": "出现错误，请稍后重试。"
+      "unexpected": "出现错误，请稍后重试。",
+      "leaveOverlap": "此人已有休假与这些日期有重叠。",
+      "leaveInvalid": "这些日期无法使用。第一天不能是过去的日期，已开始的休假不能更改第一天。",
+      "delegateInvalid": "代理人必须是此工作区中另一位活跃成员。",
+      "delegateCycle": "这会形成循环：所选的人已经把此人设为其代理人。",
+      "reassignInvalid": "无法重新分配任何内容。请确认此人名下有联系人或未结商机，且目标对象可以接收。",
+      "reassignNotRestorable": "此次重新分配已无法撤销。"
     },
     "accept": {
       "title": "加入您的工作区",
@@ -234,6 +245,81 @@
       "submit": "接受邀请",
       "submitting": "正在加入",
       "invalidHeading": "邀请链接"
+    },
+    "leave": {
+      "eyebrow": "休假与代理",
+      "calendarNote": "日期为你的工作区日历中的日期（{timezone}）。",
+      "nowTitle": "正在休假",
+      "upcomingTitle": "即将开始",
+      "notAway": "目前没有休假。",
+      "range": "{from} 至 {to}",
+      "rangeOpen": "从 {from} 起，无结束日期",
+      "reasonShown": "原因（仅管理员可见）：{reason}",
+      "endNow": "立即结束休假",
+      "cancelLeave": "取消休假",
+      "endTitle": "现在结束这次休假？",
+      "endMessage": "此人今天回归。自动分配将重新开始选择此人。",
+      "cancelTitle": "取消这次休假？",
+      "cancelMessage": "休假尚未开始，将被移除。",
+      "ended": "休假已结束。",
+      "added": "休假已保存。",
+      "readOnly": "只有本人和管理员可以更改休假。",
+      "addTitle": "添加休假",
+      "firstDay": "第一天",
+      "lastDay": "最后一天",
+      "openEnded": "暂无结束日期（直到有人结束）",
+      "reason": "原因（可选）",
+      "reasonHint": "仅本人及其管理员可见。",
+      "addSubmit": "保存休假",
+      "problems": {
+        "startRequired": "请选择第一天。",
+        "startPast": "第一天不能是过去的日期。",
+        "endRequired": "请选择最后一天，或勾选“无结束日期”。",
+        "endBeforeStart": "最后一天不能早于第一天。"
+      },
+      "delegateTitle": "代理人",
+      "delegateHelp": "此人休假期间，新聊天和自动分配会在代理人可用时交给代理人，否则交给团队。",
+      "noDelegate": "无代理人",
+      "delegateSaved": "代理人已保存。",
+      "delegateRemoved": "代理人已移除。",
+      "delegateAway": "{name} 也在休假，因此目前无法代理。"
+    },
+    "reassign": {
+      "title": "重新分配联系人和商机",
+      "holds": "{name} 名下有 {contacts, plural, one {# 位联系人} other {# 位联系人}}和 {chats, plural, one {# 个进行中的聊天} other {# 个进行中的聊天}}。",
+      "target": "分配给",
+      "kindUser": "某个人",
+      "kindDelegate": "其代理人",
+      "kindTeam": "某个团队（轮流分配）",
+      "person": "成员",
+      "team": "团队",
+      "teamHint": "在在岗且未休假的成员之间轮流分配。",
+      "choose": "请选择",
+      "includeDeals": "包含未结商机",
+      "returnOn": "在 {date} 此人回归时收回",
+      "returnUnavailable": "在此人回归时收回（需要设置了最后一天的休假）",
+      "returnHelp": "只有此后无人更改过的联系人和商机会收回。你也可以在 {days} 天内撤销。",
+      "reason": "备注（可选）",
+      "submit": "检查并重新分配",
+      "confirmTitle": "现在重新分配？",
+      "confirmMessage": "{name} 名下有 {contacts, plural, one {# 位联系人} other {# 位联系人}}和 {deals, plural, one {# 个未结商机} other {# 个未结商机}}将被转移。",
+      "confirm": "重新分配",
+      "done": "已转移 {contacts, plural, one {# 位联系人} other {# 位联系人}}和 {deals, plural, one {# 个商机} other {# 个商机}}。",
+      "history": "以往的重新分配",
+      "historyEmpty": "尚未进行过重新分配。",
+      "status": {
+        "applied": "已转移",
+        "restored": "已收回",
+        "restore_blocked": "未收回"
+      },
+      "summary": "{contacts} 位联系人和 {deals} 个商机转给 {target}",
+      "returnsOn": "将于 {date} 收回",
+      "restoredSummary": "{restored} 个已收回，{skipped} 个保持原处",
+      "remaining": "还有 {count} 个待转移：请再运行一次",
+      "undo": "撤销",
+      "undoTitle": "撤销此次重新分配？",
+      "undoMessage": "此后无人更改过的联系人和商机会回到原负责人名下，其余的保持不变。",
+      "restored": "{count} 个已收回，{skipped} 个保持原处。"
     }
   }
 }

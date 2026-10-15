@@ -45,7 +45,8 @@
       "form_submissions_monthly": "فی مہینہ فارم جمع کرائیں",
       "ai_form_generations_monthly": "فی مہینہ AI فارم بلڈر جنریشنز",
       "sms_monthly": "ماہانہ SMS",
-      "email_mailboxes": "ای میل میل باکس"
+      "email_mailboxes": "ای میل میل باکس",
+      "email_monthly": "ماہانہ ای میل"
     },
     "features": {
       "automation": "آٹومیشن",
@@ -74,12 +75,13 @@
       "storefront_builder": "اسٹور فرنٹ بلڈر",
       "invoicing": "انوائسنگ",
       "forms_and_links": "فارمز اور لنکس",
-      "extra_channels": "Telegram، Facebook اور Instagram",
+      "extra_channels": "Telegram، Facebook، Instagram، LINE، Viber اور WeChat",
       "form_builder": "فارمز",
       "waba_groups": "WhatsApp گروپس",
       "sms": "SMS چینل",
       "help_agent": "مددگار اسسٹنٹ",
-      "email_channel": "ای میل (Gmail) چینل"
+      "email_channel": "ای میل (Gmail) چینل",
+      "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)"
     },
     "limitGroups": {
       "messaging": "میسجنگ",
@@ -131,7 +133,8 @@
       "form_submissions_monthly": "کیلنڈر مہینے میں قبول کی گئی فارم جمع کرانے کی درخواستیں، اسپیم کے علاوہ۔ حد سے زیادہ ہونے پر جمع کرانا جائزے کے لیے پھر بھی محفوظ ہوتا ہے، کبھی ضائع نہیں ہوتا۔ 0 = غیر محدود۔",
       "ai_form_generations_monthly": "کیلنڈر مہینے میں AI فارم بلڈر کی جنریشنز، جن میں مرمت کی دوبارہ کوشش بھی شامل ہے۔ 0 = غیر محدود۔",
       "sms_monthly": "کیلنڈر مہینے میں بھیجے گئے آؤٹ باؤنڈ SMS پیغامات۔ 0 = لامحدود۔",
-      "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔"
+      "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔",
+      "email_monthly": "کیلنڈر مہینے میں بھیجی گئی ای میلز، جوابات اور مہم کی ای میلز ملا کر۔ 0 = لامحدود۔"
     },
     "planAddons": {
       "title": "آپ کے پلان پر دستیاب ایڈ آنز",

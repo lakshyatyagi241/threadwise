@@ -1,0 +1,36 @@
+{
+  "module": "admin-console-shell",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-admin-console-shell-001",
+      "feature": "quick access",
+      "category": "input",
+      "scenario": "a value of 11 (one past QUICK_ACCESS_MAX = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/admin-console-shell/quick-access.ts"
+    },
+    {
+      "id": "EC-admin-console-shell-002",
+      "feature": "quick access label",
+      "category": "input",
+      "scenario": "a value of 41 (one past QUICK_ACCESS_LABEL_MAX = 40) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/admin-console-shell/quick-access.ts"
+    },
+    {
+      "id": "EC-admin-console-shell-003",
+      "feature": "quick access url",
+      "category": "input",
+      "scenario": "a value of 256 (one past QUICK_ACCESS_URL_MAX = 255) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/admin-console-shell/quick-access.ts"
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Aramalara hazır mı?",
+      "status": {
+        "never_checked": "Henüz kontrol edilmedi",
+        "blocked": "Hazır değil",
+        "ready_to_enable": "Açmaya hazır",
+        "attention": "Çalışıyor, göz atın",
+        "ready": "Hazır"
+      },
+      "statusHint": {
+        "never_checked": "Bu numara henüz kontrol edilmedi.",
+        "blocked": "“Bunu düzeltin” ile işaretli öğeler çözülene kadar arama çalışmaz.",
+        "ready_to_enable": "WhatsApp'ın gerek duyduğu her şey tamam. Ara düğmesinin görünmesi için aramayı etkinleştirin.",
+        "attention": "Arama çalışıyor, ancak aşağıdaki bir öğeye göz atmanız gerekiyor.",
+        "ready": "Arama açık ve tüm kontroller başarılı."
+      },
+      "checkedAt": "Kontrol: {date}",
+      "checking": "WhatsApp ile kontrol ediliyor...",
+      "checkAgain": "Tekrar kontrol et",
+      "checkFailed": "Bu numara kontrol edilemedi.",
+      "checkedDone": "Tekrar kontrol edildi.",
+      "blockedHint": "Önce “Bunu düzeltin” ile işaretli öğeleri düzeltin. WhatsApp büyük olasılıkla aramayı açmayı reddedecektir.",
+      "details": "Kontrol edilenler",
+      "fixLabel": "Yapılacaklar:",
+      "state": {
+        "ok": "Tamam",
+        "warn": "Göz atın",
+        "fail": "Bunu düzeltin"
+      },
+      "checks": {
+        "plan_feature": "Planınız WhatsApp aramasını içeriyor",
+        "connection": "Numara bağlı",
+        "not_coexistence": "Numara yalnızca Cloud API'de",
+        "number_registered": "Numara WhatsApp'a kayıtlı",
+        "messaging_limit": "Mesaj limiti ve kalite",
+        "token_scopes": "Erişim belirteci izinleri",
+        "webhook_subscribed": "Uygulama bu hesaba abone",
+        "calls_field": "Arama webhook'u iletildi",
+        "calling_enabled": "WhatsApp'ta arama açık",
+        "turn": "Arama aktarımı (TURN) yapılandırıldı",
+        "dialler_permissions": "Ekip arkadaşlarının arama izni var",
+        "recording_consent": "Kayıt ve onay kuralları"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "WhatsApp araması planınıza dahil."
+        },
+        "plan_missing": {
+          "detail": "Planınız WhatsApp aramasını içermiyor.",
+          "fix": "Planınızı yükseltin, ardından tekrar kontrol edin."
+        },
+        "connected": {
+          "detail": "Numara bağlı ve bir erişim belirteci var."
+        },
+        "not_connected": {
+          "detail": "Bu numara şu anda bağlı değil.",
+          "fix": "Kanallar bölümünden yeniden bağlayın, ardından tekrar kontrol edin."
+        },
+        "no_credentials": {
+          "detail": "Bu numara için kayıtlı erişim belirteci veya telefon numarası kimliği yok.",
+          "fix": "Bilgilerinin yeniden kaydedilmesi için numarayı yeniden bağlayın."
+        },
+        "cloud_api_only": {
+          "detail": "Numara yalnızca WhatsApp Cloud API üzerinde çalışıyor."
+        },
+        "coexistence": {
+          "detail": "Bu numara WhatsApp Business uygulamasında da kullanılıyor (birlikte kullanım) ve WhatsApp böyle bir numarada aramaya izin vermez.",
+          "fix": "Numarayı yalnızca Cloud API'ye kaydedin veya arama için başka bir numara kullanın."
+        },
+        "on_premise": {
+          "detail": "Bu numara, Meta'nın kapattığı eski On-Premises API üzerinde.",
+          "fix": "Numarayı Cloud API'ye kaydedin veya başka bir numara kullanın."
+        },
+        "number_ok": {
+          "detail": "WhatsApp bu numarayı etkin ve doğrulanmış olarak bildiriyor."
+        },
+        "number_not_verified": {
+          "detail": "Numaranın sahiplik kodu doğrulanmadı.",
+          "fix": "Numarayı WhatsApp bağlantı sayfasından doğrulayın, ardından tekrar kontrol edin."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp bu numarayı bağlı değil, {status} olarak bildiriyor.",
+          "fix": "Numarayı Meta Business Suite'te düzeltin (beklemede, işaretlenmiş veya kısıtlanmış olabilir), ardından tekrar kontrol edin."
+        },
+        "limit_ok": {
+          "detail": "Günlük mesaj limiti ve kalite puanı arama için yeterli."
+        },
+        "limit_test_number": {
+          "detail": "Bu bir test numarası, mesaj limiti gerekmiyor."
+        },
+        "limit_low": {
+          "detail": "Mesaj limiti {tier}. Aramanın açılabilmesi için WhatsApp günde en az {needed} müşteri limiti ister.",
+          "fix": "Limitin yükselmesi için iyi kalitede daha fazla mesaj gönderin veya işletmenizi Meta Business Suite'te doğrulayın. Ardından tekrar kontrol edin."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp, bu uygulamanın tanıdığı bir mesaj limiti bildirmedi.",
+          "fix": "Limitini görmek için numarayı Meta Business Suite'te açın. Arama için günde en az 2.000 müşteri gerekir."
+        },
+        "quality_low": {
+          "detail": "Numaranın kalite puanı düşük (kırmızı) ve WhatsApp numarayı kısıtlayabilir.",
+          "fix": "Engellenen ve şikayet edilen mesajları azaltın; aramalara güvenmeden önce puanın düzelmesini bekleyin."
+        },
+        "scopes_ok": {
+          "detail": "Erişim belirteci, aramanın gerektirdiği izinlere sahip."
+        },
+        "scope_missing": {
+          "detail": "Erişim belirtecinde eksik izin: {missing}.",
+          "fix": "Hem whatsapp_business_management hem de whatsapp_business_messaging izinli yeni bir sistem kullanıcısı belirteci oluşturun, ardından numarayı yeniden bağlayın."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp kayıtlı erişim belirtecini kabul etmiyor.",
+          "fix": "Numarayı yeniden bağlayın veya yeni bir kalıcı belirteç kaydedin."
+        },
+        "token_expiring": {
+          "detail": "Erişim belirtecinin süresi {days, plural, one {# gün} other {# gün}} içinde doluyor.",
+          "fix": "Süresi dolmadan numarayı yeniden bağlayın veya kalıcı bir sistem kullanıcısı belirteci kaydedin."
+        },
+        "scopes_unverifiable": {
+          "detail": "Belirtecin izinleri okunamadı. Numaraya bir sağlayıcı üzerinden erişiliyor olabilir veya bu platformda onu incelemek için uygulama bilgileri yok.",
+          "fix": "Arama reddedilirse sağlayıcınızdan numaranın aramayı kullanabildiğini doğrulayın."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp bu hesabın olaylarını platforma iletiyor."
+        },
+        "waba_not_subscribed": {
+          "detail": "Bu WhatsApp Business hesabına abone bir uygulama yok, bu yüzden aramalar size hiç ulaşmaz.",
+          "fix": "Numaranın durum sayfasında “Gelen mesajları düzelt” düğmesini kullanın, ardından tekrar kontrol edin."
+        },
+        "calls_field_ok": {
+          "detail": "Meta uygulaması arama webhook alanını iletiyor."
+        },
+        "calls_field_added": {
+          "detail": "Arama webhook alanı eksikti ve platformun Meta uygulamasına yeni eklendi."
+        },
+        "calls_field_missing": {
+          "detail": "Meta uygulaması arama webhook alanını iletmiyor, bu yüzden gelen aramalar ve yanıtlar hiç ulaşmaz.",
+          "fix": "Platform yöneticinizden Meta uygulamasının webhook ayarlarında (WhatsApp, Yapılandırma) arama alanını işaretlemesini isteyin, ardından tekrar kontrol edin."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Bu numara, platformun okuyamadığı bir Meta uygulamasında olduğu için arama webhook alanı kontrol edilemedi.",
+          "fix": "O uygulamanın webhook ayarlarını açıp arama alanının işaretli olduğundan emin olun."
+        },
+        "calling_on": {
+          "detail": "Arama açık ve arama simgesi müşterilere gösteriliyor."
+        },
+        "calling_off": {
+          "detail": "Bu numara için arama kapalı.",
+          "fix": "Diğer öğeler tamam olunca Aramayı etkinleştir'i seçin."
+        },
+        "icon_hidden": {
+          "detail": "Arama açık, ancak arama simgesi müşterilerden gizli; bu yüzden arama başlatamazlar.",
+          "fix": "Arama simgesi görünürlüğünü, Meta'daki numaranın arama ayarlarında varsayılana geri alın."
+        },
+        "turn_ok": {
+          "detail": "TURN aktarımı yapılandırılmış, bu yüzden aramalar sıkı güvenlik duvarlarının arkasında da çalışır."
+        },
+        "turn_missing": {
+          "detail": "TURN aktarımı yapılandırılmamış, bu yüzden sıkı güvenlik duvarlarının arkasındaki kişiler için arama sessiz bağlanabilir.",
+          "fix": "Platform yöneticinizden CALLING_ICE_SERVERS'a bir TURN sunucusu eklemesini isteyin."
+        },
+        "turn_incomplete": {
+          "detail": "Listedeki bir TURN sunucusunun kullanıcı adı veya kimlik bilgisi yok.",
+          "fix": "Kullanıcı adını ve kimlik bilgisini CALLING_ICE_SERVERS içindeki o girdiye ekleyin."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS ayarlı ancak geçerli bir liste değil, bu yüzden yalnızca herkese açık STUN sunucuları kullanılıyor.",
+          "fix": "CALLING_ICE_SERVERS içindeki JSON'u düzeltin."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# ekip arkadaşı} other {# ekip arkadaşı}} arama yapabilir ve yanıtlayabilir."
+        },
+        "dialler_none": {
+          "detail": "Bu çalışma alanında kimsenin arama yapma ve yanıtlama yetkisi yok.",
+          "fix": "Ayarlar, Roller bölümünden bir role aramayı kullanma yetkisi verin."
+        },
+        "recording_off": {
+          "detail": "Arama kaydı kapalı, bu yüzden onay gerekmiyor."
+        },
+        "recording_configured": {
+          "detail": "Arama kaydı açık; bir bildirim ve bir onay kuralı var."
+        },
+        "recording_notice_missing": {
+          "detail": "Arama kaydı açık ancak okunacak bir bildirim yok.",
+          "fix": "Aşağıdaki Kayıt bölümüne kayıt bildirimini yazın."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp bu kontrole yanıt vermedi.",
+          "fix": "Biraz sonra tekrar kontrol edin."
+        },
+        "not_checked": {
+          "detail": "Yukarıdaki bir öğe bekleniyor.",
+          "fix": "Önce yukarıdaki öğeyi düzeltin."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp henüz aramayı açmayacak. Numaranın günlük mesaj limiti en az 2.000 müşteri olmalı; uygulama da WhatsApp Business hesabına ve arama webhook alanına whatsapp_business_messaging izniyle abone olmalı. Test numarası için limit gerekmez.",
+        "coexistence": "WhatsApp araması, tamamen Cloud API üzerinde olan bir numara gerektirir. Bu numara hattını WhatsApp Business uygulamasıyla paylaşıyor (birlikte kullanım) ve WhatsApp böyle numarada aramaya izin vermez. Numarayı yalnızca Cloud API'ye kaydedin veya başka bir numara kullanın.",
+        "permission_scope": "Erişim belirtecinde aramanın gerektirdiği bir izin eksik (whatsapp_business_management ve whatsapp_business_messaging). İkisini de içeren yeni bir belirteç oluşturup numarayı yeniden bağlayın.",
+        "token_expired": "WhatsApp artık kayıtlı erişim belirtecini kabul etmiyor. Numarayı yeniden bağlayıp tekrar deneyin.",
+        "calling_not_enabled": "Bu numara için WhatsApp'ta arama açık değil. Açıp tekrar deneyin.",
+        "no_call_permission": "Bu müşteri henüz aramalara izin vermedi. Kabul etmesi için bir izin isteği gönderilir.",
+        "permission_request_limit": "WhatsApp, bu müşteriden arama izni isteme sıklığınızı sınırlıyor. Daha sonra tekrar deneyin.",
+        "receiver_uncallable": "Bu müşterinin WhatsApp'ı arama alamıyor (eski uygulama sürümü veya aramalar kapalı). WhatsApp'ı güncellemesini isteyin.",
+        "meta_unreachable": "WhatsApp zamanında yanıt vermedi. Biraz sonra tekrar deneyin."
+      },
+      "refusedBecause": "WhatsApp sorulduğunda reddetti: {reason}",
+      "autoEnable": {
+        "title": "Aramayı otomatik aç",
+        "hint": "Bir WhatsApp numarası bağlandığında veya yeniden bağlandığında ve tüm gereksinimleri karşıladığında, sormadan aramayı açar. Varsayılan olarak kapalıdır; bu olmadan arama hiçbir zaman otomatik açılmaz.",
+        "label": "Numara bağlandıktan sonra aramayı otomatik aç",
+        "saved": "Kaydedildi.",
+        "loadFailed": "Bu ayar yüklenemedi."
+      },
+      "testCall": {
+        "title": "Test araması yap",
+        "intro": "Aramanın baştan sona nasıl olduğunu duymak için kendi WhatsApp numaranızı arayın. WhatsApp bir işletmenin yalnızca izin vermiş kişiyi aramasına izin verir: vermediyseniz telefonunuza bir izin isteği gönderilir ve arama yapılmaz. WhatsApp'ta İzin ver'e dokunun, ardından Beni ara'ya tekrar basın.",
+        "phoneLabel": "WhatsApp numaranız",
+        "phoneHint": "Ülke koduyla ve artı olmadan yazın, örneğin 919812345678.",
+        "call": "Beni ara",
+        "invalid": "Numaranızı ülke koduyla girin (6 ila 15 hane).",
+        "show": "Test araması yap"
+      }
+    }
+  }
+}

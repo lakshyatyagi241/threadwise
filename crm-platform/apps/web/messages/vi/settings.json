@@ -310,6 +310,11 @@
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
       },
+      "web": {
+        "label": "Chat trên website",
+        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
+      },
       "message-logs": {
         "label": "Nhật ký tin nhắn",
         "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
@@ -319,11 +324,6 @@
         "label": "Gói đăng ký",
         "description": "Gói nào sẽ gia hạn, đã trả đến khi nào và hủy gói.",
         "keywords": "gói đăng ký, gia hạn, tự động gia hạn, hủy, tự động thanh toán, thanh toán thất bại, các khoản thu"
-      },
-      "web": {
-        "label": "Chat trên website",
-        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
-        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
       },
       "lead-scoring": {
         "label": "Chấm điểm khách hàng tiềm năng bằng AI",
@@ -359,6 +359,21 @@
         "label": "Hiệu suất nhóm",
         "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
         "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
+      },
+      "contact-assignment": {
+        "label": "Phân công liên hệ",
+        "description": "Tự động giao liên hệ và deal mới cho đúng người, bỏ qua những người đang nghỉ phép.",
+        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, deal mới, nghỉ phép, định tuyến lead"
+      },
+      "privacy-requests": {
+        "label": "Yêu cầu dữ liệu",
+        "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",
+        "keywords": "quyền riêng tư, gdpr, yêu cầu dữ liệu, dsar, truy cập dữ liệu cá nhân, xuất dữ liệu, xóa, quyền được lãng quên, xóa dữ liệu cá nhân, lưu giữ pháp lý"
+      },
+      "compliance-center": {
+        "label": "Trung tâm tuân thủ",
+        "description": "Các công cụ giúp bạn thực hiện nghĩa vụ về quyền riêng tư: các luật áp dụng với bạn, đầu mối liên hệ về quyền riêng tư, thông báo và liên kết, bên xử lý phụ, giờ yên tĩnh và danh sách kiểm tra những gì đã có.",
+        "keywords": "tuân thủ, quyền riêng tư, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, cán bộ giải quyết khiếu nại, bên xử lý phụ, dpa, điều khoản, chính sách quyền riêng tư, giờ yên tĩnh, không gọi, danh sách kiểm tra, trẻ em"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

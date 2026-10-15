@@ -442,6 +442,10 @@ export class ContactsRepository {
       displayId: string;
       createdBy: number | null;
       submittedByAgentId?: number | null;
+      /** A contact keyed by a channel's own id (no phone: Telegram, Facebook, Instagram, the website widget). */
+      channel?: string | null;
+      channelUid?: string | null;
+      message?: string | null;
     },
   ): Promise<{ id: number; uuid: string }> {
     const [row] = await tx
@@ -479,6 +483,9 @@ export class ContactsRepository {
         createdBy: values.createdBy,
         updatedBy: values.createdBy,
         submittedByAgentId: values.submittedByAgentId ?? null,
+        channel: values.channel ?? null,
+        channelUid: values.channelUid ?? null,
+        message: values.message ?? null,
       })
       .returning({ id: contacts.id, uuid: contacts.uuid });
 

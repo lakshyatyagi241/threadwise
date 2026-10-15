@@ -1,0 +1,128 @@
+{
+  "_comment": "Critical query patterns. Each needs an index serving its equality filters (any order) then its ORDER BY. Add the query when you add a hot path; the idx check (#40) and the plan check (#42) both read this file.",
+  "queries": [
+    {
+      "name": "contacts list, newest first",
+      "table": "contacts",
+      "equals": ["org_id"],
+      "orderBy": ["created_at", "id"],
+      "why": "contacts page"
+    },
+    {
+      "name": "contacts by owner",
+      "table": "contacts",
+      "equals": ["org_id", "owner_id"],
+      "orderBy": ["created_at"],
+      "why": "my contacts"
+    },
+    {
+      "name": "contact lookup by email",
+      "table": "contacts",
+      "equals": ["org_id", "normalized_email"],
+      "why": "dedupe, inbound match"
+    },
+    {
+      "name": "contact lookup by phone",
+      "table": "contacts",
+      "equals": ["org_id", "normalized_phone"],
+      "why": "inbound WhatsApp/SMS match"
+    },
+    {
+      "name": "deals board column",
+      "table": "deals",
+      "equals": ["org_id", "stage_id"],
+      "orderBy": ["sort_order", "id"],
+      "why": "pipeline board"
+    },
+    {
+      "name": "deals by pipeline and stage",
+      "table": "deals",
+      "equals": ["org_id", "pipeline_id", "stage_id"],
+      "why": "pipeline totals"
+    },
+    {
+      "name": "deals list, newest first",
+      "table": "deals",
+      "equals": ["org_id"],
+      "orderBy": ["created_at", "id"],
+      "why": "deals list"
+    },
+    {
+      "name": "tasks list, newest first",
+      "table": "tasks",
+      "equals": ["org_id"],
+      "orderBy": ["created_at", "id"],
+      "why": "tasks page"
+    },
+    {
+      "name": "tasks by contact",
+      "table": "tasks",
+      "equals": ["org_id", "contact_id"],
+      "why": "contact timeline"
+    },
+    {
+      "name": "companies list, newest first",
+      "table": "companies",
+      "equals": ["org_id"],
+      "orderBy": ["created_at", "id"],
+      "why": "companies page"
+    },
+    {
+      "name": "inbox by assignee and status",
+      "table": "conversations",
+      "equals": ["org_id", "assignee_user_id", "status"],
+      "why": "inbox: mine"
+    },
+    {
+      "name": "inbox by team and status",
+      "table": "conversations",
+      "equals": ["org_id", "assignee_team_id", "status"],
+      "why": "inbox: team"
+    },
+    {
+      "name": "conversations of a contact",
+      "table": "conversations",
+      "equals": ["org_id", "contact_id"],
+      "why": "contact page"
+    },
+    {
+      "name": "audit trail of a record",
+      "table": "audit_log",
+      "equals": ["org_id", "module", "record_id"],
+      "orderBy": ["at"],
+      "why": "record history"
+    },
+    {
+      "name": "audit trail of an actor",
+      "table": "audit_log",
+      "equals": ["org_id", "actor_id"],
+      "orderBy": ["at"],
+      "why": "who did what"
+    },
+    {
+      "name": "audit log, newest first",
+      "table": "audit_log",
+      "equals": ["org_id"],
+      "orderBy": ["at", "id"],
+      "why": "audit log page"
+    },
+    {
+      "name": "notifications of a user",
+      "table": "notifications",
+      "equals": ["org_id", "user_id", "status"],
+      "why": "bell icon"
+    },
+    {
+      "name": "live sessions of a user",
+      "table": "auth_sessions",
+      "equals": ["org_id", "user_id"],
+      "why": "session cap, refresh"
+    },
+    {
+      "name": "outbox pending sweep",
+      "table": "event_outbox",
+      "equals": ["available_at"],
+      "why": "worker poll (cross-tenant by design)"
+    }
+  ]
+}

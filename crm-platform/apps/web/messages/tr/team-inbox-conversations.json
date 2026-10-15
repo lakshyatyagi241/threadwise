@@ -152,7 +152,9 @@
       "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
       "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
       "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor.",
-      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır."
+      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır.",
+      "contactOptedOut": "Bu kişi pazarlama iletilerinden çıktığı için ileti gönderilmedi.",
+      "consentRequired": "Bu çalışma alanı pazarlama iletileri için kayıtlı onay gerektiriyor ve bu kişinin onayı yok, bu yüzden ileti gönderilmedi."
     },
     "bubble": {
       "kind": {
@@ -448,7 +450,9 @@
         "unassign": "Atamayı kaldır",
         "open": "{count} açık",
         "pickTeam": "Bu konuşma için bir ekip seçin",
-        "noTeam": "Ekip yok"
+        "noTeam": "Ekip yok",
+        "onLeave": "İzinli",
+        "onLeaveUntil": "{date} tarihine kadar izinli"
       },
       "presence": {
         "online": "Çevrimiçi",
@@ -600,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Şablon gönder",
       "close": "Kapat",
-      "cancel": "İptal",
-      "back": "Şablonlara dön",
       "search": "Ad veya metne göre ara",
       "searchLabel": "Şablonlarda ara",
       "loading": "Şablonlar yükleniyor",
@@ -610,9 +612,7 @@
       "empty": "Bu WhatsApp numarası için henüz onaylı şablon yok. Şablonlar bölümünde bir şablon oluşturun ve Meta onayını bekleyin.",
       "noResults": "Aramanızla eşleşen şablon yok.",
       "windowHint": "Şablon, 24 saatlik yanıt penceresi kapansa bile çalışır.",
-      "variables": "Değişkenleri doldurun",
       "preview": "Müşterinin okuyacakları",
-      "send": "Şablonu gönder",
       "sending": "Gönderiliyor",
       "sent": "Şablon gönderildi",
       "problem": {
@@ -627,7 +627,31 @@
         "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",
         "named_variables": "Gelen kutusunun henüz desteklemediği adlandırılmış değişkenler kullanır."
       },
-      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın."
+      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın.",
+      "previewEmpty": "Müşterinin telefonunda nasıl görüneceğini görmek için bir şablonun üzerine gelin.",
+      "previewCustomer": "Müşteri",
+      "noVariables": "Bu şablonda doldurulacak bir şey yok. Telefonu kontrol edin, sonra gönderin.",
+      "sendTo": "{name} kişisine gönder",
+      "refresh": "Listeyi yenile",
+      "device": "Telefon önizlemesi",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Gövde değişkenlerini yapılandır",
+      "or": "veya",
+      "mapField": "{key} için alan eşle",
+      "mapNone": "Bu kişide eşlenecek bilgi yok.",
+      "typeMessage": "Bir mesaj yazın",
+      "fields": {
+        "name": "Ad",
+        "phone": "Telefon",
+        "email": "E-posta"
+      },
+      "create": "Yeni şablon oluştur",
+      "actions": "Şablon işlemleri",
+      "edit": "Şablonu düzenle",
+      "duplicate": "Şablonu çoğalt"
     },
     "log": {
       "title": "Teslimat günlüğü",
@@ -712,7 +736,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-posta"
+        "email": "E-posta",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Kişi",
@@ -933,7 +960,9 @@
       },
       "tag": "Etiketle",
       "tagAdd": "Etiket ekle",
-      "tagRemove": "Etiketi kaldır"
+      "tagRemove": "Etiketi kaldır",
+      "onLeave": "izinli",
+      "onLeaveUntil": "{date} tarihine kadar izinli"
     },
     "tags": {
       "tag": "Etiket",

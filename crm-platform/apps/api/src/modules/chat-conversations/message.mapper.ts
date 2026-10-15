@@ -299,6 +299,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     contacts: contactsOf(row),
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
+    imported: row.meta.historySync === true ? true : undefined,
     systemEvent: systemEventOf(row),
     referral: referralOf(row),
     group: groupAuthorOf(row),

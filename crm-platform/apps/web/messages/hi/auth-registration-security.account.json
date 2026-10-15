@@ -552,12 +552,13 @@
             "storefront_builder": "स्टोरफ़्रंट बिल्डर",
             "invoicing": "इनवॉइसिंग",
             "forms_and_links": "फ़ॉर्म और लिंक",
-            "extra_channels": "Telegram, Facebook और Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber और WeChat",
             "form_builder": "फ़ॉर्म",
             "waba_groups": "WhatsApp ग्रुप",
             "sms": "SMS",
             "help_agent": "सहायता असिस्टेंट",
-            "email_channel": "ईमेल (Gmail) चैनल"
+            "email_channel": "ईमेल (Gmail) चैनल",
+            "personal_history_full": "पूरी हिस्ट्री इंपोर्ट (व्यक्तिगत WhatsApp)"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

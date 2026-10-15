@@ -152,7 +152,9 @@
       "savedReplyGone": "Balasan tersimpan ini sudah tidak ada.",
       "savedReplyChannel": "Balasan tersimpan ini tidak ditujukan untuk jenis kanal ini.",
       "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu.",
-      "importInvalid": "File ini tidak bisa dibaca sebagai balasan tersimpan. Baris pertama harus berisi kolom title, shortcut dan body, dengan maksimal 1.000 baris."
+      "importInvalid": "File ini tidak bisa dibaca sebagai balasan tersimpan. Baris pertama harus berisi kolom title, shortcut dan body, dengan maksimal 1.000 baris.",
+      "contactOptedOut": "Kontak ini telah berhenti berlangganan pesan pemasaran, jadi pesan tidak dikirim.",
+      "consentRequired": "Ruang kerja ini mewajibkan persetujuan tercatat untuk pesan pemasaran dan kontak ini belum memilikinya, jadi pesan tidak dikirim."
     },
     "bubble": {
       "kind": {
@@ -448,7 +450,9 @@
         "unassign": "Batalkan penugasan",
         "open": "{count} terbuka",
         "pickTeam": "Pilih tim untuk percakapan ini",
-        "noTeam": "Tanpa tim"
+        "noTeam": "Tanpa tim",
+        "onLeave": "Sedang cuti",
+        "onLeaveUntil": "Cuti hingga {date}"
       },
       "presence": {
         "online": "Daring",
@@ -600,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Kirim templat",
       "close": "Tutup",
-      "cancel": "Batal",
-      "back": "Kembali ke templat",
       "search": "Cari berdasarkan nama atau teks",
       "searchLabel": "Cari templat",
       "loading": "Memuat templat",
@@ -610,9 +612,7 @@
       "empty": "Belum ada templat yang disetujui untuk nomor WhatsApp ini. Buat satu di Templat dan tunggu Meta menyetujuinya.",
       "noResults": "Tidak ada templat yang cocok dengan pencarian Anda.",
       "windowHint": "Templat tetap dapat dikirim meskipun jendela balasan 24 jam sudah ditutup.",
-      "variables": "Isi variabel",
       "preview": "Yang akan dibaca pelanggan",
-      "send": "Kirim templat",
       "sending": "Mengirim",
       "sent": "Templat terkirim",
       "problem": {
@@ -627,7 +627,31 @@
         "authentication": "Templat kata sandi sekali pakai dikirim oleh sistem, bukan dari inbox.",
         "named_variables": "Menggunakan variabel bernama, yang belum didukung inbox."
       },
-      "hasMore": "Menampilkan {count} templat pertama. Cari berdasarkan nama atau teks untuk menemukan lainnya."
+      "hasMore": "Menampilkan {count} templat pertama. Cari berdasarkan nama atau teks untuk menemukan lainnya.",
+      "previewEmpty": "Arahkan ke sebuah templat untuk melihat tampilannya di ponsel pelanggan.",
+      "previewCustomer": "Pelanggan",
+      "noVariables": "Template ini tidak perlu diisi apa pun. Periksa ponselnya, lalu kirim.",
+      "sendTo": "Kirim ke {name}",
+      "refresh": "Segarkan daftar",
+      "device": "Pratinjau ponsel",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Konfigurasi variabel isi pesan",
+      "or": "atau",
+      "mapField": "Petakan kolom ke {key}",
+      "mapNone": "Kontak ini tidak memiliki detail untuk dipetakan.",
+      "typeMessage": "Ketik pesan",
+      "fields": {
+        "name": "Nama",
+        "phone": "Telepon",
+        "email": "Email"
+      },
+      "create": "Buat template baru",
+      "actions": "Aksi template",
+      "edit": "Edit template",
+      "duplicate": "Duplikat template"
     },
     "log": {
       "title": "Log pengiriman",
@@ -712,7 +736,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "Email"
+        "email": "Email",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Kontak",
@@ -933,7 +960,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Tambah tag",
-      "tagRemove": "Hapus tag"
+      "tagRemove": "Hapus tag",
+      "onLeave": "sedang cuti",
+      "onLeaveUntil": "cuti hingga {date}"
     },
     "tags": {
       "tag": "Tag",

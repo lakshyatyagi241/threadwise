@@ -19,9 +19,14 @@ import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
 import { ChannelEmailWorkerModule } from '../modules/channel-email';
 import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
+import { ChannelLineWorkerModule } from '../modules/channel-line';
+import { ChannelViberWorkerModule } from '../modules/channel-viber';
+import { ChannelWechatWorkerModule } from '../modules/channel-wechat';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
+  OwnerReassignWorkerModule,
+  ContactAssignmentWorkerModule,
   SalesDocsWorkerModule,
   SegmentsWorkerModule,
   TasksWorkerModule,
@@ -44,6 +49,7 @@ import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge
 import { GrowthPilotWorkerModule } from '../modules/growth-pilot/growth-pilot-worker.module';
 import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-worker.module';
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
+import { PrivacyWorkerModule } from '../modules/privacy/privacy-worker.module';
 import { AuditLogWorkerModule } from '../modules/audit-log/audit-log-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
@@ -81,6 +87,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     SegmentsWorkerModule,
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
+    OwnerReassignWorkerModule,
+    ContactAssignmentWorkerModule,
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
@@ -96,6 +104,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     LeadScoringWorkerModule,
     GrowthPilotWorkerModule,
     ContactConsentWorkerModule,
+    PrivacyWorkerModule,
     AuditLogWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
@@ -107,6 +116,9 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    ChannelLineWorkerModule,
+    ChannelViberWorkerModule,
+    ChannelWechatWorkerModule,
     ChannelSmsWorkerModule,
     ChannelEmailWorkerModule,
     ChannelFacebookWorkerModule,

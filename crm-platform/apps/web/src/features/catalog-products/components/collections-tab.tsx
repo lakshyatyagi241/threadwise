@@ -10,6 +10,8 @@ import { KEYS, sendCatalog, useOverview } from '../api/catalog';
 import {
   createCollection,
   deleteCollection,
+  pushCollectionToMeta,
+  removeCollectionFromMeta,
   updateCollection,
   useCollections,
 } from '../api/collections';
@@ -158,6 +160,7 @@ function CollectionCard({
   senders,
   canSend,
   canManage,
+  catalogConnected,
   onDelete,
 }: {
   collection: CollectionResponse;
@@ -165,6 +168,7 @@ function CollectionCard({
   senders: CatalogSender[];
   canSend: boolean;
   canManage: boolean;
+  catalogConnected: boolean;
   onDelete: (c: CollectionResponse) => void;
 }) {
   const t = useTranslations('catalogProducts.collections');
@@ -184,6 +188,22 @@ function CollectionCard({
     toast(t('updated'), 'success');
     setPanel('none');
     await qc.invalidateQueries({ queryKey: KEYS.collections });
+  };
+
+  const errorText = useErrorText();
+  const [metaBusy, setMetaBusy] = useState(false);
+  const metaAction = async (kind: 'push' | 'remove') => {
+    setMetaBusy(true);
+    try {
+      if (kind === 'push') await pushCollectionToMeta(collection.id);
+      else await removeCollectionFromMeta(collection.id);
+      toast(t(kind === 'push' ? 'meta.pushed' : 'meta.removed'), 'success');
+      await qc.invalidateQueries({ queryKey: KEYS.collections });
+    } catch (e) {
+      toast(errorText(e), 'danger');
+    } finally {
+      setMetaBusy(false);
+    }
   };
 
   const btn =
@@ -207,6 +227,9 @@ function CollectionCard({
           <p className="mt-0.5 text-[11.5px] text-muted-foreground">
             {t('productCount', { count: collection.productCount })}
             {collection.description ? ` · ${collection.description.slice(0, 60)}` : ''}
+            {catalogConnected
+              ? ` · ${collection.metaSetId ? t('meta.onMeta') : t('meta.notOnMeta')}`
+              : ''}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -221,6 +244,28 @@ function CollectionCard({
               <SendIcon className="size-3" />
               {t('send.button')}
             </Button>
+          )}
+          {canManage && catalogConnected && (
+            <>
+              <button
+                type="button"
+                disabled={metaBusy}
+                className={btn}
+                onClick={() => void metaAction('push')}
+              >
+                {collection.metaSetId ? t('meta.update') : t('meta.push')}
+              </button>
+              {collection.metaSetId && (
+                <button
+                  type="button"
+                  disabled={metaBusy}
+                  className={btn}
+                  onClick={() => void metaAction('remove')}
+                >
+                  {t('meta.remove')}
+                </button>
+              )}
+            </>
           )}
           {canManage && (
             <>
@@ -368,6 +413,7 @@ export function CollectionsTab() {
             senders={senders}
             canSend={canSend}
             canManage={canManage}
+            catalogConnected={overview.data?.catalog != null}
             onDelete={setPendingDelete}
           />
         ))

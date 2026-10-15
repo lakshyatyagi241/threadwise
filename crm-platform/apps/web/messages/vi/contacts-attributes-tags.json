@@ -187,7 +187,29 @@
       "ownerFormer": "Thành viên cũ",
       "reassignView": "Phân công lại các liên hệ của {name}...",
       "smsNamed": "SMS {name}",
-      "noSms": "Không có số điện thoại để gửi SMS"
+      "noSms": "Không có số điện thoại để gửi SMS",
+      "pqlLabel": "Tìm liên hệ bằng ngôn ngữ thường",
+      "pqlAsk": "Hỏi",
+      "pqlAsking": "Đang hỏi...",
+      "pqlIgnored": "Không hiểu: {parts}",
+      "pqlNothing": "Không thể chuyển phần nào của tìm kiếm này thành bộ lọc.",
+      "pqlFailed": "Tìm kiếm bằng ngôn ngữ thường hiện không khả dụng. Hãy thử lại.",
+      "filter": "Bộ lọc",
+      "filterAi": "Lọc bằng AI",
+      "filterAiHint": "Mô tả người bạn cần tìm",
+      "filterAdvanced": "Thêm bộ lọc nâng cao",
+      "quickFilters": "Bộ lọc nhanh",
+      "sortButton": "Sắp xếp",
+      "back": "Quay lại",
+      "pqlPromptPlaceholder": "Mô tả các liên hệ bạn muốn...",
+      "pqlTry": "Thử một gợi ý",
+      "pqlExample2": "Không hoạt động 30 ngày",
+      "pqlExample3": "Tạo trong 7 ngày qua",
+      "clearFilter": "Xóa bộ lọc",
+      "conditionsChip": "Điều kiện: {count}",
+      "pqlExampleTag": "Liên hệ gắn thẻ {tag} không hoạt động 30 ngày",
+      "pqlExampleStage": "Liên hệ {stage} tạo trong 7 ngày qua",
+      "pqlExampleNoOwner": "Liên hệ chưa có người phụ trách"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Thêm hoặc chọn thẻ...",
       "addLabel": "Tên thẻ",
       "add": "Thêm thẻ",
-      "failed": "Không thể thay đổi thẻ. Hãy thử lại."
+      "failed": "Không thể thay đổi thẻ. Hãy thử lại.",
+      "quickPlaceholder": "Tìm hoặc tạo thẻ",
+      "create": "Tạo thẻ “{name}”",
+      "noMatch": "Không có thẻ phù hợp",
+      "quickHint": "Chọn nhiều thẻ, hoặc nhập tên rồi nhấn Enter để tạo thẻ mới.",
+      "quickHintPick": "Chọn nhiều thẻ từ danh sách."
     },
     "groups": {
       "eyebrow": "Không gian làm việc · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
         "source": "Nguồn",
-        "consent": "Đồng ý tiếp thị (có / không)"
+        "consent": "Đồng ý tiếp thị (có / không)",
+        "consentSms": "Đồng ý tiếp thị qua SMS (có / không)",
+        "consentEmail": "Đồng ý tiếp thị qua email (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Chọn tất cả",
         "reorder": "Kéo để sắp xếp lại các cột",
         "remove": "Gỡ {name}"
+      },
+      "presets": {
+        "myContacts": "Liên hệ của tôi",
+        "newThisWeek": "Mới trong tuần này",
+        "newLastWeek": "Mới tuần trước",
+        "recentlyCreated": "Mới tạo gần đây",
+        "recentlyModified": "Mới sửa gần đây",
+        "recentlyImported": "Mới nhập gần đây",
+        "neverContacted": "Chưa từng liên hệ",
+        "needsFollowUp": "Cần theo dõi",
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động",
+        "unsubscribed": "Đã hủy đăng ký"
       }
+    },
+    "erase": {
+      "scope": "Xóa một liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
+      "scopeMany": "Xóa các liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
+      "keepHistory": "Giữ lịch sử hội thoại nhưng không kèm danh tính của người này",
+      "keepHistoryHint": "Các hội thoại vẫn được giữ làm hồ sơ nhưng không còn liên kết đến người này."
     }
   }
 }

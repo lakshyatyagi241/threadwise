@@ -7,6 +7,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { LeadIngestService } from './lead-ingest.service';
+import { leadConsentFromBody } from './lead-consent';
 import type { NormalisedLead } from './lead-ingest.port';
 import { deriveExternalId, flattenPayload } from './lead-mapping';
 import { LeadsPlan } from './lead-plan';
@@ -87,10 +88,13 @@ export class LeadHooksService {
     const body = this.bodyOf(req);
     const fields = flattenPayload(body);
     const { externalId } = deriveExternalId({ fields, raw: body }, body, source.externalIdPath);
+    // Proof of consent is read only from the explicit `consent` object (or `consent_*` keys) of the body; without it the lead grants nothing.
+    const consent = leadConsentFromBody(body);
     const lead: NormalisedLead = {
       externalId,
       receivedAt: new Date().toISOString(),
       fields,
+      ...(consent ? { consent } : {}),
       raw: body,
     };
     await this.ingest.process(hit.orgId, source.id, lead, {});

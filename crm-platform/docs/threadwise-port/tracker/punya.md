@@ -177,3 +177,66 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-MAIL-033 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
 | TW-MAIL-034 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
 | TW-MAIL-035 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+
+## channel-line (line)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-LINE-001 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-002 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-003 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-004 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-005 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-006 | backend-done |  | lakshya/channels/line: signed webhook, fake LINE only |
+| TW-LINE-007 | backend-done |  | thread, contact, file done; flow and automation hooks are stand-ins |
+| TW-LINE-008 | backend-done |  | adapter: reply token else push |
+| TW-LINE-009 | backend-done |  |  |
+| TW-LINE-010 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-011 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-012 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-013 | backend-done |  | queue job, batches of 40, consent gate |
+| TW-LINE-014 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-015 | blocked |  | needs flow-runtime-engine and node-bridge-runtime (TW-FLR / TW-NODE) |
+| TW-LINE-016 | blocked |  | rich menus not ported yet; outside the first LINE branch |
+| TW-LINE-017 | blocked |  | insights not ported yet; outside the first LINE branch |
+| TW-LINE-018 | backend-done |  | permission keys + extra_channels; channel cap not enforced (as Reference) |
+| TW-LINE-019 | wontfix |  | unused client methods in Reference 1.7.0, no caller |
+## channel-viber (vib)
+| TW-VIB-001 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-002 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-003 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-004 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-005 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-006 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-007 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-008 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-009 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-010 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-011 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-012 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-013 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-014 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-015 | in-progress |  | permission keys done; both plan flags are the one plan feature extra_channels |
+| TW-VIB-016 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-017 | blocked |  | needs flow-runtime-engine; Node callbacks not recreated |
+## channel-wechat (wech)
+| TW-WECH-001 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-002 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-003 | backend-done |  | cache, Redis lock, one refresh on 40001/42001/40014; e2e with a fake WeChat |
+| TW-WECH-004 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-005 | backend-done |  | GET handshake and signed POST; e2e; not run against the WeChat console |
+| TW-WECH-006 | backend-done |  | AES decrypt and encrypted URL check verified against a test encryptor written from the published algorithm, not against WeChat |
+| TW-WECH-007 | backend-done |  | thread, contact, message, media, dedup by MsgId; flow and keyword automation is the inbox listeners (see 019) |
+| TW-WECH-008 | backend-done |  | unsubscribe is acknowledged only, as in Reference |
+| TW-WECH-009 | backend-done |  | adapter with 48h window, media, errcode mapping; e2e through ChannelDispatcher |
+| TW-WECH-010 | backend-done |  | adapter sends a template envelope; Reference never called it; the inbox template picker lists WhatsApp templates only, so no inbox screen reaches it |
+| TW-WECH-011 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-012 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-013 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-014 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-015 | frontend-done |  | backend and web built; unit and e2e pass against a fake WeChat; not run against a real account; Playwright twin not run |
+| TW-WECH-016 | in-progress |  | gated by the extra_channels plan feature; access_wechat, wechat_broadcasts, wechat_channels_limit and the wechat_enabled platform switch are not separate here |
+| TW-WECH-017 | blocked |  | custom menu builder not built (outside the first port); needs a screen and three endpoints over /cgi-bin/menu |
+| TW-WECH-018 | blocked |  | follower insights not built (outside the first port); needs one endpoint over /datacube |
+| TW-WECH-019 | blocked |  | Node flow bridge and flow sessions need the flow runtime and node bridge; wechat_flow_sessions unused |
+| TW-WECH-020 | wontfix |  | dead code in Reference: nothing calls createQrCode or showTyping |

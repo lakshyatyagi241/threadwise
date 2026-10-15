@@ -19,6 +19,9 @@ import {
 } from '../contacts-attributes-tags/support';
 import { connectNumber, linkChannel, whatsappChannel } from './whatsapp-support';
 
+/** What every send in this file is, for the ConsentGate. */
+const SERVICE_CONSENT = { purpose: 'service_messaging' as const };
+
 /**
  * The channel registry, the dev simulator and the dispatcher through the whole app (plan-inbox-chat.md Phase 0), and the WhatsApp
  * channel as the inbox view of a number connected in the WABA domain (one WhatsApp stack: no credentials, no webhook of its own).
@@ -813,6 +816,7 @@ describe('the dispatcher, through the real app', () => {
       channel: runtime,
       envelope: text(ref),
       lastInboundAt: recently(),
+      consent: SERVICE_CONSENT,
     });
     expect(first.providerMessageId).toMatch(/^sim\./);
     expect(first.replayed).toBe(false);
@@ -820,6 +824,7 @@ describe('the dispatcher, through the real app', () => {
       channel: runtime,
       envelope: text(ref),
       lastInboundAt: recently(),
+      consent: SERVICE_CONSENT,
     });
     expect(again).toMatchObject({ providerMessageId: first.providerMessageId, replayed: true });
 
@@ -845,6 +850,7 @@ describe('the dispatcher, through the real app', () => {
         channel: runtime,
         envelope: text(`f-${Date.now()}`, '/fail'),
         lastInboundAt: recently(),
+        consent: SERVICE_CONSENT,
       }),
     ).rejects.toMatchObject({ code: 'SIM_REJECTED', retryable: false });
     const ref = `fl-${Date.now()}`;
@@ -854,6 +860,7 @@ describe('the dispatcher, through the real app', () => {
           channel: runtime,
           envelope: { ...text(ref, '/flaky'), attempt },
           lastInboundAt: recently(),
+          consent: SERVICE_CONSENT,
         }),
       ).rejects.toMatchObject({ code: 'SIM_FLAKY', retryable: true });
     }
@@ -862,6 +869,7 @@ describe('the dispatcher, through the real app', () => {
         channel: runtime,
         envelope: { ...text(ref, '/flaky'), attempt: 3 },
         lastInboundAt: recently(),
+        consent: SERVICE_CONSENT,
       }),
     ).resolves.toMatchObject({ replayed: false });
   });
@@ -876,6 +884,7 @@ describe('the dispatcher, through the real app', () => {
           channel: runtime,
           envelope: text(`h-${Date.now()}`),
           lastInboundAt: recently(),
+          consent: SERVICE_CONSENT,
         }),
       ).rejects.toMatchObject({ code: 'AUTH_SEND_HALTED' });
     } finally {
@@ -886,6 +895,7 @@ describe('the dispatcher, through the real app', () => {
         channel: runtime,
         envelope: text(`h2-${Date.now()}`),
         lastInboundAt: recently(),
+        consent: SERVICE_CONSENT,
       }),
     ).resolves.toBeTruthy();
   });
@@ -893,7 +903,12 @@ describe('the dispatcher, through the real app', () => {
   it('the window is enforced at enqueue time: closed after 24 hours, forced either way by the simulator toggle; a template is always allowed', async () => {
     const old = new Date(Date.now() - 30 * 3_600_000);
     await expect(
-      dispatcher().assertCanQueue({ channel: runtime, envelope: text('w1'), lastInboundAt: old }),
+      dispatcher().assertCanQueue({
+        channel: runtime,
+        envelope: text('w1'),
+        lastInboundAt: old,
+        consent: SERVICE_CONSENT,
+      }),
     ).rejects.toMatchObject({ code: 'SERVICE_WINDOW_CLOSED' });
     const tpl = {
       kind: 'template',
@@ -902,7 +917,12 @@ describe('the dispatcher, through the real app', () => {
       template: { name: 'order_update', language: 'en' },
     };
     await expect(
-      dispatcher().assertCanQueue({ channel: runtime, envelope: tpl, lastInboundAt: old }),
+      dispatcher().assertCanQueue({
+        channel: runtime,
+        envelope: tpl,
+        lastInboundAt: old,
+        consent: SERVICE_CONSENT,
+      }),
     ).resolves.toBeTruthy();
     const forcedOpen = {
       ...runtime,
@@ -916,6 +936,7 @@ describe('the dispatcher, through the real app', () => {
         channel: forcedOpen,
         envelope: text('w3'),
         lastInboundAt: null,
+        consent: SERVICE_CONSENT,
       }),
     ).resolves.toBeTruthy();
   });
@@ -938,19 +959,24 @@ describe('the dispatcher, through the real app', () => {
     };
     await expect(
       dispatcher().assertCanQueue(
-        { channel: metered, envelope: tpl, lastInboundAt: null },
+        { channel: metered, envelope: tpl, lastInboundAt: null, consent: SERVICE_CONSENT },
         { monthlyUsed: 4 },
       ),
     ).resolves.toBeTruthy();
     await expect(
       dispatcher().assertCanQueue(
-        { channel: metered, envelope: tpl, lastInboundAt: null },
+        { channel: metered, envelope: tpl, lastInboundAt: null, consent: SERVICE_CONSENT },
         { monthlyUsed: 5 },
       ),
     ).rejects.toMatchObject({ code: 'PLAN_LIMIT_REACHED' });
     await expect(
       dispatcher().assertCanQueue(
-        { channel: runtime, envelope: text('cap2'), lastInboundAt: recently() },
+        {
+          channel: runtime,
+          envelope: text('cap2'),
+          lastInboundAt: recently(),
+          consent: SERVICE_CONSENT,
+        },
         { monthlyUsed: 500 },
       ),
     ).resolves.toBeTruthy();
@@ -964,7 +990,12 @@ describe('the dispatcher, through the real app', () => {
       settings: { metered: true },
     };
     await expect(
-      dispatcher().send({ channel: cloud, envelope: text('x'), lastInboundAt: recently() }),
+      dispatcher().send({
+        channel: cloud,
+        envelope: text('x'),
+        lastInboundAt: recently(),
+        consent: SERVICE_CONSENT,
+      }),
     ).rejects.toMatchObject({ code: 'CHANNEL_DISCONNECTED' });
   });
 });

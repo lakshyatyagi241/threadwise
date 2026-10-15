@@ -177,6 +177,8 @@ describe('the push preference', () => {
     'teamchat_message',
     // A failed subscription payment needs action, so it is the one billing event that also reaches devices.
     'billing_payment_failed',
+    // BL-112: a chat nobody could take because the people it wanted are on leave; the push stays on because a customer is waiting.
+    'assignment_blocked_by_leave',
   ];
 
   it('is on by default only for chat events, assignments, mentions and failed payments, and off for everything noisy', () => {

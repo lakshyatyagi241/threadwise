@@ -187,7 +187,29 @@
       "ownerFormer": "Eski üye",
       "reassignView": "{name} kişisinin kişilerini yeniden ata...",
       "smsNamed": "SMS {name}",
-      "noSms": "SMS için telefon numarası yok"
+      "noSms": "SMS için telefon numarası yok",
+      "pqlLabel": "Kişileri düz dille ara",
+      "pqlAsk": "Sor",
+      "pqlAsking": "Soruluyor...",
+      "pqlIgnored": "Anlaşılmayan: {parts}",
+      "pqlNothing": "Bu aramadan bir filtre oluşturulamadı.",
+      "pqlFailed": "Düz dille arama şu anda kullanılamıyor. Tekrar deneyin.",
+      "filter": "Filtre",
+      "filterAi": "Yapay zekâ ile filtrele",
+      "filterAiHint": "Aradığınız kişiyi tarif edin",
+      "filterAdvanced": "Gelişmiş filtre ekle",
+      "quickFilters": "Hızlı filtreler",
+      "sortButton": "Sırala",
+      "back": "Geri",
+      "pqlPromptPlaceholder": "İstediğiniz kişileri tarif edin...",
+      "pqlTry": "Bunlardan birini deneyin",
+      "pqlExample2": "30 gündür etkin değil",
+      "pqlExample3": "Son 7 günde oluşturulan",
+      "clearFilter": "Filtreyi temizle",
+      "conditionsChip": "Koşullar: {count}",
+      "pqlExampleTag": "{tag} etiketli ve 30 gündür etkin olmayan kişiler",
+      "pqlExampleStage": "Son 7 günde oluşturulan {stage} kişileri",
+      "pqlExampleNoOwner": "Sahibi olmayan kişiler"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Etiket ekleyin veya seçin...",
       "addLabel": "Etiket adı",
       "add": "Etiket ekle",
-      "failed": "Etiket değiştirilemedi. Tekrar deneyin."
+      "failed": "Etiket değiştirilemedi. Tekrar deneyin.",
+      "quickPlaceholder": "Etiket ara veya oluştur",
+      "create": "“{name}” etiketini oluştur",
+      "noMatch": "Eşleşen etiket yok",
+      "quickHint": "Birden çok etiket seçin veya bir ad yazıp Enter'a basarak yeni etiket oluşturun.",
+      "quickHintPick": "Listeden birden çok etiket seçin."
     },
     "groups": {
       "eyebrow": "Çalışma alanı · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Not",
         "status": "Durum",
         "source": "Kaynak",
-        "consent": "Pazarlama izni (evet / hayır)"
+        "consent": "Pazarlama izni (evet / hayır)",
+        "consentSms": "SMS pazarlama onayı (evet / hayır)",
+        "consentEmail": "E-posta pazarlama onayı (evet / hayır)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Tümünü seç",
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
         "remove": "{name} öğesini kaldır"
+      },
+      "presets": {
+        "myContacts": "Kişilerim",
+        "newThisWeek": "Bu hafta yeni",
+        "newLastWeek": "Geçen hafta yeni",
+        "recentlyCreated": "Son oluşturulan",
+        "recentlyModified": "Son değiştirilen",
+        "recentlyImported": "Son içe aktarılan",
+        "neverContacted": "Hiç iletişim kurulmayan",
+        "needsFollowUp": "Takip gerekenler",
+        "active": "Aktif",
+        "inactive": "Pasif",
+        "unsubscribed": "Abonelikten çıkanlar"
       }
+    },
+    "erase": {
+      "scope": "Bir kişiyi silmek; konuşmalarını, mesajlarını, medyasını, dosyalarını, arama kayıtlarını ve arama günlüklerini de siler. Potansiyel müşteriler, fırsatlar, görevler ve faturalar kalır.",
+      "scopeMany": "Kişileri silmek; konuşmalarını, mesajlarını, medyalarını, dosyalarını, arama kayıtlarını ve arama günlüklerini de siler. Potansiyel müşteriler, fırsatlar, görevler ve faturalar kalır.",
+      "keepHistory": "Konuşma geçmişini kişinin kimliği olmadan sakla",
+      "keepHistoryHint": "Konuşmalar kayıtlarınız için kalır ancak artık kişiyi göstermez."
     }
   }
 }

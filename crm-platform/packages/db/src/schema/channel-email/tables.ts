@@ -280,9 +280,79 @@ export const mailOutboundAttachments = pgTable(
   ],
 );
 
+/**
+ * A reusable email an agent inserts into the composer of an email conversation: a subject, a rich-text body and `{{variables}}`.
+ * Shared (`userId` null: the workspace's) or personal (its owner's alone). Mirrors migrations/20261202090000_mail_email_templates.sql.
+ */
+export const emailTemplates = pgTable(
+  'email_templates',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id'),
+    name: text('name').notNull(),
+    subject: text('subject').notNull().default(''),
+    bodyHtml: text('body_html').notNull(),
+    bodyText: text('body_text').notNull().default(''),
+    category: text('category'),
+    purpose: text('purpose').notNull().default('general'),
+    status: text('status').notNull().default('active'),
+    usedCount: integer('used_count').notNull().default(0),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('email_templates_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'email_templates_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('chk_email_templates_name', sql`char_length(btrim(${t.name})) between 1 and 120`),
+    check(
+      'chk_email_templates_subject',
+      sql`char_length(${t.subject}) <= 300 and ${t.subject} !~ '[\\r\\n]'`,
+    ),
+    check(
+      'chk_email_templates_body',
+      sql`char_length(btrim(${t.bodyHtml})) >= 1 and char_length(${t.bodyHtml}) <= 100000 and char_length(${t.bodyText}) <= 30000`,
+    ),
+    check(
+      'chk_email_templates_category',
+      sql`${t.category} is null or char_length(${t.category}) between 1 and 64`,
+    ),
+    check('chk_email_templates_purpose', sql`${t.purpose} in ('general', 'marketing')`),
+    check('chk_email_templates_status', sql`${t.status} in ('active', 'archived')`),
+    check('chk_email_templates_used', sql`${t.usedCount} >= 0`),
+    foreignKey({
+      name: 'fk_email_templates_user',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_email_templates_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    // uq_email_templates_shared_name and uq_email_templates_user_name (a name is unique per owner, ignoring case) are expression
+    // indexes on lower(name): they live in the migration only, which the verifier cannot compare column by column.
+    index('idx_email_templates_list').on(t.orgId, t.createdAt.desc(), t.id.desc()),
+    index('idx_email_templates_user')
+      .on(t.orgId, t.userId)
+      .where(sql`${t.userId} is not null`),
+  ],
+);
+
 export type MailWorkspaceSettingsRow = typeof mailWorkspaceSettings.$inferSelect;
 export type NewMailWorkspaceSettingsRow = typeof mailWorkspaceSettings.$inferInsert;
 export type MailSignaturesRow = typeof mailSignatures.$inferSelect;
 export type NewMailSignaturesRow = typeof mailSignatures.$inferInsert;
+export type EmailTemplatesRow = typeof emailTemplates.$inferSelect;
+export type NewEmailTemplatesRow = typeof emailTemplates.$inferInsert;
 export type MailOutboundAttachmentsRow = typeof mailOutboundAttachments.$inferSelect;
 export type NewMailOutboundAttachmentsRow = typeof mailOutboundAttachments.$inferInsert;

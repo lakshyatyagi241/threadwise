@@ -152,7 +152,9 @@
       "savedReplyGone": "Cette réponse enregistrée n'existe plus.",
       "savedReplyChannel": "Cette réponse enregistrée n'est pas prévue pour ce type de canal.",
       "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci.",
-      "importInvalid": "Ce fichier ne peut pas être lu comme réponses enregistrées. Il doit comporter une première ligne avec les colonnes title, shortcut et body, et au maximum 1 000 lignes."
+      "importInvalid": "Ce fichier ne peut pas être lu comme réponses enregistrées. Il doit comporter une première ligne avec les colonnes title, shortcut et body, et au maximum 1 000 lignes.",
+      "contactOptedOut": "Ce contact s'est désabonné des messages marketing ; le message n'a donc pas été envoyé.",
+      "consentRequired": "Cet espace de travail exige un consentement enregistré pour les messages marketing et ce contact n'en a pas ; le message n'a donc pas été envoyé."
     },
     "bubble": {
       "kind": {
@@ -448,7 +450,9 @@
         "unassign": "Désassigner",
         "open": "{count} en cours",
         "pickTeam": "Choisir une équipe pour cette conversation",
-        "noTeam": "Aucune équipe"
+        "noTeam": "Aucune équipe",
+        "onLeave": "En congé",
+        "onLeaveUntil": "En congé jusqu’au {date}"
       },
       "presence": {
         "online": "En ligne",
@@ -600,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Envoyer un modèle",
       "close": "Fermer",
-      "cancel": "Annuler",
-      "back": "Retour aux modèles",
       "search": "Rechercher par nom ou texte",
       "searchLabel": "Rechercher des modèles",
       "loading": "Chargement des modèles",
@@ -610,9 +612,7 @@
       "empty": "Aucun modèle approuvé pour ce numéro WhatsApp pour le moment. Créez-en un dans Modèles et attendez son approbation par Meta.",
       "noResults": "Aucun modèle ne correspond à votre recherche.",
       "windowHint": "Un modèle fonctionne même lorsque la fenêtre de réponse de 24 heures est fermée.",
-      "variables": "Renseignez les variables",
       "preview": "Ce que le client va lire",
-      "send": "Envoyer le modèle",
       "sending": "Envoi en cours",
       "sent": "Modèle envoyé",
       "problem": {
@@ -627,7 +627,31 @@
         "authentication": "Les modèles de mot de passe à usage unique sont envoyés par le système, pas depuis la boîte de réception.",
         "named_variables": "Utilise des variables nommées, non encore prises en charge par la boîte de réception."
       },
-      "hasMore": "Affichage des {count} premiers modèles. Recherchez par nom ou texte pour trouver les autres."
+      "hasMore": "Affichage des {count} premiers modèles. Recherchez par nom ou texte pour trouver les autres.",
+      "previewEmpty": "Pointez un modèle pour voir son rendu sur le téléphone du client.",
+      "previewCustomer": "Client",
+      "noVariables": "Ce modèle n’a rien à renseigner. Vérifiez le téléphone, puis envoyez-le.",
+      "sendTo": "Envoyer à {name}",
+      "refresh": "Actualiser la liste",
+      "device": "Aperçu du téléphone",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configurer les variables du corps",
+      "or": "ou",
+      "mapField": "Associer un champ à {key}",
+      "mapNone": "Ce contact n'a aucune information à associer.",
+      "typeMessage": "Saisissez un message",
+      "fields": {
+        "name": "Nom",
+        "phone": "Téléphone",
+        "email": "E-mail"
+      },
+      "create": "Créer un modèle",
+      "actions": "Actions du modèle",
+      "edit": "Modifier le modèle",
+      "duplicate": "Dupliquer le modèle"
     },
     "log": {
       "title": "Journal de livraison",
@@ -712,7 +736,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-mail"
+        "email": "E-mail",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Contact",
@@ -933,7 +960,9 @@
       },
       "tag": "Étiquette",
       "tagAdd": "Ajouter une étiquette",
-      "tagRemove": "Retirer une étiquette"
+      "tagRemove": "Retirer une étiquette",
+      "onLeave": "en congé",
+      "onLeaveUntil": "en congé jusqu’au {date}"
     },
     "tags": {
       "tag": "Étiquette",

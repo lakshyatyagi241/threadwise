@@ -112,11 +112,14 @@ const LOOK: Record<NotificationPrefType, Look> = {
   teamchat_message: look('team_chat', 'info', 'team_chat_channel'),
   email_bounced: look('chat', 'danger', 'conversation'),
   sla_breached: look('waiting', 'danger', 'conversation'),
+  member_leave_started: look('assign', 'info'),
+  assignment_blocked_by_leave: look('waiting', 'danger', 'conversation'),
   waba_group_join_request: look('group', 'info', 'waba_group'),
   waba_group_suspended: look('group', 'danger', 'waba_group'),
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
   device_group_join_request: look('group', 'info', 'device_group'),
   device_group_removed: look('group', 'danger', 'device_group'),
+  test: look('generic', 'info'),
 };
 
 export const TYPE_CATALOGUE: Readonly<Record<string, TypeMeta>> = Object.fromEntries(

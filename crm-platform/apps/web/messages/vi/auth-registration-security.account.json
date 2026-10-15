@@ -552,12 +552,13 @@
             "storefront_builder": "Trình tạo cửa hàng",
             "invoicing": "Lập hóa đơn",
             "forms_and_links": "Biểu mẫu và liên kết",
-            "extra_channels": "Telegram, Facebook và Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber và WeChat",
             "form_builder": "Biểu mẫu",
             "waba_groups": "Nhóm WhatsApp",
             "sms": "SMS",
             "help_agent": "Trợ lý trợ giúp",
-            "email_channel": "Kênh email (Gmail)"
+            "email_channel": "Kênh email (Gmail)",
+            "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)"
           },
           "cta": {
             "continueFree": "Tiếp tục miễn phí",

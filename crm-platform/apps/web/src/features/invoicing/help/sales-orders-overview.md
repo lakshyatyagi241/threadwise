@@ -5,7 +5,8 @@ summary: Turn accepted offers into orders, then invoice them in one go or in par
 area: sales
 order: 20
 documents: [nav:sales-orders]
-keywords: [order, purchase order, fulfilment, delivery, partial invoice, confirm, cancel, accepted proposal]
+keywords:
+  [order, purchase order, fulfilment, delivery, partial invoice, confirm, cancel, accepted proposal]
 ---
 
 ## What it is for

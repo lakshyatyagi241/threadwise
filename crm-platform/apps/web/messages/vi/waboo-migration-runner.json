@@ -1,0 +1,6 @@
+{
+  "waboo-migration-runner": {
+    "online": "Runner đã kết nối: {name}. Việc di chuyển dữ liệu chạy trên máy đó, máy nằm trong VPN của Geta.",
+    "offline": "Chưa có runner nào được kết nối. Việc di chuyển dữ liệu chạy trên máy nằm trong VPN của Geta; hãy khởi động runner ở đó trước. Một lượt chạy sẽ chờ vài phút rồi thất bại mà không bắt đầu gì."
+  }
+}

@@ -334,7 +334,15 @@ function EditorForm({ type }: { type: BookingType | null }) {
     else router.push(LIST_HREF);
   };
 
-  const ctx: EditorContextValue = { draft, set, update, err, fid, disabled: busy };
+  const ctx: EditorContextValue = {
+    draft,
+    set,
+    update,
+    err,
+    fid,
+    disabled: busy,
+    typeId: loaded?.id ?? null,
+  };
   const editing = loaded !== null;
   const publicUrl = loaded?.isActive && loaded.publicUrl ? loaded.publicUrl : null;
 

@@ -38,6 +38,7 @@ export const blankCampaignFor = (o: {
   flowIdB: null,
   useAttributes: false,
   trackingEnabled: true,
+  retryFailed: true,
   scheduleType: 'now',
   sendDate: null,
   sendTime: null,
@@ -64,6 +65,7 @@ export type CampaignOptionColumns = Pick<
   | 'abSplit'
   | 'templateIdB'
   | 'trackingEnabled'
+  | 'retryFailed'
   | 'expiresAt'
   | 'throttleMinSec'
   | 'throttleMaxSec'
@@ -72,7 +74,10 @@ export type CampaignOptionColumns = Pick<
   | 'dailyLimit'
   | 'windowStart'
   | 'windowEnd'
->;
+> & {
+  /** How many follow-up steps the draft has (0 to 3); the worker only looks at campaigns that have some. */
+  followUpCount: number;
+};
 
 /**
  * The same columns the classic create endpoint writes for these options (so the dispatcher, the pacing and the end-date sweep
@@ -89,6 +94,7 @@ export function campaignColumnsOf(
     abSplit: draft.abSplit,
     templateIdB: ab ? templateIdB : null,
     trackingEnabled: draft.trackLinks,
+    retryFailed: draft.retryFailed,
     expiresAt: draft.autoEnd ? localDateTimeToUtc(draft.autoEnd.at, draft.autoEnd.timezone) : null,
     throttleMinSec: p.throttleMinSec ?? null,
     throttleMaxSec: p.throttleMaxSec ?? null,
@@ -97,5 +103,6 @@ export function campaignColumnsOf(
     dailyLimit: p.dailyLimit ?? null,
     windowStart: p.windowStart ?? null,
     windowEnd: p.windowEnd ?? null,
+    followUpCount: draft.followUps.length,
   };
 }

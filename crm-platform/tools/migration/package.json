@@ -1,0 +1,11 @@
+{
+  "name": "@crm/migration-tool",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Waboo (MongoDB) -> crm-platform (Postgres) migration tool. Not part of the pnpm workspace.",
+  "scripts": {
+    "migrate": "tsx cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

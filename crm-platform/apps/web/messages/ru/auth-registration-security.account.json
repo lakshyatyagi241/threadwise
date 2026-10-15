@@ -552,12 +552,13 @@
             "storefront_builder": "Конструктор витрины",
             "invoicing": "Выставление счетов",
             "forms_and_links": "Формы и ссылки",
-            "extra_channels": "Telegram, Facebook и Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber и WeChat",
             "form_builder": "Формы",
             "waba_groups": "Группы WhatsApp",
             "sms": "SMS",
             "help_agent": "Помощник",
-            "email_channel": "Канал электронной почты (Gmail)"
+            "email_channel": "Канал электронной почты (Gmail)",
+            "personal_history_full": "Импорт полной истории (личный WhatsApp)"
           },
           "cta": {
             "continueFree": "Продолжить бесплатно",

@@ -9,11 +9,22 @@ export const CONSENT_CHANNELS = [
   'facebook',
   'instagram',
   'webchat',
+  'line',
+  'viber',
+  'wechat',
+  // Added with the purpose registry (BL-140): a voice call and RCS are consent channels too. The ledger column is free text with a
+  // pattern check, so older rows and the older API calls are unaffected.
+  'voice',
+  'rcs',
 ] as const;
 export const consentChannelSchema = z.enum(CONSENT_CHANNELS);
 export type ConsentChannel = z.infer<typeof consentChannelSchema>;
 
-/** `utility` is reserved: recorded, never enforced. */
+/**
+ * The two purposes the ledger STORES. `marketing` and `utility` stay the stored values; the purpose registry
+ * (`privacy/purposes.ts`) maps every registry id onto one of them (`marketing_messaging` -> `marketing`, `service_messaging` ->
+ * `utility`) and the ConsentGate enforces both.
+ */
 export const CONSENT_PURPOSES = ['marketing', 'utility'] as const;
 export const consentPurposeSchema = z.enum(CONSENT_PURPOSES);
 export type ConsentPurpose = z.infer<typeof consentPurposeSchema>;
@@ -32,9 +43,62 @@ export const CONSENT_SOURCES = [
   'inbound_message',
   'contact_request',
   'legacy',
+  // Intake sources (BL-167, migration 20261203090000): the agreement was given on the website chat widget, on a booking page, or at a
+  // store checkout (Shopify / WooCommerce marketing consent).
+  'widget',
+  'booking',
+  'commerce',
+  // Lead capture (BL-168, migration 20261205090000): the agreement was given on a lead form or ad that a connector or the generic lead
+  // webhook delivered, and the sender passed the proof (wording, version, time, form or ad) along with the lead.
+  'lead',
 ] as const;
 export const consentSourceSchema = z.enum(CONSENT_SOURCES);
 export type ConsentSource = z.infer<typeof consentSourceSchema>;
+
+/** How a message or call reaches the person. A channel has a default modality (`modalityOfChannel`). */
+export const CONSENT_MODALITIES = ['text', 'voice', 'video', 'email'] as const;
+export const consentModalitySchema = z.enum(CONSENT_MODALITIES);
+export type ConsentModality = z.infer<typeof consentModalitySchema>;
+
+/** The default modality of a consent channel. */
+export function modalityOfChannel(channel: ConsentChannel): ConsentModality {
+  if (channel === 'voice') return 'voice';
+  if (channel === 'email') return 'email';
+  return 'text';
+}
+
+/**
+ * Who the consent is about. The ledger today holds `contact` rows; the other subject types are the vocabulary the generalised model
+ * (spec privacy-and-data-governance section 4.2) will store once its migration is built. A visitor or an unknown caller is identified
+ * by a keyed hash, never raw.
+ */
+export const CONSENT_SUBJECT_TYPES = [
+  'contact',
+  'lead',
+  'visitor',
+  'call_participant',
+  'staff',
+] as const;
+export const consentSubjectTypeSchema = z.enum(CONSENT_SUBJECT_TYPES);
+export type ConsentSubjectType = z.infer<typeof consentSubjectTypeSchema>;
+
+/**
+ * A regime hint selects defaults (opt in versus opt out, quiet hours, calling windows); it never lowers what the platform requires.
+ * Vocabulary only for now: nothing reads it yet.
+ */
+export const CONSENT_REGIMES = [
+  'gdpr',
+  'eprivacy',
+  'tcpa_ctia',
+  'trai_dlt',
+  'dpdp',
+  'uae_pdpl',
+  'ksa_pdpl',
+  'wa_business',
+  'none',
+] as const;
+export const consentRegimeSchema = z.enum(CONSENT_REGIMES);
+export type ConsentRegime = z.infer<typeof consentRegimeSchema>;
 
 /** The state of a contact for one channel and purpose. `unknown` = no event yet ("No consent recorded"). */
 export const CONSENT_STATES = ['granted', 'withdrawn', 'unknown'] as const;
@@ -52,8 +116,16 @@ export function consentChannelOfKind(kind: string): ConsentChannel | null {
     case 'facebook':
     case 'instagram':
     case 'webchat':
+    case 'line':
+    case 'viber':
+    case 'wechat':
     case 'sms':
+    case 'rcs':
+    case 'voice':
       return kind;
+    case 'call':
+    case 'calling':
+      return 'voice';
     default:
       return null;
   }
@@ -102,6 +174,17 @@ export const CONSENT_EVIDENCE_KEYS = [
   'apiKeyId',
   'flowId',
   'reference',
+  // Intake evidence (BL-167): the version and address of the notice the person saw, and where they agreed.
+  'noticeVersion',
+  'noticeUrl',
+  'widgetId',
+  'bookingTypeId',
+  'integrationId',
+  'storeFlag',
+  // Lead capture evidence (BL-168): the lead source (our uuid), the provider's own lead form and ad ids.
+  'leadSourceId',
+  'leadFormId',
+  'adId',
 ] as const;
 
 export const recordConsentSchema = z.object({

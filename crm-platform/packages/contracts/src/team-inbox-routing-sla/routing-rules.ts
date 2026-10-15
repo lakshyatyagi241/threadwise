@@ -26,6 +26,12 @@ import { segmentRulesSchema } from '../segments/rules';
  */
 export const ROUTING_FLOW_REQUESTED = 'routing.flow_requested';
 
+/**
+ * Written when routing could not give a new conversation to anybody because the people it wanted are on leave and nobody (delegate or team)
+ * took their place (BL-112). The leads are told, with a link to the conversation.
+ */
+export const ROUTING_BLOCKED_BY_LEAVE = 'routing.blocked_by_leave';
+
 export const ROUTING_STRATEGIES = ['round_robin', 'least_busy', 'specific'] as const;
 export const routingStrategySchema = z.enum(ROUTING_STRATEGIES);
 export type RoutingStrategy = z.infer<typeof routingStrategySchema>;

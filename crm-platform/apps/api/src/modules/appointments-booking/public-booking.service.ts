@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  noticeGrantChannels,
   type PublicBookInput,
   type PublicBookResponse,
   type PublicBookingPage,
@@ -25,6 +26,7 @@ import {
   money,
   type QuestionFacts,
 } from './appointment-rules';
+import { ConsentNoticeService } from '../contact-consent';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentsSupport } from './appointments.support';
@@ -71,6 +73,7 @@ export class PublicBookingService {
     private readonly contactLink: ContactLinkService,
     private readonly staff: AppointmentsService,
     private readonly throttle: BookingPublicThrottle,
+    private readonly notices: ConsentNoticeService,
   ) {}
 
   // --- the booking page -------------------------------------------------------------------------------------------------
@@ -102,7 +105,11 @@ export class PublicBookingService {
       const zone = await this.slots.orgTimezone(tx, org.id);
       return {
         organization: { name: org.name, slug: org.slug },
-        service: this.presentType(row, children, zone),
+        service: {
+          ...this.presentType(row, children, zone),
+          // The optional consent line under the form (BL-167); null when the workspace wrote none.
+          consent: await this.consentLine(tx, org.id, row.uuid),
+        },
       };
     });
   }
@@ -140,7 +147,32 @@ export class PublicBookingService {
         { path: 'email', message: 'required' },
       ]);
     }
-    const contactId = await this.contactLink.resolve(invitee, prep.row.hostUuid);
+    // The visitor ticked the consent line: the wording and version are the SERVER's (looked up by the version their page named), never
+    // text sent by the browser. An unknown, switched-off or invented version grants nothing; the booking goes ahead either way.
+    const seen =
+      input.consent?.given === true
+        ? await this.db.tx((tx) =>
+            this.notices.seen(tx, org.id, 'booking', prep.row.uuid, input.consent!.version),
+          )
+        : null;
+    // Only the channels the notice's wording covers, and only those the invitee gave a phone or an address for.
+    const grantChannels = seen
+      ? noticeGrantChannels(seen, { phone: Boolean(invitee.phone), email: Boolean(invitee.email) })
+      : [];
+    const contactId = await this.contactLink.resolve(
+      invitee,
+      prep.row.hostUuid,
+      seen && grantChannels.length > 0
+        ? {
+            proof: { text: seen.text, version: String(seen.version), channels: grantChannels },
+            evidence: {
+              bookingTypeId: prep.row.uuid,
+              noticeVersion: String(seen.version),
+              noticeUrl: seen.url ?? undefined,
+            },
+          }
+        : undefined,
+    );
     const lt = await this.db.tx((tx) => this.slots.load(tx, org.id, prep.row));
     const startMs = new Date(input.startsAt).getTime();
     const busy = await this.slots.busyFor(
@@ -382,7 +414,18 @@ export class PublicBookingService {
         options: q.options,
         required: q.required,
       })),
+      // Only the single-service page carries the wording (`typeView`); the directory lists services without it.
+      consent: null,
     };
+  }
+
+  private async consentLine(
+    tx: Tx,
+    orgId: number,
+    typeUuid: string,
+  ): Promise<PublicBookingType['consent']> {
+    const n = await this.notices.publicCurrent(tx, orgId, 'booking', typeUuid);
+    return n ? { text: n.text, version: n.version, url: n.url } : null;
   }
 
   private async activeType(

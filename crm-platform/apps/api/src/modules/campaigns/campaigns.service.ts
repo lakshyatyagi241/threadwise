@@ -40,6 +40,12 @@ import {
   mediaColumnFor,
   normalizeCustomMessage,
 } from './campaign-rules';
+import {
+  emailCampaignProblems,
+  emailCleared,
+  isEmailProvider,
+  isWalletFree,
+} from './email-campaign-rules';
 import { toCampaign } from './campaigns.mapper';
 import { CampaignsRepository, type NewCampaign } from './campaigns.repository';
 import { MODULE_KEY } from './campaign-events';
@@ -113,14 +119,17 @@ export class CampaignsService {
       const resolved = await this.resolve(tx, orgId, input);
       // SMS is a paid channel of its own (TW-SMS-018): Reference only checked `campaign` here, and the owner wants `sms` enforced.
       if (resolved.provider === 'sms') await this.entitlements.assertFeature(orgId, 'sms');
+      const email = await this.forEmail(orgId, resolved.provider, input);
       // A launch needs a funded wallet (TW-WALLET-013), checked before the campaign or any recipient row exists. A draft launches
-      // nothing, so it is not checked until it is started. SMS is never charged to the wallet (TW-SMS-027), so it is not checked either.
-      if (status !== 'draft' && resolved.provider !== 'sms') {
+      // nothing, so it is not checked until it is started. SMS and email are never charged to the wallet (TW-SMS-027), so they are not
+      // checked either.
+      if (status !== 'draft' && !isWalletFree(resolved.provider)) {
         await this.wallet.precheck(orgId, contactIds.length, { source: 'campaign' });
       }
       const id = await this.repo.insert(tx, orgId, {
         ...form,
         ...resolved,
+        ...email,
         status,
         totalRecipients: contactIds.length,
         createdBy: ctx.userId,
@@ -184,10 +193,12 @@ export class CampaignsService {
         throw refuse('CAMP_NOT_EDITABLE', 'This campaign can no longer be edited.');
       }
       const resolved = await this.resolve(tx, orgId, input);
+      const email = await this.forEmail(orgId, resolved.provider, input);
       const media = this.media(input);
       await this.repo.update(tx, orgId, locked.id, {
         ...form,
         ...resolved,
+        ...email,
         status: input.status ?? null,
         media: input.mediaUrl === undefined ? null : media,
         overrides: input.templateOverrides !== undefined,
@@ -233,6 +244,24 @@ export class CampaignsService {
   }
 
   // ------------------------------------------------------------------ shared
+
+  /**
+   * An email campaign (its sender is a mailbox): the plan must have the Email add-on, the form may hold only what a mail can carry, and
+   * what a mail does not use (footer, buttons, pacing, tracking) is cleared. Null for any other campaign.
+   */
+  private async forEmail(
+    orgId: number,
+    provider: string | null,
+    input: Form,
+  ): Promise<ReturnType<typeof emailCleared> | null> {
+    if (!isEmailProvider(provider)) return null;
+    await this.entitlements.assertFeature(orgId, 'email_channel');
+    const problems = emailCampaignProblems(input);
+    if (problems.length > 0) {
+      throw AppError.validation('Request payload failed validation', problems);
+    }
+    return emailCleared();
+  }
 
   /** Everything that can be decided without a database: time zone, end date, body, guardrails. */
   private async prepare(
@@ -296,6 +325,7 @@ export class CampaignsService {
       templateOverridesB: input.templateOverridesB ?? null,
       useAttributes: input.useAttributes ?? false,
       trackingEnabled: input.trackingEnabled ?? true,
+      retryFailed: input.retryFailed ?? true,
       scheduleType: input.scheduleType,
       sendDate: input.sendDate ?? null,
       sendTime: input.sendTime ?? null,

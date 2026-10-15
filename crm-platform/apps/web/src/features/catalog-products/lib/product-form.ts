@@ -14,6 +14,7 @@ import {
   type ProductResponse,
   type ProductStatus,
 } from '@crm/contracts';
+import { EMPTY_VARIANTS, buildVariantsBody, type VariantsState } from './variants-model';
 
 /** The pure half of the product form (TW-CAT-020): the form model, its checks, what is posted, and the live indicators. */
 
@@ -202,7 +203,10 @@ function wholeProblem(value: string, max: number): ProblemKey | undefined {
 }
 
 /** Field checks mirroring the contract, so the person sees them before the server does. Empty means the form can be sent. */
-export function validate(form: ProductForm): Problems {
+export function validate(
+  form: ProductForm,
+  opts: { variants?: boolean; allVariantsPriced?: boolean } = {},
+): Problems {
   const out: Problems = {};
   const set = (key: FieldKey, p: ProblemKey | undefined) => {
     if (p) out[key] = p;
@@ -216,9 +220,11 @@ export function validate(form: ProductForm): Problems {
   if (trimLikeThreadwise(form.bodyHtml).length > PRODUCT_BODY_HTML_MAX) out.bodyHtml = 'tooLong';
   if (trimLikeThreadwise(form.category).length > 96) out.category = 'tooLong';
   if (trimLikeThreadwise(form.tags).length > 1024) out.tags = 'tooLong';
-  set('priceMajor', amountProblem(form.priceMajor, true));
+  // With variants that all carry their own price, the product price is only the fallback and may stay blank.
+  set('priceMajor', amountProblem(form.priceMajor, !(opts.variants && opts.allVariantsPriced)));
   set('comparePriceMajor', amountProblem(form.comparePriceMajor, false));
-  set('stockQty', wholeProblem(form.stockQty, 1_000_000));
+  // With variants the stock box is the read-only total of the variants, not something the person typed.
+  if (!opts.variants) set('stockQty', wholeProblem(form.stockQty, 1_000_000));
   set('weightGrams', wholeProblem(form.weightGrams, 1_000_000));
   set('sortOrder', wholeProblem(form.sortOrder, 9999));
   const image = trimLikeThreadwise(form.imageUrl);
@@ -237,19 +243,34 @@ const amount = (v: string): string => {
 };
 const text = (v: string): string | null => trimLikeThreadwise(v) || null;
 
+/** The lowest own price among the active variants, as typed; null when one has none or there are no variants. */
+function lowestVariantPrice(variants: VariantsState): string | null {
+  const rows = variants.enabled ? variants.rows.filter((r) => r.active) : [];
+  if (rows.length === 0 || rows.some((r) => !r.priceMajor.trim())) return null;
+  return String(Math.min(...rows.map((r) => Number.parseFloat(r.priceMajor))));
+}
+
 /** The request body. Blank optional fields are posted as null so an edit can clear them. */
-export function buildInput(form: ProductForm): CreateProductInput {
+export function buildInput(
+  form: ProductForm,
+  variants: VariantsState = EMPTY_VARIANTS,
+  hadVariants = false,
+): CreateProductInput {
   return {
+    ...buildVariantsBody(variants, hadVariants),
     name: trimLikeThreadwise(form.name),
     sku: text(form.sku),
     description: text(form.description),
     bodyHtml: text(form.bodyHtml),
-    priceMajor: amount(form.priceMajor),
+    priceMajor: amount(
+      form.priceMajor.trim() ? form.priceMajor : (lowestVariantPrice(variants) ?? form.priceMajor),
+    ),
     comparePriceMajor:
       text(form.comparePriceMajor) === null ? null : amount(form.comparePriceMajor),
     currencyCode: form.currencyCode as ProductCurrency,
     inStock: form.inStock,
-    stockQty: int(form.stockQty),
+    // the product's stock is the variants' total, which the API computes
+    stockQty: variants.enabled ? null : int(form.stockQty),
     sortOrder: int(form.sortOrder) ?? 0,
     status: form.status,
     weightGrams: int(form.weightGrams),

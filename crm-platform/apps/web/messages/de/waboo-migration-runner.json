@@ -1,0 +1,6 @@
+{
+  "waboo-migration-runner": {
+    "online": "Runner verbunden: {name}. Migrationen laufen auf diesem Rechner, der im Geta-VPN ist.",
+    "offline": "Kein Runner verbunden. Migrationen laufen auf einem Rechner im Geta-VPN; starten Sie dort zuerst den Runner. Ein Lauf wartet einige Minuten darauf und schlägt dann fehl, ohne etwas zu starten."
+  }
+}

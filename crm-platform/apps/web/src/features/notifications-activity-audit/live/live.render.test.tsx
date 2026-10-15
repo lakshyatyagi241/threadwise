@@ -90,6 +90,35 @@ const panel = (over: Partial<Parameters<typeof BellPanel>[0]> = {}) => (
   />
 );
 
+describe('live updates paused note', () => {
+  it('shows a quiet note in the bell panel only when live updates are paused (en and ar)', () => {
+    expect(html(panel())).not.toContain('data-testid="live-paused"');
+    const out = html(panel({ livePaused: true }));
+    expect(out).toContain('data-testid="live-paused"');
+    expect(out).toContain('Live updates are paused');
+    expect(html(panel({ livePaused: true }), 'ar')).toContain(translator('ar')('live.paused'));
+  });
+});
+
+describe('the generic toast words', () => {
+  it('has words for one and for many, in English and Arabic', () => {
+    for (const locale of ['en', 'ar'] as const) {
+      const t = translator(locale);
+      expect(t('live.generic')).not.toBe('live.generic');
+      expect(t('live.summary', { count: 4 })).toContain('4');
+    }
+    expect(translator('en')('live.generic')).toBe('You have a new notification');
+  });
+
+  it('the test notification reads as a row and a toast in English, with no contact name', () => {
+    const t = translator('en');
+    expect(alertText(t, alert({ type: 'test', data: null, title: 'Test notification' }))).toEqual({
+      title: 'Test notification',
+      body: 'If you can read this, live notifications are working.',
+    });
+  });
+});
+
 describe('bell panel states (en)', () => {
   it('empty: says so and disables mark-all', () => {
     const out = html(panel());

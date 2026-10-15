@@ -28,6 +28,7 @@ import {
   tokensOf,
   type TemplateRow,
 } from '../../../../message-templates';
+import { buildSend } from '../../../../../infra/providers/whatsapp/meta-send-payload';
 import { WabaConnectionsRepository } from '../../../../whatsapp-cloud-api-waba';
 import { v1Error, withV1NotFound } from '../automation-errors';
 import { guardHeaderMedia, type UploadedHeader } from './header-upload.guard';
@@ -255,18 +256,26 @@ export class V1TemplatesService {
     );
     if (block) refuse(block.code, block.message);
 
-    if (file || v.header_media_url || v.header_filename)
+    if (file)
       throw unsupported(
-        file ? 'header_media' : v.header_media_url ? 'header_media_url' : 'header_filename',
-        'Sending a header file through the outbound queue is not available yet.',
+        'header_media',
+        'Hosting a header file for the outbound queue is not available yet. Send header_media_url instead.',
       );
-    if (v.header_text) throw unsupported('header_text', 'Header variables are not available yet.');
-    if (v.buttons && v.buttons.length > 0)
-      throw unsupported('buttons', 'Dynamic button values are not available yet.');
-    if ((t.attachmentType ?? 'none') !== 'none')
+    const attach = (t.attachmentType ?? 'none').toLowerCase();
+    const isMedia = ['image', 'video', 'document'].includes(attach);
+    if (v.header_text && (isMedia || tokensOf(t.header ?? '').length === 0))
+      throw AppError.validation('This template has no text header variable.', [
+        { path: 'header_text', message: 'Only for text-header templates with a variable.' },
+      ]);
+    if (v.header_media_url && !isMedia)
+      throw AppError.validation('This template has no media header.', [
+        { path: 'header_media_url', message: 'Only for media-header templates.' },
+      ]);
+    const headerMediaUrl = isMedia ? (v.header_media_url ?? t.headerSampleUrl ?? '') : '';
+    if (isMedia && headerMediaUrl === '')
       refuse(
         'missing_header_media',
-        'This template has a media header, which the API cannot send yet.',
+        `This template has a ${attach} header but no file could be resolved. Send header_media_url.`,
       );
 
     const channel = await this.db.tx(async (tx) =>
@@ -283,6 +292,33 @@ export class V1TemplatesService {
     const variables = Object.fromEntries(
       tokens.map((_, i) => [String(i + 1), values[i] ?? '']),
     ) as Record<string, string>;
+
+    const { components } = buildSend(
+      {
+        templateName: t.templateName,
+        language: t.language,
+        templateType: t.templateType,
+        templateBody: t.templateBody,
+        header: t.header,
+        attachmentType: t.attachmentType,
+        attachmentFile: t.attachmentFile,
+        parameterFormat: t.parameterFormat,
+        variableMap: t.variableMap,
+        buttons: t.buttons,
+        carouselData: null,
+      },
+      {
+        body: values,
+        ...(v.header_text ? { header: v.header_text } : {}),
+        ...(headerMediaUrl ? { headerMediaUrl } : {}),
+        ...(v.header_filename ? { headerFilename: v.header_filename } : {}),
+        buttons: (v.buttons ?? []).map((b: { index: number; sub_type: string; value: string }) => ({
+          index: b.index,
+          subType: b.sub_type,
+          value: b.value,
+        })),
+      },
+    );
 
     const link = await this.db.tx((tx) =>
       this.contacts.findOrCreateByPhone(tx, orgId, { phone: `+${digits}`, source: 'api' }),
@@ -310,6 +346,7 @@ export class V1TemplatesService {
         variables,
         body: renderBody(t.templateBody, tokens, values),
         templateId: t.id,
+        components: components as Record<string, unknown>[],
       },
       sender: { kind: 'bot' },
     });

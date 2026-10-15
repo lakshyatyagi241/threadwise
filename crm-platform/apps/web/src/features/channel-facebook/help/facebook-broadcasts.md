@@ -5,7 +5,19 @@ summary: Message the people who chatted with your Facebook Page in the last 24 h
 area: campaigns
 order: 41
 documents: [nav:facebook-broadcasts]
-keywords: [messenger, broadcast, facebook, 24 hour window, recipients, template, send, pause, retry, bulk message]
+keywords:
+  [
+    messenger,
+    broadcast,
+    facebook,
+    24 hour window,
+    recipients,
+    template,
+    send,
+    pause,
+    retry,
+    bulk message,
+  ]
 ---
 
 ## What it is for

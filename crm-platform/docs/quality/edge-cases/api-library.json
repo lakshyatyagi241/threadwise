@@ -1,0 +1,66 @@
+{
+  "module": "api-library",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-api-library-001",
+      "feature": "api library name",
+      "category": "input",
+      "scenario": "a value of 65 (one past API_LIBRARY_NAME_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/api-library/definition.ts"
+    },
+    {
+      "id": "EC-api-library-002",
+      "feature": "api library url",
+      "category": "input",
+      "scenario": "a value of 2049 (one past API_LIBRARY_URL_MAX = 2048) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/api-library/definition.ts"
+    },
+    {
+      "id": "EC-api-library-003",
+      "feature": "api library",
+      "category": "input",
+      "scenario": "a value of 31 (one past API_LIBRARY_MAX_HEADERS = 30) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/api-library/definition.ts"
+    },
+    {
+      "id": "EC-api-library-004",
+      "feature": "api library",
+      "category": "input",
+      "scenario": "a value of 51 (one past API_LIBRARY_MAX_VARIABLES = 50) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/api-library/definition.ts"
+    },
+    {
+      "id": "EC-api-library-005",
+      "feature": "api library",
+      "category": "input",
+      "scenario": "a value of 101 (one past API_LIBRARY_MAX_MAPPINGS = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/api-library/definition.ts"
+    },
+    {
+      "id": "EC-api-library-006",
+      "feature": "api library function",
+      "category": "input",
+      "scenario": "a value of 20001 (one past API_LIBRARY_FUNCTION_MAX = 20000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/api-library/definition.ts"
+    }
+  ]
+}

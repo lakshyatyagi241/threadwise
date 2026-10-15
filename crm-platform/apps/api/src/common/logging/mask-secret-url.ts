@@ -10,9 +10,10 @@ const MARKETPLACE_HOOK_SECRET = /(\/public\/marketplace\/hooks\/[0-9a-f]{32}\/)[
  * the path): the Telegram bot token, the Shopify and WooCommerce webhook secrets, the lead-hook token ("the only credential").
  */
 const PATH_SECRETS = [
-  /(\/telegram\/inbound\/)[^/?#\s]+/i,
+  /(\/(?:telegram|line|viber|wechat)\/inbound\/)[^/?#\s]+/i,
   /(\/(?:shopify|woocommerce)\/webhook\/)[^/?#\s]+/i,
   /(\/public\/lead-hooks\/)[^/?#\s]+/i,
+  /(\/api\/v1\/sheets-addon\/webhook\/)[^/?#\s]+/i,
 ];
 
 export function maskSecretUrl(url: string): string;

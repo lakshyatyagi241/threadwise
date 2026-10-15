@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp-formulieren",
+      "links": "WhatsApp-links"
+    },
+    "errors": {
+      "generic": "Er is iets misgegaan. Probeer het opnieuw.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Koppel een WhatsApp Cloud API-nummer om formulieren te gebruiken.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Geen gekoppeld WhatsApp Cloud API-nummer heeft geldige inloggegevens.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta heeft de formulierdefinitie afgewezen.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Je WhatsApp Business-account moet de verificatie van Meta doorlopen voordat je formulieren kunt publiceren.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta kon dit formulier niet publiceren.",
+      "WFL_LINK_NOT_LIVE": "Deze link is gepauzeerd of verlopen.",
+      "ROW_VERSION_CONFLICT": "Dit is elders gewijzigd. Vernieuw de pagina en probeer het opnieuw.",
+      "VALIDATION_FAILED": "Controleer de gemarkeerde velden en probeer het opnieuw.",
+      "PLAN_FEATURE_LOCKED": "Upgrade je abonnement om deze functie te gebruiken."
+    },
+    "forms": {
+      "heading": "WhatsApp-formulieren",
+      "intro": "Maak formulieren die klanten rechtstreeks in WhatsApp invullen, verstuur ze vervolgens vanuit een flow en bekijk de antwoorden hier.",
+      "loading": "Formulieren laden…",
+      "retry": "Opnieuw proberen",
+      "create": {
+        "cta": "Nieuw formulier",
+        "creating": "Bezig met aanmaken…",
+        "defaultTitle": "Formulier zonder titel",
+        "defaultField": "Volledige naam"
+      },
+      "stats": {
+        "all": "Alle formulieren",
+        "published": "Gepubliceerd",
+        "draft": "Concepten",
+        "submissions": "Inzendingen"
+      },
+      "empty": {
+        "title": "Nog geen formulieren",
+        "description": "Maak een formulier en verstuur het daarna vanuit een WhatsApp-formulierstap in een flow."
+      },
+      "table": {
+        "form": "Formulier",
+        "type": "Type",
+        "fields": "Velden",
+        "submissions": "Inzendingen"
+      },
+      "status": {
+        "draft": "Concept",
+        "published": "Gepubliceerd",
+        "paused": "Gepauzeerd"
+      },
+      "audience": {
+        "lead_capture": "Leads verzamelen",
+        "survey": "Enquête",
+        "appointment_booking": "Afspraken boeken",
+        "customer_support": "Klantenservice",
+        "sign_up": "Aanmelden",
+        "other": "Overig"
+      },
+      "row": {
+        "edit": "Bewerken",
+        "duplicate": "Dupliceren",
+        "delete": "Verwijderen"
+      },
+      "confirm": {
+        "deleteTitle": "Dit formulier verwijderen?",
+        "deleteMessage": "Actieve flow-knooppunten die hiernaar verwijzen, werken dan niet meer.",
+        "deleteConfirm": "Verwijderen",
+        "cancel": "Annuleren"
+      },
+      "notice": {
+        "saved": "Opgeslagen.",
+        "published": "Gepubliceerd op WhatsApp."
+      },
+      "builder": {
+        "back": "Terug naar formulieren",
+        "untitled": "Formulier zonder titel",
+        "saving": "Bezig met opslaan…",
+        "saveDraft": "Concept opslaan",
+        "savePublish": "Opslaan en publiceren",
+        "publishing": "Bezig met publiceren…",
+        "basics": "Basisgegevens formulier",
+        "title": "Titel",
+        "audienceType": "Type",
+        "purpose": "Doel",
+        "sendButtonLabel": "Label verzendknop",
+        "thankYouNote": "Bedankbericht",
+        "screens": "Schermen",
+        "addScreen": "Scherm toevoegen",
+        "removeScreen": "Scherm verwijderen",
+        "screenN": "Scherm {n}",
+        "defaultField": "Volledige naam",
+        "newFieldLabel": "Nieuw veld",
+        "fieldKind": "Veldtype",
+        "fieldLabel": "Label",
+        "required": "Verplicht",
+        "removeField": "Verwijderen",
+        "options": "Opties (gescheiden door komma's)",
+        "optionsPlaceholder": "Optie 1, Optie 2, Optie 3"
+      },
+      "fieldKind": {
+        "heading": "Koptekst",
+        "short_text": "Korte tekst",
+        "paragraph": "Alinea",
+        "email": "E-mail",
+        "phone_number": "Telefoonnummer",
+        "number": "Getal",
+        "date": "Datum",
+        "dropdown": "Vervolgkeuzelijst",
+        "radio_buttons": "Keuzerondjes",
+        "checkbox": "Selectievakjes"
+      },
+      "submissions": {
+        "heading": "Inzendingen",
+        "metaFlowId": "Meta Flow-ID: {id}",
+        "export": "CSV exporteren",
+        "empty": {
+          "title": "Nog geen inzendingen",
+          "description": "Inzendingen verschijnen hier zodra dit formulier vanuit een flow is verstuurd en iemand het heeft ingevuld."
+        },
+        "table": {
+          "submitted": "Verzonden",
+          "contact": "Contact",
+          "phone": "Telefoon"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp-links",
+      "intro": "Maak een traceerbare link die WhatsApp opent met een voor ingevuld bericht — voor advertenties, bio's en QR-codes.",
+      "loading": "Links laden…",
+      "retry": "Opnieuw proberen",
+      "searchPlaceholder": "Zoek op naam of link",
+      "create": { "cta": "Nieuwe link" },
+      "stats": {
+        "all": "Alle links",
+        "live": "Actief",
+        "totalClicks": "Totaal aantal klikken",
+        "avgClicks": "Gem. klikken / link"
+      },
+      "tabs": { "all": "Alle", "live": "Actief", "paused": "Gepauzeerd" },
+      "status": { "live": "Actief", "paused": "Gepauzeerd" },
+      "empty": {
+        "title": "Nog geen links",
+        "description": "Maak een link om te delen in advertenties, bio's of een QR-code."
+      },
+      "table": {
+        "link": "Link",
+        "destination": "Bestemming",
+        "clicks": "Klikken",
+        "lastClicked": "Laatst geklikt"
+      },
+      "row": {
+        "open": "Openen",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd!",
+        "edit": "Bewerken",
+        "duplicate": "Dupliceren",
+        "delete": "Verwijderen"
+      },
+      "confirm": {
+        "deleteTitle": "Deze link verwijderen?",
+        "deleteMessage": "De verkorte link stopt direct met werken.",
+        "deleteConfirm": "Verwijderen",
+        "cancel": "Annuleren"
+      },
+      "notice": {
+        "saved": "Opgeslagen.",
+        "copyFailed": "De link kon niet worden gekopieerd."
+      },
+      "builder": {
+        "back": "Terug naar links",
+        "newHeading": "Nieuwe link",
+        "step": { "destination": "Bestemming", "message": "Startbericht", "tracking": "Tracking" },
+        "name": "Naam",
+        "status": "Status",
+        "countryCode": "Landcode",
+        "phoneNumber": "Telefoonnummer",
+        "welcomeMessage": "Startbericht",
+        "welcomeMessageHint": "Wordt voor ingevuld in de chat zodra iemand op de link tikt.",
+        "slug": "Verkorte link",
+        "slugHint": "Alleen letters, cijfers en streepjes. Laat leeg om er automatisch een te genereren.",
+        "slugPlaceholder": "zomer-actie",
+        "expiresAt": "Verloopt op",
+        "utmSource": "UTM-bron",
+        "utmMedium": "UTM-medium",
+        "utmCampaign": "UTM-campagne",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "mint": "Link genereren",
+        "save": "Opslaan",
+        "saving": "Bezig met opslaan…",
+        "fixErrors": "Controleer de velden voor bestemming en verkorte link.",
+        "mintedHeading": "Jouw link",
+        "shortUrl": "Verkorte link",
+        "waUrl": "WhatsApp-link",
+        "qrAlt": "QR-code voor deze link"
+      }
+    }
+  }
+}

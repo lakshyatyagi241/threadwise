@@ -225,6 +225,9 @@ function ItemsCard({ order, locale }: { order: StoreOrderDetail; locale: string 
               )}
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-medium">{l.name}</div>
+                {l.variantTitle && (
+                  <div className="truncate text-xs text-muted-foreground">{l.variantTitle}</div>
+                )}
                 <div className="text-xs text-muted-foreground">
                   {t('items.qty', { qty: l.qty })} ·{' '}
                   {t('items.unit', { price: money(l.priceMinor) })}

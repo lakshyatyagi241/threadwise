@@ -60,7 +60,9 @@
       "rejected": "Rejeté : {reason}",
       "view": "Afficher",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "curl": "cURL : envoyer ce modèle avec l'API",
+      "curlNamed": "cURL pour envoyer {name}"
     },
     "library": {
       "title": "Bibliothèque de modèles",
@@ -354,6 +356,15 @@
         "title": "Données envoyées à Meta",
         "hint": "Ce qui est envoyé à Meta pour examen, exactement tel que construit.",
         "empty": "Rien n’a encore été construit."
+      },
+      "curl": {
+        "title": "Envoyer avec l'API (cURL)",
+        "intro": "Envoyez ce modèle approuvé à un numéro. Remplacez les valeurs d'exemple par les vôtres.",
+        "copy": "Copier",
+        "copied": "Copié",
+        "copyFailed": "Copie impossible. Sélectionnez le texte et copiez-le à la main.",
+        "keyHint": "Remplacez YOUR_API_KEY par votre clé d'API.",
+        "keyLink": "Obtenir une clé d'API"
       }
     }
   }

@@ -7,16 +7,15 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 
 export * from './errors';
+export * from './runner';
+export * from './constants';
+import { WMIG_CLIENT_RE, WMIG_DB_RE, WMIG_MODES } from './constants';
 
-export const WMIG_CLIENT_RE = /^[a-z0-9_-]{1,64}$/;
-/** An organization (workspace) id = the Waboo Mongo database name. Passed to the pipeline only as an argument. */
-export const WMIG_DB_RE = /^[A-Za-z0-9_]{1,128}$/;
 /** A load needs a green dry run no older than this. */
 export const WMIG_DRY_RUN_MAX_AGE_HOURS = 24;
 export const WMIG_MAX_BATCH = 50;
 export const WMIG_MAX_SCHEDULE_DAYS = 90;
 
-export const WMIG_MODES = ['dry', 'load'] as const;
 export const WMIG_STATUSES = [
   'queued',
   'running',

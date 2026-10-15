@@ -3,7 +3,7 @@ import { Logger, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { SwaggerModule } from '@nestjs/swagger';
 import type { NextFunction, Request, Response } from 'express';
 import { RedisIoAdapter } from './realtime/redis-io.adapter';
 import { AppModule } from './app.module';
@@ -20,6 +20,7 @@ import {
   installBodyLimits,
   installProcessHandlers,
 } from './modules/platform-infrastructure';
+import { buildOpenApiDocument } from './common/openapi';
 import type { Env } from './config/env.schema';
 
 async function bootstrap(): Promise<void> {
@@ -98,36 +99,7 @@ async function bootstrap(): Promise<void> {
   app.useWebSocketAdapter(redisAdapter);
 
   if (config.get('NODE_ENV', { infer: true }) !== 'production') {
-    const document = SwaggerModule.createDocument(
-      app,
-      new DocumentBuilder()
-        .setTitle('CRM Platform API')
-        .setDescription(
-          'Multi-tenant CRM platform. Internal routes are /v1; the external contract is /public/v1 and is versioned separately.',
-        )
-        .setVersion('0.1.0')
-        .addBearerAuth()
-        .addTag('auth')
-        // 'users' / 'roles' / 'permissions' stay off this list — per
-        // docs/phase-plan.md, a page's tag is added only once every route in
-        // its docs/api-inventory.md row is built and has a
-        // docs/api-testing.md entry. Their controllers carry
-        // @ApiExcludeController() until then.
-        .addTag('contacts')
-        .addTag('field-sections')
-        .addTag('fields')
-        .addTag('status-options')
-        .addTag('tags')
-        .addTag('contact-views')
-        .addTag('contact-notes')
-        .addTag('contact-files')
-        .addTag('contact-activities')
-        .addTag('contact-meetings')
-        .addTag('partner-portal')
-        .addTag('public-api')
-        .addTag('health')
-        .build(),
-    );
+    const document = buildOpenApiDocument(app);
     SwaggerModule.setup('docs', app, document, {
       swaggerOptions: { persistAuthorization: true },
     });

@@ -738,7 +738,9 @@
           "link": "请使用站内路径，例如 /legal/terms，或完整的 http 或 https 地址。",
           "senderFormat": "请从列表中选择一个发送方。",
           "countryFormat": "请使用两位字母的国家/地区代码。",
-          "senderRequired": "创建模板之前，请先选择发送渠道。"
+          "senderRequired": "创建模板之前，请先选择发送渠道。",
+          "domainFormat": "{entry} 不是有效的域名。请使用类似 example.com 的名称。",
+          "tooMany": "最多 {max} 个域名。"
         },
         "policy": {
           "kicker": "注册",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "最大尝试次数"
+          },
+          "businessEmailOnly": {
+            "label": "仅限工作邮箱",
+            "hintOn": "注册时会拒绝 Gmail、Outlook、Yahoo 等免费邮箱服务商。",
+            "hintOff": "任何人都可以使用免费个人邮箱注册。"
+          },
+          "blockDisposableEmail": {
+            "label": "屏蔽临时邮箱",
+            "hintOn": "拒绝一次性和临时域名，以及没有邮件服务器的域名。",
+            "hintOff": "接受临时邮箱地址。"
+          },
+          "requirePhoneVerification": {
+            "label": "要求已验证的手机号",
+            "hintOn": "每次注册都必须确认一次性验证码。如果无法发送验证码，注册将停止，而不是跳过验证。",
+            "hintOff": "仅当下方的注册验证码开启时，才会执行验证码步骤。"
+          },
+          "blockedEmailDomains": {
+            "label": "始终屏蔽的域名",
+            "hint": "每行一个域名。子域名也会被屏蔽。即使关闭“仅限工作邮箱”，这些域名也会被拒绝。",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "该页脚未被接受。",
             "unexpected": "无法保存页脚。请稍后重试。"
           }
+        },
+        "guard": {
+          "kicker": "注册防护",
+          "title": "工作邮箱与手机验证",
+          "description": "拦截一次性和个人邮箱，并确保每个新账户都有已验证的手机号。适用于邮箱注册和社交账号注册。",
+          "phoneOffWarning": "关闭手机验证后，可以在没有已验证号码的情况下创建账户，批量虚假注册会更容易。"
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "在线店铺构建器。",
             "invoicing": "发票、贷项通知单、付款、销售订单和税率。",
             "forms_and_links": "线索收集表单和可分享的链接。",
-            "extra_channels": "Telegram、Facebook 和 Instagram 渠道。",
+            "extra_channels": "Telegram、Facebook、Instagram、LINE、Viber 和 WeChat 渠道。",
             "form_builder": "托管和嵌入式网页表单，可在 CRM 中创建联系人。此开关由付费的表单应用掌管。",
             "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。",
             "sms": "通过 Twilio 或 MSG91 发送的仅发送短信：连接发送方，发送短信群发和营销活动。",
             "help_agent": "应用内帮助助手：用户用平常的话说出要做的事，助手在其自己的会话中指引或代为操作，执行有风险的操作前会先询问。会消耗 AI 额度。",
-            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。"
+            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。",
+            "personal_history_full": "个人 WhatsApp 号码首次关联时，可导入完整的聊天记录。所有支持个人号码的套餐均可导入近期聊天。"
           },
           "units": {
             "days": "天",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "每月表单提交数",
             "ai_form_generations_monthly": "每月 AI 表单构建器生成次数",
             "sms_monthly": "每月短信数",
-            "email_mailboxes": "邮箱数量"
+            "email_mailboxes": "邮箱数量",
+            "email_monthly": "每月邮件数"
           },
           "featureGroups": {
             "messaging": "消息",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "店铺和网站构建器",
             "invoicing": "开具发票（发票、贷项通知单、定期发票）",
             "forms_and_links": "表单、点击聊天链接和群组",
-            "extra_channels": "Telegram、Facebook 和 Instagram 渠道",
+            "extra_channels": "Telegram、Facebook、Instagram、LINE、Viber 和 WeChat 渠道",
             "form_builder": "表单（网页表单构建器）",
             "waba_groups": "WhatsApp 群组（Cloud API）",
             "sms": "SMS 渠道",
             "help_agent": "帮助助手（AI，消耗额度）",
-            "email_channel": "电子邮件(Gmail)渠道"
+            "email_channel": "电子邮件(Gmail)渠道",
+            "personal_history_full": "完整聊天记录导入（个人 WhatsApp）"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "日历月内接受的表单提交数，不含垃圾信息。超出上限后，提交仍会保存以供审核，不会被丢弃。0 = 不限。",
             "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。",
             "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
-            "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。"
+            "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
+            "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。"
           }
         }
       },

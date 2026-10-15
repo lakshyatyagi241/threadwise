@@ -5,7 +5,19 @@ summary: Write proposals and estimates, send them to buyers, track the answer an
 area: sales
 order: 10
 documents: [nav:proposals, nav:estimates]
-keywords: [quote, quotation, offer, proposal, estimate, accept, decline, signature, convert to invoice, valid until]
+keywords:
+  [
+    quote,
+    quotation,
+    offer,
+    proposal,
+    estimate,
+    accept,
+    decline,
+    signature,
+    convert to invoice,
+    valid until,
+  ]
 ---
 
 ## What it is for

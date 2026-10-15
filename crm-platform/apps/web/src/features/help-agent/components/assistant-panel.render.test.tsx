@@ -38,7 +38,7 @@ const base = (over: Partial<PanelViewProps> = {}): PanelViewProps => ({
   onAnswer: noop,
   onReset: noop,
   onClose: noop,
-  maxSteps: 25,
+  maxSteps: 40,
   variant: 'inline',
   ...over,
 });
@@ -139,7 +139,7 @@ describe('assistant panel: running', () => {
     const out = html(base({ state: running }));
     expect(out).toContain('add the tag VIP');
     expect(out).toContain('Open the contacts page');
-    expect(out).toContain('Step 2 of 25');
+    expect(out).toContain('Step 2 of 40');
     expect(out).toContain('Thinking...');
     expect(out).toContain('>Stop<');
     expect(out).toContain('aria-live="polite"');

@@ -453,3 +453,176 @@ describe('wabo export quirks (from a real console export)', () => {
     expect(names[0]).toBe('Hello');
   });
 });
+
+describe('a website chat bot exported from the wabo console', () => {
+  const Q = 'q-web';
+  const SIDE = 'q-side';
+  const rec = (over: Record<string, unknown>) => ({
+    botid: 'b',
+    type: 'Flow',
+    name: 'Untitled',
+    ...over,
+  });
+  const WEB = [
+    rec({
+      nodeId: 'w0000001-a',
+      qid: Q,
+      displayOrder: 0,
+      stage: '1.1',
+      subType: 'text',
+      response: [{ type: 'text', value: '<p>Welcome</p>' }],
+    }),
+    rec({
+      nodeId: 'w0000002-b',
+      qid: Q,
+      displayOrder: 1,
+      stage: '1.2',
+      subType: 'name',
+      input: true,
+      input_type: 'NAME',
+      response: [{ type: 'text', value: '<p>Your name?</p>' }],
+    }),
+    rec({
+      nodeId: 'w0000003-c',
+      qid: Q,
+      displayOrder: 2,
+      stage: '1.3',
+      subType: 'phone-number',
+      hasOTPVarification: true,
+      response: [{ type: 'text', value: '<p>Your phone?</p>' }],
+    }),
+    rec({
+      nodeId: 'w0000004-d',
+      qid: Q,
+      displayOrder: 3,
+      stage: '1.4',
+      subType: 'otp',
+      parentId: 'w0000003-c',
+      response: [{ type: 'text', value: '<p>Enter the code</p>' }],
+    }),
+    rec({
+      nodeId: 'w0000005-e',
+      qid: Q,
+      displayOrder: 4,
+      stage: '1.5',
+      subType: 'date',
+      dateFormat: 'dd/mm/yyyy',
+      response: [{ type: 'text', value: '<p>Birth date?</p>' }],
+    }),
+    rec({
+      nodeId: 'w0000006-f',
+      qid: Q,
+      displayOrder: 5,
+      stage: '1.6',
+      subType: 'button',
+      response: [
+        { type: 'text', value: '<p>What next?</p>' },
+        { type: 'flow', value: { text: 'Pricing', nodeId: 's0000001-a', qid: SIDE } },
+        { type: 'live_agent', value: { text: 'Talk to a person', nodeId: 'b2184' } },
+        { type: 'link', value: { text: 'Our site', url: 'https://example.test' } },
+        { type: 'mobile', value: { text: 'Call us', url: '+919876543210' } },
+      ],
+    }),
+    rec({
+      nodeId: 's0000001-a',
+      qid: SIDE,
+      displayOrder: 0,
+      stage: '2.1',
+      subType: 'carousel',
+      response: [
+        {
+          type: 'carousel',
+          value: [
+            {
+              image: 'https://example.test/a.png',
+              title: 'Pune',
+              text: '<p>Open 9 to 5</p>',
+              buttons: [
+                { type: 'flow', value: { text: 'Book Pune', nodeId: 's0000002-b', qid: SIDE } },
+                { type: 'link', value: { text: 'Details', url: 'https://example.test/pune' } },
+              ],
+            },
+            { image: '', title: 'Mumbai', text: '<p>Open 10 to 6</p>', buttons: [] },
+          ],
+        },
+      ],
+    }),
+    rec({
+      nodeId: 's0000002-b',
+      qid: SIDE,
+      displayOrder: 1,
+      stage: '2.2',
+      subType: 'text',
+      response: [{ type: 'text', value: '<p>Booked</p>' }],
+    }),
+  ];
+
+  it('is read as a website chat bot, from the records only a web bot has', () => {
+    expect(isWaboExport(WEB)).toBe(true);
+    const w = waboToGraph(WEB);
+    expect(w.channel).toBe('web');
+    expect(waboToGraph(EXPORT).channel).toBe('chat');
+    const trigger = w.graph.flowNodes.find((n) => n.type === 'trigger')!;
+    expect(trigger.data.keywordMode).toBe('any');
+  });
+
+  it('turns each record into the matching step, the code question into a switch on the phone question', () => {
+    const w = waboToGraph(WEB);
+    const byType = (t: string) => w.graph.flowNodes.filter((n) => n.type === t);
+    const phone = byType('ask').find((n) => n.data.validate === 'phone')!;
+    expect(phone.data.verifyOtp).toBe(true);
+    expect(byType('ask').map((n) => n.data.validate)).toEqual(['name', 'phone', 'date']);
+    expect(byType('ask').find((n) => n.data.validate === 'date')!.data.dateFormat).toBe(
+      'dd/mm/yyyy',
+    );
+    // the code question is not a step of its own
+    expect(w.graph.flowNodes.some((n) => String(n.id).includes('w0000004'))).toBe(false);
+  });
+
+  it('keeps a button message: choices lead where they point, the person button hands over, links come first', () => {
+    const w = waboToGraph(WEB);
+    const buttons = w.graph.flowNodes.find((n) => n.type === 'buttons')!;
+    expect(buttons.data.options).toEqual(['Pricing', 'Talk to a person']);
+    expect(buttons.data.handoffs).toEqual({
+      '1': { team: '', message: 'The visitor asked for a person' },
+    });
+    const cta = w.graph.flowNodes.find((n) => n.type === 'cta')!;
+    expect(cta.data.actions).toEqual([
+      { type: 'url', label: 'Our site', value: 'https://example.test' },
+      { type: 'phone', label: 'Call us', value: '+919876543210' },
+    ]);
+    const carousel = w.graph.flowNodes.find((n) => n.type === 'carousel')!;
+    // the date question leads to the link step, which leads to the button step
+    const into = (id: unknown) =>
+      w.graph.flowEdges.filter((e) => e.target === id).map((e) => e.source);
+    expect(into(buttons.id)).toEqual([cta.id]);
+    // the choice "Pricing" leads to the carousel (the entry of the other flow), and "Book Pune" to the booked message
+    expect(
+      w.graph.flowEdges.find((e) => e.source === buttons.id && e.sourceHandle === 'p0')!.target,
+    ).toBe(carousel.id);
+    const cards = carousel.data.cards as Array<{ title: string; buttons: Array<{ type: string }> }>;
+    expect(cards.map((c) => c.title)).toEqual(['Pune', 'Mumbai']);
+    expect(cards[0]!.buttons.map((b) => b.type)).toEqual(['reply', 'url']);
+    expect(w.graph.flowEdges.some((e) => e.source === carousel.id && e.sourceHandle === 'p0')).toBe(
+      true,
+    );
+  });
+
+  it('opens in the Simple builder as steps, with nothing left to fix but the team of the person button', () => {
+    const r = importToSimple(WEB);
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(allSteps(r.doc).map((s) => s.type)).toEqual([
+      'message',
+      'ask',
+      'ask',
+      'ask',
+      'cta',
+      'buttons',
+      'carousel',
+      'message',
+    ]);
+    const messages = problems(r.doc, { senderRequired: false }).map((p) => en(p.message));
+    expect(messages).toEqual(['Step 1.6: choose the team the conversation goes to.']);
+  });
+});

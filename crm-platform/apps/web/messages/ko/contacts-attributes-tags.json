@@ -187,7 +187,29 @@
       "ownerFormer": "이전 멤버",
       "reassignView": "{name}의 연락처 재배정...",
       "smsNamed": "{name}에게 SMS 보내기",
-      "noSms": "SMS를 보낼 전화번호가 없습니다"
+      "noSms": "SMS를 보낼 전화번호가 없습니다",
+      "pqlLabel": "일상 언어로 연락처 검색",
+      "pqlAsk": "검색",
+      "pqlAsking": "검색 중...",
+      "pqlIgnored": "이해하지 못한 부분: {parts}",
+      "pqlNothing": "이 검색으로 필터를 만들 수 없었습니다.",
+      "pqlFailed": "자연어 검색을 지금 사용할 수 없습니다. 다시 시도하세요.",
+      "filter": "필터",
+      "filterAi": "AI로 필터링",
+      "filterAiHint": "찾는 사람을 설명하세요",
+      "filterAdvanced": "고급 필터 추가",
+      "quickFilters": "빠른 필터",
+      "sortButton": "정렬",
+      "back": "뒤로",
+      "pqlPromptPlaceholder": "원하는 연락처를 설명하세요...",
+      "pqlTry": "예시 사용해 보기",
+      "pqlExample2": "30일간 활동 없음",
+      "pqlExample3": "최근 7일 내 생성",
+      "clearFilter": "필터 지우기",
+      "conditionsChip": "조건: {count}",
+      "pqlExampleTag": "태그 {tag}가 붙은 30일간 활동 없는 연락처",
+      "pqlExampleStage": "최근 7일 내 생성된 {stage} 연락처",
+      "pqlExampleNoOwner": "담당자가 없는 연락처"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -342,7 +364,12 @@
       "addPlaceholder": "태그 추가 또는 선택...",
       "addLabel": "태그 이름",
       "add": "태그 추가",
-      "failed": "태그를 변경할 수 없습니다. 다시 시도하세요."
+      "failed": "태그를 변경할 수 없습니다. 다시 시도하세요.",
+      "quickPlaceholder": "태그 검색 또는 만들기",
+      "create": "태그 “{name}” 만들기",
+      "noMatch": "일치하는 태그가 없습니다",
+      "quickHint": "태그를 여러 개 선택하거나, 이름을 입력하고 Enter를 눌러 새 태그를 만드세요.",
+      "quickHintPick": "목록에서 태그를 여러 개 선택하세요."
     },
     "groups": {
       "eyebrow": "워크스페이스 · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "메모",
         "status": "상태",
         "source": "출처",
-        "consent": "마케팅 동의(예 / 아니요)"
+        "consent": "마케팅 동의(예 / 아니요)",
+        "consentSms": "SMS 마케팅 동의(예 / 아니요)",
+        "consentEmail": "이메일 마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "모두 선택",
         "reorder": "끌어서 열 순서 변경",
         "remove": "{name} 제거"
+      },
+      "presets": {
+        "myContacts": "내 연락처",
+        "newThisWeek": "이번 주 신규",
+        "newLastWeek": "지난주 신규",
+        "recentlyCreated": "최근 생성",
+        "recentlyModified": "최근 수정",
+        "recentlyImported": "최근 가져옴",
+        "neverContacted": "연락한 적 없음",
+        "needsFollowUp": "후속 조치 필요",
+        "active": "활성",
+        "inactive": "비활성",
+        "unsubscribed": "수신 거부"
       }
+    },
+    "erase": {
+      "scope": "연락처를 삭제하면 해당 연락처의 대화, 메시지, 미디어, 파일, 통화 녹음 및 통화 기록도 함께 삭제됩니다. 리드, 거래, 작업, 청구서는 유지됩니다.",
+      "scopeMany": "연락처를 삭제하면 해당 연락처들의 대화, 메시지, 미디어, 파일, 통화 녹음 및 통화 기록도 함께 삭제됩니다. 리드, 거래, 작업, 청구서는 유지됩니다.",
+      "keepHistory": "본인 식별 정보 없이 대화 기록 유지",
+      "keepHistoryHint": "대화는 기록용으로 남지만 더 이상 해당 사람을 가리키지 않습니다."
     }
   }
 }

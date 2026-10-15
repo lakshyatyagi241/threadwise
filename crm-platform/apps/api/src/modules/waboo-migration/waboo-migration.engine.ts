@@ -83,7 +83,7 @@ export async function executeRun(
   let startError: string | null = null;
   try {
     result = await d.runner.run(
-      { sourceClient: run.sourceClient, sourceDb: run.sourceDb, mode: run.mode },
+      { runUuid: run.uuid, sourceClient: run.sourceClient, sourceDb: run.sourceDb, mode: run.mode },
       async (ev) => {
         if (ev.event !== 'step') return;
         steps = applyStep(steps, ev, now());
@@ -155,6 +155,12 @@ export async function runBatch(
 export interface SweepStore {
   /** running longer than the timeout belonged to a worker that died: failed. Returns how many. */
   failStale(timeoutMs: number): Promise<number>;
+  /**
+   * Remote runner only. The worker that was following a running run is gone (it just started), and the agent would keep loading with
+   * nobody reading it while the one-running-run rule lets a new run start. Fails every running run and abandons the jobs of runs that
+   * are no longer running, so the agent stops the pipeline at its next report. Returns how many runs it failed.
+   */
+  failOrphanedRemote?(): Promise<number>;
   /** Standalone runs still queued. */
   pendingRuns(): Promise<Array<{ uuid: string; runAt: Date | null }>>;
   /** Batches still queued or running (resumable from their rows). */
@@ -167,11 +173,19 @@ export interface JobEnqueuer {
 
 /** Re-enqueues scheduled work whose job was lost (worker or Redis down at fire time) and fails stuck running runs. Safe to repeat. */
 export async function recover(
-  d: { store: SweepStore; jobs: JobEnqueuer; now?: () => Date; timeoutMs: number },
+  d: {
+    store: SweepStore;
+    jobs: JobEnqueuer;
+    now?: () => Date;
+    timeoutMs: number;
+    /** true when the pipeline runs on a runner agent */
+    remote?: boolean;
+  },
   delay: (runAt: Date | null, now: Date) => number,
 ): Promise<{ failed: number; requeued: number }> {
   const now = (d.now ?? (() => new Date()))();
-  const failed = await d.store.failStale(d.timeoutMs);
+  let failed = await d.store.failStale(d.timeoutMs);
+  if (d.remote && d.store.failOrphanedRemote) failed += await d.store.failOrphanedRemote();
   let requeued = 0;
   for (const r of await d.store.pendingRuns())
     if (await d.jobs.ensure('migrate', r.uuid, delay(r.runAt, now))) requeued++;

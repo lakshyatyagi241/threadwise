@@ -103,6 +103,8 @@ export const storeOrderLineSchema = z.object({
   lineTotalMinor: z.number().int(),
   image: z.string().nullable(),
   retailerId: z.string().nullable(),
+  /** "M / Red" for a variant line; null for older lines and plain products. */
+  variantTitle: z.string().nullable().optional(),
 });
 export type StoreOrderLine = z.infer<typeof storeOrderLineSchema>;
 

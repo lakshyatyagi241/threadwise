@@ -3,14 +3,17 @@ import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
   canonicalizeLocalPhone,
+  consentChannels,
   ERROR_CODES,
   formRateLimitsSchema,
+  type FormConsentChannel,
   type FormDefinition,
   type PublicFormSubmitInput,
   type PublicFormSubmitResponse,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { ownersAvailable } from '../../common/leave-owner-pool';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
@@ -341,14 +344,28 @@ export class FormSubmitService {
     const version = await this.forms.findVersionById(tx, orgId, versionId);
     if (!version) throw notFound();
     const def = readDefinition(version.definition);
+    // The channels are the ones of the wording the visitor saw (the submission's own version), not of a later republish.
+    const seen =
+      sub.versionId === versionId
+        ? version
+        : ((await this.forms.findVersionById(tx, orgId, sub.versionId)) ?? version);
+    const seenChannels = consentChannels(readDefinition(seen.definition).consent);
     await this.subs.markRetry(tx, orgId, sub.id);
     const consent: ConsentOutcome = sub.consent
       ? {
           stored: { ...sub.consent, shownVersion: null },
           missing: false,
           marketingOptIn: sub.consent.given && def.consent.marketing,
+          serviceAgreed: sub.consent.given && !def.consent.marketing,
+          channels: seenChannels,
         }
-      : { stored: null, missing: false, marketingOptIn: false };
+      : {
+          stored: null,
+          missing: false,
+          marketingOptIn: false,
+          serviceAgreed: false,
+          channels: [],
+        };
     // A staff re-run of a form that takes payment opens its attempt as well (staff then get the link from the submission screen).
     const gatewaySlug = def.payment.enabled ? await this.payments.assertGateway(orgId) : '';
     await this.processInTx(
@@ -574,7 +591,7 @@ export class FormSubmitService {
       form: form.name.slice(0, 255),
       capturedAt: sub.createdAt,
     });
-    if (consent.marketingOptIn)
+    if (consent.marketingOptIn) {
       await this.subscribe(
         tx,
         orgId,
@@ -584,7 +601,20 @@ export class FormSubmitService {
         found.uuid,
         email,
         phone?.e164 ?? null,
+        consent.channels,
       );
+    } else if (consent.serviceAgreed) {
+      await this.recordServiceAgreement(
+        tx,
+        orgId,
+        form,
+        sub,
+        found.contactId,
+        email,
+        phone?.e164 ?? null,
+        consent.channels,
+      );
+    }
 
     await this.activities.insert(tx, orgId, {
       contactId: found.contactId,
@@ -863,8 +893,13 @@ export class FormSubmitService {
       userIds?: string[];
     };
     const mode = rule.mode ?? 'unassigned';
-    const active =
-      mode === 'unassigned' ? [] : await this.forms.activeUsers(tx, orgId, rule.userIds ?? []);
+    // People on leave today are never picked (BL-112): a fixed person is replaced by their delegate, a rotation skips them.
+    const active = await ownersAvailable(
+      tx,
+      orgId,
+      mode === 'unassigned' ? [] : await this.forms.activeUsers(tx, orgId, rule.userIds ?? []),
+      mode,
+    );
     if (mode !== 'round_robin' || active.length === 0) return pickOwner({ mode }, active, 0).pick;
     return pickOwner({ mode }, active, await this.forms.takeTurn(tx, orgId, form.id)).pick;
   }
@@ -898,6 +933,7 @@ export class FormSubmitService {
     contactUuid: string,
     email: string | null,
     phone: string | null,
+    channels: readonly FormConsentChannel[],
   ): Promise<void> {
     const row = (await this.contactRepo.findById(tx, orgId, contactId))!;
     if (row.isUnsubscribed) return;
@@ -905,8 +941,9 @@ export class FormSubmitService {
     // text and its version), the form and the submission. Never the visitor's IP. A form cannot override a STOP (respectWithdrawn).
     const given = sub.consent;
     for (const channel of [
-      ...(phone ? (['whatsapp'] as const) : []),
-      ...(email ? (['email'] as const) : []),
+      ...(phone && channels.includes('whatsapp') ? (['whatsapp'] as const) : []),
+      ...(phone && channels.includes('sms') ? (['sms'] as const) : []),
+      ...(email && channels.includes('email') ? (['email'] as const) : []),
     ]) {
       await this.consentLedger.recordInTx(tx, orgId, {
         contactId,
@@ -926,8 +963,12 @@ export class FormSubmitService {
       });
     }
     const patch: Record<string, unknown> = {};
-    if (email && !row.emailSubscriptionStatus) patch.emailSubscriptionStatus = 'subscribed';
-    if (phone && !row.whatsappSubscriptionStatus) patch.whatsappSubscriptionStatus = 'subscribed';
+    if (email && channels.includes('email') && !row.emailSubscriptionStatus)
+      patch.emailSubscriptionStatus = 'subscribed';
+    if (phone && channels.includes('whatsapp') && !row.whatsappSubscriptionStatus)
+      patch.whatsappSubscriptionStatus = 'subscribed';
+    if (phone && channels.includes('sms') && !row.smsSubscriptionStatus)
+      patch.smsSubscriptionStatus = 'subscribed';
     if (Object.keys(patch).length === 0) return;
     await this.contactRepo.updateFieldsById(tx, orgId, contactId, { ...patch, updatedBy: null });
     await this.audit.record(tx, {
@@ -952,6 +993,51 @@ export class FormSubmitService {
         submissionId: sub.uuid,
       },
     });
+  }
+
+  /**
+   * A ticked consent line that is NOT marketing (BL-171, privacy spec 4.3.2): the person agreed to be contacted about their request.
+   * The ledger keeps that as evidence, with the exact line they ticked (text cut to 300 characters, the hash of the whole text, the
+   * version), the form and the submission, but only for SERVICE messages (purpose `utility`): it is never a marketing grant, changes no
+   * subscription label and announces no opt-in. WhatsApp and email follow what the form collected; SMS only when the form declares that its
+   * wording covers SMS. A person who stopped service messages on a channel is not turned back on (`respectWithdrawn`).
+   */
+  private async recordServiceAgreement(
+    tx: Tx,
+    orgId: number,
+    form: FormRow,
+    sub: SubmissionRow,
+    contactId: number,
+    email: string | null,
+    phone: string | null,
+    channels: readonly FormConsentChannel[],
+  ): Promise<void> {
+    const given = sub.consent;
+    if (!given) return;
+    for (const channel of [
+      ...(phone && channels.includes('whatsapp') ? (['whatsapp'] as const) : []),
+      ...(phone && channels.includes('sms') ? (['sms'] as const) : []),
+      ...(email && channels.includes('email') ? (['email'] as const) : []),
+    ]) {
+      await this.consentLedger.recordInTx(tx, orgId, {
+        contactId,
+        channel,
+        purpose: 'utility',
+        action: 'granted',
+        source: 'form',
+        evidence: {
+          consentText: given.text.slice(0, 300),
+          consentVersion: String(given.version),
+          consentHash: createHash('sha256').update(given.text).digest('hex'),
+          formId: form.uuid,
+          submissionId: sub.uuid,
+        },
+        note: 'Agreed to be contacted about their request (not marketing)',
+        occurredAt: new Date(given.at),
+        idempotencyKey: `form:${sub.uuid}:utility:${channel}`,
+        respectWithdrawn: true,
+      });
+    }
   }
 
   // --- small reads ---------------------------------------------------------------------------------------------------------------------

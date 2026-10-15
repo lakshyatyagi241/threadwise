@@ -116,7 +116,7 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 | channel-telegram | tg | /telegram | 3 | 100 | pending | 19 |
 | channel-tiktok | tt | /tiktok | 3 | 110 | pending |  |
 | channel-viber | vib | /viber | 3 | 80 | pending |  |
-| channel-wechat | wech | /wechat | 3 | 100 | pending |  |
+| channel-wechat | wech | /wechat | 3 | 100 | pending | 20 |
 | checkout-orders-merchant-payments | chk | /checkout | 3 | 190 | pending |  |
 | meta-ads | mads | /meta-ads | 3 | 120 | pending |  |
 | shopify-woocommerce | ecom | /ecommerce | 3 | 130 | pending | 38 |

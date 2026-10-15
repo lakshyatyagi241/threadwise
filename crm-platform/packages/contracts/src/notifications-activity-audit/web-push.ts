@@ -64,8 +64,16 @@ export type PushDevice = z.infer<typeof pushDeviceSchema>;
 export const pushDeviceListResponseSchema = z.object({ items: z.array(pushDeviceSchema) });
 export type PushDeviceListResponse = z.infer<typeof pushDeviceListResponseSchema>;
 
-/** `POST /v2/notifications/push/test`: how many of the caller's devices the test went to. */
+/**
+ * `POST /v2/notifications/push/test`: which channels the test went through. It writes a real `test` bell row for the caller and announces it
+ * live (`inApp`), and sends a Web Push to the caller's devices (`sent` / `failed`), so one press exercises every way a person is told.
+ */
 export const pushTestResponseSchema = z.object({
+  /**
+   * A bell row was written and announced over the live socket (the bell number, the toast and the tab title follow). False when the person
+   * turned the bell off for the test type, or the workspace owner did.
+   */
+  inApp: z.boolean(),
   /** Devices the push service accepted the test for. */
   sent: z.number().int().nonnegative(),
   /** Devices that could not be reached right now (removed by the browser, or the push service refused). */

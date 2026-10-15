@@ -7,7 +7,7 @@ import {
   registrationSettingsResponseSchema,
   type RegistrationSettingsResponse,
 } from '@crm/contracts';
-import { Alert, Button, Field, Input, Select, Spinner, cn } from '@crm/ui';
+import { Alert, Button, Field, Input, Select, Spinner, Textarea, cn } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import {
   TRIAL_DAYS,
@@ -35,7 +35,14 @@ import { Section, ToggleRow } from './section-parts';
 import { useProblemText } from './use-problem-text';
 
 const NS = 'auth-registration-security.platform.registration';
-type ControlId = RegistrationField | 'publicRegistration' | 'emailVerification' | 'otpEnabled';
+type ControlId =
+  | RegistrationField
+  | 'publicRegistration'
+  | 'emailVerification'
+  | 'businessEmailOnly'
+  | 'blockDisposableEmail'
+  | 'requirePhoneVerification'
+  | 'otpEnabled';
 type Errors = Partial<Record<ControlId, string>>;
 
 export function RegistrationSettingsPage() {
@@ -344,6 +351,52 @@ function RegistrationForm({ settings }: { settings: RegistrationSettingsResponse
               {text('privacyUrl', { dir: 'ltr', mono: true })}
               {text('cookiesUrl', { dir: 'ltr', mono: true })}
             </div>
+          </Section>
+
+          <Section
+            kicker={t('guard.kicker')}
+            title={t('guard.title')}
+            description={t('guard.description')}
+          >
+            {(
+              ['businessEmailOnly', 'blockDisposableEmail', 'requirePhoneVerification'] as const
+            ).map((key) => (
+              <ToggleRow
+                key={key}
+                id={`reg-${key}`}
+                label={t(`fields.${key}.label`)}
+                hint={draft[key] ? t(`fields.${key}.hintOn`) : t(`fields.${key}.hintOff`)}
+                checked={draft[key]}
+                onChange={(v) => set(key, v)}
+                disabled={dis}
+                error={errors[key]}
+              />
+            ))}
+            {!draft.requirePhoneVerification && (
+              <Alert tone="warning" className="text-xs">
+                {t('guard.phoneOffWarning')}
+              </Alert>
+            )}
+            <Field
+              label={t('fields.blockedEmailDomains.label')}
+              htmlFor="reg-blockedEmailDomains"
+              hint={t('fields.blockedEmailDomains.hint')}
+              error={errors.blockedEmailDomains}
+            >
+              <Textarea
+                id="reg-blockedEmailDomains"
+                rows={5}
+                value={draft.blockedEmailDomains}
+                onChange={(e) => set('blockedEmailDomains', e.target.value)}
+                invalid={Boolean(errors.blockedEmailDomains)}
+                readOnly={dis}
+                dir="ltr"
+                placeholder={t('fields.blockedEmailDomains.placeholder')}
+                autoComplete="off"
+                spellCheck={false}
+                className="font-mono"
+              />
+            </Field>
           </Section>
 
           <OtpSection

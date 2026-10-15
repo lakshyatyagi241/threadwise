@@ -152,7 +152,9 @@
       "savedReplyGone": "이 저장된 답변은 더 이상 존재하지 않습니다.",
       "savedReplyChannel": "이 저장된 답변은 이 유형의 채널용이 아닙니다.",
       "shortcutTaken": "다른 저장된 답변이 이미 해당 단축키를 사용하고 있습니다.",
-      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다."
+      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다.",
+      "contactOptedOut": "이 연락처는 마케팅 메시지를 수신 거부했으므로 메시지가 전송되지 않았습니다.",
+      "consentRequired": "이 워크스페이스는 마케팅 메시지에 기록된 동의를 요구하며 이 연락처에는 동의가 없어 메시지가 전송되지 않았습니다."
     },
     "bubble": {
       "kind": {
@@ -448,7 +450,9 @@
         "unassign": "배정 해제",
         "open": "진행 중 {count}건",
         "pickTeam": "이 대화에 배정할 팀 선택",
-        "noTeam": "팀 없음"
+        "noTeam": "팀 없음",
+        "onLeave": "휴가 중",
+        "onLeaveUntil": "{date}까지 휴가 중"
       },
       "presence": {
         "online": "온라인",
@@ -600,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "템플릿 보내기",
       "close": "닫기",
-      "cancel": "취소",
-      "back": "템플릿으로 돌아가기",
       "search": "이름 또는 내용으로 검색",
       "searchLabel": "템플릿 검색",
       "loading": "템플릿을 불러오는 중",
@@ -610,9 +612,7 @@
       "empty": "이 WhatsApp 번호에 승인된 템플릿이 아직 없습니다. 템플릿에서 만든 후 Meta 승인을 기다리세요.",
       "noResults": "검색과 일치하는 템플릿이 없습니다.",
       "windowHint": "템플릿은 24시간 응답 기간이 지나도 보낼 수 있습니다.",
-      "variables": "변수 입력",
       "preview": "고객이 읽게 될 내용",
-      "send": "템플릿 보내기",
       "sending": "발송 중",
       "sent": "템플릿을 보냈습니다",
       "problem": {
@@ -627,7 +627,31 @@
         "authentication": "일회용 비밀번호(OTP) 템플릿은 수신함이 아닌 시스템에서 발송됩니다.",
         "named_variables": "명명된 변수를 사용하며, 수신함에서는 아직 지원되지 않습니다."
       },
-      "hasMore": "처음 {count}개의 템플릿을 표시합니다. 나머지는 이름 또는 내용으로 검색하세요."
+      "hasMore": "처음 {count}개의 템플릿을 표시합니다. 나머지는 이름 또는 내용으로 검색하세요.",
+      "previewEmpty": "템플릿을 가리키면 고객의 휴대폰에서 어떻게 보일지 확인할 수 있습니다.",
+      "previewCustomer": "고객",
+      "noVariables": "이 템플릿에는 채울 항목이 없습니다. 휴대폰을 확인한 뒤 보내세요.",
+      "sendTo": "{name}님에게 보내기",
+      "refresh": "목록 새로고침",
+      "device": "휴대폰 미리보기",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "본문 변수 설정",
+      "or": "또는",
+      "mapField": "{key}에 필드 매핑",
+      "mapNone": "이 연락처에는 매핑할 정보가 없습니다.",
+      "typeMessage": "메시지 입력",
+      "fields": {
+        "name": "이름",
+        "phone": "전화번호",
+        "email": "이메일"
+      },
+      "create": "새 템플릿 만들기",
+      "actions": "템플릿 작업",
+      "edit": "템플릿 수정",
+      "duplicate": "템플릿 복제"
     },
     "log": {
       "title": "전송 로그",
@@ -712,7 +736,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "이메일"
+        "email": "이메일",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "연락처",
@@ -933,7 +960,9 @@
       },
       "tag": "태그",
       "tagAdd": "태그 추가",
-      "tagRemove": "태그 제거"
+      "tagRemove": "태그 제거",
+      "onLeave": "휴가 중",
+      "onLeaveUntil": "{date}까지 휴가 중"
     },
     "tags": {
       "tag": "태그",

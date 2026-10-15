@@ -2172,3 +2172,12 @@ Exposes:
   }
 }
 ```
+
+## Extensions beyond Reference (owner-requested, 2026-10-13)
+
+Not Reference features; recorded so the parity run does not read them as drift. Reference could only link or autodetect a catalog. Here the workspace manages it on Meta from our app:
+
+- **EXT-CAT-001** Create a catalog on Meta and connect it: `POST /catalog/create` (Setup tab, WABA engine).
+- **EXT-CAT-002** Rename the catalog on Meta: `POST /catalog/rename`.
+- **EXT-CAT-003** Delete the catalog on Meta (catalog id typed back to confirm): `POST /catalog/delete-remote`.
+- **EXT-CAT-004** Push, update and remove a collection as a Meta product set: `POST|DELETE /catalog/collections/:id/meta` (uses the existing `wa_product_sets.meta_set_id`).

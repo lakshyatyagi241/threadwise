@@ -60,7 +60,9 @@
       "rejected": "Rifiutato: {reason}",
       "view": "Visualizza",
       "edit": "Modifica",
-      "delete": "Elimina"
+      "delete": "Elimina",
+      "curl": "cURL: invia questo modello con l'API",
+      "curlNamed": "cURL per inviare {name}"
     },
     "library": {
       "title": "Libreria dei template",
@@ -354,6 +356,15 @@
         "title": "Payload per Meta",
         "hint": "Ciò che viene inviato a Meta per la revisione, esattamente come è costruito.",
         "empty": "Nulla ancora costruito."
+      },
+      "curl": {
+        "title": "Invia con l'API (cURL)",
+        "intro": "Invia questo modello approvato a un numero. Sostituisci i valori di esempio con i tuoi.",
+        "copy": "Copia",
+        "copied": "Copiato",
+        "copyFailed": "Impossibile copiare. Seleziona il testo e copialo a mano.",
+        "keyHint": "Sostituisci YOUR_API_KEY con la tua chiave API.",
+        "keyLink": "Ottieni una chiave API"
       }
     }
   }

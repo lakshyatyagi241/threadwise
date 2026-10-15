@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { hash } from '@node-rs/argon2';
 import { expect } from 'vitest';
+import { withContractWatch } from '../../support/contract';
 import { startHarness, type Harness } from '../auth-registration-security/harness';
 
 export { startHarness, type Harness };
@@ -141,12 +142,14 @@ export class Api {
   /** As a bearer token: `api.as(token).get('/v2/contacts')`. */
   as(token: string) {
     const http = () => this.http();
+    // `withContractWatch` does nothing unless QA_CONTRACT is set; then every error an awaited request gets is checked against
+    // the problem+json envelope (test/support/contract.ts), which turns every existing e2e request into a contract check.
     return {
-      get: (path: string) => http().get(path).set(bearer(token)),
-      post: (path: string) => http().post(path).set(bearer(token)),
-      patch: (path: string) => http().patch(path).set(bearer(token)),
-      put: (path: string) => http().put(path).set(bearer(token)),
-      delete: (path: string) => http().delete(path).set(bearer(token)),
+      get: (path: string) => withContractWatch(http().get(path).set(bearer(token))),
+      post: (path: string) => withContractWatch(http().post(path).set(bearer(token))),
+      patch: (path: string) => withContractWatch(http().patch(path).set(bearer(token))),
+      put: (path: string) => withContractWatch(http().put(path).set(bearer(token))),
+      delete: (path: string) => withContractWatch(http().delete(path).set(bearer(token))),
     };
   }
 

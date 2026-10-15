@@ -738,7 +738,9 @@
           "link": "Dùng đường dẫn của trang như /legal/terms, hoặc địa chỉ http hay https đầy đủ.",
           "senderFormat": "Chọn một trong các người gửi trong danh sách.",
           "countryFormat": "Dùng mã quốc gia hai chữ cái.",
-          "senderRequired": "Chọn kênh người gửi trước khi tạo mẫu."
+          "senderRequired": "Chọn kênh người gửi trước khi tạo mẫu.",
+          "domainFormat": "{entry} không phải là tên miền hợp lệ. Hãy dùng tên như vidu.com.",
+          "tooMany": "Tối đa {max} tên miền."
         },
         "policy": {
           "kicker": "Đăng ký",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Số lần thử tối đa"
+          },
+          "businessEmailOnly": {
+            "label": "Chỉ email công việc",
+            "hintOn": "Các nhà cung cấp miễn phí như Gmail, Outlook và Yahoo bị từ chối khi đăng ký.",
+            "hintOff": "Bất kỳ ai cũng có thể đăng ký bằng địa chỉ cá nhân miễn phí."
+          },
+          "blockDisposableEmail": {
+            "label": "Chặn email tạm thời",
+            "hintOn": "Tên miền dùng một lần, tạm thời và tên miền không có máy chủ thư đều bị từ chối.",
+            "hintOff": "Địa chỉ tạm thời được chấp nhận."
+          },
+          "requirePhoneVerification": {
+            "label": "Yêu cầu số di động đã xác minh",
+            "hintOn": "Mỗi lượt đăng ký phải xác nhận mã dùng một lần. Nếu không gửi được mã, việc đăng ký sẽ dừng lại thay vì bỏ qua bước kiểm tra.",
+            "hintOff": "Bước nhập mã chỉ chạy khi mã đăng ký bên dưới được bật."
+          },
+          "blockedEmailDomains": {
+            "label": "Tên miền luôn bị chặn",
+            "hint": "Mỗi dòng một tên miền. Tên miền phụ cũng bị chặn. Vẫn bị từ chối ngay cả khi «Chỉ email công việc» đang tắt.",
+            "placeholder": "vidu.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Chân tin nhắn đó không được chấp nhận.",
             "unexpected": "Không thể lưu chân tin nhắn. Hãy thử lại sau giây lát."
           }
+        },
+        "guard": {
+          "kicker": "Bảo vệ đăng ký",
+          "title": "Kiểm tra email công việc và số di động",
+          "description": "Chặn địa chỉ dùng một lần và địa chỉ cá nhân, đồng thời đảm bảo mọi tài khoản mới đều có số di động đã xác minh. Áp dụng cho đăng ký bằng email và mạng xã hội.",
+          "phoneOffWarning": "Khi tắt kiểm tra di động, có thể tạo tài khoản mà không cần số đã xác minh, khiến việc đăng ký giả hàng loạt dễ hơn."
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "Trình tạo cửa hàng trực tuyến.",
             "invoicing": "Hóa đơn, phiếu ghi có, thanh toán, đơn bán hàng và thuế suất.",
             "forms_and_links": "Biểu mẫu thu thập khách hàng tiềm năng và liên kết chia sẻ.",
-            "extra_channels": "Các kênh Telegram, Facebook và Instagram.",
+            "extra_channels": "Các kênh Telegram, Facebook, Instagram, LINE, Viber và WeChat.",
             "form_builder": "Biểu mẫu web được lưu trữ và nhúng tạo liên hệ trong CRM. Ứng dụng Biểu mẫu trả phí nắm công tắc này.",
             "waba_groups": "Tạo và quản lý nhóm WhatsApp từ số Cloud API: liên kết mời, yêu cầu tham gia, thành viên. Số phải là Official Business Account.",
             "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS.",
             "help_agent": "Trợ lý trợ giúp trong ứng dụng: mọi người yêu cầu một việc bằng lời đơn giản, trợ lý hướng dẫn hoặc làm giúp ngay trên phiên của họ và hỏi trước khi làm điều có rủi ro. Tốn token AI.",
-            "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này."
+            "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này.",
+            "personal_history_full": "Cho phép số WhatsApp cá nhân nhập toàn bộ lịch sử trò chuyện khi liên kết lần đầu. Tính năng nhập các cuộc trò chuyện gần đây có sẵn cho mọi gói có số cá nhân."
           },
           "units": {
             "days": "Ngày",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI mỗi tháng",
             "sms_monthly": "SMS mỗi tháng",
-            "email_mailboxes": "Hộp thư email"
+            "email_mailboxes": "Hộp thư email",
+            "email_monthly": "Email mỗi tháng"
           },
           "featureGroups": {
             "messaging": "Nhắn tin",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "Trình tạo cửa hàng và website",
             "invoicing": "Lập hóa đơn (hóa đơn, phiếu ghi có, hóa đơn định kỳ)",
             "forms_and_links": "Biểu mẫu, liên kết nhấp để trò chuyện và nhóm",
-            "extra_channels": "Kênh Telegram, Facebook và Instagram",
+            "extra_channels": "Kênh Telegram, Facebook, Instagram, LINE, Viber và WeChat",
             "form_builder": "Biểu mẫu (trình tạo biểu mẫu web)",
             "waba_groups": "Nhóm WhatsApp (Cloud API)",
             "sms": "Kênh SMS",
             "help_agent": "Trợ lý trợ giúp (AI, tốn token)",
-            "email_channel": "Kênh email (Gmail)"
+            "email_channel": "Kênh email (Gmail)",
+            "personal_history_full": "Nhập toàn bộ lịch sử trò chuyện (WhatsApp cá nhân)"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính spam. Vượt giới hạn, lượt gửi vẫn được lưu để xem xét, không bị bỏ. 0 = không giới hạn.",
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI trong tháng dương lịch, gồm cả lần thử sửa lại. 0 = không giới hạn.",
             "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
-            "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn."
+            "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
+            "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn."
           }
         }
       },

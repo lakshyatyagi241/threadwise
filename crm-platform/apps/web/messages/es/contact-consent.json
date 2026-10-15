@@ -16,7 +16,8 @@
       "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo.",
       "exportInProgress": "Ya se está preparando un archivo de prueba. Espera a que termine y vuelve a intentarlo.",
-      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo."
+      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo.",
+      "noticeTargetMissing": "Ese widget, página de reservas o tienda ya no existe."
     },
     "settings": {
       "title": "Consentimiento y respuestas STOP",
@@ -109,15 +110,24 @@
         "email": "Correo electrónico",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "Chat web"
+        "webchat": "Chat web",
+        "voice": "Llamada de voz",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "suscrito",
-        "withdrawn": "dado de baja"
+        "withdrawn": "dado de baja",
+        "utilityGranted": "aceptó mensajes de servicio",
+        "utilityWithdrawn": "mensajes de servicio detenidos"
       },
       "action": {
         "granted": "Suscrito",
-        "withdrawn": "Dado de baja"
+        "withdrawn": "Dado de baja",
+        "utilityGranted": "Aceptó que le contacten sobre su solicitud",
+        "utilityWithdrawn": "Detuvo los mensajes de servicio"
       },
       "source": {
         "form": "Formulario",
@@ -128,7 +138,11 @@
         "flow": "Flujo",
         "inbound_message": "Mensaje",
         "contact_request": "Solicitud del contacto",
-        "legacy": "Antes del historial de consentimiento"
+        "legacy": "Antes del historial de consentimiento",
+        "widget": "Chat del sitio web",
+        "booking": "Página de reservas",
+        "commerce": "Pago en la tienda",
+        "lead": "Captación de leads"
       },
       "by": "por {name}",
       "evidence": {
@@ -142,7 +156,16 @@
         "fileName": "Archivo",
         "apiKeyId": "Clave de API",
         "flowId": "Flujo",
-        "reference": "Referencia"
+        "reference": "Referencia",
+        "noticeVersion": "Versión del aviso",
+        "noticeUrl": "Enlace del aviso",
+        "widgetId": "Widget de chat",
+        "bookingTypeId": "Página de reservas",
+        "integrationId": "Tienda",
+        "storeFlag": "Ajuste de la tienda",
+        "leadSourceId": "Origen del lead",
+        "leadFormId": "Formulario de lead",
+        "adId": "Anuncio"
       },
       "dialog": {
         "titleGranted": "Marcar como suscrito",
@@ -175,7 +198,14 @@
       "hintColumn": "La columna asignada al consentimiento de marketing decide quién se registra: solo las filas que dicen sí obtienen un consentimiento, con el nombre del archivo como prueba. Un no, una celda vacía o una palabra desconocida no registran nada. Los contactos que se dieron de baja siguen dados de baja.",
       "columnSummary": "{granted} filas dicen sí y se registrarán. {notGranted} dicen no o están vacías y no reciben ningún registro de consentimiento.",
       "unrecognised": "{count, plural, one {# fila tiene} other {# filas tienen}} un valor de consentimiento que no es sí ni no ({values}). {count, plural, one {Se trata} other {Se tratan}} como no concedido. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba."
+      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba.",
+      "noticeText": "Aviso o base legal (opcional)",
+      "noticeTextHint": "A qué accedieron estos contactos y dónde, por ejemplo: se suscribieron en el pago con el aviso de privacidad v3. Se guarda como prueba con cada consentimiento registrado.",
+      "noticeVersion": "Versión del aviso (opcional)",
+      "smsSummary": "Columna de consentimiento SMS: {granted} filas dicen sí y se registrarán como consentimiento SMS. {notGranted} dicen no o están en blanco.",
+      "emailSummary": "Columna de consentimiento de correo: {granted} filas dicen sí y se registrarán como consentimiento de correo (la fila también necesita una dirección de correo). {notGranted} dicen no o están en blanco.",
+      "labelNumbers": "Tengo consentimiento para escribir a estos números",
+      "hintNumbers": "Marcada, cada número del archivo se registra como que aceptó marketing al lanzar la difusión, con el nombre del archivo como prueba. Sin marcar, no se registra consentimiento. Quienes se dieron de baja siguen de baja."
     },
     "systemLine": {
       "withdrawn": "El contacto respondió {keyword}: se dio de baja del marketing",
@@ -200,6 +230,120 @@
         "failed": "Fallido",
         "expired": "Caducado"
       }
+    },
+    "unsubscribe": {
+      "title": "Darse de baja de los correos de marketing",
+      "intro": "Confirma que ya no quieres recibir correos de marketing de este negocio. Seguirás recibiendo mensajes sobre tus pedidos y citas.",
+      "confirm": "Darme de baja",
+      "working": "Dando de baja...",
+      "doneTitle": "Te has dado de baja",
+      "doneBody": "Ya no recibirás mensajes de marketing de este negocio.",
+      "already": "Ya te habías dado de baja.",
+      "invalidTitle": "Este enlace no es válido",
+      "invalidBody": "El enlace de baja está incompleto o fue modificado. Usa el enlace del último correo que recibiste.",
+      "error": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Permitido: el aviso se entregó primero.",
+        "consent_evidence_recorded": "Permitido: el aviso se entregó y la persona aceptó.",
+        "purpose_not_enabled": "No permitido: el espacio de trabajo no lo ha activado.",
+        "consent_declined": "No permitido: la persona rechazó.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "Línea de consentimiento en el formulario del chat",
+        "booking": "Línea de consentimiento en la página de reservas",
+        "commerce": "Qué significa la casilla de marketing de la tienda",
+        "workspace": "Aviso de consentimiento predeterminado"
+      },
+      "intro": {
+        "widget": "Se muestra como una casilla bajo los datos del visitante. Solo se registra como que acepta quien la marca, y solo si dio un teléfono o un correo.",
+        "booking": "Se muestra como una casilla en el formulario de reserva. Solo se registra como que acepta quien la marca; reservar nunca la exige.",
+        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre.",
+        "workspace": "El texto que tu espacio de trabajo muestra junto a una casilla de consentimiento cuando un formulario, widget o página de reservas no tiene uno propio. Cada cambio es una nueva versión numerada."
+      },
+      "enabled": "Línea de consentimiento activada",
+      "text": "Texto que la persona acepta",
+      "textHint": "Hasta {max} caracteres. Cada cambio se guarda como una versión nueva.",
+      "textRequired": "Escriba el texto antes de activar la línea.",
+      "url": "Enlace a su política de privacidad (opcional)",
+      "urlHint": "Debe empezar por https://",
+      "save": "Guardar la línea de consentimiento",
+      "saved": "Línea de consentimiento guardada (versión {version}).",
+      "version": "Versión actual: {version}",
+      "noVersion": "Aún no guardada.",
+      "saveFirst": "Guarde esto primero y luego podrá definir su línea de consentimiento.",
+      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)",
+      "termsUrl": "Enlace a tus términos (opcional)",
+      "termsUrlHint": "Debe empezar por https://",
+      "useWorkspacePrivacy": "Usar el enlace de privacidad de mi espacio de trabajo",
+      "useWorkspaceTerms": "Usar el enlace de términos de mi espacio de trabajo",
+      "useWorkspaceText": "Usar el texto predeterminado de mi espacio de trabajo",
+      "statement": "Acepto recibir novedades y ofertas por {channels}. Puedo responder STOP en cualquier momento para darme de baja.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "correo electrónico"
+      },
+      "channelsLabel": "Canales que cubre este consentimiento",
+      "channelsHint": "La persona solo se suscribe en los canales marcados aquí, y el texto del consentimiento los nombra. Un canal se usa solo si la persona da el teléfono o el correo correspondiente.",
+      "channelsUse": "Actualizar el texto con estos canales"
     }
   }
 }

@@ -144,6 +144,16 @@ piece is an endpoint a screen composes.
 An id of another organization is a 404, a malformed id a 400. Percentages: delivery is delivered over sent, read is read over
 delivered, failed is failed over sent on the tiles; on the detail header sent, delivered and failed are over the audience.
 
+### Director summary (an addition beyond Reference)
+
+`GET /v2/broadcasts/:id/summary?cameBackDays=3|7|14&formIds=` and `GET /v2/broadcasts/:id/summary/people?kind=came_back|filled_form|not_reached`
+return the same shapes as a campaign's (`kind: 'broadcast'`): people messaged, delivered, read, failed, who wrote back inside the window
+and who filled an application form, as distinct people. Permission `bcast.broadcasts.read`; the form figures and `filled_form` need
+`record.form-submissions.read`. The rules, the caveats and the 60-second cache are in
+[campaigns.md](campaigns.md#director-summary-an-addition-beyond-reference). The routes are served by the campaigns module (it already
+depends on this one), so the two share one engine. A broadcast row carries no opt-out of its own, so an opted-out contact (`status`
+`unsubscribed` or the contact's flag) is left out of "wrote back".
+
 ## Actions: delete, retry, export (TW-BCAST-037, 038, 039, 040)
 
 | Route                                  | Permission                | What                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -278,8 +288,11 @@ the contacts, groups and tags endpoints.
 attachmentType, attachmentUrl, senderLabel, twilioReady`; `category` is `meta_category`, else the local category when it is a
   WhatsApp one, else `utility`.
 - `senders`: connected numbers (`key` is `<engine>:<uuid>`, what `senderKeys` takes), default engine first, with `label, phone,
-engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers are
-  left out.
+engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers and
+  mailboxes are left out.
+- `?channel=sms` and `?channel=email` scope the page to that channel. `email` lists the connected mailboxes the caller may send from
+  (`key` `email:<mailbox uuid>`, `phone` the address, `engine` `email`), no templates, and nothing without the Email plan add-on
+  (see [campaigns.md](campaigns.md#email-campaigns)). A template broadcast refuses an `email:` sender (422 on `senderKeys`).
 - `twilioEnabled`: a Twilio number is connected, so the picker marks each template "Twilio ready" or "plain text only".
 
 `templates[].engine` is `baileys`, `waba` or `twilio`: the stored channel, else Twilio when the template has a Content SID, WABA when

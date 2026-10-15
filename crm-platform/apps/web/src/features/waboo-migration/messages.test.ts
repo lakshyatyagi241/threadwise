@@ -18,8 +18,18 @@ const json = JSON.parse(
 ) as { 'waboo-migration': Record<string, Record<string, Node>> };
 const en = json['waboo-migration'];
 
+const runnerSlice = JSON.parse(
+  readFileSync(join(process.cwd(), 'messages', 'en', 'waboo-migration-runner.json'), 'utf8'),
+) as Record<string, Node>;
+
 /** Every `t('key')` / `t('a.b')` used by a namespace, resolved against the JSON. */
 function lookup(ns: string, key: string): Node | undefined {
+  // the runner banner's two sentences live in their own slice (translated in all 21 locales)
+  if (ns === 'waboo-migration-runner') {
+    let r: Node | undefined = runnerSlice[ns];
+    for (const p of key.split('.')) r = typeof r === 'object' ? r[p] : undefined;
+    return r;
+  }
   let cur: Node | undefined = ns
     .split('.')
     .slice(1)
@@ -81,6 +91,21 @@ describe('waboo-migration messages', () => {
       'WMIG_RUN_ACTIVE',
       'WMIG_SCHEDULE_INVALID',
     ]);
+  });
+
+  it('has the runner banner sentences in every locale, each keeping the {name} placeholder', () => {
+    const root = join(process.cwd(), 'messages');
+    const locales = readdirSync(root).filter((d) => !d.startsWith('.'));
+    expect(locales).toHaveLength(21);
+    for (const l of locales) {
+      const f = JSON.parse(readFileSync(join(root, l, 'waboo-migration-runner.json'), 'utf8')) as {
+        'waboo-migration-runner': { online: string; offline: string };
+      };
+      const m = f['waboo-migration-runner'];
+      expect(m.online, l).toContain('{name}');
+      expect(m.offline.length, l).toBeGreaterThan(20);
+      expect(m.offline, l).not.toContain('{');
+    }
   });
 
   it('has the navigation labels and the schedule errors', () => {

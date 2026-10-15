@@ -16,7 +16,8 @@
       "validation": "일부 값이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.",
       "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
       "exportInProgress": "동의 증빙 파일을 이미 준비하는 중입니다. 완료될 때까지 기다린 후 다시 시도하세요.",
-      "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 파일을 준비하세요."
+      "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 파일을 준비하세요.",
+      "noticeTargetMissing": "해당 위젯, 예약 페이지 또는 스토어가 더 이상 없습니다."
     },
     "settings": {
       "title": "수신 동의 및 STOP 답장",
@@ -109,15 +110,24 @@
         "email": "이메일",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "웹 채팅"
+        "webchat": "웹 채팅",
+        "voice": "음성 통화",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "수신 중",
-        "withdrawn": "수신 거부"
+        "withdrawn": "수신 거부",
+        "utilityGranted": "서비스 메시지에 동의",
+        "utilityWithdrawn": "서비스 메시지 중지"
       },
       "action": {
         "granted": "수신 중",
-        "withdrawn": "수신 거부"
+        "withdrawn": "수신 거부",
+        "utilityGranted": "요청 관련 연락에 동의",
+        "utilityWithdrawn": "서비스 메시지를 중지함"
       },
       "source": {
         "form": "양식",
@@ -128,7 +138,11 @@
         "flow": "플로우",
         "inbound_message": "메시지",
         "contact_request": "연락 요청",
-        "legacy": "수신 동의 기록 이전"
+        "legacy": "수신 동의 기록 이전",
+        "widget": "웹사이트 채팅",
+        "booking": "예약 페이지",
+        "commerce": "스토어 결제",
+        "lead": "리드 수집"
       },
       "by": "{name}님이 기록",
       "evidence": {
@@ -142,7 +156,16 @@
         "fileName": "파일",
         "apiKeyId": "API 키",
         "flowId": "플로우",
-        "reference": "참조"
+        "reference": "참조",
+        "noticeVersion": "고지 버전",
+        "noticeUrl": "고지 링크",
+        "widgetId": "채팅 위젯",
+        "bookingTypeId": "예약 페이지",
+        "integrationId": "스토어",
+        "storeFlag": "스토어 설정",
+        "leadSourceId": "리드 소스",
+        "leadFormId": "리드 양식",
+        "adId": "광고"
       },
       "dialog": {
         "titleGranted": "수신 중으로 표시",
@@ -175,7 +198,14 @@
       "hintColumn": "마케팅 동의에 매핑된 열이 기록 대상을 정합니다. '예'라고 표시된 행에만 동의가 기록되며, 증빙으로 파일 이름이 남습니다. '아니요', 빈 셀, 알 수 없는 단어는 아무것도 기록하지 않습니다. 수신 거부한 연락처는 계속 수신 거부 상태로 유지됩니다.",
       "columnSummary": "{granted}개 행이 '예'라고 되어 있어 기록됩니다. {notGranted}개 행은 '아니요'이거나 비어 있어 동의 기록이 생성되지 않습니다.",
       "unrecognised": "{count, plural, one {#개 행에} other {#개 행에}} '예' 또는 '아니요'가 아닌 동의 값({values})이 있습니다. 동의하지 않은 것으로 처리됩니다. yes / no, true / false 또는 1 / 0을 사용하세요.",
-      "columnIgnored": "위 체크박스를 선택하기 전까지 동의 열은 적용되지 않습니다."
+      "columnIgnored": "위 체크박스를 선택하기 전까지 동의 열은 적용되지 않습니다.",
+      "noticeText": "고지 또는 법적 근거(선택)",
+      "noticeTextHint": "이 연락처가 무엇에 어디서 동의했는지, 예: 결제 시 개인정보 고지 v3에 따라 가입. 기록된 각 동의의 증거로 보관됩니다.",
+      "noticeVersion": "고지 버전(선택)",
+      "smsSummary": "SMS 동의 열: {granted}행이 예이며 SMS 동의로 기록됩니다. {notGranted}행은 아니요이거나 비어 있습니다.",
+      "emailSummary": "이메일 동의 열: {granted}행이 예이며 이메일 동의로 기록됩니다(해당 행에 이메일 주소도 있어야 합니다). {notGranted}행은 아니요이거나 비어 있습니다.",
+      "labelNumbers": "이 번호로 메시지를 보낼 동의를 받았습니다",
+      "hintNumbers": "선택하면 브로드캐스트를 시작할 때 파일의 모든 번호가 마케팅에 동의한 것으로 기록되며 파일 이름이 증거가 됩니다. 선택하지 않으면 동의가 기록되지 않습니다. 수신 거부한 사람은 그대로 거부 상태입니다."
     },
     "systemLine": {
       "withdrawn": "연락처가 {keyword}로 답장함: 마케팅 수신 거부",
@@ -200,6 +230,120 @@
         "failed": "실패",
         "expired": "만료됨"
       }
+    },
+    "unsubscribe": {
+      "title": "마케팅 이메일 수신 거부",
+      "intro": "이 업체의 마케팅 이메일을 더 이상 받지 않겠다고 확인해 주세요. 주문 및 예약 관련 메시지는 계속 받으실 수 있습니다.",
+      "confirm": "수신 거부",
+      "working": "처리 중...",
+      "doneTitle": "수신 거부되었습니다",
+      "doneBody": "앞으로 이 업체의 마케팅 메시지를 받지 않습니다.",
+      "already": "이미 수신 거부하셨습니다.",
+      "invalidTitle": "유효하지 않은 링크입니다",
+      "invalidBody": "수신 거부 링크가 불완전하거나 변경되었습니다. 가장 최근에 받은 이메일의 링크를 사용하세요.",
+      "error": "문제가 발생했습니다. 다시 시도해 주세요."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "허용: 안내문이 먼저 전달되었습니다.",
+        "consent_evidence_recorded": "허용: 안내문이 전달되었고 상대가 동의했습니다.",
+        "purpose_not_enabled": "허용되지 않음: 워크스페이스에서 켜지 않았습니다.",
+        "consent_declined": "허용되지 않음: 상대가 거부했습니다.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "채팅 양식의 동의 문구",
+        "booking": "예약 페이지의 동의 문구",
+        "commerce": "스토어 마케팅 체크박스의 의미",
+        "workspace": "기본 동의 고지문"
+      },
+      "intro": {
+        "widget": "방문자 정보 아래에 체크박스로 표시됩니다. 체크한 방문자만 동의로 기록되며, 전화번호나 이메일을 입력한 경우에만 해당합니다.",
+        "booking": "예약 양식에 체크박스로 표시됩니다. 체크한 사람만 동의로 기록되며, 예약에는 필요하지 않습니다.",
+        "commerce": "스토어에서 마케팅을 수락한 고객은 동의로 기록됩니다. 그 체크박스가 고객에게 알려 주는 내용을 적어 증빙에 남기세요.",
+        "workspace": "양식, 위젯, 예약 페이지에 자체 문구가 없을 때 동의 체크박스 옆에 워크스페이스가 표시하는 문구입니다. 변경할 때마다 번호가 매겨진 새 버전이 됩니다."
+      },
+      "enabled": "동의 문구 켜기",
+      "text": "사용자가 동의하는 문구",
+      "textHint": "최대 {max}자. 변경할 때마다 새 버전으로 저장됩니다.",
+      "textRequired": "문구를 쓴 다음에 켜세요.",
+      "url": "개인정보 처리방침 링크 (선택)",
+      "urlHint": "https://로 시작해야 합니다",
+      "save": "동의 문구 저장",
+      "saved": "동의 문구를 저장했습니다 (버전 {version}).",
+      "version": "현재 버전: {version}",
+      "noVersion": "아직 저장되지 않았습니다.",
+      "saveFirst": "먼저 저장한 뒤에 동의 문구를 설정할 수 있습니다.",
+      "whatsappToo": "WhatsApp 동의로도 간주 (문구에 그렇게 적힌 경우에만)",
+      "termsUrl": "이용약관 링크(선택)",
+      "termsUrlHint": "https://로 시작해야 합니다",
+      "useWorkspacePrivacy": "워크스페이스 개인정보 링크 사용",
+      "useWorkspaceTerms": "워크스페이스 이용약관 링크 사용",
+      "useWorkspaceText": "워크스페이스 기본 문구 사용",
+      "statement": "{channels}으로 업데이트와 혜택 안내를 받는 데 동의합니다. 언제든지 STOP이라고 답장하면 수신을 거부할 수 있습니다.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "이메일"
+      },
+      "channelsLabel": "이 동의가 적용되는 채널",
+      "channelsHint": "본인은 여기서 선택한 채널에만 구독되며, 동의 문구에 해당 채널이 표시됩니다. 해당 전화번호나 이메일을 입력한 경우에만 채널이 사용됩니다.",
+      "channelsUse": "이 채널로 문구 업데이트"
     }
   }
 }

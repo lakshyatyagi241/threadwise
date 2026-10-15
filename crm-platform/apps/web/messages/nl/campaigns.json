@@ -160,6 +160,17 @@
             "body": "Begin met een sjabloonupdate of een broadcast om contacten opnieuw te betrekken, en vergelijk daarna bezorgde, gelezen en mislukte aantallen voordat je opschaalt."
           }
         }
+      },
+      "view": {
+        "label": "Weergave",
+        "list": "Lijst",
+        "blocks": "Blokken"
+      },
+      "col": {
+        "name": "Campagne",
+        "status": "Status",
+        "schedule": "Planning",
+        "actions": "Acties"
       }
     },
     "builder": {
@@ -192,7 +203,22 @@
         "typeLabel": "Type",
         "ab": "A/B",
         "off": "Uit",
-        "step": "Stap {n} van {total}"
+        "step": "Stap {n} van {total}",
+        "broadcastTitle": "Voorbeeld van de broadcast",
+        "templateMessage": "Sjabloonbericht",
+        "customMessage": "Eigen bericht",
+        "flowTitle": "Flow",
+        "variants": "Getoonde variant",
+        "variant": "Variant {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "E-mailvoorbeeld",
+        "emailFrom": "Van",
+        "emailSubject": "Onderwerp",
+        "emailNoSender": "Kies een afzender",
+        "emailNoSubject": "(geen onderwerp)",
+        "emailEmpty": "Schrijf de berichttekst en die verschijnt hier.",
+        "emailUnsubscribe": "Onderaan elke e-mail wordt een afmeldlink toegevoegd.",
+        "emailNote": "Zo ziet je campagne eruit in de inbox van elke ontvanger."
       },
       "previewEmpty": "Voorbeeld van je bericht…",
       "previewTemplate": "Sjabloon",
@@ -211,7 +237,8 @@
         "throttle": "De langste pauze moet minstens zo lang zijn als de kortste.",
         "expiry": "De einddatum moet na de verzenddatum liggen, anders zou de campagne verlopen voordat hij ooit wordt verzonden.",
         "media": "Voer een volledig adres in dat begint met http:// of https://.",
-        "sender": "Kies een afzender."
+        "sender": "Kies een afzender.",
+        "subject": "Kort het onderwerp in tot maximaal 150 tekens."
       },
       "submit": {
         "save": "Wijzigingen opslaan",
@@ -247,7 +274,8 @@
         "abHint": "Verdeel ontvangers over twee berichtvarianten.",
         "split": "Variant A-verdeling {a}%",
         "splitHint": "Variant B krijgt het resterende publiek. Stel de inhoud van Variant B in bij de stap Opstellen.",
-        "pickSender": "— Kies een afzender —"
+        "pickSender": "— Kies een afzender —",
+        "notVerified": "Nog niet geverifieerd: de begeleide flow is beschikbaar zodra het nummer is geverifieerd."
       },
       "audience": {
         "title": "Doelgroep",
@@ -275,7 +303,10 @@
         },
         "csvRows": "{count} nummers in het bestand",
         "numbersPlaceholder": "Eén nummer per regel — met landcode, zonder plusteken",
-        "numbersCount": "{count} nummers"
+        "numbersCount": "{count} nummers",
+        "emailNote": "E-mails gaan naar het adres van elk contact. Contacten zonder e-mailadres, dubbele adressen en afgemelde contacten worden overgeslagen.",
+        "emailSkipped": "{count, plural, one {# gekozen ontvanger heeft geen e-mailadres en wordt overgeslagen.} other {# gekozen ontvangers hebben geen e-mailadres en worden overgeslagen.}}",
+        "emailNoAddress": "Getypte nummers en CSV-rijen hebben geen e-mailadres en worden daarom overgeslagen. Kies in plaats daarvan contacten, groepen, tags of segmenten."
       },
       "message": {
         "title": "Bericht",
@@ -385,7 +416,9 @@
         "smartIntro": "Laat leeg om het standaardtempo van de workspace te gebruiken. Deze regels spreiden het verzenden zodat een grote lijst menselijk oogt en onder de radar van WhatsApp blijft.",
         "smartZone": "Tijden in {zone}.",
         "throttleMaxHint": "De langste wachttijd voor een bericht.",
-        "batchPauseHint": "Minuten rust na elke batch."
+        "batchPauseHint": "Minuten rust na elke batch.",
+        "retryFailed": "Mislukte berichten automatisch opnieuw proberen",
+        "retryFailedHint": "Een bericht dat om een tijdelijke reden mislukt, wordt een paar keer opnieuw geprobeerd, met een pauze tussen de pogingen. Zet dit uit om elk bericht maar één keer te sturen."
       },
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "draftChip": "Concept / niet opgeslagen",
@@ -506,7 +539,13 @@
           "baileys": "Nog geen Unofficial API-sjablonen. Maak er een op de pagina Sjablonen."
         },
         "templateIntroApproved": "Kies een goedgekeurd Meta-sjabloon. Variabelewaarden per contact worden bij het verzenden ingevuld vanuit contactattributen.",
-        "templateApproved": "Goedgekeurd sjabloon"
+        "templateApproved": "Goedgekeurd sjabloon",
+        "subject": "Onderwerp",
+        "subjectNote": "Onderwerp, max. 150",
+        "subjectPlaceholder": "bijv. Je meiaanbieding is live",
+        "subjectHint": "Wordt gebruikt als onderwerp van de e-mail. Laat leeg om de campagnenaam te gebruiken.",
+        "emailNote": "Deze campagne wordt als e-mail verstuurd vanuit de gekozen mailbox. Onderaan elke e-mail wordt een afmeldlink toegevoegd.",
+        "emailBodyHint": "Platte tekst. Gebruik '{{name}}' of '{{first_name}}' om te personaliseren. Contacten zonder e-mailadres worden overgeslagen."
       },
       "review": {
         "title": "Controleren",
@@ -548,8 +587,14 @@
           "throttle": "De langste pauze moet minstens zo lang zijn als de kortste.",
           "expiry": "De einddatum moet na de verzenddatum liggen, anders verloopt de campagne voordat er iets wordt verzonden.",
           "media": "Voer een volledig adres in dat begint met http:// of https://.",
-          "sender": "Kies een afzender."
-        }
+          "sender": "Kies een afzender.",
+          "subject": "Kort het onderwerp in tot maximaal 150 tekens."
+        },
+        "from": "Van",
+        "subject": "Onderwerp",
+        "subjectFallback": "De campagnenaam",
+        "skippedNoEmail": "Overgeslagen (geen e-mailadres)",
+        "estimateEmail": "Dit is een schatting: een contact in twee groepen wordt dubbel geteld. Contacten zonder e-mailadres in groepen, tags en segmenten worden overgeslagen wanneer de campagne draait."
       },
       "ai": {
         "open": "Bouwen met AI",
@@ -604,6 +649,35 @@
         "notesPlaceholder": "Alles wat specifiek is — verplichte zinnen, wat je moet vermijden, kenmerken van de merkstem…",
         "failed": "De campagne kon niet worden gegenereerd. Probeer het opnieuw.",
         "applied": "De campagnetekst is ingevuld. Controleer deze voordat je verdergaat."
+      },
+      "switch": {
+        "title": "De begeleide flow gebruiken?",
+        "body": "Een geverifieerd WhatsApp Cloud API (Meta)-nummer verstuurt via de begeleide flow in vier stappen, die opnieuw begint. Wat je hier hebt ingevuld is niet opgeslagen en wordt niet overgenomen. Gebruik eerst Concept opslaan als je het wilt bewaren.",
+        "confirm": "Begeleide flow openen",
+        "cancel": "Hier blijven"
+      },
+      "guided": {
+        "template": "Sjabloon",
+        "pickTemplate": "— Kies een sjabloon —",
+        "templateHint": "Alleen goedgekeurde sjablonen van het gekozen nummer. De variabelen vul je hieronder in.",
+        "noTemplates": "Dit nummer heeft nog geen goedgekeurde sjablonen. Maak er een aan en wacht op de goedkeuring.",
+        "deliveryTitle": "Verzending",
+        "deliveryTag": "wanneer",
+        "typeBlocked": "Via de WhatsApp Cloud API (Meta) kan vanuit een campagne alleen een goedgekeurd sjabloon worden verzonden: een eigen bericht of een flow bereikt alleen mensen die je in de afgelopen 24 uur hebben geschreven, en de Cloud API kan die niet in bulk versturen. Gebruik een sjabloon of kies een ander type nummer.",
+        "templateA": "Sjabloon variant A",
+        "templateB": "Sjabloon variant B",
+        "variablesA": "Variabelen variant A",
+        "variablesB": "Variabelen variant B",
+        "splitNote": "Variant A gaat naar {a}% van de ontvangers, variant B naar de rest.",
+        "costTitle": "Geschatte kosten",
+        "costNoTemplate": "Kies een sjabloon om de kosten te zien.",
+        "costNoAudience": "Kies wie het ontvangt om de kosten te zien.",
+        "costLoading": "Kosten controleren",
+        "costError": "Het saldo kon niet worden gecontroleerd.",
+        "balanceOk": "Het saldo is genoeg voor de volledige kosten van {full}",
+        "balanceShort": "Het saldo is niet genoeg: je hebt nog {shortfall} nodig.",
+        "balanceLowFull": "Het saldo is lager dan de volledige kosten van {full}: je abonnement dekt het nu, maar niet meer zodra het abonnement afloopt.",
+        "chargedNowLabel": "Nu van je portemonnee afgeschreven"
       }
     },
     "detail": {
@@ -640,7 +714,8 @@
         "edit": "Bewerken",
         "resendAll": "Opnieuw naar iedereen",
         "export": "Rijen exporteren",
-        "delete": "Verwijderen"
+        "delete": "Verwijderen",
+        "broadcastStatus": "Status van de verzending"
       },
       "kpi": {
         "recipients": "Ontvangers",
@@ -659,7 +734,9 @@
         "engagement": "Betrokkenheid",
         "replies": "Antwoorden ({count})",
         "failures": "Fouten ({count})",
-        "optouts": "Afmeldingen ({count})"
+        "optouts": "Afmeldingen ({count})",
+        "summary": "Samenvatting",
+        "statistics": "Statistieken"
       },
       "cancel": "Annuleren",
       "deleted": "Campagne verwijderd.",
@@ -770,6 +847,186 @@
         "replies": "Antwoorden",
         "optOuts": "Afmeldingen",
         "readRate": "Leesratio"
+      },
+      "summary": {
+        "title": "Samenvatting",
+        "intro": "In gewone woorden: wie je bericht heeft gekregen, wie heeft gereageerd en wie een aanmeldformulier heeft ingevuld.",
+        "loading": "Je samenvatting wordt geladen",
+        "headline": {
+          "none": "Er zijn nog geen berichten verstuurd.",
+          "messaged": "{count, plural, one {Je hebt # persoon een bericht gestuurd.} other {Je hebt # mensen een bericht gestuurd.}}",
+          "notReceived": "{messaged} Nog niemand heeft het ontvangen.",
+          "received": "{count, plural, =0 {nog niemand heeft het ontvangen} one {# heeft het ontvangen} other {# hebben het ontvangen}}",
+          "opened": "{count, plural, =0 {nog niemand heeft het geopend} one {# heeft het geopend} other {# hebben het geopend}}",
+          "wroteBack": "{count, plural, =0 {nog niemand heeft binnen {days, plural, one {# dag} other {# dagen}} gereageerd} one {# heeft binnen {days, plural, one {# dag} other {# dagen}} gereageerd} other {# hebben binnen {days, plural, one {# dag} other {# dagen}} gereageerd}}",
+          "filledForm": "{count, plural, =0 {nog niemand heeft een aanmeldformulier ingevuld} one {# heeft een aanmeldformulier ingevuld} other {# hebben een aanmeldformulier ingevuld}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Tel reacties en formulieren mee die binnenkomen",
+          "hint": "Geteld vanaf het moment dat je het bericht hebt verstuurd.",
+          "option": "Binnen {days, plural, one {# dag} other {# dagen}}"
+        },
+        "forms": {
+          "label": "Welke formulieren tellen als aanmelding?",
+          "hint": "Laat leeg om alle webformulieren en WhatsApp-formulieren mee te tellen.",
+          "placeholder": "Alle formulieren",
+          "empty": "Geen formulieren gevonden",
+          "clear": "Alle formulieren meetellen",
+          "remove": "{name} verwijderen",
+          "web": "{name} (webformulier)",
+          "whatsapp": "{name} (WhatsApp-formulier)",
+          "loadError": "We konden je formulieren niet laden. Voorlopig worden alle formulieren meegeteld."
+        },
+        "tile": {
+          "listLabel": "De cijfers",
+          "unit": "{count, plural, one {persoon} other {mensen}}",
+          "messaged": {
+            "label": "Bericht gestuurd",
+            "explain": "Mensen naar wie we je bericht hebben gestuurd.",
+            "pct": "De mensen die je hebt gekozen om te berichten"
+          },
+          "received": {
+            "label": "Ontvangen",
+            "explain": "Mensen op wier telefoon het bericht is aangekomen."
+          },
+          "opened": {
+            "label": "Geopend",
+            "explain": "Mensen die het bericht hebben geopend en gelezen."
+          },
+          "wroteBack": {
+            "label": "Gereageerd",
+            "explain": "Mensen die je binnen {days, plural, one {# dag} other {# dagen}} na het versturen een bericht hebben gestuurd."
+          },
+          "filledForm": {
+            "label": "Formulier ingevuld",
+            "explainAll": "Mensen die een van je aanmeldformulieren hebben ingevuld.",
+            "explainSome": "{count, plural, one {Mensen die het formulier hebben ingevuld dat je hebt gekozen.} other {Mensen die een van de # formulieren hebben ingevuld die je hebt gekozen.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% van de mensen die je een bericht hebt gestuurd",
+          "less": "Minder dan 1% van de mensen die je een bericht hebt gestuurd",
+          "zero": "Niemand van de mensen die je een bericht hebt gestuurd",
+          "everyone": "Iedereen die je een bericht hebt gestuurd"
+        },
+        "funnel": {
+          "title": "Van bericht tot aanmeldformulier",
+          "alt": "Aantal mensen per stap, van bericht gestuurd tot formulier ingevuld",
+          "note": "Mensen kunnen een stap overslaan. Iemand kan reageren zonder het bericht eerst te openen, dus een balk kan langer zijn dan de balk erboven."
+        },
+        "daily": {
+          "title": "Mensen die per dag reageren",
+          "series": "Mensen die hebben gereageerd",
+          "empty": "Nog niemand heeft gereageerd.",
+          "alt": "{total, plural, one {# persoon heeft} other {# mensen hebben}} gereageerd. De drukste dag was {day}, met {count, plural, one {# persoon} other {# mensen}}."
+        },
+        "people": {
+          "title": "Bekijk wie",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Gereageerd",
+            "hint": "Mensen die je een bericht hebben gestuurd nadat jouw bericht was verstuurd."
+          },
+          "filled_form": {
+            "title": "Formulier ingevuld",
+            "hint": "Mensen die een aanmeldformulier hebben ingevuld."
+          },
+          "not_reached": {
+            "title": "Niet bereikt",
+            "hint": "Mensen die je bericht niet hebben bereikt."
+          },
+          "table": "Mensen in deze lijst",
+          "name": "Naam",
+          "phone": "Telefoon",
+          "when": "Wanneer",
+          "form": "Formulier",
+          "unknown": "Naam onbekend",
+          "noContact": "Niet gekoppeld aan een contact",
+          "open": "{name} openen",
+          "empty": "Nog niemand in deze lijst.",
+          "shown": "{shown} van {total} weergegeven",
+          "more": "Meer tonen",
+          "loading": "De lijst wordt geladen",
+          "error": "We konden deze lijst niet laden.",
+          "retry": "Opnieuw proberen",
+          "forbidden": "Je hebt geen toegang om deze namen te zien."
+        },
+        "download": {
+          "button": "Namen downloaden",
+          "busy": "Het bestand wordt voorbereid",
+          "failed": "We konden het namenbestand niet voorbereiden.",
+          "done": "Het namenbestand staat klaar.",
+          "truncated": "Het bestand bevat de eerste {count} mensen van elke lijst.",
+          "none": "Er zijn nog geen namen om te downloaden.",
+          "csv": {
+            "group": "Lijst",
+            "name": "Naam",
+            "phone": "Telefoon",
+            "when": "Wanneer",
+            "form": "Formulier"
+          }
+        },
+        "print": {
+          "button": "Samenvatting afdrukken",
+          "sent": "Verstuurd op {date}",
+          "notSent": "Nog niet verstuurd",
+          "window": "Reacties en formulieren geteld binnen {days, plural, one {# dag} other {# dagen}} na het versturen",
+          "printed": "Afgedrukt op {date}"
+        },
+        "caveats": {
+          "title": "Goed om te weten",
+          "recipients_without_contact": "{count, plural, one {# persoon kon niet aan een contact worden gekoppeld, dus we kunnen niet zien of die persoon heeft gereageerd.} other {# mensen konden niet aan een contact worden gekoppeld, dus we kunnen niet zien of zij hebben gereageerd.}}",
+          "contact_match_only": "We koppelen mensen aan je contacten via het telefoonnummer. Iemand die vanaf een ander nummer schrijft, wordt niet meegeteld.",
+          "opted_out_excluded": "Mensen die hebben gevraagd geen berichten meer te krijgen, worden niet meegeteld.",
+          "counted_in_other_campaigns": "Iemand die je in meer dan één campagne een bericht hebt gestuurd, kan in elke campagne worden meegeteld."
+        },
+        "notSent": {
+          "title": "Er is nog niets verstuurd",
+          "body": "Zodra de berichten zijn verstuurd, zie je hier wie ze heeft ontvangen, wie heeft gereageerd en wie een aanmeldformulier heeft ingevuld."
+        },
+        "sending": "Nog bezig met versturen, dus deze cijfers blijven nog groeien.",
+        "error": {
+          "title": "We konden deze samenvatting niet laden.",
+          "retry": "Opnieuw proberen"
+        },
+        "latestRun": "Verzending {occurrence} wordt getoond, de nieuwste van deze reeks."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "bijgewerkt {time}",
+        "queued": "{count} wachten op verzending",
+        "processing": "{count} worden nu verstuurd"
+      },
+      "statistics": {
+        "loadFailed": "De statistieken konden niet worden geladen.",
+        "rates": {
+          "delivered": "Afleverpercentage",
+          "deliveredHint": "van het publiek",
+          "read": "Leespercentage",
+          "readHint": "van de afgeleverde",
+          "replies": "Antwoordpercentage",
+          "clicks": "Klikpercentage",
+          "failed": "Foutpercentage"
+        },
+        "breakdown": {
+          "title": "Waar iedereen nu is",
+          "hint": "Elk van de {total} ontvangers wordt één keer geteld, in de status waarin hij zit.",
+          "empty": "Deze campagne heeft nog geen ontvangers."
+        },
+        "timeline": {
+          "title": "Tijdlijn",
+          "created": "Aangemaakt",
+          "scheduled": "Gepland om te starten",
+          "firstSent": "Eerste bericht verstuurd",
+          "lastRun": "Laatste run",
+          "finished": "Afgerond",
+          "notYet": "Nog niet"
+        },
+        "live": "Live gevolgd",
+        "atRest": "Eindcijfers",
+        "updated": "Bijgewerkt {time}"
       }
     },
     "wizard": {
@@ -864,7 +1121,15 @@
         "insufficient_balance": "Je wallet-saldo is te laag voor deze broadcast.",
         "checking_balance": "Je wallet-saldo wordt gecontroleerd...",
         "sender_required": "Kies het WhatsApp-nummer om vanaf te verzenden.",
-        "balance_unavailable": "We konden je wallet-saldo niet controleren. Probeer het opnieuw voordat je verzendt."
+        "balance_unavailable": "We konden je wallet-saldo niet controleren. Probeer het opnieuw voordat je verzendt.",
+        "template_b_required": "Kies het sjabloon voor variant B van de A/B-test.",
+        "auto_end_in_past": "De automatische einddatum is al verstreken.",
+        "auto_end_before_send": "De automatische einddatum moet na het verzendmoment liggen.",
+        "auto_end_recurring": "Een terugkerende campagne eindigt volgens haar eigen regel: wis de automatische einddatum.",
+        "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld.",
+        "follow_up_template_required": "Kies de sjabloon die elke follow-up verstuurt.",
+        "follow_up_flow_required": "Kies de flow die elke follow-up start.",
+        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups."
       },
       "template": {
         "previewOnline": "online",
@@ -897,7 +1162,8 @@
         "previewEmpty": "Kies een sjabloon om te zien hoe het bericht eruitziet.",
         "senderLabel": "Verzenden vanaf",
         "senderHint": "Het WhatsApp-nummer waarvanaf deze broadcast wordt verzonden.",
-        "pickSender": "Kies een nummer"
+        "pickSender": "Kies een nummer",
+        "classicOption": "klassieke builder"
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -1040,7 +1306,9 @@
           "invalid_phone": "Geen geldig nummer",
           "duplicate": "Duplicaat"
         },
-        "csvIssuesMore": "Nog {count} staan in de download."
+        "csvIssuesMore": "Nog {count} staan in de download.",
+        "csvConsentOn": "U hebt de toestemming voor deze nummers bevestigd. Ze worden bij het starten van de verzending vastgelegd als akkoord.",
+        "csvConsentVersion": "Versie van de mededeling: {version}."
       },
       "review": {
         "intro": "Controleer de kosten, geef aan waarmee elke sjabloonvariabele wordt gevuld en bekijk de broadcast.",
@@ -1057,6 +1325,7 @@
         "messages": "Berichten",
         "modePlan": "{count, plural, one {Je abonnement dekt de eerste berichten; de wallet betaalt voor # bericht daarboven.} other {Je abonnement dekt de eerste berichten; de wallet betaalt voor # berichten daarboven.}}",
         "modeWallet": "{count, plural, one {Elk afgeleverd bericht wordt van je wallet afgeschreven: # bericht.} other {Elk afgeleverd bericht wordt van je wallet afgeschreven: # berichten.}}",
+        "platformOwned": "Voor verzendingen in deze werkruimte wordt niets gefactureerd, dus er wordt niets van je portemonnee afgeschreven.",
         "breakdown": "Kosten per land",
         "country": "Land",
         "unitPrice": "Per bericht",
@@ -1113,7 +1382,11 @@
         "sumContacts": "{count, plural, one {# contact gekozen in de tabel} other {# contacten gekozen in de tabel}}",
         "sumAllMatching": "Alle contacten die overeenkomen met {what}",
         "sumAllContacts": "Alle contacten",
-        "sumCsv": "CSV-bestand {name}: {count, plural, one {# geldig nummer} other {# geldige nummers}}"
+        "sumCsv": "CSV-bestand {name}: {count, plural, one {# geldig nummer} other {# geldige nummers}}",
+        "estimatedCostFull": "Geschatte kosten (volledig)",
+        "chargedPlan": "Nu van je portemonnee afgeschreven: {amount} (je abonnement dekt {covered} van deze berichten)",
+        "chargedWallet": "Van je portemonnee afgeschreven: {amount}",
+        "sumFollowUps": "Follow-ups"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1283,12 +1556,17 @@
         "action": {
           "pause": "Pauzeren",
           "resume": "Hervatten",
-          "cancel": "Broadcast annuleren"
+          "cancel": "Broadcast annuleren",
+          "retryFailed": "Mislukte opnieuw proberen ({count})",
+          "export": "Rijen exporteren",
+          "delete": "Verwijderen"
         },
         "done": {
           "pause": "Broadcast gepauzeerd.",
           "resume": "Broadcast hervat.",
-          "cancel": "Broadcast geannuleerd."
+          "cancel": "Broadcast geannuleerd.",
+          "retryFailed": "Opnieuw proberen voor {count, plural, one {# mislukte ontvanger} other {# mislukte ontvangers}}.",
+          "delete": "Verzending verwijderd."
         },
         "failed": "Dat is niet gelukt. Probeer het opnieuw.",
         "noControl": "Je hebt geen toestemming om broadcasts te pauzeren, hervatten of annuleren.",
@@ -1307,6 +1585,30 @@
           "cancelled": "Geannuleerd",
           "active": "Actief",
           "ended": "Beëindigd"
+        },
+        "retryTitle": "Mislukte berichten opnieuw proberen?",
+        "retryMessage": "Stuurt opnieuw naar {count, plural, one {# ontvanger} other {# ontvangers}} bij wie het bericht mislukte. Wie het al kreeg, blijft met rust en een bericht wordt alleen in rekening gebracht als het is afgeleverd.",
+        "exportFailed": "De export kon niet worden gedownload.",
+        "deleteTitle": "Deze verzending verwijderen?",
+        "deleteOne": "Verwijdert deze verzending en de ontvangers. Dit kan niet ongedaan worden gemaakt.",
+        "deleteSeries": "Verwijdert deze terugkerende verzending en de geplande runs. Er is niets verstuurd, dus er gaat geen geschiedenis verloren. Dit kan niet ongedaan worden gemaakt.",
+        "followUps": {
+          "title": "Follow-ups",
+          "step": "Follow-up {step}",
+          "count": {
+            "waiting": "{count} in afwachting",
+            "sent": "{count} verzonden",
+            "delivered": "{count} afgeleverd",
+            "read": "{count} gelezen",
+            "flowsStarted": "{count} flows gestart",
+            "skipped": "{count} overgeslagen",
+            "lapsed": "{count} verlopen",
+            "failed": "{count} mislukt"
+          },
+          "hint": {
+            "skipped": "Er werd niet aan de voorwaarde voldaan toen deze werd gecontroleerd, dus de reeks eindigde daar.",
+            "lapsed": "De bewakingstijd was verstreken voordat het contact reageerde of las, dus de reeks eindigde daar."
+          }
         }
       },
       "panel": {
@@ -1332,6 +1634,78 @@
         "pm": "PM",
         "hour": "Uur",
         "minute": "Minuut"
+      },
+      "switch": {
+        "title": "De klassieke builder gebruiken?",
+        "body": "{number} ({engine}) verstuurt via de klassieke builder, die opnieuw begint. Deze campagne wordt als concept opgeslagen en blijft in je campagnelijst staan, zodat je er later op terug kunt komen.",
+        "confirm": "Klassieke builder openen",
+        "cancel": "Hier blijven"
+      },
+      "followUps": {
+        "title": "Follow-ups",
+        "intro": "Verstuur nog een bericht of start een flow, afhankelijk van wat het contact doet na het campagnebericht. Maximaal 3 stappen achter elkaar.",
+        "cloudOnly": "Follow-ups vereisen een WhatsApp Cloud API-nummer, omdat ze gebruikmaken van de lees- en antwoordrapporten van Meta. Kies er een in stap 1.",
+        "add": "Follow-up toevoegen",
+        "count": "{used} van {max} follow-ups",
+        "limitReached": "Limiet bereikt: {max} follow-ups.",
+        "stepTitle": "Follow-up {step}",
+        "measuredFromCampaign": "Geteld vanaf het campagnebericht.",
+        "measuredFromStep": "Geteld vanaf het bericht van follow-up {step}.",
+        "remove": "Follow-up {step} verwijderen",
+        "removeShort": "Verwijderen",
+        "triggerLabel": "Wanneer het contact",
+        "trigger": {
+          "replied": "Antwoordt",
+          "read": "Het bericht leest",
+          "not_replied": "Niet heeft geantwoord",
+          "not_read": "Het bericht niet heeft gelezen"
+        },
+        "triggerHelp": {
+          "replied": "Wordt direct uitgevoerd zodra het contact antwoordt, als dat binnen de ingestelde tijd gebeurt. Anders eindigt de reeks.",
+          "read": "Wordt direct uitgevoerd zodra het contact het bericht leest, als dat binnen de ingestelde tijd gebeurt. Anders eindigt de reeks.",
+          "not_replied": "Wacht de ingestelde tijd en wordt dan uitgevoerd als het contact niet heeft geantwoord. Als het wel heeft geantwoord, eindigt de reeks.",
+          "not_read": "Wacht de ingestelde tijd en wordt dan uitgevoerd als het contact het bericht niet heeft gelezen. Als het dat wel heeft gedaan, eindigt de reeks."
+        },
+        "watchLabel": "Bewaken tot maximaal",
+        "waitLabel": "Wachten",
+        "unitLabel": "Tijdseenheid",
+        "duration": {
+          "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+          "hours": "{count, plural, one {# uur} other {# uur}}",
+          "days": "{count, plural, one {# dag} other {# dagen}}"
+        },
+        "actionLabel": "Dan",
+        "action": {
+          "template": "Een sjabloon versturen",
+          "flow": "Een flow starten"
+        },
+        "templateLabel": "Te versturen sjabloon",
+        "flowLabel": "Te starten flow",
+        "pickTemplate": "Kies een sjabloon",
+        "pickFlow": "Kies een flow",
+        "loading": "Laden...",
+        "unavailable": "Niet meer beschikbaar",
+        "noTemplates": "Nog geen goedgekeurde sjablonen.",
+        "createTemplate": "Een sjabloon maken",
+        "noFlows": "Nog geen flows.",
+        "createFlow": "Een flow maken",
+        "flowsError": "De flows konden niet worden geladen. Probeer het later opnieuw.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Als het contact binnen {wait} antwoordt",
+          "read": "Als het contact het binnen {wait} leest",
+          "not_replied": "Als er na {wait} niet is geantwoord",
+          "not_read": "Als het na {wait} niet is gelezen"
+        },
+        "does": {
+          "template": "{name} versturen",
+          "flow": "flow {name} starten"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuut} other {minuten}}",
+          "hours": "{count, plural, one {uur} other {uur}}",
+          "days": "{count, plural, one {dag} other {dagen}}"
+        }
       }
     },
     "history": {
@@ -1403,7 +1777,14 @@
         "runs": "Uitvoeringen",
         "noRuns": "Er is nog geen uitvoering gestart.",
         "cancel": "Reeks annuleren"
-      }
+      },
+      "view": {
+        "label": "Weergave",
+        "list": "Lijst",
+        "blocks": "Blokken"
+      },
+      "showing": "{count, plural, one {# campagne} other {# campagnes}} getoond",
+      "legacy": "Oude broadcasts ({count})"
     },
     "senderEmpty": {
       "loading": "Je nummers worden geladen…",
@@ -1438,7 +1819,29 @@
         "title": "Persoonlijke nummers staan uit voor deze werkruimte",
         "body": "{count, plural, one {Je persoonlijke (QR-)nummer kan} other {Je # persoonlijke (QR-)nummers kunnen}} geen campagnes verzenden zolang dit uitstaat. Een platformbeheerder kan dit voor deze werkruimte inschakelen, of je koppelt een officieel WhatsApp Business-nummer.",
         "action": "Officieel nummer koppelen"
+      },
+      "email": {
+        "none": {
+          "title": "Geen mailbox gekoppeld",
+          "body": "Koppel een mailbox op de pagina E-mail om te kiezen waarvandaan deze campagne wordt verstuurd.",
+          "action": "Mailbox koppelen"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# mailbox is losgekoppeld} other {# mailboxen zijn losgekoppeld}}",
+          "body": "Koppel hem opnieuw op de pagina E-mail om er campagnes mee te versturen.",
+          "action": "Pagina E-mail openen"
+        },
+        "error": {
+          "title": "{count, plural, one {# mailbox moet opnieuw worden gekoppeld} other {# mailboxen moeten opnieuw worden gekoppeld}}",
+          "body": "De laatste aanmelding is mislukt. Koppel hem opnieuw op de pagina E-mail en hij verschijnt hier.",
+          "action": "Pagina E-mail openen"
+        }
       }
+    },
+    "create": {
+      "loading": "Je nummers laden",
+      "noAccessTitle": "Je kunt geen campagnes aanmaken",
+      "noAccess": "Vraag een beheerder van de werkruimte om toestemming om campagnes aan te maken."
     }
   }
 }

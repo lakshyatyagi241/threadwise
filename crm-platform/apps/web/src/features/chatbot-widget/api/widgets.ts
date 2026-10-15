@@ -1,7 +1,10 @@
 'use client';
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { z } from 'zod';
 import {
+  FLB_NODE_TYPES,
+  flowDetailSchema,
   flowWidgetResponseSchema,
   listWidgetsResponseSchema,
   registrationConfigResponseSchema,
@@ -105,6 +108,57 @@ export function useFlowWidget(flowId: string | null) {
   });
 }
 
+/** The real chat window in preview mode, as the Customize tab frames it (the page draws what the tab sends it). */
+export function useWebChatPreviewPage(flowId: string) {
+  return useQuery({
+    queryKey: [...KEYS.flow(flowId), 'preview-page'],
+    staleTime: Infinity,
+    queryFn: ({ signal }): Promise<{ html: string }> =>
+      apiFetch(`/flows/${flowId}/widget/preview-page`, {
+        schema: z.object({ html: z.string() }),
+        signal,
+      }),
+  });
+}
+
+/** One step of a website bot's flow a button can jump to: its id and a short name made of its kind and what it says. */
+export interface BotStep {
+  id: string;
+  label: string;
+}
+
+const STEP_TEXT_KEYS = ['text', 'prompt', 'bodyText', 'caption', 'question', 'valueText'] as const;
+
+/** The steps of the bot's saved flow that a tap can start from (every step but the trigger and the end), for the Customize tab. */
+export function useBotSteps(flowId: string) {
+  return useQuery({
+    queryKey: [...KEYS.flow(flowId), 'steps'],
+    queryFn: async ({ signal }): Promise<BotStep[]> => {
+      const flow = await apiFetch(`/flows/${flowId}`, { schema: flowDetailSchema, signal });
+      return flow.graph.flowNodes
+        .filter((n) => n.type !== 'trigger' && n.type !== 'end')
+        .map((n) => {
+          const data = (n.data ?? {}) as Record<string, unknown>;
+          const key = STEP_TEXT_KEYS.find((k) => typeof data[k] === 'string' && data[k] !== '');
+          const text = key ? String(data[key]).replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+          const kind = FLB_NODE_TYPES[n.type]?.label ?? n.type;
+          return { id: n.id, label: text ? `${kind}: ${text}` : kind };
+        });
+    },
+  });
+}
+
+/** The closed launcher as a visitor's site draws it (callout, animation, badge), for the Customize tab's closed-launcher view. */
+export const previewFlowEmbed = (
+  flowId: string,
+  body: Record<string, unknown>,
+): Promise<{ html: string }> =>
+  apiFetch(`/flows/${flowId}/widget/preview-embed`, {
+    method: 'POST',
+    body,
+    schema: z.object({ html: z.string() }),
+  });
+
 export const saveFlowWidget = (flowId: string, body: FlowWidgetSaveInput): Promise<Widget> =>
   apiFetch(`/flows/${flowId}/widget`, { method: 'PUT', body, schema: widgetSchema });
 
@@ -115,4 +169,30 @@ export function useWebBots() {
     queryFn: ({ signal }): Promise<WebBotsResponse> =>
       apiFetch('/widgets/flow-bots', { schema: webBotsResponseSchema, signal }),
   });
+}
+
+/**
+ * Uploads a picture for a WhatsApp bot's button (`logo` or `popup`) and returns the public address to keep in its settings.
+ * Plain `fetch` with a form body, like the flow media upload: the shared client always sends JSON.
+ */
+export async function uploadFlowWidgetImage(
+  flowId: string,
+  slot: string,
+  file: File,
+): Promise<string> {
+  const form = new FormData();
+  form.append('file', file);
+  const res = await fetch(`/api/v2/flows/${flowId}/widget/assets/${slot}`, {
+    method: 'POST',
+    body: form,
+    credentials: 'same-origin',
+    headers: { Accept: 'application/json', 'Idempotency-Key': crypto.randomUUID() },
+  });
+  const json = (await res.json().catch(() => ({}))) as {
+    url?: string;
+    detail?: string;
+    title?: string;
+  };
+  if (!res.ok || !json.url) throw new Error(json.detail ?? json.title ?? `HTTP ${res.status}`);
+  return json.url;
 }

@@ -310,6 +310,11 @@
         "description": "Assegna automaticamente le nuove conversazioni all’agente giusto, a turno o secondo regole.",
         "keywords": "instradamento, round robin, assegna, agenti, regole inbox, distribuisci, proprietario"
       },
+      "web": {
+        "label": "Chat del sito web",
+        "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
+        "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
+      },
       "message-logs": {
         "label": "Registri dei messaggi",
         "description": "Esporta il registro di consegna dei tuoi messaggi, fino a un anno indietro, come file inviato alla tua e-mail.",
@@ -319,11 +324,6 @@
         "label": "Abbonamenti",
         "description": "Cosa si rinnova, fino a quando è pagato e annullamento.",
         "keywords": "abbonamento, rinnovo, rinnovo automatico, annulla, addebito automatico, pagamento non riuscito, addebiti"
-      },
-      "web": {
-        "label": "Chat del sito web",
-        "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
-        "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
       },
       "lead-scoring": {
         "label": "Lead scoring con IA",
@@ -359,6 +359,21 @@
         "label": "Prestazioni del team",
         "description": "Scopri quanto è stato veloce ogni agente a rispondere e risolvere oggi, questa settimana o questo mese.",
         "keywords": "report, analisi, agenti, tempo di risposta, prima risposta, risolte, carico, prestazioni"
+      },
+      "contact-assignment": {
+        "label": "Assegnazione dei contatti",
+        "description": "Assegna automaticamente i nuovi contatti e le nuove trattative alla persona giusta, saltando chi è in ferie.",
+        "keywords": "assegnare, proprietario, round robin, nuovo contatto, nuova trattativa, ferie, assenza, routing dei lead"
+      },
+      "privacy-requests": {
+        "label": "Richieste sui dati",
+        "description": "Rispondi a chi chiede cosa conservi su di loro: verifica dell'identità, esportazione, cancellazione con anteprima e una prova da conservare.",
+        "keywords": "privacy, gdpr, richiesta sui dati, dsar, accesso ai dati, esportare dati, cancellare, diritto all'oblio, eliminare dati personali, blocco legale"
+      },
+      "compliance-center": {
+        "label": "Centro di conformità",
+        "description": "Strumenti che ti aiutano a rispettare i tuoi obblighi in materia di privacy: le leggi a cui sei soggetto, contatti privacy, informative e link, sub-responsabili, orari di silenzio e una checklist di ciò che è già attivo.",
+        "keywords": "conformità, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, responsabile dei reclami, sub-responsabile, dpa, termini, informativa sulla privacy, orari di silenzio, do not call, checklist, minori"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

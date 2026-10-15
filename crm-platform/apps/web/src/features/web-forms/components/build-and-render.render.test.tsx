@@ -376,6 +376,7 @@ describe('Form renderer', () => {
         required: true,
         privacyUrl: 'https://example.com/privacy',
         marketing: false,
+        coversSms: false,
         version: 2,
       },
     });

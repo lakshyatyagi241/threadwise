@@ -591,12 +591,13 @@
             "storefront_builder": "Storefront builder",
             "invoicing": "Invoicing",
             "forms_and_links": "Forms and links",
-            "extra_channels": "Telegram, Facebook and Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat",
             "form_builder": "Forms",
             "waba_groups": "WhatsApp groups",
             "sms": "SMS",
             "help_agent": "Help assistant",
-            "email_channel": "Email (Gmail) channel"
+            "email_channel": "Email (Gmail) channel",
+            "personal_history_full": "Full history import (personal WhatsApp)"
           },
           "cta": {
             "continueFree": "Continue free",

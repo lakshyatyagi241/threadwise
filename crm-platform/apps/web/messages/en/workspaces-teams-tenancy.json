@@ -11,7 +11,8 @@
       "copied": "Copied",
       "retry": "Try again",
       "loadMore": "Load more",
-      "loadingMore": "Loading"
+      "loadingMore": "Loading",
+      "loading": "Loading"
     },
     "tiers": {
       "owner": "Owner",
@@ -95,7 +96,11 @@
       "linkReset": "Email isn't configured on this server, so share this link with them directly. It works once.",
       "linkInvite": "Email isn't configured on this server, so share this link with them directly. It works once and expires after {days, plural, one {# day} other {# days}}.",
       "linkLabel": "One-time link",
-      "linkEmail": "Email"
+      "linkEmail": "Email",
+      "onLeaveUntil": "On leave until {date}",
+      "onLeaveOpen": "On leave",
+      "leaveFrom": "Leave from {date}",
+      "leaveAction": "Leave and delegate"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -214,7 +219,13 @@
       "teamNameTaken": "A team with that name already exists.",
       "teamMemberUnknown": "One of the people you picked is not in this workspace.",
       "orgSuspended": "This workspace is suspended.",
-      "unexpected": "Something went wrong. Try again in a moment."
+      "unexpected": "Something went wrong. Try again in a moment.",
+      "leaveOverlap": "This person already has leave that shares a day with these dates.",
+      "leaveInvalid": "Those dates cannot be used. The first day cannot be in the past, and a leave that has begun keeps its first day.",
+      "delegateInvalid": "The delegate must be another active member of this workspace.",
+      "delegateCycle": "That would make a circle: the chosen person already has this person as their delegate.",
+      "reassignInvalid": "Nothing could be reassigned. Check that the person holds contacts or open deals and that the target can take them.",
+      "reassignNotRestorable": "This reassignment can no longer be undone."
     },
     "accept": {
       "title": "Join your workspace",
@@ -234,6 +245,81 @@
       "submit": "Accept invitation",
       "submitting": "Joining",
       "invalidHeading": "Invitation link"
+    },
+    "leave": {
+      "eyebrow": "Leave and delegate",
+      "calendarNote": "Dates are days in your workspace calendar ({timezone}).",
+      "nowTitle": "Leave now",
+      "upcomingTitle": "Coming up",
+      "notAway": "Not on leave right now.",
+      "range": "{from} to {to}",
+      "rangeOpen": "From {from}, no end date",
+      "reasonShown": "Reason (only managers see it): {reason}",
+      "endNow": "End leave now",
+      "cancelLeave": "Cancel leave",
+      "endTitle": "End this leave now?",
+      "endMessage": "The person is back today. Automatic assignment will start choosing them again.",
+      "cancelTitle": "Cancel this leave?",
+      "cancelMessage": "It has not started yet. It will be removed.",
+      "ended": "Leave ended.",
+      "added": "Leave saved.",
+      "readOnly": "Only the person themselves and managers can change leave.",
+      "addTitle": "Add leave",
+      "firstDay": "First day",
+      "lastDay": "Last day",
+      "openEnded": "No end date yet (until someone ends it)",
+      "reason": "Reason (optional)",
+      "reasonHint": "Only the person and their managers see this.",
+      "addSubmit": "Save leave",
+      "problems": {
+        "startRequired": "Choose the first day.",
+        "startPast": "The first day cannot be in the past.",
+        "endRequired": "Choose the last day, or tick \"No end date\".",
+        "endBeforeStart": "The last day cannot be before the first day."
+      },
+      "delegateTitle": "Delegate",
+      "delegateHelp": "While this person is on leave, new chats and automatic assignment go to their delegate when the delegate is available, otherwise to the team.",
+      "noDelegate": "No delegate",
+      "delegateSaved": "Delegate saved.",
+      "delegateRemoved": "Delegate removed.",
+      "delegateAway": "{name} is on leave too, so they cannot cover right now."
+    },
+    "reassign": {
+      "title": "Reassign contacts and deals",
+      "holds": "{name} owns {contacts, plural, one {# contact} other {# contacts}} and {chats, plural, one {# open chat} other {# open chats}}.",
+      "target": "Give them to",
+      "kindUser": "A person",
+      "kindDelegate": "Their delegate",
+      "kindTeam": "A team, round robin",
+      "person": "Person",
+      "team": "Team",
+      "teamHint": "Shared out in turns among the members who are present and not on leave.",
+      "choose": "Choose",
+      "includeDeals": "Include open deals",
+      "returnOn": "Bring them back on {date}, when the person returns",
+      "returnUnavailable": "Bring them back when the person returns (needs a leave with a last day)",
+      "returnHelp": "Only contacts and deals nobody has changed since come back. You can also undo for {days} days.",
+      "reason": "Note (optional)",
+      "submit": "Review and reassign",
+      "confirmTitle": "Reassign now?",
+      "confirmMessage": "{name} owns {contacts, plural, one {# contact} other {# contacts}} and {deals, plural, one {# open deal} other {# open deals}} that will move.",
+      "confirm": "Reassign",
+      "done": "Moved {contacts, plural, one {# contact} other {# contacts}} and {deals, plural, one {# deal} other {# deals}}.",
+      "history": "Earlier reassignments",
+      "historyEmpty": "Nothing has been reassigned yet.",
+      "status": {
+        "applied": "Moved",
+        "restored": "Returned",
+        "restore_blocked": "Not returned"
+      },
+      "summary": "{contacts} contacts and {deals} deals to {target}",
+      "returnsOn": "returns on {date}",
+      "restoredSummary": "{restored} returned, {skipped} left where they are",
+      "remaining": "{count} more to move: run it again",
+      "undo": "Undo",
+      "undoTitle": "Undo this reassignment?",
+      "undoMessage": "Contacts and deals nobody has changed since go back to the previous owner. The others stay where they are.",
+      "restored": "{count} returned, {skipped} left where they are."
     }
   }
 }

@@ -1,7 +1,7 @@
 # Email channel API (Gmail)
 
 Everything is under `/v2`, signed in as a user. A mailbox is addressed by its uuid. No response ever carries a token, a scope list or the sync
-cursor. Email is the paid first-party Marketplace **integration** **Email (Gmail)** (kind `integration`, category Messaging and email; plan feature `email_channel`, limit `email_mailboxes`; its tile is in Settings > Integrations); the platform operator
+cursor. Email is the paid first-party Marketplace **integration** **Email (Gmail)** (kind `integration`, category Messaging and email; plan feature `email_channel`, limit `email_mailboxes`; its tile is in Settings > Channels); the platform operator
 gives the platform a Google OAuth client first ([runbooks/google-mail-setup.md](../runbooks/google-mail-setup.md)).
 
 Gates, in this order on every mailbox route: sign-in, the permission, the plan feature `email_channel` (422 `PLAN_FEATURE_LOCKED` on every route,
@@ -323,3 +323,9 @@ Deviation from Reference (every linked mailbox there is workspace-wide): a membe
   workspace export (personal mail is excluded outright: they are not people).
 - Tests: `test/unit/realtime/conversation-visibility.spec.ts`, `test/unit/channel-email/mail-personal-policy.spec.ts`, and the matrix `test/e2e/channel-email/personal-mailboxes.e2e.spec.ts` (owner, agent, no-permission
   agent, admin with the policy off and on, another workspace, across list, counts, search, detail, messages, notes, events, attachments, channel list, realtime rooms and events, notifications, assignment, owner removal).
+
+## Campaigns by email (TW-CAMP-028, the email half)
+
+A mailbox is also an **engine** for campaigns: a campaign whose `senderKey` is `email:<mailbox uuid>` is sent through the mailbox (Gmail, Microsoft or IMAP/SMTP) by `EmailEngineSender`,
+with the mailbox's own limits (`MailSendGuard`: the bounce list and the hourly cap), the consent gate and the signed unsubscribe link, and each mail is written into the mailbox's inbox thread.
+The plan limit `email_monthly` (mails sent in a calendar month, replies and campaign mail together, 0 = unlimited) is new. The whole behaviour is documented in [campaigns.md](campaigns.md#email-campaigns).

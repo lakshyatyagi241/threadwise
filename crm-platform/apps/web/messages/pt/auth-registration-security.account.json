@@ -552,12 +552,13 @@
             "storefront_builder": "Construtor de loja virtual",
             "invoicing": "Faturas",
             "forms_and_links": "Formulários e links",
-            "extra_channels": "Telegram, Facebook e Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber e WeChat",
             "form_builder": "Formulários",
             "waba_groups": "Grupos do WhatsApp",
             "sms": "SMS",
             "help_agent": "Assistente de ajuda",
-            "email_channel": "Canal de e-mail (Gmail)"
+            "email_channel": "Canal de e-mail (Gmail)",
+            "personal_history_full": "Importação do histórico completo (WhatsApp pessoal)"
           },
           "cta": {
             "continueFree": "Continuar grátis",

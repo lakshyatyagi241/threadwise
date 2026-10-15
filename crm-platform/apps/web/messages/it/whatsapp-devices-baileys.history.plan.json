@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Non incluso nel tuo piano. Passa a un piano superiore per importare la cronologia completa.",
+        "fullLockedLink": "Vedi i piani"
+      }
+    }
+  }
+}

@@ -15,6 +15,10 @@ export interface StoredEmailReply {
   bodyHtml?: string;
   signatureId?: string;
   signature?: boolean;
+  /** The email template the reply was filled from (counted as used once the mail is sent). */
+  templateId?: string;
+  /** Set by the server (never the client) when the template is marketing mail: the ConsentGate and the unsubscribe link apply. */
+  marketing?: boolean;
 }
 
 const REFERENCES_MAX = 100;
@@ -57,6 +61,8 @@ export function emailEnvelopeOf(
     ...(reply?.bodyHtml ? { bodyHtml: reply.bodyHtml } : {}),
     ...(reply?.signatureId ? { signatureId: reply.signatureId } : {}),
     ...(reply?.signature === false ? { signature: false } : {}),
+    ...(reply?.templateId ? { templateId: reply.templateId } : {}),
+    ...(reply?.marketing ? { marketing: true } : {}),
     ...(sentBy ? { sentBy } : {}),
   };
 }
@@ -150,6 +156,7 @@ export function envelopeOf(
         templateName?: string;
         templateLanguage?: string;
         templateVariables?: Record<string, string>;
+        templateComponents?: Record<string, unknown>[];
       };
       return {
         ...common,
@@ -158,6 +165,7 @@ export function envelopeOf(
           name: meta.templateName ?? '',
           language: meta.templateLanguage ?? 'en',
           variables: meta.templateVariables ?? {},
+          ...(meta.templateComponents?.length ? { components: meta.templateComponents } : {}),
         },
       };
     }
@@ -220,6 +228,8 @@ export function messageFieldsOf(content: OutboundContent): {
           extras.attachmentIds?.length ||
           extras.bodyHtml ||
           extras.signatureId ||
+          extras.templateId ||
+          extras.marketing ||
           extras.signature === false)
           ? {
               cc: extras.cc,
@@ -229,6 +239,8 @@ export function messageFieldsOf(content: OutboundContent): {
               ...(extras.bodyHtml ? { bodyHtml: extras.bodyHtml } : {}),
               ...(extras.signatureId ? { signatureId: extras.signatureId } : {}),
               ...(extras.signature === false ? { signature: false } : {}),
+              ...(extras.templateId ? { templateId: extras.templateId } : {}),
+              ...(extras.marketing ? { marketing: true } : {}),
             }
           : null;
       return {
@@ -310,6 +322,7 @@ export function messageFieldsOf(content: OutboundContent): {
           templateName: content.name,
           templateLanguage: content.language,
           templateVariables: content.variables,
+          ...(content.components?.length ? { templateComponents: content.components } : {}),
         },
         templateId: content.templateId ?? null,
       };

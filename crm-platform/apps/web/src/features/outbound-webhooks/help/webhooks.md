@@ -5,7 +5,20 @@ summary: Send events from your workspace to your own systems as they happen, sig
 area: settings
 order: 40
 documents: [tile:webhooks]
-keywords: [webhook, webhooks, events, callback, endpoint, http, integration, signature, secret, delivery log, retry]
+keywords:
+  [
+    webhook,
+    webhooks,
+    events,
+    callback,
+    endpoint,
+    http,
+    integration,
+    signature,
+    secret,
+    delivery log,
+    retry,
+  ]
 ---
 
 ## What it is for

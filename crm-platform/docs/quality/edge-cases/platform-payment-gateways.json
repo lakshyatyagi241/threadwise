@@ -1,0 +1,16 @@
+{
+  "module": "platform-payment-gateways",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-platform-payment-gateways-001",
+      "feature": "invoice logo",
+      "category": "input",
+      "scenario": "a value of 1025 (one past INVOICE_LOGO_MAX_KB = 1024) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/platform-payment-gateways/admin-billing.ts"
+    }
+  ]
+}

@@ -1,8 +1,10 @@
 import type { ChannelCapabilities } from '@crm/contracts';
+import type { ChatMediaStore } from './media';
 import {
   windowFromLastInbound,
   type ChannelAdapter,
   type ChannelRuntime,
+  type InboundMedia,
   type OutboundEnvelope,
   type ParsedInbound,
   type SendResult,
@@ -13,7 +15,7 @@ const WEBCHAT_CAPABILITIES: ChannelCapabilities = {
   // A visitor on the page is there now: no 24 hour rule, no templates.
   windowHours: null,
   templates: false,
-  media: ['image', 'document'],
+  media: ['image', 'video', 'audio', 'document'],
   reactions: false,
   editDelete: false,
   receipts: ['sent'],
@@ -35,6 +37,8 @@ export class WebchatChannelAdapter implements ChannelAdapter {
   readonly credentialsSchema = null;
   readonly secretFields = [] as const;
 
+  constructor(private readonly store?: ChatMediaStore) {}
+
   externalIdOf(): string | null {
     return null;
   }
@@ -53,6 +57,23 @@ export class WebchatChannelAdapter implements ChannelAdapter {
       providerMessageId: `web:${envelope.clientReference}`,
       acceptedAt: new Date(),
     });
+  }
+
+  /**
+   * A file the visitor attached: the widget's upload route staged it in the media store (checked there) and names its key; ingest reads
+   * the bytes back here and stores the final copy, so the same content check and size limit run again. The staged copy is removed once
+   * it has been read.
+   */
+  async fetchMedia(
+    channel: ChannelRuntime,
+    media: InboundMedia,
+  ): Promise<{ bytes: Buffer; mime: string }> {
+    const opened = await this.store?.open(channel.orgId, media.providerMediaId);
+    if (!opened) throw new Error('The attached file is gone');
+    const chunks: Buffer[] = [];
+    for await (const c of opened.stream) chunks.push(Buffer.from(c as Buffer));
+    await this.store?.remove(channel.orgId, media.providerMediaId).catch(() => undefined);
+    return { bytes: Buffer.concat(chunks), mime: media.mime };
   }
 
   verifyInbound(): boolean {

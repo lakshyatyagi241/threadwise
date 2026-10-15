@@ -1,0 +1,26 @@
+{
+  "module": "message-templates",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-message-templates-001",
+      "feature": "tpl name",
+      "category": "input",
+      "scenario": "a value of 513 (one past TPL_NAME_MAX = 512) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/message-templates/templates.ts"
+    },
+    {
+      "id": "EC-message-templates-002",
+      "feature": "tpl body",
+      "category": "input",
+      "scenario": "a value of 1025 (one past TPL_BODY_MAX = 1024) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/message-templates/templates.ts"
+    }
+  ]
+}

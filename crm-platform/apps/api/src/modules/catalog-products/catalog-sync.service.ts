@@ -5,6 +5,7 @@ import {
   type PollBatchesResponse,
   type SyncProductsResponse,
 } from '@crm/contracts';
+import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -22,8 +23,8 @@ import { currentUserId, withOrgContext } from './catalog-context';
 import { CATALOG_MODULE } from './catalog-connection.service';
 import { notConnected, providerFailure, providerRefusal } from './catalog-problems';
 import { parseMetaPriceMinor } from './catalog-money';
+import { metaItemsOf, resolveVariantRetailerIds } from './catalog-variants';
 import {
-  buildMetaItem,
   normalizeImportedAvailability,
   nextFreeSlug,
   retailerIdOf,
@@ -37,10 +38,12 @@ import { ProductsRepository, type ProductRow } from './products.repository';
 const FINISHED = new Set(['finished', 'success', 'completed']);
 const FAILED = new Set(['error', 'failed']);
 
-const toItem = (p: ProductRow, shopUrl: string): CatalogBatchItem => ({
-  retailerId: retailerIdOf(p),
-  data: buildMetaItem({ ...p, galleryUrls: p.gallery }, shopUrl),
-});
+/** The Meta items of a product: one, or one per variant when it has variants (hidden for an inactive one). */
+const toItems = (p: ProductRow, shopUrl: string): CatalogBatchItem[] =>
+  metaItemsOf({ ...p, galleryUrls: p.gallery }, p.variants, shopUrl);
+
+/** Meta takes up to 5,000 requests in one items_batch; stay well inside it. */
+const META_BATCH_ITEMS = 4000;
 
 /**
  * The Meta side of the product list (TW-CAT-009..013): push in chunks, settle the batches, pull a Meta-built catalog down, and
@@ -106,10 +109,11 @@ export class CatalogSyncService {
     const plan = await this.tx(orgId, async (tx) => {
       const catalog = await this.catalogs.first(tx, orgId);
       if (!catalog || !catalog.catalogId) throw notConnected();
-      const rows = await this.repo.selectForPush(tx, orgId, {
-        uuids,
-        limit: CATALOG_SYNC_CHUNK,
-      });
+      const rows = await this.products.withVariants(
+        tx,
+        orgId,
+        await this.repo.selectForPush(tx, orgId, { uuids, limit: CATALOG_SYNC_CHUNK }),
+      );
       return { catalog, rows, shopUrl: await this.shopUrl(tx, orgId) };
     });
     if (plan.rows.length === 0) {
@@ -121,11 +125,23 @@ export class CatalogSyncService {
     }
 
     let handles: string[];
+    // A product with variants is several items; its handle is the one of its first item.
+    const firstItem: number[] = [];
     try {
-      handles = await this.provider.upsertProductsBatch(
-        this.bindings.of(plan.catalog),
-        plan.rows.map((p) => toItem(p, plan.shopUrl)),
-      );
+      const items: CatalogBatchItem[] = [];
+      for (const p of plan.rows) {
+        firstItem.push(items.length);
+        items.push(...toItems(p, plan.shopUrl));
+      }
+      handles = [];
+      for (let i = 0; i < items.length; i += META_BATCH_ITEMS) {
+        handles.push(
+          ...(await this.provider.upsertProductsBatch(
+            this.bindings.of(plan.catalog),
+            items.slice(i, i + META_BATCH_ITEMS),
+          )),
+        );
+      }
     } catch (err) {
       if (!(err instanceof CatalogProviderError)) throw err;
       await this.tx(orgId, (tx) =>
@@ -147,7 +163,7 @@ export class CatalogSyncService {
           orgId,
           plan.rows.map((p, i) => ({
             id: p.id,
-            handle: handles[i] ?? null,
+            handle: handles[firstItem[i]!] ?? null,
             retailerId: retailerIdOf(p),
           })),
         );
@@ -285,6 +301,11 @@ export class CatalogSyncService {
       let imported = 0;
       let updated = 0;
       let skipped = 0;
+      const ownItems = await this.ownVariantItems(
+        tx,
+        orgId,
+        listed.map((r) => r.retailerId.trim()),
+      );
       for (const r of listed) {
         const retailer = r.retailerId.trim();
         const name = r.name.trim();
@@ -309,7 +330,24 @@ export class CatalogSyncService {
           meta_batch_handle: null,
           ...(priceMinor !== null ? { price_minor: priceMinor } : {}),
         };
-        const existing = await this.repo.findByRetailerId(tx, orgId, retailer);
+        // An item this workspace pushed as a variant, or the hidden item of a product that has variants, is not a new product.
+        if (ownItems.variantIds.has(retailer)) {
+          skipped++;
+          continue;
+        }
+        const found = await this.repo.findByRetailerId(tx, orgId, retailer);
+        const existing = found
+          ? (await this.products.withVariants(tx, orgId, [found]))[0]
+          : undefined;
+        if (existing && ownItems.withVariants.has(existing.id)) {
+          skipped++;
+          continue;
+        }
+        if (existing && existing.variants.length > 0) {
+          // Its own item is the hidden twin of the product-with-variants: Meta must not overwrite the aggregate.
+          skipped++;
+          continue;
+        }
         if (existing) {
           // A currency Meta did not send never overwrites the one the operator set.
           await this.products.update(tx, orgId, existing.id, undefined, {
@@ -352,6 +390,22 @@ export class CatalogSyncService {
     });
   }
 
+  /** Which of these Meta retailer ids are variants of ours, and which products have variants (their own item is only a placeholder). */
+  private async ownVariantItems(
+    tx: Tx,
+    orgId: number,
+    ids: readonly string[],
+  ): Promise<{ variantIds: Set<string>; withVariants: Set<number> }> {
+    const variantIds = new Set((await resolveVariantRetailerIds(tx, orgId, ids)).keys());
+    const withVariants = new Set<number>();
+    const res = await tx.execute(
+      sql`SELECT DISTINCT product_id FROM wa_product_variants WHERE org_id = ${orgId}`,
+    );
+    for (const r of res.rows as Array<{ product_id: number | string }>)
+      withVariants.add(Number(r.product_id));
+    return { variantIds, withVariants };
+  }
+
   // --- auto-sync (TW-CAT-012) ---------------------------------------------------------------------------------------------
 
   /**
@@ -373,9 +427,10 @@ export class CatalogSyncService {
       });
       if (!plan) return;
       try {
-        const handles = await this.provider.upsertProductsBatch(this.bindings.of(plan.catalog), [
-          toItem(plan.product, plan.shopUrl),
-        ]);
+        const handles = await this.provider.upsertProductsBatch(
+          this.bindings.of(plan.catalog),
+          toItems(plan.product, plan.shopUrl),
+        );
         await this.tx(orgId, (tx) =>
           this.repo.markPending(tx, orgId, [
             { id: productId, handle: handles[0] ?? null, retailerId: retailerIdOf(plan.product) },

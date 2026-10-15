@@ -8,15 +8,25 @@ import {
   Query,
   Req,
   Res,
+  UploadedFile,
   UseFilters,
+  UseInterceptors,
   VERSION_NEUTRAL,
   type ArgumentsHost,
   type ExceptionFilter,
 } from '@nestjs/common';
+import { pipeline } from 'node:stream';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
+import { ChatMediaStore } from '../../infra/providers/chat-conversations/media';
+import {
+  isInlineMime,
+  servableMime,
+} from '../../infra/providers/chat-conversations/media/media-types';
 import { ApiExcludeController } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators';
+import { pickChatLocale } from './chat-page-text';
 import {
   NOT_FOUND_SCRIPT,
   WidgetPublicError,
@@ -48,6 +58,7 @@ export class WidgetPublicController {
   constructor(
     private readonly widgets: WidgetPublicService,
     private readonly config: ConfigService,
+    private readonly mediaStore: ChatMediaStore,
   ) {}
 
   /** Behind a proxy `req.protocol` and `req.get('host')` follow the configured `trust proxy`; an override pins the base. */
@@ -115,8 +126,17 @@ export class WidgetPublicController {
   }
 
   @Get('chat')
-  async chat(@Param('token') token: string, @Res() res: Response): Promise<void> {
-    const html = await this.widgets.chatPage(token);
+  async chat(
+    @Param('token') token: string,
+    @Query('lang') lang: string | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    // The window speaks the visitor's browser language (or `?lang=`), one of the app's 21.
+    const html = await this.widgets.chatPage(
+      token,
+      pickChatLocale(req.headers['accept-language'], lang),
+    );
     if (html === null) {
       res.status(404).type('text/plain').send('Widget not found');
       return;
@@ -162,6 +182,40 @@ export class WidgetPublicController {
     res.status(200).json(out);
   }
 
+  /** The visitor attaches a file to answer a question that asked for one. Up to 10 MB; the content is checked on the server. */
+  @Post('api/upload')
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024, files: 1 } }))
+  async upload(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @UploadedFile() file: { buffer: Buffer; originalname: string } | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const out = await this.widgets.upload(token, this.publicRequest(req, queryUuid), file);
+    res.status(200).json(out);
+  }
+
+  /** The visitor's thumbs up or down on a line the bot sent. */
+  @Post('api/feedback')
+  async feedback(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Body() body: Record<string, unknown> | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const inputUuid =
+      queryUuid ?? (typeof body?.visitor_uuid === 'string' ? body.visitor_uuid : undefined);
+    res
+      .status(200)
+      .json(await this.widgets.feedback(token, this.publicRequest(req, inputUuid), body));
+  }
+
   @Get('api/history')
   async history(
     @Param('token') token: string,
@@ -179,5 +233,73 @@ export class WidgetPublicController {
       Number.isFinite(n) && n > 0 ? n : 0,
     );
     res.status(200).json(out);
+  }
+
+  /**
+   * A file the flow bot sent this visitor (`GET /widget/<token>/api/media/<line id>`): read through the visitor's own thread, so
+   * another visitor's id or a stale one is the same 404. Served as data, never as a page.
+   */
+  @Get('api/media/:id')
+  async media(
+    @Param('token') token: string,
+    @Param('id') idParam: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.widgets.enforceThrottle('history', req.ip ?? '');
+    const id = Number.parseInt(idParam, 10);
+    if (!Number.isFinite(id) || id <= 0)
+      throw new WidgetPublicError(404, { ok: false, error: 'widget_not_found' });
+    const file = await this.widgets.mediaFile(token, this.publicRequest(req, queryUuid), id);
+    const opened = await this.mediaStore.open(file.orgId, file.key, undefined);
+    if (!opened) throw new WidgetPublicError(404, { ok: false, error: 'widget_not_found' });
+    const mime = servableMime(file.mime, file.key);
+    res.status(200);
+    res.setHeader('Content-Type', mime);
+    res.setHeader('Content-Length', String(opened.end - opened.start + 1));
+    res.setHeader(
+      'Content-Disposition',
+      `${isInlineMime(mime) ? 'inline' : 'attachment'}; filename*=UTF-8''${encodeURIComponent(file.name).replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)}`,
+    );
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Content-Security-Policy', "default-src 'none'; sandbox");
+    res.setHeader('Cache-Control', 'private, max-age=300');
+    pipeline(opened.stream, res, () => undefined);
+  }
+}
+
+/**
+ * The pictures of a WhatsApp bot's button (its logo and popup picture) as a visitor's browser fetches them: public, cacheable for good
+ * because the address carries the picture's version (`?v=`), and allowed to be embedded by any site, since the button lives on them.
+ */
+@ApiExcludeController()
+@Public()
+@Controller({ path: 'widget-assets', version: VERSION_NEUTRAL })
+export class WidgetAssetsPublicController {
+  constructor(private readonly widgets: WidgetPublicService) {}
+
+  @Get(':flowId/:slot')
+  async asset(
+    @Param('flowId') flowId: string,
+    @Param('slot') slot: string,
+    @Res() res: Response,
+  ): Promise<void> {
+    const found = await this.widgets.asset(flowId, slot);
+    if (!found) {
+      res.status(404).type('text/plain').send('Not found');
+      return;
+    }
+    res.setHeader('Content-Type', found.mime);
+    res.setHeader('ETag', `"${found.etag}"`);
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    // An SVG opened at its own address runs nothing: no script, no fetch, and the page is a sandbox of its own.
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox",
+    );
+    res.send(found.bytes);
   }
 }

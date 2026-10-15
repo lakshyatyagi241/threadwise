@@ -4,8 +4,11 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { Queue } from 'bullmq';
 import type { Redis } from 'ioredis';
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
+import { WOOCOMMERCE, type WooFactory } from '../../infra/providers/ecom/ecom.port';
 import { QUEUES } from '../../infra/queue/queues';
+import { ConsentNoticeService } from '../contact-consent';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import {
   PAID_ORDER_HOOK,
@@ -34,6 +37,7 @@ import { storeFlowEvents } from './flow-events';
 import { EcomOrderHooks, flowRefOf } from './order-hooks';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { StoresRepository } from './stores.repository';
+import { withWooVariations } from './woo-variations';
 
 type Json = Record<string, unknown>;
 
@@ -62,6 +66,7 @@ export class WebhookPipelineService {
   constructor(
     private readonly db: DatabaseService,
     private readonly stores: StoresRepository,
+    private readonly notices: ConsentNoticeService,
     private readonly mirrorRepo: MirrorRepository,
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
@@ -74,6 +79,8 @@ export class WebhookPipelineService {
     @Inject(PAID_ORDER_HOOK) private readonly paidOrders: PaidOrderHook,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
+    private readonly crypto: CryptoService,
+    @Inject(WOOCOMMERCE) private readonly woo: WooFactory,
   ) {}
 
   async run(job: WebhookJob): Promise<void> {
@@ -399,7 +406,28 @@ export class WebhookPipelineService {
         });
       }
     } else if (kindOf.startsWith('product') && !topic.includes('delete')) {
-      const m = kind === 'shopify' ? shopifyProduct(data, ctx) : wooProduct(data, ctx);
+      // A WooCommerce variable product's delivery lists only the variation ids: its variations are read to mirror them as variants.
+      let payload = data;
+      if (kind === 'woocommerce' && 'consumerKey' in store && store.consumerKey !== '') {
+        try {
+          payload = (
+            await withWooVariations(
+              this.woo.store(
+                store.storeUrl,
+                this.crypto.decrypt(store.consumerKey),
+                this.crypto.decrypt(store.consumerSecret),
+              ),
+              data,
+            )
+          ).product;
+        } catch (err) {
+          this.logger.warn(
+            { orgId, storeId, err },
+            'woocommerce variations not read; mirrored as a plain product',
+          );
+        }
+      }
+      const m = kind === 'shopify' ? shopifyProduct(payload, ctx) : wooProduct(payload, ctx);
       if (m.storeId !== '')
         await this.db.txAs({ orgId }, (tx) =>
           this.mirror.upsertProduct(tx, orgId, kind, store.userId, m),
@@ -422,7 +450,21 @@ export class WebhookPipelineService {
           await this.stores.mergeMetadata(tx, orgId, kind, storeId, {
             [kind === 'shopify' ? 'shopify_group_id' : 'woo_group_id']: group,
           });
-        await this.mirror.upsertCustomer(tx, orgId, store.userId, kind, m, group);
+        const notice = await this.notices.publicCurrent(
+          tx,
+          orgId,
+          'commerce',
+          `${kind}:${store.uuid}`,
+        );
+        await this.mirror.upsertCustomer(
+          tx,
+          orgId,
+          store.userId,
+          kind,
+          m,
+          group,
+          notice ? { ref: `${kind}:${store.uuid}`, notice } : undefined,
+        );
       });
     }
   }

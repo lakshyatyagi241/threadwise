@@ -2,13 +2,16 @@
 
 import { Alert, Button, ConfirmDialog, useToast } from '@crm/ui';
 import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { WSP_INVITE_TTL_DAYS, type WspMember } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useMembers, useMembersSummary, useRefreshWorkspace } from '../api/hooks';
 import { wspApi } from '../api/service';
 import { primaryRole, seatsLine, tierQuery, type FilterTier } from '../lib/roles';
+import { useLeaves } from '../api/leave';
 import { InviteDialog } from './invite-dialog';
+import { MemberLeaveDialog } from './member-leave-dialog';
 import { PlusIcon, SearchIcon } from './icons';
 import { LinkBanner, WspProviders, useDebounced, useErrorText } from './parts';
 import { MembersTable } from './members-table';
@@ -44,6 +47,14 @@ function Members() {
   const q = useDebounced(search.trim(), 150);
 
   const summaryQ = useMembersSummary();
+  const leavesQ = useLeaves();
+  const params = useSearchParams();
+  // `/team-members?member=<id>&reassign=1` is the link of the "went on leave" notice: it opens that person's leave dialog.
+  const [leaveFor, setLeaveFor] = useState<{ id: string; name: string; reassign: boolean } | null>(
+    params.get('member')
+      ? { id: params.get('member')!, name: '', reassign: params.get('reassign') === '1' }
+      : null,
+  );
   const membersQ = useMembers(q, tierQuery(tier));
   const summary = summaryQ.data;
   const me = summary?.me;
@@ -244,6 +255,8 @@ function Members() {
                 onInvite={() => setInviteOpen(true)}
                 actions={{
                   busyId,
+                  leaves: { items: leavesQ.data?.data ?? [], today: leavesQ.data?.today ?? '' },
+                  onLeave: (m) => setLeaveFor({ id: m.id, name: m.fullName, reassign: false }),
                   onRole: (m, roleId) => void changeRole(m, roleId),
                   onReset: (m) => setConfirm({ kind: 'reset', member: m }),
                   onResend: (m) => void handOver(m, 'resend'),
@@ -263,6 +276,16 @@ function Members() {
           onInvited={() => void refresh()}
         />
       )}
+
+      <MemberLeaveDialog
+        memberId={leaveFor?.id ?? null}
+        memberName={
+          leaveFor ? leaveFor.name || (items.find((m) => m.id === leaveFor.id)?.fullName ?? '') : ''
+        }
+        open={leaveFor !== null}
+        focusReassign={leaveFor?.reassign ?? false}
+        onClose={() => setLeaveFor(null)}
+      />
 
       <ConfirmDialog
         open={confirm?.kind === 'remove'}

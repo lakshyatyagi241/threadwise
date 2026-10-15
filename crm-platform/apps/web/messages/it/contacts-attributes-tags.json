@@ -187,7 +187,29 @@
       "ownerFormer": "Ex membro",
       "reassignView": "Riassegna i contatti di {name}...",
       "smsNamed": "SMS a {name}",
-      "noSms": "Nessun numero di telefono per gli SMS"
+      "noSms": "Nessun numero di telefono per gli SMS",
+      "pqlLabel": "Cerca contatti in linguaggio naturale",
+      "pqlAsk": "Chiedi",
+      "pqlAsking": "Richiesta in corso...",
+      "pqlIgnored": "Non compreso: {parts}",
+      "pqlNothing": "Nulla di questa ricerca è diventato un filtro.",
+      "pqlFailed": "La ricerca in linguaggio naturale non è disponibile ora. Riprova.",
+      "filter": "Filtra",
+      "filterAi": "Filtra con l'IA",
+      "filterAiHint": "Descrivi chi stai cercando",
+      "filterAdvanced": "Aggiungi filtro avanzato",
+      "quickFilters": "Filtri rapidi",
+      "sortButton": "Ordina",
+      "back": "Indietro",
+      "pqlPromptPlaceholder": "Descrivi i contatti che vuoi...",
+      "pqlTry": "Prova uno di questi",
+      "pqlExample2": "Inattivi da 30 giorni",
+      "pqlExample3": "Creati negli ultimi 7 giorni",
+      "clearFilter": "Rimuovi filtro",
+      "conditionsChip": "Condizioni: {count}",
+      "pqlExampleTag": "Contatti con il tag {tag} inattivi da 30 giorni",
+      "pqlExampleStage": "Contatti in {stage} creati negli ultimi 7 giorni",
+      "pqlExampleNoOwner": "Contatti senza proprietario"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Aggiungi o scegli un tag...",
       "addLabel": "Nome del tag",
       "add": "Aggiungi tag",
-      "failed": "Non è stato possibile modificare il tag. Riprova."
+      "failed": "Non è stato possibile modificare il tag. Riprova.",
+      "quickPlaceholder": "Cerca o crea un tag",
+      "create": "Crea il tag «{name}»",
+      "noMatch": "Nessun tag corrispondente",
+      "quickHint": "Scegli più tag, oppure digita un nome e premi Invio per crearne uno nuovo.",
+      "quickHintPick": "Scegli più tag dall'elenco."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Memo",
         "status": "Stato",
         "source": "Origine",
-        "consent": "Consenso marketing (sì / no)"
+        "consent": "Consenso marketing (sì / no)",
+        "consentSms": "Consenso marketing via SMS (sì / no)",
+        "consentEmail": "Consenso marketing via email (sì / no)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Seleziona tutto",
         "reorder": "Trascina per riordinare le colonne",
         "remove": "Rimuovi {name}"
+      },
+      "presets": {
+        "myContacts": "I miei contatti",
+        "newThisWeek": "Nuovi questa settimana",
+        "newLastWeek": "Nuovi la settimana scorsa",
+        "recentlyCreated": "Creati di recente",
+        "recentlyModified": "Modificati di recente",
+        "recentlyImported": "Importati di recente",
+        "neverContacted": "Mai contattati",
+        "needsFollowUp": "Da ricontattare",
+        "active": "Attivi",
+        "inactive": "Inattivi",
+        "unsubscribed": "Disiscritti"
       }
+    },
+    "erase": {
+      "scope": "Eliminare un contatto cancella anche le sue conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
+      "scopeMany": "Eliminare dei contatti cancella anche le loro conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
+      "keepHistory": "Conserva la cronologia delle conversazioni senza l'identità della persona",
+      "keepHistoryHint": "Le conversazioni restano nei tuoi archivi ma non rimandano più alla persona."
     }
   }
 }

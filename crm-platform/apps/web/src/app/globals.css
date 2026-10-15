@@ -2,6 +2,12 @@
 @import '@crm/ui/tokens.css';
 @source '../../../../packages/ui/src';
 
+/* The app's base type (set once, in the root layout): every domain's font-sans/font-mono picks it up. */
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 /* The public marketing site's palette (TW-CMS-021): colour utilities (bg-ink-950, text-wa-deep, border-paper-200) that follow the editable --site-* tokens set on .cms-site. */
 @theme inline {
   --color-wa-deep: var(--site-wa-deep, #3214db);

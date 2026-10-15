@@ -18,6 +18,7 @@ import { canDisconnect, canEditNumber, primaryAction } from '../lib/state-model'
 import { nameProblem } from '../lib/wizard-model';
 import { ConnectWizard } from './connect-wizard';
 import { DeleteDialog, DisconnectDialog } from './device-dialogs';
+import { HistoryImportCard } from './history-import-card';
 import { ErrorNotice } from './error-notice';
 import { ReasonText, StateBadge } from './state-badge';
 import { useErrorText, type ErrorText } from './use-error-text';
@@ -130,6 +131,8 @@ export function DeviceDetailScreen({ id }: { id: string }) {
         </div>
       </section>
 
+      <HistoryImportCard deviceId={d.id} canCancel={perms.pair} />
+
       <EditCard device={d} canEdit={perms.create} />
 
       {(perms.disconnect || perms.delete) && (
@@ -162,6 +165,7 @@ export function DeviceDetailScreen({ id }: { id: string }) {
           existing={d}
           noticeVersion={list.data?.meta.noticeVersion ?? null}
           noticeAccepted={list.data?.meta.noticeAccepted ?? false}
+          historyFullAllowed={list.data?.meta.historyFullAllowed ?? false}
           onClose={close}
         />
       )}

@@ -18,7 +18,7 @@
     },
     "page": {
       "title": "Google-Sheets-Add-on",
-      "subtitle": "Rufen Sie Kontakte ab und übertragen Sie sie, und synchronisieren Sie Produkte zwischen einer Tabelle und Ihrem Workspace.",
+      "subtitle": "Senden Sie neue und geänderte Tabellenzeilen als Kontakte an Ihren Arbeitsbereich, laden Sie Kontakte in eine Tabelle und synchronisieren Sie Produkte.",
       "loading": "Add-on-Einrichtung wird geladen",
       "retry": "Wiederholen",
       "status": {
@@ -50,7 +50,7 @@
     },
     "key": {
       "title": "Ihr Schlüssel",
-      "intro": "Das Add-on verwendet Ihren persönlichen Schlüssel, um in Ihrem Namen zu handeln. Es sieht nur, was Ihre Rolle erlaubt.",
+      "intro": "Das Add-on verwendet Ihren persönlichen Schlüssel, um in Ihrem Namen zu handeln. Es sieht nur, was Ihre Rolle erlaubt. Der Schlüssel ist der letzte Teil Ihrer Webhook URL.",
       "none": "Sie haben noch keinen Schlüssel.",
       "generate": "Schlüssel erzeugen",
       "rotate": "Neuen Schlüssel erzeugen",
@@ -60,8 +60,8 @@
       "created": "Erstellt {when}",
       "lastUsed": "Zuletzt verwendet {when}",
       "neverUsed": "Nie verwendet",
-      "newTitle": "Ihr neuer Schlüssel",
-      "newWarning": "Kopieren Sie ihn jetzt. Er wird nur einmal angezeigt und kann nicht erneut angezeigt werden. Jeder mit diesem Schlüssel kann im Add-on in Ihrem Namen handeln.",
+      "newTitle": "Ihr neuer Schlüssel und Ihre Webhook URL",
+      "newWarning": "Kopieren Sie beides jetzt. Der Schlüssel und die Webhook URL werden nur einmal angezeigt und können nicht erneut angezeigt werden. Jeder, der sie hat, kann im Add-on in Ihrem Namen handeln.",
       "rotatedNote": "Ihr vorheriger Schlüssel funktioniert nicht mehr.",
       "keyLabel": "Neuer Schlüssel",
       "confirmRotate": {
@@ -85,7 +85,8 @@
         "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
         "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
         "unexpected": "Bei uns ist etwas schiefgelaufen. Versuchen Sie es erneut."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Was Ihr Schlüssel kann",
@@ -108,12 +109,12 @@
     },
     "steps": {
       "title": "In einer Tabelle einrichten",
-      "one": "Öffnen Sie eine Tabelle, dann Erweiterungen, dann Apps Script.",
-      "two": "Laden Sie die sechs obigen Dateien herunter. Blenden Sie in den Projekteinstellungen die Datei appsscript.json ein und fügen Sie appsscript.json und Code.gs anstelle der Dateien im Editor ein.",
-      "three": "Fügen Sie drei HTML-Dateien mit den Namen Dialog, Settings und Help hinzu und fügen Sie die heruntergeladenen Dateien darin ein.",
-      "four": "Speichern Sie und laden Sie die Tabelle neu. Ein Menü CRM erscheint. Erlauben Sie die drei Berechtigungen, nach denen Google fragt.",
-      "five": "Wählen Sie CRM, dann Settings, fügen Sie Ihren Schlüssel ein und wählen Sie Speichern und prüfen.",
-      "six": "Zeile 1 Ihrer Tabelle enthält die Spaltennamen. Verwenden Sie dann im CRM-Menü Kontakte abrufen, Kontakte übertragen oder Produkte synchronisieren."
+      "one": "Kopieren Sie Ihre Webhook URL, wenn Sie Ihren Schlüssel erstellen. Sie wird nur einmal angezeigt.",
+      "two": "Wählen Sie in einer Tabelle Extensions, dann Add-ons, dann Get add-ons und installieren Sie das Add-on aus dem Google Workspace Marketplace. Solange es dort nicht gelistet ist, fügen Sie die sechs Dateien unten unter Extensions, Apps Script ein.",
+      "three": "Laden Sie die Tabelle neu. Wählen Sie Extensions, dann das Add-on, dann Initial Setup und fügen Sie die Webhook URL ein.",
+      "four": "Wählen Sie das Tabellenblatt und die Auslöserspalte. Eine Zeile wird gesendet, wenn diese Zelle ausgefüllt oder geändert wird.",
+      "five": "Wählen Sie Send Test, um die Verbindung zu prüfen. Es wird nichts gespeichert; Sie sehen die Spalten, die das CRM empfangen hat. Wählen Sie dann Submit.",
+      "six": "Aktivieren Sie Send on event (eine Zeile wird gesendet, sobald Sie sie bearbeiten) und/oder Send on schedule (stündlich, Zeilen, die ein Formular oder eine andere App geändert hat). Jede Zeile kommt als Kontakt an, und ihr Ergebnis wird in eine Spalte CRM status geschrieben."
     },
     "columns": {
       "title": "Spalten, die das Add-on liest",
@@ -133,6 +134,22 @@
       "title": "Neueste Produkte",
       "empty": "Noch keine Produkte. Synchronisieren Sie eine Tabelle, um welche hinzuzufügen.",
       "count": "{count, plural, one {# Produkt in Ihrem Workspace} other {# Produkte in Ihrem Workspace}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Fügen Sie sie im Add-on bei Initial Setup ein. Sie enthält Ihren Schlüssel, halten Sie sie also privat.",
+      "none": "Erstellen Sie einen Schlüssel, um Ihre Webhook URL zu erhalten.",
+      "capture": {
+        "title": "Zuletzt empfangene Daten",
+        "none": "Noch nichts empfangen. Wählen Sie im Add-on Initial Setup und dann Send Test.",
+        "when": "{event} aus {sheet}, {when}. {rows, plural, one {# Zeile} other {# Zeilen}}.",
+        "noSheet": "eine unbenannte Tabelle",
+        "events": {
+          "test": "Test",
+          "edit": "Bearbeitung",
+          "schedule": "Stündlicher Durchlauf"
+        }
+      }
     }
   }
 }

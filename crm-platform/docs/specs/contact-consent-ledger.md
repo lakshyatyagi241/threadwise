@@ -233,4 +233,11 @@ With "Marketing opt-in" on, the Forms settings show a button that fills the cons
 updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe.") in the editor's language, through the same
 version-bumping path as typing, so the wording version and the stored proof stay honest.
 
+## 14. Consent at intake (BL-165 to BL-167)
+
+The policy and the table of intake paths are in [privacy-and-data-governance.md](privacy-and-data-governance.md) section 4.3.2:
+a first inbound message permits replying only and never creates a marketing grant; a grant is written only when the person agreed, with
+source, wording, version and time as evidence; a subscription status is a label, not proof. `ConsentIntakeService` (`consent-intake.service.ts`)
+and the pure rules `consent-intake.rules.ts` are the one writer for those paths; the API shape is in [../api/contact-consent.md](../api/contact-consent.md).
+
 Platform-wide follow-up: the consent gate, purposes beyond marketing/utility, voice and email unsubscribe are designed in [privacy-and-data-governance.md](privacy-and-data-governance.md) (BL-140, BL-141, BL-145, BL-148).

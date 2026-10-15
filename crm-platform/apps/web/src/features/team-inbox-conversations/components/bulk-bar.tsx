@@ -1,6 +1,6 @@
 'use client';
 
-import { useTimeZone, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Button, Select, Spinner } from '@crm/ui';
 import {
   CONVERSATION_PRIORITIES,
@@ -8,6 +8,7 @@ import {
   type ConversationPriority,
 } from '@crm/contracts';
 import { useAssignees, useTags } from '../api/hooks';
+import { leaveDayText } from '../lib/leave-mark';
 import { SNOOZE_PRESETS, snoozeUntil, type SnoozePreset } from '../lib/selection';
 
 export interface BulkBarProps {
@@ -37,6 +38,7 @@ export interface BulkBarProps {
  */
 export function BulkBar(props: BulkBarProps) {
   const t = useTranslations('team-inbox-conversations.bulk');
+  const locale = useLocale();
   const timeZone = useTimeZone();
   const tp = useTranslations('team-inbox-conversations.list');
   const { can } = props;
@@ -146,6 +148,9 @@ export function BulkBar(props: BulkBarProps) {
                 .map((u) => (
                   <option key={u.id} value={`u:${u.id}`}>
                     {u.name ?? u.email}
+                    {u.onLeave
+                      ? ` · ${u.onLeave.until ? t('onLeaveUntil', { date: leaveDayText(u.onLeave.until, locale) }) : t('onLeave')}`
+                      : ''}
                   </option>
                 ))}
             {can.assign &&

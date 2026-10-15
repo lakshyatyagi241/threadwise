@@ -58,7 +58,8 @@
         "tryAgain": "Riprova a pagare",
         "missingTitle": "Non abbiamo trovato questo pagamento",
         "missingBody": "Il link potrebbe essere errato o troppo vecchio."
-      }
+      },
+      "termsOfService": "Termini"
     }
   }
 }

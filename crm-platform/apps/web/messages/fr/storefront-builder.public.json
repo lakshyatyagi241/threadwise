@@ -75,7 +75,9 @@
       "removeWish": "Retirer {name} de la liste de souhaits",
       "quickView": "Aperçu rapide de {name}",
       "quickViewTitle": "Aperçu rapide",
-      "was": "Avant"
+      "was": "Avant",
+      "chooseOptions": "Choisir les options",
+      "chooseOptionsNamed": "Choisir les options de {name}"
     },
     "quick": {
       "details": "Détails complets →"
@@ -162,7 +164,9 @@
       "increase": "Augmenter la quantité",
       "remove": "Retirer {name} du panier",
       "fullTitle": "Votre panier est plein",
-      "fullBody": "Un panier contient jusqu’à 100 produits différents. Commandez ceux-ci d’abord, puis commencez un nouveau panier."
+      "fullBody": "Un panier contient jusqu’à 100 produits différents. Commandez ceux-ci d’abord, puis commencez un nouveau panier.",
+      "variantDroppedTitle": "Votre panier a été mis à jour",
+      "variantDroppedBody": "{count, plural, one {# article demande de choisir à nouveau ses options et a été retiré de votre panier.} other {# articles demandent de choisir à nouveau leurs options et ont été retirés de votre panier.}}"
     },
     "wish": {
       "title": "Liste de souhaits",
@@ -233,9 +237,9 @@
       "couponFallback": "Code non valide."
     },
     "errors": {
-      "itemsUnavailable": "Ces articles ne sont plus disponibles. Actualisez la page et réessayez.",
       "notAvailable": "Cette boutique n’est pas disponible.",
-      "rateLimited": "Trop de requêtes. Patientez un instant puis réessayez."
+      "rateLimited": "Trop de requêtes. Patientez un instant puis réessayez.",
+      "itemsRefreshed": "Certains articles ont changé ou sont épuisés, nous avons donc mis à jour votre panier. Vérifiez-le et réessayez."
     },
     "placed": {
       "title": "Commande passée",
@@ -331,6 +335,13 @@
       "help": "Besoin d’aide ?",
       "support": "Contacter l’assistance",
       "metaTitle": "Page introuvable"
+    },
+    "variant": {
+      "from": "À partir de {price}",
+      "optionsCount": "{count, plural, one {# option} other {# options}}",
+      "select": "Choisissez {option}",
+      "unavailable": "Cette combinaison n’est pas disponible",
+      "soldOutValue": "épuisé"
     }
   }
 }

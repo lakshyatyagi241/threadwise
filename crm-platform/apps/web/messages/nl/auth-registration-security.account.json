@@ -552,12 +552,13 @@
             "storefront_builder": "Winkelbouwer",
             "invoicing": "Facturatie",
             "forms_and_links": "Formulieren en links",
-            "extra_channels": "Telegram, Facebook en Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber en WeChat",
             "form_builder": "Formulieren",
             "waba_groups": "WhatsApp-groepen",
             "sms": "SMS",
             "help_agent": "Hulpassistent",
-            "email_channel": "E-mailkanaal (Gmail)"
+            "email_channel": "E-mailkanaal (Gmail)",
+            "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

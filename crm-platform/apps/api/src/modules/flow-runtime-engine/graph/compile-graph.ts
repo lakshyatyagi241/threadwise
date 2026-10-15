@@ -3,6 +3,7 @@ import {
   flbCleanAskInputType,
   flbSanitizeConditionGroup,
   flbToRuntimeData,
+  flbCleanCarouselCards,
 } from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
@@ -38,6 +39,7 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   wa_form: 'WaForm',
   template: 'Template',
   buttons: 'InteractiveButtons',
+  carousel: 'Carousel',
   list: 'List',
   ask: 'Question',
   ask_file: 'AskFile',
@@ -208,18 +210,52 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         savePropertyKey: str(data.savePropertyKey),
       };
     }
+    case 'carousel': {
+      // The reply buttons become the node's exits in card order (`p0`, `p1`, ...); a card's link buttons keep their kind and value.
+      const cards = flbCleanCarouselCards(data.cards);
+      let reply = 0;
+      const buttons: Array<{ id: string; title: string }> = [];
+      const handoffs: Record<string, { team: string; message: string }> = {};
+      return {
+        bodyText: str(data.text),
+        cards: cards.map((c) => ({
+          image: c.image,
+          title: c.title,
+          text: c.text,
+          buttons: c.buttons.map((b) => {
+            if (b.type !== 'reply' && b.type !== 'agent')
+              return { kind: 'link', type: b.type, label: b.label, value: b.value };
+            const i = reply++;
+            if (b.type === 'agent')
+              handoffs[String(i)] = { team: b.team ?? '', message: b.note ?? '' };
+            const title = b.label || `Option ${i + 1}`;
+            buttons.push({ id: `p${i}`, title });
+            return { kind: 'reply', index: i, label: title };
+          }),
+        })),
+        buttons,
+        handoffs,
+        variable: cleanVar(data.var, 'choice'),
+      };
+    }
     case 'buttons': {
       const opts = arr(data.options);
       return {
         bodyText: str(data.prompt, 'Please choose:'),
-        buttons: opts.map((o, i) => ({
-          id: `p${i}`,
-          title: typeof o === 'string' ? o : str(obj(o).title, `Option ${i + 1}`),
-        })),
+        buttons: opts.map((o, i) => {
+          const icon = str(arr(data.optionIcons)[i]).trim();
+          return {
+            id: `p${i}`,
+            title: typeof o === 'string' ? o : str(obj(o).title, `Option ${i + 1}`),
+            ...(/^https?:\/\/\S+$/i.test(icon) ? { icon } : {}),
+          };
+        }),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
         savePropertyKey: str(data.savePropertyKey),
         keepMenuOpen: data.keepMenuOpen !== false,
+        handoffs: cleanHandoffs(data.handoffs, opts.length),
+        actions: cleanButtonActions(data.optionActions, opts.length),
       };
     }
     case 'ask':
@@ -238,6 +274,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         maxRetries: int(data.maxRetries, 0),
         onGiveUp: str(data.onGiveUp, 'continue'),
         savePropertyKey: str(data.savePropertyKey),
+        verifyOtp: data.verifyOtp === true,
       };
     // Not Reference nodes (TW-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
     case 'ask_file':
@@ -303,6 +340,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
             type: str(obj(a).type, 'url').toLowerCase(),
             label: str(obj(a).label),
             value: str(obj(a).value),
+            ...(str(obj(a).icon).trim() ? { icon: str(obj(a).icon).trim() } : {}),
           })),
       };
     case 'location':
@@ -333,6 +371,48 @@ function portOf(type: string, handle: unknown): number {
  * Builder graph to runtime graph (TW-FLR-013). Pure: no database, no clock. The pinned start node (`isStart`) moves to the front,
  * else the first `trigger` node, else the order is kept; the runtime always begins at the first node.
  */
+/**
+ * "Hand over to a person" on a button: `{ "<exit index>": { team, message } }`, only for exits that exist. The compiler gives such an
+ * exit its own Assign agent step when the author wired nothing to it.
+ */
+function cleanHandoffs(
+  raw: unknown,
+  exits: number,
+): Record<string, { team: string; message: string }> {
+  const out: Record<string, { team: string; message: string }> = {};
+  for (const [k, v] of Object.entries(obj(raw))) {
+    const i = Number(k);
+    if (!Number.isInteger(i) || i < 0 || i >= exits) continue;
+    const h = obj(v);
+    out[String(i)] = { team: str(h.team).trim(), message: str(h.message).slice(0, 500) };
+  }
+  return out;
+}
+
+/**
+ * What a button does when tapped, besides leading to the next step. `live_agent` is the `handoffs` above, not an action here. A `flow`
+ * action hands the conversation to that flow; the opt actions carry on to the step wired after the button.
+ */
+export type ButtonAction =
+  { type: 'flow'; flow: string } | { type: 'opt_in' } | { type: 'opt_out' };
+
+/**
+ * "Button pressed action" on a button: `{ "<exit index>": { type: "flow" | "opt_in" | "opt_out", flow? } }`, only for exits that exist.
+ * The compiler gives such an exit its own step (Run sub-flow, or Opt in / Opt out of marketing) in front of whatever is wired after it.
+ */
+export function cleanButtonActions(raw: unknown, exits: number): Record<string, ButtonAction> {
+  const out: Record<string, ButtonAction> = {};
+  for (const [k, v] of Object.entries(obj(raw))) {
+    const i = Number(k);
+    if (!Number.isInteger(i) || i < 0 || i >= exits) continue;
+    const a = obj(v);
+    if (a.type === 'opt_in' || a.type === 'opt_out') out[String(i)] = { type: a.type };
+    else if (a.type === 'flow' && str(a.flow).trim() !== '')
+      out[String(i)] = { type: 'flow', flow: str(a.flow).trim() };
+  }
+  return out;
+}
+
 export function compileGraph(input: unknown): RuntimeGraph {
   const g = obj(input) as BuilderGraph;
   const raw = [...arr(g.flowNodes)].map(obj) as BuilderNode[];
@@ -377,6 +457,57 @@ export function compileGraph(input: unknown): RuntimeGraph {
       .map((e) => str(e.source)),
   );
   for (const n of nodes) if (n.type === 'Template') n.props.buttonsWired = tapWired.has(n.id);
+  // A button that hands the visitor to a person and has nothing wired after it gets its own Assign agent step.
+  const wired = new Set(edges.map((e) => e.from));
+  for (const n of [...nodes]) {
+    for (const [idx, h] of Object.entries(obj(n.props.handoffs))) {
+      const from = `${n.id}_${portOf(typeById.get(n.id) ?? '', `p${idx}`)}`;
+      if (wired.has(from)) continue;
+      const id = `${n.id}__agent_${idx}`;
+      const give = obj(h);
+      nodes.push({
+        id,
+        type: 'AssignAgent',
+        props: shapeNode(
+          'assign',
+          flbToRuntimeData({
+            type: 'assign',
+            data: { team: str(give.team), message: str(give.message) },
+          }),
+        ),
+      });
+      edges.push({ from, to: id });
+    }
+  }
+  // A button with an action runs that step first (a sub-flow, or the contact's marketing opt-in / opt-out), then goes on to whatever the
+  // author wired to the button, if anything.
+  for (const n of [...nodes]) {
+    for (const [idx, action] of Object.entries(
+      n.type === 'InteractiveButtons' ? (obj(n.props.actions) as Record<string, ButtonAction>) : {},
+    )) {
+      const from = `${n.id}_${portOf(typeById.get(n.id) ?? '', `p${idx}`)}`;
+      const id = `${n.id}__action_${idx}`;
+      nodes.push(
+        action.type === 'flow'
+          ? {
+              id,
+              type: 'SubFlow',
+              props: shapeNode(
+                'subflow',
+                flbToRuntimeData({ type: 'subflow', data: { flow: action.flow } }),
+              ),
+            }
+          : { id, type: 'ContactConsent', props: { data: { action: action.type } } },
+      );
+      const wiredEdge = edges.find((e) => e.from === from);
+      if (wiredEdge) {
+        // A sub-flow takes the run over for good (the engine does not return to this flow), so nothing carries on after it; the opt
+        // steps do carry on to what the author wired.
+        if (action.type !== 'flow') edges.push({ from: `${id}_1`, to: wiredEdge.to });
+        wiredEdge.to = id;
+      } else edges.push({ from, to: id });
+    }
+  }
   return { nodes, edges, vars: obj(g.vars) };
 }
 

@@ -31,6 +31,7 @@ import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { Throttle } from '../platform-infrastructure';
 import { DevicePairingService } from './device-pairing.service';
 import { DevicesService } from './devices.service';
+import { HistoryImportService } from './history-import.service';
 import { RiskNoticeService } from './risk-notice.service';
 import { UnofficialEngineGuard } from './unofficial-engine.guard';
 
@@ -51,6 +52,7 @@ export class DevicesController {
     private readonly devices: DevicesService,
     private readonly pairing: DevicePairingService,
     private readonly notice: RiskNoticeService,
+    private readonly history: HistoryImportService,
   ) {}
 
   @Get()
@@ -154,6 +156,29 @@ export class DevicesController {
   @ApiOperation({ summary: 'End the pairing attempt now' })
   cancelPairing(@Param('id', ParseUUIDPipe) id: string) {
     return this.pairing.cancel(id);
+  }
+
+  @Get(':id/history-import')
+  @Header('Cache-Control', 'no-store')
+  @RequirePermission('wa.devices.read')
+  @ApiOperation({
+    summary:
+      'The opt-in import of existing chats: state, counts, progress, last error (poll every few seconds while it runs)',
+  })
+  historyImport(@Param('id', ParseUUIDPipe) id: string) {
+    return this.history.status(id);
+  }
+
+  @Post(':id/history-import/cancel')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('wa.devices.pair')
+  @ApiOperation({
+    summary:
+      'Stop the import of existing chats: no further batch is accepted, what was stored stays (409 when none is running)',
+  })
+  cancelHistoryImport(@Param('id', ParseUUIDPipe) id: string) {
+    return this.history.cancel(id);
   }
 
   @Post(':id/disconnect')

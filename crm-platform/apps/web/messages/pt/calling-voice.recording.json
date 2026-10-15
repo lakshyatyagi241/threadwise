@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Gravação de chamadas",
+        "intro": "A gravação fica desligada até você ativá-la. Quando está ativa, um colega lê o aviso, a pessoa responde e só então a gravação começa. As gravações são excluídas ao fim do período de retenção.",
+        "loading": "Carregando as regras de gravação",
+        "loadFailed": "Não foi possível carregar as regras de gravação.",
+        "retry": "Tentar novamente",
+        "viewOnly": "Você pode ver estas regras, mas só um proprietário ou administrador pode alterá-las.",
+        "enabled": "Gravar chamadas",
+        "enabledOn": "Ativada: os colegas podem gravar uma chamada depois que a pessoa concordar.",
+        "enabledOff": "Desativada: nenhuma chamada é gravada.",
+        "mode": "Como a pessoa concorda",
+        "modeHint": {
+          "confirmed": "A pessoa diz sim à gravação e o colega salva a resposta. A opção mais segura.",
+          "announcement": "O colega lê o aviso e a chamada continua. Use apenas onde seu assessor jurídico confirmar que um anúncio basta."
+        },
+        "modeOption": {
+          "confirmed": "A pessoa diz sim",
+          "announcement": "Anúncio e seguir em frente"
+        },
+        "retention": "Manter gravações por (dias)",
+        "retentionHint": "Entre {min} e {max} dias. Gravações mais antigas são excluídas toda noite; a chamada continua no registro.",
+        "retentionInvalid": "Digite um número inteiro de dias dentro do intervalo permitido.",
+        "notice": "Aviso de gravação",
+        "noticeHint": "O colega lê isto antes de gravar. Até {max} caracteres. Cada alteração é salva como uma nova versão.",
+        "noticeRequired": "Escreva o aviso (pelo menos {min} caracteres) para ativar a gravação.",
+        "noticeVersion": "Versão do aviso {version}",
+        "noticeNone": "Nenhum aviso salvo ainda",
+        "updatedAt": "salvo {date}",
+        "noticeSuggestion": "Esta chamada pode ser gravada para fins de qualidade e treinamento. Você concorda com a gravação?",
+        "useSuggestion": "Usar o texto sugerido",
+        "saved": "Regras de gravação salvas.",
+        "saving": "Salvando",
+        "save": "Salvar regras"
+      },
+      "consent": {
+        "title": "Perguntar antes de gravar",
+        "askConfirmed": "Leia o aviso. Pressione o primeiro botão só se a pessoa disser sim.",
+        "askAnnouncement": "Leia o aviso e depois inicie a gravação.",
+        "grantConfirmed": "Disse sim: iniciar gravação",
+        "grantAnnouncement": "Aviso lido: iniciar gravação",
+        "decline": "Não: continuar sem gravar",
+        "declinedNote": "Sem gravação: a pessoa não concordou.",
+        "off": "A gravação de chamadas está desativada neste espaço de trabalho.",
+        "failed": "Não foi possível salvar a resposta, então nada é gravado: {message}"
+      },
+      "lifecycle": {
+        "title": "Gravação e consentimento",
+        "consent": "Consentimento para gravar",
+        "consentGranted": "Concordou em ser gravada",
+        "consentDeclined": "Recusou ser gravada",
+        "consentNone": "Nenhuma resposta registrada",
+        "method": {
+          "announcement_continue": "Aviso lido, chamada continuou",
+          "spoken_yes": "Disse sim"
+        },
+        "noticeVersion": "Versão do aviso {version}",
+        "storedAt": "Armazenada",
+        "expiresAt": "Excluída automaticamente em",
+        "heldNoExpiry": "Não excluída: bloqueio legal",
+        "none": "Não definido",
+        "deleted": "Gravação excluída",
+        "deletedReason": {
+          "retention": "período de retenção terminou",
+          "manual": "excluída por um colega",
+          "consent_withdrawn": "consentimento retirado"
+        },
+        "holdOn": "Bloqueio legal",
+        "placeHold": "Aplicar bloqueio legal",
+        "liftHold": "Remover bloqueio legal",
+        "holdLifted": "Bloqueio legal removido.",
+        "holdPlaced": "Bloqueio legal aplicado.",
+        "holdReasonLabel": "Por que está sendo mantida?",
+        "cancel": "Cancelar",
+        "delete": "Excluir gravação",
+        "deleteBlockedByHold": "Remova primeiro o bloqueio legal.",
+        "deleteTitle": "Excluir esta gravação?",
+        "deleteMessage": "O arquivo de áudio é removido de vez. A chamada continua no registro.",
+        "deletedToast": "Gravação excluída."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "A gravação de chamadas está desativada neste espaço de trabalho.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Esta chamada não pode ser gravada: a pessoa não concordou.",
+      "CALL_RECORDING_CONSENT_INVALID": "Essa resposta não pode ser salva para esta chamada.",
+      "CALL_RECORDING_ON_HOLD": "Esta gravação está sob bloqueio legal. Remova o bloqueio primeiro.",
+      "CALL_RECORDING_SETTINGS_INVALID": "As regras de gravação não são válidas: escreva o aviso primeiro."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "A pessoa concordou em ser gravada",
+          "recording_consent_declined": "A pessoa recusou a gravação",
+          "recording_deleted": "Gravação excluída",
+          "recording_hold_set": "Bloqueio legal aplicado",
+          "recording_hold_lifted": "Bloqueio legal removido"
+        }
+      }
+    }
+  }
+}

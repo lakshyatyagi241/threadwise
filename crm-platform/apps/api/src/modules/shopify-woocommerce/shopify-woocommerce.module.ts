@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastsModule } from '../broadcasts';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
@@ -71,6 +72,7 @@ import { WoocommerceService } from './woocommerce.service';
     BroadcastsModule,
     NodeBridgeRuntimeModule,
     PlansCoreModule,
+    ContactConsentModule,
     CrmModule,
     PlatformSettingsModule,
   ],

@@ -32,13 +32,14 @@ describe('planned screens', () => {
       PLANNED_NAV.filter((i) => i.group === g)
         .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
         .map((i) => i.id);
-    expect(ids('audience')).toEqual(['lead-finder', 'email-templates']);
-    expect(ids('sales')).toEqual(['crm-dashboard']);
+    expect(ids('audience')).toEqual(['lead-finder']);
+    // Every Sales screen is real now (the CRM dashboard was the last planned one).
+    expect(ids('sales')).toEqual([]);
   });
 
   it('cover the Reference groups the real screens do not', () => {
     const groups = new Set<string>(PLANNED_NAV.map((i) => i.group));
-    for (const g of ['inbox', 'campaigns', 'automation', 'sales', 'store', 'help']) {
+    for (const g of ['inbox', 'campaigns', 'automation', 'store', 'help']) {
       expect(groups.has(g), g).toBe(true);
     }
   });

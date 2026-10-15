@@ -738,7 +738,9 @@
           "link": "Gunakan path situs seperti /legal/terms, atau alamat http atau https lengkap.",
           "senderFormat": "Pilih salah satu pengirim dari daftar.",
           "countryFormat": "Gunakan kode negara dua huruf.",
-          "senderRequired": "Pilih kanal pengirim sebelum membuat templat."
+          "senderRequired": "Pilih kanal pengirim sebelum membuat templat.",
+          "domainFormat": "{entry} bukan domain yang valid. Gunakan nama seperti contoh.com.",
+          "tooMany": "Paling banyak {max} domain."
         },
         "policy": {
           "kicker": "Pendaftaran",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Maks. percobaan"
+          },
+          "businessEmailOnly": {
+            "label": "Hanya alamat email kerja",
+            "hintOn": "Penyedia gratis seperti Gmail, Outlook, dan Yahoo ditolak saat pendaftaran.",
+            "hintOff": "Siapa pun dapat mendaftar dengan alamat pribadi gratis."
+          },
+          "blockDisposableEmail": {
+            "label": "Blokir email sementara",
+            "hintOn": "Domain sekali pakai dan sementara, serta domain tanpa server email, ditolak.",
+            "hintOff": "Alamat sementara diterima."
+          },
+          "requirePhoneVerification": {
+            "label": "Wajibkan nomor ponsel terverifikasi",
+            "hintOn": "Setiap pendaftaran harus mengonfirmasi kode sekali pakai. Jika kode tidak dapat dikirim, pendaftaran berhenti alih-alih melewati pemeriksaan.",
+            "hintOff": "Langkah kode hanya berjalan saat kode pendaftaran di bawah aktif."
+          },
+          "blockedEmailDomains": {
+            "label": "Domain yang selalu diblokir",
+            "hint": "Satu domain per baris. Subdomain juga diblokir. Tetap ditolak meskipun «Hanya alamat email kerja» dinonaktifkan.",
+            "placeholder": "contoh.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Footer itu tidak diterima.",
             "unexpected": "Footer tidak dapat disimpan. Coba lagi sebentar lagi."
           }
+        },
+        "guard": {
+          "kicker": "Perlindungan pendaftaran",
+          "title": "Pemeriksaan email kerja dan ponsel",
+          "description": "Menolak alamat sekali pakai dan pribadi serta memastikan setiap akun baru memiliki nomor ponsel terverifikasi. Berlaku untuk pendaftaran email dan sosial.",
+          "phoneOffWarning": "Dengan pemeriksaan ponsel dimatikan, akun dapat dibuat tanpa nomor terverifikasi, sehingga pendaftaran palsu massal lebih mudah."
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "Pembuat etalase online.",
             "invoicing": "Faktur, nota kredit, pembayaran, pesanan penjualan, dan tarif pajak.",
             "forms_and_links": "Formulir penangkap lead dan tautan yang dapat dibagikan.",
-            "extra_channels": "Kanal Telegram, Facebook, dan Instagram.",
+            "extra_channels": "Kanal Telegram, Facebook, Instagram, LINE, Viber dan WeChat.",
             "form_builder": "Formulir web yang di-host dan disematkan yang membuat kontak di CRM. Aplikasi Formulir berbayar memegang sakelar ini.",
             "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account.",
             "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
             "help_agent": "Asisten Bantuan dalam aplikasi: pengguna meminta tugas dengan kata-kata biasa, lalu asisten memandu atau mengerjakannya di sesi mereka sendiri dan bertanya dulu sebelum hal berisiko. Memakai token AI.",
-            "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini."
+            "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini.",
+            "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi."
           },
           "units": {
             "days": "Hari",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "Pengiriman formulir per bulan",
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan",
             "sms_monthly": "SMS per bulan",
-            "email_mailboxes": "Kotak surat email"
+            "email_mailboxes": "Kotak surat email",
+            "email_monthly": "Email per bulan"
           },
           "featureGroups": {
             "messaging": "Pesan",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "Pembuat etalase dan situs web",
             "invoicing": "Faktur (faktur, nota kredit, faktur berulang)",
             "forms_and_links": "Formulir, tautan klik-untuk-obrolan, dan grup",
-            "extra_channels": "Kanal Telegram, Facebook, dan Instagram",
+            "extra_channels": "Kanal Telegram, Facebook, Instagram, LINE, Viber dan WeChat",
             "form_builder": "Formulir (pembuat formulir web)",
             "waba_groups": "Grup WhatsApp (Cloud API)",
             "sms": "Kanal SMS",
             "help_agent": "Asisten Bantuan (AI, memakai token)",
-            "email_channel": "Kanal email (Gmail)"
+            "email_channel": "Kanal email (Gmail)",
+            "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
             "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
-            "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas."
+            "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
+            "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas."
           }
         }
       },

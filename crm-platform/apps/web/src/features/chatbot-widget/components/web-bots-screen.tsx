@@ -35,7 +35,7 @@ export function WebBotsScreen() {
   });
   const mode = overview.data?.builderMode ?? 'advanced';
 
-  const open = (bot: WebBotItem, tab?: 'customize' | 'install') =>
+  const open = (bot: WebBotItem, tab?: 'customize' | 'deploy') =>
     `${openHref(mode, bot.flowId, 'web')}${tab ? `?tab=${tab}` : ''}`;
 
   return (
@@ -113,8 +113,8 @@ export function WebBotsScreen() {
                     {t('customize')}
                   </Link>
                   {bot.widget ? (
-                    <Link href={open(bot, 'install')} className={LINK}>
-                      {t('install')}
+                    <Link href={open(bot, 'deploy')} className={LINK}>
+                      {t('deploy')}
                     </Link>
                   ) : null}
                 </div>

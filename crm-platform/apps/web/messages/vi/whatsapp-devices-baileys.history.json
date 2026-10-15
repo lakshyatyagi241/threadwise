@@ -1,0 +1,79 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Nhập các cuộc trò chuyện hiện có?",
+        "intro": "WhatsApp chỉ gửi lịch sử trò chuyện của một số một lần, ngay sau khi số được liên kết lần đầu. Hãy chọn ngay bây giờ, trước khi bạn quét mã.",
+        "label": "Nhập các cuộc trò chuyện hiện có",
+        "none": "Không, bắt đầu từ trống",
+        "noneHelp": "Chỉ tin nhắn mới xuất hiện trong hộp thư chung. Đây là tùy chọn mặc định.",
+        "recent": "Có, các cuộc trò chuyện và liên hệ gần đây",
+        "recentHelp": "Các cuộc trò chuyện gần đây mà WhatsApp gửi khi số được liên kết lần đầu, cùng những người trong đó.",
+        "full": "Có, nhiều nhất có thể mà WhatsApp gửi",
+        "fullHelp": "Bao gồm cả lịch sử cũ hơn của WhatsApp. Mất nhiều thời gian hơn và dùng nhiều hơn hạn mức liên hệ của bạn.",
+        "pointsTitle": "Những điều cần biết",
+        "pointQuiet": "Các cuộc trò chuyện được nhập sẽ được đánh dấu đã đọc và im lặng: không có thông báo, tự động hóa hay trả lời tự động.",
+        "pointNothingSent": "Không có gì được gửi cho bất kỳ ai.",
+        "pointMedia": "Ảnh, video, tin nhắn thoại và tệp không được nhập. Bạn sẽ thấy một phần giữ chỗ như [Ảnh].",
+        "pointGroups": "Trò chuyện nhóm được lưu thành cuộc trò chuyện nhóm và không tạo liên hệ.",
+        "pointConsent": "Những người được nhập không được đánh dấu là đã đồng ý nhận tin nhắn tiếp thị.",
+        "pointLimit": "Những người được nhập được tính vào hạn mức liên hệ của gói. Việc nhập sẽ dừng gọn gàng nếu đạt hạn mức.",
+        "pointTime": "Có thể mất vài phút. Bạn có thể tiếp tục làm việc và hủy bất cứ lúc nào.",
+        "pointOnce": "Liên kết lại số chỉ nhập khi bạn chọn nhập lại trước khi quét mã."
+      },
+      "result": {
+        "note": "Các cuộc trò chuyện của bạn đang được nhập. Theo dõi tiến trình trên trang của số.",
+        "link": "Xem quá trình nhập"
+      },
+      "card": {
+        "title": "Trò chuyện đã nhập",
+        "state": {
+          "not_requested": "Không yêu cầu",
+          "idle": "Đang chờ WhatsApp",
+          "running": "Đang nhập",
+          "done": "Đã hoàn tất",
+          "failed": "Chưa hoàn tất",
+          "cancelled": "Đã hủy",
+          "limit_reached": "Dừng do đạt hạn mức liên hệ"
+        },
+        "body": {
+          "not_requested": "Số này không nhập các cuộc trò chuyện. WhatsApp chỉ cung cấp lịch sử khi số được liên kết lần đầu, vì vậy hãy chọn nhập vào lần tới khi bạn liên kết số này.",
+          "idle": "Đang chờ số được liên kết và WhatsApp gửi các cuộc trò chuyện. Việc này có thể mất vài phút.",
+          "running": "Đang nhập các cuộc trò chuyện. Bạn có thể rời khỏi trang này, quá trình nhập vẫn tiếp tục.",
+          "done": "Đã nhập xong. Các cuộc trò chuyện nằm trong hộp thư chung, được đánh dấu đã đọc.",
+          "failed": "Quá trình nhập chưa hoàn tất. Những gì đã nhập vẫn nằm trong hộp thư.",
+          "cancelled": "Bạn đã dừng quá trình nhập. Những gì đã nhập vẫn nằm trong hộp thư.",
+          "limit_reached": "Quá trình nhập dừng vì đã đạt hạn mức liên hệ của gói. Những gì đã nhập vẫn nằm trong hộp thư."
+        },
+        "chats": "{count, plural, other {# cuộc trò chuyện}}",
+        "contacts": "{count, plural, other {# liên hệ}}",
+        "messages": "{count, plural, other {# tin nhắn}}",
+        "progress": "Tiến trình: {percent}%",
+        "window": "Tin nhắn trong {days, plural, other {# ngày}} gần nhất.",
+        "mediaNote": "Ảnh, video, tin nhắn thoại và tệp không được nhập. Vị trí của chúng hiển thị phần giữ chỗ.",
+        "started": "Bắt đầu",
+        "finished": "Hoàn tất",
+        "openInbox": "Mở hộp thư",
+        "cancel": "Dừng nhập",
+        "cancelling": "Đang dừng...",
+        "cancelTitle": "Dừng quá trình nhập?",
+        "cancelMessage": "Sẽ không lấy thêm cuộc trò chuyện nào. Những gì đã nhập vẫn nằm trong hộp thư.",
+        "cancelConfirm": "Dừng nhập",
+        "cancelKeep": "Tiếp tục nhập",
+        "cancelDone": "Đã dừng nhập. Những gì đã nhập vẫn nằm trong hộp thư."
+      },
+      "error": {
+        "history_not_received": "WhatsApp không gửi lịch sử trò chuyện nào. WhatsApp chỉ làm vậy khi số được liên kết lần đầu. Hãy liên kết lại số và chọn nhập để thử lại.",
+        "message_cap_reached": "Đã dừng ở giới hạn số tin nhắn cho một số. Những gì đã nhập vẫn được giữ.",
+        "chat_cap_reached": "Đã dừng ở giới hạn số cuộc trò chuyện cho một số. Những gì đã nhập vẫn được giữ.",
+        "contact_limit_reached": "Đã dừng vì đạt hạn mức liên hệ của gói. Hãy giải phóng bớt liên hệ hoặc nâng cấp, sau đó liên kết lại số và nhập.",
+        "worker_error": "Quá trình nhập dừng do có lỗi. Những gì đã nhập vẫn được giữ. Hãy liên kết lại số để thử lại.",
+        "ended_idle": "Đã hoàn tất. WhatsApp đã ngừng gửi lịch sử, nên quá trình nhập kết thúc với những gì đã nhận được.",
+        "limits_unavailable": "Không thể chạy quá trình nhập vì dịch vụ chưa được thiết lập đúng. Hãy liên hệ bộ phận hỗ trợ, sau đó liên kết lại số này."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Không có quá trình nhập nào đang chạy cho số này."
+    }
+  }
+}

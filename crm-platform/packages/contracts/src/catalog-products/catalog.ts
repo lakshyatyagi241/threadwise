@@ -123,6 +123,21 @@ export const connectCatalogSchema = z.object({
 });
 export type ConnectCatalogInput = z.infer<typeof connectCatalogSchema>;
 
+/** Create a new catalog on Meta from here and link it to the connected WABA (needs the WABA's business id). */
+export const createCatalogSchema = z.object({
+  name: z.string().trim().min(1).max(191),
+});
+export type CreateCatalogInput = z.infer<typeof createCatalogSchema>;
+
+export const renameCatalogSchema = createCatalogSchema;
+export type RenameCatalogInput = z.infer<typeof renameCatalogSchema>;
+
+/** Deletes the catalog on Meta; `confirmCatalogId` must equal the connected catalog id. */
+export const deleteRemoteCatalogSchema = z.object({
+  confirmCatalogId: z.string().trim().min(1).max(64),
+});
+export type DeleteRemoteCatalogInput = z.infer<typeof deleteRemoteCatalogSchema>;
+
 export const commerceSettingsSchema = z.object({
   isCatalogVisible: z.boolean().default(false),
   isCartEnabled: z.boolean().default(false),

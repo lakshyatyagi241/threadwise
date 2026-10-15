@@ -18,11 +18,11 @@ const helpAgentEnvSchema = z.object({
   /** Model calls one task may use. */
   HELP_AGENT_MAX_STEPS: z.coerce.number().int().min(1).max(100).default(HELP_AGENT_MAX_STEPS),
   /** Minutes a task may stay open. */
-  HELP_AGENT_TASK_MINUTES: z.coerce.number().int().min(1).max(120).default(15),
+  HELP_AGENT_TASK_MINUTES: z.coerce.number().int().min(1).max(120).default(25),
   /** Prompt plus completion tokens one task may use. */
-  HELP_AGENT_TASK_TOKENS: z.coerce.number().int().min(1_000).max(5_000_000).default(200_000),
+  HELP_AGENT_TASK_TOKENS: z.coerce.number().int().min(1_000).max(5_000_000).default(400_000),
   /** Output tokens asked of the vendor for one step. */
-  HELP_AGENT_STEP_MAX_TOKENS: z.coerce.number().int().min(100).max(8_000).default(1_500),
+  HELP_AGENT_STEP_MAX_TOKENS: z.coerce.number().int().min(100).max(8_000).default(3_000),
   /** Characters of messages one model call may carry (the page text is most of it). */
   HELP_AGENT_REQUEST_CHARS: z.coerce.number().int().min(5_000).max(1_000_000).default(120_000),
   HELP_AGENT_TASKS_PER_MINUTE: z.coerce.number().int().min(1).max(60).default(3),

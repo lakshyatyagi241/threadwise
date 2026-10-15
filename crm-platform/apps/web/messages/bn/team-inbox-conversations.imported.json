@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "ইমপোর্ট করা",
+      "importedHint": "এই চ্যাটটি ফোনের ইতিহাস থেকে ইমপোর্ট করা হয়েছে"
+    },
+    "bubble": {
+      "imported": "ইমপোর্ট করা",
+      "importedHint": "ফোনের চ্যাট ইতিহাস থেকে ইমপোর্ট করা"
+    }
+  }
+}

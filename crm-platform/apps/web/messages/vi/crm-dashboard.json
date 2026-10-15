@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "Bảng điều khiển CRM"
+    },
+    "title": "CRM của bạn",
+    "subtitle": "Giao dịch, hóa đơn, thanh toán và công việc — toàn bộ hoạt động kinh doanh trong một màn hình.",
+    "period": "{from} đến {to} · múi giờ {zone}",
+    "openBoard": "Mở bảng giao dịch",
+    "loading": "Đang tải bảng điều khiển",
+    "retry": "Thử lại",
+    "stale": "Làm mới không thành công. Đây là những số liệu gần nhất chúng tôi có.",
+    "empty": {
+      "title": "Chưa có gì để báo cáo",
+      "message": "Thêm liên hệ và giao dịch, trang này sẽ hiển thị: phễu quy trình bán hàng, ai đang thắng, khách tiềm năng đến từ đâu, công việc và khoản bạn được nợ.",
+      "deals": "Đến giao dịch",
+      "contacts": "Đến liên hệ"
+    },
+    "filters": {
+      "label": "Bộ lọc bảng điều khiển",
+      "period": "Khoảng thời gian",
+      "range": {
+        "month": "Tháng này",
+        "7d": "7 ngày",
+        "30d": "30 ngày",
+        "90d": "90 ngày",
+        "custom": "Tùy chỉnh"
+      },
+      "from": "Từ",
+      "to": "Đến",
+      "pipeline": "Quy trình bán hàng",
+      "allPipelines": "Tất cả quy trình",
+      "owner": "Người phụ trách",
+      "everyone": "Tất cả mọi người",
+      "team": "Nhóm",
+      "allTeams": "Tất cả nhóm",
+      "reset": "Đặt lại bộ lọc"
+    },
+    "kpi": {
+      "title": "Số liệu chính",
+      "vsPrevious": "So với kỳ trước có cùng độ dài",
+      "open": "Quy trình đang mở",
+      "openHint": "{count, plural, other {# giao dịch}} · dự báo {forecast}",
+      "won": "Thắng",
+      "wonHint": "{count, plural, other {# giao dịch đã chốt}}",
+      "collected": "Đã thu",
+      "collectedHint": "Các khoản thanh toán đã nhận",
+      "outstanding": "Còn nợ",
+      "outstandingHint": "{count, plural, other {# hóa đơn đang mở}}",
+      "winRate": "Tỷ lệ thắng",
+      "winRateHint": "{won} thắng, {lost} thua",
+      "avgSize": "Giá trị giao dịch trung bình",
+      "avgSizeHint": "Của các giao dịch thắng",
+      "avgCycle": "Chu kỳ bán hàng trung bình",
+      "avgCycleHint": "Từ lúc tạo đến khi thắng",
+      "days": "{count, plural, other {# ngày}}",
+      "lost": "Giao dịch thua",
+      "lateClose": "Quá hạn chốt dự kiến",
+      "lateCloseHint": "Giao dịch đang mở đã qua ngày dự kiến",
+      "contacts": "Liên hệ",
+      "contactsHint": "Trong chế độ xem của bạn hôm nay",
+      "newContacts": "Liên hệ mới",
+      "newLeads": "Khách tiềm năng mới",
+      "newLeadsHint": "Liên hệ đến kèm nguồn",
+      "paid": "Hóa đơn đã thanh toán",
+      "paidHint": "Chuyển sang đã thanh toán trong kỳ",
+      "tasksOpen": "Công việc đang mở",
+      "tasksOpenHint": "{count} đến hạn trong hôm nay",
+      "tasksOverdue": "Công việc quá hạn"
+    },
+    "funnel": {
+      "title": "Phễu quy trình bán hàng",
+      "subtitle": "{pipeline} · {count, plural, other {# giao dịch được tạo}} trong kỳ",
+      "noPipeline": "Chưa có quy trình bán hàng nào.",
+      "empty": "Không có giao dịch nào được tạo trong kỳ này.",
+      "conversion": "{percent}% đã chuyển tiếp",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} đã đến giai đoạn này, hiện {open} đang mở. Mở chúng.",
+      "openNow": "{count, plural, other {# đang mở}} · {value}"
+    },
+    "trend": {
+      "title": "Giao dịch thắng và thua",
+      "subtitle": {
+        "day": "Theo ngày · thắng {value}",
+        "week": "Theo tuần · thắng {value}",
+        "month": "Theo tháng · thắng {value}"
+      },
+      "chartLabel": "Giao dịch thắng và thua trong kỳ",
+      "won": "Thắng",
+      "lost": "Thua"
+    },
+    "leaderboard": {
+      "title": "Bảng xếp hạng người phụ trách",
+      "subtitle": "Theo giá trị thắng trong kỳ",
+      "empty": "Không có giao dịch để xếp hạng trong chế độ xem này.",
+      "owner": "Người phụ trách",
+      "won": "Thắng",
+      "value": "Giá trị",
+      "lost": "Thua",
+      "open": "Đang mở",
+      "activities": "Hoạt động",
+      "unowned": "Chưa có người phụ trách"
+    },
+    "sources": {
+      "title": "Nguồn khách tiềm năng",
+      "subtitle": "Liên hệ đến trong kỳ và mức độ tiến triển của họ",
+      "empty": "Không có liên hệ nào có nguồn đến trong kỳ này.",
+      "source": "Nguồn",
+      "leads": "Khách tiềm năng",
+      "toDeal": "Thành giao dịch",
+      "toWon": "Thành thắng",
+      "wonValue": "Giá trị thắng",
+      "none": "Không có nguồn"
+    },
+    "tasks": {
+      "title": "Công việc",
+      "subtitle": "{open} đang mở · {overdue} quá hạn · {today} đến hạn trong hôm nay",
+      "all": "Tất cả công việc",
+      "empty": "Không có công việc đang mở.",
+      "byAssignee": "Công việc đang mở theo người được giao",
+      "assignee": "Người được giao",
+      "open": "Đang mở",
+      "overdue": "Quá hạn",
+      "dueToday": "Trong hôm nay",
+      "unassigned": "Chưa giao",
+      "upcoming": "Công việc sắp tới",
+      "overdueTag": "Quá hạn"
+    },
+    "aging": {
+      "title": "Phân tích tuổi nợ phải thu",
+      "open": "Thanh toán",
+      "empty": "Không có khoản nào phải thu.",
+      "bucket": {
+        "current": "Chưa đến hạn",
+        "d1_30": "Quá hạn 1–30 ngày",
+        "d31_60": "Quá hạn 31–60 ngày",
+        "d61_90": "Quá hạn 61–90 ngày",
+        "d90_plus": "Quá hạn trên 90 ngày"
+      }
+    },
+    "payments": {
+      "title": "Thanh toán gần đây",
+      "empty": "Chưa có thanh toán nào."
+    },
+    "activity": {
+      "title": "Hoạt động gần đây",
+      "empty": "Chưa có hoạt động nào.",
+      "stageMoved": "Chuyển từ {from} sang {to}",
+      "stagePlaced": "Đặt vào {to}",
+      "by": "bởi {name}",
+      "system": "bởi hệ thống",
+      "type": {
+        "note": "Ghi chú",
+        "stage_change": "Đổi giai đoạn",
+        "call": "Cuộc gọi",
+        "message": "Tin nhắn",
+        "email": "Email",
+        "meeting": "Cuộc họp",
+        "task": "Công việc"
+      }
+    }
+  }
+}

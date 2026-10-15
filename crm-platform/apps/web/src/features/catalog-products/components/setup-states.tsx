@@ -9,6 +9,7 @@ import type { CatalogOverview } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { autodetectCatalog, KEYS } from '../api/catalog';
 import { isOfficialEngine, senderPhone, workspaceEngine } from '../lib/senders';
+import { CreateCatalogPanel } from './catalog-manage';
 import { ConnectForm } from './connect-form';
 import { ArrowRightIcon, ChatIcon, PhoneIcon } from './icons';
 import { CARD, DotPill, KICKER, PILL_LINK, TEXT_LINK } from './parts';
@@ -193,6 +194,8 @@ export function ReadyView({ overview }: { overview: CatalogOverview }) {
           </div>
         </section>
       )}
+
+      {canManage && engine === 'waba' && <CreateCatalogPanel />}
 
       {canManage && (
         <AdvancedPanel

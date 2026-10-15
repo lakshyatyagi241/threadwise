@@ -206,6 +206,14 @@ export class ContactBulkRepository {
     return Number((res.rows[0] as { changed: number }).changed);
   }
 
+  /** The ids the next `deleteBatch` call with the same arguments will delete (same order, same limit). */
+  async nextIds(tx: Tx, where: SQL, batch: number): Promise<number[]> {
+    const res = await tx.execute(
+      sql`SELECT contacts.id FROM contacts WHERE ${where} ORDER BY contacts.id LIMIT ${batch}`,
+    );
+    return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
+  }
+
   /**
    * Deletes up to `batch` matching contacts with one audit row and one event each (the trail
    * must survive the rows). Call until it returns 0. Cascades and SET NULL foreign keys take

@@ -19,6 +19,11 @@ import {
 import { BroadcastScreen } from './broadcast-screen';
 import { WizardScreen } from './wizard-screen';
 
+// The director summary has its own tests (director-summary.test.tsx); here it is a marker so this screen is tested on its own.
+vi.mock('@/features/campaigns/components/director-summary', () => ({
+  DirectorSummary: () => <section data-testid="director-summary" />,
+}));
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
   usePathname: () => '/campaigns/wizard',
@@ -207,6 +212,7 @@ describe('status page', () => {
           clicks: 3,
         } as never,
         retries,
+        followUps: [],
       },
     ],
     ...over,
@@ -226,6 +232,8 @@ describe('status page', () => {
     expect(out).toContain('Oct 12, 2026, 9:00 AM'); // shown on the schedule's own clock
     expect(out).toContain('940');
     expect(out).toContain('#2');
+    // The summary of the newest run is part of the page.
+    expect(out).toContain('data-testid="director-summary"');
   });
 
   it('links every run to the existing campaign page', () => {
@@ -241,6 +249,60 @@ describe('status page', () => {
     expect(out).toContain('4 waiting, 7 recovered, 1 gave up');
   });
 
+  describe('follow-ups of a run', () => {
+    const steps = [
+      {
+        step: 1,
+        waiting: 12,
+        sent: 300,
+        delivered: 280,
+        read: 90,
+        flowsStarted: 0,
+        skipped: 40,
+        lapsed: 0,
+        failed: 3,
+      },
+      {
+        step: 2,
+        waiting: 0,
+        sent: 0,
+        delivered: 0,
+        read: 0,
+        flowsStarted: 55,
+        skipped: 0,
+        lapsed: 21,
+        failed: 0,
+      },
+    ];
+    const withFollowUps = () =>
+      detail({ runList: [{ ...detail().runList[0]!, followUps: steps }] });
+
+    it('lists what each step did under the run', () => {
+      const out = page(withFollowUps());
+      expect(out).toContain('data-testid="run-follow-ups"');
+      expect(out).toContain('Follow-up 1');
+      expect(out).toContain('Follow-up 2');
+      for (const text of [
+        '12 waiting',
+        '300 sent',
+        '280 delivered',
+        '90 read',
+        '40 skipped',
+        '3 failed',
+        '55 flows started',
+        '21 lapsed',
+      ]) {
+        expect(out).toContain(text);
+      }
+    });
+
+    it('shows nothing for a run without follow-ups', () => {
+      const out = page(detail());
+      expect(out).not.toContain('run-follow-ups');
+      expect(out).not.toContain('Follow-up 1');
+    });
+  });
+
   it('shows Pause and Cancel for an active series, Resume and Cancel for a paused one', () => {
     const active = page(detail());
     expect(active).toContain('>Pause<');
@@ -252,12 +314,85 @@ describe('status page', () => {
   });
 
   it('shows no controls for ended work, and hides them without the permission', () => {
-    const ended = page(detail({ status: 'ended' }));
+    const clean = (runs: WizardBroadcastDetail['runList']) =>
+      runs.map((r) => ({ ...r, counts: { ...r.counts, failed: 0 } }));
+    const ended = page(detail({ status: 'ended', runList: clean(detail().runList) }));
     expect(ended).toContain('<div class="flex flex-wrap gap-2"></div>');
     expect(ended).not.toContain('>Pause<');
     const noPerm = page(detail(), ['camp.campaigns.read']);
     expect(noPerm).not.toContain('>Pause<');
     expect(noPerm).toContain('do not have permission to pause, resume or cancel');
+  });
+
+  it('offers Retry failed with the number of failed recipients of the finished runs, behind a confirm', () => {
+    const out = page(detail());
+    expect(out).toContain('Retry failed (10)');
+    expect(out).toContain('Retry the failed messages?');
+    expect(out).toContain('Sends again to the 10 recipients whose message failed.');
+    // It stays available after the series has ended: the failures are still there.
+    expect(page(detail({ status: 'ended' }))).toContain('Retry failed (10)');
+  });
+
+  it('hides Retry failed without the control permission, with nothing failed, or while the failing run is still going', () => {
+    expect(page(detail(), ['camp.campaigns.read'])).not.toContain('Retry failed');
+    const run = detail().runList[0]!;
+    const withRun = (status: typeof run.status, failed: number) =>
+      detail({ runList: [{ ...run, status, counts: { ...run.counts, failed } }] });
+    expect(page(withRun('completed', 0))).not.toContain('Retry failed');
+    expect(page(withRun('running', 10))).not.toContain('Retry failed');
+    // A series never restarts a cancelled run; a one-off campaign can be resent after a cancel.
+    expect(page(withRun('cancelled', 3))).not.toContain('Retry failed');
+    expect(page({ ...withRun('cancelled', 3), kind: 'campaign' })).toContain('Retry failed (3)');
+  });
+
+  describe('export and delete', () => {
+    const PERMS = [...ALL_PERMISSIONS, 'camp.campaigns.export', 'camp.campaigns.delete'];
+    const quietRun = (status: 'scheduled' | 'cancelled') => {
+      const r = detail().runList[0]!;
+      return { ...r, status, counts: { ...r.counts, sent: 0, delivered: 0, read: 0, failed: 0 } };
+    };
+
+    it('offers Export rows with the export permission, always', () => {
+      expect(page(detail(), PERMS)).toContain('>Export rows<');
+      expect(page(detail(), ALL_PERMISSIONS)).not.toContain('Export rows');
+    });
+
+    it('a series that has sent keeps its history: no Delete, only Cancel', () => {
+      const out = page(detail(), PERMS);
+      expect(out).not.toContain('>Delete<');
+      expect(out).not.toContain('Delete this broadcast?');
+      expect(out).toContain('Cancel campaign');
+    });
+
+    it('a series that has sent nothing can be deleted, behind a confirm that says no history is lost', () => {
+      const out = page(detail({ runList: [quietRun('scheduled')] }), PERMS);
+      expect(out).toContain('>Delete<');
+      expect(out).toContain('Delete this broadcast?');
+      expect(out).toContain('Nothing has been sent from it, so no history is lost');
+      expect(page(detail({ runList: [] }), PERMS)).toContain('>Delete<');
+    });
+
+    it('a one-off broadcast waiting for its time, or failed, can be deleted; one that ran cannot', () => {
+      const one = (status: string) =>
+        detail({
+          kind: 'campaign',
+          mode: 'scheduled',
+          status,
+          schedule: { mode: 'scheduled', date: '2026-10-09', time: '10:30', timezone: 'UTC' },
+          runList: [],
+        });
+      const out = page(one('scheduled'), PERMS);
+      expect(out).toContain('>Delete<');
+      expect(out).toContain('Deletes this broadcast and its recipients.');
+      expect(page(one('failed'), PERMS)).toContain('>Delete<');
+      expect(page(one('completed'), PERMS)).not.toContain('>Delete<');
+    });
+
+    it('hides Delete without the delete permission', () => {
+      expect(
+        page(detail({ runList: [] }), [...ALL_PERMISSIONS, 'camp.campaigns.export']),
+      ).not.toContain('>Delete<');
+    });
   });
 
   it('a one-off campaign: a single run, no retries', () => {

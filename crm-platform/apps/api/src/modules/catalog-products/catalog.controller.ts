@@ -18,7 +18,10 @@ import {
   catalogSendOptionsQuerySchema,
   commerceSettingsSchema,
   connectCatalogSchema,
+  createCatalogSchema,
   createCollectionSchema,
+  deleteRemoteCatalogSchema,
+  renameCatalogSchema,
   saveAutomationSchema,
   sendCatalogSchema,
   syncProductsSchema,
@@ -27,7 +30,10 @@ import {
   type CatalogSendOptionsQuery,
   type CommerceSettingsInput,
   type ConnectCatalogInput,
+  type CreateCatalogInput,
   type CreateCollectionInput,
+  type DeleteRemoteCatalogInput,
+  type RenameCatalogInput,
   type SaveAutomationInput,
   type SendCatalogInput,
   type SyncProductsInput,
@@ -121,6 +127,47 @@ export class CatalogController {
   })
   autodetect() {
     return this.connection.autodetect();
+  }
+
+  @Post('create')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('cat.catalog.manage')
+  @ApiOperation({
+    summary: 'Create a new catalog on Meta and connect it',
+    description:
+      "Creates the catalog under the connected WABA's business, links it to the WABA and connects it here. 422 CAT_ALREADY_CONNECTED when a catalog is connected; 422 CAT_NO_WABA, CAT_WABA_TOKEN_MISSING, CAT_NO_CATALOG_LINKED (no business id); 422 CAT_META_REJECTED with Meta's message (nothing is saved).",
+  })
+  create(@Body(zodPipe(createCatalogSchema)) body: CreateCatalogInput) {
+    return this.connection.create(body);
+  }
+
+  @Post('rename')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('cat.catalog.manage')
+  @ApiOperation({
+    summary: 'Rename the catalog on Meta',
+    description:
+      'Meta is asked first and the stored name changes only when Meta accepts. 404 with no catalog; 422 CAT_META_REJECTED.',
+  })
+  rename(@Body(zodPipe(renameCatalogSchema)) body: RenameCatalogInput) {
+    return this.connection.rename(body);
+  }
+
+  @Post('delete-remote')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Idempotent()
+  @RequirePermission('cat.catalog.manage')
+  @ApiOperation({
+    summary: 'Delete the catalog on Meta and disconnect it',
+    description:
+      'Irreversible on Meta. `confirmCatalogId` must equal the connected catalog id (422 CAT_CONFIRM_MISMATCH). After Meta accepts, the catalog is disconnected here like POST /catalog/disconnect. 404 with no catalog; 422 CAT_META_REJECTED.',
+  })
+  async deleteRemote(
+    @Body(zodPipe(deleteRemoteCatalogSchema)) body: DeleteRemoteCatalogInput,
+  ): Promise<void> {
+    await this.connection.deleteRemote(body);
   }
 
   @Post('disconnect')
@@ -265,13 +312,38 @@ export class CollectionsController {
     return this.collections.update(id, body);
   }
 
+  @Post(':id/meta')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('cat.collections.manage')
+  @ApiOperation({
+    summary: 'Push the collection to Meta as a product set',
+    description:
+      'Creates the product set (or updates the one pushed before) holding the active members by retailer id. 422 CAT_NOT_CONNECTED, CAT_SET_NOT_SYNCABLE (no active products), CAT_META_REJECTED.',
+  })
+  pushToMeta(@Param('id', ParseUUIDPipe) id: string) {
+    return this.collections.pushToMeta(id);
+  }
+
+  @Delete(':id/meta')
+  @Idempotent()
+  @RequirePermission('cat.collections.manage')
+  @ApiOperation({
+    summary: "Remove the collection's product set from Meta",
+    description: 'The collection stays. A set already gone on Meta counts as removed.',
+  })
+  removeFromMeta(@Param('id', ParseUUIDPipe) id: string) {
+    return this.collections.removeFromMeta(id);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @Idempotent()
   @RequirePermission('cat.collections.manage')
   @ApiOperation({
     summary: 'Delete a collection',
-    description: 'The products are untouched. Deleting one that is already gone succeeds.',
+    description:
+      'The products are untouched; its Meta product set is deleted too when it was pushed. Deleting one that is already gone succeeds.',
   })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.collections.remove(id);

@@ -1,0 +1,140 @@
+{
+  "client": "iskm",
+  "generatedAt": "2026-10-12T10:05:00.000Z",
+  "collections": [
+    {
+      "collection": "contact_list",
+      "kind": "collection",
+      "disposition": "MIGRATE",
+      "read": 4488,
+      "migrated": 4487,
+      "quarantined": 1,
+      "excluded": 0,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    },
+    {
+      "collection": "chathistory",
+      "kind": "collection",
+      "disposition": "MIGRATE",
+      "read": 200,
+      "migrated": 190,
+      "quarantined": 0,
+      "excluded": 10,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    },
+    {
+      "collection": "credit_logs",
+      "kind": "collection",
+      "disposition": "MIGRATE",
+      "read": 745,
+      "migrated": 745,
+      "quarantined": 0,
+      "excluded": 0,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    },
+    {
+      "collection": "file_manager",
+      "kind": "collection",
+      "disposition": "MIGRATE_LATER",
+      "read": 1,
+      "migrated": 0,
+      "quarantined": 0,
+      "excluded": 1,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    },
+    {
+      "collection": "deals",
+      "kind": "collection",
+      "disposition": "EXCLUDE",
+      "read": 50,
+      "migrated": 0,
+      "quarantined": 0,
+      "excluded": 50,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    },
+    {
+      "collection": "document_col",
+      "kind": "collection",
+      "disposition": "GAP",
+      "read": 3,
+      "migrated": 0,
+      "quarantined": 0,
+      "excluded": 0,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    }
+  ],
+  "nonMigrated": [
+    {
+      "collection": "contact_list",
+      "key": "_id:***a1",
+      "status": "quarantined",
+      "code": "INVALID_PHONE",
+      "reason": "phone cannot be made E.164"
+    }
+  ],
+  "fieldIssues": {},
+  "excludedByCode": {
+    "chathistory: WEBCHAT_NO_CHANNEL": 10
+  },
+  "fields": [
+    {
+      "step": "contacts",
+      "field": "name",
+      "seen": 4488,
+      "where": "contacts.name",
+      "verdict": "mapped"
+    },
+    {
+      "step": "contacts",
+      "field": "legacy_flag",
+      "seen": 12,
+      "where": "drop: no column",
+      "verdict": "dropped"
+    }
+  ],
+  "fingerprints": {
+    "contacts": {
+      "rows": 4487,
+      "source": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "target": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "conversations": {
+      "rows": 30,
+      "source": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "target": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "sample": {
+    "size": 0,
+    "compared": 0,
+    "mismatches": []
+  },
+  "integrity": [],
+  "alarms": [
+    "ORACLE_MISMATCH: chathistory conversations differ for 2 threads",
+    "EXTRA_ROWS: 1 row in messages no source accounts for"
+  ],
+  "warnings": ["NO-ADMIN: no user holds the admin role"],
+  "notPresent": {
+    "collectionsGap": ["document_col (3 docs)"],
+    "collectionsUnknown": [],
+    "collectionsDeferred": ["file_manager"],
+    "collectionsOpen": [],
+    "droppedFields": ["contact_list.legacy_flag (12 docs): no column"],
+    "dataOnlyFields": []
+  },
+  "unaccounted": 0,
+  "ok": false
+}

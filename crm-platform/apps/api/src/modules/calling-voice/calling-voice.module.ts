@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CallingGraphClient, CALLING_GRAPH } from '../../infra/providers/calling-voice';
 import { ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { CallActionsService } from './call-actions.service';
@@ -9,8 +10,13 @@ import { CallLogsRepository } from './call-logs.repository';
 import { CallLogsService } from './call-logs.service';
 import { CallEventsService } from './call-events.service';
 import { CallPermissionService } from './call-permission.service';
+import { CallRecordingConsentService } from './call-recording-consent.service';
+import { CallRecordingRepository } from './call-recording.repository';
+import { CallRecordingSettingsService } from './call-recording-settings.service';
 import { CallRecordingsService } from './call-recordings.service';
 import { CallingNumbersService } from './calling-numbers.service';
+import { CallingReadinessRepository } from './calling-readiness.repository';
+import { CallingReadinessService } from './calling-readiness.service';
 import { CallingWabaSink } from './calling-waba.sink';
 import { CallingWebhookController } from './calling-webhook.controller';
 import { CallingController } from './calling.controller';
@@ -27,7 +33,7 @@ import { CallsRepository } from './calls.repository';
  * Kernel services (audit, outbox, RBAC), the database, Redis, the queues, the WhatsApp HTTP client and the chat media door are global.
  */
 @Module({
-  imports: [ChatConversationsModule, WabaModule, PlansCoreModule],
+  imports: [ChatConversationsModule, ContactConsentModule, WabaModule, PlansCoreModule],
   controllers: [CallingController, CallLogsController, CallingWebhookController],
   providers: [
     CallingGraphClient,
@@ -36,12 +42,26 @@ import { CallsRepository } from './calls.repository';
     CallLogsRepository,
     CallLogsService,
     CallingNumbersService,
+    CallingReadinessRepository,
+    CallingReadinessService,
     CallPermissionService,
     CallActionsService,
     CallEventsService,
     CallRecordingsService,
+    CallRecordingRepository,
+    CallRecordingSettingsService,
+    CallRecordingConsentService,
     CallingWabaSink,
   ],
-  exports: [CallingWabaSink, CallActionsService, CallPermissionService, CallEventsService],
+  exports: [
+    CallsRepository,
+    CallRecordingRepository,
+    CallingWabaSink,
+    CallActionsService,
+    CallPermissionService,
+    CallEventsService,
+    CallingReadinessService,
+    CallingReadinessRepository,
+  ],
 })
 export class CallingVoiceModule {}

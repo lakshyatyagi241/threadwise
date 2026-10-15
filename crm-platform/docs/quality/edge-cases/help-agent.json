@@ -1,0 +1,16 @@
+{
+  "module": "help-agent",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-help-agent-001",
+      "feature": "help agent",
+      "category": "input",
+      "scenario": "a value of 41 (one past HELP_AGENT_MAX_STEPS = 40) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/help-agent/assistant.ts"
+    }
+  ]
+}

@@ -1086,7 +1086,8 @@
           "wordsPlaceholder": "hoi, hallo, menu",
           "whatsappNumber": "WhatsApp-nummer",
           "noNumberHint": "Er is nog geen WhatsApp-nummer verbonden: verbind er een onder Instellingen en kies het daarna hier.",
-          "chooseNumber": "Kies een nummer…"
+          "chooseNumber": "Kies een nummer…",
+          "connectedNumber": "Antwoordt via je gekoppelde WhatsApp-nummer: {number}"
         },
         "add": {
           "addStep": "Een stap toevoegen",
@@ -1094,7 +1095,9 @@
             "send": "Verzenden",
             "ask": "Vraag de klant",
             "handoff": "Doorgeven",
-            "answer": "Antwoord"
+            "logic": "Beslissen",
+            "answer": "Antwoord",
+            "action": "Acties"
           },
           "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen.",
           "blockedTitleFaq": "Antwoord uit FAQ heeft twee uitgangen en kan daarom alleen als laatste staan."
@@ -1110,7 +1113,21 @@
           "faqExits": {
             "matched": "Beantwoord",
             "no_match": "Geen match"
-          }
+          },
+          "close": "Sluiten",
+          "clickToEdit": "Klik om te bewerken",
+          "outsideToSave": "Klik ergens buiten de stap om de wijzigingen op te slaan",
+          "addCondition": "Een voorwaarde toevoegen na deze stap",
+          "conditionLast": "Een voorwaarde sluit dit deel af, dus hij kan alleen als laatste.",
+          "duplicateTitle": "Deze stap dupliceren?",
+          "duplicateBody": "Direct erna wordt een kopie toegevoegd.",
+          "deleteTitle": "Deze stap verwijderen?",
+          "deleteBody": "De stap wordt uit de flow verwijderd.",
+          "stage": "Fase {stage}",
+          "storedIn": "Waarden worden opgeslagen in de eigenschap <b>{property}</b> van het contact",
+          "actions": "Acties",
+          "actionsHint": "Een stap toevoegen die direct na deze draait.",
+          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen."
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
@@ -1142,7 +1159,8 @@
             "placeholder": "Knop {n}",
             "remove": "Knop verwijderen",
             "add": "Een knop toevoegen",
-            "saveIn": "Opslaan van de getikte knop in"
+            "saveIn": "Opslaan van de getikte knop in",
+            "handoff": "Overdragen aan een persoon (live agent)"
           },
           "list": {
             "above": "Bericht boven de lijst",
@@ -1174,7 +1192,9 @@
             "dateFormat": "Datumformaat",
             "dateFormatHint": "Hoe de klant de datum schrijft. Die wordt opgeslagen zoals getypt, en een kopie als jaar-maand-dag in de variabele _iso.",
             "saveIn": "Het antwoord opslaan in",
-            "retriesHint": "0 blijft vragen tot het antwoord goed is."
+            "retriesHint": "0 blijft vragen tot het antwoord goed is.",
+            "verifyOtp": "Het nummer verifiëren met een eenmalige code",
+            "verifyOtpHint": "Er wordt een code naar het nummer gestuurd (landcode nodig) en de bezoeker typt die in de chat. Het nummer wordt alleen bewaard als de code klopt; de variabele die eindigt op _verified zegt ja of nee."
           },
           "askFile": {
             "accepted": "Geaccepteerde bestanden",
@@ -1225,7 +1245,45 @@
           },
           "cta": {
             "buttonText": "Knoptekst",
-            "opens": "Opent (link)"
+            "opens": "Opent (link)",
+            "type": "Opent",
+            "kinds": {
+              "url": "Een webpagina",
+              "phone": "Een telefoongesprek",
+              "email": "Een e-mail"
+            },
+            "add": "Nog een knop toevoegen",
+            "remove": "Knop verwijderen",
+            "opensPhone": "Telefoonnummer",
+            "opensEmail": "E-mailadres"
+          },
+          "carousel": {
+            "intro": "Bericht boven de kaarten",
+            "card": "Kaart {n}",
+            "image": "Afbeeldingslink (optioneel)",
+            "title": "Titel",
+            "text": "Tekst",
+            "buttons": "Knoppen (maximaal 2)",
+            "label": "Tekst van de knop",
+            "addCard": "Kaart toevoegen",
+            "removeCard": "Kaart verwijderen",
+            "addButton": "Knop toevoegen",
+            "removeButton": "Knop verwijderen",
+            "btnKinds": {
+              "reply": "Antwoorden in de chat",
+              "url": "Een webpagina openen",
+              "phone": "Een nummer bellen",
+              "email": "Een e-mail sturen",
+              "agent": "Met een persoon praten"
+            }
+          },
+          "condition": {
+            "info": "Voeg regels toe (een variabele, een vergelijking en een waarde). Koppel ze met AND of OR en nest groepen als dat nodig is.",
+            "yes": "Als de regels kloppen, ga naar",
+            "no": "Als ze niet kloppen, ga naar"
+          },
+          "handoff": {
+            "hint": "De bezoeker gaat met je notitie naar dit team. Na deze knop hoeft niets te worden gekoppeld."
           },
           "faq": {
             "exits": {
@@ -1238,6 +1296,7 @@
             }
           }
         },
+        "branchAdd": "Stap toevoegen voor “{title}”",
         "faqEnds": "Deze stap sluit dit deel af: wat daarna wordt verzonden hangt ervan af of een FAQ heeft geantwoord."
       },
       "formsCore": {
@@ -1752,13 +1811,56 @@
       },
       "webBot": {
         "aria": "Flow-secties",
-        "faqs": "FAQs",
-        "saveFirst": "Sla eerst de flow op.",
         "build": "Bouwen",
         "customize": "Aanpassen",
-        "install": "Installeren",
+        "saveFirst": "Sla eerst de flow op.",
         "needsCustomizing": "De widget gebruikt nog de standaardlook. Open Aanpassen.",
-        "customizeFirst": "Pas je chatwidget aan en sla hem één keer op voordat je publiceert."
+        "customizeFirst": "Pas je chatwidget aan en sla hem één keer op voordat je publiceert.",
+        "deploy": "Implementeren",
+        "customizeFirstWhatsapp": "Pas je WhatsApp-knop aan en sla hem één keer op voordat je publiceert.",
+        "faqs": "FAQs",
+        "install": "Installeren"
+      },
+      "buttonIcon": {
+        "label": "Pictogram (optioneel)",
+        "add": "Pictogram toevoegen",
+        "saveFirst": "Sla de bot één keer op om een pictogram toe te voegen."
+      },
+      "buttonAction": {
+        "label": "Actie bij indrukken van de knop",
+        "kind": {
+          "none": "Ga naar de volgende stap",
+          "flow": "Flow koppelen",
+          "live_agent": "Live agent",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Kies een flow",
+        "loadingFlows": "Flows laden…",
+        "flowMissing": "Flow {id} (niet gevonden)",
+        "hint": {
+          "flow": "Start de gekozen flow voor dit contact en het gesprek gaat daar verder. Na deze knop wordt niets gekoppeld.",
+          "live_agent": "Draagt het gesprek over aan het team dat je kiest. Na deze knop wordt niets gekoppeld.",
+          "opt_in": "Markeert het contact als geabonneerd op marketingberichten en gaat daarna door naar de gekoppelde stap.",
+          "opt_out": "Markeert het contact als afgemeld voor marketingberichten en gaat daarna door naar de gekoppelde stap."
+        }
+      },
+      "messageTools": {
+        "format": "Tekstopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "strike": "Doorgehaald",
+        "mono": "Monospace",
+        "bullet": "Opsommingslijst",
+        "numbered": "Genummerde lijst",
+        "emoji": "Emoji",
+        "emojiSearch": "Emoji zoeken",
+        "emojiNone": "Geen emoji gevonden",
+        "variable": "Variabele invoegen",
+        "variableSearch": "Variabelen zoeken",
+        "groupContact": "Contacteigenschappen",
+        "groupFlow": "Opgeslagen in deze flow",
+        "variableNone": "Geen variabelen gevonden"
       }
     },
     "contracts": {
@@ -2035,6 +2137,10 @@
           "label": "API (uit bibliotheek)",
           "description": "Roep een opgeslagen API aan vanuit de API-bibliotheek"
         },
+        "carousel": {
+          "label": "Carrousel",
+          "description": "Scrollbare kaarten met afbeeldingen en knoppen"
+        },
         "faq": {
           "label": "Antwoord uit FAQ",
           "description": "Koppel een bericht aan je FAQ's"
@@ -2262,9 +2368,25 @@
           "label": "Hun locatie",
           "help": "Wacht tot de klant een locatie deelt"
         },
+        "carousel": {
+          "label": "Carrousel",
+          "help": "Scrollbare kaarten met afbeeldingen en knoppen"
+        },
+        "condition": {
+          "label": "Voorwaarde",
+          "help": "Vertakken op wat de klant zei of opsloeg, met AND-/OR-regels"
+        },
         "faq": {
           "label": "Antwoord uit FAQ",
           "help": "Koppel het bericht van de klant aan je FAQ's. Beëindigt deze flow: één uitgang als een FAQ heeft geantwoord, een andere zo niet"
+        },
+        "apiLibrary": {
+          "label": "API-aanroep",
+          "help": "Een API uit je API-bibliotheek aanroepen"
+        },
+        "code": {
+          "label": "JS-functie",
+          "help": "Een klein stukje JavaScript uitvoeren"
         }
       },
       "typeLabel": {
@@ -2280,7 +2402,11 @@
         "template": "Sjabloon",
         "cta": "Linkknop",
         "assign": "Toewijzen aan een medewerker",
-        "faq": "Antwoord uit FAQ"
+        "carousel": "Carrousel",
+        "condition": "Voorwaarde",
+        "faq": "Antwoord uit FAQ",
+        "api_library": "API-aanroep",
+        "code": "JS-functie"
       },
       "stepLabel": {
         "questionOf": "Vraag · {kind}"
@@ -2318,7 +2444,13 @@
         "rowTitle": "Stap {stage}: elke rij heeft een titel nodig van maximaal {max} tekens.",
         "rowDescriptionTooLong": "Stap {stage}: een rijbeschrijving is langer dan {max} tekens.",
         "variableUsed": "Stap {stage}: “{name}” wordt al gebruikt door stap {other}; geef elk antwoord een eigen naam.",
-        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow."
+        "carouselCards": "Stap {stage}: voeg minstens één kaart toe en geef elke kaart een titel.",
+        "carouselButtons": "Stap {stage}: geef elke knop een naam, en een link, nummer of adres waar hij iets opent.",
+        "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde).",
+        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow.",
+        "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
+        "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
+        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },
@@ -2470,7 +2602,11 @@
         "buttonNoTarget": "Een knop van type “{type}” (“{text}”) heeft geen doel in Eenvoudig.",
         "skippedStep": "Een stap “{sub}” is overgeslagen: Eenvoudig kent niets vergelijkbaars.",
         "leadsOutside": "“{text}” leidt naar een flow die niet in dit bestand staat; die eindigt daar tot je hem koppelt.",
-        "connectsOutside": "Een stap is verbonden met een node die niet in dit bestand staat ({id}); die blijft niet-gekoppeld."
+        "connectsOutside": "Een stap is verbonden met een node die niet in dit bestand staat ({id}); die blijft niet-gekoppeld.",
+        "dateLimits": "Een datumvraag behoudt haar notatie maar niet haar grenzen (vroegste, laatste, uitgesloten dagen).",
+        "tooManyButtons": "Een knoppenbericht had meer keuzes dan er passen; de extra knoppen zijn weggelaten.",
+        "agentTeam": "Een live-agentknop is behouden: kies het team dat het gesprek krijgt.",
+        "tooManySlides": "Een carrousel had meer dan 10 kaarten; de extra kaarten zijn weggelaten."
       },
       "reasons": {
         "notExport": "Dit bestand is geen flow-export. Gebruik een .json-bestand dat is geëxporteerd uit Flows, of een flow die is geëxporteerd uit de wabo-console.",

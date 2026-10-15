@@ -11,7 +11,10 @@
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
       "instagram": "Instagram",
-      "email": "电子邮件 (Gmail)"
+      "email": "电子邮件 (Gmail)",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
     },
     "page": {
       "back": "自动化与 AI",
@@ -182,7 +185,9 @@
         "offOption": "{name}（已关闭）",
         "goneOption": "已不存在的流程",
         "loadFailed": "无法加载流程，所以列表可能不完整。"
-      }
+      },
+      "onLeave": "休假中",
+      "onLeaveUntil": "休假至 {date}"
     },
     "sla": {
       "back": "返回设置",
@@ -275,6 +280,123 @@
         "busy": "忙碌",
         "offline": "离线"
       }
+    },
+    "contactAssignment": {
+      "back": "自动化",
+      "title": "联系人分配",
+      "intro": "自动把没有负责人的新联系人和商机分配给合适的人。",
+      "howTitle": "工作原理",
+      "how1": "先打开开关，打开之前此功能处于关闭状态。",
+      "how2": "规则从上到下依次尝试。第一条匹配且能找到可用人员的规则，会为联系人或商机指定负责人。",
+      "how3": "休假的人会被跳过（指定的固定人员会由其代理人替代）。除非规则另有设置，离线的人也会被跳过。",
+      "how4": "已由人工设置的负责人不会被替换。",
+      "enable": "自动分配新联系人和商机",
+      "enableHint": "适用于来自表单、线索来源、聊天和 API 的联系人，以及新商机。",
+      "imports": "同时分配导入的联系人",
+      "importsHint": "默认关闭，以免大批量导入改变现有的负责人归属。",
+      "turnedOn": "自动分配已开启。",
+      "turnedOff": "自动分配已关闭。",
+      "newContactRule": "新联系人规则",
+      "newDealRule": "新商机规则",
+      "editTitle": "编辑规则",
+      "name": "规则名称",
+      "strategyLabel": "由谁负责",
+      "strategy": {
+        "fixed": "指定一人",
+        "round_robin": "轮流分配",
+        "least_busy": "最空闲者"
+      },
+      "people": "成员和团队",
+      "peopleHint": "固定规则只指定一人。轮流分配和最空闲者会在你勾选的成员和团队中选择。",
+      "onLeave": "休假中",
+      "teamOption": "团队：{name}",
+      "skipOffline": "跳过离线的人",
+      "skipOfflineHint": "休假的人始终会被跳过。",
+      "conditions": "条件",
+      "conditionsHint": "你填写的所有条件都必须满足。留空则匹配所有情况。",
+      "f": {
+        "sources": "来源为以下之一",
+        "listHint": "用逗号分隔。",
+        "countryCodes": "国家为以下之一",
+        "phonePrefixes": "电话号码开头为",
+        "phoneHint": "国家区号数字，例如 91。",
+        "lifecycleStages": "生命周期阶段为以下之一",
+        "origins": "进入渠道",
+        "properties": "自定义属性等于",
+        "propertiesHint": "每行一个，格式为 key=value。",
+        "pipelines": "销售管道",
+        "valueMin": "商机金额至少为",
+        "valueMax": "商机金额至多为"
+      },
+      "origin": {
+        "manual": "由人工添加",
+        "import": "导入",
+        "inbound": "首条消息",
+        "form": "表单",
+        "lead": "线索来源",
+        "api": "API"
+      },
+      "cond": {
+        "sources": "来源",
+        "countryCodes": "国家",
+        "phonePrefixes": "电话前缀",
+        "lifecycleStages": "阶段",
+        "tagIds": "标签",
+        "origins": "进入渠道",
+        "properties": "属性",
+        "pipelineIds": "销售管道",
+        "value": "金额"
+      },
+      "catchAll": "匹配所有情况",
+      "problems": {
+        "name": "请为规则命名。",
+        "people": "请至少选择一名成员或一个团队。",
+        "fixedOne": "固定规则只能指定一人。",
+        "prefix": "只能使用数字，例如 91。",
+        "value": "请输入数字，且最高金额不能低于最低金额。"
+      },
+      "save": "保存规则",
+      "cancel": "取消",
+      "saved": "规则已保存。",
+      "created": "规则已添加。",
+      "deleted": "规则已删除。",
+      "conflict": "其他人修改了此规则。请刷新后重试。",
+      "failed": "出了点问题，请重试。",
+      "contactRules": "联系人规则",
+      "dealRules": "商机规则",
+      "emptyTitle": "暂无规则",
+      "emptyContacts": "新联系人将保留其创建时的负责人。",
+      "emptyDeals": "新商机将保留其创建时的负责人。",
+      "off": "关闭",
+      "fired": "已使用 {count, plural, one {# 次} other {# 次}}",
+      "activeFor": "规则 {name} 已启用",
+      "moveUp": "上移 {name}",
+      "moveDown": "下移 {name}",
+      "edit": "编辑",
+      "delete": "删除",
+      "deleteTitle": "删除此规则？",
+      "deleteMessage": "规则 {name} 将停止分配。已由它分配的联系人保留原负责人。",
+      "unknownPerson": "前成员",
+      "unknownTeam": "已移除的团队",
+      "testTitle": "测试规则",
+      "testHint": "描述一个联系人或商机，查看哪条规则会处理它以及会分配给谁。不会更改任何数据。",
+      "testSubject": "测试对象",
+      "subjectContact": "联系人",
+      "subjectDeal": "商机",
+      "testPhone": "电话号码",
+      "testValue": "商机金额",
+      "testRun": "测试",
+      "testWould": "规则 {rule} 会把它分配给 {name}。",
+      "testOutcome": {
+        "would_assign": "将会被分配。",
+        "disabled": "自动分配已关闭。",
+        "has_owner": "它已有负责人，因此不会有任何变化。",
+        "no_rule": "没有匹配的规则。",
+        "nobody_available": "有规则匹配，但没有可用的人（休假或离线）。",
+        "plan": "你的套餐不包含自动分配。"
+      },
+      "testSkipped": "因无人可用而被跳过：{names}",
+      "testOff": "上方的开关处于关闭状态，所以这里只显示开启后会发生的情况。"
     }
   }
 }

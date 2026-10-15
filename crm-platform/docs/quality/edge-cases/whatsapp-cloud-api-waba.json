@@ -1,0 +1,86 @@
+{
+  "module": "whatsapp-cloud-api-waba",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-whatsapp-cloud-api-waba-001",
+      "feature": "waba id",
+      "category": "input",
+      "scenario": "a value of 41 (one past WABA_ID_MAX = 40) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/connections.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-002",
+      "feature": "waba label",
+      "category": "input",
+      "scenario": "a value of 121 (one past WABA_LABEL_MAX = 120) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/connections.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-003",
+      "feature": "waba token",
+      "category": "input",
+      "scenario": "a value of 1025 (one past WABA_TOKEN_MAX = 1024) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/connections.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-004",
+      "feature": "waba token",
+      "category": "input",
+      "scenario": "a value of 19 (one under WABA_TOKEN_MIN = 20) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/connections.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-005",
+      "feature": "waba code",
+      "category": "input",
+      "scenario": "a value of 501 (one past WABA_CODE_MAX = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/connections.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-006",
+      "feature": "waba group subject",
+      "category": "input",
+      "scenario": "a value of 129 (one past WABA_GROUP_SUBJECT_MAX = 128) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/groups.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-007",
+      "feature": "waba group description",
+      "category": "input",
+      "scenario": "a value of 2049 (one past WABA_GROUP_DESCRIPTION_MAX = 2048) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/groups.ts"
+    },
+    {
+      "id": "EC-whatsapp-cloud-api-waba-008",
+      "feature": "waba group remove",
+      "category": "input",
+      "scenario": "a value of 9 (one past WABA_GROUP_REMOVE_MAX = 8) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-cloud-api-waba/groups.ts"
+    }
+  ]
+}

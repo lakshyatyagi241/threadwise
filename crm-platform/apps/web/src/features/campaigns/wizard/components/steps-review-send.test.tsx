@@ -16,6 +16,7 @@ import {
   sender,
   sources,
   template,
+  templates,
   uuid,
 } from '../testing';
 import { CreditCard } from './credit-card';
@@ -57,6 +58,13 @@ describe('credit check', () => {
     expect(out).toContain(
       'Your plan covers the first messages; the wallet pays for 40 messages beyond them.',
     );
+  });
+
+  it('says the workspace is not billed instead of what the plan covers', () => {
+    const out = card(ready(credit({ platformOwned: true, billingMode: 'plan' })));
+    expect(out).toContain('This workspace is not billed for sends');
+    expect(out).not.toContain('Your plan covers');
+    expect(out).not.toContain('Charged to your wallet');
   });
 
   it('shows the danger state with the shortfall and a Top up link to the response url', () => {
@@ -212,6 +220,28 @@ describe('step 3 as a whole', () => {
     expect(out).toContain('$95.00');
     expect(out).toContain('is filled from First name, or &quot;friend&quot; when empty');
     expect(out).toContain('is the fixed text &quot;A-1&quot;');
+  });
+
+  it('lists the follow-ups in words, naming the template and the flow', () => {
+    const followUps = [
+      {
+        trigger: 'not_read' as const,
+        waitMinutes: 120,
+        action: { kind: 'template' as const, templateId: uuid(2) },
+      },
+      {
+        trigger: 'replied' as const,
+        waitMinutes: 2880,
+        action: { kind: 'flow' as const, flowId: uuid(81) },
+      },
+    ];
+    const d = draft({ name: 'October offer', templateId: uuid(1), followUps });
+    const out = review({ draft: d, templates: templates() });
+    expect(out).toContain('Follow-ups');
+    expect(out).toContain('If not read after 2 hours: send summer_sale');
+    // The flows are still loading here: a dash instead of a name.
+    expect(out).toContain('If they reply within 2 days: start flow -');
+    expect(review()).not.toContain('Follow-ups');
   });
 
   it('has an Edit link per owned value that names what it edits', () => {
@@ -526,6 +556,13 @@ describe('step 4 and the launch dialog', () => {
         draftId={uuid(100)}
         zone="Asia/Kolkata"
         canTest
+        templates={{
+          data: { data: templates() },
+          isPending: false,
+          isError: false,
+          error: null,
+          refetch: none,
+        }}
         issues={[]}
         currency="USD"
         ensureSaved={async () => true}
@@ -541,6 +578,13 @@ describe('step 4 and the launch dialog', () => {
     expect(test).toBeGreaterThan(-1);
     expect(when).toBeGreaterThan(test);
     expect(retries).toBeGreaterThan(when);
+  });
+
+  it('ends with the follow-ups card, after the retries', () => {
+    const out = step(draft());
+    expect(out.indexOf('Follow-ups')).toBeGreaterThan(out.indexOf('Activate Retries'));
+    expect(out).toContain('Add a follow-up');
+    expect(out).toContain('0 of 3 follow-ups');
   });
 
   it('shows the recurring panel only for the recurring mode', () => {

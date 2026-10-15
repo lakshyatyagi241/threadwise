@@ -11,6 +11,7 @@ import {
   type ConversationsFacade,
   type ExternalAccount,
 } from '../../chat-conversations';
+import { ContactsService } from '../../crm';
 import type { InboundMessageInput, InboundRecorded, InboxIngest } from './tokens';
 
 /** The channel kind a bot's threads live on. */
@@ -54,6 +55,7 @@ export class ChatInboxIngest implements InboxIngest {
     private readonly db: DatabaseService,
     private readonly external: ExternalChannelIngest,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly contacts: ContactsService,
   ) {}
 
   private account(bot: {
@@ -152,19 +154,24 @@ export class ChatInboxIngest implements InboxIngest {
       let contactId = conv.contact_id === null ? null : Number(conv.contact_id);
       let newContact = false;
       if (m.uid !== '') {
-        const c = await tx.execute(sql`
-          INSERT INTO contacts (org_id, name, channel, channel_uid, message)
-          VALUES (${orgId}, ${m.title}, ${TELEGRAM_KIND}, ${m.uid}, 'Source: Telegram DM')
-          ON CONFLICT (org_id, channel, channel_uid) WHERE channel IS NOT NULL AND channel_uid IS NOT NULL
-          DO UPDATE SET name = coalesce(nullif(contacts.name, ''), EXCLUDED.name)
-          RETURNING id, (xmax = 0) AS inserted`);
-        const row = c.rows[0] as { id: number | string; inserted: boolean };
-        newContact = row.inserted;
-        if (contactId === null) {
-          contactId = Number(row.id);
-          await tx.execute(
-            sql`UPDATE conversations SET contact_id = ${contactId} WHERE org_id = ${orgId} AND id = ${conversationId}`,
-          );
+        // Through the contacts service: audit and the plan's contact cap apply, and no consent is granted by a first message. Over the
+        // cap the thread simply has no contact (the message is kept).
+        const r = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+          kind: 'channel_uid',
+          channel: TELEGRAM_KIND,
+          value: m.uid,
+          name: m.title,
+          message: 'Source: Telegram DM',
+          quiet: true,
+        });
+        if (r.outcome === 'found' || r.outcome === 'created') {
+          newContact = r.outcome === 'created';
+          if (contactId === null) {
+            contactId = r.contactId;
+            await tx.execute(
+              sql`UPDATE conversations SET contact_id = ${contactId} WHERE org_id = ${orgId} AND id = ${conversationId}`,
+            );
+          }
         }
       }
       return {

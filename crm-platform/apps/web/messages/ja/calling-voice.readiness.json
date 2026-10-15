@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "通話の準備はできていますか？",
+      "status": {
+        "never_checked": "未確認",
+        "blocked": "準備未完了",
+        "ready_to_enable": "有効化できます",
+        "attention": "動作中（要確認）",
+        "ready": "準備完了"
+      },
+      "statusHint": {
+        "never_checked": "この番号はまだ確認されていません。",
+        "blocked": "「要修正」の項目を解決するまで、通話は利用できません。",
+        "ready_to_enable": "WhatsAppに必要な条件はすべて整っています。「通話を有効にする」を押すと通話ボタンが表示されます。",
+        "attention": "通話は利用できますが、下に確認が必要な項目があります。",
+        "ready": "通話はオンで、すべてのチェックに合格しています。"
+      },
+      "checkedAt": "確認日時: {date}",
+      "checking": "WhatsAppで確認中...",
+      "checkAgain": "再確認",
+      "checkFailed": "この番号を確認できませんでした。",
+      "checkedDone": "再確認しました。",
+      "blockedHint": "まず「要修正」の項目を直してください。このままではWhatsAppが通話の有効化を拒否する可能性が高いです。",
+      "details": "確認した項目",
+      "fixLabel": "対処方法:",
+      "state": {
+        "ok": "OK",
+        "warn": "要確認",
+        "fail": "要修正"
+      },
+      "checks": {
+        "plan_feature": "プランにWhatsApp通話が含まれている",
+        "connection": "番号が接続されている",
+        "not_coexistence": "番号がCloud APIのみで使われている",
+        "number_registered": "番号がWhatsAppに登録されている",
+        "messaging_limit": "メッセージ上限と品質",
+        "token_scopes": "アクセストークンの権限",
+        "webhook_subscribed": "アプリがこのアカウントを購読している",
+        "calls_field": "通話Webhookが配信されている",
+        "calling_enabled": "WhatsApp側で通話がオンになっている",
+        "turn": "通話リレー（TURN）が設定されている",
+        "dialler_permissions": "通話を許可されたチームメイト",
+        "recording_consent": "録音と同意のルール"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "WhatsApp通話はお使いのプランに含まれています。"
+        },
+        "plan_missing": {
+          "detail": "お使いのプランにはWhatsApp通話が含まれていません。",
+          "fix": "プランをアップグレードしてから、再確認してください。"
+        },
+        "connected": {
+          "detail": "番号は接続されており、アクセストークンもあります。"
+        },
+        "not_connected": {
+          "detail": "この番号は現在接続されていません。",
+          "fix": "チャンネルで再接続してから、再確認してください。"
+        },
+        "no_credentials": {
+          "detail": "この番号にはアクセストークンまたは電話番号IDが保存されていません。",
+          "fix": "認証情報が再び保存されるよう、番号を再接続してください。"
+        },
+        "cloud_api_only": {
+          "detail": "この番号はWhatsApp Cloud APIのみで動作しています。"
+        },
+        "coexistence": {
+          "detail": "この番号はWhatsApp Businessアプリでも使用されており（共存）、WhatsAppはこのような番号での通話を許可していません。",
+          "fix": "Cloud APIのみに登録するか、通話用に別の番号を使用してください。"
+        },
+        "on_premise": {
+          "detail": "この番号は旧オンプレミスAPIを使用していますが、Metaはこれを終了しました。",
+          "fix": "Cloud APIに登録するか、別の番号を使用してください。"
+        },
+        "number_ok": {
+          "detail": "WhatsAppはこの番号を稼働中かつ認証済みとして報告しています。"
+        },
+        "number_not_verified": {
+          "detail": "この番号の所有確認コードが認証されていません。",
+          "fix": "番号のWhatsApp接続ページから認証を行い、再確認してください。"
+        },
+        "number_not_live": {
+          "detail": "WhatsAppはこの番号を接続済みではなく「{status}」として報告しています。",
+          "fix": "Meta Business Suiteで番号の状態（保留中、フラグ付き、制限中の可能性があります）を直してから、再確認してください。"
+        },
+        "limit_ok": {
+          "detail": "1日のメッセージ上限と品質評価は、通話に十分です。"
+        },
+        "limit_test_number": {
+          "detail": "これはテスト番号のため、メッセージ上限は不要です。"
+        },
+        "limit_low": {
+          "detail": "メッセージ上限は{tier}です。通話を有効にするには、WhatsAppが1日あたり少なくとも{needed}人の顧客への送信を求めています。",
+          "fix": "品質を保ったままメッセージ送信を増やすか、Meta Business Suiteでビジネス認証を行って上限を引き上げてから、再確認してください。"
+        },
+        "limit_unknown": {
+          "detail": "WhatsAppから、このアプリが認識できるメッセージ上限が報告されませんでした。",
+          "fix": "Meta Business Suiteで番号を開いて上限を確認してください。通話には1日あたり2,000人以上の顧客への送信が必要です。"
+        },
+        "quality_low": {
+          "detail": "番号の品質評価が低く（赤）、WhatsAppによって制限される可能性があります。",
+          "fix": "ブロックや報告されたメッセージを減らし、評価が回復してから通話を利用してください。"
+        },
+        "scopes_ok": {
+          "detail": "アクセストークンに通話に必要な権限があります。"
+        },
+        "scope_missing": {
+          "detail": "アクセストークンに次の権限がありません: {missing}",
+          "fix": "whatsapp_business_managementとwhatsapp_business_messagingの両方を持つ新しいシステムユーザートークンを生成し、番号を再接続してください。"
+        },
+        "token_invalid": {
+          "detail": "WhatsAppが保存済みのアクセストークンを受け付けません。",
+          "fix": "番号を再接続するか、新しい永続トークンを保存してください。"
+        },
+        "token_expiring": {
+          "detail": "アクセストークンの有効期限は{days, plural, other {#日後}}です。",
+          "fix": "期限が切れる前に、番号を再接続するか、永続的なシステムユーザートークンを保存してください。"
+        },
+        "scopes_unverifiable": {
+          "detail": "トークンの権限を読み取れませんでした。番号がプロバイダー経由で接続されているか、このプラットフォームに確認用のアプリ認証情報がない可能性があります。",
+          "fix": "通話が拒否される場合は、この番号で通話を使えるかプロバイダーに確認してください。"
+        },
+        "subscribed_ok": {
+          "detail": "WhatsAppはこのアカウントのイベントをプラットフォームに配信しています。"
+        },
+        "waba_not_subscribed": {
+          "detail": "このWhatsApp Business Accountを購読しているアプリがないため、通話が届きません。",
+          "fix": "番号のヘルスページで「受信を修正」を使用してから、再確認してください。"
+        },
+        "calls_field_ok": {
+          "detail": "Metaアプリは通話Webhookフィールドを配信しています。"
+        },
+        "calls_field_added": {
+          "detail": "通話Webhookフィールドがありませんでしたが、プラットフォームのMetaアプリに追加しました。"
+        },
+        "calls_field_missing": {
+          "detail": "Metaアプリが通話Webhookフィールドを配信していないため、着信や応答が届きません。",
+          "fix": "プラットフォーム管理者に、MetaアプリのWebhook設定（WhatsApp、設定）で通話フィールドにチェックを入れるよう依頼し、再確認してください。"
+        },
+        "calls_field_unverifiable": {
+          "detail": "この番号はプラットフォームが読み取れないMetaアプリを使用しているため、通話Webhookフィールドを確認できませんでした。",
+          "fix": "そのアプリのWebhook設定を開き、通話フィールドにチェックが入っていることを確認してください。"
+        },
+        "calling_on": {
+          "detail": "通話はオンで、通話アイコンが顧客に表示されています。"
+        },
+        "calling_off": {
+          "detail": "この番号の通話はオフです。",
+          "fix": "他の項目に問題がなければ、「通話を有効にする」を選択してください。"
+        },
+        "icon_hidden": {
+          "detail": "通話はオンですが、通話アイコンが顧客に表示されないため、顧客は通話を開始できません。",
+          "fix": "Metaの番号の通話設定で、通話アイコンの表示を既定に戻してください。"
+        },
+        "turn_ok": {
+          "detail": "TURNリレーが設定されているため、厳しいファイアウォールの内側でも通話できます。"
+        },
+        "turn_missing": {
+          "detail": "TURNリレーが設定されていないため、厳しいファイアウォールの内側にいる相手とは、音声なしで接続される場合があります。",
+          "fix": "プラットフォーム管理者に、CALLING_ICE_SERVERSへTURNサーバーを追加するよう依頼してください。"
+        },
+        "turn_incomplete": {
+          "detail": "TURNサーバーにユーザー名または認証情報が設定されていません。",
+          "fix": "CALLING_ICE_SERVERSのそのエントリにユーザー名と認証情報を追加してください。"
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERSは設定されていますが有効なリストではないため、公開STUNサーバーのみが使われます。",
+          "fix": "CALLING_ICE_SERVERSのJSONを修正してください。"
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, other {#人のチームメイトが}}通話の発信と応答をできます。"
+        },
+        "dialler_none": {
+          "detail": "このワークスペースには、通話の発信と応答の権限を持つ人がいません。",
+          "fix": "設定の「ロール」で、いずれかのロールに通話を使う権限を付与してください。"
+        },
+        "recording_off": {
+          "detail": "通話の録音はオフのため、同意は不要です。"
+        },
+        "recording_configured": {
+          "detail": "通話の録音はオンで、通知と同意ルールが設定されています。"
+        },
+        "recording_notice_missing": {
+          "detail": "通話の録音はオンですが、読み上げる通知が設定されていません。",
+          "fix": "下の「録音」で録音の通知を入力してください。"
+        },
+        "meta_unreadable": {
+          "detail": "WhatsAppからこの確認への応答がありませんでした。",
+          "fix": "しばらくしてから再確認してください。"
+        },
+        "not_checked": {
+          "detail": "上の項目の完了待ちです。",
+          "fix": "まず上の項目を直してください。"
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsAppはまだ通話を有効にできません。番号の1日のメッセージ上限が2,000人以上であること、アプリがWhatsApp Business Accountと通話Webhookフィールドを購読していること、whatsapp_business_messaging権限があることが必要です。テスト番号には上限は不要です。",
+        "coexistence": "WhatsApp通話には、Cloud APIのみで動作する番号が必要です。この番号はWhatsApp Businessアプリと回線を共有しており（共存）、WhatsAppはこのような番号での通話を許可していません。Cloud APIのみに登録するか、別の番号を使用してください。",
+        "permission_scope": "アクセストークンに通話に必要な権限（whatsapp_business_managementとwhatsapp_business_messaging）がありません。両方を持つ新しいトークンを生成し、番号を再接続してください。",
+        "token_expired": "WhatsAppが保存済みのアクセストークンを受け付けなくなりました。番号を再接続してから、もう一度お試しください。",
+        "calling_not_enabled": "この番号はWhatsApp側で通話がオンになっていません。オンにしてから、もう一度お試しください。",
+        "no_call_permission": "この顧客はまだ通話を許可していません。許可リクエストを送信しますので、承認してもらってください。",
+        "permission_request_limit": "この顧客への通話許可のリクエストには、WhatsAppによる回数制限があります。しばらくしてからもう一度お試しください。",
+        "receiver_uncallable": "この顧客のWhatsAppは通話を受けられません（アプリのバージョンが古いか、通話がオフです）。WhatsAppを更新するよう伝えてください。",
+        "meta_unreachable": "WhatsAppからの応答がありませんでした。しばらくしてからもう一度お試しください。"
+      },
+      "refusedBecause": "問い合わせたところ、WhatsAppに拒否されました: {reason}",
+      "autoEnable": {
+        "title": "通話を自動でオンにする",
+        "hint": "WhatsApp番号が接続または再接続され、すべての要件を満たしたときに、確認なしでその番号の通話をオンにします。既定ではオフで、この設定がない限り通話が自動でオンになることはありません。",
+        "label": "番号の接続後に通話を自動でオンにする",
+        "saved": "保存しました。",
+        "loadFailed": "この設定を読み込めませんでした。"
+      },
+      "testCall": {
+        "title": "テスト通話を発信",
+        "intro": "ご自身のWhatsApp番号に発信して、通話を最初から最後まで確認できます。WhatsAppでは、許可した相手にしか事業者から発信できません。許可していない場合は、お使いの電話に許可リクエストが送られ、通話は発信されません。WhatsAppで「許可」をタップしてから、もう一度「自分に発信」を押してください。",
+        "phoneLabel": "あなたのWhatsApp番号",
+        "phoneHint": "国番号から入力し、プラス記号は付けません。例: 919812345678",
+        "call": "自分に発信",
+        "invalid": "国番号を含めて番号を入力してください（6〜15桁）。",
+        "show": "テスト通話を発信"
+      }
+    }
+  }
+}

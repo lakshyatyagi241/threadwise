@@ -162,6 +162,11 @@ export const KNOWN_STEPS = [
   'terminate_sent',
   'terminate',
   'recording_stored',
+  'recording_consent_granted',
+  'recording_consent_declined',
+  'recording_deleted',
+  'recording_hold_set',
+  'recording_hold_lifted',
 ] as const;
 export const knownStep = (type: string): string | null =>
   (KNOWN_STEPS as readonly string[]).includes(type) ? type : null;

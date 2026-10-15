@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Biểu mẫu WhatsApp",
+      "links": "Liên kết WhatsApp"
+    },
+    "errors": {
+      "generic": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Kết nối một số WhatsApp Cloud API để sử dụng biểu mẫu.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Không có số WhatsApp Cloud API nào đã kết nối có thông tin xác thực hợp lệ.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta đã từ chối định nghĩa biểu mẫu này.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Tài khoản WhatsApp Business của bạn cần vượt qua xác minh của Meta trước khi có thể xuất bản biểu mẫu.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta không thể xuất bản biểu mẫu này.",
+      "WFL_LINK_NOT_LIVE": "Liên kết này đang tạm dừng hoặc đã hết hạn.",
+      "ROW_VERSION_CONFLICT": "Mục này đã được thay đổi ở nơi khác. Hãy tải lại và thử lại.",
+      "VALIDATION_FAILED": "Kiểm tra các trường được đánh dấu và thử lại.",
+      "PLAN_FEATURE_LOCKED": "Nâng cấp gói của bạn để sử dụng tính năng này."
+    },
+    "forms": {
+      "heading": "Biểu mẫu WhatsApp",
+      "intro": "Tạo các biểu mẫu mà khách hàng điền ngay trong WhatsApp, sau đó gửi từ một luồng và xem lại câu trả lời tại đây.",
+      "loading": "Đang tải biểu mẫu…",
+      "retry": "Thử lại",
+      "create": {
+        "cta": "Biểu mẫu mới",
+        "creating": "Đang tạo…",
+        "defaultTitle": "Biểu mẫu chưa có tên",
+        "defaultField": "Họ và tên"
+      },
+      "stats": {
+        "all": "Tất cả biểu mẫu",
+        "published": "Đã xuất bản",
+        "draft": "Bản nháp",
+        "submissions": "Lượt gửi"
+      },
+      "empty": {
+        "title": "Chưa có biểu mẫu nào",
+        "description": "Tạo một biểu mẫu, sau đó gửi nó từ bước Biểu mẫu WhatsApp trong một luồng."
+      },
+      "table": {
+        "form": "Biểu mẫu",
+        "type": "Loại",
+        "fields": "Trường dữ liệu",
+        "submissions": "Lượt gửi"
+      },
+      "status": {
+        "draft": "Bản nháp",
+        "published": "Đã xuất bản",
+        "paused": "Đã tạm dừng"
+      },
+      "audience": {
+        "lead_capture": "Thu thập khách hàng tiềm năng",
+        "survey": "Khảo sát",
+        "appointment_booking": "Đặt lịch hẹn",
+        "customer_support": "Hỗ trợ khách hàng",
+        "sign_up": "Đăng ký",
+        "other": "Khác"
+      },
+      "row": {
+        "edit": "Chỉnh sửa",
+        "duplicate": "Sao chép",
+        "delete": "Xóa"
+      },
+      "confirm": {
+        "deleteTitle": "Xóa biểu mẫu này?",
+        "deleteMessage": "Các nút luồng đang hoạt động tham chiếu đến nó sẽ bị lỗi.",
+        "deleteConfirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notice": {
+        "saved": "Đã lưu.",
+        "published": "Đã xuất bản lên WhatsApp."
+      },
+      "builder": {
+        "back": "Về biểu mẫu",
+        "untitled": "Biểu mẫu chưa có tên",
+        "saving": "Đang lưu…",
+        "saveDraft": "Lưu bản nháp",
+        "savePublish": "Lưu & xuất bản",
+        "publishing": "Đang xuất bản…",
+        "basics": "Thông tin cơ bản của biểu mẫu",
+        "title": "Tiêu đề",
+        "audienceType": "Loại",
+        "purpose": "Mục đích",
+        "sendButtonLabel": "Nhãn nút gửi",
+        "thankYouNote": "Lời cảm ơn",
+        "screens": "Màn hình",
+        "addScreen": "Thêm màn hình",
+        "removeScreen": "Xóa màn hình",
+        "screenN": "Màn hình {n}",
+        "defaultField": "Họ và tên",
+        "newFieldLabel": "Trường mới",
+        "fieldKind": "Loại trường",
+        "fieldLabel": "Nhãn",
+        "required": "Bắt buộc",
+        "removeField": "Xóa",
+        "options": "Tùy chọn (cách nhau bằng dấu phẩy)",
+        "optionsPlaceholder": "Tùy chọn 1, Tùy chọn 2, Tùy chọn 3"
+      },
+      "fieldKind": {
+        "heading": "Đề mục",
+        "short_text": "Văn bản ngắn",
+        "paragraph": "Đoạn văn",
+        "email": "Email",
+        "phone_number": "Số điện thoại",
+        "number": "Số",
+        "date": "Ngày",
+        "dropdown": "Danh sách thả xuống",
+        "radio_buttons": "Nút chọn một",
+        "checkbox": "Hộp kiểm"
+      },
+      "submissions": {
+        "heading": "Lượt gửi",
+        "metaFlowId": "ID Meta Flow: {id}",
+        "export": "Xuất CSV",
+        "empty": {
+          "title": "Chưa có lượt gửi nào",
+          "description": "Các lượt gửi sẽ xuất hiện ở đây khi biểu mẫu này được gửi từ một luồng và có người điền vào."
+        },
+        "table": {
+          "submitted": "Đã gửi",
+          "contact": "Liên hệ",
+          "phone": "Điện thoại"
+        }
+      }
+    },
+    "links": {
+      "heading": "Liên kết WhatsApp",
+      "intro": "Tạo một liên kết có thể theo dõi để mở WhatsApp với tin nhắn được điền sẵn — dùng cho quảng cáo, tiểu sử và mã QR.",
+      "loading": "Đang tải liên kết…",
+      "retry": "Thử lại",
+      "searchPlaceholder": "Tìm theo tên hoặc liên kết",
+      "create": { "cta": "Liên kết mới" },
+      "stats": {
+        "all": "Tất cả liên kết",
+        "live": "Đang hoạt động",
+        "totalClicks": "Tổng số lượt nhấp",
+        "avgClicks": "TB lượt nhấp / liên kết"
+      },
+      "tabs": { "all": "Tất cả", "live": "Đang hoạt động", "paused": "Đã tạm dừng" },
+      "status": { "live": "Hoạt động", "paused": "Tạm dừng" },
+      "empty": {
+        "title": "Chưa có liên kết nào",
+        "description": "Tạo một liên kết để chia sẻ trong quảng cáo, tiểu sử hoặc mã QR."
+      },
+      "table": {
+        "link": "Liên kết",
+        "destination": "Đích đến",
+        "clicks": "Lượt nhấp",
+        "lastClicked": "Lần nhấp cuối"
+      },
+      "row": {
+        "open": "Mở",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép!",
+        "edit": "Chỉnh sửa",
+        "duplicate": "Sao chép",
+        "delete": "Xóa"
+      },
+      "confirm": {
+        "deleteTitle": "Xóa liên kết này?",
+        "deleteMessage": "Liên kết ngắn sẽ ngừng hoạt động ngay lập tức.",
+        "deleteConfirm": "Xóa",
+        "cancel": "Hủy"
+      },
+      "notice": {
+        "saved": "Đã lưu.",
+        "copyFailed": "Không thể sao chép liên kết."
+      },
+      "builder": {
+        "back": "Về liên kết",
+        "newHeading": "Liên kết mới",
+        "step": { "destination": "Đích đến", "message": "Tin nhắn khởi đầu", "tracking": "Theo dõi" },
+        "name": "Tên",
+        "status": "Trạng thái",
+        "countryCode": "Mã quốc gia",
+        "phoneNumber": "Số điện thoại",
+        "welcomeMessage": "Tin nhắn khởi đầu",
+        "welcomeMessageHint": "Được điền sẵn vào cuộc trò chuyện khi ai đó nhấn vào liên kết.",
+        "slug": "Liên kết ngắn",
+        "slugHint": "Chỉ chữ, số và gạch ngang. Để trống để tự động tạo.",
+        "slugPlaceholder": "khuyen-mai-he",
+        "expiresAt": "Hết hạn",
+        "utmSource": "Nguồn UTM",
+        "utmMedium": "Kênh UTM",
+        "utmCampaign": "Chiến dịch UTM",
+        "previous": "Trước",
+        "next": "Tiếp theo",
+        "mint": "Tạo liên kết",
+        "save": "Lưu",
+        "saving": "Đang lưu…",
+        "fixErrors": "Kiểm tra các trường đích đến và liên kết ngắn.",
+        "mintedHeading": "Liên kết của bạn",
+        "shortUrl": "Liên kết ngắn",
+        "waUrl": "Liên kết WhatsApp",
+        "qrAlt": "Mã QR cho liên kết này"
+      }
+    }
+  }
+}

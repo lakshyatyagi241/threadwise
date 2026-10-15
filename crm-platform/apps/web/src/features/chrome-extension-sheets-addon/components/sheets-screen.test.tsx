@@ -29,7 +29,7 @@ vi.mock('../api/sheets', () => ({
 }));
 
 import { ApiError } from '@/lib/api/errors';
-import { KeyCard, SheetsScreen } from './sheets-screen';
+import { KeyCard, SheetsScreen, WebhookCard } from './sheets-screen';
 
 const en = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'chrome-extension-sheets-addon.json'), 'utf8'),
@@ -49,6 +49,8 @@ const overview = (over: Partial<ExtSheetsOverview> = {}): ExtSheetsOverview => (
   blockers: [],
   marketplaceUrl: 'https://workspace.google.com/marketplace/',
   apiBase: 'https://api.example.com',
+  webhookUrl: null,
+  lastCapture: null,
   key: { active: false, suffix: null, masked: null, createdAt: null, lastUsedAt: null },
   can: { readContacts: true, writeContacts: true, readCatalog: true, writeCatalog: false },
   files: [
@@ -196,5 +198,37 @@ describe('KeyCard', () => {
     expect(out).toContain('<button');
     expect(out).not.toContain('readOnly');
     expect(out).not.toContain('wsn_live_0');
+  });
+});
+
+describe('WebhookCard', () => {
+  it('says to create a key first when there is no Webhook URL, and that nothing was received', () => {
+    const out = html(<WebhookCard overview={overview()} />);
+    expect(out).toContain('Create a key to get your Webhook URL.');
+    expect(out).toContain('Nothing received yet.');
+  });
+
+  it('shows only the masked Webhook URL and the columns of the last capture', () => {
+    const masked = 'https://api.example.com/api/v1/sheets-addon/webhook/wsn_live_••••••••89abcdef';
+    const out = html(
+      <WebhookCard
+        overview={overview({
+          webhookUrl: masked,
+          lastCapture: {
+            receivedAt: '2026-10-07T09:30:00.000Z',
+            event: 'test',
+            sheetName: 'Leads',
+            rows: 1,
+            fields: ['Name', 'Email'],
+            sample: { Name: 'Ann', Email: 'ann@example.com' },
+          },
+        })}
+      />,
+    );
+    expect(out).toContain('wsn_live_••••••••89abcdef');
+    expect(out).toContain('Test from Leads');
+    expect(out).toContain('1 row');
+    expect(out).toContain('ann@example.com');
+    expect(out).not.toContain('Nothing received yet.');
   });
 });

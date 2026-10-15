@@ -53,7 +53,9 @@ const inboundSchema = z.object({
       participantLid: z.string().optional(),
     })
     .optional(),
-  history: z.object({ direction: z.enum(['in', 'out']) }).optional(),
+  history: z
+    .object({ direction: z.enum(['in', 'out']), contact: z.boolean().optional() })
+    .optional(),
 });
 
 const receiptSchema = z.object({

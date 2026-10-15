@@ -296,7 +296,9 @@
       "media": "{kind} önizlemesi",
       "contactsDenied": "Kişi listesine erişiminiz yok. Kişileri gruplar veya etiketler üzerinden seçin.",
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
-      "previewLabel": "Şablon önizleme"
+      "previewLabel": "Şablon önizleme",
+      "colEmail": "E-posta",
+      "noEmail": "E-posta adresi yok"
     },
     "overrides": {
       "title": "Bu gönderimi doldurun",
@@ -353,6 +355,31 @@
         "name": "Instagram",
         "hint": "Instagram DM kutunuzdaki kişilere mesaj gönderin; şablon onayı gerekmez.",
         "cta": "Instagram toplu gönderimi oluştur"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Son 24 saat içinde Sayfanıza mesaj atan kişilere Messenger mesajı gönderin.",
+        "cta": "Facebook yayını oluştur"
+      },
+      "email": {
+        "name": "E-posta",
+        "hint": "Bağlı bir posta kutusundan mesajı e-posta olarak gönderin, abonelikten çıkma bağlantısıyla.",
+        "cta": "E-posta kampanyası oluştur"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "LINE hesabınızla zaten yazışan kişilere mesaj gönderin.",
+        "cta": "LINE toplu mesajı oluştur"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Viber hesabınızla zaten sohbet eden kişilere mesaj gönderin.",
+        "cta": "Viber toplu gönderimi oluştur"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Resmi Hesabınızın tüm takipçilerine, bir etikete veya seçtiğiniz kullanıcılara toplu mesaj gönderin.",
+        "cta": "WeChat toplu mesajı oluştur"
       }
     }
   }

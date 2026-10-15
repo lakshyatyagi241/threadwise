@@ -8,11 +8,13 @@ import {
   WIZARD_CSV_TTL_DAYS,
   type WizardAudience,
   type WizardCsvReport,
+  type WizardCsvUploadOptions,
 } from '@crm/contracts';
 import { schema, type Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { ConsentIntakeService } from '../../contact-consent';
 import {
   ContactResolverService,
   UTF8_BOM,
@@ -21,7 +23,7 @@ import {
   type UploadedCsv,
 } from '../../crm';
 import { parseWizardCsv } from './wizard-csv-parse';
-import { csvMatchedLines, csvNewRowsWhere } from './wizard-csv-sql';
+import { csvContactsWhere, csvMatchedLines, csvNewRowsWhere } from './wizard-csv-sql';
 
 const { campWizardCsv, campWizardCsvRows } = schema;
 /** Rows per INSERT. */
@@ -30,6 +32,8 @@ const CHUNK = 1000;
 /** Uploads (not pinned by a recurring broadcast) one workspace keeps at a time. */
 const MAX_LIVE_UPLOADS = 20;
 const PREVIEW_ROWS = 10;
+/** Contacts granted per query when the uploader confirmed consent for the file. */
+const CHUNK_GRANTS = 500;
 const ISSUE_ROWS = 50;
 
 const REASON_TEXT = {
@@ -46,6 +50,12 @@ const safe = (v: string): string =>
 export interface CsvUploadRef {
   id: number;
   uuid: string;
+  fileName: string;
+  createdBy: number | null;
+  /** The uploader confirmed they hold consent for every number in the file (BL-170). */
+  consentConfirmed: boolean;
+  consentNoticeText: string | null;
+  consentNoticeVersion: string | null;
 }
 
 /**
@@ -62,9 +72,13 @@ export class WizardCsvService {
   constructor(
     private readonly db: DatabaseService,
     private readonly resolver: ContactResolverService,
+    private readonly intake: ConsentIntakeService,
   ) {}
 
-  async upload(file: UploadedCsv | undefined): Promise<WizardCsvReport> {
+  async upload(
+    file: UploadedCsv | undefined,
+    options: WizardCsvUploadOptions = { consentConfirmed: false },
+  ): Promise<WizardCsvReport> {
     const { orgId, userId } = RequestContextStore.require();
     if (file?.buffer && file.buffer.length > WIZARD_CSV_MAX_BYTES) {
       throw new AppError(
@@ -86,6 +100,13 @@ export class WizardCsvService {
           validCount: parsed.valid,
           duplicateCount: parsed.duplicate,
           invalidCount: parsed.invalid,
+          // The confirmation belongs to the upload (a recurring broadcast reads the same upload again). Without it the file records no
+          // consent; the notice text and version are kept only with the confirmation they explain.
+          consentConfirmed: options.consentConfirmed,
+          consentNoticeText: options.consentConfirmed ? (options.consentNoticeText ?? null) : null,
+          consentNoticeVersion: options.consentConfirmed
+            ? (options.consentNoticeVersion ?? null)
+            : null,
           createdBy: userId,
           expiresAt: sql`now() + ${`${WIZARD_CSV_TTL_DAYS} days`}::interval`,
         })
@@ -169,10 +190,72 @@ export class WizardCsvService {
 
   async find(tx: Tx, orgId: number, uuid: string): Promise<CsvUploadRef | undefined> {
     const res = await tx.execute(
-      sql`SELECT id, uuid FROM camp_wizard_csv WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+      sql`SELECT id, uuid, file_name, created_by, consent_confirmed, consent_notice_text, consent_notice_version
+          FROM camp_wizard_csv WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
     );
-    const r = res.rows[0] as { id: number | string; uuid: string } | undefined;
-    return r ? { id: Number(r.id), uuid: r.uuid } : undefined;
+    const r = res.rows[0] as
+      | {
+          id: number | string;
+          uuid: string;
+          file_name: string;
+          created_by: number | string | null;
+          consent_confirmed: boolean;
+          consent_notice_text: string | null;
+          consent_notice_version: string | null;
+        }
+      | undefined;
+    return r
+      ? {
+          id: Number(r.id),
+          uuid: r.uuid,
+          fileName: r.file_name,
+          createdBy: r.created_by === null ? null : Number(r.created_by),
+          consentConfirmed: r.consent_confirmed,
+          consentNoticeText: r.consent_notice_text,
+          consentNoticeVersion: r.consent_notice_version,
+        }
+      : undefined;
+  }
+
+  /**
+   * Records the consent the uploader confirmed for this file (BL-170, privacy spec 4.3.2): a WhatsApp marketing grant for every
+   * contact one of the file's valid numbers belongs to, with the file, the upload and the notice wording and version they stated as
+   * proof (source `import`). Nothing when the upload has no confirmation. A contact that opted out is never turned back on
+   * (`respectWithdrawn`), and one grant per contact and upload is all that is ever written, so a recurring broadcast that reads the
+   * upload again adds nothing. Returns the number of grants written now.
+   */
+  async grantConsent(tx: Tx, orgId: number, up: CsvUploadRef): Promise<number> {
+    if (!up.consentConfirmed) return 0;
+    let after = 0;
+    let written = 0;
+    for (;;) {
+      const res = await tx.execute(sql`
+        SELECT contacts.id FROM contacts
+        WHERE contacts.org_id = ${orgId} AND ${csvContactsWhere(orgId, up.id)} AND contacts.id > ${after}::bigint
+        ORDER BY contacts.id LIMIT ${CHUNK_GRANTS}`);
+      const ids = (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
+      if (ids.length === 0) break;
+      for (const contactId of ids) {
+        const recorded = await this.intake.grant(tx, orgId, {
+          contactId,
+          channels: ['whatsapp'],
+          source: 'import',
+          proof: {
+            ...(up.consentNoticeText ? { text: up.consentNoticeText } : {}),
+            ...(up.consentNoticeVersion ? { version: up.consentNoticeVersion } : {}),
+          },
+          evidence: { fileName: up.fileName, reference: `wizard_csv:${up.uuid}` },
+          actorUserId: up.createdBy,
+          keyBase: `wizcsv:${up.uuid}:${contactId}`,
+          fallbackNote: up.consentNoticeText
+            ? 'The person uploading confirmed consent for this file, under the notice they stated'
+            : 'The person uploading confirmed consent for this file',
+        });
+        written += recorded.length;
+      }
+      after = ids[ids.length - 1]!;
+    }
+    return written;
   }
 
   /** A recurring broadcast reads its upload on every run, so it is kept (no expiry) once the series exists. */
@@ -226,7 +309,8 @@ export class WizardCsvService {
     uuid: string,
   ): Promise<WizardCsvReport | undefined> {
     const upRes = await tx.execute(sql`
-      SELECT id, uuid, file_name, total_rows, valid_count, duplicate_count, invalid_count, expires_at
+      SELECT id, uuid, file_name, total_rows, valid_count, duplicate_count, invalid_count, expires_at,
+             consent_confirmed, consent_notice_version
       FROM camp_wizard_csv WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`);
     const up = upRes.rows[0] as
       | {
@@ -238,6 +322,8 @@ export class WizardCsvService {
           duplicate_count: number;
           invalid_count: number;
           expires_at: Date | string | null;
+          consent_confirmed: boolean;
+          consent_notice_version: string | null;
         }
       | undefined;
     if (!up) return undefined;
@@ -296,6 +382,8 @@ export class WizardCsvService {
       })),
       issuesTotal: Number(up.duplicate_count) + Number(up.invalid_count),
       expiresAt: up.expires_at ? new Date(up.expires_at).toISOString() : null,
+      consentConfirmed: up.consent_confirmed,
+      consentNoticeVersion: up.consent_notice_version,
     };
   }
 }

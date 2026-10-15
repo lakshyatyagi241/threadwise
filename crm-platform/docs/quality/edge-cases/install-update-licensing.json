@@ -1,0 +1,36 @@
+{
+  "module": "install-update-licensing",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-install-update-licensing-001",
+      "feature": "setup token",
+      "category": "input",
+      "scenario": "a value of 31 (one under SETUP_TOKEN_MIN_LENGTH = 32) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/install-update-licensing/setup.ts"
+    },
+    {
+      "id": "EC-install-update-licensing-002",
+      "feature": "setup password",
+      "category": "input",
+      "scenario": "a value of 11 (one under SETUP_PASSWORD_MIN_LENGTH = 12) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/install-update-licensing/setup.ts"
+    },
+    {
+      "id": "EC-install-update-licensing-003",
+      "feature": "node token",
+      "category": "input",
+      "scenario": "a value of 15 (one under NODE_TOKEN_MIN_LENGTH = 16) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/install-update-licensing/setup.ts"
+    }
+  ]
+}

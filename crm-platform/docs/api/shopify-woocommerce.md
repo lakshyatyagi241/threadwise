@@ -40,6 +40,15 @@ The answer never carries a token, the webhook address or the workspace. The web 
 
 Give Shopify `{APP_URL}/v2/shopify/oauth/callback` as the app's redirect address (the platform setting defaults to it).
 
+## Marketing consent of store customers (BL-167)
+
+Customers are mirrored into contacts through `ContactsService.resolveOrCreateByIdentity` (audit, plan contact cap, default stage; quiet: no
+`contact.created`). A customer's own marketing choice in the store is recorded in the consent ledger only when the merchant switched on the
+store's consent line (`PUT /v2/contact-consent/notices/commerce/shopify:<id>` or `woocommerce:<id>`, the Settings tab). Shopify:
+`email_marketing_consent` / `sms_marketing_consent` with state `subscribed`, or the older `accepts_marketing`. WooCommerce has no such flag; only
+a checkout plugin's customer `meta_data` entry `accepts_marketing` or `marketing_consent` is read. Source `commerce`; the notice's `channels:
+["whatsapp"]` also counts it for WhatsApp. Once per customer and wording version; never over a withdrawal.
+
 ## WooCommerce (TW-ECOM-025, 026, 013)
 
 | Method and path                     | Permission     | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |

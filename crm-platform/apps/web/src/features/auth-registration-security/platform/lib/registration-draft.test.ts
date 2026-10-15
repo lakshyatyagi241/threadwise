@@ -8,6 +8,7 @@ import {
   buildOtpTemplateRequest,
   buildRegistrationPatch,
   isValidLegalLink,
+  parseDomainList,
   patchSize,
   registrationFieldForPath,
   registrationToDraft,
@@ -17,6 +18,70 @@ const base = registrationSettingsSchema.parse({});
 const draftOf = (over: Partial<ReturnType<typeof registrationToDraft>> = {}) => ({
   ...registrationToDraft(base),
   ...over,
+});
+
+describe('sign-up protection settings', () => {
+  it('starts with work email, no temporary mail and the mobile check on', () => {
+    const d = registrationToDraft(base);
+    expect(d).toMatchObject({
+      businessEmailOnly: true,
+      blockDisposableEmail: true,
+      requirePhoneVerification: true,
+      blockedEmailDomains: '',
+    });
+  });
+
+  it('sends only the switches that changed', () => {
+    const { patch } = buildRegistrationPatch(
+      base,
+      draftOf({ businessEmailOnly: false, requirePhoneVerification: false }),
+    );
+    expect(patch).toEqual({ businessEmailOnly: false, requirePhoneVerification: false });
+    expect(registrationSettingsPatchSchema.safeParse(patch).success).toBe(true);
+  });
+
+  it('reads the blocked-domain box one per line, lower-cased and without repeats', () => {
+    expect(parseDomainList('Rival.com\n@other.io, rival.com;  sub.third.co.uk.\n')).toEqual({
+      domains: ['rival.com', 'other.io', 'sub.third.co.uk'],
+      invalid: null,
+    });
+    const { patch } = buildRegistrationPatch(
+      base,
+      draftOf({ blockedEmailDomains: 'A.com\nb.com' }),
+    );
+    expect(patch).toEqual({ blockedEmailDomains: ['a.com', 'b.com'] });
+    expect(registrationSettingsPatchSchema.safeParse(patch).success).toBe(true);
+  });
+
+  it('names the first entry that is not a domain and sends nothing for it', () => {
+    const { patch, problems } = buildRegistrationPatch(
+      base,
+      draftOf({ blockedEmailDomains: 'ok.com\nnot a domain!\nlocalhost' }),
+    );
+    expect(patch).toEqual({});
+    expect(problems.blockedEmailDomains).toEqual({ code: 'domainFormat', entry: 'not' });
+    expect(
+      buildRegistrationPatch(base, draftOf({ blockedEmailDomains: 'localhost' })).problems
+        .blockedEmailDomains,
+    ).toEqual({ code: 'domainFormat', entry: 'localhost' });
+  });
+
+  it('refuses more than 500 domains and sends nothing when the list is unchanged', () => {
+    const many = Array.from({ length: 501 }, (_, i) => `d${i}.com`).join('\n');
+    expect(
+      buildRegistrationPatch(base, draftOf({ blockedEmailDomains: many })).problems
+        .blockedEmailDomains,
+    ).toEqual({ code: 'tooMany', max: 500 });
+    const withList = { ...base, blockedEmailDomains: ['a.com'] };
+    expect(buildRegistrationPatch(withList, { ...registrationToDraft(withList) }).patch).toEqual(
+      {},
+    );
+  });
+
+  it('maps API paths to the new controls', () => {
+    expect(registrationFieldForPath('requirePhoneVerification')).toBe('requirePhoneVerification');
+    expect(registrationFieldForPath('blockedEmailDomains')).toBe('blockedEmailDomains');
+  });
 });
 
 describe('buildRegistrationPatch', () => {

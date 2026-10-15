@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import type { WizardFollowUpStepSummary } from '@crm/contracts';
 import type { CampaignOptionColumns } from './wizard-blank';
 
 /** The SQL of the broadcast wizard: templates, audience sources, the wizard columns of a campaign, series, retries and test sends. */
@@ -427,10 +428,10 @@ export class WizardRepository {
     await tx.execute(sql`
       UPDATE wpcampaigns SET wizard = ${json(v.wizard)}::jsonb, provider = ${v.provider}, device_id = ${v.deviceId},
         ab_testing = ${o.abTesting}, ab_split = ${o.abSplit}, template_id_b = ${o.templateIdB},
-        tracking_enabled = ${o.trackingEnabled}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
+        tracking_enabled = ${o.trackingEnabled}, retry_failed = ${o.retryFailed}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
         throttle_min_sec = ${o.throttleMinSec}, throttle_max_sec = ${o.throttleMaxSec}, batch_size = ${o.batchSize},
         batch_pause_min = ${o.batchPauseMin}, daily_limit = ${o.dailyLimit}, window_start = ${o.windowStart},
-        window_end = ${o.windowEnd},
+        window_end = ${o.windowEnd}, follow_up_count = ${o.followUpCount},
         series_id = ${v.seriesId}::bigint, occurrence_no = ${v.occurrenceNo}::int,
         schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date, send_time = ${v.sendTime}::time,
         timezone = ${v.timezone}, status = ${v.status}, total_recipients = ${v.total},
@@ -529,6 +530,32 @@ export class WizardRepository {
       UPDATE camp_series SET status = ${status},
         ended_at = CASE WHEN ${status === 'cancelled' || status === 'ended'} THEN coalesce(ended_at, now()) ELSE ended_at END
       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Takes the row locks of every run of the series. A worker moving a run from scheduled to running waits for the transaction that
+   * holds them, and then finds the run gone, so a delete never removes a run a worker has just claimed.
+   */
+  async lockSeriesRuns(tx: Tx, orgId: number, seriesId: number): Promise<void> {
+    await tx.execute(
+      sql`SELECT id FROM wpcampaigns WHERE org_id = ${orgId} AND series_id = ${seriesId} ORDER BY id FOR UPDATE`,
+    );
+  }
+
+  /** True once any run of the series has sent a message: its history is then kept. */
+  async seriesHasSent(tx: Tx, orgId: number, seriesId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wp_campaign_contacts r
+      JOIN wpcampaigns c ON c.org_id = r.org_id AND c.id = r.campaign_id
+      WHERE c.org_id = ${orgId} AND c.series_id = ${seriesId}
+        AND (r.status IN ('sent', 'delivered', 'read', 'responded') OR r.sent_at IS NOT NULL
+             OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)
+      LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
+  async deleteSeries(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`DELETE FROM camp_series WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
   async seriesChildren(tx: Tx, orgId: number, seriesId: number): Promise<WizardCampaignRow[]> {
@@ -704,6 +731,53 @@ export class WizardRepository {
       recovered: Number(r.recovered),
       exhausted: Number(r.exhausted),
     };
+  }
+
+  async flowExists(tx: Tx, orgId: number, uuid: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM flows WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
+    return res.rows.length > 0;
+  }
+
+  /** What each follow-up step did for a run: still ahead, sent, delivered, read, flows started, skipped, lapsed, failed. */
+  async followUpTotals(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    steps: number,
+  ): Promise<WizardFollowUpStepSummary[]> {
+    if (steps <= 0) return [];
+    const waiting = await tx.execute(sql`
+      SELECT follow_up_next AS step, count(*)::int AS n FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND follow_up_state = 'active' GROUP BY follow_up_next`);
+    const done = await tx.execute(sql`
+      SELECT step_no AS step,
+        count(*) FILTER (WHERE outcome = 'sent')::int AS sent,
+        count(*) FILTER (WHERE outcome = 'sent' AND delivery_status IN ('delivered', 'read'))::int AS delivered,
+        count(*) FILTER (WHERE outcome = 'sent' AND delivery_status = 'read')::int AS read,
+        count(*) FILTER (WHERE outcome = 'flow_started')::int AS flows,
+        count(*) FILTER (WHERE outcome = 'skipped')::int AS skipped,
+        count(*) FILTER (WHERE outcome = 'lapsed')::int AS lapsed,
+        count(*) FILTER (WHERE outcome = 'failed' OR (outcome = 'sent' AND delivery_status = 'failed'))::int AS failed
+      FROM camp_follow_up_attempts WHERE org_id = ${orgId} AND campaign_id = ${campaignId} GROUP BY step_no`);
+    const w = new Map((waiting.rows as Raw[]).map((r) => [Number(r.step), Number(r.n)]));
+    const d = new Map((done.rows as Raw[]).map((r) => [Number(r.step), r]));
+    return Array.from({ length: steps }, (_, i) => {
+      const step = i + 1;
+      const r = d.get(step);
+      return {
+        step,
+        waiting: w.get(step) ?? 0,
+        sent: Number(r?.sent ?? 0),
+        delivered: Number(r?.delivered ?? 0),
+        read: Number(r?.read ?? 0),
+        flowsStarted: Number(r?.flows ?? 0),
+        skipped: Number(r?.skipped ?? 0),
+        lapsed: Number(r?.lapsed ?? 0),
+        failed: Number(r?.failed ?? 0),
+      };
+    });
   }
 
   async runCounts(tx: Tx, orgId: number, campaignId: number) {

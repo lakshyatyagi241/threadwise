@@ -8,7 +8,18 @@ documents: [nav:store]
 gates:
   permission: record.invoices.read
 routes: [/store/invoices]
-keywords: [store invoices, order invoice, create invoice, invoice from order, sales, paid, overdue, due date, billing]
+keywords:
+  [
+    store invoices,
+    order invoice,
+    create invoice,
+    invoice from order,
+    sales,
+    paid,
+    overdue,
+    due date,
+    billing,
+  ]
 ---
 
 ## What it is for

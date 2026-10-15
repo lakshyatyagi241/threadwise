@@ -54,6 +54,10 @@ Add-on and web page (this session):
 | TW-EXT-015 | backend-done        | `GET /api/v1/sheets-addon/health`. Difference 7.                                                                                                                                                   |
 | TW-EXT-016 | blocked             | Sending a message from a sheet is not in Reference; needs an owner decision (see the inventory).                                                                                                   |
 
+## Webhook trigger (TW-EXT-017, new in this port)
+
+Added at the owner's request, modelled on the Pabbly Connect Google Sheets webhook add-on; Reference has no such mode, and every Reference behaviour above is unchanged (additive only). Built: the contract (`extSheetsWebhookRequestSchema`, capture, `webhookUrl`), the route `POST /api/v1/sheets-addon/webhook[/:key]` with `SheetsWebhookService`, the setup page card, help guide and 21 locales, the Initial Setup dialog and triggers in the add-on, unit tests (add-on helpers run in a Node `vm`, contract and capture, URL masking, web card) and an e2e spec (`sheets-webhook.e2e.spec.ts`). **Not run:** the API compile and the e2e spec (the workspace install fails on a blocked GitHub-hosted dependency in this environment; no Docker for testcontainers), the Apps Script triggers and `createAddonMenu` in a real Google Sheet, and the Playwright twin run.
+
 ## Differences from Reference
 
 1. **The key is created through the add-on's Marketplace install and a role permission.** Reference let any signed-in user create one with no install and no permission. Here: the add-on must be installed in the workspace, the role must hold `app.google-sheets.use`, and the plan feature `marketplace` must be on. (intended: the design note `docs/specs/marketplace-extension-listings.md`.)

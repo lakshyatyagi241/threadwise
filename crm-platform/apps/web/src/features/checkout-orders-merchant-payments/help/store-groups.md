@@ -8,7 +8,18 @@ documents: [nav:store]
 gates:
   permission: store.groups.read
 routes: [/store/groups]
-keywords: [whatsapp groups, group code, ordering code, ordering link, wa.me, group order, mention, bot number, group directory]
+keywords:
+  [
+    whatsapp groups,
+    group code,
+    ordering code,
+    ordering link,
+    wa.me,
+    group order,
+    mention,
+    bot number,
+    group directory,
+  ]
 ---
 
 ## What it is for

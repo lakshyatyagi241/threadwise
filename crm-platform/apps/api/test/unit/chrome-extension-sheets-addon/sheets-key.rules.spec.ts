@@ -6,7 +6,9 @@ import {
   hashSheetsKey,
   looksLikeSheetsKey,
   maskedSheetsKey,
+  maskedSheetsWebhookUrl,
   sheetsKeySuffix,
+  sheetsWebhookUrl,
 } from '../../../src/modules/chrome-extension-sheets-addon/sheets-key.rules';
 
 /** TW-EXT-001, 004: what a key looks like, what is stored of it, and how a bearer header is read. */
@@ -57,5 +59,23 @@ describe('sheets key', () => {
     expect(bearerToken('Bearer ')).toBeNull();
     expect(bearerToken('Basic abc')).toBeNull();
     expect(bearerToken(undefined)).toBeNull();
+  });
+});
+
+describe('the Webhook URL', () => {
+  const key = generateSheetsKey();
+
+  it('is the API origin, the webhook path and the key, with no doubled slash', () => {
+    expect(sheetsWebhookUrl('https://api.example.com/', key)).toBe(
+      `https://api.example.com/api/v1/sheets-addon/webhook/${key}`,
+    );
+  });
+
+  it('is masked to the last 8 characters after the one-time display', () => {
+    const masked = maskedSheetsWebhookUrl('https://api.example.com', sheetsKeySuffix(key));
+    expect(masked).toBe(
+      `https://api.example.com/api/v1/sheets-addon/webhook/wsn_live_••••••••${sheetsKeySuffix(key)}`,
+    );
+    expect(masked).not.toContain(key);
   });
 });

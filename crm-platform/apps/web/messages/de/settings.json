@@ -310,6 +310,11 @@
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
       },
+      "web": {
+        "label": "Website-Chat",
+        "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
+        "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
+      },
       "message-logs": {
         "label": "Nachrichtenprotokolle",
         "description": "Exportieren Sie das Zustellprotokoll Ihrer Nachrichten bis zu einem Jahr rückwirkend als Datei, die an Ihre E-Mail-Adresse gesendet wird.",
@@ -319,11 +324,6 @@
         "label": "Abonnements",
         "description": "Was sich verlängert, bis wann bezahlt ist, und Kündigung.",
         "keywords": "Abonnement, Verlängerung, automatische Verlängerung, kündigen, Lastschrift, fehlgeschlagene Zahlung, Zahlungen"
-      },
-      "web": {
-        "label": "Website-Chat",
-        "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
-        "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
       },
       "lead-scoring": {
         "label": "KI-Lead-Scoring",
@@ -359,6 +359,21 @@
         "label": "Teamleistung",
         "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
         "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
+      },
+      "contact-assignment": {
+        "label": "Kontaktzuweisung",
+        "description": "Neue Kontakte und Deals automatisch der richtigen Person zuweisen, ohne Personen im Urlaub.",
+        "keywords": "zuweisen, Inhaber, Round Robin, neuer Kontakt, neuer Deal, Abwesenheit, Urlaub, Lead-Routing"
+      },
+      "privacy-requests": {
+        "label": "Datenanfragen",
+        "description": "Beantworten Sie Personen, die wissen wollen, was Sie über sie speichern: Identitätsprüfung, Export, Löschung mit Vorschau und ein Nachweis zum Aufbewahren.",
+        "keywords": "Datenschutz, DSGVO, GDPR, Datenanfrage, DSR, Auskunftsersuchen, Daten exportieren, löschen, Recht auf Vergessenwerden, personenbezogene Daten löschen, Rechtssperre"
+      },
+      "compliance-center": {
+        "label": "Compliance-Center",
+        "description": "Werkzeuge, die Sie bei Ihren Datenschutzpflichten unterstützen: die Gesetze, denen Sie unterliegen, Datenschutzkontakte, Hinweise und Links, Unterauftragsverarbeiter, Ruhezeiten und eine Checkliste dessen, was vorhanden ist.",
+        "keywords": "compliance, datenschutz, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, datenschutzbeauftragter, beschwerdebeauftragter, unterauftragsverarbeiter, dpa, auftragsverarbeitungsvertrag, nutzungsbedingungen, datenschutzerklärung, ruhezeiten, do not call, checkliste, kinder"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

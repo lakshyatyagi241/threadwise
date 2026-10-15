@@ -1,5 +1,8 @@
 'use client';
 
+import { ButtonIcon } from '../../button-icon';
+import { ButtonActionPicker } from '../../button-action-picker';
+import { buttonActionOf, buttonActionPatch } from '../../../lib/button-actions';
 import {
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
@@ -42,7 +45,15 @@ function setStringOption(options: unknown, i: number, value: string): string[] {
   return asArray(options).map((v, j) => (j === i ? value : String(v ?? '')));
 }
 
-export function ButtonsForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+export function ButtonsForm({
+  node,
+  data: d,
+  set,
+  setMany,
+  env,
+  addOption,
+  removeOption,
+}: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   return (
     <>
@@ -52,13 +63,36 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
       </Field>
       <Field label={t('buttonsOptions')} hint={t('buttonsOptionsHint', { max: 3 })}>
         {asArray(d.options).map((o, i) => (
-          <OptionRow
-            key={`${node.id}-opt-${i}`}
-            index={i}
-            value={o}
-            onChange={(v) => set('options', setStringOption(d.options, i, v))}
-            onRemove={() => removeOption(i)}
-          />
+          <div key={`${node.id}-opt-${i}`}>
+            <OptionRow
+              index={i}
+              value={o}
+              onChange={(v) => set('options', setStringOption(d.options, i, v))}
+              onRemove={() => removeOption(i)}
+            />
+            <div className="-mt-1 mb-2 ps-6">
+              <ButtonIcon
+                value={String(asArray(d.optionIcons)[i] ?? '')}
+                onChange={(v) =>
+                  set(
+                    'optionIcons',
+                    asArray(d.options).map((_, j) =>
+                      j === i ? v : String(asArray(d.optionIcons)[j] ?? ''),
+                    ),
+                  )
+                }
+              />
+            </div>
+            <div className="mb-3 ps-6">
+              <ButtonActionPicker
+                value={buttonActionOf(d, i)}
+                ctx={env.ctx}
+                loading={env.loading}
+                flowId={env.flowId}
+                onChange={(next) => setMany(buttonActionPatch(d, i, next))}
+              />
+            </div>
+          </div>
         ))}
         <AddLink onClick={addOption}>{t('addButton')}</AddLink>
       </Field>
@@ -182,6 +216,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
+  const ts = useTranslations('flb.builder.simple.editors');
   const tf = useFlb();
   const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
@@ -212,6 +247,13 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
                 options={FLB_DATE_FORMATS.map((v) => ({ v, l: dateFormatLabel(tf, v) }))}
                 onChange={(v) => set('dateFormat', v)}
               />
+            </Field>
+          ) : null}
+          {flbCleanAskInputType(d.validate) === 'phone' ? (
+            <Field hint={ts('ask.verifyOtpHint')}>
+              <Check checked={d.verifyOtp === true} onChange={(v) => set('verifyOtp', v)}>
+                {ts('ask.verifyOtp')}
+              </Check>
             </Field>
           ) : null}
           <Field label={t('askWrongLabel')} hint={t('askWrongHint')}>

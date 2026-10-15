@@ -18,11 +18,14 @@ import {
   wabooMigrationRunsQuerySchema,
   type CreateWabooMigrationBatchInput,
   type CreateWabooMigrationRunInput,
+  type WabooMigrationRunnerStatus,
   type WabooMigrationRunsQuery,
 } from '@crm/contracts';
 import { ActorKinds } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
+import { runnerMode } from './runner';
+import { RunnerJobs } from './runner-jobs';
 import { WabooMigrationService } from './waboo-migration.service';
 
 /** The Waboo migration panel API. Super admins only, reads included: a run names an organization and its database. */
@@ -32,7 +35,28 @@ import { WabooMigrationService } from './waboo-migration.service';
 @OperatorRoles('super_admin')
 @Controller({ path: 'platform/waboo-migration', version: '2' })
 export class WabooMigrationController {
-  constructor(private readonly runs: WabooMigrationService) {}
+  constructor(
+    private readonly runs: WabooMigrationService,
+    private readonly runner: RunnerJobs,
+  ) {}
+
+  @Get('runner')
+  @ApiOperation({
+    summary: 'Is a runner agent connected?',
+    description:
+      'mode "remote": runs are executed by an agent on a VPN machine (online = heard from in the last minute). mode "local": the worker starts the pipeline itself.',
+  })
+  async runnerStatus(): Promise<WabooMigrationRunnerStatus> {
+    if (runnerMode(process.env) === 'local')
+      return { mode: 'local', online: true, name: null, lastSeenAt: null };
+    const last = await this.runner.lastRunner();
+    return {
+      mode: 'remote',
+      online: last?.online ?? false,
+      name: last?.name ?? null,
+      lastSeenAt: last?.lastSeenAt.toISOString() ?? null,
+    };
+  }
 
   @Post('runs')
   @ApiOperation({

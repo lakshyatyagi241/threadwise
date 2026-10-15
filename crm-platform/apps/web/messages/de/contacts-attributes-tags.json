@@ -187,7 +187,29 @@
       "ownerFormer": "Ehemaliges Mitglied",
       "reassignView": "Kontakte von {name} neu zuweisen...",
       "smsNamed": "SMS an {name}",
-      "noSms": "Keine Telefonnummer für SMS"
+      "noSms": "Keine Telefonnummer für SMS",
+      "pqlLabel": "Kontakte in normaler Sprache suchen",
+      "pqlAsk": "Fragen",
+      "pqlAsking": "Frage läuft...",
+      "pqlIgnored": "Nicht verstanden: {parts}",
+      "pqlNothing": "Aus dieser Suche ließ sich kein Filter bilden.",
+      "pqlFailed": "Die Suche in normaler Sprache ist gerade nicht verfügbar. Bitte erneut versuchen.",
+      "filter": "Filter",
+      "filterAi": "Mit KI filtern",
+      "filterAiHint": "Beschreiben Sie, wen Sie suchen",
+      "filterAdvanced": "Erweiterten Filter hinzufügen",
+      "quickFilters": "Schnellfilter",
+      "sortButton": "Sortieren",
+      "back": "Zurück",
+      "pqlPromptPlaceholder": "Beschreiben Sie die gewünschten Kontakte...",
+      "pqlTry": "Eines davon ausprobieren",
+      "pqlExample2": "30 Tage nicht aktiv",
+      "pqlExample3": "In den letzten 7 Tagen erstellt",
+      "clearFilter": "Filter löschen",
+      "conditionsChip": "Bedingungen: {count}",
+      "pqlExampleTag": "Kontakte mit dem Tag {tag}, 30 Tage nicht aktiv",
+      "pqlExampleStage": "Kontakte in {stage}, in den letzten 7 Tagen erstellt",
+      "pqlExampleNoOwner": "Kontakte ohne Besitzer"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Tag hinzufügen oder auswählen...",
       "addLabel": "Tag-Name",
       "add": "Tag hinzufügen",
-      "failed": "Der Tag konnte nicht geändert werden. Versuchen Sie es erneut."
+      "failed": "Der Tag konnte nicht geändert werden. Versuchen Sie es erneut.",
+      "quickPlaceholder": "Tag suchen oder erstellen",
+      "create": "Tag „{name}“ erstellen",
+      "noMatch": "Keine passenden Tags",
+      "quickHint": "Mehrere Tags wählen oder einen Namen tippen und mit Enter einen neuen Tag erstellen.",
+      "quickHintPick": "Mehrere Tags aus der Liste wählen."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Quelle",
-        "consent": "Marketing-Einverständnis (ja / nein)"
+        "consent": "Marketing-Einverständnis (ja / nein)",
+        "consentSms": "SMS-Marketing-Einwilligung (ja / nein)",
+        "consentEmail": "E-Mail-Marketing-Einwilligung (ja / nein)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Alle auswählen",
         "reorder": "Ziehen, um Spalten neu anzuordnen",
         "remove": "{name} entfernen"
+      },
+      "presets": {
+        "myContacts": "Meine Kontakte",
+        "newThisWeek": "Neu diese Woche",
+        "newLastWeek": "Neu letzte Woche",
+        "recentlyCreated": "Kürzlich erstellt",
+        "recentlyModified": "Kürzlich geändert",
+        "recentlyImported": "Kürzlich importiert",
+        "neverContacted": "Nie kontaktiert",
+        "needsFollowUp": "Nachfassen nötig",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "unsubscribed": "Abgemeldet"
       }
+    },
+    "erase": {
+      "scope": "Das Löschen eines Kontakts löscht auch seine Gespräche, Nachrichten, Medien, Dateien, Anrufaufzeichnungen und Anrufprotokolle. Leads, Deals, Aufgaben und Rechnungen bleiben erhalten.",
+      "scopeMany": "Das Löschen von Kontakten löscht auch deren Gespräche, Nachrichten, Medien, Dateien, Anrufaufzeichnungen und Anrufprotokolle. Leads, Deals, Aufgaben und Rechnungen bleiben erhalten.",
+      "keepHistory": "Gesprächsverlauf ohne die Identität der Person behalten",
+      "keepHistoryHint": "Die Gespräche bleiben für Ihre Unterlagen erhalten, verweisen aber nicht mehr auf die Person."
     }
   }
 }

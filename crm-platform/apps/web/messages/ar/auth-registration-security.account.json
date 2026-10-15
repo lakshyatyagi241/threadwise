@@ -552,12 +552,13 @@
             "storefront_builder": "منشئ المتجر",
             "invoicing": "الفوترة",
             "forms_and_links": "النماذج والروابط",
-            "extra_channels": "تيليجرام وفيسبوك وإنستغرام",
+            "extra_channels": "تيليجرام وفيسبوك وإنستغرام وLINE وViber وWeChat",
             "form_builder": "النماذج",
             "waba_groups": "مجموعات واتساب",
             "sms": "SMS",
             "help_agent": "المساعد الذكي",
-            "email_channel": "قناة البريد الإلكتروني (Gmail)"
+            "email_channel": "قناة البريد الإلكتروني (Gmail)",
+            "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

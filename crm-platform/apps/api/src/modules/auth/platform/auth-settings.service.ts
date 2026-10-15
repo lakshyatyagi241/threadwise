@@ -233,7 +233,7 @@ export class AuthSettingsService {
   }
 
   private projectPages(doc: PagesDoc): AuthPagesResponse {
-    const variant = doc.variant && doc.variant >= 1 && doc.variant <= 5 ? doc.variant : 1;
+    const variant = doc.variant && doc.variant >= 1 && doc.variant <= 6 ? doc.variant : 6;
     return {
       defaults: {
         login: PAGE_DEFAULTS.login,
@@ -383,6 +383,8 @@ export class AuthSettingsService {
       trialDays: registration.trialDays,
       rememberMeEnabled: security.rememberMeEnabled,
       otp: { enabled: (await this.otp.statusFor(registration)).active },
+      businessEmailOnly: registration.businessEmailOnly,
+      phoneRequired: registration.requirePhoneVerification,
       captcha: captcha ? { version: captcha.version, siteKey: captcha.siteKey } : null,
       social: { google: google !== null, facebook: facebook !== null },
       defaultCountryIso: registration.defaultCountryIso,

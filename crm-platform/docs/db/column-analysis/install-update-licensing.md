@@ -1,0 +1,26 @@
+# install-update-licensing — column analysis
+
+Tables: 1 · Columns: 10. Generated from the live schema (all migrations applied). Legend and method: [README](README.md).
+
+## `platform_setup`
+
+**Purpose:** Platform-wide singleton (id = 1): the first-run installer lock and progress (current step, first operator/org, completion version).
+
+**Linked to:** install-update-licensing setup.repository.ts + setup.service.ts (installer wizard, steps 0-6); web setup wizard; Reference install flag file replaced by this row.
+
+**Facts:** RLS on+forced · plain · created in `20261003090000_inst_platform_setup.sql` · Drizzle `packages/db/src/schema/install-update-licensing/tables.ts`
+
+**Design notes:** No org_id and privileged-only RLS. id is smallint with CHECK id = 1. completed_at/completed_version kept in step by CHECK. app_url is write-only.
+
+| Column | Type · null · default | Purpose | Allowed values / format | Best practice | Linked features | Usage | Useful | Evidence |
+|---|---|---|---|---|---|---|---|---|
+| `id` | `smallint` NOT NULL default `1` | Singleton key: the install wizard state is exactly one row per platform install. | smallint, always 1 (CHECK id = 1, PK) so a second row cannot exist <br>**DB:** `CHECK: CHECK ((id = 1))` | Good singleton pattern. Not a tenant row, so no org_id and no RLS; keep writes limited to the privileged install flow. | Install/setup wizard (install-update-licensing; Reference installer) | USED | YES | singleton guard for platform_setup rows read/written by the setup wizard |
+| `completed_at` | `timestamp with time zone` null | When setup finished; its presence locks the installer. | timestamptz UTC; NULL while installing; set with completed_version (CHECK both null or both set). <br>**DB:** `CHECK: CHECK (((completed_at IS NULL) = (completed_version IS NULL)))` | Good. | setup.repository.ts:64,99 (complete()), contracts setup.ts. | USED | YES | UPDATE ... SET completed_at = now() in setup.repository.ts:99. |
+| `completed_version` | `text` null | Application version that completed the install. | Semver-like text; NULL until completed. <br>**DB:** `CHECK: CHECK (((completed_at IS NULL) = (completed_version IS NULL)))` | Good (CHECK pairs it with completed_at). | setup.repository.ts:99 write, status read at :41. | USED | YES | Written by complete() and returned in the status read. |
+| `first_operator_id` | `bigint` null | The super-admin platform operator created by setup. | bigint platform_operators.id; NULL until step 4; ON DELETE SET NULL. <br>**DB:** `FOREIGN KEY (first_operator_id) REFERENCES platform_operators(id) ON DELETE SET NULL` | Good; complete() requires it NOT NULL. | setup.repository.ts:64,110,128. | USED | YES | linkProvisioned() writes it; complete() requires it. |
+| `first_org_id` | `bigint` null | The first workspace created by setup. | bigint organizations.id; NULL until step 4; ON DELETE SET NULL. <br>**DB:** `FOREIGN KEY (first_org_id) REFERENCES organizations(id) ON DELETE SET NULL` | Good. | setup.repository.ts:110,128 (summary join). | USED | YES | Joined in setup.repository.ts summary(). |
+| `app_url` | `text` null | Public URL of the installed app entered in the wizard. | URL text; NULL if not given (falls back to WEB_APP_URL env). | Write-only: nothing reads it back (links use env). Either use it for outbound links or drop. | setup.repository.ts linkProvisioned() writes it; setup.service.ts:360. | PARTIAL | MAYBE | Written in setup.repository.ts linkProvisioned(); no SELECT of app_url in apps/api. |
+| `created_at` | `timestamp with time zone` NOT NULL default `now()` | When the row was inserted (audit/sort key). | timestamptz, default now(), stored UTC, ISO-8601 in API; immutable after insert | Correct type (timestamptz) and default. Never update it. Index only if used for ordering/filtering. | Lists/sorting and audit in api:modules/install-update-licensing | DB_ONLY | YES | populated by DB default only; no app query names it (still valuable as audit) |
+| `updated_at` | `timestamp with time zone` NOT NULL default `now()` | When the row was last modified. | timestamptz, default now(), set by touch_row() trigger on every UPDATE; ISO-8601 UTC | Correct: maintained by trigger so no app can forget. Do not set it from the app. | Sync/cache/'last changed' display in api:modules/install-update-licensing | DB_ONLY | YES | trigger-maintained, no app read found |
+| `row_version` | `integer` NOT NULL default `1` | Optimistic-lock counter; stops two editors silently overwriting each other. | integer starts at 1, +1 per UPDATE by touch_row() trigger; client sends it back (If-Match / expectedVersion), mismatch => ROW_VERSION_CONFLICT | Correct pattern. Only useful on tables edited from UI/API; on append-only/system tables it is dead weight. | Edit screens/PATCH endpoints in api:modules/install-update-licensing | DB_ONLY | MAYBE | trigger bumps it but no app compares it: optimistic locking not wired for this table |
+| `run_step` | `smallint` NOT NULL default `0` | Highest wizard step completed (0-6) so the order is enforced server-side. | smallint 0..6 (CHECK), default 0; only moves forward (GREATEST). <br>**DB:** `CHECK: CHECK (((run_step >= 0) AND (run_step <= 6)))` | Good. | setup.repository.ts:76,110,99; contracts setup.ts runStep. | USED | YES | advance() uses GREATEST(run_step, step) in setup.repository.ts:77. |

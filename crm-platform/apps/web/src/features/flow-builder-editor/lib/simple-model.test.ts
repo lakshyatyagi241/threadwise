@@ -11,6 +11,7 @@ import {
   insertStep,
   moveStep,
   newStep,
+  optionCount,
   problems,
   removeGroup,
   removeJourney,
@@ -631,10 +632,291 @@ describe('the Answer from FAQ step in the Simple builder', () => {
 describe('steps per channel', () => {
   it('a website chat bot offers only what the widget can show', () => {
     const keys = stepKindsFor('web').map((k) => k.type);
-    expect(new Set(keys)).toEqual(new Set(['message', 'buttons', 'ask', 'delay']));
+    expect(new Set(keys)).toEqual(
+      new Set([
+        'message',
+        'media',
+        'buttons',
+        'carousel',
+        'condition',
+        'ask',
+        'ask_file',
+        'delay',
+        'cta',
+      ]),
+    );
   });
 
-  it('a WhatsApp bot keeps every step', () => {
-    expect(stepKindsFor('chat')).toEqual(STEP_KINDS);
+  it('a WhatsApp bot keeps every step except the website-only carousel', () => {
+    expect(stepKindsFor('chat')).toEqual(STEP_KINDS.filter((k) => k.type !== 'carousel'));
+  });
+});
+
+describe('the carousel step', () => {
+  const two = (extra: Record<string, unknown> = {}) => ({
+    text: 'Pick one',
+    cards: [
+      {
+        image: '',
+        title: 'Pune',
+        text: 'Open',
+        buttons: [
+          { type: 'reply', label: 'Book Pune', value: '' },
+          { type: 'url', label: 'Details', value: 'https://x.test' },
+        ],
+      },
+      {
+        image: '',
+        title: 'Mumbai',
+        text: '',
+        buttons: [{ type: 'reply', label: 'Book Mumbai', value: '' }],
+      },
+    ],
+    ...extra,
+  });
+
+  it('starts with one card and one reply, so one exit', () => {
+    const s = newStep('carousel', []);
+    expect(s.links).toEqual([null]);
+    expect(optionCount(s)).toBe(1);
+  });
+
+  it('has one exit per reply button, in card order, not per card or per link button', () => {
+    expect(optionCount({ type: 'carousel', data: two() })).toBe(2);
+  });
+
+  it('keeps its exits in step with the replies when buttons change', () => {
+    let d = emptyDoc();
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, { data: two() });
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toHaveLength(2);
+  });
+
+  it('round-trips through the graph: each reply exit is wired to its own step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, { data: two() });
+    const a = newStep('message', allSteps(d));
+    d = addJourney(d, a);
+    const b = newStep('message', allSteps(d));
+    d = addJourney(d, b);
+    d = updateStep(d, c.id, { links: [a.id, b.id] });
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', a.id],
+      ['p1', b.id],
+    ]);
+  });
+
+  it('asks for a card with a title, and for a name and an address on every button', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: add at least one card and give every card a title.',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: '' }] }],
+      },
+    });
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: give every button a name, and a link, number or address where it opens one.',
+    ]);
+  });
+});
+
+describe('the condition step', () => {
+  it('has two exits, Yes then No, wired to the handles the runtime reads', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('condition', []);
+    expect(c.links).toEqual([null, null]);
+    expect(optionCount(c)).toBe(2);
+    d = insertStep(d, 0, 0, c);
+    const a = newStep('message', allSteps(d));
+    d = addJourney(d, a);
+    const b = newStep('message', allSteps(d));
+    d = addJourney(d, b);
+    d = updateStep(d, c.id, { links: [a.id, b.id] });
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['yes', a.id],
+      ['no', b.id],
+    ]);
+    // and back: a saved Yes/No condition opens with both exits wired
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(allSteps(back.doc).find((x) => x.id === c.id)!.links).toEqual([a.id, b.id]);
+  });
+
+  it('asks for complete rules, and takes nested AND / OR groups', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('condition', []);
+    d = insertStep(d, 0, 0, c);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: finish the rules of the condition (a variable and a value in each).',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        conditionGroup: {
+          op: 'or',
+          items: [
+            { variable: 'plan', operator: 'equals', value: 'pro' },
+            { op: 'and', items: [{ variable: 'age', operator: 'greater_than', value: '30' }] },
+          ],
+        },
+      },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+});
+
+describe('a button that hands the visitor to a person', () => {
+  it('counts as an exit of a carousel, and needs a team, but no step after it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          { title: 'Billing', buttons: [{ type: 'agent', label: 'Talk to billing', team: '' }] },
+        ],
+      },
+    });
+    expect(optionCount(allSteps(d)[0]!)).toBe(1);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: choose the team the conversation goes to.',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          {
+            title: 'Billing',
+            buttons: [{ type: 'agent', label: 'Talk to billing', team: 'team-1' }],
+          },
+        ],
+      },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+
+  it('on a quick reply, is kept per button and needs a team', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const b = newStep('buttons', []);
+    d = insertStep(d, 0, 0, b);
+    d = updateStep(d, b.id, {
+      data: {
+        prompt: 'p',
+        options: ['Pricing', 'Talk to a person'],
+        handoffs: { '1': { team: '', message: '' } },
+      },
+    });
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: choose the team the conversation goes to.',
+    ]);
+    d = updateStep(d, b.id, {
+      data: { handoffs: { '1': { team: 'team-1', message: 'Asked for a person' } } },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+});
+
+describe('API call and JS function steps (the Actions list)', () => {
+  const docWith = (type: 'api_library' | 'code') => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    const a = newStep(type, [m]);
+    const after = newStep('message', [m, a]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, a);
+    d = insertStep(d, 0, 2, after);
+    return { d, a };
+  };
+
+  it('are offered in the + menu on WhatsApp and not on a website chat bot', () => {
+    expect(stepKindsFor('chat').map((k) => k.key)).toEqual(
+      expect.arrayContaining(['api-library', 'code']),
+    );
+    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('api-library');
+    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('code');
+  });
+
+  it('start with their own result name, never one another step already saves', () => {
+    const first = newStep('api_library', []);
+    const second = newStep('api_library', [first]);
+    expect(first.data.save).toBe('api_response_1');
+    expect(second.data.save).toBe('api_response_2');
+    expect(newStep('code', [first]).data.save).toBe('result_1');
+  });
+
+  it('say what is missing: an API to call, code to run', () => {
+    const { d } = docWith('api_library');
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: choose the API to call.',
+    );
+    const c = docWith('code');
+    c.d = updateStep(c.d, c.a.id, { data: { code: '' } });
+    expect(problems(c.d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: write the code to run.',
+    );
+  });
+
+  it('an API step carries on to the next step on success and on error, and reads back as a plain step', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    const from = g.flowEdges.filter((e) => e.source === a.id);
+    expect(from.map((e) => e.sourceHandle).sort()).toEqual(['error', 'success']);
+    expect(new Set(from.map((e) => e.target)).size).toBe(1);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok)
+      expect(back.doc.journeys[0]!.steps.map((s) => s.type)).toEqual([
+        'message',
+        'api_library',
+        'message',
+      ]);
+  });
+
+  it('an API step whose error ends the flow keeps doing so after a save from the Simple builder', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    g.flowEdges = g.flowEdges.filter((e) => !(e.source === a.id && e.sourceHandle === 'error'));
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (!back.ok) return;
+    const again = toGraph(back.doc);
+    expect(again.flowEdges.filter((e) => e.source === a.id).map((e) => e.sourceHandle)).toEqual([
+      'success',
+    ]);
+  });
+
+  it('a graph whose API error wire goes elsewhere is left to the Advanced builder', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    const stray = g.flowEdges.find((e) => e.source === a.id && e.sourceHandle === 'error')!;
+    stray.target = g.flowNodes[0]!.id;
+    expect(toSimple(g).ok).toBe(false);
+  });
+
+  it('a JS function step is a plain step with one exit', () => {
+    const { d, a } = docWith('code');
+    const g = toGraph(d);
+    expect(g.flowEdges.filter((e) => e.source === a.id).map((e) => e.sourceHandle)).toEqual([
+      'out',
+    ]);
+    expect(toSimple(g).ok).toBe(true);
   });
 });

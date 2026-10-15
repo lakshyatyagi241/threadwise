@@ -186,8 +186,8 @@ export const IMPERSONATION_MAX_MINUTES = 60;
 export const startImpersonationRequestSchema = z.object({
   /** Why the operator is entering the workspace; kept in the audit trail. */
   reason: z.string().trim().min(8).max(500),
-  /** Read-only: the session can look but every write is refused. */
-  readOnly: z.boolean().default(false),
+  /** Read-only unless the super admin explicitly asks for write access: the session can look but every write is refused. */
+  readOnly: z.boolean().default(true),
 });
 export type StartImpersonationRequest = z.infer<typeof startImpersonationRequestSchema>;
 

@@ -28,6 +28,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { LeadEventsRepository, type LeadEventRow } from './lead-events.repository';
 import { LeadIngestService } from './lead-ingest.service';
+import { leadConsentFromBody } from './lead-consent';
 import type { NormalisedLead } from './lead-ingest.port';
 import {
   MAPPABLE_FIELD_TYPES,
@@ -358,10 +359,13 @@ export class LeadSourcesService {
     const source = await this.db.tx((tx) => this.mustFind(tx, ctx.orgId, uuid));
     if (source.status !== 'active') throw sourcePaused();
     const body = input.payload ?? sampleBody(source);
+    // The test reads the same `consent` the real door reads, so it shows the lead exactly as it will arrive; a test lead never grants.
+    const consent = leadConsentFromBody(body);
     const lead: NormalisedLead = {
       externalId: `test-${randomUUID()}`,
       receivedAt: new Date().toISOString(),
       fields: flattenPayload(body),
+      ...(consent ? { consent } : {}),
       raw: body,
     };
     const outcome = await this.ingest.process(ctx.orgId, source.id, lead, { isTest: true });

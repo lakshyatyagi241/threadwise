@@ -1,0 +1,26 @@
+{
+  "module": "marketplace",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-marketplace-001",
+      "feature": "market trial days",
+      "category": "input",
+      "scenario": "a value of 91 (one past MARKET_TRIAL_DAYS_MAX = 90) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/marketplace/pricing.ts"
+    },
+    {
+      "id": "EC-marketplace-002",
+      "feature": "market comp",
+      "category": "input",
+      "scenario": "a value of 37 (one past MARKET_COMP_MAX_MONTHS = 36) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/marketplace/pricing.ts"
+    }
+  ]
+}

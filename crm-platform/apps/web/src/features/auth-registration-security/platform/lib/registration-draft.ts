@@ -23,10 +23,37 @@ export const TRIAL_DAYS = { min: 0, max: 365 } as const;
 /** `<kind>:<id>`, the reference of a sender in the OTP sender registry. */
 export const SENDER_PATTERN = /^(waba|twilio|device|dev):[a-z0-9]{1,24}$/;
 export const COUNTRY_PATTERN = /^[A-Za-z]{2}$/;
+/** A bare domain (`rival.com`, `mail.rival.co.uk`): labels of letters, digits and hyphens, at least one dot. */
+export const DOMAIN_PATTERN =
+  /^(?=.{3,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/;
+export const BLOCKED_DOMAINS_MAX = 500;
+
+/**
+ * The blocked-domain box is one domain per line (commas and spaces also separate). Each is lower-cased, a
+ * leading `@` (as in `@rival.com`) and a trailing dot are tolerated, and repeats are dropped.
+ */
+export function parseDomainList(text: string): { domains: string[]; invalid: string | null } {
+  const seen = new Set<string>();
+  const domains: string[] = [];
+  let invalid: string | null = null;
+  for (const raw of text.split(/[\s,;]+/)) {
+    const d = raw.trim().toLowerCase().replace(/^@/, '').replace(/\.$/, '');
+    if (!d || seen.has(d)) continue;
+    seen.add(d);
+    if (!DOMAIN_PATTERN.test(d)) invalid ??= raw.trim();
+    domains.push(d);
+  }
+  return { domains, invalid };
+}
 
 export interface RegistrationDraft {
   publicRegistration: boolean;
   emailVerification: RegistrationSettings['emailVerification'];
+  businessEmailOnly: boolean;
+  blockDisposableEmail: boolean;
+  requirePhoneVerification: boolean;
+  /** One domain per line. */
+  blockedEmailDomains: string;
   defaultPlanId: string;
   trialDays: string;
   defaultTimezone: string;
@@ -52,6 +79,7 @@ export type RegistrationField =
   | 'termsUrl'
   | 'privacyUrl'
   | 'cookiesUrl'
+  | 'blockedEmailDomains'
   | 'otpSender'
   | OtpKnob;
 
@@ -62,7 +90,9 @@ export type RegistrationProblem =
   | { code: 'tooLong'; max: number }
   | { code: 'senderFormat' }
   | { code: 'senderRequired' }
-  | { code: 'countryFormat' };
+  | { code: 'countryFormat' }
+  | { code: 'domainFormat'; entry: string }
+  | { code: 'tooMany'; max: number };
 export type RegistrationProblems = Partial<Record<RegistrationField, RegistrationProblem>>;
 
 /** The OTP part of the form (what a template action returns and the draft takes back). */
@@ -86,6 +116,10 @@ export function registrationToDraft(s: RegistrationSettings): RegistrationDraft 
   return {
     publicRegistration: s.publicRegistration,
     emailVerification: s.emailVerification,
+    businessEmailOnly: s.businessEmailOnly,
+    blockDisposableEmail: s.blockDisposableEmail,
+    requirePhoneVerification: s.requirePhoneVerification,
+    blockedEmailDomains: s.blockedEmailDomains.join('\n'),
     defaultPlanId: s.defaultPlanId ?? '',
     trialDays: String(s.trialDays),
     defaultTimezone: s.defaultTimezone,
@@ -126,6 +160,21 @@ export function buildRegistrationPatch(
     patch.publicRegistration = draft.publicRegistration;
   if (draft.emailVerification !== base.emailVerification)
     patch.emailVerification = draft.emailVerification;
+
+  for (const key of [
+    'businessEmailOnly',
+    'blockDisposableEmail',
+    'requirePhoneVerification',
+  ] as const) {
+    if (draft[key] !== base[key]) patch[key] = draft[key];
+  }
+
+  const { domains, invalid } = parseDomainList(draft.blockedEmailDomains);
+  if (invalid !== null) problems.blockedEmailDomains = { code: 'domainFormat', entry: invalid };
+  else if (domains.length > BLOCKED_DOMAINS_MAX)
+    problems.blockedEmailDomains = { code: 'tooMany', max: BLOCKED_DOMAINS_MAX };
+  else if (JSON.stringify(domains) !== JSON.stringify(base.blockedEmailDomains))
+    patch.blockedEmailDomains = domains;
 
   const plan = draft.defaultPlanId.trim();
   if (plan.length > 64) problems.defaultPlanId = { code: 'tooLong', max: 64 };
@@ -216,10 +265,22 @@ export function patchSize(patch: RegistrationSettingsPatch): number {
 /** Maps an API field path (`otp.ttlMinutes`) to the form control it belongs to. */
 export function registrationFieldForPath(
   path: string,
-): RegistrationField | 'publicRegistration' | 'emailVerification' | 'otpEnabled' | null {
+):
+  | RegistrationField
+  | 'publicRegistration'
+  | 'emailVerification'
+  | 'businessEmailOnly'
+  | 'blockDisposableEmail'
+  | 'requirePhoneVerification'
+  | 'otpEnabled'
+  | null {
   const map: Record<string, ReturnType<typeof registrationFieldForPath>> = {
     publicRegistration: 'publicRegistration',
     emailVerification: 'emailVerification',
+    businessEmailOnly: 'businessEmailOnly',
+    blockDisposableEmail: 'blockDisposableEmail',
+    requirePhoneVerification: 'requirePhoneVerification',
+    blockedEmailDomains: 'blockedEmailDomains',
     defaultPlanId: 'defaultPlanId',
     trialDays: 'trialDays',
     defaultTimezone: 'defaultTimezone',

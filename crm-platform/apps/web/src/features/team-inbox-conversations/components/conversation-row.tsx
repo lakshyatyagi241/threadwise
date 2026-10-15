@@ -59,6 +59,7 @@ export const ConversationRow = memo(function ConversationRow({
   const label = [
     row.title,
     unread ? t('unreadCount', { count: row.unreadCount }) : null,
+    row.imported ? t('imported') : null,
     row.preview,
   ]
     .filter(Boolean)
@@ -147,6 +148,15 @@ export const ConversationRow = memo(function ConversationRow({
                 className="max-w-[9rem] truncate rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
               >
                 {row.channel.name}
+              </span>
+            )}
+            {row.imported && (
+              <span
+                data-testid="inbox-row-imported"
+                title={t('importedHint')}
+                className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
+              >
+                {t('imported')}
               </span>
             )}
             <SlaBadge status={row.slaStatus} nowMs={nowMs} compact />

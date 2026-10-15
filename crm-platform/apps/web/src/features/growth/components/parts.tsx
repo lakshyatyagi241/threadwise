@@ -74,13 +74,13 @@ export function SectionCard({
   );
 }
 
-/** A failed call, said in words, with the request id for support and a retry when there is one. */
+/** A failed call, said in words, and a retry when there is one. */
 export function LoadError({
   errorKey,
-  error,
   onRetry,
 }: {
   errorKey: ErrorKey;
+  /** Still passed by callers; the request id is no longer shown (#362). */
   error?: unknown;
   onRetry?: () => void;
 }) {

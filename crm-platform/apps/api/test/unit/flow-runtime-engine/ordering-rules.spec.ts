@@ -9,6 +9,7 @@ import {
   normalizeItems,
   offlineEnglish,
   reasonText,
+  lineName,
   shippingText,
 } from '../../../src/modules/flow-runtime-engine/runtime/nodes/ai/ordering-rules';
 
@@ -101,16 +102,40 @@ describe('natural-language ordering rules (TW-FLR-042)', () => {
           { name: '   ' },
           'junk',
           { name: 'Zero', qty: 0 },
+          { name: 'Hoodie', qty: 1, variant: ' M red ' },
         ],
       }),
     ).toEqual([
-      { name: 'Wings', qty: 3 },
-      { name: 'Fries', qty: 2 },
-      { name: 'Soda', qty: 1 },
-      { name: 'Zero', qty: 1 },
+      { name: 'Wings', qty: 3, variant: '' },
+      { name: 'Fries', qty: 2, variant: '' },
+      { name: 'Soda', qty: 1, variant: '' },
+      { name: 'Zero', qty: 1, variant: '' },
+      { name: 'Hoodie', qty: 1, variant: 'M red' },
     ]);
     expect(normalizeItems(null)).toEqual([]);
     expect(normalizeItems({ items: 'x' })).toEqual([]);
+  });
+
+  it('names a variant line and asks for a missing option', () => {
+    expect(lineName({ name: 'Hoodie', variant_title: 'M / Red' })).toBe('Hoodie (M / Red)');
+    expect(lineName({ name: 'Hoodie' })).toBe('Hoodie');
+    const ask = {
+      name: 'Hoodie',
+      qty: 1,
+      reason: 'option_required' as const,
+      options: [
+        { name: 'Size', values: ['S', 'M'] },
+        { name: 'Colour', values: ['Red'] },
+      ],
+    };
+    expect(reasonText(ask)).toBe('please tell us the Size: S, M and Colour: Red');
+    expect(reasonText({ ...ask, options: [] })).toBe('please tell us which option');
+    const item = { ...line('Hoodie', 2, 1000), variant_id: 'u', variant_title: 'M / Red' };
+    expect(buildSummary([item], [ask], 2000, 'INR')).toContain('2 × Hoodie (M / Red)');
+    expect(buildSummary([item], [ask], 2000, 'INR')).toContain(
+      '1 × Hoodie — please tell us the Size',
+    );
+    expect(buildConfirmedText(5, [item], 2000, 'INR')).toContain('• 2 × Hoodie (M / Red)');
   });
 
   it('joins the ship-to on lines, dropping blanks', () => {

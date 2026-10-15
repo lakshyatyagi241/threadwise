@@ -21,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
+import { ImpersonationMaskInterceptor } from './modules/auth/guards/impersonation-mask.interceptor';
 import { ImpersonationGuard } from './modules/auth/guards/impersonation.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
@@ -41,9 +42,13 @@ import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelEmailModule } from './modules/channel-email';
+import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { ChannelLineModule } from './modules/channel-line';
+import { ChannelViberModule } from './modules/channel-viber';
+import { ChannelWechatModule } from './modules/channel-wechat';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
@@ -81,7 +86,10 @@ import { FaqKnowledgeModule } from './modules/faq-knowledge';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
+import { PrivacyModule } from './modules/privacy';
+import { ComplianceCenterModule } from './modules/compliance-center';
 import { AuditLogModule } from './modules/audit-log';
+import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
@@ -93,6 +101,7 @@ import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy
 import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
 import { FormsBuilderModule } from './modules/forms-builder';
+import { FormsLinksGroupsModule } from './modules/forms-links-groups';
 import { MarketplaceModule } from './modules/marketplace';
 import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -213,9 +222,13 @@ import { HealthModule } from './health/health.module';
     CampaignsModule,
     CallingVoiceModule,
     ChannelTelegramModule,
+    ChannelLineModule,
+    ChannelViberModule,
+    ChannelWechatModule,
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
+    EmailTemplatesModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
     ShopifyWoocommerceModule,
@@ -236,7 +249,10 @@ import { HealthModule } from './health/health.module';
     LeadScoringModule,
     GrowthPilotModule,
     ContactConsentModule,
+    PrivacyModule,
+    ComplianceCenterModule,
     AuditLogModule,
+    ContactsPqlModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,
@@ -247,6 +263,7 @@ import { HealthModule } from './health/health.module';
     WorkspaceImpersonationModule,
     LeadsModule,
     FormsBuilderModule,
+    FormsLinksGroupsModule,
     MarketplaceModule,
     ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
@@ -272,6 +289,7 @@ import { HealthModule } from './health/health.module';
     // Route-level plan gate (TW-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
     { provide: APP_GUARD, useExisting: PlanFeatureGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: ImpersonationMaskInterceptor },
   ],
   exports: [CryptoService],
 })

@@ -60,7 +60,9 @@
       "rejected": "Afgewezen: {reason}",
       "view": "Bekijken",
       "edit": "Bewerken",
-      "delete": "Verwijderen"
+      "delete": "Verwijderen",
+      "curl": "cURL: dit sjabloon via de API versturen",
+      "curlNamed": "cURL om {name} te versturen"
     },
     "library": {
       "title": "Sjabloonbibliotheek",
@@ -354,6 +356,15 @@
         "title": "Meta-payload",
         "hint": "Wat er voor de beoordeling naar Meta wordt gestuurd, precies zoals het is opgebouwd.",
         "empty": "Nog niets opgebouwd."
+      },
+      "curl": {
+        "title": "Versturen met de API (cURL)",
+        "intro": "Verstuur dit goedgekeurde sjabloon naar één nummer. Vervang de voorbeeldwaarden door je eigen waarden.",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "Kopiëren mislukt. Selecteer de tekst en kopieer hem handmatig.",
+        "keyHint": "Vervang YOUR_API_KEY door je API-sleutel.",
+        "keyLink": "API-sleutel ophalen"
       }
     }
   }

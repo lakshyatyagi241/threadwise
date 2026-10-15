@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "通话录音",
+        "intro": "录音在你开启之前处于关闭状态。开启后，团队成员会宣读提示，对方作答，之后才开始录音。录音在保留期结束后删除。",
+        "loading": "正在加载录音规则",
+        "loadFailed": "无法加载录音规则。",
+        "retry": "重试",
+        "viewOnly": "你可以查看这些规则，但只有所有者或管理员可以修改。",
+        "enabled": "录制通话",
+        "enabledOn": "开启：对方同意后，团队成员可以录制通话。",
+        "enabledOff": "关闭：不录制任何通话。",
+        "mode": "对方如何同意",
+        "modeHint": {
+          "confirmed": "对方对录音回答“是”，团队成员保存该回答。最安全的选择。",
+          "announcement": "团队成员宣读提示后通话继续。仅在法律顾问确认口头告知即可时使用。"
+        },
+        "modeOption": {
+          "confirmed": "对方回答“是”",
+          "announcement": "告知后继续"
+        },
+        "retention": "录音保留天数",
+        "retentionHint": "{min} 到 {max} 天。较早的录音每晚删除，通话本身仍保留在日志中。",
+        "retentionInvalid": "请输入允许范围内的整数天数。",
+        "notice": "录音提示",
+        "noticeHint": "团队成员在录音前宣读。最多 {max} 个字符。每次修改都会保存为新版本。",
+        "noticeRequired": "请先填写提示（至少 {min} 个字符）再开启录音。",
+        "noticeVersion": "提示版本 {version}",
+        "noticeNone": "尚未保存提示",
+        "updatedAt": "保存于 {date}",
+        "noticeSuggestion": "本次通话可能被录音，用于质量检查和培训。您是否同意录音？",
+        "useSuggestion": "使用建议文本",
+        "saved": "录音规则已保存。",
+        "saving": "正在保存",
+        "save": "保存规则"
+      },
+      "consent": {
+        "title": "录音前先询问",
+        "askConfirmed": "宣读提示。只有对方回答“是”时才点击第一个按钮。",
+        "askAnnouncement": "宣读提示，然后开始录音。",
+        "grantConfirmed": "对方说是：开始录音",
+        "grantAnnouncement": "已宣读提示：开始录音",
+        "decline": "否：不录音继续",
+        "declinedNote": "未录音：对方不同意。",
+        "off": "此工作区已关闭通话录音。",
+        "failed": "无法保存回答，因此不会录音：{message}"
+      },
+      "lifecycle": {
+        "title": "录音与同意",
+        "consent": "录音同意",
+        "consentGranted": "同意被录音",
+        "consentDeclined": "拒绝被录音",
+        "consentNone": "没有记录的回答",
+        "method": {
+          "announcement_continue": "已宣读提示，通话继续",
+          "spoken_yes": "回答了“是”"
+        },
+        "noticeVersion": "提示版本 {version}",
+        "storedAt": "存储时间",
+        "expiresAt": "自动删除时间",
+        "heldNoExpiry": "未删除：法律保全",
+        "none": "未设置",
+        "deleted": "录音已删除",
+        "deletedReason": {
+          "retention": "保留期已结束",
+          "manual": "已由团队成员删除",
+          "consent_withdrawn": "同意已撤回"
+        },
+        "holdOn": "法律保全",
+        "placeHold": "设置法律保全",
+        "liftHold": "解除法律保全",
+        "holdLifted": "已解除法律保全。",
+        "holdPlaced": "已设置法律保全。",
+        "holdReasonLabel": "为什么保留？",
+        "cancel": "取消",
+        "delete": "删除录音",
+        "deleteBlockedByHold": "请先解除法律保全。",
+        "deleteTitle": "删除此录音？",
+        "deleteMessage": "音频文件将被永久删除。通话仍保留在日志中。",
+        "deletedToast": "录音已删除。"
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "此工作区已关闭通话录音。",
+      "CALL_RECORDING_CONSENT_REQUIRED": "无法录制此通话：对方尚未同意。",
+      "CALL_RECORDING_CONSENT_INVALID": "无法为此通话保存该回答。",
+      "CALL_RECORDING_ON_HOLD": "此录音处于法律保全中，请先解除保全。",
+      "CALL_RECORDING_SETTINGS_INVALID": "录音规则无效：请先填写提示。"
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "对方同意被录音",
+          "recording_consent_declined": "对方拒绝录音",
+          "recording_deleted": "录音已删除",
+          "recording_hold_set": "已设置法律保全",
+          "recording_hold_lifted": "已解除法律保全"
+        }
+      }
+    }
+  }
+}

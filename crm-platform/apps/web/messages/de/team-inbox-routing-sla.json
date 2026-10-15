@@ -11,7 +11,10 @@
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
       "instagram": "Instagram",
-      "email": "E-Mail (Gmail)"
+      "email": "E-Mail (Gmail)",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
     },
     "page": {
       "back": "Automatisierung und KI",
@@ -182,7 +185,9 @@
         "offOption": "{name} (ausgeschaltet)",
         "goneOption": "Ein Flow, den es nicht mehr gibt",
         "loadFailed": "Die Flows konnten nicht geladen werden, die Auswahl ist deshalb eventuell unvollständig."
-      }
+      },
+      "onLeave": "abwesend",
+      "onLeaveUntil": "abwesend bis {date}"
     },
     "sla": {
       "back": "Zurück zu den Einstellungen",
@@ -275,6 +280,123 @@
         "busy": "Beschäftigt",
         "offline": "Offline"
       }
+    },
+    "contactAssignment": {
+      "back": "Automatisierung",
+      "title": "Kontaktzuweisung",
+      "intro": "Neue Kontakte und Deals ohne Inhaber automatisch der richtigen Person zuweisen.",
+      "howTitle": "So funktioniert es",
+      "how1": "Schalten Sie die Funktion ein. Bis dahin ist sie aus.",
+      "how2": "Die Regeln werden von oben nach unten geprüft. Die erste Regel, die zutrifft und jemanden Verfügbaren findet, legt den Inhaber des Kontakts oder Deals fest.",
+      "how3": "Personen im Urlaub werden übersprungen (eine feste Person wird durch ihre Vertretung ersetzt). Offline-Personen werden übersprungen, sofern die Regel nichts anderes vorsieht.",
+      "how4": "Ein von jemandem festgelegter Inhaber wird nie ersetzt.",
+      "enable": "Neue Kontakte und Deals automatisch zuweisen",
+      "enableHint": "Gilt für Kontakte aus Formularen, Lead-Quellen, Chats und der API sowie für neue Deals.",
+      "imports": "Importierte Kontakte ebenfalls zuweisen",
+      "importsHint": "Standardmäßig aus, damit ein großer Import nicht ändert, wem was gehört.",
+      "turnedOn": "Die automatische Zuweisung ist aktiv.",
+      "turnedOff": "Die automatische Zuweisung ist aus.",
+      "newContactRule": "Regel für neue Kontakte",
+      "newDealRule": "Regel für neue Deals",
+      "editTitle": "Regel bearbeiten",
+      "name": "Regelname",
+      "strategyLabel": "Wer übernimmt",
+      "strategy": {
+        "fixed": "Eine Person",
+        "round_robin": "Round Robin",
+        "least_busy": "Geringste Auslastung"
+      },
+      "people": "Personen und Teams",
+      "peopleHint": "Eine feste Regel nennt eine Person. Round Robin und geringste Auslastung wählen unter den angehakten Personen und Teams.",
+      "onLeave": "abwesend",
+      "teamOption": "Team: {name}",
+      "skipOffline": "Offline-Personen überspringen",
+      "skipOfflineHint": "Personen im Urlaub werden immer übersprungen.",
+      "conditions": "Bedingungen",
+      "conditionsHint": "Alle ausgefüllten Bedingungen müssen zutreffen. Leer lassen, damit alles zutrifft.",
+      "f": {
+        "sources": "Quelle ist eine von",
+        "listHint": "Mit Kommas trennen.",
+        "countryCodes": "Land ist eines von",
+        "phonePrefixes": "Telefonnummer beginnt mit",
+        "phoneHint": "Ziffern der Landesvorwahl, zum Beispiel 91.",
+        "lifecycleStages": "Lebenszyklusphase ist eine von",
+        "origins": "Eingegangen über",
+        "properties": "Benutzerdefinierte Eigenschaften entsprechen",
+        "propertiesHint": "Eine pro Zeile, als Schlüssel=Wert.",
+        "pipelines": "Pipeline",
+        "valueMin": "Dealwert mindestens",
+        "valueMax": "Dealwert höchstens"
+      },
+      "origin": {
+        "manual": "Von einer Person hinzugefügt",
+        "import": "Import",
+        "inbound": "Erste Nachricht",
+        "form": "Formular",
+        "lead": "Lead-Quelle",
+        "api": "API"
+      },
+      "cond": {
+        "sources": "Quelle",
+        "countryCodes": "Land",
+        "phonePrefixes": "Vorwahl",
+        "lifecycleStages": "Phase",
+        "tagIds": "Tag",
+        "origins": "eingegangen über",
+        "properties": "Eigenschaften",
+        "pipelineIds": "Pipeline",
+        "value": "Wert"
+      },
+      "catchAll": "trifft auf alles zu",
+      "problems": {
+        "name": "Geben Sie der Regel einen Namen.",
+        "people": "Wählen Sie mindestens eine Person oder ein Team.",
+        "fixedOne": "Eine feste Regel nennt genau eine Person.",
+        "prefix": "Nur Ziffern verwenden, zum Beispiel 91.",
+        "value": "Verwenden Sie Zahlen; der höchste Wert darf nicht unter dem niedrigsten liegen."
+      },
+      "save": "Regel speichern",
+      "cancel": "Abbrechen",
+      "saved": "Regel gespeichert.",
+      "created": "Regel hinzugefügt.",
+      "deleted": "Regel gelöscht.",
+      "conflict": "Jemand anderes hat diese Regel geändert. Laden Sie neu und versuchen Sie es erneut.",
+      "failed": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "contactRules": "Kontaktregeln",
+      "dealRules": "Dealregeln",
+      "emptyTitle": "Noch keine Regeln",
+      "emptyContacts": "Neue Kontakte behalten den Inhaber, mit dem sie angelegt werden.",
+      "emptyDeals": "Neue Deals behalten den Inhaber, mit dem sie angelegt werden.",
+      "off": "Aus",
+      "fired": "{count, plural, one {# Mal verwendet} other {# Mal verwendet}}",
+      "activeFor": "Regel {name} ist aktiv",
+      "moveUp": "{name} nach oben verschieben",
+      "moveDown": "{name} nach unten verschieben",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "deleteTitle": "Diese Regel löschen?",
+      "deleteMessage": "Die Regel {name} weist nicht mehr zu. Bereits zugewiesene Kontakte behalten ihren Inhaber.",
+      "unknownPerson": "Ehemaliges Mitglied",
+      "unknownTeam": "Entferntes Team",
+      "testTitle": "Regeln testen",
+      "testHint": "Beschreiben Sie einen Kontakt oder Deal und sehen Sie, welche Regel greift und wer ihn bekäme. Es wird nichts geändert.",
+      "testSubject": "Testen:",
+      "subjectContact": "Kontakt",
+      "subjectDeal": "Deal",
+      "testPhone": "Telefonnummer",
+      "testValue": "Dealwert",
+      "testRun": "Testen",
+      "testWould": "Die Regel {rule} würde ihn {name} zuweisen.",
+      "testOutcome": {
+        "would_assign": "Er würde zugewiesen.",
+        "disabled": "Die automatische Zuweisung ist aus.",
+        "has_owner": "Er hat bereits einen Inhaber, daher würde sich nichts ändern.",
+        "no_rule": "Keine Regel trifft zu.",
+        "nobody_available": "Eine Regel trifft zu, aber niemand ist verfügbar (abwesend oder offline).",
+        "plan": "Ihr Tarif enthält keine automatische Zuweisung."
+      },
+      "testSkipped": "Übersprungen, weil niemand verfügbar war: {names}",
+      "testOff": "Der Schalter oben ist aus, daher zeigt dies nur, was nach dem Einschalten passieren würde."
     }
   }
 }

@@ -159,6 +159,11 @@
         "title": "Ihre Nummer wurde aus {name} entfernt",
         "titleNoName": "Ihre Nummer wurde aus einer WhatsApp-Gruppe entfernt",
         "body": "Jemand hat Ihre persönliche Nummer aus dieser Gruppe entfernt. Die Gruppe wird hier schreibgeschützt aufbewahrt."
+      },
+      "test": {
+        "title": "Testbenachrichtigung",
+        "titleNoName": "Testbenachrichtigung",
+        "bodyNoActor": "Wenn du das lesen kannst, funktionieren Live-Benachrichtigungen."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "WhatsApp-Gruppe gesperrt",
         "waba_group_suspension_cleared": "WhatsApp-Gruppe wieder aktiv",
         "device_group_join_request": "Beitrittsanfrage für eine Gruppe",
-        "device_group_removed": "Aus einer WhatsApp-Gruppe entfernt"
-      }
+        "device_group_removed": "Aus einer WhatsApp-Gruppe entfernt",
+        "test": "Testbenachrichtigung"
+      },
+      "generic": "Du hast eine neue Benachrichtigung",
+      "paused": "Live-Aktualisierungen sind pausiert, neue Hinweise können daher bis zu einer Minute später ankommen. Lade die Seite neu, um die Verbindung wiederherzustellen."
     },
     "prefs": {
       "title": "Benachrichtigungseinstellungen",
@@ -212,7 +220,8 @@
         "broadcasts": "Broadcasts und Kampagnen",
         "team_chat": "Team-Chat",
         "whatsapp_groups": "WhatsApp-Gruppen",
-        "billing": "Abrechnung und Abonnements"
+        "billing": "Abrechnung und Abonnements",
+        "system": "System"
       },
       "types": {
         "new_chat": {
@@ -358,6 +367,18 @@
         "sla_breached": {
           "label": "SLA verletzt",
           "hint": "Eine Ihrer Unterhaltungen hat das Ziel für die erste Antwort oder die Lösung verfehlt."
+        },
+        "member_leave_started": {
+          "label": "Mitglied ist im Urlaub",
+          "hint": "Ein Mitglied deines Teams ist in den Urlaub gegangen. Zeigt, was es betreut, mit Link zum Neuzuweisen."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat, den niemand übernehmen konnte",
+          "hint": "Das Routing hat für einen neuen Chat niemanden gefunden, weil die gewählten Personen im Urlaub sind. Weise ihn manuell zu."
+        },
+        "test": {
+          "label": "Testbenachrichtigung",
+          "hint": "Der Test, den du unter Browser-Benachrichtigungen sendest, damit du siehst, dass Glocke, Pop-up und Tab-Titel funktionieren."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",
@@ -437,6 +458,11 @@
           "neverUsed": "noch nicht benachrichtigt",
           "remove": "Entfernen",
           "removeFor": "{device} entfernen"
+        },
+        "testInApp": {
+          "watch": "Du solltest ein Pop-up sehen, und die Zahl an der Glocke und der Tab-Titel ändern sich.",
+          "notConnected": "Live-Aktualisierungen sind auf dieser Seite nicht verbunden, daher kann hier kein Pop-up erscheinen. Lade die Seite neu und versuche es erneut.",
+          "off": "Es wurde keine Benachrichtigung in der Glocke erstellt: Die Glocke ist für „Testbenachrichtigung“ in der Tabelle unten ausgeschaltet, oder vom Inhaber deines Arbeitsbereichs."
         }
       }
     },

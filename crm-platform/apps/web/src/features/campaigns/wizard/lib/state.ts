@@ -3,6 +3,7 @@ import {
   WIZARD_STEP_COUNT,
   type WizardAudience,
   type WizardDraft,
+  type WizardFollowUp,
   type WizardRetries,
   type WizardSchedule,
   type WizardTemplate,
@@ -33,7 +34,10 @@ export type WizardAction =
   | {
       type: 'options';
       patch: Partial<
-        Pick<WizardDraft, 'abTesting' | 'abSplit' | 'autoEnd' | 'pacing' | 'trackLinks'>
+        Pick<
+          WizardDraft,
+          'abTesting' | 'abSplit' | 'autoEnd' | 'pacing' | 'trackLinks' | 'retryFailed'
+        >
       >;
     }
   /** Variant B of an A/B test: its template (its mapping keeps what still fits) and its variable mapping. */
@@ -42,6 +46,8 @@ export type WizardAction =
   | { type: 'variablesB'; variables: WizardVariables }
   | { type: 'schedule'; schedule: WizardSchedule }
   | { type: 'retries'; retries: WizardRetries }
+  /** The follow-up steps after the campaign message, as the whole list (add, remove and edit build the next list). */
+  | { type: 'followUps'; followUps: WizardFollowUp[] }
   | { type: 'go'; step: WizardView }
   | { type: 'hydrate'; draft: WizardDraft };
 
@@ -119,6 +125,8 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
       return { ...state, draft: { ...d, schedule: action.schedule } };
     case 'retries':
       return { ...state, draft: { ...d, retries: action.retries } };
+    case 'followUps':
+      return { ...state, draft: { ...d, followUps: action.followUps } };
     case 'go': {
       const step = Math.max(d.step, action.step);
       return {

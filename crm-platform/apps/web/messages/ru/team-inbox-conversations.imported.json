@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Импорт",
+      "importedHint": "Этот чат импортирован из истории телефона"
+    },
+    "bubble": {
+      "imported": "Импорт",
+      "importedHint": "Импортировано из истории чатов телефона"
+    }
+  }
+}

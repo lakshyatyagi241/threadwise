@@ -66,6 +66,26 @@ const flag = z.preprocess((v) => {
   return v;
 }, z.boolean().nullable().optional());
 
+/**
+ * The person's agreement to marketing, with its proof (a product extension: Reference's API has only `is_unsubscribed`). Writing it
+ * records a consent grant in the ledger with source `api`; without a `note` or `text` it is refused (422 CONSENT_NOTE_REQUIRED). The
+ * channels default to the ones the contact can be reached on (a phone is WhatsApp, an email address is email).
+ */
+export const v1ConsentSchema = z
+  .object({
+    channels: z
+      .array(z.enum(['whatsapp', 'sms', 'email']))
+      .min(1)
+      .max(3)
+      .optional(),
+    note: text(500),
+    text: text(2000),
+    version: text(64),
+    at: z.string().datetime().optional(),
+  })
+  .nullable()
+  .optional();
+
 const contactFields = {
   middle_name: text(191),
   last_name: text(191),
@@ -78,6 +98,7 @@ const contactFields = {
   group_ids: z.array(z.string().max(64)).nullable().optional(),
   attributes: z.record(z.unknown()).nullable().optional(),
   is_unsubscribed: flag,
+  consent: v1ConsentSchema,
 };
 
 export const v1CreateContactSchema = z

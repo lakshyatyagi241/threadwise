@@ -1,9 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useId, useState, type ReactNode } from 'react';
-import { FORM_CAPTCHA_MODES, lifecycleStageSchema } from '@crm/contracts';
+import {
+  consentChannels,
+  formCollects,
+  FORM_CAPTCHA_MODES,
+  FORM_CONSENT_CHANNELS,
+  lifecycleStageSchema,
+  type FormConsentChannel,
+} from '@crm/contracts';
 import {
   Alert,
   Badge,
@@ -29,7 +36,10 @@ import {
   RETENTION_RANGE,
   checkEmail,
   checkTag,
+  consentStatement,
+  DEFAULT_CONSENT_TEXT,
   consentWithText,
+  toggleConsentChannel,
   emailsIssue,
   ownerRuleForMode,
   ownerRuleIssue,
@@ -42,6 +52,7 @@ import {
 import type { Definition, FormCaptchaMode } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
 import { useFormProtection } from '../api/forms';
+import { useComplianceLinks } from '@/features/compliance-center/api/hooks';
 import { useFormUsers } from './forms-users';
 import { PaymentPanel } from './payment-panel';
 
@@ -368,6 +379,39 @@ export function SettingsTab(props: BuilderTabProps) {
 
   const s = draft.settings;
   const consent = draft.consent;
+  const locale = useLocale();
+  const channels = consentChannels(consent);
+  const collects = formCollects(draft);
+  const collectsFor = (ch: FormConsentChannel) =>
+    ch === 'email' ? collects.email : collects.phone;
+  const channelNames = {
+    whatsapp: t('consent.channelNames.whatsapp'),
+    sms: t('consent.channelNames.sms'),
+    email: t('consent.channelNames.email'),
+  };
+  const statementFor = (chs: readonly FormConsentChannel[]) =>
+    consentStatement(t('consent.statement', { channels: '{channels}' }), chs, channelNames, locale);
+  const suggested = statementFor(channels);
+  const applyText = (text: string) =>
+    setDraft((d) => ({
+      ...d,
+      consent: consentWithText(d.consent, text, saved.consent, published),
+    }));
+  /**
+   * Ticking a channel writes it into the sentence. The sentence is rewritten only while it is still the generated one (or empty or the
+   * default); wording the owner wrote by hand is kept, and the button offers the generated one.
+   */
+  const setChannels = (next: FormConsentChannel[]) => {
+    const generated =
+      consent.text.trim() === '' ||
+      consent.text.trim() === statementFor(channels) ||
+      consent.text.trim() === DEFAULT_CONSENT_TEXT;
+    setDraft((d) => {
+      const withChannels = { ...d.consent, channels: next };
+      const text = generated ? statementFor(next) : withChannels.text;
+      return { ...d, consent: consentWithText(withChannels, text, saved.consent, published) };
+    });
+  };
   const after = draft.after;
   const ownerIssue = ownerRuleIssue(live.ownerRule);
   const storedEmailIssue = emailsIssue(live.notify.emails);
@@ -376,6 +420,9 @@ export function SettingsTab(props: BuilderTabProps) {
   const labelIssue = submitLabelIssue(s.submitLabel);
   const redirectProblem = redirectIssue(s.successMode, s.redirectUrl);
   const privacyProblem = consent.enabled ? privacyUrlIssue(consent.privacyUrl) : null;
+  const termsProblem = consent.enabled ? privacyUrlIssue(consent.termsUrl) : null;
+  // The workspace links (Compliance center) are offered, never filled in: a role without access to them simply gets no buttons.
+  const workspaceLinks = useComplianceLinks(canEdit);
   const consentTextEmpty = consent.enabled && consent.text.trim().length === 0;
   const rangeText = { min: RETENTION_RANGE.min, max: RETENTION_RANGE.max };
 
@@ -570,6 +617,57 @@ export function SettingsTab(props: BuilderTabProps) {
                 />
               )}
             </FieldBox>
+            {workspaceLinks.data?.privacyUrl &&
+              consent.privacyUrl !== workspaceLinks.data.privacyUrl && (
+                <div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={disabled}
+                    onClick={() =>
+                      setConsent({ privacyUrl: workspaceLinks.data?.privacyUrl ?? undefined })
+                    }
+                  >
+                    {t('consent.useWorkspacePrivacy')}
+                  </Button>
+                </div>
+              )}
+            <FieldBox
+              label={t('consent.termsUrl')}
+              hint={t('consent.termsUrlHint')}
+              error={termsProblem ? t('consent.privacyUrlHttps') : undefined}
+            >
+              {(a) => (
+                <Input
+                  {...a}
+                  type="url"
+                  dir="ltr"
+                  placeholder="https://example.com/terms"
+                  value={consent.termsUrl ?? ''}
+                  disabled={disabled}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setConsent({ termsUrl: v.trim() === '' ? undefined : v });
+                  }}
+                />
+              )}
+            </FieldBox>
+            {workspaceLinks.data?.termsUrl && consent.termsUrl !== workspaceLinks.data.termsUrl && (
+              <div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled}
+                  onClick={() =>
+                    setConsent({ termsUrl: workspaceLinks.data?.termsUrl ?? undefined })
+                  }
+                >
+                  {t('consent.useWorkspaceTerms')}
+                </Button>
+              </div>
+            )}
             <SwitchRow
               label={t('consent.required')}
               hint={t('consent.requiredHint')}
@@ -584,30 +682,45 @@ export function SettingsTab(props: BuilderTabProps) {
               disabled={disabled}
               onChange={(marketing) => setConsent({ marketing })}
             />
-            {consent.marketing && (
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-dashed border-border p-3">
-                <p className={`${HINT} min-w-0 flex-1`}>{t('consent.whatsappHint')}</p>
+            {!consent.marketing && <p className={HINT}>{t('consent.serviceHint')}</p>}
+            <fieldset className="space-y-2">
+              <legend className="text-sm font-medium">{t('consent.channelsLabel')}</legend>
+              <p className={HINT}>{t('consent.channelsHint')}</p>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {FORM_CONSENT_CHANNELS.map((ch) => (
+                  <div key={ch}>
+                    <Checkbox
+                      label={channelNames[ch]}
+                      checked={channels.includes(ch)}
+                      disabled={disabled || (channels.length === 1 && channels[0] === ch)}
+                      onChange={(e) =>
+                        setChannels(toggleConsentChannel(channels, ch, e.target.checked))
+                      }
+                    />
+                    {!collectsFor(ch) && (
+                      <p className={HINT}>
+                        {t(
+                          ch === 'email'
+                            ? 'consent.channelNeedsEmail'
+                            : 'consent.channelNeedsPhone',
+                        )}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {consent.text.trim() !== suggested && (
                 <Button
                   type="button"
                   size="sm"
                   variant="secondary"
-                  disabled={disabled || consent.text.trim() === t('consent.whatsappWording')}
-                  onClick={() =>
-                    setDraft((d) => ({
-                      ...d,
-                      consent: consentWithText(
-                        d.consent,
-                        t('consent.whatsappWording'),
-                        saved.consent,
-                        published,
-                      ),
-                    }))
-                  }
+                  disabled={disabled}
+                  onClick={() => applyText(suggested)}
                 >
-                  {t('consent.whatsappInsert')}
+                  {t('consent.channelsUse')}
                 </Button>
-              </div>
-            )}
+              )}
+            </fieldset>
           </div>
         )}
       </Section>

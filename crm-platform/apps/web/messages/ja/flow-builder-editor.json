@@ -707,7 +707,8 @@
           "wordsPlaceholder": "こんにちは, hello, メニュー",
           "whatsappNumber": "WhatsApp番号",
           "noNumberHint": "WhatsApp番号がまだ接続されていません。設定で接続してから、ここで選択してください。",
-          "chooseNumber": "番号を選択…"
+          "chooseNumber": "番号を選択…",
+          "connectedNumber": "接続済みの WhatsApp 番号で返信します: {number}"
         },
         "add": {
           "addStep": "ステップを追加",
@@ -715,7 +716,9 @@
             "send": "送信",
             "ask": "顧客に質問",
             "handoff": "引き継ぎ",
-            "answer": "回答"
+            "logic": "判断",
+            "answer": "回答",
+            "action": "アクション"
           },
           "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
           "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
@@ -731,7 +734,21 @@
           "faqExits": {
             "matched": "回答済み",
             "no_match": "一致なし"
-          }
+          },
+          "close": "閉じる",
+          "clickToEdit": "クリックして編集",
+          "outsideToSave": "変更を保存するには外側のどこかをクリックしてください",
+          "addCondition": "このステップの後に条件を追加",
+          "conditionLast": "条件はこの部分を終了させるため、最後にしか置けません。",
+          "duplicateTitle": "このステップを複製しますか？",
+          "duplicateBody": "直後にコピーが追加されます。",
+          "deleteTitle": "このステップを削除しますか？",
+          "deleteBody": "ステップはフローから削除されます。",
+          "stage": "ステージ {stage}",
+          "storedIn": "値は連絡先の <b>{property}</b> プロパティに保存されます",
+          "actions": "アクション",
+          "actionsHint": "このステップの直後に実行されるステップを追加します。",
+          "actionsBlocked": "自分の部分を終えるステップの後には、ステップを続けられません。"
         },
         "editors": {
           "linkLabel": "この後の移動先",
@@ -763,7 +780,8 @@
             "placeholder": "ボタン{n}",
             "remove": "ボタンを削除",
             "add": "ボタンを追加",
-            "saveIn": "タップされたボタンの保存先"
+            "saveIn": "タップされたボタンの保存先",
+            "handoff": "担当者に引き継ぐ（有人対応）"
           },
           "list": {
             "above": "リストの上のメッセージ",
@@ -795,7 +813,9 @@
             "dateFormat": "日付の形式",
             "dateFormatHint": "顧客が日付を入力する形式です。入力されたまま保存され、年-月-日形式のコピーが_iso変数に保存されます。",
             "saveIn": "回答の保存先",
-            "retriesHint": "0の場合は、正しい回答が得られるまで尋ね続けます。"
+            "retriesHint": "0の場合は、正しい回答が得られるまで尋ね続けます。",
+            "verifyOtp": "ワンタイムコードで番号を確認",
+            "verifyOtpHint": "番号にコードが送られ（国番号が必要）、訪問者がチャットに入力します。コードが正しいときだけ番号を保存し、_verified で終わる変数が yes か no を示します。"
           },
           "askFile": {
             "accepted": "受け付けるファイル",
@@ -846,7 +866,45 @@
           },
           "cta": {
             "buttonText": "ボタンのテキスト",
-            "opens": "開く(リンク)"
+            "opens": "開く(リンク)",
+            "type": "開く内容",
+            "kinds": {
+              "url": "ウェブページ",
+              "phone": "電話",
+              "email": "メール"
+            },
+            "add": "ボタンを追加",
+            "remove": "ボタンを削除",
+            "opensPhone": "電話番号",
+            "opensEmail": "メールアドレス"
+          },
+          "carousel": {
+            "intro": "カードの上のメッセージ",
+            "card": "カード {n}",
+            "image": "画像のリンク（任意）",
+            "title": "タイトル",
+            "text": "テキスト",
+            "buttons": "ボタン（最大2つ）",
+            "label": "ボタンのテキスト",
+            "addCard": "カードを追加",
+            "removeCard": "カードを削除",
+            "addButton": "ボタンを追加",
+            "removeButton": "ボタンを削除",
+            "btnKinds": {
+              "reply": "チャットで返信",
+              "url": "Webページを開く",
+              "phone": "番号に電話",
+              "email": "メールを送る",
+              "agent": "担当者と話す"
+            }
+          },
+          "condition": {
+            "info": "ルール（変数、比較、値）を追加します。AND または OR で結び、必要ならグループを入れ子にできます。",
+            "yes": "ルールを満たす場合の移動先",
+            "no": "満たさない場合の移動先"
+          },
+          "handoff": {
+            "hint": "訪問者はメモ付きでこのチームに引き継がれます。このボタンの後に何かを接続する必要はありません。"
           },
           "faq": {
             "exits": {
@@ -859,6 +917,7 @@
             }
           }
         },
+        "branchAdd": "「{title}」のステップを追加",
         "faqEnds": "このステップでこの部分は終了します。次に送信される内容は、FAQが回答したかどうかで変わります。"
       },
       "formsCore": {
@@ -1894,13 +1953,56 @@
       },
       "webBot": {
         "aria": "フローのセクション",
-        "faqs": "FAQ",
-        "saveFirst": "先にフローを保存してください。",
         "build": "作成",
         "customize": "カスタマイズ",
-        "install": "インストール",
+        "saveFirst": "先にフローを保存してください。",
         "needsCustomizing": "ウィジェットはまだ既定の外観です。「カスタマイズ」を開いてください。",
-        "customizeFirst": "公開する前に、チャットウィジェットをカスタマイズして一度保存してください。"
+        "customizeFirst": "公開する前に、チャットウィジェットをカスタマイズして一度保存してください。",
+        "deploy": "デプロイ",
+        "customizeFirstWhatsapp": "公開する前に、WhatsAppボタンをカスタマイズして一度保存してください。",
+        "faqs": "FAQ",
+        "install": "インストール"
+      },
+      "buttonIcon": {
+        "label": "アイコン(任意)",
+        "add": "アイコンを追加",
+        "saveFirst": "アイコンを追加するには、ボットを一度保存してください。"
+      },
+      "buttonAction": {
+        "label": "ボタン押下時のアクション",
+        "kind": {
+          "none": "次のステップへ進む",
+          "flow": "フローを接続",
+          "live_agent": "ライブエージェント",
+          "opt_in": "オプトイン",
+          "opt_out": "オプトアウト"
+        },
+        "pickFlow": "フローを選択",
+        "loadingFlows": "フローを読み込み中…",
+        "flowMissing": "フロー {id}（見つかりません）",
+        "hint": {
+          "flow": "この連絡先に対して選んだフローを開始し、会話はそのフローで続きます。このボタンの先には何もつなぎません。",
+          "live_agent": "選んだチームに会話を引き継ぎます。このボタンの先には何もつなぎません。",
+          "opt_in": "連絡先をマーケティングメッセージの配信登録済みにし、その後このボタンの先につないだステップへ進みます。",
+          "opt_out": "連絡先をマーケティングメッセージの配信停止にし、その後このボタンの先につないだステップへ進みます。"
+        }
+      },
+      "messageTools": {
+        "format": "テキストの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "strike": "取り消し線",
+        "mono": "等幅",
+        "bullet": "箇条書き",
+        "numbered": "番号付きリスト",
+        "emoji": "絵文字",
+        "emojiSearch": "絵文字を検索",
+        "emojiNone": "絵文字が見つかりません",
+        "variable": "変数を挿入",
+        "variableSearch": "変数を検索",
+        "groupContact": "連絡先のプロパティ",
+        "groupFlow": "このフローに保存済み",
+        "variableNone": "変数が見つかりません"
       }
     },
     "contracts": {
@@ -2177,6 +2279,10 @@
           "label": "API（ライブラリから）",
           "description": "API ライブラリから保存済みの API を呼び出す"
         },
+        "carousel": {
+          "label": "カルーセル",
+          "description": "画像とボタン付きのスクロールカード"
+        },
         "faq": {
           "label": "FAQから回答",
           "description": "メッセージをFAQと照合"
@@ -2404,9 +2510,25 @@
           "label": "位置情報",
           "help": "顧客の位置情報の共有を待機"
         },
+        "carousel": {
+          "label": "カルーセル",
+          "help": "画像とボタン付きのスクロールカード"
+        },
+        "condition": {
+          "label": "条件",
+          "help": "お客様の発言や保存した内容で分岐します（AND / OR ルール）"
+        },
         "faq": {
           "label": "FAQから回答",
           "help": "お客様のメッセージをFAQと照合します。このフローを終了します。FAQが回答した場合と回答しなかった場合で出口が分かれます"
+        },
+        "apiLibrary": {
+          "label": "API呼び出し",
+          "help": "API ライブラリの API を呼び出します"
+        },
+        "code": {
+          "label": "JS関数",
+          "help": "小さな JavaScript を実行します"
         }
       },
       "typeLabel": {
@@ -2422,7 +2544,11 @@
         "template": "テンプレート",
         "cta": "リンクボタン",
         "assign": "担当者に割り当て",
-        "faq": "FAQから回答"
+        "carousel": "カルーセル",
+        "condition": "条件",
+        "faq": "FAQから回答",
+        "api_library": "API呼び出し",
+        "code": "JS関数"
       },
       "stepLabel": {
         "questionOf": "質問 · {kind}"
@@ -2460,7 +2586,13 @@
         "rowTitle": "ステップ {stage}: すべての行に{max}文字以内のタイトルが必要です。",
         "rowDescriptionTooLong": "ステップ {stage}: 行の説明が{max}文字を超えています。",
         "variableUsed": "ステップ {stage}: 「{name}」はステップ {other} で既に使用されています。回答ごとに別の名前を付けてください。",
-        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。"
+        "carouselCards": "ステップ {stage}: カードを1枚以上追加し、すべてのカードにタイトルを付けてください。",
+        "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
+        "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
+        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
+        "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
+        "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
+        "writeCode": "ステップ {stage}: 実行するコードを書いてください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
@@ -2470,7 +2602,11 @@
         "buttonNoTarget": "「{type}」ボタン（「{text}」）の移行先がシンプルでは未設定です。",
         "skippedStep": "「{sub}」ステップをスキップしました。シンプルには同等の機能がありません。",
         "leadsOutside": "「{text}」はこのファイルに含まれないフローにつながっています。リンクするまでそこで終了します。",
-        "connectsOutside": "あるステップが、このファイルにないノード（{id}）に接続しています。接続はされないままになります。"
+        "connectsOutside": "あるステップが、このファイルにないノード（{id}）に接続しています。接続はされないままになります。",
+        "dateLimits": "日付の質問は形式を保ちますが、範囲（最早・最遅・除外日）は引き継ぎません。",
+        "tooManyButtons": "ボタンメッセージに収まりきらない数の選択肢がありました。余分なボタンは省きました。",
+        "agentTeam": "有人対応ボタンを残しました。会話を受け取るチームを選んでください。",
+        "tooManySlides": "カルーセルに10枚を超えるカードがありました。余分なカードは省きました。"
       },
       "reasons": {
         "notExport": "このファイルはフローのエクスポートではありません。フローからエクスポートした .json ファイル、またはwaboコンソールからエクスポートしたフローを使用してください。",

@@ -738,7 +738,9 @@
           "link": "/legal/terms gibi bir site yolu veya tam bir http ya da https adresi kullanın.",
           "senderFormat": "Listeden gönderenlerden birini seçin.",
           "countryFormat": "İki harfli bir ülke kodu kullanın.",
-          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin."
+          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin.",
+          "domainFormat": "{entry} geçerli bir alan adı değil. ornek.com gibi bir ad kullanın.",
+          "tooMany": "En fazla {max} alan adı."
         },
         "policy": {
           "kicker": "Kaydolma",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "En fazla deneme"
+          },
+          "businessEmailOnly": {
+            "label": "Yalnızca iş e-posta adresleri",
+            "hintOn": "Gmail, Outlook ve Yahoo gibi ücretsiz sağlayıcılar kayıt sırasında reddedilir.",
+            "hintOff": "Herkes ücretsiz bir kişisel adresle kaydolabilir."
+          },
+          "blockDisposableEmail": {
+            "label": "Geçici e-postayı engelle",
+            "hintOn": "Tek kullanımlık ve geçici alan adları ile posta sunucusu olmayan alan adları reddedilir.",
+            "hintOff": "Geçici adresler kabul edilir."
+          },
+          "requirePhoneVerification": {
+            "label": "Doğrulanmış cep telefonu numarası iste",
+            "hintOn": "Her kayıt tek kullanımlık bir kodu onaylamalıdır. Kod gönderilemezse kayıt, denetimi atlamak yerine durur.",
+            "hintOff": "Kod adımı yalnızca aşağıdaki kayıt kodu açıkken çalışır."
+          },
+          "blockedEmailDomains": {
+            "label": "Her zaman engellenen alan adları",
+            "hint": "Her satırda bir alan adı. Alt alan adları da engellenir. «Yalnızca iş e-posta adresleri» kapalı olsa bile reddedilirler.",
+            "placeholder": "ornek.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Bu alt bilgi kabul edilmedi.",
             "unexpected": "Alt bilgi kaydedilemedi. Biraz sonra tekrar deneyin."
           }
+        },
+        "guard": {
+          "kicker": "Kayıt koruması",
+          "title": "İş e-postası ve cep telefonu kontrolü",
+          "description": "Tek kullanımlık ve kişisel adresleri dışarıda tutar ve her yeni hesabın doğrulanmış bir cep telefonu numarası olmasını sağlar. E-posta ve sosyal kayıtlarda geçerlidir.",
+          "phoneOffWarning": "Cep telefonu kontrolü kapalıyken hesaplar doğrulanmış numara olmadan oluşturulabilir; bu da toplu sahte kayıtları kolaylaştırır."
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "Çevrimiçi mağaza vitrini oluşturucu.",
             "invoicing": "Faturalar, alacak dekontları, ödemeler, satış siparişleri ve vergi oranları.",
             "forms_and_links": "Potansiyel müşteri toplama formları ve paylaşılabilir bağlantılar.",
-            "extra_channels": "Telegram, Facebook ve Instagram kanalları.",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat kanalları.",
             "form_builder": "CRM'de kişi oluşturan barındırılan ve gömülü web formları. Bu anahtar ücretli Formlar uygulamasına aittir.",
             "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır.",
             "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
             "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
-            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir."
+            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
+            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir."
           },
           "units": {
             "days": "Gün",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "Aylık form gönderimleri",
             "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri",
             "sms_monthly": "Aylık SMS",
-            "email_mailboxes": "E-posta kutuları"
+            "email_mailboxes": "E-posta kutuları",
+            "email_monthly": "Aylık e-posta"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "Mağaza vitrini ve web sitesi oluşturucu",
             "invoicing": "Faturalama (faturalar, alacak dekontları, yinelenen faturalar)",
             "forms_and_links": "Formlar, tıkla ve sohbet et bağlantıları ve gruplar",
-            "extra_channels": "Telegram, Facebook ve Instagram kanalları",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat kanalları",
             "form_builder": "Formlar (web formu oluşturucu)",
             "waba_groups": "WhatsApp grupları (Cloud API)",
             "sms": "SMS kanalı",
             "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
-            "email_channel": "E-posta (Gmail) kanalı"
+            "email_channel": "E-posta (Gmail) kanalı",
+            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınır aşıldığında gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
             "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
             "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
-            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız."
+            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
+            "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız."
           }
         }
       },

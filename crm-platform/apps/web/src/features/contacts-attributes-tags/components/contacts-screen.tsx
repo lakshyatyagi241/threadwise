@@ -53,6 +53,7 @@ import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
+import { presetFilters, type PresetView } from '../lib/preset-views';
 import { filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
 import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
@@ -86,6 +87,7 @@ import { GroupModal } from './group-modal';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
 import { ViewsBar } from './views-bar';
 import { ImportModal } from './import-modal';
+import { DeleteHistoryOption } from './delete-history-option';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
 
 type View = 'list' | 'kanban';
@@ -152,6 +154,17 @@ export function ContactsScreen() {
     router.replace(`${pathname}${withView(filtersToSearch(next, sizeDefault), view?.id ?? '')}`, {
       scroll: false,
     });
+  };
+
+  /** A built-in view: the filters it stands for, on top of the defaults, with no saved view open. */
+  const selectPreset = (preset: PresetView) => {
+    appliedView.current = '';
+    const next = {
+      ...DEFAULT_FILTERS,
+      limit: sizeDefault,
+      ...presetFilters(preset, session.user.id),
+    };
+    router.replace(`${pathname}${filtersToSearch(next, sizeDefault)}`, { scroll: false });
   };
 
   /**
@@ -327,6 +340,7 @@ export function ContactsScreen() {
   const [formFor, setFormFor] = useState<ContactRow | 'new' | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
+  const [keepHistory, setKeepHistory] = useState(false);
   const [dedupeOpen, setDedupeOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [groupOpen, setGroupOpen] = useState(false);
@@ -405,8 +419,9 @@ export function ContactsScreen() {
   }
 
   async function onBulkDelete() {
-    const out = await guarded(() => bulkDelete(target()));
+    const out = await guarded(() => bulkDelete(target(), { eraseHistory: !keepHistory }));
     setConfirmBulkDelete(false);
+    setKeepHistory(false);
     if (!out) return;
     dispatch({ type: 'clear' });
     await refresh();
@@ -437,14 +452,21 @@ export function ContactsScreen() {
     return true;
   }
 
-  async function onBulkTag(action: 'add' | 'remove', choice: TagChoice): Promise<boolean> {
-    const out = await guarded(() => bulkTag(target(), action, choice));
+  async function onBulkTag(action: 'add' | 'remove', choices: TagChoice[]): Promise<boolean> {
+    let out: Awaited<ReturnType<typeof bulkTag>> | null | undefined = null;
+    for (const choice of choices) {
+      out = await guarded(() => bulkTag(target(), action, choice));
+      if (!out) return false;
+    }
     if (!out) return false;
     if (!pickerRow) dispatch({ type: 'clear' });
     await refresh();
-    const name = choice.tagId
-      ? ((tags.data ?? []).find((x) => x.id === choice.tagId)?.name ?? '')
-      : (choice.name ?? '');
+    const name = choices
+      .map((c) =>
+        c.tagId ? ((tags.data ?? []).find((x) => x.id === c.tagId)?.name ?? '') : (c.name ?? ''),
+      )
+      .filter(Boolean)
+      .join(', ');
     report(tb(action === 'add' ? 'tagged' : 'untagged', { count: out.changed, name }), out);
     return true;
   }
@@ -506,8 +528,9 @@ export function ContactsScreen() {
     if (!deleteTarget) return;
     setBusy(true);
     try {
-      await deleteContact(deleteTarget.id);
+      await deleteContact(deleteTarget.id, { eraseHistory: !keepHistory });
       setDeleteId(null);
+      setKeepHistory(false);
       await refresh();
       toast(t('deleted'), 'success');
     } catch (e) {
@@ -694,6 +717,8 @@ export function ContactsScreen() {
               columnIds={columns.map((c) => c.id)}
               keepsColumns={savedViewCols !== null}
               onSelect={selectView}
+              onPreset={selectPreset}
+              meId={session.user.id}
               can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
             />
           )}
@@ -925,10 +950,18 @@ export function ContactsScreen() {
           tone="danger"
           busy={busy}
           title={t('deleteTitle')}
-          message={t('deleteMessage', { name: deleteTarget ? displayName(deleteTarget) : '' })}
+          message={
+            <>
+              <p>{t('deleteMessage', { name: deleteTarget ? displayName(deleteTarget) : '' })}</p>
+              <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
+            </>
+          }
           confirmLabel={t('delete')}
           cancelLabel={t('keep')}
-          onClose={() => setDeleteId(null)}
+          onClose={() => {
+            setDeleteId(null);
+            setKeepHistory(false);
+          }}
           onConfirm={() => void onDeleteOne()}
         />
         <ConfirmDialog
@@ -936,10 +969,18 @@ export function ContactsScreen() {
           tone="danger"
           busy={busy}
           title={tb('deleteTitle')}
-          message={count === null ? tb('deleteAllMessage') : tb('deleteMessage', { count })}
+          message={
+            <>
+              <p>{count === null ? tb('deleteAllMessage') : tb('deleteMessage', { count })}</p>
+              <DeleteHistoryOption many keepHistory={keepHistory} onChange={setKeepHistory} />
+            </>
+          }
           confirmLabel={tb('delete')}
           cancelLabel={tb('keep')}
-          onClose={() => setConfirmBulkDelete(false)}
+          onClose={() => {
+            setConfirmBulkDelete(false);
+            setKeepHistory(false);
+          }}
           onConfirm={() => void onBulkDelete()}
         />
       </div>

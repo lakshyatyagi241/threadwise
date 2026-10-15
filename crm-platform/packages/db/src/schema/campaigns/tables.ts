@@ -97,6 +97,10 @@ export const campWizardCsv = pgTable(
     validCount: integer('valid_count').notNull().default(0),
     duplicateCount: integer('duplicate_count').notNull().default(0),
     invalidCount: integer('invalid_count').notNull().default(0),
+    // BL-170: the uploader confirmed consent for the file, and the notice they stated (migration 20261205090200).
+    consentConfirmed: boolean('consent_confirmed').notNull().default(false),
+    consentNoticeText: text('consent_notice_text'),
+    consentNoticeVersion: text('consent_notice_version'),
     createdBy: idColumn('created_by'),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -116,6 +120,10 @@ export const campWizardCsv = pgTable(
       columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    check(
+      'ck_camp_wizard_csv_notice',
+      sql`char_length(coalesce(${t.consentNoticeText}, '')) <= 2000 and char_length(coalesce(${t.consentNoticeVersion}, '')) <= 64`,
+    ),
     index('idx_camp_wizard_csv_expiry')
       .on(t.expiresAt)
       .where(sql`expires_at IS NOT NULL`),
@@ -181,6 +189,8 @@ export const wpcampaigns = pgTable(
     flowIdB: idColumn('flow_id_b'),
     useAttributes: boolean('use_attributes').notNull().default(false),
     trackingEnabled: boolean('tracking_enabled').notNull().default(true),
+    /** Retry a transient failure under the platform's retry settings; false makes the first failure final. */
+    retryFailed: boolean('retry_failed').notNull().default(true),
     scheduleType: text('schedule_type').notNull().default('now'),
     sendDate: date('send_date'),
     sendTime: time('send_time'),
@@ -216,6 +226,8 @@ export const wpcampaigns = pgTable(
     runAt: timestamp('run_at', { withTimezone: true }),
     retryEnabled: boolean('retry_enabled').notNull().default(false),
     retryUntil: timestamp('retry_until', { withTimezone: true }),
+    /** Follow-up steps of the guided campaign's draft (0 to 3): the worker only looks at campaigns that have some. */
+    followUpCount: smallint('follow_up_count').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -276,6 +288,10 @@ export const wpcampaigns = pgTable(
     index('idx_wpcampaigns_retry')
       .on(t.retryEnabled)
       .where(sql`retry_enabled`),
+    check('ck_wpcampaigns_follow_up_count', sql`follow_up_count BETWEEN 0 AND 3`),
+    index('idx_wpcampaigns_follow_up')
+      .on(t.orgId, t.id)
+      .where(sql`follow_up_count > 0`),
   ],
 );
 
@@ -317,6 +333,11 @@ export const wpCampaignContacts = pgTable(
     retryCount: smallint('retry_count').notNull().default(0),
     retryFirstSentAt: timestamp('retry_first_sent_at', { withTimezone: true }),
     retryNextAt: timestamp('retry_next_at', { withTimezone: true }),
+    /** null: not in a chain yet; active: step `followUpNext` is next, measured from `followUpBaseAt`; done: the chain ended. */
+    followUpState: text('follow_up_state'),
+    followUpNext: smallint('follow_up_next'),
+    followUpBaseAt: timestamp('follow_up_base_at', { withTimezone: true }),
+    followUpCheckAt: timestamp('follow_up_check_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -324,6 +345,17 @@ export const wpCampaignContacts = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_wp_campaign_contacts_org_id_uuid').on(t.orgId, t.uuid),
+    check(
+      'ck_wp_campaign_contacts_follow_up_state',
+      sql`follow_up_state IS NULL OR follow_up_state IN ('active', 'done')`,
+    ),
+    check(
+      'ck_wp_campaign_contacts_follow_up_chain',
+      sql`(follow_up_state = 'active') = (follow_up_next IS NOT NULL AND follow_up_base_at IS NOT NULL AND follow_up_check_at IS NOT NULL)`,
+    ),
+    index('idx_wp_campaign_contacts_follow_up_active')
+      .on(t.followUpCheckAt)
+      .where(sql`follow_up_state = 'active'`),
     check(
       'ck_wp_campaign_contacts_retry_state',
       sql`retry_state IS NULL OR retry_state IN ('scheduled', 'sending', 'sent', 'recovered', 'exhausted')`,
@@ -414,6 +446,71 @@ export const campRetryAttempts = pgTable(
   ],
 );
 export type CampRetryAttemptsRow = typeof campRetryAttempts.$inferSelect;
+
+/** One row per (recipient, follow-up step): written BEFORE the provider is called, so a step happens at most once. */
+export const campFollowUpAttempts = pgTable(
+  'camp_follow_up_attempts',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    campaignId: idColumn('campaign_id').notNull(),
+    recipientId: idColumn('recipient_id').notNull(),
+    stepNo: smallint('step_no').notNull(),
+    trigger: text('trigger').notNull(),
+    actionKind: text('action_kind').notNull(),
+    scheduledFor: timestamp('scheduled_for', { withTimezone: true }).notNull(),
+    executedAt: timestamp('executed_at', { withTimezone: true }).notNull().defaultNow(),
+    outcome: text('outcome').notNull(),
+    deliveryStatus: text('delivery_status'),
+    deliveredAt: timestamp('delivered_at', { withTimezone: true }),
+    readAt: timestamp('read_at', { withTimezone: true }),
+    providerMessageId: text('provider_message_id'),
+    errorCode: text('error_code'),
+    errorMessage: text('error_message'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('camp_follow_up_attempts_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_camp_follow_up_attempts_step').on(t.orgId, t.recipientId, t.stepNo),
+    check(
+      'ck_camp_follow_up_attempts_trigger',
+      sql`trigger IN ('replied', 'read', 'not_replied', 'not_read')`,
+    ),
+    check('ck_camp_follow_up_attempts_action', sql`action_kind IN ('template', 'flow')`),
+    check(
+      'ck_camp_follow_up_attempts_outcome',
+      sql`outcome IN ('claimed', 'sent', 'flow_started', 'failed', 'skipped', 'lapsed')`,
+    ),
+    check(
+      'ck_camp_follow_up_attempts_delivery',
+      sql`delivery_status IS NULL OR delivery_status IN ('sent', 'delivered', 'read', 'failed')`,
+    ),
+    foreignKey({
+      name: 'fk_camp_follow_up_attempts_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_follow_up_attempts_campaign',
+      columns: [t.orgId, t.campaignId],
+      foreignColumns: [wpcampaigns.orgId, wpcampaigns.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_camp_follow_up_attempts_recipient',
+      columns: [t.orgId, t.recipientId],
+      foreignColumns: [wpCampaignContacts.orgId, wpCampaignContacts.id],
+    }).onDelete('cascade'),
+    index('idx_camp_follow_up_attempts_campaign').on(t.orgId, t.campaignId, t.stepNo),
+    index('idx_camp_follow_up_attempts_message')
+      .on(t.providerMessageId)
+      .where(sql`provider_message_id IS NOT NULL`),
+  ],
+);
+export type CampFollowUpAttemptsRow = typeof campFollowUpAttempts.$inferSelect;
 
 /** A test message sent from the wizard: logged, and charged by the wallet when its delivery is reported. */
 export const campTestSends = pgTable(

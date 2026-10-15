@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Nicht in Ihrem Tarif enthalten. Upgraden Sie, um den gesamten Verlauf zu importieren.",
+        "fullLockedLink": "Tarife ansehen"
+      }
+    }
+  }
+}

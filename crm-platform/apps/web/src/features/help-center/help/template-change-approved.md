@@ -5,7 +5,8 @@ summary: An approved template cannot be edited here. Create a new version, wait 
 area: campaigns
 order: 56
 documents: [nav:templates]
-keywords: [edit approved template, new version, change template, copy template, delete template, resubmit]
+keywords:
+  [edit approved template, new version, change template, copy template, delete template, resubmit]
 ---
 
 ## What it is for

@@ -134,3 +134,28 @@ export function TrackClicks({
     </label>
   );
 }
+
+/** "Retry failed messages automatically": a temporary failure is tried again under the platform's retry settings; off, the first failure is final. */
+export function RetryFailed({
+  checked,
+  onChange,
+}: {
+  checked: boolean;
+  onChange: (on: boolean) => void;
+}) {
+  const t = useTranslations('campaigns.builder.delivery');
+  return (
+    <label className="flex cursor-pointer items-start gap-2 text-sm">
+      <input
+        type="checkbox"
+        className="mt-0.5 size-4 accent-[var(--primary)]"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+      />
+      <span>
+        {t('retryFailed')}
+        <span className="block text-xs text-muted-foreground">{t('retryFailedHint')}</span>
+      </span>
+    </label>
+  );
+}

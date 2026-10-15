@@ -168,6 +168,32 @@ export class CallsRepository {
     return toNumber(rowsOf(res)[0]!);
   }
 
+  /**
+   * Same as `setCalling`, but only when the flag still reads `expected`: a check that read the number a moment ago must not overwrite a
+   * switch a person (or the automatic one) made since. With `unchangedSince` (the database time a check began) the row must also be
+   * untouched since then: a toggle that landed while the check waited on Meta wins even when its value happens to match. `null` when
+   * either no longer holds.
+   */
+  async setCallingIf(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    expected: boolean,
+    enabled: boolean,
+    meta: unknown,
+    unchangedSince?: Date,
+  ): Promise<NumberRow | null> {
+    const res = await tx.execute(sql`
+      UPDATE wa_provider_configs
+         SET calling_enabled = ${enabled}, calling_enabled_at = ${enabled ? sql`now()` : sql`NULL`},
+             calling_enabled_meta = ${json(meta)}
+       WHERE org_id = ${orgId} AND id = ${id} AND calling_enabled = ${expected}
+         ${unchangedSince ? sql`AND updated_at <= ${unchangedSince.toISOString()}::timestamptz` : sql``}
+       RETURNING id, uuid, status, phone_number, display_label, calling_enabled, calling_enabled_at, meta_json`);
+    const r = rowsOf(res)[0];
+    return r ? toNumber(r) : null;
+  }
+
   /** The number a conversation is on, when it is a WhatsApp Cloud API one: through the channel the number is the inbox view of. */
   async numberOfConversation(tx: Tx, orgId: number, conversationUuid: string) {
     const res = await tx.execute(sql`

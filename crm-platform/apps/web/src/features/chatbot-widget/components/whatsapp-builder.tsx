@@ -5,12 +5,15 @@ import { useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   DEFAULT_LAUNCHER_AVATAR,
+  DEFAULT_POPUP_TEXT,
+  LAUNCHER_ANIMATIONS,
   LAUNCHER_AVATARS,
   LAUNCHER_AVATAR_PREFIX,
   LAUNCHER_COLOUR_PRESETS,
   LAUNCHER_LIMITS,
   LAUNCHER_SIDES,
   LAUNCHER_TEXT,
+  POPUP_POSITIONS,
   WIDGET_LIMITS,
   launcherAvatarSrc,
   resolveLauncherColour,
@@ -28,6 +31,7 @@ import {
 } from '../lib/builder-model';
 import { BackIcon, ChevronDownIcon, ChevronUpIcon, CopyIcon, WhatsappGlyph } from './icons';
 import { LauncherPreview, type PreviewDevice } from './launcher-preview';
+import { ImageUpload } from './image-upload';
 import { PhoneField } from './phone-field';
 
 const INPUT =
@@ -58,6 +62,16 @@ export interface WhatsappBuilderProps {
   snippet: { embedUrl: string; previewUrl: string } | null;
   onCopy: () => void;
   onSave: () => void;
+  /**
+   * Uploads a picture for the button (the logo or the popup image) and returns its address. Only a WhatsApp bot has somewhere to keep
+   * one; without it the cards offer the address box alone.
+   */
+  upload?: (slot: 'logo' | 'popup', file: File) => Promise<string>;
+  /**
+   * Inside a WhatsApp bot's Customize tab: no page header, name or type (the bot supplies them), no number card (the number and the
+   * message come from the bot's Trigger), and the embed code is on the Deploy tab.
+   */
+  embedded?: boolean;
 }
 
 /**
@@ -78,8 +92,40 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
 
   const cards: Array<{ n: WhatsappCard; body: React.ReactNode }> = [
     { n: 1, body: <StyleCard s={s} setLauncher={setLauncher} /> },
-    { n: 2, body: <MessengerCard s={s} setLauncher={setLauncher} flash={flash} /> },
-    { n: 3, body: <WelcomeCard s={s} setLauncher={setLauncher} flash={flash} /> },
+    {
+      n: 2,
+      body: (
+        <MessengerCard
+          s={s}
+          setLauncher={setLauncher}
+          flash={flash}
+          upload={p.upload ? (file) => p.upload!('logo', file) : undefined}
+        />
+      ),
+    },
+    {
+      n: 3,
+      body: (
+        <WelcomeCard
+          s={s}
+          set={set}
+          setLauncher={setLauncher}
+          flash={flash}
+          bot={p.embedded === true}
+        />
+      ),
+    },
+    {
+      n: 6,
+      body: (
+        <PopupCard
+          s={s}
+          setLauncher={setLauncher}
+          flash={flash}
+          upload={p.upload ? (file) => p.upload!('popup', file) : undefined}
+        />
+      ),
+    },
     {
       n: 4,
       body: (
@@ -95,89 +141,96 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
     { n: 5, body: <NumberCard s={s} set={set} flash={flash} defaultIso={p.defaultIso} /> },
   ];
 
+  // The bot's own number and keyword fill the button, so a bot's Customize tab has no number card.
+  const shown = p.embedded ? cards.filter((c) => c.n !== 5) : cards;
+
   return (
     <>
-      <div className="sticky top-0 z-20 border-b border-border bg-background">
-        <div className="mx-auto flex max-w-none items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
-          <div className="flex min-w-0 items-center gap-3">
-            <Link
-              href="/chatbot-widgets"
-              title={b('back')}
-              aria-label={b('back')}
-              className="flex size-8 items-center justify-center rounded-full border border-border hover:bg-muted"
-            >
-              <BackIcon className="size-3.5" />
-            </Link>
-            <div className="min-w-0">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-                {b('crumb')} / {t('crumb')}
+      {p.embedded ? null : (
+        <div className="sticky top-0 z-20 border-b border-border bg-background">
+          <div className="mx-auto flex max-w-none items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
+            <div className="flex min-w-0 items-center gap-3">
+              <Link
+                href="/chatbot-widgets"
+                title={b('back')}
+                aria-label={b('back')}
+                className="flex size-8 items-center justify-center rounded-full border border-border hover:bg-muted"
+              >
+                <BackIcon className="size-3.5" />
+              </Link>
+              <div className="min-w-0">
+                <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {b('crumb')} / {t('crumb')}
+                </div>
+                <h1 className="truncate text-xl leading-tight">
+                  {t('title')} <span className="italic text-emerald-700">{t('titleAccent')}</span>
+                </h1>
               </div>
-              <h1 className="truncate text-xl leading-tight">
-                {t('title')} <span className="italic text-emerald-700">{t('titleAccent')}</span>
-              </h1>
             </div>
+            <span
+              data-testid="state-pill"
+              className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-mono text-[11px] font-medium"
+            >
+              {p.saved ? b('stateSaved') : b('stateDraft')}
+            </span>
           </div>
-          <span
-            data-testid="state-pill"
-            className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-mono text-[11px] font-medium"
-          >
-            {p.saved ? b('stateSaved') : b('stateDraft')}
-          </span>
         </div>
-      </div>
+      )}
 
       <section className="mx-auto max-w-none px-4 py-6 sm:px-6 lg:px-7">
         <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_460px]">
           <div className="space-y-3" data-testid="whatsapp-builder">
-            <div className="rounded-2xl border border-border bg-background p-4 shadow-sm">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
-                <div>
-                  <label htmlFor="wgt-f-name" className={LABEL}>
-                    {setup('name')} <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    id="wgt-f-name"
-                    type="text"
-                    value={s.name}
-                    maxLength={WIDGET_LIMITS.name}
-                    placeholder={setup('namePlaceholder')}
-                    aria-invalid={flash === 'name' || undefined}
-                    onChange={(e) => set({ name: e.target.value })}
-                    className={cn(INPUT, ring(flash, 'name'))}
-                  />
-                  <div className={HINT}>{t('nameHint')}</div>
-                </div>
-                <fieldset>
-                  <legend className={LABEL}>{t('type')}</legend>
-                  <div className="flex flex-wrap gap-2">
-                    {(['whatsapp', 'ai', 'both'] as const).map((mode) => (
-                      <label
-                        key={mode}
-                        data-mode-tile={mode}
-                        className={cn(
-                          'cursor-pointer rounded-full border px-3 py-1.5 text-[12px] font-semibold transition focus-within:ring-2 focus-within:ring-primary',
-                          s.mode === mode
-                            ? 'border-emerald-600 bg-emerald-50 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100'
-                            : 'border-border text-muted-foreground hover:bg-muted',
-                        )}
-                      >
-                        <input
-                          type="radio"
-                          name="wgt-mode"
-                          value={mode}
-                          checked={s.mode === mode}
-                          onChange={() => set({ mode })}
-                          className="sr-only"
-                        />
-                        {setup(`mode.${mode}.title`)}
-                      </label>
-                    ))}
+            {p.embedded ? null : (
+              <div className="rounded-2xl border border-border bg-background p-4 shadow-sm">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
+                  <div>
+                    <label htmlFor="wgt-f-name" className={LABEL}>
+                      {setup('name')} <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      id="wgt-f-name"
+                      type="text"
+                      value={s.name}
+                      maxLength={WIDGET_LIMITS.name}
+                      placeholder={setup('namePlaceholder')}
+                      aria-invalid={flash === 'name' || undefined}
+                      onChange={(e) => set({ name: e.target.value })}
+                      className={cn(INPUT, ring(flash, 'name'))}
+                    />
+                    <div className={HINT}>{t('nameHint')}</div>
                   </div>
-                </fieldset>
+                  <fieldset>
+                    <legend className={LABEL}>{t('type')}</legend>
+                    <div className="flex flex-wrap gap-2">
+                      {(['whatsapp', 'ai', 'both'] as const).map((mode) => (
+                        <label
+                          key={mode}
+                          data-mode-tile={mode}
+                          className={cn(
+                            'cursor-pointer rounded-full border px-3 py-1.5 text-[12px] font-semibold transition focus-within:ring-2 focus-within:ring-primary',
+                            s.mode === mode
+                              ? 'border-emerald-600 bg-emerald-50 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100'
+                              : 'border-border text-muted-foreground hover:bg-muted',
+                          )}
+                        >
+                          <input
+                            type="radio"
+                            name="wgt-mode"
+                            value={mode}
+                            checked={s.mode === mode}
+                            onChange={() => set({ mode })}
+                            className="sr-only"
+                          />
+                          {setup(`mode.${mode}.title`)}
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
               </div>
-            </div>
+            )}
 
-            {cards.map(({ n, body }) => {
+            {shown.map(({ n, body }) => {
               const open = p.openCard === n;
               return (
                 <section
@@ -239,7 +292,7 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
               )}
             </div>
 
-            {p.snippet && (
+            {p.snippet && !p.embedded && (
               <div
                 data-testid="install"
                 className="rounded-2xl border border-emerald-500 bg-background p-5 shadow-sm"
@@ -404,6 +457,35 @@ function StyleCard({ s, setLauncher }: { s: BuilderState; setLauncher: LauncherS
           />
         </div>
       </fieldset>
+
+      <fieldset className="mt-6">
+        <legend className={LABEL}>{t('animation')}</legend>
+        <div className="flex flex-wrap gap-2">
+          {LAUNCHER_ANIMATIONS.map((a) => (
+            <label
+              key={a}
+              data-animation={a}
+              className={cn(
+                'cursor-pointer rounded-full border px-3.5 py-1.5 text-[12.5px] font-semibold transition focus-within:ring-2 focus-within:ring-primary',
+                l.animation === a
+                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100'
+                  : 'border-border text-muted-foreground hover:bg-muted',
+              )}
+            >
+              <input
+                type="radio"
+                name="wgt-animation"
+                value={a}
+                checked={l.animation === a}
+                onChange={() => setLauncher({ animation: a })}
+                className="sr-only"
+              />
+              {t(`animations.${a}`)}
+            </label>
+          ))}
+        </div>
+        <div className={HINT}>{t('animationHint')}</div>
+      </fieldset>
     </div>
   );
 }
@@ -414,16 +496,35 @@ function MessengerCard({
   s,
   setLauncher,
   flash,
+  upload,
 }: {
   s: BuilderState;
   setLauncher: LauncherSetter;
   flash: string | null;
+  upload: ((file: File) => Promise<string>) | undefined;
 }) {
   const t = useTranslations('chatbotWidget.whatsappBuilder.card.2');
   const avatar = s.launcher.avatar;
   const isPreset = avatar.startsWith(LAUNCHER_AVATAR_PREFIX);
   return (
     <div>
+      <div className="mb-5">
+        <label htmlFor="wgt-f-botName" className={LABEL}>
+          {t('botName')}
+        </label>
+        <input
+          id="wgt-f-botName"
+          type="text"
+          value={s.launcher.botName}
+          maxLength={LAUNCHER_LIMITS.botName}
+          placeholder={s.name}
+          onChange={(e) => setLauncher({ botName: e.target.value })}
+          className={cn(INPUT, 'border-border')}
+        />
+        <div className={HINT}>
+          {t('botNameHint')} {s.launcher.botName.length}/{LAUNCHER_LIMITS.botName}
+        </div>
+      </div>
       <fieldset className="mb-5">
         <legend className={LABEL}>{t('image')}</legend>
         <div className="flex flex-wrap gap-3">
@@ -477,6 +578,12 @@ function MessengerCard({
         className={cn(INPUT, ring(flash, 'avatar'))}
       />
       <div className={HINT}>{t('urlHint')}</div>
+      <ImageUpload
+        id="wgt-f-avatarFile"
+        value={avatar.startsWith(LAUNCHER_AVATAR_PREFIX) ? '' : avatar}
+        upload={upload}
+        onChange={(v) => setLauncher({ avatar: v === '' ? DEFAULT_LAUNCHER_AVATAR : v })}
+      />
     </div>
   );
 }
@@ -485,12 +592,17 @@ function MessengerCard({
 
 function WelcomeCard({
   s,
+  set,
   setLauncher,
   flash,
+  bot,
 }: {
   s: BuilderState;
+  set: (patch: Partial<BuilderState>) => void;
   setLauncher: LauncherSetter;
   flash: string | null;
+  /** A WhatsApp bot's button: the message a tap sends is set here (the Chat widget page sets it with the number). */
+  bot: boolean;
 }) {
   const t = useTranslations('chatbotWidget.whatsappBuilder.card.3');
   return (
@@ -525,6 +637,164 @@ function WelcomeCard({
           className={cn(INPUT, ring(flash, 'introMessage'))}
         />
         <div className={HINT}>{t('introHint')}</div>
+      </div>
+      <div>
+        <label htmlFor="wgt-f-subHeader" className={LABEL}>
+          {t('subHeader')}
+        </label>
+        <input
+          id="wgt-f-subHeader"
+          type="text"
+          value={s.launcher.subHeader}
+          maxLength={LAUNCHER_LIMITS.subHeader}
+          onChange={(e) => setLauncher({ subHeader: e.target.value })}
+          className={cn(INPUT, 'border-border')}
+        />
+        <div className={HINT}>
+          {t('subHeaderHint')} {s.launcher.subHeader.length}/{LAUNCHER_LIMITS.subHeader}
+        </div>
+      </div>
+      <div>
+        <label htmlFor="wgt-f-ctaText" className={LABEL}>
+          {t('cta')} <span className="text-danger">*</span>
+        </label>
+        <input
+          id="wgt-f-ctaText"
+          type="text"
+          value={s.launcher.ctaText}
+          maxLength={LAUNCHER_LIMITS.cta}
+          aria-invalid={flash === 'ctaText' || undefined}
+          onChange={(e) => setLauncher({ ctaText: e.target.value })}
+          className={cn(INPUT, ring(flash, 'ctaText'))}
+        />
+        <div className={HINT}>
+          {t('ctaHint')} {s.launcher.ctaText.length}/{LAUNCHER_LIMITS.cta}
+        </div>
+      </div>
+      {bot ? (
+        <div>
+          <label htmlFor="wgt-f-prefilledMessage" className={LABEL}>
+            {t('prefilled')} <span className="text-danger">*</span>
+          </label>
+          <textarea
+            id="wgt-f-prefilledMessage"
+            rows={3}
+            value={s.prefilledMessage}
+            maxLength={BOT_MESSAGE_MAX}
+            aria-invalid={flash === 'prefilledMessage' || undefined}
+            onChange={(e) => set({ prefilledMessage: e.target.value })}
+            className={cn(INPUT, ring(flash, 'prefilledMessage'))}
+          />
+          <div className={HINT}>
+            {t('prefilledHint')} {s.prefilledMessage.length}/{BOT_MESSAGE_MAX}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/** The most a tap on a WhatsApp bot's button sends. */
+export const BOT_MESSAGE_MAX = 200;
+
+// --- card 6: the popup message ----------------------------------------------------------------------------------------------
+
+function PopupCard({
+  s,
+  setLauncher,
+  flash,
+  upload,
+}: {
+  s: BuilderState;
+  setLauncher: LauncherSetter;
+  flash: string | null;
+  upload: ((file: File) => Promise<string>) | undefined;
+}) {
+  const t = useTranslations('chatbotWidget.whatsappBuilder.card.6');
+  const popup = s.launcher.popup;
+  const setPopup = (patch: Partial<typeof popup>) => setLauncher({ popup: { ...popup, ...patch } });
+  return (
+    <div className="space-y-5">
+      <label className="flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5 hover:bg-muted">
+        <span>
+          <span className="block text-[13px] font-semibold">{t('visibility')}</span>
+          <span className="block text-[11px] text-muted-foreground">{t('visibilityHint')}</span>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          id="wgt-f-popupEnabled"
+          aria-label={t('visibility')}
+          checked={popup.enabled}
+          onChange={(e) => setPopup({ enabled: e.target.checked })}
+          className="size-4 accent-emerald-600"
+        />
+      </label>
+      <fieldset>
+        <legend className={LABEL}>{t('position')}</legend>
+        <div className="flex gap-2">
+          {POPUP_POSITIONS.map((pos) => (
+            <label
+              key={pos}
+              data-popup-position={pos}
+              className={cn(
+                'cursor-pointer rounded-full border px-3.5 py-1.5 text-[12.5px] font-semibold transition focus-within:ring-2 focus-within:ring-primary',
+                popup.position === pos
+                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-100'
+                  : 'border-border text-muted-foreground hover:bg-muted',
+              )}
+            >
+              <input
+                type="radio"
+                name="wgt-popup-position"
+                value={pos}
+                checked={popup.position === pos}
+                onChange={() => setPopup({ position: pos })}
+                className="sr-only"
+              />
+              {t(pos)}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div>
+        <label htmlFor="wgt-f-popupText" className={LABEL}>
+          {t('text')} {popup.enabled ? <span className="text-danger">*</span> : null}
+        </label>
+        <textarea
+          id="wgt-f-popupText"
+          rows={2}
+          value={popup.text}
+          maxLength={LAUNCHER_LIMITS.popupText}
+          placeholder={DEFAULT_POPUP_TEXT}
+          aria-invalid={flash === 'popupText' || undefined}
+          onChange={(e) => setPopup({ text: e.target.value })}
+          className={cn(INPUT, ring(flash, 'popupText'))}
+        />
+        <div className={HINT}>{t('textHint')}</div>
+      </div>
+      <div>
+        <label htmlFor="wgt-f-popupImage" className={LABEL}>
+          {t('image')}
+        </label>
+        <input
+          id="wgt-f-popupImage"
+          type="url"
+          inputMode="url"
+          value={popup.image}
+          maxLength={LAUNCHER_LIMITS.avatar}
+          placeholder="https://example.com/picture.png"
+          aria-invalid={flash === 'popupImage' || undefined}
+          onChange={(e) => setPopup({ image: e.target.value })}
+          className={cn(INPUT, ring(flash, 'popupImage'))}
+        />
+        <div className={HINT}>{t('imageHint')}</div>
+        <ImageUpload
+          id="wgt-f-popupImageFile"
+          value={popup.image}
+          upload={upload}
+          onChange={(v) => setPopup({ image: v })}
+        />
       </div>
     </div>
   );

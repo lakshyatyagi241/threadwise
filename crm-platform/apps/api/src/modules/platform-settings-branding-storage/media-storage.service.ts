@@ -1,5 +1,6 @@
 import { Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { canonicalStorageKey } from '../../common/storage-key-owner';
 import type { Env } from '../../config/env.schema';
 import {
   presignS3Get,
@@ -23,17 +24,14 @@ export interface MediaDestination {
   target: StorageTarget | null;
   visibility: 'public' | 'private';
   cdnUrl: string;
+  /** Public address of the bucket for links handed to outsiders, when the endpoint the server uses is private (`S3_PUBLIC_ENDPOINT`). */
+  publicEndpoint?: string;
 }
 
 const LOCAL_URL_ROOT = '/storage';
 
 /** `storage/foo` and `/foo` both mean the object key `foo` (Reference's media_url strips a stray `storage/`). */
-export function normaliseKey(path: string): string {
-  return path
-    .trim()
-    .replace(/^\/+/, '')
-    .replace(/^storage\//, '');
-}
+export const normaliseKey = canonicalStorageKey;
 
 @Injectable()
 export class MediaStorageService {
@@ -86,7 +84,18 @@ export class MediaStorageService {
       : null;
     if (!target) {
       const fallback = this.envTarget();
-      if (fallback) return { disk: 'cloud', target: fallback, visibility: 'private', cdnUrl: '' };
+      if (fallback) {
+        const publicEndpoint = this.config
+          ?.get('S3_PUBLIC_ENDPOINT', { infer: true })
+          ?.replace(/\/+$/, '');
+        return {
+          disk: 'cloud',
+          target: fallback,
+          visibility: 'private',
+          cdnUrl: '',
+          ...(publicEndpoint ? { publicEndpoint } : {}),
+        };
+      }
     }
     return {
       disk: target ? 'cloud' : 'local',
@@ -121,6 +130,7 @@ export class MediaStorageService {
         method: 'PUT',
         headers: { ...req.headers, 'content-type': contentType },
         body,
+        redirect: 'manual',
         signal: AbortSignal.timeout(30_000),
       });
     };
@@ -137,6 +147,7 @@ export class MediaStorageService {
     const res = await fetch(req.url, {
       method: 'PUT',
       headers: req.headers,
+      redirect: 'manual',
       signal: AbortSignal.timeout(15_000),
     });
     if (!res.ok && res.status !== 409) return false;
@@ -151,6 +162,7 @@ export class MediaStorageService {
     const res = await fetch(req.url, {
       method: 'DELETE',
       headers: req.headers,
+      redirect: 'manual',
       signal: AbortSignal.timeout(15_000),
     });
     if (!res.ok && res.status !== 404) {
@@ -169,8 +181,8 @@ export class MediaStorageService {
     if (d.disk !== 'cloud' || !d.target) return `${LOCAL_URL_ROOT}/${k}`;
     const objectKey = this.fullKey(d, k);
     if (d.cdnUrl) return `${d.cdnUrl.replace(/\/+$/, '')}/${objectKey}`;
-    if (d.visibility === 'private') return presignS3Get(d.target, objectKey, ttlSeconds);
-    const t = d.target;
+    const t = d.publicEndpoint ? { ...d.target, endpoint: d.publicEndpoint } : d.target;
+    if (d.visibility === 'private') return presignS3Get(t, objectKey, ttlSeconds);
     const base = new URL(t.endpoint);
     return t.pathStyle
       ? `${t.endpoint}/${t.bucket}/${objectKey}`

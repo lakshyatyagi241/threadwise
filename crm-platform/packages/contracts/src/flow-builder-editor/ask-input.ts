@@ -51,6 +51,32 @@ export const flbCleanDateFormat = (v: unknown): FlbDateFormat =>
     ? (v as FlbDateFormat)
     : FLB_DEFAULT_DATE_FORMAT;
 
+/**
+ * The one-time code that proves a phone number is the visitor's: a Phone question with "Verify with a code" on sends it to the number
+ * (over the platform's verification sender) and waits for it in the chat. Short-lived and hard to farm: a code lives 10 minutes, three
+ * wrong tries end the question, two new codes at most, three codes per number every ten minutes and a daily limit per workspace.
+ */
+export const FLB_OTP = {
+  digits: 6,
+  ttlMinutes: 10,
+  maxTries: 3,
+  maxResends: 2,
+  perPhoneWindowSeconds: 600,
+  perPhone: 3,
+  perOrgPerDay: 100,
+} as const;
+
+/** What the visitor is told while a code is asked for. `{phone}` and `{minutes}` are filled in. */
+export const FLB_OTP_TEXT = {
+  sent: 'We sent a code to {phone}. Type it here (it works for {minutes} minutes), or send "resend" for a new one.',
+  wrong: 'That code is not right. Please try again.',
+  expired: 'That code has expired. Send "resend" for a new one.',
+  noMoreCodes: 'No more new codes can be sent for this number.',
+  needCountryCode: 'Please include your country code, like +91 98765 43210.',
+  sendFailed: 'We could not send a code to that number. Please check it and try again.',
+  tooMany: 'Too many codes were asked for. Please try again later.',
+} as const;
+
 /** The text sent when an answer does not pass and the author wrote none. */
 export function flbAskInputWrongText(type: FlbAskInputType, dateFormat?: unknown): string {
   switch (type) {

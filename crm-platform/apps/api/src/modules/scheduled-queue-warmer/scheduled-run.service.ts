@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, type ConsentGateResult, type PurposeInput } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import {
   UNOFFICIAL_ENGINE,
@@ -24,6 +24,7 @@ import {
   nextUtcMidnight,
   type PacingSettingsSource,
 } from '../broadcasts';
+import { ConsentGate, purposeOfCategory } from '../contact-consent';
 import { MergeTagService } from '../crm';
 import {
   OutboundRegistry,
@@ -81,6 +82,7 @@ export class ScheduledRunService {
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly outbox: OutboxService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
+    private readonly consentGate: ConsentGate,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -207,9 +209,22 @@ export class ScheduledRunService {
         });
         if (batch.length === 0) break;
 
+        // The consent gate runs NOW, at send time, not when the schedule was saved: a STOP since then, or a workspace that has since
+        // switched on "require recorded consent", is honoured. One statement for the whole batch.
+        const refused = await this.refusedByGate(orgId, batch, prepared);
+
         for (const r of batch) {
           lastId = Number(r.id);
           const to = digits(r.phone);
+
+          const why = refused.get(Number(r.id));
+          if (why) {
+            await this.db.tx((tx) =>
+              this.setRecipient(tx, orgId, Number(r.id), 'failed', { error: why }),
+            );
+            processed++;
+            continue;
+          }
 
           if (to && sender.engine === 'baileys') {
             const used = await this.cap.sentToday(orgId, sender.engine, sender.id);
@@ -332,6 +347,40 @@ export class ScheduledRunService {
     } finally {
       await this.lease.release(leaseKey, leaseToken);
     }
+  }
+
+  /**
+   * The recipients the ConsentGate refuses for this occurrence, with the plain reason kept on the recipient row. A schedule is
+   * marketing unless its template is a utility or authentication one. Typed numbers that belong to no contact are decided on the
+   * workspace policy alone (a withdrawn contact cannot be named, a missing grant is "no consent recorded").
+   */
+  private async refusedByGate(
+    orgId: number,
+    batch: readonly Recipient[],
+    prepared: PreparedMessage,
+  ): Promise<Map<number, string>> {
+    const purpose: PurposeInput = prepared.template
+      ? purposeOfCategory(prepared.template.category)
+      : 'marketing_messaging';
+    // Scheduled messages are WhatsApp (Cloud, Twilio or the linked number): one consent channel.
+    const channel = 'whatsapp';
+    const refused = new Map<number, string>();
+    const reasonText = (d: ConsentGateResult): string =>
+      d.reason === 'withdrawn'
+        ? 'Not sent: the contact unsubscribed'
+        : 'Not sent: no recorded consent';
+
+    const ids = batch.filter((r) => r.contact_id !== null).map((r) => Number(r.contact_id));
+    const many =
+      ids.length > 0 ? await this.consentGate.checkMany(orgId, ids, channel, purpose) : null;
+    const anyone = batch.some((r) => r.contact_id === null)
+      ? await this.consentGate.check(orgId, { type: 'anonymous' }, channel, purpose)
+      : null;
+    for (const r of batch) {
+      const d = r.contact_id === null ? anyone : many?.decisions.get(Number(r.contact_id));
+      if (d && d.decision === 'deny') refused.set(Number(r.id), reasonText(d));
+    }
+    return refused;
   }
 
   private async stillRunning(orgId: number, scheduledId: number): Promise<boolean> {

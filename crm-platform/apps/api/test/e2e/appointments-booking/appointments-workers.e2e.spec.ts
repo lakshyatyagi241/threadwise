@@ -440,6 +440,7 @@ describe('the message consumer (TW-APPT-013, 030, 031, D-14, EXT-APPT-08)', () =
       support,
       new OutboxSubscriberRegistry(),
       messenger,
+      { check: async () => ({ decision: 'allow', reason: 'utility_exempt' }) } as never,
     );
   });
 

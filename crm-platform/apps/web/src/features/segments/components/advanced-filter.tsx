@@ -42,18 +42,40 @@ export function AdvancedFilter({
   value,
   onApply,
   className,
+  open: openProp,
+  onOpenChange,
+  hideTrigger,
 }: {
   value: string;
   onApply: (rulesJson: string) => void;
   className?: string;
+  /** Lets a parent (the contact Filter panel) open the drawer; without it the button below does. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** The parent has its own way in: draw only the drawer. */
+  hideTrigger?: boolean;
 }) {
   const t = useTranslations('segments.advancedFilter');
   const tfields = useTranslations('segments.fields');
   const tactions = useTranslations('segments.actions');
   const { catalog, ready } = useSegmentCatalog();
-  const [open, setOpen] = useState(false);
+  const [openState, setOpenState] = useState(false);
+  const open = openProp ?? openState;
+  const setOpen = (v: boolean) => {
+    setOpenState(v);
+    onOpenChange?.(v);
+  };
   const [draft, setDraft] = useState<Group>(() => groupOf(value));
   const [showProblems, setShowProblems] = useState(false);
+  // Opened from outside: start from what is applied now (state adjusted while rendering, settles after one pass).
+  const [wasOpen, setWasOpen] = useState(false);
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) {
+      setDraft(groupOf(value));
+      setShowProblems(false);
+    }
+  }
   const applied = appliedConditionCount(value);
 
   // An empty builder opens with one condition ready to fill, so the person sees field, operator and value at once.
@@ -100,26 +122,28 @@ export function AdvancedFilter({
 
   return (
     <>
-      <button
-        type="button"
-        aria-haspopup="dialog"
-        onClick={() => {
-          setDraft(groupOf(value));
-          setShowProblems(false);
-          setOpen(true);
-        }}
-        className={cn(
-          'inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background px-3 text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
-          className,
-        )}
-      >
-        {applied > 0 ? t('triggerOn') : t('trigger')}
-        {applied > 0 && (
-          <span className="rounded-full bg-brand px-1.5 text-[11px] leading-5 text-brand-foreground">
-            {applied}
-          </span>
-        )}
-      </button>
+      {!hideTrigger && (
+        <button
+          type="button"
+          aria-haspopup="dialog"
+          onClick={() => {
+            setDraft(groupOf(value));
+            setShowProblems(false);
+            setOpen(true);
+          }}
+          className={cn(
+            'inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background px-3 text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+            className,
+          )}
+        >
+          {applied > 0 ? t('triggerOn') : t('trigger')}
+          {applied > 0 && (
+            <span className="rounded-full bg-brand px-1.5 text-[11px] leading-5 text-brand-foreground">
+              {applied}
+            </span>
+          )}
+        </button>
+      )}
       {/* A drawer, not an inline panel: the page behind keeps its place, and the title and the Apply / Clear row stay in view while the rules scroll. */}
       <Drawer
         open={open}

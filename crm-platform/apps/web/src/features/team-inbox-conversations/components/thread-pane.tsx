@@ -485,6 +485,8 @@ export function ThreadPane(props: ThreadPaneProps) {
       />
       <TemplatePicker
         conversationId={props.conversationId}
+        contactName={detail?.title}
+        contactFields={contactFieldsOf(detail?.contactSummary)}
         open={templatesOpen}
         onClose={() => setTemplatesOpen(false)}
         onSend={thread.sendTemplate}
@@ -578,4 +580,14 @@ function TypingLine({ conversationId }: { conversationId: string }) {
       {t('typing', { count: typing.size })}
     </span>
   );
+}
+
+/** The contact's details a template variable can be taken from, only the ones the contact has. */
+function contactFieldsOf(
+  c: { name: string | null; phone: string | null; email: string | null } | null | undefined,
+): Array<{ key: 'name' | 'phone' | 'email'; value: string }> {
+  if (!c) return [];
+  return (['name', 'phone', 'email'] as const)
+    .map((key) => ({ key, value: (c[key] ?? '').trim() }))
+    .filter((f) => f.value !== '');
 }

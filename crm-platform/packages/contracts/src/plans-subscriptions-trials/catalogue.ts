@@ -87,6 +87,8 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'sms_monthly', group: 'messaging' },
   // Connected Gmail mailboxes the workspace holds (the Email add-on; not disconnected ones). Default for a plan that has it: 3 (DEFAULT_EMAIL_MAILBOXES). 0 = unlimited.
   { key: 'email_mailboxes', group: 'messaging' },
+  // Emails sent per calendar month, replies and campaign mails together (Reference's `email_monthly_limit`). Enforced by the email campaign sender. 0 = unlimited.
+  { key: 'email_monthly', group: 'messaging' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -156,6 +158,9 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'help_agent', group: 'aiCalling', default: false },
   // The Email (Gmail) channel add-on: connect Gmail mailboxes into the team inbox. Default FALSE: the Marketplace app `email` owns this key (`grants_plan_features`).
   { key: 'email_channel', group: 'messaging', default: false },
+  // The FULL history choice of the opt-in import of a personal WhatsApp number (TW-WAHIST; owner decision 2026-10-14). The `recent` choice is open to every workspace that
+  // may use personal numbers; only `full` needs this. Default false, switched on for the plans with the most generous personal-number allowance (migration 20261204090100).
+  { key: 'personal_history_full', group: 'messaging', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -188,12 +193,13 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   storefront_builder: 'Storefront builder',
   invoicing: 'Invoicing',
   forms_and_links: 'Forms and links',
-  extra_channels: 'Telegram, Facebook and Instagram channels',
+  extra_channels: 'Telegram, Facebook, Instagram, LINE, Viber and WeChat channels',
   form_builder: 'Forms',
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',
   help_agent: 'Help assistant',
   email_channel: 'Email (Gmail) channel',
+  personal_history_full: 'Full history import (personal WhatsApp)',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -235,6 +241,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'sms',
   'help_agent',
   'email_channel',
+  'personal_history_full',
 ];
 export const PLAN_CHIP_MAX = 3;
 

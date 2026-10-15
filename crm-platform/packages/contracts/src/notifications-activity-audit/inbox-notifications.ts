@@ -61,6 +61,9 @@ export const NOTIFICATION_TYPES = [
   'device_group_join_request',
   /** The personal number was removed from a group by someone else (a useful abuse or ban signal). */
   'device_group_removed',
+  // --- The test button (Account, Notifications, Browser notifications) -------------------------------------------------------------
+  /** "Send a test notification": a harmless row written for the person who pressed the button, so the bell, the toast, the ping and the tab title can be seen working. */
+  'test',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
@@ -82,6 +85,10 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'email_bounced',
   /** A conversation's response clock ran out (SLA, BL-036): told to its assignee, else its team, else the SLA managers. */
   'sla_breached',
+  /** A member went on leave (BL-112): told to the leads, with how many contacts and open chats they hold and a link to reassign. */
+  'member_leave_started',
+  /** Routing found nobody for a new chat because the people it wanted are on leave (BL-112). Told to the leads. */
+  'assignment_blocked_by_leave',
 ] as const;
 
 /** Every type a person can set preferences for. */

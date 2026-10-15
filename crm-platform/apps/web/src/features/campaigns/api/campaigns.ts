@@ -12,7 +12,9 @@ import {
   campaignListResponseSchema,
   campaignLiveSchema,
   campaignRecipientsResponseSchema,
+  campaignStatisticsSchema,
   resendCampaignResponseSchema,
+  type BroadcastComposeQuery,
   type CampaignAiGenerateInput,
   type CreateCampaignInput,
   type ResendCampaignInput,
@@ -23,6 +25,7 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import type { ListState } from '../lib/list-model';
 import { stateToQuery } from '../lib/list-model';
+import { detailInterval, liveInterval } from '../lib/live-model';
 
 export const KEYS = {
   all: ['camp'] as const,
@@ -52,8 +55,11 @@ export function useCampaignList(state: ListState) {
   });
 }
 
-/** `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018). */
-export function useBuilder(channel?: 'sms') {
+/**
+ * `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018); `'email'` lists the connected mailboxes
+ * as senders and no templates (TW-MAIL-036).
+ */
+export function useBuilder(channel?: BroadcastComposeQuery['channel']) {
   return useQuery({
     queryKey: channel ? ([...KEYS.builder, channel] as const) : KEYS.builder,
     queryFn: ({ signal }) =>
@@ -82,16 +88,33 @@ export function useCampaignDetail(id: string) {
   return useQuery({
     queryKey: KEYS.detail(id),
     queryFn: ({ signal }) => apiFetch(`/campaigns/${id}`, { schema: campaignDetailSchema, signal }),
-    refetchInterval: POLL_MS,
+    // The heavy read follows along slowly; the live stats below carry the fast-moving numbers while the campaign is in flight.
+    refetchInterval: (q) => detailInterval(q.state.data?.campaign.status),
   });
 }
 
-export function useCampaignLive(id: string) {
+/**
+ * Live stats: the light read, asked every 12 seconds while the campaign is scheduled or running and never once it is at rest. Pass
+ * `enabled` from the detail's status; the interval then stops by itself the moment the server says `inFlight: false`. A hidden tab
+ * pauses it (react-query does not poll in the background) and a returning tab asks again at once.
+ */
+export function useCampaignLive(id: string, enabled: boolean) {
   return useQuery({
     queryKey: [...KEYS.detail(id), 'live'],
+    enabled,
     queryFn: ({ signal }) =>
       apiFetch(`/campaigns/${id}/live`, { schema: campaignLiveSchema, signal }),
-    refetchInterval: POLL_MS,
+    refetchInterval: (q) => liveInterval(q.state.data),
+  });
+}
+
+/** Statistics: where every recipient is now and the campaign's timeline; follows the campaign like the live stats do. */
+export function useCampaignStatistics(id: string) {
+  return useQuery({
+    queryKey: [...KEYS.detail(id), 'statistics'],
+    queryFn: ({ signal }) =>
+      apiFetch(`/campaigns/${id}/statistics`, { schema: campaignStatisticsSchema, signal }),
+    refetchInterval: (q) => liveInterval(q.state.data),
   });
 }
 

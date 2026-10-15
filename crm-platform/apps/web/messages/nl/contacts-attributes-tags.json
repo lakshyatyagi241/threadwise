@@ -187,7 +187,29 @@
       "ownerFormer": "Voormalig lid",
       "reassignView": "Wijs de contacten van {name} opnieuw toe...",
       "smsNamed": "SMS {name}",
-      "noSms": "Geen telefoonnummer voor sms"
+      "noSms": "Geen telefoonnummer voor sms",
+      "pqlLabel": "Zoek contacten in gewone taal",
+      "pqlAsk": "Vragen",
+      "pqlAsking": "Bezig met vragen...",
+      "pqlIgnored": "Niet begrepen: {parts}",
+      "pqlNothing": "Uit deze zoekopdracht kon geen filter worden gemaakt.",
+      "pqlFailed": "Zoeken in gewone taal is nu niet beschikbaar. Probeer het opnieuw.",
+      "filter": "Filter",
+      "filterAi": "Filteren met AI",
+      "filterAiHint": "Beschrijf wie je zoekt",
+      "filterAdvanced": "Geavanceerd filter toevoegen",
+      "quickFilters": "Snelfilters",
+      "sortButton": "Sorteren",
+      "back": "Terug",
+      "pqlPromptPlaceholder": "Beschrijf de contacten die je wilt...",
+      "pqlTry": "Probeer er een",
+      "pqlExample2": "30 dagen niet actief",
+      "pqlExample3": "In de afgelopen 7 dagen aangemaakt",
+      "clearFilter": "Filter wissen",
+      "conditionsChip": "Voorwaarden: {count}",
+      "pqlExampleTag": "Contacten met tag {tag} die 30 dagen niet actief zijn",
+      "pqlExampleStage": "{stage}-contacten van de afgelopen 7 dagen",
+      "pqlExampleNoOwner": "Contacten zonder eigenaar"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Voeg een tag toe of kies er een...",
       "addLabel": "Tagnaam",
       "add": "Tag toevoegen",
-      "failed": "De tag kon niet worden gewijzigd. Probeer het opnieuw."
+      "failed": "De tag kon niet worden gewijzigd. Probeer het opnieuw.",
+      "quickPlaceholder": "Zoek of maak een tag",
+      "create": "Tag “{name}” maken",
+      "noMatch": "Geen overeenkomende tags",
+      "quickHint": "Kies meerdere tags, of typ een naam en druk op Enter om een nieuwe tag te maken.",
+      "quickHintPick": "Kies meerdere tags uit de lijst."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Bron",
-        "consent": "Marketingtoestemming (ja / nee)"
+        "consent": "Marketingtoestemming (ja / nee)",
+        "consentSms": "SMS-marketingtoestemming (ja / nee)",
+        "consentEmail": "E-mailmarketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Alles selecteren",
         "reorder": "Sleep om kolommen te herschikken",
         "remove": "{name} verwijderen"
+      },
+      "presets": {
+        "myContacts": "Mijn contacten",
+        "newThisWeek": "Nieuw deze week",
+        "newLastWeek": "Nieuw vorige week",
+        "recentlyCreated": "Onlangs aangemaakt",
+        "recentlyModified": "Onlangs gewijzigd",
+        "recentlyImported": "Onlangs geïmporteerd",
+        "neverContacted": "Nooit gecontacteerd",
+        "needsFollowUp": "Opvolging nodig",
+        "active": "Actief",
+        "inactive": "Inactief",
+        "unsubscribed": "Uitgeschreven"
       }
+    },
+    "erase": {
+      "scope": "Als je een contact verwijdert, worden ook de gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
+      "scopeMany": "Als je contacten verwijdert, worden ook hun gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
+      "keepHistory": "Gespreksgeschiedenis bewaren zonder de identiteit van de persoon",
+      "keepHistoryHint": "De gesprekken blijven bewaard voor je administratie maar verwijzen niet meer naar de persoon."
     }
   }
 }

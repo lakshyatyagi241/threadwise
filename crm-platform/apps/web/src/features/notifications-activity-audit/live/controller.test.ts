@@ -16,6 +16,7 @@ import {
 } from './controller';
 import { stateFromResponse, type PrefEntry } from '../prefs/model';
 import { FLUSH_MS, TOAST_PER_SUBJECT_MS, TOAST_WINDOW_MAX } from './model';
+import { FEED_RETRY_MS } from './controller';
 
 const CONV_A = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
 const CONV_B = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
@@ -52,6 +53,11 @@ interface Harness {
   desktops: string[];
   announces: number[];
   listCalls: number;
+  /** How many of the next list calls fail. */
+  failLists: number;
+  /** Makes the tab visible and tells the controller, as the browser's visibilitychange does. */
+  becomeVisible(): void;
+  visibleListeners: Array<() => void>;
   readSubjects: string[];
   visible: boolean;
   location: { pathname: string; search: string };
@@ -88,6 +94,8 @@ async function setup(): Promise<Harness> {
     desktops: [] as string[],
     announces: [] as number[],
     listCalls: 0,
+    failLists: 0,
+    visibleListeners: [] as Array<() => void>,
     readSubjects: [] as string[],
     visible: true,
     location: { pathname: '/dashboard', search: '' },
@@ -102,6 +110,10 @@ async function setup(): Promise<Harness> {
   const api: LiveApi = {
     list: async () => {
       h.listCalls += 1;
+      if (h.failLists > 0) {
+        h.failLists -= 1;
+        throw new Error('network');
+      }
       return {
         data: h.rows,
         page: { nextCursor: null, hasMore: false, limit: 8 },
@@ -128,8 +140,20 @@ async function setup(): Promise<Harness> {
     prefs: () => h.prefs,
     settings: { soundOn: () => h.sound, desktopOn: () => h.desktopOn },
     claimer: { claim: async () => h.claimResult },
-    env: { isVisible: () => h.visible, location: () => h.location, now: () => Date.now() },
+    env: {
+      isVisible: () => h.visible,
+      onVisible: (listener) => {
+        h.visibleListeners.push(listener);
+        return () => undefined;
+      },
+      location: () => h.location,
+      now: () => Date.now(),
+    },
   });
+  h.becomeVisible = () => {
+    h.visible = true;
+    for (const l of h.visibleListeners) l();
+  };
   h.controller.start();
   h.emit = (payload, type = REALTIME_EVENT.notificationCreated) => {
     socket.push({ type, room: 'user', seq: ++h.seq, payload } as never);
@@ -331,31 +355,13 @@ describe('notification.created', () => {
     expect(h.presented).toEqual([]);
   });
 
-  it('survives a failing list call (no toast, no throw)', async () => {
+  it('survives a failing list call: it never throws, and still tells the person (see the resilient toast tests)', async () => {
     const h = await setup();
-    h.controller.stop();
-    const failing = new LiveNotificationsController({
-      client: h.client,
-      qc: h.qc,
-      api: {
-        list: async () => Promise.reject(new Error('down')),
-        readSubject: async () => undefined,
-      },
-      presenter: {
-        toast: () => h.presented.push({}),
-        announce: () => undefined,
-        desktop: () => undefined,
-        ping: () => undefined,
-      },
-      settings: { soundOn: () => true, desktopOn: () => false },
-      claimer: { claim: async () => true },
-      env: { isVisible: () => true, location: () => h.location, now: () => Date.now() },
-    });
-    failing.start();
+    h.failLists = 10;
     h.created(1, CONV_A);
-    await settle();
-    expect(h.presented).toEqual([]);
+    await settle(FLUSH_MS + FEED_RETRY_MS);
     expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(1);
+    expect(h.presented).toEqual([{ kind: 'generic', count: 1 }]);
   });
 });
 
@@ -651,6 +657,214 @@ describe('the persons own choices', () => {
     await vi.advanceTimersByTimeAsync(TOAST_PER_SUBJECT_MS + 10);
     h.rows = [row(2, CONV_A)];
     h.created(2, CONV_A);
+    await settle();
+    expect(h.presented).toHaveLength(1);
+  });
+});
+
+describe('a toast is never dropped silently', () => {
+  it('retries a failed fetch once and shows the real toast when the second try works', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A)];
+    h.failLists = 1;
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toEqual([]); // waiting for the retry
+    await settle(FEED_RETRY_MS);
+    expect(h.listCalls).toBe(2);
+    expect(h.presented).toHaveLength(1);
+    expect(h.presented[0]).toMatchObject({ kind: 'alert', alert: { row: { id: id(1) } } });
+  });
+
+  it('shows the generic toast when both tries fail, and pings once', async () => {
+    const h = await setup();
+    h.failLists = 2;
+    h.created(1, CONV_A);
+    await settle(FLUSH_MS + FEED_RETRY_MS);
+    expect(h.listCalls).toBe(2);
+    expect(h.presented).toEqual([{ kind: 'generic', count: 1 }]);
+    expect(h.pings).toBe(1);
+    expect(h.announces).toEqual([]);
+  });
+
+  it('shows the generic toast when the row is not among the newest rows', async () => {
+    const h = await setup();
+    h.rows = [row(50, CONV_B), row(49, CONV_C)]; // the new row (1) was pushed out, or never listed
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toEqual([{ kind: 'generic', count: 1 }]);
+  });
+
+  it('counts several rows that could not be found in one generic toast', async () => {
+    const h = await setup();
+    h.rows = [row(50, CONV_D)];
+    h.created(1, CONV_A);
+    h.created(2, CONV_B);
+    await settle();
+    expect(h.presented).toEqual([{ kind: 'generic', count: 2 }]);
+  });
+
+  it('says nothing when the badge is back at zero (it was read somewhere else meanwhile)', async () => {
+    const h = await setup();
+    h.failLists = 2;
+    h.created(1, CONV_A);
+    await settle();
+    h.emit({ unread: 0, notificationIds: 'all' }, REALTIME_EVENT.notificationRead);
+    await settle(FEED_RETRY_MS);
+    expect(h.presented).toEqual([]);
+  });
+
+  it('shows nothing for a silent event, whatever the fetch does', async () => {
+    const h = await setup();
+    h.failLists = 5;
+    h.created(1, CONV_A, { silent: true });
+    await settle(FLUSH_MS + FEED_RETRY_MS);
+    expect(h.presented).toEqual([]);
+    expect(h.listCalls).toBe(0);
+    expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(1);
+  });
+
+  it('shows nothing when the event says toast:false', async () => {
+    const h = await setup();
+    h.failLists = 5;
+    h.created(1, CONV_A, { toast: false });
+    await settle(FLUSH_MS + FEED_RETRY_MS);
+    expect(h.presented).toEqual([]);
+  });
+
+  it('shows nothing when the person is looking at that conversation, even if the fetch fails', async () => {
+    const h = await setup();
+    h.location = { pathname: '/inbox', search: `?c=${CONV_A}` };
+    h.failLists = 5;
+    h.created(1, CONV_A);
+    await settle(FLUSH_MS + FEED_RETRY_MS);
+    expect(h.presented).toEqual([]);
+  });
+
+  it('shows nothing when they open that conversation while the retry waits', async () => {
+    const h = await setup();
+    h.failLists = 2;
+    h.created(1, CONV_A);
+    await settle();
+    h.location = { pathname: '/inbox', search: `?c=${CONV_A}` };
+    await settle(FEED_RETRY_MS);
+    expect(h.presented).toEqual([]);
+  });
+
+  it('skips a row that was read elsewhere (found, with a read time): nothing is left to tell', async () => {
+    const h = await setup();
+    h.rows = [row(1, CONV_A, { readAt: '2026-10-07T10:00:01.000Z' })];
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toEqual([]);
+  });
+
+  it('paces the generic toast like one conversation: one now, the rest merged into one later', async () => {
+    const h = await setup();
+    h.rows = [];
+    const convs = [CONV_A, CONV_B, CONV_C, CONV_D];
+    for (let i = 0; i < 4; i++) {
+      h.created(i + 1, convs[i]!);
+      await settle();
+    }
+    expect(h.presented).toEqual([{ kind: 'generic', count: 1 }]);
+    await settle(TOAST_PER_SUBJECT_MS);
+    expect(h.presented).toEqual([
+      { kind: 'generic', count: 1 },
+      { kind: 'generic', count: 3 },
+    ]);
+  });
+});
+
+describe('a hidden tab', () => {
+  it('shows the title only (no toast) while hidden, then the toast when the tab comes back and the row is still unread', async () => {
+    const h = await setup();
+    h.visible = false;
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A);
+    await settle();
+    expect(h.presented).toEqual([]);
+    expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(1);
+
+    h.becomeVisible();
+    expect(h.presented).toHaveLength(1);
+    expect(h.presented[0]).toMatchObject({ kind: 'alert', alert: { row: { id: id(1) } } });
+    expect(h.announces).toEqual([1]);
+  });
+
+  it('does not show the toast later when everything was read in the meantime', async () => {
+    const h = await setup();
+    h.visible = false;
+    h.rows = [row(1, CONV_A)];
+    h.created(1, CONV_A);
+    await settle();
+    h.emit({ unread: 0, notificationIds: [id(1)] }, REALTIME_EVENT.notificationRead);
+    h.becomeVisible();
+    expect(h.presented).toEqual([]);
+  });
+
+  it('folds many missed notifications into one summary when the tab comes back', async () => {
+    const h = await setup();
+    h.visible = false;
+    h.rows = [row(1, CONV_A), row(2, CONV_B), row(3, CONV_C)];
+    h.created(1, CONV_A);
+    h.created(2, CONV_B);
+    h.created(3, CONV_C);
+    await settle();
+    h.becomeVisible();
+    expect(h.presented).toEqual([{ kind: 'generic', count: 3 }]);
+  });
+
+  it('a missed notification whose row could not be fetched comes back as the generic toast', async () => {
+    const h = await setup();
+    h.visible = false;
+    h.failLists = 5;
+    h.created(1, CONV_A);
+    await settle(FLUSH_MS + FEED_RETRY_MS);
+    expect(h.presented).toEqual([]);
+    h.becomeVisible();
+    expect(h.presented).toEqual([{ kind: 'generic', count: 1 }]);
+  });
+
+  it('shows nothing extra when the tab becomes visible with nothing missed', async () => {
+    const h = await setup();
+    h.becomeVisible();
+    expect(h.presented).toEqual([]);
+  });
+});
+
+describe('repeated and newer events', () => {
+  const envelope = (eventId: string, seq: number, payload: Record<string, unknown>) => ({
+    v: 1,
+    id: eventId,
+    at: new Date(0).toISOString(),
+    type: REALTIME_EVENT.notificationCreated,
+    room: 'user',
+    seq,
+    payload,
+  });
+  const payload = (n: number, unread: number) => ({
+    notificationId: id(n),
+    type: 'new_message',
+    unread,
+    subjectKind: 'conversation',
+    subjectId: CONV_A,
+    collapsed: false,
+    silent: false,
+  });
+
+  it('a repeat of one event id changes nothing, and a newer event with its own id still moves the badge', async () => {
+    const h = await setup();
+    h.rows = [row(2, CONV_A, { count: 2 })];
+    const first = envelope('eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee', 1, payload(1, 1));
+    const second = envelope('ffffffff-ffff-4fff-8fff-ffffffffffff', 2, payload(2, 2));
+    h.socket.serverEmit(first.type, first);
+    h.socket.serverEmit(first.type, first);
+    expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(1);
+    h.socket.serverEmit(second.type, second);
+    expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(2);
+    h.socket.serverEmit(first.type, first); // a late repeat of the older one must not pull the badge back
+    expect(h.qc.getQueryData(NOTIFICATION_KEYS.unread)).toBe(2);
     await settle();
     expect(h.presented).toHaveLength(1);
   });

@@ -296,7 +296,9 @@
       "media": "Aperçu {kind}",
       "contactsDenied": "Vous n’avez pas accès à la liste de contacts. Choisissez des contacts via des groupes ou des étiquettes.",
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
-      "previewLabel": "Aperçu du modèle"
+      "previewLabel": "Aperçu du modèle",
+      "colEmail": "E-mail",
+      "noEmail": "Aucune adresse e-mail"
     },
     "overrides": {
       "title": "Renseigner cet envoi",
@@ -353,6 +355,31 @@
         "name": "Instagram",
         "hint": "Écrivez aux personnes déjà présentes dans vos messages privés Instagram : aucune approbation de modèle.",
         "cta": "Créer une diffusion Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envoyez un message Messenger aux personnes qui ont écrit à votre Page ces dernières 24 heures.",
+        "cta": "Créer une diffusion Facebook"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Envoyez un message sous forme d'e-mail depuis une boîte mail connectée, avec un lien de désabonnement.",
+        "cta": "Créer une campagne e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte LINE.",
+        "cta": "Créer une diffusion LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte Viber.",
+        "cta": "Créer une diffusion Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envoyez un message de masse à tous les abonnés, à un tag ou à des utilisateurs sélectionnés de votre compte officiel.",
+        "cta": "Créer une diffusion WeChat"
       }
     }
   }

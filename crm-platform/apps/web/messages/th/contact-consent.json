@@ -16,7 +16,8 @@
       "validation": "ค่าบางรายการไม่ถูกต้อง ตรวจสอบแบบฟอร์มแล้วลองอีกครั้ง",
       "unexpected": "เกิดข้อผิดพลาด ลองอีกครั้ง",
       "exportInProgress": "กำลังเตรียมไฟล์หลักฐานอยู่ โปรดรอให้เสร็จก่อนแล้วลองอีกครั้ง",
-      "exportNotReady": "ไฟล์นั้นยังไม่พร้อมหรือหมดอายุแล้ว โปรดเตรียมไฟล์ใหม่"
+      "exportNotReady": "ไฟล์นั้นยังไม่พร้อมหรือหมดอายุแล้ว โปรดเตรียมไฟล์ใหม่",
+      "noticeTargetMissing": "วิดเจ็ต หน้าจอง หรือร้านค้านั้นไม่มีอยู่แล้ว"
     },
     "settings": {
       "title": "ความยินยอมและการตอบกลับ STOP",
@@ -109,15 +110,24 @@
         "email": "อีเมล",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "เว็บแชต"
+        "webchat": "เว็บแชต",
+        "voice": "สายสนทนาด้วยเสียง",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "สมัครรับแล้ว",
-        "withdrawn": "เลิกรับแล้ว"
+        "withdrawn": "เลิกรับแล้ว",
+        "utilityGranted": "ยินยอมรับข้อความบริการ",
+        "utilityWithdrawn": "หยุดข้อความบริการแล้ว"
       },
       "action": {
         "granted": "สมัครรับแล้ว",
-        "withdrawn": "เลิกรับแล้ว"
+        "withdrawn": "เลิกรับแล้ว",
+        "utilityGranted": "ยินยอมให้ติดต่อเกี่ยวกับคำขอของตน",
+        "utilityWithdrawn": "หยุดรับข้อความบริการ"
       },
       "source": {
         "form": "แบบฟอร์ม",
@@ -128,7 +138,11 @@
         "flow": "โฟลว์",
         "inbound_message": "ข้อความ",
         "contact_request": "คำขอติดต่อ",
-        "legacy": "ก่อนประวัติความยินยอม"
+        "legacy": "ก่อนประวัติความยินยอม",
+        "widget": "แชตบนเว็บไซต์",
+        "booking": "หน้าจอง",
+        "commerce": "การชำระเงินของร้านค้า",
+        "lead": "การรับลีด"
       },
       "by": "โดย {name}",
       "evidence": {
@@ -142,7 +156,16 @@
         "fileName": "ไฟล์",
         "apiKeyId": "คีย์ API",
         "flowId": "โฟลว์",
-        "reference": "อ้างอิง"
+        "reference": "อ้างอิง",
+        "noticeVersion": "เวอร์ชันของประกาศ",
+        "noticeUrl": "ลิงก์ของประกาศ",
+        "widgetId": "วิดเจ็ตแชต",
+        "bookingTypeId": "หน้าจอง",
+        "integrationId": "ร้านค้า",
+        "storeFlag": "การตั้งค่าร้านค้า",
+        "leadSourceId": "แหล่งลีด",
+        "leadFormId": "ฟอร์มลีด",
+        "adId": "โฆษณา"
       },
       "dialog": {
         "titleGranted": "ทำเครื่องหมายว่าสมัครรับ",
@@ -175,7 +198,14 @@
       "hintColumn": "คอลัมน์ที่จับคู่กับความยินยอมทางการตลาดจะเป็นตัวกำหนดว่าจะบันทึกใคร: เฉพาะแถวที่ระบุว่าใช่เท่านั้นที่จะได้รับความยินยอม โดยใช้ชื่อไฟล์เป็นหลักฐาน ไม่ / ช่องว่าง / คำที่ไม่รู้จักจะไม่บันทึกอะไรเลย ผู้ติดต่อที่ยกเลิกการรับข่าวสารจะยังคงถูกยกเลิกอยู่",
       "columnSummary": "{granted} แถวระบุว่าใช่และจะถูกบันทึก {notGranted} แถวระบุว่าไม่ใช่หรือเว้นว่าง และจะไม่มีการบันทึกความยินยอม",
       "unrecognised": "มี {count, plural, one {# แถว} other {# แถว}} ที่ค่าความยินยอมไม่ใช่ใช่หรือไม่ใช่ ({values}) ซึ่งจะถือว่าไม่ได้รับความยินยอม โปรดใช้ yes / no, true / false หรือ 1 / 0",
-      "columnIgnored": "คอลัมน์ความยินยอมจะไม่ทำงานจนกว่าคุณจะเลือกช่องทำเครื่องหมายด้านบน"
+      "columnIgnored": "คอลัมน์ความยินยอมจะไม่ทำงานจนกว่าคุณจะเลือกช่องทำเครื่องหมายด้านบน",
+      "noticeText": "ประกาศหรือฐานทางกฎหมาย (ไม่บังคับ)",
+      "noticeTextHint": "ผู้ติดต่อเหล่านี้ยินยอมอะไรและที่ไหน เช่น สมัครตอนชำระเงินตามประกาศความเป็นส่วนตัว v3 เก็บไว้เป็นหลักฐานกับความยินยอมที่บันทึกแต่ละรายการ",
+      "noticeVersion": "เวอร์ชันของประกาศ (ไม่บังคับ)",
+      "smsSummary": "คอลัมน์ความยินยอม SMS: {granted} แถวตอบใช่และจะถูกบันทึกเป็นความยินยอม SMS ส่วน {notGranted} แถวตอบไม่หรือว่างเปล่า",
+      "emailSummary": "คอลัมน์ความยินยอมอีเมล: {granted} แถวตอบใช่และจะถูกบันทึกเป็นความยินยอมอีเมล (แถวต้องมีที่อยู่อีเมลด้วย) ส่วน {notGranted} แถวตอบไม่หรือว่างเปล่า",
+      "labelNumbers": "ฉันได้รับความยินยอมให้ส่งข้อความถึงหมายเลขเหล่านี้",
+      "hintNumbers": "เมื่อเลือก ทุกหมายเลขในไฟล์จะถูกบันทึกว่ายินยอมรับการตลาดเมื่อคุณเริ่มส่ง โดยใช้ชื่อไฟล์เป็นหลักฐาน หากไม่เลือกจะไม่บันทึกความยินยอม ผู้ที่ยกเลิกการรับยังคงยกเลิกอยู่"
     },
     "systemLine": {
       "withdrawn": "ผู้ติดต่อตอบ {keyword}: ยกเลิกการรับข่าวสารทางการตลาดแล้ว",
@@ -200,6 +230,120 @@
         "failed": "ล้มเหลว",
         "expired": "หมดอายุ"
       }
+    },
+    "unsubscribe": {
+      "title": "ยกเลิกการรับอีเมลการตลาด",
+      "intro": "ยืนยันว่าคุณไม่ต้องการรับอีเมลการตลาดจากธุรกิจนี้อีกต่อไป คุณจะยังคงได้รับข้อความเกี่ยวกับคำสั่งซื้อและนัดหมาย",
+      "confirm": "ยกเลิกการรับ",
+      "working": "กำลังยกเลิก...",
+      "doneTitle": "ยกเลิกการรับเรียบร้อยแล้ว",
+      "doneBody": "คุณจะไม่ได้รับข้อความการตลาดจากธุรกิจนี้อีก",
+      "already": "คุณยกเลิกการรับไปแล้ว",
+      "invalidTitle": "ลิงก์นี้ไม่ถูกต้อง",
+      "invalidBody": "ลิงก์ยกเลิกไม่สมบูรณ์หรือถูกเปลี่ยนแปลง โปรดใช้ลิงก์ในอีเมลล่าสุดที่คุณได้รับ",
+      "error": "เกิดข้อผิดพลาด ลองอีกครั้ง"
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "อนุญาต: ส่งประกาศก่อนแล้ว",
+        "consent_evidence_recorded": "อนุญาต: ส่งประกาศแล้วและอีกฝ่ายยินยอม",
+        "purpose_not_enabled": "ไม่อนุญาต: พื้นที่ทำงานยังไม่ได้เปิดใช้งาน",
+        "consent_declined": "ไม่อนุญาต: อีกฝ่ายปฏิเสธ",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "บรรทัดความยินยอมในแบบฟอร์มแชต",
+        "booking": "บรรทัดความยินยอมในหน้าจอง",
+        "commerce": "ช่องทำเครื่องหมายการตลาดของร้านค้าหมายถึงอะไร",
+        "workspace": "ประกาศขอความยินยอมเริ่มต้น"
+      },
+      "intro": {
+        "widget": "แสดงเป็นช่องทำเครื่องหมายใต้ข้อมูลของผู้เยี่ยมชม จะบันทึกว่ายินยอมเฉพาะผู้ที่ติ๊ก และเฉพาะเมื่อให้เบอร์โทรหรืออีเมลเท่านั้น",
+        "booking": "แสดงเป็นช่องทำเครื่องหมายในแบบฟอร์มจอง จะบันทึกว่ายินยอมเฉพาะผู้ที่ติ๊ก และการจองไม่จำเป็นต้องใช้ช่องนี้เลย",
+        "commerce": "ลูกค้าที่ยอมรับการตลาดในร้านของคุณจะถูกบันทึกว่ายินยอม โปรดเขียนสิ่งที่ช่องนั้นบอกลูกค้า เพื่อให้หลักฐานระบุไว้",
+        "workspace": "ข้อความที่เวิร์กสเปซของคุณแสดงถัดจากช่องความยินยอมเมื่อแบบฟอร์ม วิดเจ็ต หรือหน้าจองไม่มีข้อความของตัวเอง ทุกการเปลี่ยนแปลงจะเป็นเวอร์ชันใหม่ที่มีหมายเลข"
+      },
+      "enabled": "เปิดบรรทัดความยินยอม",
+      "text": "ข้อความที่บุคคลยินยอม",
+      "textHint": "สูงสุด {max} อักขระ ทุกการเปลี่ยนแปลงจะถูกบันทึกเป็นเวอร์ชันใหม่",
+      "textRequired": "เขียนข้อความก่อนเปิดบรรทัดนี้",
+      "url": "ลิงก์นโยบายความเป็นส่วนตัวของคุณ (ไม่บังคับ)",
+      "urlHint": "ต้องขึ้นต้นด้วย https://",
+      "save": "บันทึกบรรทัดความยินยอม",
+      "saved": "บันทึกบรรทัดความยินยอมแล้ว (เวอร์ชัน {version})",
+      "version": "เวอร์ชันปัจจุบัน: {version}",
+      "noVersion": "ยังไม่ได้บันทึก",
+      "saveFirst": "บันทึกรายการนี้ก่อน แล้วจึงตั้งค่าบรรทัดความยินยอมได้",
+      "whatsappToo": "นับเป็นความยินยอมทาง WhatsApp ด้วย (เฉพาะเมื่อข้อความระบุไว้)",
+      "termsUrl": "ลิงก์ไปยังข้อกำหนดของคุณ (ไม่บังคับ)",
+      "termsUrlHint": "ต้องขึ้นต้นด้วย https://",
+      "useWorkspacePrivacy": "ใช้ลิงก์ความเป็นส่วนตัวของเวิร์กสเปซ",
+      "useWorkspaceTerms": "ใช้ลิงก์ข้อกำหนดของเวิร์กสเปซ",
+      "useWorkspaceText": "ใช้ข้อความเริ่มต้นของเวิร์กสเปซ",
+      "statement": "ฉันยินยอมรับการอัปเดตและข้อเสนอทาง {channels} ฉันสามารถตอบ STOP เมื่อใดก็ได้เพื่อยกเลิกการรับข่าวสาร",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "อีเมล"
+      },
+      "channelsLabel": "ช่องทางที่ความยินยอมนี้ครอบคลุม",
+      "channelsHint": "บุคคลนั้นจะสมัครรับเฉพาะช่องทางที่เลือกไว้ที่นี่ และข้อความยินยอมจะระบุช่องทางเหล่านั้น ช่องทางจะถูกใช้เมื่อบุคคลนั้นให้หมายเลขโทรศัพท์หรืออีเมลที่ตรงกันเท่านั้น",
+      "channelsUse": "อัปเดตข้อความตามช่องทางเหล่านี้"
     }
   }
 }

@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Siap untuk panggilan?",
+      "status": {
+        "never_checked": "Belum diperiksa",
+        "blocked": "Belum siap",
+        "ready_to_enable": "Siap diaktifkan",
+        "attention": "Berfungsi, perlu dicek",
+        "ready": "Siap"
+      },
+      "statusHint": {
+        "never_checked": "Nomor ini belum diperiksa.",
+        "blocked": "Panggilan tidak akan berfungsi sampai item yang bertanda Perbaiki ini selesai ditangani.",
+        "ready_to_enable": "Semua yang dibutuhkan WhatsApp sudah terpenuhi. Aktifkan panggilan agar tombol Panggil muncul.",
+        "attention": "Panggilan berfungsi, tetapi ada yang perlu dicek di bawah.",
+        "ready": "Panggilan aktif dan semua pemeriksaan lolos."
+      },
+      "checkedAt": "Diperiksa {date}",
+      "checking": "Memeriksa ke WhatsApp...",
+      "checkAgain": "Periksa lagi",
+      "checkFailed": "Tidak dapat memeriksa nomor ini.",
+      "checkedDone": "Sudah diperiksa ulang.",
+      "blockedHint": "Perbaiki dulu item yang bertanda Perbaiki ini. WhatsApp kemungkinan besar akan menolak mengaktifkan panggilan.",
+      "details": "Yang diperiksa",
+      "fixLabel": "Yang perlu dilakukan:",
+      "state": {
+        "ok": "OK",
+        "warn": "Perlu dicek",
+        "fail": "Perbaiki ini"
+      },
+      "checks": {
+        "plan_feature": "Paket mencakup panggilan WhatsApp",
+        "connection": "Nomor terhubung",
+        "not_coexistence": "Nomor hanya di Cloud API",
+        "number_registered": "Nomor terdaftar di WhatsApp",
+        "messaging_limit": "Batas pesan dan kualitas",
+        "token_scopes": "Izin token akses",
+        "webhook_subscribed": "Aplikasi berlangganan ke akun ini",
+        "calls_field": "Webhook panggilan terkirim",
+        "calling_enabled": "Panggilan diaktifkan di WhatsApp",
+        "turn": "Relai panggilan (TURN) dikonfigurasi",
+        "dialler_permissions": "Rekan tim boleh menelepon",
+        "recording_consent": "Aturan perekaman dan persetujuan"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "Panggilan WhatsApp termasuk dalam paket Anda."
+        },
+        "plan_missing": {
+          "detail": "Paket Anda tidak mencakup panggilan WhatsApp.",
+          "fix": "Upgrade paket Anda, lalu periksa lagi."
+        },
+        "connected": {
+          "detail": "Nomor terhubung dan memiliki token akses."
+        },
+        "not_connected": {
+          "detail": "Nomor ini sedang tidak terhubung.",
+          "fix": "Hubungkan kembali di Saluran, lalu periksa lagi."
+        },
+        "no_credentials": {
+          "detail": "Nomor ini tidak memiliki token akses atau ID nomor telepon yang tersimpan.",
+          "fix": "Hubungkan kembali nomor agar kredensialnya tersimpan lagi."
+        },
+        "cloud_api_only": {
+          "detail": "Nomor ini hanya berjalan di WhatsApp Cloud API."
+        },
+        "coexistence": {
+          "detail": "Nomor ini juga digunakan di aplikasi WhatsApp Business (koeksistensi), dan WhatsApp tidak mengizinkan panggilan pada nomor seperti itu.",
+          "fix": "Daftarkan hanya di Cloud API, atau gunakan nomor lain untuk panggilan."
+        },
+        "on_premise": {
+          "detail": "Nomor ini masih memakai On-Premises API lama, yang sudah dihentikan oleh Meta.",
+          "fix": "Daftarkan di Cloud API, atau gunakan nomor lain."
+        },
+        "number_ok": {
+          "detail": "WhatsApp melaporkan nomor ini aktif dan terverifikasi."
+        },
+        "number_not_verified": {
+          "detail": "Kode kepemilikan nomor ini belum diverifikasi.",
+          "fix": "Verifikasi nomor dari halaman koneksi WhatsApp-nya, lalu periksa lagi."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp melaporkan nomor ini berstatus {status}, bukan terhubung.",
+          "fix": "Perbaiki nomor di Meta Business Suite (mungkin sedang tertunda, ditandai, atau dibatasi), lalu periksa lagi."
+        },
+        "limit_ok": {
+          "detail": "Batas pesan harian dan peringkat kualitas sudah cukup untuk panggilan."
+        },
+        "limit_test_number": {
+          "detail": "Ini nomor uji coba, yang tidak memerlukan batas pesan."
+        },
+        "limit_low": {
+          "detail": "Batas pesan saat ini {tier}. WhatsApp membutuhkan minimal {needed} pelanggan per hari sebelum panggilan dapat diaktifkan.",
+          "fix": "Kirim lebih banyak pesan berkualitas baik, atau verifikasi bisnis Anda di Meta Business Suite agar batasnya naik. Lalu periksa lagi."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp tidak melaporkan batas pesan yang dikenali aplikasi ini.",
+          "fix": "Buka nomor di Meta Business Suite untuk melihat batasnya. Panggilan membutuhkan minimal 2.000 pelanggan per hari."
+        },
+        "quality_low": {
+          "detail": "Peringkat kualitas nomor ini rendah (merah) dan WhatsApp mungkin membatasinya.",
+          "fix": "Kurangi pesan yang diblokir dan dilaporkan, lalu tunggu peringkat pulih sebelum mengandalkan panggilan."
+        },
+        "scopes_ok": {
+          "detail": "Token akses memiliki izin yang dibutuhkan panggilan."
+        },
+        "scope_missing": {
+          "detail": "Token akses tidak memiliki: {missing}.",
+          "fix": "Buat token pengguna sistem baru dengan whatsapp_business_management dan whatsapp_business_messaging, lalu hubungkan kembali nomor."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp tidak menerima token akses yang tersimpan.",
+          "fix": "Hubungkan kembali nomor atau simpan token permanen baru."
+        },
+        "token_expiring": {
+          "detail": "Token akses kedaluwarsa dalam {days, plural, other {# hari}}.",
+          "fix": "Hubungkan kembali nomor atau simpan token pengguna sistem permanen sebelum kedaluwarsa."
+        },
+        "scopes_unverifiable": {
+          "detail": "Izin token tidak dapat dibaca. Nomor mungkin terhubung lewat penyedia, atau platform ini tidak memiliki kredensial aplikasi untuk memeriksanya.",
+          "fix": "Jika panggilan ditolak, pastikan ke penyedia Anda bahwa nomor ini boleh menggunakan panggilan."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp mengirimkan peristiwa akun ini ke platform."
+        },
+        "waba_not_subscribed": {
+          "detail": "Tidak ada aplikasi yang berlangganan ke WhatsApp Business Account ini, sehingga panggilan tidak akan pernah sampai ke Anda.",
+          "fix": "Gunakan Perbaiki pesan masuk di halaman kesehatan nomor, lalu periksa lagi."
+        },
+        "calls_field_ok": {
+          "detail": "Aplikasi Meta mengirimkan kolom webhook panggilan."
+        },
+        "calls_field_added": {
+          "detail": "Kolom webhook panggilan sebelumnya belum ada dan baru saja ditambahkan ke aplikasi Meta platform."
+        },
+        "calls_field_missing": {
+          "detail": "Aplikasi Meta tidak mengirimkan kolom webhook panggilan, sehingga panggilan masuk dan jawabannya tidak akan pernah sampai.",
+          "fix": "Minta operator platform Anda mencentang kolom calls di pengaturan webhook aplikasi Meta (WhatsApp, Konfigurasi), lalu periksa lagi."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Nomor ini ada di aplikasi Meta yang tidak dapat dibaca platform, sehingga kolom webhook panggilan tidak dapat diperiksa.",
+          "fix": "Buka pengaturan webhook aplikasi tersebut dan pastikan kolom calls dicentang."
+        },
+        "calling_on": {
+          "detail": "Panggilan aktif dan ikon panggil ditampilkan kepada pelanggan."
+        },
+        "calling_off": {
+          "detail": "Panggilan dinonaktifkan untuk nomor ini.",
+          "fix": "Pilih Aktifkan panggilan setelah item lainnya beres."
+        },
+        "icon_hidden": {
+          "detail": "Panggilan aktif, tetapi ikon panggil disembunyikan dari pelanggan, sehingga mereka tidak dapat memulai panggilan.",
+          "fix": "Kembalikan visibilitas ikon panggil ke default di pengaturan panggilan nomor ini di Meta."
+        },
+        "turn_ok": {
+          "detail": "Relai TURN sudah dikonfigurasi, sehingga panggilan tetap berfungsi di balik firewall yang ketat."
+        },
+        "turn_missing": {
+          "detail": "Relai TURN belum dikonfigurasi, sehingga panggilan bisa tersambung tanpa suara bagi orang di balik firewall yang ketat.",
+          "fix": "Minta operator platform Anda menambahkan server TURN ke CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "Ada server TURN yang tercantum tanpa nama pengguna atau kredensialnya.",
+          "fix": "Tambahkan nama pengguna dan kredensial ke entri CALLING_ICE_SERVERS tersebut."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS sudah diatur tetapi bukan daftar yang valid, sehingga hanya server STUN publik yang digunakan.",
+          "fix": "Perbaiki JSON di CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, other {# rekan tim dapat}} melakukan dan menjawab panggilan."
+        },
+        "dialler_none": {
+          "detail": "Tidak ada yang di workspace ini memiliki izin untuk melakukan dan menjawab panggilan.",
+          "fix": "Berikan izin menggunakan panggilan ke sebuah peran di Pengaturan, Peran."
+        },
+        "recording_off": {
+          "detail": "Perekaman panggilan nonaktif, jadi persetujuan tidak diperlukan."
+        },
+        "recording_configured": {
+          "detail": "Perekaman panggilan aktif, lengkap dengan pemberitahuan dan aturan persetujuan."
+        },
+        "recording_notice_missing": {
+          "detail": "Perekaman panggilan aktif tetapi belum ada pemberitahuan untuk dibacakan.",
+          "fix": "Tulis pemberitahuan perekaman di bagian Perekaman di bawah."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp tidak menjawab pemeriksaan ini.",
+          "fix": "Periksa lagi sebentar lagi."
+        },
+        "not_checked": {
+          "detail": "Menunggu item di atas.",
+          "fix": "Perbaiki dulu item di atas."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp belum akan mengaktifkan panggilan. Nomor harus memiliki batas pesan harian minimal 2.000 pelanggan, dan aplikasi harus berlangganan ke WhatsApp Business Account serta ke kolom webhook calls dengan izin whatsapp_business_messaging. Nomor uji coba tidak memerlukan batas tersebut.",
+        "coexistence": "Panggilan WhatsApp membutuhkan nomor yang sepenuhnya berada di Cloud API. Nomor ini berbagi jalur dengan aplikasi WhatsApp Business (koeksistensi), yang tidak diizinkan WhatsApp untuk panggilan. Daftarkan hanya di Cloud API, atau gunakan nomor lain.",
+        "permission_scope": "Token akses tidak memiliki izin yang dibutuhkan panggilan (whatsapp_business_management dan whatsapp_business_messaging). Buat token baru dengan keduanya lalu hubungkan kembali nomor.",
+        "token_expired": "WhatsApp tidak lagi menerima token akses yang tersimpan. Hubungkan kembali nomor, lalu coba lagi.",
+        "calling_not_enabled": "Panggilan belum diaktifkan di WhatsApp untuk nomor ini. Aktifkan, lalu coba lagi.",
+        "no_call_permission": "Pelanggan ini belum mengizinkan panggilan. Permintaan izin dikirim agar mereka menerimanya.",
+        "permission_request_limit": "WhatsApp membatasi seberapa sering Anda dapat meminta izin panggilan dari pelanggan ini. Coba lagi nanti.",
+        "receiver_uncallable": "WhatsApp pelanggan ini tidak dapat menerima panggilan (versi aplikasi lama, atau panggilan dimatikan). Minta mereka memperbarui WhatsApp.",
+        "meta_unreachable": "WhatsApp tidak menjawab tepat waktu. Coba lagi sebentar lagi."
+      },
+      "refusedBecause": "WhatsApp menolak saat diminta: {reason}",
+      "autoEnable": {
+        "title": "Aktifkan panggilan otomatis",
+        "hint": "Saat nomor WhatsApp terhubung atau dihubungkan kembali dan memenuhi semua persyaratan, aktifkan panggilan untuknya tanpa bertanya. Nonaktif secara default; panggilan tidak pernah diaktifkan tanpa pengaturan ini.",
+        "label": "Aktifkan panggilan otomatis setelah nomor terhubung",
+        "saved": "Tersimpan.",
+        "loadFailed": "Tidak dapat memuat pengaturan ini."
+      },
+      "testCall": {
+        "title": "Lakukan panggilan uji coba",
+        "intro": "Telepon nomor WhatsApp Anda sendiri untuk mendengar panggilan dari awal sampai akhir. WhatsApp hanya mengizinkan bisnis menelepon orang yang sudah mengizinkannya: jika Anda belum, permintaan izin dikirim ke ponsel Anda dan panggilan tidak dilakukan. Ketuk Izinkan di WhatsApp, lalu tekan Telepon saya lagi.",
+        "phoneLabel": "Nomor WhatsApp Anda",
+        "phoneHint": "Dengan kode negara dan tanpa tanda plus, misalnya 919812345678.",
+        "call": "Telepon saya",
+        "invalid": "Masukkan nomor Anda dengan kode negara (6 sampai 15 digit).",
+        "show": "Lakukan panggilan uji coba"
+      }
+    }
+  }
+}

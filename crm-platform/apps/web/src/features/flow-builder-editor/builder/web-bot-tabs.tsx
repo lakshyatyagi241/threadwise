@@ -4,18 +4,47 @@ import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useState } from 'react';
 import { FlowWidgetCustomize } from '@/features/chatbot-widget/components/flow-widget-customize';
-import { FlowWidgetInstall } from '@/features/chatbot-widget/components/flow-widget-install';
+import {
+  FlowWhatsappCustomize,
+  type WhatsappBotDefaults,
+} from '@/features/chatbot-widget/components/flow-whatsapp-customize';
+import { FlowWidgetDeploy } from '@/features/chatbot-widget/components/flow-widget-deploy';
 
-/** The pages of a builder: Build always, FAQs for every saved flow in the Simple builder, Customize and Install for a website bot. */
-export type BuilderTab = 'build' | 'faqs' | 'customize' | 'install';
+/** What a WhatsApp bot's website button starts from, read off the bot's Trigger: the number it runs on and the word that starts it. */
+export function whatsappDefaultsFrom(
+  trigger: { data?: Record<string, unknown> | null } | undefined,
+  senders: ReadonlyArray<{ key: string; label?: string; phone?: string | null }>,
+): WhatsappBotDefaults {
+  const d = trigger?.data ?? {};
+  // A bot with no number chosen yet but exactly one connected number runs on that one.
+  const chosen = String(d.deviceId ?? '');
+  const key = chosen !== '' ? chosen : senders.length === 1 ? (senders[0]?.key ?? '') : '';
+  const sender = senders.find((s) => s.key === key);
+  const any = String(d.keywordMode ?? '') === 'any';
+  const first = String(d.keywords ?? '')
+    .split(/[,\n]/)
+    .map((w) => w.trim())
+    .find((w) => w !== '');
+  return {
+    phone: sender?.phone ?? null,
+    numberLabel: sender?.label ?? '',
+    keyword: any ? '' : (first ?? ''),
+  };
+}
 
-const ORDER: readonly BuilderTab[] = ['build', 'faqs', 'customize', 'install'];
+/** The channels whose bots have a widget and so the Customize and Deploy tabs: website chat and WhatsApp. */
+export type WidgetChannel = 'web' | 'chat';
+
+/** The pages of a builder: Build always, FAQs for every saved flow in the Simple builder, Customize and Deploy for a website bot. */
+export type BuilderTab = 'build' | 'faqs' | 'customize' | 'deploy';
+
+const ORDER: readonly BuilderTab[] = ['build', 'faqs', 'customize', 'deploy'];
 
 /** Which tabs a builder offers. */
 export interface TabSet {
   /** The FAQs tab (the Simple builder, for a person who may read FAQs). */
   faqs: boolean;
-  /** Customize and Install (the bot is built for website chat). */
+  /** Customize and Deploy (the bot is built for website chat). */
   web: boolean;
 }
 
@@ -31,7 +60,9 @@ export function tabFromParam(
   value: string | null,
   set: TabSet = { faqs: true, web: true },
 ): BuilderTab {
-  return ORDER.find((k) => k === value && tabsOf(set).includes(k)) ?? 'build';
+  // `install` is the old name of Deploy.
+  const wanted = value === 'install' ? 'deploy' : value;
+  return ORDER.find((k) => k === wanted && tabsOf(set).includes(k)) ?? 'build';
 }
 
 /**
@@ -85,7 +116,7 @@ export function useBuilderTab(
 }
 
 /**
- * Build · FAQs · Customize · Install, under the header of a builder. FAQs, Customize and Install need the flow to exist (a
+ * Build · FAQs · Customize · Deploy, under the header of a builder. FAQs, Customize and Deploy need the flow to exist (a
  * "save first" tooltip says so), and an amber dot stays on Customize until the widget has been saved once. A builder with
  * nothing but Build shows no bar.
  */
@@ -150,19 +181,24 @@ export function BuilderTabs({
   );
 }
 
-/** The Customize and Install pages of a website chat bot; the Build page is whatever the builder draws. */
+/** The Customize and Deploy pages of a website chat or WhatsApp bot; the Build page is whatever the builder draws. */
 export function WebBotPanels({
   tab,
+  channel,
   flowId,
   flowName,
   published,
   canEdit,
+  whatsapp,
 }: {
   tab: BuilderTab;
+  channel: WidgetChannel;
   flowId: string;
   flowName: string;
   published: boolean;
   canEdit: boolean;
+  /** What a WhatsApp bot's button starts from (its number and keyword); ignored for website chat. */
+  whatsapp: WhatsappBotDefaults;
 }) {
   return (
     <>
@@ -172,15 +208,26 @@ export function WebBotPanels({
         aria-labelledby="web-bot-tab-customize"
         className={`min-h-0 flex-1 overflow-y-auto bg-muted ${tab === 'customize' ? '' : 'hidden'}`}
       >
-        <FlowWidgetCustomize flowId={flowId} flowName={flowName} canEdit={canEdit} />
+        {channel === 'chat' ? (
+          <FlowWhatsappCustomize
+            flowId={flowId}
+            flowName={flowName}
+            canEdit={canEdit}
+            defaults={whatsapp}
+          />
+        ) : (
+          <FlowWidgetCustomize flowId={flowId} flowName={flowName} canEdit={canEdit} />
+        )}
       </div>
       <div
         role="tabpanel"
-        id="web-bot-panel-install"
-        aria-labelledby="web-bot-tab-install"
-        className={`min-h-0 flex-1 overflow-y-auto bg-background ${tab === 'install' ? '' : 'hidden'}`}
+        id="web-bot-panel-deploy"
+        aria-labelledby="web-bot-tab-deploy"
+        className={`min-h-0 flex-1 overflow-y-auto bg-background ${tab === 'deploy' ? '' : 'hidden'}`}
       >
-        {tab === 'install' ? <FlowWidgetInstall flowId={flowId} published={published} /> : null}
+        {tab === 'deploy' ? (
+          <FlowWidgetDeploy flowId={flowId} channel={channel} published={published} />
+        ) : null}
       </div>
     </>
   );

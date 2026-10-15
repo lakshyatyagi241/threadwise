@@ -1,0 +1,36 @@
+{
+  "module": "flow-runtime-engine",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-flow-runtime-engine-001",
+      "feature": "flow enroll",
+      "category": "input",
+      "scenario": "a value of 501 (one past FLOW_ENROLL_MAX_CONTACTS = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-runtime-engine/index.ts"
+    },
+    {
+      "id": "EC-flow-runtime-engine-002",
+      "feature": "flow run log",
+      "category": "input",
+      "scenario": "a value of 201 (one past FLOW_RUN_LOG_MAX_STEPS = 200) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-runtime-engine/index.ts"
+    },
+    {
+      "id": "EC-flow-runtime-engine-003",
+      "feature": "flow retry",
+      "category": "input",
+      "scenario": "a value of 51 (one past FLOW_RETRY_MAX_BATCH = 50) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-runtime-engine/index.ts"
+    }
+  ]
+}

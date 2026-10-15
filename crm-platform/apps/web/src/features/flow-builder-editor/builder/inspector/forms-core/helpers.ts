@@ -259,6 +259,8 @@ export interface CtaAction {
   type?: string;
   label?: string;
   value?: string;
+  /** A small picture in front of the button (website chat only): an https address. */
+  icon?: string;
 }
 
 /** Reads the CTA actions, upgrading the legacy single-kind shape (kind/label/url|phone|code) like Reference does. */

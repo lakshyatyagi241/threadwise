@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   CATALOG_SEND_MAX_PRODUCTS,
@@ -13,8 +13,16 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import {
+  CATALOG_PROVIDER,
+  CatalogProviderError,
+  type CatalogProvider,
+} from '../../infra/providers/catalog-products/catalog-provider.port';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { CatalogBindings } from './catalog-bindings';
+import { notConnected, providerRefusal } from './catalog-problems';
+import { CatalogsRepository } from './catalogs.repository';
 import { nextFreeSlug, ownedInSubmittedOrder, retailerIdOf, slugify } from './catalog-rules';
 import { ProductsRepository, type ProductRow } from './products.repository';
 
@@ -28,6 +36,7 @@ interface SetRow {
   description: string | null;
   productIds: number[];
   isActive: boolean;
+  metaSetId: string | null;
   rowVersion: number;
   createdAt: Date;
   updatedAt: Date;
@@ -45,12 +54,13 @@ const toRow = (r: Raw): SetRow => ({
     .map(Number)
     .filter(Number.isFinite),
   isActive: r.is_active === true,
+  metaSetId: (r.meta_set_id as string | null) ?? null,
   rowVersion: Number(r.row_version),
   createdAt: new Date(r.created_at as string),
   updatedAt: new Date(r.updated_at as string),
 });
 
-const COLUMNS = sql`id, uuid, name, slug, description, product_ids, is_active, row_version, created_at, updated_at`;
+const COLUMNS = sql`id, uuid, name, slug, description, product_ids, is_active, meta_set_id, row_version, created_at, updated_at`;
 
 /**
  * Collections (TW-CAT-017, 018): a saved, ordered group of up to 30 products that is sent as one list message. The stored order
@@ -58,11 +68,16 @@ const COLUMNS = sql`id, uuid, name, slug, description, product_ids, is_active, r
  */
 @Injectable()
 export class CollectionsService {
+  private readonly logger = new Logger(CollectionsService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly products: ProductsRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly catalogs: CatalogsRepository,
+    private readonly bindings: CatalogBindings,
+    @Inject(CATALOG_PROVIDER) private readonly provider: CatalogProvider,
   ) {}
 
   private async members(
@@ -86,6 +101,7 @@ export class CollectionsService {
       isActive: set.isActive,
       // The stored ids, stale ones included (Reference's `product_count`).
       productCount: set.productIds.length,
+      metaSetId: set.metaSetId,
       products: products.map((p) => ({
         id: p.uuid,
         name: p.name,
@@ -237,6 +253,7 @@ export class CollectionsService {
   /** Deleting a missing collection is a success (Reference was silent); the products are untouched. */
   async remove(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
+    await this.dropFromMetaQuietly(ctx.orgId, uuid);
     await this.db.tx(async (tx) => {
       const found = await tx.execute(sql`
         SELECT ${COLUMNS} FROM wa_product_sets WHERE org_id = ${ctx.orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
@@ -258,5 +275,135 @@ export class CollectionsService {
         sql`DELETE FROM wa_product_sets WHERE org_id = ${ctx.orgId} AND id = ${set.id}`,
       );
     });
+  }
+
+  // --- the same collection as a product set on Meta ------------------------------------------------------------------------
+
+  private async loadForMeta(uuid: string) {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const found = await tx.execute(sql`
+        SELECT ${COLUMNS} FROM wa_product_sets WHERE org_id = ${ctx.orgId} AND uuid = ${uuid}::uuid`);
+      if (!found.rows[0]) throw AppError.notFound('Collection', uuid);
+      const set = toRow(found.rows[0] as Raw);
+      const catalog = await this.catalogs.first(tx, ctx.orgId);
+      return { ctx, set, catalog, members: await this.members(tx, ctx.orgId, set.productIds) };
+    });
+  }
+
+  /**
+   * Creates the collection as a product set on Meta (or updates it when it was pushed before) and keeps Meta's id. The set holds the
+   * products whose retailer id is in the collection. Meta first: a refusal changes nothing here.
+   */
+  async pushToMeta(uuid: string): Promise<CollectionResponse> {
+    const { ctx, set, catalog, members } = await this.loadForMeta(uuid);
+    if (!catalog) throw notConnected();
+    const retailerIds = set.productIds
+      .map((id) => members.get(id))
+      .filter((p): p is ProductRow => p !== undefined && p.status === 'active')
+      .map((p) => retailerIdOf(p));
+    if (retailerIds.length === 0) {
+      throw new AppError(
+        ERROR_CODES.CAT_SET_NOT_SYNCABLE,
+        'This collection has no active products to put in a Meta product set.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const binding = this.bindings.of(catalog);
+    let metaSetId: string;
+    try {
+      metaSetId = await this.writeSet(binding, set, retailerIds);
+    } catch (err) {
+      if (err instanceof CatalogProviderError) throw providerRefusal(err);
+      throw err;
+    }
+    return this.db.tx(async (tx) => {
+      await tx.execute(sql`
+        UPDATE wa_product_sets SET meta_set_id = ${metaSetId}
+        WHERE org_id = ${ctx.orgId} AND id = ${set.id}`);
+      await this.audit.record(tx, {
+        module: COLLECTION_MODULE,
+        recordId: set.id,
+        action: 'update',
+        delta: { metaSetId: { old: set.metaSetId, new: metaSetId } },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: COLLECTION_MODULE,
+        aggregateId: set.id,
+        eventType: 'product_set.pushed',
+        payload: { uuid: set.uuid, metaSetId, productCount: retailerIds.length },
+      });
+      return this.toResponse({ ...set, metaSetId }, members);
+    });
+  }
+
+  /** Updates the set when this collection has one on Meta; if Meta no longer has it (code 100), creates a fresh one. */
+  private async writeSet(
+    binding: ReturnType<CatalogBindings['of']>,
+    set: SetRow,
+    retailerIds: readonly string[],
+  ): Promise<string> {
+    if (set.metaSetId) {
+      try {
+        await this.provider.updateProductSet(binding, set.metaSetId, set.name, retailerIds);
+        return set.metaSetId;
+      } catch (err) {
+        if (!(err instanceof CatalogProviderError) || err.meta.code !== 100) throw err;
+      }
+    }
+    return this.provider.createProductSet(binding, set.name, retailerIds);
+  }
+
+  /** Removes the product set from Meta and forgets its id; the collection itself stays. */
+  async removeFromMeta(uuid: string): Promise<CollectionResponse> {
+    const { ctx, set, catalog, members } = await this.loadForMeta(uuid);
+    if (set.metaSetId && catalog) {
+      try {
+        await this.provider.deleteProductSet(this.bindings.of(catalog), set.metaSetId);
+      } catch (err) {
+        // Already gone on Meta (code 100) is the state we wanted; anything else is surfaced.
+        if (!(err instanceof CatalogProviderError)) throw err;
+        if (err.meta.code !== 100) throw providerRefusal(err);
+      }
+    }
+    return this.db.tx(async (tx) => {
+      await tx.execute(sql`
+        UPDATE wa_product_sets SET meta_set_id = NULL
+        WHERE org_id = ${ctx.orgId} AND id = ${set.id}`);
+      await this.audit.record(tx, {
+        module: COLLECTION_MODULE,
+        recordId: set.id,
+        action: 'update',
+        delta: { metaSetId: { old: set.metaSetId, new: null } },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: COLLECTION_MODULE,
+        aggregateId: set.id,
+        eventType: 'product_set.unpushed',
+        payload: { uuid: set.uuid },
+      });
+      return this.toResponse({ ...set, metaSetId: null }, members);
+    });
+  }
+
+  /** Deleting a collection also deletes its Meta set; a Meta failure must not block removing the local row, so it is logged. */
+  private async dropFromMetaQuietly(orgId: number, uuid: string): Promise<void> {
+    try {
+      const { set, catalog } = await this.db.tx(async (tx) => {
+        const found = await tx.execute(sql`
+          SELECT ${COLUMNS} FROM wa_product_sets WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`);
+        return {
+          set: found.rows[0] ? toRow(found.rows[0] as Raw) : undefined,
+          catalog: await this.catalogs.first(tx, orgId),
+        };
+      });
+      if (!set?.metaSetId || !catalog) return;
+      await this.provider.deleteProductSet(this.bindings.of(catalog), set.metaSetId);
+    } catch (err) {
+      this.logger.warn(
+        { err: err instanceof Error ? err.message : 'failed', uuid },
+        'could not delete the Meta product set; removing the collection anyway',
+      );
+    }
   }
 }

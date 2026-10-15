@@ -9,13 +9,17 @@ import {
   WIDGET_BUILDER_DEFAULTS,
   WIDGET_HEX_COLOUR,
   type CreateWidgetInput,
+  type LauncherAnimation,
   type LauncherButtonType,
   type LauncherSide,
+  type PopupPosition,
   type Widget,
   type WidgetBodyBgKind,
   type WidgetLauncher,
   type WidgetMode,
   type WidgetPosition,
+  type PopupStyle,
+  type WidgetChatOptions,
 } from '@crm/contracts';
 
 /** One placement of the launcher as the form holds it: spacing stays text until it is validated. */
@@ -34,8 +38,29 @@ export interface LauncherDraft {
   avatar: string;
   greeting: string;
   introMessage: string;
+  /** The name in the panel header; empty shows the bot's own name. */
+  botName: string;
+  subHeader: string;
+  ctaText: string;
+  popup: PopupDraft;
+  animation: LauncherAnimation;
+  badge: boolean;
+  /** The chat window's look beyond colours; suggestions are held as typed lines (blank ones are dropped on save). */
+  chat: ChatDraft;
   desktop: PlacementDraft;
   mobile: PlacementDraft;
+}
+
+export type ChatDraft = WidgetChatOptions;
+
+/** The popup bubble beside or above the closed launcher, as the form holds it. */
+export interface PopupDraft {
+  enabled: boolean;
+  position: PopupPosition;
+  style: PopupStyle;
+  text: string;
+  /** `preset:<key>`, an image address, or empty for none. */
+  image: string;
 }
 
 const placementDraft = (p: WidgetLauncher['desktop']): PlacementDraft => ({
@@ -50,12 +75,34 @@ export const launcherDraft = (l: WidgetLauncher): LauncherDraft => ({
   avatar: l.avatar,
   greeting: l.greeting,
   introMessage: l.introMessage,
+  botName: l.botName,
+  subHeader: l.subHeader,
+  ctaText: l.ctaText,
+  popup: { ...l.popup },
+  animation: l.animation,
+  badge: l.badge,
+  chat: JSON.parse(JSON.stringify(l.chat)) as ChatDraft,
   desktop: placementDraft(l.desktop),
   mobile: placementDraft(l.mobile),
 });
 
 const spacingOf = (v: string): number =>
   /^\d{1,4}$/.test(v.trim()) ? Number(v.trim()) : Number.NaN;
+
+/** What the chat options send: items still being typed (no title, no picture, no video) are left out, blank lines are dropped. */
+export const cleanChat = (c: ChatDraft): ChatDraft => ({
+  ...c,
+  suggestions: c.suggestions.map((x) => x.trim()).filter((x) => x !== ''),
+  notice: {
+    ...c.notice,
+    items: c.notice.items.filter((i) => i.title.trim() !== '' && i.description.trim() !== ''),
+  },
+  quickMenu: { ...c.quickMenu, items: c.quickMenu.items.filter((i) => i.title.trim() !== '') },
+  banners: {
+    ...c.banners,
+    items: c.banners.items.filter((i) => (i.kind === 'video' ? i.video !== '' : i.image !== '')),
+  },
+});
 
 /** The draft as the API takes it. A spacing that is not a whole number is NaN here; `validateWhatsapp` refuses it first. */
 export const launcherPayload = (d: LauncherDraft): WidgetLauncher => ({
@@ -64,6 +111,13 @@ export const launcherPayload = (d: LauncherDraft): WidgetLauncher => ({
   avatar: d.avatar,
   greeting: d.greeting.trim(),
   introMessage: d.introMessage.trim(),
+  botName: d.botName.trim(),
+  subHeader: d.subHeader.trim(),
+  ctaText: d.ctaText.trim(),
+  popup: { ...d.popup, text: d.popup.text.trim() },
+  animation: d.animation,
+  badge: d.badge,
+  chat: cleanChat(d.chat),
   desktop: {
     side: d.desktop.side,
     sideSpacing: spacingOf(d.desktop.sideSpacing),
@@ -150,6 +204,34 @@ export function newState(): BuilderState {
     collectEmail: D.collectEmail,
     collectPhone: D.collectPhone,
     launcher: launcherDraft(DEFAULT_LAUNCHER),
+  };
+}
+
+/**
+ * The settings the chat window's preview draws, in the public shape the real page reads (`api/config`): the look the author is
+ * editing right now, saved or not. A visitor's details form and the WhatsApp link have no place in the preview.
+ */
+export function chatPreviewWidget(s: BuilderState): Record<string, unknown> {
+  const launcher = launcherPayload(s.launcher);
+  return {
+    header_title: s.headerTitle,
+    header_bg: s.headerBg,
+    header_text: s.headerTextColor,
+    welcome_message: s.welcomeMessage,
+    bubble_color: s.messageBubbleColor,
+    bubble_text: s.messageTextColor,
+    body_bg_kind: s.bodyBgKind,
+    body_bg_color: s.bodyBgColor,
+    body_bg_image_url: s.bodyBgImageUrl,
+    button_label: s.buttonLabel,
+    button_bg: s.actionButtonBg,
+    button_text: s.actionButtonTextColor,
+    collect_name: false,
+    collect_email: false,
+    collect_phone: false,
+    whatsapp_url: null,
+    mode: 'ai',
+    launcher: { chat: launcher.chat },
   };
 }
 
@@ -331,14 +413,24 @@ export function previewImageUrl(v: string): string | null {
 
 // --- the WhatsApp widget page (TW-WGT-028) ---------------------------------------------------------------------------------
 
-export type WhatsappCard = 1 | 2 | 3 | 4 | 5;
+export type WhatsappCard = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type WhatsappProblem =
   | { ok: true }
   | {
       ok: false;
       /** Message key under `chatbotWidget.whatsappBuilder.problem`. */
-      key: 'name' | 'avatar' | 'greeting' | 'intro' | 'spacing' | 'whatsapp';
+      key:
+        | 'name'
+        | 'avatar'
+        | 'greeting'
+        | 'intro'
+        | 'cta'
+        | 'prefilled'
+        | 'popupText'
+        | 'popupImage'
+        | 'spacing'
+        | 'whatsapp';
       /** The accordion card to open (0 = the name above the cards). */
       card: 0 | WhatsappCard;
       /** The control to flash and focus: its `wgt-f-<field>` id. */
@@ -358,8 +450,11 @@ export const validSpacing = (v: string): boolean => {
   return Number.isInteger(n) && n >= 0 && n <= LAUNCHER_LIMITS.spacing;
 };
 
-/** The first failing rule of the WhatsApp page, in the order the page reads. */
-export function validateWhatsapp(s: BuilderState): WhatsappProblem {
+/**
+ * The first failing rule of the WhatsApp page, in the order the page reads. A WhatsApp bot's button (`bot`) takes its number from the
+ * bot, so the number is not asked for, and the message a tap sends is required (it is what starts the bot).
+ */
+export function validateWhatsapp(s: BuilderState, opts: { bot?: boolean } = {}): WhatsappProblem {
   if (s.name.trim() === '') return { ok: false, key: 'name', card: 0, field: 'name' };
   const l = s.launcher;
   if (!isLauncherAvatar(l.avatar)) return { ok: false, key: 'avatar', card: 2, field: 'avatar' };
@@ -367,9 +462,20 @@ export function validateWhatsapp(s: BuilderState): WhatsappProblem {
   if (l.introMessage.trim() === '') {
     return { ok: false, key: 'intro', card: 3, field: 'introMessage' };
   }
+  if (l.ctaText.trim() === '') return { ok: false, key: 'cta', card: 3, field: 'ctaText' };
+  if (opts.bot && s.prefilledMessage.trim() === '') {
+    return { ok: false, key: 'prefilled', card: 3, field: 'prefilledMessage' };
+  }
+  if (l.popup.enabled && l.popup.text.trim() === '') {
+    return { ok: false, key: 'popupText', card: 6, field: 'popupText' };
+  }
+  if (!isLauncherAvatar(l.popup.image)) {
+    return { ok: false, key: 'popupImage', card: 6, field: 'popupImage' };
+  }
   for (const [device, key, field] of SPACING_FIELDS) {
     if (!validSpacing(l[device][key])) return { ok: false, key: 'spacing', card: 4, field };
   }
+  if (opts.bot) return { ok: true };
   if (digitsOf(`${s.targetWhatsappCc}${s.targetWhatsappNumber}`).length < 8) {
     return { ok: false, key: 'whatsapp', card: 5, field: 'phone' };
   }
@@ -388,6 +494,8 @@ export function previewLauncher(d: LauncherDraft): WidgetLauncher {
     ...p,
     greeting: p.greeting || DEFAULT_LAUNCHER.greeting,
     introMessage: p.introMessage || DEFAULT_LAUNCHER.introMessage,
+    ctaText: p.ctaText || DEFAULT_LAUNCHER.ctaText,
+    popup: { ...p.popup, image: isLauncherAvatar(p.popup.image) ? p.popup.image : '' },
     avatar: isLauncherAvatar(p.avatar) ? p.avatar : DEFAULT_LAUNCHER.avatar,
     desktop: {
       ...p.desktop,

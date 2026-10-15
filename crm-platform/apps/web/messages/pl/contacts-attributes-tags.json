@@ -187,7 +187,29 @@
       "ownerFormer": "Były członek",
       "reassignView": "Przypisz ponownie kontakty użytkownika {name}...",
       "smsNamed": "SMS {name}",
-      "noSms": "Brak numeru telefonu do SMS"
+      "noSms": "Brak numeru telefonu do SMS",
+      "pqlLabel": "Szukaj kontaktów zwykłym językiem",
+      "pqlAsk": "Zapytaj",
+      "pqlAsking": "Pytanie...",
+      "pqlIgnored": "Niezrozumiane: {parts}",
+      "pqlNothing": "Z tego wyszukiwania nie udało się utworzyć filtra.",
+      "pqlFailed": "Wyszukiwanie zwykłym językiem jest teraz niedostępne. Spróbuj ponownie.",
+      "filter": "Filtr",
+      "filterAi": "Filtruj z AI",
+      "filterAiHint": "Opisz, kogo szukasz",
+      "filterAdvanced": "Dodaj filtr zaawansowany",
+      "quickFilters": "Szybkie filtry",
+      "sortButton": "Sortuj",
+      "back": "Wstecz",
+      "pqlPromptPlaceholder": "Opisz potrzebne kontakty...",
+      "pqlTry": "Wypróbuj jeden z przykładów",
+      "pqlExample2": "Nieaktywne od 30 dni",
+      "pqlExample3": "Utworzone w ostatnich 7 dniach",
+      "clearFilter": "Wyczyść filtr",
+      "conditionsChip": "Warunki: {count}",
+      "pqlExampleTag": "Kontakty z tagiem {tag} nieaktywne od 30 dni",
+      "pqlExampleStage": "Kontakty na etapie {stage} utworzone w ostatnich 7 dniach",
+      "pqlExampleNoOwner": "Kontakty bez właściciela"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -342,7 +364,12 @@
       "addPlaceholder": "Dodaj lub wybierz tag...",
       "addLabel": "Nazwa tagu",
       "add": "Dodaj tag",
-      "failed": "Nie udało się zmienić tagu. Spróbuj ponownie."
+      "failed": "Nie udało się zmienić tagu. Spróbuj ponownie.",
+      "quickPlaceholder": "Szukaj lub utwórz tag",
+      "create": "Utwórz tag „{name}”",
+      "noMatch": "Brak pasujących tagów",
+      "quickHint": "Wybierz kilka tagów albo wpisz nazwę i naciśnij Enter, aby utworzyć nowy.",
+      "quickHintPick": "Wybierz kilka tagów z listy."
     },
     "groups": {
       "eyebrow": "Przestrzeń robocza · {workspace}",
@@ -429,7 +456,9 @@
         "memo": "Notatka",
         "status": "Status",
         "source": "Źródło",
-        "consent": "Zgoda marketingowa (tak / nie)"
+        "consent": "Zgoda marketingowa (tak / nie)",
+        "consentSms": "Zgoda na marketing SMS (tak / nie)",
+        "consentEmail": "Zgoda na marketing e-mail (tak / nie)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -1372,7 +1401,26 @@
         "selectAll": "Zaznacz wszystko",
         "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
         "remove": "Usuń: {name}"
+      },
+      "presets": {
+        "myContacts": "Moje kontakty",
+        "newThisWeek": "Nowe w tym tygodniu",
+        "newLastWeek": "Nowe w zeszłym tygodniu",
+        "recentlyCreated": "Ostatnio utworzone",
+        "recentlyModified": "Ostatnio zmienione",
+        "recentlyImported": "Ostatnio zaimportowane",
+        "neverContacted": "Nigdy nie kontaktowano",
+        "needsFollowUp": "Wymagają kontaktu",
+        "active": "Aktywne",
+        "inactive": "Nieaktywne",
+        "unsubscribed": "Wypisane"
       }
+    },
+    "erase": {
+      "scope": "Usunięcie kontaktu usuwa też jego rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
+      "scopeMany": "Usunięcie kontaktów usuwa też ich rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
+      "keepHistory": "Zachowaj historię rozmów bez tożsamości osoby",
+      "keepHistoryHint": "Rozmowy pozostają w Twoich zapisach, ale nie wskazują już na osobę."
     }
   }
 }

@@ -3,6 +3,7 @@ import {
   wabooMigrationBatchDetailSchema,
   wabooMigrationBatchesResponseSchema,
   wabooMigrationReadinessSchema,
+  wabooMigrationRunnerStatusSchema,
   wabooMigrationRunSchema,
   wabooMigrationRunsResponseSchema,
   type WabooMigrationBatch,
@@ -15,6 +16,7 @@ export const BATCHES_QUERY_KEY = ['operator', 'waboo-migration', 'batches'] as c
 export const runQueryKey = (id: string) => ['operator', 'waboo-migration', 'run', id] as const;
 export const batchQueryKey = (id: string) => ['operator', 'waboo-migration', 'batch', id] as const;
 export const READINESS_KEY = ['operator', 'waboo-migration', 'readiness'] as const;
+export const RUNNER_KEY = ['operator', 'waboo-migration', 'runner'] as const;
 
 /** How often an active run is re-read: the verifier result is shown live. */
 export const POLL_MS = 3000;
@@ -96,6 +98,20 @@ export function useReadiness(organizationIds: string[]) {
         signal,
       }),
     refetchInterval: 5000,
+    refetchOnWindowFocus: false,
+  });
+}
+
+/** Is a runner agent connected (the machine on the Geta VPN that runs the pipeline)? Re-read every 10 seconds so the banner follows it. */
+export function useRunnerStatus() {
+  return useQuery({
+    queryKey: RUNNER_KEY,
+    queryFn: ({ signal }) =>
+      operatorFetch('/waboo-migration/runner', {
+        schema: wabooMigrationRunnerStatusSchema,
+        signal,
+      }),
+    refetchInterval: 10_000,
     refetchOnWindowFocus: false,
   });
 }

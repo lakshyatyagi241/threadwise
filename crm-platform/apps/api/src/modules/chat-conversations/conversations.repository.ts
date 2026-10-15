@@ -175,11 +175,14 @@ export class ConversationsRepository {
       title: string;
       contactId: number | null;
       needsContact: boolean;
+      /** The thread starts from an imported history: it is marked once (`imported_at`). */
+      imported?: boolean;
     },
   ): Promise<ConversationRow> {
     const res = await tx.execute(sql`
-      INSERT INTO conversations (org_id, channel_id, peer_key, peer_name, title, contact_id, needs_contact, status)
-      VALUES (${orgId}, ${c.channelId}, ${c.peerKey}, ${c.peerName}, ${c.title}, ${c.contactId}, ${c.needsContact}, 'open')
+      INSERT INTO conversations (org_id, channel_id, peer_key, peer_name, title, contact_id, needs_contact, status, imported_at)
+      VALUES (${orgId}, ${c.channelId}, ${c.peerKey}, ${c.peerName}, ${c.title}, ${c.contactId}, ${c.needsContact}, 'open',
+              ${c.imported ? sql`now()` : sql`NULL`})
       RETURNING ${COLUMNS}`);
     return toConversationRow(rowsOf(res)[0]!);
   }

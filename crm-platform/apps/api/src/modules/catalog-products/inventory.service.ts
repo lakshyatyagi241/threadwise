@@ -12,11 +12,14 @@ import {
   holdTtl,
   type Stock,
 } from './inventory-rules';
+import { recomputeProductAggregate } from './products.repository';
 
 export interface StockReservation {
   id: number;
   uuid: string;
   productId: number;
+  /** Set for the sale of one variant of a product with variants. */
+  variantId: number | null;
   orderId: number | null;
   ref: string | null;
   qty: number;
@@ -30,6 +33,7 @@ const toReservation = (r: Raw): StockReservation => ({
   id: Number(r.id),
   uuid: r.uuid as string,
   productId: Number(r.product_id),
+  variantId: r.variant_id === null || r.variant_id === undefined ? null : Number(r.variant_id),
   orderId: r.order_id === null || r.order_id === undefined ? null : Number(r.order_id),
   ref: (r.ref as string | null) ?? null,
   qty: Number(r.qty),
@@ -37,7 +41,7 @@ const toReservation = (r: Raw): StockReservation => ({
   expiresAt: r.expires_at ? new Date(r.expires_at as string) : null,
 });
 
-const COLUMNS = sql`id, uuid, product_id, order_id, ref, qty, status, expires_at`;
+const COLUMNS = sql`id, uuid, product_id, variant_id, order_id, ref, qty, status, expires_at`;
 
 /**
  * The anti-sellout ledger of natural-language ordering (TW-CAT-025), exported from the barrel for flows and checkout.
@@ -53,9 +57,21 @@ export class InventoryService {
 
   constructor(private readonly db: DatabaseService) {}
 
-  private async lockStock(tx: Tx, orgId: number, productId: number): Promise<Stock | undefined> {
-    const res = await tx.execute(sql`
-      SELECT stock_qty, reserved_qty FROM wa_products WHERE org_id = ${orgId} AND id = ${productId} FOR UPDATE`);
+  /** Locks the stock row: the variant's when one is named (invariant 4), else the product's. */
+  private async lockStock(
+    tx: Tx,
+    orgId: number,
+    productId: number,
+    variantId?: number | null,
+    activeOnly = false,
+  ): Promise<Stock | undefined> {
+    const res = variantId
+      ? await tx.execute(sql`
+          SELECT stock_qty, reserved_qty FROM wa_product_variants
+          WHERE org_id = ${orgId} AND product_id = ${productId} AND id = ${variantId}
+            ${activeOnly ? sql`AND active` : sql``} FOR UPDATE`)
+      : await tx.execute(sql`
+          SELECT stock_qty, reserved_qty FROM wa_products WHERE org_id = ${orgId} AND id = ${productId} FOR UPDATE`);
     const r = res.rows[0] as Raw | undefined;
     if (!r) return undefined;
     return {
@@ -64,10 +80,31 @@ export class InventoryService {
     };
   }
 
-  private async writeStock(tx: Tx, orgId: number, productId: number, s: Stock): Promise<void> {
+  /** Writes the stock back; a variant's write is followed by the product aggregate's recompute in the same transaction. */
+  private async writeStock(
+    tx: Tx,
+    orgId: number,
+    productId: number,
+    s: Stock,
+    variantId?: number | null,
+  ): Promise<void> {
+    if (variantId) {
+      await tx.execute(sql`
+        UPDATE wa_product_variants SET stock_qty = ${s.stockQty}, reserved_qty = ${s.reservedQty}
+        WHERE org_id = ${orgId} AND id = ${variantId}`);
+      await recomputeProductAggregate(tx, orgId, productId);
+      return;
+    }
     await tx.execute(sql`
       UPDATE wa_products SET stock_qty = ${s.stockQty}, reserved_qty = ${s.reservedQty}
       WHERE org_id = ${orgId} AND id = ${productId}`);
+  }
+
+  /** Whether the product has variants: its own row is then only the aggregate and cannot be sold from directly. */
+  private async hasVariants(tx: Tx, orgId: number, productId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wa_product_variants WHERE org_id = ${orgId} AND product_id = ${productId} LIMIT 1`);
+    return res.rows.length > 0;
   }
 
   /** Sellable right now (null = unlimited). */
@@ -82,18 +119,21 @@ export class InventoryService {
     productId: number,
     qty: number,
     ref: string,
-    opts: { orderId?: number | null; ttlSeconds?: number } = {},
+    opts: { orderId?: number | null; ttlSeconds?: number; variantId?: number | null } = {},
   ): Promise<StockReservation | null> {
     if (qty <= 0) return null;
-    const stock = await this.lockStock(tx, orgId, productId);
+    const variantId = opts.variantId ?? null;
+    // A product with variants is sold by variant: a hold on its aggregate row would be overwritten by the next recompute.
+    if (!variantId && (await this.hasVariants(tx, orgId, productId))) return null;
+    const stock = await this.lockStock(tx, orgId, productId, variantId, true);
     if (!stock || !canHold(stock, qty)) return null;
     const ttl = holdTtl(opts.ttlSeconds ?? DEFAULT_HOLD_TTL_SECONDS);
     const res = await tx.execute(sql`
-      INSERT INTO wa_stock_reservations (org_id, product_id, order_id, ref, qty, status, expires_at)
-      VALUES (${orgId}, ${productId}, ${opts.orderId ?? null}, ${clampRef(ref)}, ${qty}, 'held',
+      INSERT INTO wa_stock_reservations (org_id, product_id, variant_id, order_id, ref, qty, status, expires_at)
+      VALUES (${orgId}, ${productId}, ${variantId}, ${opts.orderId ?? null}, ${clampRef(ref)}, ${qty}, 'held',
               now() + make_interval(secs => ${ttl}))
       RETURNING ${COLUMNS}`);
-    await this.writeStock(tx, orgId, productId, afterHold(stock, qty));
+    await this.writeStock(tx, orgId, productId, afterHold(stock, qty), variantId);
     return toReservation(res.rows[0] as Raw);
   }
 
@@ -118,8 +158,15 @@ export class InventoryService {
   ): Promise<boolean> {
     const held = await this.findHeld(tx, orgId, reservationId);
     if (!held || held.status !== 'held') return false;
-    const stock = await this.lockStock(tx, orgId, held.productId);
-    if (stock) await this.writeStock(tx, orgId, held.productId, afterCommit(stock, held.qty));
+    const stock = await this.lockStock(tx, orgId, held.productId, held.variantId);
+    if (stock)
+      await this.writeStock(
+        tx,
+        orgId,
+        held.productId,
+        afterCommit(stock, held.qty),
+        held.variantId,
+      );
     await tx.execute(sql`
       UPDATE wa_stock_reservations
       SET status = 'committed', order_id = coalesce(${orderId ?? null}, order_id)
@@ -131,8 +178,15 @@ export class InventoryService {
   async release(tx: Tx, orgId: number, reservationId: number): Promise<boolean> {
     const held = await this.findHeld(tx, orgId, reservationId);
     if (!held || held.status !== 'held') return false;
-    const stock = await this.lockStock(tx, orgId, held.productId);
-    if (stock) await this.writeStock(tx, orgId, held.productId, afterRelease(stock, held.qty));
+    const stock = await this.lockStock(tx, orgId, held.productId, held.variantId);
+    if (stock)
+      await this.writeStock(
+        tx,
+        orgId,
+        held.productId,
+        afterRelease(stock, held.qty),
+        held.variantId,
+      );
     await tx.execute(
       sql`UPDATE wa_stock_reservations SET status = 'released' WHERE org_id = ${orgId} AND id = ${held.id}`,
     );

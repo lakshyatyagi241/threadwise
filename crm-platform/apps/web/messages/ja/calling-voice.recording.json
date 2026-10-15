@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "通話の録音",
+        "intro": "録音は有効にするまでオフです。オンにすると、チームメンバーが告知を読み上げ、相手が答え、その後に初めて録音が始まります。録音は保存期間が過ぎると削除されます。",
+        "loading": "録音ルールを読み込み中",
+        "loadFailed": "録音ルールを読み込めませんでした。",
+        "retry": "再試行",
+        "viewOnly": "このルールは表示できますが、変更できるのはオーナーまたは管理者のみです。",
+        "enabled": "通話を録音する",
+        "enabledOn": "オン: 相手が同意した後、チームメンバーが通話を録音できます。",
+        "enabledOff": "オフ: どの通話も録音されません。",
+        "mode": "相手の同意方法",
+        "modeHint": {
+          "confirmed": "相手が録音に「はい」と答え、チームメンバーがその回答を保存します。最も安全な選択です。",
+          "announcement": "チームメンバーが告知を読み上げ、通話を続けます。アナウンスで十分だと法務担当が確認した場合のみ使用してください。"
+        },
+        "modeOption": {
+          "confirmed": "相手が「はい」と答える",
+          "announcement": "アナウンスして続行"
+        },
+        "retention": "録音の保存期間（日）",
+        "retentionHint": "{min}日から{max}日まで。古い録音は毎晩削除されます。通話自体はログに残ります。",
+        "retentionInvalid": "許可された範囲の整数で日数を入力してください。",
+        "notice": "録音の告知",
+        "noticeHint": "チームメンバーが録音前に読み上げます。最大{max}文字。変更するたびに新しいバージョンとして保存されます。",
+        "noticeRequired": "録音をオンにするには告知（{min}文字以上）を書いてください。",
+        "noticeVersion": "告知バージョン {version}",
+        "noticeNone": "告知はまだ保存されていません",
+        "updatedAt": "{date} に保存",
+        "noticeSuggestion": "この通話は品質向上と研修のために録音されることがあります。録音に同意しますか？",
+        "useSuggestion": "提案文を使う",
+        "saved": "録音ルールを保存しました。",
+        "saving": "保存中",
+        "save": "ルールを保存"
+      },
+      "consent": {
+        "title": "録音前に確認",
+        "askConfirmed": "告知を読み上げてください。相手が「はい」と答えた場合のみ最初のボタンを押してください。",
+        "askAnnouncement": "告知を読み上げてから録音を開始してください。",
+        "grantConfirmed": "「はい」と答えた: 録音を開始",
+        "grantAnnouncement": "告知を読み上げた: 録音を開始",
+        "decline": "いいえ: 録音せずに続行",
+        "declinedNote": "録音していません: 相手が同意しませんでした。",
+        "off": "このワークスペースでは通話の録音がオフです。",
+        "failed": "回答を保存できなかったため、何も録音されません: {message}"
+      },
+      "lifecycle": {
+        "title": "録音と同意",
+        "consent": "録音への同意",
+        "consentGranted": "録音に同意した",
+        "consentDeclined": "録音を拒否した",
+        "consentNone": "回答は記録されていません",
+        "method": {
+          "announcement_continue": "告知を読み上げ、通話を続行",
+          "spoken_yes": "「はい」と答えた"
+        },
+        "noticeVersion": "告知バージョン {version}",
+        "storedAt": "保存日時",
+        "expiresAt": "自動削除日",
+        "heldNoExpiry": "削除されません: 法的保全",
+        "none": "未設定",
+        "deleted": "録音を削除しました",
+        "deletedReason": {
+          "retention": "保存期間が終了",
+          "manual": "チームメンバーが削除",
+          "consent_withdrawn": "同意が撤回されました"
+        },
+        "holdOn": "法的保全",
+        "placeHold": "法的保全を設定",
+        "liftHold": "法的保全を解除",
+        "holdLifted": "法的保全を解除しました。",
+        "holdPlaced": "法的保全を設定しました。",
+        "holdReasonLabel": "保管する理由",
+        "cancel": "キャンセル",
+        "delete": "録音を削除",
+        "deleteBlockedByHold": "先に法的保全を解除してください。",
+        "deleteTitle": "この録音を削除しますか？",
+        "deleteMessage": "音声ファイルは完全に削除されます。通話はログに残ります。",
+        "deletedToast": "録音を削除しました。"
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "このワークスペースでは通話の録音がオフです。",
+      "CALL_RECORDING_CONSENT_REQUIRED": "この通話は録音できません: 相手が同意していません。",
+      "CALL_RECORDING_CONSENT_INVALID": "この通話ではその回答を保存できません。",
+      "CALL_RECORDING_ON_HOLD": "この録音は法的保全中です。先に保全を解除してください。",
+      "CALL_RECORDING_SETTINGS_INVALID": "録音ルールが無効です。先に告知を書いてください。"
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "相手が録音に同意しました",
+          "recording_consent_declined": "相手が録音を拒否しました",
+          "recording_deleted": "録音を削除しました",
+          "recording_hold_set": "法的保全を設定しました",
+          "recording_hold_lifted": "法的保全を解除しました"
+        }
+      }
+    }
+  }
+}

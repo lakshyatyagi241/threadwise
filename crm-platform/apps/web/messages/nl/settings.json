@@ -294,6 +294,11 @@
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
       },
+      "web": {
+        "label": "Websitechat",
+        "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
+        "keywords": "web, website, widget, chatbot, insluiten, livechat"
+      },
       "message-logs": {
         "label": "Berichtlogboeken",
         "description": "Exporteer het bezorglogboek van je berichten, tot een jaar terug, als bestand dat naar je e-mail wordt gestuurd.",
@@ -303,11 +308,6 @@
         "label": "Abonnementen",
         "description": "Wat wordt verlengd, tot wanneer het betaald is, en annuleren.",
         "keywords": "abonnement, verlengen, automatisch verlengen, annuleren, automatische betaling, mislukte betaling, afschrijvingen"
-      },
-      "web": {
-        "label": "Websitechat",
-        "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
-        "keywords": "web, website, widget, chatbot, insluiten, livechat"
       },
       "lead-scoring": {
         "label": "AI-leadscoring",
@@ -343,6 +343,21 @@
         "label": "Teamprestaties",
         "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",
         "keywords": "rapporten, analyses, agenten, reactietijd, eerste antwoord, opgelost, werkdruk, prestaties"
+      },
+      "contact-assignment": {
+        "label": "Contacttoewijzing",
+        "description": "Geef nieuwe contacten en deals automatisch aan de juiste persoon, en sla mensen met verlof over.",
+        "keywords": "toewijzen, eigenaar, round robin, nieuw contact, nieuwe deal, verlof, leadroutering"
+      },
+      "privacy-requests": {
+        "label": "Gegevensverzoeken",
+        "description": "Beantwoord mensen die vragen wat je van hen bewaart: identiteitscontrole, export, wissen met voorvertoning en een bewijs dat je kunt bewaren.",
+        "keywords": "privacy, gdpr, gegevensverzoek, dsar, inzage, gegevens exporteren, wissen, recht op vergetelheid, persoonsgegevens verwijderen, legal hold"
+      },
+      "compliance-center": {
+        "label": "Compliancecentrum",
+        "description": "Hulpmiddelen om je te helpen je privacyverplichtingen na te komen: de wetten waaronder je werkt, privacycontacten, mededelingen en links, subverwerkers, stille uren en een checklist van wat er is ingericht.",
+        "keywords": "compliance, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, functionaris gegevensbescherming, klachtenfunctionaris, subverwerker, dpa, verwerkersovereenkomst, voorwaarden, privacybeleid, stille uren, niet bellen, checklist, kinderen"
       }
     },
     "title": "Instellingen",

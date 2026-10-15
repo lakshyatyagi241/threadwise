@@ -36,6 +36,8 @@ const actions: RowActions = {
   onReset: noop,
   onResend: noop,
   onRemove: noop,
+  onLeave: noop,
+  leaves: { items: [], today: '2026-10-13' },
 };
 
 function table(opts: {

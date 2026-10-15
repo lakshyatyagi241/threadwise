@@ -738,7 +738,9 @@
           "link": "Użyj ścieżki witryny, takiej jak /legal/terms, lub pełnego adresu http albo https.",
           "senderFormat": "Wybierz jednego z nadawców z listy.",
           "countryFormat": "Użyj dwuliterowego kodu kraju.",
-          "senderRequired": "Wybierz kanał nadawcy przed utworzeniem szablonu."
+          "senderRequired": "Wybierz kanał nadawcy przed utworzeniem szablonu.",
+          "domainFormat": "{entry} nie jest prawidłową domeną. Użyj nazwy takiej jak przyklad.pl.",
+          "tooMany": "Nie więcej niż {max} domen."
         },
         "policy": {
           "kicker": "Rejestracja",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Maks. liczba prób"
+          },
+          "businessEmailOnly": {
+            "label": "Tylko służbowe adresy e-mail",
+            "hintOn": "Bezpłatni dostawcy, tacy jak Gmail, Outlook i Yahoo, są odrzucani przy rejestracji.",
+            "hintOff": "Każdy może się zarejestrować przy użyciu bezpłatnego adresu prywatnego."
+          },
+          "blockDisposableEmail": {
+            "label": "Blokuj tymczasowe adresy e-mail",
+            "hintOn": "Domeny jednorazowe i tymczasowe oraz domeny bez serwera poczty są odrzucane.",
+            "hintOff": "Adresy tymczasowe są akceptowane."
+          },
+          "requirePhoneVerification": {
+            "label": "Wymagaj zweryfikowanego numeru komórkowego",
+            "hintOn": "Każda rejestracja musi potwierdzić jednorazowy kod. Jeśli nie można wysłać kodu, rejestracja zostaje zatrzymana zamiast pominąć weryfikację.",
+            "hintOff": "Krok z kodem działa tylko wtedy, gdy poniższy kod rejestracji jest włączony."
+          },
+          "blockedEmailDomains": {
+            "label": "Zawsze blokowane domeny",
+            "hint": "Jedna domena w wierszu. Subdomeny są również blokowane. Są odrzucane nawet przy wyłączonej opcji „Tylko służbowe adresy e-mail”.",
+            "placeholder": "przyklad.pl"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Ta stopka nie została zaakceptowana.",
             "unexpected": "Nie udało się zapisać stopki. Spróbuj ponownie za chwilę."
           }
+        },
+        "guard": {
+          "kicker": "Ochrona rejestracji",
+          "title": "Sprawdzanie służbowego e-maila i numeru komórkowego",
+          "description": "Odsiewa adresy jednorazowe i prywatne oraz dba o to, by każde nowe konto miało zweryfikowany numer komórkowy. Dotyczy rejestracji e-mailem i przez media społecznościowe.",
+          "phoneOffWarning": "Przy wyłączonym sprawdzaniu numeru komórkowego można tworzyć konta bez zweryfikowanego numeru, co ułatwia masowe fałszywe rejestracje."
         }
       },
       "social": {
@@ -1405,12 +1433,13 @@
             "storefront_builder": "Kreator sklepu internetowego.",
             "invoicing": "Faktury, noty kredytowe, płatności, zamówienia sprzedaży i stawki podatkowe.",
             "forms_and_links": "Formularze pozyskiwania leadów i linki do udostępniania.",
-            "extra_channels": "Kanały Telegram, Facebook i Instagram.",
+            "extra_channels": "Kanały Telegram, Facebook, Instagram, LINE, Viber i WeChat.",
             "form_builder": "Hostowane i osadzane formularze internetowe tworzące kontakty w CRM. Ten przełącznik należy do płatnej aplikacji Formularze.",
             "waba_groups": "Tworzenie grup WhatsApp i zarządzanie nimi z numeru Cloud API: link zaproszenia, prośby o dołączenie, członkowie. Numer musi być Official Business Account.",
             "sms": "SMS tylko do wysyłki przez Twilio lub MSG91: połącz nadawców, wysyłaj transmisje i kampanie SMS.",
             "help_agent": "Asystent pomocy w aplikacji: użytkownicy opisują zadanie zwykłymi słowami, a asystent prowadzi ich przez nie lub wykonuje je w ich sesji, pytając o zgodę przed wszystkim, co ryzykowne. Zużywa tokeny AI.",
-            "email_channel": "Połącz skrzynki Gmail i Google Workspace ze skrzynką odbiorczą zespołu. Tym przełącznikiem steruje płatna aplikacja E-mail."
+            "email_channel": "Połącz skrzynki Gmail i Google Workspace ze skrzynką odbiorczą zespołu. Tym przełącznikiem steruje płatna aplikacja E-mail.",
+            "personal_history_full": "Pozwala osobistemu numerowi WhatsApp zaimportować pełną historię czatów przy pierwszym połączeniu. Import ostatnich czatów jest dostępny w każdym planie z numerami osobistymi."
           },
           "units": {
             "days": "Dni",
@@ -1553,7 +1582,8 @@
             "form_submissions_monthly": "Zgłoszenia formularzy miesięcznie",
             "ai_form_generations_monthly": "Generacje kreatora formularzy AI miesięcznie",
             "sms_monthly": "SMS miesięcznie",
-            "email_mailboxes": "Skrzynki e-mail"
+            "email_mailboxes": "Skrzynki e-mail",
+            "email_monthly": "E-maile miesięcznie"
           },
           "featureGroups": {
             "messaging": "Wiadomości",
@@ -1588,12 +1618,13 @@
             "storefront_builder": "Kreator sklepu i strony internetowej",
             "invoicing": "Fakturowanie (faktury, noty kredytowe, faktury cykliczne)",
             "forms_and_links": "Formularze, linki click-to-chat i grupy",
-            "extra_channels": "Kanały Telegram, Facebook i Instagram",
+            "extra_channels": "Kanały Telegram, Facebook, Instagram, LINE, Viber i WeChat",
             "form_builder": "Formularze (kreator formularzy internetowych)",
             "waba_groups": "Grupy WhatsApp (Cloud API)",
             "sms": "Kanał SMS",
             "help_agent": "Asystent pomocy (AI, zużywa tokeny)",
-            "email_channel": "Kanał e-mail (Gmail)"
+            "email_channel": "Kanał e-mail (Gmail)",
+            "personal_history_full": "Import pełnej historii czatów (osobisty WhatsApp)"
           },
           "problems": {
             "required": "To pole jest wymagane.",
@@ -1647,7 +1678,8 @@
             "form_submissions_monthly": "Zgłoszenia formularzy przyjęte w miesiącu kalendarzowym, z wyłączeniem spamu. Po przekroczeniu limitu zgłoszenie nadal jest zapisywane do przeglądu, nigdy odrzucane. 0 = bez limitu.",
             "ai_form_generations_monthly": "Generacje kreatora formularzy AI w miesiącu kalendarzowym, łącznie z ponowną próbą naprawy. 0 = bez limitu.",
             "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu.",
-            "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu."
+            "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
+            "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu."
           }
         }
       },

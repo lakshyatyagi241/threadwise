@@ -5,6 +5,7 @@ import { getLocale, getMessages, getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { dirOf } from '@/i18n/locales';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
+import { appFontVariables } from '@/lib/fonts';
 import { getSiteConfig } from '@/features/platform-settings-branding-storage/site/site-config';
 import { SiteHead } from '@/features/platform-settings-branding-storage/site/site-head';
 import { SiteRuntime } from '@/features/platform-settings-branding-storage/site/site-runtime';
@@ -34,7 +35,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={locale} dir={dirOf(locale)} data-theme={theme}>
       <head>{site && <SiteHead cfg={site} />}</head>
-      <body className="bg-background text-foreground antialiased">
+      <body className={`${appFontVariables} bg-background font-sans text-foreground antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>{children}</Providers>
           {site && <SiteRuntime banner={site.cookieBanner} analytics={site.analytics} />}

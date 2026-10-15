@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Formulaires WhatsApp",
+      "links": "Liens WhatsApp"
+    },
+    "errors": {
+      "generic": "Une erreur est survenue. Veuillez réessayer.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Connectez un numéro WhatsApp Cloud API pour utiliser les formulaires.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Aucun numéro WhatsApp Cloud API connecté ne dispose d'identifiants valides.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta a rejeté la définition du formulaire.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Votre compte WhatsApp Business doit réussir la vérification de Meta avant de pouvoir publier des formulaires.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta n'a pas pu publier ce formulaire.",
+      "WFL_LINK_NOT_LIVE": "Ce lien est en pause ou a expiré.",
+      "ROW_VERSION_CONFLICT": "Cet élément a été modifié ailleurs. Rechargez la page et réessayez.",
+      "VALIDATION_FAILED": "Vérifiez les champs mis en évidence et réessayez.",
+      "PLAN_FEATURE_LOCKED": "Passez à un forfait supérieur pour utiliser cette fonctionnalité."
+    },
+    "forms": {
+      "heading": "Formulaires WhatsApp",
+      "intro": "Créez des formulaires que les clients remplissent directement dans WhatsApp, envoyez-les depuis un flux, puis consultez les réponses ici.",
+      "loading": "Chargement des formulaires…",
+      "retry": "Réessayer",
+      "create": {
+        "cta": "Nouveau formulaire",
+        "creating": "Création en cours…",
+        "defaultTitle": "Formulaire sans titre",
+        "defaultField": "Nom complet"
+      },
+      "stats": {
+        "all": "Tous les formulaires",
+        "published": "Publiés",
+        "draft": "Brouillons",
+        "submissions": "Réponses"
+      },
+      "empty": {
+        "title": "Aucun formulaire pour le moment",
+        "description": "Créez un formulaire, puis envoyez-le depuis une étape de formulaire WhatsApp dans un flux."
+      },
+      "table": {
+        "form": "Formulaire",
+        "type": "Type",
+        "fields": "Champs",
+        "submissions": "Réponses"
+      },
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "paused": "En pause"
+      },
+      "audience": {
+        "lead_capture": "Capture de prospects",
+        "survey": "Sondage",
+        "appointment_booking": "Prise de rendez-vous",
+        "customer_support": "Support client",
+        "sign_up": "Inscription",
+        "other": "Autre"
+      },
+      "row": {
+        "edit": "Modifier",
+        "duplicate": "Dupliquer",
+        "delete": "Supprimer"
+      },
+      "confirm": {
+        "deleteTitle": "Supprimer ce formulaire ?",
+        "deleteMessage": "Les nœuds de flux actifs qui y font référence cesseront de fonctionner.",
+        "deleteConfirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notice": {
+        "saved": "Enregistré.",
+        "published": "Publié sur WhatsApp."
+      },
+      "builder": {
+        "back": "Retour aux formulaires",
+        "untitled": "Formulaire sans titre",
+        "saving": "Enregistrement…",
+        "saveDraft": "Enregistrer le brouillon",
+        "savePublish": "Enregistrer et publier",
+        "publishing": "Publication en cours…",
+        "basics": "Informations de base du formulaire",
+        "title": "Titre",
+        "audienceType": "Type",
+        "purpose": "Objectif",
+        "sendButtonLabel": "Libellé du bouton d'envoi",
+        "thankYouNote": "Message de remerciement",
+        "screens": "Écrans",
+        "addScreen": "Ajouter un écran",
+        "removeScreen": "Supprimer l'écran",
+        "screenN": "Écran {n}",
+        "defaultField": "Nom complet",
+        "newFieldLabel": "Nouveau champ",
+        "fieldKind": "Type de champ",
+        "fieldLabel": "Libellé",
+        "required": "Obligatoire",
+        "removeField": "Supprimer",
+        "options": "Options (séparées par des virgules)",
+        "optionsPlaceholder": "Option 1, Option 2, Option 3"
+      },
+      "fieldKind": {
+        "heading": "Titre",
+        "short_text": "Texte court",
+        "paragraph": "Paragraphe",
+        "email": "E-mail",
+        "phone_number": "Numéro de téléphone",
+        "number": "Nombre",
+        "date": "Date",
+        "dropdown": "Liste déroulante",
+        "radio_buttons": "Boutons radio",
+        "checkbox": "Cases à cocher"
+      },
+      "submissions": {
+        "heading": "Réponses",
+        "metaFlowId": "ID de flux Meta : {id}",
+        "export": "Exporter en CSV",
+        "empty": {
+          "title": "Aucune réponse pour le moment",
+          "description": "Les réponses apparaîtront ici dès que ce formulaire sera envoyé depuis un flux et rempli par quelqu'un."
+        },
+        "table": {
+          "submitted": "Envoyé",
+          "contact": "Contact",
+          "phone": "Téléphone"
+        }
+      }
+    },
+    "links": {
+      "heading": "Liens WhatsApp",
+      "intro": "Créez un lien traçable qui ouvre WhatsApp avec un message prérempli — idéal pour les publicités, les bios et les codes QR.",
+      "loading": "Chargement des liens…",
+      "retry": "Réessayer",
+      "searchPlaceholder": "Rechercher par nom ou par lien",
+      "create": { "cta": "Nouveau lien" },
+      "stats": {
+        "all": "Tous les liens",
+        "live": "Actifs",
+        "totalClicks": "Clics totaux",
+        "avgClicks": "Clics moy. / lien"
+      },
+      "tabs": { "all": "Tous", "live": "Actifs", "paused": "En pause" },
+      "status": { "live": "Actif", "paused": "En pause" },
+      "empty": {
+        "title": "Aucun lien pour le moment",
+        "description": "Créez un lien à partager dans une publicité, une bio ou un code QR."
+      },
+      "table": {
+        "link": "Lien",
+        "destination": "Destination",
+        "clicks": "Clics",
+        "lastClicked": "Dernier clic"
+      },
+      "row": {
+        "open": "Ouvrir",
+        "copy": "Copier",
+        "copied": "Copié !",
+        "edit": "Modifier",
+        "duplicate": "Dupliquer",
+        "delete": "Supprimer"
+      },
+      "confirm": {
+        "deleteTitle": "Supprimer ce lien ?",
+        "deleteMessage": "Le lien court cesse de fonctionner immédiatement.",
+        "deleteConfirm": "Supprimer",
+        "cancel": "Annuler"
+      },
+      "notice": {
+        "saved": "Enregistré.",
+        "copyFailed": "Impossible de copier le lien."
+      },
+      "builder": {
+        "back": "Retour aux liens",
+        "newHeading": "Nouveau lien",
+        "step": { "destination": "Destination", "message": "Message de départ", "tracking": "Suivi" },
+        "name": "Nom",
+        "status": "Statut",
+        "countryCode": "Indicatif du pays",
+        "phoneNumber": "Numéro de téléphone",
+        "welcomeMessage": "Message de départ",
+        "welcomeMessageHint": "Préremplie dans la discussion lorsqu'une personne clique sur le lien.",
+        "slug": "Lien court",
+        "slugHint": "Lettres, chiffres et tirets uniquement. Laissez vide pour en générer un automatiquement.",
+        "slugPlaceholder": "soldes-ete",
+        "expiresAt": "Expire",
+        "utmSource": "Source UTM",
+        "utmMedium": "Support UTM",
+        "utmCampaign": "Campagne UTM",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "mint": "Créer le lien",
+        "save": "Enregistrer",
+        "saving": "Enregistrement…",
+        "fixErrors": "Vérifiez les champs de destination et de lien court.",
+        "mintedHeading": "Votre lien",
+        "shortUrl": "Lien court",
+        "waUrl": "Lien WhatsApp",
+        "qrAlt": "Code QR pour ce lien"
+      }
+    }
+  }
+}

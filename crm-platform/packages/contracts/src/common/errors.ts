@@ -31,15 +31,23 @@ import { ALIB_ERROR_CODES } from '../api-library/errors';
 import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
 import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
+import { PRIVACY_ERROR_CODES } from '../privacy/errors';
+import { COMPLIANCE_ERROR_CODES } from '../compliance/errors';
 import { GROWTH_ERROR_CODES } from '../growth';
 import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log';
+import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
+import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 
 export const ERROR_CODES = {
   ...FAQ_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,
   ...CONSENT_ERROR_CODES,
+  ...PRIVACY_ERROR_CODES,
+  ...COMPLIANCE_ERROR_CODES,
   ...AUDIT_LOG_ERROR_CODES,
+  ...PQL_ERROR_CODES,
+  ...WFL_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,
@@ -240,6 +248,41 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // LINE channel (LINE)
+  /** LINE refused the channel access token (the bot info call failed). */
+  LINE_TOKEN_REJECTED: 'LINE_TOKEN_REJECTED',
+  /** A broadcast needs a message, a file, or both. */
+  LINE_BROADCAST_EMPTY: 'LINE_BROADCAST_EMPTY',
+  /** None of the picked people belong to the channel. */
+  LINE_NO_RECIPIENTS: 'LINE_NO_RECIPIENTS',
+  /** The channel is not connected or is paused. */
+  LINE_CHANNEL_UNAVAILABLE: 'LINE_CHANNEL_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  LINE_NOTHING_TO_SEND: 'LINE_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  LINE_NOTHING_TO_RETRY: 'LINE_NOTHING_TO_RETRY',
+  /** Token rotation could not be set up: the Channel ID is missing, the key does not sign, or LINE refused the assertion. */
+  LINE_ROTATION_FAILED: 'LINE_ROTATION_FAILED',
+  // Viber channel (TW-VIB)
+  /** Viber refused the auth token (get_account_info failed). */
+  VIB_TOKEN_REJECTED: 'VIB_TOKEN_REJECTED',
+  VIB_BROADCAST_EMPTY: 'VIB_BROADCAST_EMPTY',
+  /** None of the picked users belong to the channel. */
+  VIB_NO_RECIPIENTS: 'VIB_NO_RECIPIENTS',
+  VIB_CHANNEL_UNAVAILABLE: 'VIB_CHANNEL_UNAVAILABLE',
+  VIB_NOTHING_TO_SEND: 'VIB_NOTHING_TO_SEND',
+  VIB_NOTHING_TO_RETRY: 'VIB_NOTHING_TO_RETRY',
+  // WeChat channel (WECH)
+  /** WeChat refused the AppID and AppSecret (no access token). */
+  WECH_CREDENTIALS_REJECTED: 'WECH_CREDENTIALS_REJECTED',
+  /** An OpenID broadcast needs at least two recipients that belong to the channel. */
+  WECH_TOO_FEW_RECIPIENTS: 'WECH_TOO_FEW_RECIPIENTS',
+  WECH_CHANNEL_UNAVAILABLE: 'WECH_CHANNEL_UNAVAILABLE',
+  /** The broadcast was already sent: a mass send cannot be repeated. */
+  WECH_ALREADY_SENT: 'WECH_ALREADY_SENT',
+  /** Retry: the broadcast did not fail. */
+  WECH_NOT_RETRYABLE: 'WECH_NOT_RETRYABLE',
+
   // Help assistant (docs/specs/help-agent-assistant.md)
   /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */
   HELP_AGENT_DISABLED: 'HELP_AGENT_DISABLED',
@@ -286,6 +329,14 @@ export const ERROR_CODES = {
   MAIL_ATTACHMENT_NOT_FOUND: 'MAIL_ATTACHMENT_NOT_FOUND',
   /** The signature does not exist or is not one the caller may use. */
   MAIL_SIGNATURE_NOT_FOUND: 'MAIL_SIGNATURE_NOT_FOUND',
+  /** The email template does not exist or is a colleague's personal one. */
+  EMAIL_TEMPLATE_NOT_FOUND: 'EMAIL_TEMPLATE_NOT_FOUND',
+  /** Another template of the same owner (the workspace, or you) already has this name. */
+  EMAIL_TEMPLATE_NAME_TAKEN: 'EMAIL_TEMPLATE_NAME_TAKEN',
+  /** Only people who manage email templates can create or change a shared one. */
+  EMAIL_TEMPLATE_NOT_EDITABLE: 'EMAIL_TEMPLATE_NOT_EDITABLE',
+  /** The template is archived and cannot be used in a reply. */
+  EMAIL_TEMPLATE_ARCHIVED: 'EMAIL_TEMPLATE_ARCHIVED',
 
   // SMS channel (TW-SMS)
   /** The provider refused the credentials at connect time. */
@@ -366,6 +417,8 @@ export const ERROR_CODES = {
   CAMP_NOT_RESENDABLE: 'CAMP_NOT_RESENDABLE',
   /** Resend: nobody matches the scope. */
   CAMP_NOTHING_TO_RESEND: 'CAMP_NOTHING_TO_RESEND',
+  /** A recurring broadcast that already sent messages keeps its history: it can be cancelled, not deleted. */
+  CAMP_SERIES_HAS_HISTORY: 'CAMP_SERIES_HAS_HISTORY',
   /** The template cannot be used for a campaign (not approved, OTP, quality, media). */
   CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
   /** The auto-end date is not after the send date. */
@@ -634,6 +687,12 @@ export const ERROR_CODES = {
   CAT_SEND_FAILED: 'CAT_SEND_FAILED',
   CAT_COLLECTION_PRODUCTS_INVALID: 'CAT_COLLECTION_PRODUCTS_INVALID',
   CAT_PROVIDER_FAILED: 'CAT_PROVIDER_FAILED',
+  /** Creating a catalog needs the workspace to have none connected yet; remove or disconnect the current one first. */
+  CAT_ALREADY_CONNECTED: 'CAT_ALREADY_CONNECTED',
+  /** Deleting the catalog on Meta needs the catalog id typed back exactly. */
+  CAT_CONFIRM_MISMATCH: 'CAT_CONFIRM_MISMATCH',
+  /** The product set could not be pushed: it has no product with a retailer id on Meta, or no catalog is connected. */
+  CAT_SET_NOT_SYNCABLE: 'CAT_SET_NOT_SYNCABLE',
   /** The catalog has no phone number id: commerce settings and Meta sends need one (TW-CAT-005, 034). */
   CAT_NO_PHONE_NUMBER: 'CAT_NO_PHONE_NUMBER',
   /** A catalog link without a Meta catalog sends the shop link, and the workspace has no shop (TW-CAT-015). */

@@ -6,6 +6,7 @@ import {
   GoogleCalendarClient,
   NoAppointmentMessenger,
 } from '../../infra/providers/appointments-booking';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
@@ -48,7 +49,7 @@ import { SlotsService } from './slots.service';
 @Module({
   // CrmModule: contacts (find-or-create by phone and email). PlansCoreModule: the `appointment_booking` flag and the `appointments` cap.
   // PlatformSettingsModule: the operator's Google OAuth client (console, Google Calendar).
-  imports: [CrmModule, PlansCoreModule, PlatformSettingsModule],
+  imports: [ContactConsentModule, CrmModule, PlansCoreModule, PlatformSettingsModule],
   controllers: [
     // `booking-types/options`, `preview-slots` and `appointments/counts`, `calendar` are literal paths declared before `:id` inside
     // their controllers. The public controllers are unauthenticated (a public page, a bearer token).

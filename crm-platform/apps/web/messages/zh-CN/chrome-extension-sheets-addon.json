@@ -18,7 +18,7 @@
     },
     "page": {
       "title": "Google 表格附加组件",
-      "subtitle": "在电子表格与您的工作区之间拉取和推送联系人，并同步商品。",
+      "subtitle": "将工作表中新增和更改的行作为联系人发送到您的工作区，把联系人拉取到工作表，并同步商品。",
       "loading": "正在加载附加组件设置",
       "retry": "重试",
       "status": {
@@ -50,7 +50,7 @@
     },
     "key": {
       "title": "您的密钥",
-      "intro": "附加组件使用您的个人密钥以您的身份执行操作，只能看到您的角色允许的内容。",
+      "intro": "附加组件使用您的个人密钥以您的身份操作。它只能看到您的角色所允许的内容。密钥是您的 Webhook URL 的最后一部分。",
       "none": "您还没有密钥。",
       "generate": "生成密钥",
       "rotate": "生成新密钥",
@@ -60,8 +60,8 @@
       "created": "创建于 {when}",
       "lastUsed": "最近使用 {when}",
       "neverUsed": "从未使用",
-      "newTitle": "您的新密钥",
-      "newWarning": "请立即复制。它只显示一次，之后无法再次显示。任何持有此密钥的人都可以在附加组件中以您的身份操作。",
+      "newTitle": "您的新密钥和 Webhook URL",
+      "newWarning": "请立即复制。密钥和 Webhook URL 只显示一次，之后无法再次显示。任何持有它们的人都可以在附加组件中以您的身份操作。",
       "rotatedNote": "您之前的密钥已失效。",
       "keyLabel": "新密钥",
       "confirmRotate": {
@@ -85,7 +85,8 @@
         "rateLimited": "请求过多。请稍候再试。",
         "network": "无法连接到服务器。请检查网络连接后重试。",
         "unexpected": "我们这边出了点问题。请重试。"
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "您的密钥可以做什么",
@@ -108,12 +109,12 @@
     },
     "steps": {
       "title": "在电子表格中设置",
-      "one": "打开电子表格，然后依次选择扩展程序、Apps Script。",
-      "two": "下载上面的六个文件。在项目设置中显示 appsscript.json 文件，并将 appsscript.json 和 Code.gs 粘贴覆盖编辑器中的对应文件。",
-      "three": "添加三个名为 Dialog、Settings 和 Help 的 HTML 文件，并将下载的文件粘贴进去。",
-      "four": "保存并重新加载电子表格。会出现 CRM 菜单。请允许 Google 请求的三项权限。",
-      "five": "选择 CRM，然后选择设置，粘贴您的密钥并选择“保存并检查”。",
-      "six": "表格的第 1 行存放列名。然后从 CRM 菜单使用“拉取联系人”、“推送联系人”或“同步商品”。"
+      "one": "创建密钥时复制您的 Webhook URL。它只显示一次。",
+      "two": "在电子表格中依次选择 Extensions、Add-ons、Get add-ons，然后从 Google Workspace Marketplace 安装附加组件。在其上架之前，请将下方六个文件粘贴到 Extensions、Apps Script 中。",
+      "three": "重新加载电子表格。依次选择 Extensions、附加组件、Initial Setup，然后粘贴 Webhook URL。",
+      "four": "选择工作表和触发列。该单元格被填写或更改时，会发送一行。",
+      "five": "选择 Send Test 以检查连接。不会保存任何内容；您会看到 CRM 收到的列。然后选择 Submit。",
+      "six": "开启 Send on event（编辑行后立即发送）和/或 Send on schedule（每小时发送一次，包括由表单或其他应用更改的行）。每一行都会作为联系人到达，其结果会写入 CRM status 列。"
     },
     "columns": {
       "title": "附加组件读取的列",
@@ -133,6 +134,22 @@
       "title": "最近的商品",
       "empty": "暂无商品。同步一个表格即可添加。",
       "count": "{count, plural, other {您的工作区中有 # 件商品}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "将其粘贴到附加组件的 Initial Setup 中。它包含您的密钥，请妥善保密。",
+      "none": "创建密钥以获取您的 Webhook URL。",
+      "capture": {
+        "title": "最近收到的数据",
+        "none": "尚未收到任何数据。在附加组件中选择 Initial Setup，然后选择 Send Test。",
+        "when": "来自 {sheet} 的 {event}，{when}。{rows, plural, other {# 行}}。",
+        "noSheet": "未命名的工作表",
+        "events": {
+          "test": "测试",
+          "edit": "编辑",
+          "schedule": "每小时扫描"
+        }
+      }
     }
   }
 }

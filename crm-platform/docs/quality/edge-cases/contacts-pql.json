@@ -1,0 +1,86 @@
+{
+  "module": "contacts-pql",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-contacts-pql-001",
+      "feature": "attribute label",
+      "category": "input",
+      "scenario": "a value of 121 (one past ATTRIBUTE_LABEL_MAX = 120) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/attribute.ts"
+    },
+    {
+      "id": "EC-contacts-pql-002",
+      "feature": "attribute default",
+      "category": "input",
+      "scenario": "a value of 256 (one past ATTRIBUTE_DEFAULT_MAX = 255) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/attribute.ts"
+    },
+    {
+      "id": "EC-contacts-pql-003",
+      "feature": "attribute description",
+      "category": "input",
+      "scenario": "a value of 501 (one past ATTRIBUTE_DESCRIPTION_MAX = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/attribute.ts"
+    },
+    {
+      "id": "EC-contacts-pql-004",
+      "feature": "bulk ids",
+      "category": "input",
+      "scenario": "a value of 5001 (one past BULK_IDS_MAX = 5000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/contact-filter.ts"
+    },
+    {
+      "id": "EC-contacts-pql-005",
+      "feature": "bulk filter",
+      "category": "input",
+      "scenario": "a value of 50001 (one past BULK_FILTER_MAX = 50000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/contact-filter.ts"
+    },
+    {
+      "id": "EC-contacts-pql-006",
+      "feature": "export",
+      "category": "input",
+      "scenario": "a value of 200001 (one past EXPORT_MAX_ROWS = 200000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/contact-filter.ts"
+    },
+    {
+      "id": "EC-contacts-pql-007",
+      "feature": "group name",
+      "category": "input",
+      "scenario": "a value of 192 (one past GROUP_NAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/contact-group.ts"
+    },
+    {
+      "id": "EC-contacts-pql-008",
+      "feature": "group note",
+      "category": "input",
+      "scenario": "a value of 501 (one past GROUP_NOTE_MAX = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/contacts-attributes-tags/contact-group.ts"
+    }
+  ]
+}

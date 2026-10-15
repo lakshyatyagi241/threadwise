@@ -210,18 +210,14 @@ export const widgetSchema = z.object({
 export type Widget = z.infer<typeof widgetSchema>;
 
 /**
- * The look of a flow bot's widget (the Customize tab). The bot supplies the widget's name and the flow runtime supplies its
- * answers, so the AI and WhatsApp fields of a plain widget are not part of it. The first save creates the widget; every later
+ * The look of a flow bot's widget (the Customize tab). The bot supplies the widget's name, so the name, the mode and the AI
+ * assistant of a plain widget are not part of it. A website chat bot's flow answers its visitors; a WhatsApp bot's widget is the
+ * website button that opens WhatsApp on the bot's number, so it also carries that number (`targetWhatsappCc` + `targetWhatsappNumber`)
+ * and the message the button prefills. The first save creates the widget; every later
  * save carries the row version it was read at.
  */
 export const flowWidgetSaveSchema = widgetFieldsSchema
-  .omit({
-    name: true,
-    mode: true,
-    assistantId: true,
-    targetWhatsappCc: true,
-    targetWhatsappNumber: true,
-  })
+  .omit({ name: true, mode: true, assistantId: true })
   .extend({ rowVersion: z.number().int().min(1).optional() });
 export type FlowWidgetSaveInput = z.infer<typeof flowWidgetSaveSchema>;
 
@@ -313,8 +309,74 @@ const blankToNull = (v: unknown) =>
   typeof v === 'string' ? (v.trim() === '' ? null : v.trim()) : v;
 
 /** A reply button a flow bot offers; the visitor's tap comes back as `tap_id`. */
-export const widgetButtonSchema = z.object({ id: z.string(), title: z.string() });
+export const widgetButtonSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  /** A small picture in front of the button. */
+  icon: z.string().optional(),
+});
 export type WidgetButton = z.infer<typeof widgetButtonSchema>;
+
+/**
+ * What a question waits for, so the chat window can draw the right input: `type` is `text`, `name`, `email`, `phone`, `number`,
+ * `alphanumeric`, `date` or `file`; `format` is the date shape (`dd-mm-yyyy`); `accept` the file extensions a file question allows.
+ */
+export const widgetInputSchema = z.object({
+  type: z.string(),
+  format: z.string().optional(),
+  accept: z.array(z.string()).optional(),
+});
+export type WidgetInput = z.infer<typeof widgetInputSchema>;
+
+/**
+ * A button on a bot line that opens something outside the chat: a web page, a phone call or an email. `url` starts with `https://`,
+ * `http://`, `tel:` or `mailto:`; the window checks that again before it draws the button.
+ */
+export const widgetLinkSchema = z.object({
+  label: z.string(),
+  url: z.string(),
+  icon: z.string().optional(),
+});
+export type WidgetLink = z.infer<typeof widgetLinkSchema>;
+
+/**
+ * One card of a carousel the bot sent: a picture, a title, a line of text and up to two buttons. A `reply` button sends the visitor's
+ * tap back (`id` is its `tap_id`); a `link` button opens a page, a call or an email.
+ */
+export const widgetCardSchema = z.object({
+  title: z.string(),
+  text: z.string(),
+  image: z.string().optional(),
+  buttons: z.array(
+    z.union([
+      z.object({ kind: z.literal('reply'), id: z.string(), title: z.string() }),
+      z.object({ kind: z.literal('link'), label: z.string(), url: z.string() }),
+    ]),
+  ),
+});
+export type WidgetCard = z.infer<typeof widgetCardSchema>;
+
+/** `POST /widget/<token>/api/feedback`: a visitor's thumbs up or down on one line the bot sent them (`null` takes it back). */
+export const widgetFeedbackRequestSchema = z.object({
+  message_id: z.number().int().positive(),
+  value: z.enum(['up', 'down']).nullable(),
+});
+export type WidgetFeedbackRequest = z.infer<typeof widgetFeedbackRequestSchema>;
+
+/** The kinds of file a flow bot can show in the chat window. */
+export const WIDGET_MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
+export type WidgetMediaKind = (typeof WIDGET_MEDIA_KINDS)[number];
+
+/**
+ * A file a flow bot sent, as the chat window draws it. `url` is relative to the widget's own address (`api/media/<id>`): the file is
+ * read through the visitor's own thread, never through a public link.
+ */
+export const widgetMediaSchema = z.object({
+  kind: z.enum(WIDGET_MEDIA_KINDS),
+  name: z.string(),
+  url: z.string(),
+});
+export type WidgetMedia = z.infer<typeof widgetMediaSchema>;
 
 /** `POST /widget/<token>/api/message` body (TW-WGT-014). `visitor_uuid` may also ride in the query, a header or a cookie. */
 export const widgetMessageRequestSchema = z.object({
@@ -325,6 +387,12 @@ export const widgetMessageRequestSchema = z.object({
   visitor_uuid: z.preprocess(blankToNull, z.string().max(64).nullish()),
   /** A flow bot's reply button the visitor tapped: `body` is its title, this is its id. Ignored by a widget with no flow. */
   tap_id: z.preprocess(blankToNull, z.string().max(128).nullish()),
+  /**
+   * The visitor ticked the consent line of the intake form, which was at `consent_version` (BL-167). Sent only by a page that showed the
+   * line; ignored when the widget has none, when the version is not a real version of it, or when no phone or email was given.
+   */
+  consent: z.boolean().nullish(),
+  consent_version: z.number().int().min(1).nullish(),
 });
 export type WidgetMessageRequest = z.infer<typeof widgetMessageRequestSchema>;
 
@@ -351,6 +419,13 @@ export const widgetPublicConfigSchema = z.object({
     whatsapp_url: z.string().nullable(),
     /** Look and placement of the WhatsApp launcher (TW-WGT-028); resolved colours and image, snake_case like the rest. */
     launcher: widgetPublicLauncherSchema,
+    /** The flow that answers this widget; a tap that jumps to one of its steps names it. Null for an AI widget. */
+    flow_uuid: z.string().nullable().optional(),
+    /** The consent line under the intake form: only when the widget has one switched on and asks for a phone or an email. */
+    consent: z
+      .object({ text: z.string(), version: z.number().int().min(1), url: z.string().nullable() })
+      .nullable()
+      .optional(),
   }),
   visitor: z.object({
     uuid: z.string(),
@@ -368,6 +443,14 @@ export const widgetPublicConfigSchema = z.object({
       from: z.enum(['visitor', 'agent', 'assistant']),
       /** Reply buttons offered with this line (a flow bot's question). */
       buttons: z.array(widgetButtonSchema).optional(),
+      /** A file the bot sent with this line. */
+      media: widgetMediaSchema.optional(),
+      /** What this line (a question) waits for. */
+      input: widgetInputSchema.optional(),
+      /** Link, call and email buttons on this line. */
+      links: z.array(widgetLinkSchema).optional(),
+      /** The cards of a carousel the bot sent with this line. */
+      cards: z.array(widgetCardSchema).optional(),
     }),
   ),
 });
@@ -389,6 +472,10 @@ export const widgetHistoryResponseSchema = z.object({
       at: z.string().nullable(),
       from: z.enum(['agent', 'assistant']),
       buttons: z.array(widgetButtonSchema).optional(),
+      media: widgetMediaSchema.optional(),
+      input: widgetInputSchema.optional(),
+      links: z.array(widgetLinkSchema).optional(),
+      cards: z.array(widgetCardSchema).optional(),
     }),
   ),
 });

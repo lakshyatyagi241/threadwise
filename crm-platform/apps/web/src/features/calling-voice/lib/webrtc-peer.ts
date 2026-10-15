@@ -436,6 +436,30 @@ export class CallPeer {
   }
 
   /**
+   * The person refused (or withdrew): disarm the recorder and throw away everything it caught. Nothing is uploaded, ever, for this call
+   * (BL-144: a refusal leaves no recording). The call itself goes on.
+   */
+  discardRecording(): void {
+    this.recordArmed = false;
+    const rec = this.recorder;
+    const ctx = this.recCtx;
+    this.recorder = null;
+    this.recCtx = null;
+    this.recCallId = null;
+    this.recChunks = [];
+    try {
+      if (rec && rec.state !== 'inactive') {
+        rec.ondataavailable = null;
+        rec.onstop = null;
+        rec.stop();
+      }
+    } catch (e) {
+      this.warn('recording discard failed', e);
+    }
+    void ctx?.close().catch(() => undefined);
+  }
+
+  /**
    * Stop the recorder and upload the mix. The chunk list is kept until the recorder's own final flush so the tail of the call
    * is not lost; a blob under 256 bytes is empty and is dropped.
    */

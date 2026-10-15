@@ -1,0 +1,79 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Mevcut sohbetleriniz aktarılsın mı?",
+        "intro": "WhatsApp, bir numaranın sohbet geçmişini yalnızca numara ilk bağlandıktan hemen sonra, bir kez gönderir. Karekodu taramadan önce şimdi seçin.",
+        "label": "Mevcut sohbetleri içe aktar",
+        "none": "Hayır, boş başla",
+        "noneHelp": "Ortak gelen kutusunda yalnızca yeni mesajlar görünür. Varsayılan seçenek budur.",
+        "recent": "Evet, son sohbetler ve kişiler",
+        "recentHelp": "Bir numara ilk bağlandığında WhatsApp'ın gönderdiği son sohbetler ve bu sohbetlerdeki kişiler.",
+        "full": "Evet, WhatsApp'ın gönderdiği kadarı",
+        "fullHelp": "WhatsApp'ın daha eski geçmişini de içerir. Daha uzun sürer ve kişi limitinizin daha fazlasını kullanır.",
+        "pointsTitle": "Neler olacak",
+        "pointQuiet": "İçe aktarılan sohbetler okundu olarak işaretlenir ve sessiz kalır: bildirim, otomasyon veya otomatik yanıt olmaz.",
+        "pointNothingSent": "Hiç kimseye bir şey gönderilmez.",
+        "pointMedia": "Fotoğraflar, videolar, sesli mesajlar ve dosyalar içe aktarılmaz. [Fotoğraf] gibi bir yer tutucu görürsünüz.",
+        "pointGroups": "Grup sohbetleri grup konuşması olarak kaydedilir ve kişi oluşturmaz.",
+        "pointConsent": "İçe aktarılan kişiler pazarlama mesajlarını kabul etmiş olarak işaretlenmez.",
+        "pointLimit": "İçe aktarılan kişiler planınızın kişi limitine sayılır. Limite ulaşılırsa içe aktarma düzgün şekilde durur.",
+        "pointTime": "Birkaç dakika sürebilir. Çalışmaya devam edebilir ve istediğiniz zaman iptal edebilirsiniz.",
+        "pointOnce": "Numarayı yeniden bağladığınızda, yalnızca karekodu taramadan önce tekrar içe aktarmayı seçerseniz içe aktarılır."
+      },
+      "result": {
+        "note": "Sohbetleriniz içe aktarılıyor. İlerlemeyi numaranın sayfasından takip edin.",
+        "link": "İçe aktarmayı gör"
+      },
+      "card": {
+        "title": "İçe aktarılan sohbetler",
+        "state": {
+          "not_requested": "İstenmedi",
+          "idle": "WhatsApp bekleniyor",
+          "running": "İçe aktarılıyor",
+          "done": "Tamamlandı",
+          "failed": "Tamamlanamadı",
+          "cancelled": "İptal edildi",
+          "limit_reached": "Kişi limitinizde durdu"
+        },
+        "body": {
+          "not_requested": "Bu numara sohbetlerini içe aktarmadı. WhatsApp geçmişi yalnızca numara ilk bağlandığında sunar; bu numarayı bir sonraki bağlayışınızda içe aktarmayı seçin.",
+          "idle": "Numaranın bağlanması ve WhatsApp'ın sohbetlerini göndermesi bekleniyor. Bu birkaç dakika sürebilir.",
+          "running": "Sohbetler içe aktarılıyor. Bu sayfadan ayrılabilirsiniz, içe aktarma devam eder.",
+          "done": "İçe aktarma tamamlandı. Sohbetler ortak gelen kutusunda, okundu olarak işaretlendi.",
+          "failed": "İçe aktarma tamamlanamadı. İçe aktarılanlar gelen kutusunda kalır.",
+          "cancelled": "İçe aktarmayı durdurdunuz. İçe aktarılanlar gelen kutusunda kalır.",
+          "limit_reached": "Planınızın kişi limitine ulaşıldığı için içe aktarma durdu. İçe aktarılanlar gelen kutusunda kalır."
+        },
+        "chats": "{count, plural, one {# sohbet} other {# sohbet}}",
+        "contacts": "{count, plural, one {# kişi} other {# kişi}}",
+        "messages": "{count, plural, one {# mesaj} other {# mesaj}}",
+        "progress": "İlerleme: %{percent}",
+        "window": "Son {days, plural, one {# günün} other {# günün}} mesajları.",
+        "mediaNote": "Fotoğraflar, videolar, sesli mesajlar ve dosyalar içe aktarılmaz. Yerlerinde bir yer tutucu görünür.",
+        "started": "Başlangıç",
+        "finished": "Bitiş",
+        "openInbox": "Gelen kutusunu aç",
+        "cancel": "İçe aktarmayı durdur",
+        "cancelling": "Durduruluyor...",
+        "cancelTitle": "İçe aktarma durdurulsun mu?",
+        "cancelMessage": "Daha fazla sohbet alınmayacak. Daha önce içe aktarılanlar gelen kutusunda kalır.",
+        "cancelConfirm": "İçe aktarmayı durdur",
+        "cancelKeep": "İçe aktarmaya devam et",
+        "cancelDone": "İçe aktarma durduruldu. İçe aktarılanlar gelen kutusunda kalır."
+      },
+      "error": {
+        "history_not_received": "WhatsApp hiç sohbet geçmişi göndermedi. Bunu yalnızca numara ilk bağlandığında yapar. Tekrar denemek için numarayı yeniden bağlayın ve içe aktarmayı seçin.",
+        "message_cap_reached": "Bir numara için mesaj limitinde durdu. İçe aktarılanlar kalır.",
+        "chat_cap_reached": "Bir numara için sohbet limitinde durdu. İçe aktarılanlar kalır.",
+        "contact_limit_reached": "Planınızın kişi limitine ulaşıldığı için durdu. Bazı kişileri silin veya planınızı yükseltin, ardından numarayı yeniden bağlayıp içe aktarın.",
+        "worker_error": "İçe aktarma bir hata nedeniyle durdu. İçe aktarılanlar kalır. Tekrar denemek için numarayı yeniden bağlayın.",
+        "ended_idle": "Tamamlandı. WhatsApp geçmişi göndermeyi durdurdu, bu yüzden içe aktarma o ana kadar gelenlerle sona erdi.",
+        "limits_unavailable": "Hizmet doğru şekilde kurulmadığı için içe aktarma çalıştırılamadı. Destek ekibiyle iletişime geçin, ardından numarayı yeniden bağlayın."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Bu numara için devam eden bir içe aktarma yok."
+    }
+  }
+}

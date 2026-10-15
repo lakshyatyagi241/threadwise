@@ -22,6 +22,12 @@ export const ERROR_KINDS = [
   'teamNameTaken',
   'teamMemberUnknown',
   'orgSuspended',
+  'leaveOverlap',
+  'leaveInvalid',
+  'delegateInvalid',
+  'delegateCycle',
+  'reassignInvalid',
+  'reassignNotRestorable',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -46,6 +52,12 @@ const BY_CODE: Record<string, ErrorKind> = {
   [ERROR_CODES.WSP_TEAM_NAME_TAKEN]: 'teamNameTaken',
   [ERROR_CODES.WSP_TEAM_MEMBER_UNKNOWN]: 'teamMemberUnknown',
   [ERROR_CODES.WSP_ORG_SUSPENDED]: 'orgSuspended',
+  [ERROR_CODES.WSP_LEAVE_OVERLAP]: 'leaveOverlap',
+  [ERROR_CODES.WSP_LEAVE_INVALID]: 'leaveInvalid',
+  [ERROR_CODES.WSP_DELEGATE_INVALID]: 'delegateInvalid',
+  [ERROR_CODES.WSP_DELEGATE_CYCLE]: 'delegateCycle',
+  [ERROR_CODES.WSP_REASSIGN_INVALID]: 'reassignInvalid',
+  [ERROR_CODES.WSP_REASSIGN_NOT_RESTORABLE]: 'reassignNotRestorable',
 };
 
 export function errorKind(error: unknown): ErrorKind {

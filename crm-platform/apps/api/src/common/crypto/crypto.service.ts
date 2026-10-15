@@ -146,7 +146,8 @@ export class CryptoService {
       throw new Error('malformed ciphertext');
     }
     const [, ivB64, tagB64, dataB64, keyId] = parts;
-    if (!ivB64 || !tagB64 || !dataB64 || (parts.length === 5 && !keyId)) {
+    // An empty plaintext seals to an empty ciphertext (GCM still produces a tag), so the data segment may be empty; iv and tag may not.
+    if (!ivB64 || !tagB64 || dataB64 === undefined || (parts.length === 5 && !keyId)) {
       throw new Error('malformed ciphertext');
     }
     return {

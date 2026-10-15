@@ -50,12 +50,16 @@ function build(over: Record<string, unknown> = {}) {
   const conversations = {
     findThread: vi.fn().mockResolvedValue({ lastInboundAt: new Date(Date.now() - 3_600_000) }),
   };
+  const ledger = { recordInTx: vi.fn().mockResolvedValue({ recorded: true, stateChanged: true }) };
+  const db = { txAs: vi.fn((_scope: unknown, fn: (tx: unknown) => unknown) => fn({ tx: true })) };
   Object.assign({ contacts, groups, segments, conversations }, over);
   const node = new CrmNodes(
     contacts as never,
     groups as never,
     segments as never,
     conversations as never,
+    ledger as never,
+    db as never,
   );
   const notes: string[] = [];
   const mk = (type: string, d: Record<string, unknown>, run: Record<string, unknown> = {}) => ({
@@ -63,6 +67,7 @@ function build(over: Record<string, unknown> = {}) {
       orgId: 7,
       contactId: 40,
       channelUuid: 'c',
+      channelKind: 'whatsapp_cloud',
       peerKey: 'p',
       vars: {} as Record<string, unknown>,
       ...run,
@@ -72,7 +77,7 @@ function build(over: Record<string, unknown> = {}) {
     note: (t: string) => notes.push(t),
     now: () => new Date(),
   });
-  return { node, contacts, groups, segments, conversations, mk, notes };
+  return { node, contacts, groups, segments, conversations, ledger, db, mk, notes };
 }
 
 describe('the CRM nodes', () => {
@@ -186,5 +191,135 @@ describe('compile', () => {
       { from: 'a_1', to: 'y' },
       { from: 'a_2', to: 'n' },
     ]);
+  });
+});
+
+describe('a button that opts the contact in or out', () => {
+  it('writes a withdrawal or a grant to the consent ledger from the flow, once per step', async () => {
+    const a = build();
+    const out = await a.node.execute(
+      a.mk(
+        'ContactConsent',
+        { action: 'opt_out' },
+        { channelKind: 'whatsapp_cloud', stepKey: 'k1' },
+      ) as never,
+    );
+    expect(out).toEqual({ kind: 'advance', port: 1 });
+    expect(a.ledger.recordInTx).toHaveBeenCalledWith(
+      { tx: true },
+      7,
+      expect.objectContaining({
+        contactId: 40,
+        channel: 'whatsapp',
+        action: 'withdrawn',
+        source: 'flow',
+        announceOptIn: true,
+      }),
+    );
+    const b = build();
+    await b.node.execute(b.mk('ContactConsent', { action: 'opt_in' }, { stepKey: 'k2' }) as never);
+    expect(b.ledger.recordInTx).toHaveBeenCalledWith(
+      { tx: true },
+      7,
+      expect.objectContaining({
+        action: 'granted',
+        announceOptIn: true,
+        idempotencyKey: expect.any(String),
+      }),
+    );
+  });
+
+  it('skips a channel that has no marketing consent, such as the website chat', async () => {
+    const a = build();
+    expect(
+      await a.node.execute(
+        a.mk('ContactConsent', { action: 'opt_out' }, { channelKind: 'webchat' }) as never,
+      ),
+    ).toEqual({ kind: 'advance', port: 1 });
+    expect(a.notes[0]).toMatch(/no marketing consent/);
+    for (const kind of ['call', 'web_widget']) {
+      const b = build();
+      await b.node.execute(
+        b.mk('ContactConsent', { action: 'opt_out' }, { channelKind: kind }) as never,
+      );
+      expect(b.ledger.recordInTx).not.toHaveBeenCalled();
+    }
+    expect(a.ledger.recordInTx).not.toHaveBeenCalled();
+  });
+
+  it('skips a run with no contact, and stops the run when the ledger write fails', async () => {
+    const a = build();
+    expect(
+      await a.node.execute(
+        a.mk('ContactConsent', { action: 'opt_out' }, { contactId: null }) as never,
+      ),
+    ).toEqual({ kind: 'advance', port: 1 });
+    expect(a.ledger.recordInTx).not.toHaveBeenCalled();
+    const b = build();
+    b.ledger.recordInTx.mockRejectedValue(new Error('ledger down'));
+    const failed = await b.node.execute(b.mk('ContactConsent', { action: 'opt_out' }) as never);
+    expect(failed).toMatchObject({ kind: 'fail', code: 'CONSENT_WRITE_FAILED' });
+    expect((failed as { reason: string }).reason).toMatch(/ledger down/);
+  });
+});
+
+describe('compileGraph: a button with an action', () => {
+  const graph = (actions: Record<string, unknown>, edges: unknown[] = []) =>
+    compileGraph({
+      flowNodes: [
+        {
+          id: 'b',
+          type: 'buttons',
+          data: { options: ['Yes', 'Stop', 'Talk'], optionActions: actions },
+        },
+        { id: 'next', type: 'end', data: {} },
+      ],
+      flowEdges: edges,
+    });
+
+  it('gives an unwired button its own step: a sub-flow, an opt-in or an opt-out', () => {
+    const g = graph({
+      '0': { type: 'flow', flow: 'F1' },
+      '1': { type: 'opt_out' },
+      '2': { type: 'opt_in' },
+    });
+    expect(g.nodes.map((n) => n.type)).toEqual([
+      'InteractiveButtons',
+      'End',
+      'SubFlow',
+      'ContactConsent',
+      'ContactConsent',
+    ]);
+    expect(g.edges).toEqual([
+      { from: 'b_1', to: 'b__action_0' },
+      { from: 'b_2', to: 'b__action_1' },
+      { from: 'b_3', to: 'b__action_2' },
+    ]);
+    expect(g.nodes.find((n) => n.id === 'b__action_1')?.props).toEqual({
+      data: { action: 'opt_out' },
+    });
+    expect(g.nodes.find((n) => n.id === 'b__action_0')?.props).toMatchObject({
+      data: { flow: 'F1' },
+    });
+  });
+
+  it('runs the action first and then goes on to what the author wired to the button', () => {
+    const g = graph({ '1': { type: 'opt_out' } }, [
+      { source: 'b', sourceHandle: 'p1', target: 'next' },
+    ]);
+    expect(g.edges).toEqual([
+      { from: 'b_2', to: 'b__action_1' },
+      { from: 'b__action_1_1', to: 'next' },
+    ]);
+  });
+
+  it('ignores an action on a button that does not exist, an unknown kind, or a flow action with no flow', () => {
+    const g = graph({
+      '7': { type: 'opt_out' },
+      '0': { type: 'fly' },
+      '1': { type: 'flow', flow: '  ' },
+    });
+    expect(g.nodes.map((n) => n.type)).toEqual(['InteractiveButtons', 'End']);
+    expect(g.edges).toEqual([]);
   });
 });

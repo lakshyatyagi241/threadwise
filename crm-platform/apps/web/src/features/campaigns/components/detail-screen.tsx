@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { costLabel } from '../wizard/lib/money';
@@ -28,8 +28,11 @@ import {
   resumeCampaign,
   sendNowCampaign,
   useCampaignDetail,
+  useCampaignLive,
 } from '../api/campaigns';
+import { freshest, isInFlight, waiting } from '../lib/live-model';
 import { can } from '../lib/list-model';
+import { defaultTab } from '../lib/summary-model';
 import { AreaChart, Donut, HBars, HourHeatmap } from './charts';
 import {
   ChevronLeftIcon,
@@ -40,8 +43,10 @@ import {
   StopIcon,
   TrashIcon,
 } from './icons';
+import { DirectorSummary } from './director-summary';
 import { EngagementTab } from './engagement-tab';
 import { RecipientsTab } from './recipients-tab';
+import { StatisticsTab } from './statistics-tab';
 
 const TONE: Record<string, string> = {
   running: 'border-success/30 bg-success/10 text-success',
@@ -85,6 +90,14 @@ export function DetailScreen({ id }: { id: string }) {
   const canDelete = useCan('camp.campaigns.delete');
   const canExport = useCan('camp.campaigns.export');
   const res = useCampaignDetail(id);
+  // Live stats: the light read follows a campaign that is scheduled or running (every 12 s, visible tab only) and stops by itself once
+  // the server says it is at rest. When it does, the heavy detail is read once more for the final figures.
+  const flying = isInFlight(res.data?.campaign.status);
+  const live = useCampaignLive(id, flying);
+  const liveDone = live.data !== undefined && !live.data.inFlight;
+  useEffect(() => {
+    if (flying && liveDone) void qc.invalidateQueries({ queryKey: KEYS.detail(id), exact: true });
+  }, [flying, liveDone, qc, id]);
   const [pending, setPending] = useState<Pending>(null);
   const [busy, setBusy] = useState(false);
 
@@ -114,7 +127,9 @@ export function DetailScreen({ id }: { id: string }) {
   }
   const d: CampaignDetail = res.data;
   const c = d.campaign;
-  const n = c.counts;
+  const f = freshest(d, res.dataUpdatedAt, live.data, live.dataUpdatedAt);
+  const n = f.counts;
+  const shownStatus = f.status as typeof c.status;
 
   const act = async (action: () => Promise<unknown>, ok: string, then?: () => void) => {
     setBusy(true);
@@ -142,13 +157,26 @@ export function DetailScreen({ id }: { id: string }) {
       toast(message(e, t('exportFailed')), 'danger');
     }
   };
-  const tab = search.get('tab') ?? 'overview';
-  const setTab = (next: string) =>
-    router.replace(`${pathname}${next === 'overview' ? '' : `?tab=${next}`}`, { scroll: false });
+  // A finished campaign opens on the Summary; a live one on the Overview. The address can name any tab, and its other parameters
+  // (the summary's `window`) are kept when the tab changes.
+  const fallbackTab = defaultTab(c.status);
+  const tab = search.get('tab') ?? fallbackTab;
+  const setTab = (next: string) => {
+    const p = new URLSearchParams(search.toString());
+    if (next === fallbackTab) p.delete('tab');
+    else p.set('tab', next);
+    const q = p.toString();
+    router.replace(`${pathname}${q ? `?${q}` : ''}`, { scroll: false });
+  };
 
   const btn =
     'inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-xs font-medium hover:bg-muted disabled:opacity-50';
   const rate = (v: number) => `${v.toFixed(1)}%`;
+  // What is still waiting to go out, and what a run holds right now (the live read brings both).
+  const waitingHint =
+    waiting(f)
+      .map(([kind, count]) => t(`live.${kind}`, { count }))
+      .join(' · ') || undefined;
 
   const overview = (
     <div className="space-y-5">
@@ -440,9 +468,9 @@ export function DetailScreen({ id }: { id: string }) {
             <div className="mt-1 flex flex-wrap items-center gap-3">
               <h1 className="text-[26px] leading-none sm:text-[34px]">{c.name}</h1>
               <span
-                className={`inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[11px] ${TONE[c.status]}`}
+                className={`inline-flex items-center rounded-full border px-2.5 py-1 font-mono text-[11px] ${TONE[shownStatus]}`}
               >
-                {t(`status.${c.status}`)}
+                {t(`status.${shownStatus}`)}
               </span>
             </div>
             <div className="mt-1 font-mono text-[11px] text-muted-foreground">
@@ -485,6 +513,11 @@ export function DetailScreen({ id }: { id: string }) {
                 {t('actions.sendNow')}
               </button>
             )}
+          {c.wizard && c.status !== 'draft' && (
+            <Link href={`/campaigns/wizard/broadcasts/${c.seriesId ?? c.id}`} className={btn}>
+              {t('actions.broadcastStatus')}
+            </Link>
+          )}
           {canUpdate && can.edit(c.status) && (
             <Link href={`/campaigns/${id}/edit`} className={btn}>
               <EditIcon className="size-3.5" />
@@ -508,7 +541,7 @@ export function DetailScreen({ id }: { id: string }) {
               {t('actions.export')}
             </button>
           )}
-          {canDelete && (
+          {canDelete && can.delete(c.status) && (
             <button
               type="button"
               className={`${btn} text-danger hover:bg-danger/10`}
@@ -522,30 +555,49 @@ export function DetailScreen({ id }: { id: string }) {
         </div>
       </div>
 
+      {flying && (
+        <p
+          role="status"
+          className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground"
+        >
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-success opacity-60" />
+            <span className="relative inline-flex size-2 rounded-full bg-success" />
+          </span>
+          {t('live.badge')}
+          {f.fetchedAt &&
+            ` · ${t('live.updated', { time: new Date(f.fetchedAt).toLocaleTimeString() })}`}
+        </p>
+      )}
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-        <StatTile label={t('kpi.recipients')} value={n.recipients.toLocaleString()} />
+        <StatTile
+          label={t('kpi.recipients')}
+          value={n.recipients.toLocaleString()}
+          hint={waitingHint}
+        />
         <StatTile label={t('kpi.sent')} value={n.sent.toLocaleString()} tone="accent" />
         <StatTile
           label={t('kpi.delivered')}
           value={n.delivered.toLocaleString()}
-          hint={rate(d.rates.delivered)}
+          hint={rate(f.rates.delivered)}
           tone="accent"
         />
-        <StatTile label={t('kpi.read')} value={n.read.toLocaleString()} hint={rate(d.rates.read)} />
+        <StatTile label={t('kpi.read')} value={n.read.toLocaleString()} hint={rate(f.rates.read)} />
         <StatTile
           label={t('kpi.replies')}
           value={n.replies.toLocaleString()}
-          hint={rate(d.rates.replies)}
+          hint={rate(f.rates.replies)}
         />
         <StatTile
           label={t('kpi.clicks')}
           value={n.clicks.toLocaleString()}
-          hint={rate(d.rates.clicks)}
+          hint={rate(f.rates.clicks)}
         />
         <StatTile
           label={t('kpi.failed')}
           value={n.failed.toLocaleString()}
-          hint={rate(d.rates.failed)}
+          hint={rate(f.rates.failed)}
           tone={n.failed > 0 ? 'warning' : 'default'}
         />
         <StatTile
@@ -559,7 +611,13 @@ export function DetailScreen({ id }: { id: string }) {
         value={tab}
         onValueChange={setTab}
         items={[
+          {
+            id: 'summary',
+            label: t('tabs.summary'),
+            content: <DirectorSummary kind="campaign" id={id} />,
+          },
           { id: 'overview', label: t('tabs.overview'), content: overview },
+          { id: 'statistics', label: t('tabs.statistics'), content: <StatisticsTab id={id} /> },
           { id: 'messages', label: t('tabs.messages'), content: <RecipientsTab id={id} /> },
           { id: 'engagement', label: t('tabs.engagement'), content: <EngagementTab d={d} /> },
           { id: 'replies', label: t('tabs.replies', { count: n.replies }), content: replies },

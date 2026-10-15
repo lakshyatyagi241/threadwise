@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Ausblenden",
+      "retry": "Erneut versuchen",
+      "loading": "Wird geladen ...",
+      "cancel": "Abbrechen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "close": "Schließen",
+      "save": "Speichern"
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keine Berechtigung für diese Aktion.",
+      "notFound": "Diese Anfrage existiert nicht mehr.",
+      "subjectNotFound": "Diese Person existiert in diesem Arbeitsbereich nicht mehr.",
+      "stateInvalid": "Diese Anfrage befindet sich in einem Status, in dem das nicht möglich ist. Laden Sie neu und prüfen Sie den Status.",
+      "notVerified": "Bestätigen Sie zuerst die Identität der Person.",
+      "legalHold": "Diese Anfrage unterliegt einer Rechtssperre. Heben Sie die Sperre auf, bevor Sie löschen.",
+      "confirmationRequired": "Führen Sie zuerst die Vorschau aus und geben Sie den Bestätigungstext exakt ein.",
+      "exportInProgress": "Ein Export dieser Anfrage wird bereits vorbereitet.",
+      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Bereiten Sie einen neuen Export vor.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "type": {
+      "access": "Auskunft",
+      "export": "Export",
+      "erasure": "Löschung",
+      "rectification": "Berichtigung",
+      "restriction": "Einschränkung",
+      "objection": "Widerspruch",
+      "withdrawal": "Widerruf der Einwilligung",
+      "portability": "Datenübertragbarkeit"
+    },
+    "typeHint": {
+      "access": "Die Person fragt, welche Daten wir über sie speichern. Endet mit einer Datei.",
+      "export": "Eine Kopie der Daten der Person. Endet mit einer Datei.",
+      "erasure": "Die Daten der Person löschen. Sie sehen vorher eine Vorschau.",
+      "rectification": "Falsche Daten korrigieren. Sie korrigieren manuell und schließen die Anfrage.",
+      "restriction": "Die Daten vorerst nicht mehr verwenden. Sie bearbeiten manuell und schließen die Anfrage.",
+      "objection": "Die Person widerspricht einer Nutzung ihrer Daten. Sie bearbeiten manuell und schließen die Anfrage.",
+      "withdrawal": "Die Person widerruft ihre Einwilligung. Sie bearbeiten manuell und schließen die Anfrage.",
+      "portability": "Eine maschinenlesbare Kopie zur Mitnahme. Endet mit einer Datei."
+    },
+    "status": {
+      "received": "Eingegangen",
+      "verifying": "Identität wird geprüft",
+      "in_progress": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "rejected": "Abgelehnt",
+      "expired": "Abgelaufen"
+    },
+    "channel": {
+      "email": "E-Mail",
+      "whatsapp": "WhatsApp",
+      "phone": "Telefon",
+      "in_person": "Persönlich",
+      "portal": "Portal",
+      "staff": "Von Mitarbeitenden erfasst",
+      "other": "Sonstiges"
+    },
+    "method": {
+      "channel_code": "Code an den Kanal der Person gesendet",
+      "email_link": "Link per E-Mail gesendet",
+      "known_contact": "Über die bekannte Nummer oder E-Mail erreicht",
+      "existing_session": "In ihrem Konto angemeldet",
+      "id_document_checked": "Ausweisdokument geprüft",
+      "other": "Sonstiges"
+    },
+    "disposition": {
+      "deleted": "Gelöscht",
+      "anonymised": "Anonymisiert",
+      "cascaded": "Kaskadierend gelöscht",
+      "retained": "Aufbewahrt",
+      "unlinked": "Verknüpfung gelöst"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {# Tag verbleibend} other {# Tage verbleibend}}",
+      "dueToday": "Heute fällig",
+      "overdue": "{count, plural, one {# Tag überfällig} other {# Tage überfällig}}",
+      "closed": "Geschlossen",
+      "dueOn": "Fällig am {date}"
+    },
+    "list": {
+      "title": "Datenanfragen",
+      "subtitle": "Anfragen von Personen zu den Daten, die Sie über sie speichern: Auskunft, Export, Löschung und mehr. Jede hat eine Frist und ein Protokoll der durchgeführten Schritte.",
+      "newRequest": "Neue Anfrage",
+      "settings": "Einstellungen",
+      "empty": "Noch keine Datenanfragen.",
+      "emptyFiltered": "Keine Anfragen entsprechen diesen Filtern.",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen ...",
+      "columns": {
+        "reference": "Referenz",
+        "type": "Typ",
+        "subject": "Person",
+        "status": "Status",
+        "due": "Frist"
+      },
+      "filters": {
+        "label": "Filter",
+        "status": "Status",
+        "type": "Typ",
+        "any": "Alle",
+        "overdue": "Nur überfällige"
+      },
+      "open": "Anfrage {reference} öffnen"
+    },
+    "settings": {
+      "title": "Frist",
+      "slaDays": "Tage bis zur Beantwortung einer Anfrage",
+      "slaHint": "Wie viele Tage nach Eingang einer Anfrage sie fällig ist. Standard ist 30.",
+      "saved": "Einstellungen gespeichert.",
+      "invalid": "Geben Sie eine ganze Zahl von 1 bis 90 ein."
+    },
+    "wizard": {
+      "title": "Neue Datenanfrage",
+      "step": "Schritt {current} von {total}",
+      "person": {
+        "title": "Person suchen",
+        "search": "Nach Name, Telefon oder E-Mail suchen",
+        "searchHint": "Geben Sie mindestens 2 Zeichen ein.",
+        "searching": "Suche läuft ...",
+        "none": "Niemand gefunden. Unten können Sie eine Telefonnummer oder E-Mail verwenden.",
+        "pick": "{name} auswählen",
+        "unnamed": "Ohne Namen",
+        "kindContact": "Kontakt",
+        "kindLead": "Lead",
+        "selected": "Ausgewählt: {name}",
+        "other": "Nicht in Ihren Kontakten",
+        "otherValue": "Telefonnummer oder E-Mail",
+        "otherHint": "Für jemanden, der nicht gespeichert ist. Wir suchen anhand dieses Werts nach den Daten.",
+        "useOther": "Diesen Wert verwenden",
+        "clear": "Andere Person wählen"
+      },
+      "kind": {
+        "title": "Was verlangt die Person?"
+      },
+      "details": {
+        "title": "Details",
+        "channel": "Wie ist die Anfrage bei Ihnen eingegangen?",
+        "note": "Interne Notiz",
+        "noteHint": "Optional. Nur Ihr Team sieht dies. Schreiben Sie hier keine persönlichen Angaben.",
+        "history": "Gesprächsverlauf",
+        "historyHint": "Was mit den Gesprächen der Person geschieht, wenn ihre Daten gelöscht werden.",
+        "historyDelete": "Gespräche, Nachrichten und Dateien löschen",
+        "historyAnonymise": "Gespräche ohne die Identität der Person behalten"
+      },
+      "create": "Anfrage erstellen",
+      "creating": "Wird erstellt ...",
+      "created": "Anfrage {reference} erstellt."
+    },
+    "detail": {
+      "back": "Datenanfragen",
+      "loading": "Wird geladen ...",
+      "received": "Eingegangen am {date}",
+      "channel": "Kanal: {channel}",
+      "history": {
+        "delete": "Bei Löschung: Gespräche werden gelöscht",
+        "anonymise": "Bei Löschung: Gespräche bleiben ohne die Identität der Person erhalten"
+      },
+      "note": "Interne Notiz",
+      "legalHoldBadge": "Rechtssperre",
+      "timeline": {
+        "title": "Verlauf",
+        "empty": "Noch nichts aufgezeichnet.",
+        "by": "von {actor}",
+        "system": "das System",
+        "event": {
+          "created": "Anfrage erstellt",
+          "verification_started": "Identitätsprüfung gestartet",
+          "verified": "Identität bestätigt",
+          "verification_failed": "Identität nicht bestätigt",
+          "hold_set": "Rechtssperre gesetzt",
+          "hold_released": "Rechtssperre aufgehoben",
+          "rejected": "Anfrage abgelehnt",
+          "export_requested": "Export angefordert",
+          "export_downloaded": "Export heruntergeladen",
+          "erase_previewed": "Löschung in der Vorschau angezeigt",
+          "erased": "Daten gelöscht",
+          "completed": "Anfrage abgeschlossen",
+          "other": "Aktualisieren"
+        }
+      },
+      "verify": {
+        "title": "Identitätsprüfung",
+        "intro": "Prüfen Sie, ob die anfragende Person die ist, die sie vorgibt zu sein, bevor Sie etwas exportieren oder löschen.",
+        "state": {
+          "none": "Noch nicht geprüft.",
+          "verified": "Bestätigt am {date} ({method}).",
+          "evidence": "Nachweisreferenz: {ref}"
+        },
+        "method": "Wie wurde geprüft?",
+        "evidence": "Nachweisreferenz-ID",
+        "evidenceHint": "Nur eine Referenz-ID, laden Sie niemals Dokumente hoch. Verwenden Sie eine Ticketnummer oder eine Nachrichten-ID.",
+        "note": "Notiz",
+        "outcome": "Ergebnis",
+        "pending": "Prüfung gestartet",
+        "verified": "Bestätigt",
+        "notVerified": "Nicht bestätigt",
+        "submit": "Ergebnis erfassen",
+        "notVerifiedWarn": "Bei einer nicht bestätigten Person wird die Anfrage abgelehnt.",
+        "saved": "Prüfung erfasst."
+      },
+      "hold": {
+        "title": "Rechtssperre",
+        "intro": "Solange eine Sperre aktiv ist, wird die Löschung verweigert. Nutzen Sie sie, wenn Gesetz oder ein Rechtsstreit die Aufbewahrung der Daten verlangt.",
+        "toggle": "Rechtssperre",
+        "reason": "Grund",
+        "reasonHint": "Mindestens 3 Zeichen.",
+        "apply": "Sperre setzen",
+        "release": "Sperre aufheben",
+        "active": "Gesperrt: {reason}",
+        "saved": "Sperre aktualisiert."
+      },
+      "export": {
+        "title": "Export",
+        "intro": "Erstellt eine ZIP-Datei mit den Daten, die wir über diese Person speichern.",
+        "expiry": "Eine fertige Datei bleibt {days} Tage verfügbar und wird dann gelöscht.",
+        "noEmail": "Der Person wird nichts gesendet. Laden Sie die Datei herunter und übergeben Sie sie über einen sicheren Kanal.",
+        "request": "Export vorbereiten",
+        "requesting": "Wird vorbereitet ...",
+        "requested": "Export gestartet.",
+        "none": "Noch keine Exporte.",
+        "download": "Herunterladen",
+        "size": "{size} KB",
+        "expires": "Läuft ab am {date}",
+        "status": {
+          "queued": "Wartet",
+          "running": "Wird erstellt",
+          "ready": "Bereit",
+          "failed": "Fehlgeschlagen",
+          "expired": "Abgelaufen"
+        }
+      },
+      "erase": {
+        "title": "Löschen",
+        "intro": "Löscht die Daten der Person aus allen Modulen. Zuerst Vorschau: Nichts ändert sich, bis Sie bestätigen.",
+        "preview": "Vorschau",
+        "previewing": "Wird gezählt ...",
+        "previewTitle": "Was passieren würde",
+        "previewNote": "Nur Vorschau. Nichts wurde geändert.",
+        "files": "{count, plural, one {# gespeicherte Datei zur Löschung vorgemerkt} other {# gespeicherte Dateien zur Löschung vorgemerkt}}",
+        "totals": "{deleted} gelöscht, {anonymised} anonymisiert, {retained} aufbewahrt",
+        "colTable": "Tabelle",
+        "colWhat": "Was passiert",
+        "colCount": "Zeilen",
+        "colReason": "Grund",
+        "confirmLabel": "Geben Sie {phrase} zur Bestätigung ein",
+        "confirmHint": "Dies kann nicht rückgängig gemacht werden.",
+        "execute": "Jetzt löschen",
+        "executing": "Wird gelöscht ...",
+        "done": "Löschung abgeschlossen.",
+        "blocked": "Die Löschung ist möglich, sobald die Identität bestätigt ist und keine Rechtssperre besteht."
+      },
+      "proof": {
+        "title": "Löschnachweis",
+        "executedAt": "Ausgeführt am {date}",
+        "executedBy": "Von {actor}",
+        "totals": "{deleted} gelöscht, {anonymised} anonymisiert, {retained} aufbewahrt, {files} Dateien",
+        "registryDigest": "Registerprüfsumme",
+        "sha256": "SHA-256",
+        "notes": "Grenzen dieser Löschung",
+        "download": "Nachweis herunterladen"
+      },
+      "close": {
+        "title": "Anfrage schließen",
+        "complete": "Als abgeschlossen markieren",
+        "completeHint": "Verwenden Sie dies, wenn die Person eine Antwort erhalten hat oder die Arbeit manuell erledigt wurde.",
+        "completed": "Anfrage abgeschlossen.",
+        "rejectReason": "Ablehnungsgrund",
+        "reject": "Anfrage ablehnen",
+        "rejectConfirm": "Ablehnen",
+        "rejected": "Anfrage abgelehnt.",
+        "rejectedWith": "Abgelehnt: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Datenschutz",
+      "export": "Daten dieser Person exportieren",
+      "erase": "Diese Person löschen",
+      "created": "Anfrage {reference} erstellt.",
+      "failed": "Die Anfrage konnte nicht erstellt werden."
+    }
+  }
+}
