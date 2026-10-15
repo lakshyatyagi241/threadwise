@@ -87,6 +87,7 @@ const BY_CODE: Record<string, { key: string; field?: string }> = {
   [ERROR_CODES.AUTH_IP_BLOCKED]: { key: 'ipBlocked' },
   [ERROR_CODES.AUTH_WORKSPACE_NOT_AVAILABLE]: { key: 'workspaceUnavailable' },
   [ERROR_CODES.AUTH_WORKSPACE_REQUIRED]: { key: 'workspaceRequired', field: 'orgSlug' },
+  [ERROR_CODES.AUTH_IDENTITY_EXISTS]: { key: 'emailTaken', field: 'email' },
 };
 
 function retryAfter(err: ApiError): number | undefined {
