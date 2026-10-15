@@ -82,6 +82,8 @@ export class WabaWebhookService {
     signatureHeader: string | undefined;
     contentType?: string | undefined;
     queryKey: string | undefined;
+    /** The client address after `TRUST_PROXY`, matched against `WABA_TRUSTED_FORWARDER_IPS`. */
+    sourceIp?: string | undefined;
     /** Any request header by lower-case name (a provider of the registry may sign with a header of its own). */
     header?: (name: string) => string | undefined;
   }): Promise<{ queued: number }> {
@@ -113,6 +115,7 @@ export class WabaWebhookService {
       queryKey: input.queryKey,
       expectedKey: inboundUrlKey(this.credentialsKey()),
       requireSignature: this.env.WABA_REQUIRE_INTERAKT_SIGNATURE,
+      trustedSource: this.isTrustedForwarder(input.sourceIp),
     });
     // Numbers on a provider of the registry are authenticated by that provider's own scheme (signature, shared secret header, or the
     // URL secret for a provider that signs nothing). A number on a built-in route keeps the rule above, unchanged.
@@ -212,6 +215,13 @@ export class WabaWebhookService {
       return null;
     }
     return out;
+  }
+
+  /** True when the request came from an address listed in `WABA_TRUSTED_FORWARDER_IPS` (an IPv4-mapped IPv6 form is unwrapped). */
+  private isTrustedForwarder(ip: string | undefined): boolean {
+    if (!ip) return false;
+    const plain = ip.replace(/^::ffff:/i, '');
+    return this.env.WABA_TRUSTED_FORWARDER_IPS.includes(plain);
   }
 
   private credentialsKey(): string {

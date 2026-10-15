@@ -233,6 +233,21 @@ describe('authenticateWebhook', () => {
     expect(authenticateWebhook({ ...base, queryKey: 's' }).ok).toBe(false);
   });
 
+  it('accepts a request from a trusted forwarder that re-posts the body without a signature or key', () => {
+    expect(authenticateWebhook({ ...base, trustedSource: true })).toEqual({
+      ok: true,
+      via: 'trusted_source',
+    });
+    expect(authenticateWebhook({ ...base, trustedSource: false }).ok).toBe(false);
+  });
+
+  it('a trusted source never overrides requireSignature', () => {
+    expect(authenticateWebhook({ ...base, trustedSource: true, requireSignature: true })).toEqual({
+      ok: false,
+      reason: 'missing signature',
+    });
+  });
+
   it('requireSignature closes the URL-key door', () => {
     expect(authenticateWebhook({ ...base, queryKey: 'secret', requireSignature: true })).toEqual({
       ok: false,
