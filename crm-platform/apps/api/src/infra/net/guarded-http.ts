@@ -25,6 +25,7 @@ export interface GuardedRequest {
 /**
  * A request to an operator-supplied address. The address check runs inside the socket's own DNS lookup, so the address that was
  * checked is the address that is connected to (no resolve-then-connect gap for DNS rebinding), and redirects are never followed.
+ * `timeoutMs` is an overall deadline (connect, answer and body), and an answer larger than `maxBytes` is cut off and the connection closed.
  */
 export function guardedRequest(
   req: GuardedRequest,
@@ -44,6 +45,14 @@ export function guardedRequest(
     headers['Content-Length'] = String(Buffer.byteLength(req.body));
   }
   return new Promise((resolve, reject) => {
+    let settled = false;
+    let deadline: NodeJS.Timeout | undefined;
+    const settle = (fn: () => void) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(deadline);
+      fn();
+    };
     const r = doRequest(
       {
         protocol: url.protocol,
@@ -77,22 +86,29 @@ export function guardedRequest(
       (res) => {
         const chunks: Buffer[] = [];
         let size = 0;
+        const answer = () => ({
+          status: res.statusCode ?? 0,
+          body: Buffer.concat(chunks).toString('utf8'),
+          headers: res.headers,
+        });
         res.on('data', (c: Buffer) => {
           size += c.length;
-          if (size <= req.maxBytes) chunks.push(c);
+          if (size <= req.maxBytes) return void chunks.push(c);
+          // Past the cap: nobody will read the rest, so stop taking it (a hostile target can stream for as long as it likes).
+          settle(() => resolve(answer()));
+          r.destroy();
         });
-        res.on('end', () =>
-          resolve({
-            status: res.statusCode ?? 0,
-            body: Buffer.concat(chunks).toString('utf8'),
-            headers: res.headers,
-          }),
-        );
-        res.on('error', reject);
+        res.on('end', () => settle(() => resolve(answer())));
+        res.on('error', (e) => settle(() => reject(e)));
+        // A connection that closes before the answer is complete must still end the call.
+        res.on('close', () => settle(() => reject(new Error('connection closed before the answer was complete'))));
       },
     );
+    // `timeout` above only fires when the socket goes quiet, so a target that trickles a byte at a time would never trip it. This is the
+    // overall deadline: `timeoutMs` is how long the target has, in total, to finish its answer.
+    deadline = setTimeout(() => r.destroy(new Error('timed out')), req.timeoutMs);
     r.on('timeout', () => r.destroy(new Error('timed out')));
-    r.on('error', reject);
+    r.on('error', (e) => settle(() => reject(e)));
     r.end(req.body);
   });
 }
