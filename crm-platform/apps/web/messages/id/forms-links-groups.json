@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Formulir WhatsApp",
+      "links": "Tautan WhatsApp"
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Silakan coba lagi.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Hubungkan nomor WhatsApp Cloud API untuk menggunakan Formulir.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Tidak ada nomor WhatsApp Cloud API yang terhubung memiliki kredensial yang valid.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta menolak definisi formulir ini.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Akun WhatsApp Business Anda harus lolos verifikasi Meta sebelum dapat memublikasikan formulir.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta tidak dapat memublikasikan formulir ini.",
+      "WFL_LINK_NOT_LIVE": "Tautan ini sedang dijeda atau sudah kedaluwarsa.",
+      "ROW_VERSION_CONFLICT": "Data ini telah diubah di tempat lain. Muat ulang dan coba lagi.",
+      "VALIDATION_FAILED": "Periksa kolom yang disorot dan coba lagi.",
+      "PLAN_FEATURE_LOCKED": "Tingkatkan paket Anda untuk menggunakan fitur ini."
+    },
+    "forms": {
+      "heading": "Formulir WhatsApp",
+      "intro": "Buat formulir yang diisi pelanggan langsung di WhatsApp, kirim dari sebuah flow, lalu tinjau jawabannya di sini.",
+      "loading": "Memuat formulir…",
+      "retry": "Coba lagi",
+      "create": {
+        "cta": "Formulir baru",
+        "creating": "Membuat…",
+        "defaultTitle": "Formulir tanpa judul",
+        "defaultField": "Nama lengkap"
+      },
+      "stats": {
+        "all": "Semua formulir",
+        "published": "Diterbitkan",
+        "draft": "Draf",
+        "submissions": "Pengisian"
+      },
+      "empty": {
+        "title": "Belum ada formulir",
+        "description": "Buat formulir, lalu kirim dari langkah Formulir WhatsApp dalam sebuah flow."
+      },
+      "table": {
+        "form": "Formulir",
+        "type": "Jenis",
+        "fields": "Kolom",
+        "submissions": "Pengisian"
+      },
+      "status": {
+        "draft": "Draf",
+        "published": "Diterbitkan",
+        "paused": "Dijeda"
+      },
+      "audience": {
+        "lead_capture": "Penjaringan prospek",
+        "survey": "Survei",
+        "appointment_booking": "Pemesanan jadwal",
+        "customer_support": "Dukungan pelanggan",
+        "sign_up": "Pendaftaran",
+        "other": "Lainnya"
+      },
+      "row": {
+        "edit": "Edit",
+        "duplicate": "Duplikat",
+        "delete": "Hapus"
+      },
+      "confirm": {
+        "deleteTitle": "Hapus formulir ini?",
+        "deleteMessage": "Node flow aktif yang merujuk ke formulir ini akan berhenti berfungsi.",
+        "deleteConfirm": "Hapus",
+        "cancel": "Batal"
+      },
+      "notice": {
+        "saved": "Tersimpan.",
+        "published": "Diterbitkan ke WhatsApp."
+      },
+      "builder": {
+        "back": "Kembali ke formulir",
+        "untitled": "Formulir tanpa judul",
+        "saving": "Menyimpan…",
+        "saveDraft": "Simpan draf",
+        "savePublish": "Simpan & terbitkan",
+        "publishing": "Menerbitkan…",
+        "basics": "Informasi dasar formulir",
+        "title": "Judul",
+        "audienceType": "Jenis",
+        "purpose": "Tujuan",
+        "sendButtonLabel": "Label tombol kirim",
+        "thankYouNote": "Catatan terima kasih",
+        "screens": "Layar",
+        "addScreen": "Tambah layar",
+        "removeScreen": "Hapus layar",
+        "screenN": "Layar {n}",
+        "defaultField": "Nama lengkap",
+        "newFieldLabel": "Kolom baru",
+        "fieldKind": "Jenis kolom",
+        "fieldLabel": "Label",
+        "required": "Wajib diisi",
+        "removeField": "Hapus",
+        "options": "Pilihan (dipisahkan dengan koma)",
+        "optionsPlaceholder": "Pilihan 1, Pilihan 2, Pilihan 3"
+      },
+      "fieldKind": {
+        "heading": "Judul",
+        "short_text": "Teks pendek",
+        "paragraph": "Paragraf",
+        "email": "Email",
+        "phone_number": "Nomor telepon",
+        "number": "Angka",
+        "date": "Tanggal",
+        "dropdown": "Menu tarik-turun",
+        "radio_buttons": "Tombol radio",
+        "checkbox": "Kotak centang"
+      },
+      "submissions": {
+        "heading": "Pengisian",
+        "metaFlowId": "ID Meta Flow: {id}",
+        "export": "Ekspor CSV",
+        "empty": {
+          "title": "Belum ada pengisian",
+          "description": "Pengisian akan muncul di sini setelah formulir ini dikirim dari sebuah flow dan diisi oleh seseorang."
+        },
+        "table": {
+          "submitted": "Dikirim",
+          "contact": "Kontak",
+          "phone": "Telepon"
+        }
+      }
+    },
+    "links": {
+      "heading": "Tautan WhatsApp",
+      "intro": "Buat tautan yang dapat dilacak dan membuka WhatsApp dengan pesan yang sudah terisi — untuk iklan, bio, dan kode QR.",
+      "loading": "Memuat tautan…",
+      "retry": "Coba lagi",
+      "searchPlaceholder": "Cari berdasarkan nama atau tautan",
+      "create": { "cta": "Tautan baru" },
+      "stats": {
+        "all": "Semua tautan",
+        "live": "Aktif",
+        "totalClicks": "Total klik",
+        "avgClicks": "Rata-rata klik / tautan"
+      },
+      "tabs": { "all": "Semua", "live": "Aktif", "paused": "Dijeda" },
+      "status": { "live": "Aktif", "paused": "Dijeda" },
+      "empty": {
+        "title": "Belum ada tautan",
+        "description": "Buat tautan untuk dibagikan di iklan, bio, atau kode QR."
+      },
+      "table": {
+        "link": "Tautan",
+        "destination": "Tujuan",
+        "clicks": "Klik",
+        "lastClicked": "Klik terakhir"
+      },
+      "row": {
+        "open": "Buka",
+        "copy": "Salin",
+        "copied": "Tersalin!",
+        "edit": "Edit",
+        "duplicate": "Duplikat",
+        "delete": "Hapus"
+      },
+      "confirm": {
+        "deleteTitle": "Hapus tautan ini?",
+        "deleteMessage": "Tautan singkat akan langsung berhenti berfungsi.",
+        "deleteConfirm": "Hapus",
+        "cancel": "Batal"
+      },
+      "notice": {
+        "saved": "Tersimpan.",
+        "copyFailed": "Tautan tidak dapat disalin."
+      },
+      "builder": {
+        "back": "Kembali ke tautan",
+        "newHeading": "Tautan baru",
+        "step": { "destination": "Tujuan", "message": "Pesan pembuka", "tracking": "Pelacakan" },
+        "name": "Nama",
+        "status": "Status",
+        "countryCode": "Kode negara",
+        "phoneNumber": "Nomor telepon",
+        "welcomeMessage": "Pesan pembuka",
+        "welcomeMessageHint": "Terisi otomatis di obrolan saat seseorang mengetuk tautan.",
+        "slug": "Tautan singkat",
+        "slugHint": "Hanya huruf, angka, dan tanda hubung. Biarkan kosong untuk membuatnya secara otomatis.",
+        "slugPlaceholder": "diskon-musim-panas",
+        "expiresAt": "Kedaluwarsa",
+        "utmSource": "Sumber UTM",
+        "utmMedium": "Media UTM",
+        "utmCampaign": "Kampanye UTM",
+        "previous": "Sebelumnya",
+        "next": "Selanjutnya",
+        "mint": "Buat tautan",
+        "save": "Simpan",
+        "saving": "Menyimpan…",
+        "fixErrors": "Periksa kolom tujuan dan tautan singkat.",
+        "mintedHeading": "Tautan Anda",
+        "shortUrl": "Tautan singkat",
+        "waUrl": "Tautan WhatsApp",
+        "qrAlt": "Kode QR untuk tautan ini"
+      }
+    }
+  }
+}

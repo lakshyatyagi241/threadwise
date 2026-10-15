@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Moduli WhatsApp",
+      "links": "Link WhatsApp"
+    },
+    "errors": {
+      "generic": "Qualcosa è andato storto. Riprova.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Collega un numero WhatsApp Cloud API per usare i moduli.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Nessun numero WhatsApp Cloud API collegato dispone di credenziali valide.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta ha rifiutato la definizione del modulo.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Il tuo account WhatsApp Business deve superare la verifica di Meta prima di poter pubblicare moduli.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta non è riuscita a pubblicare questo modulo.",
+      "WFL_LINK_NOT_LIVE": "Questo link è in pausa o scaduto.",
+      "ROW_VERSION_CONFLICT": "Questo elemento è stato modificato altrove. Ricarica e riprova.",
+      "VALIDATION_FAILED": "Controlla i campi evidenziati e riprova.",
+      "PLAN_FEATURE_LOCKED": "Esegui l'upgrade del piano per usare questa funzionalità."
+    },
+    "forms": {
+      "heading": "Moduli WhatsApp",
+      "intro": "Crea moduli che i clienti compilano direttamente in WhatsApp, inviali da un flusso e controlla qui le risposte.",
+      "loading": "Caricamento moduli…",
+      "retry": "Riprova",
+      "create": {
+        "cta": "Nuovo modulo",
+        "creating": "Creazione in corso…",
+        "defaultTitle": "Modulo senza titolo",
+        "defaultField": "Nome completo"
+      },
+      "stats": {
+        "all": "Tutti i moduli",
+        "published": "Pubblicati",
+        "draft": "Bozze",
+        "submissions": "Invii"
+      },
+      "empty": {
+        "title": "Ancora nessun modulo",
+        "description": "Crea un modulo, poi invialo da un passaggio modulo WhatsApp all'interno di un flusso."
+      },
+      "table": {
+        "form": "Modulo",
+        "type": "Tipo",
+        "fields": "Campi",
+        "submissions": "Invii"
+      },
+      "status": {
+        "draft": "Bozza",
+        "published": "Pubblicato",
+        "paused": "In pausa"
+      },
+      "audience": {
+        "lead_capture": "Acquisizione contatti",
+        "survey": "Sondaggio",
+        "appointment_booking": "Prenotazione appuntamenti",
+        "customer_support": "Assistenza clienti",
+        "sign_up": "Registrazione",
+        "other": "Altro"
+      },
+      "row": {
+        "edit": "Modifica",
+        "duplicate": "Duplica",
+        "delete": "Elimina"
+      },
+      "confirm": {
+        "deleteTitle": "Eliminare questo modulo?",
+        "deleteMessage": "I nodi di flusso attivi che lo referenziano smetteranno di funzionare.",
+        "deleteConfirm": "Elimina",
+        "cancel": "Annulla"
+      },
+      "notice": {
+        "saved": "Salvato.",
+        "published": "Pubblicato su WhatsApp."
+      },
+      "builder": {
+        "back": "Torna ai moduli",
+        "untitled": "Modulo senza titolo",
+        "saving": "Salvataggio…",
+        "saveDraft": "Salva bozza",
+        "savePublish": "Salva e pubblica",
+        "publishing": "Pubblicazione in corso…",
+        "basics": "Informazioni di base del modulo",
+        "title": "Titolo",
+        "audienceType": "Tipo",
+        "purpose": "Scopo",
+        "sendButtonLabel": "Etichetta del pulsante di invio",
+        "thankYouNote": "Messaggio di ringraziamento",
+        "screens": "Schermate",
+        "addScreen": "Aggiungi schermata",
+        "removeScreen": "Rimuovi schermata",
+        "screenN": "Schermata {n}",
+        "defaultField": "Nome completo",
+        "newFieldLabel": "Nuovo campo",
+        "fieldKind": "Tipo di campo",
+        "fieldLabel": "Etichetta",
+        "required": "Obbligatorio",
+        "removeField": "Rimuovi",
+        "options": "Opzioni (separate da virgole)",
+        "optionsPlaceholder": "Opzione 1, Opzione 2, Opzione 3"
+      },
+      "fieldKind": {
+        "heading": "Titolo",
+        "short_text": "Testo breve",
+        "paragraph": "Paragrafo",
+        "email": "Email",
+        "phone_number": "Numero di telefono",
+        "number": "Numero",
+        "date": "Data",
+        "dropdown": "Menu a discesa",
+        "radio_buttons": "Pulsanti di opzione",
+        "checkbox": "Caselle di controllo"
+      },
+      "submissions": {
+        "heading": "Invii",
+        "metaFlowId": "ID Meta Flow: {id}",
+        "export": "Esporta CSV",
+        "empty": {
+          "title": "Ancora nessun invio",
+          "description": "Gli invii appariranno qui non appena questo modulo verrà inviato da un flusso e qualcuno lo compilerà."
+        },
+        "table": {
+          "submitted": "Inviato",
+          "contact": "Contatto",
+          "phone": "Telefono"
+        }
+      }
+    },
+    "links": {
+      "heading": "Link WhatsApp",
+      "intro": "Genera un link tracciabile che apre WhatsApp con un messaggio precompilato, ideale per annunci, bio e codici QR.",
+      "loading": "Caricamento link…",
+      "retry": "Riprova",
+      "searchPlaceholder": "Cerca per nome o link",
+      "create": { "cta": "Nuovo link" },
+      "stats": {
+        "all": "Tutti i link",
+        "live": "Attivi",
+        "totalClicks": "Clic totali",
+        "avgClicks": "Clic medi / link"
+      },
+      "tabs": { "all": "Tutti", "live": "Attivi", "paused": "In pausa" },
+      "status": { "live": "Attivo", "paused": "In pausa" },
+      "empty": {
+        "title": "Ancora nessun link",
+        "description": "Genera un link da condividere in annunci, bio o un codice QR."
+      },
+      "table": {
+        "link": "Link",
+        "destination": "Destinazione",
+        "clicks": "Clic",
+        "lastClicked": "Ultimo clic"
+      },
+      "row": {
+        "open": "Apri",
+        "copy": "Copia",
+        "copied": "Copiato!",
+        "edit": "Modifica",
+        "duplicate": "Duplica",
+        "delete": "Elimina"
+      },
+      "confirm": {
+        "deleteTitle": "Eliminare questo link?",
+        "deleteMessage": "Il link breve smette di funzionare immediatamente.",
+        "deleteConfirm": "Elimina",
+        "cancel": "Annulla"
+      },
+      "notice": {
+        "saved": "Salvato.",
+        "copyFailed": "Impossibile copiare il link."
+      },
+      "builder": {
+        "back": "Torna ai link",
+        "newHeading": "Nuovo link",
+        "step": { "destination": "Destinazione", "message": "Messaggio iniziale", "tracking": "Tracciamento" },
+        "name": "Nome",
+        "status": "Stato",
+        "countryCode": "Prefisso internazionale",
+        "phoneNumber": "Numero di telefono",
+        "welcomeMessage": "Messaggio iniziale",
+        "welcomeMessageHint": "Precompilato nella chat quando qualcuno tocca il link.",
+        "slug": "Link breve",
+        "slugHint": "Solo lettere, numeri e trattini. Lascia vuoto per generarne uno automaticamente.",
+        "slugPlaceholder": "saldi-estate",
+        "expiresAt": "Scade",
+        "utmSource": "Fonte UTM",
+        "utmMedium": "Mezzo UTM",
+        "utmCampaign": "Campagna UTM",
+        "previous": "Precedente",
+        "next": "Avanti",
+        "mint": "Genera link",
+        "save": "Salva",
+        "saving": "Salvataggio…",
+        "fixErrors": "Controlla i campi di destinazione e link breve.",
+        "mintedHeading": "Il tuo link",
+        "shortUrl": "Link breve",
+        "waUrl": "Link WhatsApp",
+        "qrAlt": "Codice QR per questo link"
+      }
+    }
+  }
+}

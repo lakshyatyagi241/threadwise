@@ -1133,7 +1133,7 @@
    "cluster": "messaging",
    "wave": 3,
    "estDays": 110,
-   "inventory": "pending",
+   "inventory": "written",
    "routeBase": "forms",
    "zone": [
     "apps/api/src/modules/forms-links-groups/",
