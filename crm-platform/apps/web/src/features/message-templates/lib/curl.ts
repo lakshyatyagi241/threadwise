@@ -11,7 +11,7 @@ export function apiBaseUrl(origin: string): string {
 
 /** Only an approved template can be sent; the API refuses every other status. */
 export const canSendViaApi = (t: Pick<TemplateSummary, 'status' | 'metaCategory'>): boolean =>
-  (t.status === 'approved' || t.status === 'public') && t.metaCategory !== 'AUTHENTICATION';
+  t.status === 'approved' && t.metaCategory !== 'AUTHENTICATION';
 
 /**
  * The copy-ready `POST /templates/{id}/send` request for one template: a value slot for each body variable, the header (text variable

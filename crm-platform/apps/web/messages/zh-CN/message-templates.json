@@ -54,7 +54,10 @@
       "time": "10:30",
       "copyCode": "复制验证码",
       "buttonUnnamed": "按钮",
-      "moreButtons": "{count, plural, other {另有 # 个按钮}}"
+      "moreButtons": "{count, plural, other {另有 # 个按钮}}",
+      "live": "实时预览",
+      "business": "Bloomly",
+      "online": "在线"
     },
     "card": {
       "rejected": "已拒绝:{reason}",
@@ -62,7 +65,19 @@
       "edit": "编辑",
       "delete": "删除",
       "curl": "cURL：通过 API 发送此模板",
-      "curlNamed": "发送 {name} 的 cURL"
+      "curlNamed": "发送 {name} 的 cURL",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "标准",
+        "media": "媒体",
+        "auth": "验证",
+        "carousel": "轮播",
+        "catalog": "商品目录",
+        "limited_time_offer": "限时优惠"
+      },
+      "rejectedLabel": "已拒绝：",
+      "viewTitle": "查看详情和 Meta 审核状态",
+      "deleteNamed": "删除 {name}"
     },
     "library": {
       "title": "模板库",
@@ -91,7 +106,56 @@
       "emptyFilteredTitle": "没有匹配的模板",
       "emptyFilteredBody": "更改或清除筛选条件以查看更多模板。",
       "clearFilters": "清除筛选",
-      "loadMore": "加载更多"
+      "loadMore": "加载更多",
+      "crumb": "营销活动 / 模板",
+      "titleA": "模板",
+      "titleB": "库",
+      "tipTitle": "提示",
+      "tip": "提交模板时请使用清晰且便于使用变量的文案（'{{name}}'、'{{order_id}}'）。如果正文避免促销性触发词并与所选 Meta 类别相符，审核时间可控制在 24 小时以内。",
+      "statusTitle": "状态",
+      "statusTab": {
+        "all": "全部",
+        "approved": "已批准",
+        "pending": "审核中",
+        "rejected": "已拒绝"
+      },
+      "quickStartTitle": "快速入门",
+      "quickStart": "提交到 Meta 之前请阅读<link>模板指南</link>，以便将审核时间控制在 24 小时以内。",
+      "createTemplate": "创建模板",
+      "syncFailedLabel": "从 Meta 同步失败：",
+      "categories": "类别",
+      "tabAll": "全部",
+      "sortLabel": "模板排序",
+      "sort": {
+        "newest": "最新",
+        "oldest": "最早",
+        "name-asc": "名称 A→Z",
+        "name-desc": "名称 Z→A"
+      },
+      "showing": "显示",
+      "of": "/",
+      "filteredTemplates": "个已筛选模板",
+      "showingRange": "显示第 1-{shown} 个，共 {total} 个模板",
+      "legend": {
+        "approved": "已批准",
+        "pending": "审核中",
+        "rejected": "已拒绝"
+      },
+      "helpLabel": "帮助 - 0{n}",
+      "help": {
+        "one": {
+          "title": "什么是模板消息？",
+          "body": "Meta 要求的预先批准的消息格式，用于在 24 小时服务窗口之外向客户发起新对话。"
+        },
+        "two": {
+          "title": "如何缩短审核时间？",
+          "body": "保持消息正文清晰，在实用类别中避免过度促销的措辞，并始终为变量提供示例值。"
+        },
+        "three": {
+          "title": "我的模板为什么被拒绝？",
+          "body": "常见原因包括格式不正确、类别不匹配或内容违规。请查看拒绝原因并编辑后重新提交。"
+        }
+      }
     },
     "delete": {
       "title": "删除模板",
@@ -317,7 +381,15 @@
         "paused": "已被 Meta 暂停。在 Meta 解除暂停之前无法发送。",
         "pausedUntil": "已被 Meta 暂停,直至 {when}。",
         "disabled": "已被 Meta 禁用。无法发送。",
-        "deleted": "Meta 已不再列出此模板。此处将保留该模板;请重新同步或删除它。"
+        "deleted": "Meta 已不再列出此模板。此处将保留该模板;请重新同步或删除它。",
+        "notSubmitted": "尚未提交到 Meta",
+        "notSubmittedBody": "此模板已保存在这里，但没有 Meta 模板 ID：Meta 从未接受它，因此无法审核或发送。请提交以开始审核。",
+        "notSubmittedNoWaba": "此模板没有 Meta 模板 ID。请连接 WhatsApp Business (WABA) 账号，然后提交审核。",
+        "pendingBody": "大多数模板几分钟内即可获批；Meta 最长可能需要 48 小时。状态待处理期间，此页面每 30 秒自动刷新一次。",
+        "submittedAgo": "提交于 {when}",
+        "checkedAgo": "上次检查于 {when}",
+        "code": "代码：",
+        "pausedBody": "多次负面反馈（屏蔽或垃圾信息举报）导致此模板被暂停。其质量评分必须恢复后才能再次发送。"
       },
       "facts": {
         "title": "Meta 同步",
@@ -364,7 +436,36 @@
         "copied": "已复制",
         "copyFailed": "无法复制。请选中文本后手动复制。",
         "keyHint": "请把 YOUR_API_KEY 换成你的 API 密钥。",
-        "keyLink": "获取 API 密钥"
+        "keyLink": "获取 API 密钥",
+        "loading": "正在检查你的 API 密钥…",
+        "noKey": "此工作区还没有 API 密钥。请先创建 API 密钥，再使用此 cURL。",
+        "keysUnknown": "无法检查你的 API 密钥。请打开“开发者”页面创建或查看密钥，再使用此 cURL。",
+        "createKey": "创建 API 密钥"
+      },
+      "refreshNow": "立即刷新",
+      "editTemplate": "编辑模板",
+      "editResubmit": "编辑并重新提交",
+      "submitToMeta": "提交到 Meta",
+      "wabaAccount": "WhatsApp Business 账号",
+      "noWaba": "未连接 WABA 账号。",
+      "connectOne": "立即连接",
+      "noWabaTail": "以向 Meta 提交模板。",
+      "related": "相关",
+      "useInBroadcast": "用于群发",
+      "crumbTemplates": "模板",
+      "crumbDetail": "详情",
+      "notSubmittedPill": "未提交",
+      "qualityPill": "质量 · {quality}",
+      "preview": {
+        "title": "预览",
+        "hint": "在 WhatsApp 上的显示效果"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "内容被标记为辱骂或威胁。",
+        "INVALID_FORMAT": "格式违反 Meta 的模板规则（占位符、换行、长度）。",
+        "PROMOTIONAL": "此类别不允许使用营销用语。",
+        "TAG_CONTENT_MISMATCH": "类别与内容不符（例如在 UTILITY 模板中使用促销文案）。",
+        "SCAM": "Meta 将此模板标记为潜在诈骗。请检查声明和措辞。"
       }
     }
   }

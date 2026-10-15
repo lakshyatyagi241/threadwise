@@ -14,7 +14,7 @@ import {
 } from '@crm/contracts';
 import { useCursorList } from '@/lib/api/use-cursor-list';
 import { DETAIL_POLL_MS, isAwaitingReview } from '../lib/status-model';
-import { connectionsApi, templatesApi } from './service';
+import { apiKeysApi, connectionsApi, templatesApi } from './service';
 
 export const KEYS = {
   all: ['tpl'] as const,
@@ -22,6 +22,7 @@ export const KEYS = {
   detail: (id: string) => ['tpl', 'detail', id] as const,
   connections: ['tpl', 'connections'] as const,
   lint: ['tpl', 'lint'] as const,
+  apiKeys: ['tpl', 'api-keys'] as const,
 };
 
 export const PAGE_SIZE_LIBRARY = 8;
@@ -137,3 +138,15 @@ export const useSubmitTemplate = () =>
 export const useRefreshTemplate = () => useAction((id: string) => templatesApi.refresh(id));
 export const useSyncTemplates = () =>
   useAction((input: SyncTemplatesInput) => templatesApi.sync(input));
+
+/** True/false once known, undefined while loading or when the keys cannot be read. A live key is active and not revoked. */
+export function useHasApiKey(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.apiKeys,
+    queryFn: ({ signal }) => apiKeysApi.list(signal),
+    select: (r) => r.data.some((k) => k.status === 'active' && k.revokedAt === null),
+    enabled,
+    staleTime: 60_000,
+    retry: false,
+  });
+}
