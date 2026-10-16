@@ -33,7 +33,8 @@
       "journey": "Percorso",
       "who": "Chi",
       "activity": "Attività",
-      "properties": "Proprietà"
+      "properties": "Proprietà",
+      "company": "Proprietà aziendale"
     },
     "operators": {
       "equals": "è",

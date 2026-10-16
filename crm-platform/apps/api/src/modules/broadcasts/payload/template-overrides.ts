@@ -1,4 +1,5 @@
 import type { SendVars } from '../../../infra/providers/whatsapp/meta-send-payload';
+import { buttonKindOf } from '../../../infra/providers/whatsapp/template-vocab';
 
 /**
  * Send-time template overrides (TW-BCAST-017 rule 9, TW-BCAST-015 rule 3): what the operator typed in the mapping panel
@@ -64,10 +65,11 @@ export function sanitizeOverrides(input: unknown): TemplateOverrides | null {
       const value = str(b.value);
       const index = Number(b.index);
       if (value === '' || !Number.isInteger(index) || index < 0) continue;
-      const sub = String(b.subType ?? 'url').toLowerCase();
+      // Any spelling of the kind (`URL`, `visit_website`, `copy_text`...); what no override can carry is a link.
+      const kind = buttonKindOf(b.subType ?? 'url');
       clean.push({
         index,
-        subType: sub === 'quick_reply' || sub === 'copy_code' ? sub : 'url',
+        subType: kind === 'quick_reply' || kind === 'copy_code' ? kind : 'url',
         value: value.slice(0, BUTTON_MAX),
       });
     }

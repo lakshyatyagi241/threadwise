@@ -33,7 +33,8 @@
       "journey": "Perjalanan",
       "who": "Siapa",
       "activity": "Aktivitas",
-      "properties": "Properti"
+      "properties": "Properti",
+      "company": "Properti perusahaan"
     },
     "operators": {
       "equals": "adalah",

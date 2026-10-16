@@ -278,6 +278,26 @@ export class AttributesService {
         { key: 'groups', label: 'Groups', sample: sample(sampleRow?.groups) },
       ];
       const registered = new Set(active.map((a) => a.key));
+      // The contact's company (BL-196): its columns and the workspace's company properties, for someone who may read companies.
+      const canCompanies = ctx.grants
+        ? this.rbac.can(ctx.grants, 'record.companies.read').allowed
+        : false;
+      const companyItems = canCompanies
+        ? [
+            { key: 'company', label: 'Company name', sample: null },
+            { key: 'company.industry', label: 'Company industry', sample: null },
+            { key: 'company.website', label: 'Company website', sample: null },
+            { key: 'company.email', label: 'Company email', sample: null },
+            { key: 'company.phone', label: 'Company phone', sample: null },
+            { key: 'company.size', label: 'Company size', sample: null },
+            { key: 'company.address', label: 'Company address', sample: null },
+            ...(await this.repo.listCompanyProperties(tx, ctx.orgId)).map((p) => ({
+              key: `company.${p.key}`,
+              label: p.label,
+              sample: null,
+            })),
+          ]
+        : [];
       const groups = [
         take('contact', contactItems),
         take(
@@ -298,6 +318,7 @@ export class AttributesService {
             sample: sample(a.config.defaultValue),
           })),
         ),
+        take('company', companyItems),
         take('system', [
           { key: 'today', label: 'Today', sample: new Date().toISOString().slice(0, 10) },
           { key: 'business_name', label: 'Business name', sample: null },

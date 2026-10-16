@@ -33,7 +33,8 @@
       "journey": "מסלול",
       "who": "מי",
       "activity": "פעילות",
-      "properties": "מאפיינים"
+      "properties": "מאפיינים",
+      "company": "מאפיין חברה"
     },
     "operators": {
       "equals": "הוא",

@@ -12,6 +12,7 @@ import {
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { RbacService } from '../../kernel/rbac/rbac.service';
 import {
   LEAD_SCORING_AI_PORT as PQL_AI_PORT,
   LeadScoringAiError,
@@ -28,6 +29,13 @@ import {
 import { pruneRules } from './pql.prune';
 
 const { tags, contactGroups, users, statusOptions, fields } = schema;
+
+/** A property of the registry as the catalog reads it. */
+interface FieldRow {
+  key: string;
+  label: string;
+  type: string;
+}
 
 /** A very cheap model is enough: the answer is a small JSON tree over a catalog the prompt lists. */
 export const PQL_DEFAULT_MODEL = 'openai/gpt-oss-120b';
@@ -49,8 +57,15 @@ export class PqlService {
     private readonly db: DatabaseService,
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
+    private readonly rbac: RbacService,
     @Inject(PQL_AI_PORT) private readonly ai: LeadScoringAiPort,
   ) {}
+
+  /** Company properties are offered to the model only to someone who may read companies. */
+  private canReadCompanies(): boolean {
+    const grants = RequestContextStore.require().grants;
+    return grants ? this.rbac.can(grants, 'record.companies.read').allowed : false;
+  }
 
   async translate(input: PqlRequest): Promise<PqlResult> {
     const ctx = RequestContextStore.require();
@@ -140,61 +155,84 @@ export class PqlService {
 
   private async loadCatalog(orgId: number): Promise<PqlCatalog> {
     return this.db.txAs({ orgId }, async (tx) => {
-      const [tagRows, groupRows, ownerRows, optionRows, fieldRows] = await Promise.all([
-        tx
-          .select({ id: tags.uuid, name: tags.name })
-          .from(tags)
-          .where(eq(tags.orgId, orgId))
-          .orderBy(asc(tags.name))
-          .limit(CATALOG_CAP),
-        tx
-          .select({ id: contactGroups.uuid, name: contactGroups.name })
-          .from(contactGroups)
-          .where(eq(contactGroups.orgId, orgId))
-          .orderBy(asc(contactGroups.name))
-          .limit(CATALOG_CAP),
-        tx
-          .select({ id: users.uuid, name: users.fullName })
-          .from(users)
-          .where(and(eq(users.orgId, orgId), eq(users.status, 'active')))
-          .orderBy(asc(users.fullName))
-          .limit(CATALOG_CAP),
-        tx
-          .select({
-            group: statusOptions.optionGroup,
-            value: statusOptions.value,
-            label: statusOptions.label,
-          })
-          .from(statusOptions)
-          .where(
-            and(
-              eq(statusOptions.orgId, orgId),
-              eq(statusOptions.moduleKey, 'contacts'),
-              eq(statusOptions.isActive, true),
-              inArray(statusOptions.optionGroup, ['lifecycle_stage', 'status', 'contact_status']),
-            ),
-          )
-          .orderBy(asc(statusOptions.position)),
-        tx
-          .select({ key: fields.key, label: fields.label, type: fields.fieldType })
-          .from(fields)
-          .where(
-            and(
-              eq(fields.orgId, orgId),
-              eq(fields.moduleKey, 'contacts'),
-              eq(fields.isActive, true),
-              eq(fields.isSystem, false),
-            ),
-          )
-          .orderBy(asc(fields.position))
-          .limit(CATALOG_CAP),
-      ]);
-      const customFields: PqlCatalog['customFields'] = [];
-      for (const f of fieldRows) {
-        const type = fieldTypeSchema.safeParse(f.type);
-        const kind = type.success ? segmentKindForFieldType(type.data) : undefined;
-        if (kind) customFields.push({ key: f.key, label: f.label, kind });
-      }
+      const [tagRows, groupRows, ownerRows, optionRows, fieldRows, companyFieldRows] =
+        await Promise.all([
+          tx
+            .select({ id: tags.uuid, name: tags.name })
+            .from(tags)
+            .where(eq(tags.orgId, orgId))
+            .orderBy(asc(tags.name))
+            .limit(CATALOG_CAP),
+          tx
+            .select({ id: contactGroups.uuid, name: contactGroups.name })
+            .from(contactGroups)
+            .where(eq(contactGroups.orgId, orgId))
+            .orderBy(asc(contactGroups.name))
+            .limit(CATALOG_CAP),
+          tx
+            .select({ id: users.uuid, name: users.fullName })
+            .from(users)
+            .where(and(eq(users.orgId, orgId), eq(users.status, 'active')))
+            .orderBy(asc(users.fullName))
+            .limit(CATALOG_CAP),
+          tx
+            .select({
+              group: statusOptions.optionGroup,
+              value: statusOptions.value,
+              label: statusOptions.label,
+            })
+            .from(statusOptions)
+            .where(
+              and(
+                eq(statusOptions.orgId, orgId),
+                eq(statusOptions.moduleKey, 'contacts'),
+                eq(statusOptions.isActive, true),
+                inArray(statusOptions.optionGroup, ['lifecycle_stage', 'status', 'contact_status']),
+              ),
+            )
+            .orderBy(asc(statusOptions.position)),
+          tx
+            .select({ key: fields.key, label: fields.label, type: fields.fieldType })
+            .from(fields)
+            .where(
+              and(
+                eq(fields.orgId, orgId),
+                eq(fields.moduleKey, 'contacts'),
+                eq(fields.isActive, true),
+                eq(fields.isSystem, false),
+              ),
+            )
+            .orderBy(asc(fields.position))
+            .limit(CATALOG_CAP),
+          // Company properties: only the names go to the model, as for contact properties. A caller who may not read companies is not
+          // offered them (the rule would be refused when the list is filtered by it).
+          this.canReadCompanies()
+            ? tx
+                .select({ key: fields.key, label: fields.label, type: fields.fieldType })
+                .from(fields)
+                .where(
+                  and(
+                    eq(fields.orgId, orgId),
+                    eq(fields.moduleKey, 'companies'),
+                    eq(fields.isActive, true),
+                    eq(fields.isSystem, false),
+                  ),
+                )
+                .orderBy(asc(fields.position))
+                .limit(CATALOG_CAP)
+            : Promise.resolve([] as FieldRow[]),
+        ]);
+      const kindOf = (rows: FieldRow[]): PqlCatalog['customFields'] => {
+        const out: PqlCatalog['customFields'] = [];
+        for (const f of rows) {
+          const type = fieldTypeSchema.safeParse(f.type);
+          const kind = type.success ? segmentKindForFieldType(type.data) : undefined;
+          if (kind) out.push({ key: f.key, label: f.label, kind });
+        }
+        return out;
+      };
+      const customFields = kindOf(fieldRows);
+      const companyFields = kindOf(companyFieldRows);
       return {
         tags: tagRows.map((t) => ({ id: t.id, name: String(t.name) })),
         groups: groupRows,
@@ -202,6 +240,7 @@ export class PqlService {
         stages: optionRows.filter((o) => o.group === 'lifecycle_stage'),
         statuses: optionRows.filter((o) => o.group !== 'lifecycle_stage'),
         customFields,
+        companyFields,
       };
     });
   }

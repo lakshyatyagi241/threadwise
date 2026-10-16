@@ -11,6 +11,7 @@ const catalog: PqlCatalog = {
   stages: [{ value: 'lead', label: 'Lead' }],
   statuses: [],
   customFields: [{ key: 'city', label: 'City', kind: 'text' }],
+  companyFields: [{ key: 'tier', label: 'Tier', kind: 'option' }],
 };
 const cond = (field: string, operator: string, value?: unknown) =>
   ({ type: 'condition', field, operator, value }) as never;
@@ -69,6 +70,27 @@ describe('pruneRules kinds', () => {
       catalog,
     );
     expect(r.dropped).toEqual(['custom.city']);
+    expect(r.rules?.children).toHaveLength(1);
+  });
+});
+
+describe('company properties in plain English search (BL-196)', () => {
+  it('the prompt lists the company property keys and the field prefix, and still no contact data', () => {
+    const p = pqlPrompt('contacts at gold companies', catalog, '2026-10-14');
+    expect(p.system).toContain('company.tier "Tier" (option)');
+    expect(p.system).toContain('"company.<key>"');
+  });
+
+  it('keeps a company condition that fits its property and drops an invented or ill-fitting one', () => {
+    const r = pruneRules(
+      group(
+        cond('company.tier', 'equals', 'gold'),
+        cond('company.nope', 'equals', 'x'),
+        cond('company.tier', 'gt', 5),
+      ),
+      catalog,
+    );
+    expect(r.dropped.sort()).toEqual(['company.nope', 'company.tier']);
     expect(r.rules?.children).toHaveLength(1);
   });
 });

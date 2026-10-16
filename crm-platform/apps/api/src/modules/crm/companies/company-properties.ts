@@ -18,6 +18,11 @@ export interface CompanyPropertyDef {
   isReadOnly: boolean;
   isActive: boolean;
   isSystem: boolean;
+  /**
+   * The workspace hides this property's value on screen (a secret, an account number). It is then left out of filters, orders and
+   * exports, which would otherwise let a value be guessed or copied out.
+   */
+  isMasked?: boolean;
   /** Values of the options a person may pick (select, radio, multi-select). */
   options: string[];
   conditions: Array<{ parentKey: string; wanted: string | null }>;

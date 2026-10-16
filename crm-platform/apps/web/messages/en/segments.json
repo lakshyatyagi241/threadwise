@@ -33,7 +33,8 @@
       "journey": "Journey",
       "who": "Who",
       "activity": "Activity",
-      "properties": "Properties"
+      "properties": "Properties",
+      "company": "Company property"
     },
     "operators": {
       "equals": "is",
