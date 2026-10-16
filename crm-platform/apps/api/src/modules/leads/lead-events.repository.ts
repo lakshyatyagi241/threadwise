@@ -135,6 +135,26 @@ export class LeadEventsRepository {
     return { kind: 'repeat', row: (await this.findById(tx, orgId, id))! };
   }
 
+  /** Which of these ids the source holds and has no reason to re-run (see `LeadIngestPort.settled`). */
+  async settled(
+    tx: Tx,
+    orgId: number,
+    sourceId: number,
+    externalIds: readonly string[],
+  ): Promise<string[]> {
+    if (externalIds.length === 0) return [];
+    const res = await tx.execute(sql`
+      SELECT external_id FROM lead_events
+      WHERE org_id = ${orgId} AND source_id = ${sourceId}
+        AND external_id = ANY(ARRAY[${sql.join(
+          externalIds.map((id) => sql`${id}`),
+          sql`, `,
+        )}]::text[])
+        AND status <> 'failed'
+        AND NOT (status = 'received' AND updated_at < now() - (${STALE_RECEIVED_MS / 1000} * interval '1 second'))`);
+    return (res.rows as Array<{ external_id: string }>).map((r) => r.external_id);
+  }
+
   private async claimAfterVanish(tx: Tx, orgId: number, input: ClaimInput): Promise<Claim> {
     const res = await tx.execute(sql`
       INSERT INTO lead_events (org_id, source_id, external_id, is_test, payload, payload_expires_at, received_at)

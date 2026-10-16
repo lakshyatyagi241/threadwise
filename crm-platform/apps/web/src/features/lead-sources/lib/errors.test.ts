@@ -3,6 +3,16 @@ import { ERROR_CODES, PLAN_UPGRADE_PATH } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { LEAD_DETAIL_CODES, LEAD_ERROR_KEYS, detailIssue, issuesByPath, leadError } from './errors';
 
+const MLA_CODES = [
+  ERROR_CODES.MLA_NOT_CONFIGURED,
+  ERROR_CODES.MLA_LEAD_ACCESS_MISSING,
+  ERROR_CODES.MLA_PAGE_RECONNECT,
+  ERROR_CODES.MLA_SUBSCRIBE_FAILED,
+  ERROR_CODES.MLA_FORMS_UNAVAILABLE,
+  ERROR_CODES.MLA_FORM_NOT_FOUND,
+  ERROR_CODES.MLA_SYNC_OFF,
+];
+
 const err = (
   status: number,
   code: string,
@@ -159,6 +169,7 @@ describe('leadError', () => {
       err(500, 'INTERNAL'),
       err(400, 'OTHER'),
       new Error('x'),
+      ...MLA_CODES.map((code) => err(422, code)),
     ];
     for (const e of all) expect(LEAD_ERROR_KEYS as readonly string[]).toContain(leadError(e).key);
   });
@@ -175,5 +186,41 @@ describe('leadError', () => {
     expect(Object.keys(by)).toEqual(['name', 'secret']);
     expect(by.name!.values).toEqual({ message: 'a' });
     expect(issuesByPath(null)).toEqual({});
+  });
+});
+
+describe('leadError: Meta lead ads codes', () => {
+  it('maps each MLA code to the way out the screen offers', () => {
+    const kinds = Object.fromEntries(
+      MLA_CODES.map((code) => [
+        code,
+        [leadError(err(422, code)).kind, leadError(err(422, code)).key],
+      ]),
+    );
+    expect(kinds).toEqual({
+      MLA_NOT_CONFIGURED: ['general', 'mlaNotConfigured'],
+      MLA_LEAD_ACCESS_MISSING: ['grantAccess', 'mlaLeadAccessMissing'],
+      MLA_PAGE_RECONNECT: ['reconnect', 'mlaPageReconnect'],
+      MLA_SUBSCRIBE_FAILED: ['metaRetry', 'mlaSubscribeFailed'],
+      MLA_FORMS_UNAVAILABLE: ['metaRetry', 'mlaFormsUnavailable'],
+      MLA_FORM_NOT_FOUND: ['metaRetry', 'mlaFormNotFound'],
+      MLA_SYNC_OFF: ['syncOff', 'mlaSyncOff'],
+    });
+  });
+
+  it('carries Meta words only for the two refusals that hold them, cut short', () => {
+    const long = new ApiError(422, ERROR_CODES.MLA_FORMS_UNAVAILABLE, 'x'.repeat(500), 'req-2');
+    expect(leadError(long).metaSaid).toHaveLength(300);
+    const sub = new ApiError(422, ERROR_CODES.MLA_SUBSCRIBE_FAILED, 'Meta said no', 'req-3');
+    expect(leadError(sub).metaSaid).toBe('Meta said no');
+    expect(leadError(err(422, ERROR_CODES.MLA_LEAD_ACCESS_MISSING)).metaSaid).toBeUndefined();
+    expect(leadError(err(422, ERROR_CODES.MLA_PAGE_RECONNECT)).metaSaid).toBeUndefined();
+    expect(
+      leadError(new ApiError(422, ERROR_CODES.MLA_SUBSCRIBE_FAILED, '  ')).metaSaid,
+    ).toBeUndefined();
+  });
+
+  it('still answers a plan that lacks the Facebook channel as a locked plan', () => {
+    expect(leadError(err(422, ERROR_CODES.PLAN_FEATURE_LOCKED)).kind).toBe('locked');
   });
 });

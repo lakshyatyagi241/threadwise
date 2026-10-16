@@ -78,6 +78,8 @@ import { FacebookPublicController } from './webhook.controller';
     BackfillService,
     SenderService,
     FbBroadcastSenderService,
+    // The Meta app's settings (id, secret, Graph version): the Meta lead ads door reads them from the same place.
+    FACEBOOK_GRAPH,
   ],
 })
 export class ChannelFacebookModule implements OnModuleInit {

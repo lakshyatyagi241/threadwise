@@ -48,26 +48,28 @@ const LIST = [leadKeys.list, [source(), waiting, connector]] as const;
 
 describe('Social leads screen: the Ads tab', () => {
   for (const locale of LOCALES) {
-    it(`offers the Webhook and shows the four providers without a door as coming soon in ${locale}`, () => {
+    it(`offers the Webhook and Meta lead forms and shows the three providers without a door as coming soon in ${locale}`, () => {
       const html = renderAccount(<LeadSourcesScreen tab="ads" />, {
         locale,
         ...as(MANAGE),
         seed: [LIST],
       });
       expect(html).toContain('data-testid="provider-webhook"');
-      for (const p of ['meta', 'linkedin', 'tiktok', 'google']) {
+      expect(html).toContain('data-testid="provider-meta"');
+      for (const p of ['linkedin', 'tiktok', 'google']) {
         expect(html).toContain(`data-testid="provider-${p}"`);
       }
+      expect(html.match(/data-coming-soon="true"/g)).toHaveLength(3);
       // The webhook leads to the wizard
       expect(html).toContain('href="/lead-sources/new"');
     });
   }
 
-  it('the coming-soon cards are not links and not buttons, and say what to do until then', () => {
+  it('the three coming-soon cards are not links and not buttons, and say what to do until then', () => {
     const html = renderAccount(
       <AdsTab can={{ read: true, manage: true }} count={0} onOpenSources={() => undefined} />,
     );
-    for (const p of ['meta', 'linkedin', 'tiktok', 'google']) {
+    for (const p of ['linkedin', 'tiktok', 'google']) {
       const card =
         new RegExp(`<div[^>]*data-testid="provider-${p}"[\\s\\S]*?</li>`).exec(html)?.[0] ?? '';
       expect(card, p).not.toBe('');

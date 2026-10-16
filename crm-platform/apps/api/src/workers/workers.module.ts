@@ -58,6 +58,7 @@ import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { LeadsWorkerModule } from '../modules/leads';
+import { MetaLeadAdsWorkerModule } from '../modules/meta-lead-ads';
 import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
@@ -134,6 +135,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     WhatsappDevicesBaileysWorkerModule,
     NodeCatalogBridgeModule,
     LeadsWorkerModule,
+    MetaLeadAdsWorkerModule,
     FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,

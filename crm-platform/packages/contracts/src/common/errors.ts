@@ -21,6 +21,7 @@ import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
 import { MKT_ERROR_CODES } from '../marketplace/errors';
 import { LEAD_ERROR_CODES } from '../leads/errors';
+import { MLA_ERROR_CODES } from '../meta-lead-ads/errors';
 import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
 import { FORMS_ERROR_CODES } from '../forms-builder/errors';
@@ -73,6 +74,7 @@ export const ERROR_CODES = {
   ...FLR_ERROR_CODES,
   ...MKT_ERROR_CODES,
   ...LEAD_ERROR_CODES,
+  ...MLA_ERROR_CODES,
   ...FLB_ERROR_CODES,
   ...CHK_ERROR_CODES,
   ...FORMS_ERROR_CODES,

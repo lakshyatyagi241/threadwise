@@ -90,6 +90,15 @@ export class LeadIngestService implements LeadIngestPort {
     return (await this.process(orgId, sourceId, lead, {})).result;
   }
 
+  /** The port's `settled`: a poller's way of not re-delivering what the source already holds. */
+  settled(orgId: number, sourceId: number, externalIds: readonly string[]): Promise<string[]> {
+    return runInOrg(orgId, () =>
+      this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.events.settled(tx, orgId, sourceId, externalIds),
+      ),
+    );
+  }
+
   async process(
     orgId: number,
     sourceId: number,

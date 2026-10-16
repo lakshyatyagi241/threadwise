@@ -46,7 +46,14 @@
         "pipeline_required": "Scegli la pipeline a cui appartiene questa fase.",
         "unknown_or_lost_stage": "Questa fase del ciclo di vita non esiste o è una fase persa.",
         "unknown_or_inactive_user": "Una delle persone selezionate non è un membro attivo di questo spazio di lavoro."
-      }
+      },
+      "mlaNotConfigured": "Meta non è configurato in questa installazione. Prima un amministratore deve aggiungere l'app Meta.",
+      "mlaLeadAccessMissing": "Questa Pagina non ha i permessi richiesti da Meta per leggere i lead. Concedi l'accesso ai lead e riprova.",
+      "mlaPageReconnect": "Meta non accetta più la connessione di questa Pagina. Ricollega la Pagina e riprova.",
+      "mlaSubscribeFailed": "Meta non ha attivato la ricezione dei lead per questa Pagina. Verifica che l'app Meta abbia il permesso per i lead e che il suo webhook della Pagina sia configurato, poi riprova.",
+      "mlaFormsUnavailable": "Meta non ha restituito i moduli lead. Riprova tra un momento.",
+      "mlaFormNotFound": "Questo modulo non è più tra i moduli lead di questa Pagina. Aggiorna l'elenco e riprova.",
+      "mlaSyncOff": "Attiva la sincronizzazione dei lead per questa Pagina prima di scegliere i moduli."
     },
     "problems": {
       "nameRequired": "Dai un nome alla fonte.",
@@ -149,7 +156,7 @@
         },
         "meta": {
           "name": "Moduli lead di Meta",
-          "body": "Annunci lead di Facebook e Instagram, direttamente dalla tua Pagina."
+          "body": "Inserzioni lead di Facebook e Instagram, direttamente dalla tua Pagina ai tuoi contatti."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -163,7 +170,8 @@
           "name": "Google Ads",
           "body": "Estensioni dei moduli lead di Google Ads."
         }
-      }
+      },
+      "dismissNotice": "Chiudi"
     },
     "sources": {
       "emptyTitle": "Nessuna fonte ancora",
@@ -182,7 +190,8 @@
       "connector": "Tramite il Marketplace",
       "endsIn": "Termina in {hint}",
       "noEvents": "Nessun lead ancora",
-      "needsAttention": "{count, plural, one {# lead} other {# lead}}"
+      "needsAttention": "{count, plural, one {# lead} other {# lead}}",
+      "metaDelivery": "Da Meta"
     },
     "wizard": {
       "title": "Nuova fonte di lead",
@@ -480,7 +489,9 @@
           "body": "Il suo URL smette di funzionare e con essa vengono eliminati i lead memorizzati. I contatti già creati restano. L’operazione non può essere annullata.",
           "action": "Elimina fonte"
         }
-      }
+      },
+      "metaForm": "I lead arrivano da Meta. Questa fonte non ha URL né token; gestisci il modulo (mappa le domande, assegnazione e trattativa, oppure interrompilo) nella scheda Ads.",
+      "metaFormLink": "Apri i moduli lead Meta"
     },
     "events": {
       "title": "Lead ricevuti",
@@ -554,6 +565,211 @@
       },
       "capturedAt": "Acquisito",
       "openSource": "Apri la fonte lead"
+    },
+    "meta": {
+      "heading": "Moduli lead Meta",
+      "intro": "Porta i lead delle tue inserzioni Facebook e Instagram direttamente nei tuoi contatti. Collega una Pagina Facebook, attiva la sincronizzazione dei lead e scegli i moduli lead da importare.",
+      "loading": "Caricamento dei moduli lead Meta",
+      "pagesLabel": "Pagine Facebook collegate",
+      "planLocked": "I moduli lead Meta richiedono un piano con Lead social e la funzione canali aggiuntivi (Facebook). Passa a un piano superiore per usarli.",
+      "metaSaid": "Meta ha risposto:",
+      "requestId": "ID richiesta:",
+      "connectPage": "Collega una Pagina Facebook",
+      "connectAnother": "Collega un'altra Pagina",
+      "connectNeedsPermission": "Per collegare una Pagina serve anche il permesso {permission}.",
+      "card": {
+        "checking": "Verifica della connessione",
+        "unavailable": "Impossibile caricare lo stato della connessione. Apri il pannello per riprovare.",
+        "notConfigured": "Non ancora configurato in questa installazione",
+        "noPages": "Nessuna Pagina Facebook collegata",
+        "summary": "{pages, plural, one {# Pagina collegata} other {# Pagine collegate}}, {forms, plural, one {# modulo scelto} other {# moduli scelti}}",
+        "attention": "{count, plural, one {# Pagina richiede attenzione} other {# Pagine richiedono attenzione}}",
+        "open": "Apri i moduli lead Meta",
+        "close": "Nascondi i moduli lead Meta"
+      },
+      "notConfigured": {
+        "title": "Meta non è ancora configurato",
+        "body": "I moduli lead Meta richiedono un'app Meta in questa installazione. Chiedi a un amministratore del workspace di aggiungerla, poi torna qui per collegare una Pagina.",
+        "bodyManage": "Questa installazione non ha ancora un'app Meta, quindi non è possibile collegare Pagine per le inserzioni lead. Prima un amministratore deve aggiungere l'app Meta (ID app e segreto). Fatto questo, registra il webhook come descritto qui sotto."
+      },
+      "noPages": {
+        "title": "Nessuna Pagina Facebook collegata",
+        "body": "Collega la Pagina Facebook che gestisce le tue inserzioni lead. Ti verranno chiesti i permessi richiesti da Meta per leggere i lead.",
+        "bodyNoManage": "Nessuna Pagina Facebook è ancora collegata. Chiedi a chi può gestire le fonti di lead di collegarne una."
+      },
+      "setup": {
+        "title": "Impostazioni Webhook per l'app Meta",
+        "summary": "Impostazioni Webhook per l'app Meta",
+        "intro": "Meta invia i nuovi lead a un indirizzo di callback. Un amministratore lo registra una sola volta nella dashboard dell'app Meta.",
+        "callbackUrl": "URL di callback",
+        "copyUrl": "Copia URL",
+        "verifyToken": "Token di verifica",
+        "verifyTokenSet": "Impostato in questa installazione",
+        "verifyTokenMissing": "Non impostato",
+        "verifyTokenHelp": "Meta non può confermare l'indirizzo di callback finché questa installazione non ha un token di verifica. Impostalo nelle impostazioni Facebook di questa installazione.",
+        "steps": {
+          "callback": "Nella dashboard dell'app Meta apri Webhooks, scegli l'oggetto Page e incolla l'URL di callback qui sopra.",
+          "verify": "Quando Meta chiede un token di verifica, inserisci quello delle impostazioni Facebook di questa installazione, poi verifica e salva.",
+          "subscribe": "Iscrivi l'oggetto Page al campo {field}."
+        },
+        "scopes": "Permessi richiesti al login: {scopes}.",
+        "scopesFromConfiguration": "I permessi richiesti al login derivano dalla tua configurazione di login Meta."
+      },
+      "pageStatus": {
+        "connected": "Pagina collegata",
+        "disconnected": "Pagina scollegata",
+        "expired": "Connessione scaduta",
+        "error": "Errore della Pagina"
+      },
+      "leadAccess": {
+        "granted": "Accesso ai lead concesso",
+        "missing": "Accesso ai lead mancante"
+      },
+      "syncState": {
+        "off": "Sincronizzazione lead disattivata",
+        "subscribed": "Ricezione lead",
+        "needs_lead_access": "Serve l'accesso ai lead",
+        "needs_reconnect": "Serve la riconnessione",
+        "error": "Errore"
+      },
+      "page": {
+        "pageId": "ID Pagina",
+        "missingScopes": "Permessi mancanti:",
+        "lastLead": "Ultimo lead",
+        "lastSweep": "Ultimo controllo",
+        "subscribedAt": "Sincronizzazione lead attiva dal",
+        "never": "Mai",
+        "formsConnected": "Moduli scelti",
+        "lastError": "Ultimo errore:",
+        "grant": "Concedi accesso ai lead",
+        "reconnect": "Ricollega",
+        "enable": "Attiva sincronizzazione lead",
+        "disable": "Disattiva sincronizzazione lead",
+        "chooseForms": "Scegli i moduli lead",
+        "hideForms": "Nascondi i moduli lead",
+        "enabledToast": "Sincronizzazione lead attiva per {name}",
+        "disabledToast": "Sincronizzazione lead disattivata per {name}",
+        "stateHelp": {
+          "off": "La sincronizzazione dei lead è disattivata. Attivala per iniziare a ricevere i lead di questa Pagina.",
+          "subscribed": "La sincronizzazione dei lead è attiva. I nuovi lead dei moduli scelti arrivano in pochi istanti e un controllo periodico recupera quelli eventualmente persi.",
+          "needs_lead_access": "La sincronizzazione dei lead è attiva, ma questa Pagina è stata collegata senza i permessi richiesti da Meta per leggere i lead. Concedi l'accesso ai lead per continuare.",
+          "needs_reconnect": "Meta non accetta più la connessione di questa Pagina. Ricollega la Pagina per tornare a ricevere i lead.",
+          "error": "Meta ha rifiutato qualcosa all'ultimo tentativo. Il messaggio qui sotto ne spiega il motivo; sparisce dopo il prossimo successo."
+        },
+        "hints": {
+          "needManage": "Per modificare la sincronizzazione dei lead serve il permesso {permission}.",
+          "needFacebook": "Per concedere l'accesso o ricollegare serve anche il permesso {permission}, perché viene salvata la connessione della Pagina.",
+          "enableNeedsAccess": "Concedi prima l'accesso ai lead; Meta rifiuta la sincronizzazione dei lead per una Pagina che non lo ha.",
+          "enableNeedsReconnect": "Ricollega prima la Pagina; la sua connessione non funziona più.",
+          "pickNeedsSync": "Attiva la sincronizzazione dei lead per scegliere i moduli.",
+          "pickNeedsAccess": "Concedi l'accesso ai lead per scegliere i moduli.",
+          "pickNeedsReconnect": "Ricollega la Pagina per scegliere i moduli."
+        },
+        "confirmOff": {
+          "title": "Disattivare la sincronizzazione dei lead per {name}?",
+          "body": "Questa Pagina smette di ricevere nuovi lead da Meta. I moduli scelti e i lead già salvati vengono conservati, e puoi riattivare la sincronizzazione in qualsiasi momento.",
+          "action": "Disattiva sincronizzazione lead",
+          "cancel": "Annulla"
+        }
+      },
+      "forms": {
+        "title": "Moduli lead di {name}",
+        "intro": "Sono i moduli lead che Meta elenca per questa Pagina. Scegli un modulo per importarne i lead; ogni modulo scelto diventa una fonte di lead nella scheda Webhook.",
+        "refresh": "Aggiorna elenco",
+        "loading": "Caricamento dei moduli lead da Meta",
+        "emptyTitle": "Nessun modulo lead",
+        "empty": "Questa Pagina non ha ancora moduli lead. Creane uno in Meta Ads Manager o sulla Pagina, poi aggiorna questo elenco.",
+        "caption": "Moduli lead della Pagina",
+        "col": {
+          "form": "Modulo",
+          "status": "Stato Meta",
+          "leads": "Lead",
+          "questions": "Domande",
+          "consent": "Casella di consenso",
+          "connected": "Collegato",
+          "lastLead": "Ultimo lead",
+          "lastError": "Ultimo errore",
+          "actions": "Azioni"
+        },
+        "formId": "ID modulo",
+        "formStatus": {
+          "ACTIVE": "Attivo",
+          "ARCHIVED": "Archiviato",
+          "DELETED": "Eliminato",
+          "DRAFT": "Bozza",
+          "unknown": "Sconosciuto"
+        },
+        "leadsUnknown": "Non indicato da Meta",
+        "consentYes": "Ha una casella di consenso",
+        "consentNo": "Nessuna",
+        "connected": "Collegato",
+        "notConnected": "Non scelto",
+        "noLeads": "Ancora nessun lead",
+        "pick": "Scegli",
+        "pickFor": "Scegli {name}",
+        "stop": "Interrompi",
+        "stopFor": "Interrompi {name}",
+        "mapFields": "Mappa i campi",
+        "mapFieldsFor": "Mappa i campi di {name}",
+        "rules": "Assegnazione e trattativa",
+        "rulesFor": "Assegnazione e trattativa di {name}",
+        "openSource": "Apri fonte",
+        "openSourceFor": "Apri la fonte di lead di {name}",
+        "pickedToast": "{name} scelto",
+        "stoppedToast": "{name} interrotto",
+        "confirmStop": {
+          "title": "Interrompere l'importazione di {name}?",
+          "body": "La fonte di lead di questo modulo e i lead salvati al suo interno vengono eliminati. I contatti già creati restano. Potrai scegliere di nuovo il modulo in seguito.",
+          "action": "Interrompi importazione lead",
+          "cancel": "Annulla"
+        }
+      },
+      "mapping": {
+        "title": "Mappa i campi: {name}",
+        "close": "Chiudi",
+        "noSource": "Impossibile trovare la fonte di lead di questo modulo. Aggiorna l'elenco e riprova.",
+        "loading": "Caricamento della fonte di lead",
+        "intro": "Scegli dove va a finire ogni risposta di questo modulo nel contatto. Una domanda lasciata su Automatico viene cercata con i nomi abituali, come email o phone_number.",
+        "suggested": "Li abbiamo compilati in base al tipo di ogni domanda. Controllali, poi salva.",
+        "multiUse": "La mappatura salvata usava la stessa domanda per più campi ({keys}). Quando salvi viene mantenuto solo il primo.",
+        "noQuestions": "Meta non ha elencato domande per questo modulo, quindi non c'è nulla da mappare. I nomi abituali vengono comunque cercati.",
+        "ignore": "Automatico (non mappato qui)",
+        "contactFields": "Campi del contatto",
+        "contactProperties": "Proprietà del contatto",
+        "problems": {
+          "duplicateTarget": "Un'altra domanda corrisponde già a questo campo. Scegline un'altra.",
+          "propertyKey": "Questa chiave di proprietà non è valida."
+        },
+        "conflict": "Qualcun altro ha modificato questa fonte di lead. Ricarica per vedere la sua versione; le tue scelte non salvate andranno perse.",
+        "cancel": "Annulla",
+        "save": "Salva mappatura",
+        "saved": "Mappatura dei campi salvata per {name}"
+      },
+      "rules": {
+        "title": "Assegnazione e trattativa: {name}",
+        "close": "Chiudi",
+        "noSource": "Impossibile trovare la fonte di lead di questo modulo. Aggiorna l'elenco e riprova.",
+        "loading": "Caricamento della fonte di lead",
+        "intro": "Decidi a chi appartengono i contatti creati da questo modulo, se aprire una trattativa per ogni lead e chi viene avvisato. Le modifiche valgono per i lead che arrivano dopo il salvataggio.",
+        "conflict": "Qualcun altro ha modificato questa fonte di lead. Ricarica per vedere la sua versione; le tue modifiche non salvate andranno perse.",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "saved": "Assegnazione e trattativa salvate per {name}"
+      },
+      "health": {
+        "title": "Stato del modulo lead Meta",
+        "loading": "Verifica del modulo",
+        "notConnected": "Questa fonte non è più collegata a un modulo lead Meta, quindi non c'è nulla da controllare. Scegli di nuovo il modulo nella scheda Ads.",
+        "page": "Pagina",
+        "form": "Modulo",
+        "state": "Sincronizzazione lead",
+        "leadAccess": "Accesso ai lead",
+        "lastLead": "Ultimo lead",
+        "never": "Ancora nessun lead",
+        "lastError": "Ultimo errore:",
+        "fixHint": "Per risolvere, apri la scheda Ads: concedi l'accesso ai lead, ricollega la Pagina o riattiva la sincronizzazione dei lead.",
+        "openAds": "Apri la scheda Ads"
+      }
     }
   }
 }

@@ -46,7 +46,14 @@
         "pipeline_required": "Kies de pipeline waar deze fase bij hoort.",
         "unknown_or_lost_stage": "Deze levenscyclusfase bestaat niet of is een verloren fase.",
         "unknown_or_inactive_user": "Een van de geselecteerde personen is geen actief lid van deze workspace."
-      }
+      },
+      "mlaNotConfigured": "Meta is niet ingesteld op deze installatie. Een beheerder moet eerst de Meta-app toevoegen.",
+      "mlaLeadAccessMissing": "Deze Pagina heeft niet de rechten die Meta nodig heeft om leads te lezen. Verleen toegang tot leads en probeer het opnieuw.",
+      "mlaPageReconnect": "Meta accepteert de verbinding van deze Pagina niet meer. Verbind de Pagina opnieuw en probeer het opnieuw.",
+      "mlaSubscribeFailed": "Meta heeft de levering van leads voor deze Pagina niet ingeschakeld. Controleer of de Meta-app de machtiging voor leads heeft en of de Webhook van de Pagina is ingesteld, en probeer het opnieuw.",
+      "mlaFormsUnavailable": "Meta heeft de leadformulieren niet teruggegeven. Probeer het over een moment opnieuw.",
+      "mlaFormNotFound": "Dat formulier hoort niet meer bij de leadformulieren van deze Pagina. Vernieuw de lijst en probeer het opnieuw.",
+      "mlaSyncOff": "Schakel leadsynchronisatie voor deze Pagina in voordat je formulieren kiest."
     },
     "problems": {
       "nameRequired": "Geef de bron een naam.",
@@ -149,7 +156,7 @@
         },
         "meta": {
           "name": "Meta-leadformulieren",
-          "body": "Facebook- en Instagram-leadadvertenties, rechtstreeks vanaf je pagina."
+          "body": "Facebook- en Instagram-leadadvertenties, rechtstreeks van je Pagina naar je contacten."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -163,7 +170,8 @@
           "name": "Google Ads",
           "body": "Google Ads-leadformulierextensies."
         }
-      }
+      },
+      "dismissNotice": "Sluiten"
     },
     "sources": {
       "emptyTitle": "Nog geen bronnen",
@@ -182,7 +190,8 @@
       "connector": "Via de Marketplace",
       "endsIn": "Eindigt over {hint}",
       "noEvents": "Nog geen leads",
-      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}",
+      "metaDelivery": "Van Meta"
     },
     "wizard": {
       "title": "Nieuwe leadbron",
@@ -480,7 +489,9 @@
           "body": "De URL werkt niet meer en de leads die erin zijn opgeslagen worden mee verwijderd. Contacten die al zijn aangemaakt blijven bestaan. Dit kan niet ongedaan worden gemaakt.",
           "action": "Bron verwijderen"
         }
-      }
+      },
+      "metaForm": "Leads komen binnen via Meta. Deze bron heeft geen URL of token; beheer het formulier (koppel de vragen, toewijzing en deal, of stop het) op het tabblad Advertenties.",
+      "metaFormLink": "Meta-leadformulieren openen"
     },
     "events": {
       "title": "Ontvangen leads",
@@ -554,6 +565,211 @@
       },
       "capturedAt": "Vastgelegd",
       "openSource": "Open de leadbron"
+    },
+    "meta": {
+      "heading": "Meta-leadformulieren",
+      "intro": "Haal leads uit je Facebook- en Instagram-leadadvertenties rechtstreeks in je contacten. Verbind een Facebook-Pagina, schakel leadsynchronisatie ervoor in en kies de leadformulieren die je wilt binnenhalen.",
+      "loading": "Meta-leadformulieren laden",
+      "pagesLabel": "Verbonden Facebook-Pagina’s",
+      "planLocked": "Meta-leadformulieren vereisen een abonnement met zowel Social leads als de functie extra kanalen (Facebook). Upgrade om ze te gebruiken.",
+      "metaSaid": "Meta zei:",
+      "requestId": "Verzoek-ID:",
+      "connectPage": "Verbind een Facebook-Pagina",
+      "connectAnother": "Verbind nog een Pagina",
+      "connectNeedsPermission": "Voor het verbinden van een Pagina is ook de machtiging {permission} nodig.",
+      "card": {
+        "checking": "Verbinding controleren",
+        "unavailable": "Kan de verbindingsstatus niet laden. Open het paneel om het opnieuw te proberen.",
+        "notConfigured": "Nog niet ingesteld op deze installatie",
+        "noPages": "Nog geen Facebook-Pagina verbonden",
+        "summary": "{pages, plural, one {# Pagina} other {# Pagina’s}} verbonden, {forms, plural, one {# formulier} other {# formulieren}} gekozen",
+        "attention": "{count, plural, one {# Pagina heeft aandacht nodig} other {# Pagina’s hebben aandacht nodig}}",
+        "open": "Meta-leadformulieren openen",
+        "close": "Meta-leadformulieren verbergen"
+      },
+      "notConfigured": {
+        "title": "Meta is nog niet ingesteld",
+        "body": "Voor Meta-leadformulieren is een Meta-app op deze installatie nodig. Vraag een werkruimtebeheerder die toe te voegen en kom dan hier terug om een Pagina te verbinden.",
+        "bodyManage": "Deze installatie heeft nog geen Meta-app, dus Pagina’s kunnen niet worden verbonden voor leadadvertenties. Een beheerder moet eerst de Meta-app toevoegen (app-ID en geheim). Registreer daarna de Webhook zoals hieronder beschreven."
+      },
+      "noPages": {
+        "title": "Geen Facebook-Pagina verbonden",
+        "body": "Verbind de Facebook-Pagina waarop je leadadvertenties draaien. Je krijgt een verzoek voor de rechten die Meta nodig heeft om leads te lezen.",
+        "bodyNoManage": "Er is nog geen Facebook-Pagina verbonden. Vraag iemand die leadbronnen kan beheren er een te verbinden."
+      },
+      "setup": {
+        "title": "Webhook-instellingen voor de Meta-app",
+        "summary": "Webhook-instellingen voor de Meta-app",
+        "intro": "Meta levert nieuwe leads af op een callback-adres. Een beheerder registreert dit eenmalig in het dashboard van de Meta-app.",
+        "callbackUrl": "Callback-URL",
+        "copyUrl": "URL kopiëren",
+        "verifyToken": "Verificatietoken",
+        "verifyTokenSet": "Ingesteld op deze installatie",
+        "verifyTokenMissing": "Niet ingesteld",
+        "verifyTokenHelp": "Meta kan het callback-adres pas bevestigen als deze installatie een verificatietoken heeft. Stel het in bij de Facebook-instellingen van deze installatie.",
+        "steps": {
+          "callback": "Open in het dashboard van de Meta-app Webhooks, kies het object Page en plak de callback-URL hierboven.",
+          "verify": "Voer, wanneer Meta om een verificatietoken vraagt, het token uit de Facebook-instellingen van deze installatie in, en verifieer en sla op.",
+          "subscribe": "Abonneer het object Page op het veld {field}."
+        },
+        "scopes": "Rechten die bij het inloggen worden gevraagd: {scopes}.",
+        "scopesFromConfiguration": "De rechten die bij het inloggen worden gevraagd, komen uit je Meta-loginconfiguratie."
+      },
+      "pageStatus": {
+        "connected": "Pagina verbonden",
+        "disconnected": "Pagina losgekoppeld",
+        "expired": "Verbinding verlopen",
+        "error": "Paginafout"
+      },
+      "leadAccess": {
+        "granted": "Toegang tot leads verleend",
+        "missing": "Toegang tot leads ontbreekt"
+      },
+      "syncState": {
+        "off": "Leadsynchronisatie uit",
+        "subscribed": "Ontvangt leads",
+        "needs_lead_access": "Toegang tot leads nodig",
+        "needs_reconnect": "Opnieuw verbinden nodig",
+        "error": "Fout"
+      },
+      "page": {
+        "pageId": "Pagina-ID",
+        "missingScopes": "Ontbrekende rechten:",
+        "lastLead": "Laatste lead",
+        "lastSweep": "Laatste controle",
+        "subscribedAt": "Leadsynchronisatie aan sinds",
+        "never": "Nooit",
+        "formsConnected": "Gekozen formulieren",
+        "lastError": "Laatste fout:",
+        "grant": "Toegang tot leads verlenen",
+        "reconnect": "Opnieuw verbinden",
+        "enable": "Leadsynchronisatie inschakelen",
+        "disable": "Leadsynchronisatie uitschakelen",
+        "chooseForms": "Leadformulieren kiezen",
+        "hideForms": "Leadformulieren verbergen",
+        "enabledToast": "Leadsynchronisatie is ingeschakeld voor {name}",
+        "disabledToast": "Leadsynchronisatie is uitgeschakeld voor {name}",
+        "stateHelp": {
+          "off": "Leadsynchronisatie staat uit. Schakel het in om de leads van deze Pagina te ontvangen.",
+          "subscribed": "Leadsynchronisatie staat aan. Nieuwe leads van de gekozen formulieren komen binnen enkele ogenblikken binnen, en een regelmatige controle haalt gemiste leads op.",
+          "needs_lead_access": "Leadsynchronisatie staat aan, maar deze Pagina is verbonden zonder de rechten die Meta nodig heeft om leads te lezen. Verleen toegang tot leads om door te gaan.",
+          "needs_reconnect": "Meta accepteert de verbinding van deze Pagina niet meer. Verbind de Pagina opnieuw om weer leads te ontvangen.",
+          "error": "Meta heeft bij de laatste poging iets geweigerd. Het bericht hieronder zegt wat; het verdwijnt na de volgende geslaagde poging."
+        },
+        "hints": {
+          "needManage": "Voor het wijzigen van leadsynchronisatie is de machtiging {permission} nodig.",
+          "needFacebook": "Voor het verlenen van toegang of opnieuw verbinden is ook de machtiging {permission} nodig, omdat de verbinding van de Pagina wordt opgeslagen.",
+          "enableNeedsAccess": "Verleen eerst toegang tot leads; Meta weigert leadsynchronisatie voor een Pagina zonder.",
+          "enableNeedsReconnect": "Verbind de Pagina eerst opnieuw; de verbinding werkt niet meer.",
+          "pickNeedsSync": "Schakel leadsynchronisatie in om formulieren te kiezen.",
+          "pickNeedsAccess": "Verleen toegang tot leads om formulieren te kiezen.",
+          "pickNeedsReconnect": "Verbind de Pagina opnieuw om formulieren te kiezen."
+        },
+        "confirmOff": {
+          "title": "Leadsynchronisatie voor {name} uitschakelen?",
+          "body": "Deze Pagina ontvangt geen nieuwe leads meer van Meta. De gekozen formulieren en de al opgeslagen leads blijven bewaard, en je kunt leadsynchronisatie op elk moment weer inschakelen.",
+          "action": "Leadsynchronisatie uitschakelen",
+          "cancel": "Annuleren"
+        }
+      },
+      "forms": {
+        "title": "Leadformulieren van {name}",
+        "intro": "Dit zijn de leadformulieren die Meta voor deze Pagina vermeldt. Kies een formulier om de leads ervan binnen te halen; elk gekozen formulier wordt een leadbron op het tabblad Webhook.",
+        "refresh": "Lijst vernieuwen",
+        "loading": "Leadformulieren laden vanuit Meta",
+        "emptyTitle": "Geen leadformulieren",
+        "empty": "Deze Pagina heeft nog geen leadformulieren. Maak er een in Meta Ads Manager of op de Pagina en vernieuw dan deze lijst.",
+        "caption": "Leadformulieren van de Pagina",
+        "col": {
+          "form": "Formulier",
+          "status": "Meta-status",
+          "leads": "Leads",
+          "questions": "Vragen",
+          "consent": "Toestemmingsvakje",
+          "connected": "Verbonden",
+          "lastLead": "Laatste lead",
+          "lastError": "Laatste fout",
+          "actions": "Acties"
+        },
+        "formId": "Formulier-ID",
+        "formStatus": {
+          "ACTIVE": "Actief",
+          "ARCHIVED": "Gearchiveerd",
+          "DELETED": "Verwijderd",
+          "DRAFT": "Concept",
+          "unknown": "Onbekend"
+        },
+        "leadsUnknown": "Niet gemeld door Meta",
+        "consentYes": "Heeft een toestemmingsvakje",
+        "consentNo": "Geen",
+        "connected": "Verbonden",
+        "notConnected": "Niet gekozen",
+        "noLeads": "Nog geen leads",
+        "pick": "Kiezen",
+        "pickFor": "{name} kiezen",
+        "stop": "Stoppen",
+        "stopFor": "{name} stoppen",
+        "mapFields": "Velden koppelen",
+        "mapFieldsFor": "Velden van {name} koppelen",
+        "rules": "Toewijzing en deal",
+        "rulesFor": "Toewijzing en deal van {name}",
+        "openSource": "Bron openen",
+        "openSourceFor": "Leadbron van {name} openen",
+        "pickedToast": "{name} gekozen",
+        "stoppedToast": "{name} gestopt",
+        "confirmStop": {
+          "title": "Stoppen met het binnenhalen van {name}?",
+          "body": "De leadbron voor dit formulier en de daaronder opgeslagen leads worden verwijderd. Contacten die al uit deze leads zijn gemaakt, blijven bestaan. Je kunt het formulier later opnieuw kiezen.",
+          "action": "Stoppen met leads binnenhalen",
+          "cancel": "Annuleren"
+        }
+      },
+      "mapping": {
+        "title": "Velden koppelen: {name}",
+        "close": "Sluiten",
+        "noSource": "De leadbron van dit formulier is niet gevonden. Vernieuw de lijst en probeer het opnieuw.",
+        "loading": "Leadbron laden",
+        "intro": "Kies waar elk antwoord op dit formulier in het contact terechtkomt. Een vraag die op Automatisch blijft staan, wordt opgezocht onder de gebruikelijke namen, zoals email of phone_number.",
+        "suggested": "We hebben deze ingevuld op basis van het type van elke vraag. Controleer ze en sla daarna op.",
+        "multiUse": "De opgeslagen koppeling gebruikte dezelfde vraag voor meer dan één veld ({keys}). Bij het opslaan wordt alleen de eerste bewaard.",
+        "noQuestions": "Meta heeft geen vragen voor dit formulier vermeld, dus er valt niets te koppelen. De gebruikelijke namen worden nog steeds opgezocht.",
+        "ignore": "Automatisch (hier niet gekoppeld)",
+        "contactFields": "Contactvelden",
+        "contactProperties": "Contacteigenschappen",
+        "problems": {
+          "duplicateTarget": "Een andere vraag gaat al naar dit veld. Kies een ander veld.",
+          "propertyKey": "Deze eigenschapssleutel is niet geldig."
+        },
+        "conflict": "Iemand anders heeft deze leadbron gewijzigd. Laad opnieuw om hun versie te zien; je niet-opgeslagen keuzes gaan verloren.",
+        "cancel": "Annuleren",
+        "save": "Koppeling opslaan",
+        "saved": "Veldkoppeling opgeslagen voor {name}"
+      },
+      "rules": {
+        "title": "Toewijzing en deal: {name}",
+        "close": "Sluiten",
+        "noSource": "De leadbron van dit formulier is niet gevonden. Vernieuw de lijst en probeer het opnieuw.",
+        "loading": "Leadbron laden",
+        "intro": "Bepaal wie eigenaar is van de contacten die dit formulier aanmaakt, of voor elke lead een deal wordt geopend, en wie een melding krijgt. Wijzigingen gelden voor leads die binnenkomen nadat je hebt opgeslagen.",
+        "conflict": "Iemand anders heeft deze leadbron gewijzigd. Laad opnieuw om hun versie te zien; je niet-opgeslagen wijzigingen gaan verloren.",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "saved": "Toewijzing en deal opgeslagen voor {name}"
+      },
+      "health": {
+        "title": "Status van Meta-leadformulier",
+        "loading": "Formulier controleren",
+        "notConnected": "Deze bron is niet meer gekoppeld aan een Meta-leadformulier, dus er is niets te controleren. Kies het formulier opnieuw op het tabblad Advertenties.",
+        "page": "Pagina",
+        "form": "Formulier",
+        "state": "Leadsynchronisatie",
+        "leadAccess": "Toegang tot leads",
+        "lastLead": "Laatste lead",
+        "never": "Nog geen leads",
+        "lastError": "Laatste fout:",
+        "fixHint": "Open om dit op te lossen het tabblad Advertenties: verleen toegang tot leads, verbind de Pagina opnieuw of schakel leadsynchronisatie weer in.",
+        "openAds": "Tabblad Advertenties openen"
+      }
     }
   }
 }
