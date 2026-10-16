@@ -28,9 +28,9 @@ export class ImapSession {
   constructor(private readonly client: ImapFlow) {}
 
   /** Opens the INBOX read-only (nothing is marked seen). */
-  async openInbox(): Promise<{ uidValidity: string; uidNext: number }> {
+  async openInbox(): Promise<{ uidValidity: string; uidNext: number; exists: number }> {
     const box = await this.client.mailboxOpen('INBOX', { readOnly: true });
-    return { uidValidity: String(box.uidValidity), uidNext: box.uidNext };
+    return { uidValidity: String(box.uidValidity), uidNext: box.uidNext, exists: box.exists };
   }
 
   /** UIDs of the opened folder: those received since a date, or those above a UID (ascending). */

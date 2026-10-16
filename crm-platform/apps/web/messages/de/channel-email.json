@@ -120,7 +120,13 @@
       "limitDefault": "Plattform-Standard",
       "limitPerHour": "{count, plural, one {# E-Mail pro Stunde} other {# E-Mails pro Stunde}}",
       "limitSaved": "Sendelimit gespeichert.",
-      "needsReauthImap": "Der Mailserver hat das gespeicherte Passwort abgelehnt. Verbinden Sie erneut und geben Sie das Passwort noch einmal ein."
+      "needsReauthImap": "Der Mailserver hat das gespeicherte Passwort abgelehnt. Verbinden Sie erneut und geben Sie das Passwort noch einmal ein.",
+      "test": "Verbindung testen",
+      "testing": "Wird getestet",
+      "lag": "Rückstand",
+      "lagUnderMinute": "Unter einer Minute",
+      "lagMinutes": "{count, plural, one {# Minute} other {# Minuten}}",
+      "lagHours": "{count, plural, one {# Stunde} other {# Stunden}}"
     },
     "outcome": {
       "connected": "Postfach verbunden. E-Mails der letzten 7 Tage werden in den Posteingang abgerufen.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Der Postausgangsserver (SMTP) hat Benutzername oder Passwort abgelehnt. Prüfen Sie beides und versuchen Sie es erneut.",
         "unreachable": "Der Mailserver ist nicht erreichbar oder sein Zertifikat ist ungültig. Prüfen Sie Server, Port und Sicherheit.",
         "generic": "Das Postfach konnte nicht verbunden werden. Versuchen Sie es erneut."
+      },
+      "test": {
+        "button": "Zugangsdaten testen",
+        "testing": "Wird getestet",
+        "imap": "Eingang (IMAP)",
+        "smtp": "Ausgang (SMTP)",
+        "ok": "Anmeldung erfolgreich.",
+        "inbox": "Anmeldung erfolgreich. Der Posteingang enthält {count, plural, one {# Nachricht} other {# Nachrichten}}.",
+        "smtpOk": "Anmeldung erfolgreich. Es wurde nichts gesendet.",
+        "note": "Es wurde nichts gespeichert und keine E-Mail gesendet.",
+        "tooMany": "Zu viele Tests in kurzer Zeit. Warte eine Minute und versuche es erneut.",
+        "failed": "Der Test konnte nicht ausgeführt werden. Versuche es erneut.",
+        "reasons": {
+          "auth_failed": "Der Server hat den Benutzernamen oder das Passwort abgelehnt.",
+          "tls": "Die sichere Verbindung konnte nicht überprüft werden. Prüfe den Servernamen und die Sicherheitseinstellung.",
+          "unreachable": "Der Server ist nicht erreichbar. Prüfe Server, Port und Sicherheitseinstellung.",
+          "blocked_address": "Diese Serveradresse ist nicht erlaubt.",
+          "rejected": "Der Server hat die Anfrage abgelehnt.",
+          "unknown": "Der Server hat nicht wie erwartet geantwortet."
+        }
       }
     },
     "sharing": {

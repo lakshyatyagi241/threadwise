@@ -256,11 +256,61 @@ export class GraphMailClient {
     }
   }
 
+  /**
+   * A change-notification subscription on new Inbox mail. Graph validates `notificationUrl` before answering (it POSTs the
+   * `validationToken` and expects it back), so this call also proves the public address is reachable. Throws `MicrosoftMailError`
+   * (`bad_request` when the validation failed, `forbidden` when the permission is missing).
+   */
+  async createSubscription(
+    token: string,
+    input: {
+      notificationUrl: string;
+      lifecycleNotificationUrl: string;
+      resource: string;
+      expirationDateTime: string;
+      clientState: string;
+    },
+  ): Promise<{ id: string; expirationDateTime: string }> {
+    const body = await this.api(token, 'POST', '/subscriptions', {
+      changeType: 'created',
+      ...input,
+    });
+    return subscriptionOf(body);
+  }
+
+  /** Moves the end of a subscription. `MicrosoftMailError('not_found')` when Graph no longer has it. */
+  async renewSubscription(
+    token: string,
+    id: string,
+    expirationDateTime: string,
+  ): Promise<{ id: string; expirationDateTime: string }> {
+    const body = await this.api(token, 'PATCH', `/subscriptions/${enc(id)}`, {
+      expirationDateTime,
+    });
+    return subscriptionOf({ id, ...body });
+  }
+
+  /** Withdraws a subscription; already gone is fine. */
+  async deleteSubscription(token: string, id: string): Promise<void> {
+    try {
+      await this.api(token, 'DELETE', `/subscriptions/${enc(id)}`);
+    } catch (err) {
+      if (!(err instanceof MicrosoftMailError) || err.kind !== 'not_found') throw err;
+    }
+  }
+
   /** A cheap authenticated call: the account's address. */
   async mailboxAddress(token: string): Promise<string | null> {
     const body = await this.api(token, 'GET', '/me?$select=mail,userPrincipalName');
     return str(body.mail) ?? str(body.userPrincipalName);
   }
+}
+
+function subscriptionOf(b: Json): { id: string; expirationDateTime: string } {
+  const id = str(b.id);
+  const expirationDateTime = str(b.expirationDateTime);
+  if (!id || !expirationDateTime) throw new MicrosoftMailError('server', 200, 'bad_subscription');
+  return { id, expirationDateTime };
 }
 
 function draftOf(b: Json): GraphDraft {

@@ -3,12 +3,14 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   mailboxListResponseSchema,
+  mailConnectionTestResponseSchema,
   mailboxResponseSchema,
   mailProviderListResponseSchema,
   mailWorkspaceSettingsSchema,
   startMailboxConnectResponseSchema,
   type ConnectImapMailboxInput,
   type StartMailboxConnectInput,
+  type TestImapMailboxInput,
   type UpdateMailWorkspaceSettingsInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -74,6 +76,21 @@ export const connectImap = (body: ConnectImapMailboxInput) =>
     method: 'POST',
     body,
     schema: mailboxResponseSchema,
+  });
+
+/** "Test credentials": connects, signs in and opens the INBOX; says hello to SMTP and signs in. Stores nothing and sends nothing. */
+export const testImap = (body: TestImapMailboxInput) =>
+  apiFetch('/email/mailboxes/test-imap', {
+    method: 'POST',
+    body,
+    schema: mailConnectionTestResponseSchema,
+  });
+
+/** The same test with the credentials a connected IMAP mailbox already has (they never leave the server). */
+export const testMailbox = (id: string) =>
+  apiFetch(`/email/mailboxes/${id}/test`, {
+    method: 'POST',
+    schema: mailConnectionTestResponseSchema,
   });
 
 export const renameMailbox = (id: string, displayName: string, rowVersion: number) =>

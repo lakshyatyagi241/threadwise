@@ -120,7 +120,13 @@
       "limitDefault": "Valeur par défaut de la plateforme",
       "limitPerHour": "{count, plural, one {# e-mail par heure} other {# e-mails par heure}}",
       "limitSaved": "Limite d'envois enregistrée.",
-      "needsReauthImap": "Le serveur de messagerie a refusé le mot de passe enregistré. Reconnectez et saisissez à nouveau le mot de passe."
+      "needsReauthImap": "Le serveur de messagerie a refusé le mot de passe enregistré. Reconnectez et saisissez à nouveau le mot de passe.",
+      "test": "Tester la connexion",
+      "testing": "Test en cours",
+      "lag": "Retard",
+      "lagUnderMinute": "Moins d’une minute",
+      "lagMinutes": "{count, plural, one {# minute} other {# minutes}}",
+      "lagHours": "{count, plural, one {# heure} other {# heures}}"
     },
     "outcome": {
       "connected": "Boîte e-mail connectée. Les e-mails des 7 derniers jours sont en cours de récupération dans la boîte de réception.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Le serveur sortant (SMTP) a refusé le nom d'utilisateur ou le mot de passe. Vérifiez-les et réessayez.",
         "unreachable": "Impossible de joindre le serveur de messagerie ou son certificat n'est pas valide. Vérifiez le serveur, le port et la sécurité.",
         "generic": "Impossible de connecter la boîte. Réessayez."
+      },
+      "test": {
+        "button": "Tester les identifiants",
+        "testing": "Test en cours",
+        "imap": "Réception (IMAP)",
+        "smtp": "Envoi (SMTP)",
+        "ok": "Connexion réussie.",
+        "inbox": "Connexion réussie. La boîte de réception contient {count, plural, one {# message} other {# messages}}.",
+        "smtpOk": "Connexion réussie. Rien n’a été envoyé.",
+        "note": "Rien n’a été enregistré et aucun e-mail n’a été envoyé.",
+        "tooMany": "Trop de tests en peu de temps. Patientez une minute et réessayez.",
+        "failed": "Le test n’a pas pu être lancé. Réessayez.",
+        "reasons": {
+          "auth_failed": "Le serveur a refusé le nom d’utilisateur ou le mot de passe.",
+          "tls": "La connexion sécurisée n’a pas pu être vérifiée. Vérifiez le nom du serveur et le réglage de sécurité.",
+          "unreachable": "Le serveur est injoignable. Vérifiez le serveur, le port et le réglage de sécurité.",
+          "blocked_address": "Cette adresse de serveur n’est pas autorisée.",
+          "rejected": "Le serveur a refusé la demande.",
+          "unknown": "Le serveur n’a pas répondu comme prévu."
+        }
       }
     },
     "sharing": {

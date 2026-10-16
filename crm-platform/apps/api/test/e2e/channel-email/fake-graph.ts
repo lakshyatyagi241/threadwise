@@ -113,6 +113,21 @@ const graphError = (status: number, code: string, message = 'injected') => ({
   body: { error: { code, message } },
 });
 
+export interface FakeSubscription {
+  id: string;
+  account: string;
+  resource: string;
+  changeType: string;
+  notificationUrl: string;
+  lifecycleNotificationUrl: string;
+  clientState: string;
+  /** Epoch ms. */
+  expires: number;
+}
+
+/** Graph's longest subscription on mail, in minutes (learn.microsoft.com, subscription resource type: Outlook message 4230). */
+export const SUBSCRIPTION_MAX_MINUTES = 4230;
+
 export const MS_SCOPES = 'Mail.Read Mail.Send User.Read email openid profile';
 
 export class FakeGraph {
@@ -128,6 +143,14 @@ export class FakeGraph {
   boxes = new Map<string, Box>();
   sent: GraphSent[] = [];
   private failures: Failure[] = [];
+  /** Change-notification subscriptions, by id. */
+  subscriptions = new Map<string, FakeSubscription>();
+  /**
+   * What Graph does when it validates a notification URL: it POSTs `?validationToken=<token>` and wants the token back as text within 10 s.
+   * A test points this at the real API route; without one the validation fails (Graph cannot reach the address).
+   */
+  validator: ((url: string, token: string) => Promise<{ status: number; text: string }>) | null =
+    null;
   private uploads = new Map<
     string,
     { draft: string; email: string; name: string; mime: string; chunks: Buffer[] }
@@ -321,6 +344,10 @@ export class FakeGraph {
       failure.times -= 1;
       return json(res, failure.status, failure.body, failure.headers);
     }
+    if (/^\/v1\.0\/subscriptions(\/|$)/.test(url.pathname)) {
+      const sub = await this.subscriptionRoute(method, url.pathname, body, auth);
+      return json(res, sub.status, sub.body);
+    }
     const out = this.route(method, url, body, auth, raw, headers);
     if (out.bytes) {
       res.writeHead(out.status, { 'content-type': 'application/octet-stream' });
@@ -328,6 +355,120 @@ export class FakeGraph {
       return;
     }
     json(res, out.status, out.body);
+  }
+
+  // --- change notifications ----------------------------------------------------------------------------------------------------
+
+  /** `subscriptions`: create (with the validation handshake), renew (PATCH) and delete, the way the documentation describes them. */
+  private async subscriptionRoute(
+    method: string,
+    path: string,
+    body: Record<string, unknown>,
+    token: string | null,
+  ): Promise<{ status: number; body?: unknown }> {
+    const live = token ? this.accessTokens.get(token) : undefined;
+    if (!live?.valid) {
+      return graphError(
+        401,
+        'InvalidAuthenticationToken',
+        'Access token has expired or is not yet valid.',
+      );
+    }
+    const one = /^\/v1\.0\/subscriptions\/([^/]+)$/.exec(path);
+    const shape = (x: FakeSubscription) => ({
+      id: x.id,
+      resource: x.resource,
+      changeType: x.changeType,
+      notificationUrl: x.notificationUrl,
+      lifecycleNotificationUrl: x.lifecycleNotificationUrl,
+      clientState: x.clientState,
+      expirationDateTime: new Date(x.expires).toISOString(),
+    });
+    const checkExpiry = (value: unknown): number | null => {
+      const t = Date.parse(String(value ?? ''));
+      if (!Number.isFinite(t) || t <= Date.now()) return null;
+      return Math.min(t, Date.now() + SUBSCRIPTION_MAX_MINUTES * 60_000) === t ? t : null;
+    };
+    if (!one && method === 'POST') {
+      const notificationUrl = String(body.notificationUrl ?? '');
+      const expires = checkExpiry(body.expirationDateTime);
+      if (!notificationUrl || !body.resource || !body.clientState || expires === null) {
+        return graphError(400, 'ValidationError', 'The subscription request is not valid.');
+      }
+      if (String(body.clientState).length > 128) {
+        return graphError(400, 'ValidationError', 'clientState is longer than 128 characters.');
+      }
+      const token0 = `vt-${++this.seq}-${Math.random().toString(36).slice(2)}`;
+      const checked = this.validator
+        ? await this.validator(notificationUrl, token0).catch(() => null)
+        : null;
+      if (!checked || checked.status !== 200 || checked.text !== token0) {
+        return graphError(
+          400,
+          'ValidationError',
+          'Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.',
+        );
+      }
+      const sub: FakeSubscription = {
+        id: `sub-${++this.seq}`,
+        account: live.account.mail,
+        resource: String(body.resource),
+        changeType: String(body.changeType ?? 'created'),
+        notificationUrl,
+        lifecycleNotificationUrl: String(body.lifecycleNotificationUrl ?? ''),
+        clientState: String(body.clientState),
+        expires,
+      };
+      this.subscriptions.set(sub.id, sub);
+      return { status: 201, body: shape(sub) };
+    }
+    const sub = one ? this.subscriptions.get(decodeURIComponent(one[1]!)) : undefined;
+    if (one && (!sub || sub.account !== live.account.mail || sub.expires <= Date.now())) {
+      return graphError(404, 'ResourceNotFound', 'The object was not found.');
+    }
+    if (one && method === 'PATCH') {
+      const expires = checkExpiry(body.expirationDateTime);
+      if (expires === null)
+        return graphError(400, 'ValidationError', 'The expiration is not valid.');
+      sub!.expires = expires;
+      return { status: 200, body: shape(sub!) };
+    }
+    if (one && method === 'DELETE') {
+      this.subscriptions.delete(sub!.id);
+      return { status: 204 };
+    }
+    return graphError(404, 'ErrorItemNotFound');
+  }
+
+  subscriptionsOf(mail: string): FakeSubscription[] {
+    return [...this.subscriptions.values()].filter((x) => x.account === mail);
+  }
+
+  /** Graph drops a subscription (it lapsed): the next renewal answers 404. */
+  dropSubscription(id: string): void {
+    this.subscriptions.delete(id);
+  }
+
+  /** The body Graph posts for new mail on a subscription (the ids are mutable ids, as in Microsoft's notifications). */
+  notification(
+    sub: FakeSubscription,
+    extra: { lifecycleEvent?: string; clientState?: string; subscriptionId?: string } = {},
+  ): Record<string, unknown> {
+    return {
+      value: [
+        {
+          subscriptionId: extra.subscriptionId ?? sub.id,
+          subscriptionExpirationDateTime: new Date(sub.expires).toISOString(),
+          clientState: extra.clientState ?? sub.clientState,
+          resource: 'Users/oid/Messages/mutable-id',
+          resourceData: { '@odata.type': '#Microsoft.Graph.Message', id: 'mutable-id' },
+          ...(extra.lifecycleEvent
+            ? { lifecycleEvent: extra.lifecycleEvent }
+            : { changeType: sub.changeType }),
+          tenantId: 'tenant',
+        },
+      ],
+    };
   }
 
   private route(

@@ -39,7 +39,7 @@ Email mailboxes connects the addresses your customers write to, such as support@
 1. Open **Marketplace**, stay on the **Integrations** tab and open **Email**.
 2. Under **Add a mailbox**, choose how to connect. If personal mailboxes are on and you may connect one, first choose **Shared** or **Personal**.
    - **Connect Gmail** or **Connect Microsoft 365**: sign in with the account that owns the mailbox and allow reading and sending mail. Both are needed.
-   - **Connect IMAP / SMTP**: pick your mail provider from the list, or fill in the incoming (IMAP) and outgoing (SMTP) server, port, security, user name and password. Select **Use the same user name and password for sending** when both servers share the login, then select **Verify and connect**. We log in to both servers first, and if one refuses the message says which. The password is stored encrypted and never shown again.
+   - **Connect IMAP / SMTP**: pick your mail provider from the list, or fill in the incoming (IMAP) and outgoing (SMTP) server, port, security, user name and password. Select **Use the same user name and password for sending** when both servers share the login, then select **Verify and connect**. We log in to both servers first, and if one refuses the message says which. The password is stored encrypted and never shown again. Select **Test credentials** first to try both servers without saving anything: it shows, for the incoming and the outgoing server separately, either that the login works (with the number of messages in the INBOX) or why it does not. Nothing is saved and no email is sent.
 3. After the sign-in, you come back to the Email screen with a confirmation.
 4. The mailbox shows on the Email screen. The last 7 days of mail are fetched into the inbox without notifying anyone, and new mail is checked every minute after that.
 5. Open the mailbox in the inbox with **Open in inbox**, or pick it in the **Channel** filter of the inbox, where mailboxes are grouped under **Email**.
@@ -55,7 +55,9 @@ Email mailboxes connects the addresses your customers write to, such as support@
 - **Display name** is the name replies go out under. Select **Edit** on the mailbox, type the name and select **Save**.
 - Each mailbox card shows its provider, whether it is **Shared** or **Personal** (with the owner's name), **Live updates** when new mail arrives by push instead of waiting for the next check, and a **Signature** chip when the mailbox has a signature.
 - **Send limit per hour** is how many emails the mailbox may send in an hour. Select **Edit**, type a whole number from 1 to 10000, or leave it empty for the platform default.
+- **Behind by** shows how long ago the mailbox was last read, for example **Under a minute** or **5 minutes**. It turns orange past ten minutes, which means mail is waiting; select **Sync now**.
 - **Sync now** fetches new mail straight away instead of waiting for the next check.
+- **Test connection** (IMAP / SMTP mailboxes) tries the saved login on both servers and shows the result on the card, without changing anything. It also works on a mailbox that needs reconnecting, which tells you which server refused. You can run a few tests a minute.
 - **Reconnect** appears when a mailbox needs it. For Gmail and Microsoft 365, sign in with the same address (a different address is refused). For IMAP / SMTP, enter the password again.
 - **Remove** stops reading and sending for that mailbox after you confirm. Its conversations stay in the inbox as read-only history, and connecting the same address again picks them up.
 - The meter **x of N mailboxes** shows how many your plan allows. Personal mailboxes count too. At the limit, the connect buttons are switched off.
@@ -63,6 +65,7 @@ Email mailboxes connects the addresses your customers write to, such as support@
 - Someone else's personal mailbox shows only as a summary (address, provider, owner and status), with no actions, unless the policy lets admins read personal mailboxes.
 - Pictures from the internet inside an email are hidden. Select **Load images** under the message header to show them.
 - Automatic replies, bounces and mailing-list mail are kept and marked **Automated**.
+- On a **Shared** mailbox, each email you receive from a contact and each reply you send also appears on that contact's **Activity Timeline** as **Email received from ...** or **Email sent to ...**, with the subject and the first words, once per email. Automatic mail and bounce notices are left out, and so is everything on a **Personal** mailbox, so private mail never shows on a page other people can read. Only people who may see the contact see these lines.
 - **Signatures** (on the Email screen) are added at the end of replies. A mailbox can have a shared signature, and each agent can keep their own, which is used first. Write `{{name}}`, `{{title}}` and `{{phone}}` and they are filled in with the details of the person who sends. Agents change only their own signatures; changing a mailbox's shared signature needs the right to manage mailboxes.
 - An email takes up to 10 files, each up to 10 MB and 20 MB together. A file that is too big, too many, or a type email cannot carry is refused with the reason. Files you attach but do not send expire after a day.
 - Emails do not count against your message quota or wallet.
@@ -77,6 +80,9 @@ You need the permission to view mailboxes to open the screen, and the manage per
 - **The connect buttons are switched off and say you used all your mailboxes.** Remove a mailbox you no longer need, or ask an administrator to upgrade the plan.
 - **The status is Needs reconnect.** The provider revoked or expired the access, or the mail server refused the saved password. Select **Reconnect** and sign in with the same address, or for IMAP / SMTP enter the password again.
 - **IMAP / SMTP says the incoming or the outgoing server refused the login.** The message names which one. Check the user name and password; some providers need an app password. If it says the server cannot be reached, check the server name, port and security. The server certificate must be valid.
+- **Test credentials says the server refused the user name or password.** The line names the incoming or the outgoing server. Check the user name and password; some providers need an app password.
+- **Test credentials says the secure connection could not be verified.** The server certificate is not valid for that server name, or the security setting does not match the port. Check the server name and choose the security the provider documents.
+- **Test credentials says the server could not be reached, or the address is not allowed.** Check the server name and port. Addresses on a private network are refused for safety.
 - **I cannot choose Personal.** An administrator has to turn personal mailboxes on in Email sharing, and your role needs the personal mailbox permission.
 - **The status is Error.** The line below it shows the last problem. Select **Sync now**; if it keeps failing, reconnect the mailbox.
 - **Mail is missing from the inbox.** Spam, trash and drafts are skipped, and so is mail you sent yourself from Gmail. Check that the status is Connected and that the last synced time moves.

@@ -120,7 +120,13 @@
       "limitDefault": "Platform default",
       "limitPerHour": "{count, plural, one {# email per hour} other {# emails per hour}}",
       "limitSaved": "Send limit saved.",
-      "needsReauthImap": "The mail server refused the saved password. Reconnect and enter the password again."
+      "needsReauthImap": "The mail server refused the saved password. Reconnect and enter the password again.",
+      "test": "Test connection",
+      "testing": "Testing",
+      "lag": "Behind by",
+      "lagUnderMinute": "Under a minute",
+      "lagMinutes": "{count, plural, one {# minute} other {# minutes}}",
+      "lagHours": "{count, plural, one {# hour} other {# hours}}"
     },
     "outcome": {
       "connected": "Mailbox connected. Mail from the last 7 days is being fetched into the inbox.",
@@ -325,6 +331,26 @@
         "smtpAuth": "The outgoing server (SMTP) refused the user name or password. Check them and try again.",
         "unreachable": "Could not reach the mail server or its certificate is not valid. Check the server, port and security.",
         "generic": "Could not connect the mailbox. Try again."
+      },
+      "test": {
+        "button": "Test credentials",
+        "testing": "Testing",
+        "imap": "Incoming (IMAP)",
+        "smtp": "Outgoing (SMTP)",
+        "ok": "Signed in.",
+        "inbox": "Signed in. The INBOX holds {count, plural, one {# message} other {# messages}}.",
+        "smtpOk": "Signed in. Nothing was sent.",
+        "note": "Nothing was saved and no email was sent.",
+        "tooMany": "Too many tests in a short time. Wait a minute and try again.",
+        "failed": "The test could not be run. Try again.",
+        "reasons": {
+          "auth_failed": "The server refused the user name or password.",
+          "tls": "The secure connection could not be verified. Check the server name and the security setting.",
+          "unreachable": "The server could not be reached. Check the server, the port and the security setting.",
+          "blocked_address": "This server address is not allowed.",
+          "rejected": "The server refused the request.",
+          "unknown": "The server did not answer as expected."
+        }
       }
     },
     "sharing": {
