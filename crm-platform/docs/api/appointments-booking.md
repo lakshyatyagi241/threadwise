@@ -355,6 +355,7 @@ Every appointment event also carries `uuid`, `status`, `startsAt`, `endsAt`, `ti
   connected or the grant needs reconnecting; the events missed then are written later by the **back-fill** (below).
 - **Calendar back-fill consumer** (`appointment_calendar.connected | provider_selected`): queues the workspace's back-fill job (queue
   `calendar-backfill`, one workspace per job): see "Back-fill after a reconnect".
+- **iCal feed read** (every minute the scheduler claims the due feeds; queue `calendar-ics-refresh`, one feed per job): see "iCal calendars".
 
 ## Google Calendar (TW-APPT-012, 028, 029; D-08)
 
@@ -557,6 +558,78 @@ After `appointment_calendar.connected` (first connect, reconnect, another accoun
 - **Failure:** a calendar that cannot be asked (outage, throttling, a grant that just died) stops the pass and throws, so the queue retries with backoff (4 attempts, 60 s base); what was written stays written. One booking the calendar refuses as bad or forbidden is counted and the pass moves on; five refused in a row end the pass (the refusal is then the account's, not the booking's).
 - **Trail:** one audit row (`appointment_calendar_backfill`, record = the workspace) and one event `appointment_calendar.backfilled` (`provider`, `written`, `failed`, `moreWaiting`; counts only, never a name or a link) per pass that did something.
 - **By hand:** `POST /appointments/calendar/backfill` queues the same job; `GET /appointments/calendar/overview` reports `backfillPending`.
+
+## iCal calendars: a read-only busy source, and your bookings as a subscription (BL-035)
+
+Two directions, both through ICS (RFC 5545). Neither needs an OAuth client or the platform operator.
+
+### IN: other calendars as busy time
+
+A workspace subscribes to a calendar it cannot connect with a sign-in (Apple, Fastmail, a school or club timetable, a Google or Outlook calendar published as a secret address). The feed is **read-only and only ever contributes busy time**: no event of it is imported, shown to anyone,
+stored (beyond when the person is busy) or sent anywhere. The slot engine reads the stored intervals from the database in one indexed query, so a slot lookup never waits on someone else's server.
+
+| Route                                               | Capability                    | Notes                                                                                                                                                                                                                                                                                                                                           |
+| --------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /appointments/calendar/ics-feeds`              | `record.booking-types.read`   | `{ data: [{ id, name, host, isActive, blockAllDay, status, errorCode, lastFetchedAt, lastSuccessAt, calendarName, eventCount, busyCount, warnings, rowVersion, createdAt }] }`. **Never the address**: only its host                                                                                                                            |
+| `POST /appointments/calendar/ics-feeds`             | `record.booking-types.update` | _idempotent_; `{ name, url, blockAllDay? }`. The address (`https://`, `http://`, `webcal://`) is **read once before anything is saved**. `422 APPT_ICS_FEED_INVALID` (not an address we read; credentials in it), `422 APPT_ICS_FEED_UNREADABLE` (details `url` with the reason), `409 APPT_ICS_FEED_DUPLICATE`, `422 APPT_ICS_FEED_LIMIT` (10) |
+| `PATCH /appointments/calendar/ics-feeds/:id`        | `record.booking-types.update` | `{ name?, isActive?, blockAllDay?, rowVersion }` (`409 ROW_VERSION_CONFLICT`); resuming or changing the all-day rule reads the feed again at once                                                                                                                                                                                               |
+| `POST /appointments/calendar/ics-feeds/:id/refresh` | `record.booking-types.update` | reads now; a feed read within the last 30 seconds is left alone                                                                                                                                                                                                                                                                                 |
+| `DELETE /appointments/calendar/ics-feeds/:id`       | `record.booking-types.update` | 204; the slots it was closing are free again at once                                                                                                                                                                                                                                                                                            |
+
+The reason codes of an unreadable feed (`errorCode`, and the detail of `APPT_ICS_FEED_UNREADABLE`): `unreachable`, `timeout`, `not_found`, `forbidden`, `server_error`, `redirect_loop`, `not_a_calendar`, `too_large`, `blocked_address`.
+
+**The address is a secret.** Published-calendar addresses carry a token, so it is sealed with the credentials key (`url_enc`), never returned, never in an audit row, an outbox event or a log line (only the host and the reason code are). **The server is not a way into its own network:** every fetch goes through the shared guarded client, which
+refuses loopback, private, link-local and CGNAT destinations at the socket's own DNS lookup (no gap for DNS rebinding), caps the answer at 5 MB, and never follows a redirect by itself; the fetcher follows at most four by hand and checks each hop as a fresh request (iCloud's published calendars redirect to another host). `ICS_FEED_ALLOW_PRIVATE_ADDRESSES` exists for tests only and is off.
+
+**How a feed is read.** The worker's scheduler (every minute) claims the feeds that are due and queues one job each (queue `calendar-ics-refresh`, a Redis lock per feed); a healthy feed is read every 15 minutes with a conditional GET (`ETag`, `Last-Modified`), a failing one at 15 minutes doubling up to 6 hours, and the busy intervals of the last good read stay while it fails. A feed
+that has not been read successfully for **7 days** contributes nothing. The status, counts and tags of a read are monitoring columns: they do not bump `row_version`, so an admin editing a feed never gets a 409 because of a refresh.
+
+**What counts as busy** (`ics-feed-parser.ts`, pure and unit-tested): a VEVENT that is not `STATUS:CANCELLED` and not `TRANSP:TRANSPARENT`; all-day events block their whole local day unless the feed is set to ignore them; a point in time with no end blocks nothing. Recurring events are expanded for the window (today minus a day to 180 days ahead):
+`DAILY`, `WEEKLY`, `MONTHLY`, `YEARLY` with `INTERVAL`, `COUNT`, `UNTIL`, `BYDAY` (with ordinals), `BYMONTHDAY`, `BYMONTH`, `BYSETPOS`, `WKST`, plus `RDATE`, `EXDATE` and `RECURRENCE-ID` overrides; the expansion is done on the wall clock of the event's zone, so a 9:00 meeting stays at 9:00 across a daylight-saving change.
+Time zones: an IANA name as is, the Windows names Outlook writes mapped, floating times and unknown zones read in the feed's `X-WR-TIMEZONE` or the workspace's zone. **Anything it cannot interpret is counted, not guessed away:** an unknown zone (`warnings.unknownZone`), a rule it does not support (HOURLY, BYYEARDAY, BYWEEKNO ...: only the first occurrence is used, `warnings.unsupportedRule`), more than 5,000
+blocks (`warnings.truncated`); the settings card shows all three. A body that is not an iCalendar (an HTML sign-in page) is `not_a_calendar`, never read as "no events".
+
+**Limits, recorded.** A feed of the calendar that bookings are written to counts a multi-seat service's own events as busy (a feed has no way to mark them as ours) and a cancelled booking's slot stays blocked until the next read: do not subscribe to the booking calendar. Basic-auth feeds, CalDAV and two-way sync are not built (BL-194).
+
+Storage (migration `20261218090000`): `calendar_ics_feeds` (forced RLS, composite FK to the admin, unique per address, monitoring trigger), `calendar_ics_busy` (the stored intervals, replaced as a whole by each good read, cascade on delete). Audit module `calendar_ics_feed`; outbox `calendar_ics_feed.created | updated | deleted` (a uuid, never the address).
+
+### OUT: my bookings in my calendar app
+
+| Route                                         | Capability                                | Notes                                                                                                                                                                                                                                         |
+| --------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /appointments/calendar/bookings-feed`    | `record.appointments.read`                | `{ url, createdAt, lastUsedAt }` of the signed-in person's link (`url: null` until they make one)                                                                                                                                             |
+| `POST /appointments/calendar/bookings-feed`   | `record.appointments.read`                | makes the link, or replaces it with a new one (the old stops working at once); audit + outbox `appointment_feed.created \| rotated`                                                                                                           |
+| `DELETE /appointments/calendar/bookings-feed` | `record.appointments.read`                | 204; stops the feed; audit + outbox `appointment_feed.revoked`                                                                                                                                                                                |
+| `GET /public/appointments/feed/<token>.ics`   | none (the 43-character token in the path) | `text/calendar`. 404 for an unknown, revoked or malformed link (the same answer, no query for a malformed one). Throttled per IP and per link. `Cache-Control: private, max-age=300`, `X-Robots-Tag: noindex`, `Referrer-Policy: no-referrer` |
+
+The token is 256 random bits; only its SHA-256 is a lookup key and an encrypted copy lets the person copy the link again. **What the feed shows is decided when it is read**, from the person's CURRENT record scope over appointments (own, team or all) and their current status: a person who loses the capability or is deactivated sees an empty feed (or none), with the same link.
+Pending and confirmed bookings from 30 days ago to 180 days ahead, at most 2,000, each with the booking's title, time, place and status (`TENTATIVE` for a pending one) and **nothing else**: no phone, e-mail, notes, answers or manage link, because calendar apps cache the feed on their own servers. The token never appears in an audit row, an event or a log line.
+
+## Tools for agents and chatbots (BL-035): the contract, not yet bound
+
+An AI agent or a chatbot that can be given tools books the way a person does: see what is offered, pick a time, confirm, change it later. **The contract is written** (`packages/contracts/src/appointments/booking-tools.ts`: four tool definitions with JSON Schema and Zod arguments and results, a `parseBookingToolCall` that validates what a model sent, the stable refusal codes, and the rules below), and **nothing is bound to it yet**, because the customer-facing AI has nothing to bind it to:
+
+- **AI Agent Studio** (`ai-agents-training`) stores assistants and their training sources and the chat widget (`chatbot-widget`, `WidgetAiReplyService`) answers with `AiChatPort.complete`: **one prompt, one text answer**, no tool definitions, no tool-call loop.
+- **The flow runtime** has no tool registry. Its Book appointment node (below, "For the flow-runtime domain") already books through chat with fixed steps, and its AI step is a single completion.
+- The only tool-calling loop in the repository is the **staff** AI CRM Copilot (`ai-copilot-lead-finder`: `AiCrmProviderPort.runTurn`, `AiCrmToolkitService`, confirm-before-act for writes). It acts as the signed-in staff member, not as a customer's assistant, belongs to another domain's zone, and is a different audience; adding appointment tools there is a follow-up (BL-193), not part of this change.
+
+Building a tool-calling loop for the customer-facing AI is a design of its own (provider support for tools, the confirmation turn, metering, safety review), so it was not started here.
+
+| Tool                     | Kind  | Maps to (the existing service)                                                                                                 |
+| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `list_services`          | read  | `BookingOffersService.offer(orgId)`: the active types, their questions, what is due to book, and the plan gate                 |
+| `check_availability`     | read  | `BookingOffersService.days` / `.times`, or the slot engine over a date window: at most 9 times, soonest first, at most 14 days |
+| `book_appointment`       | write | `BookingOffersService.reserve` then `.book(orgId, input)`: actor `bot`, source `chat`, the same engine and guards              |
+| `reschedule_appointment` | write | the customer's own move (`PublicBookingService.reschedule` rules): an offered slot, not started, pending or confirmed          |
+
+**Rules a binding must keep** (they are in the contract's header, and `parseBookingToolCall` enforces the checkable ones):
+
+1. **One booking path.** The tools call the services above; there is no second way to book. The double-booking guarantee, the plan cap, `maxPerDay`, buffers and the calendar's busy time (every connected calendar and iCal feed) apply exactly as for a person.
+2. **A write needs the customer's explicit yes** in the conversation (`confirmed: true`). The binding stops at the call, shows the service, the time in the customer's zone and any amount due, and runs only after a clear confirmation turn. `parseBookingToolCall` refuses a write with `confirmed` not true as `not_confirmed`.
+3. **Identity comes from the conversation, never from the model.** A reschedule takes no phone, e-mail or contact id: the appointment must belong to the conversation's contact, else `not_found` (never `forbidden`: no oracle for other people's bookings). A booking made through the tool is attached to the conversation's contact; a name, phone or e-mail is accepted only for a visitor with no contact yet, through the same find-or-create the booking page uses.
+4. **Consent and privacy.** Booking records no marketing consent and grants none. The confirmation and reminder messages it triggers are **utility** messages (the ConsentGate does not hold them). Results carry no phone, e-mail, notes or answers of anyone; the manage link is returned only for the same customer, in the same thread. The schemas drop anything beyond the contract.
+5. **Idempotent and bounded.** A write carries an idempotency key (`<conversation id>:<tool call id>`), so a retried call books once; a conversation may do at most 3 booking writes; `check_availability` returns at most 9 times.
+6. **Refusals are results.** `{ ok: false, code, message }` with the codes `unavailable`, `unknown_service`, `slot_unavailable`, `slot_taken`, `answers_invalid`, `not_found`, `not_changeable`, `too_many_writes`, `not_confirmed`, so the model can say something true instead of the turn failing.
 
 ## Ports (what other domains plug in)
 

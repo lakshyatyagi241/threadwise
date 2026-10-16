@@ -1019,3 +1019,14 @@ local day. Staff may book with `ignoreAvailability`, which skips the grid, notic
 | Real WhatsApp / email delivery of booking messages                                                   | channel domains replace the stub `AppointmentMessenger`                                                                                                                                              |
 | Org-wide holidays, staff calendars, cross-type conflicts, reservations over HTTP, recurring bookings | not in Reference; reservations are a service method for the chat flow                                                                                                                                |
 | Web screens                                                                                          | the web agent builds them against the contracts                                                                                                                                                      |
+
+### More calendars, iCal and back-fill (BL-035)
+
+Added after the first port, at the owner's request (see [parity/product-extensions.md](../parity/product-extensions.md), "Appointments: Outlook / Microsoft 365, iCal calendars, back-fill and booking tools"; wiring: [wiring/appointments-booking.md](../wiring/appointments-booking.md)). Reference has Google Calendar only.
+
+- **The calendar port has several providers.** `APPOINTMENT_CALENDAR` is `MultiCalendarAdapter` over `GoogleCalendarAdapter` and `MicrosoftCalendarAdapter` (plus the iCal feeds as a busy source). Busy time is the union of every source; an event is written to exactly one provider (`CalendarProviders.writeProvider`: the admin's choice, else Google when usable, else Microsoft). `appointments.calendar_provider` records which provider holds an event (empty with an event id means Google).
+- **Outlook is connected like Google, with a two-step confirmation that parks no token** (Microsoft cannot withdraw one). Migration `20261217090000_appt_microsoft_calendar.sql`: `appointment_microsoft_connections`, `appointment_calendar_preferences`, `appointments.calendar_provider`.
+- **A reconnect now back-fills** (it did not, in the first Google build): queue `calendar-backfill`, confirmed bookings that have not ended within 90 days, idempotent, 200 per pass.
+- **iCal feeds** (migration `20261218090000_appt_ics_feeds.sql`): read-only busy time from a sealed address, read every 15 minutes by the worker; a person's own bookings as a subscribable feed behind a private link.
+- **Booking tools for agents and chatbots**: the contract only (`booking-tools.ts`); no binding, because the customer-facing AI has no tool-calling loop (BL-193).
+- Not built: Outlook drift (BL-192), Basic-auth/CalDAV/two-way iCal (BL-194).
