@@ -1666,5 +1666,160 @@
         "desk": "服务台"
       }
     }
+  },
+  "notifications": {
+    "title": "通知",
+    "markAll": "全部标为已读",
+    "dismiss": "忽略此通知",
+    "unread": "未读",
+    "empty": "暂无通知",
+    "emptyHint": "新的聊天、分配、提及以及你的发送结果将显示在这里。",
+    "emptyFiltered": "没有符合筛选条件的通知",
+    "emptyFilteredHint": "请移除某个筛选条件或搜索其他内容。",
+    "bell": {
+      "label": "通知",
+      "labelUnread_other": "通知,{{count}} 条未读"
+    },
+    "filter": {
+      "label": "显示",
+      "all": "全部",
+      "unread": "未读"
+    },
+    "sections": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "thisWeek": "本周早些时候",
+      "older": "更早"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "任务已分配给你",
+        "body": "{{actor}} 为你分配了任务:{{task}}"
+      },
+      "task_due": {
+        "title": "任务到期"
+      },
+      "task_completed": {
+        "title": "任务已完成",
+        "body": "{{actor}} 已完成:{{task}}"
+      },
+      "new_lead": {
+        "title": "新线索",
+        "titleReturning": "线索再次到达",
+        "body": "{{name}} 来自 {{platform}}",
+        "bodyReturning": "{{name}} 从 {{platform}} 再次发来线索",
+        "bodyNoActor": "{{name}} 已到达"
+      },
+      "new_chat": {
+        "title": "来自 {{name}} 的新聊天",
+        "titleNoName": "新聊天"
+      },
+      "new_message": {
+        "title_other": "来自 {{name}} 的 {{count}} 条新消息",
+        "titleNoName_other": "{{count}} 条新消息"
+      },
+      "chat_waiting": {
+        "title": "尚无人回复 {{name}}",
+        "titleNoName": "有一个聊天仍在等待回复"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} 已分配给你",
+        "titleNoName": "有一个聊天已分配给你",
+        "titleTeam": "{{name}} 已分配给你的团队",
+        "titleTeamNoName": "有一个聊天已分配给你的团队",
+        "body": "由 {{actor}} 分配"
+      },
+      "mention": {
+        "title": "{{actor}} 提到了你",
+        "titleNoName": "你在备注中被提及",
+        "body": "{{name}}:{{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} 已连接",
+        "titleNoName": "你的 WhatsApp 号码已连接"
+      },
+      "device_disconnected": {
+        "title": "{{name}} 已断开连接",
+        "titleNoName": "一个 WhatsApp 号码已断开连接",
+        "body": "请打开设备以重新连接。"
+      },
+      "device_logged_out": {
+        "title": "{{name}} 已退出登录",
+        "titleNoName": "一个 WhatsApp 号码已退出登录",
+        "body": "请重新扫描二维码以重新连接。"
+      },
+      "broadcast_completed": {
+        "title": "群发“{{name}}”已完成",
+        "titleNoName": "一次群发已完成",
+        "bodySent_other": "已发送 {{count}} 条消息",
+        "bodySentFailed_other": "已发送 {{count}} 条消息,{{failed}} 条失败"
+      },
+      "broadcast_failed": {
+        "title": "群发“{{name}}”失败",
+        "titleNoName": "一次群发失败",
+        "bodyNoReason": "打开以查看问题所在。"
+      },
+      "campaign_completed": {
+        "title": "营销活动“{{name}}”已完成",
+        "titleNoName": "一个营销活动已完成",
+        "bodySent_other": "已发送 {{count}} 条消息",
+        "bodySentFailed_other": "已发送 {{count}} 条消息,{{failed}} 条失败"
+      },
+      "campaign_failed": {
+        "title": "营销活动“{{name}}”失败",
+        "titleNoName": "一个营销活动失败",
+        "bodyNoReason": "打开以查看问题所在。"
+      },
+      "scheduled_completed": {
+        "title": "定时发送“{{name}}”已发出",
+        "titleNoName": "一条定时发送已发出",
+        "bodySent_other": "已发送 {{count}} 条消息",
+        "bodySentFailed_other": "已发送 {{count}} 条消息,{{failed}} 条失败"
+      },
+      "scheduled_failed": {
+        "title": "定时发送“{{name}}”失败",
+        "titleNoName": "一条定时发送失败",
+        "bodyNoReason": "打开以查看问题所在。"
+      },
+      "teamchat_mention": {
+        "title": "{{author}} 在 {{channel}} 中提到了你",
+        "titleNoChannel": "{{author}} 在团队聊天中提到了你",
+        "titleNoName": "你在团队聊天中被提及"
+      },
+      "teamchat_message": {
+        "title_other": "来自 {{author}} 的 {{count}} 条新消息",
+        "titleNoName_other": "{{count}} 条新私信"
+      },
+      "waba_group_join_request": {
+        "title_other": "{{count}} 人想加入 {{name}}",
+        "titleNoName_other": "{{count}} 人想加入 WhatsApp 群组",
+        "body": "打开群组以批准或拒绝。"
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} 已被暂停",
+        "titleNoName": "一个 WhatsApp 群组已被暂停",
+        "body": "WhatsApp 已暂停此群组。在其恢复之前，你无法向该群组发送消息。"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} 已恢复正常",
+        "titleNoName": "一个 WhatsApp 群组已恢复正常",
+        "body": "WhatsApp 已恢复此群组。你可以再次向其发送消息。"
+      },
+      "device_group_join_request": {
+        "title_other": "有 {{count}} 人想加入 {{name}}",
+        "titleNoName_other": "有 {{count}} 人想加入 WhatsApp 群组",
+        "body": "请打开群组进行批准或拒绝。"
+      },
+      "device_group_removed": {
+        "title": "您的号码已被移出 {{name}}",
+        "titleNoName": "您的号码已被移出 WhatsApp 群组",
+        "body": "有人将您的个人号码移出了此群组。群组以只读方式保留在此处。"
+      },
+      "test": {
+        "title": "测试通知",
+        "titleNoName": "测试通知",
+        "bodyNoActor": "如果你能看到这条消息，说明实时通知正常工作。"
+      }
+    }
   }
 }

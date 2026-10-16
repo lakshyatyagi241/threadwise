@@ -1666,5 +1666,160 @@
         "desk": "Desk"
       }
     }
+  },
+  "notifications": {
+    "title": "Notifikasi",
+    "markAll": "Tandai semua dibaca",
+    "dismiss": "Abaikan notifikasi ini",
+    "unread": "Belum dibaca",
+    "empty": "Belum ada notifikasi",
+    "emptyHint": "Chat baru, penugasan, sebutan, dan hasil pengiriman Anda akan muncul di sini.",
+    "emptyFiltered": "Tidak ada notifikasi yang cocok dengan filter ini",
+    "emptyFilteredHint": "Hapus filter atau cari hal lain.",
+    "bell": {
+      "label": "Notifikasi",
+      "labelUnread_other": "Notifikasi, {{count}} belum dibaca"
+    },
+    "filter": {
+      "label": "Tampilkan",
+      "all": "Semua",
+      "unread": "Belum dibaca"
+    },
+    "sections": {
+      "today": "Hari ini",
+      "yesterday": "Kemarin",
+      "thisWeek": "Awal minggu ini",
+      "older": "Lebih lama"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Tugas ditugaskan kepada Anda",
+        "body": "{{actor}} menugaskan Anda: {{task}}"
+      },
+      "task_due": {
+        "title": "Tugas jatuh tempo"
+      },
+      "task_completed": {
+        "title": "Tugas selesai",
+        "body": "{{actor}} menyelesaikan: {{task}}"
+      },
+      "new_lead": {
+        "title": "Prospek baru",
+        "titleReturning": "Prospek masuk lagi",
+        "body": "{{name}} masuk dari {{platform}}",
+        "bodyReturning": "{{name}} mengirim prospek lain dari {{platform}}",
+        "bodyNoActor": "{{name}} masuk"
+      },
+      "new_chat": {
+        "title": "Chat baru dari {{name}}",
+        "titleNoName": "Chat baru"
+      },
+      "new_message": {
+        "title_other": "{{count}} pesan baru dari {{name}}",
+        "titleNoName_other": "{{count}} pesan baru"
+      },
+      "chat_waiting": {
+        "title": "Belum ada yang membalas {{name}}",
+        "titleNoName": "Sebuah chat masih menunggu balasan"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} ditugaskan kepada Anda",
+        "titleNoName": "Sebuah chat ditugaskan kepada Anda",
+        "titleTeam": "{{name}} ditugaskan kepada tim Anda",
+        "titleTeamNoName": "Sebuah chat ditugaskan kepada tim Anda",
+        "body": "Ditugaskan oleh {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} menyebut Anda",
+        "titleNoName": "Anda disebut dalam catatan",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} terhubung",
+        "titleNoName": "Nomor WhatsApp Anda terhubung"
+      },
+      "device_disconnected": {
+        "title": "{{name}} terputus",
+        "titleNoName": "Sebuah nomor WhatsApp terputus",
+        "body": "Buka perangkat untuk menghubungkan ulang."
+      },
+      "device_logged_out": {
+        "title": "{{name}} keluar",
+        "titleNoName": "Sebuah nomor WhatsApp keluar",
+        "body": "Pindai kode QR lagi untuk menghubungkan ulang."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast “{{name}}” selesai",
+        "titleNoName": "Sebuah broadcast selesai",
+        "bodySent_other": "{{count}} pesan terkirim",
+        "bodySentFailed_other": "{{count}} pesan terkirim, {{failed}} gagal"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast “{{name}}” gagal",
+        "titleNoName": "Sebuah broadcast gagal",
+        "bodyNoReason": "Buka untuk melihat apa yang salah."
+      },
+      "campaign_completed": {
+        "title": "Kampanye “{{name}}” selesai",
+        "titleNoName": "Sebuah kampanye selesai",
+        "bodySent_other": "{{count}} pesan terkirim",
+        "bodySentFailed_other": "{{count}} pesan terkirim, {{failed}} gagal"
+      },
+      "campaign_failed": {
+        "title": "Kampanye “{{name}}” gagal",
+        "titleNoName": "Sebuah kampanye gagal",
+        "bodyNoReason": "Buka untuk melihat apa yang salah."
+      },
+      "scheduled_completed": {
+        "title": "Pengiriman terjadwal “{{name}}” terkirim",
+        "titleNoName": "Sebuah pengiriman terjadwal terkirim",
+        "bodySent_other": "{{count}} pesan terkirim",
+        "bodySentFailed_other": "{{count}} pesan terkirim, {{failed}} gagal"
+      },
+      "scheduled_failed": {
+        "title": "Pengiriman terjadwal “{{name}}” gagal",
+        "titleNoName": "Sebuah pengiriman terjadwal gagal",
+        "bodyNoReason": "Buka untuk melihat apa yang salah."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} menyebut Anda di {{channel}}",
+        "titleNoChannel": "{{author}} menyebut Anda di Team chat",
+        "titleNoName": "Anda disebut di Team chat"
+      },
+      "teamchat_message": {
+        "title_other": "{{count}} pesan baru dari {{author}}",
+        "titleNoName_other": "{{count}} pesan langsung baru"
+      },
+      "waba_group_join_request": {
+        "title_other": "Ada {{count}} orang ingin bergabung ke {{name}}",
+        "titleNoName_other": "Ada {{count}} orang ingin bergabung ke grup WhatsApp",
+        "body": "Buka Grup untuk menyetujui atau menolak."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} ditangguhkan",
+        "titleNoName": "Sebuah grup WhatsApp ditangguhkan",
+        "body": "WhatsApp menangguhkan grup ini. Anda tidak dapat mengirim pesan ke grup sampai dipulihkan."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} aktif kembali",
+        "titleNoName": "Sebuah grup WhatsApp aktif kembali",
+        "body": "WhatsApp memulihkan grup ini. Anda dapat mengirim pesan lagi."
+      },
+      "device_group_join_request": {
+        "title_other": "{{count}} orang ingin bergabung ke {{name}}",
+        "titleNoName_other": "{{count}} orang ingin bergabung ke grup WhatsApp",
+        "body": "Buka Grup untuk menyetujui atau menolak."
+      },
+      "device_group_removed": {
+        "title": "Nomor Anda dikeluarkan dari {{name}}",
+        "titleNoName": "Nomor Anda dikeluarkan dari grup WhatsApp",
+        "body": "Seseorang mengeluarkan nomor pribadi Anda dari grup ini. Grup disimpan di sini, hanya bisa dibaca."
+      },
+      "test": {
+        "title": "Notifikasi uji",
+        "titleNoName": "Notifikasi uji",
+        "bodyNoActor": "Jika Anda bisa membaca ini, notifikasi langsung berfungsi."
+      }
+    }
   }
 }

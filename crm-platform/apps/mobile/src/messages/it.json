@@ -1702,5 +1702,190 @@
         "desk": "Assistenza"
       }
     }
+  },
+  "notifications": {
+    "title": "Notifiche",
+    "markAll": "Segna tutto come letto",
+    "dismiss": "Ignora questa notifica",
+    "unread": "Non lette",
+    "empty": "Ancora nessuna notifica",
+    "emptyHint": "Nuove chat, assegnazioni, menzioni ed esiti dei tuoi invii compariranno qui.",
+    "emptyFiltered": "Nessuna notifica corrisponde a questi filtri",
+    "emptyFilteredHint": "Rimuovi un filtro o cerca qualcos'altro.",
+    "bell": {
+      "label": "Notifiche",
+      "labelUnread_many": "Notifiche, {{count}} non lette",
+      "labelUnread_one": "Notifiche, {{count}} non lette",
+      "labelUnread_other": "Notifiche, {{count}} non lette"
+    },
+    "filter": {
+      "label": "Mostra",
+      "all": "Tutte",
+      "unread": "Non lette"
+    },
+    "sections": {
+      "today": "Oggi",
+      "yesterday": "Ieri",
+      "thisWeek": "Prima in questa settimana",
+      "older": "Più vecchie"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Attività assegnata a te",
+        "body": "{{actor}} ti ha assegnato: {{task}}"
+      },
+      "task_due": {
+        "title": "Attività in scadenza"
+      },
+      "task_completed": {
+        "title": "Attività completata",
+        "body": "{{actor}} ha completato: {{task}}"
+      },
+      "new_lead": {
+        "title": "Nuovo lead",
+        "titleReturning": "Il lead è arrivato di nuovo",
+        "body": "{{name}} è arrivato da {{platform}}",
+        "bodyReturning": "{{name}} ha inviato un altro lead da {{platform}}",
+        "bodyNoActor": "{{name}} è arrivato"
+      },
+      "new_chat": {
+        "title": "Nuova chat da {{name}}",
+        "titleNoName": "Nuova chat"
+      },
+      "new_message": {
+        "title_many": "{{count}} nuovi messaggi da {{name}}",
+        "title_one": "Nuovo messaggio da {{name}}",
+        "title_other": "{{count}} nuovi messaggi da {{name}}",
+        "titleNoName_many": "{{count}} nuovi messaggi",
+        "titleNoName_one": "Nuovo messaggio",
+        "titleNoName_other": "{{count}} nuovi messaggi"
+      },
+      "chat_waiting": {
+        "title": "Nessuno ha ancora risposto a {{name}}",
+        "titleNoName": "Una chat è ancora in attesa di risposta"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} ti è stata assegnata",
+        "titleNoName": "Una chat ti è stata assegnata",
+        "titleTeam": "{{name}} è stata assegnata al tuo team",
+        "titleTeamNoName": "Una chat è stata assegnata al tuo team",
+        "body": "Assegnata da {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} ti ha menzionato",
+        "titleNoName": "Sei stato menzionato in una nota",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} è connesso",
+        "titleNoName": "Il tuo numero WhatsApp è connesso"
+      },
+      "device_disconnected": {
+        "title": "{{name}} disconnesso",
+        "titleNoName": "Un numero WhatsApp si è disconnesso",
+        "body": "Apri il dispositivo per ricollegarlo."
+      },
+      "device_logged_out": {
+        "title": "{{name}} è stato disconnesso",
+        "titleNoName": "Un numero WhatsApp è stato disconnesso dalla sessione",
+        "body": "Scansiona di nuovo il codice QR per ricollegarlo."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast «{{name}}» completato",
+        "titleNoName": "Un broadcast è stato completato",
+        "bodySent_many": "{{count}} messaggi inviati",
+        "bodySent_one": "{{count}} messaggio inviato",
+        "bodySent_other": "{{count}} messaggi inviati",
+        "bodySentFailed_many": "{{count}} messaggi inviati, {{failed}} non riusciti",
+        "bodySentFailed_one": "{{count}} messaggio inviato, {{failed}} non riusciti",
+        "bodySentFailed_other": "{{count}} messaggi inviati, {{failed}} non riusciti"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast «{{name}}» non riuscito",
+        "titleNoName": "Un broadcast non è riuscito",
+        "bodyNoReason": "Aprilo per vedere cosa è andato storto."
+      },
+      "campaign_completed": {
+        "title": "Campagna «{{name}}» completata",
+        "titleNoName": "Una campagna è stata completata",
+        "bodySent_many": "{{count}} messaggi inviati",
+        "bodySent_one": "{{count}} messaggio inviato",
+        "bodySent_other": "{{count}} messaggi inviati",
+        "bodySentFailed_many": "{{count}} messaggi inviati, {{failed}} non riusciti",
+        "bodySentFailed_one": "{{count}} messaggio inviato, {{failed}} non riusciti",
+        "bodySentFailed_other": "{{count}} messaggi inviati, {{failed}} non riusciti"
+      },
+      "campaign_failed": {
+        "title": "Campagna «{{name}}» non riuscita",
+        "titleNoName": "Una campagna non è riuscita",
+        "bodyNoReason": "Aprila per vedere cosa è andato storto."
+      },
+      "scheduled_completed": {
+        "title": "Invio programmato «{{name}}» inviato",
+        "titleNoName": "Un invio programmato è stato inviato",
+        "bodySent_many": "{{count}} messaggi inviati",
+        "bodySent_one": "{{count}} messaggio inviato",
+        "bodySent_other": "{{count}} messaggi inviati",
+        "bodySentFailed_many": "{{count}} messaggi inviati, {{failed}} non riusciti",
+        "bodySentFailed_one": "{{count}} messaggio inviato, {{failed}} non riusciti",
+        "bodySentFailed_other": "{{count}} messaggi inviati, {{failed}} non riusciti"
+      },
+      "scheduled_failed": {
+        "title": "Invio programmato «{{name}}» non riuscito",
+        "titleNoName": "Un invio programmato non è riuscito",
+        "bodyNoReason": "Aprilo per vedere cosa è andato storto."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} ti ha menzionato in {{channel}}",
+        "titleNoChannel": "{{author}} ti ha menzionato in Team chat",
+        "titleNoName": "Sei stato menzionato in Team chat"
+      },
+      "teamchat_message": {
+        "title_many": "{{count}} nuovi messaggi da {{author}}",
+        "title_one": "Nuovo messaggio da {{author}}",
+        "title_other": "{{count}} nuovi messaggi da {{author}}",
+        "titleNoName_many": "{{count}} nuovi messaggi diretti",
+        "titleNoName_one": "Nuovo messaggio diretto",
+        "titleNoName_other": "{{count}} nuovi messaggi diretti"
+      },
+      "waba_group_join_request": {
+        "title_many": "{{count}} persone vogliono entrare in {{name}}",
+        "title_one": "Una persona vuole entrare in {{name}}",
+        "title_other": "{{count}} persone vogliono entrare in {{name}}",
+        "titleNoName_many": "{{count}} persone vogliono entrare in un gruppo WhatsApp",
+        "titleNoName_one": "Una persona vuole entrare in un gruppo WhatsApp",
+        "titleNoName_other": "{{count}} persone vogliono entrare in un gruppo WhatsApp",
+        "body": "Apri Gruppi per approvare o rifiutare."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} è stato sospeso",
+        "titleNoName": "Un gruppo WhatsApp è stato sospeso",
+        "body": "WhatsApp ha sospeso questo gruppo. Non puoi inviare messaggi finché non viene ripristinato."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} è di nuovo attivo",
+        "titleNoName": "Un gruppo WhatsApp è di nuovo attivo",
+        "body": "WhatsApp ha ripristinato questo gruppo. Puoi di nuovo inviarvi messaggi."
+      },
+      "device_group_join_request": {
+        "title_many": "{{count}} persone vogliono entrare in {{name}}",
+        "title_one": "Qualcuno vuole entrare in {{name}}",
+        "title_other": "{{count}} persone vogliono entrare in {{name}}",
+        "titleNoName_many": "{{count}} persone vogliono entrare in un gruppo WhatsApp",
+        "titleNoName_one": "Qualcuno vuole entrare in un gruppo WhatsApp",
+        "titleNoName_other": "{{count}} persone vogliono entrare in un gruppo WhatsApp",
+        "body": "Apri Gruppi per approvare o rifiutare."
+      },
+      "device_group_removed": {
+        "title": "Il tuo numero è stato rimosso da {{name}}",
+        "titleNoName": "Il tuo numero è stato rimosso da un gruppo WhatsApp",
+        "body": "Qualcuno ha rimosso il tuo numero personale da questo gruppo. Il gruppo resta qui, in sola lettura."
+      },
+      "test": {
+        "title": "Notifica di prova",
+        "titleNoName": "Notifica di prova",
+        "bodyNoActor": "Se riesci a leggere questo, le notifiche in tempo reale funzionano."
+      }
+    }
   }
 }

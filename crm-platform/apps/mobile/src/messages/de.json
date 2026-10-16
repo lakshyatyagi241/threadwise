@@ -1684,5 +1684,175 @@
         "desk": "Support"
       }
     }
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "markAll": "Alle als gelesen markieren",
+    "dismiss": "Diese Benachrichtigung ausblenden",
+    "unread": "Ungelesen",
+    "empty": "Noch keine Benachrichtigungen",
+    "emptyHint": "Neue Chats, Zuweisungen, Erwähnungen und Ergebnisse Ihrer Sendungen erscheinen hier.",
+    "emptyFiltered": "Keine Benachrichtigungen entsprechen diesen Filtern",
+    "emptyFilteredHint": "Entfernen Sie einen Filter oder suchen Sie nach etwas anderem.",
+    "bell": {
+      "label": "Benachrichtigungen",
+      "labelUnread_one": "Benachrichtigungen, {{count}} ungelesen",
+      "labelUnread_other": "Benachrichtigungen, {{count}} ungelesen"
+    },
+    "filter": {
+      "label": "Anzeigen",
+      "all": "Alle",
+      "unread": "Ungelesen"
+    },
+    "sections": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "thisWeek": "Früher diese Woche",
+      "older": "Älter"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Aufgabe Ihnen zugewiesen",
+        "body": "{{actor}} hat Ihnen zugewiesen: {{task}}"
+      },
+      "task_due": {
+        "title": "Aufgabe fällig"
+      },
+      "task_completed": {
+        "title": "Aufgabe erledigt",
+        "body": "{{actor}} hat erledigt: {{task}}"
+      },
+      "new_lead": {
+        "title": "Neuer Lead",
+        "titleReturning": "Lead ist erneut eingegangen",
+        "body": "{{name}} ist über {{platform}} eingegangen",
+        "bodyReturning": "{{name}} hat über {{platform}} einen weiteren Lead gesendet",
+        "bodyNoActor": "{{name}} ist eingegangen"
+      },
+      "new_chat": {
+        "title": "Neuer Chat von {{name}}",
+        "titleNoName": "Neuer Chat"
+      },
+      "new_message": {
+        "title_one": "Neue Nachricht von {{name}}",
+        "title_other": "{{count}} neue Nachrichten von {{name}}",
+        "titleNoName_one": "Neue Nachricht",
+        "titleNoName_other": "{{count}} neue Nachrichten"
+      },
+      "chat_waiting": {
+        "title": "{{name}} wurde noch niemand geantwortet",
+        "titleNoName": "Ein Chat wartet noch auf eine Antwort"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} wurde Ihnen zugewiesen",
+        "titleNoName": "Ein Chat wurde Ihnen zugewiesen",
+        "titleTeam": "{{name}} wurde Ihrem Team zugewiesen",
+        "titleTeamNoName": "Ein Chat wurde Ihrem Team zugewiesen",
+        "body": "Zugewiesen von {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} hat Sie erwähnt",
+        "titleNoName": "Sie wurden in einer Notiz erwähnt",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} ist verbunden",
+        "titleNoName": "Ihre WhatsApp-Nummer ist verbunden"
+      },
+      "device_disconnected": {
+        "title": "{{name}} getrennt",
+        "titleNoName": "Eine WhatsApp-Nummer wurde getrennt",
+        "body": "Öffnen Sie das Gerät, um die Verbindung wiederherzustellen."
+      },
+      "device_logged_out": {
+        "title": "{{name}} wurde abgemeldet",
+        "titleNoName": "Eine WhatsApp-Nummer wurde abgemeldet",
+        "body": "Scannen Sie den QR-Code erneut, um die Verbindung wiederherzustellen."
+      },
+      "broadcast_completed": {
+        "title": "Broadcast „{{name}}“ abgeschlossen",
+        "titleNoName": "Ein Broadcast wurde abgeschlossen",
+        "bodySent_one": "{{count}} Nachricht gesendet",
+        "bodySent_other": "{{count}} Nachrichten gesendet",
+        "bodySentFailed_one": "{{count}} Nachricht gesendet, {{failed}} fehlgeschlagen",
+        "bodySentFailed_other": "{{count}} Nachrichten gesendet, {{failed}} fehlgeschlagen"
+      },
+      "broadcast_failed": {
+        "title": "Broadcast „{{name}}“ fehlgeschlagen",
+        "titleNoName": "Ein Broadcast ist fehlgeschlagen",
+        "bodyNoReason": "Öffnen Sie ihn, um zu sehen, was schiefgelaufen ist."
+      },
+      "campaign_completed": {
+        "title": "Kampagne „{{name}}“ abgeschlossen",
+        "titleNoName": "Eine Kampagne wurde abgeschlossen",
+        "bodySent_one": "{{count}} Nachricht gesendet",
+        "bodySent_other": "{{count}} Nachrichten gesendet",
+        "bodySentFailed_one": "{{count}} Nachricht gesendet, {{failed}} fehlgeschlagen",
+        "bodySentFailed_other": "{{count}} Nachrichten gesendet, {{failed}} fehlgeschlagen"
+      },
+      "campaign_failed": {
+        "title": "Kampagne „{{name}}“ fehlgeschlagen",
+        "titleNoName": "Eine Kampagne ist fehlgeschlagen",
+        "bodyNoReason": "Öffnen Sie sie, um zu sehen, was schiefgelaufen ist."
+      },
+      "scheduled_completed": {
+        "title": "Geplanter Versand „{{name}}“ wurde gesendet",
+        "titleNoName": "Ein geplanter Versand wurde gesendet",
+        "bodySent_one": "{{count}} Nachricht gesendet",
+        "bodySent_other": "{{count}} Nachrichten gesendet",
+        "bodySentFailed_one": "{{count}} Nachricht gesendet, {{failed}} fehlgeschlagen",
+        "bodySentFailed_other": "{{count}} Nachrichten gesendet, {{failed}} fehlgeschlagen"
+      },
+      "scheduled_failed": {
+        "title": "Geplanter Versand „{{name}}“ fehlgeschlagen",
+        "titleNoName": "Ein geplanter Versand ist fehlgeschlagen",
+        "bodyNoReason": "Öffnen Sie ihn, um zu sehen, was schiefgelaufen ist."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} hat Sie in {{channel}} erwähnt",
+        "titleNoChannel": "{{author}} hat Sie im Team-Chat erwähnt",
+        "titleNoName": "Sie wurden im Team-Chat erwähnt"
+      },
+      "teamchat_message": {
+        "title_one": "Neue Nachricht von {{author}}",
+        "title_other": "{{count}} neue Nachrichten von {{author}}",
+        "titleNoName_one": "Neue Direktnachricht",
+        "titleNoName_other": "{{count}} neue Direktnachrichten"
+      },
+      "waba_group_join_request": {
+        "title_one": "Jemand möchte {{name}} beitreten",
+        "title_other": "{{count}} Personen möchten {{name}} beitreten",
+        "titleNoName_one": "Jemand möchte einer WhatsApp-Gruppe beitreten",
+        "titleNoName_other": "{{count}} Personen möchten einer WhatsApp-Gruppe beitreten",
+        "body": "Unter Gruppen genehmigen oder ablehnen."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} wurde gesperrt",
+        "titleNoName": "Eine WhatsApp-Gruppe wurde gesperrt",
+        "body": "WhatsApp hat diese Gruppe gesperrt. Bis sie wiederhergestellt wird, können Sie ihr keine Nachrichten senden."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} ist wieder aktiv",
+        "titleNoName": "Eine WhatsApp-Gruppe ist wieder aktiv",
+        "body": "WhatsApp hat diese Gruppe wiederhergestellt. Sie können ihr wieder Nachrichten senden."
+      },
+      "device_group_join_request": {
+        "title_one": "Jemand möchte {{name}} beitreten",
+        "title_other": "{{count}} Personen möchten {{name}} beitreten",
+        "titleNoName_one": "Jemand möchte einer WhatsApp-Gruppe beitreten",
+        "titleNoName_other": "{{count}} Personen möchten einer WhatsApp-Gruppe beitreten",
+        "body": "Öffnen Sie Gruppen, um zu genehmigen oder abzulehnen."
+      },
+      "device_group_removed": {
+        "title": "Ihre Nummer wurde aus {{name}} entfernt",
+        "titleNoName": "Ihre Nummer wurde aus einer WhatsApp-Gruppe entfernt",
+        "body": "Jemand hat Ihre persönliche Nummer aus dieser Gruppe entfernt. Die Gruppe wird hier schreibgeschützt aufbewahrt."
+      },
+      "test": {
+        "title": "Testbenachrichtigung",
+        "titleNoName": "Testbenachrichtigung",
+        "bodyNoActor": "Wenn du das lesen kannst, funktionieren Live-Benachrichtigungen."
+      }
+    }
   }
 }

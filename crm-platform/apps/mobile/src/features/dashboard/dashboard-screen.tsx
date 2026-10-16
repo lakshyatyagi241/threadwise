@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FadeIn } from '@/components/ui/fade-in';
 import { MenuTitle } from '@/components/ui/menu-title';
+import { NotificationBell } from '@/components/ui/notification-bell';
 import { ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
 import { messageForError } from '@/lib/api/error-message';
@@ -212,7 +213,7 @@ export function DashboardScreen() {
 
   return (
     <View style={[styles.fill, { backgroundColor: colors.background }]}>
-      <ScreenHeader>
+      <ScreenHeader actions={<NotificationBell />}>
         <MenuTitle
           label={t('dashboard.views.label')}
           options={viewOptions}

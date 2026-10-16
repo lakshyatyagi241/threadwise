@@ -17,7 +17,8 @@
     "deals.stages.tab",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "mr": [
     "auth.emailPlaceholder",
@@ -37,7 +38,8 @@
     "deals.stages.tab",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "ar": [
     "auth.emailPlaceholder",
@@ -63,7 +65,8 @@
     "inbox.row.labelUnread",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "bn": [
     "auth.emailPlaceholder",
@@ -92,7 +95,8 @@
     "inbox.time.pm",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "de": [
     "calls.summary.purposes.demo",
@@ -179,7 +183,8 @@
     "menu.workspace",
     "tabs.dashboard",
     "tasks.details.status",
-    "tasks.filter.group.status"
+    "tasks.filter.group.status",
+    "notifications.types.mention.body"
   ],
   "es": [
     "auth.emailPlaceholder",
@@ -221,7 +226,8 @@
     "menu.profileLabel",
     "menu.signOutNo",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "fr": [
     "auth.emailPlaceholder",
@@ -308,7 +314,10 @@
     "tabs.contacts",
     "tabs.menu",
     "tasks.details.description",
-    "tasks.form.contact"
+    "tasks.form.contact",
+    "notifications.types.mention.body",
+    "notifications.title",
+    "notifications.bell.label"
   ],
   "he": [
     "auth.emailPlaceholder",
@@ -335,7 +344,8 @@
     "inbox.row.labelUnread",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "id": [
     "auth.email",
@@ -411,7 +421,8 @@
     "signUp.orgNamePlaceholder",
     "tabs.menu",
     "tasks.details.status",
-    "tasks.filter.group.status"
+    "tasks.filter.group.status",
+    "notifications.types.mention.body"
   ],
   "it": [
     "auth.email",
@@ -489,7 +500,8 @@
     "signUp.orgNamePlaceholder",
     "tabs.dashboard",
     "tabs.inbox",
-    "tabs.menu"
+    "tabs.menu",
+    "notifications.types.mention.body"
   ],
   "ja": [
     "auth.emailPlaceholder",
@@ -508,7 +520,8 @@
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "ko": [
     "auth.emailPlaceholder",
@@ -533,7 +546,8 @@
     "inbox.row.labelUnread",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "nl": [
     "calls.monitor.contact",
@@ -643,7 +657,8 @@
     "tasks.filter.group.status",
     "tasks.filter.status.open",
     "tasks.form.contact",
-    "tasks.status.open"
+    "tasks.status.open",
+    "notifications.types.mention.body"
   ],
   "pl": [
     "calls.summary.purposes.demo",
@@ -695,7 +710,8 @@
     "menu.profileLabel",
     "tabs.menu",
     "tasks.details.status",
-    "tasks.filter.group.status"
+    "tasks.filter.group.status",
+    "notifications.types.mention.body"
   ],
   "pt": [
     "contactNotes.activity.source.bot",
@@ -744,7 +760,8 @@
     "menu.profileLabel",
     "tabs.menu",
     "tasks.details.status",
-    "tasks.filter.group.status"
+    "tasks.filter.group.status",
+    "notifications.types.mention.body"
   ],
   "ru": [
     "auth.emailPlaceholder",
@@ -772,7 +789,8 @@
     "inbox.time.am",
     "inbox.time.pm",
     "menu.profileLabel",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "th": [
     "auth.emailPlaceholder",
@@ -800,7 +818,8 @@
     "inbox.row.labelUnread",
     "menu.profileLabel",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "tr": [
     "auth.emailPlaceholder",
@@ -833,7 +852,8 @@
     "inbox.row.label",
     "inbox.row.labelUnread",
     "inbox.status.spam",
-    "menu.profileLabel"
+    "menu.profileLabel",
+    "notifications.types.mention.body"
   ],
   "ur": [
     "auth.emailPlaceholder",
@@ -855,7 +875,8 @@
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ],
   "vi": [
     "auth.email",
@@ -894,7 +915,8 @@
     "inbox.row.labelUnread",
     "menu.profile.email",
     "menu.profileLabel",
-    "tabs.menu"
+    "tabs.menu",
+    "notifications.types.mention.body"
   ],
   "zh-CN": [
     "auth.emailPlaceholder",
@@ -915,6 +937,7 @@
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
     "signUp.orgNamePlaceholder",
-    "signUp.orgSlugPlaceholder"
+    "signUp.orgSlugPlaceholder",
+    "notifications.types.mention.body"
   ]
 }

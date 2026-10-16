@@ -1684,5 +1684,175 @@
         "desk": "Masa"
       }
     }
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "markAll": "Tümünü okundu işaretle",
+    "dismiss": "Bu bildirimi kapat",
+    "unread": "Okunmadı",
+    "empty": "Henüz bildirim yok",
+    "emptyHint": "Yeni sohbetler, atamalar, bahsetmeler ve gönderimlerinizin sonuçları burada görünecek.",
+    "emptyFiltered": "Bu filtrelerle eşleşen bildirim yok",
+    "emptyFilteredHint": "Bir filtreyi kaldırın veya başka bir şey arayın.",
+    "bell": {
+      "label": "Bildirimler",
+      "labelUnread_one": "Bildirimler, {{count}} okunmadı",
+      "labelUnread_other": "Bildirimler, {{count}} okunmadı"
+    },
+    "filter": {
+      "label": "Göster",
+      "all": "Tümü",
+      "unread": "Okunmamış"
+    },
+    "sections": {
+      "today": "Bugün",
+      "yesterday": "Dün",
+      "thisWeek": "Bu hafta daha önce",
+      "older": "Daha eski"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Size bir görev atandı",
+        "body": "{{actor}} size bir görev atadı: {{task}}"
+      },
+      "task_due": {
+        "title": "Görev süresi doluyor"
+      },
+      "task_completed": {
+        "title": "Görev tamamlandı",
+        "body": "{{actor}} tamamladı: {{task}}"
+      },
+      "new_lead": {
+        "title": "Yeni potansiyel müşteri",
+        "titleReturning": "Potansiyel müşteri yeniden geldi",
+        "body": "{{name}}, {{platform}} üzerinden geldi",
+        "bodyReturning": "{{name}}, {{platform}} üzerinden başka bir potansiyel müşteri gönderdi",
+        "bodyNoActor": "{{name}} geldi"
+      },
+      "new_chat": {
+        "title": "{{name}} kişisinden yeni sohbet",
+        "titleNoName": "Yeni sohbet"
+      },
+      "new_message": {
+        "title_one": "{{name}} kişisinden {{count}} yeni mesaj",
+        "title_other": "{{name}} kişisinden {{count}} yeni mesaj",
+        "titleNoName_one": "{{count}} yeni mesaj",
+        "titleNoName_other": "{{count}} yeni mesaj"
+      },
+      "chat_waiting": {
+        "title": "{{name}} henüz yanıtlanmadı",
+        "titleNoName": "Bir sohbet hâlâ yanıt bekliyor"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} size atandı",
+        "titleNoName": "Size bir sohbet atandı",
+        "titleTeam": "{{name}} ekibinize atandı",
+        "titleTeamNoName": "Ekibinize bir sohbet atandı",
+        "body": "{{actor}} tarafından atandı"
+      },
+      "mention": {
+        "title": "{{actor}} sizi andı",
+        "titleNoName": "Bir notta adınız anıldı",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} bağlandı",
+        "titleNoName": "WhatsApp numaranız bağlandı"
+      },
+      "device_disconnected": {
+        "title": "{{name}} bağlantısı kesildi",
+        "titleNoName": "Bir WhatsApp numarasının bağlantısı kesildi",
+        "body": "Yeniden bağlamak için cihazı açın."
+      },
+      "device_logged_out": {
+        "title": "{{name}} oturumu kapatıldı",
+        "titleNoName": "Bir WhatsApp numarasının oturumu kapatıldı",
+        "body": "Yeniden bağlanmak için QR kodunu tekrar tarayın."
+      },
+      "broadcast_completed": {
+        "title": "“{{name}}” toplu gönderimi tamamlandı",
+        "titleNoName": "Bir toplu gönderim tamamlandı",
+        "bodySent_one": "{{count}} mesaj gönderildi",
+        "bodySent_other": "{{count}} mesaj gönderildi",
+        "bodySentFailed_one": "{{count}} mesaj gönderildi, {{failed}} başarısız",
+        "bodySentFailed_other": "{{count}} mesaj gönderildi, {{failed}} başarısız"
+      },
+      "broadcast_failed": {
+        "title": "“{{name}}” toplu gönderimi başarısız oldu",
+        "titleNoName": "Bir toplu gönderim başarısız oldu",
+        "bodyNoReason": "Neyin yanlış gittiğini görmek için açın."
+      },
+      "campaign_completed": {
+        "title": "“{{name}}” kampanyası tamamlandı",
+        "titleNoName": "Bir kampanya tamamlandı",
+        "bodySent_one": "{{count}} mesaj gönderildi",
+        "bodySent_other": "{{count}} mesaj gönderildi",
+        "bodySentFailed_one": "{{count}} mesaj gönderildi, {{failed}} başarısız",
+        "bodySentFailed_other": "{{count}} mesaj gönderildi, {{failed}} başarısız"
+      },
+      "campaign_failed": {
+        "title": "“{{name}}” kampanyası başarısız oldu",
+        "titleNoName": "Bir kampanya başarısız oldu",
+        "bodyNoReason": "Neyin yanlış gittiğini görmek için açın."
+      },
+      "scheduled_completed": {
+        "title": "“{{name}}” zamanlanmış gönderimi gönderildi",
+        "titleNoName": "Zamanlanmış bir gönderim gönderildi",
+        "bodySent_one": "{{count}} mesaj gönderildi",
+        "bodySent_other": "{{count}} mesaj gönderildi",
+        "bodySentFailed_one": "{{count}} mesaj gönderildi, {{failed}} başarısız",
+        "bodySentFailed_other": "{{count}} mesaj gönderildi, {{failed}} başarısız"
+      },
+      "scheduled_failed": {
+        "title": "“{{name}}” zamanlanmış gönderimi başarısız oldu",
+        "titleNoName": "Zamanlanmış bir gönderim başarısız oldu",
+        "bodyNoReason": "Neyin yanlış gittiğini görmek için açın."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} sizi {{channel}} kanalında andı",
+        "titleNoChannel": "{{author}} sizi Ekip sohbetinde andı",
+        "titleNoName": "Ekip sohbetinde adınız anıldı"
+      },
+      "teamchat_message": {
+        "title_one": "{{author}} kişisinden {{count}} yeni mesaj",
+        "title_other": "{{author}} kişisinden {{count}} yeni mesaj",
+        "titleNoName_one": "{{count}} yeni doğrudan mesaj",
+        "titleNoName_other": "{{count}} yeni doğrudan mesaj"
+      },
+      "waba_group_join_request": {
+        "title_one": "Biri {{name}} grubuna katılmak istiyor",
+        "title_other": "{{count}} kişi {{name}} grubuna katılmak istiyor",
+        "titleNoName_one": "Bir WhatsApp grubuna katılmak isteyen biri var",
+        "titleNoName_other": "Bir WhatsApp grubuna katılmak isteyen {{count}} kişi var",
+        "body": "Onaylamak veya reddetmek için Gruplar'ı açın."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} askıya alındı",
+        "titleNoName": "Bir WhatsApp grubu askıya alındı",
+        "body": "WhatsApp bu grubu askıya aldı. Geri yüklenene kadar gruba mesaj gönderemezsiniz."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} yeniden etkin",
+        "titleNoName": "Bir WhatsApp grubu yeniden etkin",
+        "body": "WhatsApp bu grubu geri yükledi. Gruba yeniden mesaj gönderebilirsiniz."
+      },
+      "device_group_join_request": {
+        "title_one": "Biri {{name}} grubuna katılmak istiyor",
+        "title_other": "{{count}} kişi {{name}} grubuna katılmak istiyor",
+        "titleNoName_one": "Biri bir WhatsApp grubuna katılmak istiyor",
+        "titleNoName_other": "{{count}} kişi bir WhatsApp grubuna katılmak istiyor",
+        "body": "Onaylamak veya reddetmek için Grupları açın."
+      },
+      "device_group_removed": {
+        "title": "Numaranız {{name}} grubundan çıkarıldı",
+        "titleNoName": "Numaranız bir WhatsApp grubundan çıkarıldı",
+        "body": "Biri kişisel numaranızı bu gruptan çıkardı. Grup burada salt okunur olarak saklanıyor."
+      },
+      "test": {
+        "title": "Test bildirimi",
+        "titleNoName": "Test bildirimi",
+        "bodyNoActor": "Bunu okuyabiliyorsanız canlı bildirimler çalışıyor."
+      }
+    }
   }
 }

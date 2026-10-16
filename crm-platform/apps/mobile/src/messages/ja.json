@@ -1666,5 +1666,160 @@
         "desk": "デスク"
       }
     }
+  },
+  "notifications": {
+    "title": "通知",
+    "markAll": "すべて既読にする",
+    "dismiss": "この通知を閉じる",
+    "unread": "未読",
+    "empty": "通知はまだありません",
+    "emptyHint": "新しいチャット、割り当て、メンション、送信結果がここに表示されます。",
+    "emptyFiltered": "条件に一致する通知はありません",
+    "emptyFilteredHint": "フィルターを外すか、別のキーワードで検索してください。",
+    "bell": {
+      "label": "通知",
+      "labelUnread_other": "通知、未読 {{count}} 件"
+    },
+    "filter": {
+      "label": "表示",
+      "all": "すべて",
+      "unread": "未読"
+    },
+    "sections": {
+      "today": "今日",
+      "yesterday": "昨日",
+      "thisWeek": "今週の以前",
+      "older": "それ以前"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "タスクが割り当てられました",
+        "body": "{{actor}}があなたにタスクを割り当てました：{{task}}"
+      },
+      "task_due": {
+        "title": "タスクの期限"
+      },
+      "task_completed": {
+        "title": "タスクが完了しました",
+        "body": "{{actor}}が完了しました：{{task}}"
+      },
+      "new_lead": {
+        "title": "新規リード",
+        "titleReturning": "リードが再度届きました",
+        "body": "{{name}}が{{platform}}から届きました",
+        "bodyReturning": "{{name}}が{{platform}}から別のリードを送信しました",
+        "bodyNoActor": "{{name}}が届きました"
+      },
+      "new_chat": {
+        "title": "{{name}}からの新しいチャット",
+        "titleNoName": "新しいチャット"
+      },
+      "new_message": {
+        "title_other": "{{name}}からの新着メッセージ {{count}}件",
+        "titleNoName_other": "新着メッセージ {{count}}件"
+      },
+      "chat_waiting": {
+        "title": "まだ{{name}}に返信した人はいません",
+        "titleNoName": "返信待ちのチャットがあります"
+      },
+      "conversation_assigned": {
+        "title": "{{name}}があなたに割り当てられました",
+        "titleNoName": "チャットがあなたに割り当てられました",
+        "titleTeam": "{{name}}があなたのチームに割り当てられました",
+        "titleTeamNoName": "チャットがあなたのチームに割り当てられました",
+        "body": "{{actor}}が割り当て"
+      },
+      "mention": {
+        "title": "{{actor}}があなたをメンションしました",
+        "titleNoName": "メモ内であなたがメンションされました",
+        "body": "{{name}}：{{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}}が連携されました",
+        "titleNoName": "WhatsApp番号が連携されました"
+      },
+      "device_disconnected": {
+        "title": "{{name}}の連携が解除されました",
+        "titleNoName": "WhatsApp番号の連携が解除されました",
+        "body": "デバイスを開いて再連携してください。"
+      },
+      "device_logged_out": {
+        "title": "{{name}}がログアウトされました",
+        "titleNoName": "WhatsApp番号がログアウトされました",
+        "body": "QRコードを再度スキャンして再連携してください。"
+      },
+      "broadcast_completed": {
+        "title": "一斉送信「{{name}}」が完了しました",
+        "titleNoName": "一斉送信が完了しました",
+        "bodySent_other": "{{count}} 件のメッセージを送信",
+        "bodySentFailed_other": "{{count}} 件のメッセージを送信、{{failed}} 件失敗"
+      },
+      "broadcast_failed": {
+        "title": "一斉送信「{{name}}」が失敗しました",
+        "titleNoName": "一斉送信が失敗しました",
+        "bodyNoReason": "開いて問題の詳細を確認してください。"
+      },
+      "campaign_completed": {
+        "title": "キャンペーン「{{name}}」が完了しました",
+        "titleNoName": "キャンペーンが完了しました",
+        "bodySent_other": "{{count}} 件のメッセージを送信",
+        "bodySentFailed_other": "{{count}} 件のメッセージを送信、{{failed}} 件失敗"
+      },
+      "campaign_failed": {
+        "title": "キャンペーン「{{name}}」が失敗しました",
+        "titleNoName": "キャンペーンが失敗しました",
+        "bodyNoReason": "開いて問題の詳細を確認してください。"
+      },
+      "scheduled_completed": {
+        "title": "予約送信「{{name}}」が送信されました",
+        "titleNoName": "予約送信が送信されました",
+        "bodySent_other": "{{count}} 件のメッセージを送信",
+        "bodySentFailed_other": "{{count}} 件のメッセージを送信、{{failed}} 件失敗"
+      },
+      "scheduled_failed": {
+        "title": "予約送信「{{name}}」が失敗しました",
+        "titleNoName": "予約送信が失敗しました",
+        "bodyNoReason": "開いて問題の詳細を確認してください。"
+      },
+      "teamchat_mention": {
+        "title": "{{author}}が{{channel}}であなたをメンションしました",
+        "titleNoChannel": "{{author}}がチームチャットであなたをメンションしました",
+        "titleNoName": "チームチャットであなたがメンションされました"
+      },
+      "teamchat_message": {
+        "title_other": "{{author}}からの新着メッセージ {{count}}件",
+        "titleNoName_other": "新しいダイレクトメッセージ {{count}}件"
+      },
+      "waba_group_join_request": {
+        "title_other": "{{count}}人が{{name}}に参加したいと考えています",
+        "titleNoName_other": "{{count}}人がWhatsAppグループへの参加を希望しています",
+        "body": "グループを開いて承認または却下してください。"
+      },
+      "waba_group_suspended": {
+        "title": "{{name}}は停止されました",
+        "titleNoName": "WhatsAppグループが停止されました",
+        "body": "WhatsAppによってこのグループは停止されました。復旧されるまでメッセージを送信できません。"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}}が再び有効になりました",
+        "titleNoName": "WhatsAppグループが再び有効になりました",
+        "body": "WhatsAppによってこのグループが復旧されました。再びメッセージを送信できます。"
+      },
+      "device_group_join_request": {
+        "title_other": "{{count}}人が{{name}}への参加を希望しています",
+        "titleNoName_other": "{{count}}人がWhatsAppグループへの参加を希望しています",
+        "body": "グループを開いて承認または拒否してください。"
+      },
+      "device_group_removed": {
+        "title": "あなたの番号が{{name}}から削除されました",
+        "titleNoName": "あなたの番号がWhatsAppグループから削除されました",
+        "body": "誰かがこのグループからあなたの個人番号を削除しました。グループは読み取り専用でここに保存されています。"
+      },
+      "test": {
+        "title": "テスト通知",
+        "titleNoName": "テスト通知",
+        "bodyNoActor": "これが読めていれば、ライブ通知は動作しています。"
+      }
+    }
   }
 }

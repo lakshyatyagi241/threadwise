@@ -1684,5 +1684,175 @@
         "desk": "ڈیسک"
       }
     }
+  },
+  "notifications": {
+    "title": "اطلاعات",
+    "markAll": "سب کو پڑھا ہوا نشان زد کریں",
+    "dismiss": "یہ اطلاع ہٹائیں",
+    "unread": "غیر پڑھی",
+    "empty": "ابھی تک کوئی اطلاع نہیں",
+    "emptyHint": "نئی چیٹس، تفویضات، ذکر اور آپ کی بھیجی گئی چیزوں کے نتائج یہاں ظاہر ہوں گے۔",
+    "emptyFiltered": "ان فلٹرز سے کوئی اطلاع مطابقت نہیں رکھتی",
+    "emptyFilteredHint": "کوئی فلٹر ہٹائیں یا کچھ اور تلاش کریں۔",
+    "bell": {
+      "label": "اطلاعات",
+      "labelUnread_one": "اطلاعات، {{count}} غیر پڑھی",
+      "labelUnread_other": "اطلاعات، {{count}} غیر پڑھی"
+    },
+    "filter": {
+      "label": "دکھائیں",
+      "all": "سب",
+      "unread": "نہ پڑھی ہوئی"
+    },
+    "sections": {
+      "today": "آج",
+      "yesterday": "کل",
+      "thisWeek": "اس ہفتے کی ابتدا میں",
+      "older": "پرانی"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "آپ کو تفویض کردہ کام",
+        "body": "{{actor}} نے آپ کو تفویض کیا: {{task}}"
+      },
+      "task_due": {
+        "title": "کام کی آخری تاریخ"
+      },
+      "task_completed": {
+        "title": "کام مکمل ہو گیا",
+        "body": "{{actor}} نے مکمل کیا: {{task}}"
+      },
+      "new_lead": {
+        "title": "نیا لیڈ",
+        "titleReturning": "لیڈ دوبارہ آئی",
+        "body": "{{name}} کی طرف سے {{platform}} سے لیڈ آئی",
+        "bodyReturning": "{{name}} نے {{platform}} سے ایک اور لیڈ بھیجی",
+        "bodyNoActor": "{{name}} کی لیڈ آئی"
+      },
+      "new_chat": {
+        "title": "{{name}} کی طرف سے نئی چیٹ",
+        "titleNoName": "نئی چیٹ"
+      },
+      "new_message": {
+        "title_one": "{{name}} کا نیا پیغام",
+        "title_other": "{{name}} کے {{count}} نئے پیغامات",
+        "titleNoName_one": "نیا پیغام",
+        "titleNoName_other": "{{count}} نئے پیغامات"
+      },
+      "chat_waiting": {
+        "title": "{{name}} کو ابھی تک کسی نے جواب نہیں دیا",
+        "titleNoName": "ایک چیٹ اب بھی جواب کی منتظر ہے"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} آپ کو تفویض کیا گیا",
+        "titleNoName": "ایک چیٹ آپ کو تفویض کی گئی",
+        "titleTeam": "{{name}} آپ کی ٹیم کو تفویض کیا گیا",
+        "titleTeamNoName": "ایک چیٹ آپ کی ٹیم کو تفویض کی گئی",
+        "body": "{{actor}} کی طرف سے تفویض کیا گیا"
+      },
+      "mention": {
+        "title": "{{actor}} نے آپ کا ذکر کیا",
+        "titleNoName": "ایک نوٹ میں آپ کا ذکر کیا گیا",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} جڑ گیا ہے",
+        "titleNoName": "آپ کا WhatsApp نمبر جڑ گیا ہے"
+      },
+      "device_disconnected": {
+        "title": "{{name}} کا کنکشن ختم ہو گیا",
+        "titleNoName": "ایک WhatsApp نمبر کا کنکشن ختم ہو گیا",
+        "body": "دوبارہ جوڑنے کے لیے ڈیوائس کھولیں۔"
+      },
+      "device_logged_out": {
+        "title": "{{name}} سے لاگ آؤٹ ہو گیا",
+        "titleNoName": "ایک WhatsApp نمبر سے لاگ آؤٹ ہو گیا",
+        "body": "دوبارہ جوڑنے کے لیے QR کوڈ دوبارہ اسکین کریں۔"
+      },
+      "broadcast_completed": {
+        "title": "براڈکاسٹ “{{name}}” مکمل ہو گیا",
+        "titleNoName": "ایک براڈکاسٹ مکمل ہو گیا",
+        "bodySent_one": "{{count}} پیغام بھیجا گیا",
+        "bodySent_other": "{{count}} پیغامات بھیجے گئے",
+        "bodySentFailed_one": "{{count}} پیغام بھیجا گیا، {{failed}} ناکام",
+        "bodySentFailed_other": "{{count}} پیغامات بھیجے گئے، {{failed}} ناکام"
+      },
+      "broadcast_failed": {
+        "title": "براڈکاسٹ “{{name}}” ناکام ہو گیا",
+        "titleNoName": "ایک براڈکاسٹ ناکام ہو گیا",
+        "bodyNoReason": "کیا غلط ہوا یہ دیکھنے کے لیے اسے کھولیں۔"
+      },
+      "campaign_completed": {
+        "title": "مہم “{{name}}” مکمل ہو گئی",
+        "titleNoName": "ایک مہم مکمل ہو گئی",
+        "bodySent_one": "{{count}} پیغام بھیجا گیا",
+        "bodySent_other": "{{count}} پیغامات بھیجے گئے",
+        "bodySentFailed_one": "{{count}} پیغام بھیجا گیا، {{failed}} ناکام",
+        "bodySentFailed_other": "{{count}} پیغامات بھیجے گئے، {{failed}} ناکام"
+      },
+      "campaign_failed": {
+        "title": "مہم “{{name}}” ناکام ہو گئی",
+        "titleNoName": "ایک مہم ناکام ہو گئی",
+        "bodyNoReason": "کیا غلط ہوا یہ دیکھنے کے لیے اسے کھولیں۔"
+      },
+      "scheduled_completed": {
+        "title": "شیڈول شدہ ارسال “{{name}}” بھیج دیا گیا",
+        "titleNoName": "ایک شیڈول شدہ ارسال بھیج دیا گیا",
+        "bodySent_one": "{{count}} پیغام بھیجا گیا",
+        "bodySent_other": "{{count}} پیغامات بھیجے گئے",
+        "bodySentFailed_one": "{{count}} پیغام بھیجا گیا، {{failed}} ناکام",
+        "bodySentFailed_other": "{{count}} پیغامات بھیجے گئے، {{failed}} ناکام"
+      },
+      "scheduled_failed": {
+        "title": "شیڈول شدہ ارسال “{{name}}” ناکام ہو گیا",
+        "titleNoName": "ایک شیڈول شدہ ارسال ناکام ہو گیا",
+        "bodyNoReason": "کیا غلط ہوا یہ دیکھنے کے لیے اسے کھولیں۔"
+      },
+      "teamchat_mention": {
+        "title": "{{author}} نے {{channel}} میں آپ کا ذکر کیا",
+        "titleNoChannel": "{{author}} نے ٹیم چیٹ میں آپ کا ذکر کیا",
+        "titleNoName": "ٹیم چیٹ میں آپ کا ذکر کیا گیا"
+      },
+      "teamchat_message": {
+        "title_one": "{{author}} کا نیا پیغام",
+        "title_other": "{{author}} کے {{count}} نئے پیغامات",
+        "titleNoName_one": "نیا براہِ راست پیغام",
+        "titleNoName_other": "{{count}} نئے براہِ راست پیغامات"
+      },
+      "waba_group_join_request": {
+        "title_one": "کوئی {{name}} میں شامل ہونا چاہتا ہے",
+        "title_other": "{{count}} افراد {{name}} میں شامل ہونا چاہتے ہیں",
+        "titleNoName_one": "کوئی WhatsApp گروپ میں شامل ہونا چاہتا ہے",
+        "titleNoName_other": "{{count}} افراد WhatsApp گروپ میں شامل ہونا چاہتے ہیں",
+        "body": "منظور یا مسترد کرنے کے لیے گروپس کھولیں۔"
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} معطل کر دیا گیا",
+        "titleNoName": "ایک WhatsApp گروپ معطل کر دیا گیا",
+        "body": "WhatsApp نے اس گروپ کو معطل کیا ہے۔ بحالی تک آپ اسے پیغام نہیں بھیج سکتے۔"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} دوبارہ فعال ہے",
+        "titleNoName": "ایک WhatsApp گروپ دوبارہ فعال ہے",
+        "body": "WhatsApp نے یہ گروپ بحال کر دیا ہے۔ اب آپ اسے دوبارہ پیغام بھیج سکتے ہیں۔"
+      },
+      "device_group_join_request": {
+        "title_one": "کوئی {{name}} میں شامل ہونا چاہتا ہے",
+        "title_other": "{{count}} افراد {{name}} میں شامل ہونا چاہتے ہیں",
+        "titleNoName_one": "کوئی WhatsApp گروپ میں شامل ہونا چاہتا ہے",
+        "titleNoName_other": "{{count}} افراد WhatsApp گروپ میں شامل ہونا چاہتے ہیں",
+        "body": "منظور یا مسترد کرنے کے لیے گروپس کھولیں۔"
+      },
+      "device_group_removed": {
+        "title": "آپ کا نمبر {{name}} سے خارج کر دیا گیا",
+        "titleNoName": "آپ کا نمبر WhatsApp گروپ سے خارج کر دیا گیا",
+        "body": "کسی نے آپ کے ذاتی نمبر کو اس گروپ سے خارج کر دیا۔ گروپ یہاں صرف پڑھنے کے لیے محفوظ ہے۔"
+      },
+      "test": {
+        "title": "ٹیسٹ اطلاع",
+        "titleNoName": "ٹیسٹ اطلاع",
+        "bodyNoActor": "اگر آپ یہ پڑھ سکتے ہیں تو لائیو اطلاعات کام کر رہی ہیں۔"
+      }
+    }
   }
 }

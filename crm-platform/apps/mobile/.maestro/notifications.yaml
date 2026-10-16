@@ -1,0 +1,33 @@
+# Open the notification list from the dashboard bell and from the Account tab, switch to Unread and back, and leave.
+#
+#   maestro test apps/mobile/.maestro/notifications.yaml \
+#     -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<seeded password>
+#
+# Credentials come from -e, never from this file. Needs an emulator or simulator set to English, a development or preview build
+# installed, and the local API running; the account must not have MFA enabled. The rows themselves are not asserted: a fresh
+# workspace has none and the empty state is still a pass. (To see rows, assign a task to the account first.)
+# NOT YET RUN: no Maestro was available when this was written.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+# The bell is in the dashboard's header; its name carries the unread count when there is one.
+- tapOn:
+    id: 'notification-bell'
+- assertVisible: 'Notifications'
+- assertVisible: 'All'
+- tapOn: 'Unread'
+- assertVisible: '(No notifications yet|No notifications match these filters|Today|Yesterday|Earlier this week|Older)'
+- tapOn: 'All'
+# Back to the dashboard, then the same list from the Account tab.
+- tapOn: 'Back'
+- tapOn: 'Account'
+- tapOn: 'Notifications'
+- assertVisible: 'All'

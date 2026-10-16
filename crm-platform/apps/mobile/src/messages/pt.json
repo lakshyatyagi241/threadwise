@@ -1702,5 +1702,190 @@
         "desk": "Suporte"
       }
     }
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAll": "Marcar tudo como lido",
+    "dismiss": "Dispensar esta notificação",
+    "unread": "Não lidas",
+    "empty": "Nenhuma notificação ainda",
+    "emptyHint": "Novos chats, atribuições, menções e resultados dos seus envios aparecerão aqui.",
+    "emptyFiltered": "Nenhuma notificação corresponde a estes filtros",
+    "emptyFilteredHint": "Remova um filtro ou busque outra coisa.",
+    "bell": {
+      "label": "Notificações",
+      "labelUnread_many": "Notificações, {{count}} não lidas",
+      "labelUnread_one": "Notificações, {{count}} não lidas",
+      "labelUnread_other": "Notificações, {{count}} não lidas"
+    },
+    "filter": {
+      "label": "Mostrar",
+      "all": "Todas",
+      "unread": "Não lidas"
+    },
+    "sections": {
+      "today": "Hoje",
+      "yesterday": "Ontem",
+      "thisWeek": "Antes, nesta semana",
+      "older": "Mais antigas"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Tarefa atribuída a você",
+        "body": "{{actor}} atribuiu a você: {{task}}"
+      },
+      "task_due": {
+        "title": "Tarefa vencendo"
+      },
+      "task_completed": {
+        "title": "Tarefa concluída",
+        "body": "{{actor}} concluiu: {{task}}"
+      },
+      "new_lead": {
+        "title": "Novo lead",
+        "titleReturning": "Lead chegou de novo",
+        "body": "{{name}} chegou por {{platform}}",
+        "bodyReturning": "{{name}} enviou outro lead por {{platform}}",
+        "bodyNoActor": "{{name}} chegou"
+      },
+      "new_chat": {
+        "title": "Novo chat de {{name}}",
+        "titleNoName": "Novo chat"
+      },
+      "new_message": {
+        "title_many": "{{count}} novas mensagens de {{name}}",
+        "title_one": "Nova mensagem de {{name}}",
+        "title_other": "{{count}} novas mensagens de {{name}}",
+        "titleNoName_many": "{{count}} novas mensagens",
+        "titleNoName_one": "Nova mensagem",
+        "titleNoName_other": "{{count}} novas mensagens"
+      },
+      "chat_waiting": {
+        "title": "Ninguém respondeu a {{name}} ainda",
+        "titleNoName": "Um chat ainda aguarda resposta"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} foi atribuído a você",
+        "titleNoName": "Um chat foi atribuído a você",
+        "titleTeam": "{{name}} foi atribuído à sua equipe",
+        "titleTeamNoName": "Um chat foi atribuído à sua equipe",
+        "body": "Atribuído por {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} mencionou você",
+        "titleNoName": "Você foi mencionado em uma nota",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} está conectado",
+        "titleNoName": "Seu número do WhatsApp está conectado"
+      },
+      "device_disconnected": {
+        "title": "{{name}} desconectado",
+        "titleNoName": "Um número do WhatsApp foi desconectado",
+        "body": "Abra o dispositivo para reconectar."
+      },
+      "device_logged_out": {
+        "title": "{{name}} foi desconectado da sessão",
+        "titleNoName": "Um número do WhatsApp foi desconectado da sessão",
+        "body": "Leia o QR code novamente para reconectar."
+      },
+      "broadcast_completed": {
+        "title": "Transmissão “{{name}}” concluída",
+        "titleNoName": "Uma transmissão foi concluída",
+        "bodySent_many": "{{count}} mensagens enviadas",
+        "bodySent_one": "{{count}} mensagem enviada",
+        "bodySent_other": "{{count}} mensagens enviadas",
+        "bodySentFailed_many": "{{count}} mensagens enviadas, {{failed}} com falha",
+        "bodySentFailed_one": "{{count}} mensagem enviada, {{failed}} com falha",
+        "bodySentFailed_other": "{{count}} mensagens enviadas, {{failed}} com falha"
+      },
+      "broadcast_failed": {
+        "title": "Transmissão “{{name}}” falhou",
+        "titleNoName": "Uma transmissão falhou",
+        "bodyNoReason": "Abra para ver o que deu errado."
+      },
+      "campaign_completed": {
+        "title": "Campanha “{{name}}” concluída",
+        "titleNoName": "Uma campanha foi concluída",
+        "bodySent_many": "{{count}} mensagens enviadas",
+        "bodySent_one": "{{count}} mensagem enviada",
+        "bodySent_other": "{{count}} mensagens enviadas",
+        "bodySentFailed_many": "{{count}} mensagens enviadas, {{failed}} com falha",
+        "bodySentFailed_one": "{{count}} mensagem enviada, {{failed}} com falha",
+        "bodySentFailed_other": "{{count}} mensagens enviadas, {{failed}} com falha"
+      },
+      "campaign_failed": {
+        "title": "Campanha “{{name}}” falhou",
+        "titleNoName": "Uma campanha falhou",
+        "bodyNoReason": "Abra para ver o que deu errado."
+      },
+      "scheduled_completed": {
+        "title": "Envio agendado “{{name}}” foi enviado",
+        "titleNoName": "Um envio agendado foi enviado",
+        "bodySent_many": "{{count}} mensagens enviadas",
+        "bodySent_one": "{{count}} mensagem enviada",
+        "bodySent_other": "{{count}} mensagens enviadas",
+        "bodySentFailed_many": "{{count}} mensagens enviadas, {{failed}} com falha",
+        "bodySentFailed_one": "{{count}} mensagem enviada, {{failed}} com falha",
+        "bodySentFailed_other": "{{count}} mensagens enviadas, {{failed}} com falha"
+      },
+      "scheduled_failed": {
+        "title": "Envio agendado “{{name}}” falhou",
+        "titleNoName": "Um envio agendado falhou",
+        "bodyNoReason": "Abra para ver o que deu errado."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} mencionou você em {{channel}}",
+        "titleNoChannel": "{{author}} mencionou você no Chat da equipe",
+        "titleNoName": "Você foi mencionado no Chat da equipe"
+      },
+      "teamchat_message": {
+        "title_many": "{{count}} novas mensagens de {{author}}",
+        "title_one": "Nova mensagem de {{author}}",
+        "title_other": "{{count}} novas mensagens de {{author}}",
+        "titleNoName_many": "{{count}} novas mensagens diretas",
+        "titleNoName_one": "Nova mensagem direta",
+        "titleNoName_other": "{{count}} novas mensagens diretas"
+      },
+      "waba_group_join_request": {
+        "title_many": "{{count}} pessoas querem entrar em {{name}}",
+        "title_one": "Alguém quer entrar em {{name}}",
+        "title_other": "{{count}} pessoas querem entrar em {{name}}",
+        "titleNoName_many": "{{count}} pessoas querem entrar em um grupo do WhatsApp",
+        "titleNoName_one": "Alguém quer entrar em um grupo do WhatsApp",
+        "titleNoName_other": "{{count}} pessoas querem entrar em um grupo do WhatsApp",
+        "body": "Abra Grupos para aprovar ou rejeitar."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} foi suspenso",
+        "titleNoName": "Um grupo do WhatsApp foi suspenso",
+        "body": "O WhatsApp suspendeu este grupo. Você não pode enviar mensagens para ele até que seja restaurado."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} está ativo novamente",
+        "titleNoName": "Um grupo do WhatsApp está ativo novamente",
+        "body": "O WhatsApp restaurou este grupo. Você pode enviar mensagens novamente."
+      },
+      "device_group_join_request": {
+        "title_many": "{{count}} pessoas querem entrar em {{name}}",
+        "title_one": "Alguém quer entrar em {{name}}",
+        "title_other": "{{count}} pessoas querem entrar em {{name}}",
+        "titleNoName_many": "{{count}} pessoas querem entrar em um grupo do WhatsApp",
+        "titleNoName_one": "Alguém quer entrar em um grupo do WhatsApp",
+        "titleNoName_other": "{{count}} pessoas querem entrar em um grupo do WhatsApp",
+        "body": "Abra Grupos para aprovar ou recusar."
+      },
+      "device_group_removed": {
+        "title": "Seu número foi removido de {{name}}",
+        "titleNoName": "Seu número foi removido de um grupo do WhatsApp",
+        "body": "Alguém removeu seu número pessoal deste grupo. O grupo é mantido aqui, somente leitura."
+      },
+      "test": {
+        "title": "Notificação de teste",
+        "titleNoName": "Notificação de teste",
+        "bodyNoActor": "Se você consegue ler isto, as notificações em tempo real estão funcionando."
+      }
+    }
   }
 }

@@ -1684,5 +1684,175 @@
         "desk": "डेस्क"
       }
     }
+  },
+  "notifications": {
+    "title": "सूचना",
+    "markAll": "सर्व वाचलेल्या म्हणून खूण करा",
+    "dismiss": "ही सूचना काढून टाका",
+    "unread": "न वाचलेली",
+    "empty": "अजून कोणत्याही सूचना नाहीत",
+    "emptyHint": "नवीन चॅट, नेमणुका, उल्लेख आणि तुमच्या पाठवण्यांचे निकाल येथे दिसतील.",
+    "emptyFiltered": "या फिल्टरशी जुळणाऱ्या सूचना नाहीत",
+    "emptyFilteredHint": "एखादा फिल्टर काढा किंवा दुसरे काहीतरी शोधा.",
+    "bell": {
+      "label": "सूचना",
+      "labelUnread_one": "सूचना, {{count}} न वाचलेली",
+      "labelUnread_other": "सूचना, {{count}} न वाचलेल्या"
+    },
+    "filter": {
+      "label": "दाखवा",
+      "all": "सर्व",
+      "unread": "न वाचलेल्या"
+    },
+    "sections": {
+      "today": "आज",
+      "yesterday": "काल",
+      "thisWeek": "या आठवड्याच्या सुरुवातीला",
+      "older": "जुन्या"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "तुम्हाला काम दिले",
+        "body": "{{actor}} यांनी तुम्हाला दिले: {{task}}"
+      },
+      "task_due": {
+        "title": "कामाची मुदत आली"
+      },
+      "task_completed": {
+        "title": "काम पूर्ण झाले",
+        "body": "{{actor}} यांनी पूर्ण केले: {{task}}"
+      },
+      "new_lead": {
+        "title": "नवीन लीड",
+        "titleReturning": "लीड पुन्हा आला",
+        "body": "{{name}} हे {{platform}} वरून आले",
+        "bodyReturning": "{{name}} यांनी {{platform}} वरून आणखी एक लीड पाठवला",
+        "bodyNoActor": "{{name}} आले"
+      },
+      "new_chat": {
+        "title": "{{name}} कडून नवीन चॅट",
+        "titleNoName": "नवीन चॅट"
+      },
+      "new_message": {
+        "title_one": "{{name}} कडून {{count}} नवीन संदेश",
+        "title_other": "{{name}} कडून {{count}} नवीन संदेश",
+        "titleNoName_one": "{{count}} नवीन संदेश",
+        "titleNoName_other": "{{count}} नवीन संदेश"
+      },
+      "chat_waiting": {
+        "title": "{{name}} यांना अजून कोणीही उत्तर दिलेले नाही",
+        "titleNoName": "एक चॅट अजूनही उत्तराची वाट पाहत आहे"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} तुम्हाला नेमले गेले",
+        "titleNoName": "एक चॅट तुम्हाला नेमले गेले",
+        "titleTeam": "{{name}} तुमच्या टीमला नेमले गेले",
+        "titleTeamNoName": "एक चॅट तुमच्या टीमला नेमले गेले",
+        "body": "{{actor}} यांनी नेमले"
+      },
+      "mention": {
+        "title": "{{actor}} यांनी तुमचा उल्लेख केला",
+        "titleNoName": "एका नोटमध्ये तुमचा उल्लेख झाला",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} जोडला गेला आहे",
+        "titleNoName": "तुमचा WhatsApp नंबर जोडला गेला आहे"
+      },
+      "device_disconnected": {
+        "title": "{{name}} तुटला",
+        "titleNoName": "एक WhatsApp नंबर तुटला",
+        "body": "पुन्हा जोडण्यासाठी डिव्हाइस उघडा."
+      },
+      "device_logged_out": {
+        "title": "{{name}} लॉग आउट झाला",
+        "titleNoName": "एक WhatsApp नंबर लॉग आउट झाला",
+        "body": "पुन्हा जोडण्यासाठी QR कोड पुन्हा स्कॅन करा."
+      },
+      "broadcast_completed": {
+        "title": "ब्रॉडकास्ट “{{name}}” पूर्ण झाले",
+        "titleNoName": "एक ब्रॉडकास्ट पूर्ण झाले",
+        "bodySent_one": "{{count}} संदेश पाठवला",
+        "bodySent_other": "{{count}} संदेश पाठवले",
+        "bodySentFailed_one": "{{count}} संदेश पाठवला, {{failed}} अयशस्वी",
+        "bodySentFailed_other": "{{count}} संदेश पाठवले, {{failed}} अयशस्वी"
+      },
+      "broadcast_failed": {
+        "title": "ब्रॉडकास्ट “{{name}}” अयशस्वी झाले",
+        "titleNoName": "एक ब्रॉडकास्ट अयशस्वी झाले",
+        "bodyNoReason": "काय चुकले ते पाहण्यासाठी उघडा."
+      },
+      "campaign_completed": {
+        "title": "मोहीम “{{name}}” पूर्ण झाली",
+        "titleNoName": "एक मोहीम पूर्ण झाली",
+        "bodySent_one": "{{count}} संदेश पाठवला",
+        "bodySent_other": "{{count}} संदेश पाठवले",
+        "bodySentFailed_one": "{{count}} संदेश पाठवला, {{failed}} अयशस्वी",
+        "bodySentFailed_other": "{{count}} संदेश पाठवले, {{failed}} अयशस्वी"
+      },
+      "campaign_failed": {
+        "title": "मोहीम “{{name}}” अयशस्वी झाली",
+        "titleNoName": "एक मोहीम अयशस्वी झाली",
+        "bodyNoReason": "काय चुकले ते पाहण्यासाठी उघडा."
+      },
+      "scheduled_completed": {
+        "title": "नियोजित पाठवणी “{{name}}” पाठवली गेली",
+        "titleNoName": "एक नियोजित पाठवणी पाठवली गेली",
+        "bodySent_one": "{{count}} संदेश पाठवला",
+        "bodySent_other": "{{count}} संदेश पाठवले",
+        "bodySentFailed_one": "{{count}} संदेश पाठवला, {{failed}} अयशस्वी",
+        "bodySentFailed_other": "{{count}} संदेश पाठवले, {{failed}} अयशस्वी"
+      },
+      "scheduled_failed": {
+        "title": "नियोजित पाठवणी “{{name}}” अयशस्वी झाली",
+        "titleNoName": "एक नियोजित पाठवणी अयशस्वी झाली",
+        "bodyNoReason": "काय चुकले ते पाहण्यासाठी उघडा."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} यांनी {{channel}} मध्ये तुमचा उल्लेख केला",
+        "titleNoChannel": "{{author}} यांनी टीम चॅटमध्ये तुमचा उल्लेख केला",
+        "titleNoName": "टीम चॅटमध्ये तुमचा उल्लेख झाला"
+      },
+      "teamchat_message": {
+        "title_one": "{{author}} कडून {{count}} नवीन संदेश",
+        "title_other": "{{author}} कडून {{count}} नवीन संदेश",
+        "titleNoName_one": "{{count}} नवीन थेट संदेश",
+        "titleNoName_other": "{{count}} नवीन थेट संदेश"
+      },
+      "waba_group_join_request": {
+        "title_one": "{{name}} मध्ये कोणीतरी सामील होऊ इच्छितो",
+        "title_other": "{{count}} लोक {{name}} मध्ये सामील होऊ इच्छितात",
+        "titleNoName_one": "कोणीतरी WhatsApp ग्रुपमध्ये सामील होऊ इच्छितो",
+        "titleNoName_other": "{{count}} लोक WhatsApp ग्रुपमध्ये सामील होऊ इच्छितात",
+        "body": "मंजूर किंवा नाकारण्यासाठी ग्रुप उघडा."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} निलंबित केला गेला",
+        "titleNoName": "एक WhatsApp ग्रुप निलंबित केला गेला",
+        "body": "WhatsApp ने हा ग्रुप निलंबित केला. तो पुन्हा सुरू होईपर्यंत तुम्ही त्याला संदेश पाठवू शकत नाही."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} पुन्हा सक्रिय आहे",
+        "titleNoName": "एक WhatsApp ग्रुप पुन्हा सक्रिय आहे",
+        "body": "WhatsApp ने हा ग्रुप पुन्हा सुरू केला. तुम्ही आता पुन्हा संदेश पाठवू शकता."
+      },
+      "device_group_join_request": {
+        "title_one": "{{name}} मध्ये कोणीतरी सामील होऊ इच्छितो",
+        "title_other": "{{count}} लोक {{name}} मध्ये सामील होऊ इच्छितात",
+        "titleNoName_one": "कोणीतरी WhatsApp ग्रुपमध्ये सामील होऊ इच्छितो",
+        "titleNoName_other": "{{count}} लोक WhatsApp ग्रुपमध्ये सामील होऊ इच्छितात",
+        "body": "मंजूर किंवा नाकारण्यासाठी ग्रुप उघडा."
+      },
+      "device_group_removed": {
+        "title": "तुमचा नंबर {{name}} मधून काढला गेला",
+        "titleNoName": "तुमचा नंबर एका WhatsApp ग्रुपमधून काढला गेला",
+        "body": "कोणीतरी तुमचा वैयक्तिक नंबर या ग्रुपमधून काढला. ग्रुप येथे फक्त वाचण्यासाठी ठेवला आहे."
+      },
+      "test": {
+        "title": "चाचणी सूचना",
+        "titleNoName": "चाचणी सूचना",
+        "bodyNoActor": "तुम्हाला हे वाचता येत असेल, तर थेट सूचना काम करत आहेत."
+      }
+    }
   }
 }

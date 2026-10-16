@@ -1666,5 +1666,160 @@
         "desk": "เดสก์"
       }
     }
+  },
+  "notifications": {
+    "title": "การแจ้งเตือน",
+    "markAll": "ทำเครื่องหมายอ่านทั้งหมด",
+    "dismiss": "ปิดการแจ้งเตือนนี้",
+    "unread": "ยังไม่ได้อ่าน",
+    "empty": "ยังไม่มีการแจ้งเตือน",
+    "emptyHint": "แชตใหม่ งานที่มอบหมาย การกล่าวถึง และผลการส่งของคุณจะแสดงที่นี่",
+    "emptyFiltered": "ไม่มีการแจ้งเตือนที่ตรงกับตัวกรองเหล่านี้",
+    "emptyFilteredHint": "นำตัวกรองออกหรือค้นหาด้วยคำอื่น",
+    "bell": {
+      "label": "การแจ้งเตือน",
+      "labelUnread_other": "การแจ้งเตือน ยังไม่ได้อ่าน {{count}}"
+    },
+    "filter": {
+      "label": "แสดง",
+      "all": "ทั้งหมด",
+      "unread": "ยังไม่อ่าน"
+    },
+    "sections": {
+      "today": "วันนี้",
+      "yesterday": "เมื่อวาน",
+      "thisWeek": "ก่อนหน้านี้ในสัปดาห์นี้",
+      "older": "เก่ากว่านั้น"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "มอบหมายงานให้คุณ",
+        "body": "{{actor}} มอบหมายงานให้คุณ: {{task}}"
+      },
+      "task_due": {
+        "title": "งานถึงกำหนด"
+      },
+      "task_completed": {
+        "title": "งานเสร็จแล้ว",
+        "body": "{{actor}} ทำเสร็จแล้ว: {{task}}"
+      },
+      "new_lead": {
+        "title": "ลีดใหม่",
+        "titleReturning": "มีลีดเข้ามาอีกครั้ง",
+        "body": "{{name}} เข้ามาจาก {{platform}}",
+        "bodyReturning": "{{name}} ส่งลีดอีกรายจาก {{platform}}",
+        "bodyNoActor": "{{name}} เข้ามาแล้ว"
+      },
+      "new_chat": {
+        "title": "แชทใหม่จาก {{name}}",
+        "titleNoName": "แชทใหม่"
+      },
+      "new_message": {
+        "title_other": "ข้อความใหม่ {{count}} ข้อความจาก {{name}}",
+        "titleNoName_other": "ข้อความใหม่ {{count}}"
+      },
+      "chat_waiting": {
+        "title": "ยังไม่มีใครตอบ {{name}}",
+        "titleNoName": "มีแชทที่ยังรอการตอบกลับ"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} ถูกมอบหมายให้คุณแล้ว",
+        "titleNoName": "มีแชทถูกมอบหมายให้คุณ",
+        "titleTeam": "{{name}} ถูกมอบหมายให้ทีมของคุณแล้ว",
+        "titleTeamNoName": "มีแชทถูกมอบหมายให้ทีมของคุณ",
+        "body": "มอบหมายโดย {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} กล่าวถึงคุณ",
+        "titleNoName": "คุณถูกกล่าวถึงในบันทึก",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} เชื่อมต่อแล้ว",
+        "titleNoName": "หมายเลข WhatsApp ของคุณเชื่อมต่อแล้ว"
+      },
+      "device_disconnected": {
+        "title": "{{name}} ตัดการเชื่อมต่อแล้ว",
+        "titleNoName": "มีหมายเลข WhatsApp ตัดการเชื่อมต่อ",
+        "body": "เปิดอุปกรณ์เพื่อเชื่อมต่ออีกครั้ง"
+      },
+      "device_logged_out": {
+        "title": "{{name}} ถูกออกจากระบบแล้ว",
+        "titleNoName": "มีหมายเลข WhatsApp ถูกออกจากระบบ",
+        "body": "สแกนรหัส QR อีกครั้งเพื่อเชื่อมต่อ"
+      },
+      "broadcast_completed": {
+        "title": "บรอดแคสต์ “{{name}}” เสร็จสิ้นแล้ว",
+        "titleNoName": "บรอดแคสต์เสร็จสิ้นแล้ว",
+        "bodySent_other": "ส่งข้อความแล้ว {{count}}",
+        "bodySentFailed_other": "ส่งข้อความแล้ว {{count}}, ล้มเหลว {{failed}}"
+      },
+      "broadcast_failed": {
+        "title": "บรอดแคสต์ “{{name}}” ล้มเหลว",
+        "titleNoName": "บรอดแคสต์ล้มเหลว",
+        "bodyNoReason": "เปิดเพื่อดูว่าเกิดอะไรขึ้น"
+      },
+      "campaign_completed": {
+        "title": "แคมเปญ “{{name}}” เสร็จสิ้นแล้ว",
+        "titleNoName": "แคมเปญเสร็จสิ้นแล้ว",
+        "bodySent_other": "ส่งข้อความแล้ว {{count}}",
+        "bodySentFailed_other": "ส่งข้อความแล้ว {{count}}, ล้มเหลว {{failed}}"
+      },
+      "campaign_failed": {
+        "title": "แคมเปญ “{{name}}” ล้มเหลว",
+        "titleNoName": "แคมเปญล้มเหลว",
+        "bodyNoReason": "เปิดเพื่อดูว่าเกิดอะไรขึ้น"
+      },
+      "scheduled_completed": {
+        "title": "การส่งตามกำหนดเวลา “{{name}}” ถูกส่งแล้ว",
+        "titleNoName": "การส่งตามกำหนดเวลาถูกส่งแล้ว",
+        "bodySent_other": "ส่งข้อความแล้ว {{count}}",
+        "bodySentFailed_other": "ส่งข้อความแล้ว {{count}}, ล้มเหลว {{failed}}"
+      },
+      "scheduled_failed": {
+        "title": "การส่งตามกำหนดเวลา “{{name}}” ล้มเหลว",
+        "titleNoName": "การส่งตามกำหนดเวลาล้มเหลว",
+        "bodyNoReason": "เปิดเพื่อดูว่าเกิดอะไรขึ้น"
+      },
+      "teamchat_mention": {
+        "title": "{{author}} กล่าวถึงคุณใน {{channel}}",
+        "titleNoChannel": "{{author}} กล่าวถึงคุณในแชททีม",
+        "titleNoName": "คุณถูกกล่าวถึงในแชททีม"
+      },
+      "teamchat_message": {
+        "title_other": "ข้อความใหม่ {{count}} ข้อความจาก {{author}}",
+        "titleNoName_other": "ข้อความส่วนตัวใหม่ {{count}}"
+      },
+      "waba_group_join_request": {
+        "title_other": "มี {{count}} คนต้องการเข้าร่วม {{name}}",
+        "titleNoName_other": "มี {{count}} คนต้องการเข้าร่วมกลุ่ม WhatsApp",
+        "body": "เปิดกลุ่มเพื่ออนุมัติหรือปฏิเสธ"
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} ถูกระงับแล้ว",
+        "titleNoName": "กลุ่ม WhatsApp ถูกระงับแล้ว",
+        "body": "WhatsApp ระงับกลุ่มนี้ คุณจะส่งข้อความไปยังกลุ่มไม่ได้จนกว่าจะกู้คืน"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} กลับมาใช้งานได้อีกครั้ง",
+        "titleNoName": "กลุ่ม WhatsApp กลับมาใช้งานได้อีกครั้ง",
+        "body": "WhatsApp กู้คืนกลุ่มนี้แล้ว คุณส่งข้อความไปยังกลุ่มได้อีกครั้ง"
+      },
+      "device_group_join_request": {
+        "title_other": "{{count}} คนต้องการเข้าร่วม {{name}}",
+        "titleNoName_other": "{{count}} คนต้องการเข้าร่วมกลุ่ม WhatsApp",
+        "body": "เปิดกลุ่มเพื่ออนุมัติหรือปฏิเสธ"
+      },
+      "device_group_removed": {
+        "title": "หมายเลขของคุณถูกลบออกจาก {{name}}",
+        "titleNoName": "หมายเลขของคุณถูกลบออกจากกลุ่ม WhatsApp",
+        "body": "มีคนลบหมายเลขส่วนตัวของคุณออกจากกลุ่มนี้ เก็บกลุ่มไว้ที่นี่ในโหมดอ่านอย่างเดียว"
+      },
+      "test": {
+        "title": "การแจ้งเตือนทดสอบ",
+        "titleNoName": "การแจ้งเตือนทดสอบ",
+        "bodyNoActor": "ถ้าคุณอ่านข้อความนี้ได้ แสดงว่าการแจ้งเตือนแบบเรียลไทม์ทำงานอยู่"
+      }
+    }
   }
 }

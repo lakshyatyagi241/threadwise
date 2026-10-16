@@ -1702,5 +1702,190 @@
         "desk": "מוקד"
       }
     }
+  },
+  "notifications": {
+    "title": "התראות",
+    "markAll": "סמן הכול כנקרא",
+    "dismiss": "התעלם מההתראה הזו",
+    "unread": "לא נקרא",
+    "empty": "עדיין אין התראות",
+    "emptyHint": "צ'אטים חדשים, הקצאות, אזכורים ותוצאות השליחות שלך יופיעו כאן.",
+    "emptyFiltered": "אין התראות שמתאימות למסננים",
+    "emptyFilteredHint": "הסר מסנן או חפש משהו אחר.",
+    "bell": {
+      "label": "התראות",
+      "labelUnread_one": "התראות, {{count}} שלא נקראו",
+      "labelUnread_two": "התראות, {{count}} שלא נקראו",
+      "labelUnread_other": "התראות, {{count}} שלא נקראו"
+    },
+    "filter": {
+      "label": "הצג",
+      "all": "הכול",
+      "unread": "לא נקראו"
+    },
+    "sections": {
+      "today": "היום",
+      "yesterday": "אתמול",
+      "thisWeek": "מוקדם יותר השבוע",
+      "older": "ישנות יותר"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "משימה שהוקצתה לך",
+        "body": "{{actor}} הקצה לך: {{task}}"
+      },
+      "task_due": {
+        "title": "משימה מועדת"
+      },
+      "task_completed": {
+        "title": "משימה הושלמה",
+        "body": "{{actor}} השלים: {{task}}"
+      },
+      "new_lead": {
+        "title": "ליד חדש",
+        "titleReturning": "ליד הגיע שוב",
+        "body": "{{name}} הגיע מ־{{platform}}",
+        "bodyReturning": "{{name}} שלח ליד נוסף מ־{{platform}}",
+        "bodyNoActor": "{{name}} הגיע"
+      },
+      "new_chat": {
+        "title": "צ׳אט חדש מ־{{name}}",
+        "titleNoName": "צ׳אט חדש"
+      },
+      "new_message": {
+        "title_one": "הודעה חדשה מ־{{name}}",
+        "title_two": "{{count}} הודעות חדשות מ־{{name}}",
+        "title_other": "{{count}} הודעות חדשות מ־{{name}}",
+        "titleNoName_one": "הודעה חדשה",
+        "titleNoName_two": "{{count}} הודעות חדשות",
+        "titleNoName_other": "{{count}} הודעות חדשות"
+      },
+      "chat_waiting": {
+        "title": "עדיין אף אחד לא ענה ל־{{name}}",
+        "titleNoName": "צ׳אט עדיין ממתין לתגובה"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} הוקצה לך",
+        "titleNoName": "צ׳אט הוקצה לך",
+        "titleTeam": "{{name}} הוקצה לצוות שלך",
+        "titleTeamNoName": "צ׳אט הוקצה לצוות שלך",
+        "body": "הוקצה על ידי {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} תייג אותך",
+        "titleNoName": "תויגת בהערה",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} מחובר",
+        "titleNoName": "מספר ה־WhatsApp שלך מחובר"
+      },
+      "device_disconnected": {
+        "title": "{{name}} התנתק",
+        "titleNoName": "מספר WhatsApp התנתק",
+        "body": "פתח את המכשיר כדי להתחבר מחדש."
+      },
+      "device_logged_out": {
+        "title": "{{name}} התנתק מהחשבון",
+        "titleNoName": "מספר WhatsApp התנתק מהחשבון",
+        "body": "סרוק שוב את קוד ה־QR כדי להתחבר מחדש."
+      },
+      "broadcast_completed": {
+        "title": "השידור “{{name}}” הסתיים",
+        "titleNoName": "שידור הסתיים",
+        "bodySent_one": "{{count}} הודעה נשלחה",
+        "bodySent_two": "{{count}} הודעות נשלחו",
+        "bodySent_other": "{{count}} הודעות נשלחו",
+        "bodySentFailed_one": "{{count}} הודעה נשלחה, {{failed}} נכשלו",
+        "bodySentFailed_two": "{{count}} הודעות נשלחו, {{failed}} נכשלו",
+        "bodySentFailed_other": "{{count}} הודעות נשלחו, {{failed}} נכשלו"
+      },
+      "broadcast_failed": {
+        "title": "השידור “{{name}}” נכשל",
+        "titleNoName": "שידור נכשל",
+        "bodyNoReason": "פתח כדי לראות מה השתבש."
+      },
+      "campaign_completed": {
+        "title": "הקמפיין “{{name}}” הסתיים",
+        "titleNoName": "קמפיין הסתיים",
+        "bodySent_one": "{{count}} הודעה נשלחה",
+        "bodySent_two": "{{count}} הודעות נשלחו",
+        "bodySent_other": "{{count}} הודעות נשלחו",
+        "bodySentFailed_one": "{{count}} הודעה נשלחה, {{failed}} נכשלו",
+        "bodySentFailed_two": "{{count}} הודעות נשלחו, {{failed}} נכשלו",
+        "bodySentFailed_other": "{{count}} הודעות נשלחו, {{failed}} נכשלו"
+      },
+      "campaign_failed": {
+        "title": "הקמפיין “{{name}}” נכשל",
+        "titleNoName": "קמפיין נכשל",
+        "bodyNoReason": "פתח כדי לראות מה השתבש."
+      },
+      "scheduled_completed": {
+        "title": "השליחה המתוזמנת “{{name}}” יצאה",
+        "titleNoName": "שליחה מתוזמנת יצאה",
+        "bodySent_one": "{{count}} הודעה נשלחה",
+        "bodySent_two": "{{count}} הודעות נשלחו",
+        "bodySent_other": "{{count}} הודעות נשלחו",
+        "bodySentFailed_one": "{{count}} הודעה נשלחה, {{failed}} נכשלו",
+        "bodySentFailed_two": "{{count}} הודעות נשלחו, {{failed}} נכשלו",
+        "bodySentFailed_other": "{{count}} הודעות נשלחו, {{failed}} נכשלו"
+      },
+      "scheduled_failed": {
+        "title": "השליחה המתוזמנת “{{name}}” נכשלה",
+        "titleNoName": "שליחה מתוזמנת נכשלה",
+        "bodyNoReason": "פתח כדי לראות מה השתבש."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} תייג אותך ב־{{channel}}",
+        "titleNoChannel": "{{author}} תייג אותך בצ׳אט הצוות",
+        "titleNoName": "תויגת בצ׳אט הצוות"
+      },
+      "teamchat_message": {
+        "title_one": "הודעה חדשה מ־{{author}}",
+        "title_two": "{{count}} הודעות חדשות מ־{{author}}",
+        "title_other": "{{count}} הודעות חדשות מ־{{author}}",
+        "titleNoName_one": "הודעה פרטית חדשה",
+        "titleNoName_two": "{{count}} הודעות פרטיות חדשות",
+        "titleNoName_other": "{{count}} הודעות פרטיות חדשות"
+      },
+      "waba_group_join_request": {
+        "title_one": "מישהו רוצה להצטרף ל-{{name}}",
+        "title_two": "{{count}} אנשים רוצים להצטרף ל-{{name}}",
+        "title_other": "{{count}} אנשים רוצים להצטרף ל-{{name}}",
+        "titleNoName_one": "מישהו רוצה להצטרף לקבוצת WhatsApp",
+        "titleNoName_two": "{{count}} אנשים רוצים להצטרף לקבוצות WhatsApp",
+        "titleNoName_other": "{{count}} אנשים רוצים להצטרף לקבוצות WhatsApp",
+        "body": "פתחו את הקבוצות כדי לאשר או לדחות."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} הושעתה",
+        "titleNoName": "קבוצת WhatsApp הושעתה",
+        "body": "WhatsApp השעתה את הקבוצה הזו. אי אפשר לשלוח לה הודעות עד שתשוחזר."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} פעילה שוב",
+        "titleNoName": "קבוצת WhatsApp פעילה שוב",
+        "body": "WhatsApp שחזרה את הקבוצה הזו. אפשר לשלוח לה הודעות שוב."
+      },
+      "device_group_join_request": {
+        "title_one": "מישהו רוצה להצטרף ל-{{name}}",
+        "title_two": "{{count}} אנשים רוצים להצטרף ל-{{name}}",
+        "title_other": "{{count}} אנשים רוצים להצטרף ל-{{name}}",
+        "titleNoName_one": "מישהו רוצה להצטרף לקבוצת WhatsApp",
+        "titleNoName_two": "{{count}} אנשים רוצים להצטרף לקבוצת WhatsApp",
+        "titleNoName_other": "{{count}} אנשים רוצים להצטרף לקבוצת WhatsApp",
+        "body": "פתחו את קבוצות כדי לאשר או לדחות."
+      },
+      "device_group_removed": {
+        "title": "המספר שלכם הוסר מ-{{name}}",
+        "titleNoName": "המספר שלכם הוסר מקבוצת WhatsApp",
+        "body": "מישהו הסיר את המספר האישי שלכם מהקבוצה הזו. הקבוצה נשמרת כאן לקריאה בלבד."
+      },
+      "test": {
+        "title": "התראת בדיקה",
+        "titleNoName": "התראת בדיקה",
+        "bodyNoActor": "אם אתם יכולים לקרוא את זה, ההתראות החיות עובדות."
+      }
+    }
   }
 }

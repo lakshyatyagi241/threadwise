@@ -82,6 +82,7 @@ describe('MenuScreen', () => {
       'Dashboard',
       'Inbox',
       'Contacts',
+      'Notifications',
       'Tasks',
       'Deals',
       'Manage profile',
@@ -105,6 +106,12 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/inbox');
       await press('Tasks');
       expect(mockNavigate).toHaveBeenCalledWith('/tasks');
+    });
+
+    it('opens the notifications for everyone: a person always has their own feed', async () => {
+      await show({ ...session.permissions });
+      await press('Notifications');
+      expect(mockNavigate).toHaveBeenCalledWith('/notifications');
     });
 
     it('opens the deals for a person who may read them, and explains when they may not', async () => {

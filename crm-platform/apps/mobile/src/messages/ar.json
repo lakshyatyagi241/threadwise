@@ -1756,5 +1756,235 @@
         "desk": "مكتب"
       }
     }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "markAll": "تعليم الكل كمقروء",
+    "dismiss": "تجاهل هذا الإشعار",
+    "unread": "غير مقروء",
+    "empty": "لا توجد إشعارات بعد",
+    "emptyHint": "ستظهر هنا المحادثات الجديدة والتعيينات والإشارات ونتائج رسائلك المرسلة.",
+    "emptyFiltered": "لا توجد إشعارات تطابق عوامل التصفية هذه",
+    "emptyFilteredHint": "أزل أحد عوامل التصفية أو ابحث عن شيء آخر.",
+    "bell": {
+      "label": "الإشعارات",
+      "labelUnread_few": "الإشعارات، {{count}} إشعارات غير مقروءة",
+      "labelUnread_many": "الإشعارات، {{count}} إشعارًا غير مقروء",
+      "labelUnread_one": "الإشعارات، إشعار واحد غير مقروء",
+      "labelUnread_two": "الإشعارات، إشعاران غير مقروءين",
+      "labelUnread_zero": "الإشعارات، لا إشعارات غير مقروءة",
+      "labelUnread_other": "الإشعارات، {{count}} إشعار غير مقروء"
+    },
+    "filter": {
+      "label": "عرض",
+      "all": "الكل",
+      "unread": "غير المقروءة"
+    },
+    "sections": {
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "thisWeek": "في وقت سابق من هذا الأسبوع",
+      "older": "الأقدم"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "تم إسناد مهمة إليك",
+        "body": "أسند إليك {{actor}} المهمة: {{task}}"
+      },
+      "task_due": {
+        "title": "حان موعد مهمة"
+      },
+      "task_completed": {
+        "title": "اكتملت مهمة",
+        "body": "أكمل {{actor}} المهمة: {{task}}"
+      },
+      "new_lead": {
+        "title": "عميل محتمل جديد",
+        "titleReturning": "عاد عميل محتمل",
+        "body": "{{name}} وصل من {{platform}}",
+        "bodyReturning": "{{name}} أرسل عميلاً محتملاً آخر من {{platform}}",
+        "bodyNoActor": "{{name}} وصل"
+      },
+      "new_chat": {
+        "title": "محادثة جديدة من {{name}}",
+        "titleNoName": "محادثة جديدة"
+      },
+      "new_message": {
+        "title_few": "{{count}} رسائل جديدة من {{name}}",
+        "title_many": "{{count}} رسالة جديدة من {{name}}",
+        "title_one": "رسالة جديدة من {{name}}",
+        "title_two": "رسالتان جديدتان من {{name}}",
+        "title_zero": "{{count}} رسالة جديدة من {{name}}",
+        "title_other": "{{count}} رسالة جديدة من {{name}}",
+        "titleNoName_few": "{{count}} رسائل جديدة",
+        "titleNoName_many": "{{count}} رسالة جديدة",
+        "titleNoName_one": "رسالة جديدة",
+        "titleNoName_two": "رسالتان جديدتان",
+        "titleNoName_zero": "{{count}} رسالة جديدة",
+        "titleNoName_other": "{{count}} رسالة جديدة"
+      },
+      "chat_waiting": {
+        "title": "لم يردّ أحد على {{name}} بعد",
+        "titleNoName": "هناك محادثة ما زالت تنتظر ردًا"
+      },
+      "conversation_assigned": {
+        "title": "تم إسناد {{name}} إليك",
+        "titleNoName": "تم إسناد محادثة إليك",
+        "titleTeam": "تم إسناد {{name}} إلى فريقك",
+        "titleTeamNoName": "تم إسناد محادثة إلى فريقك",
+        "body": "أسندها {{actor}}"
+      },
+      "mention": {
+        "title": "أشار إليك {{actor}}",
+        "titleNoName": "تمت الإشارة إليك في ملاحظة",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "تم ربط {{name}}",
+        "titleNoName": "تم ربط رقم واتساب الخاص بك"
+      },
+      "device_disconnected": {
+        "title": "انقطع اتصال {{name}}",
+        "titleNoName": "انقطع اتصال رقم واتساب",
+        "body": "افتح الجهاز لإعادة الاتصال."
+      },
+      "device_logged_out": {
+        "title": "تم تسجيل خروج {{name}}",
+        "titleNoName": "تم تسجيل خروج رقم واتساب",
+        "body": "امسح رمز QR مرة أخرى لإعادة الاتصال."
+      },
+      "broadcast_completed": {
+        "title": "اكتمل البث «{{name}}»",
+        "titleNoName": "اكتمل بث",
+        "bodySent_few": "أُرسلت {{count}} رسائل",
+        "bodySent_many": "أُرسلت {{count}} رسالة",
+        "bodySent_one": "أُرسلت رسالة واحدة",
+        "bodySent_two": "أُرسلت رسالتان",
+        "bodySent_zero": "لم تُرسل أي رسالة",
+        "bodySent_other": "أُرسلت {{count}} رسالة",
+        "bodySentFailed_few": "أُرسلت {{count}} رسائل، فشلت {{failed}} رسالة",
+        "bodySentFailed_many": "أُرسلت {{count}} رسالة، فشلت {{failed}} رسالة",
+        "bodySentFailed_one": "أُرسلت رسالة واحدة، فشلت {{failed}} رسالة",
+        "bodySentFailed_two": "أُرسلت رسالتان، فشلت {{failed}} رسالة",
+        "bodySentFailed_zero": "لم تُرسل أي رسالة، فشلت {{failed}} رسالة",
+        "bodySentFailed_other": "أُرسلت {{count}} رسالة، فشلت {{failed}} رسالة"
+      },
+      "broadcast_failed": {
+        "title": "فشل البث «{{name}}»",
+        "titleNoName": "فشل بث",
+        "bodyNoReason": "افتحه لمعرفة سبب الفشل."
+      },
+      "campaign_completed": {
+        "title": "اكتملت الحملة «{{name}}»",
+        "titleNoName": "اكتملت حملة",
+        "bodySent_few": "أُرسلت {{count}} رسائل",
+        "bodySent_many": "أُرسلت {{count}} رسالة",
+        "bodySent_one": "أُرسلت رسالة واحدة",
+        "bodySent_two": "أُرسلت رسالتان",
+        "bodySent_zero": "لم تُرسل أي رسالة",
+        "bodySent_other": "أُرسلت {{count}} رسالة",
+        "bodySentFailed_few": "أُرسلت {{count}} رسائل، فشلت {{failed}} رسالة",
+        "bodySentFailed_many": "أُرسلت {{count}} رسالة، فشلت {{failed}} رسالة",
+        "bodySentFailed_one": "أُرسلت رسالة واحدة، فشلت {{failed}} رسالة",
+        "bodySentFailed_two": "أُرسلت رسالتان، فشلت {{failed}} رسالة",
+        "bodySentFailed_zero": "لم تُرسل أي رسالة، فشلت {{failed}} رسالة",
+        "bodySentFailed_other": "أُرسلت {{count}} رسالة، فشلت {{failed}} رسالة"
+      },
+      "campaign_failed": {
+        "title": "فشلت الحملة «{{name}}»",
+        "titleNoName": "فشلت حملة",
+        "bodyNoReason": "افتحها لمعرفة سبب الفشل."
+      },
+      "scheduled_completed": {
+        "title": "تم إرسال الرسالة المجدولة «{{name}}»",
+        "titleNoName": "تم إرسال رسالة مجدولة",
+        "bodySent_few": "أُرسلت {{count}} رسائل",
+        "bodySent_many": "أُرسلت {{count}} رسالة",
+        "bodySent_one": "أُرسلت رسالة واحدة",
+        "bodySent_two": "أُرسلت رسالتان",
+        "bodySent_zero": "لم تُرسل أي رسالة",
+        "bodySent_other": "أُرسلت {{count}} رسالة",
+        "bodySentFailed_few": "أُرسلت {{count}} رسائل، فشلت {{failed}} رسالة",
+        "bodySentFailed_many": "أُرسلت {{count}} رسالة، فشلت {{failed}} رسالة",
+        "bodySentFailed_one": "أُرسلت رسالة واحدة، فشلت {{failed}} رسالة",
+        "bodySentFailed_two": "أُرسلت رسالتان، فشلت {{failed}} رسالة",
+        "bodySentFailed_zero": "لم تُرسل أي رسالة، فشلت {{failed}} رسالة",
+        "bodySentFailed_other": "أُرسلت {{count}} رسالة، فشلت {{failed}} رسالة"
+      },
+      "scheduled_failed": {
+        "title": "فشل إرسال الرسالة المجدولة «{{name}}»",
+        "titleNoName": "فشل إرسال رسالة مجدولة",
+        "bodyNoReason": "افتحها لمعرفة سبب الفشل."
+      },
+      "teamchat_mention": {
+        "title": "أشار إليك {{author}} في {{channel}}",
+        "titleNoChannel": "أشار إليك {{author}} في دردشة الفريق",
+        "titleNoName": "تمت الإشارة إليك في دردشة الفريق"
+      },
+      "teamchat_message": {
+        "title_few": "{{count}} رسائل جديدة من {{author}}",
+        "title_many": "{{count}} رسالة جديدة من {{author}}",
+        "title_one": "رسالة جديدة من {{author}}",
+        "title_two": "رسالتان جديدتان من {{author}}",
+        "title_zero": "{{count}} رسالة جديدة من {{author}}",
+        "title_other": "{{count}} رسالة جديدة من {{author}}",
+        "titleNoName_few": "{{count}} رسائل مباشرة جديدة",
+        "titleNoName_many": "{{count}} رسالة مباشرة جديدة",
+        "titleNoName_one": "رسالة مباشرة جديدة",
+        "titleNoName_two": "رسالتان مباشرتان جديدتان",
+        "titleNoName_zero": "{{count}} رسالة مباشرة جديدة",
+        "titleNoName_other": "{{count}} رسالة مباشرة جديدة"
+      },
+      "waba_group_join_request": {
+        "title_few": "{{count}} طلبات للانضمام إلى «{{name}}»",
+        "title_many": "{{count}} طلبًا للانضمام إلى «{{name}}»",
+        "title_one": "طلب انضمام إلى «{{name}}»",
+        "title_two": "طلبان للانضمام إلى «{{name}}»",
+        "title_zero": "لا طلبات للانضمام إلى «{{name}}»",
+        "title_other": "{{count}} طلب للانضمام إلى «{{name}}»",
+        "titleNoName_few": "{{count}} طلبات للانضمام إلى مجموعة واتساب",
+        "titleNoName_many": "{{count}} طلبًا للانضمام إلى مجموعة واتساب",
+        "titleNoName_one": "طلب انضمام إلى مجموعة واتساب",
+        "titleNoName_two": "طلبان للانضمام إلى مجموعة واتساب",
+        "titleNoName_zero": "لا طلبات للانضمام إلى مجموعة واتساب",
+        "titleNoName_other": "{{count}} طلب للانضمام إلى مجموعة واتساب",
+        "body": "افتح المجموعات للموافقة أو الرفض."
+      },
+      "waba_group_suspended": {
+        "title": "تم تعليق «{{name}}»",
+        "titleNoName": "تم تعليق مجموعة واتساب",
+        "body": "علّقت واتساب هذه المجموعة. لا يمكنك مراسلتها حتى تعيدها."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "عادت «{{name}}» إلى العمل",
+        "titleNoName": "عادت مجموعة واتساب إلى العمل",
+        "body": "أعادت واتساب هذه المجموعة. يمكنك مراسلتها من جديد."
+      },
+      "device_group_join_request": {
+        "title_few": "{{count}} أشخاص يريدون الانضمام إلى {{name}}",
+        "title_many": "{{count}} شخصًا يريدون الانضمام إلى {{name}}",
+        "title_one": "شخص يريد الانضمام إلى {{name}}",
+        "title_two": "شخصان يريدان الانضمام إلى {{name}}",
+        "title_zero": "{{count}} شخص يريدون الانضمام إلى {{name}}",
+        "title_other": "{{count}} شخص يريدون الانضمام إلى {{name}}",
+        "titleNoName_few": "{{count}} أشخاص يريدون الانضمام إلى مجموعة WhatsApp",
+        "titleNoName_many": "{{count}} شخصًا يريدون الانضمام إلى مجموعة WhatsApp",
+        "titleNoName_one": "شخص يريد الانضمام إلى مجموعة WhatsApp",
+        "titleNoName_two": "شخصان يريدان الانضمام إلى مجموعة WhatsApp",
+        "titleNoName_zero": "{{count}} شخص يريدون الانضمام إلى مجموعة WhatsApp",
+        "titleNoName_other": "{{count}} شخص يريدون الانضمام إلى مجموعة WhatsApp",
+        "body": "افتح المجموعات للموافقة أو الرفض."
+      },
+      "device_group_removed": {
+        "title": "تمت إزالة رقمك من {{name}}",
+        "titleNoName": "تمت إزالة رقمك من مجموعة WhatsApp",
+        "body": "أزال شخص ما رقمك الشخصي من هذه المجموعة. تم الاحتفاظ بالمجموعة هنا للقراءة فقط."
+      },
+      "test": {
+        "title": "إشعار تجريبي",
+        "titleNoName": "إشعار تجريبي",
+        "bodyNoActor": "إذا كنت تستطيع قراءة هذا، فالإشعارات المباشرة تعمل."
+      }
+    }
   }
 }

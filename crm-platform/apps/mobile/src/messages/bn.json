@@ -1684,5 +1684,175 @@
         "desk": "ডেস্ক"
       }
     }
+  },
+  "notifications": {
+    "title": "নোটিফিকেশন",
+    "markAll": "সব পড়া হিসেবে চিহ্নিত করুন",
+    "dismiss": "এই নোটিফিকেশন বাদ দিন",
+    "unread": "অপঠিত",
+    "empty": "এখনও কোনো নোটিফিকেশন নেই",
+    "emptyHint": "নতুন চ্যাট, অ্যাসাইনমেন্ট, মেনশন এবং আপনার পাঠানোর ফলাফল এখানে দেখা যাবে।",
+    "emptyFiltered": "এই ফিল্টারের সাথে কোনো নোটিফিকেশন মেলেনি",
+    "emptyFilteredHint": "একটি ফিল্টার সরান বা অন্য কিছু খুঁজুন।",
+    "bell": {
+      "label": "বিজ্ঞপ্তি",
+      "labelUnread_one": "বিজ্ঞপ্তি, {{count}}টি অপঠিত",
+      "labelUnread_other": "বিজ্ঞপ্তি, {{count}}টি অপঠিত"
+    },
+    "filter": {
+      "label": "দেখান",
+      "all": "সব",
+      "unread": "অপঠিত"
+    },
+    "sections": {
+      "today": "আজ",
+      "yesterday": "গতকাল",
+      "thisWeek": "এই সপ্তাহের আগের দিকে",
+      "older": "আরও পুরনো"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "আপনাকে একটি টাস্ক দেওয়া হয়েছে",
+        "body": "{{actor}} আপনাকে দিয়েছেন: {{task}}"
+      },
+      "task_due": {
+        "title": "টাস্কের সময়সীমা"
+      },
+      "task_completed": {
+        "title": "টাস্ক সম্পন্ন হয়েছে",
+        "body": "{{actor}} সম্পন্ন করেছেন: {{task}}"
+      },
+      "new_lead": {
+        "title": "নতুন লিড",
+        "titleReturning": "লিড আবার এসেছে",
+        "body": "{{name}} {{platform}} থেকে এসেছে",
+        "bodyReturning": "{{name}} {{platform}} থেকে আরেকটি লিড পাঠিয়েছে",
+        "bodyNoActor": "{{name}} এসেছে"
+      },
+      "new_chat": {
+        "title": "{{name}}-এর কাছ থেকে নতুন চ্যাট",
+        "titleNoName": "নতুন চ্যাট"
+      },
+      "new_message": {
+        "title_one": "{{name}}-এর কাছ থেকে নতুন বার্তা",
+        "title_other": "{{name}}-এর কাছ থেকে {{count}} টি নতুন বার্তা",
+        "titleNoName_one": "নতুন বার্তা",
+        "titleNoName_other": "{{count}} টি নতুন বার্তা"
+      },
+      "chat_waiting": {
+        "title": "{{name}}-কে এখনও কেউ উত্তর দেননি",
+        "titleNoName": "একটি চ্যাট এখনও উত্তরের অপেক্ষায়"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} আপনাকে দেওয়া হয়েছে",
+        "titleNoName": "একটি চ্যাট আপনাকে দেওয়া হয়েছে",
+        "titleTeam": "{{name}} আপনার টিমকে দেওয়া হয়েছে",
+        "titleTeamNoName": "একটি চ্যাট আপনার টিমকে দেওয়া হয়েছে",
+        "body": "{{actor}} কর্তৃক দেওয়া হয়েছে"
+      },
+      "mention": {
+        "title": "{{actor}} আপনাকে উল্লেখ করেছেন",
+        "titleNoName": "একটি নোটে আপনাকে উল্লেখ করা হয়েছে",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} সংযুক্ত হয়েছে",
+        "titleNoName": "আপনার WhatsApp নম্বর সংযুক্ত হয়েছে"
+      },
+      "device_disconnected": {
+        "title": "{{name}} সংযোগ বিচ্ছিন্ন হয়েছে",
+        "titleNoName": "একটি WhatsApp নম্বরের সংযোগ বিচ্ছিন্ন হয়েছে",
+        "body": "পুনরায় সংযুক্ত করতে ডিভাইসটি খুলুন।"
+      },
+      "device_logged_out": {
+        "title": "{{name}} থেকে লগ আউট করা হয়েছে",
+        "titleNoName": "একটি WhatsApp নম্বর থেকে লগ আউট করা হয়েছে",
+        "body": "পুনরায় সংযুক্ত করতে QR কোডটি আবার স্ক্যান করুন।"
+      },
+      "broadcast_completed": {
+        "title": "ব্রডকাস্ট “{{name}}” শেষ হয়েছে",
+        "titleNoName": "একটি ব্রডকাস্ট শেষ হয়েছে",
+        "bodySent_one": "{{count}} টি বার্তা পাঠানো হয়েছে",
+        "bodySent_other": "{{count}} টি বার্তা পাঠানো হয়েছে",
+        "bodySentFailed_one": "{{count}} টি বার্তা পাঠানো হয়েছে, {{failed}} টি ব্যর্থ",
+        "bodySentFailed_other": "{{count}} টি বার্তা পাঠানো হয়েছে, {{failed}} টি ব্যর্থ"
+      },
+      "broadcast_failed": {
+        "title": "ব্রডকাস্ট “{{name}}” ব্যর্থ হয়েছে",
+        "titleNoName": "একটি ব্রডকাস্ট ব্যর্থ হয়েছে",
+        "bodyNoReason": "কী ভুল হয়েছে তা দেখতে এটি খুলুন।"
+      },
+      "campaign_completed": {
+        "title": "ক্যাম্পেইন “{{name}}” শেষ হয়েছে",
+        "titleNoName": "একটি ক্যাম্পেইন শেষ হয়েছে",
+        "bodySent_one": "{{count}} টি বার্তা পাঠানো হয়েছে",
+        "bodySent_other": "{{count}} টি বার্তা পাঠানো হয়েছে",
+        "bodySentFailed_one": "{{count}} টি বার্তা পাঠানো হয়েছে, {{failed}} টি ব্যর্থ",
+        "bodySentFailed_other": "{{count}} টি বার্তা পাঠানো হয়েছে, {{failed}} টি ব্যর্থ"
+      },
+      "campaign_failed": {
+        "title": "ক্যাম্পেইন “{{name}}” ব্যর্থ হয়েছে",
+        "titleNoName": "একটি ক্যাম্পেইন ব্যর্থ হয়েছে",
+        "bodyNoReason": "কী ভুল হয়েছে তা দেখতে এটি খুলুন।"
+      },
+      "scheduled_completed": {
+        "title": "নির্ধারিত প্রেরণ “{{name}}” পাঠানো হয়েছে",
+        "titleNoName": "একটি নির্ধারিত প্রেরণ পাঠানো হয়েছে",
+        "bodySent_one": "{{count}} টি বার্তা পাঠানো হয়েছে",
+        "bodySent_other": "{{count}} টি বার্তা পাঠানো হয়েছে",
+        "bodySentFailed_one": "{{count}} টি বার্তা পাঠানো হয়েছে, {{failed}} টি ব্যর্থ",
+        "bodySentFailed_other": "{{count}} টি বার্তা পাঠানো হয়েছে, {{failed}} টি ব্যর্থ"
+      },
+      "scheduled_failed": {
+        "title": "নির্ধারিত প্রেরণ “{{name}}” ব্যর্থ হয়েছে",
+        "titleNoName": "একটি নির্ধারিত প্রেরণ ব্যর্থ হয়েছে",
+        "bodyNoReason": "কী ভুল হয়েছে তা দেখতে এটি খুলুন।"
+      },
+      "teamchat_mention": {
+        "title": "{{author}} {{channel}}-এ আপনাকে উল্লেখ করেছেন",
+        "titleNoChannel": "{{author}} টিম চ্যাটে আপনাকে উল্লেখ করেছেন",
+        "titleNoName": "টিম চ্যাটে আপনাকে উল্লেখ করা হয়েছে"
+      },
+      "teamchat_message": {
+        "title_one": "{{author}}-এর কাছ থেকে নতুন বার্তা",
+        "title_other": "{{author}}-এর কাছ থেকে {{count}} টি নতুন বার্তা",
+        "titleNoName_one": "নতুন সরাসরি বার্তা",
+        "titleNoName_other": "{{count}} টি নতুন সরাসরি বার্তা"
+      },
+      "waba_group_join_request": {
+        "title_one": "কেউ {{name}}-এ যোগ দিতে চায়",
+        "title_other": "{{count}} জন {{name}}-এ যোগ দিতে চায়",
+        "titleNoName_one": "কেউ একটি WhatsApp গ্রুপে যোগ দিতে চায়",
+        "titleNoName_other": "{{count}} জন একটি WhatsApp গ্রুপে যোগ দিতে চায়",
+        "body": "অনুমোদন বা প্রত্যাখ্যান করতে গ্রুপ খুলুন।"
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} স্থগিত করা হয়েছে",
+        "titleNoName": "একটি WhatsApp গ্রুপ স্থগিত করা হয়েছে",
+        "body": "WhatsApp এই গ্রুপটি স্থগিত করেছে। পুনরুদ্ধার না করা পর্যন্ত আপনি এতে বার্তা পাঠাতে পারবেন না।"
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} আবার সক্রিয়",
+        "titleNoName": "একটি WhatsApp গ্রুপ আবার সক্রিয়",
+        "body": "WhatsApp এই গ্রুপটি পুনরুদ্ধার করেছে। আপনি আবার এতে বার্তা পাঠাতে পারবেন।"
+      },
+      "device_group_join_request": {
+        "title_one": "কেউ একজন {{name}}-এ যোগ দিতে চান",
+        "title_other": "{{count}}জন {{name}}-এ যোগ দিতে চান",
+        "titleNoName_one": "কেউ একজন একটি WhatsApp গ্রুপে যোগ দিতে চান",
+        "titleNoName_other": "{{count}}জন একটি WhatsApp গ্রুপে যোগ দিতে চান",
+        "body": "অনুমোদন বা প্রত্যাখ্যান করতে গ্রুপ খুলুন।"
+      },
+      "device_group_removed": {
+        "title": "আপনার নম্বরটি {{name}} থেকে সরানো হয়েছে",
+        "titleNoName": "আপনার নম্বরটি একটি WhatsApp গ্রুপ থেকে সরানো হয়েছে",
+        "body": "কেউ একজন আপনার ব্যক্তিগত নম্বরটি এই গ্রুপ থেকে সরিয়ে দিয়েছেন। গ্রুপটি এখানে শুধু পড়ার জন্য রাখা আছে।"
+      },
+      "test": {
+        "title": "পরীক্ষামূলক বিজ্ঞপ্তি",
+        "titleNoName": "পরীক্ষামূলক বিজ্ঞপ্তি",
+        "bodyNoActor": "আপনি যদি এটি পড়তে পারেন, তাহলে লাইভ বিজ্ঞপ্তি কাজ করছে।"
+      }
+    }
   }
 }

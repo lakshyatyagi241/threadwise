@@ -1720,5 +1720,205 @@
         "desk": "Служба поддержки"
       }
     }
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "markAll": "Отметить все прочитанными",
+    "dismiss": "Скрыть это уведомление",
+    "unread": "Непрочитанные",
+    "empty": "Уведомлений пока нет",
+    "emptyHint": "Здесь появятся новые чаты, назначения, упоминания и результаты ваших отправок.",
+    "emptyFiltered": "Нет уведомлений, подходящих под фильтры",
+    "emptyFilteredHint": "Уберите фильтр или измените поисковый запрос.",
+    "bell": {
+      "label": "Уведомления",
+      "labelUnread_few": "Уведомления, непрочитанных: {{count}}",
+      "labelUnread_many": "Уведомления, непрочитанных: {{count}}",
+      "labelUnread_one": "Уведомления, непрочитанных: {{count}}",
+      "labelUnread_other": "Уведомления, непрочитанных: {{count}}"
+    },
+    "filter": {
+      "label": "Показать",
+      "all": "Все",
+      "unread": "Непрочитанные"
+    },
+    "sections": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "thisWeek": "Ранее на этой неделе",
+      "older": "Ранее"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Задача назначена вам",
+        "body": "Задачу назначил {{actor}}: {{task}}"
+      },
+      "task_due": {
+        "title": "Срок задачи истекает"
+      },
+      "task_completed": {
+        "title": "Задача выполнена",
+        "body": "Задачу выполнил {{actor}}: {{task}}"
+      },
+      "new_lead": {
+        "title": "Новый лид",
+        "titleReturning": "Лид снова оставил заявку",
+        "body": "{{name}} пришёл с платформы {{platform}}",
+        "bodyReturning": "{{name}} отправил ещё один лид с платформы {{platform}}",
+        "bodyNoActor": "{{name}} оставил заявку"
+      },
+      "new_chat": {
+        "title": "Новый чат от {{name}}",
+        "titleNoName": "Новый чат"
+      },
+      "new_message": {
+        "title_few": "{{count}} новых сообщения от {{name}}",
+        "title_many": "{{count}} новых сообщений от {{name}}",
+        "title_one": "{{count}} новое сообщение от {{name}}",
+        "title_other": "{{count}} нового сообщения от {{name}}",
+        "titleNoName_few": "{{count}} новых сообщения",
+        "titleNoName_many": "{{count}} новых сообщений",
+        "titleNoName_one": "{{count}} новое сообщение",
+        "titleNoName_other": "{{count}} нового сообщения"
+      },
+      "chat_waiting": {
+        "title": "{{name}} пока никто не ответил",
+        "titleNoName": "Чат всё ещё ждёт ответа"
+      },
+      "conversation_assigned": {
+        "title": "«{{name}}» назначен вам",
+        "titleNoName": "Чат назначен вам",
+        "titleTeam": "«{{name}}» назначен вашей команде",
+        "titleTeamNoName": "Чат назначен вашей команде",
+        "body": "Назначил {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} упомянул вас",
+        "titleNoName": "Вас упомянули в заметке",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "«{{name}}» подключён",
+        "titleNoName": "Ваш номер WhatsApp подключён"
+      },
+      "device_disconnected": {
+        "title": "«{{name}}» отключён",
+        "titleNoName": "Номер WhatsApp отключён",
+        "body": "Откройте устройство, чтобы подключить снова."
+      },
+      "device_logged_out": {
+        "title": "Сеанс «{{name}}» завершён",
+        "titleNoName": "Сеанс номера WhatsApp завершён",
+        "body": "Отсканируйте QR-код снова, чтобы подключиться."
+      },
+      "broadcast_completed": {
+        "title": "Рассылка «{{name}}» завершена",
+        "titleNoName": "Рассылка завершена",
+        "bodySent_few": "отправлено {{count}} сообщения",
+        "bodySent_many": "отправлено {{count}} сообщений",
+        "bodySent_one": "отправлено {{count}} сообщение",
+        "bodySent_other": "отправлено {{count}} сообщения",
+        "bodySentFailed_few": "отправлено {{count}} сообщения, {{failed}} не доставлено",
+        "bodySentFailed_many": "отправлено {{count}} сообщений, {{failed}} не доставлено",
+        "bodySentFailed_one": "отправлено {{count}} сообщение, {{failed}} не доставлено",
+        "bodySentFailed_other": "отправлено {{count}} сообщения, {{failed}} не доставлено"
+      },
+      "broadcast_failed": {
+        "title": "Рассылка «{{name}}» не удалась",
+        "titleNoName": "Рассылка не удалась",
+        "bodyNoReason": "Откройте, чтобы узнать, что пошло не так."
+      },
+      "campaign_completed": {
+        "title": "Кампания «{{name}}» завершена",
+        "titleNoName": "Кампания завершена",
+        "bodySent_few": "отправлено {{count}} сообщения",
+        "bodySent_many": "отправлено {{count}} сообщений",
+        "bodySent_one": "отправлено {{count}} сообщение",
+        "bodySent_other": "отправлено {{count}} сообщения",
+        "bodySentFailed_few": "отправлено {{count}} сообщения, {{failed}} не доставлено",
+        "bodySentFailed_many": "отправлено {{count}} сообщений, {{failed}} не доставлено",
+        "bodySentFailed_one": "отправлено {{count}} сообщение, {{failed}} не доставлено",
+        "bodySentFailed_other": "отправлено {{count}} сообщения, {{failed}} не доставлено"
+      },
+      "campaign_failed": {
+        "title": "Кампания «{{name}}» завершилась с ошибкой",
+        "titleNoName": "Кампания завершилась с ошибкой",
+        "bodyNoReason": "Откройте, чтобы узнать, что пошло не так."
+      },
+      "scheduled_completed": {
+        "title": "Отложенная отправка «{{name}}» выполнена",
+        "titleNoName": "Отложенная отправка выполнена",
+        "bodySent_few": "отправлено {{count}} сообщения",
+        "bodySent_many": "отправлено {{count}} сообщений",
+        "bodySent_one": "отправлено {{count}} сообщение",
+        "bodySent_other": "отправлено {{count}} сообщения",
+        "bodySentFailed_few": "отправлено {{count}} сообщения, {{failed}} не доставлено",
+        "bodySentFailed_many": "отправлено {{count}} сообщений, {{failed}} не доставлено",
+        "bodySentFailed_one": "отправлено {{count}} сообщение, {{failed}} не доставлено",
+        "bodySentFailed_other": "отправлено {{count}} сообщения, {{failed}} не доставлено"
+      },
+      "scheduled_failed": {
+        "title": "Отложенная отправка «{{name}}» не удалась",
+        "titleNoName": "Отложенная отправка не удалась",
+        "bodyNoReason": "Откройте, чтобы узнать, что пошло не так."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} упомянул вас в {{channel}}",
+        "titleNoChannel": "{{author}} упомянул вас в командном чате",
+        "titleNoName": "Вас упомянули в командном чате"
+      },
+      "teamchat_message": {
+        "title_few": "{{count}} новых сообщения от {{author}}",
+        "title_many": "{{count}} новых сообщений от {{author}}",
+        "title_one": "{{count}} новое сообщение от {{author}}",
+        "title_other": "{{count}} нового сообщения от {{author}}",
+        "titleNoName_few": "{{count}} новых личных сообщения",
+        "titleNoName_many": "{{count}} новых личных сообщений",
+        "titleNoName_one": "{{count}} новое личное сообщение",
+        "titleNoName_other": "{{count}} нового личного сообщения"
+      },
+      "waba_group_join_request": {
+        "title_few": "{{count}} человека хотят вступить в {{name}}",
+        "title_many": "{{count}} человек хотят вступить в {{name}}",
+        "title_one": "Кто-то хочет вступить в {{name}}",
+        "title_other": "{{count}} человека хотят вступить в {{name}}",
+        "titleNoName_few": "{{count}} человека хотят вступить в группу WhatsApp",
+        "titleNoName_many": "{{count}} человек хотят вступить в группу WhatsApp",
+        "titleNoName_one": "Кто-то хочет вступить в группу WhatsApp",
+        "titleNoName_other": "{{count}} человека хотят вступить в группу WhatsApp",
+        "body": "Откройте «Группы», чтобы одобрить или отклонить."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} приостановлена",
+        "titleNoName": "Группа WhatsApp приостановлена",
+        "body": "WhatsApp приостановил эту группу. Писать в неё нельзя, пока её не восстановят."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} снова активна",
+        "titleNoName": "Группа WhatsApp снова активна",
+        "body": "WhatsApp восстановил эту группу. Теперь в неё можно писать."
+      },
+      "device_group_join_request": {
+        "title_few": "{{count}} человека хотят вступить в {{name}}",
+        "title_many": "{{count}} человек хотят вступить в {{name}}",
+        "title_one": "Кто-то хочет вступить в {{name}}",
+        "title_other": "{{count}} человека хотят вступить в {{name}}",
+        "titleNoName_few": "{{count}} человека хотят вступить в группу WhatsApp",
+        "titleNoName_many": "{{count}} человек хотят вступить в группу WhatsApp",
+        "titleNoName_one": "Кто-то хочет вступить в группу WhatsApp",
+        "titleNoName_other": "{{count}} человека хотят вступить в группу WhatsApp",
+        "body": "Откройте «Группы», чтобы одобрить или отклонить."
+      },
+      "device_group_removed": {
+        "title": "Ваш номер удалён из группы {{name}}",
+        "titleNoName": "Ваш номер удалён из группы WhatsApp",
+        "body": "Кто-то удалил ваш личный номер из этой группы. Группа сохранена здесь только для чтения."
+      },
+      "test": {
+        "title": "Тестовое уведомление",
+        "titleNoName": "Тестовое уведомление",
+        "bodyNoActor": "Если вы видите этот текст, уведомления в реальном времени работают."
+      }
+    }
   }
 }

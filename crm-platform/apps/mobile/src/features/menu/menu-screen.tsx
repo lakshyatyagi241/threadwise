@@ -190,6 +190,11 @@ export function MenuScreen() {
             <Children items={contactChildren} faded={faded} onOpen={go} />
           ) : null}
           <Row
+            icon="notifications-outline"
+            label={t('notifications.title')}
+            onPress={() => router.navigate('/notifications')}
+          />
+          <Row
             icon="clipboard-outline"
             label={t('menu.tasks')}
             faded={faded('record.tasks.read')}

@@ -1666,5 +1666,160 @@
         "desk": "Bàn làm việc"
       }
     }
+  },
+  "notifications": {
+    "title": "Thông báo",
+    "markAll": "Đánh dấu tất cả đã đọc",
+    "dismiss": "Bỏ qua thông báo này",
+    "unread": "Chưa đọc",
+    "empty": "Chưa có thông báo nào",
+    "emptyHint": "Cuộc trò chuyện mới, việc được giao, lượt nhắc đến và kết quả các lần gửi của bạn sẽ xuất hiện ở đây.",
+    "emptyFiltered": "Không có thông báo nào khớp với các bộ lọc này",
+    "emptyFilteredHint": "Hãy bỏ bớt một bộ lọc hoặc tìm nội dung khác.",
+    "bell": {
+      "label": "Thông báo",
+      "labelUnread_other": "Thông báo, {{count}} chưa đọc"
+    },
+    "filter": {
+      "label": "Hiển thị",
+      "all": "Tất cả",
+      "unread": "Chưa đọc"
+    },
+    "sections": {
+      "today": "Hôm nay",
+      "yesterday": "Hôm qua",
+      "thisWeek": "Đầu tuần này",
+      "older": "Cũ hơn"
+    },
+    "types": {
+      "task_assigned": {
+        "title": "Công việc được giao cho bạn",
+        "body": "{{actor}} đã giao cho bạn: {{task}}"
+      },
+      "task_due": {
+        "title": "Công việc đến hạn"
+      },
+      "task_completed": {
+        "title": "Công việc đã hoàn thành",
+        "body": "{{actor}} đã hoàn thành: {{task}}"
+      },
+      "new_lead": {
+        "title": "Khách hàng tiềm năng mới",
+        "titleReturning": "Khách hàng tiềm năng quay lại",
+        "body": "{{name}} đến từ {{platform}}",
+        "bodyReturning": "{{name}} đã gửi thêm một khách hàng tiềm năng từ {{platform}}",
+        "bodyNoActor": "{{name}} vừa đến"
+      },
+      "new_chat": {
+        "title": "Chat mới từ {{name}}",
+        "titleNoName": "Chat mới"
+      },
+      "new_message": {
+        "title_other": "{{count}} tin nhắn mới từ {{name}}",
+        "titleNoName_other": "{{count}} tin nhắn mới"
+      },
+      "chat_waiting": {
+        "title": "Chưa ai trả lời {{name}}",
+        "titleNoName": "Có chat vẫn đang chờ trả lời"
+      },
+      "conversation_assigned": {
+        "title": "{{name}} đã được giao cho bạn",
+        "titleNoName": "Một chat đã được giao cho bạn",
+        "titleTeam": "{{name}} đã được giao cho nhóm của bạn",
+        "titleTeamNoName": "Một chat đã được giao cho nhóm của bạn",
+        "body": "Được giao bởi {{actor}}"
+      },
+      "mention": {
+        "title": "{{actor}} đã nhắc đến bạn",
+        "titleNoName": "Bạn được nhắc đến trong một ghi chú",
+        "body": "{{name}}: {{preview}}"
+      },
+      "device_connected": {
+        "title": "{{name}} đã được kết nối",
+        "titleNoName": "Số WhatsApp của bạn đã được kết nối"
+      },
+      "device_disconnected": {
+        "title": "{{name}} đã ngắt kết nối",
+        "titleNoName": "Một số WhatsApp đã ngắt kết nối",
+        "body": "Mở thiết bị để kết nối lại."
+      },
+      "device_logged_out": {
+        "title": "{{name}} đã bị đăng xuất",
+        "titleNoName": "Một số WhatsApp đã bị đăng xuất",
+        "body": "Quét lại mã QR để kết nối lại."
+      },
+      "broadcast_completed": {
+        "title": "Gửi hàng loạt “{{name}}” đã hoàn tất",
+        "titleNoName": "Một chiến dịch Gửi hàng loạt đã hoàn tất",
+        "bodySent_other": "Đã gửi {{count}} tin nhắn",
+        "bodySentFailed_other": "Đã gửi {{count}} tin nhắn, {{failed}} thất bại"
+      },
+      "broadcast_failed": {
+        "title": "Gửi hàng loạt “{{name}}” thất bại",
+        "titleNoName": "Một chiến dịch Gửi hàng loạt thất bại",
+        "bodyNoReason": "Mở để xem lỗi ở đâu."
+      },
+      "campaign_completed": {
+        "title": "Chiến dịch “{{name}}” đã hoàn tất",
+        "titleNoName": "Một chiến dịch đã hoàn tất",
+        "bodySent_other": "Đã gửi {{count}} tin nhắn",
+        "bodySentFailed_other": "Đã gửi {{count}} tin nhắn, {{failed}} thất bại"
+      },
+      "campaign_failed": {
+        "title": "Chiến dịch “{{name}}” thất bại",
+        "titleNoName": "Một chiến dịch thất bại",
+        "bodyNoReason": "Mở để xem lỗi ở đâu."
+      },
+      "scheduled_completed": {
+        "title": "Lịch gửi “{{name}}” đã được gửi",
+        "titleNoName": "Một lịch gửi đã được gửi",
+        "bodySent_other": "Đã gửi {{count}} tin nhắn",
+        "bodySentFailed_other": "Đã gửi {{count}} tin nhắn, {{failed}} thất bại"
+      },
+      "scheduled_failed": {
+        "title": "Lịch gửi “{{name}}” thất bại",
+        "titleNoName": "Một lịch gửi thất bại",
+        "bodyNoReason": "Mở để xem lỗi ở đâu."
+      },
+      "teamchat_mention": {
+        "title": "{{author}} đã nhắc bạn trong {{channel}}",
+        "titleNoChannel": "{{author}} đã nhắc bạn trong Chat nhóm",
+        "titleNoName": "Bạn được nhắc đến trong Chat nhóm"
+      },
+      "teamchat_message": {
+        "title_other": "{{count}} tin nhắn mới từ {{author}}",
+        "titleNoName_other": "{{count}} tin nhắn trực tiếp mới"
+      },
+      "waba_group_join_request": {
+        "title_other": "{{count}} người muốn tham gia {{name}}",
+        "titleNoName_other": "{{count}} người muốn tham gia nhóm WhatsApp",
+        "body": "Mở Nhóm để duyệt hoặc từ chối."
+      },
+      "waba_group_suspended": {
+        "title": "{{name}} đã bị tạm ngưng",
+        "titleNoName": "Một nhóm WhatsApp đã bị tạm ngưng",
+        "body": "WhatsApp đã tạm ngưng nhóm này. Bạn không thể nhắn tin cho nhóm cho đến khi nhóm được khôi phục."
+      },
+      "waba_group_suspension_cleared": {
+        "title": "{{name}} đã hoạt động trở lại",
+        "titleNoName": "Một nhóm WhatsApp đã hoạt động trở lại",
+        "body": "WhatsApp đã khôi phục nhóm này. Bạn có thể nhắn tin lại."
+      },
+      "device_group_join_request": {
+        "title_other": "{{count}} người muốn tham gia {{name}}",
+        "titleNoName_other": "{{count}} người muốn tham gia một nhóm WhatsApp",
+        "body": "Mở Nhóm để duyệt hoặc từ chối."
+      },
+      "device_group_removed": {
+        "title": "Số của bạn đã bị xóa khỏi {{name}}",
+        "titleNoName": "Số của bạn đã bị xóa khỏi một nhóm WhatsApp",
+        "body": "Ai đó đã xóa số cá nhân của bạn khỏi nhóm này. Nhóm được giữ lại ở đây, chỉ có thể đọc."
+      },
+      "test": {
+        "title": "Thông báo thử",
+        "titleNoName": "Thông báo thử",
+        "bodyNoActor": "Nếu bạn đọc được dòng này, thông báo trực tiếp đang hoạt động."
+      }
+    }
   }
 }
