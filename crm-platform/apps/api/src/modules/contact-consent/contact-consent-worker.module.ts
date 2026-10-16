@@ -20,7 +20,7 @@ import { MinorSweepService } from './minor-sweep.service';
     ConsentExportRunner,
     ConsentExportProcessor,
     ConsentExportSweepService,
-    // The nightly birthday sweep of the minor flag (BL-211).
+    // The nightly birthday sweep of the minor flag (BL-217).
     MinorSweepService,
   ],
 })

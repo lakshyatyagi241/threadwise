@@ -165,7 +165,7 @@ export interface BuilderState {
   collectName: boolean;
   collectEmail: boolean;
   collectPhone: boolean;
-  /** The optional age question of the intake form (BL-212). Off unless a person turns it on. */
+  /** The optional age question of the intake form (BL-218). Off unless a person turns it on. */
   ageGate: AgeGate;
   /** The WhatsApp widget's look and placement; the AI and Both builders carry it along untouched. */
   launcher: LauncherDraft;

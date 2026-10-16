@@ -344,7 +344,7 @@ export class WidgetPublicService {
     }
     const data = parsed.data;
 
-    // The age gate (BL-212) is judged BEFORE anything of the visitor is stored: a refused visitor leaves no row, no profile, no age.
+    // The age gate (BL-218) is judged BEFORE anything of the visitor is stored: a refused visitor leaves no row, no profile, no age.
     const age = await this.ageCheck(orgId, widget, req, data);
 
     const forInbox: WidgetForInbox = {
@@ -436,7 +436,7 @@ export class WidgetPublicService {
   }
 
   /**
-   * The age gate of the intake form (BL-212, spec 11.10). Off for most widgets. A visitor who already passed is not asked again; any
+   * The age gate of the intake form (BL-218, spec 11.10). Off for most widgets. A visitor who already passed is not asked again; any
    * other visitor must answer on the first message. `block` refuses the chat with a neutral 403 (nothing is stored; the page remembers
    * for the session), `flag` lets it through and the contact is flagged once it exists. With the box and `block`, an unticked box is
    * only an unanswered question (422), because nobody has said anything yet.

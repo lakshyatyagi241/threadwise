@@ -145,7 +145,7 @@ function checkField(
       return { value: d.iso };
     }
     case 'date_of_birth': {
-      // A real day that can be a birth date (BL-211). The same code as a bad date, so the page cannot tell a typo from a refusal.
+      // A real day that can be a birth date (BL-217). The same code as a bad date, so the page cannot tell a typo from a refusal.
       if (typeof raw !== 'string') return { issue: 'invalid_date' };
       const d = parseDateValue(raw.trim());
       if (!d || d.kind !== 'day' || !isPlausibleBirthDate(d.iso, now)) {
@@ -288,7 +288,7 @@ export function mapAnswers(
   for (const f of formFields(def)) {
     const value = values[f.id];
     if (value === undefined) continue;
-    // A date of birth field always writes the contact's date of birth, bound or not (BL-211): there is nowhere else it could go.
+    // A date of birth field always writes the contact's date of birth, bound or not (BL-217): there is nowhere else it could go.
     const bind =
       f.kind === 'date_of_birth'
         ? ({ object: 'contact', property: 'date_of_birth' } as const)
@@ -396,7 +396,7 @@ export function companyHostFromEmail(email: string | null | undefined): string |
 
 export const isFreeMailDomain = (host: string): boolean => FREE_MAIL.has(host.toLowerCase());
 
-// --- the age gate (BL-211, spec 11.10) -------------------------------------------------------------------------------------------------
+// --- the age gate (BL-217, spec 11.10) -------------------------------------------------------------------------------------------------
 
 /**
  * Answers the server adds beside the visitor's own, under keys no field can have (a block id starts with a letter). They travel with the

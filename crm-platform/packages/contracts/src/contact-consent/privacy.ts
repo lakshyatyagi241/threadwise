@@ -24,7 +24,7 @@ export type PrivacyFlagKind = z.infer<typeof privacyFlagKindSchema>;
 /**
  * Where a change came from. `gpc` is the browser signal (header `Sec-GPC: 1`) on a public form or the chat widget (the evidence names
  * which: `formId` / `widgetId`); a person or an API caller uses `manual` / `api`; `contact_request` is the person's own request
- * recorded by staff. `dob` is the system acting on a date of birth or an age answer (BL-211): the ONLY source the birthday sweep
+ * recorded by staff. `dob` is the system acting on a date of birth or an age answer (BL-217): the ONLY source the birthday sweep
  * may lift again; every other source is a person's or a flow author's decision and stays until a person clears it. `import` is a CSV
  * column, `flow` a chatbot flow that learned of a minor, `declaration` a visitor who did not
  * confirm the minimum age on a form (it never lapses by itself).

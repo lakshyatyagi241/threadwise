@@ -323,7 +323,7 @@ recorded as agreement to service messages (ledger purpose `utility`, source `for
 marketing, and changes no subscription label. An unticked line records nothing in the ledger (the submission keeps the wording shown and
 `given: false`). A person who stopped a channel is not turned back on.
 
-## Age check (BL-211)
+## Age check (BL-217)
 
 Spec section 11.10. `definition.ageGate` (off by default): `{ enabled, mode: dob | age | declaration, minAge: 1..21 | null, whenUnder: block | flag | guardian }`. `minAge: null` means the workspace's minor age (highest of the Compliance profiles, else 18).
 

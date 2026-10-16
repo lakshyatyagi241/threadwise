@@ -3,7 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import { MinorDetectionService } from './minor-detection.service';
 
 /**
- * The nightly birthday sweep (BL-211, spec 11.10; worker only): lifts the minor flags that came from a date of birth or an age and whose day
+ * The nightly birthday sweep (BL-217, spec 11.10; worker only): lifts the minor flags that came from a date of birth or an age and whose day
  * has come, and flags the under-age contacts that no write evaluated. A flag a person set is never touched. At 03:35, away from the other
  * nightly sweeps (the forms retention at 03:17, the consent export keeper at 02:41).
  */

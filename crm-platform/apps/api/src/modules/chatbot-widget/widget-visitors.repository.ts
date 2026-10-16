@@ -10,7 +10,7 @@ export interface VisitorRow {
   email: string | null;
   phone: string | null;
   conversationId: number | null;
-  /** When this visitor's answer passed the widget's age gate (BL-212); null = not yet. */
+  /** When this visitor's answer passed the widget's age gate (BL-218); null = not yet. */
   ageCheckedAt: Date | null;
 }
 

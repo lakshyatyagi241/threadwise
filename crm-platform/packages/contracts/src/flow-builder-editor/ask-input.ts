@@ -22,7 +22,7 @@ export const FLB_ASK_INPUT_TYPES = [
   'number',
   'alphanumeric',
   'date',
-  // The age question (BL-212, spec 11.10): an age in whole years, or a date of birth written in the chosen date format. The answer is
+  // The age question (BL-218, spec 11.10): an age in whole years, or a date of birth written in the chosen date format. The answer is
   // judged against the workspace's minor age (or the node's own) and written to the contact; see `FLB_AGE_*` below.
   'age',
   'date_of_birth',

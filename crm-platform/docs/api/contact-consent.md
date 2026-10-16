@@ -205,7 +205,7 @@ the Do Not Sell or Share opt-out of the contact that the submission or thread re
 nothing else about the request. Already opted out: nothing more is written. It never changes marketing consent. A widget visitor has a
 contact once they give a phone number or an email address.
 
-## How a minor is detected (BL-211, BL-212, BL-190)
+## How a minor is detected (BL-217, BL-218, BL-190)
 
 Spec: [privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 11.10.
 

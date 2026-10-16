@@ -37,7 +37,7 @@ export const publicFormSchema = z.object({
   }),
   theme: formThemeSchema,
   /**
-   * The age question the page draws (BL-211), or null when the form has no gate. NEVER carries the action or, for a date of birth or an age,
+   * The age question the page draws (BL-217), or null when the form has no gate. NEVER carries the action or, for a date of birth or an age,
    * the minimum: the screen does not say which answer passes. `declarationAge` is set only for the declaration, whose wording must name it.
    */
   ageGate: z

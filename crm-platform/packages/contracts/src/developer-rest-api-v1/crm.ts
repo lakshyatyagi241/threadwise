@@ -96,7 +96,7 @@ const contactFields = {
   language: text(80),
   address: text(1000),
   /**
-   * `YYYY-MM-DD` (BL-190, BL-211). Not in Reference's API: a product extension. A date that makes the contact a minor flags it
+   * `YYYY-MM-DD` (BL-190, BL-217). Not in Reference's API: a product extension. A date that makes the contact a minor flags it
    * (source `dob`) in the same request; `null` clears the date. A flag a person set is never changed by the date.
    */
   date_of_birth: z.preprocess(blankToNull, birthDateSchema.nullable().optional()),

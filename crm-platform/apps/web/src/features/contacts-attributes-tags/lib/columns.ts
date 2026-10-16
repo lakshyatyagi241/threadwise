@@ -15,7 +15,7 @@ export const FIXED_COLUMN_IDS = [
   'leadScore',
   'language',
   'memo',
-  // BL-190 / BL-211: offered, hidden until chosen. Neither can be sorted.
+  // BL-190 / BL-217: offered, hidden until chosen. Neither can be sorted.
   'dateOfBirth',
   'minor',
   'createdOn',

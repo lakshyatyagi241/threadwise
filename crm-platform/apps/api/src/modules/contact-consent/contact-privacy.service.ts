@@ -152,12 +152,12 @@ export class ContactPrivacyService {
     return this.repo.minorUuids(tx, orgId, uuids);
   }
 
-  /** The age below which a person is a minor in this workspace (BL-211): the highest of the profiles' ages, else 18. */
+  /** The age below which a person is a minor in this workspace (BL-217): the highest of the profiles' ages, else 18. */
   async minorAge(tx: Tx, orgId: number): Promise<number> {
     return (await this.repo.complianceFacts(tx, orgId)).minorAge;
   }
 
-  /** What a form's or a widget's age settings explain themselves with (BL-211): the minor age, and whether the children question is answered. */
+  /** What a form's or a widget's age settings explain themselves with (BL-217): the minor age, and whether the children question is answered. */
   async ageContext(
     tx: Tx,
     orgId: number,

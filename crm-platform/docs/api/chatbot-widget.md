@@ -119,7 +119,7 @@ message (`sender_kind = 'customer'`, status `received`); the opening line and th
 conversation reaches the visitor on the next poll. As in Reference (QUIRK), ANY outbound line after the opening line silences the AI for that thread, so the assistant answers a
 conversation's first message only. Data model: [chat-conversations.md](chat-conversations.md).
 
-## Age question on the intake form (BL-212)
+## Age question on the intake form (BL-218)
 
 `ageGate` on a widget (`POST/PATCH /v2/widgets`, `PUT` of a flow bot's look): `{ enabled, mode: dob | age | declaration, minAge, whenUnder: block | flag }` (a chat has no second screen, so `guardian` is refused). Off by default. The intake form shows it only for a visitor who has not passed it.
 

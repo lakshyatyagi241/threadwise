@@ -9,10 +9,10 @@
 --                  the gate matches on (a contact's stored number may carry the plus or not). `source` says where the entry came from:
 --                  `manual` (a person typed or pasted it), `import` (a CSV), `contact_request` (the person asked the workspace), or
 --                  `registry_export` (an extract the workspace downloaded from a registry it is entitled to use). NO registry is called
---                  from here; that needs a licence and credentials (BL-215).
+--                  from here; that needs a licence and credentials (BL-221).
 --
 --   compliance_settings.consent_manager_registration   the registration number of the DPDP Consent Manager the workspace uses (a note;
---                  the inbound hook is a contract only, BL-216).
+--                  the inbound hook is a contract only, BL-222).
 --
 -- Additive: nothing is backfilled and no existing statement is touched.
 

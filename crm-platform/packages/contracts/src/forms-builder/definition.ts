@@ -38,11 +38,11 @@ export const FORM_FIELD_KINDS = [
   'currency',
   'date',
   /**
-   * A date of birth (BL-211). Written to the contact's `date_of_birth` property; with the form's age gate on and mode `dob` it is also the
+   * A date of birth (BL-217). Written to the contact's `date_of_birth` property; with the form's age gate on and mode `dob` it is also the
    * question the gate judges. Never required unless the gate needs it, never asked unless a person adds it to the form.
    */
   'date_of_birth',
-  /** An age in whole years (BL-211). Judged by the age gate (mode `age`) and then forgotten: it has no contact property. */
+  /** An age in whole years (BL-217). Judged by the age gate (mode `age`) and then forgotten: it has no contact property. */
   'age',
   'dropdown',
   'radio',
@@ -468,7 +468,7 @@ export const formDefinitionSchema = z
     mapping: formMappingSchema.default({}),
     after: formAfterSchema.default({}),
     payment: formPaymentSchema.default({}),
-    /** The age gate (BL-211, spec 11.10): off unless a person turns it on. */
+    /** The age gate (BL-217, spec 11.10): off unless a person turns it on. */
     ageGate: ageGateSchema.default({}),
   })
   .strict()

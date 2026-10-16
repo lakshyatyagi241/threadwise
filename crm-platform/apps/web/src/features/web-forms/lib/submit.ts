@@ -28,9 +28,9 @@ export type SubmitOutcome =
   | { ok: false; kind: 'rate_limited'; retryAfterSeconds: number | null }
   | { ok: false; kind: 'closed' }
   | { ok: false; kind: 'payment_unavailable' }
-  /** The age check refused the submission (BL-211). The page says so neutrally and does not offer another try in this session. */
+  /** The age check refused the submission (BL-217). The page says so neutrally and does not offer another try in this session. */
   | { ok: false; kind: 'age_blocked' }
-  /** The age check wants a parent or guardian before it accepts (BL-211). */
+  /** The age check wants a parent or guardian before it accepts (BL-217). */
   | { ok: false; kind: 'guardian_required' }
   | { ok: false; kind: 'error' };
 

@@ -12,7 +12,7 @@ const CAPTION =
   'mb-1 block text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground';
 
 /**
- * The optional age question of the chat's intake form (BL-212, spec docs/specs/privacy-and-data-governance.md 11.10). Off by default and
+ * The optional age question of the chat's intake form (BL-218, spec docs/specs/privacy-and-data-governance.md 11.10). Off by default and
  * worded so nobody turns it on without a reason: it is for workspaces whose rules ask for it or whose visitors may be minors. The chat
  * never tells the visitor which answer passes. A chat has no second screen, so there is no guardian action.
  */

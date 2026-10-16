@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /**
- * Age rules (BL-211, spec docs/specs/privacy-and-data-governance.md section 11.10): the pure date arithmetic and the age gate that the
+ * Age rules (BL-217, spec docs/specs/privacy-and-data-governance.md section 11.10): the pure date arithmetic and the age gate that the
  * form builder, the website chat widget and the flow Ask node share, so one answer is judged the same way everywhere. No I/O, no clock
  * of its own: every function takes `now`.
  *

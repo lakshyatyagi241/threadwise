@@ -230,7 +230,7 @@ export class FormSubmitService {
       );
     }
 
-    // The age gate (BL-211): judged on the validated answers, BEFORE anything is stored. A refused visitor leaves no trace at all.
+    // The age gate (BL-217): judged on the validated answers, BEFORE anything is stored. A refused visitor leaves no trace at all.
     const ageExtras = await this.judgeAge(orgId, def, validated.values, body, now);
     const stored: Record<string, StoredAnswer> = { ...validated.values, ...ageExtras };
 
@@ -560,7 +560,7 @@ export class FormSubmitService {
     }
   }
 
-  // --- the age gate (BL-211, spec 11.10) -------------------------------------------------------------------------------------------
+  // --- the age gate (BL-217, spec 11.10) -------------------------------------------------------------------------------------------
 
   /**
    * Judges the visitor's age answer against the form's gate. Returns the answers the server adds beside theirs (the outcome and, for
@@ -728,7 +728,7 @@ export class FormSubmitService {
       created: found.created,
       now: sub.createdAt,
     });
-    // A date of birth the submission wrote brings the minor flag in line with it (BL-211); a form's own stricter reading follows below.
+    // A date of birth the submission wrote brings the minor flag in line with it (BL-217); a form's own stricter reading follows below.
     if (filled.dobChanged) {
       await this.minors.evaluateInTx(tx, orgId, found.contactId, sub.createdAt, {
         dobChanged: true,
@@ -952,7 +952,7 @@ export class FormSubmitService {
     if (blank(v.extras.title) && b.title) patch.title = b.title.slice(0, 191);
     if (blank(v.extras.address) && b.address) patch.address = b.address.slice(0, 500);
     if (blank(v.extras.message) && b.message) patch.message = b.message.slice(0, 5000);
-    // The younger date of birth wins (BL-211): a blank is filled; a different date is kept only if it is later, so a form can make a
+    // The younger date of birth wins (BL-217): a blank is filled; a different date is kept only if it is later, so a form can make a
     // contact a minor but never an adult again. A date that cannot be a birth date is ignored.
     const dob = b.date_of_birth;
     if (dob && isPlausibleBirthDate(dob, v.now) && (!row.dateOfBirth || dob > row.dateOfBirth)) {

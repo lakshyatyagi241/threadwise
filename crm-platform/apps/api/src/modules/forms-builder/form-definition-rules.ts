@@ -130,7 +130,7 @@ export function publishProblems(def: FormDefinition, ctx: PublishContext): FormP
   if (ctx.captchaMissing === true)
     out.push(problem('settings.captchaMode', 'captcha_not_configured'));
 
-  // The age gate needs the question it judges (BL-211). A declaration needs none.
+  // The age gate needs the question it judges (BL-217). A declaration needs none.
   if (def.ageGate.enabled && def.ageGate.mode !== 'declaration') {
     const want = def.ageGate.mode === 'dob' ? 'date_of_birth' : 'age';
     const q = formFields(def).find((f) => f.kind === want);

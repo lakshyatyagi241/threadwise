@@ -64,7 +64,7 @@ export interface ContactRow {
   emailSubscriptionStatus: string | null;
   emailConfirmed: boolean;
   faxNumber: string | null;
-  /** ISO day (`YYYY-MM-DD`) or null. Built-in personal property (BL-211). */
+  /** ISO day (`YYYY-MM-DD`) or null. Built-in personal property (BL-217). */
   dateOfBirth: string | null;
   /** Flagged as a minor (BL-190), read from the privacy flags in the same statement. */
   isMinor: boolean;

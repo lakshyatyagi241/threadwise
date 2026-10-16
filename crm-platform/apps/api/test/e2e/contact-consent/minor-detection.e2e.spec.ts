@@ -6,7 +6,7 @@ import { tenantWithKey } from '../developer-rest-api-v1/support';
 import { FormsApi, field, startHarness, type Harness, type Tenant } from '../forms-builder/support';
 
 /**
- * How a minor is detected (BL-211, BL-212, BL-190) and the Do-Not-Call list (BL-181), on a real Postgres (restricted role, forced RLS), Redis
+ * How a minor is detected (BL-217, BL-218, BL-190) and the Do-Not-Call list (BL-181), on a real Postgres (restricted role, forced RLS), Redis
  * and the real app: the date of birth on the contact, the automatic flag and the birthday sweep, the age gate of a form and of a chat
  * widget, the minor filter and segment fields, the CSV import columns, the customer API, and the DNC list read by the ConsentGate.
  */

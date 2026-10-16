@@ -49,7 +49,7 @@ export class FormPublicService {
     const closed = route.status === 'paused';
     const captcha = await this.captcha.publicConfig();
     const s = def.settings;
-    // The declaration must name the age it asks about; a date of birth or an age question never says which answer passes (BL-211).
+    // The declaration must name the age it asks about; a date of birth or an age question never says which answer passes (BL-217).
     const declarationAge =
       def.ageGate.enabled && def.ageGate.mode === 'declaration'
         ? (def.ageGate.minAge ??

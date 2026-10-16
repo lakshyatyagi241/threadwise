@@ -15,7 +15,7 @@ import {
  */
 
 /**
- * The age question of the intake form (BL-212, spec 11.10). The same gate as a form's, except that a chat has no second screen to ask a
+ * The age question of the intake form (BL-218, spec 11.10). The same gate as a form's, except that a chat has no second screen to ask a
  * parent or guardian on, so `guardian` is not offered: `block` refuses the chat (nothing is stored), `flag` lets it through and flags the
  * contact. Off by default.
  */
@@ -408,7 +408,7 @@ export const widgetMessageRequestSchema = z.object({
    */
   consent: z.boolean().nullish(),
   consent_version: z.number().int().min(1).nullish(),
-  /** The intake form's age answer (BL-212): a date of birth (YYYY-MM-DD), an age, or the box "I confirm I am at least N years old". */
+  /** The intake form's age answer (BL-218): a date of birth (YYYY-MM-DD), an age, or the box "I confirm I am at least N years old". */
   date_of_birth: z.preprocess(blankToNull, z.string().max(10).nullish()),
   age: z.preprocess(blankToNull, z.union([z.string().max(3), z.number().int()]).nullish()),
   age_confirmed: z.boolean().nullish(),
@@ -436,14 +436,14 @@ export const widgetPublicConfigSchema = z.object({
     collect_email: z.boolean(),
     collect_phone: z.boolean(),
     /**
-     * The age question the intake form asks (BL-212), or null. Never the action or, for a date of birth or an age, the minimum:
+     * The age question the intake form asks (BL-218), or null. Never the action or, for a date of birth or an age, the minimum:
      * `declaration_age` is set only for the box, whose wording must name it.
      */
     age_gate: z
       .object({
         mode: z.enum(['dob', 'age', 'declaration']),
         declaration_age: z.number().int().nullable(),
-        /** This visitor has not passed the gate yet: the intake form must show the question (BL-212). */
+        /** This visitor has not passed the gate yet: the intake form must show the question (BL-218). */
         pending: z.boolean(),
       })
       .nullable()

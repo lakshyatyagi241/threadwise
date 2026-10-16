@@ -1,4 +1,4 @@
--- contact date of birth and the automatic minor flag (BL-211, spec docs/specs/privacy-and-data-governance.md section 11.10).
+-- contact date of birth and the automatic minor flag (BL-217, spec docs/specs/privacy-and-data-governance.md section 11.10).
 --
 -- Why this migration exists. Forms, widgets and chatbots collect a name, an email and a phone number, so the minor flag of BL-180 could
 -- only ever be set by hand. A form, a chat intake or a flow can now ask for a date of birth (or an age), and the contact keeps the date.

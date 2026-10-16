@@ -40,7 +40,7 @@ the same change as anything that reads or writes the settings below.
 | ConsentGate                                                                 | asked first, and again when a held send is released; the DND registry is a note                                                                                                                                                                                                                     | built / **hook (BL-181)** |
 | Consent switch "require recorded consent"                                   | hinted and linked from the profile summary; never flipped by a profile                                                                                                                                                                                                                              | by design (D13)           |
 | Per-contact minor tag, parental evidence, do-not-sell opt-out               | `childrenPolicy` + `parentalConsentRequired` -> `minorRuleOf` -> ConsentGate `subject_minor`; `ccpa_us` -> the opt-out switch and the Global Privacy Control rule; tables `contact_privacy_*`                                                                                                       | built (BL-180)            |
-| DPDP consent manager, DNC / NDNC feed                                       | name, link and registration number stored as a note; the inbound event is a contract only (`consentManagerEventSchema`, BL-216). The workspace's own Do-Not-Call list (`dnc_entries`) is read by the ConsentGate for voice and SMS marketing (reason `on_dnc_list`); no registry is called (BL-215) | **placeholder (BL-181)**  |
+| DPDP consent manager, DNC / NDNC feed                                       | name, link and registration number stored as a note; the inbound event is a contract only (`consentManagerEventSchema`, BL-222). The workspace's own Do-Not-Call list (`dnc_entries`) is read by the ConsentGate for voice and SMS marketing (reason `on_dnc_list`); no registry is called (BL-221) | **placeholder (BL-181)**  |
 
 ## Privacy register entries
 
@@ -49,5 +49,5 @@ the same change as anything that reads or writes the settings below.
 
 ## Open
 
-BL-191 to BL-193 (quiet hours: the remaining senders, a recurring campaign's held recipients, a visible contact time zone), BL-181 (the DNC list is built; the registries and the consent manager route are BL-215 and BL-216), BL-188 to BL-190 (follow-ups of BL-180). BL-180 (contact-level extras) is built: saving the Compliance center drops the gate's cached minor rule. Owner decisions D13 to D17 are in
+BL-191 to BL-193 (quiet hours: the remaining senders, a recurring campaign's held recipients, a visible contact time zone), BL-181 (the DNC list is built; the registries and the consent manager route are BL-221 and BL-222), BL-188 to BL-190 (follow-ups of BL-180). BL-180 (contact-level extras) is built: saving the Compliance center drops the gate's cached minor rule. Owner decisions D13 to D17 are in
 the spec, section 11.8.

@@ -198,6 +198,6 @@ security event.
 `FLB_GETA_SETTINGS_INVALID`, `FLB_GETA_NOT_RETRYABLE`, plus the shared `PLAN_LIMIT_REACHED`,
 `PLAN_FEATURE_LOCKED`, `ROW_VERSION_CONFLICT`, `NOT_FOUND`, `VALIDATION_FAILED`.
 
-## Age question in the Ask node (BL-212)
+## Age question in the Ask node (BL-218)
 
 Ask > "Validate as" gained **Age** (`age`) and **Date of birth** (`date_of_birth`, written in the chosen date format). Node data: `ageMinAge` (1..21, empty = the workspace's minor age), `ageWhenUnder` (`end`, the default, or `continue`), `ageEndText` (the neutral closing line; empty = "We are not able to continue."). At run time (`ask-input-node.ts`) the answer is written to the contact (the date of birth, the younger date wins) and, when under, flags it (source `dob`); `{{var}}_age_gate` is `under` or `adult`. `end` sends the closing line and ends the run; `continue` lets the author branch on the variable (for example to ask for a parent). Nothing says which answer passes.

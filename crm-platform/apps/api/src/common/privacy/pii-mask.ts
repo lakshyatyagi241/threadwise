@@ -47,7 +47,7 @@ const has = (parts: string[], ...words: string[]): boolean => words.some((w) => 
 export function piiKindOfKey(key: string, module: string): PiiKind | null {
   const parts = snake(key).split('_').filter(Boolean);
   if (parts.length === 0) return null;
-  // A date of birth is personal data of its own (BL-211): `date_of_birth`, `dob`, `birthdate`, `birthday`.
+  // A date of birth is personal data of its own (BL-217): `date_of_birth`, `dob`, `birthdate`, `birthday`.
   if (has(parts, 'dob', 'birthdate', 'birthday') || (has(parts, 'birth') && has(parts, 'date'))) {
     return 'birth';
   }

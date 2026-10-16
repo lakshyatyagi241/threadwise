@@ -416,7 +416,7 @@ const SHAPERS: Record<string, Shaper> = {
       inputType: flbCleanAskInputType(d.validate),
       dateFormat: flbCleanDateFormat(d.dateFormat),
       wrongReplyText: s(d.wrongReply).trim(),
-      // The age question (BL-212): its own minimum (null = the workspace's), what to do when under, and the neutral closing line.
+      // The age question (BL-218): its own minimum (null = the workspace's), what to do when under, and the neutral closing line.
       ageMinAge: flbCleanMinAge(d.ageMinAge),
       ageWhenUnder: flbCleanAgeWhenUnder(d.ageWhenUnder),
       ageEndText: s(d.ageEndText).trim(),

@@ -12,7 +12,7 @@ import { FieldBox, Section, SwitchRow } from './settings-tab';
 import { useState } from 'react';
 
 /**
- * The age check of a form (BL-211, spec docs/specs/privacy-and-data-governance.md 11.10). Off by default; the section says why a person
+ * The age check of a form (BL-217, spec docs/specs/privacy-and-data-governance.md 11.10). Off by default; the section says why a person
  * would turn it on, how little each way of asking keeps, and what the gate does with an under-age answer. It never suggests wording
  * that names the minimum, because the page does not either.
  */

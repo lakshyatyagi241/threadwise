@@ -301,7 +301,7 @@ const minutes = (hhmm: string): number => {
   return Number(h) * 60 + Number(m);
 };
 
-/** The age below which a person is a minor in this workspace: the highest of the switched-on profiles' ages, else 18 (BL-211, spec 11.10). */
+/** The age below which a person is a minor in this workspace: the highest of the switched-on profiles' ages, else 18 (BL-217, spec 11.10). */
 export function workspaceMinorAge(regimes: readonly ComplianceRegime[]): number {
   return effectivePolicy(regimes).minorAge ?? DEFAULT_MINOR_AGE;
 }

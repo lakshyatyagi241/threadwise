@@ -57,7 +57,7 @@ is a design assumption that counsel must confirm (spec section 10).
     switch (`ai_content_processing`).
 14. **Minors.** If the caller says they are under the local age of consent, or the contact is tagged as a minor, the bot stops
     recording, stops marketing and hands to a human.
-    **Age confirmation (BL-213, requirement only, not built).** Where the workspace asks (spec 11.10 rule 2: never by default), the bot
+    **Age confirmation (BL-219, requirement only, not built).** Where the workspace asks (spec 11.10 rule 2: never by default), the bot
     asks one neutral yes/no question before any marketing or recording: "Are you at least N years old?" (N is the workspace's minor
     age, `effectivePolicy().minorAge`, else 18). The caller answers by voice or by DTMF ("press 1 for yes, 2 for no"). Evidence on the
     call and in the ledger: method `spoken_age` or `dtmf_age`, the prompt version and its sha-256, the time, the call id; the audio is

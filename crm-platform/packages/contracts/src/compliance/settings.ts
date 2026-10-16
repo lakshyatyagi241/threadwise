@@ -91,11 +91,11 @@ const settingsFields = {
   /** CCPA: offer a "Do Not Sell or Share My Personal Information" opt-out. */
   offerSaleShareOptOut: z.boolean(),
   optOutNoticeUrl: optionalHttpsUrl,
-  /** DPDP consent manager: a name, a link and the registration number; nothing is integrated (BL-181, BL-216). */
+  /** DPDP consent manager: a name, a link and the registration number; nothing is integrated (BL-181, BL-222). */
   consentManager: z.object({
     name: text(120),
     url: optionalHttpsUrl,
-    /** The Consent Manager's registration number (BL-181): a note. The inbound hook is a contract only (BL-216). */
+    /** The Consent Manager's registration number (BL-181): a note. The inbound hook is a contract only (BL-222). */
     registrationId: text(60),
   }),
   quietHours: quietHoursSchema,

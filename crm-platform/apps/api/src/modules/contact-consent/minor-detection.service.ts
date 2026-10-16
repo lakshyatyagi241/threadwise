@@ -23,7 +23,7 @@ const SWEEP_BATCH = 500;
 const YOUNGEST_CANDIDATE_AGE = 21;
 
 /**
- * Turns a date of birth, or an age answer, into the minor flag (BL-211, spec docs/specs/privacy-and-data-governance.md 11.10), through
+ * Turns a date of birth, or an age answer, into the minor flag (BL-217, spec docs/specs/privacy-and-data-governance.md 11.10), through
  * the one door that writes the flag (`ContactPrivacyService`). Three entry points:
  *
  *  - `evaluateInTx`  a contact's stored date of birth against the workspace's minor age (a write of the date: contact form, REST v1, import,

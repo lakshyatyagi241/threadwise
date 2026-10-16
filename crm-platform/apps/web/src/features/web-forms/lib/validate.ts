@@ -84,7 +84,7 @@ export function fieldIssue(f: FieldBlock, value: AnswerValue | undefined): Field
         : { fieldId: f.id, code: 'invalid_date' };
     }
     case 'date_of_birth':
-      // A real day that can be a birth date; the page says nothing more than "enter a valid date" (BL-211).
+      // A real day that can be a birth date; the page says nothing more than "enter a valid date" (BL-217).
       return isPlausibleBirthDate(String(value).trim(), new Date())
         ? null
         : { fieldId: f.id, code: 'invalid_date' };

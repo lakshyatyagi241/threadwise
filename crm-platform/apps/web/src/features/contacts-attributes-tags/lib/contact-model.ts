@@ -157,7 +157,7 @@ export interface ContactFormValues {
   email: string;
   language: string;
   address: string;
-  /** `YYYY-MM-DD` or '' (BL-211). A date that makes the contact a minor sets the minor flag when it is saved. */
+  /** `YYYY-MM-DD` or '' (BL-217). A date that makes the contact a minor sets the minor flag when it is saved. */
   dateOfBirth: string;
   memo: string;
   status: string;

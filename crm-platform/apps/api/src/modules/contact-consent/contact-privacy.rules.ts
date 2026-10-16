@@ -1,7 +1,7 @@
 import type { PrivacyFlagKind, PrivacyFlagSource } from '@crm/contracts';
 
 /**
- * The pure rules of the contact privacy flags (BL-180, BL-211). The database layer only stores what these decide, so the truth table is
+ * The pure rules of the contact privacy flags (BL-180, BL-217). The database layer only stores what these decide, so the truth table is
  * unit tested without a database (the same split as `consent.rules.ts` and `consent-gate.rules.ts`).
  */
 

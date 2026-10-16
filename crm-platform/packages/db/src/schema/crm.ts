@@ -123,7 +123,7 @@ export const contacts = pgTable(
     language: text('language'),
     address: text('address'),
     countryCode: text('country_code'),
-    /** Built-in personal property (BL-211): a calendar day, no time. Read as text ('YYYY-MM-DD'), never as a JS Date. */
+    /** Built-in personal property (BL-217): a calendar day, no time. Read as text ('YYYY-MM-DD'), never as a JS Date. */
     dateOfBirth: date('date_of_birth', { mode: 'string' }),
     channel: text('channel'),
     channelUid: text('channel_uid'),

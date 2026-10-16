@@ -58,7 +58,7 @@ export const SEGMENT_BUILTIN_FIELDS = {
   imported: 'boolean',
   /** Flagged as a minor (BL-190). */
   minor: 'boolean',
-  /** The built-in date of birth (BL-211). */
+  /** The built-in date of birth (BL-217). */
   dateOfBirth: 'date',
   /** Whole years, worked out from the date of birth on the earliest calendar date on Earth; empty when there is no date (BL-190). */
   age: 'number',

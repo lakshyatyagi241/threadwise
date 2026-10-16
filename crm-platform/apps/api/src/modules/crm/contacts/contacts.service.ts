@@ -480,7 +480,7 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
-      // A date of birth that makes the contact a minor sets the flag in the same transaction (BL-211).
+      // A date of birth that makes the contact a minor sets the flag in the same transaction (BL-217).
       if (input.dateOfBirth) {
         await this.minors.evaluateInTx(tx, ctx.orgId, created.id, new Date(), { dobChanged: true });
       }

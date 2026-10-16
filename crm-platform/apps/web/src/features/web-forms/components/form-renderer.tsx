@@ -71,7 +71,7 @@ export interface FormRendererProps {
   honeypotField?: string | null;
   /**
    * The form's key. After the age check refuses a visitor the browser remembers it for this session (and only the browser: the server
-   * keeps nothing about a refused visitor), so the same person is not invited to try again with another answer (BL-211).
+   * keeps nothing about a refused visitor), so the same person is not invited to try again with another answer (BL-217).
    */
   ageLockKey?: string;
   /** The builder previews `auto` mode both ways. */
@@ -396,7 +396,7 @@ export function FormRenderer(props: FormRendererProps) {
   }
 
   if (ageBlocked) {
-    // Neutral on purpose (BL-211): it does not say why, which answer would pass, or invite another try.
+    // Neutral on purpose (BL-217): it does not say why, which answer would pass, or invite another try.
     return shell(
       <div className="wf-shell">
         <div className="wf-card">
@@ -596,7 +596,7 @@ function guardianComplete(answers: Answers): boolean {
 }
 
 /**
- * "I confirm I am at least N years old" (BL-211). Never ticked for the person, and the only place the minimum is named, because the
+ * "I confirm I am at least N years old" (BL-217). Never ticked for the person, and the only place the minimum is named, because the
  * sentence cannot be honest without it. Whether leaving it empty refuses the visitor is the server's business, not the page's.
  */
 function AgeDeclarationView({
@@ -836,7 +836,7 @@ function FieldView({
           min={numeric ? f.validation?.min : undefined}
           max={numeric ? f.validation?.max : undefined}
           maxLength={f.kind === 'age' ? 3 : type === 'text' ? f.validation?.maxLen : undefined}
-          // An age or a date of birth is never offered from the browser's saved answers: nothing coaches the answer (BL-211).
+          // An age or a date of birth is never offered from the browser's saved answers: nothing coaches the answer (BL-217).
           autoComplete={
             f.kind === 'email'
               ? 'email'

@@ -102,7 +102,7 @@ contacts are the workspace's own business contacts); both are on the privacy reg
 
 ## Do-Not-Call list (BL-181)
 
-Numbers that get no marketing by voice or SMS. The ConsentGate denies marketing on the `sms` and `voice` channels to a listed number with the reason `on_dnc_list` (after a withdrawal, before the minor hold); WhatsApp, email and service messages are not held by it. No registry is called from here (BL-215).
+Numbers that get no marketing by voice or SMS. The ConsentGate denies marketing on the `sms` and `voice` channels to a listed number with the reason `on_dnc_list` (after a withdrawal, before the minor hold); WhatsApp, email and service messages are not held by it. No registry is called from here (BL-221).
 
 | Method | Path                        | Key                                    | Notes                                                                                                                                                                                                     |
 | ------ | --------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -113,4 +113,4 @@ Numbers that get no marketing by voice or SMS. The ConsentGate denies marketing 
 
 A number is stored as E.164 and matched on its digits, once per workspace. Every change is audited (a batch is one row with a count) and emitted as `compliance.dnc_added` / `compliance.dnc_removed`.
 
-`consentManager` in the settings document gained `registrationId` (BL-181). The inbound Consent Manager event is a contract only (`consentManagerEventSchema` in `@crm/contracts`); no route serves it (BL-216).
+`consentManager` in the settings document gained `registrationId` (BL-181). The inbound Consent Manager event is a contract only (`consentManagerEventSchema` in `@crm/contracts`); no route serves it (BL-222).

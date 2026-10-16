@@ -332,7 +332,7 @@ export function definitionProblems(
     else if (!field.required) out.push({ code: 'crm_required_optional', blockId: field.id });
   }
 
-  // The age check needs the question it judges, and it has to be required (BL-211). The declaration needs none.
+  // The age check needs the question it judges, and it has to be required (BL-217). The declaration needs none.
   if (def.ageGate.enabled && def.ageGate.mode !== 'declaration') {
     const want = def.ageGate.mode === 'dob' ? 'date_of_birth' : 'age';
     const q = fields.find((f) => f.kind === want);
@@ -346,7 +346,7 @@ export function definitionProblems(
 }
 
 /**
- * Changes the age check (BL-211) and keeps the form able to ask it: a date-of-birth or age mode adds the question as a REQUIRED field
+ * Changes the age check (BL-217) and keeps the form able to ask it: a date-of-birth or age mode adds the question as a REQUIRED field
  * when the form has none, and makes an existing one required. The declaration mode needs no field.
  */
 export function withAgeGate(

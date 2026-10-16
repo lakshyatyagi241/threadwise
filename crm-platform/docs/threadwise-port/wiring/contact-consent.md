@@ -112,7 +112,7 @@ Settings tile `consent` (Security) -> `/contact-consent`; Consent card in `conta
 | Tests        | `test/unit/contact-consent/contact-privacy.spec.ts`, `test/e2e/contact-consent/contact-privacy.e2e.spec.ts`, `consent-card.test.tsx`, `messages.test.ts`                                                                                                  |
 | Help         | `features/contact-consent/help/contact-consent.md` (+ `.ar.md`), section "Minors, guardian consent and Do Not Sell or Share"; `compliance-center.md` children paragraph                                                                                   |
 
-## How a minor is detected (BL-211, BL-212, BL-190)
+## How a minor is detected (BL-217, BL-218, BL-190)
 
 Spec 11.10. A flag is set from a fact we hold (a date of birth, an age answer) or by a person; nothing is inferred. Asking is off by default.
 

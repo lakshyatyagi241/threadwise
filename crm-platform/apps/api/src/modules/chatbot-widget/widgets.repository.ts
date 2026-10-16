@@ -47,7 +47,7 @@ export interface WidgetRow {
   collectName: boolean;
   collectEmail: boolean;
   collectPhone: boolean;
-  /** The age question of the intake form (BL-212); off unless a person turned it on. */
+  /** The age question of the intake form (BL-218); off unless a person turned it on. */
   ageGate: AgeGate;
   status: string;
   allowedDomains: string[];

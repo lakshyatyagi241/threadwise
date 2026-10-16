@@ -63,7 +63,7 @@ export type AnswerValue = string | boolean | string[];
 export type Answers = Record<string, AnswerValue>;
 export const CONSENT_KEY = '__consent';
 /**
- * The age check's own answers (BL-211): the declaration box and a parent or guardian's details. They belong to the page, not to a field,
+ * The age check's own answers (BL-217): the declaration box and a parent or guardian's details. They belong to the page, not to a field,
  * and no field id can start with two underscores, so they never collide with a visitor's own answers.
  */
 export const AGE_CONFIRMED_KEY = '__age_confirmed';
@@ -110,7 +110,7 @@ export interface RenderableForm {
   >;
   theme: ThemeTokens;
   /**
-   * The age question (BL-211): the public form's summary (the page never learns the action or, for a date of birth or an age, the
+   * The age question (BL-217): the public form's summary (the page never learns the action or, for a date of birth or an age, the
    * minimum), or in the builder's preview the draft's own gate. Absent or off = nothing is asked.
    */
   ageGate?: PublicForm['ageGate'] | Definition['ageGate'];

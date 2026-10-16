@@ -63,7 +63,7 @@ export const chatbotWidgets = pgTable(
     launcher: jsonb('launcher')
       .notNull()
       .default(sql`'{}'::jsonb`),
-    // migrations/20261223090000_widget_age_gate.sql: the optional age question of the intake form (BL-212). `{}` = off.
+    // migrations/20261223090000_widget_age_gate.sql: the optional age question of the intake form (BL-218). `{}` = off.
     ageGate: jsonb('age_gate')
       .notNull()
       .default(sql`'{}'::jsonb`),
@@ -179,7 +179,7 @@ export const chatbotWidgetVisitors = pgTable(
     ip: text('ip'),
     firstSeenAt: timestamp('first_seen_at', { withTimezone: true }),
     lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
-    // migrations/20261223090000_widget_age_gate.sql: when this visitor's answer passed the widget's age gate (BL-212).
+    // migrations/20261223090000_widget_age_gate.sql: when this visitor's answer passed the widget's age gate (BL-218).
     ageCheckedAt: timestamp('age_checked_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),

@@ -81,7 +81,7 @@ export type DncAddResult = z.infer<typeof dncAddResultSchema>;
 
 /**
  * The event a DPDP Consent Manager would send to a workspace (BL-181, spec 11.11): a CONTRACT only. No route serves it yet and no key
- * exists to sign it (BL-216); it is fixed here so a Consent Manager's integration, when there is a real specification to meet, has one
+ * exists to sign it (BL-222); it is fixed here so a Consent Manager's integration, when there is a real specification to meet, has one
  * place to land. `eventId` makes it idempotent; `consentArtifactId` is the reference kept as evidence in the ledger.
  */
 export const consentManagerEventSchema = z.object({

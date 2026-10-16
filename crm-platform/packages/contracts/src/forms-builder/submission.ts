@@ -94,7 +94,7 @@ export const formSubmissionDetailSchema = formSubmissionSummarySchema.extend({
   /** A second payment arrived for a submission already paid: refund it by hand. */
   duplicatePayment: z.boolean(),
   answers: z.array(formAnswerSchema),
-  /** The age gate found the visitor under the minimum age and the form let them through (BL-211): the contact was flagged as a minor. */
+  /** The age gate found the visitor under the minimum age and the form let them through (BL-217): the contact was flagged as a minor. */
   ageGate: z.enum(['under']).nullable(),
   /** The parent or guardian the visitor named after an under-age answer; null when none was asked for. */
   guardian: z
@@ -188,11 +188,11 @@ export const publicFormSubmitSchema = z.object({
     .optional(),
   captchaToken: z.string().max(4096).optional(),
   /**
-   * The age gate's declaration (BL-211): the box "I confirm I am at least N years old" was ticked. Sent only by a page whose form asks it;
+   * The age gate's declaration (BL-217): the box "I confirm I am at least N years old" was ticked. Sent only by a page whose form asks it;
    * absent counts as not confirmed.
    */
   ageConfirmed: z.boolean().optional(),
-  /** A parent or guardian, asked for after an under-age answer on a form whose gate says `guardian` (BL-211). */
+  /** A parent or guardian, asked for after an under-age answer on a form whose gate says `guardian` (BL-217). */
   guardian: z
     .object({
       name: z.string().trim().min(1).max(120),

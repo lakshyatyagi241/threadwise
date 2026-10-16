@@ -41,7 +41,7 @@ import type {
  * the question is sent and the run parks as a `Custom` wait; the next message reaches `onReply`:
  *
  *  - an answer that passes: it is saved in the variable (and, when asked, on a contact property) and the run leaves by its one port
- *  - an AGE answer (validate as Age or Date of birth, BL-212): judged against the node's own minimum or the workspace's minor age, written
+ *  - an AGE answer (validate as Age or Date of birth, BL-218): judged against the node's own minimum or the workspace's minor age, written
  *    to the contact (the date of birth) and flagging it as a minor when under; `{{var}}_age_gate` says `under` or `adult`, and an
  *    under-age answer ends the run with a neutral line unless the author chose to carry on
  *  - anything else: the wrong-answer text is sent (not the question again, as in the console) and the run keeps waiting. With
@@ -149,7 +149,7 @@ export class AskInputNode implements NodeExecutor {
   }
 
   /**
-   * An age answer (BL-212): judged against the node's minimum (else the workspace's minor age), written to the contact, and routed. Nothing
+   * An age answer (BL-218): judged against the node's minimum (else the workspace's minor age), written to the contact, and routed. Nothing
    * is said about which answer passes. The date of birth is also kept in the run's variables like any answer; the run log and the
    * conversation already hold what the customer typed.
    */

@@ -1,4 +1,4 @@
--- website chat widget: an optional age question on the intake form (BL-212, spec docs/specs/privacy-and-data-governance.md section 11.10).
+-- website chat widget: an optional age question on the intake form (BL-218, spec docs/specs/privacy-and-data-governance.md section 11.10).
 --
 -- Why: a chat intake collects a name, an email and a phone number and no age, so a minor could never be detected from it. A workspace that
 -- needs to know (its profile asks, or it serves minors) can now turn on ONE question: a box "I confirm I am at least N years old", an age

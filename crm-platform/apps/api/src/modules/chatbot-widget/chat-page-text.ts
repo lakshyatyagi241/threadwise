@@ -54,7 +54,7 @@ export const CHAT_TEXT_KEYS = [
   'pipYes',
   'closeThis',
   'restartThis',
-  // The optional age question of the intake form (BL-212). A missing translation falls back to English in the page.
+  // The optional age question of the intake form (BL-218). A missing translation falls back to English in the page.
   'ageDeclaration',
   'ageDobLabel',
   'ageAgeLabel',

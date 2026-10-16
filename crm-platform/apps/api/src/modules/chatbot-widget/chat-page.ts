@@ -972,7 +972,7 @@ const SCRIPT = `
     $('msgs').appendChild(a);
   }
 
-  // The optional age question of the intake form (BL-212). It is never pre-filled and never says which answer passes. A refusal is
+  // The optional age question of the intake form (BL-218). It is never pre-filled and never says which answer passes. A refusal is
   // remembered for this tab only (the server keeps nothing about a refused visitor).
   var AGELOCK = 'wsnap_age_' + TOKEN;
   function ageLocked() {
