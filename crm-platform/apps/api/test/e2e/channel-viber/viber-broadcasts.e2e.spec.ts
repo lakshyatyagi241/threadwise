@@ -4,6 +4,9 @@ import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { ChannelIngestPublisher } from '../../../src/modules/chat-conversations';
 import { ReceiptsService } from '../../../src/modules/chat-conversations/receipts.service';
 import { VibBroadcastSenderService } from '../../../src/modules/channel-viber/vib-broadcast-sender.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { ConsentKit, refusedWith } from '../contact-consent/broadcast-consent.support';
 import {
   Api,
   bearer,
@@ -704,5 +707,181 @@ describe('isolation and access', () => {
     const raw = (await rowOf(made.body.id)).body as string;
     expect(raw).not.toContain('4242');
     expect(h.app.get(CryptoService).decrypt(raw)).toBe('Secret promo code 4242');
+  });
+});
+
+describe('BL-141: the first send of a Viber broadcast asks the ConsentGate', () => {
+  const kit = () => new ConsentKit(h, api);
+
+  /** The thread behind a user of a draft; its contact is the one the Viber ingest made for them. */
+  async function contactOfUser(t: Tenant, uuid: string, userId: string) {
+    const r = await h.owner.query(
+      `SELECT r.conversation_id FROM viber_broadcast_recipients r
+         JOIN viber_broadcasts b ON b.org_id = r.org_id AND b.id = r.viber_broadcast_id
+        WHERE b.uuid = $1 AND r.viber_user_id = $2`,
+      [uuid, userId],
+    );
+    return kit().forConversation(t, Number(r.rows[0].conversation_id), 'viber', userId);
+  }
+  const byUser = (rows: Awaited<ReturnType<typeof recipients>>) =>
+    Object.fromEntries(rows.map((r) => [r.viber_user_id, r]));
+  const sentTo = () => calls().flatMap((c) => c.to as string[]);
+
+  it('an opted-out user is left out of the call and keeps the gate reason; the rest are sent in one call', async () => {
+    const t = await api.signup('vcg1');
+    const c = await channelWithUsers(t, 4);
+    const made = await create(t, c, { userIds: ids(4) });
+    const stopped = await contactOfUser(t, made.body.id, 'user-0');
+    const ledger = await contactOfUser(t, made.body.id, 'user-1');
+    const granted = await contactOfUser(t, made.body.id, 'user-2');
+    await contactOfUser(t, made.body.id, 'user-3');
+    await kit().unsubscribe(t, stopped.id);
+    await kit().record(t, ledger.uuid, 'viber', 'withdrawn');
+    await kit().record(t, granted.uuid, 'viber', 'granted');
+
+    await post(t, `broadcasts/${made.body.id}/start`);
+    expect(await run(t, made.body.id)).toBe('done');
+
+    expect(calls()).toHaveLength(1);
+    expect(sentTo()).toEqual(['user-2', 'user-3']);
+    const rows = byUser(await recipients(made.body.id));
+    expect(rows['user-0']).toMatchObject({ status: 'failed', error: refusedWith('withdrawn') });
+    expect(rows['user-1']).toMatchObject({ status: 'failed', error: refusedWith('withdrawn') });
+    expect(rows['user-2']).toMatchObject({ status: 'sent', error: null });
+    expect(rows['user-3']).toMatchObject({ status: 'sent', error: null });
+    expect(await rowOf(made.body.id)).toMatchObject({ status: 'done', sent: 2, failed: 2 });
+  });
+
+  it('with the workspace switch on a user needs a recorded grant; one with no contact has none', async () => {
+    const t = await api.signup('vcg2');
+    const c = await channelWithUsers(t, 3);
+    const made = await create(t, c, { userIds: ids(3) });
+    const granted = await contactOfUser(t, made.body.id, 'user-0');
+    await contactOfUser(t, made.body.id, 'user-1');
+    const orphan = await contactOfUser(t, made.body.id, 'user-2');
+    await kit().record(t, granted.uuid, 'viber', 'granted');
+    await h.owner.query(
+      `UPDATE conversations SET contact_id = NULL WHERE org_id = $1 AND contact_id = $2`,
+      [t.orgId, orphan.id],
+    );
+    await kit().setSwitch(t, true);
+
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+
+    expect(sentTo()).toEqual(['user-0']);
+    const rows = byUser(await recipients(made.body.id));
+    for (const user of ['user-1', 'user-2']) {
+      expect(rows[user]).toMatchObject({
+        status: 'failed',
+        error: refusedWith('no_consent_recorded'),
+      });
+    }
+  });
+
+  it('with the switch off (the default) a user with no grant is messaged', async () => {
+    const t = await api.signup('vcg3');
+    const c = await channelWithUsers(t, 2);
+    const made = await create(t, c, { userIds: ids(2) });
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+    expect(sentTo()).toEqual(['user-0', 'user-1']);
+  });
+
+  it('when everyone is refused no call is made, and the broadcast still ends', async () => {
+    const t = await api.signup('vcg4');
+    const c = await channelWithUsers(t, 2);
+    const made = await create(t, c, { userIds: ids(2) });
+    for (const u of ids(2))
+      await kit().unsubscribe(t, (await contactOfUser(t, made.body.id, u)).id);
+    await post(t, `broadcasts/${made.body.id}/start`);
+    expect(await run(t, made.body.id)).toBe('done');
+    expect(calls()).toHaveLength(0);
+    expect(await rowOf(made.body.id)).toMatchObject({ status: 'done', sent: 0, failed: 2 });
+  });
+
+  it('a contact flagged as a minor is skipped when the workspace says no minors', async () => {
+    const t = await api.signup('vcg5');
+    const c = await channelWithUsers(t, 2);
+    const made = await create(t, c, { userIds: ids(2) });
+    const child = await contactOfUser(t, made.body.id, 'user-0');
+    await contactOfUser(t, made.body.id, 'user-1');
+    await kit().minor(t, child.id);
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+    expect(sentTo()).toEqual(['user-1']);
+    expect(byUser(await recipients(made.body.id))['user-0']).toMatchObject({
+      status: 'failed',
+      error: refusedWith('subject_minor'),
+    });
+  });
+
+  it('a service message is never blocked: STOP, the switch and a minor flag do not stop a reply or a utility notice', async () => {
+    const t = await api.signup('vcg6');
+    const c = await channelWithUsers(t, 1);
+    const made = await create(t, c, { userIds: ids(1) });
+    const user = await contactOfUser(t, made.body.id, 'user-0');
+    await kit().unsubscribe(t, user.id);
+    await kit().minor(t, user.id);
+    await kit().setSwitch(t, true);
+    const gate = h.app.get(ConsentGate);
+    const subject = { type: 'contact', id: user.id } as const;
+    expect((await gate.check(t.orgId, subject, 'viber', 'marketing_messaging')).decision).toBe(
+      'deny',
+    );
+    expect(
+      await gate.check(t.orgId, subject, 'viber', 'service_messaging', undefined, {
+        replyWindowOpen: true,
+      }),
+    ).toEqual({ decision: 'allow', reason: 'inbound_reply_window' });
+    expect(await gate.check(t.orgId, subject, 'viber', 'service_messaging')).toEqual({
+      decision: 'allow',
+      reason: 'utility_exempt',
+    });
+  });
+
+  describe('held for the quiet hours, then released', () => {
+    const EVENING = new Date('2030-10-15T16:00:00Z');
+    const MORNING = new Date('2030-10-16T03:31:00Z');
+
+    it('is asked again on release: a user who unsubscribed while they waited is not messaged', async () => {
+      const window = h.app.get(SendWindowService);
+      const realNow = window.now;
+      window.now = () => EVENING;
+      try {
+        const t = await api.signup('vcg7');
+        const c = await channelWithUsers(t, 2);
+        await h.owner.query(
+          `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, '21:00', '09:00')`,
+          [t.orgId],
+        );
+        const made = await create(t, c, { userIds: ids(2) });
+        const first = await contactOfUser(t, made.body.id, 'user-0');
+        const second = await contactOfUser(t, made.body.id, 'user-1');
+        for (const u of [first, second]) {
+          await h.owner.query(
+            `UPDATE contacts SET data = jsonb_build_object('timezone', 'Asia/Kolkata') WHERE org_id = $1 AND id = $2`,
+            [t.orgId, u.id],
+          );
+        }
+        await post(t, `broadcasts/${made.body.id}/start`);
+        expect(await run(t, made.body.id)).toBe('held');
+        expect(calls()).toHaveLength(0);
+
+        await kit().unsubscribe(t, first.id);
+        window.now = () => MORNING;
+        await h.owner.query(
+          `UPDATE viber_broadcast_recipients SET held_until = now() - interval '1 minute' WHERE org_id = $1 AND held_until IS NOT NULL`,
+          [t.orgId],
+        );
+        expect(await run(t, made.body.id)).toBe('done');
+        expect(sentTo()).toEqual(['user-1']);
+        const rows = byUser(await recipients(made.body.id));
+        expect(rows['user-0']).toMatchObject({ status: 'failed', error: refusedWith('withdrawn') });
+        expect(rows['user-1']).toMatchObject({ status: 'sent' });
+      } finally {
+        window.now = realNow;
+      }
+    });
   });
 });

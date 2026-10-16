@@ -4,6 +4,9 @@ import type { Job, Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { QUEUES } from '../../../src/infra/queue/queues';
 import { BroadcastSenderService } from '../../../src/modules/channel-wechat/broadcast-sender.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { ConsentKit, refusedWith } from '../contact-consent/broadcast-consent.support';
 import { BroadcastProcessor } from '../../../src/modules/channel-wechat/broadcast.processor';
 import {
   Api,
@@ -617,5 +620,211 @@ describe('WECH list, delete and access control', () => {
     expect((await api.http().get('/v2/wechat/broadcasts').set(bearer(nobody.token))).status).toBe(
       403,
     );
+  });
+});
+
+describe('BL-141: a WeChat broadcast asks the ConsentGate before the one mass-send call', () => {
+  const kit = () => new ConsentKit(h, api);
+  const contactOf = (t: Tenant, n: number) => kit().contact(t, 'wechat', `oFollower${n}`);
+  const byOpenid = (rows: Awaited<ReturnType<typeof recipients>>) =>
+    Object.fromEntries(rows.map((r) => [r.openid, r]));
+  const errorsOf = async (uuid: string) =>
+    Object.fromEntries(
+      (
+        await h.owner.query(
+          `SELECT r.openid, r.error FROM wechat_broadcast_recipients r
+             JOIN wechat_broadcasts b ON b.org_id = r.org_id AND b.id = r.wechat_broadcast_id WHERE b.uuid = $1`,
+          [uuid],
+        )
+      ).rows.map((r: { openid: string; error: string | null }) => [r.openid, r.error]),
+    );
+  const start = (t: Tenant, uuid: string) => post(api, t, `/v2/wechat/broadcasts/${uuid}/start`);
+  const sentOpenids = () => (mass()[0]?.args[1] ?? []) as string[];
+
+  it('a picked list leaves out whoever the gate refuses and sends the rest in the one call', async () => {
+    const t = await api.signup('wcg1');
+    const a = await accountWithFollowers(t, 4);
+    await kit().unsubscribe(t, (await contactOf(t, 0)).id);
+    await kit().record(t, (await contactOf(t, 1)).uuid, 'wechat', 'withdrawn');
+    await kit().record(t, (await contactOf(t, 2)).uuid, 'wechat', 'granted');
+    const made = await create(t, a, { openids: openids(4) });
+    await start(t, made.body.id);
+
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('done');
+
+    expect(mass()).toHaveLength(1);
+    expect(sentOpenids()).toEqual(['oFollower2', 'oFollower3']);
+    const rows = byOpenid(await recipients(made.body.id));
+    expect(rows['oFollower0']!.status).toBe('blocked');
+    expect(rows['oFollower1']!.status).toBe('blocked');
+    expect(rows['oFollower2']!.status).toBe('sent');
+    expect(rows['oFollower3']!.status).toBe('sent');
+    const errors = await errorsOf(made.body.id);
+    expect(errors['oFollower0']).toBe(refusedWith('withdrawn'));
+    expect(errors['oFollower1']).toBe(refusedWith('withdrawn'));
+    expect(errors['oFollower2']).toBeNull();
+    // The audience stays what was picked (4); the sent count is who was reached.
+    expect(await rowOf(made.body.id)).toMatchObject({ status: 'done', total: 4, sent: 2 });
+  });
+
+  it('with the workspace switch on a picked list needs a recorded grant for each person', async () => {
+    const t = await api.signup('wcg2');
+    const a = await accountWithFollowers(t, 4);
+    await kit().record(t, (await contactOf(t, 0)).uuid, 'wechat', 'granted');
+    await kit().record(t, (await contactOf(t, 1)).uuid, 'wechat', 'granted');
+    await kit().setSwitch(t, true);
+    const made = await create(t, a, { openids: openids(4) });
+    await start(t, made.body.id);
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('done');
+    expect(sentOpenids()).toEqual(['oFollower0', 'oFollower1']);
+    const errors = await errorsOf(made.body.id);
+    expect(errors['oFollower2']).toBe(refusedWith('no_consent_recorded'));
+    expect(errors['oFollower3']).toBe(refusedWith('no_consent_recorded'));
+  });
+
+  it('with the switch off (the default) a picked list with no grant at all is sent', async () => {
+    const t = await api.signup('wcg3');
+    const a = await accountWithFollowers(t, 3);
+    const made = await create(t, a);
+    await start(t, made.body.id);
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('done');
+    expect(sentOpenids()).toEqual(openids(3));
+  });
+
+  it('a list that is too small after the check makes no call: it fails with the reasons and can be retried once consent changes', async () => {
+    const t = await api.signup('wcg4');
+    const a = await accountWithFollowers(t, 3);
+    await kit().unsubscribe(t, (await contactOf(t, 0)).id);
+    await kit().unsubscribe(t, (await contactOf(t, 1)).id);
+    const made = await create(t, a);
+    await start(t, made.body.id);
+
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('failed');
+    expect(mass()).toHaveLength(0);
+    const row = await rowOf(made.body.id);
+    expect(row.status).toBe('failed');
+    expect(row.last_error).toMatch(/only 1 of 3.*consent: withdrawn 2.*needs 2/);
+
+    // The people agree again (the STOP is lifted): the retry asks the gate again and the broadcast goes.
+    await h.owner.query(`UPDATE contacts SET is_unsubscribed = false WHERE org_id = $1`, [t.orgId]);
+    const retried = await post(api, t, `/v2/wechat/broadcasts/${made.body.id}/retry`);
+    expect(retried.status, JSON.stringify(retried.body)).toBe(200);
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('done');
+    expect(sentOpenids()).toEqual(openids(3));
+  });
+
+  it('a send to all followers cannot leave a person out: it is refused while the account knows one the gate refuses', async () => {
+    const t = await api.signup('wcg5');
+    const a = await accountWithFollowers(t, 3);
+    await kit().unsubscribe(t, (await contactOf(t, 0)).id);
+    const made = await create(t, a, { audience: 'all', openids: undefined });
+    await start(t, made.body.id);
+
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('failed');
+    expect(mass()).toHaveLength(0);
+    expect((await rowOf(made.body.id)).last_error).toMatch(
+      /1 of 3 known followers cannot be messaged \(consent: withdrawn 1\).*all followers.*picked list/,
+    );
+  });
+
+  it('a send to a tag is checked the same way, and goes when nobody the account knows is refused', async () => {
+    const t = await api.signup('wcg6');
+    const a = await accountWithFollowers(t, 2);
+    const made = await create(t, a, { audience: 'tag', tagId: '101', openids: undefined });
+    await start(t, made.body.id);
+    expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('done');
+    expect(mass()).toHaveLength(1);
+    expect(mass()[0]!.method).toBe('massSendAll');
+
+    // Another workspace whose account knows a follower flagged as a minor (the workspace's children rule is read once a minute per
+    // process, so a rule written straight into the table is only seen by a workspace that has not asked yet).
+    wechat.reset();
+    const u = await api.signup('wcg6b');
+    const b = await accountWithFollowers(u, 2);
+    await kit().minor(u, (await contactOf(u, 1)).id);
+    const second = await create(u, b, { audience: 'tag', tagId: '101', openids: undefined });
+    await start(u, second.body.id);
+    expect(await sender.run(u.orgId, await idOf(second.body.id))).toBe('failed');
+    expect(mass()).toHaveLength(0);
+    expect((await rowOf(second.body.id)).last_error).toMatch(/subject_minor 1/);
+  });
+
+  it('with the switch on a send to all followers or a tag is refused outright: nobody unknown can have a grant', async () => {
+    const t = await api.signup('wcg7');
+    const a = await accountWithFollowers(t, 2);
+    await kit().setSwitch(t, true);
+    for (const over of [
+      { audience: 'all', openids: undefined },
+      { audience: 'tag', tagId: '7', openids: undefined },
+    ]) {
+      const made = await create(t, a, over);
+      await start(t, made.body.id);
+      expect(await sender.run(t.orgId, await idOf(made.body.id))).toBe('failed');
+      expect((await rowOf(made.body.id)).last_error).toMatch(
+        /consent \(no_consent_recorded\).*picked list/,
+      );
+    }
+    expect(mass()).toHaveLength(0);
+  });
+
+  it('a person flagged as a minor is left out of a list when the workspace says no minors', async () => {
+    const t = await api.signup('wcg8');
+    const a = await accountWithFollowers(t, 3);
+    await kit().minor(t, (await contactOf(t, 0)).id);
+    const made = await create(t, a);
+    await start(t, made.body.id);
+    await sender.run(t.orgId, await idOf(made.body.id));
+    expect(sentOpenids()).toEqual(['oFollower1', 'oFollower2']);
+    expect((await errorsOf(made.body.id))['oFollower0']).toBe(refusedWith('subject_minor'));
+  });
+
+  it('a service message is never blocked: STOP, the switch and a minor flag do not stop a reply or a utility notice', async () => {
+    const t = await api.signup('wcg9');
+    await accountWithFollowers(t, 1);
+    const person = await contactOf(t, 0);
+    await kit().unsubscribe(t, person.id);
+    await kit().minor(t, person.id);
+    await kit().setSwitch(t, true);
+    const gate = h.app.get(ConsentGate);
+    const subject = { type: 'contact', id: person.id } as const;
+    expect((await gate.check(t.orgId, subject, 'wechat', 'marketing_messaging')).decision).toBe(
+      'deny',
+    );
+    expect(
+      await gate.check(t.orgId, subject, 'wechat', 'service_messaging', undefined, {
+        replyWindowOpen: true,
+      }),
+    ).toEqual({ decision: 'allow', reason: 'inbound_reply_window' });
+    expect(await gate.check(t.orgId, subject, 'wechat', 'service_messaging')).toEqual({
+      decision: 'allow',
+      reason: 'utility_exempt',
+    });
+  });
+
+  it('held for the quiet hours, then released: the gate is asked again and a person who unsubscribed while it waited is left out', async () => {
+    const window = h.app.get(SendWindowService);
+    const realNow = window.now;
+    window.now = () => new Date('2030-10-15T22:00:00Z');
+    try {
+      const t = await api.signup('wcg10');
+      const a = await accountWithFollowers(t, 3);
+      await h.owner.query(
+        `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end, window_timezone) VALUES ($1, true, '21:00', '09:00', 'UTC')`,
+        [t.orgId],
+      );
+      const made = await create(t, a);
+      await start(t, made.body.id);
+      const id = await idOf(made.body.id);
+      expect(await sender.run(t.orgId, id)).toBe('held');
+      expect(mass()).toHaveLength(0);
+
+      await kit().unsubscribe(t, (await contactOf(t, 0)).id);
+      window.now = () => new Date('2030-10-16T09:05:00Z');
+      expect(await sender.run(t.orgId, id)).toBe('done');
+      expect(sentOpenids()).toEqual(['oFollower1', 'oFollower2']);
+      expect((await errorsOf(made.body.id))['oFollower0']).toBe(refusedWith('withdrawn'));
+    } finally {
+      window.now = realNow;
+    }
   });
 });
