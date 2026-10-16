@@ -2,151 +2,69 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, type ReactNode } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useFormatter, useTranslations } from 'next-intl';
-import { contactActivityResponseSchema } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { AGENT_IGNORE } from '@/lib/agent-marks';
-import { LinkedAppointments } from '@/features/appointments';
-import { ContactAttributionCard } from '@/features/lead-sources';
+import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
+import { Badge, EmptyState, Spinner, cn } from '@crm/ui';
+import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { CompanyLink } from '@/features/companies';
-import { ConsentCard, ContactPrivacyBadges } from '@/features/contact-consent';
+import { ContactPrivacyBadges } from '@/features/contact-consent';
+import { bandOf } from '@/features/lead-scoring';
 import { ContactPrivacyMenu } from '@/features/privacy-requests';
-import { ContactGrowthCard } from '@/features/growth';
-import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
-import { LinkedSalesDocs } from '@/features/sales-docs';
-import { LinkedInvoices } from '@/features/invoicing';
-import { LinkedTasks } from '@/features/tasks';
-import { useCursorList } from '@/lib/api/use-cursor-list';
-import {
-  deleteContact,
-  invalidateContacts,
-  KEYS,
-  updateContact,
-  useContact,
-} from '../api/contacts';
-import { useStatusOptions } from '../api/attributes';
-import { useContactFields, useFieldSections } from '../api/properties';
-import {
-  displayName,
-  EXTRA_KEYS,
-  formatPhone,
-  isOptedOut,
-  RESERVED_CUSTOM_KEYS,
-  titleCaseKey,
-} from '../lib/contact-model';
+import { useContact } from '../api/contacts';
+import { useOwnerNames } from '../api/owners';
+import type { ContactRow } from '../api/schemas';
+import { displayName, formatPhone, isOptedOut } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
-import { detailGroups } from '../lib/property-model';
-import { stageChoices, statusChoices } from '../lib/option-sets';
-import { ContactAvatar, GroupChip } from './chips';
+import {
+  sectionHref,
+  visibleSections,
+  type CoreSection,
+  type RelatedSection,
+  type SectionId,
+} from '../lib/sections';
+import { ContactAvatar } from './chips';
+import { ContactActionBar } from './contact/action-bar';
+import { FieldHistoryButton } from './contact/field-history';
+import { SocialIcons } from './contact/parts';
+import { ContactSection } from './contact/sections';
+import { useStageChange, type StageChange } from './contact/use-stage-change';
 import { ContactQuickTags } from './contact-quick-tags';
-import { StageMenu } from './stage-menu';
-import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
-import { OwnerControl } from './owner-control';
-import { LostReasonDialog, type LostPrompt } from './lost-reason';
-import { isLostStage } from '../lib/stage-flow';
-import { statusAfterMove, statusNotice } from '../lib/status-scope';
-import { DeleteHistoryOption } from './delete-history-option';
-import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
+import { BuildingIcon, ChevronLeftIcon, MailIcon, PhoneIcon, StarIcon, UserIcon } from './icons';
+import { StageMenu } from './stage-menu';
+import { optionColor } from '../lib/stage-model';
 
 /**
- * `/contacts/[id]` (TW-CON-018): the profile Reference could not render (its back link pointed at a route that did
- * not exist, so every contact answered 500). Header, KPIs, the activity timeline and every field of the contact.
+ * `/contacts/[id]` and `/contacts/[id]/[section]` (TW-CON-018): the contact's page. A sub-nav on the start side (Back to listing,
+ * the contact's sections, then the related ones), the header (avatar, name, lifecycle stage, lead-score star, how to reach them,
+ * owner, social links, tags, the action bar), the lifecycle stage stepper with the status bar of that stage, and the section the URL
+ * names (the overview by default). The same section components fill the quick view's drawer.
  */
-export function ContactDetail({ id }: { id: string }) {
+export function ContactDetail({ id, section }: { id: string; section: SectionId }) {
   const t = useTranslations('contacts-attributes-tags.detail');
-  const router = useRouter();
-  const qc = useQueryClient();
-  const { toast } = useToast();
-  const canUpdate = useCan('record.contacts.update');
-  const canDelete = useCan('record.contacts.delete');
+  const tn = useTranslations('contacts-attributes-tags.contact.nav');
   const contact = useContact(id);
-  const registry = useContactFields();
-  const sections = useFieldSections();
-  const statusOptions = useStatusOptions();
-  const [editing, setEditing] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [keepHistory, setKeepHistory] = useState(false);
-  const ts = useTranslations('contacts-attributes-tags.stageMenu');
-  const tForm = useTranslations('contacts-attributes-tags.form');
-  /** A status value as the workspace names it (its configured label, else the platform's). */
-  const statusLabelOf = (v: string) =>
-    statusChoices(statusOptions.data, (x) => tForm(`statuses.${x}`)).find((c) => c.value === v)
-      ?.label ?? titleCaseKey(v);
-
-  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
-
-  const changeStage = useMutation({
-    mutationFn: (v: {
-      stage: string;
-      rowVersion: number;
-      /** The status the contact holds now, to tell what the stage move did to it. */
-      statusBefore: string | null;
-      reason?: { lostReason?: string | null; otherLostReason?: string | null };
-    }) => updateContact(id, { lifecycleStage: v.stage, ...v.reason, rowVersion: v.rowVersion }),
-    onSuccess: async (saved, v) => {
-      setLostPrompt(null);
-      await Promise.all([
-        invalidateContacts(qc),
-        qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-      ]);
-      const stageName =
-        stageChoices(statusOptions.data).find((s) => s.value === saved.lifecycleStage)?.label ??
-        saved.lifecycleStage ??
-        '';
-      // The API keeps the status valid for the stage: say what happened to it, from its answer.
-      const notice = statusNotice(v.statusBefore, saved.status);
-      toast(
-        notice.kind === 'none'
-          ? ts('changed', { stage: stageName })
-          : notice.kind === 'cleared'
-            ? ts('changedStatusCleared', { stage: stageName })
-            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
-                stage: stageName,
-                status: statusLabelOf(notice.status),
-              }),
-        'success',
-      );
-    },
-    onError: async (e) => {
-      const kind = errorKind(e);
-      toast(
-        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
-        'danger',
-      );
-      if (kind === 'conflict') await qc.invalidateQueries({ queryKey: KEYS.contact(id) });
-    },
-  });
-
-  const remove = useMutation({
-    mutationFn: () => deleteContact(id, { eraseHistory: !keepHistory }),
-    onSuccess: async () => {
-      await invalidateContacts(qc);
-      toast(t('deleted'), 'success');
-      router.replace('/contacts');
-    },
-    onError: () => {
-      setDeleting(false);
-      toast(t('deleteFailed'), 'danger');
-    },
-  });
+  const session = useSession();
+  const router = useRouter();
+  const nav = useMemo(
+    () => visibleSections((permission) => permission in session.permissions),
+    [session.permissions],
+  );
 
   const back = (
     <Link
       href="/contacts"
-      className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
     >
-      <ChevronLeftIcon className="size-3.5 rtl:rotate-180" /> {t('back')}
+      <ChevronLeftIcon className="size-3.5 rtl:rotate-180" /> {tn('back')}
     </Link>
   );
 
   if (contact.isPending) {
     return (
       <section>
-        {back}
+        <div className="mb-4">{back}</div>
         <div role="status" className="flex items-center gap-2 py-10 text-muted-foreground">
           <Spinner /> {t('loading')}
         </div>
@@ -156,7 +74,7 @@ export function ContactDetail({ id }: { id: string }) {
   if (contact.isError) {
     return (
       <section>
-        {back}
+        <div className="mb-4">{back}</div>
         {errorKind(contact.error) === 'unavailable' ? (
           <EmptyState title={t('notFoundTitle')} message={t('notFound')} />
         ) : (
@@ -167,328 +85,313 @@ export function ContactDetail({ id }: { id: string }) {
   }
 
   const c = contact.data;
-  const name = displayName(c) || t('unnamed');
-  const phone = formatPhone(c.phone);
-  const cf = c.customFields;
-  const text = (key: string): string => (typeof cf[key] === 'string' ? cf[key] : '');
-  const customGroups = detailGroups(
-    registry.data ?? [],
-    sections.data ?? [],
-    cf,
-    RESERVED_CUSTOM_KEYS,
-    { yes: t('yes'), no: t('no') },
-    titleCaseKey,
-  );
-  const memberGroups = c.groups ?? [];
+  // A section this person cannot open (no permission) falls back to the overview.
+  const allowed = [...nav.core, ...nav.related] as SectionId[];
+  const current: SectionId = allowed.includes(section) ? section : 'overview';
 
   return (
-    <section>
-      {back}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-center gap-4">
-          <ContactAvatar id={c.id} name={name} size="lg" />
-          <div className="min-w-0">
-            <h1 className="truncate text-2xl font-semibold leading-tight" dir="auto">
-              {name}
-            </h1>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
-              {phone && (
-                <span dir="ltr" className="font-mono">
-                  {phone}
-                </span>
-              )}
-              {c.email && <span dir="ltr">{c.email}</span>}
-              {c.companyId && <CompanyLink id={c.companyId} />}
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              {c.lifecycleStage && (
+    <CallingProvider>
+      <div className="grid gap-4 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-6">
+        <aside aria-label={tn('label')} className="min-w-0 lg:sticky lg:top-20 lg:self-start">
+          <div className="mb-3">{back}</div>
+          <SectionNav contactId={id} current={current} core={nav.core} related={nav.related} />
+        </aside>
+
+        <div className="min-w-0 space-y-4">
+          <DetailHeader
+            contact={c}
+            onOpenSection={(s) => router.push(sectionHref(id, s))}
+            onDeleted={() => router.replace('/contacts')}
+          />
+          <StageStepper contact={c} />
+          <ContactSection
+            section={current}
+            contact={c}
+            variant="page"
+            composer={false}
+            onOpenSection={(s) => router.push(sectionHref(id, s))}
+          />
+        </div>
+      </div>
+      <OnCallPanel />
+    </CallingProvider>
+  );
+}
+
+/** The sub-nav: a vertical list on a wide screen, a scrolling strip of tabs on a narrow one. */
+function SectionNav({
+  contactId,
+  current,
+  core,
+  related,
+}: {
+  contactId: string;
+  current: SectionId;
+  core: readonly CoreSection[];
+  related: readonly RelatedSection[];
+}) {
+  const t = useTranslations('contacts-attributes-tags.contact.nav');
+  const item = (s: SectionId) => (
+    <Link
+      key={s}
+      href={sectionHref(contactId, s)}
+      aria-current={current === s ? 'page' : undefined}
+      className={cn(
+        'block shrink-0 whitespace-nowrap rounded-md px-3 py-2 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
+        current === s
+          ? 'bg-brand/10 font-semibold text-brand'
+          : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+      )}
+    >
+      {t(`section.${s}`)}
+    </Link>
+  );
+  const heading = (text: string) => (
+    <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground max-lg:hidden">
+      {text}
+    </p>
+  );
+  return (
+    <nav
+      aria-label={t('label')}
+      className="thin-scrollbar flex gap-1 overflow-x-auto max-lg:pb-1 lg:flex-col lg:overflow-visible"
+    >
+      {heading(t('contactDetails'))}
+      {core.map(item)}
+      {related.length > 0 && heading(t('related'))}
+      {related.map(item)}
+    </nav>
+  );
+}
+
+/** Avatar, name and lifecycle stage; email, phone, company and owner in one line; social links, privacy chips and tags; the action bar. */
+function DetailHeader({
+  contact,
+  onOpenSection,
+  onDeleted,
+}: {
+  contact: ContactRow;
+  onOpenSection: (section: SectionId) => void;
+  onDeleted: () => void;
+}) {
+  const t = useTranslations('contacts-attributes-tags.detail');
+  const th = useTranslations('contacts-attributes-tags.contact.header');
+  const canUpdate = useCan('record.contacts.update');
+  const stage = useStageChange(contact);
+  const { nameOf } = useOwnerNames();
+  const name = displayName(contact) || t('unnamed');
+  const phone = formatPhone(contact.phone);
+  const owner = contact.ownerId ? nameOf(contact.ownerId) : undefined;
+  const band = contact.leadScore === null ? null : bandOf(contact.leadScore);
+
+  return (
+    <header className="rounded-xl border border-border bg-background p-4 sm:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
+        <div className="flex min-w-0 flex-1 items-start gap-4">
+          <ContactAvatar
+            id={contact.id}
+            name={name}
+            size="lg"
+            className="size-14 text-lg sm:size-16 sm:text-xl"
+          />
+          <div className="min-w-0 flex-1">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5">
+              <h1 className="min-w-0 truncate text-2xl font-semibold leading-tight" dir="auto">
+                {name}
+              </h1>
+              {contact.lifecycleStage && (
                 <StageMenu
-                  value={c.lifecycleStage}
-                  choices={stageChoices(statusOptions.data, c.lifecycleStage)}
+                  value={contact.lifecycleStage}
+                  choices={stage.stages}
                   name={name}
-                  busy={changeStage.isPending}
-                  statusHint={(stage) => {
-                    const move = statusAfterMove(statusOptions.data, c.status, stage);
-                    if (!move.changed) return null;
-                    return move.status === null
-                      ? ts('willClear')
-                      : ts('willReset', { status: statusLabelOf(move.status) });
-                  }}
-                  onChange={
-                    canUpdate
-                      ? (stage) => {
-                          const choices = stageChoices(
-                            statusOptions.data,
-                            c.lifecycleStage ?? undefined,
-                          );
-                          // A lost stage asks why first; nothing is saved until the dialog gives a reason.
-                          if (isLostStage(choices, stage)) {
-                            setLostPrompt({
-                              contactId: c.id,
-                              contactName: name,
-                              stageValue: stage,
-                              stageLabel: choices.find((x) => x.value === stage)?.label ?? stage,
-                            });
-                          } else
-                            changeStage.mutate({
-                              stage,
-                              rowVersion: c.rowVersion,
-                              statusBefore: c.status,
-                            });
-                        }
-                      : undefined
-                  }
+                  busy={stage.busy}
+                  statusHint={stage.hint}
+                  onChange={canUpdate ? stage.changeStage : undefined}
                 />
               )}
-              {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
-              {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
-              <ContactPrivacyBadges contactId={id} />
-              <ContactQuickTags contactId={id} />
+              {band && (
+                <button
+                  type="button"
+                  onClick={() => onOpenSection('overview')}
+                  title={th('leadScore')}
+                  aria-label={th('leadScoreAria', { score: contact.leadScore ?? 0 })}
+                  className={cn(
+                    'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                    band === 'hot' && 'border-success/30 bg-success/10 text-success',
+                    band === 'warm' && 'border-warning/30 bg-warning/10 text-warning',
+                    band === 'cold' && 'border-border bg-muted text-muted-foreground',
+                  )}
+                >
+                  <StarIcon className="size-3.5" />
+                  {contact.leadScore}
+                </button>
+              )}
+              {isOptedOut(contact) && <Badge tone="warning">{t('optedOut')}</Badge>}
+              <ContactPrivacyBadges contactId={contact.id} />
+            </div>
+            <ul className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+              {contact.email && (
+                <li className="inline-flex min-w-0 items-center gap-1.5" dir="ltr">
+                  <MailIcon className="size-3.5 shrink-0" />
+                  <a
+                    href={`mailto:${contact.email}`}
+                    className="truncate hover:text-foreground hover:underline"
+                  >
+                    {contact.email}
+                  </a>
+                </li>
+              )}
+              {phone && (
+                <li className="inline-flex items-center gap-1.5" dir="ltr">
+                  <PhoneIcon className="size-3.5 shrink-0" />
+                  <span className="font-mono">{phone}</span>
+                </li>
+              )}
+              {contact.companyId && (
+                <li className="inline-flex items-center gap-1.5">
+                  <BuildingIcon className="size-3.5 shrink-0" />
+                  <CompanyLink id={contact.companyId} />
+                </li>
+              )}
+              <li className="inline-flex items-center gap-1.5">
+                <UserIcon className="size-3.5 shrink-0" />
+                <span>
+                  {th('owner')}: {contact.ownerId ? (owner ?? '') : t('ownerNone')}
+                </span>
+              </li>
+              <li>
+                <SocialIcons contact={contact} />
+              </li>
+            </ul>
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+              <ContactQuickTags contactId={contact.id} />
             </div>
           </div>
         </div>
-        <div className="flex shrink-0 gap-2">
-          <ContactPrivacyMenu contactId={id} />
-          {canUpdate && (
-            <Button variant="secondary" onClick={() => setEditing(true)}>
-              <PencilIcon /> {t('edit')}
-            </Button>
-          )}
-          {canDelete && (
-            <Button
-              variant="secondary"
-              className="border-danger text-danger hover:bg-danger/10"
-              onClick={() => setDeleting(true)}
-            >
-              <TrashIcon /> {t('delete')}
-            </Button>
-          )}
+        <div className="flex shrink-0 items-center gap-2">
+          <FieldHistoryButton contactId={contact.id} />
+          <ContactPrivacyMenu contactId={contact.id} />
         </div>
       </div>
-
-      <div className="mb-6 grid grid-cols-2 gap-3">
-        <ScoreCard
-          contactId={id}
-          contact={c}
-          className="col-span-2"
-          onScored={() =>
-            Promise.all([
-              invalidateContacts(qc),
-              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-            ])
-          }
-        />
-        {/* Only present in a workspace that has the chat reading on; every other workspace sees the page as before. */}
-        <ChatInsightCard
-          contactId={id}
-          className="col-span-2"
-          onChanged={() =>
-            Promise.all([
-              invalidateContacts(qc),
-              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-            ])
-          }
-        />
-        {/* Only present in a workspace that is in the growth pilot with the conversion model or enrichment on. */}
-        <ContactGrowthCard contactId={id} className="col-span-2" />
-        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
-        <StatTile label={t('created')} value={<DateText value={c.createdAt} />} />
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="min-w-0 space-y-6">
-          <LinkedTasks kind="contact" id={id} label={name} />
-          <LinkedInvoices kind="contact" id={id} />
-          <LinkedSalesDocs kind="contact" id={id} />
-          <LinkedAppointments contactId={id} />
-          <ContactAttributionCard contactId={id} />
-          <ConsentCard
-            contactId={id}
-            onChanged={() =>
-              Promise.all([
-                invalidateContacts(qc),
-                qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-              ])
-            }
-          />
-          <Timeline id={id} />
-        </div>
-        <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            {t('details')}
-          </h2>
-          <dl className="space-y-3 text-sm">
-            <Detail label={t('owner')}>
-              <OwnerControl
-                contactId={id}
-                ownerId={c.ownerId}
-                rowVersion={c.rowVersion}
-                canEdit={canUpdate}
-              />
-            </Detail>
-            <Detail label={t('language')}>{text(EXTRA_KEYS.language)}</Detail>
-            <Detail label={t('source')}>{c.source ?? text(EXTRA_KEYS.source)}</Detail>
-            <Detail label={t('address')}>{text(EXTRA_KEYS.address)}</Detail>
-            <Detail label={t('memo')}>{text(EXTRA_KEYS.memo)}</Detail>
-            <Detail label={t('groups')}>
-              {memberGroups.length > 0 && (
-                <span className="flex flex-wrap gap-1">
-                  {memberGroups.map((g) => (
-                    <GroupChip key={g.id} name={g.name} color={g.color} />
-                  ))}
-                </span>
-              )}
-            </Detail>
-            <Detail label={t('consent')}>{isOptedOut(c) ? t('optedOutFull') : t('optedIn')}</Detail>
-          </dl>
-          {customGroups.map((g) => (
-            <div key={g.title ?? 'other'} className="space-y-3 border-t border-border pt-3">
-              {g.title && (
-                <h3
-                  className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
-                  dir="auto"
-                >
-                  {g.title}
-                </h3>
-              )}
-              <dl className="space-y-3 text-sm">
-                {g.rows.map((r) => (
-                  <Detail key={r.key} label={r.label}>
-                    {r.value}
-                  </Detail>
-                ))}
-              </dl>
-            </div>
-          ))}
-        </aside>
-      </div>
-
-      <ContactFormModal open={editing} contact={c} onClose={() => setEditing(false)} />
-      <LostReasonDialog
-        prompt={lostPrompt}
-        busy={changeStage.isPending}
-        onConfirm={(p, reason) =>
-          changeStage.mutate({
-            stage: p.stageValue,
-            rowVersion: c.rowVersion,
-            reason,
-            statusBefore: c.status,
-          })
-        }
-        onClose={() => setLostPrompt(null)}
+      <ContactActionBar
+        contact={contact}
+        onOpenSection={(s) => onOpenSection(s)}
+        onDeleted={onDeleted}
+        className="mt-4 border-t border-border pt-3"
       />
-      <ConfirmDialog
-        open={deleting}
-        tone="danger"
-        busy={remove.isPending}
-        title={t('deleteTitle')}
-        message={
-          <>
-            <p>{t('deleteMessage', { name })}</p>
-            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
-          </>
-        }
-        confirmLabel={t('delete')}
-        cancelLabel={t('keep')}
-        onClose={() => {
-          setDeleting(false);
-          setKeepHistory(false);
-        }}
-        onConfirm={() => remove.mutate()}
-      />
-    </section>
+      {stage.dialog}
+    </header>
   );
 }
 
-function Detail({ label, children }: { label: string; children: ReactNode }) {
-  const empty = children === '' || children === false || children == null;
-  return (
-    <div>
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 break-words" dir="auto">
-        {empty ? <span className="text-muted-foreground">&mdash;</span> : children}
-      </dd>
-    </div>
-  );
-}
-
-function DateText({ value }: { value: string | null }) {
-  const format = useFormatter();
-  if (!value) return <>&mdash;</>;
-  return (
-    <span className="text-xl">{format.dateTime(new Date(value), { dateStyle: 'medium' })}</span>
-  );
-}
-
-function Timeline({ id }: { id: string }) {
-  const t = useTranslations('contacts-attributes-tags.detail');
-  const format = useFormatter();
-  const list = useCursorList(
-    ['cat', 'activities', id],
-    `/contacts/${id}/activities`,
-    contactActivityResponseSchema,
-  );
+/**
+ * The lifecycle stages as a stepper (the contact's stage highlighted, the ones before it tinted) with the status bar of that stage
+ * under it. Clicking a stage is the stage menu's change (a lost stage asks why first and the toast says what happened to the status);
+ * clicking a status sets it, among the statuses valid in the stage, which is the linking rule the API enforces.
+ */
+function StageStepper({ contact }: { contact: ContactRow }) {
+  const t = useTranslations('contacts-attributes-tags.contact.stages');
+  const canUpdate = useCan('record.contacts.update');
+  const stage = useStageChange(contact);
+  const current = contact.lifecycleStage;
+  const at = stage.stages.findIndex((s) => s.value === current);
+  if (stage.stages.length === 0) return null;
   return (
     <section
-      className="rounded-md border border-border bg-background p-4 sm:p-5"
-      aria-labelledby={`tl-${id}`}
+      aria-label={t('title')}
+      className="space-y-3 rounded-xl border border-border bg-background p-4 sm:p-5"
     >
-      <h2
-        id={`tl-${id}`}
-        className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
-      >
-        {t('timeline')}
-      </h2>
-      {list.isPending ? (
-        <div role="status" className="flex items-center gap-2 py-6 text-muted-foreground">
-          <Spinner /> {t('loading')}
-        </div>
-      ) : list.isError ? (
-        <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
-      ) : list.items.length === 0 ? (
-        <p className="py-6 text-center text-sm text-muted-foreground">{t('noActivity')}</p>
-      ) : (
-        <ol
-          {...AGENT_IGNORE}
-          className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border"
-        >
-          {list.items.map((a) => (
-            <li key={a.id} className="relative">
-              <span className="absolute -start-6 top-1 size-[18px] rounded-full border border-border bg-background" />
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-semibold" dir="auto">
-                  {a.title}
-                </span>
-                <time
-                  dateTime={a.occurredAt}
-                  className="shrink-0 font-mono text-[11px] text-muted-foreground"
+      <div>
+        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          {t('stages')}
+        </h2>
+        <ol className="thin-scrollbar flex gap-1.5 overflow-x-auto pb-1">
+          {stage.stages.map((s, i) => {
+            const active = s.value === current;
+            const done = at >= 0 && i < at;
+            const hint = canUpdate && !active ? stage.hint(s.value) : null;
+            return (
+              <li key={s.value} className="min-w-[7.5rem] flex-1">
+                <button
+                  type="button"
+                  disabled={!canUpdate || stage.busy}
+                  aria-current={active ? 'step' : undefined}
+                  title={hint ?? undefined}
+                  onClick={() => stage.changeStage(s.value)}
+                  className={cn(
+                    'relative flex h-10 w-full items-center justify-center gap-2 rounded-md border px-3 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-default',
+                    active
+                      ? 'border-brand bg-brand font-semibold text-brand-foreground'
+                      : done
+                        ? 'border-brand/30 bg-brand/10 text-brand hover:bg-brand/15'
+                        : 'border-border bg-background text-muted-foreground hover:bg-muted',
+                  )}
                 >
-                  {format.dateTime(new Date(a.occurredAt), {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  })}
-                </time>
-              </div>
-              {a.body && (
-                <p className="mt-0.5 text-sm leading-snug text-muted-foreground" dir="auto">
-                  {a.body}
-                </p>
-              )}
-            </li>
-          ))}
+                  <span
+                    aria-hidden="true"
+                    className="size-2 shrink-0 rounded-full"
+                    style={{
+                      background: active
+                        ? 'currentColor'
+                        : optionColor({ value: s.value, color: s.color }),
+                    }}
+                  />
+                  <span className="truncate">{s.label}</span>
+                </button>
+              </li>
+            );
+          })}
         </ol>
-      )}
-      {list.hasNextPage && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="mt-4"
-          onClick={() => void list.fetchNextPage()}
-          disabled={list.isFetchingNextPage}
-        >
-          {t('loadMore')}
-        </Button>
-      )}
+      </div>
+      <StatusBar stage={stage} current={contact.status} canUpdate={canUpdate} />
+      {stage.dialog}
     </section>
+  );
+}
+
+function StatusBar({
+  stage,
+  current,
+  canUpdate,
+}: {
+  stage: StageChange;
+  current: string | null;
+  canUpdate: boolean;
+}) {
+  const t = useTranslations('contacts-attributes-tags.contact.stages');
+  return (
+    <div>
+      <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        {t('status')}
+      </h2>
+      {stage.statuses.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{t('noStatuses')}</p>
+      ) : (
+        <ul className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={t('status')}>
+          {stage.statuses.map((s) => {
+            const on = s.value === current;
+            return (
+              <li key={s.value}>
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  disabled={!canUpdate || stage.busy}
+                  onClick={() => stage.changeStatus(s.value)}
+                  className={cn(
+                    'inline-flex h-8 items-center rounded-full border px-3 text-xs font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-default',
+                    on
+                      ? 'border-success/40 bg-success/10 text-success'
+                      : 'border-border text-muted-foreground hover:bg-muted',
+                  )}
+                >
+                  {s.label}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
   );
 }

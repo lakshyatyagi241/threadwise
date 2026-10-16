@@ -31,7 +31,7 @@ export const KEYS = {
   owners: ['cat', 'owners'] as const,
 };
 
-/** Rows per screen (the API accepts up to 1000; the footer offers these); ten is the default until one is remembered. */
+/** Rows per screen (the API accepts up to 1000; the footer offers these); fifty is the default until one is remembered. */
 export const PAGE_SIZES = [10, 25, 50, 100, 200] as const;
 export type PageSize = (typeof PAGE_SIZES)[number];
 
@@ -47,6 +47,10 @@ export interface ContactFilters {
   consent: ConsentFilter;
   /** Created by a CSV import (Reference's "Imported" view, which never matched anything there). */
   imported: boolean;
+  /** One contact status value (`status` on the API), empty for any. */
+  status: string;
+  /** Where the contact came from (`source` on the API: the import's source knob, a form, "api"), empty for any. */
+  source: string;
   /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
   segment: string;
   /**
@@ -71,12 +75,14 @@ export const DEFAULT_FILTERS: ContactFilters = {
   tag: '',
   consent: '',
   imported: false,
+  status: '',
+  source: '',
   segment: '',
   owner: '',
   rules: '',
   order: 'desc',
   sort: 'createdAt',
-  limit: 10,
+  limit: 50,
   page: 1,
 };
 
@@ -85,7 +91,7 @@ export function contactFilterBody(
   f: Pick<
     ContactFilters,
     'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
-  > & { rules?: string; owner?: string },
+  > & { rules?: string; owner?: string; status?: string; source?: string },
 ) {
   const owners = ownerTokens(f.owner ?? '');
   const ownerIds = owners.filter((o) => o !== UNASSIGNED_OWNER);
@@ -97,6 +103,8 @@ export function contactFilterBody(
     tagIds: f.tag ? [f.tag] : undefined,
     unsubscribed: f.consent === '' ? undefined : f.consent === 'unsubscribed',
     imported: f.imported ? true : undefined,
+    status: f.status?.trim() || undefined,
+    source: f.source?.trim() || undefined,
     segmentId: f.segment || undefined,
     rules: f.rules || undefined,
     ownerIds: ownerIds.length > 0 ? ownerIds : undefined,
@@ -130,6 +138,8 @@ export function listQuery(f: ContactFilters) {
     tagIds: f.tag || undefined,
     unsubscribed: b.unsubscribed,
     imported: b.imported,
+    status: b.status,
+    source: b.source,
     segmentId: b.segmentId,
     rules: b.rules,
     ownerIds: b.ownerIds?.join(','),
@@ -249,10 +259,11 @@ export async function fetchContact(id: string, signal?: AbortSignal): Promise<Co
   return { ...contact, groups };
 }
 
-export function useContact(id: string) {
+export function useContact(id: string, enabled = true) {
   return useQuery({
     queryKey: KEYS.contact(id),
     queryFn: ({ signal }) => fetchContact(id, signal),
+    enabled,
     retry: false,
   });
 }

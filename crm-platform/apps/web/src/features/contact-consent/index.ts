@@ -7,3 +7,5 @@ export { ConsentNoticeEditor } from './components/consent-notice-editor';
 export { ImportConsent } from './components/import-consent';
 export { OptOutFooterSuggestion } from './components/opt-out-line';
 export { channelStatement, toggleChannel } from './lib/channels';
+/** The contact screens read the same consent query as the Consent card (one request for the card, the badges and the quick view). */
+export { useContactConsent } from './api/hooks';

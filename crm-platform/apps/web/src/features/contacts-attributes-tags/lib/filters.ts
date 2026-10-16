@@ -35,6 +35,17 @@ function cleanRules(v: string | null): string {
   }
 }
 
+/** A status value: the lower-case key the workspace's options use. */
+function cleanKey(v: string | null): string {
+  const t = (v ?? '').trim();
+  return /^[a-z][a-z0-9_]{0,63}$/.test(t) ? t : '';
+}
+
+/** A free-text filter value (a source): trimmed and cut to the API's 128 characters. */
+function cleanText(v: string | null): string {
+  return (v ?? '').trim().slice(0, 128);
+}
+
 const SORTS: ReadonlySet<string> = new Set(CONTACT_SORT_FIELDS);
 
 /** A `sort=` the API accepts: one of its columns or `attr:<key>`; anything else is the default order. */
@@ -66,6 +77,8 @@ export function parseFilters(
       ? consent
       : '') as ConsentFilter,
     imported: params.get('imported') === '1',
+    status: cleanKey(params.get('status')),
+    source: cleanText(params.get('source')),
     segment: cleanId(params.get('segment'), false),
     owner: ownerTokens(params.get('owner') ?? '').join(','),
     rules: cleanRules(params.get('rules')),
@@ -88,6 +101,8 @@ export function filtersToSearch(
   if (f.lifecycleStage) p.set('stage', f.lifecycleStage);
   if (f.consent) p.set('consent', f.consent);
   if (f.imported) p.set('imported', '1');
+  if (f.status) p.set('status', f.status);
+  if (f.source.trim()) p.set('source', f.source.trim());
   if (f.segment) p.set('segment', f.segment);
   if (f.owner) p.set('owner', f.owner);
   if (f.rules) p.set('rules', f.rules);
@@ -108,6 +123,8 @@ export function hasActiveFilter(f: ContactFilters): boolean {
     f.lifecycleStage ||
     f.consent ||
     f.imported ||
+    f.status ||
+    f.source.trim() ||
     f.segment ||
     f.owner ||
     f.rules,
