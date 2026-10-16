@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useId, useMemo, useRef, useState, type FormEvent } from 'react';
 import { Alert, Badge, Button, Card, Field, Input, Select, Spinner } from '@crm/ui';
-import { setLocale, setTheme } from '@/components/shell/actions';
+import { setLocale } from '@/components/shell/actions';
 import { ApiError } from '@/lib/api/errors';
 import { LOCALES, isLocale } from '@/i18n/locales';
 import { ErrorNote } from '../../shared/error-note';
@@ -22,10 +22,7 @@ import { firstNameOf } from '../hub/person-text';
 import { EmailChangeModal } from './email-change-modal';
 import { profileChanges, savedMyZone, savedZone } from './profile-changes';
 
-type Theme = ProfileResponse['theme'];
-const THEMES: Theme[] = ['paper', 'bright', 'dark'];
-type FieldKey =
-  'fullName' | 'displayName' | 'phone' | 'locale' | 'theme' | 'workspaceTimezone' | 'timezone';
+type FieldKey = 'fullName' | 'displayName' | 'phone' | 'locale' | 'workspaceTimezone' | 'timezone';
 type Errors = Partial<Record<FieldKey, string>>;
 
 export function ProfileView() {
@@ -54,13 +51,6 @@ export function ProfileView() {
   return <ProfileForm profile={query.data} title={t('personalInfo')} />;
 }
 
-/** Applies the theme now: the shell stores light/dark in a cookie, paper and bright are both light. */
-function applyTheme(theme: Theme) {
-  const mode = theme === 'dark' ? 'dark' : 'light';
-  document.documentElement.dataset.theme = mode;
-  void setTheme(mode);
-}
-
 function ProfileForm({ profile, title }: { profile: ProfileResponse; title: string }) {
   const t = useTranslations('auth-registration-security.account.profile');
   const c = useTranslations('auth-registration-security.account.common');
@@ -82,7 +72,6 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
     problem: null,
   });
   const [locale, setLocaleValue] = useState(profile.locale ?? '');
-  const [theme, setThemeValue] = useState<Theme>(profile.theme);
   const [zone, setZone] = useState(initialZone);
   const [myZone, setMyZone] = useState(savedMyZone(profile));
   const [resetCount, setResetCount] = useState(0);
@@ -107,13 +96,17 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
     return out;
   }, []);
 
-  /** Only what changed, so saving never overwrites a field the person did not touch. */
+  /**
+   * Only what changed, so saving never overwrites a field the person did not touch. `theme` is no
+   * longer editable here (it moved to the profile dropdown below Wallet), so it is always the saved
+   * value and the diff for it never fires.
+   */
   const body = profileChanges(profile, {
     fullName,
     displayName,
     phone: phone.e164,
     locale,
-    theme,
+    theme: profile.theme,
     zone,
     myZone,
   });
@@ -155,7 +148,6 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
       const updated = await authApi.updateProfile(body);
       queryClient.setQueryData(keys.profile, updated);
       setSaved(true);
-      if (body.theme) applyTheme(body.theme);
       if (body.locale && isLocale(body.locale)) await setLocale(body.locale);
       // The name and photo in the shell come from the session, which the server re-reads.
       router.refresh();
@@ -191,7 +183,6 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
     setDisplayName(defaultDisplayName);
     setPhone({ e164: profile.phone, empty: !profile.phone, problem: null });
     setLocaleValue(profile.locale ?? '');
-    setThemeValue(profile.theme);
     setZone(initialZone);
     setMyZone(savedMyZone(profile));
     setErrors({});
@@ -331,41 +322,26 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
             </Field>
           </div>
 
-          {/* Beyond Reference's form: the person's own language and theme. */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field
-              label={t('language')}
-              htmlFor={id('locale')}
-              hint={t('languageHint')}
-              error={errors.locale}
+          {/* Beyond Reference's form: the person's own language. Theme moved to the profile dropdown below Wallet. */}
+          <Field
+            label={t('language')}
+            htmlFor={id('locale')}
+            hint={t('languageHint')}
+            error={errors.locale}
+          >
+            <Select
+              id={id('locale')}
+              value={locale}
+              onChange={(e) => setLocaleValue(e.target.value)}
             >
-              <Select
-                id={id('locale')}
-                value={locale}
-                onChange={(e) => setLocaleValue(e.target.value)}
-              >
-                <option value="">{t('languageDefault')}</option>
-                {languageNames.map((l) => (
-                  <option key={l.code} value={l.code} lang={l.code}>
-                    {l.name}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field label={t('theme')} htmlFor={id('theme')} error={errors.theme}>
-              <Select
-                id={id('theme')}
-                value={theme}
-                onChange={(e) => setThemeValue(e.target.value as Theme)}
-              >
-                {THEMES.map((name) => (
-                  <option key={name} value={name}>
-                    {t(`themes.${name}`)}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-          </div>
+              <option value="">{t('languageDefault')}</option>
+              {languageNames.map((l) => (
+                <option key={l.code} value={l.code} lang={l.code}>
+                  {l.name}
+                </option>
+              ))}
+            </Select>
+          </Field>
 
           <ErrorNote error={error} />
           {saved && <Alert tone="success">{t('saved')}</Alert>}
