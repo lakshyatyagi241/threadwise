@@ -445,7 +445,11 @@ export class SegmentsService {
       return {
         count: counted.count,
         countApproximate: counted.approximate,
-        sample: rows.slice(0, SEGMENT_PREVIEW_SAMPLE).map((r) => toContactResponse(r)),
+        // Segment preview is a different screen from Contacts list/detail and out of scope for
+        // the contacts.phone.reveal gate added there — unmasked, as before, pending its own pass.
+        sample: rows
+          .slice(0, SEGMENT_PREVIEW_SAMPLE)
+          .map((r) => toContactResponse(r, { canRevealPhone: true })),
         invalidConditions: compiled.invalid,
       };
     });
