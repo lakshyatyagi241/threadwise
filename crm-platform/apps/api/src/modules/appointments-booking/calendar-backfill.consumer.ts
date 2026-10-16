@@ -35,6 +35,7 @@ export class CalendarBackfillConsumer implements OutboxSubscriber, OnModuleInit 
     this.registry.register(this);
   }
 
+  /** A redelivered event is harmless: the job id is fixed per workspace, so a second enqueue while the first job is still queued is a no-op. */
   async handle(event: OutboxEvent): Promise<void> {
     await this.queue.enqueue(event.orgId);
   }
