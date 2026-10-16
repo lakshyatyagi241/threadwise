@@ -11,8 +11,10 @@ const str = (x: unknown): string =>
 export interface PageEntry {
   pageId: string;
   messaging: Dict[];
-  /** The `value` of every `feed` change (other fields are not ours). */
+  /** The `value` of every `feed` change. */
   feed: Dict[];
+  /** The `value` of every `leadgen` change (a new lead on one of the Page's lead forms). */
+  leadgen: Dict[];
 }
 
 /** Only `object = page` is ours; everything else is acknowledged and ignored. Delivery is batched: every entry is read. */
@@ -31,9 +33,29 @@ export function readEntries(payload: unknown): PageEntry[] {
         .map(dict)
         .filter((c) => c.field === 'feed')
         .map((c) => dict(c.value)),
+      leadgen: list(e.changes)
+        .map(dict)
+        .filter((c) => c.field === 'leadgen')
+        .map((c) => dict(c.value)),
     });
   }
   return out;
+}
+
+/** A new lead on a lead form, as the webhook names it: ids only. The lead's answers are fetched from Meta by the lead ads worker. */
+export interface LeadgenInput {
+  leadgenId: string;
+  formId: string | null;
+  adId: string | null;
+}
+
+/** A `leadgen` change needs a lead id; the form and ad ids are kept when present. */
+export function readLeadgen(value: Dict): LeadgenInput | null {
+  const leadgenId = str(value.leadgen_id);
+  if (leadgenId === '') return null;
+  const formId = str(value.form_id);
+  const adId = str(value.ad_id);
+  return { leadgenId, formId: formId === '' ? null : formId, adId: adId === '' ? null : adId };
 }
 
 export interface Attachment {

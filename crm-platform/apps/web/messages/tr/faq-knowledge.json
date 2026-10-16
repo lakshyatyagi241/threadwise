@@ -178,14 +178,6 @@
           "otherHint": "Görüşmeyi farklı bir akışa devredin."
         }
       },
-      "advanced": {
-        "title": "Gelişmiş: yalnızca bu SSS için hassasiyet",
-        "custom": "Bu SSS için özel hassasiyet kullan",
-        "sliderLabel": "Şu değer ve üzerinde eşleş",
-        "body": "Varsayılan olarak her SSS bu akışın hassasiyetini kullanır. Çok sık eşleşiyorsa (yükseltin) veya çok seyrek eşleşiyorsa (düşürün) özel bir değer kullanın.",
-        "workspace": "Bu akışın hassasiyeti %{value}.",
-        "following": "Bu akışın hassasiyeti izleniyor (%{value})."
-      },
       "problem": {
         "question": {
           "required": "Müşterilerin sorduğu soruyu yazın.",

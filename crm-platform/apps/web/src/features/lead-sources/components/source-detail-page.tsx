@@ -20,8 +20,17 @@ import { issuesByPath, leadError, type LeadError } from '../lib/errors';
 import { DEFAULT_EVENT_FILTERS, filtersFromLink, type EventFilters } from '../lib/event-view';
 import { LEADS_READ, useLeadsCan } from '../lib/permissions';
 import { dismissReveal, needsLeaveGuard, revealOf, type Reveal } from '../lib/reveal';
-import { ROUTES, canRotate, isConnector, tokenHintOf } from '../lib/source-view';
+import {
+  ROUTES,
+  canDeleteHere,
+  canRotate,
+  hasOwnUrl,
+  isConnector,
+  isMetaForm,
+  tokenHintOf,
+} from '../lib/source-view';
 import { EventsPanel } from './events-panel';
+import { MetaHealthCard } from './meta-health-card';
 import { MappingStudio, usePathFocus } from './mapping-studio';
 import { RevealPanel } from './reveal-panel';
 import { BasicsFields, DefaultsFields, type SetDraft } from './source-fields';
@@ -107,6 +116,9 @@ function Detail({
   const baseline = draftFromSource(base);
   const dirty = isDirty(draft, baseline);
   const connector = isConnector(base);
+  const meta = isMetaForm(base);
+  // Connectors and Meta forms both receive leads without a URL of their own: no secret and no sender id path to edit.
+  const noUrl = !hasOwnUrl(base);
 
   // Unsaved edits and an unconfirmed token both die with the page: the browser asks first.
   useEffect(() => {
@@ -284,14 +296,16 @@ function Detail({
                   {t('rotate')}
                 </Button>
               )}
-              <Button
-                type="button"
-                variant="danger"
-                disabled={busy}
-                onClick={() => setConfirm('delete')}
-              >
-                {t('delete')}
-              </Button>
+              {canDeleteHere(live) && (
+                <Button
+                  type="button"
+                  variant="danger"
+                  disabled={busy}
+                  onClick={() => setConfirm('delete')}
+                >
+                  {t('delete')}
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -322,7 +336,14 @@ function Detail({
         <h2 id="ls-conn-title" className="text-lg font-semibold">
           {t('connection')}
         </h2>
-        {connector ? (
+        {meta ? (
+          <Alert tone="info" className="space-y-2" data-testid="meta-note">
+            <p>{t('metaForm')}</p>
+            <Link href={ROUTES.ads} className="font-medium underline underline-offset-2">
+              {t('metaFormLink')}
+            </Link>
+          </Alert>
+        ) : connector ? (
           <Alert tone="info" className="space-y-2" data-testid="connector-note">
             <p>{t('connector')}</p>
             <Link
@@ -350,6 +371,8 @@ function Detail({
         )}
       </section>
 
+      {meta && <MetaHealthCard sourceId={base.id} enabled={can.read} />}
+
       <EventsPanel source={live} can={can} filters={filters} onFilters={setFilters} />
 
       <TestLeadPanel source={live} canManage={can.manage} />
@@ -372,7 +395,7 @@ function Detail({
             disabled={!can.manage}
             hasSecret={base.hasSecret}
             onFocusTarget={focus.setFocus}
-            connector={connector}
+            connector={noUrl}
           />
         </section>
 
@@ -453,17 +476,19 @@ function Detail({
               onClose={() => setConfirm(null)}
             />
           )}
-          <ConfirmDialog
-            open={confirm === 'delete'}
-            tone="danger"
-            title={t('confirm.delete.title', { name: base.name })}
-            message={t('confirm.delete.body')}
-            confirmLabel={t('confirm.delete.action')}
-            cancelLabel={t('confirm.cancel')}
-            busy={remove.isPending}
-            onConfirm={() => remove.mutate()}
-            onClose={() => setConfirm(null)}
-          />
+          {canDeleteHere(base) && (
+            <ConfirmDialog
+              open={confirm === 'delete'}
+              tone="danger"
+              title={t('confirm.delete.title', { name: base.name })}
+              message={t('confirm.delete.body')}
+              confirmLabel={t('confirm.delete.action')}
+              cancelLabel={t('confirm.cancel')}
+              busy={remove.isPending}
+              onConfirm={() => remove.mutate()}
+              onClose={() => setConfirm(null)}
+            />
+          )}
         </>
       )}
     </div>

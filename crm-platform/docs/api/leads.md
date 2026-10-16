@@ -9,8 +9,9 @@ call the same pipeline. Base path `/v2`. Errors are `application/problem+json` w
 uuid. The management routes need a staff bearer token; the hook needs none.
 
 **One pipeline, several doors.** A lead source is a door; every door ends in the same pipeline (`LeadIngestService`), the only writer of
-lead-originated contacts. Today a workspace creates one kind of door, the generic webhook (covers LinkedIn, TikTok, Google Ads and any
-landing-page tool through Zapier, Make or a native webhook). `kind` already names the doors that follow (`meta_lead_ads`, `tiktok`, `linkedin`,
+lead-originated contacts. A workspace creates the generic webhook (covers LinkedIn, TikTok, Google Ads and any
+landing-page tool through Zapier, Make or a native webhook) and, from the Ads tab, picks Meta lead forms: each picked form is a source of kind
+`meta_lead_ads` made by the Meta door ([meta-lead-ads.md](meta-lead-ads.md)). `kind` already names the doors that follow (`meta_lead_ads`, `tiktok`, `linkedin`,
 `google_ads`) and `connector` (a marketplace portal such as IndiaMART), which reaches the pipeline through the port in
 [The port](#the-port-for-other-domains).
 
@@ -365,6 +366,10 @@ export interface LeadIngestResult {
 }
 export interface LeadIngestPort {
   ingest(orgId: number, sourceId: number, lead: NormalisedLead): Promise<LeadIngestResult>;
+  // For a poller (the Meta lead ads sweep): which of these external ids the source already holds and needs no more
+  // (anything but a `failed` event or a `received` one that stalled). Optional; asking first keeps a re-read from counting
+  // every lead as a duplicate delivery.
+  settled?(orgId: number, sourceId: number, externalIds: readonly string[]): Promise<string[]>;
 }
 ```
 
@@ -374,7 +379,7 @@ export const LEAD_SOURCE_DIRECTORY = Symbol('LEAD_SOURCE_DIRECTORY');
 export interface LeadSourceDirectoryPort {
   ensureConnectorSource(
     orgId,
-    { providerKey, externalRef, name },
+    { providerKey, externalRef, name, kind? }, // kind: 'connector' (default) | 'meta_lead_ads'
   ): Promise<{ sourceId: number; sourceUuid: string }>; // idempotent per externalRef
   releaseConnectorSource(orgId, externalRef): Promise<void>;
 }

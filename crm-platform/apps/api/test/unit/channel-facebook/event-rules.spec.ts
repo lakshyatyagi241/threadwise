@@ -4,6 +4,7 @@ import {
   readComment,
   readEntries,
   readHistory,
+  readLeadgen,
   readMessaging,
 } from '../../../src/modules/channel-facebook/event-rules';
 
@@ -29,7 +30,7 @@ describe('reading a webhook payload (TW-FB-006)', () => {
     expect(out.map((e) => e.pageId)).toEqual(['P1', 'P2']);
     expect(out[0]?.messaging).toHaveLength(1);
     expect(out[0]?.feed).toEqual([{ item: 'comment' }]);
-    expect(out[1]).toEqual({ pageId: 'P2', messaging: [], feed: [] });
+    expect(out[1]).toEqual({ pageId: 'P2', messaging: [], feed: [], leadgen: [] });
   });
 });
 
@@ -201,5 +202,43 @@ describe('history from Meta (TW-FB-010)', () => {
       attachments: { data: [{ mime_type: 'application/pdf', file_url: 'https://x/f.pdf' }] },
     });
     expect(f).toMatchObject({ mediaType: 'file', mediaUrl: 'https://x/f.pdf', text: '' });
+  });
+});
+
+describe('a lead on a lead form (leadgen)', () => {
+  it('is read from the changes of an entry, next to the feed, and nothing else is taken for one', () => {
+    const out = readEntries({
+      object: 'page',
+      entry: [
+        {
+          id: 'P1',
+          changes: [
+            {
+              field: 'leadgen',
+              value: { leadgen_id: '9001', form_id: '5001', ad_id: 'a1', page_id: 'P1' },
+            },
+            { field: 'feed', value: { item: 'comment' } },
+            { field: 'leadgen', value: { leadgen_id: '9002' } },
+          ],
+        },
+      ],
+    });
+    expect(out[0]?.leadgen).toHaveLength(2);
+    expect(out[0]?.feed).toHaveLength(1);
+  });
+
+  it('needs a lead id and keeps the form and ad ids when present', () => {
+    expect(readLeadgen({ leadgen_id: '9001', form_id: '5001', ad_id: 'a1' })).toEqual({
+      leadgenId: '9001',
+      formId: '5001',
+      adId: 'a1',
+    });
+    expect(readLeadgen({ leadgen_id: 9001 })).toEqual({
+      leadgenId: '9001',
+      formId: null,
+      adId: null,
+    });
+    expect(readLeadgen({ form_id: '5001' })).toBeNull();
+    expect(readLeadgen({})).toBeNull();
   });
 });

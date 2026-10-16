@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Badge, Button, Card, EmptyState, Tabs } from '@crm/ui';
+import { Alert, Badge, Button, Card, EmptyState, Tabs } from '@crm/ui';
 import { fetchSources, leadKeys } from '../api';
 import { LEADS_READ, useLeadsCan, type LeadsCan } from '../lib/permissions';
 import {
@@ -20,6 +20,9 @@ import {
 } from '../lib/source-view';
 import { HookAddressNotice } from './hook-address-notice';
 import { LeadInboxTab } from './lead-inbox-tab';
+import { parseConnectNotice, type ConnectNotice } from '../lib/meta-view';
+import { MetaCard } from './meta-card';
+import { MetaPanel } from './meta-panel';
 import { KindBadge, Loading, NoAccess, RegionError, SourceStatusChip, When } from './ui';
 
 const LINK_BUTTON =
@@ -28,8 +31,9 @@ const PRIMARY = `${LINK_BUTTON} bg-primary text-primary-foreground hover:opacity
 const SECONDARY = `${LINK_BUTTON} border border-border bg-background text-foreground hover:bg-muted`;
 
 /**
- * `/lead-sources`: Social leads (spec 5.6). Three tabs are built: Ads (where leads can come from), Webhook (the sources that exist
- * and what they received) and Lead inbox (every delivery of every source, retry, sync and backfill). The whole screen answers a plan without the feature with the upgrade prompt and a role without the
+ * `/lead-sources`: Social leads (spec 5.6). Three tabs are built: Ads (where leads can come from: the Webhook and Meta lead forms),
+ * Webhook (the sources that exist and what they received) and Lead inbox (every delivery of every source, retry, sync and backfill).
+ * The whole screen answers a plan without the feature with the upgrade prompt and a role without the
  * read key with the key it lacks; the plan check is the API's (422), the screen only explains it.
  */
 export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }) {
@@ -37,6 +41,7 @@ export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }
   const router = useRouter();
   const can = useLeadsCan();
   const [tab, setTab] = useState<LeadTab>(initialTab);
+  const { notice, dismiss } = useConnectNotice();
   const list = useQuery({
     queryKey: leadKeys.list,
     queryFn: ({ signal }) => fetchSources(signal),
@@ -80,7 +85,13 @@ export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }
             id: 'ads',
             label: t('tabs.ads'),
             content: (
-              <AdsTab can={can} count={rows.length} onOpenSources={() => change('webhook')} />
+              <AdsTab
+                can={can}
+                count={rows.length}
+                onOpenSources={() => change('webhook')}
+                notice={notice}
+                onDismissNotice={dismiss}
+              />
             ),
           },
           {
@@ -115,23 +126,61 @@ export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }
 // --- Ads tab --------------------------------------------------------------------------------------------------------------------
 
 /**
- * Where leads can come from. Only the generic webhook has a door today (it carries LinkedIn, TikTok, Google Ads and any form tool
- * through Zapier or Make); the other providers are shown as coming soon because the backend has no door for them yet. A coming-soon
- * card is not a link and not a button.
+ * The Facebook login comes back to `/lead-sources?tab=ads&fb=connected|error&message=...`. The notice is read once into state, then
+ * the parameters are taken out of the address so a reload does not show it again (the same way the Facebook hub does it).
+ */
+function useConnectNotice() {
+  const search = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [notice, setNotice] = useState<ConnectNotice | null>(() => parseConnectNotice(search));
+  useEffect(() => {
+    if (search.has('fb')) router.replace(pathname, { scroll: false });
+  }, [search, router, pathname]);
+  return { notice, dismiss: () => setNotice(null) };
+}
+
+/**
+ * Where leads can come from. The Webhook (it also carries LinkedIn, TikTok and Google Ads through Zapier or Make) and Meta lead
+ * forms have a door; the other providers are shown as coming soon because the backend has no door for them yet. A coming-soon card
+ * is not a link and not a button. The Meta panel opens below the cards, and opens by itself when the Facebook login has just come back.
  */
 export function AdsTab({
   can,
   count,
   onOpenSources,
+  notice = null,
+  onDismissNotice,
 }: {
   can: LeadsCan;
   count: number;
   onOpenSources: () => void;
+  notice?: ConnectNotice | null;
+  onDismissNotice?: () => void;
 }) {
   const t = useTranslations('lead-sources.ads');
+  const [metaOpen, setMetaOpen] = useState(notice !== null);
   return (
     <div className="space-y-4">
       <p className="max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
+      {notice && (
+        <Alert
+          tone={notice.ok ? 'success' : 'danger'}
+          className="flex flex-wrap items-start justify-between gap-2"
+          data-testid="meta-connect-notice"
+        >
+          <span dir="auto">{notice.text}</span>
+          {onDismissNotice && (
+            <button
+              type="button"
+              onClick={onDismissNotice}
+              className="text-xs font-medium underline underline-offset-2 focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t('dismissNotice')}
+            </button>
+          )}
+        </Alert>
+      )}
       <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <li>
           <Card className="flex h-full flex-col gap-3 p-5" data-testid="provider-webhook">
@@ -153,6 +202,9 @@ export function AdsTab({
             </div>
           </Card>
         </li>
+        <li>
+          <MetaCard open={metaOpen} onToggle={() => setMetaOpen((v) => !v)} />
+        </li>
         {COMING_SOON_PROVIDERS.map((p) => (
           <li key={p}>
             {/* Not a link and not a button on purpose: the API has no door for this provider yet. */}
@@ -171,6 +223,7 @@ export function AdsTab({
           </li>
         ))}
       </ul>
+      {metaOpen && <MetaPanel />}
     </div>
   );
 }
@@ -244,6 +297,8 @@ export function WebhookTab({ can, rows }: { can: LeadsCan; rows: SourceRow[] }) 
                 <td className="px-3 py-3 text-xs text-muted-foreground">
                   {r.connector ? (
                     t('connector')
+                  ) : r.meta ? (
+                    t('metaDelivery')
                   ) : r.tokenHint ? (
                     <span dir="ltr">{t('endsIn', { hint: r.tokenHint })}</span>
                   ) : (

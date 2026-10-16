@@ -56,7 +56,14 @@
       "syncInProgress": "Cette source est déjà en cours de récupération. Attendez la fin de l’opération.",
       "syncTooSoon": "Cette source vient d’être interrogée. Réessayez dans {seconds} secondes.",
       "syncTooSoonNoWait": "Cette source vient d’être interrogée. Réessayez dans un moment.",
-      "backfillRange": "Cette période ne peut pas être récupérée : elle remonte plus loin que la durée de conservation des leads par la source, ou s’étend dans le futur."
+      "backfillRange": "Cette période ne peut pas être récupérée : elle remonte plus loin que la durée de conservation des leads par la source, ou s’étend dans le futur.",
+      "mlaNotConfigured": "Meta n’est pas configuré sur cette installation. Un administrateur doit d’abord ajouter l’application Meta.",
+      "mlaLeadAccessMissing": "Cette Page n’a pas les autorisations que Meta exige pour lire les leads. Accordez l’accès aux leads, puis réessayez.",
+      "mlaPageReconnect": "Meta n’accepte plus la connexion de cette Page. Reconnectez la Page, puis réessayez.",
+      "mlaSubscribeFailed": "Meta n’a pas activé la livraison des leads pour cette Page. Vérifiez que l’application Meta dispose de l’autorisation leads et que son webhook de Page est configuré, puis réessayez.",
+      "mlaFormsUnavailable": "Meta n’a pas renvoyé les formulaires de leads. Réessayez dans un instant.",
+      "mlaFormNotFound": "Ce formulaire ne fait plus partie des formulaires de leads de cette Page. Actualisez la liste, puis réessayez.",
+      "mlaSyncOff": "Activez la synchronisation des leads pour cette Page avant de choisir des formulaires."
     },
     "problems": {
       "nameRequired": "Donnez un nom à la source.",
@@ -162,7 +169,7 @@
         },
         "meta": {
           "name": "Formulaires de leads Meta",
-          "body": "Publicités de leads Facebook et Instagram, directement depuis votre Page."
+          "body": "Les publicités à formulaire Facebook et Instagram, directement de votre Page vers vos contacts."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -176,7 +183,8 @@
           "name": "Google Ads",
           "body": "Extensions de formulaires de leads Google Ads."
         }
-      }
+      },
+      "dismissNotice": "Ignorer"
     },
     "sources": {
       "emptyTitle": "Aucune source pour l’instant",
@@ -195,7 +203,8 @@
       "connector": "Via la Marketplace",
       "endsIn": "Se termine dans {hint}",
       "noEvents": "Aucun lead pour l’instant",
-      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}",
+      "metaDelivery": "Depuis Meta"
     },
     "wizard": {
       "title": "Nouvelle source de leads",
@@ -528,7 +537,9 @@
           "body": "Son URL cesse de fonctionner et les leads qu’elle a stockés sont supprimés avec elle. Les contacts déjà créés sont conservés. Cette action est irréversible.",
           "action": "Supprimer la source"
         }
-      }
+      },
+      "metaForm": "Les leads arrivent depuis Meta. Cette source n’a ni URL ni jeton ; gérez le formulaire (mapper ses questions, attribution et transaction, ou l’arrêter) dans l’onglet Publicités.",
+      "metaFormLink": "Ouvrir les formulaires de leads Meta"
     },
     "events": {
       "title": "Leads reçus",
@@ -819,6 +830,211 @@
           "noSource": "Choisissez au moins une source."
         },
         "safe": "Rien n’est perdu ni dupliqué si vous le relancez ; seuls les leads manquants sont ajoutés."
+      }
+    },
+    "meta": {
+      "heading": "Formulaires de leads Meta",
+      "intro": "Importez directement dans vos contacts les leads de vos publicités à formulaire Facebook et Instagram. Connectez une Page Facebook, activez la synchronisation des leads pour elle, puis choisissez les formulaires à importer.",
+      "loading": "Chargement des formulaires de leads Meta",
+      "pagesLabel": "Pages Facebook connectées",
+      "planLocked": "Les formulaires de leads Meta nécessitent un forfait incluant à la fois Leads sociaux et la fonction de canaux supplémentaires (Facebook). Passez à un forfait supérieur pour les utiliser.",
+      "metaSaid": "Meta indique :",
+      "requestId": "ID de la requête :",
+      "connectPage": "Connecter une Page Facebook",
+      "connectAnother": "Connecter une autre Page",
+      "connectNeedsPermission": "Pour connecter une Page, l’autorisation {permission} est également nécessaire.",
+      "card": {
+        "checking": "Vérification de la connexion",
+        "unavailable": "Impossible de charger l’état de la connexion. Ouvrez le panneau pour réessayer.",
+        "notConfigured": "Pas encore configuré sur cette installation",
+        "noPages": "Aucune Page Facebook connectée pour le moment",
+        "summary": "{pages, plural, one {# Page connectée} other {# Pages connectées}}, {forms, plural, one {# formulaire choisi} other {# formulaires choisis}}",
+        "attention": "{count, plural, one {# Page nécessite votre attention} other {# Pages nécessitent votre attention}}",
+        "open": "Ouvrir les formulaires de leads Meta",
+        "close": "Masquer les formulaires de leads Meta"
+      },
+      "notConfigured": {
+        "title": "Meta n’est pas encore configuré",
+        "body": "Les formulaires de leads Meta nécessitent une application Meta sur cette installation. Demandez à un administrateur de l’espace de travail de l’ajouter, puis revenez ici pour connecter une Page.",
+        "bodyManage": "Cette installation n’a pas encore d’application Meta, les Pages ne peuvent donc pas être connectées pour les publicités à formulaire. Un administrateur doit d’abord ajouter l’application Meta (ID d’application et secret). Ensuite, enregistrez le webhook comme décrit ci-dessous."
+      },
+      "noPages": {
+        "title": "Aucune Page Facebook connectée",
+        "body": "Connectez la Page Facebook qui diffuse vos publicités à formulaire. Les autorisations que Meta exige pour lire les leads vous seront demandées.",
+        "bodyNoManage": "Aucune Page Facebook n’est encore connectée. Demandez à une personne pouvant gérer les sources de leads d’en connecter une."
+      },
+      "setup": {
+        "title": "Paramètres du webhook pour l’application Meta",
+        "summary": "Paramètres du webhook pour l’application Meta",
+        "intro": "Meta livre les nouveaux leads à une adresse de rappel. Un administrateur l’enregistre une seule fois dans le tableau de bord de l’application Meta.",
+        "callbackUrl": "URL de rappel",
+        "copyUrl": "Copier l’URL",
+        "verifyToken": "Jeton de vérification",
+        "verifyTokenSet": "Défini sur cette installation",
+        "verifyTokenMissing": "Non défini",
+        "verifyTokenHelp": "Meta ne peut pas confirmer l’adresse de rappel tant que cette installation n’a pas de jeton de vérification. Définissez-le dans les paramètres Facebook de cette installation.",
+        "steps": {
+          "callback": "Dans le tableau de bord de l’application Meta, ouvrez Webhooks, choisissez l’objet Page et collez l’URL de rappel ci-dessus.",
+          "verify": "Lorsque Meta demande un jeton de vérification, saisissez celui des paramètres Facebook de cette installation, puis vérifiez et enregistrez.",
+          "subscribe": "Abonnez l’objet Page au champ {field}."
+        },
+        "scopes": "Autorisations demandées à la connexion : {scopes}.",
+        "scopesFromConfiguration": "Les autorisations demandées à la connexion proviennent de votre configuration de connexion Meta."
+      },
+      "pageStatus": {
+        "connected": "Page connectée",
+        "disconnected": "Page déconnectée",
+        "expired": "Connexion expirée",
+        "error": "Erreur de Page"
+      },
+      "leadAccess": {
+        "granted": "Accès aux leads accordé",
+        "missing": "Accès aux leads manquant"
+      },
+      "syncState": {
+        "off": "Synchronisation des leads désactivée",
+        "subscribed": "Réception des leads",
+        "needs_lead_access": "Accès aux leads requis",
+        "needs_reconnect": "Reconnexion requise",
+        "error": "Erreur"
+      },
+      "page": {
+        "pageId": "ID de la Page",
+        "missingScopes": "Autorisations manquantes :",
+        "lastLead": "Dernier lead",
+        "lastSweep": "Dernière vérification",
+        "subscribedAt": "Synchronisation des leads activée depuis",
+        "never": "Jamais",
+        "formsConnected": "Formulaires choisis",
+        "lastError": "Dernière erreur :",
+        "grant": "Accorder l’accès aux leads",
+        "reconnect": "Reconnecter",
+        "enable": "Activer la synchronisation des leads",
+        "disable": "Désactiver la synchronisation des leads",
+        "chooseForms": "Choisir les formulaires de leads",
+        "hideForms": "Masquer les formulaires de leads",
+        "enabledToast": "Synchronisation des leads activée pour {name}",
+        "disabledToast": "Synchronisation des leads désactivée pour {name}",
+        "stateHelp": {
+          "off": "La synchronisation des leads est désactivée. Activez-la pour commencer à recevoir les leads de cette Page.",
+          "subscribed": "La synchronisation des leads est activée. Les nouveaux leads des formulaires choisis arrivent en quelques instants, et une vérification régulière récupère ceux qui auraient été manqués.",
+          "needs_lead_access": "La synchronisation des leads est activée, mais cette Page a été connectée sans les autorisations que Meta exige pour lire les leads. Accordez l’accès aux leads pour continuer.",
+          "needs_reconnect": "Meta n’accepte plus la connexion de cette Page. Reconnectez la Page pour recevoir de nouveau des leads.",
+          "error": "Meta a refusé quelque chose lors de la dernière tentative. Le message ci-dessous précise quoi ; il disparaît après le prochain succès."
+        },
+        "hints": {
+          "needManage": "Modifier la synchronisation des leads nécessite l’autorisation {permission}.",
+          "needFacebook": "Accorder l’accès ou reconnecter nécessite aussi l’autorisation {permission}, car cela enregistre la connexion de la Page.",
+          "enableNeedsAccess": "Accordez d’abord l’accès aux leads ; Meta refuse la synchronisation des leads pour une Page qui n’y a pas accès.",
+          "enableNeedsReconnect": "Reconnectez d’abord la Page ; sa connexion ne fonctionne plus.",
+          "pickNeedsSync": "Activez la synchronisation des leads pour choisir des formulaires.",
+          "pickNeedsAccess": "Accordez l’accès aux leads pour choisir des formulaires.",
+          "pickNeedsReconnect": "Reconnectez la Page pour choisir des formulaires."
+        },
+        "confirmOff": {
+          "title": "Désactiver la synchronisation des leads pour {name} ?",
+          "body": "Cette Page cesse de recevoir de nouveaux leads de Meta. Les formulaires choisis et les leads déjà enregistrés sont conservés, et vous pouvez réactiver la synchronisation des leads à tout moment.",
+          "action": "Désactiver la synchronisation des leads",
+          "cancel": "Annuler"
+        }
+      },
+      "forms": {
+        "title": "Formulaires de leads de {name}",
+        "intro": "Voici les formulaires de leads que Meta liste pour cette Page. Choisissez un formulaire pour importer ses leads ; chaque formulaire choisi devient une source de leads dans l’onglet Webhook.",
+        "refresh": "Actualiser la liste",
+        "loading": "Chargement des formulaires de leads depuis Meta",
+        "emptyTitle": "Aucun formulaire de leads",
+        "empty": "Cette Page n’a pas encore de formulaire de leads. Créez-en un dans Meta Ads Manager ou sur la Page, puis actualisez cette liste.",
+        "caption": "Formulaires de leads de la Page",
+        "col": {
+          "form": "Formulaire",
+          "status": "Statut Meta",
+          "leads": "Leads",
+          "questions": "Questions",
+          "consent": "Case de consentement",
+          "connected": "Connecté",
+          "lastLead": "Dernier lead",
+          "lastError": "Dernière erreur",
+          "actions": "Actions"
+        },
+        "formId": "ID du formulaire",
+        "formStatus": {
+          "ACTIVE": "Actif",
+          "ARCHIVED": "Archivé",
+          "DELETED": "Supprimé",
+          "DRAFT": "Brouillon",
+          "unknown": "Inconnu"
+        },
+        "leadsUnknown": "Non communiqué par Meta",
+        "consentYes": "A une case de consentement",
+        "consentNo": "Aucune",
+        "connected": "Connecté",
+        "notConnected": "Non choisi",
+        "noLeads": "Aucun lead pour le moment",
+        "pick": "Choisir",
+        "pickFor": "Choisir {name}",
+        "stop": "Arrêter",
+        "stopFor": "Arrêter {name}",
+        "mapFields": "Mapper les champs",
+        "mapFieldsFor": "Mapper les champs de {name}",
+        "rules": "Attribution et transaction",
+        "rulesFor": "Attribution et transaction de {name}",
+        "openSource": "Ouvrir la source",
+        "openSourceFor": "Ouvrir la source de leads de {name}",
+        "pickedToast": "{name} choisi",
+        "stoppedToast": "{name} arrêté",
+        "confirmStop": {
+          "title": "Arrêter l’import de {name} ?",
+          "body": "La source de leads de ce formulaire et les leads enregistrés dessous sont supprimés. Les contacts déjà créés à partir de ceux-ci restent. Vous pourrez choisir de nouveau le formulaire plus tard.",
+          "action": "Arrêter l’import des leads",
+          "cancel": "Annuler"
+        }
+      },
+      "mapping": {
+        "title": "Mapper les champs : {name}",
+        "close": "Fermer",
+        "noSource": "La source de leads de ce formulaire est introuvable. Actualisez la liste, puis réessayez.",
+        "loading": "Chargement de la source de leads",
+        "intro": "Choisissez dans quel champ du contact va chaque réponse de ce formulaire. Une question laissée sur Automatique est recherchée sous les noms habituels, comme email ou phone_number.",
+        "suggested": "Nous les avons remplis selon le type de chaque question. Vérifiez-les, puis enregistrez.",
+        "multiUse": "Le mappage enregistré utilisait la même question pour plusieurs champs ({keys}). Seul le premier est conservé à l’enregistrement.",
+        "noQuestions": "Meta n’a listé aucune question pour ce formulaire, il n’y a donc rien à mapper. Les noms habituels sont toujours recherchés.",
+        "ignore": "Automatique (non mappé ici)",
+        "contactFields": "Champs du contact",
+        "contactProperties": "Propriétés du contact",
+        "problems": {
+          "duplicateTarget": "Une autre question alimente déjà ce champ. Choisissez-en un autre.",
+          "propertyKey": "Cette clé de propriété n’est pas valide."
+        },
+        "conflict": "Quelqu’un d’autre a modifié cette source de leads. Rechargez pour voir sa version ; vos choix non enregistrés seront perdus.",
+        "cancel": "Annuler",
+        "save": "Enregistrer le mappage",
+        "saved": "Mappage des champs enregistré pour {name}"
+      },
+      "rules": {
+        "title": "Attribution et transaction : {name}",
+        "close": "Fermer",
+        "noSource": "La source de leads de ce formulaire est introuvable. Actualisez la liste, puis réessayez.",
+        "loading": "Chargement de la source de leads",
+        "intro": "Décidez à qui appartiennent les contacts créés par ce formulaire, si une transaction est ouverte pour chaque lead et qui est notifié. Les modifications s’appliquent aux leads qui arrivent après l’enregistrement.",
+        "conflict": "Quelqu’un d’autre a modifié cette source de leads. Rechargez pour voir sa version ; vos modifications non enregistrées seront perdues.",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "saved": "Attribution et transaction enregistrées pour {name}"
+      },
+      "health": {
+        "title": "État du formulaire de leads Meta",
+        "loading": "Vérification du formulaire",
+        "notConnected": "Cette source n’est plus liée à un formulaire de leads Meta, il n’y a donc rien à vérifier. Choisissez de nouveau le formulaire dans l’onglet Publicités.",
+        "page": "Page",
+        "form": "Formulaire",
+        "state": "Synchronisation des leads",
+        "leadAccess": "Accès aux leads",
+        "lastLead": "Dernier lead",
+        "never": "Aucun lead pour le moment",
+        "lastError": "Dernière erreur :",
+        "fixHint": "Pour corriger cela, ouvrez l’onglet Publicités : accordez l’accès aux leads, reconnectez la Page ou réactivez la synchronisation des leads.",
+        "openAds": "Ouvrir l’onglet Publicités"
       }
     }
   }

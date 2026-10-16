@@ -56,7 +56,14 @@
       "syncInProgress": "이 소스는 이미 가져오는 중입니다. 완료될 때까지 기다려 주세요.",
       "syncTooSoon": "이 소스는 방금 요청했습니다. {seconds}초 후에 다시 시도해 주세요.",
       "syncTooSoonNoWait": "이 소스는 방금 요청했습니다. 잠시 후에 다시 시도해 주세요.",
-      "backfillRange": "이 기간은 가져올 수 없습니다. 소스가 리드를 보관하는 기간보다 더 과거이거나 미래 날짜가 포함되어 있습니다."
+      "backfillRange": "이 기간은 가져올 수 없습니다. 소스가 리드를 보관하는 기간보다 더 과거이거나 미래 날짜가 포함되어 있습니다.",
+      "mlaNotConfigured": "이 설치본에는 Meta가 설정되어 있지 않습니다. 먼저 관리자가 Meta 앱을 추가해야 합니다.",
+      "mlaLeadAccessMissing": "이 페이지에는 Meta가 리드를 읽는 데 필요한 권한이 없습니다. 리드 접근 권한을 부여한 후 다시 시도하세요.",
+      "mlaPageReconnect": "Meta가 더 이상 이 페이지의 연결을 허용하지 않습니다. 페이지를 다시 연결한 후 다시 시도하세요.",
+      "mlaSubscribeFailed": "Meta가 이 페이지의 리드 수신을 켜지 않았습니다. Meta 앱에 리드 권한이 있고 페이지 webhook이 설정되어 있는지 확인한 후 다시 시도하세요.",
+      "mlaFormsUnavailable": "Meta가 리드 양식을 반환하지 않았습니다. 잠시 후 다시 시도하세요.",
+      "mlaFormNotFound": "해당 양식은 더 이상 이 페이지의 리드 양식이 아닙니다. 목록을 새로고침한 후 다시 시도하세요.",
+      "mlaSyncOff": "양식을 선택하기 전에 이 페이지의 리드 동기화를 켜세요."
     },
     "problems": {
       "nameRequired": "소스 이름을 입력하세요.",
@@ -162,7 +169,7 @@
         },
         "meta": {
           "name": "Meta 리드 양식",
-          "body": "페이스북 및 인스타그램 리드 광고를 페이지에서 바로 연결합니다."
+          "body": "Facebook과 Instagram 리드 광고를 페이지에서 연락처로 바로 연결합니다."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -176,7 +183,8 @@
           "name": "Google Ads",
           "body": "Google Ads 리드 양식 확장."
         }
-      }
+      },
+      "dismissNotice": "닫기"
     },
     "sources": {
       "emptyTitle": "아직 소스가 없습니다",
@@ -195,7 +203,8 @@
       "connector": "마켓플레이스 경유",
       "endsIn": "{hint}에서 종료",
       "noEvents": "아직 리드가 없습니다",
-      "needsAttention": "{count, plural, other {리드 #개}}"
+      "needsAttention": "{count, plural, other {리드 #개}}",
+      "metaDelivery": "Meta에서 수신"
     },
     "wizard": {
       "title": "새 리드 소스",
@@ -528,7 +537,9 @@
           "body": "URL이 작동을 멈추며 이 소스가 저장한 리드도 함께 삭제됩니다. 이미 만든 연락처는 유지됩니다. 이 작업은 되돌릴 수 없습니다.",
           "action": "소스 삭제"
         }
-      }
+      },
+      "metaForm": "리드는 Meta에서 들어옵니다. 이 소스에는 URL이나 토큰이 없습니다. 양식 관리(질문 매핑, 담당자 및 거래 설정, 중지)는 광고 탭에서 하세요.",
+      "metaFormLink": "Meta 리드 양식 열기"
     },
     "events": {
       "title": "받은 리드",
@@ -819,6 +830,211 @@
           "noSource": "소스를 하나 이상 선택하세요."
         },
         "safe": "다시 실행해도 아무것도 손실되거나 중복되지 않으며, 누락된 리드만 추가됩니다."
+      }
+    },
+    "meta": {
+      "heading": "Meta 리드 양식",
+      "intro": "Facebook과 Instagram 리드 광고의 리드를 연락처로 바로 가져오세요. Facebook 페이지를 연결하고 리드 동기화를 켠 다음 가져올 리드 양식을 선택하세요.",
+      "loading": "Meta 리드 양식 불러오는 중",
+      "pagesLabel": "연결된 Facebook 페이지",
+      "planLocked": "Meta 리드 양식은 소셜 리드와 추가 채널 기능(Facebook)이 모두 포함된 요금제에서 사용할 수 있습니다. 사용하려면 업그레이드하세요.",
+      "metaSaid": "Meta 응답:",
+      "requestId": "요청 ID:",
+      "connectPage": "Facebook 페이지 연결",
+      "connectAnother": "다른 페이지 연결",
+      "connectNeedsPermission": "페이지를 연결하려면 {permission} 권한도 필요합니다.",
+      "card": {
+        "checking": "연결 확인 중",
+        "unavailable": "연결 상태를 불러오지 못했습니다. 패널을 열어 다시 시도하세요.",
+        "notConfigured": "이 설치본에 아직 설정되지 않음",
+        "noPages": "연결된 Facebook 페이지 없음",
+        "summary": "{pages, plural, other {페이지 #개}} 연결됨, {forms, plural, other {양식 #개}} 선택됨",
+        "attention": "{count, plural, other {확인이 필요한 페이지 #개}}",
+        "open": "Meta 리드 양식 열기",
+        "close": "Meta 리드 양식 숨기기"
+      },
+      "notConfigured": {
+        "title": "Meta가 아직 설정되지 않음",
+        "body": "Meta 리드 양식을 사용하려면 이 설치본에 Meta 앱이 있어야 합니다. 워크스페이스 관리자에게 추가를 요청한 후 여기로 돌아와 페이지를 연결하세요.",
+        "bodyManage": "이 설치본에는 아직 Meta 앱이 없어 리드 광고용 페이지를 연결할 수 없습니다. 먼저 관리자가 Meta 앱(앱 ID와 시크릿)을 추가해야 합니다. 그런 다음 아래 설명대로 webhook을 등록하세요."
+      },
+      "noPages": {
+        "title": "연결된 Facebook 페이지 없음",
+        "body": "리드 광고를 운영하는 Facebook 페이지를 연결하세요. 리드를 읽기 위해 Meta가 요구하는 권한을 요청합니다.",
+        "bodyNoManage": "아직 연결된 Facebook 페이지가 없습니다. 리드 소스를 관리할 수 있는 사람에게 연결을 요청하세요."
+      },
+      "setup": {
+        "title": "Meta 앱의 Webhook 설정",
+        "summary": "Meta 앱의 Webhook 설정",
+        "intro": "Meta는 새 리드를 콜백 주소로 전달합니다. 관리자가 Meta 앱 대시보드에서 한 번만 등록하면 됩니다.",
+        "callbackUrl": "콜백 URL",
+        "copyUrl": "URL 복사",
+        "verifyToken": "확인 토큰",
+        "verifyTokenSet": "이 설치본에 설정됨",
+        "verifyTokenMissing": "설정되지 않음",
+        "verifyTokenHelp": "이 설치본에 확인 토큰이 없으면 Meta가 콜백 주소를 확인할 수 없습니다. 이 설치본의 Facebook 설정에서 지정하세요.",
+        "steps": {
+          "callback": "Meta 앱 대시보드에서 Webhooks를 열고 Page 객체를 선택한 다음 위의 콜백 URL을 붙여넣으세요.",
+          "verify": "Meta가 확인 토큰을 요구하면 이 설치본의 Facebook 설정에 있는 토큰을 입력한 후 확인하고 저장하세요.",
+          "subscribe": "Page 객체를 {field} 필드에 구독하세요."
+        },
+        "scopes": "로그인 시 요청하는 권한: {scopes}.",
+        "scopesFromConfiguration": "로그인 시 요청하는 권한은 Meta 로그인 구성에 따라 정해집니다."
+      },
+      "pageStatus": {
+        "connected": "페이지 연결됨",
+        "disconnected": "페이지 연결 해제됨",
+        "expired": "연결 만료됨",
+        "error": "페이지 오류"
+      },
+      "leadAccess": {
+        "granted": "리드 접근 권한 부여됨",
+        "missing": "리드 접근 권한 없음"
+      },
+      "syncState": {
+        "off": "리드 동기화 꺼짐",
+        "subscribed": "리드 수신 중",
+        "needs_lead_access": "리드 접근 권한 필요",
+        "needs_reconnect": "다시 연결 필요",
+        "error": "오류"
+      },
+      "page": {
+        "pageId": "페이지 ID",
+        "missingScopes": "누락된 권한:",
+        "lastLead": "마지막 리드",
+        "lastSweep": "마지막 확인",
+        "subscribedAt": "리드 동기화 켠 시점",
+        "never": "없음",
+        "formsConnected": "선택한 양식",
+        "lastError": "마지막 오류:",
+        "grant": "리드 접근 권한 부여",
+        "reconnect": "다시 연결",
+        "enable": "리드 동기화 켜기",
+        "disable": "리드 동기화 끄기",
+        "chooseForms": "리드 양식 선택",
+        "hideForms": "리드 양식 숨기기",
+        "enabledToast": "{name}의 리드 동기화가 켜져 있습니다",
+        "disabledToast": "{name}의 리드 동기화가 꺼져 있습니다",
+        "stateHelp": {
+          "off": "리드 동기화가 꺼져 있습니다. 이 페이지의 리드를 받으려면 켜세요.",
+          "subscribed": "리드 동기화가 켜져 있습니다. 선택한 양식의 새 리드는 곧바로 도착하며, 정기 점검으로 놓친 리드도 가져옵니다.",
+          "needs_lead_access": "리드 동기화는 켜져 있지만, 이 페이지는 Meta가 리드를 읽는 데 필요한 권한 없이 연결되었습니다. 계속하려면 리드 접근 권한을 부여하세요.",
+          "needs_reconnect": "Meta가 더 이상 이 페이지의 연결을 허용하지 않습니다. 리드를 다시 받으려면 페이지를 다시 연결하세요.",
+          "error": "마지막 시도에서 Meta가 요청을 거부했습니다. 아래 메시지에 이유가 나와 있으며, 다음에 성공하면 사라집니다."
+        },
+        "hints": {
+          "needManage": "리드 동기화를 변경하려면 {permission} 권한이 필요합니다.",
+          "needFacebook": "접근 권한 부여나 다시 연결은 페이지의 연결 정보를 저장하므로 {permission} 권한도 필요합니다.",
+          "enableNeedsAccess": "먼저 리드 접근 권한을 부여하세요. 권한이 없는 페이지는 Meta가 리드 동기화를 거부합니다.",
+          "enableNeedsReconnect": "먼저 페이지를 다시 연결하세요. 현재 연결은 더 이상 작동하지 않습니다.",
+          "pickNeedsSync": "양식을 선택하려면 리드 동기화를 켜세요.",
+          "pickNeedsAccess": "양식을 선택하려면 리드 접근 권한을 부여하세요.",
+          "pickNeedsReconnect": "양식을 선택하려면 페이지를 다시 연결하세요."
+        },
+        "confirmOff": {
+          "title": "{name}의 리드 동기화를 끄시겠습니까?",
+          "body": "이 페이지는 Meta에서 새 리드를 더 이상 받지 않습니다. 선택한 양식과 이미 저장된 리드는 유지되며, 리드 동기화는 언제든 다시 켤 수 있습니다.",
+          "action": "리드 동기화 끄기",
+          "cancel": "취소"
+        }
+      },
+      "forms": {
+        "title": "{name}의 리드 양식",
+        "intro": "Meta가 이 페이지에 대해 나열한 리드 양식입니다. 리드를 가져올 양식을 선택하세요. 선택한 양식은 각각 Webhook 탭의 리드 소스가 됩니다.",
+        "refresh": "목록 새로고침",
+        "loading": "Meta에서 리드 양식 불러오는 중",
+        "emptyTitle": "리드 양식 없음",
+        "empty": "이 페이지에는 아직 리드 양식이 없습니다. Meta 광고 관리자나 페이지에서 만든 다음 이 목록을 새로고침하세요.",
+        "caption": "페이지의 리드 양식",
+        "col": {
+          "form": "양식",
+          "status": "Meta 상태",
+          "leads": "리드",
+          "questions": "질문",
+          "consent": "동의 체크박스",
+          "connected": "연결됨",
+          "lastLead": "마지막 리드",
+          "lastError": "마지막 오류",
+          "actions": "작업"
+        },
+        "formId": "양식 ID",
+        "formStatus": {
+          "ACTIVE": "활성",
+          "ARCHIVED": "보관됨",
+          "DELETED": "삭제됨",
+          "DRAFT": "임시 저장",
+          "unknown": "알 수 없음"
+        },
+        "leadsUnknown": "Meta에서 제공하지 않음",
+        "consentYes": "동의 체크박스 있음",
+        "consentNo": "없음",
+        "connected": "연결됨",
+        "notConnected": "선택 안 함",
+        "noLeads": "아직 리드 없음",
+        "pick": "선택",
+        "pickFor": "{name} 선택",
+        "stop": "중지",
+        "stopFor": "{name} 중지",
+        "mapFields": "필드 매핑",
+        "mapFieldsFor": "{name} 필드 매핑",
+        "rules": "담당자 및 거래",
+        "rulesFor": "{name}의 담당자 및 거래",
+        "openSource": "소스 열기",
+        "openSourceFor": "{name}의 리드 소스 열기",
+        "pickedToast": "{name}을(를) 선택했습니다",
+        "stoppedToast": "{name}을(를) 중지했습니다",
+        "confirmStop": {
+          "title": "{name} 가져오기를 중지하시겠습니까?",
+          "body": "이 양식의 리드 소스와 그 아래 저장된 리드가 삭제됩니다. 이미 만들어진 연락처는 유지됩니다. 나중에 양식을 다시 선택할 수 있습니다.",
+          "action": "리드 가져오기 중지",
+          "cancel": "취소"
+        }
+      },
+      "mapping": {
+        "title": "필드 매핑: {name}",
+        "close": "닫기",
+        "noSource": "이 양식의 리드 소스를 찾을 수 없습니다. 목록을 새로고침한 후 다시 시도하세요.",
+        "loading": "리드 소스 불러오는 중",
+        "intro": "이 양식의 각 답변이 연락처의 어느 항목으로 들어갈지 선택하세요. 자동으로 둔 질문은 email, phone_number 같은 일반적인 이름으로 찾습니다.",
+        "suggested": "각 질문의 유형에 따라 미리 채웠습니다. 확인한 후 저장하세요.",
+        "multiUse": "저장된 매핑에서 하나의 질문이 여러 필드({keys})에 사용되었습니다. 저장하면 첫 번째만 유지됩니다.",
+        "noQuestions": "Meta가 이 양식의 질문을 나열하지 않아 매핑할 항목이 없습니다. 일반적인 이름은 계속 찾습니다.",
+        "ignore": "자동 (여기서 매핑하지 않음)",
+        "contactFields": "연락처 필드",
+        "contactProperties": "연락처 속성",
+        "problems": {
+          "duplicateTarget": "다른 질문이 이미 이 필드로 연결되어 있습니다. 다른 필드를 선택하세요.",
+          "propertyKey": "이 속성 키는 올바르지 않습니다."
+        },
+        "conflict": "다른 사용자가 이 리드 소스를 변경했습니다. 다시 불러와 변경된 버전을 확인하세요. 저장하지 않은 선택은 사라집니다.",
+        "cancel": "취소",
+        "save": "매핑 저장",
+        "saved": "{name}의 필드 매핑을 저장했습니다"
+      },
+      "rules": {
+        "title": "담당자 및 거래: {name}",
+        "close": "닫기",
+        "noSource": "이 양식의 리드 소스를 찾을 수 없습니다. 목록을 새로고침한 후 다시 시도하세요.",
+        "loading": "리드 소스 불러오는 중",
+        "intro": "이 양식으로 만들어지는 연락처의 담당자, 리드마다 거래를 만들지 여부, 알림을 받을 사람을 정하세요. 변경 사항은 저장 후 들어오는 리드부터 적용됩니다.",
+        "conflict": "다른 사용자가 이 리드 소스를 변경했습니다. 다시 불러와 변경된 버전을 확인하세요. 저장하지 않은 변경 사항은 사라집니다.",
+        "cancel": "취소",
+        "save": "저장",
+        "saved": "{name}의 담당자 및 거래를 저장했습니다"
+      },
+      "health": {
+        "title": "Meta 리드 양식 상태",
+        "loading": "양식 확인 중",
+        "notConnected": "이 소스는 더 이상 Meta 리드 양식에 연결되어 있지 않아 확인할 항목이 없습니다. 광고 탭에서 양식을 다시 선택하세요.",
+        "page": "페이지",
+        "form": "양식",
+        "state": "리드 동기화",
+        "leadAccess": "리드 접근 권한",
+        "lastLead": "마지막 리드",
+        "never": "아직 리드 없음",
+        "lastError": "마지막 오류:",
+        "fixHint": "해결하려면 광고 탭을 열어 리드 접근 권한을 부여하거나, 페이지를 다시 연결하거나, 리드 동기화를 다시 켜세요.",
+        "openAds": "광고 탭 열기"
       }
     }
   }

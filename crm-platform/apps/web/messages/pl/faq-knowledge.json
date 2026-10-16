@@ -178,14 +178,6 @@
           "otherHint": "Przekaż rozmowę do innego przepływu."
         }
       },
-      "advanced": {
-        "title": "Zaawansowane: czułość tylko dla tego FAQ",
-        "custom": "Użyj własnej czułości dla tego FAQ",
-        "sliderLabel": "Dopasuj od",
-        "body": "Domyślnie każde FAQ używa czułości tego przepływu. Ustaw własną wartość, gdy dopasowuje zbyt chętnie (zwiększ) lub zbyt rzadko (zmniejsz).",
-        "workspace": "Czułość tego przepływu to {value}%.",
-        "following": "Zgodnie z czułością tego przepływu ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Wpisz pytanie zadawane przez klientów.",

@@ -44,6 +44,10 @@ export const QUEUES = {
   VIBER_BROADCAST: 'viber-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */
   FB_BACKFILL: 'fb-backfill',
+  /** One job per `leadgen` webhook event of a Facebook Page (BL-011): fetches the lead from Meta and hands it to the lead pipeline. Own queue: a slow Meta must not hold a Messenger message. */
+  META_LEADGEN: 'meta-leadgen',
+  /** One job per Page with Meta lead ads on: re-reads its forms' recent leads so a missed webhook never loses one (BL-011). Own queue: a long read must not hold a live lead. */
+  META_LEAD_SWEEP: 'meta-lead-sweep',
   /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (TW-FB-013). */
   FB_BROADCAST: 'fb-broadcast',
   /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (TW-IG-009). */

@@ -331,7 +331,9 @@
           "body": "其网址将失效，其中存储的线索也会一并删除。已创建的联系人会保留。此操作无法撤销。",
           "action": "删除来源"
         }
-      }
+      },
+      "metaForm": "线索来自 Meta。此来源没有 URL 或令牌；请在广告标签页管理该表单（映射问题、分配和商机，或停止导入）。",
+      "metaFormLink": "打开 Meta 线索表单"
     },
     "events": {
       "title": "已收到的线索",
@@ -463,7 +465,14 @@
       "syncInProgress": "此来源正在拉取中，请等待完成。",
       "syncTooSoon": "刚刚已请求过此来源，请 {seconds} 秒后再试。",
       "syncTooSoonNoWait": "刚刚已请求过此来源，请稍后再试。",
-      "backfillRange": "无法拉取该范围：它超出了来源保留线索的时间，或包含未来日期。"
+      "backfillRange": "无法拉取该范围：它超出了来源保留线索的时间，或包含未来日期。",
+      "mlaNotConfigured": "此安装尚未设置 Meta。需要管理员先添加 Meta 应用。",
+      "mlaLeadAccessMissing": "此主页没有 Meta 读取线索所需的权限。请授予线索访问权限后重试。",
+      "mlaPageReconnect": "Meta 不再接受此主页的连接。请重新连接主页后重试。",
+      "mlaSubscribeFailed": "Meta 未为此主页开启线索推送。请检查 Meta 应用是否具有线索权限，以及其主页 webhook 是否已设置，然后重试。",
+      "mlaFormsUnavailable": "Meta 没有返回线索表单。请稍后重试。",
+      "mlaFormNotFound": "该表单已不再属于此主页的线索表单。请刷新列表后重试。",
+      "mlaSyncOff": "选择表单之前，请先为此主页开启线索同步。"
     },
     "problems": {
       "nameRequired": "请为来源命名。",
@@ -569,7 +578,7 @@
         },
         "meta": {
           "name": "Meta 线索表单",
-          "body": "直接从您的主页接收 Facebook 和 Instagram 线索广告。"
+          "body": "Facebook 和 Instagram 线索广告，从你的主页直接进入联系人。"
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -583,7 +592,8 @@
           "name": "Google Ads",
           "body": "Google Ads 线索表单扩展。"
         }
-      }
+      },
+      "dismissNotice": "关闭"
     },
     "sources": {
       "emptyTitle": "暂无来源",
@@ -602,7 +612,8 @@
       "connector": "通过应用市场",
       "endsIn": "将于 {hint} 结束",
       "noEvents": "暂无线索",
-      "needsAttention": "{count, plural, other {# 条线索}}"
+      "needsAttention": "{count, plural, other {# 条线索}}",
+      "metaDelivery": "来自 Meta"
     },
     "hookAddress": {
       "title": "新的 webhook URL 将不完整",
@@ -819,6 +830,211 @@
           "noSource": "请至少选择一个来源。"
         },
         "safe": "重复运行不会丢失或重复任何数据，只会补上缺失的线索。"
+      }
+    },
+    "meta": {
+      "heading": "Meta 线索表单",
+      "intro": "将 Facebook 和 Instagram 线索广告的线索直接导入联系人。连接 Facebook 主页，开启线索同步，然后选择要导入的线索表单。",
+      "loading": "正在加载 Meta 线索表单",
+      "pagesLabel": "已连接的 Facebook 主页",
+      "planLocked": "Meta 线索表单需要同时包含社交线索和附加渠道功能（Facebook）的套餐。请升级后使用。",
+      "metaSaid": "Meta 返回：",
+      "requestId": "请求 ID：",
+      "connectPage": "连接 Facebook 主页",
+      "connectAnother": "连接其他主页",
+      "connectNeedsPermission": "连接主页还需要 {permission} 权限。",
+      "card": {
+        "checking": "正在检查连接",
+        "unavailable": "无法加载连接状态。请打开面板重试。",
+        "notConfigured": "此安装尚未设置",
+        "noPages": "尚未连接 Facebook 主页",
+        "summary": "已连接 {pages, plural, other {# 个主页}}，已选择 {forms, plural, other {# 个表单}}",
+        "attention": "{count, plural, other {# 个主页需要处理}}",
+        "open": "打开 Meta 线索表单",
+        "close": "隐藏 Meta 线索表单"
+      },
+      "notConfigured": {
+        "title": "Meta 尚未设置",
+        "body": "Meta 线索表单需要此安装中有 Meta 应用。请让工作区管理员添加，然后回到这里连接主页。",
+        "bodyManage": "此安装还没有 Meta 应用，因此无法为线索广告连接主页。需要管理员先添加 Meta 应用（应用 ID 和密钥）。完成后，按下方说明注册 webhook。"
+      },
+      "noPages": {
+        "title": "未连接 Facebook 主页",
+        "body": "连接运行线索广告的 Facebook 主页。系统会请求 Meta 读取线索所需的权限。",
+        "bodyNoManage": "尚未连接 Facebook 主页。请让有权管理线索来源的人来连接。"
+      },
+      "setup": {
+        "title": "Meta 应用的 Webhook 设置",
+        "summary": "Meta 应用的 Webhook 设置",
+        "intro": "Meta 会把新线索发送到一个回调地址。管理员只需在 Meta 应用后台注册一次。",
+        "callbackUrl": "回调 URL",
+        "copyUrl": "复制 URL",
+        "verifyToken": "验证令牌",
+        "verifyTokenSet": "已在此安装中设置",
+        "verifyTokenMissing": "未设置",
+        "verifyTokenHelp": "此安装设置验证令牌之前，Meta 无法确认回调地址。请在此安装的 Facebook 设置中设置。",
+        "steps": {
+          "callback": "在 Meta 应用后台打开 Webhooks，选择 Page 对象，并粘贴上方的回调 URL。",
+          "verify": "当 Meta 要求验证令牌时，输入此安装 Facebook 设置中的令牌，然后验证并保存。",
+          "subscribe": "让 Page 对象订阅 {field} 字段。"
+        },
+        "scopes": "登录时请求的权限：{scopes}。",
+        "scopesFromConfiguration": "登录时请求的权限来自你的 Meta 登录配置。"
+      },
+      "pageStatus": {
+        "connected": "主页已连接",
+        "disconnected": "主页已断开",
+        "expired": "连接已过期",
+        "error": "主页错误"
+      },
+      "leadAccess": {
+        "granted": "已授予线索访问权限",
+        "missing": "缺少线索访问权限"
+      },
+      "syncState": {
+        "off": "线索同步已关闭",
+        "subscribed": "正在接收线索",
+        "needs_lead_access": "需要线索访问权限",
+        "needs_reconnect": "需要重新连接",
+        "error": "错误"
+      },
+      "page": {
+        "pageId": "主页 ID",
+        "missingScopes": "缺少的权限：",
+        "lastLead": "最近线索",
+        "lastSweep": "最近检查",
+        "subscribedAt": "线索同步开启时间",
+        "never": "从未",
+        "formsConnected": "已选表单",
+        "lastError": "最近错误：",
+        "grant": "授予线索访问权限",
+        "reconnect": "重新连接",
+        "enable": "开启线索同步",
+        "disable": "关闭线索同步",
+        "chooseForms": "选择线索表单",
+        "hideForms": "隐藏线索表单",
+        "enabledToast": "已为 {name} 开启线索同步",
+        "disabledToast": "已为 {name} 关闭线索同步",
+        "stateHelp": {
+          "off": "线索同步已关闭。开启后即可开始接收此主页的线索。",
+          "subscribed": "线索同步已开启。所选表单的新线索会很快到达，定期检查也会补回遗漏的线索。",
+          "needs_lead_access": "线索同步已开启，但此主页连接时没有 Meta 读取线索所需的权限。请授予线索访问权限后继续。",
+          "needs_reconnect": "Meta 不再接受此主页的连接。请重新连接主页以继续接收线索。",
+          "error": "Meta 在上次尝试时拒绝了某项请求。下方消息说明了原因；下次成功后会自动清除。"
+        },
+        "hints": {
+          "needManage": "更改线索同步需要 {permission} 权限。",
+          "needFacebook": "授予访问权限或重新连接还需要 {permission} 权限，因为这会保存主页的连接信息。",
+          "enableNeedsAccess": "请先授予线索访问权限；没有该权限的主页，Meta 会拒绝线索同步。",
+          "enableNeedsReconnect": "请先重新连接主页；其当前连接已失效。",
+          "pickNeedsSync": "开启线索同步后才能选择表单。",
+          "pickNeedsAccess": "授予线索访问权限后才能选择表单。",
+          "pickNeedsReconnect": "重新连接主页后才能选择表单。"
+        },
+        "confirmOff": {
+          "title": "要关闭 {name} 的线索同步吗？",
+          "body": "此主页将不再从 Meta 接收新线索。你已选的表单和已存储的线索会保留，之后可随时重新开启线索同步。",
+          "action": "关闭线索同步",
+          "cancel": "取消"
+        }
+      },
+      "forms": {
+        "title": "{name} 的线索表单",
+        "intro": "这是 Meta 为此主页列出的线索表单。选择一个表单即可导入其线索；每个已选表单都会成为 Webhook 标签页中的一个线索来源。",
+        "refresh": "刷新列表",
+        "loading": "正在从 Meta 加载线索表单",
+        "emptyTitle": "没有线索表单",
+        "empty": "此主页还没有线索表单。请在 Meta 广告管理工具或主页上创建，然后刷新此列表。",
+        "caption": "主页的线索表单",
+        "col": {
+          "form": "表单",
+          "status": "Meta 状态",
+          "leads": "线索",
+          "questions": "问题",
+          "consent": "同意复选框",
+          "connected": "已连接",
+          "lastLead": "最近线索",
+          "lastError": "最近错误",
+          "actions": "操作"
+        },
+        "formId": "表单 ID",
+        "formStatus": {
+          "ACTIVE": "有效",
+          "ARCHIVED": "已归档",
+          "DELETED": "已删除",
+          "DRAFT": "草稿",
+          "unknown": "未知"
+        },
+        "leadsUnknown": "Meta 未提供",
+        "consentYes": "含同意复选框",
+        "consentNo": "无",
+        "connected": "已连接",
+        "notConnected": "未选择",
+        "noLeads": "暂无线索",
+        "pick": "选择",
+        "pickFor": "选择 {name}",
+        "stop": "停止",
+        "stopFor": "停止 {name}",
+        "mapFields": "映射字段",
+        "mapFieldsFor": "映射 {name} 的字段",
+        "rules": "分配和商机",
+        "rulesFor": "{name} 的分配和商机",
+        "openSource": "打开来源",
+        "openSourceFor": "打开 {name} 的线索来源",
+        "pickedToast": "已选择 {name}",
+        "stoppedToast": "已停止 {name}",
+        "confirmStop": {
+          "title": "要停止导入 {name} 吗？",
+          "body": "此表单的线索来源及其下已存储的线索将被删除。已创建的联系人会保留。之后你可以重新选择该表单。",
+          "action": "停止导入线索",
+          "cancel": "取消"
+        }
+      },
+      "mapping": {
+        "title": "映射字段：{name}",
+        "close": "关闭",
+        "noSource": "找不到此表单的线索来源。请刷新列表后重试。",
+        "loading": "正在加载线索来源",
+        "intro": "选择此表单中每个答案要存入联系人的哪个位置。保持为“自动”的问题会按常用名称查找，例如 email 或 phone_number。",
+        "suggested": "我们已根据每个问题的类型预先填写。请检查后保存。",
+        "multiUse": "已保存的映射把同一个问题用于多个字段（{keys}）。保存时只保留第一个。",
+        "noQuestions": "Meta 没有列出此表单的任何问题，因此没有可映射的内容。仍会按常用名称查找。",
+        "ignore": "自动（不在此映射）",
+        "contactFields": "联系人字段",
+        "contactProperties": "联系人属性",
+        "problems": {
+          "duplicateTarget": "已有另一个问题对应此字段。请选择其他字段。",
+          "propertyKey": "此属性键无效。"
+        },
+        "conflict": "其他人修改了此线索来源。请重新加载以查看对方的版本；你未保存的选择将丢失。",
+        "cancel": "取消",
+        "save": "保存映射",
+        "saved": "已保存 {name} 的字段映射"
+      },
+      "rules": {
+        "title": "分配和商机：{name}",
+        "close": "关闭",
+        "noSource": "找不到此表单的线索来源。请刷新列表后重试。",
+        "loading": "正在加载线索来源",
+        "intro": "决定此表单创建的联系人归谁负责、是否为每条线索创建商机，以及通知谁。更改仅适用于保存之后到达的线索。",
+        "conflict": "其他人修改了此线索来源。请重新加载以查看对方的版本；你未保存的更改将丢失。",
+        "cancel": "取消",
+        "save": "保存",
+        "saved": "已保存 {name} 的分配和商机"
+      },
+      "health": {
+        "title": "Meta 线索表单状态",
+        "loading": "正在检查表单",
+        "notConnected": "此来源已不再关联 Meta 线索表单，因此无需检查。请在广告标签页重新选择该表单。",
+        "page": "主页",
+        "form": "表单",
+        "state": "线索同步",
+        "leadAccess": "线索访问权限",
+        "lastLead": "最近线索",
+        "never": "暂无线索",
+        "lastError": "最近错误：",
+        "fixHint": "要修复，请打开广告标签页：授予线索访问权限、重新连接主页，或重新开启线索同步。",
+        "openAds": "打开广告标签页"
       }
     }
   }

@@ -56,7 +56,14 @@
       "syncInProgress": "Esta fuente ya se está sincronizando. Espera a que termine.",
       "syncTooSoon": "Se consultó a esta fuente hace un momento. Inténtalo de nuevo en {seconds} segundos.",
       "syncTooSoonNoWait": "Se consultó a esta fuente hace un momento. Inténtalo de nuevo en un rato.",
-      "backfillRange": "No se puede obtener ese rango: se remonta más atrás de lo que la fuente conserva los leads, o llega al futuro."
+      "backfillRange": "No se puede obtener ese rango: se remonta más atrás de lo que la fuente conserva los leads, o llega al futuro.",
+      "mlaNotConfigured": "Meta no está configurado en esta instalación. Un administrador debe añadir primero la app de Meta.",
+      "mlaLeadAccessMissing": "Esta Página no tiene los permisos que Meta exige para leer leads. Concede el acceso a leads e inténtalo de nuevo.",
+      "mlaPageReconnect": "Meta ya no acepta la conexión de esta Página. Vuelve a conectarla e inténtalo de nuevo.",
+      "mlaSubscribeFailed": "Meta no activó la entrega de leads para esta Página. Comprueba que la app de Meta tenga el permiso de leads y el webhook de Página configurado, y vuelve a intentarlo.",
+      "mlaFormsUnavailable": "Meta no devolvió los formularios de leads. Inténtalo de nuevo en un momento.",
+      "mlaFormNotFound": "Ese formulario ya no es uno de los formularios de leads de esta Página. Actualiza la lista e inténtalo de nuevo.",
+      "mlaSyncOff": "Activa la sincronización de leads de esta Página antes de elegir formularios."
     },
     "problems": {
       "nameRequired": "Ponle un nombre a la fuente.",
@@ -162,7 +169,7 @@
         },
         "meta": {
           "name": "Formularios de leads de Meta",
-          "body": "Anuncios de leads de Facebook e Instagram, directamente desde tu página."
+          "body": "Anuncios de leads de Facebook e Instagram, directamente de tu Página a tus contactos."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -176,7 +183,8 @@
           "name": "Google Ads",
           "body": "Extensiones de formulario de leads de Google Ads."
         }
-      }
+      },
+      "dismissNotice": "Descartar"
     },
     "sources": {
       "emptyTitle": "Todavía no hay fuentes",
@@ -195,7 +203,8 @@
       "connector": "A través del Marketplace",
       "endsIn": "Termina en {hint}",
       "noEvents": "Todavía no hay leads",
-      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}",
+      "metaDelivery": "Desde Meta"
     },
     "wizard": {
       "title": "Nueva fuente de leads",
@@ -528,7 +537,9 @@
           "body": "Su URL dejará de funcionar y los leads que haya almacenado se eliminarán con ella. Los contactos que ya creó se conservan. Esta acción no se puede deshacer.",
           "action": "Eliminar fuente"
         }
-      }
+      },
+      "metaForm": "Los leads llegan desde Meta. Esta fuente no tiene URL ni token; gestiona el formulario (asigna sus preguntas, la asignación y el trato, o detenlo) en la pestaña Anuncios.",
+      "metaFormLink": "Abrir formularios de leads de Meta"
     },
     "events": {
       "title": "Leads recibidos",
@@ -819,6 +830,211 @@
           "noSource": "Elige al menos una fuente."
         },
         "safe": "No se pierde ni se duplica nada si la ejecutas de nuevo; solo añade los leads que faltan."
+      }
+    },
+    "meta": {
+      "heading": "Formularios de leads de Meta",
+      "intro": "Trae los leads de tus anuncios de clientes potenciales de Facebook e Instagram directamente a tus contactos. Conecta una Página de Facebook, activa la sincronización de leads y elige los formularios que quieres importar.",
+      "loading": "Cargando formularios de leads de Meta",
+      "pagesLabel": "Páginas de Facebook conectadas",
+      "planLocked": "Los formularios de leads de Meta requieren un plan con Leads sociales y la función de canales adicionales (Facebook). Mejora tu plan para usarlos.",
+      "metaSaid": "Meta indicó:",
+      "requestId": "ID de solicitud:",
+      "connectPage": "Conectar una Página de Facebook",
+      "connectAnother": "Conectar otra Página",
+      "connectNeedsPermission": "Para conectar una Página también necesitas el permiso {permission}.",
+      "card": {
+        "checking": "Comprobando la conexión",
+        "unavailable": "No se pudo cargar el estado de la conexión. Abre el panel para intentarlo de nuevo.",
+        "notConfigured": "Aún no configurado en esta instalación",
+        "noPages": "Aún no hay ninguna Página de Facebook conectada",
+        "summary": "{pages, plural, one {# Página conectada} other {# Páginas conectadas}}, {forms, plural, one {# formulario elegido} other {# formularios elegidos}}",
+        "attention": "{count, plural, one {# Página requiere atención} other {# Páginas requieren atención}}",
+        "open": "Abrir formularios de leads de Meta",
+        "close": "Ocultar formularios de leads de Meta"
+      },
+      "notConfigured": {
+        "title": "Meta aún no está configurado",
+        "body": "Los formularios de leads de Meta necesitan una app de Meta en esta instalación. Pide a un administrador del espacio de trabajo que la añada y vuelve aquí para conectar una Página.",
+        "bodyManage": "Esta instalación aún no tiene una app de Meta, por lo que no se pueden conectar Páginas para anuncios de leads. Un administrador debe añadir primero la app de Meta (ID y secreto de la app). Después, registra el webhook como se describe a continuación."
+      },
+      "noPages": {
+        "title": "Ninguna Página de Facebook conectada",
+        "body": "Conecta la Página de Facebook que publica tus anuncios de leads. Se te pedirán los permisos que Meta exige para leer leads.",
+        "bodyNoManage": "Aún no hay ninguna Página de Facebook conectada. Pide a alguien que pueda gestionar las fuentes de leads que conecte una."
+      },
+      "setup": {
+        "title": "Configuración del webhook de la app de Meta",
+        "summary": "Configuración del webhook de la app de Meta",
+        "intro": "Meta entrega los nuevos leads a una dirección de callback. Un administrador la registra una sola vez en el panel de la app de Meta.",
+        "callbackUrl": "URL de callback",
+        "copyUrl": "Copiar URL",
+        "verifyToken": "Token de verificación",
+        "verifyTokenSet": "Configurado en esta instalación",
+        "verifyTokenMissing": "Sin configurar",
+        "verifyTokenHelp": "Meta no puede confirmar la dirección de callback hasta que esta instalación tenga un token de verificación. Defínelo en los ajustes de Facebook de esta instalación.",
+        "steps": {
+          "callback": "En el panel de la app de Meta, abre Webhooks, elige el objeto Page y pega la URL de callback de arriba.",
+          "verify": "Cuando Meta pida un token de verificación, introduce el de los ajustes de Facebook de esta instalación, y luego verifica y guarda.",
+          "subscribe": "Suscribe el objeto Page al campo {field}."
+        },
+        "scopes": "Permisos solicitados al iniciar sesión: {scopes}.",
+        "scopesFromConfiguration": "Los permisos solicitados al iniciar sesión provienen de tu configuración de inicio de sesión de Meta."
+      },
+      "pageStatus": {
+        "connected": "Página conectada",
+        "disconnected": "Página desconectada",
+        "expired": "Conexión caducada",
+        "error": "Error de Página"
+      },
+      "leadAccess": {
+        "granted": "Acceso a leads concedido",
+        "missing": "Falta el acceso a leads"
+      },
+      "syncState": {
+        "off": "Sincronización desactivada",
+        "subscribed": "Recibiendo leads",
+        "needs_lead_access": "Requiere acceso a leads",
+        "needs_reconnect": "Requiere reconexión",
+        "error": "Error"
+      },
+      "page": {
+        "pageId": "ID de la Página",
+        "missingScopes": "Permisos que faltan:",
+        "lastLead": "Último lead",
+        "lastSweep": "Última comprobación",
+        "subscribedAt": "Sincronización activa desde",
+        "never": "Nunca",
+        "formsConnected": "Formularios elegidos",
+        "lastError": "Último error:",
+        "grant": "Conceder acceso a leads",
+        "reconnect": "Reconectar",
+        "enable": "Activar sincronización de leads",
+        "disable": "Desactivar sincronización de leads",
+        "chooseForms": "Elegir formularios de leads",
+        "hideForms": "Ocultar formularios de leads",
+        "enabledToast": "La sincronización de leads está activada para {name}",
+        "disabledToast": "La sincronización de leads está desactivada para {name}",
+        "stateHelp": {
+          "off": "La sincronización de leads está desactivada. Actívala para empezar a recibir los leads de esta Página.",
+          "subscribed": "La sincronización de leads está activada. Los leads nuevos de los formularios que elijas llegan en segundos, y una revisión periódica recoge los que se hayan perdido.",
+          "needs_lead_access": "La sincronización de leads está activada, pero esta Página se conectó sin los permisos que Meta exige para leer leads. Concede el acceso a leads para continuar.",
+          "needs_reconnect": "Meta ya no acepta la conexión de esta Página. Vuelve a conectarla para recibir leads de nuevo.",
+          "error": "Meta rechazó algo en el último intento. El mensaje de abajo indica qué; se borra tras el siguiente intento correcto."
+        },
+        "hints": {
+          "needManage": "Cambiar la sincronización de leads requiere el permiso {permission}.",
+          "needFacebook": "Conceder el acceso o reconectar también requiere el permiso {permission}, porque guarda la conexión de la Página.",
+          "enableNeedsAccess": "Concede primero el acceso a leads; Meta rechaza la sincronización de leads de una Página que no lo tiene.",
+          "enableNeedsReconnect": "Reconecta primero la Página; su conexión ya no funciona.",
+          "pickNeedsSync": "Activa la sincronización de leads para elegir formularios.",
+          "pickNeedsAccess": "Concede el acceso a leads para elegir formularios.",
+          "pickNeedsReconnect": "Reconecta la Página para elegir formularios."
+        },
+        "confirmOff": {
+          "title": "¿Desactivar la sincronización de leads de {name}?",
+          "body": "Esta Página dejará de recibir leads nuevos de Meta. Los formularios elegidos y los leads ya guardados se conservan, y puedes volver a activar la sincronización cuando quieras.",
+          "action": "Desactivar sincronización de leads",
+          "cancel": "Cancelar"
+        }
+      },
+      "forms": {
+        "title": "Formularios de leads de {name}",
+        "intro": "Estos son los formularios de leads que Meta muestra para esta Página. Elige un formulario para importar sus leads; cada formulario elegido se convierte en una fuente de leads en la pestaña Webhook.",
+        "refresh": "Actualizar lista",
+        "loading": "Cargando formularios de leads desde Meta",
+        "emptyTitle": "Sin formularios de leads",
+        "empty": "Esta Página aún no tiene formularios de leads. Crea uno en el Administrador de anuncios de Meta o en la Página y actualiza esta lista.",
+        "caption": "Formularios de leads de la Página",
+        "col": {
+          "form": "Formulario",
+          "status": "Estado en Meta",
+          "leads": "Leads",
+          "questions": "Preguntas",
+          "consent": "Casilla de consentimiento",
+          "connected": "Conectado",
+          "lastLead": "Último lead",
+          "lastError": "Último error",
+          "actions": "Acciones"
+        },
+        "formId": "ID del formulario",
+        "formStatus": {
+          "ACTIVE": "Activo",
+          "ARCHIVED": "Archivado",
+          "DELETED": "Eliminado",
+          "DRAFT": "Borrador",
+          "unknown": "Desconocido"
+        },
+        "leadsUnknown": "Meta no lo informa",
+        "consentYes": "Tiene casilla de consentimiento",
+        "consentNo": "Ninguna",
+        "connected": "Conectado",
+        "notConnected": "Sin elegir",
+        "noLeads": "Aún no hay leads",
+        "pick": "Elegir",
+        "pickFor": "Elegir {name}",
+        "stop": "Detener",
+        "stopFor": "Detener {name}",
+        "mapFields": "Asignar campos",
+        "mapFieldsFor": "Asignar campos de {name}",
+        "rules": "Asignación y trato",
+        "rulesFor": "Asignación y trato de {name}",
+        "openSource": "Abrir fuente",
+        "openSourceFor": "Abrir la fuente de leads de {name}",
+        "pickedToast": "{name} elegido",
+        "stoppedToast": "{name} detenido",
+        "confirmStop": {
+          "title": "¿Dejar de importar {name}?",
+          "body": "Se eliminan la fuente de leads de este formulario y los leads guardados en ella. Los contactos ya creados a partir de ellos se conservan. Puedes volver a elegir el formulario más adelante.",
+          "action": "Dejar de importar leads",
+          "cancel": "Cancelar"
+        }
+      },
+      "mapping": {
+        "title": "Asignar campos: {name}",
+        "close": "Cerrar",
+        "noSource": "No se encontró la fuente de leads de este formulario. Actualiza la lista e inténtalo de nuevo.",
+        "loading": "Cargando la fuente de leads",
+        "intro": "Elige a qué campo del contacto va cada respuesta de este formulario. Una pregunta en Automático se busca con los nombres habituales, como email o phone_number.",
+        "suggested": "Los hemos completado según el tipo de cada pregunta. Revísalos y guarda.",
+        "multiUse": "La asignación guardada usaba la misma pregunta para más de un campo ({keys}). Al guardar solo se conserva el primero.",
+        "noQuestions": "Meta no listó ninguna pregunta para este formulario, así que no hay nada que asignar. Se siguen buscando los nombres habituales.",
+        "ignore": "Automático (sin asignar aquí)",
+        "contactFields": "Campos del contacto",
+        "contactProperties": "Propiedades del contacto",
+        "problems": {
+          "duplicateTarget": "Otra pregunta ya va a este campo. Elige uno distinto.",
+          "propertyKey": "Esta clave de propiedad no es válida."
+        },
+        "conflict": "Otra persona modificó esta fuente de leads. Recarga para ver su versión; tus cambios sin guardar se perderán.",
+        "cancel": "Cancelar",
+        "save": "Guardar asignación",
+        "saved": "Asignación de campos guardada para {name}"
+      },
+      "rules": {
+        "title": "Asignación y trato: {name}",
+        "close": "Cerrar",
+        "noSource": "No se encontró la fuente de leads de este formulario. Actualiza la lista e inténtalo de nuevo.",
+        "loading": "Cargando la fuente de leads",
+        "intro": "Decide quién es el responsable de los contactos que crea este formulario, si se abre un trato por cada lead y a quién se notifica. Los cambios se aplican a los leads que lleguen después de guardar.",
+        "conflict": "Otra persona modificó esta fuente de leads. Recarga para ver su versión; tus cambios sin guardar se perderán.",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "saved": "Asignación y trato guardados para {name}"
+      },
+      "health": {
+        "title": "Estado del formulario de leads de Meta",
+        "loading": "Comprobando el formulario",
+        "notConnected": "Esta fuente ya no está vinculada a un formulario de leads de Meta, así que no hay nada que comprobar. Vuelve a elegir el formulario en la pestaña Anuncios.",
+        "page": "Página",
+        "form": "Formulario",
+        "state": "Sincronización de leads",
+        "leadAccess": "Acceso a leads",
+        "lastLead": "Último lead",
+        "never": "Aún no hay leads",
+        "lastError": "Último error:",
+        "fixHint": "Para solucionarlo, abre la pestaña Anuncios: concede el acceso a leads, reconecta la Página o vuelve a activar la sincronización de leads.",
+        "openAds": "Abrir la pestaña Anuncios"
       }
     }
   }

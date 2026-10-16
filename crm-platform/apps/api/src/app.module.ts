@@ -101,6 +101,7 @@ import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
+import { MetaLeadAdsModule } from './modules/meta-lead-ads';
 import { FormsBuilderModule } from './modules/forms-builder';
 import { FormsLinksGroupsModule } from './modules/forms-links-groups';
 import { AiCopilotLeadFinderModule } from './modules/ai-copilot-lead-finder';
@@ -265,6 +266,7 @@ import { HealthModule } from './health/health.module';
     WorkspacesTeamsTenancyModule,
     WorkspaceImpersonationModule,
     LeadsModule,
+    MetaLeadAdsModule,
     FormsBuilderModule,
     FormsLinksGroupsModule,
     AiCopilotLeadFinderModule,

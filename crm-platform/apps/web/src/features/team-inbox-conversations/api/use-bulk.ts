@@ -25,6 +25,8 @@ export interface BulkSelection {
   allInView: boolean;
   toggleSelecting: () => void;
   select: (id: string, shift: boolean) => void;
+  /** A tick on a row's hover box: starts the selection if none is on, toggles the row (shift: the run), and ends it when the last tick is taken off. */
+  pick: (id: string, shift: boolean) => void;
   selectAll: () => void;
   clear: () => void;
   run: (action: BulkConversationAction) => void;
@@ -47,6 +49,8 @@ export function useBulkSelection(
   const [selection, setSelection] = useState<Selection>(EMPTY_SELECTION);
   const [busy, setBusy] = useState(false);
   const anchor = useRef<string | null>(null);
+  // Select mode started with the Select button stays on until Done; one started by a tick on a row ends with its last tick.
+  const manual = useRef(false);
   const viewRef = useRef(viewKey);
 
   useEffect(() => {
@@ -70,6 +74,18 @@ export function useBulkSelection(
       anchor.current = id;
     },
     [rows],
+  );
+
+  const pick = useCallback(
+    (id: string, shift: boolean) => {
+      const next = shift
+        ? selectRange(selection, rows, anchor.current, id)
+        : toggleId(selection, id);
+      anchor.current = id;
+      setSelection(next);
+      setSelecting(next.size > 0 || manual.current);
+    },
+    [rows, selection],
   );
 
   const run = useCallback(
@@ -117,10 +133,12 @@ export function useBulkSelection(
     busy,
     allInView: allInViewSelected(rows, selection),
     toggleSelecting: () => {
-      setSelecting((v) => !v);
+      manual.current = !selecting;
+      setSelecting(!selecting);
       clear();
     },
     select,
+    pick,
     selectAll: () => setSelection(selectAllInView(rows)),
     clear,
     run,

@@ -82,6 +82,12 @@ export const FlagIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M5 21V4m0 1h12l-2 4 2 4H5" />
   </Icon>
 );
+export const ChatIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8Z" />
+    <path d="M8 11h8M8 14h5" />
+  </Icon>
+);
 export const CloseIcon = (p: SVGProps<SVGSVGElement>) => (
   <Icon {...p}>
     <path d="M6 6l12 12M18 6 6 18" />

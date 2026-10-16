@@ -102,5 +102,11 @@
       "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.settings.get(",
       "reason": "read once per workspace and memoised for the rest of the sweep (attemptsByOrg), so the call count is the number of workspaces, not campaigns; fixed and reviewed 2026-10-15"
     }
+  ],
+  "36": [
+    {
+      "key": "google-account: 4 mutating route(s), 0 audit calls (apps/api/src/modules/google-account/google-account.controller.ts)",
+      "reason": "the controller only delegates to GoogleCalendarConnectService / GoogleConsentService in appointments-booking, which write the audit rows: disconnect (google-calendar-connect.service.ts, audit.record action delete), confirm (google-consent.service.ts, audit.record), calendar select; connect/begin only returns a consent URL and changes no state; reviewed 2026-10-16"
+    }
   ]
 }

@@ -76,6 +76,7 @@ export * from './workspaces-teams-tenancy';
 export * from './roles-permissions';
 export * from './whatsapp-providers';
 export * from './leads';
+export * from './meta-lead-ads';
 export * from './marketplace';
 export * from './forms-builder';
 export * from './admin-console-shell';

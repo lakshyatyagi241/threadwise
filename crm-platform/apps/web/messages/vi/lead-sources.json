@@ -56,7 +56,14 @@
       "syncInProgress": "Nguồn này đang được kéo dữ liệu. Vui lòng đợi hoàn tất.",
       "syncTooSoon": "Nguồn này vừa được yêu cầu. Hãy thử lại sau {seconds} giây.",
       "syncTooSoonNoWait": "Nguồn này vừa được yêu cầu. Hãy thử lại sau một lúc.",
-      "backfillRange": "Không thể kéo khoảng thời gian này: nó lùi xa hơn thời gian nguồn lưu khách hàng tiềm năng, hoặc nằm trong tương lai."
+      "backfillRange": "Không thể kéo khoảng thời gian này: nó lùi xa hơn thời gian nguồn lưu khách hàng tiềm năng, hoặc nằm trong tương lai.",
+      "mlaNotConfigured": "Meta chưa được thiết lập trên hệ thống này. Quản trị viên cần thêm ứng dụng Meta trước.",
+      "mlaLeadAccessMissing": "Trang này không có các quyền mà Meta yêu cầu để đọc lead. Hãy cấp quyền truy cập lead rồi thử lại.",
+      "mlaPageReconnect": "Meta không còn chấp nhận kết nối của Trang này. Hãy kết nối lại Trang rồi thử lại.",
+      "mlaSubscribeFailed": "Meta chưa bật việc chuyển lead cho Trang này. Hãy kiểm tra ứng dụng Meta có quyền leads và webhook của Trang đã được thiết lập, rồi thử lại.",
+      "mlaFormsUnavailable": "Meta không trả về biểu mẫu lead. Hãy thử lại sau giây lát.",
+      "mlaFormNotFound": "Biểu mẫu đó không còn là biểu mẫu lead của Trang này. Hãy làm mới danh sách rồi thử lại.",
+      "mlaSyncOff": "Hãy bật đồng bộ lead cho Trang này trước khi chọn biểu mẫu."
     },
     "problems": {
       "nameRequired": "Hãy đặt tên cho nguồn.",
@@ -162,7 +169,7 @@
         },
         "meta": {
           "name": "Biểu mẫu khách hàng tiềm năng của Meta",
-          "body": "Quảng cáo khách hàng tiềm năng trên Facebook và Instagram, lấy trực tiếp từ Trang của bạn."
+          "body": "Quảng cáo lead Facebook và Instagram, từ Trang của bạn thẳng vào danh bạ liên hệ."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -176,7 +183,8 @@
           "name": "Google Ads",
           "body": "Tiện ích biểu mẫu khách hàng tiềm năng của Google Ads."
         }
-      }
+      },
+      "dismissNotice": "Bỏ qua"
     },
     "sources": {
       "emptyTitle": "Chưa có nguồn nào",
@@ -195,7 +203,8 @@
       "connector": "Qua Marketplace",
       "endsIn": "Kết thúc trong {hint}",
       "noEvents": "Chưa có khách hàng tiềm năng nào",
-      "needsAttention": "{count, plural, other {# khách hàng tiềm năng}}"
+      "needsAttention": "{count, plural, other {# khách hàng tiềm năng}}",
+      "metaDelivery": "Từ Meta"
     },
     "wizard": {
       "title": "Nguồn khách hàng tiềm năng mới",
@@ -528,7 +537,9 @@
           "body": "URL của nguồn sẽ ngừng hoạt động và các khách hàng tiềm năng đã lưu sẽ bị xóa cùng. Các liên hệ đã tạo vẫn được giữ. Không thể hoàn tác.",
           "action": "Xóa nguồn"
         }
-      }
+      },
+      "metaForm": "Lead đến từ Meta. Nguồn này không có URL hay token; hãy quản lý biểu mẫu (ánh xạ câu hỏi, phân công và giao dịch, hoặc dừng) ở tab Quảng cáo.",
+      "metaFormLink": "Mở biểu mẫu lead Meta"
     },
     "events": {
       "title": "Khách hàng tiềm năng đã nhận",
@@ -819,6 +830,211 @@
           "noSource": "Hãy chọn ít nhất một nguồn."
         },
         "safe": "Chạy lại cũng không mất hay trùng dữ liệu; chỉ những khách còn thiếu mới được thêm vào."
+      }
+    },
+    "meta": {
+      "heading": "Biểu mẫu lead Meta",
+      "intro": "Đưa lead từ quảng cáo lead Facebook và Instagram của bạn thẳng vào danh bạ liên hệ. Kết nối một Trang Facebook, bật đồng bộ lead cho Trang đó, rồi chọn các biểu mẫu lead cần đưa vào.",
+      "loading": "Đang tải biểu mẫu lead Meta",
+      "pagesLabel": "Các Trang Facebook đã kết nối",
+      "planLocked": "Biểu mẫu lead Meta cần gói có cả Lead mạng xã hội và tính năng kênh bổ sung (Facebook). Hãy nâng cấp để sử dụng.",
+      "metaSaid": "Meta cho biết:",
+      "requestId": "ID yêu cầu:",
+      "connectPage": "Kết nối Trang Facebook",
+      "connectAnother": "Kết nối Trang khác",
+      "connectNeedsPermission": "Kết nối Trang cũng cần quyền {permission}.",
+      "card": {
+        "checking": "Đang kiểm tra kết nối",
+        "unavailable": "Không thể tải trạng thái kết nối. Hãy mở bảng để thử lại.",
+        "notConfigured": "Chưa được thiết lập trên hệ thống này",
+        "noPages": "Chưa kết nối Trang Facebook nào",
+        "summary": "Đã kết nối {pages, plural, other {# Trang}}, đã chọn {forms, plural, other {# biểu mẫu}}",
+        "attention": "{count, plural, other {# Trang cần chú ý}}",
+        "open": "Mở biểu mẫu lead Meta",
+        "close": "Ẩn biểu mẫu lead Meta"
+      },
+      "notConfigured": {
+        "title": "Meta chưa được thiết lập",
+        "body": "Biểu mẫu lead Meta cần có ứng dụng Meta trên hệ thống này. Hãy nhờ quản trị viên workspace thêm ứng dụng, rồi quay lại đây để kết nối Trang.",
+        "bodyManage": "Hệ thống này chưa có ứng dụng Meta nên chưa thể kết nối Trang cho quảng cáo lead. Quản trị viên cần thêm ứng dụng Meta (ID ứng dụng và secret) trước. Sau đó, hãy đăng ký webhook như hướng dẫn bên dưới."
+      },
+      "noPages": {
+        "title": "Chưa kết nối Trang Facebook",
+        "body": "Kết nối Trang Facebook đang chạy quảng cáo lead của bạn. Bạn sẽ được yêu cầu cấp các quyền mà Meta cần để đọc lead.",
+        "bodyNoManage": "Chưa kết nối Trang Facebook nào. Hãy nhờ người có quyền quản lý nguồn lead kết nối một Trang."
+      },
+      "setup": {
+        "title": "Cài đặt webhook cho ứng dụng Meta",
+        "summary": "Cài đặt webhook cho ứng dụng Meta",
+        "intro": "Meta gửi lead mới đến một địa chỉ callback. Quản trị viên chỉ cần đăng ký địa chỉ này một lần trong bảng điều khiển ứng dụng Meta.",
+        "callbackUrl": "URL callback",
+        "copyUrl": "Sao chép URL",
+        "verifyToken": "Mã xác minh",
+        "verifyTokenSet": "Đã đặt trên hệ thống này",
+        "verifyTokenMissing": "Chưa đặt",
+        "verifyTokenHelp": "Meta không thể xác nhận địa chỉ callback cho đến khi hệ thống này có mã xác minh. Hãy đặt mã trong cài đặt Facebook của hệ thống này.",
+        "steps": {
+          "callback": "Trong bảng điều khiển ứng dụng Meta, mở Webhooks, chọn đối tượng Page rồi dán URL callback ở trên.",
+          "verify": "Khi Meta yêu cầu mã xác minh, hãy nhập mã trong cài đặt Facebook của hệ thống này, sau đó xác minh và lưu.",
+          "subscribe": "Đăng ký đối tượng Page với trường {field}."
+        },
+        "scopes": "Quyền được yêu cầu khi đăng nhập: {scopes}.",
+        "scopesFromConfiguration": "Các quyền được yêu cầu khi đăng nhập lấy từ cấu hình đăng nhập Meta của bạn."
+      },
+      "pageStatus": {
+        "connected": "Đã kết nối Trang",
+        "disconnected": "Đã ngắt kết nối Trang",
+        "expired": "Kết nối đã hết hạn",
+        "error": "Lỗi Trang"
+      },
+      "leadAccess": {
+        "granted": "Đã cấp quyền truy cập lead",
+        "missing": "Thiếu quyền truy cập lead"
+      },
+      "syncState": {
+        "off": "Đồng bộ lead đang tắt",
+        "subscribed": "Đang nhận lead",
+        "needs_lead_access": "Cần quyền truy cập lead",
+        "needs_reconnect": "Cần kết nối lại",
+        "error": "Lỗi"
+      },
+      "page": {
+        "pageId": "ID Trang",
+        "missingScopes": "Quyền còn thiếu:",
+        "lastLead": "Lead gần nhất",
+        "lastSweep": "Lần kiểm tra gần nhất",
+        "subscribedAt": "Đồng bộ lead bật từ",
+        "never": "Chưa bao giờ",
+        "formsConnected": "Biểu mẫu đã chọn",
+        "lastError": "Lỗi gần nhất:",
+        "grant": "Cấp quyền truy cập lead",
+        "reconnect": "Kết nối lại",
+        "enable": "Bật đồng bộ lead",
+        "disable": "Tắt đồng bộ lead",
+        "chooseForms": "Chọn biểu mẫu lead",
+        "hideForms": "Ẩn biểu mẫu lead",
+        "enabledToast": "Đồng bộ lead đang bật cho {name}",
+        "disabledToast": "Đồng bộ lead đang tắt cho {name}",
+        "stateHelp": {
+          "off": "Đồng bộ lead đang tắt. Hãy bật để bắt đầu nhận lead của Trang này.",
+          "subscribed": "Đồng bộ lead đang bật. Lead mới từ các biểu mẫu bạn chọn sẽ đến trong chốc lát, và một lần kiểm tra định kỳ sẽ lấy những lead bị bỏ sót.",
+          "needs_lead_access": "Đồng bộ lead đang bật, nhưng Trang này được kết nối mà không có các quyền Meta yêu cầu để đọc lead. Hãy cấp quyền truy cập lead để tiếp tục.",
+          "needs_reconnect": "Meta không còn chấp nhận kết nối của Trang này. Hãy kết nối lại Trang để nhận lead trở lại.",
+          "error": "Meta đã từ chối một yêu cầu ở lần thử gần nhất. Thông báo bên dưới cho biết lý do; thông báo sẽ biến mất sau lần thành công tiếp theo."
+        },
+        "hints": {
+          "needManage": "Thay đổi đồng bộ lead cần quyền {permission}.",
+          "needFacebook": "Cấp quyền truy cập hoặc kết nối lại cũng cần quyền {permission}, vì thao tác này lưu kết nối của Trang.",
+          "enableNeedsAccess": "Hãy cấp quyền truy cập lead trước; Meta từ chối đồng bộ lead cho Trang không có quyền này.",
+          "enableNeedsReconnect": "Hãy kết nối lại Trang trước; kết nối của Trang không còn hoạt động.",
+          "pickNeedsSync": "Bật đồng bộ lead để chọn biểu mẫu.",
+          "pickNeedsAccess": "Cấp quyền truy cập lead để chọn biểu mẫu.",
+          "pickNeedsReconnect": "Kết nối lại Trang để chọn biểu mẫu."
+        },
+        "confirmOff": {
+          "title": "Tắt đồng bộ lead cho {name}?",
+          "body": "Trang này sẽ ngừng nhận lead mới từ Meta. Các biểu mẫu bạn đã chọn và lead đã lưu vẫn được giữ, và bạn có thể bật lại đồng bộ lead bất cứ lúc nào.",
+          "action": "Tắt đồng bộ lead",
+          "cancel": "Hủy"
+        }
+      },
+      "forms": {
+        "title": "Biểu mẫu lead của {name}",
+        "intro": "Đây là các biểu mẫu lead mà Meta liệt kê cho Trang này. Chọn một biểu mẫu để đưa lead của nó vào; mỗi biểu mẫu được chọn sẽ trở thành một nguồn lead ở tab Webhook.",
+        "refresh": "Làm mới danh sách",
+        "loading": "Đang tải biểu mẫu lead từ Meta",
+        "emptyTitle": "Không có biểu mẫu lead",
+        "empty": "Trang này chưa có biểu mẫu lead nào. Hãy tạo một biểu mẫu trong Meta Ads Manager hoặc trên Trang, rồi làm mới danh sách này.",
+        "caption": "Biểu mẫu lead của Trang",
+        "col": {
+          "form": "Biểu mẫu",
+          "status": "Trạng thái Meta",
+          "leads": "Lead",
+          "questions": "Câu hỏi",
+          "consent": "Hộp kiểm đồng ý",
+          "connected": "Đã kết nối",
+          "lastLead": "Lead gần nhất",
+          "lastError": "Lỗi gần nhất",
+          "actions": "Thao tác"
+        },
+        "formId": "ID biểu mẫu",
+        "formStatus": {
+          "ACTIVE": "Đang hoạt động",
+          "ARCHIVED": "Đã lưu trữ",
+          "DELETED": "Đã xóa",
+          "DRAFT": "Bản nháp",
+          "unknown": "Không rõ"
+        },
+        "leadsUnknown": "Meta không báo cáo",
+        "consentYes": "Có hộp kiểm đồng ý",
+        "consentNo": "Không có",
+        "connected": "Đã kết nối",
+        "notConnected": "Chưa chọn",
+        "noLeads": "Chưa có lead",
+        "pick": "Chọn",
+        "pickFor": "Chọn {name}",
+        "stop": "Dừng",
+        "stopFor": "Dừng {name}",
+        "mapFields": "Ánh xạ trường",
+        "mapFieldsFor": "Ánh xạ trường của {name}",
+        "rules": "Phân công và giao dịch",
+        "rulesFor": "Phân công và giao dịch của {name}",
+        "openSource": "Mở nguồn",
+        "openSourceFor": "Mở nguồn lead của {name}",
+        "pickedToast": "Đã chọn {name}",
+        "stoppedToast": "Đã dừng {name}",
+        "confirmStop": {
+          "title": "Dừng đưa {name} vào?",
+          "body": "Nguồn lead của biểu mẫu này và các lead lưu trong đó sẽ bị xóa. Các liên hệ đã được tạo từ chúng vẫn được giữ. Bạn có thể chọn lại biểu mẫu sau.",
+          "action": "Dừng đưa lead vào",
+          "cancel": "Hủy"
+        }
+      },
+      "mapping": {
+        "title": "Ánh xạ trường: {name}",
+        "close": "Đóng",
+        "noSource": "Không tìm thấy nguồn lead của biểu mẫu này. Hãy làm mới danh sách rồi thử lại.",
+        "loading": "Đang tải nguồn lead",
+        "intro": "Chọn nơi mỗi câu trả lời trong biểu mẫu này được lưu vào liên hệ. Câu hỏi để ở Tự động sẽ được tìm theo các tên thông dụng, như email hoặc phone_number.",
+        "suggested": "Chúng tôi đã điền sẵn dựa trên loại của từng câu hỏi. Hãy kiểm tra rồi lưu.",
+        "multiUse": "Ánh xạ đã lưu dùng cùng một câu hỏi cho nhiều trường ({keys}). Khi lưu, chỉ giữ lại trường đầu tiên.",
+        "noQuestions": "Meta không liệt kê câu hỏi nào cho biểu mẫu này nên không có gì để ánh xạ. Các tên thông dụng vẫn được tìm.",
+        "ignore": "Tự động (không ánh xạ ở đây)",
+        "contactFields": "Trường liên hệ",
+        "contactProperties": "Thuộc tính liên hệ",
+        "problems": {
+          "duplicateTarget": "Một câu hỏi khác đã được gán cho trường này. Hãy chọn trường khác.",
+          "propertyKey": "Khóa thuộc tính này không hợp lệ."
+        },
+        "conflict": "Người khác đã thay đổi nguồn lead này. Hãy tải lại để xem phiên bản của họ; các lựa chọn chưa lưu của bạn sẽ mất.",
+        "cancel": "Hủy",
+        "save": "Lưu ánh xạ",
+        "saved": "Đã lưu ánh xạ trường cho {name}"
+      },
+      "rules": {
+        "title": "Phân công và giao dịch: {name}",
+        "close": "Đóng",
+        "noSource": "Không tìm thấy nguồn lead của biểu mẫu này. Hãy làm mới danh sách rồi thử lại.",
+        "loading": "Đang tải nguồn lead",
+        "intro": "Quyết định ai sở hữu các liên hệ do biểu mẫu này tạo, có mở giao dịch cho từng lead hay không, và ai được thông báo. Thay đổi chỉ áp dụng cho lead đến sau khi bạn lưu.",
+        "conflict": "Người khác đã thay đổi nguồn lead này. Hãy tải lại để xem phiên bản của họ; các thay đổi chưa lưu của bạn sẽ mất.",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "saved": "Đã lưu phân công và giao dịch cho {name}"
+      },
+      "health": {
+        "title": "Tình trạng biểu mẫu lead Meta",
+        "loading": "Đang kiểm tra biểu mẫu",
+        "notConnected": "Nguồn này không còn liên kết với biểu mẫu lead Meta nào nên không có gì để kiểm tra. Hãy chọn lại biểu mẫu ở tab Quảng cáo.",
+        "page": "Trang",
+        "form": "Biểu mẫu",
+        "state": "Đồng bộ lead",
+        "leadAccess": "Quyền truy cập lead",
+        "lastLead": "Lead gần nhất",
+        "never": "Chưa có lead",
+        "lastError": "Lỗi gần nhất:",
+        "fixHint": "Để khắc phục, hãy mở tab Quảng cáo: cấp quyền truy cập lead, kết nối lại Trang hoặc bật lại đồng bộ lead.",
+        "openAds": "Mở tab Quảng cáo"
       }
     }
   }

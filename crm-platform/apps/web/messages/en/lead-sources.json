@@ -56,7 +56,14 @@
       "syncInProgress": "This source is already being pulled. Wait for it to finish.",
       "syncTooSoon": "This source was asked a moment ago. Try again in {seconds} seconds.",
       "syncTooSoonNoWait": "This source was asked a moment ago. Try again in a little while.",
-      "backfillRange": "That range cannot be pulled: it reaches back further than the source keeps leads, or into the future."
+      "backfillRange": "That range cannot be pulled: it reaches back further than the source keeps leads, or into the future.",
+      "mlaNotConfigured": "Meta is not set up on this install. An administrator has to add the Meta app first.",
+      "mlaLeadAccessMissing": "This Page does not have the permissions Meta requires to read leads. Grant lead access, then try again.",
+      "mlaPageReconnect": "Meta no longer accepts this Page's connection. Reconnect the Page, then try again.",
+      "mlaSubscribeFailed": "Meta did not turn on lead delivery for this Page. Check that the Meta app has the leads permission and its Page webhook is set up, then try again.",
+      "mlaFormsUnavailable": "Meta did not return the lead forms. Try again in a moment.",
+      "mlaFormNotFound": "That form is no longer one of this Page's lead forms. Refresh the list and try again.",
+      "mlaSyncOff": "Turn on lead sync for this Page before choosing forms."
     },
     "problems": {
       "nameRequired": "Give the source a name.",
@@ -162,7 +169,7 @@
         },
         "meta": {
           "name": "Meta lead forms",
-          "body": "Facebook and Instagram lead ads, straight from your Page."
+          "body": "Facebook and Instagram lead ads, straight from your Page into your contacts."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -176,7 +183,8 @@
           "name": "Google Ads",
           "body": "Google Ads lead form extensions."
         }
-      }
+      },
+      "dismissNotice": "Dismiss"
     },
     "sources": {
       "emptyTitle": "No sources yet",
@@ -195,7 +203,8 @@
       "connector": "Through the Marketplace",
       "endsIn": "Ends in {hint}",
       "noEvents": "No leads yet",
-      "needsAttention": "{count, plural, one {# lead} other {# leads}}"
+      "needsAttention": "{count, plural, one {# lead} other {# leads}}",
+      "metaDelivery": "From Meta"
     },
     "wizard": {
       "title": "New lead source",
@@ -528,7 +537,9 @@
           "body": "Its URL stops working and the leads it stored are deleted with it. Contacts it already created stay. This cannot be undone.",
           "action": "Delete source"
         }
-      }
+      },
+      "metaForm": "Leads arrive from Meta. This source has no URL or token; manage the form (map its questions, assignment and deal, or stop it) on the Ads tab.",
+      "metaFormLink": "Open Meta lead forms"
     },
     "events": {
       "title": "Leads received",
@@ -819,6 +830,211 @@
           "noSource": "Choose at least one source."
         },
         "safe": "Nothing is lost or duplicated if you run it again; it only adds the leads that are missing."
+      }
+    },
+    "meta": {
+      "heading": "Meta lead forms",
+      "intro": "Bring leads from your Facebook and Instagram lead ads straight into your contacts. Connect a Facebook Page, turn on lead sync for it, then choose the lead forms to bring in.",
+      "loading": "Loading Meta lead forms",
+      "pagesLabel": "Connected Facebook Pages",
+      "planLocked": "Meta lead forms need a plan with both Social leads and the extra channels feature (Facebook). Upgrade to use them.",
+      "metaSaid": "Meta said:",
+      "requestId": "Request ID:",
+      "connectPage": "Connect a Facebook Page",
+      "connectAnother": "Connect another Page",
+      "connectNeedsPermission": "Connecting a Page needs the permission {permission} as well.",
+      "card": {
+        "checking": "Checking the connection",
+        "unavailable": "Could not load the connection state. Open the panel to try again.",
+        "notConfigured": "Not set up on this install yet",
+        "noPages": "No Facebook Page connected yet",
+        "summary": "{pages, plural, one {# Page} other {# Pages}} connected, {forms, plural, one {# form} other {# forms}} picked",
+        "attention": "{count, plural, one {# Page needs attention} other {# Pages need attention}}",
+        "open": "Open Meta lead forms",
+        "close": "Hide Meta lead forms"
+      },
+      "notConfigured": {
+        "title": "Meta is not set up yet",
+        "body": "Meta lead forms need a Meta app on this install. Ask a workspace administrator to add it, then come back here to connect a Page.",
+        "bodyManage": "This install has no Meta app yet, so Pages cannot be connected for lead ads. An administrator has to add the Meta app (app ID and secret) first. Once that is done, register the webhook as described below."
+      },
+      "noPages": {
+        "title": "No Facebook Page connected",
+        "body": "Connect the Facebook Page that runs your lead ads. You will be asked for the permissions Meta requires to read leads.",
+        "bodyNoManage": "No Facebook Page is connected yet. Ask someone who can manage lead sources to connect one."
+      },
+      "setup": {
+        "title": "Webhook settings for the Meta app",
+        "summary": "Webhook settings for the Meta app",
+        "intro": "Meta delivers new leads to a callback address. An administrator registers it once in the Meta app dashboard.",
+        "callbackUrl": "Callback URL",
+        "copyUrl": "Copy URL",
+        "verifyToken": "Verify token",
+        "verifyTokenSet": "Set on this install",
+        "verifyTokenMissing": "Not set",
+        "verifyTokenHelp": "Meta cannot confirm the callback address until this install has a verify token. Set it in the Facebook settings of this install.",
+        "steps": {
+          "callback": "In the Meta app dashboard, open Webhooks, choose the Page object and paste the callback URL above.",
+          "verify": "When Meta asks for a verify token, enter the one from this install's Facebook settings, then verify and save.",
+          "subscribe": "Subscribe the Page object to the {field} field."
+        },
+        "scopes": "Permissions asked at login: {scopes}.",
+        "scopesFromConfiguration": "The permissions asked at login come from your Meta login configuration."
+      },
+      "pageStatus": {
+        "connected": "Page connected",
+        "disconnected": "Page disconnected",
+        "expired": "Connection expired",
+        "error": "Page error"
+      },
+      "leadAccess": {
+        "granted": "Lead access granted",
+        "missing": "Lead access missing"
+      },
+      "syncState": {
+        "off": "Lead sync off",
+        "subscribed": "Receiving leads",
+        "needs_lead_access": "Needs lead access",
+        "needs_reconnect": "Needs reconnect",
+        "error": "Error"
+      },
+      "page": {
+        "pageId": "Page ID",
+        "missingScopes": "Missing permissions:",
+        "lastLead": "Last lead",
+        "lastSweep": "Last check",
+        "subscribedAt": "Lead sync on since",
+        "never": "Never",
+        "formsConnected": "Forms picked",
+        "lastError": "Last error:",
+        "grant": "Grant lead access",
+        "reconnect": "Reconnect",
+        "enable": "Turn on lead sync",
+        "disable": "Turn off lead sync",
+        "chooseForms": "Choose lead forms",
+        "hideForms": "Hide lead forms",
+        "enabledToast": "Lead sync is on for {name}",
+        "disabledToast": "Lead sync is off for {name}",
+        "stateHelp": {
+          "off": "Lead sync is off. Turn it on to start receiving this Page's leads.",
+          "subscribed": "Lead sync is on. New leads from the forms you pick arrive within moments, and a regular check picks up any that were missed.",
+          "needs_lead_access": "Lead sync is on, but this Page was connected without the permissions Meta requires to read leads. Grant lead access to continue.",
+          "needs_reconnect": "Meta no longer accepts this Page's connection. Reconnect the Page to receive leads again.",
+          "error": "Meta refused something on the last attempt. The message below says what; it clears after the next success."
+        },
+        "hints": {
+          "needManage": "Changing lead sync needs the permission {permission}.",
+          "needFacebook": "Granting access or reconnecting also needs the permission {permission}, because it stores the Page's connection.",
+          "enableNeedsAccess": "Grant lead access first; Meta refuses lead sync for a Page without it.",
+          "enableNeedsReconnect": "Reconnect the Page first; its connection no longer works.",
+          "pickNeedsSync": "Turn on lead sync to choose forms.",
+          "pickNeedsAccess": "Grant lead access to choose forms.",
+          "pickNeedsReconnect": "Reconnect the Page to choose forms."
+        },
+        "confirmOff": {
+          "title": "Turn off lead sync for {name}?",
+          "body": "This Page stops receiving new leads from Meta. The forms you picked and the leads already stored are kept, and you can turn lead sync on again at any time.",
+          "action": "Turn off lead sync",
+          "cancel": "Cancel"
+        }
+      },
+      "forms": {
+        "title": "Lead forms of {name}",
+        "intro": "These are the lead forms Meta lists for this Page. Pick a form to bring its leads in; each picked form becomes a lead source on the Webhook tab.",
+        "refresh": "Refresh list",
+        "loading": "Loading lead forms from Meta",
+        "emptyTitle": "No lead forms",
+        "empty": "This Page has no lead forms yet. Create one in Meta Ads Manager or on the Page, then refresh this list.",
+        "caption": "Lead forms of the Page",
+        "col": {
+          "form": "Form",
+          "status": "Meta status",
+          "leads": "Leads",
+          "questions": "Questions",
+          "consent": "Consent checkbox",
+          "connected": "Connected",
+          "lastLead": "Last lead",
+          "lastError": "Last error",
+          "actions": "Actions"
+        },
+        "formId": "Form ID",
+        "formStatus": {
+          "ACTIVE": "Active",
+          "ARCHIVED": "Archived",
+          "DELETED": "Deleted",
+          "DRAFT": "Draft",
+          "unknown": "Unknown"
+        },
+        "leadsUnknown": "Not reported by Meta",
+        "consentYes": "Has a consent checkbox",
+        "consentNo": "None",
+        "connected": "Connected",
+        "notConnected": "Not picked",
+        "noLeads": "No leads yet",
+        "pick": "Pick",
+        "pickFor": "Pick {name}",
+        "stop": "Stop",
+        "stopFor": "Stop {name}",
+        "mapFields": "Map fields",
+        "mapFieldsFor": "Map fields of {name}",
+        "rules": "Assignment and deal",
+        "rulesFor": "Assignment and deal of {name}",
+        "openSource": "Open source",
+        "openSourceFor": "Open the lead source of {name}",
+        "pickedToast": "Picked {name}",
+        "stoppedToast": "Stopped {name}",
+        "confirmStop": {
+          "title": "Stop bringing in {name}?",
+          "body": "The lead source for this form and the leads stored under it are deleted. Contacts already created from them stay. You can pick the form again later.",
+          "action": "Stop bringing in leads",
+          "cancel": "Cancel"
+        }
+      },
+      "mapping": {
+        "title": "Map fields: {name}",
+        "close": "Close",
+        "noSource": "This form's lead source could not be found. Refresh the list and try again.",
+        "loading": "Loading the lead source",
+        "intro": "Choose where each answer on this form goes on the contact. A question left on Automatic is looked up under the usual names, such as email or phone_number.",
+        "suggested": "We filled these in from the type of each question. Check them, then save.",
+        "multiUse": "The saved mapping used the same question for more than one field ({keys}). Only the first is kept when you save.",
+        "noQuestions": "Meta did not list any questions for this form, so there is nothing to map. The usual names are still looked up.",
+        "ignore": "Automatic (not mapped here)",
+        "contactFields": "Contact fields",
+        "contactProperties": "Contact properties",
+        "problems": {
+          "duplicateTarget": "Another question already goes to this field. Choose a different one.",
+          "propertyKey": "This property key is not valid."
+        },
+        "conflict": "Someone else changed this lead source. Reload to see their version; your unsaved choices will be lost.",
+        "cancel": "Cancel",
+        "save": "Save mapping",
+        "saved": "Field mapping saved for {name}"
+      },
+      "rules": {
+        "title": "Assignment and deal: {name}",
+        "close": "Close",
+        "noSource": "This form's lead source could not be found. Refresh the list and try again.",
+        "loading": "Loading the lead source",
+        "intro": "Decide who owns the contacts this form creates, whether a deal is opened for each lead, and who is notified. Changes apply to leads that arrive after you save.",
+        "conflict": "Someone else changed this lead source. Reload to see their version; your unsaved changes will be lost.",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saved": "Assignment and deal saved for {name}"
+      },
+      "health": {
+        "title": "Meta lead form health",
+        "loading": "Checking the form",
+        "notConnected": "This source is no longer linked to a Meta lead form, so there is nothing to check. Pick the form again on the Ads tab.",
+        "page": "Page",
+        "form": "Form",
+        "state": "Lead sync",
+        "leadAccess": "Lead access",
+        "lastLead": "Last lead",
+        "never": "No leads yet",
+        "lastError": "Last error:",
+        "fixHint": "To fix this, open the Ads tab: grant lead access, reconnect the Page or turn lead sync back on.",
+        "openAds": "Open the Ads tab"
       }
     }
   }

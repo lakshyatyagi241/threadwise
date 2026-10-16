@@ -78,7 +78,12 @@ export class FacebookPublicController {
     @Res() res: Response,
   ): Promise<void> {
     const out = await this.pages.completeLogin({ code, state, error, errorDescription });
-    const hub = new URL('/facebook', this.config.get('WEB_APP_URL', { infer: true }));
+    // The Meta lead ads screen starts its own login (more permissions) and is where the person goes back to.
+    const hub = new URL(
+      out.returnTo === 'lead-sources' ? '/lead-sources' : '/facebook',
+      this.config.get('WEB_APP_URL', { infer: true }),
+    );
+    if (out.returnTo === 'lead-sources') hub.searchParams.set('tab', 'ads');
     hub.searchParams.set('fb', out.ok ? 'connected' : 'error');
     hub.searchParams.set('message', out.message);
     res.redirect(303, hub.toString());

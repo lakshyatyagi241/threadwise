@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, Inter } from 'next/font/google';
 
 /**
  * The app's base type: Geist for text, Geist Mono for code and monospace copy. Both are open-licence
@@ -17,5 +17,14 @@ const mono = Geist_Mono({
   variable: '--font-geist-mono',
 });
 
-/** Class names that define `--font-geist-sans`/`--font-geist-mono`; put them on the root `<body>`. */
-export const appFontVariables = `${sans.variable} ${mono.variable}`;
+/** Inter, for the operator dashboard's heading block (`--font-inter`), upright and italic, weight 600. */
+const inter = Inter({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  weight: ['600'],
+  style: ['normal', 'italic'],
+  variable: '--font-inter',
+});
+
+/** Class names that define `--font-geist-sans`/`--font-geist-mono`/`--font-inter`; put them on the root `<body>`. */
+export const appFontVariables = `${sans.variable} ${mono.variable} ${inter.variable}`;

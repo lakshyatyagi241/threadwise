@@ -10,6 +10,11 @@
 export const LEAD_SOURCE_DIRECTORY = Symbol('LEAD_SOURCE_DIRECTORY');
 
 export interface ConnectorSourceInput {
+  /**
+   * The source's kind. Omitted: `connector` (a Marketplace installation). `meta_lead_ads` is a lead form of a connected Facebook Page
+   * (one source per form). Either kind has no URL token and is edited in the same screen as a webhook's mapping and rules.
+   */
+  kind?: 'connector' | 'meta_lead_ads';
   /** The platform label of its leads ("IndiaMART"): the default `contacts.source` and attribution platform. */
   providerKey: string;
   /** Stable and unique per workspace: the installation's id. */

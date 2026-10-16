@@ -56,7 +56,14 @@
       "syncInProgress": "このソースは現在取得中です。完了するまでお待ちください。",
       "syncTooSoon": "このソースには少し前にリクエストしました。{seconds}秒後にもう一度お試しください。",
       "syncTooSoonNoWait": "このソースには少し前にリクエストしました。しばらくしてからもう一度お試しください。",
-      "backfillRange": "この期間は取得できません。ソースがリードを保持している期間より前、または未来の日付が含まれています。"
+      "backfillRange": "この期間は取得できません。ソースがリードを保持している期間より前、または未来の日付が含まれています。",
+      "mlaNotConfigured": "このインストールでは Meta が設定されていません。先に管理者が Meta アプリを追加する必要があります。",
+      "mlaLeadAccessMissing": "このページには、Meta がリードの読み取りに必要とする権限がありません。リードへのアクセスを許可してから、もう一度お試しください。",
+      "mlaPageReconnect": "Meta はこのページの接続を受け付けなくなりました。ページを再接続してから、もう一度お試しください。",
+      "mlaSubscribeFailed": "Meta がこのページのリード配信を有効にしませんでした。Meta アプリにリード権限があり、ページの Webhook が設定されていることを確認してから、もう一度お試しください。",
+      "mlaFormsUnavailable": "Meta からリードフォームが返されませんでした。しばらくしてからもう一度お試しください。",
+      "mlaFormNotFound": "このフォームは、もうこのページのリードフォームではありません。一覧を更新してから、もう一度お試しください。",
+      "mlaSyncOff": "フォームを選ぶ前に、このページのリード同期をオンにしてください。"
     },
     "problems": {
       "nameRequired": "ソースに名前を付けてください。",
@@ -162,7 +169,7 @@
         },
         "meta": {
           "name": "Meta リードフォーム",
-          "body": "Facebook と Instagram のリード広告を、ページから直接受け付けます。"
+          "body": "Facebook と Instagram のリード広告を、ページからそのままコンタクトへ。"
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -176,7 +183,8 @@
           "name": "Google 広告",
           "body": "Google 広告のリードフォーム拡張。"
         }
-      }
+      },
+      "dismissNotice": "閉じる"
     },
     "sources": {
       "emptyTitle": "ソースはまだありません",
@@ -195,7 +203,8 @@
       "connector": "マーケットプレイス経由",
       "endsIn": "{hint} で終了",
       "noEvents": "リードはまだありません",
-      "needsAttention": "{count, plural, other {# 件のリード}}"
+      "needsAttention": "{count, plural, other {# 件のリード}}",
+      "metaDelivery": "Meta から"
     },
     "wizard": {
       "title": "新しいリードソース",
@@ -528,7 +537,9 @@
           "body": "URLは無効になり、保存されたリードも一緒に削除されます。すでに作成された連絡先は残ります。この操作は元に戻せません。",
           "action": "ソースを削除"
         }
-      }
+      },
+      "metaForm": "リードは Meta から届きます。このソースには URL もトークンもありません。フォームの管理（質問のマッピング、担当者と商談の設定、停止）は「広告」タブで行います。",
+      "metaFormLink": "Meta リードフォームを開く"
     },
     "events": {
       "title": "受信したリード",
@@ -819,6 +830,211 @@
           "noSource": "ソースを1つ以上選択してください。"
         },
         "safe": "もう一度実行しても、失われたり重複したりするものはありません。不足しているリードだけが追加されます。"
+      }
+    },
+    "meta": {
+      "heading": "Meta リードフォーム",
+      "intro": "Facebook と Instagram のリード広告からのリードを、そのままコンタクトに取り込めます。Facebook ページを接続し、リード同期をオンにしてから、取り込むリードフォームを選びます。",
+      "loading": "Meta リードフォームを読み込み中",
+      "pagesLabel": "接続済みの Facebook ページ",
+      "planLocked": "Meta リードフォームを使うには、ソーシャルリードと追加チャネル（Facebook）機能の両方を含むプランが必要です。アップグレードしてご利用ください。",
+      "metaSaid": "Meta からのメッセージ:",
+      "requestId": "リクエスト ID:",
+      "connectPage": "Facebook ページを接続",
+      "connectAnother": "別のページを接続",
+      "connectNeedsPermission": "ページを接続するには、権限 {permission} も必要です。",
+      "card": {
+        "checking": "接続を確認中",
+        "unavailable": "接続状態を読み込めませんでした。パネルを開いて、もう一度お試しください。",
+        "notConfigured": "このインストールではまだ設定されていません",
+        "noPages": "接続済みの Facebook ページはまだありません",
+        "summary": "{pages, plural, other {# ページ}}接続済み、{forms, plural, other {# フォーム}}選択済み",
+        "attention": "{count, plural, other {# ページで対応が必要です}}",
+        "open": "Meta リードフォームを開く",
+        "close": "Meta リードフォームを非表示"
+      },
+      "notConfigured": {
+        "title": "Meta はまだ設定されていません",
+        "body": "Meta リードフォームを使うには、このインストールに Meta アプリが必要です。ワークスペースの管理者に追加を依頼してから、ここに戻ってページを接続してください。",
+        "bodyManage": "このインストールには Meta アプリがまだないため、リード広告用にページを接続できません。先に管理者が Meta アプリ（アプリ ID とシークレット）を追加する必要があります。完了したら、以下の手順で Webhook を登録してください。"
+      },
+      "noPages": {
+        "title": "Facebook ページが接続されていません",
+        "body": "リード広告を配信している Facebook ページを接続してください。Meta がリードの読み取りに必要とする権限の許可を求められます。",
+        "bodyNoManage": "Facebook ページはまだ接続されていません。リードソースを管理できる人に接続を依頼してください。"
+      },
+      "setup": {
+        "title": "Meta アプリの Webhook 設定",
+        "summary": "Meta アプリの Webhook 設定",
+        "intro": "Meta は新しいリードをコールバック URL に配信します。管理者が Meta アプリのダッシュボードで一度だけ登録します。",
+        "callbackUrl": "コールバック URL",
+        "copyUrl": "URL をコピー",
+        "verifyToken": "検証トークン",
+        "verifyTokenSet": "このインストールで設定済み",
+        "verifyTokenMissing": "未設定",
+        "verifyTokenHelp": "このインストールに検証トークンが設定されるまで、Meta はコールバック URL を確認できません。このインストールの Facebook 設定で設定してください。",
+        "steps": {
+          "callback": "Meta アプリのダッシュボードで Webhooks を開き、Page オブジェクトを選んで、上のコールバック URL を貼り付けます。",
+          "verify": "Meta から検証トークンを求められたら、このインストールの Facebook 設定にあるトークンを入力し、検証して保存します。",
+          "subscribe": "Page オブジェクトを {field} フィールドにサブスクライブします。"
+        },
+        "scopes": "ログイン時に求める権限: {scopes}",
+        "scopesFromConfiguration": "ログイン時に求める権限は、Meta のログイン設定によって決まります。"
+      },
+      "pageStatus": {
+        "connected": "ページ接続済み",
+        "disconnected": "ページ切断済み",
+        "expired": "接続の有効期限切れ",
+        "error": "ページエラー"
+      },
+      "leadAccess": {
+        "granted": "リードへのアクセス許可済み",
+        "missing": "リードへのアクセス未許可"
+      },
+      "syncState": {
+        "off": "リード同期オフ",
+        "subscribed": "リード受信中",
+        "needs_lead_access": "リードへのアクセスが必要",
+        "needs_reconnect": "再接続が必要",
+        "error": "エラー"
+      },
+      "page": {
+        "pageId": "ページ ID",
+        "missingScopes": "不足している権限:",
+        "lastLead": "最新のリード",
+        "lastSweep": "最終確認",
+        "subscribedAt": "リード同期オン開始日",
+        "never": "なし",
+        "formsConnected": "選択したフォーム",
+        "lastError": "最後のエラー:",
+        "grant": "リードへのアクセスを許可",
+        "reconnect": "再接続",
+        "enable": "リード同期をオンにする",
+        "disable": "リード同期をオフにする",
+        "chooseForms": "リードフォームを選択",
+        "hideForms": "リードフォームを非表示",
+        "enabledToast": "{name} のリード同期はオンです",
+        "disabledToast": "{name} のリード同期はオフです",
+        "stateHelp": {
+          "off": "リード同期がオフです。オンにすると、このページのリードの受信を開始します。",
+          "subscribed": "リード同期はオンです。選択したフォームの新しいリードはすぐに届き、定期チェックで取りこぼしも拾われます。",
+          "needs_lead_access": "リード同期はオンですが、このページは Meta がリードの読み取りに必要とする権限なしで接続されています。続けるには、リードへのアクセスを許可してください。",
+          "needs_reconnect": "Meta はこのページの接続を受け付けなくなりました。リードを再び受信するには、ページを再接続してください。",
+          "error": "前回の試行で Meta が何かを拒否しました。内容は下のメッセージに表示され、次に成功すると消えます。"
+        },
+        "hints": {
+          "needManage": "リード同期を変更するには、権限 {permission} が必要です。",
+          "needFacebook": "アクセスの許可や再接続にも権限 {permission} が必要です。ページの接続情報を保存するためです。",
+          "enableNeedsAccess": "先にリードへのアクセスを許可してください。許可がないページでは、Meta がリード同期を拒否します。",
+          "enableNeedsReconnect": "先にページを再接続してください。現在の接続は使えなくなっています。",
+          "pickNeedsSync": "フォームを選ぶには、リード同期をオンにしてください。",
+          "pickNeedsAccess": "フォームを選ぶには、リードへのアクセスを許可してください。",
+          "pickNeedsReconnect": "フォームを選ぶには、ページを再接続してください。"
+        },
+        "confirmOff": {
+          "title": "{name} のリード同期をオフにしますか？",
+          "body": "このページは Meta から新しいリードを受信しなくなります。選択したフォームと保存済みのリードは残り、リード同期はいつでも再びオンにできます。",
+          "action": "リード同期をオフにする",
+          "cancel": "キャンセル"
+        }
+      },
+      "forms": {
+        "title": "{name} のリードフォーム",
+        "intro": "Meta がこのページ用に一覧表示しているリードフォームです。フォームを選ぶとそのリードを取り込み、選んだフォームは Webhook タブのリードソースになります。",
+        "refresh": "一覧を更新",
+        "loading": "Meta からリードフォームを読み込み中",
+        "emptyTitle": "リードフォームなし",
+        "empty": "このページにはまだリードフォームがありません。Meta 広告マネージャまたはページで作成してから、この一覧を更新してください。",
+        "caption": "ページのリードフォーム",
+        "col": {
+          "form": "フォーム",
+          "status": "Meta のステータス",
+          "leads": "リード",
+          "questions": "質問",
+          "consent": "同意チェックボックス",
+          "connected": "接続済み",
+          "lastLead": "最新のリード",
+          "lastError": "最後のエラー",
+          "actions": "操作"
+        },
+        "formId": "フォーム ID",
+        "formStatus": {
+          "ACTIVE": "有効",
+          "ARCHIVED": "アーカイブ済み",
+          "DELETED": "削除済み",
+          "DRAFT": "下書き",
+          "unknown": "不明"
+        },
+        "leadsUnknown": "Meta から報告なし",
+        "consentYes": "同意チェックボックスあり",
+        "consentNo": "なし",
+        "connected": "接続済み",
+        "notConnected": "未選択",
+        "noLeads": "リードはまだありません",
+        "pick": "選択",
+        "pickFor": "{name} を選択",
+        "stop": "停止",
+        "stopFor": "{name} を停止",
+        "mapFields": "フィールドをマッピング",
+        "mapFieldsFor": "{name} のフィールドをマッピング",
+        "rules": "担当者と商談",
+        "rulesFor": "{name} の担当者と商談",
+        "openSource": "ソースを開く",
+        "openSourceFor": "{name} のリードソースを開く",
+        "pickedToast": "{name} を選択しました",
+        "stoppedToast": "{name} を停止しました",
+        "confirmStop": {
+          "title": "{name} の取り込みを停止しますか？",
+          "body": "このフォームのリードソースと、その下に保存されたリードは削除されます。それらから作成済みのコンタクトは残ります。フォームは後から再び選択できます。",
+          "action": "リードの取り込みを停止",
+          "cancel": "キャンセル"
+        }
+      },
+      "mapping": {
+        "title": "フィールドのマッピング: {name}",
+        "close": "閉じる",
+        "noSource": "このフォームのリードソースが見つかりません。一覧を更新してから、もう一度お試しください。",
+        "loading": "リードソースを読み込み中",
+        "intro": "このフォームの各回答をコンタクトのどのフィールドに入れるか選びます。「自動」のままの質問は、email や phone_number など一般的な名前で探されます。",
+        "suggested": "各質問のタイプをもとに自動で入力しました。確認してから保存してください。",
+        "multiUse": "保存済みのマッピングで、1 つの質問が複数のフィールド（{keys}）に使われていました。保存すると最初のものだけが残ります。",
+        "noQuestions": "Meta がこのフォームの質問を返さなかったため、マッピングするものがありません。一般的な名前は引き続き探されます。",
+        "ignore": "自動（ここではマッピングしない）",
+        "contactFields": "コンタクトフィールド",
+        "contactProperties": "コンタクトプロパティ",
+        "problems": {
+          "duplicateTarget": "別の質問がすでにこのフィールドに割り当てられています。別のフィールドを選んでください。",
+          "propertyKey": "このプロパティキーは無効です。"
+        },
+        "conflict": "他のユーザーがこのリードソースを変更しました。最新の内容を見るには再読み込みしてください。未保存の選択内容は失われます。",
+        "cancel": "キャンセル",
+        "save": "マッピングを保存",
+        "saved": "{name} のフィールドマッピングを保存しました"
+      },
+      "rules": {
+        "title": "担当者と商談: {name}",
+        "close": "閉じる",
+        "noSource": "このフォームのリードソースが見つかりません。一覧を更新してから、もう一度お試しください。",
+        "loading": "リードソースを読み込み中",
+        "intro": "このフォームが作成するコンタクトの担当者、リードごとに商談を作成するかどうか、通知する相手を決めます。変更は、保存後に届くリードに適用されます。",
+        "conflict": "他のユーザーがこのリードソースを変更しました。最新の内容を見るには再読み込みしてください。未保存の変更は失われます。",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "saved": "{name} の担当者と商談を保存しました"
+      },
+      "health": {
+        "title": "Meta リードフォームの状態",
+        "loading": "フォームを確認中",
+        "notConnected": "このソースは Meta リードフォームとの連携が解除されているため、確認する項目がありません。「広告」タブでフォームを選び直してください。",
+        "page": "ページ",
+        "form": "フォーム",
+        "state": "リード同期",
+        "leadAccess": "リードへのアクセス",
+        "lastLead": "最新のリード",
+        "never": "リードはまだありません",
+        "lastError": "最後のエラー:",
+        "fixHint": "修正するには「広告」タブを開き、リードへのアクセスを許可するか、ページを再接続するか、リード同期を再びオンにしてください。",
+        "openAds": "「広告」タブを開く"
       }
     }
   }

@@ -36,6 +36,7 @@ import {
   loginUrl,
   readState,
   webhookAddress,
+  type LoginReturn,
 } from './page-rules';
 import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { PagesRepository, type PageRow } from './pages.repository';
@@ -60,6 +61,15 @@ const NO_PAGES =
 export interface LoginOutcome {
   ok: boolean;
   message: string;
+  /** The screen that started the login, when it was not the hub. */
+  returnTo?: LoginReturn;
+}
+
+/** Options of a login started from another screen: more permissions than the hub asks for, asked again, and where to come back to. */
+export interface StartLoginOptions {
+  extraScopes?: readonly string[];
+  rerequest?: boolean;
+  returnTo?: LoginReturn;
 }
 
 /**
@@ -147,7 +157,7 @@ export class PagesService {
   }
 
   /** The login dialog address. The sealed state names who started it and when, and must come back unchanged. */
-  async startLogin(): Promise<StartConnectResponse> {
+  async startLogin(opts: StartLoginOptions = {}): Promise<StartConnectResponse> {
     const ctx = RequestContextStore.require();
     await this.plan.assertChannel(ctx.orgId);
     const s = this.graph.settings;
@@ -163,6 +173,7 @@ export class PagesService {
         userId: ctx.userId,
         at: Date.now(),
         nonce: randomBytes(12).toString('hex'),
+        ...(opts.returnTo ? { returnTo: opts.returnTo } : {}),
       }),
     );
     return {
@@ -171,8 +182,9 @@ export class PagesService {
         appId: s.appId,
         redirectUri: this.redirectUri(),
         state,
-        scopes: FB_SCOPES,
+        scopes: [...new Set([...FB_SCOPES, ...(opts.extraScopes ?? [])])],
         configId: s.configId,
+        rerequest: opts.rerequest,
       }),
     };
   }
@@ -187,8 +199,11 @@ export class PagesService {
     error?: string;
     errorDescription?: string;
   }): Promise<LoginOutcome> {
-    if (q.error) return { ok: false, message: q.errorDescription || q.error };
     const state = this.openState(q.state);
+    // A refused dialog still says where it started, but only once the sealed state proves it: an unproven one goes to the hub.
+    const returnTo = state?.returnTo;
+    const back = returnTo ? { returnTo } : {};
+    if (q.error) return { ok: false, message: q.errorDescription || q.error, ...back };
     if (!state) {
       return {
         ok: false,
@@ -196,7 +211,7 @@ export class PagesService {
       };
     }
     const code = (q.code ?? '').trim();
-    if (code === '') return { ok: false, message: 'Missing code or workspace.' };
+    if (code === '') return { ok: false, message: 'Missing code or workspace.', ...back };
 
     return RequestContextStore.run(
       {
@@ -211,11 +226,11 @@ export class PagesService {
           await this.plan.assertChannel(state.orgId);
           const user = await this.userToken(code, this.redirectUri());
           const done = await this.storePages(user, 'oauth');
-          return { ok: true, message: done.message };
+          return { ok: true, message: done.message, ...back };
         } catch (err) {
-          if (err instanceof AppError) return { ok: false, message: err.message };
+          if (err instanceof AppError) return { ok: false, message: err.message, ...back };
           this.logger.error({ err }, 'facebook login callback failed');
-          return { ok: false, message: 'Facebook connect failed. Please try again.' };
+          return { ok: false, message: 'Facebook connect failed. Please try again.', ...back };
         }
       },
     );

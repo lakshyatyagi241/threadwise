@@ -144,7 +144,8 @@
       "statusFilter": "상태",
       "statusOpen": "진행 중",
       "statusAll": "모든 상태",
-      "channelFilter": "채널"
+      "channelFilter": "채널",
+      "selectRow": "{name} 선택"
     },
     "status": {
       "received": "수신됨",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "저장된 답변",
-      "savedReplyIssues": "채워지지 않고 그대로 남음 ({count}개): {list}. 보내기 전에 수정하세요."
+      "savedReplyIssues": "채워지지 않고 그대로 남음 ({count}개): {list}. 보내기 전에 수정하세요.",
+      "toolbar": {
+        "label": "메시지 서식",
+        "bold": "굵게",
+        "italic": "기울임",
+        "underline": "밑줄",
+        "strike": "취소선",
+        "bullets": "글머리 기호 목록",
+        "numbers": "번호 목록",
+        "ai": {
+          "open": "스마트 AI 어시스턴트",
+          "noModel": "이 워크스페이스에는 활성화된 AI 모델이 없습니다",
+          "title": "스마트 AI 어시스턴트",
+          "condense": "간결하게",
+          "condenseHint": "글을 더 짧고 간결하게 만듭니다",
+          "fix": "문법 수정",
+          "fixHint": "문법과 맞춤법 오류를 고칩니다",
+          "positive": "긍정적인 어조",
+          "positiveHint": "글을 더 긍정적이고 밝게 만듭니다",
+          "translate": "번역",
+          "translateHint": "다른 언어로 번역합니다",
+          "selectLanguage": "언어 선택",
+          "searchLanguages": "언어 검색…",
+          "noLanguage": "일치하는 언어가 없습니다",
+          "working": "처리 중…",
+          "empty": "먼저 메시지를 작성하세요.",
+          "failed": "AI가 글을 바꾸지 못했습니다. 다시 시도해 주세요."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "메모 및 타임라인",

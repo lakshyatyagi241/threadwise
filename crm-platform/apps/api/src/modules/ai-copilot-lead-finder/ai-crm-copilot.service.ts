@@ -7,6 +7,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { AuditService } from '../../kernel/audit/audit.service';
 import {
   AI_CRM_PROVIDER_PORT,
   type AiCrmProviderPort,
@@ -46,6 +47,7 @@ export class AiCrmCopilotService {
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
     private readonly actions: AiCrmActionsRepository,
+    private readonly audit: AuditService,
     private readonly toolkit: AiCrmToolkitService,
     @Inject(AI_CRM_PROVIDER_PORT) private readonly provider: AiCrmProviderPort,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
@@ -161,9 +163,23 @@ export class AiCrmCopilotService {
 
   async setSettings(enabled: boolean): Promise<AiCrmSettingsResponse> {
     const ctx = RequestContextStore.require();
-    await this.db.tx((tx) =>
-      tx.execute(sql`UPDATE workspace_settings SET wa_copilot_enabled = ${enabled} WHERE org_id = ${ctx.orgId}`),
-    );
+    await this.db.tx(async (tx) => {
+      // Lock the row so the recorded old value is the one this update replaces, even under two concurrent toggles.
+      const before = await tx.execute(
+        sql`SELECT wa_copilot_enabled FROM workspace_settings WHERE org_id = ${ctx.orgId} FOR UPDATE`,
+      );
+      const was = Boolean((before.rows[0] as { wa_copilot_enabled?: boolean } | undefined)?.wa_copilot_enabled);
+      await tx.execute(sql`UPDATE workspace_settings SET wa_copilot_enabled = ${enabled} WHERE org_id = ${ctx.orgId}`);
+      // A toggle that changes nothing is not an event; a real change is recorded with who made it (the audit row carries the actor).
+      if (was !== enabled) {
+        await this.audit.record(tx, {
+          module: 'ai_copilot_settings',
+          recordId: ctx.orgId,
+          action: 'update',
+          delta: { wa_copilot_enabled: { old: was, new: enabled } },
+        });
+      }
+    });
     return { waCopilotEnabled: enabled };
   }
 

@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
+import { FLOW_AI_PORT } from '../../infra/providers/flow-builder-editor/flow-ai.port';
+import { HttpFlowAiAdapter } from '../../infra/providers/flow-builder-editor/http-flow-ai.adapter';
+import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { EmailTemplatesModule } from '../email-templates';
@@ -10,6 +13,8 @@ import { ConversationEventsRepository } from './conversation-events.repository';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
+import { InboxAiController } from './inbox-ai.controller';
+import { InboxAiService } from './inbox-ai.service';
 import { InboxController } from './inbox.controller';
 import { MessageHistoryController } from './message-history.controller';
 import { MessageHistoryService } from './message-history.service';
@@ -44,6 +49,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
  */
 @Module({
   imports: [
+    AiKeysUsageAdminModule,
     ChatConversationsModule,
     ChatChannelProvidersModule,
     CrmModule,
@@ -55,6 +61,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
   // The transfer controller first: `export` and `import` must not be read as a reply id.
   controllers: [
     InboxController,
+    InboxAiController,
     MessageHistoryController,
     InboxTagsController,
     SavedRepliesTransferController,
@@ -84,6 +91,8 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     SavedRepliesTransferService,
     SharedSavedRepliesReader,
     InboxEmailTemplatesService,
+    InboxAiService,
+    { provide: FLOW_AI_PORT, useClass: HttpFlowAiAdapter },
   ],
   exports: [
     ConversationsRepository,

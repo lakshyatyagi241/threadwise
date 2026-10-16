@@ -178,14 +178,6 @@
           "otherHint": "Draag het gesprek over aan een andere flow."
         }
       },
-      "advanced": {
-        "title": "Geavanceerd: gevoeligheid alleen voor deze FAQ",
-        "custom": "Eigen gevoeligheid gebruiken voor deze FAQ",
-        "sliderLabel": "Overeenkomst vanaf",
-        "body": "Standaard gebruikt elke FAQ de gevoeligheid van deze flow. Gebruik een eigen waarde als deze te vaak (verhoog) of te zelden (verlaag) overeenkomt.",
-        "workspace": "De gevoeligheid van deze flow is {value}%.",
-        "following": "Volgt de gevoeligheid van deze flow ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Schrijf de vraag die klanten stellen.",

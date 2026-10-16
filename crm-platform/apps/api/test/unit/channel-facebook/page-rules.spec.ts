@@ -51,6 +51,29 @@ describe('connecting a Page (TW-FB-002, 003)', () => {
     expect(withConfig.searchParams.get('override_default_response_type')).toBe('true');
   });
 
+  it('a re-consent login asks again for permissions Meta already has an answer for', () => {
+    const o = {
+      graphVersion: 'v21.0',
+      appId: '123',
+      redirectUri: 'https://api.test/v2/facebook/callback',
+      state: 'sealed',
+      scopes: ['leads_retrieval'],
+      configId: null,
+    };
+    expect(new URL(loginUrl(o)).searchParams.has('auth_type')).toBe(false);
+    expect(new URL(loginUrl({ ...o, rerequest: true })).searchParams.get('auth_type')).toBe(
+      'rerequest',
+    );
+  });
+
+  it('a state remembers the screen that started the login, and only a screen we know', () => {
+    expect(readState(state({ returnTo: 'lead-sources' }), NOW)?.returnTo).toBe('lead-sources');
+    expect(readState(state({ returnTo: 'https://evil.example' }), NOW)).not.toHaveProperty(
+      'returnTo',
+    );
+    expect(readState(state({}), NOW)).not.toHaveProperty('returnTo');
+  });
+
   it('a state is good only when it parses, is fresh and is not from the future (login-CSRF)', () => {
     expect(readState(state({}), NOW + 1000)).toEqual({
       orgId: 3,

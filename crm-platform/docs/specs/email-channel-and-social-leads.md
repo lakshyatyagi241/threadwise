@@ -217,7 +217,7 @@ The Bigin screenshot hides the work behind a third-party connector. We split it 
 
 **L-05 Field mapping.** Per source (and per Meta form), the admin maps incoming fields to contact fields and custom fields, with sensible defaults (`full_name`, `email`, `phone_number`), phone normalisation with a workspace default country code, and a preview using the last real payload.
 
-**L-06 Meta Lead Ads door.** Using the existing Facebook Page connection and shared Meta app: subscribe the Page to `leadgen`, receive the webhook (signature-verified like the existing Facebook webhook), fetch the lead by id, list forms for the form picker, and ingest through L-01.
+**L-06 Meta Lead Ads door.** _(Built, BL-011: [api/meta-lead-ads.md](../api/meta-lead-ads.md); not yet run against Meta, BL-205.)_ Using the existing Facebook Page connection and shared Meta app: subscribe the Page to `leadgen`, receive the webhook (signature-verified like the existing Facebook webhook), fetch the lead by id, list forms for the form picker, and ingest through L-01.
 
 - Requires adding the leads permission scopes and re-consent for already-connected Pages: pages connected before this feature show "Grant lead access" rather than silently failing.
 - A **reconciliation sweep** re-reads recent leads from the Page so a missed webhook never loses a lead (Meta keeps leads about 90 days).

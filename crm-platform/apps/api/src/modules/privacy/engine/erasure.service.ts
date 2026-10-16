@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { PrivacyErasureLine, PrivacyErasureReport, PrivacyHistoryMode } from '@crm/contracts';
 import { eraseSpec } from '../registry/define';
@@ -92,7 +93,7 @@ export class PersonalDataErasureService {
     mode: PrivacyHistoryMode,
   ): Promise<ErasureRun> {
     const subject = await this.resolver.fromContacts(tx, orgId, contactIds);
-    return this.run(tx, {
+    const run = await this.run(tx, {
       orgId,
       requestId: null,
       subject,
@@ -100,5 +101,11 @@ export class PersonalDataErasureService {
       mode,
       dryRun: false,
     });
+    // The AI scoring log is a records-tier table (kept when a contact is deleted, erased by a data request). Here the person's id,
+    // name and the reasons written about them go; the cost row stays for billing and the cost report.
+    await tx.execute(sql`
+      UPDATE lead_scoring_runs SET contact_id = NULL, contact_name = NULL, reasons = NULL
+      WHERE org_id = ${orgId}::bigint AND contact_id = ANY(${`{${contactIds.join(',')}}`}::bigint[])`);
+    return run;
   }
 }
