@@ -24,11 +24,30 @@ export function AssignMenu({ current, meId, canAssign, busy, onAssign }: AssignM
   const tb = useTranslations('team-inbox-conversations.bulk');
   const [open, setOpen] = useState(false);
   const assignees = useAssignees(open && canAssign);
-  const users = assignees.data?.users ?? [];
+  // Everyone who can take the chat, those online first (then away, busy, offline), each with a dot for how they are right now.
+  const RANK = { online: 0, away: 1, busy: 2, offline: 3 } as const;
+  const users = [...(assignees.data?.users ?? [])].sort(
+    (a, b) => RANK[a.availability] - RANK[b.availability],
+  );
+  const me = users.find((u) => u.id === meId);
   const pick = (userId: string | null) => {
     setOpen(false);
     onAssign({ userId });
   };
+  const DOT = {
+    online: 'bg-success',
+    away: 'bg-warning',
+    busy: 'bg-danger',
+    offline: 'bg-muted-foreground/40',
+  } as const;
+  const dot = (a: keyof typeof DOT) => (
+    <span
+      role="img"
+      aria-label={t(`availability.${a}`)}
+      title={t(`availability.${a}`)}
+      className={`size-2 shrink-0 rounded-full ${DOT[a]}`}
+    />
+  );
   const row =
     'flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-1.5 text-start text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
   return (
@@ -77,7 +96,10 @@ export function AssignMenu({ current, meId, canAssign, busy, onAssign }: AssignM
         <div role="menu" className="max-h-72 space-y-0.5 overflow-y-auto">
           {current?.id !== meId && (
             <button type="button" role="menuitem" className={row} onClick={() => pick(meId)}>
-              {t('assignToMe')}
+              <span className="flex min-w-0 items-center gap-2">
+                {me && dot(me.availability)}
+                <span className="truncate">{t('assignToMe')}</span>
+              </span>
             </button>
           )}
           {canAssign &&
@@ -92,7 +114,10 @@ export function AssignMenu({ current, meId, canAssign, busy, onAssign }: AssignM
                   aria-current={u.id === current?.id ? 'true' : undefined}
                   onClick={() => pick(u.id)}
                 >
-                  <span className="truncate">{u.name ?? u.email}</span>
+                  <span className="flex min-w-0 items-center gap-2">
+                    {dot(u.availability)}
+                    <span className="truncate">{u.name ?? u.email}</span>
+                  </span>
                   <span className="shrink-0 text-xs text-muted-foreground">
                     {t('open', { count: u.openConversations })}
                   </span>

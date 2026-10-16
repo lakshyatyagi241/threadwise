@@ -1,16 +1,20 @@
 'use client';
 
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
-import { memo } from 'react';
-import { cn } from '@crm/ui';
-import type { ConversationSummary } from '@crm/contracts';
+import { memo, useState } from 'react';
+import { Popover, cn } from '@crm/ui';
+import {
+  CONVERSATION_PRIORITIES,
+  type ConversationPriority,
+  type ConversationSummary,
+} from '@crm/contracts';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
 import { TagChip } from './tag-chip';
 import { SlaBadge } from './sla-badge';
 import { Avatar, ChannelTag } from './parts';
-import { PinIcon } from './icons';
+import { FlagIcon, MoreIcon, PinIcon } from './icons';
 
 export interface ConversationRowProps {
   row: ConversationSummary;
@@ -22,6 +26,8 @@ export interface ConversationRowProps {
   selecting?: boolean;
   selected?: boolean;
   onSelect?: (id: string, shift: boolean) => void;
+  /** Present when the caller may change priority: shows the row's three-dot menu. */
+  onPriority?: (row: ConversationSummary, priority: ConversationPriority) => void;
 }
 
 /** True when the last message in the thread went out (so the preview starts with "You:"). */
@@ -46,7 +52,9 @@ export const ConversationRow = memo(function ConversationRow({
   selecting = false,
   selected = false,
   onSelect,
+  onPriority,
 }: ConversationRowProps) {
+  const [menu, setMenu] = useState(false);
   const t = useTranslations('team-inbox-conversations.list');
   const locale = useLocale();
   const timeZone = useTimeZone();
@@ -66,7 +74,7 @@ export const ConversationRow = memo(function ConversationRow({
     .join(', ');
 
   return (
-    <li>
+    <li className="group relative">
       <button
         type="button"
         data-testid="inbox-row"
@@ -209,6 +217,67 @@ export const ConversationRow = memo(function ConversationRow({
           </span>
         </span>
       </button>
+      {onPriority && !selecting && (
+        <div className="absolute end-2 top-8">
+          <button
+            type="button"
+            data-testid="inbox-row-more"
+            aria-haspopup="menu"
+            aria-expanded={menu}
+            aria-label={t('rowMenu', { name: row.title })}
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => setMenu((v) => !v)}
+            className={cn(
+              'grid size-6 place-items-center rounded-md border border-border bg-background text-muted-foreground shadow-sm hover:text-foreground focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary',
+              menu ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 max-md:opacity-100',
+            )}
+          >
+            <MoreIcon className="size-3.5" />
+          </button>
+          <Popover
+            open={menu}
+            onClose={() => setMenu(false)}
+            label={t('priorityMenu')}
+            className="w-40 space-y-0.5 p-1"
+          >
+            <p className="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              {t('priorityMenu')}
+            </p>
+            {CONVERSATION_PRIORITIES.map((p) => (
+              <button
+                key={p}
+                type="button"
+                role="menuitemradio"
+                aria-checked={row.priority === p}
+                data-testid={`inbox-row-priority-${p}`}
+                onClick={() => {
+                  setMenu(false);
+                  onPriority(row, p);
+                }}
+                className={cn(
+                  'flex w-full items-center gap-2 rounded px-2 py-1.5 text-start text-sm hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+                  row.priority === p && 'font-semibold',
+                )}
+              >
+                <FlagIcon
+                  className={cn(
+                    'size-4',
+                    p === 'urgent'
+                      ? 'text-danger'
+                      : p === 'high'
+                        ? 'text-warning'
+                        : p === 'low'
+                          ? 'text-muted-foreground'
+                          : 'text-primary',
+                  )}
+                />
+                <span className="flex-1">{t(`priority.${p}`)}</span>
+                {row.priority === p && <span aria-hidden="true">✓</span>}
+              </button>
+            ))}
+          </Popover>
+        </div>
+      )}
     </li>
   );
 });

@@ -44,9 +44,6 @@
         "unassigned": "Sem atribuição",
         "unread": "Não lidas"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Aberta",
-      "statusAll": "Todos os status",
       "status": {
         "open": "Aberta",
         "pending": "Pendente",
@@ -61,7 +58,6 @@
         "high": "Alta",
         "urgent": "Urgente"
       },
-      "channelFilter": "Canal",
       "allChannels": "Todos os canais",
       "archived": "Arquivadas",
       "backToInbox": "Voltar para a caixa de entrada",
@@ -107,7 +103,48 @@
         }
       },
       "select": "Selecionar",
-      "selectDone": "Concluído"
+      "selectDone": "Concluído",
+      "filters": {
+        "open": "Filtros",
+        "openActive": "Filtros ({count} ativos)",
+        "title": "Filtros",
+        "close": "Fechar",
+        "reset": "Redefinir",
+        "cancel": "Cancelar",
+        "apply": "Aplicar",
+        "status": "Estado do chat",
+        "statusHint": "Sem escolha, aparecem os chats abertos e pendentes.",
+        "conversation": "Conversa",
+        "any": "Qualquer",
+        "assigned": "Atribuída",
+        "unassigned": "Não atribuída",
+        "unattended": "Sem atendimento",
+        "labels": "Tags",
+        "channels": "Canais",
+        "agents": "Agentes",
+        "sortBy": "Ordenar por",
+        "recent": "Recentes",
+        "old": "Antigos",
+        "dateRange": "Intervalo de datas (última atividade)",
+        "from": "De",
+        "to": "Até",
+        "select": "Selecione uma opção",
+        "search": "Pesquisar",
+        "noMatch": "Nenhum resultado",
+        "today": "Hoje",
+        "last7": "Últimos 7 dias",
+        "last30": "Últimos 30 dias",
+        "thisMonth": "Este mês",
+        "clearDates": "Limpar datas",
+        "previousMonth": "Mês anterior",
+        "nextMonth": "Próximo mês"
+      },
+      "rowMenu": "Mais ações para {name}",
+      "priorityMenu": "Prioridade",
+      "statusFilter": "Status",
+      "statusOpen": "Aberta",
+      "statusAll": "Todos os status",
+      "channelFilter": "Canal"
     },
     "status": {
       "received": "Recebida",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "Nova mensagem: {text}",
       "attachment": "um anexo",
       "jumpLatest": "Ir para a mais recente",
-      "jumpLatestNew": "{count, plural, one {# nova mensagem} other {# novas mensagens}}"
+      "jumpLatestNew": "{count, plural, one {# nova mensagem} other {# novas mensagens}}",
+      "searchOpen": "Pesquisar neste chat",
+      "searchPlaceholder": "Pesquisar neste chat",
+      "searchCount": "{current} de {total}",
+      "searchNone": "Nenhum resultado",
+      "searchPrev": "Resultado anterior",
+      "searchNext": "Próximo resultado",
+      "searchClose": "Fechar pesquisa"
     },
     "groupThread": {
       "openGroup": "Abrir grupo",
@@ -454,7 +498,13 @@
         "pickTeam": "Escolha uma equipe para esta conversa",
         "noTeam": "Sem equipe",
         "onLeave": "De licença",
-        "onLeaveUntil": "De licença até {date}"
+        "onLeaveUntil": "De licença até {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Ausente",
+          "busy": "Ocupado",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

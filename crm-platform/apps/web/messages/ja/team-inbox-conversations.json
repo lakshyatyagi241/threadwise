@@ -44,9 +44,6 @@
         "unassigned": "未割り当て",
         "unread": "未読"
       },
-      "statusFilter": "ステータス",
-      "statusOpen": "未対応",
-      "statusAll": "すべてのステータス",
       "status": {
         "open": "未対応",
         "pending": "保留中",
@@ -61,7 +58,6 @@
         "high": "高",
         "urgent": "緊急"
       },
-      "channelFilter": "チャネル",
       "allChannels": "すべてのチャネル",
       "archived": "アーカイブ",
       "backToInbox": "受信箱に戻る",
@@ -107,7 +103,48 @@
         }
       },
       "select": "選択",
-      "selectDone": "完了"
+      "selectDone": "完了",
+      "filters": {
+        "open": "フィルター",
+        "openActive": "フィルター（{count}件オン）",
+        "title": "フィルター",
+        "close": "閉じる",
+        "reset": "リセット",
+        "cancel": "キャンセル",
+        "apply": "適用",
+        "status": "チャットの状態",
+        "statusHint": "何も選ばない場合は、オープンと保留のチャットが表示されます。",
+        "conversation": "会話",
+        "any": "すべて",
+        "assigned": "割り当て済み",
+        "unassigned": "未割り当て",
+        "unattended": "未対応",
+        "labels": "タグ",
+        "channels": "チャネル",
+        "agents": "担当者",
+        "sortBy": "並べ替え",
+        "recent": "新しい順",
+        "old": "古い順",
+        "dateRange": "期間（最終アクティビティ）",
+        "from": "開始日",
+        "to": "終了日",
+        "select": "オプションを選択",
+        "search": "検索",
+        "noMatch": "一致なし",
+        "today": "今日",
+        "last7": "過去7日間",
+        "last30": "過去30日間",
+        "thisMonth": "今月",
+        "clearDates": "日付をクリア",
+        "previousMonth": "前の月",
+        "nextMonth": "次の月"
+      },
+      "rowMenu": "{name} のその他の操作",
+      "priorityMenu": "優先度",
+      "statusFilter": "ステータス",
+      "statusOpen": "未対応",
+      "statusAll": "すべてのステータス",
+      "channelFilter": "チャネル"
     },
     "status": {
       "received": "受信済み",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "新しいメッセージ: {text}",
       "attachment": "添付ファイル",
       "jumpLatest": "最新へ移動",
-      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}"
+      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}",
+      "searchOpen": "このチャット内を検索",
+      "searchPlaceholder": "このチャット内を検索",
+      "searchCount": "{current} / {total}",
+      "searchNone": "一致なし",
+      "searchPrev": "前の一致",
+      "searchNext": "次の一致",
+      "searchClose": "検索を閉じる"
     },
     "groupThread": {
       "openGroup": "グループを開く",
@@ -454,7 +498,13 @@
         "pickTeam": "この会話のチームを選択",
         "noTeam": "チームなし",
         "onLeave": "休暇中",
-        "onLeaveUntil": "{date}まで休暇中"
+        "onLeaveUntil": "{date}まで休暇中",
+        "availability": {
+          "online": "オンライン",
+          "away": "離席中",
+          "busy": "取り込み中",
+          "offline": "オフライン"
+        }
       },
       "presence": {
         "online": "オンライン",

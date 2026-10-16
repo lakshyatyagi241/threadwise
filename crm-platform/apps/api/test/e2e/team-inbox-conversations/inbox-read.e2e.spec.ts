@@ -127,6 +127,47 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     expect(stranger.page.hasMore).toBe(false);
   });
 
+  it('the Filters window: several statuses, Conversation, agents, oldest first and a date range', async () => {
+    expect(new Set(ids(await list(agent.token, '?statuses=resolved,snoozed')))).toEqual(
+      new Set([c.resolved, c.snoozed]),
+    );
+    expect(new Set(ids(await list(agent.token, '?statuses=open,pending')))).toEqual(
+      new Set([c.mine, c.unassigned, c.unread, c.pending, c.other]),
+    );
+    expect((await api.as(agent.token).get('/v2/inbox/conversations?statuses=bogus')).status).toBe(
+      422,
+    );
+    expect(new Set(ids(await list(agent.token, '?assignment=assigned')))).toEqual(
+      new Set([c.mine, c.other]),
+    );
+    expect(new Set(ids(await list(agent.token, '?assignment=unassigned')))).toEqual(
+      new Set([c.unassigned, c.unread, c.pending]),
+    );
+    expect(ids(await list(agent.token, '?assignment=unattended'))).toEqual([c.unread]);
+    const who = await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [agent.userId]);
+    expect(ids(await list(agent.token, `?agentIds=${who.rows[0].uuid}`))).toEqual([c.mine]);
+    expect(
+      new Set(ids(await list(agent.token, `?channelIds=${ch.id},${ch2.id}&status=all`))),
+    ).toEqual(new Set(ids(await list(agent.token, '?status=all'))));
+    expect(ids(await list(agent.token, `?channelIds=${ch2.id}`))).toEqual([c.other]);
+    expect(
+      (await list(agent.token, '?channelIds=0a5c1d92-1f64-4f9b-8a0e-0e8b6f5a77f1')).data,
+    ).toEqual([]);
+    // Oldest activity first is the exact reverse of the default order when nothing is pinned.
+    const recent = ids(await list(agent.token));
+    expect(ids(await list(agent.token, '?sort=old'))).toEqual([...recent].reverse());
+    const page1 = await list(agent.token, '?sort=old&limit=2');
+    const page2 = await list(agent.token, `?sort=old&limit=2&cursor=${page1.page.nextCursor}`);
+    expect([...ids(page1), ...ids(page2)]).toEqual([...recent].reverse().slice(0, 4));
+    // Everything was seeded today: today is in range, a day in the past is not.
+    const today = new Date().toISOString().slice(0, 10);
+    expect(ids(await list(agent.token, `?from=${today}&to=${today}`))).toHaveLength(5);
+    expect(ids(await list(agent.token, '?to=2000-01-01'))).toEqual([]);
+    expect((await api.as(agent.token).get('/v2/inbox/conversations?from=yesterday')).status).toBe(
+      422,
+    );
+  });
+
   it('the archive view shows every archived thread whatever the tab or status, and archived ones stay out of the other views', async () => {
     const a = await list(agent.token, '?archived=true&tab=mine&status=open');
     expect(ids(a)).toEqual([c.archived]);
