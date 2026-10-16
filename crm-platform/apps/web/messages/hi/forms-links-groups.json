@@ -109,6 +109,13 @@
           "title": "पदनाम",
           "language": "भाषा",
           "address": "पتा"
+        },
+        "mapsToPrivacyGroup": "गोपनीयता और सहमति",
+        "mapsToPrivacy": {
+          "age": "आयु (नाबालिग जांच)",
+          "date_of_birth": "जन्म तिथि (नाबालिग जांच)",
+          "consent_marketing": "मार्केटिंग सहमति (व्हॉट्सऐप)",
+          "consent_service": "सेवा समझौता (मार्केटिंग नहीं)"
         }
       },
       "fieldKind": {

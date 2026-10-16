@@ -109,6 +109,13 @@
           "title": "职位",
           "language": "语言",
           "address": "地址"
+        },
+        "mapsToPrivacyGroup": "隐私与同意",
+        "mapsToPrivacy": {
+          "age": "年龄（未成年人检查）",
+          "date_of_birth": "出生日期（未成年人检查）",
+          "consent_marketing": "营销同意（WhatsApp）",
+          "consent_service": "服务协议（非营销）"
         }
       },
       "fieldKind": {

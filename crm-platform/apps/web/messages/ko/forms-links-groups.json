@@ -109,6 +109,13 @@
           "title": "직함",
           "language": "언어",
           "address": "주소"
+        },
+        "mapsToPrivacyGroup": "개인정보 및 동의",
+        "mapsToPrivacy": {
+          "age": "나이(미성년자 확인)",
+          "date_of_birth": "생년월일(미성년자 확인)",
+          "consent_marketing": "마케팅 동의(왔캓앱)",
+          "consent_service": "서비스 동의(마케팅 아님)"
         }
       },
       "fieldKind": {

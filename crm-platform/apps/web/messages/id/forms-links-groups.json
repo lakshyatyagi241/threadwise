@@ -109,6 +109,13 @@
           "title": "Jabatan",
           "language": "Bahasa",
           "address": "Alamat"
+        },
+        "mapsToPrivacyGroup": "Privasi & persetujuan",
+        "mapsToPrivacy": {
+          "age": "Usia (pemeriksaan anak di bawah umur)",
+          "date_of_birth": "Tanggal lahir (pemeriksaan anak di bawah umur)",
+          "consent_marketing": "Persetujuan pemasaran (WhatsApp)",
+          "consent_service": "Perjanjian layanan (bukan pemasaran)"
         }
       },
       "fieldKind": {

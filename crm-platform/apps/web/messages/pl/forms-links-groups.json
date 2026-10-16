@@ -109,6 +109,13 @@
           "title": "Stanowisko",
           "language": "Język",
           "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Prywatność i zgoda",
+        "mapsToPrivacy": {
+          "age": "Wiek (weryfikacja nieletnich)",
+          "date_of_birth": "Data urodzenia (weryfikacja nieletnich)",
+          "consent_marketing": "Zgoda marketingowa (WhatsApp)",
+          "consent_service": "Zgoda na usługę (nie marketing)"
         }
       },
       "fieldKind": {

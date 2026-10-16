@@ -109,6 +109,13 @@
           "title": "Cargo",
           "language": "Idioma",
           "address": "Dirección"
+        },
+        "mapsToPrivacyGroup": "Privacidad y consentimiento",
+        "mapsToPrivacy": {
+          "age": "Edad (verificación de menores)",
+          "date_of_birth": "Fecha de nacimiento (verificación de menores)",
+          "consent_marketing": "Consentimiento de marketing (WhatsApp)",
+          "consent_service": "Acuerdo de servicio (no marketing)"
         }
       },
       "fieldKind": {

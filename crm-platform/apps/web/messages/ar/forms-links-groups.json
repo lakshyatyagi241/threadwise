@@ -109,6 +109,13 @@
           "title": "المسمى الوظيفي",
           "language": "اللغة",
           "address": "العنوان"
+        },
+        "mapsToPrivacyGroup": "الخصوصية والموافقة",
+        "mapsToPrivacy": {
+          "age": "العمر (فحص القاصرين)",
+          "date_of_birth": "تاريخ الميلاد (فحص القاصرين)",
+          "consent_marketing": "موافقة التسويق (واتساب)",
+          "consent_service": "اتفاقية الخدمة (غير تسويقية)"
         }
       },
       "fieldKind": {

@@ -807,6 +807,83 @@ export class ContactsService {
     });
   }
 
+  /**
+   * An automated intake path (not a staff request) already decided the person agreed: a WhatsApp Form field mapped to a consent
+   * privacy key today (TW-WFL net addition), the same role form-submit's own private `subscribe`/`recordServiceAgreement` play for
+   * web forms. `marketing` goes through `ConsentIntakeService` (the canonical intake-grant door) and marks the channel subscribed
+   * if its status was blank, never over an existing one, including unsubscribed; `utility` writes the ledger directly (never a
+   * marketing grant, changes no subscription label, announces no opt-in), matching `recordServiceAgreement`'s own rule. No RBAC
+   * check: the caller already is the automated system that decided the grant is real. Returns whether anything was written.
+   */
+  async grantFromIntake(
+    orgId: number,
+    contactId: number,
+    input: {
+      channel: IntakeChannel;
+      purpose: 'marketing' | 'utility';
+      source: ConsentSource;
+      text?: string;
+      evidence?: Record<string, string | null | undefined>;
+      idempotencyKey: string;
+    },
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const found = await tx.execute(
+        sql`SELECT uuid FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      const row = found.rows[0] as { uuid: string } | undefined;
+      if (!row) return false;
+
+      if (input.purpose === 'utility') {
+        const out = await this.consent.recordInTx(tx, orgId, {
+          contactId,
+          channel: input.channel,
+          purpose: 'utility',
+          action: 'granted',
+          source: input.source,
+          evidence: input.evidence,
+          note: input.text,
+          idempotencyKey: input.idempotencyKey,
+          respectWithdrawn: true,
+        });
+        return out.recorded;
+      }
+
+      const recorded = await this.intake.grant(tx, orgId, {
+        contactId,
+        channels: [input.channel],
+        source: input.source,
+        proof: input.text ? { text: input.text } : undefined,
+        evidence: input.evidence,
+        keyBase: input.idempotencyKey,
+      });
+      if (recorded.length === 0) return false;
+      const column = STATUS_COLUMN[input.channel];
+      const existing = await tx.execute(
+        sql`SELECT ${sql.raw(column)} AS status FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      const status = (existing.rows[0] as { status: string | null } | undefined)?.status;
+      if ((status ?? '').trim()) return true;
+      await tx.execute(
+        sql`UPDATE contacts SET ${sql.raw(column)} = 'subscribed' WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: contactId,
+        action: 'update',
+        delta: { [column]: { old: null, new: 'subscribed' } },
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: MODULE_KEY,
+        aggregateId: contactId,
+        eventType: 'contact.opt_in',
+        payload: { contactId: row.uuid, optedIn: true, action: 'subscribed', source: input.source },
+      });
+      return true;
+    });
+  }
+
   /** One field of a contact as text, for the flow triggers and conditions: an own column or a custom property; null when it is blank. */
   /**
    * A stage change made by the system, not by a person: the guarded automatic mode of the growth pilot, and its undo. The edit's own
