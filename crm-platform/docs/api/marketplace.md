@@ -336,7 +336,7 @@ notification and one email for every workspace admin, deduplicated on the outbox
 `marketplace_renewal_due` (the sentence says what will really happen: the card renews it, it is paid until a date, or it was cancelled and ends), `payment_failed` ->
 `marketplace_payment_failed` (also a push by default), the clock's `lapsed` -> `marketplace_subscription_ended` (an operator's own cancel is not announced again).
 The three types are in `NOTIFICATION_TYPES` and the preferences catalogue (group `billing`); the web translates the row from its data. Email text is English only
-(BL-235).
+(BL-241).
 
 The buyer lands back on the app: `Subscribe` answers `/billing/checkout/<pack>?return=/marketplace/app/<slug>[&period=yearly]`, checkout sends an instant payment there, and
 the payment return (`PaymentsService.handleReturn`) redirects an add-on order of a Marketplace app to `/marketplace/app/<slug>?payment=<outcome>&order=<number>`
@@ -363,7 +363,7 @@ subscribing again at the listing price. A locked subscriber is never told "the p
 
 A coupon already names the add-on that sells an app: `applicablePlans` takes plan **and add-on** slugs, the coupons form's picker lists every add-on by its name ("Quote Pro
 (Marketplace)") and checkout resolves the coupon against the add-on's slug. Verified end to end (`marketplace-recurring.e2e.spec.ts`: a coupon for one app discounts that app's
-quote and is refused on another's). No new restriction field was needed. Not built: a **tax category per app** (BL-233): checkout charges one platform-wide rate
+quote and is refused on another's). No new restriction field was needed. Not built: a **tax category per app** (BL-239): checkout charges one platform-wide rate
 (`pricing.tax_rate`) and `@crm/tax` is the invoicing engine, not checkout's, so a per-app category would be new tax logic that needs the finance owner's rule first.
 
 ### Returning the unused time (BL-077)
@@ -376,7 +376,7 @@ in the refund service's own transaction); the Marketplace only works out the amo
 - `POST /apps/:ref/refund-unused { reason, dryRun (default true), after }`: only for a **killed** app; every paid subscriber is owed the share from the moment the app was withdrawn
   (`killed_at`), 200 subscriptions per call (`next` continues).
   What is owed is the unused share **minus what was already returned on that payment**, never more than is left of it, so running either again returns nothing more. A dry run changes
-  nothing. The kill switch also stops every card renewal first. A credit **note** document is not generated (the refund record is the paper trail; BL-234).
+  nothing. The kill switch also stops every card renewal first. A credit **note** document is not generated (the refund record is the paper trail; BL-240).
 
 ### Apps that own existing plan features (first-party)
 
