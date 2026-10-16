@@ -1,12 +1,16 @@
 import { MERGE_TAG_PATTERN } from '@crm/contracts';
 import {
-  buttonSubType,
   scalarize,
   type ButtonVar,
   type CardVars,
   type SendVars,
   type TemplateShape,
 } from '../../../infra/providers/whatsapp/meta-send-payload';
+import {
+  buttonAddress,
+  kindOfButton,
+  sendKindOf,
+} from '../../../infra/providers/whatsapp/template-vocab';
 
 /** What the builder needs to know about one recipient: how a token resolves, and where stored media lives. */
 export interface VarsContext {
@@ -61,14 +65,28 @@ function buttonVars(
   const out: ButtonVar[] = [];
   buttons.forEach((b, index) => {
     if (!isDict(b)) return;
-    const sub = buttonSubType(String(b.type ?? ''));
+    const sub = sendKindOf(kindOfButton(b));
     if (sub === null) return; // static: no send-time parameter
-    const resolved = String(b.value ?? '').replace(MERGE_TAG_PATTERN, (_m, inner: string) => {
-      const key = inner.trim();
-      // A positional slot is translated through the variable map first; a name is looked up as written.
-      if (/^\d+$/.test(key) && positional[key]) return pull(positional[key]!);
-      return pull(key);
-    });
+    const own = String(b.value ?? '');
+    // Reference keeps the whole address in `value` and sends it resolved. Our own template form (Meta's shape) keeps the address in
+    // `url` and Meta wants only the part that changes: a placeholder that is a field name resolves to that field; a numbered one
+    // (`{{1}}`) is the button's own variable, which only the mapping or an override can fill (else the example goes out).
+    // Meta allows one variable per button, so only the first named placeholder is used.
+    const fromAddress = (): string => {
+      const names = [...buttonAddress(b).matchAll(MERGE_TAG_PATTERN)]
+        .map((m) => (m[1] ?? '').trim())
+        .filter((k) => k !== '' && !/^\d+$/.test(k));
+      return names.length > 0 ? pull(names[0]!) : '';
+    };
+    const resolved =
+      sub === 'url' && own.trim() === ''
+        ? fromAddress()
+        : own.replace(MERGE_TAG_PATTERN, (_m, inner: string) => {
+            const key = inner.trim();
+            // A positional slot is translated through the variable map first; a name is looked up as written.
+            if (/^\d+$/.test(key) && positional[key]) return pull(positional[key]!);
+            return pull(key);
+          });
     // Meta rejects an empty quick-reply payload (#132000); without one it uses the button text.
     if (sub === 'quick_reply' && resolved.trim() === '') return;
     out.push({ index, subType: sub, value: resolved });

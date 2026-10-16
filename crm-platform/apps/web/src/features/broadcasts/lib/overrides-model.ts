@@ -1,4 +1,4 @@
-import { MERGE_TAG_PATTERN, type ComposeTemplate } from '@crm/contracts';
+import { MERGE_TAG_PATTERN, templateButtonKindOf, type ComposeTemplate } from '@crm/contracts';
 import { slotMap } from './compose-model';
 
 /**
@@ -115,26 +115,23 @@ function sectionMeta(
   return { text, slots: raws.length, tokens, defaults: defaultsOf(mapSection) };
 }
 
+/**
+ * What kind of send-time value a stored button takes, in any spelling or case (Meta's `URL`, `QUICK_REPLY`, `FLOW`; Reference's
+ * `visit_website`, `call_phone`). The API decides the same way (`infra/providers/whatsapp/template-vocab.ts`): a link and a code take a
+ * value; a phone, voice call, catalog, flow, OTP or product-list button takes none ('phone' here means "static"); a type nobody knows is
+ * a quick reply, as in Reference.
+ */
 export function buttonKind(type: string): ButtonKind {
-  switch (type.trim().toLowerCase()) {
-    case 'visit_website':
+  switch (templateButtonKindOf(type)) {
     case 'url':
-    case 'cta_url':
       return 'url';
     case 'copy_code':
-    case 'copy_text':
-    case 'coupon_code':
       return 'copy_code';
-    case 'call_phone':
-    case 'call':
-    case 'phone':
-    case 'phone_number':
-    case 'cta_call':
-    case 'voice_call':
-    case 'catalog':
-      return 'phone';
-    default:
+    case 'quick_reply':
+    case 'other':
       return 'quick_reply';
+    default:
+      return 'phone';
   }
 }
 
@@ -155,13 +152,16 @@ export function buildMeta(t: ComposeTemplate): PanelMeta {
   const buttons = (Array.isArray(t.buttons) ? t.buttons : []).flatMap((b, index): ButtonMeta[] => {
     if (typeof b !== 'object' || b === null) return [];
     const o = b as Record<string, unknown>;
-    const kind = buttonKind(String(o.type ?? ''));
+    const kind = buttonKind(String(o.type ?? o.sub_type ?? ''));
+    // Reference keeps a button's value in `value`; our own template form (Meta's shape) keeps a link in `url` and the sample of its
+    // variable in `example`, which is what a blank override sends.
+    const example = Array.isArray(o.example) ? String(o.example[0] ?? '') : String(o.example ?? '');
     return [
       {
         index,
         kind,
         label: String(o.text ?? o.label ?? `Button ${index + 1}`),
-        value: String(o.value ?? ''),
+        value: String(o.value ?? '') || example,
         editable: kind === 'url' || kind === 'copy_code',
       },
     ];

@@ -1,3 +1,8 @@
+import {
+  buttonAddress,
+  buttonPhone,
+  kindOfButton,
+} from '../../infra/providers/whatsapp/template-vocab';
 import { QUICK_REPLY_PREFIX } from './update-rules';
 
 /**
@@ -19,9 +24,6 @@ const dict = (x: unknown): Record<string, unknown> =>
 const text = (x: unknown): string =>
   typeof x === 'string' || typeof x === 'number' ? String(x).trim() : '';
 
-const URL_TYPES = new Set(['url', 'quick_reply_url']);
-const PHONE_TYPES = new Set(['phone_number', 'call', 'phone']);
-
 export function templateButtonsMarkup(buttons: readonly unknown[]): Markup {
   const links: Array<{ text: string; url: string }> = [];
   const quick: string[] = [];
@@ -29,13 +31,14 @@ export function templateButtonsMarkup(buttons: readonly unknown[]): Markup {
 
   for (const raw of buttons) {
     const b = dict(raw);
-    const type = (text(b.type) || text(b.sub_type) || 'quick_reply').toLowerCase();
+    const kind = kindOfButton(b);
     const label = text(b.text) || text(b.title);
     if (label === '') continue;
-    const url = text(b.url);
-    const phone = text(b.phone_number) || text(b.phone);
-    if (URL_TYPES.has(type) && url !== '') links.push({ text: label.slice(0, 64), url });
-    else if (PHONE_TYPES.has(type) && phone !== '') phones.push(`${label}: ${phone}`);
+    // The link and the number in any spelling of the template's buttons (Meta's `url`, Reference's `value`).
+    const url = buttonAddress(b);
+    const phone = buttonPhone(b);
+    if (kind === 'url' && url !== '') links.push({ text: label.slice(0, 64), url });
+    else if (kind === 'phone' && phone !== '') phones.push(`${label}: ${phone}`);
     else quick.push(label.slice(0, 64));
   }
 
