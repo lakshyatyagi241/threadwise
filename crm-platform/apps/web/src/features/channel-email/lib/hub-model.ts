@@ -32,6 +32,13 @@ export const canSync = (m: Pick<MailboxResponse, 'status'>) =>
 export const needsReconnect = (m: Pick<MailboxResponse, 'status'>) =>
   m.status === 'needs_reauth' || m.status === 'disconnected';
 
+/**
+ * Disconnect (what "Remove" calls) revokes the grant and wipes tokens but keeps the row, so a disconnected
+ * mailbox's history stays attached and reconnecting the same address reattaches it. Once already disconnected
+ * there is nothing left for the action to do, so the button is hidden rather than offered and silently no-op.
+ */
+export const canRemove = (m: Pick<MailboxResponse, 'status'>) => m.status !== 'disconnected';
+
 /** Where "Open in inbox" goes: the inbox filtered by this mailbox's channel. Null until the first sync created the channel. */
 export const inboxHref = (m: Pick<MailboxResponse, 'channelId'>): string | null =>
   m.channelId ? `/inbox?channel=${encodeURIComponent(m.channelId)}` : null;
