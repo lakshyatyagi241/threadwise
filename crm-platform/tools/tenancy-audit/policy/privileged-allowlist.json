@@ -24,6 +24,11 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/appointments-booking/bookings-feed.service.ts": {
+    "status": "reviewed",
+    "reason": "public calendar feed (no login): the privileged step only maps the hashed feed token to an org and user, then the request runs in that tenant context with a per-IP and per-token throttle and an RBAC check on appointments read before anything is returned.",
+    "reviewedOn": "2026-10-16"
+  },
   "modules/appointments-booking/calendar-reconcile.jobs.ts": {
     "status": "reviewed",
     "reason": "worker scheduler only (no controller reaches it); the privileged step claims due workspaces from appointment_calendar_connections across tenants and returns only org ids, the pass for each runs under that workspace's own txAs with a per-workspace Redis lock",
@@ -33,6 +38,11 @@
     "status": "reviewed",
     "reason": "the expired-confirmation sweep only (called by the worker, no controller reaches it); the privileged step lists expired google_consent_requests across tenants, each is then ended and its parked grant withdrawn under that row's own txAs. Every request path of the service runs under the caller's tenant transaction",
     "reviewedOn": "2026-10-15"
+  },
+  "modules/appointments-booking/ics-feeds.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker only (queue processor and interval); the privileged step claims due feed refreshes across tenants with a bounded batch and lease, and each refresh runs under its own org context.",
+    "reviewedOn": "2026-10-16"
   },
   "modules/appointments-booking/public-booking.service.ts": {
     "status": "reviewed",
@@ -320,10 +330,20 @@
     "reason": "worker/cron only (no controller reaches it); deletes scoring runs older than the operator-set retention across tenants, no per-row side effects",
     "reviewedOn": "2026-10-14"
   },
+  "modules/leads/lead-first-reply.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (called from the lead first-reply sweep); the privileged steps free abandoned claims and take due rows, and each reply is written under txAs({ orgId }) for that row.",
+    "reviewedOn": "2026-10-16"
+  },
   "modules/leads/lead-retention-sweep.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/leads/lead-sync.worker.ts": {
+    "status": "reviewed",
+    "reason": "worker only (interval); the privileged step requeues stale queued sync runs and fails abandoned ones, changing status only; each requeue carries its own org id.",
+    "reviewedOn": "2026-10-16"
   },
   "modules/marketing-site-cms/cms-store.ts": {
     "status": "reviewed-partial",
@@ -349,6 +369,11 @@
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/meta-lead-ads/lead-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (cron); the privileged step lists the Meta pages due for a sweep, and each page is then processed in its own org context.",
+    "reviewedOn": "2026-10-16"
   },
   "modules/node-bridge-runtime/outbound/catalog-bridge.adapter.ts": {
     "status": "reviewed-fixed",
