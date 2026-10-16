@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Deals",
+        "loading": "Deals laden",
+        "empty": "Nog geen deals voor dit contact.",
+        "unavailable": "Deals zijn niet beschikbaar in je abonnement, of je rol geeft er geen toegang toe.",
+        "listLabel": "Deals van dit contact",
+        "openRollup": "{count, plural, one {# open deal} other {# open deals}}",
+        "wonRollup": "{count, plural, one {# gewonnen deal} other {# gewonnen deals}}",
+        "noValue": "Geen waarde",
+        "capped": "De eerste {count} deals worden getoond. De totalen hierboven gelden voor alle deals.",
+        "pipeline": "Pipeline {name}",
+        "closes": "Verwachte afsluiting {date}",
+        "owner": "Eigenaar {name}",
+        "status": {
+          "open": "Open",
+          "won": "Gewonnen",
+          "lost": "Verloren"
+        }
+      },
+      "conversations": {
+        "title": "Gesprekken",
+        "loading": "Gesprekken laden",
+        "empty": "Geen gesprekken gevonden voor dit contact.",
+        "listLabel": "Gesprekken van dit contact",
+        "unread": "{count, plural, one {# ongelezen bericht} other {# ongelezen berichten}}",
+        "open": "Openen",
+        "openLabel": "Gesprek {title} openen",
+        "noPreview": "Nog geen berichten",
+        "lastMessage": "Laatste bericht {time}",
+        "assignedTo": "Toegewezen aan {name}",
+        "unassigned": "Niet toegewezen",
+        "footnote": "Gevonden op telefoonnummer, e-mailadres of naam van het contact. Gearchiveerde gesprekken worden niet getoond.",
+        "status": {
+          "open": "Open",
+          "pending": "In afwachting",
+          "snoozed": "Uitgesteld",
+          "resolved": "Opgelost",
+          "closed": "Gesloten",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Veldgeschiedenis",
+        "title": "Veldgeschiedenis van contact",
+        "close": "Sluiten",
+        "loading": "Geschiedenis laden",
+        "empty": "Voor dit contact zijn nog geen veldwijzigingen vastgelegd.",
+        "loadMore": "Meer laden",
+        "changedTo": "gewijzigd naar",
+        "noValue": "leeg",
+        "by": "Door {actor}",
+        "actor": {
+          "user": "een gebruiker",
+          "system": "het systeem",
+          "api": "de API"
+        },
+        "fields": {
+          "name": "Naam",
+          "firstName": "Voornaam",
+          "lastName": "Achternaam",
+          "email": "E-mail",
+          "phone": "Telefoon",
+          "companyId": "Bedrijf",
+          "ownerId": "Eigenaar",
+          "lifecycleStage": "Levenscyclusfase",
+          "lifecycleState": "Levenscyclusstatus",
+          "status": "Status",
+          "lostReason": "Reden van verlies",
+          "leadScore": "Leadscore",
+          "source": "Bron",
+          "isUnsubscribed": "Afgemeld"
+        }
+      },
+      "stats": {
+        "title": "Communicatiestatistieken",
+        "loading": "Statistieken laden",
+        "conversations": "Gesprekken",
+        "unread": "Ongelezen berichten",
+        "lastInbound": "Laatst ontvangen bericht",
+        "lastOutbound": "Laatst verzonden bericht",
+        "calls": "Oproepen",
+        "callsAnswered": "Beantwoorde oproepen",
+        "callsMissed": "Gemiste oproepen",
+        "callMinutes": "Belminuten",
+        "openTasks": "Open taken",
+        "leadScore": "Leadscore",
+        "lastActivity": "Laatste activiteit",
+        "created": "Aangemaakt",
+        "none": "Nog geen",
+        "atLeast": "{count}+",
+        "footnote": "De berichtcijfers hebben betrekking op de gesprekken die voor dit contact zijn gevonden (op telefoonnummer, e-mailadres of naam). De oproepcijfers hebben betrekking op het afgelopen jaar en worden gekoppeld op telefoonnummer of naam.",
+        "callsPartial": "Er zijn meer oproepen gevonden dan gelezen konden worden, dus de oproepcijfers kunnen te laag zijn."
+      }
+    }
+  }
+}

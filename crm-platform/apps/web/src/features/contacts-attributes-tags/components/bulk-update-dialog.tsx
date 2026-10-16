@@ -36,6 +36,7 @@ export function BulkUpdateDialog({
   open,
   count,
   ownerOnly = false,
+  focus,
   busy,
   onApply,
   onClose,
@@ -48,6 +49,8 @@ export function BulkUpdateDialog({
    * handed to a new owner (the API moves a whole filter in one request), so the other fields are not offered.
    */
   ownerOnly?: boolean;
+  /** The field to put the cursor on: the selection bar's "Assign owner" and "Change stage" open this dialog on theirs. */
+  focus?: 'owner' | 'stage';
   busy: boolean;
   onApply: (values: BulkUpdateValues) => Promise<boolean>;
   onClose: () => void;
@@ -61,7 +64,14 @@ export function BulkUpdateDialog({
       closeLabel={t('close')}
     >
       {open && (
-        <Form count={count} ownerOnly={ownerOnly} busy={busy} onApply={onApply} onClose={onClose} />
+        <Form
+          count={count}
+          ownerOnly={ownerOnly}
+          focus={focus}
+          busy={busy}
+          onApply={onApply}
+          onClose={onClose}
+        />
       )}
     </Modal>
   );
@@ -70,12 +80,14 @@ export function BulkUpdateDialog({
 function Form({
   count,
   ownerOnly,
+  focus,
   busy,
   onApply,
   onClose,
 }: {
   count: number | null;
   ownerOnly: boolean;
+  focus?: 'owner' | 'stage';
   busy: boolean;
   onApply: (values: BulkUpdateValues) => Promise<boolean>;
   onClose: () => void;
@@ -146,6 +158,7 @@ function Form({
           <Field label={t('stage')} htmlFor={`${uid}-stage`}>
             <Select
               id={`${uid}-stage`}
+              autoFocus={focus === 'stage'}
               value={stage}
               onChange={(e) => {
                 setStage(e.target.value);
@@ -182,7 +195,12 @@ function Form({
         </>
       )}
       <Field label={t('owner')} htmlFor={`${uid}-owner`}>
-        <Select id={`${uid}-owner`} value={owner} onChange={(e) => setOwner(e.target.value)}>
+        <Select
+          id={`${uid}-owner`}
+          autoFocus={focus === 'owner' || (focus === 'stage' && ownerOnly)}
+          value={owner}
+          onChange={(e) => setOwner(e.target.value)}
+        >
           <option value={KEEP}>{t('keep')}</option>
           <option value={UNASSIGN}>{t('unassign')}</option>
           {(owners.data ?? [])

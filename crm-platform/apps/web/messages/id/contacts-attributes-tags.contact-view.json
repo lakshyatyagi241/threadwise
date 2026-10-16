@@ -1,0 +1,179 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Tampilan cepat kontak",
+        "loading": "Memuat kontak...",
+        "notFoundTitle": "Kontak tidak ditemukan",
+        "notFound": "Kontak mungkin sudah dihapus, atau Anda tidak memiliki akses.",
+        "close": "Tutup",
+        "seeAll": "Lihat semua detail",
+        "previous": "Kontak sebelumnya",
+        "next": "Kontak berikutnya",
+        "position": "{index} dari {total}",
+        "rail": "Bagian kontak",
+        "rail_overview": "Ringkasan",
+        "rail_activities": "Aktivitas",
+        "rail_conversations": "Percakapan",
+        "rail_notes": "Catatan",
+        "rail_stats": "Statistik komunikasi",
+        "rail_files": "Berkas",
+        "rail_details": "Properti",
+        "openFull": "Buka di halaman detail"
+      },
+      "actions": {
+        "note": "Catatan",
+        "task": "Tugas",
+        "meeting": "Rapat",
+        "addCompany": "Tambah perusahaan",
+        "changeCompany": "Ganti perusahaan",
+        "channels": "Kirim pesan atau telepon kontak ini",
+        "more": "Tindakan lainnya",
+        "edit": "Edit kontak",
+        "delete": "Hapus kontak",
+        "close": "Tutup",
+        "companyHint": "Pilih perusahaan tempat kontak ini bekerja. Pilih lagi untuk membiarkannya tidak berubah, atau kosongkan untuk menghapus tautan.",
+        "companySaved": "Perusahaan disimpan.",
+        "companyFailed": "Perusahaan tidak dapat disimpan. Coba lagi.",
+        "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
+        "deleteFailed": "Kontak tidak dapat dihapus."
+      },
+      "header": {
+        "jobTitle": "Jabatan",
+        "jobTitlePlaceholder": "Tambah jabatan...",
+        "editJobTitle": "Edit jabatan",
+        "jobTitleConflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
+        "jobTitleFailed": "Jabatan tidak dapat disimpan. Coba lagi.",
+        "leadScore": "Skor prospek",
+        "leadScoreAria": "Skor prospek {score}. Tampilkan detail skor.",
+        "owner": "Pemilik"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Situs web",
+        "open": "Buka profil {network}"
+      },
+      "subscription": {
+        "title": "Status langganan",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "Email",
+          "sms": "SMS"
+        },
+        "yes": "Ya",
+        "no": "Tidak",
+        "optedOut": "Berhenti menerima pesan pemasaran",
+        "optedOutNote": "Kontak ini berhenti menerima pesan pemasaran, jadi semua saluran bernilai Tidak.",
+        "proof": "Bukti setiap persetujuan ada di catatan persetujuan.",
+        "openConsent": "Buka kartu persetujuan"
+      },
+      "score": {
+        "title": "Skor prospek",
+        "details": "Detail skor",
+        "hideDetails": "Sembunyikan detail",
+        "none": "Belum diberi skor",
+        "aria": "Skor prospek {score}, {band}"
+      },
+      "owner": {
+        "title": "Pemilik dan penugasan",
+        "owner": "Pemilik",
+        "tags": "Tag",
+        "groups": "Grup"
+      },
+      "location": {
+        "title": "Lokasi",
+        "address": "Alamat",
+        "country": "Negara",
+        "timeZone": "Zona waktu",
+        "language": "Bahasa"
+      },
+      "compliance": {
+        "title": "Privasi",
+        "optedOut": "Berhenti menerima pemasaran",
+        "allowed": "Pemasaran diizinkan",
+        "noFlags": "Tanpa penanda privasi"
+      },
+      "overview": {
+        "information": "Kontak"
+      },
+      "tabs": {
+        "info": "Informasi kontak",
+        "social": "Media sosial",
+        "source": "Sumber prospek",
+        "custom": "Kolom kustom"
+      },
+      "info": {
+        "firstName": "Nama depan",
+        "lastName": "Nama belakang",
+        "email": "Email",
+        "phone": "Telepon",
+        "fax": "Faks",
+        "company": "Perusahaan",
+        "jobTitle": "Jabatan",
+        "language": "Bahasa",
+        "address": "Alamat",
+        "memo": "Catatan singkat",
+        "contactId": "ID kontak",
+        "createdAt": "Dibuat pada",
+        "lastActivity": "Aktivitas terakhir",
+        "source": "Sumber",
+        "noCustomFields": "Kontak ini belum memiliki nilai kolom kustom.",
+        "noLeadSource": "Belum ada sumber prospek yang tercatat untuk kontak ini.",
+        "dateOfBirth": "Tanggal lahir"
+      },
+      "details": {
+        "title": "Detail kontak",
+        "stage": "Tahap siklus hidup",
+        "otherProperties": "Properti lainnya"
+      },
+      "company": {
+        "title": "Perusahaan",
+        "change": "Ubah",
+        "add": "Tambah perusahaan",
+        "none": "Kontak ini tidak terhubung ke perusahaan."
+      },
+      "sections": {
+        "lead-source": "Sumber prospek"
+      },
+      "nav": {
+        "back": "Kembali ke daftar",
+        "label": "Bagian kontak",
+        "contactDetails": "Detail kontak",
+        "related": "Terkait",
+        "section": {
+          "overview": "Ringkasan",
+          "activities": "Aktivitas",
+          "conversations": "Percakapan",
+          "details": "Detail kontak",
+          "stats": "Statistik komunikasi",
+          "notes": "Catatan",
+          "files": "Berkas",
+          "tasks": "Tugas",
+          "deals": "Transaksi",
+          "appointments": "Janji temu",
+          "sales": "Faktur dan dokumen",
+          "lead-source": "Sumber prospek",
+          "company": "Perusahaan",
+          "consent": "Persetujuan",
+          "history": "Riwayat kolom"
+        }
+      },
+      "stages": {
+        "title": "Siklus hidup",
+        "stages": "Tahap siklus hidup",
+        "status": "Status",
+        "noStatuses": "Tahap ini tidak memiliki status.",
+        "statusChanged": "Status diatur ke {status}.",
+        "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
+        "forbidden": "Anda tidak memiliki izin untuk mengubah kontak ini.",
+        "statusFailed": "Status tidak dapat diubah. Coba lagi."
+      }
+    }
+  }
+}

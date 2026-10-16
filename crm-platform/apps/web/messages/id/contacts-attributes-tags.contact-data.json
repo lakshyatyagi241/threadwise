@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Transaksi",
+        "loading": "Memuat transaksi",
+        "empty": "Belum ada transaksi untuk kontak ini.",
+        "unavailable": "Transaksi tidak tersedia di paket Anda, atau peran Anda tidak mencakup aksesnya.",
+        "listLabel": "Transaksi kontak ini",
+        "openRollup": "{count, plural, other {# transaksi terbuka}}",
+        "wonRollup": "{count, plural, other {# transaksi dimenangkan}}",
+        "noValue": "Tanpa nilai",
+        "capped": "Menampilkan {count} transaksi pertama. Total di atas mencakup semuanya.",
+        "pipeline": "Pipeline {name}",
+        "closes": "Perkiraan penutupan {date}",
+        "owner": "Pemilik {name}",
+        "status": {
+          "open": "Terbuka",
+          "won": "Menang",
+          "lost": "Kalah"
+        }
+      },
+      "conversations": {
+        "title": "Percakapan",
+        "loading": "Memuat percakapan",
+        "empty": "Tidak ada percakapan untuk kontak ini.",
+        "listLabel": "Percakapan kontak ini",
+        "unread": "{count, plural, other {# pesan belum dibaca}}",
+        "open": "Buka",
+        "openLabel": "Buka percakapan {title}",
+        "noPreview": "Belum ada pesan",
+        "lastMessage": "Pesan terakhir {time}",
+        "assignedTo": "Ditugaskan ke {name}",
+        "unassigned": "Belum ditugaskan",
+        "footnote": "Ditemukan berdasarkan nomor telepon, alamat email, atau nama kontak. Percakapan yang diarsipkan tidak ditampilkan.",
+        "status": {
+          "open": "Terbuka",
+          "pending": "Tertunda",
+          "snoozed": "Ditunda",
+          "resolved": "Selesai",
+          "closed": "Ditutup",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Riwayat kolom kontak",
+        "title": "Riwayat kolom kontak",
+        "close": "Tutup",
+        "loading": "Memuat riwayat",
+        "empty": "Belum ada perubahan kolom yang tercatat untuk kontak ini.",
+        "loadMore": "Muat lebih banyak",
+        "changedTo": "diubah menjadi",
+        "noValue": "kosong",
+        "by": "Oleh {actor}",
+        "actor": {
+          "user": "pengguna",
+          "system": "sistem",
+          "api": "API"
+        },
+        "fields": {
+          "name": "Nama lengkap",
+          "firstName": "Nama depan",
+          "lastName": "Nama belakang",
+          "email": "Email",
+          "phone": "Telepon",
+          "companyId": "Perusahaan",
+          "ownerId": "Pemilik",
+          "lifecycleStage": "Tahap siklus hidup",
+          "lifecycleState": "Status siklus hidup",
+          "status": "Status",
+          "lostReason": "Alasan kalah",
+          "leadScore": "Skor prospek",
+          "source": "Sumber",
+          "isUnsubscribed": "Berhenti berlangganan"
+        }
+      },
+      "stats": {
+        "title": "Statistik komunikasi",
+        "loading": "Memuat statistik",
+        "conversations": "Percakapan",
+        "unread": "Pesan belum dibaca",
+        "lastInbound": "Pesan masuk terakhir",
+        "lastOutbound": "Pesan keluar terakhir",
+        "calls": "Panggilan",
+        "callsAnswered": "Panggilan terjawab",
+        "callsMissed": "Panggilan tak terjawab",
+        "callMinutes": "Menit panggilan",
+        "openTasks": "Tugas terbuka",
+        "leadScore": "Skor prospek",
+        "lastActivity": "Aktivitas terakhir",
+        "created": "Dibuat",
+        "none": "Belum ada",
+        "atLeast": "{count}+",
+        "footnote": "Angka pesan mencakup percakapan yang ditemukan untuk kontak ini (berdasarkan nomor telepon, alamat email, atau nama). Angka panggilan mencakup satu tahun terakhir, dicocokkan berdasarkan nomor telepon atau nama.",
+        "callsPartial": "Panggilan yang cocok lebih banyak daripada yang dapat dibaca, sehingga angka panggilan mungkin kurang."
+      }
+    }
+  }
+}

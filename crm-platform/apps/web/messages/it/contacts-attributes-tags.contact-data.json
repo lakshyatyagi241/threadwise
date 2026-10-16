@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Trattative",
+        "loading": "Caricamento delle trattative",
+        "empty": "Questo contatto non ha ancora trattative.",
+        "unavailable": "Le trattative non sono disponibili nel tuo piano oppure il tuo ruolo non include l'accesso.",
+        "listLabel": "Trattative di questo contatto",
+        "openRollup": "{count, plural, one {# trattativa aperta} other {# trattative aperte}}",
+        "wonRollup": "{count, plural, one {# trattativa vinta} other {# trattative vinte}}",
+        "noValue": "Senza valore",
+        "capped": "Vengono mostrate le prime {count} trattative. I totali qui sopra le includono tutte.",
+        "pipeline": "Pipeline {name}",
+        "closes": "Chiusura prevista {date}",
+        "owner": "Responsabile {name}",
+        "status": {
+          "open": "Aperta",
+          "won": "Vinta",
+          "lost": "Persa"
+        }
+      },
+      "conversations": {
+        "title": "Conversazioni",
+        "loading": "Caricamento delle conversazioni",
+        "empty": "Nessuna conversazione trovata per questo contatto.",
+        "listLabel": "Conversazioni di questo contatto",
+        "unread": "{count, plural, one {# messaggio non letto} other {# messaggi non letti}}",
+        "open": "Apri",
+        "openLabel": "Apri la conversazione {title}",
+        "noPreview": "Ancora nessun messaggio",
+        "lastMessage": "Ultimo messaggio {time}",
+        "assignedTo": "Assegnata a {name}",
+        "unassigned": "Non assegnata",
+        "footnote": "Trovate in base a telefono, e-mail o nome del contatto. Le conversazioni archiviate non sono elencate.",
+        "status": {
+          "open": "Aperta",
+          "pending": "In sospeso",
+          "snoozed": "Posticipata",
+          "resolved": "Risolta",
+          "closed": "Chiusa",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Cronologia dei campi del contatto",
+        "title": "Cronologia dei campi del contatto",
+        "close": "Chiudi",
+        "loading": "Caricamento della cronologia",
+        "empty": "Non è ancora stata registrata alcuna modifica ai campi di questo contatto.",
+        "loadMore": "Carica altro",
+        "changedTo": "modificato in",
+        "noValue": "vuoto",
+        "by": "Da {actor}",
+        "actor": {
+          "user": "un utente",
+          "system": "il sistema",
+          "api": "l'API"
+        },
+        "fields": {
+          "name": "Nome",
+          "firstName": "Nome",
+          "lastName": "Cognome",
+          "email": "E-mail",
+          "phone": "Telefono",
+          "companyId": "Azienda",
+          "ownerId": "Responsabile",
+          "lifecycleStage": "Fase del ciclo di vita",
+          "lifecycleState": "Stato del ciclo di vita",
+          "status": "Stato",
+          "lostReason": "Motivo della perdita",
+          "leadScore": "Punteggio del lead",
+          "source": "Origine",
+          "isUnsubscribed": "Disiscritto"
+        }
+      },
+      "stats": {
+        "title": "Statistiche di comunicazione",
+        "loading": "Caricamento delle statistiche",
+        "conversations": "Conversazioni",
+        "unread": "Messaggi non letti",
+        "lastInbound": "Ultimo messaggio ricevuto",
+        "lastOutbound": "Ultimo messaggio inviato",
+        "calls": "Chiamate",
+        "callsAnswered": "Chiamate risposte",
+        "callsMissed": "Chiamate perse",
+        "callMinutes": "Minuti di chiamata",
+        "openTasks": "Attività aperte",
+        "leadScore": "Punteggio del lead",
+        "lastActivity": "Ultima attività",
+        "created": "Creato",
+        "none": "Ancora nessuno",
+        "atLeast": "{count}+",
+        "footnote": "I dati sui messaggi riguardano le conversazioni trovate per questo contatto (per telefono, e-mail o nome). I dati sulle chiamate riguardano l'ultimo anno, in base a telefono o nome.",
+        "callsPartial": "Le chiamate corrispondenti erano più di quelle leggibili, quindi i dati sulle chiamate potrebbero essere parziali."
+      }
+    }
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "תצוגה מהירה של איש קשר",
+        "loading": "טוען איש קשר...",
+        "notFoundTitle": "איש הקשר לא נמצא",
+        "notFound": "ייתכן שנמחק, או שאין לך הרשאת גישה אליו.",
+        "close": "סגור",
+        "seeAll": "הצג את כל הפרטים",
+        "previous": "איש הקשר הקודם",
+        "next": "איש הקשר הבא",
+        "position": "{index} מתוך {total}",
+        "rail": "מקטעי איש קשר",
+        "rail_overview": "סקירה",
+        "rail_activities": "פעילות",
+        "rail_conversations": "שיחות",
+        "rail_notes": "הערות",
+        "rail_stats": "סטטיסטיקות תקשורת",
+        "rail_files": "קבצים",
+        "rail_details": "מאפיינים",
+        "openFull": "פתח בעמוד הפרטים"
+      },
+      "actions": {
+        "note": "הערה",
+        "task": "משימה",
+        "meeting": "פגישה",
+        "addCompany": "הוסף חברה",
+        "changeCompany": "שנה חברה",
+        "channels": "שלח הודעה או התקשר לאיש קשר זה",
+        "more": "פעולות נוספות",
+        "edit": "ערוך איש קשר",
+        "delete": "מחק איש קשר",
+        "close": "סגור",
+        "companyHint": "בחר את החברה שבה איש הקשר עובד. בחירה חוזרת משאירה אותה ללא שינוי, וניקוי מסיר את הקישור.",
+        "companySaved": "החברה נשמרה.",
+        "companyFailed": "לא ניתן היה לשמור את החברה. נסה שוב.",
+        "conflict": "מישהו אחר שינה את איש הקשר קודם. הוא נטען מחדש; נסה שוב.",
+        "deleteFailed": "לא ניתן היה למחוק את איש הקשר."
+      },
+      "header": {
+        "jobTitle": "תפקיד",
+        "jobTitlePlaceholder": "הוסף תפקיד...",
+        "editJobTitle": "ערוך תפקיד",
+        "jobTitleConflict": "מישהו אחר שינה את איש הקשר קודם. הוא נטען מחדש; נסה שוב.",
+        "jobTitleFailed": "לא ניתן היה לשמור את התפקיד. נסה שוב.",
+        "leadScore": "דירוג ליד",
+        "leadScoreAria": "דירוג ליד {score}. הצג את פרטי הדירוג.",
+        "owner": "בעלים"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "אתר",
+        "open": "פתח את הפרופיל ב-{network}"
+      },
+      "subscription": {
+        "title": "סטטוס מנוי",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "אימייל",
+          "sms": "SMS"
+        },
+        "yes": "כן",
+        "no": "לא",
+        "optedOut": "ביטל קבלת הודעות שיווקיות",
+        "optedOutNote": "איש קשר זה ביטל קבלת הודעות שיווקיות, ולכן בכל הערוצים מופיע ״לא״.",
+        "proof": "ההוכחה לכל הסכמה נמצאת ברשומת ההסכמה.",
+        "openConsent": "פתח את כרטיס ההסכמה"
+      },
+      "score": {
+        "title": "דירוג ליד",
+        "details": "פרטי הדירוג",
+        "hideDetails": "הסתר פרטים",
+        "none": "עדיין לא דורג",
+        "aria": "דירוג ליד {score}, {band}"
+      },
+      "owner": {
+        "title": "בעלים והקצאה",
+        "owner": "בעלים",
+        "tags": "תגיות",
+        "groups": "קבוצות"
+      },
+      "location": {
+        "title": "מיקום",
+        "address": "כתובת",
+        "country": "מדינה",
+        "timeZone": "אזור זמן",
+        "language": "שפה"
+      },
+      "compliance": {
+        "title": "פרטיות",
+        "optedOut": "ביטל קבלת הודעות שיווק",
+        "allowed": "שיווק מותר",
+        "noFlags": "אין דגלי פרטיות"
+      },
+      "overview": {
+        "information": "איש קשר"
+      },
+      "tabs": {
+        "info": "פרטי איש קשר",
+        "social": "רשתות חברתיות",
+        "source": "מקור הליד",
+        "custom": "שדות מותאמים אישית"
+      },
+      "info": {
+        "firstName": "שם פרטי",
+        "lastName": "שם משפחה",
+        "email": "אימייל",
+        "phone": "טלפון",
+        "fax": "פקס",
+        "company": "חברה",
+        "jobTitle": "תפקיד",
+        "language": "שפה",
+        "address": "כתובת",
+        "memo": "הערה",
+        "contactId": "מזהה איש קשר",
+        "createdAt": "נוצר ב",
+        "lastActivity": "פעילות אחרונה",
+        "source": "מקור",
+        "noCustomFields": "עדיין אין ערכים בשדות מותאמים אישית לאיש קשר זה.",
+        "noLeadSource": "לא תועד מקור ליד עבור איש קשר זה.",
+        "dateOfBirth": "תאריך לידה"
+      },
+      "details": {
+        "title": "פרטי איש קשר",
+        "stage": "שלב במחזור החיים",
+        "otherProperties": "מאפיינים נוספים"
+      },
+      "company": {
+        "title": "חברה",
+        "change": "שנה",
+        "add": "הוסף חברה",
+        "none": "איש קשר זה אינו מקושר לחברה."
+      },
+      "sections": {
+        "lead-source": "מקור הליד"
+      },
+      "nav": {
+        "back": "חזרה לרשימה",
+        "label": "מקטעי איש קשר",
+        "contactDetails": "פרטי איש קשר",
+        "related": "קשור",
+        "section": {
+          "overview": "סקירה",
+          "activities": "פעילויות",
+          "conversations": "שיחות",
+          "details": "פרטי איש קשר",
+          "stats": "סטטיסטיקות תקשורת",
+          "notes": "הערות",
+          "files": "קבצים",
+          "tasks": "משימות",
+          "deals": "עסקאות",
+          "appointments": "תורים",
+          "sales": "חשבוניות ומסמכים",
+          "lead-source": "מקור הליד",
+          "company": "חברה",
+          "consent": "הסכמה",
+          "history": "היסטוריית שדות"
+        }
+      },
+      "stages": {
+        "title": "מחזור חיים",
+        "stages": "שלב במחזור החיים",
+        "status": "סטטוס",
+        "noStatuses": "לשלב זה אין סטטוסים.",
+        "statusChanged": "הסטטוס הוגדר ל-{status}.",
+        "conflict": "מישהו אחר שינה את איש הקשר קודם. הוא נטען מחדש; נסה שוב.",
+        "forbidden": "אין לך הרשאה לשנות איש קשר זה.",
+        "statusFailed": "לא ניתן היה לשנות את הסטטוס. נסה שוב."
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Deals",
+        "loading": "Loading deals",
+        "empty": "No deals for this contact yet.",
+        "unavailable": "Deals are not available on your plan, or your role does not include access to them.",
+        "listLabel": "Deals of this contact",
+        "openRollup": "{count, plural, one {# open deal} other {# open deals}}",
+        "wonRollup": "{count, plural, one {# won deal} other {# won deals}}",
+        "noValue": "No value",
+        "capped": "Showing the first {count} deals. The totals above cover all of them.",
+        "pipeline": "Pipeline {name}",
+        "closes": "Expected close {date}",
+        "owner": "Owner {name}",
+        "status": {
+          "open": "Open",
+          "won": "Won",
+          "lost": "Lost"
+        }
+      },
+      "conversations": {
+        "title": "Conversations",
+        "loading": "Loading conversations",
+        "empty": "No conversations found for this contact.",
+        "listLabel": "Conversations of this contact",
+        "unread": "{count, plural, one {# unread message} other {# unread messages}}",
+        "open": "Open",
+        "openLabel": "Open the conversation {title}",
+        "noPreview": "No messages yet",
+        "lastMessage": "Last message {time}",
+        "assignedTo": "Assigned to {name}",
+        "unassigned": "Unassigned",
+        "footnote": "Found by the contact's phone number, e-mail address or name. Archived conversations are not listed.",
+        "status": {
+          "open": "Open",
+          "pending": "Pending",
+          "snoozed": "Snoozed",
+          "resolved": "Resolved",
+          "closed": "Closed",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Contact Field History",
+        "title": "Contact Field History",
+        "close": "Close",
+        "loading": "Loading the history",
+        "empty": "No field changes have been recorded for this contact yet.",
+        "loadMore": "Load more",
+        "changedTo": "changed to",
+        "noValue": "empty",
+        "by": "By {actor}",
+        "actor": {
+          "user": "a user",
+          "system": "the system",
+          "api": "the API"
+        },
+        "fields": {
+          "name": "Name",
+          "firstName": "First name",
+          "lastName": "Last name",
+          "email": "Email",
+          "phone": "Phone",
+          "companyId": "Company",
+          "ownerId": "Owner",
+          "lifecycleStage": "Lifecycle stage",
+          "lifecycleState": "Lifecycle state",
+          "status": "Status",
+          "lostReason": "Lost reason",
+          "leadScore": "Lead score",
+          "source": "Source",
+          "isUnsubscribed": "Unsubscribed"
+        }
+      },
+      "stats": {
+        "title": "Communication stats",
+        "loading": "Loading the stats",
+        "conversations": "Conversations",
+        "unread": "Unread messages",
+        "lastInbound": "Last message received",
+        "lastOutbound": "Last message sent",
+        "calls": "Calls",
+        "callsAnswered": "Answered calls",
+        "callsMissed": "Missed calls",
+        "callMinutes": "Call minutes",
+        "openTasks": "Open tasks",
+        "leadScore": "Lead score",
+        "lastActivity": "Last activity",
+        "created": "Created",
+        "none": "None yet",
+        "atLeast": "{count}+",
+        "footnote": "Message figures cover the conversations found for this contact (by phone number, e-mail address or name). Call figures cover the last year, matched by phone number or name.",
+        "callsPartial": "More calls matched than could be read, so the call figures may be short."
+      }
+    }
+  }
+}

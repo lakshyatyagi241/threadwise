@@ -34,7 +34,7 @@ export function ColumnsModal({
       open={open}
       onClose={onClose}
       label={t('modifyColumns')}
-      className="w-[min(40rem,calc(100vw-2rem))] space-y-0 p-4"
+      className="start-0 end-auto z-40 w-[min(40rem,calc(100vw-2rem))] space-y-0 p-4 max-sm:inset-x-0 max-sm:w-auto"
     >
       {open && (
         <Body
