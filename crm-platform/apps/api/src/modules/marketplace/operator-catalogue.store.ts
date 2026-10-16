@@ -324,6 +324,7 @@ export class OperatorCatalogueStore {
       amount: string | null;
       currency: string | null;
       annualAmount: string | null;
+      billingMode: 'one_time' | 'recurring';
       trialDays: number;
       purchasable: boolean;
       includedPlanFeature: string | null;
@@ -337,7 +338,8 @@ export class OperatorCatalogueStore {
     const res = await tx.execute(sql`
       UPDATE marketplace_apps SET
         pricing_model = ${p.model}, price_amount = ${p.amount}::numeric, price_currency = ${p.currency},
-        annual_amount = ${p.annualAmount}::numeric, trial_days = ${p.trialDays}, purchasable = ${p.purchasable},
+        annual_amount = ${p.annualAmount}::numeric, billing_mode = ${p.billingMode}, trial_days = ${p.trialDays},
+        purchasable = ${p.purchasable},
         included_plan_feature = ${p.includedPlanFeature}, included_min_plan = ${p.includedMinPlan},
         grants_plan_features = ${textArray(p.grantsPlanFeatures)}, grandfather_existing = ${p.grandfatherExisting},
         price_changed_at = ${p.priceChanged ? sql`now()` : sql`price_changed_at`}
@@ -359,16 +361,18 @@ export class OperatorCatalogueStore {
       currency: string;
       /** The feature keys the add-on grants: the app's own entitlement key, plus the plan features a first-party app owns. */
       features: string[];
+      /** `recurring`: the add-on is sold as an autopay subscription (`plans.billing_mode`). */
+      billingMode: 'one_time' | 'recurring';
     },
   ): Promise<void> {
     await tx.execute(sql`
       INSERT INTO plans (slug, kind, name, amount, currency, billing_unit, billing_duration, is_free, is_lifetime, is_active, sort_order,
-                         cta_label, limits, features, marketplace_app_id)
+                         cta_label, limits, features, marketplace_app_id, billing_mode)
       VALUES (${p.slug}, 'addon', ${p.name}, ${p.amount}::numeric, ${p.currency}, 'months', 1, false, false, true, 9000,
-              'Subscribe', '{}'::jsonb, ${jsonb(Object.fromEntries(p.features.map((k) => [k, true])))}, ${p.appId})
+              'Subscribe', '{}'::jsonb, ${jsonb(Object.fromEntries(p.features.map((k) => [k, true])))}, ${p.appId}, ${p.billingMode})
       ON CONFLICT (marketplace_app_id) WHERE marketplace_app_id IS NOT NULL DO UPDATE SET
         name = EXCLUDED.name, amount = EXCLUDED.amount, currency = EXCLUDED.currency, is_active = true,
-        features = EXCLUDED.features`);
+        features = EXCLUDED.features, billing_mode = EXCLUDED.billing_mode`);
   }
 
   /** The app is free now: its add-on can no longer be bought. Workspaces that hold it keep it until it ends. */

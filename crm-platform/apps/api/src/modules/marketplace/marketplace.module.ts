@@ -3,6 +3,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { MarketplaceConnectorsModule } from '../../infra/providers/marketplace';
 import { AddonFulfilmentHooks, AddonsExtensionRegistryModule } from '../addons-extension-registry';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { PlatformPaymentGatewaysModule } from '../platform-payment-gateways';
 import { RolesPermissionsModule } from '../roles-permissions';
 import { BrowseRepository } from './browse.repository';
 import { BrowseService } from './browse.service';
@@ -52,6 +53,8 @@ import { SubscriptionsService } from './subscriptions.service';
   imports: [
     AddonsExtensionRegistryModule,
     PlansCoreModule,
+    // The card renewal of an app lives with the payment provider: cancelling a subscription asks the payments domain to end it there.
+    PlatformPaymentGatewaysModule,
     RolesPermissionsModule,
     MarketplaceConnectorsModule,
   ],

@@ -14,6 +14,8 @@ export { AddonEntitlementService } from './addon-entitlement.service';
 export {
   AddonFulfilmentHooks,
   type AddonFulfilmentListener,
+  type AddonTermEvent,
+  type AddonTermEventKind,
   type FulfilledAddon,
 } from './addon-fulfilment-hooks';
 export {
@@ -28,3 +30,4 @@ export {
 } from './extension-token.service';
 export { EngineConnectionService } from './engine-connections.service';
 export { mergeFeature, mergeLimit, type PlanFacts } from './entitlement-merge';
+export { addonLiveSql } from './addon-grants';

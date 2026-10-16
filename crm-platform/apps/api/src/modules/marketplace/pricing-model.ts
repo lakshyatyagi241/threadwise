@@ -6,6 +6,7 @@ import {
   marketPackSlug,
   subscriptionActions,
   type MarketAppPricingModel,
+  type MarketBillingMode,
   type MarketPricingView,
   type MarketSubscription,
   type MarketSubscriptionSource,
@@ -20,6 +21,7 @@ export interface AppPricingRow {
   priceAmount: string | null;
   priceCurrency: string | null;
   annualAmount: string | null;
+  billingMode: MarketBillingMode;
   trialDays: number;
   purchasable: boolean;
   includedPlanFeature: string | null;
@@ -33,7 +35,8 @@ export interface AppPricingRow {
 /** The pricing columns of `marketplace_apps` aliased `a`. */
 export const APP_PRICING_COLUMNS_TEXT = `
   a.pricing_model, a.price_amount::text AS price_amount, a.price_currency, a.annual_amount::text AS annual_amount, a.trial_days,
-  a.purchasable, a.included_plan_feature, a.included_min_plan, a.price_changed_at, a.grants_plan_features, a.grandfather_existing`;
+  a.purchasable, a.included_plan_feature, a.included_min_plan, a.price_changed_at, a.grants_plan_features, a.grandfather_existing,
+  a.billing_mode`;
 export const APP_PRICING_COLUMNS = sql.raw(APP_PRICING_COLUMNS_TEXT);
 
 export function readAppPricing(r: Raw): AppPricingRow {
@@ -42,6 +45,7 @@ export function readAppPricing(r: Raw): AppPricingRow {
     priceAmount: (r.price_amount as string | null | undefined) ?? null,
     priceCurrency: (r.price_currency as string | null | undefined) ?? null,
     annualAmount: (r.annual_amount as string | null | undefined) ?? null,
+    billingMode: r.billing_mode === 'recurring' ? 'recurring' : 'one_time',
     trialDays: Number(r.trial_days ?? 0),
     purchasable: (r.purchasable as boolean | undefined) ?? true,
     includedPlanFeature: (r.included_plan_feature as string | null | undefined) ?? null,
@@ -64,6 +68,7 @@ export function toPricingView(
     amount: p.priceAmount,
     currency: p.priceCurrency,
     annualAmount: p.annualAmount,
+    billingMode: p.billingMode,
     trialDays: p.trialDays,
     purchasable: p.purchasable,
     includedPlanFeature: p.includedPlanFeature,
@@ -98,6 +103,11 @@ export interface SubscriptionRow {
   lapsedAt: Date | null;
   renewals: number;
   compNote: string | null;
+  autorenew: boolean;
+  paymentFailedAt: Date | null;
+  graceEndsAt: Date | null;
+  lastRenewedAt: Date | null;
+  autorenewStoppedAt: Date | null;
 }
 
 /** The subscription columns of `marketplace_subscriptions` aliased `s`, prefixed so they sit beside the app's in one row. */
@@ -105,7 +115,9 @@ export const SUBSCRIPTION_COLUMNS_TEXT = `
   s.org_id AS sub_org_id, s.id AS sub_id, s.uuid AS sub_uuid, s.app_id AS sub_app_id, s.pack_id AS sub_pack_id, s.status AS sub_status,
   s.source AS sub_source, s.cancel_at_period_end AS sub_cancel, s.amount::text AS sub_amount, s.currency AS sub_currency,
   s.started_at AS sub_started, s.current_period_end AS sub_end, s.trial_ends_at AS sub_trial_end, s.canceled_at AS sub_canceled,
-  s.lapsed_at AS sub_lapsed, s.renewals_count AS sub_renewals, s.comp_note AS sub_comp_note`;
+  s.lapsed_at AS sub_lapsed, s.renewals_count AS sub_renewals, s.comp_note AS sub_comp_note,
+  s.autorenew AS sub_autorenew, s.payment_failed_at AS sub_payment_failed, s.grace_ends_at AS sub_grace_ends,
+  s.last_renewed_at AS sub_last_renewed, s.autorenew_stopped_at AS sub_autorenew_stopped`;
 export const SUBSCRIPTION_COLUMNS = sql.raw(SUBSCRIPTION_COLUMNS_TEXT);
 
 /** The subscription of a joined row, or null when the left join found none. */
@@ -129,6 +141,11 @@ export function readSubscription(r: Raw): SubscriptionRow | null {
     lapsedAt: toDate(r.sub_lapsed),
     renewals: Number(r.sub_renewals),
     compNote: (r.sub_comp_note as string | null) ?? null,
+    autorenew: r.sub_autorenew === true,
+    paymentFailedAt: toDate(r.sub_payment_failed),
+    graceEndsAt: toDate(r.sub_grace_ends),
+    lastRenewedAt: toDate(r.sub_last_renewed),
+    autorenewStoppedAt: toDate(r.sub_autorenew_stopped),
   };
 }
 
@@ -158,11 +175,15 @@ export function toSubscriptionView(
       source: sub.source,
       cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
       currentPeriodEnd: sub.currentPeriodEnd,
+      paymentFailedAt: sub.paymentFailedAt,
+      graceEndsAt: sub.graceEndsAt,
     },
     now,
   );
   const daysLeft = sub.currentPeriodEnd ? daysUntil(sub.currentPeriodEnd, now) : null;
   const paid = pricing.pricingModel === 'paid_monthly';
+  // Renewing on its own only while a provider subscription is live and the person has not asked to stop it.
+  const autoRenew = sub.autorenew && !sub.cancelAtPeriodEnd && sub.status === 'active';
   const priceDiffers =
     paid &&
     sub.source === 'purchase' &&
@@ -181,6 +202,12 @@ export function toSubscriptionView(
     renewals: sub.renewals,
     nextAmount: priceDiffers ? pricing.priceAmount : null,
     nextCurrency: priceDiffers ? pricing.priceCurrency : null,
-    actions: subscriptionActions(status, sub.source, daysLeft, onSale(pricing, appStatus, sub)),
+    autoRenew,
+    paymentFailedAt: iso(sub.paymentFailedAt),
+    graceEndsAt: iso(sub.graceEndsAt),
+    actions: subscriptionActions(status, sub.source, daysLeft, onSale(pricing, appStatus, sub), {
+      autopayStopped: sub.autorenewStoppedAt !== null,
+      autoRenewing: autoRenew,
+    }),
   };
 }

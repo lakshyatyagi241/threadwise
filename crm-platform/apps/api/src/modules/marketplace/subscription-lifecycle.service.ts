@@ -1,18 +1,33 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
+import { sql, type SQL } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import type { AddonFulfilmentListener, FulfilledAddon } from '../addons-extension-registry';
+import {
+  addonLiveSql,
+  type AddonFulfilmentListener,
+  type AddonTermEvent,
+  type FulfilledAddon,
+} from '../addons-extension-registry';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { SubscriptionCancelService, type EndReason } from '../platform-payment-gateways';
 import { readAppPricing, APP_PRICING_COLUMNS } from './pricing-model';
 import { PricingAccess } from './pricing-access.service';
 
 type Raw = Record<string, unknown>;
 
 export type SubscriptionEvent =
-  'started' | 'renewed' | 'resubscribed' | 'comped' | 'canceled' | 'resumed' | 'lapsed';
+  | 'started'
+  | 'renewed'
+  | 'resubscribed'
+  | 'comped'
+  | 'canceled'
+  | 'resumed'
+  | 'lapsed'
+  /** The provider reported a failed renewal charge; the app keeps working for the grace days. */
+  | 'payment_failed';
 
 /** Who or what did it, for the audit trail. */
 export type Cause =
@@ -42,6 +57,8 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     private readonly db: DatabaseService,
     private readonly outbox: OutboxService,
     private readonly access: PricingAccess,
+    private readonly plans: PlanEntitlementService,
+    private readonly cancel: SubscriptionCancelService,
   ) {}
 
   // --- a payment arrives --------------------------------------------------------------------------------------------------------------
@@ -63,11 +80,20 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     );
     const pack = packRes.rows[0] as { amount: string; currency: string };
     const end = p.endsAt ? p.endsAt.toISOString() : null;
+    // The card renews it when the order that paid for it started a provider subscription (the buyer cannot opt out of one for a recurring
+    // pack, and a one-time order never does): the page then says "renews on" instead of "paid until".
+    const ord = p.orderId
+      ? await tx.execute(
+          sql`SELECT auto_renew FROM orders WHERE org_id = ${p.orgId} AND id = ${p.orderId}`,
+        )
+      : null;
+    const autorenew = (ord?.rows[0] as { auto_renew: boolean } | undefined)?.auto_renew === true;
 
     const created = await tx.execute(sql`
-      INSERT INTO marketplace_subscriptions (org_id, app_id, pack_id, status, source, amount, currency, started_at, current_period_end)
+      INSERT INTO marketplace_subscriptions
+        (org_id, app_id, pack_id, status, source, amount, currency, started_at, current_period_end, autorenew)
       VALUES (${p.orgId}, ${p.marketplaceAppId}, ${p.packId}, 'active', 'purchase', ${pack.amount}::numeric, ${pack.currency},
-              ${p.startsAt.toISOString()}::timestamptz, ${end}::timestamptz)
+              ${p.startsAt.toISOString()}::timestamptz, ${end}::timestamptz, ${autorenew})
       ON CONFLICT (org_id, app_id) DO NOTHING
       RETURNING id, uuid`);
     let sub = created.rows[0] as { id: string; uuid: string } | undefined;
@@ -95,7 +121,11 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
           comped_by_operator_id = NULL, comp_note = NULL,
           started_at = ${renewed ? sql`started_at` : sql`${p.startsAt.toISOString()}::timestamptz`},
           renewals_count = renewals_count + ${renewed ? 1 : 0},
-          current_period_end = GREATEST(current_period_end, ${end}::timestamptz)
+          current_period_end = GREATEST(current_period_end, ${end}::timestamptz),
+          -- any payment ends a failed-renewal state; an order that started a provider subscription (re)starts the card renewal
+          payment_failed_at = NULL, grace_ends_at = NULL,
+          autorenew = ${autorenew ? sql`true` : sql`(autorenew AND ${renewed})`},
+          autorenew_stopped_at = ${autorenew ? sql`NULL` : sql`autorenew_stopped_at`}
         WHERE org_id = ${p.orgId} AND id = ${sub.id}`);
     }
     await this.note(
@@ -111,9 +141,194 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
         from,
         orderId: p.orderId,
         periodEnd: end,
+        ...(autorenew ? { autorenew: true } : {}),
       },
     );
     await this.resume(tx, p.orgId, p.marketplaceAppId, slug, 'subscription_paid');
+  }
+
+  // --- the provider acts on the card renewal -----------------------------------------------------------------------------------------
+
+  /**
+   * The payment provider's autopay subscription behind the app's add-on changed: the first charge went through, a renewal arrived, a renewal
+   * failed, or the subscription ended. Runs in the payments domain's transaction (a webhook, the reconciler or a cancel), so the ledger
+   * moves with the entitlement. The ledger follows what the add-on says: `current_period_end` is the purchase's own end after the event.
+   */
+  async onTermEvent(tx: Tx, e: AddonTermEvent): Promise<void> {
+    if (e.marketplaceAppId === null) return;
+    const res = await tx.execute(sql`
+      SELECT s.id, s.uuid, s.status, s.source, s.cancel_at_period_end, s.payment_failed_at, a.slug
+      FROM marketplace_subscriptions s JOIN marketplace_apps a ON a.id = s.app_id
+      WHERE s.org_id = ${e.orgId} AND s.app_id = ${e.marketplaceAppId} FOR UPDATE OF s`);
+    const s = res.rows[0] as
+      | {
+          id: string;
+          uuid: string;
+          status: string;
+          source: string;
+          cancel_at_period_end: boolean;
+          payment_failed_at: string | null;
+          slug: string;
+        }
+      | undefined;
+    // No ledger row yet (the add-on was bought before the Marketplace sold it, or never recorded): nothing to follow.
+    if (!s) return;
+    const end = e.endsAt ? e.endsAt.toISOString() : null;
+    const id = Number(s.id);
+    const by: Cause = { by: 'system' };
+
+    switch (e.kind) {
+      case 'activated': {
+        await tx.execute(sql`
+          UPDATE marketplace_subscriptions SET
+            autorenew = (source = 'purchase'), autorenew_stopped_at = NULL,
+            current_period_end = GREATEST(current_period_end, ${end}::timestamptz)
+          WHERE org_id = ${e.orgId} AND id = ${id}`);
+        return;
+      }
+      case 'renewed': {
+        const revived = s.status === 'lapsed';
+        await tx.execute(sql`
+          UPDATE marketplace_subscriptions SET
+            status = 'active', lapsed_at = NULL, autorenew = (source = 'purchase'), autorenew_stopped_at = NULL,
+            current_period_end = GREATEST(current_period_end, ${end}::timestamptz),
+            renewals_count = renewals_count + 1, last_renewed_at = now(),
+            payment_failed_at = NULL, grace_ends_at = NULL
+          WHERE org_id = ${e.orgId} AND id = ${id}`);
+        await this.note(tx, e.orgId, id, s.uuid, s.slug, revived ? 'resubscribed' : 'renewed', by, {
+          source: 'provider',
+          payment: e.paymentId,
+          periodEnd: end,
+          recovered: s.payment_failed_at !== null,
+        });
+        await this.resume(tx, e.orgId, e.marketplaceAppId, s.slug, 'subscription_paid');
+        return;
+      }
+      case 'payment_failed': {
+        // The provider retries and tells us each time: only the first failure of a run starts the clock and tells anyone.
+        if (s.payment_failed_at !== null || s.status === 'lapsed') return;
+        const days = await this.plans.graceDays();
+        await tx.execute(sql`
+          UPDATE marketplace_subscriptions SET
+            payment_failed_at = now(),
+            grace_ends_at = ${days > 0 ? sql`current_period_end + make_interval(days => ${days})` : sql`NULL`}
+          WHERE org_id = ${e.orgId} AND id = ${id}`);
+        await this.note(tx, e.orgId, id, s.uuid, s.slug, 'payment_failed', by, {
+          source: 'provider',
+          payment: e.paymentId,
+          graceDays: days,
+        });
+        return;
+      }
+      case 'ended': {
+        // A newer subscription replaced this one and now owns the ledger: its charge already set autorenew, and this end must not undo it.
+        if (e.reason === 'superseded') return;
+        await tx.execute(sql`
+          UPDATE marketplace_subscriptions SET autorenew = false, autorenew_stopped_at = coalesce(autorenew_stopped_at, now())
+          WHERE org_id = ${e.orgId} AND id = ${id}`);
+        // A person or an operator who asked for this writes the cancellation (with who) itself. When the provider or the mandate's
+        // expiry ended it, nobody did: the app simply will not renew, which is a cancellation at the end of the period paid for.
+        const byProvider = e.reason === 'provider' || e.reason === 'expired';
+        if (byProvider && s.status === 'active' && !s.cancel_at_period_end) {
+          await tx.execute(sql`
+            UPDATE marketplace_subscriptions SET cancel_at_period_end = true, canceled_at = coalesce(canceled_at, now())
+            WHERE org_id = ${e.orgId} AND id = ${id}`);
+          await this.note(tx, e.orgId, id, s.uuid, s.slug, 'canceled', by, {
+            reason: e.reason,
+            periodEnd: end,
+          });
+        }
+        return;
+      }
+    }
+  }
+
+  /**
+   * Ends the card renewal of a workspace's subscription at the payment provider BEFORE the ledger says it will not renew, so a workspace
+   * that cancelled is never charged again. `atCycleEnd`: the provider stops at the end of the period already paid for (the workspace keeps
+   * what it paid for); false stops it now. The provider is asked with no transaction open and must confirm: when it cannot (down, or the
+   * gateway has no cancel), nothing is changed and the caller is told, because saying "cancelled" while the card is still charged is the one
+   * thing this must never do. Returns whether a provider subscription was ended (false: the workspace had none).
+   */
+  async stopCardRenewal(
+    orgId: number,
+    packId: number,
+    opts: {
+      atCycleEnd: boolean;
+      reason: EndReason;
+      actor: { id: number | null; type: string };
+    },
+  ): Promise<boolean> {
+    const ids = await this.db.privileged(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT s.id FROM subscriptions s
+        JOIN workspace_addons a ON a.org_id = s.org_id AND a.id = s.workspace_addon_id
+        WHERE s.org_id = ${orgId} AND s.kind = 'addon' AND s.status IN ('active', 'past_due') AND a.package_id = ${packId}
+        ORDER BY s.id`);
+      return (res.rows as Array<{ id: string }>).map((r) => Number(r.id));
+    });
+    let ended = false;
+    for (const id of ids) {
+      const out = await this.cancel.endOne(orgId, id, {
+        atCycleEnd: opts.atCycleEnd,
+        reason: opts.reason,
+        actor: opts.actor,
+        strict: true,
+      });
+      // null: someone else got there first (a webhook, a second click): it is over, which is what was asked.
+      if (out !== null && !providerStopped(out)) {
+        throw new AppError(
+          ERROR_CODES.MKT_RENEWAL_NOT_STOPPED,
+          'The automatic renewal could not be stopped at the payment provider, so nothing was changed. Try again in a moment.',
+          HttpStatus.BAD_GATEWAY,
+        );
+      }
+      ended = true;
+    }
+    return ended;
+  }
+
+  /**
+   * The app was withdrawn: every card renewal of its subscribers stops at the end of the period they paid for. Returns how many provider
+   * subscriptions could NOT be stopped (the operator must finish them at the provider; they are logged). Never throws for one
+   * subscription: the rest are still stopped.
+   */
+  async stopAllCardRenewals(
+    appId: number,
+    reason: EndReason,
+  ): Promise<{ stopped: number; failed: number }> {
+    const rows = await this.db.privileged(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT s.org_id, s.id FROM subscriptions s
+        JOIN workspace_addons a ON a.org_id = s.org_id AND a.id = s.workspace_addon_id
+        JOIN plans p ON p.id = a.package_id
+        WHERE p.marketplace_app_id = ${appId} AND s.kind = 'addon' AND s.status IN ('active', 'past_due')
+        ORDER BY s.org_id, s.id`);
+      return res.rows as Array<{ org_id: string; id: string }>;
+    });
+    let stopped = 0;
+    let failed = 0;
+    for (const r of rows) {
+      try {
+        const out = await this.cancel.endOne(Number(r.org_id), Number(r.id), {
+          atCycleEnd: true,
+          reason,
+          actor: { id: null, type: 'system' },
+          strict: true,
+        });
+        if (out === null || providerStopped(out)) stopped += 1;
+        else failed += 1;
+      } catch (err) {
+        failed += 1;
+        this.logger.error({ err, subscription: r.id }, 'stopping a card renewal failed');
+      }
+    }
+    if (failed > 0)
+      this.logger.error(
+        { appId, failed },
+        'some card renewals of a withdrawn app were not stopped at the provider',
+      );
+    return { stopped, failed };
   }
 
   // --- the operator -------------------------------------------------------------------------------------------------------------------
@@ -173,6 +388,7 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
         UPDATE marketplace_subscriptions SET
           status = 'active', source = 'comp', cancel_at_period_end = false, canceled_at = NULL, lapsed_at = NULL,
           amount = NULL, currency = NULL, pack_id = ${p.packId},
+          autorenew = false, autorenew_stopped_at = NULL, payment_failed_at = NULL, grace_ends_at = NULL,
           started_at = CASE WHEN status = 'lapsed' THEN now() ELSE started_at END,
           current_period_end = ${end}::timestamptz, comped_by_operator_id = ${p.operatorId}, comp_note = ${p.note}
         WHERE org_id = ${p.orgId} AND id = ${prev.id}`);
@@ -314,11 +530,12 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
    * is no longer lapsed-eligible) and a second sweep finds nothing left to do.
    */
   async sweep(limit = 200): Promise<{ lapsed: number; paused: number }> {
+    const noEntitlement = noEntitlementSql(await this.plans.graceDays());
     const due = await this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
         SELECT s.org_id, s.id, s.app_id, a.uuid AS app_uuid, a.slug, ${APP_PRICING_COLUMNS}
         FROM marketplace_subscriptions s JOIN marketplace_apps a ON a.id = s.app_id
-        WHERE s.status = 'active' AND ${NO_ENTITLEMENT}
+        WHERE s.status = 'active' AND ${noEntitlement}
         ORDER BY s.current_period_end NULLS LAST, s.id
         LIMIT ${limit}`);
       return res.rows as Raw[];
@@ -327,7 +544,7 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     let paused = 0;
     for (const r of due) {
       try {
-        const out = await this.lapseOne(r);
+        const out = await this.lapseOne(r, noEntitlement);
         if (out.lapsed) lapsed += 1;
         if (out.paused) paused += 1;
       } catch (err) {
@@ -337,7 +554,10 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     return { lapsed, paused };
   }
 
-  private async lapseOne(r: Raw): Promise<{ lapsed: boolean; paused: boolean }> {
+  private async lapseOne(
+    r: Raw,
+    noEntitlement: SQL,
+  ): Promise<{ lapsed: boolean; paused: boolean }> {
     const orgId = Number(r.org_id);
     const pricing = readAppPricing(r);
     // Decided before the transaction: a free app, a plan that includes the app, or an override that lets the workspace use it all mean the
@@ -355,7 +575,7 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
     return this.db.privileged(async (tx) => {
       const lock = await tx.execute(sql`
         SELECT s.id, s.uuid, s.app_id FROM marketplace_subscriptions s
-        WHERE s.org_id = ${orgId} AND s.id = ${Number(r.id)} AND s.status = 'active' AND ${NO_ENTITLEMENT}
+        WHERE s.org_id = ${orgId} AND s.id = ${Number(r.id)} AND s.status = 'active' AND ${noEntitlement}
         FOR UPDATE OF s SKIP LOCKED`);
       const s = lock.rows[0] as { id: string; uuid: string; app_id: string } | undefined;
       if (!s) return { lapsed: false, paused: false };
@@ -506,8 +726,15 @@ export class MarketSubscriptionLifecycle implements AddonFulfilmentListener {
   }
 }
 
-/** True when the workspace has no active, unexpired purchase row of the subscription's add-on. The entitlement itself, read in SQL. */
-const NO_ENTITLEMENT = sql`NOT EXISTS (
-  SELECT 1 FROM workspace_addons w
-   WHERE w.org_id = s.org_id AND w.package_id = s.pack_id AND w.status = 'active'
-     AND (w.ends_at IS NULL OR w.ends_at > now()))`;
+/**
+ * True when the workspace has no purchase row of the subscription's add-on that still counts: active and unexpired, or (while the card
+ * renewal is being retried) past its end by less than the grace days. The entitlement itself, read in SQL with the add-ons domain's own
+ * rule (`addonLiveSql`), so the ledger lapses exactly when access does.
+ */
+const noEntitlementSql = (graceDays: number): SQL => sql`NOT EXISTS (
+  SELECT 1 FROM workspace_addons a
+   WHERE a.org_id = s.org_id AND a.package_id = s.pack_id AND ${sql.raw(addonLiveSql(graceDays))})`;
+
+/** The provider no longer charges: it said ok, or there was no provider subscription to stop. */
+const providerStopped = (r: { result: 'ok' | 'failed' | 'unsupported'; reason?: string }): boolean =>
+  r.result === 'ok' || (r.result === 'unsupported' && r.reason === 'no_gateway_subscription_id');

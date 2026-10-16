@@ -45,7 +45,10 @@ const USAGE_PROBES: Record<string, SQL> = {
 
 /** The subscription status a person sees, in SQL: ended, canceling, trialing or comped, active (the same precedence as `deriveSubscriptionStatus`). */
 const DERIVED_STATUS = sql.raw(`
-  CASE WHEN s.status = 'lapsed' OR (s.current_period_end IS NOT NULL AND s.current_period_end <= now()) THEN 'ended'
+  CASE WHEN s.status = 'lapsed' THEN 'ended'
+       WHEN s.payment_failed_at IS NOT NULL THEN
+         CASE WHEN greatest(s.current_period_end, s.grace_ends_at) <= now() THEN 'ended' ELSE 'past_due' END
+       WHEN s.current_period_end IS NOT NULL AND s.current_period_end <= now() THEN 'ended'
        WHEN s.cancel_at_period_end THEN 'canceling'
        WHEN s.source = 'trial' THEN 'trialing'
        WHEN s.source = 'comp' THEN 'comped'
@@ -66,6 +69,9 @@ const toSubscription = (r: Raw): MarketOperatorSubscription => ({
   lapsedAt: iso(r.lapsed_at),
   renewals: Number(r.renewals_count),
   cancelAtPeriodEnd: r.cancel_at_period_end as boolean,
+  autoRenew: r.autorenew === true,
+  paymentFailedAt: iso(r.payment_failed_at),
+  graceEndsAt: iso(r.grace_ends_at),
   compNote: (r.comp_note as string | null) ?? null,
   compBy: (r.comp_by as string | null) ?? null,
 });
@@ -73,6 +79,7 @@ const toSubscription = (r: Raw): MarketOperatorSubscription => ({
 const SUBSCRIPTION_SELECT = sql.raw(`
   s.id, s.uuid, s.org_id, s.source, s.amount::text AS amount, s.currency, s.started_at, s.current_period_end, s.trial_ends_at,
   s.canceled_at, s.lapsed_at, s.renewals_count, s.cancel_at_period_end, s.comp_note, s.started_at::text AS k0,
+  s.autorenew, s.payment_failed_at, s.grace_ends_at,
   a.uuid AS app_uuid, a.slug AS app_slug, a.name AS app_name, o.uuid AS org_uuid, o.name AS org_name, op.full_name AS comp_by`);
 const SUBSCRIPTION_FROM = sql`
   FROM marketplace_subscriptions s
@@ -168,6 +175,7 @@ export class OperatorPricingService {
           amount,
           currency,
           annualAmount: annual,
+          billingMode: paid ? input.billingMode : 'one_time',
           trialDays: paid ? input.trialDays : 0,
           purchasable: input.purchasable,
           includedPlanFeature: paid ? (input.includedPlanFeature ?? null) : null,
@@ -187,6 +195,7 @@ export class OperatorPricingService {
           amount: amount!,
           currency: currency!,
           features: [marketEntitlementKey(app.slug), ...input.grantsPlanFeatures],
+          billingMode: input.billingMode,
         });
       } else if (app.packExists) {
         await this.store.deactivatePack(tx, app.id);
@@ -203,6 +212,7 @@ export class OperatorPricingService {
             amount,
             currency,
             annualAmount: annual,
+            billingMode: paid ? input.billingMode : 'one_time',
             trialDays: paid ? input.trialDays : 0,
             purchasable: input.purchasable,
             includedPlanFeature: paid ? (input.includedPlanFeature ?? null) : null,
@@ -222,6 +232,7 @@ export class OperatorPricingService {
     pricingModel: string;
     priceAmount: string | null;
     priceCurrency: string | null;
+    billingMode: string;
     trialDays: number;
     purchasable: boolean;
     grantsPlanFeatures: string[];
@@ -231,6 +242,7 @@ export class OperatorPricingService {
       model: p.pricingModel,
       amount: p.priceAmount,
       currency: p.priceCurrency,
+      billingMode: p.billingMode,
       trialDays: p.trialDays,
       purchasable: p.purchasable,
     };
@@ -297,6 +309,7 @@ export class OperatorPricingService {
                count(s.id) FILTER (WHERE ${DERIVED_STATUS} = 'trialing')::int AS trialing,
                count(s.id) FILTER (WHERE ${DERIVED_STATUS} = 'comped')::int AS comped,
                count(s.id) FILTER (WHERE ${DERIVED_STATUS} = 'canceling')::int AS canceling,
+               count(s.id) FILTER (WHERE ${DERIVED_STATUS} = 'past_due')::int AS past_due,
                count(s.id) FILTER (WHERE ${DERIVED_STATUS} = 'ended')::int AS ended,
                count(s.id)::int AS total
         FROM marketplace_apps a LEFT JOIN marketplace_subscriptions s ON s.app_id = a.id
@@ -333,6 +346,7 @@ export class OperatorPricingService {
           trialing: Number(a.trialing),
           comped: Number(a.comped),
           canceling: Number(a.canceling),
+          pastDue: Number(a.past_due),
           ended: Number(a.ended),
           total: Number(a.total),
         },
@@ -517,6 +531,19 @@ export class OperatorPricingService {
     input: CancelOperatorSubscriptionInput,
     operatorId: number,
   ): Promise<MarketOperatorSubscription> {
+    // The card renewal is ended at the provider first (now, or at the end of the period already paid for): see `stopCardRenewal`.
+    const live = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT org_id, pack_id FROM marketplace_subscriptions
+        WHERE uuid = ${uuid}::uuid AND autorenew AND status = 'active'`);
+      return res.rows[0] as { org_id: string; pack_id: string } | undefined;
+    });
+    if (live)
+      await this.lifecycle.stopCardRenewal(Number(live.org_id), Number(live.pack_id), {
+        atCycleEnd: !input.immediate,
+        reason: 'operator',
+        actor: { id: operatorId, type: 'platform_operator' },
+      });
     const out = await this.store.tx(async (tx) => {
       const r = await this.lifecycle.cancelByOperator(tx, {
         uuid,

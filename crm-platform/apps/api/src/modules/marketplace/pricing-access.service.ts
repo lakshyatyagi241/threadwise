@@ -141,6 +141,7 @@ export function cardPricing(f: PricingFacts, ev: PricingEvaluation): MarketCardP
     model: f.pricing.pricingModel,
     amount: f.pricing.priceAmount,
     currency: f.pricing.priceCurrency,
+    billingMode: f.pricing.billingMode,
     trialDays: f.pricing.trialDays,
     trialAvailable: trialAvailable({
       model: f.pricing.pricingModel,

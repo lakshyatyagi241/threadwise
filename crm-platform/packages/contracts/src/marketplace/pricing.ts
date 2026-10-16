@@ -19,6 +19,14 @@ export const MARKET_APP_PRICING_MODELS = ['free', 'paid_monthly'] as const;
 export const marketAppPricingModelSchema = z.enum(MARKET_APP_PRICING_MODELS);
 export type MarketAppPricingModel = z.infer<typeof marketAppPricingModelSchema>;
 
+/**
+ * How a paid app renews. `one_time`: a prepaid month, renewed by paying again (the default). `recurring`: the card renews it on its own through
+ * the payment provider's subscription; the operator chooses per listing and the app's add-on carries the choice (`plans.billing_mode`).
+ */
+export const MARKET_BILLING_MODES = ['one_time', 'recurring'] as const;
+export const marketBillingModeSchema = z.enum(MARKET_BILLING_MODES);
+export type MarketBillingMode = z.infer<typeof marketBillingModeSchema>;
+
 export const MARKET_TRIAL_DAYS_MAX = 90;
 
 /** A subscription's source: bought through checkout, the free trial of the listing, or granted by the operator. */
@@ -27,14 +35,16 @@ export const marketSubscriptionSourceSchema = z.enum(MARKET_SUBSCRIPTION_SOURCES
 export type MarketSubscriptionSource = z.infer<typeof marketSubscriptionSourceSchema>;
 
 /**
- * What a subscription is to a person. `canceling`: it will not renew but the paid period still runs. `ended`: the period is over (the
- * installation is paused, its data kept). The stored status is only `active | lapsed`; this is derived by `deriveSubscriptionStatus`.
+ * What a subscription is to a person. `canceling`: it will not renew but the paid period still runs. `past_due`: the card renewal failed and
+ * the app keeps working for the grace days while the provider retries. `ended`: the period (and any grace) is over (the installation is
+ * paused, its data kept). The stored status is only `active | lapsed`; this is derived by `deriveSubscriptionStatus`.
  */
 export const MARKET_SUBSCRIPTION_STATUSES = [
   'active',
   'trialing',
   'comped',
   'canceling',
+  'past_due',
   'ended',
 ] as const;
 export const marketSubscriptionStatusSchema = z.enum(MARKET_SUBSCRIPTION_STATUSES);
@@ -135,6 +145,7 @@ const planSlugSchema = z
 
 interface PricingFields {
   model: MarketAppPricingModel;
+  billingMode?: MarketBillingMode;
   amount?: string | null;
   currency?: string | null;
   annualAmount?: string | null;
@@ -164,6 +175,8 @@ export function pricingIssues(p: PricingFields): Array<{ path: string; message: 
         issues.push({ path, message: 'A free app has no price or inclusion rule.' });
     if ((p.trialDays ?? 0) !== 0)
       issues.push({ path: 'trialDays', message: 'A free app has no trial.' });
+    if (p.billingMode === 'recurring')
+      issues.push({ path: 'billingMode', message: 'A free app has nothing to renew.' });
     if ((p.grantsPlanFeatures?.length ?? 0) > 0)
       issues.push({ path: 'grantsPlanFeatures', message: 'Only a paid app grants plan features.' });
     if (p.grandfatherExisting)
@@ -226,6 +239,8 @@ export const setMarketPricingSchema = z
     currency: currencySchema.nullable().optional(),
     /** Stored and shown to the operator; there is no annual checkout yet. */
     annualAmount: moneySchema.nullable().optional(),
+    /** `recurring`: the card renews the app on its own. Applies to NEW subscriptions; one already running keeps the way it was bought. */
+    billingMode: marketBillingModeSchema.default('one_time'),
     trialDays: z.number().int().min(0).max(MARKET_TRIAL_DAYS_MAX).default(0),
     /** Off: no NEW subscriptions (workspaces that already subscribe may keep renewing). */
     purchasable: z.boolean().default(true),
@@ -255,6 +270,7 @@ export const marketPricingViewSchema = z.object({
   amount: z.string().nullable(),
   currency: z.string().nullable(),
   annualAmount: z.string().nullable(),
+  billingMode: marketBillingModeSchema,
   trialDays: z.number().int(),
   purchasable: z.boolean(),
   includedPlanFeature: z.string().nullable(),
@@ -272,6 +288,7 @@ export const FREE_PRICING: MarketPricingView = {
   amount: null,
   currency: null,
   annualAmount: null,
+  billingMode: 'one_time',
   trialDays: 0,
   purchasable: true,
   includedPlanFeature: null,
@@ -288,6 +305,8 @@ export const marketCardPricingSchema = z.object({
   /** Per month, major units. */
   amount: z.string().nullable(),
   currency: z.string().nullable(),
+  /** How the app renews: the card does it (`recurring`) or the workspace pays again (`one_time`). */
+  billingMode: marketBillingModeSchema.optional(),
   trialDays: z.number().int(),
   /** The workspace may start the free trial now (the app offers one and the workspace has never had a subscription to it). */
   trialAvailable: z.boolean(),
@@ -376,17 +395,28 @@ export interface SubscriptionFacts {
   source: MarketSubscriptionSource;
   cancelAtPeriodEnd: boolean;
   currentPeriodEnd: Date | null;
+  /** The provider reported a failed renewal charge that has not recovered. */
+  paymentFailedAt?: Date | null;
+  /** Until when the app keeps working after that failure (the end of the paid period plus the grace days). */
+  graceEndsAt?: Date | null;
 }
 
 /**
  * The status a person sees. A period that has run out is `ended` even before the sweep has recorded it, so no page ever shows a lapsed
- * subscription as active. Precedence: ended, canceling, trialing or comped, active.
+ * subscription as active. A failed card renewal is `past_due` while the paid period or its grace days still run (the app keeps working)
+ * and `ended` after. Precedence: ended, past_due, canceling, trialing or comped, active.
  */
 export function deriveSubscriptionStatus(
   f: SubscriptionFacts,
   now: Date,
 ): MarketSubscriptionStatus {
   if (f.status === 'lapsed') return 'ended';
+  if (f.paymentFailedAt) {
+    const ends = [f.currentPeriodEnd, f.graceEndsAt ?? null]
+      .filter((d): d is Date => d !== null)
+      .map((d) => d.getTime());
+    return ends.length > 0 && Math.max(...ends) <= now.getTime() ? 'ended' : 'past_due';
+  }
   if (f.currentPeriodEnd !== null && f.currentPeriodEnd.getTime() <= now.getTime()) return 'ended';
   if (f.cancelAtPeriodEnd) return 'canceling';
   if (f.source === 'trial') return 'trialing';
@@ -403,21 +433,32 @@ export interface SubscriptionActions {
   canRenew: boolean;
 }
 
-/** What the manage page offers. `daysLeft` is null for a subscription with no end. */
+/**
+ * What the manage page offers. `daysLeft` is null for a subscription with no end.
+ *  autopayStopped  the card renewal of this subscription was ended at the provider (a provider subscription cannot be revived), so a
+ *                  cancellation cannot be taken back: the person pays again instead (`canRenew`, which then opens at any time before the end).
+ *  autoRenewing    the card is going to renew it: there is nothing to renew by hand (paying again would start a second subscription).
+ * A failed card renewal (`past_due`) offers paying now.
+ */
 export function subscriptionActions(
   status: MarketSubscriptionStatus,
   source: MarketSubscriptionSource,
   daysLeft: number | null,
   onSale: boolean,
+  opts: { autopayStopped?: boolean; autoRenewing?: boolean } = {},
 ): SubscriptionActions {
   const live = status !== 'ended';
+  const stopped = opts.autopayStopped === true;
   return {
     canCancel: live && status !== 'canceling' && source !== 'comp',
-    canResume: status === 'canceling' && source !== 'comp',
+    canResume: status === 'canceling' && source !== 'comp' && !stopped,
     canRenew:
       onSale &&
       source !== 'comp' &&
-      (status === 'ended' || (daysLeft !== null && daysLeft <= MARKET_RENEW_NUDGE_DAYS)),
+      (status === 'ended' ||
+        status === 'past_due' ||
+        (status === 'canceling' && stopped) ||
+        (opts.autoRenewing !== true && daysLeft !== null && daysLeft <= MARKET_RENEW_NUDGE_DAYS)),
   };
 }
 
@@ -483,6 +524,11 @@ export const marketSubscriptionSchema = z.object({
   /** The listing's price now, when it differs from `amount`: what the next payment will be. */
   nextAmount: z.string().nullable(),
   nextCurrency: z.string().nullable(),
+  /** The card renews it on its own at the end of the period: the page says "renews on" (otherwise "paid until"). */
+  autoRenew: z.boolean(),
+  /** The card renewal failed; the app keeps working until `graceEndsAt` while the provider retries. Null when nothing is wrong. */
+  paymentFailedAt: z.string().datetime().nullable(),
+  graceEndsAt: z.string().datetime().nullable(),
   actions: z.object({ canCancel: z.boolean(), canResume: z.boolean(), canRenew: z.boolean() }),
 });
 export type MarketSubscription = z.infer<typeof marketSubscriptionSchema>;
@@ -595,6 +641,9 @@ export const marketOperatorSubscriptionSchema = z.object({
   lapsedAt: z.string().datetime().nullable(),
   renewals: z.number().int(),
   cancelAtPeriodEnd: z.boolean(),
+  autoRenew: z.boolean(),
+  paymentFailedAt: z.string().datetime().nullable(),
+  graceEndsAt: z.string().datetime().nullable(),
   compNote: z.string().nullable(),
   compBy: z.string().nullable(),
 });
@@ -638,6 +687,7 @@ export const marketSubscriptionSummaryRowSchema = z.object({
     trialing: z.number().int(),
     comped: z.number().int(),
     canceling: z.number().int(),
+    pastDue: z.number().int(),
     ended: z.number().int(),
     total: z.number().int(),
   }),

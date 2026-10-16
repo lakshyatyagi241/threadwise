@@ -106,6 +106,8 @@ export const marketplaceApps = pgTable(
       .default(sql`'{}'::text[]`),
     /** The operator may comp the workspaces that already have the granted features (an explicit action). */
     grandfatherExisting: boolean('grandfather_existing').notNull().default(false),
+    /** `recurring`: the card renews the app on its own (the app's add-on is an autopay pack); `one_time`: a prepaid month, renewed by paying again. */
+    billingMode: text('billing_mode').$type<'one_time' | 'recurring'>().notNull().default('one_time'),
     createdByOperatorId: idColumn('created_by_operator_id').references(() => platformOperators.id, {
       onDelete: 'set null',
     }),
@@ -123,6 +125,11 @@ export const marketplaceApps = pgTable(
       sql`(${t.pricingModel} = 'free' and ${t.priceAmount} is null and ${t.priceCurrency} is null and ${t.annualAmount} is null and ${t.trialDays} = 0 and ${t.includedPlanFeature} is null and ${t.includedMinPlan} is null and cardinality(${t.grantsPlanFeatures}) = 0 and not ${t.grandfatherExisting}) or (${t.pricingModel} = 'paid_monthly' and ((${t.priceAmount} > 0 and ${t.priceCurrency} ~ '^[A-Z]{3}$') or (${t.status} in ('draft', 'in_review') and ${t.priceAmount} is null and ${t.priceCurrency} is null)) and (${t.annualAmount} is null or ${t.annualAmount} > 0))`,
     ),
     check('chk_marketplace_apps_trial_days', sql`${t.trialDays} between 0 and 90`),
+    check('chk_marketplace_apps_billing_mode', sql`${t.billingMode} in ('one_time', 'recurring')`),
+    check(
+      'chk_marketplace_apps_recurring_paid',
+      sql`${t.billingMode} = 'one_time' or ${t.pricingModel} = 'paid_monthly'`,
+    ),
     index('idx_marketplace_apps_browse').on(t.kind, t.categoryId, t.status),
     index('idx_marketplace_apps_published_at')
       .on(t.publishedAt, t.id)
@@ -583,6 +590,15 @@ export const marketplaceSubscriptions = pgTable(
     canceledAt: timestamp('canceled_at', { withTimezone: true }),
     lapsedAt: timestamp('lapsed_at', { withTimezone: true }),
     renewalsCount: integer('renewals_count').notNull().default(0),
+    /** A live provider subscription will charge this one again; cleared when it ends for any reason (20261222090000). */
+    autorenew: boolean('autorenew').notNull().default(false),
+    /** The provider reported a failed renewal charge and has not recovered; `graceEndsAt` is when the app stops working if it does not. */
+    paymentFailedAt: timestamp('payment_failed_at', { withTimezone: true }),
+    graceEndsAt: timestamp('grace_ends_at', { withTimezone: true }),
+    /** The last renewal the provider made (a manual renewal does not set it). */
+    lastRenewedAt: timestamp('last_renewed_at', { withTimezone: true }),
+    /** The provider subscription was ended while the app was still paid; a cancellation cannot be taken back. Cleared when a new autopay starts. */
+    autorenewStoppedAt: timestamp('autorenew_stopped_at', { withTimezone: true }),
     compedByOperatorId: idColumn('comped_by_operator_id').references(() => platformOperators.id, {
       onDelete: 'set null',
     }),
@@ -609,6 +625,14 @@ export const marketplaceSubscriptions = pgTable(
       .on(t.currentPeriodEnd)
       .where(sql`${t.status} = 'active'`),
     check('chk_marketplace_subscriptions_status', sql`${t.status} in ('active', 'lapsed')`),
+    check(
+      'chk_marketplace_subscriptions_grace',
+      sql`${t.graceEndsAt} is null or ${t.paymentFailedAt} is not null`,
+    ),
+    check(
+      'chk_marketplace_subscriptions_autorenew',
+      sql`not ${t.autorenew} or ${t.source} = 'purchase'`,
+    ),
     check(
       'chk_marketplace_subscriptions_source',
       sql`${t.source} in ('purchase', 'trial', 'comp')`,
