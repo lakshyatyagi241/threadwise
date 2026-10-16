@@ -10,6 +10,7 @@
       "intro": "Bir WeChat Resmi Hesabı (onaylı Hizmet Hesabı) bağlayın. Gelen mesajlar ortak Ekip Gelen Kutusu’na düşer; yanıtlar, anahtar kelime kuralları ve otomatik yanıtlayıcılar diğer tüm kanallarla aynı şekilde çalışır.",
       "broadcasts": "Toplu mesajlar",
       "loadError": "WeChat kanallarınız yüklenemedi.",
+      "unavailableCountry": "WeChat ülkenizde kullanılamıyor. Bu çalışma alanından WeChat kanalı bağlayamaz ya da WeChat mesajı gönderemezsiniz.",
       "connectTitle": "Kanal bağla",
       "connectBody": "AppID, AppSecret ve sunucu Token’ını WeChat Official Accounts Platform’dan (Ayarlar → Temel Yapılandırma) yapıştırın.",
       "connect": "WeChat’i bağla",

@@ -22,6 +22,7 @@ import {
   type WechatUploadType,
 } from '../../infra/providers/channel-wechat/wechat.port';
 import { ChannelsRepository } from './channels.repository';
+import { WechatAvailabilityService } from './wechat-availability.service';
 import { WechatTokenService } from './wechat-token.service';
 import { WINDOW_HOURS, clipText } from './wechat-rules';
 
@@ -93,6 +94,7 @@ export class WechatChannelAdapter implements ChannelAdapter {
     private readonly db: DatabaseService,
     private readonly channels: ChannelsRepository,
     private readonly tokens: WechatTokenService,
+    private readonly availability: WechatAvailabilityService,
     @Inject(WECHAT_API) private readonly wechat: WechatApi,
     /** Present where files are handled (the worker sends them). */
     @Optional() private readonly media?: ChatMediaStore,
@@ -121,11 +123,20 @@ export class WechatChannelAdapter implements ChannelAdapter {
   /** The account that carried the thread must still be connected and switched on. */
   private async connectedRow(channel: ChannelRuntime): Promise<number> {
     const id = this.rowId(channel);
-    const row = await this.db.txAs({ orgId: channel.orgId }, (tx) =>
-      this.channels.findById(tx, channel.orgId, id),
-    );
+    const { row, availability } = await this.db.txAs({ orgId: channel.orgId }, async (tx) => ({
+      row: await this.channels.findById(tx, channel.orgId, id),
+      availability: await this.availability.forOrg(tx, channel.orgId),
+    }));
     if (!row?.active) {
       throw new ChannelError('CHANNEL_DISCONNECTED', 'WeChat channel not connected', false);
+    }
+    // A workspace in a blocked country sends nothing, even on a channel that was connected before the rule.
+    if (!availability.available) {
+      throw new ChannelError(
+        'CHANNEL_UNAVAILABLE',
+        'WeChat is not available in your country',
+        false,
+      );
     }
     return id;
   }

@@ -10,6 +10,7 @@
       "intro": "Połącz Konto oficjalne WeChat (certyfikowane Konto usługowe). Wiadomości przychodzące trafiają do wspólnej skrzynki zespołu, a odpowiedzi, reguły słów kluczowych i autorespondery działają dokładnie tak jak w każdym innym kanale.",
       "broadcasts": "Broadcasty",
       "loadError": "Nie udało się wczytać Twoich kanałów WeChat.",
+      "unavailableCountry": "WeChat nie jest dostępny w Twoim kraju. W tym obszarze roboczym nie można połączyć kanału WeChat ani wysyłać wiadomości WeChat.",
       "connectTitle": "Połącz kanał",
       "connectBody": "Wklej AppID, AppSecret i Token serwera z platformy WeChat Official Accounts (Ustawienia → Konfiguracja podstawowa).",
       "connect": "Połącz WeChat",

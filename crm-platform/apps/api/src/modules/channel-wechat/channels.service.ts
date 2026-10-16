@@ -18,6 +18,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { ChatInboxIngest } from './chat-inbox-ingest';
+import { WechatAvailabilityService } from './wechat-availability.service';
 import { WechatTokenService } from './wechat-token.service';
 import { clipError, randomToken, tokenLifetimeSeconds, webhookUrl } from './wechat-rules';
 
@@ -44,6 +45,7 @@ export class ChannelsService {
     @Inject(WECHAT_API) private readonly wechat: WechatApi,
     private readonly tokens: WechatTokenService,
     private readonly inbox: ChatInboxIngest,
+    private readonly availability: WechatAvailabilityService,
   ) {}
 
   private url(row: ChannelRow): string {
@@ -79,14 +81,21 @@ export class ChannelsService {
 
   async list(): Promise<WechatChannelList> {
     const { orgId } = RequestContextStore.require();
-    const rows = await this.db.tx((tx) => this.repo.list(tx, orgId));
-    return { data: rows.map((r) => this.toResponse(r)) };
+    const { rows, availability } = await this.db.tx(async (tx) => ({
+      rows: await this.repo.list(tx, orgId),
+      availability: await this.availability.forOrg(tx, orgId),
+    }));
+    return { data: rows.map((r) => this.toResponse(r)), availability };
   }
 
   async connect(input: ConnectWechatChannelInput): Promise<WechatChannel> {
     const ctx = RequestContextStore.require();
     const appId = input.appId.trim();
     const appSecret = input.appSecret.trim();
+
+    // Refused before WeChat is called: a workspace in a blocked country never gets its credentials stored or checked.
+    const availability = await this.db.tx((tx) => this.availability.forOrg(tx, ctx.orgId));
+    if (!availability.available) throw WechatAvailabilityService.refused();
 
     // WeChat proves the credentials before anything is saved: a call to the provider never holds a transaction open.
     const fetched = await this.wechat.fetchAccessToken(appId, appSecret);
