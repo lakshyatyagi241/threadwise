@@ -2,6 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import {
+  collectConditions,
+  isCompanySegmentField,
   ERROR_CODES,
   SEGMENT_COUNT_TTL_MS,
   SEGMENT_PREVIEW_SAMPLE,
@@ -427,6 +429,7 @@ export class SegmentsService {
     await this.throttle.check('preview', ctx.orgId, ctx.userId);
     return this.db.tx(async (tx) => {
       const rules = input.rules as unknown as SegmentGroup;
+      this.assertCompanyFieldsReadable(rules);
       const rc = await loadRuleContext(tx, ctx.orgId, collectRuleRefs(rules));
       const compiled = compileRules(ctx.orgId, rules, rc);
       const scopeSql = contactScopeCondition(ctx.orgId, scope, ctx.userId);
@@ -630,8 +633,24 @@ export class SegmentsService {
     return loadRuleContext(tx, orgId, refs);
   }
 
+  /**
+   * A rule on a company property reads the company of every contact it matches: the caller must be able to read companies. Checked when
+   * rules are saved or previewed (a segment already saved keeps working for the senders that use it).
+   */
+  private assertCompanyFieldsReadable(rules: SegmentGroup): void {
+    const ctx = RequestContextStore.require();
+    if (!ctx.grants) return;
+    const usesCompany = collectConditions(rules).some(({ condition }) =>
+      isCompanySegmentField(condition.field),
+    );
+    if (usesCompany && !this.rbac.can(ctx.grants, 'record.companies.read').allowed) {
+      throw AppError.forbidden('record.companies.read');
+    }
+  }
+
   /** A save refuses rules that point at things that do not exist now (later deletions are only flagged). */
   private async assertRulesValid(tx: Tx, orgId: number, rules: SegmentGroup): Promise<void> {
+    this.assertCompanyFieldsReadable(rules);
     const rc = await loadRuleContext(tx, orgId, collectRuleRefs(rules));
     const { invalid } = compileRules(orgId, rules, rc);
     if (invalid.length > 0) {

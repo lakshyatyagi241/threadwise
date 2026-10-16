@@ -38,6 +38,7 @@ const TAG_BY_PATH: Record<string, string> = {
   devices: 'Device',
   webhooks: 'Webhook',
   deals: 'Deal',
+  companies: 'Company',
 };
 
 export function tagForPath(path: string): string {

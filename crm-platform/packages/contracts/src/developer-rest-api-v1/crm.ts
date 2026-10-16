@@ -278,3 +278,79 @@ export const v1DealsQuerySchema = z.object({
   status: z.string().max(32).optional(),
 });
 export type V1DealsQuery = z.infer<typeof v1DealsQuerySchema>;
+
+// --- companies (BL-196; a product extension, Reference's API has no companies) ---------------------------------------------------------
+
+/**
+ * A company of the customer API: snake_case like every resource here, `custom_fields` holding the workspace's company properties by key.
+ * Reading needs the `companies:read` scope, writing `companies:write`; both need the plan's sales pipeline.
+ */
+const companyBlank = z.preprocess(
+  (v) => (typeof v === 'string' ? (v.trim() === '' ? null : v.trim()) : v),
+  z.string().max(500).nullable().optional(),
+);
+const companyField = (max: number) =>
+  z.preprocess(
+    (v) => (typeof v === 'string' ? (v.trim() === '' ? null : v.trim()) : v),
+    z.string().max(max).nullable().optional(),
+  );
+const companyCustomFields = z.record(z.string().min(1).max(100), z.unknown()).nullable().optional();
+
+export const v1CreateCompanySchema = z.object({
+  name: z.preprocess(
+    blankToNull,
+    z.string({ required_error: 'The name field is required.' }).max(191),
+  ),
+  website: companyField(191),
+  email: z.preprocess(blankToNull, z.string().email().max(191).nullable().optional()),
+  phone: companyField(32),
+  industry: companyField(100),
+  size_range: companyField(40),
+  address: companyBlank,
+  notes: companyField(2000),
+  owner_user_id: looseRef,
+  custom_fields: companyCustomFields,
+});
+export type V1CreateCompany = z.infer<typeof v1CreateCompanySchema>;
+
+/** Every key optional; only the keys present change, `null` clears one that can be empty. */
+export const v1UpdateCompanySchema = z.object({
+  name: z.preprocess(
+    blankToNull,
+    z.string().min(1, 'The name field must not be empty.').max(191).optional(),
+  ),
+  website: companyField(191),
+  email: z.preprocess(blankToNull, z.string().email().max(191).nullable().optional()),
+  phone: companyField(32),
+  industry: companyField(100),
+  size_range: companyField(40),
+  address: companyBlank,
+  notes: companyField(2000),
+  owner_user_id: looseRef,
+  custom_fields: companyCustomFields,
+});
+export type V1UpdateCompany = z.infer<typeof v1UpdateCompanySchema>;
+
+export const v1CompaniesQuerySchema = z.object({
+  search: z.string().trim().max(100).optional(),
+  industry: z.string().trim().max(100).optional(),
+  owner_user_id: z.string().max(64).optional(),
+});
+export type V1CompaniesQuery = z.infer<typeof v1CompaniesQuerySchema>;
+
+export const v1CompanySchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  website: z.string().nullable(),
+  email: z.string().nullable(),
+  phone: z.string().nullable(),
+  industry: z.string().nullable(),
+  size_range: z.string().nullable(),
+  address: z.string().nullable(),
+  notes: z.string().nullable(),
+  owner_user_id: z.string().uuid().nullable(),
+  custom_fields: z.record(z.unknown()),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+export type V1Company = z.infer<typeof v1CompanySchema>;

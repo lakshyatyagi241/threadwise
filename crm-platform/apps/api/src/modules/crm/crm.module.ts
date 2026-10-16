@@ -8,6 +8,7 @@ import { AttributesRepository } from './attributes/attributes.repository';
 import { AttributesService } from './attributes/attributes.service';
 import { MergeTagService } from './attributes/merge-tag.service';
 import { CompaniesController } from './companies/companies.controller';
+import { CompaniesCsvService } from './companies/companies-csv.service';
 import { CompaniesRepository } from './companies/companies.repository';
 import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
@@ -307,6 +308,7 @@ import { TagsService } from './tags/tags.service';
     ContactMeetingsRepository,
     CompaniesRepository,
     CompaniesService,
+    CompaniesCsvService,
     DealsPlan,
     SalesPipelineGuard,
     DealsRepository,
