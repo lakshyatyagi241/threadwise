@@ -2,9 +2,9 @@
 
 |             |                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Status**  | Draft for owner review                                                                                                                                                                                                                                                                                                                                                                                            |
-| **Author**  | Drafted with Claude Code from the owner's brief (2026-10-04) and a read-only survey of the repo                                                                                                                                                                                                                                                                                                                   |
-| **Related** | `apps/web/src/features/_registry/` (nav, settings, planned, gate resolution), `apps/web/src/components/shell/` (rail, top bar, user menu), `packages/contracts/src/plans-subscriptions-trials/catalogue.ts` (plan feature keys), `apps/api/src/modules/addons-extension-registry/module-registry.service.ts` (dormant features), `docs/threadwise-port/ownership.json`, `.claude/skills/threadwise-port-feature/` |
+| **Status**  | Shipped (`main`); this spec was refreshed on 2026-10-17 to match the built state — see "Revision history" at the end                                                                                                                                                                                                                                                                                             |
+| **Author**  | Drafted with Claude Code from the owner's brief (2026-10-04) and a read-only survey of the repo; later sections amended in place as the build evolved                                                                                                                                                                                                                                                             |
+| **Related** | `apps/web/src/features/_registry/` (nav, settings, planned, gate resolution), `apps/web/src/components/shell/` (rail, top bar, user menu), `packages/contracts/src/plans-subscriptions-trials/catalogue.ts` (plan feature keys), `apps/api/src/modules/addons-extension-registry/module-registry.service.ts` (dormant features), `docs/specs/help-agent-assistant.md` (the "Ask the assistant" card on `/help`, a separate spec), `docs/threadwise-port/ownership.json`, `.claude/skills/threadwise-port-feature/` |
 
 ---
 
@@ -67,15 +67,26 @@ id: contacts-overview          # unique across the app, kebab-case; used in /hel
 title: Contacts
 summary: Your customer list: add people, import them, group and search them.   # <= 160 chars; tooltip and search text
 area: audience                 # a menu group id (overview, inbox, audience, sales, campaigns, automation, store, apps),
-                               # or settings | account | getting-started
+                               # or settings | account | getting-started | troubleshooting
 order: 10
 documents: [nav:contacts]      # nav:<id> and/or tile:<id>; empty only for guide-level docs (getting-started, billing basics)
 gates:                         # optional, in addition to what the documented screen already requires
   planFeature: sales_pipeline
 keywords: [customers, leads, people]
+features: [personal_history_full]   # optional: plan features this guide explains WITHOUT being gated by them (section 4.3)
 audience: workspace            # default
 ---
 ```
+
+A long flow list (`keywords`, `documents`, `features`...) may wrap across several lines when Prettier reformats the file; the
+compiler rejoins a wrapped list before parsing it, so formatting a guide never breaks it.
+
+**`features`** exists because a plan feature sometimes unlocks only *part* of what a guide covers — gating the whole guide on it
+would hide the guide from plans that can still use the rest. Example shipped in `whatsapp-devices-baileys/help/import-your-existing-personal-whatsapp-chats.md`:
+the guide covers the whole personal-number chat-history import, but only the "as much as WhatsApp sends" choice needs
+`personal_history_full`; the "recent chats" choice is open to every plan. The guide declares `features: [personal_history_full]`
+instead of `gates.planFeature`, so it stays visible on every plan and the coverage check (section 6) still sees the feature as
+explained.
 
 The body is a **restricted markdown subset** parsed by our own pure function (no new dependency, no raw HTML, so nothing to
 sanitise): `##`/`###` headings (anchors are the slugified heading), paragraphs, `-` and `1.` lists, `> ` callouts, `**bold**`,
@@ -132,7 +143,7 @@ New domain `help-center` (`features/help-center/`, `app/(app)/(help-center)/help
 
 | Route        | What                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `/help`      | One layout for the whole centre: a header band (back, crumb, title, "Ask support"), a category rail ("All guides" and one row per area that has guides for this person, each with its count, then "Need a human? Contact support"), a search card (box with the Cmd/Ctrl+K hint and the popular guides as quick links) and the guides as cards (area, minutes to read, title, summary, "Read guide"). `?area=<area>` limits the list to one area; with no area the cards are grouped by area under a "Start here" row. Search filters title, summary, keywords and headings client-side over the index, within the chosen area. Empty state when nothing matches; a workspace with no visible docs sees a single "Getting started" doc (always visible, no gates). |
+| `/help`      | One layout for the whole centre: a header band (back, crumb, title, "Ask support"), a category rail ("All guides" and one row per area that has guides for this person, each with its count, then "Need a human? Contact support"), an **"Ask the assistant" card** when the Help assistant is on for this person (plan, workspace switch and role — a separate feature, [docs/specs/help-agent-assistant.md](help-agent-assistant.md); the card renders nothing when it is off, so the centre never advertises what is off), a search card (box with the Cmd/Ctrl+K hint and the popular guides as quick links) and the guides as cards (area, minutes to read, title, summary, "Read guide"). `?area=<area>` limits the list to one area; with no area the cards are grouped by area under a "Start here" row (Getting started leads). Search filters title, summary, keywords and headings client-side over the index, within the chosen area. Empty state when nothing matches; a workspace with no visible docs sees a single "Getting started" doc (always visible, no gates). |
 | `/help/[id]` | The same header and rail (the guide's area marked), then the guide as a card: back link and minutes to read, area, title, summary, an "Open this screen" button when the person may open it, "On this page" list and the rendered body, then "More in <area>" (that area's other guides). Deep links to `#heading` work; focus moves to the heading. Not-visible id: 404.                                                                                                                                                                                                                                                                                                                                                                                          |
 
 Both are server components; the search box is the only client island. Layout uses logical properties (RTL), a heading outline,
@@ -144,8 +155,9 @@ and no horizontal scroll at phone width.
 The rail already pins every `settings`-group item under the scrolling list, ordered, so Help renders directly above Settings
 in both the slim rail and the mobile drawer. The one change to `nav-rail.tsx` is the label of that pinned `<nav>` landmark, from
 "Settings" to "Help and settings" (`shell.pinned`), because it now holds both. `types.ts`'s comment on the `settings` group is
-updated to say "pinned to the bottom" (it no longer holds only Settings). The user menu's Support block is
-untouched. The `help` icon exists in `nav-icons.tsx`. Active state: `/help` and `/help/*`.
+updated to say "pinned to the bottom" (it no longer holds only Settings). The user menu keeps its Support entry; Guidebook is
+gone from it along with the Guidebook feature it pointed at (section 2, parity HC-5). The `help` icon exists in `nav-icons.tsx`.
+Active state: `/help` and `/help/*`.
 
 ### 4.6 Tooltips
 
@@ -194,13 +206,19 @@ RLS / outbox / contracts rules apply.
 ## 6. Keeping docs complete (the standing rule, made mechanical)
 
 **Coverage unit** = every nav item and Settings tile that is built (declared in `features/*/nav.ts` or `settings.ts`, not in a
-`planned` file) plus every plan feature key in `PLAN_FEATURE_KEYS`. A screen is covered when some doc lists it in `documents`; a plan feature key is
-covered when at least one doc declares it in `gates.planFeature` or inherits it from a documented screen.
+`planned` file) plus every plan feature key in `PLAN_FEATURE_KEYS`. A screen is covered when some doc lists it in `documents`. A
+plan feature key is covered by any of three things: a doc with `gates.planFeature` set to it; a doc that documents a screen
+whose own gate (`gates.planFeature`, or the Marketplace-app gate `gates.app` a first-party app's listing grants) names it; or a
+doc that names it in `features` without being gated by it (the mechanism in section 4.1, for a feature that unlocks only part
+of what the doc covers).
 
-1. **`help-coverage.test.ts`** (vitest, runs inside `pnpm test`, therefore inside `gate.sh` and CI) fails when a unit has no
-   doc, unless it is listed in `features/help-center/pending.json`. A pending entry needs `unit`, `owner` and `reason`; the file
-   can be edited but every line is reviewable in the PR, so "no doc" is always a visible, owned choice. It also fails on a pending
-   entry that has since been documented (the list can only shrink honestly), and on a doc whose gate key is unknown.
+1. **`coverage.gate.test.ts`** plus the semantic checks in **`registry.test.ts`** (`apps/web/src/features/help-center/`; both
+   vitest, run inside `pnpm test`, therefore inside `gate.sh` and CI) fail when a unit has no doc, unless it is listed in
+   `features/help-center/pending.json`. A pending entry needs `unit`, `owner` and `reason`; the file can be edited but every
+   line is reviewable in the PR, so "no doc" is always a visible, owned choice. The gate also fails on a pending entry that has
+   since been documented (the list can only shrink honestly), and `registry.test.ts` fails on a `gates.planFeature` or
+   `features` entry that is not a real plan feature key (`isPlanFeatureKey`). The pure rule the tests enforce lives in
+   `coverage.ts` (`coverage()`, `unitsOf()`); `pending-report.test.ts` is the gitignored-report writer, not the gate.
 2. **`bash .claude/skills/help-docs-sync/scripts/pending.sh`** runs the same logic through a vitest file gated by
    `HELP_WRITE_PENDING=1` (no `package.json` change) and writes `docs/help-pending.md` (generated, gitignored): undocumented
    units grouped by domain and owner. It never fails.
@@ -247,9 +265,9 @@ I review a sample of each domain's output against the running screens before it 
 
 | Layer                                         | What                                                                                                                                                                                                                                                                  |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Unit (`help-compile`)                         | frontmatter and body parsing, every validation rule, heading anchors, restricted-markdown rejections (raw HTML, external link, bad `help:` link)                                                                                                                      |
+| Unit (`help-compile`)                         | frontmatter and body parsing (including `features`), every validation rule, heading anchors, restricted-markdown rejections (raw HTML, external link, bad `help:` link). The multi-line flow-list rejoin (4.1) has no dedicated unit test yet — only every real guide file compiling is evidence it works. |
 | Unit (`resolve`)                              | plan feature on/off, dormant module feature absent from entitlements, permission, channel, unbuilt screen, caps unknown, effective-gate union, `help:` link degradation                                                                                               |
-| Unit (`coverage`)                             | undocumented unit fails, pending entry passes, stale pending entry fails, unknown gate key fails                                                                                                                                                                      |
+| Unit (`coverage`)                             | undocumented unit fails, pending entry passes, stale pending entry fails, unknown gate key fails, a plan feature named only in `features` (not `gates`) still counts as covered                                                                                      |
 | Unit (messages)                               | `en`/`ar` parity for `help-center.json` (existing messages test pattern)                                                                                                                                                                                              |
 | Component                                     | `HelpTip` renders nothing when hidden, summary vs anchored text, keyboard open/close/focus return, RTL placement                                                                                                                                                      |
 | E2E (Playwright, `apps/web/e2e/help-center/`) | Help icon sits above Settings (rail and drawer); `/help` lists visible docs and search filters; a doc gated on a plan feature the seeded plan lacks is absent from the list, search and direct URL (404); the page tooltip opens and its link lands on the doc anchor |
@@ -283,3 +301,18 @@ word).
 8. End-to-end tests, then verify in the running app (Help icon, a gated doc, tooltip) and run `gate.sh`.
 
 The step-by-step plan is [help-center-plan.md](help-center-plan.md).
+
+## 12. Revision history
+
+- **2026-10-04 to 2026-10-06** — original design and build (sections 1 to 11 above); the layout then was the plain area-grid
+  one described in earlier drafts.
+- **2026-10-05/06 (owner)** — the Guidebook retired entirely in favour of one Help screen laid out like it (HC-5); the sections
+  above already reflect that layout (header band, category rail, search card with popular guides, cards with read time,
+  `troubleshooting` area).
+- **2026-10-16** — the `features` frontmatter field and its coverage rule shipped ([PR #474](https://github.com/lakshyatyagi241/threadwise/pull/474)),
+  for a guide that explains a plan feature without being gated by it.
+- **A separate feature, "Ask the assistant"** (`docs/specs/help-agent-assistant.md`), added an entry point on `/help` (the
+  `AskAssistantCard`, section 4.4) and a floating "Ask" button on most other screens; this spec only notes the integration
+  point on `/help`, not the assistant's own design.
+- **2026-10-17** — this spec resynced against the built code in an isolated worktree (section headers, test file names, the
+  `features` field and the assistant integration were the parts that had drifted); no behaviour changed as part of this pass.
