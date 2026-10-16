@@ -306,6 +306,14 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 - **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-sequence.e2e.spec.ts` and the web sequence tests.
 - **Not verified:** nothing was run against the real WhatsApp Cloud API.
 
+### TW-CAMP-041: target previous sends in every audience (ADDITION)
+
+- **Source:** the meeting's "target previous broadcast" audience option. Reference has it only in the Scheduled composer (recipients "queue": broadcasts, whole), reading the broadcasts table; the classic campaign builder and the guided wizard could not target it.
+- **Rules:** a source "Previous sends" in the wizard's audience step, in the classic builder's recipients step and in the Scheduled composer; a send is a broadcast or a campaign (every run of a recurring broadcast is a campaign); up to 20; narrowed by an outcome (all, delivered, read, not read, replied, not replied, clicked, failed; a broadcast has no replies or clicks). It is a source of the union like a group, so opted-out and unusable numbers are left out and a contact counts once. The count the wizard shows and the recipients a launch writes come from the same function.
+- **Acceptance:** Given a campaign sent to five people of whom one read it, one replied and one clicked, a new broadcast aimed at its "not read" outcome messages exactly the people who neither read nor replied; a send of another workspace reaches nobody; a broadcast cannot be narrowed by replies.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-previous-sends.e2e.spec.ts` and the web tests of the picker, the wizard step, the classic step and the composer.
+- **Not done:** the Scheduled composer has no outcome filter (Reference parity); the classic edit form does not re-show the choice (its recipients are the resolved contacts).
+
 ### Reference comparison (live Reference, read-only)
 
 See [parity/campaigns.md](../parity/campaigns.md#broadcast-wizard-addition): Reference's create flow, and what the wizard does the same or differently.

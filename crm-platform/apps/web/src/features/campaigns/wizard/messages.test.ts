@@ -176,7 +176,9 @@ const DYNAMIC = [
   ...['searchGroups', 'searchSegments', 'groups', 'segments', 'noGroups', 'noSegments'].map(
     (k) => `campaigns.wizard.audience.${k}`,
   ),
-  ...['contacts', 'groups', 'segments', 'csv'].map((k) => `campaigns.wizard.audience.mode.${k}`),
+  ...['contacts', 'groups', 'segments', 'csv', 'previous'].map(
+    (k) => `campaigns.wizard.audience.mode.${k}`,
+  ),
   ...['new', 'existing', 'optedOut'].map((k) => `campaigns.wizard.audience.csvRow.${k}`),
   ...['missing_phone', 'invalid_phone', 'duplicate'].map(
     (k) => `campaigns.wizard.audience.csvReason.${k}`,

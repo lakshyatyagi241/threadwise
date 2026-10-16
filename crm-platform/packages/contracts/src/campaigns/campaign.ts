@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
+import { previousSendsAudienceSchema } from '../broadcasts/previous-sends';
 import { marketingMediaSchema } from '../broadcasts/marketing-media';
 
 /**
@@ -126,6 +127,8 @@ const audienceFields = {
   manualNumbers: z.string().max(500_000).default(''),
   /** The text of an uploaded CSV (`name,country_code,phone` plus any attribute columns). */
   csvText: z.string().max(CAMPAIGN_CSV_MAX_CHARS).default(''),
+  /** Who earlier broadcasts and campaigns went to, optionally only those who did (or did not) read, reply or click. */
+  previousSends: previousSendsAudienceSchema.nullish(),
 };
 
 type Shape = {
@@ -176,6 +179,7 @@ export const updateCampaignSchema = z
     segmentIds: audienceFields.segmentIds.optional(),
     manualNumbers: audienceFields.manualNumbers.optional(),
     csvText: audienceFields.csvText.optional(),
+    previousSends: audienceFields.previousSends,
   })
   .superRefine(refine);
 export type UpdateCampaignInput = z.infer<typeof updateCampaignSchema>;

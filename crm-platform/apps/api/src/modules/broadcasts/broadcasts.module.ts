@@ -12,6 +12,7 @@ import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, TransportEngineSender, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
+import { PreviousSendsService } from './previous-sends';
 import { MarketingMediaController } from './marketing-media.controller';
 import { MarketingMediaService } from './marketing-media.service';
 import { LinkRedirectController } from './tracking/link-redirect.controller';
@@ -68,6 +69,7 @@ import {
     MarketingMediaController,
   ],
   exports: [
+    PreviousSendsService,
     MarketingMediaService,
     BroadcastsService,
     BroadcastsReadService,
@@ -90,6 +92,7 @@ import {
   ],
   providers: [
     MarketingMediaService,
+    PreviousSendsService,
     CryptoService,
     BroadcastsService,
     BroadcastsRepository,

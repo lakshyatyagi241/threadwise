@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { EMPTY_WIZARD_AUDIENCE } from '@crm/contracts';
 import { uuid } from '../testing';
 import { sanitizePatch } from './save-patch';
 
@@ -97,5 +98,23 @@ describe('sanitizePatch: template sequence', () => {
   it('an empty list is saved as empty, and a patch without it is untouched', () => {
     expect(sanitizePatch({ templateSequence: [] }).templateSequence).toEqual([]);
     expect('templateSequence' in sanitizePatch({ name: 'A' })).toBe(false);
+  });
+
+  it('cleans the previous sends of an audience: no repeats, 20 at most, a known outcome', () => {
+    const c = (n: number) => ({ kind: 'campaign' as const, id: uuid(n) });
+    const out = sanitizePatch({
+      audience: {
+        ...EMPTY_WIZARD_AUDIENCE,
+        previous: {
+          sends: [...Array.from({ length: 24 }, (_, i) => c(i + 1)), c(1)],
+          outcome: 'nope' as never,
+        },
+      },
+    });
+    expect(out.audience?.previous?.sends).toHaveLength(20);
+    expect(out.audience?.previous?.outcome).toBe('all');
+    // an audience without previous sends is sent as it is
+    const plain = { ...EMPTY_WIZARD_AUDIENCE, groupIds: [uuid(1)] };
+    expect(sanitizePatch({ audience: plain }).audience).toEqual(plain);
   });
 });

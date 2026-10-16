@@ -270,3 +270,52 @@ describe('template sequence', () => {
     expect(wizardReducer(none, { type: 'sequenceClear' })).toBe(none);
   });
 });
+
+describe('previous sends in the audience', () => {
+  const c = (n: number) => ({ kind: 'campaign' as const, id: uuid(n) });
+
+  it('sets the picked sends and the outcome, next to the other sources', () => {
+    let s = wizardReducer(initialState(), { type: 'audience', patch: { groupIds: [uuid(11)] } });
+    s = wizardReducer(s, {
+      type: 'audience',
+      patch: { previous: { sends: [c(1)], outcome: 'read' } },
+    });
+    expect(s.draft.audience.groupIds).toEqual([uuid(11)]);
+    expect(s.draft.audience.previous).toEqual({ sends: [c(1)], outcome: 'read' });
+  });
+
+  it('keeps at most 20 sends, no repeats, and drops an outcome a ticked broadcast cannot give', () => {
+    const many = Array.from({ length: 25 }, (_, i) => c(i + 1));
+    const s = wizardReducer(initialState(), {
+      type: 'audience',
+      patch: { previous: { sends: [...many, c(1)], outcome: 'read' } },
+    });
+    expect(s.draft.audience.previous?.sends).toHaveLength(20);
+    const b = wizardReducer(initialState(), {
+      type: 'audience',
+      patch: { previous: { sends: [{ kind: 'broadcast', id: uuid(1) }], outcome: 'clicked' } },
+    });
+    expect(b.draft.audience.previous?.outcome).toBe('all');
+  });
+
+  it('clears with null, and a patch of another source leaves it alone', () => {
+    let s = wizardReducer(initialState(), {
+      type: 'audience',
+      patch: { previous: { sends: [c(1)], outcome: 'all' } },
+    });
+    s = wizardReducer(s, { type: 'audience', patch: { groupIds: [uuid(11)] } });
+    expect(s.draft.audience.previous?.sends).toHaveLength(1);
+    s = wizardReducer(s, { type: 'audience', patch: { previous: null } });
+    expect(s.draft.audience.previous).toBeNull();
+  });
+
+  it('is part of the save patch when it changes, and a resumed draft opens with it', () => {
+    const before = draft();
+    const after = draft({
+      audience: audience({ previous: { sends: [c(1)], outcome: 'replied' } }),
+    });
+    expect(Object.keys(draftPatch(before, after))).toEqual(['audience']);
+    const hydrated = wizardReducer(initialState(), { type: 'hydrate', draft: after });
+    expect(hydrated.draft.audience.previous?.outcome).toBe('replied');
+  });
+});
