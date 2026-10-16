@@ -128,9 +128,11 @@ describe('the list: filter, condition, bulk edit, export', () => {
     await create(t, { name: 'In1', timezone: 'Asia/Kolkata' });
     await create(t, { name: 'Ny', timezone: 'America/New_York' });
     const rules = JSON.stringify({
-      version: 1,
-      match: 'all',
-      children: [{ field: 'timezone', operator: 'equals', value: 'Asia/Kolkata' }],
+      type: 'group',
+      combinator: 'and',
+      children: [
+        { type: 'condition', field: 'timezone', operator: 'equals', value: 'Asia/Kolkata' },
+      ],
     });
     const res = await api.as(t.admin).get(`/v2/contacts?rules=${encodeURIComponent(rules)}`);
     expect(res.status, JSON.stringify(res.body)).toBe(200);
@@ -146,7 +148,7 @@ describe('the list: filter, condition, bulk edit, export', () => {
       .as(t.admin)
       .post('/v2/contacts/bulk/update')
       .send({ ids, values: { timezone: 'Asia/Tokyo' } });
-    expect(set.status, JSON.stringify(set.body)).toBe(200);
+    expect(set.status, JSON.stringify(set.body)).toBe(201);
     expect(set.body.succeeded).toHaveLength(2);
     for (const id of ids)
       expect(await stored(id)).toEqual({ timezone: 'Asia/Tokyo', timezone_source: 'staff' });
@@ -208,7 +210,9 @@ describe('the CSV import', () => {
       { name: 'Zone One', timezone: 'Asia/Kolkata', timezone_source: 'import' },
       { name: 'Zone Two', timezone: null, timezone_source: null },
     ]);
-    expect(JSON.stringify(res.body)).toContain('invalid_timezone');
+    const rejects = (await api.as(t.admin).get(`/v2/contacts/import/jobs/${res.body.id}/rejects`))
+      .text;
+    expect(rejects).toContain('invalid_timezone');
   });
 
   it('fills a contact that has no zone but never replaces one a person chose', async () => {

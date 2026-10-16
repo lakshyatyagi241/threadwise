@@ -281,7 +281,7 @@ request and response shapes are `broadcast-wizard.ts` and `recurrence.ts` in `@c
 
 | Method and path                                  | Key     | What it does                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /templates`                                 | create  | Approved templates (not OTP, not an SMS template, number connected, nothing the campaign gate would refuse) with `slots` (`body.1`, `header.1`, `button.0`), language and category                                                                                                                                                                                                                                                                                            |
+| `GET /templates`                                 | create  | Approved templates (not OTP, not an SMS template, number connected, nothing the campaign gate would refuse) with `slots` (`body.1`, `header.1`, `button.0`), language and category                                                                                                                                                                                                                               |
 | `GET /audience-sources`                          | create  | `groups` and `segments` with `memberCount` (a segment's is its last stored count)                                                                                                                                                                                                                                                                                                                                |
 | `POST /audience/count`                           | create  | `{ audience }` to `matching`, `optedOut`, `invalidNumber`, `recipients`, `countries`, `approximate`, `invalidConditions`                                                                                                                                                                                                                                                                                         |
 | `POST /drafts`, `GET /drafts/:id`                | create  | Start and read a draft. A draft takes whatever is filled in so far                                                                                                                                                                                                                                                                                                                                               |
@@ -411,15 +411,15 @@ Reference's Scheduled composer can take "Previous broadcast" as its recipients (
 
 `outcome` narrows the contacts of those sends:
 
-| outcome | who |
-| --- | --- |
-| `all` | everyone the message was meant for (a recipient who was skipped or opted out is not one) |
-| `delivered` | it reached their phone (delivered or read) |
-| `read` | they read it (a reply counts: they saw it) |
-| `not_read` | it was sent to them and they did not read it, nor reply |
-| `replied`, `not_replied` | they replied / it was sent and they did not (campaigns only) |
-| `clicked` | they clicked a tracked link (campaigns only) |
-| `failed` | it could not be delivered to them |
+| outcome                  | who                                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| `all`                    | everyone the message was meant for (a recipient who was skipped or opted out is not one) |
+| `delivered`              | it reached their phone (delivered or read)                                               |
+| `read`                   | they read it (a reply counts: they saw it)                                               |
+| `not_read`               | it was sent to them and they did not read it, nor reply                                  |
+| `replied`, `not_replied` | they replied / it was sent and they did not (campaigns only)                             |
+| `clicked`                | they clicked a tracked link (campaigns only)                                             |
+| `failed`                 | it could not be delivered to them                                                        |
 
 A broadcast records delivery and reading only, so `replied`, `not_replied` and `clicked` with a broadcast in the list are 422 (`previous_outcome_unsupported`). A send of another workspace matches nobody (the lookup is by the send's own organization).
 
