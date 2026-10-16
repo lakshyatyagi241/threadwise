@@ -22,6 +22,8 @@ export interface PqlCatalog {
   statuses: Array<{ value: string; label: string }>;
   /** Custom properties a rule can filter, with the kind that decides their operators. */
   customFields: Array<{ key: string; label: string; kind: SegmentFieldKind }>;
+  /** Company properties: a rule on one reads the company the contact belongs to. */
+  companyFields: Array<{ key: string; label: string; kind: SegmentFieldKind }>;
 }
 
 const list = (rows: string[]): string => (rows.length > 0 ? rows.join('\n') : '(none)');
@@ -56,6 +58,13 @@ export function pqlPrompt(
       catalog.customFields.map(
         (f) =>
           `custom.${f.key} "${f.label}" (${f.kind}): ${SEGMENT_OPERATORS_BY_KIND[f.kind].join(', ')}`,
+      ),
+    ),
+    'Properties of the company a contact belongs to use field "company.<key>" (for "contacts at companies that ...") and only these keys:',
+    list(
+      catalog.companyFields.map(
+        (f) =>
+          `company.${f.key} "${f.label}" (${f.kind}): ${SEGMENT_OPERATORS_BY_KIND[f.kind].join(', ')}`,
       ),
     ),
     'Tags:',

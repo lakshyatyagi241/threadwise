@@ -24,6 +24,12 @@ export const SCOPE_PERMISSIONS: Record<ApiScope, readonly string[]> = {
   ],
   'deals:read': ['record.deals.read', 'record.pipelines.read'],
   'deals:write': ['record.deals.create', 'record.deals.update', 'record.deals.delete'],
+  'companies:read': ['record.companies.read'],
+  'companies:write': [
+    'record.companies.create',
+    'record.companies.update',
+    'record.companies.delete',
+  ],
   'flows:read': ['flr.runs.read'],
   'flows:write': ['flr.runs.manage'],
   'templates:read': ['tpl.templates.read'],

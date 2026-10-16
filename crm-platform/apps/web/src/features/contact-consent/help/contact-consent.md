@@ -141,7 +141,7 @@ Minor and Do Not Sell or Share badges also show beside the contact's name. Chang
 Names, emails and phone numbers say nothing about age, so a contact is only marked as a minor when something tells us. There are four ways, and none of them asks everyone by default:
 
 - **A date of birth.** The contact has a **Date of birth** (on its page, in an import column, from a form or chat question, or through the API). If the person is under your workspace's age, the contact is flagged as a minor with the source "date of birth". The flag lapses by itself on the birthday: a nightly check lifts it, and only flags that came from a date of birth. A flag a colleague set, or one from a request, an import, a flow or a declaration box, is never lifted by a birthday. If a colleague switches a date-of-birth flag off, it stays off.
-- **A form, chat or flow question.** A form can have an age check, the website chat can ask for an age before the chat starts, and a flow can ask it with an Ask step. See [forms](help:forms-builder), [website chat bots](help:website-chat-bots) and [flows](help:flows). An under-age answer flags the contact. The page never says which answer passes.
+- **A form, chat or flow question.** A form can have an age check, the website chat can ask for an age before the chat starts, and a flow can ask it with an Ask step. See [forms](help:forms-builder), [website chat bots](help:website-chat-bots) and [flows](help:flows-overview). An under-age answer flags the contact. The page never says which answer passes.
 - **A person.** Switch **Minor** on, on the Consent card, when a customer says they are a child or you learn it on a call.
 - **A flow.** A flow can set the flag when it learns the customer is a minor.
 

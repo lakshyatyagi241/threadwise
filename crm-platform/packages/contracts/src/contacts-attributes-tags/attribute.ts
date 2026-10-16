@@ -164,6 +164,7 @@ export const attributeCatalogGroupSchema = z.enum([
   'contact',
   'custom_field',
   'workspace',
+  'company',
   'system',
 ]);
 export const attributeCatalogSchema = z.object({
@@ -238,7 +239,14 @@ export const resolveMergeTagResponseSchema = z.object({
       key: z.string(),
       resolved: z.boolean(),
       /** Where the value came from. */
-      source: z.enum(['contact', 'contact_attribute', 'attribute_default', 'system', 'unresolved']),
+      source: z.enum([
+        'contact',
+        'contact_attribute',
+        'attribute_default',
+        'company',
+        'system',
+        'unresolved',
+      ]),
     }),
   ),
 });

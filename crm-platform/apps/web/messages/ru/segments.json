@@ -32,7 +32,8 @@
       "journey": "Путь",
       "who": "Кто",
       "activity": "Активность",
-      "properties": "Свойства"
+      "properties": "Свойства",
+      "company": "Свойство компании"
     },
     "operators": {
       "equals": "равно",
