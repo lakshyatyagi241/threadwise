@@ -204,6 +204,12 @@ export const marketKillResultSchema = z.object({
   app: marketOperatorAppSchema,
   /** Installations switched off by this call. */
   disabledInstallations: z.number().int(),
+  /**
+   * Card renewals of the app's subscribers ended at the payment provider (at the end of the period each paid for), and how many could NOT
+   * be: those still charge until the operator ends them at the provider (the Subscriptions screen lists them as failed cancellations).
+   */
+  renewalsStopped: z.number().int(),
+  renewalsNotStopped: z.number().int(),
 });
 export type MarketKillResult = z.infer<typeof marketKillResultSchema>;
 

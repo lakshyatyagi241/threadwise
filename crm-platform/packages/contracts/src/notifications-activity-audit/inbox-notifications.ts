@@ -61,6 +61,13 @@ export const NOTIFICATION_TYPES = [
   'device_group_join_request',
   /** The personal number was removed from a group by someone else (a useful abuse or ban signal). */
   'device_group_removed',
+  // --- Paid Marketplace apps (BL-076): told to the workspace's admins by the Marketplace's subscription events ------------------------
+  /** A paid app's period ends in a few days (it renews by card, is paid until a date, or was cancelled and ends). Once per period. */
+  'marketplace_renewal_due',
+  /** The card renewal of a paid app failed; the app keeps working for the grace days while the payment is retried. */
+  'marketplace_payment_failed',
+  /** A paid app's subscription ended and the app was paused (its data is kept). */
+  'marketplace_subscription_ended',
   // --- The test button (Account, Notifications, Browser notifications) -------------------------------------------------------------
   /** "Send a test notification": a harmless row written for the person who pressed the button, so the bell, the toast, the ping and the tab title can be seen working. */
   'test',

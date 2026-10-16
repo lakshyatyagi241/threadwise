@@ -58,7 +58,8 @@
           "trialing": "En prueba",
           "comped": "De cortesía",
           "canceling": "Finalizando",
-          "ended": "Finalizada"
+          "ended": "Finalizada",
+          "past_due": "Pago fallido"
         },
         "subscriptionSource": {
           "purchase": "Compra",
@@ -92,7 +93,8 @@
         "request": "No se pudo completar la solicitud.",
         "unexpected": "Algo ha fallado de nuestro lado. Vuelve a intentarlo; si sigue pasando, indica el ID de la solicitud.",
         "subscriptionState": "Eso no es posible en el estado actual de la suscripción. Un espacio de trabajo que ya paga no puede recibir cortesía (cancela antes su suscripción), una app gratuita no tiene nada que conceder y una suscripción finalizada no se puede volver a cancelar.",
-        "subscriptionNotFound": "No se ha encontrado esa suscripción. Puede que se haya eliminado. Recarga la lista."
+        "subscriptionNotFound": "No se ha encontrado esa suscripción. Puede que se haya eliminado. Recarga la lista.",
+        "renewalNotStopped": "No se pudo detener la renovación con tarjeta en el proveedor de pagos, así que no se ha cambiado nada y aún se puede cobrar al espacio de trabajo. Inténtalo de nuevo en un momento, o termínala en el panel del proveedor."
       },
       "list": {
         "title": "Catálogo del Marketplace",
@@ -658,12 +660,13 @@
         "free": "Gratis",
         "perMonth": "/ mes",
         "trial": "{count, plural, one {# día de prueba} other {# días de prueba}}",
-        "notOnSale": "No está a la venta"
+        "notOnSale": "No está a la venta",
+        "perYear": "/ año"
       },
       "pricing": {
         "title": "Precios",
         "description": "Decide si esta app es gratuita o de pago y cuánto cuesta. Cuenta tu precio: el manifiesto del desarrollador solo propone uno.",
-        "billing": "Una app de pago se vende como un periodo mensual prepagado: un complemento de facturación que se compra en el proceso de pago habitual. Todavía no hay renovación automática con tarjeta, así que un espacio de trabajo vuelve a pagar cuando su mes está por terminar. Un cambio de precio se aplica a las nuevas suscripciones y al siguiente pago de cada suscriptor; un periodo ya pagado nunca se modifica.",
+        "billing": "Una app de pago se vende como un complemento de facturación que se compra en el proceso de pago habitual. Por defecto es un periodo mensual prepagado: un espacio de trabajo vuelve a pagar cuando su mes está por terminar. Elige \"Renovación automática con tarjeta\" más abajo para cobrar en su lugar la tarjeta del espacio de trabajo automáticamente cada mes. Un cambio de precio se aplica a las nuevas suscripciones y al siguiente pago de cada suscriptor prepagado; un periodo ya pagado nunca se modifica, y un suscriptor cuya tarjeta ya se renueva conserva el precio de su suscripción en el proveedor hasta que vuelva a suscribirse.",
         "readOnly": "Solo lectura. Cambiar los precios requiere el permiso de la plataforma {permission}.",
         "visibility": {
           "label": "Estado del listado",
@@ -693,7 +696,7 @@
           "trialDays": "Prueba gratuita (días)",
           "trialDaysHint": "0 para no ofrecer prueba, máximo {max}. Cada espacio de trabajo obtiene una prueba por app.",
           "annualAmount": "Precio anual (opcional)",
-          "annualAmountHint": "Se guarda para más adelante. La facturación anual aún no está disponible, así que hoy los espacios de trabajo no pueden pagar al año.",
+          "annualAmountHint": "El precio de un año. Déjalo vacío para vender la app solo mensualmente. Un espacio de trabajo que elija el pago anual paga esta cantidad una vez al año, o con tarjeta cada año cuando la app se renueva con tarjeta.",
           "purchasable": "A la venta",
           "purchasableHint": "Si está desactivado, ningún espacio de trabajo nuevo puede suscribirse. Los que ya están suscritos pueden seguir renovando."
         },
@@ -763,6 +766,27 @@
             "paid": "Los suscriptores conservan el tiempo que ya pagaron. No se reembolsa.",
             "action": "Hacer gratis"
           }
+        },
+        "billingMode": {
+          "legend": "Cómo se renueva",
+          "one_time": {
+            "label": "Mes prepagado",
+            "hint": "El espacio de trabajo vuelve a pagar cuando su mes está por terminar."
+          },
+          "recurring": {
+            "label": "Renovación automática con tarjeta",
+            "hint": "El proveedor de pagos cobra la tarjeta cada mes hasta que el espacio de trabajo cancela."
+          },
+          "note": "Se aplica a las nuevas suscripciones. Una suscripción que ya está en marcha conserva la forma en que se compró. Requiere una pasarela de pago compatible con suscripciones."
+        },
+        "priceLock": {
+          "label": "Mantener a los suscriptores en el precio que pagaron al inicio",
+          "hint": "Un cambio de precio solo llega entonces a los nuevos suscriptores. Al activarlo, también se fija a los suscriptores actuales en su último pago; al desactivarlo no se libera a nadie. Un bloqueo termina cuando termina la suscripción."
+        },
+        "withdrawn": {
+          "title": "Reembolsar a los suscriptores de esta app retirada",
+          "hint": "La app se retiró en mitad de los periodos que sus suscriptores habían pagado. Devuelve a cada uno la parte de su último pago correspondiente desde el momento de la retirada.",
+          "action": "Reembolsar tiempo sin usar..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Terminadas",
           "mrr": "Ingresos mensuales",
           "mrrNone": "Todavía no hay suscriptores que paguen",
-          "mrrCurrency": "Ingresos mensuales, {currency}"
+          "mrrCurrency": "Ingresos mensuales, {currency}",
+          "pastDue": "Pago fallido"
         },
         "summary": {
           "emptyTitle": "Todavía no hay apps de pago",
@@ -871,7 +896,8 @@
             "canceling": "Terminando",
             "ended": "Terminadas",
             "total": "Total",
-            "mrr": "Ingresos mensuales"
+            "mrr": "Ingresos mensuales",
+            "pastDue": "Pago fallido"
           },
           "free": "Gratis",
           "totals": "Todas las apps",
@@ -905,7 +931,9 @@
           "compUntil": "Cortesía hasta {date}",
           "compOpen": "Cortesía hasta que la termines",
           "endedOn": "Terminada el {date}",
-          "none": "Sin fecha de fin"
+          "none": "Sin fecha de fin",
+          "renewsOn": "Se renueva el {date}",
+          "graceUntil": "Periodo de gracia hasta {date}"
         },
         "noCharge": "Sin cargo",
         "compBy": "Cortesía de {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Ninguna suscripción coincide",
         "noMatchMessage": "Nada coincide con estos filtros. Prueba con otros.",
         "clearFilters": "Borrar filtros",
-        "loadMore": "Cargar más"
+        "loadMore": "Cargar más",
+        "unlockPrice": "Liberar precio",
+        "refundUnused": "Reembolsar tiempo sin usar"
+      },
+      "unlockDialog": {
+        "eyebrow": "Precio fijado",
+        "title": "Liberar el precio de {workspace}",
+        "close": "Cerrar",
+        "back": "Volver",
+        "confirm": "Liberar precio",
+        "summary": "{workspace} paga por {app} el precio que pagó al inicio. Al liberarlo, su próximo pago será al precio actual de la app.",
+        "effectPrepaid": "Su próximo pago, tras el periodo pagado hasta el {date}, será al precio actual.",
+        "effectCard": "Su tarjeta renueva la app al precio anterior en el proveedor de pagos, por lo que la renovación con tarjeta termina al final del periodo pagado ({date}). Se les avisa y pueden volver a suscribirse al precio actual.",
+        "reason": "Motivo (se guarda en el registro de auditoría)",
+        "done": "{workspace} ya no tiene un precio fijado para {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Reembolso",
+        "title": "Reembolsar el tiempo sin usar de {workspace}",
+        "close": "Cerrar",
+        "back": "Atrás",
+        "summary": "Devuelve, a través del proveedor de pagos, la parte del último pago de {app} que aún queda por delante. Nada se devuelve dos veces: si lo ejecutas de nuevo, solo se devuelve lo que falta.",
+        "working": "Calculando el importe...",
+        "paid": "Último pago",
+        "unused": "Parte sin usar",
+        "already": "Ya reembolsado",
+        "refundable": "A reembolsar ahora",
+        "nothing": "No hay nada que reembolsar: el periodo terminó, no se encontró ningún pago por pasarela o la parte sin usar ya se devolvió.",
+        "endNow": "Terminar también la suscripción ahora",
+        "endNowHint": "La instalación se pausa y se conservan sus datos. Sin esto, la app sigue funcionando hasta el final del periodo.",
+        "reason": "Motivo (se guarda en el registro de auditoría y se envía al proveedor de pagos)",
+        "confirm": "Reembolsar {amount}",
+        "done": "Se reembolsaron {amount} a {workspace} por {app}.",
+        "refused": "El proveedor de pagos rechazó el reembolso: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "App retirada",
+        "title": "Reembolsar a los suscriptores de {name}",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "intro": "Revisa cada suscripción de pago de {name} y devuelve, a través del proveedor de pagos, la parte de su último pago que aún quedaba por delante cuando se retiró la app. Primero ves una vista previa; nada se devuelve dos veces.",
+        "preview": "Vista previa",
+        "owed": "{count, plural, one {# suscriptor tiene un reembolso pendiente} other {# suscriptores tienen un reembolso pendiente}}",
+        "nobody": "Ahora mismo no se le debe nada a nadie.",
+        "more": "Hay más suscripciones de las que procesa una sola ejecución. Ejecútalo de nuevo para continuar.",
+        "reason": "Motivo (se guarda en el registro de auditoría y se envía al proveedor de pagos)",
+        "run": "{count, plural, one {Reembolsar a # suscriptor} other {Reembolsar a # suscriptores}}",
+        "continue": "Continuar con las siguientes suscripciones",
+        "result": "Reembolsados: {refunded}, fallidos: {failed}.",
+        "someFailed": "Algunos reembolsos no se completaron (el proveedor los rechazó o no se pudo contactar). Constan en el registro de auditoría; si lo ejecutas de nuevo, se intentan otra vez.",
+        "done": "{count, plural, one {Se reembolsó a # suscriptor de {name}.} other {Se reembolsó a # suscriptores de {name}.}}"
       }
     }
   }

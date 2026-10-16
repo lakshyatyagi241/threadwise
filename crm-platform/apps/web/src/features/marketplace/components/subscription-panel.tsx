@@ -61,16 +61,39 @@ export function SubscriptionPanel({
           )}
         </div>
         {view.lastPayment && (
-          <p className="text-muted-foreground">{t('lastPayment', { price: view.lastPayment })}</p>
+          <p className="text-muted-foreground">
+            {t(view.period === 'yearly' ? 'lastPaymentYear' : 'lastPayment', {
+              price: view.lastPayment,
+            })}
+          </p>
+        )}
+        {view.priceLocked && view.lastPayment && (
+          <p className="text-muted-foreground" data-testid="price-locked">
+            {t(view.period === 'yearly' ? 'priceLockedYear' : 'priceLocked', {
+              price: view.lastPayment,
+            })}
+          </p>
+        )}
+        {view.paymentFailed && (
+          <Alert tone="warning" data-testid="payment-failed">
+            {date ? t('paymentFailed', { date }) : t('paymentFailedNoDate')}
+          </Alert>
         )}
         {view.nextPayment && (
           <Alert tone="info" data-testid="price-change">
-            {t('nextPayment', { price: view.nextPayment })}
+            {t(view.period === 'yearly' ? 'nextPaymentYear' : 'nextPayment', {
+              price: view.nextPayment,
+            })}
           </Alert>
         )}
         {view.comp && <p className="text-muted-foreground">{t('compNote')}</p>}
         {view.cannotRenew && <NotForSaleNote />}
-        {view.actions.renew !== null && view.status !== 'ended' && (
+        {view.autoRenew && (
+          <p className="text-muted-foreground" data-testid="auto-renew-hint">
+            {t('autoRenewHint')}
+          </p>
+        )}
+        {view.actions.renew !== null && view.status !== 'ended' && !view.autoRenew && (
           <p className="text-muted-foreground">{t('renewHint')}</p>
         )}
 
@@ -118,9 +141,13 @@ export function SubscriptionPanel({
           message={
             <div className="space-y-2">
               <p>
-                {date
-                  ? t('cancelConfirm.message', { name: app.name, date })
-                  : t('cancelConfirm.messageNoDate', { name: app.name })}
+                {view.autoRenew
+                  ? date
+                    ? t('cancelConfirm.messageAuto', { name: app.name, date })
+                    : t('cancelConfirm.messageAutoNoDate', { name: app.name })
+                  : date
+                    ? t('cancelConfirm.message', { name: app.name, date })
+                    : t('cancelConfirm.messageNoDate', { name: app.name })}
               </p>
               <p>{t('cancelConfirm.afterwards')}</p>
               {change.cancel.error ? <ErrorLine error={change.cancel.error} /> : null}

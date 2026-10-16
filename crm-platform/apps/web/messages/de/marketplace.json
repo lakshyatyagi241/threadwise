@@ -61,7 +61,8 @@
       "notForSale": "Diese App wird derzeit nicht an neue Abonnenten verkauft.",
       "trialUnavailable": "Die kostenlose Testphase ist für diese App in Ihrem Arbeitsbereich nicht verfügbar.",
       "subscriptionNotFound": "Ihr Arbeitsbereich hat kein Abonnement für diese App.",
-      "subscriptionState": "Das passt nicht zum aktuellen Stand des Abonnements. Laden Sie neu, um den neuesten Stand zu sehen."
+      "subscriptionState": "Das passt nicht zum aktuellen Stand des Abonnements. Laden Sie neu, um den neuesten Stand zu sehen.",
+      "renewalNotStopped": "Die automatische Verlängerung konnte beim Zahlungsanbieter nicht beendet werden. Es wurde nichts geändert, und Ihre Karte kann weiterhin belastet werden. Versuchen Sie es in einem Moment erneut."
     },
     "chips": {
       "installed": "Installiert",
@@ -77,7 +78,8 @@
       "trialing": "Kostenlose Testphase",
       "comped": "Kostenlos bereitgestellt",
       "canceling": "Keine Verlängerung",
-      "subscriptionEnded": "Abonnement beendet"
+      "subscriptionEnded": "Abonnement beendet",
+      "pastDue": "Zahlung fehlgeschlagen"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Nicht erhältlich",
         "paid": "Kostenpflichtige App",
         "addOn": "Add-on",
-        "trial": "{days}-tägige kostenlose Testphase"
+        "trial": "{days}-tägige kostenlose Testphase",
+        "monthlyOrYearly": "{price} / Monat oder {annual} / Jahr"
       },
       "installs": "{count, plural, one {# Installation} other {# Installationen}}",
       "version": "Version {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "Nicht erhältlich",
         "message": "Diese App wird derzeit nicht an neue Abonnenten verkauft."
-      }
+      },
+      "autoRenewNote": "Die Abrechnung erfolgt monatlich über die Abrechnung Ihres Workspace. Ihre Karte wird jeden Monat zum Verlängerungsdatum automatisch belastet, bis Sie kündigen."
     },
     "subscribe": {
       "subscribe": "Abonnieren",
@@ -820,7 +824,16 @@
         "included": "{name} ist in Ihrem Tarif enthalten.",
         "already_entitled": "Ihr Workspace hat bereits Zugriff auf {name}.",
         "free": "{name} ist kostenlos."
-      }
+      },
+      "hintPriceAuto": "{price} pro Monat, jeden Monat automatisch von Ihrer Karte abgebucht, bis Sie kündigen.",
+      "hintAuto": "Ihre Karte wird jeden Monat automatisch belastet, bis Sie kündigen.",
+      "period": {
+        "legend": "Abrechnungszeitraum",
+        "monthly": "Monatlich, {price}",
+        "yearly": "Jährlich, {price}"
+      },
+      "hintYear": "{price} pro Jahr, zahlbar im Checkout. Jede Zahlung deckt ein Jahr ab.",
+      "hintYearAuto": "{price} pro Jahr, jedes Jahr automatisch von Ihrer Karte abgebucht, bis Sie kündigen."
     },
     "subscription": {
       "title": "Abonnement",
@@ -829,7 +842,8 @@
         "trialing": "Kostenlose Testphase",
         "comped": "Kostenlos bereitgestellt",
         "canceling": "Keine Verlängerung",
-        "ended": "Beendet"
+        "ended": "Beendet",
+        "past_due": "Zahlung fehlgeschlagen"
       },
       "date": {
         "paidUntil": "Bezahlt bis {date}",
@@ -838,7 +852,9 @@
         "compOpen": "Kostenloser Zugang ohne Enddatum",
         "cancelingUntil": "Keine Verlängerung. Aktiv bis {date}",
         "endedOn": "Abonnement beendet am {date}",
-        "endedNoDate": "Abonnement beendet"
+        "endedNoDate": "Abonnement beendet",
+        "renewsOn": "Verlängert sich am {date}",
+        "graceUntil": "Zahlung fehlgeschlagen. Funktioniert bis {date}"
       },
       "lastPayment": "Letzte Zahlung: {price} pro Monat",
       "nextPayment": "Der Preis dieser App hat sich geändert. Ihre nächste Zahlung beträgt {price} pro Monat.",
@@ -849,7 +865,8 @@
         "resubscribe": "Erneut abonnieren",
         "subscribe": "Jetzt abonnieren",
         "resume": "Abonnement fortsetzen",
-        "cancel": "Abonnement kündigen"
+        "cancel": "Abonnement kündigen",
+        "payNow": "Jetzt zahlen"
       },
       "cancelConfirm": {
         "title": "Abonnement für {name} kündigen?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name} bleibt bis zum Ende des bezahlten Zeitraums aktiv und wird danach pausiert. Ihre Daten und Einstellungen bleiben erhalten.",
         "afterwards": "Es fallen keine weiteren Kosten an, und Sie können jederzeit erneut abonnieren.",
         "confirm": "Abonnement kündigen",
-        "keep": "Abonnement behalten"
+        "keep": "Abonnement behalten",
+        "messageAuto": "Ihre Karte wird nicht mehr belastet. {name} bleibt bis {date} aktiv und wird danach pausiert. Ihre Daten und Einstellungen bleiben erhalten.",
+        "messageAutoNoDate": "Ihre Karte wird nicht mehr belastet. {name} bleibt bis zum Ende des bezahlten Zeitraums aktiv und wird danach pausiert. Ihre Daten und Einstellungen bleiben erhalten."
       },
       "toast": {
         "canceled": "Abonnement gekündigt. Es bleibt bis {date} aktiv.",
@@ -865,7 +884,14 @@
         "resumed": "Abonnement fortgesetzt."
       },
       "working": "Wird verarbeitet",
-      "noCheckout": "Der Checkout ist für diese App derzeit nicht verfügbar. Versuchen Sie es in einem Moment erneut."
+      "noCheckout": "Der Checkout ist für diese App derzeit nicht verfügbar. Versuchen Sie es in einem Moment erneut.",
+      "paymentFailed": "Die letzte Kartenzahlung für diese App ist fehlgeschlagen. Die App funktioniert bis {date} weiter, während der Zahlungsanbieter es erneut versucht. Zahlen Sie jetzt oder korrigieren Sie Ihre Zahlungsmethode, um eine Pause zu vermeiden.",
+      "paymentFailedNoDate": "Die letzte Kartenzahlung für diese App ist fehlgeschlagen. Die App funktioniert weiter, während der Zahlungsanbieter es erneut versucht. Zahlen Sie jetzt oder korrigieren Sie Ihre Zahlungsmethode, um eine Pause zu vermeiden.",
+      "autoRenewHint": "Ihre Karte wird zum Verlängerungsdatum automatisch belastet. Kündigen Sie vorher, um das zu verhindern.",
+      "lastPaymentYear": "Letzte Zahlung: {price} pro Jahr",
+      "nextPaymentYear": "Der Preis dieser App hat sich geändert. Ihre nächste Zahlung beträgt {price} pro Jahr.",
+      "priceLocked": "Ihr Preis ist bei {price} pro Monat festgeschrieben. Er bleibt gleich, solange Sie abonniert bleiben, auch wenn sich der Preis der App ändert.",
+      "priceLockedYear": "Ihr Preis ist bei {price} pro Jahr festgeschrieben. Er bleibt gleich, solange Sie abonniert bleiben, auch wenn sich der Preis der App ändert."
     },
     "tools": {
       "open": "Öffnen",
@@ -875,6 +901,24 @@
       },
       "soon": "Demnächst",
       "upgrade": "Upgrade"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Zahlung eingegangen",
+        "message": "Vielen Dank. Ihr Abonnement ist aktiv und die App ist einsatzbereit."
+      },
+      "pending": {
+        "title": "Zahlung wird bestätigt",
+        "message": "Der Zahlungsanbieter hat die Zahlung noch nicht bestätigt. Diese Seite aktualisiert sich, sobald das geschieht; Sie müssen nicht erneut zahlen."
+      },
+      "failed": {
+        "title": "Die Zahlung ist nicht durchgegangen",
+        "message": "Es wurde nichts abgebucht. Abonnieren Sie erneut, um eine andere Zahlungsart zu versuchen."
+      },
+      "cancelled": {
+        "title": "Zahlung abgebrochen",
+        "message": "Es wurde nichts abgebucht. Abonnieren Sie erneut, wann immer Sie bereit sind."
+      }
     }
   }
 }

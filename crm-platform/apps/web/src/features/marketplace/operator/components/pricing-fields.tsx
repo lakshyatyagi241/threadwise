@@ -181,6 +181,50 @@ export function PricingFields({
             </Field>
           </div>
 
+          <fieldset className="min-w-0 space-y-2" data-testid="pricing-billing-mode">
+            <legend className="mb-1 text-sm font-medium">{t('billingMode.legend')}</legend>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {(['one_time', 'recurring'] as const).map((m) => (
+                <label
+                  key={m}
+                  className={cn(
+                    'flex cursor-pointer items-start gap-3 rounded-md border p-3 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
+                    draft.billingMode === m ? 'border-primary bg-primary/5' : 'border-border',
+                    disabled && 'cursor-not-allowed opacity-70',
+                  )}
+                >
+                  <input
+                    type="radio"
+                    name={id('billing-mode')}
+                    value={m}
+                    checked={draft.billingMode === m}
+                    onChange={() => onChange({ billingMode: m })}
+                    className="mt-0.5 size-4 accent-[var(--primary)]"
+                  />
+                  <span>
+                    <span className="block font-medium">{t(`billingMode.${m}.label`)}</span>
+                    <span className="block text-xs text-muted-foreground">
+                      {t(`billingMode.${m}.hint`)}
+                    </span>
+                  </span>
+                </label>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">{t('billingMode.note')}</p>
+          </fieldset>
+
+          <Checkbox
+            id={id('price-lock')}
+            label={
+              <span>
+                {t('priceLock.label')}
+                <span className="block text-xs text-muted-foreground">{t('priceLock.hint')}</span>
+              </span>
+            }
+            checked={draft.priceLock}
+            onChange={(e) => onChange({ priceLock: e.target.checked })}
+          />
+
           <div className="flex items-start gap-3">
             <Switch
               id={id('on-sale')}

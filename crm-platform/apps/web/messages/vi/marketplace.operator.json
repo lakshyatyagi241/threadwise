@@ -58,7 +58,8 @@
           "trialing": "Đang dùng thử",
           "comped": "Được tặng",
           "canceling": "Sắp kết thúc",
-          "ended": "Đã kết thúc"
+          "ended": "Đã kết thúc",
+          "past_due": "Thanh toán thất bại"
         },
         "subscriptionSource": {
           "purchase": "Mua",
@@ -92,7 +93,8 @@
         "request": "Không thể hoàn tất yêu cầu.",
         "unexpected": "Có lỗi xảy ra phía chúng tôi. Thử lại; nếu vẫn tiếp diễn, hãy trích mã yêu cầu.",
         "subscriptionState": "Không thể thực hiện ở trạng thái hiện tại của gói đăng ký. Không gian làm việc đã trả tiền không thể được tặng (hãy hủy đăng ký trước), ứng dụng miễn phí không có gì để tặng, và gói đã kết thúc không thể hủy lại.",
-        "subscriptionNotFound": "Không tìm thấy gói đăng ký đó. Có thể đã bị xóa. Tải lại danh sách."
+        "subscriptionNotFound": "Không tìm thấy gói đăng ký đó. Có thể đã bị xóa. Tải lại danh sách.",
+        "renewalNotStopped": "Không thể dừng gia hạn thẻ tại nhà cung cấp thanh toán, nên không có gì thay đổi và không gian làm việc vẫn có thể bị trừ tiền. Hãy thử lại sau ít phút, hoặc kết thúc trong trang quản trị của nhà cung cấp."
       },
       "list": {
         "title": "Danh mục Chợ ứng dụng",
@@ -658,12 +660,13 @@
         "free": "Miễn phí",
         "perMonth": "/ tháng",
         "trial": "{count, plural, other {dùng thử # ngày}}",
-        "notOnSale": "Không bán"
+        "notOnSale": "Không bán",
+        "perYear": "/ năm"
       },
       "pricing": {
         "title": "Giá",
         "description": "Quyết định ứng dụng này miễn phí hay trả phí, và giá là bao nhiêu. Giá của bạn là giá có hiệu lực: manifest của nhà phát triển chỉ đề xuất một mức giá.",
-        "billing": "Ứng dụng trả phí được bán theo kỳ hạn trả trước hằng tháng: một tiện ích thanh toán được mua qua quy trình thanh toán thông thường. Hiện chưa có gia hạn thẻ tự động, nên không gian làm việc sẽ phải trả lại khi kỳ sắp hết. Thay đổi giá áp dụng cho đăng ký mới và lần thanh toán kế tiếp của mỗi người đăng ký; kỳ đã thanh toán không bị ảnh hưởng.",
+        "billing": "Ứng dụng trả phí được bán dưới dạng tiện ích thanh toán, mua qua quy trình thanh toán thông thường. Mặc định là kỳ hạn trả trước hằng tháng: không gian làm việc sẽ trả lại khi kỳ sắp hết. Chọn \"Thẻ tự động gia hạn\" bên dưới để tự động trừ tiền thẻ của không gian làm việc mỗi tháng. Thay đổi giá áp dụng cho đăng ký mới và lần thanh toán kế tiếp của mỗi người đăng ký trả trước; kỳ đã thanh toán không bị ảnh hưởng, và người đăng ký đã được thẻ gia hạn tự động vẫn giữ giá trên gói đăng ký tại nhà cung cấp thanh toán cho đến khi họ đăng ký lại.",
         "readOnly": "Chỉ xem. Thay đổi giá cần quyền nền tảng {permission}.",
         "visibility": {
           "label": "Trạng thái niêm yết",
@@ -693,7 +696,7 @@
           "trialDays": "Số ngày dùng thử miễn phí",
           "trialDaysHint": "0 nghĩa là không dùng thử, tối đa {max}. Mỗi không gian làm việc được dùng thử một lần cho mỗi ứng dụng.",
           "annualAmount": "Giá hằng năm (không bắt buộc)",
-          "annualAmountHint": "Lưu để dùng sau. Thanh toán hằng năm chưa được xây dựng, nên hiện không gian làm việc chưa thể trả theo năm.",
+          "annualAmountHint": "Giá của một năm. Để trống nếu chỉ bán ứng dụng theo tháng. Không gian làm việc chọn trả theo năm sẽ thanh toán khoản này mỗi năm một lần, hoặc trừ thẻ mỗi năm khi ứng dụng gia hạn bằng thẻ.",
           "purchasable": "Đang bán",
           "purchasableHint": "Khi tắt, không gian làm việc mới không thể đăng ký. Các không gian làm việc đã đăng ký vẫn có thể gia hạn."
         },
@@ -763,6 +766,27 @@
             "paid": "Người đăng ký giữ phần thời gian đã thanh toán. Không hoàn tiền.",
             "action": "Đặt miễn phí"
           }
+        },
+        "billingMode": {
+          "legend": "Cách gia hạn",
+          "one_time": {
+            "label": "Tháng trả trước",
+            "hint": "Không gian làm việc trả lại khi kỳ sắp hết."
+          },
+          "recurring": {
+            "label": "Thẻ tự động gia hạn",
+            "hint": "Nhà cung cấp thanh toán trừ tiền thẻ mỗi tháng cho đến khi không gian làm việc hủy."
+          },
+          "note": "Áp dụng cho đăng ký mới. Đăng ký đang chạy giữ nguyên cách đã mua. Cần cổng thanh toán hỗ trợ đăng ký định kỳ."
+        },
+        "priceLock": {
+          "label": "Giữ người đăng ký ở mức giá họ trả lần đầu",
+          "hint": "Khi đó, thay đổi giá chỉ áp dụng cho người đăng ký mới. Bật tùy chọn này cũng khóa người đăng ký hiện tại ở mức giá của lần thanh toán gần nhất; tắt đi thì không mở khóa cho ai. Khóa giá kết thúc khi đăng ký kết thúc."
+        },
+        "withdrawn": {
+          "title": "Hoàn tiền cho người đăng ký ứng dụng đã gỡ này",
+          "hint": "Ứng dụng bị gỡ giữa chừng các kỳ mà người đăng ký đã trả tiền. Hoàn cho mỗi người phần của khoản thanh toán gần nhất tính từ lúc ứng dụng bị gỡ.",
+          "action": "Hoàn tiền thời gian chưa dùng..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Đã kết thúc",
           "mrr": "Doanh thu hằng tháng",
           "mrrNone": "Chưa có người đăng ký trả phí",
-          "mrrCurrency": "Doanh thu hằng tháng, {currency}"
+          "mrrCurrency": "Doanh thu hằng tháng, {currency}",
+          "pastDue": "Thanh toán thất bại"
         },
         "summary": {
           "emptyTitle": "Chưa có ứng dụng trả phí",
@@ -871,7 +896,8 @@
             "canceling": "Sắp kết thúc",
             "ended": "Đã kết thúc",
             "total": "Tổng",
-            "mrr": "Doanh thu hằng tháng"
+            "mrr": "Doanh thu hằng tháng",
+            "pastDue": "Thanh toán thất bại"
           },
           "free": "Miễn phí",
           "totals": "Mọi ứng dụng",
@@ -905,7 +931,9 @@
           "compUntil": "Tặng đến {date}",
           "compOpen": "Tặng cho đến khi bạn kết thúc",
           "endedOn": "Đã kết thúc {date}",
-          "none": "Không có ngày kết thúc"
+          "none": "Không có ngày kết thúc",
+          "renewsOn": "Gia hạn {date}",
+          "graceUntil": "Thời gian ân hạn đến {date}"
         },
         "noCharge": "Không tính phí",
         "compBy": "Được tặng bởi {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Không có đăng ký nào khớp",
         "noMatchMessage": "Không có kết quả nào khớp với bộ lọc này. Hãy thử bộ lọc khác.",
         "clearFilters": "Xóa bộ lọc",
-        "loadMore": "Tải thêm"
+        "loadMore": "Tải thêm",
+        "unlockPrice": "Mở khóa giá",
+        "refundUnused": "Hoàn tiền thời gian chưa dùng"
+      },
+      "unlockDialog": {
+        "eyebrow": "Giá bị khóa",
+        "title": "Mở khóa giá cho {workspace}",
+        "close": "Đóng",
+        "back": "Quay lại",
+        "confirm": "Mở khóa giá",
+        "summary": "{workspace} trả mức giá đã trả lần đầu cho {app}. Mở khóa sẽ đưa lần thanh toán tiếp theo về giá hiện tại của ứng dụng.",
+        "effectPrepaid": "Lần thanh toán tiếp theo của họ, sau kỳ đã trả đến {date}, sẽ theo giá hiện tại.",
+        "effectCard": "Thẻ của họ gia hạn ứng dụng với giá cũ tại nhà cung cấp thanh toán, nên việc gia hạn bằng thẻ sẽ kết thúc vào cuối kỳ đã trả ({date}). Họ sẽ được thông báo và có thể đăng ký lại với giá hiện tại.",
+        "reason": "Lý do (lưu trong nhật ký kiểm toán)",
+        "done": "{workspace} không còn ở mức giá bị khóa cho {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Hoàn tiền",
+        "title": "Hoàn tiền thời gian chưa dùng cho {workspace}",
+        "close": "Đóng",
+        "back": "Quay lại",
+        "summary": "Hoàn lại phần của khoản thanh toán gần nhất cho {app} mà chưa sử dụng, thông qua nhà cung cấp thanh toán. Không có khoản nào được hoàn hai lần: chạy lại chỉ hoàn phần còn lại.",
+        "working": "Đang tính số tiền...",
+        "paid": "Thanh toán gần nhất",
+        "unused": "Phần chưa dùng",
+        "already": "Đã hoàn tiền",
+        "refundable": "Hoàn tiền ngay",
+        "nothing": "Không có gì để hoàn: kỳ đã kết thúc, không tìm thấy khoản thanh toán qua cổng thanh toán, hoặc phần chưa dùng đã được hoàn.",
+        "endNow": "Đồng thời kết thúc đăng ký ngay",
+        "endNowHint": "Bản cài đặt bị tạm dừng và dữ liệu được giữ lại. Nếu không chọn, ứng dụng vẫn chạy đến hết kỳ.",
+        "reason": "Lý do (lưu trong nhật ký kiểm toán và gửi tới nhà cung cấp thanh toán)",
+        "confirm": "Hoàn {amount}",
+        "done": "Đã hoàn {amount} cho {workspace} về {app}.",
+        "refused": "Nhà cung cấp thanh toán đã từ chối hoàn tiền: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Ứng dụng đã gỡ",
+        "title": "Hoàn tiền cho người đăng ký {name}",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "intro": "Xem xét mọi đăng ký trả phí của {name} và hoàn phần của khoản thanh toán gần nhất vẫn chưa dùng khi ứng dụng bị gỡ, thông qua nhà cung cấp thanh toán. Hãy xem trước; không có khoản nào được hoàn hai lần.",
+        "preview": "Xem trước",
+        "owed": "{count, plural, other {# người đăng ký được hoàn tiền}}",
+        "nobody": "Hiện không ai được hoàn khoản nào.",
+        "more": "Số đăng ký vượt quá mức một lần chạy xử lý được. Hãy chạy lại để tiếp tục.",
+        "reason": "Lý do (lưu trong nhật ký kiểm toán và gửi tới nhà cung cấp thanh toán)",
+        "run": "{count, plural, other {Hoàn tiền cho # người đăng ký}}",
+        "continue": "Tiếp tục với các đăng ký tiếp theo",
+        "result": "Đã hoàn {refunded}, thất bại {failed}.",
+        "someFailed": "Một số khoản hoàn không thành công (nhà cung cấp từ chối hoặc không kết nối được). Chúng được liệt kê trong nhật ký kiểm toán; chạy lại sẽ thử lại.",
+        "done": "{count, plural, other {Đã hoàn tiền cho # người đăng ký của {name}.}}"
       }
     }
   }

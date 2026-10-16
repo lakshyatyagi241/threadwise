@@ -58,7 +58,8 @@
           "trialing": "In prova",
           "comped": "Omaggio",
           "canceling": "In scadenza",
-          "ended": "Terminato"
+          "ended": "Terminato",
+          "past_due": "Pagamento non riuscito"
         },
         "subscriptionSource": {
           "purchase": "Acquisto",
@@ -92,7 +93,8 @@
         "request": "Impossibile completare la richiesta.",
         "unexpected": "Qualcosa è andato storto dal nostro lato. Riprova; se continua, indica l’ID della richiesta.",
         "subscriptionState": "Non è possibile nello stato attuale dell’abbonamento. Un workspace che già paga non può ricevere l’omaggio (prima annulla il suo abbonamento), un’app gratuita non ha nulla da omaggiare e un abbonamento terminato non può essere annullato di nuovo.",
-        "subscriptionNotFound": "Abbonamento non trovato. Potrebbe essere stato rimosso. Ricarica l’elenco."
+        "subscriptionNotFound": "Abbonamento non trovato. Potrebbe essere stato rimosso. Ricarica l’elenco.",
+        "renewalNotStopped": "Non è stato possibile interrompere il rinnovo con carta presso il provider di pagamento, quindi non è cambiato nulla e il workspace può ancora essere addebitato. Riprova tra un momento, oppure termina il rinnovo nella dashboard del provider."
       },
       "list": {
         "title": "Catalogo del Marketplace",
@@ -658,12 +660,13 @@
         "free": "Gratuita",
         "perMonth": "/ mese",
         "trial": "{count, plural, one {Prova di # giorno} other {Prova di # giorni}}",
-        "notOnSale": "Non in vendita"
+        "notOnSale": "Non in vendita",
+        "perYear": "/ anno"
       },
       "pricing": {
         "title": "Prezzo",
         "description": "Decidi se questa app è gratuita o a pagamento e quanto costa. Conta il tuo prezzo: il manifest dello sviluppatore ne propone solo uno.",
-        "billing": "Un’app a pagamento si vende come periodo mensile prepagato: un componente aggiuntivo di fatturazione acquistato tramite il normale checkout. Non c’è ancora un rinnovo automatico con carta, quindi un workspace paga di nuovo quando il suo mese sta per finire. Una modifica del prezzo si applica alle nuove sottoscrizioni e al pagamento successivo di ciascun abbonato; un periodo già pagato non viene mai toccato.",
+        "billing": "Un’app a pagamento si vende come componente aggiuntivo di fatturazione acquistato tramite il normale checkout. Per impostazione predefinita è un periodo mensile prepagato: un workspace paga di nuovo quando il suo mese sta per finire. Scegli “La carta rinnova automaticamente” qui sotto per addebitare invece la carta del workspace automaticamente ogni mese. Una modifica del prezzo si applica alle nuove sottoscrizioni e al pagamento successivo di ciascun abbonato prepagato; un periodo già pagato non viene mai toccato, e un abbonato la cui carta si rinnova già mantiene il prezzo del suo abbonamento presso il provider finché non si riabbona.",
         "readOnly": "Sola lettura. Modificare il prezzo richiede l’autorizzazione di piattaforma {permission}.",
         "visibility": {
           "label": "Stato dell’inserzione",
@@ -693,7 +696,7 @@
           "trialDays": "Periodo di prova gratuito (giorni)",
           "trialDaysHint": "0 per nessuna prova, al massimo {max}. Ogni workspace ottiene una sola prova per app.",
           "annualAmount": "Prezzo annuale (facoltativo)",
-          "annualAmountHint": "Salvato per dopo. La fatturazione annuale non è ancora disponibile, quindi oggi i workspace non possono pagare su base annua.",
+          "annualAmountHint": "Il prezzo di un anno. Lascia vuoto per vendere l’app solo con pagamento mensile. Un workspace che sceglie il pagamento annuale versa questo importo una volta all’anno, o con carta ogni anno quando l’app si rinnova con carta.",
           "purchasable": "In vendita",
           "purchasableHint": "Se disattivato, nessun nuovo workspace può abbonarsi. I workspace già abbonati possono ancora rinnovare."
         },
@@ -763,6 +766,27 @@
             "paid": "Gli abbonati mantengono il tempo già pagato. Non viene rimborsato.",
             "action": "Rendi gratuita"
           }
+        },
+        "billingMode": {
+          "legend": "Modalità di rinnovo",
+          "one_time": {
+            "label": "Mese prepagato",
+            "hint": "Il workspace paga di nuovo quando il suo mese sta per finire."
+          },
+          "recurring": {
+            "label": "La carta rinnova automaticamente",
+            "hint": "Il provider di pagamento addebita la carta ogni mese finché il workspace non annulla."
+          },
+          "note": "Si applica alle nuove sottoscrizioni. Un abbonamento già attivo mantiene la modalità con cui è stato acquistato. Richiede un gateway di pagamento che supporti gli abbonamenti."
+        },
+        "priceLock": {
+          "label": "Mantieni gli abbonati al prezzo pagato all’inizio",
+          "hint": "Una modifica di prezzo riguarda quindi solo i nuovi abbonati. Attivando l’opzione, anche gli abbonati attuali vengono bloccati sul loro ultimo pagamento; disattivandola non si sblocca nessuno. Il blocco termina con l’abbonamento."
+        },
+        "withdrawn": {
+          "title": "Rimborsa gli abbonati di questa app ritirata",
+          "hint": "L’app è stata ritirata a metà dei periodi pagati dai suoi abbonati. Restituisci a ciascuno la quota dell’ultimo pagamento dal momento del ritiro.",
+          "action": "Rimborsa il tempo non usato..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Scaduto",
           "mrr": "Ricavo mensile",
           "mrrNone": "Ancora nessun abbonato pagante",
-          "mrrCurrency": "Ricavo mensile, {currency}"
+          "mrrCurrency": "Ricavo mensile, {currency}",
+          "pastDue": "Pagamento non riuscito"
         },
         "summary": {
           "emptyTitle": "Ancora nessuna app a pagamento",
@@ -871,7 +896,8 @@
             "canceling": "In scadenza",
             "ended": "Scaduti",
             "total": "Totale",
-            "mrr": "Ricavo mensile"
+            "mrr": "Ricavo mensile",
+            "pastDue": "Pagamento non riuscito"
           },
           "free": "Gratuita",
           "totals": "Tutte le app",
@@ -905,7 +931,9 @@
           "compUntil": "Offerto gratis fino al {date}",
           "compOpen": "Offerto gratis finché non lo termini",
           "endedOn": "Terminato il {date}",
-          "none": "Nessuna data di fine"
+          "none": "Nessuna data di fine",
+          "renewsOn": "Si rinnova il {date}",
+          "graceUntil": "Periodo di tolleranza fino al {date}"
         },
         "noCharge": "Nessun addebito",
         "compBy": "Offerto da {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Nessun abbonamento corrisponde",
         "noMatchMessage": "Nessun elemento corrisponde a questi filtri. Prova con altri.",
         "clearFilters": "Cancella filtri",
-        "loadMore": "Carica altri"
+        "loadMore": "Carica altri",
+        "unlockPrice": "Sblocca prezzo",
+        "refundUnused": "Rimborsa il tempo non usato"
+      },
+      "unlockDialog": {
+        "eyebrow": "Prezzo bloccato",
+        "title": "Sblocca il prezzo di {workspace}",
+        "close": "Chiudi",
+        "back": "Indietro",
+        "confirm": "Sblocca prezzo",
+        "summary": "{workspace} paga per {app} il prezzo pagato all’inizio. Con lo sblocco, il prossimo pagamento sarà al prezzo attuale dell’app.",
+        "effectPrepaid": "Il loro prossimo pagamento, dopo il periodo pagato fino al {date}, sarà al prezzo attuale.",
+        "effectCard": "La loro carta rinnova l’app al vecchio prezzo presso il fornitore di pagamenti, quindi il rinnovo con carta termina alla fine del periodo pagato ({date}). Vengono avvisati e possono riabbonarsi al prezzo attuale.",
+        "reason": "Motivo (conservato nel registro di audit)",
+        "done": "{workspace} non ha più un prezzo bloccato per {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Rimborso",
+        "title": "Rimborsa il tempo non usato di {workspace}",
+        "close": "Chiudi",
+        "back": "Indietro",
+        "summary": "Restituisce, tramite il provider di pagamento, la parte dell’ultimo pagamento di {app} che è ancora davanti. Nulla viene restituito due volte: rieseguendolo si restituisce solo ciò che resta.",
+        "working": "Calcolo dell’importo in corso...",
+        "paid": "Ultimo pagamento",
+        "unused": "Quota non usata",
+        "already": "Già rimborsato",
+        "refundable": "Da rimborsare ora",
+        "nothing": "Non c’è nulla da rimborsare: il periodo è terminato, non è stato trovato alcun pagamento tramite gateway o la quota non usata è già stata restituita.",
+        "endNow": "Termina anche l’abbonamento adesso",
+        "endNowHint": "L’installazione viene messa in pausa e i suoi dati restano conservati. Senza questa opzione l’app continua a funzionare fino alla fine del periodo.",
+        "reason": "Motivo (conservato nel registro di audit e inviato al provider di pagamento)",
+        "confirm": "Rimborsa {amount}",
+        "done": "Rimborsati {amount} a {workspace} per {app}.",
+        "refused": "Il provider di pagamento ha rifiutato il rimborso: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "App ritirata",
+        "title": "Rimborsa gli abbonati di {name}",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "intro": "Esamina ogni abbonamento a pagamento di {name} e restituisce, tramite il provider di pagamento, la quota dell’ultimo pagamento che era ancora davanti al momento del ritiro dell’app. Prima l’anteprima; nulla viene restituito due volte.",
+        "preview": "Anteprima",
+        "owed": "{count, plural, one {# abbonato ha diritto a un rimborso} other {# abbonati hanno diritto a un rimborso}}",
+        "nobody": "Al momento nessuno ha diritto a un rimborso.",
+        "more": "Ci sono più abbonamenti di quanti ne gestisca una singola esecuzione. Eseguilo di nuovo per continuare.",
+        "reason": "Motivo (conservato nel registro di audit e inviato al provider di pagamento)",
+        "run": "{count, plural, one {Rimborsa # abbonato} other {Rimborsa # abbonati}}",
+        "continue": "Continua con gli abbonamenti successivi",
+        "result": "Rimborsati: {refunded}, non riusciti: {failed}.",
+        "someFailed": "Alcuni rimborsi non sono andati a buon fine (il provider li ha rifiutati o non era raggiungibile). Sono elencati nel registro di audit; rieseguendolo vengono ritentati.",
+        "done": "{count, plural, one {Rimborsato # abbonato di {name}.} other {Rimborsati # abbonati di {name}.}}"
       }
     }
   }

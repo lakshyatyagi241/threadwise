@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import type { MarketSubscription } from '@crm/contracts';
+import type { MarketBillingPeriod, MarketSubscription } from '@crm/contracts';
 import { useToast } from '@crm/ui';
 import {
   cancelSubscription,
@@ -38,10 +38,10 @@ export function useSubscribe(app: { slug: string; name: string }) {
   // a second navigation. Leaving unmounts this page, and coming back mounts it fresh.
   const [redirecting, setRedirecting] = useState(false);
 
-  const run = async (startTrial: boolean) => {
+  const run = async (startTrial: boolean, period: MarketBillingPeriod = 'monthly') => {
     setMode(startTrial ? 'trial' : 'pay');
     setNoCheckout(false);
-    const out = await action.run(() => subscribeToApp(app.slug, subscribeBody(startTrial)));
+    const out = await action.run(() => subscribeToApp(app.slug, subscribeBody(startTrial, period)));
     if (!out.ok) {
       const kind = mktError(out.error).kind;
       if (kind === 'trialUnavailable' || kind === 'notForSale')

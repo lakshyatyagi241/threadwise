@@ -119,9 +119,15 @@ export class SubscriptionsService {
       if (ev.availability === 'not_visible') throw this.notFound();
       const now = new Date();
       const view = app.sub ? toSubscriptionView(app.sub, app.pricing, app.status, now) : null;
+      // A yearly subscription needs a yearly price on the listing: asking for one that is not offered is a mistake, not a monthly purchase.
+      if (!input.startTrial && input.period === 'yearly' && app.pricing.annualAmount === null)
+        throw AppError.validation('This app is not sold yearly.', [
+          { path: 'period', message: 'There is no yearly price for this app.' },
+        ]);
+      const period = input.startTrial ? 'monthly' : input.period;
       const checkout = {
         packSlug: marketPackSlug(app.uuid),
-        path: marketCheckoutPath(marketPackSlug(app.uuid)),
+        path: marketCheckoutPath(marketPackSlug(app.uuid), app.slug, period),
       };
 
       if (input.startTrial) {
@@ -176,6 +182,22 @@ export class SubscriptionsService {
   /** Stops renewal. The period already paid for runs to its end; then the installation is paused and its data kept. */
   async cancel(appRef: string): Promise<MarketSubscriptionStateAnswer> {
     const ctx = RequestContextStore.require();
+    // A subscription the card renews is stopped at the payment provider FIRST (at the end of the period already paid for): the person is
+    // told the card will not be charged again, so that must be true before the ledger says it. When the provider cannot confirm, nothing
+    // changes and the person is told to try again.
+    const live = await this.db.tx(async (tx) => {
+      const app = await this.facts(tx, ctx.orgId, appRef);
+      const sub = app.sub;
+      return sub && sub.source === 'purchase' && sub.status === 'active' && sub.autorenew
+        ? { packId: sub.packId }
+        : null;
+    });
+    if (live)
+      await this.lifecycle.stopCardRenewal(ctx.orgId, live.packId, {
+        atCycleEnd: true,
+        reason: 'user',
+        actor: { id: ctx.actorId ?? ctx.userId, type: ctx.actorType },
+      });
     return this.change(appRef, async (tx, app, view) => {
       if (view.status === 'ended') throw this.state('This subscription has already ended.');
       if (app.sub!.source === 'comp')
@@ -204,6 +226,10 @@ export class SubscriptionsService {
     const ctx = RequestContextStore.require();
     return this.change(appRef, async (tx, app, view) => {
       if (view.status !== 'canceling') throw this.state('There is no cancellation to take back.');
+      if (app.sub!.autorenewStoppedAt !== null)
+        throw this.state(
+          'The automatic renewal was stopped at the payment provider and cannot be restarted. Subscribe again to keep the app.',
+        );
       const changed = await this.setCancel(tx, app.id, false);
       if (changed)
         await this.lifecycle.note(
@@ -230,10 +256,10 @@ export class SubscriptionsService {
     userId: number | null,
     appId: number,
     slug: string,
-  ): Promise<boolean> {
+  ): Promise<{ changed: boolean; cardPackId: number | null }> {
     const sub = await this.subOf(tx, orgId, appId);
     if (!sub || sub.status !== 'active' || sub.source === 'comp' || sub.cancelAtPeriodEnd)
-      return false;
+      return { changed: false, cardPackId: null };
     const changed = await this.setCancel(tx, appId, true);
     if (changed)
       await this.lifecycle.note(
@@ -246,7 +272,21 @@ export class SubscriptionsService {
         { by: 'workspace', userId },
         { reason: 'uninstalled', periodEnd: iso(sub.currentPeriodEnd) },
       );
-    return changed;
+    // The caller ends the provider subscription after the commit (a provider call must not hold this transaction).
+    return { changed, cardPackId: changed && sub.autorenew ? sub.packId : null };
+  }
+
+  /** After an uninstall committed: the card renewal of the app it cancelled is ended at the provider, at the end of the paid period. */
+  async stopCardRenewalAfterUninstall(
+    orgId: number,
+    userId: number | null,
+    packId: number,
+  ): Promise<void> {
+    await this.lifecycle.stopCardRenewal(orgId, packId, {
+      atCycleEnd: true,
+      reason: 'user',
+      actor: { id: userId, type: 'user' },
+    });
   }
 
   // --- internals ----------------------------------------------------------------------------------------------------------------------

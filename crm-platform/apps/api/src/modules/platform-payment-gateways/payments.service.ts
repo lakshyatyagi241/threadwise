@@ -1,5 +1,6 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
@@ -50,10 +51,26 @@ export class PaymentsService {
     private readonly config: ConfigService<Env, true>,
   ) {}
 
-  private webUrl(outcome: ReturnOutcome, order?: string): string {
+  /** Where the buyer lands: the order history, or (for an order of a Marketplace app) the app's own page, with the outcome in the address. */
+  private webUrl(outcome: ReturnOutcome, order?: string, path = '/billing/orders'): string {
     const q = new URLSearchParams({ payment: outcome });
     if (order) q.set('order', order);
-    return `${this.config.get('WEB_APP_URL', { infer: true })}/billing/orders?${q.toString()}`;
+    return `${this.config.get('WEB_APP_URL', { infer: true })}${path}?${q.toString()}`;
+  }
+
+  /**
+   * The page of the Marketplace app an add-on order bought (`/marketplace/app/<slug>`), or null for any other order. Read by the add-on's
+   * link to its app only, never from anything the provider sent.
+   */
+  private async appPage(order: OrderRow): Promise<string | null> {
+    if (order.kind !== 'addon' || !order.planSlug) return null;
+    return this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT a.slug FROM plans p JOIN marketplace_apps a ON a.id = p.marketplace_app_id
+        WHERE p.slug = ${order.planSlug}`);
+      const slug = (res.rows[0] as { slug?: string } | undefined)?.slug;
+      return slug ? `/marketplace/app/${encodeURIComponent(slug)}` : null;
+    });
   }
 
   // ---- the buyer comes back --------------------------------------------------------------------------------------------
@@ -65,7 +82,7 @@ export class PaymentsService {
     const order = await this.store.tx((tx) => this.orders.byReturnToken(tx, token));
     if (!order || order.gatewaySlug !== slug) return this.webUrl('notfound');
     const { outcome } = await this.confirmation.confirm(order, params);
-    return this.webUrl(outcome, order.orderNumber);
+    return this.webUrl(outcome, order.orderNumber, (await this.appPage(order)) ?? undefined);
   }
 
   // ---- the provider calls --------------------------------------------------------------------------------------------

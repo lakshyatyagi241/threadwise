@@ -58,7 +58,8 @@
           "trialing": "Uji coba",
           "comped": "Diberikan gratis",
           "canceling": "Akan berakhir",
-          "ended": "Berakhir"
+          "ended": "Berakhir",
+          "past_due": "Pembayaran gagal"
         },
         "subscriptionSource": {
           "purchase": "Pembelian",
@@ -92,7 +93,8 @@
         "request": "Permintaan tidak dapat diselesaikan.",
         "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi; jika terus terjadi, sertakan ID permintaan.",
         "subscriptionState": "Itu tidak mungkin dilakukan dalam status langganan saat ini. Workspace yang sudah membayar tidak dapat diberi akses gratis (batalkan langganannya dulu), aplikasi gratis tidak punya yang perlu diberikan gratis, dan langganan yang sudah berakhir tidak dapat dibatalkan lagi.",
-        "subscriptionNotFound": "Langganan itu tidak ditemukan. Mungkin sudah dihapus. Muat ulang daftar."
+        "subscriptionNotFound": "Langganan itu tidak ditemukan. Mungkin sudah dihapus. Muat ulang daftar.",
+        "renewalNotStopped": "Perpanjangan kartu tidak dapat dihentikan di penyedia pembayaran, jadi tidak ada yang diubah dan workspace masih dapat ditagih. Coba lagi sebentar lagi, atau akhiri di dasbor penyedia."
       },
       "list": {
         "title": "Katalog Marketplace",
@@ -658,12 +660,13 @@
         "free": "Gratis",
         "perMonth": "/ bulan",
         "trial": "{count, plural, other {uji coba # hari}}",
-        "notOnSale": "Tidak dijual"
+        "notOnSale": "Tidak dijual",
+        "perYear": "/ tahun"
       },
       "pricing": {
         "title": "Harga",
         "description": "Tentukan apakah aplikasi ini gratis atau berbayar dan berapa biayanya. Harga Anda yang berlaku: manifes pengembang hanya mengusulkan.",
-        "billing": "Aplikasi berbayar dijual sebagai masa berlaku bulanan prabayar: add-on penagihan yang dibeli lewat checkout biasa. Belum ada perpanjangan kartu otomatis, jadi workspace membayar lagi saat masa bulannya hampir habis. Perubahan harga berlaku untuk langganan baru dan pembayaran berikutnya setiap pelanggan; masa yang sudah dibayar tidak pernah diubah.",
+        "billing": "Aplikasi berbayar dijual sebagai add-on penagihan yang dibeli lewat checkout biasa. Secara default berupa masa berlaku bulanan prabayar: workspace membayar lagi saat masa bulannya hampir habis. Pilih \"Kartu memperpanjang otomatis\" di bawah untuk menagih kartu workspace secara otomatis setiap bulan. Perubahan harga berlaku untuk langganan baru dan pembayaran berikutnya setiap pelanggan prabayar; masa yang sudah dibayar tidak pernah diubah, dan pelanggan yang kartunya sudah diperpanjang otomatis tetap memakai harga pada langganan penyedia pembayarannya sampai mereka berlangganan lagi.",
         "readOnly": "Hanya baca. Mengubah harga memerlukan izin platform {permission}.",
         "visibility": {
           "label": "Status listing",
@@ -693,7 +696,7 @@
           "trialDays": "Uji coba gratis (hari)",
           "trialDaysHint": "0 untuk tanpa uji coba, maksimal {max}. Setiap workspace mendapat satu uji coba per aplikasi.",
           "annualAmount": "Harga tahunan (opsional)",
-          "annualAmountHint": "Disimpan untuk nanti. Penagihan tahunan belum tersedia, jadi workspace belum bisa membayar setahun sekali.",
+          "annualAmountHint": "Harga untuk satu tahun. Kosongkan untuk menjual aplikasi hanya secara bulanan. Workspace yang memilih tahunan membayar ini setahun sekali, atau lewat kartu setiap tahun saat aplikasi diperpanjang dengan kartu.",
           "purchasable": "Dijual",
           "purchasableHint": "Jika mati, workspace baru tidak dapat berlangganan. Workspace yang sudah berlangganan tetap dapat memperpanjang."
         },
@@ -763,6 +766,27 @@
             "paid": "Pelanggan tetap mendapat masa yang sudah dibayar. Tidak ada pengembalian dana.",
             "action": "Jadikan gratis"
           }
+        },
+        "billingMode": {
+          "legend": "Cara perpanjangan",
+          "one_time": {
+            "label": "Bulan prabayar",
+            "hint": "Workspace membayar lagi saat masa bulannya hampir habis."
+          },
+          "recurring": {
+            "label": "Kartu memperpanjang otomatis",
+            "hint": "Penyedia pembayaran menagih kartu setiap bulan sampai workspace membatalkan."
+          },
+          "note": "Berlaku untuk langganan baru. Langganan yang sudah berjalan tetap memakai cara pembeliannya. Memerlukan gateway pembayaran yang mendukung langganan."
+        },
+        "priceLock": {
+          "label": "Pertahankan pelanggan pada harga pertama yang mereka bayar",
+          "hint": "Perubahan harga kemudian hanya berlaku untuk pelanggan baru. Mengaktifkan ini juga mengunci pelanggan saat ini pada pembayaran terakhir mereka; menonaktifkannya tidak membuka kunci siapa pun. Kunci berakhir saat langganan berakhir."
+        },
+        "withdrawn": {
+          "title": "Kembalikan dana kepada pelanggan aplikasi yang ditarik ini",
+          "hint": "Aplikasi ditarik di tengah periode yang sudah dibayar pelanggannya. Kembalikan kepada masing-masing bagian dari pembayaran terakhir mereka sejak saat aplikasi ditarik.",
+          "action": "Kembalikan sisa waktu..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Sudah berakhir",
           "mrr": "Pendapatan bulanan",
           "mrrNone": "Belum ada pelanggan berbayar",
-          "mrrCurrency": "Pendapatan bulanan, {currency}"
+          "mrrCurrency": "Pendapatan bulanan, {currency}",
+          "pastDue": "Pembayaran gagal"
         },
         "summary": {
           "emptyTitle": "Belum ada aplikasi berbayar",
@@ -871,7 +896,8 @@
             "canceling": "Berakhir",
             "ended": "Sudah berakhir",
             "total": "Total",
-            "mrr": "Pendapatan bulanan"
+            "mrr": "Pendapatan bulanan",
+            "pastDue": "Pembayaran gagal"
           },
           "free": "Gratis",
           "totals": "Semua aplikasi",
@@ -905,7 +931,9 @@
           "compUntil": "Gratis sampai {date}",
           "compOpen": "Gratis sampai Anda mengakhirinya",
           "endedOn": "Berakhir {date}",
-          "none": "Tanpa tanggal akhir"
+          "none": "Tanpa tanggal akhir",
+          "renewsOn": "Diperpanjang {date}",
+          "graceUntil": "Masa tenggang hingga {date}"
         },
         "noCharge": "Tanpa biaya",
         "compBy": "Digratiskan oleh {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Tidak ada langganan yang cocok",
         "noMatchMessage": "Tidak ada yang cocok dengan filter ini. Coba filter lain.",
         "clearFilters": "Hapus filter",
-        "loadMore": "Muat lebih banyak"
+        "loadMore": "Muat lebih banyak",
+        "unlockPrice": "Buka kunci harga",
+        "refundUnused": "Kembalikan sisa waktu"
+      },
+      "unlockDialog": {
+        "eyebrow": "Harga terkunci",
+        "title": "Buka kunci harga untuk {workspace}",
+        "close": "Tutup",
+        "back": "Kembali",
+        "confirm": "Buka kunci harga",
+        "summary": "{workspace} membayar harga pertama yang dibayarnya untuk {app}. Dengan membuka kunci, pembayaran berikutnya menjadi harga aplikasi saat ini.",
+        "effectPrepaid": "Pembayaran berikutnya, setelah masa yang dibayar hingga {date}, adalah harga saat ini.",
+        "effectCard": "Kartu mereka memperpanjang aplikasi dengan harga lama di penyedia pembayaran, sehingga perpanjangan kartu diakhiri pada akhir masa yang dibayar ({date}). Mereka diberi tahu, dan dapat berlangganan lagi dengan harga saat ini.",
+        "reason": "Alasan (disimpan di jejak audit)",
+        "done": "{workspace} tidak lagi memakai harga terkunci untuk {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Pengembalian dana",
+        "title": "Kembalikan sisa waktu untuk {workspace}",
+        "close": "Tutup",
+        "back": "Kembali",
+        "summary": "Mengembalikan bagian pembayaran terakhir untuk {app} yang masih tersisa, melalui penyedia pembayaran. Tidak ada yang dikembalikan dua kali: menjalankannya lagi hanya mengembalikan sisanya.",
+        "working": "Menghitung jumlah...",
+        "paid": "Pembayaran terakhir",
+        "unused": "Bagian yang belum terpakai",
+        "already": "Sudah dikembalikan",
+        "refundable": "Dikembalikan sekarang",
+        "nothing": "Tidak ada yang perlu dikembalikan: periode sudah berakhir, tidak ditemukan pembayaran melalui gateway, atau bagian yang belum terpakai sudah dikembalikan.",
+        "endNow": "Akhiri juga langganan sekarang",
+        "endNowHint": "Instalasi dijeda dan datanya disimpan. Tanpa ini, aplikasi tetap berjalan sampai akhir periode.",
+        "reason": "Alasan (disimpan di jejak audit dan dikirim ke penyedia pembayaran)",
+        "confirm": "Kembalikan {amount}",
+        "done": "Dana {amount} dikembalikan ke {workspace} untuk {app}.",
+        "refused": "Penyedia pembayaran menolak pengembalian dana: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Aplikasi ditarik",
+        "title": "Kembalikan dana kepada pelanggan {name}",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "intro": "Memeriksa setiap langganan berbayar {name} dan mengembalikan bagian dari pembayaran terakhirnya yang masih tersisa saat aplikasi ditarik, melalui penyedia pembayaran. Pratinjau dulu; tidak ada yang dikembalikan dua kali.",
+        "preview": "Pratinjau",
+        "owed": "{count, plural, other {# pelanggan berhak atas pengembalian dana}}",
+        "nobody": "Saat ini tidak ada yang berhak atas pengembalian dana.",
+        "more": "Jumlah langganan melebihi yang bisa diproses dalam satu kali jalan. Jalankan lagi untuk melanjutkan.",
+        "reason": "Alasan (disimpan di jejak audit dan dikirim ke penyedia pembayaran)",
+        "run": "{count, plural, other {Kembalikan dana ke # pelanggan}}",
+        "continue": "Lanjutkan dengan langganan berikutnya",
+        "result": "Berhasil dikembalikan {refunded}, gagal {failed}.",
+        "someFailed": "Sebagian pengembalian dana tidak berhasil (penyedia menolak atau tidak dapat dihubungi). Semuanya tercantum di jejak audit; menjalankannya lagi akan mencoba kembali.",
+        "done": "{count, plural, other {Dana dikembalikan ke # pelanggan {name}.}}"
       }
     }
   }
