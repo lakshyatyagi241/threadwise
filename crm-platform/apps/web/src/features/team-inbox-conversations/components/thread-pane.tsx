@@ -41,6 +41,7 @@ import { TagChip } from './tag-chip';
 import { SlaBadge } from './sla-badge';
 import { TagMenu } from './tag-menu';
 import { TemplatePicker } from './template-picker';
+import { AssignMenu } from './assign-menu';
 import { TriageMenu } from './triage-menu';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
@@ -89,6 +90,13 @@ export interface ThreadPaneProps {
   onRetryMessage: (messageId: string) => Promise<void>;
   resolving: boolean;
   onAssignSelf: () => void;
+  /** The assign pill in the header; without it the header keeps its single "Assign to me" button. */
+  assignMenu?: {
+    meId: string;
+    canAssign: boolean;
+    busy: boolean;
+    onAssign: (change: { userId: string | null }) => void;
+  };
   /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
   triage?: {
     busy: boolean;
@@ -264,17 +272,30 @@ export function ThreadPane(props: ThreadPaneProps) {
               contactId={detail.contact?.id}
             />
           )}
-          {detail && !props.panelOpen && !detail.assignment.user && props.can.assignSelf && (
-            <Button
-              variant="secondary"
-              size="sm"
-              data-testid="inbox-assign-self"
-              onClick={props.onAssignSelf}
-              className="hidden sm:inline-flex"
-            >
-              {t('assignToMe')}
-            </Button>
+          {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
+            <AssignMenu
+              current={detail.assignment.user}
+              meId={props.assignMenu.meId}
+              canAssign={props.assignMenu.canAssign}
+              busy={props.assignMenu.busy}
+              onAssign={props.assignMenu.onAssign}
+            />
           )}
+          {detail &&
+            !props.assignMenu &&
+            !props.panelOpen &&
+            !detail.assignment.user &&
+            props.can.assignSelf && (
+              <Button
+                variant="secondary"
+                size="sm"
+                data-testid="inbox-assign-self"
+                onClick={props.onAssignSelf}
+                className="hidden sm:inline-flex"
+              >
+                {t('assignToMe')}
+              </Button>
+            )}
           {detail && props.tags && (
             <TagMenu
               applied={detail.labels}
@@ -302,14 +323,13 @@ export function ThreadPane(props: ThreadPaneProps) {
               variant="secondary"
               size="sm"
               data-testid="inbox-resolve"
+              className="size-9 rounded-full px-0"
               disabled={props.resolving}
               onClick={props.onToggleResolved}
               title={t('resolveShortcut')}
             >
               {props.resolving ? <Spinner /> : <CheckCircleIcon width={14} height={14} />}
-              <span className={props.panelOpen ? 'hidden 2xl:inline' : 'hidden sm:inline'}>
-                {resolved ? t('reopen') : t('resolve')}
-              </span>
+              <span className="sr-only">{resolved ? t('reopen') : t('resolve')}</span>
             </Button>
           )}
           <button

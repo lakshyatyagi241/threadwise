@@ -104,8 +104,8 @@ export class FieldsService {
   }
 
   /**
-   * How many contacts hold a value for each field of the module ("in use" on the properties screen). Only contacts
-   * keep their values in a custom-data column today, so any other module reports zero.
+   * How many records hold a value for each field of the module ("in use" on the properties screen): contacts and companies keep
+   * their values in a custom-data column. Segments filter on contact properties only.
    */
   async usage(query: FieldUsageQuery): Promise<FieldUsageResponse> {
     const ctx = RequestContextStore.require();
@@ -118,7 +118,7 @@ export class FieldsService {
       const counts =
         query.moduleKey === 'contacts'
           ? await this.repo.countContactsByKey(tx, ctx.orgId)
-          : new Map<string, number>();
+          : await this.repo.countCompaniesByKey(tx, ctx.orgId);
       const segments =
         query.moduleKey === 'contacts'
           ? await segmentUsageCounts(tx, ctx.orgId, 'field')
@@ -393,8 +393,9 @@ export class FieldsService {
       const field = await this.requireField(tx, ctx.orgId, fieldUuid);
       this.requireModulePermission(field.moduleKey as ModuleKey, 'update');
       const ids: number[] = [];
+      const rows = await this.optionsRepo.findByUuids(tx, ctx.orgId, input.orderedIds);
       for (const uuid of input.orderedIds) {
-        const row = await this.optionsRepo.findByUuid(tx, ctx.orgId, uuid);
+        const row = rows.get(uuid);
         // Not just "exists" — must belong to *this* field, or a caller could
         // reorder another field's (possibly another module's) options via
         // this endpoint's permission check.

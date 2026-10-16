@@ -486,6 +486,12 @@ export const ERROR_CODES = {
   // companies (TW-CTP)
   /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
   COMPANY_OWNER_INVALID: 'COMPANY_OWNER_INVALID',
+  /** A custom value names a company property that is not editable here (not defined, inactive, hidden, read-only or computed). */
+  COMPANY_PROPERTY_NOT_EDITABLE: 'COMPANY_PROPERTY_NOT_EDITABLE',
+  /** A custom value does not fit its property's type (not a number, not one of the options, not a date, ...). */
+  COMPANY_PROPERTY_INVALID: 'COMPANY_PROPERTY_INVALID',
+  /** A property the workspace marked required has no value (honouring its "show only when" rule). */
+  COMPANY_REQUIRED_PROPERTY_MISSING: 'COMPANY_REQUIRED_PROPERTY_MISSING',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)

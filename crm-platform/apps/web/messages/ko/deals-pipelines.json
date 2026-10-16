@@ -181,7 +181,10 @@
         "valueInvalid": "1250.50과 같은 숫자를 입력하세요.",
         "valueTooLarge": "값이 너무 큽니다.",
         "stageInvalid": "이 파이프라인의 단계를 선택하세요."
-      }
+      },
+      "company": "회사",
+      "companyHint": "비워 두면 연락처의 회사를 사용합니다.",
+      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요."
     },
     "contact": {
       "unlink": "연락처 제거",
@@ -221,7 +224,9 @@
       "deleteTitle": "이 딜을 삭제할까요?",
       "deleteMessage": "\"{title}\"과(와) 타임라인이 제거됩니다. 이 작업은 되돌릴 수 없습니다.",
       "cancel": "취소",
-      "company": "회사: {name}"
+      "company": "회사: {name}",
+      "companyLabel": "회사",
+      "companyRefused": "해당 회사는 사용할 수 없습니다."
     },
     "activity": {
       "title": "활동",

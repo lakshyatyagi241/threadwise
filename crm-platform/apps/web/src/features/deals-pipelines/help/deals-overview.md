@@ -15,10 +15,10 @@ keywords: [opportunities, pipeline, kanban, board, sales, won, lost, forecast, w
 ## How to use it
 
 1. Open **Deals** in the CRM area of the menu, or go to `/deals`. Choose a pipeline in the **Pipeline** dropdown if you have more than one.
-2. Select **New deal** and fill in the title, value, currency, stage, owner, contact and expected close date.
+2. Select **New deal** and fill in the title, value, currency, stage, owner, contact, company and expected close date. Leave **Company** empty to use the contact's company. If you can read companies, you can search for one or create it from the typed name.
 3. Move a deal by dragging its card to another column, or use **Move to** in its "..." menu.
 4. Moving a deal to a lost stage asks why it was lost.
-5. Select a card to open its panel. Fields save when you leave them. Add a contact, notes, calls and tasks, or use **Mark won**, **Mark lost** or **Reopen deal**.
+5. Select a card to open its panel. Fields save when you leave them. Add a contact, change the company, add notes, calls and tasks, or use **Mark won**, **Mark lost** or **Reopen deal**.
 6. Narrow the board with the search box, **Owner** and **Source**. Select **Clear** to remove filters.
 
 ## Options and settings

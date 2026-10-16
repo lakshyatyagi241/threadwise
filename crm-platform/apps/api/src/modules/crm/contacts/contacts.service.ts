@@ -31,6 +31,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { DisplayIdService } from '../../../kernel/identifiers/display-id.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertCompanyReadable, companyLinkRefused } from '../companies/company-link';
 import { countWithTimeout } from '../segments/segment-count';
 import { contactConditions, contactScopeCondition, whereOf } from './contact-conditions';
 import { resolveContactFilter } from './contact-filter.resolver';
@@ -1168,7 +1169,7 @@ export class ContactsService {
       }
       if (input.companyId !== undefined) {
         values.companyId = input.companyId
-          ? await this.requireCompany(tx, ctx.orgId, input.companyId)
+          ? await this.requireCompany(tx, ctx.orgId, input.companyId, existing.companyId)
           : null;
       }
 
@@ -1397,13 +1398,20 @@ export class ContactsService {
     return id;
   }
 
+  /**
+   * A company to link: in this workspace (404 otherwise), and, when the link is new, one the caller may read (the capability and
+   * their record scope). A company the contact already has stays linkable by someone who cannot read it, so saving an unrelated
+   * field of a contact never fails on it.
+   */
   private async requireCompany(
     tx: Parameters<typeof this.repo.resolveCompanyId>[0],
     orgId: number,
     uuid: string,
+    current: number | null = null,
   ) {
     const id = await this.repo.resolveCompanyId(tx, orgId, uuid);
-    if (id === undefined) throw AppError.notFound('Company', uuid);
+    if (id === undefined) throw companyLinkRefused('notFound');
+    if (id !== current) await assertCompanyReadable(tx, this.rbac, orgId, id);
     return id;
   }
 

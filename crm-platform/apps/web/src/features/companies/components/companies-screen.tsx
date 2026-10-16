@@ -199,10 +199,10 @@ export function CompaniesScreen() {
           </div>
         ) : list.isError ? (
           <div className="p-4">
-            {errorKind(list.error) === 'unavailable' ? (
+            {errorKind(list.error, 'list') === 'unavailable' ? (
               <EmptyState title={t('unavailableTitle')} message={t('unavailable')} />
             ) : (
-              <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
+              <ErrorLine error={list.error} context="list" onRetry={() => void list.refetch()} />
             )}
           </div>
         ) : rows.length === 0 ? (

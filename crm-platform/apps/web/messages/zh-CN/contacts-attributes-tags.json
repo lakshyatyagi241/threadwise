@@ -348,7 +348,10 @@
       "ownerMe": "{name}(我)",
       "ownerFormer": "已离开的成员",
       "ownerHelp": "负责这个联系人的人。只能选择您的权限允许的人员。",
-      "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。"
+      "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。",
+      "company": "公司",
+      "companyHint": "将此联系人归入某个组织。",
+      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。"
     },
     "tags": {
       "title": "标签",

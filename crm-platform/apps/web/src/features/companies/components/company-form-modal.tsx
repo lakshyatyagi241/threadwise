@@ -5,9 +5,12 @@ import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Field, Input, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+// The shared property inputs come from their own file, not the contacts domain's index (see `lib/properties.ts`).
+import { CustomFieldsSection } from '@/features/contacts-attributes-tags/components/custom-fields-section';
 import { companiesApi, invalidateCompanies, useMembers } from '../api/companies';
+import { useCompanyProperties } from '../api/properties';
 import type { CompanyResponse } from '../api/schemas';
-import { errorKind, fieldErrors } from '../lib/errors';
+import { errorKind, fieldErrors, propertyErrorKind } from '../lib/errors';
 import {
   EMPTY_FORM,
   LIMITS,
@@ -18,6 +21,13 @@ import {
   type CompanyFormValues,
   type FormErrorKind,
 } from '../lib/form';
+import {
+  createValues,
+  inputsOf,
+  propertyProblems,
+  updateValues,
+  type PropertyInputs,
+} from '../lib/properties';
 
 export interface CompanyFormModalProps {
   /** Present: edit this company. Absent: create. */
@@ -37,6 +47,7 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
   const t = useTranslations('companies.form');
   const toastText = useTranslations('companies.toast');
   const tErr = useTranslations('companies.errors');
+  const tProp = useTranslations('companies.form.propertyProblems');
   const { toast } = useToast();
   const qc = useQueryClient();
   const session = useSession();
@@ -47,6 +58,14 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
   );
   const [errors, setErrors] = useState<Partial<Record<FormKey, string>>>({});
   const [busy, setBusy] = useState(false);
+  // The workspace's company properties: what the person typed over what the company holds, and the message per property.
+  const props = useCompanyProperties();
+  const [typed, setTyped] = useState<PropertyInputs>({});
+  const [propErrors, setPropErrors] = useState<Record<string, string>>({});
+  const inputs: PropertyInputs = {
+    ...inputsOf(props.fields, company?.customFields ?? {}),
+    ...typed,
+  };
   const set = <K extends keyof CompanyFormValues>(k: K, v: CompanyFormValues[K]) =>
     setValues((s) => ({ ...s, [k]: v }));
 
@@ -55,6 +74,12 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
 
   async function submit() {
     const found = validate(values);
+    const wrong = propertyProblems(props.fields, props.dependencies, inputs);
+    setPropErrors(Object.fromEntries(Object.entries(wrong).map(([k, kind]) => [k, tProp(kind)])));
+    if (Object.keys(wrong).length > 0 && Object.keys(found).length === 0) {
+      document.getElementById(`company-prop-${Object.keys(wrong)[0]}`)?.focus();
+      return;
+    }
     if (Object.keys(found).length > 0) {
       setErrors(
         Object.fromEntries(
@@ -71,14 +96,22 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
     try {
       let saved: CompanyResponse;
       if (company) {
-        const patch = toUpdateInput(values, company);
-        if (patch === null) {
+        const own = updateValues(props.fields, props.dependencies, inputs, company.customFields);
+        const fieldsPatch = toUpdateInput(values, company);
+        if (fieldsPatch === null && own === null) {
           onClose();
           return;
         }
-        saved = await companiesApi.update(company.id, patch);
+        saved = await companiesApi.update(company.id, {
+          ...(fieldsPatch ?? { rowVersion: company.rowVersion }),
+          ...(own ? { customFields: own } : {}),
+        });
       } else {
-        saved = await companiesApi.create(toCreateInput(values));
+        const own = createValues(props.fields, props.dependencies, inputs);
+        saved = await companiesApi.create({
+          ...toCreateInput(values),
+          ...(Object.keys(own).length > 0 ? { customFields: own } : {}),
+        });
       }
       await invalidateCompanies(qc, saved.id);
       toast(toastText(editing ? 'updated' : 'created'), 'success');
@@ -88,12 +121,22 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
       const server = fieldErrors(e);
       const kind = errorKind(e);
       if (kind === 'conflict' && company) void invalidateCompanies(qc, company.id);
+      const why = propertyErrorKind(e);
+      if (why) {
+        setPropErrors(
+          Object.fromEntries(
+            Object.keys(server)
+              .filter((k) => k.startsWith('customFields.'))
+              .map((k) => [k.slice('customFields.'.length), tProp(why)]),
+          ),
+        );
+      }
       setErrors({
         name: server.name ? t('problems.required') : undefined,
         email: server.email ? t('problems.email') : undefined,
         ownerId: kind === 'ownerInvalid' ? t('problems.ownerInvalid') : undefined,
         form:
-          Object.keys(server).length === 0 && kind !== 'ownerInvalid'
+          Object.keys(server).length === 0 && kind !== 'ownerInvalid' && !why
             ? tErr(kind)
             : server.phone ||
                 server.website ||
@@ -127,7 +170,7 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
           <Button variant="secondary" onClick={onClose} disabled={busy}>
             {t('cancel')}
           </Button>
-          <Button variant="brand" onClick={() => void submit()} disabled={busy}>
+          <Button variant="brand" onClick={() => void submit()} disabled={busy || props.loading}>
             {busy && <Spinner />}
             {editing ? t('save') : t('create')}
           </Button>
@@ -274,6 +317,24 @@ export function CompanyFormModal({ company, onClose, onSaved }: CompanyFormModal
             </Field>
           </div>
         </details>
+        {props.fields.length > 0 && (
+          <div className="sm:col-span-2">
+            <CustomFieldsSection
+              fields={props.fields}
+              sections={props.sections}
+              dependencies={props.dependencies}
+              values={inputs}
+              errors={propErrors}
+              idPrefix="company"
+              looseTitle={t('propertiesTitle')}
+              hint={t('propertiesHint')}
+              onChange={(key, value) => {
+                setTyped((cur) => ({ ...cur, [key]: value }));
+                setPropErrors(({ [key]: _gone, ...rest }) => rest);
+              }}
+            />
+          </div>
+        )}
       </form>
     </Modal>
   );

@@ -26,6 +26,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
+import { assertCompanyReadable } from '../companies/company-link';
 import { assertOwnerWithinScope } from '../owner-scope';
 // Not the deals barrel: it re-exports the activities service, which imports this one (a cycle that leaves a constructor
 // parameter undefined at runtime).
@@ -136,6 +137,21 @@ export class TasksService {
       if (!read.allowed) throw AppError.forbidden('record.deals.read');
       await this.deals.assertScope(tx, read.scope, deal.ownerId);
       return this.listIn(tx, query, scope, { dealId: deal.id });
+    });
+  }
+
+  /** A company's tasks (the company page's tasks card): needs record.companies.read on the company, whose own scope applies. */
+  async forCompany(
+    companyUuid: string,
+    query: ListLinkedTasksQuery,
+    scope: RecordScope,
+  ): Promise<PageResponse<TaskResponse>> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const companyId = await this.repo.resolveCompanyId(tx, ctx.orgId, companyUuid);
+      if (companyId === undefined) throw AppError.notFound('Company', companyUuid);
+      await assertCompanyReadable(tx, this.rbac, ctx.orgId, companyId);
+      return this.listIn(tx, query, scope, { companyId });
     });
   }
 
@@ -438,7 +454,7 @@ export class TasksService {
     tx: Tx,
     query: ListTasksQuery | ListLinkedTasksQuery,
     scope: RecordScope,
-    fixed: { contactId?: number; dealId?: number },
+    fixed: { contactId?: number; dealId?: number; companyId?: number },
   ): Promise<PageResponse<TaskResponse>> {
     const ctx = RequestContextStore.require();
     const filter = await this.resolveFilter(tx, ctx.orgId, query as FilterInput, fixed);
@@ -475,7 +491,7 @@ export class TasksService {
     tx: Tx,
     orgId: number,
     f: FilterInput,
-    fixed: { contactId?: number; dealId?: number },
+    fixed: { contactId?: number; dealId?: number; companyId?: number },
   ): Promise<TaskFilter | null> {
     const ctx = RequestContextStore.require();
     const out: TaskFilter = {
@@ -484,6 +500,7 @@ export class TasksService {
       unassigned: f.unassigned,
       contactId: fixed.contactId,
       dealId: fixed.dealId,
+      companyId: fixed.companyId,
     };
     if (f.mine) {
       if (!ctx.userId) return null;

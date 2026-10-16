@@ -90,6 +90,7 @@ import { LostReasonsService } from './pipelines/lost-reasons.service';
 import { PipelinesRepository } from './pipelines/pipelines.repository';
 import { PipelinesService } from './pipelines/pipelines.service';
 import {
+  CompanyTasksController,
   ContactTasksController,
   DealTasksController,
   TasksController,
@@ -233,6 +234,7 @@ import { TagsService } from './tags/tags.service';
     TasksController,
     ContactTasksController,
     DealTasksController,
+    CompanyTasksController,
     // Proposals and estimates: `sales-docs/settings`, `sales-docs/templates` (settings controller, registered first) and
     // `sales-docs/counts` are literal paths declared before `sales-docs/:id`. The public controller is unauthenticated (token).
     SalesDocSettingsController,

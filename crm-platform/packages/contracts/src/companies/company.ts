@@ -16,6 +16,8 @@ export const COMPANY_INDUSTRY_MAX = 100;
 export const COMPANY_SIZE_RANGE_MAX = 40;
 export const COMPANY_ADDRESS_MAX = 500;
 export const COMPANY_NOTES_MAX = 2000;
+export const COMPANY_CUSTOM_TEXT_MAX = 4000;
+export const COMPANY_CUSTOM_LIST_MAX = 100;
 export const COMPANY_BULK_MAX = 100;
 export const COMPANY_LINK_MAX = 100;
 
@@ -47,6 +49,24 @@ export const companyRollupSchema = z.object({
 });
 export type CompanyRollup = z.infer<typeof companyRollupSchema>;
 
+/**
+ * A value of one of the workspace's company properties (Settings, Company properties), as stored in the company's `data`: text for
+ * the text-like types and dates, a number, a boolean (checkbox), or a list of option values (multi-select). `null` clears a key.
+ */
+export const companyCustomValueSchema = z.union([
+  z.string().max(COMPANY_CUSTOM_TEXT_MAX),
+  z.number().finite(),
+  z.boolean(),
+  z.array(z.string().max(COMPANY_CUSTOM_TEXT_MAX)).max(COMPANY_CUSTOM_LIST_MAX),
+  z.null(),
+]);
+export type CompanyCustomValue = z.infer<typeof companyCustomValueSchema>;
+export const companyCustomFieldsSchema = z.record(
+  z.string().min(1).max(100),
+  companyCustomValueSchema,
+);
+export type CompanyCustomFields = z.infer<typeof companyCustomFieldsSchema>;
+
 export const companyResponseSchema = z.object({
   id: uuidSchema,
   displayId: z.string().nullable(),
@@ -58,6 +78,8 @@ export const companyResponseSchema = z.object({
   sizeRange: z.string().nullable(),
   address: z.string().nullable(),
   notes: z.string().nullable(),
+  /** The values of the workspace's company properties, by property key; a key with no value is absent. */
+  customFields: z.record(z.unknown()),
   owner: companyUserRefSchema.nullable(),
   createdBy: companyUserRefSchema.nullable(),
   rollup: companyRollupSchema,
@@ -103,6 +125,8 @@ export const createCompanySchema = z.object({
   sizeRange: text(COMPANY_SIZE_RANGE_MAX),
   address: text(COMPANY_ADDRESS_MAX),
   notes: text(COMPANY_NOTES_MAX),
+  /** Values of the workspace's company properties, by key. Only editable properties; a blank or `null` value stores nothing. */
+  customFields: companyCustomFieldsSchema.optional(),
   /** An active member of this workspace. Omit for the caller; `null` for nobody. */
   ownerId: uuidSchema.nullish(),
 });
@@ -118,6 +142,8 @@ export const updateCompanySchema = z.object({
   sizeRange: text(COMPANY_SIZE_RANGE_MAX),
   address: text(COMPANY_ADDRESS_MAX),
   notes: text(COMPANY_NOTES_MAX),
+  /** Merged into the stored values: a key sent changes, `null` or a blank clears it, a key left out keeps its value. */
+  customFields: companyCustomFieldsSchema.optional(),
   ownerId: uuidSchema.nullish(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409 ROW_VERSION_CONFLICT. */
   rowVersion: z.number().int().positive(),

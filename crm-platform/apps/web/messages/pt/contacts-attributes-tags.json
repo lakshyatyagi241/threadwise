@@ -348,7 +348,10 @@
       "ownerMe": "{name} (eu)",
       "ownerFormer": "Ex-membro",
       "ownerHelp": "Quem cuida deste contato. Você só pode escolher pessoas que seu acesso permite.",
-      "ownerOutOfScope": "Seu acesso não permite atribuir este contato a essa pessoa."
+      "ownerOutOfScope": "Seu acesso não permite atribuir este contato a essa pessoa.",
+      "company": "Empresa",
+      "companyHint": "Agrupa este contato sob uma organização.",
+      "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo."
     },
     "tags": {
       "title": "Tags",

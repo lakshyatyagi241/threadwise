@@ -8,6 +8,7 @@ import type {
   FieldResponse,
   FieldSectionResponse,
   FieldType,
+  ModuleKey,
 } from '@crm/contracts';
 import {
   Alert,
@@ -53,6 +54,7 @@ import {
   type PropertyDraft,
 } from '../lib/property-model';
 import { moveItem, sameOrder } from '../lib/stage-model';
+import { useModuleCopy } from '../lib/module-copy';
 import { ErrorLine } from './error-line';
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon, TrashIcon } from './icons';
 
@@ -66,18 +68,21 @@ export interface PropertyModalProps {
   /** Every custom property, inactive ones too: for the key check and the "show only when" choices. */
   fields: readonly FieldResponse[];
   dependencies: readonly FieldDependencyResponse[];
+  /** The module the property belongs to (default contacts). */
+  moduleKey?: ModuleKey;
   onClose: () => void;
 }
 
 export function PropertyModal(props: PropertyModalProps) {
   const t = useTranslations('contacts-attributes-tags.properties');
+  const copy = useModuleCopy(props.moduleKey ?? 'contacts');
   return (
     <Modal
       open={props.open}
       onClose={props.onClose}
       size="lg"
       eyebrow={props.field ? t('modal.editEyebrow') : t('modal.newEyebrow')}
-      title={props.field ? t('modal.editTitle') : t('modal.newTitle')}
+      title={props.field ? t('modal.editTitle') : copy('modal.newTitle')}
       closeLabel={t('modal.close')}
     >
       {props.open && <PropertyForm key={props.field?.id ?? 'new'} {...props} />}
@@ -91,9 +96,11 @@ function PropertyForm({
   sections,
   fields,
   dependencies,
+  moduleKey = 'contacts',
   onClose,
 }: PropertyModalProps) {
   const t = useTranslations('contacts-attributes-tags.properties');
+  const copy = useModuleCopy(moduleKey);
   const qc = useQueryClient();
   const { toast } = useToast();
   const uid = useId();
@@ -137,7 +144,7 @@ function PropertyForm({
           if (!sameOrder(finalIds, expected)) await reorderFieldOptions(field.id, finalIds);
         }
       } else {
-        target = await createField(toCreateBody(draft));
+        target = await createField(toCreateBody(draft, moduleKey));
       }
       const diff = diffConditions(savedDeps, draft.conditions);
       for (const dep of diff.remove) await deleteFieldDependency(dep);
@@ -290,7 +297,7 @@ function PropertyForm({
       <Field
         label={t('modal.description')}
         htmlFor={id('description')}
-        hint={t('modal.descriptionHint')}
+        hint={copy('modal.descriptionHint')}
       >
         <Textarea
           id={id('description')}
@@ -381,7 +388,7 @@ function PropertyForm({
               {t(`modal.problem.options.${problems.options}`)}
             </p>
           )}
-          {editing && <p className="text-xs text-muted-foreground">{t('modal.optionsNote')}</p>}
+          {editing && <p className="text-xs text-muted-foreground">{copy('modal.optionsNote')}</p>}
         </fieldset>
       )}
 
@@ -389,14 +396,14 @@ function PropertyForm({
         <ToggleRow
           id={id('required')}
           label={t('modal.required')}
-          hint={t('modal.requiredHint')}
+          hint={copy('modal.requiredHint')}
           checked={draft.required}
           onChange={(v) => set('required', v)}
         />
         <ToggleRow
           id={id('visible')}
           label={t('modal.visible')}
-          hint={t('modal.visibleHint')}
+          hint={copy('modal.visibleHint')}
           checked={draft.visible}
           onChange={(v) => set('visible', v)}
         />
@@ -420,7 +427,7 @@ function PropertyForm({
 
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium">{t('modal.conditions')}</legend>
-        <p className="text-xs text-muted-foreground">{t('modal.conditionsHint')}</p>
+        <p className="text-xs text-muted-foreground">{copy('modal.conditionsHint')}</p>
         {draft.conditions.map((c, i) => {
           const parent = others.find((f) => f.id === c.fieldId);
           const choices = parent && isOptionType(parent.fieldType) ? (parent.options ?? []) : null;
@@ -519,7 +526,7 @@ function PropertyForm({
       </fieldset>
 
       {editing && draft.active !== field.isActive && !draft.active && (
-        <Alert tone="warning">{t('modal.deactivateNote')}</Alert>
+        <Alert tone="warning">{copy('modal.deactivateNote')}</Alert>
       )}
 
       <div className="flex justify-end gap-2 border-t border-border pt-4">

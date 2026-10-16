@@ -21,6 +21,7 @@ const company: CompanyResponse = {
   sizeRange: '11-50',
   address: '1 Main St',
   notes: 'Key account',
+  customFields: {},
   owner: { id: '22222222-2222-4222-8222-222222222222', name: 'Asha' },
   createdBy: null,
   rollup: { contacts: 0, deals: null },

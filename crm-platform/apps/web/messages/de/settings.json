@@ -374,6 +374,11 @@
         "label": "Compliance-Center",
         "description": "Werkzeuge, die Sie bei Ihren Datenschutzpflichten unterstützen: die Gesetze, denen Sie unterliegen, Datenschutzkontakte, Hinweise und Links, Unterauftragsverarbeiter, Ruhezeiten und eine Checkliste dessen, was vorhanden ist.",
         "keywords": "compliance, datenschutz, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, datenschutzbeauftragter, beschwerdebeauftragter, unterauftragsverarbeiter, dpa, auftragsverarbeitungsvertrag, nutzungsbedingungen, datenschutzerklärung, ruhezeiten, do not call, checkliste, kinder"
+      },
+      "company-properties": {
+        "label": "Unternehmens-Eigenschaften",
+        "description": "Fügen Sie Felder hinzu, die bei jedem Unternehmen gespeichert werden sollen.",
+        "keywords": "benutzerdefinierte felder, felder, pflichtfeld, dropdown, organisation, konto"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

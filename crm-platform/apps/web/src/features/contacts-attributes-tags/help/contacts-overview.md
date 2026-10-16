@@ -22,6 +22,10 @@ keywords: [customers, people, leads, import, csv, export, duplicates, tags, bulk
 6. Tick rows, then open **More Actions** to export, add to or remove from a group, tag, untag or delete.
 7. To change several contacts at once, tick them and choose **Update**. Set the stage, status or owner, or use **Add property** under **Custom properties** to pick a property and give it one value for everyone selected. **Clear** empties that property on all of them; **Keep** takes it off the list so it is left alone. Anything you do not touch stays as it is.
 
+## Company
+
+If you can read companies, the contact form has a **Company** field: search, pick a company, or select the cross to remove it. When no company matches and you may create companies, **Create "name"** makes one and picks it. A company you may not read cannot be picked. The company shows in the contact's header, and the contact appears on the company's page. See [Companies](help:companies-overview).
+
 ## Owners
 
 Every contact can have one **owner**, the person who looks after it. A contact you create is yours until you pick someone else (or **Unassigned**) in the **Owner** field of the form.

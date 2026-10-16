@@ -20,9 +20,13 @@ export function configureMock(me: { id: string; name: string }): void {
   mockState.me = me;
 }
 
-/** Names of the contacts and deals a person linked while the stand-in is on, so its tasks can show them. */
+/** Names of the contacts, deals and companies a person linked while the stand-in is on, so its tasks can show them. */
 export const mockRefs = new Map<string, string>();
-export const rememberMockRef = (kind: 'contact' | 'deal', id: string, label: string): void => {
+export const rememberMockRef = (
+  kind: 'contact' | 'deal' | 'company',
+  id: string,
+  label: string,
+): void => {
   if (mockEnabled()) mockRefs.set(`${kind}:${id}`, label);
 };
 

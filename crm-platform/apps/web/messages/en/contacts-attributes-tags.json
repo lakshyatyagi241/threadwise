@@ -348,7 +348,10 @@
       "ownerMe": "{name} (me)",
       "ownerFormer": "Former member",
       "ownerHelp": "Who looks after this contact. You can only pick people your access allows.",
-      "ownerOutOfScope": "Your access does not let you assign this contact to that person."
+      "ownerOutOfScope": "Your access does not let you assign this contact to that person.",
+      "company": "Company",
+      "companyHint": "Groups this contact under an organization.",
+      "companyRefused": "You cannot use that company. Pick another one or clear the field."
     },
     "tags": {
       "title": "Tags",

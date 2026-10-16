@@ -181,7 +181,10 @@
         "valueInvalid": "Introduce un número, por ejemplo 1250.50.",
         "valueTooLarge": "Ese valor es demasiado grande.",
         "stageInvalid": "Elige una etapa de este embudo."
-      }
+      },
+      "company": "Empresa",
+      "companyHint": "Déjalo vacío para usar la empresa del contacto.",
+      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo."
     },
     "contact": {
       "unlink": "Quitar contacto",
@@ -221,7 +224,9 @@
       "deleteTitle": "¿Eliminar este negocio?",
       "deleteMessage": "“{title}” y su cronología se eliminarán. Esta acción no se puede deshacer.",
       "cancel": "Cancelar",
-      "company": "Empresa: {name}"
+      "company": "Empresa: {name}",
+      "companyLabel": "Empresa",
+      "companyRefused": "No puedes usar esa empresa."
     },
     "activity": {
       "title": "Actividad",
