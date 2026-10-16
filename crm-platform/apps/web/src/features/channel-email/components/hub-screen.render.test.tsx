@@ -115,6 +115,17 @@ describe('email hub', () => {
     expect(html).toContain('Last problem: Quota exceeded');
   });
 
+  it('offers Reconnect but not Remove once a mailbox is already disconnected', () => {
+    search = '';
+    manage = true;
+    // Disconnect keeps the row (so its history stays attached on reconnect); Remove would just call the same
+    // no-op disconnect again, so the button is hidden rather than offered and silently doing nothing.
+    const html = page({ data: [box({ status: 'disconnected' })] });
+    expect(html).toContain('>Disconnected<');
+    expect(html).toContain('>Reconnect<');
+    expect(html).not.toContain('>Remove<');
+  });
+
   it('says to ask the platform administrator while Google is not set up, and offers no working button', () => {
     search = '';
     manage = true;
