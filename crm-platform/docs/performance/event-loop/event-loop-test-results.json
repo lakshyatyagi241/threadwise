@@ -11,6 +11,32 @@
       "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
     },
     {
+      "suite": "apps/api/test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (booted worker module, Postgres and Redis containers)",
+      "status": "PASSED",
+      "ranOn": "2026-10-16, branch claude/event-loop-job-retries",
+      "checks": [
+        "WorkerModule initialised with lifecycle hooks (moduleRef.init(), not just compile())",
+        "more than 20 WorkerHost processors found, each with a completed and a failed listener",
+        "a real job on the tpl-sweep queue through the real TemplateSweepProcessor and a real migrated database: completed, duration and wait observed, no retries"
+      ],
+      "durationSeconds": 208,
+      "note": "The first attempt reused the full API harness (startHarness) and timed out at 240 s in beforeAll, with an afterAll that then crashed on an undefined harness. Rewritten to start only Postgres, Redis and the migrations, as the harness does, and to tolerate a failed setup. During the boot the monitor logged several 'event loop blocked' lines (max delay 287 ms to 1268 ms): that is vitest transforming TypeScript on a OneDrive disk, not the compiled worker, and says nothing about production."
+    },
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure (job-metrics.spec.ts 17 + event-loop-monitor.spec.ts 27)",
+      "status": "PASSED",
+      "tests": 44,
+      "passed": 44,
+      "ranOn": "2026-10-16",
+      "note": "A first run had 1 failure in my earlier cgroup test, which slept a fixed 50 ms for an async file read. That and the GC test (also a fixed sleep) now poll with a 5 s limit."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker, throwaway Redis)",
+      "status": "PASSED",
+      "checks": 8,
+      "note": "Adds the retries check: the retried job started twice, so crm_queue_job_retries_total is exactly 1."
+    },
+    {
       "suite": "deploy/observability/event-loop.rules.yml with promtool v2.55.0 (docker image prom/prometheus:v2.55.0)",
       "status": "PASSED",
       "ranOn": "2026-10-15, branch claude/event-loop-rules-promtool",

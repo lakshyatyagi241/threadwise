@@ -274,7 +274,14 @@ describe('RuntimeMonitor', () => {
         cgroupCpuStatPath: file,
       });
       monitor.tick();
-      await new Promise((r) => setTimeout(r, 50)); // the read is asynchronous
+      // The read is asynchronous: wait for it rather than guess how long a loaded machine takes (a fixed 50 ms flaked).
+      const deadline = Date.now() + 5000;
+      while (
+        Date.now() < deadline &&
+        !monitor.render().includes('crm_container_cpu_throttled_seconds_total')
+      ) {
+        await new Promise((r) => setTimeout(r, 20));
+      }
       const out = monitor.render();
       expect(out).toMatch(/crm_container_cpu_throttled_periods_total\{[^}]*\} 7/);
       expect(out).toMatch(/crm_container_cpu_throttled_seconds_total\{[^}]*\} 2\.5/);
@@ -290,7 +297,11 @@ describe('RuntimeMonitor', () => {
     monitor = new RuntimeMonitor({ service: 'api', intervalMs: 60_000 });
     monitor.start();
     gc();
-    await new Promise((r) => setTimeout(r, 100)); // the observer delivers asynchronously
+    // The observer delivers asynchronously: wait for the first event instead of a fixed sleep.
+    const deadline = Date.now() + 5000;
+    while (Date.now() < deadline && !monitor.render().includes('crm_gc_events_total')) {
+      await new Promise((r) => setTimeout(r, 20));
+    }
     monitor.tick();
     const out = monitor.render();
     expect(out).toMatch(/crm_gc_events_total{[^}]*kind="(major|minor|incremental)"} [1-9]/);
