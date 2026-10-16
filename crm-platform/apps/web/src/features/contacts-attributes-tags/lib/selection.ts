@@ -68,6 +68,8 @@ export interface ContactFilterSnapshot {
   imported: boolean;
   /** One contact status value, or empty / absent. */
   status?: string;
+  /** `yes` or `no`, or empty / absent. */
+  minor?: '' | 'yes' | 'no';
   /** A source text, or empty / absent. */
   source?: string;
   /** Segment id, or empty: "select all matching" inside a segment acts on its members only. */

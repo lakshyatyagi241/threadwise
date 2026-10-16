@@ -15,6 +15,9 @@ export const FIXED_COLUMN_IDS = [
   'leadScore',
   'language',
   'memo',
+  // BL-190 / BL-217: offered, hidden until chosen. Neither can be sorted.
+  'dateOfBirth',
+  'minor',
   'createdOn',
   'whatsapp',
   'sms',
@@ -79,6 +82,8 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   leadScore: 'colLeadScore',
   language: 'colLanguage',
   memo: 'colMemo',
+  dateOfBirth: 'colDateOfBirth',
+  minor: 'colMinor',
   createdOn: 'colCreatedOn',
   whatsapp: 'colWhatsapp',
   sms: 'colSms',
@@ -120,6 +125,8 @@ export function allColumns(
       fixed('language'),
       fixed('memo'),
       fixed('source'),
+      fixed('dateOfBirth'),
+      fixed('minor'),
       fixed('lastActivity'),
       fixed('createdOn'),
     ] as ColumnDef[]
@@ -216,6 +223,8 @@ export function sortKeyOf(id: ColumnId): string | null {
     case 'company':
     case 'lastActivity':
     case 'source':
+    case 'dateOfBirth':
+    case 'minor':
       return null;
     case 'createdOn':
       return 'createdAt';
@@ -252,6 +261,7 @@ export function columnGroup(id: ColumnId): ColumnGroup {
     case 'language':
     case 'memo':
     case 'source':
+    case 'dateOfBirth':
       return 'contact';
     case 'stage':
     case 'status':
@@ -265,6 +275,7 @@ export function columnGroup(id: ColumnId): ColumnGroup {
     case 'whatsapp':
     case 'sms':
     case 'emailOptIn':
+    case 'minor':
       return 'consent';
     case 'lastActivity':
     case 'createdOn':

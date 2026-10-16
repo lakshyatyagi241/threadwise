@@ -35,6 +35,7 @@ export function useInfoRows(contact: ContactRow, opts: { full?: boolean } = {}):
   const t = useTranslations('contacts-attributes-tags.contact.info');
   const fields = useContactFields();
   const when = useWhen();
+  const format = useFormatter();
   const job = jobTitleField(fields.data);
   const rows: KeyValueRow[] = [
     { key: 'first', label: t('firstName'), value: contact.firstName ?? '' },
@@ -55,6 +56,17 @@ export function useInfoRows(contact: ContactRow, opts: { full?: boolean } = {}):
       ),
     },
     { key: 'phone', label: t('phone'), ltr: true, value: formatPhone(contact.phone) },
+    {
+      key: 'dob',
+      label: t('dateOfBirth'),
+      // `YYYY-MM-DD` is a calendar day, shown as that day whatever the viewer's zone.
+      value: contact.dateOfBirth
+        ? format.dateTime(new Date(`${contact.dateOfBirth}T00:00:00Z`), {
+            dateStyle: 'medium',
+            timeZone: 'UTC',
+          })
+        : '',
+    },
     ...(opts.full
       ? [{ key: 'fax', label: t('fax'), ltr: true, value: contact.faxNumber ?? '' }]
       : []),

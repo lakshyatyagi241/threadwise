@@ -124,7 +124,8 @@
         "lastActivity": "Ostatnia aktywność",
         "source": "Źródło",
         "noCustomFields": "Ten kontakt nie ma jeszcze wartości w polach niestandardowych.",
-        "noLeadSource": "Dla tego kontaktu nie zapisano źródła leada."
+        "noLeadSource": "Dla tego kontaktu nie zapisano źródła leada.",
+        "dateOfBirth": "Data urodzenia"
       },
       "details": {
         "title": "Szczegóły kontaktu",

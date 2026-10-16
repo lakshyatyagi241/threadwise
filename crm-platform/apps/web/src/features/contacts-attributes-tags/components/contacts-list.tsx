@@ -114,6 +114,8 @@ const WIDTH: Record<string, number> = {
   leadScore: 130,
   language: 130,
   memo: 220,
+  dateOfBirth: 150,
+  minor: 110,
   createdOn: 190,
   whatsapp: 150,
   sms: 130,
@@ -155,6 +157,7 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <GlobeIcon className={cls} />;
     case 'memo':
       return <NoteIcon className={cls} />;
+    case 'dateOfBirth':
     case 'createdOn':
       return <CalendarIcon className={cls} />;
     case 'whatsapp':
@@ -169,7 +172,15 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <ClockIcon className={cls} />;
     case 'source':
       return <GlobeIcon className={cls} />;
+    case 'minor':
+      return <UserIcon className={cls} />;
   }
+}
+
+/** The "Minor" badge of the minor column (BL-190). */
+function MinorCell() {
+  const t = useTranslations('contacts-attributes-tags.list');
+  return <OutlineTag value={t('minorBadge')} />;
 }
 
 /** The checkbox that selects every loaded row; `some` shows the mixed state. */
@@ -680,6 +691,19 @@ function Cell({
       return row.language ? <OutlineTag value={row.language} /> : <Dash />;
     case 'memo':
       return <Clip value={row.memo} />;
+    case 'dateOfBirth':
+      return row.dateOfBirth ? (
+        <Clip
+          value={new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' }).format(
+            new Date(`${row.dateOfBirth}T00:00:00Z`),
+          )}
+          mono
+        />
+      ) : (
+        <Dash />
+      );
+    case 'minor':
+      return row.isMinor ? <MinorCell /> : <Dash />;
     case 'createdOn':
       return <Clip value={formatDateTime(row.createdAt, locale, timeZone)} mono />;
     case 'whatsapp':

@@ -49,6 +49,7 @@ export const toWidget = (row: WidgetRow, base: string): Widget => ({
   collectName: row.collectName,
   collectEmail: row.collectEmail,
   collectPhone: row.collectPhone,
+  ageGate: row.ageGate,
   launcher: row.launcher,
   allowedDomains: row.allowedDomains,
   embedToken: row.embedToken,

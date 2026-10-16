@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { parseLauncher, type WidgetLauncher } from '@crm/contracts';
+import {
+  OFF_AGE_GATE,
+  ageGateSchema,
+  parseLauncher,
+  type AgeGate,
+  type WidgetLauncher,
+} from '@crm/contracts';
 
 export interface WidgetRow {
   id: number;
@@ -41,6 +47,8 @@ export interface WidgetRow {
   collectName: boolean;
   collectEmail: boolean;
   collectPhone: boolean;
+  /** The age question of the intake form (BL-218); off unless a person turned it on. */
+  ageGate: AgeGate;
   status: string;
   allowedDomains: string[];
   /** The WhatsApp widget's look and placement, with every missing key at its default (TW-WGT-028). */
@@ -79,6 +87,8 @@ export interface WidgetWrite {
   collectName?: boolean;
   collectEmail?: boolean;
   collectPhone?: boolean;
+  /** Absent keeps the stored gate on update and starts with none on insert. */
+  ageGate?: AgeGate;
   allowedDomains?: string[];
   /** Absent keeps the stored config on update and starts from the defaults on insert. */
   launcher?: WidgetLauncher;
@@ -106,12 +116,18 @@ const COLUMNS = sql`
   w.button_color, w.button_image_url, w.header_title, w.header_bg, w.header_text_color, w.welcome_message,
   w.message_bubble_color, w.message_text_color, w.body_bg_kind, w.body_bg_color, w.body_bg_image_url, w.auto_open,
   w.button_label, w.action_button_bg, w.action_button_text_color, w.collect_name, w.collect_email, w.collect_phone,
-  w.status, w.allowed_domains, w.launcher, w.created_at, w.updated_at, w.row_version`;
+  w.status, w.allowed_domains, w.launcher, w.age_gate, w.created_at, w.updated_at, w.row_version`;
 
 const FROM = sql`
   chatbot_widgets w
   LEFT JOIN ai_chat_assistants a ON a.org_id = w.org_id AND a.id = w.assistant_id
   LEFT JOIN flows f ON f.org_id = w.org_id AND f.id = w.flow_id`;
+
+/** The stored gate with every missing key at its default; anything unreadable is "off" (a widget never breaks over it). */
+const parseAgeGate = (v: unknown): AgeGate => {
+  const parsed = ageGateSchema.safeParse(v ?? {});
+  return parsed.success ? parsed.data : OFF_AGE_GATE;
+};
 
 const num = (v: unknown): number => Number(v);
 const numOrNull = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
@@ -152,6 +168,7 @@ const toRow = (r: Raw): WidgetRow => ({
   collectName: r.collect_name as boolean,
   collectEmail: r.collect_email as boolean,
   collectPhone: r.collect_phone as boolean,
+  ageGate: parseAgeGate(r.age_gate),
   status: r.status as string,
   allowedDomains: Array.isArray(r.allowed_domains) ? (r.allowed_domains as string[]) : [],
   launcher: parseLauncher(r.launcher),
@@ -345,7 +362,7 @@ export class WidgetsRepository {
         prefilled_message, position, button_color, button_image_url, header_title, header_bg, header_text_color,
         welcome_message, message_bubble_color, message_text_color, body_bg_kind, body_bg_color, body_bg_image_url,
         auto_open, button_label, action_button_bg, action_button_text_color, collect_name, collect_email, collect_phone,
-        status, allowed_domains, launcher, flow_id, customized_at)
+        status, allowed_domains, launcher, age_gate, flow_id, customized_at)
       VALUES (
         ${orgId}, ${userId}, ${w.assistantId}, ${w.name}, ${slug}, ${embedToken}, ${w.mode}, ${w.targetWhatsappCc},
         ${w.targetWhatsappNumber}, ${w.prefilledMessage}, ${w.position}, ${w.buttonColor}, ${w.buttonImageUrl},
@@ -354,7 +371,7 @@ export class WidgetsRepository {
         ${w.buttonLabel}, ${w.actionButtonBg}, ${w.actionButtonTextColor}, ${w.collectName ?? true},
         ${w.collectEmail ?? false}, ${w.collectPhone ?? false}, ${status},
         ${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb,
-        ${JSON.stringify(w.launcher ?? {})}::jsonb, ${flowId},
+        ${JSON.stringify(w.launcher ?? {})}::jsonb, ${JSON.stringify(w.ageGate ?? {})}::jsonb, ${flowId},
         ${flowId === null ? null : sql`now()`})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
@@ -388,6 +405,7 @@ export class WidgetsRepository {
         collect_phone = COALESCE(${w.collectPhone ?? null}::boolean, collect_phone),
         allowed_domains = COALESCE(${w.allowedDomains === undefined ? null : JSON.stringify(w.allowedDomains)}::jsonb, allowed_domains),
         launcher = COALESCE(${w.launcher === undefined ? null : JSON.stringify(w.launcher)}::jsonb, launcher),
+        age_gate = COALESCE(${w.ageGate === undefined ? null : JSON.stringify(w.ageGate)}::jsonb, age_gate),
         customized_at = CASE WHEN flow_id IS NOT NULL THEN COALESCE(customized_at, now()) ELSE customized_at END
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}
       RETURNING id`);

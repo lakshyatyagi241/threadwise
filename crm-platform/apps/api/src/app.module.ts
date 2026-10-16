@@ -105,6 +105,7 @@ import { MetaLeadAdsModule } from './modules/meta-lead-ads';
 import { FormsBuilderModule } from './modules/forms-builder';
 import { FormsLinksGroupsModule } from './modules/forms-links-groups';
 import { AiCopilotLeadFinderModule } from './modules/ai-copilot-lead-finder';
+import { CompanyBriefsModule } from './modules/company-briefs';
 import { MarketplaceModule } from './modules/marketplace';
 import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -270,6 +271,7 @@ import { HealthModule } from './health/health.module';
     FormsBuilderModule,
     FormsLinksGroupsModule,
     AiCopilotLeadFinderModule,
+    CompanyBriefsModule,
     MarketplaceModule,
     ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each

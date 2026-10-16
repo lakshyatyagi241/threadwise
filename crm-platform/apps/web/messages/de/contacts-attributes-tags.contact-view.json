@@ -124,7 +124,8 @@
         "lastActivity": "Letzte Aktivität",
         "source": "Quelle",
         "noCustomFields": "Dieser Kontakt hat noch keine Werte in benutzerdefinierten Feldern.",
-        "noLeadSource": "Für diesen Kontakt ist keine Lead-Quelle erfasst."
+        "noLeadSource": "Für diesen Kontakt ist keine Lead-Quelle erfasst.",
+        "dateOfBirth": "Geburtsdatum"
       },
       "details": {
         "title": "Kontaktdetails",

@@ -5,7 +5,7 @@ import {
   type PublicFormSubmissionStatus,
 } from '@crm/contracts';
 import { toApiError } from '@/lib/api/errors';
-import { CONSENT_KEY, type FieldIssue, type IssueCode } from '../lib/types';
+import { AGE_CONFIRMED_KEY, CONSENT_KEY, type FieldIssue, type IssueCode } from '../lib/types';
 import type { SubmitOutcome, SubmitPayload } from '../lib/submit';
 
 /**
@@ -28,6 +28,7 @@ const KNOWN: ReadonlySet<string> = new Set<IssueCode>([
   'invalid_option',
   'invalid_amount',
   'consent_required',
+  'guardian_required',
 ]);
 
 /** The API names the rule that failed in each error's `message`; a rule this page has no wording for reads as a format error. */
@@ -40,7 +41,7 @@ export function issuesFromErrors(errors: Array<{ path: string; message: string }
     if (!id || seen.has(id)) continue;
     seen.add(id);
     out.push({
-      fieldId: id === 'consent' ? CONSENT_KEY : id,
+      fieldId: id === 'consent' ? CONSENT_KEY : id === 'age_confirmed' ? AGE_CONFIRMED_KEY : id,
       code: KNOWN.has(e.message) ? (e.message as IssueCode) : 'pattern',
     });
   }
@@ -93,6 +94,8 @@ export async function submitForm(key: string, payload: SubmitPayload): Promise<S
     };
   }
   if (error.code === 'FORMS_PAYMENT_UNAVAILABLE') return { ok: false, kind: 'payment_unavailable' };
+  if (error.code === 'FORMS_AGE_BLOCKED') return { ok: false, kind: 'age_blocked' };
+  if (error.code === 'FORMS_GUARDIAN_REQUIRED') return { ok: false, kind: 'guardian_required' };
   if (res.status === 404) return { ok: false, kind: 'closed' };
   return { ok: false, kind: 'error' };
 }

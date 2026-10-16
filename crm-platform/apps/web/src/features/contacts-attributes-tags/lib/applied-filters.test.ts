@@ -113,6 +113,7 @@ describe('appliedFilterChips', () => {
         'group',
         'imported',
         'lifecycleStage',
+        'minor',
         'owner',
         'rules',
         'segment',

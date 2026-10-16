@@ -197,6 +197,9 @@
       "pqlExampleTag": "אנשי קשר עם התגית {tag} שלא פעילים 30 יום",
       "pqlExampleStage": "אנשי קשר בשלב {stage} שנוצרו ב-7 הימים האחרונים",
       "pqlExampleNoOwner": "אנשי קשר ללא בעלים",
+      "colDateOfBirth": "תאריך לידה",
+      "colMinor": "קטין",
+      "minorBadge": "קטין",
       "breadcrumb": "פירורי לחם",
       "breadcrumbContacts": "אנשי קשר",
       "breadcrumbList": "רשימה",
@@ -259,7 +262,12 @@
       "addNoteNamed": "הוסף הערה ל-{name}",
       "chatNamed": "שוחח עם {name}",
       "openChat": "פתח צ׳אט",
-      "sendSms": "שלח SMS"
+      "sendSms": "שלח SMS",
+      "minorLabel": "קטין",
+      "minorFilter": "סינון לפי סימון קטין",
+      "minorYes": "מסומן כקטין",
+      "minorNo": "לא מסומן כקטין",
+      "allMinor": "כולם"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -405,7 +413,9 @@
       "ownerOutOfScope": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה.",
       "company": "חברה",
       "companyHint": "משייך את איש הקשר הזה לארגון.",
-      "companyRefused": "אי אפשר להשתמש בחברה הזו. בחרו חברה אחרת או רוקנו את השדה."
+      "companyRefused": "אי אפשר להשתמש בחברה הזו. בחרו חברה אחרת או רוקנו את השדה.",
+      "dateOfBirth": "תאריך לידה",
+      "dateOfBirthHint": "אופציונלי. אם זה הופך את איש הקשר לקטין, הוא מסומן ככזה."
     },
     "tags": {
       "title": "תגיות",
@@ -515,7 +525,9 @@
         "source": "מקור",
         "consent": "הסכמה לשיווק (כן / לא)",
         "consentSms": "הסכמה לשיווק ב-SMS (כן / לא)",
-        "consentEmail": "הסכמה לשיווק באימייל (כן / לא)"
+        "consentEmail": "הסכמה לשיווק באימייל (כן / לא)",
+        "dateOfBirth": "תאריך לידה (שנה קודם, 2010-05-04)",
+        "minor": "קטין (כן מסמן את איש הקשר)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",
@@ -572,7 +584,8 @@
         "tag_name_too_long": "שם התגית ארוך מדי",
         "plan_limit_reached": "הגעת למגבלת אנשי הקשר של התוכנית",
         "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית",
-        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת"
+        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת",
+        "invalid_date_of_birth": "תאריך הלידה אינו תאריך עם השנה בהתחלה שיכול להיות תאריך לידה"
       },
       "statusHint": "חל על אנשי הקשר שהקובץ יוצר.",
       "queued": "ממתין להתחלה...",
@@ -632,7 +645,8 @@
       "ownerForbidden": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה.",
       "ownerFailed": "לא ניתן היה לשנות את הבעלים. נסה שוב.",
       "ownerMe": "{name} (אני)",
-      "ownerFormer": "חבר לשעבר"
+      "ownerFormer": "חבר לשעבר",
+      "dateOfBirth": "תאריך לידה"
     },
     "attributes": {
       "eyebrow": "עוד / מאפיינים",
@@ -1477,7 +1491,8 @@
         "needsFollowUp": "דורשים מעקב",
         "active": "פעילים",
         "inactive": "לא פעילים",
-        "unsubscribed": "בוטלה הרשמתם"
+        "unsubscribed": "בוטלה הרשמתם",
+        "minors": "קטינים"
       }
     },
     "erase": {

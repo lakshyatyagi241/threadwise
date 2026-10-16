@@ -19,7 +19,7 @@ export function isSecretKey(key: string): boolean {
   return SECRET_KEY.test(k) || SECRET_HEADER_NAMES.has(k.toLowerCase());
 }
 
-export type PiiKind = 'phone' | 'email' | 'address' | 'text' | 'name';
+export type PiiKind = 'phone' | 'email' | 'address' | 'text' | 'name' | 'birth';
 
 /** Modules whose bare `name` field is a person's name (a tag's or a role's name is not personal data). */
 const PERSON_MODULES = new Set([
@@ -47,6 +47,10 @@ const has = (parts: string[], ...words: string[]): boolean => words.some((w) => 
 export function piiKindOfKey(key: string, module: string): PiiKind | null {
   const parts = snake(key).split('_').filter(Boolean);
   if (parts.length === 0) return null;
+  // A date of birth is personal data of its own (BL-217): `date_of_birth`, `dob`, `birthdate`, `birthday`.
+  if (has(parts, 'dob', 'birthdate', 'birthday') || (has(parts, 'birth') && has(parts, 'date'))) {
+    return 'birth';
+  }
   if (has(parts, 'email', 'emails', 'mail') && !has(parts, 'verified', 'at', 'count'))
     return 'email';
   if (has(parts, 'phone', 'phones', 'mobile', 'msisdn', 'whatsapp', 'tel', 'fax', 'wa')) {

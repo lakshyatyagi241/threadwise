@@ -28,4 +28,8 @@ export const FORMS_ERROR_CODES = {
   FORMS_TEMPLATE_UNKNOWN: 'FORMS_TEMPLATE_UNKNOWN',
   /** The version number does not exist for the form. */
   FORMS_VERSION_UNKNOWN: 'FORMS_VERSION_UNKNOWN',
+  /** The age gate refused the submission (BL-217). 403, a neutral message that does not say why or which answer would pass. Nothing was stored. */
+  FORMS_AGE_BLOCKED: 'FORMS_AGE_BLOCKED',
+  /** The age gate wants a parent or guardian's name and an email or phone before it accepts (BL-217). 422. */
+  FORMS_GUARDIAN_REQUIRED: 'FORMS_GUARDIAN_REQUIRED',
 } as const;

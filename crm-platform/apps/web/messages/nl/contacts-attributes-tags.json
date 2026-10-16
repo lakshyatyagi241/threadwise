@@ -197,6 +197,9 @@
       "pqlExampleTag": "Contacten met tag {tag} die 30 dagen niet actief zijn",
       "pqlExampleStage": "{stage}-contacten van de afgelopen 7 dagen",
       "pqlExampleNoOwner": "Contacten zonder eigenaar",
+      "colDateOfBirth": "Geboortedatum",
+      "colMinor": "Minderjarig",
+      "minorBadge": "Minderjarig",
       "breadcrumb": "Kruimelpad",
       "breadcrumbContacts": "Contacten",
       "breadcrumbList": "Lijst",
@@ -259,7 +262,12 @@
       "addNoteNamed": "Notitie toevoegen aan {name}",
       "chatNamed": "Chatten met {name}",
       "openChat": "Chat openen",
-      "sendSms": "SMS sturen"
+      "sendSms": "SMS sturen",
+      "minorLabel": "Minderjarig",
+      "minorFilter": "Filteren op minderjarigenmarkering",
+      "minorYes": "Gemarkeerd als minderjarig",
+      "minorNo": "Niet gemarkeerd als minderjarig",
+      "allMinor": "Iedereen"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -405,7 +413,9 @@
       "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
       "company": "Bedrijf",
       "companyHint": "Plaatst dit contact onder een organisatie.",
-      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
+      "dateOfBirth": "Geboortedatum",
+      "dateOfBirthHint": "Optioneel. Als het contact hierdoor minderjarig is, wordt het als zodanig gemarkeerd."
     },
     "tags": {
       "title": "Tags",
@@ -515,7 +525,9 @@
         "source": "Bron",
         "consent": "Marketingtoestemming (ja / nee)",
         "consentSms": "SMS-marketingtoestemming (ja / nee)",
-        "consentEmail": "E-mailmarketingtoestemming (ja / nee)"
+        "consentEmail": "E-mailmarketingtoestemming (ja / nee)",
+        "dateOfBirth": "Geboortedatum (jaar eerst, 2010-05-04)",
+        "minor": "Minderjarig (ja markeert het contact)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -572,7 +584,8 @@
         "tag_name_too_long": "tagnaam te lang",
         "plan_limit_reached": "contactlimiet van abonnement bereikt",
         "tag_limit_reached": "taglimiet van abonnement bereikt",
-        "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij"
+        "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
+        "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -632,7 +645,8 @@
       "ownerForbidden": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
       "ownerFailed": "De eigenaar kon niet worden gewijzigd. Probeer het opnieuw.",
       "ownerMe": "{name} (ik)",
-      "ownerFormer": "Voormalig lid"
+      "ownerFormer": "Voormalig lid",
+      "dateOfBirth": "Geboortedatum"
     },
     "attributes": {
       "eyebrow": "Meer / Attributen",
@@ -1477,7 +1491,8 @@
         "needsFollowUp": "Opvolging nodig",
         "active": "Actief",
         "inactive": "Inactief",
-        "unsubscribed": "Uitgeschreven"
+        "unsubscribed": "Uitgeschreven",
+        "minors": "Minderjarigen"
       }
     },
     "erase": {

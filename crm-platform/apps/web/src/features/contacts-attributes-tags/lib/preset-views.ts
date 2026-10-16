@@ -18,6 +18,7 @@ export const PRESET_VIEWS = [
   'active',
   'inactive',
   'unsubscribed',
+  'minors',
 ] as const;
 export type PresetView = (typeof PRESET_VIEWS)[number];
 
@@ -84,6 +85,9 @@ export function presetFilters(preset: PresetView, meId: string): Partial<Contact
       return { rules: rulesOf(quietFor(30)) };
     case 'unsubscribed':
       return { consent: 'unsubscribed' };
+    case 'minors':
+      // Flagged as a minor (BL-190): the same condition the "Add condition" builder writes for the field "Minor".
+      return { rules: rulesOf({ field: 'minor', operator: 'is_true' }) };
   }
 }
 

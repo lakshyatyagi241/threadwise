@@ -197,6 +197,9 @@
       "pqlExampleTag": "Contacts avec le tag {tag} inactifs depuis 30 jours",
       "pqlExampleStage": "Contacts à l'étape {stage} créés ces 7 derniers jours",
       "pqlExampleNoOwner": "Contacts sans propriétaire",
+      "colDateOfBirth": "Date de naissance",
+      "colMinor": "Mineur",
+      "minorBadge": "Mineur",
       "breadcrumb": "Fil d'Ariane",
       "breadcrumbContacts": "Contacts",
       "breadcrumbList": "Liste",
@@ -259,7 +262,12 @@
       "addNoteNamed": "Ajouter une note à {name}",
       "chatNamed": "Discuter avec {name}",
       "openChat": "Ouvrir le chat",
-      "sendSms": "Envoyer un SMS"
+      "sendSms": "Envoyer un SMS",
+      "minorLabel": "Mineur",
+      "minorFilter": "Filtrer par marque de mineur",
+      "minorYes": "Marqué comme mineur",
+      "minorNo": "Non marqué comme mineur",
+      "allMinor": "Tous"
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",
@@ -405,7 +413,9 @@
       "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
       "company": "Entreprise",
       "companyHint": "Rattache ce contact à une organisation.",
-      "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ."
+      "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ.",
+      "dateOfBirth": "Date de naissance",
+      "dateOfBirthHint": "Facultatif. Si cela fait du contact un mineur, il est marqué comme tel."
     },
     "tags": {
       "title": "Étiquettes",
@@ -515,7 +525,9 @@
         "source": "Source",
         "consent": "Consentement marketing (oui / non)",
         "consentSms": "Consentement marketing par SMS (oui / non)",
-        "consentEmail": "Consentement marketing par e-mail (oui / non)"
+        "consentEmail": "Consentement marketing par e-mail (oui / non)",
+        "dateOfBirth": "Date de naissance (année en premier, 2010-05-04)",
+        "minor": "Mineur (oui marque le contact)"
       },
       "notInFile": "Absent du fichier",
       "columnN": "Colonne {n}",
@@ -572,7 +584,8 @@
         "tag_name_too_long": "nom d’étiquette trop long",
         "plan_limit_reached": "limite de contacts du forfait atteinte",
         "tag_limit_reached": "limite d’étiquettes du forfait atteinte",
-        "duplicate_in_file": "numéro répété, fusionné avec une ligne précédente"
+        "duplicate_in_file": "numéro répété, fusionné avec une ligne précédente",
+        "invalid_date_of_birth": "la date de naissance n'est pas une date avec l'année en premier pouvant être une date de naissance"
       },
       "statusHint": "Appliqué aux contacts créés par ce fichier.",
       "queued": "En attente de démarrage...",
@@ -632,7 +645,8 @@
       "ownerForbidden": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
       "ownerFailed": "Impossible de changer le propriétaire. Réessayez.",
       "ownerMe": "{name} (moi)",
-      "ownerFormer": "Ancien membre"
+      "ownerFormer": "Ancien membre",
+      "dateOfBirth": "Date de naissance"
     },
     "attributes": {
       "eyebrow": "Plus / Attributs",
@@ -1477,7 +1491,8 @@
         "needsFollowUp": "À relancer",
         "active": "Actifs",
         "inactive": "Inactifs",
-        "unsubscribed": "Désabonnés"
+        "unsubscribed": "Désabonnés",
+        "minors": "Mineurs"
       }
     },
     "erase": {

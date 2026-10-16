@@ -124,7 +124,8 @@
         "lastActivity": "Last activity",
         "source": "Source",
         "noCustomFields": "This contact has no custom field values yet.",
-        "noLeadSource": "No lead source is recorded for this contact."
+        "noLeadSource": "No lead source is recorded for this contact.",
+        "dateOfBirth": "Date of birth"
       },
       "details": {
         "title": "Contact details",

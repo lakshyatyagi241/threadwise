@@ -144,7 +144,9 @@
         "booking": "Strona rezerwacji",
         "commerce": "Kasa sklepu",
         "lead": "Pozyskanie leada",
-        "gpc": "Global Privacy Control"
+        "gpc": "Global Privacy Control",
+        "dob": "Data urodzenia lub wiek",
+        "declaration": "Wiek niepotwierdzony"
       },
       "by": "przez {name}",
       "evidence": {
@@ -227,7 +229,9 @@
           "noteHint": "Na przykład: podpisali papierowy formularz przy okienku. Nie wpisuj imienia ani danych kontaktowych opiekuna.",
           "ref": "Odniesienie (opcjonalnie)",
           "refHint": "Numer formularza lub identyfikator dokumentu, który da się później odszukać."
-        }
+        },
+        "minorFrom": "Ustawione na podstawie podanej daty urodzenia lub wieku. Zniknie samo dnia {date}, chyba że osoba je zachowa.",
+        "minorFromDeclaration": "Ustawione, ponieważ wiek nie został potwierdzony w formularzu. Pozostaje, dopóki osoba go nie wyczyści."
       }
     },
     "composer": {
@@ -351,7 +355,8 @@
         "consent_declined": "Niedozwolone: osoba odmówiła.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Niedozwolone: ten kontakt jest oznaczony jako małoletni, a Twoja przestrzeń robocza wstrzymuje marketing.",
-        "sale_share_opted_out": "Niedozwolone: kontakt sprzeciwił się sprzedaży lub udostępnianiu swoich danych."
+        "sale_share_opted_out": "Niedozwolone: kontakt sprzeciwił się sprzedaży lub udostępnianiu swoich danych.",
+        "on_dnc_list": "Na Twojej liście Nie dzwonić: bez marketingowych połączeń i SMS-ów na ten numer"
       }
     },
     "notice": {

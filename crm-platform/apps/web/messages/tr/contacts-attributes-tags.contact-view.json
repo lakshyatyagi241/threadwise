@@ -124,7 +124,8 @@
         "lastActivity": "Son etkinlik",
         "source": "Kaynak",
         "noCustomFields": "Bu kişinin henüz özel alan değeri yok.",
-        "noLeadSource": "Bu kişi için kayıtlı bir potansiyel müşteri kaynağı yok."
+        "noLeadSource": "Bu kişi için kayıtlı bir potansiyel müşteri kaynağı yok.",
+        "dateOfBirth": "Doğum tarihi"
       },
       "details": {
         "title": "Kişi ayrıntıları",

@@ -23,13 +23,17 @@
       "imported": "Diimpor dari file",
       "createdAt": "Dibuat",
       "updatedAt": "Terakhir diperbarui",
-      "lastActivityAt": "Aktivitas terakhir"
+      "lastActivityAt": "Aktivitas terakhir",
+      "minor": "Ditandai di bawah umur",
+      "dateOfBirth": "Tanggal lahir",
+      "age": "Usia (tahun)"
     },
     "fieldGroups": {
       "journey": "Perjalanan",
       "who": "Siapa",
       "activity": "Aktivitas",
-      "properties": "Properti"
+      "properties": "Properti",
+      "company": "Properti perusahaan"
     },
     "operators": {
       "equals": "adalah",

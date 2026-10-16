@@ -124,7 +124,8 @@
         "lastActivity": "Laatste activiteit",
         "source": "Bron",
         "noCustomFields": "Dit contact heeft nog geen waarden voor aangepaste velden.",
-        "noLeadSource": "Voor dit contact is geen leadbron vastgelegd."
+        "noLeadSource": "Voor dit contact is geen leadbron vastgelegd.",
+        "dateOfBirth": "Geboortedatum"
       },
       "details": {
         "title": "Contactdetails",

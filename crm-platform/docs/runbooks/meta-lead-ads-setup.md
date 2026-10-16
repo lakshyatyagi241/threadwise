@@ -72,7 +72,10 @@ is hard-coded and nothing is stored in the repository; `.env.example` lists the 
 2. In the product, within seconds: the contact exists (source "Facebook"), the lead appears in the source's **Leads received**, the Page shows a
    **Last lead** time and the source's **Meta lead form health** card shows "Receiving".
 3. If nothing arrives: the table below. Meta also keeps a lead for about 90 days, so the **sweep** (every 10 minutes) brings in a lead whose
-   webhook was missed once the Page is healthy; there is no button for it yet (BL-204).
+   webhook was missed once the Page is healthy. To bring one in at once, open **Lead inbox**, then **Sync now** next to the form. To bring in
+   leads from before the form was picked (up to 90 days, which is as far as Meta keeps them), use **Backfill...** there: the leads become
+   contacts and are assigned and notified like new ones, but they are **not** sent the automatic first message unless they are younger than the
+   form's limit (one hour by default, set under the form's first message setting).
 4. Delete the test lead in the tool and the test contact in the product afterwards.
 
 | Symptom                                              | Likely cause and fix                                                                                                                          |

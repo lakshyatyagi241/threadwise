@@ -9,6 +9,7 @@ export const ERROR_KEYS = [
   'conflict',
   'settingsInvalid',
   'duplicate',
+  'dncInvalid',
   'rateLimited',
   'validation',
   'unexpected',
@@ -22,10 +23,13 @@ export function errorKey(error: unknown): ErrorKey {
     case ERROR_CODES.COMPLIANCE_SETTINGS_INVALID:
       return 'settingsInvalid';
     case ERROR_CODES.COMPLIANCE_SUBPROCESSOR_NOT_FOUND:
+    case ERROR_CODES.COMPLIANCE_DNC_NOT_FOUND:
     case ERROR_CODES.COMPLIANCE_TRUST_PAGE_NOT_FOUND:
       return 'notFound';
     case ERROR_CODES.COMPLIANCE_SUBPROCESSOR_DUPLICATE:
       return 'duplicate';
+    case ERROR_CODES.COMPLIANCE_DNC_INVALID:
+      return 'dncInvalid';
     case ERROR_CODES.ROW_VERSION_CONFLICT:
       return 'conflict';
     case ERROR_CODES.VALIDATION_FAILED:

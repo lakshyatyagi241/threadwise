@@ -43,7 +43,13 @@ function make(opts: {
       return { text: opts.text ?? '', promptTokens: 10, completionTokens: 5, costUsd: null };
     }),
   };
-  const svc = new PqlService(db as never, keys as never, meter as never, ai as never);
+  const svc = new PqlService(
+    db as never,
+    keys as never,
+    meter as never,
+    { can: () => ({ allowed: false }) } as never,
+    ai as never,
+  );
   return { svc, keys, meter, ai };
 }
 const run = <T>(fn: () => Promise<T>) => RequestContextStore.run(ctx, fn);

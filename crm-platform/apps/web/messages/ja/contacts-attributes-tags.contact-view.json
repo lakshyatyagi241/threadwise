@@ -124,7 +124,8 @@
         "lastActivity": "最終アクティビティ",
         "source": "ソース",
         "noCustomFields": "この連絡先にはまだカスタムフィールドの値がありません。",
-        "noLeadSource": "この連絡先のリードソースは記録されていません。"
+        "noLeadSource": "この連絡先のリードソースは記録されていません。",
+        "dateOfBirth": "生年月日"
       },
       "details": {
         "title": "連絡先の詳細",

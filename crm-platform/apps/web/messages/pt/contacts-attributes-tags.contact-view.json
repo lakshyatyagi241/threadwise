@@ -124,7 +124,8 @@
         "lastActivity": "Última atividade",
         "source": "Origem",
         "noCustomFields": "Este contato ainda não tem valores em campos personalizados.",
-        "noLeadSource": "Nenhuma origem de lead registrada para este contato."
+        "noLeadSource": "Nenhuma origem de lead registrada para este contato.",
+        "dateOfBirth": "Data de nascimento"
       },
       "details": {
         "title": "Detalhes do contato",

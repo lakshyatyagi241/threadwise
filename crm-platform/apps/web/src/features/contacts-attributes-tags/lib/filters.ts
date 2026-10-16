@@ -78,6 +78,10 @@ export function parseFilters(
       : '') as ConsentFilter,
     imported: params.get('imported') === '1',
     status: cleanKey(params.get('status')),
+    minor:
+      params.get('minor') === 'yes' || params.get('minor') === 'no'
+        ? (params.get('minor') as 'yes' | 'no')
+        : '',
     source: cleanText(params.get('source')),
     segment: cleanId(params.get('segment'), false),
     owner: ownerTokens(params.get('owner') ?? '').join(','),
@@ -102,6 +106,7 @@ export function filtersToSearch(
   if (f.consent) p.set('consent', f.consent);
   if (f.imported) p.set('imported', '1');
   if (f.status) p.set('status', f.status);
+  if (f.minor) p.set('minor', f.minor);
   if (f.source.trim()) p.set('source', f.source.trim());
   if (f.segment) p.set('segment', f.segment);
   if (f.owner) p.set('owner', f.owner);
@@ -124,6 +129,7 @@ export function hasActiveFilter(f: ContactFilters): boolean {
     f.consent ||
     f.imported ||
     f.status ||
+    f.minor ||
     f.source.trim() ||
     f.segment ||
     f.owner ||

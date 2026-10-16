@@ -37,7 +37,7 @@
       "id": 6,
       "criterion": "Actionable warning and critical alert rules active",
       "status": "PARTIAL",
-      "evidence": "deploy/observability/event-loop.rules.yml passes promtool check (11 rules) and promtool test (9 case groups on synthetic series, mutation-checked, including the near-misses that must not page). Not loaded in any Prometheus, never fired from a real process, no receiver configured, so not 'active'. The worker queue-impact alert has data to evaluate (job metrics hook, verified on a real BullMQ worker) but has never fired."
+      "evidence": "deploy/observability/event-loop.rules.yml passes promtool check (11 rules) and promtool test (11 case groups on synthetic series, mutation-checked, including the near-misses that must not page). Loaded in a REAL Prometheus scraping a real API and worker (scrape-demo.mjs, 25/25): all 11 evaluate without error, nothing fires when idle, RuntimeMetricsTargetDown fires when the worker is killed, and EventLoopBlockingWithImpact fires from a real stall injected into the live API. That run exposed a defect (the request histogram cannot see queueing behind a blocked loop, so the original impact condition could never be true) which is fixed. Still not 'active': no production Prometheus, no receiver, the worker critical alert never fired from a real stall, and blocks of roughly 10 s to 2 min are not paged (EL-B13)."
     },
     {
       "id": 7,
@@ -67,7 +67,8 @@
   "verifiedCount": 3,
   "openSevereRegressions": "none known; no comparison possible without a baseline",
   "nextActions": [
-    "EL-B01/B03 fire WorkerEventLoopBlockingWithQueueImpact from a real worker stall in a real Prometheus",
+    "EL-B02 decide and wire a production Prometheus and receiver; EL-B01/B03 fire WorkerEventLoopBlockingWithQueueImpact from a real worker stall",
+    "EL-B12 caller-visible API latency (the in-process request histogram misses queueing behind the loop); EL-B13 decide how to treat 10 s to 2 min stalls",
     "EL-B02/B03 stand up a Prometheus scrape, validate the rules with promtool",
     "EL-B05 choose and add a load tool, build the workload mix, record idle/normal/peak/spike baselines",
     "EL-B06 add the p99 regression comparison to CI"

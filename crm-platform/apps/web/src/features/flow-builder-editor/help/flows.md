@@ -81,3 +81,7 @@ A WhatsApp or website chat bot has three tabs under its name: **Build**, **Custo
 - The **WhatsApp number** list is empty: connect a WhatsApp number first; flows only run on a connected number.
 - The flow does not answer: check that it is published, that the word you send matches one of its trigger words, and that its number is the one you wrote to.
 - A button does nothing: check that it leads to a step. A button set to **Ends here** sends nothing more.
+
+## Asking an age in a flow
+
+An **Ask** step can expect an **Age** or a **Date of birth**. The answer is checked before it is accepted, and written to the contact: a date of birth as the contact's date of birth, and an under-age answer flags the contact as a minor. Leave the minimum age empty to use the workspace age from the [Compliance center](help:compliance-center). The customer is never told which answer passes. The steps after it can read the answer's variable followed by `_age_gate` (for example `answer_age_gate`), which is `under` or `adult`, in a Condition. Ask for an age only where you need it.

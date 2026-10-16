@@ -124,7 +124,8 @@
         "lastActivity": "마지막 활동",
         "source": "출처",
         "noCustomFields": "이 연락처에는 아직 사용자 지정 필드 값이 없습니다.",
-        "noLeadSource": "이 연락처에 기록된 리드 출처가 없습니다."
+        "noLeadSource": "이 연락처에 기록된 리드 출처가 없습니다.",
+        "dateOfBirth": "생년월일"
       },
       "details": {
         "title": "연락처 세부 정보",

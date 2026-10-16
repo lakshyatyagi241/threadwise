@@ -99,3 +99,18 @@ outbox `compliance.settings_changed`. Sub-processors: audit module `compliance_s
 Migration `20261206090000_compliance_center.sql`: `compliance_settings` (one row per workspace), `compliance_subprocessors`,
 `consent_notices.terms_url`, the `workspace` scope. Forced RLS on both new tables. Neither table holds a contact's data (the officer
 contacts are the workspace's own business contacts); both are on the privacy registry allowlist.
+
+## Do-Not-Call list (BL-181)
+
+Numbers that get no marketing by voice or SMS. The ConsentGate denies marketing on the `sms` and `voice` channels to a listed number with the reason `on_dnc_list` (after a withdrawal, before the minor hold); WhatsApp, email and service messages are not held by it. No registry is called from here (BL-221).
+
+| Method | Path                        | Key                                    | Notes                                                                                                                                                                                                     |
+| ------ | --------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/v2/compliance/dnc`        | `settings.compliance.read` / `.manage` | `q` (part of a number), `cursor`, `limit` (max 200). Newest first. `total` is the whole list.                                                                                                             |
+| POST   | `/v2/compliance/dnc`        | `settings.compliance.manage`           | `{ numbers[1..1000], defaultCountryCode?, source: manual or contact_request, note? }`. Answers `{ added, alreadyListed, invalid, invalidSamples }`.                                                       |
+| POST   | `/v2/compliance/dnc/import` | `settings.compliance.manage`           | `{ csv (at most 90 KiB of text), defaultCountryCode?, source: import or registry_export, note? }`. The column named phone, mobile or number, else the first. 422 `COMPLIANCE_DNC_INVALID` for no numbers. |
+| DELETE | `/v2/compliance/dnc/:id`    | `settings.compliance.manage`           | 204; 404 `COMPLIANCE_DNC_NOT_FOUND`.                                                                                                                                                                      |
+
+A number is stored as E.164 and matched on its digits, once per workspace. Every change is audited (a batch is one row with a count) and emitted as `compliance.dnc_added` / `compliance.dnc_removed`.
+
+`consentManager` in the settings document gained `registrationId` (BL-181). The inbound Consent Manager event is a contract only (`consentManagerEventSchema` in `@crm/contracts`); no route serves it (BL-222).

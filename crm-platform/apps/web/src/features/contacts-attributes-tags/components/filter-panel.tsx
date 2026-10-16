@@ -22,7 +22,7 @@ import { CheckIcon, ChevronDownIcon, FilterIcon, SparkIcon } from './icons';
 
 /** The parts of the panel that can be opened straight away (a column header's "Filter" does that). */
 export type FilterSection =
-  'segment' | 'tag' | 'owner' | 'stage' | 'status' | 'consent' | 'source' | 'ai';
+  'segment' | 'tag' | 'owner' | 'stage' | 'status' | 'minor' | 'consent' | 'source' | 'ai';
 
 type View = 'menu' | FilterSection;
 type Outcome = { kind: 'ignored'; parts: string[] } | { kind: 'empty' } | { kind: 'failed' };
@@ -36,6 +36,7 @@ type FilterValues = Pick<
   | 'owner'
   | 'lifecycleStage'
   | 'status'
+  | 'minor'
   | 'consent'
   | 'source'
   | 'rules'
@@ -84,6 +85,7 @@ export function quickFilterCount(f: FilterValues): number {
     Number(ownerTokens(f.owner).length > 0) +
     Number(f.lifecycleStage !== '') +
     Number(f.status !== '') +
+    Number(f.minor !== '') +
     Number(f.consent !== '') +
     Number(f.source.trim() !== '')
   );
@@ -181,6 +183,7 @@ export function FilterPanel(p: FilterPanelProps) {
             : (p.owners.find((o) => o.id === owners[0])?.fullName ?? t('ownerFormer'));
   const stageName = p.stages.find((s) => s.value === f.lifecycleStage)?.label;
   const statusName = p.statuses.find((s) => s.value === f.status)?.label;
+  const minorName = f.minor === 'yes' ? t('minorYes') : f.minor === 'no' ? t('minorNo') : undefined;
   const consentName =
     f.consent === 'subscribed'
       ? t('subscribedOnly')
@@ -298,6 +301,7 @@ export function FilterPanel(p: FilterPanelProps) {
             {entry('owner', t('ownerLabel'), ownerName)}
             {entry('stage', t('stageLabel'), stageName)}
             {entry('status', t('statusLabel'), statusName)}
+            {entry('minor', t('minorLabel'), minorName)}
             {entry('consent', t('consentLabel'), consentName)}
             {entry('source', t('sourceLabel'), f.source.trim() || undefined)}
             <button
@@ -497,6 +501,15 @@ export function FilterPanel(p: FilterPanelProps) {
                 s.color,
               ),
             )}
+          </div>
+        )}
+
+        {view === 'minor' && (
+          <div role="radiogroup" aria-label={t('minorFilter')} className="space-y-0.5 p-1">
+            {back}
+            {choice('all', t('allMinor'), f.minor === '', () => pick({ minor: '' }))}
+            {choice('yes', t('minorYes'), f.minor === 'yes', () => pick({ minor: 'yes' }))}
+            {choice('no', t('minorNo'), f.minor === 'no', () => pick({ minor: 'no' }))}
           </div>
         )}
 

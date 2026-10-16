@@ -5,6 +5,9 @@ import {
   hasActiveFilter,
   listQuery,
   parseFilters,
+  parseProps,
+  sortFromValue,
+  sortValue,
   statsQuery,
 } from './filters';
 
@@ -19,7 +22,14 @@ describe('parseFilters (the address is the state)', () => {
   it('reads every filter', () => {
     expect(
       parseFilters(params(`q=acme&owner=${UUID}&industry=Retail&openDeals=1&sort=name`)),
-    ).toEqual({ q: 'acme', owner: UUID, industry: 'Retail', openDeals: true, sort: 'name' });
+    ).toEqual({
+      ...DEFAULT_FILTERS,
+      q: 'acme',
+      owner: UUID,
+      industry: 'Retail',
+      openDeals: true,
+      sort: 'name',
+    });
   });
 
   it('drops what it does not understand instead of failing', () => {
@@ -50,7 +60,10 @@ describe('filtersToSearch', () => {
       owner: UUID,
       industry: 'Food & Drink',
       openDeals: true,
-      sort: 'name' as const,
+      props: [{ key: 'tier', operator: 'equals' as const, value: 'gold' }],
+      sort: 'property' as const,
+      sortKey: 'tier',
+      sortDir: 'desc' as const,
     };
     expect(parseFilters(params(filtersToSearch(f)))).toEqual(f);
   });
@@ -71,7 +84,10 @@ describe('the requests', () => {
       unassigned: true,
       industry: 'Retail',
       hasOpenDeals: true,
+      props: undefined,
       sort: 'created',
+      sortKey: undefined,
+      sortDir: undefined,
     });
     expect(statsQuery({ ...f, owner: UUID })).toMatchObject({
       ownerId: UUID,
@@ -92,8 +108,69 @@ describe('the requests', () => {
       unassigned: undefined,
       industry: undefined,
       hasOpenDeals: undefined,
+      props: undefined,
       sort: 'created',
+      sortKey: undefined,
+      sortDir: undefined,
     });
+  });
+});
+
+describe('company property conditions and orders (BL-196)', () => {
+  const tier = { key: 'tier', operator: 'equals' as const, value: 'gold' };
+
+  it('the conditions travel in the address as JSON and come back the same', () => {
+    const search = filtersToSearch({ ...DEFAULT_FILTERS, props: [tier] });
+    expect(search).toBe(`?props=${encodeURIComponent(JSON.stringify([tier]))}`);
+    expect(parseFilters(params(search)).props).toEqual([tier]);
+  });
+
+  it('a malformed or oversized props value is no conditions, never an error', () => {
+    for (const raw of [
+      'nope',
+      '{"a":1}',
+      '[{"key":"Bad Key","operator":"equals"}]',
+      '[{"key":"x","operator":"drop"}]',
+    ])
+      expect(parseProps(raw)).toEqual([]);
+    const many = JSON.stringify(Array.from({ length: 11 }, () => tier));
+    expect(parseProps(many)).toEqual([]);
+    expect(parseProps(null)).toEqual([]);
+  });
+
+  it('the list and the tiles both send the conditions as one JSON value', () => {
+    const f = { ...DEFAULT_FILTERS, props: [tier] };
+    expect(listQuery(f).props).toBe(JSON.stringify([tier]));
+    expect(statsQuery(f).props).toBe(JSON.stringify([tier]));
+  });
+
+  it('a condition narrows the list, so an empty result reads "no match"', () => {
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, props: [tier] })).toBe(true);
+  });
+
+  it('an order by a property carries its key and direction, and only then', () => {
+    const q = listQuery({ ...DEFAULT_FILTERS, sort: 'property', sortKey: 'tier', sortDir: 'desc' });
+    expect(q).toMatchObject({ sort: 'property', sortKey: 'tier', sortDir: 'desc' });
+    expect(parseFilters(params('sort=property&sortKey=Bad%20Key')).sort).toBe('created');
+    expect(parseFilters(params('sort=property')).sort).toBe('created');
+    expect(parseFilters(params('sort=name&sortKey=tier&dir=sideways'))).toMatchObject({
+      sort: 'name',
+      sortKey: '',
+      sortDir: '',
+    });
+  });
+
+  it('the order select speaks created, name and property:<key>', () => {
+    expect(sortValue({ sort: 'property', sortKey: 'tier' })).toBe('property:tier');
+    expect(sortValue({ sort: 'name', sortKey: '' })).toBe('name');
+    expect(sortFromValue('property:tier')).toEqual({
+      sort: 'property',
+      sortKey: 'tier',
+      sortDir: '',
+    });
+    expect(sortFromValue('name')).toEqual({ sort: 'name', sortKey: '', sortDir: '' });
+    expect(sortFromValue('property:Bad Key').sort).toBe('created');
+    expect(sortFromValue('whatever').sort).toBe('created');
   });
 });
 

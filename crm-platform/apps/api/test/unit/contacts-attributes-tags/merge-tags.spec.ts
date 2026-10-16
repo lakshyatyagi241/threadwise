@@ -189,3 +189,66 @@ describe('attribute definitions (TW-CON-043, 044, 046)', () => {
     expect(updateAttributeSchema.safeParse({ name: 'X' }).success).toBe(false);
   });
 });
+
+describe('company merge tags (BL-196)', () => {
+  const company = {
+    name: 'Acme Ltd',
+    website: 'acme.example',
+    email: 'hello@acme.example',
+    phone: '+911234567890',
+    industry: 'Logistics',
+    sizeRange: '51-200',
+    address: 'Pune',
+    notes: 'internal: pays late',
+    data: { tier: 'gold', annual_revenue: 120000, channels: ['email', 'sms'], vip: true },
+  };
+  const withCompany = (over: Partial<MergeContact> = {}) =>
+    ctx({ contact: contact({ company, ...over }) });
+
+  it('resolves a built-in column of the contact company, with the dot or the underscore', () => {
+    expect(
+      renderMergeTags('{{company.industry}} / {{company_website}}', withCompany()).rendered,
+    ).toBe('Logistics / acme.example');
+    expect(renderMergeTags('{{ Company.Size }}', withCompany()).rendered).toBe('51-200');
+  });
+
+  it('resolves a company property by key, whatever its type', () => {
+    const r = renderMergeTags(
+      '{{company.tier}} {{company.annual_revenue}} {{company.channels}} {{company.vip}}',
+      withCompany(),
+    );
+    expect(r.rendered).toBe('gold 120000 email, sms true');
+    expect(r.tokens.every((t) => t.source === 'company' && t.resolved)).toBe(true);
+  });
+
+  it('{{company}} and {{contact.company}} are the name of the contact company', () => {
+    expect(renderMergeTags('{{company}} {{contact.company}}', withCompany()).rendered).toBe(
+      'Acme Ltd Acme Ltd',
+    );
+  });
+
+  it('company_name stays the sender business name, as it always was (TW-CON-048)', () => {
+    expect(renderMergeTags('{{company_name}} {{company.name}}', withCompany()).rendered).toBe(
+      'Geta Inc Geta Inc',
+    );
+  });
+
+  it('never prints the internal notes of a company', () => {
+    expect(renderMergeTags('[{{company.notes}}]', withCompany()).rendered).toBe('[]');
+  });
+
+  it('a contact with no company, or a company with no value, gets the empty string, never the braces', () => {
+    expect(renderMergeTags('[{{company.industry}}][{{company}}]', ctx()).rendered).toBe('[][]');
+    const bare = { ...company, industry: null, data: {} };
+    expect(
+      renderMergeTags('[{{company.industry}}][{{company.tier}}]', withCompany({ company: bare }))
+        .rendered,
+    ).toBe('[][]');
+  });
+
+  it('the contact own attribute of the same name wins over the company one', () => {
+    expect(
+      renderMergeTags('{{company}}', withCompany({ data: { company: 'Self employed' } })).rendered,
+    ).toBe('Self employed');
+  });
+});

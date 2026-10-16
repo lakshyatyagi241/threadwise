@@ -17,6 +17,7 @@ import { ContactPrivacyRepository } from './contact-privacy.repository';
 import { ContactPrivacyService } from './contact-privacy.service';
 import { ContactConsentController } from './consent.controller';
 import { ContactConsentService } from './consent.service';
+import { MinorDetectionService } from './minor-detection.service';
 
 /**
  * The contact consent ledger (spec docs/specs/contact-consent-ledger.md): the API, the settings, and the services other modules call
@@ -33,6 +34,7 @@ import { ContactConsentService } from './consent.service';
     ConsentRepository,
     ContactPrivacyRepository,
     ContactPrivacyService,
+    MinorDetectionService,
     ContactConsentService,
     ConsentIntakeService,
     ConsentNoticeRepository,
@@ -48,6 +50,7 @@ import { ContactConsentService } from './consent.service';
   exports: [
     ContactConsentService,
     ContactPrivacyService,
+    MinorDetectionService,
     ConsentIntakeService,
     ConsentNoticeService,
     ConsentSettingsService,

@@ -14,7 +14,13 @@ import {
 import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ConsentPolicyService } from './consent-policy.service';
-import { NO_FACTS, decideConsent, failureResult, type ConsentFacts } from './consent-gate.rules';
+import {
+  NO_FACTS,
+  decideConsent,
+  failureResult,
+  isDncChannel,
+  type ConsentFacts,
+} from './consent-gate.rules';
 
 export interface GateOptions {
   /** The message answers something this contact sent and the customer-service window is open (see `messagePurpose`). */
@@ -201,6 +207,19 @@ export class ConsentGate {
     const rows = await this.run(orgId, tx, (t) =>
       this.factRows(t, orgId, where, channel, ledgerPurpose),
     );
+    // A number with no contact is still a number someone may have asked us not to call (BL-181): the list is read on its own.
+    if (
+      rows.length === 0 &&
+      subject.type === 'phone' &&
+      ledgerPurpose === 'marketing' &&
+      isDncChannel(channel)
+    ) {
+      const digits = subject.phone.replace(/[^0-9]/g, '');
+      if (digits.length >= 6 && digits.length <= 15) {
+        const listed = await this.run(orgId, tx, (t) => this.onDncDirect(t, orgId, digits));
+        if (listed) return { ...NO_FACTS, onDncList: true };
+      }
+    }
     // A phone can belong to more than one contact: any withdrawal wins, then any grant.
     const merged: ConsentFacts = {
       unsubscribedFlag: false,
@@ -208,6 +227,7 @@ export class ConsentGate {
       minor: false,
       guardianConsent: false,
       saleShareOptOut: false,
+      onDncList: false,
     };
     // Any matched contact that is a minor or opted out counts (the stricter reading); guardian consent must cover EVERY flagged minor.
     let minors = 0;
@@ -219,6 +239,7 @@ export class ConsentGate {
         if (r.guardian) guarded += 1;
       }
       if (r.saleShare) merged.saleShareOptOut = true;
+      if (r.onDnc) merged.onDncList = true;
       if (r.state === 'withdrawn') merged.ledgerState = 'withdrawn';
       else if (r.state === 'granted' && merged.ledgerState !== 'withdrawn') {
         merged.ledgerState = 'granted';
@@ -253,6 +274,7 @@ export class ConsentGate {
           minor: r.minor,
           guardianConsent: r.guardian,
           saleShareOptOut: r.saleShare,
+          onDncList: r.onDnc,
         });
       }
     }
@@ -278,13 +300,19 @@ export class ConsentGate {
       minor: boolean;
       guardian: boolean;
       saleShare: boolean;
+      onDnc: boolean;
     }>
   > {
     const consentChannel = consentChannelOfKind(channel);
+    // The Do-Not-Call list only matters for voice and SMS marketing; for every other send the lookup is not made at all.
+    const dnc =
+      ledgerPurpose === 'marketing' && isDncChannel(channel)
+        ? sql`EXISTS (SELECT 1 FROM dnc_entries d WHERE d.org_id = c.org_id AND d.phone_digits = regexp_replace(coalesce(c.normalized_phone, ''), '[^0-9]', '', 'g'))`
+        : sql`false`;
     const res = await tx.execute(sql`
       SELECT c.id, c.is_unsubscribed AS flag, cs.state,
              coalesce(pf.is_minor, false) AS minor, coalesce(pf.guardian_consent, false) AS guardian,
-             coalesce(pf.do_not_sell_share, false) AS sale_share
+             coalesce(pf.do_not_sell_share, false) AS sale_share, ${dnc} AS on_dnc
       FROM contacts c
       LEFT JOIN contact_consent_state cs
         ON cs.org_id = c.org_id AND cs.contact_id = c.id
@@ -298,7 +326,16 @@ export class ConsentGate {
       minor: r.minor === true,
       guardian: r.guardian === true,
       saleShare: r.sale_share === true,
+      onDnc: r.on_dnc === true,
     }));
+  }
+
+  /** Is this number (digits only) on the workspace's Do-Not-Call list? One unique-index lookup. */
+  private async onDncDirect(tx: Tx, orgId: number, digits: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM dnc_entries WHERE org_id = ${orgId} AND phone_digits = ${digits}`,
+    );
+    return res.rows.length > 0;
   }
 
   private run<T>(orgId: number, tx: Tx | undefined, fn: (tx: Tx) => Promise<T>): Promise<T> {

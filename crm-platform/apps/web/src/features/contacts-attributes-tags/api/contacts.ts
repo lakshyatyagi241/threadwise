@@ -36,6 +36,7 @@ export const PAGE_SIZES = [10, 25, 50, 100, 200] as const;
 export type PageSize = (typeof PAGE_SIZES)[number];
 
 export type ConsentFilter = '' | 'subscribed' | 'unsubscribed';
+export type MinorFilter = '' | 'yes' | 'no';
 
 export interface ContactFilters {
   q: string;
@@ -49,6 +50,8 @@ export interface ContactFilters {
   imported: boolean;
   /** One contact status value (`status` on the API), empty for any. */
   status: string;
+  /** `yes`: flagged as a minor only; `no`: not flagged; empty for both (`minor` on the API, BL-190). */
+  minor: MinorFilter;
   /** Where the contact came from (`source` on the API: the import's source knob, a form, "api"), empty for any. */
   source: string;
   /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
@@ -76,6 +79,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   consent: '',
   imported: false,
   status: '',
+  minor: '',
   source: '',
   segment: '',
   owner: '',
@@ -91,7 +95,7 @@ export function contactFilterBody(
   f: Pick<
     ContactFilters,
     'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
-  > & { rules?: string; owner?: string; status?: string; source?: string },
+  > & { rules?: string; owner?: string; status?: string; source?: string; minor?: MinorFilter },
 ) {
   const owners = ownerTokens(f.owner ?? '');
   const ownerIds = owners.filter((o) => o !== UNASSIGNED_OWNER);
@@ -104,6 +108,7 @@ export function contactFilterBody(
     unsubscribed: f.consent === '' ? undefined : f.consent === 'unsubscribed',
     imported: f.imported ? true : undefined,
     status: f.status?.trim() || undefined,
+    minor: f.minor ? f.minor === 'yes' : undefined,
     source: f.source?.trim() || undefined,
     segmentId: f.segment || undefined,
     rules: f.rules || undefined,
@@ -139,6 +144,7 @@ export function listQuery(f: ContactFilters) {
     unsubscribed: b.unsubscribed,
     imported: b.imported,
     status: b.status,
+    minor: b.minor,
     source: b.source,
     segmentId: b.segmentId,
     rules: b.rules,

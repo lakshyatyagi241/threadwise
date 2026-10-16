@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Mappa al massimo {max} proprietà personalizzate.",
       "contract": "{message}",
       "speedTemplateRequired": "Scegli il template da inviare.",
-      "speedDelayRange": "Inserisci minuti interi da 0 a {max}."
+      "speedDelayRange": "Inserisci minuti interi da 0 a {max}.",
+      "speedMaxAgeRange": "Scegli quanto può essere vecchio un lead, da 1 minuto a 90 giorni."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Attesa prima dell'invio (minuti)",
         "delayHint": "Minuti interi da 0 a {max}. Con 0 l'invio è immediato.",
+        "maxAge": "Non scrivere ai lead più vecchi di",
+        "maxAgeHint": "Un lead che arriva in ritardo (un recupero, un nuovo tentativo, una sincronizzazione saltata) viene comunque salvato, assegnato e notificato, ma non riceve il primo messaggio se è più vecchio di questo limite. Scegli un periodo più lungo solo se vuoi scrivere ai lead vecchi. Le regole sul consenso valgono sempre.",
         "businessHours": "Solo durante l'orario di lavoro",
         "businessHoursHint": "Fuori dall'orario di lavoro impostato nel tuo workspace, il messaggio attende l'apertura.",
         "optionsFailed": "Non è stato possibile caricare i template e i mittenti. Riprova tra un momento."
@@ -646,6 +649,7 @@
         "no_sender": "Nessun mittente connesso",
         "template_unavailable": "Il template non può essere inviato",
         "missing_value": "Manca un valore del template per questo contatto",
+        "lead_too_old": "Il lead era più vecchio di quanto consente l'impostazione",
         "provider_error": "Il provider lo ha rifiutato",
         "interrupted": "È stato interrotto",
         "expired": "Ha atteso troppo a lungo",
@@ -791,6 +795,7 @@
           "not_now": "La fonte non era pronta: troppo presto per lei, oppure la sua connessione è in pausa.",
           "provider_error": "La fonte ha rifiutato o non è riuscita.",
           "credentials_refused": "La fonte ha rifiutato le credenziali. Ricollegala.",
+          "permission_missing": "Meta non ha consentito a questa Pagina di leggere i lead. Concedi l'accesso ai lead in Moduli lead di Meta, poi riprova.",
           "interrupted": "È stato interrotto. Eseguilo di nuovo.",
           "internal_error": "Errore interno. Eseguilo di nuovo.",
           "incomplete": "Alcuni lead non sono stati consegnati. Eseguilo di nuovo per completare.",
@@ -829,7 +834,8 @@
           "tooWide": "Al massimo {days} giorni per volta.",
           "noSource": "Scegli almeno una fonte."
         },
-        "safe": "Non si perde né si duplica nulla se lo riesegui; vengono aggiunti solo i lead mancanti."
+        "safe": "Non si perde né si duplica nulla se lo riesegui; vengono aggiunti solo i lead mancanti.",
+        "speedNote": "I lead recuperati diventano contatti, vengono assegnati a un responsabile e avvisano il tuo team, come i lead nuovi. Non ricevono il primo messaggio automatico se sono più vecchi del limite della fonte (un'ora, a meno che tu non l'abbia cambiato nell'impostazione del primo messaggio della fonte)."
       }
     },
     "meta": {

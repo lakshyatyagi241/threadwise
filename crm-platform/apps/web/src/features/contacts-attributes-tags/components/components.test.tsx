@@ -83,6 +83,8 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   leadScore: null,
   leadScoreSource: null,
   leadScoredAt: null,
+  dateOfBirth: null,
+  isMinor: false,
   ...over,
 });
 
@@ -632,6 +634,7 @@ describe('ContactsToolbar', () => {
               owner: '',
               lifecycleStage: '',
               status: '',
+              minor: '',
               consent: '',
               source: '',
               rules: '',

@@ -124,7 +124,8 @@
         "lastActivity": "Hoạt động gần nhất",
         "source": "Nguồn",
         "noCustomFields": "Liên hệ này chưa có giá trị trường tùy chỉnh.",
-        "noLeadSource": "Chưa ghi nhận nguồn khách hàng tiềm năng cho liên hệ này."
+        "noLeadSource": "Chưa ghi nhận nguồn khách hàng tiềm năng cho liên hệ này.",
+        "dateOfBirth": "Ngày sinh"
       },
       "details": {
         "title": "Chi tiết liên hệ",

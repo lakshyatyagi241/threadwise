@@ -124,7 +124,8 @@
         "lastActivity": "Aktivitas terakhir",
         "source": "Sumber",
         "noCustomFields": "Kontak ini belum memiliki nilai kolom kustom.",
-        "noLeadSource": "Belum ada sumber prospek yang tercatat untuk kontak ini."
+        "noLeadSource": "Belum ada sumber prospek yang tercatat untuk kontak ini.",
+        "dateOfBirth": "Tanggal lahir"
       },
       "details": {
         "title": "Detail kontak",

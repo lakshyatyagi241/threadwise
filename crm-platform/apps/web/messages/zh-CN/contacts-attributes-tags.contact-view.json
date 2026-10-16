@@ -124,7 +124,8 @@
         "lastActivity": "最近活动",
         "source": "来源",
         "noCustomFields": "该联系人暂无自定义字段值。",
-        "noLeadSource": "该联系人未记录线索来源。"
+        "noLeadSource": "该联系人未记录线索来源。",
+        "dateOfBirth": "出生日期"
       },
       "details": {
         "title": "联系人详情",

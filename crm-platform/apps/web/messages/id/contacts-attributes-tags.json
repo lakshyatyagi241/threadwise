@@ -197,6 +197,9 @@
       "pqlExampleTag": "Kontak dengan tag {tag} yang tidak aktif 30 hari",
       "pqlExampleStage": "Kontak {stage} yang dibuat dalam 7 hari terakhir",
       "pqlExampleNoOwner": "Kontak tanpa pemilik",
+      "colDateOfBirth": "Tanggal lahir",
+      "colMinor": "Di bawah umur",
+      "minorBadge": "Di bawah umur",
       "breadcrumb": "Jejak navigasi",
       "breadcrumbContacts": "Kontak",
       "breadcrumbList": "Daftar",
@@ -259,7 +262,12 @@
       "addNoteNamed": "Tambah catatan untuk {name}",
       "chatNamed": "Chat dengan {name}",
       "openChat": "Buka chat",
-      "sendSms": "Kirim SMS"
+      "sendSms": "Kirim SMS",
+      "minorLabel": "Di bawah umur",
+      "minorFilter": "Filter berdasarkan tanda di bawah umur",
+      "minorYes": "Ditandai di bawah umur",
+      "minorNo": "Tidak ditandai di bawah umur",
+      "allMinor": "Semua orang"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -405,7 +413,9 @@
       "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
       "company": "Perusahaan",
       "companyHint": "Mengelompokkan kontak ini di bawah sebuah organisasi.",
-      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom."
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom.",
+      "dateOfBirth": "Tanggal lahir",
+      "dateOfBirthHint": "Opsional. Jika membuat kontak tergolong di bawah umur, kontak ditandai demikian."
     },
     "tags": {
       "title": "Tag",
@@ -515,7 +525,9 @@
         "source": "Sumber",
         "consent": "Persetujuan pemasaran (ya / tidak)",
         "consentSms": "Persetujuan pemasaran SMS (ya / tidak)",
-        "consentEmail": "Persetujuan pemasaran email (ya / tidak)"
+        "consentEmail": "Persetujuan pemasaran email (ya / tidak)",
+        "dateOfBirth": "Tanggal lahir (tahun lebih dulu, 2010-05-04)",
+        "minor": "Di bawah umur (jika ya, kontak ditandai)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -572,7 +584,8 @@
         "tag_name_too_long": "nama tag terlalu panjang",
         "plan_limit_reached": "batas kontak paket tercapai",
         "tag_limit_reached": "batas tag paket tercapai",
-        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya"
+        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
+        "invalid_date_of_birth": "tanggal lahir bukan tanggal berformat tahun lebih dulu yang bisa menjadi tanggal lahir"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -632,7 +645,8 @@
       "ownerForbidden": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
       "ownerFailed": "Pemilik tidak dapat diubah. Coba lagi.",
       "ownerMe": "{name} (saya)",
-      "ownerFormer": "Mantan anggota"
+      "ownerFormer": "Mantan anggota",
+      "dateOfBirth": "Tanggal lahir"
     },
     "attributes": {
       "eyebrow": "Lainnya / Atribut",
@@ -1477,7 +1491,8 @@
         "needsFollowUp": "Perlu tindak lanjut",
         "active": "Aktif",
         "inactive": "Tidak aktif",
-        "unsubscribed": "Berhenti berlangganan"
+        "unsubscribed": "Berhenti berlangganan",
+        "minors": "Anak di bawah umur"
       }
     },
     "erase": {

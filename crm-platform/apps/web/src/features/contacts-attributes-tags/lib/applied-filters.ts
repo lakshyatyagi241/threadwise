@@ -7,7 +7,7 @@ import { SEGMENT_PREFIX } from './segment-entries';
  */
 
 export type FilterChipKind =
-  'segment' | 'tag' | 'owner' | 'stage' | 'status' | 'consent' | 'source' | 'rules';
+  'segment' | 'tag' | 'owner' | 'stage' | 'status' | 'minor' | 'consent' | 'source' | 'rules';
 
 export interface FilterChip {
   /** Stable key for React and for tests. */
@@ -28,6 +28,9 @@ export interface ChipNames {
     owner: string;
     stage: string;
     status: string;
+    minor: string;
+    minorYes: string;
+    minorNo: string;
     consent: string;
     source: string;
     conditions: string;
@@ -149,6 +152,17 @@ export function appliedFilterChips(f: ContactFilters, n: ChipNames): FilterChip[
     });
   }
 
+  if (f.minor) {
+    const name = f.minor === 'yes' ? w.minorYes : w.minorNo;
+    out.push({
+      id: `minor:${f.minor}`,
+      kind: 'minor',
+      label: text(w.minor, name),
+      value: name,
+      clear: { minor: '' },
+    });
+  }
+
   if (f.consent) {
     const name = f.consent === 'subscribed' ? w.subscribed : w.unsubscribed;
     out.push({
@@ -189,6 +203,7 @@ export function clearAllPatch(): Partial<ContactFilters> {
     owner: '',
     lifecycleStage: '',
     status: '',
+    minor: '',
     consent: '',
     source: '',
     rules: '',

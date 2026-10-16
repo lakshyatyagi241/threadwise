@@ -23,7 +23,7 @@ export interface SettingsForm extends Omit<
   privacyUrl: string;
   termsUrl: string;
   optOutNoticeUrl: string;
-  consentManager: { name: string; url: string };
+  consentManager: { name: string; url: string; registrationId: string };
   windowTimezone: string;
   secondaryNoticeLocale: string;
 }
@@ -39,7 +39,11 @@ export function formFromSettings(s: ComplianceSettings | ComplianceSettingsValue
     parentalConsentRequired: s.parentalConsentRequired,
     offerSaleShareOptOut: s.offerSaleShareOptOut,
     optOutNoticeUrl: s.optOutNoticeUrl ?? '',
-    consentManager: { name: s.consentManager.name, url: s.consentManager.url ?? '' },
+    consentManager: {
+      name: s.consentManager.name,
+      url: s.consentManager.url ?? '',
+      registrationId: s.consentManager.registrationId,
+    },
     quietHours: { ...s.quietHours },
     callingWindow: { ...s.callingWindow, days: [...s.callingWindow.days] },
     windowTimezone: s.windowTimezone ?? '',
@@ -73,7 +77,11 @@ export function toSettingsInput(
     parentalConsentRequired: f.parentalConsentRequired,
     offerSaleShareOptOut: f.offerSaleShareOptOut,
     optOutNoticeUrl: orNull(f.optOutNoticeUrl),
-    consentManager: { name: f.consentManager.name.trim(), url: orNull(f.consentManager.url) },
+    consentManager: {
+      name: f.consentManager.name.trim(),
+      url: orNull(f.consentManager.url),
+      registrationId: f.consentManager.registrationId.trim(),
+    },
     quietHours: f.quietHours,
     callingWindow: f.callingWindow,
     windowTimezone: orNull(f.windowTimezone),

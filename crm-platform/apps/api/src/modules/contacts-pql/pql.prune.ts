@@ -21,9 +21,10 @@ export function pruneRules(
     owner: new Set(catalog.owners.map((o) => o.id)),
     lifecycleStage: new Set(catalog.stages.map((s) => s.value)),
     status: new Set(catalog.statuses.map((s) => s.value)),
-    custom: new Map<string, SegmentFieldKind>(
-      catalog.customFields.map((f) => [`custom.${f.key}`, f.kind]),
-    ),
+    custom: new Map<string, SegmentFieldKind>([
+      ...catalog.customFields.map((f): [string, SegmentFieldKind] => [`custom.${f.key}`, f.kind]),
+      ...catalog.companyFields.map((f): [string, SegmentFieldKind] => [`company.${f.key}`, f.kind]),
+    ]),
   };
   const dropped: string[] = [];
   const values = (v: unknown): unknown[] => (Array.isArray(v) ? v : v === undefined ? [] : [v]);
@@ -38,7 +39,7 @@ export function pruneRules(
 
   const keep = (n: SegmentNode): SegmentNode | null => {
     if (n.type === 'condition') {
-      if (n.field.startsWith('custom.')) {
+      if (n.field.startsWith('custom.') || n.field.startsWith('company.')) {
         // The key must exist AND the operator and value must fit its kind: otherwise the compiler would answer "matches nothing".
         const kind = known.custom.get(n.field);
         if (!kind || checkConditionValue(kind, n.operator, n.value) !== null) {

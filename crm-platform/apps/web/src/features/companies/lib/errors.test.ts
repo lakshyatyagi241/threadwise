@@ -33,6 +33,9 @@ describe('errorKind (what a failed call says)', () => {
       [401, ERROR_CODES.UNAUTHENTICATED, 'signedOut'],
       [429, ERROR_CODES.RATE_LIMITED, 'rateLimited'],
       [422, ERROR_CODES.PLAN_FEATURE_LOCKED, 'planDisabled'],
+      [422, ERROR_CODES.COMPANY_FILTER_INVALID, 'filterInvalid'],
+      [422, ERROR_CODES.COMPANY_EXPORT_TOO_LARGE, 'exportTooLarge'],
+      [422, ERROR_CODES.COMPANY_IMPORT_INVALID, 'importInvalid'],
     ] as const) {
       expect(errorKind(api(status, code), 'list')).toBe(kind);
       expect(errorKind(api(status, code), 'record')).toBe(kind);

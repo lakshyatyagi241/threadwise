@@ -46,6 +46,8 @@ describe('columns', () => {
       'language',
       'memo',
       'source',
+      'dateOfBirth',
+      'minor',
       'lastActivity',
       'createdOn',
     ]);

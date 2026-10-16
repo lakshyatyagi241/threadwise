@@ -144,7 +144,9 @@
         "booking": "Página de reservas",
         "commerce": "Checkout da loja",
         "lead": "Captação de leads",
-        "gpc": "Global Privacy Control"
+        "gpc": "Global Privacy Control",
+        "dob": "Data de nascimento ou idade",
+        "declaration": "Idade não confirmada"
       },
       "by": "por {name}",
       "evidence": {
@@ -227,7 +229,9 @@
           "noteHint": "Por exemplo: assinou o formulário em papel no balcão. Não escreva o nome nem os dados de contato do responsável.",
           "ref": "Referência (opcional)",
           "refHint": "Um número de formulário ou id de documento que você possa consultar depois."
-        }
+        },
+        "minorFrom": "Definido a partir da data de nascimento ou da idade informada. Sai sozinho em {date}, a menos que uma pessoa o mantenha.",
+        "minorFromDeclaration": "Definido porque a idade não foi confirmada em um formulário. Permanece até uma pessoa removê-lo."
       }
     },
     "composer": {
@@ -351,7 +355,8 @@
         "consent_declined": "Não permitido: a pessoa recusou.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Não permitido: este contato está marcado como menor e seu espaço de trabalho retém o marketing.",
-        "sale_share_opted_out": "Não permitido: o contato recusou a venda ou o compartilhamento de seus dados."
+        "sale_share_opted_out": "Não permitido: o contato recusou a venda ou o compartilhamento de seus dados.",
+        "on_dnc_list": "Na sua lista Não Perturbe: sem ligações nem mensagens de marketing para este número"
       }
     },
     "notice": {

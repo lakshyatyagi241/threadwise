@@ -213,10 +213,10 @@ export function ComplianceCard({ contact }: { contact: ContactRow }) {
         <Badge tone={contact.isUnsubscribed ? 'danger' : 'success'}>
           {contact.isUnsubscribed ? t('optedOut') : t('allowed')}
         </Badge>
-        {p?.isMinor && <Badge tone="warning">{tp('minorLabel')}</Badge>}
+        {(contact.isMinor || p?.isMinor) && <Badge tone="warning">{tp('minorLabel')}</Badge>}
         {p?.isMinor && p.guardianConsent && <Badge tone="neutral">{tp('guardianBadge')}</Badge>}
         {p?.doNotSellShare && <Badge tone="danger">{tp('dnsLabel')}</Badge>}
-        {canRead && p && !p.isMinor && !p.doNotSellShare && (
+        {canRead && p && !contact.isMinor && !p.isMinor && !p.doNotSellShare && (
           <span className="text-xs text-muted-foreground">{t('noFlags')}</span>
         )}
       </div>

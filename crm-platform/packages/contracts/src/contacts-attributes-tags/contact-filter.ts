@@ -40,6 +40,8 @@ export const contactFilterShape = {
   imported: queryBoolean().optional(),
   /** true: opted out. false: subscribed. */
   unsubscribed: queryBoolean().optional(),
+  /** true: flagged as a minor. false: not flagged (BL-190). */
+  minor: queryBoolean().optional(),
   source: z.string().max(128).optional(),
   status: z.string().max(64).optional(),
   /**

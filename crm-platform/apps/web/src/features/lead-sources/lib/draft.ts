@@ -1,7 +1,9 @@
 import {
   LEAD_RAW_RETENTION_DEFAULT_DAYS,
   LEAD_RAW_RETENTION_MAX_DAYS,
+  SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
   SPEED_TO_LEAD_MAX_DELAY_MINUTES,
+  SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES,
   SPEED_TO_LEAD_OFF,
   createLeadSourceSchema,
   leadFieldMappingSchema,
@@ -101,7 +103,20 @@ export interface SpeedDraft {
   senderId: string;
   delay: string;
   businessHoursOnly: boolean;
+  /** Minutes, as text: the oldest a lead may be and still get the first message (the select's value). */
+  maxLeadAge: string;
 }
+
+/** The ages the form offers (minutes). A value set some other way is shown as it is and kept. */
+export const SPEED_MAX_AGE_CHOICES: readonly number[] = [
+  SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
+  6 * 60,
+  24 * 60,
+  3 * 24 * 60,
+  7 * 24 * 60,
+  30 * 24 * 60,
+  SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES,
+];
 
 export const emptySpeed = (): SpeedDraft => ({
   enabled: false,
@@ -110,6 +125,7 @@ export const emptySpeed = (): SpeedDraft => ({
   senderId: '',
   delay: '0',
   businessHoursOnly: false,
+  maxLeadAge: String(SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES),
 });
 
 export interface SourceDraft {
@@ -189,6 +205,7 @@ function speedFromDefaults(v: NonNullable<LeadSourceDefaults['speedToLead']>): S
     senderId: v.senderId ?? '',
     delay: String(v.delayMinutes),
     businessHoursOnly: v.businessHoursOnly,
+    maxLeadAge: String(v.maxLeadAgeMinutes),
   };
 }
 
@@ -301,6 +318,14 @@ export function speedDelay(raw: string): number | null {
   return n <= SPEED_TO_LEAD_MAX_DELAY_MINUTES ? n : null;
 }
 
+/** The oldest-lead limit as whole minutes within the contract's range, or null when it is not one. */
+export function speedMaxLeadAge(raw: string): number | null {
+  const text = raw.trim();
+  if (!/^\d{1,6}$/.test(text)) return null;
+  const n = Number(text);
+  return n >= 1 && n <= SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES ? n : null;
+}
+
 export function buildSpeed(v: SpeedDraft): NonNullable<LeadSourceDefaults['speedToLead']> {
   return {
     enabled: v.enabled,
@@ -310,6 +335,7 @@ export function buildSpeed(v: SpeedDraft): NonNullable<LeadSourceDefaults['speed
     senderId: v.channel === 'whatsapp' ? null : orNull(v.senderId),
     delayMinutes: speedDelay(v.delay) ?? 0,
     businessHoursOnly: v.businessHoursOnly,
+    maxLeadAgeMinutes: speedMaxLeadAge(v.maxLeadAge) ?? SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
   };
 }
 
@@ -432,6 +458,9 @@ export function validateDraft(d: SourceDraft): Problems {
       key: 'speedDelayRange',
       values: { max: SPEED_TO_LEAD_MAX_DELAY_MINUTES },
     };
+
+  if (speedMaxLeadAge(d.speed.maxLeadAge) === null)
+    p['defaults.speedToLead.maxLeadAgeMinutes'] = { key: 'speedMaxAgeRange' };
 
   for (const f of MAPPING_FIELDS) pathProblems(d.mapping.fields[f], p, `mapping.${f}`);
   for (const f of ATTRIBUTION_FIELDS)
