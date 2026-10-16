@@ -5,6 +5,7 @@ import type {
   MessageTemplateHeader,
   MessageTemplatePreview,
 } from '@crm/contracts';
+import { buttonKindOf, headerFormatOf } from '../../infra/providers/whatsapp/template-vocab';
 import { tokensOf, type VariableMap } from '../message-templates';
 
 /**
@@ -129,15 +130,16 @@ export function renderBody(body: string, variables: Record<string, string>): str
 
 /** The kind of a stored button as the bubble draws it. An OTP button is the copy-code button WhatsApp shows for a login code. */
 export function buttonTypeOf(raw: unknown): MessageTemplateButton['type'] {
-  switch (typeof raw === 'string' ? raw.toUpperCase() : '') {
-    case 'QUICK_REPLY':
+  // Any spelling: Meta's (`URL`), our form's, Reference's (`visit_website`, `call_phone`).
+  switch (buttonKindOf(raw)) {
+    case 'quick_reply':
       return 'quick_reply';
-    case 'URL':
+    case 'url':
       return 'url';
-    case 'PHONE_NUMBER':
+    case 'phone':
       return 'phone';
-    case 'COPY_CODE':
-    case 'OTP':
+    case 'copy_code':
+    case 'otp':
       return 'copy_code';
     default:
       return 'other';
@@ -175,7 +177,7 @@ const MEDIA_HEADERS: ReadonlySet<string> = new Set(['image', 'video', 'document'
 export function previewHeaderOf(
   t: Pick<TemplateFacts, 'attachmentType' | 'header'>,
 ): MessageTemplateHeader | null {
-  const attachment = (t.attachmentType ?? 'none').toLowerCase();
+  const attachment = headerFormatOf(t.attachmentType);
   if (MEDIA_HEADERS.has(attachment)) {
     return { format: attachment as MessageTemplateHeader['format'], text: null };
   }
