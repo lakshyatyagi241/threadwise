@@ -20,7 +20,7 @@ const httpUrl = (v: string) => /^https?:\/\/[^\s/$.?#][^\s]*$/i.test(v);
  * range and the cloud metadata names are never a bridge, and are what a redirect or a typo would otherwise reach.
  */
 export const bridgeHostAllowed = (v: string): boolean => {
-  const m = /^https?:\/\/(?:[^@\/?#]*@)?(\[[^\]]+\]|[^:\/?#]+)/i.exec(v.trim());
+  const m = /^https?:\/\/(?:[^@/?#]*@)?(\[[^\]]+\]|[^:/?#]+)/i.exec(v.trim());
   if (!m) return false;
   const h = m[1]!.toLowerCase().replace(/^\[|\]$/g, '');
   return !(
@@ -41,7 +41,10 @@ const serverUrlSchema = z
   .trim()
   .max(191)
   .refine((v) => v === '' || httpUrl(v), 'Enter a valid Server URL (http:// or https://).')
-  .refine((v) => v === '' || !httpUrl(v) || bridgeHostAllowed(v), 'That address cannot be a bridge.');
+  .refine(
+    (v) => v === '' || !httpUrl(v) || bridgeHostAllowed(v),
+    'That address cannot be a bridge.',
+  );
 
 export const nodePacingSchema = z.object({
   /** Seconds between consecutive sends. */
@@ -102,7 +105,10 @@ export const nodeBridgeTestRequestSchema = z.object({
     .string()
     .trim()
     .max(191)
-    .refine((v) => v === '' || (httpUrl(v) && bridgeHostAllowed(v)), 'Enter a valid Server URL (http:// or https://).'),
+    .refine(
+      (v) => v === '' || (httpUrl(v) && bridgeHostAllowed(v)),
+      'Enter a valid Server URL (http:// or https://).',
+    ),
   /** Blank tests with the stored token. */
   token: z.string().trim().max(191).optional(),
 });

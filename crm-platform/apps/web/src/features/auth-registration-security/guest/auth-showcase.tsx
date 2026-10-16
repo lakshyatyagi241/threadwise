@@ -199,7 +199,7 @@ export function GetaMark({
         >
           <path d="M17.6 8.3A6.6 6.6 0 1 0 18.6 13h-6.1" />
         </svg>
-        <span className="absolute -bottom-px -right-px size-[5px] rounded-full bg-(--auth-geta-ink)" />
+        <span className="absolute -bottom-px -end-px size-[5px] rounded-full bg-(--auth-geta-ink)" />
       </span>
       <span
         className={cn(
@@ -254,10 +254,10 @@ export function GetaSky() {
         <span className="auth-geta-ring absolute -inset-[26px] rounded-full border border-white/15" />
         <span className="auth-geta-ring auth-geta-ring--dashed absolute -inset-[44px] rounded-full border border-dashed border-white/15" />
         <span className="auth-geta-orbit absolute -inset-[26px]">
-          <span className="absolute left-1/2 top-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-400 shadow-[0_0_12px_3px_rgb(167_139_250/0.7)]" />
+          <span className="absolute start-1/2 top-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-400 shadow-[0_0_12px_3px_rgb(167_139_250/0.7)]" />
         </span>
         <span className="auth-geta-orbit auth-geta-orbit--rev absolute -inset-[44px]">
-          <span className="absolute bottom-0 left-1/2 size-1.5 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-300 shadow-[0_0_10px_2px_rgb(249_168_212/0.6)]" />
+          <span className="absolute bottom-0 start-1/2 size-1.5 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-300 shadow-[0_0_10px_2px_rgb(249_168_212/0.6)]" />
         </span>
       </div>
       {GETA_STARS.map(([top, left, size, delay], i) => (
@@ -267,20 +267,20 @@ export function GetaSky() {
           style={{ top, left, width: size, height: size, animationDelay: delay }}
         />
       ))}
-      <span className="absolute -bottom-[300px] -right-[300px] size-[760px] rounded-full border border-white/10" />
-      <span className="absolute -bottom-[210px] -right-[210px] size-[580px] rounded-full border border-white/10" />
+      <span className="absolute -bottom-[300px] -end-[300px] size-[760px] rounded-full border border-white/10" />
+      <span className="absolute -bottom-[210px] -end-[210px] size-[580px] rounded-full border border-white/10" />
       <div className="absolute inset-x-0 bottom-0 h-28 overflow-hidden">
         <svg
           viewBox="0 0 1800 120"
           preserveAspectRatio="none"
-          className="auth-geta-wave absolute bottom-0 left-0 h-full w-[200%] fill-white/[0.06]"
+          className="auth-geta-wave absolute bottom-0 start-0 h-full w-[200%] fill-white/[0.06]"
         >
           <path d={WAVE_A} />
         </svg>
         <svg
           viewBox="0 0 1800 120"
           preserveAspectRatio="none"
-          className="auth-geta-wave auth-geta-wave--rev absolute bottom-0 left-0 h-[78%] w-[200%] fill-violet-400/[0.12]"
+          className="auth-geta-wave auth-geta-wave--rev absolute bottom-0 start-0 h-[78%] w-[200%] fill-violet-400/[0.12]"
         >
           <path d={WAVE_B} />
         </svg>

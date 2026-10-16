@@ -77,7 +77,7 @@ describe('message bubble', () => {
     const out = html(<MessageBubble model={model({ body: '*Hi* {{name}}\nsecond line' })} />);
     expect(out).toMatch(/<strong>.*Hi.*<\/strong>/);
     expect(out).toContain('{{name}}');
-    expect(out).toContain('<br/>');
+    expect(out).toMatch(/<div><span>second line<\/span><\/div>/);
   });
 
   it('never injects html from the body', () => {

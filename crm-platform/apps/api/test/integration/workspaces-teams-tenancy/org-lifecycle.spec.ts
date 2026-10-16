@@ -347,7 +347,7 @@ describe('workspace lifecycle', () => {
 
     const u = '00000000-0000-4000-8000-0000000000aa';
     await owner.query(
-      `INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key) VALUES (1, $1, 'k/ok.pdf'), (1, $1, 'k/retry.pdf')`,
+      `INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key) VALUES (1, $1, 'contact-files/1/ok.pdf'), (1, $1, 'contact-files/1/retry.pdf')`,
       [u],
     );
     fail = true;
@@ -369,9 +369,15 @@ describe('workspace lifecycle', () => {
       u,
     ]);
     expect(done.rows.every((r) => r.purged_at !== null)).toBe(true);
-    expect(removed).toEqual(expect.arrayContaining(['k/ok.pdf', 'chat:k/ok.pdf', 'k/retry.pdf']));
+    expect(removed).toEqual(
+      expect.arrayContaining([
+        'contact-files/1/ok.pdf',
+        'chat:contact-files/1/ok.pdf',
+        'contact-files/1/retry.pdf',
+      ]),
+    );
     await purge.pass();
-    expect(removed.filter((k) => k === 'k/ok.pdf')).toHaveLength(1); // a purged row is not touched again
+    expect(removed.filter((k) => k === 'contact-files/1/ok.pdf')).toHaveLength(1); // a purged row is not touched again
   });
 
   it('dry run changes nothing', async () => {

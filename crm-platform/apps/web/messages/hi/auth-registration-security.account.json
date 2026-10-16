@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "सहायता असिस्टेंट",
             "email_channel": "ईमेल (Gmail) चैनल",
-            "personal_history_full": "पूरी हिस्ट्री इंपोर्ट (व्यक्तिगत WhatsApp)"
+            "personal_history_full": "पूरी हिस्ट्री इंपोर्ट (व्यक्तिगत WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

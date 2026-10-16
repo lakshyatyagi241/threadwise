@@ -1439,7 +1439,8 @@
             "sms": "SMS en envoi uniquement via Twilio ou MSG91 : connectez des expéditeurs, envoyez des diffusions et campagnes SMS.",
             "help_agent": "L’assistant d’aide intégré à l’app : les utilisateurs demandent une tâche avec leurs mots et il les guide ou la réalise dans leur propre session, en demandant avant toute action sensible. Consomme des jetons d’IA.",
             "email_channel": "Connectez des boîtes Gmail et Google Workspace à la boîte de réception d'équipe. L'application payante E-mail contrôle cet interrupteur.",
-            "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels."
+            "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels.",
+            "ai_crm_copilot": "Trouve et note des prospects avec l'IA à partir de vos contacts."
           },
           "units": {
             "days": "Jours",
@@ -1624,7 +1625,8 @@
             "sms": "Canal SMS",
             "help_agent": "Assistant d’aide (IA, consomme des jetons)",
             "email_channel": "Canal e-mail (Gmail)",
-            "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)"
+            "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "Aurore",
             "description": "Une couleur douce et lumineuse derrière une carte givrée."
+          },
+          "geta": {
+            "name": "Scission Geta",
+            "description": "Formulaire d'un côté, panneau de marque animé avec des chiffres de l'autre."
           }
         },
         "fields": {

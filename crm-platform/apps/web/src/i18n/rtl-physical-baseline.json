@@ -38,7 +38,7 @@
   "features/flow-builder-editor/builder/node-preview.tsx": 2,
   "features/flow-builder-editor/builder/overlays.tsx": 3,
   "features/flow-builder-editor/builder/palette.tsx": 5,
-  "features/flow-builder-editor/builder/simple/simple-screen.tsx": 14,
+  "features/flow-builder-editor/builder/simple/simple-screen.tsx": 12,
   "features/flow-builder-editor/builder/simulator/test-panel.tsx": 3,
   "features/flow-builder-editor/builder/toolbar.tsx": 3,
   "features/flow-builder-editor/components/admin-template-form.tsx": 1,
