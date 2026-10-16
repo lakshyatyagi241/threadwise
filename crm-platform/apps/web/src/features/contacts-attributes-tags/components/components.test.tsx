@@ -372,6 +372,16 @@ describe('ContactsTable', () => {
     expect(out).not.toContain('aria-label="Add column"');
   });
 
+  it('disables call and WhatsApp (never a dead link) for a masked phone number, leaving email alone', () => {
+    const out = table([row({ phone: '+xxxxxxxx0025' })]);
+    expect(out).not.toContain('href="tel:');
+    expect(out).not.toContain('wa.me');
+    // the viewer can still mail this contact: masking is phone-only
+    expect(out).toContain('href="mailto:aarav@example.com"');
+    expect(out.match(/aria-label="No phone number"/g)).toHaveLength(1);
+    expect(out).toContain('aria-label="No phone number for WhatsApp"');
+  });
+
   it('freezes the checkbox and the name cell and keeps the scroll area focusable', () => {
     const out = table([row()]);
     expect(out).toContain(STICKY_NAME);

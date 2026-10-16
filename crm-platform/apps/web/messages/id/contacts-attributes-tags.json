@@ -1350,6 +1350,7 @@
       "optedOut": "Kontak ini telah berhenti menerima komunikasi. Pesan tidak dapat dikirim.",
       "noPhone": "Kontak ini tidak memiliki nomor telepon.",
       "noEmail": "Kontak ini tidak memiliki alamat email.",
+      "phoneMasked": "Nomor ini disembunyikan untuk peran Anda.",
       "number": "Kirim dari",
       "numberHint": "Nomor WhatsApp yang digunakan untuk mengirim pesan.",
       "noChannel": "Belum ada nomor WhatsApp yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
