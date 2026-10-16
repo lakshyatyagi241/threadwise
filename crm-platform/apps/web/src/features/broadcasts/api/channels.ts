@@ -122,7 +122,9 @@ export function useBroadcastChannels(): {
     facebook: (pages.data?.data ?? []).some((p) => p.status === 'connected'),
     instagram: (accounts.data?.data ?? []).length > 0,
     viber: (viberChannels.data?.data ?? []).some((c) => c.active),
-    wechat: (wechatChannels.data?.data ?? []).some((c) => c.active),
+    wechat:
+      (wechatChannels.data?.availability.available ?? false) &&
+      (wechatChannels.data?.data ?? []).some((c) => c.active),
     line: (lineChannels.data?.data ?? []).some((c) => c.active),
   };
 }

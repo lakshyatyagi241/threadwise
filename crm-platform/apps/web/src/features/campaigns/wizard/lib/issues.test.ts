@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { WizardFollowUp } from '@crm/contracts';
 import { audience, draft, NOW, uuid } from '../testing';
-import { issueFor, stepIssues, stepOfPath, unmappedSlots } from './issues';
+import { defaultRule } from './schedule';
+import { issueFor, sequenceMappingIssues, stepIssues, stepOfPath, unmappedSlots } from './issues';
 
 const ctx = { slots: ['body.1', 'body.2'], now: NOW };
 
@@ -150,5 +151,60 @@ describe('follow-up issues (step 4)', () => {
   it('every follow-up path belongs to step 4', () => {
     expect(stepOfPath('followUps')).toBe(4);
     expect(stepOfPath('followUps.1.action')).toBe(4);
+  });
+});
+
+describe('template sequence issues', () => {
+  const rec = { mode: 'recurring' as const, rule: defaultRule('Asia/Kolkata', NOW) };
+  const entry = (templateId: string | null, variables = {}) => ({ templateId, variables });
+
+  it("step 3 reports each sequence template's unmapped slot on its own path and step", () => {
+    const d = draft({
+      schedule: rec,
+      templateSequence: [
+        entry(uuid(5), { 'body.1': { kind: 'fixed', text: 'x' } }),
+        entry(uuid(6)),
+      ],
+    });
+    const issues = stepIssues(3, d, {
+      ...ctx,
+      slots: [],
+      slotsSequence: [['body.1', 'body.2'], ['body.1']],
+    });
+    expect(issues.map((i) => i.path)).toEqual([
+      'templateSequence.0.variables.body.2',
+      'templateSequence.1.variables.body.1',
+    ]);
+    expect(issues.every((i) => i.code === 'variable_unmapped')).toBe(true);
+    expect(sequenceMappingIssues(issues, 1)).toEqual([
+      { path: 'variables.body.1', code: 'variable_unmapped' },
+    ]);
+    expect(unmappedSlots(sequenceMappingIssues(issues, 0))).toEqual(['body.2']);
+  });
+
+  it('step 4 reports an empty entry, a sequence off a recurring schedule and one with A/B', () => {
+    const base = { templateSequence: [entry(null)] };
+    expect(stepIssues(4, draft({ ...base, schedule: rec }), ctx)).toEqual([
+      { path: 'templateSequence.0.templateId', code: 'sequence_template_required' },
+    ]);
+    expect(
+      stepIssues(4, draft({ templateSequence: [entry(uuid(5))] }), ctx).map((i) => i.code),
+    ).toEqual(['sequence_not_recurring']);
+    expect(
+      stepIssues(
+        4,
+        draft({ templateSequence: [entry(uuid(5))], schedule: rec, abTesting: true }),
+        ctx,
+      ).map((i) => i.code),
+    ).toEqual(['sequence_with_ab']);
+    expect(
+      stepIssues(4, draft({ templateSequence: [entry(uuid(5))], schedule: rec }), ctx),
+    ).toEqual([]);
+  });
+
+  it('maps the paths to their step', () => {
+    expect(stepOfPath('templateSequence.2.variables.body.1')).toBe(3);
+    expect(stepOfPath('templateSequence.2.templateId')).toBe(4);
+    expect(stepOfPath('templateSequence')).toBe(4);
   });
 });

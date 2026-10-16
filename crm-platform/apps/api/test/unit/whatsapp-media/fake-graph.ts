@@ -20,7 +20,7 @@ import type { AddressInfo } from 'node:net';
 
 export type LookupStep = 'ok' | '500' | '429' | '404' | '401' | 'no-url' | 'bad-json';
 export type DownloadMode =
-  'ok' | '500' | '404' | 'truncate' | 'huge' | 'slow' | `redirect:${string}`;
+  'ok' | '403' | '500' | '404' | 'truncate' | 'huge' | 'slow' | `redirect:${string}`;
 
 export interface FakeMediaFile {
   id: string;
@@ -307,6 +307,11 @@ export class FakeGraph {
     if (mode === '404') {
       res.writeHead(404);
       return void res.end('gone');
+    }
+    if (mode === '403') {
+      // A bare refusal, like the file host's own XML answer for a link it will not serve (no Graph error code).
+      res.writeHead(403, { 'content-type': 'application/xml' });
+      return void res.end('<Error><Code>AccessDenied</Code></Error>');
     }
     if (mode.startsWith('redirect:')) {
       res.writeHead(302, { location: mode.slice('redirect:'.length) });

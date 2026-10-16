@@ -47,6 +47,9 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
     "A staff member's acknowledgement of the personal-WhatsApp risk (user agent as evidence).",
   ),
   social_identities: staff("A staff member's social login identity (email)."),
+  google_consent_requests: staff(
+    "A staff member's Google account consent in flight: one row per press of Connect, holding the Google email and the sealed tokens of the staff member who pressed it (privacy spec D11).",
+  ),
   team_chat_invitations: staff(
     'Invitations of staff to team chat (invitee name and email); not a contact.',
   ),

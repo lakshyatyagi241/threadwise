@@ -1166,7 +1166,10 @@
         "pacing_range": "בדקו את Smart Delivery: ההשהיה הארוכה ביותר קצרה מהקצרה ביותר, או שרק אחת משתי שעות השליחה הוגדרה.",
         "follow_up_template_required": "בחרו את התבנית שכל מעקב שולח.",
         "follow_up_flow_required": "בחרו את התהליך שכל מעקב מפעיל.",
-        "follow_up_cloud_api_only": "מעקבים עובדים רק עם מספר WhatsApp Cloud API. בחרו מספר כזה בשלב 1 או הסירו את המעקבים."
+        "follow_up_cloud_api_only": "מעקבים עובדים רק עם מספר WhatsApp Cloud API. בחרו מספר כזה בשלב 1 או הסירו את המעקבים.",
+        "sequence_not_recurring": "תבניות לסירוגין פועלות רק עם קמפיין חוזר. בחרו לוח זמנים חוזר או הסירו את התבניות הנוספות.",
+        "sequence_with_ab": "אי אפשר לשלב תבניות לסירוגין עם בדיקת A/B. כבו את בדיקת A/B או הסירו את התבניות הנוספות.",
+        "sequence_template_required": "בחרו תבנית לכל שלב בסדר, או הסירו את הריקים."
       },
       "template": {
         "previewOnline": "מחובר",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "עלות משוערת (מלאה)",
         "chargedPlan": "יחויב מהארנק שלכם עכשיו: {amount} (החבילה שלכם מכסה {covered} מההודעות האלה)",
         "chargedWallet": "יחויב מהארנק שלכם: {amount}",
-        "sumFollowUps": "מעקבים"
+        "sumFollowUps": "מעקבים",
+        "sumSequence": "נשלח לסירוגין"
       },
       "test": {
         "title": "שלח הודעת WhatsApp לבדיקה",
@@ -1588,7 +1592,8 @@
           "sent": "נשלחו",
           "delivered": "נמסרו",
           "failed": "נכשלו",
-          "retries": "ניסיונות חוזרים"
+          "retries": "ניסיונות חוזרים",
+          "template": "תבנית"
         },
         "retrySummary": "{pending} ממתינים, {recovered} הושבו, {exhausted} ויתרו",
         "openRun": "פתח הרצה",
@@ -1648,7 +1653,9 @@
             "skipped": "התנאי לא התקיים בעת הבדיקה, ולכן הרצף הסתיים כאן.",
             "lapsed": "זמן המעקב נגמר לפני שאיש הקשר הגיב או קרא, ולכן הרצף הסתיים כאן."
           }
-        }
+        },
+        "templatesTitle": "תבניות",
+        "templatesInTurn": "{count, plural, one {תבנית אחת לסירוגין} two {# תבניות לסירוגין} other {# תבניות לסירוגין}}"
       },
       "panel": {
         "title": "נוצר ב\"יצירת שידור\"",
@@ -1659,7 +1666,8 @@
           "recurring": "חוזר"
         },
         "recipients": "{count, plural, one {נמען אחד} two {# נמענים} other {# נמענים}}",
-        "next": "ההרצה הבאה {when}"
+        "next": "ההרצה הבאה {when}",
+        "moreTemplates": "+{count} נוספות"
       },
       "pickers": {
         "selectDate": "בחירת תאריך",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, one {שעה} two {שעות} other {שעות}}",
           "days": "{count, plural, one {יום} two {ימים} other {ימים}}"
         }
+      },
+      "sequence": {
+        "title": "תבניות לפי סדר",
+        "intro": "כל הרצה שולחת את התבנית הבאה ברשימה. הרצה 1 שולחת את הראשונה, הרצה 2 את השנייה, ואחרי האחרונה הרשימה מתחילה שוב מהראשונה.",
+        "notRecurring": "רק שידור חוזר שולח תבניות לסירוגין. בחרו לוח זמנים חוזר או הסירו את התבניות האלה.",
+        "withAb": "אי אפשר להשתמש בתבניות לסירוגין יחד עם בדיקת A/B, ששולחת כבר שתי תבניות. כבו את בדיקת A/B כדי להשתמש בהן.",
+        "templateLabel": "תבנית {position}",
+        "firstMissing": "עדיין לא נבחרה",
+        "firstHint": "התבנית שנבחרה לקמפיין. אפשר לשנות אותה בשלב התבנית.",
+        "pick": "בחרו תבנית",
+        "loading": "טוען...",
+        "unavailable": "כבר לא זמינה",
+        "up": "למעלה",
+        "down": "למטה",
+        "moveUp": "העבר את תבנית {position} למעלה",
+        "moveDown": "העבר את תבנית {position} למטה",
+        "remove": "הסר את תבנית {position}",
+        "removeShort": "הסר",
+        "removeAll": "הסר הכול",
+        "add": "הוספת תבנית",
+        "count": "{used} מתוך {max} תבניות",
+        "limitReached": "הגעתם למגבלה: {max} תבניות.",
+        "variablesTitle": "משתני תבנית {position}: {name}"
       }
     },
     "history": {

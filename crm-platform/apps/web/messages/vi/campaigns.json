@@ -1166,7 +1166,10 @@
         "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi.",
         "follow_up_template_required": "Chọn mẫu mà mỗi tin theo dõi sẽ gửi.",
         "follow_up_flow_required": "Chọn luồng mà mỗi tin theo dõi sẽ bắt đầu.",
-        "follow_up_cloud_api_only": "Tin theo dõi chỉ hoạt động với số WhatsApp Cloud API. Hãy chọn một số ở bước 1 hoặc xóa các tin theo dõi."
+        "follow_up_cloud_api_only": "Tin theo dõi chỉ hoạt động với số WhatsApp Cloud API. Hãy chọn một số ở bước 1 hoặc xóa các tin theo dõi.",
+        "sequence_not_recurring": "Mẫu gửi luân phiên chỉ hoạt động với chiến dịch lặp lại. Hãy chọn lịch lặp lại hoặc xóa các mẫu bổ sung.",
+        "sequence_with_ab": "Mẫu gửi luân phiên không thể kết hợp với thử nghiệm A/B. Hãy tắt thử nghiệm A/B hoặc xóa các mẫu bổ sung.",
+        "sequence_template_required": "Chọn một mẫu cho mỗi bước trong thứ tự hoặc xóa các bước trống."
       },
       "template": {
         "previewOnline": "trực tuyến",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "Chi phí ước tính (đầy đủ)",
         "chargedPlan": "Trừ vào ví của bạn ngay bây giờ: {amount} (gói của bạn chi trả {covered} trong số các tin nhắn này)",
         "chargedWallet": "Trừ vào ví của bạn: {amount}",
-        "sumFollowUps": "Tin theo dõi"
+        "sumFollowUps": "Tin theo dõi",
+        "sumSequence": "Gửi luân phiên"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1588,7 +1592,8 @@
           "sent": "Đã gửi",
           "delivered": "Đã nhận",
           "failed": "Thất bại",
-          "retries": "Thử lại"
+          "retries": "Thử lại",
+          "template": "Mẫu"
         },
         "retrySummary": "{pending} đang chờ, {recovered} đã khôi phục, {exhausted} đã bỏ cuộc",
         "openRun": "Mở lần chạy",
@@ -1648,7 +1653,9 @@
             "skipped": "Điều kiện không được đáp ứng khi kiểm tra nên chuỗi kết thúc tại đó.",
             "lapsed": "Thời gian theo dõi đã hết trước khi liên hệ trả lời hoặc đọc nên chuỗi kết thúc tại đó."
           }
-        }
+        },
+        "templatesTitle": "Mẫu",
+        "templatesInTurn": "{count, plural, other {# mẫu luân phiên}}"
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",
@@ -1659,7 +1666,8 @@
           "recurring": "Định kỳ"
         },
         "recipients": "{count, plural, other {# người nhận}}",
-        "next": "Lần chạy tiếp theo {when}"
+        "next": "Lần chạy tiếp theo {when}",
+        "moreTemplates": "+{count} nữa"
       },
       "pickers": {
         "selectDate": "Chọn ngày",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, other {giờ}}",
           "days": "{count, plural, other {ngày}}"
         }
+      },
+      "sequence": {
+        "title": "Các mẫu theo thứ tự",
+        "intro": "Mỗi lần chạy gửi mẫu kế tiếp trong danh sách này. Lần chạy 1 gửi mẫu đầu tiên, lần 2 gửi mẫu thứ hai, và sau mẫu cuối danh sách bắt đầu lại từ mẫu đầu.",
+        "notRecurring": "Chỉ chiến dịch lặp lại mới gửi mẫu luân phiên. Hãy chọn lịch lặp lại hoặc xóa các mẫu này.",
+        "withAb": "Mẫu luân phiên không thể dùng cùng thử nghiệm A/B, vốn đã gửi hai mẫu. Hãy tắt thử nghiệm A/B để dùng.",
+        "templateLabel": "Mẫu {position}",
+        "firstMissing": "Chưa chọn",
+        "firstHint": "Mẫu đã chọn cho chiến dịch. Đổi ở bước chọn mẫu.",
+        "pick": "Chọn một mẫu",
+        "loading": "Đang tải...",
+        "unavailable": "Không còn khả dụng",
+        "up": "Lên",
+        "down": "Xuống",
+        "moveUp": "Di chuyển mẫu {position} lên",
+        "moveDown": "Di chuyển mẫu {position} xuống",
+        "remove": "Xóa mẫu {position}",
+        "removeShort": "Xóa",
+        "removeAll": "Xóa tất cả",
+        "add": "Thêm một mẫu",
+        "count": "{used}/{max} mẫu",
+        "limitReached": "Đã đạt giới hạn: {max} mẫu.",
+        "variablesTitle": "Biến của mẫu {position}: {name}"
       }
     },
     "history": {

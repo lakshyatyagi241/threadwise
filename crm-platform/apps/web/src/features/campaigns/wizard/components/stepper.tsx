@@ -3,10 +3,24 @@
 import { useTranslations } from 'next-intl';
 import { WIZARD_STEPS, WIZARD_STEP_COUNT } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import {
+  CheckIcon,
+  ChecklistIcon,
+  SendIcon,
+  TemplateIcon,
+  UsersIcon,
+} from '../../components/icons';
 import type { WizardView } from '../lib/state';
 
+const STEP_ICON = {
+  template: TemplateIcon,
+  audience: UsersIcon,
+  review: ChecklistIcon,
+  send: SendIcon,
+} as const;
+
 /**
- * The four steps. On a wide screen: numbered buttons (a step already reached can be opened again); on a phone: "Step 2 of 4 - Audience"
+ * The four steps. On a wide screen: buttons with each step's icon, or a check once it is done (a step already reached can be opened again); on a phone: "Step 2 of 4 - Audience"
  * with a progress bar. The current step carries `aria-current="step"`.
  */
 export function Stepper({
@@ -24,7 +38,11 @@ export function Stepper({
   return (
     <nav aria-label={t('navLabel')}>
       <div className="sm:hidden">
-        <p className="text-sm font-medium" data-testid="stepper-compact">
+        <p className="flex items-center gap-2 text-sm font-medium" data-testid="stepper-compact">
+          {(() => {
+            const Icon = STEP_ICON[WIZARD_STEPS[current - 1]!];
+            return <Icon className="size-4 text-brand" />;
+          })()}
           {t('compact', { current, total: WIZARD_STEP_COUNT, name: label(current) })}
         </p>
         <div
@@ -46,6 +64,7 @@ export function Stepper({
           const n = (i + 1) as WizardView;
           const active = n === current;
           const reachable = n <= reached;
+          const StepIcon = n < current ? CheckIcon : STEP_ICON[WIZARD_STEPS[i]!];
           return (
             <li key={n} className="flex min-w-0 flex-1 items-center gap-2">
               <button
@@ -70,7 +89,7 @@ export function Stepper({
                         : 'border-border text-muted-foreground',
                   )}
                 >
-                  {n < current ? '✓' : n}
+                  <StepIcon className="size-3.5" />
                 </span>
                 <span className="truncate">{label(n)}</span>
                 <span className="sr-only">

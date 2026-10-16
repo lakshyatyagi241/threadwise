@@ -3,8 +3,24 @@
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { WIZARD_STEPS, type WizardStep } from '../../lib/wizard-model';
+import {
+  CalendarIcon,
+  CheckIcon,
+  ChecklistIcon,
+  MessageIcon,
+  SlidersIcon,
+  UsersIcon,
+} from '../icons';
 
-/** The five numbered dots joined by a bar. A step is reachable when every step before it has nothing missing. */
+const STEP_ICON = {
+  setup: SlidersIcon,
+  compose: MessageIcon,
+  recipients: UsersIcon,
+  schedule: CalendarIcon,
+  review: ChecklistIcon,
+} as const;
+
+/** The five step dots (each with its own icon, a check once done) joined by a bar. A step is reachable when every step before it has nothing missing. */
 export function Stepper({
   current,
   reachable,
@@ -27,6 +43,7 @@ export function Stepper({
           const active = i === at;
           const last = i === WIZARD_STEPS.length - 1;
           const ok = reachable(s);
+          const StepIcon = done ? CheckIcon : STEP_ICON[s];
           return (
             <li key={s} className={cn('flex items-center gap-2.5', !last && 'flex-1')}>
               <button
@@ -44,8 +61,9 @@ export function Stepper({
                     !active && !done && 'border-border bg-background text-muted-foreground',
                   )}
                 >
-                  {done ? '✓' : i + 1}
+                  <StepIcon className="size-3.5" />
                 </span>
+                <span className="sr-only">{i + 1}</span>
                 <span
                   className={cn(
                     'whitespace-nowrap text-[11.5px]',

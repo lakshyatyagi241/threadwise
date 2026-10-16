@@ -3,7 +3,12 @@
 import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, Card, Checkbox, Spinner, Textarea } from '@crm/ui';
-import { useAiCrmIndex, useResetAiCrm, useSendAiCrmMessage, useSetAiCrmSettings } from './api/ai-crm-hooks';
+import {
+  useAiCrmIndex,
+  useResetAiCrm,
+  useSendAiCrmMessage,
+  useSetAiCrmSettings,
+} from './api/ai-crm-hooks';
 import { useErrorText } from './components/use-error-text';
 
 interface ChatTurn {
@@ -85,7 +90,9 @@ export function AiCrmScreen() {
       <div className="mt-5 grid gap-5 lg:grid-cols-[2fr_1fr]">
         <Card className="flex min-h-[420px] flex-col p-4">
           <div className="flex-1 space-y-3 overflow-y-auto">
-            {turns.length === 0 && <p className="text-sm text-muted-foreground">{t('emptyState')}</p>}
+            {turns.length === 0 && (
+              <p className="text-sm text-muted-foreground">{t('emptyState')}</p>
+            )}
             {turns.map((turn, i) => (
               <div
                 key={i}
@@ -144,7 +151,9 @@ export function AiCrmScreen() {
             <Card className="space-y-3 p-4">
               <h2 className="text-sm font-semibold">{t('settings.title')}</h2>
               {setSettings.isSuccess && <Alert tone="success">{t('notice.settingsSaved')}</Alert>}
-              {setSettings.isError && <Alert tone="danger">{errorText(setSettings.error).text}</Alert>}
+              {setSettings.isError && (
+                <Alert tone="danger">{errorText(setSettings.error).text}</Alert>
+              )}
               <Checkbox
                 checked={index.data.waCopilotEnabled}
                 onChange={(e) => onToggleWaCopilot(e.target.checked)}

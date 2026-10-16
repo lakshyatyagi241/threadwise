@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-15T16:31:52.915Z",
-  "commit": "42a46d0f8da97e3944ed66d4922b6b15d9af3b12",
+  "recordedAt": "2026-10-16T13:39:45.191Z",
+  "commit": "75544c93a625eca9a1bd6c8e04cb02a6f8f6f2e7",
   "note": "Snapshot of the @Public routes accepted by a human on recordedAt. Routes under auth/, platform/auth, account and realtime were read individually in the 2026-10-09 analysis; the rest were recorded as found. A NEW public route fails the audit until someone reviews it and re-records this file (pnpm audit:auth -- --update-baseline).",
   "publicRoutes": [
     "POST /v2/account/email-change/confirm",

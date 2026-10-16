@@ -1,10 +1,12 @@
 import {
   EMPTY_WIZARD_DRAFT,
   WIZARD_STEP_COUNT,
+  WIZARD_TEMPLATE_SEQUENCE_MAX,
   type WizardAudience,
   type WizardDraft,
   type WizardFollowUp,
   type WizardRetries,
+  type WizardSequenceTemplate,
   type WizardSchedule,
   type WizardTemplate,
   type WizardVariableSource,
@@ -44,6 +46,18 @@ export type WizardAction =
   | { type: 'templateB'; template: WizardTemplate | null }
   | { type: 'variableB'; slot: string; source: WizardVariableSource | null }
   | { type: 'variablesB'; variables: WizardVariables }
+  /**
+   * The templates after the draft's own in a recurring broadcast, which the runs send in turn: add an empty one at the end, remove or
+   * move one (it takes its variable mapping along), clear them all, pick one's template (its mapping keeps what still fits) and map
+   * its variables.
+   */
+  | { type: 'sequenceAdd' }
+  | { type: 'sequenceRemove'; index: number }
+  | { type: 'sequenceMove'; index: number; by: -1 | 1 }
+  | { type: 'sequenceClear' }
+  | { type: 'sequenceTemplate'; index: number; template: WizardTemplate | null }
+  | { type: 'sequenceVariable'; index: number; slot: string; source: WizardVariableSource | null }
+  | { type: 'sequenceVariables'; index: number; variables: WizardVariables }
   | { type: 'schedule'; schedule: WizardSchedule }
   | { type: 'retries'; retries: WizardRetries }
   /** The follow-up steps after the campaign message, as the whole list (add, remove and edit build the next list). */
@@ -66,6 +80,15 @@ export function keepMatchingVariables(
   if (!template) return {};
   const slots = new Set(template.slots.map((s) => s.slot));
   return Object.fromEntries(Object.entries(variables).filter(([k]) => slots.has(k)));
+}
+
+/** The sequence with the entry at `index` replaced (the same list when there is no such entry). */
+function withEntry(
+  list: readonly WizardSequenceTemplate[],
+  index: number,
+  change: (e: WizardSequenceTemplate) => WizardSequenceTemplate,
+): WizardSequenceTemplate[] {
+  return list.map((e, i) => (i === index ? change(e) : e));
 }
 
 export function wizardReducer(state: WizardState, action: WizardAction): WizardState {
@@ -121,6 +144,81 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
     }
     case 'variablesB':
       return { ...state, draft: { ...d, variablesB: action.variables } };
+    case 'sequenceAdd':
+      return d.templateSequence.length >= WIZARD_TEMPLATE_SEQUENCE_MAX
+        ? state
+        : {
+            ...state,
+            draft: {
+              ...d,
+              templateSequence: [...d.templateSequence, { templateId: null, variables: {} }],
+            },
+          };
+    case 'sequenceRemove':
+      return action.index < 0 || action.index >= d.templateSequence.length
+        ? state
+        : {
+            ...state,
+            draft: {
+              ...d,
+              templateSequence: d.templateSequence.filter((_, i) => i !== action.index),
+            },
+          };
+    case 'sequenceClear':
+      return d.templateSequence.length === 0
+        ? state
+        : { ...state, draft: { ...d, templateSequence: [] } };
+    case 'sequenceMove': {
+      const to = action.index + action.by;
+      const n = d.templateSequence.length;
+      if (action.index < 0 || action.index >= n || to < 0 || to >= n) return state;
+      const next = [...d.templateSequence];
+      [next[action.index], next[to]] = [next[to]!, next[action.index]!];
+      return { ...state, draft: { ...d, templateSequence: next } };
+    }
+    case 'sequenceTemplate': {
+      const current = d.templateSequence[action.index];
+      const templateId = action.template?.id ?? null;
+      if (!current || current.templateId === templateId) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateSequence: withEntry(d.templateSequence, action.index, (e) => ({
+            templateId,
+            variables: keepMatchingVariables(e.variables, action.template),
+          })),
+        },
+      };
+    }
+    case 'sequenceVariable': {
+      if (!d.templateSequence[action.index]) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateSequence: withEntry(d.templateSequence, action.index, (e) => {
+            const next = { ...e.variables };
+            if (action.source) next[action.slot] = action.source;
+            else delete next[action.slot];
+            return { ...e, variables: next };
+          }),
+        },
+      };
+    }
+    case 'sequenceVariables': {
+      if (!d.templateSequence[action.index]) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateSequence: withEntry(d.templateSequence, action.index, (e) => ({
+            ...e,
+            variables: action.variables,
+          })),
+        },
+      };
+    }
     case 'schedule':
       return { ...state, draft: { ...d, schedule: action.schedule } };
     case 'retries':

@@ -247,6 +247,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'help_agent',
   'email_channel',
   'personal_history_full',
+  'ai_crm_copilot',
 ];
 export const PLAN_CHIP_MAX = 3;
 

@@ -10,7 +10,7 @@ keywords: [custom fields, fields, dropdown, required, sections, form, columns, c
 
 ## What it is for
 
-Contact properties are everything a contact can store. Some are built in, such as name, mobile number, email, lifecycle stage, status and groups. You add your own, such as a renewal date or a dropdown for source city, and group them into sections. They appear on the contact form and on the contact page.
+Contact properties are everything a contact can store. Some are built in, such as name, mobile number, email, owner, lifecycle stage, status and groups. You add your own, such as a renewal date or a dropdown for source city, and group them into sections. They appear on the contact form and on the contact page.
 
 ## How to use it
 

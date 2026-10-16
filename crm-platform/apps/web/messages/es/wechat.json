@@ -10,6 +10,7 @@
       "intro": "Conecta una Cuenta oficial de WeChat (Cuenta de servicio certificada). Los mensajes entrantes llegan a tu Bandeja de equipo compartida, y las respuestas, las reglas de palabras clave y los autorrespondedores funcionan igual que en cualquier otro canal.",
       "broadcasts": "Difusiones",
       "loadError": "No se pudieron cargar tus canales de WeChat.",
+      "unavailableCountry": "WeChat no está disponible en tu país. Desde este espacio de trabajo no puedes conectar un canal ni enviar mensajes de WeChat.",
       "connectTitle": "Conectar un canal",
       "connectBody": "Pega el AppID, el AppSecret y el Token del servidor desde la Plataforma de Cuentas oficiales de WeChat (Configuración → Configuración básica).",
       "connect": "Conectar WeChat",

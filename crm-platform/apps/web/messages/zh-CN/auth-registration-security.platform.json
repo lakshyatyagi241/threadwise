@@ -1439,7 +1439,8 @@
             "sms": "通过 Twilio 或 MSG91 发送的仅发送短信：连接发送方，发送短信群发和营销活动。",
             "help_agent": "应用内帮助助手：用户用平常的话说出要做的事，助手在其自己的会话中指引或代为操作，执行有风险的操作前会先询问。会消耗 AI 额度。",
             "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。",
-            "personal_history_full": "个人 WhatsApp 号码首次关联时，可导入完整的聊天记录。所有支持个人号码的套餐均可导入近期聊天。"
+            "personal_history_full": "个人 WhatsApp 号码首次关联时，可导入完整的聊天记录。所有支持个人号码的套餐均可导入近期聊天。",
+            "ai_crm_copilot": "用 AI 从您的联系人中查找并评分潜在客户。"
           },
           "units": {
             "days": "天",
@@ -1624,7 +1625,8 @@
             "sms": "SMS 渠道",
             "help_agent": "帮助助手（AI，消耗额度）",
             "email_channel": "电子邮件(Gmail)渠道",
-            "personal_history_full": "完整聊天记录导入（个人 WhatsApp）"
+            "personal_history_full": "完整聊天记录导入（个人 WhatsApp）",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "极光",
             "description": "磨砂卡片后方是柔和的发光色彩。"
+          },
+          "geta": {
+            "name": "Geta 分栏",
+            "description": "一侧是表单，另一侧是带数据的动态品牌面板。"
           }
         },
         "fields": {

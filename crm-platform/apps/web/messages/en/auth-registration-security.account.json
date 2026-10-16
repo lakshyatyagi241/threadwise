@@ -597,7 +597,8 @@
             "sms": "SMS",
             "help_agent": "Help assistant",
             "email_channel": "Email (Gmail) channel",
-            "personal_history_full": "Full history import (personal WhatsApp)"
+            "personal_history_full": "Full history import (personal WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "Continue free",

@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "المساعد الذكي",
             "email_channel": "قناة البريد الإلكتروني (Gmail)",
-            "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)"
+            "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

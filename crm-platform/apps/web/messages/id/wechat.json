@@ -10,6 +10,7 @@
       "intro": "Hubungkan Akun Resmi WeChat (Akun Layanan yang telah tersertifikasi). Pesan masuk akan tiba di Team Inbox bersama Anda, dan balasan, aturan kata kunci, serta balasan otomatis bekerja persis seperti kanal lainnya.",
       "broadcasts": "Siaran",
       "loadError": "Tidak dapat memuat kanal WeChat Anda.",
+      "unavailableCountry": "WeChat tidak tersedia di negara Anda. Anda tidak dapat menghubungkan saluran atau mengirim pesan WeChat dari ruang kerja ini.",
       "connectTitle": "Hubungkan kanal",
       "connectBody": "Tempelkan AppID, AppSecret, dan Token server dari Platform Akun Resmi WeChat (Pengaturan → Konfigurasi Dasar).",
       "connect": "Hubungkan WeChat",

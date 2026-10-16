@@ -1166,7 +1166,10 @@
         "pacing_range": "Smart Delivery を確認してください。最長の遅延が最短より短いか、2つの送信時刻の片方しか設定されていません。",
         "follow_up_template_required": "各フォローアップで送信するテンプレートを選択してください。",
         "follow_up_flow_required": "各フォローアップで開始するフローを選択してください。",
-        "follow_up_cloud_api_only": "フォローアップは WhatsApp Cloud API の番号でのみ使用できます。ステップ1で番号を選択するか、フォローアップを削除してください。"
+        "follow_up_cloud_api_only": "フォローアップは WhatsApp Cloud API の番号でのみ使用できます。ステップ1で番号を選択するか、フォローアップを削除してください。",
+        "sequence_not_recurring": "順番に送るテンプレートは、繰り返しキャンペーンでのみ使えます。繰り返しのスケジュールを選ぶか、追加のテンプレートを削除してください。",
+        "sequence_with_ab": "順番に送るテンプレートは A/B テストと併用できません。A/B テストをオフにするか、追加のテンプレートを削除してください。",
+        "sequence_template_required": "順番の各ステップにテンプレートを選ぶか、空のものを削除してください。"
       },
       "template": {
         "previewOnline": "オンライン",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "概算費用(全額)",
         "chargedPlan": "今回ウォレットから請求される金額: {amount}(これらのメッセージのうち {covered} 件はプランでまかなわれます)",
         "chargedWallet": "ウォレットから請求される金額: {amount}",
-        "sumFollowUps": "フォローアップ"
+        "sumFollowUps": "フォローアップ",
+        "sumSequence": "順番に送信"
       },
       "test": {
         "title": "WhatsAppテストメッセージを送信",
@@ -1588,7 +1592,8 @@
           "sent": "送信済み",
           "delivered": "配信済み",
           "failed": "失敗",
-          "retries": "再試行"
+          "retries": "再試行",
+          "template": "テンプレート"
         },
         "retrySummary": "待機{pending}件、回復{recovered}件、断念{exhausted}件",
         "openRun": "実行を開く",
@@ -1648,7 +1653,9 @@
             "skipped": "確認時に条件を満たしていなかったため、シーケンスはそこで終了しました。",
             "lapsed": "コンタクトが返信または既読にする前に監視時間が終了したため、シーケンスはそこで終了しました。"
           }
-        }
+        },
+        "templatesTitle": "テンプレート",
+        "templatesInTurn": "{count, plural, other {#件のテンプレートを順番に送信}}"
       },
       "panel": {
         "title": "一斉配信の作成で作成",
@@ -1659,7 +1666,8 @@
           "recurring": "定期"
         },
         "recipients": "{count, plural, other {#人の受信者}}",
-        "next": "次回の実行 {when}"
+        "next": "次回の実行 {when}",
+        "moreTemplates": "他に{count}件"
       },
       "pickers": {
         "selectDate": "日付を選択",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, other {時間}}",
           "days": "{count, plural, other {日}}"
         }
+      },
+      "sequence": {
+        "title": "テンプレートの順番",
+        "intro": "実行ごとに、このリストの次のテンプレートを送信します。1回目は1番目、2回目は2番目を送り、最後の次はまた最初から始まります。",
+        "notRecurring": "テンプレートを順番に送れるのは繰り返し配信だけです。繰り返しのスケジュールを選ぶか、これらのテンプレートを削除してください。",
+        "withAb": "順番に送るテンプレートは、すでに2つのテンプレートを送る A/B テストとは併用できません。使うには A/B テストをオフにしてください。",
+        "templateLabel": "テンプレート{position}",
+        "firstMissing": "未選択",
+        "firstHint": "キャンペーンに選んだテンプレートです。テンプレートのステップで変更できます。",
+        "pick": "テンプレートを選択",
+        "loading": "読み込み中...",
+        "unavailable": "利用できなくなりました",
+        "up": "上へ",
+        "down": "下へ",
+        "moveUp": "テンプレート{position}を上へ移動",
+        "moveDown": "テンプレート{position}を下へ移動",
+        "remove": "テンプレート{position}を削除",
+        "removeShort": "削除",
+        "removeAll": "すべて削除",
+        "add": "テンプレートを追加",
+        "count": "{used} / {max} 件のテンプレート",
+        "limitReached": "上限に達しました：テンプレートは{max}件までです。",
+        "variablesTitle": "テンプレート{position}の変数：{name}"
       }
     },
     "history": {

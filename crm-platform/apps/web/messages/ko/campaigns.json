@@ -1166,7 +1166,10 @@
         "pacing_range": "Smart Delivery를 확인하세요. 가장 긴 지연이 가장 짧은 지연보다 짧거나, 두 발송 시간 중 하나만 설정되어 있습니다.",
         "follow_up_template_required": "각 후속 메시지로 보낼 템플릿을 선택하세요.",
         "follow_up_flow_required": "각 후속 메시지로 시작할 플로우를 선택하세요.",
-        "follow_up_cloud_api_only": "후속 메시지는 WhatsApp Cloud API 번호에서만 사용할 수 있습니다. 1단계에서 번호를 선택하거나 후속 메시지를 삭제하세요."
+        "follow_up_cloud_api_only": "후속 메시지는 WhatsApp Cloud API 번호에서만 사용할 수 있습니다. 1단계에서 번호를 선택하거나 후속 메시지를 삭제하세요.",
+        "sequence_not_recurring": "순서대로 보내는 템플릿은 반복 캠페인에서만 작동합니다. 반복 일정을 선택하거나 추가 템플릿을 삭제하세요.",
+        "sequence_with_ab": "순서대로 보내는 템플릿은 A/B 테스트와 함께 사용할 수 없습니다. A/B 테스트를 끄거나 추가 템플릿을 삭제하세요.",
+        "sequence_template_required": "순서의 각 단계에 템플릿을 선택하거나 비어 있는 단계를 삭제하세요."
       },
       "template": {
         "previewOnline": "온라인",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "예상 비용(전체)",
         "chargedPlan": "지금 지갑에서 차감: {amount} (요금제가 이 메시지 중 {covered}건을 충당합니다)",
         "chargedWallet": "지갑에서 차감: {amount}",
-        "sumFollowUps": "후속 메시지"
+        "sumFollowUps": "후속 메시지",
+        "sumSequence": "순서대로 발송"
       },
       "test": {
         "title": "WhatsApp 테스트 메시지 보내기",
@@ -1588,7 +1592,8 @@
           "sent": "발송됨",
           "delivered": "전달됨",
           "failed": "실패",
-          "retries": "재시도"
+          "retries": "재시도",
+          "template": "템플릿"
         },
         "retrySummary": "대기 {pending}, 복구 {recovered}, 포기 {exhausted}",
         "openRun": "실행 열기",
@@ -1648,7 +1653,9 @@
             "skipped": "확인 시점에 조건이 충족되지 않아 시퀀스가 거기서 종료되었습니다.",
             "lapsed": "연락처가 답장하거나 읽기 전에 감시 시간이 끝나 시퀀스가 거기서 종료되었습니다."
           }
-        }
+        },
+        "templatesTitle": "템플릿",
+        "templatesInTurn": "{count, plural, other {템플릿 #개 순서대로}}"
       },
       "panel": {
         "title": "브로드캐스트 만들기로 생성됨",
@@ -1659,7 +1666,8 @@
           "recurring": "반복"
         },
         "recipients": "{count, plural, other {수신자 #명}}",
-        "next": "다음 실행 {when}"
+        "next": "다음 실행 {when}",
+        "moreTemplates": "+{count}개 더"
       },
       "pickers": {
         "selectDate": "날짜 선택",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, other {시간}}",
           "days": "{count, plural, other {일}}"
         }
+      },
+      "sequence": {
+        "title": "템플릿 순서",
+        "intro": "실행할 때마다 이 목록의 다음 템플릿을 보냅니다. 1회차는 첫 번째, 2회차는 두 번째를 보내고, 마지막 다음에는 다시 처음부터 시작합니다.",
+        "notRecurring": "반복 발송만 템플릿을 순서대로 보냅니다. 반복 일정을 선택하거나 이 템플릿을 삭제하세요.",
+        "withAb": "순서대로 보내는 템플릿은 이미 템플릿 두 개를 보내는 A/B 테스트와 함께 사용할 수 없습니다. 사용하려면 A/B 테스트를 끄세요.",
+        "templateLabel": "템플릿 {position}",
+        "firstMissing": "아직 선택 안 됨",
+        "firstHint": "캠페인에 선택한 템플릿입니다. 템플릿 단계에서 변경하세요.",
+        "pick": "템플릿 선택",
+        "loading": "불러오는 중...",
+        "unavailable": "더 이상 사용할 수 없음",
+        "up": "위로",
+        "down": "아래로",
+        "moveUp": "템플릿 {position} 위로 이동",
+        "moveDown": "템플릿 {position} 아래로 이동",
+        "remove": "템플릿 {position} 삭제",
+        "removeShort": "삭제",
+        "removeAll": "모두 삭제",
+        "add": "템플릿 추가",
+        "count": "템플릿 {used}/{max}개",
+        "limitReached": "한도 도달: 템플릿 {max}개.",
+        "variablesTitle": "템플릿 {position}의 변수: {name}"
       }
     },
     "history": {

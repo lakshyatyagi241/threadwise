@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
 import {
+  ALL_PERMISSIONS,
   audience,
   count,
   failed,
@@ -61,6 +62,20 @@ describe('stepper', () => {
     const buttons = out.match(/<button[^>]*>/g) ?? [];
     expect(buttons).toHaveLength(4);
     expect(buttons.filter((b) => / disabled=""/.test(b))).toHaveLength(2);
+  });
+
+  it('gives each step its own icon, and a check once the step is done', () => {
+    const out = html(<Stepper current={3} reached={4} onGo={none} />);
+    const buttons = out.match(/<button[\s\S]*?<\/button>/g) ?? [];
+    expect(buttons).toHaveLength(4);
+    // Every step button carries one icon; the two steps before the current one show the check (the same path), the others differ.
+    const paths = buttons.map((b) => /<svg[\s\S]*?<\/svg>/.exec(b)?.[0] ?? '');
+    expect(paths.every((p) => p !== '')).toBe(true);
+    const check = 'M3 8l3 3 7-7';
+    expect(paths.filter((p) => p.includes(check))).toHaveLength(2);
+    expect(new Set(paths.slice(2)).size).toBe(2);
+    // The compact phone line has the current step's icon too.
+    expect(out.slice(0, out.indexOf('<ol'))).toContain('<svg');
   });
 
   it('is right-to-left safe in Arabic', () => {
@@ -126,7 +141,7 @@ describe('footer and save indicator', () => {
 });
 
 describe('step 1: name and template', () => {
-  const step = (over: Partial<Parameters<typeof StepTemplate>[0]> = {}) =>
+  const step = (over: Partial<Parameters<typeof StepTemplate>[0]> = {}, perms?: string[]) =>
     html(
       <StepTemplate
         name=""
@@ -140,6 +155,7 @@ describe('step 1: name and template', () => {
         onSender={none}
         {...over}
       />,
+      { perms },
     );
 
   it('has a required Send from number next to the name, and says so when none is connected', () => {
@@ -241,15 +257,30 @@ describe('step 1: name and template', () => {
     expect(step()).toContain('Choose a template to see how the message looks.');
   });
 
-  it('shows a loading state, an error with retry, and an empty state that links to /templates', () => {
+  it('shows a loading state, an error with retry, and an empty state that links to the new-template form', () => {
     expect(step({ templates: pending })).toContain('Loading templates');
     const bad = step({ templates: failed(new ApiError(500, 'INTERNAL', 'x', 'req-9')) });
     expect(bad).toContain('Something went wrong on our side');
     expect(bad).not.toContain('req-9');
     expect(bad).toContain('Try again');
-    const empty = step({ templates: ready({ data: [] }) });
+    const empty = step({ templates: ready({ data: [] }) }, [
+      ...ALL_PERMISSIONS,
+      'tpl.templates.create',
+    ]);
     expect(empty).toContain('No approved templates yet');
-    expect(empty).toContain('href="/templates"');
+    expect(empty).toContain('href="/templates/new"');
+  });
+
+  it('opens the new-template form on the chosen number, and offers no link to a person who may not create templates', () => {
+    const n = sender();
+    const tied = step(
+      { templates: ready({ data: [] }), senderKey: `waba:${uuid(77)}`, senders: [n] },
+      [...ALL_PERMISSIONS, 'tpl.templates.create'],
+    );
+    expect(tied).toContain(`href="/templates/new?connection=${uuid(77)}"`);
+    const noRight = step({ templates: ready({ data: [] }) });
+    expect(noRight).toContain('No approved templates yet');
+    expect(noRight).not.toContain('/templates/new');
   });
 });
 

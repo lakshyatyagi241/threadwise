@@ -113,6 +113,8 @@ const GUARDS = /\b(isSameOrigin|proxyRequest|forwardPublicPost)\b/;
 const MUTATING =
   /export\s+(?:async\s+function|const)\s+(POST|PUT|PATCH|DELETE)\b|export\s*\{[^}]*\bas\s+(POST|PUT|PATCH|DELETE)\b/;
 const REVIEWED_WITHOUT_GUARD: Record<string, string> = {
+  'widget/[token]/[...path]/route.ts':
+    "the chat widget is embedded on other sites, so its requests are cross-site by design; the API checks the embed token in the path and, for the api/* routes, the widget's origin allow-list, and the proxy forwards the real origin",
   'webhooks/storefront-pay/route.ts':
     'Razorpay calls it server to server; the API verifies the signature, no cookie is involved',
   '(auth)/logout/route.ts':
