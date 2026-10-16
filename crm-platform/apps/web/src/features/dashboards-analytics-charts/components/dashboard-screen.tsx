@@ -183,7 +183,7 @@ export function DashboardScreen() {
               </>
             )}
           </p>
-          <h1 className="text-2xl leading-tight sm:text-4xl">
+          <h1 className="text-[32px] leading-tight">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
             <em className="text-primary">
               {running > 0 ? t('running', { n: running }) : t('calm')}
