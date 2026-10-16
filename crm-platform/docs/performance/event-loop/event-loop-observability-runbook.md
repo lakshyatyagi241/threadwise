@@ -139,6 +139,27 @@ node tools/event-loop-audit/bench.mjs --seconds 15 --rounds 3
 
 Writes `reports/event-loop/bench-monitor.json` with machine, Node version and commit. Compare only runs from the same environment.
 
+## Load baselines of the real application
+
+```bash
+pnpm --filter @crm/db --filter @crm/contracts --filter @crm/config --filter @crm/tax build
+pnpm --filter @crm/api build
+node tools/event-loop-audit/load/run-load.mjs                                   # idle, normal, peak, spike, 10 min soak: ~35 minutes
+node tools/event-loop-audit/load/run-load.mjs --profiles=idle,normal --seconds=60 --contacts=1000   # a quick look
+```
+
+Needs Docker (throwaway Postgres and Redis, and `grafana/k6:0.49.0`). It starts the BUILT API and worker as separate processes, seeds
+one workspace and N contacts through the real create route, runs a k6 mix (contact list/search/get/create/update, inbox list/counts,
+a `/health` control) at a fixed arrival rate, and reads the processes' own `/metrics` every 2 s plus `pg_stat_activity`. It writes
+`reports/event-loop/load-baseline.json` with the commit, Node version, machine, workload and rates, and, for each profile, loop delay,
+utilization, CPU, heap, RSS, blocked windows, the server-side request quantiles, what Postgres was doing, the k6 client latency per
+route, and host-to-container round-trip times measured before and after the profile. Run it only against its own stack.
+
+How to read it: client latency (k6) is what a caller waited; `serverRequestMs` excludes time queued behind a blocked loop; loop delay
+says whether the process itself was the delay. Callers waiting seconds while loop delay p99 stays at tens of milliseconds means the
+wait is somewhere else (database, Redis, the network path), not a blocked loop. Compare two runs only if their round-trip
+calibration is similar. The rates are chosen, not taken from production, and the soak is minutes, not 12 or 24 hours.
+
 ## Check the job metrics against a real BullMQ worker
 
 Needs Docker (a throwaway Redis; no data of the app is touched):

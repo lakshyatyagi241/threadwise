@@ -3,6 +3,24 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "tools/event-loop-audit/load/run-load.mjs (k6 0.49.0, the built API and worker, Postgres and Redis containers; idle, normal, peak, spike, 10 minute soak)",
+      "status": "RAN; baselines recorded, NOT stable",
+      "ranOn": "2026-10-16, branch claude/event-loop-load-baselines, commit 18f84c6 (before the rebase onto main)",
+      "rawData": "evidence/load-baseline.json (final run), evidence/load-run1-collapse-10-40-120.json (first run at higher rates)",
+      "history": [
+        "First full run at 10 / 40 / 120 req/s: the stack answered at 10 req/s (p50 0.8 s) and collapsed at 40 (16 % failed, 2,425 iterations dropped) with the API's loop delay p99 near 43 ms throughout. Rates lowered to 5 / 20 / 60.",
+        "Three diagnostic runs showed the same workload giving caller p50 of 39 ms, 226 ms and 235 ms on different occasions; Postgres sessions were mostly idle in transaction, waiting on the API. A host-to-container round-trip calibration, a /health control and a pg_stat_activity sampler were added.",
+        "Final run at 5 / 20 / 60 req/s: normal p95 0.5 s, peak p95 6.3 s (1 % failed), spike p50 12.7 s (12 % failed), soak 10 minutes 0 failures with flat memory; loop delay p99 25 to 33 ms in every profile."
+      ],
+      "notShown": [
+        "a repeatable result (the environment moved several-fold between runs)",
+        "production-shaped rates",
+        "12 h or 24 h soak",
+        "webhooks, broadcasts, automations, reporting, a populated inbox",
+        "the cause of the seconds-long wait in the authenticated path (EL-B16)"
+      ]
+    },
+    {
       "suite": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
       "command": "vitest run test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
       "status": "PASSED",
@@ -199,7 +217,7 @@
     "a Prometheus/Alertmanager/probe stack on a real server",
     "delivery to a real chat or pager destination",
     "dashboards",
-    "any load, spike or soak test of the real application",
+    "a 12 h or 24 h soak, or any load test on a dedicated host",
     "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
   ]
 }
