@@ -232,7 +232,7 @@ describe('the CSV export', () => {
     );
     expect(res.status, res.text).toBe(200);
     expect(res.headers['content-type']).toContain('text/csv');
-    const lines = res.text.replace(/^﻿/, '').trim().split('\n');
+    const lines = res.text.replace(/^\uFEFF/, '').trim().split('\n');
     expect(lines[0]).toBe(
       'name,website,email,phone,industry,sizeRange,address,notes,owner,createdAt,Tier,Seats,Renewal,VIP,Channels',
     );
@@ -246,7 +246,7 @@ describe('the CSV export', () => {
 
   it('chooses the columns and their order, and refuses an unknown one', async () => {
     const res = await exportOf('?sort=name&columns=property:seats,name');
-    expect(res.text.replace(/^﻿/, '').split('\n').slice(0, 2)).toEqual(['Seats,name', '50,Acme']);
+    expect(res.text.replace(/^\uFEFF/, '').split('\n').slice(0, 2)).toEqual(['Seats,name', '50,Acme']);
     const bad = await exportOf('?columns=name,property:secret');
     expect(bad.status).toBe(422);
     expect(code(bad)).toBe('COMPANY_FILTER_INVALID');
@@ -276,7 +276,7 @@ describe('the CSV export', () => {
     expect(mine.status).toBe(201);
     const file = await api.as(own.token).get('/v2/companies/export?columns=name');
     expect(file.status).toBe(200);
-    expect(file.text.replace(/^﻿/, '').trim().split('\n')).toEqual(['name', 'Only Mine']);
+    expect(file.text.replace(/^\uFEFF/, '').trim().split('\n')).toEqual(['name', 'Only Mine']);
   });
 });
 
