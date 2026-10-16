@@ -1159,6 +1159,97 @@
           "queued": "Die Buchungen werden im Hintergrund in Ihren Kalender eingetragen.",
           "notConnected": "Es ist kein Kalender verbunden, daher gibt es keinen Ort zum Eintragen."
         }
+      },
+      "feeds": {
+        "title": "Weitere Kalender (iCal)",
+        "description": "Abonnieren Sie einen Kalender über seine iCal-Adresse, damit seine Belegtzeiten Termine sperren. Verwendet wird nur, wann Sie beschäftigt sind: Nichts sonst daraus wird angezeigt oder gespeichert.",
+        "loading": "Ihre Kalender werden geladen",
+        "empty": "Noch keine Kalender abonniert.",
+        "status": {
+          "pending": "Noch nicht gelesen",
+          "ok": "Funktioniert",
+          "error": "Problem"
+        },
+        "paused": "Pausiert",
+        "neverRead": "Noch nicht gelesen.",
+        "lastRead": "Gelesen {when}.",
+        "busyCount": "{count, plural, one {# Belegtblock} other {# Belegtblöcke}} in den nächsten 180 Tagen",
+        "allDayLabel": "Ganztägige Termine sperren den Tag",
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "refresh": "Jetzt lesen",
+        "reading": "Wird gelesen",
+        "remove": "Abo beenden",
+        "removed": "Kalenderabo beendet.",
+        "added": "Kalender abonniert.",
+        "addTitle": "Kalender abonnieren",
+        "nameLabel": "Name",
+        "namePlaceholder": "Dienstplan des Teams",
+        "urlLabel": "Kalenderadresse",
+        "urlHint": "Eine Adresse, die mit https:// oder webcal:// beginnt und auf .ics endet. Sie wird jetzt geprüft, dann verschlüsselt gespeichert und nie wieder angezeigt.",
+        "add": "Abonnieren",
+        "adding": "Kalender wird gelesen",
+        "hint": "Abonnieren Sie nicht den Kalender, in den Ihre Buchungen eingetragen werden: Ein Service mit mehreren Plätzen würde seine eigenen Termine als belegt ansehen. Ein Feed wird etwa alle 15 Minuten gelesen, daher kann eine Änderung dort so lange dauern, bis sie sichtbar wird.",
+        "confirmRemove": {
+          "title": "Dieses Kalenderabo beenden?",
+          "message": "Von {name} gesperrte Zeiten sind sofort wieder frei. Der Kalender selbst wird nicht verändert.",
+          "confirm": "Abo beenden",
+          "cancel": "Beibehalten"
+        },
+        "errors": {
+          "invalid": "Geben Sie eine Adresse ein, die mit https://, http:// oder webcal:// beginnt und keinen Benutzernamen und kein Passwort enthält.",
+          "duplicate": "Dieser Arbeitsbereich hat diesen Kalender bereits abonniert.",
+          "limit": "Ein Arbeitsbereich kann 10 Kalender abonnieren. Beenden Sie zuerst ein Abo."
+        },
+        "reason": {
+          "unreachable": "Die Adresse war nicht erreichbar. Prüfen Sie, ob sie stimmt und öffentlich ist.",
+          "timeout": "Der Kalender hat zu lange für die Antwort gebraucht.",
+          "not_found": "Unter dieser Adresse wurde nichts gefunden. Möglicherweise wurde die Veröffentlichung aufgehoben.",
+          "forbidden": "Der Kalender hat den Zugriff verweigert. Stellen Sie sicher, dass er für alle mit dem Link veröffentlicht ist.",
+          "server_error": "Der Server des Kalenders hatte ein Problem. Es wird automatisch erneut versucht.",
+          "redirect_loop": "Die Adresse leitet uns im Kreis herum.",
+          "not_a_calendar": "Diese Adresse ist kein iCal-Kalender. Sie sollte auf .ics enden.",
+          "too_large": "Dieser Kalender ist zu groß zum Lesen.",
+          "blocked_address": "Diese Adresse verweist auf ein privates Netzwerk, was nicht erlaubt ist.",
+          "unknown": "Diese Adresse konnte nicht als Kalender gelesen werden."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# Termin verwendet eine uns unbekannte Zeitzone und wurde in der Zeitzone Ihres Arbeitsbereichs gelesen.} other {# Termine verwenden eine uns unbekannte Zeitzone und wurden in der Zeitzone Ihres Arbeitsbereichs gelesen.}}",
+          "unsupportedRule": "{count, plural, one {# wiederkehrender Termin verwendet} other {# wiederkehrende Termine verwenden}} eine nicht unterstützte Regel: Nur das erste Vorkommen sperrt Zeit.",
+          "truncated": "Dieser Kalender hat mehr Belegtblöcke, als wir speichern, daher fehlen einige."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Meine Buchungen in meiner Kalender-App",
+        "description": "Abonnieren Sie Ihre Buchungen in Apple Calendar, Outlook oder Google Calendar.",
+        "loading": "Ihr Link wird geladen",
+        "none": "Sie haben noch keinen Link.",
+        "make": "Meinen Link erstellen",
+        "making": "Wird erstellt",
+        "made": "Ihr Link ist bereit.",
+        "linkLabel": "Ihr Link",
+        "copy": "Link kopieren",
+        "copied": "Link kopiert.",
+        "copyFailed": "Automatisches Kopieren war nicht möglich. Markieren Sie den Link und kopieren Sie ihn.",
+        "open": "In meiner Kalender-App öffnen",
+        "rotate": "Neuen Link erstellen",
+        "stop": "Freigabe beenden",
+        "stopped": "Ihr Link funktioniert nicht mehr.",
+        "lastUsed": "Eine Kalender-App hat ihn zuletzt {when} gelesen.",
+        "neverUsed": "Bisher hat keine Kalender-App ihn gelesen.",
+        "warning": "Jeder, der diesen Link hat, sieht die Titel, Zeiten und Orte Ihrer Buchungen. Halten Sie ihn privat. Telefonnummern, E-Mail-Adressen und Notizen werden nie angezeigt.",
+        "hint": "Sie sehen das, was Sie auch in der Buchungsliste sehen. Ihre Kalender-App aktualisiert den Feed nach ihrem eigenen Zeitplan, oft alle paar Stunden.",
+        "confirmRotate": {
+          "title": "Neuen Link erstellen?",
+          "message": "Der alte Link funktioniert sofort nicht mehr. Kalender-Apps, die ihn verwenden, benötigen den neuen.",
+          "confirm": "Neuen Link erstellen"
+        },
+        "confirmStop": {
+          "title": "Freigabe Ihrer Buchungen beenden?",
+          "message": "Ihr Link funktioniert sofort nicht mehr. Kalender-Apps, die ihn verwenden, zeigen nichts Neues mehr an.",
+          "confirm": "Freigabe beenden"
+        },
+        "confirmCancel": "Beibehalten"
       }
     },
     "linked": {

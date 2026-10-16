@@ -1,7 +1,7 @@
 ---
 id: appointments-settings
 title: Appointment settings
-summary: Connect Google Calendar or Outlook, then set your time zone, business hours, booking rules and customer messages for all bookings in your workspace.
+summary: Connect Google Calendar or Outlook, add other calendars for busy time, then set hours, booking rules and customer messages.
 area: settings
 order: 11
 documents: [tile:appointment-settings, tile:google-calendar]
@@ -9,6 +9,9 @@ keywords:
   [
     google calendar,
     outlook,
+    ical,
+    ics,
+    calendar feed,
     microsoft 365,
     teams,
     meet,
@@ -26,7 +29,7 @@ keywords:
 
 ## What it is for
 
-Appointment settings holds what every booking in your workspace shares: the Google Calendar and Outlook connections, the time zone, the weekly business hours, default booking rules and the messages customers receive. The Google Calendar card can also be opened from Settings under **Integrations**.
+Appointment settings holds what every booking in your workspace shares: the Google Calendar and Outlook connections, other calendars read for busy time, the time zone, the weekly business hours, default booking rules and the messages customers receive. The Google Calendar card can also be opened from Settings under **Integrations**.
 
 ## How to use it
 
@@ -45,6 +48,8 @@ Appointment settings holds what every booking in your workspace shares: the Goog
 - With Google Calendar, bookings are written as events, busy times are read so they are not offered twice, and a Meet link is added when the service asks for one.
 - With Outlook, confirmed bookings are written as events and the customer is invited. Work and school accounts also get a Teams meeting link when the service is online. Personal Microsoft accounts get the event without a link.
 - With both connected, busy times are read from both, and each booking is written to one of them. **Where bookings are written** lets you choose; **Automatic** uses Google Calendar when it works, otherwise Outlook.
+- **Other calendars (iCal)** reads a calendar you can only reach by address (Apple, Fastmail, a timetable, or a Google or Outlook calendar published as a secret link). Only the times you are busy are used: nothing else from it is shown or kept. Paste the address, give it a name and select **Subscribe**: the address is checked straight away, then stored encrypted and never shown again. It is read about every 15 minutes, so a change there can take that long to show. **Pause**, **Read now** and **Unsubscribe** are on each calendar. Do not subscribe to the calendar your bookings are written to.
+- **My bookings in my calendar app** gives you a private link to subscribe Apple Calendar, Outlook or Google Calendar to your own bookings. It shows the titles, times and places of the bookings you can see in the bookings list, never phone numbers, e-mail addresses or notes. Anyone with the link sees them, so keep it private; **Make a new link** stops the old one at once and **Stop sharing** ends it.
 - Bookings that were made while no calendar was connected, or lost with an account you replaced, are written to the calendar by themselves after you connect (confirmed bookings in the next 90 days). The card **Where bookings are written** shows how many are waiting and has **Write them now**.
 - **Discard changes** puts back the saved values.
 
@@ -57,6 +62,8 @@ You need permission to view booking settings. Changing them, and connecting or d
 - **Google Calendar needs reconnecting.** Google withdrew access or it expired. Bookings are not written to your calendar until you reconnect.
 - **Outlook needs reconnecting.** Microsoft withdrew access, the password changed, or your organization asked for a new sign-in. Reconnect, then the missed bookings are written by themselves.
 - **"This connection was started by someone else."** The link you came back through belongs to another person. Nothing was connected; press **Connect** yourself.
+- **An iCal calendar shows a problem.** The card says why: the address could not be reached, it is not published to anyone with the link, it is not an iCal calendar (it should end in .ics) or it is too large. It keeps the last busy times it read, and tries again by itself.
+- **An iCal calendar says some events were read in your time zone, or only their first occurrence counts.** Those events use a time zone or a repeat rule we cannot read; the card says how many.
 - **Outlook cannot be connected.** Your platform administrator has to add the Microsoft app first. Some organizations also need an administrator to approve the app on Microsoft's side.
 - **"That attempt took too long."** Press **Connect** again to start over.
 - **Google did not give every permission.** Connect again and keep all the boxes ticked on Google's screen.

@@ -1159,6 +1159,97 @@
           "queued": "Đang ghi chúng vào lịch của bạn trong nền.",
           "notConnected": "Chưa có lịch nào được kết nối nên không có nơi để ghi."
         }
+      },
+      "feeds": {
+        "title": "Các lịch khác (iCal)",
+        "description": "Đăng ký một lịch bằng địa chỉ iCal để thời gian bận của lịch đó đóng các khung giờ. Chỉ thông tin lúc bạn bận được dùng: không có gì khác từ lịch đó được hiển thị hay lưu giữ.",
+        "loading": "Đang tải các lịch của bạn",
+        "empty": "Chưa đăng ký lịch nào.",
+        "status": {
+          "pending": "Chưa được đọc",
+          "ok": "Hoạt động tốt",
+          "error": "Có sự cố"
+        },
+        "paused": "Đã tạm dừng",
+        "neverRead": "Chưa được đọc.",
+        "lastRead": "Đã đọc {when}.",
+        "busyCount": "{count, plural, other {# khoảng thời gian bận}} trong 180 ngày tới",
+        "allDayLabel": "Sự kiện cả ngày sẽ chặn cả ngày",
+        "pause": "Tạm dừng",
+        "resume": "Tiếp tục",
+        "refresh": "Đọc ngay",
+        "reading": "Đang đọc",
+        "remove": "Hủy đăng ký",
+        "removed": "Đã hủy đăng ký lịch.",
+        "added": "Đã đăng ký lịch.",
+        "addTitle": "Đăng ký một lịch",
+        "nameLabel": "Tên",
+        "namePlaceholder": "Lịch làm việc của nhóm",
+        "urlLabel": "Địa chỉ lịch",
+        "urlHint": "Địa chỉ bắt đầu bằng https:// hoặc webcal:// và kết thúc bằng .ics. Địa chỉ được kiểm tra ngay bây giờ, sau đó lưu dưới dạng mã hóa và không bao giờ hiển thị lại.",
+        "add": "Đăng ký",
+        "adding": "Đang đọc lịch",
+        "hint": "Đừng đăng ký lịch mà các lượt đặt lịch của bạn được ghi vào: dịch vụ nhiều vị trí sẽ coi các sự kiện của chính nó là bận. Lịch đăng ký được đọc khoảng 15 phút một lần, nên thay đổi ở đó có thể mất chừng ấy thời gian mới hiển thị.",
+        "confirmRemove": {
+          "title": "Hủy đăng ký lịch này?",
+          "message": "Các khung giờ bị {name} chặn sẽ được mở lại ngay lập tức. Bản thân lịch không bị thay đổi.",
+          "confirm": "Hủy đăng ký",
+          "cancel": "Giữ lại"
+        },
+        "errors": {
+          "invalid": "Hãy nhập địa chỉ bắt đầu bằng https://, http:// hoặc webcal://, không chứa tên người dùng hay mật khẩu.",
+          "duplicate": "Không gian làm việc này đã đăng ký lịch đó rồi.",
+          "limit": "Một không gian làm việc có thể đăng ký tối đa 10 lịch. Hãy hủy đăng ký một lịch trước."
+        },
+        "reason": {
+          "unreachable": "Không thể truy cập địa chỉ này. Hãy kiểm tra xem địa chỉ có đúng và công khai hay không.",
+          "timeout": "Lịch phản hồi quá lâu.",
+          "not_found": "Không tìm thấy gì tại địa chỉ này. Có thể lịch đã bị gỡ khỏi chế độ công khai.",
+          "forbidden": "Lịch đã từ chối quyền truy cập. Hãy đảm bảo lịch được công khai cho bất kỳ ai có liên kết.",
+          "server_error": "Máy chủ của lịch gặp sự cố. Hệ thống sẽ tự động thử lại.",
+          "redirect_loop": "Địa chỉ này chuyển hướng vòng quanh không dứt.",
+          "not_a_calendar": "Địa chỉ đó không phải là lịch iCal. Địa chỉ nên kết thúc bằng .ics.",
+          "too_large": "Lịch đó quá lớn để đọc.",
+          "blocked_address": "Địa chỉ đó trỏ đến mạng riêng, điều này không được phép.",
+          "unknown": "Không thể đọc địa chỉ đó như một lịch."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, other {# sự kiện dùng múi giờ mà chúng tôi không nhận biết được và đã được đọc theo múi giờ của không gian làm việc của bạn.}}",
+          "unsupportedRule": "{count, plural, other {# sự kiện lặp lại dùng}} quy tắc mà chúng tôi chưa hỗ trợ: chỉ lần xuất hiện đầu tiên chặn thời gian.",
+          "truncated": "Lịch này có nhiều khoảng thời gian bận hơn mức chúng tôi lưu giữ, nên một số khoảng bị thiếu."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Các lượt đặt lịch của tôi trong ứng dụng lịch",
+        "description": "Đăng ký Apple Calendar, Outlook hoặc Google Calendar để nhận các lượt đặt lịch của bạn.",
+        "loading": "Đang tải liên kết của bạn",
+        "none": "Bạn chưa có liên kết nào.",
+        "make": "Tạo liên kết của tôi",
+        "making": "Đang tạo",
+        "made": "Liên kết của bạn đã sẵn sàng.",
+        "linkLabel": "Liên kết của bạn",
+        "copy": "Sao chép liên kết",
+        "copied": "Đã sao chép liên kết.",
+        "copyFailed": "Không thể tự động sao chép. Hãy chọn liên kết và sao chép thủ công.",
+        "open": "Mở trong ứng dụng lịch của tôi",
+        "rotate": "Tạo liên kết mới",
+        "stop": "Dừng chia sẻ",
+        "stopped": "Liên kết của bạn không còn hoạt động.",
+        "lastUsed": "Một ứng dụng lịch đã đọc liên kết này lần cuối {when}.",
+        "neverUsed": "Chưa có ứng dụng lịch nào đọc liên kết này.",
+        "warning": "Bất kỳ ai có liên kết này đều thấy tiêu đề, thời gian và địa điểm của các lượt đặt lịch của bạn. Hãy giữ bí mật. Liên kết không bao giờ hiển thị số điện thoại, địa chỉ email hay ghi chú.",
+        "hint": "Bạn thấy những gì mình xem được trong danh sách lượt đặt lịch. Ứng dụng lịch của bạn làm mới nguồn theo lịch riêng của nó, thường vài giờ một lần.",
+        "confirmRotate": {
+          "title": "Tạo liên kết mới?",
+          "message": "Liên kết cũ sẽ ngừng hoạt động ngay lập tức. Các ứng dụng lịch đang dùng liên kết đó cần liên kết mới.",
+          "confirm": "Tạo liên kết mới"
+        },
+        "confirmStop": {
+          "title": "Dừng chia sẻ các lượt đặt lịch của bạn?",
+          "message": "Liên kết của bạn sẽ ngừng hoạt động ngay lập tức. Các ứng dụng lịch đang dùng liên kết đó sẽ không hiển thị thêm gì mới.",
+          "confirm": "Dừng chia sẻ"
+        },
+        "confirmCancel": "Giữ lại"
       }
     },
     "linked": {

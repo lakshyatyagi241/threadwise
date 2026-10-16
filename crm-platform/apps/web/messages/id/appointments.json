@@ -1159,6 +1159,97 @@
           "queued": "Menulisnya ke kalender Anda di latar belakang.",
           "notConnected": "Tidak ada kalender yang terhubung, jadi tidak ada tempat untuk menulisnya."
         }
+      },
+      "feeds": {
+        "title": "Kalender lain (iCal)",
+        "description": "Berlangganan kalender melalui alamat iCal-nya agar waktu sibuknya menutup slot. Hanya status sibuk yang dipakai: tidak ada hal lain darinya yang ditampilkan atau disimpan.",
+        "loading": "Memuat kalender Anda",
+        "empty": "Belum ada kalender yang dilanggan.",
+        "status": {
+          "pending": "Belum dibaca",
+          "ok": "Berfungsi",
+          "error": "Bermasalah"
+        },
+        "paused": "Dijeda",
+        "neverRead": "Belum dibaca.",
+        "lastRead": "Dibaca {when}.",
+        "busyCount": "{count, plural, other {# blok sibuk}} dalam 180 hari ke depan",
+        "allDayLabel": "Acara seharian memblokir hari itu",
+        "pause": "Jeda",
+        "resume": "Lanjutkan",
+        "refresh": "Baca sekarang",
+        "reading": "Membaca",
+        "remove": "Berhenti berlangganan",
+        "removed": "Langganan kalender dihentikan.",
+        "added": "Kalender dilanggan.",
+        "addTitle": "Berlangganan kalender",
+        "nameLabel": "Nama",
+        "namePlaceholder": "Jadwal tim",
+        "urlLabel": "Alamat kalender",
+        "urlHint": "Alamat yang diawali https:// atau webcal:// dan diakhiri .ics. Alamat diperiksa sekarang, lalu disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+        "add": "Berlangganan",
+        "adding": "Membaca kalender",
+        "hint": "Jangan berlangganan kalender tempat pemesanan Anda ditulis: layanan multi-kursi akan menganggap acaranya sendiri sebagai waktu sibuk. Feed dibaca sekitar setiap 15 menit, jadi perubahan di sana bisa selama itu baru tampil.",
+        "confirmRemove": {
+          "title": "Berhenti berlangganan kalender ini?",
+          "message": "Waktu yang diblokir oleh {name} langsung kosong kembali. Kalender itu sendiri tidak diubah.",
+          "confirm": "Berhenti berlangganan",
+          "cancel": "Pertahankan"
+        },
+        "errors": {
+          "invalid": "Masukkan alamat yang diawali https://, http://, atau webcal://, tanpa nama pengguna atau kata sandi di dalamnya.",
+          "duplicate": "Ruang kerja ini sudah berlangganan kalender tersebut.",
+          "limit": "Satu ruang kerja dapat berlangganan 10 kalender. Berhenti berlangganan salah satunya terlebih dahulu."
+        },
+        "reason": {
+          "unreachable": "Alamat tidak dapat dijangkau. Pastikan alamatnya benar dan bersifat publik.",
+          "timeout": "Kalender terlalu lama merespons.",
+          "not_found": "Tidak ada apa pun di alamat itu. Mungkin sudah tidak dipublikasikan.",
+          "forbidden": "Kalender menolak akses. Pastikan kalender dipublikasikan untuk siapa saja yang memiliki tautannya.",
+          "server_error": "Server kalender mengalami masalah. Akan dicoba lagi secara otomatis.",
+          "redirect_loop": "Alamat itu mengarahkan kami berputar-putar.",
+          "not_a_calendar": "Alamat itu bukan kalender iCal. Seharusnya diakhiri .ics.",
+          "too_large": "Kalender itu terlalu besar untuk dibaca.",
+          "blocked_address": "Alamat itu mengarah ke jaringan privat, yang tidak diizinkan.",
+          "unknown": "Alamat itu tidak dapat dibaca sebagai kalender."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, other {# acara menggunakan zona waktu yang tidak kami kenali dan dibaca dalam zona waktu ruang kerja Anda.}}",
+          "unsupportedRule": "{count, plural, other {# acara berulang memakai}} aturan yang tidak kami dukung: hanya kemunculan pertama yang memblokir waktu.",
+          "truncated": "Kalender ini memiliki lebih banyak blok sibuk daripada yang kami simpan, sehingga sebagian tidak ada."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Pemesanan saya di aplikasi kalender saya",
+        "description": "Langganankan Apple Calendar, Outlook, atau Google Calendar ke pemesanan Anda.",
+        "loading": "Memuat tautan Anda",
+        "none": "Anda belum memiliki tautan.",
+        "make": "Buat tautan saya",
+        "making": "Membuat",
+        "made": "Tautan Anda sudah siap.",
+        "linkLabel": "Tautan Anda",
+        "copy": "Salin tautan",
+        "copied": "Tautan disalin.",
+        "copyFailed": "Tidak dapat menyalin otomatis. Pilih tautan lalu salin.",
+        "open": "Buka di aplikasi kalender saya",
+        "rotate": "Buat tautan baru",
+        "stop": "Berhenti berbagi",
+        "stopped": "Tautan Anda tidak berfungsi lagi.",
+        "lastUsed": "Aplikasi kalender terakhir membacanya {when}.",
+        "neverUsed": "Belum ada aplikasi kalender yang membacanya.",
+        "warning": "Siapa pun yang memiliki tautan ini dapat melihat judul, waktu, dan lokasi pemesanan Anda. Jaga kerahasiaannya. Tautan ini tidak pernah menampilkan nomor telepon, alamat email, atau catatan.",
+        "hint": "Anda melihat apa yang dapat Anda lihat di daftar pemesanan. Aplikasi kalender Anda menyegarkan feed sesuai jadwalnya sendiri, sering kali setiap beberapa jam.",
+        "confirmRotate": {
+          "title": "Buat tautan baru?",
+          "message": "Tautan lama langsung berhenti berfungsi. Aplikasi kalender yang memakainya memerlukan tautan yang baru.",
+          "confirm": "Buat tautan baru"
+        },
+        "confirmStop": {
+          "title": "Berhenti membagikan pemesanan Anda?",
+          "message": "Tautan Anda langsung berhenti berfungsi. Aplikasi kalender yang memakainya tidak akan menampilkan data baru.",
+          "confirm": "Berhenti berbagi"
+        },
+        "confirmCancel": "Pertahankan"
       }
     },
     "linked": {

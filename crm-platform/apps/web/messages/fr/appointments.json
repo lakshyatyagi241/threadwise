@@ -1159,6 +1159,97 @@
           "queued": "Inscription dans votre calendrier en arrière-plan.",
           "notConnected": "Aucun calendrier n’est connecté, il n’y a donc nulle part où les inscrire."
         }
+      },
+      "feeds": {
+        "title": "Autres calendriers (iCal)",
+        "description": "Abonnez-vous à un calendrier par son adresse iCal pour que ses périodes d’occupation bloquent les créneaux. Seules les périodes où vous êtes occupé sont utilisées : rien d’autre n’est affiché ni conservé.",
+        "loading": "Chargement de vos calendriers",
+        "empty": "Aucun calendrier abonné pour l’instant.",
+        "status": {
+          "pending": "Pas encore lu",
+          "ok": "Fonctionne",
+          "error": "Problème"
+        },
+        "paused": "En pause",
+        "neverRead": "Pas encore lu.",
+        "lastRead": "Lu {when}.",
+        "busyCount": "{count, plural, one {# période d’occupation} many {# de périodes d’occupation} other {# périodes d’occupation}} dans les 180 prochains jours",
+        "allDayLabel": "Les événements sur toute la journée bloquent le jour",
+        "pause": "Mettre en pause",
+        "resume": "Reprendre",
+        "refresh": "Lire maintenant",
+        "reading": "Lecture en cours",
+        "remove": "Se désabonner",
+        "removed": "Désabonnement du calendrier effectué.",
+        "added": "Abonnement au calendrier effectué.",
+        "addTitle": "S’abonner à un calendrier",
+        "nameLabel": "Nom",
+        "namePlaceholder": "Planning de l’équipe",
+        "urlLabel": "Adresse du calendrier",
+        "urlHint": "Une adresse qui commence par https:// ou webcal:// et se termine par .ics. Elle est vérifiée maintenant, puis stockée chiffrée et jamais affichée de nouveau.",
+        "add": "S’abonner",
+        "adding": "Lecture du calendrier",
+        "hint": "Ne vous abonnez pas au calendrier dans lequel vos réservations sont inscrites : un service multi-places verrait ses propres événements comme des périodes d’occupation. Un flux est lu environ toutes les 15 minutes, donc une modification peut mettre autant de temps à apparaître.",
+        "confirmRemove": {
+          "title": "Se désabonner de ce calendrier ?",
+          "message": "Les horaires bloqués par {name} sont de nouveau libres immédiatement. Le calendrier lui-même n’est pas modifié.",
+          "confirm": "Se désabonner",
+          "cancel": "Conserver"
+        },
+        "errors": {
+          "invalid": "Saisissez une adresse qui commence par https://, http:// ou webcal://, sans nom d’utilisateur ni mot de passe.",
+          "duplicate": "Cet espace de travail est déjà abonné à ce calendrier.",
+          "limit": "Un espace de travail peut s’abonner à 10 calendriers. Désabonnez-vous d’abord de l’un d’eux."
+        },
+        "reason": {
+          "unreachable": "L’adresse est inaccessible. Vérifiez qu’elle est correcte et publique.",
+          "timeout": "Le calendrier a mis trop de temps à répondre.",
+          "not_found": "Rien n’a été trouvé à cette adresse. Elle a peut-être été dépubliée.",
+          "forbidden": "Le calendrier a refusé l’accès. Vérifiez qu’il est publié pour toute personne disposant du lien.",
+          "server_error": "Le serveur du calendrier a rencontré un problème. Une nouvelle tentative est faite automatiquement.",
+          "redirect_loop": "L’adresse nous renvoie en boucle.",
+          "not_a_calendar": "Cette adresse n’est pas un calendrier iCal. Elle devrait se terminer par .ics.",
+          "too_large": "Ce calendrier est trop volumineux pour être lu.",
+          "blocked_address": "Cette adresse pointe vers un réseau privé, ce qui n’est pas autorisé.",
+          "unknown": "Cette adresse n’a pas pu être lue comme un calendrier."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# événement utilise un fuseau horaire que nous ne connaissons pas et a été lu dans le fuseau horaire de votre espace de travail.} many {# d'événements utilisent un fuseau horaire que nous ne connaissons pas et ont été lus dans le fuseau horaire de votre espace de travail.} other {# événements utilisent un fuseau horaire que nous ne connaissons pas et ont été lus dans le fuseau horaire de votre espace de travail.}}",
+          "unsupportedRule": "{count, plural, one {# événement récurrent utilise} many {# d’événements récurrents utilisent} other {# événements récurrents utilisent}} une règle non prise en charge : seule la première occurrence bloque du temps.",
+          "truncated": "Ce calendrier contient plus de périodes d’occupation que nous n’en conservons, donc certaines manquent."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mes réservations dans mon application de calendrier",
+        "description": "Abonnez Apple Calendar, Outlook ou Google Calendar à vos réservations.",
+        "loading": "Chargement de votre lien",
+        "none": "Vous n’avez pas encore de lien.",
+        "make": "Créer mon lien",
+        "making": "Création en cours",
+        "made": "Votre lien est prêt.",
+        "linkLabel": "Votre lien",
+        "copy": "Copier le lien",
+        "copied": "Lien copié.",
+        "copyFailed": "Copie automatique impossible. Sélectionnez le lien et copiez-le.",
+        "open": "Ouvrir dans mon application de calendrier",
+        "rotate": "Créer un nouveau lien",
+        "stop": "Arrêter le partage",
+        "stopped": "Votre lien ne fonctionne plus.",
+        "lastUsed": "Une application de calendrier l’a lu pour la dernière fois {when}.",
+        "neverUsed": "Aucune application de calendrier ne l’a encore lu.",
+        "warning": "Toute personne qui possède ce lien voit les titres, les horaires et les lieux de vos réservations. Gardez-le privé. Il n’affiche jamais les numéros de téléphone, les adresses e-mail ni les notes.",
+        "hint": "Vous voyez ce que vous pouvez voir dans la liste des réservations. Votre application de calendrier actualise le flux selon son propre rythme, souvent toutes les quelques heures.",
+        "confirmRotate": {
+          "title": "Créer un nouveau lien ?",
+          "message": "L’ancien lien cesse de fonctionner immédiatement. Les applications de calendrier qui l’utilisent auront besoin du nouveau.",
+          "confirm": "Créer un nouveau lien"
+        },
+        "confirmStop": {
+          "title": "Arrêter le partage de vos réservations ?",
+          "message": "Votre lien cesse de fonctionner immédiatement. Les applications de calendrier qui l’utilisent n’afficheront plus rien de nouveau.",
+          "confirm": "Arrêter le partage"
+        },
+        "confirmCancel": "Conserver"
       }
     },
     "linked": {

@@ -27,6 +27,8 @@ export const KEYS = {
   calendars: ['appointments', 'calendar', 'list'] as const,
   overview: ['appointments', 'calendar', 'overview'] as const,
   outlookCalendars: ['appointments', 'calendar', 'outlook', 'list'] as const,
+  icsFeeds: ['appointments', 'calendar', 'ics-feeds'] as const,
+  bookingsFeed: ['appointments', 'calendar', 'bookings-feed'] as const,
 };
 
 /** Keeps the development stand-in (when it is on) in step with who is signed in. Call it once near the top of a screen. */
@@ -212,5 +214,29 @@ export function useOutlookCalendars(enabled: boolean) {
     retry: transientRetry,
     retryDelay: transientRetryDelay,
     staleTime: 60_000,
+  });
+}
+
+/** The iCal subscriptions of the workspace (busy time only). */
+export function useIcsFeeds(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.icsFeeds,
+    queryFn: ({ signal }) => calendarsApi.icsFeeds(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 15_000,
+  });
+}
+
+/** The signed-in person's own bookings feed link (null url until they make one). */
+export function useBookingsFeed(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.bookingsFeed,
+    queryFn: ({ signal }) => calendarsApi.bookingsFeed(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 15_000,
   });
 }

@@ -1159,6 +1159,97 @@
           "queued": "正在后台将它们写入您的日历。",
           "notConnected": "尚未连接任何日历，无处可写。"
         }
+      },
+      "feeds": {
+        "title": "其他日历（iCal）",
+        "description": "通过 iCal 地址订阅日历，其中的忙碌时间会占用时段。仅使用您忙碌的时间：不会显示或保留其中的其他任何内容。",
+        "loading": "正在加载您的日历",
+        "empty": "尚未订阅任何日历。",
+        "status": {
+          "pending": "尚未读取",
+          "ok": "正常",
+          "error": "有问题"
+        },
+        "paused": "已暂停",
+        "neverRead": "尚未读取。",
+        "lastRead": "{when}读取。",
+        "busyCount": "未来 180 天内有 {count, plural, other {# 个忙碌时段}}",
+        "allDayLabel": "全天事件会占用整天",
+        "pause": "暂停",
+        "resume": "恢复",
+        "refresh": "立即读取",
+        "reading": "正在读取",
+        "remove": "取消订阅",
+        "removed": "已取消订阅日历。",
+        "added": "已订阅日历。",
+        "addTitle": "订阅日历",
+        "nameLabel": "名称",
+        "namePlaceholder": "团队时间表",
+        "urlLabel": "日历地址",
+        "urlHint": "以 https:// 或 webcal:// 开头、以 .ics 结尾的地址。系统会立即检查，然后加密存储，之后不再显示。",
+        "add": "订阅",
+        "adding": "正在读取日历",
+        "hint": "请不要订阅用于写入您预约的那个日历：多席位服务会把自己的事件当作忙碌时间。订阅日历大约每 15 分钟读取一次，因此那边的更改可能需要这么久才会显示。",
+        "confirmRemove": {
+          "title": "取消订阅此日历？",
+          "message": "被 {name} 占用的时间会立即恢复为空闲。日历本身不会受到影响。",
+          "confirm": "取消订阅",
+          "cancel": "保留"
+        },
+        "errors": {
+          "invalid": "请输入以 https://、http:// 或 webcal:// 开头的地址，且地址中不能包含用户名或密码。",
+          "duplicate": "此工作区已订阅该日历。",
+          "limit": "一个工作区最多可订阅 10 个日历。请先取消订阅其中一个。"
+        },
+        "reason": {
+          "unreachable": "无法访问该地址。请检查地址是否正确且为公开地址。",
+          "timeout": "日历响应时间过长。",
+          "not_found": "该地址下没有找到任何内容，可能已被取消发布。",
+          "forbidden": "日历拒绝了访问。请确保已将其发布给任何拥有链接的人。",
+          "server_error": "日历所在的服务器出现问题，将自动重试。",
+          "redirect_loop": "该地址会让我们陷入无限重定向。",
+          "not_a_calendar": "该地址不是 iCal 日历，应以 .ics 结尾。",
+          "too_large": "该日历太大，无法读取。",
+          "blocked_address": "该地址指向私有网络，不允许使用。",
+          "unknown": "无法将该地址作为日历读取。"
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, other {有 # 个事件使用了我们无法识别的时区，已按您工作区的时区读取。}}",
+          "unsupportedRule": "有 {count, plural, other {# 个重复事件}}使用了我们不支持的规则：只有第一次出现会占用时间。",
+          "truncated": "此日历的忙碌时段超出了我们保留的上限，因此部分时段缺失。"
+        }
+      },
+      "bookingsFeed": {
+        "title": "在我的日历应用中查看我的预约",
+        "description": "让 Apple Calendar、Outlook 或 Google Calendar 订阅您的预约。",
+        "loading": "正在加载您的链接",
+        "none": "您还没有链接。",
+        "make": "创建我的链接",
+        "making": "正在创建",
+        "made": "您的链接已就绪。",
+        "linkLabel": "您的链接",
+        "copy": "复制链接",
+        "copied": "链接已复制。",
+        "copyFailed": "无法自动复制。请选中链接后手动复制。",
+        "open": "在我的日历应用中打开",
+        "rotate": "生成新链接",
+        "stop": "停止共享",
+        "stopped": "您的链接已失效。",
+        "lastUsed": "日历应用上次读取时间：{when}。",
+        "neverUsed": "还没有日历应用读取过它。",
+        "warning": "任何拿到此链接的人都能看到您预约的标题、时间和地点。请妥善保密。链接中不会显示电话号码、电子邮件地址或备注。",
+        "hint": "您能看到的内容与预约列表中一致。日历应用会按自己的计划刷新订阅，通常每隔几个小时一次。",
+        "confirmRotate": {
+          "title": "生成新链接？",
+          "message": "旧链接会立即失效。使用旧链接的日历应用需要改用新链接。",
+          "confirm": "生成新链接"
+        },
+        "confirmStop": {
+          "title": "停止共享您的预约？",
+          "message": "您的链接会立即失效。使用该链接的日历应用将不再显示新的内容。",
+          "confirm": "停止共享"
+        },
+        "confirmCancel": "保留"
       }
     },
     "linked": {

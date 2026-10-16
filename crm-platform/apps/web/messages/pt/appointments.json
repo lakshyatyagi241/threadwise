@@ -1159,6 +1159,97 @@
           "queued": "Gravando no seu calendário em segundo plano.",
           "notConnected": "Nenhum calendário está conectado, então não há onde gravá-las."
         }
+      },
+      "feeds": {
+        "title": "Outros calendários (iCal)",
+        "description": "Assine um calendário pelo endereço iCal para que os horários ocupados dele bloqueiem os horários disponíveis. Somente os momentos em que você está ocupado são usados: nada mais dele é exibido ou guardado.",
+        "loading": "Carregando seus calendários",
+        "empty": "Nenhum calendário assinado ainda.",
+        "status": {
+          "pending": "Ainda não lido",
+          "ok": "Funcionando",
+          "error": "Problema"
+        },
+        "paused": "Pausado",
+        "neverRead": "Ainda não lido.",
+        "lastRead": "Lido {when}.",
+        "busyCount": "{count, plural, one {# bloco ocupado} many {# de blocos ocupados} other {# blocos ocupados}} nos próximos 180 dias",
+        "allDayLabel": "Eventos de dia inteiro bloqueiam o dia",
+        "pause": "Pausar",
+        "resume": "Retomar",
+        "refresh": "Ler agora",
+        "reading": "Lendo",
+        "remove": "Cancelar assinatura",
+        "removed": "Assinatura do calendário cancelada.",
+        "added": "Calendário assinado.",
+        "addTitle": "Assinar um calendário",
+        "nameLabel": "Nome",
+        "namePlaceholder": "Escala da equipe",
+        "urlLabel": "Endereço do calendário",
+        "urlHint": "Um endereço que começa com https:// ou webcal:// e termina em .ics. Ele é verificado agora, depois armazenado criptografado e nunca mais exibido.",
+        "add": "Assinar",
+        "adding": "Lendo o calendário",
+        "hint": "Não assine o calendário no qual suas reservas são gravadas: um serviço com várias vagas veria os próprios eventos como ocupados. Um feed é lido a cada 15 minutos, aproximadamente, então uma alteração nele pode levar esse tempo para aparecer.",
+        "confirmRemove": {
+          "title": "Cancelar a assinatura deste calendário?",
+          "message": "Os horários bloqueados por {name} ficam livres novamente de imediato. O calendário em si não é alterado.",
+          "confirm": "Cancelar assinatura",
+          "cancel": "Manter"
+        },
+        "errors": {
+          "invalid": "Informe um endereço que comece com https://, http:// ou webcal://, sem nome de usuário nem senha.",
+          "duplicate": "Este espaço de trabalho já assina esse calendário.",
+          "limit": "Um espaço de trabalho pode assinar 10 calendários. Cancele a assinatura de um antes."
+        },
+        "reason": {
+          "unreachable": "Não foi possível acessar o endereço. Verifique se ele está correto e é público.",
+          "timeout": "O calendário demorou demais para responder.",
+          "not_found": "Nada foi encontrado nesse endereço. Ele pode ter sido despublicado.",
+          "forbidden": "O calendário recusou o acesso. Verifique se ele está publicado para qualquer pessoa com o link.",
+          "server_error": "O servidor do calendário teve um problema. Uma nova tentativa é feita automaticamente.",
+          "redirect_loop": "O endereço nos manda em círculos.",
+          "not_a_calendar": "Esse endereço não é um calendário iCal. Ele deve terminar em .ics.",
+          "too_large": "Esse calendário é grande demais para ser lido.",
+          "blocked_address": "Esse endereço aponta para uma rede privada, o que não é permitido.",
+          "unknown": "Não foi possível ler esse endereço como um calendário."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# evento usa um fuso horário que não conhecemos e foi lido no fuso horário do seu espaço de trabalho.} many {# de eventos usam um fuso horário que não conhecemos e foram lidos no fuso horário do seu espaço de trabalho.} other {# eventos usam um fuso horário que não conhecemos e foram lidos no fuso horário do seu espaço de trabalho.}}",
+          "unsupportedRule": "{count, plural, one {# evento recorrente usa} many {# de eventos recorrentes usam} other {# eventos recorrentes usam}} uma regra que não suportamos: somente a primeira ocorrência bloqueia horário.",
+          "truncated": "Este calendário tem mais blocos ocupados do que guardamos, então alguns estão faltando."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Minhas reservas no meu app de calendário",
+        "description": "Assine suas reservas no Apple Calendar, no Outlook ou no Google Calendar.",
+        "loading": "Carregando seu link",
+        "none": "Você ainda não tem um link.",
+        "make": "Criar meu link",
+        "making": "Criando",
+        "made": "Seu link está pronto.",
+        "linkLabel": "Seu link",
+        "copy": "Copiar link",
+        "copied": "Link copiado.",
+        "copyFailed": "Não foi possível copiar automaticamente. Selecione o link e copie-o.",
+        "open": "Abrir no meu app de calendário",
+        "rotate": "Criar um novo link",
+        "stop": "Parar de compartilhar",
+        "stopped": "Seu link não funciona mais.",
+        "lastUsed": "Um app de calendário o leu pela última vez {when}.",
+        "neverUsed": "Nenhum app de calendário o leu ainda.",
+        "warning": "Qualquer pessoa que tenha este link vê os títulos, os horários e os locais das suas reservas. Mantenha-o privado. Ele nunca mostra números de telefone, endereços de e-mail nem observações.",
+        "hint": "Você vê o que pode ver na lista de reservas. Seu app de calendário atualiza o feed no próprio ritmo, geralmente a cada poucas horas.",
+        "confirmRotate": {
+          "title": "Criar um novo link?",
+          "message": "O link antigo deixa de funcionar imediatamente. Os apps de calendário que o usam precisarão do novo.",
+          "confirm": "Criar um novo link"
+        },
+        "confirmStop": {
+          "title": "Parar de compartilhar suas reservas?",
+          "message": "Seu link deixa de funcionar imediatamente. Os apps de calendário que o usam não mostrarão nada de novo.",
+          "confirm": "Parar de compartilhar"
+        },
+        "confirmCancel": "Manter"
       }
     },
     "linked": {

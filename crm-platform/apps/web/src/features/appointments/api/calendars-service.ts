@@ -3,17 +3,26 @@ import {
   calendarConnectStartResponseSchema,
   calendarListResponseSchema,
   calendarOverviewResponseSchema,
+  bookingsFeedLinkSchema,
+  icsFeedListResponseSchema,
+  icsFeedSchema,
   microsoftCalendarConfirmResponseSchema,
   type CalendarBackfillResponse,
   type CalendarListResponse,
   type CalendarOverviewResponse,
+  type BookingsFeedLink,
   type CalendarProvider,
+  type CreateIcsFeedInput,
+  type IcsFeed,
+  type IcsFeedListResponse,
   type MicrosoftCalendarConfirmResponse,
+  type UpdateIcsFeedInput,
 } from '@crm/contracts';
 import { call } from './http';
 
 /**
- * The calendar calls beyond Google's card: Outlook / Microsoft 365 and where bookings are written (BL-035). Always the real API: these have no stand-in for the development switch, so with it on they fail visibly instead of faking an answer.
+ * The calendar calls beyond Google's card: Outlook / Microsoft 365, where bookings are written, iCal subscriptions and the person's own bookings
+ * feed (BL-035). Always the real API: these have no stand-in for the development switch, so with it on they fail visibly instead of faking an answer.
  * Wire shapes are used as they are (the contract already is the view model).
  */
 export const calendarsApi = {
@@ -70,5 +79,49 @@ export const calendarsApi = {
   },
   disconnectOutlook(): Promise<void> {
     return call('/appointments/calendar/microsoft/disconnect', { method: 'POST', body: {} });
+  },
+
+  // iCal subscriptions (busy time only)
+  icsFeeds(signal?: AbortSignal): Promise<IcsFeedListResponse> {
+    return call('/appointments/calendar/ics-feeds', { schema: icsFeedListResponseSchema, signal });
+  },
+  createIcsFeed(input: CreateIcsFeedInput): Promise<IcsFeed> {
+    return call('/appointments/calendar/ics-feeds', {
+      method: 'POST',
+      body: input,
+      schema: icsFeedSchema,
+    });
+  },
+  updateIcsFeed(id: string, input: UpdateIcsFeedInput): Promise<IcsFeed> {
+    return call(`/appointments/calendar/ics-feeds/${id}`, {
+      method: 'PATCH',
+      body: input,
+      schema: icsFeedSchema,
+    });
+  },
+  refreshIcsFeed(id: string): Promise<IcsFeed> {
+    return call(`/appointments/calendar/ics-feeds/${id}/refresh`, {
+      method: 'POST',
+      body: {},
+      schema: icsFeedSchema,
+    });
+  },
+  removeIcsFeed(id: string): Promise<void> {
+    return call(`/appointments/calendar/ics-feeds/${id}`, { method: 'DELETE' });
+  },
+
+  // the signed-in person's own bookings as a calendar subscription
+  bookingsFeed(signal?: AbortSignal): Promise<BookingsFeedLink> {
+    return call('/appointments/calendar/bookings-feed', { schema: bookingsFeedLinkSchema, signal });
+  },
+  makeBookingsFeed(): Promise<BookingsFeedLink> {
+    return call('/appointments/calendar/bookings-feed', {
+      method: 'POST',
+      body: {},
+      schema: bookingsFeedLinkSchema,
+    });
+  },
+  stopBookingsFeed(): Promise<void> {
+    return call('/appointments/calendar/bookings-feed', { method: 'DELETE' });
   },
 };

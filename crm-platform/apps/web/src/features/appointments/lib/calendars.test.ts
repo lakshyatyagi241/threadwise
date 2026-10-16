@@ -3,8 +3,10 @@ import { ERROR_CODES, type CalendarOverviewResponse } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import {
   hasWriteChoice,
+  icsFailure,
   outlookFailure,
   readOutlookReturn,
+  toWebcal,
   withoutOutlookParams,
   writeTargetChoices,
   writeTargetValue,
@@ -133,5 +135,47 @@ describe('where bookings are written', () => {
   it("selects the admin's choice, else automatic", () => {
     expect(writeTargetValue(overview('connected', 'connected', 'microsoft'))).toBe('microsoft');
     expect(writeTargetValue(overview('connected', 'connected'))).toBe('auto');
+  });
+});
+
+describe('icsFailure', () => {
+  const withUrl = (code: string, reason: string) =>
+    new ApiError(422, code, 'x', undefined, [{ path: 'url', message: reason }]);
+
+  it('names the feed calls own failures by code', () => {
+    expect(icsFailure(apiError(ERROR_CODES.APPT_ICS_FEED_INVALID))).toEqual({ kind: 'invalid' });
+    expect(icsFailure(apiError(ERROR_CODES.APPT_ICS_FEED_DUPLICATE))).toEqual({
+      kind: 'duplicate',
+    });
+    expect(icsFailure(apiError(ERROR_CODES.APPT_ICS_FEED_LIMIT))).toEqual({ kind: 'limit' });
+  });
+
+  it('takes the reason of an unreadable address from the url detail, and never trusts an unknown one', () => {
+    expect(icsFailure(withUrl(ERROR_CODES.APPT_ICS_FEED_UNREADABLE, 'not_a_calendar'))).toEqual({
+      kind: 'unreadable',
+      reason: 'not_a_calendar',
+    });
+    expect(icsFailure(withUrl(ERROR_CODES.APPT_ICS_FEED_UNREADABLE, 'some new thing'))).toEqual({
+      kind: 'unreadable',
+      reason: 'unknown',
+    });
+    expect(icsFailure(apiError(ERROR_CODES.APPT_ICS_FEED_UNREADABLE))).toEqual({
+      kind: 'unreadable',
+      reason: 'unknown',
+    });
+  });
+
+  it('leaves everything else to the generic error line', () => {
+    expect(icsFailure(apiError('SOMETHING_ELSE'))).toBeNull();
+    expect(icsFailure(new Error('x'))).toBeNull();
+  });
+});
+
+describe('toWebcal', () => {
+  it('turns the feed link into an address a calendar app opens directly', () => {
+    expect(toWebcal('https://api.example/v2/public/appointments/feed/abc.ics')).toBe(
+      'webcal://api.example/v2/public/appointments/feed/abc.ics',
+    );
+    expect(toWebcal('http://localhost:3000/feed.ics')).toBe('webcal://localhost:3000/feed.ics');
   });
 });

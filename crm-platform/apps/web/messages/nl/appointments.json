@@ -1159,6 +1159,97 @@
           "queued": "Ze worden op de achtergrond naar je agenda geschreven.",
           "notConnected": "Er is geen agenda gekoppeld, dus er is geen plek om ze naartoe te schrijven."
         }
+      },
+      "feeds": {
+        "title": "Andere agenda's (iCal)",
+        "description": "Abonneer je met het iCal-adres op een agenda zodat de bezette tijden ervan tijdsloten sluiten. Alleen wanneer je bezet bent wordt gebruikt: verder wordt er niets van getoond of bewaard.",
+        "loading": "Je agenda's laden",
+        "empty": "Nog geen agenda's geabonneerd.",
+        "status": {
+          "pending": "Nog niet gelezen",
+          "ok": "Werkt",
+          "error": "Probleem"
+        },
+        "paused": "Gepauzeerd",
+        "neverRead": "Nog niet gelezen.",
+        "lastRead": "Gelezen {when}.",
+        "busyCount": "{count, plural, one {# bezet blok} other {# bezette blokken}} in de komende 180 dagen",
+        "allDayLabel": "Evenementen van een hele dag blokkeren de dag",
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "refresh": "Nu lezen",
+        "reading": "Lezen",
+        "remove": "Abonnement opzeggen",
+        "removed": "Abonnement op agenda opgezegd.",
+        "added": "Geabonneerd op agenda.",
+        "addTitle": "Abonneren op een agenda",
+        "nameLabel": "Naam",
+        "namePlaceholder": "Teamrooster",
+        "urlLabel": "Agenda-adres",
+        "urlHint": "Een adres dat begint met https:// of webcal:// en eindigt op .ics. Het wordt nu gecontroleerd, daarna versleuteld opgeslagen en nooit meer getoond.",
+        "add": "Abonneren",
+        "adding": "Agenda lezen",
+        "hint": "Abonneer je niet op de agenda waarnaar je boekingen worden geschreven: een dienst met meerdere plaatsen zou zijn eigen gebeurtenissen als bezet zien. Een feed wordt ongeveer elke 15 minuten gelezen, dus een wijziging daar kan zo lang duren voordat die zichtbaar is.",
+        "confirmRemove": {
+          "title": "Abonnement op deze agenda opzeggen?",
+          "message": "Tijden die door {name} werden geblokkeerd, zijn meteen weer vrij. De agenda zelf wordt niet aangepast.",
+          "confirm": "Abonnement opzeggen",
+          "cancel": "Behouden"
+        },
+        "errors": {
+          "invalid": "Voer een adres in dat begint met https://, http:// of webcal://, zonder gebruikersnaam of wachtwoord erin.",
+          "duplicate": "Deze werkruimte is al geabonneerd op die agenda.",
+          "limit": "Een werkruimte kan zich op 10 agenda's abonneren. Zeg eerst een abonnement op."
+        },
+        "reason": {
+          "unreachable": "Het adres kon niet worden bereikt. Controleer of het klopt en openbaar is.",
+          "timeout": "De agenda deed er te lang over om te antwoorden.",
+          "not_found": "Op dat adres is niets gevonden. Mogelijk is het niet meer gepubliceerd.",
+          "forbidden": "De agenda weigerde toegang. Controleer of hij is gepubliceerd voor iedereen met de link.",
+          "server_error": "De server van de agenda had een probleem. Het wordt automatisch opnieuw geprobeerd.",
+          "redirect_loop": "Het adres stuurt ons in cirkels rond.",
+          "not_a_calendar": "Dat adres is geen iCal-agenda. Het moet eindigen op .ics.",
+          "too_large": "Die agenda is te groot om te lezen.",
+          "blocked_address": "Dat adres verwijst naar een privénetwerk, wat niet is toegestaan.",
+          "unknown": "Dat adres kon niet als agenda worden gelezen."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# afspraak gebruikt een tijdzone die we niet kennen en is gelezen in de tijdzone van je werkruimte.} other {# afspraken gebruiken een tijdzone die we niet kennen en zijn gelezen in de tijdzone van je werkruimte.}}",
+          "unsupportedRule": "{count, plural, one {# terugkerende gebeurtenis gebruikt} other {# terugkerende gebeurtenissen gebruiken}} een regel die we niet ondersteunen: alleen de eerste keer blokkeert tijd.",
+          "truncated": "Deze agenda heeft meer bezette blokken dan we bewaren, dus sommige ontbreken."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mijn boekingen in mijn agenda-app",
+        "description": "Abonneer Apple Calendar, Outlook of Google Calendar op je boekingen.",
+        "loading": "Je link laden",
+        "none": "Je hebt nog geen link.",
+        "make": "Mijn link aanmaken",
+        "making": "Aanmaken",
+        "made": "Je link is klaar.",
+        "linkLabel": "Je link",
+        "copy": "Link kopiëren",
+        "copied": "Link gekopieerd.",
+        "copyFailed": "Automatisch kopiëren is niet gelukt. Selecteer de link en kopieer hem zelf.",
+        "open": "Openen in mijn agenda-app",
+        "rotate": "Nieuwe link maken",
+        "stop": "Delen stoppen",
+        "stopped": "Je link werkt niet meer.",
+        "lastUsed": "Een agenda-app heeft hem voor het laatst gelezen {when}.",
+        "neverUsed": "Geen enkele agenda-app heeft hem al gelezen.",
+        "warning": "Iedereen met deze link ziet de titels, tijden en plaatsen van je boekingen. Houd hem privé. Telefoonnummers, e-mailadressen en notities worden nooit getoond.",
+        "hint": "Je ziet wat je ook in de boekingenlijst kunt zien. Je agenda-app vernieuwt de feed volgens een eigen schema, vaak om de paar uur.",
+        "confirmRotate": {
+          "title": "Nieuwe link maken?",
+          "message": "De oude link werkt meteen niet meer. Agenda-apps die hem gebruiken, hebben de nieuwe nodig.",
+          "confirm": "Nieuwe link maken"
+        },
+        "confirmStop": {
+          "title": "Delen van je boekingen stoppen?",
+          "message": "Je link werkt meteen niet meer. Agenda-apps die hem gebruiken, tonen niets nieuws meer.",
+          "confirm": "Delen stoppen"
+        },
+        "confirmCancel": "Behouden"
       }
     },
     "linked": {

@@ -1159,6 +1159,97 @@
           "queued": "Escribiéndolas en tu calendario en segundo plano.",
           "notConnected": "No hay ningún calendario conectado, así que no hay dónde escribirlas."
         }
+      },
+      "feeds": {
+        "title": "Otros calendarios (iCal)",
+        "description": "Suscríbete a un calendario mediante su dirección iCal para que sus horas ocupadas cierren franjas. Solo se usa cuándo estás ocupado: no se muestra ni se guarda nada más.",
+        "loading": "Cargando tus calendarios",
+        "empty": "Aún no hay calendarios suscritos.",
+        "status": {
+          "pending": "Aún sin leer",
+          "ok": "Funcionando",
+          "error": "Problema"
+        },
+        "paused": "En pausa",
+        "neverRead": "Aún sin leer.",
+        "lastRead": "Leído {when}.",
+        "busyCount": "{count, plural, one {# bloque ocupado} many {# de bloques ocupados} other {# bloques ocupados}} en los próximos 180 días",
+        "allDayLabel": "Los eventos de todo el día bloquean el día",
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "refresh": "Leer ahora",
+        "reading": "Leyendo",
+        "remove": "Cancelar suscripción",
+        "removed": "Suscripción al calendario cancelada.",
+        "added": "Calendario suscrito.",
+        "addTitle": "Suscribirse a un calendario",
+        "nameLabel": "Nombre",
+        "namePlaceholder": "Horario del equipo",
+        "urlLabel": "Dirección del calendario",
+        "urlHint": "Una dirección que empiece por https:// o webcal:// y termine en .ics. Se comprueba ahora, luego se guarda cifrada y no se vuelve a mostrar.",
+        "add": "Suscribirse",
+        "adding": "Leyendo el calendario",
+        "hint": "No te suscribas al calendario en el que se escriben tus reservas: un servicio con varias plazas vería sus propios eventos como ocupados. Una suscripción se lee aproximadamente cada 15 minutos, así que un cambio puede tardar ese tiempo en reflejarse.",
+        "confirmRemove": {
+          "title": "¿Cancelar la suscripción a este calendario?",
+          "message": "Las horas bloqueadas por {name} quedarán libres de inmediato. El calendario en sí no se modifica.",
+          "confirm": "Cancelar suscripción",
+          "cancel": "Mantener"
+        },
+        "errors": {
+          "invalid": "Introduce una dirección que empiece por https://, http:// o webcal://, sin nombre de usuario ni contraseña.",
+          "duplicate": "Este espacio de trabajo ya está suscrito a ese calendario.",
+          "limit": "Un espacio de trabajo puede suscribirse a 10 calendarios. Cancela primero la suscripción a uno."
+        },
+        "reason": {
+          "unreachable": "No se pudo acceder a la dirección. Comprueba que sea correcta y pública.",
+          "timeout": "El calendario tardó demasiado en responder.",
+          "not_found": "No se encontró nada en esa dirección. Puede que se haya dejado de publicar.",
+          "forbidden": "El calendario rechazó el acceso. Asegúrate de que esté publicado para cualquier persona que tenga el enlace.",
+          "server_error": "El servidor del calendario tuvo un problema. Se vuelve a intentar automáticamente.",
+          "redirect_loop": "La dirección nos redirige en círculos.",
+          "not_a_calendar": "Esa dirección no es un calendario iCal. Debería terminar en .ics.",
+          "too_large": "Ese calendario es demasiado grande para leerlo.",
+          "blocked_address": "Esa dirección apunta a una red privada, lo cual no está permitido.",
+          "unknown": "No se pudo leer esa dirección como un calendario."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# evento usa una zona horaria que no conocemos y se leyó en la zona horaria de tu espacio de trabajo.} many {# de eventos usan una zona horaria que no conocemos y se leyeron en la zona horaria de tu espacio de trabajo.} other {# eventos usan una zona horaria que no conocemos y se leyeron en la zona horaria de tu espacio de trabajo.}}",
+          "unsupportedRule": "{count, plural, one {# evento recurrente usa} many {# de eventos recurrentes usan} other {# eventos recurrentes usan}} una regla que no admitimos: solo la primera repetición bloquea tiempo.",
+          "truncated": "Este calendario tiene más bloques ocupados de los que guardamos, por lo que faltan algunos."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mis reservas en mi aplicación de calendario",
+        "description": "Suscribe Apple Calendar, Outlook o Google Calendar a tus reservas.",
+        "loading": "Cargando tu enlace",
+        "none": "Aún no tienes ningún enlace.",
+        "make": "Crear mi enlace",
+        "making": "Creando",
+        "made": "Tu enlace está listo.",
+        "linkLabel": "Tu enlace",
+        "copy": "Copiar enlace",
+        "copied": "Enlace copiado.",
+        "copyFailed": "No se pudo copiar automáticamente. Selecciona el enlace y cópialo.",
+        "open": "Abrir en mi aplicación de calendario",
+        "rotate": "Crear un enlace nuevo",
+        "stop": "Dejar de compartir",
+        "stopped": "Tu enlace ya no funciona.",
+        "lastUsed": "Una aplicación de calendario lo leyó por última vez {when}.",
+        "neverUsed": "Ninguna aplicación de calendario lo ha leído todavía.",
+        "warning": "Cualquier persona que tenga este enlace verá los títulos, las horas y los lugares de tus reservas. Mantenlo en privado. Nunca muestra números de teléfono, direcciones de correo electrónico ni notas.",
+        "hint": "Ves lo mismo que puedes ver en la lista de reservas. Tu aplicación de calendario actualiza la suscripción según su propio ritmo, a menudo cada pocas horas.",
+        "confirmRotate": {
+          "title": "¿Crear un enlace nuevo?",
+          "message": "El enlace anterior deja de funcionar de inmediato. Las aplicaciones de calendario que lo usan necesitarán el nuevo.",
+          "confirm": "Crear un enlace nuevo"
+        },
+        "confirmStop": {
+          "title": "¿Dejar de compartir tus reservas?",
+          "message": "Tu enlace deja de funcionar de inmediato. Las aplicaciones de calendario que lo usan no mostrarán nada nuevo.",
+          "confirm": "Dejar de compartir"
+        },
+        "confirmCancel": "Mantener"
       }
     },
     "linked": {

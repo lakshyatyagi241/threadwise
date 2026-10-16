@@ -1159,6 +1159,97 @@
           "queued": "Writing them to your calendar in the background.",
           "notConnected": "No calendar is connected, so there is nowhere to write them."
         }
+      },
+      "feeds": {
+        "title": "Other calendars (iCal)",
+        "description": "Subscribe to a calendar by its iCal address so its busy times close slots. Only when you are busy is used: nothing else from it is shown or kept.",
+        "loading": "Loading your calendars",
+        "empty": "No calendars subscribed yet.",
+        "status": {
+          "pending": "Not read yet",
+          "ok": "Working",
+          "error": "Problem"
+        },
+        "paused": "Paused",
+        "neverRead": "Not read yet.",
+        "lastRead": "Read {when}.",
+        "busyCount": "{count, plural, one {# busy block} other {# busy blocks}} in the next 180 days",
+        "allDayLabel": "All-day events block the day",
+        "pause": "Pause",
+        "resume": "Resume",
+        "refresh": "Read now",
+        "reading": "Reading",
+        "remove": "Unsubscribe",
+        "removed": "Calendar unsubscribed.",
+        "added": "Calendar subscribed.",
+        "addTitle": "Subscribe to a calendar",
+        "nameLabel": "Name",
+        "namePlaceholder": "Team timetable",
+        "urlLabel": "Calendar address",
+        "urlHint": "An address that starts with https:// or webcal:// and ends in .ics. It is checked now, then stored encrypted and never shown again.",
+        "add": "Subscribe",
+        "adding": "Reading the calendar",
+        "hint": "Do not subscribe to the calendar your bookings are written to: a multi-seat service would see its own events as busy. A feed is read about every 15 minutes, so a change there can take that long to show.",
+        "confirmRemove": {
+          "title": "Unsubscribe from this calendar?",
+          "message": "Times blocked by {name} are free again straight away. The calendar itself is not touched.",
+          "confirm": "Unsubscribe",
+          "cancel": "Keep it"
+        },
+        "errors": {
+          "invalid": "Enter an address that starts with https://, http:// or webcal://, without a user name or password in it.",
+          "duplicate": "This workspace already subscribes to that calendar.",
+          "limit": "A workspace can subscribe to 10 calendars. Unsubscribe from one first."
+        },
+        "reason": {
+          "unreachable": "The address could not be reached. Check that it is right and public.",
+          "timeout": "The calendar took too long to answer.",
+          "not_found": "Nothing was found at that address. It may have been unpublished.",
+          "forbidden": "The calendar refused access. Make sure it is published to anyone with the link.",
+          "server_error": "The calendar's server had a problem. It is tried again automatically.",
+          "redirect_loop": "The address sends us round in circles.",
+          "not_a_calendar": "That address is not an iCal calendar. It should end in .ics.",
+          "too_large": "That calendar is too large to read.",
+          "blocked_address": "That address points at a private network, which is not allowed.",
+          "unknown": "That address could not be read as a calendar."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# event uses a time zone we do not know and was read in your workspace's time zone.} other {# events use a time zone we do not know and were read in your workspace's time zone.}}",
+          "unsupportedRule": "{count, plural, one {# repeating event uses} other {# repeating events use}} a rule we do not support: only the first occurrence blocks time.",
+          "truncated": "This calendar has more busy blocks than we keep, so some are missing."
+        }
+      },
+      "bookingsFeed": {
+        "title": "My bookings in my calendar app",
+        "description": "Subscribe Apple Calendar, Outlook or Google Calendar to your bookings.",
+        "loading": "Loading your link",
+        "none": "You have no link yet.",
+        "make": "Create my link",
+        "making": "Creating",
+        "made": "Your link is ready.",
+        "linkLabel": "Your link",
+        "copy": "Copy link",
+        "copied": "Link copied.",
+        "copyFailed": "Could not copy automatically. Select the link and copy it.",
+        "open": "Open in my calendar app",
+        "rotate": "Make a new link",
+        "stop": "Stop sharing",
+        "stopped": "Your link no longer works.",
+        "lastUsed": "A calendar app last read it {when}.",
+        "neverUsed": "No calendar app has read it yet.",
+        "warning": "Anyone who has this link sees the titles, times and places of your bookings. Keep it private. It never shows phone numbers, e-mail addresses or notes.",
+        "hint": "You see what you can see in the bookings list. Your calendar app refreshes the feed on its own schedule, often every few hours.",
+        "confirmRotate": {
+          "title": "Make a new link?",
+          "message": "The old link stops working at once. Calendar apps that use it need the new one.",
+          "confirm": "Make a new link"
+        },
+        "confirmStop": {
+          "title": "Stop sharing your bookings?",
+          "message": "Your link stops working at once. Calendar apps that use it will show nothing new.",
+          "confirm": "Stop sharing"
+        },
+        "confirmCancel": "Keep it"
       }
     },
     "linked": {
