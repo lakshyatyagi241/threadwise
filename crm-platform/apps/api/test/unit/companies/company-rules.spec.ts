@@ -156,6 +156,7 @@ describe('the rollup (TW-CTP-003, 004)', () => {
       sizeRange: null,
       address: null,
       notes: null,
+      data: { tier: 'gold' },
       ownerId: 9,
       ownerUuid: '22222222-2222-4222-8222-222222222222',
       ownerName: 'Asha',
@@ -170,6 +171,9 @@ describe('the rollup (TW-CTP-003, 004)', () => {
     expect(JSON.stringify(res)).not.toMatch(/"id":5|ownerId|createdById/);
     expect(res.owner).toEqual({ id: row.ownerUuid, name: 'Asha' });
     expect(res.createdBy).toBeNull();
+    // the company's own property values travel as customFields (the `data` column is not a wire name)
+    expect(res.customFields).toEqual({ tier: 'gold' });
+    expect(res).not.toHaveProperty('data');
   });
 });
 
