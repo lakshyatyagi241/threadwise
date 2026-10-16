@@ -145,11 +145,6 @@
         "description": "Edit pipeline Deal, tahap, dan alasan kalah.",
         "keywords": "deal, tahap penjualan, board, alasan kalah, funnel"
       },
-      "tags": {
-        "label": "Tag",
-        "description": "Buat dan atur tag yang dipakai di kontak dan chat.",
-        "keywords": "label, warna, color"
-      },
       "saved-replies": {
         "label": "Balasan tersimpan",
         "description": "Tulis jawaban yang dapat dipakai ulang dan dikirim tim Anda dengan satu klik.",

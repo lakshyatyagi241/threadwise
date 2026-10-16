@@ -145,11 +145,6 @@
         "description": "Modifica le pipeline delle trattative, le fasi e i motivi di perdita.",
         "keywords": "trattative, fasi di vendita, board, motivo di perdita, funnel"
       },
-      "tags": {
-        "label": "Tag",
-        "description": "Crea e organizza i tag usati su contatti e chat.",
-        "keywords": "etichette, colore"
-      },
       "saved-replies": {
         "label": "Risposte salvate",
         "description": "Scrivi risposte riutilizzabili che il team può inviare con un clic.",

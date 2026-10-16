@@ -145,11 +145,6 @@
         "description": "编辑交易销售管道、阶段和丢失原因。",
         "keywords": "交易, 销售阶段, 看板, 丢失原因, 漏斗"
       },
-      "tags": {
-        "label": "标签",
-        "description": "创建和整理用于联系人与聊天的标签。",
-        "keywords": "标记, 颜色, color"
-      },
       "saved-replies": {
         "label": "快捷回复",
         "description": "撰写可重复使用的回复，团队成员一键即可发送。",

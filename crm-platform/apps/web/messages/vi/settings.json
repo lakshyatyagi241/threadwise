@@ -145,11 +145,6 @@
         "description": "Chỉnh sửa pipeline thương vụ, giai đoạn và lý do thất bại.",
         "keywords": "thương vụ, giai đoạn bán hàng, bảng, lý do thất bại, phễu"
       },
-      "tags": {
-        "label": "Thẻ",
-        "description": "Tạo và sắp xếp các thẻ dùng cho liên hệ và cuộc trò chuyện.",
-        "keywords": "nhãn, màu sắc, màu"
-      },
       "saved-replies": {
         "label": "Câu trả lời đã lưu",
         "description": "Soạn các câu trả lời dùng lại để nhóm gửi chỉ bằng một cú nhấp.",

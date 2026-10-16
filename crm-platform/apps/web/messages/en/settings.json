@@ -150,11 +150,6 @@
         "description": "Edit your deal pipelines, stages and lost reasons.",
         "keywords": "deals, sales stages, board, lost reason, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Create and organise the tags used across contacts and chats.",
-        "keywords": "labels, colour, color"
-      },
       "saved-replies": {
         "label": "Saved replies",
         "description": "Write reusable answers your team can send in one click.",

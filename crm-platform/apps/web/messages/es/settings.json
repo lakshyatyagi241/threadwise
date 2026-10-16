@@ -145,11 +145,6 @@
         "description": "Edita tus embudos de negocios, etapas y motivos de pérdida.",
         "keywords": "negocios, etapas de venta, tablero, motivo de pérdida, embudo"
       },
-      "tags": {
-        "label": "Etiquetas",
-        "description": "Crea y organiza las etiquetas usadas en contactos y chats.",
-        "keywords": "etiquetas, color"
-      },
       "saved-replies": {
         "label": "Respuestas guardadas",
         "description": "Escribe respuestas reutilizables que tu equipo pueda enviar con un clic.",

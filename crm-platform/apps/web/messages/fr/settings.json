@@ -145,11 +145,6 @@
         "description": "Modifiez vos pipelines d’opportunités, leurs étapes et les motifs de perte.",
         "keywords": "opportunités, étapes de vente, tableau, motif de perte, entonnoir"
       },
-      "tags": {
-        "label": "Étiquettes",
-        "description": "Créez et organisez les étiquettes utilisées pour les contacts et les discussions.",
-        "keywords": "libellés, couleur, color"
-      },
       "saved-replies": {
         "label": "Réponses enregistrées",
         "description": "Rédigez des réponses réutilisables que votre équipe peut envoyer en un clic.",
