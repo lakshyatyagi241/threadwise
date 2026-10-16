@@ -864,7 +864,8 @@
         "clicked": "クリック済み",
         "showing": "{total}件中{shown}件を表示",
         "prev": "前のページ",
-        "next": "次のページ"
+        "next": "次のページ",
+        "heldUntil": "{when} まで保留中(通知を控える時間帯)"
       },
       "engagement": {
         "opened": "開封",
@@ -1032,7 +1033,8 @@
         "badge": "ライブ",
         "updated": "更新 {time}",
         "queued": "{count} 件が送信待ち",
-        "processing": "{count} 件を送信中"
+        "processing": "{count} 件を送信中",
+        "held": "{count} 件が通知を控える時間帯のため保留中"
       },
       "statistics": {
         "loadFailed": "統計を読み込めませんでした。",

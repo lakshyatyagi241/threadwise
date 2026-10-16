@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Stille uren en belvensters worden nog niet afgedwongen",
+          "title": "Stille uren en belvensters worden toegepast",
           "detail": {
-            "notEnforced": "Je stille uren en belvenster zijn opgeslagen, maar er houdt nog niets een bericht tegen of blokkeert een gesprek erbuiten. Plan zelf rond deze tijden."
+            "enforced": "Marketingberichten binnen uw stille uren worden vastgehouden tot die voorbij zijn, en een gesprek buiten uw belvenster wordt geweigerd met het tijdstip waarop het opent. Antwoorden binnen het 24-uursvenster en servicemeldingen worden nooit vastgehouden. Het DND-register is slechts een notitie: er wordt nog niets tegen gecontroleerd."
           }
         }
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Deze instellingen zijn opgeslagen, maar worden nog niet afgedwongen. Een bericht wordt niet tegengehouden en een gesprek wordt niet geblokkeerd buiten de ingestelde uren. Plan je verzending en gesprekken daaromheen.",
-      "intro": "Sommige regels beperken wanneer marketingberichten en -gesprekken mensen mogen bereiken. Leg hier de uren vast waarop je werkt.",
+      "intro": "Sommige regels beperken wanneer marketingberichten en gesprekken mensen mogen bereiken. Stel hier uw uren in: een marketingbericht dat in de stille uren wordt verzonden wacht en gaat weg zodra die voorbij zijn, en buiten het belvenster wordt niet gebeld.",
       "quiet": {
         "title": "Stille uren voor berichten",
-        "hint": "Uren waarin je niet wilt dat marketingberichten mensen bereiken. De periode mag over middernacht gaan.",
+        "hint": "Uren waarin marketingberichten niet worden verstuurd. Ze wachten en gaan weg zodra de uren voorbij zijn. De periode mag over middernacht heen lopen.",
         "enabled": "Stille uren aan",
         "start": "Stil vanaf",
         "end": "Stil tot"
       },
       "calling": {
         "title": "Belvenster",
-        "hint": "De enige uren waarop marketinggesprekken gevoerd mogen worden, op de dagen die je kiest.",
+        "hint": "De enige uren waarin marketinggesprekken worden gevoerd, op de dagen die u kiest. Een gesprek daarbuiten wordt geweigerd en vermeldt wanneer het venster opent.",
         "enabled": "Belvenster aan",
         "start": "Bellen vanaf",
         "end": "Bellen tot",
@@ -407,8 +406,8 @@
       },
       "suggested": "De wetten die je hebt ingeschakeld suggereren {start} tot {end}.",
       "zone": {
-        "label": "Tijdzone",
-        "hint": "De uren worden in deze zone gelezen. De zone van je werkruimte is {zone}.",
+        "label": "Reservetijdzone",
+        "hint": "De uren worden gelezen op de klok van het contact zelf: de tijdzone-eigenschap, anders de landcode van het nummer. Deze zone wordt gebruikt als geen van beide bekend is. De zone van uw werkruimte is {zone}.",
         "workspace": "Tijdzone van de werkruimte ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Je eigen lijst"
         },
         "note": "Dit is alleen een notitie. Er wordt nog niets tegen een register gecontroleerd."
-      }
+      },
+      "enforcedNote": "Stille uren houden een marketingbericht vast tot ze voorbij zijn, en het belvenster weigert een gesprek erbuiten. De klok van elk contact wordt gebruikt. Antwoorden binnen het 24-uursvenster en servicemeldingen worden nooit vastgehouden."
     },
     "subprocessors": {
       "intro": "De leveranciers die persoonsgegevens voor je werkruimte verwerken: wat ze doen, welke gegevens ze krijgen en waar. Je kunt de lijst op een openbare pagina publiceren.",
@@ -487,6 +487,10 @@
       "privacy": "Privacybeleid",
       "terms": "Voorwaarden",
       "notFound": "Pagina niet gevonden"
+    },
+    "hold": {
+      "heldUntil": "Vastgehouden tot {when} (stille uren)",
+      "heldCount": "{count} vastgehouden wegens stille uren"
     }
   }
 }

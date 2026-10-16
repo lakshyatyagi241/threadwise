@@ -864,7 +864,8 @@
         "clicked": "הקליק",
         "showing": "מציג {shown} מתוך {total}",
         "prev": "העמוד הקודם",
-        "next": "העמוד הבא"
+        "next": "העמוד הבא",
+        "heldUntil": "מוחזק עד {when} (שעות שקט)"
       },
       "engagement": {
         "opened": "נפתח",
@@ -1032,7 +1033,8 @@
         "badge": "בשידור חי",
         "updated": "עודכן {time}",
         "queued": "{count} ממתינים לשליחה",
-        "processing": "{count} נשלחים כרגע"
+        "processing": "{count} נשלחים כרגע",
+        "held": "{count} מוחזקים בגלל שעות השקט"
       },
       "statistics": {
         "loadFailed": "לא ניתן היה לטעון את הסטטיסטיקה.",

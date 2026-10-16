@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { sendHoldReasonSchema } from '../compliance/send-window';
 import {
   composeSenderSchema,
   composeTemplateSchema,
@@ -250,6 +251,9 @@ export const campaignRecipientSchema = z.object({
   readAt: z.string().datetime().nullable(),
   respondedAt: z.string().datetime().nullable(),
   error: z.string().nullable(),
+  /** While the recipient waits for the workspace's quiet hours to end (BL-177): when it may go and why. Null otherwise. */
+  heldUntil: z.string().datetime().nullable().optional(),
+  heldReason: sendHoldReasonSchema.nullable().optional(),
 });
 export type CampaignRecipient = z.infer<typeof campaignRecipientSchema>;
 
@@ -270,6 +274,8 @@ export const campaignLiveSchema = z.object({
   inFlight: z.boolean(),
   counts: campaignCountsSchema,
   queued: z.number().int(),
+  /** Of `queued`, the recipients held for the quiet hours: they go when the hours open (BL-177). */
+  held: z.number().int().optional(),
   processing: z.number().int(),
   rates: z.object({ delivered: pct, read: pct, replies: pct, clicks: pct, failed: pct }),
   failures: z.array(z.object({ id: uuidSchema, error: z.string(), at: z.string().datetime() })),

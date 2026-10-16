@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Gepauzeerd: de dagelijkse verzendlimiet is bereikt. Hervat automatisch na {when}.",
         "halt": "Gepauzeerd: verzenden is stopgezet voor deze workspace. Hervat zodra de stop wordt opgeheven.",
-        "manual": "Gepauzeerd."
+        "manual": "Gepauzeerd.",
+        "quiet_hours": "Gepauzeerd: sommige ontvangers zitten in hun stille uren. Gaat vanzelf verder na {when}."
       },
       "delete": "Verwijderen",
       "deleteTitle": "Broadcast verwijderen?",
@@ -145,7 +146,8 @@
         "queued": "In wachtrij",
         "queuedHint": "wacht op verzending",
         "failed": "Mislukt",
-        "failedPct": "{pct}% foutratio"
+        "failedPct": "{pct}% foutratio",
+        "queuedHeld": "{count} vastgehouden wegens stille uren"
       },
       "tab": {
         "overview": "Overzicht",
@@ -193,7 +195,8 @@
         "lastClick": "Laatste klik: {when}",
         "empty": "Geen ontvangers gekoppeld.",
         "more": "Meer laden",
-        "loading": "Laden"
+        "loading": "Laden",
+        "heldUntil": "Vastgehouden tot {when} (stille uren)"
       },
       "failures": {
         "kicker": "Foutredenen",

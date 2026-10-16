@@ -864,7 +864,8 @@
         "clicked": "کلک کیا",
         "showing": "{total} میں سے {shown} دکھائے جا رہے ہیں",
         "prev": "پچھلا صفحہ",
-        "next": "اگلا صفحہ"
+        "next": "اگلا صفحہ",
+        "heldUntil": "{when} تک روکا گیا (خاموش اوقات)"
       },
       "engagement": {
         "opened": "کھولا گیا",
@@ -1032,7 +1033,8 @@
         "badge": "لائیو",
         "updated": "اپ ڈیٹ {time}",
         "queued": "{count} بھیجے جانے کے منتظر",
-        "processing": "{count} ابھی بھیجے جا رہے ہیں"
+        "processing": "{count} ابھی بھیجے جا رہے ہیں",
+        "held": "{count} خاموش اوقات کی وجہ سے روکے گئے"
       },
       "statistics": {
         "loadFailed": "اعدادوشمار لوڈ نہیں ہو سکے۔",

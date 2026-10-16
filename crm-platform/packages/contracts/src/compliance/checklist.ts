@@ -24,7 +24,7 @@ export const BASELINE_ITEM_IDS = [
 ] as const;
 export type BaselineItemId = (typeof BASELINE_ITEM_IDS)[number];
 
-/** The rows a profile adds. Same text keys as the requirement ids, plus the enforcement note for quiet hours and windows. */
+/** The rows a profile adds. Same text keys as the requirement ids, plus the note on what quiet hours and windows do (BL-177). */
 export const PROFILE_ITEM_IDS = [
   'dpo_contact',
   'grievance_officer',
@@ -66,7 +66,7 @@ export const CHECKLIST_DETAIL_KEYS: Readonly<Record<string, readonly string[]>> 
   subprocessor_locations: ['built', 'some', 'none'],
   request_days: ['built', 'tooLong'],
   marketing_opt_in: ['built', 'off'],
-  windows_enforcement: ['notEnforced'],
+  windows_enforcement: ['enforced'],
 };
 
 export const checklistItemSchema = z.object({

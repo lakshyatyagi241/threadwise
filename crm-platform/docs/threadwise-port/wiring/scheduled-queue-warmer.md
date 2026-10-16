@@ -64,3 +64,7 @@ are index rows only, ported from the reference source directly.
 ## Menu location (our change, see parity/product-extensions.md item 22)
 
 The Warmer (`/warmer`, TW-SCHED-036) is no longer a sidebar entry of the Campaigns group (`inMenu: false` in `apps/web/src/features/scheduled-queue-warmer/nav.ts`); it has a tile in Settings > Channels (`settings.ts`, id `warmer`, gate `sched.warmer.manage`). The route, the permission and the plan feature `whatsapp_warmer` are unchanged.
+
+## Quiet hours and calling windows (BL-177, product extension)
+
+Not in Reference. `ScheduledRunService` asks `SendWindowService` per batch for a marketing schedule (typed numbers that belong to no contact are read by their country code). A held recipient stays `pending` with `scheduled_message_contacts.held_until`; the run pauses (`status = paused`, `next_attempt_at` = the first opening) and the due sweep resumes it. The ConsentGate is already asked at send time for every batch. Read side: recipients `heldUntil` / `heldReason`, `counts.held`. The hold wording lives in `compliance-center.hold` until this feature's message file has no backlog (BL-193).

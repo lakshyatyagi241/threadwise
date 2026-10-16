@@ -89,7 +89,8 @@
       "NETWORK": "Netwerkfout - probeer het opnieuw.",
       "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw.",
       "CALL_PLAYBACK_LINK_INVALID": "Deze opnamelink is verlopen. Druk opnieuw op afspelen om een nieuwe te krijgen.",
-      "CALL_RANGE_INVALID": "Deze datums kloppen niet: het begin mag niet na het einde liggen, een bereik mag maximaal een jaar beslaan en de tijdzone moet bestaan."
+      "CALL_RANGE_INVALID": "Deze datums kloppen niet: het begin mag niet na het einde liggen, een bereik mag maximaal een jaar beslaan en de tijdzone moet bestaan.",
+      "CALL_OUTSIDE_WINDOW": "Dit contact valt buiten uw beluren, dus er is niet gebeld. Het belvenster opent {when}."
     },
     "settings": {
       "title": "Bellen",

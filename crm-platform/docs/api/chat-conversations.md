@@ -99,7 +99,7 @@ Flat, not partitioned. Exists because a partitioned table cannot enforce a uniqu
 
 ## `message_events`
 
-Monthly partitioned stream (`queued`, `attempt`, `retry`, `sent`, `delivered`, `read`, `failed`) with `detail jsonb`; `created_at` is
+Monthly partitioned stream (`queued`, `attempt`, `retry`, `held`, `sent`, `delivered`, `read`, `failed`; `held`: the quiet hours delayed a marketing send, BL-177) with `detail jsonb`; `created_at` is
 the time the event happened. Retention about 180 days (a sweep is not built yet). No foreign keys, like `conversation_events`.
 
 ## Writers other than the pipeline

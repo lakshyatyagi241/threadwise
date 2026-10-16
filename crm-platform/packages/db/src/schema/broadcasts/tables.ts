@@ -5,6 +5,7 @@
 import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
   foreignKey,
   index,
   integer,
@@ -105,6 +106,9 @@ export const broadcastContacts = pgTable(
     sentAt: timestamp('sent_at', { withTimezone: true }),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
     readAt: timestamp('read_at', { withTimezone: true }),
+    /** BL-177: the instant this recipient may be messaged after the workspace's quiet hours, and why. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -130,6 +134,13 @@ export const broadcastContacts = pgTable(
     index('idx_broadcast_contacts_broadcast_id_status').on(t.orgId, t.broadcastId, t.status),
     index('idx_broadcast_contacts_contact_id').on(t.orgId, t.contactId),
     index('idx_broadcast_contacts_status').on(t.orgId, t.status),
+    check(
+      'ck_broadcast_contacts_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
+    index('idx_broadcast_contacts_held')
+      .on(t.orgId, t.broadcastId, t.heldUntil)
+      .where(sql`${t.heldUntil} IS NOT NULL`),
     // The Message History feed, newest send first (20261126090000).
     index('idx_broadcast_contacts_org_at').on(
       t.orgId,

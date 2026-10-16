@@ -864,7 +864,8 @@
         "clicked": "geklickt",
         "showing": "{shown} von {total} werden angezeigt",
         "prev": "Vorherige Seite",
-        "next": "Nächste Seite"
+        "next": "Nächste Seite",
+        "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)"
       },
       "engagement": {
         "opened": "Geöffnet",
@@ -1032,7 +1033,8 @@
         "badge": "Live",
         "updated": "aktualisiert {time}",
         "queued": "{count} warten auf den Versand",
-        "processing": "{count} werden gerade gesendet"
+        "processing": "{count} werden gerade gesendet",
+        "held": "{count} wegen der Ruhezeiten zurückgehalten"
       },
       "statistics": {
         "loadFailed": "Die Statistik konnte nicht geladen werden.",

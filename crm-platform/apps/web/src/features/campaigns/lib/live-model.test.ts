@@ -93,4 +93,18 @@ describe('what is waiting', () => {
     expect(waiting({ queued: 0, processing: 0 })).toEqual([]);
     expect(waiting({ queued: null, processing: null })).toEqual([]);
   });
+
+  it('names the recipients held for the quiet hours after the queued ones (BL-177)', () => {
+    expect(waiting({ queued: 5, held: 2, processing: 0 })).toEqual([
+      ['queued', 5],
+      ['held', 2],
+    ]);
+    expect(waiting({ queued: 5, held: 0, processing: 0 })).toEqual([['queued', 5]]);
+  });
+
+  it('a live read brings the held count; the detail has none', () => {
+    const f = freshest(detail, 1_000, live({ held: 2 }), 2_000);
+    expect(f.held).toBe(2);
+    expect(freshest(detail, 1_000, undefined, 0).held).toBeNull();
+  });
 });

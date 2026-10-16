@@ -232,7 +232,9 @@
         "undone": "Stage change undone: back to {stage}.",
         "undoneToast": "Stage put back to {stage}.",
         "couldNotUndo": "This change cannot be undone any more: the contact moved on, or it was already undone."
-      }
+      },
+      "heldUntil": "Held until {when}",
+      "heldWhy": "This marketing message is waiting for your quiet hours to end. It is sent then, if the contact has not unsubscribed in the meantime."
     },
     "media": {
       "openImage": "Open image {name}",

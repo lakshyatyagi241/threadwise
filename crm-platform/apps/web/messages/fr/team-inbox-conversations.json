@@ -232,7 +232,9 @@
         "undone": "Changement d’étape annulé : retour à {stage}.",
         "undoneToast": "Étape rétablie sur {stage}.",
         "couldNotUndo": "Ce changement ne peut plus être annulé : le contact a avancé ou il a déjà été annulé."
-      }
+      },
+      "heldUntil": "Retenu jusqu’à {when}",
+      "heldWhy": "Ce message marketing attend la fin de vos heures de silence. Il sera envoyé à ce moment-là, si le contact ne s’est pas désabonné entre-temps."
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",

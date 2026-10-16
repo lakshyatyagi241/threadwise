@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Ruhezeiten und Anruffenster werden noch nicht durchgesetzt",
+          "title": "Ruhezeiten und Anruffenster werden durchgesetzt",
           "detail": {
-            "notEnforced": "Ihre Ruhezeiten und Ihr Anruffenster sind gespeichert, aber noch hält nichts eine Nachricht außerhalb davon zurück oder blockiert einen Anruf. Planen Sie selbst entsprechend."
+            "enforced": "Marketing-Nachrichten in Ihren Ruhezeiten werden bis zu deren Ende zurückgehalten, und ein Anruf außerhalb Ihres Anruffensters wird mit Angabe der Öffnungszeit abgelehnt. Antworten innerhalb des 24-Stunden-Fensters und Service-Benachrichtigungen werden nie zurückgehalten. Das DND-Register ist nur ein Vermerk: Es wird noch nichts dagegen geprüft."
           }
         }
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Diese Einstellungen sind gespeichert, aber noch nicht durchgesetzt. Eine Nachricht wird nicht zurückgehalten und ein Anruf nicht blockiert, wenn er außerhalb der festgelegten Zeiten liegt. Planen Sie Ihren Versand und Ihre Anrufe entsprechend.",
-      "intro": "Manche Regeln beschränken, wann Marketingnachrichten und -anrufe Personen erreichen dürfen. Halten Sie hier die Zeiten fest, zu denen Sie arbeiten.",
+      "intro": "Manche Regeln beschränken, wann Marketing-Nachrichten und Anrufe Personen erreichen dürfen. Legen Sie hier Ihre Zeiten fest: Eine Marketing-Nachricht, die in den Ruhezeiten gesendet wird, wartet und geht nach deren Ende raus, und außerhalb des Anruffensters wird kein Anruf getätigt.",
       "quiet": {
         "title": "Ruhezeiten für Nachrichten",
-        "hint": "Zeiten, in denen Marketingnachrichten Personen nicht erreichen sollen. Der Zeitraum kann über Mitternacht gehen.",
+        "hint": "Zeiten, in denen keine Marketing-Nachrichten rausgehen. Sie warten und werden nach Ende der Zeiten gesendet. Der Zeitraum darf über Mitternacht hinausgehen.",
         "enabled": "Ruhezeiten aktiv",
         "start": "Ruhe ab",
         "end": "Ruhe bis"
       },
       "calling": {
         "title": "Anruffenster",
-        "hint": "Die einzigen Zeiten, zu denen Marketinganrufe erfolgen sollen, an den von Ihnen gewählten Tagen.",
+        "hint": "Die einzigen Zeiten, in denen Marketing-Anrufe getätigt werden, an den gewählten Tagen. Ein Anruf außerhalb wird abgelehnt und nennt, wann das Fenster öffnet.",
         "enabled": "Anruffenster aktiv",
         "start": "Anrufe ab",
         "end": "Anrufe bis",
@@ -407,8 +406,8 @@
       },
       "suggested": "Die von Ihnen aktivierten Gesetze legen {start} bis {end} nahe.",
       "zone": {
-        "label": "Zeitzone",
-        "hint": "Die Zeiten werden in dieser Zone gelesen. Die Zone Ihres Arbeitsbereichs ist {zone}.",
+        "label": "Ersatz-Zeitzone",
+        "hint": "Die Zeiten werden auf der Uhr des jeweiligen Kontakts gelesen: nach seiner Zeitzonen-Eigenschaft, sonst nach der Landesvorwahl seiner Nummer. Diese Zone gilt, wenn beides unbekannt ist. Die Zeitzone Ihres Arbeitsbereichs ist {zone}.",
         "workspace": "Zeitzone des Arbeitsbereichs ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Ihre eigene Liste"
         },
         "note": "Dies ist nur ein Hinweis. Es wird noch nichts gegen ein Register geprüft."
-      }
+      },
+      "enforcedNote": "Ruhezeiten halten eine Marketing-Nachricht zurück, bis sie enden, und das Anruffenster lehnt einen Anruf außerhalb davon ab. Es gilt die Uhr des jeweiligen Kontakts. Antworten innerhalb des 24-Stunden-Fensters und Service-Benachrichtigungen werden nie zurückgehalten."
     },
     "subprocessors": {
       "intro": "Die Dienstleister, die für Ihren Arbeitsbereich personenbezogene Daten verarbeiten: was sie tun, welche Daten sie erhalten und wo. Sie können die Liste auf einer öffentlichen Seite veröffentlichen.",
@@ -487,6 +487,10 @@
       "privacy": "Datenschutzerklärung",
       "terms": "Nutzungsbedingungen",
       "notFound": "Seite nicht gefunden"
+    },
+    "hold": {
+      "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)",
+      "heldCount": "{count} wegen der Ruhezeiten zurückgehalten"
     }
   }
 }

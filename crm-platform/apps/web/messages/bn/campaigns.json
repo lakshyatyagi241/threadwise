@@ -864,7 +864,8 @@
         "clicked": "ক্লিক হয়েছে",
         "showing": "{total}-এর মধ্যে {shown}টি দেখানো হচ্ছে",
         "prev": "আগের পেজ",
-        "next": "পরের পেজ"
+        "next": "পরের পেজ",
+        "heldUntil": "{when} পর্যন্ত আটকে রাখা হয়েছে (নীরব সময়)"
       },
       "engagement": {
         "opened": "খোলা হয়েছে",
@@ -1032,7 +1033,8 @@
         "badge": "লাইভ",
         "updated": "আপডেট {time}",
         "queued": "{count}টি পাঠানোর অপেক্ষায়",
-        "processing": "{count}টি এখন পাঠানো হচ্ছে"
+        "processing": "{count}টি এখন পাঠানো হচ্ছে",
+        "held": "{count} নীরব সময়ের কারণে আটকে আছে"
       },
       "statistics": {
         "loadFailed": "পরিসংখ্যান লোড করা যায়নি।",

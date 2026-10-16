@@ -864,7 +864,8 @@
         "clicked": "tıklandı",
         "showing": "{total} içinden {shown} gösteriliyor",
         "prev": "Önceki sayfa",
-        "next": "Sonraki sayfa"
+        "next": "Sonraki sayfa",
+        "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
       },
       "engagement": {
         "opened": "Açıldı",
@@ -1032,7 +1033,8 @@
         "badge": "Canlı",
         "updated": "güncellendi {time}",
         "queued": "{count} gönderim bekliyor",
-        "processing": "{count} şu anda gönderiliyor"
+        "processing": "{count} şu anda gönderiliyor",
+        "held": "{count} kişi sessiz saatler nedeniyle bekletiliyor"
       },
       "statistics": {
         "loadFailed": "İstatistikler yüklenemedi.",

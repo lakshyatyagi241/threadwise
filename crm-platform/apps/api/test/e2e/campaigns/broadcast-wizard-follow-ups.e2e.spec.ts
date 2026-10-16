@@ -354,6 +354,52 @@ describe('"not read" and "not replied": wait, then check', () => {
   });
 });
 
+describe('BL-177: a follow-up is deferred, not skipped, in the quiet hours', () => {
+  /** HH:MM on the clock of India, where the sandbox's +91 numbers are read. */
+  const ist = (d: Date) =>
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).format(d);
+
+  it('holds a marketing follow-up that falls inside the quiet hours and sends it when they end', async () => {
+    const c = await launch('fu-quiet', ['Asha'], async (w) => [
+      {
+        trigger: 'not_replied',
+        waitMinutes: 60,
+        action: { kind: 'template', templateId: (await secondTemplate(w)).uuid },
+      },
+    ]);
+    // Quiet from 30 minutes after the campaign went out until three hours after it: the follow-up (at 60 minutes) falls inside.
+    const from = new Date(c.start.getTime() + 30 * MIN);
+    const until = new Date(c.start.getTime() + 180 * MIN);
+    await owner().query(
+      `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, $2, $3)`,
+      [c.orgId, ist(from), ist(until)],
+    );
+
+    after(c, 61);
+    await lab.followUps.tick();
+    expect(lab.sent).toHaveLength(0);
+    // Not skipped and not failed: the step is still waiting, to be looked at again when the hours end.
+    expect(await attempts(c)).toEqual([]);
+    expect((await chain(c)).Asha).toEqual({ state: 'active', next: 1 });
+    const due = (
+      await owner().query(`SELECT follow_up_check_at FROM wp_campaign_contacts WHERE id = $1`, [
+        c.who.Asha!.recipientId,
+      ])
+    ).rows[0].follow_up_check_at as Date;
+    expect(Math.abs(due.getTime() - until.getTime())).toBeLessThan(60_000);
+
+    after(c, 181);
+    await lab.followUps.tick();
+    expect(lab.sent).toHaveLength(1);
+    expect((await attempts(c)).map((a) => [a.name, a.outcome])).toEqual([['Asha', 'sent']]);
+  });
+});
+
 describe('"replied" and "read": watch, fire at once, or run out', () => {
   it('fires on the first look after the reply, well before the watch time ends', async () => {
     const c = await launch('fu-replied', ['Asha', 'Binod'], async (w) => [

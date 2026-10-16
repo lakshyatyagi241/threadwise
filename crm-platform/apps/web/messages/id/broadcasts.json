@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Dijeda: batas pengiriman harian tercapai. Akan lanjut otomatis setelah {when}.",
         "halt": "Dijeda: pengiriman dihentikan untuk workspace ini. Akan lanjut saat penghentian dicabut.",
-        "manual": "Dijeda."
+        "manual": "Dijeda.",
+        "quiet_hours": "Dijeda: sebagian penerima sedang dalam jam tenang. Akan berlanjut sendiri setelah {when}."
       },
       "delete": "Hapus",
       "deleteTitle": "Hapus broadcast?",
@@ -145,7 +146,8 @@
         "queued": "Dalam antrean",
         "queuedHint": "menunggu dikirim",
         "failed": "Gagal",
-        "failedPct": "{pct}% tingkat kegagalan"
+        "failedPct": "{pct}% tingkat kegagalan",
+        "queuedHeld": "{count} ditahan karena jam tenang"
       },
       "tab": {
         "overview": "Ringkasan",
@@ -193,7 +195,8 @@
         "lastClick": "Klik terakhir: {when}",
         "empty": "Tidak ada penerima terlampir.",
         "more": "Muat lebih banyak",
-        "loading": "Memuat"
+        "loading": "Memuat",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "failures": {
         "kicker": "Alasan kegagalan",
