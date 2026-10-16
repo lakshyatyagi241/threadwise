@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Hear that a call placed from the app has started and ended (no call log, no numbers: only the phone's state). -->
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <!-- The contact card over the phone's call screen, and bringing the app back when the call ends. -->
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+  <application>
+    <service
+      android:name=".CallMonitorService"
+      android:exported="false"
+      android:foregroundServiceType="specialUse">
+      <property
+        android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+        android:value="Watches the phone's call state while a call placed from the app is on, to show the contact on the call screen and offer to log the call afterwards" />
+    </service>
+  </application>
+</manifest>

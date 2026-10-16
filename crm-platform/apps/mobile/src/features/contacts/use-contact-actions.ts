@@ -57,7 +57,13 @@ export function useContactActions(
       icon: 'call-outline',
       label: t('contacts.detail.actions.call'),
       disabled: !phone,
-      onPress: () => void placeCall(phone ?? ''),
+      onPress: () =>
+        void placeCall(phone ?? '', {
+          // Only people who may update contacts can log the call afterwards.
+          contactId: can(session.data, 'record.contacts.update') ? contact.id : null,
+          name: contact.name ?? phone ?? '',
+          phone: phone ?? '',
+        }),
     },
     {
       key: 'chat',

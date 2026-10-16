@@ -3,6 +3,7 @@ import { placeCall } from '@/lib/device/call';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { can, useSession } from '@/lib/session/use-session';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Icon, type IconName } from '@/components/ui/icon';
@@ -52,6 +53,8 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
   // The device's own dialer, not WhatsApp Business Calling (that needs a WebRTC peer this app does not have yet):
   // the same shortcut the contact and chat-details screens already give, one tap earlier.
   const phone = conversation?.contactSummary?.phone ?? null;
+  // Only people who may update contacts can log the call afterwards.
+  const canLog = can(useSession().data, 'record.contacts.update');
 
   return (
     <ScreenHeader
@@ -67,7 +70,13 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
               <HeaderIconButton
                 icon="call-outline"
                 label={t('inbox.thread.call', { phone })}
-                onPress={() => void placeCall(phone)}
+                onPress={() =>
+                  void placeCall(phone, {
+                    contactId: canLog ? (conversation?.contactSummary?.id ?? null) : null,
+                    name: conversation?.contactSummary?.name ?? conversation?.title ?? phone,
+                    phone,
+                  })
+                }
                 testID="thread-call-button"
               />
             ) : null}

@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { useCallReturn } from '@/features/contacts/use-call-return';
 import { ThemeSync } from '@/features/menu/theme-sync';
 
 /**
@@ -9,10 +10,17 @@ export const unstable_settings = { anchor: '(tabs)' };
 
 /** The signed-in app: the four tabs, with the thread and contact screens on top of them. */
 export default function AppLayout() {
+  useCallReturn();
   return (
     <>
       <ThemeSync />
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        {/* The "log this call" sheet slides up over whatever is on screen, so the person is not taken away from it. */}
+        <Stack.Screen
+          name="call-summary"
+          options={{ presentation: 'transparentModal', animation: 'slide_from_bottom' }}
+        />
+      </Stack>
     </>
   );
 }

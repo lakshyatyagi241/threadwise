@@ -29,9 +29,9 @@ afterEach(() => {
 });
 
 describe('offeredPermissions', () => {
-  it('offers notifications, calls and camera on Android', () => {
+  it('offers notifications, calls, camera and the call pop-up on Android', () => {
     onPlatform('android');
-    expect(offeredPermissions()).toEqual(['notifications', 'calls', 'camera']);
+    expect(offeredPermissions()).toEqual(['notifications', 'calls', 'camera', 'callPopup']);
   });
 
   it('offers no calls on iOS, which has no call permission', () => {

@@ -158,7 +158,15 @@ export function ConversationDetailsScreen() {
                 <Button
                   variant="secondary"
                   label={t('inbox.details.call')}
-                  onPress={() => void placeCall(phone)}
+                  onPress={() =>
+                    void placeCall(phone, {
+                      contactId: can(session.data, 'record.contacts.update')
+                        ? (contact?.id ?? null)
+                        : null,
+                      name,
+                      phone,
+                    })
+                  }
                 />
               </View>
             ) : null}

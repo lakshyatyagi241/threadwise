@@ -1398,7 +1398,8 @@
     "names": {
       "notifications": "Notifications",
       "calls": "Phone calls",
-      "camera": "Camera"
+      "camera": "Camera",
+      "callPopup": "Call pop-up (display over other apps)"
     },
     "guide": {
       "title": "Turn on permissions",
@@ -1407,6 +1408,39 @@
       "notifications": "Notifications are off. Next, switch them on.",
       "android": "Switched off: {{list}}. Next, tap Permissions, pick each one and choose Allow.",
       "ios": "Switched off: {{list}}. Next, switch each one on."
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Contact",
+      "close": "Close",
+      "ongoingTitle": "Call in progress",
+      "endedTitle": "Call ended",
+      "endedText": "Tap to log your call with {{name}}.",
+      "channelOngoing": "Calls in progress",
+      "channelEnded": "Call summaries"
+    },
+    "summary": {
+      "title": "Log call",
+      "contact": "Contact",
+      "type": "Call type",
+      "outbound": "Outbound",
+      "status": "Call status",
+      "completed": "Completed",
+      "notAnswered": "Not answered",
+      "startTime": "Call start time",
+      "duration": "Call duration",
+      "durationHint": "Minutes and seconds, for example 02:30",
+      "durationInvalid": "Enter the length as minutes:seconds, for example 02:30.",
+      "subject": "Subject",
+      "subjectDefault": "Outgoing call to {{name}}",
+      "subjectInvalid": "Enter a subject of up to 255 characters.",
+      "notes": "Notes",
+      "notesPlaceholder": "What was discussed?",
+      "save": "Save call",
+      "skip": "Skip",
+      "contactMissing": "This call has no contact to log it on.",
+      "denied": "Your role can't change contacts, so this call can't be logged."
     }
   }
 }

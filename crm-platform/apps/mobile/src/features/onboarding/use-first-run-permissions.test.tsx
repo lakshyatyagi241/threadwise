@@ -7,7 +7,7 @@ jest.mock('@/lib/device/permissions');
 
 const ask = jest.mocked(askForPermissions);
 const store = (SecureStore as unknown as { __store: Map<string, string> }).__store;
-const KEY = 'crm.permissions-asked.v1';
+const KEY = 'crm.permissions-asked.v2';
 
 beforeEach(() => {
   jest.clearAllMocks();

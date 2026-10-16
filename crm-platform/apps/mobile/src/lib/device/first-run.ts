@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store';
  * lives in the same keychain-backed store as everything else the app keeps on the phone, so the app has one place for local state.
  * Changing the key (`.v2`) makes the app ask once more, for example after a new permission is added.
  */
-const KEY = 'crm.permissions-asked.v1';
+const KEY = 'crm.permissions-asked.v2';
 
 export async function hasAskedForPermissions(): Promise<boolean> {
   return (await SecureStore.getItemAsync(KEY)) === '1';
