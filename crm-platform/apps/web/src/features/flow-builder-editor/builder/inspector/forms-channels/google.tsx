@@ -157,7 +157,7 @@ export const GoogleSheetsForm: FormComponent = (p) => {
             <Check checked={byHeader} onChange={(v) => p.set('matchByHeader', v)}>
               {t('matchByHeader')}
             </Check>
-            <div className="ml-6 text-[10.5px] text-muted-foreground">{t('matchByHeaderHint')}</div>
+            <div className="ms-6 text-[10.5px] text-muted-foreground">{t('matchByHeaderHint')}</div>
           </div>
         </>
       )}

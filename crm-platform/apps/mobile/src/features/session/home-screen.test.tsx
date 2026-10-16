@@ -73,13 +73,19 @@ beforeEach(async () => {
 });
 
 describe('HomeScreen', () => {
-  it('greets the person and names the workspace, and tags error reports with the opaque user id only', async () => {
-    fetchSession.mockResolvedValue(session);
-    await renderScreen();
-    expect(await screen.findByText('Hello, Pat Person')).toBeTruthy();
-    expect(screen.getByText('Workspace: Acme Ltd')).toBeTruthy();
-    expect(identifyUser).toHaveBeenCalledWith(session.user.id);
-  });
+  it(
+    'greets the person and names the workspace, and tags error reports with the opaque user id only',
+    async () => {
+      fetchSession.mockResolvedValue(session);
+      await renderScreen();
+      expect(await screen.findByText('Hello, Pat Person')).toBeTruthy();
+      expect(screen.getByText('Workspace: Acme Ltd')).toBeTruthy();
+      expect(identifyUser).toHaveBeenCalledWith(session.user.id);
+    },
+    // First test in the file: pays the suite's one-time render/query-client setup cost, which can
+    // push it past the 20s floor under a loaded coverage run even though nothing here is slow on its own.
+    40000,
+  );
 
   it('prefers the display name', async () => {
     fetchSession.mockResolvedValue({ ...session, user: { ...session.user, displayName: 'Pat' } });

@@ -506,7 +506,7 @@ export function FlowsScreen() {
             <div className="relative w-full sm:w-auto">
               <svg
                 viewBox="0 0 16 16"
-                className="absolute top-1/2 left-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                className="absolute top-1/2 start-3 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
@@ -520,7 +520,7 @@ export function FlowsScreen() {
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchLabel')}
-                className="w-full rounded-full border border-border bg-background py-1.5 pr-3 pl-9 text-[12px] outline-none focus:border-brand sm:w-64"
+                className="w-full rounded-full border border-border bg-background py-1.5 pe-3 ps-9 text-[12px] outline-none focus:border-brand sm:w-64"
               />
             </div>
           </div>
@@ -788,7 +788,7 @@ function BuilderPicker({
   const t = useTranslations('flb.list.builder');
   return (
     <label
-      className="flex items-center gap-2 rounded-full border border-border bg-background py-1.5 pr-2 pl-4 text-[12px] font-medium"
+      className="flex items-center gap-2 rounded-full border border-border bg-background py-1.5 pe-2 ps-4 text-[12px] font-medium"
       title={t('title')}
     >
       {t('label')}
@@ -834,7 +834,7 @@ function CreateSheet({
       type="button"
       onClick={() => go(href)}
       data-channel={channel}
-      className="group flex w-full items-center gap-3 rounded-xl border border-border p-3 text-left transition hover:border-brand hover:bg-muted"
+      className="group flex w-full items-center gap-3 rounded-xl border border-border p-3 text-start transition hover:border-brand hover:bg-muted"
     >
       <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${bg}`}>
         <Svg d={icon} className="h-5 w-5 text-brand" />
@@ -845,7 +845,7 @@ function CreateSheet({
       </span>
       <Svg
         d="M6 3l5 5-5 5"
-        className="ml-auto h-4 w-4 shrink-0 text-muted-foreground group-hover:text-brand"
+        className="ms-auto h-4 w-4 shrink-0 text-muted-foreground group-hover:text-brand"
       />
     </button>
   );

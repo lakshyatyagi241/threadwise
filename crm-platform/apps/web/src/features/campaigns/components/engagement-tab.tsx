@@ -37,7 +37,7 @@ export function EngagementTab({ d }: { d: CampaignDetail }) {
             <ul className="divide-y divide-border text-[13px]">
               {d.buttonRows.map((b, i) => (
                 <li key={`${b.label}-${i}`} className="flex items-center justify-between py-2">
-                  <span className="truncate pr-3">{b.label}</span>
+                  <span className="truncate pe-3">{b.label}</span>
                   {b.trackable ? (
                     <span className="tabular-nums text-muted-foreground">
                       {t('clicks', { count: b.count ?? 0 })} · {b.pct}%
@@ -65,7 +65,7 @@ export function EngagementTab({ d }: { d: CampaignDetail }) {
                 label={t('topSegments')}
               />
               <table className="mt-4 w-full text-[12.5px]">
-                <thead className="text-left text-muted-foreground">
+                <thead className="text-start text-muted-foreground">
                   <tr>
                     <th className="py-1 font-medium">{t('group')}</th>
                     <th className="py-1 font-medium">{t('recipients')}</th>

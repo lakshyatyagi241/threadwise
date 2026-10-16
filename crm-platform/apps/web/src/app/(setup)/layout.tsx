@@ -18,8 +18,8 @@ export default function SetupLayout({ children }: { children: ReactNode }) {
         @keyframes wiz-card-in { from { opacity: 0; transform: translateY(10px) scale(.99); } to { opacity: 1; transform: none; } }
         @keyframes wiz-step-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
       `}</style>
-      <div className="pointer-events-none absolute -left-24 -top-32 size-[28rem] rounded-full bg-primary/20 blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-32 -right-24 size-[28rem] rounded-full bg-brand/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -start-24 -top-32 size-[28rem] rounded-full bg-primary/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-32 -end-24 size-[28rem] rounded-full bg-brand/20 blur-[120px]" />
       {children}
     </main>
   );

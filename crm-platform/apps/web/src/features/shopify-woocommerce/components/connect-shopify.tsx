@@ -144,7 +144,7 @@ export function ConnectShopify({ overview }: { overview: StoreOverview }) {
                       placeholder={t('urlPlaceholder')}
                       className="flex-1 bg-transparent px-3 py-2.5 font-mono text-[13px] outline-none"
                     />
-                    <span className="flex items-center border-l border-border bg-muted px-3 font-mono text-[12.5px] text-muted-foreground">
+                    <span className="flex items-center border-s border-border bg-muted px-3 font-mono text-[12.5px] text-muted-foreground">
                       {t('urlSuffix')}
                     </span>
                   </div>
@@ -165,7 +165,7 @@ export function ConnectShopify({ overview }: { overview: StoreOverview }) {
                   <button
                     type="submit"
                     disabled={busy || shop.trim() === ''}
-                    className={`${primaryButton} ml-auto`}
+                    className={`${primaryButton} ms-auto`}
                   >
                     <SendIcon className="size-3.5" />
                     {busy ? t('continuing') : t('continue')}

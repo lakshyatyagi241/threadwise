@@ -147,7 +147,7 @@ export function Testimonials({ ctx, def }: P) {
                   />
                   <T ctx={ctx} k={k('feat_role')} as="div" className="text-[12px] text-ink-500" />
                 </div>
-                <div className="text-right">
+                <div className="text-end">
                   <T
                     ctx={ctx}
                     k={k('feat_stat')}

@@ -324,7 +324,7 @@ export const Th = ({
     scope="col"
     className={cn(
       'px-3 py-2.5 text-xs font-medium text-muted-foreground first:ps-4',
-      align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left',
+      align === 'right' ? 'text-end' : align === 'center' ? 'text-center' : 'text-start',
       className,
     )}
   >

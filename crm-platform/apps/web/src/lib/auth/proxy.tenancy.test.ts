@@ -118,4 +118,15 @@ describe('the API proxy carries the credential, never a tenant chosen by the bro
     expect(res.status).toBe(404);
     expect(upstreamCalls).toHaveLength(0);
   });
+
+  it("never relays the three-step signup flow's account-creating endpoint either", async () => {
+    jar.set('crm_at', 'COOKIE-TOKEN');
+    const res = await proxyRequest(
+      browserRequest({}, 'POST'),
+      ['auth', 'signup', 'set-password'],
+      'user',
+    );
+    expect(res.status).toBe(404);
+    expect(upstreamCalls).toHaveLength(0);
+  });
 });

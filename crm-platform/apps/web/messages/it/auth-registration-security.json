@@ -193,6 +193,7 @@
         "signupClosed": "La registrazione è chiusa. Chiedi un invito a un amministratore.",
         "slugTaken": "L'indirizzo del workspace è già in uso.",
         "emailTaken": "Questa email è già utilizzata in questo workspace.",
+        "identityExists": "Esiste già un account con questa email o questo numero di telefono.",
         "passwordPolicy": "La password non rispetta la politica di sicurezza:",
         "tokenInvalid": "Questo link non è valido o è scaduto.",
         "emailUnverified": "Conferma prima il tuo indirizzo email.",
@@ -361,7 +362,9 @@
         "resendIn": "Invia di nuovo il codice tra {time}",
         "resending": "Invio in corso",
         "resent": "Un nuovo codice è in arrivo sul tuo WhatsApp.",
+        "resentEmail": "Un nuovo codice è in arrivo alla tua email.",
         "wrongNumber": "Numero sbagliato?",
+        "wrongEmail": "Email sbagliata?",
         "goBack": "Torna indietro",
         "addressTakenHint": "L'indirizzo del workspace è stato preso mentre eseguivi la verifica. Scegline un altro e ti invieremo un nuovo codice.",
         "chooseAnotherAddress": "Scegli un altro indirizzo"

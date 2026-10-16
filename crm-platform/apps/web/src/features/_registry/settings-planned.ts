@@ -23,7 +23,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Channels (these were the menu's Channels group)
   tile('channels', 'channels', '/channels', 'channels', 0),
   tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50),
-  tile('channels', 'wa-links', '/wa-links', 'link', 110),
 
   // Automation and AI
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),

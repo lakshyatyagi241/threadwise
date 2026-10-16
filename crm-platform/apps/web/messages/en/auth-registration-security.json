@@ -193,6 +193,7 @@
         "signupClosed": "Registration is closed. Ask an administrator for an invitation.",
         "slugTaken": "That workspace address is already taken.",
         "emailTaken": "That email is already used in this workspace.",
+        "identityExists": "An account with this email or phone already exists.",
         "passwordPolicy": "That password does not meet the security policy:",
         "tokenInvalid": "This link is invalid or has expired.",
         "emailUnverified": "Confirm your email address first.",
@@ -364,7 +365,9 @@
         "resendIn": "Resend code in {time}",
         "resending": "Sending",
         "resent": "A new code is on its way to your WhatsApp.",
+        "resentEmail": "A new code is on its way to your email.",
         "wrongNumber": "Wrong number?",
+        "wrongEmail": "Wrong email?",
         "goBack": "Go back",
         "addressTakenHint": "That workspace address was taken while you were verifying. Choose another one and we will send you a new code.",
         "chooseAnotherAddress": "Choose another address"

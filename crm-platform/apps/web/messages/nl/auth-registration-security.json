@@ -193,6 +193,7 @@
         "signupClosed": "Registratie is gesloten. Vraag een beheerder om een uitnodiging.",
         "slugTaken": "Dat workspaceadres is al in gebruik.",
         "emailTaken": "Dat e-mailadres wordt al gebruikt in deze workspace.",
+        "identityExists": "Er bestaat al een account met dit e-mailadres of telefoonnummer.",
         "passwordPolicy": "Dat wachtwoord voldoet niet aan het beveiligingsbeleid:",
         "tokenInvalid": "Deze link is ongeldig of verlopen.",
         "emailUnverified": "Bevestig eerst je e-mailadres.",
@@ -364,7 +365,9 @@
         "resendIn": "Code opnieuw versturen over {time}",
         "resending": "Versturen",
         "resent": "Er is een nieuwe code onderweg naar je WhatsApp.",
+        "resentEmail": "Een nieuwe code is onderweg naar je e-mail.",
         "wrongNumber": "Verkeerd nummer?",
+        "wrongEmail": "Verkeerd e-mailadres?",
         "goBack": "Terug",
         "addressTakenHint": "Dat workspaceadres is bezet geraakt terwijl je verifieerde. Kies een ander adres, dan sturen we je een nieuwe code.",
         "chooseAnotherAddress": "Kies een ander adres"

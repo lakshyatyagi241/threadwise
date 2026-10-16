@@ -209,7 +209,7 @@ export function ValidationPopup({
             <div className="text-[13.5px] font-semibold">
               {t('cantSave', { count: items.length })}
             </div>
-            <ul className="mt-1 list-disc space-y-0.5 pl-4 text-[12px] text-[var(--flb-ink-600)]">
+            <ul className="mt-1 list-disc space-y-0.5 ps-4 text-[12px] text-[var(--flb-ink-600)]">
               {items.slice(0, 6).map((m, i) => (
                 <li key={i}>{m}</li>
               ))}
@@ -280,7 +280,7 @@ export function InspectorPanel({
   if (!node) {
     return (
       <aside
-        className="ins-panel z-20 flex w-[360px] shrink-0 flex-col border-l border-border bg-background"
+        className="ins-panel z-20 flex w-[360px] shrink-0 flex-col border-s border-border bg-background"
         aria-label={t('inspector')}
       >
         <div className="flex items-center justify-between gap-2 border-b border-border px-4 py-3">
@@ -337,7 +337,7 @@ export function InspectorPanel({
   const data: FlbNodeData = node.data ?? {};
   return (
     <aside
-      className="ins-panel z-20 flex w-[360px] shrink-0 flex-col border-l border-border bg-background"
+      className="ins-panel z-20 flex w-[360px] shrink-0 flex-col border-s border-border bg-background"
       aria-label={t('inspector')}
       data-testid="inspector"
     >

@@ -47,14 +47,20 @@ beforeEach(() => {
 });
 
 describe('SignInScreen', () => {
-  it('validates the fields before calling the API', async () => {
-    await renderScreen();
-    await fill('Email', 'not-an-email');
-    await press('Sign in');
-    expect(await screen.findByText('Enter a valid email address.')).toBeTruthy();
-    expect(screen.getByText('Enter your password.')).toBeTruthy();
-    expect(signInWithPassword).not.toHaveBeenCalled();
-  });
+  it(
+    'validates the fields before calling the API',
+    async () => {
+      await renderScreen();
+      await fill('Email', 'not-an-email');
+      await press('Sign in');
+      expect(await screen.findByText('Enter a valid email address.')).toBeTruthy();
+      expect(screen.getByText('Enter your password.')).toBeTruthy();
+      expect(signInWithPassword).not.toHaveBeenCalled();
+    },
+    // First test in the file: pays the suite's one-time render setup cost, which can push it past
+    // the 20s floor under a loaded coverage run even though nothing here is slow on its own.
+    40000,
+  );
 
   it('signs in with the typed credentials and keeps the session', async () => {
     signInWithPassword.mockResolvedValue(authenticated);

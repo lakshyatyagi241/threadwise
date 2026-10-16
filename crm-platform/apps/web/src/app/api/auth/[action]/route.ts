@@ -35,6 +35,7 @@ const UPSTREAM: Record<string, string | ((body: Record<string, unknown>) => stri
   'login-workspace': '/v2/auth/login/workspace',
   signup: '/v2/auth/signup',
   'signup-otp': '/v2/auth/signup/verify-otp',
+  'signup-set-password': '/v2/auth/signup/set-password',
   switch: '/v2/auth/workspaces/switch',
   'accept-invite': '/v2/workspace/invitations/accept',
   'social-callback': (b) =>
@@ -106,7 +107,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
   void _provider;
   // A sign-up that left the referral box empty still counts the link that brought the visitor here.
   const outgoing =
-    action === 'signup' || action === 'social-callback'
+    action === 'signup' || action === 'social-callback' || action === 'signup-set-password'
       ? withReferralFallback(payload, store.get(REFERRAL_COOKIE)?.value)
       : payload;
 
@@ -150,7 +151,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
     });
     setSessionCookies(store, json.tokens as never, { remember });
     // The account exists now, so the referral link has done its job (Reference forgets it at the same point).
-    if ((action === 'signup' || action === 'signup-otp') && store.get(REFERRAL_COOKIE)) {
+    if (
+      (action === 'signup' || action === 'signup-otp' || action === 'signup-set-password') &&
+      store.get(REFERRAL_COOKIE)
+    ) {
       store.delete(REFERRAL_COOKIE);
     }
     // Remember which workspace this browser signs in to (not a credential).

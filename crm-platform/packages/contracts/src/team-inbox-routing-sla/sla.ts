@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { conversationPrioritySchema } from '../chat-conversations/enums';
 import { uuidSchema } from '../common/ids';
 
 /**

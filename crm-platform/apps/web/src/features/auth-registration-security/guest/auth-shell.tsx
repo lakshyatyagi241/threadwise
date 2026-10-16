@@ -548,11 +548,11 @@ function GetaSplit({
     >
       <span
         aria-hidden="true"
-        className="auth-geta-blob auth-geta-blob--slow -left-40 -top-40 size-[500px] bg-violet-300/30 blur-[120px]"
+        className="auth-geta-blob auth-geta-blob--slow -start-40 -top-40 size-[500px] bg-violet-300/30 blur-[120px]"
       />
       <span
         aria-hidden="true"
-        className="auth-geta-blob -bottom-40 -right-40 size-[500px] bg-indigo-300/30 blur-[120px]"
+        className="auth-geta-blob -bottom-40 -end-40 size-[500px] bg-indigo-300/30 blur-[120px]"
       />
       <div className="auth-geta-card relative flex w-full max-w-7xl overflow-hidden rounded-3xl shadow-2xl lg:max-h-[calc(100dvh-1.5rem)] lg:min-h-[min(770px,calc(100dvh-1.5rem))]">
         <main
@@ -580,16 +580,16 @@ function GetaSplit({
           <span aria-hidden="true" className="auth-geta-dots" />
           <span
             aria-hidden="true"
-            className="auth-geta-blob left-1/2 top-1/3 size-80 bg-(--auth-geta-primary)/15 blur-[80px]"
+            className="auth-geta-blob start-1/2 top-1/3 size-80 bg-(--auth-geta-primary)/15 blur-[80px]"
           />
           <span
             aria-hidden="true"
-            className="auth-geta-blob auth-geta-blob--rev -right-24 top-1/4 size-80 bg-(--auth-geta-primary)/30 blur-[80px]"
+            className="auth-geta-blob auth-geta-blob--rev -end-24 top-1/4 size-80 bg-(--auth-geta-primary)/30 blur-[80px]"
           />
           <span aria-hidden="true" className="auth-geta-sheen" />
           <span
             aria-hidden="true"
-            className="auth-geta-orb auth-geta-orb--pulse -bottom-16 -right-16 size-72"
+            className="auth-geta-orb auth-geta-orb--pulse -bottom-16 -end-16 size-72"
           />
           <GetaSky />
           <GetaShapes />

@@ -28,7 +28,7 @@ export function CodeBlock({ text, copyLabel }: { text: string; copyLabel: string
         failedLabel={c('copyFailed')}
         className="absolute end-2 top-2 rounded-md bg-background/15 p-1.5 text-background hover:bg-background/30"
       />
-      <pre dir="ltr" className={cn(CODE, 'pe-12 text-left')}>
+      <pre dir="ltr" className={cn(CODE, 'pe-12 text-start')}>
         {text}
       </pre>
     </div>
@@ -93,7 +93,7 @@ export function Hero({ brand, baseUrl }: { brand: string; baseUrl: string }) {
         <div className="flex min-w-[260px] flex-1 items-center gap-2.5 rounded-lg bg-foreground px-3.5 py-2.5 text-background">
           <code
             dir="ltr"
-            className="flex-1 overflow-x-auto whitespace-nowrap text-left font-mono text-[12.5px]"
+            className="flex-1 overflow-x-auto whitespace-nowrap text-start font-mono text-[12.5px]"
           >
             {baseUrl}
           </code>

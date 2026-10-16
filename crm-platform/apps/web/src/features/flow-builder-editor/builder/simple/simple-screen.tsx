@@ -158,7 +158,7 @@ function SimpleInner({
         <div className="w-full max-w-lg rounded-2xl border border-border bg-background p-6">
           <h1 className="font-serif text-[22px]">{t('needsAdvanced.title')}</h1>
           <p className="mt-2 text-[13px] text-muted-foreground">{t('needsAdvanced.intro')}</p>
-          <ul className="mt-3 list-disc space-y-1 pl-5 text-[13px]">
+          <ul className="mt-3 list-disc space-y-1 ps-5 text-[13px]">
             {parsed.reasons.map((r) => (
               <li key={JSON.stringify(r)}>{m(r)}</li>
             ))}
@@ -594,7 +594,7 @@ function Editor({
             {status}
           </Badge>
           <Badge>{t('simpleBuilder')}</Badge>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ms-auto flex items-center gap-2">
             {found.length > 0 ? (
               <button
                 type="button"
@@ -689,7 +689,7 @@ function Editor({
                 {tCommon('dismiss')}
               </button>
             </div>
-            <ul className="list-disc space-y-0.5 pl-5">
+            <ul className="list-disc space-y-0.5 ps-5">
               {importFailed.map((r) => (
                 <li key={r}>{r}</li>
               ))}
@@ -708,7 +708,7 @@ function Editor({
                 {tCommon('dismiss')}
               </button>
             </div>
-            <ul className="list-disc space-y-0.5 pl-5 text-muted-foreground">
+            <ul className="list-disc space-y-0.5 ps-5 text-muted-foreground">
               {importNotes.map((r) => (
                 <li key={r}>{r}</li>
               ))}
@@ -719,12 +719,12 @@ function Editor({
         {showProblems && found.length > 0 ? (
           <div className="shrink-0 border-b border-warning/30 bg-warning/10 px-4 py-2 text-[12.5px]">
             <div className="mb-1 font-medium">{t('fixBeforePublishing')}</div>
-            <ul className="list-disc space-y-0.5 pl-5">
+            <ul className="list-disc space-y-0.5 ps-5">
               {found.map((p, i) => (
                 <li key={i}>
                   <button
                     type="button"
-                    className="text-left underline-offset-2 hover:underline"
+                    className="text-start underline-offset-2 hover:underline"
                     onClick={() => openStep(p.stepId)}
                   >
                     {m(p.message)}
@@ -747,12 +747,12 @@ function Editor({
                 {t('hide')}
               </button>
             </div>
-            <ul className="list-disc space-y-0.5 pl-5 text-muted-foreground">
+            <ul className="list-disc space-y-0.5 ps-5 text-muted-foreground">
               {notReached.map((p) => (
                 <li key={p.stepId}>
                   <button
                     type="button"
-                    className="text-left underline-offset-2 hover:underline"
+                    className="text-start underline-offset-2 hover:underline"
                     onClick={() => openStep(p.stepId)}
                   >
                     {p.message}
@@ -764,7 +764,7 @@ function Editor({
         ) : null}
 
         <div className={`flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
-          <aside className="hidden w-72 shrink-0 flex-col border-r border-border bg-background md:flex">
+          <aside className="hidden w-72 shrink-0 flex-col border-e border-border bg-background md:flex">
             <div className="flex items-center justify-between px-4 pt-3">
               <span className="text-[15px] font-semibold">{t('flows')}</span>
               <button
@@ -812,9 +812,9 @@ function Editor({
                         setGi(i);
                         setActiveId(null);
                       }}
-                      className="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left text-[13px]"
+                      className="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-start text-[13px]"
                     >
-                      <span className="w-5 shrink-0 text-right font-mono text-[12px] text-muted-foreground">
+                      <span className="w-5 shrink-0 text-end font-mono text-[12px] text-muted-foreground">
                         {i + 1}
                       </span>
                       <span className="min-w-0 flex-1 truncate">{groupText(g, tf)}</span>
@@ -847,7 +847,7 @@ function Editor({
                         <path d="M10.5 3.5v-.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h.5" />
                       </svg>
                     </button>
-                    <span className="w-6 shrink-0 text-right font-mono text-[12px] text-muted-foreground">
+                    <span className="w-6 shrink-0 text-end font-mono text-[12px] text-muted-foreground">
                       {String(g.steps).padStart(2, '0')}
                     </span>
                   </div>

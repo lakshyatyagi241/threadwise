@@ -193,6 +193,7 @@
         "signupClosed": "Die Registrierung ist geschlossen. Bitten Sie einen Administrator um eine Einladung.",
         "slugTaken": "Diese Workspace-Adresse ist bereits vergeben.",
         "emailTaken": "Diese E-Mail-Adresse wird in diesem Workspace bereits verwendet.",
+        "identityExists": "Für diese E-Mail-Adresse oder Telefonnummer besteht bereits ein Konto.",
         "passwordPolicy": "Das Passwort erfüllt die Sicherheitsrichtlinie nicht:",
         "tokenInvalid": "Dieser Link ist ungültig oder abgelaufen.",
         "emailUnverified": "Bestätigen Sie zuerst Ihre E-Mail-Adresse.",
@@ -364,7 +365,9 @@
         "resendIn": "Code erneut senden in {time}",
         "resending": "Wird gesendet",
         "resent": "Ein neuer Code ist auf dem Weg zu Ihrem WhatsApp.",
+        "resentEmail": "Ein neuer Code ist auf dem Weg zu deiner E-Mail-Adresse.",
         "wrongNumber": "Falsche Nummer?",
+        "wrongEmail": "Falsche E-Mail-Adresse?",
         "goBack": "Zurück",
         "addressTakenHint": "Diese Workspace-Adresse wurde vergeben, während Sie die Bestätigung durchgeführt haben. Wählen Sie eine andere, und wir senden Ihnen einen neuen Code.",
         "chooseAnotherAddress": "Andere Adresse wählen"

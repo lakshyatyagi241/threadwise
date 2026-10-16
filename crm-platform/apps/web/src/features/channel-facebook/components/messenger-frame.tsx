@@ -36,7 +36,7 @@ export function MessengerFrame({
           </div>
           <svg
             viewBox="0 0 16 16"
-            className="ml-auto size-4 shrink-0"
+            className="ms-auto size-4 shrink-0"
             fill={MESSENGER_BLUE}
             aria-hidden
           >

@@ -119,7 +119,7 @@ export function ContactChannels({ ctx, def }: P) {
             className={`${cardCls} relative overflow-hidden`}
           >
             {(ctx.edit || ctx.fc(k('ch2_badge')) !== '') && (
-              <div className="absolute right-5 top-5">
+              <div className="absolute end-5 top-5">
                 <span className="pill border border-wa-green/40 bg-wa-bubble text-wa-deep">
                   <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-wa-green" />
                   <T ctx={ctx} k={k('ch2_badge')} as="span" />
