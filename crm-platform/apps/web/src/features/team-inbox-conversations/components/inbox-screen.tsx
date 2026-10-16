@@ -553,7 +553,7 @@ export function InboxScreen() {
     <div className="space-y-2">
       <div
         data-testid="inbox-frame"
-        className="flex h-[calc(100dvh-7.5rem)] min-h-[30rem] overflow-hidden rounded-xl border border-border bg-background md:h-[calc(100dvh-9rem)]"
+        className="relative flex h-[calc(100dvh-7.5rem)] min-h-[30rem] overflow-hidden rounded-xl border border-border bg-background md:h-[calc(100dvh-9rem)]"
       >
         <aside
           aria-label={t('listRegion')}
@@ -679,7 +679,7 @@ export function InboxScreen() {
         {selectedId && isXl && inlineOpen && panel && (
           <aside
             aria-label={t('panelRegion')}
-            className="hidden min-h-0 w-80 shrink-0 overflow-y-auto border-s border-border xl:block thin-scrollbar"
+            className="relative hidden min-h-0 w-80 shrink-0 overflow-y-auto border-s border-border xl:block thin-scrollbar"
           >
             {panel}
           </aside>
