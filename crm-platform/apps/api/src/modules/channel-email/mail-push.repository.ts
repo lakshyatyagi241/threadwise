@@ -42,13 +42,22 @@ export class MailPushRepository {
     return (res.rows as Raw[]).map(toPush);
   }
 
-  /** Every Google mailbox that has a push registration or could get one (connected), for the renewal sweep. */
-  async pushCandidates(tx: Tx): Promise<PushMailbox[]> {
+  /** Every mailbox of `provider` that has a push registration or could get one (connected), for the renewal sweep. */
+  async pushCandidates(tx: Tx, provider: 'google' | 'microsoft' = 'google'): Promise<PushMailbox[]> {
     const res = await tx.execute(sql`
       SELECT org_id, uuid, status, sync_cursor, push_state FROM mail_mailboxes
-       WHERE provider = 'google' AND (push_state IS NOT NULL OR status = 'connected')
+       WHERE provider = ${provider} AND (push_state IS NOT NULL OR status = 'connected')
        ORDER BY org_id, id`);
     return (res.rows as Raw[]).map(toPush);
+  }
+
+  /** One mailbox by the workspace and uuid a verified Graph notification names (its signed `clientState`), or undefined. */
+  async microsoftByUuid(tx: Tx, orgId: number, uuid: string): Promise<PushMailbox | undefined> {
+    const res = await tx.execute(sql`
+      SELECT org_id, uuid, status, sync_cursor, push_state FROM mail_mailboxes
+       WHERE provider = 'microsoft' AND org_id = ${orgId} AND uuid = ${uuid}::uuid`);
+    const row = (res.rows as Raw[])[0];
+    return row ? toPush(row) : undefined;
   }
 
   /** Mailboxes with a live push registration that were synced within `minutes`: the polling sweep leaves them alone until the window passes. */

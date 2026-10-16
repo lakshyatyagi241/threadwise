@@ -91,6 +91,7 @@
     "GET /v2/public/email/google/callback",
     "POST /v2/public/email/google/push",
     "GET /v2/public/email/microsoft/callback",
+    "POST /v2/public/email/microsoft/push",
     "GET /v2/public/forms/:publicKey",
     "GET /v2/public/forms/:publicKey/embed.js",
     "POST /v2/public/forms/:publicKey/events",

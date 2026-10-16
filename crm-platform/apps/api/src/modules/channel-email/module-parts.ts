@@ -13,6 +13,8 @@ import { MailOutboundAttachments } from './mail-outbound-attachments.service';
 import { MailSignaturesController } from './mail-signatures.controller';
 import { MailSignaturesRepository } from './mail-signatures.repository';
 import { MailSignaturesService } from './mail-signatures.service';
+import { MailGraphPushController } from './mail-graph-push.controller';
+import { MailGraphPushService } from './mail-graph-push.service';
 import { MailPushController } from './mail-push.controller';
 import { MailPushRepository } from './mail-push.repository';
 import { MailPushService } from './mail-push.service';
@@ -35,6 +37,8 @@ export const MAIL_EXTRA_CONTROLLERS: Type<unknown>[] = [
   MailOutboundAttachmentsController,
   // TW-MAIL-033 Gmail push: the public push controller (Pub/Sub) and the Graph notification controller of 034 if shared
   MailPushController,
+  // E-17 Microsoft Graph change notifications (the public notification URL)
+  MailGraphPushController,
 ];
 
 /** Providers (services, repositories) available to the API and the worker. */
@@ -55,6 +59,8 @@ export const MAIL_EXTRA_PROVIDERS: Provider[] = [
   GoogleOidcVerifier,
   MailPushRepository,
   MailPushService,
+  // E-17 Graph change notifications
+  MailGraphPushService,
   // E-19 contact timeline
   MailTimelineRepository,
   MailTimeline,
