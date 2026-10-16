@@ -16,6 +16,7 @@ const doc: HelpDoc = {
   gates: {},
   keywords: [],
   routes: [],
+  features: [],
   audience: 'workspace',
   domain: 'd',
   text: {

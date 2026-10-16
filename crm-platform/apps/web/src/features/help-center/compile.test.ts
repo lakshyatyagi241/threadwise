@@ -61,6 +61,16 @@ describe('compileRegistry', () => {
     expect(doc.documents).toEqual([]);
     expect(doc.gates).toEqual({});
     expect(doc.keywords).toEqual([]);
+    expect(doc.features).toEqual([]);
+  });
+
+  it('parses a features list: plan features the guide explains without being gated by them', () => {
+    const [doc] = one(file([...BASE, 'features: [personal_history_full, automation]']));
+    expect(doc.features).toEqual(['personal_history_full', 'automation']);
+  });
+
+  it('rejects a features value that is not a list', () => {
+    failing(file([...BASE, 'features: automation']), /features must be a list/);
   });
 
   it('handles CRLF files the same as LF files', () => {
