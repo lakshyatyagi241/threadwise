@@ -95,7 +95,21 @@
         "required": "Wymagane",
         "removeField": "Usuń",
         "options": "Opcje (rozdzielone przecinkami)",
-        "optionsPlaceholder": "Opcja 1, Opcja 2, Opcja 3"
+        "optionsPlaceholder": "Opcja 1, Opcja 2, Opcja 3",
+        "mapsTo": "Mapuje do",
+        "mapsToHint": "Zapisuje tę odpowiedź we właściwości kontaktu po wysłaniu formularza.",
+        "mapsToNone": "Nie zapisuj we właściwości kontaktu",
+        "mapsToSystemGroup": "Pola kontaktu",
+        "mapsToCustomGroup": "Właściwości niestandardowe",
+        "mapsToSystem": {
+          "name": "Imię i nazwisko",
+          "first_name": "Imię",
+          "last_name": "Nazwisko",
+          "email": "E-mail",
+          "title": "Stanowisko",
+          "language": "Język",
+          "address": "Adres"
+        }
       },
       "fieldKind": {
         "heading": "Nagłówek",

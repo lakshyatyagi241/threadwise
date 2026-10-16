@@ -95,7 +95,21 @@
         "required": "Zorunlu",
         "removeField": "Kaldır",
         "options": "Seçenekler (virgülle ayrılmış)",
-        "optionsPlaceholder": "Seçenek 1, Seçenek 2, Seçenek 3"
+        "optionsPlaceholder": "Seçenek 1, Seçenek 2, Seçenek 3",
+        "mapsTo": "Eşleşir",
+        "mapsToHint": "Form gönderildiğinde bu yanıtı bir kişi özelliğine kaydeder.",
+        "mapsToNone": "Bir kişi özelliğine kaydetme",
+        "mapsToSystemGroup": "Kişi alanları",
+        "mapsToCustomGroup": "Özel özellikler",
+        "mapsToSystem": {
+          "name": "Tam ad",
+          "first_name": "Ad",
+          "last_name": "Soyad",
+          "email": "E-posta",
+          "title": "Unvan",
+          "language": "Dil",
+          "address": "Adres"
+        }
       },
       "fieldKind": {
         "heading": "Başlık",

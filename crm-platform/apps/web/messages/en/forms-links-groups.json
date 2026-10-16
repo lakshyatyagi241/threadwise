@@ -95,7 +95,21 @@
         "required": "Required",
         "removeField": "Remove",
         "options": "Options (comma separated)",
-        "optionsPlaceholder": "Option 1, Option 2, Option 3"
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Maps to",
+        "mapsToHint": "Save this answer onto a contact property when the form is submitted.",
+        "mapsToNone": "Don't save to a contact property",
+        "mapsToSystemGroup": "Contact fields",
+        "mapsToCustomGroup": "Custom properties",
+        "mapsToSystem": {
+          "name": "Full name",
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "title": "Job title",
+          "language": "Language",
+          "address": "Address"
+        }
       },
       "fieldKind": {
         "heading": "Heading",

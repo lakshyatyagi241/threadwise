@@ -95,7 +95,7 @@ workspace contact's mobile — no indexed lookup, a perf note), PLAN (the two no
 | TW-WFL-005 | Publish error translation (incl. "Blocked by Integrity")                 | done    | P1       | S      | TW-WFL-004 |
 | TW-WFL-006 | Duplicate / delete a form                                                | done    | P1       | S      | TW-WFL-001 |
 | TW-WFL-007 | Picker endpoint for the flow builder's `wa_form` node                    | done    | P0       | S      | TW-WFL-003 |
-| TW-WFL-008 | Submission ingest from Meta's `nfm_reply` webhook + flow resume          | blocked | P0       | L      | TW-WFL-004 |
+| TW-WFL-008 | Submission ingest from Meta's `nfm_reply` webhook + flow resume          | done    | P0       | L      | TW-WFL-004 |
 | TW-WFL-009 | Submissions list, contact resolution, inbox mirror                       | done    | P0       | M      | TW-WFL-008 |
 | TW-WFL-010 | Submissions CSV export (CSV-injection safe)                              | done    | P1       | S      | TW-WFL-009 |
 | TW-WFL-011 | Engine gate (Cloud API only) and plan-feature gate                       | done    | P0       | S      | -          |
@@ -221,10 +221,24 @@ CUSTOMER_SUPPORT|SIGN_UP|OTHER`).
      lookup instead of carrying the O(n) scan forward (intentional improvement, record it).
 - **Source refs:** `app/Services/Forms/WaFormSubmissionService.php`, `WaWebhookController::handle` (nfm_reply
   branch), `node/controllers/flowController.js::resumeForm`.
-- **Port status (blocked):** not built yet. The real integration point is cross-domain — implement as an
-  outbox-driven handoff (`form.submitted` event) rather than a direct cross-module call, so FLR's resume logic
-  subscribes instead of this domain reaching into FLR's session store or WABA's webhook controller. Needs
-  coordination with those domains' owners rather than a unilateral change from here.
+- **Port status: done** (this entry was stale — it previously said "blocked, not built yet"; confirmed built and
+  corrected 2026-10-16). The cross-domain handoff this entry called for landed as a listener, not an outbox event:
+  `CommerceResume` (`flow-runtime-engine/runtime/nodes/commerce/commerce-resume.ts`) registers as an
+  `InboundMessageListener` on the normal inbound-message pipeline (`InboundMessageHooks`) rather than bypassing it
+  the way Reference's `WaWebhookController` does, and matches a submission to its flow token itself
+  (`parseFormToken`) — no separate webhook branch or Node resume-session endpoint. `WaFormRecords`
+  (`wa-form-records.ts`) is the forms domain's own read/write surface for `wa_forms`/`wa_form_submissions`, used
+  by that listener instead of a facade this domain exposes (still a known gap, see its own doc comment). The O(n)
+  decrypt-and-compare contact resolution this entry flagged as a perf concern does not carry forward: contact
+  resolution is the normal inbound-message pipeline's own (indexed), not re-implemented here.
+  - **Port addition, 2026-10-16 (not in Reference):** a form field can carry `mapsTo` (one of
+    `WA_FORM_SYSTEM_MAP_FIELDS` or an active custom contact attribute key); `CommerceResume.applyFieldMappings`
+    writes the matching answers onto the submitting contact via `ContactsService.setFieldFromFlow` — the same
+    safe writer the flow engine's own "Update contact field" step uses, so a mapping is skipped (not an error) if
+    the target attribute was since deactivated, and phone can never be overwritten by a form answer. Reference's
+    `WaFormSubmissionService` never writes submission answers onto contact fields at all; this is a net-new
+    enhancement, not a parity gap, and does not change the stored submission shape (`wa_form_submissions` is
+    unaffected).
 
 ### TW-WFL-009 — Submissions list, contact resolution, inbox mirror
 
@@ -232,8 +246,8 @@ CUSTOMER_SUPPORT|SIGN_UP|OTHER`).
   first; dynamic columns = Submitted/Contact/Phone + one column per form field label (heading-kind fields excluded
   from the label map).
 - **Source refs:** `WaFormController::submissions`, `fieldLabels()`, `resources/views/user/wa-forms/submissions.blade.php`.
-- **Port status (done):** built against the submissions already written directly (no ingest pipeline yet — TW-WFL-008);
-  the list/export work regardless of how a row got there.
+- **Port status (done):** the list/export work regardless of how a row got there — now the real ingest pipeline
+  (TW-WFL-008, corrected 2026-10-16 from an earlier "not built yet" note), not submissions written directly.
 
 ### TW-WFL-010 — Submissions CSV export (CSV-injection safe)
 
