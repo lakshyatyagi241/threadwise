@@ -1,11 +1,15 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   findWorkspacesRequestSchema,
   forgotPasswordRequestSchema,
   resetPasswordRequestSchema,
   signupRequestSchema,
+  signupResendEmailCodeRequestSchema,
   signupResendOtpRequestSchema,
+  signupSetPasswordRequestSchema,
+  signupStartRequestSchema,
+  signupVerifyEmailCodeRequestSchema,
   signupVerifyOtpRequestSchema,
   socialCallbackRequestSchema,
   socialProviderSchema,
@@ -15,7 +19,11 @@ import {
   type ForgotPasswordRequest,
   type ResetPasswordRequest,
   type SignupRequest,
+  type SignupResendEmailCodeRequest,
   type SignupResendOtpRequest,
+  type SignupSetPasswordRequest,
+  type SignupStartRequest,
+  type SignupVerifyEmailCodeRequest,
   type SignupVerifyOtpRequest,
   type SocialCallbackRequest,
   type SocialStartQuery,
@@ -69,6 +77,41 @@ export class RegistrationController {
   @ApiOperation({ summary: 'Send a new code (cooldown applies)' })
   async resendOtp(@Body(zodPipe(signupResendOtpRequestSchema)) body: SignupResendOtpRequest) {
     return this.signup.resendOtp(body, clientMeta());
+  }
+
+  @Public()
+  @Post('signup/start')
+  @ApiOperation({ summary: 'Start email-verified sign-up: stage the account and email a code' })
+  async signupStart(@Body(zodPipe(signupStartRequestSchema)) body: SignupStartRequest) {
+    return this.signup.start(body, clientMeta());
+  }
+
+  @Public()
+  @HttpCode(200)
+  @Post('signup/verify-email-code')
+  @ApiOperation({ summary: 'Confirm the emailed code for a staged sign-up' })
+  async signupVerifyEmailCode(
+    @Body(zodPipe(signupVerifyEmailCodeRequestSchema)) body: SignupVerifyEmailCodeRequest,
+  ) {
+    return this.signup.verifyEmailCode(body, clientMeta());
+  }
+
+  @Public()
+  @Post('signup/resend-email-code')
+  @ApiOperation({ summary: 'Send the sign-up code again (cooldown applies)' })
+  async signupResendEmailCode(
+    @Body(zodPipe(signupResendEmailCodeRequestSchema)) body: SignupResendEmailCodeRequest,
+  ) {
+    return this.signup.resendEmailCode(body, clientMeta());
+  }
+
+  @Public()
+  @Post('signup/set-password')
+  @ApiOperation({ summary: 'Choose a password and create the account after email verification' })
+  async signupSetPassword(
+    @Body(zodPipe(signupSetPasswordRequestSchema)) body: SignupSetPasswordRequest,
+  ) {
+    return this.signup.setPassword(body, clientMeta());
   }
 
   @Public()

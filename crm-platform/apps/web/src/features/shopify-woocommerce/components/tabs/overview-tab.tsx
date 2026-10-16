@@ -90,7 +90,7 @@ export function OverviewTab({ kind, data }: { kind: Kind; data: StoreDashboard }
                     <div className="truncate text-[13px] font-medium">{order.name}</div>
                     <div className="truncate text-xs text-muted-foreground">{order.customer}</div>
                   </div>
-                  <div className="shrink-0 text-right">
+                  <div className="shrink-0 text-end">
                     <div className="text-[13px] tabular-nums">
                       {money(order.total, order.currency || data.currency)}
                     </div>

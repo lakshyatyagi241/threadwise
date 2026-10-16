@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { CAMPAIGN_AI_PORT } from '../../infra/providers/campaigns/campaign-ai.port';
+import { HttpCampaignAiAdapter } from '../../infra/providers/campaigns/http-campaign-ai.adapter';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AiKeyResolver } from './ai-key-resolver.service';
 import { AiModelsService } from './ai-models.service';
@@ -40,7 +42,9 @@ import {
     AiTokenMeter,
     AiUsageService,
     AiModelsService,
+    // The one text-completion adapter the AI-using domains (campaigns, templates) share.
+    { provide: CAMPAIGN_AI_PORT, useClass: HttpCampaignAiAdapter },
   ],
-  exports: [AiKeyResolver, AiTokenMeter, AiModelsService],
+  exports: [AiKeyResolver, AiTokenMeter, AiModelsService, CAMPAIGN_AI_PORT],
 })
 export class AiKeysUsageAdminModule {}

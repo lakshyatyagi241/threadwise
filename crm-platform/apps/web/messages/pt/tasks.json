@@ -100,7 +100,8 @@
       "views": {
         "list": "Lista",
         "board": "Quadro por data de vencimento"
-      }
+      },
+      "linkCompany": "Uma empresa"
     },
     "table": {
       "scrollArea": "Tabela de tarefas",
@@ -204,7 +205,8 @@
         "notesTooLong": "As observações são longas demais (no máximo 5000 caracteres).",
         "dueInvalid": "Data inválida.",
         "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho."
-      }
+      },
+      "company": "Empresa"
     },
     "drawer": {
       "loading": "Carregando tarefa",
@@ -268,7 +270,8 @@
       "searching": "Pesquisando",
       "unavailable": "A pesquisa não está disponível no momento.",
       "none": "Nenhum resultado.",
-      "unlink": "Remover o link"
+      "unlink": "Remover o link",
+      "searchCompany": "Pesquisar empresas"
     },
     "errors": {
       "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
@@ -323,7 +326,8 @@
       "loadMore": "Carregar mais",
       "loadMoreDone": "Carregar mais concluídas",
       "showDone": "Mostrar concluídas",
-      "hideDone": "Ocultar concluídas"
+      "hideDone": "Ocultar concluídas",
+      "gone": "O registro a que estas tarefas pertencem não está mais disponível."
     }
   }
 }

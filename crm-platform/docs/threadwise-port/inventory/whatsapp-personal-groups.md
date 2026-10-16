@@ -30,41 +30,41 @@ Plan tiers and gates: Reference has **no group-specific plan limit, plan feature
 
 ### What Reference does NOT do with groups (so nobody ports a rumour)
 
-| Capability                                                                 | Reference                                                                                                                                                                                                    |
-| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Broadcast, campaign or bulk scheduled message to a WhatsApp group          | **No.** Audience pickers use contact groups (Reference's own tag-like lists, a different thing) and phone numbers; no `@g.us` audience exists in any broadcast, campaign or scheduled-bulk code.             |
-| Flows, keyword auto-reply or AI agent on a group                           | **Not at the bridge** (deliberately skipped). Laravel's inbound handler has no group guard and still runs part of the pipeline (TW-WAGRP-018, QUIRK).                                                       |
-| Join a group by invite link or code (`groupAcceptInvite`, invite preview)  | **No** (the bot is added by a human on WhatsApp). Port addition only (TW-WAGRP-030).                                                                                                                         |
-| Group picture (`updateProfilePicture`)                                     | **No.** Port addition only (TW-WAGRP-031).                                                                                                                                                                   |
-| Join-approval mode, pending join requests, approve or reject               | **No** (no call to `groupJoinApprovalMode`, `groupRequestParticipantsList` or `groupRequestParticipantsUpdate`; the event `group.join-request` is not listened to). Port addition (TW-WAGRP-029).           |
-| Ephemeral (disappearing) messages setting, "members can add members" mode | **No** (`groupToggleEphemeral` and `groupMemberAddMode` unused). Not planned.                                                                                                                                 |
-| Reacting to, replying with a mention, or tagging inside the inbox composer | **No.** Mentions exist only in the order notifier (TW-WAGRP-020, 024).                                                                                                                                       |
-| Delete a group, or remove every member and leave in one step               | **No.** WhatsApp has no delete: the only exit is leave (TW-WAGRP-011).                                                                                                                                       |
-| Web screen to create or manage a group                                     | **No** (mobile API only). Port addition (TW-WAGRP-027, 028).                                                                                                                                                 |
-| Reacting to the `groups.update` event (rename, restrictions changed)       | **No**; only `groups.upsert` (new group) and `group-participants.update` trigger a directory sync, and the pairing-code start path registers only the second (TW-WAGRP-003).                                |
+| Capability                                                                 | Reference                                                                                                                                                                                         |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Broadcast, campaign or bulk scheduled message to a WhatsApp group          | **No.** Audience pickers use contact groups (Reference's own tag-like lists, a different thing) and phone numbers; no `@g.us` audience exists in any broadcast, campaign or scheduled-bulk code.  |
+| Flows, keyword auto-reply or AI agent on a group                           | **Not at the bridge** (deliberately skipped). Laravel's inbound handler has no group guard and still runs part of the pipeline (TW-WAGRP-018, QUIRK).                                             |
+| Join a group by invite link or code (`groupAcceptInvite`, invite preview)  | **No** (the bot is added by a human on WhatsApp). Port addition only (TW-WAGRP-030).                                                                                                              |
+| Group picture (`updateProfilePicture`)                                     | **No.** Port addition only (TW-WAGRP-031).                                                                                                                                                        |
+| Join-approval mode, pending join requests, approve or reject               | **No** (no call to `groupJoinApprovalMode`, `groupRequestParticipantsList` or `groupRequestParticipantsUpdate`; the event `group.join-request` is not listened to). Port addition (TW-WAGRP-029). |
+| Ephemeral (disappearing) messages setting, "members can add members" mode  | **No** (`groupToggleEphemeral` and `groupMemberAddMode` unused). Not planned.                                                                                                                     |
+| Reacting to, replying with a mention, or tagging inside the inbox composer | **No.** Mentions exist only in the order notifier (TW-WAGRP-020, 024).                                                                                                                            |
+| Delete a group, or remove every member and leave in one step               | **No.** WhatsApp has no delete: the only exit is leave (TW-WAGRP-011).                                                                                                                            |
+| Web screen to create or manage a group                                     | **No** (mobile API only). Port addition (TW-WAGRP-027, 028).                                                                                                                                      |
+| Reacting to the `groups.update` event (rename, restrictions changed)       | **No**; only `groups.upsert` (new group) and `group-participants.update` trigger a directory sync, and the pairing-code start path registers only the second (TW-WAGRP-003).                      |
 
 ### Official (Cloud API) groups versus personal-number groups: what to mirror
 
 Our official feature is described in `docs/specs/waba-groups-management.md` and inventory TW-WABA-039/040. The two have different shapes (Meta groups are invite-only, created by the business, no add-by-number; Baileys groups are ordinary WhatsApp groups where the account can add people if it is an admin). The matrix says what a personal-number group screen should mirror from the official one.
 
-| Capability                             | Reference, personal (Baileys)                         | Our official (WABA) groups                                              | Personal port plan                                                                      |
-| -------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Screen with KPIs, create, list, rows   | Mobile only; web has the ordering-code directory      | `/waba-groups` (rail, KPIs, create form, rows, invite panel)            | Mirror as `TW-WAGRP-027` (port-addition)                                                |
-| Create group                           | Mobile `POST api/app/groups`                          | `POST /v2/waba/numbers/:id/groups`                                      | `TW-WAGRP-006` port, same limits as Reference unless D12 changes them                   |
-| Eligibility state ("not eligible")     | n/a (any connected personal number works)             | Probe, only error 131215 is a no                                        | Not applicable; replaced by "device connected and engine allowed" (TW-WAGRP-001)         |
-| Refresh one group from the source      | Live list each call                                   | Per-row Refresh, cached mirror                                          | Per-row refresh against the live socket, roster cached (TW-WAGRP-035)                    |
-| Invite link get / reset                | `GET invite-code`, `POST revoke-invite`               | Copy panel, "New link" with confirm                                     | Same, with the same confirm sentence (TW-WAGRP-012, 013)                                 |
-| Edit subject and description           | Mobile `subject`, `description`                       | PATCH, answered 202, confirmed by webhook                               | Same endpoints; confirmation from the `groups.update` event (TW-WAGRP-008, 009, 032)    |
-| Member list, remove participants       | Metadata read, `participants` action                  | On-demand member list, remove up to 8                                   | `TW-WAGRP-028`; plus add, promote, demote (Reference has them, WABA cannot)             |
-| Join approvals                         | None                                                  | Pending list, approve/reject                                            | `TW-WAGRP-029` port-addition                                                            |
-| Suspended group                        | n/a (a ban hits the whole number)                     | Banner, sends refused (`WABA_GROUP_SUSPENDED`)                          | Replaced by "number disconnected / banned" banner and refusal (TW-WAGRP-034)            |
-| Group thread in inbox, author per bubble | Thread stored; speaker number kept, name dropped     | `g:<id>` thread, author from `meta.group`, delivery tally, header       | `TW-WAGRP-033`                                                                          |
-| Safe send guard                        | Forced to Baileys with `target_jid`; no announce check | `WABA_GROUP_SEND_UNAVAILABLE` then verbatim group id; kinds limited     | `TW-WAGRP-034`: refuse admin-only groups for non-admin, refuse unsupported kinds         |
-| Events and notifications               | FCM push `is_group`, webhook `conversation.*`         | `whatsapp.group.*` outbox events, notification consumer                 | `TW-WAGRP-032`                                                                          |
-| Plan gate, permissions, audit          | None (mobile has no role gate)                        | Plan feature `waba_groups`, keys `waba.groups.*`, audit per action      | `TW-WAGRP-036`                                                                          |
-| Delete group                           | None                                                  | `DELETE` removes everyone, row deleted                                  | Not possible on WhatsApp; leave only                                                    |
-| Ordering codes, order-in-group notice  | Yes (personal only)                                   | Explicit non-goal                                                       | Keep personal-only (TW-WAGRP-023, 024)                                                  |
-| Mentions                               | Order notifier only                                   | Not in scope                                                            | Keep; optional composer mentions are a decision (D8)                                    |
+| Capability                               | Reference, personal (Baileys)                          | Our official (WABA) groups                                          | Personal port plan                                                                   |
+| ---------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Screen with KPIs, create, list, rows     | Mobile only; web has the ordering-code directory       | `/waba-groups` (rail, KPIs, create form, rows, invite panel)        | Mirror as `TW-WAGRP-027` (port-addition)                                             |
+| Create group                             | Mobile `POST api/app/groups`                           | `POST /v2/waba/numbers/:id/groups`                                  | `TW-WAGRP-006` port, same limits as Reference unless D12 changes them                |
+| Eligibility state ("not eligible")       | n/a (any connected personal number works)              | Probe, only error 131215 is a no                                    | Not applicable; replaced by "device connected and engine allowed" (TW-WAGRP-001)     |
+| Refresh one group from the source        | Live list each call                                    | Per-row Refresh, cached mirror                                      | Per-row refresh against the live socket, roster cached (TW-WAGRP-035)                |
+| Invite link get / reset                  | `GET invite-code`, `POST revoke-invite`                | Copy panel, "New link" with confirm                                 | Same, with the same confirm sentence (TW-WAGRP-012, 013)                             |
+| Edit subject and description             | Mobile `subject`, `description`                        | PATCH, answered 202, confirmed by webhook                           | Same endpoints; confirmation from the `groups.update` event (TW-WAGRP-008, 009, 032) |
+| Member list, remove participants         | Metadata read, `participants` action                   | On-demand member list, remove up to 8                               | `TW-WAGRP-028`; plus add, promote, demote (Reference has them, WABA cannot)          |
+| Join approvals                           | None                                                   | Pending list, approve/reject                                        | `TW-WAGRP-029` port-addition                                                         |
+| Suspended group                          | n/a (a ban hits the whole number)                      | Banner, sends refused (`WABA_GROUP_SUSPENDED`)                      | Replaced by "number disconnected / banned" banner and refusal (TW-WAGRP-034)         |
+| Group thread in inbox, author per bubble | Thread stored; speaker number kept, name dropped       | `g:<id>` thread, author from `meta.group`, delivery tally, header   | `TW-WAGRP-033`                                                                       |
+| Safe send guard                          | Forced to Baileys with `target_jid`; no announce check | `WABA_GROUP_SEND_UNAVAILABLE` then verbatim group id; kinds limited | `TW-WAGRP-034`: refuse admin-only groups for non-admin, refuse unsupported kinds     |
+| Events and notifications                 | FCM push `is_group`, webhook `conversation.*`          | `whatsapp.group.*` outbox events, notification consumer             | `TW-WAGRP-032`                                                                       |
+| Plan gate, permissions, audit            | None (mobile has no role gate)                         | Plan feature `waba_groups`, keys `waba.groups.*`, audit per action  | `TW-WAGRP-036`                                                                       |
+| Delete group                             | None                                                   | `DELETE` removes everyone, row deleted                              | Not possible on WhatsApp; leave only                                                 |
+| Ordering codes, order-in-group notice    | Yes (personal only)                                    | Explicit non-goal                                                   | Keep personal-only (TW-WAGRP-023, 024)                                               |
+| Mentions                                 | Order notifier only                                    | Not in scope                                                        | Keep; optional composer mentions are a decision (D8)                                 |
 
 ### Limits and risks that must be visible to every builder and every user
 
@@ -85,44 +85,44 @@ The list separates what the **Reference code** proves from **WhatsApp or Baileys
 
 ## Feature index
 
-| Id           | Feature                                                                              | Status         | Priority | Effort | Depends on                                      |
-| ------------ | ------------------------------------------------------------------------------------ | -------------- | -------- | ------ | ----------------------------------------------- |
-| TW-WAGRP-001 | Engine gate and device resolution for group operations (Baileys only)                | implemented    | P0       | M      | TW-WADEV-001, TW-WADEV-032                      |
-| TW-WAGRP-002 | Bridge group command surface (routes, guard, JID rule, response shapes)              | implemented    | P0       | M      | TW-NODE-002, TW-NODE-021                        |
-| TW-WAGRP-003 | Group directory sync into `wa_groups` and `wa_group_members`                          | partial        | P1       | M      | TW-WAGRP-002, TW-NODE-021                       |
-| TW-WAGRP-004 | List groups (live roster merged with the local mirror)                               | implemented    | P0       | M      | TW-WAGRP-001, TW-WAGRP-002                      |
-| TW-WAGRP-005 | Group detail with the connected account's role and send permission                   | implemented    | P0       | S      | TW-WAGRP-004                                    |
-| TW-WAGRP-006 | Create a group                                                                       | implemented    | P0       | M      | TW-WAGRP-001, TW-WAGRP-002                      |
-| TW-WAGRP-007 | Add, remove, promote, demote participants                                            | implemented    | P0       | M      | TW-WAGRP-014                                    |
-| TW-WAGRP-008 | Change the group name (subject)                                                      | implemented    | P1       | S      | TW-WAGRP-014                                    |
-| TW-WAGRP-009 | Change the group description                                                         | implemented    | P1       | S      | TW-WAGRP-014                                    |
-| TW-WAGRP-010 | Group restrictions (admin-only messaging, admin-only editing)                        | implemented    | P1       | S      | TW-WAGRP-014                                    |
-| TW-WAGRP-011 | Leave a group                                                                        | implemented    | P1       | S      | TW-WAGRP-014                                    |
-| TW-WAGRP-012 | Read the invite link                                                                 | implemented    | P1       | S      | TW-WAGRP-014                                    |
-| TW-WAGRP-013 | Rotate (revoke) the invite link                                                      | implemented    | P1       | S      | TW-WAGRP-014                                    |
-| TW-WAGRP-014 | Open a chat for an existing group and the group access check                         | implemented    | P0       | M      | TW-WAGRP-001, TW-WAGRP-017                      |
-| TW-WAGRP-015 | Group message capture at the bridge (storage-only path)                              | partial        | P0       | M      | TW-NODE-016, TW-NODE-018                        |
-| TW-WAGRP-016 | Group inbound handling in Laravel (thread, title, dedupe, unread, push, webhooks)    | implemented    | P0       | L      | TW-WAGRP-015, TW-WAGRP-017                      |
-| TW-WAGRP-017 | Group thread identity, listing rules and de-duplication                              | implemented    | P0       | M      | -                                               |
-| TW-WAGRP-018 | No automation on group messages: the rule and what actually runs                     | partial        | P0       | M      | TW-WAGRP-016                                    |
-| TW-WAGRP-019 | Reply into a group from the inbox or the app                                         | implemented    | P0       | M      | TW-WAGRP-017, TW-WADEV-030                      |
-| TW-WAGRP-020 | Send into a group with @mentions                                                     | implemented    | P1       | S      | TW-WAGRP-002                                    |
-| TW-WAGRP-021 | Message actions in a group thread (react, star, pin, forward, delete)                | partial        | P2       | S      | TW-WAGRP-019                                    |
-| TW-WAGRP-022 | Group directory screen (`/store/groups`)                                             | implemented    | P1       | M      | TW-WAGRP-003                                    |
-| TW-WAGRP-023 | Ordering code per group and the ordering link                                        | implemented    | P1       | S      | TW-WAGRP-022                                    |
-| TW-WAGRP-024 | Order notice into the customer's group with @mention                                 | implemented    | P1       | M      | TW-WAGRP-003, TW-WAGRP-020                      |
-| TW-WAGRP-025 | Access control, tenancy and plan gating of group operations                          | partial        | P0       | S      | TW-WAGRP-001                                    |
-| TW-WAGRP-026 | Scheduled send to a group thread                                                     | partial        | P2       | S      | TW-WAGRP-019, TW-NODE-030                       |
-| TW-WAGRP-027 | Personal groups management screen (web)                                              | port-addition  | P1       | L      | TW-WAGRP-004, TW-WAGRP-036                      |
-| TW-WAGRP-028 | Members panel with promote, demote, remove                                           | port-addition  | P1       | M      | TW-WAGRP-005, TW-WAGRP-007                      |
-| TW-WAGRP-029 | Join approvals (approval mode, pending requests, approve or reject)                  | port-addition  | P2       | M      | TW-WAGRP-032                                    |
-| TW-WAGRP-030 | Join a group by invite link or code                                                  | port-addition  | P2       | M      | TW-WAGRP-035, TW-WAGRP-036                      |
-| TW-WAGRP-031 | Group picture                                                                        | port-addition  | P2       | S      | TW-WAGRP-008                                    |
-| TW-WAGRP-032 | Group events, outbox events and notifications                                        | port-addition  | P1       | M      | TW-WAGRP-003                                    |
-| TW-WAGRP-033 | Group thread display in the inbox (author, header, banners)                          | port-addition  | P1       | M      | TW-WAGRP-016, TW-WAGRP-005                      |
-| TW-WAGRP-034 | Send guard on the `whatsapp_qr` channel for group peers                              | port-addition  | P0       | M      | TW-WAGRP-019, TW-WAGRP-005                      |
-| TW-WAGRP-035 | Ban-safety controls: throttles, roster cache, caps, risk text                        | port-addition  | P0       | M      | TW-WAGRP-002                                    |
-| TW-WAGRP-036 | Permissions, plan feature, audit, help and i18n for personal groups                  | port-addition  | P0       | M      | TW-WAGRP-001                                    |
+| Id           | Feature                                                                           | Status        | Priority | Effort | Depends on                 |
+| ------------ | --------------------------------------------------------------------------------- | ------------- | -------- | ------ | -------------------------- |
+| TW-WAGRP-001 | Engine gate and device resolution for group operations (Baileys only)             | implemented   | P0       | M      | TW-WADEV-001, TW-WADEV-032 |
+| TW-WAGRP-002 | Bridge group command surface (routes, guard, JID rule, response shapes)           | implemented   | P0       | M      | TW-NODE-002, TW-NODE-021   |
+| TW-WAGRP-003 | Group directory sync into `wa_groups` and `wa_group_members`                      | partial       | P1       | M      | TW-WAGRP-002, TW-NODE-021  |
+| TW-WAGRP-004 | List groups (live roster merged with the local mirror)                            | implemented   | P0       | M      | TW-WAGRP-001, TW-WAGRP-002 |
+| TW-WAGRP-005 | Group detail with the connected account's role and send permission                | implemented   | P0       | S      | TW-WAGRP-004               |
+| TW-WAGRP-006 | Create a group                                                                    | implemented   | P0       | M      | TW-WAGRP-001, TW-WAGRP-002 |
+| TW-WAGRP-007 | Add, remove, promote, demote participants                                         | implemented   | P0       | M      | TW-WAGRP-014               |
+| TW-WAGRP-008 | Change the group name (subject)                                                   | implemented   | P1       | S      | TW-WAGRP-014               |
+| TW-WAGRP-009 | Change the group description                                                      | implemented   | P1       | S      | TW-WAGRP-014               |
+| TW-WAGRP-010 | Group restrictions (admin-only messaging, admin-only editing)                     | implemented   | P1       | S      | TW-WAGRP-014               |
+| TW-WAGRP-011 | Leave a group                                                                     | implemented   | P1       | S      | TW-WAGRP-014               |
+| TW-WAGRP-012 | Read the invite link                                                              | implemented   | P1       | S      | TW-WAGRP-014               |
+| TW-WAGRP-013 | Rotate (revoke) the invite link                                                   | implemented   | P1       | S      | TW-WAGRP-014               |
+| TW-WAGRP-014 | Open a chat for an existing group and the group access check                      | implemented   | P0       | M      | TW-WAGRP-001, TW-WAGRP-017 |
+| TW-WAGRP-015 | Group message capture at the bridge (storage-only path)                           | partial       | P0       | M      | TW-NODE-016, TW-NODE-018   |
+| TW-WAGRP-016 | Group inbound handling in Laravel (thread, title, dedupe, unread, push, webhooks) | implemented   | P0       | L      | TW-WAGRP-015, TW-WAGRP-017 |
+| TW-WAGRP-017 | Group thread identity, listing rules and de-duplication                           | implemented   | P0       | M      | -                          |
+| TW-WAGRP-018 | No automation on group messages: the rule and what actually runs                  | partial       | P0       | M      | TW-WAGRP-016               |
+| TW-WAGRP-019 | Reply into a group from the inbox or the app                                      | implemented   | P0       | M      | TW-WAGRP-017, TW-WADEV-030 |
+| TW-WAGRP-020 | Send into a group with @mentions                                                  | implemented   | P1       | S      | TW-WAGRP-002               |
+| TW-WAGRP-021 | Message actions in a group thread (react, star, pin, forward, delete)             | partial       | P2       | S      | TW-WAGRP-019               |
+| TW-WAGRP-022 | Group directory screen (`/store/groups`)                                          | implemented   | P1       | M      | TW-WAGRP-003               |
+| TW-WAGRP-023 | Ordering code per group and the ordering link                                     | implemented   | P1       | S      | TW-WAGRP-022               |
+| TW-WAGRP-024 | Order notice into the customer's group with @mention                              | implemented   | P1       | M      | TW-WAGRP-003, TW-WAGRP-020 |
+| TW-WAGRP-025 | Access control, tenancy and plan gating of group operations                       | partial       | P0       | S      | TW-WAGRP-001               |
+| TW-WAGRP-026 | Scheduled send to a group thread                                                  | partial       | P2       | S      | TW-WAGRP-019, TW-NODE-030  |
+| TW-WAGRP-027 | Personal groups management screen (web)                                           | port-addition | P1       | L      | TW-WAGRP-004, TW-WAGRP-036 |
+| TW-WAGRP-028 | Members panel with promote, demote, remove                                        | port-addition | P1       | M      | TW-WAGRP-005, TW-WAGRP-007 |
+| TW-WAGRP-029 | Join approvals (approval mode, pending requests, approve or reject)               | port-addition | P2       | M      | TW-WAGRP-032               |
+| TW-WAGRP-030 | Join a group by invite link or code                                               | port-addition | P2       | M      | TW-WAGRP-035, TW-WAGRP-036 |
+| TW-WAGRP-031 | Group picture                                                                     | port-addition | P2       | S      | TW-WAGRP-008               |
+| TW-WAGRP-032 | Group events, outbox events and notifications                                     | port-addition | P1       | M      | TW-WAGRP-003               |
+| TW-WAGRP-033 | Group thread display in the inbox (author, header, banners)                       | port-addition | P1       | M      | TW-WAGRP-016, TW-WAGRP-005 |
+| TW-WAGRP-034 | Send guard on the `whatsapp_qr` channel for group peers                           | port-addition | P0       | M      | TW-WAGRP-019, TW-WAGRP-005 |
+| TW-WAGRP-035 | Ban-safety controls: throttles, roster cache, caps, risk text                     | port-addition | P0       | M      | TW-WAGRP-002               |
+| TW-WAGRP-036 | Permissions, plan feature, audit, help and i18n for personal groups               | port-addition | P0       | M      | TW-WAGRP-001               |
 
 ## Features
 
@@ -166,19 +166,19 @@ The list separates what the **Reference code** proves from **WhatsApp or Baileys
 - **UX & screens:** none.
 - **Endpoints:**
 
-  | METHOD uri (Node)                              | Body or query                                              | Success body                                                                                                          | Failures                                                         |
-  | ---------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-  | POST /api/groups/create/:phone                 | `subject` (or `name`), `participants[]` (numbers or JIDs)  | `{ok, jid, subject, participants_count, meta}`                                                                        | 503 not connected; 422 missing; 502 no JID; 500                  |
-  | GET /api/groups/all/:phone?workspace_id=       | -                                                          | `{ok, groups:[{jid,subject,owner,creation,description,participants_count,announce_only,restrict,ephemeral_duration}], total}` | 503; 500                                                         |
-  | GET /api/groups/meta/:phone?jid=               | `jid`                                                      | `{ok, meta}` (raw Baileys metadata)                                                                                   | 503; 422 bad JID; 500                                            |
-  | POST /api/groups/participants/:phone           | `jid`, `action` add, remove, promote, demote, `participants[]` | `{ok, action, result[], meta, partial, ok_count, fail_count, total_count}`                                        | 503; 422; 500                                                    |
-  | POST /api/groups/subject/:phone                | `jid`, `subject`                                           | `{ok, jid, subject}`                                                                                                  | 503; 422; 500                                                    |
-  | POST /api/groups/description/:phone            | `jid`, `description` (may be empty)                        | `{ok, jid, description}`                                                                                              | 503; 422; 500                                                    |
-  | POST /api/groups/settings/:phone               | `jid`, `setting` announcement, not_announcement, locked, unlocked | `{ok, jid, setting}`                                                                                          | 503; 422; 500                                                    |
-  | POST /api/groups/leave/:phone                  | `jid`, `workspace_id`                                      | `{ok, jid}`                                                                                                           | 503; 422; 500                                                    |
-  | GET /api/groups/invite-code/:phone?jid=        | `jid`                                                      | `{ok, jid, code, url:"https://chat.whatsapp.com/<code>"}`                                                             | 503; 422; 500                                                    |
-  | POST /api/groups/revoke-invite/:phone          | `jid`                                                      | `{ok, jid, code, url}` (new code)                                                                                     | 503; 422; 500                                                    |
-  | POST /api/send-group-message/:phone            | `group_jid`, `text`, `mentions[]`                          | `{message:"GROUP MESSAGE SENT", id}`                                                                                  | 503 no socket; 400 no `group_jid`; 500                           |
+  | METHOD uri (Node)                        | Body or query                                                     | Success body                                                                                                                  | Failures                                        |
+  | ---------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+  | POST /api/groups/create/:phone           | `subject` (or `name`), `participants[]` (numbers or JIDs)         | `{ok, jid, subject, participants_count, meta}`                                                                                | 503 not connected; 422 missing; 502 no JID; 500 |
+  | GET /api/groups/all/:phone?workspace_id= | -                                                                 | `{ok, groups:[{jid,subject,owner,creation,description,participants_count,announce_only,restrict,ephemeral_duration}], total}` | 503; 500                                        |
+  | GET /api/groups/meta/:phone?jid=         | `jid`                                                             | `{ok, meta}` (raw Baileys metadata)                                                                                           | 503; 422 bad JID; 500                           |
+  | POST /api/groups/participants/:phone     | `jid`, `action` add, remove, promote, demote, `participants[]`    | `{ok, action, result[], meta, partial, ok_count, fail_count, total_count}`                                                    | 503; 422; 500                                   |
+  | POST /api/groups/subject/:phone          | `jid`, `subject`                                                  | `{ok, jid, subject}`                                                                                                          | 503; 422; 500                                   |
+  | POST /api/groups/description/:phone      | `jid`, `description` (may be empty)                               | `{ok, jid, description}`                                                                                                      | 503; 422; 500                                   |
+  | POST /api/groups/settings/:phone         | `jid`, `setting` announcement, not_announcement, locked, unlocked | `{ok, jid, setting}`                                                                                                          | 503; 422; 500                                   |
+  | POST /api/groups/leave/:phone            | `jid`, `workspace_id`                                             | `{ok, jid}`                                                                                                                   | 503; 422; 500                                   |
+  | GET /api/groups/invite-code/:phone?jid=  | `jid`                                                             | `{ok, jid, code, url:"https://chat.whatsapp.com/<code>"}`                                                                     | 503; 422; 500                                   |
+  | POST /api/groups/revoke-invite/:phone    | `jid`                                                             | `{ok, jid, code, url}` (new code)                                                                                             | 503; 422; 500                                   |
+  | POST /api/send-group-message/:phone      | `group_jid`, `text`, `mentions[]`                                 | `{message:"GROUP MESSAGE SENT", id}`                                                                                          | 503 no socket; 400 no `group_jid`; 500          |
 
 - **Data:** in-memory only: the clients map, the ready flags and the recently-left ledger.
 - **Rules & edge cases:**
@@ -1044,18 +1044,18 @@ The list separates what the **Reference code** proves from **WhatsApp or Baileys
 
 Purpose: one row per WhatsApp group a personal number belongs to, per workspace. Written by TW-WAGRP-003, read by 022 to 024. Volume: tens to low thousands per workspace.
 
-| Column                 | Type / null / default (Reference)        | Behavior                                                                                                  |
-| ---------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| id                     | bigint PK                                | Row id used by the ordering-code route                                                                    |
-| workspace_id           | bigint NOT NULL, indexed                 | Tenant (our `org_id`)                                                                                     |
-| device_phone           | varchar(24) null, indexed                | Digits of the bot number that last synced the group; overwritten by every sync; the sender of order posts |
-| group_jid              | varchar(64) NOT NULL                     | `<digits>(-<digits>)?@g.us`; unique per workspace                                                         |
-| subject                | varchar(191) null                        | Group name, truncated to 191                                                                              |
-| size                   | int unsigned default 0                   | Participant count at sync time                                                                            |
-| group_code             | varchar(48) null, indexed                | Ordering code; uniqueness enforced in code, not by an index                                               |
-| meta_json              | json null                                | Unused                                                                                                    |
-| synced_at              | timestamp null                           | Last sync; the list orders by it                                                                          |
-| created_at, updated_at | timestamps                               |                                                                                                           |
+| Column                 | Type / null / default (Reference) | Behavior                                                                                                  |
+| ---------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| id                     | bigint PK                         | Row id used by the ordering-code route                                                                    |
+| workspace_id           | bigint NOT NULL, indexed          | Tenant (our `org_id`)                                                                                     |
+| device_phone           | varchar(24) null, indexed         | Digits of the bot number that last synced the group; overwritten by every sync; the sender of order posts |
+| group_jid              | varchar(64) NOT NULL              | `<digits>(-<digits>)?@g.us`; unique per workspace                                                         |
+| subject                | varchar(191) null                 | Group name, truncated to 191                                                                              |
+| size                   | int unsigned default 0            | Participant count at sync time                                                                            |
+| group_code             | varchar(48) null, indexed         | Ordering code; uniqueness enforced in code, not by an index                                               |
+| meta_json              | json null                         | Unused                                                                                                    |
+| synced_at              | timestamp null                    | Last sync; the list orders by it                                                                          |
+| created_at, updated_at | timestamps                        |                                                                                                           |
 
 Unique `(workspace_id, group_jid)`. Our version adds `uuid`, `row_version`, composite primary key `(org_id, id)`, forced RLS and `touch_row`.
 
@@ -1063,13 +1063,13 @@ Unique `(workspace_id, group_jid)`. Our version adds `uuid`, `row_version`, comp
 
 Purpose: participants of each group (digits-only phone), powering the reverse lookup "which groups is this customer in". Replaced wholesale per group on every sync.
 
-| Column                 | Type / null / default | Behavior                                                           |
-| ---------------------- | --------------------- | ------------------------------------------------------------------ |
-| workspace_id           | bigint NOT NULL       | Tenant                                                             |
-| group_jid              | varchar(64) NOT NULL, indexed |                                                            |
-| phone                  | varchar(24) NOT NULL  | Digits only; **LID digits for LID-addressed members** (QUIRK)     |
-| is_admin               | boolean default false | Admin or super-admin                                               |
-| synced_at              | timestamp null        |                                                                    |
+| Column       | Type / null / default         | Behavior                                                      |
+| ------------ | ----------------------------- | ------------------------------------------------------------- |
+| workspace_id | bigint NOT NULL               | Tenant                                                        |
+| group_jid    | varchar(64) NOT NULL, indexed |                                                               |
+| phone        | varchar(24) NOT NULL          | Digits only; **LID digits for LID-addressed members** (QUIRK) |
+| is_admin     | boolean default false         | Admin or super-admin                                          |
+| synced_at    | timestamp null                |                                                               |
 
 Unique `(workspace_id, group_jid, phone)` (the July 2026 fix; the original `(group_jid, phone)` broke multi-tenant syncs); index `(workspace_id, phone)` for the reverse lookup.
 
@@ -1168,7 +1168,10 @@ Quirks and gaps found in Reference (keep a QUIRK in the test plan so the port do
     "app/Http/Controllers/Api/App/GroupController.php",
     "app/Http/Controllers/WaGroupController.php"
   ],
-  "services": ["app/Services/Ordering/GroupDirectory.php", "app/Services/Ordering/GroupNotifier.php"],
+  "services": [
+    "app/Services/Ordering/GroupDirectory.php",
+    "app/Services/Ordering/GroupNotifier.php"
+  ],
   "models": ["WaGroup", "WaGroupMember"],
   "tables": ["wa_groups", "wa_group_members"],
   "views": ["resources/views/user/store/groups/index.blade.php"],

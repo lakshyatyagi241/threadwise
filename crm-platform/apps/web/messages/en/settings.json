@@ -150,11 +150,6 @@
         "description": "Edit your deal pipelines, stages and lost reasons.",
         "keywords": "deals, sales stages, board, lost reason, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Create and organise the tags used across contacts and chats.",
-        "keywords": "labels, colour, color"
-      },
       "saved-replies": {
         "label": "Saved replies",
         "description": "Write reusable answers your team can send in one click.",
@@ -374,6 +369,11 @@
         "label": "Contact assignment",
         "description": "Give new contacts and deals to the right person automatically, skipping people on leave.",
         "keywords": "assign, owner, round robin, new contact, new deal, leave, lead routing"
+      },
+      "company-properties": {
+        "label": "Company properties",
+        "description": "Add the fields you want to keep on every company.",
+        "keywords": "custom fields, fields, required, dropdown, organization, account"
       }
     },
     "backToMarketplace": "Back to Marketplace"

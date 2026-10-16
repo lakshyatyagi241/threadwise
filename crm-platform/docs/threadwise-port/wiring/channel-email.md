@@ -27,13 +27,13 @@ No SECURITY DEFINER lookup: the public callback carries workspace and admin in i
 
 ## Settings and environment read
 
-| Setting                                                                    | Where                                 | Reader                                  |
-| -------------------------------------------------------------------------- | ------------------------------------- | --------------------------------------- |
-| `googleMail` `{enabled, clientId, redirectUri}` + secret `clientSecret`    | platform settings (operator console)  | `GoogleMailConfig` (env fallback below) |
-| `microsoftMail` `{enabled, clientId, tenant, redirectUri}` + secret `clientSecret` | platform settings (operator console) | `MicrosoftMailConfig` (env `MICROSOFT_MAIL_*` fallback) |
-| `GOOGLE_MAIL_CLIENT_ID/SECRET/REDIRECT_URI`                                | environment                           | `GoogleMailConfig` fallback             |
-| `GOOGLE_OAUTH_*`, `GMAIL_API_URL`, `GOOGLE_MAIL_HTTP_TIMEOUT_MS`, `MAIL_*` | `config/domains/channel-email.env.ts` | provider clients, sync, ingest          |
-| plan feature `email_channel`, limit `email_mailboxes`                      | plan catalogue                        | `@RequirePlanFeature`, `MailPlan`       |
+| Setting                                                                            | Where                                 | Reader                                                  |
+| ---------------------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------- |
+| `googleMail` `{enabled, clientId, redirectUri}` + secret `clientSecret`            | platform settings (operator console)  | `GoogleMailConfig` (env fallback below)                 |
+| `microsoftMail` `{enabled, clientId, tenant, redirectUri}` + secret `clientSecret` | platform settings (operator console)  | `MicrosoftMailConfig` (env `MICROSOFT_MAIL_*` fallback) |
+| `GOOGLE_MAIL_CLIENT_ID/SECRET/REDIRECT_URI`                                        | environment                           | `GoogleMailConfig` fallback                             |
+| `GOOGLE_OAUTH_*`, `GMAIL_API_URL`, `GOOGLE_MAIL_HTTP_TIMEOUT_MS`, `MAIL_*`         | `config/domains/channel-email.env.ts` | provider clients, sync, ingest                          |
+| plan feature `email_channel`, limit `email_mailboxes`                              | plan catalogue                        | `@RequirePlanFeature`, `MailPlan`                       |
 
 ## Queues and workers
 

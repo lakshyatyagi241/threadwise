@@ -112,6 +112,17 @@
         "email": "Wpisz prawidłowy adres e-mail.",
         "invalid": "Część wprowadzonych danych jest nieprawidłowa.",
         "ownerInvalid": "Właściciel musi być aktywnym członkiem tej przestrzeni roboczej."
+      },
+      "propertiesTitle": "Właściwości",
+      "propertiesHint": "konfigurowane w Ustawieniach, Właściwości firm",
+      "propertyProblems": {
+        "invalid": "Ta wartość nie pasuje do właściwości.",
+        "notEditable": "Tej właściwości nie można już edytować. Zamknij formularz i otwórz go ponownie.",
+        "required": "Ta właściwość jest wymagana.",
+        "number": "Wpisz liczbę.",
+        "integer": "Wpisz liczbę całkowitą.",
+        "email": "Wpisz prawidłowy adres e-mail.",
+        "url": "Wpisz pełny link zaczynający się od http:// lub https://."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Adres",
       "createdBy": "Utworzona przez",
       "created": "Utworzono",
-      "updated": "Ostatnia zmiana"
+      "updated": "Ostatnia zmiana",
+      "properties": "Właściwości",
+      "yes": "Tak",
+      "no": "Nie"
     },
     "contacts": {
       "title": "Kontakty",
@@ -211,6 +225,44 @@
         "address": "Adres",
         "notes": "Notatki",
         "owner": "Właściciel"
+      },
+      "propertiesChanged": "Zmienione właściwości:"
+    },
+    "picker": {
+      "search": "Szukaj firm",
+      "results": "Firmy",
+      "searching": "Wyszukiwanie",
+      "none": "Żadna firma nie pasuje.",
+      "unavailable": "Nie można teraz wyszukać firm.",
+      "create": "Utwórz „{name}”",
+      "creating": "Tworzenie firmy",
+      "clear": "Usuń firmę",
+      "loading": "Wczytywanie firmy",
+      "unknown": "Firma niedostępna",
+      "createFailed": "Nie udało się utworzyć firmy. Spróbuj ponownie.",
+      "createForbidden": "Nie masz uprawnień do tworzenia firm."
+    },
+    "properties": {
+      "title": "Właściwości firm",
+      "subtitle": "Wszystko, co firma może przechowywać, w jednym miejscu: Twoje własne właściwości, pogrupowane w sekcje.",
+      "section": {
+        "hint": "Sekcje grupują właściwości w formularzu firmy i na stronie firmy."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# firma} few {# firmy} many {# firm} other {# firmy}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# firma ma} few {# firmy mają} many {# firm ma} other {# firmy ma}} wartość tej właściwości. Wartości zostaną zachowane, ale właściwość zniknie z formularza firmy i strony firmy.",
+        "unused": "Żadna firma nie ma jeszcze wartości tej właściwości."
+      },
+      "modal": {
+        "newTitle": "Dodaj właściwość firmy",
+        "descriptionHint": "Wyświetlany pod polem w formularzu firmy.",
+        "optionsNote": "Usunięcie opcji nie zmienia firm, które już ją mają; zachowują zapisaną wartość.",
+        "requiredHint": "Formularza firmy nie można zapisać bez wartości.",
+        "visibleHint": "Pokazuj w formularzu firmy i na stronie firmy.",
+        "conditionsHint": "Ukryj tę właściwość w formularzu firmy, dopóki inna właściwość nie będzie miała wartości.",
+        "deactivateNote": "Zapisanie ukryje tę właściwość w formularzu i na stronie firmy. Wartości zapisane w firmach zostaną zachowane."
       }
     }
   }

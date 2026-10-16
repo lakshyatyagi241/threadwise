@@ -35,7 +35,7 @@ export function HelpTip({ label, children }: { label: string; children: string }
       <span
         id={id}
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-30 mb-1.5 hidden w-[200px] -translate-x-1/2 rounded-lg bg-foreground px-2.5 py-1.5 text-[10.5px] leading-snug text-background shadow-lg group-focus-within:block group-hover:block"
+        className="pointer-events-none absolute bottom-full start-1/2 z-30 mb-1.5 hidden w-[200px] -translate-x-1/2 rtl:translate-x-1/2 rounded-lg bg-foreground px-2.5 py-1.5 text-[10.5px] leading-snug text-background shadow-lg group-focus-within:block group-hover:block"
       >
         {children}
       </span>

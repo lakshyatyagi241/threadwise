@@ -44,9 +44,6 @@
         "unassigned": "Не назначены",
         "unread": "Непрочитанные"
       },
-      "statusFilter": "Статус",
-      "statusOpen": "Открытые",
-      "statusAll": "Все статусы",
       "status": {
         "open": "Открыт",
         "pending": "Ожидает",
@@ -61,7 +58,6 @@
         "high": "Высокий",
         "urgent": "Срочный"
       },
-      "channelFilter": "Канал",
       "allChannels": "Все каналы",
       "archived": "Архив",
       "backToInbox": "Назад в инбокс",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Выбрать",
-      "selectDone": "Готово"
+      "selectDone": "Готово",
+      "filters": {
+        "open": "Фильтры",
+        "openActive": "Фильтры (включено: {count})",
+        "title": "Фильтры",
+        "close": "Закрыть",
+        "reset": "Сбросить",
+        "cancel": "Отмена",
+        "apply": "Применить",
+        "status": "Статус чата",
+        "statusHint": "Если ничего не выбрано, показываются открытые и ожидающие чаты.",
+        "conversation": "Диалог",
+        "any": "Любой",
+        "assigned": "Назначен",
+        "unassigned": "Не назначен",
+        "unattended": "Без ответа",
+        "labels": "Теги",
+        "channels": "Каналы",
+        "agents": "Агенты",
+        "sortBy": "Сортировка",
+        "recent": "Сначала новые",
+        "old": "Сначала старые",
+        "dateRange": "Период (последняя активность)",
+        "from": "С",
+        "to": "По",
+        "select": "Выберите вариант",
+        "search": "Поиск",
+        "noMatch": "Ничего не найдено",
+        "today": "Сегодня",
+        "last7": "Последние 7 дней",
+        "last30": "Последние 30 дней",
+        "thisMonth": "Этот месяц",
+        "clearDates": "Сбросить даты",
+        "previousMonth": "Предыдущий месяц",
+        "nextMonth": "Следующий месяц"
+      },
+      "rowMenu": "Другие действия для {name}",
+      "priorityMenu": "Приоритет",
+      "statusFilter": "Статус",
+      "statusOpen": "Открытые",
+      "statusAll": "Все статусы",
+      "channelFilter": "Канал",
+      "selectRow": "Выбрать {name}"
     },
     "status": {
       "received": "Получено",
@@ -285,7 +323,14 @@
       "newMessageAnnounce": "Новое сообщение: {text}",
       "attachment": "вложение",
       "jumpLatest": "К последним сообщениям",
-      "jumpLatestNew": "{count, plural, one {# новое сообщение} few {# новых сообщения} many {# новых сообщений} other {# нового сообщения}}"
+      "jumpLatestNew": "{count, plural, one {# новое сообщение} few {# новых сообщения} many {# новых сообщений} other {# нового сообщения}}",
+      "searchOpen": "Поиск в этом чате",
+      "searchPlaceholder": "Поиск в этом чате",
+      "searchCount": "{current} из {total}",
+      "searchNone": "Ничего не найдено",
+      "searchPrev": "Предыдущее совпадение",
+      "searchNext": "Следующее совпадение",
+      "searchClose": "Закрыть поиск"
     },
     "groupThread": {
       "openGroup": "Открыть группу",
@@ -423,7 +468,35 @@
         }
       },
       "savedReplies": "Сохранённые ответы",
-      "savedReplyIssues": "Не заполнено и оставлено как есть ({count}): {list}. Исправьте перед отправкой."
+      "savedReplyIssues": "Не заполнено и оставлено как есть ({count}): {list}. Исправьте перед отправкой.",
+      "toolbar": {
+        "label": "Форматирование сообщения",
+        "bold": "Жирный",
+        "italic": "Курсив",
+        "underline": "Подчёркнутый",
+        "strike": "Зачёркнутый",
+        "bullets": "Маркированный список",
+        "numbers": "Нумерованный список",
+        "ai": {
+          "open": "Умный ИИ-помощник",
+          "noModel": "Для этого пространства не включена ни одна модель ИИ",
+          "title": "Умный ИИ-помощник",
+          "condense": "Сократить",
+          "condenseHint": "Сделать текст короче и лаконичнее",
+          "fix": "Исправить грамматику",
+          "fixHint": "Исправить грамматические и орфографические ошибки",
+          "positive": "Позитивный тон",
+          "positiveHint": "Сделать текст более позитивным и бодрым",
+          "translate": "Перевести",
+          "translateHint": "Перевести на другие языки",
+          "selectLanguage": "Выберите язык",
+          "searchLanguages": "Поиск языков…",
+          "noLanguage": "Язык не найден",
+          "working": "Выполняется…",
+          "empty": "Сначала напишите сообщение.",
+          "failed": "ИИ не смог изменить текст. Попробуйте ещё раз."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Заметки и лента событий",
@@ -454,7 +527,13 @@
         "pickTeam": "Выберите команду для этого диалога",
         "noTeam": "Без команды",
         "onLeave": "В отпуске",
-        "onLeaveUntil": "В отпуске до {date}"
+        "onLeaveUntil": "В отпуске до {date}",
+        "availability": {
+          "online": "В сети",
+          "away": "Отошёл",
+          "busy": "Занят",
+          "offline": "Не в сети"
+        }
       },
       "presence": {
         "online": "В сети",

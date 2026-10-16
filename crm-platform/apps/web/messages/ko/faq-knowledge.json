@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "테스트",
         "unanswered": "답변 없음",
-        "insights": "인사이트",
-        "settings": "설정"
+        "insights": "인사이트"
       },
       "unansweredCount": "{count, plural, other {답변되지 않은 메시지 #개}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "이 플로우가 FAQ 한도에 도달했습니다. 사용하지 않는 FAQ나 변형을 삭제하거나 플랫폼 관리자에게 한도 상향을 요청하세요."
     },
     "banner": {
-      "enabledToast": "FAQ 답변이 켜져 있습니다.",
-      "engineOff": "플랫폼에서 FAQ 답변을 껐습니다. 다시 켜질 때까지 고객은 FAQ 답변을 받지 못합니다.",
-      "modelChanged": "이 임계값을 조정한 뒤 플랫폼이 AI 모델을 변경했습니다. 점수가 달라졌으니 민감도를 검토하세요.",
-      "reviewSensitivity": "민감도 검토",
-      "offNoRight": "faq.settings.manage 권한이 있는 사람(보통 워크스페이스 관리자)에게 켜 달라고 요청하세요.",
-      "enable": "FAQ 답변 켜기",
-      "offTitle": "이 플로우에서는 FAQ 답변이 꺼져 있습니다",
-      "offBody": "이 플로우의 FAQ를 작성하고 테스트할 수 있지만, 켜기 전까지 고객에게 답변되지 않습니다."
+      "engineOff": "플랫폼에서 FAQ 답변을 껐습니다. 다시 켜질 때까지 고객은 FAQ 답변을 받지 못합니다."
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "활성",
         "paused": "일시중지",
-        "variations": "표현",
-        "pending": "인덱싱",
-        "pendingHint": "몇 초 안에 적용",
-        "failed": "인덱싱 실패",
-        "failedHint": "확인 필요"
+        "variations": "표현"
       },
-      "failedBanner": "{count, plural, other {표현 #개}}의 인덱싱에 실패하여 아직 고객 메시지와 매칭되지 않습니다.",
-      "showFailed": "실패한 FAQ 보기",
       "search": "FAQ 검색",
       "searchPlaceholder": "질문과 표현 검색",
       "filter": {
         "status": "상태",
         "anyStatus": "모든 상태",
         "category": "카테고리",
-        "anyCategory": "모든 카테고리",
-        "indexing": "인덱싱",
-        "anyIndexing": "전체",
-        "pending": "인덱싱 중",
-        "failed": "실패"
+        "anyCategory": "모든 카테고리"
       },
       "status": {
         "active": "활성",
@@ -108,7 +90,6 @@
       "col": {
         "question": "질문",
         "answer": "답변",
-        "indexing": "활성 표현",
         "answered": "답변 횟수 (90일)",
         "status": "상태",
         "actions": "작업"
@@ -130,12 +111,6 @@
         "rowBody": "\"{question}\"와(과) 모든 표현이 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
         "delete": "삭제",
         "cancel": "취소"
-      },
-      "indexing": {
-        "summary": "활성 {ready}, 인덱싱 중 {pending}, 실패 {failed}",
-        "ready": "활성 {count}",
-        "pending": "인덱싱 중 {count}",
-        "failed": "실패 {count}"
       },
       "stepMissing": "단계 없음",
       "subtitle": "{flow}에서 고객이 묻는 질문과 봇의 답변입니다. 이 FAQ는 이 플로우 안에서만 답변합니다.",
@@ -202,14 +177,6 @@
           "other": "다른 플로우의 단계",
           "otherHint": "대화를 다른 플로우로 넘깁니다."
         }
-      },
-      "advanced": {
-        "title": "고급: 이 FAQ만의 민감도",
-        "custom": "이 FAQ에 사용자 지정 민감도 사용",
-        "sliderLabel": "다음 이상일 때 매칭",
-        "body": "기본적으로 모든 FAQ는 이 플로우의 민감도를 사용합니다. 이 FAQ가 너무 쉽게 매칭되면 값을 높이고, 너무 드물게 매칭되면 낮춰 사용자 지정 값을 쓰세요.",
-        "workspace": "이 플로우의 민감도는 {value}%입니다.",
-        "following": "이 플로우의 민감도({value}%)를 따릅니다."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "추가",
       "pasteMany": "여러 개 붙여넣기",
       "full": "이 FAQ는 표현 {max}개 한도에 도달했습니다.",
-      "failedNotice": "{count, plural, other {표현 #개}}의 인덱싱에 실패했습니다. 표현을 편집하고 저장하면 다시 시도합니다.",
       "suggest": "AI로 제안받기",
       "suggestSaveFirst": "먼저 FAQ를 저장하면 AI가 표현을 제안할 수 있습니다.",
       "suggesting": "AI에게 제안을 요청하는 중",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, other {#줄이}} 표현 한도를 넘어 제외되었습니다.",
         "more": "외 {count}개",
         "add": "{count, plural, other {표현 #개}} 추가"
-      },
-      "state": {
-        "ready": "활성",
-        "pending": "인덱싱 중",
-        "pendingHint": "저장했습니다. 몇 초 후부터 매칭됩니다.",
-        "failed": "실패",
-        "failedHint": "표현을 편집하고 저장하면 다시 시도합니다.",
-        "noReason": "사유가 제공되지 않았습니다"
       },
       "confirm": {
         "title": "이 표현을 삭제할까요?",
@@ -539,9 +497,7 @@
       },
       "hist": {
         "title": "메시지 점수 분포",
-        "hint": "각 막대는 점수 구간입니다. 점선은 현재 민감도입니다.",
-        "advice": "잘못된 답변이 나가면 임계값을 높이고, 답변되지 않는 메시지가 너무 많으면 낮추세요.",
-        "tune": "민감도 변경"
+        "hint": "각 막대는 점수 구간입니다. 점선은 현재 민감도입니다."
       },
       "top": {
         "title": "상위 FAQ",
@@ -568,98 +524,6 @@
         "bucketTooltip": "{from}-{to}%: 답변됨 {answered}, 답변 없음 {unanswered}",
         "thresholdMarker": "임계값 {value}%"
       }
-    },
-    "settings": {
-      "title": "FAQ 설정",
-      "unsaved": "저장되지 않은 변경 사항",
-      "discard": "버리기",
-      "save": "설정 저장",
-      "saved": "설정을 저장했습니다.",
-      "readOnly": "이 설정은 볼 수만 있습니다. 변경하려면 보통 워크스페이스 관리자에게 있는 faq.settings.manage 권한이 필요합니다.",
-      "engineOff": "플랫폼에서 FAQ 답변을 껐습니다. 여기서 설정한 내용은 다시 켜지면 적용됩니다.",
-      "conflict": "다른 사람이 이 설정을 저장했습니다. 새로고침하여 그 버전을 확인한 뒤 다시 변경하세요.",
-      "reload": "설정 새로고침",
-      "modelChanged": {
-        "title": "민감도 검토",
-        "body": "이 임계값을 조정한 뒤 플랫폼이 AI 모델을 변경했습니다. 점수가 달라졌으니 민감도를 검토하세요. 저장하면 확인한 것으로 처리됩니다."
-      },
-      "enable": {
-        "title": "FAQ 답변",
-        "on": "켜짐",
-        "off": "꺼짐",
-        "label": "이 플로우의 FAQ로 고객에게 답변",
-        "onBody": "이 플로우가 라이브인 동안, 키워드 트리거나 실행 중인 플로우가 처리하지 않은 고객 메시지는 이 플로우의 FAQ와 비교됩니다. 봇은 가장 적합한 답변을 보내거나 FAQ가 가리키는 단계로 고객을 안내합니다.",
-        "offBody": "이 플로우의 FAQ는 고객에게 답변하지 않습니다. 작성과 테스트는 계속할 수 있습니다."
-      },
-      "sens": {
-        "title": "민감도",
-        "hint": "메시지가 얼마나 비슷해야 매칭되는지 정합니다. 점수는 {model} 모델 기준입니다.",
-        "label": "매칭 점수가 다음 이상이면 답변",
-        "presets": "민감도 프리셋",
-        "preset": {
-          "strict": "엄격",
-          "balanced": "균형",
-          "forgiving": "유연"
-        },
-        "looser": "더 많이 답변",
-        "stricter": "더 적게 답변",
-        "recommendedMark": "권장 {value}%",
-        "explain": "{value}%에서는 최고 매칭 점수가 {value}% 이상일 때만 답변합니다. 높을수록 답변은 적지만 더 안전하고, 낮을수록 답변은 많아지지만 오답 가능성도 커집니다.",
-        "useRecommended": "권장 값({value}%) 사용",
-        "modelScale": "점수는 같은 모델 안에서만 비교할 수 있습니다. 플랫폼이 모델({model})을 변경하면 이 값을 검토하세요."
-      },
-      "margin": {
-        "title": "모호성 방지",
-        "hint": "점수가 거의 같은 두 FAQ 사이에서 봇이 추측하지 않도록 합니다.",
-        "label": "2위와의 최소 격차",
-        "off": "꺼짐",
-        "explain": "최고 FAQ와 2위의 격차가 이 값보다 작으면 봇은 답변하지 않고 메시지를 답변 없음으로 기록합니다. FAQ가 거의 겹치지 않는다면 꺼 두세요."
-      },
-      "log": {
-        "title": "로그의 고객 메시지",
-        "label": "매칭 로그에 고객 메시지 보관",
-        "onBody": "각 메시지의 텍스트를 90일 동안 보관하여 답변 여부와 이유를 확인하고 학습에 활용할 수 있습니다. 이후에는 삭제됩니다.",
-        "offBody": "점수와 결과만 보관하고 텍스트는 보관하지 않습니다. 봇의 답변 비율은 볼 수 있지만 답변되지 않은 메시지로 학습할 수는 없습니다."
-      },
-      "facts": {
-        "title": "모델 및 한도",
-        "model": "매칭용 AI 모델",
-        "faqs": "FAQ",
-        "variations": "사용 중인 표현",
-        "perFaq": "FAQ당 허용 표현 수",
-        "of": "{max}개 중 {used}개"
-      },
-      "how": {
-        "title": "매칭 방식",
-        "exact": "정확히 일치: 대소문자와 공백을 무시하고 저장된 표현과 같은 메시지입니다.",
-        "semantic": "의미 일치: 모든 활성 표현과 의미를 비교하므로 다른 단어라도 매칭될 수 있습니다.",
-        "trigram": "철자 대체 매칭: AI 제공업체를 사용할 수 없으면 글자를 비교하며, 오타만 잡아냅니다.",
-        "threshold": "최고 점수를 민감도와 비교합니다. 이상이면 FAQ가 답변하고, 미만이면 메시지가 답변 없음 목록에 표시됩니다.",
-        "verify": "재확인(선택): 감도 기준을 간신히 넘은 매칭은 소형 채팅 모델이 다시 확인할 수 있으며, 이 모델은 답변을 보류하는 것만 할 수 있습니다."
-      },
-      "who": "이 설정을 변경하려면 faq.settings.manage 권한이 필요합니다.",
-      "leave": {
-        "title": "저장하지 않고 나갈까요?",
-        "body": "이 설정의 변경 사항이 저장되지 않았습니다.",
-        "leave": "나가기",
-        "stay": "머무르기"
-      },
-      "verify": {
-        "title": "아슬아슬한 매칭 재확인",
-        "hint": "기준을 간신히 넘은 매칭을 소형 채팅 모델이 다시 확인합니다.",
-        "unavailable": "플랫폼에서 재확인을 꺼 두어 여기서 켜도 실행되지 않습니다. 플랫폼 관리자에게 문의하세요.",
-        "label": "아슬아슬한 매칭을 재확인으로 검증",
-        "on": "켜짐",
-        "off": "꺼짐",
-        "onBody": "매칭이 기준을 간신히 넘으면 소형 채팅 모델이 고객 메시지와 FAQ를 읽고 답변이 적합한지 판단합니다. 모델은 \"아니요\"만 말할 수 있으며, 답변을 새로 만들어 내지는 않습니다.",
-        "offBody": "기준에 도달한 모든 매칭은 재확인 없이 바로 답변됩니다.",
-        "bandLabel": "아슬아슬한 매칭으로 보는 범위",
-        "bandValue": "+{value}%",
-        "explainOn": "점수가 {from}%에서 {to}% 사이인 매칭은 {model}이(가) 확인합니다. \"아니요\" 판정이 나오면 답변이 전송되지 않고 해당 메시지는 답변 없음에 표시됩니다.",
-        "explainOff": "점수가 {threshold}% 이상인 모든 매칭에 답변합니다. 가장 아슬아슬한 매칭을 다시 확인하려면 재확인을 켜세요.",
-        "cost": "확인할 때마다 고객 메시지와 FAQ 질문이 모델로 전송되며, 토큰 수백 개가 사용되고 경계선상의 답변은 1초가량 늦어집니다. 범위 밖의 매칭은 확인하지 않습니다. 확인에 실패하거나 사용할 수 없거나 시간당 한도에 도달하면 확인 없이 매칭이 그대로 유지됩니다."
-      },
-      "subtitle": "{flow}의 FAQ 답변을 켜고 메시지가 얼마나 일치해야 하는지 조정하세요."
     },
     "flowNode": {
       "start": "플로우의 처음",

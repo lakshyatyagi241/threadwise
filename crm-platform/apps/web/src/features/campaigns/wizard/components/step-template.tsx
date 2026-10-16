@@ -29,6 +29,12 @@ export function wabaConnectionOf(senderKey: string | null): string | null {
   return m ? m[1]! : null;
 }
 
+/** Where the new-template form opens for the chosen number (the form starts on that number). */
+export function newTemplateHref(senderKey: string | null): string {
+  const connection = wabaConnectionOf(senderKey);
+  return connection ? `/templates/new?connection=${connection}` : '/templates/new';
+}
+
 /** Step 1: the broadcast's name and the approved template it sends, with the live preview beside the list. */
 export function StepTemplate({
   name,
@@ -68,8 +74,7 @@ export function StepTemplate({
   // then pass Meta's review before this list offers it. The wizard's own draft autosaves, so coming back resumes this campaign.
   const sendDraftToTemplates = (draft: TplAiDraft) => {
     stashAiDraft({ draft, language: AI_TEMPLATE_LANGUAGE, metaCategory: 'MARKETING' });
-    const connection = wabaConnectionOf(senderKey);
-    router.push(connection ? `/templates/new?connection=${connection}` : '/templates/new');
+    router.push(newTemplateHref(senderKey));
   };
   const nameIssue = issueFor(issues, 'name');
   const tplIssue = issueFor(issues, 'templateId');
@@ -143,6 +148,7 @@ export function StepTemplate({
           <p className="text-xs text-muted-foreground">{t('pickHint')}</p>
           <TemplatePicker
             templates={templates}
+            createHref={mayCreateTemplate ? newTemplateHref(senderKey) : null}
             selectedId={templateId}
             onSelect={(tpl) => !disabled && onTemplate(tpl)}
             invalid={Boolean(tplIssue)}

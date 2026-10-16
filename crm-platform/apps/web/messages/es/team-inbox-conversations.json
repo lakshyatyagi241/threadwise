@@ -44,9 +44,6 @@
         "unassigned": "Sin asignar",
         "unread": "No leídas"
       },
-      "statusFilter": "Estado",
-      "statusOpen": "Abierta",
-      "statusAll": "Todos los estados",
       "status": {
         "open": "Abierta",
         "pending": "Pendiente",
@@ -61,7 +58,6 @@
         "high": "Alta",
         "urgent": "Urgente"
       },
-      "channelFilter": "Canal",
       "allChannels": "Todos los canales",
       "archived": "Archivadas",
       "backToInbox": "Volver a la bandeja de entrada",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Seleccionar",
-      "selectDone": "Listo"
+      "selectDone": "Listo",
+      "filters": {
+        "open": "Filtros",
+        "openActive": "Filtros ({count} activos)",
+        "title": "Filtros",
+        "close": "Cerrar",
+        "reset": "Restablecer",
+        "cancel": "Cancelar",
+        "apply": "Aplicar",
+        "status": "Estado del chat",
+        "statusHint": "Sin elegir nada se ven los chats abiertos y pendientes.",
+        "conversation": "Conversación",
+        "any": "Cualquiera",
+        "assigned": "Asignada",
+        "unassigned": "Sin asignar",
+        "unattended": "Sin atender",
+        "labels": "Etiquetas",
+        "channels": "Canales",
+        "agents": "Agentes",
+        "sortBy": "Ordenar por",
+        "recent": "Recientes",
+        "old": "Antiguos",
+        "dateRange": "Rango de fechas (última actividad)",
+        "from": "Desde",
+        "to": "Hasta",
+        "select": "Selecciona una opción",
+        "search": "Buscar",
+        "noMatch": "Sin resultados",
+        "today": "Hoy",
+        "last7": "Últimos 7 días",
+        "last30": "Últimos 30 días",
+        "thisMonth": "Este mes",
+        "clearDates": "Borrar fechas",
+        "previousMonth": "Mes anterior",
+        "nextMonth": "Mes siguiente"
+      },
+      "rowMenu": "Más acciones para {name}",
+      "priorityMenu": "Prioridad",
+      "statusFilter": "Estado",
+      "statusOpen": "Abierta",
+      "statusAll": "Todos los estados",
+      "channelFilter": "Canal",
+      "selectRow": "Seleccionar {name}"
     },
     "status": {
       "received": "Recibido",
@@ -285,7 +323,14 @@
       "newMessageAnnounce": "Mensaje nuevo: {text}",
       "attachment": "un adjunto",
       "jumpLatest": "Ir al más reciente",
-      "jumpLatestNew": "{count, plural, one {# mensaje nuevo} other {# mensajes nuevos}}"
+      "jumpLatestNew": "{count, plural, one {# mensaje nuevo} other {# mensajes nuevos}}",
+      "searchOpen": "Buscar en este chat",
+      "searchPlaceholder": "Buscar en este chat",
+      "searchCount": "{current} de {total}",
+      "searchNone": "Sin resultados",
+      "searchPrev": "Coincidencia anterior",
+      "searchNext": "Coincidencia siguiente",
+      "searchClose": "Cerrar búsqueda"
     },
     "groupThread": {
       "openGroup": "Abrir grupo",
@@ -423,7 +468,35 @@
         }
       },
       "savedReplies": "Respuestas guardadas",
-      "savedReplyIssues": "Sin completar y dejadas tal cual ({count}): {list}. Corrígelo antes de enviar."
+      "savedReplyIssues": "Sin completar y dejadas tal cual ({count}): {list}. Corrígelo antes de enviar.",
+      "toolbar": {
+        "label": "Formato del mensaje",
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "underline": "Subrayado",
+        "strike": "Tachado",
+        "bullets": "Lista con viñetas",
+        "numbers": "Lista numerada",
+        "ai": {
+          "open": "Asistente de IA inteligente",
+          "noModel": "No hay ningún modelo de IA activado en este espacio",
+          "title": "Asistente de IA inteligente",
+          "condense": "Condensar",
+          "condenseHint": "Hacer el texto más corto y conciso",
+          "fix": "Corregir gramática",
+          "fixHint": "Corregir errores de gramática y ortografía",
+          "positive": "Tono positivo",
+          "positiveHint": "Hacer el texto más positivo y animado",
+          "translate": "Traducir",
+          "translateHint": "Traducir a otros idiomas",
+          "selectLanguage": "Seleccionar idioma",
+          "searchLanguages": "Buscar idiomas…",
+          "noLanguage": "Ningún idioma coincide",
+          "working": "Trabajando…",
+          "empty": "Escribe primero un mensaje.",
+          "failed": "La IA no pudo cambiar el texto. Inténtalo de nuevo."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notas y cronología",
@@ -454,7 +527,13 @@
         "pickTeam": "Elige un equipo para esta conversación",
         "noTeam": "Sin equipo",
         "onLeave": "De ausencia",
-        "onLeaveUntil": "De ausencia hasta el {date}"
+        "onLeaveUntil": "De ausencia hasta el {date}",
+        "availability": {
+          "online": "En línea",
+          "away": "Ausente",
+          "busy": "Ocupado",
+          "offline": "Desconectado"
+        }
       },
       "presence": {
         "online": "En línea",

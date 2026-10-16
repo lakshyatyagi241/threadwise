@@ -15,7 +15,7 @@ import { contactName, matchesSearch, toggle } from '../lib/compose-model';
 import { SearchIcon } from './icons';
 
 const KICKER =
-  'mr-1 self-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
+  'ms-1 self-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
 const CHIP =
   'inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-[11.5px] hover:bg-muted';
 

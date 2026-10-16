@@ -182,8 +182,8 @@
   },
   "modules/compliance-center/public-trust.service.ts": {
     "status": "reviewed",
-    "reason": "the one privileged read is the slug lookup on an active organization (parameterised, slug pattern-checked), returning only the id and name; the page itself runs under txAs for that tenant and shows only what the workspace published. Served by a @Public route throttled per IP at 60/min.",
-    "reviewedOn": "2026-10-16"
+    "reason": "public, unauthenticated /trust/:slug page (BL-173). privileged() is used only to resolve slug -> org id/name (the only legitimate way to find an org pre-tenant-context, same pattern as tenant-directory.ts). Input is regex-validated before the query; every subsequent read runs under txAs({orgId}), properly tenant-scoped. The response is hand-built from an explicit allowlist of fields the workspace chose to publish (name, privacy/terms URLs, DPO contact, active subprocessors only) and is gated by a subprocessorsPublic opt-in toggle; a missing, inactive or opted-out workspace all answer the same 404, so the endpoint cannot be used to enumerate slugs.",
+    "reviewedOn": "2026-10-15"
   },
   "modules/contact-consent/consent-export-sweep.service.ts": {
     "status": "reviewed",

@@ -44,9 +44,6 @@
         "unassigned": "Atanmamış",
         "unread": "Okunmamış"
       },
-      "statusFilter": "Durum",
-      "statusOpen": "Açık",
-      "statusAll": "Tüm durumlar",
       "status": {
         "open": "Açık",
         "pending": "Beklemede",
@@ -61,7 +58,6 @@
         "high": "Yüksek",
         "urgent": "Acil"
       },
-      "channelFilter": "Kanal",
       "allChannels": "Tüm kanallar",
       "archived": "Arşivlendi",
       "backToInbox": "Gelen kutusuna dön",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Seç",
-      "selectDone": "Bitti"
+      "selectDone": "Bitti",
+      "filters": {
+        "open": "Filtreler",
+        "openActive": "Filtreler ({count} açık)",
+        "title": "Filtreler",
+        "close": "Kapat",
+        "reset": "Sıfırla",
+        "cancel": "İptal",
+        "apply": "Uygula",
+        "status": "Sohbet durumu",
+        "statusHint": "Seçim yapılmazsa açık ve bekleyen sohbetler görünür.",
+        "conversation": "Konuşma",
+        "any": "Herhangi",
+        "assigned": "Atanmış",
+        "unassigned": "Atanmamış",
+        "unattended": "İlgilenilmemiş",
+        "labels": "Etiketler",
+        "channels": "Kanallar",
+        "agents": "Temsilciler",
+        "sortBy": "Sırala",
+        "recent": "En yeni",
+        "old": "En eski",
+        "dateRange": "Tarih aralığı (son etkinlik)",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "select": "Bir seçenek seçin",
+        "search": "Ara",
+        "noMatch": "Eşleşme yok",
+        "today": "Bugün",
+        "last7": "Son 7 gün",
+        "last30": "Son 30 gün",
+        "thisMonth": "Bu ay",
+        "clearDates": "Tarihleri temizle",
+        "previousMonth": "Önceki ay",
+        "nextMonth": "Sonraki ay"
+      },
+      "rowMenu": "{name} için diğer işlemler",
+      "priorityMenu": "Öncelik",
+      "statusFilter": "Durum",
+      "statusOpen": "Açık",
+      "statusAll": "Tüm durumlar",
+      "channelFilter": "Kanal",
+      "selectRow": "{name} seç"
     },
     "status": {
       "received": "Alındı",
@@ -285,7 +323,14 @@
       "newMessageAnnounce": "Yeni mesaj: {text}",
       "attachment": "bir ek",
       "jumpLatest": "En yeniye git",
-      "jumpLatestNew": "{count, plural, other {# yeni mesaj}}"
+      "jumpLatestNew": "{count, plural, other {# yeni mesaj}}",
+      "searchOpen": "Bu sohbette ara",
+      "searchPlaceholder": "Bu sohbette ara",
+      "searchCount": "{current} / {total}",
+      "searchNone": "Eşleşme yok",
+      "searchPrev": "Önceki eşleşme",
+      "searchNext": "Sonraki eşleşme",
+      "searchClose": "Aramayı kapat"
     },
     "groupThread": {
       "openGroup": "Grubu aç",
@@ -423,7 +468,35 @@
         }
       },
       "savedReplies": "Hazır yanıtlar",
-      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin."
+      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin.",
+      "toolbar": {
+        "label": "Mesaj biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "underline": "Altı çizili",
+        "strike": "Üstü çizili",
+        "bullets": "Madde işaretli liste",
+        "numbers": "Numaralı liste",
+        "ai": {
+          "open": "Akıllı Yapay Zekâ Asistanı",
+          "noModel": "Bu çalışma alanı için etkin bir yapay zekâ modeli yok",
+          "title": "Akıllı Yapay Zekâ Asistanı",
+          "condense": "Kısalt",
+          "condenseHint": "Metni daha kısa ve öz yap",
+          "fix": "Dilbilgisini düzelt",
+          "fixHint": "Dilbilgisi ve yazım hatalarını düzelt",
+          "positive": "Olumlu ton",
+          "positiveHint": "Metni daha olumlu ve neşeli yap",
+          "translate": "Çevir",
+          "translateHint": "Farklı dillere çevir",
+          "selectLanguage": "Dil seç",
+          "searchLanguages": "Dil ara…",
+          "noLanguage": "Eşleşen dil yok",
+          "working": "İşleniyor…",
+          "empty": "Önce bir mesaj yazın.",
+          "failed": "Yapay zekâ metni değiştiremedi. Tekrar deneyin."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",
@@ -454,7 +527,13 @@
         "pickTeam": "Bu konuşma için bir ekip seçin",
         "noTeam": "Ekip yok",
         "onLeave": "İzinli",
-        "onLeaveUntil": "{date} tarihine kadar izinli"
+        "onLeaveUntil": "{date} tarihine kadar izinli",
+        "availability": {
+          "online": "Çevrimiçi",
+          "away": "Uzakta",
+          "busy": "Meşgul",
+          "offline": "Çevrimdışı"
+        }
       },
       "presence": {
         "online": "Çevrimiçi",

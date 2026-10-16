@@ -118,6 +118,10 @@ export const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_SECURE: booleanish.default(false),
+  /** Which MailPort adapter auth-providers.module.ts binds: 'smtp' (Mailpit locally, any SMTP relay in prod) or 'resend' (Resend's HTTP API). */
+  MAIL_PROVIDER: z.enum(['smtp', 'resend']).default('smtp'),
+  /** Required when MAIL_PROVIDER=resend; unused otherwise. Never has a default. */
+  RESEND_API_KEY: z.string().optional(),
 
   // --- web app / branding (links in transactional mail, OAuth redirects) ----
   WEB_APP_URL: z.string().url().default('http://localhost:3001'),

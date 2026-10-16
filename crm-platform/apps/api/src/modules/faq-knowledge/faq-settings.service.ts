@@ -25,7 +25,7 @@ export interface EffectiveSettings {
 
 export const SETTINGS_MODULE_KEY = 'faq_settings';
 
-/** One flow's switch and matching knobs; a flow that never saved runs on the platform defaults, switched off. */
+/** One flow's switch and matching knobs; a flow that never saved runs on the platform defaults, switched on. */
 @Injectable()
 export class FaqSettingsService {
   constructor(
@@ -50,7 +50,7 @@ export class FaqSettingsService {
       : await this.db.txAs({ orgId, userId: null }, (t) => this.logs.getSettings(t, orgId, flowId));
     return {
       engineEnabled: cfg.engineEnabled,
-      enabled: row?.enabled ?? false,
+      enabled: row?.enabled ?? true,
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
@@ -70,7 +70,7 @@ export class FaqSettingsService {
       };
     });
     return {
-      enabled: row?.enabled ?? false,
+      enabled: row?.enabled ?? true,
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
@@ -123,7 +123,7 @@ export class FaqSettingsService {
       if (!ok) throw AppError.rowVersionConflict('FAQ settings');
       const delta: Record<string, { old: unknown; new: unknown }> = {};
       const was = before ?? {
-        enabled: false,
+        enabled: true,
         threshold: null,
         minMargin: null,
         logQueries: true,

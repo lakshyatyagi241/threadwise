@@ -19,7 +19,8 @@
       "googleCalendar": "Google Kalender",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Flow-Builder"
+      "flowBuilder": "Flow-Builder",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Admin – Projekteinstellungen",
@@ -1024,6 +1025,37 @@
             "advanced": "Nur Erweitert"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Die Microsoft-App, über die jeder Arbeitsbereich seinen Outlook- oder Microsoft-365-Kalender verbindet.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft-Entra-App"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Arbeitsbereichen das Verbinden von Outlook erlauben",
+            "hint": "Aus: Kein Arbeitsbereich kann sich verbinden, und es wird nichts aus Outlook-Kalendern gelesen oder in sie geschrieben. Verbundene Kalender bleiben erhalten."
+          },
+          "clientId": {
+            "label": "Anwendungs-ID (Client-ID)",
+            "hint": "Aus dem Microsoft Entra Admin Center, App-Registrierungen, Übersicht. Leer verwendet MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Clientgeheimnis",
+            "hint": "Wird verschlüsselt gespeichert und nie wieder angezeigt. Leer behält das gespeicherte Geheimnis; MICROSOFT_CALENDAR_CLIENT_SECRET ist der Ersatzwert."
+          },
+          "tenant": {
+            "label": "Mandant",
+            "hint": "common erlaubt Geschäfts-, Schul- und persönliche Konten; für eine App mit nur einem Mandanten verwenden Sie die Verzeichnis-ID (Mandanten-ID). Leer verwendet MICROSOFT_CALENDAR_TENANT, sonst common."
+          },
+          "redirectUri": {
+            "label": "Weiterleitungs-URI überschreiben",
+            "hint": "Leer lassen, um die obige Adresse zu verwenden. Sie muss genau mit einer Weiterleitungs-URI der App übereinstimmen."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Flow-Builder",
         "description": "Der Standard-Flow-Builder für jeden Workspace: Einfach (schrittweise) oder Erweitert (Canvas). Ein Workspace kann ihn überschreiben.",
         "tags": "Einfach / Erweitert / Automatisierung"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Die Microsoft-App, über die Arbeitsbereiche ihre Outlook- und Microsoft-365-Kalender für Buchungen verbinden.",
+        "tags": "Microsoft / OAuth / Outlook / Kalender"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Bestehende Flows",
               "body": "Eine Änderung dieser Einstellung ändert oder löscht nie einen Flow. Ein Flow funktioniert weiter; er wird nur im gerade aktiven Builder geöffnet. Ein Workspace, der seinen eigenen Builder gewählt hat, behält ihn, bis er wieder den Plattform-Standard wählt."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Termine",
+        "description": "Eine Microsoft-Entra-App für die gesamte Plattform. Jeder Arbeitsbereich verbindet dann seinen eigenen Outlook- oder Microsoft-365-Kalender unter Termine, Einstellungen und sieht dabei weder Client-ID noch Geheimnis.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft-Entra-App",
+            "description": "Ohne Client-ID und Geheimnis sehen Arbeitsbereiche Outlook als nicht verfügbar, und Buchungen laufen ohne Outlook weiter. Google Calendar ist nicht betroffen."
+          }
+        },
+        "guide": {
+          "title": "In Microsoft Entra einrichten",
+          "items": {
+            "registration": {
+              "title": "1. App-Registrierung",
+              "body": "Erstellen Sie im Microsoft Entra Admin Center eine App-Registrierung für Konten in beliebigen Organisationsverzeichnissen und persönliche Microsoft-Konten und kopieren Sie die Anwendungs-ID (Client-ID) hierher. Lassen Sie den Mandanten auf common, sofern Sie keine engere Option gewählt haben."
+            },
+            "redirect": {
+              "title": "2. Weiterleitungs-URI und Geheimnis",
+              "body": "Fügen Sie die auf dieser Seite angezeigte Weiterleitungs-URI als Web-Weiterleitung hinzu, erstellen Sie dann unter Zertifikate und Geheimnisse ein Clientgeheimnis und fügen Sie seinen Wert hier ein. Notieren Sie sich das Ablaufdatum: Danach funktionieren die Kalender aller Arbeitsbereiche nicht mehr, bis ein neues Geheimnis gespeichert wird."
+            },
+            "permissions": {
+              "title": "3. API-Berechtigungen",
+              "body": "Fügen Sie die delegierten Microsoft-Graph-Berechtigungen Calendars.ReadWrite, User.Read und offline_access hinzu, und sonst nichts. Schließen Sie für den allgemeinen Einsatz die Herausgeberüberprüfung ab; der Mandant eines Kunden kann außerdem verlangen, dass ein Administrator die App genehmigt."
+            },
+            "workspaces": {
+              "title": "4. Arbeitsbereiche verbinden",
+              "body": "Fügen Sie Client-ID und Geheimnis hier ein und speichern Sie. Administratoren verbinden sich dann unter Termine, Einstellungen."
             }
           }
         }

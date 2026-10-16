@@ -62,6 +62,10 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 
 `facebook.broadcast.created`, `facebook.broadcast.deleted`, `facebook.broadcast.paused`, `facebook.broadcast.retry_requested`, `facebook.broadcast.started`, `facebook.page.connected`, `facebook.page.disconnected`, `facebook.post.deleted`
 
+## Lead ads (leadgen) on the same webhook
+
+`leadgen` changes of `POST /v2/facebook/webhook` are read by `readLeadgen` (`event-rules.ts`) and queued on `meta-leadgen` by `InboundService.queueLead`, one job per workspace and lead; the Meta lead ads domain consumes them ([meta-lead-ads.md](meta-lead-ads.md)). `PagesService.startLogin` takes optional extra scopes, `auth_type=rerequest` and a sealed `returnTo`, and the callback redirects to `/lead-sources?tab=ads` for a login started there. `PageApi.subscribeWebhooks` keeps `leadgen` when the Page has it. The module exports `FACEBOOK_GRAPH`, and the barrel `FacebookPagesService` and `FacebookPagesRepository`. Consumer of `facebook.page.disconnected`: `PageDisconnectConsumer` (meta-lead-ads, worker).
+
 ## Shims, owners and blocked consumers
 
 - `OpenFacebookPlanGate`: no Facebook keys in the plan catalogue.

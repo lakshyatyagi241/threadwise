@@ -497,7 +497,7 @@ export function PhonePreview({
             </span>
             <span
               aria-hidden="true"
-              className="absolute left-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rounded-full bg-black"
+              className="absolute start-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rtl:translate-x-1/2 rounded-full bg-black"
             />
             <span aria-hidden="true" className="text-[10px]">
               ●●●
@@ -548,7 +548,7 @@ export function PhonePreview({
           {template ? (
             <div
               data-testid="inbox-template-preview"
-              className="max-w-[92%] self-start overflow-hidden rounded-lg rounded-tl-none bg-white text-[13px] text-[#111B21] shadow-sm"
+              className="max-w-[92%] self-start overflow-hidden rounded-lg rounded-ss-none bg-white text-[13px] text-[#111B21] shadow-sm"
             >
               <div className="space-y-1.5 px-2.5 pb-1.5 pt-2">
                 {template.header && <p className="font-semibold">{template.header}</p>}

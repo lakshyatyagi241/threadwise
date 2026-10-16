@@ -41,6 +41,12 @@ function Change({ view }: { view: ChangeView }) {
           </Link>
         </li>
       );
+    case 'properties':
+      return (
+        <li dir="auto">
+          {t('propertiesChanged')} <span className="font-mono">{view.keys.join(', ')}</span>
+        </li>
+      );
     case 'other':
       return <li>{view.field}</li>;
   }

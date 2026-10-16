@@ -19,7 +19,8 @@
       "googleCalendar": "Google Agenda",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Construtor de fluxos"
+      "flowBuilder": "Construtor de fluxos",
+      "microsoftCalendar": "Calendário Microsoft"
     },
     "hub": {
       "kicker": "Admin - Configurações do projeto",
@@ -1024,6 +1025,37 @@
             "advanced": "Somente avançado"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Calendário Microsoft",
+        "description": "O app da Microsoft pelo qual todos os espaços de trabalho conectam seu calendário do Outlook ou do Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "App do Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que os espaços de trabalho conectem o Outlook",
+            "hint": "Desativado: nenhum espaço de trabalho pode se conectar e nada é lido nem gravado em nenhum calendário do Outlook. Os calendários conectados são mantidos."
+          },
+          "clientId": {
+            "label": "ID do aplicativo (cliente)",
+            "hint": "No centro de administração do Microsoft Entra, Registros de aplicativos, Visão geral. Se ficar vazio, usa MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segredo do cliente",
+            "hint": "Armazenado criptografado e nunca mais exibido. Se ficar vazio, mantém o segredo salvo; MICROSOFT_CALENDAR_CLIENT_SECRET é a alternativa."
+          },
+          "tenant": {
+            "label": "Locatário",
+            "hint": "common permite contas de trabalho, escola e pessoais; use o ID de um diretório (locatário) para um app de locatário único. Se ficar vazio, usa MICROSOFT_CALENDAR_TENANT e, na falta dele, common."
+          },
+          "redirectUri": {
+            "label": "Substituição do URI de redirecionamento",
+            "hint": "Deixe vazio para usar o endereço acima. Ele deve corresponder exatamente a um URI de redirecionamento do app."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Construtor de fluxos",
         "description": "O construtor de fluxos padrão de todos os espaços de trabalho: Simples, passo a passo, ou Avançado, em canvas. Um espaço de trabalho pode substituí-lo.",
         "tags": "Simples / Avançado / Automação"
+      },
+      "microsoftCalendar": {
+        "title": "Calendário Microsoft",
+        "description": "O app da Microsoft que os espaços de trabalho usam para conectar seus calendários do Outlook e do Microsoft 365 para as reservas.",
+        "tags": "Microsoft / OAuth / Outlook / Calendário"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Fluxos que já existem",
               "body": "Alterar esta configuração nunca altera ou apaga um fluxo. Um fluxo continua funcionando; ele só é aberto no construtor que estiver ativo. Um espaço de trabalho que escolheu o próprio construtor o mantém até escolher novamente o padrão da plataforma."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Calendário Microsoft",
+        "eyebrow": "Admin - Agendamentos",
+        "description": "Um único app do Microsoft Entra para toda a plataforma. Cada espaço de trabalho conecta então seu próprio calendário do Outlook ou do Microsoft 365 em Agendamentos, Configurações, e nunca vê o ID do cliente nem o segredo.",
+        "sections": {
+          "oauth": {
+            "title": "App do Microsoft Entra",
+            "description": "Sem um ID de cliente e um segredo, os espaços de trabalho veem o Outlook como indisponível e as reservas continuam sem ele. O Google Calendar não é afetado."
+          }
+        },
+        "guide": {
+          "title": "Configure no Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registro do aplicativo",
+              "body": "No centro de administração do Microsoft Entra, crie um registro de aplicativo para contas em qualquer diretório organizacional e contas pessoais da Microsoft, e copie aqui o ID do aplicativo (cliente). Mantenha o locatário como common, a menos que você tenha escolhido uma opção mais restrita."
+            },
+            "redirect": {
+              "title": "2. URI de redirecionamento e segredo",
+              "body": "Adicione o URI de redirecionamento mostrado nesta página como um redirecionamento Web, depois crie um segredo do cliente em Certificados e segredos e cole o valor dele aqui. Anote quando ele expira: depois dessa data, o calendário de todos os espaços de trabalho para de funcionar até que um novo segredo seja salvo."
+            },
+            "permissions": {
+              "title": "3. Permissões de API",
+              "body": "Adicione as permissões delegadas do Microsoft Graph Calendars.ReadWrite, User.Read e offline_access, e nada além disso. Para uso geral, conclua a verificação do editor; o locatário de um cliente também pode exigir que um administrador aprove o app."
+            },
+            "workspaces": {
+              "title": "4. Os espaços de trabalho se conectam",
+              "body": "Cole aqui o ID do cliente e o segredo e salve. Os administradores então conectam em Agendamentos, Configurações."
             }
           }
         }

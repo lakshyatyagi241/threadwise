@@ -13,7 +13,8 @@ export const isFormField = (f: FieldResponse): boolean => f.isActive && !f.isSys
 /**
  * The workspace's contact properties on the contact form, grouped under their sections. Each one is drawn for its
  * type (text, long text, number, date, dropdown, multi-select, checkbox, link, email, phone); a property with a
- * "show only when" rule appears once the property it waits for has the value.
+ * "show only when" rule appears once the property it waits for has the value. Other modules that keep properties in the same
+ * registry (companies) reuse it and give their own `looseTitle` / `hint`.
  */
 export function CustomFieldsSection({
   fields,
@@ -22,6 +23,8 @@ export function CustomFieldsSection({
   values,
   errors,
   idPrefix,
+  looseTitle,
+  hint,
   onChange,
 }: {
   fields: readonly FieldResponse[];
@@ -31,6 +34,10 @@ export function CustomFieldsSection({
   /** Message per property key. */
   errors: Readonly<Record<string, string>>;
   idPrefix: string;
+  /** The heading of properties that have no section (default: the contact form's). */
+  looseTitle?: string;
+  /** The words beside each heading (default: the contact form's). */
+  hint?: string;
   onChange: (key: string, value: InputValue) => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.form');
@@ -46,9 +53,9 @@ export function CustomFieldsSection({
       {groups.map((g) => (
         <fieldset key={g.section?.id ?? 'loose'} className="space-y-1.5">
           <legend className="flex w-full items-baseline justify-between gap-2 text-sm font-medium">
-            <span dir="auto">{g.section?.name ?? t('customProperties')}</span>
+            <span dir="auto">{g.section?.name ?? looseTitle ?? t('customProperties')}</span>
             <span className="text-xs font-normal text-muted-foreground">
-              {t('customPropertiesHint')}
+              {hint ?? t('customPropertiesHint')}
             </span>
           </legend>
           <div className="grid gap-3 sm:grid-cols-2">

@@ -35,7 +35,6 @@ vi.mock('./editor-screen', () => ({
 vi.mock('./playground-screen', () => ({ PlaygroundScreen: screen('test') }));
 vi.mock('./unanswered-screen', () => ({ UnansweredScreen: screen('unanswered') }));
 vi.mock('./insights-screen', () => ({ InsightsScreen: screen('insights') }));
-vi.mock('./settings-screen', () => ({ SettingsScreen: screen('settings') }));
 
 import { FaqPanel } from './faq-panel';
 
@@ -80,7 +79,7 @@ afterEach(async () => {
 });
 
 describe('the FAQs tab panel', () => {
-  it('opens the list when the address has no view, with the five screens as links into this flow', async () => {
+  it('opens the list when the address has no view, with the four screens as links into this flow', async () => {
     await mount();
     expect(host.textContent).toContain('screen:list');
     expect(links()).toEqual([
@@ -88,7 +87,6 @@ describe('the FAQs tab panel', () => {
       ['Test', `/flows/simple/${FLOW}?tab=faqs&view=test`, null],
       ['Unanswered4', `/flows/simple/${FLOW}?tab=faqs&view=unanswered`, null],
       ['Insights', `/flows/simple/${FLOW}?tab=faqs&view=insights`, null],
-      ['Settings', `/flows/simple/${FLOW}?tab=faqs&view=settings`, null],
     ]);
   });
 
@@ -98,7 +96,6 @@ describe('the FAQs tab panel', () => {
     ['test', 'screen:test', 'Test'],
     ['unanswered', 'screen:unanswered', 'Unanswered4'],
     ['insights', 'screen:insights', 'Insights'],
-    ['settings', 'screen:settings', 'Settings'],
   ])('?view=%s shows its screen and marks its tab', async (view, shown, tab) => {
     state.view = view;
     await mount();
@@ -110,15 +107,16 @@ describe('the FAQs tab panel', () => {
     ).toEqual([tab]);
   });
 
-  it('falls back to the list for an unknown view', async () => {
-    state.view = 'bogus';
+  it.each(['bogus', 'settings'])('falls back to the list for an unknown view (%s)', async (view) => {
+    state.view = view;
     await mount();
     expect(host.textContent).toContain('screen:list');
+    expect(links().map((l) => l[0])).not.toContain('Settings');
   });
 
   it('hides the screens a role cannot read', async () => {
     state.perms = new Set(['faq.entries.read']);
     await mount();
-    expect(links().map((l) => l[0])).toEqual(['FAQs', 'Test', 'Settings']);
+    expect(links().map((l) => l[0])).toEqual(['FAQs', 'Test']);
   });
 });

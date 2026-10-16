@@ -13,7 +13,13 @@ import { OperatorAuthService } from '../../../src/modules/auth/platform/operator
 import { AuthAuditService } from '../../../src/modules/auth/security/auth-audit.service';
 import { SessionService } from '../../../src/modules/auth/sessions/session.service';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
-import { OPERATOR_EMAIL, OPERATOR_PASSWORD, startHarness, type Harness } from './harness';
+import {
+  OPERATOR_EMAIL,
+  OPERATOR_PASSWORD,
+  seedAnotherWorkspace,
+  startHarness,
+  type Harness,
+} from './harness';
 
 /**
  * Sign-in, sessions, second factor, sign-out, recovery mail and sign-in alerts:
@@ -1160,14 +1166,14 @@ describe('new-device alert (TW-AUTH-018)', () => {
       .set('x-forwarded-for', '203.0.113.14')
       .set('user-agent', CHROME_WIN)
       .send({ orgName: 'Hop One', fullName: 'Hop', email, password: PASSWORD, acceptTerms: true });
-    const second = await api()
-      .post('/v2/auth/signup')
-      .set('x-forwarded-for', '203.0.113.14')
-      .set('user-agent', CHROME_WIN)
-      .send({ orgName: 'Hop Two', fullName: 'Hop', email, password: PASSWORD, acceptTerms: true });
+    // Public sign-up refuses a second account for one email (one identity, one account).
     const slugTwo = (
-      await api().get('/v2/auth/session').set(bearer(second.body.tokens.accessToken))
-    ).body.org.slug as string;
+      await seedAnotherWorkspace(
+        h,
+        { email, orgName: 'Hop Two', fullName: 'Hop', password: PASSWORD },
+        { ip: '203.0.113.14', userAgent: CHROME_WIN },
+      )
+    ).orgSlug;
     const mark = h.mail.length;
     const hop = await api()
       .post('/v2/auth/workspaces/switch')
@@ -1289,6 +1295,10 @@ describe('password rules the web hint relies on (TW-AUTH-035)', () => {
 describe('sign-in when the email is in several workspaces', () => {
   const noOrg = (email: string, password = PASSWORD) =>
     api().post('/v2/auth/login').set('x-forwarded-for', nextIp()).send({ email, password });
+  /** A second workspace for an email that already has one; public sign-up refuses that (one identity, one account). */
+  const anotherWorkspace = async (email: string, orgName: string, password = PASSWORD) => ({
+    slug: (await seedAnotherWorkspace(h, { email, orgName, password })).orgSlug,
+  });
 
   it('one workspace signs straight in without asking for a workspace', async () => {
     const a = await signup();
@@ -1301,7 +1311,7 @@ describe('sign-in when the email is in several workspaces', () => {
   it('several workspaces answer with the cards, then the pick opens that workspace', async () => {
     const email = uniqueEmail('multi');
     const one = await signup({ email, orgName: 'Multi One' });
-    const two = await signup({ email, orgName: 'Multi Two' });
+    const two = await anotherWorkspace(email, 'Multi Two');
 
     const res = await noOrg(email);
     expect(res.status, JSON.stringify(res.body)).toBe(201);
@@ -1329,7 +1339,7 @@ describe('sign-in when the email is in several workspaces', () => {
   it('the pick is single use, and a slug that was not offered is refused without spending it', async () => {
     const email = uniqueEmail('multi');
     const one = await signup({ email, orgName: 'Once One' });
-    await signup({ email, orgName: 'Once Two' });
+    await anotherWorkspace(email, 'Once Two');
     const other = await signup();
 
     const res = await noOrg(email);
@@ -1353,7 +1363,7 @@ describe('sign-in when the email is in several workspaces', () => {
   it('a password that opens only one of the workspaces signs straight into it', async () => {
     const email = uniqueEmail('multi');
     const one = await signup({ email, orgName: 'Own One' });
-    await signup({ email, orgName: 'Own Two', password: 'An0ther#Passw0rd9' });
+    await anotherWorkspace(email, 'Own Two', 'An0ther#Passw0rd9');
 
     const res = await noOrg(email);
     expect(res.status, JSON.stringify(res.body)).toBe(201);
@@ -1364,7 +1374,7 @@ describe('sign-in when the email is in several workspaces', () => {
   it('a wrong password gets the usual refusal and lists nothing', async () => {
     const email = uniqueEmail('multi');
     await signup({ email, orgName: 'Bad One' });
-    await signup({ email, orgName: 'Bad Two' });
+    await anotherWorkspace(email, 'Bad Two');
 
     const res = await noOrg(email, 'Wr0ng#Passw0rd!x');
     expect(res.status).toBe(401);

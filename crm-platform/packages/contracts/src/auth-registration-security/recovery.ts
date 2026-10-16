@@ -65,7 +65,7 @@ export const socialStartQuerySchema = z.object({
   mode: z.enum(['login', 'signup']).default('login'),
   /** Where the provider redirects back to: must be an allowed web origin. */
   redirectUri: z.string().url().max(512),
-  /** Required for mode=signup. */
+  /** Optional for mode=signup: the three-step sign-up redesign collects no workspace name up front, so the API falls back to a provisional one. */
   orgName: z.string().trim().min(2).max(120).optional(),
 });
 export type SocialStartQuery = z.infer<typeof socialStartQuerySchema>;

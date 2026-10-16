@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, EmptyState, Spinner, cn } from '@crm/ui';
 import { useTasksList, useTasksSetup } from '../api/hooks';
-import { isUnavailable } from '../lib/errors';
+import { errorKind, isUnavailable } from '../lib/errors';
 import {
   Avatar,
   CompleteCheck,
@@ -22,7 +22,7 @@ import { useTaskActions } from './use-task-actions';
 
 export interface LinkedTasksProps {
   /** The record whose tasks are listed, and the link a new task gets. */
-  kind: 'contact' | 'deal';
+  kind: 'contact' | 'deal' | 'company';
   id: string;
   /** The record's name, shown on the link chip of the New task form. */
   label?: string;
@@ -34,9 +34,9 @@ export interface LinkedTasksProps {
 }
 
 /**
- * The tasks of one contact or deal: open ones first, a quick add that links the new task to the record, a switch for the
- * completed ones, and a link to the Tasks hub filtered to the record. Shared by the contact page and the deal drawer, so
- * both behave the same. Renders nothing for someone who may not read tasks.
+ * The tasks of one contact, deal or company: open ones first, a quick add that links the new task to the record, a switch for the
+ * completed ones, and a link to the Tasks hub filtered to the record. Shared by the contact page, the deal drawer and the
+ * company page, so all behave the same. Renders nothing for someone who may not read tasks.
  */
 export function LinkedTasks({ kind, id, label, compact, className, onChanged }: LinkedTasksProps) {
   const can = useTasksCan();
@@ -142,6 +142,9 @@ function Panel({
       ) : open.isError ? (
         isUnavailable(open.error) ? (
           <EmptyState title={t('unavailableTitle')} message={t('unavailable')} />
+        ) : errorKind(open.error) === 'notFound' ? (
+          // The list answers for a record; a 404 here is that record, not a task.
+          <p className="py-3 text-center text-sm text-muted-foreground">{t('gone')}</p>
         ) : (
           <ErrorLine error={open.error} onRetry={() => void open.refetch()} />
         )

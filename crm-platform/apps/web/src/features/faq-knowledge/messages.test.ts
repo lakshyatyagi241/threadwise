@@ -75,8 +75,6 @@ const DYNAMIC = [
   `${ROOT}.log.view.`,
   `${ROOT}.log.why.`,
   `${ROOT}.flowPicker.state.`,
-  `${ROOT}.settings.sens.preset.`,
-  `${ROOT}.settings.facts.`,
 ];
 
 const files = [
@@ -142,7 +140,7 @@ describe('faq-knowledge messages', () => {
     ];
     const dynamic = [
       ...errorKeys.map((k) => `errors.${k}`),
-      ...['faqs', 'test', 'unanswered', 'insights', 'settings'].map((k) => `nav.tab.${k}`),
+      ...['faqs', 'test', 'unanswered', 'insights'].map((k) => `nav.tab.${k}`),
       ...['pause', 'activate', 'delete'].map((k) => `list.bulk.done.${k}`),
       ...['active', 'paused'].map((k) => `list.status.${k}`),
       ...fields.flatMap((f) => problems.map((p) => `editor.problem.${f}.${p}`)),
@@ -171,8 +169,6 @@ describe('faq-knowledge messages', () => {
         `verify.body.${k}`,
       ]),
       ...['live', 'off', 'draft'].map((s) => `flowPicker.state.${s}`),
-      ...['strict', 'balanced', 'forgiving'].map((p) => `settings.sens.preset.${p}`),
-      ...['faqs', 'variations'].map((k) => `settings.facts.${k}`),
     ];
     expect(dynamic.filter((k) => !(`${ROOT}.${k}` in en))).toEqual([]);
   });

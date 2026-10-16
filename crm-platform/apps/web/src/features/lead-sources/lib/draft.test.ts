@@ -17,8 +17,11 @@ import {
   buildPreviewBody,
   buildUpdateBody,
   contractIssues,
+  buildSpeed,
   draftFromSource,
   emptyDraft,
+  emptySpeed,
+  speedDelay,
   firstStepWithProblem,
   isDirty,
   newRow,
@@ -81,6 +84,15 @@ describe('a new draft', () => {
       owner: { mode: 'unassigned', userIds: [] },
       deal: { enabled: false, pipelineId: null, stageId: null, title: DEFAULT_DEAL_TITLE },
       notify: { owner: true, userIds: [] },
+      // the first message to a new lead is off until somebody turns it on
+      speedToLead: {
+        enabled: false,
+        channel: 'whatsapp',
+        templateId: null,
+        senderId: null,
+        delayMinutes: 0,
+        businessHoursOnly: false,
+      },
     });
   });
 });
@@ -327,6 +339,14 @@ describe('draft <-> API body', () => {
       owner: { mode: 'round_robin', userIds: [ID(5), ID(6)] },
       deal: { enabled: true, pipelineId: ID(7), stageId: ID(8), title: '{{name}} / {{campaign}}' },
       notify: { owner: false, userIds: [ID(5)] },
+      speedToLead: {
+        enabled: true,
+        channel: 'email',
+        templateId: ID(40),
+        senderId: ID(41),
+        delayMinutes: 15,
+        businessHoursOnly: true,
+      },
     },
   });
 
@@ -427,5 +447,76 @@ describe('the preview request', () => {
     expect(previewIsPossible(bad)).toBe(false);
     // A problem outside the mapping (the name) does not block the preview.
     expect(previewIsPossible(named({ name: '' }))).toBe(true);
+  });
+});
+
+describe('the first message to a new lead (speed-to-lead)', () => {
+  const on = (patch: Partial<SourceDraft['speed']> = {}): SourceDraft =>
+    named({ speed: { ...emptySpeed(), enabled: true, templateId: ID(40), ...patch } });
+
+  it('is off by default and a draft of a source that never set it is off too', () => {
+    expect(emptyDraft().speed).toEqual(emptySpeed());
+    expect(emptySpeed().enabled).toBe(false);
+    expect(draftFromSource(source()).speed).toEqual(emptySpeed());
+  });
+
+  it('goes to the server as the contract states it, and survives a round trip', () => {
+    const d = on({ channel: 'sms', senderId: ID(41), delay: '30', businessHoursOnly: true });
+    expect(buildDefaults(d).speedToLead).toEqual({
+      enabled: true,
+      channel: 'sms',
+      templateId: ID(40),
+      senderId: ID(41),
+      delayMinutes: 30,
+      businessHoursOnly: true,
+    });
+    expect(createLeadSourceSchema.safeParse(buildCreateBody(d)).success).toBe(true);
+    const back = draftFromSource(
+      source({ defaults: { ...source().defaults, speedToLead: buildSpeed(d.speed) } }),
+    );
+    expect(back.speed).toEqual(d.speed);
+  });
+
+  it('WhatsApp is sent by the template own number: a sender chosen earlier for SMS is not carried', () => {
+    expect(buildSpeed(on({ channel: 'whatsapp', senderId: ID(41) }).speed).senderId).toBeNull();
+  });
+
+  it('switched on it needs a template, and the delay must be whole minutes from 0 to 60', () => {
+    expect(validateDraft(on({ templateId: '' }))['defaults.speedToLead.templateId']).toEqual({
+      key: 'speedTemplateRequired',
+    });
+    // off, an unfinished setting is not a problem
+    expect(
+      validateDraft(named({ speed: { ...emptySpeed(), templateId: '' } }))[
+        'defaults.speedToLead.templateId'
+      ],
+    ).toBeUndefined();
+    for (const bad of ['', 'x', '-1', '61', '1.5', '1e1']) {
+      expect(
+        validateDraft(on({ delay: bad }))['defaults.speedToLead.delayMinutes'],
+        bad,
+      ).toMatchObject({ key: 'speedDelayRange', values: { max: 60 } });
+    }
+    for (const ok of ['0', '1', '60', ' 15 ']) {
+      expect(
+        validateDraft(on({ delay: ok }))['defaults.speedToLead.delayMinutes'],
+        ok,
+      ).toBeUndefined();
+    }
+    expect(speedDelay('60')).toBe(60);
+    expect(speedDelay('61')).toBeNull();
+  });
+
+  it('a problem in it belongs to the rules step and is found by the contract too', () => {
+    expect(stepOfField('defaults.speedToLead.templateId')).toBe('rules');
+    expect(firstStepWithProblem(validateDraft(on({ templateId: '' })))).toBe('rules');
+    expect(contractIssues(on({ delay: '5' }))).toEqual({});
+  });
+
+  it('counts as a change when the person edits it', () => {
+    const base = on();
+    expect(isDirty(on({ delay: '5' }), base)).toBe(true);
+    expect(isDirty(on({ businessHoursOnly: true }), base)).toBe(true);
+    expect(isDirty(on(), base)).toBe(false);
   });
 });

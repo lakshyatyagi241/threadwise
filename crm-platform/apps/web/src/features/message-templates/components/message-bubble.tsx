@@ -171,7 +171,7 @@ export function PhonePreview({ model }: { model: PreviewModel }) {
       </div>
       <div className="rounded-[2.4rem] bg-neutral-900 p-2 shadow-xl ring-1 ring-black/20">
         <div className="relative flex h-[min(34rem,calc(100dvh-16rem))] min-h-[26rem] flex-col overflow-hidden rounded-[2rem] bg-[#efeae2] dark:bg-[#0b141a]">
-          <div className="absolute top-1.5 left-1/2 z-10 h-4 w-20 -translate-x-1/2 rounded-full bg-neutral-900" />
+          <div className="absolute top-1.5 start-1/2 z-10 h-4 w-20 -translate-x-1/2 rtl:translate-x-1/2 rounded-full bg-neutral-900" />
           <div className="flex items-center justify-between bg-[#008069] px-5 pt-2 pb-1 text-[10px] font-medium text-white dark:bg-[#202c33]">
             <span>{t('time')}</span>
             <span className="flex items-center gap-1" aria-hidden="true">

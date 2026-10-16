@@ -210,7 +210,7 @@ export function AdminTemplatesScreen() {
                 <div role="columnheader">{t('colCategory')}</div>
                 <div role="columnheader">{t('colSteps')}</div>
                 <div role="columnheader">{t('colClones')}</div>
-                <div role="columnheader" className="pr-2 text-right">
+                <div role="columnheader" className="pe-2 text-end">
                   {t('colActions')}
                 </div>
               </div>

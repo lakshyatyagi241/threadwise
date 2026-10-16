@@ -24,7 +24,7 @@ export function OnCallPanel() {
   return (
     <section
       aria-label={t('label')}
-      className="fixed bottom-4 right-4 z-50 w-72 rounded-xl border border-border bg-background p-4 shadow-lg"
+      className="fixed bottom-4 end-4 z-50 w-72 rounded-xl border border-border bg-background p-4 shadow-lg"
     >
       <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
         {t('title')}

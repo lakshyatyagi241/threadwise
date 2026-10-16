@@ -17,11 +17,13 @@ import {
   listLeadEventsQuerySchema,
   previewLeadMappingSchema,
   sendTestLeadSchema,
+  speedToLeadOptionsQuerySchema,
   updateLeadSourceSchema,
   type CreateLeadSourceInput,
   type ListLeadEventsQuery,
   type PreviewLeadMappingInput,
   type SendTestLeadInput,
+  type SpeedToLeadOptionsQuery,
   type UpdateLeadSourceInput,
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
@@ -50,6 +52,20 @@ export class LeadSourcesController {
   })
   list() {
     return this.sources.list();
+  }
+
+  // Literal route first: ':id' would otherwise take it for an id.
+  @Get('speed-to-lead/options')
+  @RequirePermission('leads.sources.manage')
+  @ApiOperation({
+    summary: 'What the first-message setting can choose from',
+    description:
+      'For one channel: the templates it can send and the connected senders. Names only, nothing of a contact.',
+  })
+  speedToLeadOptions(
+    @Query(zodPipe(speedToLeadOptionsQuerySchema)) query: SpeedToLeadOptionsQuery,
+  ) {
+    return this.sources.speedToLeadOptions(query);
   }
 
   @Post()

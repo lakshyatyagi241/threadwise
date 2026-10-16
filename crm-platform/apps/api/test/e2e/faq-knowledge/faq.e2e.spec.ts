@@ -823,7 +823,7 @@ describe('indexing', () => {
     void e;
   });
 
-  it('vectors made under a replaced model are re-queued by the self-heal pass, rows that gave up are left alone', async () => {
+  it('vectors made under a replaced model and rows that gave up are re-queued by the self-heal pass, so indexing passes', async () => {
     const { FaqEmbedWorker } = await import('../../../src/modules/faq-knowledge/faq-embed.worker');
     const worker = p.h.app.get(FaqEmbedWorker);
     const x = await api.signup('faqheal');
@@ -839,7 +839,8 @@ describe('indexing', () => {
        WHERE org_id = $1 AND text = 'heal two'`,
       [x.orgId],
     );
-    expect(await worker.healStale()).toBeGreaterThanOrEqual(1);
+    // Both come back: the stale vector and the row that gave up are queued again (the self-heal pass retries by default).
+    expect(await worker.healStale()).toBeGreaterThanOrEqual(2);
     const states = async () =>
       Object.fromEntries(
         (
@@ -851,15 +852,15 @@ describe('indexing', () => {
       );
     let now = await states();
     expect(now['heal one']).toMatchObject({ embed_state: 'pending' });
-    expect(now['heal two']).toMatchObject({ embed_state: 'failed' });
+    expect(now['heal two']).toMatchObject({ embed_state: 'pending' });
     await indexAll(p);
     now = await states();
     expect(now['heal one']).toMatchObject({
       embed_state: 'ready',
       embedding_model: 'openai/text-embedding-3-large',
     });
-    expect(now['heal two']).toMatchObject({ embed_state: 'failed' });
-    expect(((await api.faq(x.admin).get(e.id)).body as EntryJson).failedCount).toBe(1);
+    expect(now['heal two']).toMatchObject({ embed_state: 'ready' });
+    expect(((await api.faq(x.admin).get(e.id)).body as EntryJson).failedCount).toBe(0);
   });
 
   it('a provider failure for one workspace leaves others indexing and the failing rows pending with a reason', async () => {
@@ -1160,7 +1161,7 @@ describe('answering customers on a channel', () => {
   const say = (peer: string, text: string) =>
     simInbound(p, t, ch, { from: peer, name: 'Asha', text });
 
-  it('is silent while the workspace has not switched answering on (the default)', async () => {
+  it('stays silent for a phrase no FAQ has, with answering on by default', async () => {
     const peer = nextPeer();
     await say(peer, 'order status');
     await new Promise((r) => setTimeout(r, 1500));
@@ -1177,7 +1178,7 @@ describe('answering customers on a channel', () => {
     const f = api.faq(t.admin);
     const before = (await f.settings()).body;
     expect(before).toMatchObject({
-      enabled: false,
+      enabled: true,
       // The default follows the embedding model: 0.5 is the one measured for text-embedding-3-large.
       threshold: 0.5,
       recommendedThreshold: 0.5,
@@ -2085,20 +2086,12 @@ describe('FAQs belong to a flow: settings, limits and who may see what', () => {
     const fb = api.faq(t.admin, B.uuid);
     for (const f of [fa, fb]) {
       expect((await f.settings()).body).toMatchObject({
-        enabled: false,
+        enabled: true,
         isDefault: true,
         rowVersion: null,
         threshold: 0.5,
       });
     }
-    // Both switched off: silent, and nothing is logged.
-    const quiet = nextPeer();
-    await say(quiet, 'Track my order');
-    await new Promise((r) => setTimeout(r, 1500));
-    expect(await sentTo(p, t, ch, quiet)).toEqual([]);
-    expect(
-      await api.count(`SELECT count(*) AS n FROM faq_match_logs WHERE org_id = $1`, [t.orgId]),
-    ).toBe(0);
 
     // A saves first: B is untouched, and B's first save needs no version although A's row exists.
     expect((await fa.saveSettings(settingsOf({ threshold: 0.45 }))).body).toMatchObject({
@@ -2107,7 +2100,7 @@ describe('FAQs belong to a flow: settings, limits and who may see what', () => {
       rowVersion: 1,
     });
     expect((await fb.settings()).body).toMatchObject({
-      enabled: false,
+      enabled: true,
       isDefault: true,
       rowVersion: null,
     });

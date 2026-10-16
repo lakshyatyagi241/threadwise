@@ -185,7 +185,7 @@ function useAttrPicker<T extends AttrEl>(
                 <path d="M3 8h10" />
               </svg>
               {t('insertAttribute')}
-              <span className="ml-auto text-foreground/80">/{slash!.query}</span>
+              <span className="ms-auto text-foreground/80">/{slash!.query}</span>
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: 232 }}>
               {matches.length === 0 ? (
@@ -211,7 +211,7 @@ function useAttrPicker<T extends AttrEl>(
                     }}
                     onMouseEnter={() => setActive(i)}
                     className={cn(
-                      'flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-muted',
+                      'flex w-full items-start gap-2 px-3 py-2 text-start hover:bg-muted',
                       i === current && 'bg-brand/10',
                     )}
                   >
@@ -652,7 +652,7 @@ export function WaBubble({ html, children }: { html?: string; children?: ReactNo
   const t = useTranslations('flb.builder.shell.kit');
   return (
     <div
-      className="relative mb-1 ml-auto max-w-[88%] rounded-lg px-2.5 py-1.5 shadow-sm"
+      className="relative mb-1 ms-auto max-w-[88%] rounded-lg px-2.5 py-1.5 shadow-sm"
       style={{ background: '#D9FDD3', color: '#111B21' }}
     >
       {html !== undefined ? (
@@ -665,7 +665,7 @@ export function WaBubble({ html, children }: { html?: string; children?: ReactNo
           {children}
         </div>
       )}
-      <div className="mt-0.5 text-right text-[9.5px]" style={{ color: 'rgba(0,0,0,0.45)' }}>
+      <div className="mt-0.5 text-end text-[9.5px]" style={{ color: 'rgba(0,0,0,0.45)' }}>
         {time(t('am'), t('pm'))} ✓✓
       </div>
     </div>

@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, useTransition, type ReactNode } from 'react';
 import { Popover, cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { useOptionalShellData } from './shell-data';
 import { NavIcon } from './nav-icons';
+import { setTheme } from './actions';
 import { TOUR_START_EVENT } from '@/features/admin-console-shell/tour/tour-model';
 
 export interface ShellUser {
@@ -81,21 +82,63 @@ function Row({ icon, children, end, className, onClick, href }: RowProps) {
 }
 
 /**
+ * The light/dark row (below Wallet, per the product owner): same sun/moon icon and immediate-apply behavior as the header's
+ * `ThemeMenu`, reusing its `setTheme` action so the two controls share one cookie. Unlike every other row here, toggling the
+ * theme is not a navigation, so it does not close the popover — the person may want to see both states before dismissing it.
+ */
+function ThemeRow({ theme }: { theme: 'light' | 'dark' }) {
+  const t = useTranslations('shell');
+  const [current, setCurrent] = useState(theme);
+  const [, start] = useTransition();
+  useEffect(() => {
+    document.documentElement.dataset.theme = current;
+  }, [current]);
+
+  const toggle = () => {
+    const next = current === 'dark' ? 'light' : 'dark';
+    setCurrent(next);
+    start(() => void setTheme(next));
+  };
+
+  const label = current === 'dark' ? t('themeDark') : t('themeLight');
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      role="switch"
+      aria-checked={current === 'dark'}
+      aria-label={`${t('theme')}: ${label}`}
+      data-testid="user-menu-theme"
+      className={ROW}
+    >
+      <NavIcon
+        name={current === 'dark' ? 'moon' : 'sun'}
+        className="size-4 text-muted-foreground"
+      />
+      <span className="flex-1">{t('theme')}</span>
+      <span className="font-mono text-[11px] text-muted-foreground">{label}</span>
+    </button>
+  );
+}
+
+/**
  * The account menu behind the round avatar (TW-ASHELL-019). Reference replaces its server menu with this one once the bundle
- * loads: avatar, name and email, a "plan - role" chip, then Profile, Wallet with the balance, Order history, Settings,
- * Pricing and plans, Help and support and Log out, with the app name in the footer. Theme and language live in the header
- * beside it, as in Reference. `strip` shows the name and role next to the avatar, as the sidebar mode's top strip does.
+ * loads: avatar, name and email, a "plan - role" chip, then Profile, Wallet with the balance, a light/dark toggle, Order
+ * history, Settings, Pricing and plans, Help and support and Log out, with the app name in the footer. The header's theme
+ * menu still exists beside it, as in Reference; this menu adds the same choice inline, below Wallet, per the product owner.
+ * Language stays in the header. `strip` shows the name and role next to the avatar, as the sidebar mode's top strip does.
  * "Take the tour" is the replay entry Reference never wired (its own port notes ask for one).
  */
 export function UserMenu({
   user,
+  theme = 'light',
   settingsHref,
   helpItems = [],
   profile: profileProp,
   variant = 'bar',
 }: {
   user: ShellUser;
-  /** Kept for callers that still pass it; the theme now lives in the header's theme menu. */
+  /** The current theme, shown and toggled by the row below Wallet (the header's theme menu also reads and sets it). */
   theme?: 'light' | 'dark';
   /** Opens the Settings area. */
   settingsHref?: string;
@@ -187,6 +230,7 @@ export function UserMenu({
           >
             {tm('wallet')}
           </Row>
+          <ThemeRow theme={theme} />
           <Row icon="cart" href="/billing/orders" onClick={close}>
             {tm('orders')}
           </Row>

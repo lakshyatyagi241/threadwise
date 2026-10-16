@@ -26,6 +26,7 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { assertOwnerWithinScope } from '../owner-scope';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertCompanyReadable, companyLinkRefused } from '../companies/company-link';
 import { PipelinesRepository, type StageRow } from '../pipelines/pipelines.repository';
 import { DealsPlan } from './deals-plan';
 import { between, onTop } from './deal-ordering';
@@ -334,7 +335,12 @@ export class DealsService {
         }
       }
       if (input.companyId !== undefined) {
-        patch.company_id = await this.resolveCompany(tx, ctx.orgId, input.companyId);
+        patch.company_id = await this.resolveCompany(
+          tx,
+          ctx.orgId,
+          input.companyId,
+          deal.companyId,
+        );
       }
 
       const ok = await this.repo.update(tx, ctx.orgId, deal.id, input.rowVersion, patch);
@@ -639,14 +645,17 @@ export class DealsService {
     return this.requireActiveUser(tx, orgId, ownerId);
   }
 
+  /** A company to link: in this workspace (404 otherwise), and, when the link is new, one the caller may read (capability and record scope). */
   private async resolveCompany(
     tx: Tx,
     orgId: number,
     companyId: string | null,
+    current: number | null = null,
   ): Promise<number | null> {
     if (companyId === null) return null;
     const id = await this.repo.resolveCompanyId(tx, orgId, companyId);
-    if (id === undefined) throw AppError.notFound('Company', companyId);
+    if (id === undefined) throw companyLinkRefused('notFound');
+    if (id !== current) await assertCompanyReadable(tx, this.rbac, orgId, id);
     return id;
   }
 

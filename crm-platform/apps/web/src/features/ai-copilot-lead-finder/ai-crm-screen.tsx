@@ -97,9 +97,7 @@ export function AiCrmScreen() {
               <div
                 key={i}
                 className={`rounded-lg px-3 py-2 text-sm ${
-                  turn.role === 'user'
-                    ? 'ms-auto max-w-[80%] bg-primary text-primary-foreground'
-                    : 'max-w-[80%] bg-muted'
+                  turn.role === 'user' ? 'ms-auto max-w-[80%] bg-primary text-primary-foreground' : 'max-w-[80%] bg-muted'
                 }`}
               >
                 {turn.text}

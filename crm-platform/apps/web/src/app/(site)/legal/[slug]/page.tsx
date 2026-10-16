@@ -26,7 +26,7 @@ export default async function LegalPage({ params }: Props) {
     <>
       <section className="relative overflow-hidden bg-paper-0">
         <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-        <div className="blur-bub absolute -right-32 -top-32 h-[420px] w-[420px] rounded-full bg-wa-mint/40" />
+        <div className="blur-bub absolute -end-32 -top-32 h-[420px] w-[420px] rounded-full bg-wa-mint/40" />
         <div className="relative mx-auto max-w-[1080px] px-4 py-24 sm:px-6 lg:px-7">
           <span className="badge-num mb-6 inline-block">— {t('legalTitle')}</span>
           <h1 className="serif text-[40px] leading-[0.92] tracking-[-0.025em] sm:text-[56px] lg:text-[88px]">

@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import type { FaqEntrySummary } from '@crm/contracts';
 import {
-  Alert,
   Badge,
   Button,
   ConfirmDialog,
@@ -27,7 +26,6 @@ import {
   bulkAllowed,
   flowMissing,
   hasFilters,
-  indexingShares,
   pruneSelection,
   stepMissing,
   toggleAll,
@@ -147,27 +145,7 @@ export function FaqListScreen() {
           <StatTile label={t('stats.active')} value={stats.active} />
           <StatTile label={t('stats.paused')} value={stats.paused} />
           <StatTile label={t('stats.variations')} value={stats.variations} />
-          <StatTile
-            label={t('stats.pending')}
-            value={stats.pending}
-            hint={stats.pending > 0 ? t('stats.pendingHint') : undefined}
-          />
-          <StatTile
-            label={t('stats.failed')}
-            value={stats.failed}
-            tone={stats.failed > 0 ? 'warning' : 'default'}
-            hint={stats.failed > 0 ? t('stats.failedHint') : undefined}
-          />
         </div>
-      )}
-
-      {stats && stats.failed > 0 && (
-        <Alert tone="warning" className="flex flex-wrap items-center justify-between gap-3">
-          <span>{t('failedBanner', { count: stats.failed })}</span>
-          <Button size="sm" variant="secondary" onClick={() => set({ indexing: 'failed' })}>
-            {t('showFailed')}
-          </Button>
-        </Alert>
       )}
 
       {!noFaqsAtAll && (
@@ -206,17 +184,6 @@ export function FaqListScreen() {
             options={[
               ['', t('filter.anyCategory')],
               ...(stats?.categories ?? []).map((c): [string, string] => [c, c]),
-            ]}
-          />
-          <FilterSelect
-            id="faq-indexing"
-            label={t('filter.indexing')}
-            value={filters.indexing}
-            onChange={(v) => set({ indexing: v as ListFilters['indexing'] })}
-            options={[
-              ['', t('filter.anyIndexing')],
-              ['pending', t('filter.pending')],
-              ['failed', t('filter.failed')],
             ]}
           />
           {filtered && (
@@ -350,9 +317,6 @@ export function FaqListScreen() {
                       {t('col.answer')}
                     </th>
                     <th scope="col" className={TH}>
-                      {t('col.indexing')}
-                    </th>
-                    <th scope="col" className={TH}>
                       {t('col.answered')}
                     </th>
                     <th scope="col" className={TH}>
@@ -387,7 +351,6 @@ export function FaqListScreen() {
                         })
                       }
                       onDelete={() => setConfirm({ kind: 'row-delete', row })}
-                      onShowFailed={() => set({ indexing: 'failed' })}
                     />
                   ))}
                 </tbody>
@@ -472,7 +435,6 @@ export function FaqRow({
   busy,
   onToggle,
   onDelete,
-  onShowFailed,
 }: {
   row: FaqEntrySummary;
   selected: boolean;
@@ -482,7 +444,6 @@ export function FaqRow({
   busy?: boolean;
   onToggle: () => void;
   onDelete: () => void;
-  onShowFailed: () => void;
 }) {
   const t = useTranslations('faq.list');
   const { flowId, href } = useFaqFlow();
@@ -547,9 +508,6 @@ export function FaqRow({
           </div>
         )}
       </td>
-      <td className="px-3 py-3">
-        <IndexingBar row={row} onShowFailed={onShowFailed} />
-      </td>
       <td className="whitespace-nowrap px-3 py-3">
         <div className="font-medium tabular-nums">{row.hitCount}</div>
         <div className="text-xs text-muted-foreground">
@@ -591,50 +549,5 @@ export function FaqRow({
         </div>
       </td>
     </tr>
-  );
-}
-
-/** Ready / pending / failed as a thin segmented bar with the numbers in words; a failed count opens the failed filter. */
-export function IndexingBar({
-  row,
-  onShowFailed,
-}: {
-  row: Pick<FaqEntrySummary, 'readyCount' | 'pendingCount' | 'failedCount'>;
-  onShowFailed?: () => void;
-}) {
-  const t = useTranslations('faq.list.indexing');
-  const s = indexingShares(row);
-  return (
-    <div className="w-36 space-y-1.5">
-      <div
-        role="img"
-        aria-label={t('summary', {
-          ready: row.readyCount,
-          pending: row.pendingCount,
-          failed: row.failedCount,
-        })}
-        className="flex h-2 w-full gap-0.5 overflow-hidden rounded-full bg-muted"
-      >
-        <span className="bg-success" style={{ width: `${s.ready}%` }} />
-        <span className="bg-warning/60" style={{ width: `${s.pending}%` }} />
-        <span className="bg-danger" style={{ width: `${s.failed}%` }} />
-      </div>
-      <p className="text-xs text-muted-foreground">
-        {t('ready', { count: row.readyCount })}
-        {row.pendingCount > 0 && <> · {t('pending', { count: row.pendingCount })}</>}
-        {row.failedCount > 0 && (
-          <>
-            {' · '}
-            <button
-              type="button"
-              onClick={onShowFailed}
-              className="font-medium text-danger underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              {t('failed', { count: row.failedCount })}
-            </button>
-          </>
-        )}
-      </p>
-    </div>
   );
 }

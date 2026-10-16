@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CAMPAIGN_AI_PORT } from '../../infra/providers/campaigns/campaign-ai.port';
-import { HttpCampaignAiAdapter } from '../../infra/providers/campaigns/http-campaign-ai.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
@@ -19,13 +17,7 @@ import { TemplatesService } from './templates.service';
 @Module({
   imports: [WabaModule, PlansCoreModule, AiKeysUsageAdminModule],
   controllers: [TemplatesController, TemplateAiController],
-  providers: [
-    TemplatesRepository,
-    TemplatesService,
-    TemplateSyncService,
-    TemplateAiService,
-    { provide: CAMPAIGN_AI_PORT, useClass: HttpCampaignAiAdapter },
-  ],
+  providers: [TemplatesRepository, TemplatesService, TemplateSyncService, TemplateAiService],
   exports: [TemplatesService, TemplateSyncService, TemplatesRepository],
 })
 export class MessageTemplatesModule {}

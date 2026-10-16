@@ -1057,7 +1057,200 @@
         "badHours": "Corrige las horas resaltadas en el horario comercial."
       },
       "notAvailable": "Los ajustes de reservas para todo el espacio de trabajo no están disponibles en este servidor. En su lugar, cada tipo de reserva tiene sus propios horarios, zona horaria, recordatorios y mensajes.",
-      "openTypes": "Abrir tipos de reserva"
+      "openTypes": "Abrir tipos de reserva",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Conecta un calendario de Microsoft para que las reservas confirmadas se escriban en él y sus horas ocupadas cierren franjas.",
+        "provider": "Calendario de Outlook",
+        "providerSub": "Microsoft 365 y Outlook.com",
+        "status": {
+          "unavailable": "No disponible",
+          "disconnected": "No conectado",
+          "connected": "Conectado",
+          "needs_reconnect": "Requiere reconexión"
+        },
+        "loading": "Comprobando la conexión",
+        "unavailableTitle": "Outlook aún no está configurado en esta plataforma",
+        "unavailableBody": "El administrador de tu plataforma debe registrar la aplicación de Microsoft (Admin, Ajustes, Calendario de Microsoft) antes de que un espacio de trabajo pueda conectarse. Tus reservas no se ven afectadas.",
+        "disconnectedBody": "No conectado. Al conectar se abre Microsoft, donde eliges la cuenta y aceptas compartir el acceso al calendario.",
+        "disconnectedReadOnly": "No conectado. Pide a un administrador del espacio de trabajo que lo conecte.",
+        "reconnectTitle": "Microsoft dejó de aceptar la conexión",
+        "reconnectBody": "El acceso fue retirado o ha caducado, por lo que las reservas no se escriben en tu calendario y no se leen sus horas ocupadas. Vuelve a conectar para reanudar.",
+        "reconnectBodyAccount": "El acceso de {account} fue retirado o ha caducado, por lo que las reservas no se escriben en tu calendario y no se leen sus horas ocupadas. Vuelve a conectar para reanudar.",
+        "account": "Cuenta de Microsoft",
+        "calendar": "Calendario",
+        "primaryCalendar": "Tu calendario principal",
+        "connectedAgo": "Conectado {when}",
+        "writesHere": "Las reservas confirmadas se escriben en este calendario.",
+        "readsOnly": "Solo se leen sus horas ocupadas. Las reservas se escriben en tu otro calendario.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft está limitando las solicitudes. Las reservas se reintentan automáticamente.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft rechazó el acceso a este calendario. Comprueba que la cuenta tenga un buzón y pueda compartir su calendario.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft no respondió. Se vuelve a intentar automáticamente."
+        },
+        "errors": {
+          "notConfigured": "Outlook no está configurado en esta plataforma. Pide al administrador de tu plataforma que registre la aplicación de Microsoft.",
+          "notConnected": "No hay ningún calendario de Outlook conectado. Recarga la página y vuelve a conectar.",
+          "providerFailed": "Microsoft no respondió. Inténtalo de nuevo en un momento.",
+          "notYours": "Esta conexión la inició otra persona, así que no se conectó nada. Pídele que conecte, o pulsa Conectar tú mismo.",
+          "invalidTicket": "Esta conexión ya no se puede confirmar. Pulsa Conectar para empezar de nuevo."
+        },
+        "loadingCalendars": "Cargando tus calendarios",
+        "chooseLabel": "Escribir las reservas en",
+        "chooseHint": "Solo se muestran los calendarios que esta cuenta puede editar. Los eventos ya escritos se quedan donde están.",
+        "choosePlaceholder": "Elige un calendario",
+        "chooseOptionPrimary": "{name} (calendario principal)",
+        "chooseSave": "Usar este calendario",
+        "chooseCancel": "Cancelar",
+        "saving": "Guardando",
+        "connect": "Conectar Outlook",
+        "reconnect": "Reconectar Outlook",
+        "redirecting": "Abriendo Microsoft",
+        "choose": "Elegir calendario",
+        "disconnect": "Desconectar",
+        "disconnected": "Outlook desconectado.",
+        "calendarSaved": "Calendario guardado.",
+        "confirm": {
+          "title": "¿Conectar esta cuenta de Microsoft?",
+          "body": "Microsoft te ha devuelto aquí para terminar de conectar una cuenta a {workspace}. Continúa solo si lo iniciaste tú hace un momento.",
+          "confirm": "Conectar",
+          "working": "Conectando",
+          "cancel": "Cancelar"
+        },
+        "confirmOff": {
+          "title": "¿Desconectar Outlook?",
+          "message": "Las nuevas reservas dejarán de ir a tu calendario de Outlook y ya no se leerán sus horas ocupadas. Los eventos que ya están en tu calendario se quedan ahí. Para retirar el permiso en Microsoft, elimina la aplicación en tu cuenta de Microsoft.",
+          "confirm": "Desconectar",
+          "cancel": "Mantener"
+        },
+        "outcome": {
+          "connected": "Outlook conectado. Las reservas confirmadas ahora van a tu calendario.",
+          "denied": "No se concedió el acceso en Microsoft, así que no se conectó nada.",
+          "failed": "La conexión no se completó. Inténtalo de nuevo; si sigue fallando, pide al administrador de tu plataforma que revise la aplicación de Microsoft.",
+          "expired": "Ese intento tardó demasiado. Pulsa Conectar para empezar de nuevo.",
+          "not_configured": "Outlook no está configurado en esta plataforma. Pide al administrador de tu plataforma que registre la aplicación de Microsoft.",
+          "missing_scope": "Microsoft no concedió el permiso de calendario necesario. Vuelve a conectar y deja marcadas todas las casillas.",
+          "cancelled": "Cancelaste el proceso. No se conectó nada."
+        },
+        "whatTitle": "Qué hace esto",
+        "what": {
+          "freeBusy": "Lee las horas ocupadas de tu calendario para que no se ofrezcan horarios reservados o bloqueados.",
+          "writeBack": "Escribe las reservas confirmadas en tu calendario como eventos e invita al cliente.",
+          "teams": "Añade un enlace de reunión de Teams a los servicios en línea (cuentas de trabajo y de centros educativos)."
+        },
+        "hint": "Las reservas funcionan sin esto. Si también tienes Google conectado, las horas ocupadas se leen de ambos y cada reserva se escribe en uno."
+      },
+      "writeTarget": {
+        "title": "Dónde se escriben las reservas",
+        "description": "Las horas ocupadas se leen de todos los calendarios conectados. Cada reserva se escribe en uno de ellos.",
+        "label": "Escribir las reservas en",
+        "hint": "Automático usa Google Calendar cuando funciona y, si no, Outlook. Al cambiarlo, los eventos de las próximas reservas se mueven al calendario que elijas.",
+        "auto": "Automático",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "no conectado",
+        "saved": "Guardado.",
+        "backfill": {
+          "body": "{count, plural, one {# reserva confirmada de los próximos 90 días aún no está} many {# de reservas confirmadas de los próximos 90 días aún no están} other {# reservas confirmadas de los próximos 90 días aún no están}} en el calendario al que van. Se escriben automáticamente después de conectar o cambiar de calendario.",
+          "action": "Escribirlas ahora",
+          "working": "En cola",
+          "queued": "Escribiéndolas en tu calendario en segundo plano.",
+          "notConnected": "No hay ningún calendario conectado, así que no hay dónde escribirlas."
+        }
+      },
+      "feeds": {
+        "title": "Otros calendarios (iCal)",
+        "description": "Suscríbete a un calendario mediante su dirección iCal para que sus horas ocupadas cierren franjas. Solo se usa cuándo estás ocupado: no se muestra ni se guarda nada más.",
+        "loading": "Cargando tus calendarios",
+        "empty": "Aún no hay calendarios suscritos.",
+        "status": {
+          "pending": "Aún sin leer",
+          "ok": "Funcionando",
+          "error": "Problema"
+        },
+        "paused": "En pausa",
+        "neverRead": "Aún sin leer.",
+        "lastRead": "Leído {when}.",
+        "busyCount": "{count, plural, one {# bloque ocupado} many {# de bloques ocupados} other {# bloques ocupados}} en los próximos 180 días",
+        "allDayLabel": "Los eventos de todo el día bloquean el día",
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "refresh": "Leer ahora",
+        "reading": "Leyendo",
+        "remove": "Cancelar suscripción",
+        "removed": "Suscripción al calendario cancelada.",
+        "added": "Calendario suscrito.",
+        "addTitle": "Suscribirse a un calendario",
+        "nameLabel": "Nombre",
+        "namePlaceholder": "Horario del equipo",
+        "urlLabel": "Dirección del calendario",
+        "urlHint": "Una dirección que empiece por https:// o webcal:// y termine en .ics. Se comprueba ahora, luego se guarda cifrada y no se vuelve a mostrar.",
+        "add": "Suscribirse",
+        "adding": "Leyendo el calendario",
+        "hint": "No te suscribas al calendario en el que se escriben tus reservas: un servicio con varias plazas vería sus propios eventos como ocupados. Una suscripción se lee aproximadamente cada 15 minutos, así que un cambio puede tardar ese tiempo en reflejarse.",
+        "confirmRemove": {
+          "title": "¿Cancelar la suscripción a este calendario?",
+          "message": "Las horas bloqueadas por {name} quedarán libres de inmediato. El calendario en sí no se modifica.",
+          "confirm": "Cancelar suscripción",
+          "cancel": "Mantener"
+        },
+        "errors": {
+          "invalid": "Introduce una dirección que empiece por https://, http:// o webcal://, sin nombre de usuario ni contraseña.",
+          "duplicate": "Este espacio de trabajo ya está suscrito a ese calendario.",
+          "limit": "Un espacio de trabajo puede suscribirse a 10 calendarios. Cancela primero la suscripción a uno."
+        },
+        "reason": {
+          "unreachable": "No se pudo acceder a la dirección. Comprueba que sea correcta y pública.",
+          "timeout": "El calendario tardó demasiado en responder.",
+          "not_found": "No se encontró nada en esa dirección. Puede que se haya dejado de publicar.",
+          "forbidden": "El calendario rechazó el acceso. Asegúrate de que esté publicado para cualquier persona que tenga el enlace.",
+          "server_error": "El servidor del calendario tuvo un problema. Se vuelve a intentar automáticamente.",
+          "redirect_loop": "La dirección nos redirige en círculos.",
+          "not_a_calendar": "Esa dirección no es un calendario iCal. Debería terminar en .ics.",
+          "too_large": "Ese calendario es demasiado grande para leerlo.",
+          "blocked_address": "Esa dirección apunta a una red privada, lo cual no está permitido.",
+          "unknown": "No se pudo leer esa dirección como un calendario."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# evento usa una zona horaria que no conocemos y se leyó en la zona horaria de tu espacio de trabajo.} many {# de eventos usan una zona horaria que no conocemos y se leyeron en la zona horaria de tu espacio de trabajo.} other {# eventos usan una zona horaria que no conocemos y se leyeron en la zona horaria de tu espacio de trabajo.}}",
+          "unsupportedRule": "{count, plural, one {# evento recurrente usa} many {# de eventos recurrentes usan} other {# eventos recurrentes usan}} una regla que no admitimos: solo la primera repetición bloquea tiempo.",
+          "truncated": "Este calendario tiene más bloques ocupados de los que guardamos, por lo que faltan algunos."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mis reservas en mi aplicación de calendario",
+        "description": "Suscribe Apple Calendar, Outlook o Google Calendar a tus reservas.",
+        "loading": "Cargando tu enlace",
+        "none": "Aún no tienes ningún enlace.",
+        "make": "Crear mi enlace",
+        "making": "Creando",
+        "made": "Tu enlace está listo.",
+        "linkLabel": "Tu enlace",
+        "copy": "Copiar enlace",
+        "copied": "Enlace copiado.",
+        "copyFailed": "No se pudo copiar automáticamente. Selecciona el enlace y cópialo.",
+        "open": "Abrir en mi aplicación de calendario",
+        "rotate": "Crear un enlace nuevo",
+        "stop": "Dejar de compartir",
+        "stopped": "Tu enlace ya no funciona.",
+        "lastUsed": "Una aplicación de calendario lo leyó por última vez {when}.",
+        "neverUsed": "Ninguna aplicación de calendario lo ha leído todavía.",
+        "warning": "Cualquier persona que tenga este enlace verá los títulos, las horas y los lugares de tus reservas. Mantenlo en privado. Nunca muestra números de teléfono, direcciones de correo electrónico ni notas.",
+        "hint": "Ves lo mismo que puedes ver en la lista de reservas. Tu aplicación de calendario actualiza la suscripción según su propio ritmo, a menudo cada pocas horas.",
+        "confirmRotate": {
+          "title": "¿Crear un enlace nuevo?",
+          "message": "El enlace anterior deja de funcionar de inmediato. Las aplicaciones de calendario que lo usan necesitarán el nuevo.",
+          "confirm": "Crear un enlace nuevo"
+        },
+        "confirmStop": {
+          "title": "¿Dejar de compartir tus reservas?",
+          "message": "Tu enlace deja de funcionar de inmediato. Las aplicaciones de calendario que lo usan no mostrarán nada nuevo.",
+          "confirm": "Dejar de compartir"
+        },
+        "confirmCancel": "Mantener"
+      }
     },
     "linked": {
       "title": "Citas",

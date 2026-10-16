@@ -119,8 +119,8 @@ function StepRow({
     }
   };
   return (
-    <li className="relative pl-7">
-      <span aria-hidden className={`absolute left-0 top-3 h-3 w-3 rounded-full ${DOT[tone]}`} />
+    <li className="relative ps-7">
+      <span aria-hidden className={`absolute start-0 top-3 h-3 w-3 rounded-full ${DOT[tone]}`} />
       <details className="group rounded-xl border border-border bg-background open:bg-muted/40">
         <summary className="cursor-pointer list-none px-4 py-2.5">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -133,7 +133,7 @@ function StepRow({
                 {t('run.removed')}
               </span>
             )}
-            <span className="ml-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            <span className="ms-auto flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {outcomeLabel && (
                 <span className={`font-semibold ${TEXT[tone]}`}>{outcomeLabel}</span>
               )}
@@ -274,7 +274,7 @@ export function RunTimeline({ run }: { run: FlowRunDetail }) {
           {run.log.length === 0 ? t('run.logEmpty') : t('run.noErrors')}
         </p>
       ) : (
-        <ol className="relative space-y-2 px-5 pb-5 before:absolute before:bottom-8 before:left-[26px] before:top-4 before:w-px before:bg-border">
+        <ol className="relative space-y-2 px-5 pb-5 before:absolute before:bottom-8 before:start-[26px] before:top-4 before:w-px before:bg-border">
           {rows.map((s) => (
             <StepRow
               key={`${s.seq}-${s.event}-${s.at}`}

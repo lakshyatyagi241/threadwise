@@ -115,3 +115,16 @@ describe('verification mail delivery result (TW-AUTH-015)', () => {
     expect(await service(port).sendVerifyEmail('a@b.test', 'Al', 'http://x')).toBe(false);
   });
 });
+
+describe('signup code mail', () => {
+  it('sends the signup code', async () => {
+    const r = recorder();
+    const ok = await service(r.port).sendSignupCode('ada@example.com', 'Ada', '482913', 5);
+    expect(ok).toBe(true);
+    expect(r.sent[0]!.to).toBe('ada@example.com');
+    expect(r.sent[0]!.subject).toMatch(/code/i);
+    expect(r.sent[0]!.text).toContain('482913');
+    expect(r.sent[0]!.html).toContain('482913');
+    expect(r.sent[0]!.text).toContain('5 minutes');
+  });
+});

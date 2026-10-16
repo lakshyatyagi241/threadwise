@@ -181,7 +181,10 @@
         "valueInvalid": "Nhập một số, ví dụ 1250.50.",
         "valueTooLarge": "Giá trị quá lớn.",
         "stageInvalid": "Chọn một giai đoạn từ quy trình này."
-      }
+      },
+      "company": "Công ty",
+      "companyHint": "Để trống để dùng công ty của liên hệ.",
+      "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này."
     },
     "contact": {
       "unlink": "Xóa liên hệ",
@@ -221,7 +224,9 @@
       "deleteTitle": "Xóa giao dịch này?",
       "deleteMessage": "\"{title}\" và dòng thời gian của nó sẽ bị xóa. Không thể hoàn tác.",
       "cancel": "Hủy",
-      "company": "Công ty: {name}"
+      "company": "Công ty: {name}",
+      "companyLabel": "Công ty",
+      "companyRefused": "Bạn không thể dùng công ty đó."
     },
     "activity": {
       "title": "Hoạt động",

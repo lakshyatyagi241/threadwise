@@ -129,11 +129,6 @@
         "description": "Bewerk je dealpijplijnen, fases en redenen voor verlies.",
         "keywords": "deals, verkoopfases, bord, reden verloren, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Maak en orden de tags die bij contacten en chats worden gebruikt.",
-        "keywords": "labels, kleur, color"
-      },
       "saved-replies": {
         "label": "Opgeslagen antwoorden",
         "description": "Schrijf herbruikbare antwoorden die je team met één klik kan versturen.",
@@ -358,6 +353,11 @@
         "label": "Compliancecentrum",
         "description": "Hulpmiddelen om je te helpen je privacyverplichtingen na te komen: de wetten waaronder je werkt, privacycontacten, mededelingen en links, subverwerkers, stille uren en een checklist van wat er is ingericht.",
         "keywords": "compliance, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, functionaris gegevensbescherming, klachtenfunctionaris, subverwerker, dpa, verwerkersovereenkomst, voorwaarden, privacybeleid, stille uren, niet bellen, checklist, kinderen"
+      },
+      "company-properties": {
+        "label": "Bedrijfseigenschappen",
+        "description": "Voeg de velden toe die je bij elk bedrijf wilt bewaren.",
+        "keywords": "aangepaste velden, velden, verplicht, keuzelijst, organisatie, account"
       }
     },
     "title": "Instellingen",

@@ -168,6 +168,8 @@ export interface ContactFormValues {
   ownerId: string;
   /** Group ids (uuid). Empty array = no groups, which clears them on save. */
   groupIds: string[];
+  /** The company's id (uuid); '' = none. The picker holds its name; the form only needs the id. */
+  companyId: string;
   /**
    * Property key -> what the form holds: text for most types (a number, a date, 'true' for a ticked checkbox) and a
    * list for a multi-select. `customFieldsFromForm` converts back to the stored type.
@@ -195,6 +197,7 @@ export const EMPTY_FORM: ContactFormValues = {
   source: '',
   ownerId: '',
   groupIds: [],
+  companyId: '',
   attributes: {},
   optedOut: false,
   leadScore: '',
@@ -233,6 +236,7 @@ export function contactToForm(
     source: c.source ?? str(cf[EXTRA_KEYS.source]),
     ownerId: c.ownerId ?? '',
     groupIds: [...groupIds],
+    companyId: c.companyId ?? '',
     attributes,
     optedOut: isOptedOut(c),
     leadScore: scoreToText(c.leadScore),
@@ -293,6 +297,7 @@ export function toCreatePayload(
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
     // Always explicit: '' is "nobody" (null), not "the creator" which is what omitting it would mean.
     ownerId: v.ownerId || null,
+    ...(v.companyId ? { companyId: v.companyId } : {}),
     ...(v.optedOut ? { isUnsubscribed: true } : {}),
     ...(typeof newScore === 'number' ? { leadScore: newScore } : {}),
     customFields: withoutNulls(customFieldsFromForm(v, attributeKeys, fields)),
@@ -312,6 +317,8 @@ export function toUpdatePayload(
   previousLeadScore: number | null = null,
   /** The owner the contact has now: sent only when the form changed it, so saving an unrelated field never re-assigns. */
   previousOwnerId: string | null = null,
+  /** The company the contact has now: sent only when the form changed it (null clears it), so saving an unrelated field never re-links. */
+  previousCompanyId: string | null = null,
 ) {
   const name = composeName(v);
   const lead = scoreChange(v.leadScore, previousLeadScore);
@@ -326,6 +333,7 @@ export function toUpdatePayload(
     status: orNull(v.status),
     source: orNull(v.source),
     ...(v.ownerId !== (previousOwnerId ?? '') ? { ownerId: v.ownerId || null } : {}),
+    ...(v.companyId !== (previousCompanyId ?? '') ? { companyId: v.companyId || null } : {}),
     // Only a change to the switch touches the consent flag; saving an unrelated field must not flip it.
     ...(v.optedOut !== wasOptedOut ? { isUnsubscribed: v.optedOut } : {}),
     // Only a typed change touches the score: saving an unrelated field must not turn an AI score into a manual one.

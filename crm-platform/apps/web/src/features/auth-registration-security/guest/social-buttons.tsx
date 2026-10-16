@@ -88,7 +88,8 @@ export function SocialButtons({
     const orgSlug = getOrgSlug?.().trim() ?? '';
     const orgName = getOrgName?.().trim() ?? '';
     if (mode === 'login' && !orgSlug) return onNeedInput('orgSlug');
-    if (mode === 'signup' && orgName.length < 2) return onNeedInput('orgName');
+    // Sign-up collects no workspace name up front (the three-step redesign): the API falls back to a
+    // provisional one, same as the password step's account creation already does.
     setPending(provider);
     if (mode === 'login') rememberNext(next);
     try {

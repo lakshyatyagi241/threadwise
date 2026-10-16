@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-16T12:58:10.007Z",
-  "commit": "6ae300556b8b49ed804637d3010b98c020f78813",
+  "recordedAt": "2026-10-16T13:39:45.191Z",
+  "commit": "75544c93a625eca9a1bd6c8e04cb02a6f8f6f2e7",
   "note": "Snapshot of the @Public routes accepted by a human on recordedAt. Routes under auth/, platform/auth, account and realtime were read individually in the 2026-10-09 analysis; the rest were recorded as found. A NEW public route fails the audit until someone reviews it and re-records this file (pnpm audit:auth -- --update-baseline).",
   "publicRoutes": [
     "POST /v2/account/email-change/confirm",
@@ -27,7 +27,11 @@
     "GET /v2/auth/registration-config",
     "POST /v2/auth/reset-password",
     "POST /v2/auth/signup",
+    "POST /v2/auth/signup/resend-email-code",
     "POST /v2/auth/signup/resend-otp",
+    "POST /v2/auth/signup/set-password",
+    "POST /v2/auth/signup/start",
+    "POST /v2/auth/signup/verify-email-code",
     "POST /v2/auth/signup/verify-otp",
     "POST /v2/auth/social/:provider/callback",
     "GET /v2/auth/social/:provider/start",

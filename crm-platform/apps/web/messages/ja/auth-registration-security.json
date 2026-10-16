@@ -193,6 +193,7 @@
         "signupClosed": "登録は受け付けていません。管理者に招待を依頼してください。",
         "slugTaken": "そのワークスペースアドレスはすでに使用されています。",
         "emailTaken": "そのメールアドレスはこのワークスペースですでに使用されています。",
+        "identityExists": "そのメールアドレスまたは電話番号のアカウントは既に存在します。",
         "passwordPolicy": "そのパスワードはセキュリティポリシーを満たしていません：",
         "tokenInvalid": "このリンクは無効か、有効期限が切れています。",
         "emailUnverified": "先にメールアドレスを確認してください。",
@@ -364,7 +365,9 @@
         "resendIn": "{time}後にコードを再送信",
         "resending": "送信中",
         "resent": "新しいコードをWhatsAppに送信しました。",
+        "resentEmail": "新しいコードがメールに届きます。",
         "wrongNumber": "番号が違いますか？",
+        "wrongEmail": "メールアドレスが違いますか？",
         "goBack": "戻る",
         "addressTakenHint": "確認中にそのワークスペースアドレスが使用されました。別のアドレスを選択してください。新しいコードを送信します。",
         "chooseAnotherAddress": "別のアドレスを選択"

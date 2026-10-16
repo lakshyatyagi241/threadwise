@@ -12,6 +12,7 @@ import { CalendarReconcileService } from '../../../src/modules/appointments-book
 import { AppointmentCalendarConsumer } from '../../../src/modules/appointments-booking/appointment-calendar.consumer';
 import { GoogleCalendarTokens } from '../../../src/modules/appointments-booking/google-calendar-tokens.service';
 import { GoogleCalendarAdapter } from '../../../src/modules/appointments-booking/google-calendar.adapter';
+import { MultiCalendarAdapter } from '../../../src/modules/appointments-booking/multi-calendar.adapter';
 import {
   deriveStateKey,
   newState,
@@ -80,7 +81,8 @@ beforeAll(async () => {
   api = new AppointmentsApi(h);
   adapter = h.app.get(GoogleCalendarAdapter);
   consumer = h.app.get(AppointmentCalendarConsumer);
-  expect(h.app.get(APPOINTMENT_CALENDAR)).toBe(adapter);
+  // The booking code talks to the multi-provider front, which serves a workspace that only has Google exactly as the Google adapter alone did.
+  expect(h.app.get(APPOINTMENT_CALENDAR)).toBe(h.app.get(MultiCalendarAdapter));
   a = await api.signup('gca');
   b = await api.signup('gcb');
 

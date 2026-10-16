@@ -38,6 +38,9 @@ import {
 
 const MODULE_KEY = 'email_templates';
 
+/** No person: a read as this id sees the shared templates only (a personal template belongs to a real user). */
+const NO_USER = -1;
+
 export const templateNotFound = (): AppError =>
   new AppError(
     ERROR_CODES.EMAIL_TEMPLATE_NOT_FOUND,
@@ -331,6 +334,37 @@ export class EmailTemplatesService {
     const text =
       (row.body_text as string).trim() !== '' ? (row.body_text as string) : outboundText(html);
     return this.fill(row.subject as string, html, text, lookup, 'conversation');
+  }
+
+  /**
+   * A SHARED template rendered for one contact with nobody sending it: the workspace's own automatic mail (the first message to a new
+   * lead, BL-014). No agent is behind it, so the agent variables come out empty; the contact and workspace variables are filled as in
+   * `renderFor`. A personal template does not exist here (it is its author's, not the workspace's): `not_found`, like an archived one is
+   * `archived`. Counts nothing and sends nothing.
+   */
+  async renderShared(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    facts: ConversationFacts,
+  ): Promise<
+    | { kind: 'ok'; subject: string; text: string; purpose: EmailTemplatePurpose }
+    | { kind: 'not_found' | 'archived' }
+  > {
+    const row = await this.repo.byUuid(tx, orgId, NO_USER, uuid);
+    if (!row) return { kind: 'not_found' };
+    if (row.status === 'archived') return { kind: 'archived' };
+    const lookup = buildLookup({ ...facts, agentName: null });
+    const html = row.body_html as string;
+    const text =
+      (row.body_text as string).trim() !== '' ? (row.body_text as string) : outboundText(html);
+    const filled = this.fill(row.subject as string, html, text, lookup, 'conversation');
+    return {
+      kind: 'ok',
+      subject: filled.subject,
+      text: filled.text,
+      purpose: row.purpose as EmailTemplatePurpose,
+    };
   }
 
   // --- pieces -----------------------------------------------------------------------------------------------------------------

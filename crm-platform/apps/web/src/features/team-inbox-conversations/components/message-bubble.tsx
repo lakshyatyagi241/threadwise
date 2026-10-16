@@ -1,5 +1,6 @@
 'use client';
 
+import { FormattedText } from './formatted-text';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { cn } from '@crm/ui';
@@ -706,7 +707,7 @@ export function NoteBubble({
           )}
         </div>
         <p dir="auto" className="whitespace-pre-wrap break-words">
-          {note.body}
+          <FormattedText text={note.body} />
         </p>
       </div>
     </li>

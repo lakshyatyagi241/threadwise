@@ -22,50 +22,61 @@ import { fieldResponseSchema } from './schemas';
  * Contact properties are the rows of the field registry (`/v2/fields`, module `contacts`), grouped by
  * `/v2/field-sections`. Attributes (`/v2/attributes`) read and write the same rows, so every change here also
  * reaches the Attributes screen, the slash picker and the merge-tag resolver; `invalidateProperties` refreshes all.
+ * The registry is shared with the companies module (`companies`: Settings, Company properties), so every call takes the
+ * module it works on and defaults to contacts.
  */
+export type PropertyModule = 'contacts' | 'companies';
 
 const FIELDS = ['cat', 'fields'] as const;
 const SECTIONS = ['cat', 'field-sections'] as const;
 const USAGE = ['cat', 'field-usage'] as const;
 const DEPENDENCIES = ['cat', 'field-dependencies'] as const;
 
-/** Custom properties of the contacts module. Inactive ones come only when asked for (the screen's "show inactive"). */
-export function useContactFields(includeInactive = false) {
+/** Custom properties of a module. Inactive ones come only when asked for (the screen's "show inactive"). */
+export function useModuleFields(
+  moduleKey: PropertyModule,
+  includeInactive = false,
+  enabled = true,
+) {
   return useQuery({
-    queryKey: [...FIELDS, includeInactive],
+    enabled,
+    // contacts keeps its original key, so everything that already reads or invalidates it is unchanged
+    queryKey:
+      moduleKey === 'contacts'
+        ? [...FIELDS, includeInactive]
+        : [...FIELDS, moduleKey, includeInactive],
     queryFn: ({ signal }) =>
       fetchAllPages(
         '/fields',
         fieldResponseSchema,
-        { moduleKey: 'contacts', ...(includeInactive ? { includeInactive: true } : {}) },
+        { moduleKey, ...(includeInactive ? { includeInactive: true } : {}) },
         { signal },
       ),
     staleTime: 60_000,
   });
 }
 
-export function useFieldSections() {
+export const useContactFields = (includeInactive = false) =>
+  useModuleFields('contacts', includeInactive);
+
+export function useFieldSections(moduleKey: PropertyModule = 'contacts', enabled = true) {
   return useQuery({
-    queryKey: SECTIONS,
+    enabled,
+    queryKey: moduleKey === 'contacts' ? SECTIONS : [...SECTIONS, moduleKey],
     queryFn: ({ signal }) =>
-      fetchAllPages(
-        '/field-sections',
-        fieldSectionResponseSchema,
-        { moduleKey: 'contacts' },
-        { signal },
-      ),
+      fetchAllPages('/field-sections', fieldSectionResponseSchema, { moduleKey }, { signal }),
     staleTime: 60_000,
   });
 }
 
-/** Contacts holding a value for each property, by property id. */
-export function useFieldUsage(enabled = true) {
+/** Records holding a value for each property, by property id (contacts for the contacts module, companies for the other). */
+export function useFieldUsage(enabled = true, moduleKey: PropertyModule = 'contacts') {
   return useQuery({
-    queryKey: USAGE,
+    queryKey: moduleKey === 'contacts' ? USAGE : [...USAGE, moduleKey],
     enabled,
     queryFn: async ({ signal }) => {
       const res = await apiFetch('/fields/usage', {
-        query: { moduleKey: 'contacts' },
+        query: { moduleKey },
         schema: fieldUsageResponseSchema,
         signal,
       });
@@ -74,12 +85,13 @@ export function useFieldUsage(enabled = true) {
   });
 }
 
-export function useFieldDependencies() {
+export function useFieldDependencies(moduleKey: PropertyModule = 'contacts', enabled = true) {
   return useQuery({
-    queryKey: DEPENDENCIES,
+    enabled,
+    queryKey: moduleKey === 'contacts' ? DEPENDENCIES : [...DEPENDENCIES, moduleKey],
     queryFn: ({ signal }) =>
       apiFetch('/fields/dependencies', {
-        query: { moduleKey: 'contacts' },
+        query: { moduleKey },
         schema: z.array(fieldDependencyResponseSchema),
         signal,
       }),
@@ -111,10 +123,14 @@ export const updateField = (id: string, body: UpdateFieldInput): Promise<FieldRe
 export const deactivateField = (id: string): Promise<void> =>
   apiFetch(`/fields/${id}`, { method: 'DELETE' });
 
-export const reorderFields = (sectionId: string, orderedIds: string[]): Promise<void> =>
+export const reorderFields = (
+  sectionId: string,
+  orderedIds: string[],
+  moduleKey: PropertyModule = 'contacts',
+): Promise<void> =>
   apiFetch('/fields/reorder', {
     method: 'POST',
-    body: { moduleKey: 'contacts', sectionId, orderedIds },
+    body: { moduleKey, sectionId, orderedIds },
   });
 
 // --- options ----------------------------------------------------------------------------------------------------
@@ -164,10 +180,13 @@ export const deleteFieldDependency = (id: string): Promise<void> =>
 
 // --- sections ---------------------------------------------------------------------------------------------------
 
-export const createSection = (name: string): Promise<FieldSectionResponse> =>
+export const createSection = (
+  name: string,
+  moduleKey: PropertyModule = 'contacts',
+): Promise<FieldSectionResponse> =>
   apiFetch('/field-sections', {
     method: 'POST',
-    body: { moduleKey: 'contacts', name: name.trim() },
+    body: { moduleKey, name: name.trim() },
     schema: fieldSectionResponseSchema,
   });
 
@@ -181,10 +200,13 @@ export const renameSection = (
     schema: fieldSectionResponseSchema,
   });
 
-export const reorderSections = (orderedIds: string[]): Promise<void> =>
+export const reorderSections = (
+  orderedIds: string[],
+  moduleKey: PropertyModule = 'contacts',
+): Promise<void> =>
   apiFetch('/field-sections/reorder', {
     method: 'POST',
-    body: { moduleKey: 'contacts', orderedIds },
+    body: { moduleKey, orderedIds },
   });
 
 /** The properties of a deleted section are not deleted: they become sectionless. */

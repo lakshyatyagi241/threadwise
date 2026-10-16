@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "Test",
         "unanswered": "Bez odpowiedzi",
-        "insights": "Statystyki",
-        "settings": "Ustawienia"
+        "insights": "Statystyki"
       },
       "unansweredCount": "{count, plural, one {# wiadomość bez odpowiedzi} few {# wiadomości bez odpowiedzi} many {# wiadomości bez odpowiedzi} other {# wiadomości bez odpowiedzi}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Ten przepływ osiągnął limit FAQ. Usuń nieużywane FAQ lub warianty albo poproś administratora platformy o podniesienie limitu."
     },
     "banner": {
-      "enabledToast": "Odpowiadanie przez FAQ jest włączone.",
-      "engineOff": "Platforma wyłączyła odpowiadanie przez FAQ. Klienci nie dostaną odpowiedzi z FAQ, dopóki nie zostanie ono włączone ponownie.",
-      "modelChanged": "Platforma zmieniła model AI po dostrojeniu tego progu. Wyniki się zmieniły, więc sprawdź czułość.",
-      "reviewSensitivity": "Sprawdź czułość",
-      "offNoRight": "Poproś osobę z uprawnieniem faq.settings.manage (zwykle administratora przestrzeni roboczej) o włączenie.",
-      "enable": "Włącz odpowiadanie przez FAQ",
-      "offTitle": "Odpowiadanie na FAQ jest WYŁĄCZONE dla tego przepływu",
-      "offBody": "Możesz pisać i testować FAQ tego przepływu, ale klienci nie dostaną odpowiedzi, dopóki tego nie włączysz."
+      "engineOff": "Platforma wyłączyła odpowiadanie przez FAQ. Klienci nie dostaną odpowiedzi z FAQ, dopóki nie zostanie ono włączone ponownie."
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "Aktywne",
         "paused": "Wstrzymane",
-        "variations": "Sformułowania",
-        "pending": "Indeksowanie",
-        "pendingHint": "Działa w kilka sekund",
-        "failed": "Indeksowanie nie powiodło się",
-        "failedHint": "Wymaga uwagi"
+        "variations": "Sformułowania"
       },
-      "failedBanner": "{count, plural, one {# sformułowanie nie zostało zaindeksowane} few {# sformułowania nie zostały zaindeksowane} many {# sformułowań nie zostało zaindeksowanych} other {# sformułowania nie zostało zaindeksowane}}, więc nie mogą jeszcze pasować do wiadomości klientów.",
-      "showFailed": "Pokaż FAQ z błędami",
       "search": "Szukaj FAQ",
       "searchPlaceholder": "Szukaj pytań i sformułowań",
       "filter": {
         "status": "Status",
         "anyStatus": "Dowolny status",
         "category": "Kategoria",
-        "anyCategory": "Dowolna kategoria",
-        "indexing": "Indeksowanie",
-        "anyIndexing": "Dowolne",
-        "pending": "W trakcie indeksowania",
-        "failed": "Niepowodzenie"
+        "anyCategory": "Dowolna kategoria"
       },
       "status": {
         "active": "Aktywne",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Pytanie",
         "answer": "Odpowiedź",
-        "indexing": "Aktywne sformułowania",
         "answered": "Odpowiedzi (90 dni)",
         "status": "Status",
         "actions": "Działania"
@@ -130,12 +111,6 @@
         "rowBody": "„{question}” i wszystkie jego sformułowania zostaną usunięte na stałe. Tej operacji nie można cofnąć.",
         "delete": "Usuń",
         "cancel": "Anuluj"
-      },
-      "indexing": {
-        "summary": "Aktywnych: {ready}, w indeksowaniu: {pending}, z błędem: {failed}",
-        "ready": "Aktywnych: {count}",
-        "pending": "W indeksowaniu: {count}",
-        "failed": "Z błędem: {count}"
       },
       "stepMissing": "Brak kroku",
       "subtitle": "Pytania zadawane przez klientów w {flow} i odpowiedzi bota. Te FAQ odpowiadają tylko w tym przepływie.",
@@ -202,14 +177,6 @@
           "other": "Krok innego przepływu",
           "otherHint": "Przekaż rozmowę do innego przepływu."
         }
-      },
-      "advanced": {
-        "title": "Zaawansowane: czułość tylko dla tego FAQ",
-        "custom": "Użyj własnej czułości dla tego FAQ",
-        "sliderLabel": "Dopasuj od",
-        "body": "Domyślnie każde FAQ używa czułości tego przepływu. Ustaw własną wartość, gdy dopasowuje zbyt chętnie (zwiększ) lub zbyt rzadko (zmniejsz).",
-        "workspace": "Czułość tego przepływu to {value}%.",
-        "following": "Zgodnie z czułością tego przepływu ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Dodaj",
       "pasteMany": "Wklej wiele",
       "full": "To FAQ osiągnęło limit {max} sformułowań.",
-      "failedNotice": "{count, plural, one {# sformułowanie nie zostało zaindeksowane} few {# sformułowania nie zostały zaindeksowane} many {# sformułowań nie zostało zaindeksowanych} other {# sformułowania nie zostało zaindeksowane}}. Edytuj i zapisz sformułowanie, aby spróbować ponownie.",
       "suggest": "Zaproponuj z AI",
       "suggestSaveFirst": "Najpierw zapisz FAQ, a potem AI będzie mogło zaproponować sformułowania.",
       "suggesting": "Pobieranie propozycji od AI",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# wiersz nie mieści się} few {# wiersze nie mieszczą się} many {# wierszy nie mieści się} other {# wiersza nie mieści się}} w limicie sformułowań i {count, plural, one {został pominięty} other {zostało pominiętych}}.",
         "more": "i jeszcze {count}",
         "add": "Dodaj {count, plural, one {# sformułowanie} few {# sformułowania} many {# sformułowań} other {# sformułowania}}"
-      },
-      "state": {
-        "ready": "Aktywne",
-        "pending": "Indeksowanie",
-        "pendingHint": "Zapisano. Zacznie pasować za kilka sekund.",
-        "failed": "Niepowodzenie",
-        "failedHint": "Edytuj i zapisz sformułowanie, aby spróbować ponownie.",
-        "noReason": "Nie podano powodu"
       },
       "confirm": {
         "title": "Usunąć to sformułowanie?",
@@ -539,9 +497,7 @@
       },
       "hist": {
         "title": "Jak punktowano wiadomości",
-        "hint": "Każdy słupek to przedział wyników. Linia przerywana to Twoja aktualna czułość.",
-        "advice": "Zwiększ próg, jeśli trafiają się błędne odpowiedzi, zmniejsz go, jeśli zbyt wiele wiadomości zostaje bez odpowiedzi.",
-        "tune": "Zmień czułość"
+        "hint": "Każdy słupek to przedział wyników. Linia przerywana to Twoja aktualna czułość."
       },
       "top": {
         "title": "Najlepsze FAQ",
@@ -568,98 +524,6 @@
         "bucketTooltip": "{from}-{to}%: z odpowiedzią {answered}, bez odpowiedzi {unanswered}",
         "thresholdMarker": "Próg {value}%"
       }
-    },
-    "settings": {
-      "title": "Ustawienia FAQ",
-      "unsaved": "Niezapisane zmiany",
-      "discard": "Odrzuć",
-      "save": "Zapisz ustawienia",
-      "saved": "Ustawienia zapisane.",
-      "readOnly": "Możesz wyświetlać te ustawienia. Zmiana wymaga uprawnienia faq.settings.manage, które zwykle mają administratorzy przestrzeni roboczej.",
-      "engineOff": "Platforma wyłączyła odpowiadanie przez FAQ. To, co tu ustawisz, zacznie działać po jego ponownym włączeniu.",
-      "conflict": "Ktoś inny zapisał te ustawienia. Odśwież, aby zobaczyć jego wersję, a potem wprowadź zmianę ponownie.",
-      "reload": "Odśwież ustawienia",
-      "modelChanged": {
-        "title": "Sprawdź czułość",
-        "body": "Platforma zmieniła model AI po dostrojeniu tego progu. Wyniki się zmieniły, więc sprawdź czułość. Zapisanie to potwierdza."
-      },
-      "enable": {
-        "title": "Odpowiadanie przez FAQ",
-        "on": "Wł.",
-        "off": "Wył.",
-        "label": "Odpowiadaj klientom za pomocą FAQ tego przepływu",
-        "onBody": "Gdy ten przepływ jest aktywny, wiadomość klienta, której nie obsłużył żaden wyzwalacz słów kluczowych ani działający przepływ, jest porównywana z FAQ tego przepływu. Bot odpowiada najlepszą odpowiedzią lub kieruje klienta do kroku wskazanego przez FAQ.",
-        "offBody": "FAQ tego przepływu nie odpowiadają klientom. Nadal możesz je pisać i testować."
-      },
-      "sens": {
-        "title": "Czułość",
-        "hint": "Jak dokładnie wiadomość musi pasować. Wyniki zależą od modelu {model}.",
-        "label": "Odpowiadaj, gdy dopasowanie wynosi co najmniej",
-        "presets": "Gotowe ustawienia czułości",
-        "preset": {
-          "strict": "Ścisła",
-          "balanced": "Zrównoważona",
-          "forgiving": "Łagodna"
-        },
-        "looser": "Więcej odpowiedzi",
-        "stricter": "Mniej odpowiedzi",
-        "recommendedMark": "zalecane {value}%",
-        "explain": "Przy {value}% wiadomość dostaje odpowiedź tylko wtedy, gdy jej najlepsze dopasowanie ma co najmniej {value}%. Wyżej oznacza mniej, ale pewniejszych odpowiedzi; niżej oznacza więcej odpowiedzi i większą szansę na błędną.",
-        "useRecommended": "Użyj zalecanej wartości ({value}%)",
-        "modelScale": "Wyniki można porównywać tylko w obrębie jednego modelu. Jeśli platforma zmieni model ({model}), sprawdź tę wartość."
-      },
-      "margin": {
-        "title": "Ochrona przed niejednoznacznością",
-        "hint": "Powstrzymuje bota przed zgadywaniem między dwoma FAQ o niemal takim samym wyniku.",
-        "label": "Minimalna przewaga nad drugim najlepszym",
-        "off": "Wył.",
-        "explain": "Gdy najlepsze FAQ wyprzedza drugie o mniej niż tę wartość, bot milczy, a wiadomość trafia do dziennika jako bez odpowiedzi. Zostaw wyłączone, jeśli Twoje FAQ rzadko się pokrywają."
-      },
-      "log": {
-        "title": "Wiadomości klientów w dzienniku",
-        "label": "Zapisuj wiadomości klientów w dzienniku dopasowań",
-        "onBody": "Treść każdej wiadomości jest przechowywana 90 dni, abyś mógł zobaczyć, dlaczego odpowiedziano lub nie, i się na tym uczyć. Potem jest usuwana.",
-        "offBody": "Zapisywane są tylko wyniki i rezultaty, nigdy treść. Nadal zobaczysz, jak często bot odpowiada, ale nie nauczysz się na wiadomościach bez odpowiedzi."
-      },
-      "facts": {
-        "title": "Model i limity",
-        "model": "Model AI do dopasowywania",
-        "faqs": "FAQ",
-        "variations": "Używane sformułowania",
-        "perFaq": "Dozwolone sformułowania na FAQ",
-        "of": "{used} z {max}"
-      },
-      "how": {
-        "title": "Jak działa dopasowywanie",
-        "exact": "Dokładne: wiadomość jest równa zapisanemu sformułowaniu, z pominięciem wielkości liter i spacji.",
-        "semantic": "Według znaczenia: wiadomość jest porównywana pod względem znaczenia z każdym aktywnym sformułowaniem, więc pasować mogą także inne słowa.",
-        "trigram": "Zapasowe według pisowni: gdy dostawca AI jest niedostępny, porównywane są litery, co wyłapuje tylko literówki.",
-        "threshold": "Najlepszy wynik jest porównywany z czułością. Powyżej niej FAQ odpowiada; poniżej wiadomość trafia na listę Bez odpowiedzi.",
-        "verify": "Drugie sprawdzenie (opcjonalne): dopasowanie, które ledwo osiągnęło czułość, może zostać dodatkowo sprawdzone przez mały model czatu, który może jedynie wstrzymać odpowiedź."
-      },
-      "who": "Zmiana tych ustawień wymaga uprawnienia faq.settings.manage.",
-      "leave": {
-        "title": "Wyjść bez zapisywania?",
-        "body": "Zmiany w tych ustawieniach nie zostały zapisane.",
-        "leave": "Wyjdź",
-        "stay": "Zostań"
-      },
-      "verify": {
-        "title": "Drugie sprawdzenie niepewnych dopasowań",
-        "hint": "Mały model czatu dodatkowo sprawdza dopasowania, które ledwo osiągnęły próg.",
-        "unavailable": "Platforma wyłączyła drugie sprawdzenie, więc nie działa ono, nawet jeśli włączysz je tutaj. Skontaktuj się z administratorem platformy.",
-        "label": "Sprawdzaj niepewne dopasowania drugą opinią",
-        "on": "Wł.",
-        "off": "Wył.",
-        "onBody": "Gdy dopasowanie ledwo przekracza próg, mały model czatu czyta wiadomość klienta i FAQ, a potem ocenia, czy odpowiedź pasuje. Może tylko odmówić: nigdy nie sprawia, że odpowiedź zostanie wysłana.",
-        "offBody": "Każde dopasowanie, które osiąga próg, dostaje odpowiedź bez ponownego sprawdzenia.",
-        "bandLabel": "Jak blisko progu dopasowanie jest niepewne",
-        "bandValue": "+{value}%",
-        "explainOn": "Dopasowania z wynikiem od {from}% do {to}% są sprawdzane przez {model}. Odpowiedź „nie” oznacza, że odpowiedź nie zostanie wysłana, a wiadomość pojawi się w zakładce Bez odpowiedzi.",
-        "explainOff": "Każde dopasowanie z wynikiem {threshold}% lub wyższym dostaje odpowiedź. Włącz drugie sprawdzenie, aby najbardziej niepewne dopasowania były dodatkowo weryfikowane.",
-        "cost": "Każde sprawdzenie wysyła do modelu wiadomość klienta i pytanie z FAQ: kilkaset tokenów, a odpowiedź na graniczne dopasowanie jest opóźniona o około sekundę. Dopasowania poza tym zakresem nigdy nie są sprawdzane. Jeśli sprawdzenie się nie powiedzie, jest niedostępne lub osiągnięto limit godzinowy, dopasowanie obowiązuje tak, jakby sprawdzenia nie było."
-      },
-      "subtitle": "Włącz odpowiadanie na FAQ dla {flow} i ustaw, jak dokładnie wiadomość musi pasować."
     },
     "flowNode": {
       "start": "Początek przepływu",

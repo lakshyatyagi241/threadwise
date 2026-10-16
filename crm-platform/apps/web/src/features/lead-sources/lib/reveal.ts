@@ -1,4 +1,8 @@
-import { LEAD_HOOK_SECRET_HEADER, type LeadSourceSecretsResponse } from '@crm/contracts';
+import {
+  LEAD_HOOK_SECRET_HEADER,
+  type LeadHookBaseProblem,
+  type LeadSourceSecretsResponse,
+} from '@crm/contracts';
 
 /**
  * The one-time reveal of a source's token and URL (create, rotate). It is a tiny state machine held ONLY in component state: never
@@ -11,6 +15,9 @@ export type RevealReason = 'created' | 'rotated';
 export interface Reveal {
   token: string;
   hookPath: string;
+  /** The complete public address the server built, or null when it could not (see `hookUrlProblem`). */
+  hookUrl: string | null;
+  hookUrlProblem: LeadHookBaseProblem | null;
   reason: RevealReason;
   /** The person ticked "I have copied it". */
   confirmed: boolean;
@@ -19,6 +26,8 @@ export interface Reveal {
 export const revealOf = (secrets: LeadSourceSecretsResponse, reason: RevealReason): Reveal => ({
   token: secrets.token,
   hookPath: secrets.hookPath,
+  hookUrl: secrets.hookUrl,
+  hookUrlProblem: secrets.hookUrlProblem,
   reason,
   confirmed: false,
 });

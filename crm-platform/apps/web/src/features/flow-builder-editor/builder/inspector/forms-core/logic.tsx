@@ -157,7 +157,7 @@ function GroupEditor({
   return (
     <div
       data-cond-group={depth}
-      className={cn(!isRoot && 'mb-2 ml-1 border-l-2 border-border pl-2')}
+      className={cn(!isRoot && 'mb-2 ms-1 border-s-2 border-border ps-2')}
     >
       <div className="mb-1.5 flex items-center gap-2">
         <div className="inline-flex overflow-hidden rounded-full border border-border bg-muted text-[11px] font-semibold">

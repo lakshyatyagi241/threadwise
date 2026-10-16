@@ -10,3 +10,4 @@ export * from './message';
 export * from './message-history';
 export * from './message-log';
 export * from './outbox-events';
+export * from './rewrite';

@@ -11,13 +11,12 @@ import { FaqEditorScreen } from './editor-screen';
 import { InsightsScreen } from './insights-screen';
 import { FaqListScreen } from './list-screen';
 import { PlaygroundScreen } from './playground-screen';
-import { SettingsScreen } from './settings-screen';
 import { UnansweredScreen } from './unanswered-screen';
 
 /**
  * The FAQs tab of a flow in the Simple builder. Which screen shows is `?view=` in the address (see `lib/links.ts`), so a reload and
  * the back button come back to the same screen, and moving between screens never leaves the builder or touches the flow being edited.
- * Everything below is scoped to this flow: its FAQs, settings, tests, unanswered messages and insights.
+ * Everything below is scoped to this flow: its FAQs, tests, unanswered messages and insights.
  */
 export function FaqPanel({
   flowId,
@@ -26,7 +25,7 @@ export function FaqPanel({
 }: {
   flowId: string;
   flowName: string;
-  /** Called with true while a screen holds unsaved edits (an FAQ being edited, settings being changed). */
+  /** Called with true while a screen holds unsaved edits (an FAQ being edited). */
   onDirtyChange?: (dirty: boolean) => void;
 }) {
   const params = useSearchParams();
@@ -57,8 +56,6 @@ function FaqScreen({ location }: { location: FaqLocation }) {
       return <UnansweredScreen />;
     case 'insights':
       return <InsightsScreen />;
-    case 'settings':
-      return <SettingsScreen />;
     default:
       return <FaqListScreen />;
   }

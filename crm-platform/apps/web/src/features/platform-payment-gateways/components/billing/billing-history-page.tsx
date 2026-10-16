@@ -260,7 +260,7 @@ export function BillingHistoryPage() {
                 </td>
                 <td className="truncate px-3 py-3 text-xs">{o.planName ?? '—'}</td>
                 <td
-                  className={`px-3 py-3 text-right font-mono ${o.status === 'paid' ? 'text-success' : o.status === 'refunded' || o.status === 'failed' ? 'text-danger' : ''}`}
+                  className={`px-3 py-3 text-end font-mono ${o.status === 'paid' ? 'text-success' : o.status === 'refunded' || o.status === 'failed' ? 'text-danger' : ''}`}
                 >
                   {o.status === 'refunded' ? '-' : ''}
                   {money(o.total, o.currency, locale)}

@@ -34,13 +34,23 @@ describe('parseFilters', () => {
       assignee: ID,
       contact: ID2,
       deal: '',
+      company: '',
       view: 'board',
       task: ID,
     });
   });
+  it('reads and writes the linked company (the company page’s "View all"), and drops one that is not a uuid', () => {
+    expect(parseFilters(params(`tab=all&status=all&company=${ID}`)).company).toBe(ID);
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, tab: 'all', company: ID })).toContain(
+      `company=${ID}`,
+    );
+    expect(parseFilters(params('company=acme')).company).toBe('');
+  });
   it('falls back instead of failing on unknown or malformed values', () => {
     const p = parseFilters(
-      params('tab=nope&status=x&priority=urgent&assignee=bob&contact=1&deal=2&task=zzz&view=grid'),
+      params(
+        'tab=nope&status=x&priority=urgent&assignee=bob&contact=1&deal=2&company=3&task=zzz&view=grid',
+      ),
     );
     expect(p).toEqual(DEFAULT_FILTERS);
   });
@@ -82,6 +92,7 @@ describe('hasActiveFilter', () => {
     expect(hasActiveFilter(f({ priority: 'high' }))).toBe(true);
     expect(hasActiveFilter(f({ assignee: 'none' }))).toBe(true);
     expect(hasActiveFilter(f({ contact: ID }))).toBe(true);
+    expect(hasActiveFilter(f({ company: ID }))).toBe(true);
     expect(hasActiveFilter(f({ q: '   ' }))).toBe(false);
   });
   it('counts a non-default status only on the All tab', () => {
@@ -119,12 +130,15 @@ describe('listQuery', () => {
   });
   it('passes the search, priority and linked records through', () => {
     expect(
-      listQuery(f({ tab: 'all', q: ' acme ', priority: 'high', contact: ID, deal: ID2 })),
+      listQuery(
+        f({ tab: 'all', q: ' acme ', priority: 'high', contact: ID, deal: ID2, company: ID }),
+      ),
     ).toMatchObject({
       q: 'acme',
       priority: 'high',
       contactId: ID,
       dealId: ID2,
+      companyId: ID,
     });
   });
 });

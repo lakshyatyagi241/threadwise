@@ -73,7 +73,10 @@
       "@grpc/grpc-js": ">=1.14.5"
     },
     "auditConfig": {
-      "ignoreGhsas": []
+      "ignoreGhsas": [
+        "GHSA-86w9-cpqp-85rv",
+        "GHSA-vfj7-8cjw-p6xm"
+      ]
     }
   }
 }

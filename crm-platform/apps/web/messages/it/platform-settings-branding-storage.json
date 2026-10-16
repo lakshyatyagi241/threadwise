@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Flow builder"
+      "flowBuilder": "Flow builder",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Admin - Impostazioni progetto",
@@ -1024,6 +1025,37 @@
             "advanced": "Solo Advanced"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "L'app Microsoft tramite cui ogni spazio di lavoro collega il proprio calendario Outlook o Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "App Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Consenti agli spazi di lavoro di collegare Outlook",
+            "hint": "Disattivato: nessuno spazio di lavoro può collegarsi e nulla viene letto o scritto in alcun calendario Outlook. I calendari già collegati vengono mantenuti."
+          },
+          "clientId": {
+            "label": "ID applicazione (client)",
+            "hint": "Dall'interfaccia di amministrazione di Microsoft Entra, Registrazioni app, Panoramica. Se vuoto, usa MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segreto client",
+            "hint": "Salvato cifrato e non più mostrato. Se vuoto, mantiene quello salvato; MICROSOFT_CALENDAR_CLIENT_SECRET è l'alternativa."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common consente account di lavoro, scuola e personali; usa l'ID di una directory (tenant) per un'app a tenant singolo. Se vuoto, usa MICROSOFT_CALENDAR_TENANT, altrimenti common."
+          },
+          "redirectUri": {
+            "label": "URI di reindirizzamento personalizzato",
+            "hint": "Lascia vuoto per usare l'indirizzo qui sopra. Deve corrispondere esattamente a un URI di reindirizzamento dell'app."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Flow builder",
         "description": "Il flow builder predefinito per ogni workspace: Simple passo passo o Advanced a tela. Un workspace può sostituirlo.",
         "tags": "Simple / Advanced / Automazione"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "L'app Microsoft che gli spazi di lavoro usano per collegare i propri calendari Outlook e Microsoft 365 per le prenotazioni.",
+        "tags": "Microsoft / OAuth / Outlook / Calendario"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Flow già esistenti",
               "body": "Cambiare questa impostazione non modifica né elimina mai un flow. Il flow continua a funzionare; viene solo aperto nel builder attivo. Un workspace che ha scelto il proprio builder lo mantiene finché non sceglie di nuovo il predefinito della piattaforma."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Appuntamenti",
+        "description": "Un'unica app Microsoft Entra per l'intera piattaforma. Ogni spazio di lavoro collega poi il proprio calendario Outlook o Microsoft 365 da Appuntamenti, Impostazioni, e non vede mai l'ID client né il segreto.",
+        "sections": {
+          "oauth": {
+            "title": "App Microsoft Entra",
+            "description": "Senza un ID client e un segreto, gli spazi di lavoro vedono Outlook come non disponibile e le prenotazioni proseguono senza. Google Calendar non è interessato."
+          }
+        },
+        "guide": {
+          "title": "Configuralo in Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registrazione dell'app",
+              "body": "Nell'interfaccia di amministrazione di Microsoft Entra crea una registrazione app per account in qualsiasi directory organizzativa e account Microsoft personali, e copia qui l'ID applicazione (client). Lascia il tenant su common, a meno che tu non abbia scelto un'opzione più restrittiva."
+            },
+            "redirect": {
+              "title": "2. URI di reindirizzamento e segreto",
+              "body": "Aggiungi l'URI di reindirizzamento mostrato in questa pagina come reindirizzamento Web, poi crea un segreto client in Certificati e segreti e incolla qui il suo valore. Annota quando scade: dopo quella data il calendario di ogni spazio di lavoro smette di funzionare finché non viene salvato un nuovo segreto."
+            },
+            "permissions": {
+              "title": "3. Autorizzazioni API",
+              "body": "Aggiungi le autorizzazioni delegate di Microsoft Graph Calendars.ReadWrite, User.Read e offline_access, e nient'altro. Per l'uso generale, completa la verifica dell'editore; il tenant di un cliente può inoltre richiedere che un amministratore approvi l'app."
+            },
+            "workspaces": {
+              "title": "4. Gli spazi di lavoro si collegano",
+              "body": "Incolla qui l'ID client e il segreto e salva. Gli amministratori potranno quindi collegarsi da Appuntamenti, Impostazioni."
             }
           }
         }

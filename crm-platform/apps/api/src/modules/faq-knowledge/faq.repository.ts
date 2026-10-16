@@ -563,7 +563,7 @@ export class FaqRepository {
 
   /**
    * A model change: every vector that belongs to another model waits to be re-made. Privileged. `includeFailed` also gives the rows that
-   * gave up a fresh start (an operator changing the model); the worker's own self-heal pass leaves them alone.
+   * gave up a fresh start (an operator changing the model, and the worker's self-heal pass, so indexing passes by default).
    */
   async markStale(tx: Tx, currentModel: string, includeFailed = true): Promise<number> {
     const res = await tx.execute(sql`

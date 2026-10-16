@@ -19,7 +19,8 @@
       "googleCalendar": "Google 日历",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "流程构建器"
+      "flowBuilder": "流程构建器",
+      "microsoftCalendar": "Microsoft 日历"
     },
     "hub": {
       "kicker": "管理员 - 项目设置",
@@ -1024,6 +1025,37 @@
             "advanced": "仅高级模式"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 日历",
+        "description": "所有工作区连接其 Outlook 或 Microsoft 365 日历时使用的 Microsoft 应用。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 应用"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "允许工作区连接 Outlook",
+            "hint": "关闭后：任何工作区都无法连接，也不会读取或写入任何 Outlook 日历。已连接的日历会保留。"
+          },
+          "clientId": {
+            "label": "应用程序（客户端）ID",
+            "hint": "在 Microsoft Entra 管理中心的“应用注册”“概述”中获取。留空则使用 MICROSOFT_CALENDAR_CLIENT_ID。"
+          },
+          "clientSecret": {
+            "label": "客户端密码",
+            "hint": "加密存储，之后不再显示。留空则保留已保存的密码；备用来源为 MICROSOFT_CALENDAR_CLIENT_SECRET。"
+          },
+          "tenant": {
+            "label": "租户",
+            "hint": "common 允许工作账户、学校账户和个人账户；单租户应用请使用目录（租户）ID。留空则使用 MICROSOFT_CALENDAR_TENANT，否则使用 common。"
+          },
+          "redirectUri": {
+            "label": "重定向 URI 覆盖值",
+            "hint": "留空则使用上方的地址。它必须与应用上的某个重定向 URI 完全一致。"
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "流程构建器",
         "description": "每个工作区的默认流程构建器：简单逐步模式或高级画布模式。工作区可覆盖此设置。",
         "tags": "简单 / 高级 / 自动化"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 日历",
+        "description": "工作区连接其 Outlook 和 Microsoft 365 日历以用于预约时使用的 Microsoft 应用。",
+        "tags": "Microsoft / OAuth / Outlook / 日历"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "已存在的流程",
               "body": "更改此设置绝不会更改或删除流程。流程仍会正常运行，只是会在当前启用的构建器中打开。自行选择构建器的工作区会保留该选择，直到其重新选择平台默认值。"
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 日历",
+        "eyebrow": "Admin - 预约",
+        "description": "整个平台共用一个 Microsoft Entra 应用。各工作区随后在“预约”“设置”中连接各自的 Outlook 或 Microsoft 365 日历，无法看到客户端 ID 或密码。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 应用",
+            "description": "如果没有客户端 ID 和密码，工作区会看到 Outlook 不可用，预约功能仍可照常使用。Google Calendar 不受影响。"
+          }
+        },
+        "guide": {
+          "title": "在 Microsoft Entra 中设置",
+          "items": {
+            "registration": {
+              "title": "1. 应用注册",
+              "body": "在 Microsoft Entra 管理中心创建应用注册，支持任何组织目录中的账户和个人 Microsoft 账户，并将应用程序（客户端）ID 复制到此处。除非您选择了更窄的范围，否则请将租户保持为 common。"
+            },
+            "redirect": {
+              "title": "2. 重定向 URI 和密码",
+              "body": "将本页显示的重定向 URI 添加为 Web 重定向，然后在“证书和密码”下创建客户端密码，并将其值粘贴到此处。请记下它的到期时间：到期后，所有工作区的日历都会停止工作，直到保存新的密码。"
+            },
+            "permissions": {
+              "title": "3. API 权限",
+              "body": "添加 Microsoft Graph 的委托权限 Calendars.ReadWrite、User.Read 和 offline_access，不要添加其他权限。若要广泛使用，请完成发布者验证；客户的租户也可能要求管理员批准该应用。"
+            },
+            "workspaces": {
+              "title": "4. 工作区连接",
+              "body": "在此处粘贴客户端 ID 和密码并保存。之后管理员即可在“预约”“设置”中进行连接。"
             }
           }
         }

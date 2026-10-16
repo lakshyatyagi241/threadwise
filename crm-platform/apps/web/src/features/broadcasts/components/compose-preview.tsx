@@ -45,7 +45,7 @@ export function ComposePreview({
             </div>
           </div>
           <div className="min-h-[270px] p-3">
-            <div className="ms-auto max-w-[255px] rounded-2xl rounded-tr-md border border-border bg-background px-3 py-2 shadow-sm">
+            <div className="ms-auto max-w-[255px] rounded-2xl rounded-se-md border border-border bg-background px-3 py-2 shadow-sm">
               {p?.media && (
                 <div className="mb-2 overflow-hidden rounded-[7px]">
                   {p.media === 'image' && template?.attachmentUrl ? (

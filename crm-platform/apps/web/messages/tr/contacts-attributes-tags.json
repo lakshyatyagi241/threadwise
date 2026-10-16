@@ -348,7 +348,10 @@
       "ownerMe": "{name} (ben)",
       "ownerFormer": "Eski üye",
       "ownerHelp": "Bu kişiyle kimin ilgilendiği. Yalnızca erişiminizin izin verdiği kişileri seçebilirsiniz.",
-      "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor."
+      "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
+      "company": "Şirket",
+      "companyHint": "Bu kişiyi bir kuruluşun altında gruplar.",
+      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin."
     },
     "tags": {
       "title": "Etiketler",

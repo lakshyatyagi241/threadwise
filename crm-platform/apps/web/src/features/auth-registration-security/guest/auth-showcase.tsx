@@ -254,10 +254,10 @@ export function GetaSky() {
         <span className="auth-geta-ring absolute -inset-[26px] rounded-full border border-white/15" />
         <span className="auth-geta-ring auth-geta-ring--dashed absolute -inset-[44px] rounded-full border border-dashed border-white/15" />
         <span className="auth-geta-orbit absolute -inset-[26px]">
-          <span className="absolute start-1/2 top-0 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-400 shadow-[0_0_12px_3px_rgb(167_139_250/0.7)]" />
+          <span className="absolute start-1/2 top-0 size-2.5 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-400 shadow-[0_0_12px_3px_rgb(167_139_250/0.7)]" />
         </span>
         <span className="auth-geta-orbit auth-geta-orbit--rev absolute -inset-[44px]">
-          <span className="absolute bottom-0 start-1/2 size-1.5 -translate-x-1/2 translate-y-1/2 rounded-full bg-pink-300 shadow-[0_0_10px_2px_rgb(249_168_212/0.6)]" />
+          <span className="absolute bottom-0 start-1/2 size-1.5 -translate-x-1/2 rtl:translate-x-1/2 translate-y-1/2 rounded-full bg-pink-300 shadow-[0_0_10px_2px_rgb(249_168_212/0.6)]" />
         </span>
       </div>
       {GETA_STARS.map(([top, left, size, delay], i) => (

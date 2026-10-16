@@ -397,7 +397,7 @@ function InvoiceRowView({
               : ymd(inv.issuedAt)}
         </div>
       </td>
-      <td className={cn('px-3 py-3 text-right font-mono', amountTone)}>
+      <td className={cn('px-3 py-3 text-end font-mono', amountTone)}>
         {inv.badge === 'refunded' ? '-' : ''}
         {money(inv.total, inv.currency, locale)}
       </td>

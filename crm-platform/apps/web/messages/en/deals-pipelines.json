@@ -181,7 +181,10 @@
         "valueInvalid": "Enter a number, for example 1250.50.",
         "valueTooLarge": "That value is too large.",
         "stageInvalid": "Choose a stage from this pipeline."
-      }
+      },
+      "company": "Company",
+      "companyHint": "Leave empty to use the contact’s company.",
+      "companyRefused": "You cannot use that company. Pick another one or clear the field."
     },
     "contact": {
       "unlink": "Remove contact",
@@ -221,7 +224,9 @@
       "deleteTitle": "Delete this deal?",
       "deleteMessage": "\"{title}\" and its timeline will be removed. This cannot be undone.",
       "cancel": "Cancel",
-      "company": "Company: {name}"
+      "company": "Company: {name}",
+      "companyLabel": "Company",
+      "companyRefused": "You cannot use that company."
     },
     "activity": {
       "title": "Activity",

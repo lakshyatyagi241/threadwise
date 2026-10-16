@@ -122,3 +122,33 @@ export const UsersIcon = (p: IconProps) => (
     <path d="M1.5 13a4.5 4.5 0 0 1 9 0M11 4a2.3 2.3 0 0 1 0 4.4M12.5 13a4 4 0 0 0-2-3.5" />
   </Svg>
 );
+
+/** The step icons of the two campaign steppers (the builder's five steps, the guided wizard's four). */
+export const SlidersIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2.5 5h6M11.5 5h2M2.5 11h2M7.5 11h6" />
+    <circle cx="10" cy="5" r="1.5" />
+    <circle cx="6" cy="11" r="1.5" />
+  </Svg>
+);
+export const MessageIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 3.5h10a1 1 0 0 1 1 1v5.5a1 1 0 0 1-1 1H8l-3 2.5V11H3a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1z" />
+  </Svg>
+);
+export const ChecklistIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2.5 4.5l1.2 1.2 2-2M2.5 10l1.2 1.2 2-2M8 5h5.5M8 10.5h5.5" />
+  </Svg>
+);
+export const TemplateIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" />
+    <path d="M2.5 6h11M6 6v7.5" />
+  </Svg>
+);
+export const SendIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M14 2L7 9M14 2l-4.5 12-2.5-5.5L1.5 6 14 2z" />
+  </Svg>
+);

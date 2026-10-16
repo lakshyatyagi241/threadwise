@@ -553,10 +553,14 @@ describe('web forms (BL-171)', () => {
       marketing: false,
     });
     const a = email('svc');
-    await submitTo(form.publicKey, { name: 'Service Sam', email: a, phone: nextPhone() }, {
-      given: true,
-      textVersion: 1,
-    });
+    await submitTo(
+      form.publicKey,
+      { name: 'Service Sam', email: a, phone: nextPhone() },
+      {
+        given: true,
+        textVersion: 1,
+      },
+    );
     const rows = await ledgerOf(a);
     expect(rows.map((r) => [r.channel, r.purpose, r.action, r.source])).toEqual([
       ['email', 'utility', 'granted', 'form'],
@@ -590,8 +594,8 @@ describe('web forms (BL-171)', () => {
       sms_subscription_status: null,
     });
     expect(
-      (await forms.eventsOfType(ft.orgId, 'contact.opt_in')).filter(
-        (e) => JSON.stringify(e.payload).includes(form.id),
+      (await forms.eventsOfType(ft.orgId, 'contact.opt_in')).filter((e) =>
+        JSON.stringify(e.payload).includes(form.id),
       ),
     ).toEqual([]);
   });
@@ -604,10 +608,14 @@ describe('web forms (BL-171)', () => {
       marketing: false,
     });
     const a = email('unt');
-    await submitTo(optional.publicKey, { name: 'No Tick', email: a, phone: nextPhone() }, {
-      given: false,
-      textVersion: 1,
-    });
+    await submitTo(
+      optional.publicKey,
+      { name: 'No Tick', email: a, phone: nextPhone() },
+      {
+        given: false,
+        textVersion: 1,
+      },
+    );
     expect(await ledgerOf(a)).toEqual([]);
     expect((await forms.submissions(ft.orgId, optional.id)).at(-1)!.consent).toMatchObject({
       given: false,
@@ -620,10 +628,14 @@ describe('web forms (BL-171)', () => {
       marketing: true,
     });
     const b = email('mkt');
-    await submitTo(unticked.publicKey, { name: 'No Offers', email: b }, {
-      given: false,
-      textVersion: 1,
-    });
+    await submitTo(
+      unticked.publicKey,
+      { name: 'No Offers', email: b },
+      {
+        given: false,
+        textVersion: 1,
+      },
+    );
     expect(await ledgerOf(b)).toEqual([]);
 
     const plain = await live(undefined);
@@ -640,10 +652,14 @@ describe('web forms (BL-171)', () => {
       marketing: true,
     });
     const a = email('m1');
-    await submitTo(noSms.publicKey, { name: 'Marketing One', email: a, phone: nextPhone() }, {
-      given: true,
-      textVersion: 1,
-    });
+    await submitTo(
+      noSms.publicKey,
+      { name: 'Marketing One', email: a, phone: nextPhone() },
+      {
+        given: true,
+        textVersion: 1,
+      },
+    );
     expect((await ledgerOf(a)).map((r) => [r.channel, r.purpose])).toEqual([
       ['email', 'marketing'],
       ['whatsapp', 'marketing'],
@@ -657,10 +673,14 @@ describe('web forms (BL-171)', () => {
       coversSms: true,
     });
     const b = email('m2');
-    await submitTo(withSms.publicKey, { name: 'Marketing Two', email: b, phone: nextPhone() }, {
-      given: true,
-      textVersion: 1,
-    });
+    await submitTo(
+      withSms.publicKey,
+      { name: 'Marketing Two', email: b, phone: nextPhone() },
+      {
+        given: true,
+        textVersion: 1,
+      },
+    );
     const rows = await ledgerOf(b);
     expect(rows.map((r) => [r.channel, r.purpose, r.action])).toEqual([
       ['email', 'marketing', 'granted'],
@@ -679,10 +699,14 @@ describe('web forms (BL-171)', () => {
 
     // No phone collected: nothing for sms or whatsapp, whatever the wording covers.
     const c = email('m3');
-    await submitTo(withSms.publicKey, { name: 'Marketing Three', email: c }, {
-      given: true,
-      textVersion: 1,
-    });
+    await submitTo(
+      withSms.publicKey,
+      { name: 'Marketing Three', email: c },
+      {
+        given: true,
+        textVersion: 1,
+      },
+    );
     expect((await ledgerOf(c)).map((r) => r.channel)).toEqual(['email']);
   });
 
@@ -696,10 +720,14 @@ describe('web forms (BL-171)', () => {
     });
     const a = email('svcsms');
     const ph = nextPhone();
-    await submitTo(form.publicKey, { name: 'Service Sms', email: a, phone: ph }, {
-      given: true,
-      textVersion: 1,
-    });
+    await submitTo(
+      form.publicKey,
+      { name: 'Service Sms', email: a, phone: ph },
+      {
+        given: true,
+        textVersion: 1,
+      },
+    );
     expect((await ledgerOf(a)).map((r) => [r.channel, r.purpose])).toEqual([
       ['email', 'utility'],
       ['sms', 'utility'],
@@ -713,10 +741,14 @@ describe('web forms (BL-171)', () => {
       .post(`/v2/contact-consent/contacts/${uuid}/events`)
       .send({ channel: 'email', purpose: 'utility', action: 'withdrawn', source: 'manual' });
     expect(out.status, JSON.stringify(out.body)).toBe(201);
-    await submitTo(form.publicKey, { name: 'Service Sms', email: a, phone: ph }, {
-      given: true,
-      textVersion: 1,
-    });
+    await submitTo(
+      form.publicKey,
+      { name: 'Service Sms', email: a, phone: ph },
+      {
+        given: true,
+        textVersion: 1,
+      },
+    );
     const states = (
       await h.owner.query(
         `SELECT s.channel, s.state FROM contact_consent_state s

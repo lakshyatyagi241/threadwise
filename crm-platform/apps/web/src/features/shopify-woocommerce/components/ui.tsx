@@ -70,7 +70,7 @@ export function TableFrame({ children }: { children: ReactNode }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-[13px]">{children}</table>
+        <table className="w-full text-start text-[13px]">{children}</table>
       </div>
     </div>
   );

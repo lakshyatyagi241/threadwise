@@ -323,7 +323,7 @@ function AIGenInner({
                   key={key}
                   type="button"
                   onClick={() => setPrompt(t(key))}
-                  className="inline-flex w-full items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-left text-[11.5px] text-foreground/80 hover:bg-muted"
+                  className="inline-flex w-full items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-start text-[11.5px] text-foreground/80 hover:bg-muted"
                 >
                   <Icon d="M3 8l3 3 7-7" className="h-3 w-3 text-brand" />
                   <span className="truncate">{t(key)}</span>

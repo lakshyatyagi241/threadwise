@@ -100,7 +100,8 @@
       "views": {
         "list": "Lijst",
         "board": "Bord op vervaldatum"
-      }
+      },
+      "linkCompany": "Een bedrijf"
     },
     "table": {
       "scrollArea": "Takentabel",
@@ -204,7 +205,8 @@
         "notesTooLong": "De notities zijn te lang (maximaal 5000 tekens).",
         "dueInvalid": "Die datum is niet geldig.",
         "assigneeInvalid": "Die persoon is geen actief lid van deze workspace."
-      }
+      },
+      "company": "Bedrijf"
     },
     "drawer": {
       "loading": "Taak laden",
@@ -268,7 +270,8 @@
       "searching": "Zoeken",
       "unavailable": "Zoeken is op dit moment niet beschikbaar.",
       "none": "Geen resultaten.",
-      "unlink": "Koppeling verwijderen"
+      "unlink": "Koppeling verwijderen",
+      "searchCompany": "Bedrijven zoeken"
     },
     "errors": {
       "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
@@ -323,7 +326,8 @@
       "loadMore": "Meer laden",
       "loadMoreDone": "Meer voltooide laden",
       "showDone": "Voltooide tonen",
-      "hideDone": "Voltooide verbergen"
+      "hideDone": "Voltooide verbergen",
+      "gone": "Het record waartoe deze taken behoren, is niet meer beschikbaar."
     }
   }
 }

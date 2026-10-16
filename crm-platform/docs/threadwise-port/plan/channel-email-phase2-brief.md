@@ -5,6 +5,7 @@ Repo `crm-platform/` (branch `lakshya/mail/gmail-email-channel`; NestJS api `app
 provider-agnostic and landed ALL shared schema, contracts and permissions.
 
 ## Rules for every builder
+
 - Read first: `plan/channel-email-build.md` (especially "## Phase 2 seams (as built)": code against it; do NOT add migrations or change shared contracts unless your
   task says so; if something is truly missing add the smallest additive change and say so in your report), `inventory/channel-email.md` (TW-MAIL-027, 031..035),
   `docs/specs/email-channel-and-social-leads.md`, `docs/api/channel-email.md`, the wiring and parity docs, `CLAUDE.md`, `CONTRIBUTING.md`, `PORTING_RULES.md`, and the skills in
@@ -21,6 +22,7 @@ provider-agnostic and landed ALL shared schema, contracts and permissions.
 ## Tasks (you are told your number)
 
 ### 1. IMAP + SMTP provider (TW-MAIL-031)
+
 `drivers/imap-mail.driver.ts` (a PasswordMailDriver) with imapflow (add the dependency to apps/api; mailparser or postal-mime for MIME if needed) and nodemailer SMTP for send.
 verify() logs in to BOTH IMAP and SMTP before anything is stored (MailDriverError auth_failed with providerCode imap|smtp, or unreachable); TLS modes ssl/starttls/none with
 certificate validation on (no insecure option); SSRF guard (refuse private, loopback, link-local and metadata addresses unless an env flag allows it for tests or self-hosted);
@@ -32,6 +34,7 @@ image `greenmail/standalone`, or a tiny in-process IMAP server if the image cann
 conversation, reply threads correctly, redelivery idempotent, UIDVALIDITY change, SSRF refusal.
 
 ### 2. Microsoft 365 / Outlook via Microsoft Graph (TW-MAIL-034)
+
 `drivers/microsoft-mail.driver.ts` (an OAuthMailDriver) plus an infra client (plain fetch). OAuth 2.0 authorization-code flow on the Microsoft identity platform (tenant `common`;
 scopes openid, email, offline_access, Mail.Read, Mail.Send, User.Read), profile via /me, delta sync of the Inbox (`/me/mailFolders/inbox/messages/delta`, `deltaLink` cursor, quiet
 backfill of N days, skip junk, deleted, drafts, sent), NormalisedMail from Graph messages (conversationId -> thread key via resolveThreadKey, internetMessageId, headers via
@@ -44,6 +47,7 @@ service (signed state with its own purpose) and add it to tools/auth-audit/basel
 registration, redirect URI, permissions, publisher verification). e2e with a fake Graph server (connect, wrong account, sync a thread, reply, reauth, 429).
 
 ### 3. Gmail push via Pub/Sub (TW-MAIL-033)
+
 Implement the optional MailPushSupport on GoogleMailDriver: users.watch on the mailbox (labelIds INBOX, topic from platform config), store push_state `{kind:'gmail-watch',
 historyId, expiresAt}` via savePushState, a renewal sweep (watches expire after 7 days) and stop on disconnect or lapse. A PUBLIC endpoint `POST /v2/public/email/google/push`
 verifies Google's OIDC JWT (Authorization bearer; RS256 against Google's JWKS cached with rotation; check issuer, audience = configured value, email = configured push service
@@ -58,6 +62,7 @@ email, bad signature, alg none); e2e: a push syncs exactly the right mailbox, an
 stops it.
 
 ### 4. Personal mailboxes + email sharing policy (TW-MAIL-035)
+
 Phase A added mail_mailboxes.scope and owner_user_id, mail_workspace_settings, and permissions mail.mailboxes.manage_personal and mail.settings.manage. Build: (1) the workspace policy
 API `GET/PUT /v2/email/settings` (personal_mailboxes_enabled, who_may_connect_personal admins|agents, admins_can_read_personal; row version; permission mail.settings.manage; audit and
 outbox); (2) connecting a personal mailbox through any provider (scope personal, owner = the connecting user, only when the policy enables it and the user holds manage_personal per
@@ -72,6 +77,7 @@ on) and another tenant cannot read list, detail, messages, search, counts, attac
 Turning the policy off hides the connect option but never exposes existing personal mailboxes to others.
 
 ### 5. Outbound attachments + signatures + composer backend (TW-MAIL-027)
+
 Phase A added tables mail_outbound_attachments and mail_signatures, contracts (outbound-attachment.ts, signature.ts, reply extras attachmentIds, signatureId, signature), permission
 mail.signatures.manage, the pass-through stub MailOutboundPreparer and OutboundEmail fields sentBy, attachmentIds, signatureId. Build the real thing: (1) `POST /v2/email/attachments/upload`
 (multipart; per-file and per-message caps from env; mime allow/deny list; an antivirus hook point documented; object store key; expiry), delete a staged file, cleanup of expired staged
@@ -87,6 +93,7 @@ already does): confirm in the seams doc that bytes arrive in OutgoingMail.attach
 both, the thread shows them, another user cannot attach someone else's upload, caps refused, expired cleanup, signature scope permissions).
 
 ### 6. Bounce handling + rate limits (TW-MAIL-032)
+
 Phase A added the stubs MailBounceHandler (in ingest) and MailSendGuard, the contracts email-meta bounce and delivery fields, error MAIL_RATE_LIMITED, mailbox sendLimitPerHour. Build:
 (1) bounce and DSN detection in ingest for every provider: recognise delivery-status notifications (multipart/report with message/delivery-status, report-type=delivery-status, From
 MAILER-DAEMON or postmaster, X-Failed-Recipients, the Gmail "Delivery Status Notification" mail, Microsoft "Undeliverable" NDRs with the original headers), parse the failed recipient,
@@ -103,6 +110,7 @@ for Gmail, Postfix, Exchange/Outlook NDRs (soft and hard) linking to the origina
 headers, rate limit unit (window math) and e2e (limit hit -> MAIL_RATE_LIMITED, reset after the window, other mailboxes unaffected), flood limit.
 
 ### 7. WEB: hub, providers, IMAP form, personal mailboxes, sharing policy
+
 In `apps/web/src/features/channel-email`: you own hub-screen.tsx, mailbox-card.tsx, channel-options.tsx, the hub api hooks and routes (task 8 owns the composer, thread and signatures).
 The email feature is an INTEGRATION: a Settings > Integrations tile gated by planFeature email_channel (see channel-email/settings.ts and nav.ts). Backend contracts exist
 (`packages/contracts/src/channel-email`: mailbox.ts, settings.ts, the providers response). Build: provider cards from `GET /v2/email/providers` (Google, Microsoft 365, IMAP/SMTP with
@@ -117,6 +125,7 @@ locally installed chromium through a temporary playwright config with launchOpti
 start the API with GOOGLE_MAIL_CLIENT_ID and GOOGLE_MAIL_CLIENT_SECRET env to test connect; delete temp configs afterwards).
 
 ### 8. WEB: composer, attachments, signatures, thread bounce display
+
 In `apps/web/src/features/channel-email` and the email parts of team-inbox-conversations (composer.tsx, message-bubble.tsx, email-message.tsx, extras-fields.tsx); task 7 owns
 hub-screen.tsx, mailbox-card.tsx and channel-options.tsx. Backend contracts exist (outbound-attachment.ts, signature.ts, email-meta bounce and delivery, reply extras attachmentIds,
 signatureId, signature) and the API is built concurrently (`POST /v2/email/attachments/upload` multipart, `/v2/email/signatures` CRUD, replies with attachmentIds and an HTML body).

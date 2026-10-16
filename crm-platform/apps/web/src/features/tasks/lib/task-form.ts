@@ -19,6 +19,8 @@ export interface TaskDraft {
   assigneeId: string;
   contactId: string;
   dealId: string;
+  /** The company a new task was started from (the company page's tasks card); not editable in the form. */
+  companyId: string;
 }
 
 export const emptyDraft = (assigneeId: string): TaskDraft => ({
@@ -29,6 +31,7 @@ export const emptyDraft = (assigneeId: string): TaskDraft => ({
   assigneeId,
   contactId: '',
   dealId: '',
+  companyId: '',
 });
 
 export const draftOf = (t: TaskResponse): TaskDraft => ({
@@ -39,6 +42,7 @@ export const draftOf = (t: TaskResponse): TaskDraft => ({
   assigneeId: t.assignee?.id ?? '',
   contactId: t.contact?.id ?? '',
   dealId: t.deal?.id ?? '',
+  companyId: t.company?.id ?? '',
 });
 
 export type DraftProblem =
@@ -75,6 +79,7 @@ export function createBody(d: TaskDraft): CreateTaskInput {
     assigneeId: d.assigneeId || null,
     contactId: d.contactId || null,
     dealId: d.dealId || null,
+    ...(d.companyId ? { companyId: d.companyId } : {}),
   };
 }
 

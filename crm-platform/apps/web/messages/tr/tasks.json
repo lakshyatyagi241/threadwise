@@ -100,7 +100,8 @@
       "views": {
         "list": "Liste",
         "board": "Son tarihe göre pano"
-      }
+      },
+      "linkCompany": "Bir şirket"
     },
     "table": {
       "scrollArea": "Görev tablosu",
@@ -204,7 +205,8 @@
         "notesTooLong": "Notlar çok uzun (en fazla 5000 karakter).",
         "dueInvalid": "Bu tarih geçerli değil.",
         "assigneeInvalid": "Bu kişi bu çalışma alanının etkin bir üyesi değil."
-      }
+      },
+      "company": "Şirket"
     },
     "drawer": {
       "loading": "Görev yükleniyor",
@@ -268,7 +270,8 @@
       "searching": "Aranıyor",
       "unavailable": "Arama şu anda kullanılamıyor.",
       "none": "Eşleşme yok.",
-      "unlink": "Bağlantıyı kaldır"
+      "unlink": "Bağlantıyı kaldır",
+      "searchCompany": "Şirket ara"
     },
     "errors": {
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
@@ -323,7 +326,8 @@
       "loadMore": "Daha fazla yükle",
       "loadMoreDone": "Tamamlananları daha fazla yükle",
       "showDone": "Tamamlananları göster",
-      "hideDone": "Tamamlananları gizle"
+      "hideDone": "Tamamlananları gizle",
+      "gone": "Bu görevlerin ait olduğu kayıt artık kullanılamıyor."
     }
   }
 }
