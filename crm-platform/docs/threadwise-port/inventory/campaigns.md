@@ -291,6 +291,13 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 - **Tests:** `apps/api/test/e2e/campaigns/campaigns-ai-build.e2e.spec.ts`, `test/unit/campaigns/http-campaign-ai-image.adapter.spec.ts`, `test/unit/message-templates/template-ai-rules.spec.ts`, and the web tests of the modal, the wizard button and the picture option.
 - **Not verified:** nothing was run against a real OpenAI, Anthropic or Gemini key, or Meta's review of an AI-written template.
 
+### TW-CAMP-039: step icons, and one list of templates in both builders (ADDITION)
+
+- **Source:** the meeting's "Step icons and the stepper disappeared, and templates do not show in some views." Reference's stepper is numbered dots; the icons are an addition.
+- **Stepper:** both steppers (the classic builder's five steps, the guided wizard's four) show an icon for each step in the dot, a check once the step is done; the number stays for screen readers. The wizard's phone view shows the current step's icon too.
+- **Templates:** the classic builder's pickers and the wizard's list now hold the same templates (approved, sendable now, not OTP, not SMS). The classic builder still narrows its list to the chosen number in the browser, and the wizard still lets the picked number send a template of another number of the same business (both are deliberate and tested: numbers of one Meta business share its templates). The empty state links to the new-template form on the chosen number (the classic builder's link to `/templates/create` went nowhere).
+- **Tests:** `broadcast-wizard-templates.e2e.spec.ts`, the stepper tests of both builders, the step-1 tests.
+
 ### Reference comparison (live Reference, read-only)
 
 See [parity/campaigns.md](../parity/campaigns.md#broadcast-wizard-addition): Reference's create flow, and what the wizard does the same or differently.
