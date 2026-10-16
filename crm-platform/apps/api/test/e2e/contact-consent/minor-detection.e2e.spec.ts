@@ -47,7 +47,8 @@ const email = (label: string) => `${label}${Date.now().toString(36)}${n++}@examp
 const flagsOf = async (t: Tenant, uuid: string) =>
   (
     await q(
-      `SELECT f.* FROM contact_privacy_flags f JOIN contacts c ON c.org_id = f.org_id AND c.id = f.contact_id
+      `SELECT f.*, to_char(f.minor_until, 'YYYY-MM-DD') AS minor_until, to_char(f.dob_override_for, 'YYYY-MM-DD') AS dob_override_for
+       FROM contact_privacy_flags f JOIN contacts c ON c.org_id = f.org_id AND c.id = f.contact_id
        WHERE f.org_id = $1 AND c.uuid = $2`,
       [t.orgId, uuid],
     )
@@ -240,15 +241,22 @@ describe('the age gate on a form', () => {
     expect(refused.status, JSON.stringify(refused.body)).toBe(403);
     expect(refused.body.code).toBe('FORMS_AGE_BLOCKED');
     // Neutral: it does not say why or what would pass.
-    expect(JSON.stringify(refused.body).toLowerCase()).not.toMatch(/18|age|old|minor|year/);
+    expect(`${refused.body.title} ${refused.body.detail}`.toLowerCase()).not.toMatch(
+      /18|age|old|minor|year/,
+    );
     expect(await api.submissions(t.orgId, form.id)).toHaveLength(0);
     expect(await api.contactByEmail(t.orgId, who)).toBeUndefined();
 
     const okMail = email('adult');
     const ok = await api.submit(form.publicKey, { answers: { email: okMail, how_old: ADULT } });
     expect(ok.status, JSON.stringify(ok.body)).toBe(201);
-    const c = await api.contactByEmail(t.orgId, okMail);
-    expect(String(c.date_of_birth).slice(0, 10)).toBe(ADULT);
+    const c = (
+      await q(
+        `SELECT date_of_birth::text AS date_of_birth FROM contacts WHERE org_id = $1 AND normalized_email = $2`,
+        [t.orgId, okMail],
+      )
+    )[0];
+    expect(c.date_of_birth).toBe(ADULT);
   });
 
   it('the public form never carries the action or the minimum of a date of birth question, but the box names its age', async () => {
@@ -411,15 +419,13 @@ describe('the age question of a chat widget', () => {
       .pub(w.embedToken)
       .message({ visitor_uuid: uuid, body: 'hi', name: 'Kim', email: email('k') });
     expect(noAnswer.status).toBe(422);
-    const under = await widgets
-      .pub(w.embedToken)
-      .message({
-        visitor_uuid: uuid,
-        body: 'hi',
-        name: 'Kim',
-        email: email('k'),
-        date_of_birth: MINOR,
-      });
+    const under = await widgets.pub(w.embedToken).message({
+      visitor_uuid: uuid,
+      body: 'hi',
+      name: 'Kim',
+      email: email('k'),
+      date_of_birth: MINOR,
+    });
     expect(under.status).toBe(403);
     expect(under.body.code).toBe('age_blocked');
     expect(
@@ -439,15 +445,13 @@ describe('the age question of a chat widget', () => {
     ).toEqual({ name: null, email: null });
 
     const who = email('adult');
-    const ok = await widgets
-      .pub(w.embedToken)
-      .message({
-        visitor_uuid: uuid,
-        body: 'hello',
-        name: 'Ada',
-        email: who,
-        date_of_birth: ADULT,
-      });
+    const ok = await widgets.pub(w.embedToken).message({
+      visitor_uuid: uuid,
+      body: 'hello',
+      name: 'Ada',
+      email: who,
+      date_of_birth: ADULT,
+    });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
     const again = await widgets
       .pub(w.embedToken)
@@ -456,10 +460,10 @@ describe('the age question of a chat widget', () => {
     const cfg2 = (await widgets.pub(w.embedToken).config(uuid)).body;
     expect(cfg2.widget.age_gate.pending).toBe(false);
     const c = (
-      await q(`SELECT date_of_birth FROM contacts WHERE org_id = $1 AND normalized_email = $2`, [
-        t.orgId,
-        who,
-      ])
+      await q(
+        `SELECT date_of_birth::text AS date_of_birth FROM contacts WHERE org_id = $1 AND normalized_email = $2`,
+        [t.orgId, who],
+      )
     )[0];
     expect(String(c.date_of_birth).slice(0, 10)).toBe(ADULT);
   });
@@ -576,10 +580,10 @@ describe('minors in lists, segments and the customer API (BL-190)', () => {
     expect(res.status, JSON.stringify(res.body)).toBeLessThan(300);
     const byName = async (name: string) =>
       (
-        await q(`SELECT id, uuid, date_of_birth FROM contacts WHERE org_id = $1 AND name = $2`, [
-          t.orgId,
-          name,
-        ])
+        await q(
+          `SELECT id, uuid, date_of_birth::text AS date_of_birth FROM contacts WHERE org_id = $1 AND name = $2`,
+          [t.orgId, name],
+        )
       )[0];
     const kid = await byName('Imp Kid');
     expect(String(kid.date_of_birth).slice(0, 10)).toBe(MINOR);
