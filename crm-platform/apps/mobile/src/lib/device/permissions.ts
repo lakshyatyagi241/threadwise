@@ -106,7 +106,7 @@ export async function requestPermission(
  * The first-open flow: the phone's own "Allow" prompt for each permission, one after the other, with no screen of the app in
  * between. Answers with the permissions still off afterwards (refused, or refused for good here or in an earlier install, when the
  * phone would not even show the prompt): only the phone's settings can switch those on, and the app tells the person where first
- * (the first-run flow opens the page for "display over other apps" itself) before `openSettingsFor` takes them there.
+ * (the app never opens a settings page on its own) before `openSettingsFor` takes them there.
  */
 export async function askForPermissions(labels: Labels): Promise<DevicePermission[]> {
   const off: DevicePermission[] = [];
