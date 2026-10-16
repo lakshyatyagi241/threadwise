@@ -4,6 +4,7 @@
 # Paging rule: a critical alert needs SUSTAINED loop degradation AND user impact (slow API, slow webhook ack, or a queue wait
 # climbing). A lone spike is recorded in the metrics and the "event loop blocked" log line, and does not page.
 # Thresholds are the initial engineering targets, not measured limits: tune them from the baselines before making them gates.
+# Tested with promtool: event-loop.rules.test.yml next to this file. Change a threshold or add an alert only together with a case there.
 groups:
   - name: event-loop
     rules:
