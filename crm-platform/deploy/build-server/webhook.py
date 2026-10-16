@@ -11,6 +11,7 @@ import json
 import os
 import subprocess
 import sys
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 SECRET_FILE = os.environ.get("DESK_CI_SECRET_FILE", "/etc/desk-ci/webhook-secret")
@@ -63,7 +64,10 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path != PATH:
             return self._reply(404, "not found")
-        length = int(self.headers.get("Content-Length") or 0)
+        try:
+            length = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            length = 0
         if length <= 0 or length > MAX_BODY:
             return self._reply(413, "bad size")
         body = self.rfile.read(length)
@@ -82,8 +86,9 @@ class Handler(BaseHTTPRequestHandler):
         if not deploy:
             return self._reply(200, why)
         # detached: the request returns at once; the script logs to /var/log/desk-ci
-        subprocess.Popen([DEPLOY], stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                         stderr=subprocess.DEVNULL, start_new_session=True)
+        child = subprocess.Popen([DEPLOY], stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                 stderr=subprocess.DEVNULL, start_new_session=True)
+        threading.Thread(target=child.wait, daemon=True).start()  # reap it when it ends
         return self._reply(202, "deploy started")
 
     def log_message(self, fmt, *args):

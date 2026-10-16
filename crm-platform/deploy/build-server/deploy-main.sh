@@ -25,9 +25,11 @@ ssh_prod() { ssh -F "$SSH_CONFIG" -o BatchMode=yes desk "$@"; }
 export GIT_SSH_COMMAND="ssh -F $SSH_CONFIG -o BatchMode=yes"
 
 mkdir -p "$STATE" "$LOGS"
+# Mark the request BEFORE taking the lock: a run that is finishing releases the lock and then looks for this flag, so a push that
+# lost the lock race is always seen (touching it after a failed flock could land just after that last look).
+touch "$STATE/pending"
 exec 9>"$STATE/lock"
 if ! flock -n 9; then
-  touch "$STATE/pending"
   echo "$(date -Is) a deploy is running; the new push will be picked up when it ends" >> "$LOGS/webhook.log"
   exit 0
 fi
@@ -39,14 +41,19 @@ run_once() {
   exec > >(tee -a "$LOG") 2>&1
   echo "== $(date -Is) fetching $BRANCH"
   if [ -d "$CI_DIR/repo/.git" ]; then
-    git -C "$CI_DIR/repo" fetch --depth 1 origin "$BRANCH" && git -C "$CI_DIR/repo" reset --hard FETCH_HEAD && git -C "$CI_DIR/repo" clean -fdq || return 1
+    git -C "$CI_DIR/repo" fetch --depth 200 origin "$BRANCH" && git -C "$CI_DIR/repo" reset --hard FETCH_HEAD && git -C "$CI_DIR/repo" clean -fdq || return 1
   else
-    git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$CI_DIR/repo" || return 1
+    git clone --depth 200 --branch "$BRANCH" "$REPO_URL" "$CI_DIR/repo" || return 1
   fi
   cd "$CI_DIR/repo" || return 1
   TAG=$(git rev-parse --short=9 HEAD)
-  LOG="$LOGS/$(date +%Y%m%dT%H%M%S)-$TAG.log"
-  if [ "$FORCE" = 0 ] && [ "$(cat "$STATE/deployed" 2>/dev/null)" = "$TAG" ]; then echo "== $TAG is already released; nothing to do"; return 0; fi
+  last=$(cat "$STATE/deployed" 2>/dev/null || true)
+  if [ "$FORCE" = 0 ] && [ "$last" = "$TAG" ]; then echo "== $TAG is already released; nothing to do"; return 0; fi
+  # Like the old workflow's `paths: crm-platform/**`: a push that changes nothing under crm-platform/ is not released.
+  if [ "$FORCE" = 0 ] && [ -n "$last" ] && git rev-parse -q --verify "$last^{commit}" >/dev/null 2>&1 \
+    && git diff --quiet "$last" HEAD -- crm-platform; then
+    echo "== $TAG changes nothing under crm-platform/ since $last; not releasing"; return 0
+  fi
   status building
   echo "== building $TAG"
   docker build -f crm-platform/apps/api/Dockerfile -t "desk-api:$TAG" --build-arg "GIT_SHA=$TAG" crm-platform || return 1
@@ -72,7 +79,7 @@ run_once() {
 while true; do
   rm -f "$STATE/pending"
   ( run_once ); rc=$?
-  TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/*.log 2>/dev/null | head -1)
+  TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
   if [ "$rc" = 0 ]; then status ok; else status failed; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"; fi
   # keep the last two local builds and trim the build cache so the disk does not fill
   docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
@@ -80,3 +87,6 @@ while true; do
   [ -e "$STATE/pending" ] || break
   FORCE=0
 done
+# Release the lock, then look once more: a push that failed to get the lock has already set the flag (see above).
+exec 9>&-
+if [ -e "$STATE/pending" ]; then exec "$0"; fi

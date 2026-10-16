@@ -53,4 +53,4 @@ echo "-- GitHub: repo Settings > Deploy keys, read-only:"; cat "$CONF/github_dep
 echo "-- production /root/.ssh/authorized_keys, as ONE line with the forced command:"
 echo "restrict,command=\"/opt/desk/ci-entry.sh\" $(cat "$CONF/prod_deploy_key.pub")"
 echo "-- known_hosts: add github.com and the production host key to $CONF/known_hosts (README.md, step 3)."
-echo "-- webhook: https://$CI_HOST/hooks/github, secret in $CONF/webhook-secret (README.md, step 4)."
+echo "-- webhook: https://$CI_HOST/hooks/github, secret in $CONF/webhook-secret (README.md, step 5)."

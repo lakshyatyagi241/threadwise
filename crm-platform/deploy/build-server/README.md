@@ -38,11 +38,13 @@ Nothing secret is in this repository.
 
 ## Behaviour
 
-- **One run at a time** (`flock`). A push that arrives while a run is going sets a `pending` flag; when the run ends, the script fetches
-  `main` again and releases the new tip. Several quick merges therefore produce at most one extra release, of the latest commit.
+- **One run at a time** (`flock`). A push that arrives while a run is going sets a `pending` flag (set before the lock is tried, so it cannot be
+  missed); when the run ends, the script releases the lock, looks for the flag, fetches `main` again and releases the new tip. Several quick merges therefore produce at most one extra release, of the latest commit.
 - The webhook payload is only a trigger. The script always builds the **current tip of `main`**. Only a non-deleting push to
   `refs/heads/main` of `lakshyatyagi241/threadwise` starts it; other events, branches and repositories are acknowledged and ignored.
 - A tip that is already released (`/var/lib/desk-ci/deployed`) is skipped; `deploy-main.sh --force` releases it again.
+- Like the old workflow's `paths: crm-platform/**`, a push that changes **nothing under `crm-platform/`** since the last released commit (a root
+  README, docs elsewhere in the repository) is not released. The log says so and `deployed` is left as it was.
 - The tag is the 9-character commit hash, as `ship.sh` uses. The last two releases stay on the production host for rollback.
 - There is **no test or CI gate**: the Docker builds type-check the API and the web app (that stopped the bad builds so far), but unit
   tests, the migrations-from-scratch check and the security scans do not run here. Run `pnpm test` and the migration check before merging
