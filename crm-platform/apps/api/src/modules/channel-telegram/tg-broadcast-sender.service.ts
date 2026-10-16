@@ -31,7 +31,7 @@ import {
   scheduleWake,
   splitByQuietHours,
 } from '../compliance-center';
-import { ConsentGate } from '../contact-consent';
+import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 
 export type TgRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
 
@@ -110,27 +110,20 @@ export class TgBroadcastSenderService {
       if (batch.length === 0) return this.finish(orgId, current);
       lastId = Math.max(...batch.map((r) => r.id));
 
-      const windows = await splitByQuietHours(this.sendWindow, orgId, batch);
+      // Every chat is asked, on the first send and on a release alike (BL-141): a chat that unsubscribed, or has no recorded consent while
+      // the workspace requires it, is `blocked` with the gate's reason, never messaged and never dropped without a trace.
+      const gated = await gateRecipients(this.gate, orgId, batch, 'telegram');
+      const refused = new Map(gated.skipped.map((s) => [s.row.id, s.reason]));
+      const windows = await splitByQuietHours(this.sendWindow, orgId, gated.go);
       const held = new Map(windows.held.map((h) => [h.row.id, h.hold]));
-      // A chat released from a hold may have unsubscribed while it waited: the gate is asked again (BL-141).
-      const released = batch.filter((r) => r.wasHeld && r.contactId !== null);
-      const recheck =
-        released.length > 0
-          ? await this.gate.checkMany(
-              orgId,
-              released.map((r) => r.contactId as number),
-              'telegram',
-              'marketing_messaging',
-            )
-          : null;
 
       for (const r of batch) {
-        const verdict = r.contactId === null ? undefined : recheck?.decisions.get(r.contactId);
-        if (verdict && verdict.decision === 'deny') {
+        const why = refused.get(r.id);
+        if (why) {
           await this.db.txAs({ orgId }, (tx) =>
             this.repo.markRecipient(tx, orgId, r.id, {
               status: 'blocked',
-              error: `Not messaged: consent (${verdict.reason})`,
+              error: consentSkipNote(why),
             }),
           );
           continue;

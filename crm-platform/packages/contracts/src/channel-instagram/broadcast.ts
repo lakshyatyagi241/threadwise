@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { CONSENT_GATE_REASONS } from '../privacy/gate';
 
 /**
  * Reply-only sends (TW-IG-013, 014). Instagram only lets an account message someone who has already written to it, so the
@@ -63,5 +64,13 @@ export const igSendResultSchema = z.object({
   /** BL-191: people held for the workspace's quiet hours (neither sent nor failed), and the first instant one of them is messaged. */
   held: z.number().int(),
   heldUntil: z.string().datetime().nullable(),
+  /**
+   * People the ConsentGate refused for a marketing send (the broadcasts page; the inbox composer is a reply and is never asked): not
+   * messaged, neither sent nor failed. `skippedReasons` says why, by the gate's closed set of reason codes.
+   */
+  skipped: z.number().int().min(0),
+  skippedReasons: z.array(
+    z.object({ reason: z.enum(CONSENT_GATE_REASONS), count: z.number().int().min(1) }),
+  ),
 });
 export type IgSendResult = z.infer<typeof igSendResultSchema>;

@@ -85,7 +85,8 @@
       "outsideWindow": "Ngoài 24 giờ",
       "selected": "{count, plural, other {# đã chọn}}",
       "sent": "Đã gửi hàng loạt Instagram — {sent} đã gửi{failed, plural, =0 {} other {, # thất bại}}.",
-      "sentNone": "Không gửi được tới người nhận nào. Hãy kiểm tra kết nối Instagram."
+      "sentNone": "Không gửi được tới người nhận nào. Hãy kiểm tra kết nối Instagram.",
+      "skipped": "Không gửi tin nhắn vì sự đồng ý: {count}"
     }
   }
 }

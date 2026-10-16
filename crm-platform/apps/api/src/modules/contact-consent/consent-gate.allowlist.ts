@@ -182,6 +182,11 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     reason: 'Provider driver; reached only through the email adapter.',
   },
   {
+    path: 'modules/channel-email/mail-connection-test.service.ts',
+    reason:
+      'Test credentials for an IMAP/SMTP mailbox (E-08): tries the two logins and reports the result; stores and sends nothing to a contact.',
+  },
+  {
     path: 'modules/channel-email/mail-push.service.ts',
     reason: 'Mailbox push-notification watch; reads mail, sends none.',
   },
@@ -214,10 +219,5 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   {
     path: 'modules/shopify-woocommerce/_shims/engine-commerce-sender.ts',
     reason: `${GAP} commerce broadcasts (abandoned cart, order updates) send through the engine registry; they honour the contact flag only.`,
-  },
-  // --- open gaps ----------------------------------------------------------------------------------------------------------------
-  {
-    path: 'modules/channel-wechat/broadcast-sender.service.ts',
-    reason: `${GAP} a WeChat mass send is ONE call whose audience (all followers, a tag) WeChat resolves, so it cannot be screened per contact; the picked-users audience could be, and is not yet.`,
   },
 ];

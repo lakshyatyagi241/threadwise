@@ -13,7 +13,7 @@ import {
   splitByQuietHours,
   heldSummaries,
 } from '../compliance-center';
-import { ConsentGate } from '../contact-consent';
+import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 import { INBOX_INGEST, type InboxIngest } from './_shims/tokens';
 import {
   BATCH_SIZE,
@@ -36,7 +36,9 @@ export type LineRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
  * the template), and each outcome is written at once, so a crash loses at most the person in flight (put back after two minutes).
  * Counters are recomputed from the rows. Pause or delete is noticed at the next batch.
  *
- * Every batch asks the ConsentGate first (purpose marketing, channel line): a contact who withdrew is `blocked`, not messaged.
+ * Every batch asks the ConsentGate first (purpose marketing, channel line): a contact who withdrew, or has no recorded consent while the
+ * workspace requires it, is `blocked` with `Not messaged: consent (<reason>)`, not messaged. A person with no contact is asked as an
+ * anonymous subject (allowed while the switch is off).
  *
  * Quiet hours (BL-191): after the gate, a person whose local time is inside the workspace's quiet hours is HELD, not denied. They go back
  * to `pending` with the instant they may be messaged, the rest of the audience goes, and when only held people are left the run ends and a
@@ -104,25 +106,23 @@ export class LineBroadcastSenderService {
       );
       if (batch.length === 0) return this.finish(orgId, current);
       lastId = Math.max(...batch.map((r) => r.id));
-      const windows = await splitByQuietHours(this.sendWindow, orgId, batch);
+
+      // Every person is asked first (BL-141), on the first send and on a release alike; then whoever is inside the quiet hours is held.
+      const gated = await gateRecipients(this.gate, orgId, batch, 'line');
+      const refused = new Map(gated.skipped.map((s) => [s.row.id, s.reason]));
+      const windows = await splitByQuietHours(this.sendWindow, orgId, gated.go);
       const held = new Map(windows.held.map((h) => [h.row.id, h.hold]));
 
       // The renewal of a rotated token happens here, at most once a day, not per person.
       const api = this.line.forToken(await this.tokens.accessToken(orgId, channel));
-      const verdict = await this.gate.checkMany(
-        orgId,
-        batch.flatMap((r) => (r.contactId === null ? [] : [r.contactId])),
-        'line',
-        'marketing_messaging',
-      );
 
       for (const r of batch) {
-        if (r.contactId !== null && !verdict.allowed.has(r.contactId)) {
-          const why = verdict.decisions.get(r.contactId)?.reason ?? 'withdrawn';
+        const why = refused.get(r.id);
+        if (why) {
           await this.db.txAs({ orgId }, (tx) =>
             this.repo.markRecipient(tx, orgId, r.id, {
               status: 'blocked',
-              error: `Not messaged: consent (${why})`,
+              error: consentSkipNote(why),
             }),
           );
           continue;

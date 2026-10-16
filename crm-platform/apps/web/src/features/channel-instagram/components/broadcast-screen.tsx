@@ -29,6 +29,8 @@ export function BroadcastScreen() {
   const t = useTranslations('instagram.broadcast');
   // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
   const tHold = useTranslations('compliance-center.hold');
+  // The reason a person was not messaged is the ConsentGate's own code; its wording lives with the consent screens.
+  const tReason = useTranslations('contact-consent.gate.reasons');
   const compose = useCompose();
   const [chosenAccount, setChosenAccount] = useState('');
   const [name, setName] = useState('');
@@ -93,6 +95,7 @@ export function BroadcastScreen() {
       {error && <Alert tone="danger">{error}</Alert>}
       {result &&
         outcomeOf(result) !== 'held' &&
+        outcomeOf(result) !== 'skipped' &&
         (outcomeOf(result) === 'none' ? (
           <Alert tone="danger">{t('sentNone')}</Alert>
         ) : (
@@ -100,6 +103,18 @@ export function BroadcastScreen() {
             {t('sent', { sent: result.sent, failed: result.failed })}
           </Alert>
         ))}
+      {result && result.skipped > 0 && (
+        <Alert tone="info">
+          <span data-testid="broadcast-skipped">{t('skipped', { count: result.skipped })}</span>
+          <ul className="mt-1 space-y-0.5 text-[11.5px]">
+            {result.skippedReasons.map((s) => (
+              <li key={s.reason}>
+                {tReason(s.reason)} ({s.count})
+              </li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       {result && result.held > 0 && (
         <Alert tone="info">
           <span data-testid="broadcast-held">

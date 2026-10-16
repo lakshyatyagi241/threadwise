@@ -85,7 +85,8 @@
       "outsideWindow": "เกิน 24 ชั่วโมง",
       "selected": "{count, plural, other {เลือกแล้ว #}}",
       "sent": "ส่งบรอดแคสต์ Instagram แล้ว ส่งถึง {sent}{failed, plural, =0 {} other {, ไม่สำเร็จ #}}",
-      "sentNone": "ส่งไปยังผู้รับไม่ได้เลย โปรดตรวจสอบการเชื่อมต่อ Instagram"
+      "sentNone": "ส่งไปยังผู้รับไม่ได้เลย โปรดตรวจสอบการเชื่อมต่อ Instagram",
+      "skipped": "ไม่ได้ส่งข้อความเพราะเรื่องความยินยอม: {count}"
     }
   }
 }

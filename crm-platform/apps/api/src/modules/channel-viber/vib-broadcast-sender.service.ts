@@ -20,7 +20,7 @@ import {
   scheduleWake,
   splitByQuietHours,
 } from '../compliance-center';
-import { ConsentGate } from '../contact-consent';
+import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 
 export type VibRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
 
@@ -33,7 +33,11 @@ export type VibRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
  *
  * Quiet hours (BL-191): a user whose contact's local time is inside the workspace's quiet hours is left out of the call and HELD, not
  * denied. They go back to `pending` with the instant they may be messaged, the rest of the batch is sent, and when only held users are
- * left a delayed job takes them up at the first opening. At release the ConsentGate is asked again.
+ * left a delayed job takes them up at the first opening.
+ *
+ * Consent (BL-141): every batch asks the ConsentGate first (purpose marketing, channel viber), so the first send is screened like a
+ * release is. A user the gate refuses is left out of the call and recorded `failed` with `Not messaged: consent (<reason>)` (Viber's
+ * recipient statuses have no `blocked`); the broadcast itself still ends `done`.
  */
 @Injectable()
 export class VibBroadcastSenderService {
@@ -106,33 +110,21 @@ export class VibBroadcastSenderService {
       if (batch.length === 0) return this.finish(orgId, current);
       lastId = Math.max(...batch.map((r) => r.id));
 
-      // Held for the quiet hours, or released and since unsubscribed: left out of the call (the rest of the batch goes).
-      const windows = await splitByQuietHours(this.sendWindow, orgId, batch);
-      const released = windows.go.filter((r) => r.wasHeld && r.contactId !== null);
-      const recheck =
-        released.length > 0
-          ? await this.gate.checkMany(
-              orgId,
-              released.map((r) => r.contactId as number),
-              'viber',
-              'marketing_messaging',
-            )
-          : null;
-      const denied = windows.go.filter((r) => {
-        const v = r.contactId === null ? undefined : recheck?.decisions.get(r.contactId);
-        return v?.decision === 'deny';
-      });
-      const send = windows.go.filter((r) => !denied.includes(r));
-      if (windows.held.length > 0 || denied.length > 0) {
+      // Every user is asked, on the first send and on a release alike (BL-141): someone who unsubscribed, or has no recorded consent while
+      // the workspace requires it, is left out of the call and recorded `failed` with the gate's reason (a retry asks the gate again).
+      // Then whoever is inside the quiet hours is left out and HELD. The rest of the batch is sent.
+      const gated = await gateRecipients(this.gate, orgId, batch, 'viber');
+      const windows = await splitByQuietHours(this.sendWindow, orgId, gated.go);
+      const send = windows.go;
+      if (windows.held.length > 0 || gated.skipped.length > 0) {
         await this.db.txAs({ orgId }, async (tx) => {
           for (const h of windows.held) {
             await holdRecipient(tx, orgId, HELD_TABLES.viber, h.row.id, h.hold);
           }
-          for (const r of denied) {
-            await this.repo.markRecipient(tx, orgId, r.id, {
+          for (const s of gated.skipped) {
+            await this.repo.markRecipient(tx, orgId, s.row.id, {
               status: 'failed',
-              error:
-                'Not messaged: the contact unsubscribed while the message waited for the quiet hours to end',
+              error: consentSkipNote(s.reason),
             });
           }
         });
