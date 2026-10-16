@@ -46,6 +46,10 @@ export const leadKeys = {
   pipelines: ['lead-sources', 'picker', 'pipelines'] as const,
   stages: ['lead-sources', 'picker', 'lifecycle-stages'] as const,
   properties: ['lead-sources', 'picker', 'contact-properties'] as const,
+  /** Meta lead forms: the overview (Pages and their sync state), one Page's forms, one form source's health. */
+  meta: ['lead-sources', 'meta'] as const,
+  metaForms: (pageId: string) => ['lead-sources', 'meta', 'forms', pageId] as const,
+  metaHealth: (sourceId: string) => ['lead-sources', 'meta', 'health', sourceId] as const,
 };
 
 const ROOT = '/lead-sources';

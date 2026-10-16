@@ -46,7 +46,14 @@
         "pipeline_required": "Pilih pipeline tempat tahap ini berada.",
         "unknown_or_lost_stage": "Tahap siklus hidup ini tidak ada atau merupakan tahap hilang.",
         "unknown_or_inactive_user": "Salah satu orang yang dipilih bukan anggota aktif workspace ini."
-      }
+      },
+      "mlaNotConfigured": "Meta belum disiapkan di instalasi ini. Administrator harus menambahkan aplikasi Meta terlebih dahulu.",
+      "mlaLeadAccessMissing": "Halaman ini tidak memiliki izin yang diperlukan Meta untuk membaca lead. Berikan akses lead, lalu coba lagi.",
+      "mlaPageReconnect": "Meta tidak lagi menerima koneksi Halaman ini. Hubungkan ulang Halaman, lalu coba lagi.",
+      "mlaSubscribeFailed": "Meta tidak mengaktifkan pengiriman lead untuk Halaman ini. Pastikan aplikasi Meta memiliki izin leads dan webhook Halamannya sudah disiapkan, lalu coba lagi.",
+      "mlaFormsUnavailable": "Meta tidak mengembalikan formulir lead. Coba lagi sebentar lagi.",
+      "mlaFormNotFound": "Formulir itu tidak lagi termasuk formulir lead Halaman ini. Muat ulang daftar lalu coba lagi.",
+      "mlaSyncOff": "Aktifkan sinkronisasi lead untuk Halaman ini sebelum memilih formulir."
     },
     "problems": {
       "nameRequired": "Beri nama sumber ini.",
@@ -149,7 +156,7 @@
         },
         "meta": {
           "name": "Formulir prospek Meta",
-          "body": "Iklan prospek Facebook dan Instagram, langsung dari Halaman Anda."
+          "body": "Iklan lead Facebook dan Instagram, langsung dari Halaman Anda ke kontak Anda."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -163,7 +170,8 @@
           "name": "Google Ads",
           "body": "Ekstensi formulir prospek Google Ads."
         }
-      }
+      },
+      "dismissNotice": "Tutup"
     },
     "sources": {
       "emptyTitle": "Belum ada sumber",
@@ -182,7 +190,8 @@
       "connector": "Melalui Marketplace",
       "endsIn": "Berakhir dalam {hint}",
       "noEvents": "Belum ada prospek",
-      "needsAttention": "{count, plural, other {# prospek}}"
+      "needsAttention": "{count, plural, other {# prospek}}",
+      "metaDelivery": "Dari Meta"
     },
     "wizard": {
       "title": "Sumber prospek baru",
@@ -480,7 +489,9 @@
           "body": "URL-nya berhenti berfungsi dan prospek yang tersimpan di sana ikut dihapus. Kontak yang sudah dibuat tetap ada. Tindakan ini tidak dapat dibatalkan.",
           "action": "Hapus sumber"
         }
-      }
+      },
+      "metaForm": "Lead masuk dari Meta. Sumber ini tidak memiliki URL atau token; kelola formulirnya (petakan pertanyaan, penugasan dan deal, atau hentikan) di tab Iklan.",
+      "metaFormLink": "Buka formulir lead Meta"
     },
     "events": {
       "title": "Prospek diterima",
@@ -554,6 +565,211 @@
       },
       "capturedAt": "Ditangkap",
       "openSource": "Buka sumber prospek"
+    },
+    "meta": {
+      "heading": "Formulir lead Meta",
+      "intro": "Bawa lead dari iklan lead Facebook dan Instagram Anda langsung ke kontak. Hubungkan Halaman Facebook, aktifkan sinkronisasi lead untuknya, lalu pilih formulir lead yang akan dimasukkan.",
+      "loading": "Memuat formulir lead Meta",
+      "pagesLabel": "Halaman Facebook yang terhubung",
+      "planLocked": "Formulir lead Meta memerlukan paket dengan Lead Sosial dan fitur saluran tambahan (Facebook). Upgrade untuk menggunakannya.",
+      "metaSaid": "Meta menyatakan:",
+      "requestId": "ID permintaan:",
+      "connectPage": "Hubungkan Halaman Facebook",
+      "connectAnother": "Hubungkan Halaman lain",
+      "connectNeedsPermission": "Menghubungkan Halaman juga memerlukan izin {permission}.",
+      "card": {
+        "checking": "Memeriksa koneksi",
+        "unavailable": "Tidak dapat memuat status koneksi. Buka panel untuk mencoba lagi.",
+        "notConfigured": "Belum disiapkan di instalasi ini",
+        "noPages": "Belum ada Halaman Facebook yang terhubung",
+        "summary": "{pages, plural, other {# Halaman}} terhubung, {forms, plural, other {# formulir}} dipilih",
+        "attention": "{count, plural, other {# Halaman perlu perhatian}}",
+        "open": "Buka formulir lead Meta",
+        "close": "Sembunyikan formulir lead Meta"
+      },
+      "notConfigured": {
+        "title": "Meta belum disiapkan",
+        "body": "Formulir lead Meta memerlukan aplikasi Meta di instalasi ini. Minta administrator workspace menambahkannya, lalu kembali ke sini untuk menghubungkan Halaman.",
+        "bodyManage": "Instalasi ini belum memiliki aplikasi Meta, sehingga Halaman tidak dapat dihubungkan untuk iklan lead. Administrator harus menambahkan aplikasi Meta (ID aplikasi dan secret) terlebih dahulu. Setelah itu, daftarkan webhook seperti dijelaskan di bawah."
+      },
+      "noPages": {
+        "title": "Tidak ada Halaman Facebook yang terhubung",
+        "body": "Hubungkan Halaman Facebook yang menjalankan iklan lead Anda. Anda akan diminta memberikan izin yang diperlukan Meta untuk membaca lead.",
+        "bodyNoManage": "Belum ada Halaman Facebook yang terhubung. Minta seseorang yang dapat mengelola sumber lead untuk menghubungkannya."
+      },
+      "setup": {
+        "title": "Pengaturan webhook untuk aplikasi Meta",
+        "summary": "Pengaturan webhook untuk aplikasi Meta",
+        "intro": "Meta mengirim lead baru ke sebuah alamat callback. Administrator mendaftarkannya sekali di dasbor aplikasi Meta.",
+        "callbackUrl": "URL callback",
+        "copyUrl": "Salin URL",
+        "verifyToken": "Token verifikasi",
+        "verifyTokenSet": "Sudah disetel di instalasi ini",
+        "verifyTokenMissing": "Belum disetel",
+        "verifyTokenHelp": "Meta tidak dapat mengonfirmasi alamat callback sampai instalasi ini memiliki token verifikasi. Setel di pengaturan Facebook instalasi ini.",
+        "steps": {
+          "callback": "Di dasbor aplikasi Meta, buka Webhooks, pilih objek Page, lalu tempel URL callback di atas.",
+          "verify": "Saat Meta meminta token verifikasi, masukkan token dari pengaturan Facebook instalasi ini, lalu verifikasi dan simpan.",
+          "subscribe": "Langganan objek Page ke bidang {field}."
+        },
+        "scopes": "Izin yang diminta saat login: {scopes}.",
+        "scopesFromConfiguration": "Izin yang diminta saat login berasal dari konfigurasi login Meta Anda."
+      },
+      "pageStatus": {
+        "connected": "Halaman terhubung",
+        "disconnected": "Halaman terputus",
+        "expired": "Koneksi kedaluwarsa",
+        "error": "Kesalahan Halaman"
+      },
+      "leadAccess": {
+        "granted": "Akses lead diberikan",
+        "missing": "Akses lead belum ada"
+      },
+      "syncState": {
+        "off": "Sinkronisasi lead nonaktif",
+        "subscribed": "Menerima lead",
+        "needs_lead_access": "Perlu akses lead",
+        "needs_reconnect": "Perlu dihubungkan ulang",
+        "error": "Kesalahan"
+      },
+      "page": {
+        "pageId": "ID Halaman",
+        "missingScopes": "Izin yang kurang:",
+        "lastLead": "Lead terakhir",
+        "lastSweep": "Pemeriksaan terakhir",
+        "subscribedAt": "Sinkronisasi lead aktif sejak",
+        "never": "Belum pernah",
+        "formsConnected": "Formulir dipilih",
+        "lastError": "Kesalahan terakhir:",
+        "grant": "Berikan akses lead",
+        "reconnect": "Hubungkan ulang",
+        "enable": "Aktifkan sinkronisasi lead",
+        "disable": "Nonaktifkan sinkronisasi lead",
+        "chooseForms": "Pilih formulir lead",
+        "hideForms": "Sembunyikan formulir lead",
+        "enabledToast": "Sinkronisasi lead aktif untuk {name}",
+        "disabledToast": "Sinkronisasi lead nonaktif untuk {name}",
+        "stateHelp": {
+          "off": "Sinkronisasi lead nonaktif. Aktifkan untuk mulai menerima lead Halaman ini.",
+          "subscribed": "Sinkronisasi lead aktif. Lead baru dari formulir yang Anda pilih tiba dalam sekejap, dan pemeriksaan berkala mengambil lead yang terlewat.",
+          "needs_lead_access": "Sinkronisasi lead aktif, tetapi Halaman ini dihubungkan tanpa izin yang diperlukan Meta untuk membaca lead. Berikan akses lead untuk melanjutkan.",
+          "needs_reconnect": "Meta tidak lagi menerima koneksi Halaman ini. Hubungkan ulang Halaman untuk kembali menerima lead.",
+          "error": "Meta menolak sesuatu pada percobaan terakhir. Pesan di bawah menjelaskannya; pesan ini hilang setelah percobaan berikutnya berhasil."
+        },
+        "hints": {
+          "needManage": "Mengubah sinkronisasi lead memerlukan izin {permission}.",
+          "needFacebook": "Memberikan akses atau menghubungkan ulang juga memerlukan izin {permission}, karena menyimpan koneksi Halaman.",
+          "enableNeedsAccess": "Berikan akses lead terlebih dahulu; Meta menolak sinkronisasi lead untuk Halaman tanpa akses itu.",
+          "enableNeedsReconnect": "Hubungkan ulang Halaman terlebih dahulu; koneksinya tidak lagi berfungsi.",
+          "pickNeedsSync": "Aktifkan sinkronisasi lead untuk memilih formulir.",
+          "pickNeedsAccess": "Berikan akses lead untuk memilih formulir.",
+          "pickNeedsReconnect": "Hubungkan ulang Halaman untuk memilih formulir."
+        },
+        "confirmOff": {
+          "title": "Nonaktifkan sinkronisasi lead untuk {name}?",
+          "body": "Halaman ini berhenti menerima lead baru dari Meta. Formulir yang Anda pilih dan lead yang sudah tersimpan tetap ada, dan Anda dapat mengaktifkan sinkronisasi lead lagi kapan saja.",
+          "action": "Nonaktifkan sinkronisasi lead",
+          "cancel": "Batal"
+        }
+      },
+      "forms": {
+        "title": "Formulir lead {name}",
+        "intro": "Ini adalah formulir lead yang didaftarkan Meta untuk Halaman ini. Pilih formulir untuk memasukkan lead-nya; setiap formulir yang dipilih menjadi sumber lead di tab Webhook.",
+        "refresh": "Muat ulang daftar",
+        "loading": "Memuat formulir lead dari Meta",
+        "emptyTitle": "Tidak ada formulir lead",
+        "empty": "Halaman ini belum memiliki formulir lead. Buat satu di Meta Ads Manager atau di Halaman, lalu muat ulang daftar ini.",
+        "caption": "Formulir lead Halaman",
+        "col": {
+          "form": "Formulir",
+          "status": "Status Meta",
+          "leads": "Lead",
+          "questions": "Pertanyaan",
+          "consent": "Kotak centang persetujuan",
+          "connected": "Terhubung",
+          "lastLead": "Lead terakhir",
+          "lastError": "Kesalahan terakhir",
+          "actions": "Tindakan"
+        },
+        "formId": "ID formulir",
+        "formStatus": {
+          "ACTIVE": "Aktif",
+          "ARCHIVED": "Diarsipkan",
+          "DELETED": "Dihapus",
+          "DRAFT": "Draf",
+          "unknown": "Tidak diketahui"
+        },
+        "leadsUnknown": "Tidak dilaporkan oleh Meta",
+        "consentYes": "Memiliki kotak centang persetujuan",
+        "consentNo": "Tidak ada",
+        "connected": "Terhubung",
+        "notConnected": "Belum dipilih",
+        "noLeads": "Belum ada lead",
+        "pick": "Pilih",
+        "pickFor": "Pilih {name}",
+        "stop": "Hentikan",
+        "stopFor": "Hentikan {name}",
+        "mapFields": "Petakan kolom",
+        "mapFieldsFor": "Petakan kolom {name}",
+        "rules": "Penugasan dan deal",
+        "rulesFor": "Penugasan dan deal {name}",
+        "openSource": "Buka sumber",
+        "openSourceFor": "Buka sumber lead {name}",
+        "pickedToast": "{name} dipilih",
+        "stoppedToast": "{name} dihentikan",
+        "confirmStop": {
+          "title": "Hentikan pemasukan {name}?",
+          "body": "Sumber lead untuk formulir ini dan lead yang tersimpan di bawahnya akan dihapus. Kontak yang sudah dibuat dari lead tersebut tetap ada. Anda dapat memilih formulir ini lagi nanti.",
+          "action": "Hentikan pemasukan lead",
+          "cancel": "Batal"
+        }
+      },
+      "mapping": {
+        "title": "Petakan kolom: {name}",
+        "close": "Tutup",
+        "noSource": "Sumber lead formulir ini tidak ditemukan. Muat ulang daftar lalu coba lagi.",
+        "loading": "Memuat sumber lead",
+        "intro": "Pilih ke mana setiap jawaban di formulir ini masuk pada kontak. Pertanyaan yang dibiarkan pada Otomatis dicari dengan nama yang umum, seperti email atau phone_number.",
+        "suggested": "Kami mengisinya berdasarkan jenis tiap pertanyaan. Periksa, lalu simpan.",
+        "multiUse": "Pemetaan tersimpan memakai pertanyaan yang sama untuk lebih dari satu kolom ({keys}). Hanya yang pertama dipertahankan saat Anda menyimpan.",
+        "noQuestions": "Meta tidak mencantumkan pertanyaan apa pun untuk formulir ini, jadi tidak ada yang dipetakan. Nama yang umum tetap dicari.",
+        "ignore": "Otomatis (tidak dipetakan di sini)",
+        "contactFields": "Kolom kontak",
+        "contactProperties": "Properti kontak",
+        "problems": {
+          "duplicateTarget": "Pertanyaan lain sudah masuk ke kolom ini. Pilih yang berbeda.",
+          "propertyKey": "Kunci properti ini tidak valid."
+        },
+        "conflict": "Orang lain mengubah sumber lead ini. Muat ulang untuk melihat versinya; pilihan Anda yang belum disimpan akan hilang.",
+        "cancel": "Batal",
+        "save": "Simpan pemetaan",
+        "saved": "Pemetaan kolom disimpan untuk {name}"
+      },
+      "rules": {
+        "title": "Penugasan dan deal: {name}",
+        "close": "Tutup",
+        "noSource": "Sumber lead formulir ini tidak ditemukan. Muat ulang daftar lalu coba lagi.",
+        "loading": "Memuat sumber lead",
+        "intro": "Tentukan siapa pemilik kontak yang dibuat formulir ini, apakah deal dibuka untuk setiap lead, dan siapa yang diberi tahu. Perubahan berlaku untuk lead yang masuk setelah Anda menyimpan.",
+        "conflict": "Orang lain mengubah sumber lead ini. Muat ulang untuk melihat versinya; perubahan Anda yang belum disimpan akan hilang.",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "saved": "Penugasan dan deal disimpan untuk {name}"
+      },
+      "health": {
+        "title": "Kesehatan formulir lead Meta",
+        "loading": "Memeriksa formulir",
+        "notConnected": "Sumber ini tidak lagi terhubung ke formulir lead Meta, jadi tidak ada yang perlu diperiksa. Pilih formulir lagi di tab Iklan.",
+        "page": "Halaman",
+        "form": "Formulir",
+        "state": "Sinkronisasi lead",
+        "leadAccess": "Akses lead",
+        "lastLead": "Lead terakhir",
+        "never": "Belum ada lead",
+        "lastError": "Kesalahan terakhir:",
+        "fixHint": "Untuk memperbaikinya, buka tab Iklan: berikan akses lead, hubungkan ulang Halaman, atau aktifkan kembali sinkronisasi lead.",
+        "openAds": "Buka tab Iklan"
+      }
     }
   }
 }
