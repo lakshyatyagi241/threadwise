@@ -25,6 +25,8 @@ export interface JobTimings {
   /** Time from "ready to run" to "started". null when it is not a queue wait (a retry) or cannot be known. */
   waitMs: number | null;
   durationMs: number;
+  /** Starts beyond the first: retries after a failure, and restarts after a stall. 0 for a job that ran once. */
+  retries: number;
 }
 
 /**
@@ -42,13 +44,15 @@ export function jobTimings(job: JobTimingFields | undefined): JobTimings | null 
   if (!job || job.processedOn === undefined || job.finishedOn === undefined) return null;
   const durationMs = job.finishedOn - job.processedOn;
   if (!Number.isFinite(durationMs) || durationMs < 0) return null;
-  const isRetry = (job.attemptsStarted ?? 1) > 1;
+  const starts = job.attemptsStarted ?? 1;
+  const isRetry = starts > 1;
+  const retries = Number.isFinite(starts) ? Math.max(0, Math.floor(starts) - 1) : 0;
   // The larger of the two: BullMQ resets `job.delay` to 0 once a delayed job is promoted (measured against a real worker), so only
   // `opts.delay` still says how long it was asked to wait; `job.delay` can be larger after a later changeDelay.
   const delay = Math.max(job.delay ?? 0, job.opts?.delay ?? 0);
   const raw = job.processedOn - job.timestamp - delay;
   const waitMs = isRetry || !Number.isFinite(raw) ? null : Math.max(0, raw);
-  return { waitMs, durationMs };
+  return { waitMs, durationMs, retries };
 }
 
 /**
@@ -62,7 +66,7 @@ export function attachJobMetrics(
   const record = (outcome: 'completed' | 'failed') => (job: JobTimingFields | undefined) => {
     try {
       const t = jobTimings(job);
-      if (t) monitor.observeJob(worker.name, t.waitMs, t.durationMs, outcome);
+      if (t) monitor.observeJob(worker.name, t.waitMs, t.durationMs, outcome, t.retries);
     } catch {
       // Observability must never fail a job.
     }

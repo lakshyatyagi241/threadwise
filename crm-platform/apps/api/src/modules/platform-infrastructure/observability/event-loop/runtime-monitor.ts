@@ -88,6 +88,7 @@ export class RuntimeMonitor {
   private readonly throttledPeriods: Gauge;
   private readonly throttledSeconds: Gauge;
   private readonly jobs: Counter;
+  private readonly jobRetries: Counter;
   private readonly httpDuration: Histogram;
   private readonly jobDuration: Histogram;
   private readonly jobWait: Histogram;
@@ -168,6 +169,10 @@ export class RuntimeMonitor {
       'Cumulative GC pause time by kind',
     );
     this.gcCount = this.registry.counter('crm_gc_events_total', 'Cumulative GC events by kind');
+    this.jobRetries = this.registry.counter(
+      'crm_queue_job_retries_total',
+      'Extra starts of jobs that finished: retries after a failure, plus restarts after a stall. BullMQ reports no event for an attempt that will be retried, so this is the only trace of them',
+    );
     this.blocked = this.registry.counter(
       'crm_event_loop_blocked_windows_total',
       'Windows whose loop DELAY crossed the warn or critical target (utilization alone never counts)',
@@ -255,11 +260,13 @@ export class RuntimeMonitor {
     waitMs: number | null,
     durationMs: number,
     outcome: 'completed' | 'failed',
+    retries = 0,
   ): void {
     // null: not a queue wait (a retry), so the wait histogram is left alone rather than polluted.
     if (waitMs !== null) this.jobWait.observe(waitMs / 1000, { queue });
     this.jobDuration.observe(durationMs / 1000, { queue });
     this.jobs.inc(1, { queue, outcome });
+    if (retries > 0) this.jobRetries.inc(retries, { queue });
   }
 
   render(): string {
