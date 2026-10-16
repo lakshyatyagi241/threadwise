@@ -135,6 +135,8 @@
         },
         "delay": "Opóźnienie przed wysłaniem (w minutach)",
         "delayHint": "Pełne minuty od 0 do {max}. Wartość 0 oznacza wysłanie od razu.",
+        "maxAge": "Nie wysyłaj wiadomości do leadów starszych niż",
+        "maxAgeHint": "Lead, który dotrze z opóźnieniem (uzupełnienie wsteczne, ponowna próba, pominięta synchronizacja), jest nadal zapisywany, przypisywany i zgłaszany, ale nie dostaje pierwszej wiadomości, jeśli jest starszy niż ta wartość. Wybierz dłuższy czas tylko wtedy, gdy chcesz pisać do starych leadów. Zasady zgody obowiązują zawsze.",
         "businessHours": "Tylko w godzinach pracy",
         "businessHoursHint": "Poza godzinami pracy ustawionymi w Twoim obszarze roboczym wiadomość czeka na ich rozpoczęcie.",
         "optionsFailed": "Nie udało się wczytać szablonów i nadawców. Spróbuj ponownie za chwilę."
@@ -496,7 +498,8 @@
       "customFieldsTooMany": "Zmapuj co najwyżej {max} niestandardowych właściwości.",
       "contract": "{message}",
       "speedTemplateRequired": "Wybierz szablon do wysłania.",
-      "speedDelayRange": "Wpisz pełne minuty od 0 do {max}."
+      "speedDelayRange": "Wpisz pełne minuty od 0 do {max}.",
+      "speedMaxAgeRange": "Wybierz maksymalny wiek leada, od 1 minuty do 90 dni."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -646,6 +649,7 @@
         "no_sender": "Brak połączonego nadawcy",
         "template_unavailable": "Nie można wysłać szablonu",
         "missing_value": "Brakuje wartości szablonu dla tego kontaktu",
+        "lead_too_old": "Lead był starszy, niż pozwala ustawienie",
         "provider_error": "Dostawca odrzucił wiadomość",
         "interrupted": "Wysyłka została przerwana",
         "expired": "Czekała zbyt długo",
@@ -791,6 +795,7 @@
           "not_now": "Źródło nie było gotowe: za wcześnie dla niego lub jego połączenie jest wstrzymane.",
           "provider_error": "Źródło odmówiło lub zgłosiło błąd.",
           "credentials_refused": "Źródło odrzuciło dane uwierzytelniające. Połącz je ponownie.",
+          "permission_missing": "Meta nie zezwoliła tej stronie na odczyt leadów. Przyznaj dostęp do leadów w sekcji Formularze leadów Meta i uruchom ponownie.",
           "interrupted": "Przerwano. Uruchom ponownie.",
           "internal_error": "Błąd wewnętrzny. Uruchom ponownie.",
           "incomplete": "Nie wszystkie leady zostały przekazane. Uruchom ponownie, aby dokończyć.",
@@ -829,7 +834,8 @@
           "tooWide": "Najwyżej {days} dni naraz.",
           "noSource": "Wybierz co najmniej jedno źródło."
         },
-        "safe": "Nic nie zostanie utracone ani zduplikowane, jeśli uruchomisz to ponownie; dodawane są tylko brakujące leady."
+        "safe": "Nic nie zostanie utracone ani zduplikowane, jeśli uruchomisz to ponownie; dodawane są tylko brakujące leady.",
+        "speedNote": "Leady uzupełnione wstecznie stają się kontaktami, są przypisywane do właściciela i powiadamiają zespół, tak jak nowe leady. Nie dostają automatycznej pierwszej wiadomości, jeśli są starsze niż limit źródła (godzina, chyba że zmieniono go w ustawieniu pierwszej wiadomości źródła)."
       }
     },
     "meta": {

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
+import { birthDateSchema } from '../contact-consent/age';
 import { lifecycleStageSchema, recordLifecycleSchema } from '../common/enums';
 import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
@@ -56,6 +57,10 @@ export const contactResponseSchema = z.object({
   emailSubscriptionStatus: z.string().nullable(),
   emailConfirmed: z.boolean(),
   faxNumber: z.string().nullable(),
+  /** Built-in personal property (BL-217): `YYYY-MM-DD`, or null. A date that makes the contact a minor sets the minor flag (source `dob`). */
+  dateOfBirth: z.string().nullable(),
+  /** The contact is flagged as a minor (BL-190). Server-derived from the privacy flags; set through the Consent card or `POST /v1/contacts/:id/privacy`. */
+  isMinor: z.boolean(),
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),
@@ -99,6 +104,8 @@ export const createContactSchema = z
     emailSubscriptionStatus: z.string().max(64).optional(),
     emailConfirmed: z.boolean().optional(),
     faxNumber: z.string().max(32).optional(),
+    /** `YYYY-MM-DD`; a real date of birth, not in the future. */
+    dateOfBirth: birthDateSchema.optional(),
     /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
     source: z.string().trim().max(128).optional(),
     /** The contact's own IANA time zone (BL-193), e.g. `Asia/Kolkata`; recorded as set by whoever makes the contact. */
@@ -139,6 +146,8 @@ export const updateContactSchema = z.object({
   emailSubscriptionStatus: z.string().max(64).nullish(),
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
+  /** `null` clears the date; a minor flag set from it stays until a person clears it or the sweep reads the date again. */
+  dateOfBirth: birthDateSchema.nullish(),
   source: z.string().trim().max(128).nullish(),
   /** The contact's own IANA time zone (BL-193). `null` clears it (the contact is then read on its number's country, then the workspace). */
   timezone: contactTimezoneSchema.nullish(),

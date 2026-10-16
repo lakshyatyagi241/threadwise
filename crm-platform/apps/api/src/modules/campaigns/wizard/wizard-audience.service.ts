@@ -20,6 +20,7 @@ import {
   segmentContactsWhere,
   whereOf,
 } from '../../crm';
+import { previousSendContactsSql } from '../../broadcasts';
 import { ConsentPolicyService, hasGrantedConsentSql } from '../../contact-consent';
 import { countryOfPhone } from '../../wallet-message-billing';
 import { WizardCsvService } from './wizard-csv.service';
@@ -133,6 +134,10 @@ export class WizardAudienceService {
     if (audience.contactIds.length > 0) {
       sources.push(sql`contacts.uuid IN (${uuidList(audience.contactIds)})`);
     }
+
+    // Who earlier broadcasts and campaigns went to (optionally only those who read, replied...): another source like a group.
+    const previous = previousSendContactsSql(orgId, audience.previous);
+    if (previous) sources.push(sql`contacts.id IN (${previous})`);
 
     // The Contact Hub's "everything the view matched" hand-over (ticked rows arrive as contactIds).
     if (audience.selection)

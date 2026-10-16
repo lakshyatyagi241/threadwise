@@ -62,7 +62,7 @@ never merely held) and **again at release**. Which clock: the contact's time zon
 property keyed `timezone`), the country code of the number (a country spanning hours must be inside the hours in all its zones), the zone
 chosen in the settings (`windowTimezone` is the fallback), the workspace zone, UTC. When the windows cannot be read a marketing send waits
 five minutes. Migration `20261216090000_quiet_hours_hold.sql` adds the `held` message event and `held_until`/`held_reason` to
-`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table). Migration `20261222090000_quiet_hours_senders.sql`
+`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table). Migration `20261225090000_quiet_hours_senders.sql`
 (BL-191) adds the same two columns to `line_`, `facebook_`, `telegram_` and `viber_broadcast_recipients`, to `wechat_broadcasts` and to
 `camp_test_sends` (status `held`).
 
@@ -116,3 +116,18 @@ outbox `compliance.settings_changed`. Sub-processors: audit module `compliance_s
 Migration `20261206090000_compliance_center.sql`: `compliance_settings` (one row per workspace), `compliance_subprocessors`,
 `consent_notices.terms_url`, the `workspace` scope. Forced RLS on both new tables. Neither table holds a contact's data (the officer
 contacts are the workspace's own business contacts); both are on the privacy registry allowlist.
+
+## Do-Not-Call list (BL-181)
+
+Numbers that get no marketing by voice or SMS. The ConsentGate denies marketing on the `sms` and `voice` channels to a listed number with the reason `on_dnc_list` (after a withdrawal, before the minor hold); WhatsApp, email and service messages are not held by it. No registry is called from here (BL-221).
+
+| Method | Path                        | Key                                    | Notes                                                                                                                                                                                                     |
+| ------ | --------------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/v2/compliance/dnc`        | `settings.compliance.read` / `.manage` | `q` (part of a number), `cursor`, `limit` (max 200). Newest first. `total` is the whole list.                                                                                                             |
+| POST   | `/v2/compliance/dnc`        | `settings.compliance.manage`           | `{ numbers[1..1000], defaultCountryCode?, source: manual or contact_request, note? }`. Answers `{ added, alreadyListed, invalid, invalidSamples }`.                                                       |
+| POST   | `/v2/compliance/dnc/import` | `settings.compliance.manage`           | `{ csv (at most 90 KiB of text), defaultCountryCode?, source: import or registry_export, note? }`. The column named phone, mobile or number, else the first. 422 `COMPLIANCE_DNC_INVALID` for no numbers. |
+| DELETE | `/v2/compliance/dnc/:id`    | `settings.compliance.manage`           | 204; 404 `COMPLIANCE_DNC_NOT_FOUND`.                                                                                                                                                                      |
+
+A number is stored as E.164 and matched on its digits, once per workspace. Every change is audited (a batch is one row with a count) and emitted as `compliance.dnc_added` / `compliance.dnc_removed`.
+
+`consentManager` in the settings document gained `registrationId` (BL-181). The inbound Consent Manager event is a contract only (`consentManagerEventSchema` in `@crm/contracts`); no route serves it (BL-222).

@@ -5,7 +5,10 @@ import {
   canonicalizeLocalPhone,
   consentChannels,
   ERROR_CODES,
+  formAgeField,
   formRateLimitsSchema,
+  isPlausibleBirthDate,
+  judgeAgeAnswer,
   type FormConsentChannel,
   type FormDefinition,
   type PublicFormSubmitInput,
@@ -31,7 +34,11 @@ import {
 import { coerceCustomValue, normaliseLeadEmail, pickOwner } from '../leads';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { createHash } from 'node:crypto';
-import { ContactConsentService, ContactPrivacyService } from '../contact-consent';
+import {
+  ContactConsentService,
+  ContactPrivacyService,
+  MinorDetectionService,
+} from '../contact-consent';
 import { resolveConsent, type ConsentOutcome } from './form-consent';
 import { computeAmount } from './form-payment-rules';
 import { FormPaymentsService, type Payer } from './form-payments.service';
@@ -41,9 +48,14 @@ import { notFound, type FormRoute } from './form-lookup.service';
 import { hashIp, newReceiptToken } from './form-key';
 import { FormsPlan } from './form-plan';
 import {
+  AGE_KEYS,
+  ageAnswerOf,
+  cleanGuardian,
   companyHostFromEmail,
   contactDisplayName,
   freeTexts,
+  guardianOf,
+  judgeFormAge,
   mapAnswers,
   validateSubmission,
   type MappedSubmission,
@@ -153,6 +165,7 @@ export class FormSubmitService {
     private readonly outbox: OutboxService,
     private readonly consentLedger: ContactConsentService,
     private readonly privacy: ContactPrivacyService,
+    private readonly minors: MinorDetectionService,
     config: ConfigService<Env, true>,
   ) {
     this.ipSecret = `forms-ip:${config.get('JWT_ACCESS_SECRET', { infer: true })}`;
@@ -189,8 +202,8 @@ export class FormSubmitService {
     }
     if (form.captchaMode !== 'off') await this.captcha.assert(body.captchaToken, 'form');
 
-    const validated = validateSubmission(def, body.answers, body.hidden);
     const now = new Date();
+    const validated = validateSubmission(def, body.answers, body.hidden, now);
     const consent = resolveConsent(def, body.consent, now);
     const issues = [
       ...validated.issues,
@@ -217,6 +230,10 @@ export class FormSubmitService {
       );
     }
 
+    // The age gate (BL-217): judged on the validated answers, BEFORE anything is stored. A refused visitor leaves no trace at all.
+    const ageExtras = await this.judgeAge(orgId, def, validated.values, body, now);
+    const stored: Record<string, StoredAnswer> = { ...validated.values, ...ageExtras };
+
     const mapped = mapAnswers(def, validated.values);
     const contactKey =
       mapped.contact.builtin.email?.toLowerCase() ?? mapped.contact.builtin.phone ?? null;
@@ -238,7 +255,7 @@ export class FormSubmitService {
       receiptToken: newReceiptToken(),
       status: verdict.spam ? 'spam' : 'received',
       reason: verdict.spam ? 'spam_score' : null,
-      answers: validated.values,
+      answers: stored,
       utm: Object.fromEntries(
         (['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const).flatMap(
           (k) => {
@@ -300,7 +317,7 @@ export class FormSubmitService {
             form,
             def,
             c.row,
-            validated.values,
+            stored,
             consent,
             gatewaySlug,
             { gpc: meta.gpc === true },
@@ -405,7 +422,17 @@ export class FormSubmitService {
     signals: Signals = NO_SIGNALS,
   ): Promise<{ payment: PaymentRow; payer: Payer } | null> {
     const mapped = mapAnswers(def, values);
-    const outcome = await this.writeCrm(tx, orgId, form, def, sub, mapped, consent, signals);
+    const outcome = await this.writeCrm(
+      tx,
+      orgId,
+      form,
+      def,
+      sub,
+      mapped,
+      values,
+      consent,
+      signals,
+    );
     if (outcome.kind === 'review') {
       await this.review(tx, orgId, form, sub, outcome.reason);
       return null;
@@ -533,6 +560,121 @@ export class FormSubmitService {
     }
   }
 
+  // --- the age gate (BL-217, spec 11.10) -------------------------------------------------------------------------------------------
+
+  /**
+   * Judges the visitor's age answer against the form's gate. Returns the answers the server adds beside theirs (the outcome and, for
+   * `guardian`, the guardian's details). Refuses with a neutral message when the gate says `block` (nothing is stored), and asks for a
+   * guardian when it says `guardian`. A gate that is off, and an adult, add nothing but the declaration's evidence.
+   */
+  private async judgeAge(
+    orgId: number,
+    def: FormDefinition,
+    values: Record<string, StoredAnswer>,
+    body: PublicFormSubmitInput,
+    now: Date,
+  ): Promise<Record<string, StoredAnswer>> {
+    const gate = def.ageGate;
+    if (!gate.enabled) return {};
+    const workspaceAge =
+      gate.minAge ??
+      (await this.db.txAs({ orgId, userId: null }, (tx) => this.privacy.minorAge(tx, orgId)));
+    const confirmed = body.ageConfirmed === true;
+    const judged = judgeFormAge(def, values, confirmed, workspaceAge, now);
+    if (!judged) return {};
+    const extras: Record<string, StoredAnswer> = {};
+    if (gate.mode === 'declaration' && confirmed) extras[AGE_KEYS.confirmed] = true;
+    if (judged.verdict.kind === 'invalid') {
+      // The question was left out or cannot be read: the same "required" a blank field gets.
+      throw new AppError(
+        ERROR_CODES.FORMS_VALIDATION,
+        'Please check the form and try again.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: formAgeField(def)?.id ?? 'age', message: 'required' }],
+      );
+    }
+    if (judged.verdict.kind === 'adult') return extras;
+    // Nobody has stated an age yet: an unticked declaration box is an unanswered required question, not a refusal (ticking it passes).
+    if (gate.mode === 'declaration' && gate.whenUnder === 'block') {
+      throw new AppError(
+        ERROR_CODES.FORMS_VALIDATION,
+        'Please check the form and try again.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'age_confirmed', message: 'required' }],
+      );
+    }
+    if (gate.whenUnder === 'block') {
+      throw new AppError(
+        ERROR_CODES.FORMS_AGE_BLOCKED,
+        'We are not able to accept this submission.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    if (gate.whenUnder === 'guardian') {
+      const guardian = cleanGuardian(body.guardian, def.settings.phoneCountryCode);
+      if (!guardian) {
+        throw new AppError(
+          ERROR_CODES.FORMS_GUARDIAN_REQUIRED,
+          'Please add the name and the email or phone of a parent or guardian.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      extras[AGE_KEYS.guardianName] = guardian.name;
+      if (guardian.email) extras[AGE_KEYS.guardianEmail] = guardian.email;
+      if (guardian.phone) extras[AGE_KEYS.guardianPhone] = guardian.phone;
+    }
+    extras[AGE_KEYS.outcome] = 'under';
+    extras[AGE_KEYS.minAge] = judged.minAge;
+    return extras;
+  }
+
+  /**
+   * The gate let an under-age visitor through (`flag` or `guardian`): flag the contact as a minor from the answer (the same verdict the
+   * gate gave, recomputed from the stored answers so a staff re-run agrees), and note the guardian on the timeline. Best effort in a
+   * savepoint: the visitor's submission is never lost over the flag.
+   */
+  private async recordUnderAge(
+    tx: Tx,
+    orgId: number,
+    form: FormRow,
+    def: FormDefinition,
+    sub: SubmissionRow,
+    contactId: number,
+    values: Record<string, StoredAnswer>,
+  ): Promise<void> {
+    try {
+      await tx.transaction(async (sp) => {
+        const minAge = Number(values[AGE_KEYS.minAge]);
+        const answer = ageAnswerOf(def, values, values[AGE_KEYS.confirmed] === true);
+        if (!answer || !Number.isInteger(minAge)) return;
+        const verdict = judgeAgeAnswer(answer, minAge, sub.createdAt);
+        if (verdict.kind !== 'under') return;
+        const guardian = guardianOf(values);
+        await this.minors.flagFromAnswer(sp as Tx, orgId, contactId, {
+          source: verdict.mode === 'declaration' ? 'declaration' : 'dob',
+          minorUntil: verdict.minorUntil,
+          evidence: { formId: form.uuid, submissionId: sub.uuid },
+          note: guardian
+            ? 'A parent or guardian was named on the form. Their consent is not recorded until a person records it.'
+            : null,
+          now: sub.createdAt,
+        });
+        if (guardian) {
+          await this.activities.insert(sp as Tx, orgId, {
+            contactId,
+            activityType: 'guardian_details',
+            title: `Parent or guardian named on ${form.name}`,
+            body: [guardian.name, guardian.email, guardian.phone].filter(Boolean).join(' - '),
+            source: 'system',
+            actorId: null,
+          });
+        }
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err), form: form.uuid }, 'could not flag the minor');
+    }
+  }
+
   // --- contact, company, tags, owner -------------------------------------------------------------------------------------------------
 
   private async writeCrm(
@@ -542,6 +684,7 @@ export class FormSubmitService {
     def: FormDefinition,
     sub: SubmissionRow,
     mapped: MappedSubmission,
+    values: Record<string, StoredAnswer>,
     consent: ConsentOutcome,
     signals: Signals,
   ): Promise<Outcome> {
@@ -573,7 +716,7 @@ export class FormSubmitService {
       Object.keys(mapped.contact.custom),
     );
     const extras = await this.forms.contactExtras(tx, orgId, row.id);
-    await this.fillContact(tx, orgId, row, {
+    const filled = await this.fillContact(tx, orgId, row, {
       mapped,
       name,
       email,
@@ -583,7 +726,18 @@ export class FormSubmitService {
       customTypes: contactTypes,
       extras,
       created: found.created,
+      now: sub.createdAt,
     });
+    // A date of birth the submission wrote brings the minor flag in line with it (BL-217); a form's own stricter reading follows below.
+    if (filled.dobChanged) {
+      await this.minors.evaluateInTx(tx, orgId, found.contactId, sub.createdAt, {
+        dobChanged: true,
+      });
+    }
+    // An under-age visitor the gate let through (`flag` or `guardian`): the contact is flagged, the guardian's details are kept on the
+    // timeline, and the marketing agreement of THIS submission is not recorded.
+    const under = values[AGE_KEYS.outcome] === 'under';
+    if (under) await this.recordUnderAge(tx, orgId, form, def, sub, found.contactId, values);
 
     await this.applyTags(tx, orgId, found.contactId, def.after.tags);
     const companyId = await this.linkCompany(
@@ -603,7 +757,7 @@ export class FormSubmitService {
       form: form.name.slice(0, 255),
       capturedAt: sub.createdAt,
     });
-    if (consent.marketingOptIn) {
+    if (consent.marketingOptIn && !under) {
       await this.subscribe(
         tx,
         orgId,
@@ -781,8 +935,9 @@ export class FormSubmitService {
         middleName: string | null;
       };
       created: boolean;
+      now: Date;
     },
-  ): Promise<void> {
+  ): Promise<{ dobChanged: boolean }> {
     const patch: Record<string, unknown> = {};
     const blank = (x: string | null | undefined): boolean =>
       x === null || x === undefined || x.trim() === '';
@@ -797,6 +952,12 @@ export class FormSubmitService {
     if (blank(v.extras.title) && b.title) patch.title = b.title.slice(0, 191);
     if (blank(v.extras.address) && b.address) patch.address = b.address.slice(0, 500);
     if (blank(v.extras.message) && b.message) patch.message = b.message.slice(0, 5000);
+    // The younger date of birth wins (BL-217): a blank is filled; a different date is kept only if it is later, so a form can make a
+    // contact a minor but never an adult again. A date that cannot be a birth date is ignored.
+    const dob = b.date_of_birth;
+    if (dob && isPlausibleBirthDate(dob, v.now) && (!row.dateOfBirth || dob > row.dateOfBirth)) {
+      patch.dateOfBirth = dob;
+    }
 
     if (v.email) {
       const holder = await this.contactRepo.findByIdentity(tx, orgId, 'email', v.email);
@@ -824,7 +985,7 @@ export class FormSubmitService {
     }
     if (Object.keys(custom).length > 0) patch.data = { ...(row.data ?? {}), ...custom };
 
-    if (Object.keys(patch).length === 0) return;
+    if (Object.keys(patch).length === 0) return { dobChanged: false };
     await this.contactRepo.updateFieldsById(tx, orgId, row.id, { ...patch, updatedBy: null });
     if (!v.created) {
       await this.audit.record(tx, {
@@ -848,6 +1009,7 @@ export class FormSubmitService {
         payload: { uuid: row.uuid, via: 'form' },
       });
     }
+    return { dobChanged: patch.dateOfBirth !== undefined };
   }
 
   private async applyTags(

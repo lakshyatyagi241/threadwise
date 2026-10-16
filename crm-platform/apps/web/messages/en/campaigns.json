@@ -9,6 +9,58 @@
     "common": {
       "dismiss": "Dismiss"
     },
+    "previousSends": {
+      "title": "Previous sends",
+      "empty": "No earlier broadcasts or campaigns yet",
+      "outcomeLabel": "Who from those sends",
+      "outcomes": {
+        "all": "Everyone it went to",
+        "delivered": "Delivered",
+        "read": "Read",
+        "not_read": "Did not read",
+        "replied": "Replied",
+        "not_replied": "Did not reply",
+        "clicked": "Clicked a link",
+        "failed": "Failed"
+      },
+      "outcomeOff": "{name} (not for broadcasts)",
+      "outcomeHint": {
+        "all": "Everyone it went to: all the people the message was meant for. Opted-out contacts and skipped rows are left out.",
+        "delivered": "Delivered: the people it reached.",
+        "read": "Read: the people who read it.",
+        "not_read": "Did not read: the people it was sent to who have not read it.",
+        "replied": "Replied: the people who replied to it.",
+        "not_replied": "Did not reply: the people it was sent to who have not replied.",
+        "clicked": "Clicked a link: the people who clicked a tracked link in it.",
+        "failed": "Failed: the people it could not be delivered to."
+      },
+      "broadcastNote": "A broadcast records delivery and reading only, so replies and clicks are not available while one is ticked.",
+      "broadcastOff": "A broadcast has no replies or clicks. Choose another outcome to tick it.",
+      "search": "Search previous sends",
+      "searchPlaceholder": "Search",
+      "listLabel": "Earlier broadcasts and campaigns",
+      "noMatch": "Nothing matches your search.",
+      "chosen": "{count} of {max} chosen",
+      "limit": "You can pick up to {max} sends. Untick one to pick another.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Campaign"
+      },
+      "wentOut": "Sent {date}",
+      "wentOutUnknown": "Date unknown",
+      "recipients": "{count, plural, one {# recipient} other {# recipients}}",
+      "notRecorded": "Not recorded for a broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# person} other {# people}}",
+        "delivered": "{count, plural, one {# person received it} other {# people received it}}",
+        "read": "{count, plural, one {# person read it} other {# people read it}}",
+        "not_read": "{count, plural, one {# person did not read it} other {# people did not read it}}",
+        "replied": "{count, plural, one {# person replied} other {# people replied}}",
+        "not_replied": "{count, plural, one {# person did not reply} other {# people did not reply}}",
+        "clicked": "{count, plural, one {# person clicked a link} other {# people clicked a link}}",
+        "failed": "{count, plural, one {# person it failed for} other {# people it failed for}}"
+      }
+    },
     "list": {
       "workspace": "Workspace",
       "title": "WhatsApp",
@@ -297,7 +349,11 @@
         "numbersCount": "{count} numbers",
         "emailNote": "Emails go to the address on each contact. Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
         "emailSkipped": "{count, plural, one {# chosen recipient has no email address and will be skipped.} other {# chosen recipients have no email address and will be skipped.}}",
-        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead."
+        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead.",
+        "previousTitle": "Previous sends",
+        "previousHint": "Add the people earlier broadcasts and campaigns went to, optionally only those who read it, replied or clicked.",
+        "previousEstimate": "{count, plural, one {Up to # person from the previous sends (an estimate: someone in two sends is counted twice).} other {Up to # people from the previous sends (an estimate: someone in two sends is counted twice).}}",
+        "previousEditHint": "Your earlier choice of previous sends is not shown when you edit: this campaign already holds its recipients as contacts. Pick again to add more people."
       },
       "message": {
         "title": "Message",
@@ -585,7 +641,8 @@
         "subject": "Subject",
         "subjectFallback": "The campaign name",
         "skippedNoEmail": "Skipped (no email address)",
-        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs."
+        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs.",
+        "previousSends": "Previous sends (up to)"
       },
       "ai": {
         "open": "Build with AI",
@@ -1157,7 +1214,10 @@
         "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set.",
         "follow_up_template_required": "Choose the template each follow-up sends.",
         "follow_up_flow_required": "Choose the flow each follow-up starts.",
-        "follow_up_cloud_api_only": "Follow-ups work only with a WhatsApp Cloud API number. Pick one in step 1 or remove the follow-ups."
+        "follow_up_cloud_api_only": "Follow-ups work only with a WhatsApp Cloud API number. Pick one in step 1 or remove the follow-ups.",
+        "sequence_not_recurring": "Templates in turn only work with a recurring campaign. Choose a recurring schedule or remove the extra templates.",
+        "sequence_with_ab": "Templates in turn cannot be combined with an A/B test. Turn the A/B test off or remove the extra templates.",
+        "sequence_template_required": "Choose a template for every step of the order, or remove the empty ones."
       },
       "template": {
         "previewOnline": "online",
@@ -1238,20 +1298,24 @@
         "modeGroups": "Send to groups",
         "modeSegments": "Send to segments",
         "modeCsv": "Send via CSV",
+        "modePrevious": "Send to previous sends",
         "mode": {
           "contacts": "Contacts",
           "groups": "Groups",
           "segments": "Segments",
-          "csv": "CSV file"
+          "csv": "CSV file",
+          "previous": "Previous sends"
         },
         "groupsHint": "Groups are your marketing lists. Everyone in the groups you tick is included.",
         "segmentsHint": "Segments fill themselves from rules. Everyone in the segments you tick is included.",
+        "previousHint": "Re-target the people earlier broadcasts and campaigns went to, optionally only those who read, did not read, replied or clicked.",
         "chipContacts": "{count, plural, one {# contact} other {# contacts}}",
         "chipAllMatching": "All matching contacts",
         "chipAllMatchingN": "{count, plural, one {All # matching contact} other {All # matching contacts}}",
         "chipGroups": "{count, plural, one {# group} other {# groups}}",
         "chipSegments": "{count, plural, one {# segment} other {# segments}}",
         "chipCsv": "{count} from CSV",
+        "chipPrevious": "{count, plural, one {# earlier send} other {# earlier sends}} ({outcome})",
         "chipHub": "Contact Hub view",
         "nothingSelected": "Nothing selected yet.",
         "unionRule": "Everyone selected in any option is messaged once. Opted-out and invalid numbers are skipped.",
@@ -1412,10 +1476,12 @@
         "sumAllMatching": "All contacts matching {what}",
         "sumAllContacts": "All contacts",
         "sumCsv": "CSV file {name}: {count, plural, one {# valid number} other {# valid numbers}}",
+        "sumPrevious": "Previous sends: {names} ({outcome})",
         "estimatedCostFull": "Estimated cost (full)",
         "chargedPlan": "Charged to your wallet now: {amount} (your plan covers {covered} of these messages)",
         "chargedWallet": "Charged to your wallet: {amount}",
-        "sumFollowUps": "Follow-ups"
+        "sumFollowUps": "Follow-ups",
+        "sumSequence": "Sends in turn"
       },
       "test": {
         "title": "Send a test WhatsApp message",
@@ -1579,7 +1645,8 @@
           "sent": "Sent",
           "delivered": "Delivered",
           "failed": "Failed",
-          "retries": "Retries"
+          "retries": "Retries",
+          "template": "Template"
         },
         "retrySummary": "{pending} waiting, {recovered} recovered, {exhausted} gave up",
         "openRun": "Open run",
@@ -1639,7 +1706,9 @@
             "skipped": "The condition was not met when it was checked, so the sequence ended there.",
             "lapsed": "The watch time ran out before the contact replied or read, so the sequence ended there."
           }
-        }
+        },
+        "templatesTitle": "Templates",
+        "templatesInTurn": "{count, plural, one {# template in turn} other {# templates in turn}}"
       },
       "panel": {
         "title": "Created with the guided flow",
@@ -1650,7 +1719,8 @@
           "recurring": "Recurring"
         },
         "recipients": "{count, plural, one {# recipient} other {# recipients}}",
-        "next": "Next run {when}"
+        "next": "Next run {when}",
+        "moreTemplates": "+{count} more"
       },
       "pickers": {
         "selectDate": "Select date",
@@ -1736,6 +1806,29 @@
           "hours": "{count, plural, one {hour} other {hours}}",
           "days": "{count, plural, one {day} other {days}}"
         }
+      },
+      "sequence": {
+        "title": "Templates in order",
+        "intro": "Each run sends the next template in this list. Run 1 sends the first, run 2 the second, and after the last the list starts again from the first.",
+        "notRecurring": "Only a recurring broadcast sends templates in turn. Choose a recurring schedule, or remove these templates.",
+        "withAb": "Templates in turn cannot be used together with an A/B test, which already sends two templates. Turn the A/B test off to use them.",
+        "templateLabel": "Template {position}",
+        "firstMissing": "Not chosen yet",
+        "firstHint": "The template chosen for the campaign. Change it in the template step.",
+        "pick": "Choose a template",
+        "loading": "Loading...",
+        "unavailable": "No longer available",
+        "up": "Up",
+        "down": "Down",
+        "moveUp": "Move template {position} up",
+        "moveDown": "Move template {position} down",
+        "remove": "Remove template {position}",
+        "removeShort": "Remove",
+        "removeAll": "Remove all",
+        "add": "Add a template",
+        "count": "{used} of {max} templates",
+        "limitReached": "Limit reached: {max} templates.",
+        "variablesTitle": "Variables of template {position}: {name}"
       }
     },
     "history": {

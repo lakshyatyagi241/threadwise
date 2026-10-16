@@ -6,6 +6,7 @@ import {
   canonicalizePhone,
   composeDisplayName,
   detectImportColumns,
+  parseImportBirthDate,
   parseImportConsent,
   type ImportConsentValue,
   type ImportField,
@@ -32,6 +33,10 @@ export interface ParsedRow {
   source?: string;
   /** An IANA zone (canonical spelling), only when the file has a time zone column and the cell is a real zone. */
   timezone?: string;
+  /** A year-first date of birth that can be believed (BL-190). */
+  dateOfBirth?: string;
+  /** The minor column said yes: flag the contact (source `import`). No, blank and unknown words are left out: a file never clears a flag. */
+  minor?: true;
   groups: string[];
   tags: string[];
   /** What the consent column says, only when a column is mapped (`blank` is left out so a later row for the same number can refine it). */
@@ -155,6 +160,12 @@ export function extractRow(
   const tags = splitList(cell('tags'));
   if (tags.some((t) => t.length > TAG_NAME_MAX)) return reject('tag_name_too_long');
 
+  // A date of birth must be year first and believable; a blank cell is simply no date.
+  const dobCell = cell('dateOfBirth');
+  const dateOfBirth = dobCell === '' ? undefined : (parseImportBirthDate(dobCell) ?? null);
+  if (dateOfBirth === null) return reject('invalid_date_of_birth');
+  const minor = mapping.minor !== undefined && parseImportConsent(cell('minor')) === 'granted';
+
   const opt = (v: string, max: number): string | undefined => (v ? v.slice(0, max) : undefined);
   const consentColumn = mapping.consent !== undefined;
   const consent = consentColumn ? parseImportConsent(cell('consent')) : undefined;
@@ -179,6 +190,8 @@ export function extractRow(
       status: opt(cell('status'), 64),
       source: opt(cell('source'), 128),
       ...(timezone ? { timezone } : {}),
+      ...(dateOfBirth ? { dateOfBirth } : {}),
+      ...(minor ? { minor: true as const } : {}),
       groups,
       tags,
       ...(consentColumn ? { consentColumn } : {}),

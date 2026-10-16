@@ -1439,7 +1439,8 @@
             "sms": "SMS somente de envio via Twilio ou MSG91: conecte remetentes e envie transmissões e campanhas por SMS.",
             "help_agent": "O Assistente de ajuda do app: as pessoas pedem uma tarefa com palavras simples e ele orienta ou executa na própria sessão delas, perguntando antes de qualquer ação arriscada. Gasta tokens de IA.",
             "email_channel": "Conecte caixas do Gmail e do Google Workspace à caixa de entrada da equipe. O app pago E-mail controla este botão.",
-            "personal_history_full": "Permite que um número pessoal de WhatsApp importe todo o histórico de conversas ao ser vinculado pela primeira vez. A importação das conversas recentes está disponível em todos os planos que incluem números pessoais."
+            "personal_history_full": "Permite que um número pessoal de WhatsApp importe todo o histórico de conversas ao ser vinculado pela primeira vez. A importação das conversas recentes está disponível em todos os planos que incluem números pessoais.",
+            "ai_crm_copilot": "Encontra e pontua leads com IA a partir dos seus contatos."
           },
           "units": {
             "days": "Dias",
@@ -1624,7 +1625,8 @@
             "sms": "Canal SMS",
             "help_agent": "Assistente de ajuda (IA, gasta tokens)",
             "email_channel": "Canal de e-mail (Gmail)",
-            "personal_history_full": "Importação do histórico completo de conversas (WhatsApp pessoal)"
+            "personal_history_full": "Importação do histórico completo de conversas (WhatsApp pessoal)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "Este campo é obrigatório.",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Cor suave e brilhante atrás de um cartão fosco."
+          },
+          "geta": {
+            "name": "Divisão Geta",
+            "description": "Formulário de um lado e um painel de marca animado com estatísticas do outro."
           }
         },
         "fields": {

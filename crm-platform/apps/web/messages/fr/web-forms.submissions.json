@@ -115,7 +115,14 @@
         "consentAt": "Donné le",
         "noConsent": "Ce formulaire ne demandait pas de consentement.",
         "links": "Enregistrements",
-        "actions": "Actions"
+        "actions": "Actions",
+        "ageCheck": "Vérification de l'âge",
+        "ageOutcome": "Résultat",
+        "ageUnder": "En dessous de l'âge minimum. L'envoi a été accepté et le contact a été marqué comme mineur ; le consentement marketing n'a pas été enregistré.",
+        "guardianName": "Parent ou tuteur",
+        "guardianEmail": "E-mail du tuteur",
+        "guardianPhone": "Téléphone du tuteur",
+        "guardianNote": "Indiqué par le visiteur, non vérifié. Son consentement n'est pas enregistré tant qu'une personne ne l'enregistre pas dans la carte Consentement du contact."
       },
       "actions": {
         "retry": "Relancer",

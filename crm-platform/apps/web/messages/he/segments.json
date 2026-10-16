@@ -24,6 +24,9 @@
       "createdAt": "נוצר",
       "updatedAt": "עודכן לאחרונה",
       "lastActivityAt": "פעילות אחרונה",
+      "minor": "מסומן כקטין",
+      "dateOfBirth": "תאריך לידה",
+      "age": "גיל (שנים)",
       "timezone": "אזור זמן"
     },
     "fieldGroups": {

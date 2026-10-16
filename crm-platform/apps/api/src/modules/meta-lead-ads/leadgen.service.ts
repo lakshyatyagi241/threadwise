@@ -173,7 +173,8 @@ export class LeadgenService {
 
   // --- shared ---------------------------------------------------------------------------------------------------------------
 
-  private async deliver(orgId: number, form: FormRow, lead: GraphLead): Promise<LeadIngestResult> {
+  /** One lead through the pipeline and the bookkeeping of its form and Page. Shared with the pull ("Sync now" and backfill). */
+  async deliver(orgId: number, form: FormRow, lead: GraphLead): Promise<LeadIngestResult> {
     const normalised = toNormalisedLead(lead, {
       formId: form.formId,
       name: form.name,
@@ -213,7 +214,8 @@ export class LeadgenService {
     return this.graph.forPage(this.crypto.decrypt(fb.accessToken ?? ''), fb.pageId);
   }
 
-  private async recordRefusal(
+  /** What Meta refused, written on the Page (and the form) for the screen to show. */
+  async recordRefusal(
     orgId: number,
     pageId: string,
     form: FormRow | undefined,

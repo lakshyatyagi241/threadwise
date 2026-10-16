@@ -24,6 +24,9 @@
       "createdAt": "创建时间",
       "updatedAt": "最后更新",
       "lastActivityAt": "最后活动",
+      "minor": "已标记为未成年人",
+      "dateOfBirth": "出生日期",
+      "age": "年龄(岁)",
       "timezone": "时区"
     },
     "fieldGroups": {

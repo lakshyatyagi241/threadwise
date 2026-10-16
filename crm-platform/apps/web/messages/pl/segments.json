@@ -24,6 +24,9 @@
       "createdAt": "Utworzono",
       "updatedAt": "Ostatnia zmiana",
       "lastActivityAt": "Ostatnia aktywność",
+      "minor": "Oznaczony jako niepełnoletni",
+      "dateOfBirth": "Data urodzenia",
+      "age": "Wiek (lata)",
       "timezone": "Strefa czasowa"
     },
     "fieldGroups": {

@@ -19,6 +19,7 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { BroadcastsRepository, type BroadcastRow } from './broadcasts.repository';
 import { ChannelsRepository } from './channels.repository';
+import { WechatAvailabilityService } from './wechat-availability.service';
 import { STALE_SENDING_MINUTES } from './wechat-rules';
 
 const MODULE_KEY = 'wechat_broadcasts';
@@ -64,6 +65,7 @@ export class BroadcastsService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     @InjectQueue(QUEUES.WECHAT_BROADCAST) private readonly queue: Queue<WechatBroadcastJob>,
+    private readonly availability: WechatAvailabilityService,
   ) {}
 
   private toResponse(r: BroadcastRow): WechatBroadcast {
@@ -136,6 +138,9 @@ export class BroadcastsService {
   async create(input: CreateWechatBroadcastInput): Promise<WechatBroadcast> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      if (!(await this.availability.forOrg(tx, ctx.orgId)).available) {
+        throw WechatAvailabilityService.refused();
+      }
       const channel = await this.channels.findByUuid(tx, ctx.orgId, input.channelId);
       if (!channel) throw AppError.notFound('WeChat channel', input.channelId);
 
@@ -222,6 +227,9 @@ export class BroadcastsService {
       }
       if (event === 'retry_requested' && found.status === 'draft') {
         throw refuse('WECH_NOT_RETRYABLE', 'This broadcast has not failed.', HttpStatus.CONFLICT);
+      }
+      if (!(await this.availability.forOrg(tx, ctx.orgId)).available) {
+        throw WechatAvailabilityService.refused();
       }
       const channel = await this.channels.findById(tx, ctx.orgId, found.channelRowId);
       if (!channel?.active) {

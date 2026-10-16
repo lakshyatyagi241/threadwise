@@ -2019,6 +2019,18 @@
         "groupContact": "Kişi özellikleri",
         "groupFlow": "Bu akışta kayıtlı",
         "variableNone": "Değişken bulunamadı"
+      },
+      "askAge": {
+        "minAge": "En düşük yaş",
+        "minAgeHint": "Boş bırakırsanız Uyumluluk merkezindeki çalışma alanı yaşı kullanılır (hiçbiri ayarlı değilse 18). 1 ile 21 arasında olmalıdır.",
+        "whenUnder": "Yanıt bu yaşın altındaysa",
+        "whenUnderHint": "Kişi her durumda reşit olmayan olarak işaretlenir. Müşteriye hangi yanıtın geçtiği asla söylenmez.",
+        "end": "Akışı kısa, tarafsız bir cümleyle bitir",
+        "continue": "Devam et ve yanıta göre dallanmama izin ver",
+        "endText": "Kapanış cümlesi",
+        "endTextHint": "Akış bitmeden önce gönderilir. Yaştan söz etmeyin. Boş bırakılırsa “Devam edemiyoruz.” kullanılır.",
+        "continueNote": "Sonraki adımlar, yanıtın değişkenini ve ardından _age_gate ekini (örneğin answer_age_gate) okuyabilir; değeri under veya adult olur. Dallanmak için bir Koşul ekleyin, örneğin ebeveyn veya vasi istemek için.",
+        "note": "Yaşı yalnızca ihtiyaç duyduğunuz yerde sorun. Yanıt kişiye yazılır: doğum tarihi doğum tarihi olarak, yaş sınırının altındaki bir yanıt ise kişiyi reşit olmayan olarak işaretler."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Telefon numarası",
         "number": "Sayı",
         "alphanumeric": "Harfler ve sayılar",
-        "date": "Tarih"
+        "date": "Tarih",
+        "age": "Yaş",
+        "date_of_birth": "Doğum tarihi"
       },
       "askInputWrong": {
         "text": "Lütfen tekrar deneyin",
@@ -2338,7 +2352,9 @@
         "phone": "Lütfen geçerli bir telefon numarası girin",
         "number": "Lütfen geçerli bir sayı girin",
         "alphanumeric": "Lütfen yalnızca harf ve rakam kullanın",
-        "date": "Lütfen geçerli bir tarih girin ({format})"
+        "date": "Lütfen geçerli bir tarih girin ({format})",
+        "age": "Lütfen yaşınızı tam sayı olarak girin",
+        "date_of_birth": "Lütfen geçerli bir tarih girin ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

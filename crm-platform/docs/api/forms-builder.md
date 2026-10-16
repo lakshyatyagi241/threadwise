@@ -322,3 +322,14 @@ new consent version in the editor. Re-running a submission uses the channels of 
 recorded as agreement to service messages (ledger purpose `utility`, source `form`, with the wording, version, form and submission), never as
 marketing, and changes no subscription label. An unticked line records nothing in the ledger (the submission keeps the wording shown and
 `given: false`). A person who stopped a channel is not turned back on.
+
+## Age check (BL-217)
+
+Spec section 11.10. `definition.ageGate` (off by default): `{ enabled, mode: dob | age | declaration, minAge: 1..21 | null, whenUnder: block | flag | guardian }`. `minAge: null` means the workspace's minor age (highest of the Compliance profiles, else 18).
+
+- **Field kinds.** `date_of_birth` always writes the contact's `date_of_birth` (bound or not; the younger date wins on a returning contact); `age` is judged and forgotten. One question per form; an `age` field cannot be bound. Publish wants the question for `dob` / `age` and wants it required (`age_gate_field_missing`, `age_gate_field_not_required`).
+- **Public door.** `GET /v2/public/forms/:key` carries `ageGate: { mode, declarationAge }` (the age only for the box); never the action. `POST .../submit` accepts `ageConfirmed` (the box) and `guardian { name, email?, phone? }`.
+  - `block`: an under-age answer is refused before anything is stored: 403 `FORMS_AGE_BLOCKED`, a neutral message. With the box, an unticked box is an unanswered question (422 `FORMS_VALIDATION`, path `age_confirmed`).
+  - `flag`: accepted; the contact is flagged (source `dob`, or `declaration` for an unticked box); the consent line is stored as shown but no marketing agreement is recorded.
+  - `guardian`: as `flag`, and 422 `FORMS_GUARDIAN_REQUIRED` until a name and an email or phone arrive; the details are kept as stored answers (`_guardian_*`, removed by the retention sweep with the rest), on the submission detail (`guardian`, `ageGate`) and as a contact timeline entry. Guardian consent is not recorded until a person records it.
+- **Builder meta.** `GET /v2/forms/meta/protection` returns `age: { workspaceMinorAge, childrenAnswered }` for the settings screen.

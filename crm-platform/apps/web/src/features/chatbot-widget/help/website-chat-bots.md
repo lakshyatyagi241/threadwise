@@ -36,3 +36,7 @@ If you have more bots than the list shows, a line under it says so; open the res
 - The list does not load: refresh the page.
 - A row says **Needs customizing**: open **Customize** and save the widget once.
 - The bubble does not appear on your site: open **Install** and check the code is on every page where you want it.
+
+## Asking an age before the chat
+
+In the widget builder, **Ask for an age before the chat starts** adds one question to the first screen. It is off by default: ask only if your workspace's rules require it or your visitors may be minors. Choose a box "I confirm I am at least N years old" or a date of birth, leave the minimum age empty to use the workspace age from the [Compliance center](help:compliance-center), and choose whether an under-age answer stops the chat or lets it go on with the contact flagged as a minor. The chat never says which answer passes. The age is recorded on a contact only once the visitor has given a phone number or an email address.

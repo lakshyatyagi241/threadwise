@@ -144,7 +144,9 @@
         "booking": "预约页面",
         "commerce": "店铺结账",
         "lead": "线索收集",
-        "gpc": "全球隐私控制"
+        "gpc": "全球隐私控制",
+        "dob": "出生日期或年龄",
+        "declaration": "年龄未确认"
       },
       "by": "由 {name}",
       "evidence": {
@@ -227,7 +229,9 @@
           "noteHint": "例如：在柜台签署了纸质表格。请勿填写监护人的姓名或联系方式。",
           "ref": "引用编号（可选）",
           "refHint": "以后可以查到的表格编号或文档 ID。"
-        }
+        },
+        "minorFrom": "根据所填的出生日期或年龄设置。除非有人保留该标记,否则将于 {date} 自动解除。",
+        "minorFromDeclaration": "因表单中的年龄未确认而设置。在有人清除之前一直保留。"
       }
     },
     "composer": {
@@ -351,7 +355,8 @@
         "consent_declined": "不允许：对方拒绝。",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "不允许：该联系人已标记为未成年人，且你的工作区拦截营销。",
-        "sale_share_opted_out": "不允许：该联系人已选择退出其数据的出售或共享。"
+        "sale_share_opted_out": "不允许：该联系人已选择退出其数据的出售或共享。",
+        "on_dnc_list": "在您的“禁止来电”名单中:不向此号码拨打营销电话或发送营销短信"
       }
     },
     "notice": {

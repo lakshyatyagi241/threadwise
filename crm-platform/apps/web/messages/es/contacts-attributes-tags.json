@@ -209,7 +209,10 @@
       "conditionsChip": "Condiciones: {count}",
       "pqlExampleTag": "Contactos con la etiqueta {tag} sin actividad en 30 días",
       "pqlExampleStage": "Contactos en {stage} creados en los últimos 7 días",
-      "pqlExampleNoOwner": "Contactos sin propietario"
+      "pqlExampleNoOwner": "Contactos sin propietario",
+      "colDateOfBirth": "Fecha de nacimiento",
+      "colMinor": "Menor",
+      "minorBadge": "Menor"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona.",
       "company": "Empresa",
       "companyHint": "Agrupa este contacto bajo una organización.",
-      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo."
+      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
+      "dateOfBirth": "Fecha de nacimiento",
+      "dateOfBirthHint": "Opcional. Si lo convierte en menor, el contacto se marca como tal."
     },
     "tags": {
       "title": "Etiquetas",
@@ -462,6 +467,8 @@
         "consent": "Consentimiento de marketing (sí / no)",
         "consentSms": "Consentimiento de marketing por SMS (sí / no)",
         "consentEmail": "Consentimiento de marketing por correo (sí / no)",
+        "dateOfBirth": "Fecha de nacimiento (año primero, 2010-05-04)",
+        "minor": "Menor (sí marca el contacto)",
         "timezone": "Zona horaria (p. ej. Asia/Kolkata)"
       },
       "notInFile": "No está en el archivo",
@@ -520,6 +527,7 @@
         "plan_limit_reached": "se alcanzó el límite de contactos del plan",
         "tag_limit_reached": "se alcanzó el límite de etiquetas del plan",
         "duplicate_in_file": "número repetido, combinado con una fila anterior",
+        "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento",
         "invalid_timezone": "zona horaria no válida"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
@@ -580,7 +588,8 @@
       "ownerForbidden": "Tu acceso no te permite asignar este contacto a esa persona.",
       "ownerFailed": "No se pudo cambiar el responsable. Inténtalo de nuevo.",
       "ownerMe": "{name} (yo)",
-      "ownerFormer": "Ex miembro"
+      "ownerFormer": "Ex miembro",
+      "dateOfBirth": "Fecha de nacimiento"
     },
     "attributes": {
       "eyebrow": "Más / Atributos",
@@ -1021,6 +1030,7 @@
         "lifecycle_stage": "Etapa del ciclo de vida",
         "status": "Estado",
         "groups": "Grupos",
+        "owner": "Responsable",
         "opt_out": "Baja de marketing"
       },
       "types": {
@@ -1424,7 +1434,8 @@
         "needsFollowUp": "Necesitan seguimiento",
         "active": "Activos",
         "inactive": "Inactivos",
-        "unsubscribed": "Dados de baja"
+        "unsubscribed": "Dados de baja",
+        "minors": "Menores"
       }
     },
     "erase": {

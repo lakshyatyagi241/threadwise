@@ -519,6 +519,33 @@
           "phone": "Phone number"
         }
       },
+      "age": {
+        "enable": "Ask for an age before the chat starts",
+        "enableHint": "Off by default. Use it only if your workspace's rules ask for it or your visitors may be minors. The chat never says which answer passes.",
+        "mode": "How to ask",
+        "modes": {
+          "declaration": "A box: \"I confirm I am at least N years old\"",
+          "age": "Ask for their age",
+          "dob": "Ask for their date of birth"
+        },
+        "modeHints": {
+          "declaration": "Nothing about their age is kept. The least data.",
+          "age": "A whole number. It is used for the check; only the result is kept.",
+          "dob": "Saved on the contact as the date of birth. Use it only if you need the date."
+        },
+        "minAge": "Minimum age",
+        "minAgeHint": "Leave empty to use your workspace's age from the Compliance center (18 when none is set). Between 1 and 21.",
+        "whenUnder": "If the visitor is under that age",
+        "actions": {
+          "block": "Do not start the chat",
+          "flag": "Start the chat and flag the contact as a minor"
+        },
+        "actionHints": {
+          "block": "Nothing about the visitor is stored and they see a neutral message. With the box, the visitor only has to tick it.",
+          "flag": "The chat goes on and, once the visitor has given a phone number or an email, the contact is flagged as a minor."
+        },
+        "contactNote": "The age is only recorded on a contact once the visitor has given a phone number or an email address."
+      },
       "launch": {
         "title": "Send-button & embed snippet",
         "tag": "launch",

@@ -24,6 +24,9 @@
       "createdAt": "Creato",
       "updatedAt": "Ultimo aggiornamento",
       "lastActivityAt": "Ultima attività",
+      "minor": "Contrassegnato come minorenne",
+      "dateOfBirth": "Data di nascita",
+      "age": "Età (anni)",
       "timezone": "Fuso orario"
     },
     "fieldGroups": {

@@ -254,7 +254,34 @@
         "off": "Nonaktif",
         "none": "Tidak ada"
       },
-      "colorSwatch": "{label} (contoh warna)"
+      "colorSwatch": "{label} (contoh warna)",
+      "age": {
+        "enable": "Tanyakan usia sebelum obrolan dimulai",
+        "enableHint": "Nonaktif secara default. Gunakan hanya jika aturan ruang kerja Anda mengharuskannya atau pengunjung Anda mungkin anak di bawah umur. Obrolan tidak pernah menyebutkan jawaban mana yang lolos.",
+        "mode": "Cara bertanya",
+        "modes": {
+          "declaration": "Sebuah kotak centang: “Saya menyatakan bahwa usia saya minimal N tahun”",
+          "age": "Tanyakan usianya",
+          "dob": "Tanyakan tanggal lahirnya"
+        },
+        "modeHints": {
+          "declaration": "Tidak ada data usia yang disimpan. Data paling sedikit.",
+          "age": "Bilangan bulat. Digunakan untuk pemeriksaan; hanya hasilnya yang disimpan.",
+          "dob": "Disimpan pada kontak sebagai tanggal lahir. Gunakan hanya jika Anda memerlukan tanggalnya."
+        },
+        "minAge": "Usia minimum",
+        "minAgeHint": "Kosongkan untuk memakai usia ruang kerja Anda dari Pusat kepatuhan (18 jika belum diatur). Antara 1 dan 21.",
+        "whenUnder": "Jika pengunjung berusia di bawah itu",
+        "actions": {
+          "block": "Jangan mulai obrolan",
+          "flag": "Mulai obrolan dan tandai kontak sebagai di bawah umur"
+        },
+        "actionHints": {
+          "block": "Tidak ada data pengunjung yang disimpan dan mereka melihat pesan netral. Dengan kotak centang, pengunjung cukup mencentangnya.",
+          "flag": "Obrolan berlanjut dan, setelah pengunjung memberikan nomor telepon atau email, kontak ditandai sebagai di bawah umur."
+        },
+        "contactNote": "Usia baru dicatat pada kontak setelah pengunjung memberikan nomor telepon atau alamat email."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widget WhatsApp",

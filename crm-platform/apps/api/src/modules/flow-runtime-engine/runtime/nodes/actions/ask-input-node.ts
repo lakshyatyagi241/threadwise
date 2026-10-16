@@ -1,16 +1,25 @@
 import { createHash, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
+  FLB_AGE_END_TEXT,
   FLB_ASK_MAX_RETRIES,
   FLB_OTP,
   FLB_OTP_TEXT,
   flbAskInputCheck,
   flbAskInputWrongText,
+  flbCleanAgeWhenUnder,
   flbCleanAskInputType,
   flbCleanDateFormat,
+  flbCleanMinAge,
+  flbIsAgeInput,
   flbParseDate,
+  judgeAgeAnswer,
+  type AgeVerdict,
+  type FlbAskInputType,
 } from '@crm/contracts';
+import { DatabaseService } from '../../../../../infra/db/database.service';
 import { RateLimitService } from '../../../../auth';
+import { ContactPrivacyService, MinorDetectionService } from '../../../../contact-consent';
 import { ContactsService } from '../../../../crm';
 import {
   OTP_SENDER_PORT,
@@ -33,12 +42,20 @@ import { haltOf } from '../../halt';
  * the question is sent and the run parks as a `Custom` wait; the next message reaches `onReply`:
  *
  *  - an answer that passes: it is saved in the variable (and, when asked, on a contact property) and the run leaves by its one port
+ *  - an AGE answer (validate as Age or Date of birth, BL-218): judged against the node's own minimum or the workspace's minor age, written
+ *    to the contact (the date of birth) and flagging it as a minor when under; `{{var}}_age_gate` says `under` or `adult`, and an
+ *    under-age answer ends the run with a neutral line unless the author chose to carry on
  *  - anything else: the wrong-answer text is sent (not the question again, as in the console) and the run keeps waiting. With
  *    `maxRetries` 0 it asks for ever, as the console does (the run's own idle limit still ends it); with a number, after that many
  *    wrong answers the run moves on without an answer (`onGiveUp: continue`) or ends (`end`)
  */
 
 const HANDLER = 'AskInput';
+
+/** What the channel's input hint is told: an age is a number, a date of birth a date (the same pickers as the plain kinds). */
+const wireType = (t: FlbAskInputType): string =>
+  t === 'date_of_birth' ? 'date' : t === 'age' ? 'number' : t;
+const takesDateFormat = (t: FlbAskInputType): boolean => t === 'date' || t === 'date_of_birth';
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' : String(v));
 const num = (v: unknown, fallback: number): number => {
@@ -60,6 +77,9 @@ export class AskInputNode implements NodeExecutor {
     private readonly contacts: ContactsService,
     @Inject(OTP_SENDER_PORT) private readonly otp: OtpSenderPort,
     private readonly limits: RateLimitService,
+    private readonly db: DatabaseService,
+    private readonly privacy: ContactPrivacyService,
+    private readonly minors: MinorDetectionService,
   ) {}
 
   async execute(ctx: NodeContext): Promise<NodeResult> {
@@ -75,8 +95,8 @@ export class AskInputNode implements NodeExecutor {
       kind: 'text',
       body: question,
       input: {
-        type: inputType,
-        ...(inputType === 'date' ? { format: flbCleanDateFormat(p.dateFormat) } : {}),
+        type: wireType(inputType),
+        ...(takesDateFormat(inputType) ? { format: flbCleanDateFormat(p.dateFormat) } : {}),
       },
     });
     if (!out.ok) return this.sendFailed(out, ctx);
@@ -109,6 +129,7 @@ export class AskInputNode implements NodeExecutor {
       const checked = flbAskInputCheck(type, reply.text, { dateFormat });
       if (checked.ok) {
         const value = checked.value;
+        if (flbIsAgeInput(type)) return this.answerAge(ctx, type, value, dateFormat, variable);
         if (verify) return this.startCode(ctx, value, variable, 0);
         await this.saveProperty(ctx, str(p.savePropertyKey), value);
         const iso = type === 'date' ? flbParseDate(value, dateFormat) : null;
@@ -126,6 +147,88 @@ export class AskInputNode implements NodeExecutor {
       }
     }
     return this.wrong(ctx, type, dateFormat, variable);
+  }
+
+  /**
+   * An age answer (BL-218): judged against the node's minimum (else the workspace's minor age), written to the contact, and routed. Nothing
+   * is said about which answer passes. The date of birth is also kept in the run's variables like any answer; the run log and the
+   * conversation already hold what the customer typed.
+   */
+  private async answerAge(
+    ctx: NodeContext,
+    type: 'age' | 'date_of_birth',
+    value: string,
+    dateFormat: string,
+    variable: string,
+  ): Promise<CustomDecision> {
+    const p = ctx.node.props;
+    const iso =
+      type === 'date_of_birth' ? flbParseDate(value, flbCleanDateFormat(dateFormat)) : null;
+    const orgId = ctx.run.orgId;
+    const minAge =
+      flbCleanMinAge(p.ageMinAge) ??
+      (await this.db.txAs({ orgId, userId: null }, (tx) => this.privacy.minorAge(tx, orgId)));
+    const verdict = judgeAgeAnswer(
+      type === 'age' ? { mode: 'age', age: value } : { mode: 'dob', dob: iso },
+      minAge,
+      ctx.now(),
+    );
+    // The check already refused what cannot be read; this is only the guard for a date the clock disagrees with.
+    if (verdict.kind === 'invalid') return this.wrong(ctx, type, dateFormat, variable);
+    const under = verdict.kind === 'under';
+    await this.recordAge(ctx, verdict, iso);
+    if (under && flbCleanAgeWhenUnder(p.ageWhenUnder) === 'end') {
+      const line = str(p.ageEndText).trim() || FLB_AGE_END_TEXT;
+      const sent = await ctx.send({ kind: 'text', body: ctx.render(line) });
+      if (!sent.ok) ctx.note(`the closing line was not sent: ${sent.error}`);
+      ctx.note('under the minimum age: the run ended');
+      return { action: 'end', reason: 'end_node' };
+    }
+    return {
+      action: 'route',
+      port: 1,
+      setVars: {
+        [variable]: value,
+        [ctx.node.id]: value,
+        user_message: value,
+        ...(iso ? { [`${variable}_iso`]: iso } : {}),
+        [`${variable}_age_gate`]: under ? 'under' : 'adult',
+        ...status(variable, 'received'),
+      },
+    };
+  }
+
+  /** The age on the contact: the date of birth (the younger date wins) and the minor flag. A failure never stops the flow. */
+  private async recordAge(
+    ctx: NodeContext,
+    verdict: Exclude<AgeVerdict, { kind: 'invalid' }>,
+    iso: string | null,
+  ): Promise<void> {
+    if (ctx.run.contactId === null) {
+      ctx.note('this run has no contact to record the age on: skipped');
+      return;
+    }
+    const contactId = ctx.run.contactId;
+    const orgId = ctx.run.orgId;
+    try {
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.minors.applyAnswer(tx, orgId, contactId, {
+          dob: verdict.mode === 'dob' ? iso : null,
+          under:
+            verdict.kind === 'under' ? { source: 'dob', minorUntil: verdict.minorUntil } : null,
+          evidence: { reference: `flow-run:${ctx.run.uuid}` },
+          now: ctx.now(),
+        }),
+      );
+      ctx.note(
+        verdict.kind === 'under'
+          ? 'under the minimum age: the contact was flagged'
+          : 'age recorded',
+      );
+    } catch (err) {
+      this.logger.warn({ err }, '[FLR] recording the age failed');
+      ctx.note(`the age could not be recorded: ${(err as Error).message}`);
+    }
   }
 
   private say(ctx: NodeContext, body: string, input: string): Promise<SendOutcome> {
@@ -269,7 +372,7 @@ export class AskInputNode implements NodeExecutor {
       const out = await ctx.send({
         kind: 'text',
         body: ctx.render(text),
-        input: { type, ...(type === 'date' ? { format: dateFormat } : {}) },
+        input: { type: wireType(type), ...(takesDateFormat(type) ? { format: dateFormat } : {}) },
       });
       if (!out.ok) ctx.note(`the wrong-answer message was not sent: ${out.error}`);
       return { action: 'stay', data: { attempts } };

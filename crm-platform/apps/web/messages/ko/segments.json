@@ -24,6 +24,9 @@
       "createdAt": "생성일",
       "updatedAt": "마지막 수정",
       "lastActivityAt": "마지막 활동",
+      "minor": "미성년자로 표시됨",
+      "dateOfBirth": "생년월일",
+      "age": "나이(세)",
       "timezone": "시간대"
     },
     "fieldGroups": {

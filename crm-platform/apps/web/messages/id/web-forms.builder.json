@@ -53,7 +53,9 @@
           "crm_required_unbound": "Properti yang diwajibkan workspace Anda tidak ada di formulir.",
           "no_contact_point": "Tambahkan kolom email atau telepon yang ditautkan ke kontak, agar setiap pengiriman dapat dicocokkan dengan seseorang.",
           "payment_no_gateway": "Hubungkan gateway pembayaran yang dapat membuat tautan pembayaran, atau matikan pembayaran.",
-          "captcha_not_configured": "CAPTCHA diatur selalu aktif, tetapi platform tidak memiliki CAPTCHA. Pilih pengaturan lain, atau minta administrator platform Anda untuk menambahkannya."
+          "captcha_not_configured": "CAPTCHA diatur selalu aktif, tetapi platform tidak memiliki CAPTCHA. Pilih pengaturan lain, atau minta administrator platform Anda untuk menambahkannya.",
+          "age_gate_field_missing": "Pemeriksaan usia memerlukan pertanyaannya: tambahkan kolom tanggal lahir atau usia, atau pilih kotak centang.",
+          "age_gate_field_not_required": "Pertanyaan yang dinilai oleh pemeriksaan usia harus wajib diisi."
         },
         "code": {
           "no_fields": "Tambahkan minimal satu kolom.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Workspace Anda mewajibkan properti CRM “{property}”: tambahkan ke formulir dan tandai sebagai wajib.",
           "crm_required_optional": "Kolom yang ditautkan ke properti CRM wajib harus berupa kolom wajib.",
           "redirect_not_https": "Alamat pengalihan harus diawali dengan https://.",
-          "too_large": "Formulir terlalu besar. Hapus beberapa kolom."
+          "too_large": "Formulir terlalu besar. Hapus beberapa kolom.",
+          "age_gate_field_missing": "Pemeriksaan usia memerlukan pertanyaannya: tambahkan kolom tanggal lahir atau usia, atau pilih kotak centang.",
+          "age_gate_field_optional": "Pertanyaan yang dinilai oleh pemeriksaan usia harus wajib diisi."
         }
       },
       "versionsTitle": "Versi",

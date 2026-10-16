@@ -24,6 +24,9 @@
       "createdAt": "Dibuat",
       "updatedAt": "Terakhir diperbarui",
       "lastActivityAt": "Aktivitas terakhir",
+      "minor": "Ditandai di bawah umur",
+      "dateOfBirth": "Tanggal lahir",
+      "age": "Usia (tahun)",
       "timezone": "Zona waktu"
     },
     "fieldGroups": {

@@ -1,5 +1,10 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import {
+  hasPreviousSends,
+  previousSendOptionSchema,
+  previousSendsAudienceSchema,
+} from '../broadcasts/previous-sends';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
@@ -105,6 +110,8 @@ export const wizardAudienceSchema = z.object({
   selection: contactSelectionSchema.nullish(),
   /** The valid numbers of an uploaded CSV. Numbers that are not contacts yet become contacts when the broadcast is launched. */
   csv: wizardCsvRefSchema.nullable().default(null),
+  /** Who earlier broadcasts and campaigns went to, optionally only those who did (or did not) read, reply or click. */
+  previous: previousSendsAudienceSchema.nullish(),
 });
 export type WizardAudience = z.infer<typeof wizardAudienceSchema>;
 export const EMPTY_WIZARD_AUDIENCE: WizardAudience = {
@@ -124,7 +131,8 @@ export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
   a.contactIds.length > 0 ||
   a.allMatching !== null ||
   a.csv !== null ||
-  Boolean(a.selection);
+  Boolean(a.selection) ||
+  hasPreviousSends(a.previous);
 
 // ---------------------------------------------------------------------------------------- variables
 
@@ -258,6 +266,20 @@ export const wizardFollowUpSchema = z.object({
 });
 export type WizardFollowUp = z.infer<typeof wizardFollowUpSchema>;
 
+/**
+ * Templates in sequence for a recurring broadcast (an addition: Reference's recurring campaign repeats one template). The draft's own
+ * template is the first; each entry here follows it, and the runs of the series take them in turn, round and round: run 1 sends the
+ * first, run 2 the next, and after the last the sequence starts again. Each entry has its own variable mapping, because a template has its
+ * own placeholders. Only a recurring schedule uses it, and not together with an A/B test (two templates already).
+ */
+export const WIZARD_TEMPLATE_SEQUENCE_MAX = 9;
+export const wizardSequenceTemplateSchema = z.object({
+  /** Null while the draft is incomplete. */
+  templateId: uuidSchema.nullable(),
+  variables: wizardVariablesSchema.default({}),
+});
+export type WizardSequenceTemplate = z.infer<typeof wizardSequenceTemplateSchema>;
+
 // ---------------------------------------------------------------------------------------- the draft
 
 export const wizardDraftSchema = z.object({
@@ -282,6 +304,11 @@ export const wizardDraftSchema = z.object({
   abSplit: z.number().int().min(0).max(100).default(50),
   templateIdB: uuidSchema.nullable().default(null),
   variablesB: wizardVariablesSchema.default({}),
+  /** The templates after `templateId` in a recurring broadcast, used by the runs in turn (see {@link wizardSequenceTemplateSchema}). */
+  templateSequence: z
+    .array(wizardSequenceTemplateSchema)
+    .max(WIZARD_TEMPLATE_SEQUENCE_MAX)
+    .default([]),
   autoEnd: wizardAutoEndSchema.nullable().default(null),
   pacing: wizardPacingSchema.default({}),
   trackLinks: z.boolean().default(true),
@@ -371,6 +398,8 @@ export const wizardSegmentSourceSchema = z.object({
 export const wizardAudienceSourcesSchema = z.object({
   groups: z.array(wizardGroupSourceSchema),
   segments: z.array(wizardSegmentSourceSchema),
+  /** Earlier broadcasts and campaigns that went out, newest first (the "Previous sends" source). */
+  previousSends: z.array(previousSendOptionSchema).default([]),
 });
 export type WizardAudienceSources = z.infer<typeof wizardAudienceSourcesSchema>;
 
@@ -704,6 +733,8 @@ export const wizardRunSchema = z.object({
   retries: wizardRetrySummarySchema,
   /** One entry per follow-up step of the draft; empty without follow-ups. */
   followUps: z.array(wizardFollowUpStepSummarySchema).default([]),
+  /** The template this run sent (in a recurring broadcast with a template sequence, it changes from run to run). */
+  templateName: z.string().nullable().default(null),
 });
 export type WizardRun = z.infer<typeof wizardRunSchema>;
 
@@ -717,6 +748,8 @@ export const wizardBroadcastSchema = z.object({
   mode: z.enum(WIZARD_SCHEDULE_MODES),
   templateId: uuidSchema.nullable(),
   templateName: z.string().nullable(),
+  /** How many templates the broadcast sends in turn (1 without a sequence). */
+  templateCount: z.number().int().min(1).default(1),
   /** The next time something is sent: a scheduled run, or the series' next occurrence. */
   nextRunAt: z.string().datetime().nullable(),
   lastRunAt: z.string().datetime().nullable(),
@@ -873,7 +906,10 @@ export interface WizardIssue {
     | 'pacing_range'
     | 'follow_up_template_required'
     | 'follow_up_flow_required'
-    | 'follow_up_cloud_api_only';
+    | 'follow_up_cloud_api_only'
+    | 'sequence_not_recurring'
+    | 'sequence_with_ab'
+    | 'sequence_template_required';
 }
 
 const ruleOf = (s: WizardSchedule): RecurrenceRule | null =>
@@ -902,7 +938,13 @@ export function draftTimeZone(d: Pick<WizardDraft, 'schedule' | 'retries'>): str
 export function wizardStepIssues(
   step: 1 | 2 | 3 | 4,
   draft: WizardDraft,
-  ctx: { slots?: readonly string[]; slotsB?: readonly string[]; now: Date },
+  ctx: {
+    slots?: readonly string[];
+    slotsB?: readonly string[];
+    /** The placeholders of each template of `templateSequence`, in order. */
+    slotsSequence?: ReadonlyArray<readonly string[]>;
+    now: Date;
+  },
 ): WizardIssue[] {
   const out: WizardIssue[] = [];
   if (step === 1) {
@@ -927,6 +969,15 @@ export function wizardStepIssues(
           out.push({ path: `variablesB.${slot}`, code: 'variable_unmapped' });
       }
     }
+    (ctx.slotsSequence ?? []).forEach((slots, i) => {
+      for (const slot of slots) {
+        if (!draft.templateSequence[i]?.variables[slot])
+          out.push({
+            path: `templateSequence.${i}.variables.${slot}`,
+            code: 'variable_unmapped',
+          });
+      }
+    });
   }
   if (step === 4) {
     const s = draft.schedule;
@@ -984,6 +1035,15 @@ export function wizardStepIssues(
         }
       }
     }
+    if (draft.templateSequence.length > 0) {
+      if (s.mode !== 'recurring')
+        out.push({ path: 'templateSequence', code: 'sequence_not_recurring' });
+      if (draft.abTesting) out.push({ path: 'templateSequence', code: 'sequence_with_ab' });
+    }
+    draft.templateSequence.forEach((t, i) => {
+      if (t.templateId === null)
+        out.push({ path: `templateSequence.${i}.templateId`, code: 'sequence_template_required' });
+    });
     draft.followUps.forEach((f, i) => {
       if (f.action.kind === 'template' && f.action.templateId === null)
         out.push({ path: `followUps.${i}.action`, code: 'follow_up_template_required' });
@@ -1004,7 +1064,13 @@ export function wizardStepIssues(
 /** Every step's issues in order, for a launch. */
 export function wizardLaunchIssues(
   draft: WizardDraft,
-  ctx: { slots?: readonly string[]; slotsB?: readonly string[]; now: Date },
+  ctx: {
+    slots?: readonly string[];
+    slotsB?: readonly string[];
+    /** The placeholders of each template of `templateSequence`, in order. */
+    slotsSequence?: ReadonlyArray<readonly string[]>;
+    now: Date;
+  },
 ): WizardIssue[] {
   return ([1, 2, 3, 4] as const).flatMap((s) => wizardStepIssues(s, draft, ctx));
 }

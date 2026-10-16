@@ -14,6 +14,8 @@ import {
 } from './meta-lead-ads.parse';
 import type {
   FormLeads,
+  FormLeadsPage,
+  FormLeadsWindow,
   GraphLead,
   LeadForm,
   MetaLeadAdsGraph,
@@ -129,6 +131,36 @@ class PageApi implements MetaLeadAdsPageApi {
     // Oldest first, so contacts are created in the order the people applied.
     leads.reverse();
     return { ok: true, data: { leads: capped ? leads.slice(1) : leads, capped } };
+  }
+
+  async pageFormLeads(formId: string, w: FormLeadsWindow): Promise<GraphResult<FormLeadsPage>> {
+    const bounds: Array<{ field: string; operator: string; value: number }> = [
+      { field: 'time_created', operator: 'GREATER_THAN', value: Math.max(0, w.sinceEpochSeconds) },
+    ];
+    if (w.untilEpochSeconds !== null) {
+      bounds.push({ field: 'time_created', operator: 'LESS_THAN', value: w.untilEpochSeconds });
+    }
+    const filtering = JSON.stringify(bounds);
+    const read = (fields: string) =>
+      this.get(`${formId}/leads`, {
+        fields,
+        filtering,
+        limit: String(Math.min(PAGE_SIZE, Math.max(1, w.limit))),
+        ...(w.after ? { after: w.after } : {}),
+      });
+    let r = await read(LEAD_FIELDS_FULL);
+    if (!r.ok && r.code === INVALID_PARAMETER) r = await read(LEAD_FIELDS_CORE);
+    if (!r.ok) return { ok: false, error: r.error, code: r.code };
+    const rows = Array.isArray(r.data?.data) ? (r.data?.data as unknown[]) : [];
+    const leads = rows.map(normaliseLead).filter((l): l is GraphLead => l !== null);
+    // Meta names the next page by a cursor; a `next` address without one (or the last page, which has none) ends the read.
+    const paging = obj(r.data?.paging);
+    const after = obj(paging.cursors).after;
+    const more = typeof paging.next === 'string' && paging.next !== '';
+    return {
+      ok: true,
+      data: { leads, next: more && typeof after === 'string' && after !== '' ? after : null },
+    };
   }
 
   async subscribedFields(): Promise<GraphResult<string[]>> {

@@ -44,6 +44,8 @@ export function toContactResponse(
     emailSubscriptionStatus: row.emailSubscriptionStatus,
     emailConfirmed: row.emailConfirmed,
     faxNumber: row.faxNumber,
+    dateOfBirth: row.dateOfBirth,
+    isMinor: row.isMinor === true,
     lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
     customFields: row.data ?? {},
     source: row.source,

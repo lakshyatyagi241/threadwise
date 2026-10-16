@@ -33,6 +33,7 @@ export const contactsCard = defineHolder({
         'fax_number',
         'title',
         'address',
+        'date_of_birth',
         'image_url',
         'channel_uid',
         'subject',
@@ -160,7 +161,7 @@ export const consentLedger = defineHolder({
   key: 'consent.ledger',
   module: 'contact-consent',
   description:
-    'Consent events (append-only proof) and the derived state per channel and purpose, and the contact privacy flags (minor, guardian consent, Do Not Sell or Share) with their events.',
+    'Consent events (append-only proof) and the derived state per channel and purpose, the contact privacy flags (minor, guardian consent, Do Not Sell or Share) with their events, and the workspace Do-Not-Call list.',
   subjects: ['contact'],
   tables: [
     {
@@ -207,6 +208,17 @@ export const consentLedger = defineHolder({
       categories: ['special_risk'],
       pii: [],
       retention: 'With the contact.',
+    },
+    {
+      table: 'dnc_entries',
+      link: { by: 'phone', column: 'phone_digits' },
+      disposition: 'retain',
+      reason:
+        'The Do-Not-Call list of the workspace is the suppression record that stops marketing calls and texts to a number. Erasing the person must not make the number callable again, so the entry stays (a number and a source, no name); a data request can still remove it on purpose.',
+      tier: 'records',
+      categories: ['identifier'],
+      pii: ['phone', 'note'],
+      retention: 'Until the workspace removes the number from its list.',
     },
   ],
 });

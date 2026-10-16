@@ -221,6 +221,7 @@ export const RUN_ERROR_KEYS = [
   'not_now',
   'provider_error',
   'credentials_refused',
+  'permission_missing',
   'interrupted',
   'internal_error',
   'incomplete',

@@ -24,6 +24,9 @@
       "createdAt": "بنایا گیا",
       "updatedAt": "آخری بار اپ ڈیٹ",
       "lastActivityAt": "آخری سرگرمی",
+      "minor": "نابالغ کے طور پر نشان زد",
+      "dateOfBirth": "تاریخِ پیدائش",
+      "age": "عمر (سال)",
       "timezone": "ٹائم زون"
     },
     "fieldGroups": {

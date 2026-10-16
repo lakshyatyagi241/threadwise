@@ -10,6 +10,7 @@
       "intro": "Kết nối Tài khoản chính thức WeChat (Tài khoản dịch vụ đã được chứng nhận). Tin nhắn đến sẽ vào Team Inbox dùng chung, còn phản hồi, quy tắc từ khóa và trả lời tự động hoạt động giống hệt các kênh khác.",
       "broadcasts": "Chiến dịch gửi hàng loạt",
       "loadError": "Không thể tải các kênh WeChat của bạn.",
+      "unavailableCountry": "WeChat không khả dụng ở quốc gia của bạn. Bạn không thể kết nối kênh WeChat hoặc gửi tin nhắn WeChat từ không gian làm việc này.",
       "connectTitle": "Kết nối một kênh",
       "connectBody": "Dán AppID, AppSecret và Token máy chủ từ Nền tảng Tài khoản chính thức WeChat (Cài đặt → Cấu hình cơ bản).",
       "connect": "Kết nối WeChat",

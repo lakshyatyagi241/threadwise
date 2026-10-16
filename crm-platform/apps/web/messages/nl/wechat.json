@@ -10,6 +10,7 @@
       "intro": "Koppel een WeChat Official Account (gecertificeerd Service Account). Inkomende berichten komen in je gedeelde Team Inbox en antwoorden, trefwoordregels en automatische antwoorden werken precies zoals bij elk ander kanaal.",
       "broadcasts": "Broadcasts",
       "loadError": "Je WeChat-kanalen konden niet worden geladen.",
+      "unavailableCountry": "WeChat is niet beschikbaar in uw land. U kunt in deze werkruimte geen WeChat-kanaal koppelen of WeChat-berichten versturen.",
       "connectTitle": "Een kanaal koppelen",
       "connectBody": "Plak de AppID, AppSecret en de server-Token uit het WeChat Official Accounts Platform (Instellingen → Basisconfiguratie).",
       "connect": "WeChat koppelen",

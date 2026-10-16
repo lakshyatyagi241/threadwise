@@ -306,7 +306,11 @@
         "numbersCount": "{count} nomor",
         "emailNote": "Email dikirim ke alamat setiap kontak. Kontak tanpa alamat email, alamat ganda, dan kontak yang berhenti berlangganan dilewati.",
         "emailSkipped": "Penerima terpilih tanpa alamat email (akan dilewati): {count}",
-        "emailNoAddress": "Nomor yang diketik dan baris CSV tidak memiliki alamat email, sehingga dilewati. Pilih kontak, grup, tag, atau segmen."
+        "emailNoAddress": "Nomor yang diketik dan baris CSV tidak memiliki alamat email, sehingga dilewati. Pilih kontak, grup, tag, atau segmen.",
+        "previousTitle": "Pengiriman sebelumnya",
+        "previousHint": "Tambahkan orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, membalas, atau mengklik.",
+        "previousEstimate": "{count, plural, other {Hingga # orang dari pengiriman sebelumnya (perkiraan: orang yang ada di dua pengiriman dihitung dua kali).}}",
+        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang."
       },
       "message": {
         "title": "Pesan",
@@ -594,7 +598,8 @@
         "subject": "Subjek",
         "subjectFallback": "Nama kampanye",
         "skippedNoEmail": "Dilewati (tanpa alamat email)",
-        "estimateEmail": "Ini perkiraan: kontak yang ada di dua grup dihitung dua kali. Kontak tanpa alamat email di grup, tag, dan segmen dilewati saat kampanye berjalan."
+        "estimateEmail": "Ini perkiraan: kontak yang ada di dua grup dihitung dua kali. Kontak tanpa alamat email di grup, tag, dan segmen dilewati saat kampanye berjalan.",
+        "previousSends": "Pengiriman sebelumnya (hingga)"
       },
       "ai": {
         "open": "Buat dengan AI",
@@ -1166,7 +1171,10 @@
         "pacing_range": "Periksa Smart Delivery: jeda terlama lebih pendek dari yang tersingkat, atau hanya satu dari dua jam pengiriman yang diatur.",
         "follow_up_template_required": "Pilih templat yang dikirim oleh setiap tindak lanjut.",
         "follow_up_flow_required": "Pilih alur yang dimulai oleh setiap tindak lanjut.",
-        "follow_up_cloud_api_only": "Tindak lanjut hanya berfungsi dengan nomor WhatsApp Cloud API. Pilih satu di langkah 1 atau hapus tindak lanjut."
+        "follow_up_cloud_api_only": "Tindak lanjut hanya berfungsi dengan nomor WhatsApp Cloud API. Pilih satu di langkah 1 atau hapus tindak lanjut.",
+        "sequence_not_recurring": "Templat bergiliran hanya berfungsi dengan kampanye berulang. Pilih jadwal berulang atau hapus templat tambahan.",
+        "sequence_with_ab": "Templat bergiliran tidak dapat digabungkan dengan uji A/B. Matikan uji A/B atau hapus templat tambahan.",
+        "sequence_template_required": "Pilih templat untuk setiap langkah urutan atau hapus yang kosong."
       },
       "template": {
         "previewOnline": "online",
@@ -1251,7 +1259,8 @@
           "contacts": "Kontak",
           "groups": "Grup",
           "segments": "Segmen",
-          "csv": "File CSV"
+          "csv": "File CSV",
+          "previous": "Pengiriman sebelumnya"
         },
         "groupsHint": "Grup adalah daftar pemasaran Anda. Semua orang di grup yang Anda centang disertakan.",
         "segmentsHint": "Segmen terisi sendiri berdasarkan aturan. Semua orang di segmen yang Anda centang disertakan.",
@@ -1347,7 +1356,10 @@
         },
         "csvIssuesMore": "{count} lainnya ada di unduhan.",
         "csvConsentOn": "Anda mengonfirmasi persetujuan untuk nomor-nomor ini. Nomor ini dicatat sebagai setuju saat siaran diluncurkan.",
-        "csvConsentVersion": "Versi pemberitahuan: {version}."
+        "csvConsentVersion": "Versi pemberitahuan: {version}.",
+        "modePrevious": "Kirim ke pengiriman sebelumnya",
+        "previousHint": "Targetkan ulang orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, tidak membaca, membalas, atau mengklik.",
+        "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})"
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",
@@ -1425,7 +1437,9 @@
         "estimatedCostFull": "Perkiraan biaya (penuh)",
         "chargedPlan": "Dibebankan ke dompet Anda sekarang: {amount} (paket Anda menanggung {covered} dari pesan ini)",
         "chargedWallet": "Dibebankan ke dompet Anda: {amount}",
-        "sumFollowUps": "Tindak lanjut"
+        "sumFollowUps": "Tindak lanjut",
+        "sumSequence": "Dikirim bergiliran",
+        "sumPrevious": "Pengiriman sebelumnya: {names} ({outcome})"
       },
       "test": {
         "title": "Kirim pesan WhatsApp uji coba",
@@ -1589,7 +1603,8 @@
           "sent": "Terkirim",
           "delivered": "Tersampaikan",
           "failed": "Gagal",
-          "retries": "Percobaan ulang"
+          "retries": "Percobaan ulang",
+          "template": "Templat"
         },
         "retrySummary": "{pending} menunggu, {recovered} pulih, {exhausted} menyerah",
         "openRun": "Buka putaran",
@@ -1649,7 +1664,9 @@
             "skipped": "Kondisi tidak terpenuhi saat diperiksa, sehingga urutan berakhir di sana.",
             "lapsed": "Waktu pemantauan habis sebelum kontak membalas atau membaca, sehingga urutan berakhir di sana."
           }
-        }
+        },
+        "templatesTitle": "Templat",
+        "templatesInTurn": "{count, plural, other {# templat bergiliran}}"
       },
       "panel": {
         "title": "Dibuat dengan Buat broadcast",
@@ -1660,7 +1677,8 @@
           "recurring": "Berulang"
         },
         "recipients": "{count, plural, other {# penerima}}",
-        "next": "Putaran berikutnya {when}"
+        "next": "Putaran berikutnya {when}",
+        "moreTemplates": "+{count} lagi"
       },
       "pickers": {
         "selectDate": "Pilih tanggal",
@@ -1746,6 +1764,29 @@
           "hours": "{count, plural, other {jam}}",
           "days": "{count, plural, other {hari}}"
         }
+      },
+      "sequence": {
+        "title": "Templat berurutan",
+        "intro": "Setiap putaran mengirim templat berikutnya dalam daftar ini. Putaran 1 mengirim yang pertama, putaran 2 yang kedua, dan setelah yang terakhir daftar dimulai lagi dari yang pertama.",
+        "notRecurring": "Hanya siaran berulang yang mengirim templat bergiliran. Pilih jadwal berulang atau hapus templat ini.",
+        "withAb": "Templat bergiliran tidak dapat digunakan bersama uji A/B, yang sudah mengirim dua templat. Matikan uji A/B untuk menggunakannya.",
+        "templateLabel": "Templat {position}",
+        "firstMissing": "Belum dipilih",
+        "firstHint": "Templat yang dipilih untuk kampanye. Ubah di langkah templat.",
+        "pick": "Pilih templat",
+        "loading": "Memuat...",
+        "unavailable": "Tidak tersedia lagi",
+        "up": "Naik",
+        "down": "Turun",
+        "moveUp": "Naikkan templat {position}",
+        "moveDown": "Turunkan templat {position}",
+        "remove": "Hapus templat {position}",
+        "removeShort": "Hapus",
+        "removeAll": "Hapus semua",
+        "add": "Tambah templat",
+        "count": "{used} dari {max} templat",
+        "limitReached": "Batas tercapai: {max} templat.",
+        "variablesTitle": "Variabel templat {position}: {name}"
       }
     },
     "history": {
@@ -1882,6 +1923,58 @@
       "loading": "Memuat nomor Anda",
       "noAccessTitle": "Anda tidak dapat membuat kampanye",
       "noAccess": "Minta izin membuat kampanye kepada admin ruang kerja."
+    },
+    "previousSends": {
+      "title": "Pengiriman sebelumnya",
+      "empty": "Belum ada broadcast atau kampanye sebelumnya",
+      "outcomeLabel": "Siapa dari pengiriman tersebut",
+      "outcomes": {
+        "all": "Semua penerima",
+        "delivered": "Terkirim",
+        "read": "Dibaca",
+        "not_read": "Tidak dibaca",
+        "replied": "Membalas",
+        "not_replied": "Tidak membalas",
+        "clicked": "Mengklik tautan",
+        "failed": "Gagal"
+      },
+      "outcomeOff": "{name} (tidak untuk broadcast)",
+      "outcomeHint": {
+        "all": "Semua penerima: semua orang yang dituju pesan ini. Kontak yang berhenti berlangganan dan baris yang dilewati tidak disertakan.",
+        "delivered": "Terkirim: orang yang menerima pesan.",
+        "read": "Dibaca: orang yang membacanya.",
+        "not_read": "Tidak dibaca: orang yang dikirimi pesan tetapi belum membacanya.",
+        "replied": "Membalas: orang yang membalas pesan.",
+        "not_replied": "Tidak membalas: orang yang dikirimi pesan tetapi belum membalas.",
+        "clicked": "Mengklik tautan: orang yang mengklik tautan terlacak di dalamnya.",
+        "failed": "Gagal: orang yang pesannya tidak dapat dikirim."
+      },
+      "broadcastNote": "Broadcast hanya mencatat pengiriman dan pembacaan, sehingga balasan dan klik tidak tersedia selama broadcast dicentang.",
+      "broadcastOff": "Broadcast tidak memiliki balasan atau klik. Pilih hasil lain untuk mencentangnya.",
+      "search": "Cari pengiriman sebelumnya",
+      "searchPlaceholder": "Cari",
+      "listLabel": "Broadcast dan kampanye sebelumnya",
+      "noMatch": "Tidak ada yang cocok dengan pencarian Anda.",
+      "chosen": "{count} dari {max} dipilih",
+      "limit": "Anda dapat memilih hingga {max} pengiriman. Hapus centang satu untuk memilih yang lain.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Kampanye"
+      },
+      "wentOut": "Dikirim {date}",
+      "wentOutUnknown": "Tanggal tidak diketahui",
+      "recipients": "{count, plural, other {# penerima}}",
+      "notRecorded": "Tidak dicatat untuk broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, other {# orang}}",
+        "delivered": "{count, plural, other {# orang menerimanya}}",
+        "read": "{count, plural, other {# orang membacanya}}",
+        "not_read": "{count, plural, other {# orang tidak membacanya}}",
+        "replied": "{count, plural, other {# orang membalas}}",
+        "not_replied": "{count, plural, other {# orang tidak membalas}}",
+        "clicked": "{count, plural, other {# orang mengklik tautan}}",
+        "failed": "{count, plural, other {# orang yang pengirimannya gagal}}"
+      }
     }
   }
 }

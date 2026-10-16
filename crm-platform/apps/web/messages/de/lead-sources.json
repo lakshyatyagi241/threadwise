@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Ordnen Sie höchstens {max} benutzerdefinierte Eigenschaften zu.",
       "contract": "{message}",
       "speedTemplateRequired": "Wählen Sie die Vorlage aus, die gesendet werden soll.",
-      "speedDelayRange": "Geben Sie ganze Minuten von 0 bis {max} ein."
+      "speedDelayRange": "Geben Sie ganze Minuten von 0 bis {max} ein.",
+      "speedMaxAgeRange": "Wähle, wie alt ein Lead höchstens sein darf, von 1 Minute bis 90 Tage."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Wartezeit vor dem Senden (Minuten)",
         "delayHint": "Ganze Minuten von 0 bis {max}. Bei 0 wird sofort gesendet.",
+        "maxAge": "Leads nicht anschreiben, die älter sind als",
+        "maxAgeHint": "Ein verspätet eintreffender Lead (Nachladen, erneuter Versuch, verpasster Abgleich) wird trotzdem gespeichert, zugewiesen und gemeldet, bekommt aber keine erste Nachricht, wenn er älter ist als dieser Wert. Wähle nur dann einen längeren Zeitraum, wenn alte Leads angeschrieben werden sollen. Die Einwilligungsregeln gelten immer.",
         "businessHours": "Nur zu Geschäftszeiten",
         "businessHoursHint": "Außerhalb der in Ihrem Workspace festgelegten Geschäftszeiten wartet die Nachricht, bis diese beginnen.",
         "optionsFailed": "Die Vorlagen und Absender konnten nicht geladen werden. Versuchen Sie es gleich noch einmal."
@@ -646,6 +649,7 @@
         "no_sender": "Kein verbundener Absender",
         "template_unavailable": "Die Vorlage kann nicht gesendet werden",
         "missing_value": "Für diesen Kontakt fehlt ein Vorlagenwert",
+        "lead_too_old": "Der Lead war älter, als die Einstellung erlaubt",
         "provider_error": "Der Anbieter hat es abgelehnt",
         "interrupted": "Der Vorgang wurde unterbrochen",
         "expired": "Es hat zu lange gewartet",
@@ -791,6 +795,7 @@
           "not_now": "Die Quelle war nicht bereit: zu früh für sie, oder ihre Verbindung ist pausiert.",
           "provider_error": "Die Quelle hat abgelehnt oder ist fehlgeschlagen.",
           "credentials_refused": "Die Quelle hat die Zugangsdaten abgelehnt. Verbinden Sie sie erneut.",
+          "permission_missing": "Meta hat dieser Seite das Lesen von Leads nicht erlaubt. Erteile unter Meta-Lead-Formulare den Lead-Zugriff und starte es dann erneut.",
           "interrupted": "Der Vorgang wurde unterbrochen. Führen Sie ihn erneut aus.",
           "internal_error": "Ein interner Fehler ist aufgetreten. Führen Sie den Vorgang erneut aus.",
           "incomplete": "Einige Leads wurden nicht übergeben. Führen Sie den Vorgang erneut aus, um ihn abzuschließen.",
@@ -829,7 +834,8 @@
           "tooWide": "Höchstens {days} Tage auf einmal.",
           "noSource": "Wählen Sie mindestens eine Quelle."
         },
-        "safe": "Beim erneuten Ausführen geht nichts verloren und nichts wird doppelt angelegt; es werden nur die fehlenden Leads hinzugefügt."
+        "safe": "Beim erneuten Ausführen geht nichts verloren und nichts wird doppelt angelegt; es werden nur die fehlenden Leads hinzugefügt.",
+        "speedNote": "Nachgeladene Leads werden wie neue Leads zu Kontakten, einem Verantwortlichen zugewiesen und melden sich bei deinem Team. Die automatische erste Nachricht bekommen sie nicht, wenn sie älter sind als das Limit der Quelle (eine Stunde, solange du es nicht in der Einstellung der ersten Nachricht der Quelle geändert hast)."
       }
     },
     "meta": {

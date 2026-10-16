@@ -215,30 +215,73 @@ export class WizardRepository {
   // ------------------------------------------------------------------------------------------ templates
 
   /**
-   * Templates the wizard may offer: approved the way the broadcast composer reads it (Meta's approval on the Cloud engine, the local
-   * approval on any other), not an OTP template, and tied to a number that is still connected.
+   * The FROM and WHERE of the templates the wizard may offer: approved the way the broadcast composer reads it, for the workspace's
+   * default engine as the sender directory resolves it (Meta's approval on the Cloud engine, the local approval on any other), not an
+   * OTP template, not an SMS one, and tied to a number that is still connected.
    */
-  async approvedTemplates(tx: Tx, orgId: number): Promise<TemplateListRow[]> {
-    const eng = await tx.execute(
-      sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
-    );
-    const def = (eng.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
+  private approvedFrom(orgId: number, defaultEngine: string) {
     const approved =
-      def === 'waba'
+      defaultEngine === 'waba'
         ? sql`t.meta_template_id IS NOT NULL AND t.meta_status = 'APPROVED' AND (t.paused_until IS NULL OR t.paused_until <= now())`
         : sql`t.status IN ('approved', 'public')`;
+    return sql`
+      FROM wa_templates t
+      LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
+      WHERE t.org_id = ${orgId} AND ${approved} AND t.template_type <> 'auth'
+        AND (t.provider_config_id IS NULL OR c.status = 'connected')
+        AND coalesce(t.channel, 'waba') <> 'sms'`;
+  }
+
+  async approvedTemplates(
+    tx: Tx,
+    orgId: number,
+    defaultEngine: string,
+  ): Promise<TemplateListRow[]> {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
              t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
-      FROM wa_templates t
-      LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
-      WHERE t.org_id = ${orgId} AND ${approved} AND t.template_type <> 'auth'
-        AND (t.provider_config_id IS NULL OR c.status = 'connected')
+      ${this.approvedFrom(orgId, defaultEngine)}
       ORDER BY t.id DESC`);
     return (res.rows as Raw[]).map((r) => this.template(r));
+  }
+
+  /** The same templates as `approvedTemplates`, but only what the campaign gate looks at (no bodies, buttons or numbers). */
+  async approvedTemplateFacts(
+    tx: Tx,
+    orgId: number,
+    defaultEngine: string,
+  ): Promise<
+    Array<
+      Pick<
+        TemplateListRow,
+        | 'uuid'
+        | 'templateType'
+        | 'attachmentType'
+        | 'attachmentFile'
+        | 'metaTemplateId'
+        | 'metaStatus'
+        | 'pausedUntil'
+        | 'qualityScore'
+      >
+    >
+  > {
+    const res = await tx.execute(sql`
+      SELECT t.uuid, t.template_type, t.attachment_type, t.attachment_file, t.meta_template_id, t.meta_status, t.paused_until,
+             t.quality_score
+      ${this.approvedFrom(orgId, defaultEngine)}`);
+    return (res.rows as Raw[]).map((r) => ({
+      uuid: String(r.uuid),
+      templateType: String(r.template_type),
+      attachmentType: r.attachment_type === null ? null : String(r.attachment_type),
+      attachmentFile: r.attachment_file === null ? null : String(r.attachment_file),
+      metaTemplateId: r.meta_template_id === null ? null : String(r.meta_template_id),
+      metaStatus: r.meta_status === null ? null : String(r.meta_status),
+      pausedUntil: when(r.paused_until),
+      qualityScore: r.quality_score === null ? null : String(r.quality_score),
+    }));
   }
 
   /** One template by uuid with its sender, whether or not it is approved (the caller gates it). */

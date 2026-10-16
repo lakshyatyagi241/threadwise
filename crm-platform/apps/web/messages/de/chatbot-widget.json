@@ -254,7 +254,34 @@
         "off": "Aus",
         "none": "Keine"
       },
-      "colorSwatch": "{label} (Farbfeld)"
+      "colorSwatch": "{label} (Farbfeld)",
+      "age": {
+        "enable": "Vor Beginn des Chats nach dem Alter fragen",
+        "enableHint": "Standardmäßig aus. Nutzen Sie dies nur, wenn die Regeln Ihres Arbeitsbereichs es verlangen oder Ihre Besucher minderjährig sein könnten. Der Chat verrät nie, welche Antwort durchgeht.",
+        "mode": "Art der Abfrage",
+        "modes": {
+          "declaration": "Ein Kästchen: „Ich bestätige, dass ich mindestens N Jahre alt bin“",
+          "age": "Nach dem Alter fragen",
+          "dob": "Nach dem Geburtsdatum fragen"
+        },
+        "modeHints": {
+          "declaration": "Es wird nichts zum Alter gespeichert. Die geringste Datenmenge.",
+          "age": "Eine ganze Zahl. Sie wird für die Prüfung verwendet; nur das Ergebnis wird gespeichert.",
+          "dob": "Wird am Kontakt als Geburtsdatum gespeichert. Nutzen Sie dies nur, wenn Sie das Datum benötigen."
+        },
+        "minAge": "Mindestalter",
+        "minAgeHint": "Leer lassen, um das Alter Ihres Arbeitsbereichs aus dem Compliance-Center zu verwenden (18, wenn keines festgelegt ist). Zwischen 1 und 21.",
+        "whenUnder": "Wenn der Besucher jünger ist",
+        "actions": {
+          "block": "Chat nicht starten",
+          "flag": "Chat starten und den Kontakt als minderjährig markieren"
+        },
+        "actionHints": {
+          "block": "Es wird nichts über den Besucher gespeichert, und er sieht eine neutrale Meldung. Beim Kästchen muss der Besucher es nur anhaken.",
+          "flag": "Der Chat läuft weiter, und sobald der Besucher eine Telefonnummer oder E-Mail-Adresse angegeben hat, wird der Kontakt als minderjährig markiert."
+        },
+        "contactNote": "Das Alter wird erst dann an einem Kontakt erfasst, wenn der Besucher eine Telefonnummer oder E-Mail-Adresse angegeben hat."
+      }
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp-Widget",

@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { assemblePhone } from '../broadcasts';
+import type { PreviousSendsAudience } from '@crm/contracts';
+import { assemblePhone, previousSendContactsSql } from '../broadcasts';
 import { hasGrantedConsentSql } from '../contact-consent';
 import { DUPLICATE_EMAIL, NO_EMAIL_ADDRESS } from './email-campaign-rules';
 
@@ -1022,6 +1023,18 @@ export class CampaignsRepository {
   // -------------------------------------------------------------- audience
 
   /** Ids of the contacts named by uuid, in the order sent. Another organization's ids are dropped. */
+  /** The contacts the named earlier sends went to, narrowed by the outcome (see `previousSendContactsSql`). */
+  async previousSendContactIds(
+    tx: Tx,
+    orgId: number,
+    previous: PreviousSendsAudience | null | undefined,
+  ): Promise<number[]> {
+    const q = previousSendContactsSql(orgId, previous);
+    if (!q) return [];
+    const res = await tx.execute(q);
+    return (res.rows as Array<{ contact_id: number | string }>).map((r) => Number(r.contact_id));
+  }
+
   async contactIdsByUuid(tx: Tx, orgId: number, uuids: readonly string[]): Promise<number[]> {
     const byUuid = new Map<string, number>();
     for (const part of chunks(uuids)) {

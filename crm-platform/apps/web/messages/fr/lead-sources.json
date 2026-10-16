@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Mappez {max} propriétés personnalisées au maximum.",
       "contract": "{message}",
       "speedTemplateRequired": "Choisissez le modèle à envoyer.",
-      "speedDelayRange": "Saisissez un nombre entier de minutes de 0 à {max}."
+      "speedDelayRange": "Saisissez un nombre entier de minutes de 0 à {max}.",
+      "speedMaxAgeRange": "Choisissez l'ancienneté maximale d'un lead, de 1 minute à 90 jours."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Délai avant l'envoi (minutes)",
         "delayHint": "Minutes entières de 0 à {max}. 0 envoie immédiatement.",
+        "maxAge": "Ne pas écrire aux leads de plus de",
+        "maxAgeHint": "Un lead qui arrive en retard (rattrapage, nouvel essai, synchronisation manquée) est quand même enregistré, attribué et signalé, mais ne reçoit pas de premier message s'il est plus ancien que cette durée. Choisissez une durée plus longue seulement si vous voulez écrire à d'anciens leads. Les règles de consentement s'appliquent toujours.",
         "businessHours": "Uniquement pendant les heures d'ouverture",
         "businessHoursHint": "En dehors des heures d'ouverture définies dans votre espace de travail, le message attend leur ouverture.",
         "optionsFailed": "Impossible de charger les modèles et les expéditeurs. Réessayez dans un instant."
@@ -646,6 +649,7 @@
         "no_sender": "Aucun expéditeur connecté",
         "template_unavailable": "Le modèle ne peut pas être envoyé",
         "missing_value": "Une valeur du modèle est manquante pour ce contact",
+        "lead_too_old": "Le lead était plus ancien que ce que le réglage autorise",
         "provider_error": "Le fournisseur l'a refusé",
         "interrupted": "Il a été interrompu",
         "expired": "L'attente a été trop longue",
@@ -791,6 +795,7 @@
           "not_now": "La source n’était pas prête : trop tôt pour elle, ou sa connexion est en pause.",
           "provider_error": "La source a refusé ou a échoué.",
           "credentials_refused": "La source a refusé les identifiants. Reconnectez-la.",
+          "permission_missing": "Meta n'a pas autorisé cette Page à lire les leads. Accordez l'accès aux leads dans Formulaires de leads Meta, puis relancez.",
           "interrupted": "L’opération a été interrompue. Relancez-la.",
           "internal_error": "Une erreur interne s’est produite. Relancez l’opération.",
           "incomplete": "Certains leads n’ont pas été transmis. Relancez l’opération pour terminer.",
@@ -829,7 +834,8 @@
           "tooWide": "{days} jours au maximum à la fois.",
           "noSource": "Choisissez au moins une source."
         },
-        "safe": "Rien n’est perdu ni dupliqué si vous le relancez ; seuls les leads manquants sont ajoutés."
+        "safe": "Rien n’est perdu ni dupliqué si vous le relancez ; seuls les leads manquants sont ajoutés.",
+        "speedNote": "Les leads rattrapés deviennent des contacts, sont attribués à un responsable et préviennent votre équipe, comme les nouveaux leads. Ils ne reçoivent pas le premier message automatique s'ils sont plus anciens que la limite de la source (une heure, sauf si vous l'avez modifiée dans le réglage du premier message de la source)."
       }
     },
     "meta": {

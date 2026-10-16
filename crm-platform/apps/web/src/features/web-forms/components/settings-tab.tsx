@@ -54,6 +54,7 @@ import type { BuilderTabProps } from './builder-types';
 import { useFormProtection } from '../api/forms';
 import { useComplianceLinks } from '@/features/compliance-center/api/hooks';
 import { useFormUsers } from './forms-users';
+import { AgeCheckSection } from './age-check-section';
 import { PaymentPanel } from './payment-panel';
 
 const CONTROL_ERROR = 'text-xs text-danger';
@@ -724,6 +725,13 @@ export function SettingsTab(props: BuilderTabProps) {
           </div>
         )}
       </Section>
+
+      <AgeCheckSection
+        draft={draft}
+        setDraft={setDraft}
+        disabled={disabled}
+        age={protection.data?.age ?? null}
+      />
 
       <Section title={t('crm.title')} description={t('crm.description')}>
         <div className="grid gap-4 sm:grid-cols-2">

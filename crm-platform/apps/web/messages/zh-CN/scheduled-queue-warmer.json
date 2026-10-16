@@ -139,7 +139,8 @@
         "cancel": "取消",
         "retry": "重新设定时间后重试",
         "delete": "删除",
-        "deleteHistory": "从历史记录中删除"
+        "deleteHistory": "从历史记录中删除",
+        "edit": "编辑"
       },
       "empty": {
         "title": "暂无排期",
@@ -207,7 +208,8 @@
         "noSenders": "没有已连接的发送号码，请先连接号码。",
         "warming": "养号中",
         "splitHint": "每个勾选的发送号码都将运行各自的排期，并公平分配受众。",
-        "messageType": "消息类型"
+        "messageType": "消息类型",
+        "editSenderHint": "一个计划只对应一个号码。选择其他号码会将该计划移到该号码，并重新预留其预热额度。"
       },
       "audience": {
         "title": "收件人",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "受众队列",
-            "hint": "重新定向过往群发的收件人。"
+            "hint": "重新触达以往群发和活动的收件人。"
           },
           "number": {
             "title": "号码",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "选择分组",
         "chooseTags": "选择一个或多个标签",
-        "chooseQueues": "选择一个或多个过往群发",
+        "chooseQueues": "选择一个或多个以往的群发或活动",
         "tickAny": "（可多选）",
         "noGroups": "暂无分组",
         "noTags": "暂无标签",
-        "noQueues": "暂无已完成的群发",
+        "noQueues": "暂无以往的群发或活动",
         "contacts": "前往联系人",
         "broadcast": "前往群发",
         "tagsHint": "排期触发时会重新计算收件人，因此新添加标签的联系人也会包含在内。",
-        "queuesHint": "可勾选任意数量的群发。发送前会自动对收件人去重。",
+        "queuesHint": "可勾选任意数量的群发或活动。发送前会自动对收件人去重。",
         "paste": "粘贴号码",
         "pasteHint": "请先填写国家区号，不要带前导 +。每条之间用换行或逗号分隔。",
         "pastePlaceholder": "每行一个号码，包含国家区号，不带加号",
         "total": "收件人总数：",
-        "optedOut": "{n} 个已排除：已退订或已归档"
+        "optedOut": "{n} 个已排除：已退订或已归档",
+        "kind": {
+          "broadcast": "群发",
+          "campaign": "活动"
+        }
       },
       "message": {
         "title": "编辑消息",
@@ -275,7 +281,34 @@
         "pickerSearch": "按名称或语言搜索…",
         "pickerEmpty": "没有匹配的模板。",
         "manageTemplates": "管理模板 →",
-        "cancel": "取消"
+        "cancel": "取消",
+        "pickToPreview": "选择模板即可预览。",
+        "headerMedia": "{kind}页眉",
+        "windowNote": "即使客户在过去 24 小时内没有发过消息，Cloud API 号码也可以发送已获批准的模板。",
+        "previewSamples": "使用示例值预览",
+        "pickerCategories": "模板类别",
+        "categories": {
+          "all": "全部",
+          "marketing": "营销",
+          "utility": "实用"
+        },
+        "pickerHidden": "{n, plural, other {还有 # 个模板已隐藏，因为已勾选的号码无法发送。}}",
+        "file": "文件",
+        "chooseFile": "选择要发送的文件",
+        "fileHint": "图片、视频、音频或文档。文件将私密存储在您的工作区中。",
+        "limits": "所选号码支持：图片最大 {image} MB，视频 {video} MB，音频 {audio} MB，文档 {document} MB。",
+        "tooBigUpload": "文件大于 {mb} MB。",
+        "uploadFailed": "文件上传失败。请重试。",
+        "uploading": "正在上传…",
+        "replace": "替换",
+        "remove": "移除",
+        "kinds": {
+          "image": "图片",
+          "video": "视频",
+          "audio": "音频",
+          "document": "文档"
+        },
+        "orLink": "或粘贴文件链接"
       },
       "when": {
         "title": "发送时间",
@@ -356,7 +389,18 @@
         "daysRequired": "请选择星期。",
         "endDateRequired": "请选择最后一天。",
         "endBeforeStart": "结束日期早于首次发送日期。",
-        "testNumber": "请输入包含国家区号的号码。"
+        "testNumber": "请输入包含国家区号的号码。",
+        "mediaTooLarge": "此文件超过已勾选号码允许的大小。请选择更小的文件。",
+        "mediaType": "已勾选的号码不支持此媒体类型使用该文件格式。",
+        "templateNotForSender": "已勾选的号码无法发送此模板：WhatsApp Cloud API 号码只能发送 Meta 已批准的模板。请选择其他模板或号码。"
+      },
+      "edit": {
+        "title": "编辑定时消息",
+        "saved": "计划已更新。",
+        "submit": "保存更改",
+        "stale": "您编辑期间有人修改了此计划。请重新加载以查看他们的更改；您在此输入的内容将会丢失。",
+        "reload": "重新加载计划",
+        "backToSchedule": "返回计划"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "立即运行",
         "cancel": "取消",
         "retry": "重新设定时间后重试",
-        "delete": "删除"
+        "delete": "删除",
+        "edit": "编辑"
       },
       "kpi": {
         "recipients": "收件人",
@@ -434,7 +479,11 @@
           "delivered": "已送达",
           "read": "已读",
           "failed": "失败"
-        }
+        },
+        "search": "搜索姓名或号码",
+        "range": "第 {from}–{to} 条，共 {total} 条",
+        "prev": "上一页",
+        "next": "下一页"
       },
       "config": {
         "eyebrow": "排期详情",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "消息预览",
         "title": "收件人看到的内容",
-        "empty": "（消息正文为空）"
+        "empty": "（消息正文为空）",
+        "template": "模板 {name}（{language}）",
+        "file": "文件：{name}"
       },
-      "another": "再创建一个排期"
+      "another": "再创建一个排期",
+      "engagement": {
+        "eyebrow": "互动",
+        "title": "送达趋势",
+        "legend": "图例",
+        "steps": {
+          "queued": "排队中",
+          "sent": "已发送",
+          "delivered": "已送达",
+          "read": "已读",
+          "failed": "失败"
+        },
+        "empty": "尚未发送任何内容，因此没有可绘制的图表。",
+        "perHour": "每小时开始时的累计总数，时区：{zone}。",
+        "perDay": "每天开始时的累计总数，时区：{zone}。"
+      }
     },
     "warmer": {
       "warming": "{n} 个养号中",

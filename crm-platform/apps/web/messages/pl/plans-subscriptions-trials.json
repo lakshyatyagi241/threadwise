@@ -81,7 +81,8 @@
       "sms": "Kanał SMS",
       "help_agent": "Asystent pomocy",
       "email_channel": "Kanał e-mail (Gmail)",
-      "personal_history_full": "Import pełnej historii (osobisty WhatsApp)"
+      "personal_history_full": "Import pełnej historii (osobisty WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot"
     },
     "limitGroups": {
       "messaging": "Wiadomości",

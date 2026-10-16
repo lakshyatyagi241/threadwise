@@ -28,6 +28,8 @@ export interface ConsentFacts {
   guardianConsent?: boolean;
   /** The contact opted out of the sale or sharing of their personal information. Absent = false. */
   saleShareOptOut?: boolean;
+  /** The contact's number is on the workspace's Do-Not-Call list (BL-181). Read only for voice and SMS marketing. Absent = false. */
+  onDncList?: boolean;
 }
 
 export const NO_FACTS: ConsentFacts = { unsubscribedFlag: false, ledgerState: 'unknown' };
@@ -63,7 +65,8 @@ const deny = (reason: ConsentGateReason): ConsentGateResult => ({ decision: 'den
  *  3. Service (`utility`): a reply inside the customer-service window is allowed (`inbound_reply_window`); otherwise only an
  *     explicit withdrawal of the service purpose on that channel blocks it. STOP withdraws MARKETING only, so a contact who sent
  *     STOP still gets order, appointment and support messages.
- *  4. Marketing: a withdrawal (the roll-up flag or the ledger) ALWAYS denies, whatever the switch says. Then a contact flagged as a
+ *  4. Marketing: a withdrawal (the roll-up flag or the ledger) ALWAYS denies, whatever the switch says. Then, for voice and SMS, a number
+ *     on the workspace's Do-Not-Call list is denied (`on_dnc_list`, BL-181). Then a contact flagged as a
  *     minor is held (`subject_minor`) when the workspace's children setting says so: always under `block`, and under `guardian` until
  *     a parent's or guardian's consent is on record (BL-180). With the switch on, a recorded grant on the channel is also needed. With
  *     it off (the default) everyone else is allowed: today's behaviour, exactly. Service messages are never held back by the flag.
@@ -102,6 +105,7 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
     if (input.facts.unsubscribedFlag || (channel && input.facts.ledgerState === 'withdrawn')) {
       return deny('withdrawn');
     }
+    if (input.facts.onDncList && isDncChannel(input.channel, modality)) return deny('on_dnc_list');
     if (isHeldAsMinor(input.minorRule, input.facts)) return deny('subject_minor');
     if (!input.requireConsent) return allow('policy_off');
     if (!channel) return deny('channel_unmapped');
@@ -121,6 +125,15 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
 export function isHeldAsMinor(rule: MinorRule | undefined, facts: ConsentFacts): boolean {
   if (!facts.minor || !rule || rule === 'off') return false;
   return rule === 'block' || !facts.guardianConsent;
+}
+
+/**
+ * Does the workspace's Do-Not-Call list apply to marketing on this channel (BL-181)? Voice and SMS do; WhatsApp, email and the rest follow
+ * the consent ledger. Exported so the service reads the list only when it can matter.
+ */
+export function isDncChannel(channel: string, modality?: ConsentModality): boolean {
+  const ch = consentChannelOfKind(channel);
+  return ch === 'sms' || ch === 'voice' || modality === 'voice';
 }
 
 /** The answer when the gate itself failed: consent-based purposes fail closed, everything else (service replies) fails open. */

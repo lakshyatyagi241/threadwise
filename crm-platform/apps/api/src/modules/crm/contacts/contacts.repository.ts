@@ -64,6 +64,10 @@ export interface ContactRow {
   emailSubscriptionStatus: string | null;
   emailConfirmed: boolean;
   faxNumber: string | null;
+  /** ISO day (`YYYY-MM-DD`) or null. Built-in personal property (BL-217). */
+  dateOfBirth: string | null;
+  /** Flagged as a minor (BL-190), read from the privacy flags in the same statement. */
+  isMinor: boolean;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
   /** BL-193: the contact's own IANA time zone and who set it (staff | import | api); both null when none is stored. */
@@ -185,6 +189,8 @@ export class ContactsRepository {
       emailSubscriptionStatus: contacts.emailSubscriptionStatus,
       emailConfirmed: contacts.emailConfirmed,
       faxNumber: contacts.faxNumber,
+      dateOfBirth: contacts.dateOfBirth,
+      isMinor: sql<boolean>`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
       timezone: contacts.timezone,
@@ -458,6 +464,7 @@ export class ContactsRepository {
       emailSubscriptionStatus?: string | null;
       emailConfirmed?: boolean;
       faxNumber?: string | null;
+      dateOfBirth?: string | null;
       source?: string | null;
       timezone?: string | null;
       timezoneSource?: string | null;
@@ -500,6 +507,7 @@ export class ContactsRepository {
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
+        dateOfBirth: values.dateOfBirth ?? null,
         source: values.source ?? null,
         timezone: values.timezone ?? null,
         timezoneSource: values.timezone ? (values.timezoneSource ?? 'staff') : null,

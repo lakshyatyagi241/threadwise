@@ -59,6 +59,7 @@ import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
  */
 export function ContactDetail({ id }: { id: string }) {
   const t = useTranslations('contacts-attributes-tags.detail');
+  const format = useFormatter();
   const router = useRouter();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -331,6 +332,14 @@ export function ContactDetail({ id }: { id: string }) {
             </Detail>
             <Detail label={t('language')}>{text(EXTRA_KEYS.language)}</Detail>
             <Detail label={t('source')}>{c.source ?? text(EXTRA_KEYS.source)}</Detail>
+            <Detail label={t('dateOfBirth')}>
+              {c.dateOfBirth
+                ? format.dateTime(new Date(`${c.dateOfBirth}T00:00:00Z`), {
+                    dateStyle: 'medium',
+                    timeZone: 'UTC',
+                  })
+                : ''}
+            </Detail>
             <Detail label={t('address')}>{text(EXTRA_KEYS.address)}</Detail>
             <Detail label={t('memo')}>{text(EXTRA_KEYS.memo)}</Detail>
             <Detail label={t('groups')}>

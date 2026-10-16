@@ -5,9 +5,11 @@ import {
   LAUNCHER_HEX,
   launcherImageUrl,
   LAUNCHER_LIMITS,
+  OFF_AGE_GATE,
   resolveLauncherColour,
   WIDGET_BUILDER_DEFAULTS,
   WIDGET_HEX_COLOUR,
+  type AgeGate,
   type CreateWidgetInput,
   type LauncherAnimation,
   type LauncherButtonType,
@@ -163,6 +165,8 @@ export interface BuilderState {
   collectName: boolean;
   collectEmail: boolean;
   collectPhone: boolean;
+  /** The optional age question of the intake form (BL-218). Off unless a person turns it on. */
+  ageGate: AgeGate;
   /** The WhatsApp widget's look and placement; the AI and Both builders carry it along untouched. */
   launcher: LauncherDraft;
 }
@@ -203,6 +207,7 @@ export function newState(): BuilderState {
     collectName: D.collectName,
     collectEmail: D.collectEmail,
     collectPhone: D.collectPhone,
+    ageGate: OFF_AGE_GATE,
     launcher: launcherDraft(DEFAULT_LAUNCHER),
   };
 }
@@ -265,6 +270,7 @@ export function fromWidget(w: Widget): BuilderState {
     collectName: w.collectName,
     collectEmail: w.collectEmail,
     collectPhone: w.collectPhone,
+    ageGate: w.ageGate,
     launcher: launcherDraft(w.launcher),
   };
 }
@@ -304,6 +310,8 @@ export function toPayload(s: BuilderState): CreateWidgetInput {
     collectName: s.collectName,
     collectEmail: s.collectEmail,
     collectPhone: s.collectPhone,
+    // A chat has no second screen, so the guardian action is never sent (the contract refuses it).
+    ageGate: s.ageGate.whenUnder === 'guardian' ? { ...s.ageGate, whenUnder: 'flag' } : s.ageGate,
     launcher: launcherPayload(s.launcher),
   };
 }

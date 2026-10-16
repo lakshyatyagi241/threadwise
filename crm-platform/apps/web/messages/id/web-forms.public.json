@@ -34,7 +34,8 @@
         "too_long": "Masukkan maksimal {max} karakter.",
         "pattern": "Format ini tidak sesuai dengan yang diharapkan.",
         "invalid_option": "Pilih salah satu opsi yang tersedia.",
-        "invalid_amount": "Masukkan jumlah dalam rentang yang diizinkan."
+        "invalid_amount": "Masukkan jumlah dalam rentang yang diizinkan.",
+        "guardian_required": "Tambahkan nama serta alamat email atau nomor telepon orang tua atau wali."
       },
       "closedTitle": "Formulir ini ditutup",
       "payTitle": "Satu langkah lagi",
@@ -59,7 +60,15 @@
         "missingTitle": "Pembayaran ini tidak ditemukan",
         "missingBody": "Tautan mungkin salah atau sudah terlalu lama."
       },
-      "termsOfService": "Ketentuan"
+      "termsOfService": "Ketentuan",
+      "ageDeclaration": "Saya menyatakan bahwa usia saya minimal {age} tahun",
+      "ageBlockedTitle": "Kami tidak dapat melanjutkan",
+      "ageBlockedBody": "Terima kasih atas minat Anda. Kami tidak dapat menerima pengiriman ini.",
+      "guardianTitle": "Orang tua atau wali",
+      "guardianIntro": "Tambahkan data orang tua atau wali.",
+      "guardianName": "Nama",
+      "guardianEmail": "Email",
+      "guardianPhone": "Telepon"
     }
   }
 }

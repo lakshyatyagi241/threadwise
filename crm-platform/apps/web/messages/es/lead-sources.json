@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Asigna como máximo {max} propiedades personalizadas.",
       "contract": "{message}",
       "speedTemplateRequired": "Elige la plantilla que se enviará.",
-      "speedDelayRange": "Introduce minutos enteros de 0 a {max}."
+      "speedDelayRange": "Introduce minutos enteros de 0 a {max}.",
+      "speedMaxAgeRange": "Elige la antigüedad máxima de un lead, de 1 minuto a 90 días."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Esperar antes de enviar (minutos)",
         "delayHint": "Minutos enteros de 0 a {max}. Con 0 se envía de inmediato.",
+        "maxAge": "No escribir a leads con más de",
+        "maxAgeHint": "Un lead que llega tarde (una recuperación, un reintento, una sincronización perdida) se guarda, se asigna y se notifica igualmente, pero no recibe el primer mensaje si es más antiguo que este valor. Elige un plazo más largo solo si quieres escribir a leads antiguos. Las reglas de consentimiento se aplican siempre.",
         "businessHours": "Solo en horario laboral",
         "businessHoursHint": "Fuera del horario laboral definido en tu espacio de trabajo, el mensaje espera a que empiece.",
         "optionsFailed": "No se pudieron cargar las plantillas y los remitentes. Inténtalo de nuevo en un momento."
@@ -646,6 +649,7 @@
         "no_sender": "No hay ningún remitente conectado",
         "template_unavailable": "La plantilla no se puede enviar",
         "missing_value": "Falta un valor de la plantilla para este contacto",
+        "lead_too_old": "El lead era más antiguo de lo que permite el ajuste",
         "provider_error": "El proveedor lo rechazó",
         "interrupted": "Se interrumpió",
         "expired": "Esperó demasiado",
@@ -791,6 +795,7 @@
           "not_now": "La fuente no estaba lista: es demasiado pronto para ella o su conexión está en pausa.",
           "provider_error": "La fuente rechazó la solicitud o falló.",
           "credentials_refused": "La fuente rechazó las credenciales. Vuelve a conectarla.",
+          "permission_missing": "Meta no permitió que esta página lea leads. Concede el acceso a leads en Formularios de leads de Meta y vuelve a ejecutarlo.",
           "interrupted": "Se interrumpió. Ejecútalo de nuevo.",
           "internal_error": "Error interno. Ejecútalo de nuevo.",
           "incomplete": "Algunos leads no se entregaron. Ejecútalo de nuevo para terminar.",
@@ -829,7 +834,8 @@
           "tooWide": "Como máximo {days} días a la vez.",
           "noSource": "Elige al menos una fuente."
         },
-        "safe": "No se pierde ni se duplica nada si la ejecutas de nuevo; solo añade los leads que faltan."
+        "safe": "No se pierde ni se duplica nada si la ejecutas de nuevo; solo añade los leads que faltan.",
+        "speedNote": "Los leads recuperados se convierten en contactos, se asignan a un responsable y avisan a tu equipo, como los leads nuevos. No reciben el primer mensaje automático si son más antiguos que el límite de la fuente (una hora, salvo que lo hayas cambiado en el ajuste del primer mensaje de la fuente)."
       }
     },
     "meta": {

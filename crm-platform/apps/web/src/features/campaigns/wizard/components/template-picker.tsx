@@ -31,6 +31,7 @@ export function TemplatePicker({
   onSelect,
   invalid,
   initialFilters = NO_FILTERS,
+  createHref = '/templates/new',
 }: {
   templates: TemplatesQuery;
   selectedId: string | null;
@@ -38,6 +39,8 @@ export function TemplatePicker({
   invalid?: boolean;
   /** Where the filters start (the screens leave it empty). */
   initialFilters?: TemplateFilters;
+  /** Where "Create a template" goes; null hides it (the person may not create templates). */
+  createHref?: string | null;
 }) {
   const t = useTranslations('campaigns.wizard.template');
   const tc = useTranslations('campaigns.wizard.categories');
@@ -57,12 +60,14 @@ export function TemplatePicker({
         title={t('emptyTitle')}
         message={t('emptyHint')}
         actions={
-          <Link
-            href="/templates"
-            className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground hover:opacity-90"
-          >
-            {t('createTemplate')}
-          </Link>
+          createHref ? (
+            <Link
+              href={createHref}
+              className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground hover:opacity-90"
+            >
+              {t('createTemplate')}
+            </Link>
+          ) : undefined
         }
       />
     );

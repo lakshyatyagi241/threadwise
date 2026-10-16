@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
 import {
+  ALL_PERMISSIONS,
   audience,
   count,
   failed,
@@ -9,6 +10,7 @@ import {
   pending,
   ready,
   sender,
+  previousSends,
   sources,
   templates,
   template,
@@ -61,6 +63,20 @@ describe('stepper', () => {
     const buttons = out.match(/<button[^>]*>/g) ?? [];
     expect(buttons).toHaveLength(4);
     expect(buttons.filter((b) => / disabled=""/.test(b))).toHaveLength(2);
+  });
+
+  it('gives each step its own icon, and a check once the step is done', () => {
+    const out = html(<Stepper current={3} reached={4} onGo={none} />);
+    const buttons = out.match(/<button[\s\S]*?<\/button>/g) ?? [];
+    expect(buttons).toHaveLength(4);
+    // Every step button carries one icon; the two steps before the current one show the check (the same path), the others differ.
+    const paths = buttons.map((b) => /<svg[\s\S]*?<\/svg>/.exec(b)?.[0] ?? '');
+    expect(paths.every((p) => p !== '')).toBe(true);
+    const check = 'M3 8l3 3 7-7';
+    expect(paths.filter((p) => p.includes(check))).toHaveLength(2);
+    expect(new Set(paths.slice(2)).size).toBe(2);
+    // The compact phone line has the current step's icon too.
+    expect(out.slice(0, out.indexOf('<ol'))).toContain('<svg');
   });
 
   it('is right-to-left safe in Arabic', () => {
@@ -126,7 +142,7 @@ describe('footer and save indicator', () => {
 });
 
 describe('step 1: name and template', () => {
-  const step = (over: Partial<Parameters<typeof StepTemplate>[0]> = {}) =>
+  const step = (over: Partial<Parameters<typeof StepTemplate>[0]> = {}, perms?: string[]) =>
     html(
       <StepTemplate
         name=""
@@ -140,6 +156,7 @@ describe('step 1: name and template', () => {
         onSender={none}
         {...over}
       />,
+      { perms },
     );
 
   it('has a required Send from number next to the name, and says so when none is connected', () => {
@@ -241,15 +258,30 @@ describe('step 1: name and template', () => {
     expect(step()).toContain('Choose a template to see how the message looks.');
   });
 
-  it('shows a loading state, an error with retry, and an empty state that links to /templates', () => {
+  it('shows a loading state, an error with retry, and an empty state that links to the new-template form', () => {
     expect(step({ templates: pending })).toContain('Loading templates');
     const bad = step({ templates: failed(new ApiError(500, 'INTERNAL', 'x', 'req-9')) });
     expect(bad).toContain('Something went wrong on our side');
     expect(bad).not.toContain('req-9');
     expect(bad).toContain('Try again');
-    const empty = step({ templates: ready({ data: [] }) });
+    const empty = step({ templates: ready({ data: [] }) }, [
+      ...ALL_PERMISSIONS,
+      'tpl.templates.create',
+    ]);
     expect(empty).toContain('No approved templates yet');
-    expect(empty).toContain('href="/templates"');
+    expect(empty).toContain('href="/templates/new"');
+  });
+
+  it('opens the new-template form on the chosen number, and offers no link to a person who may not create templates', () => {
+    const n = sender();
+    const tied = step(
+      { templates: ready({ data: [] }), senderKey: `waba:${uuid(77)}`, senders: [n] },
+      [...ALL_PERMISSIONS, 'tpl.templates.create'],
+    );
+    expect(tied).toContain(`href="/templates/new?connection=${uuid(77)}"`);
+    const noRight = step({ templates: ready({ data: [] }) });
+    expect(noRight).toContain('No approved templates yet');
+    expect(noRight).not.toContain('/templates/new');
   });
 });
 
@@ -332,6 +364,7 @@ describe('step 2: audience', () => {
         memberCount: i,
       })),
       segments: [],
+      previousSends: [],
     };
     expect(picker('groups', { sources: ready(many) })).toContain('aria-label="Search groups"');
     expect(picker('segments', { sources: ready(many) })).toContain('No segments yet.');
@@ -357,7 +390,7 @@ describe('step 2: audience', () => {
       />,
     );
 
-  it('shows the four campaign actions as pills, one active, and the rule that joins them', () => {
+  it('shows the five campaign actions as pills, one active, and the rule that joins them', () => {
     const out = step();
     expect(out).toContain('Send to');
     for (const label of [
@@ -365,14 +398,36 @@ describe('step 2: audience', () => {
       'Send to groups',
       'Send to segments',
       'Send via CSV',
+      'Send to previous sends',
     ]) {
       expect(out).toContain(label);
     }
-    expect(out.match(/role="tab"/g)).toHaveLength(4);
+    expect(out.match(/role="tab"/g)).toHaveLength(5);
     expect(out.match(/aria-selected="true"/g)).toHaveLength(1);
     expect(out).toContain('role="tabpanel"');
     expect(out).toContain('Nothing selected yet.');
     expect(out).toContain('messaged once');
+  });
+
+  it('has a Previous sends mode that opens on a draft holding one, with the picker and a chip', () => {
+    const previous = {
+      sends: [{ kind: 'campaign' as const, id: previousSends()[1]!.id }],
+      outcome: 'not_read' as const,
+    };
+    const out = step({
+      audience: audience({ previous }),
+      sources: ready({ ...sources(), previousSends: previousSends() }),
+    });
+    expect(out.match(/role="tab"/g)).toHaveLength(5);
+    expect(out).toContain('Send to previous sends');
+    expect(out).toMatch(
+      /aria-selected="true"[^>]*>Send to previous sends|Send to previous sends[\s\S]{0,20}aria-selected/,
+    );
+    expect(out).toContain('Re-target the people earlier broadcasts and campaigns went to');
+    expect(out).toContain('Spring win-back');
+    expect(out).toContain('1 earlier send (Did not read)');
+    expect(out).toContain('70 people did not read it');
+    expect(out).not.toContain('Nothing selected yet.');
   });
 
   it('keeps the count panel and the template preview on the right', () => {
@@ -597,6 +652,21 @@ describe('contacts selection', () => {
       contacts: 1,
       groups: 1,
     });
+  });
+
+  it('tallies the previous sends, and counts them as a selection', () => {
+    const previous = {
+      sends: [{ kind: 'campaign' as const, id: uuid(32) }],
+      outcome: 'read' as const,
+    };
+    expect(audienceTally(audience({ previous }))).toMatchObject({
+      previous: 1,
+      previousOutcome: 'read',
+    });
+    expect(tallyIsEmpty(audienceTally(audience({ previous })))).toBe(false);
+    expect(tallyIsEmpty(audienceTally(audience({ previous: { sends: [], outcome: 'all' } })))).toBe(
+      true,
+    );
   });
 
   it('pages numbers with gaps', () => {

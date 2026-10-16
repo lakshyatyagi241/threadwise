@@ -24,6 +24,9 @@
       "createdAt": "Creado",
       "updatedAt": "Última actualización",
       "lastActivityAt": "Última actividad",
+      "minor": "Marcado como menor",
+      "dateOfBirth": "Fecha de nacimiento",
+      "age": "Edad (años)",
       "timezone": "Zona horaria"
     },
     "fieldGroups": {

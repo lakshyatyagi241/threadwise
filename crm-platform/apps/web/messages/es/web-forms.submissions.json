@@ -115,7 +115,14 @@
         "consentAt": "Otorgado el",
         "noConsent": "Este formulario no pedía consentimiento.",
         "links": "Registros",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "ageCheck": "Comprobación de edad",
+        "ageOutcome": "Resultado",
+        "ageUnder": "Menor de la edad mínima. El envío se aceptó y el contacto se marcó como menor; no se registró consentimiento de marketing.",
+        "guardianName": "Padre, madre o tutor",
+        "guardianEmail": "Correo del tutor",
+        "guardianPhone": "Teléfono del tutor",
+        "guardianNote": "Indicado por el visitante, sin verificar. Su consentimiento no consta hasta que una persona lo registre en la tarjeta de Consentimiento del contacto."
       },
       "actions": {
         "retry": "Reintentar",

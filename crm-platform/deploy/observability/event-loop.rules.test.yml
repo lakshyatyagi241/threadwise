@@ -37,8 +37,47 @@ tests:
               service: api
               instance: 'a:1'
             exp_annotations:
-              summary: 'API event loop blocked and request p95 over 500 ms on a:1'
-              description: 'Sustained loop delay with slow requests. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+              summary: 'API event loop blocked and requests are waiting on a:1'
+              description: 'Sustained loop delay with either the loop delay p95 over 250 ms (requests queue behind it) or request p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+  # ---- API: a real loop stall pages even though the request histogram looks healthy ------------------------------------
+  # Measured against a real API process (scrape-demo.mjs --stall): loop delay p95 0.6 s while the request histogram read 5 ms,
+  # because a request that queued behind the blocked loop is only timed from when its handler runs.
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.6x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'API event loop blocked and requests are waiting on a:1'
+              description: 'Sustained loop delay with either the loop delay p95 over 250 ms (requests queue behind it) or request p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+  # ---- API: moderate delay (p95 200 ms) with fast requests: a warning, not a page ---------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.2x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: []
 
   # ---- API: delay without impact warns but does not page ---------------------------------------------------------------
   - interval: 1m
@@ -218,7 +257,7 @@ tests:
               instance: 'w:1'
             exp_annotations:
               summary: 'worker w:1 stopped reporting runtime metrics'
-              description: 'The monitor window stopped completing. A loop blocked for over a minute looks exactly like this; check the process before the scrape.'
+              description: 'The monitor window stopped completing while the process is still being scraped. A process that is gone does not look like this (its series vanish and RuntimeMetricsTargetDown fires), and a loop blocked long enough to fail the scrape shows as a failed scrape; check the process itself.'
 
   # ---- scrape failing -----------------------------------------------------------------------------------------------------
   - interval: 1m

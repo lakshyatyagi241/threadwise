@@ -53,7 +53,9 @@
           "crm_required_unbound": "Eine Eigenschaft, die Ihr Workspace verlangt, fehlt im Formular.",
           "no_contact_point": "Fügen Sie ein E-Mail- oder Telefonfeld hinzu, das mit dem Kontakt verknüpft ist, damit jede Einsendung einer Person zugeordnet werden kann.",
           "payment_no_gateway": "Verbinden Sie ein Zahlungsgateway, das Zahlungslinks erstellen kann, oder schalten Sie die Zahlung aus.",
-          "captcha_not_configured": "CAPTCHA ist auf „immer an“ gesetzt, aber die Plattform hat kein CAPTCHA. Wählen Sie eine andere Einstellung oder bitten Sie Ihren Plattformadministrator, eines hinzuzufügen."
+          "captcha_not_configured": "CAPTCHA ist auf „immer an“ gesetzt, aber die Plattform hat kein CAPTCHA. Wählen Sie eine andere Einstellung oder bitten Sie Ihren Plattformadministrator, eines hinzuzufügen.",
+          "age_gate_field_missing": "Die Altersprüfung braucht ihre Frage: Fügen Sie ein Feld für das Geburtsdatum oder das Alter hinzu oder wählen Sie stattdessen das Kästchen.",
+          "age_gate_field_not_required": "Die Frage, anhand derer die Altersprüfung entscheidet, muss ein Pflichtfeld sein."
         },
         "code": {
           "no_fields": "Fügen Sie mindestens ein Feld hinzu.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Ihr Workspace verlangt die CRM-Eigenschaft „{property}“: Fügen Sie sie dem Formular hinzu und markieren Sie sie als Pflichtfeld.",
           "crm_required_optional": "Ein Feld, das mit einer Pflicht-CRM-Eigenschaft verknüpft ist, muss ein Pflichtfeld sein.",
           "redirect_not_https": "Die Weiterleitungsadresse muss mit https:// beginnen.",
-          "too_large": "Das Formular ist zu groß. Entfernen Sie einige Felder."
+          "too_large": "Das Formular ist zu groß. Entfernen Sie einige Felder.",
+          "age_gate_field_missing": "Die Altersprüfung braucht ihre Frage: Fügen Sie ein Feld für das Geburtsdatum oder das Alter hinzu oder wählen Sie stattdessen das Kästchen.",
+          "age_gate_field_optional": "Die Frage, anhand derer die Altersprüfung entscheidet, muss ein Pflichtfeld sein."
         }
       },
       "versionsTitle": "Versionen",

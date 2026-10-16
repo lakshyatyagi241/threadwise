@@ -18,7 +18,8 @@
       "notices": "Avisos",
       "links": "Links de privacidade e termos",
       "subprocessors": "Suboperadores",
-      "windows": "Horário de silêncio e chamadas"
+      "windows": "Horário de silêncio e chamadas",
+      "dnc": "Não ligar"
     },
     "saveBar": {
       "unsaved": "Você tem alterações não salvas.",
@@ -35,7 +36,8 @@
       "duplicate": "Você já tem um suboperador com esse nome.",
       "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
       "validation": "Alguns valores não são válidos. Verifique o formulário e tente novamente.",
-      "unexpected": "Algo deu errado. Tente novamente."
+      "unexpected": "Algo deu errado. Tente novamente.",
+      "dncInvalid": "Não foi possível ler o arquivo: ele não tem números de telefone ou tem números demais de uma só vez."
     },
     "problems": {
       "httpsOnly": "Use um endereço que comece com https://.",
@@ -322,7 +324,9 @@
         "hint": "A lei DPDP permite que as pessoas gerenciem o consentimento por meio de um gerenciador de consentimento registrado. Informe o seu aqui, se usar um.",
         "managerName": "Gerenciador de consentimento",
         "managerUrl": "Link do gerenciador de consentimento",
-        "placeholderNote": "É apenas uma nota. Nada está conectado a um gerenciador de consentimento ainda."
+        "placeholderNote": "É apenas uma nota. Nada está conectado a um gerenciador de consentimento ainda.",
+        "managerRegistration": "Número de registro do gerenciador de consentimento",
+        "managerRegistrationHint": "O número sob o qual o Data Protection Board registrou seu gerenciador de consentimento. Apenas uma nota."
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "Do Not Call de Singapura",
           "custom": "Sua própria lista"
         },
-        "note": "É apenas uma nota. Nada é conferido em nenhum cadastro ainda."
+        "note": "É apenas uma nota. Nada é conferido em nenhum cadastro ainda.",
+        "listNote": "Os números da sua lista Não Perturbe (a última aba) já ficam fora das ligações e das mensagens de texto de marketing."
       },
       "enforcedNote": "O horário de silêncio retém uma mensagem de marketing até terminar, e a janela de chamadas recusa uma ligação fora dela. O relógio de cada contato é usado. Respostas dentro da janela de 24 horas e avisos utilitários nunca são retidos."
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "Retido até {when} (horário de silêncio)",
       "heldCount": "{count} retidas pelo horário de silêncio"
+    },
+    "dnc": {
+      "intro": "Os números desta lista não recebem marketing por voz nem SMS, seja qual for o histórico de consentimento. WhatsApp, e-mail e mensagens de serviço não são retidos por ela. Nada é verificado aqui em um cadastro nacional: adicione o extrato que você tem direito de baixar.",
+      "addTitle": "Adicionar números",
+      "numbers": "Números de telefone",
+      "numbersHint": "Um por linha ou separados por vírgulas. Até {max} por vez; use o arquivo para mais.",
+      "country": "Código do país para números locais",
+      "countryHint": "Um número escrito sem o código do país é lido com este.",
+      "note": "Nota",
+      "noteHint": "Opcional. Por que estes números estão na lista.",
+      "add": "Adicionar à lista",
+      "adding": "Adicionando...",
+      "or": "ou",
+      "import": "Adicionar de um arquivo CSV",
+      "importing": "Lendo o arquivo...",
+      "importHint": "A coluna chamada phone, mobile ou number; se não houver, a primeira coluna. Um arquivo grande é lido em partes.",
+      "fromRegistry": "O arquivo é um extrato de um cadastro que tenho direito de usar",
+      "progress": "Enviando a parte {done} de {of}...",
+      "added": "{count, plural, =0 {Nada novo para adicionar} one {# número adicionado} other {# números adicionados}}",
+      "result": "{added} adicionados, {already} já estavam na lista, {invalid} não são números de telefone.",
+      "invalidSamples": "Por exemplo: {samples}",
+      "listTitle": "Números na lista",
+      "total": "{count, plural, =0 {Nenhum número na lista} one {# número na lista} other {# números na lista}}",
+      "search": "Buscar um número",
+      "loading": "Carregando a lista...",
+      "empty": "Ainda não há números",
+      "emptyHint": "Adicione os números que pediram para não receber ligações nem mensagens, ou um extrato de um cadastro que você possa usar.",
+      "noMatch": "Nenhum número corresponde",
+      "source": {
+        "manual": "Adicionado manualmente",
+        "import": "De um arquivo",
+        "contact_request": "A pessoa pediu",
+        "registry_export": "Extrato de cadastro"
+      },
+      "remove": "Remover",
+      "removeLabel": "Remover {phone} da lista",
+      "removed": "Número removido da lista",
+      "newer": "Mais recentes",
+      "older": "Mais antigos",
+      "confirm": {
+        "title": "Remover este número?",
+        "message": "{phone} poderá voltar a receber ligações e mensagens de marketing, a menos que o contato tenha retirado o consentimento. Remova somente se a pessoa pediu ou se ele foi adicionado por engano.",
+        "confirm": "Remover o número",
+        "cancel": "Manter"
+      }
     }
   }
 }

@@ -7,7 +7,7 @@ export function toE164(raw: string | null): string | null {
 }
 
 /** `ContactResponse` (the dashboard's shape, read with its groups) to Reference's public contact. */
-export function toV1Contact(c: ContactResponse): V1Contact {
+export function toV1Contact(c: ContactResponse, isMinor = false): V1Contact {
   return {
     id: c.id,
     name: c.name,
@@ -17,6 +17,8 @@ export function toV1Contact(c: ContactResponse): V1Contact {
     attributes: c.customFields ?? {},
     timezone: c.timezone,
     timezone_source: c.timezoneSource,
+    date_of_birth: c.dateOfBirth,
+    is_minor: isMinor,
     created_at: c.createdAt,
   };
 }

@@ -27,6 +27,8 @@ WeChat connects a WeChat Official Account to this workspace, so the messages fol
 
 You need a certified WeChat Service Account. Subscription accounts and accounts that are not verified cannot use the messaging APIs.
 
+WeChat is not available in every country. A workspace whose country is **India** cannot connect a WeChat channel, start a broadcast or send WeChat messages, because WeChat is banned there. The country is the billing country of the workspace's latest paid order, or the country it gave when it was set up. The screen says so, and channels connected before are kept but do not send.
+
 ## How to use it
 
 1. In the WeChat Official Accounts Platform, open **Settings and development**, then **Basic configuration**. Copy the **AppID** and generate the **AppSecret**.

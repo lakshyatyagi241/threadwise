@@ -3,6 +3,7 @@
  * Field names are Reference's snake_case; ids are uuids; timestamps are ISO-8601.
  */
 import { z } from 'zod';
+import { birthDateSchema } from '../contact-consent/age';
 
 // --- account (TW-API-020, 021) ------------------------------------------------------------------------------------------------------
 
@@ -94,6 +95,11 @@ const contactFields = {
   email: z.preprocess(blankToNull, z.string().email().max(191).nullable().optional()),
   language: text(80),
   address: text(1000),
+  /**
+   * `YYYY-MM-DD` (BL-190, BL-217). Not in Reference's API: a product extension. A date that makes the contact a minor flags it
+   * (source `dob`) in the same request; `null` clears the date. A flag a person set is never changed by the date.
+   */
+  date_of_birth: z.preprocess(blankToNull, birthDateSchema.nullable().optional()),
   note: text(2000),
   /** An IANA time zone such as `Asia/Kolkata` (BL-193, a product extension): the quiet hours are read on it. `null` clears it. */
   timezone: text(64),
@@ -147,6 +153,10 @@ export const v1ContactSchema = z.object({
   timezone: z.string().nullable(),
   /** Who set it: `staff`, `import` or `api`; null when no zone is stored. */
   timezone_source: z.enum(['staff', 'import', 'api']).nullable(),
+  /** Product extension (BL-190): the contact's date of birth, or null. */
+  date_of_birth: z.string().nullable(),
+  /** Product extension (BL-190): the contact is flagged as a minor. Written through `POST /v1/contacts/:id/privacy`. */
+  is_minor: z.boolean(),
   created_at: z.string(),
 });
 export type V1Contact = z.infer<typeof v1ContactSchema>;

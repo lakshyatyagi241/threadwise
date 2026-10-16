@@ -7,6 +7,7 @@ import { useBuilder } from '../../api/campaigns';
 import { FollowUpsCard } from './follow-ups-card';
 import { RetriesCard } from './retries-card';
 import { ScheduleCard } from './schedule-card';
+import { SequenceCard } from './sequence-card';
 import type { TemplatesQuery } from './template-picker';
 import { TestSendCard } from './test-send-card';
 
@@ -37,6 +38,8 @@ export function StepSend({
 }) {
   // The published flows a follow-up can start: the same list the campaign builder offers.
   const builder = useBuilder();
+  const approved = templates.data?.data;
+  const own = approved?.find((x) => x.id === draft.templateId)?.name ?? null;
   return (
     <div className="space-y-5">
       <TestSendCard
@@ -51,6 +54,17 @@ export function StepSend({
         issues={issues}
         disabled={disabled}
         onSchedule={(schedule) => dispatch({ type: 'schedule', schedule })}
+      />
+      <SequenceCard
+        firstName={own}
+        sequence={draft.templateSequence}
+        recurring={draft.schedule.mode === 'recurring'}
+        abTesting={draft.abTesting}
+        templates={approved}
+        loading={templates.isPending}
+        issues={issues}
+        disabled={disabled}
+        dispatch={dispatch}
       />
       <RetriesCard
         retries={draft.retries}

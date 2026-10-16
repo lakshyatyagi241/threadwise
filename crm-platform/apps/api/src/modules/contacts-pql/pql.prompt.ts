@@ -50,6 +50,7 @@ export function pqlPrompt(
     'For tags, groups and owner the value is the id from the lists below, never the name. For lifecycleStage and status the value is the value from the lists.',
     'For a country, use field "phone" with operator "starts_with" and the dial code (+91 India, +1 USA or Canada, +44 UK, +971 UAE); countryCode is often empty, so do not use it.',
     'Free words that match a name, email or phone use field "search" with operator "matches".',
+    'Minors, children, kids or underage contacts are field "minor" with operator is_true (adults: is_false). "Under 16" or "older than 40" use field "age" (whole years) with lt, gte or gt; "born before 2010-01-01" uses dateOfBirth with before. Contacts with no date of birth have an empty age.',
     'Custom fields use field "custom.<key>" and only these keys:',
     list(
       catalog.customFields.map(
