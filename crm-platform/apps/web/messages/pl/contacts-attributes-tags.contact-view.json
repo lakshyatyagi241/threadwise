@@ -1,0 +1,179 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Szybki podgląd kontaktu",
+        "loading": "Wczytywanie kontaktu...",
+        "notFoundTitle": "Nie znaleziono kontaktu",
+        "notFound": "Mógł zostać usunięty lub nie masz do niego dostępu.",
+        "close": "Zamknij",
+        "seeAll": "Zobacz wszystkie szczegóły",
+        "previous": "Poprzedni kontakt",
+        "next": "Następny kontakt",
+        "position": "{index} z {total}",
+        "rail": "Sekcje kontaktu",
+        "rail_overview": "Przegląd",
+        "rail_activities": "Aktywność",
+        "rail_conversations": "Rozmowy",
+        "rail_notes": "Notatki",
+        "rail_stats": "Statystyki komunikacji",
+        "rail_files": "Pliki",
+        "rail_details": "Właściwości",
+        "openFull": "Otwórz na stronie szczegółów"
+      },
+      "actions": {
+        "note": "Notatka",
+        "task": "Zadanie",
+        "meeting": "Spotkanie",
+        "addCompany": "Dodaj firmę",
+        "changeCompany": "Zmień firmę",
+        "channels": "Napisz lub zadzwoń do kontaktu",
+        "more": "Więcej działań",
+        "edit": "Edytuj kontakt",
+        "delete": "Usuń kontakt",
+        "close": "Zamknij",
+        "companyHint": "Wybierz firmę, w której pracuje ten kontakt. Wybierz ją ponownie, aby nic nie zmieniać, lub wyczyść pole, aby usunąć powiązanie.",
+        "companySaved": "Firma zapisana.",
+        "companyFailed": "Nie udało się zapisać firmy. Spróbuj ponownie.",
+        "conflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
+        "deleteFailed": "Nie udało się usunąć kontaktu."
+      },
+      "header": {
+        "jobTitle": "Stanowisko",
+        "jobTitlePlaceholder": "Dodaj stanowisko...",
+        "editJobTitle": "Edytuj stanowisko",
+        "jobTitleConflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
+        "jobTitleFailed": "Nie udało się zapisać stanowiska. Spróbuj ponownie.",
+        "leadScore": "Ocena leada",
+        "leadScoreAria": "Ocena leada: {score}. Pokaż szczegóły oceny.",
+        "owner": "Właściciel"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Strona internetowa",
+        "open": "Otwórz profil: {network}"
+      },
+      "subscription": {
+        "title": "Status subskrypcji",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "E-mail",
+          "sms": "SMS"
+        },
+        "yes": "Tak",
+        "no": "Nie",
+        "optedOut": "Zrezygnował z wiadomości marketingowych",
+        "optedOutNote": "Ten kontakt zrezygnował z wiadomości marketingowych, więc każdy kanał ma wartość Nie.",
+        "proof": "Dowód każdej zgody znajduje się w rejestrze zgód.",
+        "openConsent": "Otwórz kartę zgód"
+      },
+      "score": {
+        "title": "Ocena leada",
+        "details": "Szczegóły oceny",
+        "hideDetails": "Ukryj szczegóły",
+        "none": "Jeszcze nieoceniony",
+        "aria": "Ocena leada: {score}, {band}"
+      },
+      "owner": {
+        "title": "Właściciel i przypisanie",
+        "owner": "Właściciel",
+        "tags": "Tagi",
+        "groups": "Grupy"
+      },
+      "location": {
+        "title": "Lokalizacja",
+        "address": "Adres",
+        "country": "Kraj",
+        "timeZone": "Strefa czasowa",
+        "language": "Język"
+      },
+      "compliance": {
+        "title": "Prywatność",
+        "optedOut": "Zrezygnował z marketingu",
+        "allowed": "Marketing dozwolony",
+        "noFlags": "Brak flag prywatności"
+      },
+      "overview": {
+        "information": "Kontakt"
+      },
+      "tabs": {
+        "info": "Informacje o kontakcie",
+        "social": "Media społecznościowe",
+        "source": "Źródło leada",
+        "custom": "Pola niestandardowe"
+      },
+      "info": {
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "fax": "Faks",
+        "company": "Firma",
+        "jobTitle": "Stanowisko",
+        "language": "Język",
+        "address": "Adres",
+        "memo": "Uwagi",
+        "contactId": "ID kontaktu",
+        "createdAt": "Utworzono",
+        "lastActivity": "Ostatnia aktywność",
+        "source": "Źródło",
+        "noCustomFields": "Ten kontakt nie ma jeszcze wartości w polach niestandardowych.",
+        "noLeadSource": "Dla tego kontaktu nie zapisano źródła leada.",
+        "dateOfBirth": "Data urodzenia"
+      },
+      "details": {
+        "title": "Szczegóły kontaktu",
+        "stage": "Etap cyklu życia",
+        "otherProperties": "Pozostałe właściwości"
+      },
+      "company": {
+        "title": "Firma",
+        "change": "Zmień",
+        "add": "Dodaj firmę",
+        "none": "Ten kontakt nie jest powiązany z żadną firmą."
+      },
+      "sections": {
+        "lead-source": "Źródło leada"
+      },
+      "nav": {
+        "back": "Wróć do listy",
+        "label": "Sekcje kontaktu",
+        "contactDetails": "Szczegóły kontaktu",
+        "related": "Powiązane",
+        "section": {
+          "overview": "Przegląd",
+          "activities": "Aktywności",
+          "conversations": "Rozmowy",
+          "details": "Szczegóły kontaktu",
+          "stats": "Statystyki komunikacji",
+          "notes": "Notatki",
+          "files": "Pliki",
+          "tasks": "Zadania",
+          "deals": "Transakcje",
+          "appointments": "Terminy",
+          "sales": "Faktury i dokumenty",
+          "lead-source": "Źródło leada",
+          "company": "Firma",
+          "consent": "Zgoda",
+          "history": "Historia pól"
+        }
+      },
+      "stages": {
+        "title": "Cykl życia",
+        "stages": "Etap cyklu życia",
+        "status": "Status",
+        "noStatuses": "Ten etap nie ma statusów.",
+        "statusChanged": "Ustawiono status: {status}.",
+        "conflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
+        "forbidden": "Nie masz uprawnień do zmiany tego kontaktu.",
+        "statusFailed": "Nie udało się zmienić statusu. Spróbuj ponownie."
+      }
+    }
+  }
+}

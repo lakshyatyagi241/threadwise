@@ -1,0 +1,179 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Visão rápida do contato",
+        "loading": "Carregando contato...",
+        "notFoundTitle": "Contato não encontrado",
+        "notFound": "Ele pode ter sido excluído ou você pode não ter acesso a ele.",
+        "close": "Fechar",
+        "seeAll": "Ver todos os detalhes",
+        "previous": "Contato anterior",
+        "next": "Próximo contato",
+        "position": "{index} de {total}",
+        "rail": "Seções do contato",
+        "rail_overview": "Visão geral",
+        "rail_activities": "Atividade",
+        "rail_conversations": "Conversas",
+        "rail_notes": "Observações",
+        "rail_stats": "Estatísticas de comunicação",
+        "rail_files": "Arquivos",
+        "rail_details": "Propriedades",
+        "openFull": "Abrir na página de detalhes"
+      },
+      "actions": {
+        "note": "Observação",
+        "task": "Tarefa",
+        "meeting": "Reunião",
+        "addCompany": "Adicionar empresa",
+        "changeCompany": "Alterar empresa",
+        "channels": "Enviar mensagem ou ligar para este contato",
+        "more": "Mais ações",
+        "edit": "Editar contato",
+        "delete": "Excluir contato",
+        "close": "Fechar",
+        "companyHint": "Escolha a empresa em que este contato trabalha. Escolha-a novamente para manter como está ou limpe para remover o vínculo.",
+        "companySaved": "Empresa salva.",
+        "companyFailed": "Não foi possível salvar a empresa. Tente novamente.",
+        "conflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
+        "deleteFailed": "Não foi possível excluir o contato."
+      },
+      "header": {
+        "jobTitle": "Cargo",
+        "jobTitlePlaceholder": "Adicionar cargo...",
+        "editJobTitle": "Editar cargo",
+        "jobTitleConflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
+        "jobTitleFailed": "Não foi possível salvar o cargo. Tente novamente.",
+        "leadScore": "Pontuação do lead",
+        "leadScoreAria": "Pontuação do lead {score}. Mostrar os detalhes da pontuação.",
+        "owner": "Responsável"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Site",
+        "open": "Abrir o perfil de {network}"
+      },
+      "subscription": {
+        "title": "Status da inscrição",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "E-mail",
+          "sms": "SMS"
+        },
+        "yes": "Sim",
+        "no": "Não",
+        "optedOut": "Recusou mensagens de marketing",
+        "optedOutNote": "Este contato recusou mensagens de marketing, por isso todos os canais mostram Não.",
+        "proof": "A prova de cada opt-in está no registro de consentimento.",
+        "openConsent": "Abrir o cartão de consentimento"
+      },
+      "score": {
+        "title": "Pontuação do lead",
+        "details": "Detalhes da pontuação",
+        "hideDetails": "Ocultar detalhes",
+        "none": "Ainda sem pontuação",
+        "aria": "Pontuação do lead {score}, {band}"
+      },
+      "owner": {
+        "title": "Responsável e atribuição",
+        "owner": "Responsável",
+        "tags": "Tags",
+        "groups": "Grupos"
+      },
+      "location": {
+        "title": "Localização",
+        "address": "Endereço",
+        "country": "País",
+        "timeZone": "Fuso horário",
+        "language": "Idioma"
+      },
+      "compliance": {
+        "title": "Privacidade",
+        "optedOut": "Recusou marketing",
+        "allowed": "Marketing permitido",
+        "noFlags": "Sem indicadores de privacidade"
+      },
+      "overview": {
+        "information": "Contato"
+      },
+      "tabs": {
+        "info": "Informações do contato",
+        "social": "Redes sociais",
+        "source": "Origem do lead",
+        "custom": "Campos personalizados"
+      },
+      "info": {
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "fax": "Fax",
+        "company": "Empresa",
+        "jobTitle": "Cargo",
+        "language": "Idioma",
+        "address": "Endereço",
+        "memo": "Memorando",
+        "contactId": "ID do contato",
+        "createdAt": "Criado em",
+        "lastActivity": "Última atividade",
+        "source": "Origem",
+        "noCustomFields": "Este contato ainda não tem valores em campos personalizados.",
+        "noLeadSource": "Nenhuma origem de lead registrada para este contato.",
+        "dateOfBirth": "Data de nascimento"
+      },
+      "details": {
+        "title": "Detalhes do contato",
+        "stage": "Estágio do ciclo de vida",
+        "otherProperties": "Outras propriedades"
+      },
+      "company": {
+        "title": "Empresa",
+        "change": "Alterar",
+        "add": "Adicionar empresa",
+        "none": "Este contato não está vinculado a uma empresa."
+      },
+      "sections": {
+        "lead-source": "Origem do lead"
+      },
+      "nav": {
+        "back": "Voltar à lista",
+        "label": "Seções do contato",
+        "contactDetails": "Detalhes do contato",
+        "related": "Relacionados",
+        "section": {
+          "overview": "Visão geral",
+          "activities": "Atividades",
+          "conversations": "Conversas",
+          "details": "Detalhes do contato",
+          "stats": "Estatísticas de comunicação",
+          "notes": "Observações",
+          "files": "Arquivos",
+          "tasks": "Tarefas",
+          "deals": "Negócios",
+          "appointments": "Compromissos",
+          "sales": "Faturas e documentos",
+          "lead-source": "Origem do lead",
+          "company": "Empresa",
+          "consent": "Consentimento",
+          "history": "Histórico de campos"
+        }
+      },
+      "stages": {
+        "title": "Ciclo de vida",
+        "stages": "Estágio do ciclo de vida",
+        "status": "Status",
+        "noStatuses": "Este estágio não tem status.",
+        "statusChanged": "Status alterado para {status}.",
+        "conflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
+        "forbidden": "Você não tem permissão para alterar este contato.",
+        "statusFailed": "Não foi possível alterar o status. Tente novamente."
+      }
+    }
+  }
+}
