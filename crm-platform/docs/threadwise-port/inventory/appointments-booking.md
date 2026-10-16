@@ -1028,5 +1028,5 @@ Added after the first port, at the owner's request (see [parity/product-extensio
 - **Outlook is connected like Google, with a two-step confirmation that parks no token** (Microsoft cannot withdraw one). Migration `20261217090000_appt_microsoft_calendar.sql`: `appointment_microsoft_connections`, `appointment_calendar_preferences`, `appointments.calendar_provider`.
 - **A reconnect now back-fills** (it did not, in the first Google build): queue `calendar-backfill`, confirmed bookings that have not ended within 90 days, idempotent, 200 per pass.
 - **iCal feeds** (migration `20261218090000_appt_ics_feeds.sql`): read-only busy time from a sealed address, read every 15 minutes by the worker; a person's own bookings as a subscribable feed behind a private link.
-- **Booking tools for agents and chatbots**: the contract only (`booking-tools.ts`); no binding, because the customer-facing AI has no tool-calling loop (BL-196).
-- Not built: Outlook drift (BL-195), Basic-auth/CalDAV/two-way iCal (BL-197).
+- **Booking tools for agents and chatbots**: the contract only (`booking-tools.ts`); no binding, because the customer-facing AI has no tool-calling loop (BL-201).
+- Not built: Outlook drift (BL-200), Basic-auth/CalDAV/two-way iCal (BL-202).
