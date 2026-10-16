@@ -51,7 +51,9 @@ export class ProblemExceptionFilter implements ExceptionFilter {
 
     // 5xx means we broke something — log the stack. 4xx is the caller's
     // problem and logging stacks for those just buries the real incidents.
-    if (problem.status >= 500) {
+    // An AppError flagged `expected` is a 5xx that is a handled state (an integration that is switched off): quiet, like a 4xx.
+    const expected = exception instanceof AppError && exception.expected;
+    if (problem.status >= 500 && !expected) {
       this.logger.error(
         { err: exception, path: maskSecretUrl(request.url), requestId },
         `Unhandled error: ${problem.detail}`,

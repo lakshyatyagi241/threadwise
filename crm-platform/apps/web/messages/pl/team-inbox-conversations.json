@@ -44,9 +44,6 @@
         "unassigned": "Nieprzypisane",
         "unread": "Nieprzeczytane"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Otwarte",
-      "statusAll": "Wszystkie statusy",
       "status": {
         "open": "Otwarte",
         "pending": "Oczekujące",
@@ -61,7 +58,6 @@
         "high": "Wysoki",
         "urgent": "Pilny"
       },
-      "channelFilter": "Kanał",
       "allChannels": "Wszystkie kanały",
       "archived": "Zarchiwizowane",
       "backToInbox": "Wróć do skrzynki odbiorczej",
@@ -107,7 +103,48 @@
         }
       },
       "select": "Wybierz",
-      "selectDone": "Gotowe"
+      "selectDone": "Gotowe",
+      "filters": {
+        "open": "Filtry",
+        "openActive": "Filtry ({count} włączone)",
+        "title": "Filtry",
+        "close": "Zamknij",
+        "reset": "Resetuj",
+        "cancel": "Anuluj",
+        "apply": "Zastosuj",
+        "status": "Status czatu",
+        "statusHint": "Bez wyboru widać czaty otwarte i oczekujące.",
+        "conversation": "Rozmowa",
+        "any": "Dowolna",
+        "assigned": "Przypisana",
+        "unassigned": "Nieprzypisana",
+        "unattended": "Bez obsługi",
+        "labels": "Tagi",
+        "channels": "Kanały",
+        "agents": "Agenci",
+        "sortBy": "Sortuj według",
+        "recent": "Najnowsze",
+        "old": "Najstarsze",
+        "dateRange": "Zakres dat (ostatnia aktywność)",
+        "from": "Od",
+        "to": "Do",
+        "select": "Wybierz opcję",
+        "search": "Szukaj",
+        "noMatch": "Brak wyników",
+        "today": "Dziś",
+        "last7": "Ostatnie 7 dni",
+        "last30": "Ostatnie 30 dni",
+        "thisMonth": "Ten miesiąc",
+        "clearDates": "Wyczyść daty",
+        "previousMonth": "Poprzedni miesiąc",
+        "nextMonth": "Następny miesiąc"
+      },
+      "rowMenu": "Więcej działań dla {name}",
+      "priorityMenu": "Priorytet",
+      "statusFilter": "Status",
+      "statusOpen": "Otwarte",
+      "statusAll": "Wszystkie statusy",
+      "channelFilter": "Kanał"
     },
     "status": {
       "received": "Odebrano",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "Nowa wiadomość: {text}",
       "attachment": "załącznik",
       "jumpLatest": "Przejdź do najnowszych",
-      "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}"
+      "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}",
+      "searchOpen": "Szukaj w tym czacie",
+      "searchPlaceholder": "Szukaj w tym czacie",
+      "searchCount": "{current} z {total}",
+      "searchNone": "Brak wyników",
+      "searchPrev": "Poprzedni wynik",
+      "searchNext": "Następny wynik",
+      "searchClose": "Zamknij wyszukiwanie"
     },
     "groupThread": {
       "openGroup": "Otwórz grupę",
@@ -454,7 +498,13 @@
         "pickTeam": "Wybierz zespół dla tej rozmowy",
         "noTeam": "Brak zespołu",
         "onLeave": "Na urlopie",
-        "onLeaveUntil": "Na urlopie do {date}"
+        "onLeaveUntil": "Na urlopie do {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Zaraz wracam",
+          "busy": "Zajęty",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

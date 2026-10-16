@@ -44,9 +44,6 @@
         "unassigned": "ยังไม่มอบหมาย",
         "unread": "ยังไม่ได้อ่าน"
       },
-      "statusFilter": "สถานะ",
-      "statusOpen": "เปิดอยู่",
-      "statusAll": "ทุกสถานะ",
       "status": {
         "open": "เปิดอยู่",
         "pending": "รอดำเนินการ",
@@ -61,7 +58,6 @@
         "high": "สูง",
         "urgent": "ด่วนมาก"
       },
-      "channelFilter": "ช่องทาง",
       "allChannels": "ทุกช่องทาง",
       "archived": "จัดเก็บแล้ว",
       "backToInbox": "กลับไปยังกล่องข้อความ",
@@ -107,7 +103,48 @@
         }
       },
       "select": "เลือก",
-      "selectDone": "เสร็จสิ้น"
+      "selectDone": "เสร็จสิ้น",
+      "filters": {
+        "open": "ตัวกรอง",
+        "openActive": "ตัวกรอง (เปิด {count})",
+        "title": "ตัวกรอง",
+        "close": "ปิด",
+        "reset": "รีเซ็ต",
+        "cancel": "ยกเลิก",
+        "apply": "ใช้",
+        "status": "สถานะแชท",
+        "statusHint": "หากไม่เลือก จะแสดงแชทที่เปิดอยู่และรอดำเนินการ",
+        "conversation": "การสนทนา",
+        "any": "ทั้งหมด",
+        "assigned": "มอบหมายแล้ว",
+        "unassigned": "ยังไม่มอบหมาย",
+        "unattended": "ยังไม่ได้ดูแล",
+        "labels": "แท็ก",
+        "channels": "ช่องทาง",
+        "agents": "เอเจนต์",
+        "sortBy": "เรียงตาม",
+        "recent": "ล่าสุด",
+        "old": "เก่าสุด",
+        "dateRange": "ช่วงวันที่ (กิจกรรมล่าสุด)",
+        "from": "จาก",
+        "to": "ถึง",
+        "select": "เลือกตัวเลือก",
+        "search": "ค้นหา",
+        "noMatch": "ไม่พบรายการ",
+        "today": "วันนี้",
+        "last7": "7 วันที่ผ่านมา",
+        "last30": "30 วันที่ผ่านมา",
+        "thisMonth": "เดือนนี้",
+        "clearDates": "ล้างวันที่",
+        "previousMonth": "เดือนก่อนหน้า",
+        "nextMonth": "เดือนถัดไป"
+      },
+      "rowMenu": "การดำเนินการเพิ่มเติมสำหรับ {name}",
+      "priorityMenu": "ลำดับความสำคัญ",
+      "statusFilter": "สถานะ",
+      "statusOpen": "เปิดอยู่",
+      "statusAll": "ทุกสถานะ",
+      "channelFilter": "ช่องทาง"
     },
     "status": {
       "received": "ได้รับแล้ว",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "ข้อความใหม่: {text}",
       "attachment": "ไฟล์แนบ",
       "jumpLatest": "ไปยังข้อความล่าสุด",
-      "jumpLatestNew": "{count, plural, other {# ข้อความใหม่}}"
+      "jumpLatestNew": "{count, plural, other {# ข้อความใหม่}}",
+      "searchOpen": "ค้นหาในแชทนี้",
+      "searchPlaceholder": "ค้นหาในแชทนี้",
+      "searchCount": "{current} จาก {total}",
+      "searchNone": "ไม่พบรายการ",
+      "searchPrev": "ผลลัพธ์ก่อนหน้า",
+      "searchNext": "ผลลัพธ์ถัดไป",
+      "searchClose": "ปิดการค้นหา"
     },
     "groupThread": {
       "openGroup": "เปิดกลุ่ม",
@@ -454,7 +498,13 @@
         "pickTeam": "เลือกทีมสำหรับการสนทนานี้",
         "noTeam": "ไม่มีทีม",
         "onLeave": "ลาอยู่",
-        "onLeaveUntil": "ลาถึง {date}"
+        "onLeaveUntil": "ลาถึง {date}",
+        "availability": {
+          "online": "ออนไลน์",
+          "away": "ไม่อยู่",
+          "busy": "ไม่ว่าง",
+          "offline": "ออฟไลน์"
+        }
       },
       "presence": {
         "online": "ออนไลน์",

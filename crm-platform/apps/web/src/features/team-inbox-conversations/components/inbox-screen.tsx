@@ -8,6 +8,7 @@ import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import {
   uuidSchema,
   type ConversationPriority,
+  type ConversationSummary,
   type EmailReplyExtras,
   type MessageResponse,
   type WaGroupMention,
@@ -325,6 +326,17 @@ export function InboxScreen() {
     },
     [detail.detail, can.priority, guarded, list, toast, t],
   );
+  // The row's three-dot menu: the same priority change as the thread header, for any row in the list.
+  const setRowPriority = useCallback(
+    async (row: ConversationSummary, priority: ConversationPriority) => {
+      if (!can.priority || row.priority === priority) return;
+      const ok = await guarded(async () => {
+        list.placeRow(await inboxApi.setPriority(row.id, row.rowVersion, priority));
+      });
+      if (ok) toast(t('priorityChanged'));
+    },
+    [can.priority, guarded, list, toast, t],
+  );
   const snooze = useCallback(
     async (preset: SnoozePreset) => {
       const d = detail.detail;
@@ -571,6 +583,7 @@ export function InboxScreen() {
             activeId={selectedId}
             nowMs={nowMs}
             onOpen={(id) => open(id)}
+            onRowPriority={can.priority ? (r, p) => void setRowPriority(r, p) : undefined}
             onLoadMore={list.loadMore}
             onRefresh={() => {
               list.refresh();

@@ -84,10 +84,22 @@ export interface ListFilter {
   /** `undefined`: the open and pending threads. `'all'`: no filter. */
   status?: string;
   channelId?: number;
+  /** Several channels at once: threads on any of them (the Filters window). */
+  channelIds?: number[];
   /** Tag uuids: threads that carry any of them. */
   tagIds?: string[];
   /** What `tagIds` is matched against: the thread's own tags (default) or its contact's tags. */
   tagScope?: 'conversation' | 'contact';
+  /** Several statuses at once (the Filters window); replaces `status`. */
+  statuses?: string[];
+  assignment?: 'assigned' | 'unassigned' | 'unattended';
+  /** User uuids: threads assigned to any of them. */
+  agentIds?: string[];
+  /** `old` lists the oldest activity first and ignores pins. */
+  sort?: 'recent' | 'old';
+  /** `YYYY-MM-DD`: last activity from the start of `from` to the end of `to`. */
+  from?: string;
+  to?: string;
   q?: string;
   archived: boolean;
   limit: number;
@@ -253,7 +265,18 @@ export class ConversationsRepository {
 
     // The archive view shows everything archived whatever the tab or status (Reference rule); otherwise the tab and status narrow it.
     if (!f.archived) {
-      if (f.status === undefined) where.push(sql`c.status IN ('open', 'pending')`);
+      if (f.statuses && f.statuses.length > 0) {
+        // Resolved and closed are one thing to an agent, so choosing Resolved lists both.
+        const all = new Set(
+          f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s])),
+        );
+        where.push(
+          sql`c.status IN (${sql.join(
+            [...all].map((s) => sql`${s}`),
+            sql`, `,
+          )})`,
+        );
+      } else if (f.status === undefined) where.push(sql`c.status IN ('open', 'pending')`);
       // Resolved and closed are one thing to an agent (the same Resolve button, the same reopen), so the Resolved view lists both.
       else if (f.status === 'resolved') where.push(sql`c.status IN ('resolved', 'closed')`);
       else if (f.status !== 'all') where.push(sql`c.status = ${f.status}`);
@@ -261,6 +284,13 @@ export class ConversationsRepository {
       if (tab) where.push(tab);
     }
     if (f.channelId !== undefined) where.push(sql`c.channel_id = ${f.channelId}`);
+    if (f.channelIds && f.channelIds.length > 0)
+      where.push(
+        sql`c.channel_id IN (${sql.join(
+          f.channelIds.map((n) => sql`${n}`),
+          sql`, `,
+        )})`,
+      );
     if (f.tagIds && f.tagIds.length > 0) {
       const ids = sql.join(
         f.tagIds.map((u) => sql`${u}::uuid`),
@@ -276,13 +306,32 @@ export class ConversationsRepository {
         WHERE fx.org_id = c.org_id AND fx.conversation_id = c.id AND ft.uuid IN (${ids}))`,
       );
     }
+    if (f.assignment === 'assigned') where.push(sql`c.assignee_user_id IS NOT NULL`);
+    else if (f.assignment === 'unassigned') where.push(sql`c.assignee_user_id IS NULL`);
+    else if (f.assignment === 'unattended') where.push(sql`c.unread_count > 0`);
+    if (f.agentIds && f.agentIds.length > 0) {
+      const ids = sql.join(
+        f.agentIds.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      );
+      where.push(
+        sql`c.assignee_user_id IN (SELECT fu.id FROM users fu WHERE fu.org_id = c.org_id AND fu.uuid IN (${ids}))`,
+      );
+    }
+    if (f.from) where.push(sql`c.last_message_at >= ${f.from}::date`);
+    if (f.to) where.push(sql`c.last_message_at < (${f.to}::date + 1)`);
     if (f.q) where.push(this.searchCondition(f.q));
-    if (f.cursor) where.push(this.cursorCondition(f.cursor));
+    const oldest = f.sort === 'old';
+    if (f.cursor) where.push(this.cursorCondition(f.cursor, oldest));
 
     const res = await tx.execute(sql`
       SELECT ${SELECT_ROW} ${FROM_ROW}
       WHERE ${sql.join(where, sql` AND `)}
-      ORDER BY c.pinned_at DESC NULLS LAST, c.last_message_at DESC, c.id DESC
+      ORDER BY ${
+        oldest
+          ? sql`c.last_message_at ASC, c.id ASC`
+          : sql`c.pinned_at DESC NULLS LAST, c.last_message_at DESC, c.id DESC`
+      }
       LIMIT ${f.limit + 1}`);
     return rowsOf(res).map(toRow);
   }
@@ -542,7 +591,9 @@ export class ConversationsRepository {
   }
 
   /** Strictly after the cursor row in the list order. Pinned rows come first; inside each group newest activity first, id last. */
-  private cursorCondition(cur: ListCursor): SQL {
+  private cursorCondition(cur: ListCursor, oldest = false): SQL {
+    if (oldest)
+      return sql`(c.last_message_at, c.id) > (${cur.lastMessageAt}::timestamptz, ${cur.id})`;
     if (cur.pinnedAt !== null) {
       return sql`(
         (c.pinned_at IS NOT NULL AND (c.pinned_at, c.last_message_at, c.id) < (${cur.pinnedAt}::timestamptz, ${cur.lastMessageAt}::timestamptz, ${cur.id}))
