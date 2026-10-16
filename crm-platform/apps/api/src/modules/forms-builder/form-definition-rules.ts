@@ -63,6 +63,7 @@ const KINDS_FOR_TYPE: Record<string, readonly FormFieldKind[]> = {
 const BUILTIN_KINDS: Record<string, readonly FormFieldKind[]> = {
   'contact:email': ['email'],
   'contact:phone': ['phone'],
+  'contact:date_of_birth': ['date_of_birth', 'date'],
   'company:email': ['email'],
   'company:phone': ['phone'],
 };
@@ -128,6 +129,14 @@ export function publishProblems(def: FormDefinition, ctx: PublishContext): FormP
 
   if (ctx.captchaMissing === true)
     out.push(problem('settings.captchaMode', 'captcha_not_configured'));
+
+  // The age gate needs the question it judges (BL-211). A declaration needs none.
+  if (def.ageGate.enabled && def.ageGate.mode !== 'declaration') {
+    const want = def.ageGate.mode === 'dob' ? 'date_of_birth' : 'age';
+    const q = formFields(def).find((f) => f.kind === want);
+    if (!q) out.push(problem('ageGate', 'age_gate_field_missing'));
+    else if (!q.required) out.push(problem(`${at(q)}.required`, 'age_gate_field_not_required'));
+  }
 
   if (def.payment.enabled && ctx.paymentGatewayReady === false) {
     out.push(problem('payment', 'payment_no_gateway'));

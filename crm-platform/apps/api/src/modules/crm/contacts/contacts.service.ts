@@ -481,7 +481,9 @@ export class ContactsService {
         action: 'insert',
       });
       // A date of birth that makes the contact a minor sets the flag in the same transaction (BL-211).
-      if (input.dateOfBirth) await this.minors.evaluateInTx(tx, ctx.orgId, created.id);
+      if (input.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, ctx.orgId, created.id, new Date(), { dobChanged: true });
+      }
       // A contact created already opted out leaves its proof in the consent ledger (it is never invented for the other case).
       if (input.isUnsubscribed === true) {
         await this.consent.recordInTx(tx, ctx.orgId, {
@@ -1254,7 +1256,7 @@ export class ContactsService {
 
       // The date of birth moved: the flag follows it (flagged, kept, or lifted once the contact is of age).
       if (input.dateOfBirth !== undefined && input.dateOfBirth !== existing.dateOfBirth) {
-        await this.minors.evaluateInTx(tx, ctx.orgId, existing.id);
+        await this.minors.evaluateInTx(tx, ctx.orgId, existing.id, new Date(), { dobChanged: true });
       }
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);

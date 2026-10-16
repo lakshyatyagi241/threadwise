@@ -25,7 +25,13 @@ import {
 import { fontStylesheet, safeImageUrl, tokensToCssVars } from '../lib/theme';
 import { validateAnswers } from '../lib/validate';
 import {
+  AGE_CONFIRMED_KEY,
   CONSENT_KEY,
+  GUARDIAN_EMAIL_KEY,
+  GUARDIAN_KEY,
+  GUARDIAN_NAME_KEY,
+  GUARDIAN_PHONE_KEY,
+  pageAgeGate,
   type AnswerValue,
   type Answers,
   type Block,
@@ -63,6 +69,11 @@ export interface FormRendererProps {
   poweredBy?: string | null;
   /** The honeypot input's name, rendered hidden from people and assistive tech; null or absent when the form has none. */
   honeypotField?: string | null;
+  /**
+   * The form's key. After the age check refuses a visitor the browser remembers it for this session (and only the browser: the server
+   * keeps nothing about a refused visitor), so the same person is not invited to try again with another answer (BL-211).
+   */
+  ageLockKey?: string;
   /** The builder previews `auto` mode both ways. */
   forceMode?: 'light' | 'dark';
 }
@@ -97,11 +108,24 @@ export function FormRenderer(props: FormRendererProps) {
     pay?: boolean;
   }>(null);
   const [hp, setHp] = useState('');
+  const [ageBlocked, setAgeBlocked] = useState(false);
+  const [needsGuardian, setNeedsGuardian] = useState(false);
+  const ageGate = pageAgeGate(form);
 
   useEffect(() => {
     startedAt.current = Date.now();
     idempotency.current = newIdempotencyKey();
   }, []);
+
+  const { ageLockKey } = props;
+  useEffect(() => {
+    if (mode !== 'live' || !ageLockKey) return;
+    try {
+      if (window.sessionStorage.getItem(`wf-age-${ageLockKey}`) === '1') setAgeBlocked(true);
+    } catch {
+      /* private mode: the lock is a courtesy, the server decides */
+    }
+  }, [mode, ageLockKey]);
 
   const lastStep = form.steps.length - 1;
   const theme = form.theme;
@@ -147,7 +171,7 @@ export function FormRenderer(props: FormRendererProps) {
 
   const stepOfIssue = (list: FieldIssue[]): number => {
     const first = list[0];
-    if (!first || first.fieldId === CONSENT_KEY) return lastStep;
+    if (!first || first.fieldId === CONSENT_KEY || first.fieldId.startsWith('__')) return lastStep;
     const at = form.steps.findIndex((s) => s.blocks.some((b) => b.id === first.fieldId));
     return at >= 0 ? at : step;
   };
@@ -173,6 +197,12 @@ export function FormRenderer(props: FormRendererProps) {
     if (found.length > 0) {
       setStep(stepOfIssue(found));
       showIssues(found);
+      return;
+    }
+    if (needsGuardian && !guardianComplete(answers)) {
+      setStep(lastStep);
+      showIssues([{ fieldId: GUARDIAN_KEY, code: 'guardian_required' }]);
+      focusControl(GUARDIAN_KEY);
       return;
     }
     setBanner(null);
@@ -236,6 +266,22 @@ export function FormRenderer(props: FormRendererProps) {
       setDone({ message, redirect: target });
       return;
     }
+    if (outcome.kind === 'age_blocked') {
+      try {
+        if (props.ageLockKey) window.sessionStorage.setItem(`wf-age-${props.ageLockKey}`, '1');
+      } catch {
+        /* the lock is a courtesy */
+      }
+      setAgeBlocked(true);
+      return;
+    }
+    if (outcome.kind === 'guardian_required') {
+      setNeedsGuardian(true);
+      setStep(lastStep);
+      showIssues([{ fieldId: GUARDIAN_KEY, code: 'guardian_required' }]);
+      focusControl(GUARDIAN_KEY);
+      return;
+    }
     if (outcome.kind === 'validation') {
       setStep(stepOfIssue(outcome.issues));
       showIssues(outcome.issues);
@@ -255,6 +301,7 @@ export function FormRenderer(props: FormRendererProps) {
 
   const message = (issue: FieldIssue, f: FieldBlock | null): string => {
     const v = f?.validation;
+    if (issue.fieldId === AGE_CONFIRMED_KEY) return t('errors.consent_required');
     switch (issue.code) {
       case 'too_small':
         return t('errors.too_small', { min: v?.min ?? 0 });
@@ -347,6 +394,20 @@ export function FormRenderer(props: FormRendererProps) {
     );
   }
 
+  if (ageBlocked) {
+    // Neutral on purpose (BL-211): it does not say why, which answer would pass, or invite another try.
+    return shell(
+      <div className="wf-shell">
+        <div className="wf-card">
+          <div className="wf-success" role="status" data-testid="form-age-blocked">
+            <h2>{t('ageBlockedTitle')}</h2>
+            <p>{t('ageBlockedBody')}</p>
+          </div>
+        </div>
+      </div>,
+    );
+  }
+
   const current = form.steps[step] ?? form.steps[0];
   const payment = paymentOf(form);
   const amount = payment ? previewAmount(form, answers) : null;
@@ -354,7 +415,9 @@ export function FormRenderer(props: FormRendererProps) {
   const logo = safeImageUrl(theme.logo);
   const shown = issues.filter(
     (i) =>
-      i.fieldId === CONSENT_KEY || form.steps.some((s) => s.blocks.some((b) => b.id === i.fieldId)),
+      i.fieldId === CONSENT_KEY ||
+      i.fieldId.startsWith('__') ||
+      form.steps.some((s) => s.blocks.some((b) => b.id === i.fieldId)),
   );
 
   return shell(
@@ -394,7 +457,13 @@ export function FormRenderer(props: FormRendererProps) {
               {shown.map((i) => {
                 const f = fieldOf(i.fieldId);
                 const name =
-                  i.fieldId === CONSENT_KEY ? form.consent.text : (f?.label ?? i.fieldId);
+                  i.fieldId === CONSENT_KEY
+                    ? form.consent.text
+                    : i.fieldId === AGE_CONFIRMED_KEY
+                      ? t('ageDeclaration', { age: ageGate?.declarationAge ?? 0 })
+                      : i.fieldId === GUARDIAN_KEY
+                        ? t('guardianTitle')
+                        : (f?.label ?? i.fieldId);
                 return (
                   <li key={i.fieldId}>
                     <a
@@ -421,6 +490,25 @@ export function FormRenderer(props: FormRendererProps) {
         <form onSubmit={(e) => void submit(e)} noValidate aria-label={form.title}>
           {current?.title && <h2 className="wf-step-title">{current.title}</h2>}
           <div className="wf-grid">{current?.blocks.map(renderBlock)}</div>
+          {step === lastStep && ageGate?.mode === 'declaration' && (
+            <AgeDeclarationView
+              uid={uid}
+              age={ageGate.declarationAge ?? 0}
+              checked={answers[AGE_CONFIRMED_KEY] === true}
+              issue={issueFor(AGE_CONFIRMED_KEY)}
+              message={message}
+              onChange={(v) => setValue(AGE_CONFIRMED_KEY, v)}
+            />
+          )}
+          {step === lastStep && needsGuardian && (
+            <GuardianView
+              uid={uid}
+              answers={answers}
+              issue={issueFor(GUARDIAN_KEY)}
+              message={message}
+              onChange={(key, v) => setValue(key, v)}
+            />
+          )}
           {step === lastStep && form.consent.enabled && (
             <ConsentView
               uid={uid}
@@ -495,6 +583,107 @@ export function FormRenderer(props: FormRendererProps) {
 function FontLink({ font }: { font: RenderableForm['theme']['fontFamily'] }) {
   const href = fontStylesheet(font);
   return href ? <link rel="stylesheet" href={href} /> : null;
+}
+
+/** Is there a guardian name and at least one way to reach them? The server checks again and cleans the values. */
+function guardianComplete(answers: Answers): boolean {
+  const text = (k: string) => (typeof answers[k] === 'string' ? (answers[k] as string).trim() : '');
+  return (
+    text(GUARDIAN_NAME_KEY) !== '' &&
+    (text(GUARDIAN_EMAIL_KEY) !== '' || text(GUARDIAN_PHONE_KEY) !== '')
+  );
+}
+
+/**
+ * "I confirm I am at least N years old" (BL-211). Never ticked for the person, and the only place the minimum is named, because the
+ * sentence cannot be honest without it. Whether leaving it empty refuses the visitor is the server's business, not the page's.
+ */
+function AgeDeclarationView({
+  uid,
+  age,
+  checked,
+  issue,
+  message,
+  onChange,
+}: {
+  uid: string;
+  age: number;
+  checked: boolean;
+  issue: FieldIssue | undefined;
+  message: (i: FieldIssue, f: FieldBlock | null) => string;
+  onChange: (v: boolean) => void;
+}) {
+  const t = useTranslations('web-forms.public');
+  const id = `${uid}-${AGE_CONFIRMED_KEY}`;
+  return (
+    <div
+      className="wf-field wf-consent"
+      data-field-id={AGE_CONFIRMED_KEY}
+      data-invalid={issue ? '1' : '0'}
+    >
+      <label className="wf-choice" htmlFor={id}>
+        <input
+          id={id}
+          data-control=""
+          type="checkbox"
+          checked={checked}
+          aria-invalid={issue ? true : undefined}
+          aria-describedby={issue ? `${id}-err` : undefined}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <span>{t('ageDeclaration', { age })}</span>
+      </label>
+      {issue && (
+        <div id={`${id}-err`} className="wf-error">
+          {message(issue, null)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** A parent or guardian: a name and an email address or a phone number. Shown only after the server asked for them. */
+function GuardianView({
+  uid,
+  answers,
+  issue,
+  message,
+  onChange,
+}: {
+  uid: string;
+  answers: Answers;
+  issue: FieldIssue | undefined;
+  message: (i: FieldIssue, f: FieldBlock | null) => string;
+  onChange: (key: string, v: string) => void;
+}) {
+  const t = useTranslations('web-forms.public');
+  const text = (k: string) => (typeof answers[k] === 'string' ? (answers[k] as string) : '');
+  const row = (key: string, label: string, type: string, auto: string, first?: boolean) => (
+    <label className="wf-label" htmlFor={`${uid}-${key}`}>
+      <span className="wf-label-text">{label}</span>
+      <input
+        id={`${uid}-${key}`}
+        data-control={first ? '' : undefined}
+        className="wf-input"
+        type={type}
+        autoComplete={auto}
+        maxLength={key === GUARDIAN_NAME_KEY ? 120 : 191}
+        value={text(key)}
+        aria-invalid={issue ? true : undefined}
+        onChange={(e) => onChange(key, e.target.value)}
+      />
+    </label>
+  );
+  return (
+    <fieldset className="wf-field" data-field-id={GUARDIAN_KEY} data-invalid={issue ? '1' : '0'}>
+      <legend className="wf-label-text">{t('guardianTitle')}</legend>
+      <p className="wf-help">{t('guardianIntro')}</p>
+      {row(GUARDIAN_NAME_KEY, t('guardianName'), 'text', 'off', true)}
+      {row(GUARDIAN_EMAIL_KEY, t('guardianEmail'), 'email', 'off')}
+      {row(GUARDIAN_PHONE_KEY, t('guardianPhone'), 'tel', 'off')}
+      {issue && <div className="wf-error">{message(issue, null)}</div>}
+    </fieldset>
+  );
 }
 
 function ConsentView({
@@ -621,7 +810,9 @@ function FieldView({
     case 'phone':
     case 'number':
     case 'currency':
-    case 'date': {
+    case 'date':
+    case 'date_of_birth':
+    case 'age': {
       simple = true;
       const numeric = f.kind === 'number' || f.kind === 'currency';
       const type =
@@ -631,7 +822,7 @@ function FieldView({
             ? 'tel'
             : numeric
               ? 'number'
-              : f.kind === 'date'
+              : f.kind === 'date' || f.kind === 'date_of_birth'
                 ? 'date'
                 : 'text';
       control = (
@@ -639,12 +830,23 @@ function FieldView({
           {...common}
           className="wf-input"
           type={type}
-          inputMode={numeric ? 'decimal' : undefined}
+          inputMode={numeric ? 'decimal' : f.kind === 'age' ? 'numeric' : undefined}
           step={f.kind === 'currency' ? '0.01' : numeric ? 'any' : undefined}
           min={numeric ? f.validation?.min : undefined}
           max={numeric ? f.validation?.max : undefined}
-          maxLength={type === 'text' ? f.validation?.maxLen : undefined}
-          autoComplete={f.kind === 'email' ? 'email' : f.kind === 'phone' ? 'tel' : undefined}
+          maxLength={
+            f.kind === 'age' ? 3 : type === 'text' ? f.validation?.maxLen : undefined
+          }
+          // An age or a date of birth is never offered from the browser's saved answers: nothing coaches the answer (BL-211).
+          autoComplete={
+            f.kind === 'email'
+              ? 'email'
+              : f.kind === 'phone'
+                ? 'tel'
+                : f.kind === 'age' || f.kind === 'date_of_birth'
+                  ? 'off'
+                  : undefined
+          }
           placeholder={f.placeholder}
           value={text}
           onChange={(e) => onChange(e.target.value)}

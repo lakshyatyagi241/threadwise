@@ -94,6 +94,12 @@ export const formSubmissionDetailSchema = formSubmissionSummarySchema.extend({
   /** A second payment arrived for a submission already paid: refund it by hand. */
   duplicatePayment: z.boolean(),
   answers: z.array(formAnswerSchema),
+  /** The age gate found the visitor under the minimum age and the form let them through (BL-211): the contact was flagged as a minor. */
+  ageGate: z.enum(['under']).nullable(),
+  /** The parent or guardian the visitor named after an under-age answer; null when none was asked for. */
+  guardian: z
+    .object({ name: z.string(), email: z.string().nullable(), phone: z.string().nullable() })
+    .nullable(),
   attribution: z.object({
     utm: z.record(z.string()),
     referrer: z.string().nullable(),
@@ -181,6 +187,19 @@ export const publicFormSubmitSchema = z.object({
     .object({ given: z.boolean(), textVersion: z.number().int().min(1).max(10_000) })
     .optional(),
   captchaToken: z.string().max(4096).optional(),
+  /**
+   * The age gate's declaration (BL-211): the box "I confirm I am at least N years old" was ticked. Sent only by a page whose form asks it;
+   * absent counts as not confirmed.
+   */
+  ageConfirmed: z.boolean().optional(),
+  /** A parent or guardian, asked for after an under-age answer on a form whose gate says `guardian` (BL-211). */
+  guardian: z
+    .object({
+      name: z.string().trim().min(1).max(120),
+      email: z.string().trim().email().max(191).optional(),
+      phone: z.string().trim().max(40).optional(),
+    })
+    .optional(),
   /** The honeypot: a real visitor never fills it (the field is hidden from people). */
   hp: z.string().max(500).optional(),
   /** Milliseconds between the page's `start` event and the submit, when the page tracked it. */

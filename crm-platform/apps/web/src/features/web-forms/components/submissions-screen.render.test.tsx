@@ -94,6 +94,8 @@ function detail(over: Partial<FormSubmissionDetail> = {}): FormSubmissionDetail 
       { fieldId: 'c', label: 'Interests', kind: 'checkbox_group', value: ['Sales', 'Support'] },
       { fieldId: 'd', label: 'Newsletter', kind: 'checkbox', value: true },
     ] as FormSubmissionDetail['answers'],
+    ageGate: null,
+    guardian: null,
     attribution: {
       utm: { utm_source: 'newsletter' },
       referrer: 'https://news.test/post',

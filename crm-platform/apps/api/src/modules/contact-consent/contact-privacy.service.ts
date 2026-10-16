@@ -147,6 +147,28 @@ export class ContactPrivacyService {
     return { recorded: true, changed: plan.changed };
   }
 
+  /** Which of these contacts (by uuid) are flagged as minors (the customer API's contact list). */
+  minorUuids(tx: Tx, orgId: number, uuids: readonly string[]): Promise<Set<string>> {
+    return this.repo.minorUuids(tx, orgId, uuids);
+  }
+
+  /** The age below which a person is a minor in this workspace (BL-211): the highest of the profiles' ages, else 18. */
+  async minorAge(tx: Tx, orgId: number): Promise<number> {
+    return (await this.repo.complianceFacts(tx, orgId)).minorAge;
+  }
+
+  /** What a form's or a widget's age settings explain themselves with (BL-211): the minor age, and whether the children question is answered. */
+  async ageContext(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ workspaceMinorAge: number; childrenAnswered: boolean }> {
+    const facts = await this.repo.complianceFacts(tx, orgId);
+    return {
+      workspaceMinorAge: facts.minorAge,
+      childrenAnswered: facts.childrenPolicy !== 'unset' || facts.parentalConsentRequired,
+    };
+  }
+
   /** A person (or an API caller) turns a flag on or off for a contact. */
   async record(
     contactUuid: string,

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ageGateSchema } from '../contact-consent/age';
 
 /**
  * The form definition (docs/specs/forms-builder-app.md section 5): ONE JSON document that the builder edits, the public renderer draws,
@@ -36,6 +37,13 @@ export const FORM_FIELD_KINDS = [
   'number',
   'currency',
   'date',
+  /**
+   * A date of birth (BL-211). Written to the contact's `date_of_birth` property; with the form's age gate on and mode `dob` it is also the
+   * question the gate judges. Never required unless the gate needs it, never asked unless a person adds it to the form.
+   */
+  'date_of_birth',
+  /** An age in whole years (BL-211). Judged by the age gate (mode `age`) and then forgotten: it has no contact property. */
+  'age',
   'dropdown',
   'radio',
   'checkbox_group',
@@ -109,6 +117,7 @@ export const CONTACT_BUILTIN_PROPERTIES = [
   'address',
   ...FORM_ADDRESS_PARTS,
   'message',
+  'date_of_birth',
 ] as const;
 export type ContactBuiltinProperty = (typeof CONTACT_BUILTIN_PROPERTIES)[number];
 
@@ -459,12 +468,15 @@ export const formDefinitionSchema = z
     mapping: formMappingSchema.default({}),
     after: formAfterSchema.default({}),
     payment: formPaymentSchema.default({}),
+    /** The age gate (BL-211, spec 11.10): off unless a person turns it on. */
+    ageGate: ageGateSchema.default({}),
   })
   .strict()
   .superRefine((def, ctx) => {
     const seen = new Set<string>();
     const binds = new Set<string>();
     let blocks = 0;
+    let ageFields = 0;
     def.steps.forEach((step, si) => {
       if (seen.has(step.id))
         ctx.addIssue({ code: 'custom', path: ['steps', si, 'id'], message: 'duplicate_id' });
@@ -498,6 +510,15 @@ export const formDefinitionSchema = z
             }
             values.add(o.value);
           });
+        }
+        if (b.kind === 'age' && b.bind) {
+          ctx.addIssue({ code: 'custom', path: [...at, 'bind'], message: 'bind_not_allowed' });
+        }
+        if (b.kind === 'date_of_birth' || b.kind === 'age') {
+          if (ageFields > 0) {
+            ctx.addIssue({ code: 'custom', path: at, message: 'age_field_duplicate' });
+          }
+          ageFields += 1;
         }
         if (b.kind === 'hidden') {
           if (!b.hiddenSource)
@@ -611,4 +632,14 @@ export function formBlocks(def: FormDefinition): FormBlock[] {
 /** Every input block (`type: 'field'`) of a definition, in order. */
 export function formFields(def: FormDefinition): FormFieldBlock[] {
   return formBlocks(def).filter((b): b is FormFieldBlock => b.type === 'field');
+}
+
+/** The one question the age gate judges: a date of birth or an age field of the form, or undefined (a declaration needs none). */
+export function formAgeField(def: Pick<FormDefinition, 'steps'>): FormFieldBlock | undefined {
+  return def.steps
+    .flatMap((s) => s.blocks)
+    .find(
+      (b): b is FormFieldBlock =>
+        b.type === 'field' && (b.kind === 'date_of_birth' || b.kind === 'age'),
+    );
 }

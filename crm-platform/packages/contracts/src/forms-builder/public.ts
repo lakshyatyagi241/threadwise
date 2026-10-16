@@ -36,6 +36,16 @@ export const publicFormSchema = z.object({
     version: true,
   }),
   theme: formThemeSchema,
+  /**
+   * The age question the page draws (BL-211), or null when the form has no gate. NEVER carries the action or, for a date of birth or an age,
+   * the minimum: the screen does not say which answer passes. `declarationAge` is set only for the declaration, whose wording must name it.
+   */
+  ageGate: z
+    .object({
+      mode: z.enum(['dob', 'age', 'declaration']),
+      declarationAge: z.number().int().nullable(),
+    })
+    .nullable(),
   /** What the visitor will be asked to pay: shown before they submit. Null when the form takes no payment. */
   payment: formPaymentSchema
     .pick({

@@ -178,11 +178,44 @@ export class ContactPrivacyRepository {
     };
   }
 
+  /** Which of these contacts (by uuid) are flagged as minors. One statement for a whole page. */
+  async minorUuids(tx: Tx, orgId: number, uuids: readonly string[]): Promise<Set<string>> {
+    if (uuids.length === 0) return new Set();
+    const res = await tx.execute(sql`
+      SELECT c.uuid FROM contact_privacy_flags f
+      JOIN contacts c ON c.org_id = f.org_id AND c.id = f.contact_id
+      WHERE f.org_id = ${orgId} AND f.is_minor AND c.uuid IN (${sql.join(
+        uuids.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      )})`);
+    return new Set((res.rows as Raw[]).map((r) => String(r.uuid)));
+  }
+
   /** The contact's date of birth as an ISO day, or null. */
   async dateOfBirth(tx: Tx, orgId: number, contactId: number): Promise<string | null> {
     const res = await tx.execute(sql`
       SELECT to_char(date_of_birth, 'YYYY-MM-DD') AS dob FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`);
     return ((res.rows[0] as Raw | undefined)?.dob as string | null | undefined) ?? null;
+  }
+
+  /**
+   * Writes a date of birth the contact is given by a form, a chat intake or a flow: a blank is filled, a different date is kept only if
+   * it is LATER (the younger person wins, so a public door can make a contact a minor but never an adult again). Returns the date it
+   * replaced (`''` for none) when the column changed, else null.
+   */
+  async setYoungerDateOfBirth(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    dob: string,
+  ): Promise<{ previous: string | null } | null> {
+    const res = await tx.execute(sql`
+      UPDATE contacts c SET date_of_birth = ${dob}::date
+      FROM (SELECT to_char(date_of_birth, 'YYYY-MM-DD') AS previous FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}) old
+      WHERE c.org_id = ${orgId} AND c.id = ${contactId} AND (c.date_of_birth IS NULL OR c.date_of_birth < ${dob}::date)
+      RETURNING old.previous`);
+    const r = res.rows[0] as Raw | undefined;
+    return r ? { previous: (r.previous as string | null) ?? null } : null;
   }
 
   /**

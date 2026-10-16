@@ -10,6 +10,7 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
+import { AuditService } from '../../kernel/audit/audit.service';
 import { ContactPrivacyRepository } from './contact-privacy.repository';
 import { ContactPrivacyService } from './contact-privacy.service';
 
@@ -42,13 +43,19 @@ export class MinorDetectionService {
     private readonly db: DatabaseService,
     private readonly repo: ContactPrivacyRepository,
     private readonly privacy: ContactPrivacyService,
+    private readonly audit: AuditService,
   ) {}
 
+  /**
+   * `dobChanged`: the date itself was just written (a corrected date is a new fact: the flag is brought in line with it at once, even if
+   * a stricter form had set a later expiry). Without it a flag keeps the expiry it was given, and is lifted only when that day has come.
+   */
   async evaluateInTx(
     tx: Tx,
     orgId: number,
     contactId: number,
     now: Date = new Date(),
+    opts: { dobChanged?: boolean } = {},
   ): Promise<MinorEvaluation> {
     const dob = await this.repo.dateOfBirth(tx, orgId, contactId);
     if (!dob) return 'none';
@@ -60,8 +67,10 @@ export class MinorDetectionService {
     if (isUnderAge(dob, facts.minorAge, now)) {
       const until = minorUntilForBirth(dob, facts.minorAge);
       if (flags.isMinor) {
-        // A flag a person set is theirs. One the system set only needs its expiry kept right (the date or the age line moved).
-        if (flags.minorSource !== 'dob' || flags.minorUntil === until) return 'none';
+        // A flag a person set is theirs. One the system set only needs its expiry kept right when the date itself moved.
+        if (flags.minorSource !== 'dob' || !opts.dobChanged || flags.minorUntil === until) {
+          return 'none';
+        }
         const out = await this.change(tx, orgId, contactId, true, until, evidence, now);
         return out ? 'refreshed' : 'none';
       }
@@ -70,10 +79,54 @@ export class MinorDetectionService {
       return out ? 'flagged' : 'none';
     }
     if (flags.isMinor && flags.minorSource === 'dob' && flags.minorUntil !== null) {
+      const lapsed = flags.minorUntil <= earliestToday(now);
+      if (!lapsed && !opts.dobChanged) return 'none';
       const out = await this.change(tx, orgId, contactId, false, null, evidence, now);
       return out ? 'lifted' : 'none';
     }
     return 'none';
+  }
+
+  /**
+   * What a visitor's age answer does to the contact it resolved to (a chat intake, a flow): writes the date of birth when one was given
+   * (the younger date wins), brings the flag in line with the stored date, and, when the answer itself was under the line, flags the
+   * contact from the answer (the form's or flow's own minimum can be stricter than the workspace's). Acts as the system of THIS
+   * workspace, so a public page or a flow run needs no request context of its own.
+   */
+  async applyAnswer(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    a: {
+      dob?: string | null;
+      under?: { source: 'dob' | 'declaration'; minorUntil: string | null } | null;
+      evidence: Record<string, unknown>;
+      now?: Date;
+    },
+  ): Promise<void> {
+    const now = a.now ?? new Date();
+    await this.asSystem(orgId, async () => {
+      if (a.dob) {
+        const written = await this.repo.setYoungerDateOfBirth(tx, orgId, contactId, a.dob);
+        if (written) {
+          await this.audit.record(tx, {
+            module: 'contacts',
+            recordId: contactId,
+            action: 'update',
+            delta: { dateOfBirth: { old: written.previous, new: a.dob } },
+          });
+          await this.evaluateInTx(tx, orgId, contactId, now, { dobChanged: true });
+        }
+      }
+      if (a.under) {
+        await this.flagFromAnswer(tx, orgId, contactId, {
+          source: a.under.source,
+          minorUntil: a.under.minorUntil,
+          evidence: a.evidence,
+          now,
+        });
+      }
+    });
   }
 
   /**
@@ -87,7 +140,8 @@ export class MinorDetectionService {
     now: Date = new Date(),
   ): Promise<MinorEvaluation> {
     if (await this.repo.dateOfBirth(tx, orgId, contactId)) {
-      return this.evaluateInTx(tx, orgId, contactId, now);
+      // The day has come: the date decides again (a later expiry is refreshed, a contact of age is lifted).
+      return this.evaluateInTx(tx, orgId, contactId, now, { dobChanged: true });
     }
     const flags = await this.repo.flagsOf(tx, orgId, contactId);
     if (
