@@ -1287,6 +1287,7 @@ export class ContactsService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact', uuid);
+      await this.repo.lockById(tx, ctx.orgId, existing.id);
       const deleteScope = this.rbac.can(ctx.grants!, 'record.contacts.delete').scope;
       await assertContactScope(
         tx,
