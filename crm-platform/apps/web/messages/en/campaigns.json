@@ -1157,7 +1157,10 @@
         "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set.",
         "follow_up_template_required": "Choose the template each follow-up sends.",
         "follow_up_flow_required": "Choose the flow each follow-up starts.",
-        "follow_up_cloud_api_only": "Follow-ups work only with a WhatsApp Cloud API number. Pick one in step 1 or remove the follow-ups."
+        "follow_up_cloud_api_only": "Follow-ups work only with a WhatsApp Cloud API number. Pick one in step 1 or remove the follow-ups.",
+        "sequence_not_recurring": "Templates in turn only work with a recurring campaign. Choose a recurring schedule or remove the extra templates.",
+        "sequence_with_ab": "Templates in turn cannot be combined with an A/B test. Turn the A/B test off or remove the extra templates.",
+        "sequence_template_required": "Choose a template for every step of the order, or remove the empty ones."
       },
       "template": {
         "previewOnline": "online",
@@ -1415,7 +1418,8 @@
         "estimatedCostFull": "Estimated cost (full)",
         "chargedPlan": "Charged to your wallet now: {amount} (your plan covers {covered} of these messages)",
         "chargedWallet": "Charged to your wallet: {amount}",
-        "sumFollowUps": "Follow-ups"
+        "sumFollowUps": "Follow-ups",
+        "sumSequence": "Sends in turn"
       },
       "test": {
         "title": "Send a test WhatsApp message",
@@ -1578,7 +1582,8 @@
           "sent": "Sent",
           "delivered": "Delivered",
           "failed": "Failed",
-          "retries": "Retries"
+          "retries": "Retries",
+          "template": "Template"
         },
         "retrySummary": "{pending} waiting, {recovered} recovered, {exhausted} gave up",
         "openRun": "Open run",
@@ -1638,7 +1643,9 @@
             "skipped": "The condition was not met when it was checked, so the sequence ended there.",
             "lapsed": "The watch time ran out before the contact replied or read, so the sequence ended there."
           }
-        }
+        },
+        "templatesTitle": "Templates",
+        "templatesInTurn": "{count, plural, one {# template in turn} other {# templates in turn}}"
       },
       "panel": {
         "title": "Created with the guided flow",
@@ -1649,7 +1656,8 @@
           "recurring": "Recurring"
         },
         "recipients": "{count, plural, one {# recipient} other {# recipients}}",
-        "next": "Next run {when}"
+        "next": "Next run {when}",
+        "moreTemplates": "+{count} more"
       },
       "pickers": {
         "selectDate": "Select date",
@@ -1735,6 +1743,29 @@
           "hours": "{count, plural, one {hour} other {hours}}",
           "days": "{count, plural, one {day} other {days}}"
         }
+      },
+      "sequence": {
+        "title": "Templates in order",
+        "intro": "Each run sends the next template in this list. Run 1 sends the first, run 2 the second, and after the last the list starts again from the first.",
+        "notRecurring": "Only a recurring broadcast sends templates in turn. Choose a recurring schedule, or remove these templates.",
+        "withAb": "Templates in turn cannot be used together with an A/B test, which already sends two templates. Turn the A/B test off to use them.",
+        "templateLabel": "Template {position}",
+        "firstMissing": "Not chosen yet",
+        "firstHint": "The template chosen for the campaign. Change it in the template step.",
+        "pick": "Choose a template",
+        "loading": "Loading...",
+        "unavailable": "No longer available",
+        "up": "Up",
+        "down": "Down",
+        "moveUp": "Move template {position} up",
+        "moveDown": "Move template {position} down",
+        "remove": "Remove template {position}",
+        "removeShort": "Remove",
+        "removeAll": "Remove all",
+        "add": "Add a template",
+        "count": "{used} of {max} templates",
+        "limitReached": "Limit reached: {max} templates.",
+        "variablesTitle": "Variables of template {position}: {name}"
       }
     },
     "history": {

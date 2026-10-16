@@ -1166,7 +1166,10 @@
         "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido.",
         "follow_up_template_required": "Escolha o modelo que cada acompanhamento envia.",
         "follow_up_flow_required": "Escolha o fluxo que cada acompanhamento inicia.",
-        "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos."
+        "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos.",
+        "sequence_not_recurring": "Modelos em rodízio só funcionam com uma campanha recorrente. Escolha um agendamento recorrente ou remova os modelos extras.",
+        "sequence_with_ab": "Modelos em rodízio não podem ser combinados com um teste A/B. Desative o teste A/B ou remova os modelos extras.",
+        "sequence_template_required": "Escolha um modelo para cada passo da ordem ou remova os vazios."
       },
       "template": {
         "previewOnline": "online",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "Custo estimado (total)",
         "chargedPlan": "Cobrado agora da sua carteira: {amount} (seu plano cobre {covered} destas mensagens)",
         "chargedWallet": "Cobrado da sua carteira: {amount}",
-        "sumFollowUps": "Acompanhamentos"
+        "sumFollowUps": "Acompanhamentos",
+        "sumSequence": "Enviado em rodízio"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1588,7 +1592,8 @@
           "sent": "Enviadas",
           "delivered": "Entregues",
           "failed": "Com falha",
-          "retries": "Novas tentativas"
+          "retries": "Novas tentativas",
+          "template": "Modelo"
         },
         "retrySummary": "{pending} aguardando, {recovered} recuperadas, {exhausted} desistiram",
         "openRun": "Abrir execução",
@@ -1648,7 +1653,9 @@
             "skipped": "A condição não foi atendida quando foi verificada, então a sequência terminou ali.",
             "lapsed": "O tempo de monitoramento acabou antes de o contato responder ou ler, então a sequência terminou ali."
           }
-        }
+        },
+        "templatesTitle": "Modelos",
+        "templatesInTurn": "{count, plural, one {# modelo em rodízio} other {# modelos em rodízio}}"
       },
       "panel": {
         "title": "Criadas com Criar transmissão",
@@ -1659,7 +1666,8 @@
           "recurring": "Recorrente"
         },
         "recipients": "{count, plural, one {# destinatário} other {# destinatários}}",
-        "next": "Próxima execução {when}"
+        "next": "Próxima execução {when}",
+        "moreTemplates": "+{count} mais"
       },
       "pickers": {
         "selectDate": "Selecionar data",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, one {hora} many {horas} other {horas}}",
           "days": "{count, plural, one {dia} many {dias} other {dias}}"
         }
+      },
+      "sequence": {
+        "title": "Modelos em ordem",
+        "intro": "Cada execução envia o próximo modelo desta lista. A execução 1 envia o primeiro, a 2 o segundo e, depois do último, a lista recomeça pelo primeiro.",
+        "notRecurring": "Só uma transmissão recorrente envia modelos em rodízio. Escolha um agendamento recorrente ou remova estes modelos.",
+        "withAb": "Modelos em rodízio não podem ser usados com um teste A/B, que já envia dois modelos. Desative o teste A/B para usá-los.",
+        "templateLabel": "Modelo {position}",
+        "firstMissing": "Ainda não escolhido",
+        "firstHint": "O modelo escolhido para a campanha. Altere-o na etapa do modelo.",
+        "pick": "Escolha um modelo",
+        "loading": "Carregando...",
+        "unavailable": "Não está mais disponível",
+        "up": "Subir",
+        "down": "Descer",
+        "moveUp": "Subir o modelo {position}",
+        "moveDown": "Descer o modelo {position}",
+        "remove": "Remover o modelo {position}",
+        "removeShort": "Remover",
+        "removeAll": "Remover todos",
+        "add": "Adicionar um modelo",
+        "count": "{used} de {max} modelos",
+        "limitReached": "Limite atingido: {max} modelos.",
+        "variablesTitle": "Variáveis do modelo {position}: {name}"
       }
     },
     "history": {

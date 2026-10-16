@@ -1166,7 +1166,10 @@
         "pacing_range": "请检查 Smart Delivery：最长延迟短于最短延迟，或两个发送时间只设置了其中一个。",
         "follow_up_template_required": "请选择每个跟进要发送的模板。",
         "follow_up_flow_required": "请选择每个跟进要启动的流程。",
-        "follow_up_cloud_api_only": "跟进仅适用于 WhatsApp Cloud API 号码。请在第 1 步中选择一个号码，或移除跟进。"
+        "follow_up_cloud_api_only": "跟进仅适用于 WhatsApp Cloud API 号码。请在第 1 步中选择一个号码，或移除跟进。",
+        "sequence_not_recurring": "轮流发送的模板仅适用于重复活动。请选择重复计划，或删除多余的模板。",
+        "sequence_with_ab": "轮流发送的模板不能与 A/B 测试同时使用。请关闭 A/B 测试，或删除多余的模板。",
+        "sequence_template_required": "请为顺序中的每一步选择模板，或删除空的步骤。"
       },
       "template": {
         "previewOnline": "在线",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "预估费用（全部）",
         "chargedPlan": "现从您的钱包扣款：{amount}（您的套餐覆盖其中 {covered} 条消息）",
         "chargedWallet": "从您的钱包扣款：{amount}",
-        "sumFollowUps": "跟进"
+        "sumFollowUps": "跟进",
+        "sumSequence": "轮流发送"
       },
       "test": {
         "title": "发送 WhatsApp 测试消息",
@@ -1588,7 +1592,8 @@
           "sent": "已发送",
           "delivered": "已送达",
           "failed": "失败",
-          "retries": "重试"
+          "retries": "重试",
+          "template": "模板"
         },
         "retrySummary": "{pending} 个等待中，{recovered} 个已恢复，{exhausted} 个已放弃",
         "openRun": "打开运行",
@@ -1648,7 +1653,9 @@
             "skipped": "检查时未满足条件，因此序列到此结束。",
             "lapsed": "在联系人回复或阅读之前，监测时间已到，因此序列到此结束。"
           }
-        }
+        },
+        "templatesTitle": "模板",
+        "templatesInTurn": "{count, plural, other {# 个模板轮流发送}}"
       },
       "panel": {
         "title": "通过“创建群发”创建",
@@ -1659,7 +1666,8 @@
           "recurring": "周期性"
         },
         "recipients": "{count, plural, other {# 位收件人}}",
-        "next": "下次运行 {when}"
+        "next": "下次运行 {when}",
+        "moreTemplates": "另外 +{count} 个"
       },
       "pickers": {
         "selectDate": "选择日期",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, other {小时}}",
           "days": "{count, plural, other {天}}"
         }
+      },
+      "sequence": {
+        "title": "按顺序的模板",
+        "intro": "每次运行发送此列表中的下一个模板。第 1 次发送第一个，第 2 次发送第二个，最后一个之后列表从头开始。",
+        "notRecurring": "只有重复群发才会轮流发送模板。请选择重复计划，或删除这些模板。",
+        "withAb": "轮流发送的模板不能与 A/B 测试一起使用，因为 A/B 测试已经发送两个模板。请关闭 A/B 测试后再使用。",
+        "templateLabel": "模板 {position}",
+        "firstMissing": "尚未选择",
+        "firstHint": "为活动选择的模板。请在模板步骤中更改。",
+        "pick": "选择模板",
+        "loading": "加载中...",
+        "unavailable": "已不可用",
+        "up": "上移",
+        "down": "下移",
+        "moveUp": "将模板 {position} 上移",
+        "moveDown": "将模板 {position} 下移",
+        "remove": "删除模板 {position}",
+        "removeShort": "删除",
+        "removeAll": "全部删除",
+        "add": "添加模板",
+        "count": "第 {used} 个，共 {max} 个模板",
+        "limitReached": "已达上限：最多 {max} 个模板。",
+        "variablesTitle": "模板 {position} 的变量：{name}"
       }
     },
     "history": {

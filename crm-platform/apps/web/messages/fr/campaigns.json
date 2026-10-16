@@ -1166,7 +1166,10 @@
         "pacing_range": "Vérifiez Smart Delivery : le délai le plus long est inférieur au plus court, ou une seule des deux heures d’envoi est définie.",
         "follow_up_template_required": "Choisissez le modèle envoyé par chaque relance.",
         "follow_up_flow_required": "Choisissez le flux démarré par chaque relance.",
-        "follow_up_cloud_api_only": "Les relances ne fonctionnent qu'avec un numéro WhatsApp Cloud API. Choisissez-en un à l'étape 1 ou supprimez les relances."
+        "follow_up_cloud_api_only": "Les relances ne fonctionnent qu'avec un numéro WhatsApp Cloud API. Choisissez-en un à l'étape 1 ou supprimez les relances.",
+        "sequence_not_recurring": "Les modèles en alternance ne fonctionnent qu'avec une campagne récurrente. Choisissez une planification récurrente ou retirez les modèles supplémentaires.",
+        "sequence_with_ab": "Les modèles en alternance ne peuvent pas être combinés avec un test A/B. Désactivez le test A/B ou retirez les modèles supplémentaires.",
+        "sequence_template_required": "Choisissez un modèle pour chaque étape de l'ordre, ou retirez les étapes vides."
       },
       "template": {
         "previewOnline": "en ligne",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "Coût estimé (total)",
         "chargedPlan": "Débité maintenant de votre portefeuille : {amount} (votre forfait couvre {covered} de ces messages)",
         "chargedWallet": "Débité de votre portefeuille : {amount}",
-        "sumFollowUps": "Relances"
+        "sumFollowUps": "Relances",
+        "sumSequence": "Envoyé en alternance"
       },
       "test": {
         "title": "Envoyer un message WhatsApp de test",
@@ -1588,7 +1592,8 @@
           "sent": "Envoyés",
           "delivered": "Distribués",
           "failed": "Échoués",
-          "retries": "Nouvelles tentatives"
+          "retries": "Nouvelles tentatives",
+          "template": "Modèle"
         },
         "retrySummary": "{pending} en attente, {recovered} récupérés, {exhausted} abandonnés",
         "openRun": "Ouvrir l’exécution",
@@ -1648,7 +1653,9 @@
             "skipped": "La condition n'était pas remplie lors de la vérification, la séquence s'est donc arrêtée là.",
             "lapsed": "Le délai de surveillance a expiré avant que le contact ne réponde ou ne lise, la séquence s'est donc arrêtée là."
           }
-        }
+        },
+        "templatesTitle": "Modèles",
+        "templatesInTurn": "{count, plural, one {# modèle en alternance} other {# modèles en alternance}}"
       },
       "panel": {
         "title": "Créées avec Créer une diffusion",
@@ -1659,7 +1666,8 @@
           "recurring": "Récurrente"
         },
         "recipients": "{count, plural, one {# destinataire} other {# destinataires}}",
-        "next": "Prochaine exécution {when}"
+        "next": "Prochaine exécution {when}",
+        "moreTemplates": "+{count} de plus"
       },
       "pickers": {
         "selectDate": "Sélectionner la date",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, one {heure} many {d'heures} other {heures}}",
           "days": "{count, plural, one {jour} many {de jours} other {jours}}"
         }
+      },
+      "sequence": {
+        "title": "Modèles dans l'ordre",
+        "intro": "Chaque exécution envoie le modèle suivant de cette liste. L'exécution 1 envoie le premier, la 2 le deuxième, et après le dernier la liste reprend au premier.",
+        "notRecurring": "Seule une diffusion récurrente envoie des modèles en alternance. Choisissez une planification récurrente ou retirez ces modèles.",
+        "withAb": "Les modèles en alternance ne peuvent pas être utilisés avec un test A/B, qui envoie déjà deux modèles. Désactivez le test A/B pour les utiliser.",
+        "templateLabel": "Modèle {position}",
+        "firstMissing": "Pas encore choisi",
+        "firstHint": "Le modèle choisi pour la campagne. Changez-le à l'étape du modèle.",
+        "pick": "Choisir un modèle",
+        "loading": "Chargement...",
+        "unavailable": "N'est plus disponible",
+        "up": "Monter",
+        "down": "Descendre",
+        "moveUp": "Monter le modèle {position}",
+        "moveDown": "Descendre le modèle {position}",
+        "remove": "Retirer le modèle {position}",
+        "removeShort": "Retirer",
+        "removeAll": "Tout retirer",
+        "add": "Ajouter un modèle",
+        "count": "{used} modèles sur {max}",
+        "limitReached": "Limite atteinte : {max} modèles.",
+        "variablesTitle": "Variables du modèle {position} : {name}"
       }
     },
     "history": {

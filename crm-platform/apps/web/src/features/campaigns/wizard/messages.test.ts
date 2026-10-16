@@ -200,6 +200,10 @@ const DYNAMIC = [
     (k) => `campaigns.wizard.status.followUps.count.${k}`,
   ),
   ...['skipped', 'lapsed'].map((k) => `campaigns.wizard.status.followUps.hint.${k}`),
+  ...['sequence_not_recurring', 'sequence_with_ab', 'sequence_template_required'].map(
+    (k) => `campaigns.wizard.issues.${k}`,
+  ),
+  'campaigns.wizard.status.col.template',
 ];
 
 describe('message keys used in code', () => {

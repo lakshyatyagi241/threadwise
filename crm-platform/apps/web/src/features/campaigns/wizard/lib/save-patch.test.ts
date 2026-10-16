@@ -68,3 +68,34 @@ describe('sanitizePatch: follow-ups', () => {
     expect(sanitizePatch({ followUps: [ok, ok, ok, ok, ok] }).followUps).toHaveLength(3);
   });
 });
+
+describe('sanitizePatch: template sequence', () => {
+  it('keeps every entry in place and cleans only a mapping the server would refuse', () => {
+    const out = sanitizePatch({
+      templateSequence: [
+        { templateId: uuid(5), variables: { 'body.1': { kind: 'fixed', text: 'ok' } } },
+        { templateId: null, variables: {} },
+        {
+          templateId: uuid(6),
+          variables: {
+            'body.1': { kind: 'fixed', text: '{{x}}' },
+            'body.2': { kind: 'field', field: 'email', fallback: null },
+          },
+        },
+      ],
+    });
+    expect(out.templateSequence).toEqual([
+      { templateId: uuid(5), variables: { 'body.1': { kind: 'fixed', text: 'ok' } } },
+      { templateId: null, variables: {} },
+      {
+        templateId: uuid(6),
+        variables: { 'body.2': { kind: 'field', field: 'email', fallback: null } },
+      },
+    ]);
+  });
+
+  it('an empty list is saved as empty, and a patch without it is untouched', () => {
+    expect(sanitizePatch({ templateSequence: [] }).templateSequence).toEqual([]);
+    expect('templateSequence' in sanitizePatch({ name: 'A' })).toBe(false);
+  });
+});

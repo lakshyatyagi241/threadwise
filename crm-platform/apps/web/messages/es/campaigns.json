@@ -1166,7 +1166,10 @@
         "pacing_range": "Revisa Smart Delivery: el retraso máximo es menor que el mínimo, o solo se ha definido una de las dos horas de envío.",
         "follow_up_template_required": "Elige la plantilla que envía cada seguimiento.",
         "follow_up_flow_required": "Elige el flujo que inicia cada seguimiento.",
-        "follow_up_cloud_api_only": "Los seguimientos solo funcionan con un número de WhatsApp Cloud API. Elige uno en el paso 1 o quita los seguimientos."
+        "follow_up_cloud_api_only": "Los seguimientos solo funcionan con un número de WhatsApp Cloud API. Elige uno en el paso 1 o quita los seguimientos.",
+        "sequence_not_recurring": "Las plantillas por turnos solo funcionan con una campaña recurrente. Elige una programación recurrente o quita las plantillas adicionales.",
+        "sequence_with_ab": "Las plantillas por turnos no se pueden combinar con una prueba A/B. Desactiva la prueba A/B o quita las plantillas adicionales.",
+        "sequence_template_required": "Elige una plantilla para cada paso del orden o quita los vacíos."
       },
       "template": {
         "previewOnline": "en línea",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "Coste estimado (total)",
         "chargedPlan": "Se cobra ahora de tu monedero: {amount} (tu plan cubre {covered} de estos mensajes)",
         "chargedWallet": "Se cobra de tu monedero: {amount}",
-        "sumFollowUps": "Seguimientos"
+        "sumFollowUps": "Seguimientos",
+        "sumSequence": "Se envía por turnos"
       },
       "test": {
         "title": "Enviar un mensaje de prueba de WhatsApp",
@@ -1588,7 +1592,8 @@
           "sent": "Enviados",
           "delivered": "Entregados",
           "failed": "Fallidos",
-          "retries": "Reintentos"
+          "retries": "Reintentos",
+          "template": "Plantilla"
         },
         "retrySummary": "{pending} en espera, {recovered} recuperados, {exhausted} descartados",
         "openRun": "Abrir ejecución",
@@ -1648,7 +1653,9 @@
             "skipped": "La condición no se cumplía cuando se comprobó, así que la secuencia terminó ahí.",
             "lapsed": "El tiempo de vigilancia se agotó antes de que el contacto respondiera o leyera, así que la secuencia terminó ahí."
           }
-        }
+        },
+        "templatesTitle": "Plantillas",
+        "templatesInTurn": "{count, plural, one {# plantilla por turnos} other {# plantillas por turnos}}"
       },
       "panel": {
         "title": "Creadas con Crear difusión",
@@ -1659,7 +1666,8 @@
           "recurring": "Recurrente"
         },
         "recipients": "{count, plural, one {# destinatario} other {# destinatarios}}",
-        "next": "Próxima ejecución {when}"
+        "next": "Próxima ejecución {when}",
+        "moreTemplates": "+{count} más"
       },
       "pickers": {
         "selectDate": "Seleccionar fecha",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, one {hora} many {horas} other {horas}}",
           "days": "{count, plural, one {día} many {días} other {días}}"
         }
+      },
+      "sequence": {
+        "title": "Plantillas en orden",
+        "intro": "Cada ejecución envía la siguiente plantilla de esta lista. La ejecución 1 envía la primera, la 2 la segunda y, tras la última, la lista vuelve a empezar desde la primera.",
+        "notRecurring": "Solo una difusión recurrente envía plantillas por turnos. Elige una programación recurrente o quita estas plantillas.",
+        "withAb": "Las plantillas por turnos no se pueden usar con una prueba A/B, que ya envía dos plantillas. Desactiva la prueba A/B para usarlas.",
+        "templateLabel": "Plantilla {position}",
+        "firstMissing": "Aún sin elegir",
+        "firstHint": "La plantilla elegida para la campaña. Cámbiala en el paso de plantilla.",
+        "pick": "Elige una plantilla",
+        "loading": "Cargando...",
+        "unavailable": "Ya no está disponible",
+        "up": "Subir",
+        "down": "Bajar",
+        "moveUp": "Subir la plantilla {position}",
+        "moveDown": "Bajar la plantilla {position}",
+        "remove": "Quitar la plantilla {position}",
+        "removeShort": "Quitar",
+        "removeAll": "Quitar todas",
+        "add": "Añadir una plantilla",
+        "count": "{used} de {max} plantillas",
+        "limitReached": "Límite alcanzado: {max} plantillas.",
+        "variablesTitle": "Variables de la plantilla {position}: {name}"
       }
     },
     "history": {
