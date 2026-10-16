@@ -33,7 +33,7 @@ All but the webhook are gated by the plan feature `extra_channels`.
 
 ## Tables read or written
 
-`line_channels`, `line_broadcasts`, `line_broadcast_recipients`, `line_flow_sessions` (unused until the flow runtime binds it), `line_rich_menus` (unused, see below), plus `channels`, `contacts`, `conversations`, `messages`, `wa_templates` (channel `line`), `organizations` (no write). `line_channel_lookup` is the only function.
+`line_channels`, `line_broadcasts`, `line_broadcast_recipients`, `line_rich_menus` (unused, blocked on TW-LINE-016, see below), plus `channels`, `contacts`, `conversations`, `messages`, `wa_templates` (channel `line`), `organizations` (no write). `line_channel_lookup` is the only function.
 
 ## Queues and workers
 
@@ -57,7 +57,7 @@ All but the webhook are gated by the plan feature `extra_channels`.
 
 ## Shims, owners and blocked consumers
 
-- `NoInboundHooks` (`INBOUND_HOOKS`): flow hand-off and routing, AI agent and keyword auto-reply are not bound yet; nothing consumes a message and nothing replies. Owners: flow-runtime-engine, team-inbox-routing-sla, ai-agents-training. `line_flow_sessions` and Reference's two Node callbacks (`flow-log`, `flow-node`) wait on the same owners (TW-LINE-015, blocked).
+- `NoInboundHooks` (`INBOUND_HOOKS`): flow hand-off and routing, AI agent and keyword auto-reply are not bound yet; nothing consumes a message and nothing replies. Owners: flow-runtime-engine, team-inbox-routing-sla, ai-agents-training. Reference's two Node callbacks (`flow-log`, `flow-node`) wait on the same owners (TW-LINE-015, blocked). The `line_flow_sessions` table was dropped by `20261216090000_drop_dormant_tables.sql` (Reference keeps these sessions in Node memory and never writes it); flow state is `flow_runs`, one engine for every channel (TW-FLR-070 wontfix, TW-NODE-050). Pending owner confirmation: punya.
 - `SqlLineTemplates` (`LINE_TEMPLATES`): reads `wa_templates` where the channel is line until message-templates exports a lookup.
 - Plan flags `access_line`, `line_broadcasts` and `line_channels_limit` are folded into `extra_channels`; the channel cap is not enforced (Reference never did).
 - Rich menus (`line_rich_menus`, TW-LINE-016) and insights (TW-LINE-017) are Reference features that are **blocked / not ported**; no control for them is shown.

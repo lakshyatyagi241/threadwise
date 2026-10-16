@@ -16,7 +16,6 @@ const TABLES = [
   'team_chat_reactions',
   'team_chat_invitations',
   'team_chat_attachment_blobs',
-  'team_chat_reads',
 ];
 
 describe('team chat: schema, constraints and isolation', () => {

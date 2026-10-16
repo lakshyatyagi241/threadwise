@@ -33,7 +33,7 @@ Every controller carries `@RequirePlanFeature('extra_channels')`, `@ActorKinds('
 
 ## Tables read or written
 
-`viber_channels`, `viber_broadcasts`, `viber_broadcast_recipients` (additive columns `message_token`, `delivered_at`, `seen_at`; on broadcasts `delivered`, `seen`, `media_size`, migration `20261203090200_vib_receipt_tokens.sql`), `channels` (kind `viber`, mirrored), `conversations`, `messages`, `contacts` (`channel = 'viber'`, `channel_uid` = the Viber user id), `wa_templates` (channel `viber`), `permission_defs`/`role_grants` (migration `20261203090000_vib_permissions.sql`), function `vib_channel_lookup` (`20261203090100_vib_channel_lookup.sql`, granted to `crm_app_user` and `crm_worker_user`). `viber_flow_sessions` exists and is not used here.
+`viber_channels`, `viber_broadcasts`, `viber_broadcast_recipients` (additive columns `message_token`, `delivered_at`, `seen_at`; on broadcasts `delivered`, `seen`, `media_size`, migration `20261203090200_vib_receipt_tokens.sql`), `channels` (kind `viber`, mirrored), `conversations`, `messages`, `contacts` (`channel = 'viber'`, `channel_uid` = the Viber user id), `wa_templates` (channel `viber`), `permission_defs`/`role_grants` (migration `20261203090000_vib_permissions.sql`), function `vib_channel_lookup` (`20261203090100_vib_channel_lookup.sql`, granted to `crm_app_user` and `crm_worker_user`). `viber_flow_sessions` was dropped by `20261216090000_drop_dormant_tables.sql` (Reference keeps Viber flow sessions in Node memory and never writes it; flow state is `flow_runs`, TW-FLR-070 wontfix, TW-NODE-050). Pending owner confirmation: punya.
 
 ## Queues and workers
 
@@ -48,7 +48,7 @@ Every controller carries `@RequirePlanFeature('extra_channels')`, `@ActorKinds('
 - Inbox: the `viber` `ChannelAdapter` (registered in `ChannelAdapterRegistry`, API and worker) carries replies; threads and unread come from `ExternalChannelIngest`.
 - Flow builder: `viber_channels` is read for the channel list of the Trigger node (`flow-builder-editor`); flow runtime launches `viber` flows from stored messages (`launch.service.ts`, `channel-render.ts`).
 - Consent: `viber` is a consent channel; the send paths are listed in `consent-gate.allowlist.ts` (the broadcast sender as a known gap).
-- Privacy: manifests for `viber_broadcast_recipients` and `viber_flow_sessions` (`modules/privacy/manifests/inbox.ts`).
+- Privacy: manifest for `viber_broadcast_recipients` (`modules/privacy/manifests/inbox.ts`); the `viber_flow_sessions` manifest went with the table (`20261216090000_drop_dormant_tables.sql`).
 - Provider port: token `VIBER_API` (`infra/providers/channel-viber/viber.port.ts`), client `ViberBotApiFactory`.
 
 ## Shims, owners and blocked consumers

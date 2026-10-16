@@ -154,7 +154,6 @@ describe('the load', () => {
       'flow_runs',
       'flow_run_steps',
       'flow_subscribers',
-      'flow_connected_devices',
       'flb_geta_publish_syncs',
       'event_outbox',
     ])

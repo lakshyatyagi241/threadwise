@@ -123,6 +123,58 @@ reserved <= balance` check) replaces the two balances Reference keeps on `users`
 10. **Data migration** is out of scope here: this is the schema. Reference ids, encrypted columns and the JSON-list-to-join-table
     conversion (`contacts.contact_group` to `contact_group_members`) are the data migration's job.
 
+## Dropped after the port
+
+Migration `packages/db/migrations/20261216090000_drop_dormant_tables.sql` (2026-10-16, approved by the project owner) drops 15 tables that
+the translation above created and that nothing writes and nothing needs. Each was checked for a writer in every form (SQL, Drizzle,
+dynamic table-name maps, queue processors, seeds, the Waboo importer, triggers and functions), for a built product path that reads it, and
+for an unported Reference feature that would need it. The migration refuses to run if any of them holds a row. The deviation of each
+one from Reference is recorded as `intended` in `docs/threadwise-port/parity/<domain>.md`.
+
+| Table                                                                                         | Where the behaviour lives now                                                                                                                                                                               |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `line_flow_sessions`, `telegram_flow_sessions`, `viber_flow_sessions`, `wechat_flow_sessions` | `flow_runs`, one engine for every channel (TW-FLR-070 wontfix, TW-NODE-050). Pending owner confirmation: punya.                                                                                             |
+| `sla_breaches`                                                                                | the workspace SLA sweep flags `conversations.sla_breached`; the helpdesk ledger is `support_sla_breaches` (TW-SUPP)                                                                                         |
+| `support_agents`                                                                              | `support_agent_roster`, keyed by platform operator                                                                                                                                                          |
+| `support_assignments`                                                                         | never written (not in Reference either); assignment history would need an operator-keyed table                                                                                                              |
+| `team_chat_reads`                                                                             | dead in Reference (TW-TCHAT-031); read state is `team_chat_channel_members.last_read_message_id`                                                                                                            |
+| `google_form_sessions`                                                                        | the waiting flow run is the session (TW-FLR-046)                                                                                                                                                            |
+| `invoice_webhook_events`                                                                      | `ecom_invoice_handoffs`, which is tenant data                                                                                                                                                               |
+| `chat_templates`                                                                              | dead in Reference (TW-TPL-049); the chat picker reads `wa_templates`                                                                                                                                        |
+| `flow_connected_devices`                                                                      | dead in Reference (TW-FLB-078); the sender binding is on the flow row                                                                                                                                       |
+| `playbooks`                                                                                   | `support_playbooks`                                                                                                                                                                                         |
+| `package_features`, `packages`                                                                | `plans` replaced the package catalogue (`workspace_addons` was repointed to `plans` in `add_addon_registry`); the unused `subscriptions.package_id` and `orders.package_id` columns go with them |
+
+The generated files (`table-map.md`, `review-notes.md`, `source/*` and `docs/db/threadwise-port-schema.dbml`) are a snapshot of the
+Reference translation and still list these tables. They are not edited, and `gen_schema.py` must not be run over the repo: it would
+create the tables again.
+
+### Looked dormant but kept
+
+The same check found these tables with no writer today, but each backs an unported Reference feature or a live read path, so they stay.
+They are recorded as blocked on the feature, not dropped.
+
+| Table                                                                                                | Blocked on, or why it stays                                                                        |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `line_rich_menus`                                                                                    | blocked on TW-LINE-016 (LINE rich menus)                                                           |
+| `telegram_accounts`                                                                                  | blocked on TW-TG-015 to 017 (Telegram account login through the Node bridge)                       |
+| `tiktok_accounts`, `tiktok_posts`, `tiktok_shops`                                                    | blocked on the channel-tiktok domain (pending); `tiktok_accounts` is also read by the flow builder |
+| `user_device_tokens`                                                                                 | blocked on TW-NOTIF-022 to 025 (mobile push)                                                       |
+| `hubspot_*`, `slack_*`, `trello_*` (integrations and their logs)                                     | blocked on the INTG domain (not started)                                                           |
+| `incoming_webhooks`, `incoming_webhook_events`                                                       | blocked on WIRE-LEAD-020                                                                           |
+| `outbound_webhooks`                                                                                  | blocked on TW-TIB1-047; owner decision: merge into `webhooks` or build                             |
+| `meta_campaigns`                                                                                     | blocked on the MADS domain (not started)                                                           |
+| `workspace_email_accounts`                                                                           | read by the flow builder's email sender picker                                                     |
+| `notifications`                                                                                      | blocked on TW-NOTIF-001 to 004; owner decision                                                     |
+| `agent_statuses`                                                                                     | blocked on TW-TIB2-023                                                                             |
+| `ai_agents`, `ai_call_assistants`, `ai_call_assistant_tools`, `ai_call_logs`, `ai_voice_usage_daily` | blocked on TW-AIAG-017 and 018, BL-109                                                             |
+| `ai_crm_actions`, `crm_briefs`, `leads`                                                              | blocked on the AICRM domain (unbuilt)                                                              |
+| `auto_reply_lookups`, `keyword_reply_logs`                                                           | blocked on the auto-reply domain (TW-AR-*)                                                         |
+| `conversation_participants`                                                                          | blocked on TW-TIB1-004 and 009                                                                     |
+| `projects`                                                                                           | blocked on Reference's Projects page (unbuilt)                                                     |
+| `csat_responses`                                                                                     | feeds the built Team Performance CSAT column                                                       |
+| `shopify_stock_waitlist`, `woocommerce_stock_waitlist`                                               | blocked on TW-ECOM-020, which waits on the inbox hook TW-ECOM-034                                  |
+
 ## Working with it
 
 ```bash

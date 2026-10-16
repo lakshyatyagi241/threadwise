@@ -226,15 +226,6 @@ export const formsSubmissions = defineHolder({
       pii: ['caller_phone', 'answers_json', 'meta_payload', 'flow_token'],
       retention: 'Forever today.',
     },
-    {
-      table: 'google_form_sessions',
-      link: { by: 'phone', column: 'contact_phone' },
-      disposition: 'delete',
-      tier: 'history',
-      categories: ['identifier', 'content'],
-      pii: ['contact_phone', 'answers_json'],
-      retention: 'Expires with the session (expires_at).',
-    },
   ],
 });
 

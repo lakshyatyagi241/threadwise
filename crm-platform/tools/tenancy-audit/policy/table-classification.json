@@ -69,11 +69,6 @@
     "reason": "operator act-as sessions, target_workspace_id, operator_write only",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
-  "invoice_webhook_events": {
-    "class": "PLATFORM_ONLY",
-    "reason": "operator_write / privileged_only policy, no tenant policy",
-    "reviewed": "2026-10-11 (policy text read in catalog)"
-  },
   "languages": {
     "class": "GLOBAL",
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
@@ -117,16 +112,6 @@
   "organizations": {
     "class": "TENANT_ROOT",
     "reason": "keyed on id = current_org_id(); the tenant row itself",
-    "reviewed": "2026-10-11 (policy text read in catalog)"
-  },
-  "package_features": {
-    "class": "GLOBAL",
-    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
-    "reviewed": "2026-10-11 (policy text read in catalog)"
-  },
-  "packages": {
-    "class": "GLOBAL",
-    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
   "payment_gateways": {

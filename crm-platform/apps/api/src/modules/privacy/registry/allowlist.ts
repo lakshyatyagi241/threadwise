@@ -62,9 +62,6 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
   orders: staff(
     "The workspace's own billing orders to the platform (the billing contact's name and email); financial record kept by the platform (ADR-0028).",
   ),
-  packages: notPersonal(
-    'Plan catalogue row; `access_email` is a plan access setting, not a person.',
-  ),
 
   // ---- workspace: the workspace's own settings, accounts and business numbers -----------------------------------------------------
   devices: workspace(

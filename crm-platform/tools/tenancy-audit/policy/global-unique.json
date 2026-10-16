@@ -91,10 +91,6 @@
     "category": "secret-or-token",
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   },
-  "uq_google_form_sessions_webhook_token": {
-    "category": "secret-or-token",
-    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
-  },
   "uq_incoming_webhooks_token": {
     "category": "secret-or-token",
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
