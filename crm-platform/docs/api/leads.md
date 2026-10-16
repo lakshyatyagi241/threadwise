@@ -9,8 +9,9 @@ call the same pipeline. Base path `/v2`. Errors are `application/problem+json` w
 uuid. The management routes need a staff bearer token; the hook needs none.
 
 **One pipeline, several doors.** A lead source is a door; every door ends in the same pipeline (`LeadIngestService`), the only writer of
-lead-originated contacts. Today a workspace creates one kind of door, the generic webhook (covers LinkedIn, TikTok, Google Ads and any
-landing-page tool through Zapier, Make or a native webhook). `kind` already names the doors that follow (`meta_lead_ads`, `tiktok`, `linkedin`,
+lead-originated contacts. A workspace creates the generic webhook (covers LinkedIn, TikTok, Google Ads and any
+landing-page tool through Zapier, Make or a native webhook) and, from the Ads tab, picks Meta lead forms: each picked form is a source of kind
+`meta_lead_ads` made by the Meta door ([meta-lead-ads.md](meta-lead-ads.md)). `kind` already names the doors that follow (`meta_lead_ads`, `tiktok`, `linkedin`,
 `google_ads`) and `connector` (a marketplace portal such as IndiaMART), which reaches the pipeline through the port in
 [The port](#the-port-for-other-domains).
 

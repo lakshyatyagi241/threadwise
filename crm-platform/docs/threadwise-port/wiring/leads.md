@@ -29,12 +29,12 @@ Written by this domain in other domains' tables: `contacts` (create through `Con
 
 ## Writers of a lead-originated contact
 
-| Id            | Writer                                                                                    | Where                                                                                                                   |
-| ------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| WIRE-LEAD-007 | The generic webhook (JSON or form body)                                                   | `LeadHooksService.receive` -> `LeadIngestService.process`                                                               |
-| WIRE-LEAD-008 | An admin's test lead and a retry of a stored lead                                         | `POST /lead-sources/:id/test`, `.../events/:id/retry` -> `LeadIngestService.process` / `.run`                           |
-| WIRE-LEAD-009 | Marketplace connectors (IndiaMART, JustDial, ...) and the Meta, TikTok and LinkedIn doors | not built; they inject `LEAD_INGEST` and import only `lead-ingest.port.ts` (and `lead-source-directory.port.ts`)        |
-| WIRE-LEAD-010 | Nothing else: no import, no flow, no public API writes a contact as a lead                | `POST /public/v1/leads` (API key + HMAC) is a separate door and does not record a lead event or attribution (unchanged) |
+| Id            | Writer                                                                                                                                                                | Where                                                                                                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-LEAD-007 | The generic webhook (JSON or form body)                                                                                                                               | `LeadHooksService.receive` -> `LeadIngestService.process`                                                                                                                                           |
+| WIRE-LEAD-008 | An admin's test lead and a retry of a stored lead                                                                                                                     | `POST /lead-sources/:id/test`, `.../events/:id/retry` -> `LeadIngestService.process` / `.run`                                                                                                       |
+| WIRE-LEAD-009 | Marketplace connectors (IndiaMART, JustDial, ...), the Meta lead ads door (built, [meta-lead-ads.md](meta-lead-ads.md)) and the TikTok and LinkedIn doors (not built) | they inject `LEAD_INGEST` and import only `lead-ingest.port.ts` (and `lead-source-directory.port.ts`); `LeadIngestPort.settled` and `ConnectorSourceInput.kind` serve the pollers and the Meta door |
+| WIRE-LEAD-010 | Nothing else: no import, no flow, no public API writes a contact as a lead                                                                                            | `POST /public/v1/leads` (API key + HMAC) is a separate door and does not record a lead event or attribution (unchanged)                                                                             |
 
 ## Consumers
 
@@ -58,10 +58,10 @@ Written by this domain in other domains' tables: `contacts` (create through `Con
 
 ## Not built, recorded
 
-| Id            | What                                                                                                 | Status                                               |
-| ------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)                                          | blocked on the Facebook module and Meta app review   |
-| WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15)                                   | blocked on partner approval                          |
-| WIRE-LEAD-019 | Speed-to-lead first message (L-16), backfill and "sync now" (L-18), Zapier and Make templates (L-19) | later phases                                         |
-| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL                                   | integrations domain (the ported `incoming_webhooks`) |
-| WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                                                      | the UI agent                                         |
+| Id            | What                                                                                                 | Status                                                                                      |
+| ------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)                                          | built (BL-011), see [meta-lead-ads.md](meta-lead-ads.md); not yet run against Meta (BL-205) |
+| WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15)                                   | blocked on partner approval                                                                 |
+| WIRE-LEAD-019 | Speed-to-lead first message (L-16), backfill and "sync now" (L-18), Zapier and Make templates (L-19) | later phases                                                                                |
+| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL                                   | integrations domain (the ported `incoming_webhooks`)                                        |
+| WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                                                      | the UI agent                                                                                |
