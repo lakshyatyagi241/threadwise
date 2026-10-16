@@ -1478,7 +1478,8 @@
           "failed": "Com falha",
           "held": "Retido"
         },
-        "charged": "Cobrado {amount}"
+        "charged": "Cobrado {amount}",
+        "heldUntil": "Retido até {when} (horário de silêncio)"
       },
       "send": {
         "whenTitle": "Quando enviar",

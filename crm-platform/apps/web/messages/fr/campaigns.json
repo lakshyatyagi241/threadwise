@@ -1478,7 +1478,8 @@
           "failed": "Échoué",
           "held": "Retenu"
         },
-        "charged": "Débité : {amount}"
+        "charged": "Débité : {amount}",
+        "heldUntil": "Retenu jusqu’à {when} (heures de silence)"
       },
       "send": {
         "whenTitle": "Quand envoyer",

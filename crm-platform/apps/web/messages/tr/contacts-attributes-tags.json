@@ -1471,7 +1471,8 @@
         "window_setting": "Yedek saat diliminiz (Uyumluluk merkezi)",
         "workspace": "Çalışma alanınızın saat dilimi",
         "utc": "UTC (başka bir bilgi yok)"
-      }
+      },
+      "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
     }
   }
 }

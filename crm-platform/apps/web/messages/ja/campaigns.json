@@ -1478,7 +1478,8 @@
           "failed": "失敗",
           "held": "保留中"
         },
-        "charged": "{amount}課金"
+        "charged": "{amount}課金",
+        "heldUntil": "{when} まで保留中(通知を控える時間帯)"
       },
       "send": {
         "whenTitle": "送信タイミング",

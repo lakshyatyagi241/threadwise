@@ -570,7 +570,8 @@
           "failed": "فشلت",
           "held": "مؤجّل"
         },
-        "charged": "تم خصم {amount}"
+        "charged": "تم خصم {amount}",
+        "heldUntil": "مؤجّل حتى {when} (ساعات الهدوء)"
       },
       "send": {
         "whenTitle": "موعد الإرسال",

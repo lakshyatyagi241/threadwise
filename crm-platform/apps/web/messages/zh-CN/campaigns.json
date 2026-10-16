@@ -1478,7 +1478,8 @@
           "failed": "失败",
           "held": "暂缓"
         },
-        "charged": "已扣费 {amount}"
+        "charged": "已扣费 {amount}",
+        "heldUntil": "暂缓至 {when}（免打扰时段）"
       },
       "send": {
         "whenTitle": "发送时间",

@@ -1520,7 +1520,8 @@
           "failed": "Failed",
           "held": "Held"
         },
-        "charged": "Charged {amount}"
+        "charged": "Charged {amount}",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "send": {
         "whenTitle": "When to send",

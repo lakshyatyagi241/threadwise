@@ -29,7 +29,6 @@ export function TimezoneCard({
   className?: string;
 }) {
   const t = useTranslations('contacts-attributes-tags.timezone');
-  const tHold = useTranslations('compliance-center.hold');
   const locale = useLocale();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -135,7 +134,7 @@ export function TimezoneCard({
       {w.heldCount > 0 && (
         <p className="mt-1 text-sm text-warning" data-testid="timezone-held">
           {t('held', { count: w.heldCount })}
-          {w.heldUntil ? ` · ${tHold('heldUntil', { when: when(w.heldUntil) })}` : ''}
+          {w.heldUntil ? ` · ${t('heldUntil', { when: when(w.heldUntil) })}` : ''}
         </p>
       )}
     </section>

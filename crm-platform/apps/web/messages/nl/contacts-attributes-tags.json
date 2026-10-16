@@ -1471,7 +1471,8 @@
         "window_setting": "Uw terugvaltijdzone (Compliancecentrum)",
         "workspace": "De tijdzone van uw werkruimte",
         "utc": "UTC (verder is niets bekend)"
-      }
+      },
+      "heldUntil": "Vastgehouden tot {when} (stille uren)"
     }
   }
 }

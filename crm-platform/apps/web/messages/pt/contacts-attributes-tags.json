@@ -1471,7 +1471,8 @@
         "window_setting": "Seu fuso horário de reserva (Central de conformidade)",
         "workspace": "O fuso horário do seu espaço de trabalho",
         "utc": "UTC (nada mais é conhecido)"
-      }
+      },
+      "heldUntil": "Retido até {when} (horário de silêncio)"
     }
   }
 }

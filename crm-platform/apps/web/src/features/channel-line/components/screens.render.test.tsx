@@ -75,6 +75,8 @@ const broadcast = (over: Partial<LineBroadcast> = {}): LineBroadcast => ({
   failed: 0,
   blocked: 0,
   progress: 0,
+  held: 0,
+  heldUntil: null,
   hasMedia: false,
   lastError: null,
   startedAt: null,

@@ -1478,7 +1478,8 @@
           "failed": "विफल",
           "held": "रोका गया"
         },
-        "charged": "{amount} का शुल्क लिया गया"
+        "charged": "{amount} का शुल्क लिया गया",
+        "heldUntil": "{when} तक रोका गया (शांत घंटे)"
       },
       "send": {
         "whenTitle": "कब भेजें",

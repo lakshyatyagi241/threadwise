@@ -1471,7 +1471,8 @@
         "window_setting": "Votre fuseau horaire de repli (Centre de conformité)",
         "workspace": "Le fuseau horaire de votre espace de travail",
         "utc": "UTC (rien d'autre n'est connu)"
-      }
+      },
+      "heldUntil": "Retenu jusqu’à {when} (heures de silence)"
     }
   }
 }

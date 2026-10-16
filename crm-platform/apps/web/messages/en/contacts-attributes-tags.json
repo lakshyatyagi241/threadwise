@@ -1471,7 +1471,8 @@
         "window_setting": "Your fallback time zone (Compliance center)",
         "workspace": "Your workspace time zone",
         "utc": "UTC (nothing else is known)"
-      }
+      },
+      "heldUntil": "Held until {when} (quiet hours)"
     }
   }
 }

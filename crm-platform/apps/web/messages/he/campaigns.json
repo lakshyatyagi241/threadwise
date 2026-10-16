@@ -1478,7 +1478,8 @@
           "failed": "נכשל",
           "held": "מוחזק"
         },
-        "charged": "חויב {amount}"
+        "charged": "חויב {amount}",
+        "heldUntil": "מוחזק עד {when} (שעות שקט)"
       },
       "send": {
         "whenTitle": "מתי לשלוח",

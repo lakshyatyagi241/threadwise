@@ -1471,7 +1471,8 @@
         "window_setting": "Ihre Ersatz-Zeitzone (Compliance-Center)",
         "workspace": "Die Zeitzone Ihres Workspace",
         "utc": "UTC (mehr ist nicht bekannt)"
-      }
+      },
+      "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)"
     }
   }
 }

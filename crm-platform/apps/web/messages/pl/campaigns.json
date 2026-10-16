@@ -1478,7 +1478,8 @@
           "failed": "Nieudane",
           "held": "Wstrzymano"
         },
-        "charged": "Naliczono {amount}"
+        "charged": "Naliczono {amount}",
+        "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
       },
       "send": {
         "whenTitle": "Kiedy wysłać",

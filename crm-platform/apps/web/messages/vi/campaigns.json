@@ -1478,7 +1478,8 @@
           "failed": "Thất bại",
           "held": "Tạm giữ"
         },
-        "charged": "Đã tính phí {amount}"
+        "charged": "Đã tính phí {amount}",
+        "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
       },
       "send": {
         "whenTitle": "Thời điểm gửi",

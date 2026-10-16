@@ -1471,7 +1471,8 @@
         "window_setting": "Il tuo fuso orario di riserva (Centro conformità)",
         "workspace": "Il fuso orario del tuo workspace",
         "utc": "UTC (non si sa altro)"
-      }
+      },
+      "heldUntil": "Trattenuto fino a {when} (ore di silenzio)"
     }
   }
 }

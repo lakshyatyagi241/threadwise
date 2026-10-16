@@ -1478,7 +1478,8 @@
           "failed": "Fallido",
           "held": "En espera"
         },
-        "charged": "Cobrado {amount}"
+        "charged": "Cobrado {amount}",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "send": {
         "whenTitle": "Cuándo enviar",

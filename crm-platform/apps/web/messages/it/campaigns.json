@@ -1478,7 +1478,8 @@
           "failed": "Non riuscito",
           "held": "Trattenuto"
         },
-        "charged": "Addebitati {amount}"
+        "charged": "Addebitati {amount}",
+        "heldUntil": "Trattenuto fino a {when} (ore di silenzio)"
       },
       "send": {
         "whenTitle": "Quando inviare",

@@ -1471,7 +1471,8 @@
         "window_setting": "Tu zona horaria de respaldo (Centro de cumplimiento)",
         "workspace": "La zona horaria de tu espacio de trabajo",
         "utc": "UTC (no se sabe nada más)"
-      }
+      },
+      "heldUntil": "En espera hasta {when} (horas de silencio)"
     }
   }
 }

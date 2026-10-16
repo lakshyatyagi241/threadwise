@@ -1471,7 +1471,8 @@
         "window_setting": "备用时区（合规中心）",
         "workspace": "工作区时区",
         "utc": "UTC（没有其他信息）"
-      }
+      },
+      "heldUntil": "暂缓至 {when}（免打扰时段）"
     }
   }
 }

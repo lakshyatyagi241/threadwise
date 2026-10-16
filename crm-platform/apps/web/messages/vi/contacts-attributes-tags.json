@@ -1471,7 +1471,8 @@
         "window_setting": "Múi giờ dự phòng của bạn (Trung tâm tuân thủ)",
         "workspace": "Múi giờ của không gian làm việc",
         "utc": "UTC (không biết thông tin nào khác)"
-      }
+      },
+      "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
     }
   }
 }

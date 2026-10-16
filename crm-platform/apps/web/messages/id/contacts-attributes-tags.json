@@ -1471,7 +1471,8 @@
         "window_setting": "Zona waktu cadangan Anda (Pusat kepatuhan)",
         "workspace": "Zona waktu ruang kerja Anda",
         "utc": "UTC (tidak ada informasi lain)"
-      }
+      },
+      "heldUntil": "Ditahan sampai {when} (jam tenang)"
     }
   }
 }

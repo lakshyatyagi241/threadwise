@@ -1471,7 +1471,8 @@
         "window_setting": "Zapasowa strefa czasowa (Centrum zgodności)",
         "workspace": "Strefa czasowa przestrzeni roboczej",
         "utc": "UTC (nic więcej nie wiadomo)"
-      }
+      },
+      "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
     }
   }
 }

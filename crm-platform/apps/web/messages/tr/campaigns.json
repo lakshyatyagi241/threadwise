@@ -1478,7 +1478,8 @@
           "failed": "Başarısız",
           "held": "Bekletiliyor"
         },
-        "charged": "Ücretlendirilen: {amount}"
+        "charged": "Ücretlendirilen: {amount}",
+        "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
       },
       "send": {
         "whenTitle": "Ne zaman gönderilsin",
