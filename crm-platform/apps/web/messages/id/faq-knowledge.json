@@ -178,14 +178,6 @@
           "otherHint": "Serahkan percakapan ke alur yang berbeda."
         }
       },
-      "advanced": {
-        "title": "Lanjutan: kepekaan khusus untuk FAQ ini",
-        "custom": "Gunakan kepekaan khusus untuk FAQ ini",
-        "sliderLabel": "Cocok pada atau di atas",
-        "body": "Secara default setiap FAQ memakai sensitivitas alur ini. Gunakan nilai khusus jika FAQ ini terlalu mudah cocok (naikkan) atau terlalu jarang cocok (turunkan).",
-        "workspace": "Sensitivitas alur ini adalah {value}%.",
-        "following": "Mengikuti sensitivitas alur ini ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Tulis pertanyaan yang diajukan pelanggan.",

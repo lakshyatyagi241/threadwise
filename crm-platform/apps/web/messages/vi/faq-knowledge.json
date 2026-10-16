@@ -178,14 +178,6 @@
           "otherHint": "Chuyển cuộc trò chuyện sang một luồng khác."
         }
       },
-      "advanced": {
-        "title": "Nâng cao: độ nhạy riêng cho FAQ này",
-        "custom": "Dùng độ nhạy riêng cho FAQ này",
-        "sliderLabel": "Khớp từ mức",
-        "body": "Theo mặc định, mọi FAQ dùng độ nhạy của luồng này. Dùng giá trị tùy chỉnh khi FAQ khớp quá dễ (tăng lên) hoặc quá hiếm (giảm xuống).",
-        "workspace": "Độ nhạy của luồng này là {value}%.",
-        "following": "Theo độ nhạy của luồng này ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Hãy viết câu hỏi mà khách hàng hỏi.",

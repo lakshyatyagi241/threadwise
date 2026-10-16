@@ -178,14 +178,6 @@
           "otherHint": "将对话转交给另一个流程。"
         }
       },
-      "advanced": {
-        "title": "高级：仅针对此 FAQ 的灵敏度",
-        "custom": "为此 FAQ 使用自定义灵敏度",
-        "sliderLabel": "匹配分数不低于",
-        "body": "默认情况下，每条 FAQ 使用此流程的灵敏度。如果某条 FAQ 匹配过于频繁（调高）或过少（调低），请使用自定义值。",
-        "workspace": "此流程的灵敏度为 {value}%。",
-        "following": "沿用此流程的灵敏度（{value}%）。"
-      },
       "problem": {
         "question": {
           "required": "请填写客户会问的问题。",

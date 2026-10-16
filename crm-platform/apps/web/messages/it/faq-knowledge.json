@@ -178,14 +178,6 @@
           "otherHint": "Passa la conversazione a un flusso diverso."
         }
       },
-      "advanced": {
-        "title": "Avanzate: sensibilità solo per questa FAQ",
-        "custom": "Usa una sensibilità personalizzata per questa FAQ",
-        "sliderLabel": "Corrispondenza pari o superiore a",
-        "body": "Per impostazione predefinita ogni FAQ usa la sensibilità di questo flusso. Usa un valore personalizzato quando questa corrisponde troppo facilmente (aumentalo) o troppo raramente (diminuiscilo).",
-        "workspace": "La sensibilità di questo flusso è {value}%.",
-        "following": "Segue la sensibilità di questo flusso ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Scrivi la domanda posta dai clienti.",

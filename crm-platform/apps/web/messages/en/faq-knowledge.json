@@ -179,14 +179,6 @@
           "otherHint": "Hand the conversation over to a different flow."
         }
       },
-      "advanced": {
-        "title": "Advanced: sensitivity for this FAQ only",
-        "body": "By default every FAQ uses this flow's sensitivity. Use a custom value when this one matches too eagerly (raise it) or too rarely (lower it).",
-        "custom": "Use a custom sensitivity for this FAQ",
-        "sliderLabel": "Match at or above",
-        "workspace": "This flow's sensitivity is {value}%.",
-        "following": "Following this flow's sensitivity ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Write the question customers ask.",
