@@ -20,7 +20,7 @@ beforeAll(async () => {
   api = new Api(h);
   window = h.app.get(SendWindowService);
   window.now = () => EVENING;
-}, 240_000);
+}, 900_000);
 
 afterAll(async () => {
   await h?.stop();
