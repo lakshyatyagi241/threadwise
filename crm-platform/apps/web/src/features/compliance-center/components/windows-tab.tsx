@@ -203,6 +203,7 @@ export function WindowsTab({
           </Field>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">{t('dnd.note')}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{t('dnd.listNote')}</p>
       </section>
     </div>
   );

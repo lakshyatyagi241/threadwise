@@ -91,8 +91,13 @@ const settingsFields = {
   /** CCPA: offer a "Do Not Sell or Share My Personal Information" opt-out. */
   offerSaleShareOptOut: z.boolean(),
   optOutNoticeUrl: optionalHttpsUrl,
-  /** DPDP consent manager: a placeholder (a name and a link); nothing is integrated (BL-181). */
-  consentManager: z.object({ name: text(120), url: optionalHttpsUrl }),
+  /** DPDP consent manager: a name, a link and the registration number; nothing is integrated (BL-181, BL-216). */
+  consentManager: z.object({
+    name: text(120),
+    url: optionalHttpsUrl,
+    /** The Consent Manager's registration number (BL-181): a note. The inbound hook is a contract only (BL-216). */
+    registrationId: text(60),
+  }),
   quietHours: quietHoursSchema,
   callingWindow: callingWindowSchema,
   /** IANA zone the quiet hours and calling window are read in; null = the workspace's. */
@@ -124,7 +129,7 @@ export const COMPLIANCE_DEFAULTS: ComplianceSettingsValues = {
   parentalConsentRequired: false,
   offerSaleShareOptOut: false,
   optOutNoticeUrl: null,
-  consentManager: { name: '', url: null },
+  consentManager: { name: '', url: null, registrationId: '' },
   quietHours: { enabled: false, start: '21:00', end: '08:00' },
   callingWindow: { enabled: false, start: '08:00', end: '21:00', days: [1, 2, 3, 4, 5, 6, 7] },
   windowTimezone: null,

@@ -18,7 +18,8 @@
       "notices": "Notices",
       "links": "Privacy and terms links",
       "subprocessors": "Sub-processors",
-      "windows": "Quiet hours and calls"
+      "windows": "Quiet hours and calls",
+      "dnc": "Do not call"
     },
     "saveBar": {
       "unsaved": "You have unsaved changes.",
@@ -33,6 +34,7 @@
       "conflict": "Someone else changed this. Reload and try again.",
       "settingsInvalid": "Some of the settings are not valid. Check the quiet hours, the calling window, the time zone and the language.",
       "duplicate": "You already list a sub-processor with that name.",
+      "dncInvalid": "The file could not be read: it has no phone numbers, or too many in one go.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "validation": "Some of the values are not valid. Check the form and try again.",
       "unexpected": "Something went wrong. Try again."
@@ -321,6 +323,8 @@
         "title": "Consent manager",
         "hint": "The DPDP Act lets people manage consent through a registered consent manager. Name yours here if you use one.",
         "managerName": "Consent manager",
+        "managerRegistration": "Consent Manager registration number",
+        "managerRegistrationHint": "The number the Data Protection Board registered your Consent Manager under. A note only.",
         "managerUrl": "Consent manager link",
         "placeholderNote": "This is a note only. Nothing is connected to a consent manager yet."
       }
@@ -421,7 +425,53 @@
           "sg_dnc": "Singapore Do Not Call",
           "custom": "Your own list"
         },
-        "note": "This is a note only. Nothing is checked against a registry yet."
+        "note": "This is a note only. Nothing is checked against a registry yet.",
+        "listNote": "Numbers on your Do not call list (the last tab) are already held back from marketing calls and texts."
+      }
+    },
+    "dnc": {
+      "intro": "Numbers on this list get no marketing by voice or SMS, whatever the consent history says. WhatsApp, email and service messages are not held back by it. Nothing is checked against a national registry from here: add the extract you are entitled to download.",
+      "addTitle": "Add numbers",
+      "numbers": "Phone numbers",
+      "numbersHint": "One per line, or separated by commas. Up to {max} at a time; use the file for more.",
+      "country": "Country code for local numbers",
+      "countryHint": "A number written without its country code is read with this one.",
+      "note": "Note",
+      "noteHint": "Optional. Why these numbers are listed.",
+      "add": "Add to the list",
+      "adding": "Adding...",
+      "or": "or",
+      "import": "Add from a CSV file",
+      "importing": "Reading the file...",
+      "importHint": "The column named phone, mobile or number, else the first column. A big file is read in parts.",
+      "fromRegistry": "The file is an extract from a registry I am entitled to use",
+      "progress": "Sending part {done} of {of}...",
+      "added": "{count, plural, =0 {Nothing new to add} one {# number added} other {# numbers added}}",
+      "result": "{added} added, {already} already on the list, {invalid} not a phone number.",
+      "invalidSamples": "For example: {samples}",
+      "listTitle": "Numbers on the list",
+      "total": "{count, plural, =0 {No numbers listed} one {# number listed} other {# numbers listed}}",
+      "search": "Find a number",
+      "loading": "Loading the list...",
+      "empty": "No numbers yet",
+      "emptyHint": "Add the numbers that asked not to be called or texted, or an extract from a registry you may use.",
+      "noMatch": "No number matches",
+      "source": {
+        "manual": "Added by hand",
+        "import": "From a file",
+        "contact_request": "The person asked",
+        "registry_export": "Registry extract"
+      },
+      "remove": "Remove",
+      "removeLabel": "Remove {phone} from the list",
+      "removed": "Number removed from the list",
+      "newer": "Newer",
+      "older": "Older",
+      "confirm": {
+        "title": "Remove this number?",
+        "message": "{phone} can get marketing calls and texts again, unless the contact withdrew consent. Remove it only if the person asked you to, or it was added by mistake.",
+        "confirm": "Remove the number",
+        "cancel": "Keep it"
       }
     },
     "hold": {

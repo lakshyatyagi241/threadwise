@@ -9,12 +9,19 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  addDncSchema,
+  dncListQuerySchema,
+  importDncSchema,
   subprocessorInputSchema,
   updateComplianceSettingsSchema,
   updateSubprocessorSchema,
+  type AddDncInput,
+  type DncListQuery,
+  type ImportDncInput,
   type SubprocessorInput,
   type UpdateComplianceSettingsInput,
   type UpdateSubprocessorInput,
@@ -23,6 +30,7 @@ import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { ComplianceChecklistService } from './compliance-checklist.service';
 import { ComplianceSettingsService } from './compliance-settings.service';
+import { DncService } from './dnc.service';
 import { SubprocessorsService } from './subprocessors.service';
 
 /**
@@ -37,6 +45,7 @@ export class ComplianceController {
     private readonly settings: ComplianceSettingsService,
     private readonly checklist: ComplianceChecklistService,
     private readonly subprocessors: SubprocessorsService,
+    private readonly dnc: DncService,
   ) {}
 
   @Get('settings')
@@ -124,5 +133,46 @@ export class ComplianceController {
   @ApiOperation({ summary: 'Remove a sub-processor from the list' })
   async removeSubprocessor(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.subprocessors.remove(id);
+  }
+
+  @Get('dnc')
+  @RequirePermission('settings.compliance.read', 'settings.compliance.manage')
+  @ApiOperation({
+    summary: 'The Do-Not-Call list: numbers that get no marketing by voice or SMS (newest first)',
+    description:
+      '`q` matches a part of the number. The ConsentGate reads this list (reason `on_dnc_list`); WhatsApp, email and service messages are not held by it.',
+  })
+  listDnc(@Query(zodPipe(dncListQuerySchema)) query: DncListQuery) {
+    return this.dnc.list(query);
+  }
+
+  @Post('dnc')
+  @RequirePermission('settings.compliance.manage')
+  @ApiOperation({
+    summary: 'Add numbers to the Do-Not-Call list',
+    description:
+      'Up to 1000 numbers. Local numbers are read with `defaultCountryCode`. A number already listed is left as it is; an entry that is not a number is counted and sampled in the answer.',
+  })
+  addDnc(@Body(zodPipe(addDncSchema)) body: AddDncInput) {
+    return this.dnc.add(body);
+  }
+
+  @Post('dnc/import')
+  @RequirePermission('settings.compliance.manage')
+  @ApiOperation({
+    summary: 'Add the numbers of a CSV (text) to the Do-Not-Call list',
+    description:
+      'The column named phone, mobile or number, else the first column. At most 90 KiB of text per request; the screen sends a bigger file in parts. 422 COMPLIANCE_DNC_INVALID for a file with no numbers column.',
+  })
+  importDnc(@Body(zodPipe(importDncSchema)) body: ImportDncInput) {
+    return this.dnc.importCsv(body);
+  }
+
+  @Delete('dnc/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermission('settings.compliance.manage')
+  @ApiOperation({ summary: 'Remove a number from the Do-Not-Call list (404 COMPLIANCE_DNC_NOT_FOUND)' })
+  async removeDnc(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.dnc.remove(id);
   }
 }

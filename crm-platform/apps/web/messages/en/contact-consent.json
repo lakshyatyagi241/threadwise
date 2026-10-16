@@ -355,7 +355,8 @@
         "consent_declined": "Not allowed: the person declined.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Not allowed: this contact is marked as a minor and your workspace holds marketing back.",
-        "sale_share_opted_out": "Not allowed: the contact opted out of the sale or sharing of their data."
+        "sale_share_opted_out": "Not allowed: the contact opted out of the sale or sharing of their data.",
+        "on_dnc_list": "On your Do-Not-Call list: no marketing calls or texts to this number"
       }
     },
     "notice": {

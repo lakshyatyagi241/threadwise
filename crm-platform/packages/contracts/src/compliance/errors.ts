@@ -8,4 +8,8 @@ export const COMPLIANCE_ERROR_CODES = {
   COMPLIANCE_SUBPROCESSOR_DUPLICATE: 'COMPLIANCE_SUBPROCESSOR_DUPLICATE',
   /** The workspace has no public trust page (the switch is off or the workspace does not exist). 404. */
   COMPLIANCE_TRUST_PAGE_NOT_FOUND: 'COMPLIANCE_TRUST_PAGE_NOT_FOUND',
+  /** No such entry on the Do-Not-Call list of this workspace. 404. */
+  COMPLIANCE_DNC_NOT_FOUND: 'COMPLIANCE_DNC_NOT_FOUND',
+  /** The Do-Not-Call list could not be read: the text is empty or has no phone number column. 422. */
+  COMPLIANCE_DNC_INVALID: 'COMPLIANCE_DNC_INVALID',
 } as const;
