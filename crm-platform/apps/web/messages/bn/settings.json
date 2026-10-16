@@ -145,11 +145,6 @@
         "description": "আপনার ডিল পাইপলাইন, স্টেজ ও হারের কারণগুলো সম্পাদনা করুন।",
         "keywords": "deals, sales stages, board, lost reason, funnel"
       },
-      "tags": {
-        "label": "ট্যাগ",
-        "description": "কন্টাক্ট ও চ্যাটে ব্যবহৃত ট্যাগ তৈরি ও সাজান।",
-        "keywords": "labels, colour, color"
-      },
       "saved-replies": {
         "label": "সেভ করা রিপ্লাই",
         "description": "পুনরায় ব্যবহারযোগ্য উত্তর লিখুন, যা আপনার টিম এক ক্লিকে পাঠাতে পারবে।",

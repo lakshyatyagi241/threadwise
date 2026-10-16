@@ -145,11 +145,6 @@
         "description": "Edite seus funis de vendas, etapas e motivos de perda.",
         "keywords": "negócios, etapas de venda, quadro, motivo de perda, funil"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Crie e organize as tags usadas em contatos e conversas.",
-        "keywords": "rótulos, cor, color"
-      },
       "saved-replies": {
         "label": "Respostas salvas",
         "description": "Escreva respostas reutilizáveis que sua equipe pode enviar com um clique.",

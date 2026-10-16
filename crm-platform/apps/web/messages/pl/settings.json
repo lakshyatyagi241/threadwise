@@ -145,11 +145,6 @@
         "description": "Edytuj lejki szans sprzedaży, etapy i powody utraty.",
         "keywords": "szanse sprzedaży, etapy sprzedaży, tablica, powód utraty, lejek"
       },
-      "tags": {
-        "label": "Tagi",
-        "description": "Twórz i porządkuj tagi używane w kontaktach i czatach.",
-        "keywords": "etykiety, kolor"
-      },
       "saved-replies": {
         "label": "Zapisane odpowiedzi",
         "description": "Twórz gotowe odpowiedzi, które zespół wyśle jednym kliknięciem.",

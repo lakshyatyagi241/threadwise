@@ -145,11 +145,6 @@
         "description": "Bearbeiten Sie Ihre Deal-Pipelines, Phasen und Verlustgründe.",
         "keywords": "deals, verkaufsphasen, board, verlustgrund, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Erstellen und ordnen Sie die Tags, die für Kontakte und Chats verwendet werden.",
-        "keywords": "labels, farbe, color"
-      },
       "saved-replies": {
         "label": "Gespeicherte Antworten",
         "description": "Schreiben Sie wiederverwendbare Antworten, die Ihr Team mit einem Klick senden kann.",

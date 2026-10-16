@@ -145,11 +145,6 @@
         "description": "거래 파이프라인, 단계 및 실패 사유를 편집하세요.",
         "keywords": "거래, 영업 단계, 보드, 실패 사유, 퍼널"
       },
-      "tags": {
-        "label": "태그",
-        "description": "연락처와 채팅 전반에 쓰는 태그를 만들고 정리하세요.",
-        "keywords": "라벨, 색상, color"
-      },
       "saved-replies": {
         "label": "저장된 답장",
         "description": "팀이 한 번의 클릭으로 보낼 수 있는 답변을 작성하세요.",

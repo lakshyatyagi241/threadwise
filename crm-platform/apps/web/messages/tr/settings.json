@@ -145,11 +145,6 @@
         "description": "Fırsat satış hatlarınızı, aşamalarınızı ve kayıp nedenlerinizi düzenleyin.",
         "keywords": "fırsatlar, satış aşamaları, pano, kayıp nedeni, huni"
       },
-      "tags": {
-        "label": "Etiketler",
-        "description": "Kişilerde ve sohbetlerde kullanılan etiketleri oluşturun ve düzenleyin.",
-        "keywords": "etiketler, renk"
-      },
       "saved-replies": {
         "label": "Kayıtlı yanıtlar",
         "description": "Ekibinizin tek tıkla gönderebileceği yeniden kullanılabilir yanıtlar yazın.",

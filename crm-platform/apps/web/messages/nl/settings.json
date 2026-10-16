@@ -129,11 +129,6 @@
         "description": "Bewerk je dealpijplijnen, fases en redenen voor verlies.",
         "keywords": "deals, verkoopfases, bord, reden verloren, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Maak en orden de tags die bij contacten en chats worden gebruikt.",
-        "keywords": "labels, kleur, color"
-      },
       "saved-replies": {
         "label": "Opgeslagen antwoorden",
         "description": "Schrijf herbruikbare antwoorden die je team met één klik kan versturen.",
