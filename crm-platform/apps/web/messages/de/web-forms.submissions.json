@@ -115,7 +115,14 @@
         "consentAt": "Erteilt am",
         "noConsent": "Dieses Formular hat keine Einwilligung abgefragt.",
         "links": "Datensätze",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "ageCheck": "Altersprüfung",
+        "ageOutcome": "Ergebnis",
+        "ageUnder": "Unter dem Mindestalter. Die Übermittlung wurde angenommen und der Kontakt als minderjährig markiert; die Marketing-Einwilligung wurde nicht erfasst.",
+        "guardianName": "Elternteil oder Vormund",
+        "guardianEmail": "E-Mail des Vormunds",
+        "guardianPhone": "Telefon des Vormunds",
+        "guardianNote": "Vom Besucher angegeben, nicht geprüft. Die Einwilligung ist erst erfasst, wenn eine Person sie in der Einwilligungskarte des Kontakts erfasst."
       },
       "actions": {
         "retry": "Erneut versuchen",

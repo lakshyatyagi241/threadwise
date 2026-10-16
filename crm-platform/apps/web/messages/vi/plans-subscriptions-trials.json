@@ -81,7 +81,8 @@
       "sms": "Kênh SMS",
       "help_agent": "Trợ lý trợ giúp",
       "email_channel": "Kênh email (Gmail)",
-      "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)"
+      "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
+      "ai_crm_copilot": "AI CRM Copilot"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",

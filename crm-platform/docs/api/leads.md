@@ -213,7 +213,8 @@ source, off by default):
   "templateId": "…",
   "senderId": null,
   "delayMinutes": 0,
-  "businessHoursOnly": false
+  "businessHoursOnly": false,
+  "maxLeadAgeMinutes": 60
 }
 ```
 
@@ -226,6 +227,13 @@ source, off by default):
 - **When.** On `lead.created` only: a lead that becomes a NEW contact. A returning contact (`lead.updated`) and a test lead get none. The
   message is due after `delayMinutes` (0 to 60). With `businessHoursOnly` and the workspace's business hours set, it is held until they open
   (no hours set means always open). A held message that has not gone within 24 hours ends `failed / expired`.
+- **Old leads are not messaged (BL-204).** `maxLeadAgeMinutes` (1 minute to 90 days, default 60) is the oldest a lead may be, measured from
+  when it was submitted at the provider (`lead_events.received_at`, which a connector sets from the provider's own time) to the moment the
+  pipeline scheduled its message. A lead older than that (a backfill, a retry of an old lead, a sweep that found it late) is still stored,
+  made a contact, assigned and notified like any lead, but its message is decided at once and ends `skipped / lead_too_old`, with the usual
+  audit row, event and timeline entry, and the channel, consent gate and wallet are never reached. The age is taken at scheduling, not at
+  sending, so the source's own delay (up to an hour) and a hold for business hours never turn a fresh lead "old". A workspace that wants old
+  leads messaged raises the limit on purpose, per source; the consent rules apply to every message either way.
 - **Never twice.** One row per lead event in `lead_first_replies` (`UNIQUE (org_id, lead_event_id)`): a redelivered outbox event, a second
   worker and a retry of the lead meet the same row. The WhatsApp message carries the row's uuid as its `clientMessageId`, so even a
   repeated attempt returns the first message. An SMS or an email has no such key at the provider, so one whose claim was interrupted is
@@ -243,7 +251,7 @@ source, off by default):
 - **Result.** `scheduled`, `sending`, `held` (quiet hours, business hours, channel down, wallet empty, sending halted: goes by itself),
   `sent` (handed to the dispatcher: WhatsApp is queued on the contact's conversation, where delivery shows; SMS and email are accepted by
   the provider), `blocked` (opted out, no consent, minor, plan limit: final), `skipped` (nothing to send: no number or address, no sender,
-  template gone, a template value the contact lacks, setting off, source paused), `failed`. The `reason` is a stable code, never provider
+  template gone, a template value the contact lacks, setting off, source paused, lead too old), `failed`. The `reason` is a stable code, never provider
   text. It is on every lead event as `firstReply`, in the lead inbox, and on the contact's timeline as an activity of type `speed_to_lead`
   (title and reason only: never the message or an address). Audit rows: module `lead_first_replies`. Outbox: `lead.first_reply.scheduled`
   and `lead.first_reply.<status>`.
@@ -283,10 +291,15 @@ bulk retry over a page someone else already fixed therefore reports those leads 
 **Pulling.** The leads module owns the schedule, the limits and the record; the domain that owns a source supplies a provider through the
 leaf port `lead-pull.port.ts` (`LEAD_PULL_REGISTRY`, found by token, so neither module imports the other). A provider says whether it can
 pull a source and how far back it can go, and does the pull, handing every lead to `LEAD_INGEST`, whose idempotency key makes a lead fetched
-twice a no-op. Today the marketplace's pull connectors are the only provider (`MarketplaceLeadPullProvider`): "Sync now" is the poller's
+twice a no-op. Two providers register today. The marketplace's pull connectors (`MarketplaceLeadPullProvider`): "Sync now" is the poller's
 own step (`PullRunService.run`), a backfill is `PullBackfillService`, window by window from the start of the range, never past its end,
 kept to the portal's minimum interval and pace, a window halved when the answer would not fit; only a portal that answers "the leads
-between two times" (a recipe with a `window`) can backfill. The Meta lead ads door and any later connector register the same way.
+between two times" (a recipe with a `window`) can backfill. The Meta lead forms (`MetaLeadPullProvider`, BL-204, see
+[meta-lead-ads.md](meta-lead-ads.md)): every picked form can sync and backfill, up to 90 days. A later connector registers the same way.
+
+**A backfill is not speed-to-lead.** Backfilled leads become contacts, are assigned by the source's owner rule and notify the team like any
+new lead; they do NOT get the automatic first message unless they are younger than the source's `speedToLead.maxLeadAgeMinutes` (see above).
+The backfill dialog says so before it starts.
 
 - **One at a time per source** is a partial unique index (`uq_lead_sync_runs_active`), not a check in code.
 - **Rate limits.** The source's own minimum interval (and at least a minute) between manual pulls of a source, ten minutes between

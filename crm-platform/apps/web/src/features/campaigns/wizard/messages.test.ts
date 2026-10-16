@@ -176,7 +176,9 @@ const DYNAMIC = [
   ...['searchGroups', 'searchSegments', 'groups', 'segments', 'noGroups', 'noSegments'].map(
     (k) => `campaigns.wizard.audience.${k}`,
   ),
-  ...['contacts', 'groups', 'segments', 'csv'].map((k) => `campaigns.wizard.audience.mode.${k}`),
+  ...['contacts', 'groups', 'segments', 'csv', 'previous'].map(
+    (k) => `campaigns.wizard.audience.mode.${k}`,
+  ),
   ...['new', 'existing', 'optedOut'].map((k) => `campaigns.wizard.audience.csvRow.${k}`),
   ...['missing_phone', 'invalid_phone', 'duplicate'].map(
     (k) => `campaigns.wizard.audience.csvReason.${k}`,
@@ -200,6 +202,10 @@ const DYNAMIC = [
     (k) => `campaigns.wizard.status.followUps.count.${k}`,
   ),
   ...['skipped', 'lapsed'].map((k) => `campaigns.wizard.status.followUps.hint.${k}`),
+  ...['sequence_not_recurring', 'sequence_with_ab', 'sequence_template_required'].map(
+    (k) => `campaigns.wizard.issues.${k}`,
+  ),
+  'campaigns.wizard.status.col.template',
 ];
 
 describe('message keys used in code', () => {

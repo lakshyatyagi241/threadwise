@@ -209,7 +209,10 @@
       "conditionsChip": "Condições: {count}",
       "pqlExampleTag": "Contatos com a etiqueta {tag} inativos há 30 dias",
       "pqlExampleStage": "Contatos em {stage} criados nos últimos 7 dias",
-      "pqlExampleNoOwner": "Contatos sem responsável"
+      "pqlExampleNoOwner": "Contatos sem responsável",
+      "colDateOfBirth": "Data de nascimento",
+      "colMinor": "Menor",
+      "minorBadge": "Menor"
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "Seu acesso não permite atribuir este contato a essa pessoa.",
       "company": "Empresa",
       "companyHint": "Agrupa este contato sob uma organização.",
-      "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo."
+      "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo.",
+      "dateOfBirth": "Data de nascimento",
+      "dateOfBirthHint": "Opcional. Se isso tornar o contato um menor, ele é marcado como menor."
     },
     "tags": {
       "title": "Tags",
@@ -461,7 +466,9 @@
         "source": "Origem",
         "consent": "Consentimento de marketing (sim / não)",
         "consentSms": "Consentimento de marketing por SMS (sim / não)",
-        "consentEmail": "Consentimento de marketing por e-mail (sim / não)"
+        "consentEmail": "Consentimento de marketing por e-mail (sim / não)",
+        "dateOfBirth": "Data de nascimento (ano primeiro, 2010-05-04)",
+        "minor": "Menor (sim marca o contato)"
       },
       "notInFile": "Não está no arquivo",
       "columnN": "Coluna {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "nome da etiqueta muito longo",
         "plan_limit_reached": "limite de contatos do plano atingido",
         "tag_limit_reached": "limite de etiquetas do plano atingido",
-        "duplicate_in_file": "número repetido, mesclado a uma linha anterior"
+        "duplicate_in_file": "número repetido, mesclado a uma linha anterior",
+        "invalid_date_of_birth": "a data de nascimento não é uma data com o ano primeiro que possa ser de nascimento"
       },
       "statusHint": "Aplicado aos contatos que este arquivo cria.",
       "queued": "Aguardando para iniciar...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "Seu acesso não permite atribuir este contato a essa pessoa.",
       "ownerFailed": "Não foi possível alterar o responsável. Tente novamente.",
       "ownerMe": "{name} (eu)",
-      "ownerFormer": "Ex-membro"
+      "ownerFormer": "Ex-membro",
+      "dateOfBirth": "Data de nascimento"
     },
     "attributes": {
       "eyebrow": "Mais / Atributos",
@@ -1019,6 +1028,7 @@
         "lifecycle_stage": "Estágio do ciclo de vida",
         "status": "Status",
         "groups": "Grupos",
+        "owner": "Responsável",
         "opt_out": "Cancelamento de marketing"
       },
       "types": {
@@ -1422,7 +1432,8 @@
         "needsFollowUp": "Precisam de acompanhamento",
         "active": "Ativos",
         "inactive": "Inativos",
-        "unsubscribed": "Cancelaram a inscrição"
+        "unsubscribed": "Cancelaram a inscrição",
+        "minors": "Menores"
       }
     },
     "erase": {

@@ -46,7 +46,7 @@ export function guardedRequest(
   }
   return new Promise((resolve, reject) => {
     let settled = false;
-    let deadline: NodeJS.Timeout | undefined;
+    let deadline: NodeJS.Timeout | undefined = undefined;
     const settle = (fn: () => void) => {
       if (settled) return;
       settled = true;
@@ -101,7 +101,9 @@ export function guardedRequest(
         res.on('end', () => settle(() => resolve(answer())));
         res.on('error', (e) => settle(() => reject(e)));
         // A connection that closes before the answer is complete must still end the call.
-        res.on('close', () => settle(() => reject(new Error('connection closed before the answer was complete'))));
+        res.on('close', () =>
+          settle(() => reject(new Error('connection closed before the answer was complete'))),
+        );
       },
     );
     // `timeout` above only fires when the socket goes quiet, so a target that trickles a byte at a time would never trip it. This is the

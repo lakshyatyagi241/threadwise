@@ -1,5 +1,6 @@
-import type { CampaignAiGenerateResponse } from '@crm/contracts';
+import type { CampaignAiGenerateResponse, PreviousSendOption } from '@crm/contracts';
 import { problems, type BuilderForm, type ButtonRow, type Problem } from './builder-model';
+import { EMPTY_PREVIOUS, previousEstimate } from './previous-sends';
 
 /** The five steps of the campaign builder (TW-CAMP-002 to 010), in Reference's order. */
 export const WIZARD_STEPS = ['setup', 'compose', 'recipients', 'schedule', 'review'] as const;
@@ -58,6 +59,7 @@ export function withRecipientMode(f: BuilderForm, mode: RecipientMode): Partial<
   const clear: Partial<BuilderForm> = {};
   if (mode !== 'audience')
     Object.assign(clear, { contactIds: [], groupIds: [], tagIds: [], segmentIds: [] });
+  if (mode !== 'audience') clear.previousSends = EMPTY_PREVIOUS;
   if (mode !== 'csv') clear.csvText = '';
   if (mode !== 'manual') clear.manualNumbers = '';
   return clear;
@@ -80,23 +82,30 @@ export interface RecipientTotals {
   groups: number;
   contacts: number;
   numbers: number;
+  /** Up to this many from the picked previous sends, for the chosen outcome (people in two sends count twice). */
+  previous: number;
   total: number;
 }
 
 /**
  * The recipients as the review step counts them: members of the picked groups and tags, the individually picked contacts, and the
- * typed or uploaded numbers. An estimate (a contact in two groups is counted twice); the server de-duplicates when it builds the queue.
+ * typed or uploaded numbers, plus what the picked previous sends held. An estimate (a contact in two groups is counted twice); the server de-duplicates when it builds the queue.
  */
 export function recipientTotals(
   f: BuilderForm,
-  sizes: { groups: Record<string, number>; tags: Record<string, number> },
+  sizes: {
+    groups: Record<string, number>;
+    tags: Record<string, number>;
+    previous?: readonly PreviousSendOption[];
+  },
 ): RecipientTotals {
   const groups =
     f.groupIds.reduce((n, id) => n + (sizes.groups[id] ?? 0), 0) +
     f.tagIds.reduce((n, id) => n + (sizes.tags[id] ?? 0), 0);
   const contacts = f.contactIds.length;
   const numbers = countNumbers(f.manualNumbers) + countCsvRows(f.csvText);
-  return { groups, contacts, numbers, total: groups + contacts + numbers };
+  const previous = previousEstimate(f.previousSends, sizes.previous ?? []);
+  return { groups, contacts, numbers, previous, total: groups + contacts + numbers + previous };
 }
 
 const MAX_BUTTONS = 3;

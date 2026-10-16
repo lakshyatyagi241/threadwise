@@ -139,7 +139,8 @@
         "cancel": "İptal",
         "retry": "Yeni saatle yeniden dene",
         "delete": "Sil",
-        "deleteHistory": "Geçmişten sil"
+        "deleteHistory": "Geçmişten sil",
+        "edit": "Düzenle"
       },
       "empty": {
         "title": "Zamanlama yok",
@@ -207,7 +208,8 @@
         "noSenders": "Bağlı gönderen yok. Önce bir numara bağlayın.",
         "warming": "Isınma",
         "splitHint": "İşaretlenen her gönderen, kitlenin adil bir payıyla kendi zamanlamasını çalıştırır.",
-        "messageType": "Mesaj türü"
+        "messageType": "Mesaj türü",
+        "editSenderHint": "Bir zamanlamanın tek numarası olur. Başka bir numara seçerseniz zamanlama o numaraya taşınır ve ısınma kotası yeniden ayrılır."
       },
       "audience": {
         "title": "Alıcılar",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Kitle kuyruğu",
-            "hint": "Geçmiş bir toplu gönderimin alıcılarını yeniden hedefleyin."
+            "hint": "Geçmiş toplu mesaj ve kampanyaların alıcılarını yeniden hedefleyin."
           },
           "number": {
             "title": "Numaralar",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Grup(lar) seçin",
         "chooseTags": "Bir ya da daha fazla etiket seçin",
-        "chooseQueues": "Bir ya da daha fazla geçmiş toplu gönderim seçin",
+        "chooseQueues": "Bir veya daha fazla geçmiş toplu mesaj ya da kampanya seçin",
         "tickAny": "(istediğiniz kadar işaretleyin)",
         "noGroups": "Henüz grup yok",
         "noTags": "Henüz etiket yok",
-        "noQueues": "Henüz tamamlanmış toplu gönderim yok",
+        "noQueues": "Henüz önceki bir toplu mesaj veya kampanya yok",
         "contacts": "Kişilere git",
         "broadcast": "Toplu gönderimlere git",
         "tagsHint": "Alıcılar zamanlama çalıştığında yeniden hesaplanır; bu nedenle yeni etiketlenen kişiler de dahil edilir.",
-        "queuesHint": "İstediğiniz kadar toplu gönderim işaretleyin. Alıcılar gönderimden önce otomatik olarak tekilleştirilir.",
+        "queuesHint": "İstediğiniz kadar toplu mesaj veya kampanya işaretleyin. Alıcılar gönderimden önce otomatik olarak tekilleştirilir.",
         "paste": "Numaraları yapıştır",
         "pasteHint": "Önce ülke kodu, başta + olmadan. Her girdi yeni satır ya da virgülle ayrılır.",
         "pastePlaceholder": "Satır başına bir numara — ülke kodunu ekleyin, artı işareti olmadan",
         "total": "Toplam alıcı:",
-        "optedOut": "{n} dışarıda bırakıldı: abonelikten çıkmış ya da arşivlenmiş"
+        "optedOut": "{n} dışarıda bırakıldı: abonelikten çıkmış ya da arşivlenmiş",
+        "kind": {
+          "broadcast": "Toplu mesaj",
+          "campaign": "Kampanya"
+        }
       },
       "message": {
         "title": "Mesaj oluştur",
@@ -275,7 +281,34 @@
         "pickerSearch": "Ada ya da dile göre ara…",
         "pickerEmpty": "Eşleşen şablon yok.",
         "manageTemplates": "Şablonları yönet →",
-        "cancel": "İptal"
+        "cancel": "İptal",
+        "pickToPreview": "Görmek için bir şablon seçin.",
+        "headerMedia": "{kind} başlığı",
+        "windowNote": "Cloud API numarası, müşteri son 24 saatte yazmamış olsa bile onaylı bir şablonu iletir.",
+        "previewSamples": "Örnek değerlerle önizleme",
+        "pickerCategories": "Şablon kategorisi",
+        "categories": {
+          "all": "Tümü",
+          "marketing": "Pazarlama",
+          "utility": "Hizmet"
+        },
+        "pickerHidden": "{n, plural, one {# şablon daha gizli, çünkü işaretli bir numara bunu gönderemiyor.} other {# şablon daha gizli, çünkü işaretli bir numara bunları gönderemiyor.}}",
+        "file": "Dosya",
+        "chooseFile": "Gönderilecek dosyayı seçin",
+        "fileHint": "Görsel, video, ses veya belge. Çalışma alanınızda özel olarak saklanır.",
+        "limits": "Seçtiğiniz numaralarda: görseller için en fazla {image} MB, video için {video} MB, ses için {audio} MB ve belgeler için {document} MB.",
+        "tooBigUpload": "Dosya {mb} MB değerinden büyük.",
+        "uploadFailed": "Dosya yüklenemedi. Tekrar deneyin.",
+        "uploading": "Yükleniyor…",
+        "replace": "Değiştir",
+        "remove": "Kaldır",
+        "kinds": {
+          "image": "Görsel",
+          "video": "Video",
+          "audio": "Ses",
+          "document": "Belge"
+        },
+        "orLink": "Veya dosyanın bağlantısını yapıştırın"
       },
       "when": {
         "title": "Ne zaman gönderilsin",
@@ -356,7 +389,18 @@
         "daysRequired": "Haftanın günlerini seçin.",
         "endDateRequired": "Son günü seçin.",
         "endBeforeStart": "Bitiş tarihi ilk gönderimden önce.",
-        "testNumber": "Numarayı ülke koduyla birlikte girin."
+        "testNumber": "Numarayı ülke koduyla birlikte girin.",
+        "mediaTooLarge": "Bu dosya, işaretli bir numaranın kabul ettiğinden büyük. Daha küçük bir dosya seçin.",
+        "mediaType": "İşaretli bir numara bu medya türü için bu dosya biçimini kabul etmiyor.",
+        "templateNotForSender": "İşaretli bir numara bu şablonu gönderemez: WhatsApp Cloud API numarası yalnızca Meta tarafından onaylanmış şablonları gönderir. Başka bir şablon veya numara seçin."
+      },
+      "edit": {
+        "title": "Zamanlanmış mesajı düzenle",
+        "saved": "Zamanlama güncellendi.",
+        "submit": "Değişiklikleri kaydet",
+        "stale": "Siz düzenlerken biri bu zamanlamayı değiştirdi. Değişiklikleri görmek için yeniden yükleyin; buraya yazdıklarınız kaybolacak.",
+        "reload": "Zamanlamayı yeniden yükle",
+        "backToSchedule": "Zamanlamaya dön"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Şimdi çalıştır",
         "cancel": "İptal",
         "retry": "Yeni saatle yeniden dene",
-        "delete": "Sil"
+        "delete": "Sil",
+        "edit": "Düzenle"
       },
       "kpi": {
         "recipients": "Alıcılar",
@@ -434,7 +479,11 @@
           "delivered": "Teslim edildi",
           "read": "Okundu",
           "failed": "Başarısız"
-        }
+        },
+        "search": "Ad veya numara ara",
+        "range": "{total} içinde {from}–{to}",
+        "prev": "Önceki",
+        "next": "Sonraki"
       },
       "config": {
         "eyebrow": "Zamanlama ayrıntıları",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Mesaj önizlemesi",
         "title": "Alıcıların gördükleri",
-        "empty": "(boş içerik)"
+        "empty": "(boş içerik)",
+        "template": "Şablon {name} ({language})",
+        "file": "Dosya: {name}"
       },
-      "another": "Bir tane daha zamanla"
+      "another": "Bir tane daha zamanla",
+      "engagement": {
+        "eyebrow": "Etkileşim",
+        "title": "Zaman içinde iletim",
+        "legend": "Açıklama",
+        "steps": {
+          "queued": "Sırada",
+          "sent": "Gönderildi",
+          "delivered": "İletildi",
+          "read": "Okundu",
+          "failed": "Başarısız"
+        },
+        "empty": "Henüz hiçbir şey gönderilmedi, bu yüzden gösterilecek grafik yok.",
+        "perHour": "Her saatin başındaki toplam değerler, saat dilimi: {zone}.",
+        "perDay": "Her günün başındaki toplam değerler, saat dilimi: {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} ısınıyor",

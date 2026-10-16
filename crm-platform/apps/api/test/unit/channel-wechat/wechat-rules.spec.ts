@@ -10,6 +10,8 @@ import {
   msgSignatureMatches,
   parseXml,
   randomToken,
+  wechatAllowedIn,
+  workspaceCountry,
   signatureMatches,
   tagIdOf,
   tokenIsFresh,
@@ -322,5 +324,30 @@ describe('replay and size guards', () => {
 
   it('an oversized packet is not read', () => {
     expect(parseXml(`<xml><Content>${'a'.repeat(XML_MAX_CHARS)}</Content></xml>`)).toEqual({});
+  });
+});
+
+describe('where WeChat may be used', () => {
+  it('a workspace whose billing country is India is blocked, whatever it gave at onboarding', () => {
+    const country = workspaceCountry('IN', 'US');
+    expect(country).toBe('IN');
+    expect(wechatAllowedIn(country)).toBe(false);
+  });
+
+  it('the billing country wins over onboarding, and a name is read as a country', () => {
+    expect(workspaceCountry('US', 'IN')).toBe('US');
+    expect(workspaceCountry(null, 'India')).toBe('IN');
+    expect(wechatAllowedIn(workspaceCountry(null, 'India'))).toBe(false);
+  });
+
+  it('other countries may use WeChat', () => {
+    expect(wechatAllowedIn(workspaceCountry('CN', null))).toBe(true);
+    expect(wechatAllowedIn(workspaceCountry(null, 'GB'))).toBe(true);
+  });
+
+  it('an unknown country is not blocked', () => {
+    expect(workspaceCountry(null, null)).toBeNull();
+    expect(wechatAllowedIn(workspaceCountry(null, null))).toBe(true);
+    expect(workspaceCountry('  ', 'not a country')).toBeNull();
   });
 });

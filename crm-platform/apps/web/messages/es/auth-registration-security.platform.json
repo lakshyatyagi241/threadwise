@@ -1439,7 +1439,8 @@
             "sms": "SMS solo de envío mediante Twilio o MSG91: conecta remitentes y envía difusiones y campañas por SMS.",
             "help_agent": "El asistente de ayuda dentro de la app: la gente pide una tarea con sus palabras y él la guía o la hace en su propia sesión, preguntando antes de cualquier acción de riesgo. Consume tokens de IA.",
             "email_channel": "Conecta buzones de Gmail y Google Workspace a la bandeja de equipo. La aplicación de pago Correo controla este interruptor.",
-            "personal_history_full": "Permite que un número personal de WhatsApp importe todo su historial de chats al vincularse por primera vez. La importación de chats recientes está disponible en todos los planes que incluyen números personales."
+            "personal_history_full": "Permite que un número personal de WhatsApp importe todo su historial de chats al vincularse por primera vez. La importación de chats recientes está disponible en todos los planes que incluyen números personales.",
+            "ai_crm_copilot": "Encuentra y puntúa leads con IA a partir de tus contactos."
           },
           "units": {
             "days": "Días",
@@ -1624,7 +1625,8 @@
             "sms": "Canal SMS",
             "help_agent": "Asistente de ayuda (IA, consume tokens)",
             "email_channel": "Canal de correo (Gmail)",
-            "personal_history_full": "Importación del historial completo de chats (WhatsApp personal)"
+            "personal_history_full": "Importación del historial completo de chats (WhatsApp personal)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "Este campo es obligatorio.",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Color suave y luminoso detrás de una tarjeta esmerilada."
+          },
+          "geta": {
+            "name": "División Geta",
+            "description": "Formulario en un lado y un panel de marca animado con estadísticas en el otro."
           }
         },
         "fields": {

@@ -18,7 +18,8 @@
       "notices": "Informacje",
       "links": "Linki do polityki prywatności i regulaminu",
       "subprocessors": "Podprocesorzy",
-      "windows": "Godziny ciszy i połączenia"
+      "windows": "Godziny ciszy i połączenia",
+      "dnc": "Nie dzwonić"
     },
     "saveBar": {
       "unsaved": "Masz niezapisane zmiany.",
@@ -35,7 +36,8 @@
       "duplicate": "Podprocesor o tej nazwie jest już na liście.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "dncInvalid": "Nie udało się odczytać pliku: nie ma w nim numerów telefonów albo jest ich za dużo naraz."
     },
     "problems": {
       "httpsOnly": "Podaj adres zaczynający się od https://.",
@@ -322,7 +324,9 @@
         "hint": "Ustawa DPDP pozwala osobom zarządzać zgodą za pośrednictwem zarejestrowanego menedżera zgód. Podaj tutaj swojego, jeśli z niego korzystasz.",
         "managerName": "Menedżer zgód",
         "managerUrl": "Link do menedżera zgód",
-        "placeholderNote": "To tylko adnotacja. Nic nie jest jeszcze połączone z menedżerem zgód."
+        "placeholderNote": "To tylko adnotacja. Nic nie jest jeszcze połączone z menedżerem zgód.",
+        "managerRegistration": "Numer rejestracyjny Menedżera zgód",
+        "managerRegistrationHint": "Numer, pod którym Rada Ochrony Danych zarejestrowała Twojego Menedżera zgód. Tylko adnotacja."
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "Singapurski rejestr Do Not Call",
           "custom": "Twoja własna lista"
         },
-        "note": "To tylko adnotacja. Nic nie jest jeszcze porównywane z rejestrem."
+        "note": "To tylko adnotacja. Nic nie jest jeszcze porównywane z rejestrem.",
+        "listNote": "Numery z Twojej listy Nie dzwonić (ostatnia karta) są już wstrzymywane przed połączeniami i SMS-ami marketingowymi."
       },
       "enforcedNote": "Godziny ciszy wstrzymują wiadomość marketingową do ich końca, a okno dzwonienia odrzuca połączenie poza nim. Używany jest zegar każdego kontaktu. Odpowiedzi w oknie 24 godzin i powiadomienia usługowe nigdy nie są wstrzymywane."
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "Wstrzymano do {when} (godziny ciszy)",
       "heldCount": "{count} wstrzymano z powodu godzin ciszy"
+    },
+    "dnc": {
+      "intro": "Numery z tej listy nie otrzymują marketingu głosowego ani SMS, bez względu na historię zgód. Nie dotyczy to WhatsApp, e-maili ani wiadomości serwisowych. Stąd nic nie jest sprawdzane w krajowym rejestrze: dodaj wyciąg, który masz prawo pobrać.",
+      "addTitle": "Dodaj numery",
+      "numbers": "Numery telefonów",
+      "numbersHint": "Jeden w wierszu lub oddzielone przecinkami. Do {max} naraz; więcej dodasz z pliku.",
+      "country": "Kod kraju dla numerów lokalnych",
+      "countryHint": "Numer zapisany bez kodu kraju jest odczytywany z tym kodem.",
+      "note": "Notatka",
+      "noteHint": "Opcjonalnie. Dlaczego te numery są na liście.",
+      "add": "Dodaj do listy",
+      "adding": "Dodawanie...",
+      "or": "lub",
+      "import": "Dodaj z pliku CSV",
+      "importing": "Odczytywanie pliku...",
+      "importHint": "Kolumna o nazwie phone, mobile lub number, a w razie jej braku pierwsza kolumna. Duży plik jest odczytywany po częściach.",
+      "fromRegistry": "Plik jest wyciągiem z rejestru, z którego mam prawo korzystać",
+      "progress": "Wysyłanie części {done} z {of}...",
+      "added": "{count, plural, =0 {Nie ma nic nowego do dodania} one {Dodano # numer} few {Dodano # numery} many {Dodano # numerów} other {Dodano # numeru}}",
+      "result": "Dodano: {added}, już na liście: {already}, nie jest numerem telefonu: {invalid}.",
+      "invalidSamples": "Na przykład: {samples}",
+      "listTitle": "Numery na liście",
+      "total": "{count, plural, =0 {Brak numerów na liście} one {# numer na liście} few {# numery na liście} many {# numerów na liście} other {# numeru na liście}}",
+      "search": "Znajdź numer",
+      "loading": "Wczytywanie listy...",
+      "empty": "Brak numerów",
+      "emptyHint": "Dodaj numery osób, które prosiły, aby do nich nie dzwonić ani nie wysyłać SMS-ów, lub wyciąg z rejestru, z którego możesz korzystać.",
+      "noMatch": "Żaden numer nie pasuje",
+      "source": {
+        "manual": "Dodane ręcznie",
+        "import": "Z pliku",
+        "contact_request": "Na prośbę osoby",
+        "registry_export": "Wyciąg z rejestru"
+      },
+      "remove": "Usuń",
+      "removeLabel": "Usuń {phone} z listy",
+      "removed": "Numer usunięty z listy",
+      "newer": "Nowsze",
+      "older": "Starsze",
+      "confirm": {
+        "title": "Usunąć ten numer?",
+        "message": "{phone} znów może otrzymywać marketingowe połączenia i SMS-y, chyba że kontakt wycofał zgodę. Usuń go tylko wtedy, gdy osoba o to poprosiła lub numer dodano przez pomyłkę.",
+        "confirm": "Usuń numer",
+        "cancel": "Zachowaj"
+      }
     }
   }
 }

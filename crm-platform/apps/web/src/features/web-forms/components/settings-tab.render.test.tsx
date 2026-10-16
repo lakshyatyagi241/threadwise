@@ -99,7 +99,7 @@ describe('Settings tab: structure', () => {
     it(`renders every section with real messages in ${locale}`, () => {
       const html = render({}, locale);
       const headings = [...html.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map((m) => m[1]);
-      expect(headings).toHaveLength(7);
+      expect(headings).toHaveLength(8);
       expect(html).toContain(locale === 'en' ? 'After submit' : 'بعد الإرسال');
       expect(html).toContain(locale === 'en' ? 'Payment' : headings[3]!);
       expect(html).toContain(locale === 'en' ? 'Advanced: rate limits' : 'متقدم: حدود المعدل');

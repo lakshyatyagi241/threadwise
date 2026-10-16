@@ -3,6 +3,7 @@
  * re-exports them so every import of a contract type goes through one file, and adds the few shapes that exist only in the browser
  * (a visitor's answers while they type, the issues found before sending).
  */
+import { DEFAULT_MINOR_AGE } from '@crm/contracts';
 import type {
   PublicForm,
   FormBlock,
@@ -61,6 +62,15 @@ export type AnswerValue = string | boolean | string[];
 /** Answers keyed by block id; the consent box is under `CONSENT_KEY`. */
 export type Answers = Record<string, AnswerValue>;
 export const CONSENT_KEY = '__consent';
+/**
+ * The age check's own answers (BL-217): the declaration box and a parent or guardian's details. They belong to the page, not to a field,
+ * and no field id can start with two underscores, so they never collide with a visitor's own answers.
+ */
+export const AGE_CONFIRMED_KEY = '__age_confirmed';
+export const GUARDIAN_KEY = '__guardian';
+export const GUARDIAN_NAME_KEY = '__guardian_name';
+export const GUARDIAN_EMAIL_KEY = '__guardian_email';
+export const GUARDIAN_PHONE_KEY = '__guardian_phone';
 
 export type IssueCode =
   | 'required'
@@ -75,7 +85,8 @@ export type IssueCode =
   | 'pattern'
   | 'invalid_option'
   | 'invalid_amount'
-  | 'consent_required';
+  | 'consent_required'
+  | 'guardian_required';
 
 export interface FieldIssue {
   fieldId: string;
@@ -98,8 +109,29 @@ export interface RenderableForm {
     'enabled' | 'text' | 'privacyUrl' | 'termsUrl' | 'required' | 'version'
   >;
   theme: ThemeTokens;
+  /**
+   * The age question (BL-217): the public form's summary (the page never learns the action or, for a date of birth or an age, the
+   * minimum), or in the builder's preview the draft's own gate. Absent or off = nothing is asked.
+   */
+  ageGate?: PublicForm['ageGate'] | Definition['ageGate'];
   /** What the visitor is asked to pay: the public form's summary, or (in the builder's preview) the draft's own block. Absent = no payment. */
   payment?: PublicForm['payment'] | Definition['payment'];
 }
 
-export type FormShape = Pick<RenderableForm, 'steps' | 'consent'>;
+export type FormShape = Pick<RenderableForm, 'steps' | 'consent' | 'ageGate'>;
+
+/** The age question a page draws, from either shape of the gate; null when nothing is asked. */
+export function pageAgeGate(
+  form: Pick<RenderableForm, 'ageGate'>,
+): { mode: 'dob' | 'age' | 'declaration'; declarationAge: number | null } | null {
+  const g = form.ageGate;
+  if (!g) return null;
+  if ('enabled' in g) {
+    if (!g.enabled) return null;
+    return {
+      mode: g.mode,
+      declarationAge: g.mode === 'declaration' ? (g.minAge ?? DEFAULT_MINOR_AGE) : null,
+    };
+  }
+  return g;
+}

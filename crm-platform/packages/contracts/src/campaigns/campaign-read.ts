@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { previousSendOptionSchema } from '../broadcasts/previous-sends';
 import { sendHoldReasonSchema } from '../compliance/send-window';
 import {
   composeSenderSchema,
@@ -114,6 +115,8 @@ export const campaignBuilderSchema = z.object({
     }),
   ),
   flows: z.array(z.object({ id: uuidSchema, name: z.string() })),
+  /** Earlier broadcasts and campaigns that went out, newest first (the "Previous sends" source). */
+  previousSends: z.array(previousSendOptionSchema).default([]),
   /** True when the default engine is WABA: only Meta-approved templates may be sent. */
   requiresApprovedTemplates: z.boolean(),
 });

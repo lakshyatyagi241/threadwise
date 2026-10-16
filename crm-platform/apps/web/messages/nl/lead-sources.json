@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Koppel maximaal {max} aangepaste eigenschappen.",
       "contract": "{message}",
       "speedTemplateRequired": "Kies het sjabloon dat verzonden moet worden.",
-      "speedDelayRange": "Voer hele minuten in van 0 tot {max}."
+      "speedDelayRange": "Voer hele minuten in van 0 tot {max}.",
+      "speedMaxAgeRange": "Kies hoe oud een lead mag zijn, van 1 minuut tot 90 dagen."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Wachttijd vóór verzending (minuten)",
         "delayHint": "Hele minuten van 0 tot {max}. Bij 0 wordt direct verzonden.",
+        "maxAge": "Leads niet berichten die ouder zijn dan",
+        "maxAgeHint": "Een lead die te laat binnenkomt (een backfill, een nieuwe poging, een gemiste synchronisatie) wordt nog steeds opgeslagen, toegewezen en gemeld, maar krijgt geen eerste bericht als hij ouder is dan dit. Kies alleen een langere tijd als je oude leads wilt berichten. De toestemmingsregels gelden altijd.",
         "businessHours": "Alleen tijdens kantooruren",
         "businessHoursHint": "Buiten de kantooruren die in je werkruimte zijn ingesteld, wacht het bericht tot ze beginnen.",
         "optionsFailed": "De sjablonen en afzenders konden niet worden geladen. Probeer het zo meteen opnieuw."
@@ -646,6 +649,7 @@
         "no_sender": "Geen verbonden afzender",
         "template_unavailable": "Het sjabloon kan niet worden verzonden",
         "missing_value": "Er ontbreekt een sjabloonwaarde voor dit contact",
+        "lead_too_old": "De lead was ouder dan de instelling toestaat",
         "provider_error": "De provider heeft het geweigerd",
         "interrupted": "Het is onderbroken",
         "expired": "Het heeft te lang gewacht",
@@ -791,6 +795,7 @@
           "not_now": "De bron was er niet klaar voor: te vroeg voor hem, of zijn verbinding is gepauzeerd.",
           "provider_error": "De bron weigerde of faalde.",
           "credentials_refused": "De bron weigerde de inloggegevens. Verbind hem opnieuw.",
+          "permission_missing": "Meta heeft deze Pagina niet toegestaan leads te lezen. Geef toegang tot leads onder Meta-leadformulieren en voer het opnieuw uit.",
           "interrupted": "Het is onderbroken. Voer het opnieuw uit.",
           "internal_error": "Interne fout. Voer het opnieuw uit.",
           "incomplete": "Sommige leads zijn niet doorgegeven. Voer het opnieuw uit om af te maken.",
@@ -829,7 +834,8 @@
           "tooWide": "Maximaal {days} dagen tegelijk.",
           "noSource": "Kies minstens één bron."
         },
-        "safe": "Er gaat niets verloren en er wordt niets dubbel aangemaakt als je het opnieuw uitvoert; alleen ontbrekende leads worden toegevoegd."
+        "safe": "Er gaat niets verloren en er wordt niets dubbel aangemaakt als je het opnieuw uitvoert; alleen ontbrekende leads worden toegevoegd.",
+        "speedNote": "Nageladen leads worden net als nieuwe leads contacten, krijgen een eigenaar en waarschuwen je team. Ze krijgen het automatische eerste bericht niet als ze ouder zijn dan de limiet van de bron (een uur, tenzij je dat hebt aangepast in de instelling voor het eerste bericht van de bron)."
       }
     },
     "meta": {

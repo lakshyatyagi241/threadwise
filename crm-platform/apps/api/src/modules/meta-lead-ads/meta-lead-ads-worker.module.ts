@@ -9,6 +9,8 @@ import { LeadSweepService } from './lead-sweep.service';
 import { LeadgenProcessor } from './leadgen.processor';
 import { LeadgenService } from './leadgen.service';
 import { MetaLeadAdsRepository } from './meta-lead-ads.repository';
+import { MetaLeadPullBinding, MetaLeadPullProvider } from './meta-lead-pull.provider';
+import { MetaLeadPullService } from './meta-lead-pull.service';
 import { PageDisconnectConsumer } from './page-disconnect.consumer';
 
 /**
@@ -24,6 +26,9 @@ import { PageDisconnectConsumer } from './page-disconnect.consumer';
     MetaLeadAdsGraphClient,
     { provide: META_LEAD_ADS_GRAPH, useExisting: MetaLeadAdsGraphClient },
     LeadgenService,
+    MetaLeadPullService,
+    MetaLeadPullProvider,
+    MetaLeadPullBinding,
     LeadgenProcessor,
     LeadSweepProcessor,
     LeadSweepService,

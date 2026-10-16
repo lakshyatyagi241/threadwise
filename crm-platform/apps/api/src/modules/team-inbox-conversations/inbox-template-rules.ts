@@ -144,13 +144,28 @@ export function buttonTypeOf(raw: unknown): MessageTemplateButton['type'] {
   }
 }
 
-/** The buttons of a stored template in order, each with its kind and label (empty when the button has none, as a copy-code one). */
+/**
+ * The buttons of a stored template in order, each with its kind and label (empty when the button has none, as a copy-code one).
+ * A URL button carries its link only when the template fixes it: a `{{n}}` in it is filled at send time, so the thread cannot know
+ * the final address and the bubble leaves it unlinked. A call button carries its number.
+ */
 export function previewButtonsOf(raw: unknown): MessageTemplateButton[] {
   if (!Array.isArray(raw)) return [];
   return raw.flatMap((b): MessageTemplateButton[] => {
     if (!b || typeof b !== 'object') return [];
     const o = b as Record<string, unknown>;
-    return [{ type: buttonTypeOf(o.type), text: typeof o.text === 'string' ? o.text : '' }];
+    const type = buttonTypeOf(o.type);
+    const out: MessageTemplateButton = {
+      type,
+      text: typeof o.text === 'string' ? o.text : '',
+    };
+    if (type === 'url' && typeof o.url === 'string' && tokensOf(o.url).length === 0) {
+      out.url = o.url;
+    }
+    if (type === 'phone' && typeof o.phone_number === 'string' && o.phone_number.trim() !== '') {
+      out.phone = o.phone_number.trim();
+    }
+    return [out];
   });
 }
 

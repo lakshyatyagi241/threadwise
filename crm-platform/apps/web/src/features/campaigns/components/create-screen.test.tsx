@@ -4,7 +4,7 @@ import { KEYS as CAMP_KEYS } from '../api/campaigns';
 import { KEYS } from '../wizard/api/wizard';
 import type { SenderHidden } from '@crm/contracts';
 import { ENTITLEMENTS_KEY } from '@/lib/use-unofficial-whatsapp';
-import { html, sender, templates, uuid } from '../wizard/testing';
+import { html, previousSends, sender, templates, uuid } from '../wizard/testing';
 import { EMPTY_FORM, type BuilderForm } from '../lib/builder-model';
 import { StepCompose } from './builder/step-compose';
 import { StepRecipients } from './builder/step-recipients';
@@ -53,6 +53,7 @@ const seeded = (
     tags: [],
     segments: [],
     flows: [],
+    previousSends: [],
     requiresApprovedTemplates: true,
   });
   return qc;
@@ -361,6 +362,71 @@ describe('an email campaign (a connected mailbox as the sender)', () => {
     expect(wa).toContain('>Phone<');
   });
 
+  it('Recipients has a Previous sends section with the picker, the estimate, and a hint on edit', () => {
+    const [b, c] = previousSends();
+    const base = {
+      form: {
+        ...mail,
+        previousSends: {
+          sends: [
+            { kind: 'broadcast' as const, id: b!.id },
+            { kind: 'campaign' as const, id: c!.id },
+          ],
+          outcome: 'read' as const,
+        },
+      },
+      patch: noop,
+      lists: {
+        tags: [],
+        groups: [],
+        segments: [],
+        contacts: [],
+        contactsDenied: false,
+        filter: {},
+        onFilter: noop,
+      },
+      onSample: noop,
+      onCsvTooBig: noop,
+      engine: 'baileys',
+      previousOptions: previousSends(),
+    };
+    const out = html(<StepRecipients {...base} mode="audience" onMode={noop} />);
+    expect(out).toContain('data-testid="builder-previous-sends"');
+    expect(out).toContain('Diwali offer');
+    expect(out).toContain('Spring win-back');
+    expect(out).toContain('Up to 420 people from the previous sends');
+    expect(out).not.toContain('data-testid="previous-edit-hint"');
+    const edit = html(<StepRecipients {...base} mode="audience" onMode={noop} editing />);
+    expect(edit).toContain('data-testid="previous-edit-hint"');
+    expect(edit).toContain('is not shown when you edit');
+    // the other ways of choosing do not show it
+    expect(html(<StepRecipients {...base} mode="manual" onMode={noop} />)).not.toContain(
+      'builder-previous-sends',
+    );
+  });
+
+  it('Review lists the previous sends estimate once any is picked', () => {
+    const props = {
+      senderLabel: 'Acme',
+      scheduleLabel: 'Sending immediately',
+      onGo: noop,
+      totals: { groups: 0, contacts: 0, numbers: 0, previous: 420, total: 420 },
+    };
+    const none = html(<StepReview {...props} form={mail} />);
+    expect(none).not.toContain('review-previous');
+    const picked = html(
+      <StepReview
+        {...props}
+        form={{
+          ...mail,
+          previousSends: { sends: [{ kind: 'campaign', id: uuid(32) }], outcome: 'all' },
+        }}
+      />,
+    );
+    expect(picked).toContain('data-testid="review-previous"');
+    expect(picked).toContain('Previous sends (up to)');
+  });
+
   it('the preview is an email card with the sender, the subject and the body', () => {
     const out = html(
       <LivePreview
@@ -400,7 +466,7 @@ describe('an email campaign (a connected mailbox as the sender)', () => {
         form={mail}
         senderLabel="Support inbox · support@acme.test"
         scheduleLabel="Sending immediately"
-        totals={{ groups: 0, contacts: 2, numbers: 1, total: 3 }}
+        totals={{ groups: 0, contacts: 2, numbers: 1, previous: 0, total: 3 }}
         skipped={{ contacts: 1, numbers: 1, total: 2 }}
         engine="email"
         onGo={noop}

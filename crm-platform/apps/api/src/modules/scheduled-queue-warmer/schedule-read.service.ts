@@ -219,10 +219,16 @@ export class ScheduleReadService {
           FROM tags t LEFT JOIN contact_tags ct ON ct.org_id = t.org_id AND ct.tag_id = t.id
          WHERE t.org_id = ${orgId} GROUP BY t.id, t.uuid, t.name ORDER BY t.name`);
       const queues = await tx.execute(sql`
-        SELECT b.uuid, b.name, count(DISTINCT bc.contact_id)::int AS recipients
+        SELECT b.uuid, b.name, count(DISTINCT bc.contact_id)::int AS recipients, 'broadcast' AS kind, coalesce(b.updated_at, b.created_at) AS sort_at
           FROM broadcasts b LEFT JOIN broadcast_contacts bc ON bc.org_id = b.org_id AND bc.broadcast_id = b.id
          WHERE b.org_id = ${orgId} AND b.status IN ('completed', 'completed_with_errors')
-         GROUP BY b.id, b.uuid, b.name ORDER BY b.id DESC LIMIT 100`);
+         GROUP BY b.id, b.uuid, b.name, b.updated_at, b.created_at ORDER BY b.id DESC LIMIT 100`);
+      const sentCampaigns = await tx.execute(sql`
+        SELECT c.uuid, c.campaign_name AS name, count(DISTINCT r.contact_id)::int AS recipients, 'campaign' AS kind, coalesce(c.last_run_at, c.created_at) AS sort_at
+          FROM wpcampaigns c LEFT JOIN wp_campaign_contacts r ON r.org_id = c.org_id AND r.campaign_id = c.id
+            AND r.status NOT IN ('skipped', 'unsubscribed')
+         WHERE c.org_id = ${orgId} AND c.status NOT IN ('draft', 'scheduled') AND c.total_recipients > 0
+         GROUP BY c.id, c.uuid, c.campaign_name, c.last_run_at, c.created_at ORDER BY c.id DESC LIMIT 100`);
       // An authentication (OTP) template needs a unique code per person, so it can never be scheduled and is not offered.
       const templates = await tx.execute(sql`
         SELECT t.uuid, t.template_name, t.header, t.template_body, t.footer, t.category, t.meta_category, t.template_type, t.language,
@@ -259,11 +265,19 @@ export class ScheduleReadService {
           name: String(t.name ?? ''),
           contacts: num(t.contacts),
         })),
-        queues: (queues.rows as Raw[]).map((b) => ({
-          id: String(b.uuid),
-          name: String(b.name ?? ''),
-          recipients: num(b.recipients),
-        })),
+        // Earlier sends, newest first across both kinds (by when it went out).
+        queues: [...(queues.rows as Raw[]), ...(sentCampaigns.rows as Raw[])]
+          .sort(
+            (a, b) =>
+              new Date(b.sort_at as string).getTime() - new Date(a.sort_at as string).getTime(),
+          )
+          .slice(0, 100)
+          .map((b) => ({
+            id: String(b.uuid),
+            name: String(b.name ?? ''),
+            recipients: num(b.recipients),
+            kind: b.kind === 'campaign' ? ('campaign' as const) : ('broadcast' as const),
+          })),
         templates: (templates.rows as Raw[]).map((t) => {
           const connected = t.provider_config_id === null || t.config_status === 'connected';
           const meta =

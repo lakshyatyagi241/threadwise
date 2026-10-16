@@ -87,6 +87,10 @@ export type MessageTemplateHeader = z.infer<typeof messageTemplateHeaderSchema>;
 export const messageTemplateButtonSchema = z.object({
   type: z.enum(['quick_reply', 'url', 'phone', 'copy_code', 'other']),
   text: z.string(),
+  /** A URL button's link when the template fixes it (no `{{n}}` in it): the bubble opens it. Absent otherwise. */
+  url: z.string().nullable().optional(),
+  /** A call button's number as the template holds it: the bubble dials it. Absent otherwise. */
+  phone: z.string().nullable().optional(),
 });
 export type MessageTemplateButton = z.infer<typeof messageTemplateButtonSchema>;
 

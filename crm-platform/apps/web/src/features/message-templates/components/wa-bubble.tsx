@@ -99,14 +99,14 @@ export function MessageBubble({
           <>
             <MediaBlock model={model} />
             {model.headerKind === 'text' && model.headerText && (
-              <p className="mb-1 text-[12.5px] font-semibold leading-snug break-words">
+              <div className="mb-1 text-[12.5px] font-semibold leading-snug break-words">
                 <FormattedText text={model.headerText} />
-              </p>
+              </div>
             )}
             {model.body ? (
-              <p {...AGENT_IGNORE} className="break-words" data-testid="bubble-body">
+              <div {...AGENT_IGNORE} className="break-words" data-testid="bubble-body">
                 <FormattedText text={model.body} />
-              </p>
+              </div>
             ) : (
               <p className="text-muted-foreground">{t('bodyEmpty')}</p>
             )}

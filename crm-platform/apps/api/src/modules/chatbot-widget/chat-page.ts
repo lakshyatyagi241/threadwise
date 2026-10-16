@@ -171,6 +171,7 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .intake label.consent { display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px; color: #374151; margin: 2px 0 10px; line-height: 1.4; }
 .intake label.consent input { width: auto; margin: 2px 0 0; padding: 0; flex: none; }
 .intake label.consent a { color: var(--accent); }
+.intake .age-err { color: #b91c1c; font-size: 12px; margin: -2px 0 8px; }
 .intake button { width: 100%; padding: 10px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px; font: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; }
 .footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
@@ -971,6 +972,36 @@ const SCRIPT = `
     $('msgs').appendChild(a);
   }
 
+  // The optional age question of the intake form (BL-218). It is never pre-filled and never says which answer passes. A refusal is
+  // remembered for this tab only (the server keeps nothing about a refused visitor).
+  var AGELOCK = 'wsnap_age_' + TOKEN;
+  function ageLocked() {
+    try { return window.sessionStorage.getItem(AGELOCK) === '1'; } catch (e) { return false; }
+  }
+  function ageError(text) {
+    var el = $('i-age-err');
+    if (!el) return;
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+  function blockChat(remember) {
+    if (remember) { try { window.sessionStorage.setItem(AGELOCK, '1'); } catch (e) { /* a courtesy only */ } }
+    hideTyping();
+    intakeDone = true;
+    $('intake').style.display = 'none';
+    $('msgs').textContent = '';
+    addBubble('in', tx('ageBlocked', 'We are not able to continue this chat.'));
+    $('send').disabled = true;
+    $('txt').disabled = true;
+  }
+  function reopenIntake() {
+    hideTyping();
+    intakeDone = false;
+    $('send').disabled = true;
+    $('intake').style.display = 'block';
+    ageError(tx('ageRequired', 'Please answer this question to continue.'));
+  }
+
   function field(box, labelText, id, type) {
     var l = document.createElement('label');
     l.textContent = labelText;
@@ -991,6 +1022,36 @@ const SCRIPT = `
     if (cfg.collect_name) field(box, tx('name', 'Name'), 'i-name', 'text');
     if (cfg.collect_email) field(box, tx('email', 'Email'), 'i-email', 'email');
     if (cfg.collect_phone) field(box, tx('phone', 'Phone'), 'i-phone', 'tel');
+    if (cfg.age_gate && cfg.age_gate.pending) {
+      if (cfg.age_gate.mode === 'dob') {
+        field(box, tx('ageDobLabel', 'Date of birth'), 'i-dob', 'date');
+        $('i-dob').setAttribute('autocomplete', 'off');
+      } else if (cfg.age_gate.mode === 'age') {
+        field(box, tx('ageAgeLabel', 'Your age'), 'i-age', 'text');
+        var ageIn = $('i-age');
+        ageIn.setAttribute('inputmode', 'numeric');
+        ageIn.setAttribute('maxlength', '3');
+        ageIn.setAttribute('autocomplete', 'off');
+      } else {
+        var arow = document.createElement('label');
+        arow.className = 'consent';
+        var abox = document.createElement('input');
+        abox.type = 'checkbox';
+        abox.id = 'i-age-ok';
+        arow.appendChild(abox);
+        var atext = document.createElement('span');
+        atext.textContent = tx('ageDeclaration', 'I confirm I am at least {n} years old').replace('{n}', String(cfg.age_gate.declaration_age || 0));
+        atext.setAttribute('dir', 'auto');
+        arow.appendChild(atext);
+        box.appendChild(arow);
+      }
+      var aerr = document.createElement('div');
+      aerr.id = 'i-age-err';
+      aerr.className = 'age-err';
+      aerr.style.display = 'none';
+      aerr.setAttribute('role', 'alert');
+      box.appendChild(aerr);
+    }
     // The optional consent line: unticked by default. Only the wording the workspace wrote is shown, as plain text.
     if (cfg.consent && cfg.consent.text && (cfg.collect_email || cfg.collect_phone)) {
       var crow = document.createElement('label');
@@ -1019,6 +1080,10 @@ const SCRIPT = `
     go.type = 'button';
     go.textContent = tx('continue', 'Continue');
     go.onclick = function () {
+      if (cfg.age_gate && cfg.age_gate.pending) {
+        var missing = (cfg.age_gate.mode === 'dob' && !$('i-dob').value) || (cfg.age_gate.mode === 'age' && !$('i-age').value.trim());
+        if (missing) { ageError(tx('ageRequired', 'Please answer this question to continue.')); return; }
+      }
       intakeDone = true;
       box.style.display = 'none';
       $('send').disabled = false;
@@ -1052,12 +1117,14 @@ const SCRIPT = `
         renderSuggestions();
         settled = true;
         if (cfg.whatsapp_url && cfg.mode !== 'ai') addWaCta();
-        if ((cfg.collect_name || cfg.collect_email || cfg.collect_phone) && !(vis.name || vis.email || vis.phone)) {
+        var ageAsk = !!(cfg.age_gate && cfg.age_gate.pending);
+        if (((cfg.collect_name || cfg.collect_email || cfg.collect_phone) && !(vis.name || vis.email || vis.phone)) || ageAsk) {
           renderIntake();
         } else {
           intakeDone = true;
           $('send').disabled = false;
         }
+        if (ageAsk && ageLocked()) blockChat(false);
       });
     // QUIRK: reproduced deliberately (TW-WGT-009 rule 4). A failed config (403, 404) is not handled: the page stays empty
     // with a disabled Send button.
@@ -1083,6 +1150,9 @@ const SCRIPT = `
       var p = $('i-phone'); if (p && p.value) payload.phone = p.value;
       var c = $('i-consent');
       if (c && c.checked && cfg.consent) { payload.consent = true; payload.consent_version = cfg.consent.version; }
+      var dobIn = $('i-dob'); if (dobIn && dobIn.value) payload.date_of_birth = dobIn.value;
+      var ageIn2 = $('i-age'); if (ageIn2 && ageIn2.value.trim()) payload.age = ageIn2.value.trim();
+      var ageOk = $('i-age-ok'); if (ageOk) payload.age_confirmed = !!ageOk.checked;
     }
     showTyping();
     fetch(API_MSG, {
@@ -1098,6 +1168,8 @@ const SCRIPT = `
         // QUIRK: reproduced deliberately (TW-WGT-009 rule 2). A refused message (403, 422, 429) shows nothing: the visitor's
         // bubble stays and the message was never stored.
         var json = r.json;
+        if (!r.ok && json && json.code === 'age_blocked') { blockChat(true); return; }
+        if (!r.ok && json && json.errors && json.errors.age) { reopenIntake(); return; }
         if (json.reply && json.reply.body) {
           addBubble('in', json.reply.body, { id: json.reply.id, at: json.reply.at });
           lastSeenMsgId = Math.max(lastSeenMsgId, json.reply.id || 0);

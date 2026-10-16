@@ -14,6 +14,8 @@
       "number": "Number",
       "currency": "Amount",
       "date": "Date",
+      "date_of_birth": "Date of birth",
+      "age": "Age",
       "dropdown": "Dropdown",
       "radio": "Single choice",
       "checkbox_group": "Multiple choice",

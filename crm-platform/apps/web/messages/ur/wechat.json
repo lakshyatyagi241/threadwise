@@ -10,6 +10,7 @@
       "intro": "WeChat آفیشل اکاؤنٹ (تصدیق شدہ سروس اکاؤنٹ) کنیکٹ کریں۔ آنے والے پیغامات آپ کے مشترکہ ٹیم اِن باکس میں آتے ہیں، اور جوابات، کی ورڈ اصول اور آٹو ریسپانڈرز بالکل دوسرے چینلز کی طرح کام کرتے ہیں۔",
       "broadcasts": "براڈکاسٹس",
       "loadError": "آپ کے WeChat چینلز لوڈ نہیں ہو سکے۔",
+      "unavailableCountry": "WeChat آپ کے ملک میں دستیاب نہیں ہے۔ اس ورک اسپیس سے WeChat چینل جوڑا نہیں جا سکتا اور WeChat پیغامات نہیں بھیجے جا سکتے۔",
       "connectTitle": "چینل کنیکٹ کریں",
       "connectBody": "WeChat Official Accounts Platform (سیٹنگز → Basic Configuration) سے AppID، AppSecret اور سرور Token یہاں پیسٹ کریں۔",
       "connect": "WeChat کنیکٹ کریں",

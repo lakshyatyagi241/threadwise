@@ -23,7 +23,10 @@
       "imported": "Bir dosyadan içe aktarıldı",
       "createdAt": "Oluşturuldu",
       "updatedAt": "Son güncelleme",
-      "lastActivityAt": "Son etkinlik"
+      "lastActivityAt": "Son etkinlik",
+      "minor": "Reşit olmayan olarak işaretlendi",
+      "dateOfBirth": "Doğum tarihi",
+      "age": "Yaş (yıl)"
     },
     "fieldGroups": {
       "journey": "Yolculuk",

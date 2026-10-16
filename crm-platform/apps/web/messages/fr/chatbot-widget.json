@@ -254,7 +254,34 @@
         "off": "Désactivé",
         "none": "Aucun"
       },
-      "colorSwatch": "{label} (échantillon)"
+      "colorSwatch": "{label} (échantillon)",
+      "age": {
+        "enable": "Demander l'âge avant le début du chat",
+        "enableHint": "Désactivé par défaut. Utilisez-le uniquement si les règles de votre espace de travail l'exigent ou si vos visiteurs peuvent être mineurs. Le chat ne dit jamais quelle réponse est acceptée.",
+        "mode": "Comment demander",
+        "modes": {
+          "declaration": "Une case : « Je confirme avoir au moins N ans »",
+          "age": "Demander son âge",
+          "dob": "Demander sa date de naissance"
+        },
+        "modeHints": {
+          "declaration": "Aucune information sur son âge n'est conservée. Un minimum de données.",
+          "age": "Un nombre entier. Il sert à la vérification ; seul le résultat est conservé.",
+          "dob": "Enregistrée sur le contact comme date de naissance. Utilisez-la uniquement si vous avez besoin de la date."
+        },
+        "minAge": "Âge minimum",
+        "minAgeHint": "Laissez vide pour utiliser l'âge de votre espace de travail défini dans le Centre de conformité (18 si aucun n'est défini). Entre 1 et 21.",
+        "whenUnder": "Si le visiteur a moins que cet âge",
+        "actions": {
+          "block": "Ne pas démarrer le chat",
+          "flag": "Démarrer le chat et marquer le contact comme mineur"
+        },
+        "actionHints": {
+          "block": "Rien sur le visiteur n'est enregistré et il voit un message neutre. Avec la case, le visiteur n'a qu'à la cocher.",
+          "flag": "Le chat continue et, dès que le visiteur a donné un numéro de téléphone ou un e-mail, le contact est marqué comme mineur."
+        },
+        "contactNote": "L'âge n'est enregistré sur un contact qu'une fois que le visiteur a donné un numéro de téléphone ou une adresse e-mail."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widget WhatsApp",

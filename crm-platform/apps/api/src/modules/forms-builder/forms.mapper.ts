@@ -14,7 +14,7 @@ import {
   type FormSummary,
   type FormVersion,
 } from '@crm/contracts';
-import { asText, type StoredAnswer } from './form-rules';
+import { AGE_KEYS, asText, guardianOf, type StoredAnswer } from './form-rules';
 import type { FormRow, VersionRow } from './forms.repository';
 import type { SubmissionRow } from './form-submissions.repository';
 
@@ -165,6 +165,8 @@ export function toSubmissionDetail(
     payments,
     duplicatePayment: row.duplicatePayment,
     answers: toAnswers(def, row.answers),
+    ageGate: row.answers[AGE_KEYS.outcome] === 'under' ? 'under' : null,
+    guardian: guardianOf(row.answers),
     attribution: {
       utm: row.utm,
       referrer: row.referrer,

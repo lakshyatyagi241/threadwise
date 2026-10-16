@@ -13,6 +13,7 @@ import {
 import { useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
+  FLB_AGE_END_TEXT,
   FLB_CAROUSEL_LIMITS,
   FLB_CAROUSEL_MAX_BUTTONS,
   FLB_CAROUSEL_MAX_CARDS,
@@ -879,6 +880,7 @@ function SavePropertyField({
 function AskEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const tf = useFlb();
+  const ta = useTranslations('flb.builder.askAge');
   const type = flbCleanAskInputType(step.data.validate);
   const checked = type !== 'text';
   return (
@@ -902,7 +904,7 @@ function AskEditor({ step, doc, set }: EditorProps) {
           ))}
         </Select>
       </Field>
-      {type === 'date' ? (
+      {type === 'date' || type === 'date_of_birth' ? (
         <Field label={t('ask.dateFormat')} hint={t('ask.dateFormatHint')}>
           <Select
             value={flbCleanDateFormat(step.data.dateFormat)}
@@ -915,6 +917,49 @@ function AskEditor({ step, doc, set }: EditorProps) {
             ))}
           </Select>
         </Field>
+      ) : null}
+      {type === 'age' || type === 'date_of_birth' ? (
+        <>
+          <Field label={ta('minAge')} hint={ta('minAgeHint')}>
+            <Input
+              type="number"
+              min={1}
+              max={21}
+              value={step.data.ageMinAge === undefined ? '' : String(step.data.ageMinAge)}
+              onChange={(e) => {
+                const n = Math.trunc(Number(e.target.value));
+                set({
+                  ageMinAge:
+                    e.target.value === '' || !Number.isFinite(n)
+                      ? ''
+                      : Math.min(21, Math.max(1, n)),
+                });
+              }}
+            />
+          </Field>
+          <Field label={ta('whenUnder')} hint={ta('whenUnderHint')}>
+            <Select
+              value={step.data.ageWhenUnder === 'continue' ? 'continue' : 'end'}
+              onChange={(e) => set({ ageWhenUnder: e.target.value })}
+            >
+              <option value="end">{ta('end')}</option>
+              <option value="continue">{ta('continue')}</option>
+            </Select>
+          </Field>
+          {step.data.ageWhenUnder === 'continue' ? (
+            <p className="text-xs text-muted-foreground">{ta('continueNote')}</p>
+          ) : (
+            <Field label={ta('endText')} hint={ta('endTextHint')}>
+              <Textarea
+                rows={2}
+                value={str(step.data.ageEndText)}
+                placeholder={FLB_AGE_END_TEXT}
+                onChange={(e) => set({ ageEndText: e.target.value })}
+              />
+            </Field>
+          )}
+          <p className="text-xs text-muted-foreground">{ta('note')}</p>
+        </>
       ) : null}
       {type === 'phone' ? (
         <label className="flex items-start gap-2 text-[12.5px]">

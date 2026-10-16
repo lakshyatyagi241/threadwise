@@ -115,7 +115,14 @@
         "consentAt": "Diberikan pada",
         "noConsent": "Formulir ini tidak meminta persetujuan.",
         "links": "Catatan",
-        "actions": "Tindakan"
+        "actions": "Tindakan",
+        "ageCheck": "Pemeriksaan usia",
+        "ageOutcome": "Hasil",
+        "ageUnder": "Di bawah usia minimum. Pengiriman diterima dan kontak ditandai sebagai di bawah umur; persetujuan pemasaran tidak dicatat.",
+        "guardianName": "Orang tua atau wali",
+        "guardianEmail": "Email wali",
+        "guardianPhone": "Telepon wali",
+        "guardianNote": "Diberikan oleh pengunjung, tidak diperiksa. Persetujuan mereka tidak tercatat sampai seseorang mencatatnya di kartu Persetujuan kontak."
       },
       "actions": {
         "retry": "Coba lagi",

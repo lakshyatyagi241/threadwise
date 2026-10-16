@@ -99,6 +99,9 @@
       "colGroups": "Groups",
       "colTags": "Tags",
       "colMemo": "Memo",
+      "colDateOfBirth": "Date of birth",
+      "colMinor": "Minor",
+      "minorBadge": "Minor",
       "tagFilter": "Filter by tag",
       "allTags": "All tags",
       "consentFilter": "Filter by consent",
@@ -289,6 +292,8 @@
       "memoPlaceholder": "Notes about this contact",
       "address": "Address",
       "addressPlaceholder": "Enter address",
+      "dateOfBirth": "Date of birth",
+      "dateOfBirthHint": "Optional. If it makes the contact a minor, the contact is flagged as one.",
       "status": "Status",
       "statusNone": "- none -",
       "statuses": {
@@ -461,7 +466,9 @@
         "source": "Source",
         "consent": "Marketing consent (yes / no)",
         "consentSms": "SMS marketing consent (yes / no)",
-        "consentEmail": "Email marketing consent (yes / no)"
+        "consentEmail": "Email marketing consent (yes / no)",
+        "dateOfBirth": "Date of birth (year first, 2010-05-04)",
+        "minor": "Minor (yes flags the contact)"
       },
       "notInFile": "Not in file",
       "columnN": "Column {n}",
@@ -518,6 +525,7 @@
         "tag_name_too_long": "tag name too long",
         "plan_limit_reached": "plan contact limit reached",
         "tag_limit_reached": "plan tag limit reached",
+        "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
         "duplicate_in_file": "repeated number, merged into an earlier row"
       },
       "statusHint": "Applied to contacts this file creates.",
@@ -559,6 +567,7 @@
       "language": "Language",
       "source": "Source",
       "address": "Address",
+      "dateOfBirth": "Date of birth",
       "memo": "Memo",
       "groups": "Groups",
       "consent": "Marketing messages",
@@ -1019,6 +1028,7 @@
         "lifecycle_stage": "Lifecycle stage",
         "status": "Status",
         "groups": "Groups",
+        "owner": "Owner",
         "opt_out": "Marketing opt-out"
       },
       "types": {
@@ -1422,7 +1432,8 @@
         "needsFollowUp": "Needs follow-up",
         "active": "Active",
         "inactive": "Inactive",
-        "unsubscribed": "Unsubscribed"
+        "unsubscribed": "Unsubscribed",
+        "minors": "Minors"
       }
     },
     "erase": {

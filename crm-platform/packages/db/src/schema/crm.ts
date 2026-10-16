@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import {
   boolean,
+  date,
   index,
   integer,
   jsonb,
@@ -122,6 +123,8 @@ export const contacts = pgTable(
     language: text('language'),
     address: text('address'),
     countryCode: text('country_code'),
+    /** Built-in personal property (BL-217): a calendar day, no time. Read as text ('YYYY-MM-DD'), never as a JS Date. */
+    dateOfBirth: date('date_of_birth', { mode: 'string' }),
     channel: text('channel'),
     channelUid: text('channel_uid'),
     imageUrl: text('image_url'),
@@ -159,6 +162,9 @@ export const contacts = pgTable(
     index('idx_contacts_org_owner').on(t.orgId, t.ownerId, t.createdAt),
     index('idx_contacts_org_stage').on(t.orgId, t.lifecycleStage, t.createdAt),
     index('idx_contacts_org_last_activity').on(t.orgId, t.lastActivityAt),
+    index('idx_contacts_date_of_birth')
+      .on(t.orgId, t.dateOfBirth.desc())
+      .where(sql`${t.dateOfBirth} IS NOT NULL`),
   ],
 );
 

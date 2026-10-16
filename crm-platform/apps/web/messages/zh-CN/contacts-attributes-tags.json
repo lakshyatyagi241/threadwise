@@ -209,7 +209,10 @@
       "conditionsChip": "条件：{count}",
       "pqlExampleTag": "带有标签 {tag} 且30天未活跃的联系人",
       "pqlExampleStage": "最近7天创建的 {stage} 联系人",
-      "pqlExampleNoOwner": "没有负责人的联系人"
+      "pqlExampleNoOwner": "没有负责人的联系人",
+      "colDateOfBirth": "出生日期",
+      "colMinor": "未成年人",
+      "minorBadge": "未成年人"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。",
       "company": "公司",
       "companyHint": "将此联系人归入某个组织。",
-      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。"
+      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。",
+      "dateOfBirth": "出生日期",
+      "dateOfBirthHint": "选填。如果据此判定为未成年人,该联系人会被标记为未成年人。"
     },
     "tags": {
       "title": "标签",
@@ -461,7 +466,9 @@
         "source": "来源",
         "consent": "营销同意（是 / 否）",
         "consentSms": "短信营销同意(是 / 否)",
-        "consentEmail": "邮件营销同意(是 / 否)"
+        "consentEmail": "邮件营销同意(是 / 否)",
+        "dateOfBirth": "出生日期(年份在前,2010-05-04)",
+        "minor": "未成年人(填“是”会标记该联系人)"
       },
       "notInFile": "文件中没有",
       "columnN": "第 {n} 列",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "标签名称过长",
         "plan_limit_reached": "已达套餐联系人上限",
         "tag_limit_reached": "已达套餐标签上限",
-        "duplicate_in_file": "号码重复，已合并到前面的行"
+        "duplicate_in_file": "号码重复，已合并到前面的行",
+        "invalid_date_of_birth": "出生日期不是可作为出生日期的年份在前的日期"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "您的权限不允许将此联系人分配给该人员。",
       "ownerFailed": "无法更改负责人。请重试。",
       "ownerMe": "{name}(我)",
-      "ownerFormer": "已离开的成员"
+      "ownerFormer": "已离开的成员",
+      "dateOfBirth": "出生日期"
     },
     "attributes": {
       "eyebrow": "更多 / 属性",
@@ -1019,6 +1028,7 @@
         "lifecycle_stage": "生命周期阶段",
         "status": "状态",
         "groups": "群组",
+        "owner": "负责人",
         "opt_out": "营销退订"
       },
       "types": {
@@ -1422,7 +1432,8 @@
         "needsFollowUp": "需要跟进",
         "active": "活跃",
         "inactive": "不活跃",
-        "unsubscribed": "已退订"
+        "unsubscribed": "已退订",
+        "minors": "未成年人"
       }
     },
     "erase": {

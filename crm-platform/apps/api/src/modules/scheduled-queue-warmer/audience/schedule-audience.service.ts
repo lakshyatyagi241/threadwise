@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { assemblePhone } from '../../broadcasts';
+import { assemblePhone, previousSendContactsSql } from '../../broadcasts';
 import { ConsentGate } from '../../contact-consent';
 
 export interface AudienceInput {
@@ -82,11 +82,18 @@ export class ScheduleAudienceService {
       return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
     }
     if (input.recipientType === 'queue' && input.queueIds?.length) {
-      const res = await tx.execute(sql`
-        SELECT DISTINCT bc.contact_id AS id
-          FROM broadcast_contacts bc JOIN broadcasts b ON b.org_id = bc.org_id AND b.id = bc.broadcast_id
-         WHERE bc.org_id = ${orgId} AND b.uuid IN (${uuids(input.queueIds)}) AND bc.contact_id IS NOT NULL
-         ORDER BY bc.contact_id`);
+      // An earlier send: a broadcast or a campaign (a uuid is one or the other; the other kind simply matches nobody).
+      const q = previousSendContactsSql(orgId, {
+        sends: [
+          ...input.queueIds.map((id) => ({ kind: 'broadcast' as const, id })),
+          ...input.queueIds.map((id) => ({ kind: 'campaign' as const, id })),
+        ],
+        outcome: 'all',
+      });
+      if (!q) return [];
+      const res = await tx.execute(
+        sql`SELECT DISTINCT contact_id AS id FROM (${q}) p ORDER BY contact_id`,
+      );
       return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
     }
     return [];

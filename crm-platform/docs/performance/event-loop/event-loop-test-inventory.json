@@ -5,10 +5,11 @@
     "e2e": 1,
     "staticGate": 1,
     "benchmarks": 3,
-    "alertRuleCases": 9,
-    "total": 58
+    "scrapeDemoChecks": 25,
+    "alertRuleCases": 11,
+    "total": 85
   },
-  "coverageAgainstTarget": "58 of 280 (about 21%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
+  "coverageAgainstTarget": "85 of 280 (about 30%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
   "categories": [
     {
       "name": "Instrumentation unit/integration",
@@ -82,9 +83,9 @@
     {
       "name": "Alerting, telemetry and operational",
       "target": 30,
-      "implemented": 9,
-      "file": "deploy/observability/event-loop.rules.test.yml (promtool test rules, 9 case groups over all 11 rules, mutation-checked)",
-      "note": "Rules pass promtool check and test on synthetic series. No alert has been fired against a real Prometheus, no receiver is configured, and telemetry/operational checks (stale-metric end to end, restart continuity) are still missing."
+      "implemented": 36,
+      "file": "deploy/observability/event-loop.rules.test.yml (promtool test rules, 11 case groups over all 11 rules, mutation-checked) and tools/event-loop-audit/scrape-demo.mjs (25 checks against a real Prometheus, real API and worker processes, with a real injected stall; manual, needs Docker and the built API, about 25 minutes)",
+      "note": "Rules pass promtool and fire correctly in a real Prometheus for the API stall and for a killed worker. Missing: the worker critical alert from a real worker stall, delivery to a receiver, restart continuity, and stalls of 10 s to 2 min."
     }
   ]
 }

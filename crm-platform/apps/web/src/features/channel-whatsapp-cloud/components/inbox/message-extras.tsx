@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import type { MessageContactCard, MessageInteractive } from '@crm/contracts';
 import { contactCards, interactiveChip } from '../../lib/media-state';
+import { telHref } from '@/lib/safe-links';
+import { BubbleButton, BubbleButtonList } from '@/components/whatsapp-button';
 
 /** A customer's answer to a button or a list, shown as a chip with the title they chose (not as a plain sentence they typed). */
 export function InteractiveChip({
@@ -67,46 +69,48 @@ export function ContactCards({
   const cards = contactCards({ kind, body, contacts });
   if (cards.length === 0) return null;
   return (
-    <ul className="space-y-1.5" data-testid="inbox-contact-cards">
+    <ul className="space-y-2" data-testid="inbox-contact-cards">
       {cards.map((c, i) => (
-        <li
-          key={`${c.name ?? ''}-${i}`}
-          className="flex w-64 max-w-full items-start gap-3 rounded-md border border-border bg-background/70 p-2.5"
-        >
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
-            <svg
-              viewBox="0 0 24 24"
-              width="18"
-              height="18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-            </svg>
-          </span>
-          <span className="min-w-0 flex-1">
-            <span dir="auto" className="block truncate text-sm font-medium">
-              {c.name ?? t('unnamed')}
+        <li key={`${c.name ?? ''}-${i}`} className="w-64 max-w-full">
+          <div className="flex items-center gap-2.5">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+              </svg>
             </span>
-            {c.phones.length > 0 ? (
-              c.phones.map((p) => (
-                <span
+            <span className="min-w-0 flex-1">
+              <span dir="auto" className="block truncate text-sm font-medium">
+                {c.name ?? t('unnamed')}
+              </span>
+              {c.phones.length === 0 && (
+                <span className="block text-xs text-muted-foreground">{t('shared')}</span>
+              )}
+            </span>
+          </div>
+          {c.phones.length > 0 && (
+            <BubbleButtonList>
+              {c.phones.map((p) => (
+                <BubbleButton
                   key={p}
-                  dir="ltr"
-                  className="block truncate text-start font-mono text-xs text-muted-foreground"
-                >
-                  {p}
-                </span>
-              ))
-            ) : (
-              <span className="block text-xs text-muted-foreground">{t('shared')}</span>
-            )}
-          </span>
+                  href={telHref(p)}
+                  tone="plain"
+                  linkTestId="inbox-contact-phone"
+                  label={p}
+                />
+              ))}
+            </BubbleButtonList>
+          )}
         </li>
       ))}
     </ul>

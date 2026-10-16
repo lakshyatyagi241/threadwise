@@ -53,7 +53,9 @@
           "crm_required_unbound": "Uma propriedade exigida pelo seu espaço de trabalho não está no formulário.",
           "no_contact_point": "Adicione um campo de e-mail ou telefone vinculado ao contato, para que cada envio possa ser associado a uma pessoa.",
           "payment_no_gateway": "Conecte um gateway de pagamento que possa gerar links de pagamento, ou desative o pagamento.",
-          "captcha_not_configured": "O CAPTCHA está definido como sempre ativo, mas a plataforma não tem CAPTCHA. Escolha outra opção ou peça ao administrador da plataforma para adicionar um."
+          "captcha_not_configured": "O CAPTCHA está definido como sempre ativo, mas a plataforma não tem CAPTCHA. Escolha outra opção ou peça ao administrador da plataforma para adicionar um.",
+          "age_gate_field_missing": "A verificação de idade precisa da sua pergunta: adicione um campo de data de nascimento ou de idade, ou escolha a caixa.",
+          "age_gate_field_not_required": "A pergunta que a verificação de idade avalia deve ser obrigatória."
         },
         "code": {
           "no_fields": "Adicione pelo menos um campo.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Seu espaço de trabalho exige a propriedade do CRM \"{property}\": adicione-a ao formulário e marque-a como obrigatória.",
           "crm_required_optional": "Um campo vinculado a uma propriedade obrigatória do CRM também precisa ser obrigatório.",
           "redirect_not_https": "O endereço de redirecionamento deve começar com https://.",
-          "too_large": "O formulário está grande demais. Remova alguns campos."
+          "too_large": "O formulário está grande demais. Remova alguns campos.",
+          "age_gate_field_missing": "A verificação de idade precisa da sua pergunta: adicione um campo de data de nascimento ou de idade, ou escolha a caixa.",
+          "age_gate_field_optional": "A pergunta que a verificação de idade avalia deve ser obrigatória."
         }
       },
       "versionsTitle": "Versões",

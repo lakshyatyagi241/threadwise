@@ -63,3 +63,7 @@ Opening the screen needs permission to read contacts. Creating, editing, deletin
 - **A contact with this phone number or email already exists.** Nothing new was created.
 - **An import rejects rows.** The reason is shown per row. Fix them and upload again.
 - **Someone else changed this record.** Reload it and apply your change again.
+
+## Date of birth and minors
+
+A contact can have a **Date of birth**, set on its edit form, in an import or by a form, the chat or a flow. When the person is under your workspace's age, the contact is flagged as a minor and shows a minor badge next to its name. Use the **Minors** view of the list to see them, or the "minor" filter in the filter panel and in segments. See [consent](help:contact-consent) for how the flag works and when it lapses.

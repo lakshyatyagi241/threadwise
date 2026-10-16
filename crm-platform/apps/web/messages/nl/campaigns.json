@@ -306,7 +306,11 @@
         "numbersCount": "{count} nummers",
         "emailNote": "E-mails gaan naar het adres van elk contact. Contacten zonder e-mailadres, dubbele adressen en afgemelde contacten worden overgeslagen.",
         "emailSkipped": "{count, plural, one {# gekozen ontvanger heeft geen e-mailadres en wordt overgeslagen.} other {# gekozen ontvangers hebben geen e-mailadres en worden overgeslagen.}}",
-        "emailNoAddress": "Getypte nummers en CSV-rijen hebben geen e-mailadres en worden daarom overgeslagen. Kies in plaats daarvan contacten, groepen, tags of segmenten."
+        "emailNoAddress": "Getypte nummers en CSV-rijen hebben geen e-mailadres en worden daarom overgeslagen. Kies in plaats daarvan contacten, groepen, tags of segmenten.",
+        "previousTitle": "Eerdere verzendingen",
+        "previousHint": "Voeg de mensen toe naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, erop antwoordde of klikte.",
+        "previousEstimate": "{count, plural, one {Maximaal # persoon uit de eerdere verzendingen (een schatting: iemand in twee verzendingen wordt dubbel geteld).} other {Maximaal # personen uit de eerdere verzendingen (een schatting: iemand in twee verzendingen wordt dubbel geteld).}}",
+        "previousEditHint": "Je eerdere keuze van verzendingen wordt niet getoond bij bewerken: deze campagne bevat haar ontvangers al als contacten. Kies opnieuw om meer mensen toe te voegen."
       },
       "message": {
         "title": "Bericht",
@@ -594,7 +598,8 @@
         "subject": "Onderwerp",
         "subjectFallback": "De campagnenaam",
         "skippedNoEmail": "Overgeslagen (geen e-mailadres)",
-        "estimateEmail": "Dit is een schatting: een contact in twee groepen wordt dubbel geteld. Contacten zonder e-mailadres in groepen, tags en segmenten worden overgeslagen wanneer de campagne draait."
+        "estimateEmail": "Dit is een schatting: een contact in twee groepen wordt dubbel geteld. Contacten zonder e-mailadres in groepen, tags en segmenten worden overgeslagen wanneer de campagne draait.",
+        "previousSends": "Eerdere verzendingen (maximaal)"
       },
       "ai": {
         "open": "Bouwen met AI",
@@ -1166,7 +1171,10 @@
         "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld.",
         "follow_up_template_required": "Kies de sjabloon die elke follow-up verstuurt.",
         "follow_up_flow_required": "Kies de flow die elke follow-up start.",
-        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups."
+        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups.",
+        "sequence_not_recurring": "Sjablonen om de beurt werken alleen met een terugkerende campagne. Kies een terugkerend schema of verwijder de extra sjablonen.",
+        "sequence_with_ab": "Sjablonen om de beurt kunnen niet worden gecombineerd met een A/B-test. Zet de A/B-test uit of verwijder de extra sjablonen.",
+        "sequence_template_required": "Kies een sjabloon voor elke stap in de volgorde of verwijder de lege."
       },
       "template": {
         "previewOnline": "online",
@@ -1251,7 +1259,8 @@
           "contacts": "Contacten",
           "groups": "Groepen",
           "segments": "Segmenten",
-          "csv": "CSV-bestand"
+          "csv": "CSV-bestand",
+          "previous": "Eerdere verzendingen"
         },
         "groupsHint": "Groepen zijn je marketinglijsten. Iedereen in de groepen die je aanvinkt is inbegrepen.",
         "segmentsHint": "Segmenten vullen zichzelf op basis van regels. Iedereen in de segmenten die je aanvinkt is inbegrepen.",
@@ -1347,7 +1356,10 @@
         },
         "csvIssuesMore": "Nog {count} staan in de download.",
         "csvConsentOn": "U hebt de toestemming voor deze nummers bevestigd. Ze worden bij het starten van de verzending vastgelegd als akkoord.",
-        "csvConsentVersion": "Versie van de mededeling: {version}."
+        "csvConsentVersion": "Versie van de mededeling: {version}.",
+        "modePrevious": "Verzenden naar eerdere verzendingen",
+        "previousHint": "Bereik opnieuw de mensen naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, niet las, erop antwoordde of klikte.",
+        "chipPrevious": "{count, plural, one {# eerdere verzending} other {# eerdere verzendingen}} ({outcome})"
       },
       "review": {
         "intro": "Controleer de kosten, geef aan waarmee elke sjabloonvariabele wordt gevuld en bekijk de broadcast.",
@@ -1425,7 +1437,9 @@
         "estimatedCostFull": "Geschatte kosten (volledig)",
         "chargedPlan": "Nu van je portemonnee afgeschreven: {amount} (je abonnement dekt {covered} van deze berichten)",
         "chargedWallet": "Van je portemonnee afgeschreven: {amount}",
-        "sumFollowUps": "Follow-ups"
+        "sumFollowUps": "Follow-ups",
+        "sumSequence": "Wordt om de beurt verzonden",
+        "sumPrevious": "Eerdere verzendingen: {names} ({outcome})"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1588,7 +1602,8 @@
           "sent": "Verzonden",
           "delivered": "Afgeleverd",
           "failed": "Mislukt",
-          "retries": "Nieuwe pogingen"
+          "retries": "Nieuwe pogingen",
+          "template": "Sjabloon"
         },
         "retrySummary": "{pending} wachtend, {recovered} hersteld, {exhausted} opgegeven",
         "openRun": "Uitvoering openen",
@@ -1648,7 +1663,9 @@
             "skipped": "Er werd niet aan de voorwaarde voldaan toen deze werd gecontroleerd, dus de reeks eindigde daar.",
             "lapsed": "De bewakingstijd was verstreken voordat het contact reageerde of las, dus de reeks eindigde daar."
           }
-        }
+        },
+        "templatesTitle": "Sjablonen",
+        "templatesInTurn": "{count, plural, one {# sjabloon om de beurt} other {# sjablonen om de beurt}}"
       },
       "panel": {
         "title": "Gemaakt met Broadcast maken",
@@ -1659,7 +1676,8 @@
           "recurring": "Terugkerend"
         },
         "recipients": "{count, plural, one {# ontvanger} other {# ontvangers}}",
-        "next": "Volgende uitvoering {when}"
+        "next": "Volgende uitvoering {when}",
+        "moreTemplates": "+{count} meer"
       },
       "pickers": {
         "selectDate": "Datum selecteren",
@@ -1745,6 +1763,29 @@
           "hours": "{count, plural, one {uur} other {uur}}",
           "days": "{count, plural, one {dag} other {dagen}}"
         }
+      },
+      "sequence": {
+        "title": "Sjablonen op volgorde",
+        "intro": "Elke run verstuurt het volgende sjabloon uit deze lijst. Run 1 verstuurt het eerste, run 2 het tweede en na het laatste begint de lijst weer bij het eerste.",
+        "notRecurring": "Alleen een terugkerende verzending gebruikt sjablonen om de beurt. Kies een terugkerend schema of verwijder deze sjablonen.",
+        "withAb": "Sjablonen om de beurt kunnen niet samen met een A/B-test worden gebruikt, die al twee sjablonen verstuurt. Zet de A/B-test uit om ze te gebruiken.",
+        "templateLabel": "Sjabloon {position}",
+        "firstMissing": "Nog niet gekozen",
+        "firstHint": "Het sjabloon dat voor de campagne is gekozen. Wijzig het in de sjabloonstap.",
+        "pick": "Kies een sjabloon",
+        "loading": "Laden...",
+        "unavailable": "Niet meer beschikbaar",
+        "up": "Omhoog",
+        "down": "Omlaag",
+        "moveUp": "Sjabloon {position} omhoog",
+        "moveDown": "Sjabloon {position} omlaag",
+        "remove": "Sjabloon {position} verwijderen",
+        "removeShort": "Verwijderen",
+        "removeAll": "Alles verwijderen",
+        "add": "Een sjabloon toevoegen",
+        "count": "{used} van {max} sjablonen",
+        "limitReached": "Limiet bereikt: {max} sjablonen.",
+        "variablesTitle": "Variabelen van sjabloon {position}: {name}"
       }
     },
     "history": {
@@ -1881,6 +1922,58 @@
       "loading": "Je nummers laden",
       "noAccessTitle": "Je kunt geen campagnes aanmaken",
       "noAccess": "Vraag een beheerder van de werkruimte om toestemming om campagnes aan te maken."
+    },
+    "previousSends": {
+      "title": "Eerdere verzendingen",
+      "empty": "Nog geen eerdere broadcasts of campagnes",
+      "outcomeLabel": "Wie uit die verzendingen",
+      "outcomes": {
+        "all": "Iedereen die het ontving",
+        "delivered": "Afgeleverd",
+        "read": "Gelezen",
+        "not_read": "Niet gelezen",
+        "replied": "Beantwoord",
+        "not_replied": "Niet beantwoord",
+        "clicked": "Op een link geklikt",
+        "failed": "Mislukt"
+      },
+      "outcomeOff": "{name} (niet voor broadcasts)",
+      "outcomeHint": {
+        "all": "Iedereen die het ontving: alle mensen voor wie het bericht bedoeld was. Contacten die zich hebben afgemeld en overgeslagen rijen blijven buiten beschouwing.",
+        "delivered": "Afgeleverd: de mensen die het hebben bereikt.",
+        "read": "Gelezen: de mensen die het hebben gelezen.",
+        "not_read": "Niet gelezen: de mensen naar wie het is verzonden en die het nog niet hebben gelezen.",
+        "replied": "Beantwoord: de mensen die erop hebben gereageerd.",
+        "not_replied": "Niet beantwoord: de mensen naar wie het is verzonden en die nog niet hebben gereageerd.",
+        "clicked": "Op een link geklikt: de mensen die op een gevolgde link erin hebben geklikt.",
+        "failed": "Mislukt: de mensen aan wie het niet kon worden afgeleverd."
+      },
+      "broadcastNote": "Een broadcast registreert alleen aflevering en lezen, dus antwoorden en klikken zijn niet beschikbaar zolang er een is aangevinkt.",
+      "broadcastOff": "Een broadcast heeft geen antwoorden of klikken. Kies een andere uitkomst om deze aan te vinken.",
+      "search": "Eerdere verzendingen zoeken",
+      "searchPlaceholder": "Zoeken",
+      "listLabel": "Eerdere broadcasts en campagnes",
+      "noMatch": "Niets komt overeen met je zoekopdracht.",
+      "chosen": "{count} van {max} gekozen",
+      "limit": "Je kunt maximaal {max} verzendingen kiezen. Vink er een uit om een andere te kiezen.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Campagne"
+      },
+      "wentOut": "Verzonden {date}",
+      "wentOutUnknown": "Datum onbekend",
+      "recipients": "{count, plural, one {# ontvanger} other {# ontvangers}}",
+      "notRecorded": "Niet geregistreerd voor een broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# persoon} other {# personen}}",
+        "delivered": "{count, plural, one {# persoon heeft het ontvangen} other {# personen hebben het ontvangen}}",
+        "read": "{count, plural, one {# persoon heeft het gelezen} other {# personen hebben het gelezen}}",
+        "not_read": "{count, plural, one {# persoon heeft het niet gelezen} other {# personen hebben het niet gelezen}}",
+        "replied": "{count, plural, one {# persoon heeft geantwoord} other {# personen hebben geantwoord}}",
+        "not_replied": "{count, plural, one {# persoon heeft niet geantwoord} other {# personen hebben niet geantwoord}}",
+        "clicked": "{count, plural, one {# persoon heeft op een link geklikt} other {# personen hebben op een link geklikt}}",
+        "failed": "{count, plural, one {# persoon voor wie het mislukte} other {# personen voor wie het mislukte}}"
+      }
     }
   }
 }

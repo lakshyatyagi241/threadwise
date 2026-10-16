@@ -254,7 +254,7 @@ function SplitShowcase({
   );
 }
 
-/** The right-hand column of the split designs: brand (small screens), title block, form. */
+/** The end-hand column of the split designs: brand (small screens), title block, form. */
 function FormColumn({
   page,
   name,
