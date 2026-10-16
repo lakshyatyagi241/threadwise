@@ -62,12 +62,12 @@ only reconciles every `MAIL_PUSH_RECONCILE_MINUTES`, default 10). The hub shows 
 3. **No new Graph permission.** A subscription on `me/mailFolders('inbox')/messages` with a delegated token needs `Mail.Read`, which the app already has. Nothing in the Entra app changes.
 4. **Switch it on:** `MAIL_GRAPH_PUSH_ENABLED=true` on the API **and** the worker, then restart both. Until then the route answers `404` and no subscription is created.
 
-| Variable                          | Meaning                                                                                                          |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `MAIL_GRAPH_PUSH_ENABLED`         | `true` to use change notifications (default `false`)                                                             |
-| `MICROSOFT_MAIL_NOTIFICATION_URL` | the full public address, when it is not the redirect URI's origin plus `/v2/public/email/microsoft/push`         |
+| Variable                          | Meaning                                                                                                           |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `MAIL_GRAPH_PUSH_ENABLED`         | `true` to use change notifications (default `false`)                                                              |
+| `MICROSOFT_MAIL_NOTIFICATION_URL` | the full public address, when it is not the redirect URI's origin plus `/v2/public/email/microsoft/push`          |
 | `MAIL_PUSH_RENEW_BEFORE_HOURS`    | renew a subscription when less than this is left (default 24; never later than half its lifetime, about 35 hours) |
-| `MAIL_PUSH_RECONCILE_MINUTES`     | a mailbox with a live subscription is still polled at least this often (default 10): the net behind a lost event |
+| `MAIL_PUSH_RECONCILE_MINUTES`     | a mailbox with a live subscription is still polled at least this often (default 10): the net behind a lost event  |
 
 **How it works.** Every two minutes the push sweep (worker) creates a subscription for each connected Microsoft mailbox that has none, renews the ones near their end (Graph keeps a mail
 subscription under three days; we ask for 70 hours), and recreates one that Graph no longer has. Creating a subscription makes Microsoft call the address with `?validationToken=` and expect the
@@ -83,12 +83,12 @@ makes a new one) and syncs; `missed` syncs. Disconnecting a mailbox deletes its 
 **Rotating `CREDENTIALS_ENCRYPTION_KEY`** changes the `clientState` key: the notifications of existing subscriptions no longer verify, so those mailboxes fall back to polling until their
 subscriptions are recreated (clear `push_state` of the Microsoft mailboxes after the rotation, or wait for the 70-hour subscriptions to lapse).
 
-| What you see                                      | Cause and fix                                                                                                                              |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| No **Live updates** chip on a Microsoft mailbox   | push is off (`MAIL_GRAPH_PUSH_ENABLED`), the address is not public https, or Microsoft could not validate it (see the log)                 |
-| Log: "mail push could not be started or renewed"  | usually the validation: the address is unreachable from the internet, the certificate is not from a public CA, or the proxy drops the query string |
-| The chip is there but mail still takes a minute   | notifications are not arriving (firewall, WAF); the reconcile poll and the sweep still deliver the mail                                    |
-| A notification never syncs anything               | the mailbox is not connected, its add-on lapsed, or the subscription id it stores is not the one Microsoft sent (it was replaced)          |
+| What you see                                     | Cause and fix                                                                                                                                      |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No **Live updates** chip on a Microsoft mailbox  | push is off (`MAIL_GRAPH_PUSH_ENABLED`), the address is not public https, or Microsoft could not validate it (see the log)                         |
+| Log: "mail push could not be started or renewed" | usually the validation: the address is unreachable from the internet, the certificate is not from a public CA, or the proxy drops the query string |
+| The chip is there but mail still takes a minute  | notifications are not arriving (firewall, WAF); the reconcile poll and the sweep still deliver the mail                                            |
+| A notification never syncs anything              | the mailbox is not connected, its add-on lapsed, or the subscription id it stores is not the one Microsoft sent (it was replaced)                  |
 
 ## How it behaves (what to tell support)
 

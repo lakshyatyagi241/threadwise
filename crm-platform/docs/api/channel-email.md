@@ -347,9 +347,17 @@ Mail of a **shared** mailbox is written to the contact's Activity Timeline (`GET
 `POST /v2/email/mailboxes/test-imap` takes `{ imap: {host, port, security, username, password}, smtp: {host, port, security, username?, password?} }` (the shapes of `connect-imap`, without address, name or scope) and `POST /v2/email/mailboxes/:id/test` takes no body and uses the saved login. Both answer `200`:
 
 ```json
-{ "ok": false,
-  "imap": { "ok": false, "failedStep": "login", "reason": "auth_failed", "message": "The IMAP server refused the username or password.", "inboxMessages": null },
-  "smtp": { "ok": true, "failedStep": null, "reason": null, "message": null, "inboxMessages": null } }
+{
+  "ok": false,
+  "imap": {
+    "ok": false,
+    "failedStep": "login",
+    "reason": "auth_failed",
+    "message": "The IMAP server refused the username or password.",
+    "inboxMessages": null
+  },
+  "smtp": { "ok": true, "failedStep": null, "reason": null, "message": null, "inboxMessages": null }
+}
 ```
 
 Both sides are always tried. `failedStep`: `connect`, `login`, `inbox` (IMAP) or `connect`, `auth` (SMTP). `reason`: `auth_failed`, `tls`, `unreachable`, `blocked_address`, `rejected`, `unknown`. `message` is one sentence in our words (never a host, banner or password); the web translates from `reason`. `inboxMessages` is the INBOX count on a good IMAP side. Nothing is stored and nothing is sent. Errors: `422` for a body that is not settings, `429 MAIL_RATE_LIMITED` after 6 tests a minute per workspace, `409 MAIL_MAILBOX_UNAVAILABLE` for a disconnected mailbox, `422 MAIL_PROVIDER_UNSUPPORTED` for Gmail/Microsoft, `403`/`404` as for Sync now. Permission `mail.mailboxes.manage` (shared) or `mail.mailboxes.manage_personal` (own personal mailbox); the plan feature `email_channel` applies.
