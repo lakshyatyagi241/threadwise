@@ -253,7 +253,7 @@ function cellsOf(line: string, delimiter: string): string[] {
  */
 export function phoneCells(text: string): string[] | null {
   const lines = text
-    .replace(/^﻿/, '')
+    .replace(/^\uFEFF/, '')
     .split(/\r?\n/)
     .filter((l) => l.trim() !== '');
   if (lines.length === 0) return null;

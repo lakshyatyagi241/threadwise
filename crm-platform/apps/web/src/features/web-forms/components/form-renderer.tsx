@@ -121,6 +121,7 @@ export function FormRenderer(props: FormRendererProps) {
   useEffect(() => {
     if (mode !== 'live' || !ageLockKey) return;
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read after mount so the server and first paint agree
       if (window.sessionStorage.getItem(`wf-age-${ageLockKey}`) === '1') setAgeBlocked(true);
     } catch {
       /* private mode: the lock is a courtesy, the server decides */
