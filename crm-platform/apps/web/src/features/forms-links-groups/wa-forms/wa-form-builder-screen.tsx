@@ -14,6 +14,8 @@ import {
   WA_FORM_AUDIENCE_TYPES,
   WA_FORM_CHOICE_FIELD_KINDS,
   WA_FORM_FIELD_KINDS,
+  WA_FORM_PRIVACY_MAP_FIELDS,
+  WA_FORM_PRIVACY_MAP_KIND,
   WA_FORM_SYSTEM_MAP_FIELDS,
 } from '@crm/contracts';
 import { Alert, Button, Card, Checkbox, Field, Input, Select, Spinner, Textarea } from '@crm/ui';
@@ -364,6 +366,19 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                             {feed.data!.custom.map((a) => (
                               <option key={a.key} value={a.key}>
                                 {a.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )}
+                        {WA_FORM_PRIVACY_MAP_FIELDS.filter(
+                          (key) => WA_FORM_PRIVACY_MAP_KIND[key] === field.kind,
+                        ).length > 0 && (
+                          <optgroup label={t('builder.mapsToPrivacyGroup')}>
+                            {WA_FORM_PRIVACY_MAP_FIELDS.filter(
+                              (key) => WA_FORM_PRIVACY_MAP_KIND[key] === field.kind,
+                            ).map((key) => (
+                              <option key={key} value={key}>
+                                {t(`builder.mapsToPrivacy.${key.replace('privacy:', '')}`)}
                               </option>
                             ))}
                           </optgroup>

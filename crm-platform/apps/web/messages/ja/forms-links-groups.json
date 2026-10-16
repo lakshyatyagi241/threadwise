@@ -109,6 +109,13 @@
           "title": "役職",
           "language": "言語",
           "address": "住所"
+        },
+        "mapsToPrivacyGroup": "プライバシーと同意",
+        "mapsToPrivacy": {
+          "age": "年齢（未成年者チェック）",
+          "date_of_birth": "生年月日（未成年者チェック）",
+          "consent_marketing": "マーケティング同意（WhatsApp）",
+          "consent_service": "サービス合意（マーケティングではない）"
         }
       },
       "fieldKind": {

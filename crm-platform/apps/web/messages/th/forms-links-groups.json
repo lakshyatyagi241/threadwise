@@ -109,6 +109,13 @@
           "title": "ตำแหน่ง",
           "language": "ภาษา",
           "address": "ที่อยู่"
+        },
+        "mapsToPrivacyGroup": "ความเป็นส่วนตัวและการยินยอม",
+        "mapsToPrivacy": {
+          "age": "อายุ (ตรวจสอบผู้เยาว์)",
+          "date_of_birth": "วันเกิด (ตรวจสอบผู้เยาว์)",
+          "consent_marketing": "การยินยอมการตลาด (WhatsApp)",
+          "consent_service": "ข้อตกลงบริการ (ไม่ใช่การตลาด)"
         }
       },
       "fieldKind": {

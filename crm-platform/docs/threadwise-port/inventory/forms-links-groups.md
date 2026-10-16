@@ -239,6 +239,20 @@ CUSTOMER_SUPPORT|SIGN_UP|OTHER`).
     `WaFormSubmissionService` never writes submission answers onto contact fields at all; this is a net-new
     enhancement, not a parity gap, and does not change the stored submission shape (`wa_form_submissions` is
     unaffected).
+  - **Port addition, 2026-10-17 (not in Reference):** WhatsApp Forms previously had neither a consent-capture nor
+    a minor/age-check mechanism of its own — Reference's forms never had either, and the port's own web-forms,
+    chat-widget and flow-builder each got one independently (`MinorDetectionService`, `judgeAgeAnswer`). A field's
+    `mapsTo` can now also be `privacy:age`, `privacy:date_of_birth` (number/date fields; flags the contact as a
+    minor under the workspace's own minor age, via the same `judgeAgeAnswer`/`MinorDetectionService.flagFromAnswer`
+    every other age-check surface uses), or `privacy:consent_marketing`/`privacy:consent_service` (checkbox fields;
+    a ticked answer grants WhatsApp marketing consent or records a service agreement, via the new
+    `ContactsService.grantFromIntake`, which routes a marketing grant through `ConsentIntakeService` — the
+    canonical intake-grant door every other surface uses — and a service agreement straight to
+    `ContactConsentService.recordInTx`, matching `recordServiceAgreement`'s own rule that it never touches the
+    subscription label). Consent source `wa_form` (migration `20261225090000_consent_wa_form_source.sql`) keeps
+    this intake surface distinct in the ledger from the web-forms feature's own `form` source. A privacy mapping on
+    the wrong field `kind` (e.g. `privacy:age` left on a field later changed to `short_text`) is skipped, not an
+    error, same rule as every other `mapsTo` mismatch.
 
 ### TW-WFL-009 — Submissions list, contact resolution, inbox mirror
 

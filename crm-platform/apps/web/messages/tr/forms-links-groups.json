@@ -109,6 +109,13 @@
           "title": "Unvan",
           "language": "Dil",
           "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Gizlilik ve onay",
+        "mapsToPrivacy": {
+          "age": "Yaş (reşit olmayan kontrolü)",
+          "date_of_birth": "Doğum tarihi (reşit olmayan kontrolü)",
+          "consent_marketing": "Pazarlama onayı (WhatsApp)",
+          "consent_service": "Hizmet anlaşması (pazarlama değil)"
         }
       },
       "fieldKind": {

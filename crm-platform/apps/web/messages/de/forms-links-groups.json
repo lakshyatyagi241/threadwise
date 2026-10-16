@@ -109,6 +109,13 @@
           "title": "Berufsbezeichnung",
           "language": "Sprache",
           "address": "Adresse"
+        },
+        "mapsToPrivacyGroup": "Datenschutz & Einwilligung",
+        "mapsToPrivacy": {
+          "age": "Alter (Minderjährigenprüfung)",
+          "date_of_birth": "Geburtsdatum (Minderjährigenprüfung)",
+          "consent_marketing": "Marketing-Einwilligung (WhatsApp)",
+          "consent_service": "Diensteinwilligung (kein Marketing)"
         }
       },
       "fieldKind": {

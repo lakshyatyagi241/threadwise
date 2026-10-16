@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
-import type { AttributePickerFeed, WaForm } from '@crm/contracts';
+import type { AttributePickerFeed, WaForm, WaFormField } from '@crm/contracts';
 import {
   makeSession,
   renderAccount,
@@ -10,7 +10,21 @@ import { KEYS } from '@/features/contacts-attributes-tags/api/contacts';
 import { WA_FORM_KEYS } from '../api/wa-forms-hooks';
 import { WaFormBuilderScreen } from './wa-form-builder-screen';
 
-const form = (): WaForm => ({
+const DEFAULT_FIELDS: WaFormField[] = [
+  { id: 'fld_name', kind: 'short_text', label: 'Name', required: true, mapsTo: 'name' },
+  { id: 'fld_notes', kind: 'paragraph', label: 'Notes', required: false },
+  { id: 'fld_age', kind: 'number', label: 'Your age', required: false },
+  { id: 'fld_dob', kind: 'date', label: 'Date of birth', required: false },
+  {
+    id: 'fld_consent',
+    kind: 'checkbox',
+    label: 'I agree to receive marketing messages',
+    required: false,
+    options: ['I agree'],
+  },
+];
+
+const form = (fields: WaFormField[] = DEFAULT_FIELDS): WaForm => ({
   id: '33333333-3333-4333-8333-333333333333',
   title: 'Lead capture',
   purpose: null,
@@ -20,22 +34,12 @@ const form = (): WaForm => ({
   capReachedNote: null,
   sendButtonLabel: 'Send',
   thankYouNote: null,
-  definition: {
-    screens: [
-      {
-        id: 'A',
-        fields: [
-          { id: 'fld_name', kind: 'short_text', label: 'Name', required: true, mapsTo: 'name' },
-          { id: 'fld_notes', kind: 'paragraph', label: 'Notes', required: false },
-        ],
-      },
-    ],
-  },
+  definition: { screens: [{ id: 'A', fields }] },
   status: 'draft',
   isLive: false,
   publishedAt: null,
   publishError: null,
-  fieldsCount: 2,
+  fieldsCount: fields.length,
   submissionCount: 0,
   createdAt: '2026-10-08T00:00:00.000Z',
   rowVersion: 1,
@@ -53,14 +57,15 @@ const ALL = {
   'wfl.forms.delete': 'all',
 } as const;
 
-function render(customAttributes: AttributePickerFeed['custom'] = []) {
+function render(customAttributes: AttributePickerFeed['custom'] = [], fields?: WaFormField[]) {
+  const f = form(fields);
   const seed: Seed = [
-    [WA_FORM_KEYS.detail(form().id), form()],
+    [WA_FORM_KEYS.detail(f.id), f],
     [KEYS.attributePicker, feed(customAttributes)],
   ];
   return renderAccount(
     <ToastProvider dismissLabel="x">
-      <WaFormBuilderScreen id={form().id} />
+      <WaFormBuilderScreen id={f.id} />
     </ToastProvider>,
     { session: makeSession({ permissions: ALL as never }), seed },
   );
@@ -87,5 +92,24 @@ describe('the WhatsApp Form builder — contact property mapping', () => {
   it('does not offer a custom-properties group when there are none', () => {
     const html = render([]);
     expect(html).not.toContain('Custom properties');
+  });
+});
+
+describe('the WhatsApp Form builder — privacy mapping (age, date of birth, consent)', () => {
+  it('offers the privacy group, with age/date-of-birth/consent options, on the matching field kinds', () => {
+    const html = render();
+    expect(html).toContain('Privacy &amp; consent');
+    expect(html).toContain('Age (minor check)');
+    expect(html).toContain('Date of birth (minor check)');
+    expect(html).toContain('Marketing consent (WhatsApp)');
+    expect(html).toContain('Service agreement (not marketing)');
+  });
+
+  it('does not offer the privacy group at all on a form with no number, date or checkbox field', () => {
+    const html = render(undefined, [
+      { id: 'fld_name', kind: 'short_text', label: 'Name', required: true },
+      { id: 'fld_notes', kind: 'paragraph', label: 'Notes', required: false },
+    ]);
+    expect(html).not.toContain('Privacy &amp; consent');
   });
 });

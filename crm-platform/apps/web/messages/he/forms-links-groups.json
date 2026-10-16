@@ -109,6 +109,13 @@
           "title": "תפקיד",
           "language": "שפה",
           "address": "כתובת"
+        },
+        "mapsToPrivacyGroup": "פרטיות והסכמה",
+        "mapsToPrivacy": {
+          "age": "גיל (בדיקת קטינים)",
+          "date_of_birth": "תאריך לידה (בדיקת קטינים)",
+          "consent_marketing": "הסכמה שיווקית (WhatsApp)",
+          "consent_service": "הסכמת שירות (לא שיווק)"
         }
       },
       "fieldKind": {

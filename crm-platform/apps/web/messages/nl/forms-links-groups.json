@@ -109,6 +109,13 @@
           "title": "Functietitel",
           "language": "Taal",
           "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Privacy & toestemming",
+        "mapsToPrivacy": {
+          "age": "Leeftijd (minderjarigheidscontrole)",
+          "date_of_birth": "Geboortedatum (minderjarigheidscontrole)",
+          "consent_marketing": "Marketingtoestemming (WhatsApp)",
+          "consent_service": "Service-overeenkomst (geen marketing)"
         }
       },
       "fieldKind": {

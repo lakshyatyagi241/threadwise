@@ -109,6 +109,13 @@
           "title": "Qualifica",
           "language": "Lingua",
           "address": "Indirizzo"
+        },
+        "mapsToPrivacyGroup": "Privacy e consenso",
+        "mapsToPrivacy": {
+          "age": "Età (verifica minorenni)",
+          "date_of_birth": "Data di nascita (verifica minorenni)",
+          "consent_marketing": "Consenso marketing (WhatsApp)",
+          "consent_service": "Accordo di servizio (non marketing)"
         }
       },
       "fieldKind": {
