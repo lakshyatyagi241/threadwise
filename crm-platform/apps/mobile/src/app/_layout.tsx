@@ -9,7 +9,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
-import { PermissionGuide } from '@/features/onboarding/permission-guide';
 import { useFirstRunPermissions } from '@/features/onboarding/use-first-run-permissions';
 import { i18n, initI18n } from '@/lib/i18n';
 import { getSnapshot, restoreSession, subscribe } from '@/lib/auth/session-manager';
@@ -41,8 +40,8 @@ function RootLayout() {
       .finally(() => setReady(true));
   }, []);
 
-  // The first time the app opens, the phone's own permission prompts (no screen of ours before them), then a guide to settings for any left off.
-  const permissions = useFirstRunPermissions(ready && fontsDone && auth.status !== 'loading');
+  // The first time the app opens, the phone's own permission prompts (no screen or dialog of ours around them).
+  useFirstRunPermissions(ready && fontsDone && auth.status !== 'loading');
 
   useEffect(() => {
     if (fontError) log.exception(fontError, 'app.fonts_failed');
@@ -62,7 +61,6 @@ function RootLayout() {
         <I18nextProvider i18n={i18n}>
           <QueryClientProvider client={queryClient}>
             <StatusBar style="auto" />
-            <PermissionGuide off={permissions.off} onClose={permissions.clear} />
             <Stack screenOptions={{ headerShown: false }}>
               <Stack.Protected guard={auth.status === 'signedIn'}>
                 <Stack.Screen name="(app)" />
