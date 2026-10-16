@@ -17,6 +17,7 @@ import { Panel, useRefreshContact, type SectionProps } from './shared';
  */
 export function ContactOverview({
   contact,
+  variant,
   onOpenSection,
 }: SectionProps & {
   /** Moves to a section in place (the details page); the quick view sends the person to the details page instead. */
@@ -28,9 +29,12 @@ export function ContactOverview({
     <div className="@container">
       <div className="grid gap-4 @2xl:grid-cols-[minmax(0,1fr)_18rem]">
         <div className="min-w-0 space-y-3">
-          <div className="flex justify-end">
-            <FieldHistoryButton contactId={contact.id} />
-          </div>
+          {/* The details page has the button in its header; the drawer has no header room for it. */}
+          {variant === 'drawer' && (
+            <div className="flex justify-end">
+              <FieldHistoryButton contactId={contact.id} />
+            </div>
+          )}
           <Panel id={`info-${contact.id}`} title={t('information')} bodyClassName="pt-1">
             <ContactInfoTabs contact={contact} />
           </Panel>

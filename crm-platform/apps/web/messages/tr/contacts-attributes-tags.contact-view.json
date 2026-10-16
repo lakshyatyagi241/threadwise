@@ -1,0 +1,178 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Kişi hızlı görünümü",
+        "loading": "Kişi yükleniyor...",
+        "notFoundTitle": "Kişi bulunamadı",
+        "notFound": "Silinmiş olabilir veya erişiminiz olmayabilir.",
+        "close": "Kapat",
+        "seeAll": "Tüm ayrıntıları gör",
+        "previous": "Önceki kişi",
+        "next": "Sonraki kişi",
+        "position": "{index} / {total}",
+        "rail": "Kişi bölümleri",
+        "rail_overview": "Genel bakış",
+        "rail_activities": "Etkinlik",
+        "rail_conversations": "Görüşmeler",
+        "rail_notes": "Notlar",
+        "rail_stats": "İletişim istatistikleri",
+        "rail_files": "Dosyalar",
+        "rail_details": "Özellikler",
+        "openFull": "Ayrıntı sayfasında aç"
+      },
+      "actions": {
+        "note": "Not",
+        "task": "Görev",
+        "meeting": "Toplantı",
+        "addCompany": "Şirket ekle",
+        "changeCompany": "Şirketi değiştir",
+        "channels": "Bu kişiye mesaj gönder veya ara",
+        "more": "Diğer eylemler",
+        "edit": "Kişiyi düzenle",
+        "delete": "Kişiyi sil",
+        "close": "Kapat",
+        "companyHint": "Kişinin çalıştığı şirketi seçin. Değiştirmemek için yeniden seçin, bağlantıyı kaldırmak için temizleyin.",
+        "companySaved": "Şirket kaydedildi.",
+        "companyFailed": "Şirket kaydedilemedi. Tekrar deneyin.",
+        "conflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
+        "deleteFailed": "Kişi silinemedi."
+      },
+      "header": {
+        "jobTitle": "İş unvanı",
+        "jobTitlePlaceholder": "İş unvanı ekle...",
+        "editJobTitle": "İş unvanını düzenle",
+        "jobTitleConflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
+        "jobTitleFailed": "İş unvanı kaydedilemedi. Tekrar deneyin.",
+        "leadScore": "Potansiyel puanı",
+        "leadScoreAria": "Potansiyel puanı {score}. Puan ayrıntılarını göster.",
+        "owner": "Sahip"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Web sitesi",
+        "open": "{network} profilini aç"
+      },
+      "subscription": {
+        "title": "Abonelik durumu",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "E-posta",
+          "sms": "SMS"
+        },
+        "yes": "Evet",
+        "no": "Hayır",
+        "optedOut": "Pazarlama mesajlarından çıktı",
+        "optedOutNote": "Bu kişi pazarlama mesajlarından çıktı, bu yüzden her kanalda Hayır görünür.",
+        "proof": "Her onayın kanıtı onay kaydında bulunur.",
+        "openConsent": "Onay kartını aç"
+      },
+      "score": {
+        "title": "Potansiyel puanı",
+        "details": "Puan ayrıntıları",
+        "hideDetails": "Ayrıntıları gizle",
+        "none": "Henüz puanlanmadı",
+        "aria": "Potansiyel puanı {score}, {band}"
+      },
+      "owner": {
+        "title": "Sahip ve atama",
+        "owner": "Sahip",
+        "tags": "Etiketler",
+        "groups": "Gruplar"
+      },
+      "location": {
+        "title": "Konum",
+        "address": "Adres",
+        "country": "Ülke",
+        "timeZone": "Saat dilimi",
+        "language": "Dil"
+      },
+      "compliance": {
+        "title": "Gizlilik",
+        "optedOut": "Pazarlamadan çıktı",
+        "allowed": "Pazarlamaya izin var",
+        "noFlags": "Gizlilik işareti yok"
+      },
+      "overview": {
+        "information": "Kişi"
+      },
+      "tabs": {
+        "info": "Kişi bilgileri",
+        "social": "Sosyal medya",
+        "source": "Potansiyel müşteri kaynağı",
+        "custom": "Özel alanlar"
+      },
+      "info": {
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "fax": "Faks",
+        "company": "Şirket",
+        "jobTitle": "İş unvanı",
+        "language": "Dil",
+        "address": "Adres",
+        "memo": "Not defteri",
+        "contactId": "Kişi kimliği",
+        "createdAt": "Oluşturulma zamanı",
+        "lastActivity": "Son etkinlik",
+        "source": "Kaynak",
+        "noCustomFields": "Bu kişinin henüz özel alan değeri yok.",
+        "noLeadSource": "Bu kişi için kayıtlı bir potansiyel müşteri kaynağı yok."
+      },
+      "details": {
+        "title": "Kişi ayrıntıları",
+        "stage": "Yaşam döngüsü aşaması",
+        "otherProperties": "Diğer özellikler"
+      },
+      "company": {
+        "title": "Şirket",
+        "change": "Değiştir",
+        "add": "Şirket ekle",
+        "none": "Bu kişi bir şirkete bağlı değil."
+      },
+      "sections": {
+        "lead-source": "Potansiyel müşteri kaynağı"
+      },
+      "nav": {
+        "back": "Listeye dön",
+        "label": "Kişi bölümleri",
+        "contactDetails": "Kişi ayrıntıları",
+        "related": "İlgili",
+        "section": {
+          "overview": "Genel bakış",
+          "activities": "Etkinlikler",
+          "conversations": "Görüşmeler",
+          "details": "Kişi ayrıntıları",
+          "stats": "İletişim istatistikleri",
+          "notes": "Notlar",
+          "files": "Dosyalar",
+          "tasks": "Görevler",
+          "deals": "Fırsatlar",
+          "appointments": "Randevular",
+          "sales": "Faturalar ve belgeler",
+          "lead-source": "Potansiyel müşteri kaynağı",
+          "company": "Şirket",
+          "consent": "Onay",
+          "history": "Alan geçmişi"
+        }
+      },
+      "stages": {
+        "title": "Yaşam döngüsü",
+        "stages": "Yaşam döngüsü aşaması",
+        "status": "Durum",
+        "noStatuses": "Bu aşamanın durumu yok.",
+        "statusChanged": "Durum {status} olarak ayarlandı.",
+        "conflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
+        "forbidden": "Bu kişiyi değiştirme izniniz yok.",
+        "statusFailed": "Durum değiştirilemedi. Tekrar deneyin."
+      }
+    }
+  }
+}

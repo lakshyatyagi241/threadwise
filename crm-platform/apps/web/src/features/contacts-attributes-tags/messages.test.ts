@@ -133,6 +133,8 @@ describe('message keys used in code', () => {
     let checked = 0;
     for (const file of files) {
       for (const key of usedKeys(readFileSync(file, 'utf8'))) {
+        // Another domain's strings (the consent card's privacy flags, the lead attribution labels) are checked by that domain.
+        if (!key.startsWith(`${ROOT_KEY}.`)) continue;
         checked++;
         if (!(key in en)) missing.push(`${file.replace(WEB, '')}: ${key}`);
       }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormatter, useTranslations } from 'next-intl';
+import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { Tabs, type TabItem } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CompanyLink } from '@/features/companies';
@@ -23,9 +23,10 @@ const text = (c: Pick<ContactRow, 'customFields'>, key: string): string =>
 /** A when-column: the date, and how long ago in words. */
 function useWhen() {
   const format = useFormatter();
+  const now = useNow();
   return (iso: string | null) =>
     iso
-      ? `${format.dateTime(new Date(iso), { dateStyle: 'medium' })} (${format.relativeTime(new Date(iso))})`
+      ? `${format.dateTime(new Date(iso), { dateStyle: 'medium' })} (${format.relativeTime(new Date(iso), now)})`
       : '';
 }
 

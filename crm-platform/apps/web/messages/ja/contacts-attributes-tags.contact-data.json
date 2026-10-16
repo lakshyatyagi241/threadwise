@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "取引",
+        "loading": "取引を読み込み中",
+        "empty": "この連絡先の取引はまだありません。",
+        "unavailable": "お使いのプランでは取引を利用できないか、ロールに取引へのアクセス権が含まれていません。",
+        "listLabel": "この連絡先の取引",
+        "openRollup": "{count, plural, other {進行中の取引#件}}",
+        "wonRollup": "{count, plural, other {成約した取引#件}}",
+        "noValue": "金額なし",
+        "capped": "最初の{count}件の取引を表示しています。上の合計はすべての取引が対象です。",
+        "pipeline": "パイプライン: {name}",
+        "closes": "完了予定日: {date}",
+        "owner": "担当者: {name}",
+        "status": {
+          "open": "進行中",
+          "won": "成約",
+          "lost": "失注"
+        }
+      },
+      "conversations": {
+        "title": "会話",
+        "loading": "会話を読み込み中",
+        "empty": "この連絡先の会話は見つかりませんでした。",
+        "listLabel": "この連絡先の会話",
+        "unread": "{count, plural, other {未読メッセージ#件}}",
+        "open": "開く",
+        "openLabel": "会話「{title}」を開く",
+        "noPreview": "メッセージはまだありません",
+        "lastMessage": "最終メッセージ: {time}",
+        "assignedTo": "担当: {name}",
+        "unassigned": "未割り当て",
+        "footnote": "連絡先の電話番号、メールアドレス、名前で見つかった会話です。アーカイブ済みの会話は表示されません。",
+        "status": {
+          "open": "オープン",
+          "pending": "保留中",
+          "snoozed": "スヌーズ中",
+          "resolved": "解決済み",
+          "closed": "クローズ済み",
+          "spam": "スパム"
+        }
+      },
+      "history": {
+        "button": "連絡先フィールドの履歴",
+        "title": "連絡先フィールドの履歴",
+        "close": "閉じる",
+        "loading": "履歴を読み込み中",
+        "empty": "この連絡先のフィールド変更はまだ記録されていません。",
+        "loadMore": "さらに読み込む",
+        "changedTo": "変更後",
+        "noValue": "空",
+        "by": "{actor}による変更",
+        "actor": {
+          "user": "ユーザー",
+          "system": "システム",
+          "api": "API"
+        },
+        "fields": {
+          "name": "名前",
+          "firstName": "名",
+          "lastName": "姓",
+          "email": "メール",
+          "phone": "電話",
+          "companyId": "会社",
+          "ownerId": "担当者",
+          "lifecycleStage": "ライフサイクルステージ",
+          "lifecycleState": "ライフサイクルの状態",
+          "status": "ステータス",
+          "lostReason": "失注の理由",
+          "leadScore": "リードスコア",
+          "source": "ソース",
+          "isUnsubscribed": "配信停止"
+        }
+      },
+      "stats": {
+        "title": "コミュニケーション統計",
+        "loading": "統計を読み込み中",
+        "conversations": "会話",
+        "unread": "未読メッセージ",
+        "lastInbound": "最後に受信したメッセージ",
+        "lastOutbound": "最後に送信したメッセージ",
+        "calls": "通話",
+        "callsAnswered": "応答した通話",
+        "callsMissed": "不在着信",
+        "callMinutes": "通話時間（分）",
+        "openTasks": "未完了のタスク",
+        "leadScore": "リードスコア",
+        "lastActivity": "最終アクティビティ",
+        "created": "作成日",
+        "none": "まだありません",
+        "atLeast": "{count}件以上",
+        "footnote": "メッセージの数値は、この連絡先で見つかった会話（電話番号、メールアドレス、名前による照合）が対象です。通話の数値は過去1年間で、電話番号または名前で照合しています。",
+        "callsPartial": "読み取れる件数を超える通話が一致したため、通話の数値が実際より少ない可能性があります。"
+      }
+    }
+  }
+}

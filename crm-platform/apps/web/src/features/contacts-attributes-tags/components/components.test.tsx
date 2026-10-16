@@ -28,7 +28,10 @@ import { SlashTextarea } from './slash-picker';
 import { TagsEditor } from './tags-editor';
 
 /** The domain's English strings: the main file and the `contacts-attributes-tags.<part>.json` slices the app merges with it. */
-function merge(base: Record<string, unknown>, over: Record<string, unknown>): Record<string, unknown> {
+function merge(
+  base: Record<string, unknown>,
+  over: Record<string, unknown>,
+): Record<string, unknown> {
   const out = { ...base };
   for (const [k, v] of Object.entries(over)) {
     const b = out[k];
@@ -269,7 +272,14 @@ describe('ContactsTable', () => {
         can: { note: false, call: false, send: false, chat: false },
       });
       expect(out).toContain('aria-label="Open the details of Aarav Sharma"');
-      for (const gone of ['Edit Aarav', 'Add a note', 'Call Aarav', 'Email Aarav', 'WhatsApp Aarav', 'Chat with']) {
+      for (const gone of [
+        'Edit Aarav',
+        'Add a note',
+        'Call Aarav',
+        'Email Aarav',
+        'WhatsApp Aarav',
+        'Chat with',
+      ]) {
         expect(out, gone).not.toContain(`aria-label="${gone}`);
       }
       // the menu is still there, with "View"
@@ -643,7 +653,9 @@ describe('ContactsToolbar', () => {
             conditionCount: 0,
           }}
           allColumns={allColumns([])}
-          columnIds={['name', 'phone', 'email', 'stage', 'whatsapp', 'owner', 'createdOn'] as ColumnId[]}
+          columnIds={
+            ['name', 'phone', 'email', 'stage', 'whatsapp', 'owner', 'createdOn'] as ColumnId[]
+          }
           onApplyColumns={noop}
           onResetColumns={noop}
           view="list"
@@ -677,7 +689,13 @@ describe('ContactsToolbar', () => {
 
   it('has none of the separate dropdowns the old toolbar had', () => {
     const out = toolbar();
-    for (const gone of ['Select Segment', 'Select Tag', 'Send Campaign', '>More Actions<', '>Sort<']) {
+    for (const gone of [
+      'Select Segment',
+      'Select Tag',
+      'Send Campaign',
+      '>More Actions<',
+      '>Sort<',
+    ]) {
       expect(out, gone).not.toContain(gone);
     }
   });
@@ -705,7 +723,13 @@ describe('applied filters and the selection bar', () => {
       <AppliedFilters
         chips={[
           { id: 'tag:1', kind: 'tag', label: 'Tag: VIP', value: 'VIP', clear: { tag: '' } },
-          { id: 'rules', kind: 'rules', label: 'Conditions: 2', value: 'Conditions: 2', clear: { rules: '' } },
+          {
+            id: 'rules',
+            kind: 'rules',
+            label: 'Conditions: 2',
+            value: 'Conditions: 2',
+            clear: { rules: '' },
+          },
         ]}
         onRemove={noop}
         onClearAll={noop}
@@ -749,7 +773,15 @@ describe('applied filters and the selection bar', () => {
   it('offers Send campaign, Tag, Assign owner, Change stage, Export, Delete and More', () => {
     const out = bar();
     expect(out).toContain('3 selected');
-    for (const action of ['Send campaign', 'Tag', 'Assign owner', 'Change stage', 'Export', 'Delete', 'More']) {
+    for (const action of [
+      'Send campaign',
+      'Tag',
+      'Assign owner',
+      'Change stage',
+      'Export',
+      'Delete',
+      'More',
+    ]) {
       expect(out, action).toContain(action);
     }
   });

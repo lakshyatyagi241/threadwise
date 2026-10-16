@@ -156,7 +156,7 @@ export function OwnerCard({ contact }: { contact: ContactRow }) {
           <dt className="pt-1 text-muted-foreground">{t('tags')}</dt>
           <dd className="min-w-0">
             <div className="flex flex-wrap items-center gap-1.5">
-              <ContactQuickTags contactId={contact.id} />
+              <ContactQuickTags contactId={contact.id} labelled />
             </div>
           </dd>
         </div>

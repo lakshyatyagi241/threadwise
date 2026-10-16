@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "거래",
+        "loading": "거래 불러오는 중",
+        "empty": "이 연락처의 거래가 아직 없습니다.",
+        "unavailable": "현재 요금제에서 거래를 사용할 수 없거나, 내 역할에 거래 접근 권한이 없습니다.",
+        "listLabel": "이 연락처의 거래",
+        "openRollup": "{count, plural, other {진행 중인 거래 #건}}",
+        "wonRollup": "{count, plural, other {성사된 거래 #건}}",
+        "noValue": "금액 없음",
+        "capped": "처음 {count}건의 거래를 표시하고 있습니다. 위의 합계에는 모든 거래가 포함됩니다.",
+        "pipeline": "파이프라인 {name}",
+        "closes": "예상 마감일 {date}",
+        "owner": "담당자 {name}",
+        "status": {
+          "open": "진행 중",
+          "won": "성사",
+          "lost": "실패"
+        }
+      },
+      "conversations": {
+        "title": "대화",
+        "loading": "대화 불러오는 중",
+        "empty": "이 연락처의 대화를 찾을 수 없습니다.",
+        "listLabel": "이 연락처의 대화",
+        "unread": "{count, plural, other {읽지 않은 메시지 #개}}",
+        "open": "열기",
+        "openLabel": "대화 {title} 열기",
+        "noPreview": "아직 메시지가 없습니다",
+        "lastMessage": "마지막 메시지 {time}",
+        "assignedTo": "담당: {name}",
+        "unassigned": "미배정",
+        "footnote": "연락처의 전화번호, 이메일 주소 또는 이름으로 찾은 대화입니다. 보관된 대화는 표시되지 않습니다.",
+        "status": {
+          "open": "열림",
+          "pending": "대기 중",
+          "snoozed": "스누즈됨",
+          "resolved": "해결됨",
+          "closed": "종료됨",
+          "spam": "스팸"
+        }
+      },
+      "history": {
+        "button": "연락처 필드 기록",
+        "title": "연락처 필드 기록",
+        "close": "닫기",
+        "loading": "기록 불러오는 중",
+        "empty": "이 연락처의 필드 변경 내역이 아직 없습니다.",
+        "loadMore": "더 보기",
+        "changedTo": "다음으로 변경됨",
+        "noValue": "비어 있음",
+        "by": "{actor}에 의한 변경",
+        "actor": {
+          "user": "사용자",
+          "system": "시스템",
+          "api": "API"
+        },
+        "fields": {
+          "name": "이름",
+          "firstName": "이름",
+          "lastName": "성",
+          "email": "이메일",
+          "phone": "전화번호",
+          "companyId": "회사",
+          "ownerId": "담당자",
+          "lifecycleStage": "라이프사이클 단계",
+          "lifecycleState": "라이프사이클 상태",
+          "status": "상태",
+          "lostReason": "실패 사유",
+          "leadScore": "리드 점수",
+          "source": "출처",
+          "isUnsubscribed": "구독 취소"
+        }
+      },
+      "stats": {
+        "title": "커뮤니케이션 통계",
+        "loading": "통계 불러오는 중",
+        "conversations": "대화",
+        "unread": "읽지 않은 메시지",
+        "lastInbound": "마지막 수신 메시지",
+        "lastOutbound": "마지막 발신 메시지",
+        "calls": "통화",
+        "callsAnswered": "응답한 통화",
+        "callsMissed": "부재중 통화",
+        "callMinutes": "통화 시간(분)",
+        "openTasks": "진행 중인 작업",
+        "leadScore": "리드 점수",
+        "lastActivity": "마지막 활동",
+        "created": "생성일",
+        "none": "아직 없음",
+        "atLeast": "{count}개 이상",
+        "footnote": "메시지 수치는 이 연락처에 대해 찾은 대화(전화번호, 이메일 주소 또는 이름 기준)를 집계한 것입니다. 통화 수치는 최근 1년간 전화번호 또는 이름으로 일치한 통화를 집계한 것입니다.",
+        "callsPartial": "읽을 수 있는 범위보다 많은 통화가 일치하여 통화 수치가 실제보다 적을 수 있습니다."
+      }
+    }
+  }
+}

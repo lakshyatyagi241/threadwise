@@ -85,8 +85,35 @@ export function ContactQuickView(p: QuickViewProps) {
     if (!open && el.open) el.close();
   }, [open]);
 
+  // The arrow keys walk the contacts of the loaded page. The listener is on the document, not on the drawer: when the focused control
+  // is replaced (the loading header gives way to the contact) the browser leaves the focus on <body>, where the drawer sees no key.
+  const { previousId, nextId, onNavigate } = p;
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      // A dialog opened from the drawer (edit, task, meeting, send) keeps its own keys.
+      const owner = target?.closest?.('dialog');
+      if (owner && owner !== ref.current) return;
+      const move = neighbourKey(e, target, rtl);
+      const to = move === 'previous' ? previousId : move === 'next' ? nextId : null;
+      if (to) {
+        e.preventDefault();
+        onNavigate(to);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open, previousId, nextId, onNavigate, rtl]);
+
+  // Once the contact is on screen the focus goes into the drawer (the control that had it may be gone).
+  const loaded = contact.isSuccess ? contact.data.id : '';
+  useEffect(() => {
+    const el = ref.current;
+    if (open && loaded && el && !el.contains(document.activeElement)) el.focus();
+  }, [open, loaded]);
+
   // The neighbours are fetched ahead, so the arrow keys land on a contact that is already there.
-  const { previousId, nextId } = p;
   useEffect(() => {
     if (!open) return;
     for (const id of [previousId, nextId]) {
@@ -107,17 +134,8 @@ export function ContactQuickView(p: QuickViewProps) {
       onClick={(e) => {
         if (e.target === ref.current) p.onClose();
       }}
-      onKeyDown={(e) => {
-        // Only keys pressed in the drawer itself: a dialog opened from it (edit, task, meeting) keeps its own keys.
-        if ((e.target as HTMLElement).closest('dialog') !== ref.current) return;
-        const move = neighbourKey(e, e.target as HTMLElement, rtl);
-        const to = move === 'previous' ? previousId : move === 'next' ? nextId : null;
-        if (to) {
-          e.preventDefault();
-          p.onNavigate(to);
-        }
-      }}
-      className="crm-drawer fixed inset-y-0 start-auto end-0 m-0 h-dvh max-h-none w-[min(72rem,100vw)] max-w-none overflow-hidden border-s border-border bg-background p-0 text-foreground shadow-2xl backdrop:bg-black/40 lg:w-[60vw]"
+      tabIndex={-1}
+      className="crm-drawer fixed inset-y-0 start-auto end-0 m-0 h-dvh max-h-none w-[min(72rem,100vw)] max-w-none overflow-hidden outline-none border-s border-border bg-background p-0 text-foreground shadow-2xl backdrop:bg-black/40 lg:w-[60vw]"
     >
       {open &&
         (contact.isSuccess ? (

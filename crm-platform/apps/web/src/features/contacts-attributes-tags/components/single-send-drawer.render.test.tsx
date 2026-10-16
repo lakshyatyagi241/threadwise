@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
 import type { ChannelListResponse, ChannelResponse } from '@crm/contracts';
-import { makeSession, renderAccount, type Seed } from '@/features/auth-registration-security/account/render-test-utils';
+import {
+  makeSession,
+  renderAccount,
+  type Seed,
+} from '@/features/auth-registration-security/account/render-test-utils';
 import { sendKeys } from '../api/single-send';
 import type { RowView } from '../lib/row-view';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
@@ -78,7 +82,9 @@ function render(target: SingleSendTarget, channels: ChannelResponse[], seed: See
 
 describe('SingleSendDrawer — email', () => {
   it('shows there is no mailbox to send from when none is connected', () => {
-    const html = render({ row: row(), channel: 'email' }, [channel({ kind: 'whatsapp_cloud', status: 'connected' })]);
+    const html = render({ row: row(), channel: 'email' }, [
+      channel({ kind: 'whatsapp_cloud', status: 'connected' }),
+    ]);
     expect(html).toContain('No mailbox is connected');
   });
 
@@ -87,7 +93,12 @@ describe('SingleSendDrawer — email', () => {
     const html = render(
       { row: row(), channel: 'email' },
       [mailbox],
-      [[sendKeys.conversation('294dca7c-5806-4548-9035-dcca9befc7b1', mailbox.id), { id: 'conv-1' }]],
+      [
+        [
+          sendKeys.conversation('294dca7c-5806-4548-9035-dcca9befc7b1', mailbox.id),
+          { id: 'conv-1' },
+        ],
+      ],
     );
     expect(html).toContain('sales@acme.test');
     expect(html).toContain('Subject');

@@ -1,0 +1,178 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "연락처 빠른 보기",
+        "loading": "연락처 불러오는 중...",
+        "notFoundTitle": "연락처를 찾을 수 없음",
+        "notFound": "삭제되었거나 접근 권한이 없을 수 있습니다.",
+        "close": "닫기",
+        "seeAll": "모든 세부 정보 보기",
+        "previous": "이전 연락처",
+        "next": "다음 연락처",
+        "position": "{index} / {total}",
+        "rail": "연락처 섹션",
+        "rail_overview": "개요",
+        "rail_activities": "활동",
+        "rail_conversations": "대화",
+        "rail_notes": "노트",
+        "rail_stats": "커뮤니케이션 통계",
+        "rail_files": "파일",
+        "rail_details": "속성",
+        "openFull": "상세 페이지에서 열기"
+      },
+      "actions": {
+        "note": "노트",
+        "task": "작업",
+        "meeting": "미팅",
+        "addCompany": "회사 추가",
+        "changeCompany": "회사 변경",
+        "channels": "이 연락처에 메시지 또는 전화",
+        "more": "더 보기",
+        "edit": "연락처 수정",
+        "delete": "연락처 삭제",
+        "close": "닫기",
+        "companyHint": "이 연락처가 근무하는 회사를 선택하세요. 같은 회사를 다시 선택하면 변경되지 않고, 선택을 지우면 연결이 해제됩니다.",
+        "companySaved": "회사를 저장했습니다.",
+        "companyFailed": "회사를 저장하지 못했습니다. 다시 시도하세요.",
+        "conflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
+        "deleteFailed": "연락처를 삭제하지 못했습니다."
+      },
+      "header": {
+        "jobTitle": "직함",
+        "jobTitlePlaceholder": "직함 추가...",
+        "editJobTitle": "직함 수정",
+        "jobTitleConflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
+        "jobTitleFailed": "직함을 저장하지 못했습니다. 다시 시도하세요.",
+        "leadScore": "리드 점수",
+        "leadScoreAria": "리드 점수 {score}. 점수 세부 정보를 표시합니다.",
+        "owner": "담당자"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "웹사이트",
+        "open": "{network} 프로필 열기"
+      },
+      "subscription": {
+        "title": "구독 상태",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "이메일",
+          "sms": "SMS"
+        },
+        "yes": "예",
+        "no": "아니요",
+        "optedOut": "마케팅 메시지 수신 거부",
+        "optedOutNote": "이 연락처는 마케팅 메시지를 수신 거부했으므로 모든 채널이 아니요로 표시됩니다.",
+        "proof": "각 수신 동의의 증빙은 동의 기록에 있습니다.",
+        "openConsent": "동의 카드 열기"
+      },
+      "score": {
+        "title": "리드 점수",
+        "details": "점수 세부 정보",
+        "hideDetails": "세부 정보 숨기기",
+        "none": "아직 점수 없음",
+        "aria": "리드 점수 {score}, {band}"
+      },
+      "owner": {
+        "title": "담당자 및 배정",
+        "owner": "담당자",
+        "tags": "태그",
+        "groups": "그룹"
+      },
+      "location": {
+        "title": "위치",
+        "address": "주소",
+        "country": "국가",
+        "timeZone": "시간대",
+        "language": "언어"
+      },
+      "compliance": {
+        "title": "개인정보",
+        "optedOut": "마케팅 수신 거부",
+        "allowed": "마케팅 허용",
+        "noFlags": "개인정보 플래그 없음"
+      },
+      "overview": {
+        "information": "연락처"
+      },
+      "tabs": {
+        "info": "연락처 정보",
+        "social": "소셜 미디어",
+        "source": "리드 출처",
+        "custom": "사용자 지정 필드"
+      },
+      "info": {
+        "firstName": "이름",
+        "lastName": "성",
+        "email": "이메일",
+        "phone": "전화번호",
+        "fax": "팩스",
+        "company": "회사",
+        "jobTitle": "직함",
+        "language": "언어",
+        "address": "주소",
+        "memo": "메모",
+        "contactId": "연락처 ID",
+        "createdAt": "생성 일시",
+        "lastActivity": "마지막 활동",
+        "source": "출처",
+        "noCustomFields": "이 연락처에는 아직 사용자 지정 필드 값이 없습니다.",
+        "noLeadSource": "이 연락처에 기록된 리드 출처가 없습니다."
+      },
+      "details": {
+        "title": "연락처 세부 정보",
+        "stage": "라이프사이클 단계",
+        "otherProperties": "기타 속성"
+      },
+      "company": {
+        "title": "회사",
+        "change": "변경",
+        "add": "회사 추가",
+        "none": "이 연락처는 회사에 연결되어 있지 않습니다."
+      },
+      "sections": {
+        "lead-source": "리드 출처"
+      },
+      "nav": {
+        "back": "목록으로 돌아가기",
+        "label": "연락처 섹션",
+        "contactDetails": "연락처 세부 정보",
+        "related": "관련 항목",
+        "section": {
+          "overview": "개요",
+          "activities": "활동",
+          "conversations": "대화",
+          "details": "연락처 세부 정보",
+          "stats": "커뮤니케이션 통계",
+          "notes": "노트",
+          "files": "파일",
+          "tasks": "작업",
+          "deals": "거래",
+          "appointments": "예약",
+          "sales": "청구서 및 문서",
+          "lead-source": "리드 출처",
+          "company": "회사",
+          "consent": "동의",
+          "history": "필드 기록"
+        }
+      },
+      "stages": {
+        "title": "라이프사이클",
+        "stages": "라이프사이클 단계",
+        "status": "상태",
+        "noStatuses": "이 단계에는 상태가 없습니다.",
+        "statusChanged": "상태를 {status}(으)로 설정했습니다.",
+        "conflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
+        "forbidden": "이 연락처를 변경할 권한이 없습니다.",
+        "statusFailed": "상태를 변경하지 못했습니다. 다시 시도하세요."
+      }
+    }
+  }
+}

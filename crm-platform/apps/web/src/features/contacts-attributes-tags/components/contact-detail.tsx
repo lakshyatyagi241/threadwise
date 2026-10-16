@@ -264,7 +264,7 @@ function DetailHeader({
               </li>
             </ul>
             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-              <ContactQuickTags contactId={contact.id} />
+              <ContactQuickTags contactId={contact.id} labelled />
             </div>
           </div>
         </div>

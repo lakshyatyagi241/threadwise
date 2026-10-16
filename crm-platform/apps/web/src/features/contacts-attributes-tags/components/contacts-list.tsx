@@ -103,7 +103,7 @@ const CHIPS_SHOWN = 2;
 
 /** Column widths in px; the table is fixed-layout and scrolls sideways inside its card when they do not fit. */
 const WIDTH: Record<string, number> = {
-  name: 340,
+  name: 380,
   phone: 190,
   attr: 150,
   email: 260,
@@ -199,7 +199,7 @@ function HeaderCheckbox({
 const Dash = () => <span className="text-muted-foreground">-</span>;
 
 const quickBtn =
-  'inline-flex size-7 shrink-0 items-center justify-center rounded-md outline-none transition focus-visible:ring-2 focus-visible:ring-primary';
+  'inline-flex size-6 shrink-0 items-center justify-center rounded-md outline-none transition focus-visible:ring-2 focus-visible:ring-primary';
 const quickOn = 'text-muted-foreground hover:bg-background hover:text-foreground';
 const quickOff = 'cursor-not-allowed text-muted-foreground/40';
 
@@ -296,7 +296,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
             aria-label={t('openDetailsNamed', { name })}
             className={cn(quickBtn, quickOn)}
           >
-            <ExternalLinkIcon className="size-4" />
+            <ExternalLinkIcon className="size-3.5" />
           </Link>
         </HoverTip>
         {h.canEdit && (
@@ -307,7 +307,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
               onClick={() => h.onEdit(row.id)}
               className={cn(quickBtn, quickOn)}
             >
-              <PencilIcon className="size-4" />
+              <PencilIcon className="size-3.5" />
             </button>
           </HoverTip>
         )}
@@ -319,7 +319,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
               onClick={() => h.onOpenQuick?.(row.id, 'notes')}
               className={cn(quickBtn, quickOn)}
             >
-              <NoteIcon className="size-4" />
+              <NoteIcon className="size-3.5" />
             </button>
           </HoverTip>
         )}
@@ -331,7 +331,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
             tip={ts('title.call')}
             onClick={() => send(row, 'call')}
           >
-            <PhoneIcon className="size-4" />
+            <PhoneIcon className="size-3.5" />
           </QuickButton>
         )}
         {send && can.send && (
@@ -342,7 +342,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
             tip={ts('title.email')}
             onClick={() => send(row, 'email')}
           >
-            <MailIcon className="size-4" />
+            <MailIcon className="size-3.5" />
           </QuickButton>
         )}
         {send && can.send && (
@@ -354,7 +354,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
             tip={ts('title.whatsapp')}
             onClick={() => send(row, 'whatsapp')}
           >
-            <WhatsAppIcon className="size-4" />
+            <WhatsAppIcon className="size-3.5" />
           </QuickButton>
         )}
         {h.onChat && can.chat && (
@@ -365,7 +365,7 @@ function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
             tip={t('openChat')}
             onClick={() => h.onChat?.(row)}
           >
-            <ChatIcon className="size-4" />
+            <ChatIcon className="size-3.5" />
           </QuickButton>
         )}
       </span>
@@ -604,7 +604,7 @@ function NameCell({ row, h }: { row: RowView; h: ListHandlers }) {
             e.preventDefault();
             h.onOpenQuick(row.id);
           }}
-          className="min-w-0 truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary"
+          className="min-w-0 truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary [@media(hover:hover)]:group-focus-within:max-w-[calc(100%-13.5rem)] [@media(hover:hover)]:group-hover:max-w-[calc(100%-13.5rem)]"
         >
           {row.name || t('unnamed')}
         </Link>
@@ -799,7 +799,7 @@ export function ContactsTable({
           {columns.map((c) => (
             <col
               key={c.id}
-              className={c.id === 'name' ? 'w-[200px] sm:w-[340px]' : undefined}
+              className={c.id === 'name' ? 'w-[200px] sm:w-[380px]' : undefined}
               style={c.id === 'name' ? undefined : { width: widthOf(c.id) }}
             />
           ))}
@@ -916,7 +916,10 @@ export function ContactsTable({
               );
             })}
             {columnTools && (
-              <th scope="col" className={cn(th, 'px-1 text-center')}>
+              <th
+                scope="col"
+                className={cn(th, 'sticky end-0 z-30 border-s border-border px-1 text-center')}
+              >
                 <AddColumnPicker
                   groups={columnTools.addable}
                   onAdd={columnTools.onAdd}
@@ -962,7 +965,12 @@ export function ContactsTable({
                     <Cell column={c} row={row} h={h} locale={locale} timeZone={timeZone} />
                   </td>
                 ))}
-                {columnTools && <td className="border-b border-border" aria-hidden="true" />}
+                {columnTools && (
+                  <td
+                    className="sticky end-0 z-10 border-b border-s border-border bg-[var(--row-bg,var(--background))]"
+                    aria-hidden="true"
+                  />
+                )}
               </tr>
             );
           })}

@@ -1,0 +1,178 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Snelle contactweergave",
+        "loading": "Contact laden...",
+        "notFoundTitle": "Contact niet gevonden",
+        "notFound": "Het is mogelijk verwijderd, of je hebt er geen toegang toe.",
+        "close": "Sluiten",
+        "seeAll": "Alle details bekijken",
+        "previous": "Vorig contact",
+        "next": "Volgend contact",
+        "position": "{index} van {total}",
+        "rail": "Contactsecties",
+        "rail_overview": "Overzicht",
+        "rail_activities": "Activiteit",
+        "rail_conversations": "Gesprekken",
+        "rail_notes": "Notities",
+        "rail_stats": "Communicatiestatistieken",
+        "rail_files": "Bestanden",
+        "rail_details": "Eigenschappen",
+        "openFull": "Openen op de detailpagina"
+      },
+      "actions": {
+        "note": "Notitie",
+        "task": "Taak",
+        "meeting": "Vergadering",
+        "addCompany": "Bedrijf toevoegen",
+        "changeCompany": "Bedrijf wijzigen",
+        "channels": "Dit contact een bericht sturen of bellen",
+        "more": "Meer acties",
+        "edit": "Contact bewerken",
+        "delete": "Contact verwijderen",
+        "close": "Sluiten",
+        "companyHint": "Kies het bedrijf waar dit contact werkt. Kies het opnieuw om het ongewijzigd te laten, of wis het om de koppeling te verwijderen.",
+        "companySaved": "Bedrijf opgeslagen.",
+        "companyFailed": "Het bedrijf kon niet worden opgeslagen. Probeer het opnieuw.",
+        "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+        "deleteFailed": "Het contact kon niet worden verwijderd."
+      },
+      "header": {
+        "jobTitle": "Functietitel",
+        "jobTitlePlaceholder": "Functietitel toevoegen...",
+        "editJobTitle": "Functietitel bewerken",
+        "jobTitleConflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+        "jobTitleFailed": "De functietitel kon niet worden opgeslagen. Probeer het opnieuw.",
+        "leadScore": "Leadscore",
+        "leadScoreAria": "Leadscore {score}. Scoredetails tonen.",
+        "owner": "Eigenaar"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Website",
+        "open": "Profiel op {network} openen"
+      },
+      "subscription": {
+        "title": "Abonnementsstatus",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "E-mail",
+          "sms": "SMS"
+        },
+        "yes": "Ja",
+        "no": "Nee",
+        "optedOut": "Afgemeld voor marketingberichten",
+        "optedOutNote": "Dit contact heeft zich afgemeld voor marketingberichten, dus elk kanaal staat op Nee.",
+        "proof": "Het bewijs van elke aanmelding staat in het toestemmingsdossier.",
+        "openConsent": "Toestemmingskaart openen"
+      },
+      "score": {
+        "title": "Leadscore",
+        "details": "Scoredetails",
+        "hideDetails": "Details verbergen",
+        "none": "Nog niet beoordeeld",
+        "aria": "Leadscore {score}, {band}"
+      },
+      "owner": {
+        "title": "Eigenaar en toewijzing",
+        "owner": "Eigenaar",
+        "tags": "Tags",
+        "groups": "Groepen"
+      },
+      "location": {
+        "title": "Locatie",
+        "address": "Adres",
+        "country": "Land",
+        "timeZone": "Tijdzone",
+        "language": "Taal"
+      },
+      "compliance": {
+        "title": "Privacy",
+        "optedOut": "Afgemeld voor marketing",
+        "allowed": "Marketing toegestaan",
+        "noFlags": "Geen privacymarkeringen"
+      },
+      "overview": {
+        "information": "Contact"
+      },
+      "tabs": {
+        "info": "Contactgegevens",
+        "social": "Sociale media",
+        "source": "Leadbron",
+        "custom": "Aangepaste velden"
+      },
+      "info": {
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "fax": "Fax",
+        "company": "Bedrijf",
+        "jobTitle": "Functietitel",
+        "language": "Taal",
+        "address": "Adres",
+        "memo": "Aantekening",
+        "contactId": "Contact-ID",
+        "createdAt": "Aangemaakt op",
+        "lastActivity": "Laatste activiteit",
+        "source": "Bron",
+        "noCustomFields": "Dit contact heeft nog geen waarden voor aangepaste velden.",
+        "noLeadSource": "Voor dit contact is geen leadbron vastgelegd."
+      },
+      "details": {
+        "title": "Contactdetails",
+        "stage": "Levenscyclusfase",
+        "otherProperties": "Overige eigenschappen"
+      },
+      "company": {
+        "title": "Bedrijf",
+        "change": "Wijzigen",
+        "add": "Bedrijf toevoegen",
+        "none": "Dit contact is niet aan een bedrijf gekoppeld."
+      },
+      "sections": {
+        "lead-source": "Leadbron"
+      },
+      "nav": {
+        "back": "Terug naar overzicht",
+        "label": "Contactsecties",
+        "contactDetails": "Contactdetails",
+        "related": "Gerelateerd",
+        "section": {
+          "overview": "Overzicht",
+          "activities": "Activiteiten",
+          "conversations": "Gesprekken",
+          "details": "Contactdetails",
+          "stats": "Communicatiestatistieken",
+          "notes": "Notities",
+          "files": "Bestanden",
+          "tasks": "Taken",
+          "deals": "Deals",
+          "appointments": "Afspraken",
+          "sales": "Facturen en documenten",
+          "lead-source": "Leadbron",
+          "company": "Bedrijf",
+          "consent": "Toestemming",
+          "history": "Veldgeschiedenis"
+        }
+      },
+      "stages": {
+        "title": "Levenscyclus",
+        "stages": "Levenscyclusfase",
+        "status": "Status",
+        "noStatuses": "Deze fase heeft geen statussen.",
+        "statusChanged": "Status ingesteld op {status}.",
+        "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+        "forbidden": "Je hebt geen toestemming om dit contact te wijzigen.",
+        "statusFailed": "De status kon niet worden gewijzigd. Probeer het opnieuw."
+      }
+    }
+  }
+}
