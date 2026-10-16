@@ -82,7 +82,7 @@ New columns (all optional, in the add-column picker): WhatsApp opt-in, SMS opt-i
 | WIRE-CUI-60 | Contact, groups, tags         | `GET /contacts/:id`, `/groups`, `/tags` (`useContact`, `useContactTags`)                                                                                                       | `record.contacts.read`                                                      |
 | WIRE-CUI-61 | Notes                         | `GET/POST/PATCH/DELETE /contacts/:id/notes` (new web client `api/notes.ts`)                                                                                                    | read / `record.contacts.update`                                             |
 | WIRE-CUI-62 | Meetings                      | `GET/POST/PATCH/DELETE /contacts/:id/meetings` (new `api/meetings.ts`)                                                                                                         | read / `record.contacts.update`                                             |
-| WIRE-CUI-63 | Files                         | `GET /contacts/:id/files` (list only; upload belongs to the file manager, not built: BL-226)                                                                                   | `record.contacts.read`                                                      |
+| WIRE-CUI-63 | Files                         | `GET /contacts/:id/files` (list only; upload belongs to the file manager, not built: BL-229)                                                                                   | `record.contacts.read`                                                      |
 | WIRE-CUI-64 | Activities                    | `GET/POST /contacts/:id/activities` (`useCursorList`)                                                                                                                          | read / `record.contacts.update`                                             |
 | WIRE-CUI-65 | Field history                 | `GET /contacts/:id/field-history` (new `api/field-history.ts`)                                                                                                                 | `record.contacts.read`                                                      |
 | WIRE-CUI-66 | Conversations                 | `GET /inbox/conversations?q=<phone digits or email>&status=all` filtered to the contact id; opens `/inbox?c=<id>`                                                              | `inbox.conversation.read`; hidden without it                                |
@@ -92,17 +92,17 @@ New columns (all optional, in the add-column picker): WhatsApp opt-in, SMS opt-i
 | WIRE-CUI-70 | Minor flag, do-not-sell/share | `GET /contact-consent/contacts/:id` (`useContactConsent`, existing)                                                                                                            | `contacts.consent.read`                                                     |
 | WIRE-CUI-71 | Lead source tab               | `GET /contacts/:id/attribution` (`fetchAttribution`)                                                                                                                           | `record.contacts.read`                                                      |
 | WIRE-CUI-72 | Company                       | `useCompany` through `CompanyLink`; set with `CompanyPicker` and `PATCH /contacts/:id` `companyId`                                                                             | `record.companies.read`, `record.contacts.update`                           |
-| WIRE-CUI-73 | Column preference             | per browser (`cat:contacts:columns`, `column-order`); per saved view inside the view's `filter.columns`                                                                        | none; a server-side per-user store does not exist (BL-227)                  |
+| WIRE-CUI-73 | Column preference             | per browser (`cat:contacts:columns`, `column-order`); per saved view inside the view's `filter.columns`                                                                        | none; a server-side per-user store does not exist (BL-230)                  |
 
 ## 5. Gaps recorded (not lost)
 
 | Id     | Gap                                                                                                                                                           |
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BL-226 | Upload a file on the contact Files tab: the API stores a caller-given storage key only, the file manager upload is not built                                  |
-| BL-227 | Column choice saved on the server per user (today per browser, per saved view on the server)                                                                  |
-| BL-228 | Sort by owner, WhatsApp opt-in, last activity and lead score: the list API sorts only by `CONTACT_SORT_FIELDS`                                                |
-| BL-229 | Jump to any page: the API is cursor-only (OFFSET is banned), so numbered buttons reach `furthest loaded page + 10`; "Page N of M" says where the end is       |
-| BL-230 | Social media and web analytics tabs: a contact has no social profile or visit data; social icons and the tab show only for URL properties named for a network |
+| BL-229 | Upload a file on the contact Files tab: the API stores a caller-given storage key only, the file manager upload is not built                                  |
+| BL-230 | Column choice saved on the server per user (today per browser, per saved view on the server)                                                                  |
+| BL-231 | Sort by owner, WhatsApp opt-in, last activity and lead score: the list API sorts only by `CONTACT_SORT_FIELDS`                                                |
+| BL-232 | Jump to any page: the API is cursor-only (OFFSET is banned), so numbered buttons reach `furthest loaded page + 10`; "Page N of M" says where the end is       |
+| BL-233 | Social media and web analytics tabs: a contact has no social profile or visit data; social icons and the tab show only for URL properties named for a network |
 
 ## 6. Merged from main while this was built
 

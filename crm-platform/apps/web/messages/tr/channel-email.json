@@ -120,7 +120,13 @@
       "limitDefault": "Platform varsayılanı",
       "limitPerHour": "{count, plural, one {Saatte # e-posta} other {Saatte # e-posta}}",
       "limitSaved": "Gönderim sınırı kaydedildi.",
-      "needsReauthImap": "Posta sunucusu kayıtlı parolayı reddetti. Yeniden bağlayın ve parolayı tekrar girin."
+      "needsReauthImap": "Posta sunucusu kayıtlı parolayı reddetti. Yeniden bağlayın ve parolayı tekrar girin.",
+      "test": "Bağlantıyı test et",
+      "testing": "Test ediliyor",
+      "lag": "Gecikme",
+      "lagUnderMinute": "Bir dakikadan az",
+      "lagMinutes": "{count, plural, one {# dakika} other {# dakika}}",
+      "lagHours": "{count, plural, one {# saat} other {# saat}}"
     },
     "outcome": {
       "connected": "Posta kutusu bağlandı. Son 7 günün e-postaları gelen kutusuna alınıyor.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Giden sunucu (SMTP) kullanıcı adını veya parolayı reddetti. Kontrol edip tekrar deneyin.",
         "unreachable": "Posta sunucusuna ulaşılamadı veya sertifikası geçerli değil. Sunucuyu, bağlantı noktasını ve güvenliği kontrol edin.",
         "generic": "Posta kutusu bağlanamadı. Tekrar deneyin."
+      },
+      "test": {
+        "button": "Kimlik bilgilerini test et",
+        "testing": "Test ediliyor",
+        "imap": "Gelen (IMAP)",
+        "smtp": "Giden (SMTP)",
+        "ok": "Oturum açıldı.",
+        "inbox": "Oturum açıldı. Gelen kutusunda {count, plural, one {# ileti} other {# ileti}} var.",
+        "smtpOk": "Oturum açıldı. Hiçbir şey gönderilmedi.",
+        "note": "Hiçbir şey kaydedilmedi ve e-posta gönderilmedi.",
+        "tooMany": "Kısa sürede çok fazla test yapıldı. Bir dakika bekleyip tekrar deneyin.",
+        "failed": "Test çalıştırılamadı. Tekrar deneyin.",
+        "reasons": {
+          "auth_failed": "Sunucu kullanıcı adını veya parolayı reddetti.",
+          "tls": "Güvenli bağlantı doğrulanamadı. Sunucu adını ve güvenlik ayarını kontrol edin.",
+          "unreachable": "Sunucuya ulaşılamadı. Sunucuyu, bağlantı noktasını ve güvenlik ayarını kontrol edin.",
+          "blocked_address": "Bu sunucu adresine izin verilmiyor.",
+          "rejected": "Sunucu isteği reddetti.",
+          "unknown": "Sunucu beklendiği gibi yanıt vermedi."
+        }
       }
     },
     "sharing": {

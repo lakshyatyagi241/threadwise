@@ -25,6 +25,7 @@ import {
   type MailboxAction,
   type MailboxView,
 } from './mail-personal-policy';
+import { syncLagSeconds } from './mail-sync-rules';
 import { MailSyncPublisher } from './mail-sync.publisher';
 import { MAIL_AUDIT_MODULE, MailTokens } from './mail-tokens.service';
 import { MailboxesRepository, type MailboxListRow, type MailboxRow } from './mailboxes.repository';
@@ -54,6 +55,7 @@ export function toMailboxResponse(
     connectedAt: row.connectedAt?.toISOString() ?? null,
     lastSyncedAt: row.lastSyncedAt?.toISOString() ?? null,
     lastError: row.lastError,
+    syncLagSeconds: syncLagSeconds(row.status, row.lastSyncedAt),
     conversationCount: extra.conversationCount,
     rowVersion: row.rowVersion,
   };
@@ -72,6 +74,7 @@ export function toMailboxSummary(response: MailboxResponse): MailboxResponse {
     channelId: null,
     lastError: null,
     lastSyncedAt: null,
+    syncLagSeconds: null,
     conversationCount: 0,
     contentHidden: true,
   };

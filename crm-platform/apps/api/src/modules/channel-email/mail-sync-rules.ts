@@ -89,3 +89,17 @@ export const planDriverFailure = (err: MailDriverError): FailurePlan => ({
   message: err.message,
   retry: err.retryable,
 });
+
+/**
+ * How far behind a mailbox may be: whole seconds since its last successful sync, for a connected mailbox only. Null when it never synced,
+ * is not connected (its age means nothing then) or the clock reads earlier than the stamp.
+ */
+export function syncLagSeconds(
+  status: string,
+  lastSyncedAt: Date | null,
+  now: Date = new Date(),
+): number | null {
+  if (status !== 'connected' || !lastSyncedAt) return null;
+  const ms = now.getTime() - lastSyncedAt.getTime();
+  return ms < 0 ? 0 : Math.floor(ms / 1000);
+}

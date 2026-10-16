@@ -63,6 +63,59 @@ describe('keys', () => {
   });
 });
 
+// The same table as the API's `template-vocab.spec.ts` (kinds fold to what a button takes at send time); change both together.
+// 'phone' here means "static": it takes no value (a phone, voice call, catalog, flow, OTP or product-list button).
+const FOLD: Array<[string, ReturnType<typeof buttonKind>]> = [
+  ['URL', 'url'],
+  ['url', 'url'],
+  ['visit_website', 'url'],
+  ['VISIT_WEBSITE', 'url'],
+  ['cta_url', 'url'],
+  ['quick_reply_url', 'url'],
+  ['QUICK_REPLY', 'quick_reply'],
+  ['quick_reply', 'quick_reply'],
+  ['PHONE_NUMBER', 'phone'],
+  ['call_phone', 'phone'],
+  ['call', 'phone'],
+  ['phone', 'phone'],
+  ['cta_call', 'phone'],
+  ['COPY_CODE', 'copy_code'],
+  ['copy_text', 'copy_code'],
+  ['coupon_code', 'copy_code'],
+  ['VOICE_CALL', 'phone'],
+  ['CATALOG', 'phone'],
+  ['FLOW', 'phone'],
+  ['OTP', 'phone'],
+  ['otp_one_tap', 'phone'],
+  ['MPM', 'phone'],
+  ['SPM', 'phone'],
+  ['something_new', 'quick_reply'],
+  ['', 'quick_reply'],
+];
+
+describe('button kinds, in every spelling (the same table as the API)', () => {
+  it.each(FOLD)('%s is %s', (type, kind) => {
+    expect(buttonKind(type)).toBe(kind);
+  });
+
+  it('a button of our own template form shows its example as the value a blank override sends', () => {
+    const m = buildMeta(
+      tpl({
+        buttons: [
+          { type: 'URL', text: 'Track', url: 'https://shop.test/{{1}}', example: ['ORD-1'] },
+          { type: 'visit_website', text: 'Site', value: 'https://shop.test/{{name}}' },
+          { type: 'FLOW', text: 'Start', flow_id: '1' },
+        ],
+      }),
+    );
+    expect(m.buttons.map((b) => [b.kind, b.editable, b.value])).toEqual([
+      ['url', true, 'ORD-1'],
+      ['url', true, 'https://shop.test/{{name}}'],
+      ['phone', false, ''],
+    ]);
+  });
+});
+
 describe('panel meta', () => {
   const m = buildMeta(tpl());
   it('counts slots per section and labels a positional slot with its mapped attribute', () => {
