@@ -6,7 +6,12 @@ import {
   type WizardVariableSource,
   type WizardVariables,
 } from '@crm/contracts';
-import { buttonSubType, type SendVars } from '../../../infra/providers/whatsapp/meta-send-payload';
+import type { SendVars } from '../../../infra/providers/whatsapp/meta-send-payload';
+import {
+  buttonAddress,
+  buttonExample,
+  kindOfButton,
+} from '../../../infra/providers/whatsapp/template-vocab';
 import { resolveToken, type MergeContext } from '../../crm';
 
 /** The pure rules of the broadcast wizard. Nothing here reads a database or a clock it was not given. */
@@ -86,10 +91,10 @@ export function templateSlots(t: TemplateLike): WizardTemplateSlot[] {
     }
   }
   list(t.buttons).forEach((b, i) => {
-    if (!isDict(b) || buttonSubType(text(b.type)) !== 'url') return;
-    const address = text(b.url) || text(b.value);
+    if (!isDict(b) || kindOfButton(b) !== 'url') return;
+    const address = buttonAddress(b);
     if (!/\{\{/.test(address)) return;
-    const example = Array.isArray(b.example) ? text(b.example[0]) : text(b.example);
+    const example = buttonExample(b);
     out.push({
       slot: `button.${i}` as WizardTemplateSlot['slot'],
       section: 'button',

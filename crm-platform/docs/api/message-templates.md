@@ -41,6 +41,25 @@ Errors are the campaign builder's: 422 `CAMP_AI_NO_KEY`, 422 `CAMP_AI_LIMIT_REAC
 
 Differences from Reference, on purpose: no carousel draft (a carousel needs cards with their own media; recorded as blocked in the inventory), no copy-code button (Meta reviews an example code a model cannot know), and Reference's `visit_website` / `call_phone` button names are the form's `URL` / `PHONE_NUMBER`.
 
+## Button and header vocabulary (one reading everywhere)
+
+A template's buttons and header reach the code in three spellings, and every consumer reads all of them the same way through `infra/providers/whatsapp/template-vocab.ts` (the web has the same table in `features/broadcasts/lib/overrides-model.ts`; both are tested against one list of spellings).
+
+| Kind | Meta's / our form's | Reference's | At send time |
+| --- | --- | --- | --- |
+| link | `URL` (`url`, sample in `example`) | `visit_website`, `cta_url` (`value` is the whole address) | a parameter only when the address has a placeholder |
+| quick reply | `QUICK_REPLY` | `quick_reply` | a payload, none when empty (the button's own text is used) |
+| phone | `PHONE_NUMBER` (`phone_number`) | `call_phone`, `call`, `phone` (`value`) | none |
+| copy code | `COPY_CODE` (`example`) | `copy_text`, `coupon_code` | the code |
+| static | `VOICE_CALL`, `CATALOG`, `FLOW`, `OTP`, `MPM`, `SPM` | `voice_call`, `catalog` | none (a parameter is #132000) |
+
+- Case never matters; a type nobody knows is a quick reply, as in Reference.
+- A **link of our own form** (`url` with `{{1}}`, sample in `example`) used to go out with an empty parameter unless the wizard mapped it, because the send path read only Reference's `value`; and a blank link or code parameter had no fallback (#131008). Now a placeholder that is a field name resolves to that field (only the part that changes goes out, as Meta wants), a numbered one is filled by the wizard's mapping or an override, and a blank one falls back to the button's own example, then to `-`, as the body does.
+- A button type Reference never had (`FLOW`, `OTP`, `MPM`, `SPM`) was sent as a quick reply; it now carries no parameter.
+- A **Messenger or Telegram broadcast** read only the lower-case `url`/`phone` spellings, so Meta's `URL` / `PHONE_NUMBER` buttons from our form went out as plain replies; they are now links and calls, and Reference's `visit_website` / `call_phone` (address in `value`) too.
+- The inbox bubble draws `visit_website`, `call_phone` and `copy_text` as a link, a call and a code (it knew Meta's spelling only), and the broadcast overrides take any spelling of a button kind (`URL`, `visit_website`, `copy_text`...), anything they cannot carry being a link.
+- The header is `image`, `video`, `document`, `location`, `text` or none in any case (`attachment_type` is stored lower-case; Meta's `format` is upper-case).
+
 ## API cURL example (web only)
 
 `tpl.templates.api_curl` lets a person see the "Send with the API (cURL)" card on an approved template and the cURL shortcut on its library card. It is shown only together with `api.keys.read`, and it tells the person to create an API key first when the workspace has no live key. It grants no API access by itself: the example calls `POST /api/v1/templates/{id}/send`, which an API key still authorises.
