@@ -1,0 +1,1466 @@
+{
+  "common": {
+    "loading": "Caricamento…",
+    "retry": "Riprova",
+    "signOut": "Esci",
+    "clear": "Cancella",
+    "back": "Indietro",
+    "filters": {
+      "clearAll": "Cancella tutto",
+      "apply": "Applica",
+      "noMatch": "Nessun risultato per la tua ricerca."
+    }
+  },
+  "errors": {
+    "generic": "Qualcosa è andato storto. Riprova.",
+    "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+    "timeout": "Il server ha impiegato troppo tempo a rispondere. Riprova.",
+    "outdatedApp": "Questa versione dell'app non è aggiornata. Aggiornala.",
+    "tooManyRequests": "Troppi tentativi. Attendi un momento e riprova.",
+    "captchaUnsupported": "È richiesto un controllo di sicurezza che l'app non può ancora completare. Usa il sito web."
+  },
+  "auth": {
+    "welcomeBack": "Bentornato",
+    "welcomeSubtitle": "Inserisci i tuoi dati per tornare nel tuo workspace.",
+    "tagline": "Ogni chat con i clienti, un unico workspace sereno",
+    "taglineCaption": "Broadcast, automazioni e una inbox condivisa per i team che rispondono in fretta.",
+    "email": "Email",
+    "emailPlaceholder": "you@company.com",
+    "password": "Password",
+    "passwordPlaceholder": "Inserisci la password",
+    "showPassword": "Mostra password",
+    "hidePassword": "Nascondi password",
+    "signInSubmit": "Accedi",
+    "emailInvalid": "Inserisci un indirizzo email valido.",
+    "passwordRequired": "Inserisci la password.",
+    "newHere": "Sei nuovo?",
+    "createAccount": "Crea un account",
+    "legalSignIn": "Accedendo accetti i nostri <terms>Termini</terms> e l'<privacy>Informativa sulla privacy</privacy>.",
+    "mfaTitle": "Verifica in due passaggi",
+    "mfaHint": "Inserisci il codice a 6 cifre della tua app di autenticazione.",
+    "mfaCode": "Codice di verifica",
+    "mfaSubmit": "Verifica",
+    "workspaceTitle": "Scegli un workspace",
+    "workspaceHint": "Il tuo account appartiene a più di un workspace.",
+    "invalidCredentials": "Email o password non corrette.",
+    "accountLocked": "Questo account è temporaneamente bloccato. Riprova più tardi.",
+    "accountSuspended": "Questo account è stato sospeso.",
+    "mfaInvalid": "Il codice non è corretto. Riprova.",
+    "mfaExpired": "L'accesso è scaduto. Ricomincia."
+  },
+  "signUp": {
+    "tagline": "Configura il tuo workspace",
+    "taglineCaption": "Crea il tuo workspace, poi invita il tuo team e collega il tuo primo canale.",
+    "title": "Crea il tuo account",
+    "subtitle": "Pochi dati e il tuo workspace è pronto.",
+    "fullName": "Nome completo",
+    "fullNamePlaceholder": "Il tuo nome",
+    "email": "Email di lavoro",
+    "orgName": "Nome del workspace",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "Il tuo team accede con l'indirizzo {{slug}}.",
+    "orgNameHintEmpty": "È il nome che vedrà il tuo team.",
+    "customiseSlug": "Scegli un indirizzo personalizzato per il workspace",
+    "orgSlug": "Indirizzo del workspace",
+    "orgSlugPlaceholder": "il-tuo-workspace",
+    "orgSlugHint": "Lettere, numeri, trattino o trattino basso. Il tuo team lo inserisce per accedere.",
+    "phone": "Numero di cellulare",
+    "phoneHint": "Lo usiamo per verificare il tuo account e per comunicazioni importanti.",
+    "referral": "Codice referral (facoltativo)",
+    "referralPlaceholder": "Hai il codice di un amico?",
+    "confirmPassword": "Conferma password",
+    "passwordPlaceholder": "Crea una password",
+    "confirmPasswordPlaceholder": "Reinserisci la password",
+    "passwordMinLength": "Lunghezza minima: {{min}}.",
+    "passwordMixedCase": "Usa lettere maiuscole e minuscole.",
+    "passwordNumber": "Includi un numero.",
+    "passwordSymbol": "Includi un simbolo.",
+    "agree": "Accetto i <terms>Termini</terms> e l'<privacy>Informativa sulla privacy</privacy>.",
+    "submit": "Crea un account",
+    "haveAccount": "Hai già un account?",
+    "signIn": "Accedi",
+    "closedBody": "La registrazione è chiusa. Chiedi un invito a un amministratore.",
+    "closedBack": "Torna all'accesso",
+    "validation": {
+      "fullName": "Inserisci il tuo nome completo.",
+      "orgName": "Dai un nome al workspace (almeno 2 caratteri).",
+      "orgSlug": "Inserisci l'indirizzo del workspace (lettere, numeri, trattino o trattino basso).",
+      "phoneRequired": "Inserisci il tuo numero di cellulare.",
+      "phoneInvalid": "Inserisci un numero di telefono valido, con il prefisso internazionale se non è locale.",
+      "passwordMismatch": "Le due password non coincidono.",
+      "passwordInvalid": "Inserisci una password che rispetti i requisiti indicati.",
+      "acceptTerms": "Devi accettare i termini per continuare.",
+      "referralCode": "I codici referral contengono solo lettere e numeri."
+    },
+    "errors": {
+      "emailTaken": "Questa email è già usata in questo workspace.",
+      "slugTaken": "Questo indirizzo del workspace è già in uso.",
+      "passwordPolicy": "Questa password non rispetta la policy di sicurezza:",
+      "policyCommon": "Questa password è troppo facile da indovinare.",
+      "otpSendFailed": "Non siamo riusciti a inviare il codice di verifica. Controlla il numero e riprova.",
+      "signupExpired": "Ricomincia la registrazione."
+    },
+    "otp": {
+      "title": "Controlla WhatsApp",
+      "subtitle": "Inserisci il codice monouso che ti abbiamo inviato per completare la creazione del workspace.",
+      "sentTo": "Abbiamo inviato un codice a {{phone}}",
+      "code": "Codice di verifica",
+      "expiresIn": "Il codice scade tra {{time}}.",
+      "expired": "Questo codice è scaduto. Richiedine uno nuovo.",
+      "verify": "Verifica e continua",
+      "resend": "Invia di nuovo il codice",
+      "resendIn": "Invia di nuovo il codice tra {{time}}",
+      "resent": "Un nuovo codice sta arrivando su WhatsApp.",
+      "wrongNumber": "Numero sbagliato? Torna indietro",
+      "addressTakenHint": "Questo indirizzo del workspace è stato preso mentre verificavi. Scegline un altro e ti invieremo un nuovo codice.",
+      "codeInvalid": "Inserisci il codice di {{length}} cifre.",
+      "invalid": "Il codice non è corretto. Riprova.",
+      "tooMany": "Troppi tentativi. Richiedi un nuovo codice.",
+      "cooldown": "Attendi un momento prima di richiedere un altro codice."
+    }
+  },
+  "dashboard": {
+    "kicker": "Dashboard operatore",
+    "synced": "Live · sincronizzato {{s}} s fa",
+    "greeting": {
+      "morning": "Buongiorno, {{name}}.",
+      "afternoon": "Buon pomeriggio, {{name}}.",
+      "evening": "Buonasera, {{name}}."
+    },
+    "calm": "Il workspace è tranquillo.",
+    "running_one": "{{count}} campagna è in corso.",
+    "running_many": "{{count}} di campagne sono in corso.",
+    "running_other": "{{count}} campagne sono in corso.",
+    "subline_one": "{{date}} - {{range}}: {{sent}} in uscita, {{rate}}% di recapito su {{count}} dispositivo connesso.",
+    "subline_many": "{{date}} - {{range}}: {{sent}} in uscita, {{rate}}% di recapito su {{count}} di dispositivi connessi.",
+    "subline_other": "{{date}} - {{range}}: {{sent}} in uscita, {{rate}}% di recapito su {{count}} dispositivi connessi.",
+    "sublineOfficial": "{{date}} - {{range}}: {{sent}} in uscita, {{rate}}% di recapito.",
+    "setupBanner": "La configurazione del workspace non è terminata. Completala dal web per sbloccare il resto del tuo account.",
+    "range": {
+      "label": "Intervallo di date",
+      "short": {
+        "24h": "24 h",
+        "7d": "7 g",
+        "30d": "30 g",
+        "qtd": "QTD"
+      },
+      "long": {
+        "24h": "Ultime 24 ore",
+        "7d": "Ultimi 7 giorni",
+        "30d": "Ultimi 30 giorni",
+        "qtd": "Trimestre finora"
+      }
+    },
+    "trend": {
+      "up": "In aumento di {{value}} rispetto al periodo precedente",
+      "down": "In calo di {{value}} rispetto al periodo precedente",
+      "flat": "Nessuna variazione rispetto al periodo precedente"
+    },
+    "kpi": {
+      "sent": "Messaggi inviati · {{range}}",
+      "sentLegend": "{{delivered}} consegnati · {{failed}} non riusciti",
+      "sparkline": "Messaggi inviati all'ora nelle ultime 20 ore, dal più vecchio",
+      "readRate": "Tasso di lettura",
+      "readMini": {
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "read": "Letti"
+      }
+    },
+    "contacts": {
+      "title": "Contatti attivi",
+      "subscribed": "Iscritti",
+      "optedIn": "Con consenso",
+      "blocked": "Bloccati"
+    },
+    "wallet": {
+      "title": "Saldo del wallet",
+      "payPerMessage": "paghi a messaggio"
+    },
+    "autopilot": {
+      "kicker": "Fai di più",
+      "title": "Metti le risposte in automatico",
+      "body": "Crea un flow o lancia una campagna per raggiungere più clienti in automatico."
+    },
+    "pipeline": {
+      "kicker": "Pipeline di vendita",
+      "open": "Apri la pipeline",
+      "deals": "Trattative aperte",
+      "won": "Vinte questo mese",
+      "winRate": "Tasso di vittoria"
+    },
+    "throughput": {
+      "title": "Volume dei messaggi",
+      "subtitle": {
+        "24h": "In uscita, consegnati e non riusciti, per ora, ultime 24 ore",
+        "7d": "In uscita, consegnati e non riusciti, per giorno, ultimi 7 giorni",
+        "30d": "In uscita, consegnati e non riusciti, per giorno, ultimi 30 giorni",
+        "qtd": "In uscita, consegnati e non riusciti, per giorno, trimestre finora"
+      },
+      "peak": "Ora di picco {{when}} · {{n}} messaggi",
+      "sent": "Inviati",
+      "delivered": "Consegnati",
+      "failed": "Non riusciti",
+      "avgHour": "Media all'ora",
+      "replies": "Risposte",
+      "replyRate": "Tasso di risposta",
+      "summary": "In questo periodo: {{sent}} inviati, {{delivered}} consegnati e {{failed}} non riusciti.",
+      "subtitleCustom": "Per giorno · {{range}}"
+    },
+    "inbox": {
+      "title": "Inbox live",
+      "unread": "{{n}} non lette",
+      "oldest": "la più vecchia {{when}}",
+      "recent": "Conversazioni recenti",
+      "empty": "Ancora nessuna conversazione."
+    },
+    "campaigns": {
+      "title": "Campagne attive",
+      "summary": "{{running}} in corso - {{scheduled}} programmate - {{paused}} in pausa",
+      "total": "{{n}} in tutto",
+      "untitled": "Campagna senza titolo",
+      "delivered": "{{done}} / {{total}} consegnati",
+      "emptyTitle": "Nessuna campagna attiva",
+      "emptyBody": "Creane una per iniziare a inviare a un gruppo di contatti.",
+      "status": {
+        "sending": "In invio",
+        "scheduled": "Programmata",
+        "paused": "In pausa",
+        "failed": "Non riuscita",
+        "completed": "Completata"
+      }
+    },
+    "devices": {
+      "title": "Dispositivi connessi",
+      "summary": "{{total}} slot su {{cap}} usati - {{online}} online",
+      "emptyTitle": "Nessun dispositivo connesso",
+      "emptyBody": "Associa un numero WhatsApp per iniziare a inviare.",
+      "unzoned": "senza zona",
+      "per24h": "{{n}}/24 h",
+      "deliv": "recap.",
+      "free_one": "{{count}} slot dispositivo disponibile",
+      "free_many": "{{count}} di slot dispositivo disponibili",
+      "free_other": "{{count}} slot dispositivo disponibili",
+      "state": {
+        "online": "Online",
+        "connecting": "Connessione",
+        "offline": "Offline"
+      }
+    },
+    "templates": {
+      "title": "Template più performanti",
+      "subtitle": "Per volume di invio - intervallo selezionato",
+      "count_one": "{{count}} template",
+      "count_many": "{{count}} di template",
+      "count_other": "{{count}} template",
+      "empty": "Ancora nessun template.",
+      "sent": "Inviati",
+      "delivered": "Consegnati",
+      "read": "Letti",
+      "readRate": "Tasso di lettura",
+      "status": {
+        "approved": "Approvato",
+        "inReview": "In revisione",
+        "rejected": "Rifiutato"
+      }
+    },
+    "activity": {
+      "title": "Registro attività",
+      "subtitle": "Eventi del workspace",
+      "empty": "Nessuna attività recente registrata per questo workspace.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "{{count}} account",
+      "accounts_many": "{{count}} di account",
+      "accounts_other": "{{count}} account",
+      "connected": "Connesso",
+      "tile": {
+        "needReply": "Da rispondere",
+        "openChats": "Chat aperte",
+        "dmsIn": "DM ricevuti · 7 g",
+        "dmsOut": "DM inviati · 7 g",
+        "followers": "Follower"
+      }
+    },
+    "flows": {
+      "title": "Flow di automazione",
+      "summary": "{{active}} attivi · {{subscribers}} iscritti",
+      "empty": "Ancora nessun flow.",
+      "meta": "Trigger {{trigger}} · {{steps}} passaggi · {{subs}} iscritti",
+      "statusActive": "Attivo",
+      "statusPaused": "In pausa",
+      "stat": {
+        "flows": "Flow",
+        "active": "Attivi",
+        "subscribers": "Iscritti"
+      }
+    },
+    "integrations": {
+      "title": "Integrazioni",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} eventi / 7 g",
+      "connected": {
+        "woocommerce": "Connesso",
+        "shopify": "Connesso",
+        "google_sheets": "Chiave API emessa",
+        "meta_catalog": "Catalogo collegato"
+      },
+      "notConnected": "non connesso",
+      "connectedLabel": "Connesso"
+    },
+    "funnel": {
+      "title": "Funnel di coinvolgimento",
+      "stage": {
+        "messaged": "Contatti raggiunti",
+        "delivered": "Consegnati",
+        "replied": "Hanno risposto",
+        "goalCompleted": "Obiettivo raggiunto"
+      },
+      "stageLabel": "{{stage}}: {{n}} contatti, {{pct}}% dei contatti raggiunti",
+      "activity": {
+        "title": "Attività delle conversazioni",
+        "inbound_one": "{{count}} messaggio in entrata",
+        "inbound_many": "{{count}} di messaggi in entrata",
+        "inbound_other": "{{count}} messaggi in entrata",
+        "responding_one": "{{count}} contatto che risponde",
+        "responding_many": "{{count}} di contatti che rispondono",
+        "responding_other": "{{count}} contatti che rispondono",
+        "perContact": "{{value}} risposte per contatto che risponde"
+      },
+      "comparison": {
+        "title": "Rispetto al periodo precedente",
+        "replyRate": "Tasso di risposta"
+      }
+    },
+    "ago": {
+      "minute_one": "{{count}} minuto fa",
+      "minute_many": "{{count}} di minuti fa",
+      "minute_other": "{{count}} minuti fa",
+      "hour_one": "{{count}} ora fa",
+      "hour_many": "{{count}} di ore fa",
+      "hour_other": "{{count}} ore fa",
+      "day_one": "{{count}} giorno fa",
+      "day_many": "{{count}} di giorni fa",
+      "day_other": "{{count}} giorni fa"
+    },
+    "error": {
+      "forbidden": "Il tuo ruolo ({{role}}) non ha accesso alla dashboard.",
+      "generic": "Impossibile caricare i numeri. Riprova tra un attimo.",
+      "locked": "Il tuo piano non include le analisi."
+    },
+    "greetingNoName": {
+      "morning": "Buongiorno.",
+      "afternoon": "Buon pomeriggio.",
+      "evening": "Buonasera."
+    },
+    "views": {
+      "label": "Vista della dashboard",
+      "summary": "Riepilogo",
+      "agent": "Agente",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Prestazioni degli agenti",
+      "conversations": "Conversazioni",
+      "resolved": "Risolte",
+      "firstReply": "Prima risposta",
+      "resolution": "Risoluzione",
+      "csat": "Valutazione",
+      "minutes": "{{value}} min",
+      "hours": "{{value}} h",
+      "days": "{{value}} g",
+      "empty": "In questo periodo nessuna conversazione è stata assegnata a qualcuno.",
+      "noAccess": "Il tuo ruolo ({{role}}) non ha accesso alle analisi degli agenti.",
+      "everyone": "Tutti gli agenti",
+      "pickerLabel": "Agente",
+      "pickerPlaceholder": "Seleziona un agente",
+      "statusTitle": "Stato delle conversazioni",
+      "avgResolution": "Tempo medio di risoluzione",
+      "avgDuration": "Durata media delle conversazioni",
+      "byAgentTitle": "Conversazioni per agente",
+      "byAgentPicker": "Agente per l'elenco degli stati",
+      "status": {
+        "open": "Aperte",
+        "pending": "In attesa",
+        "closed": "Chiuse",
+        "assigned": "Assegnate",
+        "unassigned": "Non assegnate",
+        "unattended": "Senza risposta"
+      }
+    },
+    "bots": {
+      "activeFlows": "Flow attivi",
+      "ofTotal": "su {{total}} flow",
+      "subscribers": "Iscritti",
+      "subscribersNote": "in tutti i flow"
+    }
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "inbox": "Inbox",
+    "contacts": "Contatti",
+    "menu": "Menu"
+  },
+  "menu": {
+    "title": "Account",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Workspace",
+    "inbox": "Inbox",
+    "contacts": "Contatti",
+    "noAccess": "Non hai accesso a questa sezione. Chiedi all'amministratore del workspace di sbloccarla.",
+    "version": "Versione {{version}}",
+    "signOutTitle": "Esci",
+    "signOutConfirm": "Vuoi davvero uscire?",
+    "signOutNo": "No",
+    "signOutYes": "Sì, esci",
+    "tasks": "Task",
+    "dashboard": "Dashboard",
+    "allContacts": "Tutti i contatti",
+    "newContact": "Nuovo contatto",
+    "sectionAccount": "Account",
+    "manageProfile": "Gestisci profilo",
+    "preferences": "Preferenze",
+    "devicePermissions": "Autorizzazioni del dispositivo",
+    "devicePermissionsHint": "Apri le impostazioni di questa app sul telefono",
+    "about": "Info",
+    "dataSecurity": "Dati e sicurezza",
+    "checkUpdates": "Verifica aggiornamenti",
+    "updates": {
+      "off": "Questa versione dell'app non riceve aggiornamenti automatici. Installa la versione più recente per avere le novità.",
+      "latest": "Hai l'ultima versione.",
+      "ready": "Un aggiornamento è pronto. Tocca di nuovo per riavviare e usarlo.",
+      "failed": "Impossibile verificare gli aggiornamenti. Riprova tra un attimo."
+    },
+    "profile": {
+      "title": "Gestisci profilo",
+      "fullName": "Nome completo",
+      "displayName": "Nome visualizzato",
+      "displayNameHint": "Mostrato al tuo team al posto del nome completo. Lascia vuoto per usare il nome completo.",
+      "phone": "Telefono",
+      "phoneHint": "Con il prefisso internazionale, ad esempio +919876543210.",
+      "email": "Email",
+      "pendingEmail": "La modifica a {{email}} è in attesa della tua conferma.",
+      "timezone": "Fuso orario del workspace",
+      "save": "Salva modifiche",
+      "cancel": "Annulla",
+      "nameRequired": "Inserisci il tuo nome.",
+      "nameTooLong": "Usa al massimo 120 caratteri.",
+      "phoneInvalid": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +919876543210."
+    },
+    "appearance": {
+      "title": "Aspetto",
+      "light": "Modalità chiara",
+      "dark": "Modalità scura",
+      "device": "Usa le impostazioni del dispositivo",
+      "hint": "Salvato nel tuo account.",
+      "failed": "Impossibile salvare la scelta. Riprova."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Vista inbox",
+      "all": "Tutte",
+      "mine": "Mie",
+      "unassigned": "Non assegnate",
+      "unread": "Non lette"
+    },
+    "search": {
+      "open": "Cerca conversazioni",
+      "close": "Chiudi ricerca",
+      "label": "Cerca",
+      "placeholder": "Nome, numero o messaggio"
+    },
+    "filter": {
+      "open": "Filtri",
+      "sheet": "Stato della conversazione",
+      "close": "Chiudi",
+      "applied": "Filtri applicati",
+      "clearAll": "Cancella tutto",
+      "remove": "Rimuovi filtro: {{name}}",
+      "statusChip": "Stato: {{name}}",
+      "searchChip": "Ricerca: {{q}}",
+      "title": "Filtri",
+      "view": "Vista",
+      "viewActive": "Conversazioni",
+      "viewArchived": "Archiviate",
+      "channel": "Canale",
+      "allChannels": "Tutti i canali",
+      "labels": "Etichette",
+      "searchLabels": "Cerca etichette",
+      "channelChip": "Canale: {{name}}",
+      "labelsChip": "Etichette: {{names}}",
+      "archivedChip": "Archiviate"
+    },
+    "statusFilter": {
+      "default": "Aperte e in attesa",
+      "open": "Aperte",
+      "pending": "In attesa",
+      "snoozed": "Posticipate",
+      "resolved": "Risolte",
+      "closed": "Chiuse",
+      "all": "Tutti gli stati"
+    },
+    "status": {
+      "open": "Aperta",
+      "pending": "In attesa",
+      "snoozed": "Posticipata",
+      "resolved": "Risolta",
+      "closed": "Chiusa",
+      "spam": "Spam"
+    },
+    "list": {
+      "label": "Conversazioni",
+      "emptyTitle": "Nessuna conversazione",
+      "emptyHint": "I messaggi dei tuoi clienti appariranno qui.",
+      "emptyFilteredHint": "Nessun risultato con questi filtri. Prova a cancellarli.",
+      "noMore": "Nessun'altra conversazione",
+      "loadingMore": "Caricamento di altre conversazioni",
+      "noAccessTitle": "Nessun accesso alla inbox",
+      "noAccessBody": "Il tuo ruolo non può leggere le conversazioni. Chiedi a un amministratore del workspace di cambiarlo."
+    },
+    "row": {
+      "noMessages": "Ancora nessun messaggio",
+      "unread_one": "{{count}} messaggio non letto",
+      "unread_many": "{{count}} di messaggi non letti",
+      "unread_other": "{{count}} messaggi non letti",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "Assegnata a {{name}}",
+      "media": "Contenuto multimediale"
+    },
+    "time": {
+      "am": "AM",
+      "pm": "PM",
+      "yesterday": "Ieri"
+    },
+    "thread": {
+      "messages": "Messaggi",
+      "loadingOlder": "Caricamento dei messaggi precedenti",
+      "emptyTitle": "Ancora nessun messaggio",
+      "emptyHint": "I messaggi di questa conversazione appariranno qui.",
+      "noAccessTitle": "Nessun accesso a questa conversazione",
+      "noAccessBody": "Il tuo ruolo non può leggere le conversazioni.",
+      "resolve": "Risolvi",
+      "reopen": "Riapri",
+      "call": "Chiama {{phone}}",
+      "pictureOpen": "Apri la foto a schermo intero",
+      "pictureFull": "Foto",
+      "pictureClose": "Chiudi foto",
+      "windowClosed": "La finestra di risposta di 24 ore è chiusa. Invia un template.",
+      "conflict": "Qualcun altro ha modificato questa conversazione. È stata caricata l'ultima versione, riprova.",
+      "statusInvalid": "Questa conversazione non può essere spostata in quello stato.",
+      "window": {
+        "left": "Finestra di risposta: rimangono {{hours}} h {{minutes}} min",
+        "closed": "Finestra di risposta chiusa"
+      },
+      "menu": {
+        "open": "Altre azioni",
+        "close": "Chiudi menu",
+        "assignToMe": "Assegna a me",
+        "details": "Vedi dettagli",
+        "status": "Cambia stato",
+        "agent": "Assegna agente"
+      },
+      "bot": {
+        "notice": "Questa è una conversazione con un bot.",
+        "assignSelf": "Assegna a te"
+      },
+      "labels": {
+        "open": "Assegna etichette",
+        "title": "Assegna etichette",
+        "close": "Chiudi",
+        "empty": "Non ci sono ancora etichette.",
+        "emptyCreate": "Non ci sono ancora etichette. Scrivi un nome qui sotto per crearne una.",
+        "newLabel": "Nuova etichetta",
+        "add": "Aggiungi",
+        "failed": "Impossibile modificare le etichette. Riprova."
+      },
+      "assignment": {
+        "none": "Non assegnata",
+        "team": "Team: {{name}}",
+        "failed": "Impossibile modificare la conversazione. Riprova.",
+        "you": "Assegnata a te",
+        "to": "Assegnata a {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "Ricevuto: {{text}}, {{time}}",
+      "labelOut": "Inviato da te: {{text}}, {{time}}, {{status}}",
+      "deleted": "Questo messaggio è stato eliminato",
+      "retry": "Riprova l'invio",
+      "mediaPending": "Il file è ancora in download.",
+      "mediaFailed": "Impossibile scaricare il file."
+    },
+    "kind": {
+      "text": "Messaggio",
+      "image": "Foto",
+      "video": "Video",
+      "audio": "Audio",
+      "voice": "Messaggio vocale",
+      "document": "Documento",
+      "sticker": "Sticker",
+      "location": "Posizione",
+      "contact": "Contatto",
+      "template": "Template",
+      "reaction": "Reazione",
+      "interactive": "Messaggio interattivo",
+      "system": "Messaggio di sistema"
+    },
+    "delivery": {
+      "queued": "In invio",
+      "sent": "Inviato",
+      "delivered": "Consegnato",
+      "read": "Letto",
+      "failed": "Non inviato",
+      "received": "Ricevuto"
+    },
+    "composer": {
+      "label": "Messaggio",
+      "placeholder": "Scrivi un messaggio",
+      "send": "Invia",
+      "tooLong": "I messaggi possono contenere al massimo {{max}} caratteri.",
+      "noteLabel": "Nota privata",
+      "notePlaceholder": "Scrivi una nota visibile solo al tuo team",
+      "addNote": "Aggiungi nota",
+      "noteOn": "Scrivi una nota privata",
+      "noteOff": "Torna a una risposta"
+    },
+    "template": {
+      "closedNotice": "Il cliente non ti ha scritto nelle ultime 24 ore. Puoi inviare solo template pre-approvati.",
+      "send": "Invia template",
+      "title": "Invia un template",
+      "close": "Chiudi",
+      "search": "Cerca template",
+      "empty": "Ancora nessun template approvato per questo numero.",
+      "emptySearch": "Nessun template corrisponde alla ricerca.",
+      "more": "Ci sono altri template. Scrivi nella casella di ricerca per trovarli.",
+      "fillTitle": "Compila i dettagli",
+      "back": "Torna ai template",
+      "submit": "Invia",
+      "reason": {
+        "paused": "Messo in pausa da WhatsApp per motivi di qualità. Riprova più tardi.",
+        "media_header": "Ha un'intestazione con immagine, video o documento, che l'app non può ancora inviare.",
+        "header_variable": "Ha una variabile nell'intestazione, che l'app non può ancora compilare.",
+        "dynamic_button": "Ha un pulsante con link con variabile, che l'app non può ancora compilare.",
+        "authentication": "I template con password monouso vengono inviati dal sistema.",
+        "named_variables": "Usa variabili con nome, che l'app non può ancora compilare."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "Questo canale è disconnesso. Riconnettilo dal web, poi riprova.",
+      "planLimit": "Hai raggiunto il limite di messaggi del tuo piano.",
+      "forbidden": "Non hai l'autorizzazione per farlo.",
+      "notFound": "Questa conversazione non è più disponibile."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Chat web",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Simulatore"
+    },
+    "sheet": {
+      "close": "Chiudi",
+      "save": "Salva modifiche",
+      "noMatch": "Nessun risultato."
+    },
+    "assign": {
+      "title": "Cambia agente",
+      "search": "Cerca agenti",
+      "agents": "Agenti",
+      "teams": "Team",
+      "unassigned": "Non assegnata",
+      "noTeam": "Nessun team",
+      "you": "{{name}} (tu)",
+      "availability": {
+        "online": "Online",
+        "away": "Assente",
+        "busy": "Occupato",
+        "offline": "Offline"
+      },
+      "open_one": "{{count}} aperta",
+      "open_many": "{{count}} di aperte",
+      "open_other": "{{count}} aperte",
+      "members_one": "{{count}} membro",
+      "members_many": "{{count}} di membri",
+      "members_other": "{{count}} membri",
+      "failed": "Impossibile cambiare a chi è assegnata questa conversazione. Riprova."
+    },
+    "priority": {
+      "title": "Imposta priorità",
+      "low": "Bassa",
+      "normal": "Normale",
+      "high": "Alta",
+      "urgent": "Urgente"
+    },
+    "snooze": {
+      "title": "Posticipa fino a",
+      "hour": "Tra 1 ora",
+      "threeHours": "Tra 3 ore",
+      "tomorrow": "Domani, 9:00",
+      "nextWeek": "Lunedì prossimo, 9:00"
+    },
+    "statusSheet": {
+      "title": "Cambia stato"
+    },
+    "details": {
+      "title": "Dettagli della chat",
+      "contact": "Contatto",
+      "openContact": "Apri contatto",
+      "call": "Chiama",
+      "noContact": "Questa conversazione non ha ancora una scheda contatto.",
+      "email": "Email",
+      "stage": "Fase",
+      "contactStatus": "Stato",
+      "owner": "Responsabile",
+      "source": "Origine",
+      "since": "Contatto dal",
+      "optedOut": "Ha rifiutato i messaggi",
+      "leadScore": "Punteggio lead",
+      "actions": "Azioni",
+      "status": "Stato",
+      "priority": "Priorità",
+      "labels": "Etichette",
+      "none": "Nessuna",
+      "agent": "Agente assegnato",
+      "team": "Team",
+      "you": "Tu",
+      "bot": "Bot",
+      "unassigned": "Non assegnata",
+      "info": "Conversazione",
+      "channel": "Canale",
+      "window": "Finestra di risposta",
+      "windowOpen": "Aperta fino alle {{time}}",
+      "windowClosed": "Chiusa",
+      "windowNone": "Nessun limite di tempo",
+      "snoozedUntil": "Posticipata fino a {{time}}",
+      "notes": {
+        "title": "Note interne",
+        "empty": "Ancora nessuna nota. Le note sono visibili solo al tuo team.",
+        "label": "Scrivi una nota",
+        "add": "Aggiungi nota",
+        "delete": "Elimina",
+        "deleteFor": "Elimina la nota di {{name}}",
+        "failed": "Impossibile salvare la nota. Riprova.",
+        "deleteFailed": "Impossibile eliminare la nota. Riprova.",
+        "unknownAuthor": "Qualcuno",
+        "tooLong": "Le note possono contenere al massimo {{max}} caratteri."
+      },
+      "timeline": {
+        "title": "Cronologia",
+        "empty": "Non è ancora successo nulla.",
+        "system": "Sistema"
+      },
+      "past": {
+        "title": "Conversazioni precedenti",
+        "empty": "Nessun'altra conversazione con questo contatto."
+      },
+      "snooze": "Posticipa",
+      "wake": "Riattiva ora"
+    },
+    "event": {
+      "created": "Conversazione avviata",
+      "assigned": "Assegnata",
+      "reassigned": "Riassegnata",
+      "unassigned": "Assegnazione rimossa",
+      "ai_handoff": "Passata dall'agente IA",
+      "resolved": "Risolta",
+      "closed": "Chiusa",
+      "reopened": "Riaperta",
+      "status_changed": "Stato modificato",
+      "note_added": "Nota aggiunta",
+      "snoozed": "Posticipata",
+      "auto_unsnoozed": "Riattivata in orario",
+      "priority_changed": "Priorità modificata",
+      "tag_added": "Etichetta aggiunta",
+      "tag_removed": "Etichetta rimossa",
+      "first_response": "Prima risposta inviata",
+      "sla_breach": "Tempo di risposta non rispettato"
+    },
+    "replies": {
+      "open": "Risposte salvate",
+      "title": "Risposte salvate",
+      "search": "Cerca risposte salvate",
+      "empty": "Ancora nessuna risposta salvata.",
+      "noMatch": "Nessuna risposta salvata corrisponde alla ricerca.",
+      "failed": "Impossibile usare questa risposta. Riprova.",
+      "unfilled": "Controlla il messaggio: non è stato possibile compilare {{list}}."
+    },
+    "note": {
+      "title": "Nota privata",
+      "label": "Nota privata di {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Tieni premuto per selezionare le conversazioni",
+      "selected_one": "{{count}} selezionata",
+      "selected_many": "{{count}} di selezionate",
+      "selected_other": "{{count}} selezionate",
+      "close": "Annulla selezione",
+      "selectAll": "Seleziona tutto",
+      "read": "Segna come letto",
+      "status": "Stato",
+      "assign": "Assegna",
+      "label": "Etichette",
+      "priority": "Priorità",
+      "snooze": "Posticipa",
+      "statusTitle_one": "Cambia lo stato di {{count}} conversazione",
+      "statusTitle_many": "Cambia lo stato di {{count}} di conversazioni",
+      "statusTitle_other": "Cambia lo stato di {{count}} conversazioni",
+      "labelTitle_one": "Etichette per {{count}} conversazione",
+      "labelTitle_many": "Etichette per {{count}} di conversazioni",
+      "labelTitle_other": "Etichette per {{count}} conversazioni",
+      "labelMode": "Azione",
+      "labelAdd": "Aggiungi l'etichetta",
+      "labelRemove": "Rimuovi l'etichetta",
+      "labelSearch": "Cerca etichette",
+      "priorityTitle_one": "Priorità di {{count}} conversazione",
+      "priorityTitle_many": "Priorità di {{count}} di conversazioni",
+      "priorityTitle_other": "Priorità di {{count}} conversazioni",
+      "snoozeTitle_one": "Posticipa {{count}} conversazione fino a",
+      "snoozeTitle_many": "Posticipa {{count}} di conversazioni fino a",
+      "snoozeTitle_other": "Posticipa {{count}} conversazioni fino a",
+      "result": "{{done}} aggiornate, {{unchanged}} invariate, {{failed}} non riuscite",
+      "resultDismiss": "Chiudi"
+    }
+  },
+  "contacts": {
+    "title": "Contatti",
+    "unknown": "Sconosciuto",
+    "add": "Aggiungi contatto",
+    "cancel": "Annulla",
+    "yes": "Sì",
+    "no": "No",
+    "denied": {
+      "title": "Non puoi vedere i contatti",
+      "hint": "Chiedi a un amministratore del workspace di dare al tuo ruolo l'accesso ai contatti.",
+      "createTitle": "Non puoi aggiungere contatti",
+      "createHint": "Chiedi a un amministratore del workspace di consentire al tuo ruolo di aggiungere contatti."
+    },
+    "empty": {
+      "title": "Nessun contatto",
+      "hint": "Tocca il pulsante + per aggiungere il tuo primo contatto.",
+      "filteredTitle": "Nessun contatto corrispondente",
+      "filteredHint": "Prova con un'altra ricerca o cancella i filtri."
+    },
+    "search": {
+      "open": "Cerca contatti",
+      "close": "Chiudi ricerca",
+      "label": "Cerca",
+      "placeholder": "Nome, telefono o email"
+    },
+    "filter": {
+      "open": "Filtra contatti",
+      "title": "Filtri",
+      "stage": "Fase del ciclo di vita",
+      "owner": "Responsabile del contatto",
+      "ownerSearch": "Cerca responsabile del contatto",
+      "unassigned": "Nessun responsabile",
+      "created": "Data di creazione",
+      "any": "Qualsiasi",
+      "marketing": "Messaggi di marketing",
+      "marketingOptions": {
+        "all": "Tutti",
+        "subscribed": "Iscritti",
+        "unsubscribed": "Disiscritti"
+      },
+      "source": "Origine",
+      "sourceHint": "Da dove proviene il contatto, ad esempio import o api.",
+      "clear": "Cancella tutto",
+      "apply": "Applica"
+    },
+    "stage": {
+      "new": "Nuovo",
+      "contacted": "Contattato",
+      "qualified": "Qualificato",
+      "application_started": "Candidatura avviata",
+      "application_submitted": "Candidatura inviata",
+      "interview_scheduled": "Colloquio programmato",
+      "offer_received": "Offerta ricevuta",
+      "admission_confirmed": "Ammissione confermata",
+      "enrolled": "Iscritto",
+      "lost": "Perso"
+    },
+    "subscription": {
+      "subscribed": "Iscritto",
+      "unsubscribed": "Disiscritto",
+      "pending": "In attesa"
+    },
+    "form": {
+      "name": "Nome",
+      "phone": "Telefono",
+      "phoneHint": "Con il prefisso internazionale, ad esempio +919876543210.",
+      "email": "Email",
+      "needPhoneOrEmail": "Inserisci un numero di telefono o un indirizzo email.",
+      "phoneInvalid": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +919876543210.",
+      "emailInvalid": "Inserisci un indirizzo email valido.",
+      "nameInvalid": "Inserisci un nome di massimo 255 caratteri."
+    },
+    "new": {
+      "title": "Nuovo contatto",
+      "save": "Salva contatto",
+      "requiredTitle": "Dati obbligatori",
+      "choose": "Scegli",
+      "search": "Cerca",
+      "unsupported": "{{label}} è obbligatorio, ma per ora non si può compilare qui. Aggiungi questo contatto dal web.",
+      "requiredMissing": "Il tuo workspace richiede altri dati prima di poter salvare un contatto, e questa app non può mostrarli. Chiedi a un amministratore l'accesso alle proprietà dei contatti, oppure aggiungi il contatto dal web."
+    },
+    "edit": {
+      "title": "Modifica contatto",
+      "open": "Modifica contatto",
+      "save": "Salva modifiche",
+      "conflict": "Questo contatto è stato modificato da qualcun altro. Controlla e salva di nuovo."
+    },
+    "detail": {
+      "title": "Contatto",
+      "notFound": "Questo contatto non esiste più.",
+      "phone": "Telefono",
+      "email": "Email",
+      "call": "Chiama {{phone}}",
+      "mail": "Scrivi a {{email}}",
+      "stage": "Fase del ciclo di vita",
+      "status": "Stato",
+      "score": "Punteggio",
+      "source": "Origine",
+      "whatsapp": "Iscrizione WhatsApp",
+      "marketing": "Messaggi di marketing",
+      "optedOut": "Disiscritto",
+      "optedIn": "Può ricevere",
+      "lastActivity": "Ultima attività",
+      "noActivity": "Ancora nessuna attività",
+      "created": "Aggiunto il",
+      "customFields": "Campi personalizzati",
+      "actions": {
+        "call": "Chiama",
+        "chat": "Chat",
+        "email": "Email",
+        "sms": "SMS",
+        "tasks": "Task",
+        "notes": "Note"
+      },
+      "tabsLabel": "Sezioni del contatto",
+      "tabs": {
+        "about": "Dati del contatto",
+        "activity": "Attività",
+        "files": "Altro"
+      },
+      "activities": {
+        "label": "Viste delle attività",
+        "all": "Tutte le attività",
+        "timeline": "Cronologia delle attività"
+      },
+      "more": {
+        "account": "Account",
+        "deals": "Trattative"
+      },
+      "summary": {
+        "title": "Attività",
+        "notes": "Note",
+        "tasks": "Task",
+        "meetings": "Riunioni",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "Elimina contatto",
+        "title": "Elimina contatto",
+        "message": "Eliminare {{name}}? L'operazione non può essere annullata.",
+        "confirm": "Elimina",
+        "cancel": "Annulla"
+      }
+    },
+    "tags": {
+      "title": "Tag",
+      "none": "Ancora nessun tag.",
+      "remove": "Rimuovi il tag {{name}}",
+      "addLabel": "Aggiungi un tag",
+      "addPlaceholder": "Nome del tag",
+      "add": "Aggiungi tag"
+    },
+    "row": {
+      "more": "Altre azioni per {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Modifica",
+      "swipeDelete": "Elimina"
+    },
+    "sheet": {
+      "close": "Chiudi"
+    },
+    "views": {
+      "open": "Vista contatti: {{name}}",
+      "title": "Viste",
+      "close": "Chiudi viste",
+      "searchLabel": "Cerca viste",
+      "searchPlaceholder": "Cerca viste",
+      "systemTitle": "Viste predefinite di sistema",
+      "customTitle": "Viste personalizzate",
+      "none": "Nessuna vista disponibile",
+      "failed": "Impossibile caricare le viste salvate.",
+      "system": {
+        "all": "Tutti i contatti",
+        "mine": "I miei contatti",
+        "recent": "Creati di recente",
+        "optedOut": "Disiscritti dal marketing"
+      }
+    }
+  },
+  "tasks": {
+    "title": "Task",
+    "add": "Aggiungi task",
+    "cancel": "Annulla",
+    "unknownContact": "Contatto senza nome",
+    "notFound": "Questo task non esiste più.",
+    "priority": {
+      "low": "Bassa",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "status": {
+      "open": "Aperto",
+      "done": "Completato",
+      "overdue": "Scaduto"
+    },
+    "denied": {
+      "title": "Non puoi vedere i task",
+      "hint": "Chiedi all'amministratore del workspace di darti accesso ai task.",
+      "createTitle": "Non puoi aggiungere task",
+      "createHint": "Chiedi all'amministratore del workspace di consentirti di aggiungere task.",
+      "editTitle": "Non puoi modificare i task",
+      "editHint": "Chiedi all'amministratore del workspace di consentirti di modificare i task."
+    },
+    "planLocked": {
+      "title": "I task non sono inclusi in questo piano.",
+      "hint": "Chiedi all'amministratore del workspace di passare a un piano superiore."
+    },
+    "empty": {
+      "title": "Nessun task trovato.",
+      "hint": "I task che aggiungi appariranno qui.",
+      "filteredHint": "Prova con un altro filtro o un'altra ricerca."
+    },
+    "search": {
+      "open": "Cerca task",
+      "close": "Chiudi ricerca",
+      "label": "Cerca",
+      "placeholder": "Cerca per titolo"
+    },
+    "filter": {
+      "open": "Filtra task",
+      "title": "Filtra task",
+      "clear": "Cancella tutto",
+      "apply": "Applica",
+      "group": {
+        "status": "Stato",
+        "priority": "Priorità",
+        "due": "Scadenza",
+        "owner": "Responsabile"
+      },
+      "status": {
+        "open": "Aperti",
+        "done": "Completati",
+        "all": "Tutti"
+      },
+      "due": {
+        "overdue": "Scaduti",
+        "today": "Oggi",
+        "upcoming": "In arrivo",
+        "none": "Senza data"
+      },
+      "owner": {
+        "mine": "Miei",
+        "unassigned": "Non assegnati",
+        "all": "Tutti"
+      }
+    },
+    "list": {
+      "conflict": "Questo task è stato modificato da qualcun altro. L'elenco è stato aggiornato."
+    },
+    "row": {
+      "markDone": "Segna {{title}} come completato",
+      "reopen": "Riapri {{title}}",
+      "more": "Altre azioni per {{title}}",
+      "due": "Scadenza {{when}}",
+      "unassigned": "Non assegnato"
+    },
+    "actions": {
+      "edit": "Modifica task",
+      "delete": "Elimina task"
+    },
+    "delete": {
+      "title": "Elimina task",
+      "message": "Vuoi davvero eliminare questo task?",
+      "confirm": "Elimina"
+    },
+    "details": {
+      "title": "Dettagli del task",
+      "edit": "Modifica task",
+      "delete": "Elimina task",
+      "description": "Descrizione",
+      "priority": "Priorità",
+      "status": "Stato",
+      "owner": "Responsabile",
+      "relatedTo": "Collegato a",
+      "noDescription": "Nessuna descrizione",
+      "noDue": "Nessuna scadenza",
+      "unassigned": "Non assegnato",
+      "noContact": "Nessuno",
+      "openContact": "Apri {{name}}",
+      "markComplete": "Segna come completato",
+      "reopen": "Riapri",
+      "conflict": "Questo task è stato modificato da qualcun altro. È stato ricaricato."
+    },
+    "form": {
+      "addTitle": "Aggiungi task",
+      "editTitle": "Modifica task",
+      "save": "Salva task",
+      "saving": "Salvataggio…",
+      "title": "Titolo del task",
+      "description": "Descrizione del task",
+      "priority": "Priorità",
+      "date": "Data (YYYY-MM-DD)",
+      "dateHint": "Lascia vuoti data e ora per nessuna scadenza. Ad esempio 2026-10-31.",
+      "time": "Ora (HH:mm)",
+      "timeHint": "Formato 24 ore, ad esempio 14:30.",
+      "owner": "Responsabile",
+      "ownerPick": "Scegli un responsabile",
+      "ownerMe": "Io",
+      "ownerNone": "Non assegnato",
+      "ownerLoading": "Caricamento del tuo team…",
+      "ownerFailed": "Impossibile caricare il tuo team.",
+      "contact": "Contatto",
+      "contactLinkOptional": "Collega contatto (facoltativo)",
+      "contactNone": "Nessun contatto",
+      "contactPick": "Scegli un contatto",
+      "contactSearchLabel": "Cerca contatti",
+      "contactSearchPlaceholder": "Nome, email o telefono",
+      "contactEmpty": "Nessun contatto trovato.",
+      "contactFailed": "Impossibile caricare i contatti.",
+      "conflict": "Questo task è stato modificato da qualcun altro. Controlla e salva di nuovo.",
+      "errors": {
+        "titleRequired": "Inserisci il titolo del task.",
+        "titleTooLong": "Il titolo può contenere al massimo 255 caratteri.",
+        "titleNeedsLetter": "Il titolo deve contenere almeno una lettera.",
+        "notesTooLong": "La descrizione può contenere al massimo 5000 caratteri.",
+        "dateInvalid": "Inserisci la data come YYYY-MM-DD, ad esempio 2026-10-31.",
+        "timeInvalid": "Inserisci l'ora come HH:mm nel formato 24 ore, ad esempio 14:30.",
+        "dateNeeded": "Inserisci anche la data.",
+        "timeNeeded": "Inserisci anche l'ora.",
+        "dueInvalid": "Questa data e ora di scadenza non è utilizzabile.",
+        "assigneeInvalid": "A questa persona non si possono assegnare task. Scegli un altro responsabile.",
+        "contactInvalid": "Questo contatto non può essere collegato."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Note",
+    "cancel": "Annulla",
+    "loadMore": "Carica altro",
+    "deleteConfirm": "Elimina",
+    "contactMissing": "Questo contatto non esiste più.",
+    "add": "Aggiungi nota",
+    "edited": "Modificata",
+    "denied": {
+      "title": "Non puoi vedere le note",
+      "hint": "Chiedi a un amministratore del workspace di dare al tuo ruolo l'accesso ai contatti.",
+      "updateTitle": "Non puoi modificare le note",
+      "updateHint": "Chiedi a un amministratore del workspace di consentire al tuo ruolo di modificare i contatti."
+    },
+    "empty": {
+      "title": "Nessuna nota disponibile.",
+      "hint": "Tocca il pulsante + per aggiungere la prima nota."
+    },
+    "menu": {
+      "open": "Azioni per la nota del {{date}}",
+      "edit": "Modifica nota",
+      "delete": "Elimina nota"
+    },
+    "delete": {
+      "title": "Elimina nota",
+      "message": "Vuoi davvero eliminare questa nota?"
+    },
+    "form": {
+      "addTitle": "Aggiungi nota",
+      "editTitle": "Aggiorna nota",
+      "label": "Nota",
+      "placeholder": "Scrivi qui la tua nota...",
+      "required": "Scrivi una nota prima di salvare.",
+      "invalid": "Inserisci una nota di massimo 400 caratteri.",
+      "counterLabel": "{{used}} caratteri usati su {{max}}",
+      "save": "Salva nota",
+      "saving": "Salvataggio della nota",
+      "conflict": "Questa nota è stata modificata da qualcun altro. Controlla e salva di nuovo.",
+      "missing": "Questa nota non esiste più."
+    },
+    "activity": {
+      "notes": "Note",
+      "tasks": "Task",
+      "timeline": "Cronologia",
+      "empty": "Ancora nessuna attività.",
+      "add": "Aggiungi attività",
+      "types": {
+        "note": "Nota",
+        "call": "Chiamata",
+        "email": "Email",
+        "meeting": "Riunione",
+        "task": "Task"
+      },
+      "source": {
+        "system": "Sistema",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Aggiungi attività",
+        "type": "Tipo",
+        "typeHint": "Ad esempio nota, chiamata, email o riunione.",
+        "name": "Titolo",
+        "details": "Dettagli",
+        "save": "Salva attività",
+        "typeInvalid": "Inserisci un tipo di massimo 100 caratteri.",
+        "titleInvalid": "Inserisci un titolo di massimo 255 caratteri.",
+        "detailsInvalid": "I dettagli possono contenere al massimo 10.000 caratteri."
+      }
+    },
+    "files": {
+      "empty": "Nessun file disponibile.",
+      "delete": "Elimina il file {{name}}",
+      "deleteTitle": "Elimina file",
+      "deleteMessage": "Vuoi davvero eliminare questo file?"
+    }
+  },
+  "contactMeetings": {
+    "title": "Riunioni",
+    "loadMore": "Carica altro",
+    "contactMissing": "Questo contatto non esiste più.",
+    "noDate": "Nessuna data impostata",
+    "denied": {
+      "title": "Non puoi vedere le riunioni",
+      "hint": "Chiedi a un amministratore del workspace di dare al tuo ruolo l'accesso ai contatti."
+    },
+    "empty": {
+      "title": "Nessuna riunione registrata."
+    }
+  },
+  "contactDeals": {
+    "title": "Trattative",
+    "contactMissing": "Questo contatto non esiste più.",
+    "denied": {
+      "title": "Non puoi vedere le trattative",
+      "hint": "Chiedi a un amministratore del workspace di dare al tuo ruolo l'accesso alle trattative."
+    },
+    "empty": {
+      "title": "Ancora nessuna trattativa."
+    }
+  },
+  "contactCompany": {
+    "title": "Azienda",
+    "missing": "Questa azienda non esiste più.",
+    "denied": {
+      "title": "Non puoi vedere le aziende",
+      "hint": "Chiedi a un amministratore del workspace di dare al tuo ruolo l'accesso alle aziende."
+    },
+    "industry": "Settore",
+    "size": "Dimensione",
+    "phone": "Telefono",
+    "email": "Email",
+    "website": "Sito web",
+    "address": "Indirizzo",
+    "owner": "Responsabile",
+    "notes": "Note"
+  },
+  "contactProps": {
+    "title": "Informazioni sul contatto",
+    "search": "Cerca campi",
+    "showEmpty": "Mostra campi vuoti",
+    "footer": "Puoi personalizzare le proprietà visualizzate qui dalla tua web app.",
+    "close": "Chiudi",
+    "save": "Salva",
+    "clear": "Cancella",
+    "yes": "Sì",
+    "no": "No",
+    "rowHint": "Apre l'editor",
+    "locked": "Non puoi modificare {{label}}",
+    "webOnly": "{{label}} si può modificare solo dalla web app.",
+    "masked": "Nascosto",
+    "fields": {
+      "email": "Email",
+      "phone": "Telefono",
+      "owner": "Responsabile del contatto",
+      "name": "Nome",
+      "source": "Origine",
+      "whatsapp": "Iscrizione WhatsApp",
+      "marketing": "Disiscrizione dal marketing",
+      "leadScore": "Punteggio lead",
+      "created": "Creato",
+      "lastActivity": "Ultima attività"
+    },
+    "subscription": {
+      "subscribed": "Iscritto",
+      "unsubscribed": "Disiscritto",
+      "pending": "In attesa"
+    },
+    "editor": {
+      "title": "Modifica {{label}}",
+      "date": "Data",
+      "dateHint": "Anno-mese-giorno, ad esempio 2026-10-12.",
+      "time": "Ora",
+      "timeHint": "Formato 24 ore, ad esempio 14:30.",
+      "phoneHint": "Con il prefisso internazionale, ad esempio +919876543210.",
+      "noOptions": "Non ci sono opzioni tra cui scegliere."
+    },
+    "error": {
+      "required": "{{label}} è obbligatorio.",
+      "name": "Inserisci un nome di massimo 255 caratteri.",
+      "email": "Inserisci un indirizzo email valido.",
+      "phone": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +919876543210.",
+      "needPhoneOrEmail": "Un contatto richiede un numero di telefono o un indirizzo email.",
+      "text": "Inserisci al massimo {{max}} caratteri.",
+      "number": "Inserisci un numero.",
+      "whole": "Inserisci un numero intero.",
+      "range": "Inserisci un numero da 0 a {{max}}.",
+      "url": "Inserisci un link che inizia con http:// o https://",
+      "date": "Inserisci una data valida come YYYY-MM-DD.",
+      "time": "Inserisci un'ora valida come HH:mm.",
+      "option": "Scegli una delle opzioni.",
+      "invalid": "Questo valore non è accettato. Controllalo e riprova.",
+      "notEditable": "Questa proprietà non può essere modificata.",
+      "requiredMissing": "Una proprietà obbligatoria non ha valore. Compilala prima di salvare.",
+      "conflict": "Questo contatto è stato modificato da qualcun altro. Controlla e salva di nuovo.",
+      "lostReasonRequired": "Indica perché questo contatto è stato perso.",
+      "statusMismatch": "Questo stato non appartiene a questa fase del ciclo di vita."
+    },
+    "owner": {
+      "title": "Assegna a",
+      "unassigned": "Non assegnato",
+      "none": "Non c'è nessuno a cui assegnare questo contatto.",
+      "failed": "Impossibile cambiare il responsabile. Riprova."
+    },
+    "lifecycle": {
+      "stage": "Fase del ciclo di vita",
+      "status": "Stato",
+      "change": "Cambia fase del ciclo di vita",
+      "changeStatus": "Cambia stato",
+      "dropdownHint": "Apre l'elenco da cui scegliere",
+      "lostReason": "Motivo della perdita",
+      "otherReason": "Altro",
+      "otherLabel": "Descrivi il motivo"
+    }
+  },
+  "summary": {
+    "contacts": "Contatti",
+    "contactsNote": "Aggiunti in questo periodo",
+    "tasks": "Task",
+    "tasksNote": "Aperti ora",
+    "messages": "Messaggi",
+    "sentNote": "Inviati",
+    "receivedNote": "Ricevuti",
+    "conversations": "Conversazioni",
+    "conversationsNote": "Aperte e in attesa, in questo momento",
+    "status": {
+      "all": "Attive",
+      "mine": "Mie",
+      "unassigned": "Non assegnate",
+      "assigned": "Assegnate",
+      "unread": "Non lette",
+      "archived": "Archiviate"
+    },
+    "allMessages": {
+      "title": "Tutti i messaggi",
+      "sent": "Inviati",
+      "delivered": "Consegnati",
+      "received": "Ricevuti",
+      "read": "Letti",
+      "failed": "Non riusciti"
+    },
+    "moreTitle": "Altro dal tuo workspace"
+  },
+  "dashDate": {
+    "title": "Cerca dal calendario",
+    "close": "Chiudi calendario",
+    "apply": "Applica",
+    "reset": "Reimposta",
+    "presets": "Intervalli rapidi",
+    "pill": {
+      "label": "Intervallo di date: da {{from}} a {{to}}",
+      "hint": "Apre il calendario per cambiare le date"
+    },
+    "selection": {
+      "label": "da {{from}} a {{to}}",
+      "pickFirst": "Scegli il primo giorno",
+      "pickLast": "Scegli l'ultimo giorno"
+    },
+    "preset": {
+      "last7": "Ultimi 7 giorni",
+      "last30": "Ultimi 30 giorni",
+      "last90": "Ultimi 90 giorni",
+      "yesterday": "Ieri",
+      "today": "Oggi"
+    },
+    "calendar": {
+      "previousMonth": "Mese precedente",
+      "nextMonth": "Mese successivo",
+      "start": "Inizio intervallo",
+      "end": "Fine intervallo",
+      "inRange": "Nell'intervallo",
+      "today": "Oggi"
+    }
+  },
+  "permissions": {
+    "channelName": "Messaggi e aggiornamenti",
+    "settingsHint": "Tocca Autorizzazioni, poi attiva ciò che ti serve.",
+    "names": {
+      "notifications": "Notifiche",
+      "calls": "Chiamate telefoniche",
+      "camera": "Fotocamera",
+      "callPopup": "Pop-up chiamata (visualizzazione sopra altre app)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Contatto",
+      "close": "Chiudi",
+      "ongoingTitle": "Chiamata in corso",
+      "endedTitle": "Chiamata terminata",
+      "endedText": "Tocca per registrare la chiamata con {{name}}.",
+      "channelOngoing": "Chiamate in corso",
+      "channelEnded": "Riepiloghi delle chiamate"
+    },
+    "summary": {
+      "title": "Aggiungi chiamata",
+      "contact": "Contatto",
+      "type": "Tipo di chiamata",
+      "outbound": "In uscita",
+      "status": "Stato della chiamata in uscita",
+      "completed": "Completata",
+      "notAnswered": "Senza risposta",
+      "startTime": "Ora di inizio della chiamata",
+      "duration": "Durata della chiamata",
+      "durationHint": "Minuti e secondi, ad esempio 02:30",
+      "durationInvalid": "Inserisci la durata come minuti:secondi, ad esempio 02:30.",
+      "subject": "Oggetto",
+      "subjectDefault": "Chiamata in uscita a {{name}}",
+      "subjectInvalid": "Inserisci un oggetto di massimo 255 caratteri.",
+      "notes": "Descrizione",
+      "save": "Salva chiamata",
+      "skip": "Salta",
+      "contactMissing": "Questa chiamata non ha un contatto a cui associarla.",
+      "denied": "Il tuo ruolo non può modificare i contatti, quindi questa chiamata non può essere registrata.",
+      "purpose": "Scopo della chiamata",
+      "purposeNone": "-Nessuno-",
+      "result": "Esito della chiamata",
+      "purposes": {
+        "prospecting": "Ricerca di clienti",
+        "administrative": "Amministrativa",
+        "negotiation": "Negoziazione",
+        "demo": "Demo",
+        "project": "Progetto",
+        "desk": "Assistenza"
+      }
+    }
+  }
+}

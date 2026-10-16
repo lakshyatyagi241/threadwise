@@ -1,0 +1,1520 @@
+{
+  "common": {
+    "loading": "جارٍ التحميل…",
+    "retry": "حاول مرة أخرى",
+    "signOut": "تسجيل الخروج",
+    "clear": "مسح",
+    "back": "رجوع",
+    "filters": {
+      "clearAll": "مسح الكل",
+      "apply": "تطبيق",
+      "noMatch": "لا توجد نتائج مطابقة لبحثك."
+    }
+  },
+  "errors": {
+    "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+    "network": "تعذّر الوصول إلى الخادم. تحقق من اتصالك وحاول مرة أخرى.",
+    "timeout": "استغرق الخادم وقتًا طويلًا في الرد. يرجى المحاولة مرة أخرى.",
+    "outdatedApp": "هذا الإصدار من التطبيق قديم. يرجى تحديثه.",
+    "tooManyRequests": "محاولات كثيرة جدًا. انتظر قليلًا ثم حاول مرة أخرى.",
+    "captchaUnsupported": "يلزم إجراء فحص أمني لا يستطيع التطبيق إكماله حاليًا. يرجى استخدام الموقع بدلًا من ذلك."
+  },
+  "auth": {
+    "welcomeBack": "مرحبًا بعودتك",
+    "welcomeSubtitle": "أدخل بياناتك للعودة إلى مساحة عملك.",
+    "tagline": "كل محادثات العملاء في مساحة عمل واحدة هادئة",
+    "taglineCaption": "رسائل جماعية وأتمتة وصندوق وارد مشترك للفرق التي ترد بسرعة.",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "you@company.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "signInSubmit": "تسجيل الدخول",
+    "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا.",
+    "passwordRequired": "أدخل كلمة المرور.",
+    "newHere": "جديد هنا؟",
+    "createAccount": "إنشاء حساب",
+    "legalSignIn": "بتسجيل الدخول فإنك توافق على <terms>الشروط</terms> و<privacy>سياسة الخصوصية</privacy>.",
+    "mfaTitle": "التحقق بخطوتين",
+    "mfaHint": "أدخل الرمز المكوّن من 6 أرقام من تطبيق المصادقة.",
+    "mfaCode": "رمز التحقق",
+    "mfaSubmit": "تحقق",
+    "workspaceTitle": "اختر مساحة عمل",
+    "workspaceHint": "حسابك ينتمي إلى أكثر من مساحة عمل.",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "accountLocked": "هذا الحساب مقفل مؤقتًا. حاول مرة أخرى لاحقًا.",
+    "accountSuspended": "تم تعليق هذا الحساب.",
+    "mfaInvalid": "هذا الرمز غير صحيح. حاول مرة أخرى.",
+    "mfaExpired": "انتهت صلاحية تسجيل الدخول. يرجى البدء من جديد."
+  },
+  "signUp": {
+    "tagline": "جهّز مساحة عملك",
+    "taglineCaption": "أنشئ مساحة عملك، ثم أضف فريقك وقناتك الأولى.",
+    "title": "إنشاء حسابك",
+    "subtitle": "بضع تفاصيل وتصبح مساحة عملك جاهزة.",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "اسمك",
+    "email": "البريد الإلكتروني للعمل",
+    "orgName": "اسم مساحة العمل",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "يسجّل فريقك الدخول بالعنوان {{slug}}.",
+    "orgNameHintEmpty": "هذا هو الاسم الذي يراه فريقك.",
+    "customiseSlug": "اختر عنوانًا مخصصًا لمساحة العمل",
+    "orgSlug": "عنوان مساحة العمل",
+    "orgSlugPlaceholder": "your-workspace",
+    "orgSlugHint": "أحرف وأرقام وشرطة أو شرطة سفلية. يدخله فريقك عند تسجيل الدخول.",
+    "phone": "رقم الجوال",
+    "phoneHint": "نستخدمه للتحقق من حسابك وللتحديثات المهمة.",
+    "referral": "رمز الإحالة (اختياري)",
+    "referralPlaceholder": "لديك رمز من صديق؟",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "passwordPlaceholder": "أنشئ كلمة مرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "passwordMinLength": "الحد الأدنى للطول: {{min}}.",
+    "passwordMixedCase": "امزج بين الأحرف الكبيرة والصغيرة.",
+    "passwordNumber": "أضف رقمًا.",
+    "passwordSymbol": "أضف رمزًا.",
+    "agree": "أوافق على <terms>الشروط</terms> و<privacy>سياسة الخصوصية</privacy>.",
+    "submit": "إنشاء حساب",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "signIn": "تسجيل الدخول",
+    "closedBody": "التسجيل مغلق. اطلب دعوة من المسؤول.",
+    "closedBack": "العودة إلى تسجيل الدخول",
+    "validation": {
+      "fullName": "أدخل اسمك الكامل.",
+      "orgName": "سمِّ مساحة عملك (حرفان على الأقل).",
+      "orgSlug": "أدخل عنوان مساحة العمل (أحرف وأرقام وشرطة أو شرطة سفلية).",
+      "phoneRequired": "أدخل رقم جوالك.",
+      "phoneInvalid": "أدخل رقم هاتف صالحًا مع رمز الدولة إذا لم يكن محليًا.",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+      "passwordInvalid": "أدخل كلمة مرور تستوفي المتطلبات الموضحة.",
+      "acceptTerms": "يجب قبول الشروط للمتابعة.",
+      "referralCode": "تتكوّن رموز الإحالة من أحرف وأرقام فقط."
+    },
+    "errors": {
+      "emailTaken": "هذا البريد الإلكتروني مستخدم بالفعل في مساحة العمل هذه.",
+      "slugTaken": "عنوان مساحة العمل هذا مستخدم بالفعل.",
+      "passwordPolicy": "كلمة المرور هذه لا تستوفي سياسة الأمان:",
+      "policyCommon": "كلمة المرور هذه سهلة التخمين.",
+      "otpSendFailed": "تعذّر إرسال رمز التحقق. تحقق من الرقم وحاول مرة أخرى.",
+      "signupExpired": "يرجى بدء التسجيل من جديد."
+    },
+    "otp": {
+      "title": "تحقق من واتساب",
+      "subtitle": "أدخل الرمز المؤقت الذي أرسلناه لإكمال إنشاء مساحة عملك.",
+      "sentTo": "أرسلنا رمزًا إلى {{phone}}",
+      "code": "رمز التحقق",
+      "expiresIn": "تنتهي صلاحية الرمز خلال {{time}}.",
+      "expired": "انتهت صلاحية هذا الرمز. اطلب رمزًا جديدًا.",
+      "verify": "تحقق ومتابعة",
+      "resend": "إعادة إرسال الرمز",
+      "resendIn": "إعادة إرسال الرمز بعد {{time}}",
+      "resent": "الرمز الجديد في طريقه إلى واتساب.",
+      "wrongNumber": "رقم خاطئ؟ ارجع",
+      "addressTakenHint": "تم حجز عنوان مساحة العمل هذا أثناء التحقق. اختر عنوانًا آخر وسنرسل لك رمزًا جديدًا.",
+      "codeInvalid": "أدخل الرمز المكوّن من {{length}} أرقام.",
+      "invalid": "هذا الرمز غير صحيح. حاول مرة أخرى.",
+      "tooMany": "محاولات كثيرة جدًا. اطلب رمزًا جديدًا.",
+      "cooldown": "انتظر قليلًا قبل طلب رمز آخر."
+    }
+  },
+  "dashboard": {
+    "kicker": "لوحة المشغّل",
+    "synced": "مباشر · آخر مزامنة قبل {{s}} ث",
+    "greeting": {
+      "morning": "صباح الخير، {{name}}.",
+      "afternoon": "مساء الخير، {{name}}.",
+      "evening": "مساء الخير، {{name}}."
+    },
+    "calm": "مساحة العمل هادئة.",
+    "running_zero": "{{count}} حملة قيد التشغيل.",
+    "running_one": "حملة واحدة قيد التشغيل.",
+    "running_two": "حملتان قيد التشغيل.",
+    "running_few": "{{count}} حملات قيد التشغيل.",
+    "running_many": "{{count}} حملة قيد التشغيل.",
+    "running_other": "{{count}} حملة قيد التشغيل.",
+    "subline_zero": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}% عبر {{count}} جهاز متصل.",
+    "subline_one": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}% عبر جهاز متصل واحد.",
+    "subline_two": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}% عبر جهازين متصلين.",
+    "subline_few": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}% عبر {{count}} أجهزة متصلة.",
+    "subline_many": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}% عبر {{count}} جهازًا متصلًا.",
+    "subline_other": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}% عبر {{count}} جهاز متصل.",
+    "sublineOfficial": "{{date}} - {{range}}: {{sent}} رسالة صادرة، ونسبة تسليم {{rate}}%.",
+    "setupBanner": "لم يكتمل إعداد مساحة عملك. أكمله على الويب لفتح بقية حسابك.",
+    "range": {
+      "label": "النطاق الزمني",
+      "short": {
+        "24h": "24 س",
+        "7d": "7 أيام",
+        "30d": "30 يومًا",
+        "qtd": "الربع"
+      },
+      "long": {
+        "24h": "آخر 24 ساعة",
+        "7d": "آخر 7 أيام",
+        "30d": "آخر 30 يومًا",
+        "qtd": "منذ بداية الربع"
+      }
+    },
+    "trend": {
+      "up": "ارتفاع بمقدار {{value}} مقارنة بالفترة السابقة",
+      "down": "انخفاض بمقدار {{value}} مقارنة بالفترة السابقة",
+      "flat": "لا تغيير مقارنة بالفترة السابقة"
+    },
+    "kpi": {
+      "sent": "الرسائل المرسلة · {{range}}",
+      "sentLegend": "{{delivered}} تم تسليمها · {{failed}} فشلت",
+      "sparkline": "الرسائل المرسلة في الساعة خلال آخر 20 ساعة، من الأقدم إلى الأحدث",
+      "readRate": "معدل القراءة",
+      "readMini": {
+        "sent": "مرسلة",
+        "delivered": "تم تسليمها",
+        "read": "مقروءة"
+      }
+    },
+    "contacts": {
+      "title": "جهات الاتصال النشطة",
+      "subscribed": "مشتركون",
+      "optedIn": "موافقون على التواصل",
+      "blocked": "محظورون"
+    },
+    "wallet": {
+      "title": "رصيد المحفظة",
+      "payPerMessage": "الدفع لكل رسالة"
+    },
+    "autopilot": {
+      "kicker": "أنجز المزيد",
+      "title": "اجعل الردود تعمل تلقائيًا",
+      "body": "أنشئ تدفقًا أو أطلق حملة للوصول إلى مزيد من العملاء تلقائيًا."
+    },
+    "pipeline": {
+      "kicker": "مسار المبيعات",
+      "open": "المسار المفتوح",
+      "deals": "الصفقات المفتوحة",
+      "won": "المكسوبة هذا الشهر",
+      "winRate": "معدل الفوز"
+    },
+    "throughput": {
+      "title": "حجم الرسائل",
+      "subtitle": {
+        "24h": "الصادرة وتم تسليمها والفاشلة، بالساعة، آخر 24 ساعة",
+        "7d": "الصادرة وتم تسليمها والفاشلة، يوميًا، آخر 7 أيام",
+        "30d": "الصادرة وتم تسليمها والفاشلة، يوميًا، آخر 30 يومًا",
+        "qtd": "الصادرة وتم تسليمها والفاشلة، يوميًا، منذ بداية الربع"
+      },
+      "peak": "ساعة الذروة {{when}} · {{n}} رسالة",
+      "sent": "مرسلة",
+      "delivered": "تم تسليمها",
+      "failed": "فاشلة",
+      "avgHour": "المتوسط في الساعة",
+      "replies": "الردود",
+      "replyRate": "معدل الرد",
+      "summary": "{{sent}} مرسلة و{{delivered}} تم تسليمها و{{failed}} فاشلة في هذه الفترة.",
+      "subtitleCustom": "يوميًا · {{range}}"
+    },
+    "inbox": {
+      "title": "الوارد المباشر",
+      "unread": "{{n}} غير مقروءة",
+      "oldest": "الأقدم {{when}}",
+      "recent": "المحادثات الأخيرة",
+      "empty": "لا توجد محادثات بعد."
+    },
+    "campaigns": {
+      "title": "الحملات النشطة",
+      "summary": "{{running}} قيد التشغيل - {{scheduled}} مجدولة - {{paused}} متوقفة مؤقتًا",
+      "total": "{{n}} في المجموع",
+      "untitled": "حملة بلا عنوان",
+      "delivered": "تم تسليم {{done}} / {{total}}",
+      "emptyTitle": "لا توجد حملات نشطة",
+      "emptyBody": "أنشئ حملة لبدء الإرسال إلى مجموعة جهات اتصال.",
+      "status": {
+        "sending": "قيد الإرسال",
+        "scheduled": "مجدولة",
+        "paused": "متوقفة مؤقتًا",
+        "failed": "فاشلة",
+        "completed": "مكتملة"
+      }
+    },
+    "devices": {
+      "title": "الأجهزة المتصلة",
+      "summary": "استُخدم {{total}} من {{cap}} - {{online}} متصل",
+      "emptyTitle": "لا توجد أجهزة متصلة",
+      "emptyBody": "اربط رقم واتساب لبدء الإرسال.",
+      "unzoned": "بدون منطقة",
+      "per24h": "{{n}}/24 س",
+      "deliv": "تسليم",
+      "free_zero": "{{count}} خانة جهاز متاحة",
+      "free_one": "خانة جهاز واحدة متاحة",
+      "free_two": "خانتا جهاز متاحتان",
+      "free_few": "{{count}} خانات جهاز متاحة",
+      "free_many": "{{count}} خانة جهاز متاحة",
+      "free_other": "{{count}} خانة جهاز متاحة",
+      "state": {
+        "online": "متصل",
+        "connecting": "جارٍ الاتصال",
+        "offline": "غير متصل"
+      }
+    },
+    "templates": {
+      "title": "أفضل القوالب أداءً",
+      "subtitle": "حسب حجم الإرسال - النطاق المحدد",
+      "count_zero": "{{count}} قالب",
+      "count_one": "قالب واحد",
+      "count_two": "قالبان",
+      "count_few": "{{count}} قوالب",
+      "count_many": "{{count}} قالبًا",
+      "count_other": "{{count}} قالب",
+      "empty": "لا توجد قوالب بعد.",
+      "sent": "مرسلة",
+      "delivered": "تم تسليمها",
+      "read": "مقروءة",
+      "readRate": "معدل القراءة",
+      "status": {
+        "approved": "معتمد",
+        "inReview": "قيد المراجعة",
+        "rejected": "مرفوض"
+      }
+    },
+    "activity": {
+      "title": "سجل النشاط",
+      "subtitle": "أحداث مساحة العمل",
+      "empty": "لا يوجد نشاط حديث مسجّل في مساحة العمل هذه.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_zero": "{{count}} حساب",
+      "accounts_one": "حساب واحد",
+      "accounts_two": "حسابان",
+      "accounts_few": "{{count}} حسابات",
+      "accounts_many": "{{count}} حسابًا",
+      "accounts_other": "{{count}} حساب",
+      "connected": "متصل",
+      "tile": {
+        "needReply": "بحاجة إلى رد",
+        "openChats": "المحادثات المفتوحة",
+        "dmsIn": "رسائل خاصة واردة · 7 أيام",
+        "dmsOut": "رسائل خاصة مرسلة · 7 أيام",
+        "followers": "المتابعون"
+      }
+    },
+    "flows": {
+      "title": "تدفقات الأتمتة",
+      "summary": "{{active}} نشطة · {{subscribers}} مشترك",
+      "empty": "لا توجد تدفقات بعد.",
+      "meta": "المشغّل {{trigger}} · {{steps}} خطوات · {{subs}} مشترك",
+      "statusActive": "نشط",
+      "statusPaused": "متوقف مؤقتًا",
+      "stat": {
+        "flows": "التدفقات",
+        "active": "نشطة",
+        "subscribers": "المشتركون"
+      }
+    },
+    "integrations": {
+      "title": "التكاملات",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} حدث / 7 أيام",
+      "connected": {
+        "woocommerce": "متصل",
+        "shopify": "متصل",
+        "google_sheets": "تم إصدار مفتاح API",
+        "meta_catalog": "تم ربط الكتالوج"
+      },
+      "notConnected": "غير متصل",
+      "connectedLabel": "متصل"
+    },
+    "funnel": {
+      "title": "مسار التفاعل",
+      "stage": {
+        "messaged": "جهات الاتصال التي راسلناها",
+        "delivered": "تم التسليم",
+        "replied": "ردّت",
+        "goalCompleted": "اكتمل الهدف"
+      },
+      "stageLabel": "{{stage}}: {{n}} جهة اتصال، {{pct}}% من جهات الاتصال التي راسلناها",
+      "activity": {
+        "title": "نشاط المحادثات",
+        "inbound_zero": "{{count}} رسالة واردة",
+        "inbound_one": "رسالة واردة واحدة",
+        "inbound_two": "رسالتان واردتان",
+        "inbound_few": "{{count}} رسائل واردة",
+        "inbound_many": "{{count}} رسالة واردة",
+        "inbound_other": "{{count}} رسالة واردة",
+        "responding_zero": "{{count}} جهة اتصال متجاوبة",
+        "responding_one": "جهة اتصال واحدة متجاوبة",
+        "responding_two": "جهتا اتصال متجاوبتان",
+        "responding_few": "{{count}} جهات اتصال متجاوبة",
+        "responding_many": "{{count}} جهة اتصال متجاوبة",
+        "responding_other": "{{count}} جهة اتصال متجاوبة",
+        "perContact": "{{value}} ردود لكل جهة اتصال متجاوبة"
+      },
+      "comparison": {
+        "title": "مقارنة بالفترة السابقة",
+        "replyRate": "معدل الرد"
+      }
+    },
+    "ago": {
+      "minute_zero": "قبل {{count}} دقيقة",
+      "minute_one": "قبل دقيقة",
+      "minute_two": "قبل دقيقتين",
+      "minute_few": "قبل {{count}} دقائق",
+      "minute_many": "قبل {{count}} دقيقة",
+      "minute_other": "قبل {{count}} دقيقة",
+      "hour_zero": "قبل {{count}} ساعة",
+      "hour_one": "قبل ساعة",
+      "hour_two": "قبل ساعتين",
+      "hour_few": "قبل {{count}} ساعات",
+      "hour_many": "قبل {{count}} ساعة",
+      "hour_other": "قبل {{count}} ساعة",
+      "day_zero": "قبل {{count}} يوم",
+      "day_one": "قبل يوم",
+      "day_two": "قبل يومين",
+      "day_few": "قبل {{count}} أيام",
+      "day_many": "قبل {{count}} يومًا",
+      "day_other": "قبل {{count}} يوم"
+    },
+    "error": {
+      "forbidden": "دورك ({{role}}) لا يملك صلاحية الوصول إلى لوحة التحكم.",
+      "generic": "تعذّر تحميل الأرقام. حاول مرة أخرى بعد قليل.",
+      "locked": "باقتك لا تتضمن التحليلات."
+    },
+    "greetingNoName": {
+      "morning": "صباح الخير.",
+      "afternoon": "مساء الخير.",
+      "evening": "مساء الخير."
+    },
+    "views": {
+      "label": "عرض لوحة التحكم",
+      "summary": "الملخص",
+      "agent": "الوكيل",
+      "bot": "البوت"
+    },
+    "agents": {
+      "title": "أداء الوكلاء",
+      "conversations": "المحادثات",
+      "resolved": "تم حلها",
+      "firstReply": "أول رد",
+      "resolution": "الحل",
+      "csat": "التقييم",
+      "minutes": "{{value}} د",
+      "hours": "{{value}} س",
+      "days": "{{value}} ي",
+      "empty": "لم تُسنَد أي محادثة إلى أحد في هذه الفترة.",
+      "noAccess": "دورك ({{role}}) لا يملك صلاحية الوصول إلى تحليلات الوكلاء.",
+      "everyone": "جميع الوكلاء",
+      "pickerLabel": "الوكيل",
+      "pickerPlaceholder": "اختر وكيلًا",
+      "statusTitle": "حالة المحادثات",
+      "avgResolution": "متوسط وقت الحل",
+      "avgDuration": "متوسط مدة المحادثة",
+      "byAgentTitle": "المحادثات حسب الوكيل",
+      "byAgentPicker": "الوكيل لقائمة الحالات",
+      "status": {
+        "open": "مفتوحة",
+        "pending": "معلّقة",
+        "closed": "مغلقة",
+        "assigned": "مسندة",
+        "unassigned": "غير مسندة",
+        "unattended": "بلا متابعة"
+      }
+    },
+    "bots": {
+      "activeFlows": "التدفقات النشطة",
+      "ofTotal": "من أصل {{total}} تدفق",
+      "subscribers": "المشتركون",
+      "subscribersNote": "في جميع التدفقات"
+    }
+  },
+  "tabs": {
+    "dashboard": "لوحة التحكم",
+    "inbox": "صندوق الوارد",
+    "contacts": "جهات الاتصال",
+    "menu": "القائمة"
+  },
+  "menu": {
+    "title": "الحساب",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "مساحة العمل",
+    "inbox": "صندوق الوارد",
+    "contacts": "جهات الاتصال",
+    "noAccess": "ليست لديك صلاحية الوصول إلى هذا. اطلب من مسؤول مساحة العمل تفعيله.",
+    "version": "الإصدار {{version}}",
+    "signOutTitle": "تسجيل الخروج",
+    "signOutConfirm": "هل تريد بالتأكيد تسجيل الخروج؟",
+    "signOutNo": "لا",
+    "signOutYes": "نعم، تسجيل الخروج",
+    "tasks": "المهام",
+    "dashboard": "لوحة التحكم",
+    "allContacts": "كل جهات الاتصال",
+    "newContact": "جهة اتصال جديدة",
+    "sectionAccount": "الحساب",
+    "manageProfile": "إدارة الملف الشخصي",
+    "preferences": "التفضيلات",
+    "devicePermissions": "أذونات الجهاز",
+    "devicePermissionsHint": "افتح إعدادات هذا التطبيق على هاتفك",
+    "about": "حول",
+    "dataSecurity": "البيانات والأمان",
+    "checkUpdates": "التحقق من وجود تحديثات",
+    "updates": {
+      "off": "هذا الإصدار من التطبيق لا يتلقى التحديثات تلقائيًا. ثبّت أحدث إصدار للحصول على التغييرات.",
+      "latest": "لديك أحدث إصدار.",
+      "ready": "التحديث جاهز. اضغط مرة أخرى لإعادة التشغيل واستخدامه.",
+      "failed": "تعذّر التحقق من التحديثات. حاول مرة أخرى بعد قليل."
+    },
+    "profile": {
+      "title": "إدارة الملف الشخصي",
+      "fullName": "الاسم الكامل",
+      "displayName": "اسم العرض",
+      "displayNameHint": "يظهر لفريقك بدلًا من اسمك الكامل. اتركه فارغًا لاستخدام اسمك الكامل.",
+      "phone": "الهاتف",
+      "phoneHint": "مع رمز الدولة، مثل +919876543210.",
+      "email": "البريد الإلكتروني",
+      "pendingEmail": "تغيير البريد إلى {{email}} بانتظار تأكيدك.",
+      "timezone": "المنطقة الزمنية لمساحة العمل",
+      "save": "حفظ التغييرات",
+      "cancel": "إلغاء",
+      "nameRequired": "أدخل اسمك.",
+      "nameTooLong": "استخدم 120 حرفًا كحد أقصى.",
+      "phoneInvalid": "أدخل رقم الهاتف مع رمز الدولة، مثل +919876543210."
+    },
+    "appearance": {
+      "title": "المظهر",
+      "light": "الوضع الفاتح",
+      "dark": "الوضع الداكن",
+      "device": "استخدام إعدادات الجهاز",
+      "hint": "تم الحفظ في حسابك.",
+      "failed": "تعذّر حفظ اختيارك. حاول مرة أخرى."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "عرض صندوق الوارد",
+      "all": "الكل",
+      "mine": "الخاصة بي",
+      "unassigned": "غير مسندة",
+      "unread": "غير مقروءة"
+    },
+    "search": {
+      "open": "البحث في المحادثات",
+      "close": "إغلاق البحث",
+      "label": "بحث",
+      "placeholder": "الاسم أو الرقم أو الرسالة"
+    },
+    "filter": {
+      "open": "عوامل التصفية",
+      "sheet": "حالة المحادثة",
+      "close": "إغلاق",
+      "applied": "عوامل التصفية المطبقة",
+      "clearAll": "مسح الكل",
+      "remove": "إزالة عامل التصفية: {{name}}",
+      "statusChip": "الحالة: {{name}}",
+      "searchChip": "البحث: {{q}}",
+      "title": "عوامل التصفية",
+      "view": "العرض",
+      "viewActive": "المحادثات",
+      "viewArchived": "المؤرشفة",
+      "channel": "القناة",
+      "allChannels": "كل القنوات",
+      "labels": "التسميات",
+      "searchLabels": "البحث في التسميات",
+      "channelChip": "القناة: {{name}}",
+      "labelsChip": "التسميات: {{names}}",
+      "archivedChip": "مؤرشفة"
+    },
+    "statusFilter": {
+      "default": "مفتوحة ومعلّقة",
+      "open": "مفتوحة",
+      "pending": "معلّقة",
+      "snoozed": "مؤجلة",
+      "resolved": "تم حلها",
+      "closed": "مغلقة",
+      "all": "كل الحالات"
+    },
+    "status": {
+      "open": "مفتوحة",
+      "pending": "معلّقة",
+      "snoozed": "مؤجلة",
+      "resolved": "تم حلها",
+      "closed": "مغلقة",
+      "spam": "مزعجة"
+    },
+    "list": {
+      "label": "المحادثات",
+      "emptyTitle": "لا توجد محادثات",
+      "emptyHint": "ستظهر هنا رسائل عملائك.",
+      "emptyFilteredHint": "لا توجد نتائج مطابقة لعوامل التصفية. جرّب مسحها.",
+      "noMore": "لا مزيد من المحادثات",
+      "loadingMore": "جارٍ تحميل المزيد من المحادثات",
+      "noAccessTitle": "لا يمكنك الوصول إلى صندوق الوارد",
+      "noAccessBody": "دورك لا يسمح بقراءة المحادثات. اطلب من مسؤول مساحة العمل تغيير ذلك."
+    },
+    "row": {
+      "noMessages": "لا توجد رسائل بعد",
+      "unread_zero": "{{count}} رسالة غير مقروءة",
+      "unread_one": "رسالة غير مقروءة واحدة",
+      "unread_two": "رسالتان غير مقروءتين",
+      "unread_few": "{{count}} رسائل غير مقروءة",
+      "unread_many": "{{count}} رسالة غير مقروءة",
+      "unread_other": "{{count}} رسالة غير مقروءة",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "مسندة إلى {{name}}",
+      "media": "وسائط"
+    },
+    "time": {
+      "am": "ص",
+      "pm": "م",
+      "yesterday": "أمس"
+    },
+    "thread": {
+      "messages": "الرسائل",
+      "loadingOlder": "جارٍ تحميل الرسائل السابقة",
+      "emptyTitle": "لا توجد رسائل بعد",
+      "emptyHint": "ستظهر هنا رسائل هذه المحادثة.",
+      "noAccessTitle": "لا يمكنك الوصول إلى هذه المحادثة",
+      "noAccessBody": "دورك لا يسمح بقراءة المحادثات.",
+      "resolve": "حل",
+      "reopen": "إعادة فتح",
+      "call": "اتصل بـ {{phone}}",
+      "pictureOpen": "فتح الصورة بملء الشاشة",
+      "pictureFull": "صورة",
+      "pictureClose": "إغلاق الصورة",
+      "windowClosed": "انتهت نافذة الرد البالغة 24 ساعة. أرسل قالبًا بدلًا من ذلك.",
+      "conflict": "غيّر شخص آخر هذه المحادثة. تم تحميل أحدث نسخة، يرجى المحاولة مرة أخرى.",
+      "statusInvalid": "لا يمكن نقل هذه المحادثة إلى تلك الحالة.",
+      "window": {
+        "left": "نافذة الرد: متبقي {{hours}} س {{minutes}} د",
+        "closed": "انتهت نافذة الرد"
+      },
+      "menu": {
+        "open": "المزيد من الإجراءات",
+        "close": "إغلاق القائمة",
+        "assignToMe": "إسناد إليّ",
+        "details": "عرض التفاصيل",
+        "status": "تغيير الحالة",
+        "agent": "إسناد إلى وكيل"
+      },
+      "bot": {
+        "notice": "هذه محادثة بوت.",
+        "assignSelf": "إسناد إلى نفسك"
+      },
+      "labels": {
+        "open": "تعيين التسميات",
+        "title": "تعيين التسميات",
+        "close": "إغلاق",
+        "empty": "لا توجد تسميات بعد.",
+        "emptyCreate": "لا توجد تسميات بعد. اكتب اسمًا أدناه لإنشاء واحدة.",
+        "newLabel": "تسمية جديدة",
+        "add": "إضافة",
+        "failed": "تعذّر تغيير التسميات. حاول مرة أخرى."
+      },
+      "assignment": {
+        "none": "غير مسندة",
+        "team": "الفريق: {{name}}",
+        "failed": "تعذّر تغيير المحادثة. حاول مرة أخرى.",
+        "you": "مسندة إليك",
+        "to": "مسندة إلى {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "مستلمة: {{text}}, {{time}}",
+      "labelOut": "أرسلتَها أنت: {{text}}, {{time}}, {{status}}",
+      "deleted": "تم حذف هذه الرسالة",
+      "retry": "إعادة محاولة الإرسال",
+      "mediaPending": "لا يزال الملف قيد التنزيل.",
+      "mediaFailed": "تعذّر تنزيل الملف."
+    },
+    "kind": {
+      "text": "رسالة",
+      "image": "صورة",
+      "video": "فيديو",
+      "audio": "صوت",
+      "voice": "رسالة صوتية",
+      "document": "مستند",
+      "sticker": "ملصق",
+      "location": "موقع",
+      "contact": "جهة اتصال",
+      "template": "قالب",
+      "reaction": "تفاعل",
+      "interactive": "رسالة تفاعلية",
+      "system": "رسالة نظام"
+    },
+    "delivery": {
+      "queued": "جارٍ الإرسال",
+      "sent": "مرسلة",
+      "delivered": "تم التسليم",
+      "read": "مقروءة",
+      "failed": "لم تُرسل",
+      "received": "مستلمة"
+    },
+    "composer": {
+      "label": "الرسالة",
+      "placeholder": "اكتب رسالة",
+      "send": "إرسال",
+      "tooLong": "يمكن أن تصل الرسائل إلى {{max}} حرفًا.",
+      "noteLabel": "ملاحظة خاصة",
+      "notePlaceholder": "اكتب ملاحظة لا يراها سوى فريقك",
+      "addNote": "إضافة ملاحظة",
+      "noteOn": "كتابة ملاحظة خاصة",
+      "noteOff": "العودة إلى الرد"
+    },
+    "template": {
+      "closedNotice": "لم يتواصل معك العميل خلال آخر 24 ساعة. يمكنك إرسال القوالب المعتمدة مسبقًا فقط.",
+      "send": "إرسال قالب",
+      "title": "إرسال قالب",
+      "close": "إغلاق",
+      "search": "البحث في القوالب",
+      "empty": "لا توجد قوالب معتمدة لهذا الرقم بعد.",
+      "emptySearch": "لا توجد قوالب مطابقة لبحثك.",
+      "more": "توجد قوالب أخرى. اكتب في مربع البحث للعثور عليها.",
+      "fillTitle": "أكمل التفاصيل",
+      "back": "العودة إلى القوالب",
+      "submit": "إرسال",
+      "reason": {
+        "paused": "أوقفه واتساب مؤقتًا بسبب الجودة. حاول لاحقًا.",
+        "media_header": "يحتوي على رأس صورة أو فيديو أو مستند، ولا يستطيع التطبيق إرساله بعد.",
+        "header_variable": "يحتوي على متغيّر في رأسه، ولا يستطيع التطبيق تعبئته بعد.",
+        "dynamic_button": "يحتوي على رابط زر بمتغيّر، ولا يستطيع التطبيق تعبئته بعد.",
+        "authentication": "تُرسل قوالب كلمات المرور لمرة واحدة من النظام.",
+        "named_variables": "يستخدم متغيّرات مسمّاة، ولا يستطيع التطبيق تعبئتها بعد."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "هذه القناة غير متصلة. أعد توصيلها على الويب ثم حاول مرة أخرى.",
+      "planLimit": "تم بلوغ حد الرسائل في باقتك.",
+      "forbidden": "ليست لديك صلاحية للقيام بذلك.",
+      "notFound": "هذه المحادثة لم تعد متاحة."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "دردشة الويب",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "المحاكي"
+    },
+    "sheet": {
+      "close": "إغلاق",
+      "save": "حفظ التغييرات",
+      "noMatch": "لا توجد نتائج."
+    },
+    "assign": {
+      "title": "تغيير الوكيل",
+      "search": "البحث عن وكلاء",
+      "agents": "الوكلاء",
+      "teams": "الفرق",
+      "unassigned": "غير مسندة",
+      "noTeam": "بدون فريق",
+      "you": "{{name}} (أنت)",
+      "availability": {
+        "online": "متصل",
+        "away": "بعيد",
+        "busy": "مشغول",
+        "offline": "غير متصل"
+      },
+      "open_zero": "{{count}} مفتوحة",
+      "open_one": "{{count}} مفتوحة",
+      "open_two": "{{count}} مفتوحتان",
+      "open_few": "{{count}} مفتوحة",
+      "open_many": "{{count}} مفتوحة",
+      "open_other": "{{count}} مفتوحة",
+      "members_zero": "{{count}} عضو",
+      "members_one": "عضو واحد",
+      "members_two": "عضوان",
+      "members_few": "{{count}} أعضاء",
+      "members_many": "{{count}} عضوًا",
+      "members_other": "{{count}} عضو",
+      "failed": "تعذّر تغيير المسؤول عن هذه المحادثة. حاول مرة أخرى."
+    },
+    "priority": {
+      "title": "تحديد الأولوية",
+      "low": "منخفضة",
+      "normal": "عادية",
+      "high": "عالية",
+      "urgent": "عاجلة"
+    },
+    "snooze": {
+      "title": "تأجيل حتى",
+      "hour": "بعد ساعة",
+      "threeHours": "بعد 3 ساعات",
+      "tomorrow": "غدًا، 9:00 ص",
+      "nextWeek": "الاثنين القادم، 9:00 ص"
+    },
+    "statusSheet": {
+      "title": "تغيير الحالة"
+    },
+    "details": {
+      "title": "تفاصيل المحادثة",
+      "contact": "جهة الاتصال",
+      "openContact": "فتح جهة الاتصال",
+      "call": "اتصال",
+      "noContact": "لا يوجد سجل جهة اتصال لهذه المحادثة بعد.",
+      "email": "البريد الإلكتروني",
+      "stage": "المرحلة",
+      "contactStatus": "الحالة",
+      "owner": "المالك",
+      "source": "المصدر",
+      "since": "جهة اتصال منذ",
+      "optedOut": "ألغى الاشتراك في الرسائل",
+      "leadScore": "تقييم العميل المحتمل",
+      "actions": "الإجراءات",
+      "status": "الحالة",
+      "priority": "الأولوية",
+      "labels": "التسميات",
+      "none": "لا شيء",
+      "agent": "الوكيل المسؤول",
+      "team": "الفريق",
+      "you": "أنت",
+      "bot": "البوت",
+      "unassigned": "غير مسندة",
+      "info": "المحادثة",
+      "channel": "القناة",
+      "window": "نافذة الرد",
+      "windowOpen": "مفتوحة حتى {{time}}",
+      "windowClosed": "مغلقة",
+      "windowNone": "بدون حد زمني",
+      "snoozedUntil": "مؤجلة حتى {{time}}",
+      "notes": {
+        "title": "الملاحظات الداخلية",
+        "empty": "لا توجد ملاحظات بعد. لا يرى الملاحظات سوى فريقك.",
+        "label": "اكتب ملاحظة",
+        "add": "إضافة ملاحظة",
+        "delete": "حذف",
+        "deleteFor": "حذف ملاحظة {{name}}",
+        "failed": "تعذّر حفظ الملاحظة. حاول مرة أخرى.",
+        "deleteFailed": "تعذّر حذف الملاحظة. حاول مرة أخرى.",
+        "unknownAuthor": "شخص ما",
+        "tooLong": "يمكن أن تصل الملاحظات إلى {{max}} حرفًا."
+      },
+      "timeline": {
+        "title": "الجدول الزمني",
+        "empty": "لم يحدث شيء بعد.",
+        "system": "النظام"
+      },
+      "past": {
+        "title": "المحادثات السابقة",
+        "empty": "لا توجد محادثات أخرى مع جهة الاتصال هذه."
+      },
+      "snooze": "تأجيل",
+      "wake": "إيقاظ الآن"
+    },
+    "event": {
+      "created": "بدأت المحادثة",
+      "assigned": "تم الإسناد",
+      "reassigned": "أُعيد الإسناد",
+      "unassigned": "أُلغي الإسناد",
+      "ai_handoff": "سلّمها وكيل الذكاء الاصطناعي",
+      "resolved": "تم الحل",
+      "closed": "أُغلقت",
+      "reopened": "أُعيد فتحها",
+      "status_changed": "تغيّرت الحالة",
+      "note_added": "أُضيفت ملاحظة",
+      "snoozed": "تم التأجيل",
+      "auto_unsnoozed": "استيقظت في موعدها",
+      "priority_changed": "تغيّرت الأولوية",
+      "tag_added": "أُضيفت تسمية",
+      "tag_removed": "أُزيلت تسمية",
+      "first_response": "أُرسل أول رد",
+      "sla_breach": "فات موعد الرد"
+    },
+    "replies": {
+      "open": "الردود المحفوظة",
+      "title": "الردود المحفوظة",
+      "search": "البحث في الردود المحفوظة",
+      "empty": "لا توجد ردود محفوظة بعد.",
+      "noMatch": "لا توجد ردود محفوظة مطابقة لبحثك.",
+      "failed": "تعذّر استخدام هذا الرد. حاول مرة أخرى.",
+      "unfilled": "راجع الرسالة: تعذّرت تعبئة {{list}}."
+    },
+    "note": {
+      "title": "ملاحظة خاصة",
+      "label": "ملاحظة خاصة من {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "اضغط مطولًا لتحديد المحادثات",
+      "selected_zero": "{{count}} محددة",
+      "selected_one": "محادثة واحدة محددة",
+      "selected_two": "محادثتان محددتان",
+      "selected_few": "{{count}} محادثات محددة",
+      "selected_many": "{{count}} محادثة محددة",
+      "selected_other": "{{count}} محادثة محددة",
+      "close": "إلغاء التحديد",
+      "selectAll": "تحديد الكل",
+      "read": "وضع علامة مقروءة",
+      "status": "الحالة",
+      "assign": "إسناد",
+      "label": "التسميات",
+      "priority": "الأولوية",
+      "snooze": "تأجيل",
+      "statusTitle_zero": "تغيير حالة {{count}} محادثة",
+      "statusTitle_one": "تغيير حالة محادثة واحدة",
+      "statusTitle_two": "تغيير حالة محادثتين",
+      "statusTitle_few": "تغيير حالة {{count}} محادثات",
+      "statusTitle_many": "تغيير حالة {{count}} محادثة",
+      "statusTitle_other": "تغيير حالة {{count}} محادثة",
+      "labelTitle_zero": "تسميات {{count}} محادثة",
+      "labelTitle_one": "تسميات محادثة واحدة",
+      "labelTitle_two": "تسميات محادثتين",
+      "labelTitle_few": "تسميات {{count}} محادثات",
+      "labelTitle_many": "تسميات {{count}} محادثة",
+      "labelTitle_other": "تسميات {{count}} محادثة",
+      "labelMode": "الإجراء",
+      "labelAdd": "إضافة التسمية",
+      "labelRemove": "إزالة التسمية",
+      "labelSearch": "البحث في التسميات",
+      "priorityTitle_zero": "أولوية {{count}} محادثة",
+      "priorityTitle_one": "أولوية محادثة واحدة",
+      "priorityTitle_two": "أولوية محادثتين",
+      "priorityTitle_few": "أولوية {{count}} محادثات",
+      "priorityTitle_many": "أولوية {{count}} محادثة",
+      "priorityTitle_other": "أولوية {{count}} محادثة",
+      "snoozeTitle_zero": "تأجيل {{count}} محادثة حتى",
+      "snoozeTitle_one": "تأجيل محادثة واحدة حتى",
+      "snoozeTitle_two": "تأجيل محادثتين حتى",
+      "snoozeTitle_few": "تأجيل {{count}} محادثات حتى",
+      "snoozeTitle_many": "تأجيل {{count}} محادثة حتى",
+      "snoozeTitle_other": "تأجيل {{count}} محادثة حتى",
+      "result": "تم تحديث {{done}}، دون تغيير {{unchanged}}، فشل {{failed}}",
+      "resultDismiss": "إغلاق"
+    }
+  },
+  "contacts": {
+    "title": "جهات الاتصال",
+    "unknown": "غير معروف",
+    "add": "إضافة جهة اتصال",
+    "cancel": "إلغاء",
+    "yes": "نعم",
+    "no": "لا",
+    "denied": {
+      "title": "لا يمكنك عرض جهات الاتصال",
+      "hint": "اطلب من مسؤول مساحة العمل منح دورك صلاحية الوصول إلى جهات الاتصال.",
+      "createTitle": "لا يمكنك إضافة جهات اتصال",
+      "createHint": "اطلب من مسؤول مساحة العمل السماح لدورك بإضافة جهات اتصال."
+    },
+    "empty": {
+      "title": "لا توجد جهات اتصال",
+      "hint": "اضغط على زر + لإضافة أول جهة اتصال.",
+      "filteredTitle": "لا توجد جهات اتصال مطابقة",
+      "filteredHint": "جرّب بحثًا مختلفًا أو امسح عوامل التصفية."
+    },
+    "search": {
+      "open": "البحث في جهات الاتصال",
+      "close": "إغلاق البحث",
+      "label": "بحث",
+      "placeholder": "الاسم أو الهاتف أو البريد الإلكتروني"
+    },
+    "filter": {
+      "open": "تصفية جهات الاتصال",
+      "title": "عوامل التصفية",
+      "stage": "مرحلة دورة الحياة",
+      "owner": "مالك جهة الاتصال",
+      "ownerSearch": "البحث عن مالك جهة الاتصال",
+      "unassigned": "بدون مالك",
+      "created": "تاريخ الإنشاء",
+      "any": "أي",
+      "marketing": "الرسائل التسويقية",
+      "marketingOptions": {
+        "all": "الكل",
+        "subscribed": "مشتركون",
+        "unsubscribed": "ألغوا الاشتراك"
+      },
+      "source": "المصدر",
+      "sourceHint": "مصدر جهة الاتصال، مثل الاستيراد أو api.",
+      "clear": "مسح الكل",
+      "apply": "تطبيق"
+    },
+    "stage": {
+      "new": "جديدة",
+      "contacted": "تم التواصل",
+      "qualified": "مؤهلة",
+      "application_started": "بدأ التقديم",
+      "application_submitted": "تم تقديم الطلب",
+      "interview_scheduled": "تمت جدولة المقابلة",
+      "offer_received": "تم استلام العرض",
+      "admission_confirmed": "تم تأكيد القبول",
+      "enrolled": "مسجّل",
+      "lost": "مفقودة"
+    },
+    "subscription": {
+      "subscribed": "مشترك",
+      "unsubscribed": "ألغى الاشتراك",
+      "pending": "قيد الانتظار"
+    },
+    "form": {
+      "name": "الاسم",
+      "phone": "الهاتف",
+      "phoneHint": "مع رمز الدولة، مثل +919876543210.",
+      "email": "البريد الإلكتروني",
+      "needPhoneOrEmail": "أدخل رقم هاتف أو عنوان بريد إلكتروني.",
+      "phoneInvalid": "أدخل رقم الهاتف مع رمز الدولة، مثل +919876543210.",
+      "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا.",
+      "nameInvalid": "أدخل اسمًا لا يتجاوز 255 حرفًا."
+    },
+    "new": {
+      "title": "جهة اتصال جديدة",
+      "save": "حفظ جهة الاتصال",
+      "requiredTitle": "التفاصيل المطلوبة",
+      "choose": "اختر",
+      "search": "بحث",
+      "unsupported": "{{label}} مطلوب، لكن لا يمكن تعبئته هنا بعد. أضف جهة الاتصال هذه على الويب.",
+      "requiredMissing": "تحتاج مساحة عملك إلى مزيد من التفاصيل قبل حفظ جهة الاتصال، ولا يستطيع هذا التطبيق عرضها. اطلب من المسؤول صلاحية الوصول إلى خصائص جهة الاتصال، أو أضف جهة الاتصال على الويب."
+    },
+    "edit": {
+      "title": "تعديل جهة الاتصال",
+      "open": "تعديل جهة الاتصال",
+      "save": "حفظ التغييرات",
+      "conflict": "غيّر شخص آخر جهة الاتصال هذه. راجعها واحفظ مرة أخرى."
+    },
+    "detail": {
+      "title": "جهة الاتصال",
+      "notFound": "جهة الاتصال هذه لم تعد موجودة.",
+      "phone": "الهاتف",
+      "email": "البريد الإلكتروني",
+      "call": "اتصل بـ {{phone}}",
+      "mail": "راسل {{email}}",
+      "stage": "مرحلة دورة الحياة",
+      "status": "الحالة",
+      "score": "التقييم",
+      "source": "المصدر",
+      "whatsapp": "اشتراك واتساب",
+      "marketing": "الرسائل التسويقية",
+      "optedOut": "ألغى الاشتراك",
+      "optedIn": "يمكنه الاستلام",
+      "lastActivity": "آخر نشاط",
+      "noActivity": "لا يوجد نشاط بعد",
+      "created": "تاريخ الإضافة",
+      "customFields": "الحقول المخصصة",
+      "actions": {
+        "call": "اتصال",
+        "chat": "دردشة",
+        "email": "بريد",
+        "sms": "SMS",
+        "tasks": "المهام",
+        "notes": "الملاحظات"
+      },
+      "tabsLabel": "أقسام جهة الاتصال",
+      "tabs": {
+        "about": "تفاصيل جهة الاتصال",
+        "activity": "الأنشطة",
+        "files": "المزيد"
+      },
+      "activities": {
+        "label": "عروض الأنشطة",
+        "all": "كل الأنشطة",
+        "timeline": "الجدول الزمني للأنشطة"
+      },
+      "more": {
+        "account": "الحساب",
+        "deals": "الصفقات"
+      },
+      "summary": {
+        "title": "النشاط",
+        "notes": "الملاحظات",
+        "tasks": "المهام",
+        "meetings": "الاجتماعات",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "حذف جهة الاتصال",
+        "title": "حذف جهة الاتصال",
+        "message": "هل تريد حذف {{name}}؟ لا يمكن التراجع عن ذلك.",
+        "confirm": "حذف",
+        "cancel": "إلغاء"
+      }
+    },
+    "tags": {
+      "title": "الوسوم",
+      "none": "لا توجد وسوم بعد.",
+      "remove": "إزالة الوسم {{name}}",
+      "addLabel": "إضافة وسم",
+      "addPlaceholder": "اسم الوسم",
+      "add": "إضافة وسم"
+    },
+    "row": {
+      "more": "المزيد من الإجراءات لـ {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "تعديل",
+      "swipeDelete": "حذف"
+    },
+    "sheet": {
+      "close": "إغلاق"
+    },
+    "views": {
+      "open": "عرض جهات الاتصال: {{name}}",
+      "title": "العروض",
+      "close": "إغلاق العروض",
+      "searchLabel": "البحث في العروض",
+      "searchPlaceholder": "ابحث عن عروض",
+      "systemTitle": "العروض الافتراضية للنظام",
+      "customTitle": "العروض المخصصة",
+      "none": "لا توجد عروض متاحة",
+      "failed": "تعذّر تحميل العروض المحفوظة.",
+      "system": {
+        "all": "كل جهات الاتصال",
+        "mine": "جهات اتصالي",
+        "recent": "المنشأة حديثًا",
+        "optedOut": "ألغوا الاشتراك في التسويق"
+      }
+    }
+  },
+  "tasks": {
+    "title": "المهام",
+    "add": "إضافة مهمة",
+    "cancel": "إلغاء",
+    "unknownContact": "جهة اتصال بلا اسم",
+    "notFound": "هذه المهمة لم تعد موجودة.",
+    "priority": {
+      "low": "منخفضة",
+      "medium": "متوسطة",
+      "high": "عالية"
+    },
+    "status": {
+      "open": "مفتوحة",
+      "done": "مكتملة",
+      "overdue": "متأخرة"
+    },
+    "denied": {
+      "title": "لا يمكنك عرض المهام",
+      "hint": "اطلب من مسؤول مساحة العمل منحك صلاحية الوصول إلى المهام.",
+      "createTitle": "لا يمكنك إضافة مهام",
+      "createHint": "اطلب من مسؤول مساحة العمل السماح لك بإضافة مهام.",
+      "editTitle": "لا يمكنك تعديل المهام",
+      "editHint": "اطلب من مسؤول مساحة العمل السماح لك بتعديل المهام."
+    },
+    "planLocked": {
+      "title": "المهام غير متضمنة في هذه الباقة.",
+      "hint": "اطلب من مسؤول مساحة العمل ترقية الباقة."
+    },
+    "empty": {
+      "title": "لا توجد مهام.",
+      "hint": "ستظهر هنا المهام التي تضيفها.",
+      "filteredHint": "جرّب عامل تصفية أو بحثًا مختلفًا."
+    },
+    "search": {
+      "open": "البحث في المهام",
+      "close": "إغلاق البحث",
+      "label": "بحث",
+      "placeholder": "البحث بالعنوان"
+    },
+    "filter": {
+      "open": "تصفية المهام",
+      "title": "تصفية المهام",
+      "clear": "مسح الكل",
+      "apply": "تطبيق",
+      "group": {
+        "status": "الحالة",
+        "priority": "الأولوية",
+        "due": "الاستحقاق",
+        "owner": "المالك"
+      },
+      "status": {
+        "open": "مفتوحة",
+        "done": "مكتملة",
+        "all": "الكل"
+      },
+      "due": {
+        "overdue": "متأخرة",
+        "today": "اليوم",
+        "upcoming": "القادمة",
+        "none": "بدون تاريخ"
+      },
+      "owner": {
+        "mine": "مهامي",
+        "unassigned": "غير مسندة",
+        "all": "الكل"
+      }
+    },
+    "list": {
+      "conflict": "غيّر شخص آخر هذه المهمة. تم تحديث القائمة."
+    },
+    "row": {
+      "markDone": "وضع علامة مكتملة على {{title}}",
+      "reopen": "إعادة فتح {{title}}",
+      "more": "المزيد من الإجراءات لـ {{title}}",
+      "due": "الاستحقاق {{when}}",
+      "unassigned": "غير مسندة"
+    },
+    "actions": {
+      "edit": "تعديل المهمة",
+      "delete": "حذف المهمة"
+    },
+    "delete": {
+      "title": "حذف المهمة",
+      "message": "هل تريد بالتأكيد حذف هذه المهمة؟",
+      "confirm": "حذف"
+    },
+    "details": {
+      "title": "تفاصيل المهمة",
+      "edit": "تعديل المهمة",
+      "delete": "حذف المهمة",
+      "description": "الوصف",
+      "priority": "الأولوية",
+      "status": "الحالة",
+      "owner": "المالك",
+      "relatedTo": "مرتبطة بـ",
+      "noDescription": "لا يوجد وصف",
+      "noDue": "بدون تاريخ استحقاق",
+      "unassigned": "غير مسندة",
+      "noContact": "لا شيء",
+      "openContact": "فتح {{name}}",
+      "markComplete": "وضع علامة مكتملة",
+      "reopen": "إعادة فتح",
+      "conflict": "غيّر شخص آخر هذه المهمة. تمت إعادة تحميلها."
+    },
+    "form": {
+      "addTitle": "إضافة مهمة",
+      "editTitle": "تعديل المهمة",
+      "save": "حفظ المهمة",
+      "saving": "جارٍ الحفظ…",
+      "title": "عنوان المهمة",
+      "description": "وصف المهمة",
+      "priority": "الأولوية",
+      "date": "التاريخ (YYYY-MM-DD)",
+      "dateHint": "اترك التاريخ والوقت فارغين لمهمة بلا تاريخ استحقاق. مثال: 2026-10-31.",
+      "time": "الوقت (HH:mm)",
+      "timeHint": "نظام 24 ساعة، مثل 14:30.",
+      "owner": "المالك",
+      "ownerPick": "اختر مالكًا",
+      "ownerMe": "أنا",
+      "ownerNone": "غير مسندة",
+      "ownerLoading": "جارٍ تحميل فريقك…",
+      "ownerFailed": "تعذّر تحميل فريقك.",
+      "contact": "جهة الاتصال",
+      "contactLinkOptional": "ربط جهة اتصال (اختياري)",
+      "contactNone": "بدون جهة اتصال",
+      "contactPick": "اختر جهة اتصال",
+      "contactSearchLabel": "البحث في جهات الاتصال",
+      "contactSearchPlaceholder": "الاسم أو البريد الإلكتروني أو الهاتف",
+      "contactEmpty": "لم يتم العثور على جهات اتصال.",
+      "contactFailed": "تعذّر تحميل جهات الاتصال.",
+      "conflict": "غيّر شخص آخر هذه المهمة. راجعها واحفظ مرة أخرى.",
+      "errors": {
+        "titleRequired": "أدخل عنوان المهمة.",
+        "titleTooLong": "يجب ألا يتجاوز العنوان 255 حرفًا.",
+        "titleNeedsLetter": "يجب أن يحتوي العنوان على حرف واحد على الأقل.",
+        "notesTooLong": "يجب ألا يتجاوز الوصف 5000 حرف.",
+        "dateInvalid": "أدخل التاريخ بصيغة YYYY-MM-DD، مثل 2026-10-31.",
+        "timeInvalid": "أدخل الوقت بصيغة HH:mm بنظام 24 ساعة، مثل 14:30.",
+        "dateNeeded": "أدخل التاريخ أيضًا.",
+        "timeNeeded": "أدخل الوقت أيضًا.",
+        "dueInvalid": "لا يمكن استخدام تاريخ ووقت الاستحقاق هذين.",
+        "assigneeInvalid": "لا يمكن إسناد مهام إلى هذا الشخص. اختر مالكًا آخر.",
+        "contactInvalid": "لا يمكن ربط جهة الاتصال هذه."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "الملاحظات",
+    "cancel": "إلغاء",
+    "loadMore": "تحميل المزيد",
+    "deleteConfirm": "حذف",
+    "contactMissing": "جهة الاتصال هذه لم تعد موجودة.",
+    "add": "إضافة ملاحظة",
+    "edited": "معدّلة",
+    "denied": {
+      "title": "لا يمكنك عرض الملاحظات",
+      "hint": "اطلب من مسؤول مساحة العمل منح دورك صلاحية الوصول إلى جهات الاتصال.",
+      "updateTitle": "لا يمكنك تغيير الملاحظات",
+      "updateHint": "اطلب من مسؤول مساحة العمل السماح لدورك بتعديل جهات الاتصال."
+    },
+    "empty": {
+      "title": "لا توجد ملاحظات.",
+      "hint": "اضغط على زر + لإضافة أول ملاحظة."
+    },
+    "menu": {
+      "open": "إجراءات الملاحظة بتاريخ {{date}}",
+      "edit": "تعديل الملاحظة",
+      "delete": "حذف الملاحظة"
+    },
+    "delete": {
+      "title": "حذف الملاحظة",
+      "message": "هل تريد بالتأكيد حذف هذه الملاحظة؟"
+    },
+    "form": {
+      "addTitle": "إضافة ملاحظة",
+      "editTitle": "تحديث الملاحظة",
+      "label": "الملاحظة",
+      "placeholder": "اكتب ملاحظتك هنا...",
+      "required": "اكتب ملاحظة قبل الحفظ.",
+      "invalid": "أدخل ملاحظة لا تتجاوز 400 حرف.",
+      "counterLabel": "تم استخدام {{used}} من {{max}} حرفًا",
+      "save": "حفظ الملاحظة",
+      "saving": "جارٍ حفظ الملاحظة",
+      "conflict": "غيّر شخص آخر هذه الملاحظة. راجعها واحفظ مرة أخرى.",
+      "missing": "هذه الملاحظة لم تعد موجودة."
+    },
+    "activity": {
+      "notes": "الملاحظات",
+      "tasks": "المهام",
+      "timeline": "الجدول الزمني",
+      "empty": "لا يوجد نشاط بعد.",
+      "add": "إضافة نشاط",
+      "types": {
+        "note": "ملاحظة",
+        "call": "مكالمة",
+        "email": "بريد إلكتروني",
+        "meeting": "اجتماع",
+        "task": "مهمة"
+      },
+      "source": {
+        "system": "النظام",
+        "bot": "البوت"
+      },
+      "form": {
+        "title": "إضافة نشاط",
+        "type": "النوع",
+        "typeHint": "مثل ملاحظة أو مكالمة أو بريد إلكتروني أو اجتماع.",
+        "name": "العنوان",
+        "details": "التفاصيل",
+        "save": "حفظ النشاط",
+        "typeInvalid": "أدخل نوعًا لا يتجاوز 100 حرف.",
+        "titleInvalid": "أدخل عنوانًا لا يتجاوز 255 حرفًا.",
+        "detailsInvalid": "يمكن أن تصل التفاصيل إلى 10,000 حرف."
+      }
+    },
+    "files": {
+      "empty": "لا توجد ملفات.",
+      "delete": "حذف الملف {{name}}",
+      "deleteTitle": "حذف الملف",
+      "deleteMessage": "هل تريد بالتأكيد حذف هذا الملف؟"
+    }
+  },
+  "contactMeetings": {
+    "title": "الاجتماعات",
+    "loadMore": "تحميل المزيد",
+    "contactMissing": "جهة الاتصال هذه لم تعد موجودة.",
+    "noDate": "لم يُحدد تاريخ",
+    "denied": {
+      "title": "لا يمكنك عرض الاجتماعات",
+      "hint": "اطلب من مسؤول مساحة العمل منح دورك صلاحية الوصول إلى جهات الاتصال."
+    },
+    "empty": {
+      "title": "لا توجد اجتماعات مسجّلة."
+    }
+  },
+  "contactDeals": {
+    "title": "الصفقات",
+    "contactMissing": "جهة الاتصال هذه لم تعد موجودة.",
+    "denied": {
+      "title": "لا يمكنك عرض الصفقات",
+      "hint": "اطلب من مسؤول مساحة العمل منح دورك صلاحية الوصول إلى الصفقات."
+    },
+    "empty": {
+      "title": "لا توجد صفقات بعد."
+    }
+  },
+  "contactCompany": {
+    "title": "الحساب",
+    "missing": "هذا الحساب لم يعد موجودًا.",
+    "denied": {
+      "title": "لا يمكنك عرض الحسابات",
+      "hint": "اطلب من مسؤول مساحة العمل منح دورك صلاحية الوصول إلى الشركات."
+    },
+    "industry": "المجال",
+    "size": "الحجم",
+    "phone": "الهاتف",
+    "email": "البريد الإلكتروني",
+    "website": "الموقع الإلكتروني",
+    "address": "العنوان",
+    "owner": "المالك",
+    "notes": "الملاحظات"
+  },
+  "contactProps": {
+    "title": "معلومات جهة الاتصال",
+    "search": "البحث في الحقول",
+    "showEmpty": "إظهار الحقول الفارغة",
+    "footer": "يمكنك تخصيص الخصائص التي تراها هنا من تطبيق الويب.",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "clear": "مسح",
+    "yes": "نعم",
+    "no": "لا",
+    "rowHint": "يفتح المحرر",
+    "locked": "لا يمكنك تعديل {{label}}",
+    "webOnly": "لا يمكن تعديل {{label}} إلا من تطبيق الويب.",
+    "masked": "مخفي",
+    "fields": {
+      "email": "البريد الإلكتروني",
+      "phone": "الهاتف",
+      "owner": "مالك جهة الاتصال",
+      "name": "الاسم",
+      "source": "المصدر",
+      "whatsapp": "اشتراك واتساب",
+      "marketing": "إلغاء الاشتراك في التسويق",
+      "leadScore": "تقييم العميل المحتمل",
+      "created": "تاريخ الإنشاء",
+      "lastActivity": "آخر نشاط"
+    },
+    "subscription": {
+      "subscribed": "مشترك",
+      "unsubscribed": "ألغى الاشتراك",
+      "pending": "قيد الانتظار"
+    },
+    "editor": {
+      "title": "تعديل {{label}}",
+      "date": "التاريخ",
+      "dateHint": "السنة-الشهر-اليوم، مثل 2026-10-12.",
+      "time": "الوقت",
+      "timeHint": "نظام 24 ساعة، مثل 14:30.",
+      "phoneHint": "مع رمز الدولة، مثل +919876543210.",
+      "noOptions": "لا توجد خيارات للاختيار منها."
+    },
+    "error": {
+      "required": "{{label}} مطلوب.",
+      "name": "أدخل اسمًا لا يتجاوز 255 حرفًا.",
+      "email": "أدخل عنوان بريد إلكتروني صالحًا.",
+      "phone": "أدخل رقم الهاتف مع رمز الدولة، مثل +919876543210.",
+      "needPhoneOrEmail": "تحتاج جهة الاتصال إلى رقم هاتف أو عنوان بريد إلكتروني.",
+      "text": "أدخل {{max}} حرفًا كحد أقصى.",
+      "number": "أدخل رقمًا.",
+      "whole": "أدخل رقمًا صحيحًا.",
+      "range": "أدخل رقمًا من 0 إلى {{max}}.",
+      "url": "أدخل رابطًا يبدأ بـ http:// أو https://",
+      "date": "أدخل تاريخًا صالحًا بصيغة YYYY-MM-DD.",
+      "time": "أدخل وقتًا صالحًا بصيغة HH:mm.",
+      "option": "اختر أحد الخيارات.",
+      "invalid": "هذه القيمة غير مقبولة. تحقق منها وحاول مرة أخرى.",
+      "notEditable": "لا يمكن تعديل هذه الخاصية.",
+      "requiredMissing": "خاصية مطلوبة بلا قيمة. املأها قبل الحفظ.",
+      "conflict": "غيّر شخص آخر جهة الاتصال هذه. راجعها واحفظ مرة أخرى.",
+      "lostReasonRequired": "اذكر سبب فقدان جهة الاتصال هذه.",
+      "statusMismatch": "هذه الحالة لا تنتمي إلى مرحلة دورة الحياة هذه."
+    },
+    "owner": {
+      "title": "إسناد إلى",
+      "unassigned": "غير مسندة",
+      "none": "لا يوجد من يمكن إسناد جهة الاتصال هذه إليه.",
+      "failed": "تعذّر تغيير المالك. حاول مرة أخرى."
+    },
+    "lifecycle": {
+      "stage": "مرحلة دورة الحياة",
+      "status": "الحالة",
+      "change": "تغيير مرحلة دورة الحياة",
+      "changeStatus": "تغيير الحالة",
+      "dropdownHint": "يفتح القائمة للاختيار منها",
+      "lostReason": "سبب الفقدان",
+      "otherReason": "أخرى",
+      "otherLabel": "صف السبب"
+    }
+  },
+  "summary": {
+    "contacts": "جهات الاتصال",
+    "contactsNote": "أُضيفت في هذه الفترة",
+    "tasks": "المهام",
+    "tasksNote": "مفتوحة الآن",
+    "messages": "الرسائل",
+    "sentNote": "مرسلة",
+    "receivedNote": "مستلمة",
+    "conversations": "المحادثات",
+    "conversationsNote": "مفتوحة ومعلّقة، الآن",
+    "status": {
+      "all": "نشطة",
+      "mine": "الخاصة بي",
+      "unassigned": "غير مسندة",
+      "assigned": "مسندة",
+      "unread": "غير مقروءة",
+      "archived": "مؤرشفة"
+    },
+    "allMessages": {
+      "title": "كل الرسائل",
+      "sent": "مرسلة",
+      "delivered": "تم التسليم",
+      "received": "مستلمة",
+      "read": "مقروءة",
+      "failed": "فاشلة"
+    },
+    "moreTitle": "المزيد من مساحة عملك"
+  },
+  "dashDate": {
+    "title": "البحث بالتقويم",
+    "close": "إغلاق التقويم",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين",
+    "presets": "نطاقات سريعة",
+    "pill": {
+      "label": "النطاق الزمني: من {{from}} إلى {{to}}",
+      "hint": "يفتح التقويم لتغيير التواريخ"
+    },
+    "selection": {
+      "label": "من {{from}} إلى {{to}}",
+      "pickFirst": "اختر اليوم الأول",
+      "pickLast": "اختر اليوم الأخير"
+    },
+    "preset": {
+      "last7": "آخر 7 أيام",
+      "last30": "آخر 30 يومًا",
+      "last90": "آخر 90 يومًا",
+      "yesterday": "أمس",
+      "today": "اليوم"
+    },
+    "calendar": {
+      "previousMonth": "الشهر السابق",
+      "nextMonth": "الشهر التالي",
+      "start": "بداية النطاق",
+      "end": "نهاية النطاق",
+      "inRange": "ضمن النطاق",
+      "today": "اليوم"
+    }
+  },
+  "permissions": {
+    "channelName": "الرسائل والتحديثات",
+    "settingsHint": "اضغط على الأذونات، ثم فعّل ما تحتاجه.",
+    "names": {
+      "notifications": "الإشعارات",
+      "calls": "المكالمات الهاتفية",
+      "camera": "الكاميرا",
+      "callPopup": "نافذة المكالمة المنبثقة (العرض فوق التطبيقات الأخرى)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "جهة الاتصال",
+      "close": "إغلاق",
+      "ongoingTitle": "مكالمة جارية",
+      "endedTitle": "انتهت المكالمة",
+      "endedText": "اضغط لتسجيل مكالمتك مع {{name}}.",
+      "channelOngoing": "المكالمات الجارية",
+      "channelEnded": "ملخصات المكالمات"
+    },
+    "summary": {
+      "title": "إضافة مكالمة",
+      "contact": "جهة الاتصال",
+      "type": "نوع المكالمة",
+      "outbound": "صادرة",
+      "status": "حالة المكالمة الصادرة",
+      "completed": "مكتملة",
+      "notAnswered": "دون رد",
+      "startTime": "وقت بدء المكالمة",
+      "duration": "مدة المكالمة",
+      "durationHint": "دقائق وثوانٍ، مثل 02:30",
+      "durationInvalid": "أدخل المدة بصيغة دقائق:ثوانٍ، مثل 02:30.",
+      "subject": "الموضوع",
+      "subjectDefault": "مكالمة صادرة إلى {{name}}",
+      "subjectInvalid": "أدخل موضوعًا لا يتجاوز 255 حرفًا.",
+      "notes": "الوصف",
+      "save": "حفظ المكالمة",
+      "skip": "تخطي",
+      "contactMissing": "لا توجد جهة اتصال لتسجيل هذه المكالمة عليها.",
+      "denied": "دورك لا يسمح بتغيير جهات الاتصال، لذا لا يمكن تسجيل هذه المكالمة.",
+      "purpose": "غرض المكالمة",
+      "purposeNone": "-لا شيء-",
+      "result": "نتيجة المكالمة",
+      "purposes": {
+        "prospecting": "البحث عن عملاء",
+        "administrative": "إداري",
+        "negotiation": "تفاوض",
+        "demo": "عرض توضيحي",
+        "project": "مشروع",
+        "desk": "مكتب"
+      }
+    }
+  }
+}

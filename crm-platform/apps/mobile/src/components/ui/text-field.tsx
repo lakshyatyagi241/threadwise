@@ -1,7 +1,7 @@
 import { useState, type ReactNode, type Ref } from 'react';
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 import { FONT_FAMILY } from '@/lib/theme/fonts';
-import { CONTROL_HEIGHT, radius, spacing } from '@/lib/theme/tokens';
+import { CONTROL_HEIGHT, MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { Text } from './text';
 
@@ -18,6 +18,8 @@ export interface TextFieldProps extends Omit<TextInputProps, 'style'> {
   /** For one-time codes: centred, large, widely spaced digits. */
   code?: boolean;
   inputRef?: Ref<TextFieldHandle>;
+  /** Only the input: no visible label, box, hint or error text, for a form that lays out its own rows (the label is still the name). */
+  bare?: boolean;
 }
 
 /**
@@ -31,12 +33,27 @@ export function TextField({
   end,
   code,
   inputRef,
+  bare,
   onFocus,
   onBlur,
   ...rest
 }: TextFieldProps) {
   const { colors } = useTheme();
   const [focused, setFocused] = useState(false);
+  if (bare) {
+    return (
+      <TextInput
+        {...rest}
+        ref={inputRef}
+        accessibilityLabel={label}
+        accessibilityHint={error ?? hint}
+        placeholderTextColor={colors.textMuted}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        style={[styles.bare, { color: colors.text }]}
+      />
+    );
+  }
   const borderColor = error ? colors.danger : focused ? colors.primary : colors.borderStrong;
   return (
     <View style={styles.wrap}>
@@ -87,6 +104,12 @@ const styles = StyleSheet.create({
     minHeight: CONTROL_HEIGHT,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
+    fontSize: 16,
+    fontFamily: FONT_FAMILY.regular,
+  },
+  bare: {
+    minHeight: MIN_TOUCH_TARGET,
+    paddingVertical: spacing.sm,
     fontSize: 16,
     fontFamily: FONT_FAMILY.regular,
   },

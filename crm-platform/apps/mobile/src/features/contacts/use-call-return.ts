@@ -7,6 +7,12 @@ import { markAppLeft, takeReturnedCall } from '@/lib/device/pending-call';
 /** How long the "log this call" screen the call-monitor service opens by itself is given to appear before the app opens it. */
 const SERVICE_GRACE_MS = 1000;
 
+/**
+ * How many more times, one grace apart, the app asks the service whether a call has ended. The phone can bring the app back to the
+ * front a moment before the service hears the call go idle, so a single look right after the return can find nothing.
+ */
+const SERVICE_RETRIES = 5;
+
 /** The query of the address the service builds (`<scheme>:///call-summary?contactId=…&name=…&startedAt=…&durationSec=…`). */
 function summaryParams(url: string): Record<string, string> | null {
   const [location = '', query = ''] = url.split('#')[0]?.split('?') ?? [];
@@ -20,10 +26,12 @@ function summaryParams(url: string): Record<string, string> | null {
 }
 
 /** Opens the sheet for a call the service saw end and could not open the screen for (no "display over other apps"). */
-function openEndedCall(router: ReturnType<typeof useRouter>): void {
+function openEndedCall(router: ReturnType<typeof useRouter>): boolean {
   const url = takeEndedCall();
   const params = url ? summaryParams(url) : null;
-  if (params) router.push({ pathname: '/call-summary', params });
+  if (!params) return false;
+  router.push({ pathname: '/call-summary', params });
+  return true;
 }
 
 /**
@@ -36,15 +44,21 @@ export function useCallReturn(): void {
   const router = useRouter();
   useEffect(() => {
     let grace: ReturnType<typeof setTimeout> | undefined;
+    // Looks for an ended call now, and again a moment later while none is found (up to `SERVICE_RETRIES` more times).
+    const look = (retries: number) => {
+      if (openEndedCall(router) || retries <= 0) return;
+      grace = setTimeout(() => look(retries - 1), SERVICE_GRACE_MS);
+    };
     const subscription = AppState.addEventListener('change', (state) => {
       if (state !== 'active') {
+        clearTimeout(grace);
         markAppLeft();
         return;
       }
       const call = takeReturnedCall();
       if (!call?.party.contactId) {
         clearTimeout(grace);
-        grace = setTimeout(() => openEndedCall(router), SERVICE_GRACE_MS);
+        grace = setTimeout(() => look(SERVICE_RETRIES), SERVICE_GRACE_MS);
         return;
       }
       router.push({

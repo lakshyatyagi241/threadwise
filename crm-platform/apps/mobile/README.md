@@ -1,6 +1,6 @@
 # @crm/mobile
 
-The iOS and Android app: Expo SDK 57, React Native 0.86, Expo Router, TanStack Query, i18next (English, Hindi, Marathi).
+The iOS and Android app: Expo SDK 57, React Native 0.86, Expo Router, TanStack Query, i18next (the web's 21 languages plus Marathi).
 
 - **Start here:** [docs/mobile/README.md](../../docs/mobile/README.md) and [docs/mobile/handover.md](../../docs/mobile/handover.md).
 - **Run it:** [docs/runbooks/mobile-local-development.md](../../docs/runbooks/mobile-local-development.md).

@@ -1,0 +1,1430 @@
+{
+  "common": {
+    "loading": "Đang tải…",
+    "retry": "Thử lại",
+    "signOut": "Đăng xuất",
+    "clear": "Xóa",
+    "back": "Quay lại",
+    "filters": {
+      "clearAll": "Xóa tất cả",
+      "apply": "Áp dụng",
+      "noMatch": "Không có kết quả phù hợp với tìm kiếm của bạn."
+    }
+  },
+  "errors": {
+    "generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+    "timeout": "Máy chủ phản hồi quá lâu. Vui lòng thử lại.",
+    "outdatedApp": "Phiên bản ứng dụng này đã cũ. Vui lòng cập nhật.",
+    "tooManyRequests": "Bạn đã thử quá nhiều lần. Vui lòng chờ một lát rồi thử lại.",
+    "captchaUnsupported": "Cần thực hiện một bước kiểm tra bảo mật mà ứng dụng chưa hỗ trợ. Vui lòng dùng trang web."
+  },
+  "auth": {
+    "welcomeBack": "Chào mừng bạn quay lại",
+    "welcomeSubtitle": "Nhập thông tin của bạn để vào lại không gian làm việc.",
+    "tagline": "Mọi cuộc trò chuyện với khách hàng, trong một không gian làm việc gọn gàng",
+    "taglineCaption": "Gửi hàng loạt, tự động hóa và hộp thư chung cho các nhóm cần phản hồi nhanh.",
+    "email": "Email",
+    "emailPlaceholder": "ban@congty.com",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "Nhập mật khẩu của bạn",
+    "showPassword": "Hiện mật khẩu",
+    "hidePassword": "Ẩn mật khẩu",
+    "signInSubmit": "Đăng nhập",
+    "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+    "passwordRequired": "Nhập mật khẩu của bạn.",
+    "newHere": "Bạn mới dùng?",
+    "createAccount": "Tạo tài khoản",
+    "legalSignIn": "Khi đăng nhập, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy> của chúng tôi.",
+    "mfaTitle": "Xác minh hai bước",
+    "mfaHint": "Nhập mã gồm 6 chữ số từ ứng dụng xác thực của bạn.",
+    "mfaCode": "Mã xác minh",
+    "mfaSubmit": "Xác minh",
+    "workspaceTitle": "Chọn không gian làm việc",
+    "workspaceHint": "Tài khoản của bạn thuộc nhiều không gian làm việc.",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng.",
+    "accountLocked": "Tài khoản này tạm thời bị khóa. Vui lòng thử lại sau.",
+    "accountSuspended": "Tài khoản này đã bị tạm ngưng.",
+    "mfaInvalid": "Mã không đúng. Vui lòng thử lại.",
+    "mfaExpired": "Phiên đăng nhập đã hết hạn. Vui lòng bắt đầu lại."
+  },
+  "signUp": {
+    "tagline": "Thiết lập không gian làm việc của bạn",
+    "taglineCaption": "Tạo không gian làm việc, sau đó mời nhóm của bạn và kết nối kênh đầu tiên.",
+    "title": "Tạo tài khoản của bạn",
+    "subtitle": "Chỉ cần vài thông tin là không gian làm việc của bạn đã sẵn sàng.",
+    "fullName": "Họ và tên",
+    "fullNamePlaceholder": "Tên của bạn",
+    "email": "Email công việc",
+    "orgName": "Tên không gian làm việc",
+    "orgNamePlaceholder": "Công ty Acme",
+    "orgNameHint": "Nhóm của bạn đăng nhập bằng địa chỉ {{slug}}.",
+    "orgNameHintEmpty": "Đây là tên mà nhóm của bạn nhìn thấy.",
+    "customiseSlug": "Chọn địa chỉ không gian làm việc tùy chỉnh",
+    "orgSlug": "Địa chỉ không gian làm việc",
+    "orgSlugPlaceholder": "khong-gian-cua-ban",
+    "orgSlugHint": "Chữ cái, số, dấu gạch ngang hoặc gạch dưới. Nhóm của bạn nhập địa chỉ này khi đăng nhập.",
+    "phone": "Số di động",
+    "phoneHint": "Chúng tôi dùng số này để xác minh tài khoản và gửi thông báo quan trọng.",
+    "referral": "Mã giới thiệu (không bắt buộc)",
+    "referralPlaceholder": "Bạn có mã của bạn bè không?",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "passwordPlaceholder": "Tạo mật khẩu",
+    "confirmPasswordPlaceholder": "Nhập lại mật khẩu",
+    "passwordMinLength": "Độ dài tối thiểu: {{min}}.",
+    "passwordMixedCase": "Kết hợp chữ hoa và chữ thường.",
+    "passwordNumber": "Có ít nhất một chữ số.",
+    "passwordSymbol": "Có ít nhất một ký hiệu.",
+    "agree": "Tôi đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy>.",
+    "submit": "Tạo tài khoản",
+    "haveAccount": "Đã có tài khoản?",
+    "signIn": "Đăng nhập",
+    "closedBody": "Đăng ký hiện đã đóng. Hãy nhờ quản trị viên gửi lời mời.",
+    "closedBack": "Quay lại đăng nhập",
+    "validation": {
+      "fullName": "Nhập họ và tên của bạn.",
+      "orgName": "Đặt tên cho không gian làm việc (ít nhất 2 ký tự).",
+      "orgSlug": "Nhập địa chỉ không gian làm việc (chữ cái, số, dấu gạch ngang hoặc gạch dưới).",
+      "phoneRequired": "Nhập số di động của bạn.",
+      "phoneInvalid": "Nhập số điện thoại hợp lệ, kèm mã quốc gia nếu không phải số trong nước.",
+      "passwordMismatch": "Hai mật khẩu không khớp nhau.",
+      "passwordInvalid": "Nhập mật khẩu đáp ứng các yêu cầu được hiển thị.",
+      "acceptTerms": "Bạn phải chấp nhận điều khoản để tiếp tục.",
+      "referralCode": "Mã giới thiệu chỉ gồm chữ cái và số."
+    },
+    "errors": {
+      "emailTaken": "Email này đã được dùng trong không gian làm việc này.",
+      "slugTaken": "Địa chỉ không gian làm việc này đã có người dùng.",
+      "passwordPolicy": "Mật khẩu này không đáp ứng chính sách bảo mật:",
+      "policyCommon": "Mật khẩu này quá dễ đoán.",
+      "otpSendFailed": "Chúng tôi không thể gửi mã xác minh. Hãy kiểm tra số điện thoại và thử lại.",
+      "signupExpired": "Vui lòng bắt đầu đăng ký lại."
+    },
+    "otp": {
+      "title": "Kiểm tra WhatsApp của bạn",
+      "subtitle": "Nhập mã dùng một lần chúng tôi đã gửi để hoàn tất việc tạo không gian làm việc.",
+      "sentTo": "Chúng tôi đã gửi mã đến {{phone}}",
+      "code": "Mã xác minh",
+      "expiresIn": "Mã sẽ hết hạn sau {{time}}.",
+      "expired": "Mã này đã hết hạn. Hãy yêu cầu mã mới.",
+      "verify": "Xác minh và tiếp tục",
+      "resend": "Gửi lại mã",
+      "resendIn": "Gửi lại mã sau {{time}}",
+      "resent": "Mã mới đang được gửi đến WhatsApp của bạn.",
+      "wrongNumber": "Sai số? Quay lại",
+      "addressTakenHint": "Địa chỉ không gian làm việc đó đã có người dùng trong lúc bạn xác minh. Hãy chọn địa chỉ khác và chúng tôi sẽ gửi cho bạn mã mới.",
+      "codeInvalid": "Nhập mã gồm {{length}} chữ số.",
+      "invalid": "Mã không đúng. Vui lòng thử lại.",
+      "tooMany": "Bạn đã thử quá nhiều lần. Hãy yêu cầu mã mới.",
+      "cooldown": "Vui lòng chờ một lát trước khi yêu cầu mã khác."
+    }
+  },
+  "dashboard": {
+    "kicker": "Bảng điều khiển vận hành",
+    "synced": "Trực tiếp · đồng bộ {{s}} giây trước",
+    "greeting": {
+      "morning": "Chào buổi sáng, {{name}}.",
+      "afternoon": "Chào buổi chiều, {{name}}.",
+      "evening": "Chào buổi tối, {{name}}."
+    },
+    "calm": "Không gian làm việc đang yên ắng.",
+    "running_other": "{{count}} chiến dịch đang chạy.",
+    "subline_other": "{{date}} - {{range}} cho thấy {{sent}} tin gửi đi, tỷ lệ gửi thành công {{rate}}% trên {{count}} thiết bị đã kết nối.",
+    "sublineOfficial": "{{date}} - {{range}} cho thấy {{sent}} tin gửi đi, tỷ lệ gửi thành công {{rate}}%.",
+    "setupBanner": "Bạn chưa thiết lập xong không gian làm việc. Hãy hoàn tất trên web để mở khóa phần còn lại của tài khoản.",
+    "range": {
+      "label": "Khoảng thời gian",
+      "short": {
+        "24h": "24 giờ",
+        "7d": "7 ngày",
+        "30d": "30 ngày",
+        "qtd": "Quý này"
+      },
+      "long": {
+        "24h": "24 giờ qua",
+        "7d": "7 ngày qua",
+        "30d": "30 ngày qua",
+        "qtd": "Từ đầu quý đến nay"
+      }
+    },
+    "trend": {
+      "up": "Tăng {{value}} so với kỳ trước",
+      "down": "Giảm {{value}} so với kỳ trước",
+      "flat": "Không thay đổi so với kỳ trước"
+    },
+    "kpi": {
+      "sent": "Tin nhắn đã gửi · {{range}}",
+      "sentLegend": "{{delivered}} đã nhận · {{failed}} thất bại",
+      "sparkline": "Số tin nhắn gửi mỗi giờ trong 20 giờ qua, cũ nhất trước",
+      "readRate": "Tỷ lệ đã đọc",
+      "readMini": {
+        "sent": "Đã gửi",
+        "delivered": "Đã nhận",
+        "read": "Đã đọc"
+      }
+    },
+    "contacts": {
+      "title": "Liên hệ đang hoạt động",
+      "subscribed": "Đã đăng ký",
+      "optedIn": "Đã đồng ý nhận tin",
+      "blocked": "Đã chặn"
+    },
+    "wallet": {
+      "title": "Số dư ví",
+      "payPerMessage": "trả theo từng tin nhắn"
+    },
+    "autopilot": {
+      "kicker": "Làm được nhiều việc hơn",
+      "title": "Để phản hồi tự động chạy",
+      "body": "Tạo luồng tự động hoặc chạy chiến dịch để tiếp cận nhiều khách hàng hơn một cách tự động."
+    },
+    "pipeline": {
+      "kicker": "Quy trình bán hàng",
+      "open": "Mở quy trình",
+      "deals": "Giao dịch đang mở",
+      "won": "Thành công trong tháng này",
+      "winRate": "Tỷ lệ thắng"
+    },
+    "throughput": {
+      "title": "Lưu lượng tin nhắn",
+      "subtitle": {
+        "24h": "Gửi đi, đã nhận và thất bại, theo giờ, trong 24 giờ qua",
+        "7d": "Gửi đi, đã nhận và thất bại, theo ngày, trong 7 ngày qua",
+        "30d": "Gửi đi, đã nhận và thất bại, theo ngày, trong 30 ngày qua",
+        "qtd": "Gửi đi, đã nhận và thất bại, theo ngày, từ đầu quý đến nay"
+      },
+      "peak": "Giờ cao điểm {{when}} · {{n}} tin nhắn",
+      "sent": "Đã gửi",
+      "delivered": "Đã nhận",
+      "failed": "Thất bại",
+      "avgHour": "Trung bình mỗi giờ",
+      "replies": "Phản hồi",
+      "replyRate": "Tỷ lệ phản hồi",
+      "summary": "Trong kỳ này: {{sent}} đã gửi, {{delivered}} đã nhận và {{failed}} thất bại.",
+      "subtitleCustom": "Theo ngày · {{range}}"
+    },
+    "inbox": {
+      "title": "Hộp thư trực tiếp",
+      "unread": "{{n}} chưa đọc",
+      "oldest": "cũ nhất {{when}}",
+      "recent": "Cuộc trò chuyện gần đây",
+      "empty": "Chưa có cuộc trò chuyện nào."
+    },
+    "campaigns": {
+      "title": "Chiến dịch đang hoạt động",
+      "summary": "{{running}} đang chạy - {{scheduled}} đã lên lịch - {{paused}} tạm dừng",
+      "total": "Tổng cộng {{n}}",
+      "untitled": "Chiến dịch chưa đặt tên",
+      "delivered": "{{done}} / {{total}} đã nhận",
+      "emptyTitle": "Không có chiến dịch đang hoạt động",
+      "emptyBody": "Tạo một chiến dịch để bắt đầu gửi đến một nhóm liên hệ.",
+      "status": {
+        "sending": "Đang gửi",
+        "scheduled": "Đã lên lịch",
+        "paused": "Tạm dừng",
+        "failed": "Thất bại",
+        "completed": "Hoàn tất"
+      }
+    },
+    "devices": {
+      "title": "Thiết bị đã kết nối",
+      "summary": "Đã dùng {{total}}/{{cap}} chỗ - {{online}} trực tuyến",
+      "emptyTitle": "Chưa kết nối thiết bị nào",
+      "emptyBody": "Ghép nối một số WhatsApp để bắt đầu gửi.",
+      "unzoned": "chưa phân vùng",
+      "per24h": "{{n}}/24 giờ",
+      "deliv": "đã nhận",
+      "free_other": "Còn {{count}} chỗ thiết bị",
+      "state": {
+        "online": "Trực tuyến",
+        "connecting": "Đang kết nối",
+        "offline": "Ngoại tuyến"
+      }
+    },
+    "templates": {
+      "title": "Mẫu hiệu quả nhất",
+      "subtitle": "Theo lượng gửi - khoảng thời gian đã chọn",
+      "count_other": "{{count}} mẫu",
+      "empty": "Chưa có mẫu nào.",
+      "sent": "Đã gửi",
+      "delivered": "Đã nhận",
+      "read": "Đã đọc",
+      "readRate": "Tỷ lệ đã đọc",
+      "status": {
+        "approved": "Đã duyệt",
+        "inReview": "Đang xét duyệt",
+        "rejected": "Bị từ chối"
+      }
+    },
+    "activity": {
+      "title": "Nhật ký hoạt động",
+      "subtitle": "Sự kiện của không gian làm việc",
+      "empty": "Không có hoạt động gần đây nào được ghi lại cho không gian làm việc này.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_other": "{{count}} tài khoản",
+      "connected": "Đã kết nối",
+      "tile": {
+        "needReply": "Cần phản hồi",
+        "openChats": "Cuộc trò chuyện đang mở",
+        "dmsIn": "Tin nhắn đến · 7 ngày",
+        "dmsOut": "Tin nhắn đã gửi · 7 ngày",
+        "followers": "Người theo dõi"
+      }
+    },
+    "flows": {
+      "title": "Luồng tự động hóa",
+      "summary": "{{active}} đang hoạt động · {{subscribers}} người đăng ký",
+      "empty": "Chưa có luồng nào.",
+      "meta": "Kích hoạt {{trigger}} · {{steps}} bước · {{subs}} người đăng ký",
+      "statusActive": "Đang hoạt động",
+      "statusPaused": "Tạm dừng",
+      "stat": {
+        "flows": "Luồng",
+        "active": "Đang hoạt động",
+        "subscribers": "Người đăng ký"
+      }
+    },
+    "integrations": {
+      "title": "Tích hợp",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} sự kiện / 7 ngày",
+      "connected": {
+        "woocommerce": "Đã kết nối",
+        "shopify": "Đã kết nối",
+        "google_sheets": "Đã cấp khóa API",
+        "meta_catalog": "Đã liên kết danh mục"
+      },
+      "notConnected": "chưa kết nối",
+      "connectedLabel": "Đã kết nối"
+    },
+    "funnel": {
+      "title": "Phễu tương tác",
+      "stage": {
+        "messaged": "Liên hệ đã nhắn tin",
+        "delivered": "Đã nhận",
+        "replied": "Đã phản hồi",
+        "goalCompleted": "Hoàn thành mục tiêu"
+      },
+      "stageLabel": "{{stage}}: {{n}} liên hệ, {{pct}}% số liên hệ đã nhắn tin",
+      "activity": {
+        "title": "Hoạt động trò chuyện",
+        "inbound_other": "{{count}} tin nhắn đến",
+        "responding_other": "{{count}} liên hệ đã phản hồi",
+        "perContact": "{{value}} phản hồi trên mỗi liên hệ đã phản hồi"
+      },
+      "comparison": {
+        "title": "So với kỳ trước",
+        "replyRate": "Tỷ lệ phản hồi"
+      }
+    },
+    "ago": {
+      "minute_other": "{{count}} phút trước",
+      "hour_other": "{{count}} giờ trước",
+      "day_other": "{{count}} ngày trước"
+    },
+    "error": {
+      "forbidden": "Vai trò của bạn ({{role}}) không có quyền truy cập bảng điều khiển.",
+      "generic": "Không thể tải các số liệu. Hãy thử lại sau giây lát.",
+      "locked": "Gói của bạn không bao gồm phân tích."
+    },
+    "greetingNoName": {
+      "morning": "Chào buổi sáng.",
+      "afternoon": "Chào buổi chiều.",
+      "evening": "Chào buổi tối."
+    },
+    "views": {
+      "label": "Chế độ xem bảng điều khiển",
+      "summary": "Tổng quan",
+      "agent": "Nhân viên",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Hiệu suất nhân viên",
+      "conversations": "Cuộc trò chuyện",
+      "resolved": "Đã giải quyết",
+      "firstReply": "Phản hồi đầu tiên",
+      "resolution": "Giải quyết",
+      "csat": "Đánh giá",
+      "minutes": "{{value}} phút",
+      "hours": "{{value}} giờ",
+      "days": "{{value}} ngày",
+      "empty": "Không có cuộc trò chuyện nào được giao cho ai trong kỳ này.",
+      "noAccess": "Vai trò của bạn ({{role}}) không có quyền truy cập phân tích nhân viên.",
+      "everyone": "Tất cả nhân viên",
+      "pickerLabel": "Nhân viên",
+      "pickerPlaceholder": "Chọn một nhân viên",
+      "statusTitle": "Trạng thái cuộc trò chuyện",
+      "avgResolution": "Thời gian giải quyết trung bình",
+      "avgDuration": "Thời lượng trò chuyện trung bình",
+      "byAgentTitle": "Cuộc trò chuyện theo nhân viên",
+      "byAgentPicker": "Nhân viên cho danh sách trạng thái",
+      "status": {
+        "open": "Mở",
+        "pending": "Đang chờ",
+        "closed": "Đã đóng",
+        "assigned": "Đã phân công",
+        "unassigned": "Chưa phân công",
+        "unattended": "Chưa được xử lý"
+      }
+    },
+    "bots": {
+      "activeFlows": "Luồng đang hoạt động",
+      "ofTotal": "trong tổng số {{total}} luồng",
+      "subscribers": "Người đăng ký",
+      "subscribersNote": "trong tất cả các luồng"
+    }
+  },
+  "tabs": {
+    "dashboard": "Bảng điều khiển",
+    "inbox": "Hộp thư",
+    "contacts": "Liên hệ",
+    "menu": "Menu"
+  },
+  "menu": {
+    "title": "Tài khoản",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Không gian làm việc",
+    "inbox": "Hộp thư",
+    "contacts": "Liên hệ",
+    "noAccess": "Bạn không có quyền truy cập mục này. Hãy nhờ quản trị viên không gian làm việc mở khóa.",
+    "version": "Phiên bản {{version}}",
+    "signOutTitle": "Đăng xuất",
+    "signOutConfirm": "Bạn có chắc muốn đăng xuất không?",
+    "signOutNo": "Không",
+    "signOutYes": "Có, đăng xuất",
+    "tasks": "Công việc",
+    "dashboard": "Bảng điều khiển",
+    "allContacts": "Tất cả liên hệ",
+    "newContact": "Liên hệ mới",
+    "sectionAccount": "Tài khoản",
+    "manageProfile": "Quản lý hồ sơ",
+    "preferences": "Tùy chọn",
+    "devicePermissions": "Quyền của thiết bị",
+    "devicePermissionsHint": "Mở cài đặt của ứng dụng này trên điện thoại",
+    "about": "Giới thiệu",
+    "dataSecurity": "Dữ liệu và bảo mật",
+    "checkUpdates": "Kiểm tra cập nhật",
+    "updates": {
+      "off": "Phiên bản ứng dụng này không tự nhận cập nhật. Hãy cài phiên bản mới nhất để nhận các thay đổi.",
+      "latest": "Bạn đang dùng phiên bản mới nhất.",
+      "ready": "Bản cập nhật đã sẵn sàng. Chạm lần nữa để khởi động lại và sử dụng.",
+      "failed": "Không thể kiểm tra cập nhật. Hãy thử lại sau giây lát."
+    },
+    "profile": {
+      "title": "Quản lý hồ sơ",
+      "fullName": "Họ và tên",
+      "displayName": "Tên hiển thị",
+      "displayNameHint": "Hiển thị với nhóm của bạn thay cho họ và tên. Để trống để dùng họ và tên.",
+      "phone": "Điện thoại",
+      "phoneHint": "Kèm mã quốc gia, ví dụ +919876543210.",
+      "email": "Email",
+      "pendingEmail": "Thay đổi sang {{email}} đang chờ bạn xác nhận.",
+      "timezone": "Múi giờ của không gian làm việc",
+      "save": "Lưu thay đổi",
+      "cancel": "Hủy",
+      "nameRequired": "Nhập tên của bạn.",
+      "nameTooLong": "Dùng tối đa 120 ký tự.",
+      "phoneInvalid": "Nhập số điện thoại kèm mã quốc gia, ví dụ +919876543210."
+    },
+    "appearance": {
+      "title": "Giao diện",
+      "light": "Chế độ sáng",
+      "dark": "Chế độ tối",
+      "device": "Dùng cài đặt của thiết bị",
+      "hint": "Đã lưu vào tài khoản của bạn.",
+      "failed": "Không thể lưu lựa chọn của bạn. Hãy thử lại."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Chế độ xem hộp thư",
+      "all": "Tất cả",
+      "mine": "Của tôi",
+      "unassigned": "Chưa phân công",
+      "unread": "Chưa đọc"
+    },
+    "search": {
+      "open": "Tìm cuộc trò chuyện",
+      "close": "Đóng tìm kiếm",
+      "label": "Tìm kiếm",
+      "placeholder": "Tên, số điện thoại hoặc tin nhắn"
+    },
+    "filter": {
+      "open": "Bộ lọc",
+      "sheet": "Trạng thái cuộc trò chuyện",
+      "close": "Đóng",
+      "applied": "Bộ lọc đã áp dụng",
+      "clearAll": "Xóa tất cả",
+      "remove": "Bỏ bộ lọc: {{name}}",
+      "statusChip": "Trạng thái: {{name}}",
+      "searchChip": "Tìm kiếm: {{q}}",
+      "title": "Bộ lọc",
+      "view": "Chế độ xem",
+      "viewActive": "Cuộc trò chuyện",
+      "viewArchived": "Đã lưu trữ",
+      "channel": "Kênh",
+      "allChannels": "Tất cả kênh",
+      "labels": "Nhãn",
+      "searchLabels": "Tìm nhãn",
+      "channelChip": "Kênh: {{name}}",
+      "labelsChip": "Nhãn: {{names}}",
+      "archivedChip": "Đã lưu trữ"
+    },
+    "statusFilter": {
+      "default": "Mở và đang chờ",
+      "open": "Mở",
+      "pending": "Đang chờ",
+      "snoozed": "Tạm hoãn",
+      "resolved": "Đã giải quyết",
+      "closed": "Đã đóng",
+      "all": "Tất cả trạng thái"
+    },
+    "status": {
+      "open": "Mở",
+      "pending": "Đang chờ",
+      "snoozed": "Tạm hoãn",
+      "resolved": "Đã giải quyết",
+      "closed": "Đã đóng",
+      "spam": "Thư rác"
+    },
+    "list": {
+      "label": "Cuộc trò chuyện",
+      "emptyTitle": "Chưa có cuộc trò chuyện",
+      "emptyHint": "Tin nhắn từ khách hàng của bạn sẽ hiển thị tại đây.",
+      "emptyFilteredHint": "Không có kết quả phù hợp với các bộ lọc này. Hãy thử xóa bộ lọc.",
+      "noMore": "Không còn cuộc trò chuyện nào nữa",
+      "loadingMore": "Đang tải thêm cuộc trò chuyện",
+      "noAccessTitle": "Không có quyền truy cập hộp thư",
+      "noAccessBody": "Vai trò của bạn không thể đọc cuộc trò chuyện. Hãy nhờ quản trị viên không gian làm việc thay đổi."
+    },
+    "row": {
+      "noMessages": "Chưa có tin nhắn",
+      "unread_other": "{{count}} tin nhắn chưa đọc",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "Đã phân công cho {{name}}",
+      "media": "Phương tiện"
+    },
+    "time": {
+      "am": "SA",
+      "pm": "CH",
+      "yesterday": "Hôm qua"
+    },
+    "thread": {
+      "messages": "Tin nhắn",
+      "loadingOlder": "Đang tải tin nhắn cũ hơn",
+      "emptyTitle": "Chưa có tin nhắn",
+      "emptyHint": "Tin nhắn trong cuộc trò chuyện này sẽ hiển thị tại đây.",
+      "noAccessTitle": "Không có quyền truy cập cuộc trò chuyện này",
+      "noAccessBody": "Vai trò của bạn không thể đọc cuộc trò chuyện.",
+      "resolve": "Giải quyết",
+      "reopen": "Mở lại",
+      "call": "Gọi {{phone}}",
+      "pictureOpen": "Mở ảnh toàn màn hình",
+      "pictureFull": "Ảnh",
+      "pictureClose": "Đóng ảnh",
+      "windowClosed": "Khung thời gian phản hồi 24 giờ đã đóng. Hãy gửi một mẫu tin nhắn.",
+      "conflict": "Người khác đã thay đổi cuộc trò chuyện này. Đã tải phiên bản mới nhất, vui lòng thử lại.",
+      "statusInvalid": "Không thể chuyển cuộc trò chuyện này sang trạng thái đó.",
+      "window": {
+        "left": "Khung phản hồi: còn {{hours}} giờ {{minutes}} phút",
+        "closed": "Khung phản hồi đã đóng"
+      },
+      "menu": {
+        "open": "Thêm thao tác",
+        "close": "Đóng menu",
+        "assignToMe": "Giao cho tôi",
+        "details": "Xem chi tiết",
+        "status": "Đổi trạng thái",
+        "agent": "Phân công nhân viên"
+      },
+      "bot": {
+        "notice": "Đây là cuộc trò chuyện với bot.",
+        "assignSelf": "Giao cho chính bạn"
+      },
+      "labels": {
+        "open": "Gán nhãn",
+        "title": "Gán nhãn",
+        "close": "Đóng",
+        "empty": "Chưa có nhãn nào.",
+        "emptyCreate": "Chưa có nhãn nào. Nhập tên bên dưới để tạo nhãn.",
+        "newLabel": "Nhãn mới",
+        "add": "Thêm",
+        "failed": "Không thể thay đổi nhãn. Hãy thử lại."
+      },
+      "assignment": {
+        "none": "Chưa phân công",
+        "team": "Nhóm: {{name}}",
+        "failed": "Không thể thay đổi cuộc trò chuyện. Hãy thử lại.",
+        "you": "Đã phân công cho bạn",
+        "to": "Đã phân công cho {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "Đã nhận: {{text}}, {{time}}",
+      "labelOut": "Bạn đã gửi: {{text}}, {{time}}, {{status}}",
+      "deleted": "Tin nhắn này đã bị xóa",
+      "retry": "Thử gửi lại",
+      "mediaPending": "Tệp vẫn đang được tải xuống.",
+      "mediaFailed": "Không thể tải tệp xuống."
+    },
+    "kind": {
+      "text": "Tin nhắn",
+      "image": "Ảnh",
+      "video": "Video",
+      "audio": "Âm thanh",
+      "voice": "Tin nhắn thoại",
+      "document": "Tài liệu",
+      "sticker": "Nhãn dán",
+      "location": "Vị trí",
+      "contact": "Liên hệ",
+      "template": "Mẫu",
+      "reaction": "Biểu cảm",
+      "interactive": "Tin nhắn tương tác",
+      "system": "Tin nhắn hệ thống"
+    },
+    "delivery": {
+      "queued": "Đang gửi",
+      "sent": "Đã gửi",
+      "delivered": "Đã nhận",
+      "read": "Đã đọc",
+      "failed": "Chưa gửi được",
+      "received": "Đã nhận"
+    },
+    "composer": {
+      "label": "Tin nhắn",
+      "placeholder": "Nhập tin nhắn",
+      "send": "Gửi",
+      "tooLong": "Tin nhắn dài tối đa {{max}} ký tự.",
+      "noteLabel": "Ghi chú riêng tư",
+      "notePlaceholder": "Viết ghi chú chỉ nhóm của bạn nhìn thấy",
+      "addNote": "Thêm ghi chú",
+      "noteOn": "Viết ghi chú riêng tư",
+      "noteOff": "Quay lại phản hồi"
+    },
+    "template": {
+      "closedNotice": "Khách hàng chưa nhắn tin cho bạn trong 24 giờ qua. Bạn chỉ có thể gửi các mẫu đã được duyệt trước.",
+      "send": "Gửi mẫu",
+      "title": "Gửi một mẫu",
+      "close": "Đóng",
+      "search": "Tìm mẫu",
+      "empty": "Chưa có mẫu nào được duyệt cho số này.",
+      "emptySearch": "Không có mẫu nào phù hợp với tìm kiếm của bạn.",
+      "more": "Còn nhiều mẫu khác. Nhập vào ô tìm kiếm để tìm.",
+      "fillTitle": "Điền thông tin",
+      "back": "Quay lại các mẫu",
+      "submit": "Gửi",
+      "reason": {
+        "paused": "WhatsApp đã tạm dừng vì chất lượng. Hãy thử lại sau.",
+        "media_header": "Có tiêu đề là ảnh, video hoặc tài liệu mà ứng dụng chưa thể gửi.",
+        "header_variable": "Có biến trong tiêu đề mà ứng dụng chưa thể điền.",
+        "dynamic_button": "Có nút liên kết chứa biến mà ứng dụng chưa thể điền.",
+        "authentication": "Các mẫu mật khẩu dùng một lần do hệ thống gửi.",
+        "named_variables": "Dùng biến có tên mà ứng dụng chưa thể điền."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "Kênh này đã bị ngắt kết nối. Hãy kết nối lại trên web rồi thử lại.",
+      "planLimit": "Đã đạt giới hạn tin nhắn của gói.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
+      "notFound": "Cuộc trò chuyện này không còn nữa."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Chat web",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Trình mô phỏng"
+    },
+    "sheet": {
+      "close": "Đóng",
+      "save": "Lưu thay đổi",
+      "noMatch": "Không có kết quả phù hợp."
+    },
+    "assign": {
+      "title": "Đổi nhân viên",
+      "search": "Tìm nhân viên",
+      "agents": "Nhân viên",
+      "teams": "Nhóm",
+      "unassigned": "Chưa phân công",
+      "noTeam": "Không có nhóm",
+      "you": "{{name}} (bạn)",
+      "availability": {
+        "online": "Trực tuyến",
+        "away": "Vắng mặt",
+        "busy": "Bận",
+        "offline": "Ngoại tuyến"
+      },
+      "open_other": "{{count}} đang mở",
+      "members_other": "{{count}} thành viên",
+      "failed": "Không thể đổi người phụ trách cuộc trò chuyện này. Hãy thử lại."
+    },
+    "priority": {
+      "title": "Đặt mức ưu tiên",
+      "low": "Thấp",
+      "normal": "Bình thường",
+      "high": "Cao",
+      "urgent": "Khẩn cấp"
+    },
+    "snooze": {
+      "title": "Tạm hoãn đến",
+      "hour": "Sau 1 giờ",
+      "threeHours": "Sau 3 giờ",
+      "tomorrow": "Ngày mai, 9:00 sáng",
+      "nextWeek": "Thứ Hai tới, 9:00 sáng"
+    },
+    "statusSheet": {
+      "title": "Đổi trạng thái"
+    },
+    "details": {
+      "title": "Chi tiết cuộc trò chuyện",
+      "contact": "Liên hệ",
+      "openContact": "Mở liên hệ",
+      "call": "Gọi",
+      "noContact": "Cuộc trò chuyện này chưa có hồ sơ liên hệ.",
+      "email": "Email",
+      "stage": "Giai đoạn",
+      "contactStatus": "Trạng thái",
+      "owner": "Người phụ trách",
+      "source": "Nguồn",
+      "since": "Là liên hệ từ",
+      "optedOut": "Đã từ chối nhận tin nhắn",
+      "leadScore": "Điểm khách hàng tiềm năng",
+      "actions": "Thao tác",
+      "status": "Trạng thái",
+      "priority": "Ưu tiên",
+      "labels": "Nhãn",
+      "none": "Không có",
+      "agent": "Nhân viên phụ trách",
+      "team": "Nhóm",
+      "you": "Bạn",
+      "bot": "Bot",
+      "unassigned": "Chưa phân công",
+      "info": "Cuộc trò chuyện",
+      "channel": "Kênh",
+      "window": "Khung phản hồi",
+      "windowOpen": "Mở đến {{time}}",
+      "windowClosed": "Đã đóng",
+      "windowNone": "Không giới hạn thời gian",
+      "snoozedUntil": "Tạm hoãn đến {{time}}",
+      "notes": {
+        "title": "Ghi chú nội bộ",
+        "empty": "Chưa có ghi chú. Chỉ nhóm của bạn nhìn thấy ghi chú.",
+        "label": "Viết ghi chú",
+        "add": "Thêm ghi chú",
+        "delete": "Xóa",
+        "deleteFor": "Xóa ghi chú của {{name}}",
+        "failed": "Không thể lưu ghi chú. Hãy thử lại.",
+        "deleteFailed": "Không thể xóa ghi chú. Hãy thử lại.",
+        "unknownAuthor": "Ai đó",
+        "tooLong": "Ghi chú dài tối đa {{max}} ký tự."
+      },
+      "timeline": {
+        "title": "Dòng thời gian",
+        "empty": "Chưa có gì xảy ra.",
+        "system": "Hệ thống"
+      },
+      "past": {
+        "title": "Cuộc trò chuyện trước đây",
+        "empty": "Không có cuộc trò chuyện nào khác với liên hệ này."
+      },
+      "snooze": "Tạm hoãn",
+      "wake": "Đánh thức ngay"
+    },
+    "event": {
+      "created": "Cuộc trò chuyện đã bắt đầu",
+      "assigned": "Đã phân công",
+      "reassigned": "Đã phân công lại",
+      "unassigned": "Đã bỏ phân công",
+      "ai_handoff": "Trợ lý AI đã chuyển giao",
+      "resolved": "Đã giải quyết",
+      "closed": "Đã đóng",
+      "reopened": "Đã mở lại",
+      "status_changed": "Đã đổi trạng thái",
+      "note_added": "Đã thêm ghi chú",
+      "snoozed": "Đã tạm hoãn",
+      "auto_unsnoozed": "Đã tự đánh thức đúng giờ",
+      "priority_changed": "Đã đổi mức ưu tiên",
+      "tag_added": "Đã thêm nhãn",
+      "tag_removed": "Đã gỡ nhãn",
+      "first_response": "Đã gửi phản hồi đầu tiên",
+      "sla_breach": "Quá thời hạn phản hồi"
+    },
+    "replies": {
+      "open": "Trả lời nhanh",
+      "title": "Trả lời nhanh",
+      "search": "Tìm trả lời nhanh",
+      "empty": "Chưa có trả lời nhanh nào.",
+      "noMatch": "Không có trả lời nhanh nào phù hợp với tìm kiếm của bạn.",
+      "failed": "Không thể dùng câu trả lời này. Hãy thử lại.",
+      "unfilled": "Hãy kiểm tra tin nhắn: không thể điền {{list}}."
+    },
+    "note": {
+      "title": "Ghi chú riêng tư",
+      "label": "Ghi chú riêng tư của {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Nhấn giữ để chọn cuộc trò chuyện",
+      "selected_other": "Đã chọn {{count}}",
+      "close": "Hủy chọn",
+      "selectAll": "Chọn tất cả",
+      "read": "Đánh dấu đã đọc",
+      "status": "Trạng thái",
+      "assign": "Phân công",
+      "label": "Nhãn",
+      "priority": "Ưu tiên",
+      "snooze": "Tạm hoãn",
+      "statusTitle_other": "Đổi trạng thái của {{count}} cuộc trò chuyện",
+      "labelTitle_other": "Nhãn cho {{count}} cuộc trò chuyện",
+      "labelMode": "Thao tác",
+      "labelAdd": "Thêm nhãn",
+      "labelRemove": "Gỡ nhãn",
+      "labelSearch": "Tìm nhãn",
+      "priorityTitle_other": "Mức ưu tiên của {{count}} cuộc trò chuyện",
+      "snoozeTitle_other": "Tạm hoãn {{count}} cuộc trò chuyện đến",
+      "result": "{{done}} đã cập nhật, {{unchanged}} không đổi, {{failed}} thất bại",
+      "resultDismiss": "Bỏ qua"
+    }
+  },
+  "contacts": {
+    "title": "Liên hệ",
+    "unknown": "Không rõ",
+    "add": "Thêm liên hệ",
+    "cancel": "Hủy",
+    "yes": "Có",
+    "no": "Không",
+    "denied": {
+      "title": "Bạn không thể xem liên hệ",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho vai trò của bạn quyền truy cập liên hệ.",
+      "createTitle": "Bạn không thể thêm liên hệ",
+      "createHint": "Hãy nhờ quản trị viên không gian làm việc cho phép vai trò của bạn thêm liên hệ."
+    },
+    "empty": {
+      "title": "Chưa có liên hệ",
+      "hint": "Chạm nút + để thêm liên hệ đầu tiên của bạn.",
+      "filteredTitle": "Không có liên hệ phù hợp",
+      "filteredHint": "Hãy thử tìm kiếm khác hoặc xóa các bộ lọc."
+    },
+    "search": {
+      "open": "Tìm liên hệ",
+      "close": "Đóng tìm kiếm",
+      "label": "Tìm kiếm",
+      "placeholder": "Tên, số điện thoại hoặc email"
+    },
+    "filter": {
+      "open": "Lọc liên hệ",
+      "title": "Bộ lọc",
+      "stage": "Giai đoạn vòng đời",
+      "owner": "Người phụ trách liên hệ",
+      "ownerSearch": "Tìm người phụ trách liên hệ",
+      "unassigned": "Chưa có người phụ trách",
+      "created": "Ngày tạo",
+      "any": "Bất kỳ",
+      "marketing": "Tin nhắn tiếp thị",
+      "marketingOptions": {
+        "all": "Tất cả",
+        "subscribed": "Đã đăng ký",
+        "unsubscribed": "Đã từ chối nhận tin"
+      },
+      "source": "Nguồn",
+      "sourceHint": "Nơi liên hệ đến từ, chẳng hạn import hoặc api.",
+      "clear": "Xóa tất cả",
+      "apply": "Áp dụng"
+    },
+    "stage": {
+      "new": "Mới",
+      "contacted": "Đã liên lạc",
+      "qualified": "Đủ điều kiện",
+      "application_started": "Đã bắt đầu đăng ký",
+      "application_submitted": "Đã nộp hồ sơ đăng ký",
+      "interview_scheduled": "Đã lên lịch phỏng vấn",
+      "offer_received": "Đã nhận đề nghị",
+      "admission_confirmed": "Đã xác nhận nhập học",
+      "enrolled": "Đã ghi danh",
+      "lost": "Đã mất"
+    },
+    "subscription": {
+      "subscribed": "Đã đăng ký",
+      "unsubscribed": "Đã hủy đăng ký",
+      "pending": "Đang chờ"
+    },
+    "form": {
+      "name": "Tên",
+      "phone": "Điện thoại",
+      "phoneHint": "Kèm mã quốc gia, ví dụ +919876543210.",
+      "email": "Email",
+      "needPhoneOrEmail": "Nhập số điện thoại hoặc địa chỉ email.",
+      "phoneInvalid": "Nhập số điện thoại kèm mã quốc gia, ví dụ +919876543210.",
+      "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+      "nameInvalid": "Nhập tên tối đa 255 ký tự."
+    },
+    "new": {
+      "title": "Liên hệ mới",
+      "save": "Lưu liên hệ",
+      "requiredTitle": "Thông tin bắt buộc",
+      "choose": "Chọn",
+      "search": "Tìm kiếm",
+      "unsupported": "{{label}} là bắt buộc nhưng chưa thể điền tại đây. Hãy thêm liên hệ này trên web.",
+      "requiredMissing": "Không gian làm việc của bạn cần thêm thông tin trước khi lưu liên hệ, và ứng dụng này không thể hiển thị chúng. Hãy nhờ quản trị viên cấp quyền truy cập thuộc tính liên hệ, hoặc thêm liên hệ trên web."
+    },
+    "edit": {
+      "title": "Sửa liên hệ",
+      "open": "Sửa liên hệ",
+      "save": "Lưu thay đổi",
+      "conflict": "Liên hệ này đã được người khác thay đổi. Hãy xem lại và lưu lần nữa."
+    },
+    "detail": {
+      "title": "Liên hệ",
+      "notFound": "Liên hệ này không còn tồn tại.",
+      "phone": "Điện thoại",
+      "email": "Email",
+      "call": "Gọi {{phone}}",
+      "mail": "Viết thư cho {{email}}",
+      "stage": "Giai đoạn vòng đời",
+      "status": "Trạng thái",
+      "score": "Điểm",
+      "source": "Nguồn",
+      "whatsapp": "Đăng ký WhatsApp",
+      "marketing": "Tin nhắn tiếp thị",
+      "optedOut": "Đã từ chối nhận tin",
+      "optedIn": "Có thể nhận tin",
+      "lastActivity": "Hoạt động gần nhất",
+      "noActivity": "Chưa có hoạt động",
+      "created": "Ngày thêm",
+      "customFields": "Trường tùy chỉnh",
+      "actions": {
+        "call": "Gọi",
+        "chat": "Trò chuyện",
+        "email": "Email",
+        "sms": "SMS",
+        "tasks": "Công việc",
+        "notes": "Ghi chú"
+      },
+      "tabsLabel": "Các phần của liên hệ",
+      "tabs": {
+        "about": "Chi tiết liên hệ",
+        "activity": "Hoạt động",
+        "files": "Thêm"
+      },
+      "activities": {
+        "label": "Chế độ xem hoạt động",
+        "all": "Tất cả hoạt động",
+        "timeline": "Dòng thời gian hoạt động"
+      },
+      "more": {
+        "account": "Tài khoản",
+        "deals": "Giao dịch"
+      },
+      "summary": {
+        "title": "Hoạt động",
+        "notes": "Ghi chú",
+        "tasks": "Công việc",
+        "meetings": "Cuộc họp",
+        "rowLabel": "{{label}}: {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "Xóa liên hệ",
+        "title": "Xóa liên hệ",
+        "message": "Xóa {{name}}? Không thể hoàn tác.",
+        "confirm": "Xóa",
+        "cancel": "Hủy"
+      }
+    },
+    "tags": {
+      "title": "Thẻ",
+      "none": "Chưa có thẻ nào.",
+      "remove": "Gỡ thẻ {{name}}",
+      "addLabel": "Thêm thẻ",
+      "addPlaceholder": "Tên thẻ",
+      "add": "Thêm thẻ"
+    },
+    "row": {
+      "more": "Thêm thao tác cho {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Sửa",
+      "swipeDelete": "Xóa"
+    },
+    "sheet": {
+      "close": "Đóng"
+    },
+    "views": {
+      "open": "Chế độ xem liên hệ: {{name}}",
+      "title": "Chế độ xem",
+      "close": "Đóng chế độ xem",
+      "searchLabel": "Tìm chế độ xem",
+      "searchPlaceholder": "Tìm chế độ xem",
+      "systemTitle": "Chế độ xem mặc định của hệ thống",
+      "customTitle": "Chế độ xem tùy chỉnh",
+      "none": "Không có chế độ xem nào",
+      "failed": "Không thể tải các chế độ xem đã lưu.",
+      "system": {
+        "all": "Tất cả liên hệ",
+        "mine": "Liên hệ của tôi",
+        "recent": "Mới tạo gần đây",
+        "optedOut": "Đã từ chối nhận tin tiếp thị"
+      }
+    }
+  },
+  "tasks": {
+    "title": "Công việc",
+    "add": "Thêm công việc",
+    "cancel": "Hủy",
+    "unknownContact": "Liên hệ chưa đặt tên",
+    "notFound": "Công việc này không còn tồn tại.",
+    "priority": {
+      "low": "Thấp",
+      "medium": "Trung bình",
+      "high": "Cao"
+    },
+    "status": {
+      "open": "Mở",
+      "done": "Xong",
+      "overdue": "Quá hạn"
+    },
+    "denied": {
+      "title": "Bạn không thể xem công việc",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho bạn quyền truy cập công việc.",
+      "createTitle": "Bạn không thể thêm công việc",
+      "createHint": "Hãy nhờ quản trị viên không gian làm việc cho phép bạn thêm công việc.",
+      "editTitle": "Bạn không thể sửa công việc",
+      "editHint": "Hãy nhờ quản trị viên không gian làm việc cho phép bạn sửa công việc."
+    },
+    "planLocked": {
+      "title": "Gói này không bao gồm công việc.",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc nâng cấp gói."
+    },
+    "empty": {
+      "title": "Không tìm thấy công việc nào.",
+      "hint": "Các công việc bạn thêm sẽ hiển thị tại đây.",
+      "filteredHint": "Hãy thử bộ lọc hoặc tìm kiếm khác."
+    },
+    "search": {
+      "open": "Tìm công việc",
+      "close": "Đóng tìm kiếm",
+      "label": "Tìm kiếm",
+      "placeholder": "Tìm theo tiêu đề"
+    },
+    "filter": {
+      "open": "Lọc công việc",
+      "title": "Lọc công việc",
+      "clear": "Xóa tất cả",
+      "apply": "Áp dụng",
+      "group": {
+        "status": "Trạng thái",
+        "priority": "Ưu tiên",
+        "due": "Hạn",
+        "owner": "Người phụ trách"
+      },
+      "status": {
+        "open": "Mở",
+        "done": "Xong",
+        "all": "Tất cả"
+      },
+      "due": {
+        "overdue": "Quá hạn",
+        "today": "Hôm nay",
+        "upcoming": "Sắp tới",
+        "none": "Không có ngày"
+      },
+      "owner": {
+        "mine": "Của tôi",
+        "unassigned": "Chưa phân công",
+        "all": "Tất cả"
+      }
+    },
+    "list": {
+      "conflict": "Công việc này đã được người khác thay đổi. Danh sách đã được làm mới."
+    },
+    "row": {
+      "markDone": "Đánh dấu {{title}} là xong",
+      "reopen": "Mở lại {{title}}",
+      "more": "Thêm thao tác cho {{title}}",
+      "due": "Hạn {{when}}",
+      "unassigned": "Chưa phân công"
+    },
+    "actions": {
+      "edit": "Sửa công việc",
+      "delete": "Xóa công việc"
+    },
+    "delete": {
+      "title": "Xóa công việc",
+      "message": "Bạn có chắc muốn xóa công việc này không?",
+      "confirm": "Xóa"
+    },
+    "details": {
+      "title": "Chi tiết công việc",
+      "edit": "Sửa công việc",
+      "delete": "Xóa công việc",
+      "description": "Mô tả",
+      "priority": "Ưu tiên",
+      "status": "Trạng thái",
+      "owner": "Người phụ trách",
+      "relatedTo": "Liên quan đến",
+      "noDescription": "Không có mô tả",
+      "noDue": "Không có ngày đến hạn",
+      "unassigned": "Chưa phân công",
+      "noContact": "Không có",
+      "openContact": "Mở {{name}}",
+      "markComplete": "Đánh dấu hoàn thành",
+      "reopen": "Mở lại",
+      "conflict": "Công việc này đã được người khác thay đổi. Đã tải lại."
+    },
+    "form": {
+      "addTitle": "Thêm công việc",
+      "editTitle": "Sửa công việc",
+      "save": "Lưu công việc",
+      "saving": "Đang lưu…",
+      "title": "Tiêu đề công việc",
+      "description": "Mô tả công việc",
+      "priority": "Ưu tiên",
+      "date": "Ngày (YYYY-MM-DD)",
+      "dateHint": "Để trống ngày và giờ nếu không có hạn. Ví dụ 2026-10-31.",
+      "time": "Giờ (HH:mm)",
+      "timeHint": "Đồng hồ 24 giờ, ví dụ 14:30.",
+      "owner": "Người phụ trách",
+      "ownerPick": "Chọn người phụ trách",
+      "ownerMe": "Tôi",
+      "ownerNone": "Chưa phân công",
+      "ownerLoading": "Đang tải nhóm của bạn…",
+      "ownerFailed": "Không thể tải nhóm của bạn.",
+      "contact": "Liên hệ",
+      "contactLinkOptional": "Liên kết liên hệ (không bắt buộc)",
+      "contactNone": "Không có liên hệ",
+      "contactPick": "Chọn một liên hệ",
+      "contactSearchLabel": "Tìm liên hệ",
+      "contactSearchPlaceholder": "Tên, email hoặc số điện thoại",
+      "contactEmpty": "Không tìm thấy liên hệ nào.",
+      "contactFailed": "Không thể tải liên hệ.",
+      "conflict": "Công việc này đã được người khác thay đổi. Hãy xem lại và lưu lần nữa.",
+      "errors": {
+        "titleRequired": "Nhập tiêu đề công việc.",
+        "titleTooLong": "Tiêu đề dài tối đa 255 ký tự.",
+        "titleNeedsLetter": "Tiêu đề phải có ít nhất một chữ cái.",
+        "notesTooLong": "Mô tả dài tối đa 5000 ký tự.",
+        "dateInvalid": "Nhập ngày theo dạng YYYY-MM-DD, ví dụ 2026-10-31.",
+        "timeInvalid": "Nhập giờ theo dạng HH:mm trên đồng hồ 24 giờ, ví dụ 14:30.",
+        "dateNeeded": "Hãy nhập cả ngày.",
+        "timeNeeded": "Hãy nhập cả giờ.",
+        "dueInvalid": "Không thể dùng ngày giờ đến hạn này.",
+        "assigneeInvalid": "Không thể giao công việc cho người này. Hãy chọn người phụ trách khác.",
+        "contactInvalid": "Không thể liên kết liên hệ này."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Ghi chú",
+    "cancel": "Hủy",
+    "loadMore": "Tải thêm",
+    "deleteConfirm": "Xóa",
+    "contactMissing": "Liên hệ này không còn tồn tại.",
+    "add": "Thêm ghi chú",
+    "edited": "Đã sửa",
+    "denied": {
+      "title": "Bạn không thể xem ghi chú",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho vai trò của bạn quyền truy cập liên hệ.",
+      "updateTitle": "Bạn không thể thay đổi ghi chú",
+      "updateHint": "Hãy nhờ quản trị viên không gian làm việc cho phép vai trò của bạn sửa liên hệ."
+    },
+    "empty": {
+      "title": "Chưa có ghi chú.",
+      "hint": "Chạm nút + để thêm ghi chú đầu tiên."
+    },
+    "menu": {
+      "open": "Thao tác cho ghi chú ngày {{date}}",
+      "edit": "Sửa ghi chú",
+      "delete": "Xóa ghi chú"
+    },
+    "delete": {
+      "title": "Xóa ghi chú",
+      "message": "Bạn có chắc muốn xóa ghi chú này không?"
+    },
+    "form": {
+      "addTitle": "Thêm ghi chú",
+      "editTitle": "Cập nhật ghi chú",
+      "label": "Ghi chú",
+      "placeholder": "Viết ghi chú của bạn tại đây...",
+      "required": "Hãy viết ghi chú trước khi lưu.",
+      "invalid": "Nhập ghi chú tối đa 400 ký tự.",
+      "counterLabel": "Đã dùng {{used}}/{{max}} ký tự",
+      "save": "Lưu ghi chú",
+      "saving": "Đang lưu ghi chú",
+      "conflict": "Ghi chú này đã được người khác thay đổi. Hãy xem lại và lưu lần nữa.",
+      "missing": "Ghi chú này không còn tồn tại."
+    },
+    "activity": {
+      "notes": "Ghi chú",
+      "tasks": "Công việc",
+      "timeline": "Dòng thời gian",
+      "empty": "Chưa có hoạt động.",
+      "add": "Thêm hoạt động",
+      "types": {
+        "note": "Ghi chú",
+        "call": "Cuộc gọi",
+        "email": "Email",
+        "meeting": "Cuộc họp",
+        "task": "Công việc"
+      },
+      "source": {
+        "system": "Hệ thống",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Thêm hoạt động",
+        "type": "Loại",
+        "typeHint": "Ví dụ ghi chú, cuộc gọi, email hoặc cuộc họp.",
+        "name": "Tiêu đề",
+        "details": "Chi tiết",
+        "save": "Lưu hoạt động",
+        "typeInvalid": "Nhập loại tối đa 100 ký tự.",
+        "titleInvalid": "Nhập tiêu đề tối đa 255 ký tự.",
+        "detailsInvalid": "Chi tiết dài tối đa 10.000 ký tự."
+      }
+    },
+    "files": {
+      "empty": "Chưa có tệp nào.",
+      "delete": "Xóa tệp {{name}}",
+      "deleteTitle": "Xóa tệp",
+      "deleteMessage": "Bạn có chắc muốn xóa tệp này không?"
+    }
+  },
+  "contactMeetings": {
+    "title": "Cuộc họp",
+    "loadMore": "Tải thêm",
+    "contactMissing": "Liên hệ này không còn tồn tại.",
+    "noDate": "Chưa đặt ngày",
+    "denied": {
+      "title": "Bạn không thể xem cuộc họp",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho vai trò của bạn quyền truy cập liên hệ."
+    },
+    "empty": {
+      "title": "Chưa ghi nhận cuộc họp nào."
+    }
+  },
+  "contactDeals": {
+    "title": "Giao dịch",
+    "contactMissing": "Liên hệ này không còn tồn tại.",
+    "denied": {
+      "title": "Bạn không thể xem giao dịch",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho vai trò của bạn quyền truy cập giao dịch."
+    },
+    "empty": {
+      "title": "Chưa có giao dịch nào."
+    }
+  },
+  "contactCompany": {
+    "title": "Tài khoản",
+    "missing": "Tài khoản này không còn tồn tại.",
+    "denied": {
+      "title": "Bạn không thể xem tài khoản",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho vai trò của bạn quyền truy cập công ty."
+    },
+    "industry": "Ngành",
+    "size": "Quy mô",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "website": "Trang web",
+    "address": "Địa chỉ",
+    "owner": "Người phụ trách",
+    "notes": "Ghi chú"
+  },
+  "contactProps": {
+    "title": "Thông tin liên hệ",
+    "search": "Tìm trường",
+    "showEmpty": "Hiện các trường trống",
+    "footer": "Bạn có thể tùy chỉnh các thuộc tính hiển thị tại đây từ ứng dụng web.",
+    "close": "Đóng",
+    "save": "Lưu",
+    "clear": "Xóa",
+    "yes": "Có",
+    "no": "Không",
+    "rowHint": "Mở trình chỉnh sửa",
+    "locked": "Bạn không thể sửa {{label}}",
+    "webOnly": "{{label}} chỉ có thể sửa từ ứng dụng web.",
+    "masked": "Đã ẩn",
+    "fields": {
+      "email": "Email",
+      "phone": "Điện thoại",
+      "owner": "Người phụ trách liên hệ",
+      "name": "Tên",
+      "source": "Nguồn",
+      "whatsapp": "Đăng ký WhatsApp",
+      "marketing": "Từ chối tin tiếp thị",
+      "leadScore": "Điểm khách hàng tiềm năng",
+      "created": "Ngày tạo",
+      "lastActivity": "Hoạt động gần nhất"
+    },
+    "subscription": {
+      "subscribed": "Đã đăng ký",
+      "unsubscribed": "Đã hủy đăng ký",
+      "pending": "Đang chờ"
+    },
+    "editor": {
+      "title": "Sửa {{label}}",
+      "date": "Ngày",
+      "dateHint": "Năm-tháng-ngày, ví dụ 2026-10-12.",
+      "time": "Giờ",
+      "timeHint": "Giờ 24 giờ, ví dụ 14:30.",
+      "phoneHint": "Kèm mã quốc gia, ví dụ +919876543210.",
+      "noOptions": "Không có lựa chọn nào."
+    },
+    "error": {
+      "required": "{{label}} là bắt buộc.",
+      "name": "Nhập tên tối đa 255 ký tự.",
+      "email": "Nhập địa chỉ email hợp lệ.",
+      "phone": "Nhập số điện thoại kèm mã quốc gia, ví dụ +919876543210.",
+      "needPhoneOrEmail": "Liên hệ cần có số điện thoại hoặc địa chỉ email.",
+      "text": "Nhập tối đa {{max}} ký tự.",
+      "number": "Nhập một số.",
+      "whole": "Nhập một số nguyên.",
+      "range": "Nhập một số từ 0 đến {{max}}.",
+      "url": "Nhập liên kết bắt đầu bằng http:// hoặc https://",
+      "date": "Nhập ngày hợp lệ theo dạng YYYY-MM-DD.",
+      "time": "Nhập giờ hợp lệ theo dạng HH:mm.",
+      "option": "Hãy chọn một trong các lựa chọn.",
+      "invalid": "Giá trị này không được chấp nhận. Hãy kiểm tra và thử lại.",
+      "notEditable": "Không thể sửa thuộc tính này.",
+      "requiredMissing": "Một thuộc tính bắt buộc chưa có giá trị. Hãy điền trước khi lưu.",
+      "conflict": "Liên hệ này đã được người khác thay đổi. Hãy xem lại và lưu lần nữa.",
+      "lostReasonRequired": "Hãy cho biết lý do mất liên hệ này.",
+      "statusMismatch": "Trạng thái đó không thuộc giai đoạn vòng đời này."
+    },
+    "owner": {
+      "title": "Giao cho",
+      "unassigned": "Chưa phân công",
+      "none": "Không có ai để giao liên hệ này.",
+      "failed": "Không thể đổi người phụ trách. Hãy thử lại."
+    },
+    "lifecycle": {
+      "stage": "Giai đoạn vòng đời",
+      "status": "Trạng thái",
+      "change": "Đổi giai đoạn vòng đời",
+      "changeStatus": "Đổi trạng thái",
+      "dropdownHint": "Mở danh sách để chọn",
+      "lostReason": "Lý do mất",
+      "otherReason": "Khác",
+      "otherLabel": "Mô tả lý do"
+    }
+  },
+  "summary": {
+    "contacts": "Liên hệ",
+    "contactsNote": "Đã thêm trong kỳ này",
+    "tasks": "Công việc",
+    "tasksNote": "Đang mở hiện tại",
+    "messages": "Tin nhắn",
+    "sentNote": "Đã gửi",
+    "receivedNote": "Đã nhận",
+    "conversations": "Cuộc trò chuyện",
+    "conversationsNote": "Đang mở và đang chờ, ngay lúc này",
+    "status": {
+      "all": "Đang hoạt động",
+      "mine": "Của tôi",
+      "unassigned": "Chưa phân công",
+      "assigned": "Đã phân công",
+      "unread": "Chưa đọc",
+      "archived": "Đã lưu trữ"
+    },
+    "allMessages": {
+      "title": "Tất cả tin nhắn",
+      "sent": "Đã gửi",
+      "delivered": "Đã nhận",
+      "received": "Đã nhận",
+      "read": "Đã đọc",
+      "failed": "Thất bại"
+    },
+    "moreTitle": "Xem thêm từ không gian làm việc của bạn"
+  },
+  "dashDate": {
+    "title": "Tìm theo lịch",
+    "close": "Đóng lịch",
+    "apply": "Áp dụng",
+    "reset": "Đặt lại",
+    "presets": "Khoảng nhanh",
+    "pill": {
+      "label": "Khoảng thời gian: {{from}} đến {{to}}",
+      "hint": "Mở lịch để đổi ngày"
+    },
+    "selection": {
+      "label": "{{from}} đến {{to}}",
+      "pickFirst": "Chọn ngày đầu tiên",
+      "pickLast": "Chọn ngày cuối cùng"
+    },
+    "preset": {
+      "last7": "7 ngày qua",
+      "last30": "30 ngày qua",
+      "last90": "90 ngày qua",
+      "yesterday": "Hôm qua",
+      "today": "Hôm nay"
+    },
+    "calendar": {
+      "previousMonth": "Tháng trước",
+      "nextMonth": "Tháng sau",
+      "start": "Đầu khoảng",
+      "end": "Cuối khoảng",
+      "inRange": "Trong khoảng",
+      "today": "Hôm nay"
+    }
+  },
+  "permissions": {
+    "channelName": "Tin nhắn và cập nhật",
+    "settingsHint": "Chạm Quyền, sau đó bật những mục bạn cần.",
+    "names": {
+      "notifications": "Thông báo",
+      "calls": "Cuộc gọi điện thoại",
+      "camera": "Máy ảnh",
+      "callPopup": "Cửa sổ cuộc gọi (hiển thị trên các ứng dụng khác)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Liên hệ",
+      "close": "Đóng",
+      "ongoingTitle": "Cuộc gọi đang diễn ra",
+      "endedTitle": "Cuộc gọi đã kết thúc",
+      "endedText": "Chạm để ghi lại cuộc gọi của bạn với {{name}}.",
+      "channelOngoing": "Cuộc gọi đang diễn ra",
+      "channelEnded": "Tóm tắt cuộc gọi"
+    },
+    "summary": {
+      "title": "Thêm cuộc gọi",
+      "contact": "Liên hệ",
+      "type": "Loại cuộc gọi",
+      "outbound": "Gọi đi",
+      "status": "Trạng thái cuộc gọi đi",
+      "completed": "Hoàn tất",
+      "notAnswered": "Không trả lời",
+      "startTime": "Giờ bắt đầu cuộc gọi",
+      "duration": "Thời lượng cuộc gọi",
+      "durationHint": "Phút và giây, ví dụ 02:30",
+      "durationInvalid": "Nhập thời lượng theo dạng phút:giây, ví dụ 02:30.",
+      "subject": "Chủ đề",
+      "subjectDefault": "Cuộc gọi đi đến {{name}}",
+      "subjectInvalid": "Nhập chủ đề tối đa 255 ký tự.",
+      "notes": "Mô tả",
+      "save": "Lưu cuộc gọi",
+      "skip": "Bỏ qua",
+      "contactMissing": "Cuộc gọi này không có liên hệ để ghi lại.",
+      "denied": "Vai trò của bạn không thể thay đổi liên hệ nên không thể ghi lại cuộc gọi này.",
+      "purpose": "Mục đích cuộc gọi",
+      "purposeNone": "-Không có-",
+      "result": "Kết quả cuộc gọi",
+      "purposes": {
+        "prospecting": "Tìm kiếm khách hàng",
+        "administrative": "Hành chính",
+        "negotiation": "Đàm phán",
+        "demo": "Demo",
+        "project": "Dự án",
+        "desk": "Bàn làm việc"
+      }
+    }
+  }
+}

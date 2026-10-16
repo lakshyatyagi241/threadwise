@@ -1,0 +1,1430 @@
+{
+  "common": {
+    "loading": "加载中…",
+    "retry": "重试",
+    "signOut": "退出登录",
+    "clear": "清除",
+    "back": "返回",
+    "filters": {
+      "clearAll": "全部清除",
+      "apply": "应用",
+      "noMatch": "没有符合搜索条件的结果。"
+    }
+  },
+  "errors": {
+    "generic": "出了点问题，请重试。",
+    "network": "无法连接到服务器。请检查网络后重试。",
+    "timeout": "服务器响应超时，请重试。",
+    "outdatedApp": "此版本的应用已过期，请更新。",
+    "tooManyRequests": "尝试次数过多，请稍候再试。",
+    "captchaUnsupported": "需要完成安全验证，但应用暂不支持。请改用网站。"
+  },
+  "auth": {
+    "welcomeBack": "欢迎回来",
+    "welcomeSubtitle": "输入您的信息，返回您的工作区。",
+    "tagline": "所有客户聊天，尽在一个清爽的工作区",
+    "taglineCaption": "为快速响应的团队提供群发、自动化和共享收件箱。",
+    "email": "电子邮件",
+    "emailPlaceholder": "you@company.com",
+    "password": "密码",
+    "passwordPlaceholder": "输入密码",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码",
+    "signInSubmit": "登录",
+    "emailInvalid": "请输入有效的电子邮件地址。",
+    "passwordRequired": "请输入密码。",
+    "newHere": "第一次使用？",
+    "createAccount": "创建账号",
+    "legalSignIn": "登录即表示您同意我们的<terms>服务条款</terms>和<privacy>隐私政策</privacy>。",
+    "mfaTitle": "两步验证",
+    "mfaHint": "请输入验证器应用中的 6 位验证码。",
+    "mfaCode": "验证码",
+    "mfaSubmit": "验证",
+    "workspaceTitle": "选择工作区",
+    "workspaceHint": "您的账号属于多个工作区。",
+    "invalidCredentials": "电子邮件或密码不正确。",
+    "accountLocked": "此账号已被暂时锁定，请稍后再试。",
+    "accountSuspended": "此账号已被停用。",
+    "mfaInvalid": "验证码不正确，请重试。",
+    "mfaExpired": "登录已过期，请重新开始。"
+  },
+  "signUp": {
+    "tagline": "设置您的工作区",
+    "taglineCaption": "创建工作区，然后邀请团队并接入您的第一个渠道。",
+    "title": "创建账号",
+    "subtitle": "填写几项信息，工作区即可就绪。",
+    "fullName": "姓名",
+    "fullNamePlaceholder": "您的姓名",
+    "email": "工作邮箱",
+    "orgName": "工作区名称",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "您的团队通过地址 {{slug}} 登录。",
+    "orgNameHintEmpty": "这是您的团队看到的名称。",
+    "customiseSlug": "自定义工作区地址",
+    "orgSlug": "工作区地址",
+    "orgSlugPlaceholder": "your-workspace",
+    "orgSlugHint": "可使用字母、数字、短横线或下划线。团队成员登录时需输入此地址。",
+    "phone": "手机号码",
+    "phoneHint": "用于验证您的账号和发送重要通知。",
+    "referral": "推荐码（选填）",
+    "referralPlaceholder": "有朋友的推荐码吗？",
+    "confirmPassword": "确认密码",
+    "passwordPlaceholder": "设置密码",
+    "confirmPasswordPlaceholder": "再次输入密码",
+    "passwordMinLength": "最少 {{min}} 个字符。",
+    "passwordMixedCase": "需同时包含大写和小写字母。",
+    "passwordNumber": "需包含数字。",
+    "passwordSymbol": "需包含符号。",
+    "agree": "我同意<terms>服务条款</terms>和<privacy>隐私政策</privacy>。",
+    "submit": "创建账号",
+    "haveAccount": "已有账号？",
+    "signIn": "登录",
+    "closedBody": "注册已关闭。请向管理员索取邀请。",
+    "closedBack": "返回登录",
+    "validation": {
+      "fullName": "请输入您的姓名。",
+      "orgName": "请为工作区命名（至少 2 个字符）。",
+      "orgSlug": "请输入工作区地址（字母、数字、短横线或下划线）。",
+      "phoneRequired": "请输入手机号码。",
+      "phoneInvalid": "请输入有效的电话号码；非本地号码请带上国家/地区区号。",
+      "passwordMismatch": "两次输入的密码不一致。",
+      "passwordInvalid": "请输入符合所示要求的密码。",
+      "acceptTerms": "您必须接受条款才能继续。",
+      "referralCode": "推荐码只能包含字母和数字。"
+    },
+    "errors": {
+      "emailTaken": "此电子邮件已在该工作区中使用。",
+      "slugTaken": "该工作区地址已被占用。",
+      "passwordPolicy": "该密码不符合安全策略：",
+      "policyCommon": "该密码过于简单，容易被猜到。",
+      "otpSendFailed": "无法发送验证码。请检查号码后重试。",
+      "signupExpired": "请重新开始注册。"
+    },
+    "otp": {
+      "title": "请查看您的 WhatsApp",
+      "subtitle": "输入我们发送的一次性验证码，完成工作区创建。",
+      "sentTo": "我们已向 {{phone}} 发送验证码",
+      "code": "验证码",
+      "expiresIn": "验证码将在 {{time}} 后过期。",
+      "expired": "验证码已过期，请重新获取。",
+      "verify": "验证并继续",
+      "resend": "重新发送验证码",
+      "resendIn": "{{time}} 后可重新发送",
+      "resent": "新的验证码正在发送到您的 WhatsApp。",
+      "wrongNumber": "号码有误？返回修改",
+      "addressTakenHint": "您验证期间，该工作区地址已被占用。请另选一个，我们会向您发送新的验证码。",
+      "codeInvalid": "请输入 {{length}} 位验证码。",
+      "invalid": "验证码不正确，请重试。",
+      "tooMany": "尝试次数过多，请重新获取验证码。",
+      "cooldown": "请稍候，再重新获取验证码。"
+    }
+  },
+  "dashboard": {
+    "kicker": "运营仪表盘",
+    "synced": "实时 · {{s}} 秒前同步",
+    "greeting": {
+      "morning": "早上好，{{name}}。",
+      "afternoon": "下午好，{{name}}。",
+      "evening": "晚上好，{{name}}。"
+    },
+    "calm": "工作区一切平静。",
+    "running_other": "{{count}} 个营销活动正在进行。",
+    "subline_other": "{{date}} - {{range}}共发送 {{sent}} 条，送达率 {{rate}}%，已连接 {{count}} 台设备。",
+    "sublineOfficial": "{{date}} - {{range}}共发送 {{sent}} 条，送达率 {{rate}}%。",
+    "setupBanner": "您的工作区尚未设置完成。请在网页端完成设置，以解锁账号的其余功能。",
+    "range": {
+      "label": "日期范围",
+      "short": {
+        "24h": "24小时",
+        "7d": "7天",
+        "30d": "30天",
+        "qtd": "本季"
+      },
+      "long": {
+        "24h": "过去 24 小时",
+        "7d": "过去 7 天",
+        "30d": "过去 30 天",
+        "qtd": "本季度至今"
+      }
+    },
+    "trend": {
+      "up": "较上一周期上升 {{value}}",
+      "down": "较上一周期下降 {{value}}",
+      "flat": "与上一周期持平"
+    },
+    "kpi": {
+      "sent": "已发送消息 · {{range}}",
+      "sentLegend": "{{delivered}} 条已送达 · {{failed}} 条失败",
+      "sparkline": "过去 20 小时每小时发送的消息数，从最早开始",
+      "readRate": "已读率",
+      "readMini": {
+        "sent": "已发送",
+        "delivered": "已送达",
+        "read": "已读"
+      }
+    },
+    "contacts": {
+      "title": "活跃联系人",
+      "subscribed": "已订阅",
+      "optedIn": "已同意接收",
+      "blocked": "已屏蔽"
+    },
+    "wallet": {
+      "title": "钱包余额",
+      "payPerMessage": "按条计费"
+    },
+    "autopilot": {
+      "kicker": "事半功倍",
+      "title": "让回复自动运行",
+      "body": "创建流程或发起营销活动，自动触达更多客户。"
+    },
+    "pipeline": {
+      "kicker": "销售管道",
+      "open": "进行中的管道",
+      "deals": "进行中的交易",
+      "won": "本月赢单",
+      "winRate": "赢单率"
+    },
+    "throughput": {
+      "title": "消息吞吐量",
+      "subtitle": {
+        "24h": "发送、送达和失败数量，按小时统计，过去 24 小时",
+        "7d": "发送、送达和失败数量，按天统计，过去 7 天",
+        "30d": "发送、送达和失败数量，按天统计，过去 30 天",
+        "qtd": "发送、送达和失败数量，按天统计，本季度至今"
+      },
+      "peak": "高峰时段 {{when}} · {{n}} 条消息",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "failed": "失败",
+      "avgHour": "每小时平均",
+      "replies": "回复",
+      "replyRate": "回复率",
+      "summary": "此期间共发送 {{sent}} 条，送达 {{delivered}} 条，失败 {{failed}} 条。",
+      "subtitleCustom": "按天 · {{range}}"
+    },
+    "inbox": {
+      "title": "实时收件箱",
+      "unread": "{{n}} 条未读",
+      "oldest": "最早 {{when}}",
+      "recent": "最近的会话",
+      "empty": "暂无会话。"
+    },
+    "campaigns": {
+      "title": "进行中的营销活动",
+      "summary": "{{running}} 个进行中 - {{scheduled}} 个已排期 - {{paused}} 个已暂停",
+      "total": "共 {{n}} 个",
+      "untitled": "未命名的营销活动",
+      "delivered": "已送达 {{done}} / {{total}}",
+      "emptyTitle": "没有进行中的营销活动",
+      "emptyBody": "新建一个，开始向联系人分组发送消息。",
+      "status": {
+        "sending": "发送中",
+        "scheduled": "已排期",
+        "paused": "已暂停",
+        "failed": "失败",
+        "completed": "已完成"
+      }
+    },
+    "devices": {
+      "title": "已连接的设备",
+      "summary": "已使用 {{total}} / {{cap}} 个名额 - {{online}} 台在线",
+      "emptyTitle": "没有已连接的设备",
+      "emptyBody": "绑定 WhatsApp 号码以开始发送。",
+      "unzoned": "未分区",
+      "per24h": "{{n}}/24小时",
+      "deliv": "送达",
+      "free_other": "还有 {{count}} 个设备名额可用",
+      "state": {
+        "online": "在线",
+        "connecting": "连接中",
+        "offline": "离线"
+      }
+    },
+    "templates": {
+      "title": "表现最佳的模板",
+      "subtitle": "按发送量 - 所选范围",
+      "count_other": "{{count}} 个模板",
+      "empty": "暂无模板。",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "read": "已读",
+      "readRate": "已读率",
+      "status": {
+        "approved": "已通过",
+        "inReview": "审核中",
+        "rejected": "已拒绝"
+      }
+    },
+    "activity": {
+      "title": "活动日志",
+      "subtitle": "工作区事件",
+      "empty": "此工作区暂无近期活动记录。",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_other": "{{count}} 个账号",
+      "connected": "已连接",
+      "tile": {
+        "needReply": "待回复",
+        "openChats": "进行中的聊天",
+        "dmsIn": "收到的私信 · 7天",
+        "dmsOut": "发出的私信 · 7天",
+        "followers": "粉丝"
+      }
+    },
+    "flows": {
+      "title": "自动化流程",
+      "summary": "{{active}} 个启用 · {{subscribers}} 位订阅者",
+      "empty": "暂无流程。",
+      "meta": "{{trigger}}触发 · {{steps}} 个步骤 · {{subs}} 位订阅者",
+      "statusActive": "已启用",
+      "statusPaused": "已暂停",
+      "stat": {
+        "flows": "流程",
+        "active": "已启用",
+        "subscribers": "订阅者"
+      }
+    },
+    "integrations": {
+      "title": "集成",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} 个事件 / 7天",
+      "connected": {
+        "woocommerce": "已连接",
+        "shopify": "已连接",
+        "google_sheets": "已签发 API 密钥",
+        "meta_catalog": "已关联商品目录"
+      },
+      "notConnected": "未连接",
+      "connectedLabel": "已连接"
+    },
+    "funnel": {
+      "title": "互动漏斗",
+      "stage": {
+        "messaged": "已发消息的联系人",
+        "delivered": "已送达",
+        "replied": "已回复",
+        "goalCompleted": "目标已完成"
+      },
+      "stageLabel": "{{stage}}：{{n}} 位联系人，占已发消息联系人的 {{pct}}%",
+      "activity": {
+        "title": "会话活动",
+        "inbound_other": "{{count}} 条收到的消息",
+        "responding_other": "{{count}} 位回复的联系人",
+        "perContact": "每位回复的联系人平均回复 {{value}} 条"
+      },
+      "comparison": {
+        "title": "与上一周期对比",
+        "replyRate": "回复率"
+      }
+    },
+    "ago": {
+      "minute_other": "{{count}} 分钟前",
+      "hour_other": "{{count}} 小时前",
+      "day_other": "{{count}} 天前"
+    },
+    "error": {
+      "forbidden": "您的角色（{{role}}）无权访问仪表盘。",
+      "generic": "无法加载数据，请稍后重试。",
+      "locked": "您的套餐不包含数据分析。"
+    },
+    "greetingNoName": {
+      "morning": "早上好。",
+      "afternoon": "下午好。",
+      "evening": "晚上好。"
+    },
+    "views": {
+      "label": "仪表盘视图",
+      "summary": "概览",
+      "agent": "客服",
+      "bot": "机器人"
+    },
+    "agents": {
+      "title": "客服表现",
+      "conversations": "会话",
+      "resolved": "已解决",
+      "firstReply": "首次回复",
+      "resolution": "解决时长",
+      "csat": "评分",
+      "minutes": "{{value}} 分钟",
+      "hours": "{{value}} 小时",
+      "days": "{{value}} 天",
+      "empty": "此期间没有会话分配给任何人。",
+      "noAccess": "您的角色（{{role}}）无权查看客服数据分析。",
+      "everyone": "所有客服",
+      "pickerLabel": "客服",
+      "pickerPlaceholder": "选择客服",
+      "statusTitle": "会话状态",
+      "avgResolution": "平均解决时间",
+      "avgDuration": "平均会话时长",
+      "byAgentTitle": "按客服统计的会话",
+      "byAgentPicker": "状态列表所属客服",
+      "status": {
+        "open": "进行中",
+        "pending": "待处理",
+        "closed": "已关闭",
+        "assigned": "已分配",
+        "unassigned": "未分配",
+        "unattended": "无人处理"
+      }
+    },
+    "bots": {
+      "activeFlows": "已启用的流程",
+      "ofTotal": "共 {{total}} 个流程",
+      "subscribers": "订阅者",
+      "subscribersNote": "所有流程合计"
+    }
+  },
+  "tabs": {
+    "dashboard": "仪表盘",
+    "inbox": "收件箱",
+    "contacts": "联系人",
+    "menu": "菜单"
+  },
+  "menu": {
+    "title": "账号",
+    "profileLabel": "{{name}}，{{email}}",
+    "workspace": "工作区",
+    "inbox": "收件箱",
+    "contacts": "联系人",
+    "noAccess": "您没有权限使用此功能。请联系工作区管理员开通。",
+    "version": "版本 {{version}}",
+    "signOutTitle": "退出登录",
+    "signOutConfirm": "确定要退出登录吗？",
+    "signOutNo": "否",
+    "signOutYes": "是，退出登录",
+    "tasks": "任务",
+    "dashboard": "仪表盘",
+    "allContacts": "所有联系人",
+    "newContact": "新建联系人",
+    "sectionAccount": "账号",
+    "manageProfile": "管理个人资料",
+    "preferences": "偏好设置",
+    "devicePermissions": "设备权限",
+    "devicePermissionsHint": "打开手机上此应用的设置",
+    "about": "关于",
+    "dataSecurity": "数据与安全",
+    "checkUpdates": "检查更新",
+    "updates": {
+      "off": "此版本的应用不会自动更新。请安装最新版本以获取更改。",
+      "latest": "您使用的已是最新版本。",
+      "ready": "更新已就绪。再次点按即可重启并使用。",
+      "failed": "无法检查更新，请稍后重试。"
+    },
+    "profile": {
+      "title": "管理个人资料",
+      "fullName": "姓名",
+      "displayName": "显示名称",
+      "displayNameHint": "向团队显示的名称，将代替姓名。留空则使用姓名。",
+      "phone": "电话",
+      "phoneHint": "请带上国家/地区区号，例如 +919876543210。",
+      "email": "电子邮件",
+      "pendingEmail": "更改为 {{email}} 的请求正等待您确认。",
+      "timezone": "工作区时区",
+      "save": "保存更改",
+      "cancel": "取消",
+      "nameRequired": "请输入您的姓名。",
+      "nameTooLong": "最多 120 个字符。",
+      "phoneInvalid": "请输入带国家/地区区号的电话号码，例如 +919876543210。"
+    },
+    "appearance": {
+      "title": "外观",
+      "light": "浅色模式",
+      "dark": "深色模式",
+      "device": "跟随设备设置",
+      "hint": "已保存到您的账号。",
+      "failed": "无法保存您的选择，请重试。"
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "收件箱视图",
+      "all": "全部",
+      "mine": "我的",
+      "unassigned": "未分配",
+      "unread": "未读"
+    },
+    "search": {
+      "open": "搜索会话",
+      "close": "关闭搜索",
+      "label": "搜索",
+      "placeholder": "姓名、号码或消息"
+    },
+    "filter": {
+      "open": "筛选",
+      "sheet": "会话状态",
+      "close": "关闭",
+      "applied": "已应用的筛选条件",
+      "clearAll": "全部清除",
+      "remove": "移除筛选：{{name}}",
+      "statusChip": "状态：{{name}}",
+      "searchChip": "搜索：{{q}}",
+      "title": "筛选",
+      "view": "视图",
+      "viewActive": "会话",
+      "viewArchived": "已归档",
+      "channel": "渠道",
+      "allChannels": "所有渠道",
+      "labels": "标签",
+      "searchLabels": "搜索标签",
+      "channelChip": "渠道：{{name}}",
+      "labelsChip": "标签：{{names}}",
+      "archivedChip": "已归档"
+    },
+    "statusFilter": {
+      "default": "进行中和待处理",
+      "open": "进行中",
+      "pending": "待处理",
+      "snoozed": "已搁置",
+      "resolved": "已解决",
+      "closed": "已关闭",
+      "all": "所有状态"
+    },
+    "status": {
+      "open": "进行中",
+      "pending": "待处理",
+      "snoozed": "已搁置",
+      "resolved": "已解决",
+      "closed": "已关闭",
+      "spam": "垃圾信息"
+    },
+    "list": {
+      "label": "会话",
+      "emptyTitle": "暂无会话",
+      "emptyHint": "客户发来的消息会显示在这里。",
+      "emptyFilteredHint": "没有符合这些筛选条件的结果。试试清除筛选。",
+      "noMore": "没有更多会话了",
+      "loadingMore": "正在加载更多会话",
+      "noAccessTitle": "无权访问收件箱",
+      "noAccessBody": "您的角色无法查看会话。请联系工作区管理员更改。"
+    },
+    "row": {
+      "noMessages": "暂无消息",
+      "unread_other": "{{count}} 条未读消息",
+      "label": "{{title}}，{{preview}}",
+      "labelUnread": "{{title}}，{{unread}}，{{preview}}",
+      "assignedTo": "已分配给 {{name}}",
+      "media": "媒体"
+    },
+    "time": {
+      "am": "上午",
+      "pm": "下午",
+      "yesterday": "昨天"
+    },
+    "thread": {
+      "messages": "消息",
+      "loadingOlder": "正在加载更早的消息",
+      "emptyTitle": "暂无消息",
+      "emptyHint": "此会话中的消息会显示在这里。",
+      "noAccessTitle": "无权访问此会话",
+      "noAccessBody": "您的角色无法查看会话。",
+      "resolve": "标记为已解决",
+      "reopen": "重新打开",
+      "call": "拨打 {{phone}}",
+      "pictureOpen": "全屏查看照片",
+      "pictureFull": "照片",
+      "pictureClose": "关闭照片",
+      "windowClosed": "24 小时回复窗口已关闭。请改为发送模板。",
+      "conflict": "其他人已修改此会话。已加载最新版本，请重试。",
+      "statusInvalid": "此会话无法移动到该状态。",
+      "window": {
+        "left": "回复窗口：还剩 {{hours}} 小时 {{minutes}} 分钟",
+        "closed": "回复窗口已关闭"
+      },
+      "menu": {
+        "open": "更多操作",
+        "close": "关闭菜单",
+        "assignToMe": "分配给我",
+        "details": "查看详情",
+        "status": "更改状态",
+        "agent": "分配客服"
+      },
+      "bot": {
+        "notice": "这是一个机器人会话。",
+        "assignSelf": "分配给自己"
+      },
+      "labels": {
+        "open": "分配标签",
+        "title": "分配标签",
+        "close": "关闭",
+        "empty": "暂无标签。",
+        "emptyCreate": "暂无标签。在下方输入名称即可创建。",
+        "newLabel": "新标签",
+        "add": "添加",
+        "failed": "无法更改标签，请重试。"
+      },
+      "assignment": {
+        "none": "未分配",
+        "team": "团队：{{name}}",
+        "failed": "无法更改会话，请重试。",
+        "you": "已分配给您",
+        "to": "已分配给 {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "收到：{{text}}，{{time}}",
+      "labelOut": "您发送：{{text}}，{{time}}，{{status}}",
+      "deleted": "此消息已被删除",
+      "retry": "重新发送",
+      "mediaPending": "文件仍在下载中。",
+      "mediaFailed": "文件下载失败。"
+    },
+    "kind": {
+      "text": "消息",
+      "image": "照片",
+      "video": "视频",
+      "audio": "音频",
+      "voice": "语音消息",
+      "document": "文档",
+      "sticker": "贴纸",
+      "location": "位置",
+      "contact": "联系人",
+      "template": "模板",
+      "reaction": "回应",
+      "interactive": "互动消息",
+      "system": "系统消息"
+    },
+    "delivery": {
+      "queued": "发送中",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "read": "已读",
+      "failed": "未发送",
+      "received": "已收到"
+    },
+    "composer": {
+      "label": "消息",
+      "placeholder": "输入消息",
+      "send": "发送",
+      "tooLong": "消息最多 {{max}} 个字符。",
+      "noteLabel": "私人备注",
+      "notePlaceholder": "写一条仅团队可见的备注",
+      "addNote": "添加备注",
+      "noteOn": "写私人备注",
+      "noteOff": "返回回复"
+    },
+    "template": {
+      "closedNotice": "客户在过去 24 小时内没有与您联系。您只能发送已获批准的模板。",
+      "send": "发送模板",
+      "title": "发送模板",
+      "close": "关闭",
+      "search": "搜索模板",
+      "empty": "此号码暂无已通过的模板。",
+      "emptySearch": "没有符合搜索条件的模板。",
+      "more": "还有更多模板。在搜索框中输入关键词查找。",
+      "fillTitle": "填写详细信息",
+      "back": "返回模板",
+      "submit": "发送",
+      "reason": {
+        "paused": "因质量问题被 WhatsApp 暂停。请稍后再试。",
+        "media_header": "包含图片、视频或文档页眉，应用暂不支持发送。",
+        "header_variable": "页眉中含有变量，应用暂不支持填写。",
+        "dynamic_button": "按钮链接中含有变量，应用暂不支持填写。",
+        "authentication": "一次性密码模板由系统发送。",
+        "named_variables": "使用了命名变量，应用暂不支持填写。"
+      }
+    },
+    "errors": {
+      "channelDisconnected": "此渠道已断开连接。请在网页端重新连接后再试。",
+      "planLimit": "已达到您套餐的消息上限。",
+      "forbidden": "您没有权限执行此操作。",
+      "notFound": "此会话已不存在。"
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "网页聊天",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "模拟器"
+    },
+    "sheet": {
+      "close": "关闭",
+      "save": "保存更改",
+      "noMatch": "没有匹配项。"
+    },
+    "assign": {
+      "title": "更改客服",
+      "search": "搜索客服",
+      "agents": "客服",
+      "teams": "团队",
+      "unassigned": "未分配",
+      "noTeam": "无团队",
+      "you": "{{name}}（您）",
+      "availability": {
+        "online": "在线",
+        "away": "离开",
+        "busy": "忙碌",
+        "offline": "离线"
+      },
+      "open_other": "{{count}} 个进行中",
+      "members_other": "{{count}} 位成员",
+      "failed": "无法更改会话负责人，请重试。"
+    },
+    "priority": {
+      "title": "设置优先级",
+      "low": "低",
+      "normal": "普通",
+      "high": "高",
+      "urgent": "紧急"
+    },
+    "snooze": {
+      "title": "搁置至",
+      "hour": "1 小时后",
+      "threeHours": "3 小时后",
+      "tomorrow": "明天上午 9:00",
+      "nextWeek": "下周一上午 9:00"
+    },
+    "statusSheet": {
+      "title": "更改状态"
+    },
+    "details": {
+      "title": "聊天详情",
+      "contact": "联系人",
+      "openContact": "打开联系人",
+      "call": "通话",
+      "noContact": "此会话还没有联系人记录。",
+      "email": "电子邮件",
+      "stage": "阶段",
+      "contactStatus": "状态",
+      "owner": "负责人",
+      "source": "来源",
+      "since": "成为联系人时间",
+      "optedOut": "已退订消息",
+      "leadScore": "线索评分",
+      "actions": "操作",
+      "status": "状态",
+      "priority": "优先级",
+      "labels": "标签",
+      "none": "无",
+      "agent": "已分配客服",
+      "team": "团队",
+      "you": "您",
+      "bot": "机器人",
+      "unassigned": "未分配",
+      "info": "会话",
+      "channel": "渠道",
+      "window": "回复窗口",
+      "windowOpen": "有效期至 {{time}}",
+      "windowClosed": "已关闭",
+      "windowNone": "无时间限制",
+      "snoozedUntil": "搁置至 {{time}}",
+      "notes": {
+        "title": "内部备注",
+        "empty": "暂无备注。备注仅团队可见。",
+        "label": "写备注",
+        "add": "添加备注",
+        "delete": "删除",
+        "deleteFor": "删除 {{name}} 的备注",
+        "failed": "无法保存备注，请重试。",
+        "deleteFailed": "无法删除备注，请重试。",
+        "unknownAuthor": "某人",
+        "tooLong": "备注最多 {{max}} 个字符。"
+      },
+      "timeline": {
+        "title": "时间线",
+        "empty": "暂无动态。",
+        "system": "系统"
+      },
+      "past": {
+        "title": "历史会话",
+        "empty": "没有与该联系人的其他会话。"
+      },
+      "snooze": "搁置",
+      "wake": "立即唤醒"
+    },
+    "event": {
+      "created": "会话已开始",
+      "assigned": "已分配",
+      "reassigned": "已重新分配",
+      "unassigned": "已取消分配",
+      "ai_handoff": "由 AI 客服转接",
+      "resolved": "已解决",
+      "closed": "已关闭",
+      "reopened": "已重新打开",
+      "status_changed": "状态已更改",
+      "note_added": "已添加备注",
+      "snoozed": "已搁置",
+      "auto_unsnoozed": "已按时唤醒",
+      "priority_changed": "优先级已更改",
+      "tag_added": "已添加标签",
+      "tag_removed": "已移除标签",
+      "first_response": "已发送首次回复",
+      "sla_breach": "回复超时"
+    },
+    "replies": {
+      "open": "快捷回复",
+      "title": "快捷回复",
+      "search": "搜索快捷回复",
+      "empty": "暂无快捷回复。",
+      "noMatch": "没有符合搜索条件的快捷回复。",
+      "failed": "无法使用此回复，请重试。",
+      "unfilled": "请检查消息：{{list}} 未能填入。"
+    },
+    "note": {
+      "title": "私人备注",
+      "label": "{{name}} 的私人备注：{{text}}，{{time}}"
+    },
+    "bulk": {
+      "hint": "长按以选择会话",
+      "selected_other": "已选 {{count}} 项",
+      "close": "取消选择",
+      "selectAll": "全选",
+      "read": "标记为已读",
+      "status": "状态",
+      "assign": "分配",
+      "label": "标签",
+      "priority": "优先级",
+      "snooze": "搁置",
+      "statusTitle_other": "更改 {{count}} 个会话的状态",
+      "labelTitle_other": "{{count}} 个会话的标签",
+      "labelMode": "操作",
+      "labelAdd": "添加标签",
+      "labelRemove": "移除标签",
+      "labelSearch": "搜索标签",
+      "priorityTitle_other": "{{count}} 个会话的优先级",
+      "snoozeTitle_other": "将 {{count}} 个会话搁置至",
+      "result": "{{done}} 项已更新，{{unchanged}} 项未变，{{failed}} 项失败",
+      "resultDismiss": "忽略"
+    }
+  },
+  "contacts": {
+    "title": "联系人",
+    "unknown": "未知",
+    "add": "添加联系人",
+    "cancel": "取消",
+    "yes": "是",
+    "no": "否",
+    "denied": {
+      "title": "您无权查看联系人",
+      "hint": "请联系工作区管理员，为您的角色开通联系人权限。",
+      "createTitle": "您无权添加联系人",
+      "createHint": "请联系工作区管理员，允许您的角色添加联系人。"
+    },
+    "empty": {
+      "title": "暂无联系人",
+      "hint": "点按 + 按钮添加您的第一位联系人。",
+      "filteredTitle": "没有匹配的联系人",
+      "filteredHint": "换个搜索词，或清除筛选条件。"
+    },
+    "search": {
+      "open": "搜索联系人",
+      "close": "关闭搜索",
+      "label": "搜索",
+      "placeholder": "姓名、电话或电子邮件"
+    },
+    "filter": {
+      "open": "筛选联系人",
+      "title": "筛选",
+      "stage": "生命周期阶段",
+      "owner": "联系人负责人",
+      "ownerSearch": "搜索联系人负责人",
+      "unassigned": "无负责人",
+      "created": "创建日期",
+      "any": "不限",
+      "marketing": "营销消息",
+      "marketingOptions": {
+        "all": "全部",
+        "subscribed": "已订阅",
+        "unsubscribed": "已退订"
+      },
+      "source": "来源",
+      "sourceHint": "联系人的来源，例如 import 或 api。",
+      "clear": "全部清除",
+      "apply": "应用"
+    },
+    "stage": {
+      "new": "新建",
+      "contacted": "已联系",
+      "qualified": "已确认意向",
+      "application_started": "已开始申请",
+      "application_submitted": "已提交申请",
+      "interview_scheduled": "已安排面试",
+      "offer_received": "已收到录取通知",
+      "admission_confirmed": "已确认录取",
+      "enrolled": "已入学",
+      "lost": "已流失"
+    },
+    "subscription": {
+      "subscribed": "已订阅",
+      "unsubscribed": "已退订",
+      "pending": "待处理"
+    },
+    "form": {
+      "name": "姓名",
+      "phone": "电话",
+      "phoneHint": "请带上国家/地区区号，例如 +919876543210。",
+      "email": "电子邮件",
+      "needPhoneOrEmail": "请输入电话号码或电子邮件地址。",
+      "phoneInvalid": "请输入带国家/地区区号的电话号码，例如 +919876543210。",
+      "emailInvalid": "请输入有效的电子邮件地址。",
+      "nameInvalid": "请输入不超过 255 个字符的姓名。"
+    },
+    "new": {
+      "title": "新建联系人",
+      "save": "保存联系人",
+      "requiredTitle": "必填信息",
+      "choose": "选择",
+      "search": "搜索",
+      "unsupported": "{{label}}为必填项，但暂时无法在此填写。请在网页端添加此联系人。",
+      "requiredMissing": "您的工作区需要更多信息才能保存联系人，而此应用无法显示这些信息。请向管理员申请联系人属性的权限，或在网页端添加联系人。"
+    },
+    "edit": {
+      "title": "编辑联系人",
+      "open": "编辑联系人",
+      "save": "保存更改",
+      "conflict": "此联系人已被其他人修改。请检查后重新保存。"
+    },
+    "detail": {
+      "title": "联系人",
+      "notFound": "此联系人已不存在。",
+      "phone": "电话",
+      "email": "电子邮件",
+      "call": "拨打 {{phone}}",
+      "mail": "给 {{email}} 写邮件",
+      "stage": "生命周期阶段",
+      "status": "状态",
+      "score": "评分",
+      "source": "来源",
+      "whatsapp": "WhatsApp 订阅",
+      "marketing": "营销消息",
+      "optedOut": "已退订",
+      "optedIn": "可接收",
+      "lastActivity": "最近活动",
+      "noActivity": "暂无活动",
+      "created": "添加时间",
+      "customFields": "自定义字段",
+      "actions": {
+        "call": "通话",
+        "chat": "聊天",
+        "email": "邮件",
+        "sms": "短信",
+        "tasks": "任务",
+        "notes": "备注"
+      },
+      "tabsLabel": "联系人分区",
+      "tabs": {
+        "about": "联系人详情",
+        "activity": "活动",
+        "files": "更多"
+      },
+      "activities": {
+        "label": "活动视图",
+        "all": "所有活动",
+        "timeline": "活动时间线"
+      },
+      "more": {
+        "account": "账户",
+        "deals": "交易"
+      },
+      "summary": {
+        "title": "活动",
+        "notes": "备注",
+        "tasks": "任务",
+        "meetings": "会议",
+        "rowLabel": "{{label}}，{{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "删除联系人",
+        "title": "删除联系人",
+        "message": "删除 {{name}}？此操作无法撤销。",
+        "confirm": "删除",
+        "cancel": "取消"
+      }
+    },
+    "tags": {
+      "title": "标签",
+      "none": "暂无标签。",
+      "remove": "移除标签 {{name}}",
+      "addLabel": "添加标签",
+      "addPlaceholder": "标签名称",
+      "add": "添加标签"
+    },
+    "row": {
+      "more": "{{name}} 的更多操作",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "编辑",
+      "swipeDelete": "删除"
+    },
+    "sheet": {
+      "close": "关闭"
+    },
+    "views": {
+      "open": "联系人视图：{{name}}",
+      "title": "视图",
+      "close": "关闭视图",
+      "searchLabel": "搜索视图",
+      "searchPlaceholder": "搜索视图",
+      "systemTitle": "系统默认视图",
+      "customTitle": "自定义视图",
+      "none": "没有可用的视图",
+      "failed": "无法加载已保存的视图。",
+      "system": {
+        "all": "所有联系人",
+        "mine": "我的联系人",
+        "recent": "最近创建",
+        "optedOut": "已退订营销消息"
+      }
+    }
+  },
+  "tasks": {
+    "title": "任务",
+    "add": "添加任务",
+    "cancel": "取消",
+    "unknownContact": "未命名联系人",
+    "notFound": "此任务已不存在。",
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "status": {
+      "open": "进行中",
+      "done": "已完成",
+      "overdue": "已逾期"
+    },
+    "denied": {
+      "title": "您无权查看任务",
+      "hint": "请联系工作区管理员，为您开通任务权限。",
+      "createTitle": "您无权添加任务",
+      "createHint": "请联系工作区管理员，允许您添加任务。",
+      "editTitle": "您无权编辑任务",
+      "editHint": "请联系工作区管理员，允许您编辑任务。"
+    },
+    "planLocked": {
+      "title": "当前套餐不包含任务功能。",
+      "hint": "请联系工作区管理员升级套餐。"
+    },
+    "empty": {
+      "title": "未找到任务。",
+      "hint": "您添加的任务会显示在这里。",
+      "filteredHint": "换个筛选条件或搜索词试试。"
+    },
+    "search": {
+      "open": "搜索任务",
+      "close": "关闭搜索",
+      "label": "搜索",
+      "placeholder": "按标题搜索"
+    },
+    "filter": {
+      "open": "筛选任务",
+      "title": "筛选任务",
+      "clear": "全部清除",
+      "apply": "应用",
+      "group": {
+        "status": "状态",
+        "priority": "优先级",
+        "due": "截止时间",
+        "owner": "负责人"
+      },
+      "status": {
+        "open": "进行中",
+        "done": "已完成",
+        "all": "全部"
+      },
+      "due": {
+        "overdue": "已逾期",
+        "today": "今天",
+        "upcoming": "即将到期",
+        "none": "无日期"
+      },
+      "owner": {
+        "mine": "我的",
+        "unassigned": "未分配",
+        "all": "全部"
+      }
+    },
+    "list": {
+      "conflict": "此任务已被其他人修改。列表已刷新。"
+    },
+    "row": {
+      "markDone": "将 {{title}} 标记为已完成",
+      "reopen": "重新打开 {{title}}",
+      "more": "{{title}} 的更多操作",
+      "due": "截止 {{when}}",
+      "unassigned": "未分配"
+    },
+    "actions": {
+      "edit": "编辑任务",
+      "delete": "删除任务"
+    },
+    "delete": {
+      "title": "删除任务",
+      "message": "确定要删除此任务吗？",
+      "confirm": "删除"
+    },
+    "details": {
+      "title": "任务详情",
+      "edit": "编辑任务",
+      "delete": "删除任务",
+      "description": "描述",
+      "priority": "优先级",
+      "status": "状态",
+      "owner": "负责人",
+      "relatedTo": "关联对象",
+      "noDescription": "无描述",
+      "noDue": "无截止日期",
+      "unassigned": "未分配",
+      "noContact": "无",
+      "openContact": "打开 {{name}}",
+      "markComplete": "标记为完成",
+      "reopen": "重新打开",
+      "conflict": "此任务已被其他人修改，已重新加载。"
+    },
+    "form": {
+      "addTitle": "添加任务",
+      "editTitle": "编辑任务",
+      "save": "保存任务",
+      "saving": "正在保存…",
+      "title": "任务标题",
+      "description": "任务描述",
+      "priority": "优先级",
+      "date": "日期（YYYY-MM-DD）",
+      "dateHint": "日期和时间都留空表示无截止日期。例如 2026-10-31。",
+      "time": "时间（HH:mm）",
+      "timeHint": "24 小时制，例如 14:30。",
+      "owner": "负责人",
+      "ownerPick": "选择负责人",
+      "ownerMe": "我",
+      "ownerNone": "未分配",
+      "ownerLoading": "正在加载您的团队…",
+      "ownerFailed": "无法加载您的团队。",
+      "contact": "联系人",
+      "contactLinkOptional": "关联联系人（选填）",
+      "contactNone": "无联系人",
+      "contactPick": "选择联系人",
+      "contactSearchLabel": "搜索联系人",
+      "contactSearchPlaceholder": "姓名、电子邮件或电话",
+      "contactEmpty": "未找到联系人。",
+      "contactFailed": "无法加载联系人。",
+      "conflict": "此任务已被其他人修改。请检查后重新保存。",
+      "errors": {
+        "titleRequired": "请输入任务标题。",
+        "titleTooLong": "标题最多 255 个字符。",
+        "titleNeedsLetter": "标题至少要包含一个字母。",
+        "notesTooLong": "描述最多 5000 个字符。",
+        "dateInvalid": "请按 YYYY-MM-DD 格式输入日期，例如 2026-10-31。",
+        "timeInvalid": "请按 24 小时制 HH:mm 格式输入时间，例如 14:30。",
+        "dateNeeded": "还需要输入日期。",
+        "timeNeeded": "还需要输入时间。",
+        "dueInvalid": "无法使用此截止日期和时间。",
+        "assigneeInvalid": "无法给该用户分配任务。请选择其他负责人。",
+        "contactInvalid": "无法关联此联系人。"
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "备注",
+    "cancel": "取消",
+    "loadMore": "加载更多",
+    "deleteConfirm": "删除",
+    "contactMissing": "此联系人已不存在。",
+    "add": "添加备注",
+    "edited": "已编辑",
+    "denied": {
+      "title": "您无权查看备注",
+      "hint": "请联系工作区管理员，为您的角色开通联系人权限。",
+      "updateTitle": "您无权修改备注",
+      "updateHint": "请联系工作区管理员，允许您的角色编辑联系人。"
+    },
+    "empty": {
+      "title": "暂无备注。",
+      "hint": "点按 + 按钮添加第一条备注。"
+    },
+    "menu": {
+      "open": "{{date}} 备注的操作",
+      "edit": "编辑备注",
+      "delete": "删除备注"
+    },
+    "delete": {
+      "title": "删除备注",
+      "message": "确定要删除此备注吗？"
+    },
+    "form": {
+      "addTitle": "添加备注",
+      "editTitle": "更新备注",
+      "label": "备注",
+      "placeholder": "在此写下您的备注...",
+      "required": "保存前请先写备注。",
+      "invalid": "请输入不超过 400 个字符的备注。",
+      "counterLabel": "已使用 {{used}} / {{max}} 个字符",
+      "save": "保存备注",
+      "saving": "正在保存备注",
+      "conflict": "此备注已被其他人修改。请检查后重新保存。",
+      "missing": "此备注已不存在。"
+    },
+    "activity": {
+      "notes": "备注",
+      "tasks": "任务",
+      "timeline": "时间线",
+      "empty": "暂无活动。",
+      "add": "添加活动",
+      "types": {
+        "note": "备注",
+        "call": "通话",
+        "email": "邮件",
+        "meeting": "会议",
+        "task": "任务"
+      },
+      "source": {
+        "system": "系统",
+        "bot": "机器人"
+      },
+      "form": {
+        "title": "添加活动",
+        "type": "类型",
+        "typeHint": "例如备注、通话、邮件或会议。",
+        "name": "标题",
+        "details": "详情",
+        "save": "保存活动",
+        "typeInvalid": "请输入不超过 100 个字符的类型。",
+        "titleInvalid": "请输入不超过 255 个字符的标题。",
+        "detailsInvalid": "详情最多 10,000 个字符。"
+      }
+    },
+    "files": {
+      "empty": "暂无文件。",
+      "delete": "删除文件 {{name}}",
+      "deleteTitle": "删除文件",
+      "deleteMessage": "确定要删除此文件吗？"
+    }
+  },
+  "contactMeetings": {
+    "title": "会议",
+    "loadMore": "加载更多",
+    "contactMissing": "此联系人已不存在。",
+    "noDate": "未设置日期",
+    "denied": {
+      "title": "您无权查看会议",
+      "hint": "请联系工作区管理员，为您的角色开通联系人权限。"
+    },
+    "empty": {
+      "title": "暂无会议记录。"
+    }
+  },
+  "contactDeals": {
+    "title": "交易",
+    "contactMissing": "此联系人已不存在。",
+    "denied": {
+      "title": "您无权查看交易",
+      "hint": "请联系工作区管理员，为您的角色开通交易权限。"
+    },
+    "empty": {
+      "title": "暂无交易。"
+    }
+  },
+  "contactCompany": {
+    "title": "账户",
+    "missing": "此账户已不存在。",
+    "denied": {
+      "title": "您无权查看账户",
+      "hint": "请联系工作区管理员，为您的角色开通公司权限。"
+    },
+    "industry": "行业",
+    "size": "规模",
+    "phone": "电话",
+    "email": "电子邮件",
+    "website": "网站",
+    "address": "地址",
+    "owner": "负责人",
+    "notes": "备注"
+  },
+  "contactProps": {
+    "title": "联系人信息",
+    "search": "搜索字段",
+    "showEmpty": "显示空字段",
+    "footer": "您可以在网页端自定义此处显示的属性。",
+    "close": "关闭",
+    "save": "保存",
+    "clear": "清除",
+    "yes": "是",
+    "no": "否",
+    "rowHint": "打开编辑器",
+    "locked": "您无法编辑{{label}}",
+    "webOnly": "{{label}}只能在网页端编辑。",
+    "masked": "已隐藏",
+    "fields": {
+      "email": "电子邮件",
+      "phone": "电话",
+      "owner": "联系人负责人",
+      "name": "姓名",
+      "source": "来源",
+      "whatsapp": "WhatsApp 订阅",
+      "marketing": "营销退订",
+      "leadScore": "线索评分",
+      "created": "创建时间",
+      "lastActivity": "最近活动"
+    },
+    "subscription": {
+      "subscribed": "已订阅",
+      "unsubscribed": "已退订",
+      "pending": "待处理"
+    },
+    "editor": {
+      "title": "编辑{{label}}",
+      "date": "日期",
+      "dateHint": "年-月-日，例如 2026-10-12。",
+      "time": "时间",
+      "timeHint": "24 小时制，例如 14:30。",
+      "phoneHint": "请带上国家/地区区号，例如 +919876543210。",
+      "noOptions": "没有可选的选项。"
+    },
+    "error": {
+      "required": "{{label}}为必填项。",
+      "name": "请输入不超过 255 个字符的姓名。",
+      "email": "请输入有效的电子邮件地址。",
+      "phone": "请输入带国家/地区区号的电话号码，例如 +919876543210。",
+      "needPhoneOrEmail": "联系人需要电话号码或电子邮件地址。",
+      "text": "最多输入 {{max}} 个字符。",
+      "number": "请输入数字。",
+      "whole": "请输入整数。",
+      "range": "请输入 0 到 {{max}} 之间的数字。",
+      "url": "请输入以 http:// 或 https:// 开头的链接",
+      "date": "请按 YYYY-MM-DD 格式输入有效日期。",
+      "time": "请按 HH:mm 格式输入有效时间。",
+      "option": "请选择其中一个选项。",
+      "invalid": "该值不被接受。请检查后重试。",
+      "notEditable": "此属性无法编辑。",
+      "requiredMissing": "有必填属性尚未填写。请先填写再保存。",
+      "conflict": "此联系人已被其他人修改。请检查后重新保存。",
+      "lostReasonRequired": "请说明该联系人流失的原因。",
+      "statusMismatch": "该状态不属于此生命周期阶段。"
+    },
+    "owner": {
+      "title": "分配给",
+      "unassigned": "未分配",
+      "none": "没有可分配此联系人的人员。",
+      "failed": "无法更改负责人，请重试。"
+    },
+    "lifecycle": {
+      "stage": "生命周期阶段",
+      "status": "状态",
+      "change": "更改生命周期阶段",
+      "changeStatus": "更改状态",
+      "dropdownHint": "打开列表进行选择",
+      "lostReason": "流失原因",
+      "otherReason": "其他",
+      "otherLabel": "说明原因"
+    }
+  },
+  "summary": {
+    "contacts": "联系人",
+    "contactsNote": "此期间新增",
+    "tasks": "任务",
+    "tasksNote": "当前进行中",
+    "messages": "消息",
+    "sentNote": "已发送",
+    "receivedNote": "已收到",
+    "conversations": "会话",
+    "conversationsNote": "当前进行中和待处理",
+    "status": {
+      "all": "活跃",
+      "mine": "我的",
+      "unassigned": "未分配",
+      "assigned": "已分配",
+      "unread": "未读",
+      "archived": "已归档"
+    },
+    "allMessages": {
+      "title": "所有消息",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "received": "已收到",
+      "read": "已读",
+      "failed": "失败"
+    },
+    "moreTitle": "工作区的更多内容"
+  },
+  "dashDate": {
+    "title": "按日历搜索",
+    "close": "关闭日历",
+    "apply": "应用",
+    "reset": "重置",
+    "presets": "快捷范围",
+    "pill": {
+      "label": "日期范围：{{from}} 至 {{to}}",
+      "hint": "打开日历以更改日期"
+    },
+    "selection": {
+      "label": "{{from}} 至 {{to}}",
+      "pickFirst": "选择起始日",
+      "pickLast": "选择结束日"
+    },
+    "preset": {
+      "last7": "过去 7 天",
+      "last30": "过去 30 天",
+      "last90": "过去 90 天",
+      "yesterday": "昨天",
+      "today": "今天"
+    },
+    "calendar": {
+      "previousMonth": "上个月",
+      "nextMonth": "下个月",
+      "start": "范围起点",
+      "end": "范围终点",
+      "inRange": "范围内",
+      "today": "今天"
+    }
+  },
+  "permissions": {
+    "channelName": "消息和更新",
+    "settingsHint": "点按“权限”，然后开启所需的权限。",
+    "names": {
+      "notifications": "通知",
+      "calls": "电话",
+      "camera": "相机",
+      "callPopup": "来电弹窗（显示在其他应用上层）"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "联系人",
+      "close": "关闭",
+      "ongoingTitle": "通话中",
+      "endedTitle": "通话已结束",
+      "endedText": "点按以记录您与 {{name}} 的通话。",
+      "channelOngoing": "进行中的通话",
+      "channelEnded": "通话摘要"
+    },
+    "summary": {
+      "title": "添加通话",
+      "contact": "联系人",
+      "type": "通话类型",
+      "outbound": "呼出",
+      "status": "呼出通话状态",
+      "completed": "已完成",
+      "notAnswered": "未接听",
+      "startTime": "通话开始时间",
+      "duration": "通话时长",
+      "durationHint": "分钟和秒，例如 02:30",
+      "durationInvalid": "请按“分钟:秒”格式输入时长，例如 02:30。",
+      "subject": "主题",
+      "subjectDefault": "致 {{name}} 的呼出电话",
+      "subjectInvalid": "请输入不超过 255 个字符的主题。",
+      "notes": "描述",
+      "save": "保存通话",
+      "skip": "跳过",
+      "contactMissing": "此通话没有可记录的联系人。",
+      "denied": "您的角色无法修改联系人，因此无法记录此通话。",
+      "purpose": "通话目的",
+      "purposeNone": "-无-",
+      "result": "通话结果",
+      "purposes": {
+        "prospecting": "开发客户",
+        "administrative": "行政事务",
+        "negotiation": "洽谈",
+        "demo": "演示",
+        "project": "项目",
+        "desk": "服务台"
+      }
+    }
+  }
+}

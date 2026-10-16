@@ -19,10 +19,19 @@ interface Props {
   /** The chosen value; a value that is in no option shows the placeholder. */
   value: string | undefined;
   onChange: (value: string) => void;
+  /** `plain` has no border or fill: the value and its chevron sit in a form row that draws its own lines. */
+  variant?: 'box' | 'plain';
 }
 
 /** A boxed dropdown: the chosen label (or the placeholder) with a chevron, opening a list of choices; the chosen one carries a tick. */
-export function SelectField({ label, placeholder, options, value, onChange }: Props) {
+export function SelectField({
+  label,
+  placeholder,
+  options,
+  value,
+  onChange,
+  variant = 'box',
+}: Props) {
   const { colors } = useTheme();
   const [open, setOpen] = useState(false);
   const current = options.find((o) => o.value === value);
@@ -34,7 +43,11 @@ export function SelectField({ label, placeholder, options, value, onChange }: Pr
         accessibilityValue={{ text: current?.label ?? placeholder }}
         accessibilityState={{ expanded: open }}
         onPress={() => setOpen(true)}
-        style={[styles.box, { backgroundColor: colors.surface, borderColor: colors.borderStrong }]}
+        style={
+          variant === 'plain'
+            ? styles.plain
+            : [styles.box, { backgroundColor: colors.surface, borderColor: colors.borderStrong }]
+        }
       >
         <Text muted={!current} numberOfLines={1} style={styles.value}>
           {current?.label ?? placeholder}
@@ -92,6 +105,12 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: radius.md,
     paddingHorizontal: spacing.lg,
+  },
+  plain: {
+    minHeight: MIN_TOUCH_TARGET,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
   },
   value: { flex: 1 },
   scrim: { flex: 1, justifyContent: 'center', padding: spacing.lg },

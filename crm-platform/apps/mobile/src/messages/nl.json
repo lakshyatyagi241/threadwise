@@ -1,0 +1,1448 @@
+{
+  "common": {
+    "loading": "Laden…",
+    "retry": "Opnieuw proberen",
+    "signOut": "Uitloggen",
+    "clear": "Wissen",
+    "back": "Terug",
+    "filters": {
+      "clearAll": "Alles wissen",
+      "apply": "Toepassen",
+      "noMatch": "Geen resultaten voor je zoekopdracht."
+    }
+  },
+  "errors": {
+    "generic": "Er is iets misgegaan. Probeer het opnieuw.",
+    "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+    "timeout": "De server deed er te lang over om te antwoorden. Probeer het opnieuw.",
+    "outdatedApp": "Deze versie van de app is verouderd. Werk de app bij.",
+    "tooManyRequests": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+    "captchaUnsupported": "Er is een beveiligingscontrole nodig die de app nog niet kan uitvoeren. Gebruik in plaats daarvan de website."
+  },
+  "auth": {
+    "welcomeBack": "Welkom terug",
+    "welcomeSubtitle": "Vul je gegevens in om terug te gaan naar je workspace.",
+    "tagline": "Elk klantgesprek, één rustige workspace",
+    "taglineCaption": "Broadcasts, automatiseringen en een gedeelde inbox voor teams die snel antwoorden.",
+    "email": "E-mail",
+    "emailPlaceholder": "jij@bedrijf.nl",
+    "password": "Wachtwoord",
+    "passwordPlaceholder": "Voer je wachtwoord in",
+    "showPassword": "Wachtwoord tonen",
+    "hidePassword": "Wachtwoord verbergen",
+    "signInSubmit": "Inloggen",
+    "emailInvalid": "Voer een geldig e-mailadres in.",
+    "passwordRequired": "Voer je wachtwoord in.",
+    "newHere": "Nieuw hier?",
+    "createAccount": "Account aanmaken",
+    "legalSignIn": "Door in te loggen ga je akkoord met onze <terms>Voorwaarden</terms> en ons <privacy>Privacybeleid</privacy>.",
+    "mfaTitle": "Verificatie in twee stappen",
+    "mfaHint": "Voer de 6-cijferige code uit je authenticator-app in.",
+    "mfaCode": "Verificatiecode",
+    "mfaSubmit": "Verifiëren",
+    "workspaceTitle": "Kies een workspace",
+    "workspaceHint": "Je account hoort bij meer dan één workspace.",
+    "invalidCredentials": "Het e-mailadres of wachtwoord is onjuist.",
+    "accountLocked": "Dit account is tijdelijk vergrendeld. Probeer het later opnieuw.",
+    "accountSuspended": "Dit account is geblokkeerd.",
+    "mfaInvalid": "Die code is onjuist. Probeer het opnieuw.",
+    "mfaExpired": "De inlogsessie is verlopen. Begin opnieuw."
+  },
+  "signUp": {
+    "tagline": "Richt je workspace in",
+    "taglineCaption": "Maak je workspace aan en haal daarna je team en je eerste kanaal erbij.",
+    "title": "Maak je account aan",
+    "subtitle": "Een paar gegevens en je workspace staat klaar.",
+    "fullName": "Volledige naam",
+    "fullNamePlaceholder": "Je naam",
+    "email": "Zakelijk e-mailadres",
+    "orgName": "Naam van de workspace",
+    "orgNamePlaceholder": "Acme B.V.",
+    "orgNameHint": "Je team logt in met het adres {{slug}}.",
+    "orgNameHintEmpty": "Dit is de naam die je team ziet.",
+    "customiseSlug": "Kies een eigen workspace-adres",
+    "orgSlug": "Workspace-adres",
+    "orgSlugPlaceholder": "jouw-workspace",
+    "orgSlugHint": "Letters, cijfers, streepje of underscore. Je team voert dit in bij het inloggen.",
+    "phone": "Mobiel nummer",
+    "phoneHint": "We gebruiken het om je account te verifiëren en voor belangrijke updates.",
+    "referral": "Verwijzingscode (optioneel)",
+    "referralPlaceholder": "Heb je een code van een vriend?",
+    "confirmPassword": "Bevestig wachtwoord",
+    "passwordPlaceholder": "Kies een wachtwoord",
+    "confirmPasswordPlaceholder": "Voer je wachtwoord opnieuw in",
+    "passwordMinLength": "Minimale lengte: {{min}}.",
+    "passwordMixedCase": "Combineer hoofdletters en kleine letters.",
+    "passwordNumber": "Gebruik een cijfer.",
+    "passwordSymbol": "Gebruik een symbool.",
+    "agree": "Ik ga akkoord met de <terms>Voorwaarden</terms> en het <privacy>Privacybeleid</privacy>.",
+    "submit": "Account aanmaken",
+    "haveAccount": "Heb je al een account?",
+    "signIn": "Inloggen",
+    "closedBody": "Registratie is gesloten. Vraag een beheerder om een uitnodiging.",
+    "closedBack": "Terug naar inloggen",
+    "validation": {
+      "fullName": "Voer je volledige naam in.",
+      "orgName": "Geef je workspace een naam (minimaal 2 tekens).",
+      "orgSlug": "Voer het adres van je workspace in (letters, cijfers, streepje of underscore).",
+      "phoneRequired": "Voer je mobiele nummer in.",
+      "phoneInvalid": "Voer een geldig telefoonnummer in, met landcode als het geen lokaal nummer is.",
+      "passwordMismatch": "De twee wachtwoorden komen niet overeen.",
+      "passwordInvalid": "Voer een wachtwoord in dat aan de getoonde eisen voldoet.",
+      "acceptTerms": "Je moet de voorwaarden accepteren om door te gaan.",
+      "referralCode": "Verwijzingscodes bestaan alleen uit letters en cijfers."
+    },
+    "errors": {
+      "emailTaken": "Dat e-mailadres wordt al gebruikt in deze workspace.",
+      "slugTaken": "Dat workspace-adres is al in gebruik.",
+      "passwordPolicy": "Dat wachtwoord voldoet niet aan het beveiligingsbeleid:",
+      "policyCommon": "Dat wachtwoord is te makkelijk te raden.",
+      "otpSendFailed": "We konden de verificatiecode niet versturen. Controleer het nummer en probeer het opnieuw.",
+      "signupExpired": "Begin de registratie opnieuw."
+    },
+    "otp": {
+      "title": "Controleer je WhatsApp",
+      "subtitle": "Voer de eenmalige code in die we hebben gestuurd om je workspace af te maken.",
+      "sentTo": "We hebben een code gestuurd naar {{phone}}",
+      "code": "Verificatiecode",
+      "expiresIn": "De code verloopt over {{time}}.",
+      "expired": "Deze code is verlopen. Vraag een nieuwe aan.",
+      "verify": "Verifiëren en doorgaan",
+      "resend": "Code opnieuw versturen",
+      "resendIn": "Code opnieuw versturen over {{time}}",
+      "resent": "Er is een nieuwe code onderweg naar je WhatsApp.",
+      "wrongNumber": "Verkeerd nummer? Ga terug",
+      "addressTakenHint": "Dat workspace-adres is bezet geraakt terwijl je verifieerde. Kies een ander adres, dan sturen we je een nieuwe code.",
+      "codeInvalid": "Voer de code van {{length}} cijfers in.",
+      "invalid": "Die code is onjuist. Probeer het opnieuw.",
+      "tooMany": "Te veel pogingen. Vraag een nieuwe code aan.",
+      "cooldown": "Wacht even voordat je een nieuwe code aanvraagt."
+    }
+  },
+  "dashboard": {
+    "kicker": "Operatordashboard",
+    "synced": "Live · {{s}} s geleden gesynchroniseerd",
+    "greeting": {
+      "morning": "Goedemorgen, {{name}}.",
+      "afternoon": "Goedemiddag, {{name}}.",
+      "evening": "Goedenavond, {{name}}."
+    },
+    "calm": "Het is rustig in de workspace.",
+    "running_one": "{{count}} campagne is actief.",
+    "running_other": "{{count}} campagnes zijn actief.",
+    "subline_one": "{{date}} - {{range}}: {{sent}} uitgaand, {{rate}}% bezorgd via {{count}} verbonden apparaat.",
+    "subline_other": "{{date}} - {{range}}: {{sent}} uitgaand, {{rate}}% bezorgd via {{count}} verbonden apparaten.",
+    "sublineOfficial": "{{date}} - {{range}}: {{sent}} uitgaand, {{rate}}% bezorgd.",
+    "setupBanner": "De installatie van je workspace is nog niet afgerond. Rond die af op het web om de rest van je account te ontgrendelen.",
+    "range": {
+      "label": "Periode",
+      "short": {
+        "24h": "24 u",
+        "7d": "7 d",
+        "30d": "30 d",
+        "qtd": "KTD"
+      },
+      "long": {
+        "24h": "Afgelopen 24 uur",
+        "7d": "Afgelopen 7 dagen",
+        "30d": "Afgelopen 30 dagen",
+        "qtd": "Kwartaal tot nu toe"
+      }
+    },
+    "trend": {
+      "up": "{{value}} hoger dan in de vorige periode",
+      "down": "{{value}} lager dan in de vorige periode",
+      "flat": "Geen verandering ten opzichte van de vorige periode"
+    },
+    "kpi": {
+      "sent": "Verzonden berichten · {{range}}",
+      "sentLegend": "{{delivered}} bezorgd · {{failed}} mislukt",
+      "sparkline": "Verzonden berichten per uur over de afgelopen 20 uur, oudste eerst",
+      "readRate": "Leespercentage",
+      "readMini": {
+        "sent": "Verzonden",
+        "delivered": "Bezorgd",
+        "read": "Gelezen"
+      }
+    },
+    "contacts": {
+      "title": "Actieve contacten",
+      "subscribed": "Geabonneerd",
+      "optedIn": "Aangemeld",
+      "blocked": "Geblokkeerd"
+    },
+    "wallet": {
+      "title": "Walletsaldo",
+      "payPerMessage": "betalen per bericht"
+    },
+    "autopilot": {
+      "kicker": "Haal meer uit je tijd",
+      "title": "Zet antwoorden op de automatische piloot",
+      "body": "Bouw een flow of start een campagne om automatisch meer klanten te bereiken."
+    },
+    "pipeline": {
+      "kicker": "Salespipeline",
+      "open": "Pipeline openen",
+      "deals": "Openstaande deals",
+      "won": "Gewonnen deze maand",
+      "winRate": "Winstpercentage"
+    },
+    "throughput": {
+      "title": "Berichtendoorvoer",
+      "subtitle": {
+        "24h": "Uitgaand, bezorgd en mislukt, per uur, afgelopen 24 uur",
+        "7d": "Uitgaand, bezorgd en mislukt, per dag, afgelopen 7 dagen",
+        "30d": "Uitgaand, bezorgd en mislukt, per dag, afgelopen 30 dagen",
+        "qtd": "Uitgaand, bezorgd en mislukt, per dag, kwartaal tot nu toe"
+      },
+      "peak": "Piekuur {{when}} · {{n}} berichten",
+      "sent": "Verzonden",
+      "delivered": "Bezorgd",
+      "failed": "Mislukt",
+      "avgHour": "Gemiddeld per uur",
+      "replies": "Antwoorden",
+      "replyRate": "Antwoordpercentage",
+      "summary": "{{sent}} verzonden, {{delivered}} bezorgd en {{failed}} mislukt in deze periode.",
+      "subtitleCustom": "Per dag · {{range}}"
+    },
+    "inbox": {
+      "title": "Live-inbox",
+      "unread": "{{n}} ongelezen",
+      "oldest": "oudste {{when}}",
+      "recent": "Recente gesprekken",
+      "empty": "Nog geen gesprekken."
+    },
+    "campaigns": {
+      "title": "Actieve campagnes",
+      "summary": "{{running}} actief - {{scheduled}} gepland - {{paused}} gepauzeerd",
+      "total": "{{n}} in totaal",
+      "untitled": "Naamloze campagne",
+      "delivered": "{{done}} / {{total}} bezorgd",
+      "emptyTitle": "Geen actieve campagnes",
+      "emptyBody": "Start er een om te beginnen met versturen naar een contactgroep.",
+      "status": {
+        "sending": "Verzenden",
+        "scheduled": "Gepland",
+        "paused": "Gepauzeerd",
+        "failed": "Mislukt",
+        "completed": "Voltooid"
+      }
+    },
+    "devices": {
+      "title": "Verbonden apparaten",
+      "summary": "{{total}} van {{cap}} plekken in gebruik - {{online}} online",
+      "emptyTitle": "Geen apparaten verbonden",
+      "emptyBody": "Koppel een WhatsApp-nummer om te beginnen met versturen.",
+      "unzoned": "zonder zone",
+      "per24h": "{{n}}/24 u",
+      "deliv": "bezorgd",
+      "free_one": "{{count}} apparaatplek beschikbaar",
+      "free_other": "{{count}} apparaatplekken beschikbaar",
+      "state": {
+        "online": "Online",
+        "connecting": "Verbinden",
+        "offline": "Offline"
+      }
+    },
+    "templates": {
+      "title": "Best presterende sjablonen",
+      "subtitle": "Op verzendvolume - geselecteerde periode",
+      "count_one": "{{count}} sjabloon",
+      "count_other": "{{count}} sjablonen",
+      "empty": "Nog geen sjablonen.",
+      "sent": "Verzonden",
+      "delivered": "Bezorgd",
+      "read": "Gelezen",
+      "readRate": "Leespercentage",
+      "status": {
+        "approved": "Goedgekeurd",
+        "inReview": "In beoordeling",
+        "rejected": "Afgewezen"
+      }
+    },
+    "activity": {
+      "title": "Activiteitenlogboek",
+      "subtitle": "Gebeurtenissen in de workspace",
+      "empty": "Geen recente activiteit vastgelegd voor deze workspace.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "{{count}} account",
+      "accounts_other": "{{count}} accounts",
+      "connected": "Verbonden",
+      "tile": {
+        "needReply": "Antwoord nodig",
+        "openChats": "Openstaande chats",
+        "dmsIn": "DM's ontvangen · 7 d",
+        "dmsOut": "DM's verzonden · 7 d",
+        "followers": "Volgers"
+      }
+    },
+    "flows": {
+      "title": "Automatiseringsflows",
+      "summary": "{{active}} actief · {{subscribers}} abonnees",
+      "empty": "Nog geen flows.",
+      "meta": "Trigger: {{trigger}} · {{steps}} stappen · {{subs}} abonnees",
+      "statusActive": "Actief",
+      "statusPaused": "Gepauzeerd",
+      "stat": {
+        "flows": "Flows",
+        "active": "Actief",
+        "subscribers": "Abonnees"
+      }
+    },
+    "integrations": {
+      "title": "Integraties",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} gebeurtenissen / 7 d",
+      "connected": {
+        "woocommerce": "Verbonden",
+        "shopify": "Verbonden",
+        "google_sheets": "API-sleutel uitgegeven",
+        "meta_catalog": "Catalogus gekoppeld"
+      },
+      "notConnected": "niet verbonden",
+      "connectedLabel": "Verbonden"
+    },
+    "funnel": {
+      "title": "Betrokkenheidstrechter",
+      "stage": {
+        "messaged": "Aangeschreven contacten",
+        "delivered": "Bezorgd",
+        "replied": "Beantwoord",
+        "goalCompleted": "Doel bereikt"
+      },
+      "stageLabel": "{{stage}}: {{n}} contacten, {{pct}}% van de aangeschreven contacten",
+      "activity": {
+        "title": "Gespreksactiviteit",
+        "inbound_one": "{{count}} inkomend bericht",
+        "inbound_other": "{{count}} inkomende berichten",
+        "responding_one": "{{count}} reagerend contact",
+        "responding_other": "{{count}} reagerende contacten",
+        "perContact": "{{value}} antwoorden per reagerend contact"
+      },
+      "comparison": {
+        "title": "Vergeleken met de vorige periode",
+        "replyRate": "Antwoordpercentage"
+      }
+    },
+    "ago": {
+      "minute_one": "{{count}} minuut geleden",
+      "minute_other": "{{count}} minuten geleden",
+      "hour_one": "{{count}} uur geleden",
+      "hour_other": "{{count}} uur geleden",
+      "day_one": "{{count}} dag geleden",
+      "day_other": "{{count}} dagen geleden"
+    },
+    "error": {
+      "forbidden": "Je rol ({{role}}) heeft geen toegang tot het dashboard.",
+      "generic": "De cijfers konden niet worden geladen. Probeer het zo meteen opnieuw.",
+      "locked": "Analyses zijn niet inbegrepen in je abonnement."
+    },
+    "greetingNoName": {
+      "morning": "Goedemorgen.",
+      "afternoon": "Goedemiddag.",
+      "evening": "Goedenavond."
+    },
+    "views": {
+      "label": "Dashboardweergave",
+      "summary": "Overzicht",
+      "agent": "Agent",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Prestaties van agents",
+      "conversations": "Gesprekken",
+      "resolved": "Opgelost",
+      "firstReply": "Eerste antwoord",
+      "resolution": "Oplossing",
+      "csat": "Beoordeling",
+      "minutes": "{{value}} min",
+      "hours": "{{value}} u",
+      "days": "{{value}} d",
+      "empty": "In deze periode is aan niemand een gesprek toegewezen.",
+      "noAccess": "Je rol ({{role}}) heeft geen toegang tot agentanalyses.",
+      "everyone": "Alle agents",
+      "pickerLabel": "Agent",
+      "pickerPlaceholder": "Kies een agent",
+      "statusTitle": "Gespreksstatus",
+      "avgResolution": "Gemiddelde oplostijd",
+      "avgDuration": "Gemiddelde gespreksduur",
+      "byAgentTitle": "Gesprekken per agent",
+      "byAgentPicker": "Agent voor de statuslijst",
+      "status": {
+        "open": "Open",
+        "pending": "In behandeling",
+        "closed": "Gesloten",
+        "assigned": "Toegewezen",
+        "unassigned": "Niet toegewezen",
+        "unattended": "Onbeheerd"
+      }
+    },
+    "bots": {
+      "activeFlows": "Actieve flows",
+      "ofTotal": "van {{total}} flows",
+      "subscribers": "Abonnees",
+      "subscribersNote": "in alle flows"
+    }
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "inbox": "Inbox",
+    "contacts": "Contacten",
+    "menu": "Menu"
+  },
+  "menu": {
+    "title": "Account",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Workspace",
+    "inbox": "Inbox",
+    "contacts": "Contacten",
+    "noAccess": "Je hebt hier geen toegang toe. Vraag de beheerder van je workspace om het te ontgrendelen.",
+    "version": "Versie {{version}}",
+    "signOutTitle": "Uitloggen",
+    "signOutConfirm": "Weet je zeker dat je wilt uitloggen?",
+    "signOutNo": "Nee",
+    "signOutYes": "Ja, uitloggen",
+    "tasks": "Taken",
+    "dashboard": "Dashboard",
+    "allContacts": "Alle contacten",
+    "newContact": "Nieuw contact",
+    "sectionAccount": "Account",
+    "manageProfile": "Profiel beheren",
+    "preferences": "Voorkeuren",
+    "devicePermissions": "Apparaatrechten",
+    "devicePermissionsHint": "Open de instellingen van deze app op je telefoon",
+    "about": "Over",
+    "dataSecurity": "Gegevens en beveiliging",
+    "checkUpdates": "Controleren op updates",
+    "updates": {
+      "off": "Deze versie van de app ontvangt niet zelf updates. Installeer de nieuwste versie om wijzigingen te krijgen.",
+      "latest": "Je hebt de nieuwste versie.",
+      "ready": "Er staat een update klaar. Tik nogmaals om opnieuw te starten en hem te gebruiken.",
+      "failed": "Kan niet controleren op updates. Probeer het zo meteen opnieuw."
+    },
+    "profile": {
+      "title": "Profiel beheren",
+      "fullName": "Volledige naam",
+      "displayName": "Weergavenaam",
+      "displayNameHint": "Wordt aan je team getoond in plaats van je volledige naam. Laat leeg om je volledige naam te gebruiken.",
+      "phone": "Telefoon",
+      "phoneHint": "Met landcode, bijvoorbeeld +919876543210.",
+      "email": "E-mail",
+      "pendingEmail": "Een wijziging naar {{email}} wacht op je bevestiging.",
+      "timezone": "Tijdzone van de workspace",
+      "save": "Wijzigingen opslaan",
+      "cancel": "Annuleren",
+      "nameRequired": "Voer je naam in.",
+      "nameTooLong": "Gebruik maximaal 120 tekens.",
+      "phoneInvalid": "Voer het telefoonnummer in met landcode, bijvoorbeeld +919876543210."
+    },
+    "appearance": {
+      "title": "Weergave",
+      "light": "Lichte modus",
+      "dark": "Donkere modus",
+      "device": "Apparaatinstellingen gebruiken",
+      "hint": "Opgeslagen in je account.",
+      "failed": "Je keuze kon niet worden opgeslagen. Probeer het opnieuw."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Inboxweergave",
+      "all": "Alle",
+      "mine": "Van mij",
+      "unassigned": "Niet toegewezen",
+      "unread": "Ongelezen"
+    },
+    "search": {
+      "open": "Gesprekken zoeken",
+      "close": "Zoeken sluiten",
+      "label": "Zoeken",
+      "placeholder": "Naam, nummer of bericht"
+    },
+    "filter": {
+      "open": "Filters",
+      "sheet": "Gespreksstatus",
+      "close": "Sluiten",
+      "applied": "Toegepaste filters",
+      "clearAll": "Alles wissen",
+      "remove": "Filter verwijderen: {{name}}",
+      "statusChip": "Status: {{name}}",
+      "searchChip": "Zoeken: {{q}}",
+      "title": "Filters",
+      "view": "Weergave",
+      "viewActive": "Gesprekken",
+      "viewArchived": "Gearchiveerd",
+      "channel": "Kanaal",
+      "allChannels": "Alle kanalen",
+      "labels": "Labels",
+      "searchLabels": "Labels zoeken",
+      "channelChip": "Kanaal: {{name}}",
+      "labelsChip": "Labels: {{names}}",
+      "archivedChip": "Gearchiveerd"
+    },
+    "statusFilter": {
+      "default": "Open en in behandeling",
+      "open": "Open",
+      "pending": "In behandeling",
+      "snoozed": "Uitgesteld",
+      "resolved": "Opgelost",
+      "closed": "Gesloten",
+      "all": "Alle statussen"
+    },
+    "status": {
+      "open": "Open",
+      "pending": "In behandeling",
+      "snoozed": "Uitgesteld",
+      "resolved": "Opgelost",
+      "closed": "Gesloten",
+      "spam": "Spam"
+    },
+    "list": {
+      "label": "Gesprekken",
+      "emptyTitle": "Geen gesprekken",
+      "emptyHint": "Berichten van je klanten verschijnen hier.",
+      "emptyFilteredHint": "Niets komt overeen met deze filters. Probeer ze te wissen.",
+      "noMore": "Geen gesprekken meer",
+      "loadingMore": "Meer gesprekken laden",
+      "noAccessTitle": "Geen toegang tot de inbox",
+      "noAccessBody": "Je rol kan geen gesprekken lezen. Vraag een workspacebeheerder dit te wijzigen."
+    },
+    "row": {
+      "noMessages": "Nog geen berichten",
+      "unread_one": "{{count}} ongelezen bericht",
+      "unread_other": "{{count}} ongelezen berichten",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "Toegewezen aan {{name}}",
+      "media": "Media"
+    },
+    "time": {
+      "am": "AM",
+      "pm": "PM",
+      "yesterday": "Gisteren"
+    },
+    "thread": {
+      "messages": "Berichten",
+      "loadingOlder": "Eerdere berichten laden",
+      "emptyTitle": "Nog geen berichten",
+      "emptyHint": "Berichten in dit gesprek verschijnen hier.",
+      "noAccessTitle": "Geen toegang tot dit gesprek",
+      "noAccessBody": "Je rol kan geen gesprekken lezen.",
+      "resolve": "Oplossen",
+      "reopen": "Heropenen",
+      "call": "Bel {{phone}}",
+      "pictureOpen": "Foto op volledig scherm openen",
+      "pictureFull": "Foto",
+      "pictureClose": "Foto sluiten",
+      "windowClosed": "Het antwoordvenster van 24 uur is gesloten. Stuur in plaats daarvan een sjabloon.",
+      "conflict": "Iemand anders heeft dit gesprek gewijzigd. De nieuwste versie is geladen, probeer het opnieuw.",
+      "statusInvalid": "Dit gesprek kan niet naar die status worden verplaatst.",
+      "window": {
+        "left": "Antwoordvenster: nog {{hours}} u {{minutes}} min",
+        "closed": "Antwoordvenster gesloten"
+      },
+      "menu": {
+        "open": "Meer acties",
+        "close": "Menu sluiten",
+        "assignToMe": "Aan mij toewijzen",
+        "details": "Details bekijken",
+        "status": "Status wijzigen",
+        "agent": "Agent toewijzen"
+      },
+      "bot": {
+        "notice": "Dit is een botgesprek.",
+        "assignSelf": "Aan jezelf toewijzen"
+      },
+      "labels": {
+        "open": "Labels toewijzen",
+        "title": "Labels toewijzen",
+        "close": "Sluiten",
+        "empty": "Er zijn nog geen labels.",
+        "emptyCreate": "Er zijn nog geen labels. Typ hieronder een naam om er een te maken.",
+        "newLabel": "Nieuw label",
+        "add": "Toevoegen",
+        "failed": "De labels konden niet worden gewijzigd. Probeer het opnieuw."
+      },
+      "assignment": {
+        "none": "Niet toegewezen",
+        "team": "Team: {{name}}",
+        "failed": "Het gesprek kon niet worden gewijzigd. Probeer het opnieuw.",
+        "you": "Aan jou toegewezen",
+        "to": "Toegewezen aan {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "Ontvangen: {{text}}, {{time}}",
+      "labelOut": "Door jou verzonden: {{text}}, {{time}}, {{status}}",
+      "deleted": "Dit bericht is verwijderd",
+      "retry": "Opnieuw verzenden",
+      "mediaPending": "Het bestand wordt nog gedownload.",
+      "mediaFailed": "Het bestand kon niet worden gedownload."
+    },
+    "kind": {
+      "text": "Bericht",
+      "image": "Foto",
+      "video": "Video",
+      "audio": "Audio",
+      "voice": "Spraakbericht",
+      "document": "Document",
+      "sticker": "Sticker",
+      "location": "Locatie",
+      "contact": "Contact",
+      "template": "Sjabloon",
+      "reaction": "Reactie",
+      "interactive": "Interactief bericht",
+      "system": "Systeembericht"
+    },
+    "delivery": {
+      "queued": "Verzenden",
+      "sent": "Verzonden",
+      "delivered": "Bezorgd",
+      "read": "Gelezen",
+      "failed": "Niet verzonden",
+      "received": "Ontvangen"
+    },
+    "composer": {
+      "label": "Bericht",
+      "placeholder": "Typ een bericht",
+      "send": "Verzenden",
+      "tooLong": "Berichten mogen maximaal {{max}} tekens bevatten.",
+      "noteLabel": "Privénotitie",
+      "notePlaceholder": "Schrijf een notitie die alleen je team ziet",
+      "addNote": "Notitie toevoegen",
+      "noteOn": "Schrijf een privénotitie",
+      "noteOff": "Terug naar antwoord"
+    },
+    "template": {
+      "closedNotice": "De klant heeft de afgelopen 24 uur niet met je gesproken. Je kunt alleen vooraf goedgekeurde sjablonen versturen.",
+      "send": "Sjabloon verzenden",
+      "title": "Een sjabloon verzenden",
+      "close": "Sluiten",
+      "search": "Sjablonen zoeken",
+      "empty": "Nog geen goedgekeurde sjablonen voor dit nummer.",
+      "emptySearch": "Geen sjablonen gevonden voor je zoekopdracht.",
+      "more": "Er zijn meer sjablonen. Typ in het zoekvak om ze te vinden.",
+      "fillTitle": "Vul de gegevens in",
+      "back": "Terug naar sjablonen",
+      "submit": "Verzenden",
+      "reason": {
+        "paused": "Door WhatsApp gepauzeerd vanwege kwaliteit. Probeer het later opnieuw.",
+        "media_header": "Heeft een koptekst met afbeelding, video of document, die de app nog niet kan versturen.",
+        "header_variable": "Heeft een variabele in de koptekst, die de app nog niet kan invullen.",
+        "dynamic_button": "Heeft een knoplink met een variabele, die de app nog niet kan invullen.",
+        "authentication": "Sjablonen met eenmalige wachtwoorden worden door het systeem verzonden.",
+        "named_variables": "Gebruikt benoemde variabelen, die de app nog niet kan invullen."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "Dit kanaal is losgekoppeld. Verbind het opnieuw op het web en probeer het dan nog eens.",
+      "planLimit": "De berichtlimiet van je abonnement is bereikt.",
+      "forbidden": "Je hebt geen toestemming om dat te doen.",
+      "notFound": "Dit gesprek is niet meer beschikbaar."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Webchat",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Simulator"
+    },
+    "sheet": {
+      "close": "Sluiten",
+      "save": "Wijzigingen opslaan",
+      "noMatch": "Geen resultaten."
+    },
+    "assign": {
+      "title": "Agent wijzigen",
+      "search": "Agents zoeken",
+      "agents": "Agents",
+      "teams": "Teams",
+      "unassigned": "Niet toegewezen",
+      "noTeam": "Geen team",
+      "you": "{{name}} (jij)",
+      "availability": {
+        "online": "Online",
+        "away": "Afwezig",
+        "busy": "Bezet",
+        "offline": "Offline"
+      },
+      "open_one": "{{count}} open gesprek",
+      "open_other": "{{count}} open gesprekken",
+      "members_one": "{{count}} lid",
+      "members_other": "{{count}} leden",
+      "failed": "Kan niet wijzigen wie dit gesprek heeft. Probeer het opnieuw."
+    },
+    "priority": {
+      "title": "Prioriteit instellen",
+      "low": "Laag",
+      "normal": "Normaal",
+      "high": "Hoog",
+      "urgent": "Urgent"
+    },
+    "snooze": {
+      "title": "Uitstellen tot",
+      "hour": "Over 1 uur",
+      "threeHours": "Over 3 uur",
+      "tomorrow": "Morgen, 9:00",
+      "nextWeek": "Volgende maandag, 9:00"
+    },
+    "statusSheet": {
+      "title": "Status wijzigen"
+    },
+    "details": {
+      "title": "Chatdetails",
+      "contact": "Contact",
+      "openContact": "Contact openen",
+      "call": "Bellen",
+      "noContact": "Dit gesprek heeft nog geen contactrecord.",
+      "email": "E-mail",
+      "stage": "Fase",
+      "contactStatus": "Status",
+      "owner": "Eigenaar",
+      "source": "Bron",
+      "since": "Contact sinds",
+      "optedOut": "Afgemeld voor berichten",
+      "leadScore": "Leadscore",
+      "actions": "Acties",
+      "status": "Status",
+      "priority": "Prioriteit",
+      "labels": "Labels",
+      "none": "Geen",
+      "agent": "Toegewezen agent",
+      "team": "Team",
+      "you": "Jij",
+      "bot": "Bot",
+      "unassigned": "Niet toegewezen",
+      "info": "Gesprek",
+      "channel": "Kanaal",
+      "window": "Antwoordvenster",
+      "windowOpen": "Open tot {{time}}",
+      "windowClosed": "Gesloten",
+      "windowNone": "Geen tijdslimiet",
+      "snoozedUntil": "Uitgesteld tot {{time}}",
+      "notes": {
+        "title": "Interne notities",
+        "empty": "Nog geen notities. Alleen je team ziet notities.",
+        "label": "Schrijf een notitie",
+        "add": "Notitie toevoegen",
+        "delete": "Verwijderen",
+        "deleteFor": "Notitie van {{name}} verwijderen",
+        "failed": "De notitie kon niet worden opgeslagen. Probeer het opnieuw.",
+        "deleteFailed": "De notitie kon niet worden verwijderd. Probeer het opnieuw.",
+        "unknownAuthor": "Iemand",
+        "tooLong": "Notities mogen maximaal {{max}} tekens bevatten."
+      },
+      "timeline": {
+        "title": "Tijdlijn",
+        "empty": "Er is nog niets gebeurd.",
+        "system": "Systeem"
+      },
+      "past": {
+        "title": "Eerdere gesprekken",
+        "empty": "Geen andere gesprekken met dit contact."
+      },
+      "snooze": "Uitstellen",
+      "wake": "Nu hervatten"
+    },
+    "event": {
+      "created": "Gesprek gestart",
+      "assigned": "Toegewezen",
+      "reassigned": "Opnieuw toegewezen",
+      "unassigned": "Toewijzing opgeheven",
+      "ai_handoff": "Overgedragen door de AI-agent",
+      "resolved": "Opgelost",
+      "closed": "Gesloten",
+      "reopened": "Heropend",
+      "status_changed": "Status gewijzigd",
+      "note_added": "Notitie toegevoegd",
+      "snoozed": "Uitgesteld",
+      "auto_unsnoozed": "Op tijd hervat",
+      "priority_changed": "Prioriteit gewijzigd",
+      "tag_added": "Label toegevoegd",
+      "tag_removed": "Label verwijderd",
+      "first_response": "Eerste antwoord verzonden",
+      "sla_breach": "Antwoordtijd overschreden"
+    },
+    "replies": {
+      "open": "Opgeslagen antwoorden",
+      "title": "Opgeslagen antwoorden",
+      "search": "Opgeslagen antwoorden zoeken",
+      "empty": "Nog geen opgeslagen antwoorden.",
+      "noMatch": "Geen opgeslagen antwoorden gevonden voor je zoekopdracht.",
+      "failed": "Dit antwoord kon niet worden gebruikt. Probeer het opnieuw.",
+      "unfilled": "Controleer het bericht: {{list}} kon niet worden ingevuld."
+    },
+    "note": {
+      "title": "Privénotitie",
+      "label": "Privénotitie van {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Houd ingedrukt om gesprekken te selecteren",
+      "selected_one": "{{count}} geselecteerd",
+      "selected_other": "{{count}} geselecteerd",
+      "close": "Selectie annuleren",
+      "selectAll": "Alles selecteren",
+      "read": "Markeren als gelezen",
+      "status": "Status",
+      "assign": "Toewijzen",
+      "label": "Labels",
+      "priority": "Prioriteit",
+      "snooze": "Uitstellen",
+      "statusTitle_one": "Status van {{count}} gesprek wijzigen",
+      "statusTitle_other": "Status van {{count}} gesprekken wijzigen",
+      "labelTitle_one": "Labels voor {{count}} gesprek",
+      "labelTitle_other": "Labels voor {{count}} gesprekken",
+      "labelMode": "Actie",
+      "labelAdd": "Het label toevoegen",
+      "labelRemove": "Het label verwijderen",
+      "labelSearch": "Labels zoeken",
+      "priorityTitle_one": "Prioriteit van {{count}} gesprek",
+      "priorityTitle_other": "Prioriteit van {{count}} gesprekken",
+      "snoozeTitle_one": "{{count}} gesprek uitstellen tot",
+      "snoozeTitle_other": "{{count}} gesprekken uitstellen tot",
+      "result": "{{done}} bijgewerkt, {{unchanged}} ongewijzigd, {{failed}} mislukt",
+      "resultDismiss": "Sluiten"
+    }
+  },
+  "contacts": {
+    "title": "Contacten",
+    "unknown": "Onbekend",
+    "add": "Contact toevoegen",
+    "cancel": "Annuleren",
+    "yes": "Ja",
+    "no": "Nee",
+    "denied": {
+      "title": "Je kunt geen contacten bekijken",
+      "hint": "Vraag een workspacebeheerder om je rol toegang tot contacten te geven.",
+      "createTitle": "Je kunt geen contacten toevoegen",
+      "createHint": "Vraag een workspacebeheerder om je rol contacten te laten toevoegen."
+    },
+    "empty": {
+      "title": "Geen contacten",
+      "hint": "Tik op de +-knop om je eerste contact toe te voegen.",
+      "filteredTitle": "Geen overeenkomende contacten",
+      "filteredHint": "Probeer een andere zoekopdracht of wis de filters."
+    },
+    "search": {
+      "open": "Contacten zoeken",
+      "close": "Zoeken sluiten",
+      "label": "Zoeken",
+      "placeholder": "Naam, telefoon of e-mail"
+    },
+    "filter": {
+      "open": "Contacten filteren",
+      "title": "Filters",
+      "stage": "Levenscyclusfase",
+      "owner": "Contacteigenaar",
+      "ownerSearch": "Contacteigenaar zoeken",
+      "unassigned": "Geen eigenaar",
+      "created": "Aanmaakdatum",
+      "any": "Alle",
+      "marketing": "Marketingberichten",
+      "marketingOptions": {
+        "all": "Alle",
+        "subscribed": "Geabonneerd",
+        "unsubscribed": "Afgemeld"
+      },
+      "source": "Bron",
+      "sourceHint": "Waar het contact vandaan kwam, zoals import of api.",
+      "clear": "Alles wissen",
+      "apply": "Toepassen"
+    },
+    "stage": {
+      "new": "Nieuw",
+      "contacted": "Benaderd",
+      "qualified": "Gekwalificeerd",
+      "application_started": "Aanvraag gestart",
+      "application_submitted": "Aanvraag ingediend",
+      "interview_scheduled": "Gesprek gepland",
+      "offer_received": "Aanbod ontvangen",
+      "admission_confirmed": "Toelating bevestigd",
+      "enrolled": "Ingeschreven",
+      "lost": "Verloren"
+    },
+    "subscription": {
+      "subscribed": "Geabonneerd",
+      "unsubscribed": "Afgemeld",
+      "pending": "In afwachting"
+    },
+    "form": {
+      "name": "Naam",
+      "phone": "Telefoon",
+      "phoneHint": "Met landcode, bijvoorbeeld +919876543210.",
+      "email": "E-mail",
+      "needPhoneOrEmail": "Voer een telefoonnummer of e-mailadres in.",
+      "phoneInvalid": "Voer het telefoonnummer in met landcode, bijvoorbeeld +919876543210.",
+      "emailInvalid": "Voer een geldig e-mailadres in.",
+      "nameInvalid": "Voer een naam in van maximaal 255 tekens."
+    },
+    "new": {
+      "title": "Nieuw contact",
+      "save": "Contact opslaan",
+      "requiredTitle": "Verplichte gegevens",
+      "choose": "Kiezen",
+      "search": "Zoeken",
+      "unsupported": "{{label}} is verplicht, maar kan hier nog niet worden ingevuld. Voeg dit contact toe op het web.",
+      "requiredMissing": "Je workspace heeft meer gegevens nodig voordat een contact kan worden opgeslagen, en deze app kan ze niet tonen. Vraag een beheerder om toegang tot contacteigenschappen, of voeg het contact toe op het web."
+    },
+    "edit": {
+      "title": "Contact bewerken",
+      "open": "Contact bewerken",
+      "save": "Wijzigingen opslaan",
+      "conflict": "Dit contact is door iemand anders gewijzigd. Controleer en sla opnieuw op."
+    },
+    "detail": {
+      "title": "Contact",
+      "notFound": "Dit contact bestaat niet meer.",
+      "phone": "Telefoon",
+      "email": "E-mail",
+      "call": "Bel {{phone}}",
+      "mail": "Schrijf naar {{email}}",
+      "stage": "Levenscyclusfase",
+      "status": "Status",
+      "score": "Score",
+      "source": "Bron",
+      "whatsapp": "WhatsApp-abonnement",
+      "marketing": "Marketingberichten",
+      "optedOut": "Afgemeld",
+      "optedIn": "Kan ontvangen",
+      "lastActivity": "Laatste activiteit",
+      "noActivity": "Nog geen activiteit",
+      "created": "Toegevoegd op",
+      "customFields": "Aangepaste velden",
+      "actions": {
+        "call": "Bellen",
+        "chat": "Chat",
+        "email": "E-mail",
+        "sms": "Sms",
+        "tasks": "Taken",
+        "notes": "Notities"
+      },
+      "tabsLabel": "Contactsecties",
+      "tabs": {
+        "about": "Contactgegevens",
+        "activity": "Activiteiten",
+        "files": "Meer"
+      },
+      "activities": {
+        "label": "Activiteitsweergaven",
+        "all": "Alle activiteiten",
+        "timeline": "Activiteitentijdlijn"
+      },
+      "more": {
+        "account": "Account",
+        "deals": "Deals"
+      },
+      "summary": {
+        "title": "Activiteit",
+        "notes": "Notities",
+        "tasks": "Taken",
+        "meetings": "Afspraken",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "Contact verwijderen",
+        "title": "Contact verwijderen",
+        "message": "{{name}} verwijderen? Dit kan niet ongedaan worden gemaakt.",
+        "confirm": "Verwijderen",
+        "cancel": "Annuleren"
+      }
+    },
+    "tags": {
+      "title": "Tags",
+      "none": "Nog geen tags.",
+      "remove": "Tag {{name}} verwijderen",
+      "addLabel": "Een tag toevoegen",
+      "addPlaceholder": "Tagnaam",
+      "add": "Tag toevoegen"
+    },
+    "row": {
+      "more": "Meer acties voor {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Bewerken",
+      "swipeDelete": "Verwijderen"
+    },
+    "sheet": {
+      "close": "Sluiten"
+    },
+    "views": {
+      "open": "Contactweergave: {{name}}",
+      "title": "Weergaven",
+      "close": "Weergaven sluiten",
+      "searchLabel": "Weergaven zoeken",
+      "searchPlaceholder": "Zoek naar weergaven",
+      "systemTitle": "Standaardweergaven van het systeem",
+      "customTitle": "Aangepaste weergaven",
+      "none": "Geen weergaven beschikbaar",
+      "failed": "Opgeslagen weergaven konden niet worden geladen.",
+      "system": {
+        "all": "Alle contacten",
+        "mine": "Mijn contacten",
+        "recent": "Recent aangemaakt",
+        "optedOut": "Afgemeld voor marketing"
+      }
+    }
+  },
+  "tasks": {
+    "title": "Taken",
+    "add": "Taak toevoegen",
+    "cancel": "Annuleren",
+    "unknownContact": "Contact zonder naam",
+    "notFound": "Deze taak bestaat niet meer.",
+    "priority": {
+      "low": "Laag",
+      "medium": "Gemiddeld",
+      "high": "Hoog"
+    },
+    "status": {
+      "open": "Open",
+      "done": "Klaar",
+      "overdue": "Te laat"
+    },
+    "denied": {
+      "title": "Je kunt geen taken zien",
+      "hint": "Vraag de beheerder van je workspace om je toegang tot taken te geven.",
+      "createTitle": "Je kunt geen taken toevoegen",
+      "createHint": "Vraag de beheerder van je workspace om je taken te laten toevoegen.",
+      "editTitle": "Je kunt geen taken bewerken",
+      "editHint": "Vraag de beheerder van je workspace om je taken te laten bewerken."
+    },
+    "planLocked": {
+      "title": "Taken zijn niet inbegrepen in dit abonnement.",
+      "hint": "Vraag de beheerder van je workspace om het abonnement te upgraden."
+    },
+    "empty": {
+      "title": "Geen taken gevonden.",
+      "hint": "Taken die je toevoegt verschijnen hier.",
+      "filteredHint": "Probeer een ander filter of een andere zoekopdracht."
+    },
+    "search": {
+      "open": "Taken zoeken",
+      "close": "Zoeken sluiten",
+      "label": "Zoeken",
+      "placeholder": "Zoeken op titel"
+    },
+    "filter": {
+      "open": "Taken filteren",
+      "title": "Taken filteren",
+      "clear": "Alles wissen",
+      "apply": "Toepassen",
+      "group": {
+        "status": "Status",
+        "priority": "Prioriteit",
+        "due": "Deadline",
+        "owner": "Eigenaar"
+      },
+      "status": {
+        "open": "Open",
+        "done": "Klaar",
+        "all": "Alle"
+      },
+      "due": {
+        "overdue": "Te laat",
+        "today": "Vandaag",
+        "upcoming": "Binnenkort",
+        "none": "Geen datum"
+      },
+      "owner": {
+        "mine": "Van mij",
+        "unassigned": "Niet toegewezen",
+        "all": "Alle"
+      }
+    },
+    "list": {
+      "conflict": "Deze taak is door iemand anders gewijzigd. De lijst is vernieuwd."
+    },
+    "row": {
+      "markDone": "{{title}} als klaar markeren",
+      "reopen": "{{title}} heropenen",
+      "more": "Meer acties voor {{title}}",
+      "due": "Deadline {{when}}",
+      "unassigned": "Niet toegewezen"
+    },
+    "actions": {
+      "edit": "Taak bewerken",
+      "delete": "Taak verwijderen"
+    },
+    "delete": {
+      "title": "Taak verwijderen",
+      "message": "Weet je zeker dat je deze taak wilt verwijderen?",
+      "confirm": "Verwijderen"
+    },
+    "details": {
+      "title": "Taakdetails",
+      "edit": "Taak bewerken",
+      "delete": "Taak verwijderen",
+      "description": "Beschrijving",
+      "priority": "Prioriteit",
+      "status": "Status",
+      "owner": "Eigenaar",
+      "relatedTo": "Gerelateerd aan",
+      "noDescription": "Geen beschrijving",
+      "noDue": "Geen deadline",
+      "unassigned": "Niet toegewezen",
+      "noContact": "Geen",
+      "openContact": "{{name}} openen",
+      "markComplete": "Als voltooid markeren",
+      "reopen": "Heropenen",
+      "conflict": "Deze taak is door iemand anders gewijzigd. Hij is opnieuw geladen."
+    },
+    "form": {
+      "addTitle": "Taak toevoegen",
+      "editTitle": "Taak bewerken",
+      "save": "Taak opslaan",
+      "saving": "Opslaan…",
+      "title": "Taaktitel",
+      "description": "Taakbeschrijving",
+      "priority": "Prioriteit",
+      "date": "Datum (JJJJ-MM-DD)",
+      "dateHint": "Laat datum en tijd leeg voor een taak zonder deadline. Bijvoorbeeld 2026-10-31.",
+      "time": "Tijd (UU:mm)",
+      "timeHint": "24-uursklok, bijvoorbeeld 14:30.",
+      "owner": "Eigenaar",
+      "ownerPick": "Kies een eigenaar",
+      "ownerMe": "Ik",
+      "ownerNone": "Niet toegewezen",
+      "ownerLoading": "Je team laden…",
+      "ownerFailed": "Je team kon niet worden geladen.",
+      "contact": "Contact",
+      "contactLinkOptional": "Contact koppelen (optioneel)",
+      "contactNone": "Geen contact",
+      "contactPick": "Kies een contact",
+      "contactSearchLabel": "Contacten zoeken",
+      "contactSearchPlaceholder": "Naam, e-mail of telefoon",
+      "contactEmpty": "Geen contacten gevonden.",
+      "contactFailed": "Contacten konden niet worden geladen.",
+      "conflict": "Deze taak is door iemand anders gewijzigd. Controleer en sla opnieuw op.",
+      "errors": {
+        "titleRequired": "Voer een taaktitel in.",
+        "titleTooLong": "De titel mag maximaal 255 tekens bevatten.",
+        "titleNeedsLetter": "De titel moet minstens één letter bevatten.",
+        "notesTooLong": "De beschrijving mag maximaal 5000 tekens bevatten.",
+        "dateInvalid": "Voer de datum in als JJJJ-MM-DD, bijvoorbeeld 2026-10-31.",
+        "timeInvalid": "Voer de tijd in als UU:mm op een 24-uursklok, bijvoorbeeld 14:30.",
+        "dateNeeded": "Voer ook de datum in.",
+        "timeNeeded": "Voer ook de tijd in.",
+        "dueInvalid": "Deze deadline kan niet worden gebruikt.",
+        "assigneeInvalid": "Aan die persoon kunnen geen taken worden toegewezen. Kies een andere eigenaar.",
+        "contactInvalid": "Dit contact kan niet worden gekoppeld."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Notities",
+    "cancel": "Annuleren",
+    "loadMore": "Meer laden",
+    "deleteConfirm": "Verwijderen",
+    "contactMissing": "Dit contact bestaat niet meer.",
+    "add": "Notitie toevoegen",
+    "edited": "Bewerkt",
+    "denied": {
+      "title": "Je kunt geen notities bekijken",
+      "hint": "Vraag een workspacebeheerder om je rol toegang tot contacten te geven.",
+      "updateTitle": "Je kunt geen notities wijzigen",
+      "updateHint": "Vraag een workspacebeheerder om je rol contacten te laten bewerken."
+    },
+    "empty": {
+      "title": "Geen notities beschikbaar.",
+      "hint": "Tik op de +-knop om de eerste notitie toe te voegen."
+    },
+    "menu": {
+      "open": "Acties voor de notitie van {{date}}",
+      "edit": "Notitie bewerken",
+      "delete": "Notitie verwijderen"
+    },
+    "delete": {
+      "title": "Notitie verwijderen",
+      "message": "Weet je zeker dat je deze notitie wilt verwijderen?"
+    },
+    "form": {
+      "addTitle": "Notitie toevoegen",
+      "editTitle": "Notitie bijwerken",
+      "label": "Notitie",
+      "placeholder": "Schrijf hier je notitie...",
+      "required": "Schrijf een notitie voordat je opslaat.",
+      "invalid": "Voer een notitie in van maximaal 400 tekens.",
+      "counterLabel": "{{used}} van {{max}} tekens gebruikt",
+      "save": "Notitie opslaan",
+      "saving": "Notitie opslaan",
+      "conflict": "Deze notitie is door iemand anders gewijzigd. Controleer en sla opnieuw op.",
+      "missing": "Deze notitie bestaat niet meer."
+    },
+    "activity": {
+      "notes": "Notities",
+      "tasks": "Taken",
+      "timeline": "Tijdlijn",
+      "empty": "Nog geen activiteit.",
+      "add": "Activiteit toevoegen",
+      "types": {
+        "note": "Notitie",
+        "call": "Gesprek",
+        "email": "E-mail",
+        "meeting": "Afspraak",
+        "task": "Taak"
+      },
+      "source": {
+        "system": "Systeem",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Activiteit toevoegen",
+        "type": "Type",
+        "typeHint": "Bijvoorbeeld notitie, telefoongesprek, e-mail of afspraak.",
+        "name": "Titel",
+        "details": "Details",
+        "save": "Activiteit opslaan",
+        "typeInvalid": "Voer een type in van maximaal 100 tekens.",
+        "titleInvalid": "Voer een titel in van maximaal 255 tekens.",
+        "detailsInvalid": "Details mogen maximaal 10.000 tekens bevatten."
+      }
+    },
+    "files": {
+      "empty": "Geen bestanden beschikbaar.",
+      "delete": "Bestand {{name}} verwijderen",
+      "deleteTitle": "Bestand verwijderen",
+      "deleteMessage": "Weet je zeker dat je dit bestand wilt verwijderen?"
+    }
+  },
+  "contactMeetings": {
+    "title": "Afspraken",
+    "loadMore": "Meer laden",
+    "contactMissing": "Dit contact bestaat niet meer.",
+    "noDate": "Geen datum ingesteld",
+    "denied": {
+      "title": "Je kunt geen afspraken bekijken",
+      "hint": "Vraag een workspacebeheerder om je rol toegang tot contacten te geven."
+    },
+    "empty": {
+      "title": "Geen afspraken vastgelegd."
+    }
+  },
+  "contactDeals": {
+    "title": "Deals",
+    "contactMissing": "Dit contact bestaat niet meer.",
+    "denied": {
+      "title": "Je kunt geen deals bekijken",
+      "hint": "Vraag een workspacebeheerder om je rol toegang tot deals te geven."
+    },
+    "empty": {
+      "title": "Nog geen deals."
+    }
+  },
+  "contactCompany": {
+    "title": "Account",
+    "missing": "Dit account bestaat niet meer.",
+    "denied": {
+      "title": "Je kunt geen accounts bekijken",
+      "hint": "Vraag een workspacebeheerder om je rol toegang tot bedrijven te geven."
+    },
+    "industry": "Branche",
+    "size": "Grootte",
+    "phone": "Telefoon",
+    "email": "E-mail",
+    "website": "Website",
+    "address": "Adres",
+    "owner": "Eigenaar",
+    "notes": "Notities"
+  },
+  "contactProps": {
+    "title": "Contactgegevens",
+    "search": "Velden zoeken",
+    "showEmpty": "Lege velden tonen",
+    "footer": "Je kunt de eigenschappen die je hier ziet aanpassen in je webapp.",
+    "close": "Sluiten",
+    "save": "Opslaan",
+    "clear": "Wissen",
+    "yes": "Ja",
+    "no": "Nee",
+    "rowHint": "Opent de editor",
+    "locked": "Je kunt {{label}} niet bewerken",
+    "webOnly": "{{label}} kan alleen in de webapp worden bewerkt.",
+    "masked": "Verborgen",
+    "fields": {
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "owner": "Contacteigenaar",
+      "name": "Naam",
+      "source": "Bron",
+      "whatsapp": "WhatsApp-abonnement",
+      "marketing": "Afmelding voor marketing",
+      "leadScore": "Leadscore",
+      "created": "Aangemaakt",
+      "lastActivity": "Laatste activiteit"
+    },
+    "subscription": {
+      "subscribed": "Geabonneerd",
+      "unsubscribed": "Afgemeld",
+      "pending": "In afwachting"
+    },
+    "editor": {
+      "title": "{{label}} bewerken",
+      "date": "Datum",
+      "dateHint": "Jaar-maand-dag, bijvoorbeeld 2026-10-12.",
+      "time": "Tijd",
+      "timeHint": "24-uurstijd, bijvoorbeeld 14:30.",
+      "phoneHint": "Met landcode, bijvoorbeeld +919876543210.",
+      "noOptions": "Er zijn geen opties om uit te kiezen."
+    },
+    "error": {
+      "required": "{{label}} is verplicht.",
+      "name": "Voer een naam in van maximaal 255 tekens.",
+      "email": "Voer een geldig e-mailadres in.",
+      "phone": "Voer het telefoonnummer in met landcode, bijvoorbeeld +919876543210.",
+      "needPhoneOrEmail": "Een contact heeft een telefoonnummer of e-mailadres nodig.",
+      "text": "Voer maximaal {{max}} tekens in.",
+      "number": "Voer een getal in.",
+      "whole": "Voer een geheel getal in.",
+      "range": "Voer een getal van 0 tot {{max}} in.",
+      "url": "Voer een link in die begint met http:// of https://",
+      "date": "Voer een geldige datum in als JJJJ-MM-DD.",
+      "time": "Voer een geldige tijd in als UU:mm.",
+      "option": "Kies een van de opties.",
+      "invalid": "Die waarde wordt niet geaccepteerd. Controleer haar en probeer het opnieuw.",
+      "notEditable": "Deze eigenschap kan niet worden bewerkt.",
+      "requiredMissing": "Een verplichte eigenschap heeft geen waarde. Vul haar in voordat je opslaat.",
+      "conflict": "Dit contact is door iemand anders gewijzigd. Controleer en sla opnieuw op.",
+      "lostReasonRequired": "Geef aan waarom dit contact verloren is gegaan.",
+      "statusMismatch": "Die status hoort niet bij deze levenscyclusfase."
+    },
+    "owner": {
+      "title": "Toewijzen aan",
+      "unassigned": "Niet toegewezen",
+      "none": "Er is niemand aan wie dit contact kan worden toegewezen.",
+      "failed": "De eigenaar kon niet worden gewijzigd. Probeer het opnieuw."
+    },
+    "lifecycle": {
+      "stage": "Levenscyclusfase",
+      "status": "Status",
+      "change": "Levenscyclusfase wijzigen",
+      "changeStatus": "Status wijzigen",
+      "dropdownHint": "Opent de lijst om uit te kiezen",
+      "lostReason": "Reden van verlies",
+      "otherReason": "Anders",
+      "otherLabel": "Beschrijf de reden"
+    }
+  },
+  "summary": {
+    "contacts": "Contacten",
+    "contactsNote": "Toegevoegd in deze periode",
+    "tasks": "Taken",
+    "tasksNote": "Nu open",
+    "messages": "Berichten",
+    "sentNote": "Verzonden",
+    "receivedNote": "Ontvangen",
+    "conversations": "Gesprekken",
+    "conversationsNote": "Open en in behandeling, op dit moment",
+    "status": {
+      "all": "Actief",
+      "mine": "Van mij",
+      "unassigned": "Niet toegewezen",
+      "assigned": "Toegewezen",
+      "unread": "Ongelezen",
+      "archived": "Gearchiveerd"
+    },
+    "allMessages": {
+      "title": "Alle berichten",
+      "sent": "Verzonden",
+      "delivered": "Bezorgd",
+      "received": "Ontvangen",
+      "read": "Gelezen",
+      "failed": "Mislukt"
+    },
+    "moreTitle": "Meer uit je workspace"
+  },
+  "dashDate": {
+    "title": "Zoeken via kalender",
+    "close": "Kalender sluiten",
+    "apply": "Toepassen",
+    "reset": "Herstellen",
+    "presets": "Snelle periodes",
+    "pill": {
+      "label": "Periode: {{from}} tot {{to}}",
+      "hint": "Opent de kalender om de datums te wijzigen"
+    },
+    "selection": {
+      "label": "{{from}} tot {{to}}",
+      "pickFirst": "Kies de eerste dag",
+      "pickLast": "Kies de laatste dag"
+    },
+    "preset": {
+      "last7": "Afgelopen 7 dagen",
+      "last30": "Afgelopen 30 dagen",
+      "last90": "Afgelopen 90 dagen",
+      "yesterday": "Gisteren",
+      "today": "Vandaag"
+    },
+    "calendar": {
+      "previousMonth": "Vorige maand",
+      "nextMonth": "Volgende maand",
+      "start": "Begin van de periode",
+      "end": "Einde van de periode",
+      "inRange": "In de periode",
+      "today": "Vandaag"
+    }
+  },
+  "permissions": {
+    "channelName": "Berichten en updates",
+    "settingsHint": "Tik op Rechten en schakel in wat je nodig hebt.",
+    "names": {
+      "notifications": "Meldingen",
+      "calls": "Telefoongesprekken",
+      "camera": "Camera",
+      "callPopup": "Belvenster (weergeven over andere apps)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Contact",
+      "close": "Sluiten",
+      "ongoingTitle": "Gesprek bezig",
+      "endedTitle": "Gesprek beëindigd",
+      "endedText": "Tik om je gesprek met {{name}} vast te leggen.",
+      "channelOngoing": "Lopende gesprekken",
+      "channelEnded": "Gespreksoverzichten"
+    },
+    "summary": {
+      "title": "Gesprek toevoegen",
+      "contact": "Contact",
+      "type": "Gesprekstype",
+      "outbound": "Uitgaand",
+      "status": "Status van uitgaand gesprek",
+      "completed": "Voltooid",
+      "notAnswered": "Niet beantwoord",
+      "startTime": "Starttijd van het gesprek",
+      "duration": "Gespreksduur",
+      "durationHint": "Minuten en seconden, bijvoorbeeld 02:30",
+      "durationInvalid": "Voer de duur in als minuten:seconden, bijvoorbeeld 02:30.",
+      "subject": "Onderwerp",
+      "subjectDefault": "Uitgaand gesprek met {{name}}",
+      "subjectInvalid": "Voer een onderwerp in van maximaal 255 tekens.",
+      "notes": "Beschrijving",
+      "save": "Gesprek opslaan",
+      "skip": "Overslaan",
+      "contactMissing": "Dit gesprek heeft geen contact om het op vast te leggen.",
+      "denied": "Je rol kan contacten niet wijzigen, dus dit gesprek kan niet worden vastgelegd.",
+      "purpose": "Doel van het gesprek",
+      "purposeNone": "-Geen-",
+      "result": "Resultaat van het gesprek",
+      "purposes": {
+        "prospecting": "Prospectie",
+        "administrative": "Administratief",
+        "negotiation": "Onderhandeling",
+        "demo": "Demo",
+        "project": "Project",
+        "desk": "Balie"
+      }
+    }
+  }
+}

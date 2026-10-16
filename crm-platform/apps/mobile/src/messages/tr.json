@@ -1,0 +1,1448 @@
+{
+  "common": {
+    "loading": "Yükleniyor…",
+    "retry": "Yeniden dene",
+    "signOut": "Çıkış yap",
+    "clear": "Temizle",
+    "back": "Geri",
+    "filters": {
+      "clearAll": "Tümünü temizle",
+      "apply": "Uygula",
+      "noMatch": "Aramanızla eşleşen bir şey yok."
+    }
+  },
+  "errors": {
+    "generic": "Bir şeyler ters gitti. Lütfen yeniden deneyin.",
+    "network": "Sunucuya ulaşılamıyor. Bağlantınızı kontrol edip yeniden deneyin.",
+    "timeout": "Sunucu yanıt vermekte çok gecikti. Lütfen yeniden deneyin.",
+    "outdatedApp": "Uygulamanın bu sürümü güncel değil. Lütfen güncelleyin.",
+    "tooManyRequests": "Çok fazla deneme yapıldı. Lütfen biraz bekleyip yeniden deneyin.",
+    "captchaUnsupported": "Uygulamanın henüz tamamlayamadığı bir güvenlik doğrulaması gerekiyor. Lütfen bunun yerine web sitesini kullanın."
+  },
+  "auth": {
+    "welcomeBack": "Tekrar hoş geldiniz",
+    "welcomeSubtitle": "Çalışma alanınıza dönmek için bilgilerinizi girin.",
+    "tagline": "Tüm müşteri sohbetleri, tek sakin çalışma alanı",
+    "taglineCaption": "Hızlı yanıt veren ekipler için toplu gönderimler, otomasyonlar ve ortak bir gelen kutusu.",
+    "email": "E-posta",
+    "emailPlaceholder": "you@company.com",
+    "password": "Parola",
+    "passwordPlaceholder": "Parolanızı girin",
+    "showPassword": "Parolayı göster",
+    "hidePassword": "Parolayı gizle",
+    "signInSubmit": "Giriş yap",
+    "emailInvalid": "Geçerli bir e-posta adresi girin.",
+    "passwordRequired": "Parolanızı girin.",
+    "newHere": "Yeni misiniz?",
+    "createAccount": "Hesap oluştur",
+    "legalSignIn": "Giriş yaparak <terms>Koşullarımızı</terms> ve <privacy>Gizlilik politikamızı</privacy> kabul etmiş olursunuz.",
+    "mfaTitle": "İki adımlı doğrulama",
+    "mfaHint": "Kimlik doğrulayıcı uygulamanızdaki 6 haneli kodu girin.",
+    "mfaCode": "Doğrulama kodu",
+    "mfaSubmit": "Doğrula",
+    "workspaceTitle": "Çalışma alanı seçin",
+    "workspaceHint": "Hesabınız birden fazla çalışma alanına bağlı.",
+    "invalidCredentials": "E-posta veya parola hatalı.",
+    "accountLocked": "Bu hesap geçici olarak kilitlendi. Daha sonra yeniden deneyin.",
+    "accountSuspended": "Bu hesap askıya alındı.",
+    "mfaInvalid": "Bu kod doğru değil. Yeniden deneyin.",
+    "mfaExpired": "Oturum açma süresi doldu. Lütfen baştan başlayın."
+  },
+  "signUp": {
+    "tagline": "Çalışma alanınızı kurun",
+    "taglineCaption": "Çalışma alanınızı oluşturun, ardından ekibinizi ve ilk kanalınızı ekleyin.",
+    "title": "Hesabınızı oluşturun",
+    "subtitle": "Birkaç bilgi ve çalışma alanınız hazır.",
+    "fullName": "Ad soyad",
+    "fullNamePlaceholder": "Adınız",
+    "email": "İş e-postası",
+    "orgName": "Çalışma alanı adı",
+    "orgNamePlaceholder": "Acme A.Ş.",
+    "orgNameHint": "Ekibiniz {{slug}} adresiyle giriş yapar.",
+    "orgNameHintEmpty": "Ekibinizin göreceği ad budur.",
+    "customiseSlug": "Özel bir çalışma alanı adresi seç",
+    "orgSlug": "Çalışma alanı adresi",
+    "orgSlugPlaceholder": "calisma-alaniniz",
+    "orgSlugHint": "Harf, rakam, tire veya alt çizgi. Ekibiniz giriş yaparken bunu girer.",
+    "phone": "Cep telefonu numarası",
+    "phoneHint": "Hesabınızı doğrulamak ve önemli güncellemeler için kullanırız.",
+    "referral": "Davet kodu (isteğe bağlı)",
+    "referralPlaceholder": "Bir arkadaşınızın kodu var mı?",
+    "confirmPassword": "Parolayı onayla",
+    "passwordPlaceholder": "Bir parola oluşturun",
+    "confirmPasswordPlaceholder": "Parolanızı yeniden girin",
+    "passwordMinLength": "En az uzunluk: {{min}}.",
+    "passwordMixedCase": "Büyük ve küçük harfleri birlikte kullanın.",
+    "passwordNumber": "Bir rakam ekleyin.",
+    "passwordSymbol": "Bir simge ekleyin.",
+    "agree": "<terms>Koşulları</terms> ve <privacy>Gizlilik politikasını</privacy> kabul ediyorum.",
+    "submit": "Hesap oluştur",
+    "haveAccount": "Zaten hesabınız var mı?",
+    "signIn": "Giriş yap",
+    "closedBody": "Kayıtlar kapalı. Bir yöneticiden davet isteyin.",
+    "closedBack": "Girişe dön",
+    "validation": {
+      "fullName": "Adınızı ve soyadınızı girin.",
+      "orgName": "Çalışma alanınıza bir ad verin (en az 2 karakter).",
+      "orgSlug": "Çalışma alanı adresinizi girin (harf, rakam, tire veya alt çizgi).",
+      "phoneRequired": "Cep telefonu numaranızı girin.",
+      "phoneInvalid": "Geçerli bir telefon numarası girin; yerel değilse ülke kodunu ekleyin.",
+      "passwordMismatch": "İki parola eşleşmiyor.",
+      "passwordInvalid": "Gösterilen koşulları karşılayan bir parola girin.",
+      "acceptTerms": "Devam etmek için koşulları kabul etmelisiniz.",
+      "referralCode": "Davet kodları yalnızca harf ve rakam içerir."
+    },
+    "errors": {
+      "emailTaken": "Bu e-posta bu çalışma alanında zaten kullanılıyor.",
+      "slugTaken": "Bu çalışma alanı adresi zaten alınmış.",
+      "passwordPolicy": "Bu parola güvenlik politikasını karşılamıyor:",
+      "policyCommon": "Bu parola tahmin edilmesi çok kolay.",
+      "otpSendFailed": "Doğrulama kodunu gönderemedik. Numarayı kontrol edip yeniden deneyin.",
+      "signupExpired": "Lütfen kaydı baştan başlatın."
+    },
+    "otp": {
+      "title": "WhatsApp'ınızı kontrol edin",
+      "subtitle": "Çalışma alanınızı oluşturmayı tamamlamak için gönderdiğimiz tek kullanımlık kodu girin.",
+      "sentTo": "{{phone}} numarasına bir kod gönderdik",
+      "code": "Doğrulama kodu",
+      "expiresIn": "Kodun süresi {{time}} içinde dolacak.",
+      "expired": "Bu kodun süresi doldu. Yeni bir kod isteyin.",
+      "verify": "Doğrula ve devam et",
+      "resend": "Kodu yeniden gönder",
+      "resendIn": "Kodu {{time}} sonra yeniden gönder",
+      "resent": "Yeni bir kod WhatsApp'ınıza gönderiliyor.",
+      "wrongNumber": "Numara yanlış mı? Geri dön",
+      "addressTakenHint": "Siz doğrularken bu çalışma alanı adresi alındı. Başka bir adres seçin, size yeni bir kod gönderelim.",
+      "codeInvalid": "{{length}} haneli kodu girin.",
+      "invalid": "Bu kod doğru değil. Yeniden deneyin.",
+      "tooMany": "Çok fazla deneme yapıldı. Yeni bir kod isteyin.",
+      "cooldown": "Başka bir kod istemeden önce lütfen biraz bekleyin."
+    }
+  },
+  "dashboard": {
+    "kicker": "Operatör paneli",
+    "synced": "Canlı · {{s}} sn önce eşitlendi",
+    "greeting": {
+      "morning": "Günaydın, {{name}}.",
+      "afternoon": "İyi günler, {{name}}.",
+      "evening": "İyi akşamlar, {{name}}."
+    },
+    "calm": "Çalışma alanı sakin.",
+    "running_one": "{{count}} kampanya çalışıyor.",
+    "running_other": "{{count}} kampanya çalışıyor.",
+    "subline_one": "{{date}} - {{range}}: bağlı {{count}} cihazda {{sent}} giden mesaj, %{{rate}} teslim oranı.",
+    "subline_other": "{{date}} - {{range}}: bağlı {{count}} cihazda {{sent}} giden mesaj, %{{rate}} teslim oranı.",
+    "sublineOfficial": "{{date}} - {{range}}: {{sent}} giden mesaj, %{{rate}} teslim oranı.",
+    "setupBanner": "Çalışma alanı kurulumunuz tamamlanmadı. Hesabınızın geri kalanını açmak için kurulumu web'de bitirin.",
+    "range": {
+      "label": "Tarih aralığı",
+      "short": {
+        "24h": "24 sa",
+        "7d": "7 g",
+        "30d": "30 g",
+        "qtd": "Çeyrek"
+      },
+      "long": {
+        "24h": "Son 24 saat",
+        "7d": "Son 7 gün",
+        "30d": "Son 30 gün",
+        "qtd": "Çeyrek başından bugüne"
+      }
+    },
+    "trend": {
+      "up": "Önceki döneme göre {{value}} arttı",
+      "down": "Önceki döneme göre {{value}} azaldı",
+      "flat": "Önceki döneme göre değişiklik yok"
+    },
+    "kpi": {
+      "sent": "Gönderilen mesajlar · {{range}}",
+      "sentLegend": "{{delivered}} teslim edildi · {{failed}} başarısız",
+      "sparkline": "Son 20 saatte saat başına gönderilen mesajlar, en eskiden başlayarak",
+      "readRate": "Okunma oranı",
+      "readMini": {
+        "sent": "Gönderildi",
+        "delivered": "Teslim edildi",
+        "read": "Okundu"
+      }
+    },
+    "contacts": {
+      "title": "Aktif kişiler",
+      "subscribed": "Abone",
+      "optedIn": "İzinli",
+      "blocked": "Engellendi"
+    },
+    "wallet": {
+      "title": "Cüzdan bakiyesi",
+      "payPerMessage": "mesaj başına ödeme"
+    },
+    "autopilot": {
+      "kicker": "Daha fazlasını yapın",
+      "title": "Yanıtları otopilota alın",
+      "body": "Daha fazla müşteriye otomatik ulaşmak için bir akış oluşturun veya kampanya başlatın."
+    },
+    "pipeline": {
+      "kicker": "Satış hattı",
+      "open": "Satış hattını aç",
+      "deals": "Açık fırsatlar",
+      "won": "Bu ay kazanılan",
+      "winRate": "Kazanma oranı"
+    },
+    "throughput": {
+      "title": "Mesaj hacmi",
+      "subtitle": {
+        "24h": "Giden, teslim edilen ve başarısız, saatlik, son 24 saat",
+        "7d": "Giden, teslim edilen ve başarısız, günlük, son 7 gün",
+        "30d": "Giden, teslim edilen ve başarısız, günlük, son 30 gün",
+        "qtd": "Giden, teslim edilen ve başarısız, günlük, çeyrek başından bugüne"
+      },
+      "peak": "En yoğun saat {{when}} · {{n}} mesaj",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "failed": "Başarısız",
+      "avgHour": "Saat başına ortalama",
+      "replies": "Yanıtlar",
+      "replyRate": "Yanıt oranı",
+      "summary": "Bu dönemde {{sent}} mesaj gönderildi, {{delivered}} teslim edildi, {{failed}} başarısız oldu.",
+      "subtitleCustom": "Günlük · {{range}}"
+    },
+    "inbox": {
+      "title": "Canlı gelen kutusu",
+      "unread": "{{n}} okunmamış",
+      "oldest": "en eskisi {{when}}",
+      "recent": "Son konuşmalar",
+      "empty": "Henüz konuşma yok."
+    },
+    "campaigns": {
+      "title": "Aktif kampanyalar",
+      "summary": "{{running}} çalışıyor - {{scheduled}} zamanlanmış - {{paused}} duraklatılmış",
+      "total": "toplam {{n}}",
+      "untitled": "Adsız kampanya",
+      "delivered": "{{done}} / {{total}} teslim edildi",
+      "emptyTitle": "Aktif kampanya yok",
+      "emptyBody": "Bir kişi grubuna göndermeye başlamak için yeni bir kampanya oluşturun.",
+      "status": {
+        "sending": "Gönderiliyor",
+        "scheduled": "Zamanlandı",
+        "paused": "Duraklatıldı",
+        "failed": "Başarısız",
+        "completed": "Tamamlandı"
+      }
+    },
+    "devices": {
+      "title": "Bağlı cihazlar",
+      "summary": "{{cap}} yuvadan {{total}} kullanıldı - {{online}} çevrimiçi",
+      "emptyTitle": "Bağlı cihaz yok",
+      "emptyBody": "Göndermeye başlamak için bir WhatsApp numarası eşleyin.",
+      "unzoned": "bölgesiz",
+      "per24h": "{{n}}/24 sa",
+      "deliv": "teslim",
+      "free_one": "{{count}} cihaz yuvası kullanılabilir",
+      "free_other": "{{count}} cihaz yuvası kullanılabilir",
+      "state": {
+        "online": "Çevrimiçi",
+        "connecting": "Bağlanıyor",
+        "offline": "Çevrimdışı"
+      }
+    },
+    "templates": {
+      "title": "En iyi performans gösteren şablonlar",
+      "subtitle": "Gönderim hacmine göre - seçili aralık",
+      "count_one": "{{count}} şablon",
+      "count_other": "{{count}} şablon",
+      "empty": "Henüz şablon yok.",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "read": "Okundu",
+      "readRate": "Okunma oranı",
+      "status": {
+        "approved": "Onaylandı",
+        "inReview": "İncelemede",
+        "rejected": "Reddedildi"
+      }
+    },
+    "activity": {
+      "title": "Etkinlik günlüğü",
+      "subtitle": "Çalışma alanı olayları",
+      "empty": "Bu çalışma alanı için kayıtlı yakın tarihli etkinlik yok.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "{{count}} hesap",
+      "accounts_other": "{{count}} hesap",
+      "connected": "Bağlı",
+      "tile": {
+        "needReply": "Yanıt bekleyen",
+        "openChats": "Açık sohbetler",
+        "dmsIn": "Gelen DM · 7 g",
+        "dmsOut": "Giden DM · 7 g",
+        "followers": "Takipçiler"
+      }
+    },
+    "flows": {
+      "title": "Otomasyon akışları",
+      "summary": "{{active}} aktif · {{subscribers}} abone",
+      "empty": "Henüz akış yok.",
+      "meta": "{{trigger}} tetikleyici · {{steps}} adım · {{subs}} abone",
+      "statusActive": "Aktif",
+      "statusPaused": "Duraklatıldı",
+      "stat": {
+        "flows": "Akışlar",
+        "active": "Aktif",
+        "subscribers": "Aboneler"
+      }
+    },
+    "integrations": {
+      "title": "Entegrasyonlar",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} olay / 7 g",
+      "connected": {
+        "woocommerce": "Bağlı",
+        "shopify": "Bağlı",
+        "google_sheets": "API anahtarı verildi",
+        "meta_catalog": "Katalog bağlandı"
+      },
+      "notConnected": "bağlı değil",
+      "connectedLabel": "Bağlı"
+    },
+    "funnel": {
+      "title": "Etkileşim hunisi",
+      "stage": {
+        "messaged": "Mesaj gönderilen kişiler",
+        "delivered": "Teslim edildi",
+        "replied": "Yanıtladı",
+        "goalCompleted": "Hedef tamamlandı"
+      },
+      "stageLabel": "{{stage}}: {{n}} kişi, mesaj gönderilen kişilerin %{{pct}}'i",
+      "activity": {
+        "title": "Konuşma etkinliği",
+        "inbound_one": "{{count}} gelen mesaj",
+        "inbound_other": "{{count}} gelen mesaj",
+        "responding_one": "{{count}} yanıt veren kişi",
+        "responding_other": "{{count}} yanıt veren kişi",
+        "perContact": "Yanıt veren kişi başına {{value}} yanıt"
+      },
+      "comparison": {
+        "title": "Önceki dönemle karşılaştırma",
+        "replyRate": "Yanıt oranı"
+      }
+    },
+    "ago": {
+      "minute_one": "{{count}} dakika önce",
+      "minute_other": "{{count}} dakika önce",
+      "hour_one": "{{count}} saat önce",
+      "hour_other": "{{count}} saat önce",
+      "day_one": "{{count}} gün önce",
+      "day_other": "{{count}} gün önce"
+    },
+    "error": {
+      "forbidden": "Rolünüzün ({{role}}) panele erişimi yok.",
+      "generic": "Rakamlar yüklenemedi. Biraz sonra yeniden deneyin.",
+      "locked": "Planınız analizleri içermiyor."
+    },
+    "greetingNoName": {
+      "morning": "Günaydın.",
+      "afternoon": "İyi günler.",
+      "evening": "İyi akşamlar."
+    },
+    "views": {
+      "label": "Panel görünümü",
+      "summary": "Özet",
+      "agent": "Temsilci",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Temsilci performansı",
+      "conversations": "Konuşmalar",
+      "resolved": "Çözüldü",
+      "firstReply": "İlk yanıt",
+      "resolution": "Çözüm",
+      "csat": "Puan",
+      "minutes": "{{value}} dk",
+      "hours": "{{value}} sa",
+      "days": "{{value}} g",
+      "empty": "Bu dönemde kimseye konuşma atanmadı.",
+      "noAccess": "Rolünüzün ({{role}}) temsilci analizlerine erişimi yok.",
+      "everyone": "Tüm temsilciler",
+      "pickerLabel": "Temsilci",
+      "pickerPlaceholder": "Bir temsilci seçin",
+      "statusTitle": "Konuşma durumu",
+      "avgResolution": "Ortalama çözüm süresi",
+      "avgDuration": "Ortalama konuşma süresi",
+      "byAgentTitle": "Temsilciye göre konuşmalar",
+      "byAgentPicker": "Durum listesi için temsilci",
+      "status": {
+        "open": "Açık",
+        "pending": "Beklemede",
+        "closed": "Kapalı",
+        "assigned": "Atanmış",
+        "unassigned": "Atanmamış",
+        "unattended": "İlgilenilmemiş"
+      }
+    },
+    "bots": {
+      "activeFlows": "Aktif akışlar",
+      "ofTotal": "toplam {{total}} akıştan",
+      "subscribers": "Aboneler",
+      "subscribersNote": "tüm akışlarda"
+    }
+  },
+  "tabs": {
+    "dashboard": "Panel",
+    "inbox": "Gelen kutusu",
+    "contacts": "Kişiler",
+    "menu": "Menü"
+  },
+  "menu": {
+    "title": "Hesap",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Çalışma alanı",
+    "inbox": "Gelen kutusu",
+    "contacts": "Kişiler",
+    "noAccess": "Buna erişiminiz yok. Çalışma alanı yöneticinizden erişimi açmasını isteyin.",
+    "version": "Sürüm {{version}}",
+    "signOutTitle": "Çıkış yap",
+    "signOutConfirm": "Çıkış yapmak istediğinizden emin misiniz?",
+    "signOutNo": "Hayır",
+    "signOutYes": "Evet, çıkış yap",
+    "tasks": "Görevler",
+    "dashboard": "Panel",
+    "allContacts": "Tüm kişiler",
+    "newContact": "Yeni kişi",
+    "sectionAccount": "Hesap",
+    "manageProfile": "Profili yönet",
+    "preferences": "Tercihler",
+    "devicePermissions": "Cihaz izinleri",
+    "devicePermissionsHint": "Bu uygulamanın ayarlarını telefonunuzda açın",
+    "about": "Hakkında",
+    "dataSecurity": "Veri ve güvenlik",
+    "checkUpdates": "Güncellemeleri denetle",
+    "updates": {
+      "off": "Uygulamanın bu sürümü kendiliğinden güncelleme almaz. Değişiklikleri almak için en yeni sürümü yükleyin.",
+      "latest": "En son sürümü kullanıyorsunuz.",
+      "ready": "Bir güncelleme hazır. Yeniden başlatıp kullanmak için tekrar dokunun.",
+      "failed": "Güncellemeler denetlenemedi. Biraz sonra yeniden deneyin."
+    },
+    "profile": {
+      "title": "Profili yönet",
+      "fullName": "Ad soyad",
+      "displayName": "Görünen ad",
+      "displayNameHint": "Ekibinize tam adınız yerine bu gösterilir. Tam adınızı kullanmak için boş bırakın.",
+      "phone": "Telefon",
+      "phoneHint": "Ülke koduyla birlikte, örneğin +919876543210.",
+      "email": "E-posta",
+      "pendingEmail": "{{email}} adresine geçiş onayınızı bekliyor.",
+      "timezone": "Çalışma alanı saat dilimi",
+      "save": "Değişiklikleri kaydet",
+      "cancel": "İptal",
+      "nameRequired": "Adınızı girin.",
+      "nameTooLong": "En fazla 120 karakter kullanın.",
+      "phoneInvalid": "Telefon numarasını ülke koduyla girin, örneğin +919876543210."
+    },
+    "appearance": {
+      "title": "Görünüm",
+      "light": "Açık mod",
+      "dark": "Koyu mod",
+      "device": "Cihaz ayarlarını kullan",
+      "hint": "Hesabınıza kaydedilir.",
+      "failed": "Seçiminiz kaydedilemedi. Yeniden deneyin."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Gelen kutusu görünümü",
+      "all": "Tümü",
+      "mine": "Benim",
+      "unassigned": "Atanmamış",
+      "unread": "Okunmamış"
+    },
+    "search": {
+      "open": "Konuşmalarda ara",
+      "close": "Aramayı kapat",
+      "label": "Ara",
+      "placeholder": "Ad, numara veya mesaj"
+    },
+    "filter": {
+      "open": "Filtreler",
+      "sheet": "Konuşma durumu",
+      "close": "Kapat",
+      "applied": "Uygulanan filtreler",
+      "clearAll": "Tümünü temizle",
+      "remove": "Filtreyi kaldır: {{name}}",
+      "statusChip": "Durum: {{name}}",
+      "searchChip": "Arama: {{q}}",
+      "title": "Filtreler",
+      "view": "Görünüm",
+      "viewActive": "Konuşmalar",
+      "viewArchived": "Arşivlenenler",
+      "channel": "Kanal",
+      "allChannels": "Tüm kanallar",
+      "labels": "Etiketler",
+      "searchLabels": "Etiketlerde ara",
+      "channelChip": "Kanal: {{name}}",
+      "labelsChip": "Etiketler: {{names}}",
+      "archivedChip": "Arşivlenen"
+    },
+    "statusFilter": {
+      "default": "Açık ve beklemede",
+      "open": "Açık",
+      "pending": "Beklemede",
+      "snoozed": "Ertelendi",
+      "resolved": "Çözüldü",
+      "closed": "Kapalı",
+      "all": "Tüm durumlar"
+    },
+    "status": {
+      "open": "Açık",
+      "pending": "Beklemede",
+      "snoozed": "Ertelendi",
+      "resolved": "Çözüldü",
+      "closed": "Kapalı",
+      "spam": "Spam"
+    },
+    "list": {
+      "label": "Konuşmalar",
+      "emptyTitle": "Konuşma yok",
+      "emptyHint": "Müşterilerinizden gelen mesajlar burada görünür.",
+      "emptyFilteredHint": "Bu filtrelerle eşleşen bir şey yok. Filtreleri temizlemeyi deneyin.",
+      "noMore": "Başka konuşma yok",
+      "loadingMore": "Daha fazla konuşma yükleniyor",
+      "noAccessTitle": "Gelen kutusuna erişim yok",
+      "noAccessBody": "Rolünüz konuşmaları okuyamaz. Bir çalışma alanı yöneticisinden bunu değiştirmesini isteyin."
+    },
+    "row": {
+      "noMessages": "Henüz mesaj yok",
+      "unread_one": "{{count}} okunmamış mesaj",
+      "unread_other": "{{count}} okunmamış mesaj",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "{{name}} kişisine atandı",
+      "media": "Medya"
+    },
+    "time": {
+      "am": "ÖÖ",
+      "pm": "ÖS",
+      "yesterday": "Dün"
+    },
+    "thread": {
+      "messages": "Mesajlar",
+      "loadingOlder": "Önceki mesajlar yükleniyor",
+      "emptyTitle": "Henüz mesaj yok",
+      "emptyHint": "Bu konuşmadaki mesajlar burada görünür.",
+      "noAccessTitle": "Bu konuşmaya erişim yok",
+      "noAccessBody": "Rolünüz konuşmaları okuyamaz.",
+      "resolve": "Çöz",
+      "reopen": "Yeniden aç",
+      "call": "{{phone}} numarasını ara",
+      "pictureOpen": "Fotoğrafı tam ekran aç",
+      "pictureFull": "Fotoğraf",
+      "pictureClose": "Fotoğrafı kapat",
+      "windowClosed": "24 saatlik yanıt penceresi kapandı. Bunun yerine bir şablon gönderin.",
+      "conflict": "Bu konuşmayı başka biri değiştirdi. En son sürüm yüklendi, lütfen yeniden deneyin.",
+      "statusInvalid": "Bu konuşma o duruma taşınamaz.",
+      "window": {
+        "left": "Yanıt penceresi: {{hours}} sa {{minutes}} dk kaldı",
+        "closed": "Yanıt penceresi kapandı"
+      },
+      "menu": {
+        "open": "Diğer işlemler",
+        "close": "Menüyü kapat",
+        "assignToMe": "Bana ata",
+        "details": "Ayrıntıları göster",
+        "status": "Durumu değiştir",
+        "agent": "Temsilci ata"
+      },
+      "bot": {
+        "notice": "Bu bir bot konuşması.",
+        "assignSelf": "Kendinize atayın"
+      },
+      "labels": {
+        "open": "Etiket ata",
+        "title": "Etiket ata",
+        "close": "Kapat",
+        "empty": "Henüz etiket yok.",
+        "emptyCreate": "Henüz etiket yok. Oluşturmak için aşağıya bir ad yazın.",
+        "newLabel": "Yeni etiket",
+        "add": "Ekle",
+        "failed": "Etiketler değiştirilemedi. Yeniden deneyin."
+      },
+      "assignment": {
+        "none": "Atanmamış",
+        "team": "Ekip: {{name}}",
+        "failed": "Konuşma değiştirilemedi. Yeniden deneyin.",
+        "you": "Size atandı",
+        "to": "{{name}} kişisine atandı"
+      }
+    },
+    "message": {
+      "labelIn": "Alındı: {{text}}, {{time}}",
+      "labelOut": "Sizin gönderdiğiniz: {{text}}, {{time}}, {{status}}",
+      "deleted": "Bu mesaj silindi",
+      "retry": "Göndermeyi yeniden dene",
+      "mediaPending": "Dosya hâlâ indiriliyor.",
+      "mediaFailed": "Dosya indirilemedi."
+    },
+    "kind": {
+      "text": "Mesaj",
+      "image": "Fotoğraf",
+      "video": "Video",
+      "audio": "Ses",
+      "voice": "Sesli mesaj",
+      "document": "Belge",
+      "sticker": "Çıkartma",
+      "location": "Konum",
+      "contact": "Kişi",
+      "template": "Şablon",
+      "reaction": "Tepki",
+      "interactive": "Etkileşimli mesaj",
+      "system": "Sistem mesajı"
+    },
+    "delivery": {
+      "queued": "Gönderiliyor",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "read": "Okundu",
+      "failed": "Gönderilmedi",
+      "received": "Alındı"
+    },
+    "composer": {
+      "label": "Mesaj",
+      "placeholder": "Bir mesaj yazın",
+      "send": "Gönder",
+      "tooLong": "Mesajlar en fazla {{max}} karakter olabilir.",
+      "noteLabel": "Özel not",
+      "notePlaceholder": "Yalnızca ekibinizin göreceği bir not yazın",
+      "addNote": "Not ekle",
+      "noteOn": "Özel not yaz",
+      "noteOff": "Yanıta dön"
+    },
+    "template": {
+      "closedNotice": "Müşteri son 24 saatte size yazmadı. Yalnızca önceden onaylı şablonlar gönderebilirsiniz.",
+      "send": "Şablon gönder",
+      "title": "Şablon gönder",
+      "close": "Kapat",
+      "search": "Şablonlarda ara",
+      "empty": "Bu numara için onaylı şablon yok.",
+      "emptySearch": "Aramanızla eşleşen şablon yok.",
+      "more": "Daha fazla şablon var. Bulmak için arama kutusuna yazın.",
+      "fillTitle": "Ayrıntıları doldurun",
+      "back": "Şablonlara dön",
+      "submit": "Gönder",
+      "reason": {
+        "paused": "Kalite nedeniyle WhatsApp tarafından duraklatıldı. Daha sonra yeniden deneyin.",
+        "media_header": "Uygulamanın henüz gönderemediği bir görsel, video veya belge başlığı var.",
+        "header_variable": "Başlığında uygulamanın henüz dolduramadığı bir değişken var.",
+        "dynamic_button": "Uygulamanın henüz dolduramadığı değişkenli bir düğme bağlantısı var.",
+        "authentication": "Tek kullanımlık parola şablonlarını sistem gönderir.",
+        "named_variables": "Uygulamanın henüz dolduramadığı adlandırılmış değişkenler kullanıyor."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "Bu kanalın bağlantısı kesildi. Web'den yeniden bağlayıp tekrar deneyin.",
+      "planLimit": "Planınızın mesaj limitine ulaşıldı.",
+      "forbidden": "Bunu yapmaya izniniz yok.",
+      "notFound": "Bu konuşma artık mevcut değil."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Web sohbeti",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Simülatör"
+    },
+    "sheet": {
+      "close": "Kapat",
+      "save": "Değişiklikleri kaydet",
+      "noMatch": "Eşleşme yok."
+    },
+    "assign": {
+      "title": "Temsilciyi değiştir",
+      "search": "Temsilcilerde ara",
+      "agents": "Temsilciler",
+      "teams": "Ekipler",
+      "unassigned": "Atanmamış",
+      "noTeam": "Ekip yok",
+      "you": "{{name}} (siz)",
+      "availability": {
+        "online": "Çevrimiçi",
+        "away": "Uzakta",
+        "busy": "Meşgul",
+        "offline": "Çevrimdışı"
+      },
+      "open_one": "{{count}} açık",
+      "open_other": "{{count}} açık",
+      "members_one": "{{count}} üye",
+      "members_other": "{{count}} üye",
+      "failed": "Konuşmanın sahibi değiştirilemedi. Yeniden deneyin."
+    },
+    "priority": {
+      "title": "Önceliği ayarla",
+      "low": "Düşük",
+      "normal": "Normal",
+      "high": "Yüksek",
+      "urgent": "Acil"
+    },
+    "snooze": {
+      "title": "Şu zamana kadar ertele",
+      "hour": "1 saat sonra",
+      "threeHours": "3 saat sonra",
+      "tomorrow": "Yarın, 09:00",
+      "nextWeek": "Gelecek Pazartesi, 09:00"
+    },
+    "statusSheet": {
+      "title": "Durumu değiştir"
+    },
+    "details": {
+      "title": "Sohbet ayrıntıları",
+      "contact": "Kişi",
+      "openContact": "Kişiyi aç",
+      "call": "Ara",
+      "noContact": "Bu konuşmanın henüz bir kişi kaydı yok.",
+      "email": "E-posta",
+      "stage": "Aşama",
+      "contactStatus": "Durum",
+      "owner": "Sahip",
+      "source": "Kaynak",
+      "since": "Kişi olduğu tarih",
+      "optedOut": "Mesajlardan çıktı",
+      "leadScore": "Potansiyel puanı",
+      "actions": "İşlemler",
+      "status": "Durum",
+      "priority": "Öncelik",
+      "labels": "Etiketler",
+      "none": "Yok",
+      "agent": "Atanan temsilci",
+      "team": "Ekip",
+      "you": "Siz",
+      "bot": "Bot",
+      "unassigned": "Atanmamış",
+      "info": "Konuşma",
+      "channel": "Kanal",
+      "window": "Yanıt penceresi",
+      "windowOpen": "{{time}} saatine kadar açık",
+      "windowClosed": "Kapalı",
+      "windowNone": "Süre sınırı yok",
+      "snoozedUntil": "{{time}} saatine kadar ertelendi",
+      "notes": {
+        "title": "Dahili notlar",
+        "empty": "Henüz not yok. Notları yalnızca ekibiniz görür.",
+        "label": "Not yazın",
+        "add": "Not ekle",
+        "delete": "Sil",
+        "deleteFor": "{{name}} kişisinin notunu sil",
+        "failed": "Not kaydedilemedi. Yeniden deneyin.",
+        "deleteFailed": "Not silinemedi. Yeniden deneyin.",
+        "unknownAuthor": "Biri",
+        "tooLong": "Notlar en fazla {{max}} karakter olabilir."
+      },
+      "timeline": {
+        "title": "Zaman çizelgesi",
+        "empty": "Henüz bir şey olmadı.",
+        "system": "Sistem"
+      },
+      "past": {
+        "title": "Önceki konuşmalar",
+        "empty": "Bu kişiyle başka konuşma yok."
+      },
+      "snooze": "Ertele",
+      "wake": "Şimdi uyandır"
+    },
+    "event": {
+      "created": "Konuşma başladı",
+      "assigned": "Atandı",
+      "reassigned": "Yeniden atandı",
+      "unassigned": "Atama kaldırıldı",
+      "ai_handoff": "Yapay zekâ temsilcisi devretti",
+      "resolved": "Çözüldü",
+      "closed": "Kapatıldı",
+      "reopened": "Yeniden açıldı",
+      "status_changed": "Durum değişti",
+      "note_added": "Not eklendi",
+      "snoozed": "Ertelendi",
+      "auto_unsnoozed": "Zamanında uyandı",
+      "priority_changed": "Öncelik değişti",
+      "tag_added": "Etiket eklendi",
+      "tag_removed": "Etiket kaldırıldı",
+      "first_response": "İlk yanıt gönderildi",
+      "sla_breach": "Yanıt süresi kaçırıldı"
+    },
+    "replies": {
+      "open": "Hazır yanıtlar",
+      "title": "Hazır yanıtlar",
+      "search": "Hazır yanıtlarda ara",
+      "empty": "Henüz hazır yanıt yok.",
+      "noMatch": "Aramanızla eşleşen hazır yanıt yok.",
+      "failed": "Bu yanıt kullanılamadı. Yeniden deneyin.",
+      "unfilled": "Mesajı kontrol edin: {{list}} doldurulamadı."
+    },
+    "note": {
+      "title": "Özel not",
+      "label": "{{name}} tarafından özel not: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Konuşmaları seçmek için uzun basın",
+      "selected_one": "{{count}} seçildi",
+      "selected_other": "{{count}} seçildi",
+      "close": "Seçimi iptal et",
+      "selectAll": "Tümünü seç",
+      "read": "Okundu olarak işaretle",
+      "status": "Durum",
+      "assign": "Ata",
+      "label": "Etiketler",
+      "priority": "Öncelik",
+      "snooze": "Ertele",
+      "statusTitle_one": "{{count}} konuşmanın durumunu değiştir",
+      "statusTitle_other": "{{count}} konuşmanın durumunu değiştir",
+      "labelTitle_one": "{{count}} konuşma için etiketler",
+      "labelTitle_other": "{{count}} konuşma için etiketler",
+      "labelMode": "İşlem",
+      "labelAdd": "Etiketi ekle",
+      "labelRemove": "Etiketi kaldır",
+      "labelSearch": "Etiketlerde ara",
+      "priorityTitle_one": "{{count}} konuşmanın önceliği",
+      "priorityTitle_other": "{{count}} konuşmanın önceliği",
+      "snoozeTitle_one": "{{count}} konuşmayı şu zamana kadar ertele",
+      "snoozeTitle_other": "{{count}} konuşmayı şu zamana kadar ertele",
+      "result": "{{done}} güncellendi, {{unchanged}} değişmedi, {{failed}} başarısız",
+      "resultDismiss": "Kapat"
+    }
+  },
+  "contacts": {
+    "title": "Kişiler",
+    "unknown": "Bilinmiyor",
+    "add": "Kişi ekle",
+    "cancel": "İptal",
+    "yes": "Evet",
+    "no": "Hayır",
+    "denied": {
+      "title": "Kişileri görüntüleyemezsiniz",
+      "hint": "Bir çalışma alanı yöneticisinden rolünüze kişilere erişim vermesini isteyin.",
+      "createTitle": "Kişi ekleyemezsiniz",
+      "createHint": "Bir çalışma alanı yöneticisinden rolünüzün kişi eklemesine izin vermesini isteyin."
+    },
+    "empty": {
+      "title": "Kişi yok",
+      "hint": "İlk kişinizi eklemek için + düğmesine dokunun.",
+      "filteredTitle": "Eşleşen kişi yok",
+      "filteredHint": "Farklı bir arama deneyin veya filtreleri temizleyin."
+    },
+    "search": {
+      "open": "Kişilerde ara",
+      "close": "Aramayı kapat",
+      "label": "Ara",
+      "placeholder": "Ad, telefon veya e-posta"
+    },
+    "filter": {
+      "open": "Kişileri filtrele",
+      "title": "Filtreler",
+      "stage": "Yaşam döngüsü aşaması",
+      "owner": "Kişi sahibi",
+      "ownerSearch": "Kişi sahibinde ara",
+      "unassigned": "Sahibi yok",
+      "created": "Oluşturulma tarihi",
+      "any": "Herhangi",
+      "marketing": "Pazarlama mesajları",
+      "marketingOptions": {
+        "all": "Tümü",
+        "subscribed": "Abone",
+        "unsubscribed": "Çıkmış"
+      },
+      "source": "Kaynak",
+      "sourceHint": "Kişinin nereden geldiği, örneğin import veya api.",
+      "clear": "Tümünü temizle",
+      "apply": "Uygula"
+    },
+    "stage": {
+      "new": "Yeni",
+      "contacted": "İletişime geçildi",
+      "qualified": "Nitelikli",
+      "application_started": "Başvuru başladı",
+      "application_submitted": "Başvuru gönderildi",
+      "interview_scheduled": "Görüşme planlandı",
+      "offer_received": "Teklif alındı",
+      "admission_confirmed": "Kabul onaylandı",
+      "enrolled": "Kayıt oldu",
+      "lost": "Kaybedildi"
+    },
+    "subscription": {
+      "subscribed": "Abone",
+      "unsubscribed": "Abonelikten çıktı",
+      "pending": "Beklemede"
+    },
+    "form": {
+      "name": "Ad",
+      "phone": "Telefon",
+      "phoneHint": "Ülke koduyla birlikte, örneğin +919876543210.",
+      "email": "E-posta",
+      "needPhoneOrEmail": "Bir telefon numarası veya e-posta adresi girin.",
+      "phoneInvalid": "Telefon numarasını ülke koduyla girin, örneğin +919876543210.",
+      "emailInvalid": "Geçerli bir e-posta adresi girin.",
+      "nameInvalid": "En fazla 255 karakterlik bir ad girin."
+    },
+    "new": {
+      "title": "Yeni kişi",
+      "save": "Kişiyi kaydet",
+      "requiredTitle": "Gerekli bilgiler",
+      "choose": "Seçin",
+      "search": "Ara",
+      "unsupported": "{{label}} gerekli ancak burada henüz doldurulamıyor. Bu kişiyi web'den ekleyin.",
+      "requiredMissing": "Bir kişinin kaydedilebilmesi için çalışma alanınızın daha fazla bilgiye ihtiyacı var ve bu uygulama bunları gösteremiyor. Bir yöneticiden kişi özelliklerine erişim isteyin veya kişiyi web'den ekleyin."
+    },
+    "edit": {
+      "title": "Kişiyi düzenle",
+      "open": "Kişiyi düzenle",
+      "save": "Değişiklikleri kaydet",
+      "conflict": "Bu kişiyi başka biri değiştirdi. Gözden geçirip yeniden kaydedin."
+    },
+    "detail": {
+      "title": "Kişi",
+      "notFound": "Bu kişi artık mevcut değil.",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "call": "{{phone}} numarasını ara",
+      "mail": "{{email}} adresine yaz",
+      "stage": "Yaşam döngüsü aşaması",
+      "status": "Durum",
+      "score": "Puan",
+      "source": "Kaynak",
+      "whatsapp": "WhatsApp aboneliği",
+      "marketing": "Pazarlama mesajları",
+      "optedOut": "Çıktı",
+      "optedIn": "Alabilir",
+      "lastActivity": "Son etkinlik",
+      "noActivity": "Henüz etkinlik yok",
+      "created": "Eklenme tarihi",
+      "customFields": "Özel alanlar",
+      "actions": {
+        "call": "Ara",
+        "chat": "Sohbet",
+        "email": "E-posta",
+        "sms": "SMS",
+        "tasks": "Görevler",
+        "notes": "Notlar"
+      },
+      "tabsLabel": "Kişi bölümleri",
+      "tabs": {
+        "about": "Kişi bilgileri",
+        "activity": "Etkinlikler",
+        "files": "Daha fazla"
+      },
+      "activities": {
+        "label": "Etkinlik görünümleri",
+        "all": "Tüm etkinlikler",
+        "timeline": "Etkinlik zaman çizelgesi"
+      },
+      "more": {
+        "account": "Şirket",
+        "deals": "Fırsatlar"
+      },
+      "summary": {
+        "title": "Etkinlik",
+        "notes": "Notlar",
+        "tasks": "Görevler",
+        "meetings": "Toplantılar",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "Kişiyi sil",
+        "title": "Kişiyi sil",
+        "message": "{{name}} silinsin mi? Bu işlem geri alınamaz.",
+        "confirm": "Sil",
+        "cancel": "İptal"
+      }
+    },
+    "tags": {
+      "title": "Etiketler",
+      "none": "Henüz etiket yok.",
+      "remove": "{{name}} etiketini kaldır",
+      "addLabel": "Etiket ekle",
+      "addPlaceholder": "Etiket adı",
+      "add": "Etiket ekle"
+    },
+    "row": {
+      "more": "{{name}} için diğer işlemler",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Düzenle",
+      "swipeDelete": "Sil"
+    },
+    "sheet": {
+      "close": "Kapat"
+    },
+    "views": {
+      "open": "Kişi görünümü: {{name}}",
+      "title": "Görünümler",
+      "close": "Görünümleri kapat",
+      "searchLabel": "Görünümlerde ara",
+      "searchPlaceholder": "Görünüm ara",
+      "systemTitle": "Varsayılan sistem görünümleri",
+      "customTitle": "Özel görünümler",
+      "none": "Kullanılabilir görünüm yok",
+      "failed": "Kayıtlı görünümler yüklenemedi.",
+      "system": {
+        "all": "Tüm kişiler",
+        "mine": "Kişilerim",
+        "recent": "Yakın zamanda oluşturulan",
+        "optedOut": "Pazarlamadan çıkanlar"
+      }
+    }
+  },
+  "tasks": {
+    "title": "Görevler",
+    "add": "Görev ekle",
+    "cancel": "İptal",
+    "unknownContact": "Adsız kişi",
+    "notFound": "Bu görev artık mevcut değil.",
+    "priority": {
+      "low": "Düşük",
+      "medium": "Orta",
+      "high": "Yüksek"
+    },
+    "status": {
+      "open": "Açık",
+      "done": "Tamamlandı",
+      "overdue": "Gecikmiş"
+    },
+    "denied": {
+      "title": "Görevleri göremezsiniz",
+      "hint": "Çalışma alanı yöneticinizden görevlere erişim vermesini isteyin.",
+      "createTitle": "Görev ekleyemezsiniz",
+      "createHint": "Çalışma alanı yöneticinizden görev eklemenize izin vermesini isteyin.",
+      "editTitle": "Görevleri düzenleyemezsiniz",
+      "editHint": "Çalışma alanı yöneticinizden görevleri düzenlemenize izin vermesini isteyin."
+    },
+    "planLocked": {
+      "title": "Görevler bu plana dahil değil.",
+      "hint": "Çalışma alanı yöneticinizden planı yükseltmesini isteyin."
+    },
+    "empty": {
+      "title": "Görev bulunamadı.",
+      "hint": "Eklediğiniz görevler burada görünür.",
+      "filteredHint": "Farklı bir filtre veya arama deneyin."
+    },
+    "search": {
+      "open": "Görevlerde ara",
+      "close": "Aramayı kapat",
+      "label": "Ara",
+      "placeholder": "Başlığa göre ara"
+    },
+    "filter": {
+      "open": "Görevleri filtrele",
+      "title": "Görevleri filtrele",
+      "clear": "Tümünü temizle",
+      "apply": "Uygula",
+      "group": {
+        "status": "Durum",
+        "priority": "Öncelik",
+        "due": "Son tarih",
+        "owner": "Sahip"
+      },
+      "status": {
+        "open": "Açık",
+        "done": "Tamamlandı",
+        "all": "Tümü"
+      },
+      "due": {
+        "overdue": "Gecikmiş",
+        "today": "Bugün",
+        "upcoming": "Yaklaşan",
+        "none": "Tarih yok"
+      },
+      "owner": {
+        "mine": "Benim",
+        "unassigned": "Atanmamış",
+        "all": "Tümü"
+      }
+    },
+    "list": {
+      "conflict": "Bu görevi başka biri değiştirdi. Liste yenilendi."
+    },
+    "row": {
+      "markDone": "{{title}} görevini tamamlandı olarak işaretle",
+      "reopen": "{{title}} görevini yeniden aç",
+      "more": "{{title}} için diğer işlemler",
+      "due": "Son tarih: {{when}}",
+      "unassigned": "Atanmamış"
+    },
+    "actions": {
+      "edit": "Görevi düzenle",
+      "delete": "Görevi sil"
+    },
+    "delete": {
+      "title": "Görevi sil",
+      "message": "Bu görevi silmek istediğinizden emin misiniz?",
+      "confirm": "Sil"
+    },
+    "details": {
+      "title": "Görev ayrıntıları",
+      "edit": "Görevi düzenle",
+      "delete": "Görevi sil",
+      "description": "Açıklama",
+      "priority": "Öncelik",
+      "status": "Durum",
+      "owner": "Sahip",
+      "relatedTo": "İlgili kişi",
+      "noDescription": "Açıklama yok",
+      "noDue": "Son tarih yok",
+      "unassigned": "Atanmamış",
+      "noContact": "Yok",
+      "openContact": "{{name}} kişisini aç",
+      "markComplete": "Tamamlandı olarak işaretle",
+      "reopen": "Yeniden aç",
+      "conflict": "Bu görevi başka biri değiştirdi. Yeniden yüklendi."
+    },
+    "form": {
+      "addTitle": "Görev ekle",
+      "editTitle": "Görevi düzenle",
+      "save": "Görevi kaydet",
+      "saving": "Kaydediliyor…",
+      "title": "Görev başlığı",
+      "description": "Görev açıklaması",
+      "priority": "Öncelik",
+      "date": "Tarih (YYYY-AA-GG)",
+      "dateHint": "Son tarih olmaması için tarih ve saati boş bırakın. Örneğin 2026-10-31.",
+      "time": "Saat (SS:dd)",
+      "timeHint": "24 saatlik düzen, örneğin 14:30.",
+      "owner": "Sahip",
+      "ownerPick": "Bir sahip seçin",
+      "ownerMe": "Ben",
+      "ownerNone": "Atanmamış",
+      "ownerLoading": "Ekibiniz yükleniyor…",
+      "ownerFailed": "Ekibiniz yüklenemedi.",
+      "contact": "Kişi",
+      "contactLinkOptional": "Kişi bağla (isteğe bağlı)",
+      "contactNone": "Kişi yok",
+      "contactPick": "Bir kişi seçin",
+      "contactSearchLabel": "Kişilerde ara",
+      "contactSearchPlaceholder": "Ad, e-posta veya telefon",
+      "contactEmpty": "Kişi bulunamadı.",
+      "contactFailed": "Kişiler yüklenemedi.",
+      "conflict": "Bu görevi başka biri değiştirdi. Gözden geçirip yeniden kaydedin.",
+      "errors": {
+        "titleRequired": "Bir görev başlığı girin.",
+        "titleTooLong": "Başlık en fazla 255 karakter olabilir.",
+        "titleNeedsLetter": "Başlık en az bir harf içermelidir.",
+        "notesTooLong": "Açıklama en fazla 5000 karakter olabilir.",
+        "dateInvalid": "Tarihi YYYY-AA-GG biçiminde girin, örneğin 2026-10-31.",
+        "timeInvalid": "Saati 24 saatlik düzende SS:dd biçiminde girin, örneğin 14:30.",
+        "dateNeeded": "Tarihi de girin.",
+        "timeNeeded": "Saati de girin.",
+        "dueInvalid": "Bu son tarih ve saat kullanılamaz.",
+        "assigneeInvalid": "Bu kişiye görev atanamaz. Başka bir sahip seçin.",
+        "contactInvalid": "Bu kişi bağlanamaz."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Notlar",
+    "cancel": "İptal",
+    "loadMore": "Daha fazla yükle",
+    "deleteConfirm": "Sil",
+    "contactMissing": "Bu kişi artık mevcut değil.",
+    "add": "Not ekle",
+    "edited": "Düzenlendi",
+    "denied": {
+      "title": "Notları görüntüleyemezsiniz",
+      "hint": "Bir çalışma alanı yöneticisinden rolünüze kişilere erişim vermesini isteyin.",
+      "updateTitle": "Notları değiştiremezsiniz",
+      "updateHint": "Bir çalışma alanı yöneticisinden rolünüzün kişileri düzenlemesine izin vermesini isteyin."
+    },
+    "empty": {
+      "title": "Not yok.",
+      "hint": "İlk notu eklemek için + düğmesine dokunun."
+    },
+    "menu": {
+      "open": "{{date}} tarihli not için işlemler",
+      "edit": "Notu düzenle",
+      "delete": "Notu sil"
+    },
+    "delete": {
+      "title": "Notu sil",
+      "message": "Bu notu silmek istediğinizden emin misiniz?"
+    },
+    "form": {
+      "addTitle": "Not ekle",
+      "editTitle": "Notu güncelle",
+      "label": "Not",
+      "placeholder": "Notunuzu buraya yazın...",
+      "required": "Kaydetmeden önce bir not yazın.",
+      "invalid": "En fazla 400 karakterlik bir not girin.",
+      "counterLabel": "{{max}} karakterin {{used}} tanesi kullanıldı",
+      "save": "Notu kaydet",
+      "saving": "Not kaydediliyor",
+      "conflict": "Bu notu başka biri değiştirdi. Gözden geçirip yeniden kaydedin.",
+      "missing": "Bu not artık mevcut değil."
+    },
+    "activity": {
+      "notes": "Notlar",
+      "tasks": "Görevler",
+      "timeline": "Zaman çizelgesi",
+      "empty": "Henüz etkinlik yok.",
+      "add": "Etkinlik ekle",
+      "types": {
+        "note": "Not",
+        "call": "Arama",
+        "email": "E-posta",
+        "meeting": "Toplantı",
+        "task": "Görev"
+      },
+      "source": {
+        "system": "Sistem",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Etkinlik ekle",
+        "type": "Tür",
+        "typeHint": "Örneğin not, arama, e-posta veya toplantı.",
+        "name": "Başlık",
+        "details": "Ayrıntılar",
+        "save": "Etkinliği kaydet",
+        "typeInvalid": "En fazla 100 karakterlik bir tür girin.",
+        "titleInvalid": "En fazla 255 karakterlik bir başlık girin.",
+        "detailsInvalid": "Ayrıntılar en fazla 10.000 karakter olabilir."
+      }
+    },
+    "files": {
+      "empty": "Dosya yok.",
+      "delete": "{{name}} dosyasını sil",
+      "deleteTitle": "Dosyayı sil",
+      "deleteMessage": "Bu dosyayı silmek istediğinizden emin misiniz?"
+    }
+  },
+  "contactMeetings": {
+    "title": "Toplantılar",
+    "loadMore": "Daha fazla yükle",
+    "contactMissing": "Bu kişi artık mevcut değil.",
+    "noDate": "Tarih belirlenmedi",
+    "denied": {
+      "title": "Toplantıları görüntüleyemezsiniz",
+      "hint": "Bir çalışma alanı yöneticisinden rolünüze kişilere erişim vermesini isteyin."
+    },
+    "empty": {
+      "title": "Kayıtlı toplantı yok."
+    }
+  },
+  "contactDeals": {
+    "title": "Fırsatlar",
+    "contactMissing": "Bu kişi artık mevcut değil.",
+    "denied": {
+      "title": "Fırsatları görüntüleyemezsiniz",
+      "hint": "Bir çalışma alanı yöneticisinden rolünüze fırsatlara erişim vermesini isteyin."
+    },
+    "empty": {
+      "title": "Henüz fırsat yok."
+    }
+  },
+  "contactCompany": {
+    "title": "Şirket",
+    "missing": "Bu şirket artık mevcut değil.",
+    "denied": {
+      "title": "Şirketleri görüntüleyemezsiniz",
+      "hint": "Bir çalışma alanı yöneticisinden rolünüze şirketlere erişim vermesini isteyin."
+    },
+    "industry": "Sektör",
+    "size": "Büyüklük",
+    "phone": "Telefon",
+    "email": "E-posta",
+    "website": "Web sitesi",
+    "address": "Adres",
+    "owner": "Sahip",
+    "notes": "Notlar"
+  },
+  "contactProps": {
+    "title": "Kişi bilgileri",
+    "search": "Alanlarda ara",
+    "showEmpty": "Boş alanları göster",
+    "footer": "Burada gördüğünüz özellikleri web uygulamanızdan özelleştirebilirsiniz.",
+    "close": "Kapat",
+    "save": "Kaydet",
+    "clear": "Temizle",
+    "yes": "Evet",
+    "no": "Hayır",
+    "rowHint": "Düzenleyiciyi açar",
+    "locked": "{{label}} alanını düzenleyemezsiniz",
+    "webOnly": "{{label}} yalnızca web uygulamasından düzenlenebilir.",
+    "masked": "Gizli",
+    "fields": {
+      "email": "E-posta",
+      "phone": "Telefon",
+      "owner": "Kişi sahibi",
+      "name": "Ad",
+      "source": "Kaynak",
+      "whatsapp": "WhatsApp aboneliği",
+      "marketing": "Pazarlamadan çıkma",
+      "leadScore": "Potansiyel puanı",
+      "created": "Oluşturulma",
+      "lastActivity": "Son etkinlik"
+    },
+    "subscription": {
+      "subscribed": "Abone",
+      "unsubscribed": "Abonelikten çıktı",
+      "pending": "Beklemede"
+    },
+    "editor": {
+      "title": "{{label}} alanını düzenle",
+      "date": "Tarih",
+      "dateHint": "Yıl-ay-gün, örneğin 2026-10-12.",
+      "time": "Saat",
+      "timeHint": "24 saatlik düzen, örneğin 14:30.",
+      "phoneHint": "Ülke koduyla birlikte, örneğin +919876543210.",
+      "noOptions": "Seçilebilecek seçenek yok."
+    },
+    "error": {
+      "required": "{{label}} gerekli.",
+      "name": "En fazla 255 karakterlik bir ad girin.",
+      "email": "Geçerli bir e-posta adresi girin.",
+      "phone": "Telefon numarasını ülke koduyla girin, örneğin +919876543210.",
+      "needPhoneOrEmail": "Bir kişi için telefon numarası veya e-posta adresi gerekir.",
+      "text": "En fazla {{max}} karakter girin.",
+      "number": "Bir sayı girin.",
+      "whole": "Bir tam sayı girin.",
+      "range": "0 ile {{max}} arasında bir sayı girin.",
+      "url": "http:// veya https:// ile başlayan bir bağlantı girin",
+      "date": "Geçerli bir tarihi YYYY-AA-GG biçiminde girin.",
+      "time": "Geçerli bir saati SS:dd biçiminde girin.",
+      "option": "Seçeneklerden birini seçin.",
+      "invalid": "Bu değer kabul edilmiyor. Kontrol edip yeniden deneyin.",
+      "notEditable": "Bu özellik düzenlenemez.",
+      "requiredMissing": "Gerekli bir özelliğin değeri yok. Kaydetmeden önce doldurun.",
+      "conflict": "Bu kişiyi başka biri değiştirdi. Gözden geçirip yeniden kaydedin.",
+      "lostReasonRequired": "Bu kişinin neden kaybedildiğini belirtin.",
+      "statusMismatch": "Bu durum bu yaşam döngüsü aşamasına ait değil."
+    },
+    "owner": {
+      "title": "Şuna ata",
+      "unassigned": "Atanmamış",
+      "none": "Bu kişinin atanabileceği kimse yok.",
+      "failed": "Sahip değiştirilemedi. Yeniden deneyin."
+    },
+    "lifecycle": {
+      "stage": "Yaşam döngüsü aşaması",
+      "status": "Durum",
+      "change": "Yaşam döngüsü aşamasını değiştir",
+      "changeStatus": "Durumu değiştir",
+      "dropdownHint": "Seçim yapmak için listeyi açar",
+      "lostReason": "Kaybedilme nedeni",
+      "otherReason": "Diğer",
+      "otherLabel": "Nedeni açıklayın"
+    }
+  },
+  "summary": {
+    "contacts": "Kişiler",
+    "contactsNote": "Bu dönemde eklenen",
+    "tasks": "Görevler",
+    "tasksNote": "Şu anda açık",
+    "messages": "Mesajlar",
+    "sentNote": "Gönderilen",
+    "receivedNote": "Alınan",
+    "conversations": "Konuşmalar",
+    "conversationsNote": "Açık ve beklemede, şu anda",
+    "status": {
+      "all": "Aktif",
+      "mine": "Benim",
+      "unassigned": "Atanmamış",
+      "assigned": "Atanmış",
+      "unread": "Okunmamış",
+      "archived": "Arşivlenen"
+    },
+    "allMessages": {
+      "title": "Tüm mesajlar",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "received": "Alındı",
+      "read": "Okundu",
+      "failed": "Başarısız"
+    },
+    "moreTitle": "Çalışma alanınızdan daha fazlası"
+  },
+  "dashDate": {
+    "title": "Takvimden ara",
+    "close": "Takvimi kapat",
+    "apply": "Uygula",
+    "reset": "Sıfırla",
+    "presets": "Hızlı aralıklar",
+    "pill": {
+      "label": "Tarih aralığı: {{from}} - {{to}}",
+      "hint": "Tarihleri değiştirmek için takvimi açar"
+    },
+    "selection": {
+      "label": "{{from}} - {{to}}",
+      "pickFirst": "İlk günü seçin",
+      "pickLast": "Son günü seçin"
+    },
+    "preset": {
+      "last7": "Son 7 gün",
+      "last30": "Son 30 gün",
+      "last90": "Son 90 gün",
+      "yesterday": "Dün",
+      "today": "Bugün"
+    },
+    "calendar": {
+      "previousMonth": "Önceki ay",
+      "nextMonth": "Sonraki ay",
+      "start": "Aralık başlangıcı",
+      "end": "Aralık sonu",
+      "inRange": "Aralıkta",
+      "today": "Bugün"
+    }
+  },
+  "permissions": {
+    "channelName": "Mesajlar ve güncellemeler",
+    "settingsHint": "İzinler'e dokunun, ardından ihtiyacınız olanları açın.",
+    "names": {
+      "notifications": "Bildirimler",
+      "calls": "Telefon aramaları",
+      "camera": "Kamera",
+      "callPopup": "Arama açılır penceresi (diğer uygulamaların üzerinde göster)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Kişi",
+      "close": "Kapat",
+      "ongoingTitle": "Arama sürüyor",
+      "endedTitle": "Arama sona erdi",
+      "endedText": "{{name}} ile aramanızı kaydetmek için dokunun.",
+      "channelOngoing": "Süren aramalar",
+      "channelEnded": "Arama özetleri"
+    },
+    "summary": {
+      "title": "Arama ekle",
+      "contact": "Kişi",
+      "type": "Arama türü",
+      "outbound": "Giden",
+      "status": "Giden arama durumu",
+      "completed": "Tamamlandı",
+      "notAnswered": "Yanıtlanmadı",
+      "startTime": "Arama başlangıç saati",
+      "duration": "Arama süresi",
+      "durationHint": "Dakika ve saniye, örneğin 02:30",
+      "durationInvalid": "Süreyi dakika:saniye olarak girin, örneğin 02:30.",
+      "subject": "Konu",
+      "subjectDefault": "{{name}} kişisine giden arama",
+      "subjectInvalid": "En fazla 255 karakterlik bir konu girin.",
+      "notes": "Açıklama",
+      "save": "Aramayı kaydet",
+      "skip": "Atla",
+      "contactMissing": "Bu aramayı kaydedecek bir kişi yok.",
+      "denied": "Rolünüz kişileri değiştiremediği için bu arama kaydedilemiyor.",
+      "purpose": "Arama amacı",
+      "purposeNone": "-Yok-",
+      "result": "Arama sonucu",
+      "purposes": {
+        "prospecting": "Potansiyel müşteri arama",
+        "administrative": "İdari",
+        "negotiation": "Müzakere",
+        "demo": "Demo",
+        "project": "Proje",
+        "desk": "Masa"
+      }
+    }
+  }
+}

@@ -13,15 +13,56 @@ describe('matchLocale', () => {
     expect(matchLocale('en-GB')).toBe('en');
   });
 
+  it('accepts every language the web app has, with or without a region', () => {
+    expect(matchLocale('de-DE')).toBe('de');
+    expect(matchLocale('es-MX')).toBe('es');
+    expect(matchLocale('pt_BR')).toBe('pt');
+    expect(matchLocale('ar-EG')).toBe('ar');
+    expect(matchLocale('ur-PK')).toBe('ur');
+  });
+
+  it("maps Chinese in any script, and the older codes Android used, to the app's files", () => {
+    expect(matchLocale('zh-CN')).toBe('zh-CN');
+    expect(matchLocale('zh-Hans-CN')).toBe('zh-CN');
+    expect(matchLocale('zh-TW')).toBe('zh-CN');
+    expect(matchLocale('iw-IL')).toBe('he');
+    expect(matchLocale('in')).toBe('id');
+  });
+
   it('returns null for languages the app is not translated into, and for empty input', () => {
-    expect(matchLocale('de-DE')).toBeNull();
     expect(matchLocale('ta-IN')).toBeNull();
+    expect(matchLocale('sv-SE')).toBeNull();
     expect(matchLocale('')).toBeNull();
     expect(matchLocale(undefined)).toBeNull();
   });
 
-  it('lists English, Hindi and Marathi', () => {
-    expect([...LOCALES]).toEqual(['en', 'hi', 'mr']);
+  it("lists the web app's 21 languages and Marathi", () => {
+    expect(LOCALES).toHaveLength(22);
+    expect(LOCALES).toContain('mr');
+    for (const web of [
+      'en',
+      'es',
+      'hi',
+      'ar',
+      'pt',
+      'ru',
+      'ja',
+      'de',
+      'fr',
+      'it',
+      'ko',
+      'zh-CN',
+      'tr',
+      'id',
+      'vi',
+      'th',
+      'pl',
+      'nl',
+      'ur',
+      'he',
+      'bn',
+    ])
+      expect(LOCALES).toContain(web);
   });
 });
 
@@ -37,5 +78,15 @@ describe('usesShapedScript', () => {
     expect(usesShapedScript('hi')).toBe(true);
     expect(usesShapedScript('mr')).toBe(true);
     expect(usesShapedScript('hi-IN')).toBe(true);
+  });
+
+  it('is true for every language written in a script Inter does not have', () => {
+    for (const language of ['bn', 'ar', 'ur', 'he', 'th', 'ja', 'ko', 'zh-CN'])
+      expect(usesShapedScript(language)).toBe(true);
+  });
+
+  it('is false for the Latin and Cyrillic languages, which keep Inter', () => {
+    for (const language of ['es', 'pt', 'ru', 'de', 'fr', 'it', 'tr', 'id', 'vi', 'pl', 'nl'])
+      expect(usesShapedScript(language)).toBe(false);
   });
 });

@@ -1413,11 +1413,11 @@
       "channelEnded": "Call summaries"
     },
     "summary": {
-      "title": "Log call",
+      "title": "Add call",
       "contact": "Contact",
       "type": "Call type",
       "outbound": "Outbound",
-      "status": "Call status",
+      "status": "Outgoing call status",
       "completed": "Completed",
       "notAnswered": "Not answered",
       "startTime": "Call start time",
@@ -1427,12 +1427,22 @@
       "subject": "Subject",
       "subjectDefault": "Outgoing call to {{name}}",
       "subjectInvalid": "Enter a subject of up to 255 characters.",
-      "notes": "Notes",
-      "notesPlaceholder": "What was discussed?",
+      "notes": "Description",
       "save": "Save call",
       "skip": "Skip",
       "contactMissing": "This call has no contact to log it on.",
-      "denied": "Your role can't change contacts, so this call can't be logged."
+      "denied": "Your role can't change contacts, so this call can't be logged.",
+      "purpose": "Call purpose",
+      "purposeNone": "-None-",
+      "result": "Call result",
+      "purposes": {
+        "prospecting": "Prospecting",
+        "administrative": "Administrative",
+        "negotiation": "Negotiation",
+        "demo": "Demo",
+        "project": "Project",
+        "desk": "Desk"
+      }
     }
   }
 }

@@ -49,7 +49,7 @@ afterEach(async () => {
 describe('CallSummaryScreen', () => {
   it('shows the call as the phone saw it, with a subject ready to save', async () => {
     await show();
-    expect(await screen.findByRole('header', { name: 'Log call' })).toBeTruthy();
+    expect(await screen.findByRole('header', { name: 'Add call' })).toBeTruthy();
     expect(screen.getByText('Aarav Sharma')).toBeTruthy();
     expect(screen.getByText('Outbound')).toBeTruthy();
     expect(screen.getByLabelText('Call duration').props.value).toBe('01:15');
@@ -59,9 +59,13 @@ describe('CallSummaryScreen', () => {
   it('saves a call on the timeline with its outcome, length, start and notes, then closes', async () => {
     createCall.mockResolvedValue({} as never);
     await show();
-    await fireEvent.changeText(await screen.findByLabelText('Notes'), '  Wants a demo \n');
+    await fireEvent.changeText(await screen.findByLabelText('Description'), '  Wants a demo \n');
     await fireEvent.changeText(screen.getByLabelText('Call duration'), '02:30');
+    await fireEvent.changeText(screen.getByLabelText('Call result'), ' Interested ');
+    await fireEvent.press(screen.getByRole('button', { name: 'Outgoing call status' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'Not answered' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Call purpose' }));
+    await fireEvent.press(screen.getByRole('radio', { name: 'Demo' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Save call' }));
     await waitFor(() =>
       expect(createCall).toHaveBeenCalledWith(
@@ -69,7 +73,7 @@ describe('CallSummaryScreen', () => {
         {
           activityType: 'call',
           title: 'Outgoing call to Aarav Sharma',
-          body: 'Outbound · Not answered · 02:30\nWants a demo',
+          body: 'Outbound · Not answered · 02:30 · Demo\nCall result: Interested\nWants a demo',
           occurredAt: new Date(STARTED).toISOString(),
         },
         expect.any(String),
@@ -102,7 +106,7 @@ describe('CallSummaryScreen', () => {
   it('leaves without saving on Skip, and goes home when there is nothing to go back to', async () => {
     router.canGoBack.mockReturnValue(false);
     await show();
-    await fireEvent.press(await screen.findByRole('button', { name: 'Skip' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Back' }));
     expect(router.replace).toHaveBeenCalledWith('/');
     expect(createCall).not.toHaveBeenCalled();
   });

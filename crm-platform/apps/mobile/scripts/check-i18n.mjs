@@ -43,21 +43,50 @@ for (const f of files)
   if (!listed.includes(f)) problems.push(`${f}: file is not listed in src/lib/i18n/locales.ts`);
 
 const en = load('en');
-for (const locale of listed.filter((l) => l !== 'en' && files.includes(l))) {
+
+// Counts use i18next plurals (`key_one`, `key_other`, ...). English has two forms, but a language may need more (Arabic has six,
+// Russian and Polish four) or fewer (Japanese, Korean, Chinese, Vietnamese, Thai and Indonesian have only "other"), so a plural key
+// is checked against the categories that language really has (`Intl.PluralRules`), not against the English key names.
+const PLURAL = /^(.*)_(zero|one|two|few|many|other)$/;
+const enPlurals = new Set();
+const enPlain = new Map();
+for (const [key, value] of en) {
+  const m = PLURAL.exec(key);
+  if (m) enPlurals.add(m[1]);
+  else enPlain.set(key, value);
+}
+const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7);
+
+for (const locale of listed.filter(
+  (l) => l !== 'en' && files.includes(l) && (!only || l === only),
+)) {
   const tr = load(locale);
-  for (const [key, source] of en) {
+  const expected = new Map(enPlain);
+  const categories = new Intl.PluralRules(locale).resolvedOptions().pluralCategories;
+  for (const base of enPlurals) {
+    const other = en.get(`${base}_other`) ?? en.get(`${base}_one`);
+    for (const c of categories) expected.set(`${base}_${c}`, en.get(`${base}_${c}`) ?? other);
+  }
+  for (const [key, source] of expected) {
     const value = tr.get(key);
     if (value === undefined) problems.push(`${locale}: missing ${key}`);
     else if (value.trim() === '') problems.push(`${locale}: empty ${key}`);
     else {
       if (value === source && !(allow[locale] ?? []).includes(key))
         problems.push(`${locale}: ${key} is still English`);
-      if (placeholders(value) !== placeholders(source))
-        problems.push(`${locale}: ${key} changed a {{placeholder}}`);
+      // "one" and "two" forms may spell the number out instead of using {{count}}; every other text keeps its placeholders.
+      const spelledOut = /_(zero|one|two)$/.test(key) && PLURAL.test(key);
+      const want = placeholders(source);
+      const got = placeholders(value);
+      const same = spelledOut
+        ? got.split(',').every((p) => p === '' || want.includes(p))
+        : got === want;
+      if (!same) problems.push(`${locale}: ${key} changed a {{placeholder}}`);
     }
   }
   for (const key of tr.keys())
-    if (!en.has(key)) problems.push(`${locale}: ${key} does not exist in en`);
+    if (!expected.has(key))
+      problems.push(`${locale}: ${key} is not a key (or plural form) ${locale} needs`);
 }
 
 if (problems.length) {

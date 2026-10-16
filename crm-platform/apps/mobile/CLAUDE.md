@@ -1,6 +1,6 @@
 # Working in `apps/mobile`
 
-Read automatically when you work in this folder. The repo-wide rules in `../../CLAUDE.md` and `../../CONTRIBUTING.md` still apply (porting rules, the pre-pr gate, nothing committed unless asked). One exception for this app: it is translated into English, Hindi and Marathi only (`src/lib/i18n/locales.ts`), not the web's 21 languages.
+Read automatically when you work in this folder. The repo-wide rules in `../../CLAUDE.md` and `../../CONTRIBUTING.md` still apply (porting rules, the pre-pr gate, nothing committed unless asked). This app is translated into the web's 21 languages plus Marathi (`src/lib/i18n/locales.ts`, 22 files in `src/messages/`).
 Why the app is built this way: `../../docs/adr/0021` to `0027`. Start with `../../docs/mobile/README.md`.
 
 ## Expo changes fast: do not trust memory
@@ -37,7 +37,7 @@ Each of these fails `pnpm lint`, `pnpm arch` or a test, and the error names the 
 - Layers: `app` → `features` → `components` → `lib` → `config`, downwards only; a feature never imports another feature; no cycles. Use the `@/` alias, never `../`.
 - API: only `apiFetch` (`@/lib/api`); global `fetch` is an error. Parse with the `@crm/contracts` schema. Branch on `ApiError.code`, never on message text. Mutations carry an `Idempotency-Key`.
 - Credentials: only `lib/auth/token-store` (keychain). No AsyncStorage / MMKV. Never log, store, or put in a URL a token, password, code or message body.
-- Text: `Text`/`TextField` from `@/components/ui`, never the React Native ones. No literals in JSX or in `label`/`placeholder`/`accessibilityLabel`; use `t()`; English, Hindi and Marathi in the same change.
+- Text: `Text`/`TextField` from `@/components/ui`, never the React Native ones. No literals in JSX or in `label`/`placeholder`/`accessibilityLabel`; use `t()`; all 22 languages in the same change (`mobile-i18n-sync`).
 - Style: theme tokens only (`useTheme()`, `@/lib/theme/tokens`); no hex colours; tap targets ≥ 48; every control has a role and a name.
 - Config: `@/config/env` only; no `process.env` elsewhere. No secret in an `EXPO_PUBLIC_*` variable.
 - Imports: no `next`, `react-dom`, `@crm/ui`, `@crm/db`, `@crm/api`.
@@ -45,5 +45,5 @@ Each of these fails `pnpm lint`, `pnpm arch` or a test, and the error names the 
 
 ## Done means
 
-`bash ../../.claude/skills/mobile-pre-pr/scripts/gate.sh` passes (add `--full` before a release), tests were written with the code, text is translated into English, Hindi and Marathi, and the screen was run on an emulator or device (state in your
+`bash ../../.claude/skills/mobile-pre-pr/scripts/gate.sh` passes (add `--full` before a release), tests were written with the code, text is translated into all 22 languages, and the screen was run on an emulator or device (state in your
 report which, or say it was not run). Do not claim a screen works from a passing test alone.

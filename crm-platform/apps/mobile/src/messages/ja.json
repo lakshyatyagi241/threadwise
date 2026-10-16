@@ -1,0 +1,1430 @@
+{
+  "common": {
+    "loading": "読み込み中…",
+    "retry": "再試行",
+    "signOut": "ログアウト",
+    "clear": "クリア",
+    "back": "戻る",
+    "filters": {
+      "clearAll": "すべてクリア",
+      "apply": "適用",
+      "noMatch": "検索条件に一致するものはありません。"
+    }
+  },
+  "errors": {
+    "generic": "問題が発生しました。もう一度お試しください。",
+    "network": "サーバーに接続できません。接続を確認してもう一度お試しください。",
+    "timeout": "サーバーの応答に時間がかかっています。もう一度お試しください。",
+    "outdatedApp": "このバージョンのアプリは古くなっています。アップデートしてください。",
+    "tooManyRequests": "試行回数が多すぎます。しばらくしてからもう一度お試しください。",
+    "captchaUnsupported": "セキュリティ確認が必要ですが、アプリではまだ対応できません。ウェブサイトをご利用ください。"
+  },
+  "auth": {
+    "welcomeBack": "おかえりなさい",
+    "welcomeSubtitle": "情報を入力してワークスペースに戻りましょう。",
+    "tagline": "お客様とのチャットを、ひとつの落ち着いたワークスペースに",
+    "taglineCaption": "素早く対応するチームのための、一斉配信・自動化・共有受信トレイ。",
+    "email": "メールアドレス",
+    "emailPlaceholder": "you@company.com",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワードを入力",
+    "showPassword": "パスワードを表示",
+    "hidePassword": "パスワードを非表示",
+    "signInSubmit": "ログイン",
+    "emailInvalid": "有効なメールアドレスを入力してください。",
+    "passwordRequired": "パスワードを入力してください。",
+    "newHere": "初めてご利用ですか?",
+    "createAccount": "アカウントを作成",
+    "legalSignIn": "ログインすると、<terms>利用規約</terms>と<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。",
+    "mfaTitle": "2段階認証",
+    "mfaHint": "認証アプリに表示される6桁のコードを入力してください。",
+    "mfaCode": "認証コード",
+    "mfaSubmit": "確認",
+    "workspaceTitle": "ワークスペースを選択",
+    "workspaceHint": "お使いのアカウントは複数のワークスペースに所属しています。",
+    "invalidCredentials": "メールアドレスまたはパスワードが正しくありません。",
+    "accountLocked": "このアカウントは一時的にロックされています。しばらくしてからお試しください。",
+    "accountSuspended": "このアカウントは停止されています。",
+    "mfaInvalid": "コードが正しくありません。もう一度お試しください。",
+    "mfaExpired": "ログインの有効期限が切れました。最初からやり直してください。"
+  },
+  "signUp": {
+    "tagline": "ワークスペースを設定",
+    "taglineCaption": "ワークスペースを作成し、チームと最初のチャネルを追加しましょう。",
+    "title": "アカウントを作成",
+    "subtitle": "いくつか入力するだけでワークスペースが準備できます。",
+    "fullName": "氏名",
+    "fullNamePlaceholder": "お名前",
+    "email": "勤務先メールアドレス",
+    "orgName": "ワークスペース名",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "チームは {{slug}} のアドレスでログインします。",
+    "orgNameHintEmpty": "チームに表示される名前です。",
+    "customiseSlug": "ワークスペースのアドレスを指定する",
+    "orgSlug": "ワークスペースのアドレス",
+    "orgSlugPlaceholder": "your-workspace",
+    "orgSlugHint": "英字、数字、ハイフン、アンダースコアが使えます。チームはログイン時にこのアドレスを入力します。",
+    "phone": "携帯電話番号",
+    "phoneHint": "アカウントの確認と重要なお知らせに使用します。",
+    "referral": "紹介コード(任意)",
+    "referralPlaceholder": "お知り合いのコードをお持ちですか?",
+    "confirmPassword": "パスワード(確認)",
+    "passwordPlaceholder": "パスワードを作成",
+    "confirmPasswordPlaceholder": "パスワードをもう一度入力",
+    "passwordMinLength": "最小文字数: {{min}}",
+    "passwordMixedCase": "大文字と小文字を混ぜてください。",
+    "passwordNumber": "数字を含めてください。",
+    "passwordSymbol": "記号を含めてください。",
+    "agree": "<terms>利用規約</terms>と<privacy>プライバシーポリシー</privacy>に同意します。",
+    "submit": "アカウントを作成",
+    "haveAccount": "すでにアカウントをお持ちですか?",
+    "signIn": "ログイン",
+    "closedBody": "新規登録は受け付けていません。管理者に招待をご依頼ください。",
+    "closedBack": "ログインに戻る",
+    "validation": {
+      "fullName": "氏名を入力してください。",
+      "orgName": "ワークスペース名を入力してください(2文字以上)。",
+      "orgSlug": "ワークスペースのアドレスを入力してください(英字、数字、ハイフン、アンダースコア)。",
+      "phoneRequired": "携帯電話番号を入力してください。",
+      "phoneInvalid": "有効な電話番号を入力してください。国内番号でない場合は国番号も含めてください。",
+      "passwordMismatch": "2つのパスワードが一致しません。",
+      "passwordInvalid": "表示されている条件を満たすパスワードを入力してください。",
+      "acceptTerms": "続行するには規約への同意が必要です。",
+      "referralCode": "紹介コードには英字と数字のみ使用できます。"
+    },
+    "errors": {
+      "emailTaken": "このメールアドレスは、このワークスペースですでに使用されています。",
+      "slugTaken": "このワークスペースのアドレスはすでに使用されています。",
+      "passwordPolicy": "このパスワードはセキュリティポリシーを満たしていません:",
+      "policyCommon": "このパスワードは推測されやすすぎます。",
+      "otpSendFailed": "認証コードを送信できませんでした。番号を確認してもう一度お試しください。",
+      "signupExpired": "登録を最初からやり直してください。"
+    },
+    "otp": {
+      "title": "WhatsAppを確認してください",
+      "subtitle": "ワークスペースの作成を完了するため、送信したワンタイムコードを入力してください。",
+      "sentTo": "{{phone}} にコードを送信しました",
+      "code": "認証コード",
+      "expiresIn": "コードの有効期限は {{time}} です。",
+      "expired": "このコードは有効期限が切れています。新しいコードをリクエストしてください。",
+      "verify": "確認して続行",
+      "resend": "コードを再送信",
+      "resendIn": "{{time}} 後にコードを再送信",
+      "resent": "新しいコードをWhatsAppに送信中です。",
+      "wrongNumber": "番号が違いますか? 戻る",
+      "addressTakenHint": "確認中にそのワークスペースのアドレスが使用されました。別のアドレスを選択してください。新しいコードを送信します。",
+      "codeInvalid": "{{length}}桁のコードを入力してください。",
+      "invalid": "コードが正しくありません。もう一度お試しください。",
+      "tooMany": "試行回数が多すぎます。新しいコードをリクエストしてください。",
+      "cooldown": "別のコードをリクエストするには、しばらくお待ちください。"
+    }
+  },
+  "dashboard": {
+    "kicker": "オペレーターダッシュボード",
+    "synced": "ライブ · {{s}}秒前に同期",
+    "greeting": {
+      "morning": "おはようございます、{{name}}さん。",
+      "afternoon": "こんにちは、{{name}}さん。",
+      "evening": "こんばんは、{{name}}さん。"
+    },
+    "calm": "ワークスペースは落ち着いています。",
+    "running_other": "{{count}}件のキャンペーンを実行中です。",
+    "subline_other": "{{date}} - {{range}}: 送信 {{sent}} 件、到達率 {{rate}}%(接続中のデバイス {{count}} 台)。",
+    "sublineOfficial": "{{date}} - {{range}}: 送信 {{sent}} 件、到達率 {{rate}}%。",
+    "setupBanner": "ワークスペースの設定が完了していません。ウェブで設定を完了すると、アカウントのすべての機能が使えるようになります。",
+    "range": {
+      "label": "期間",
+      "short": {
+        "24h": "24時間",
+        "7d": "7日",
+        "30d": "30日",
+        "qtd": "四半期累計"
+      },
+      "long": {
+        "24h": "過去24時間",
+        "7d": "過去7日間",
+        "30d": "過去30日間",
+        "qtd": "四半期累計"
+      }
+    },
+    "trend": {
+      "up": "前の期間より {{value}} 増加",
+      "down": "前の期間より {{value}} 減少",
+      "flat": "前の期間から変化なし"
+    },
+    "kpi": {
+      "sent": "送信メッセージ · {{range}}",
+      "sentLegend": "配信済み {{delivered}} · 失敗 {{failed}}",
+      "sparkline": "過去20時間の1時間ごとの送信メッセージ数(古い順)",
+      "readRate": "既読率",
+      "readMini": {
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "read": "既読"
+      }
+    },
+    "contacts": {
+      "title": "アクティブな連絡先",
+      "subscribed": "購読中",
+      "optedIn": "オプトイン済み",
+      "blocked": "ブロック済み"
+    },
+    "wallet": {
+      "title": "ウォレット残高",
+      "payPerMessage": "メッセージごとの従量課金"
+    },
+    "autopilot": {
+      "kicker": "もっと効率的に",
+      "title": "返信を自動化しましょう",
+      "body": "フローを作成するかキャンペーンを開始して、より多くのお客様に自動でアプローチできます。"
+    },
+    "pipeline": {
+      "kicker": "営業パイプライン",
+      "open": "パイプラインを開く",
+      "deals": "進行中の案件",
+      "won": "今月の受注",
+      "winRate": "受注率"
+    },
+    "throughput": {
+      "title": "メッセージ処理量",
+      "subtitle": {
+        "24h": "送信・配信済み・失敗(1時間ごと、過去24時間)",
+        "7d": "送信・配信済み・失敗(日別、過去7日間)",
+        "30d": "送信・配信済み・失敗(日別、過去30日間)",
+        "qtd": "送信・配信済み・失敗(日別、四半期累計)"
+      },
+      "peak": "ピーク時間帯 {{when}} · {{n}}件のメッセージ",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "failed": "失敗",
+      "avgHour": "1時間あたりの平均",
+      "replies": "返信",
+      "replyRate": "返信率",
+      "summary": "この期間に送信 {{sent}} 件、配信済み {{delivered}} 件、失敗 {{failed}} 件。",
+      "subtitleCustom": "日別 · {{range}}"
+    },
+    "inbox": {
+      "title": "ライブ受信トレイ",
+      "unread": "未読 {{n}} 件",
+      "oldest": "最古 {{when}}",
+      "recent": "最近の会話",
+      "empty": "まだ会話はありません。"
+    },
+    "campaigns": {
+      "title": "実行中のキャンペーン",
+      "summary": "実行中 {{running}} - 予約済み {{scheduled}} - 一時停止中 {{paused}}",
+      "total": "全 {{n}} 件",
+      "untitled": "無題のキャンペーン",
+      "delivered": "{{done}} / {{total}} 配信済み",
+      "emptyTitle": "実行中のキャンペーンはありません",
+      "emptyBody": "キャンペーンを作成して、連絡先グループへの送信を始めましょう。",
+      "status": {
+        "sending": "送信中",
+        "scheduled": "予約済み",
+        "paused": "一時停止中",
+        "failed": "失敗",
+        "completed": "完了"
+      }
+    },
+    "devices": {
+      "title": "接続中のデバイス",
+      "summary": "{{cap}} 枠中 {{total}} 枠使用中 - オンライン {{online}}",
+      "emptyTitle": "接続中のデバイスはありません",
+      "emptyBody": "WhatsAppの番号をペアリングして送信を始めましょう。",
+      "unzoned": "ゾーン未設定",
+      "per24h": "{{n}}/24時間",
+      "deliv": "配信率",
+      "free_other": "空きデバイス枠 {{count}} 件",
+      "state": {
+        "online": "オンライン",
+        "connecting": "接続中",
+        "offline": "オフライン"
+      }
+    },
+    "templates": {
+      "title": "パフォーマンス上位のテンプレート",
+      "subtitle": "送信数順 - 選択した期間",
+      "count_other": "テンプレート {{count}} 件",
+      "empty": "まだテンプレートはありません。",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "read": "既読",
+      "readRate": "既読率",
+      "status": {
+        "approved": "承認済み",
+        "inReview": "審査中",
+        "rejected": "却下"
+      }
+    },
+    "activity": {
+      "title": "アクティビティログ",
+      "subtitle": "ワークスペースのイベント",
+      "empty": "このワークスペースには最近のアクティビティがありません。",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_other": "{{count}}件のアカウント",
+      "connected": "接続済み",
+      "tile": {
+        "needReply": "要返信",
+        "openChats": "対応中のチャット",
+        "dmsIn": "受信DM · 7日",
+        "dmsOut": "送信DM · 7日",
+        "followers": "フォロワー"
+      }
+    },
+    "flows": {
+      "title": "自動化フロー",
+      "summary": "有効 {{active}} · 購読者 {{subscribers}}",
+      "empty": "まだフローはありません。",
+      "meta": "トリガー {{trigger}} · {{steps}} ステップ · 購読者 {{subs}}",
+      "statusActive": "有効",
+      "statusPaused": "一時停止中",
+      "stat": {
+        "flows": "フロー",
+        "active": "有効",
+        "subscribers": "購読者"
+      }
+    },
+    "integrations": {
+      "title": "連携",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google スプレッドシート",
+        "meta_catalog": "Meta カタログ"
+      },
+      "events": "{{n}} イベント / 7日",
+      "connected": {
+        "woocommerce": "接続済み",
+        "shopify": "接続済み",
+        "google_sheets": "APIキー発行済み",
+        "meta_catalog": "カタログ連携済み"
+      },
+      "notConnected": "未接続",
+      "connectedLabel": "接続済み"
+    },
+    "funnel": {
+      "title": "エンゲージメントファネル",
+      "stage": {
+        "messaged": "メッセージ送信済みの連絡先",
+        "delivered": "配信済み",
+        "replied": "返信あり",
+        "goalCompleted": "ゴール達成"
+      },
+      "stageLabel": "{{stage}}: 連絡先 {{n}} 件、メッセージ送信済みの連絡先の {{pct}}%",
+      "activity": {
+        "title": "会話のアクティビティ",
+        "inbound_other": "受信メッセージ {{count}} 件",
+        "responding_other": "返信した連絡先 {{count}} 件",
+        "perContact": "返信した連絡先1件あたり {{value}} 件の返信"
+      },
+      "comparison": {
+        "title": "前の期間との比較",
+        "replyRate": "返信率"
+      }
+    },
+    "ago": {
+      "minute_other": "{{count}}分前",
+      "hour_other": "{{count}}時間前",
+      "day_other": "{{count}}日前"
+    },
+    "error": {
+      "forbidden": "お客様のロール({{role}})にはダッシュボードへのアクセス権がありません。",
+      "generic": "数値を読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "locked": "ご利用のプランには分析機能が含まれていません。"
+    },
+    "greetingNoName": {
+      "morning": "おはようございます。",
+      "afternoon": "こんにちは。",
+      "evening": "こんばんは。"
+    },
+    "views": {
+      "label": "ダッシュボードの表示",
+      "summary": "サマリー",
+      "agent": "エージェント",
+      "bot": "ボット"
+    },
+    "agents": {
+      "title": "エージェントのパフォーマンス",
+      "conversations": "会話",
+      "resolved": "解決済み",
+      "firstReply": "初回返信",
+      "resolution": "解決",
+      "csat": "評価",
+      "minutes": "{{value}}分",
+      "hours": "{{value}}時間",
+      "days": "{{value}}日",
+      "empty": "この期間に担当者が割り当てられた会話はありません。",
+      "noAccess": "お客様のロール({{role}})にはエージェント分析へのアクセス権がありません。",
+      "everyone": "すべてのエージェント",
+      "pickerLabel": "エージェント",
+      "pickerPlaceholder": "エージェントを選択",
+      "statusTitle": "会話のステータス",
+      "avgResolution": "平均解決時間",
+      "avgDuration": "平均会話時間",
+      "byAgentTitle": "エージェント別の会話",
+      "byAgentPicker": "ステータス一覧のエージェント",
+      "status": {
+        "open": "未解決",
+        "pending": "保留中",
+        "closed": "クローズ",
+        "assigned": "割り当て済み",
+        "unassigned": "未割り当て",
+        "unattended": "未対応"
+      }
+    },
+    "bots": {
+      "activeFlows": "有効なフロー",
+      "ofTotal": "全 {{total}} フロー中",
+      "subscribers": "購読者",
+      "subscribersNote": "全フローの合計"
+    }
+  },
+  "tabs": {
+    "dashboard": "ダッシュボード",
+    "inbox": "受信トレイ",
+    "contacts": "連絡先",
+    "menu": "メニュー"
+  },
+  "menu": {
+    "title": "アカウント",
+    "profileLabel": "{{name}}、{{email}}",
+    "workspace": "ワークスペース",
+    "inbox": "受信トレイ",
+    "contacts": "連絡先",
+    "noAccess": "この機能へのアクセス権がありません。ワークスペースの管理者に有効化を依頼してください。",
+    "version": "バージョン {{version}}",
+    "signOutTitle": "ログアウト",
+    "signOutConfirm": "ログアウトしてもよろしいですか?",
+    "signOutNo": "いいえ",
+    "signOutYes": "はい、ログアウト",
+    "tasks": "タスク",
+    "dashboard": "ダッシュボード",
+    "allContacts": "すべての連絡先",
+    "newContact": "新しい連絡先",
+    "sectionAccount": "アカウント",
+    "manageProfile": "プロフィールを管理",
+    "preferences": "設定",
+    "devicePermissions": "デバイスの権限",
+    "devicePermissionsHint": "スマートフォンでこのアプリの設定を開きます",
+    "about": "このアプリについて",
+    "dataSecurity": "データとセキュリティ",
+    "checkUpdates": "アップデートを確認",
+    "updates": {
+      "off": "このバージョンのアプリは自動更新されません。最新バージョンをインストールして変更を反映してください。",
+      "latest": "最新バージョンです。",
+      "ready": "アップデートの準備ができました。もう一度タップすると再起動して適用します。",
+      "failed": "アップデートを確認できませんでした。しばらくしてからもう一度お試しください。"
+    },
+    "profile": {
+      "title": "プロフィールを管理",
+      "fullName": "氏名",
+      "displayName": "表示名",
+      "displayNameHint": "氏名の代わりにチームへ表示されます。空欄の場合は氏名が使われます。",
+      "phone": "電話番号",
+      "phoneHint": "国番号を付けて入力してください(例: +919876543210)。",
+      "email": "メールアドレス",
+      "pendingEmail": "{{email}} への変更は、確認待ちです。",
+      "timezone": "ワークスペースのタイムゾーン",
+      "save": "変更を保存",
+      "cancel": "キャンセル",
+      "nameRequired": "お名前を入力してください。",
+      "nameTooLong": "120文字以内で入力してください。",
+      "phoneInvalid": "国番号を付けて電話番号を入力してください(例: +919876543210)。"
+    },
+    "appearance": {
+      "title": "外観",
+      "light": "ライトモード",
+      "dark": "ダークモード",
+      "device": "デバイスの設定を使用",
+      "hint": "アカウントに保存されます。",
+      "failed": "選択内容を保存できませんでした。もう一度お試しください。"
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "受信トレイの表示",
+      "all": "すべて",
+      "mine": "自分",
+      "unassigned": "未割り当て",
+      "unread": "未読"
+    },
+    "search": {
+      "open": "会話を検索",
+      "close": "検索を閉じる",
+      "label": "検索",
+      "placeholder": "名前、番号、メッセージ"
+    },
+    "filter": {
+      "open": "フィルター",
+      "sheet": "会話のステータス",
+      "close": "閉じる",
+      "applied": "適用中のフィルター",
+      "clearAll": "すべてクリア",
+      "remove": "フィルターを削除: {{name}}",
+      "statusChip": "ステータス: {{name}}",
+      "searchChip": "検索: {{q}}",
+      "title": "フィルター",
+      "view": "表示",
+      "viewActive": "会話",
+      "viewArchived": "アーカイブ済み",
+      "channel": "チャネル",
+      "allChannels": "すべてのチャネル",
+      "labels": "ラベル",
+      "searchLabels": "ラベルを検索",
+      "channelChip": "チャネル: {{name}}",
+      "labelsChip": "ラベル: {{names}}",
+      "archivedChip": "アーカイブ済み"
+    },
+    "statusFilter": {
+      "default": "未解決と保留中",
+      "open": "未解決",
+      "pending": "保留中",
+      "snoozed": "スヌーズ中",
+      "resolved": "解決済み",
+      "closed": "クローズ",
+      "all": "すべてのステータス"
+    },
+    "status": {
+      "open": "未解決",
+      "pending": "保留中",
+      "snoozed": "スヌーズ中",
+      "resolved": "解決済み",
+      "closed": "クローズ",
+      "spam": "スパム"
+    },
+    "list": {
+      "label": "会話",
+      "emptyTitle": "会話はありません",
+      "emptyHint": "お客様からのメッセージがここに表示されます。",
+      "emptyFilteredHint": "これらのフィルターに一致するものはありません。フィルターをクリアしてみてください。",
+      "noMore": "これ以上の会話はありません",
+      "loadingMore": "さらに会話を読み込み中",
+      "noAccessTitle": "受信トレイへのアクセス権がありません",
+      "noAccessBody": "お客様のロールでは会話を閲覧できません。ワークスペースの管理者に変更を依頼してください。"
+    },
+    "row": {
+      "noMessages": "まだメッセージはありません",
+      "unread_other": "未読メッセージ {{count}} 件",
+      "label": "{{title}}、{{preview}}",
+      "labelUnread": "{{title}}、{{unread}}、{{preview}}",
+      "assignedTo": "担当: {{name}}",
+      "media": "メディア"
+    },
+    "time": {
+      "am": "午前",
+      "pm": "午後",
+      "yesterday": "昨日"
+    },
+    "thread": {
+      "messages": "メッセージ",
+      "loadingOlder": "以前のメッセージを読み込み中",
+      "emptyTitle": "まだメッセージはありません",
+      "emptyHint": "この会話のメッセージがここに表示されます。",
+      "noAccessTitle": "この会話へのアクセス権がありません",
+      "noAccessBody": "お客様のロールでは会話を閲覧できません。",
+      "resolve": "解決",
+      "reopen": "再開",
+      "call": "{{phone}} に電話",
+      "pictureOpen": "写真を全画面で開く",
+      "pictureFull": "写真",
+      "pictureClose": "写真を閉じる",
+      "windowClosed": "24時間の返信可能期間が終了しました。代わりにテンプレートを送信してください。",
+      "conflict": "他のユーザーがこの会話を変更しました。最新の状態を読み込みましたので、もう一度お試しください。",
+      "statusInvalid": "この会話はそのステータスに変更できません。",
+      "window": {
+        "left": "返信可能期間: 残り {{hours}} 時間 {{minutes}} 分",
+        "closed": "返信可能期間は終了しました"
+      },
+      "menu": {
+        "open": "その他の操作",
+        "close": "メニューを閉じる",
+        "assignToMe": "自分に割り当て",
+        "details": "詳細を表示",
+        "status": "ステータスを変更",
+        "agent": "担当者を割り当て"
+      },
+      "bot": {
+        "notice": "これはボットとの会話です。",
+        "assignSelf": "自分に割り当て"
+      },
+      "labels": {
+        "open": "ラベルを割り当て",
+        "title": "ラベルを割り当て",
+        "close": "閉じる",
+        "empty": "ラベルはまだありません。",
+        "emptyCreate": "ラベルはまだありません。下に名前を入力して作成できます。",
+        "newLabel": "新しいラベル",
+        "add": "追加",
+        "failed": "ラベルを変更できませんでした。もう一度お試しください。"
+      },
+      "assignment": {
+        "none": "未割り当て",
+        "team": "チーム: {{name}}",
+        "failed": "会話を変更できませんでした。もう一度お試しください。",
+        "you": "自分に割り当て済み",
+        "to": "担当: {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "受信: {{text}}、{{time}}",
+      "labelOut": "自分が送信: {{text}}、{{time}}、{{status}}",
+      "deleted": "このメッセージは削除されました",
+      "retry": "送信を再試行",
+      "mediaPending": "ファイルをダウンロード中です。",
+      "mediaFailed": "ファイルをダウンロードできませんでした。"
+    },
+    "kind": {
+      "text": "メッセージ",
+      "image": "写真",
+      "video": "動画",
+      "audio": "音声",
+      "voice": "ボイスメッセージ",
+      "document": "ドキュメント",
+      "sticker": "スタンプ",
+      "location": "位置情報",
+      "contact": "連絡先",
+      "template": "テンプレート",
+      "reaction": "リアクション",
+      "interactive": "インタラクティブメッセージ",
+      "system": "システムメッセージ"
+    },
+    "delivery": {
+      "queued": "送信中",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "read": "既読",
+      "failed": "未送信",
+      "received": "受信済み"
+    },
+    "composer": {
+      "label": "メッセージ",
+      "placeholder": "メッセージを入力",
+      "send": "送信",
+      "tooLong": "メッセージは{{max}}文字まで入力できます。",
+      "noteLabel": "非公開メモ",
+      "notePlaceholder": "チームだけに表示されるメモを入力",
+      "addNote": "メモを追加",
+      "noteOn": "非公開メモを書く",
+      "noteOff": "返信に戻る"
+    },
+    "template": {
+      "closedNotice": "お客様から過去24時間以内にメッセージがありません。事前に承認されたテンプレートのみ送信できます。",
+      "send": "テンプレートを送信",
+      "title": "テンプレートを送信",
+      "close": "閉じる",
+      "search": "テンプレートを検索",
+      "empty": "この番号で使える承認済みテンプレートはまだありません。",
+      "emptySearch": "検索に一致するテンプレートはありません。",
+      "more": "テンプレートがほかにもあります。検索ボックスに入力して探してください。",
+      "fillTitle": "詳細を入力",
+      "back": "テンプレートに戻る",
+      "submit": "送信",
+      "reason": {
+        "paused": "品質上の理由でWhatsAppにより一時停止されています。後でもう一度お試しください。",
+        "media_header": "画像・動画・ドキュメントのヘッダーがあり、アプリではまだ送信できません。",
+        "header_variable": "ヘッダーに変数があり、アプリではまだ入力できません。",
+        "dynamic_button": "変数を含むボタンリンクがあり、アプリではまだ入力できません。",
+        "authentication": "ワンタイムパスワードのテンプレートはシステムが送信します。",
+        "named_variables": "名前付き変数を使用しており、アプリではまだ入力できません。"
+      }
+    },
+    "errors": {
+      "channelDisconnected": "このチャネルは切断されています。ウェブで再接続してから、もう一度お試しください。",
+      "planLimit": "ご利用のプランのメッセージ上限に達しました。",
+      "forbidden": "この操作を行う権限がありません。",
+      "notFound": "この会話は利用できなくなりました。"
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "ウェブチャット",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "シミュレーター"
+    },
+    "sheet": {
+      "close": "閉じる",
+      "save": "変更を保存",
+      "noMatch": "一致するものはありません。"
+    },
+    "assign": {
+      "title": "担当者を変更",
+      "search": "担当者を検索",
+      "agents": "エージェント",
+      "teams": "チーム",
+      "unassigned": "未割り当て",
+      "noTeam": "チームなし",
+      "you": "{{name}}(自分)",
+      "availability": {
+        "online": "オンライン",
+        "away": "離席中",
+        "busy": "取り込み中",
+        "offline": "オフライン"
+      },
+      "open_other": "対応中 {{count}} 件",
+      "members_other": "メンバー {{count}} 人",
+      "failed": "会話の担当者を変更できませんでした。もう一度お試しください。"
+    },
+    "priority": {
+      "title": "優先度を設定",
+      "low": "低",
+      "normal": "通常",
+      "high": "高",
+      "urgent": "緊急"
+    },
+    "snooze": {
+      "title": "スヌーズ期限",
+      "hour": "1時間後",
+      "threeHours": "3時間後",
+      "tomorrow": "明日 午前9:00",
+      "nextWeek": "来週月曜 午前9:00"
+    },
+    "statusSheet": {
+      "title": "ステータスを変更"
+    },
+    "details": {
+      "title": "チャットの詳細",
+      "contact": "連絡先",
+      "openContact": "連絡先を開く",
+      "call": "電話",
+      "noContact": "この会話にはまだ連絡先レコードがありません。",
+      "email": "メールアドレス",
+      "stage": "ステージ",
+      "contactStatus": "ステータス",
+      "owner": "担当者",
+      "source": "ソース",
+      "since": "連絡先の登録日",
+      "optedOut": "メッセージの配信を停止済み",
+      "leadScore": "リードスコア",
+      "actions": "操作",
+      "status": "ステータス",
+      "priority": "優先度",
+      "labels": "ラベル",
+      "none": "なし",
+      "agent": "担当エージェント",
+      "team": "チーム",
+      "you": "自分",
+      "bot": "ボット",
+      "unassigned": "未割り当て",
+      "info": "会話",
+      "channel": "チャネル",
+      "window": "返信可能期間",
+      "windowOpen": "{{time}} まで",
+      "windowClosed": "終了",
+      "windowNone": "期限なし",
+      "snoozedUntil": "{{time}} までスヌーズ中",
+      "notes": {
+        "title": "社内メモ",
+        "empty": "メモはまだありません。メモはチームだけに表示されます。",
+        "label": "メモを書く",
+        "add": "メモを追加",
+        "delete": "削除",
+        "deleteFor": "{{name}} のメモを削除",
+        "failed": "メモを保存できませんでした。もう一度お試しください。",
+        "deleteFailed": "メモを削除できませんでした。もう一度お試しください。",
+        "unknownAuthor": "不明なユーザー",
+        "tooLong": "メモは{{max}}文字まで入力できます。"
+      },
+      "timeline": {
+        "title": "タイムライン",
+        "empty": "まだ何も起きていません。",
+        "system": "システム"
+      },
+      "past": {
+        "title": "過去の会話",
+        "empty": "この連絡先との他の会話はありません。"
+      },
+      "snooze": "スヌーズ",
+      "wake": "今すぐ再開"
+    },
+    "event": {
+      "created": "会話を開始しました",
+      "assigned": "割り当て済み",
+      "reassigned": "再割り当て済み",
+      "unassigned": "割り当て解除",
+      "ai_handoff": "AIエージェントから引き継ぎました",
+      "resolved": "解決済み",
+      "closed": "クローズ",
+      "reopened": "再開しました",
+      "status_changed": "ステータスを変更しました",
+      "note_added": "メモを追加しました",
+      "snoozed": "スヌーズしました",
+      "auto_unsnoozed": "予定どおり再開しました",
+      "priority_changed": "優先度を変更しました",
+      "tag_added": "ラベルを追加しました",
+      "tag_removed": "ラベルを削除しました",
+      "first_response": "初回返信を送信しました",
+      "sla_breach": "返信期限を超過しました"
+    },
+    "replies": {
+      "open": "保存済みの返信",
+      "title": "保存済みの返信",
+      "search": "保存済みの返信を検索",
+      "empty": "保存済みの返信はまだありません。",
+      "noMatch": "検索に一致する保存済みの返信はありません。",
+      "failed": "この返信を使用できませんでした。もう一度お試しください。",
+      "unfilled": "メッセージを確認してください: {{list}} を入力できませんでした。"
+    },
+    "note": {
+      "title": "非公開メモ",
+      "label": "{{name}} の非公開メモ: {{text}}、{{time}}"
+    },
+    "bulk": {
+      "hint": "長押しで会話を選択",
+      "selected_other": "{{count}} 件選択中",
+      "close": "選択をキャンセル",
+      "selectAll": "すべて選択",
+      "read": "既読にする",
+      "status": "ステータス",
+      "assign": "割り当て",
+      "label": "ラベル",
+      "priority": "優先度",
+      "snooze": "スヌーズ",
+      "statusTitle_other": "{{count}} 件の会話のステータスを変更",
+      "labelTitle_other": "{{count}} 件の会話のラベル",
+      "labelMode": "操作",
+      "labelAdd": "ラベルを追加",
+      "labelRemove": "ラベルを外す",
+      "labelSearch": "ラベルを検索",
+      "priorityTitle_other": "{{count}} 件の会話の優先度",
+      "snoozeTitle_other": "{{count}} 件の会話のスヌーズ期限",
+      "result": "更新 {{done}} 件、変更なし {{unchanged}} 件、失敗 {{failed}} 件",
+      "resultDismiss": "閉じる"
+    }
+  },
+  "contacts": {
+    "title": "連絡先",
+    "unknown": "不明",
+    "add": "連絡先を追加",
+    "cancel": "キャンセル",
+    "yes": "はい",
+    "no": "いいえ",
+    "denied": {
+      "title": "連絡先を表示できません",
+      "hint": "お客様のロールに連絡先へのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。",
+      "createTitle": "連絡先を追加できません",
+      "createHint": "お客様のロールで連絡先を追加できるよう、ワークスペースの管理者に依頼してください。"
+    },
+    "empty": {
+      "title": "連絡先はありません",
+      "hint": "+ ボタンをタップして最初の連絡先を追加しましょう。",
+      "filteredTitle": "一致する連絡先はありません",
+      "filteredHint": "別の検索を試すか、フィルターをクリアしてください。"
+    },
+    "search": {
+      "open": "連絡先を検索",
+      "close": "検索を閉じる",
+      "label": "検索",
+      "placeholder": "名前、電話番号、メールアドレス"
+    },
+    "filter": {
+      "open": "連絡先をフィルター",
+      "title": "フィルター",
+      "stage": "ライフサイクルステージ",
+      "owner": "連絡先の担当者",
+      "ownerSearch": "連絡先の担当者を検索",
+      "unassigned": "担当者なし",
+      "created": "作成日",
+      "any": "指定なし",
+      "marketing": "マーケティングメッセージ",
+      "marketingOptions": {
+        "all": "すべて",
+        "subscribed": "購読中",
+        "unsubscribed": "配信停止"
+      },
+      "source": "ソース",
+      "sourceHint": "連絡先の取得元です(例: import、api)。",
+      "clear": "すべてクリア",
+      "apply": "適用"
+    },
+    "stage": {
+      "new": "新規",
+      "contacted": "連絡済み",
+      "qualified": "有望",
+      "application_started": "申込開始",
+      "application_submitted": "申込完了",
+      "interview_scheduled": "面接予定",
+      "offer_received": "合格通知受領",
+      "admission_confirmed": "入学確定",
+      "enrolled": "入学済み",
+      "lost": "失注"
+    },
+    "subscription": {
+      "subscribed": "購読中",
+      "unsubscribed": "購読解除済み",
+      "pending": "保留中"
+    },
+    "form": {
+      "name": "名前",
+      "phone": "電話番号",
+      "phoneHint": "国番号を付けて入力してください(例: +919876543210)。",
+      "email": "メールアドレス",
+      "needPhoneOrEmail": "電話番号またはメールアドレスを入力してください。",
+      "phoneInvalid": "国番号を付けて電話番号を入力してください(例: +919876543210)。",
+      "emailInvalid": "有効なメールアドレスを入力してください。",
+      "nameInvalid": "255文字以内で名前を入力してください。"
+    },
+    "new": {
+      "title": "新しい連絡先",
+      "save": "連絡先を保存",
+      "requiredTitle": "必須の項目",
+      "choose": "選択",
+      "search": "検索",
+      "unsupported": "{{label}} は必須ですが、ここではまだ入力できません。この連絡先はウェブで追加してください。",
+      "requiredMissing": "連絡先を保存するには、ワークスペースで必要な項目がほかにありますが、このアプリでは表示できません。連絡先プロパティへのアクセス権を管理者に依頼するか、ウェブで連絡先を追加してください。"
+    },
+    "edit": {
+      "title": "連絡先を編集",
+      "open": "連絡先を編集",
+      "save": "変更を保存",
+      "conflict": "他のユーザーがこの連絡先を変更しました。内容を確認して、もう一度保存してください。"
+    },
+    "detail": {
+      "title": "連絡先",
+      "notFound": "この連絡先は存在しません。",
+      "phone": "電話番号",
+      "email": "メールアドレス",
+      "call": "{{phone}} に電話",
+      "mail": "{{email}} にメール",
+      "stage": "ライフサイクルステージ",
+      "status": "ステータス",
+      "score": "スコア",
+      "source": "ソース",
+      "whatsapp": "WhatsAppの購読",
+      "marketing": "マーケティングメッセージ",
+      "optedOut": "配信停止",
+      "optedIn": "受信可能",
+      "lastActivity": "最終アクティビティ",
+      "noActivity": "まだアクティビティはありません",
+      "created": "追加日",
+      "customFields": "カスタムフィールド",
+      "actions": {
+        "call": "電話",
+        "chat": "チャット",
+        "email": "メール",
+        "sms": "SMS",
+        "tasks": "タスク",
+        "notes": "メモ"
+      },
+      "tabsLabel": "連絡先のセクション",
+      "tabs": {
+        "about": "連絡先の詳細",
+        "activity": "アクティビティ",
+        "files": "その他"
+      },
+      "activities": {
+        "label": "アクティビティの表示",
+        "all": "すべてのアクティビティ",
+        "timeline": "アクティビティのタイムライン"
+      },
+      "more": {
+        "account": "アカウント",
+        "deals": "案件"
+      },
+      "summary": {
+        "title": "アクティビティ",
+        "notes": "メモ",
+        "tasks": "タスク",
+        "meetings": "ミーティング",
+        "rowLabel": "{{label}}、{{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "連絡先を削除",
+        "title": "連絡先を削除",
+        "message": "{{name}} を削除しますか? この操作は元に戻せません。",
+        "confirm": "削除",
+        "cancel": "キャンセル"
+      }
+    },
+    "tags": {
+      "title": "タグ",
+      "none": "タグはまだありません。",
+      "remove": "タグ {{name}} を削除",
+      "addLabel": "タグを追加",
+      "addPlaceholder": "タグ名",
+      "add": "タグを追加"
+    },
+    "row": {
+      "more": "{{name}} のその他の操作",
+      "actionFor": "{{name}} を{{action}}",
+      "swipeEdit": "編集",
+      "swipeDelete": "削除"
+    },
+    "sheet": {
+      "close": "閉じる"
+    },
+    "views": {
+      "open": "連絡先ビュー: {{name}}",
+      "title": "ビュー",
+      "close": "ビューを閉じる",
+      "searchLabel": "ビューを検索",
+      "searchPlaceholder": "ビューを検索",
+      "systemTitle": "システム標準のビュー",
+      "customTitle": "カスタムビュー",
+      "none": "利用できるビューはありません",
+      "failed": "保存済みのビューを読み込めませんでした。",
+      "system": {
+        "all": "すべての連絡先",
+        "mine": "自分の連絡先",
+        "recent": "最近作成",
+        "optedOut": "マーケティング配信停止"
+      }
+    }
+  },
+  "tasks": {
+    "title": "タスク",
+    "add": "タスクを追加",
+    "cancel": "キャンセル",
+    "unknownContact": "名前のない連絡先",
+    "notFound": "このタスクは存在しません。",
+    "priority": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "status": {
+      "open": "未完了",
+      "done": "完了",
+      "overdue": "期限超過"
+    },
+    "denied": {
+      "title": "タスクを表示できません",
+      "hint": "タスクへのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。",
+      "createTitle": "タスクを追加できません",
+      "createHint": "タスクを追加できるよう、ワークスペースの管理者に依頼してください。",
+      "editTitle": "タスクを編集できません",
+      "editHint": "タスクを編集できるよう、ワークスペースの管理者に依頼してください。"
+    },
+    "planLocked": {
+      "title": "このプランにはタスクが含まれていません。",
+      "hint": "プランのアップグレードをワークスペースの管理者に依頼してください。"
+    },
+    "empty": {
+      "title": "タスクが見つかりません。",
+      "hint": "追加したタスクがここに表示されます。",
+      "filteredHint": "別のフィルターまたは検索を試してください。"
+    },
+    "search": {
+      "open": "タスクを検索",
+      "close": "検索を閉じる",
+      "label": "検索",
+      "placeholder": "タイトルで検索"
+    },
+    "filter": {
+      "open": "タスクをフィルター",
+      "title": "タスクをフィルター",
+      "clear": "すべてクリア",
+      "apply": "適用",
+      "group": {
+        "status": "ステータス",
+        "priority": "優先度",
+        "due": "期限",
+        "owner": "担当者"
+      },
+      "status": {
+        "open": "未完了",
+        "done": "完了",
+        "all": "すべて"
+      },
+      "due": {
+        "overdue": "期限超過",
+        "today": "今日",
+        "upcoming": "今後",
+        "none": "日付なし"
+      },
+      "owner": {
+        "mine": "自分",
+        "unassigned": "未割り当て",
+        "all": "すべて"
+      }
+    },
+    "list": {
+      "conflict": "他のユーザーがこのタスクを変更しました。リストを更新しました。"
+    },
+    "row": {
+      "markDone": "{{title}} を完了にする",
+      "reopen": "{{title}} を再開",
+      "more": "{{title}} のその他の操作",
+      "due": "期限 {{when}}",
+      "unassigned": "未割り当て"
+    },
+    "actions": {
+      "edit": "タスクを編集",
+      "delete": "タスクを削除"
+    },
+    "delete": {
+      "title": "タスクを削除",
+      "message": "このタスクを削除してもよろしいですか?",
+      "confirm": "削除"
+    },
+    "details": {
+      "title": "タスクの詳細",
+      "edit": "タスクを編集",
+      "delete": "タスクを削除",
+      "description": "説明",
+      "priority": "優先度",
+      "status": "ステータス",
+      "owner": "担当者",
+      "relatedTo": "関連先",
+      "noDescription": "説明なし",
+      "noDue": "期限なし",
+      "unassigned": "未割り当て",
+      "noContact": "なし",
+      "openContact": "{{name}} を開く",
+      "markComplete": "完了にする",
+      "reopen": "再開",
+      "conflict": "他のユーザーがこのタスクを変更しました。再読み込みしました。"
+    },
+    "form": {
+      "addTitle": "タスクを追加",
+      "editTitle": "タスクを編集",
+      "save": "タスクを保存",
+      "saving": "保存中…",
+      "title": "タスクのタイトル",
+      "description": "タスクの説明",
+      "priority": "優先度",
+      "date": "日付(YYYY-MM-DD)",
+      "dateHint": "期限を設定しない場合は、日付と時刻を空欄にしてください。例: 2026-10-31",
+      "time": "時刻(HH:mm)",
+      "timeHint": "24時間表記で入力してください(例: 14:30)。",
+      "owner": "担当者",
+      "ownerPick": "担当者を選択",
+      "ownerMe": "自分",
+      "ownerNone": "未割り当て",
+      "ownerLoading": "チームを読み込み中…",
+      "ownerFailed": "チームを読み込めませんでした。",
+      "contact": "連絡先",
+      "contactLinkOptional": "連絡先を紐づける(任意)",
+      "contactNone": "連絡先なし",
+      "contactPick": "連絡先を選択",
+      "contactSearchLabel": "連絡先を検索",
+      "contactSearchPlaceholder": "名前、メールアドレス、電話番号",
+      "contactEmpty": "連絡先が見つかりません。",
+      "contactFailed": "連絡先を読み込めませんでした。",
+      "conflict": "他のユーザーがこのタスクを変更しました。内容を確認して、もう一度保存してください。",
+      "errors": {
+        "titleRequired": "タスクのタイトルを入力してください。",
+        "titleTooLong": "タイトルは255文字以内で入力してください。",
+        "titleNeedsLetter": "タイトルには文字を1つ以上含めてください。",
+        "notesTooLong": "説明は5000文字以内で入力してください。",
+        "dateInvalid": "日付はYYYY-MM-DD形式で入力してください(例: 2026-10-31)。",
+        "timeInvalid": "時刻は24時間表記のHH:mm形式で入力してください(例: 14:30)。",
+        "dateNeeded": "日付も入力してください。",
+        "timeNeeded": "時刻も入力してください。",
+        "dueInvalid": "この期限の日時は使用できません。",
+        "assigneeInvalid": "このユーザーにはタスクを割り当てられません。別の担当者を選択してください。",
+        "contactInvalid": "この連絡先は紐づけできません。"
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "メモ",
+    "cancel": "キャンセル",
+    "loadMore": "さらに読み込む",
+    "deleteConfirm": "削除",
+    "contactMissing": "この連絡先は存在しません。",
+    "add": "メモを追加",
+    "edited": "編集済み",
+    "denied": {
+      "title": "メモを表示できません",
+      "hint": "お客様のロールに連絡先へのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。",
+      "updateTitle": "メモを変更できません",
+      "updateHint": "お客様のロールで連絡先を編集できるよう、ワークスペースの管理者に依頼してください。"
+    },
+    "empty": {
+      "title": "メモはありません。",
+      "hint": "+ ボタンをタップして最初のメモを追加しましょう。"
+    },
+    "menu": {
+      "open": "{{date}} のメモの操作",
+      "edit": "メモを編集",
+      "delete": "メモを削除"
+    },
+    "delete": {
+      "title": "メモを削除",
+      "message": "このメモを削除してもよろしいですか?"
+    },
+    "form": {
+      "addTitle": "メモを追加",
+      "editTitle": "メモを更新",
+      "label": "メモ",
+      "placeholder": "ここにメモを入力...",
+      "required": "保存する前にメモを入力してください。",
+      "invalid": "400文字以内でメモを入力してください。",
+      "counterLabel": "{{max}}文字中{{used}}文字を使用",
+      "save": "メモを保存",
+      "saving": "メモを保存中",
+      "conflict": "他のユーザーがこのメモを変更しました。内容を確認して、もう一度保存してください。",
+      "missing": "このメモは存在しません。"
+    },
+    "activity": {
+      "notes": "メモ",
+      "tasks": "タスク",
+      "timeline": "タイムライン",
+      "empty": "まだアクティビティはありません。",
+      "add": "アクティビティを追加",
+      "types": {
+        "note": "メモ",
+        "call": "通話",
+        "email": "メール",
+        "meeting": "ミーティング",
+        "task": "タスク"
+      },
+      "source": {
+        "system": "システム",
+        "bot": "ボット"
+      },
+      "form": {
+        "title": "アクティビティを追加",
+        "type": "種類",
+        "typeHint": "例: メモ、通話、メール、ミーティング",
+        "name": "タイトル",
+        "details": "詳細",
+        "save": "アクティビティを保存",
+        "typeInvalid": "100文字以内で種類を入力してください。",
+        "titleInvalid": "255文字以内でタイトルを入力してください。",
+        "detailsInvalid": "詳細は10,000文字以内で入力できます。"
+      }
+    },
+    "files": {
+      "empty": "ファイルはありません。",
+      "delete": "ファイル {{name}} を削除",
+      "deleteTitle": "ファイルを削除",
+      "deleteMessage": "このファイルを削除してもよろしいですか?"
+    }
+  },
+  "contactMeetings": {
+    "title": "ミーティング",
+    "loadMore": "さらに読み込む",
+    "contactMissing": "この連絡先は存在しません。",
+    "noDate": "日付未設定",
+    "denied": {
+      "title": "ミーティングを表示できません",
+      "hint": "お客様のロールに連絡先へのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。"
+    },
+    "empty": {
+      "title": "記録されたミーティングはありません。"
+    }
+  },
+  "contactDeals": {
+    "title": "案件",
+    "contactMissing": "この連絡先は存在しません。",
+    "denied": {
+      "title": "案件を表示できません",
+      "hint": "お客様のロールに案件へのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。"
+    },
+    "empty": {
+      "title": "案件はまだありません。"
+    }
+  },
+  "contactCompany": {
+    "title": "アカウント",
+    "missing": "このアカウントは存在しません。",
+    "denied": {
+      "title": "アカウントを表示できません",
+      "hint": "お客様のロールに会社へのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。"
+    },
+    "industry": "業種",
+    "size": "規模",
+    "phone": "電話番号",
+    "email": "メールアドレス",
+    "website": "ウェブサイト",
+    "address": "住所",
+    "owner": "担当者",
+    "notes": "メモ"
+  },
+  "contactProps": {
+    "title": "連絡先情報",
+    "search": "フィールドを検索",
+    "showEmpty": "空のフィールドを表示",
+    "footer": "ここに表示されるプロパティは、ウェブアプリからカスタマイズできます。",
+    "close": "閉じる",
+    "save": "保存",
+    "clear": "クリア",
+    "yes": "はい",
+    "no": "いいえ",
+    "rowHint": "エディターを開きます",
+    "locked": "{{label}} は編集できません",
+    "webOnly": "{{label}} はウェブアプリでのみ編集できます。",
+    "masked": "非表示",
+    "fields": {
+      "email": "メールアドレス",
+      "phone": "電話番号",
+      "owner": "連絡先の担当者",
+      "name": "名前",
+      "source": "ソース",
+      "whatsapp": "WhatsAppの購読",
+      "marketing": "マーケティング配信停止",
+      "leadScore": "リードスコア",
+      "created": "作成日",
+      "lastActivity": "最終アクティビティ"
+    },
+    "subscription": {
+      "subscribed": "購読中",
+      "unsubscribed": "購読解除済み",
+      "pending": "保留中"
+    },
+    "editor": {
+      "title": "{{label}} を編集",
+      "date": "日付",
+      "dateHint": "年-月-日の形式で入力してください(例: 2026-10-12)。",
+      "time": "時刻",
+      "timeHint": "24時間表記で入力してください(例: 14:30)。",
+      "phoneHint": "国番号を付けて入力してください(例: +919876543210)。",
+      "noOptions": "選択できる項目がありません。"
+    },
+    "error": {
+      "required": "{{label}} は必須です。",
+      "name": "255文字以内で名前を入力してください。",
+      "email": "有効なメールアドレスを入力してください。",
+      "phone": "国番号を付けて電話番号を入力してください(例: +919876543210)。",
+      "needPhoneOrEmail": "連絡先には電話番号またはメールアドレスが必要です。",
+      "text": "{{max}}文字以内で入力してください。",
+      "number": "数値を入力してください。",
+      "whole": "整数を入力してください。",
+      "range": "0から{{max}}までの数値を入力してください。",
+      "url": "http:// または https:// で始まるリンクを入力してください。",
+      "date": "YYYY-MM-DD形式で有効な日付を入力してください。",
+      "time": "HH:mm形式で有効な時刻を入力してください。",
+      "option": "選択肢から1つ選んでください。",
+      "invalid": "この値は受け付けられません。内容を確認してもう一度お試しください。",
+      "notEditable": "このプロパティは編集できません。",
+      "requiredMissing": "必須のプロパティに値がありません。保存する前に入力してください。",
+      "conflict": "他のユーザーがこの連絡先を変更しました。内容を確認して、もう一度保存してください。",
+      "lostReasonRequired": "この連絡先が失注になった理由を入力してください。",
+      "statusMismatch": "そのステータスは、このライフサイクルステージには属していません。"
+    },
+    "owner": {
+      "title": "担当者を割り当て",
+      "unassigned": "未割り当て",
+      "none": "この連絡先を割り当てられるユーザーがいません。",
+      "failed": "担当者を変更できませんでした。もう一度お試しください。"
+    },
+    "lifecycle": {
+      "stage": "ライフサイクルステージ",
+      "status": "ステータス",
+      "change": "ライフサイクルステージを変更",
+      "changeStatus": "ステータスを変更",
+      "dropdownHint": "選択リストを開きます",
+      "lostReason": "失注の理由",
+      "otherReason": "その他",
+      "otherLabel": "理由を入力"
+    }
+  },
+  "summary": {
+    "contacts": "連絡先",
+    "contactsNote": "この期間に追加",
+    "tasks": "タスク",
+    "tasksNote": "現在未完了",
+    "messages": "メッセージ",
+    "sentNote": "送信済み",
+    "receivedNote": "受信済み",
+    "conversations": "会話",
+    "conversationsNote": "現在の未解決と保留中",
+    "status": {
+      "all": "アクティブ",
+      "mine": "自分",
+      "unassigned": "未割り当て",
+      "assigned": "割り当て済み",
+      "unread": "未読",
+      "archived": "アーカイブ済み"
+    },
+    "allMessages": {
+      "title": "すべてのメッセージ",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "received": "受信済み",
+      "read": "既読",
+      "failed": "失敗"
+    },
+    "moreTitle": "ワークスペースのその他の情報"
+  },
+  "dashDate": {
+    "title": "カレンダーで検索",
+    "close": "カレンダーを閉じる",
+    "apply": "適用",
+    "reset": "リセット",
+    "presets": "クイック選択",
+    "pill": {
+      "label": "期間: {{from}} ~ {{to}}",
+      "hint": "カレンダーを開いて日付を変更します"
+    },
+    "selection": {
+      "label": "{{from}} ~ {{to}}",
+      "pickFirst": "開始日を選択",
+      "pickLast": "終了日を選択"
+    },
+    "preset": {
+      "last7": "過去7日間",
+      "last30": "過去30日間",
+      "last90": "過去90日間",
+      "yesterday": "昨日",
+      "today": "今日"
+    },
+    "calendar": {
+      "previousMonth": "前の月",
+      "nextMonth": "次の月",
+      "start": "期間の開始",
+      "end": "期間の終了",
+      "inRange": "期間内",
+      "today": "今日"
+    }
+  },
+  "permissions": {
+    "channelName": "メッセージとお知らせ",
+    "settingsHint": "「権限」をタップして、必要な項目をオンにしてください。",
+    "names": {
+      "notifications": "通知",
+      "calls": "通話",
+      "camera": "カメラ",
+      "callPopup": "通話ポップアップ(他のアプリの上に表示)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "連絡先",
+      "close": "閉じる",
+      "ongoingTitle": "通話中",
+      "endedTitle": "通話が終了しました",
+      "endedText": "タップして {{name}} との通話を記録します。",
+      "channelOngoing": "通話中",
+      "channelEnded": "通話サマリー"
+    },
+    "summary": {
+      "title": "通話を追加",
+      "contact": "連絡先",
+      "type": "通話の種類",
+      "outbound": "発信",
+      "status": "発信のステータス",
+      "completed": "完了",
+      "notAnswered": "不在",
+      "startTime": "通話の開始時刻",
+      "duration": "通話時間",
+      "durationHint": "分:秒の形式で入力してください(例: 02:30)",
+      "durationInvalid": "長さは分:秒の形式で入力してください(例: 02:30)。",
+      "subject": "件名",
+      "subjectDefault": "{{name}} への発信",
+      "subjectInvalid": "255文字以内で件名を入力してください。",
+      "notes": "説明",
+      "save": "通話を保存",
+      "skip": "スキップ",
+      "contactMissing": "この通話には記録先の連絡先がありません。",
+      "denied": "お客様のロールでは連絡先を変更できないため、この通話は記録できません。",
+      "purpose": "通話の目的",
+      "purposeNone": "-なし-",
+      "result": "通話の結果",
+      "purposes": {
+        "prospecting": "見込み客開拓",
+        "administrative": "事務連絡",
+        "negotiation": "商談",
+        "demo": "デモ",
+        "project": "プロジェクト",
+        "desk": "デスク"
+      }
+    }
+  }
+}

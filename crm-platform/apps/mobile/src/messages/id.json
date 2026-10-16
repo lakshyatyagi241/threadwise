@@ -1,0 +1,1430 @@
+{
+  "common": {
+    "loading": "Memuat…",
+    "retry": "Coba lagi",
+    "signOut": "Keluar",
+    "clear": "Hapus",
+    "back": "Kembali",
+    "filters": {
+      "clearAll": "Hapus semua",
+      "apply": "Terapkan",
+      "noMatch": "Tidak ada yang cocok dengan pencarian Anda."
+    }
+  },
+  "errors": {
+    "generic": "Terjadi kesalahan. Silakan coba lagi.",
+    "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda, lalu coba lagi.",
+    "timeout": "Server terlalu lama merespons. Silakan coba lagi.",
+    "outdatedApp": "Versi aplikasi ini sudah usang. Silakan perbarui.",
+    "tooManyRequests": "Terlalu banyak percobaan. Tunggu sebentar, lalu coba lagi.",
+    "captchaUnsupported": "Diperlukan pemeriksaan keamanan yang belum dapat diselesaikan aplikasi. Silakan gunakan situs web."
+  },
+  "auth": {
+    "welcomeBack": "Selamat datang kembali",
+    "welcomeSubtitle": "Masukkan data Anda untuk kembali ke workspace Anda.",
+    "tagline": "Semua chat pelanggan, satu workspace yang tenang",
+    "taglineCaption": "Broadcast, otomatisasi, dan kotak masuk bersama untuk tim yang cepat membalas.",
+    "email": "Email",
+    "emailPlaceholder": "you@company.com",
+    "password": "Kata sandi",
+    "passwordPlaceholder": "Masukkan kata sandi Anda",
+    "showPassword": "Tampilkan kata sandi",
+    "hidePassword": "Sembunyikan kata sandi",
+    "signInSubmit": "Masuk",
+    "emailInvalid": "Masukkan alamat email yang valid.",
+    "passwordRequired": "Masukkan kata sandi Anda.",
+    "newHere": "Baru di sini?",
+    "createAccount": "Buat akun",
+    "legalSignIn": "Dengan masuk, Anda menyetujui <terms>Ketentuan</terms> dan <privacy>Kebijakan Privasi</privacy> kami.",
+    "mfaTitle": "Verifikasi dua langkah",
+    "mfaHint": "Masukkan kode 6 digit dari aplikasi autentikator Anda.",
+    "mfaCode": "Kode verifikasi",
+    "mfaSubmit": "Verifikasi",
+    "workspaceTitle": "Pilih workspace",
+    "workspaceHint": "Akun Anda tergabung di lebih dari satu workspace.",
+    "invalidCredentials": "Email atau kata sandi salah.",
+    "accountLocked": "Akun ini dikunci sementara. Coba lagi nanti.",
+    "accountSuspended": "Akun ini telah ditangguhkan.",
+    "mfaInvalid": "Kode tidak benar. Coba lagi.",
+    "mfaExpired": "Sesi masuk telah kedaluwarsa. Silakan mulai lagi."
+  },
+  "signUp": {
+    "tagline": "Siapkan workspace Anda",
+    "taglineCaption": "Buat workspace Anda, lalu ajak tim dan hubungkan saluran pertama Anda.",
+    "title": "Buat akun Anda",
+    "subtitle": "Isi beberapa data dan workspace Anda siap.",
+    "fullName": "Nama lengkap",
+    "fullNamePlaceholder": "Nama Anda",
+    "email": "Email kerja",
+    "orgName": "Nama workspace",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "Tim Anda masuk dengan alamat {{slug}}.",
+    "orgNameHintEmpty": "Ini adalah nama yang dilihat tim Anda.",
+    "customiseSlug": "Pilih alamat workspace khusus",
+    "orgSlug": "Alamat workspace",
+    "orgSlugPlaceholder": "workspace-anda",
+    "orgSlugHint": "Huruf, angka, tanda hubung, atau garis bawah. Tim Anda memasukkannya saat masuk.",
+    "phone": "Nomor ponsel",
+    "phoneHint": "Kami menggunakannya untuk memverifikasi akun Anda dan untuk pembaruan penting.",
+    "referral": "Kode referral (opsional)",
+    "referralPlaceholder": "Punya kode dari teman?",
+    "confirmPassword": "Konfirmasi kata sandi",
+    "passwordPlaceholder": "Buat kata sandi",
+    "confirmPasswordPlaceholder": "Masukkan ulang kata sandi Anda",
+    "passwordMinLength": "Panjang minimum: {{min}}.",
+    "passwordMixedCase": "Gunakan huruf besar dan kecil.",
+    "passwordNumber": "Sertakan angka.",
+    "passwordSymbol": "Sertakan simbol.",
+    "agree": "Saya menyetujui <terms>Ketentuan</terms> dan <privacy>Kebijakan Privasi</privacy>.",
+    "submit": "Buat akun",
+    "haveAccount": "Sudah punya akun?",
+    "signIn": "Masuk",
+    "closedBody": "Pendaftaran ditutup. Minta undangan kepada administrator.",
+    "closedBack": "Kembali ke halaman masuk",
+    "validation": {
+      "fullName": "Masukkan nama lengkap Anda.",
+      "orgName": "Beri nama workspace Anda (minimal 2 karakter).",
+      "orgSlug": "Masukkan alamat workspace Anda (huruf, angka, tanda hubung, atau garis bawah).",
+      "phoneRequired": "Masukkan nomor ponsel Anda.",
+      "phoneInvalid": "Masukkan nomor telepon yang valid, dengan kode negara jika bukan nomor lokal.",
+      "passwordMismatch": "Kedua kata sandi tidak sama.",
+      "passwordInvalid": "Masukkan kata sandi yang memenuhi persyaratan yang ditampilkan.",
+      "acceptTerms": "Anda harus menyetujui ketentuan untuk melanjutkan.",
+      "referralCode": "Kode referral hanya boleh berisi huruf dan angka."
+    },
+    "errors": {
+      "emailTaken": "Email tersebut sudah digunakan di workspace ini.",
+      "slugTaken": "Alamat workspace tersebut sudah dipakai.",
+      "passwordPolicy": "Kata sandi tersebut tidak memenuhi kebijakan keamanan:",
+      "policyCommon": "Kata sandi tersebut terlalu mudah ditebak.",
+      "otpSendFailed": "Kami tidak dapat mengirim kode verifikasi. Periksa nomor, lalu coba lagi.",
+      "signupExpired": "Silakan mulai pendaftaran lagi."
+    },
+    "otp": {
+      "title": "Periksa WhatsApp Anda",
+      "subtitle": "Masukkan kode sekali pakai yang kami kirim untuk menyelesaikan pembuatan workspace Anda.",
+      "sentTo": "Kami mengirim kode ke {{phone}}",
+      "code": "Kode verifikasi",
+      "expiresIn": "Kode kedaluwarsa dalam {{time}}.",
+      "expired": "Kode ini sudah kedaluwarsa. Minta kode baru.",
+      "verify": "Verifikasi dan lanjutkan",
+      "resend": "Kirim ulang kode",
+      "resendIn": "Kirim ulang kode dalam {{time}}",
+      "resent": "Kode baru sedang dikirim ke WhatsApp Anda.",
+      "wrongNumber": "Nomor salah? Kembali",
+      "addressTakenHint": "Alamat workspace tersebut sudah dipakai saat Anda memverifikasi. Pilih alamat lain dan kami akan mengirim kode baru.",
+      "codeInvalid": "Masukkan kode {{length}} digit.",
+      "invalid": "Kode tidak benar. Coba lagi.",
+      "tooMany": "Terlalu banyak percobaan. Minta kode baru.",
+      "cooldown": "Tunggu sebentar sebelum meminta kode lagi."
+    }
+  },
+  "dashboard": {
+    "kicker": "Dasbor operator",
+    "synced": "Langsung · disinkronkan {{s}} dtk lalu",
+    "greeting": {
+      "morning": "Selamat pagi, {{name}}.",
+      "afternoon": "Selamat siang, {{name}}.",
+      "evening": "Selamat malam, {{name}}."
+    },
+    "calm": "Workspace sedang tenang.",
+    "running_other": "{{count}} kampanye sedang berjalan.",
+    "subline_other": "{{date}} - {{range}} menampilkan {{sent}} keluar, tingkat pengiriman {{rate}}% di {{count}} perangkat terhubung.",
+    "sublineOfficial": "{{date}} - {{range}} menampilkan {{sent}} keluar, tingkat pengiriman {{rate}}%.",
+    "setupBanner": "Penyiapan workspace Anda belum selesai. Selesaikan di web untuk membuka seluruh akun Anda.",
+    "range": {
+      "label": "Rentang tanggal",
+      "short": {
+        "24h": "24j",
+        "7d": "7h",
+        "30d": "30h",
+        "qtd": "QTD"
+      },
+      "long": {
+        "24h": "24 jam terakhir",
+        "7d": "7 hari terakhir",
+        "30d": "30 hari terakhir",
+        "qtd": "Kuartal berjalan"
+      }
+    },
+    "trend": {
+      "up": "Naik {{value}} dibanding periode sebelumnya",
+      "down": "Turun {{value}} dibanding periode sebelumnya",
+      "flat": "Tidak ada perubahan dibanding periode sebelumnya"
+    },
+    "kpi": {
+      "sent": "Pesan terkirim · {{range}}",
+      "sentLegend": "{{delivered}} tersampaikan · {{failed}} gagal",
+      "sparkline": "Pesan terkirim per jam selama 20 jam terakhir, dari yang terlama",
+      "readRate": "Tingkat dibaca",
+      "readMini": {
+        "sent": "Terkirim",
+        "delivered": "Tersampaikan",
+        "read": "Dibaca"
+      }
+    },
+    "contacts": {
+      "title": "Kontak aktif",
+      "subscribed": "Berlangganan",
+      "optedIn": "Setuju menerima",
+      "blocked": "Diblokir"
+    },
+    "wallet": {
+      "title": "Saldo dompet",
+      "payPerMessage": "bayar per pesan"
+    },
+    "autopilot": {
+      "kicker": "Selesaikan lebih banyak",
+      "title": "Biarkan balasan berjalan otomatis",
+      "body": "Buat alur atau luncurkan kampanye untuk menjangkau lebih banyak pelanggan secara otomatis."
+    },
+    "pipeline": {
+      "kicker": "Pipeline penjualan",
+      "open": "Pipeline terbuka",
+      "deals": "Deal terbuka",
+      "won": "Menang bulan ini",
+      "winRate": "Tingkat kemenangan"
+    },
+    "throughput": {
+      "title": "Throughput pesan",
+      "subtitle": {
+        "24h": "Keluar, tersampaikan, dan gagal, per jam, 24 jam terakhir",
+        "7d": "Keluar, tersampaikan, dan gagal, per hari, 7 hari terakhir",
+        "30d": "Keluar, tersampaikan, dan gagal, per hari, 30 hari terakhir",
+        "qtd": "Keluar, tersampaikan, dan gagal, per hari, kuartal berjalan"
+      },
+      "peak": "Jam puncak {{when}} · {{n}} pesan",
+      "sent": "Terkirim",
+      "delivered": "Tersampaikan",
+      "failed": "Gagal",
+      "avgHour": "Rata-rata per jam",
+      "replies": "Balasan",
+      "replyRate": "Tingkat balasan",
+      "summary": "{{sent}} terkirim, {{delivered}} tersampaikan, dan {{failed}} gagal pada periode ini.",
+      "subtitleCustom": "Per hari · {{range}}"
+    },
+    "inbox": {
+      "title": "Kotak masuk langsung",
+      "unread": "{{n}} belum dibaca",
+      "oldest": "terlama {{when}}",
+      "recent": "Percakapan terbaru",
+      "empty": "Belum ada percakapan."
+    },
+    "campaigns": {
+      "title": "Kampanye aktif",
+      "summary": "{{running}} berjalan - {{scheduled}} terjadwal - {{paused}} dijeda",
+      "total": "{{n}} secara keseluruhan",
+      "untitled": "Kampanye tanpa judul",
+      "delivered": "{{done}} / {{total}} tersampaikan",
+      "emptyTitle": "Tidak ada kampanye aktif",
+      "emptyBody": "Buat satu untuk mulai mengirim ke grup kontak.",
+      "status": {
+        "sending": "Mengirim",
+        "scheduled": "Terjadwal",
+        "paused": "Dijeda",
+        "failed": "Gagal",
+        "completed": "Selesai"
+      }
+    },
+    "devices": {
+      "title": "Perangkat terhubung",
+      "summary": "{{total}} dari {{cap}} slot terpakai - {{online}} online",
+      "emptyTitle": "Tidak ada perangkat terhubung",
+      "emptyBody": "Hubungkan nomor WhatsApp untuk mulai mengirim.",
+      "unzoned": "tanpa zona",
+      "per24h": "{{n}}/24j",
+      "deliv": "terkirim",
+      "free_other": "{{count}} slot perangkat tersedia",
+      "state": {
+        "online": "Online",
+        "connecting": "Menghubungkan",
+        "offline": "Offline"
+      }
+    },
+    "templates": {
+      "title": "Template berkinerja terbaik",
+      "subtitle": "Berdasarkan volume kirim - rentang terpilih",
+      "count_other": "{{count}} template",
+      "empty": "Belum ada template.",
+      "sent": "Terkirim",
+      "delivered": "Tersampaikan",
+      "read": "Dibaca",
+      "readRate": "Tingkat dibaca",
+      "status": {
+        "approved": "Disetujui",
+        "inReview": "Ditinjau",
+        "rejected": "Ditolak"
+      }
+    },
+    "activity": {
+      "title": "Log aktivitas",
+      "subtitle": "Peristiwa workspace",
+      "empty": "Tidak ada aktivitas terbaru yang tercatat untuk workspace ini.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_other": "{{count}} akun",
+      "connected": "Terhubung",
+      "tile": {
+        "needReply": "Perlu dibalas",
+        "openChats": "Chat terbuka",
+        "dmsIn": "DM masuk · 7h",
+        "dmsOut": "DM terkirim · 7h",
+        "followers": "Pengikut"
+      }
+    },
+    "flows": {
+      "title": "Alur otomatisasi",
+      "summary": "{{active}} aktif · {{subscribers}} pelanggan",
+      "empty": "Belum ada alur.",
+      "meta": "Pemicu {{trigger}} · {{steps}} langkah · {{subs}} pelanggan",
+      "statusActive": "Aktif",
+      "statusPaused": "Dijeda",
+      "stat": {
+        "flows": "Alur",
+        "active": "Aktif",
+        "subscribers": "Pelanggan"
+      }
+    },
+    "integrations": {
+      "title": "Integrasi",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} peristiwa / 7h",
+      "connected": {
+        "woocommerce": "Terhubung",
+        "shopify": "Terhubung",
+        "google_sheets": "Kunci API diterbitkan",
+        "meta_catalog": "Katalog ditautkan"
+      },
+      "notConnected": "belum terhubung",
+      "connectedLabel": "Terhubung"
+    },
+    "funnel": {
+      "title": "Funnel keterlibatan",
+      "stage": {
+        "messaged": "Kontak yang dikirimi pesan",
+        "delivered": "Tersampaikan",
+        "replied": "Membalas",
+        "goalCompleted": "Tujuan tercapai"
+      },
+      "stageLabel": "{{stage}}: {{n}} kontak, {{pct}}% dari kontak yang dikirimi pesan",
+      "activity": {
+        "title": "Aktivitas percakapan",
+        "inbound_other": "{{count}} pesan masuk",
+        "responding_other": "{{count}} kontak yang merespons",
+        "perContact": "{{value}} balasan per kontak yang merespons"
+      },
+      "comparison": {
+        "title": "Dibandingkan dengan periode sebelumnya",
+        "replyRate": "Tingkat balasan"
+      }
+    },
+    "ago": {
+      "minute_other": "{{count}} menit lalu",
+      "hour_other": "{{count}} jam lalu",
+      "day_other": "{{count}} hari lalu"
+    },
+    "error": {
+      "forbidden": "Peran Anda ({{role}}) tidak memiliki akses ke dasbor.",
+      "generic": "Angka tidak dapat dimuat. Coba lagi sebentar lagi.",
+      "locked": "Paket Anda tidak mencakup analitik."
+    },
+    "greetingNoName": {
+      "morning": "Selamat pagi.",
+      "afternoon": "Selamat siang.",
+      "evening": "Selamat malam."
+    },
+    "views": {
+      "label": "Tampilan dasbor",
+      "summary": "Ringkasan",
+      "agent": "Agen",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Kinerja agen",
+      "conversations": "Percakapan",
+      "resolved": "Selesai",
+      "firstReply": "Balasan pertama",
+      "resolution": "Penyelesaian",
+      "csat": "Penilaian",
+      "minutes": "{{value}} mnt",
+      "hours": "{{value}} j",
+      "days": "{{value}} h",
+      "empty": "Tidak ada percakapan yang ditugaskan kepada siapa pun pada periode ini.",
+      "noAccess": "Peran Anda ({{role}}) tidak memiliki akses ke analitik agen.",
+      "everyone": "Semua agen",
+      "pickerLabel": "Agen",
+      "pickerPlaceholder": "Pilih agen",
+      "statusTitle": "Status percakapan",
+      "avgResolution": "Rata-rata waktu penyelesaian",
+      "avgDuration": "Rata-rata durasi percakapan",
+      "byAgentTitle": "Percakapan per agen",
+      "byAgentPicker": "Agen untuk daftar status",
+      "status": {
+        "open": "Terbuka",
+        "pending": "Tertunda",
+        "closed": "Ditutup",
+        "assigned": "Ditugaskan",
+        "unassigned": "Belum ditetapkan",
+        "unattended": "Belum ditangani"
+      }
+    },
+    "bots": {
+      "activeFlows": "Alur aktif",
+      "ofTotal": "dari {{total}} alur",
+      "subscribers": "Pelanggan",
+      "subscribersNote": "di semua alur"
+    }
+  },
+  "tabs": {
+    "dashboard": "Dasbor",
+    "inbox": "Kotak masuk",
+    "contacts": "Kontak",
+    "menu": "Menu"
+  },
+  "menu": {
+    "title": "Akun",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Workspace",
+    "inbox": "Kotak masuk",
+    "contacts": "Kontak",
+    "noAccess": "Anda tidak memiliki akses ke sini. Minta admin workspace Anda untuk membukanya.",
+    "version": "Versi {{version}}",
+    "signOutTitle": "Keluar",
+    "signOutConfirm": "Yakin ingin keluar?",
+    "signOutNo": "Tidak",
+    "signOutYes": "Ya, keluar",
+    "tasks": "Tugas",
+    "dashboard": "Dasbor",
+    "allContacts": "Semua kontak",
+    "newContact": "Kontak baru",
+    "sectionAccount": "Akun",
+    "manageProfile": "Kelola profil",
+    "preferences": "Preferensi",
+    "devicePermissions": "Izin perangkat",
+    "devicePermissionsHint": "Buka pengaturan aplikasi ini di ponsel Anda",
+    "about": "Tentang",
+    "dataSecurity": "Data & Keamanan",
+    "checkUpdates": "Periksa pembaruan",
+    "updates": {
+      "off": "Versi aplikasi ini tidak menerima pembaruan otomatis. Pasang versi terbaru untuk mendapatkan perubahan.",
+      "latest": "Anda menggunakan versi terbaru.",
+      "ready": "Pembaruan siap. Ketuk lagi untuk memulai ulang dan menggunakannya.",
+      "failed": "Tidak dapat memeriksa pembaruan. Coba lagi sebentar lagi."
+    },
+    "profile": {
+      "title": "Kelola profil",
+      "fullName": "Nama lengkap",
+      "displayName": "Nama tampilan",
+      "displayNameHint": "Ditampilkan kepada tim Anda sebagai pengganti nama lengkap. Kosongkan untuk memakai nama lengkap.",
+      "phone": "Telepon",
+      "phoneHint": "Dengan kode negara, misalnya +919876543210.",
+      "email": "Email",
+      "pendingEmail": "Perubahan ke {{email}} menunggu konfirmasi Anda.",
+      "timezone": "Zona waktu workspace",
+      "save": "Simpan perubahan",
+      "cancel": "Batal",
+      "nameRequired": "Masukkan nama Anda.",
+      "nameTooLong": "Gunakan maksimal 120 karakter.",
+      "phoneInvalid": "Masukkan nomor telepon dengan kode negara, misalnya +919876543210."
+    },
+    "appearance": {
+      "title": "Tampilan",
+      "light": "Mode terang",
+      "dark": "Mode gelap",
+      "device": "Ikuti pengaturan perangkat",
+      "hint": "Disimpan ke akun Anda.",
+      "failed": "Pilihan Anda tidak dapat disimpan. Coba lagi."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Tampilan kotak masuk",
+      "all": "Semua",
+      "mine": "Milik saya",
+      "unassigned": "Belum ditetapkan",
+      "unread": "Belum dibaca"
+    },
+    "search": {
+      "open": "Cari percakapan",
+      "close": "Tutup pencarian",
+      "label": "Cari",
+      "placeholder": "Nama, nomor, atau pesan"
+    },
+    "filter": {
+      "open": "Filter",
+      "sheet": "Status percakapan",
+      "close": "Tutup",
+      "applied": "Filter diterapkan",
+      "clearAll": "Hapus semua",
+      "remove": "Hapus filter: {{name}}",
+      "statusChip": "Status: {{name}}",
+      "searchChip": "Pencarian: {{q}}",
+      "title": "Filter",
+      "view": "Tampilan",
+      "viewActive": "Percakapan",
+      "viewArchived": "Diarsipkan",
+      "channel": "Saluran",
+      "allChannels": "Semua saluran",
+      "labels": "Label",
+      "searchLabels": "Cari label",
+      "channelChip": "Saluran: {{name}}",
+      "labelsChip": "Label: {{names}}",
+      "archivedChip": "Diarsipkan"
+    },
+    "statusFilter": {
+      "default": "Terbuka & tertunda",
+      "open": "Terbuka",
+      "pending": "Tertunda",
+      "snoozed": "Ditunda",
+      "resolved": "Selesai",
+      "closed": "Ditutup",
+      "all": "Semua status"
+    },
+    "status": {
+      "open": "Terbuka",
+      "pending": "Tertunda",
+      "snoozed": "Ditunda",
+      "resolved": "Selesai",
+      "closed": "Ditutup",
+      "spam": "Spam"
+    },
+    "list": {
+      "label": "Percakapan",
+      "emptyTitle": "Tidak ada percakapan",
+      "emptyHint": "Pesan dari pelanggan Anda akan muncul di sini.",
+      "emptyFilteredHint": "Tidak ada yang cocok dengan filter ini. Coba hapus filter.",
+      "noMore": "Tidak ada percakapan lagi",
+      "loadingMore": "Memuat percakapan lainnya",
+      "noAccessTitle": "Tidak ada akses ke kotak masuk",
+      "noAccessBody": "Peran Anda tidak dapat membaca percakapan. Minta admin workspace untuk mengubahnya."
+    },
+    "row": {
+      "noMessages": "Belum ada pesan",
+      "unread_other": "{{count}} pesan belum dibaca",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "Ditugaskan ke {{name}}",
+      "media": "Media"
+    },
+    "time": {
+      "am": "AM",
+      "pm": "PM",
+      "yesterday": "Kemarin"
+    },
+    "thread": {
+      "messages": "Pesan",
+      "loadingOlder": "Memuat pesan sebelumnya",
+      "emptyTitle": "Belum ada pesan",
+      "emptyHint": "Pesan dalam percakapan ini akan muncul di sini.",
+      "noAccessTitle": "Tidak ada akses ke percakapan ini",
+      "noAccessBody": "Peran Anda tidak dapat membaca percakapan.",
+      "resolve": "Selesaikan",
+      "reopen": "Buka kembali",
+      "call": "Telepon {{phone}}",
+      "pictureOpen": "Buka foto layar penuh",
+      "pictureFull": "Foto",
+      "pictureClose": "Tutup foto",
+      "windowClosed": "Jendela balasan 24 jam sudah ditutup. Kirim template sebagai gantinya.",
+      "conflict": "Orang lain mengubah percakapan ini. Versi terbaru sudah dimuat, silakan coba lagi.",
+      "statusInvalid": "Percakapan ini tidak dapat dipindahkan ke status tersebut.",
+      "window": {
+        "left": "Jendela balasan: sisa {{hours}} j {{minutes}} mnt",
+        "closed": "Jendela balasan ditutup"
+      },
+      "menu": {
+        "open": "Tindakan lainnya",
+        "close": "Tutup menu",
+        "assignToMe": "Tugaskan ke saya",
+        "details": "Lihat detail",
+        "status": "Ubah status",
+        "agent": "Tugaskan agen"
+      },
+      "bot": {
+        "notice": "Ini adalah percakapan bot.",
+        "assignSelf": "Tugaskan ke diri sendiri"
+      },
+      "labels": {
+        "open": "Tetapkan label",
+        "title": "Tetapkan label",
+        "close": "Tutup",
+        "empty": "Belum ada label.",
+        "emptyCreate": "Belum ada label. Ketik nama di bawah untuk membuatnya.",
+        "newLabel": "Label baru",
+        "add": "Tambah",
+        "failed": "Label tidak dapat diubah. Coba lagi."
+      },
+      "assignment": {
+        "none": "Belum ditugaskan",
+        "team": "Tim: {{name}}",
+        "failed": "Percakapan tidak dapat diubah. Coba lagi.",
+        "you": "Ditugaskan ke Anda",
+        "to": "Ditugaskan ke {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "Diterima: {{text}}, {{time}}",
+      "labelOut": "Dikirim oleh Anda: {{text}}, {{time}}, {{status}}",
+      "deleted": "Pesan ini telah dihapus",
+      "retry": "Coba kirim lagi",
+      "mediaPending": "File masih diunduh.",
+      "mediaFailed": "File tidak dapat diunduh."
+    },
+    "kind": {
+      "text": "Pesan",
+      "image": "Foto",
+      "video": "Video",
+      "audio": "Audio",
+      "voice": "Pesan suara",
+      "document": "Dokumen",
+      "sticker": "Stiker",
+      "location": "Lokasi",
+      "contact": "Kontak",
+      "template": "Template",
+      "reaction": "Reaksi",
+      "interactive": "Pesan interaktif",
+      "system": "Pesan sistem"
+    },
+    "delivery": {
+      "queued": "Mengirim",
+      "sent": "Terkirim",
+      "delivered": "Tersampaikan",
+      "read": "Dibaca",
+      "failed": "Tidak terkirim",
+      "received": "Diterima"
+    },
+    "composer": {
+      "label": "Pesan",
+      "placeholder": "Ketik pesan",
+      "send": "Kirim",
+      "tooLong": "Pesan maksimal {{max}} karakter.",
+      "noteLabel": "Catatan pribadi",
+      "notePlaceholder": "Tulis catatan yang hanya dilihat tim Anda",
+      "addNote": "Tambah catatan",
+      "noteOn": "Tulis catatan pribadi",
+      "noteOff": "Kembali ke balasan"
+    },
+    "template": {
+      "closedNotice": "Pelanggan belum menghubungi Anda dalam 24 jam terakhir. Anda hanya dapat mengirim template yang sudah disetujui.",
+      "send": "Kirim template",
+      "title": "Kirim template",
+      "close": "Tutup",
+      "search": "Cari template",
+      "empty": "Belum ada template yang disetujui untuk nomor ini.",
+      "emptySearch": "Tidak ada template yang cocok dengan pencarian Anda.",
+      "more": "Masih ada template lainnya. Ketik di kotak pencarian untuk menemukannya.",
+      "fillTitle": "Isi detailnya",
+      "back": "Kembali ke template",
+      "submit": "Kirim",
+      "reason": {
+        "paused": "Dijeda oleh WhatsApp karena kualitas. Coba lagi nanti.",
+        "media_header": "Memiliki header gambar, video, atau dokumen, yang belum dapat dikirim oleh aplikasi.",
+        "header_variable": "Memiliki variabel di header, yang belum dapat diisi oleh aplikasi.",
+        "dynamic_button": "Memiliki tautan tombol dengan variabel, yang belum dapat diisi oleh aplikasi.",
+        "authentication": "Template kata sandi sekali pakai dikirim oleh sistem.",
+        "named_variables": "Menggunakan variabel bernama, yang belum dapat diisi oleh aplikasi."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "Saluran ini terputus. Hubungkan kembali di web, lalu coba lagi.",
+      "planLimit": "Batas pesan paket Anda telah tercapai.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+      "notFound": "Percakapan ini tidak lagi tersedia."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Web chat",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Simulator"
+    },
+    "sheet": {
+      "close": "Tutup",
+      "save": "Simpan perubahan",
+      "noMatch": "Tidak ada yang cocok."
+    },
+    "assign": {
+      "title": "Ganti agen",
+      "search": "Cari agen",
+      "agents": "Agen",
+      "teams": "Tim",
+      "unassigned": "Belum ditetapkan",
+      "noTeam": "Tanpa tim",
+      "you": "{{name}} (Anda)",
+      "availability": {
+        "online": "Online",
+        "away": "Sedang pergi",
+        "busy": "Sibuk",
+        "offline": "Offline"
+      },
+      "open_other": "{{count}} terbuka",
+      "members_other": "{{count}} anggota",
+      "failed": "Penanggung jawab percakapan ini tidak dapat diubah. Coba lagi."
+    },
+    "priority": {
+      "title": "Atur prioritas",
+      "low": "Rendah",
+      "normal": "Normal",
+      "high": "Tinggi",
+      "urgent": "Mendesak"
+    },
+    "snooze": {
+      "title": "Tunda hingga",
+      "hour": "1 jam lagi",
+      "threeHours": "3 jam lagi",
+      "tomorrow": "Besok, 09.00",
+      "nextWeek": "Senin depan, 09.00"
+    },
+    "statusSheet": {
+      "title": "Ubah status"
+    },
+    "details": {
+      "title": "Detail chat",
+      "contact": "Kontak",
+      "openContact": "Buka kontak",
+      "call": "Telepon",
+      "noContact": "Percakapan ini belum memiliki data kontak.",
+      "email": "Email",
+      "stage": "Tahap",
+      "contactStatus": "Status",
+      "owner": "Pemilik",
+      "source": "Sumber",
+      "since": "Kontak sejak",
+      "optedOut": "Berhenti menerima pesan",
+      "leadScore": "Skor prospek",
+      "actions": "Tindakan",
+      "status": "Status",
+      "priority": "Prioritas",
+      "labels": "Label",
+      "none": "Tidak ada",
+      "agent": "Agen yang ditugaskan",
+      "team": "Tim",
+      "you": "Anda",
+      "bot": "Bot",
+      "unassigned": "Belum ditetapkan",
+      "info": "Percakapan",
+      "channel": "Saluran",
+      "window": "Jendela balasan",
+      "windowOpen": "Terbuka hingga {{time}}",
+      "windowClosed": "Ditutup",
+      "windowNone": "Tanpa batas waktu",
+      "snoozedUntil": "Ditunda hingga {{time}}",
+      "notes": {
+        "title": "Catatan internal",
+        "empty": "Belum ada catatan. Hanya tim Anda yang melihat catatan.",
+        "label": "Tulis catatan",
+        "add": "Tambah catatan",
+        "delete": "Hapus",
+        "deleteFor": "Hapus catatan oleh {{name}}",
+        "failed": "Catatan tidak dapat disimpan. Coba lagi.",
+        "deleteFailed": "Catatan tidak dapat dihapus. Coba lagi.",
+        "unknownAuthor": "Seseorang",
+        "tooLong": "Catatan maksimal {{max}} karakter."
+      },
+      "timeline": {
+        "title": "Linimasa",
+        "empty": "Belum ada kejadian.",
+        "system": "Sistem"
+      },
+      "past": {
+        "title": "Percakapan sebelumnya",
+        "empty": "Tidak ada percakapan lain dengan kontak ini."
+      },
+      "snooze": "Tunda",
+      "wake": "Aktifkan sekarang"
+    },
+    "event": {
+      "created": "Percakapan dimulai",
+      "assigned": "Ditugaskan",
+      "reassigned": "Ditugaskan ulang",
+      "unassigned": "Penugasan dicabut",
+      "ai_handoff": "Diserahkan oleh agen AI",
+      "resolved": "Selesai",
+      "closed": "Ditutup",
+      "reopened": "Dibuka kembali",
+      "status_changed": "Status diubah",
+      "note_added": "Catatan ditambahkan",
+      "snoozed": "Ditunda",
+      "auto_unsnoozed": "Aktif kembali tepat waktu",
+      "priority_changed": "Prioritas diubah",
+      "tag_added": "Label ditambahkan",
+      "tag_removed": "Label dihapus",
+      "first_response": "Balasan pertama terkirim",
+      "sla_breach": "Waktu balasan terlewat"
+    },
+    "replies": {
+      "open": "Balasan tersimpan",
+      "title": "Balasan tersimpan",
+      "search": "Cari balasan tersimpan",
+      "empty": "Belum ada balasan tersimpan.",
+      "noMatch": "Tidak ada balasan tersimpan yang cocok dengan pencarian Anda.",
+      "failed": "Balasan ini tidak dapat digunakan. Coba lagi.",
+      "unfilled": "Periksa pesan: {{list}} tidak dapat diisi."
+    },
+    "note": {
+      "title": "Catatan pribadi",
+      "label": "Catatan pribadi oleh {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Tekan lama untuk memilih percakapan",
+      "selected_other": "{{count}} dipilih",
+      "close": "Batalkan pilihan",
+      "selectAll": "Pilih semua",
+      "read": "Tandai sudah dibaca",
+      "status": "Status",
+      "assign": "Tugaskan",
+      "label": "Label",
+      "priority": "Prioritas",
+      "snooze": "Tunda",
+      "statusTitle_other": "Ubah status {{count}} percakapan",
+      "labelTitle_other": "Label untuk {{count}} percakapan",
+      "labelMode": "Tindakan",
+      "labelAdd": "Tambahkan label",
+      "labelRemove": "Lepas label",
+      "labelSearch": "Cari label",
+      "priorityTitle_other": "Prioritas {{count}} percakapan",
+      "snoozeTitle_other": "Tunda {{count}} percakapan hingga",
+      "result": "{{done}} diperbarui, {{unchanged}} tidak berubah, {{failed}} gagal",
+      "resultDismiss": "Tutup"
+    }
+  },
+  "contacts": {
+    "title": "Kontak",
+    "unknown": "Tidak dikenal",
+    "add": "Tambah kontak",
+    "cancel": "Batal",
+    "yes": "Ya",
+    "no": "Tidak",
+    "denied": {
+      "title": "Anda tidak dapat melihat kontak",
+      "hint": "Minta admin workspace untuk memberi peran Anda akses ke kontak.",
+      "createTitle": "Anda tidak dapat menambah kontak",
+      "createHint": "Minta admin workspace untuk mengizinkan peran Anda menambah kontak."
+    },
+    "empty": {
+      "title": "Tidak ada kontak",
+      "hint": "Ketuk tombol + untuk menambah kontak pertama Anda.",
+      "filteredTitle": "Tidak ada kontak yang cocok",
+      "filteredHint": "Coba pencarian lain atau hapus filter."
+    },
+    "search": {
+      "open": "Cari kontak",
+      "close": "Tutup pencarian",
+      "label": "Cari",
+      "placeholder": "Nama, telepon, atau email"
+    },
+    "filter": {
+      "open": "Filter kontak",
+      "title": "Filter",
+      "stage": "Tahap siklus hidup",
+      "owner": "Pemilik kontak",
+      "ownerSearch": "Cari pemilik kontak",
+      "unassigned": "Tanpa pemilik",
+      "created": "Tanggal dibuat",
+      "any": "Apa saja",
+      "marketing": "Pesan pemasaran",
+      "marketingOptions": {
+        "all": "Semua",
+        "subscribed": "Berlangganan",
+        "unsubscribed": "Berhenti berlangganan"
+      },
+      "source": "Sumber",
+      "sourceHint": "Asal kontak, seperti import atau api.",
+      "clear": "Hapus semua",
+      "apply": "Terapkan"
+    },
+    "stage": {
+      "new": "Baru",
+      "contacted": "Sudah dihubungi",
+      "qualified": "Memenuhi syarat",
+      "application_started": "Pendaftaran dimulai",
+      "application_submitted": "Pendaftaran dikirim",
+      "interview_scheduled": "Wawancara dijadwalkan",
+      "offer_received": "Penawaran diterima",
+      "admission_confirmed": "Penerimaan dikonfirmasi",
+      "enrolled": "Terdaftar",
+      "lost": "Kalah"
+    },
+    "subscription": {
+      "subscribed": "Berlangganan",
+      "unsubscribed": "Berhenti berlangganan",
+      "pending": "Menunggu"
+    },
+    "form": {
+      "name": "Nama",
+      "phone": "Telepon",
+      "phoneHint": "Dengan kode negara, misalnya +919876543210.",
+      "email": "Email",
+      "needPhoneOrEmail": "Masukkan nomor telepon atau alamat email.",
+      "phoneInvalid": "Masukkan nomor telepon dengan kode negara, misalnya +919876543210.",
+      "emailInvalid": "Masukkan alamat email yang valid.",
+      "nameInvalid": "Masukkan nama maksimal 255 karakter."
+    },
+    "new": {
+      "title": "Kontak baru",
+      "save": "Simpan kontak",
+      "requiredTitle": "Detail wajib",
+      "choose": "Pilih",
+      "search": "Cari",
+      "unsupported": "{{label}} wajib diisi, tetapi belum dapat diisi di sini. Tambahkan kontak ini di web.",
+      "requiredMissing": "Workspace Anda memerlukan detail tambahan sebelum kontak dapat disimpan, dan aplikasi ini tidak dapat menampilkannya. Minta admin untuk akses ke properti kontak, atau tambahkan kontak di web."
+    },
+    "edit": {
+      "title": "Edit kontak",
+      "open": "Edit kontak",
+      "save": "Simpan perubahan",
+      "conflict": "Kontak ini diubah oleh orang lain. Tinjau dan simpan lagi."
+    },
+    "detail": {
+      "title": "Kontak",
+      "notFound": "Kontak ini sudah tidak ada.",
+      "phone": "Telepon",
+      "email": "Email",
+      "call": "Telepon {{phone}}",
+      "mail": "Tulis ke {{email}}",
+      "stage": "Tahap siklus hidup",
+      "status": "Status",
+      "score": "Skor",
+      "source": "Sumber",
+      "whatsapp": "Langganan WhatsApp",
+      "marketing": "Pesan pemasaran",
+      "optedOut": "Berhenti berlangganan",
+      "optedIn": "Dapat menerima",
+      "lastActivity": "Aktivitas terakhir",
+      "noActivity": "Belum ada aktivitas",
+      "created": "Ditambahkan pada",
+      "customFields": "Kolom kustom",
+      "actions": {
+        "call": "Telepon",
+        "chat": "Chat",
+        "email": "Email",
+        "sms": "SMS",
+        "tasks": "Tugas",
+        "notes": "Catatan"
+      },
+      "tabsLabel": "Bagian kontak",
+      "tabs": {
+        "about": "Detail kontak",
+        "activity": "Aktivitas",
+        "files": "Lainnya"
+      },
+      "activities": {
+        "label": "Tampilan aktivitas",
+        "all": "Semua aktivitas",
+        "timeline": "Linimasa aktivitas"
+      },
+      "more": {
+        "account": "Akun",
+        "deals": "Deal"
+      },
+      "summary": {
+        "title": "Aktivitas",
+        "notes": "Catatan",
+        "tasks": "Tugas",
+        "meetings": "Rapat",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "Hapus kontak",
+        "title": "Hapus kontak",
+        "message": "Hapus {{name}}? Tindakan ini tidak dapat dibatalkan.",
+        "confirm": "Hapus",
+        "cancel": "Batal"
+      }
+    },
+    "tags": {
+      "title": "Tag",
+      "none": "Belum ada tag.",
+      "remove": "Hapus tag {{name}}",
+      "addLabel": "Tambah tag",
+      "addPlaceholder": "Nama tag",
+      "add": "Tambah tag"
+    },
+    "row": {
+      "more": "Tindakan lainnya untuk {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Edit",
+      "swipeDelete": "Hapus"
+    },
+    "sheet": {
+      "close": "Tutup"
+    },
+    "views": {
+      "open": "Tampilan kontak: {{name}}",
+      "title": "Tampilan",
+      "close": "Tutup tampilan",
+      "searchLabel": "Cari tampilan",
+      "searchPlaceholder": "Cari tampilan",
+      "systemTitle": "Tampilan bawaan sistem",
+      "customTitle": "Tampilan kustom",
+      "none": "Tidak ada tampilan",
+      "failed": "Tampilan tersimpan tidak dapat dimuat.",
+      "system": {
+        "all": "Semua kontak",
+        "mine": "Kontak saya",
+        "recent": "Baru dibuat",
+        "optedOut": "Berhenti menerima pemasaran"
+      }
+    }
+  },
+  "tasks": {
+    "title": "Tugas",
+    "add": "Tambah tugas",
+    "cancel": "Batal",
+    "unknownContact": "Kontak tanpa nama",
+    "notFound": "Tugas ini sudah tidak ada.",
+    "priority": {
+      "low": "Rendah",
+      "medium": "Sedang",
+      "high": "Tinggi"
+    },
+    "status": {
+      "open": "Terbuka",
+      "done": "Selesai",
+      "overdue": "Terlambat"
+    },
+    "denied": {
+      "title": "Anda tidak dapat melihat tugas",
+      "hint": "Minta admin workspace Anda untuk memberi Anda akses ke tugas.",
+      "createTitle": "Anda tidak dapat menambah tugas",
+      "createHint": "Minta admin workspace Anda untuk mengizinkan Anda menambah tugas.",
+      "editTitle": "Anda tidak dapat mengedit tugas",
+      "editHint": "Minta admin workspace Anda untuk mengizinkan Anda mengedit tugas."
+    },
+    "planLocked": {
+      "title": "Tugas tidak termasuk dalam paket ini.",
+      "hint": "Minta admin workspace Anda untuk meningkatkan paket."
+    },
+    "empty": {
+      "title": "Tidak ada tugas.",
+      "hint": "Tugas yang Anda tambahkan akan muncul di sini.",
+      "filteredHint": "Coba filter atau pencarian lain."
+    },
+    "search": {
+      "open": "Cari tugas",
+      "close": "Tutup pencarian",
+      "label": "Cari",
+      "placeholder": "Cari berdasarkan judul"
+    },
+    "filter": {
+      "open": "Filter tugas",
+      "title": "Filter tugas",
+      "clear": "Hapus semua",
+      "apply": "Terapkan",
+      "group": {
+        "status": "Status",
+        "priority": "Prioritas",
+        "due": "Tenggat",
+        "owner": "Pemilik"
+      },
+      "status": {
+        "open": "Terbuka",
+        "done": "Selesai",
+        "all": "Semua"
+      },
+      "due": {
+        "overdue": "Terlambat",
+        "today": "Hari ini",
+        "upcoming": "Mendatang",
+        "none": "Tanpa tanggal"
+      },
+      "owner": {
+        "mine": "Milik saya",
+        "unassigned": "Belum ditetapkan",
+        "all": "Semua"
+      }
+    },
+    "list": {
+      "conflict": "Tugas ini diubah oleh orang lain. Daftar telah dimuat ulang."
+    },
+    "row": {
+      "markDone": "Tandai {{title}} selesai",
+      "reopen": "Buka kembali {{title}}",
+      "more": "Tindakan lainnya untuk {{title}}",
+      "due": "Tenggat {{when}}",
+      "unassigned": "Belum ditetapkan"
+    },
+    "actions": {
+      "edit": "Edit tugas",
+      "delete": "Hapus tugas"
+    },
+    "delete": {
+      "title": "Hapus tugas",
+      "message": "Yakin ingin menghapus tugas ini?",
+      "confirm": "Hapus"
+    },
+    "details": {
+      "title": "Detail tugas",
+      "edit": "Edit tugas",
+      "delete": "Hapus tugas",
+      "description": "Deskripsi",
+      "priority": "Prioritas",
+      "status": "Status",
+      "owner": "Pemilik",
+      "relatedTo": "Terkait dengan",
+      "noDescription": "Tanpa deskripsi",
+      "noDue": "Tanpa tenggat",
+      "unassigned": "Belum ditetapkan",
+      "noContact": "Tidak ada",
+      "openContact": "Buka {{name}}",
+      "markComplete": "Tandai selesai",
+      "reopen": "Buka kembali",
+      "conflict": "Tugas ini diubah oleh orang lain. Tugas telah dimuat ulang."
+    },
+    "form": {
+      "addTitle": "Tambah tugas",
+      "editTitle": "Edit tugas",
+      "save": "Simpan tugas",
+      "saving": "Menyimpan…",
+      "title": "Judul tugas",
+      "description": "Deskripsi tugas",
+      "priority": "Prioritas",
+      "date": "Tanggal (YYYY-MM-DD)",
+      "dateHint": "Kosongkan tanggal dan waktu jika tanpa tenggat. Contoh 2026-10-31.",
+      "time": "Waktu (HH:mm)",
+      "timeHint": "Format 24 jam, misalnya 14:30.",
+      "owner": "Pemilik",
+      "ownerPick": "Pilih pemilik",
+      "ownerMe": "Saya",
+      "ownerNone": "Belum ditetapkan",
+      "ownerLoading": "Memuat tim Anda…",
+      "ownerFailed": "Tim Anda tidak dapat dimuat.",
+      "contact": "Kontak",
+      "contactLinkOptional": "Tautkan kontak (opsional)",
+      "contactNone": "Tanpa kontak",
+      "contactPick": "Pilih kontak",
+      "contactSearchLabel": "Cari kontak",
+      "contactSearchPlaceholder": "Nama, email, atau telepon",
+      "contactEmpty": "Kontak tidak ditemukan.",
+      "contactFailed": "Kontak tidak dapat dimuat.",
+      "conflict": "Tugas ini diubah oleh orang lain. Tinjau dan simpan lagi.",
+      "errors": {
+        "titleRequired": "Masukkan judul tugas.",
+        "titleTooLong": "Judul maksimal 255 karakter.",
+        "titleNeedsLetter": "Judul harus berisi setidaknya satu huruf.",
+        "notesTooLong": "Deskripsi maksimal 5000 karakter.",
+        "dateInvalid": "Masukkan tanggal dengan format YYYY-MM-DD, misalnya 2026-10-31.",
+        "timeInvalid": "Masukkan waktu dengan format HH:mm (24 jam), misalnya 14:30.",
+        "dateNeeded": "Masukkan tanggal juga.",
+        "timeNeeded": "Masukkan waktu juga.",
+        "dueInvalid": "Tanggal dan waktu tenggat ini tidak dapat digunakan.",
+        "assigneeInvalid": "Orang tersebut tidak dapat diberi tugas. Pilih pemilik lain.",
+        "contactInvalid": "Kontak ini tidak dapat ditautkan."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Catatan",
+    "cancel": "Batal",
+    "loadMore": "Muat lebih banyak",
+    "deleteConfirm": "Hapus",
+    "contactMissing": "Kontak ini sudah tidak ada.",
+    "add": "Tambah catatan",
+    "edited": "Diedit",
+    "denied": {
+      "title": "Anda tidak dapat melihat catatan",
+      "hint": "Minta admin workspace untuk memberi peran Anda akses ke kontak.",
+      "updateTitle": "Anda tidak dapat mengubah catatan",
+      "updateHint": "Minta admin workspace untuk mengizinkan peran Anda mengedit kontak."
+    },
+    "empty": {
+      "title": "Tidak ada catatan.",
+      "hint": "Ketuk tombol + untuk menambah catatan pertama."
+    },
+    "menu": {
+      "open": "Tindakan untuk catatan dari {{date}}",
+      "edit": "Edit catatan",
+      "delete": "Hapus catatan"
+    },
+    "delete": {
+      "title": "Hapus catatan",
+      "message": "Yakin ingin menghapus catatan ini?"
+    },
+    "form": {
+      "addTitle": "Tambah catatan",
+      "editTitle": "Perbarui catatan",
+      "label": "Catatan",
+      "placeholder": "Tulis catatan Anda di sini...",
+      "required": "Tulis catatan sebelum menyimpan.",
+      "invalid": "Masukkan catatan maksimal 400 karakter.",
+      "counterLabel": "{{used}} dari {{max}} karakter terpakai",
+      "save": "Simpan catatan",
+      "saving": "Menyimpan catatan",
+      "conflict": "Catatan ini diubah oleh orang lain. Tinjau dan simpan lagi.",
+      "missing": "Catatan ini sudah tidak ada."
+    },
+    "activity": {
+      "notes": "Catatan",
+      "tasks": "Tugas",
+      "timeline": "Linimasa",
+      "empty": "Belum ada aktivitas.",
+      "add": "Tambah aktivitas",
+      "types": {
+        "note": "Catatan",
+        "call": "Panggilan",
+        "email": "Email",
+        "meeting": "Rapat",
+        "task": "Tugas"
+      },
+      "source": {
+        "system": "Sistem",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Tambah aktivitas",
+        "type": "Jenis",
+        "typeHint": "Misalnya catatan, panggilan, email, atau rapat.",
+        "name": "Judul",
+        "details": "Detail",
+        "save": "Simpan aktivitas",
+        "typeInvalid": "Masukkan jenis maksimal 100 karakter.",
+        "titleInvalid": "Masukkan judul maksimal 255 karakter.",
+        "detailsInvalid": "Detail maksimal 10.000 karakter."
+      }
+    },
+    "files": {
+      "empty": "Tidak ada file.",
+      "delete": "Hapus file {{name}}",
+      "deleteTitle": "Hapus file",
+      "deleteMessage": "Yakin ingin menghapus file ini?"
+    }
+  },
+  "contactMeetings": {
+    "title": "Rapat",
+    "loadMore": "Muat lebih banyak",
+    "contactMissing": "Kontak ini sudah tidak ada.",
+    "noDate": "Tanggal belum ditetapkan",
+    "denied": {
+      "title": "Anda tidak dapat melihat rapat",
+      "hint": "Minta admin workspace untuk memberi peran Anda akses ke kontak."
+    },
+    "empty": {
+      "title": "Belum ada rapat yang dicatat."
+    }
+  },
+  "contactDeals": {
+    "title": "Deal",
+    "contactMissing": "Kontak ini sudah tidak ada.",
+    "denied": {
+      "title": "Anda tidak dapat melihat deal",
+      "hint": "Minta admin workspace untuk memberi peran Anda akses ke deal."
+    },
+    "empty": {
+      "title": "Belum ada deal."
+    }
+  },
+  "contactCompany": {
+    "title": "Akun",
+    "missing": "Akun ini sudah tidak ada.",
+    "denied": {
+      "title": "Anda tidak dapat melihat akun",
+      "hint": "Minta admin workspace untuk memberi peran Anda akses ke perusahaan."
+    },
+    "industry": "Industri",
+    "size": "Ukuran",
+    "phone": "Telepon",
+    "email": "Email",
+    "website": "Situs web",
+    "address": "Alamat",
+    "owner": "Pemilik",
+    "notes": "Catatan"
+  },
+  "contactProps": {
+    "title": "Informasi kontak",
+    "search": "Cari kolom",
+    "showEmpty": "Tampilkan kolom kosong",
+    "footer": "Anda dapat menyesuaikan properti yang ditampilkan di sini dari aplikasi web Anda.",
+    "close": "Tutup",
+    "save": "Simpan",
+    "clear": "Hapus",
+    "yes": "Ya",
+    "no": "Tidak",
+    "rowHint": "Membuka editor",
+    "locked": "Anda tidak dapat mengedit {{label}}",
+    "webOnly": "{{label}} hanya dapat diedit dari aplikasi web.",
+    "masked": "Disembunyikan",
+    "fields": {
+      "email": "Email",
+      "phone": "Telepon",
+      "owner": "Pemilik kontak",
+      "name": "Nama",
+      "source": "Sumber",
+      "whatsapp": "Langganan WhatsApp",
+      "marketing": "Berhenti menerima pemasaran",
+      "leadScore": "Skor prospek",
+      "created": "Dibuat",
+      "lastActivity": "Aktivitas terakhir"
+    },
+    "subscription": {
+      "subscribed": "Berlangganan",
+      "unsubscribed": "Berhenti berlangganan",
+      "pending": "Menunggu"
+    },
+    "editor": {
+      "title": "Edit {{label}}",
+      "date": "Tanggal",
+      "dateHint": "Tahun-bulan-hari, misalnya 2026-10-12.",
+      "time": "Waktu",
+      "timeHint": "Format 24 jam, misalnya 14:30.",
+      "phoneHint": "Dengan kode negara, misalnya +919876543210.",
+      "noOptions": "Tidak ada pilihan yang tersedia."
+    },
+    "error": {
+      "required": "{{label}} wajib diisi.",
+      "name": "Masukkan nama maksimal 255 karakter.",
+      "email": "Masukkan alamat email yang valid.",
+      "phone": "Masukkan nomor telepon dengan kode negara, misalnya +919876543210.",
+      "needPhoneOrEmail": "Kontak memerlukan nomor telepon atau alamat email.",
+      "text": "Masukkan maksimal {{max}} karakter.",
+      "number": "Masukkan angka.",
+      "whole": "Masukkan bilangan bulat.",
+      "range": "Masukkan angka dari 0 sampai {{max}}.",
+      "url": "Masukkan tautan yang diawali http:// atau https://",
+      "date": "Masukkan tanggal yang valid dengan format YYYY-MM-DD.",
+      "time": "Masukkan waktu yang valid dengan format HH:mm.",
+      "option": "Pilih salah satu opsi.",
+      "invalid": "Nilai tersebut tidak diterima. Periksa lalu coba lagi.",
+      "notEditable": "Properti ini tidak dapat diedit.",
+      "requiredMissing": "Ada properti wajib yang belum diisi. Isi sebelum menyimpan.",
+      "conflict": "Kontak ini diubah oleh orang lain. Tinjau dan simpan lagi.",
+      "lostReasonRequired": "Sebutkan alasan kontak ini hilang.",
+      "statusMismatch": "Status tersebut tidak termasuk dalam tahap siklus hidup ini."
+    },
+    "owner": {
+      "title": "Tugaskan ke",
+      "unassigned": "Belum ditetapkan",
+      "none": "Tidak ada orang untuk menerima kontak ini.",
+      "failed": "Pemilik tidak dapat diubah. Coba lagi."
+    },
+    "lifecycle": {
+      "stage": "Tahap siklus hidup",
+      "status": "Status",
+      "change": "Ubah tahap siklus hidup",
+      "changeStatus": "Ubah status",
+      "dropdownHint": "Membuka daftar pilihan",
+      "lostReason": "Alasan kalah",
+      "otherReason": "Lainnya",
+      "otherLabel": "Jelaskan alasannya"
+    }
+  },
+  "summary": {
+    "contacts": "Kontak",
+    "contactsNote": "Ditambahkan pada periode ini",
+    "tasks": "Tugas",
+    "tasksNote": "Terbuka saat ini",
+    "messages": "Pesan",
+    "sentNote": "Terkirim",
+    "receivedNote": "Diterima",
+    "conversations": "Percakapan",
+    "conversationsNote": "Terbuka dan tertunda, saat ini",
+    "status": {
+      "all": "Aktif",
+      "mine": "Milik saya",
+      "unassigned": "Belum ditetapkan",
+      "assigned": "Ditugaskan",
+      "unread": "Belum dibaca",
+      "archived": "Diarsipkan"
+    },
+    "allMessages": {
+      "title": "Semua pesan",
+      "sent": "Terkirim",
+      "delivered": "Tersampaikan",
+      "received": "Diterima",
+      "read": "Dibaca",
+      "failed": "Gagal"
+    },
+    "moreTitle": "Lainnya dari workspace Anda"
+  },
+  "dashDate": {
+    "title": "Cari menurut kalender",
+    "close": "Tutup kalender",
+    "apply": "Terapkan",
+    "reset": "Atur ulang",
+    "presets": "Rentang cepat",
+    "pill": {
+      "label": "Rentang tanggal: {{from}} sampai {{to}}",
+      "hint": "Membuka kalender untuk mengubah tanggal"
+    },
+    "selection": {
+      "label": "{{from}} sampai {{to}}",
+      "pickFirst": "Pilih hari pertama",
+      "pickLast": "Pilih hari terakhir"
+    },
+    "preset": {
+      "last7": "7 hari terakhir",
+      "last30": "30 hari terakhir",
+      "last90": "90 hari terakhir",
+      "yesterday": "Kemarin",
+      "today": "Hari ini"
+    },
+    "calendar": {
+      "previousMonth": "Bulan sebelumnya",
+      "nextMonth": "Bulan berikutnya",
+      "start": "Awal rentang",
+      "end": "Akhir rentang",
+      "inRange": "Dalam rentang",
+      "today": "Hari ini"
+    }
+  },
+  "permissions": {
+    "channelName": "Pesan dan pembaruan",
+    "settingsHint": "Ketuk Izin, lalu aktifkan yang Anda perlukan.",
+    "names": {
+      "notifications": "Notifikasi",
+      "calls": "Panggilan telepon",
+      "camera": "Kamera",
+      "callPopup": "Pop-up panggilan (tampil di atas aplikasi lain)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Kontak",
+      "close": "Tutup",
+      "ongoingTitle": "Panggilan berlangsung",
+      "endedTitle": "Panggilan berakhir",
+      "endedText": "Ketuk untuk mencatat panggilan Anda dengan {{name}}.",
+      "channelOngoing": "Panggilan berlangsung",
+      "channelEnded": "Ringkasan panggilan"
+    },
+    "summary": {
+      "title": "Tambah panggilan",
+      "contact": "Kontak",
+      "type": "Jenis panggilan",
+      "outbound": "Keluar",
+      "status": "Status panggilan keluar",
+      "completed": "Selesai",
+      "notAnswered": "Tidak dijawab",
+      "startTime": "Waktu mulai panggilan",
+      "duration": "Durasi panggilan",
+      "durationHint": "Menit dan detik, misalnya 02:30",
+      "durationInvalid": "Masukkan durasi dengan format menit:detik, misalnya 02:30.",
+      "subject": "Subjek",
+      "subjectDefault": "Panggilan keluar ke {{name}}",
+      "subjectInvalid": "Masukkan subjek maksimal 255 karakter.",
+      "notes": "Deskripsi",
+      "save": "Simpan panggilan",
+      "skip": "Lewati",
+      "contactMissing": "Panggilan ini tidak memiliki kontak untuk dicatat.",
+      "denied": "Peran Anda tidak dapat mengubah kontak, sehingga panggilan ini tidak dapat dicatat.",
+      "purpose": "Tujuan panggilan",
+      "purposeNone": "-Tidak ada-",
+      "result": "Hasil panggilan",
+      "purposes": {
+        "prospecting": "Prospek",
+        "administrative": "Administratif",
+        "negotiation": "Negosiasi",
+        "demo": "Demo",
+        "project": "Proyek",
+        "desk": "Desk"
+      }
+    }
+  }
+}

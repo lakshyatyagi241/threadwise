@@ -1,0 +1,1466 @@
+{
+  "common": {
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "signOut": "Se déconnecter",
+    "clear": "Effacer",
+    "back": "Retour",
+    "filters": {
+      "clearAll": "Tout effacer",
+      "apply": "Appliquer",
+      "noMatch": "Aucun résultat pour votre recherche."
+    }
+  },
+  "errors": {
+    "generic": "Une erreur s’est produite. Veuillez réessayer.",
+    "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+    "timeout": "Le serveur a mis trop de temps à répondre. Veuillez réessayer.",
+    "outdatedApp": "Cette version de l’application est obsolète. Veuillez la mettre à jour.",
+    "tooManyRequests": "Trop de tentatives. Patientez un instant, puis réessayez.",
+    "captchaUnsupported": "Une vérification de sécurité est requise, mais l’application ne peut pas encore l’effectuer. Utilisez plutôt le site web."
+  },
+  "auth": {
+    "welcomeBack": "Bon retour",
+    "welcomeSubtitle": "Saisissez vos informations pour retrouver votre espace de travail.",
+    "tagline": "Toutes vos conversations clients, un seul espace serein",
+    "taglineCaption": "Diffusions, automatisations et boîte de réception partagée pour les équipes qui répondent vite.",
+    "email": "E-mail",
+    "emailPlaceholder": "you@company.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Saisissez votre mot de passe",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "signInSubmit": "Se connecter",
+    "emailInvalid": "Saisissez une adresse e-mail valide.",
+    "passwordRequired": "Saisissez votre mot de passe.",
+    "newHere": "Nouveau ici ?",
+    "createAccount": "Créer un compte",
+    "legalSignIn": "En vous connectant, vous acceptez nos <terms>Conditions</terms> et notre <privacy>Politique de confidentialité</privacy>.",
+    "mfaTitle": "Vérification en deux étapes",
+    "mfaHint": "Saisissez le code à 6 chiffres de votre application d’authentification.",
+    "mfaCode": "Code de vérification",
+    "mfaSubmit": "Vérifier",
+    "workspaceTitle": "Choisir un espace de travail",
+    "workspaceHint": "Votre compte appartient à plusieurs espaces de travail.",
+    "invalidCredentials": "L’e-mail ou le mot de passe est incorrect.",
+    "accountLocked": "Ce compte est temporairement verrouillé. Réessayez plus tard.",
+    "accountSuspended": "Ce compte a été suspendu.",
+    "mfaInvalid": "Ce code est incorrect. Réessayez.",
+    "mfaExpired": "La connexion a expiré. Veuillez recommencer."
+  },
+  "signUp": {
+    "tagline": "Configurez votre espace de travail",
+    "taglineCaption": "Créez votre espace de travail, puis invitez votre équipe et connectez votre premier canal.",
+    "title": "Créer votre compte",
+    "subtitle": "Quelques informations et votre espace de travail est prêt.",
+    "fullName": "Nom complet",
+    "fullNamePlaceholder": "Votre nom",
+    "email": "E-mail professionnel",
+    "orgName": "Nom de l’espace de travail",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "Votre équipe se connecte avec l’adresse {{slug}}.",
+    "orgNameHintEmpty": "C’est le nom que voit votre équipe.",
+    "customiseSlug": "Choisir une adresse d’espace de travail personnalisée",
+    "orgSlug": "Adresse de l’espace de travail",
+    "orgSlugPlaceholder": "your-workspace",
+    "orgSlugHint": "Lettres, chiffres, tiret ou tiret bas. Votre équipe la saisit pour se connecter.",
+    "phone": "Numéro de mobile",
+    "phoneHint": "Nous l’utilisons pour vérifier votre compte et pour les informations importantes.",
+    "referral": "Code de parrainage (facultatif)",
+    "referralPlaceholder": "Vous avez un code d’un ami ?",
+    "confirmPassword": "Confirmer le mot de passe",
+    "passwordPlaceholder": "Créez un mot de passe",
+    "confirmPasswordPlaceholder": "Saisissez à nouveau votre mot de passe",
+    "passwordMinLength": "Longueur minimale : {{min}}.",
+    "passwordMixedCase": "Mélangez majuscules et minuscules.",
+    "passwordNumber": "Incluez un chiffre.",
+    "passwordSymbol": "Incluez un symbole.",
+    "agree": "J’accepte les <terms>Conditions</terms> et la <privacy>Politique de confidentialité</privacy>.",
+    "submit": "Créer un compte",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter",
+    "closedBody": "Les inscriptions sont fermées. Demandez une invitation à un administrateur.",
+    "closedBack": "Retour à la connexion",
+    "validation": {
+      "fullName": "Saisissez votre nom complet.",
+      "orgName": "Nommez votre espace de travail (2 caractères minimum).",
+      "orgSlug": "Saisissez l’adresse de votre espace de travail (lettres, chiffres, tiret ou tiret bas).",
+      "phoneRequired": "Saisissez votre numéro de mobile.",
+      "phoneInvalid": "Saisissez un numéro de téléphone valide, avec l’indicatif du pays s’il n’est pas local.",
+      "passwordMismatch": "Les deux mots de passe ne correspondent pas.",
+      "passwordInvalid": "Saisissez un mot de passe conforme aux exigences affichées.",
+      "acceptTerms": "Vous devez accepter les conditions pour continuer.",
+      "referralCode": "Les codes de parrainage ne contiennent que des lettres et des chiffres."
+    },
+    "errors": {
+      "emailTaken": "Cet e-mail est déjà utilisé dans cet espace de travail.",
+      "slugTaken": "Cette adresse d’espace de travail est déjà prise.",
+      "passwordPolicy": "Ce mot de passe ne respecte pas la politique de sécurité :",
+      "policyCommon": "Ce mot de passe est trop facile à deviner.",
+      "otpSendFailed": "Nous n’avons pas pu envoyer le code de vérification. Vérifiez le numéro et réessayez.",
+      "signupExpired": "Veuillez recommencer l’inscription."
+    },
+    "otp": {
+      "title": "Consultez votre WhatsApp",
+      "subtitle": "Saisissez le code à usage unique que nous avons envoyé pour terminer la création de votre espace de travail.",
+      "sentTo": "Nous avons envoyé un code au {{phone}}",
+      "code": "Code de vérification",
+      "expiresIn": "Le code expire dans {{time}}.",
+      "expired": "Ce code a expiré. Demandez-en un nouveau.",
+      "verify": "Vérifier et continuer",
+      "resend": "Renvoyer le code",
+      "resendIn": "Renvoyer le code dans {{time}}",
+      "resent": "Un nouveau code est en route vers votre WhatsApp.",
+      "wrongNumber": "Mauvais numéro ? Revenir en arrière",
+      "addressTakenHint": "Cette adresse d’espace de travail a été prise pendant votre vérification. Choisissez-en une autre et nous vous enverrons un nouveau code.",
+      "codeInvalid": "Saisissez le code à {{length}} chiffres.",
+      "invalid": "Ce code est incorrect. Réessayez.",
+      "tooMany": "Trop de tentatives. Demandez un nouveau code.",
+      "cooldown": "Patientez un instant avant de demander un autre code."
+    }
+  },
+  "dashboard": {
+    "kicker": "Tableau de bord opérateur",
+    "synced": "En direct · synchronisé il y a {{s}} s",
+    "greeting": {
+      "morning": "Bonjour, {{name}}.",
+      "afternoon": "Bon après-midi, {{name}}.",
+      "evening": "Bonsoir, {{name}}."
+    },
+    "calm": "L’espace de travail est calme.",
+    "running_one": "{{count}} campagne est en cours.",
+    "running_many": "{{count}} de campagnes sont en cours.",
+    "running_other": "{{count}} campagnes sont en cours.",
+    "subline_one": "{{date}} - {{range}} : {{sent}} envoyés, {{rate}} % de délivrabilité sur {{count}} appareil connecté.",
+    "subline_many": "{{date}} - {{range}} : {{sent}} envoyés, {{rate}} % de délivrabilité sur {{count}} d’appareils connectés.",
+    "subline_other": "{{date}} - {{range}} : {{sent}} envoyés, {{rate}} % de délivrabilité sur {{count}} appareils connectés.",
+    "sublineOfficial": "{{date}} - {{range}} : {{sent}} envoyés, {{rate}} % de délivrabilité.",
+    "setupBanner": "La configuration de votre espace de travail n’est pas terminée. Terminez-la sur le web pour débloquer le reste de votre compte.",
+    "range": {
+      "label": "Période",
+      "short": {
+        "24h": "24 h",
+        "7d": "7 j",
+        "30d": "30 j",
+        "qtd": "Trim."
+      },
+      "long": {
+        "24h": "Dernières 24 heures",
+        "7d": "7 derniers jours",
+        "30d": "30 derniers jours",
+        "qtd": "Trimestre en cours"
+      }
+    },
+    "trend": {
+      "up": "En hausse de {{value}} par rapport à la période précédente",
+      "down": "En baisse de {{value}} par rapport à la période précédente",
+      "flat": "Aucun changement par rapport à la période précédente"
+    },
+    "kpi": {
+      "sent": "Messages envoyés · {{range}}",
+      "sentLegend": "{{delivered}} délivrés · {{failed}} échoués",
+      "sparkline": "Messages envoyés par heure sur les 20 dernières heures, du plus ancien au plus récent",
+      "readRate": "Taux de lecture",
+      "readMini": {
+        "sent": "Envoyés",
+        "delivered": "Délivrés",
+        "read": "Lus"
+      }
+    },
+    "contacts": {
+      "title": "Contacts actifs",
+      "subscribed": "Abonnés",
+      "optedIn": "Consentants",
+      "blocked": "Bloqués"
+    },
+    "wallet": {
+      "title": "Solde du portefeuille",
+      "payPerMessage": "paiement au message"
+    },
+    "autopilot": {
+      "kicker": "Faites-en plus",
+      "title": "Automatisez vos réponses",
+      "body": "Créez un flux ou lancez une campagne pour toucher automatiquement plus de clients."
+    },
+    "pipeline": {
+      "kicker": "Pipeline de vente",
+      "open": "Ouvrir le pipeline",
+      "deals": "Opportunités ouvertes",
+      "won": "Gagnées ce mois-ci",
+      "winRate": "Taux de réussite"
+    },
+    "throughput": {
+      "title": "Débit des messages",
+      "subtitle": {
+        "24h": "Envoyés, délivrés et échoués, par heure, sur les dernières 24 heures",
+        "7d": "Envoyés, délivrés et échoués, par jour, sur les 7 derniers jours",
+        "30d": "Envoyés, délivrés et échoués, par jour, sur les 30 derniers jours",
+        "qtd": "Envoyés, délivrés et échoués, par jour, sur le trimestre en cours"
+      },
+      "peak": "Heure de pointe {{when}} · {{n}} messages",
+      "sent": "Envoyés",
+      "delivered": "Délivrés",
+      "failed": "Échoués",
+      "avgHour": "Moyenne par heure",
+      "replies": "Réponses",
+      "replyRate": "Taux de réponse",
+      "summary": "{{sent}} envoyés, {{delivered}} délivrés et {{failed}} échoués sur cette période.",
+      "subtitleCustom": "Par jour · {{range}}"
+    },
+    "inbox": {
+      "title": "Boîte de réception en direct",
+      "unread": "{{n}} non lues",
+      "oldest": "la plus ancienne {{when}}",
+      "recent": "Conversations récentes",
+      "empty": "Aucune conversation pour le moment."
+    },
+    "campaigns": {
+      "title": "Campagnes actives",
+      "summary": "{{running}} en cours - {{scheduled}} programmées - {{paused}} en pause",
+      "total": "{{n}} au total",
+      "untitled": "Campagne sans titre",
+      "delivered": "{{done}} / {{total}} délivrés",
+      "emptyTitle": "Aucune campagne active",
+      "emptyBody": "Créez-en une pour commencer à envoyer à un groupe de contacts.",
+      "status": {
+        "sending": "Envoi en cours",
+        "scheduled": "Programmée",
+        "paused": "En pause",
+        "failed": "Échouée",
+        "completed": "Terminée"
+      }
+    },
+    "devices": {
+      "title": "Appareils connectés",
+      "summary": "{{total}} emplacements sur {{cap}} utilisés - {{online}} en ligne",
+      "emptyTitle": "Aucun appareil connecté",
+      "emptyBody": "Associez un numéro WhatsApp pour commencer à envoyer.",
+      "unzoned": "sans zone",
+      "per24h": "{{n}}/24 h",
+      "deliv": "délivr.",
+      "free_one": "{{count}} emplacement d’appareil disponible",
+      "free_many": "{{count}} d’emplacements d’appareil disponibles",
+      "free_other": "{{count}} emplacements d’appareil disponibles",
+      "state": {
+        "online": "En ligne",
+        "connecting": "Connexion",
+        "offline": "Hors ligne"
+      }
+    },
+    "templates": {
+      "title": "Modèles les plus performants",
+      "subtitle": "Par volume d’envoi - période sélectionnée",
+      "count_one": "{{count}} modèle",
+      "count_many": "{{count}} de modèles",
+      "count_other": "{{count}} modèles",
+      "empty": "Aucun modèle pour le moment.",
+      "sent": "Envoyés",
+      "delivered": "Délivrés",
+      "read": "Lus",
+      "readRate": "Taux de lecture",
+      "status": {
+        "approved": "Approuvé",
+        "inReview": "En cours d’examen",
+        "rejected": "Rejeté"
+      }
+    },
+    "activity": {
+      "title": "Journal d’activité",
+      "subtitle": "Événements de l’espace de travail",
+      "empty": "Aucune activité récente enregistrée pour cet espace de travail.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "{{count}} compte",
+      "accounts_many": "{{count}} de comptes",
+      "accounts_other": "{{count}} comptes",
+      "connected": "Connecté",
+      "tile": {
+        "needReply": "À répondre",
+        "openChats": "Discussions ouvertes",
+        "dmsIn": "MP reçus · 7 j",
+        "dmsOut": "MP envoyés · 7 j",
+        "followers": "Abonnés"
+      }
+    },
+    "flows": {
+      "title": "Flux d’automatisation",
+      "summary": "{{active}} actifs · {{subscribers}} abonnés",
+      "empty": "Aucun flux pour le moment.",
+      "meta": "Déclencheur {{trigger}} · {{steps}} étapes · {{subs}} abonnés",
+      "statusActive": "Actif",
+      "statusPaused": "En pause",
+      "stat": {
+        "flows": "Flux",
+        "active": "Actifs",
+        "subscribers": "Abonnés"
+      }
+    },
+    "integrations": {
+      "title": "Intégrations",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} événements / 7 j",
+      "connected": {
+        "woocommerce": "Connecté",
+        "shopify": "Connecté",
+        "google_sheets": "Clé API émise",
+        "meta_catalog": "Catalogue lié"
+      },
+      "notConnected": "non connecté",
+      "connectedLabel": "Connecté"
+    },
+    "funnel": {
+      "title": "Entonnoir d’engagement",
+      "stage": {
+        "messaged": "Contacts sollicités",
+        "delivered": "Délivrés",
+        "replied": "Ont répondu",
+        "goalCompleted": "Objectif atteint"
+      },
+      "stageLabel": "{{stage}} : {{n}} contacts, {{pct}} % des contacts sollicités",
+      "activity": {
+        "title": "Activité des conversations",
+        "inbound_one": "{{count}} message reçu",
+        "inbound_many": "{{count}} de messages reçus",
+        "inbound_other": "{{count}} messages reçus",
+        "responding_one": "{{count}} contact ayant répondu",
+        "responding_many": "{{count}} de contacts ayant répondu",
+        "responding_other": "{{count}} contacts ayant répondu",
+        "perContact": "{{value}} réponses par contact ayant répondu"
+      },
+      "comparison": {
+        "title": "Comparé à la période précédente",
+        "replyRate": "Taux de réponse"
+      }
+    },
+    "ago": {
+      "minute_one": "il y a {{count}} minute",
+      "minute_many": "il y a {{count}} de minutes",
+      "minute_other": "il y a {{count}} minutes",
+      "hour_one": "il y a {{count}} heure",
+      "hour_many": "il y a {{count}} d’heures",
+      "hour_other": "il y a {{count}} heures",
+      "day_one": "il y a {{count}} jour",
+      "day_many": "il y a {{count}} de jours",
+      "day_other": "il y a {{count}} jours"
+    },
+    "error": {
+      "forbidden": "Votre rôle ({{role}}) n’a pas accès au tableau de bord.",
+      "generic": "Impossible de charger les chiffres. Réessayez dans un instant.",
+      "locked": "Votre forfait n’inclut pas les statistiques."
+    },
+    "greetingNoName": {
+      "morning": "Bonjour.",
+      "afternoon": "Bon après-midi.",
+      "evening": "Bonsoir."
+    },
+    "views": {
+      "label": "Vue du tableau de bord",
+      "summary": "Résumé",
+      "agent": "Agent",
+      "bot": "Bot"
+    },
+    "agents": {
+      "title": "Performance des agents",
+      "conversations": "Conversations",
+      "resolved": "Résolues",
+      "firstReply": "Première réponse",
+      "resolution": "Résolution",
+      "csat": "Note",
+      "minutes": "{{value}} min",
+      "hours": "{{value}} h",
+      "days": "{{value}} j",
+      "empty": "Aucune conversation n’a été attribuée sur cette période.",
+      "noAccess": "Votre rôle ({{role}}) n’a pas accès aux statistiques des agents.",
+      "everyone": "Tous les agents",
+      "pickerLabel": "Agent",
+      "pickerPlaceholder": "Sélectionner un agent",
+      "statusTitle": "Statut des conversations",
+      "avgResolution": "Temps de résolution moyen",
+      "avgDuration": "Durée moyenne des conversations",
+      "byAgentTitle": "Conversations par agent",
+      "byAgentPicker": "Agent pour la liste des statuts",
+      "status": {
+        "open": "Ouvertes",
+        "pending": "En attente",
+        "closed": "Fermées",
+        "assigned": "Assignées",
+        "unassigned": "Non assignées",
+        "unattended": "Sans suivi"
+      }
+    },
+    "bots": {
+      "activeFlows": "Flux actifs",
+      "ofTotal": "sur {{total}} flux",
+      "subscribers": "Abonnés",
+      "subscribersNote": "dans tous les flux"
+    }
+  },
+  "tabs": {
+    "dashboard": "Tableau de bord",
+    "inbox": "Boîte de réception",
+    "contacts": "Contacts",
+    "menu": "Menu"
+  },
+  "menu": {
+    "title": "Compte",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "Espace de travail",
+    "inbox": "Boîte de réception",
+    "contacts": "Contacts",
+    "noAccess": "Vous n’avez pas accès à cette section. Demandez à l’administrateur de votre espace de travail de la débloquer.",
+    "version": "Version {{version}}",
+    "signOutTitle": "Se déconnecter",
+    "signOutConfirm": "Voulez-vous vraiment vous déconnecter ?",
+    "signOutNo": "Non",
+    "signOutYes": "Oui, se déconnecter",
+    "tasks": "Tâches",
+    "dashboard": "Tableau de bord",
+    "allContacts": "Tous les contacts",
+    "newContact": "Nouveau contact",
+    "sectionAccount": "Compte",
+    "manageProfile": "Gérer le profil",
+    "preferences": "Préférences",
+    "devicePermissions": "Autorisations de l’appareil",
+    "devicePermissionsHint": "Ouvrir les réglages de cette application sur votre téléphone",
+    "about": "À propos",
+    "dataSecurity": "Données et sécurité",
+    "checkUpdates": "Rechercher des mises à jour",
+    "updates": {
+      "off": "Cette version de l’application ne reçoit pas de mises à jour automatiques. Installez la dernière version pour obtenir les changements.",
+      "latest": "Vous avez la dernière version.",
+      "ready": "Une mise à jour est prête. Touchez à nouveau pour redémarrer et l’utiliser.",
+      "failed": "Impossible de rechercher les mises à jour. Réessayez dans un instant."
+    },
+    "profile": {
+      "title": "Gérer le profil",
+      "fullName": "Nom complet",
+      "displayName": "Nom affiché",
+      "displayNameHint": "Affiché à votre équipe à la place de votre nom complet. Laissez vide pour utiliser votre nom complet.",
+      "phone": "Téléphone",
+      "phoneHint": "Avec l’indicatif du pays, par exemple +919876543210.",
+      "email": "E-mail",
+      "pendingEmail": "Un changement vers {{email}} attend votre confirmation.",
+      "timezone": "Fuseau horaire de l’espace de travail",
+      "save": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "nameRequired": "Saisissez votre nom.",
+      "nameTooLong": "Utilisez 120 caractères au maximum.",
+      "phoneInvalid": "Saisissez le numéro de téléphone avec l’indicatif du pays, par exemple +919876543210."
+    },
+    "appearance": {
+      "title": "Apparence",
+      "light": "Mode clair",
+      "dark": "Mode sombre",
+      "device": "Utiliser les réglages de l’appareil",
+      "hint": "Enregistré dans votre compte.",
+      "failed": "Impossible d’enregistrer votre choix. Réessayez."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "Vue de la boîte de réception",
+      "all": "Toutes",
+      "mine": "Les miennes",
+      "unassigned": "Non assignées",
+      "unread": "Non lues"
+    },
+    "search": {
+      "open": "Rechercher des conversations",
+      "close": "Fermer la recherche",
+      "label": "Recherche",
+      "placeholder": "Nom, numéro ou message"
+    },
+    "filter": {
+      "open": "Filtres",
+      "sheet": "Statut de la conversation",
+      "close": "Fermer",
+      "applied": "Filtres appliqués",
+      "clearAll": "Tout effacer",
+      "remove": "Retirer le filtre : {{name}}",
+      "statusChip": "Statut : {{name}}",
+      "searchChip": "Recherche : {{q}}",
+      "title": "Filtres",
+      "view": "Vue",
+      "viewActive": "Conversations",
+      "viewArchived": "Archivées",
+      "channel": "Canal",
+      "allChannels": "Tous les canaux",
+      "labels": "Étiquettes",
+      "searchLabels": "Rechercher des étiquettes",
+      "channelChip": "Canal : {{name}}",
+      "labelsChip": "Étiquettes : {{names}}",
+      "archivedChip": "Archivées"
+    },
+    "statusFilter": {
+      "default": "Ouvertes et en attente",
+      "open": "Ouvertes",
+      "pending": "En attente",
+      "snoozed": "Mises en veille",
+      "resolved": "Résolues",
+      "closed": "Fermées",
+      "all": "Tous les statuts"
+    },
+    "status": {
+      "open": "Ouverte",
+      "pending": "En attente",
+      "snoozed": "En veille",
+      "resolved": "Résolue",
+      "closed": "Fermée",
+      "spam": "Spam"
+    },
+    "list": {
+      "label": "Conversations",
+      "emptyTitle": "Aucune conversation",
+      "emptyHint": "Les messages de vos clients apparaîtront ici.",
+      "emptyFilteredHint": "Aucun résultat avec ces filtres. Essayez de les effacer.",
+      "noMore": "Plus aucune conversation",
+      "loadingMore": "Chargement d’autres conversations",
+      "noAccessTitle": "Pas d’accès à la boîte de réception",
+      "noAccessBody": "Votre rôle ne peut pas lire les conversations. Demandez à un administrateur de l’espace de travail de modifier cela."
+    },
+    "row": {
+      "noMessages": "Aucun message pour le moment",
+      "unread_one": "{{count}} message non lu",
+      "unread_many": "{{count}} de messages non lus",
+      "unread_other": "{{count}} messages non lus",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "Assignée à {{name}}",
+      "media": "Média"
+    },
+    "time": {
+      "am": "matin",
+      "pm": "après-midi",
+      "yesterday": "Hier"
+    },
+    "thread": {
+      "messages": "Messages",
+      "loadingOlder": "Chargement des messages précédents",
+      "emptyTitle": "Aucun message pour le moment",
+      "emptyHint": "Les messages de cette conversation apparaîtront ici.",
+      "noAccessTitle": "Pas d’accès à cette conversation",
+      "noAccessBody": "Votre rôle ne peut pas lire les conversations.",
+      "resolve": "Résoudre",
+      "reopen": "Rouvrir",
+      "call": "Appeler le {{phone}}",
+      "pictureOpen": "Ouvrir la photo en plein écran",
+      "pictureFull": "Photo",
+      "pictureClose": "Fermer la photo",
+      "windowClosed": "La fenêtre de réponse de 24 heures est fermée. Envoyez plutôt un modèle.",
+      "conflict": "Quelqu’un d’autre a modifié cette conversation. La dernière version est chargée, veuillez réessayer.",
+      "statusInvalid": "Cette conversation ne peut pas passer à ce statut.",
+      "window": {
+        "left": "Fenêtre de réponse : {{hours}} h {{minutes}} min restantes",
+        "closed": "Fenêtre de réponse fermée"
+      },
+      "menu": {
+        "open": "Plus d’actions",
+        "close": "Fermer le menu",
+        "assignToMe": "M’assigner",
+        "details": "Voir les détails",
+        "status": "Changer le statut",
+        "agent": "Assigner un agent"
+      },
+      "bot": {
+        "notice": "Il s’agit d’une conversation avec un bot.",
+        "assignSelf": "Vous l’assigner"
+      },
+      "labels": {
+        "open": "Attribuer des étiquettes",
+        "title": "Attribuer des étiquettes",
+        "close": "Fermer",
+        "empty": "Il n’y a pas encore d’étiquettes.",
+        "emptyCreate": "Il n’y a pas encore d’étiquettes. Saisissez un nom ci-dessous pour en créer une.",
+        "newLabel": "Nouvelle étiquette",
+        "add": "Ajouter",
+        "failed": "Impossible de modifier les étiquettes. Réessayez."
+      },
+      "assignment": {
+        "none": "Non assignée",
+        "team": "Équipe : {{name}}",
+        "failed": "Impossible de modifier la conversation. Réessayez.",
+        "you": "Assignée à vous",
+        "to": "Assignée à {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "Reçu : {{text}}, {{time}}",
+      "labelOut": "Envoyé par vous : {{text}}, {{time}}, {{status}}",
+      "deleted": "Ce message a été supprimé",
+      "retry": "Réessayer l’envoi",
+      "mediaPending": "Le fichier est encore en cours de téléchargement.",
+      "mediaFailed": "Le fichier n’a pas pu être téléchargé."
+    },
+    "kind": {
+      "text": "Message",
+      "image": "Photo",
+      "video": "Vidéo",
+      "audio": "Audio",
+      "voice": "Message vocal",
+      "document": "Document",
+      "sticker": "Autocollant",
+      "location": "Position",
+      "contact": "Contact",
+      "template": "Modèle",
+      "reaction": "Réaction",
+      "interactive": "Message interactif",
+      "system": "Message système"
+    },
+    "delivery": {
+      "queued": "Envoi en cours",
+      "sent": "Envoyé",
+      "delivered": "Délivré",
+      "read": "Lu",
+      "failed": "Non envoyé",
+      "received": "Reçu"
+    },
+    "composer": {
+      "label": "Message",
+      "placeholder": "Saisissez un message",
+      "send": "Envoyer",
+      "tooLong": "Les messages peuvent contenir jusqu’à {{max}} caractères.",
+      "noteLabel": "Note privée",
+      "notePlaceholder": "Rédigez une note visible uniquement par votre équipe",
+      "addNote": "Ajouter la note",
+      "noteOn": "Rédiger une note privée",
+      "noteOff": "Revenir à une réponse"
+    },
+    "template": {
+      "closedNotice": "Le client ne vous a pas écrit au cours des dernières 24 heures. Vous ne pouvez envoyer que des modèles préapprouvés.",
+      "send": "Envoyer un modèle",
+      "title": "Envoyer un modèle",
+      "close": "Fermer",
+      "search": "Rechercher des modèles",
+      "empty": "Aucun modèle approuvé pour ce numéro pour le moment.",
+      "emptySearch": "Aucun modèle ne correspond à votre recherche.",
+      "more": "Il y a d’autres modèles. Utilisez la recherche pour les trouver.",
+      "fillTitle": "Renseignez les détails",
+      "back": "Retour aux modèles",
+      "submit": "Envoyer",
+      "reason": {
+        "paused": "Suspendu par WhatsApp pour des raisons de qualité. Réessayez plus tard.",
+        "media_header": "Comporte un en-tête image, vidéo ou document, que l’application ne peut pas encore envoyer.",
+        "header_variable": "Comporte une variable dans son en-tête, que l’application ne peut pas encore renseigner.",
+        "dynamic_button": "Comporte un bouton avec un lien contenant une variable, que l’application ne peut pas encore renseigner.",
+        "authentication": "Les modèles de mot de passe à usage unique sont envoyés par le système.",
+        "named_variables": "Utilise des variables nommées, que l’application ne peut pas encore renseigner."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "Ce canal est déconnecté. Reconnectez-le sur le web, puis réessayez.",
+      "planLimit": "La limite de messages de votre forfait est atteinte.",
+      "forbidden": "Vous n’avez pas l’autorisation de faire cela.",
+      "notFound": "Cette conversation n’est plus disponible."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Chat web",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Simulateur"
+    },
+    "sheet": {
+      "close": "Fermer",
+      "save": "Enregistrer les modifications",
+      "noMatch": "Aucun résultat."
+    },
+    "assign": {
+      "title": "Changer d’agent",
+      "search": "Rechercher des agents",
+      "agents": "Agents",
+      "teams": "Équipes",
+      "unassigned": "Non assignée",
+      "noTeam": "Aucune équipe",
+      "you": "{{name}} (vous)",
+      "availability": {
+        "online": "En ligne",
+        "away": "Absent",
+        "busy": "Occupé",
+        "offline": "Hors ligne"
+      },
+      "open_one": "{{count}} ouverte",
+      "open_many": "{{count}} ouvertes",
+      "open_other": "{{count}} ouvertes",
+      "members_one": "{{count}} membre",
+      "members_many": "{{count}} de membres",
+      "members_other": "{{count}} membres",
+      "failed": "Impossible de changer la personne en charge de cette conversation. Réessayez."
+    },
+    "priority": {
+      "title": "Définir la priorité",
+      "low": "Basse",
+      "normal": "Normale",
+      "high": "Haute",
+      "urgent": "Urgente"
+    },
+    "snooze": {
+      "title": "Mettre en veille jusqu’à",
+      "hour": "Dans 1 heure",
+      "threeHours": "Dans 3 heures",
+      "tomorrow": "Demain, 9 h 00",
+      "nextWeek": "Lundi prochain, 9 h 00"
+    },
+    "statusSheet": {
+      "title": "Changer le statut"
+    },
+    "details": {
+      "title": "Détails de la discussion",
+      "contact": "Contact",
+      "openContact": "Ouvrir le contact",
+      "call": "Appeler",
+      "noContact": "Cette conversation n’a pas encore de fiche contact.",
+      "email": "E-mail",
+      "stage": "Étape",
+      "contactStatus": "Statut",
+      "owner": "Propriétaire",
+      "source": "Source",
+      "since": "Contact depuis le",
+      "optedOut": "Ne souhaite plus recevoir de messages",
+      "leadScore": "Score du lead",
+      "actions": "Actions",
+      "status": "Statut",
+      "priority": "Priorité",
+      "labels": "Étiquettes",
+      "none": "Aucune",
+      "agent": "Agent assigné",
+      "team": "Équipe",
+      "you": "Vous",
+      "bot": "Bot",
+      "unassigned": "Non assignée",
+      "info": "Conversation",
+      "channel": "Canal",
+      "window": "Fenêtre de réponse",
+      "windowOpen": "Ouverte jusqu’à {{time}}",
+      "windowClosed": "Fermée",
+      "windowNone": "Aucune limite de temps",
+      "snoozedUntil": "En veille jusqu’à {{time}}",
+      "notes": {
+        "title": "Notes internes",
+        "empty": "Aucune note pour le moment. Seule votre équipe voit les notes.",
+        "label": "Rédiger une note",
+        "add": "Ajouter la note",
+        "delete": "Supprimer",
+        "deleteFor": "Supprimer la note de {{name}}",
+        "failed": "Impossible d’enregistrer la note. Réessayez.",
+        "deleteFailed": "Impossible de supprimer la note. Réessayez.",
+        "unknownAuthor": "Quelqu’un",
+        "tooLong": "Les notes peuvent contenir jusqu’à {{max}} caractères."
+      },
+      "timeline": {
+        "title": "Chronologie",
+        "empty": "Rien ne s’est encore passé.",
+        "system": "Système"
+      },
+      "past": {
+        "title": "Conversations précédentes",
+        "empty": "Aucune autre conversation avec ce contact."
+      },
+      "snooze": "Mettre en veille",
+      "wake": "Réveiller maintenant"
+    },
+    "event": {
+      "created": "Conversation démarrée",
+      "assigned": "Assignée",
+      "reassigned": "Réassignée",
+      "unassigned": "Désassignée",
+      "ai_handoff": "Transmise par l’agent IA",
+      "resolved": "Résolue",
+      "closed": "Fermée",
+      "reopened": "Rouverte",
+      "status_changed": "Statut modifié",
+      "note_added": "Note ajoutée",
+      "snoozed": "Mise en veille",
+      "auto_unsnoozed": "Réveillée à l’heure prévue",
+      "priority_changed": "Priorité modifiée",
+      "tag_added": "Étiquette ajoutée",
+      "tag_removed": "Étiquette retirée",
+      "first_response": "Première réponse envoyée",
+      "sla_breach": "Délai de réponse dépassé"
+    },
+    "replies": {
+      "open": "Réponses enregistrées",
+      "title": "Réponses enregistrées",
+      "search": "Rechercher des réponses enregistrées",
+      "empty": "Aucune réponse enregistrée pour le moment.",
+      "noMatch": "Aucune réponse enregistrée ne correspond à votre recherche.",
+      "failed": "Impossible d’utiliser cette réponse. Réessayez.",
+      "unfilled": "Vérifiez le message : {{list}} n’a pas pu être renseigné."
+    },
+    "note": {
+      "title": "Note privée",
+      "label": "Note privée de {{name}} : {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Appui long pour sélectionner des conversations",
+      "selected_one": "{{count}} sélectionnée",
+      "selected_many": "{{count}} sélectionnées",
+      "selected_other": "{{count}} sélectionnées",
+      "close": "Annuler la sélection",
+      "selectAll": "Tout sélectionner",
+      "read": "Marquer comme lu",
+      "status": "Statut",
+      "assign": "Assigner",
+      "label": "Étiquettes",
+      "priority": "Priorité",
+      "snooze": "Mettre en veille",
+      "statusTitle_one": "Changer le statut de {{count}} conversation",
+      "statusTitle_many": "Changer le statut de {{count}} de conversations",
+      "statusTitle_other": "Changer le statut de {{count}} conversations",
+      "labelTitle_one": "Étiquettes pour {{count}} conversation",
+      "labelTitle_many": "Étiquettes pour {{count}} de conversations",
+      "labelTitle_other": "Étiquettes pour {{count}} conversations",
+      "labelMode": "Action",
+      "labelAdd": "Ajouter l’étiquette",
+      "labelRemove": "Retirer l’étiquette",
+      "labelSearch": "Rechercher des étiquettes",
+      "priorityTitle_one": "Priorité de {{count}} conversation",
+      "priorityTitle_many": "Priorité de {{count}} de conversations",
+      "priorityTitle_other": "Priorité de {{count}} conversations",
+      "snoozeTitle_one": "Mettre {{count}} conversation en veille jusqu’à",
+      "snoozeTitle_many": "Mettre {{count}} de conversations en veille jusqu’à",
+      "snoozeTitle_other": "Mettre {{count}} conversations en veille jusqu’à",
+      "result": "{{done}} mises à jour, {{unchanged}} inchangées, {{failed}} échouées",
+      "resultDismiss": "Fermer"
+    }
+  },
+  "contacts": {
+    "title": "Contacts",
+    "unknown": "Inconnu",
+    "add": "Ajouter un contact",
+    "cancel": "Annuler",
+    "yes": "Oui",
+    "no": "Non",
+    "denied": {
+      "title": "Vous ne pouvez pas voir les contacts",
+      "hint": "Demandez à un administrateur de l’espace de travail de donner à votre rôle l’accès aux contacts.",
+      "createTitle": "Vous ne pouvez pas ajouter de contacts",
+      "createHint": "Demandez à un administrateur de l’espace de travail d’autoriser votre rôle à ajouter des contacts."
+    },
+    "empty": {
+      "title": "Aucun contact",
+      "hint": "Touchez le bouton + pour ajouter votre premier contact.",
+      "filteredTitle": "Aucun contact correspondant",
+      "filteredHint": "Essayez une autre recherche ou effacez les filtres."
+    },
+    "search": {
+      "open": "Rechercher des contacts",
+      "close": "Fermer la recherche",
+      "label": "Recherche",
+      "placeholder": "Nom, téléphone ou e-mail"
+    },
+    "filter": {
+      "open": "Filtrer les contacts",
+      "title": "Filtres",
+      "stage": "Étape du cycle de vie",
+      "owner": "Propriétaire du contact",
+      "ownerSearch": "Rechercher un propriétaire de contact",
+      "unassigned": "Sans propriétaire",
+      "created": "Date de création",
+      "any": "Tous",
+      "marketing": "Messages marketing",
+      "marketingOptions": {
+        "all": "Tous",
+        "subscribed": "Abonnés",
+        "unsubscribed": "Désinscrits"
+      },
+      "source": "Source",
+      "sourceHint": "D’où vient le contact, par exemple import ou api.",
+      "clear": "Tout effacer",
+      "apply": "Appliquer"
+    },
+    "stage": {
+      "new": "Nouveau",
+      "contacted": "Contacté",
+      "qualified": "Qualifié",
+      "application_started": "Candidature commencée",
+      "application_submitted": "Candidature soumise",
+      "interview_scheduled": "Entretien programmé",
+      "offer_received": "Offre reçue",
+      "admission_confirmed": "Admission confirmée",
+      "enrolled": "Inscrit",
+      "lost": "Perdu"
+    },
+    "subscription": {
+      "subscribed": "Abonné",
+      "unsubscribed": "Désabonné",
+      "pending": "En attente"
+    },
+    "form": {
+      "name": "Nom",
+      "phone": "Téléphone",
+      "phoneHint": "Avec l’indicatif du pays, par exemple +919876543210.",
+      "email": "E-mail",
+      "needPhoneOrEmail": "Saisissez un numéro de téléphone ou une adresse e-mail.",
+      "phoneInvalid": "Saisissez le numéro de téléphone avec l’indicatif du pays, par exemple +919876543210.",
+      "emailInvalid": "Saisissez une adresse e-mail valide.",
+      "nameInvalid": "Saisissez un nom de 255 caractères maximum."
+    },
+    "new": {
+      "title": "Nouveau contact",
+      "save": "Enregistrer le contact",
+      "requiredTitle": "Informations requises",
+      "choose": "Choisir",
+      "search": "Rechercher",
+      "unsupported": "{{label}} est requis, mais ne peut pas encore être renseigné ici. Ajoutez ce contact sur le web.",
+      "requiredMissing": "Votre espace de travail exige des informations supplémentaires avant d’enregistrer un contact, et cette application ne peut pas les afficher. Demandez à un administrateur l’accès aux propriétés des contacts, ou ajoutez le contact sur le web."
+    },
+    "edit": {
+      "title": "Modifier le contact",
+      "open": "Modifier le contact",
+      "save": "Enregistrer les modifications",
+      "conflict": "Ce contact a été modifié par quelqu’un d’autre. Vérifiez puis enregistrez à nouveau."
+    },
+    "detail": {
+      "title": "Contact",
+      "notFound": "Ce contact n’existe plus.",
+      "phone": "Téléphone",
+      "email": "E-mail",
+      "call": "Appeler le {{phone}}",
+      "mail": "Écrire à {{email}}",
+      "stage": "Étape du cycle de vie",
+      "status": "Statut",
+      "score": "Score",
+      "source": "Source",
+      "whatsapp": "Abonnement WhatsApp",
+      "marketing": "Messages marketing",
+      "optedOut": "Désinscrit",
+      "optedIn": "Peut recevoir",
+      "lastActivity": "Dernière activité",
+      "noActivity": "Aucune activité pour le moment",
+      "created": "Ajouté le",
+      "customFields": "Champs personnalisés",
+      "actions": {
+        "call": "Appeler",
+        "chat": "Discuter",
+        "email": "E-mail",
+        "sms": "SMS",
+        "tasks": "Tâches",
+        "notes": "Notes"
+      },
+      "tabsLabel": "Sections du contact",
+      "tabs": {
+        "about": "Détails du contact",
+        "activity": "Activités",
+        "files": "Plus"
+      },
+      "activities": {
+        "label": "Vues des activités",
+        "all": "Toutes les activités",
+        "timeline": "Chronologie des activités"
+      },
+      "more": {
+        "account": "Entreprise",
+        "deals": "Opportunités"
+      },
+      "summary": {
+        "title": "Activité",
+        "notes": "Notes",
+        "tasks": "Tâches",
+        "meetings": "Réunions",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "Supprimer le contact",
+        "title": "Supprimer le contact",
+        "message": "Supprimer {{name}} ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "cancel": "Annuler"
+      }
+    },
+    "tags": {
+      "title": "Étiquettes",
+      "none": "Aucune étiquette pour le moment.",
+      "remove": "Retirer l’étiquette {{name}}",
+      "addLabel": "Ajouter une étiquette",
+      "addPlaceholder": "Nom de l’étiquette",
+      "add": "Ajouter l’étiquette"
+    },
+    "row": {
+      "more": "Plus d’actions pour {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Modifier",
+      "swipeDelete": "Supprimer"
+    },
+    "sheet": {
+      "close": "Fermer"
+    },
+    "views": {
+      "open": "Vue des contacts : {{name}}",
+      "title": "Vues",
+      "close": "Fermer les vues",
+      "searchLabel": "Rechercher des vues",
+      "searchPlaceholder": "Rechercher des vues",
+      "systemTitle": "Vues par défaut du système",
+      "customTitle": "Vues personnalisées",
+      "none": "Aucune vue disponible",
+      "failed": "Impossible de charger les vues enregistrées.",
+      "system": {
+        "all": "Tous les contacts",
+        "mine": "Mes contacts",
+        "recent": "Créés récemment",
+        "optedOut": "Désinscrits du marketing"
+      }
+    }
+  },
+  "tasks": {
+    "title": "Tâches",
+    "add": "Ajouter une tâche",
+    "cancel": "Annuler",
+    "unknownContact": "Contact sans nom",
+    "notFound": "Cette tâche n’existe plus.",
+    "priority": {
+      "low": "Basse",
+      "medium": "Moyenne",
+      "high": "Haute"
+    },
+    "status": {
+      "open": "Ouverte",
+      "done": "Terminée",
+      "overdue": "En retard"
+    },
+    "denied": {
+      "title": "Vous ne pouvez pas voir les tâches",
+      "hint": "Demandez à l’administrateur de votre espace de travail de vous donner accès aux tâches.",
+      "createTitle": "Vous ne pouvez pas ajouter de tâches",
+      "createHint": "Demandez à l’administrateur de votre espace de travail de vous autoriser à ajouter des tâches.",
+      "editTitle": "Vous ne pouvez pas modifier les tâches",
+      "editHint": "Demandez à l’administrateur de votre espace de travail de vous autoriser à modifier les tâches."
+    },
+    "planLocked": {
+      "title": "Les tâches ne sont pas incluses dans ce forfait.",
+      "hint": "Demandez à l’administrateur de votre espace de travail de passer à un forfait supérieur."
+    },
+    "empty": {
+      "title": "Aucune tâche trouvée.",
+      "hint": "Les tâches que vous ajoutez apparaissent ici.",
+      "filteredHint": "Essayez un autre filtre ou une autre recherche."
+    },
+    "search": {
+      "open": "Rechercher des tâches",
+      "close": "Fermer la recherche",
+      "label": "Recherche",
+      "placeholder": "Rechercher par titre"
+    },
+    "filter": {
+      "open": "Filtrer les tâches",
+      "title": "Filtrer les tâches",
+      "clear": "Tout effacer",
+      "apply": "Appliquer",
+      "group": {
+        "status": "Statut",
+        "priority": "Priorité",
+        "due": "Échéance",
+        "owner": "Propriétaire"
+      },
+      "status": {
+        "open": "Ouvertes",
+        "done": "Terminées",
+        "all": "Toutes"
+      },
+      "due": {
+        "overdue": "En retard",
+        "today": "Aujourd’hui",
+        "upcoming": "À venir",
+        "none": "Sans date"
+      },
+      "owner": {
+        "mine": "Les miennes",
+        "unassigned": "Non assignées",
+        "all": "Toutes"
+      }
+    },
+    "list": {
+      "conflict": "Cette tâche a été modifiée par quelqu’un d’autre. La liste a été actualisée."
+    },
+    "row": {
+      "markDone": "Marquer {{title}} comme terminée",
+      "reopen": "Rouvrir {{title}}",
+      "more": "Plus d’actions pour {{title}}",
+      "due": "Échéance : {{when}}",
+      "unassigned": "Non assignée"
+    },
+    "actions": {
+      "edit": "Modifier la tâche",
+      "delete": "Supprimer la tâche"
+    },
+    "delete": {
+      "title": "Supprimer la tâche",
+      "message": "Voulez-vous vraiment supprimer cette tâche ?",
+      "confirm": "Supprimer"
+    },
+    "details": {
+      "title": "Détails de la tâche",
+      "edit": "Modifier la tâche",
+      "delete": "Supprimer la tâche",
+      "description": "Description",
+      "priority": "Priorité",
+      "status": "Statut",
+      "owner": "Propriétaire",
+      "relatedTo": "Liée à",
+      "noDescription": "Aucune description",
+      "noDue": "Aucune date d’échéance",
+      "unassigned": "Non assignée",
+      "noContact": "Aucun",
+      "openContact": "Ouvrir {{name}}",
+      "markComplete": "Marquer comme terminée",
+      "reopen": "Rouvrir",
+      "conflict": "Cette tâche a été modifiée par quelqu’un d’autre. Elle a été rechargée."
+    },
+    "form": {
+      "addTitle": "Ajouter une tâche",
+      "editTitle": "Modifier la tâche",
+      "save": "Enregistrer la tâche",
+      "saving": "Enregistrement…",
+      "title": "Titre de la tâche",
+      "description": "Description de la tâche",
+      "priority": "Priorité",
+      "date": "Date (AAAA-MM-JJ)",
+      "dateHint": "Laissez la date et l’heure vides s’il n’y a pas d’échéance. Par exemple 2026-10-31.",
+      "time": "Heure (HH:mm)",
+      "timeHint": "Format 24 heures, par exemple 14:30.",
+      "owner": "Propriétaire",
+      "ownerPick": "Choisir un propriétaire",
+      "ownerMe": "Moi",
+      "ownerNone": "Non assignée",
+      "ownerLoading": "Chargement de votre équipe…",
+      "ownerFailed": "Impossible de charger votre équipe.",
+      "contact": "Contact",
+      "contactLinkOptional": "Lier un contact (facultatif)",
+      "contactNone": "Aucun contact",
+      "contactPick": "Choisir un contact",
+      "contactSearchLabel": "Rechercher des contacts",
+      "contactSearchPlaceholder": "Nom, e-mail ou téléphone",
+      "contactEmpty": "Aucun contact trouvé.",
+      "contactFailed": "Impossible de charger les contacts.",
+      "conflict": "Cette tâche a été modifiée par quelqu’un d’autre. Vérifiez puis enregistrez à nouveau.",
+      "errors": {
+        "titleRequired": "Saisissez un titre de tâche.",
+        "titleTooLong": "Le titre peut contenir 255 caractères au maximum.",
+        "titleNeedsLetter": "Le titre doit contenir au moins une lettre.",
+        "notesTooLong": "La description peut contenir 5000 caractères au maximum.",
+        "dateInvalid": "Saisissez la date au format AAAA-MM-JJ, par exemple 2026-10-31.",
+        "timeInvalid": "Saisissez l’heure au format HH:mm sur 24 heures, par exemple 14:30.",
+        "dateNeeded": "Saisissez aussi la date.",
+        "timeNeeded": "Saisissez aussi l’heure.",
+        "dueInvalid": "Cette date et cette heure d’échéance ne peuvent pas être utilisées.",
+        "assigneeInvalid": "Cette personne ne peut pas recevoir de tâches. Choisissez un autre propriétaire.",
+        "contactInvalid": "Ce contact ne peut pas être lié."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "Notes",
+    "cancel": "Annuler",
+    "loadMore": "Charger plus",
+    "deleteConfirm": "Supprimer",
+    "contactMissing": "Ce contact n’existe plus.",
+    "add": "Ajouter une note",
+    "edited": "Modifiée",
+    "denied": {
+      "title": "Vous ne pouvez pas voir les notes",
+      "hint": "Demandez à un administrateur de l’espace de travail de donner à votre rôle l’accès aux contacts.",
+      "updateTitle": "Vous ne pouvez pas modifier les notes",
+      "updateHint": "Demandez à un administrateur de l’espace de travail d’autoriser votre rôle à modifier les contacts."
+    },
+    "empty": {
+      "title": "Aucune note disponible.",
+      "hint": "Touchez le bouton + pour ajouter la première note."
+    },
+    "menu": {
+      "open": "Actions pour la note du {{date}}",
+      "edit": "Modifier la note",
+      "delete": "Supprimer la note"
+    },
+    "delete": {
+      "title": "Supprimer la note",
+      "message": "Voulez-vous vraiment supprimer cette note ?"
+    },
+    "form": {
+      "addTitle": "Ajouter une note",
+      "editTitle": "Mettre à jour la note",
+      "label": "Note",
+      "placeholder": "Rédigez votre note ici...",
+      "required": "Rédigez une note avant d’enregistrer.",
+      "invalid": "Saisissez une note de 400 caractères maximum.",
+      "counterLabel": "{{used}} caractères utilisés sur {{max}}",
+      "save": "Enregistrer la note",
+      "saving": "Enregistrement de la note",
+      "conflict": "Cette note a été modifiée par quelqu’un d’autre. Vérifiez puis enregistrez à nouveau.",
+      "missing": "Cette note n’existe plus."
+    },
+    "activity": {
+      "notes": "Notes",
+      "tasks": "Tâches",
+      "timeline": "Chronologie",
+      "empty": "Aucune activité pour le moment.",
+      "add": "Ajouter une activité",
+      "types": {
+        "note": "Note",
+        "call": "Appel",
+        "email": "E-mail",
+        "meeting": "Réunion",
+        "task": "Tâche"
+      },
+      "source": {
+        "system": "Système",
+        "bot": "Bot"
+      },
+      "form": {
+        "title": "Ajouter une activité",
+        "type": "Type",
+        "typeHint": "Par exemple note, appel, e-mail ou réunion.",
+        "name": "Titre",
+        "details": "Détails",
+        "save": "Enregistrer l’activité",
+        "typeInvalid": "Saisissez un type de 100 caractères maximum.",
+        "titleInvalid": "Saisissez un titre de 255 caractères maximum.",
+        "detailsInvalid": "Les détails peuvent contenir 10 000 caractères au maximum."
+      }
+    },
+    "files": {
+      "empty": "Aucun fichier disponible.",
+      "delete": "Supprimer le fichier {{name}}",
+      "deleteTitle": "Supprimer le fichier",
+      "deleteMessage": "Voulez-vous vraiment supprimer ce fichier ?"
+    }
+  },
+  "contactMeetings": {
+    "title": "Réunions",
+    "loadMore": "Charger plus",
+    "contactMissing": "Ce contact n’existe plus.",
+    "noDate": "Aucune date définie",
+    "denied": {
+      "title": "Vous ne pouvez pas voir les réunions",
+      "hint": "Demandez à un administrateur de l’espace de travail de donner à votre rôle l’accès aux contacts."
+    },
+    "empty": {
+      "title": "Aucune réunion enregistrée."
+    }
+  },
+  "contactDeals": {
+    "title": "Opportunités",
+    "contactMissing": "Ce contact n’existe plus.",
+    "denied": {
+      "title": "Vous ne pouvez pas voir les opportunités",
+      "hint": "Demandez à un administrateur de l’espace de travail de donner à votre rôle l’accès aux opportunités."
+    },
+    "empty": {
+      "title": "Aucune opportunité pour le moment."
+    }
+  },
+  "contactCompany": {
+    "title": "Entreprise",
+    "missing": "Cette entreprise n’existe plus.",
+    "denied": {
+      "title": "Vous ne pouvez pas voir les entreprises",
+      "hint": "Demandez à un administrateur de l’espace de travail de donner à votre rôle l’accès aux entreprises."
+    },
+    "industry": "Secteur",
+    "size": "Taille",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "website": "Site web",
+    "address": "Adresse",
+    "owner": "Propriétaire",
+    "notes": "Notes"
+  },
+  "contactProps": {
+    "title": "Informations du contact",
+    "search": "Rechercher des champs",
+    "showEmpty": "Afficher les champs vides",
+    "footer": "Vous pouvez personnaliser les propriétés affichées ici depuis votre application web.",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "clear": "Effacer",
+    "yes": "Oui",
+    "no": "Non",
+    "rowHint": "Ouvre l’éditeur",
+    "locked": "Vous ne pouvez pas modifier {{label}}",
+    "webOnly": "{{label}} ne peut être modifié que depuis l’application web.",
+    "masked": "Masqué",
+    "fields": {
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "owner": "Propriétaire du contact",
+      "name": "Nom",
+      "source": "Source",
+      "whatsapp": "Abonnement WhatsApp",
+      "marketing": "Désinscription marketing",
+      "leadScore": "Score du lead",
+      "created": "Création",
+      "lastActivity": "Dernière activité"
+    },
+    "subscription": {
+      "subscribed": "Abonné",
+      "unsubscribed": "Désabonné",
+      "pending": "En attente"
+    },
+    "editor": {
+      "title": "Modifier {{label}}",
+      "date": "Date",
+      "dateHint": "Année-mois-jour, par exemple 2026-10-12.",
+      "time": "Heure",
+      "timeHint": "Format 24 heures, par exemple 14:30.",
+      "phoneHint": "Avec l’indicatif du pays, par exemple +919876543210.",
+      "noOptions": "Aucune option à choisir."
+    },
+    "error": {
+      "required": "{{label}} est requis.",
+      "name": "Saisissez un nom de 255 caractères maximum.",
+      "email": "Saisissez une adresse e-mail valide.",
+      "phone": "Saisissez le numéro de téléphone avec l’indicatif du pays, par exemple +919876543210.",
+      "needPhoneOrEmail": "Un contact doit avoir un numéro de téléphone ou une adresse e-mail.",
+      "text": "Saisissez {{max}} caractères au maximum.",
+      "number": "Saisissez un nombre.",
+      "whole": "Saisissez un nombre entier.",
+      "range": "Saisissez un nombre de 0 à {{max}}.",
+      "url": "Saisissez un lien commençant par http:// ou https://",
+      "date": "Saisissez une date valide au format AAAA-MM-JJ.",
+      "time": "Saisissez une heure valide au format HH:mm.",
+      "option": "Choisissez l’une des options.",
+      "invalid": "Cette valeur n’est pas acceptée. Vérifiez-la et réessayez.",
+      "notEditable": "Cette propriété ne peut pas être modifiée.",
+      "requiredMissing": "Une propriété requise n’a pas de valeur. Renseignez-la avant d’enregistrer.",
+      "conflict": "Ce contact a été modifié par quelqu’un d’autre. Vérifiez puis enregistrez à nouveau.",
+      "lostReasonRequired": "Indiquez pourquoi ce contact a été perdu.",
+      "statusMismatch": "Ce statut n’appartient pas à cette étape du cycle de vie."
+    },
+    "owner": {
+      "title": "Assigner à",
+      "unassigned": "Non assigné",
+      "none": "Personne à qui assigner ce contact.",
+      "failed": "Impossible de changer le propriétaire. Réessayez."
+    },
+    "lifecycle": {
+      "stage": "Étape du cycle de vie",
+      "status": "Statut",
+      "change": "Changer l’étape du cycle de vie",
+      "changeStatus": "Changer le statut",
+      "dropdownHint": "Ouvre la liste de choix",
+      "lostReason": "Motif de perte",
+      "otherReason": "Autre",
+      "otherLabel": "Décrivez le motif"
+    }
+  },
+  "summary": {
+    "contacts": "Contacts",
+    "contactsNote": "Ajoutés sur cette période",
+    "tasks": "Tâches",
+    "tasksNote": "Ouvertes actuellement",
+    "messages": "Messages",
+    "sentNote": "Envoyés",
+    "receivedNote": "Reçus",
+    "conversations": "Conversations",
+    "conversationsNote": "Ouvertes et en attente, en ce moment",
+    "status": {
+      "all": "Actives",
+      "mine": "Les miennes",
+      "unassigned": "Non assignées",
+      "assigned": "Assignées",
+      "unread": "Non lues",
+      "archived": "Archivées"
+    },
+    "allMessages": {
+      "title": "Tous les messages",
+      "sent": "Envoyés",
+      "delivered": "Délivrés",
+      "received": "Reçus",
+      "read": "Lus",
+      "failed": "Échoués"
+    },
+    "moreTitle": "Plus depuis votre espace de travail"
+  },
+  "dashDate": {
+    "title": "Rechercher par calendrier",
+    "close": "Fermer le calendrier",
+    "apply": "Appliquer",
+    "reset": "Réinitialiser",
+    "presets": "Périodes rapides",
+    "pill": {
+      "label": "Période : du {{from}} au {{to}}",
+      "hint": "Ouvre le calendrier pour modifier les dates"
+    },
+    "selection": {
+      "label": "Du {{from}} au {{to}}",
+      "pickFirst": "Choisissez le premier jour",
+      "pickLast": "Choisissez le dernier jour"
+    },
+    "preset": {
+      "last7": "7 derniers jours",
+      "last30": "30 derniers jours",
+      "last90": "90 derniers jours",
+      "yesterday": "Hier",
+      "today": "Aujourd’hui"
+    },
+    "calendar": {
+      "previousMonth": "Mois précédent",
+      "nextMonth": "Mois suivant",
+      "start": "Début de la période",
+      "end": "Fin de la période",
+      "inRange": "Dans la période",
+      "today": "Aujourd’hui"
+    }
+  },
+  "permissions": {
+    "channelName": "Messages et mises à jour",
+    "settingsHint": "Touchez Autorisations, puis activez ce dont vous avez besoin.",
+    "names": {
+      "notifications": "Notifications",
+      "calls": "Appels téléphoniques",
+      "camera": "Appareil photo",
+      "callPopup": "Fenêtre d’appel (affichage par-dessus les autres applications)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "Contact",
+      "close": "Fermer",
+      "ongoingTitle": "Appel en cours",
+      "endedTitle": "Appel terminé",
+      "endedText": "Touchez pour enregistrer votre appel avec {{name}}.",
+      "channelOngoing": "Appels en cours",
+      "channelEnded": "Résumés d’appels"
+    },
+    "summary": {
+      "title": "Ajouter un appel",
+      "contact": "Contact",
+      "type": "Type d’appel",
+      "outbound": "Sortant",
+      "status": "Statut de l’appel sortant",
+      "completed": "Terminé",
+      "notAnswered": "Sans réponse",
+      "startTime": "Heure de début de l’appel",
+      "duration": "Durée de l’appel",
+      "durationHint": "Minutes et secondes, par exemple 02:30",
+      "durationInvalid": "Saisissez la durée au format minutes:secondes, par exemple 02:30.",
+      "subject": "Objet",
+      "subjectDefault": "Appel sortant vers {{name}}",
+      "subjectInvalid": "Saisissez un objet de 255 caractères maximum.",
+      "notes": "Description",
+      "save": "Enregistrer l’appel",
+      "skip": "Passer",
+      "contactMissing": "Cet appel n’a pas de contact auquel l’associer.",
+      "denied": "Votre rôle ne peut pas modifier les contacts, cet appel ne peut donc pas être enregistré.",
+      "purpose": "Objectif de l’appel",
+      "purposeNone": "-Aucun-",
+      "result": "Résultat de l’appel",
+      "purposes": {
+        "prospecting": "Prospection",
+        "administrative": "Administratif",
+        "negotiation": "Négociation",
+        "demo": "Démo",
+        "project": "Projet",
+        "desk": "Support"
+      }
+    }
+  }
+}

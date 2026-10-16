@@ -1,0 +1,1466 @@
+{
+  "common": {
+    "loading": "טוען…",
+    "retry": "נסו שוב",
+    "signOut": "התנתקות",
+    "clear": "ניקוי",
+    "back": "חזרה",
+    "filters": {
+      "clearAll": "ניקוי הכול",
+      "apply": "החל",
+      "noMatch": "לא נמצאו תוצאות לחיפוש."
+    }
+  },
+  "errors": {
+    "generic": "משהו השתבש. נסו שוב.",
+    "network": "אי אפשר להתחבר לשרת. בדקו את החיבור ונסו שוב.",
+    "timeout": "השרת לקח יותר מדי זמן להגיב. נסו שוב.",
+    "outdatedApp": "גרסת האפליקציה הזו אינה עדכנית. עדכנו אותה.",
+    "tooManyRequests": "יותר מדי ניסיונות. המתינו רגע ונסו שוב.",
+    "captchaUnsupported": "נדרשת בדיקת אבטחה שהאפליקציה עדיין לא יכולה להשלים. השתמשו באתר במקום."
+  },
+  "auth": {
+    "welcomeBack": "ברוכים השבים",
+    "welcomeSubtitle": "הזינו את הפרטים שלכם כדי לחזור לסביבת העבודה.",
+    "tagline": "כל שיחות הלקוחות, בסביבת עבודה רגועה אחת",
+    "taglineCaption": "שידורים, אוטומציות ותיבת הודעות משותפת לצוותים שעונים מהר.",
+    "email": "אימייל",
+    "emailPlaceholder": "you@company.com",
+    "password": "סיסמה",
+    "passwordPlaceholder": "הזינו את הסיסמה",
+    "showPassword": "הצגת הסיסמה",
+    "hidePassword": "הסתרת הסיסמה",
+    "signInSubmit": "התחברות",
+    "emailInvalid": "הזינו כתובת אימייל תקינה.",
+    "passwordRequired": "הזינו את הסיסמה.",
+    "newHere": "חדשים כאן?",
+    "createAccount": "יצירת חשבון",
+    "legalSignIn": "בהתחברות אתם מסכימים ל<terms>תנאי השימוש</terms> ול<privacy>מדיניות הפרטיות</privacy> שלנו.",
+    "mfaTitle": "אימות דו-שלבי",
+    "mfaHint": "הזינו את הקוד בן 6 הספרות מאפליקציית האימות.",
+    "mfaCode": "קוד אימות",
+    "mfaSubmit": "אימות",
+    "workspaceTitle": "בחירת סביבת עבודה",
+    "workspaceHint": "החשבון שלכם שייך ליותר מסביבת עבודה אחת.",
+    "invalidCredentials": "האימייל או הסיסמה שגויים.",
+    "accountLocked": "החשבון הזה נעול זמנית. נסו שוב מאוחר יותר.",
+    "accountSuspended": "החשבון הזה הושעה.",
+    "mfaInvalid": "הקוד שגוי. נסו שוב.",
+    "mfaExpired": "תוקף ההתחברות פג. התחילו מחדש."
+  },
+  "signUp": {
+    "tagline": "הקמת סביבת העבודה שלכם",
+    "taglineCaption": "צרו את סביבת העבודה, ואז הוסיפו את הצוות ואת הערוץ הראשון.",
+    "title": "יצירת חשבון",
+    "subtitle": "כמה פרטים וסביבת העבודה מוכנה.",
+    "fullName": "שם מלא",
+    "fullNamePlaceholder": "השם שלכם",
+    "email": "אימייל עבודה",
+    "orgName": "שם סביבת העבודה",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "הצוות שלכם מתחבר דרך הכתובת {{slug}}.",
+    "orgNameHintEmpty": "זה השם שהצוות שלכם רואה.",
+    "customiseSlug": "בחירת כתובת מותאמת לסביבת העבודה",
+    "orgSlug": "כתובת סביבת העבודה",
+    "orgSlugPlaceholder": "your-workspace",
+    "orgSlugHint": "אותיות, מספרים, מקף או קו תחתון. הצוות שלכם מזין אותה בעת ההתחברות.",
+    "phone": "מספר נייד",
+    "phoneHint": "אנחנו משתמשים בו לאימות החשבון ולעדכונים חשובים.",
+    "referral": "קוד הפניה (אופציונלי)",
+    "referralPlaceholder": "יש לכם קוד מחבר?",
+    "confirmPassword": "אימות סיסמה",
+    "passwordPlaceholder": "צרו סיסמה",
+    "confirmPasswordPlaceholder": "הזינו שוב את הסיסמה",
+    "passwordMinLength": "אורך מינימלי: {{min}}.",
+    "passwordMixedCase": "שלבו אותיות גדולות וקטנות.",
+    "passwordNumber": "כללו ספרה.",
+    "passwordSymbol": "כללו סימן מיוחד.",
+    "agree": "אני מסכים/ה ל<terms>תנאי השימוש</terms> ול<privacy>מדיניות הפרטיות</privacy>.",
+    "submit": "יצירת חשבון",
+    "haveAccount": "כבר יש לכם חשבון?",
+    "signIn": "התחברות",
+    "closedBody": "ההרשמה סגורה. בקשו הזמנה ממנהל.",
+    "closedBack": "חזרה להתחברות",
+    "validation": {
+      "fullName": "הזינו את השם המלא.",
+      "orgName": "תנו שם לסביבת העבודה (לפחות 2 תווים).",
+      "orgSlug": "הזינו את כתובת סביבת העבודה (אותיות, מספרים, מקף או קו תחתון).",
+      "phoneRequired": "הזינו את מספר הנייד.",
+      "phoneInvalid": "הזינו מספר טלפון תקין, עם קידומת המדינה אם הוא אינו מקומי.",
+      "passwordMismatch": "שתי הסיסמאות אינן תואמות.",
+      "passwordInvalid": "הזינו סיסמה שעומדת בדרישות המוצגות.",
+      "acceptTerms": "יש לאשר את התנאים כדי להמשיך.",
+      "referralCode": "קודי הפניה כוללים אותיות ומספרים בלבד."
+    },
+    "errors": {
+      "emailTaken": "האימייל הזה כבר בשימוש בסביבת העבודה הזו.",
+      "slugTaken": "כתובת סביבת העבודה הזו כבר תפוסה.",
+      "passwordPolicy": "הסיסמה הזו אינה עומדת במדיניות האבטחה:",
+      "policyCommon": "הסיסמה הזו קלה מדי לניחוש.",
+      "otpSendFailed": "לא הצלחנו לשלוח את קוד האימות. בדקו את המספר ונסו שוב.",
+      "signupExpired": "התחילו את ההרשמה מחדש."
+    },
+    "otp": {
+      "title": "בדקו את הוואטסאפ",
+      "subtitle": "הזינו את הקוד החד-פעמי ששלחנו כדי לסיים את יצירת סביבת העבודה.",
+      "sentTo": "שלחנו קוד אל {{phone}}",
+      "code": "קוד אימות",
+      "expiresIn": "תוקף הקוד יפוג בעוד {{time}}.",
+      "expired": "תוקף הקוד פג. בקשו קוד חדש.",
+      "verify": "אימות והמשך",
+      "resend": "שליחת קוד מחדש",
+      "resendIn": "שליחת קוד מחדש בעוד {{time}}",
+      "resent": "קוד חדש בדרך לוואטסאפ שלכם.",
+      "wrongNumber": "מספר שגוי? חזרה",
+      "addressTakenHint": "כתובת סביבת העבודה נתפסה בזמן האימות. בחרו כתובת אחרת ונשלח לכם קוד חדש.",
+      "codeInvalid": "הזינו את הקוד בן {{length}} הספרות.",
+      "invalid": "הקוד שגוי. נסו שוב.",
+      "tooMany": "יותר מדי ניסיונות. בקשו קוד חדש.",
+      "cooldown": "המתינו רגע לפני שתבקשו קוד נוסף."
+    }
+  },
+  "dashboard": {
+    "kicker": "לוח בקרה למפעיל",
+    "synced": "חי · סונכרן לפני {{s}} שנ׳",
+    "greeting": {
+      "morning": "בוקר טוב, {{name}}.",
+      "afternoon": "צהריים טובים, {{name}}.",
+      "evening": "ערב טוב, {{name}}."
+    },
+    "calm": "סביבת העבודה רגועה.",
+    "running_one": "קמפיין אחד פועל.",
+    "running_two": "שני קמפיינים פועלים.",
+    "running_other": "{{count}} קמפיינים פועלים.",
+    "subline_one": "{{date}} - {{range}}: {{sent}} הודעות יוצאות, שיעור מסירה של {{rate}}% במכשיר מחובר אחד.",
+    "subline_two": "{{date}} - {{range}}: {{sent}} הודעות יוצאות, שיעור מסירה של {{rate}}% בשני מכשירים מחוברים.",
+    "subline_other": "{{date}} - {{range}}: {{sent}} הודעות יוצאות, שיעור מסירה של {{rate}}% ב-{{count}} מכשירים מחוברים.",
+    "sublineOfficial": "{{date}} - {{range}}: {{sent}} הודעות יוצאות, שיעור מסירה של {{rate}}%.",
+    "setupBanner": "הגדרת סביבת העבודה לא הסתיימה. סיימו אותה באתר כדי לפתוח את שאר החשבון.",
+    "range": {
+      "label": "טווח תאריכים",
+      "short": {
+        "24h": "24 שע׳",
+        "7d": "7 ימים",
+        "30d": "30 ימים",
+        "qtd": "רבעון עד כה"
+      },
+      "long": {
+        "24h": "24 השעות האחרונות",
+        "7d": "7 הימים האחרונים",
+        "30d": "30 הימים האחרונים",
+        "qtd": "הרבעון עד היום"
+      }
+    },
+    "trend": {
+      "up": "עלייה של {{value}} לעומת התקופה הקודמת",
+      "down": "ירידה של {{value}} לעומת התקופה הקודמת",
+      "flat": "ללא שינוי לעומת התקופה הקודמת"
+    },
+    "kpi": {
+      "sent": "הודעות שנשלחו · {{range}}",
+      "sentLegend": "{{delivered}} נמסרו · {{failed}} נכשלו",
+      "sparkline": "הודעות שנשלחו בכל שעה ב-20 השעות האחרונות, מהישנה לחדשה",
+      "readRate": "שיעור קריאה",
+      "readMini": {
+        "sent": "נשלחו",
+        "delivered": "נמסרו",
+        "read": "נקראו"
+      }
+    },
+    "contacts": {
+      "title": "אנשי קשר פעילים",
+      "subscribed": "רשומים",
+      "optedIn": "הסכימו לקבל הודעות",
+      "blocked": "חסומים"
+    },
+    "wallet": {
+      "title": "יתרת ארנק",
+      "payPerMessage": "תשלום לפי הודעה"
+    },
+    "autopilot": {
+      "kicker": "להספיק יותר",
+      "title": "העבירו את התשובות לטייס אוטומטי",
+      "body": "בנו תהליך או הפעילו קמפיין כדי להגיע ליותר לקוחות באופן אוטומטי."
+    },
+    "pipeline": {
+      "kicker": "צינור מכירות",
+      "open": "צינור פתוח",
+      "deals": "עסקאות פתוחות",
+      "won": "נסגרו החודש",
+      "winRate": "שיעור הצלחה"
+    },
+    "throughput": {
+      "title": "קצב הודעות",
+      "subtitle": {
+        "24h": "יוצאות, נמסרו ונכשלו, לפי שעה, 24 השעות האחרונות",
+        "7d": "יוצאות, נמסרו ונכשלו, לפי יום, 7 הימים האחרונים",
+        "30d": "יוצאות, נמסרו ונכשלו, לפי יום, 30 הימים האחרונים",
+        "qtd": "יוצאות, נמסרו ונכשלו, לפי יום, הרבעון עד היום"
+      },
+      "peak": "שעת שיא {{when}} · {{n}} הודעות",
+      "sent": "נשלחו",
+      "delivered": "נמסרו",
+      "failed": "נכשלו",
+      "avgHour": "ממוצע לשעה",
+      "replies": "תגובות",
+      "replyRate": "שיעור תגובה",
+      "summary": "{{sent}} נשלחו, {{delivered}} נמסרו ו-{{failed}} נכשלו בתקופה הזו.",
+      "subtitleCustom": "לפי יום · {{range}}"
+    },
+    "inbox": {
+      "title": "תיבת הודעות חיה",
+      "unread": "{{n}} שלא נקראו",
+      "oldest": "הישנה ביותר {{when}}",
+      "recent": "שיחות אחרונות",
+      "empty": "אין שיחות עדיין."
+    },
+    "campaigns": {
+      "title": "קמפיינים פעילים",
+      "summary": "{{running}} פועלים - {{scheduled}} מתוזמנים - {{paused}} מושהים",
+      "total": "{{n}} בסך הכול",
+      "untitled": "קמפיין ללא שם",
+      "delivered": "{{done}} / {{total}} נמסרו",
+      "emptyTitle": "אין קמפיינים פעילים",
+      "emptyBody": "צרו קמפיין כדי להתחיל לשלוח לקבוצת אנשי קשר.",
+      "status": {
+        "sending": "שולח",
+        "scheduled": "מתוזמן",
+        "paused": "מושהה",
+        "failed": "נכשל",
+        "completed": "הושלם"
+      }
+    },
+    "devices": {
+      "title": "מכשירים מחוברים",
+      "summary": "{{total}} מתוך {{cap}} משבצות בשימוש - {{online}} מחוברים",
+      "emptyTitle": "אין מכשירים מחוברים",
+      "emptyBody": "צרפו מספר וואטסאפ כדי להתחיל לשלוח.",
+      "unzoned": "ללא אזור",
+      "per24h": "{{n}}/24 שע׳",
+      "deliv": "מסירה",
+      "free_one": "משבצת מכשיר אחת פנויה",
+      "free_two": "שתי משבצות מכשיר פנויות",
+      "free_other": "{{count}} משבצות מכשיר פנויות",
+      "state": {
+        "online": "מחובר",
+        "connecting": "מתחבר",
+        "offline": "לא מחובר"
+      }
+    },
+    "templates": {
+      "title": "התבניות המובילות",
+      "subtitle": "לפי היקף שליחה - הטווח שנבחר",
+      "count_one": "תבנית אחת",
+      "count_two": "שתי תבניות",
+      "count_other": "{{count}} תבניות",
+      "empty": "אין תבניות עדיין.",
+      "sent": "נשלחו",
+      "delivered": "נמסרו",
+      "read": "נקראו",
+      "readRate": "שיעור קריאה",
+      "status": {
+        "approved": "מאושרת",
+        "inReview": "בבדיקה",
+        "rejected": "נדחתה"
+      }
+    },
+    "activity": {
+      "title": "יומן פעילות",
+      "subtitle": "אירועי סביבת העבודה",
+      "empty": "לא נרשמה פעילות אחרונה בסביבת העבודה הזו.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_one": "חשבון אחד",
+      "accounts_two": "שני חשבונות",
+      "accounts_other": "{{count}} חשבונות",
+      "connected": "מחובר",
+      "tile": {
+        "needReply": "ממתינות לתשובה",
+        "openChats": "צ׳אטים פתוחים",
+        "dmsIn": "הודעות ישירות נכנסות · 7 ימים",
+        "dmsOut": "הודעות ישירות שנשלחו · 7 ימים",
+        "followers": "עוקבים"
+      }
+    },
+    "flows": {
+      "title": "תהליכי אוטומציה",
+      "summary": "{{active}} פעילים · {{subscribers}} מנויים",
+      "empty": "אין תהליכים עדיין.",
+      "meta": "טריגר {{trigger}} · {{steps}} שלבים · {{subs}} מנויים",
+      "statusActive": "פעיל",
+      "statusPaused": "מושהה",
+      "stat": {
+        "flows": "תהליכים",
+        "active": "פעילים",
+        "subscribers": "מנויים"
+      }
+    },
+    "integrations": {
+      "title": "אינטגרציות",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}} אירועים / 7 ימים",
+      "connected": {
+        "woocommerce": "מחובר",
+        "shopify": "מחובר",
+        "google_sheets": "מפתח API הונפק",
+        "meta_catalog": "הקטלוג מקושר"
+      },
+      "notConnected": "לא מחובר",
+      "connectedLabel": "מחובר"
+    },
+    "funnel": {
+      "title": "משפך מעורבות",
+      "stage": {
+        "messaged": "אנשי קשר שנשלחה אליהם הודעה",
+        "delivered": "נמסרו",
+        "replied": "הגיבו",
+        "goalCompleted": "המטרה הושגה"
+      },
+      "stageLabel": "{{stage}}: {{n}} אנשי קשר, {{pct}}% מאנשי הקשר שנשלחה אליהם הודעה",
+      "activity": {
+        "title": "פעילות בשיחות",
+        "inbound_one": "הודעה נכנסת אחת",
+        "inbound_two": "שתי הודעות נכנסות",
+        "inbound_other": "{{count}} הודעות נכנסות",
+        "responding_one": "איש קשר אחד שהגיב",
+        "responding_two": "שני אנשי קשר שהגיבו",
+        "responding_other": "{{count}} אנשי קשר שהגיבו",
+        "perContact": "{{value}} תגובות לכל איש קשר שהגיב"
+      },
+      "comparison": {
+        "title": "בהשוואה לתקופה הקודמת",
+        "replyRate": "שיעור תגובה"
+      }
+    },
+    "ago": {
+      "minute_one": "לפני דקה",
+      "minute_two": "לפני שתי דקות",
+      "minute_other": "לפני {{count}} דקות",
+      "hour_one": "לפני שעה",
+      "hour_two": "לפני שעתיים",
+      "hour_other": "לפני {{count}} שעות",
+      "day_one": "לפני יום",
+      "day_two": "לפני יומיים",
+      "day_other": "לפני {{count}} ימים"
+    },
+    "error": {
+      "forbidden": "לתפקיד שלכם ({{role}}) אין גישה ללוח הבקרה.",
+      "generic": "אי אפשר היה לטעון את הנתונים. נסו שוב בעוד רגע.",
+      "locked": "החבילה שלכם אינה כוללת ניתוחים."
+    },
+    "greetingNoName": {
+      "morning": "בוקר טוב.",
+      "afternoon": "צהריים טובים.",
+      "evening": "ערב טוב."
+    },
+    "views": {
+      "label": "תצוגת לוח בקרה",
+      "summary": "סיכום",
+      "agent": "נציג",
+      "bot": "בוט"
+    },
+    "agents": {
+      "title": "ביצועי נציגים",
+      "conversations": "שיחות",
+      "resolved": "נפתרו",
+      "firstReply": "תגובה ראשונה",
+      "resolution": "פתרון",
+      "csat": "דירוג",
+      "minutes": "{{value}} דק׳",
+      "hours": "{{value}} שע׳",
+      "days": "{{value}} י׳",
+      "empty": "בתקופה הזו לא הוקצתה שיחה לאף אחד.",
+      "noAccess": "לתפקיד שלכם ({{role}}) אין גישה לניתוחי נציגים.",
+      "everyone": "כל הנציגים",
+      "pickerLabel": "נציג",
+      "pickerPlaceholder": "בחירת נציג",
+      "statusTitle": "סטטוס שיחות",
+      "avgResolution": "זמן פתרון ממוצע",
+      "avgDuration": "משך שיחה ממוצע",
+      "byAgentTitle": "שיחות לפי נציג",
+      "byAgentPicker": "נציג לרשימת הסטטוסים",
+      "status": {
+        "open": "פתוחות",
+        "pending": "ממתינות",
+        "closed": "סגורות",
+        "assigned": "משויכות",
+        "unassigned": "לא משויכות",
+        "unattended": "ללא טיפול"
+      }
+    },
+    "bots": {
+      "activeFlows": "תהליכים פעילים",
+      "ofTotal": "מתוך {{total}} תהליכים",
+      "subscribers": "מנויים",
+      "subscribersNote": "בכל התהליכים"
+    }
+  },
+  "tabs": {
+    "dashboard": "לוח בקרה",
+    "inbox": "תיבת הודעות",
+    "contacts": "אנשי קשר",
+    "menu": "תפריט"
+  },
+  "menu": {
+    "title": "חשבון",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "סביבת עבודה",
+    "inbox": "תיבת הודעות",
+    "contacts": "אנשי קשר",
+    "noAccess": "אין לכם גישה לכאן. בקשו ממנהל סביבת העבודה לפתוח אותה.",
+    "version": "גרסה {{version}}",
+    "signOutTitle": "התנתקות",
+    "signOutConfirm": "בטוחים שברצונכם להתנתק?",
+    "signOutNo": "לא",
+    "signOutYes": "כן, התנתק",
+    "tasks": "משימות",
+    "dashboard": "לוח בקרה",
+    "allContacts": "כל אנשי הקשר",
+    "newContact": "איש קשר חדש",
+    "sectionAccount": "חשבון",
+    "manageProfile": "ניהול פרופיל",
+    "preferences": "העדפות",
+    "devicePermissions": "הרשאות המכשיר",
+    "devicePermissionsHint": "פתיחת הגדרות האפליקציה בטלפון",
+    "about": "אודות",
+    "dataSecurity": "נתונים ואבטחה",
+    "checkUpdates": "בדיקת עדכונים",
+    "updates": {
+      "off": "הגרסה הזו של האפליקציה אינה מקבלת עדכונים בעצמה. התקינו את הגרסה החדשה ביותר כדי לקבל שינויים.",
+      "latest": "יש לכם את הגרסה העדכנית ביותר.",
+      "ready": "עדכון מוכן. הקישו שוב כדי להפעיל מחדש ולהשתמש בו.",
+      "failed": "אי אפשר היה לבדוק עדכונים. נסו שוב בעוד רגע."
+    },
+    "profile": {
+      "title": "ניהול פרופיל",
+      "fullName": "שם מלא",
+      "displayName": "שם תצוגה",
+      "displayNameHint": "מוצג לצוות שלכם במקום השם המלא. השאירו ריק כדי להשתמש בשם המלא.",
+      "phone": "טלפון",
+      "phoneHint": "עם קידומת המדינה, לדוגמה +919876543210.",
+      "email": "אימייל",
+      "pendingEmail": "שינוי ל-{{email}} ממתין לאישור שלכם.",
+      "timezone": "אזור הזמן של סביבת העבודה",
+      "save": "שמירת שינויים",
+      "cancel": "ביטול",
+      "nameRequired": "הזינו את השם שלכם.",
+      "nameTooLong": "השתמשו ב-120 תווים לכל היותר.",
+      "phoneInvalid": "הזינו את מספר הטלפון עם קידומת המדינה, לדוגמה +919876543210."
+    },
+    "appearance": {
+      "title": "מראה",
+      "light": "מצב בהיר",
+      "dark": "מצב כהה",
+      "device": "לפי הגדרות המכשיר",
+      "hint": "נשמר בחשבון שלכם.",
+      "failed": "אי אפשר היה לשמור את הבחירה. נסו שוב."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "תצוגת תיבת הודעות",
+      "all": "הכול",
+      "mine": "שלי",
+      "unassigned": "לא משויכות",
+      "unread": "לא נקראו"
+    },
+    "search": {
+      "open": "חיפוש שיחות",
+      "close": "סגירת החיפוש",
+      "label": "חיפוש",
+      "placeholder": "שם, מספר או הודעה"
+    },
+    "filter": {
+      "open": "מסננים",
+      "sheet": "סטטוס שיחה",
+      "close": "סגירה",
+      "applied": "מסננים פעילים",
+      "clearAll": "ניקוי הכול",
+      "remove": "הסרת מסנן: {{name}}",
+      "statusChip": "סטטוס: {{name}}",
+      "searchChip": "חיפוש: {{q}}",
+      "title": "מסננים",
+      "view": "תצוגה",
+      "viewActive": "שיחות",
+      "viewArchived": "בארכיון",
+      "channel": "ערוץ",
+      "allChannels": "כל הערוצים",
+      "labels": "תוויות",
+      "searchLabels": "חיפוש תוויות",
+      "channelChip": "ערוץ: {{name}}",
+      "labelsChip": "תוויות: {{names}}",
+      "archivedChip": "בארכיון"
+    },
+    "statusFilter": {
+      "default": "פתוחות וממתינות",
+      "open": "פתוחות",
+      "pending": "ממתינות",
+      "snoozed": "בהשהיה",
+      "resolved": "נפתרו",
+      "closed": "סגורות",
+      "all": "כל הסטטוסים"
+    },
+    "status": {
+      "open": "פתוחה",
+      "pending": "ממתינה",
+      "snoozed": "בהשהיה",
+      "resolved": "נפתרה",
+      "closed": "סגורה",
+      "spam": "ספאם"
+    },
+    "list": {
+      "label": "שיחות",
+      "emptyTitle": "אין שיחות",
+      "emptyHint": "הודעות מהלקוחות שלכם יופיעו כאן.",
+      "emptyFilteredHint": "שום דבר לא תואם למסננים האלה. נסו לנקות אותם.",
+      "noMore": "אין עוד שיחות",
+      "loadingMore": "טוען עוד שיחות",
+      "noAccessTitle": "אין גישה לתיבת ההודעות",
+      "noAccessBody": "התפקיד שלכם אינו יכול לקרוא שיחות. בקשו ממנהל סביבת העבודה לשנות זאת."
+    },
+    "row": {
+      "noMessages": "אין הודעות עדיין",
+      "unread_one": "הודעה אחת שלא נקראה",
+      "unread_two": "שתי הודעות שלא נקראו",
+      "unread_other": "{{count}} הודעות שלא נקראו",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "משויכת אל {{name}}",
+      "media": "מדיה"
+    },
+    "time": {
+      "am": "לפנה״צ",
+      "pm": "אחה״צ",
+      "yesterday": "אתמול"
+    },
+    "thread": {
+      "messages": "הודעות",
+      "loadingOlder": "טוען הודעות קודמות",
+      "emptyTitle": "אין הודעות עדיין",
+      "emptyHint": "הודעות בשיחה הזו יופיעו כאן.",
+      "noAccessTitle": "אין גישה לשיחה הזו",
+      "noAccessBody": "התפקיד שלכם אינו יכול לקרוא שיחות.",
+      "resolve": "סימון כנפתרה",
+      "reopen": "פתיחה מחדש",
+      "call": "התקשרות אל {{phone}}",
+      "pictureOpen": "פתיחת התמונה במסך מלא",
+      "pictureFull": "תמונה",
+      "pictureClose": "סגירת התמונה",
+      "windowClosed": "חלון התגובה של 24 שעות נסגר. שלחו תבנית במקום.",
+      "conflict": "מישהו אחר שינה את השיחה הזו. הגרסה העדכנית נטענה, נסו שוב.",
+      "statusInvalid": "אי אפשר להעביר את השיחה הזו לסטטוס הזה.",
+      "window": {
+        "left": "חלון תגובה: נותרו {{hours}} שע׳ ו-{{minutes}} דק׳",
+        "closed": "חלון התגובה נסגר"
+      },
+      "menu": {
+        "open": "פעולות נוספות",
+        "close": "סגירת התפריט",
+        "assignToMe": "שיוך אליי",
+        "details": "הצגת פרטים",
+        "status": "שינוי סטטוס",
+        "agent": "שיוך נציג"
+      },
+      "bot": {
+        "notice": "זו שיחת בוט.",
+        "assignSelf": "שיוך אליכם"
+      },
+      "labels": {
+        "open": "שיוך תוויות",
+        "title": "שיוך תוויות",
+        "close": "סגירה",
+        "empty": "אין תוויות עדיין.",
+        "emptyCreate": "אין תוויות עדיין. הקלידו שם למטה כדי ליצור אחת.",
+        "newLabel": "תווית חדשה",
+        "add": "הוספה",
+        "failed": "אי אפשר היה לשנות את התוויות. נסו שוב."
+      },
+      "assignment": {
+        "none": "לא משויכת",
+        "team": "צוות: {{name}}",
+        "failed": "אי אפשר היה לשנות את השיחה. נסו שוב.",
+        "you": "משויכת אליכם",
+        "to": "משויכת אל {{name}}"
+      }
+    },
+    "message": {
+      "labelIn": "התקבלה: {{text}}, {{time}}",
+      "labelOut": "נשלחה על ידכם: {{text}}, {{time}}, {{status}}",
+      "deleted": "ההודעה הזו נמחקה",
+      "retry": "ניסיון שליחה חוזר",
+      "mediaPending": "הקובץ עדיין בהורדה.",
+      "mediaFailed": "אי אפשר היה להוריד את הקובץ."
+    },
+    "kind": {
+      "text": "הודעה",
+      "image": "תמונה",
+      "video": "וידאו",
+      "audio": "אודיו",
+      "voice": "הודעה קולית",
+      "document": "מסמך",
+      "sticker": "מדבקה",
+      "location": "מיקום",
+      "contact": "איש קשר",
+      "template": "תבנית",
+      "reaction": "תגובה",
+      "interactive": "הודעה אינטראקטיבית",
+      "system": "הודעת מערכת"
+    },
+    "delivery": {
+      "queued": "שולח",
+      "sent": "נשלחה",
+      "delivered": "נמסרה",
+      "read": "נקראה",
+      "failed": "לא נשלחה",
+      "received": "התקבלה"
+    },
+    "composer": {
+      "label": "הודעה",
+      "placeholder": "הקלידו הודעה",
+      "send": "שליחה",
+      "tooLong": "הודעות יכולות להכיל עד {{max}} תווים.",
+      "noteLabel": "הערה פרטית",
+      "notePlaceholder": "כתבו הערה שרק הצוות שלכם רואה",
+      "addNote": "הוספת הערה",
+      "noteOn": "כתיבת הערה פרטית",
+      "noteOff": "חזרה לתשובה"
+    },
+    "template": {
+      "closedNotice": "הלקוח לא כתב לכם ב-24 השעות האחרונות. אפשר לשלוח רק תבניות שאושרו מראש.",
+      "send": "שליחת תבנית",
+      "title": "שליחת תבנית",
+      "close": "סגירה",
+      "search": "חיפוש תבניות",
+      "empty": "אין עדיין תבניות מאושרות למספר הזה.",
+      "emptySearch": "לא נמצאו תבניות התואמות לחיפוש.",
+      "more": "יש עוד תבניות. הקלידו בתיבת החיפוש כדי למצוא אותן.",
+      "fillTitle": "מילוי הפרטים",
+      "back": "חזרה לתבניות",
+      "submit": "שליחה",
+      "reason": {
+        "paused": "הושהתה על ידי WhatsApp בגלל איכות. נסו שוב מאוחר יותר.",
+        "media_header": "יש בה כותרת של תמונה, וידאו או מסמך, שהאפליקציה עדיין לא יכולה לשלוח.",
+        "header_variable": "יש בה משתנה בכותרת, שהאפליקציה עדיין לא יכולה למלא.",
+        "dynamic_button": "יש בה כפתור עם קישור שכולל משתנה, שהאפליקציה עדיין לא יכולה למלא.",
+        "authentication": "תבניות של סיסמה חד-פעמית נשלחות על ידי המערכת.",
+        "named_variables": "משתמשת במשתנים עם שם, שהאפליקציה עדיין לא יכולה למלא."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "הערוץ הזה מנותק. חברו אותו מחדש באתר ונסו שוב.",
+      "planLimit": "הגעתם למגבלת ההודעות של החבילה.",
+      "forbidden": "אין לכם הרשאה לבצע זאת.",
+      "notFound": "השיחה הזו כבר אינה זמינה."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "צ'אט באתר",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "סימולטור"
+    },
+    "sheet": {
+      "close": "סגירה",
+      "save": "שמירת שינויים",
+      "noMatch": "אין תוצאות."
+    },
+    "assign": {
+      "title": "החלפת נציג",
+      "search": "חיפוש נציגים",
+      "agents": "נציגים",
+      "teams": "צוותים",
+      "unassigned": "לא משויכת",
+      "noTeam": "ללא צוות",
+      "you": "{{name}} (אתם)",
+      "availability": {
+        "online": "מחובר",
+        "away": "לא זמין",
+        "busy": "עסוק",
+        "offline": "לא מחובר"
+      },
+      "open_one": "אחת פתוחה",
+      "open_two": "שתיים פתוחות",
+      "open_other": "{{count}} פתוחות",
+      "members_one": "חבר צוות אחד",
+      "members_two": "שני חברי צוות",
+      "members_other": "{{count}} חברי צוות",
+      "failed": "אי אפשר היה לשנות מי מטפל בשיחה. נסו שוב."
+    },
+    "priority": {
+      "title": "קביעת עדיפות",
+      "low": "נמוכה",
+      "normal": "רגילה",
+      "high": "גבוהה",
+      "urgent": "דחופה"
+    },
+    "snooze": {
+      "title": "השהיה עד",
+      "hour": "בעוד שעה",
+      "threeHours": "בעוד 3 שעות",
+      "tomorrow": "מחר, 9:00",
+      "nextWeek": "יום שני הבא, 9:00"
+    },
+    "statusSheet": {
+      "title": "שינוי סטטוס"
+    },
+    "details": {
+      "title": "פרטי צ׳אט",
+      "contact": "איש קשר",
+      "openContact": "פתיחת איש הקשר",
+      "call": "התקשרות",
+      "noContact": "לשיחה הזו אין עדיין כרטיס איש קשר.",
+      "email": "אימייל",
+      "stage": "שלב",
+      "contactStatus": "סטטוס",
+      "owner": "אחראי",
+      "source": "מקור",
+      "since": "איש קשר מאז",
+      "optedOut": "ביטל הסכמה לקבלת הודעות",
+      "leadScore": "דירוג ליד",
+      "actions": "פעולות",
+      "status": "סטטוס",
+      "priority": "עדיפות",
+      "labels": "תוויות",
+      "none": "ללא",
+      "agent": "נציג מטפל",
+      "team": "צוות",
+      "you": "אתם",
+      "bot": "בוט",
+      "unassigned": "לא משויכת",
+      "info": "שיחה",
+      "channel": "ערוץ",
+      "window": "חלון תגובה",
+      "windowOpen": "פתוח עד {{time}}",
+      "windowClosed": "סגור",
+      "windowNone": "ללא הגבלת זמן",
+      "snoozedUntil": "בהשהיה עד {{time}}",
+      "notes": {
+        "title": "הערות פנימיות",
+        "empty": "אין הערות עדיין. רק הצוות שלכם רואה הערות.",
+        "label": "כתבו הערה",
+        "add": "הוספת הערה",
+        "delete": "מחיקה",
+        "deleteFor": "מחיקת הערה של {{name}}",
+        "failed": "אי אפשר היה לשמור את ההערה. נסו שוב.",
+        "deleteFailed": "אי אפשר היה למחוק את ההערה. נסו שוב.",
+        "unknownAuthor": "מישהו",
+        "tooLong": "הערות יכולות להכיל עד {{max}} תווים."
+      },
+      "timeline": {
+        "title": "ציר זמן",
+        "empty": "עדיין לא קרה דבר.",
+        "system": "מערכת"
+      },
+      "past": {
+        "title": "שיחות קודמות",
+        "empty": "אין שיחות אחרות עם איש הקשר הזה."
+      },
+      "snooze": "השהיה",
+      "wake": "ביטול ההשהיה עכשיו"
+    },
+    "event": {
+      "created": "השיחה התחילה",
+      "assigned": "שויכה",
+      "reassigned": "שויכה מחדש",
+      "unassigned": "השיוך בוטל",
+      "ai_handoff": "הועברה על ידי סוכן הבינה המלאכותית",
+      "resolved": "נפתרה",
+      "closed": "נסגרה",
+      "reopened": "נפתחה מחדש",
+      "status_changed": "הסטטוס השתנה",
+      "note_added": "נוספה הערה",
+      "snoozed": "הושהתה",
+      "auto_unsnoozed": "חזרה בזמן",
+      "priority_changed": "העדיפות השתנתה",
+      "tag_added": "נוספה תווית",
+      "tag_removed": "הוסרה תווית",
+      "first_response": "נשלחה תגובה ראשונה",
+      "sla_breach": "זמן התגובה הוחמץ"
+    },
+    "replies": {
+      "open": "תשובות שמורות",
+      "title": "תשובות שמורות",
+      "search": "חיפוש תשובות שמורות",
+      "empty": "אין תשובות שמורות עדיין.",
+      "noMatch": "לא נמצאו תשובות שמורות התואמות לחיפוש.",
+      "failed": "אי אפשר היה להשתמש בתשובה הזו. נסו שוב.",
+      "unfilled": "בדקו את ההודעה: לא ניתן היה למלא את {{list}}."
+    },
+    "note": {
+      "title": "הערה פרטית",
+      "label": "הערה פרטית מאת {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "לחיצה ארוכה לבחירת שיחות",
+      "selected_one": "נבחרה שיחה אחת",
+      "selected_two": "נבחרו שתי שיחות",
+      "selected_other": "נבחרו {{count}} שיחות",
+      "close": "ביטול הבחירה",
+      "selectAll": "בחירת הכול",
+      "read": "סימון כנקראו",
+      "status": "סטטוס",
+      "assign": "שיוך",
+      "label": "תוויות",
+      "priority": "עדיפות",
+      "snooze": "השהיה",
+      "statusTitle_one": "שינוי סטטוס של שיחה אחת",
+      "statusTitle_two": "שינוי סטטוס של שתי שיחות",
+      "statusTitle_other": "שינוי סטטוס של {{count}} שיחות",
+      "labelTitle_one": "תוויות לשיחה אחת",
+      "labelTitle_two": "תוויות לשתי שיחות",
+      "labelTitle_other": "תוויות ל-{{count}} שיחות",
+      "labelMode": "פעולה",
+      "labelAdd": "הוספת התווית",
+      "labelRemove": "הסרת התווית",
+      "labelSearch": "חיפוש תוויות",
+      "priorityTitle_one": "עדיפות של שיחה אחת",
+      "priorityTitle_two": "עדיפות של שתי שיחות",
+      "priorityTitle_other": "עדיפות של {{count}} שיחות",
+      "snoozeTitle_one": "השהיית שיחה אחת עד",
+      "snoozeTitle_two": "השהיית שתי שיחות עד",
+      "snoozeTitle_other": "השהיית {{count}} שיחות עד",
+      "result": "{{done}} עודכנו, {{unchanged}} ללא שינוי, {{failed}} נכשלו",
+      "resultDismiss": "סגירה"
+    }
+  },
+  "contacts": {
+    "title": "אנשי קשר",
+    "unknown": "לא ידוע",
+    "add": "הוספת איש קשר",
+    "cancel": "ביטול",
+    "yes": "כן",
+    "no": "לא",
+    "denied": {
+      "title": "אין לכם הרשאה לצפות באנשי קשר",
+      "hint": "בקשו ממנהל סביבת העבודה לתת לתפקיד שלכם גישה לאנשי קשר.",
+      "createTitle": "אין לכם הרשאה להוסיף אנשי קשר",
+      "createHint": "בקשו ממנהל סביבת העבודה לאפשר לתפקיד שלכם להוסיף אנשי קשר."
+    },
+    "empty": {
+      "title": "אין אנשי קשר",
+      "hint": "הקישו על כפתור + כדי להוסיף את איש הקשר הראשון.",
+      "filteredTitle": "לא נמצאו אנשי קשר תואמים",
+      "filteredHint": "נסו חיפוש אחר או נקו את המסננים."
+    },
+    "search": {
+      "open": "חיפוש אנשי קשר",
+      "close": "סגירת החיפוש",
+      "label": "חיפוש",
+      "placeholder": "שם, טלפון או אימייל"
+    },
+    "filter": {
+      "open": "סינון אנשי קשר",
+      "title": "מסננים",
+      "stage": "שלב במחזור החיים",
+      "owner": "אחראי על איש הקשר",
+      "ownerSearch": "חיפוש אחראי על איש קשר",
+      "unassigned": "ללא אחראי",
+      "created": "תאריך יצירה",
+      "any": "הכול",
+      "marketing": "הודעות שיווקיות",
+      "marketingOptions": {
+        "all": "הכול",
+        "subscribed": "רשומים",
+        "unsubscribed": "ביטלו הסכמה"
+      },
+      "source": "מקור",
+      "sourceHint": "מאיפה איש הקשר הגיע, למשל import או api.",
+      "clear": "ניקוי הכול",
+      "apply": "החל"
+    },
+    "stage": {
+      "new": "חדש",
+      "contacted": "נוצר קשר",
+      "qualified": "מתאים",
+      "application_started": "תהליך ההגשה התחיל",
+      "application_submitted": "הבקשה הוגשה",
+      "interview_scheduled": "ראיון נקבע",
+      "offer_received": "התקבלה הצעה",
+      "admission_confirmed": "הקבלה אושרה",
+      "enrolled": "נרשם",
+      "lost": "אבוד"
+    },
+    "subscription": {
+      "subscribed": "רשום",
+      "unsubscribed": "בוטל מנוי",
+      "pending": "ממתין"
+    },
+    "form": {
+      "name": "שם",
+      "phone": "טלפון",
+      "phoneHint": "עם קידומת המדינה, לדוגמה +919876543210.",
+      "email": "אימייל",
+      "needPhoneOrEmail": "הזינו מספר טלפון או כתובת אימייל.",
+      "phoneInvalid": "הזינו את מספר הטלפון עם קידומת המדינה, לדוגמה +919876543210.",
+      "emailInvalid": "הזינו כתובת אימייל תקינה.",
+      "nameInvalid": "הזינו שם של עד 255 תווים."
+    },
+    "new": {
+      "title": "איש קשר חדש",
+      "save": "שמירת איש הקשר",
+      "requiredTitle": "פרטים נדרשים",
+      "choose": "בחירה",
+      "search": "חיפוש",
+      "unsupported": "השדה {{label}} נדרש, אך עדיין אי אפשר למלא אותו כאן. הוסיפו את איש הקשר הזה באתר.",
+      "requiredMissing": "סביבת העבודה שלכם דורשת פרטים נוספים לפני שאפשר לשמור איש קשר, והאפליקציה אינה יכולה להציג אותם. בקשו ממנהל גישה למאפייני אנשי קשר, או הוסיפו את איש הקשר באתר."
+    },
+    "edit": {
+      "title": "עריכת איש קשר",
+      "open": "עריכת איש קשר",
+      "save": "שמירת שינויים",
+      "conflict": "איש הקשר הזה שונה על ידי מישהו אחר. עיינו ושמרו שוב."
+    },
+    "detail": {
+      "title": "איש קשר",
+      "notFound": "איש הקשר הזה כבר לא קיים.",
+      "phone": "טלפון",
+      "email": "אימייל",
+      "call": "התקשרות אל {{phone}}",
+      "mail": "כתיבה אל {{email}}",
+      "stage": "שלב במחזור החיים",
+      "status": "סטטוס",
+      "score": "דירוג",
+      "source": "מקור",
+      "whatsapp": "מנוי WhatsApp",
+      "marketing": "הודעות שיווקיות",
+      "optedOut": "ביטל הסכמה",
+      "optedIn": "יכול לקבל",
+      "lastActivity": "פעילות אחרונה",
+      "noActivity": "אין פעילות עדיין",
+      "created": "נוסף בתאריך",
+      "customFields": "שדות מותאמים אישית",
+      "actions": {
+        "call": "שיחה",
+        "chat": "צ׳אט",
+        "email": "אימייל",
+        "sms": "SMS",
+        "tasks": "משימות",
+        "notes": "הערות"
+      },
+      "tabsLabel": "אזורי איש הקשר",
+      "tabs": {
+        "about": "פרטי איש הקשר",
+        "activity": "פעילויות",
+        "files": "עוד"
+      },
+      "activities": {
+        "label": "תצוגות פעילות",
+        "all": "כל הפעילויות",
+        "timeline": "ציר זמן הפעילות"
+      },
+      "more": {
+        "account": "חשבון",
+        "deals": "עסקאות"
+      },
+      "summary": {
+        "title": "פעילות",
+        "notes": "הערות",
+        "tasks": "משימות",
+        "meetings": "פגישות",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "מחיקת איש קשר",
+        "title": "מחיקת איש קשר",
+        "message": "למחוק את {{name}}? אי אפשר לבטל פעולה זו.",
+        "confirm": "מחיקה",
+        "cancel": "ביטול"
+      }
+    },
+    "tags": {
+      "title": "תגיות",
+      "none": "אין תגיות עדיין.",
+      "remove": "הסרת התגית {{name}}",
+      "addLabel": "הוספת תגית",
+      "addPlaceholder": "שם התגית",
+      "add": "הוספת תגית"
+    },
+    "row": {
+      "more": "פעולות נוספות עבור {{name}}",
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "עריכה",
+      "swipeDelete": "מחיקה"
+    },
+    "sheet": {
+      "close": "סגירה"
+    },
+    "views": {
+      "open": "תצוגת אנשי קשר: {{name}}",
+      "title": "תצוגות",
+      "close": "סגירת התצוגות",
+      "searchLabel": "חיפוש תצוגות",
+      "searchPlaceholder": "חיפוש תצוגות",
+      "systemTitle": "תצוגות ברירת מחדל של המערכת",
+      "customTitle": "תצוגות מותאמות",
+      "none": "אין תצוגות זמינות",
+      "failed": "אי אפשר היה לטעון את התצוגות השמורות.",
+      "system": {
+        "all": "כל אנשי הקשר",
+        "mine": "אנשי הקשר שלי",
+        "recent": "נוצרו לאחרונה",
+        "optedOut": "ביטלו הסכמה לשיווק"
+      }
+    }
+  },
+  "tasks": {
+    "title": "משימות",
+    "add": "הוספת משימה",
+    "cancel": "ביטול",
+    "unknownContact": "איש קשר ללא שם",
+    "notFound": "המשימה הזו כבר לא קיימת.",
+    "priority": {
+      "low": "נמוכה",
+      "medium": "בינונית",
+      "high": "גבוהה"
+    },
+    "status": {
+      "open": "פתוחה",
+      "done": "בוצעה",
+      "overdue": "באיחור"
+    },
+    "denied": {
+      "title": "אין לכם הרשאה לצפות במשימות",
+      "hint": "בקשו ממנהל סביבת העבודה לתת לכם גישה למשימות.",
+      "createTitle": "אין לכם הרשאה להוסיף משימות",
+      "createHint": "בקשו ממנהל סביבת העבודה לאפשר לכם להוסיף משימות.",
+      "editTitle": "אין לכם הרשאה לערוך משימות",
+      "editHint": "בקשו ממנהל סביבת העבודה לאפשר לכם לערוך משימות."
+    },
+    "planLocked": {
+      "title": "משימות אינן כלולות בחבילה הזו.",
+      "hint": "בקשו ממנהל סביבת העבודה לשדרג את החבילה."
+    },
+    "empty": {
+      "title": "לא נמצאו משימות.",
+      "hint": "משימות שתוסיפו יופיעו כאן.",
+      "filteredHint": "נסו מסנן או חיפוש אחר."
+    },
+    "search": {
+      "open": "חיפוש משימות",
+      "close": "סגירת החיפוש",
+      "label": "חיפוש",
+      "placeholder": "חיפוש לפי כותרת"
+    },
+    "filter": {
+      "open": "סינון משימות",
+      "title": "סינון משימות",
+      "clear": "ניקוי הכול",
+      "apply": "החל",
+      "group": {
+        "status": "סטטוס",
+        "priority": "עדיפות",
+        "due": "מועד",
+        "owner": "אחראי"
+      },
+      "status": {
+        "open": "פתוחות",
+        "done": "בוצעו",
+        "all": "הכול"
+      },
+      "due": {
+        "overdue": "באיחור",
+        "today": "היום",
+        "upcoming": "קרובות",
+        "none": "ללא תאריך"
+      },
+      "owner": {
+        "mine": "שלי",
+        "unassigned": "לא משויכות",
+        "all": "הכול"
+      }
+    },
+    "list": {
+      "conflict": "המשימה הזו שונתה על ידי מישהו אחר. הרשימה רועננה."
+    },
+    "row": {
+      "markDone": "סימון {{title}} כבוצעה",
+      "reopen": "פתיחה מחדש של {{title}}",
+      "more": "פעולות נוספות עבור {{title}}",
+      "due": "ליעד: {{when}}",
+      "unassigned": "לא משויכת"
+    },
+    "actions": {
+      "edit": "עריכת משימה",
+      "delete": "מחיקת משימה"
+    },
+    "delete": {
+      "title": "מחיקת משימה",
+      "message": "בטוחים שברצונכם למחוק את המשימה הזו?",
+      "confirm": "מחיקה"
+    },
+    "details": {
+      "title": "פרטי משימה",
+      "edit": "עריכת משימה",
+      "delete": "מחיקת משימה",
+      "description": "תיאור",
+      "priority": "עדיפות",
+      "status": "סטטוס",
+      "owner": "אחראי",
+      "relatedTo": "קשורה אל",
+      "noDescription": "אין תיאור",
+      "noDue": "אין תאריך יעד",
+      "unassigned": "לא משויכת",
+      "noContact": "ללא",
+      "openContact": "פתיחת {{name}}",
+      "markComplete": "סימון כהושלמה",
+      "reopen": "פתיחה מחדש",
+      "conflict": "המשימה הזו שונתה על ידי מישהו אחר. היא נטענה מחדש."
+    },
+    "form": {
+      "addTitle": "הוספת משימה",
+      "editTitle": "עריכת משימה",
+      "save": "שמירת משימה",
+      "saving": "שומר…",
+      "title": "כותרת המשימה",
+      "description": "תיאור המשימה",
+      "priority": "עדיפות",
+      "date": "תאריך (YYYY-MM-DD)",
+      "dateHint": "השאירו את התאריך והשעה ריקים אם אין תאריך יעד. לדוגמה 2026-10-31.",
+      "time": "שעה (HH:mm)",
+      "timeHint": "שעון 24 שעות, לדוגמה 14:30.",
+      "owner": "אחראי",
+      "ownerPick": "בחירת אחראי",
+      "ownerMe": "אני",
+      "ownerNone": "לא משויכת",
+      "ownerLoading": "טוען את הצוות שלכם…",
+      "ownerFailed": "אי אפשר היה לטעון את הצוות שלכם.",
+      "contact": "איש קשר",
+      "contactLinkOptional": "קישור איש קשר (אופציונלי)",
+      "contactNone": "ללא איש קשר",
+      "contactPick": "בחירת איש קשר",
+      "contactSearchLabel": "חיפוש אנשי קשר",
+      "contactSearchPlaceholder": "שם, אימייל או טלפון",
+      "contactEmpty": "לא נמצאו אנשי קשר.",
+      "contactFailed": "אי אפשר היה לטעון אנשי קשר.",
+      "conflict": "המשימה הזו שונתה על ידי מישהו אחר. עיינו ושמרו שוב.",
+      "errors": {
+        "titleRequired": "הזינו כותרת למשימה.",
+        "titleTooLong": "הכותרת יכולה להכיל עד 255 תווים.",
+        "titleNeedsLetter": "הכותרת חייבת לכלול לפחות אות אחת.",
+        "notesTooLong": "התיאור יכול להכיל עד 5000 תווים.",
+        "dateInvalid": "הזינו את התאריך בפורמט YYYY-MM-DD, לדוגמה 2026-10-31.",
+        "timeInvalid": "הזינו את השעה בפורמט HH:mm בשעון 24 שעות, לדוגמה 14:30.",
+        "dateNeeded": "הזינו גם את התאריך.",
+        "timeNeeded": "הזינו גם את השעה.",
+        "dueInvalid": "אי אפשר להשתמש בתאריך ובשעה האלה כמועד יעד.",
+        "assigneeInvalid": "אי אפשר להקצות משימות לאדם הזה. בחרו אחראי אחר.",
+        "contactInvalid": "אי אפשר לקשר את איש הקשר הזה."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "הערות",
+    "cancel": "ביטול",
+    "loadMore": "טעינת עוד",
+    "deleteConfirm": "מחיקה",
+    "contactMissing": "איש הקשר הזה כבר לא קיים.",
+    "add": "הוספת הערה",
+    "edited": "נערכה",
+    "denied": {
+      "title": "אין לכם הרשאה לצפות בהערות",
+      "hint": "בקשו ממנהל סביבת העבודה לתת לתפקיד שלכם גישה לאנשי קשר.",
+      "updateTitle": "אין לכם הרשאה לשנות הערות",
+      "updateHint": "בקשו ממנהל סביבת העבודה לאפשר לתפקיד שלכם לערוך אנשי קשר."
+    },
+    "empty": {
+      "title": "אין הערות.",
+      "hint": "הקישו על כפתור + כדי להוסיף את ההערה הראשונה."
+    },
+    "menu": {
+      "open": "פעולות להערה מתאריך {{date}}",
+      "edit": "עריכת הערה",
+      "delete": "מחיקת הערה"
+    },
+    "delete": {
+      "title": "מחיקת הערה",
+      "message": "בטוחים שברצונכם למחוק את ההערה הזו?"
+    },
+    "form": {
+      "addTitle": "הוספת הערה",
+      "editTitle": "עדכון הערה",
+      "label": "הערה",
+      "placeholder": "כתבו כאן את ההערה...",
+      "required": "כתבו הערה לפני השמירה.",
+      "invalid": "הזינו הערה של עד 400 תווים.",
+      "counterLabel": "נעשה שימוש ב-{{used}} מתוך {{max}} תווים",
+      "save": "שמירת הערה",
+      "saving": "שומר הערה",
+      "conflict": "ההערה הזו שונתה על ידי מישהו אחר. עיינו ושמרו שוב.",
+      "missing": "ההערה הזו כבר לא קיימת."
+    },
+    "activity": {
+      "notes": "הערות",
+      "tasks": "משימות",
+      "timeline": "ציר זמן",
+      "empty": "אין פעילות עדיין.",
+      "add": "הוספת פעילות",
+      "types": {
+        "note": "הערה",
+        "call": "שיחה",
+        "email": "אימייל",
+        "meeting": "פגישה",
+        "task": "משימה"
+      },
+      "source": {
+        "system": "מערכת",
+        "bot": "בוט"
+      },
+      "form": {
+        "title": "הוספת פעילות",
+        "type": "סוג",
+        "typeHint": "לדוגמה הערה, שיחה, אימייל או פגישה.",
+        "name": "כותרת",
+        "details": "פרטים",
+        "save": "שמירת פעילות",
+        "typeInvalid": "הזינו סוג של עד 100 תווים.",
+        "titleInvalid": "הזינו כותרת של עד 255 תווים.",
+        "detailsInvalid": "הפרטים יכולים להכיל עד 10,000 תווים."
+      }
+    },
+    "files": {
+      "empty": "אין קבצים.",
+      "delete": "מחיקת הקובץ {{name}}",
+      "deleteTitle": "מחיקת קובץ",
+      "deleteMessage": "בטוחים שברצונכם למחוק את הקובץ הזה?"
+    }
+  },
+  "contactMeetings": {
+    "title": "פגישות",
+    "loadMore": "טעינת עוד",
+    "contactMissing": "איש הקשר הזה כבר לא קיים.",
+    "noDate": "לא נקבע תאריך",
+    "denied": {
+      "title": "אין לכם הרשאה לצפות בפגישות",
+      "hint": "בקשו ממנהל סביבת העבודה לתת לתפקיד שלכם גישה לאנשי קשר."
+    },
+    "empty": {
+      "title": "לא נרשמו פגישות."
+    }
+  },
+  "contactDeals": {
+    "title": "עסקאות",
+    "contactMissing": "איש הקשר הזה כבר לא קיים.",
+    "denied": {
+      "title": "אין לכם הרשאה לצפות בעסקאות",
+      "hint": "בקשו ממנהל סביבת העבודה לתת לתפקיד שלכם גישה לעסקאות."
+    },
+    "empty": {
+      "title": "אין עסקאות עדיין."
+    }
+  },
+  "contactCompany": {
+    "title": "חשבון",
+    "missing": "החשבון הזה כבר לא קיים.",
+    "denied": {
+      "title": "אין לכם הרשאה לצפות בחשבונות",
+      "hint": "בקשו ממנהל סביבת העבודה לתת לתפקיד שלכם גישה לחברות."
+    },
+    "industry": "תחום",
+    "size": "גודל",
+    "phone": "טלפון",
+    "email": "אימייל",
+    "website": "אתר",
+    "address": "כתובת",
+    "owner": "אחראי",
+    "notes": "הערות"
+  },
+  "contactProps": {
+    "title": "פרטי איש הקשר",
+    "search": "חיפוש שדות",
+    "showEmpty": "הצגת שדות ריקים",
+    "footer": "אפשר להתאים את המאפיינים שמוצגים כאן מאפליקציית האינטרנט.",
+    "close": "סגירה",
+    "save": "שמירה",
+    "clear": "ניקוי",
+    "yes": "כן",
+    "no": "לא",
+    "rowHint": "פותח את העורך",
+    "locked": "אי אפשר לערוך את {{label}}",
+    "webOnly": "את {{label}} אפשר לערוך רק מאפליקציית האינטרנט.",
+    "masked": "מוסתר",
+    "fields": {
+      "email": "אימייל",
+      "phone": "טלפון",
+      "owner": "אחראי על איש הקשר",
+      "name": "שם",
+      "source": "מקור",
+      "whatsapp": "מנוי WhatsApp",
+      "marketing": "ביטול הסכמה לשיווק",
+      "leadScore": "דירוג ליד",
+      "created": "נוצר",
+      "lastActivity": "פעילות אחרונה"
+    },
+    "subscription": {
+      "subscribed": "רשום",
+      "unsubscribed": "בוטל מנוי",
+      "pending": "ממתין"
+    },
+    "editor": {
+      "title": "עריכת {{label}}",
+      "date": "תאריך",
+      "dateHint": "שנה-חודש-יום, לדוגמה 2026-10-12.",
+      "time": "שעה",
+      "timeHint": "שעון 24 שעות, לדוגמה 14:30.",
+      "phoneHint": "עם קידומת המדינה, לדוגמה +919876543210.",
+      "noOptions": "אין אפשרויות לבחירה."
+    },
+    "error": {
+      "required": "{{label}} הוא שדה חובה.",
+      "name": "הזינו שם של עד 255 תווים.",
+      "email": "הזינו כתובת אימייל תקינה.",
+      "phone": "הזינו את מספר הטלפון עם קידומת המדינה, לדוגמה +919876543210.",
+      "needPhoneOrEmail": "איש קשר חייב מספר טלפון או כתובת אימייל.",
+      "text": "הזינו עד {{max}} תווים.",
+      "number": "הזינו מספר.",
+      "whole": "הזינו מספר שלם.",
+      "range": "הזינו מספר בין 0 ל-{{max}}.",
+      "url": "הזינו קישור שמתחיל ב-http:// או ב-https://",
+      "date": "הזינו תאריך תקין בפורמט YYYY-MM-DD.",
+      "time": "הזינו שעה תקינה בפורמט HH:mm.",
+      "option": "בחרו אחת מהאפשרויות.",
+      "invalid": "הערך הזה אינו מתקבל. בדקו אותו ונסו שוב.",
+      "notEditable": "אי אפשר לערוך את המאפיין הזה.",
+      "requiredMissing": "למאפיין חובה אין ערך. מלאו אותו לפני השמירה.",
+      "conflict": "איש הקשר הזה שונה על ידי מישהו אחר. עיינו ושמרו שוב.",
+      "lostReasonRequired": "ציינו מדוע איש הקשר הזה אבד.",
+      "statusMismatch": "הסטטוס הזה אינו שייך לשלב הזה במחזור החיים."
+    },
+    "owner": {
+      "title": "שיוך אל",
+      "unassigned": "ללא אחראי",
+      "none": "אין למי לשייך את איש הקשר הזה.",
+      "failed": "אי אפשר היה לשנות את האחראי. נסו שוב."
+    },
+    "lifecycle": {
+      "stage": "שלב במחזור החיים",
+      "status": "סטטוס",
+      "change": "שינוי שלב במחזור החיים",
+      "changeStatus": "שינוי סטטוס",
+      "dropdownHint": "פותח את הרשימה לבחירה",
+      "lostReason": "סיבת האובדן",
+      "otherReason": "אחר",
+      "otherLabel": "תארו את הסיבה"
+    }
+  },
+  "summary": {
+    "contacts": "אנשי קשר",
+    "contactsNote": "נוספו בתקופה הזו",
+    "tasks": "משימות",
+    "tasksNote": "פתוחות כרגע",
+    "messages": "הודעות",
+    "sentNote": "נשלחו",
+    "receivedNote": "התקבלו",
+    "conversations": "שיחות",
+    "conversationsNote": "פתוחות וממתינות, כרגע",
+    "status": {
+      "all": "פעילות",
+      "mine": "שלי",
+      "unassigned": "לא משויכות",
+      "assigned": "משויכות",
+      "unread": "לא נקראו",
+      "archived": "בארכיון"
+    },
+    "allMessages": {
+      "title": "כל ההודעות",
+      "sent": "נשלחו",
+      "delivered": "נמסרו",
+      "received": "התקבלו",
+      "read": "נקראו",
+      "failed": "נכשלו"
+    },
+    "moreTitle": "עוד מסביבת העבודה שלכם"
+  },
+  "dashDate": {
+    "title": "חיפוש לפי לוח שנה",
+    "close": "סגירת לוח השנה",
+    "apply": "החל",
+    "reset": "איפוס",
+    "presets": "טווחים מהירים",
+    "pill": {
+      "label": "טווח תאריכים: {{from}} עד {{to}}",
+      "hint": "פותח את לוח השנה לשינוי התאריכים"
+    },
+    "selection": {
+      "label": "{{from}} עד {{to}}",
+      "pickFirst": "בחרו את היום הראשון",
+      "pickLast": "בחרו את היום האחרון"
+    },
+    "preset": {
+      "last7": "7 הימים האחרונים",
+      "last30": "30 הימים האחרונים",
+      "last90": "90 הימים האחרונים",
+      "yesterday": "אתמול",
+      "today": "היום"
+    },
+    "calendar": {
+      "previousMonth": "החודש הקודם",
+      "nextMonth": "החודש הבא",
+      "start": "תחילת הטווח",
+      "end": "סוף הטווח",
+      "inRange": "בטווח",
+      "today": "היום"
+    }
+  },
+  "permissions": {
+    "channelName": "הודעות ועדכונים",
+    "settingsHint": "הקישו על הרשאות, ואז הפעילו את מה שאתם צריכים.",
+    "names": {
+      "notifications": "התראות",
+      "calls": "שיחות טלפון",
+      "camera": "מצלמה",
+      "callPopup": "חלון קופץ לשיחות (הצגה מעל אפליקציות אחרות)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "איש קשר",
+      "close": "סגירה",
+      "ongoingTitle": "שיחה מתנהלת",
+      "endedTitle": "השיחה הסתיימה",
+      "endedText": "הקישו כדי לתעד את השיחה עם {{name}}.",
+      "channelOngoing": "שיחות מתנהלות",
+      "channelEnded": "סיכומי שיחות"
+    },
+    "summary": {
+      "title": "הוספת שיחה",
+      "contact": "איש קשר",
+      "type": "סוג שיחה",
+      "outbound": "יוצאת",
+      "status": "סטטוס שיחה יוצאת",
+      "completed": "הושלמה",
+      "notAnswered": "לא נענתה",
+      "startTime": "שעת תחילת השיחה",
+      "duration": "משך השיחה",
+      "durationHint": "דקות ושניות, לדוגמה 02:30",
+      "durationInvalid": "הזינו את האורך בפורמט דקות:שניות, לדוגמה 02:30.",
+      "subject": "נושא",
+      "subjectDefault": "שיחה יוצאת אל {{name}}",
+      "subjectInvalid": "הזינו נושא של עד 255 תווים.",
+      "notes": "תיאור",
+      "save": "שמירת שיחה",
+      "skip": "דילוג",
+      "contactMissing": "לשיחה הזו אין איש קשר לתעד אצלו.",
+      "denied": "התפקיד שלכם אינו יכול לשנות אנשי קשר, ולכן אי אפשר לתעד את השיחה.",
+      "purpose": "מטרת השיחה",
+      "purposeNone": "-ללא-",
+      "result": "תוצאת השיחה",
+      "purposes": {
+        "prospecting": "איתור לקוחות",
+        "administrative": "אדמיניסטרטיבית",
+        "negotiation": "משא ומתן",
+        "demo": "הדגמה",
+        "project": "פרויקט",
+        "desk": "מוקד"
+      }
+    }
+  }
+}

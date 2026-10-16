@@ -68,6 +68,27 @@ describe('useCallReturn', () => {
     jest.useRealTimers();
   });
 
+  it('keeps looking for a few seconds when the service has not heard the call end yet', async () => {
+    jest.useFakeTimers();
+    jest
+      .mocked(takeEndedCall)
+      .mockReturnValueOnce(null)
+      .mockReturnValueOnce(null)
+      .mockReturnValueOnce(
+        'crm-dev:///call-summary?contactId=c1&name=Aarav&startedAt=5&durationSec=42',
+      );
+    await renderHook(() => useCallReturn());
+    change('background');
+    change('active');
+    jest.advanceTimersByTime(2000);
+    expect(router.push).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(1000);
+    expect(router.push).toHaveBeenCalledTimes(1);
+    jest.advanceTimersByTime(10_000);
+    expect(router.push).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
+  });
+
   it('opens nothing when the service left no ended call (the screen is already up)', async () => {
     jest.useFakeTimers();
     await renderHook(() => useCallReturn());

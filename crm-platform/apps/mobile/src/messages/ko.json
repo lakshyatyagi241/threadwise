@@ -1,0 +1,1430 @@
+{
+  "common": {
+    "loading": "불러오는 중…",
+    "retry": "다시 시도",
+    "signOut": "로그아웃",
+    "clear": "지우기",
+    "back": "뒤로",
+    "filters": {
+      "clearAll": "모두 지우기",
+      "apply": "적용",
+      "noMatch": "검색과 일치하는 항목이 없습니다."
+    }
+  },
+  "errors": {
+    "generic": "문제가 발생했습니다. 다시 시도하세요.",
+    "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+    "timeout": "서버 응답이 너무 늦습니다. 다시 시도하세요.",
+    "outdatedApp": "이 앱 버전은 오래되었습니다. 업데이트하세요.",
+    "tooManyRequests": "시도 횟수가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+    "captchaUnsupported": "앱에서 아직 처리할 수 없는 보안 확인이 필요합니다. 웹사이트를 이용하세요."
+  },
+  "auth": {
+    "welcomeBack": "다시 오신 것을 환영합니다",
+    "welcomeSubtitle": "정보를 입력하고 워크스페이스로 돌아가세요.",
+    "tagline": "모든 고객 대화를 하나의 차분한 워크스페이스에서",
+    "taglineCaption": "빠르게 응대하는 팀을 위한 브로드캐스트, 자동화, 공유 수신함.",
+    "email": "이메일",
+    "emailPlaceholder": "you@company.com",
+    "password": "비밀번호",
+    "passwordPlaceholder": "비밀번호를 입력하세요",
+    "showPassword": "비밀번호 표시",
+    "hidePassword": "비밀번호 숨기기",
+    "signInSubmit": "로그인",
+    "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+    "passwordRequired": "비밀번호를 입력하세요.",
+    "newHere": "처음 오셨나요?",
+    "createAccount": "계정 만들기",
+    "legalSignIn": "로그인하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 간주됩니다.",
+    "mfaTitle": "2단계 인증",
+    "mfaHint": "인증 앱에 표시된 6자리 코드를 입력하세요.",
+    "mfaCode": "인증 코드",
+    "mfaSubmit": "인증",
+    "workspaceTitle": "워크스페이스 선택",
+    "workspaceHint": "계정이 둘 이상의 워크스페이스에 속해 있습니다.",
+    "invalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+    "accountLocked": "이 계정은 일시적으로 잠겼습니다. 나중에 다시 시도하세요.",
+    "accountSuspended": "이 계정은 정지되었습니다.",
+    "mfaInvalid": "코드가 올바르지 않습니다. 다시 시도하세요.",
+    "mfaExpired": "로그인 세션이 만료되었습니다. 처음부터 다시 시작하세요."
+  },
+  "signUp": {
+    "tagline": "워크스페이스 설정",
+    "taglineCaption": "워크스페이스를 만든 다음 팀원과 첫 번째 채널을 추가하세요.",
+    "title": "계정 만들기",
+    "subtitle": "몇 가지 정보만 입력하면 워크스페이스가 준비됩니다.",
+    "fullName": "이름",
+    "fullNamePlaceholder": "이름을 입력하세요",
+    "email": "업무용 이메일",
+    "orgName": "워크스페이스 이름",
+    "orgNamePlaceholder": "Acme Inc.",
+    "orgNameHint": "팀원은 {{slug}} 주소로 로그인합니다.",
+    "orgNameHintEmpty": "팀원에게 표시되는 이름입니다.",
+    "customiseSlug": "워크스페이스 주소 직접 지정",
+    "orgSlug": "워크스페이스 주소",
+    "orgSlugPlaceholder": "your-workspace",
+    "orgSlugHint": "영문, 숫자, 하이픈 또는 밑줄만 사용할 수 있습니다. 팀원이 로그인할 때 입력하는 주소입니다.",
+    "phone": "휴대폰 번호",
+    "phoneHint": "계정 인증과 중요한 알림에 사용됩니다.",
+    "referral": "추천 코드 (선택)",
+    "referralPlaceholder": "친구의 코드가 있나요?",
+    "confirmPassword": "비밀번호 확인",
+    "passwordPlaceholder": "비밀번호를 만드세요",
+    "confirmPasswordPlaceholder": "비밀번호를 다시 입력하세요",
+    "passwordMinLength": "최소 길이: {{min}}자.",
+    "passwordMixedCase": "대문자와 소문자를 함께 사용하세요.",
+    "passwordNumber": "숫자를 포함하세요.",
+    "passwordSymbol": "기호를 포함하세요.",
+    "agree": "<terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의합니다.",
+    "submit": "계정 만들기",
+    "haveAccount": "이미 계정이 있나요?",
+    "signIn": "로그인",
+    "closedBody": "가입이 마감되었습니다. 관리자에게 초대를 요청하세요.",
+    "closedBack": "로그인으로 돌아가기",
+    "validation": {
+      "fullName": "이름을 입력하세요.",
+      "orgName": "워크스페이스 이름을 입력하세요 (2자 이상).",
+      "orgSlug": "워크스페이스 주소를 입력하세요 (영문, 숫자, 하이픈 또는 밑줄).",
+      "phoneRequired": "휴대폰 번호를 입력하세요.",
+      "phoneInvalid": "올바른 전화번호를 입력하세요. 국내 번호가 아니면 국가 번호를 포함하세요.",
+      "passwordMismatch": "두 비밀번호가 일치하지 않습니다.",
+      "passwordInvalid": "표시된 요건을 충족하는 비밀번호를 입력하세요.",
+      "acceptTerms": "계속하려면 약관에 동의해야 합니다.",
+      "referralCode": "추천 코드는 영문과 숫자만 사용할 수 있습니다."
+    },
+    "errors": {
+      "emailTaken": "이 워크스페이스에서 이미 사용 중인 이메일입니다.",
+      "slugTaken": "이미 사용 중인 워크스페이스 주소입니다.",
+      "passwordPolicy": "비밀번호가 보안 정책을 충족하지 않습니다:",
+      "policyCommon": "추측하기 너무 쉬운 비밀번호입니다.",
+      "otpSendFailed": "인증 코드를 보내지 못했습니다. 번호를 확인하고 다시 시도하세요.",
+      "signupExpired": "가입을 처음부터 다시 진행하세요."
+    },
+    "otp": {
+      "title": "WhatsApp을 확인하세요",
+      "subtitle": "워크스페이스 만들기를 마치려면 보내드린 일회용 코드를 입력하세요.",
+      "sentTo": "{{phone}}(으)로 코드를 보냈습니다",
+      "code": "인증 코드",
+      "expiresIn": "코드는 {{time}} 후 만료됩니다.",
+      "expired": "코드가 만료되었습니다. 새 코드를 요청하세요.",
+      "verify": "인증하고 계속",
+      "resend": "코드 다시 보내기",
+      "resendIn": "{{time}} 후 코드 다시 보내기",
+      "resent": "새 코드를 WhatsApp으로 보내는 중입니다.",
+      "wrongNumber": "번호가 틀렸나요? 돌아가기",
+      "addressTakenHint": "인증하는 동안 해당 워크스페이스 주소가 다른 사용자에게 사용되었습니다. 다른 주소를 선택하면 새 코드를 보내드립니다.",
+      "codeInvalid": "{{length}}자리 코드를 입력하세요.",
+      "invalid": "코드가 올바르지 않습니다. 다시 시도하세요.",
+      "tooMany": "시도 횟수가 너무 많습니다. 새 코드를 요청하세요.",
+      "cooldown": "다른 코드를 요청하려면 잠시 기다려 주세요."
+    }
+  },
+  "dashboard": {
+    "kicker": "운영자 대시보드",
+    "synced": "실시간 · {{s}}초 전 동기화",
+    "greeting": {
+      "morning": "좋은 아침입니다, {{name}}님.",
+      "afternoon": "안녕하세요, {{name}}님.",
+      "evening": "좋은 저녁입니다, {{name}}님."
+    },
+    "calm": "워크스페이스가 평온합니다.",
+    "running_other": "캠페인 {{count}}개가 진행 중입니다.",
+    "subline_other": "{{date}} - {{range}} 기준 발송 {{sent}}건, 전달률 {{rate}}%, 연결된 기기 {{count}}대.",
+    "sublineOfficial": "{{date}} - {{range}} 기준 발송 {{sent}}건, 전달률 {{rate}}%.",
+    "setupBanner": "워크스페이스 설정이 끝나지 않았습니다. 웹에서 설정을 마치고 계정의 나머지 기능을 사용하세요.",
+    "range": {
+      "label": "기간",
+      "short": {
+        "24h": "24시간",
+        "7d": "7일",
+        "30d": "30일",
+        "qtd": "분기 누계"
+      },
+      "long": {
+        "24h": "최근 24시간",
+        "7d": "최근 7일",
+        "30d": "최근 30일",
+        "qtd": "분기 누계"
+      }
+    },
+    "trend": {
+      "up": "이전 기간 대비 {{value}} 증가",
+      "down": "이전 기간 대비 {{value}} 감소",
+      "flat": "이전 기간과 변화 없음"
+    },
+    "kpi": {
+      "sent": "발송한 메시지 · {{range}}",
+      "sentLegend": "전달 {{delivered}} · 실패 {{failed}}",
+      "sparkline": "최근 20시간 동안 시간별 발송 메시지 수, 오래된 순",
+      "readRate": "읽음률",
+      "readMini": {
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "read": "읽음"
+      }
+    },
+    "contacts": {
+      "title": "활성 연락처",
+      "subscribed": "구독 중",
+      "optedIn": "수신 동의",
+      "blocked": "차단됨"
+    },
+    "wallet": {
+      "title": "지갑 잔액",
+      "payPerMessage": "메시지당 과금"
+    },
+    "autopilot": {
+      "kicker": "더 많이 처리하기",
+      "title": "답장을 자동으로",
+      "body": "플로우를 만들거나 캠페인을 시작해 더 많은 고객에게 자동으로 연락하세요."
+    },
+    "pipeline": {
+      "kicker": "영업 파이프라인",
+      "open": "파이프라인 열기",
+      "deals": "진행 중인 딜",
+      "won": "이번 달 성사",
+      "winRate": "성사율"
+    },
+    "throughput": {
+      "title": "메시지 처리량",
+      "subtitle": {
+        "24h": "발송, 전달, 실패 - 시간별, 최근 24시간",
+        "7d": "발송, 전달, 실패 - 일별, 최근 7일",
+        "30d": "발송, 전달, 실패 - 일별, 최근 30일",
+        "qtd": "발송, 전달, 실패 - 일별, 분기 누계"
+      },
+      "peak": "피크 시간 {{when}} · 메시지 {{n}}건",
+      "sent": "발송됨",
+      "delivered": "전달됨",
+      "failed": "실패",
+      "avgHour": "시간당 평균",
+      "replies": "답장",
+      "replyRate": "답장률",
+      "summary": "이 기간에 {{sent}}건 발송, {{delivered}}건 전달, {{failed}}건 실패했습니다.",
+      "subtitleCustom": "일별 · {{range}}"
+    },
+    "inbox": {
+      "title": "실시간 수신함",
+      "unread": "읽지 않음 {{n}}건",
+      "oldest": "가장 오래된 것 {{when}}",
+      "recent": "최근 대화",
+      "empty": "아직 대화가 없습니다."
+    },
+    "campaigns": {
+      "title": "진행 중인 캠페인",
+      "summary": "진행 {{running}} - 예약 {{scheduled}} - 일시중지 {{paused}}",
+      "total": "총 {{n}}개",
+      "untitled": "제목 없는 캠페인",
+      "delivered": "{{total}}건 중 {{done}}건 전달",
+      "emptyTitle": "진행 중인 캠페인이 없습니다",
+      "emptyBody": "캠페인을 만들어 연락처 그룹에 발송을 시작하세요.",
+      "status": {
+        "sending": "보내는 중",
+        "scheduled": "예약됨",
+        "paused": "일시중지됨",
+        "failed": "실패",
+        "completed": "완료됨"
+      }
+    },
+    "devices": {
+      "title": "연결된 기기",
+      "summary": "{{cap}}개 중 {{total}}개 사용 - {{online}}개 온라인",
+      "emptyTitle": "연결된 기기가 없습니다",
+      "emptyBody": "WhatsApp 번호를 연결해 발송을 시작하세요.",
+      "unzoned": "구역 없음",
+      "per24h": "{{n}}/24시간",
+      "deliv": "전달",
+      "free_other": "사용 가능한 기기 슬롯 {{count}}개",
+      "state": {
+        "online": "온라인",
+        "connecting": "연결 중",
+        "offline": "오프라인"
+      }
+    },
+    "templates": {
+      "title": "성과 상위 템플릿",
+      "subtitle": "발송량 기준 - 선택한 기간",
+      "count_other": "템플릿 {{count}}개",
+      "empty": "아직 템플릿이 없습니다.",
+      "sent": "발송됨",
+      "delivered": "전달됨",
+      "read": "읽음",
+      "readRate": "읽음률",
+      "status": {
+        "approved": "승인됨",
+        "inReview": "검토 중",
+        "rejected": "거부됨"
+      }
+    },
+    "activity": {
+      "title": "활동 로그",
+      "subtitle": "워크스페이스 이벤트",
+      "empty": "이 워크스페이스에 기록된 최근 활동이 없습니다.",
+      "by": "{{actor}} - {{module}} {{action}}"
+    },
+    "instagram": {
+      "title": "Instagram",
+      "accounts_other": "계정 {{count}}개",
+      "connected": "연결됨",
+      "tile": {
+        "needReply": "답장 필요",
+        "openChats": "진행 중인 채팅",
+        "dmsIn": "받은 DM · 7일",
+        "dmsOut": "보낸 DM · 7일",
+        "followers": "팔로워"
+      }
+    },
+    "flows": {
+      "title": "자동화 플로우",
+      "summary": "활성 {{active}} · 구독자 {{subscribers}}",
+      "empty": "아직 플로우가 없습니다.",
+      "meta": "트리거 {{trigger}} · 단계 {{steps}} · 구독자 {{subs}}",
+      "statusActive": "활성",
+      "statusPaused": "일시중지됨",
+      "stat": {
+        "flows": "플로우",
+        "active": "활성",
+        "subscribers": "구독자"
+      }
+    },
+    "integrations": {
+      "title": "연동",
+      "name": {
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "google_sheets": "Google Sheets",
+        "meta_catalog": "Meta Catalog"
+      },
+      "events": "{{n}}개 이벤트 / 7일",
+      "connected": {
+        "woocommerce": "연결됨",
+        "shopify": "연결됨",
+        "google_sheets": "API 키 발급됨",
+        "meta_catalog": "카탈로그 연결됨"
+      },
+      "notConnected": "연결 안 됨",
+      "connectedLabel": "연결됨"
+    },
+    "funnel": {
+      "title": "참여 퍼널",
+      "stage": {
+        "messaged": "메시지를 보낸 연락처",
+        "delivered": "전달됨",
+        "replied": "답장함",
+        "goalCompleted": "목표 달성"
+      },
+      "stageLabel": "{{stage}}: 연락처 {{n}}명, 메시지를 보낸 연락처의 {{pct}}%",
+      "activity": {
+        "title": "대화 활동",
+        "inbound_other": "받은 메시지 {{count}}건",
+        "responding_other": "응답한 연락처 {{count}}명",
+        "perContact": "응답한 연락처당 답장 {{value}}건"
+      },
+      "comparison": {
+        "title": "이전 기간과 비교",
+        "replyRate": "답장률"
+      }
+    },
+    "ago": {
+      "minute_other": "{{count}}분 전",
+      "hour_other": "{{count}}시간 전",
+      "day_other": "{{count}}일 전"
+    },
+    "error": {
+      "forbidden": "현재 역할({{role}})은 대시보드에 접근할 수 없습니다.",
+      "generic": "수치를 불러오지 못했습니다. 잠시 후 다시 시도하세요.",
+      "locked": "요금제에 분석 기능이 포함되어 있지 않습니다."
+    },
+    "greetingNoName": {
+      "morning": "좋은 아침입니다.",
+      "afternoon": "안녕하세요.",
+      "evening": "좋은 저녁입니다."
+    },
+    "views": {
+      "label": "대시보드 보기",
+      "summary": "요약",
+      "agent": "상담원",
+      "bot": "봇"
+    },
+    "agents": {
+      "title": "상담원 성과",
+      "conversations": "대화",
+      "resolved": "해결됨",
+      "firstReply": "첫 답장",
+      "resolution": "해결",
+      "csat": "평점",
+      "minutes": "{{value}}분",
+      "hours": "{{value}}시간",
+      "days": "{{value}}일",
+      "empty": "이 기간에 배정된 대화가 없습니다.",
+      "noAccess": "현재 역할({{role}})은 상담원 분석에 접근할 수 없습니다.",
+      "everyone": "모든 상담원",
+      "pickerLabel": "상담원",
+      "pickerPlaceholder": "상담원 선택",
+      "statusTitle": "대화 상태",
+      "avgResolution": "평균 해결 시간",
+      "avgDuration": "평균 대화 시간",
+      "byAgentTitle": "상담원별 대화",
+      "byAgentPicker": "상태 목록의 상담원",
+      "status": {
+        "open": "열림",
+        "pending": "대기 중",
+        "closed": "종료됨",
+        "assigned": "배정됨",
+        "unassigned": "미배정",
+        "unattended": "미응대"
+      }
+    },
+    "bots": {
+      "activeFlows": "활성 플로우",
+      "ofTotal": "전체 {{total}}개 중",
+      "subscribers": "구독자",
+      "subscribersNote": "모든 플로우 합계"
+    }
+  },
+  "tabs": {
+    "dashboard": "대시보드",
+    "inbox": "수신함",
+    "contacts": "연락처",
+    "menu": "메뉴"
+  },
+  "menu": {
+    "title": "계정",
+    "profileLabel": "{{name}}, {{email}}",
+    "workspace": "워크스페이스",
+    "inbox": "수신함",
+    "contacts": "연락처",
+    "noAccess": "접근 권한이 없습니다. 워크스페이스 관리자에게 권한을 요청하세요.",
+    "version": "버전 {{version}}",
+    "signOutTitle": "로그아웃",
+    "signOutConfirm": "로그아웃하시겠습니까?",
+    "signOutNo": "아니요",
+    "signOutYes": "예, 로그아웃",
+    "tasks": "작업",
+    "dashboard": "대시보드",
+    "allContacts": "모든 연락처",
+    "newContact": "새 연락처",
+    "sectionAccount": "계정",
+    "manageProfile": "프로필 관리",
+    "preferences": "환경설정",
+    "devicePermissions": "기기 권한",
+    "devicePermissionsHint": "휴대폰에서 이 앱의 설정을 엽니다",
+    "about": "정보",
+    "dataSecurity": "데이터 및 보안",
+    "checkUpdates": "업데이트 확인",
+    "updates": {
+      "off": "이 앱 버전은 자동으로 업데이트되지 않습니다. 변경 사항을 받으려면 최신 버전을 설치하세요.",
+      "latest": "최신 버전을 사용 중입니다.",
+      "ready": "업데이트가 준비되었습니다. 다시 탭하면 앱을 재시작하고 적용합니다.",
+      "failed": "업데이트를 확인하지 못했습니다. 잠시 후 다시 시도하세요."
+    },
+    "profile": {
+      "title": "프로필 관리",
+      "fullName": "이름",
+      "displayName": "표시 이름",
+      "displayNameHint": "팀원에게 이름 대신 표시됩니다. 비워 두면 이름이 사용됩니다.",
+      "phone": "전화번호",
+      "phoneHint": "국가 번호를 포함하세요. 예: +919876543210.",
+      "email": "이메일",
+      "pendingEmail": "{{email}}(으)로의 변경이 확인을 기다리고 있습니다.",
+      "timezone": "워크스페이스 시간대",
+      "save": "변경 사항 저장",
+      "cancel": "취소",
+      "nameRequired": "이름을 입력하세요.",
+      "nameTooLong": "120자 이내로 입력하세요.",
+      "phoneInvalid": "국가 번호를 포함한 전화번호를 입력하세요. 예: +919876543210."
+    },
+    "appearance": {
+      "title": "화면 모양",
+      "light": "라이트 모드",
+      "dark": "다크 모드",
+      "device": "기기 설정 사용",
+      "hint": "계정에 저장됩니다.",
+      "failed": "선택을 저장하지 못했습니다. 다시 시도하세요."
+    }
+  },
+  "inbox": {
+    "tabs": {
+      "label": "수신함 보기",
+      "all": "전체",
+      "mine": "내 대화",
+      "unassigned": "미배정",
+      "unread": "읽지 않음"
+    },
+    "search": {
+      "open": "대화 검색",
+      "close": "검색 닫기",
+      "label": "검색",
+      "placeholder": "이름, 번호 또는 메시지"
+    },
+    "filter": {
+      "open": "필터",
+      "sheet": "대화 상태",
+      "close": "닫기",
+      "applied": "적용된 필터",
+      "clearAll": "모두 지우기",
+      "remove": "필터 제거: {{name}}",
+      "statusChip": "상태: {{name}}",
+      "searchChip": "검색: {{q}}",
+      "title": "필터",
+      "view": "보기",
+      "viewActive": "대화",
+      "viewArchived": "보관됨",
+      "channel": "채널",
+      "allChannels": "모든 채널",
+      "labels": "라벨",
+      "searchLabels": "라벨 검색",
+      "channelChip": "채널: {{name}}",
+      "labelsChip": "라벨: {{names}}",
+      "archivedChip": "보관됨"
+    },
+    "statusFilter": {
+      "default": "열림 및 대기 중",
+      "open": "열림",
+      "pending": "대기 중",
+      "snoozed": "다시 알림",
+      "resolved": "해결됨",
+      "closed": "종료됨",
+      "all": "모든 상태"
+    },
+    "status": {
+      "open": "열림",
+      "pending": "대기 중",
+      "snoozed": "다시 알림",
+      "resolved": "해결됨",
+      "closed": "종료됨",
+      "spam": "스팸"
+    },
+    "list": {
+      "label": "대화",
+      "emptyTitle": "대화가 없습니다",
+      "emptyHint": "고객이 보낸 메시지가 여기에 표시됩니다.",
+      "emptyFilteredHint": "필터와 일치하는 항목이 없습니다. 필터를 지워 보세요.",
+      "noMore": "더 이상 대화가 없습니다",
+      "loadingMore": "대화를 더 불러오는 중",
+      "noAccessTitle": "수신함에 접근할 수 없습니다",
+      "noAccessBody": "현재 역할은 대화를 볼 수 없습니다. 워크스페이스 관리자에게 변경을 요청하세요."
+    },
+    "row": {
+      "noMessages": "아직 메시지가 없습니다",
+      "unread_other": "읽지 않은 메시지 {{count}}건",
+      "label": "{{title}}, {{preview}}",
+      "labelUnread": "{{title}}, {{unread}}, {{preview}}",
+      "assignedTo": "{{name}}님에게 배정됨",
+      "media": "미디어"
+    },
+    "time": {
+      "am": "오전",
+      "pm": "오후",
+      "yesterday": "어제"
+    },
+    "thread": {
+      "messages": "메시지",
+      "loadingOlder": "이전 메시지를 불러오는 중",
+      "emptyTitle": "아직 메시지가 없습니다",
+      "emptyHint": "이 대화의 메시지가 여기에 표시됩니다.",
+      "noAccessTitle": "이 대화에 접근할 수 없습니다",
+      "noAccessBody": "현재 역할은 대화를 볼 수 없습니다.",
+      "resolve": "해결",
+      "reopen": "다시 열기",
+      "call": "{{phone}}에 전화",
+      "pictureOpen": "사진을 전체 화면으로 열기",
+      "pictureFull": "사진",
+      "pictureClose": "사진 닫기",
+      "windowClosed": "24시간 답장 가능 시간이 종료되었습니다. 대신 템플릿을 보내세요.",
+      "conflict": "다른 사용자가 이 대화를 변경했습니다. 최신 상태를 불러왔으니 다시 시도하세요.",
+      "statusInvalid": "이 대화는 해당 상태로 변경할 수 없습니다.",
+      "window": {
+        "left": "답장 가능 시간: {{hours}}시간 {{minutes}}분 남음",
+        "closed": "답장 가능 시간 종료"
+      },
+      "menu": {
+        "open": "더 보기",
+        "close": "메뉴 닫기",
+        "assignToMe": "나에게 배정",
+        "details": "상세 보기",
+        "status": "상태 변경",
+        "agent": "상담원 배정"
+      },
+      "bot": {
+        "notice": "봇 대화입니다.",
+        "assignSelf": "나에게 배정"
+      },
+      "labels": {
+        "open": "라벨 지정",
+        "title": "라벨 지정",
+        "close": "닫기",
+        "empty": "아직 라벨이 없습니다.",
+        "emptyCreate": "아직 라벨이 없습니다. 아래에 이름을 입력해 만드세요.",
+        "newLabel": "새 라벨",
+        "add": "추가",
+        "failed": "라벨을 변경하지 못했습니다. 다시 시도하세요."
+      },
+      "assignment": {
+        "none": "미배정",
+        "team": "팀: {{name}}",
+        "failed": "대화를 변경하지 못했습니다. 다시 시도하세요.",
+        "you": "나에게 배정됨",
+        "to": "{{name}}님에게 배정됨"
+      }
+    },
+    "message": {
+      "labelIn": "받음: {{text}}, {{time}}",
+      "labelOut": "내가 보냄: {{text}}, {{time}}, {{status}}",
+      "deleted": "삭제된 메시지입니다",
+      "retry": "다시 보내기",
+      "mediaPending": "파일을 아직 다운로드하는 중입니다.",
+      "mediaFailed": "파일을 다운로드하지 못했습니다."
+    },
+    "kind": {
+      "text": "메시지",
+      "image": "사진",
+      "video": "동영상",
+      "audio": "오디오",
+      "voice": "음성 메시지",
+      "document": "문서",
+      "sticker": "스티커",
+      "location": "위치",
+      "contact": "연락처",
+      "template": "템플릿",
+      "reaction": "반응",
+      "interactive": "인터랙티브 메시지",
+      "system": "시스템 메시지"
+    },
+    "delivery": {
+      "queued": "보내는 중",
+      "sent": "발송됨",
+      "delivered": "전달됨",
+      "read": "읽음",
+      "failed": "발송 안 됨",
+      "received": "받음"
+    },
+    "composer": {
+      "label": "메시지",
+      "placeholder": "메시지 입력",
+      "send": "보내기",
+      "tooLong": "메시지는 최대 {{max}}자까지 입력할 수 있습니다.",
+      "noteLabel": "비공개 메모",
+      "notePlaceholder": "팀원에게만 보이는 메모를 작성하세요",
+      "addNote": "메모 추가",
+      "noteOn": "비공개 메모 작성",
+      "noteOff": "답장으로 돌아가기"
+    },
+    "template": {
+      "closedNotice": "고객이 최근 24시간 동안 메시지를 보내지 않았습니다. 사전 승인된 템플릿만 보낼 수 있습니다.",
+      "send": "템플릿 보내기",
+      "title": "템플릿 보내기",
+      "close": "닫기",
+      "search": "템플릿 검색",
+      "empty": "이 번호에 승인된 템플릿이 없습니다.",
+      "emptySearch": "검색과 일치하는 템플릿이 없습니다.",
+      "more": "템플릿이 더 있습니다. 검색창에 입력해 찾으세요.",
+      "fillTitle": "세부 정보 입력",
+      "back": "템플릿으로 돌아가기",
+      "submit": "보내기",
+      "reason": {
+        "paused": "품질 문제로 WhatsApp에서 일시중지했습니다. 나중에 다시 시도하세요.",
+        "media_header": "이미지, 동영상 또는 문서 헤더가 있어 앱에서 아직 보낼 수 없습니다.",
+        "header_variable": "헤더에 변수가 있어 앱에서 아직 입력할 수 없습니다.",
+        "dynamic_button": "변수가 포함된 버튼 링크가 있어 앱에서 아직 입력할 수 없습니다.",
+        "authentication": "일회용 비밀번호 템플릿은 시스템이 보냅니다.",
+        "named_variables": "이름이 있는 변수를 사용해 앱에서 아직 입력할 수 없습니다."
+      }
+    },
+    "errors": {
+      "channelDisconnected": "이 채널의 연결이 끊겼습니다. 웹에서 다시 연결한 후 시도하세요.",
+      "planLimit": "요금제의 메시지 한도에 도달했습니다.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "notFound": "이 대화는 더 이상 사용할 수 없습니다."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "웹 채팅",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "시뮬레이터"
+    },
+    "sheet": {
+      "close": "닫기",
+      "save": "변경 사항 저장",
+      "noMatch": "일치하는 항목이 없습니다."
+    },
+    "assign": {
+      "title": "상담원 변경",
+      "search": "상담원 검색",
+      "agents": "상담원",
+      "teams": "팀",
+      "unassigned": "미배정",
+      "noTeam": "팀 없음",
+      "you": "{{name}} (나)",
+      "availability": {
+        "online": "온라인",
+        "away": "자리 비움",
+        "busy": "바쁨",
+        "offline": "오프라인"
+      },
+      "open_other": "진행 중 {{count}}건",
+      "members_other": "멤버 {{count}}명",
+      "failed": "대화 담당자를 변경하지 못했습니다. 다시 시도하세요."
+    },
+    "priority": {
+      "title": "우선순위 설정",
+      "low": "낮음",
+      "normal": "보통",
+      "high": "높음",
+      "urgent": "긴급"
+    },
+    "snooze": {
+      "title": "다시 알림 시간",
+      "hour": "1시간 후",
+      "threeHours": "3시간 후",
+      "tomorrow": "내일 오전 9:00",
+      "nextWeek": "다음 월요일 오전 9:00"
+    },
+    "statusSheet": {
+      "title": "상태 변경"
+    },
+    "details": {
+      "title": "채팅 상세",
+      "contact": "연락처",
+      "openContact": "연락처 열기",
+      "call": "전화",
+      "noContact": "이 대화에는 아직 연락처 정보가 없습니다.",
+      "email": "이메일",
+      "stage": "단계",
+      "contactStatus": "상태",
+      "owner": "담당자",
+      "source": "출처",
+      "since": "연락처 등록일",
+      "optedOut": "메시지 수신 거부함",
+      "leadScore": "리드 점수",
+      "actions": "작업",
+      "status": "상태",
+      "priority": "우선순위",
+      "labels": "라벨",
+      "none": "없음",
+      "agent": "담당 상담원",
+      "team": "팀",
+      "you": "나",
+      "bot": "봇",
+      "unassigned": "미배정",
+      "info": "대화",
+      "channel": "채널",
+      "window": "답장 가능 시간",
+      "windowOpen": "{{time}}까지",
+      "windowClosed": "종료됨",
+      "windowNone": "시간 제한 없음",
+      "snoozedUntil": "{{time}}까지 다시 알림",
+      "notes": {
+        "title": "내부 메모",
+        "empty": "아직 메모가 없습니다. 메모는 팀원에게만 보입니다.",
+        "label": "메모 작성",
+        "add": "메모 추가",
+        "delete": "삭제",
+        "deleteFor": "{{name}}님이 작성한 메모 삭제",
+        "failed": "메모를 저장하지 못했습니다. 다시 시도하세요.",
+        "deleteFailed": "메모를 삭제하지 못했습니다. 다시 시도하세요.",
+        "unknownAuthor": "알 수 없음",
+        "tooLong": "메모는 최대 {{max}}자까지 입력할 수 있습니다."
+      },
+      "timeline": {
+        "title": "타임라인",
+        "empty": "아직 아무 일도 없었습니다.",
+        "system": "시스템"
+      },
+      "past": {
+        "title": "이전 대화",
+        "empty": "이 연락처와의 다른 대화가 없습니다."
+      },
+      "snooze": "다시 알림",
+      "wake": "지금 다시 열기"
+    },
+    "event": {
+      "created": "대화 시작됨",
+      "assigned": "배정됨",
+      "reassigned": "재배정됨",
+      "unassigned": "배정 해제됨",
+      "ai_handoff": "AI 에이전트가 넘김",
+      "resolved": "해결됨",
+      "closed": "종료됨",
+      "reopened": "다시 열림",
+      "status_changed": "상태 변경됨",
+      "note_added": "메모 추가됨",
+      "snoozed": "다시 알림 설정됨",
+      "auto_unsnoozed": "예정 시간에 다시 열림",
+      "priority_changed": "우선순위 변경됨",
+      "tag_added": "라벨 추가됨",
+      "tag_removed": "라벨 제거됨",
+      "first_response": "첫 답장 발송됨",
+      "sla_breach": "응답 시간 초과"
+    },
+    "replies": {
+      "open": "저장된 답변",
+      "title": "저장된 답변",
+      "search": "저장된 답변 검색",
+      "empty": "아직 저장된 답변이 없습니다.",
+      "noMatch": "검색과 일치하는 저장된 답변이 없습니다.",
+      "failed": "이 답변을 사용하지 못했습니다. 다시 시도하세요.",
+      "unfilled": "메시지를 확인하세요: {{list}} 항목을 채우지 못했습니다."
+    },
+    "note": {
+      "title": "비공개 메모",
+      "label": "{{name}}님의 비공개 메모: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "길게 눌러 대화를 선택하세요",
+      "selected_other": "{{count}}개 선택됨",
+      "close": "선택 취소",
+      "selectAll": "모두 선택",
+      "read": "읽음으로 표시",
+      "status": "상태",
+      "assign": "배정",
+      "label": "라벨",
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "statusTitle_other": "대화 {{count}}개의 상태 변경",
+      "labelTitle_other": "대화 {{count}}개의 라벨",
+      "labelMode": "작업",
+      "labelAdd": "라벨 추가",
+      "labelRemove": "라벨 제거",
+      "labelSearch": "라벨 검색",
+      "priorityTitle_other": "대화 {{count}}개의 우선순위",
+      "snoozeTitle_other": "대화 {{count}}개 다시 알림 시간",
+      "result": "{{done}}건 업데이트, {{unchanged}}건 변경 없음, {{failed}}건 실패",
+      "resultDismiss": "닫기"
+    }
+  },
+  "contacts": {
+    "title": "연락처",
+    "unknown": "알 수 없음",
+    "add": "연락처 추가",
+    "cancel": "취소",
+    "yes": "예",
+    "no": "아니요",
+    "denied": {
+      "title": "연락처를 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 현재 역할의 연락처 접근 권한을 요청하세요.",
+      "createTitle": "연락처를 추가할 수 없습니다",
+      "createHint": "워크스페이스 관리자에게 현재 역할의 연락처 추가 권한을 요청하세요."
+    },
+    "empty": {
+      "title": "연락처가 없습니다",
+      "hint": "+ 버튼을 눌러 첫 연락처를 추가하세요.",
+      "filteredTitle": "일치하는 연락처가 없습니다",
+      "filteredHint": "다른 검색어를 입력하거나 필터를 지워 보세요."
+    },
+    "search": {
+      "open": "연락처 검색",
+      "close": "검색 닫기",
+      "label": "검색",
+      "placeholder": "이름, 전화번호 또는 이메일"
+    },
+    "filter": {
+      "open": "연락처 필터",
+      "title": "필터",
+      "stage": "라이프사이클 단계",
+      "owner": "연락처 담당자",
+      "ownerSearch": "연락처 담당자 검색",
+      "unassigned": "담당자 없음",
+      "created": "생성일",
+      "any": "전체",
+      "marketing": "마케팅 메시지",
+      "marketingOptions": {
+        "all": "전체",
+        "subscribed": "구독 중",
+        "unsubscribed": "수신 거부함"
+      },
+      "source": "출처",
+      "sourceHint": "연락처가 유입된 경로입니다. 예: import, api.",
+      "clear": "모두 지우기",
+      "apply": "적용"
+    },
+    "stage": {
+      "new": "신규",
+      "contacted": "연락 완료",
+      "qualified": "자격 확인",
+      "application_started": "지원 시작",
+      "application_submitted": "지원 제출",
+      "interview_scheduled": "면접 예정",
+      "offer_received": "합격 통보 받음",
+      "admission_confirmed": "입학 확정",
+      "enrolled": "등록 완료",
+      "lost": "실패"
+    },
+    "subscription": {
+      "subscribed": "구독 중",
+      "unsubscribed": "구독 취소",
+      "pending": "대기 중"
+    },
+    "form": {
+      "name": "이름",
+      "phone": "전화번호",
+      "phoneHint": "국가 번호를 포함하세요. 예: +919876543210.",
+      "email": "이메일",
+      "needPhoneOrEmail": "전화번호 또는 이메일 주소를 입력하세요.",
+      "phoneInvalid": "국가 번호를 포함한 전화번호를 입력하세요. 예: +919876543210.",
+      "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+      "nameInvalid": "255자 이내의 이름을 입력하세요."
+    },
+    "new": {
+      "title": "새 연락처",
+      "save": "연락처 저장",
+      "requiredTitle": "필수 정보",
+      "choose": "선택",
+      "search": "검색",
+      "unsupported": "{{label}}은(는) 필수 항목이지만 여기서는 아직 입력할 수 없습니다. 웹에서 이 연락처를 추가하세요.",
+      "requiredMissing": "연락처를 저장하려면 워크스페이스에서 요구하는 추가 정보가 필요하지만 이 앱에서는 표시할 수 없습니다. 관리자에게 연락처 속성 접근 권한을 요청하거나 웹에서 연락처를 추가하세요."
+    },
+    "edit": {
+      "title": "연락처 수정",
+      "open": "연락처 수정",
+      "save": "변경 사항 저장",
+      "conflict": "다른 사용자가 이 연락처를 변경했습니다. 내용을 확인하고 다시 저장하세요."
+    },
+    "detail": {
+      "title": "연락처",
+      "notFound": "이 연락처는 더 이상 존재하지 않습니다.",
+      "phone": "전화번호",
+      "email": "이메일",
+      "call": "{{phone}}에 전화",
+      "mail": "{{email}}에 메일 쓰기",
+      "stage": "라이프사이클 단계",
+      "status": "상태",
+      "score": "점수",
+      "source": "출처",
+      "whatsapp": "WhatsApp 구독",
+      "marketing": "마케팅 메시지",
+      "optedOut": "수신 거부함",
+      "optedIn": "수신 가능",
+      "lastActivity": "마지막 활동",
+      "noActivity": "아직 활동이 없습니다",
+      "created": "추가일",
+      "customFields": "사용자 지정 필드",
+      "actions": {
+        "call": "전화",
+        "chat": "채팅",
+        "email": "이메일",
+        "sms": "SMS",
+        "tasks": "작업",
+        "notes": "메모"
+      },
+      "tabsLabel": "연락처 섹션",
+      "tabs": {
+        "about": "연락처 정보",
+        "activity": "활동",
+        "files": "더 보기"
+      },
+      "activities": {
+        "label": "활동 보기",
+        "all": "모든 활동",
+        "timeline": "활동 타임라인"
+      },
+      "more": {
+        "account": "계정",
+        "deals": "딜"
+      },
+      "summary": {
+        "title": "활동",
+        "notes": "메모",
+        "tasks": "작업",
+        "meetings": "미팅",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
+      },
+      "delete": {
+        "open": "연락처 삭제",
+        "title": "연락처 삭제",
+        "message": "{{name}}을(를) 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
+        "confirm": "삭제",
+        "cancel": "취소"
+      }
+    },
+    "tags": {
+      "title": "태그",
+      "none": "아직 태그가 없습니다.",
+      "remove": "태그 {{name}} 제거",
+      "addLabel": "태그 추가",
+      "addPlaceholder": "태그 이름",
+      "add": "태그 추가"
+    },
+    "row": {
+      "more": "{{name}}에 대한 더 보기",
+      "actionFor": "{{name}} {{action}}",
+      "swipeEdit": "수정",
+      "swipeDelete": "삭제"
+    },
+    "sheet": {
+      "close": "닫기"
+    },
+    "views": {
+      "open": "연락처 보기: {{name}}",
+      "title": "보기",
+      "close": "보기 닫기",
+      "searchLabel": "보기 검색",
+      "searchPlaceholder": "보기 검색",
+      "systemTitle": "시스템 기본 보기",
+      "customTitle": "사용자 지정 보기",
+      "none": "사용 가능한 보기가 없습니다",
+      "failed": "저장된 보기를 불러오지 못했습니다.",
+      "system": {
+        "all": "모든 연락처",
+        "mine": "내 연락처",
+        "recent": "최근 생성",
+        "optedOut": "마케팅 수신 거부"
+      }
+    }
+  },
+  "tasks": {
+    "title": "작업",
+    "add": "작업 추가",
+    "cancel": "취소",
+    "unknownContact": "이름 없는 연락처",
+    "notFound": "이 작업은 더 이상 존재하지 않습니다.",
+    "priority": {
+      "low": "낮음",
+      "medium": "중간",
+      "high": "높음"
+    },
+    "status": {
+      "open": "진행 중",
+      "done": "완료",
+      "overdue": "기한 초과"
+    },
+    "denied": {
+      "title": "작업을 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 작업 접근 권한을 요청하세요.",
+      "createTitle": "작업을 추가할 수 없습니다",
+      "createHint": "워크스페이스 관리자에게 작업 추가 권한을 요청하세요.",
+      "editTitle": "작업을 수정할 수 없습니다",
+      "editHint": "워크스페이스 관리자에게 작업 수정 권한을 요청하세요."
+    },
+    "planLocked": {
+      "title": "현재 요금제에는 작업 기능이 포함되어 있지 않습니다.",
+      "hint": "워크스페이스 관리자에게 요금제 업그레이드를 요청하세요."
+    },
+    "empty": {
+      "title": "작업이 없습니다.",
+      "hint": "추가한 작업이 여기에 표시됩니다.",
+      "filteredHint": "다른 필터나 검색어를 사용해 보세요."
+    },
+    "search": {
+      "open": "작업 검색",
+      "close": "검색 닫기",
+      "label": "검색",
+      "placeholder": "제목으로 검색"
+    },
+    "filter": {
+      "open": "작업 필터",
+      "title": "작업 필터",
+      "clear": "모두 지우기",
+      "apply": "적용",
+      "group": {
+        "status": "상태",
+        "priority": "우선순위",
+        "due": "기한",
+        "owner": "담당자"
+      },
+      "status": {
+        "open": "진행 중",
+        "done": "완료",
+        "all": "전체"
+      },
+      "due": {
+        "overdue": "기한 초과",
+        "today": "오늘",
+        "upcoming": "예정",
+        "none": "날짜 없음"
+      },
+      "owner": {
+        "mine": "내 작업",
+        "unassigned": "미배정",
+        "all": "전체"
+      }
+    },
+    "list": {
+      "conflict": "다른 사용자가 이 작업을 변경했습니다. 목록을 새로 고쳤습니다."
+    },
+    "row": {
+      "markDone": "{{title}} 완료로 표시",
+      "reopen": "{{title}} 다시 열기",
+      "more": "{{title}}에 대한 더 보기",
+      "due": "기한 {{when}}",
+      "unassigned": "미배정"
+    },
+    "actions": {
+      "edit": "작업 수정",
+      "delete": "작업 삭제"
+    },
+    "delete": {
+      "title": "작업 삭제",
+      "message": "이 작업을 삭제할까요?",
+      "confirm": "삭제"
+    },
+    "details": {
+      "title": "작업 상세",
+      "edit": "작업 수정",
+      "delete": "작업 삭제",
+      "description": "설명",
+      "priority": "우선순위",
+      "status": "상태",
+      "owner": "담당자",
+      "relatedTo": "관련 대상",
+      "noDescription": "설명 없음",
+      "noDue": "기한 없음",
+      "unassigned": "미배정",
+      "noContact": "없음",
+      "openContact": "{{name}} 열기",
+      "markComplete": "완료로 표시",
+      "reopen": "다시 열기",
+      "conflict": "다른 사용자가 이 작업을 변경했습니다. 다시 불러왔습니다."
+    },
+    "form": {
+      "addTitle": "작업 추가",
+      "editTitle": "작업 수정",
+      "save": "작업 저장",
+      "saving": "저장하는 중…",
+      "title": "작업 제목",
+      "description": "작업 설명",
+      "priority": "우선순위",
+      "date": "날짜 (YYYY-MM-DD)",
+      "dateHint": "기한이 없으면 날짜와 시간을 비워 두세요. 예: 2026-10-31.",
+      "time": "시간 (HH:mm)",
+      "timeHint": "24시간제로 입력하세요. 예: 14:30.",
+      "owner": "담당자",
+      "ownerPick": "담당자 선택",
+      "ownerMe": "나",
+      "ownerNone": "미배정",
+      "ownerLoading": "팀을 불러오는 중…",
+      "ownerFailed": "팀을 불러오지 못했습니다.",
+      "contact": "연락처",
+      "contactLinkOptional": "연락처 연결 (선택)",
+      "contactNone": "연락처 없음",
+      "contactPick": "연락처 선택",
+      "contactSearchLabel": "연락처 검색",
+      "contactSearchPlaceholder": "이름, 이메일 또는 전화번호",
+      "contactEmpty": "연락처를 찾을 수 없습니다.",
+      "contactFailed": "연락처를 불러오지 못했습니다.",
+      "conflict": "다른 사용자가 이 작업을 변경했습니다. 내용을 확인하고 다시 저장하세요.",
+      "errors": {
+        "titleRequired": "작업 제목을 입력하세요.",
+        "titleTooLong": "제목은 최대 255자까지 입력할 수 있습니다.",
+        "titleNeedsLetter": "제목에는 문자가 하나 이상 있어야 합니다.",
+        "notesTooLong": "설명은 최대 5000자까지 입력할 수 있습니다.",
+        "dateInvalid": "날짜를 YYYY-MM-DD 형식으로 입력하세요. 예: 2026-10-31.",
+        "timeInvalid": "시간을 24시간제 HH:mm 형식으로 입력하세요. 예: 14:30.",
+        "dateNeeded": "날짜도 입력하세요.",
+        "timeNeeded": "시간도 입력하세요.",
+        "dueInvalid": "이 기한 날짜와 시간은 사용할 수 없습니다.",
+        "assigneeInvalid": "이 사용자에게는 작업을 배정할 수 없습니다. 다른 담당자를 선택하세요.",
+        "contactInvalid": "이 연락처는 연결할 수 없습니다."
+      }
+    }
+  },
+  "contactNotes": {
+    "title": "메모",
+    "cancel": "취소",
+    "loadMore": "더 보기",
+    "deleteConfirm": "삭제",
+    "contactMissing": "이 연락처는 더 이상 존재하지 않습니다.",
+    "add": "메모 추가",
+    "edited": "수정됨",
+    "denied": {
+      "title": "메모를 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 현재 역할의 연락처 접근 권한을 요청하세요.",
+      "updateTitle": "메모를 변경할 수 없습니다",
+      "updateHint": "워크스페이스 관리자에게 현재 역할의 연락처 수정 권한을 요청하세요."
+    },
+    "empty": {
+      "title": "메모가 없습니다.",
+      "hint": "+ 버튼을 눌러 첫 메모를 추가하세요."
+    },
+    "menu": {
+      "open": "{{date}} 메모 작업",
+      "edit": "메모 수정",
+      "delete": "메모 삭제"
+    },
+    "delete": {
+      "title": "메모 삭제",
+      "message": "이 메모를 삭제할까요?"
+    },
+    "form": {
+      "addTitle": "메모 추가",
+      "editTitle": "메모 수정",
+      "label": "메모",
+      "placeholder": "여기에 메모를 작성하세요...",
+      "required": "저장하기 전에 메모를 작성하세요.",
+      "invalid": "400자 이내의 메모를 입력하세요.",
+      "counterLabel": "{{max}}자 중 {{used}}자 사용",
+      "save": "메모 저장",
+      "saving": "메모 저장 중",
+      "conflict": "다른 사용자가 이 메모를 변경했습니다. 내용을 확인하고 다시 저장하세요.",
+      "missing": "이 메모는 더 이상 존재하지 않습니다."
+    },
+    "activity": {
+      "notes": "메모",
+      "tasks": "작업",
+      "timeline": "타임라인",
+      "empty": "아직 활동이 없습니다.",
+      "add": "활동 추가",
+      "types": {
+        "note": "메모",
+        "call": "통화",
+        "email": "이메일",
+        "meeting": "미팅",
+        "task": "작업"
+      },
+      "source": {
+        "system": "시스템",
+        "bot": "봇"
+      },
+      "form": {
+        "title": "활동 추가",
+        "type": "유형",
+        "typeHint": "예: 메모, 통화, 이메일 또는 미팅.",
+        "name": "제목",
+        "details": "상세 내용",
+        "save": "활동 저장",
+        "typeInvalid": "100자 이내의 유형을 입력하세요.",
+        "titleInvalid": "255자 이내의 제목을 입력하세요.",
+        "detailsInvalid": "상세 내용은 최대 10,000자까지 입력할 수 있습니다."
+      }
+    },
+    "files": {
+      "empty": "파일이 없습니다.",
+      "delete": "파일 {{name}} 삭제",
+      "deleteTitle": "파일 삭제",
+      "deleteMessage": "이 파일을 삭제할까요?"
+    }
+  },
+  "contactMeetings": {
+    "title": "미팅",
+    "loadMore": "더 보기",
+    "contactMissing": "이 연락처는 더 이상 존재하지 않습니다.",
+    "noDate": "날짜 미정",
+    "denied": {
+      "title": "미팅을 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 현재 역할의 연락처 접근 권한을 요청하세요."
+    },
+    "empty": {
+      "title": "기록된 미팅이 없습니다."
+    }
+  },
+  "contactDeals": {
+    "title": "딜",
+    "contactMissing": "이 연락처는 더 이상 존재하지 않습니다.",
+    "denied": {
+      "title": "딜을 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 현재 역할의 딜 접근 권한을 요청하세요."
+    },
+    "empty": {
+      "title": "아직 딜이 없습니다."
+    }
+  },
+  "contactCompany": {
+    "title": "계정",
+    "missing": "이 계정은 더 이상 존재하지 않습니다.",
+    "denied": {
+      "title": "계정을 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 현재 역할의 회사 접근 권한을 요청하세요."
+    },
+    "industry": "업종",
+    "size": "규모",
+    "phone": "전화번호",
+    "email": "이메일",
+    "website": "웹사이트",
+    "address": "주소",
+    "owner": "담당자",
+    "notes": "메모"
+  },
+  "contactProps": {
+    "title": "연락처 정보",
+    "search": "필드 검색",
+    "showEmpty": "빈 필드 표시",
+    "footer": "여기에 표시되는 속성은 웹 앱에서 사용자 지정할 수 있습니다.",
+    "close": "닫기",
+    "save": "저장",
+    "clear": "지우기",
+    "yes": "예",
+    "no": "아니요",
+    "rowHint": "편집기를 엽니다",
+    "locked": "{{label}}은(는) 수정할 수 없습니다",
+    "webOnly": "{{label}}은(는) 웹 앱에서만 수정할 수 있습니다.",
+    "masked": "숨김",
+    "fields": {
+      "email": "이메일",
+      "phone": "전화번호",
+      "owner": "연락처 담당자",
+      "name": "이름",
+      "source": "출처",
+      "whatsapp": "WhatsApp 구독",
+      "marketing": "마케팅 수신 거부",
+      "leadScore": "리드 점수",
+      "created": "생성일",
+      "lastActivity": "마지막 활동"
+    },
+    "subscription": {
+      "subscribed": "구독 중",
+      "unsubscribed": "구독 취소",
+      "pending": "대기 중"
+    },
+    "editor": {
+      "title": "{{label}} 수정",
+      "date": "날짜",
+      "dateHint": "연-월-일 형식으로 입력하세요. 예: 2026-10-12.",
+      "time": "시간",
+      "timeHint": "24시간제로 입력하세요. 예: 14:30.",
+      "phoneHint": "국가 번호를 포함하세요. 예: +919876543210.",
+      "noOptions": "선택할 수 있는 옵션이 없습니다."
+    },
+    "error": {
+      "required": "{{label}}은(는) 필수 항목입니다.",
+      "name": "255자 이내의 이름을 입력하세요.",
+      "email": "올바른 이메일 주소를 입력하세요.",
+      "phone": "국가 번호를 포함한 전화번호를 입력하세요. 예: +919876543210.",
+      "needPhoneOrEmail": "연락처에는 전화번호 또는 이메일 주소가 필요합니다.",
+      "text": "최대 {{max}}자까지 입력하세요.",
+      "number": "숫자를 입력하세요.",
+      "whole": "정수를 입력하세요.",
+      "range": "0에서 {{max}} 사이의 숫자를 입력하세요.",
+      "url": "http:// 또는 https://로 시작하는 링크를 입력하세요",
+      "date": "올바른 날짜를 YYYY-MM-DD 형식으로 입력하세요.",
+      "time": "올바른 시간을 HH:mm 형식으로 입력하세요.",
+      "option": "옵션 중 하나를 선택하세요.",
+      "invalid": "허용되지 않는 값입니다. 확인하고 다시 시도하세요.",
+      "notEditable": "이 속성은 수정할 수 없습니다.",
+      "requiredMissing": "필수 속성에 값이 없습니다. 저장하기 전에 입력하세요.",
+      "conflict": "다른 사용자가 이 연락처를 변경했습니다. 내용을 확인하고 다시 저장하세요.",
+      "lostReasonRequired": "이 연락처가 실패한 사유를 입력하세요.",
+      "statusMismatch": "해당 상태는 이 라이프사이클 단계에 속하지 않습니다."
+    },
+    "owner": {
+      "title": "배정 대상",
+      "unassigned": "미배정",
+      "none": "이 연락처를 배정할 사용자가 없습니다.",
+      "failed": "담당자를 변경하지 못했습니다. 다시 시도하세요."
+    },
+    "lifecycle": {
+      "stage": "라이프사이클 단계",
+      "status": "상태",
+      "change": "라이프사이클 단계 변경",
+      "changeStatus": "상태 변경",
+      "dropdownHint": "선택할 목록을 엽니다",
+      "lostReason": "실패 사유",
+      "otherReason": "기타",
+      "otherLabel": "사유를 입력하세요"
+    }
+  },
+  "summary": {
+    "contacts": "연락처",
+    "contactsNote": "이 기간에 추가됨",
+    "tasks": "작업",
+    "tasksNote": "현재 진행 중",
+    "messages": "메시지",
+    "sentNote": "발송됨",
+    "receivedNote": "받음",
+    "conversations": "대화",
+    "conversationsNote": "현재 열림 및 대기 중",
+    "status": {
+      "all": "활성",
+      "mine": "내 대화",
+      "unassigned": "미배정",
+      "assigned": "배정됨",
+      "unread": "읽지 않음",
+      "archived": "보관됨"
+    },
+    "allMessages": {
+      "title": "전체 메시지",
+      "sent": "발송됨",
+      "delivered": "전달됨",
+      "received": "받음",
+      "read": "읽음",
+      "failed": "실패"
+    },
+    "moreTitle": "워크스페이스 더 보기"
+  },
+  "dashDate": {
+    "title": "달력으로 검색",
+    "close": "달력 닫기",
+    "apply": "적용",
+    "reset": "초기화",
+    "presets": "빠른 기간",
+    "pill": {
+      "label": "기간: {{from}} ~ {{to}}",
+      "hint": "달력을 열어 날짜를 변경합니다"
+    },
+    "selection": {
+      "label": "{{from}} ~ {{to}}",
+      "pickFirst": "첫째 날 선택",
+      "pickLast": "마지막 날 선택"
+    },
+    "preset": {
+      "last7": "최근 7일",
+      "last30": "최근 30일",
+      "last90": "최근 90일",
+      "yesterday": "어제",
+      "today": "오늘"
+    },
+    "calendar": {
+      "previousMonth": "이전 달",
+      "nextMonth": "다음 달",
+      "start": "기간 시작",
+      "end": "기간 종료",
+      "inRange": "기간 내",
+      "today": "오늘"
+    }
+  },
+  "permissions": {
+    "channelName": "메시지 및 업데이트",
+    "settingsHint": "권한을 탭한 다음 필요한 항목을 켜세요.",
+    "names": {
+      "notifications": "알림",
+      "calls": "전화",
+      "camera": "카메라",
+      "callPopup": "통화 팝업 (다른 앱 위에 표시)"
+    }
+  },
+  "calls": {
+    "monitor": {
+      "contact": "연락처",
+      "close": "닫기",
+      "ongoingTitle": "통화 중",
+      "endedTitle": "통화 종료",
+      "endedText": "탭하여 {{name}}님과의 통화를 기록하세요.",
+      "channelOngoing": "진행 중인 통화",
+      "channelEnded": "통화 요약"
+    },
+    "summary": {
+      "title": "통화 추가",
+      "contact": "연락처",
+      "type": "통화 유형",
+      "outbound": "발신",
+      "status": "발신 통화 상태",
+      "completed": "완료됨",
+      "notAnswered": "응답 없음",
+      "startTime": "통화 시작 시간",
+      "duration": "통화 시간",
+      "durationHint": "분:초 형식으로 입력하세요. 예: 02:30",
+      "durationInvalid": "통화 시간을 분:초 형식으로 입력하세요. 예: 02:30.",
+      "subject": "제목",
+      "subjectDefault": "{{name}}님에게 발신한 통화",
+      "subjectInvalid": "255자 이내의 제목을 입력하세요.",
+      "notes": "설명",
+      "save": "통화 저장",
+      "skip": "건너뛰기",
+      "contactMissing": "이 통화에는 기록할 연락처가 없습니다.",
+      "denied": "현재 역할은 연락처를 변경할 수 없어 이 통화를 기록할 수 없습니다.",
+      "purpose": "통화 목적",
+      "purposeNone": "-없음-",
+      "result": "통화 결과",
+      "purposes": {
+        "prospecting": "잠재 고객 발굴",
+        "administrative": "행정",
+        "negotiation": "협상",
+        "demo": "데모",
+        "project": "프로젝트",
+        "desk": "데스크"
+      }
+    }
+  }
+}

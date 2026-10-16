@@ -17,11 +17,8 @@ export default function AppLayout() {
       <Stack screenOptions={{ headerShown: false }}>
         {/* Listed first: the first screen declared here is the one the stack starts on, and it must be the tabs. */}
         <Stack.Screen name="(tabs)" />
-        {/* The "log this call" sheet slides up over whatever is on screen, so the person is not taken away from it. */}
-        <Stack.Screen
-          name="call-summary"
-          options={{ presentation: 'transparentModal', animation: 'slide_from_bottom' }}
-        />
+        {/* The "Add call" page slides up over whatever is on screen; Back (or the app's Back) returns to it. */}
+        <Stack.Screen name="call-summary" options={{ animation: 'slide_from_bottom' }} />
       </Stack>
     </>
   );
