@@ -133,6 +133,19 @@ describe('workspace lifecycle', () => {
        VALUES ($1,'user','contacts',1,'update','{"phone":{"old":"+911","new":"+912"}}')`,
       [org.id],
     );
+    // Analytics streams have no foreign key to organizations: the erase must delete them itself.
+    await owner.query(
+      `INSERT INTO an_events (org_id, type, occurred_at, contact_id) VALUES ($1, 3, now(), $2)`,
+      [org.id, c.rows[0].id],
+    );
+    await owner.query(
+      `INSERT INTO an_rollup_hour (org_id, metric, bucket, n) VALUES ($1, 1, now(), 1)`,
+      [org.id],
+    );
+    await owner.query(
+      `INSERT INTO an_rollup_day (org_id, metric, bucket, n) VALUES ($1, 1, current_date, 1)`,
+      [org.id],
+    );
 
     await svc.sweep();
     expect(await status(org.id)).toBe('active');

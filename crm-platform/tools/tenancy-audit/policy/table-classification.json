@@ -9,6 +9,11 @@
     "reason": "operator_write / privileged_only policy, no tenant policy",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
+  "an_rollup_state": {
+    "class": "GLOBAL",
+    "reason": "rollup watermark: read by every tenant for the live tail of a query, written by the rollup worker only (privileged)",
+    "reviewed": "2026-10-16 (policy text read in the migration and in the analytics schema spec)"
+  },
   "announcements": {
     "class": "GLOBAL",
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",

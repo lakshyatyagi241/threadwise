@@ -11,6 +11,10 @@
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
   },
+  "an_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
   "audit_log_pkey": {
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"

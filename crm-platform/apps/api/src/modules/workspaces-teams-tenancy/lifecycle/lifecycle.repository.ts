@@ -338,6 +338,10 @@ export class LifecycleRepository {
     await tx.execute(sql`DELETE FROM audit_log WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM event_outbox WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM security_events WHERE subject_org_id = ${id}`);
+    // The analytics event stream and its rollups also have no foreign key to organizations.
+    await tx.execute(sql`DELETE FROM an_events WHERE org_id = ${id}`);
+    await tx.execute(sql`DELETE FROM an_rollup_hour WHERE org_id = ${id}`);
+    await tx.execute(sql`DELETE FROM an_rollup_day WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM organizations WHERE id = ${id}`);
     return { filesQueued, ordersKept };
   }

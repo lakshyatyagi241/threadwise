@@ -9,6 +9,11 @@
     "reason": "org-keyed roles_version read/bump; callers pass the authenticated org; returns an integer for a cache key",
     "reviewedOn": "2026-10-11"
   },
+  "modules/analytics/rollup/rollup.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (AnalyticsWorkerModule is imported by WorkersModule alone; no controller reaches it); the rollup pass, nightly reconcile and hour trim read and write the analytics event stream and rollups across tenants by design. Every statement is fixed in code from the rollup rules, org_id is taken from the events themselves, and the only caller input is the reconcile day, validated against YYYY-MM-DD",
+    "reviewedOn": "2026-10-16"
+  },
   "modules/api-library/api-library-retention.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",

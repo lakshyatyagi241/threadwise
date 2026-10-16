@@ -127,9 +127,14 @@ centre.
 
 ## Where this design stops
 
-Analytics. Reporting over 25M rows/month does not belong on the OLTP database
-regardless of how it is indexed. The plan is CDC into ClickHouse, with
-`metric_counters` covering the sub-5-second dashboard numbers in the meantime.
+Live analytics queries. Reporting over 25M rows/month does not belong on the OLTP
+database regardless of how it is indexed. The decision (2026-10-16) is an event
+stream with incremental rollups in the same PostgreSQL, not CDC into ClickHouse
+and not `metric_counters`: see [analytics.md](analytics.md) and
+[the design](../superpowers/specs/2026-10-16-event-based-analytics-design.md).
+ClickHouse stays a later swap behind `AnalyticsQueryService` if Postgres stops
+being enough. The sub-5-second numbers (unread badges, wallet balance) remain
+live counters.
 
 ## Ceilings to watch
 

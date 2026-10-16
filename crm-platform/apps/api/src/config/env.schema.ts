@@ -167,6 +167,18 @@ export const envSchema = z.object({
    * the period; 8 years covers India's GST rules. Confirm with legal before changing.
    */
   FINANCIAL_RECORD_RETENTION_YEARS: z.coerce.number().int().min(1).max(15).default(8),
+  // Event-based analytics (docs/superpowers/specs/2026-10-16-event-based-analytics-design.md).
+  /** Master switch for writing analytics events. Off = `AnalyticsEvents.record` does nothing. */
+  ANALYTICS_EVENTS_ENABLED: booleanish.default(true),
+  /**
+   * Each event insert runs in a savepoint so a failure cannot abort the caller's transaction. Turn off only if the Phase 0 benchmark
+   * shows the savepoint costs too much; the writer then validates in code and a database error fails the caller's transaction.
+   */
+  ANALYTICS_EVENT_SAVEPOINT: booleanish.default(true),
+  /** The rollup worker (every 30 seconds) and its nightly reconcile. */
+  ANALYTICS_ROLLUP_ENABLED: booleanish.default(true),
+  /** JSON map of metric key to `legacy` | `shadow` | `rollup`. Anything missing or invalid is `legacy`. */
+  ANALYTICS_SOURCES: z.string().default('{}'),
   FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
   FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),
