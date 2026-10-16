@@ -405,6 +405,26 @@ Reference's recurring campaign repeats one template. A recurring broadcast of th
 - `GET /broadcasts/:id`: a series has `templateCount` (1 without a sequence) and each run in `runList` has the `templateName` it sent.
 - Not done: the credit check at launch prices the first template only (a sequence with templates of another category can cost more per message); a run whose template was deleted or refused fails with the reason and the series goes on.
 
+### Previous sends as the audience (an addition beyond Reference)
+
+Reference's Scheduled composer can take "Previous broadcast" as its recipients (broadcasts only). Here every audience can, and a send is a broadcast or a campaign (each run of a recurring broadcast is a campaign). `previous` on the wizard's audience and `previousSends` on the classic create and update bodies are `{ "sends": [{ "kind": "broadcast" | "campaign", "id": "<uuid>" }], "outcome": "all" }`, up to 20 sends. A contact in several is one recipient; it is another source like a group (the audience is the union), and opted-out and unusable numbers are still left out last.
+
+`outcome` narrows the contacts of those sends:
+
+| outcome | who |
+| --- | --- |
+| `all` | everyone the message was meant for (a recipient who was skipped or opted out is not one) |
+| `delivered` | it reached their phone (delivered or read) |
+| `read` | they read it (a reply counts: they saw it) |
+| `not_read` | it was sent to them and they did not read it, nor reply |
+| `replied`, `not_replied` | they replied / it was sent and they did not (campaigns only) |
+| `clicked` | they clicked a tracked link (campaigns only) |
+| `failed` | it could not be delivered to them |
+
+A broadcast records delivery and reading only, so `replied`, `not_replied` and `clicked` with a broadcast in the list are 422 (`previous_outcome_unsupported`). A send of another workspace matches nobody (the lookup is by the send's own organization).
+
+The picker's rows: `GET /broadcast-wizard/audience-sources` has `previousSends` and `GET /campaigns/builder` has `previousSends`: finished broadcasts and every campaign that has gone out, newest first (100), each with `recipients`, `delivered`, `read`, `failed` and, for a campaign, `replied` and `clicked`. The Scheduled composer's `queues` (`GET /scheduled/options`) lists the same sends with `kind`, and its `queueIds` take a broadcast's or a campaign's uuid (no outcome filter there, as in Reference). The classic builder's edit form rebuilds its recipients from the campaign's resolved contacts, so a previous-sends choice is not shown again on edit.
+
 ### Test send
 
 `{ "draftId": "...", "recipients": "+919876543210,+14155550123" }`: the draft's template and variables resolved for the first messageable contact of

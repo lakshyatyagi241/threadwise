@@ -139,7 +139,8 @@
         "cancel": "Annuler",
         "retry": "Relancer à une nouvelle heure",
         "delete": "Supprimer",
-        "deleteHistory": "Supprimer de l’historique"
+        "deleteHistory": "Supprimer de l’historique",
+        "edit": "Modifier"
       },
       "empty": {
         "title": "Aucune planification",
@@ -207,7 +208,8 @@
         "noSenders": "Aucun expéditeur connecté. Connectez d’abord un numéro.",
         "warming": "Préchauffage",
         "splitHint": "Chaque expéditeur coché exécute sa propre planification avec une part équitable de l’audience.",
-        "messageType": "Type de message"
+        "messageType": "Type de message",
+        "editSenderHint": "Une planification a un seul numéro. En choisir un autre y déplace la planification et réserve à nouveau son budget de montée en charge."
       },
       "audience": {
         "title": "Destinataires",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "File d’audience",
-            "hint": "Cibler à nouveau les destinataires d’une diffusion passée."
+            "hint": "Ciblez à nouveau les destinataires des diffusions et campagnes passées."
           },
           "number": {
             "title": "Numéros",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Choisissez un ou plusieurs groupes",
         "chooseTags": "Choisissez une ou plusieurs étiquettes",
-        "chooseQueues": "Choisissez une ou plusieurs diffusions passées",
+        "chooseQueues": "Choisissez une ou plusieurs diffusions ou campagnes passées",
         "tickAny": "(cochez autant que nécessaire)",
         "noGroups": "Aucun groupe pour l’instant",
         "noTags": "Aucune étiquette pour l’instant",
-        "noQueues": "Aucune diffusion terminée pour l’instant",
+        "noQueues": "Aucune diffusion ni campagne antérieure pour l'instant",
         "contacts": "Aller aux contacts",
         "broadcast": "Aller aux diffusions",
         "tagsHint": "Les destinataires sont recalculés au moment de l’envoi, donc les contacts nouvellement étiquetés sont inclus.",
-        "queuesHint": "Cochez autant de diffusions que vous voulez. Les destinataires en double sont supprimés automatiquement avant l’envoi.",
+        "queuesHint": "Cochez autant de diffusions ou de campagnes que vous voulez. Les doublons de destinataires sont supprimés automatiquement avant l'envoi.",
         "paste": "Coller des numéros",
         "pasteHint": "Indicatif pays en premier, sans + initial. Les retours à la ligne ou les virgules séparent les entrées.",
         "pastePlaceholder": "Un numéro par ligne, avec l’indicatif pays, sans signe plus",
         "total": "Total des destinataires :",
-        "optedOut": "{n} exclu(s) : désinscrit(s) ou archivé(s)"
+        "optedOut": "{n} exclu(s) : désinscrit(s) ou archivé(s)",
+        "kind": {
+          "broadcast": "Diffusion",
+          "campaign": "Campagne"
+        }
       },
       "message": {
         "title": "Rédiger le message",
@@ -275,7 +281,34 @@
         "pickerSearch": "Rechercher par nom ou langue…",
         "pickerEmpty": "Aucun modèle ne correspond.",
         "manageTemplates": "Gérer les modèles →",
-        "cancel": "Annuler"
+        "cancel": "Annuler",
+        "pickToPreview": "Choisissez un modèle pour l'afficher.",
+        "headerMedia": "En-tête {kind}",
+        "windowNote": "Un numéro Cloud API livre un modèle approuvé même si le client n'a pas écrit au cours des dernières 24 heures.",
+        "previewSamples": "Aperçu avec des valeurs d'exemple",
+        "pickerCategories": "Catégorie de modèle",
+        "categories": {
+          "all": "Tous",
+          "marketing": "Marketing",
+          "utility": "Utilitaire"
+        },
+        "pickerHidden": "{n, plural, one {# autre modèle est masqué, car un numéro coché ne peut pas l'envoyer.} many {# d'autres modèles sont masqués, car un numéro coché ne peut pas les envoyer.} other {# autres modèles sont masqués, car un numéro coché ne peut pas les envoyer.}}",
+        "file": "Fichier",
+        "chooseFile": "Choisir un fichier à envoyer",
+        "fileHint": "Image, vidéo, audio ou document. Il est stocké en privé dans votre espace de travail.",
+        "limits": "Sur les numéros choisis : jusqu'à {image} Mo pour les images, {video} Mo pour les vidéos, {audio} Mo pour l'audio et {document} Mo pour les documents.",
+        "tooBigUpload": "Le fichier dépasse {mb} Mo.",
+        "uploadFailed": "Le fichier n'a pas pu être téléversé. Réessayez.",
+        "uploading": "Téléversement…",
+        "replace": "Remplacer",
+        "remove": "Supprimer",
+        "kinds": {
+          "image": "Image",
+          "video": "Vidéo",
+          "audio": "Audio",
+          "document": "Document"
+        },
+        "orLink": "Ou collez un lien vers le fichier"
       },
       "when": {
         "title": "Quand envoyer",
@@ -356,7 +389,18 @@
         "daysRequired": "Choisissez les jours de la semaine.",
         "endDateRequired": "Choisissez le dernier jour.",
         "endBeforeStart": "La date de fin est antérieure au premier envoi.",
-        "testNumber": "Saisissez le numéro avec son indicatif pays."
+        "testNumber": "Saisissez le numéro avec son indicatif pays.",
+        "mediaTooLarge": "Ce fichier dépasse la taille acceptée par un numéro coché. Choisissez un fichier plus petit.",
+        "mediaType": "Un numéro coché n'accepte pas ce type de fichier pour ce type de média.",
+        "templateNotForSender": "Un numéro coché ne peut pas envoyer ce modèle : un numéro WhatsApp Cloud API n'envoie que des modèles approuvés par Meta. Choisissez un autre modèle ou numéro."
+      },
+      "edit": {
+        "title": "Modifier le message planifié",
+        "saved": "Planification mise à jour.",
+        "submit": "Enregistrer les modifications",
+        "stale": "Quelqu'un a modifié cette planification pendant que vous la modifiiez. Rechargez-la pour voir ses changements ; ce que vous avez saisi ici sera perdu.",
+        "reload": "Recharger la planification",
+        "backToSchedule": "Retour à la planification"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Exécuter maintenant",
         "cancel": "Annuler",
         "retry": "Relancer à une nouvelle heure",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "edit": "Modifier"
       },
       "kpi": {
         "recipients": "Destinataires",
@@ -434,7 +479,11 @@
           "delivered": "Distribué",
           "read": "Lu",
           "failed": "Échec"
-        }
+        },
+        "search": "Rechercher un nom ou un numéro",
+        "range": "{from}–{to} sur {total}",
+        "prev": "Précédent",
+        "next": "Suivant"
       },
       "config": {
         "eyebrow": "Détails de la planification",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Aperçu du message",
         "title": "Ce que voient les destinataires",
-        "empty": "(corps vide)"
+        "empty": "(corps vide)",
+        "template": "Modèle {name} ({language})",
+        "file": "Fichier : {name}"
       },
-      "another": "Planifier un autre message"
+      "another": "Planifier un autre message",
+      "engagement": {
+        "eyebrow": "Engagement",
+        "title": "Livraison au fil du temps",
+        "legend": "Légende",
+        "steps": {
+          "queued": "En file d'attente",
+          "sent": "Envoyé",
+          "delivered": "Livré",
+          "read": "Lu",
+          "failed": "Échec"
+        },
+        "empty": "Rien n'a encore été envoyé, il n'y a donc rien à afficher.",
+        "perHour": "Totaux cumulés au début de chaque heure, en {zone}.",
+        "perDay": "Totaux cumulés au début de chaque jour, en {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} en préchauffage",

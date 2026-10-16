@@ -306,7 +306,11 @@
         "numbersCount": "{count} numéros",
         "emailNote": "Les e-mails sont envoyés à l'adresse de chaque contact. Les contacts sans adresse e-mail, les adresses en double et les contacts désabonnés sont ignorés.",
         "emailSkipped": "{count, plural, one {# destinataire choisi n'a pas d'adresse e-mail et sera ignoré.} other {# destinataires choisis n'ont pas d'adresse e-mail et seront ignorés.}}",
-        "emailNoAddress": "Les numéros saisis et les lignes du CSV n'ont pas d'adresse e-mail, ils sont donc ignorés. Choisissez plutôt des contacts, des groupes, des étiquettes ou des segments."
+        "emailNoAddress": "Les numéros saisis et les lignes du CSV n'ont pas d'adresse e-mail, ils sont donc ignorés. Choisissez plutôt des contacts, des groupes, des étiquettes ou des segments.",
+        "previousTitle": "Envois précédents",
+        "previousHint": "Ajoutez les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, répondu ou cliqué.",
+        "previousEstimate": "{count, plural, one {Jusqu'à # personne issue des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).} many {Jusqu'à # de personnes issues des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).} other {Jusqu'à # personnes issues des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).}}",
+        "previousEditHint": "Votre choix précédent d'envois n'est pas affiché lors de la modification : cette campagne conserve déjà ses destinataires sous forme de contacts. Choisissez à nouveau pour ajouter d'autres personnes."
       },
       "message": {
         "title": "Message",
@@ -594,7 +598,8 @@
         "subject": "Objet",
         "subjectFallback": "Le nom de la campagne",
         "skippedNoEmail": "Ignorés (sans adresse e-mail)",
-        "estimateEmail": "Il s'agit d'une estimation : un contact présent dans deux groupes est compté deux fois. Les contacts sans adresse e-mail dans les groupes, étiquettes et segments sont ignorés au lancement de la campagne."
+        "estimateEmail": "Il s'agit d'une estimation : un contact présent dans deux groupes est compté deux fois. Les contacts sans adresse e-mail dans les groupes, étiquettes et segments sont ignorés au lancement de la campagne.",
+        "previousSends": "Envois précédents (jusqu'à)"
       },
       "ai": {
         "open": "Créer avec l'IA",
@@ -1254,7 +1259,8 @@
           "contacts": "Contacts",
           "groups": "Groupes",
           "segments": "Segments",
-          "csv": "Fichier CSV"
+          "csv": "Fichier CSV",
+          "previous": "Envois précédents"
         },
         "groupsHint": "Les groupes sont vos listes marketing. Toutes les personnes des groupes cochés sont incluses.",
         "segmentsHint": "Les segments se remplissent selon des règles. Toutes les personnes des segments cochés sont incluses.",
@@ -1350,7 +1356,10 @@
         },
         "csvIssuesMore": "{count} autres figurent dans le téléchargement.",
         "csvConsentOn": "Vous avez confirmé le consentement pour ces numéros. Ils sont enregistrés comme ayant accepté au lancement de la diffusion.",
-        "csvConsentVersion": "Version de la mention : {version}."
+        "csvConsentVersion": "Version de la mention : {version}.",
+        "modePrevious": "Envoyer aux envois précédents",
+        "previousHint": "Ciblez à nouveau les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, n'ont pas lu, ont répondu ou ont cliqué.",
+        "chipPrevious": "{count, plural, one {# envoi antérieur} many {# d'envois antérieurs} other {# envois antérieurs}} ({outcome})"
       },
       "review": {
         "intro": "Vérifiez le coût, indiquez par quoi chaque variable du modèle est remplie et examinez la diffusion.",
@@ -1429,7 +1438,8 @@
         "chargedPlan": "Débité maintenant de votre portefeuille : {amount} (votre forfait couvre {covered} de ces messages)",
         "chargedWallet": "Débité de votre portefeuille : {amount}",
         "sumFollowUps": "Relances",
-        "sumSequence": "Envoyé en alternance"
+        "sumSequence": "Envoyé en alternance",
+        "sumPrevious": "Envois précédents : {names} ({outcome})"
       },
       "test": {
         "title": "Envoyer un message WhatsApp de test",
@@ -1912,6 +1922,58 @@
       "loading": "Chargement de vos numéros",
       "noAccessTitle": "Vous ne pouvez pas créer de campagnes",
       "noAccess": "Demandez à un administrateur de l’espace de travail l’autorisation de créer des campagnes."
+    },
+    "previousSends": {
+      "title": "Envois précédents",
+      "empty": "Aucune diffusion ni campagne antérieure pour l'instant",
+      "outcomeLabel": "Qui parmi ces envois",
+      "outcomes": {
+        "all": "Tous les destinataires",
+        "delivered": "Délivré",
+        "read": "Lu",
+        "not_read": "Non lu",
+        "replied": "A répondu",
+        "not_replied": "N'a pas répondu",
+        "clicked": "A cliqué sur un lien",
+        "failed": "Échec"
+      },
+      "outcomeOff": "{name} (indisponible pour les diffusions)",
+      "outcomeHint": {
+        "all": "Tous les destinataires : toutes les personnes visées par le message. Les contacts désinscrits et les lignes ignorées sont exclus.",
+        "delivered": "Délivré : les personnes qu'il a atteintes.",
+        "read": "Lu : les personnes qui l'ont lu.",
+        "not_read": "Non lu : les personnes à qui il a été envoyé et qui ne l'ont pas lu.",
+        "replied": "A répondu : les personnes qui y ont répondu.",
+        "not_replied": "N'a pas répondu : les personnes à qui il a été envoyé et qui n'ont pas répondu.",
+        "clicked": "A cliqué sur un lien : les personnes qui ont cliqué sur un lien suivi qu'il contient.",
+        "failed": "Échec : les personnes à qui il n'a pas pu être délivré."
+      },
+      "broadcastNote": "Une diffusion n'enregistre que la remise et la lecture ; les réponses et les clics ne sont donc pas disponibles tant qu'une diffusion est cochée.",
+      "broadcastOff": "Une diffusion n'a ni réponses ni clics. Choisissez un autre résultat pour la cocher.",
+      "search": "Rechercher dans les envois précédents",
+      "searchPlaceholder": "Rechercher",
+      "listLabel": "Diffusions et campagnes antérieures",
+      "noMatch": "Aucun résultat pour votre recherche.",
+      "chosen": "{count} sur {max} sélectionnés",
+      "limit": "Vous pouvez choisir jusqu'à {max} envois. Décochez-en un pour en choisir un autre.",
+      "kind": {
+        "broadcast": "Diffusion",
+        "campaign": "Campagne"
+      },
+      "wentOut": "Envoyé le {date}",
+      "wentOutUnknown": "Date inconnue",
+      "recipients": "{count, plural, one {# destinataire} many {# de destinataires} other {# destinataires}}",
+      "notRecorded": "Non enregistré pour une diffusion",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# personne} many {# de personnes} other {# personnes}}",
+        "delivered": "{count, plural, one {# personne l'a reçu} many {# de personnes l'ont reçu} other {# personnes l'ont reçu}}",
+        "read": "{count, plural, one {# personne l'a lu} many {# de personnes l'ont lu} other {# personnes l'ont lu}}",
+        "not_read": "{count, plural, one {# personne ne l'a pas lu} many {# de personnes ne l'ont pas lu} other {# personnes ne l'ont pas lu}}",
+        "replied": "{count, plural, one {# personne a répondu} many {# de personnes ont répondu} other {# personnes ont répondu}}",
+        "not_replied": "{count, plural, one {# personne n'a pas répondu} many {# de personnes n'ont pas répondu} other {# personnes n'ont pas répondu}}",
+        "clicked": "{count, plural, one {# personne a cliqué sur un lien} many {# de personnes ont cliqué sur un lien} other {# personnes ont cliqué sur un lien}}",
+        "failed": "{count, plural, one {# personne pour qui l'envoi a échoué} many {# de personnes pour qui l'envoi a échoué} other {# personnes pour qui l'envoi a échoué}}"
+      }
     }
   }
 }
