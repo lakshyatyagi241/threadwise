@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { PrivacyFlagKind, PrivacyFlagSource } from '@crm/contracts';
+import {
+  workspaceMinorAge,
+  type ComplianceRegime,
+  type PrivacyFlagKind,
+  type PrivacyFlagSource,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { NO_FLAGS, type FlagsState } from './contact-privacy.rules';
 
@@ -31,7 +36,13 @@ export interface ComplianceFacts {
   parentalConsentRequired: boolean;
   /** The `ccpa_us` profile is switched on. */
   ccpaUs: boolean;
+  /** The age below which a person is a minor in this workspace (the highest of the profiles' ages, else 18). */
+  minorAge: number;
 }
+
+/** The columns of a flags row, in the order `toState` reads them. */
+const FLAG_COLUMNS = sql.raw(`is_minor, minor_since, minor_source, to_char(minor_until, 'YYYY-MM-DD') AS minor_until,
+      to_char(dob_override_for, 'YYYY-MM-DD') AS dob_override_for, guardian_consent, guardian_since, do_not_sell_share, dns_since, dns_source`);
 
 /** SQL of the contact privacy flags. Every statement is tenant scoped by `org_id` (and by forced RLS underneath). */
 @Injectable()
@@ -42,7 +53,7 @@ export class ContactPrivacyRepository {
       INSERT INTO contact_privacy_flags (org_id, contact_id) VALUES (${orgId}, ${contactId})
       ON CONFLICT (org_id, contact_id) DO NOTHING`);
     const res = await tx.execute(sql`
-      SELECT is_minor, minor_since, minor_source, guardian_consent, guardian_since, do_not_sell_share, dns_since, dns_source
+      SELECT ${FLAG_COLUMNS}
       FROM contact_privacy_flags WHERE org_id = ${orgId} AND contact_id = ${contactId} FOR UPDATE`);
     return toState(res.rows[0] as Raw | undefined);
   }
@@ -50,7 +61,7 @@ export class ContactPrivacyRepository {
   /** The flags without creating or locking anything (a read). All false when the contact has no row. */
   async flagsOf(tx: Tx, orgId: number, contactId: number): Promise<FlagsState> {
     const res = await tx.execute(sql`
-      SELECT is_minor, minor_since, minor_source, guardian_consent, guardian_since, do_not_sell_share, dns_since, dns_source
+      SELECT ${FLAG_COLUMNS}
       FROM contact_privacy_flags WHERE org_id = ${orgId} AND contact_id = ${contactId}`);
     return toState(res.rows[0] as Raw | undefined);
   }
@@ -59,6 +70,7 @@ export class ContactPrivacyRepository {
     await tx.execute(sql`
       UPDATE contact_privacy_flags
       SET is_minor = ${s.isMinor}, minor_since = ${s.minorSince}::timestamptz, minor_source = ${s.minorSource},
+          minor_until = ${s.minorUntil}::date, dob_override_for = ${s.dobOverrideFor}::date,
           guardian_consent = ${s.guardianConsent}, guardian_since = ${s.guardianSince}::timestamptz,
           do_not_sell_share = ${s.doNotSellShare}, dns_since = ${s.doNotSellShareSince}::timestamptz,
           dns_source = ${s.doNotSellShareSource}, updated_at = now()
@@ -145,17 +157,77 @@ export class ContactPrivacyRepository {
   /** The Compliance center settings the flags depend on. A workspace that never saved them has the defaults. */
   async complianceFacts(tx: Tx, orgId: number): Promise<ComplianceFacts> {
     const res = await tx.execute(sql`
-      SELECT children_policy, parental_consent_required, 'ccpa_us' = ANY(regimes) AS ccpa_us
+      SELECT children_policy, parental_consent_required, 'ccpa_us' = ANY(regimes) AS ccpa_us, regimes
       FROM compliance_settings WHERE org_id = ${orgId}`);
     const r = res.rows[0] as Raw | undefined;
-    if (!r) return { childrenPolicy: 'unset', parentalConsentRequired: false, ccpaUs: false };
+    if (!r) {
+      return {
+        childrenPolicy: 'unset',
+        parentalConsentRequired: false,
+        ccpaUs: false,
+        minorAge: workspaceMinorAge([]),
+      };
+    }
     const policy = r.children_policy as string;
     return {
       childrenPolicy:
         policy === 'no_minors' || policy === 'may_include_minors' ? policy : 'unset',
       parentalConsentRequired: r.parental_consent_required === true,
       ccpaUs: r.ccpa_us === true,
+      minorAge: workspaceMinorAge((r.regimes as ComplianceRegime[] | null) ?? []),
     };
+  }
+
+  /** The contact's date of birth as an ISO day, or null. */
+  async dateOfBirth(tx: Tx, orgId: number, contactId: number): Promise<string | null> {
+    const res = await tx.execute(sql`
+      SELECT to_char(date_of_birth, 'YYYY-MM-DD') AS dob FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`);
+    return ((res.rows[0] as Raw | undefined)?.dob as string | null | undefined) ?? null;
+  }
+
+  /**
+   * The flags that lapse by themselves, across every workspace: minors flagged from a date of birth (or an age) whose day has come.
+   * Run as a privileged session by the worker; the writes that follow are tenant scoped again. Oldest first.
+   */
+  async lapsedFlags(
+    tx: Tx,
+    today: string,
+    limit: number,
+  ): Promise<Array<{ orgId: number; contactId: number }>> {
+    const res = await tx.execute(sql`
+      SELECT org_id, contact_id FROM contact_privacy_flags
+      WHERE is_minor AND minor_source = 'dob' AND minor_until IS NOT NULL AND minor_until <= ${today}::date
+      ORDER BY minor_until, org_id, contact_id
+      LIMIT ${limit}`);
+    return (res.rows as Raw[]).map((r) => ({ orgId: num(r.org_id), contactId: num(r.contact_id) }));
+  }
+
+  /** The workspaces that hold at least one contact born on or after `bornAfter` (the youngest threshold anyone could ask for). */
+  async orgsWithYoungContacts(tx: Tx, bornAfter: string): Promise<number[]> {
+    const res = await tx.execute(sql`
+      SELECT DISTINCT org_id FROM contacts WHERE date_of_birth > ${bornAfter}::date ORDER BY org_id`);
+    return (res.rows as Raw[]).map((r) => num(r.org_id));
+  }
+
+  /**
+   * Contacts of one workspace whose date of birth says "younger than the threshold" and who are not flagged, and whom no person has
+   * reviewed for that date. `bornAfter` is the birth day that has not yet reached the threshold.
+   */
+  async unflaggedYoung(
+    tx: Tx,
+    orgId: number,
+    bornAfter: string,
+    limit: number,
+  ): Promise<number[]> {
+    const res = await tx.execute(sql`
+      SELECT c.id FROM contacts c
+      LEFT JOIN contact_privacy_flags f ON f.org_id = c.org_id AND f.contact_id = c.id
+      WHERE c.org_id = ${orgId} AND c.date_of_birth > ${bornAfter}::date
+        AND NOT coalesce(f.is_minor, false)
+        AND f.dob_override_for IS DISTINCT FROM c.date_of_birth
+      ORDER BY c.id
+      LIMIT ${limit}`);
+    return (res.rows as Raw[]).map((r) => num(r.id));
   }
 }
 
@@ -165,6 +237,8 @@ function toState(r: Raw | undefined): FlagsState {
     isMinor: r.is_minor === true,
     minorSince: isoOrNull(r.minor_since),
     minorSource: (r.minor_source as PrivacyFlagSource | null) ?? null,
+    minorUntil: (r.minor_until as string | null) ?? null,
+    dobOverrideFor: (r.dob_override_for as string | null) ?? null,
     guardianConsent: r.guardian_consent === true,
     guardianSince: isoOrNull(r.guardian_since),
     doNotSellShare: r.do_not_sell_share === true,

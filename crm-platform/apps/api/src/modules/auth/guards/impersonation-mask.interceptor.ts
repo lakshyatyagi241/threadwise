@@ -23,6 +23,7 @@ const MASKERS = {
   name: maskName,
   address: () => '[hidden address]',
   text: () => '[hidden text]',
+  birth: () => '[hidden date of birth]',
 } as const;
 
 /** Keys that identify the session itself; masking them would break the act-as banner and the handoff. */

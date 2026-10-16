@@ -34,6 +34,7 @@ const MASKERS: Record<PiiKind, (v: string) => string> = {
   name: maskName,
   address: () => '[hidden address]',
   text: () => '[hidden text]',
+  birth: () => '[hidden date of birth]',
 };
 
 const EMAIL_IN_TEXT = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;

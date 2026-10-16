@@ -157,6 +157,8 @@ export interface ContactFormValues {
   email: string;
   language: string;
   address: string;
+  /** `YYYY-MM-DD` or '' (BL-211). A date that makes the contact a minor sets the minor flag when it is saved. */
+  dateOfBirth: string;
   memo: string;
   status: string;
   lifecycleStage: string;
@@ -189,6 +191,7 @@ export const EMPTY_FORM: ContactFormValues = {
   email: '',
   language: '',
   address: '',
+  dateOfBirth: '',
   memo: '',
   status: '',
   lifecycleStage: '',
@@ -228,6 +231,7 @@ export function contactToForm(
     email: clean(c.email),
     language: str(cf[EXTRA_KEYS.language]),
     address: str(cf[EXTRA_KEYS.address]),
+    dateOfBirth: c.dateOfBirth ?? '',
     memo: str(cf[EXTRA_KEYS.memo]),
     status: clean(c.status),
     lifecycleStage: clean(c.lifecycleStage),
@@ -295,6 +299,7 @@ export function toCreatePayload(
     ...lost,
     ...(clean(v.status) ? { status: clean(v.status) } : {}),
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
+    ...(clean(v.dateOfBirth) ? { dateOfBirth: clean(v.dateOfBirth) } : {}),
     // Always explicit: '' is "nobody" (null), not "the creator" which is what omitting it would mean.
     ownerId: v.ownerId || null,
     ...(v.companyId ? { companyId: v.companyId } : {}),
@@ -332,6 +337,7 @@ export function toUpdatePayload(
     ...lost,
     status: orNull(v.status),
     source: orNull(v.source),
+    dateOfBirth: orNull(v.dateOfBirth),
     ...(v.ownerId !== (previousOwnerId ?? '') ? { ownerId: v.ownerId || null } : {}),
     ...(v.companyId !== (previousCompanyId ?? '') ? { companyId: v.companyId || null } : {}),
     // Only a change to the switch touches the consent flag; saving an unrelated field must not flip it.

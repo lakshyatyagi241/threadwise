@@ -33,6 +33,7 @@ export const contactsCard = defineHolder({
         'fax_number',
         'title',
         'address',
+        'date_of_birth',
         'image_url',
         'channel_uid',
         'subject',

@@ -64,6 +64,8 @@ export interface ContactRow {
   emailSubscriptionStatus: string | null;
   emailConfirmed: boolean;
   faxNumber: string | null;
+  /** ISO day (`YYYY-MM-DD`) or null. Built-in personal property (BL-211). */
+  dateOfBirth: string | null;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
   source: string | null;
@@ -182,6 +184,7 @@ export class ContactsRepository {
       emailSubscriptionStatus: contacts.emailSubscriptionStatus,
       emailConfirmed: contacts.emailConfirmed,
       faxNumber: contacts.faxNumber,
+      dateOfBirth: contacts.dateOfBirth,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
       source: contacts.source,
@@ -453,6 +456,7 @@ export class ContactsRepository {
       emailSubscriptionStatus?: string | null;
       emailConfirmed?: boolean;
       faxNumber?: string | null;
+      dateOfBirth?: string | null;
       source?: string | null;
       isUnsubscribed?: boolean;
       unsubscribedAt?: Date | null;
@@ -493,6 +497,7 @@ export class ContactsRepository {
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
+        dateOfBirth: values.dateOfBirth ?? null,
         source: values.source ?? null,
         isUnsubscribed: values.isUnsubscribed ?? false,
         unsubscribedAt: values.unsubscribedAt ?? null,

@@ -144,7 +144,9 @@
         "booking": "Booking page",
         "commerce": "Store checkout",
         "lead": "Lead capture",
-        "gpc": "Global Privacy Control"
+        "gpc": "Global Privacy Control",
+        "dob": "Date of birth or age",
+        "declaration": "Age not confirmed"
       },
       "by": "by {name}",
       "evidence": {
@@ -191,6 +193,8 @@
         "minorLabel": "Minor",
         "minorOn": "Marked as a minor since {date}.",
         "minorOff": "Not marked as a minor.",
+        "minorFrom": "Set from the date of birth or age given. It lifts by itself on {date}, unless a person keeps it.",
+        "minorFromDeclaration": "Set because the age was not confirmed on a form. It stays until a person clears it.",
         "rule": {
           "off": "Your workspace has not answered the children question in the Compliance center, so marketing to this contact is not held back.",
           "guardian": "Marketing to this contact is held back until a parent or guardian's consent is on record.",

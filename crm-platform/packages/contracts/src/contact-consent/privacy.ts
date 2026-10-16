@@ -24,9 +24,21 @@ export type PrivacyFlagKind = z.infer<typeof privacyFlagKindSchema>;
 /**
  * Where a change came from. `gpc` is the browser signal (header `Sec-GPC: 1`) on a public form or the chat widget (the evidence names
  * which: `formId` / `widgetId`); a person or an API caller uses `manual` / `api`; `contact_request` is the person's own request
- * recorded by staff.
+ * recorded by staff. `dob` is the system acting on a date of birth or an age answer (BL-211): the ONLY source the birthday sweep
+ * may lift again; every other source is a person's or a flow author's decision and stays until a person clears it. `import` is a CSV
+ * column, `flow` a chatbot flow that learned of a minor, `declaration` a visitor who did not
+ * confirm the minimum age on a form (it never lapses by itself).
  */
-export const PRIVACY_FLAG_SOURCES = ['manual', 'api', 'contact_request', 'gpc'] as const;
+export const PRIVACY_FLAG_SOURCES = [
+  'manual',
+  'api',
+  'contact_request',
+  'gpc',
+  'dob',
+  'import',
+  'flow',
+  'declaration',
+] as const;
 export const privacyFlagSourceSchema = z.enum(PRIVACY_FLAG_SOURCES);
 export type PrivacyFlagSource = z.infer<typeof privacyFlagSourceSchema>;
 
@@ -87,6 +99,8 @@ export interface ContactPrivacy {
   doNotSellShare: boolean;
   doNotSellShareSince: string | null;
   doNotSellShareSource: PrivacyFlagSource | null;
+  /** When a flag set from a date of birth or an age lapses by itself (an ISO day); null for a flag a person set. */
+  minorUntil: string | null;
   /** The workspace has the `ccpa_us` profile switched on: the Do Not Sell or Share control is offered. */
   ccpaUs: boolean;
   /** What the workspace's children setting does with a flagged minor's marketing. */
@@ -103,6 +117,7 @@ export const NO_PRIVACY: ContactPrivacy = {
   doNotSellShare: false,
   doNotSellShareSince: null,
   doNotSellShareSource: null,
+  minorUntil: null,
   ccpaUs: false,
   minorRule: 'off',
   events: [],

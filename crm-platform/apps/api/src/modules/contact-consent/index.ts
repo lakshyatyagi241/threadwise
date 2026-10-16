@@ -10,6 +10,7 @@ export {
   type PrivacyChangeOutcome,
 } from './contact-privacy.service';
 export { isGpcSignal } from './contact-privacy.rules';
+export { MinorDetectionService, type MinorEvaluation } from './minor-detection.service';
 export { ConsentUnsubscribeService, type UnsubscribeLink } from './consent-unsubscribe.service';
 export { ConsentSettingsService } from './consent-settings.service';
 export { ConsentPolicyService, hasGrantedConsentSql } from './consent-policy.service';

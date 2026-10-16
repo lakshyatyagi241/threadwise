@@ -289,6 +289,8 @@
       "memoPlaceholder": "Notes about this contact",
       "address": "Address",
       "addressPlaceholder": "Enter address",
+      "dateOfBirth": "Date of birth",
+      "dateOfBirthHint": "Optional. If it makes the contact a minor, the contact is flagged as one.",
       "status": "Status",
       "statusNone": "- none -",
       "statuses": {
@@ -559,6 +561,7 @@
       "language": "Language",
       "source": "Source",
       "address": "Address",
+      "dateOfBirth": "Date of birth",
       "memo": "Memo",
       "groups": "Groups",
       "consent": "Marketing messages",

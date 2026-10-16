@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
+import { birthDateSchema } from '../contact-consent/age';
 import { lifecycleStageSchema, recordLifecycleSchema } from '../common/enums';
 import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
@@ -55,6 +56,8 @@ export const contactResponseSchema = z.object({
   emailSubscriptionStatus: z.string().nullable(),
   emailConfirmed: z.boolean(),
   faxNumber: z.string().nullable(),
+  /** Built-in personal property (BL-211): `YYYY-MM-DD`, or null. A date that makes the contact a minor sets the minor flag (source `dob`). */
+  dateOfBirth: z.string().nullable(),
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),
@@ -94,6 +97,8 @@ export const createContactSchema = z
     emailSubscriptionStatus: z.string().max(64).optional(),
     emailConfirmed: z.boolean().optional(),
     faxNumber: z.string().max(32).optional(),
+    /** `YYYY-MM-DD`; a real date of birth, not in the future. */
+    dateOfBirth: birthDateSchema.optional(),
     /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
     source: z.string().trim().max(128).optional(),
     /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
@@ -132,6 +137,8 @@ export const updateContactSchema = z.object({
   emailSubscriptionStatus: z.string().max(64).nullish(),
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
+  /** `null` clears the date; a minor flag set from it stays until a person clears it or the sweep reads the date again. */
+  dateOfBirth: birthDateSchema.nullish(),
   source: z.string().trim().max(128).nullish(),
   /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
   isUnsubscribed: z.boolean().optional(),

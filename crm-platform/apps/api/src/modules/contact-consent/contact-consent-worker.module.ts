@@ -7,6 +7,7 @@ import { ConsentExportRunner } from './consent-export.runner';
 import { ConsentExportSweepService } from './consent-export-sweep.service';
 import { ConsentKeywordListener } from './consent-keyword.listener';
 import { ConsentRepository } from './consent.repository';
+import { MinorSweepService } from './minor-sweep.service';
 
 /** What only the worker runs: the STOP / START listener on the shared inbound path and the consent proof export builder. Imported ONLY by WorkersModule. */
 @Module({
@@ -19,6 +20,8 @@ import { ConsentRepository } from './consent.repository';
     ConsentExportRunner,
     ConsentExportProcessor,
     ConsentExportSweepService,
+    // The nightly birthday sweep of the minor flag (BL-211).
+    MinorSweepService,
   ],
 })
 export class ContactConsentWorkerModule {}

@@ -51,6 +51,9 @@ export function PrivacyFlags({
 
   const date = (iso: string | null) =>
     iso ? f.dateTime(new Date(iso), { dateStyle: 'medium' }) : '';
+  /** A calendar day (no time): read as UTC so the day never shifts with the viewer's time zone. */
+  const day = (iso: string) =>
+    f.dateTime(new Date(`${iso}T00:00:00Z`), { dateStyle: 'medium', timeZone: 'UTC' });
   const showDns = privacy.ccpaUs || privacy.doNotSellShare;
 
   return (
@@ -70,6 +73,14 @@ export function PrivacyFlags({
           <p className="text-xs text-muted-foreground">
             {privacy.isMinor ? t('minorOn', { date: date(privacy.minorSince) }) : t('minorOff')}
           </p>
+          {privacy.isMinor && privacy.minorUntil && (
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {t('minorFrom', { date: day(privacy.minorUntil) })}
+            </p>
+          )}
+          {privacy.isMinor && privacy.minorSource === 'declaration' && (
+            <p className="mt-0.5 text-xs text-muted-foreground">{t('minorFromDeclaration')}</p>
+          )}
           {privacy.isMinor && (
             <p className="mt-0.5 text-xs text-muted-foreground">{t(`rule.${privacy.minorRule}`)}</p>
           )}
