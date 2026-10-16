@@ -227,7 +227,7 @@ function IgProductPicker({
               type="button"
               onClick={() => toggle(pr.retailerId)}
               className={cn(
-                'flex items-center gap-2 rounded-lg border p-1.5 text-left transition',
+                'flex items-center gap-2 rounded-lg border p-1.5 text-start transition',
                 on ? 'border-brand bg-brand/10' : 'border-border bg-background hover:bg-muted',
               )}
             >

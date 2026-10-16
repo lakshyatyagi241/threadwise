@@ -27,7 +27,7 @@ const tileClass =
   'flex items-center justify-center gap-1.5 rounded-lg bg-white px-3 py-2 text-[12.5px] font-semibold shadow-[0_1px_1px_rgba(0,0,0,0.06)]';
 
 function Tiles({ children }: { children: ReactNode }) {
-  return <div className="ml-auto mt-[5px] flex max-w-[88%] flex-col gap-[3px]">{children}</div>;
+  return <div className="ms-auto mt-[5px] flex max-w-[88%] flex-col gap-[3px]">{children}</div>;
 }
 
 function Tile({ children }: { children: ReactNode }) {
@@ -186,17 +186,17 @@ export function MediaPreview({ d }: { d: Data }) {
       <img
         src={url}
         alt=""
-        className="mb-1 ml-auto block max-h-40 max-w-[88%] rounded-lg object-cover"
+        className="mb-1 ms-auto block max-h-40 max-w-[88%] rounded-lg object-cover"
       />
     );
   } else if (kind === 'video' && url) {
     top = (
-      <video src={url} controls className="mb-1 ml-auto block max-h-40 max-w-[88%] rounded-lg" />
+      <video src={url} controls className="mb-1 ms-auto block max-h-40 max-w-[88%] rounded-lg" />
     );
   } else if (kind === 'document') {
     top = (
       <div
-        className="mb-1 ml-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
+        className="mb-1 ms-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
         style={mediaBox}
       >
         <span className="grid h-7 w-7 place-items-center rounded-md bg-brand font-mono text-[9px] text-white">
@@ -210,7 +210,7 @@ export function MediaPreview({ d }: { d: Data }) {
   } else if (kind === 'audio') {
     top = (
       <div
-        className="mb-1 ml-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
+        className="mb-1 ms-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
         style={mediaBox}
       >
         <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-white">▶</span>
@@ -220,7 +220,7 @@ export function MediaPreview({ d }: { d: Data }) {
   } else {
     top = (
       <div
-        className="mb-1 ml-auto grid min-h-[80px] max-w-[88%] place-items-center rounded-lg px-2.5 py-2 text-[11px]"
+        className="mb-1 ms-auto grid min-h-[80px] max-w-[88%] place-items-center rounded-lg px-2.5 py-2 text-[11px]"
         style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}
       >
         {t('kindPreview', { kind })}
@@ -481,13 +481,13 @@ export function SequencePreview({ d }: { d: Data }) {
               <img
                 src={url}
                 alt=""
-                className="mb-[5px] ml-auto block max-h-40 max-w-[88%] rounded-lg object-cover"
+                className="mb-[5px] ms-auto block max-h-40 max-w-[88%] rounded-lg object-cover"
               />
             );
           } else if (kind === 'video' && url) {
             media = (
               <div
-                className="mb-[5px] ml-auto flex h-[120px] max-w-[88%] items-center justify-center rounded-lg text-[11px] tracking-[0.05em] text-white"
+                className="mb-[5px] ms-auto flex h-[120px] max-w-[88%] items-center justify-center rounded-lg text-[11px] tracking-[0.05em] text-white"
                 style={{ background: '#0B1F1C' }}
               >
                 {t('videoTile')}
@@ -496,7 +496,7 @@ export function SequencePreview({ d }: { d: Data }) {
           } else if (kind === 'audio') {
             media = (
               <div
-                className="mb-[5px] ml-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
+                className="mb-[5px] ms-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
                 style={mediaBox}
               >
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#075E54] text-[11px] text-white">
@@ -510,7 +510,7 @@ export function SequencePreview({ d }: { d: Data }) {
           } else if (kind === 'document') {
             media = (
               <div
-                className="mb-[5px] ml-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
+                className="mb-[5px] ms-auto flex max-w-[88%] items-center gap-2 rounded-lg px-2.5 py-2"
                 style={mediaBox}
               >
                 <span className="flex h-7 w-7 items-center justify-center rounded bg-[#075E54] font-mono text-[9px] text-white">
@@ -522,7 +522,7 @@ export function SequencePreview({ d }: { d: Data }) {
           } else {
             media = (
               <div
-                className="mb-[5px] ml-auto max-w-[88%] rounded-lg px-2.5 py-2 text-center text-[11px]"
+                className="mb-[5px] ms-auto max-w-[88%] rounded-lg px-2.5 py-2 text-center text-[11px]"
                 style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)' }}
               >
                 {t('kindPreviewInline', { kind })}

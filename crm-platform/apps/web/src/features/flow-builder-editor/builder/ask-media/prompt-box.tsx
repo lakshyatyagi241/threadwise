@@ -124,7 +124,7 @@ export function PromptBox({
 
   const pop = (children: ReactNode) => (
     <div
-      className="absolute bottom-full left-0 z-30 mb-1 rounded-lg border border-border bg-background p-1.5 shadow-lg"
+      className="absolute bottom-full start-0 z-30 mb-1 rounded-lg border border-border bg-background p-1.5 shadow-lg"
       onPointerDown={(e) => e.stopPropagation()}
     >
       {children}
@@ -240,7 +240,7 @@ export function PromptBox({
                     type="button"
                     data-variable={m.key}
                     onClick={() => apply((s, e) => insertAt(text, s, e, `{{${m.key}}}`))}
-                    className="flex w-full items-center justify-between gap-2 rounded px-2 py-1 text-left text-[11.5px] hover:bg-muted"
+                    className="flex w-full items-center justify-between gap-2 rounded px-2 py-1 text-start text-[11.5px] hover:bg-muted"
                   >
                     <span className="truncate">{m.name}</span>
                     <span className="shrink-0 font-mono text-[10px] text-muted-foreground">

@@ -36,11 +36,11 @@ export function AboutHero({ ctx, def }: P) {
                 ctx={ctx}
                 k={k('intro')}
                 as="p"
-                className="text-[15.5px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[15.5px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
 
               <div className="mt-6 grid grid-cols-3 gap-0 hairline-t hairline-b py-4">
-                <div className="hairline-r pr-4">
+                <div className="hairline-r pe-4">
                   <T
                     ctx={ctx}
                     k={k('stat1_value')}
@@ -68,7 +68,7 @@ export function AboutHero({ ctx, def }: P) {
                     className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5"
                   />
                 </div>
-                <div className="pl-4">
+                <div className="ps-4">
                   <T
                     ctx={ctx}
                     k={k('stat3_value')}
@@ -614,11 +614,11 @@ export function ContactHero({ ctx, def }: P) {
                 ctx={ctx}
                 k={k('intro')}
                 as="p"
-                className="text-[15.5px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[15.5px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
 
               <div className="mt-6 grid grid-cols-3 gap-0 hairline-t hairline-b py-4">
-                <div className="hairline-r pr-4">
+                <div className="hairline-r pe-4">
                   <T
                     ctx={ctx}
                     k={k('stat1_value')}
@@ -646,7 +646,7 @@ export function ContactHero({ ctx, def }: P) {
                     className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5"
                   />
                 </div>
-                <div className="pl-4">
+                <div className="ps-4">
                   <T
                     ctx={ctx}
                     k={k('stat3_value')}

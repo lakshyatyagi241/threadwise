@@ -155,7 +155,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
                 <XIcon />
               </IconButton>
             </div>
-            <div className="mt-1.5 flex items-center gap-2 pl-7 pr-8">
+            <div className="mt-1.5 flex items-center gap-2 ps-7 pe-8">
               <input
                 type="text"
                 value={o.description}
@@ -166,7 +166,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
               />
               <Counter len={o.description.length} max={LIST_DESC_MAX} />
             </div>
-            <div className="mt-1.5 flex items-center gap-2 pl-7 pr-8">
+            <div className="mt-1.5 flex items-center gap-2 ps-7 pe-8">
               <input
                 type="text"
                 value={o.section}

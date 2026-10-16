@@ -83,7 +83,7 @@ export function HeroHome({ ctx, def, children }: P & { children?: ReactNode }) {
                 ctx={ctx}
                 k={k('subtitle')}
                 as="p"
-                className="text-[14px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[14px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
               <div className="mt-6 flex flex-col gap-2.5">
                 <Link
@@ -212,10 +212,10 @@ export function TwoDeviceStage({ ctx, def }: P) {
                   <span className="w-2.5 h-2.5 rounded-full bg-accent-amber/80"></span>
                   <span className="w-2.5 h-2.5 rounded-full bg-wa-green"></span>
                 </div>
-                <div className="hairline rounded-md bg-white px-3 py-1 mono text-[10px] text-ink-500 ml-2 min-w-0 truncate">
+                <div className="hairline rounded-md bg-white px-3 py-1 mono text-[10px] text-ink-500 ms-2 min-w-0 truncate">
                   app.{ctx.extras.host || 'example.com'}/campaigns/spring
                 </div>
-                <span className="ml-auto mono text-[9.5px] uppercase tracking-widest text-ink-500">
+                <span className="ms-auto mono text-[9.5px] uppercase tracking-widest text-ink-500">
                   sender
                 </span>
               </div>
@@ -264,7 +264,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
                       <span className="w-1 h-1 rounded-full bg-wa-deep typing-dot"></span>
                       <span className="w-1 h-1 rounded-full bg-wa-deep typing-dot"></span>
                       <span className="w-1 h-1 rounded-full bg-wa-deep typing-dot"></span>
-                      <span className="ml-1">sending wave 3 of 5…</span>
+                      <span className="ms-1">sending wave 3 of 5…</span>
                     </span>
                   </div>
                 </div>
@@ -284,7 +284,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
                       <div className="serif text-[18px] tabular">11.4%</div>
                     </div>
                   </div>
-                  <div className="relative ml-4 w-12 h-12">
+                  <div className="relative ms-4 w-12 h-12">
                     <span className="ring-out"></span>
                     <span className="ring-out r2"></span>
                     <span className="ring-out r3"></span>
@@ -322,7 +322,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
                 <span className="w-1.5 h-1.5 rounded-full bg-wa-green pulse-dot"></span>in flight
               </div>
               <div className="serif text-[40px] leading-none text-wa-deep tabular">
-                18<span className="text-[18px] text-ink-500 ml-0.5">ms</span>
+                18<span className="text-[18px] text-ink-500 ms-0.5">ms</span>
               </div>
               <div className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5">
                 avg latency
@@ -418,41 +418,41 @@ export function TwoDeviceStage({ ctx, def }: P) {
                     </span>
                   </div>
                   <div className="flex">
-                    <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
+                    <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 max-w-[80%] shadow-sm">
                       <div className="text-[12px]">Hi Maya 👋 quick note from the team.</div>
-                      <div className="text-[9px] text-ink-500 mono text-right mt-0.5">14:08</div>
+                      <div className="text-[9px] text-ink-500 mono text-end mt-0.5">14:08</div>
                     </div>
                   </div>
 
                   <div className="flex recv-pop">
-                    <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
+                    <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 max-w-[80%] shadow-sm">
                       <T ctx={ctx} k={k('chat1')} as="div" className="text-[12px]" />
-                      <div className="text-[9px] text-ink-500 mono text-right mt-0.5">
+                      <div className="text-[9px] text-ink-500 mono text-end mt-0.5">
                         14:08 · just now
                       </div>
                     </div>
                   </div>
                   <div className="flex recv-pop-2">
-                    <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
+                    <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 max-w-[80%] shadow-sm">
                       <T ctx={ctx} k={k('chat2')} as="div" className="text-[12px]" />
-                      <div className="text-[9px] text-ink-500 mono text-right mt-0.5">
+                      <div className="text-[9px] text-ink-500 mono text-end mt-0.5">
                         14:08 · just now
                       </div>
                     </div>
                   </div>
                   <div className="flex recv-pop-3">
-                    <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[80%] shadow-sm">
+                    <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 max-w-[80%] shadow-sm">
                       <T ctx={ctx} k={k('chat3')} as="div" className="text-[12px]" />
-                      <div className="text-[9px] text-ink-500 mono text-right mt-0.5">
+                      <div className="text-[9px] text-ink-500 mono text-end mt-0.5">
                         14:09 · just now
                       </div>
                     </div>
                   </div>
 
                   <div className="flex justify-end">
-                    <div className="bg-wa-bubble rounded-lg rounded-tr-sm px-3 py-2 max-w-[78%] shadow-sm">
+                    <div className="bg-wa-bubble rounded-lg rounded-se-sm px-3 py-2 max-w-[78%] shadow-sm">
                       <div className="text-[12px]">Yes please! 💐</div>
-                      <div className="text-[9px] text-wa-deep/60 mono text-right mt-0.5">
+                      <div className="text-[9px] text-wa-deep/60 mono text-end mt-0.5">
                         14:09 ✓✓
                       </div>
                     </div>
@@ -683,7 +683,7 @@ export function Manifesto({ ctx, def }: P) {
               <path d="M2 12 Q 60 2, 120 8 T 238 6" />
             </svg>
 
-            <div className="mt-10 hairline-l border-wa-deep/40 pl-4">
+            <div className="mt-10 hairline-l border-wa-deep/40 ps-4">
               <p className="serif italic text-[16px] leading-snug text-ink-700" {...a('quote')}>
                 “{ctx.fc(k('quote'))}”
               </p>
@@ -721,7 +721,7 @@ export function Manifesto({ ctx, def }: P) {
             />
 
             <div className="mt-10 grid grid-cols-3 gap-0 hairline-t hairline-b py-6">
-              <div className="hairline-r pr-3 sm:pr-6 min-w-0">
+              <div className="hairline-r pe-3 sm:pe-6 min-w-0">
                 <T
                   ctx={ctx}
                   k={k('stat1_value')}
@@ -749,7 +749,7 @@ export function Manifesto({ ctx, def }: P) {
                   className="mono text-[10px] uppercase tracking-widest text-ink-500 mt-2"
                 />
               </div>
-              <div className="pl-3 sm:pl-6 min-w-0">
+              <div className="ps-3 sm:ps-6 min-w-0">
                 <T
                   ctx={ctx}
                   k={k('stat3_value')}

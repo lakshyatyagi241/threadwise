@@ -300,7 +300,7 @@ export function DetailScreen({ id }: { id: string }) {
           <h3 className="mb-3 text-lg">{t('overview.message')}</h3>
           <div className="rounded-xl p-4" style={{ background: '#e5ddd5' }}>
             <div
-              className="max-w-[320px] rounded-2xl rounded-tl-md px-3.5 py-2.5 text-[13px] shadow-sm"
+              className="max-w-[320px] rounded-2xl rounded-ss-md px-3.5 py-2.5 text-[13px] shadow-sm"
               style={{ background: '#fff', color: '#111' }}
             >
               {d.preview.templateName && (

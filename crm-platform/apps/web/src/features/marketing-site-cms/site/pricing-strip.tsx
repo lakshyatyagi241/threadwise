@@ -218,7 +218,7 @@ export function PricingCards({
               >
                 {y ? labels.yearly : labels.monthly}
                 {y && pricing && pricing.yearlyDiscountPct > 0 && (
-                  <span className="mono ml-1 text-[10px] opacity-90">
+                  <span className="mono ms-1 text-[10px] opacity-90">
                     {labels.save.replace('{pct}', String(pricing.yearlyDiscountPct))}
                   </span>
                 )}

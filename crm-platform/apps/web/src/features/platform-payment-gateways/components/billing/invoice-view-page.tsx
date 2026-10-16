@@ -135,7 +135,7 @@ export function InvoiceDocument({
             {v.paidAt ? ` · ${t('banner.settled', { date: v.paidAt.slice(0, 10) })}` : ''}
           </div>
         </div>
-        <div className="text-right">
+        <div className="text-end">
           <div className="text-2xl font-semibold leading-none text-primary">{m(v.total)}</div>
           <div className="mt-1 font-mono text-[11px] text-muted-foreground">
             {v.currency} · {v.status === 'paid' ? t('banner.paidInFull') : capitalize(v.status)}
@@ -168,7 +168,7 @@ export function InvoiceDocument({
                 )}
               </div>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t('taxInvoice')}
               </div>
@@ -247,16 +247,16 @@ export function InvoiceDocument({
             <table className="w-full min-w-[480px] text-xs">
               <thead>
                 <tr className="border-b border-border font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-                  <th scope="col" className="py-2.5 text-left font-normal">
+                  <th scope="col" className="py-2.5 text-start font-normal">
                     {t('description')}
                   </th>
-                  <th scope="col" className="w-[80px] py-2.5 text-right font-normal">
+                  <th scope="col" className="w-[80px] py-2.5 text-end font-normal">
                     {t('qty')}
                   </th>
-                  <th scope="col" className="w-[120px] py-2.5 text-right font-normal">
+                  <th scope="col" className="w-[120px] py-2.5 text-end font-normal">
                     {t('unit')}
                   </th>
-                  <th scope="col" className="w-[120px] py-2.5 text-right font-normal">
+                  <th scope="col" className="w-[120px] py-2.5 text-end font-normal">
                     {t('total')}
                   </th>
                 </tr>
@@ -270,9 +270,9 @@ export function InvoiceDocument({
                       {v.line.unit ? ` · ${v.line.unit}` : ''}
                     </div>
                   </td>
-                  <td className="py-3 text-right font-mono">1</td>
-                  <td className="py-3 text-right font-mono">{m(v.subtotal)}</td>
-                  <td className="py-3 text-right font-mono">{m(v.subtotal)}</td>
+                  <td className="py-3 text-end font-mono">1</td>
+                  <td className="py-3 text-end font-mono">{m(v.subtotal)}</td>
+                  <td className="py-3 text-end font-mono">{m(v.subtotal)}</td>
                 </tr>
                 {hasDiscount && (
                   <tr>
@@ -284,9 +284,9 @@ export function InvoiceDocument({
                         </div>
                       )}
                     </td>
-                    <td className="py-3 text-right font-mono">1</td>
-                    <td className="py-3 text-right font-mono text-danger">-{m(v.discount)}</td>
-                    <td className="py-3 text-right font-mono text-danger">-{m(v.discount)}</td>
+                    <td className="py-3 text-end font-mono">1</td>
+                    <td className="py-3 text-end font-mono text-danger">-{m(v.discount)}</td>
+                    <td className="py-3 text-end font-mono text-danger">-{m(v.discount)}</td>
                   </tr>
                 )}
               </tbody>

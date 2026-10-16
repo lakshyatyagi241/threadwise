@@ -676,7 +676,7 @@ function BuilderInner({
               <button
                 type="button"
                 onClick={() => setSidebarOpen(true)}
-                className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
+                className="absolute bottom-4 start-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
                 title={tb('addNodeTitle')}
               >
                 <Icon d="M8 3v10M3 8h10" />
@@ -692,7 +692,7 @@ function BuilderInner({
               viewport={viewport}
             />
 
-            <div className="absolute right-4 bottom-4 z-20 flex items-center gap-2">
+            <div className="absolute end-4 bottom-4 z-20 flex items-center gap-2">
               <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
                 <button
                   type="button"
@@ -747,7 +747,7 @@ function BuilderInner({
                     setZoom(1);
                     setPan({ x: 40, y: 40 });
                   }}
-                  className="grid h-9 w-9 place-items-center border-l border-border hover:bg-muted"
+                  className="grid h-9 w-9 place-items-center border-s border-border hover:bg-muted"
                   title={tb('reset')}
                   aria-label={tb('resetView')}
                 >

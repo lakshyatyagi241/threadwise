@@ -105,11 +105,11 @@ export function HeroFeatures({ ctx, def }: P) {
                 ctx={ctx}
                 k={k('subtitle')}
                 as="p"
-                className="text-[15.5px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[15.5px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
 
               <div className="grid grid-cols-3 gap-0 hairline-t hairline-b py-4">
-                <div className="hairline-r pr-4">
+                <div className="hairline-r pe-4">
                   <div className="serif text-[32px] leading-none tabular text-wa-deep">
                     530<span className="text-[18px] text-ink-500">+</span>
                   </div>
@@ -123,7 +123,7 @@ export function HeroFeatures({ ctx, def }: P) {
                     engines
                   </div>
                 </div>
-                <div className="pl-4">
+                <div className="ps-4">
                   <div className="serif text-[32px] leading-none tabular text-wa-deep">1</div>
                   <div className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5">
                     bill
@@ -251,12 +251,12 @@ export function FeatureBento({ ctx, def }: P) {
                 </div>
                 <div className="col-span-5 chat-grid p-2 space-y-1">
                   <div className="flex">
-                    <div className="bg-white rounded-md rounded-tl-sm px-2 py-1 max-w-[80%] shadow-sm">
+                    <div className="bg-white rounded-md rounded-ss-sm px-2 py-1 max-w-[80%] shadow-sm">
                       <div className="text-[9.5px]">order #4218 says delivered 😕</div>
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <div className="bg-wa-bubble rounded-md rounded-tr-sm px-2 py-1 max-w-[80%] shadow-sm">
+                    <div className="bg-wa-bubble rounded-md rounded-se-sm px-2 py-1 max-w-[80%] shadow-sm">
                       <div className="text-[8px] text-wa-deep font-semibold mb-0.5">
                         ⟳ FLOW · order_lookup
                       </div>
@@ -1734,7 +1734,7 @@ export function PullQuote({ ctx, def }: P) {
                   <T ctx={ctx} k={k('author_role')} as="div" className="text-[12px] text-ink-500" />
                 </div>
                 {[1, 2].map((i) => (
-                  <div key={i} className="text-right">
+                  <div key={i} className="text-end">
                     <T
                       ctx={ctx}
                       k={k(`stat${i}_label`)}

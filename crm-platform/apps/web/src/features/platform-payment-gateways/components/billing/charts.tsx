@@ -343,7 +343,7 @@ export function Heatmap({
       <table className="w-full text-xs">
         <thead>
           <tr className="text-muted-foreground">
-            <th scope="col" className="py-1 pe-2 text-left font-medium" />
+            <th scope="col" className="py-1 pe-2 text-start font-medium" />
             {Array.from({ length: cols }, (_, k) => (
               <th scope="col" key={k} className="px-1 py-1 text-center font-mono font-medium">
                 {monthLabel(k)}
@@ -354,7 +354,7 @@ export function Heatmap({
         <tbody>
           {rows.map((r) => (
             <tr key={r.label}>
-              <th scope="row" className="whitespace-nowrap py-1 pe-2 text-left font-medium">
+              <th scope="row" className="whitespace-nowrap py-1 pe-2 text-start font-medium">
                 {r.label} <span className="font-mono text-muted-foreground">({r.size})</span>
               </th>
               {r.cells.map((c, k) => (

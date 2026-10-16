@@ -321,9 +321,9 @@ export function ComposeScreen() {
               </span>
             </div>
             <div className="p-4" style={{ background: '#cfe0ec' }}>
-              <div className="ml-auto max-w-[280px]">
+              <div className="ms-auto max-w-[280px]">
                 <div
-                  className="rounded-2xl rounded-tr-md px-3.5 py-2.5 shadow-sm"
+                  className="rounded-2xl rounded-se-md px-3.5 py-2.5 shadow-sm"
                   style={{ background: '#eeffde', color: '#111' }}
                 >
                   {mediaUrl.trim() !== '' && (

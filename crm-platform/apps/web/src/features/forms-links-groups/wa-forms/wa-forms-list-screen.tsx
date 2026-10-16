@@ -96,7 +96,7 @@ export function WaFormsListScreen() {
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-sm">
-              <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
+              <thead className="bg-muted/40 text-start text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="px-4 py-2">{t('table.form')}</th>
                   <th className="px-4 py-2">{t('table.type')}</th>
@@ -125,7 +125,7 @@ export function WaFormsListScreen() {
                           {t(`status.${form.status}`)}
                         </span>
                         {form.publishError && (
-                          <span className="ml-2 text-xs text-danger">{form.publishError}</span>
+                          <span className="ms-2 text-xs text-danger">{form.publishError}</span>
                         )}
                       </div>
                     </td>
@@ -136,7 +136,7 @@ export function WaFormsListScreen() {
                         {form.submissionCount}
                       </a>
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-end">
                       <div className="inline-flex gap-2">
                         {canManage && (
                           <a

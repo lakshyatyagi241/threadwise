@@ -161,7 +161,7 @@ export function FeatureBroadcasts({ ctx, def }: P) {
                   </div>
                   <div className="serif text-[28px] leading-none mb-3">
                     9<span className="text-ink-400">:</span>00
-                    <span className="text-[14px] text-ink-500 ml-1">am · local</span>
+                    <span className="text-[14px] text-ink-500 ms-1">am · local</span>
                   </div>
                   <ul className="space-y-2 text-[11.5px]">
                     <li className="flex items-center justify-between">
@@ -206,7 +206,7 @@ export function FeatureBroadcasts({ ctx, def }: P) {
                     </span>
                   </div>
                   <div className="serif text-[28px] leading-none mb-3">
-                    High <span className="text-[14px] text-ink-500 ml-1">· no throttle</span>
+                    High <span className="text-[14px] text-ink-500 ms-1">· no throttle</span>
                   </div>
                   <div className="flex items-end gap-1.5 h-16 mb-3">
                     <div
@@ -359,7 +359,7 @@ export function FeatureFlows({ ctx, def }: P) {
                     <div className="text-[12.5px] font-semibold">Copilot · flow generation</div>
                     <div className="mono text-[9.5px] text-ink-500">GPT-4o · Claude 3.5</div>
                   </div>
-                  <span className="ml-auto pill bg-wa-bubble text-wa-deep mono">
+                  <span className="ms-auto pill bg-wa-bubble text-wa-deep mono">
                     <span className="w-1.5 h-1.5 rounded-full bg-wa-green pulse-dot"></span>ready
                   </span>
                 </div>
@@ -697,30 +697,30 @@ export function FeatureInbox({ ctx, def }: P) {
 
                 <div className="space-y-2">
                   <div className="flex">
-                    <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-[78%] shadow-sm">
+                    <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 max-w-[78%] shadow-sm">
                       <div className="text-[11.5px]">
                         order #4218 says delivered but I haven't received it 😕
                       </div>
-                      <div className="text-[9px] text-ink-500 mono text-right mt-0.5">14:08</div>
+                      <div className="text-[9px] text-ink-500 mono text-end mt-0.5">14:08</div>
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <div className="bg-wa-bubble rounded-lg rounded-tr-sm px-3 py-2 max-w-[78%] shadow-sm">
+                    <div className="bg-wa-bubble rounded-lg rounded-se-sm px-3 py-2 max-w-[78%] shadow-sm">
                       <div className="text-[10px] mono text-wa-deep mb-0.5 font-semibold uppercase tracking-wider">
                         ↳ flow · order_lookup
                       </div>
                       <div className="text-[11.5px]">Checking #4218 with our courier…</div>
-                      <div className="text-[9px] text-wa-deep/60 mono text-right mt-0.5">
+                      <div className="text-[9px] text-wa-deep/60 mono text-end mt-0.5">
                         14:08 ✓✓
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <div className="bg-wa-bubble rounded-lg rounded-tr-sm px-3 py-2 max-w-[78%] shadow-sm">
+                    <div className="bg-wa-bubble rounded-lg rounded-se-sm px-3 py-2 max-w-[78%] shadow-sm">
                       <div className="text-[11.5px]">
                         Left at apt 4B per courier note. Want me to ping them?
                       </div>
-                      <div className="text-[9px] text-wa-deep/60 mono text-right mt-0.5">
+                      <div className="text-[9px] text-wa-deep/60 mono text-end mt-0.5">
                         14:09 ✓✓
                       </div>
                     </div>
@@ -885,7 +885,7 @@ export function FeatureTemplates({ ctx, def }: P) {
                 <span className="pill bg-wa-green/15 text-wa-deep">approved</span>
               </div>
               <div className="chat-grid rounded-xl p-3">
-                <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 max-w-full shadow-sm">
+                <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 max-w-full shadow-sm">
                   <div className="text-[11.5px]">
                     <b>Hi Maya 👋</b>
                     <br />
@@ -895,7 +895,7 @@ export function FeatureTemplates({ ctx, def }: P) {
                   <button className="mt-2 w-full hairline border-wa-deep/30 text-wa-deep text-[10px] font-semibold rounded py-1 bg-white">
                     Track order
                   </button>
-                  <div className="text-[9px] text-ink-500 mono text-right mt-1">14:08 ✓✓</div>
+                  <div className="text-[9px] text-ink-500 mono text-end mt-1">14:08 ✓✓</div>
                 </div>
               </div>
               <div className="hairline-t mt-4 pt-3 flex items-center justify-between text-[11px]">
@@ -918,7 +918,7 @@ export function FeatureTemplates({ ctx, def }: P) {
                 <span className="pill bg-wa-green/15 text-wa-deep">approved</span>
               </div>
               <div className="chat-grid rounded-xl p-3">
-                <div className="bg-white rounded-lg rounded-tl-sm overflow-hidden shadow-sm">
+                <div className="bg-white rounded-lg rounded-ss-sm overflow-hidden shadow-sm">
                   <div className="flex gap-1 p-1">
                     <div className="w-14 h-12 rounded bg-gradient-to-br from-accent-coral via-accent-amber to-wa-green shrink-0"></div>
                     <div className="w-14 h-12 rounded bg-gradient-to-br from-wa-teal via-accent-sand to-wa-deep shrink-0"></div>
@@ -958,7 +958,7 @@ export function FeatureTemplates({ ctx, def }: P) {
                 <span className="pill bg-wa-green/15 text-wa-deep">approved</span>
               </div>
               <div className="chat-grid rounded-xl p-3">
-                <div className="bg-white rounded-lg rounded-tl-sm px-3 py-2 shadow-sm">
+                <div className="bg-white rounded-lg rounded-ss-sm px-3 py-2 shadow-sm">
                   <div className="text-[11.5px]">Your one-time code:</div>
                   <div className="text-center my-2">
                     <span className="mono text-[26px] tracking-[0.4em] text-wa-deep font-bold">
@@ -969,7 +969,7 @@ export function FeatureTemplates({ ctx, def }: P) {
                   <button className="mt-2 w-full hairline border-wa-deep/30 text-wa-deep text-[10px] font-semibold rounded py-1 bg-white">
                     Copy code
                   </button>
-                  <div className="text-[9px] text-ink-500 mono text-right mt-1">14:08 ✓✓</div>
+                  <div className="text-[9px] text-ink-500 mono text-end mt-1">14:08 ✓✓</div>
                 </div>
               </div>
               <div className="hairline-t mt-4 pt-3 flex items-center justify-between text-[11px]">
@@ -1102,7 +1102,7 @@ export function FeatureConnectivity({ ctx, def }: P) {
 
           <div className="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-5 reveal" style={vd('160ms')}>
             <div className="hairline rounded-3xl bg-white p-7 relative overflow-hidden hover:border-wa-deep transition">
-              <div className="absolute top-5 right-5">
+              <div className="absolute top-5 end-5">
                 <T
                   ctx={ctx}
                   k={k('card1_badge')}
@@ -1250,7 +1250,7 @@ export function FeatureConnectivity({ ctx, def }: P) {
             </div>
 
             <div className="hairline rounded-3xl bg-white p-7 relative overflow-hidden hover:border-wa-deep transition">
-              <div className="absolute top-5 right-5">
+              <div className="absolute top-5 end-5">
                 <T
                   ctx={ctx}
                   k={k('card3_badge')}

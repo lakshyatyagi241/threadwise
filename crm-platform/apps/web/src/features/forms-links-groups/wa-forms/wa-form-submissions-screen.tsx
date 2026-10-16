@@ -58,7 +58,7 @@ export function WaFormSubmissionsScreen({ id }: { id: string }) {
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-sm">
-              <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
+              <thead className="bg-muted/40 text-start text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="px-4 py-2">{t('submissions.table.submitted')}</th>
                   <th className="px-4 py-2">{t('submissions.table.contact')}</th>

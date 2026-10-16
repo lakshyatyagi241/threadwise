@@ -217,7 +217,7 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
             dir="ltr"
             aria-hidden="true"
           >
-            <span className="absolute left-0">{t('sens.looser')}</span>
+            <span className="absolute start-0">{t('sens.looser')}</span>
             <span
               className="absolute -translate-x-1/2 font-medium text-foreground"
               style={{
@@ -229,7 +229,7 @@ function SettingsBody({ settings }: { settings: FaqSettings }) {
                 value: Math.round(settings.recommendedThreshold * 100),
               })}
             </span>
-            <span className="absolute right-0">{t('sens.stricter')}</span>
+            <span className="absolute end-0">{t('sens.stricter')}</span>
           </div>
         </div>
         <p className="text-sm text-muted-foreground">

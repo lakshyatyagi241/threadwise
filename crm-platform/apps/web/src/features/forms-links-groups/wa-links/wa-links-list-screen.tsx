@@ -126,7 +126,7 @@ export function WaLinksListScreen() {
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-sm">
-              <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
+              <thead className="bg-muted/40 text-start text-xs uppercase text-muted-foreground">
                 <tr>
                   <th className="px-4 py-2">{t('table.link')}</th>
                   <th className="px-4 py-2">{t('table.destination')}</th>
@@ -156,7 +156,7 @@ export function WaLinksListScreen() {
                     <td className="px-4 py-3 text-muted-foreground">
                       {link.lastClickedAt ? new Date(link.lastClickedAt).toLocaleString() : '—'}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-end">
                       <div className="inline-flex gap-2">
                         <a
                           href={link.shortPath}

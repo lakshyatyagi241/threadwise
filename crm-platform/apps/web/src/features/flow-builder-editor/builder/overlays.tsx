@@ -198,7 +198,7 @@ export function ValidationPopup({ items, onClose }: { items: string[]; onClose: 
             <div className="text-[13.5px] font-semibold">
               {t('cantSave', { count: items.length })}
             </div>
-            <ul className="mt-1 list-disc space-y-0.5 pl-4 text-[12px] text-[var(--flb-ink-600)]">
+            <ul className="mt-1 list-disc space-y-0.5 ps-4 text-[12px] text-[var(--flb-ink-600)]">
               {items.slice(0, 6).map((m, i) => (
                 <li key={i}>{m}</li>
               ))}
