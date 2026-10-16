@@ -26,7 +26,8 @@
       "lastActivityAt": "آخر نشاط",
       "minor": "مصنّف كقاصر",
       "dateOfBirth": "تاريخ الميلاد",
-      "age": "العمر (بالسنوات)"
+      "age": "العمر (بالسنوات)",
+      "timezone": "المنطقة الزمنية"
     },
     "fieldGroups": {
       "journey": "الرحلة",

@@ -15,6 +15,8 @@ export function toV1Contact(c: ContactResponse, isMinor = false): V1Contact {
     email: c.email,
     tags: (c.groups ?? []).map((g) => ({ id: g.id, name: g.name })),
     attributes: c.customFields ?? {},
+    timezone: c.timezone,
+    timezone_source: c.timezoneSource,
     date_of_birth: c.dateOfBirth,
     is_minor: isMinor,
     created_at: c.createdAt,

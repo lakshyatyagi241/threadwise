@@ -26,7 +26,8 @@
       "lastActivityAt": "Última actividad",
       "minor": "Marcado como menor",
       "dateOfBirth": "Fecha de nacimiento",
-      "age": "Edad (años)"
+      "age": "Edad (años)",
+      "timezone": "Zona horaria"
     },
     "fieldGroups": {
       "journey": "Recorrido",

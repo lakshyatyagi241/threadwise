@@ -26,7 +26,8 @@
       "lastActivityAt": "Ostatnia aktywność",
       "minor": "Oznaczony jako niepełnoletni",
       "dateOfBirth": "Data urodzenia",
-      "age": "Wiek (lata)"
+      "age": "Wiek (lata)",
+      "timezone": "Strefa czasowa"
     },
     "fieldGroups": {
       "journey": "Ścieżka",

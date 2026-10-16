@@ -1475,9 +1475,11 @@
           "sent": "Verzonden",
           "delivered": "Afgeleverd",
           "read": "Gelezen",
-          "failed": "Mislukt"
+          "failed": "Mislukt",
+          "held": "Vastgehouden"
         },
-        "charged": "{amount} in rekening gebracht"
+        "charged": "{amount} in rekening gebracht",
+        "heldUntil": "Vastgehouden tot {when} (stille uren)"
       },
       "send": {
         "whenTitle": "Wanneer verzenden",

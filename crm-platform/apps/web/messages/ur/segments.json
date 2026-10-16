@@ -26,7 +26,8 @@
       "lastActivityAt": "آخری سرگرمی",
       "minor": "نابالغ کے طور پر نشان زد",
       "dateOfBirth": "تاریخِ پیدائش",
-      "age": "عمر (سال)"
+      "age": "عمر (سال)",
+      "timezone": "ٹائم زون"
     },
     "fieldGroups": {
       "journey": "سفر",

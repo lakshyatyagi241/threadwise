@@ -527,7 +527,8 @@
         "consentSms": "Consenso marketing via SMS (sì / no)",
         "consentEmail": "Consenso marketing via email (sì / no)",
         "dateOfBirth": "Data di nascita (prima l'anno, 2010-05-04)",
-        "minor": "Minorenne (sì contrassegna il contatto)"
+        "minor": "Minorenne (sì contrassegna il contatto)",
+        "timezone": "Fuso orario (es. Asia/Kolkata)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "limite di contatti del piano raggiunto",
         "tag_limit_reached": "limite di tag del piano raggiunto",
         "duplicate_in_file": "numero ripetuto, unito a una riga precedente",
-        "invalid_date_of_birth": "la data di nascita non è una data con l'anno per primo che possa essere una data di nascita"
+        "invalid_date_of_birth": "la data di nascita non è una data con l'anno per primo che possa essere una data di nascita",
+        "invalid_timezone": "fuso orario non valido"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Eliminare dei contatti cancella anche le loro conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
       "keepHistory": "Conserva la cronologia delle conversazioni senza l'identità della persona",
       "keepHistoryHint": "Le conversazioni restano nei tuoi archivi ma non rimandano più alla persona."
+    },
+    "timezone": {
+      "title": "Fuso orario",
+      "hint": "Le ore di silenzio si leggono su quest'orologio. Lascia vuoto per usare il paese del numero, poi il tuo fuso orario di riserva.",
+      "useAuto": "Dal numero di telefono",
+      "clear": "Rimuovi il fuso orario",
+      "change": "Modifica",
+      "save": "Salva",
+      "cancel": "Annulla",
+      "saved": "Fuso orario salvato.",
+      "failed": "Impossibile salvare il fuso orario. Ricarica il contatto e riprova.",
+      "several": "{count} fusi orari (vale il più restrittivo)",
+      "localTime": "Lì ora sono le {time}",
+      "held": "In attesa delle ore di silenzio: {count}",
+      "quiet": {
+        "off": "Le ore di silenzio sono disattivate per questo workspace.",
+        "open": "Ora si può inviare un messaggio di marketing.",
+        "held": "Un messaggio di marketing attenderebbe fino a {when}."
+      },
+      "source": {
+        "staff": "Impostato dal team",
+        "import": "Impostato da un import CSV",
+        "api": "Impostato tramite l'API",
+        "contact_field": "Impostato sul contatto",
+        "phone_country": "Ricavato dal paese del numero di telefono",
+        "window_setting": "Il tuo fuso orario di riserva (Centro conformità)",
+        "workspace": "Il fuso orario del tuo workspace",
+        "utc": "UTC (non si sa altro)"
+      },
+      "heldUntil": "Trattenuto fino a {when} (ore di silenzio)"
     }
   }
 }

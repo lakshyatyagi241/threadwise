@@ -1475,9 +1475,11 @@
           "sent": "भेजा गया",
           "delivered": "डिलीवर हुआ",
           "read": "पढ़ा गया",
-          "failed": "विफल"
+          "failed": "विफल",
+          "held": "रोका गया"
         },
-        "charged": "{amount} का शुल्क लिया गया"
+        "charged": "{amount} का शुल्क लिया गया",
+        "heldUntil": "{when} तक रोका गया (शांत घंटे)"
       },
       "send": {
         "whenTitle": "कब भेजें",

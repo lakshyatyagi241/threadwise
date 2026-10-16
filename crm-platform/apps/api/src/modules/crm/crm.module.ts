@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
+import { SendWindowModule } from '../compliance-center';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AttributesController } from './attributes/attributes.controller';
@@ -193,6 +194,7 @@ import { TagsService } from './tags/tags.service';
     PlatformSettingsModule,
     ContactConsentModule,
     PrivacyModule,
+    SendWindowModule,
   ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and

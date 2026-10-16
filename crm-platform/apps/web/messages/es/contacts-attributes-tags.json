@@ -527,7 +527,8 @@
         "consentSms": "Consentimiento de marketing por SMS (sí / no)",
         "consentEmail": "Consentimiento de marketing por correo (sí / no)",
         "dateOfBirth": "Fecha de nacimiento (año primero, 2010-05-04)",
-        "minor": "Menor (sí marca el contacto)"
+        "minor": "Menor (sí marca el contacto)",
+        "timezone": "Zona horaria (p. ej. Asia/Kolkata)"
       },
       "notInFile": "No está en el archivo",
       "columnN": "Columna {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "se alcanzó el límite de contactos del plan",
         "tag_limit_reached": "se alcanzó el límite de etiquetas del plan",
         "duplicate_in_file": "número repetido, combinado con una fila anterior",
-        "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento"
+        "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento",
+        "invalid_timezone": "zona horaria no válida"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Al eliminar contactos también se borran sus conversaciones, mensajes, multimedia, archivos, grabaciones de llamadas y registros de llamadas. Los leads, los negocios, las tareas y las facturas se conservan.",
       "keepHistory": "Conservar el historial de conversaciones sin la identidad de la persona",
       "keepHistoryHint": "Las conversaciones se conservan para tus registros, pero ya no apuntan a la persona."
+    },
+    "timezone": {
+      "title": "Zona horaria",
+      "hint": "Las horas de silencio se leen en este reloj. Déjalo vacío para usar el país del teléfono y después tu zona horaria de respaldo.",
+      "useAuto": "Según el teléfono",
+      "clear": "Quitar la zona horaria",
+      "change": "Cambiar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "saved": "Zona horaria guardada.",
+      "failed": "No se pudo guardar la zona horaria. Recarga el contacto e inténtalo de nuevo.",
+      "several": "{count} zonas horarias (se aplica la más estricta)",
+      "localTime": "Allí son las {time}",
+      "held": "En espera por las horas de silencio: {count}",
+      "quiet": {
+        "off": "Las horas de silencio están desactivadas en este espacio de trabajo.",
+        "open": "Ahora se puede enviar un mensaje de marketing.",
+        "held": "Un mensaje de marketing esperaría hasta {when}."
+      },
+      "source": {
+        "staff": "Definida por el equipo",
+        "import": "Definida por una importación CSV",
+        "api": "Definida mediante la API",
+        "contact_field": "Definida en el contacto",
+        "phone_country": "Deducida del país del teléfono",
+        "window_setting": "Tu zona horaria de respaldo (Centro de cumplimiento)",
+        "workspace": "La zona horaria de tu espacio de trabajo",
+        "utc": "UTC (no se sabe nada más)"
+      },
+      "heldUntil": "En espera hasta {when} (horas de silencio)"
     }
   }
 }

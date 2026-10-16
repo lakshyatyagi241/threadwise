@@ -1,4 +1,6 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -13,10 +15,13 @@ import {
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { QUEUES } from '../../../infra/queue/queues';
 import { WabaApiError } from '../../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import { emitDeliveryReported, deliveryProviderOf } from '../../../kernel/outbox/delivery-report';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { MergeTagService } from '../../crm';
+import { SendWindowService, scheduleWake, type WakeQueue } from '../../compliance-center';
+import { purposeOfCategory } from '../../contact-consent';
 import {
   EngineSenderRegistry,
   LinkTracker,
@@ -39,6 +44,17 @@ import { WizardRepository, type TestSendRow } from './wizard.repository';
 
 const STATUS_RANK: Record<string, number> = { sent: 1, delivered: 2, read: 3, failed: 9 };
 
+/** The campaign queue job that sends a test the quiet hours held back, at the opening (BL-191). */
+export const TEST_SEND_RELEASE_JOB = 'test-send-release';
+export interface TestSendReleaseJob {
+  orgId: number;
+  testSendId: number;
+}
+
+type TemplateCategory = ReturnType<typeof templateCategory>;
+type Prepared = Awaited<ReturnType<WizardTestSendService['prepare']>>;
+type Ready = Awaited<ReturnType<WizardTestSendService['ready']>>;
+
 const toResult = (r: TestSendRow, charged: Map<string, number>): WizardTestResult => ({
   id: r.uuid,
   to: r.to,
@@ -47,6 +63,7 @@ const toResult = (r: TestSendRow, charged: Map<string, number>): WizardTestResul
   errorCode: r.errorCode,
   errorMessage: r.errorMessage,
   chargedMinor: r.providerMessageId ? (charged.get(r.providerMessageId) ?? 0) : 0,
+  heldUntil: r.status === 'held' && r.heldUntil ? r.heldUntil.toISOString() : null,
   createdAt: r.createdAt.toISOString(),
 });
 
@@ -58,6 +75,10 @@ const toResult = (r: TestSendRow, charged: Map<string, number>): WizardTestResul
  *
  * Done in the request, on purpose: it is one person asking for at most ten messages and waiting for the per-number answer. Link
  * tracking is off, so a test never counts as a click on the broadcast.
+ *
+ * Quiet hours (BL-191): a test of a MARKETING template to a number whose local time is inside the workspace's quiet hours is HELD, not
+ * denied. Its log row says `held` with the instant it goes, and a delayed job (campaign queue, job `test-send-release`) sends it at the
+ * opening, reading the hours and the wallet again. A utility or authentication template is never held.
  */
 @Injectable()
 export class WizardTestSendService {
@@ -76,6 +97,8 @@ export class WizardTestSendService {
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
+    private readonly sendWindow: SendWindowService,
+    @InjectQueue(QUEUES.CAMPAIGN) private readonly queue: Queue,
   ) {}
 
   async send(req: WizardTestSendRequest): Promise<WizardTestSendResponse> {
@@ -101,9 +124,75 @@ export class WizardTestSendService {
       );
     }
 
-    const prep = await this.db.tx(async (tx) => {
-      const row = await this.repo.campaignByUuid(tx, orgId, req.draftId);
-      if (!row) throw AppError.notFound('Broadcast draft', req.draftId);
+    const prep = await this.prepare(orgId, req.draftId);
+    const category = templateCategory(prep.template.metaCategory, prep.template.category);
+
+    // The wallet's launch rule, for exactly these messages: refused with 422 WALLET_EMPTY when the balance cannot cover them.
+    await this.wallet.precheck(orgId, parsed.valid.length, {
+      source: 'campaign',
+      phones: parsed.valid,
+      category,
+    });
+
+    const ready = await this.ready(orgId, prep, category);
+    // Quiet hours (BL-191): a test of a MARKETING template is held like any marketing message; a utility or authentication one is not.
+    const windows =
+      purposeOfCategory(category) === 'marketing_messaging'
+        ? await this.sendWindow.checkPhones(orgId, 'message', parsed.valid)
+        : null;
+
+    const ids: number[] = [];
+    const heldRows: Array<{ id: number; until: Date }> = [];
+    for (const [i, number] of parsed.valid.entries()) {
+      const hold = windows?.get(number.replace(/\D+/g, ''));
+      if (hold && hold.decision === 'hold') {
+        const until = new Date(hold.until);
+        const saved = await this.db.tx((tx) =>
+          this.repo.insertTestSend(tx, orgId, {
+            campaignId: prep.row.id,
+            templateId: prep.template.id,
+            provider: prep.dispatch.engine,
+            to: number,
+            status: 'held',
+            providerMessageId: null,
+            errorCode: null,
+            errorMessage: null,
+            renderedBody: ready.rendered,
+            createdBy: ctx.userId,
+            held: { until: hold.until, reason: hold.reason },
+          }),
+        );
+        ids.push(saved.id);
+        heldRows.push({ id: saved.id, until });
+        continue;
+      }
+      const out = await this.deliver(orgId, prep, ready, category, number, `${i}`);
+      const saved = await this.db.tx((tx) =>
+        this.repo.insertTestSend(tx, orgId, {
+          campaignId: prep.row.id,
+          templateId: prep.template.id,
+          provider: prep.dispatch.engine,
+          to: number,
+          status: out.wamid ? 'sent' : 'failed',
+          providerMessageId: out.wamid,
+          errorCode: out.errorCode,
+          errorMessage: out.errorMessage,
+          renderedBody: ready.rendered,
+          createdBy: ctx.userId,
+        }),
+      );
+      ids.push(saved.id);
+    }
+    for (const h of heldRows) await this.wake(orgId, h.id, h.until);
+    const rows = await this.db.tx((tx) => this.repo.testSendsByIds(tx, orgId, ids));
+    return { results: rows.map((r) => toResult(r, new Map())), renderedBody: ready.rendered };
+  }
+
+  /** The draft, its template, the sender it would go from and a sample contact to resolve the variables for. Throws what the person can fix. */
+  async prepare(orgId: number, draftId: string) {
+    return this.db.tx(async (tx) => {
+      const row = await this.repo.campaignByUuid(tx, orgId, draftId);
+      if (!row) throw AppError.notFound('Broadcast draft', draftId);
       const draft = draftOf(row);
       const template = draft.templateId
         ? await this.repo.templateByUuid(tx, orgId, draft.templateId)
@@ -151,16 +240,13 @@ export class WizardTestSendService {
       const contact = sample ? await this.merge.contactFor(tx, orgId, sample.id) : undefined;
       return { row, draft, template, slots, dispatch, sample, mergeCtx: { ...base, contact } };
     });
-    const { row, draft, template, slots, dispatch, sample, mergeCtx } = prep;
-    const category = templateCategory(template.metaCategory, template.category);
+  }
 
-    // The wallet's launch rule, for exactly these messages: refused with 422 WALLET_EMPTY when the balance cannot cover them.
-    await this.wallet.precheck(orgId, parsed.valid.length, {
-      source: 'campaign',
-      phones: parsed.valid,
-      category,
-    });
-
+  /** The open sender, the template as the send port wants it and the text for the log. */
+  async ready(orgId: number, prep: Prepared, category: TemplateCategory) {
+    const { row, draft, template, slots, dispatch, mergeCtx } = prep;
+    void row;
+    void category;
     const adapter = this.engines.get(dispatch.engine);
     if (!adapter) {
       throw new AppError(
@@ -182,62 +268,124 @@ export class WizardTestSendService {
 
     const resolved = resolveMapping(slots, draft.variables, mergeCtx);
     const rendered = fillText(template.body, 'body', slots, resolved.values) ?? '';
-    const ids: number[] = [];
-    for (const [i, number] of parsed.valid.entries()) {
-      const to = number.replace(/\D+/g, '');
-      let wamid: string | null = null;
-      let errorCode: string | null = null;
-      let errorMessage: string | null = null;
-      try {
-        const built = await buildTemplatePayload(
-          { db: this.db, templates: this.templates, tracker: this.tracker },
-          {
-            orgId,
-            campaign: { id: row.id, trackingEnabled: false },
-            wizardVariables: wizardVariablesOf(row.wizard),
-            tpl,
-            overrides: null,
-            contactId: sample?.id ?? 0,
-            to,
-            ctx: mergeCtx,
-            tracking: false,
-          },
-        );
-        const out = await opened.send({
+    return { opened, tpl, rendered };
+  }
+
+  /** One message to one number through the send port. Never throws: a refusal is the answer (`wamid` null with the reason). */
+  private async deliver(
+    orgId: number,
+    prep: Prepared,
+    ready: Ready,
+    category: TemplateCategory,
+    number: string,
+    reference: string,
+  ): Promise<{ wamid: string | null; errorCode: string | null; errorMessage: string | null }> {
+    const { row, dispatch, sample, mergeCtx } = prep;
+    const to = number.replace(/\D+/g, '');
+    try {
+      const built = await buildTemplatePayload(
+        { db: this.db, templates: this.templates, tracker: this.tracker },
+        {
+          orgId,
+          campaign: { id: row.id, trackingEnabled: false },
+          wizardVariables: wizardVariablesOf(row.wizard),
+          tpl: ready.tpl,
+          overrides: null,
+          contactId: sample?.id ?? 0,
           to,
-          templateName: built.name,
-          language: tpl.language,
-          category,
-          clientReference: `camptest-${row.id}-${this.runtime.now().getTime()}-${i}`,
-          ...(dispatch.engine === 'waba' ? { components: built.components } : {}),
-        });
-        wamid = out.providerMessageId;
-      } catch (err) {
-        errorCode = err instanceof WabaApiError && err.code !== null ? String(err.code) : null;
-        errorMessage = err instanceof Error ? err.message : String(err);
-        this.logger.warn(
-          { orgId, to: `***${to.slice(-4)}`, errorCode },
-          '[CAMP] a test send was refused',
-        );
-      }
-      const saved = await this.db.tx((tx) =>
-        this.repo.insertTestSend(tx, orgId, {
-          campaignId: row.id,
-          templateId: template.id,
-          provider: dispatch.engine,
-          to: number,
-          status: wamid ? 'sent' : 'failed',
-          providerMessageId: wamid,
-          errorCode,
-          errorMessage,
-          renderedBody: rendered,
-          createdBy: ctx.userId,
+          ctx: mergeCtx,
+          tracking: false,
+        },
+      );
+      const out = await ready.opened.send({
+        to,
+        templateName: built.name,
+        language: ready.tpl.language,
+        category,
+        clientReference: `camptest-${row.id}-${this.runtime.now().getTime()}-${reference}`,
+        ...(dispatch.engine === 'waba' ? { components: built.components } : {}),
+      });
+      return { wamid: out.providerMessageId, errorCode: null, errorMessage: null };
+    } catch (err) {
+      const errorCode = err instanceof WabaApiError && err.code !== null ? String(err.code) : null;
+      this.logger.warn(
+        { orgId, to: `***${to.slice(-4)}`, errorCode },
+        '[CAMP] a test send was refused',
+      );
+      return {
+        wamid: null,
+        errorCode,
+        errorMessage: err instanceof Error ? err.message : String(err),
+      };
+    }
+  }
+
+  /** Queues the release of a held test at its opening (the campaign queue, job `test-send-release`). */
+  private async wake(orgId: number, id: number, until: Date): Promise<void> {
+    await scheduleWake(
+      this.queue as unknown as WakeQueue<TestSendReleaseJob>,
+      TEST_SEND_RELEASE_JOB,
+      { orgId, testSendId: id },
+      `camp-test-${orgId}-${id}`,
+      until,
+      (err) =>
+        this.logger.error(
+          { orgId, testSendId: id, err },
+          '[CAMP] could not queue the release of a held test send',
+        ),
+      this.runtime.now(),
+    );
+  }
+
+  /**
+   * The release of a test the quiet hours held (worker). The hours are read again (a recipient still inside them waits for their own
+   * opening), the draft is prepared again as it is now, the wallet's launch rule is asked again, and the message goes through the same
+   * send port. A draft that was changed so that it cannot be sent any more ends the test as failed, with the reason.
+   */
+  async release(orgId: number, id: number): Promise<'sent' | 'failed' | 'held' | 'skipped'> {
+    const t = await this.db.txAs({ orgId }, (tx) => this.repo.heldTestSend(tx, orgId, id));
+    if (!t || t.status !== 'held') return 'skipped';
+
+    const window = await this.sendWindow.checkPhones(orgId, 'message', [t.to]);
+    const hold = window.get(t.to.replace(/\D+/g, ''));
+    if (hold && hold.decision === 'hold') {
+      const until = new Date(hold.until);
+      await this.db.txAs({ orgId }, (tx) =>
+        this.repo.holdTestSend(tx, orgId, id, { until: hold.until, reason: hold.reason }),
+      );
+      await this.wake(orgId, id, until);
+      return 'held';
+    }
+
+    const fail = async (message: string, code: string | null = null) => {
+      await this.db.txAs({ orgId }, (tx) =>
+        this.repo.finishHeldTestSend(tx, orgId, id, {
+          status: 'failed',
+          providerMessageId: null,
+          errorCode: code,
+          errorMessage: message,
         }),
       );
-      ids.push(saved.id);
+      return 'failed' as const;
+    };
+    try {
+      const prep = await this.prepare(orgId, t.campaignUuid);
+      const category = templateCategory(prep.template.metaCategory, prep.template.category);
+      await this.wallet.precheck(orgId, 1, { source: 'campaign', phones: [t.to], category });
+      const ready = await this.ready(orgId, prep, category);
+      const out = await this.deliver(orgId, prep, ready, category, t.to, `r${id}`);
+      await this.db.txAs({ orgId }, (tx) =>
+        this.repo.finishHeldTestSend(tx, orgId, id, {
+          status: out.wamid ? 'sent' : 'failed',
+          providerMessageId: out.wamid,
+          errorCode: out.errorCode,
+          errorMessage: out.errorMessage,
+        }),
+      );
+      return out.wamid ? 'sent' : 'failed';
+    } catch (err) {
+      return fail(err instanceof Error ? err.message : 'The test could not be sent.');
     }
-    const rows = await this.db.tx((tx) => this.repo.testSendsByIds(tx, orgId, ids));
-    return { results: rows.map((r) => toResult(r, new Map())), renderedBody: rendered };
   }
 
   /** The test log of a draft, newest first, with what the wallet charged for each message. */

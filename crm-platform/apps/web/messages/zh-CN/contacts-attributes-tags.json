@@ -527,7 +527,8 @@
         "consentSms": "短信营销同意(是 / 否)",
         "consentEmail": "邮件营销同意(是 / 否)",
         "dateOfBirth": "出生日期(年份在前,2010-05-04)",
-        "minor": "未成年人(填“是”会标记该联系人)"
+        "minor": "未成年人(填“是”会标记该联系人)",
+        "timezone": "时区（如 Asia/Kolkata）"
       },
       "notInFile": "文件中没有",
       "columnN": "第 {n} 列",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "已达套餐联系人上限",
         "tag_limit_reached": "已达套餐标签上限",
         "duplicate_in_file": "号码重复，已合并到前面的行",
-        "invalid_date_of_birth": "出生日期不是可作为出生日期的年份在前的日期"
+        "invalid_date_of_birth": "出生日期不是可作为出生日期的年份在前的日期",
+        "invalid_timezone": "时区无效"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "删除联系人时，也会删除他们的会话、消息、媒体、文件、通话录音和通话记录。线索、交易、任务和发票将保留。",
       "keepHistory": "保留会话记录，但去除当事人身份信息",
       "keepHistoryHint": "这些会话会留作记录，但不再指向当事人。"
+    },
+    "timezone": {
+      "title": "时区",
+      "hint": "免打扰时段按此时间判断。留空则使用电话号码所属国家，其次使用备用时区。",
+      "useAuto": "按电话号码判断",
+      "clear": "清除时区",
+      "change": "更改",
+      "save": "保存",
+      "cancel": "取消",
+      "saved": "时区已保存。",
+      "failed": "无法保存时区。请重新加载联系人后再试。",
+      "several": "{count} 个时区（取最严格者）",
+      "localTime": "当地现在是 {time}",
+      "held": "等待免打扰时段结束：{count} 条",
+      "quiet": {
+        "off": "此工作区未启用免打扰时段。",
+        "open": "现在可以发送营销消息。",
+        "held": "营销消息将等待至 {when}。"
+      },
+      "source": {
+        "staff": "由团队成员设置",
+        "import": "由 CSV 导入设置",
+        "api": "通过 API 设置",
+        "contact_field": "已在联系人上设置",
+        "phone_country": "根据电话号码所属国家判断",
+        "window_setting": "备用时区（合规中心）",
+        "workspace": "工作区时区",
+        "utc": "UTC（没有其他信息）"
+      },
+      "heldUntil": "暂缓至 {when}（免打扰时段）"
     }
   }
 }

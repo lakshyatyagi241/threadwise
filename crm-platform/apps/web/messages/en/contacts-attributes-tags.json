@@ -527,7 +527,8 @@
         "consentSms": "SMS marketing consent (yes / no)",
         "consentEmail": "Email marketing consent (yes / no)",
         "dateOfBirth": "Date of birth (year first, 2010-05-04)",
-        "minor": "Minor (yes flags the contact)"
+        "minor": "Minor (yes flags the contact)",
+        "timezone": "Time zone (e.g. Asia/Kolkata)"
       },
       "notInFile": "Not in file",
       "columnN": "Column {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "plan contact limit reached",
         "tag_limit_reached": "plan tag limit reached",
         "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
-        "duplicate_in_file": "repeated number, merged into an earlier row"
+        "duplicate_in_file": "repeated number, merged into an earlier row",
+        "invalid_timezone": "invalid time zone"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Deleting contacts also erases their conversations, messages, media, files, call recordings and call logs. Leads, deals, tasks and invoices stay.",
       "keepHistory": "Keep conversation history without the person identity",
       "keepHistoryHint": "The conversations stay for your records but no longer point to the person."
+    },
+    "timezone": {
+      "title": "Time zone",
+      "hint": "Quiet hours are read on this clock. Leave it empty to use the country of the phone number, then your fallback time zone.",
+      "useAuto": "Read from the phone number",
+      "clear": "Clear the time zone",
+      "change": "Change",
+      "save": "Save",
+      "cancel": "Cancel",
+      "saved": "Time zone saved.",
+      "failed": "The time zone could not be saved. Reload the contact and try again.",
+      "several": "{count} time zones (the strictest applies)",
+      "localTime": "{time} there now",
+      "held": "Waiting for the quiet hours: {count}",
+      "quiet": {
+        "off": "Quiet hours are off for this workspace.",
+        "open": "A marketing message can go now.",
+        "held": "A marketing message would wait until {when}."
+      },
+      "source": {
+        "staff": "Set by staff",
+        "import": "Set by a CSV import",
+        "api": "Set through the API",
+        "contact_field": "Set on the contact",
+        "phone_country": "Read from the country of the phone number",
+        "window_setting": "Your fallback time zone (Compliance center)",
+        "workspace": "Your workspace time zone",
+        "utc": "UTC (nothing else is known)"
+      },
+      "heldUntil": "Held until {when} (quiet hours)"
     }
   }
 }

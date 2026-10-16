@@ -527,7 +527,8 @@
         "consentSms": "SMS pazarlama onayı (evet / hayır)",
         "consentEmail": "E-posta pazarlama onayı (evet / hayır)",
         "dateOfBirth": "Doğum tarihi (önce yıl, 2010-05-04)",
-        "minor": "Reşit olmayan (evet kişiyi işaretler)"
+        "minor": "Reşit olmayan (evet kişiyi işaretler)",
+        "timezone": "Saat dilimi (ör. Asia/Kolkata)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "plan kişi sınırına ulaşıldı",
         "tag_limit_reached": "plan etiket sınırına ulaşıldı",
         "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
-        "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil"
+        "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil",
+        "invalid_timezone": "geçersiz saat dilimi"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Kişileri silmek; konuşmalarını, mesajlarını, medyalarını, dosyalarını, arama kayıtlarını ve arama günlüklerini de siler. Potansiyel müşteriler, fırsatlar, görevler ve faturalar kalır.",
       "keepHistory": "Konuşma geçmişini kişinin kimliği olmadan sakla",
       "keepHistoryHint": "Konuşmalar kayıtlarınız için kalır ancak artık kişiyi göstermez."
+    },
+    "timezone": {
+      "title": "Saat dilimi",
+      "hint": "Sessiz saatler bu saate göre okunur. Boş bırakırsanız telefon numarasının ülkesi, ardından yedek saat diliminiz kullanılır.",
+      "useAuto": "Telefon numarasından",
+      "clear": "Saat dilimini temizle",
+      "change": "Değiştir",
+      "save": "Kaydet",
+      "cancel": "İptal",
+      "saved": "Saat dilimi kaydedildi.",
+      "failed": "Saat dilimi kaydedilemedi. Kişiyi yeniden yükleyip tekrar deneyin.",
+      "several": "{count} saat dilimi (en katı olan geçerlidir)",
+      "localTime": "Orada şu an saat {time}",
+      "held": "Sessiz saatleri bekliyor: {count}",
+      "quiet": {
+        "off": "Bu çalışma alanında sessiz saatler kapalı.",
+        "open": "Şimdi bir pazarlama mesajı gönderilebilir.",
+        "held": "Bir pazarlama mesajı {when} tarihine kadar beklerdi."
+      },
+      "source": {
+        "staff": "Ekip tarafından ayarlandı",
+        "import": "CSV içe aktarımıyla ayarlandı",
+        "api": "API üzerinden ayarlandı",
+        "contact_field": "Kişide ayarlı",
+        "phone_country": "Telefon numarasının ülkesinden okundu",
+        "window_setting": "Yedek saat diliminiz (Uyumluluk merkezi)",
+        "workspace": "Çalışma alanınızın saat dilimi",
+        "utc": "UTC (başka bir bilgi yok)"
+      },
+      "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
     }
   }
 }

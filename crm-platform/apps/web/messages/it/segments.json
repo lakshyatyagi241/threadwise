@@ -26,7 +26,8 @@
       "lastActivityAt": "Ultima attività",
       "minor": "Contrassegnato come minorenne",
       "dateOfBirth": "Data di nascita",
-      "age": "Età (anni)"
+      "age": "Età (anni)",
+      "timezone": "Fuso orario"
     },
     "fieldGroups": {
       "journey": "Percorso",

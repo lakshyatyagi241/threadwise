@@ -85,6 +85,8 @@ export const wechatBroadcastSchema = z.object({
   lastError: z.string().nullable(),
   /** Send can be tried again: the last attempt failed, or a worker died while sending and left it stuck. */
   canRetry: z.boolean(),
+  /** BL-191: the mass send waits for the workspace's quiet hours until this instant; null when it is not held. */
+  heldUntil: z.string().datetime().nullable(),
   startedAt: z.string().datetime().nullable(),
   finishedAt: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),

@@ -60,5 +60,8 @@ export const igSendResultSchema = z.object({
   failed: z.number().int().min(0),
   /** Up to five reasons, each cut to 120 characters. */
   errors: z.array(z.string()),
+  /** BL-191: people held for the workspace's quiet hours (neither sent nor failed), and the first instant one of them is messaged. */
+  held: z.number().int(),
+  heldUntil: z.string().datetime().nullable(),
 });
 export type IgSendResult = z.infer<typeof igSendResultSchema>;

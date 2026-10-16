@@ -527,7 +527,8 @@
         "consentSms": "SMS-Marketing-Einwilligung (ja / nein)",
         "consentEmail": "E-Mail-Marketing-Einwilligung (ja / nein)",
         "dateOfBirth": "Geburtsdatum (Jahr zuerst, 2010-05-04)",
-        "minor": "Minderjährig (Ja markiert den Kontakt)"
+        "minor": "Minderjährig (Ja markiert den Kontakt)",
+        "timezone": "Zeitzone (z. B. Asia/Kolkata)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "Kontaktlimit des Tarifs erreicht",
         "tag_limit_reached": "Tag-Limit des Tarifs erreicht",
         "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt",
-        "invalid_date_of_birth": "Das Geburtsdatum ist kein Datum mit dem Jahr zuerst, das ein Geburtsdatum sein kann"
+        "invalid_date_of_birth": "Das Geburtsdatum ist kein Datum mit dem Jahr zuerst, das ein Geburtsdatum sein kann",
+        "invalid_timezone": "ungültige Zeitzone"
       },
       "statusHint": "Wird auf Kontakte angewendet, die diese Datei erstellt.",
       "queued": "Warten auf den Start...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Das Löschen von Kontakten löscht auch deren Gespräche, Nachrichten, Medien, Dateien, Anrufaufzeichnungen und Anrufprotokolle. Leads, Deals, Aufgaben und Rechnungen bleiben erhalten.",
       "keepHistory": "Gesprächsverlauf ohne die Identität der Person behalten",
       "keepHistoryHint": "Die Gespräche bleiben für Ihre Unterlagen erhalten, verweisen aber nicht mehr auf die Person."
+    },
+    "timezone": {
+      "title": "Zeitzone",
+      "hint": "Die Ruhezeiten werden nach dieser Uhr gelesen. Leer lassen, um das Land der Telefonnummer und danach Ihre Ersatz-Zeitzone zu verwenden.",
+      "useAuto": "Aus der Telefonnummer",
+      "clear": "Zeitzone entfernen",
+      "change": "Ändern",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "saved": "Zeitzone gespeichert.",
+      "failed": "Die Zeitzone konnte nicht gespeichert werden. Kontakt neu laden und erneut versuchen.",
+      "several": "{count} Zeitzonen (es gilt die strengste)",
+      "localTime": "Dort ist es jetzt {time}",
+      "held": "Wartet auf die Ruhezeiten: {count}",
+      "quiet": {
+        "off": "Die Ruhezeiten sind für diesen Workspace ausgeschaltet.",
+        "open": "Eine Marketingnachricht kann jetzt gesendet werden.",
+        "held": "Eine Marketingnachricht würde bis {when} warten."
+      },
+      "source": {
+        "staff": "Vom Team festgelegt",
+        "import": "Durch einen CSV-Import gesetzt",
+        "api": "Über die API gesetzt",
+        "contact_field": "Am Kontakt hinterlegt",
+        "phone_country": "Aus dem Land der Telefonnummer abgeleitet",
+        "window_setting": "Ihre Ersatz-Zeitzone (Compliance-Center)",
+        "workspace": "Die Zeitzone Ihres Workspace",
+        "utc": "UTC (mehr ist nicht bekannt)"
+      },
+      "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)"
     }
   }
 }

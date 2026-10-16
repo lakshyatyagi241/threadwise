@@ -527,7 +527,8 @@
         "consentSms": "SMS 마케팅 동의(예 / 아니요)",
         "consentEmail": "이메일 마케팅 동의(예 / 아니요)",
         "dateOfBirth": "생년월일 (연도 먼저, 2010-05-04)",
-        "minor": "미성년자 (예를 선택하면 연락처에 표시됨)"
+        "minor": "미성년자 (예를 선택하면 연락처에 표시됨)",
+        "timezone": "시간대 (예: Asia/Kolkata)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "요금제 연락처 한도 도달",
         "tag_limit_reached": "요금제 태그 한도 도달",
         "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨",
-        "invalid_date_of_birth": "생년월일이 생년월일이 될 수 있는 연도 우선 형식의 날짜가 아닙니다"
+        "invalid_date_of_birth": "생년월일이 생년월일이 될 수 있는 연도 우선 형식의 날짜가 아닙니다",
+        "invalid_timezone": "잘못된 시간대"
       },
       "statusHint": "이 파일이 생성하는 연락처에 적용됩니다.",
       "queued": "시작 대기 중...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "연락처를 삭제하면 해당 연락처들의 대화, 메시지, 미디어, 파일, 통화 녹음 및 통화 기록도 함께 삭제됩니다. 리드, 거래, 작업, 청구서는 유지됩니다.",
       "keepHistory": "본인 식별 정보 없이 대화 기록 유지",
       "keepHistoryHint": "대화는 기록용으로 남지만 더 이상 해당 사람을 가리키지 않습니다."
+    },
+    "timezone": {
+      "title": "시간대",
+      "hint": "방해 금지 시간은 이 시계 기준으로 판단합니다. 비워 두면 전화번호의 국가, 그다음 대체 시간대를 사용합니다.",
+      "useAuto": "전화번호로 판단",
+      "clear": "시간대 지우기",
+      "change": "변경",
+      "save": "저장",
+      "cancel": "취소",
+      "saved": "시간대를 저장했습니다.",
+      "failed": "시간대를 저장하지 못했습니다. 연락처를 새로 고친 뒤 다시 시도하세요.",
+      "several": "시간대 {count}개 (가장 엄격한 것을 적용)",
+      "localTime": "현지는 지금 {time}",
+      "held": "방해 금지 시간 종료 대기: {count}건",
+      "quiet": {
+        "off": "이 워크스페이스에서는 방해 금지 시간이 꺼져 있습니다.",
+        "open": "지금 마케팅 메시지를 보낼 수 있습니다.",
+        "held": "마케팅 메시지는 {when}까지 대기합니다."
+      },
+      "source": {
+        "staff": "직원이 설정",
+        "import": "CSV 가져오기로 설정",
+        "api": "API로 설정",
+        "contact_field": "연락처에 설정됨",
+        "phone_country": "전화번호의 국가로 판단",
+        "window_setting": "대체 시간대 (컴플라이언스 센터)",
+        "workspace": "워크스페이스 시간대",
+        "utc": "UTC (다른 정보 없음)"
+      },
+      "heldUntil": "{when}까지 보류됨 (방해 금지 시간)"
     }
   }
 }

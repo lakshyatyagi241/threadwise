@@ -101,6 +101,8 @@ const contactFields = {
    */
   date_of_birth: z.preprocess(blankToNull, birthDateSchema.nullable().optional()),
   note: text(2000),
+  /** An IANA time zone such as `Asia/Kolkata` (BL-193, a product extension): the quiet hours are read on it. `null` clears it. */
+  timezone: text(64),
   group_ids: z.array(z.string().max(64)).nullable().optional(),
   attributes: z.record(z.unknown()).nullable().optional(),
   is_unsubscribed: flag,
@@ -147,6 +149,10 @@ export const v1ContactSchema = z.object({
   email: z.string().nullable(),
   tags: z.array(z.object({ id: z.string().uuid(), name: z.string() })),
   attributes: z.record(z.unknown()),
+  /** The contact's own IANA time zone, or null (BL-193, a product extension). */
+  timezone: z.string().nullable(),
+  /** Who set it: `staff`, `import` or `api`; null when no zone is stored. */
+  timezone_source: z.enum(['staff', 'import', 'api']).nullable(),
   /** Product extension (BL-190): the contact's date of birth, or null. */
   date_of_birth: z.string().nullable(),
   /** Product extension (BL-190): the contact is flagged as a minor. Written through `POST /v1/contacts/:id/privacy`. */

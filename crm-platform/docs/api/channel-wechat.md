@@ -86,3 +86,7 @@ the app does not count or block them.
 
 Not enforced: the plan flags `access_wechat`, `wechat_broadcasts` and `wechat_channels_limit` and the platform switch `wechat_enabled`
 (one plan feature, `extra_channels`, gates all of it).
+
+## Quiet hours (BL-191)
+
+A WeChat broadcast is one mass-send call, so the whole broadcast waits when the workspace clock is inside the quiet hours: it stays `sending` and `heldUntil` is set on it (null otherwise). The call is made at the opening. See [compliance.md](compliance.md).

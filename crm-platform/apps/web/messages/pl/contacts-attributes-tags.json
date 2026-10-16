@@ -527,7 +527,8 @@
         "consentSms": "Zgoda na marketing SMS (tak / nie)",
         "consentEmail": "Zgoda na marketing e-mail (tak / nie)",
         "dateOfBirth": "Data urodzenia (rok na początku, 2010-05-04)",
-        "minor": "Niepełnoletni (tak oznacza kontakt)"
+        "minor": "Niepełnoletni (tak oznacza kontakt)",
+        "timezone": "Strefa czasowa (np. Asia/Kolkata)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "osiągnięto limit kontaktów w planie",
         "tag_limit_reached": "osiągnięto limit tagów w planie",
         "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem",
-        "invalid_date_of_birth": "data urodzenia nie jest datą z rokiem na początku, która może być datą urodzenia"
+        "invalid_date_of_birth": "data urodzenia nie jest datą z rokiem na początku, która może być datą urodzenia",
+        "invalid_timezone": "nieprawidłowa strefa czasowa"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Usunięcie kontaktów usuwa też ich rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
       "keepHistory": "Zachowaj historię rozmów bez tożsamości osoby",
       "keepHistoryHint": "Rozmowy pozostają w Twoich zapisach, ale nie wskazują już na osobę."
+    },
+    "timezone": {
+      "title": "Strefa czasowa",
+      "hint": "Godziny ciszy są liczone według tego zegara. Zostaw puste, aby użyć kraju numeru telefonu, a potem zapasowej strefy czasowej.",
+      "useAuto": "Z numeru telefonu",
+      "clear": "Wyczyść strefę czasową",
+      "change": "Zmień",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "saved": "Zapisano strefę czasową.",
+      "failed": "Nie udało się zapisać strefy czasowej. Odśwież kontakt i spróbuj ponownie.",
+      "several": "{count} strefy czasowe (obowiązuje najostrzejsza)",
+      "localTime": "Tam jest teraz {time}",
+      "held": "Czeka na godziny ciszy: {count}",
+      "quiet": {
+        "off": "Godziny ciszy są wyłączone w tej przestrzeni roboczej.",
+        "open": "Wiadomość marketingowa może zostać wysłana teraz.",
+        "held": "Wiadomość marketingowa poczekałaby do {when}."
+      },
+      "source": {
+        "staff": "Ustawione przez zespół",
+        "import": "Ustawione przez import CSV",
+        "api": "Ustawione przez API",
+        "contact_field": "Ustawione w kontakcie",
+        "phone_country": "Odczytane z kraju numeru telefonu",
+        "window_setting": "Zapasowa strefa czasowa (Centrum zgodności)",
+        "workspace": "Strefa czasowa przestrzeni roboczej",
+        "utc": "UTC (nic więcej nie wiadomo)"
+      },
+      "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
     }
   }
 }

@@ -26,7 +26,8 @@
       "lastActivityAt": "Hoạt động gần nhất",
       "minor": "Đã đánh dấu là chưa thành niên",
       "dateOfBirth": "Ngày sinh",
-      "age": "Tuổi (năm)"
+      "age": "Tuổi (năm)",
+      "timezone": "Múi giờ"
     },
     "fieldGroups": {
       "journey": "Hành trình",

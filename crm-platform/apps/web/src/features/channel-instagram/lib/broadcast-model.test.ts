@@ -72,8 +72,17 @@ describe('the message and the button', () => {
   });
 
   it('a result is none when nothing went, partial when some failed, all otherwise', () => {
-    expect(outcomeOf({ sent: 0, failed: 3, errors: [] })).toBe('none');
-    expect(outcomeOf({ sent: 2, failed: 1, errors: [] })).toBe('partial');
-    expect(outcomeOf({ sent: 2, failed: 0, errors: [] })).toBe('all');
+    const base = { errors: [], held: 0, heldUntil: null };
+    expect(outcomeOf({ ...base, sent: 0, failed: 3 })).toBe('none');
+    expect(outcomeOf({ ...base, sent: 2, failed: 1 })).toBe('partial');
+    expect(outcomeOf({ ...base, sent: 2, failed: 0 })).toBe('all');
+  });
+
+  it('a result where everyone waits for the quiet hours is held, not none (BL-191)', () => {
+    const at = '2026-10-16T03:30:00.000Z';
+    expect(outcomeOf({ sent: 0, failed: 0, errors: [], held: 4, heldUntil: at })).toBe('held');
+    // Some failed while others wait: nothing went, so it still reads as a failure to act on.
+    expect(outcomeOf({ sent: 0, failed: 1, errors: [], held: 3, heldUntil: at })).toBe('none');
+    expect(outcomeOf({ sent: 1, failed: 0, errors: [], held: 3, heldUntil: at })).toBe('all');
   });
 });

@@ -1,4 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -19,8 +21,19 @@ import { BotsRepository } from './bots.repository';
 import { sendToChat, type Outcome } from './chat-send';
 import { templateButtonsMarkup } from './telegram-markup';
 import { TgBroadcastsRepository, type TgBroadcastRow } from './tg-broadcasts.repository';
+import type { TgBroadcastJob } from './tg-broadcasts.service';
+import { QUEUES } from '../../infra/queue/queues';
+import {
+  HELD_TABLES,
+  SendWindowService,
+  heldSummaries,
+  holdRecipient,
+  scheduleWake,
+  splitByQuietHours,
+} from '../compliance-center';
+import { ConsentGate } from '../contact-consent';
 
-export type TgRunResult = 'skipped' | 'stopped' | 'done' | 'failed';
+export type TgRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
 
 type Bytes = Extract<MediaSource, { bytes: Uint8Array }>;
 
@@ -28,6 +41,10 @@ type Bytes = Extract<MediaSource, { bytes: Uint8Array }>;
  * Sends one Telegram broadcast (TW-TG-013), run by the `tg-broadcast` worker job. Chats are claimed in batches of 25 with
  * `FOR UPDATE SKIP LOCKED`, sent one by one about 50 ms apart, and each outcome is written at once, so a crash loses at most the
  * chat in flight (put back after two minutes). Counters are recomputed from the rows. Pause or delete is noticed at the next batch.
+ *
+ * Quiet hours (BL-191): a chat whose contact's local time is inside the workspace's quiet hours is HELD, not denied. It goes back to
+ * `pending` with the instant it may be messaged, the rest of the audience goes, and when only held chats are left a delayed job takes them
+ * up at the first opening. At release the ConsentGate is asked again, so a STOP that arrived while the message waited still stops it.
  */
 @Injectable()
 export class TgBroadcastSenderService {
@@ -41,6 +58,9 @@ export class TgBroadcastSenderService {
     private readonly repo: TgBroadcastsRepository,
     private readonly bots: BotsRepository,
     private readonly crypto: CryptoService,
+    private readonly sendWindow: SendWindowService,
+    private readonly gate: ConsentGate,
+    @InjectQueue(QUEUES.TG_BROADCAST) private readonly queue: Queue<TgBroadcastJob>,
     @Inject(TELEGRAM_API) private readonly telegram: TelegramApiFactory,
     @Inject(MEDIA_STORE) private readonly media: MediaStore,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
@@ -77,17 +97,51 @@ export class TgBroadcastSenderService {
     // The bytes are read once per run, not once per chat.
     let bytes: Bytes | null | undefined;
 
+    // A run visits each recipient once, in order: a person held for the quiet hours is not claimed again by this run.
+    let lastId = 0;
     for (;;) {
       broadcast = await load();
       if (!broadcast || broadcast.status !== 'sending') return 'stopped';
       const current = broadcast;
 
       const batch = await this.db.txAs({ orgId }, (tx) =>
-        this.repo.claim(tx, orgId, broadcastId, BATCH_SIZE),
+        this.repo.claim(tx, orgId, broadcastId, BATCH_SIZE, lastId),
       );
       if (batch.length === 0) return this.finish(orgId, current);
+      lastId = Math.max(...batch.map((r) => r.id));
+
+      const windows = await splitByQuietHours(this.sendWindow, orgId, batch);
+      const held = new Map(windows.held.map((h) => [h.row.id, h.hold]));
+      // A chat released from a hold may have unsubscribed while it waited: the gate is asked again (BL-141).
+      const released = batch.filter((r) => r.wasHeld && r.contactId !== null);
+      const recheck =
+        released.length > 0
+          ? await this.gate.checkMany(
+              orgId,
+              released.map((r) => r.contactId as number),
+              'telegram',
+              'marketing_messaging',
+            )
+          : null;
 
       for (const r of batch) {
+        const verdict = r.contactId === null ? undefined : recheck?.decisions.get(r.contactId);
+        if (verdict && verdict.decision === 'deny') {
+          await this.db.txAs({ orgId }, (tx) =>
+            this.repo.markRecipient(tx, orgId, r.id, {
+              status: 'blocked',
+              error: `Not messaged: consent (${verdict.reason})`,
+            }),
+          );
+          continue;
+        }
+        const hold = held.get(r.id);
+        if (hold) {
+          await this.db.txAs({ orgId }, (tx) =>
+            holdRecipient(tx, orgId, HELD_TABLES.telegram, r.id, hold),
+          );
+          continue;
+        }
         const text = `${personalise(body, r.title)}${markup?.append ?? ''}`.trim();
 
         let out: Outcome;
@@ -166,15 +220,43 @@ export class TgBroadcastSenderService {
     return local ? { bytes: local.bytes, filename: local.filename } : null;
   }
 
-  /** Nothing pending: the broadcast is done. Chats another worker still holds keep it sending. */
-  private finish(orgId: number, broadcast: TgBroadcastRow): Promise<TgRunResult> {
-    return this.db.txAs({ orgId }, async (tx) => {
+  /**
+   * Nothing to claim: the broadcast is done, or what is left waits. Chats another worker still holds keep it sending; chats held for the
+   * quiet hours keep it sending too, and a delayed job comes back for them at the first opening.
+   */
+  private async finish(orgId: number, broadcast: TgBroadcastRow): Promise<TgRunResult> {
+    const outcome = await this.db.txAs({ orgId }, async (tx) => {
       const row = await this.repo.findByUuid(tx, orgId, broadcast.uuid, true);
-      if (!row || row.status !== 'sending') return 'stopped';
+      if (!row || row.status !== 'sending') return { result: 'stopped' as const };
       await this.repo.recompute(tx, orgId, row.id);
-      if ((await this.repo.pendingCount(tx, orgId, row.id)) > 0) return 'stopped';
+      if ((await this.repo.pendingCount(tx, orgId, row.id)) > 0) {
+        const next = (await heldSummaries(tx, orgId, HELD_TABLES.telegram, [row.id])).get(
+          row.id,
+        )?.next;
+        return next ? { result: 'held' as const, next } : { result: 'stopped' as const };
+      }
       await this.repo.setStatus(tx, orgId, row.id, 'done', { markFinished: true });
-      return 'done';
+      return { result: 'done' as const };
     });
+    if (outcome.result === 'held') {
+      await scheduleWake(
+        this.queue,
+        'send',
+        { orgId, broadcastId: broadcast.id },
+        broadcast.uuid,
+        outcome.next,
+        (err) =>
+          this.logger.error(
+            { orgId, broadcast: broadcast.uuid, err },
+            'could not queue the wake-up of a Telegram broadcast held for the quiet hours',
+          ),
+        this.sendWindow.now(),
+      );
+      this.logger.log(
+        { orgId, broadcast: broadcast.uuid, resumeAt: outcome.next },
+        '[TG] broadcast waits: chats held for the quiet hours',
+      );
+    }
+    return outcome.result;
   }
 }

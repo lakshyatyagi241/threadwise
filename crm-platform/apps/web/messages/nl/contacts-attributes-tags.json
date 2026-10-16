@@ -527,7 +527,8 @@
         "consentSms": "SMS-marketingtoestemming (ja / nee)",
         "consentEmail": "E-mailmarketingtoestemming (ja / nee)",
         "dateOfBirth": "Geboortedatum (jaar eerst, 2010-05-04)",
-        "minor": "Minderjarig (ja markeert het contact)"
+        "minor": "Minderjarig (ja markeert het contact)",
+        "timezone": "Tijdzone (bijv. Asia/Kolkata)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -585,7 +586,8 @@
         "plan_limit_reached": "contactlimiet van abonnement bereikt",
         "tag_limit_reached": "taglimiet van abonnement bereikt",
         "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
-        "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn"
+        "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn",
+        "invalid_timezone": "ongeldige tijdzone"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -1500,6 +1502,36 @@
       "scopeMany": "Als je contacten verwijdert, worden ook hun gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
       "keepHistory": "Gespreksgeschiedenis bewaren zonder de identiteit van de persoon",
       "keepHistoryHint": "De gesprekken blijven bewaard voor je administratie maar verwijzen niet meer naar de persoon."
+    },
+    "timezone": {
+      "title": "Tijdzone",
+      "hint": "De stille uren worden op deze klok gelezen. Laat leeg om het land van het telefoonnummer te gebruiken, daarna uw terugvaltijdzone.",
+      "useAuto": "Uit het telefoonnummer",
+      "clear": "Tijdzone wissen",
+      "change": "Wijzigen",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "saved": "Tijdzone opgeslagen.",
+      "failed": "De tijdzone kon niet worden opgeslagen. Laad het contact opnieuw en probeer het nogmaals.",
+      "several": "{count} tijdzones (de strengste geldt)",
+      "localTime": "Daar is het nu {time}",
+      "held": "Wachten op de stille uren: {count}",
+      "quiet": {
+        "off": "De stille uren staan uit voor deze werkruimte.",
+        "open": "Een marketingbericht kan nu worden verstuurd.",
+        "held": "Een marketingbericht zou wachten tot {when}."
+      },
+      "source": {
+        "staff": "Ingesteld door het team",
+        "import": "Ingesteld door een CSV-import",
+        "api": "Ingesteld via de API",
+        "contact_field": "Ingesteld op het contact",
+        "phone_country": "Afgeleid uit het land van het telefoonnummer",
+        "window_setting": "Uw terugvaltijdzone (Compliancecentrum)",
+        "workspace": "De tijdzone van uw werkruimte",
+        "utc": "UTC (verder is niets bekend)"
+      },
+      "heldUntil": "Vastgehouden tot {when} (stille uren)"
     }
   }
 }

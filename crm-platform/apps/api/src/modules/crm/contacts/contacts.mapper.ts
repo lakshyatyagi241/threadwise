@@ -58,6 +58,13 @@ export function toContactResponse(
     lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
     customFields: row.data ?? {},
     source: row.source,
+    timezone: row.timezone,
+    timezoneSource:
+      row.timezone === null
+        ? null
+        : row.timezoneSource === 'import' || row.timezoneSource === 'api'
+          ? row.timezoneSource
+          : 'staff',
     isUnsubscribed: row.isUnsubscribed,
     isArchived: row.isArchived,
     ...(opts?.groups ? { groups: opts.groups.map(chip) } : {}),

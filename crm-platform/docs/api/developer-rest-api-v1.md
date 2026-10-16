@@ -1744,3 +1744,7 @@ Before opening a pull request run the `pre-pr` skill; a change to this page that
 ## Date of birth and the minor flag (BL-190, product extension)
 
 Not in Reference. `date_of_birth` (`YYYY-MM-DD`, `null` clears it) is accepted on `POST /v1/contacts` and `PUT|PATCH /v1/contacts/:id`; every contact carries `date_of_birth` and `is_minor`. A date that makes the contact a minor flags it in the same request (source `dob`). `GET /v1/contacts/:id/privacy` (`contacts:read`) and `POST /v1/contacts/:id/privacy` (`contacts:write`, `Idempotency-Key`; body `{ kind: minor | guardian_consent | sale_share_opt_out, value, note?, evidence? }`, source stored as `api`) read and write the flags; guardian consent needs a note (422 `CONSENT_NOTE_REQUIRED`) and a flagged minor (422 `CONSENT_PRIVACY_NOT_MINOR`) and never creates a marketing grant.
+
+## Contact time zone (BL-193, product extension)
+
+`timezone` (an IANA zone such as `Asia/Kolkata`; blank or `null` clears it; 422 on `timezone` when it is not a zone) is accepted by `POST /v1/contacts` and `PATCH /v1/contacts/:id`, and returned with the read-only `timezone_source` (`staff`, `import` or `api`; `null` when no zone is stored) on every contact. A zone written through the API is recorded as `api`. Marketing messages to the contact are held for the workspace's quiet hours on this clock.

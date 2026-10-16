@@ -277,7 +277,7 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
   async findThreads(tx: Tx, orgId: number, uuids: string[]): Promise<ThreadRef[]> {
     if (uuids.length === 0) return [];
     const res = await tx.execute(sql`
-      SELECT c.id, c.uuid, c.title, ch.kind AS channel, c.peer_key
+      SELECT c.id, c.uuid, c.title, ch.kind AS channel, c.peer_key, c.contact_id
       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
       WHERE c.org_id = ${orgId} AND c.uuid IN (${sql.join(
         uuids.map((u) => sql`${u}::uuid`),
@@ -290,6 +290,7 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
         title: string | null;
         channel: string | null;
         peer_key: string | null;
+        contact_id: number | string | null;
       }>
     ).map((r) => ({
       id: Number(r.id),
@@ -297,6 +298,7 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
       title: r.title ?? '',
       channel: r.channel,
       rawJid: r.peer_key,
+      contactId: r.contact_id === null ? null : Number(r.contact_id),
     }));
   }
 

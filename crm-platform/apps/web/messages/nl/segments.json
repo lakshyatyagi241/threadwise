@@ -26,7 +26,8 @@
       "lastActivityAt": "Laatste activiteit",
       "minor": "Gemarkeerd als minderjarig",
       "dateOfBirth": "Geboortedatum",
-      "age": "Leeftijd (jaren)"
+      "age": "Leeftijd (jaren)",
+      "timezone": "Tijdzone"
     },
     "fieldGroups": {
       "journey": "Traject",

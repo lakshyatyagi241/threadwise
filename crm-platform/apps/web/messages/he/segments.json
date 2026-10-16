@@ -26,7 +26,8 @@
       "lastActivityAt": "פעילות אחרונה",
       "minor": "מסומן כקטין",
       "dateOfBirth": "תאריך לידה",
-      "age": "גיל (שנים)"
+      "age": "גיל (שנים)",
+      "timezone": "אזור זמן"
     },
     "fieldGroups": {
       "journey": "מסלול",

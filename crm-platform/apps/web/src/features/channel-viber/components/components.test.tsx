@@ -91,6 +91,8 @@ const broadcast = (over: Partial<VibBroadcast> = {}): VibBroadcast => ({
   delivered: 0,
   seen: 0,
   progress: 0,
+  held: 0,
+  heldUntil: null,
   hasMedia: false,
   lastError: null,
   startedAt: null,

@@ -38,6 +38,8 @@ const pillLink =
  */
 export function BroadcastsScreen() {
   const t = useTranslations('telegram.broadcasts');
+  // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
+  const tHold = useTranslations('compliance-center.hold');
   const qc = useQueryClient();
   const { toast } = useToast();
   const canManage = useCan('tg.broadcasts.manage');
@@ -215,6 +217,17 @@ export function BroadcastsScreen() {
                         <div className="mt-1 font-mono text-[10.5px] text-muted-foreground">
                           {t('counts', { sent: b.sent, failed: b.failed, blocked: b.blocked })}
                         </div>
+                        {b.held > 0 && (
+                          <div
+                            className="mt-0.5 text-[10.5px] text-warning"
+                            data-testid="broadcast-held"
+                          >
+                            {tHold('heldCount', { count: b.held })}
+                            {b.heldUntil
+                              ? ` · ${tHold('heldUntil', { when: new Date(b.heldUntil).toLocaleString() })}`
+                              : ''}
+                          </div>
+                        )}
                       </td>
                       <td className="px-5 py-3">
                         <span

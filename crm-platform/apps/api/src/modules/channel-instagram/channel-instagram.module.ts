@@ -26,13 +26,21 @@ import { InstaflowPublicController } from './inbound.controller';
 import { IngestService } from './ingest.service';
 import { PullService } from './pull.service';
 import { SenderService } from './sender.service';
+import { SendWindowModule } from '../compliance-center';
+import { ContactConsentModule } from '../contact-consent';
 
 /**
  * The Instagram channel (IG), through the engine bridge. The shims below stand in for services other domains own; each is replaced
  * by binding the real one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [AddonsExtensionRegistryModule, ChatConversationsModule, CrmModule],
+  imports: [
+    AddonsExtensionRegistryModule,
+    ChatConversationsModule,
+    CrmModule,
+    SendWindowModule,
+    ContactConsentModule,
+  ],
   controllers: [
     AccountsController,
     BroadcastsController,
@@ -57,7 +65,14 @@ import { SenderService } from './sender.service';
     { provide: INSTAGRAM_AUTOMATION, useClass: NoInstagramAutomation },
     { provide: INSTAGRAM_TEMPLATES, useClass: SqlInstagramTemplates },
   ],
-  exports: [AccountsService, AccountsRepository, IngestService, PullService, SenderService],
+  exports: [
+    AccountsService,
+    AccountsRepository,
+    IngestService,
+    PullService,
+    SenderService,
+    BroadcastsService,
+  ],
 })
 export class ChannelInstagramModule implements OnModuleInit {
   constructor(

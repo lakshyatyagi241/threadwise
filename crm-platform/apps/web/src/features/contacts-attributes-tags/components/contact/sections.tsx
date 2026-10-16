@@ -28,6 +28,7 @@ import { ContactOverview } from './overview';
 import { LeadSourceRows, useCustomGroups, useInfoRows } from './info-tabs';
 import { EmptyLine, KeyValueList, Panel, useRefreshContact, type SectionProps } from './shared';
 import { StatsSection } from './stats-section';
+import { TimezoneCard } from '../timezone-card';
 
 /** The contact's activity timeline (what the old page called "Activity timeline"), newest first, with "Load more". */
 export function TimelinePanel({ contactId }: { contactId: string }) {
@@ -100,6 +101,8 @@ function ActivitiesSection({ contact }: SectionProps) {
   return (
     <div className="space-y-4">
       {canRead && <MeetingsPanel contact={contact} />}
+      {/* The clock marketing messages are read on and the next time one may go (BL-193), right above the history. */}
+      {canRead && <TimezoneCard contactId={contact.id} rowVersion={contact.rowVersion} />}
       <TimelinePanel contactId={contact.id} />
     </div>
   );

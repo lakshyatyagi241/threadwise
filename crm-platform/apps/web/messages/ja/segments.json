@@ -26,7 +26,8 @@
       "lastActivityAt": "最終アクティビティ",
       "minor": "未成年として設定",
       "dateOfBirth": "生年月日",
-      "age": "年齢(歳)"
+      "age": "年齢(歳)",
+      "timezone": "タイムゾーン"
     },
     "fieldGroups": {
       "journey": "ジャーニー",

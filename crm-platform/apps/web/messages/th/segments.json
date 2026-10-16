@@ -26,7 +26,8 @@
       "lastActivityAt": "กิจกรรมล่าสุด",
       "minor": "ทำเครื่องหมายเป็นผู้เยาว์แล้ว",
       "dateOfBirth": "วันเกิด",
-      "age": "อายุ (ปี)"
+      "age": "อายุ (ปี)",
+      "timezone": "เขตเวลา"
     },
     "fieldGroups": {
       "journey": "เส้นทาง",

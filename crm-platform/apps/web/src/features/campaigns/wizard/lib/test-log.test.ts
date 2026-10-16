@@ -27,5 +27,7 @@ describe('shouldPollTests', () => {
     expect(testTone('read')).toBe('success');
     expect(testTone('delivered')).toBe('success');
     expect(testTone('sent')).toBe('neutral');
+    // Held for the workspace's quiet hours (BL-191): waiting, not failed.
+    expect(testTone('held')).toBe('warning');
   });
 });

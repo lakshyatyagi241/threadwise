@@ -57,6 +57,8 @@ function buttonChips(buttons: unknown): Array<{ label: string; link: boolean }> 
  */
 export function BroadcastsScreen() {
   const t = useTranslations('facebook.broadcasts');
+  // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
+  const tHold = useTranslations('compliance-center.hold');
   const qc = useQueryClient();
   const { toast } = useToast();
   const list = useBroadcasts();
@@ -209,6 +211,14 @@ export function BroadcastsScreen() {
                     style={{ width: `${b.progress}%` }}
                   />
                 </div>
+                {b.held > 0 && (
+                  <div className="mt-0.5 text-[10.5px] text-warning" data-testid="broadcast-held">
+                    {tHold('heldCount', { count: b.held })}
+                    {b.heldUntil
+                      ? ` · ${tHold('heldUntil', { when: new Date(b.heldUntil).toLocaleString() })}`
+                      : ''}
+                  </div>
+                )}
                 <div className="mt-2 flex items-center justify-between gap-2 font-mono text-[11px] text-muted-foreground">
                   <span>{t('counts', { sent: b.sent, failed: b.failed, blocked: b.blocked })}</span>
                   {canManage && (
