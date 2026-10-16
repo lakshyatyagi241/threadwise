@@ -9,6 +9,7 @@ import {
   messageSendJobSchema,
   sendBackoffStrategy,
 } from './message-dispatch.job';
+import { SendHeldError } from './send-held.error';
 import { IN_FLIGHT, MessageDispatchService } from './message-dispatch.service';
 
 /** How long a message whose send another worker holds waits before this one looks again (without using up an attempt). */
@@ -58,6 +59,14 @@ export class MessageDispatchProcessor extends WorkerHost {
             finalAttempt: job.attemptsMade + 1 >= attempts,
           });
         } catch (err) {
+          if (err instanceof SendHeldError) {
+            // Quiet hours (BL-177): the job sleeps until the hours open, without using up an attempt. It then runs the whole send again.
+            await job.moveToDelayed(
+              Math.max(Date.parse(err.hold.until), Date.now() + 1_000),
+              token,
+            );
+            throw new DelayedError();
+          }
           if (err instanceof ChannelError && err.code === IN_FLIGHT) {
             await job.moveToDelayed(Date.now() + IN_FLIGHT_RETRY_MS, token);
             throw new DelayedError();

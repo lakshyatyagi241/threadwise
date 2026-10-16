@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Godziny ciszy i okna połączeń nie są jeszcze egzekwowane",
+          "title": "Godziny ciszy i okna dzwonienia są egzekwowane",
           "detail": {
-            "notEnforced": "Twoje godziny ciszy i okno połączeń są zapisane, ale nic jeszcze nie wstrzymuje wiadomości ani nie blokuje połączeń poza nimi. Zaplanuj działania we własnym zakresie."
+            "enforced": "Wiadomości marketingowe w godzinach ciszy są wstrzymywane do ich końca, a połączenie poza oknem dzwonienia jest odrzucane z informacją, kiedy okno się otwiera. Odpowiedzi w oknie 24 godzin i powiadomienia usługowe nigdy nie są wstrzymywane. Rejestr DND to tylko notatka: na razie nic się z nim nie sprawdza."
           }
         }
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Te ustawienia są zapisane, ale jeszcze nie egzekwowane. Wiadomość nie jest wstrzymywana, a połączenie nie jest blokowane poza ustawionymi godzinami. Zaplanuj wysyłkę i połączenia z ich uwzględnieniem.",
-      "intro": "Niektóre przepisy ograniczają, kiedy wiadomości marketingowe i połączenia mogą docierać do osób. Zapisz tutaj godziny, w których pracujesz.",
+      "intro": "Niektóre przepisy ograniczają, kiedy wiadomości marketingowe i połączenia mogą docierać do ludzi. Ustaw tu swoje godziny: wiadomość marketingowa wysłana w godzinach ciszy czeka i wychodzi po ich zakończeniu, a poza oknem dzwonienia połączenie nie jest wykonywane.",
       "quiet": {
         "title": "Godziny ciszy dla wiadomości",
-        "hint": "Godziny, w których nie chcesz, aby wiadomości marketingowe docierały do osób. Okres może przechodzić przez północ.",
+        "hint": "Godziny, w których wiadomości marketingowe nie wychodzą. Czekają i są wysyłane po ich zakończeniu. Okres może obejmować północ.",
         "enabled": "Godziny ciszy włączone",
         "start": "Cisza od",
         "end": "Cisza do"
       },
       "calling": {
         "title": "Okno połączeń",
-        "hint": "Jedyne godziny, w których należy wykonywać marketingowe połączenia, w wybrane przez Ciebie dni.",
+        "hint": "Jedyne godziny, w których wykonuje się połączenia marketingowe, w wybrane dni. Połączenie poza nimi jest odrzucane z informacją, kiedy okno się otwiera.",
         "enabled": "Okno połączeń włączone",
         "start": "Połączenia od",
         "end": "Połączenia do",
@@ -407,8 +406,8 @@
       },
       "suggested": "Włączone przepisy sugerują godziny od {start} do {end}.",
       "zone": {
-        "label": "Strefa czasowa",
-        "hint": "Godziny są odczytywane w tej strefie. Strefa Twojej przestrzeni roboczej to {zone}.",
+        "label": "Zapasowa strefa czasowa",
+        "hint": "Godziny są odczytywane według zegara danego kontaktu: jego właściwości strefy czasowej, a gdy jej brak, kierunkowego kraju numeru. Ta strefa jest używana, gdy nie wiadomo żadnego z nich. Strefa Twojego obszaru roboczego to {zone}.",
         "workspace": "Strefa czasowa przestrzeni roboczej ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Twoja własna lista"
         },
         "note": "To tylko adnotacja. Nic nie jest jeszcze porównywane z rejestrem."
-      }
+      },
+      "enforcedNote": "Godziny ciszy wstrzymują wiadomość marketingową do ich końca, a okno dzwonienia odrzuca połączenie poza nim. Używany jest zegar każdego kontaktu. Odpowiedzi w oknie 24 godzin i powiadomienia usługowe nigdy nie są wstrzymywane."
     },
     "subprocessors": {
       "intro": "Dostawcy, którzy przetwarzają dane osobowe dla Twojej przestrzeni roboczej: co robią, jakie dane otrzymują i gdzie. Listę możesz opublikować na stronie publicznej.",
@@ -487,6 +487,10 @@
       "privacy": "Polityka prywatności",
       "terms": "Regulamin",
       "notFound": "Nie znaleziono strony"
+    },
+    "hold": {
+      "heldUntil": "Wstrzymano do {when} (godziny ciszy)",
+      "heldCount": "{count} wstrzymano z powodu godzin ciszy"
     }
   }
 }

@@ -855,7 +855,8 @@
         "clicked": "clicked",
         "showing": "Showing {shown} of {total}",
         "prev": "Previous page",
-        "next": "Next page"
+        "next": "Next page",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "engagement": {
         "opened": "Opened",
@@ -1023,7 +1024,8 @@
         "badge": "Live",
         "updated": "updated {time}",
         "queued": "{count} waiting to send",
-        "processing": "{count} sending now"
+        "processing": "{count} sending now",
+        "held": "{count} held for the quiet hours"
       },
       "statistics": {
         "loadFailed": "The statistics could not be loaded.",

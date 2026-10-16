@@ -89,7 +89,8 @@
       "NETWORK": "Kesalahan jaringan - silakan coba lagi.",
       "UNEXPECTED": "Terjadi kesalahan. Silakan coba lagi.",
       "CALL_PLAYBACK_LINK_INVALID": "Tautan rekaman ini sudah kedaluwarsa. Tekan putar lagi untuk mendapatkan tautan baru.",
-      "CALL_RANGE_INVALID": "Tanggal ini tidak valid: awal tidak boleh setelah akhir, rentang maksimal satu tahun, dan zona waktu harus valid."
+      "CALL_RANGE_INVALID": "Tanggal ini tidak valid: awal tidak boleh setelah akhir, rentang maksimal satu tahun, dan zona waktu harus valid.",
+      "CALL_OUTSIDE_WINDOW": "Kontak ini berada di luar jam telepon Anda, jadi panggilan tidak dilakukan. Jendela panggilan dibuka {when}."
     },
     "settings": {
       "title": "Panggilan",

@@ -146,7 +146,8 @@ export class ScheduleEngagementService {
         : sql``;
       const where = sql`c.org_id = ${orgId} AND c.scheduled_message_id = ${Number(id)} ${filter ? sql`AND ${filter}` : sql``} ${search}`;
       const items = await tx.execute(sql`
-        SELECT c.phone, k.name AS contact_name, c.status, c.error_message, c.sent_at, c.delivered_at, c.read_at
+        SELECT c.phone, k.name AS contact_name, c.status, c.error_message, c.sent_at, c.delivered_at, c.read_at,
+               c.held_until, c.held_reason
           FROM scheduled_message_contacts c LEFT JOIN contacts k ON k.org_id = c.org_id AND k.id = c.contact_id
          WHERE ${where}
          ORDER BY c.id LIMIT ${q.limit} OFFSET ${q.offset}`);
@@ -157,6 +158,9 @@ export class ScheduleEngagementService {
       const counts = await tx.execute(sql`
         SELECT status, count(*)::int AS n FROM scheduled_message_contacts
          WHERE org_id = ${orgId} AND scheduled_message_id = ${Number(id)} GROUP BY status`);
+      const held = await tx.execute(sql`
+        SELECT count(*)::int AS n FROM scheduled_message_contacts
+         WHERE org_id = ${orgId} AND scheduled_message_id = ${Number(id)} AND status = 'pending' AND held_until IS NOT NULL`);
       return {
         items: (items.rows as Raw[]).map((p) => ({
           phone: String(p.phone),
@@ -166,9 +170,19 @@ export class ScheduleEngagementService {
           sentAt: iso(p.sent_at),
           deliveredAt: iso(p.delivered_at),
           readAt: iso(p.read_at),
+          // Only a recipient still waiting is held; once it is sent or failed the hold is history (BL-177).
+          heldUntil: p.status === 'pending' ? iso(p.held_until) : null,
+          heldReason:
+            p.status === 'pending'
+              ? ((p.held_reason as 'quiet_hours' | 'calling_window' | null) ?? null)
+              : null,
         })),
         total: num((total.rows[0] as Raw).n),
-        counts: Object.fromEntries((counts.rows as Raw[]).map((c) => [String(c.status), num(c.n)])),
+        // `held`: of the pending ones, those waiting for the end of the quiet hours.
+        counts: {
+          ...Object.fromEntries((counts.rows as Raw[]).map((c) => [String(c.status), num(c.n)])),
+          held: num((held.rows[0] as Raw).n),
+        },
       };
     });
   }

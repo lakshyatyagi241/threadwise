@@ -89,7 +89,8 @@
       "NETWORK": "Ağ hatası - lütfen tekrar deneyin.",
       "UNEXPECTED": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
       "CALL_PLAYBACK_LINK_INVALID": "Bu kayıt bağlantısının süresi doldu. Yeni bir bağlantı almak için tekrar oynat'a basın.",
-      "CALL_RANGE_INVALID": "Bu tarihler geçerli değil: başlangıç bitişten sonra olamaz, aralık en fazla bir yıl olabilir ve saat dilimi geçerli bir dilim olmalıdır."
+      "CALL_RANGE_INVALID": "Bu tarihler geçerli değil: başlangıç bitişten sonra olamaz, aralık en fazla bir yıl olabilir ve saat dilimi geçerli bir dilim olmalıdır.",
+      "CALL_OUTSIDE_WINDOW": "Bu kişi arama saatlerinizin dışında olduğundan arama yapılmadı. Arama penceresi {when} açılacak."
     },
     "settings": {
       "title": "Arama",

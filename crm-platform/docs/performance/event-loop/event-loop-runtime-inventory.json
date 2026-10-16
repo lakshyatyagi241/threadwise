@@ -43,7 +43,7 @@
       "how": "startRuntimeMonitor('worker') in worker.ts",
       "meaningOfLoopBlock": "Every queue's jobs and the outbox drain in this process wait; interactive API traffic is NOT affected (separate process).",
       "gaps": [
-        "Job wait/duration/outcome are fed by JobMetricsModule (one hook on every WorkerHost). Verified on a real BullMQ worker against Redis; not yet seen from the booted app worker with its real processors. Retried attempts are invisible (BullMQ reports final states only)."
+        "Job wait/duration/outcome are fed by JobMetricsModule (one hook on every WorkerHost). Verified on a real BullMQ worker against Redis AND in the booted WorkerModule (e2e: 20+ processors carry the listeners, a real job through TemplateSweepProcessor and a real database is recorded). Retried attempts are invisible as events (BullMQ reports final states only); crm_queue_job_retries_total counts the extra starts of jobs that finished."
       ]
     },
     {

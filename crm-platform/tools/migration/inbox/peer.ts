@@ -1,3 +1,4 @@
+import { cutText } from '../util';
 import { canonicalizePhone } from '../../../packages/contracts/src/contacts-attributes-tags/phone';
 
 /**
@@ -29,7 +30,7 @@ export function normalizePeerKey(kind: string, raw: string | null | undefined): 
 
 export function defaultTitle(kind: string, peerKey: string, peerName: string | null): string {
   const name = peerName?.trim();
-  if (name) return name.slice(0, 200);
+  if (name) return cutText(name, 200);
   return isPhoneChannel(kind) ? `+${peerKey}` : peerKey;
 }
 
@@ -37,7 +38,7 @@ const capitalise = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1)
 
 export function previewOf(m: { kind: string; body?: string | null }): string {
   const body = (m.body ?? '').replace(/\s+/g, ' ').trim();
-  if (body !== '') return body.slice(0, PREVIEW_MAX);
+  if (body !== '') return cutText(body, PREVIEW_MAX);
   if (m.kind === 'location') return '📍 Location';
   if (m.kind === 'text' || m.kind === 'system') return '';
   return `📎 ${capitalise(String(m.kind))}`;

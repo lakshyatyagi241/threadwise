@@ -89,7 +89,8 @@
       "NETWORK": "Erro de rede - tente novamente.",
       "UNEXPECTED": "Algo deu errado. Tente novamente.",
       "CALL_PLAYBACK_LINK_INVALID": "O link desta gravação expirou. Toque em reproduzir novamente para obter um novo.",
-      "CALL_RANGE_INVALID": "Estas datas não fazem sentido: o início não pode ser depois do fim, o intervalo pode abranger no máximo um ano e o fuso horário deve ser válido."
+      "CALL_RANGE_INVALID": "Estas datas não fazem sentido: o início não pode ser depois do fim, o intervalo pode abranger no máximo um ano e o fuso horário deve ser válido.",
+      "CALL_OUTSIDE_WINDOW": "Este contato está fora do seu horário de chamadas, então a ligação não foi feita. A janela de chamadas abre {when}."
     },
     "settings": {
       "title": "Chamadas",

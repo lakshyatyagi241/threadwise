@@ -1,18 +1,20 @@
 {
   "planningTarget": 280,
   "implemented": {
-    "unitIntegration": 41,
+    "unitIntegration": 44,
+    "e2e": 1,
     "staticGate": 1,
     "benchmarks": 3,
-    "total": 45
+    "alertRuleCases": 9,
+    "total": 58
   },
-  "coverageAgainstTarget": "45 of 280 (about 16%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
+  "coverageAgainstTarget": "58 of 280 (about 21%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
   "categories": [
     {
       "name": "Instrumentation unit/integration",
       "target": 40,
-      "implemented": 41,
-      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts (27) and job-metrics.spec.ts (14: wait/duration math, delay handling, retry handling, labels, discovery of WorkerHost processors)",
+      "implemented": 45,
+      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts (27), job-metrics.spec.ts (17: wait/duration math, delay and retry handling, retries counter, labels, discovery of WorkerHost processors, Nest wiring) and test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (1: booted worker module, real processor, real database)",
       "covers": [
         "histogram ns to ms conversion",
         "empty/NaN histogram is a missing measurement, not zeros",
@@ -80,8 +82,9 @@
     {
       "name": "Alerting, telemetry and operational",
       "target": 30,
-      "implemented": 0,
-      "note": "deploy/observability/event-loop.rules.yml exists and parses as YAML; PromQL was NOT validated with promtool and no alert has been fired against a real Prometheus."
+      "implemented": 9,
+      "file": "deploy/observability/event-loop.rules.test.yml (promtool test rules, 9 case groups over all 11 rules, mutation-checked)",
+      "note": "Rules pass promtool check and test on synthetic series. No alert has been fired against a real Prometheus, no receiver is configured, and telemetry/operational checks (stale-metric end to end, restart continuity) are still missing."
     }
   ]
 }

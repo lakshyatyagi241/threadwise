@@ -232,7 +232,9 @@
         "undone": "Perubahan tahap diurungkan: kembali ke {stage}.",
         "undoneToast": "Tahap dikembalikan ke {stage}.",
         "couldNotUndo": "Perubahan ini tidak bisa diurungkan lagi: kontak sudah berpindah tahap atau sudah diurungkan."
-      }
+      },
+      "heldUntil": "Ditahan sampai {when}",
+      "heldWhy": "Pesan pemasaran ini menunggu jam tenang Anda berakhir. Pesan akan dikirim saat itu, jika kontak belum berhenti berlangganan."
     },
     "media": {
       "openImage": "Buka gambar {name}",

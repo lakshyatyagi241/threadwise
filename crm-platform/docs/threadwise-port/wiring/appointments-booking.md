@@ -26,11 +26,11 @@ the domain and who reads it, so a consumer is not lost between screens. The cale
 | WIRE-APPT-004 | Back-fill of calendar events (queue `calendar-backfill`)                                                                | outbox `appointment_calendar.connected` and `.provider_selected`; `POST /appointments/calendar/backfill` | `AppointmentCalendarWriter.sync`; audit `appointment_calendar_backfill`; outbox `appointment_calendar.backfilled`; `backfillPending` in the overview                                           |
 | WIRE-APPT-005 | iCal subscriptions as a read-only busy source (`calendar_ics_feeds`, `calendar_ics_busy`, queue `calendar-ics-refresh`) | the admin's feed address (sealed), the worker's 15-minute read                                           | `IcsBusySource` through `MultiCalendarAdapter.freeBusy` (every slot lookup: staff, public page, flows, tools); the settings page (feeds card)                                                  |
 | WIRE-APPT-006 | A person's bookings as an ICS subscription (`appointment_feed_tokens`, `GET /public/appointments/feed/<token>.ics`)     | the person (Make my link), the bookings list scope at read time                                          | a calendar app; the settings page (my bookings card)                                                                                                                                           |
-| WIRE-APPT-007 | Booking tools for agents and chatbots (check availability, book, reschedule)                                            | see the tool contract in `docs/api/appointments-booking.md`, "Tools for agents and chatbots"             | **Not bound to any agent yet** (BL-193): the customer-facing AI paths have no tool-calling loop                                                                                                |
+| WIRE-APPT-007 | Booking tools for agents and chatbots (check availability, book, reschedule)                                            | see the tool contract in `docs/api/appointments-booking.md`, "Tools for agents and chatbots"             | **Not bound to any agent yet** (BL-196): the customer-facing AI paths have no tool-calling loop                                                                                                |
 
 ## Not built, recorded
 
-- The hourly drift check reads Google events only; Outlook drift is BL-192.
+- The hourly drift check reads Google events only; Outlook drift is BL-195.
 - Per-booking-type Outlook calendar; Teams links for personal Microsoft accounts.
 - A watch channel or delta query for Outlook and for iCal (the fixed 15-minute read replaces them).
-- Real-account verification of Google and Microsoft (BL-191): everything here is exercised against local stand-ins written from the vendors' documentation.
+- Real-account verification of Google and Microsoft (BL-194): everything here is exercised against local stand-ins written from the vendors' documentation.

@@ -232,7 +232,9 @@
         "undone": "阶段变更已撤销：已恢复为“{stage}”。",
         "undoneToast": "阶段已恢复为“{stage}”。",
         "couldNotUndo": "此更改已无法撤销：联系人已进入后续阶段，或已被撤销。"
-      }
+      },
+      "heldUntil": "暂缓至 {when}",
+      "heldWhy": "这条营销消息正在等待您的免打扰时段结束，届时若联系人在此期间未退订，将会发送。"
     },
     "media": {
       "openImage": "打开图片 {name}",

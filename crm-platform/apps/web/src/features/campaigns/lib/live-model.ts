@@ -26,10 +26,12 @@ export const detailInterval = (status: string | undefined): number =>
 
 /** What is still waiting to go out and what a run holds right now, as `[kind, count]` for the parts that are not zero. */
 export function waiting(
-  f: Pick<Freshest, 'queued' | 'processing'>,
-): Array<['queued' | 'processing', number]> {
-  const out: Array<['queued' | 'processing', number]> = [];
+  f: Pick<Freshest, 'queued' | 'processing'> & { held?: number | null },
+): Array<['queued' | 'held' | 'processing', number]> {
+  const out: Array<['queued' | 'held' | 'processing', number]> = [];
   if ((f.queued ?? 0) > 0) out.push(['queued', f.queued ?? 0]);
+  // Of the queued, the recipients waiting for the end of the quiet hours (BL-177).
+  if ((f.held ?? 0) > 0) out.push(['held', f.held ?? 0]);
   if ((f.processing ?? 0) > 0) out.push(['processing', f.processing ?? 0]);
   return out;
 }
@@ -40,6 +42,8 @@ export interface Freshest {
   rates: CampaignDetail['rates'];
   /** Null until a live read has come back: the detail does not carry them. */
   queued: number | null;
+  /** Of `queued`, the recipients held for the quiet hours (BL-177). */
+  held: number | null;
   processing: number | null;
   /** When the numbers on screen were read, if they came from a live read. */
   fetchedAt: string | null;
@@ -61,6 +65,7 @@ export function freshest(
       counts: live.counts,
       rates: live.rates,
       queued: live.queued,
+      held: live.held ?? 0,
       processing: live.processing,
       fetchedAt: live.fetchedAt,
     };
@@ -70,6 +75,7 @@ export function freshest(
     counts: detail.campaign.counts,
     rates: detail.rates,
     queued: null,
+    held: null,
     processing: null,
     fetchedAt: null,
   };

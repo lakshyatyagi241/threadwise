@@ -21,6 +21,7 @@ const doc = (id: string, over: Partial<HelpDoc> = {}): HelpDoc => ({
   gates: {},
   keywords: [],
   routes: [],
+  features: [],
   audience: 'workspace',
   domain: 'd',
   text: { en: { title: id, summary: id, blocks: [] } },
@@ -77,6 +78,13 @@ describe('coverage', () => {
       pending: [],
     });
     expect(r.undocumented).toEqual([]);
+  });
+
+  it('covers feature:K through a doc that only explains it (features), with no gate', () => {
+    const input = { ...base, nav: [], tiles: [], planFeatureKeys: ['personal_history_full'] };
+    expect(coverage(input).undocumented).toEqual(['feature:personal_history_full']);
+    const withDoc = coverage({ ...input, docs: [doc('d', { features: ['personal_history_full'] })] });
+    expect(withDoc.undocumented).toEqual([]);
   });
 
   it('leaves a pending unit out of undocumented', () => {

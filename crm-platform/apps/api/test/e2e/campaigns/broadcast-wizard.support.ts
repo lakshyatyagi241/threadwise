@@ -15,6 +15,7 @@ import {
   WARMER_GATE,
   type OutgoingMessage,
 } from '../../../src/modules/broadcasts';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { MergeTagService } from '../../../src/modules/crm';
 import {
   CAMPAIGN_BILLING,
@@ -79,6 +80,8 @@ export function buildLab(h: Harness): Lab {
   const runtime = get<PacingRuntime>(PacingRuntime);
   const clock = { now: new Date() };
   runtime.now = () => clock.now;
+  // The quiet hours (BL-177) are read on the same clock.
+  get<SendWindowService>(SendWindowService).now = () => clock.now;
   runtime.sleep = () => Promise.resolve();
   runtime.random = () => 0.5;
 
@@ -184,9 +187,11 @@ export function buildLab(h: Harness): Lab {
           contactId: i.contactId,
           campaignId: i.campaignId,
         });
-        return Promise.resolve({ ok: true });
+        return Promise.resolve({ ok: true, error: null });
       },
     },
+    undefined,
+    get<SendWindowService>(SendWindowService),
   );
   const tests = get<WizardTestSendService>(WizardTestSendService);
 

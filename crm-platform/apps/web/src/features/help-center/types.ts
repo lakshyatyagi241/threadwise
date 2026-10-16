@@ -52,6 +52,11 @@ export interface HelpDoc {
   keywords: string[];
   /** Extra page addresses whose "?" opens this doc, besides the documented screens' own. */
   routes: string[];
+  /**
+   * Plan features this guide explains without being gated by them: use this when a feature unlocks only part of what the guide
+   * covers (so gating the whole guide would hide the parts that apply to every plan). `coverage.ts` treats each as documented.
+   */
+  features: string[];
   audience: 'workspace' | 'operator';
   /** The `features/<domain>` folder the file lives in. */
   domain: string;

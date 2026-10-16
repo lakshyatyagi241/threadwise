@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Pausada: o limite diário de envios foi atingido. Ela é retomada automaticamente após {when}.",
         "halt": "Pausada: os envios estão suspensos para este espaço de trabalho. Ela é retomada quando a suspensão for removida.",
-        "manual": "Pausada."
+        "manual": "Pausada.",
+        "quiet_hours": "Em pausa: alguns destinatários estão no horário de silêncio. Retoma sozinho depois de {when}."
       },
       "delete": "Excluir",
       "deleteTitle": "Excluir transmissão?",
@@ -145,7 +146,8 @@
         "queued": "Na fila",
         "queuedHint": "aguardando envio",
         "failed": "Com falha",
-        "failedPct": "{pct}% de taxa de falha"
+        "failedPct": "{pct}% de taxa de falha",
+        "queuedHeld": "{count} retidas pelo horário de silêncio"
       },
       "tab": {
         "overview": "Visão geral",
@@ -193,7 +195,8 @@
         "lastClick": "Último clique: {when}",
         "empty": "Nenhum destinatário anexado.",
         "more": "Carregar mais",
-        "loading": "Carregando"
+        "loading": "Carregando",
+        "heldUntil": "Retido até {when} (horário de silêncio)"
       },
       "failures": {
         "kicker": "Motivos das falhas",

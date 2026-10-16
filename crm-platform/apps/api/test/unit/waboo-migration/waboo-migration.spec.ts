@@ -23,11 +23,6 @@ import {
 
 const NOW = new Date('2026-10-12T12:00:00Z');
 const hoursAgo = (h: number) => new Date(NOW.getTime() - h * 3600_000);
-const greenDry = (h = 1) => ({
-  status: 'completed' as const,
-  green: true,
-  finishedAt: hoursAgo(h),
-});
 
 describe('pipeline event parser', () => {
   it('reads a step event', () => {
@@ -164,41 +159,25 @@ describe('run state transitions', () => {
     expect(canMove('running', 'cancelled')).toBe(false));
 });
 
-describe('confirmation and dry-run gate', () => {
-  const base = { sourceClient: 'acme', confirmClient: 'acme', now: NOW };
+describe('confirmation gate', () => {
+  const base = { sourceClient: 'acme', confirmClient: 'acme' };
   it('a dry run is never gated', () => {
-    expect(
-      loadGate({ ...base, mode: 'dry', confirmClient: undefined, latestDry: null }),
-    ).toBeNull();
+    expect(loadGate({ ...base, mode: 'dry', confirmClient: undefined })).toBeNull();
   });
   it('a load needs the client key typed exactly', () => {
-    expect(
-      loadGate({ ...base, mode: 'load', confirmClient: undefined, latestDry: greenDry() }),
-    ).toBe('confirm');
-    expect(loadGate({ ...base, mode: 'load', confirmClient: 'Acme', latestDry: greenDry() })).toBe(
-      'confirm',
-    );
+    expect(loadGate({ ...base, mode: 'load', confirmClient: undefined })).toBe('confirm');
+    expect(loadGate({ ...base, mode: 'load', confirmClient: 'Acme' })).toBe('confirm');
+    expect(loadGate({ ...base, mode: 'load', confirmClient: 'wrong' })).toBe('confirm');
   });
-  it('a catch-up needs the typed confirmation but no earlier dry run (it runs its own)', () => {
-    expect(loadGate({ ...base, mode: 'catchup', confirmClient: undefined, latestDry: null })).toBe(
-      'confirm',
-    );
-    expect(loadGate({ ...base, mode: 'catchup', latestDry: null })).toBeNull();
+  it('the organization id typed is accepted as well as the derived client key', () => {
+    expect(
+      loadGate({ ...base, mode: 'load', organizationId: 'Acme_AbC', confirmClient: 'Acme_AbC' }),
+    ).toBeNull();
   });
-  it('a load needs a green completed dry run from the last 24 hours', () => {
-    expect(loadGate({ ...base, mode: 'load', latestDry: greenDry(1) })).toBeNull();
-    expect(loadGate({ ...base, mode: 'load', latestDry: greenDry(24) })).toBeNull();
-    expect(loadGate({ ...base, mode: 'load', latestDry: greenDry(25) })).toBe('dry');
-    expect(loadGate({ ...base, mode: 'load', latestDry: null })).toBe('dry');
-    expect(loadGate({ ...base, mode: 'load', latestDry: { ...greenDry(), green: false } })).toBe(
-      'dry',
-    );
-    expect(
-      loadGate({ ...base, mode: 'load', latestDry: { ...greenDry(), status: 'failed' } }),
-    ).toBe('dry');
-    expect(
-      loadGate({ ...base, mode: 'load', latestDry: { ...greenDry(), finishedAt: null } }),
-    ).toBe('dry');
+  it('a load and a catch-up need the typed confirmation but no earlier dry run (each rehearses itself first)', () => {
+    expect(loadGate({ ...base, mode: 'load' })).toBeNull();
+    expect(loadGate({ ...base, mode: 'catchup' })).toBeNull();
+    expect(loadGate({ ...base, mode: 'catchup', confirmClient: undefined })).toBe('confirm');
   });
 });
 

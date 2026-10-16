@@ -12,6 +12,7 @@ const doc = (id: string, over: Partial<HelpDoc> = {}): HelpDoc => ({
   gates: {},
   keywords: [],
   routes: [],
+  features: [],
   audience: 'workspace',
   domain: 'd',
   text: {

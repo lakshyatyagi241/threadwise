@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "一時停止中: 1日の送信上限に達しました。{when}以降に自動的に再開されます。",
         "halt": "一時停止中: このワークスペースの送信は停止されています。停止が解除されると再開されます。",
-        "manual": "一時停止中。"
+        "manual": "一時停止中。",
+        "quiet_hours": "一時停止中: 一部の受信者が通知を控える時間帯です。{when} 以降に自動で再開します。"
       },
       "delete": "削除",
       "deleteTitle": "一斉配信を削除しますか?",
@@ -145,7 +146,8 @@
         "queued": "待機中",
         "queuedHint": "送信待ち",
         "failed": "失敗",
-        "failedPct": "失敗率{pct}%"
+        "failedPct": "失敗率{pct}%",
+        "queuedHeld": "{count} 件が通知を控える時間帯のため保留中"
       },
       "tab": {
         "overview": "概要",
@@ -193,7 +195,8 @@
         "lastClick": "最後のクリック: {when}",
         "empty": "受信者が添付されていません。",
         "more": "さらに読み込む",
-        "loading": "読み込み中"
+        "loading": "読み込み中",
+        "heldUntil": "{when} まで保留中(通知を控える時間帯)"
       },
       "failures": {
         "kicker": "失敗の理由",

@@ -10,6 +10,7 @@ import { PlanCampaignGate } from './_shims/plan-gate';
 import { PlatformCampaignSettings } from './_shims/platform-campaign-settings';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BroadcastsModule } from '../broadcasts';
+import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { ChatConversationsModule } from '../chat-conversations';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
@@ -65,6 +66,7 @@ import { WizardRepository } from './wizard/wizard.repository';
  */
 @Module({
   imports: [
+    SendWindowModule,
     AiKeysUsageAdminModule,
     BroadcastsModule,
     ContactConsentModule,

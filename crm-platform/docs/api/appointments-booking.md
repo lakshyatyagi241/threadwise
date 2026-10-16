@@ -543,7 +543,7 @@ touch its connection. Account-level failures (throttling, access denied, outage)
 
 ### Not built (recorded)
 
-- The hourly **drift check** (TW-GACC-011) reads Google events only: an Outlook event edited in Outlook is not reported as drifted, and push/accept do not apply to it (BL-192).
+- The hourly **drift check** (TW-GACC-011) reads Google events only: an Outlook event edited in Outlook is not reported as drifted, and push/accept do not apply to it (BL-195).
 - A per-booking-type Outlook calendar; Teams links for personal accounts.
 - Everything above is verified against a local stand-in written from Microsoft's documentation (`test/e2e/appointments-booking/fake-microsoft.ts`), never against Microsoft itself.
 
@@ -589,7 +589,7 @@ that has not been read successfully for **7 days** contributes nothing. The stat
 Time zones: an IANA name as is, the Windows names Outlook writes mapped, floating times and unknown zones read in the feed's `X-WR-TIMEZONE` or the workspace's zone. **Anything it cannot interpret is counted, not guessed away:** an unknown zone (`warnings.unknownZone`), a rule it does not support (HOURLY, BYYEARDAY, BYWEEKNO ...: only the first occurrence is used, `warnings.unsupportedRule`), more than 5,000
 blocks (`warnings.truncated`); the settings card shows all three. A body that is not an iCalendar (an HTML sign-in page) is `not_a_calendar`, never read as "no events".
 
-**Limits, recorded.** A feed of the calendar that bookings are written to counts a multi-seat service's own events as busy (a feed has no way to mark them as ours) and a cancelled booking's slot stays blocked until the next read: do not subscribe to the booking calendar. Basic-auth feeds, CalDAV and two-way sync are not built (BL-194).
+**Limits, recorded.** A feed of the calendar that bookings are written to counts a multi-seat service's own events as busy (a feed has no way to mark them as ours) and a cancelled booking's slot stays blocked until the next read: do not subscribe to the booking calendar. Basic-auth feeds, CalDAV and two-way sync are not built (BL-197).
 
 Storage (migration `20261218090000`): `calendar_ics_feeds` (forced RLS, composite FK to the admin, unique per address, monitoring trigger), `calendar_ics_busy` (the stored intervals, replaced as a whole by each good read, cascade on delete). Audit module `calendar_ics_feed`; outbox `calendar_ics_feed.created | updated | deleted` (a uuid, never the address).
 
@@ -611,7 +611,7 @@ An AI agent or a chatbot that can be given tools books the way a person does: se
 
 - **AI Agent Studio** (`ai-agents-training`) stores assistants and their training sources and the chat widget (`chatbot-widget`, `WidgetAiReplyService`) answers with `AiChatPort.complete`: **one prompt, one text answer**, no tool definitions, no tool-call loop.
 - **The flow runtime** has no tool registry. Its Book appointment node (below, "For the flow-runtime domain") already books through chat with fixed steps, and its AI step is a single completion.
-- The only tool-calling loop in the repository is the **staff** AI CRM Copilot (`ai-copilot-lead-finder`: `AiCrmProviderPort.runTurn`, `AiCrmToolkitService`, confirm-before-act for writes). It acts as the signed-in staff member, not as a customer's assistant, belongs to another domain's zone, and is a different audience; adding appointment tools there is a follow-up (BL-193), not part of this change.
+- The only tool-calling loop in the repository is the **staff** AI CRM Copilot (`ai-copilot-lead-finder`: `AiCrmProviderPort.runTurn`, `AiCrmToolkitService`, confirm-before-act for writes). It acts as the signed-in staff member, not as a customer's assistant, belongs to another domain's zone, and is a different audience; adding appointment tools there is a follow-up (BL-196), not part of this change.
 
 Building a tool-calling loop for the customer-facing AI is a design of its own (provider support for tools, the confirmation turn, metering, safety review), so it was not started here.
 
