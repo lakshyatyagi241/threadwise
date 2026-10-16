@@ -18,6 +18,7 @@ import {
   packPurchaseVerdict,
   pricingIssues,
   setMarketPricingSchema,
+  subscribeAppSchema,
   subscriptionActions,
   trialAvailable,
   cancelOperatorSubscriptionSchema,
@@ -40,6 +41,8 @@ const paid: AppPricingRow = {
   priceAmount: '9.00',
   priceCurrency: 'USD',
   annualAmount: null,
+  billingMode: 'one_time',
+  priceLock: false,
   trialDays: 14,
   purchasable: true,
   includedPlanFeature: null,
@@ -59,6 +62,7 @@ const sub = (over: Partial<SubscriptionRow> = {}): SubscriptionRow => ({
   cancelAtPeriodEnd: false,
   amount: '9.00',
   currency: 'USD',
+  billingPeriod: 'monthly',
   startedAt: new Date('2026-10-01T00:00:00Z'),
   currentPeriodEnd: new Date('2026-11-01T00:00:00Z'),
   trialEndsAt: null,
@@ -66,6 +70,12 @@ const sub = (over: Partial<SubscriptionRow> = {}): SubscriptionRow => ({
   lapsedAt: null,
   renewals: 0,
   compNote: null,
+  autorenew: false,
+  priceLocked: false,
+  paymentFailedAt: null,
+  graceEndsAt: null,
+  lastRenewedAt: null,
+  autorenewStoppedAt: null,
   ...over,
 });
 const NOW = new Date('2026-10-10T00:00:00Z');
@@ -114,6 +124,26 @@ describe('pricing validation (what the operator may save)', () => {
     expect(setMarketPricingSchema.safeParse({ ...base, trialDays: 7.5 }).success).toBe(false);
   });
 
+  it('the operator chooses per listing whether the card renews the app; a free app has nothing to renew', () => {
+    const base = { rowVersion: 1, model: 'paid_monthly', amount: '9', currency: 'USD' };
+    expect(setMarketPricingSchema.parse(base).billingMode).toBe('one_time');
+    expect(setMarketPricingSchema.parse({ ...base, billingMode: 'recurring' }).billingMode).toBe(
+      'recurring',
+    );
+    expect(setMarketPricingSchema.safeParse({ ...base, billingMode: 'weekly' }).success).toBe(
+      false,
+    );
+    const free = setMarketPricingSchema.safeParse({
+      rowVersion: 1,
+      model: 'free',
+      billingMode: 'recurring',
+    });
+    expect(free.success).toBe(false);
+    expect(pricingIssues({ model: 'free', billingMode: 'recurring' })).toEqual([
+      { path: 'billingMode', message: 'A free app has nothing to renew.' },
+    ]);
+  });
+
   it('a free app carries no price, trial or inclusion rule', () => {
     expect(setMarketPricingSchema.safeParse({ rowVersion: 1, model: 'free' }).success).toBe(true);
     for (const extra of [
@@ -127,6 +157,16 @@ describe('pricing validation (what the operator may save)', () => {
       const r = setMarketPricingSchema.safeParse({ rowVersion: 1, model: 'free', ...extra });
       expect(r.success, JSON.stringify(extra)).toBe(false);
     }
+  });
+
+  it('Subscribe takes a period, monthly unless the person chose a year', () => {
+    expect(subscribeAppSchema.parse({})).toEqual({ startTrial: false, period: 'monthly' });
+    expect(subscribeAppSchema.parse({ period: 'yearly' }).period).toBe('yearly');
+    expect(subscribeAppSchema.safeParse({ period: 'weekly' }).success).toBe(false);
+    expect(marketCheckoutPath('mkt_x', 'quote-pro', 'yearly')).toBe(
+      '/billing/checkout/mkt_x?return=%2Fmarketplace%2Fapp%2Fquote-pro&period=yearly',
+    );
+    expect(marketCheckoutPath('mkt_x')).toBe('/billing/checkout/mkt_x');
   });
 
   it('the optional yearly price must be positive when given', () => {
@@ -411,6 +451,72 @@ describe('lapse and cancel rules (what a subscription is to a person)', () => {
     expect(subscriptionActions('active', 'comp', 1, true).canRenew).toBe(false);
   });
 
+  it('a failed card renewal is past due while the paid period or its grace days run, then ended', () => {
+    const failed = (over: Record<string, unknown> = {}) => ({
+      ...facts(),
+      paymentFailedAt: new Date('2026-10-09T00:00:00Z'),
+      ...over,
+    });
+    // the period still runs: the app works, the payment needs fixing
+    expect(deriveSubscriptionStatus(failed(), NOW)).toBe('past_due');
+    // the period ran out two days ago but the grace days (to the 13th) keep it working
+    expect(
+      deriveSubscriptionStatus(
+        failed({
+          currentPeriodEnd: new Date('2026-10-08T00:00:00Z'),
+          graceEndsAt: new Date('2026-10-13T00:00:00Z'),
+        }),
+        NOW,
+      ),
+    ).toBe('past_due');
+    // grace over: ended, like any lapsed subscription
+    expect(
+      deriveSubscriptionStatus(
+        failed({
+          currentPeriodEnd: new Date('2026-10-01T00:00:00Z'),
+          graceEndsAt: new Date('2026-10-08T00:00:00Z'),
+        }),
+        NOW,
+      ),
+    ).toBe('ended');
+    // no grace configured: the end of the period is the end
+    expect(
+      deriveSubscriptionStatus(failed({ currentPeriodEnd: new Date('2026-10-08T00:00:00Z') }), NOW),
+    ).toBe('ended');
+    expect(deriveSubscriptionStatus(failed({ status: 'lapsed' }), NOW)).toBe('ended');
+  });
+
+  it('past due offers cancelling and paying now; a stopped card renewal cannot be taken back, so it offers paying again', () => {
+    expect(subscriptionActions('past_due', 'purchase', 2, true)).toEqual({
+      canCancel: true,
+      canResume: false,
+      canRenew: true,
+    });
+    // cancelled at the provider (autopayStopped): resume is impossible and paying again is open at any time before the end
+    expect(
+      subscriptionActions('canceling', 'purchase', 20, true, { autopayStopped: true }),
+    ).toEqual({
+      canCancel: false,
+      canResume: false,
+      canRenew: true,
+    });
+    // a cancellation that left the provider alone (a prepaid month) can still be taken back
+    expect(
+      subscriptionActions('canceling', 'purchase', 20, true, { autopayStopped: false }).canResume,
+    ).toBe(true);
+    // a card that renews it needs nothing renewed by hand (a second subscription would charge twice), even in the last days
+    expect(
+      subscriptionActions('active', 'purchase', 3, true, { autoRenewing: true }).canRenew,
+    ).toBe(false);
+    expect(
+      subscriptionActions('active', 'purchase', 3, true, { autoRenewing: false }).canRenew,
+    ).toBe(true);
+    // still not offered when the app is no longer sold
+    expect(
+      subscriptionActions('canceling', 'purchase', 20, false, { autopayStopped: true }).canRenew,
+    ).toBe(false);
+  });
+
   it('days left rounds up and never goes negative', () => {
     expect(daysUntil(new Date('2026-10-10T00:00:01Z'), NOW)).toBe(1);
     expect(daysUntil(new Date('2026-10-11T00:00:00Z'), NOW)).toBe(1);
@@ -521,6 +627,89 @@ describe('the views', () => {
         NOW,
       ).nextAmount,
     ).toBeNull();
+  });
+
+  it('says the card renews it only while a provider subscription is live and nobody asked to stop it', () => {
+    const live = sub({ autorenew: true });
+    expect(
+      toSubscriptionView(live, { ...paid, billingMode: 'recurring' }, 'published', NOW),
+    ).toMatchObject({
+      autoRenew: true,
+      status: 'active',
+    });
+    expect(toSubscriptionView(sub(), paid, 'published', NOW).autoRenew).toBe(false);
+    // cancelled (the flag) or lapsed: it does not renew any more
+    expect(
+      toSubscriptionView(sub({ autorenew: true, cancelAtPeriodEnd: true }), paid, 'published', NOW)
+        .autoRenew,
+    ).toBe(false);
+    expect(
+      toSubscriptionView(sub({ autorenew: true, status: 'lapsed' }), paid, 'published', NOW)
+        .autoRenew,
+    ).toBe(false);
+  });
+
+  it('a yearly payment is shown per year, and the next payment compares with the yearly price', () => {
+    const yearly = sub({ billingPeriod: 'yearly', amount: '90.00' });
+    const pricing = { ...paid, annualAmount: '90.00' };
+    expect(toSubscriptionView(yearly, pricing, 'published', NOW)).toMatchObject({
+      period: 'yearly',
+      amount: '90.00',
+      nextAmount: null,
+    });
+    // the monthly price moved but the yearly one did not: nothing to announce to a yearly subscriber
+    expect(
+      toSubscriptionView(yearly, { ...pricing, priceAmount: '12.00' }, 'published', NOW).nextAmount,
+    ).toBeNull();
+    expect(
+      toSubscriptionView(yearly, { ...pricing, annualAmount: '108.00' }, 'published', NOW),
+    ).toMatchObject({ nextAmount: '108.00', nextCurrency: 'USD' });
+  });
+
+  it('a locked subscriber pays what they paid: no price change to announce, and the view says so', () => {
+    const locked = sub({ priceLocked: true });
+    const view = toSubscriptionView(
+      locked,
+      { ...paid, priceAmount: '12.00', priceLock: true },
+      'published',
+      NOW,
+    );
+    expect(view).toMatchObject({ priceLocked: true, amount: '9.00', nextAmount: null });
+    // not locked: the same price rise is announced
+    expect(
+      toSubscriptionView(sub(), { ...paid, priceAmount: '12.00' }, 'published', NOW).nextAmount,
+    ).toBe('12.00');
+  });
+
+  it('shows a failed renewal with the date the grace ends, and pay-again after the provider stopped', () => {
+    const failed = toSubscriptionView(
+      sub({
+        autorenew: true,
+        currentPeriodEnd: new Date('2026-10-09T00:00:00Z'),
+        paymentFailedAt: new Date('2026-10-09T01:00:00Z'),
+        graceEndsAt: new Date('2026-10-16T00:00:00Z'),
+      }),
+      { ...paid, billingMode: 'recurring' },
+      'published',
+      NOW,
+    );
+    expect(failed).toMatchObject({
+      status: 'past_due',
+      paymentFailedAt: '2026-10-09T01:00:00.000Z',
+      graceEndsAt: '2026-10-16T00:00:00.000Z',
+      actions: { canCancel: true, canRenew: true },
+    });
+    const stopped = toSubscriptionView(
+      sub({
+        cancelAtPeriodEnd: true,
+        autorenewStoppedAt: new Date('2026-10-05T00:00:00Z'),
+      }),
+      paid,
+      'published',
+      NOW,
+    );
+    expect(stopped.status).toBe('canceling');
+    expect(stopped.actions).toEqual({ canCancel: false, canResume: false, canRenew: true });
   });
 
   it('on sale means paid, reachable, and open to newcomers or already subscribed', () => {

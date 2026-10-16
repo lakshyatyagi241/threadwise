@@ -66,6 +66,7 @@ export function subscription(over: Partial<MarketSubscription> = {}): MarketSubs
     source: 'purchase',
     amount: '9.00',
     currency: 'USD',
+    period: 'monthly',
     startedAt: '2026-09-30T00:00:00.000Z',
     currentPeriodEnd: '2026-10-31T00:00:00.000Z',
     trialEndsAt: null,
@@ -74,6 +75,10 @@ export function subscription(over: Partial<MarketSubscription> = {}): MarketSubs
     renewals: 0,
     nextAmount: null,
     nextCurrency: null,
+    autoRenew: false,
+    priceLocked: false,
+    paymentFailedAt: null,
+    graceEndsAt: null,
     actions: { canCancel: true, canResume: false, canRenew: false },
     ...over,
   };

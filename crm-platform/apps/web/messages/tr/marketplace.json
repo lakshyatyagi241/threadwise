@@ -61,7 +61,8 @@
       "notForSale": "Bu uygulama şu anda yeni abonelere satılmıyor.",
       "trialUnavailable": "Bu uygulama için ücretsiz deneme çalışma alanınızda kullanılamıyor.",
       "subscriptionNotFound": "Çalışma alanınızın bu uygulamaya aboneliği yok.",
-      "subscriptionState": "Bu, aboneliğin mevcut durumuyla uyuşmuyor. En son durumu görmek için yenileyin."
+      "subscriptionState": "Bu, aboneliğin mevcut durumuyla uyuşmuyor. En son durumu görmek için yenileyin.",
+      "renewalNotStopped": "Otomatik yenileme ödeme sağlayıcısında durdurulamadı; hiçbir şey değişmedi ve kartınızdan hâlâ ücret alınabilir. Birazdan tekrar deneyin."
     },
     "chips": {
       "installed": "Yüklü",
@@ -77,7 +78,8 @@
       "trialing": "Ücretsiz deneme",
       "comped": "Ücretsiz erişim",
       "canceling": "Yenilenmeyecek",
-      "subscriptionEnded": "Abonelik sona erdi"
+      "subscriptionEnded": "Abonelik sona erdi",
+      "pastDue": "Ödeme başarısız"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Satılık değil",
         "paid": "Ücretli uygulama",
         "addOn": "Ek paket",
-        "trial": "{days} günlük ücretsiz deneme"
+        "trial": "{days} günlük ücretsiz deneme",
+        "monthlyOrYearly": "{price} / ay veya {annual} / yıl"
       },
       "installs": "{count, plural, other {# kurulum}}",
       "version": "Sürüm {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "Satılık değil",
         "message": "Bu uygulama şu anda yeni abonelere satılmıyor."
-      }
+      },
+      "autoRenewNote": "Çalışma alanınızın faturalandırmasıyla aylık faturalandırılır. İptal edene kadar kartınızdan her ay yenileme tarihinde otomatik olarak ücret alınır."
     },
     "subscribe": {
       "subscribe": "Abone ol",
@@ -820,7 +824,16 @@
         "included": "{name} planınıza dahil.",
         "already_entitled": "Çalışma alanınızın zaten {name} erişimi var.",
         "free": "{name} ücretsiz."
-      }
+      },
+      "hintPriceAuto": "Ayda {price}, siz iptal edene kadar her ay kartınızdan otomatik olarak çekilir.",
+      "hintAuto": "İptal edene kadar kartınızdan her ay otomatik olarak ücret alınır.",
+      "period": {
+        "legend": "Faturalandırma dönemi",
+        "monthly": "Aylık, {price}",
+        "yearly": "Yıllık, {price}"
+      },
+      "hintYear": "Yılda {price}, ödeme sayfasında ödenir. Her ödeme bir yılı kapsar.",
+      "hintYearAuto": "Yılda {price}, siz iptal edene kadar her yıl kartınızdan otomatik olarak çekilir."
     },
     "subscription": {
       "title": "Abonelik",
@@ -829,7 +842,8 @@
         "trialing": "Ücretsiz deneme",
         "comped": "Ücretsiz erişim",
         "canceling": "Yenilenmeyecek",
-        "ended": "Sona erdi"
+        "ended": "Sona erdi",
+        "past_due": "Ödeme başarısız"
       },
       "date": {
         "paidUntil": "{date} tarihine kadar ödendi",
@@ -838,7 +852,9 @@
         "compOpen": "Süresiz ücretsiz erişim",
         "cancelingUntil": "Yenilenmeyecek. {date} tarihine kadar etkin",
         "endedOn": "Abonelik {date} tarihinde sona erdi",
-        "endedNoDate": "Abonelik sona erdi"
+        "endedNoDate": "Abonelik sona erdi",
+        "renewsOn": "Yenileme tarihi: {date}",
+        "graceUntil": "Ödeme başarısız. {date} tarihine kadar çalışır"
       },
       "lastPayment": "Son ödeme: ayda {price}",
       "nextPayment": "Bu uygulamanın fiyatı değişti. Bir sonraki ödemeniz ayda {price} olacak.",
@@ -849,7 +865,8 @@
         "resubscribe": "Yeniden abone ol",
         "subscribe": "Şimdi abone ol",
         "resume": "Aboneliği devam ettir",
-        "cancel": "Aboneliği iptal et"
+        "cancel": "Aboneliği iptal et",
+        "payNow": "Şimdi öde"
       },
       "cancelConfirm": {
         "title": "{name} aboneliği iptal edilsin mi?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name}, ödediğiniz dönemin sonuna kadar etkin kalır, ardından duraklatılır. Verileriniz ve ayarlarınız korunur.",
         "afterwards": "Başka ücret alınmaz ve istediğiniz zaman yeniden abone olabilirsiniz.",
         "confirm": "Aboneliği iptal et",
-        "keep": "Aboneliği koru"
+        "keep": "Aboneliği koru",
+        "messageAuto": "Kartınızdan bir daha ücret alınmaz. {name}, {date} tarihine kadar etkin kalır, ardından duraklatılır. Verileriniz ve ayarlarınız korunur.",
+        "messageAutoNoDate": "Kartınızdan bir daha ücret alınmaz. {name}, ödediğiniz dönemin sonuna kadar etkin kalır, ardından duraklatılır. Verileriniz ve ayarlarınız korunur."
       },
       "toast": {
         "canceled": "Abonelik iptal edildi. {date} tarihine kadar etkin kalır.",
@@ -865,7 +884,14 @@
         "resumed": "Abonelik devam ettirildi."
       },
       "working": "Çalışıyor",
-      "noCheckout": "Bu uygulama için ödeme şu anda kullanılamıyor. Biraz sonra tekrar deneyin."
+      "noCheckout": "Bu uygulama için ödeme şu anda kullanılamıyor. Biraz sonra tekrar deneyin.",
+      "paymentFailed": "Bu uygulama için kartla yapılan son ödeme gerçekleşmedi. Ödeme sağlayıcısı yeniden denerken uygulama {date} tarihine kadar çalışmaya devam eder. Duraklatılmaması için şimdi ödeyin veya ödeme yönteminizi düzeltin.",
+      "paymentFailedNoDate": "Bu uygulama için kartla yapılan son ödeme gerçekleşmedi. Ödeme sağlayıcısı yeniden denerken uygulama çalışmaya devam eder. Duraklatılmaması için şimdi ödeyin veya ödeme yönteminizi düzeltin.",
+      "autoRenewHint": "Kartınızdan yenileme tarihinde otomatik olarak ücret alınır. Durdurmak için o tarihten önce iptal edin.",
+      "lastPaymentYear": "Son ödeme: yılda {price}",
+      "nextPaymentYear": "Bu uygulamanın fiyatı değişti. Bir sonraki ödemeniz yılda {price} olacak.",
+      "priceLocked": "Fiyatınız ayda {price} olarak sabitlendi. Abone kaldığınız sürece, uygulamanın fiyatı değişse bile aynı kalır.",
+      "priceLockedYear": "Fiyatınız yılda {price} olarak sabitlendi. Abone kaldığınız sürece, uygulamanın fiyatı değişse bile aynı kalır."
     },
     "tools": {
       "open": "Aç",
@@ -875,6 +901,24 @@
       },
       "soon": "Yakında",
       "upgrade": "Yükselt"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Ödeme alındı",
+        "message": "Teşekkürler. Aboneliğiniz etkin ve uygulama kullanıma hazır."
+      },
+      "pending": {
+        "title": "Ödemeniz onaylanıyor",
+        "message": "Ödeme sağlayıcısı ödemeyi henüz onaylamadı. Onayladığında bu sayfa güncellenir; yeniden ödeme yapmanız gerekmez."
+      },
+      "failed": {
+        "title": "Ödeme gerçekleşmedi",
+        "message": "Hiçbir ücret alınmadı. Başka bir ödeme yöntemi denemek için yeniden abone olun."
+      },
+      "cancelled": {
+        "title": "Ödeme iptal edildi",
+        "message": "Hiçbir ücret alınmadı. Hazır olduğunuzda yeniden abone olabilirsiniz."
+      }
     }
   }
 }

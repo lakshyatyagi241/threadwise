@@ -61,12 +61,22 @@ describe('money', () => {
 
 describe('price line', () => {
   it('says Free for a free app, whatever else the answer holds', () => {
-    expect(priceLine(pricing(), 'en')).toEqual({ key: 'free', price: null, trialDays: null });
+    expect(priceLine(pricing(), 'en')).toEqual({
+      key: 'free',
+      price: null,
+      annualPrice: null,
+      trialDays: null,
+    });
     expect(priceLine(pricing({ trialAvailable: true, trialDays: 14 }), 'en').trialDays).toBeNull();
   });
 
   it('says "$9 a month" for a paid app with no subscription, with the trial chip while a trial is on offer', () => {
-    expect(priceLine(paidPricing(), 'en')).toEqual({ key: 'monthly', price: '$9', trialDays: 14 });
+    expect(priceLine(paidPricing(), 'en')).toEqual({
+      key: 'monthly',
+      price: '$9',
+      annualPrice: null,
+      trialDays: 14,
+    });
     // The trial was used (or never offered): no chip, even though the listing has trial days.
     expect(priceLine(paidPricing({ trialAvailable: false }), 'en').trialDays).toBeNull();
     expect(
@@ -79,11 +89,17 @@ describe('price line', () => {
       'included',
     );
     const entitled = priceLine(paidPricing({ access: 'entitled', trialAvailable: false }), 'en');
-    expect(entitled).toEqual({ key: 'subscribed', price: '$9', trialDays: null });
+    expect(entitled).toEqual({
+      key: 'subscribed',
+      price: '$9',
+      annualPrice: null,
+      trialDays: null,
+    });
     expect(priceLine(paidPricing({ access: 'not_for_sale', trialAvailable: false }), 'en')).toEqual(
       {
         key: 'notForSale',
         price: null,
+        annualPrice: null,
         trialDays: null,
       },
     );
@@ -119,7 +135,9 @@ describe('what to offer for getting the app', () => {
     expect(acquireFor(paidPricing(), 'en')).toEqual({
       kind: 'subscribe',
       price: '$9',
+      annualPrice: null,
       trialDays: 14,
+      automatic: false,
     });
     expect(acquireFor(paidPricing({ trialAvailable: false }), 'en')).toMatchObject({
       kind: 'subscribe',

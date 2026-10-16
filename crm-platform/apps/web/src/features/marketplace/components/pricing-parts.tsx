@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { MarketCardPricing } from '@crm/contracts';
 import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
@@ -35,7 +35,11 @@ export function PriceText({
         </Badge>
       )}
       <span>
-        {line.key === 'monthly' ? t('monthly', { price: line.price ?? '' }) : t(line.key)}
+        {line.key === 'monthly'
+          ? line.annualPrice
+            ? t('monthlyOrYearly', { price: line.price ?? '', annual: line.annualPrice })
+            : t('monthly', { price: line.price ?? '' })
+          : t(line.key)}
       </span>
       {line.trialDays !== null && (
         <Badge tone="success" data-testid="trial-chip">
@@ -86,6 +90,11 @@ export function PricingBlock({ pricing }: { pricing: MarketCardPricing }) {
           <p data-testid="trial-offer">{t('trialOffer', { days: view.line.trialDays })}</p>
         )}
         {view.prepaidNote && <p className="text-muted-foreground">{t('prepaidNote')}</p>}
+        {view.autoRenewNote && (
+          <p className="text-muted-foreground" data-testid="auto-renew-note">
+            {t('autoRenewNote')}
+          </p>
+        )}
         {view.line.key === 'notForSale' && (
           <p className="text-muted-foreground">{t('notForSale.message')}</p>
         )}
@@ -120,12 +129,41 @@ export function SubscribeActions({
   const t = useTranslations('marketplace.subscribe');
   const locale = useLocale();
   const sub = useSubscribe(app);
+  const [period, setPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const acquire = acquireFor(app.pricing, locale);
   if (acquire.kind !== 'subscribe') return null;
+  const yearly = acquire.annualPrice !== null && period === 'yearly';
   return (
     <div className="space-y-2" data-testid="subscribe-actions">
+      {acquire.annualPrice !== null && (
+        <fieldset
+          className="flex flex-wrap items-center gap-4 text-sm"
+          data-testid="subscribe-period"
+        >
+          <legend className="sr-only">{t('period.legend')}</legend>
+          {(['monthly', 'yearly'] as const).map((p) => (
+            <label key={p} className="flex cursor-pointer items-center gap-2">
+              <input
+                type="radio"
+                name={`period-${app.slug}`}
+                value={p}
+                checked={period === p}
+                disabled={sub.pending}
+                onChange={() => setPeriod(p)}
+                className="size-4 accent-[var(--primary)]"
+              />
+              {p === 'monthly'
+                ? t('period.monthly', { price: acquire.price ?? '' })
+                : t('period.yearly', { price: acquire.annualPrice ?? '' })}
+            </label>
+          ))}
+        </fieldset>
+      )}
       <div className="flex flex-wrap items-center gap-2">
-        <Button onClick={() => void sub.run(false)} disabled={sub.pending}>
+        <Button
+          onClick={() => void sub.run(false, yearly ? 'yearly' : 'monthly')}
+          disabled={sub.pending}
+        >
           {sub.pending && sub.mode === 'pay' && <Spinner />}
           {t('subscribe')}
           <span className="sr-only"> — {app.name}</span>
@@ -140,7 +178,13 @@ export function SubscribeActions({
       </div>
       {hint && (
         <p className="text-xs text-muted-foreground">
-          {acquire.price ? t('hintPrice', { price: acquire.price }) : t('hint')}
+          {yearly
+            ? t(acquire.automatic ? 'hintYearAuto' : 'hintYear', {
+                price: acquire.annualPrice ?? '',
+              })
+            : acquire.price
+              ? t(acquire.automatic ? 'hintPriceAuto' : 'hintPrice', { price: acquire.price })
+              : t(acquire.automatic ? 'hintAuto' : 'hint')}
         </p>
       )}
       <p aria-live="polite" className="sr-only">

@@ -72,7 +72,7 @@ const SUMMARY = {
       slug: 'old-free',
       name: 'Old Free',
       pricing: { model: 'free', amount: null, currency: null },
-      counts: { active: 0, trialing: 0, comped: 0, canceling: 0, ended: 2, total: 2 },
+      counts: { active: 0, trialing: 0, comped: 0, canceling: 0, pastDue: 0, ended: 2, total: 2 },
       mrr: [],
     }),
   ],
@@ -149,12 +149,12 @@ describe('the pricing panel', () => {
     expect(html).toContain('Hide, show again or kill the listing under Operate above');
   });
 
-  it('explains the billing model: monthly prepaid, no automatic renewal, a price change reaches the next payment only', () => {
+  it('explains the billing model: monthly prepaid by default, the card renewal as a choice, a price change reaches the next payment only', () => {
     const html = render(paidApp(), access('pricing'));
     expect(html).toContain('monthly prepaid term');
-    expect(html).toContain('no automatic card renewal yet');
+    expect(html).toContain('The card renews it');
     expect(html).toContain('a period already paid for is never touched');
-    expect(html).toContain('Annual billing is not built yet');
+    expect(html).toContain('Leave it empty to sell the app monthly only');
   });
 
   it('shows the developer proposal read-only, with its model and note', () => {
@@ -527,7 +527,7 @@ describe('the subscriptions page', () => {
     const cells = [...totals.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) =>
       m[1]!.replace(/<[^>]+>/g, '').trim(),
     );
-    expect(cells).toEqual(['5', '2', '1', '1', '5', '14', '$45.00']);
+    expect(cells).toEqual(['5', '2', '1', '1', '0', '5', '14', '$45.00']);
     expect(html).toContain('Monthly revenue, USD');
     expect(html).toContain('currencies are never added together');
   });

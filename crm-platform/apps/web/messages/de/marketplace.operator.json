@@ -58,7 +58,8 @@
           "trialing": "In Testphase",
           "comped": "Kostenlos bereitgestellt",
           "canceling": "Läuft aus",
-          "ended": "Beendet"
+          "ended": "Beendet",
+          "past_due": "Zahlung fehlgeschlagen"
         },
         "subscriptionSource": {
           "purchase": "Kauf",
@@ -92,7 +93,8 @@
         "request": "Die Anfrage konnte nicht abgeschlossen werden.",
         "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es erneut; falls das Problem bestehen bleibt, nennen Sie die Anfrage-ID.",
         "subscriptionState": "Dies ist im aktuellen Zustand des Abonnements nicht möglich. Ein Workspace, der bereits zahlt, kann nicht kostenlos bereitgestellt werden (kündigen Sie zuerst sein Abonnement), eine kostenlose App hat nichts kostenlos bereitzustellen, und ein beendetes Abonnement kann nicht erneut gekündigt werden.",
-        "subscriptionNotFound": "Dieses Abonnement wurde nicht gefunden. Es wurde möglicherweise entfernt. Laden Sie die Liste neu."
+        "subscriptionNotFound": "Dieses Abonnement wurde nicht gefunden. Es wurde möglicherweise entfernt. Laden Sie die Liste neu.",
+        "renewalNotStopped": "Die Kartenverlängerung konnte beim Zahlungsanbieter nicht beendet werden. Es wurde nichts geändert, und der Workspace kann weiterhin belastet werden. Versuchen Sie es in einem Moment erneut oder beenden Sie sie im Dashboard des Anbieters."
       },
       "list": {
         "title": "Marketplace-Katalog",
@@ -658,12 +660,13 @@
         "free": "Kostenlos",
         "perMonth": "/ Monat",
         "trial": "{count, plural, one {# Testtag} other {# Testtage}}",
-        "notOnSale": "Nicht im Verkauf"
+        "notOnSale": "Nicht im Verkauf",
+        "perYear": "/ Jahr"
       },
       "pricing": {
         "title": "Preisgestaltung",
         "description": "Legen Sie fest, ob diese App kostenlos oder kostenpflichtig ist und was sie kostet. Gültig ist Ihre Preisgestaltung: Das Manifest des Entwicklers schlägt lediglich einen Preis vor.",
-        "billing": "Eine kostenpflichtige App wird als monatlicher Vorauszahlungszeitraum verkauft: ein Abrechnungs-Add-on, das über den normalen Checkout gekauft wird. Eine automatische Kartenverlängerung gibt es noch nicht, daher zahlt ein Workspace erneut, wenn sein Monat fast abgelaufen ist. Eine Preisänderung gilt für neue Abonnements und für die nächste Zahlung aller Abonnenten; ein bereits bezahlter Zeitraum bleibt unberührt.",
+        "billing": "Eine kostenpflichtige App wird als Abrechnungs-Add-on verkauft, das über den normalen Checkout gekauft wird. Standardmäßig ist es ein monatlicher Vorauszahlungszeitraum: Ein Workspace zahlt erneut, wenn sein Monat fast abgelaufen ist. Wählen Sie unten „Die Karte verlängert automatisch“, um stattdessen die Karte des Workspace jeden Monat automatisch zu belasten. Eine Preisänderung gilt für neue Abonnements und für die nächste Zahlung aller Vorauszahlungs-Abonnenten; ein bereits bezahlter Zeitraum bleibt unberührt, und ein Abonnent, dessen Karte bereits verlängert, behält den Preis seines Abonnements beim Anbieter, bis er erneut abonniert.",
         "readOnly": "Nur Lesezugriff. Zum Ändern der Preisgestaltung ist die Plattformberechtigung {permission} erforderlich.",
         "visibility": {
           "label": "Status des Eintrags",
@@ -693,7 +696,7 @@
           "trialDays": "Testzeitraum (Tage)",
           "trialDaysHint": "0 für keinen Testzeitraum, höchstens {max}. Ein Workspace erhält pro App einen Testzeitraum.",
           "annualAmount": "Jahrespreis (optional)",
-          "annualAmountHint": "Wird für später gespeichert. Die jährliche Abrechnung ist noch nicht verfügbar, daher können Workspaces derzeit nicht jährlich zahlen.",
+          "annualAmountHint": "Der Preis für ein Jahr. Lassen Sie das Feld leer, um die App nur monatlich zu verkaufen. Ein Workspace, der die jährliche Zahlung wählt, zahlt diesen Betrag einmal pro Jahr oder jedes Jahr per Karte, wenn sich die App per Karte verlängert.",
           "purchasable": "Im Verkauf",
           "purchasableHint": "Ist die Option ausgeschaltet, kann kein neuer Workspace abonnieren. Bestehende Abonnenten können weiterhin verlängern."
         },
@@ -763,6 +766,27 @@
             "paid": "Abonnenten behalten die bereits bezahlte Zeit. Sie wird nicht erstattet.",
             "action": "Kostenlos machen"
           }
+        },
+        "billingMode": {
+          "legend": "Art der Verlängerung",
+          "one_time": {
+            "label": "Vorausbezahlter Monat",
+            "hint": "Der Workspace zahlt erneut, wenn sein Monat fast abgelaufen ist."
+          },
+          "recurring": {
+            "label": "Die Karte verlängert automatisch",
+            "hint": "Der Zahlungsanbieter belastet die Karte jeden Monat, bis der Workspace kündigt."
+          },
+          "note": "Gilt für neue Abonnements. Ein bereits laufendes Abonnement behält die Art, wie es gekauft wurde. Erfordert ein Zahlungsgateway, das Abonnements unterstützt."
+        },
+        "priceLock": {
+          "label": "Abonnenten beim zuerst gezahlten Preis halten",
+          "hint": "Eine Preisänderung gilt dann nur für neue Abonnenten. Beim Aktivieren werden auch die heutigen Abonnenten auf ihre letzte Zahlung festgeschrieben; beim Deaktivieren wird niemand freigegeben. Die Festschreibung endet mit dem Abonnement."
+        },
+        "withdrawn": {
+          "title": "Abonnenten dieser zurückgezogenen App erstatten",
+          "hint": "Die App wurde mitten in den Zeiträumen zurückgezogen, die ihre Abonnenten bezahlt hatten. Erstatten Sie jedem den Anteil seiner letzten Zahlung ab dem Zeitpunkt des Rückzugs.",
+          "action": "Ungenutzte Zeit erstatten..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Beendet",
           "mrr": "Monatlicher Umsatz",
           "mrrNone": "Noch keine zahlenden Abonnenten",
-          "mrrCurrency": "Monatlicher Umsatz, {currency}"
+          "mrrCurrency": "Monatlicher Umsatz, {currency}",
+          "pastDue": "Zahlung fehlgeschlagen"
         },
         "summary": {
           "emptyTitle": "Noch keine kostenpflichtigen Apps",
@@ -871,7 +896,8 @@
             "canceling": "Endend",
             "ended": "Beendet",
             "total": "Gesamt",
-            "mrr": "Monatlicher Umsatz"
+            "mrr": "Monatlicher Umsatz",
+            "pastDue": "Zahlung fehlgeschlagen"
           },
           "free": "Kostenlos",
           "totals": "Alle Apps",
@@ -905,7 +931,9 @@
           "compUntil": "Kostenlos bis {date}",
           "compOpen": "Kostenlos, bis Sie es beenden",
           "endedOn": "Beendet am {date}",
-          "none": "Kein Enddatum"
+          "none": "Kein Enddatum",
+          "renewsOn": "Verlängert am {date}",
+          "graceUntil": "Kulanzfrist bis {date}"
         },
         "noCharge": "Keine Gebühr",
         "compBy": "Kostenlos freigeschaltet von {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Kein Abonnement passt",
         "noMatchMessage": "Diese Filter ergeben keine Treffer. Versuchen Sie andere.",
         "clearFilters": "Filter zurücksetzen",
-        "loadMore": "Mehr laden"
+        "loadMore": "Mehr laden",
+        "unlockPrice": "Preis freigeben",
+        "refundUnused": "Ungenutzte Zeit erstatten"
+      },
+      "unlockDialog": {
+        "eyebrow": "Festgeschriebener Preis",
+        "title": "Preis für {workspace} freigeben",
+        "close": "Schließen",
+        "back": "Zurück",
+        "confirm": "Preis freigeben",
+        "summary": "{workspace} zahlt für {app} den Preis, den es zuerst gezahlt hat. Mit der Freigabe gilt bei der nächsten Zahlung der aktuelle Preis der App.",
+        "effectPrepaid": "Die nächste Zahlung nach dem bis {date} bezahlten Zeitraum erfolgt zum aktuellen Preis.",
+        "effectCard": "Die Karte verlängert die App beim Zahlungsanbieter zum alten Preis, daher wird die Kartenverlängerung zum Ende des bezahlten Zeitraums ({date}) beendet. Der Kunde wird informiert und kann zum aktuellen Preis erneut abonnieren.",
+        "reason": "Grund (wird im Prüfprotokoll gespeichert)",
+        "done": "{workspace} hat für {app} keinen festgeschriebenen Preis mehr."
+      },
+      "prorateDialog": {
+        "eyebrow": "Erstattung",
+        "title": "Ungenutzte Zeit für {workspace} erstatten",
+        "close": "Schließen",
+        "back": "Zurück",
+        "summary": "Erstattet über den Zahlungsanbieter den Teil der letzten Zahlung für {app}, der noch aussteht. Nichts wird doppelt erstattet: Bei einem erneuten Durchlauf wird nur der Rest erstattet.",
+        "working": "Betrag wird berechnet...",
+        "paid": "Letzte Zahlung",
+        "unused": "Ungenutzter Anteil",
+        "already": "Bereits erstattet",
+        "refundable": "Jetzt zu erstatten",
+        "nothing": "Es gibt nichts zu erstatten: Der Zeitraum ist vorbei, es wurde keine Zahlung über ein Gateway gefunden oder der ungenutzte Anteil wurde bereits erstattet.",
+        "endNow": "Abonnement auch jetzt beenden",
+        "endNowHint": "Die Installation wird pausiert, ihre Daten bleiben erhalten. Ohne diese Option läuft die App bis zum Ende des Zeitraums weiter.",
+        "reason": "Grund (wird im Audit-Protokoll gespeichert und an den Zahlungsanbieter gesendet)",
+        "confirm": "{amount} erstatten",
+        "done": "{amount} an {workspace} für {app} erstattet.",
+        "refused": "Der Zahlungsanbieter hat die Erstattung abgelehnt: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Zurückgezogene App",
+        "title": "Abonnenten von {name} erstatten",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "intro": "Prüft jedes bezahlte Abonnement von {name} und erstattet über den Zahlungsanbieter den Anteil der letzten Zahlung, der beim Rückzug der App noch ausstand. Zuerst die Vorschau; nichts wird doppelt erstattet.",
+        "preview": "Vorschau",
+        "owed": "{count, plural, one {# Abonnent hat Anspruch auf eine Erstattung} other {# Abonnenten haben Anspruch auf eine Erstattung}}",
+        "nobody": "Derzeit steht niemandem etwas zu.",
+        "more": "Es gibt mehr Abonnements, als ein Durchlauf verarbeitet. Starten Sie ihn erneut, um fortzufahren.",
+        "reason": "Grund (wird im Audit-Protokoll gespeichert und an den Zahlungsanbieter gesendet)",
+        "run": "{count, plural, one {# Abonnenten erstatten} other {# Abonnenten erstatten}}",
+        "continue": "Mit den nächsten Abonnements fortfahren",
+        "result": "Erstattet: {refunded}, fehlgeschlagen: {failed}.",
+        "someFailed": "Einige Erstattungen sind nicht durchgegangen (der Anbieter hat sie abgelehnt oder war nicht erreichbar). Sie sind im Audit-Protokoll aufgeführt; ein erneuter Durchlauf versucht sie noch einmal.",
+        "done": "{count, plural, one {# Abonnent von {name} erstattet.} other {# Abonnenten von {name} erstattet.}}"
       }
     }
   }

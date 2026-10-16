@@ -58,7 +58,8 @@
           "trialing": "Denemede",
           "comped": "Ücretsiz erişim",
           "canceling": "Sona eriyor",
-          "ended": "Sona erdi"
+          "ended": "Sona erdi",
+          "past_due": "Ödeme başarısız"
         },
         "subscriptionSource": {
           "purchase": "Satın alma",
@@ -92,7 +93,8 @@
         "request": "İstek tamamlanamadı.",
         "unexpected": "Tarafımızda bir sorun oluştu. Tekrar deneyin; devam ederse istek kimliğini belirtin.",
         "subscriptionState": "Aboneliğin mevcut durumunda bu mümkün değil. Zaten ödeyen bir çalışma alanına ücretsiz erişim verilemez (önce aboneliğini iptal edin), ücretsiz bir uygulamanın verilecek bir şeyi yoktur ve sona ermiş bir abonelik tekrar iptal edilemez.",
-        "subscriptionNotFound": "Bu abonelik bulunamadı. Kaldırılmış olabilir. Listeyi yenileyin."
+        "subscriptionNotFound": "Bu abonelik bulunamadı. Kaldırılmış olabilir. Listeyi yenileyin.",
+        "renewalNotStopped": "Kart yenilemesi ödeme sağlayıcısında durdurulamadı; hiçbir şey değişmedi ve çalışma alanından hâlâ ücret alınabilir. Birazdan tekrar deneyin veya sağlayıcının panelinden sonlandırın."
       },
       "list": {
         "title": "Pazar yeri kataloğu",
@@ -658,12 +660,13 @@
         "free": "Ücretsiz",
         "perMonth": "/ ay",
         "trial": "{count, plural, other {# günlük deneme}}",
-        "notOnSale": "Satışta değil"
+        "notOnSale": "Satışta değil",
+        "perYear": "/ yıl"
       },
       "pricing": {
         "title": "Fiyatlandırma",
         "description": "Bu uygulamanın ücretsiz mi ücretli mi olacağına ve ne kadara satılacağına karar verin. Geçerli olan sizin fiyatınızdır; geliştiricinin manifesti yalnızca bir öneri sunar.",
-        "billing": "Ücretli bir uygulama, aylık önceden ödemeli bir dönem olarak satılır: normal ödeme akışıyla satın alınan bir faturalandırma eklentisi. Henüz otomatik kart yenilemesi yok; bu yüzden bir çalışma alanı, ayı bitmek üzereyken yeniden öder. Fiyat değişikliği yeni aboneliklere ve her abonenin bir sonraki ödemesine uygulanır; zaten ödenmiş bir dönem hiçbir zaman değiştirilmez.",
+        "billing": "Ücretli bir uygulama, normal ödeme akışıyla satın alınan bir faturalandırma eklentisi olarak satılır. Varsayılan olarak aylık önceden ödemeli bir dönemdir: çalışma alanı, ayı bitmek üzereyken yeniden öder. Çalışma alanının kartından her ay otomatik olarak ücret almak için aşağıda \"Kartla yenilenir\" seçeneğini seçin. Fiyat değişikliği yeni aboneliklere ve önceden ödemeli her abonenin bir sonraki ödemesine uygulanır; zaten ödenmiş bir dönem hiçbir zaman değiştirilmez; kartı zaten yenilenen bir abone ise yeniden abone olana kadar sağlayıcıdaki aboneliğinin fiyatını korur.",
         "readOnly": "Salt okunur. Fiyatlandırmayı değiştirmek için {permission} platform izni gerekir.",
         "visibility": {
           "label": "Listeleme durumu",
@@ -693,7 +696,7 @@
           "trialDays": "Ücretsiz deneme (gün)",
           "trialDaysHint": "Deneme yoksa 0, en fazla {max}. Bir çalışma alanı uygulama başına bir deneme alır.",
           "annualAmount": "Yıllık fiyat (isteğe bağlı)",
-          "annualAmountHint": "Sonra kullanılmak üzere saklanır. Yıllık faturalandırma henüz yapılmadı, bu yüzden çalışma alanları bugün yıllık ödeme yapamaz.",
+          "annualAmountHint": "Bir yıllık fiyat. Uygulamayı yalnızca aylık satmak için boş bırakın. Yıllık seçen bir çalışma alanı bunu yılda bir kez öder; uygulama kartla yenileniyorsa her yıl kartından çekilir.",
           "purchasable": "Satışta",
           "purchasableHint": "Kapalıyken yeni çalışma alanı abone olamaz. Zaten abone olan çalışma alanları yenilemeye devam edebilir."
         },
@@ -763,6 +766,27 @@
             "paid": "Aboneler, zaten ödedikleri süreyi korur. Bu süre iade edilmez.",
             "action": "Ücretsiz yap"
           }
+        },
+        "billingMode": {
+          "legend": "Nasıl yenilenir",
+          "one_time": {
+            "label": "Önceden ödemeli ay",
+            "hint": "Çalışma alanı, ayı bitmek üzereyken yeniden öder."
+          },
+          "recurring": {
+            "label": "Kartla yenilenir",
+            "hint": "Çalışma alanı iptal edene kadar ödeme sağlayıcısı karttan her ay ücret alır."
+          },
+          "note": "Yeni aboneliklere uygulanır. Hâlihazırda çalışan bir abonelik, satın alındığı biçimde devam eder. Abonelikleri destekleyen bir ödeme geçidi gerekir."
+        },
+        "priceLock": {
+          "label": "Aboneleri ilk ödedikleri fiyatta tut",
+          "hint": "Bu durumda fiyat değişikliği yalnızca yeni abonelere uygulanır. Bunu açmak, mevcut aboneleri de son ödemelerindeki fiyata sabitler; kapatmak kimsenin kilidini açmaz. Kilit, abonelik sona erdiğinde biter."
+        },
+        "withdrawn": {
+          "title": "Kaldırılan bu uygulamanın abonelerine iade yap",
+          "hint": "Uygulama, abonelerinin ödediği dönemlerin ortasında kaldırıldı. Her aboneye, son ödemesinin kaldırıldığı andan sonrasına denk gelen payını iade edin.",
+          "action": "Kullanılmayan süreyi iade et..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Sona erdi",
           "mrr": "Aylık gelir",
           "mrrNone": "Henüz ödeyen abone yok",
-          "mrrCurrency": "Aylık gelir, {currency}"
+          "mrrCurrency": "Aylık gelir, {currency}",
+          "pastDue": "Ödeme başarısız"
         },
         "summary": {
           "emptyTitle": "Henüz ücretli uygulama yok",
@@ -871,7 +896,8 @@
             "canceling": "Sona eriyor",
             "ended": "Sona erdi",
             "total": "Toplam",
-            "mrr": "Aylık gelir"
+            "mrr": "Aylık gelir",
+            "pastDue": "Ödeme başarısız"
           },
           "free": "Ücretsiz",
           "totals": "Tüm uygulamalar",
@@ -905,7 +931,9 @@
           "compUntil": "{date} tarihine kadar ücretsiz",
           "compOpen": "Siz sonlandırana kadar ücretsiz",
           "endedOn": "{date} tarihinde sona erdi",
-          "none": "Bitiş tarihi yok"
+          "none": "Bitiş tarihi yok",
+          "renewsOn": "Yenileme: {date}",
+          "graceUntil": "{date} tarihine kadar ek süre"
         },
         "noCharge": "Ücret yok",
         "compBy": "{operator} tarafından ücretsiz erişim verildi: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Eşleşen abonelik yok",
         "noMatchMessage": "Bu filtrelerle eşleşen bir şey yok. Farklı filtreler deneyin.",
         "clearFilters": "Filtreleri temizle",
-        "loadMore": "Daha fazla yükle"
+        "loadMore": "Daha fazla yükle",
+        "unlockPrice": "Fiyat kilidini aç",
+        "refundUnused": "Kullanılmayan süreyi iade et"
+      },
+      "unlockDialog": {
+        "eyebrow": "Kilitli fiyat",
+        "title": "{workspace} çalışma alanının fiyat kilidini aç",
+        "close": "Kapat",
+        "back": "Geri",
+        "confirm": "Fiyat kilidini aç",
+        "summary": "{workspace} çalışma alanı, {app} için ilk ödediği fiyatı öder. Kilidi açmak, bir sonraki ödemesini uygulamanın güncel fiyatı yapar.",
+        "effectPrepaid": "{date} tarihine kadar ödenen dönemden sonraki ödemesi güncel fiyat olur.",
+        "effectCard": "Kartı, uygulamayı ödeme sağlayıcısında eski fiyattan yeniliyor; bu yüzden kartla yenileme, ödenen dönemin sonunda ({date}) sonlandırılır. Kendilerine bildirilir ve güncel fiyattan yeniden abone olabilirler.",
+        "reason": "Neden (denetim kaydında tutulur)",
+        "done": "{workspace} çalışma alanı artık {app} için kilitli bir fiyatta değil."
+      },
+      "prorateDialog": {
+        "eyebrow": "İade",
+        "title": "{workspace} için kullanılmayan süreyi iade et",
+        "close": "Kapat",
+        "back": "Geri",
+        "summary": "{app} için yapılan son ödemenin henüz gelmemiş kısmını ödeme sağlayıcı üzerinden iade eder. Hiçbir şey iki kez iade edilmez: yeniden çalıştırmak yalnızca kalanı iade eder.",
+        "working": "Tutar hesaplanıyor...",
+        "paid": "Son ödeme",
+        "unused": "Kullanılmayan pay",
+        "already": "Zaten iade edilen",
+        "refundable": "Şimdi iade edilecek",
+        "nothing": "İade edilecek bir şey yok: dönem bitti, ağ geçidi üzerinden yapılmış ödeme bulunamadı veya kullanılmayan pay zaten iade edildi.",
+        "endNow": "Aboneliği de şimdi sonlandır",
+        "endNowHint": "Kurulum duraklatılır ve verileri saklanır. Bu seçilmezse uygulama dönem sonuna kadar çalışmaya devam eder.",
+        "reason": "Neden (denetim kaydında tutulur ve ödeme sağlayıcıya gönderilir)",
+        "confirm": "{amount} iade et",
+        "done": "{workspace} çalışma alanına {app} için {amount} iade edildi.",
+        "refused": "Ödeme sağlayıcı iadeyi reddetti: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Kaldırılan uygulama",
+        "title": "{name} abonelerine iade yap",
+        "close": "Kapat",
+        "cancel": "Vazgeç",
+        "intro": "{name} uygulamasının tüm ücretli aboneliklerine bakar ve son ödemelerinin, uygulama kaldırıldığında henüz gelmemiş olan kısmını ödeme sağlayıcı üzerinden iade eder. Önce önizleyin; hiçbir şey iki kez iade edilmez.",
+        "preview": "Önizleme",
+        "owed": "{count, plural, one {# abonenin iade alacağı var} other {# abonenin iade alacağı var}}",
+        "nobody": "Şu anda kimsenin alacağı yok.",
+        "more": "Tek seferde işlenebilenden fazla abonelik var. Devam etmek için yeniden çalıştırın.",
+        "reason": "Neden (denetim kaydında tutulur ve ödeme sağlayıcıya gönderilir)",
+        "run": "{count, plural, one {# aboneye iade yap} other {# aboneye iade yap}}",
+        "continue": "Sonraki aboneliklerle devam et",
+        "result": "{refunded} iade edildi, {failed} başarısız.",
+        "someFailed": "Bazı iadeler gerçekleşmedi (sağlayıcı reddetti veya ulaşılamadı). Denetim kaydında listelenir; yeniden çalıştırmak bunları tekrar dener.",
+        "done": "{count, plural, one {{name} uygulamasının # abonesine iade yapıldı.} other {{name} uygulamasının # abonesine iade yapıldı.}}"
       }
     }
   }

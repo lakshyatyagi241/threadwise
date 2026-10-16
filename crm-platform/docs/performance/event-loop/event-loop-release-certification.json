@@ -42,8 +42,8 @@
     {
       "id": 7,
       "criterion": "Representative module benchmarks automated",
-      "status": "NOT DONE",
-      "evidence": "No load tool in the repo; contacts, inbox, webhook, broadcast and automation scenarios not built. Only the monitor micro-benchmark and the zlib measurement exist."
+      "status": "PARTIAL",
+      "evidence": "k6 workload and runner exist (tools/event-loop-audit/load): contacts (list, search, get, create, update), inbox list and counts on an empty inbox, and a /health control, run as idle, normal, peak, spike and a 10 minute soak. Webhook, broadcast, automation and reporting scenarios are not built, the run is one laptop with unstable latency, and it is not automated in CI."
     },
     {
       "id": 8,
@@ -61,7 +61,7 @@
       "id": 10,
       "criterion": "Baseline, test results and release evidence generated",
       "status": "PARTIAL",
-      "evidence": "Test results and the monitor/zlib evidence are real and in this folder. Application baselines (idle, normal, peak, spike, soak) do not exist; the 280-check target is at 30."
+      "evidence": "Test results and the monitor/zlib evidence are real and in this folder. Application baselines (idle, normal, peak, spike, 10 minute soak) exist for one laptop but are unstable and use invented rates (event-loop-performance-baseline.json); the 12 h and 24 h soaks were not run; the 280-check target is at 124."
     }
   ],
   "verifiedCount": 3,
