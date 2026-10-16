@@ -29,7 +29,8 @@
       "journey": "ジャーニー",
       "who": "対象者",
       "activity": "アクティビティ",
-      "properties": "プロパティ"
+      "properties": "プロパティ",
+      "company": "企業プロパティ"
     },
     "operators": {
       "equals": "は",

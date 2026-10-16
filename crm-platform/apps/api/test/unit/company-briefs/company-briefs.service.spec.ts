@@ -9,7 +9,6 @@ import type { BriefRow } from '../../../src/modules/company-briefs/company-brief
 const FACTS: BriefFacts = {
   company: { name: 'Acme', industry: null, size: null, createdOn: '2026-01-01', hasOwner: false },
   properties: [],
-  notes: null,
   contacts: { total: 1, byStage: { lead: 1 }, lastActivityOn: null },
   deals: null,
   tasks: null,
@@ -50,18 +49,24 @@ function make(opts: {
   const db = { tx: vi.fn(async (fn: (tx: unknown) => unknown) => fn({})) };
   const repo = {
     find: vi.fn(async () => stored),
-    upsert: vi.fn(async (_tx: unknown, _org: number, v: { content: BriefRow['content']; inputHash: string; provider: string; model: string }) => {
-      const replaced = stored !== undefined;
-      stored = {
-        uuid: 'b-1',
-        inputHash: v.inputHash,
-        content: v.content,
-        provider: v.provider,
-        model: v.model,
-        updatedAt: new Date(),
-      };
-      return { row: stored, replaced };
-    }),
+    upsert: vi.fn(
+      async (
+        _tx: unknown,
+        _org: number,
+        v: { content: BriefRow['content']; inputHash: string; provider: string; model: string },
+      ) => {
+        const replaced = stored !== undefined;
+        stored = {
+          uuid: 'b-1',
+          inputHash: v.inputHash,
+          content: v.content,
+          provider: v.provider,
+          model: v.model,
+          updatedAt: new Date(),
+        };
+        return { row: stored, replaced };
+      },
+    ),
   };
   const facts = {
     gather: vi.fn(async () => ({ companyId: 5, companyName: 'Acme', facts: opts.facts ?? FACTS })),
@@ -74,10 +79,13 @@ function make(opts: {
     ),
     capMaxTokens: vi.fn(async (_p: string, n: number) => n),
   };
-  const meter = { guard: vi.fn(async () => undefined), record: vi.fn(async () => undefined) };
-  const audit = { record: vi.fn(async () => undefined) };
+  const meter = {
+    guard: vi.fn(async (..._args: unknown[]) => undefined),
+    record: vi.fn(async (..._args: unknown[]) => undefined),
+  };
+  const audit = { record: vi.fn(async (..._args: unknown[]) => undefined) };
   const ai = {
-    complete: vi.fn(async () => {
+    complete: vi.fn(async (..._args: unknown[]) => {
       if (opts.fail) throw new Error('boom');
       return { text: opts.text ?? GOOD, promptTokens: 120, completionTokens: 60 };
     }),
@@ -115,9 +123,17 @@ describe('Generate brief (BL-194)', () => {
     expect(t.meter.guard).not.toHaveBeenCalled();
     expect(t.meter.record).toHaveBeenCalledWith(
       1,
-      expect.objectContaining({ billedAgainst: 'workspace', promptTokens: 120, completionTokens: 60 }),
+      expect.objectContaining({
+        billedAgainst: 'workspace',
+        promptTokens: 120,
+        completionTokens: 60,
+      }),
     );
-    const audit = t.audit.record.mock.calls[0]![1] as { module: string; action: string; delta: unknown };
+    const audit = t.audit.record.mock.calls[0]![1] as {
+      module: string;
+      action: string;
+      delta: unknown;
+    };
     expect(audit.module).toBe('company_briefs');
     expect(audit.action).toBe('insert');
     expect(JSON.stringify(audit.delta)).not.toContain('Acme');
@@ -126,7 +142,11 @@ describe('Generate brief (BL-194)', () => {
   it('what is sent to the model is the facts and nothing else of the company', async () => {
     const t = make({ key: { source: 'workspace' } });
     await run(() => t.svc.generate('c-1', 'all', { regenerate: false }));
-    const req = t.ai.complete.mock.calls[0]![0] as unknown as { userPrompt: string; json: boolean; apiKey: string };
+    const req = t.ai.complete.mock.calls[0]![0] as unknown as {
+      userPrompt: string;
+      json: boolean;
+      apiKey: string;
+    };
     expect(req.json).toBe(true);
     expect(JSON.parse(req.userPrompt.replace('Facts (JSON):\n', ''))).toEqual(FACTS);
   });
@@ -135,13 +155,18 @@ describe('Generate brief (BL-194)', () => {
     const t = make({ key: { source: 'admin' } });
     await run(() => t.svc.generate('c-1', 'all', { regenerate: false }));
     expect(t.meter.guard).toHaveBeenCalledWith(1);
-    expect(t.meter.record).toHaveBeenCalledWith(1, expect.objectContaining({ billedAgainst: 'admin' }));
+    expect(t.meter.record).toHaveBeenCalledWith(
+      1,
+      expect.objectContaining({ billedAgainst: 'admin' }),
+    );
   });
 
   it('prefers the workspace own key over the platform key of an earlier vendor', async () => {
     const t = make({ key: { source: 'workspace', provider: 'gemini' } });
     await run(() => t.svc.generate('c-1', 'all', { regenerate: false }));
-    expect((t.ai.complete.mock.calls[0]![0] as unknown as { provider: string }).provider).toBe('gemini');
+    expect((t.ai.complete.mock.calls[0]![0] as unknown as { provider: string }).provider).toBe(
+      'gemini',
+    );
   });
 
   it('returns the stored brief for the same facts within a day and calls nothing', async () => {

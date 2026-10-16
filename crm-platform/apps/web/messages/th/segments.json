@@ -29,7 +29,8 @@
       "journey": "เส้นทาง",
       "who": "ใคร",
       "activity": "กิจกรรม",
-      "properties": "คุณสมบัติ"
+      "properties": "คุณสมบัติ",
+      "company": "คุณสมบัติของบริษัท"
     },
     "operators": {
       "equals": "คือ",

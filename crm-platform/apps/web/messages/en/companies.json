@@ -344,7 +344,7 @@
       "copyTitle": "{name}: account brief",
       "stale": "The CRM has changed since this brief was written. Regenerate for a current one.",
       "writtenBy": "Written {date} by {model}. AI can be wrong.",
-      "notice": "The model gets counts, dates, amounts and short titles. It never gets contact names, email addresses, phone numbers or message text, and numbers and email addresses in titles and notes are removed first.",
+      "notice": "The model gets counts, dates, amounts and short titles. It never gets contact names, email addresses, phone numbers, company notes or message text, and numbers and email addresses in titles are removed first.",
       "basedOn": "Based on: {kinds}. Only what your role lets you see is counted.",
       "basedOnNone": "Based on the company details only: your role does not show contacts, deals, tasks or conversations.",
       "errors": {

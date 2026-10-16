@@ -55,7 +55,6 @@ export interface BriefFacts {
     hasOwner: boolean;
   };
   properties: Array<{ label: string; value: string }>;
-  notes: string | null;
   contacts: null | {
     total: number;
     byStage: Record<string, number>;
@@ -88,11 +87,10 @@ export interface BriefFacts {
 export const BRIEF_PROPERTIES_MAX = 30;
 export const BRIEF_VALUE_MAX = 200;
 export const BRIEF_TITLE_MAX = 80;
-export const BRIEF_NOTES_MAX = 500;
 export const BRIEF_LIST_MAX = 10;
 
 export const sourcesOf = (facts: BriefFacts): CompanyBriefSources => ({
-  properties: facts.properties.length > 0 || facts.notes !== null,
+  properties: facts.properties.length > 0,
   contacts: facts.contacts !== null,
   deals: facts.deals !== null,
   tasks: facts.tasks !== null,

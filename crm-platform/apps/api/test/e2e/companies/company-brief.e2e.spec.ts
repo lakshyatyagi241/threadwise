@@ -19,7 +19,10 @@ let h: Harness;
 let api: DealsApi;
 let t: Tenant;
 let fake: Server;
-let received: Array<{ auth: string | undefined; body: { messages: Array<{ role: string; content: string }> } }> = [];
+let received: Array<{
+  auth: string | undefined;
+  body: { messages: Array<{ role: string; content: string }> };
+}> = [];
 let mode: 'ok' | 'http500' | 'prose' = 'ok';
 
 const BRIEF = {
@@ -46,7 +49,11 @@ beforeAll(async () => {
       res.setHeader('content-type', 'application/json');
       res.end(
         JSON.stringify({
-          choices: [{ message: { content: mode === 'prose' ? 'Sure, here you go!' : JSON.stringify(BRIEF) } }],
+          choices: [
+            {
+              message: { content: mode === 'prose' ? 'Sure, here you go!' : JSON.stringify(BRIEF) },
+            },
+          ],
           usage: { prompt_tokens: 321, completion_tokens: 54 },
         }),
       );
@@ -81,7 +88,8 @@ beforeEach(() => {
 });
 
 const code = (res: { body: { code?: string } }) => res.body.code;
-const sentToModel = () => received.map((r) => r.body.messages.map((m) => m.content).join('\n')).join('\n');
+const sentToModel = () =>
+  received.map((r) => r.body.messages.map((m) => m.content).join('\n')).join('\n');
 let phone = 8_000_000;
 const nextPhone = () => `+9198${String(phone++).padStart(8, '0')}`;
 
@@ -101,15 +109,18 @@ beforeAll(async () => {
       .send({ moduleKey: 'companies', sectionId: section.body.id, ...body });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
   }
-  const created = await api.as(t.admin).post('/v2/companies').send({
-    name: 'Acme Ltd',
-    industry: 'Logistics',
-    email: 'accounts@acme.example',
-    phone: '+919800000001',
-    address: '12 Hidden Street',
-    notes: 'Ask for Aarav on aarav@acme.example or +91 98123 45678 about renewal',
-    customFields: { tier: 'gold', secret: 'hunter2-top-secret' },
-  });
+  const created = await api
+    .as(t.admin)
+    .post('/v2/companies')
+    .send({
+      name: 'Acme Ltd',
+      industry: 'Logistics',
+      email: 'accounts@acme.example',
+      phone: '+919800000001',
+      address: '12 Hidden Street',
+      notes: 'Ask for Aarav on aarav@acme.example or +91 98123 45678 about renewal',
+      customFields: { tier: 'gold', secret: 'hunter2-top-secret' },
+    });
   expect(created.status, JSON.stringify(created.body)).toBe(201);
   acme = created.body;
   for (const [name, email] of [
@@ -136,6 +147,15 @@ beforeAll(async () => {
   expect(task.status, JSON.stringify(task.body)).toBe(201);
 }, 120_000);
 
+/** Moves the briefs back in time (the touch trigger stamps every update, so it is switched off for this one statement). */
+async function ageBriefs() {
+  await h.owner.query(`ALTER TABLE company_briefs DISABLE TRIGGER trg_company_briefs_touch`);
+  await h.owner.query(
+    `UPDATE company_briefs SET updated_at = now() - interval '5 minutes' WHERE org_id = $1`,
+    [t.orgId],
+  );
+  await h.owner.query(`ALTER TABLE company_briefs ENABLE TRIGGER trg_company_briefs_touch`);
+}
 const state = (token = t.admin, id = acme.id) => api.as(token).get(`/v2/companies/${id}/brief`);
 const generate = (body: object = {}, token = t.admin, id = acme.id) =>
   api.as(token).post(`/v2/companies/${id}/brief`).send(body);
@@ -161,7 +181,10 @@ describe('Generate brief', () => {
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.cached).toBe(false);
     expect(res.body.brief.content.summary).toBe(BRIEF.summary);
-    expect(res.body.brief.content.sections.map((s: { key: string }) => s.key)).toEqual(['deals', 'nextSteps']);
+    expect(res.body.brief.content.sections.map((s: { key: string }) => s.key)).toEqual([
+      'deals',
+      'nextSteps',
+    ]);
     expect(res.body.brief.stale).toBe(false);
 
     expect(received).toHaveLength(1);
@@ -185,8 +208,9 @@ describe('Generate brief', () => {
     ]) {
       expect(sent, secret).not.toContain(secret);
     }
-    expect(sent).toContain('[email]');
-    expect(sent).toContain('[number]');
+    // the company notes (free text that names people) are not sent at all
+    expect(sent).not.toContain('renewal about');
+    expect(sent).not.toContain('Ask for');
   });
 
   it('meters the tokens against the workspace and audits the generation without the facts', async () => {
@@ -231,18 +255,18 @@ describe('Generate brief', () => {
   });
 
   it('regenerates once the cooldown has passed, replacing the stored brief', async () => {
-    await h.owner.query(
-      `UPDATE company_briefs SET updated_at = now() - interval '5 minutes' WHERE org_id = $1`,
-      [t.orgId],
-    );
+    await ageBriefs();
     const res = await generate({ regenerate: true });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.cached).toBe(false);
     expect(received).toHaveLength(1);
     expect(sentToModel()).toContain('Prepare the renewal call');
     expect(
-      (await h.owner.query(`SELECT count(*)::int AS n FROM company_briefs WHERE org_id = $1`, [t.orgId]))
-        .rows[0].n,
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM company_briefs WHERE org_id = $1`, [
+          t.orgId,
+        ])
+      ).rows[0].n,
     ).toBe(1);
   });
 
@@ -294,7 +318,7 @@ describe('Generate brief', () => {
   });
 
   it('a failing provider is a 502 that keeps the stored brief', async () => {
-    await h.owner.query(`UPDATE company_briefs SET updated_at = now() - interval '5 minutes' WHERE org_id = $1`, [t.orgId]);
+    await ageBriefs();
     mode = 'http500';
     const res = await generate({ regenerate: true });
     expect(res.status).toBe(502);
@@ -303,6 +327,7 @@ describe('Generate brief', () => {
   });
 
   it('an answer that is not a brief is a 502 too', async () => {
+    await ageBriefs();
     mode = 'prose';
     const res = await generate({ regenerate: true });
     expect(res.status).toBe(502);
@@ -313,8 +338,11 @@ describe('Generate brief', () => {
     const del = await api.as(t.admin).delete(`/v2/companies/${acme.id}`);
     expect(del.status).toBe(204);
     expect(
-      (await h.owner.query(`SELECT count(*)::int AS n FROM company_briefs WHERE org_id = $1`, [t.orgId]))
-        .rows[0].n,
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM company_briefs WHERE org_id = $1`, [
+          t.orgId,
+        ])
+      ).rows[0].n,
     ).toBe(0);
   });
 });

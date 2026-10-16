@@ -156,7 +156,7 @@ it is tied to its sort (a `created` cursor against `sort=name` is `400`). A dama
 ([segments.md](segments.md#fields-and-their-operators)): the same predicates, so text, number, date, option, multi-select and checkbox
 properties filter as they do on contacts. The property must exist, be active, stored (not a formula) and not masked, and the operator
 must suit its kind, else `422 COMPANY_FILTER_INVALID` with the path (`props.0.key`, `props.1`); malformed JSON or more than 10
-conditions is `400`. A company with no value is "empty": `is_empty` and the `not_*` operators hold for it.
+conditions is `422 VALIDATION_FAILED` (as is `sort=property` without `sortKey`). A company with no value is "empty": `is_empty` and the `not_*` operators hold for it.
 
 `sort=property&sortKey=seats` orders by a property: text and options case-insensitively, numbers, dates and checkboxes by value, and a
 company with no value takes the lowest key (first when ascending, last when descending). A multi-select has no order (`422`). The
@@ -304,8 +304,8 @@ person who asks** and it is shown on the company page; there is no public link (
   caller may not read is left out and `sources` says so. Because the result depends on the caller, the stored brief is per company and
   per person (`company_briefs`, unique on `(org_id, company_id, user_id)`), also the cache.
 - **What is sent to the model.** Counts, dates, amounts, lifecycle stages, stage names, short titles of deals and tasks, the company's
-  name, industry, size, notes and property values. Never a contact's name, email, phone or address, the company's own email, phone or
-  address, or the text of any message. Titles, notes and values are cut and have emails and runs of seven or more digits replaced by
+  name, industry, size and property values. Never a contact's name, email, phone or address, the company's own email, phone or
+  address, the company's notes (free text that often names people), or the text of any message. Titles and values are cut and have emails and runs of seven or more digits replaced by
   `[email]` and `[number]` (`maskPersonalText`). The facts go in as data and the prompt tells the model to ignore instructions inside
   them; its answer is parsed strictly (unknown sections, repeats and empty bullets dropped) and rendered as text.
 - **Audit and privacy.** An audit row (module `company_briefs`, the company id) records who generated, the provider, model, which side
@@ -320,4 +320,4 @@ person who asks** and it is shown on the company page; there is no public link (
 
 ## Not built here
 
-Reference's public brief link and PDF (`/b/{token}`, `/b/{token}/pdf`) and briefs for a contact or a deal (BL-212). The AI copilot's other company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`. A company saved view / saved filter (the list's state lives in the address; segments are of contacts). See "Not built here" in the inventory.
+Reference's public brief link and PDF (`/b/{token}`, `/b/{token}/pdf`) and briefs for a contact or a deal (BL-224). The AI copilot's other company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`. A company saved view / saved filter (the list's state lives in the address; segments are of contacts). See "Not built here" in the inventory.

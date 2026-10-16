@@ -402,6 +402,7 @@ import { TagsService } from './tags/tags.service';
     ContactActivitiesService,
     ContactMeetingsService,
     CompaniesService,
+    CompaniesRepository,
     DealsService,
     PipelinesService,
     TasksService,

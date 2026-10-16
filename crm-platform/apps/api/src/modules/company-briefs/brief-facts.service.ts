@@ -21,7 +21,6 @@ import {
 import { visibleToSql } from '../team-inbox-conversations';
 import {
   BRIEF_LIST_MAX,
-  BRIEF_NOTES_MAX,
   BRIEF_PROPERTIES_MAX,
   BRIEF_TITLE_MAX,
   BRIEF_VALUE_MAX,
@@ -47,8 +46,8 @@ function valueText(value: unknown): string {
  * `sources`), and the contacts, deals, tasks and conversations counted are those their scope shows them.
  *
  * What is NOT read at all: a contact's name, email, phone or address, the text of any message, and the company's email, phone and
- * address. Short texts that remain (a deal or task title, the company's notes, a property value) are masked of emails and numbers
- * (`maskPersonalText`) and cut. The result is data for a prompt, never shown as is.
+ * address, nor the company's notes (free text that often names people). Short texts that remain (a deal or task title, a property
+ * value) are masked of emails and numbers (`maskPersonalText`) and cut. The result is data for a prompt, never shown as is.
  */
 @Injectable()
 export class BriefFactsService {
@@ -95,7 +94,6 @@ export class BriefFactsService {
         hasOwner: company.owner !== null,
       },
       properties: this.properties(company, defs),
-      notes: company.notes ? maskPersonalText(company.notes, BRIEF_NOTES_MAX) || null : null,
       contacts: contactsRead.allowed ? await this.contacts(companyId, contactScope) : null,
       deals: await this.dealsOf(uuid, company, grants),
       tasks: await this.tasksOf(uuid, grants),
@@ -218,10 +216,10 @@ export class BriefFactsService {
     const row = await this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT count(*)::int AS total,
-               (count(*) FILTER (WHERE c.inbox_status = 'open'))::int AS open,
+               (count(*) FILTER (WHERE c.status = 'open'))::int AS open,
                max(c.last_message_at) AS last_at
         FROM conversations c
-        WHERE c.org_id = ${ctx.orgId}
+        WHERE c.org_id = ${ctx.orgId} AND NOT c.archived
           AND c.contact_id IN (
             SELECT contacts.id FROM contacts
             WHERE contacts.org_id = ${ctx.orgId} AND contacts.company_id = ${companyId} AND contacts.is_archived = false${scope})

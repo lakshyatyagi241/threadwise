@@ -1,16 +1,20 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   generateCompanyBriefSchema,
   type GenerateCompanyBriefInput,
   type RecordScope,
 } from '@crm/contracts';
-import {
-  ActorKinds,
-  GrantedScope,
-  Idempotent,
-  RequirePermission,
-} from '../../common/decorators';
+import { ActorKinds, GrantedScope, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { Throttle } from '../platform-infrastructure';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';

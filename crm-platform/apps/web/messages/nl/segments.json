@@ -29,7 +29,8 @@
       "journey": "Traject",
       "who": "Wie",
       "activity": "Activiteit",
-      "properties": "Eigenschappen"
+      "properties": "Eigenschappen",
+      "company": "Bedrijfseigenschap"
     },
     "operators": {
       "equals": "is",

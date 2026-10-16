@@ -3,7 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
   isUsableProperty,
   stageChoices,
@@ -65,19 +64,13 @@ export function useSegmentCatalog(): SegmentCatalog {
   const groups = useGroups();
   const fields = useContactFields();
   const people = usePeople();
-  // Company properties are offered to someone who may read their definitions; without it the group is simply absent.
-  const canCompanyProps = useCan('record.company-properties.read');
-  const companyFields = useModuleFields('companies', false, canCompanyProps);
+  // Company properties are offered to someone who may read their definitions; a refusal just leaves the group out (it is not a failure
+  // of the builder, so it is not counted in `ready` or `failed`).
+  const companyFields = useModuleFields('companies', false);
 
-  const all = [
-    statusOptions,
-    tags,
-    groups,
-    fields,
-    people,
-    ...(canCompanyProps ? [companyFields] : []),
-  ];
-  const ready = all.every((q) => q.isSuccess || q.isError);
+  const all = [statusOptions, tags, groups, fields, people];
+  // A rule on a company property is judged deleted only once the company properties have answered (or been refused).
+  const ready = [...all, companyFields].every((q) => q.isSuccess || q.isError);
   const failed = all.some((q) => q.isError);
 
   const lookups = useMemo<Lookups>(

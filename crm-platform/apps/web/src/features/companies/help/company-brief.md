@@ -25,8 +25,8 @@ You can also ask the AI CRM Copilot to generate the brief of a company by name.
 ## What it is written from
 
 - Only what you can already see. Your record scopes decide which contacts, deals, tasks and conversations are counted, and a kind of record you may not read is left out. The card says which kinds the brief was based on.
-- Counts, dates, amounts and short titles of deals and tasks, the company's industry, size, notes and properties.
-- The model never receives contact names, email addresses, phone numbers or the text of any message, nor the company's own email, phone or address. Numbers and email addresses inside titles and notes are removed before anything is sent.
+- Counts, dates, amounts and short titles of deals and tasks, and the company's industry, size and properties.
+- The model never receives contact names, email addresses, phone numbers or the text of any message, nor the company's own email, phone, address or notes. Numbers and email addresses inside titles and property values are removed before anything is sent. A title you typed can still hold a name, so keep names out of deal and task titles if that matters to you.
 - A brief belongs to you. A colleague gets their own when they ask, written from what they can see. There is no public link to share.
 
 ## Options and settings

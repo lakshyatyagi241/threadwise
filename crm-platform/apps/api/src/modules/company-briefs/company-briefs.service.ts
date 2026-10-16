@@ -57,8 +57,8 @@ interface ResolvedAi {
  *
  *   1. the company must be inside the caller's scope (404 otherwise), and the facts are read as the caller;
  *   2. the same facts within a day return the stored brief and call nothing (`regenerate` skips this);
- *   3. a second generation within 30 seconds is refused (429), so a double click or a loop costs one call;
- *   4. no key available is 422 COMPANY_BRIEF_AI_UNAVAILABLE and nothing is sent anywhere;
+ *   3. no key available is 422 COMPANY_BRIEF_AI_UNAVAILABLE and nothing is sent anywhere;
+ *   4. a second generation within 30 seconds is refused (429), so a double click or a loop costs one call;
  *   5. the answer must be a brief; one that is not is 502 and the previous brief is kept.
  *
  * The audit trail records who generated a brief for which company, with the model and token counts, and never the facts or the text.
@@ -111,14 +111,6 @@ export class CompanyBriefsService {
     if (existing && !input.regenerate && existing.inputHash === hash && age < BRIEF_CACHE_MS) {
       return { brief: this.toBrief(existing, hash, gathered.facts), cached: true };
     }
-    if (existing && age < BRIEF_COOLDOWN_MS) {
-      throw new AppError(
-        ERROR_CODES.COMPANY_BRIEF_RATE_LIMITED,
-        'A brief was written for this company a moment ago. Wait a little before asking again.',
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-
     const resolved = await this.resolveAi(ctx.orgId);
     if (!resolved) {
       throw new AppError(
@@ -129,6 +121,14 @@ export class CompanyBriefsService {
         true,
       );
     }
+    if (existing && age < BRIEF_COOLDOWN_MS) {
+      throw new AppError(
+        ERROR_CODES.COMPANY_BRIEF_RATE_LIMITED,
+        'A brief was written for this company a moment ago. Wait a little before asking again.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
     // Tokens billed to the platform's key count against the workspace's monthly allowance; its own key does not.
     if (resolved.source === 'admin') await this.meter.guard(ctx.orgId);
 
@@ -225,7 +225,12 @@ export class CompanyBriefsService {
       for (const provider of PROVIDERS) {
         const r = await this.keys.resolve(orgId, provider);
         if (r.key && r.source === wanted) {
-          return { provider, model: r.model ?? DEFAULT_MODEL[provider], key: r.key, source: wanted };
+          return {
+            provider,
+            model: r.model ?? DEFAULT_MODEL[provider],
+            key: r.key,
+            source: wanted,
+          };
         }
       }
     }

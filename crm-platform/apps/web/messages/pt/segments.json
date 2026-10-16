@@ -29,7 +29,8 @@
       "journey": "Jornada",
       "who": "Quem",
       "activity": "Atividade",
-      "properties": "Propriedades"
+      "properties": "Propriedades",
+      "company": "Propriedade da empresa"
     },
     "operators": {
       "equals": "é",

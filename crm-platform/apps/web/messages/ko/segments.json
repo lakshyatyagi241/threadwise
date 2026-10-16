@@ -29,7 +29,8 @@
       "journey": "여정",
       "who": "대상",
       "activity": "활동",
-      "properties": "속성"
+      "properties": "속성",
+      "company": "회사 속성"
     },
     "operators": {
       "equals": "같음",

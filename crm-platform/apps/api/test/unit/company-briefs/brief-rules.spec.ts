@@ -11,9 +11,14 @@ import {
 } from '../../../src/modules/company-briefs/brief-rules';
 
 const facts = (over: Partial<BriefFacts> = {}): BriefFacts => ({
-  company: { name: 'Acme Ltd', industry: 'Logistics', size: '51-200', createdOn: '2026-01-02', hasOwner: true },
+  company: {
+    name: 'Acme Ltd',
+    industry: 'Logistics',
+    size: '51-200',
+    createdOn: '2026-01-02',
+    hasOwner: true,
+  },
   properties: [{ label: 'Tier', value: 'gold' }],
-  notes: null,
   contacts: { total: 3, byStage: { lead: 2, customer: 1 }, lastActivityOn: '2026-10-01' },
   deals: {
     open: 1,
@@ -30,9 +35,9 @@ const facts = (over: Partial<BriefFacts> = {}): BriefFacts => ({
 
 describe('maskPersonalText (what may leave the product)', () => {
   it('replaces emails and numbers people can be reached on', () => {
-    expect(maskPersonalText('Mail aarav.sharma@example.com or call +91 98123 45678 today', 200)).toBe(
-      'Mail [email] or call [number] today',
-    );
+    expect(
+      maskPersonalText('Mail aarav.sharma@example.com or call +91 98123 45678 today', 200),
+    ).toBe('Mail [email] or call [number] today');
     expect(maskPersonalText('Card 4111 1111 1111 1111, ext 12', 200)).toBe('Card [number], ext 12');
   });
 
@@ -71,8 +76,16 @@ describe('the facts', () => {
       conversations: true,
     });
     expect(
-      sourcesOf(facts({ properties: [], notes: null, contacts: null, deals: null, tasks: null, conversations: null })),
-    ).toEqual({ properties: false, contacts: false, deals: false, tasks: false, conversations: false });
+      sourcesOf(
+        facts({ properties: [], contacts: null, deals: null, tasks: null, conversations: null }),
+      ),
+    ).toEqual({
+      properties: false,
+      contacts: false,
+      deals: false,
+      tasks: false,
+      conversations: false,
+    });
   });
 
   it('dayOf keeps a day and nothing finer', () => {

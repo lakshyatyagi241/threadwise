@@ -183,6 +183,7 @@ describe('the rollup (TW-CTP-003, 004)', () => {
       displayId: 'COM-00001',
       name: 'Acme',
       nameKey: 'acme',
+      sortKey: null,
       createdAtIso: '2026-10-05T10:00:00.000000Z',
       website: 'acme.test',
       email: null,
