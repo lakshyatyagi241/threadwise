@@ -24,7 +24,7 @@ function fakeProvider(name: string, over: Partial<Record<string, unknown>> = {})
       connected: state.connected,
       account: state.connected ? `${name}@example.com` : null,
     })),
-    freeBusy: vi.fn(async () => {
+    freeBusy: vi.fn(async (..._args: unknown[]) => {
       if (state.fail) throw new Error(`${name} is down`);
       return state.busy;
     }),
