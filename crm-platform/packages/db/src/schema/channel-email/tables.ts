@@ -283,7 +283,7 @@ export const mailOutboundAttachments = pgTable(
 
 /**
  * The Email channel's ledger of the mail it already wrote onto a contact's timeline (E-19): `dedupeKey` is `<mailbox uuid>:in:<provider
- * message id>` or `<mailbox uuid>:out:<Message-ID>`. Mirrors migrations/20261222090000_mail_timeline_entries.sql.
+ * message id>` or `<mailbox uuid>:out:<Message-ID>`. Mirrors migrations/20261225090000_mail_timeline_entries.sql.
  */
 export const mailTimelineEntries = pgTable(
   'mail_timeline_entries',
