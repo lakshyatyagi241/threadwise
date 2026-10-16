@@ -236,6 +236,22 @@ export class WidgetPublicController {
     res.status(200).json({ ok: true, visitor_uuid: out.visitorUuid });
   }
 
+  /** The visitor's stars for the chat, given when they chose Close this chat. */
+  @Post('api/rating')
+  async rating(
+    @Param('token') token: string,
+    @Query('visitor_uuid') queryUuid: string | undefined,
+    @Body() body: Record<string, unknown> | undefined,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const inputUuid =
+      queryUuid ?? (typeof body?.visitor_uuid === 'string' ? body.visitor_uuid : undefined);
+    res.status(200).json(await this.widgets.rate(token, this.publicRequest(req, inputUuid), body));
+  }
+
   @Get('api/history')
   async history(
     @Param('token') token: string,

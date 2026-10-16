@@ -57,6 +57,13 @@ body { display: flex; flex-direction: column; background: #fff; }
 .pop[hidden] { display: none; }
 .pop.at-start { inset-inline-end: auto; inset-inline-start: 10px; }
 .pop .mi { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; text-align: start; font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 10px; border-radius: 10px; cursor: pointer; color: inherit; text-decoration: none; }
+.rate { position: absolute; inset: 0; z-index: 8; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 24px; text-align: center; background: rgba(255,255,255,.96); color: #20222e; }
+.rate[hidden] { display: none; }
+.rate .rt { font-size: 16px; font-weight: 700; }
+.rate .stars { display: flex; gap: 6px; direction: ltr; }
+.rate .star { border: 0; background: transparent; cursor: pointer; padding: 2px; color: #c9ccdc; line-height: 0; }
+.rate .star.on { color: #f5a623; }
+.rate .skip { border: 0; background: transparent; color: #6b6f86; font: inherit; font-size: 13px; cursor: pointer; padding: 6px 10px; text-decoration: underline; }
 #endpop { width: auto; min-width: 210px; gap: 2px; }
 #endpop .mi svg { flex: none; opacity: .75; }
 .pop .mi:hover { background: var(--accent-soft); color: var(--accent); }
@@ -208,6 +215,7 @@ const SCRIPT = `
   var API_HIS = BASE + 'history';
   var API_UP = BASE + 'upload';
   var API_FB = BASE + 'feedback';
+  var API_RATE = BASE + 'rating';
 
   // The visitor id lives in the iframe's own localStorage, not only in a cookie: the page runs in a cross-site frame where
   // third-party cookies are often blocked, and without it every visit would start a new conversation.
@@ -423,6 +431,35 @@ const SCRIPT = `
   function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; $('endpop').hidden = true; }
   // Close this chat / Restart this chat: the server makes a fresh visitor (a fresh conversation), the window keeps its id and
   // loads again. Close also asks the site to hide the panel. The Customize preview has no conversation, so it only hides.
+  // Close this chat first asks for stars (1 to 5), once a conversation has begun; Skip, or a tap on a star, then closes.
+  function askRating() {
+    closePops();
+    if (PREVIEW || !visitorSpoke) { startOver(true); return; }
+    var box = $('ratebox');
+    box.textContent = '';
+    var t = document.createElement('div'); t.className = 'rt'; t.textContent = tx('rateTitle', 'How was this chat?'); box.appendChild(t);
+    var row = document.createElement('div'); row.className = 'stars'; row.setAttribute('role', 'group'); row.setAttribute('aria-label', tx('rateTitle', 'How was this chat?'));
+    var stars = [];
+    function lit(n) { stars.forEach(function (s, i) { s.classList.toggle('on', i < n); }); }
+    for (var n = 1; n <= 5; n++) (function (n) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'star'; b.setAttribute('aria-label', String(n));
+      var s = svg(30, ['M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z']); s.setAttribute('fill', 'currentColor'); b.appendChild(s);
+      b.onmouseenter = function () { lit(n); }; b.onfocus = function () { lit(n); }; b.onmouseleave = function () { lit(0); };
+      b.onclick = function () {
+        lit(n);
+        var payload = { rating: n }, vid = storedUuid();
+        if (vid) payload.visitor_uuid = vid;
+        fetch(API_RATE, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+          .catch(function () {}).then(function () { startOver(true); });
+      };
+      stars.push(b); row.appendChild(b);
+    })(n);
+    box.appendChild(row);
+    var sk = document.createElement('button'); sk.type = 'button'; sk.className = 'skip'; sk.textContent = tx('rateSkip', 'Skip'); sk.onclick = function () { startOver(true); };
+    box.appendChild(sk);
+    box.hidden = false;
+    stars[4].focus();
+  }
   function startOver(hide) {
     closePops();
     function done() {
@@ -930,7 +967,7 @@ const SCRIPT = `
         mi.type = 'button'; mi.className = 'mi'; mi.setAttribute('role', 'menuitem');
         mi.appendChild(svg(16, o[3]));
         var sp = document.createElement('span'); sp.textContent = tx(o[0], o[1]); mi.appendChild(sp);
-        mi.onclick = function () { startOver(o[2]); };
+        mi.onclick = function () { if (o[2]) askRating(); else startOver(false); };
         ep.appendChild(mi);
       });
       x.onclick = function (e) { e.stopPropagation(); var on = ep.hidden; closePops(); ep.hidden = !on; };
@@ -1232,6 +1269,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <header class="header" id="hdr"></header>
 <div class="pop" id="menupop" hidden role="menu"></div>
 <div class="pop" id="endpop" hidden role="menu"></div>
+<div class="rate" id="ratebox" hidden role="dialog" aria-modal="true"></div>
 <div class="pop" id="noticepop" hidden></div>
 <div class="banner" id="banner" hidden></div>
 <div class="stage">

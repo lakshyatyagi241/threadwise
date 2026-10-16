@@ -54,6 +54,8 @@ export const CHAT_TEXT_KEYS = [
   'pipYes',
   'closeThis',
   'restartThis',
+  'rateTitle',
+  'rateSkip',
 ] as const;
 export type ChatTextKey = (typeof CHAT_TEXT_KEYS)[number];
 
@@ -113,6 +115,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Float the chat',
     'Close this chat',
     'Restart this chat',
+    'How was this chat?',
+    'Skip',
   ]),
   ar: row([
     'متصل',
@@ -166,6 +170,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'تعويم الدردشة',
     'إغلاق هذه الدردشة',
     'إعادة تشغيل هذه الدردشة',
+    'كيف كانت هذه الدردشة؟',
+    'تخطي',
   ]),
   bn: row([
     'অনলাইন',
@@ -219,6 +225,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'চ্যাট ভাসমান করুন',
     'এই চ্যাট বন্ধ করুন',
     'এই চ্যাট আবার শুরু করুন',
+    'এই চ্যাটটি কেমন ছিল?',
+    'এড়িয়ে যান',
   ]),
   de: row([
     'Online',
@@ -272,6 +280,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Chat schweben lassen',
     'Diesen Chat schließen',
     'Diesen Chat neu starten',
+    'Wie war dieser Chat?',
+    'Überspringen',
   ]),
   es: row([
     'En línea',
@@ -325,6 +335,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Chat flotante',
     'Cerrar este chat',
     'Reiniciar este chat',
+    '¿Cómo fue este chat?',
+    'Omitir',
   ]),
   fr: row([
     'En ligne',
@@ -378,6 +390,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Détacher le chat',
     'Fermer ce chat',
     'Redémarrer ce chat',
+    'Comment était ce chat ?',
+    'Passer',
   ]),
   he: row([
     'מחובר',
@@ -431,6 +445,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     "הצג את הצ'אט בחלון צף",
     'סגירת הצ׳אט הזה',
     'התחלת הצ׳אט מחדש',
+    'איך היה הצ׳אט הזה?',
+    'דלג',
   ]),
   hi: row([
     'ऑनलाइन',
@@ -484,6 +500,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'चैट को फ़्लोट करें',
     'यह चैट बंद करें',
     'यह चैट फिर से शुरू करें',
+    'यह चैट कैसी रही?',
+    'छोड़ें',
   ]),
   id: row([
     'Online',
@@ -537,6 +555,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Lepaskan obrolan',
     'Tutup obrolan ini',
     'Mulai ulang obrolan ini',
+    'Bagaimana obrolan ini?',
+    'Lewati',
   ]),
   it: row([
     'Online',
@@ -590,6 +610,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Chat flottante',
     'Chiudi questa chat',
     'Riavvia questa chat',
+    'Com’è andata questa chat?',
+    'Salta',
   ]),
   ja: row([
     'オンライン',
@@ -643,6 +665,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'チャットをフロート表示',
     'このチャットを閉じる',
     'このチャットを再開する',
+    'このチャットはいかがでしたか？',
+    'スキップ',
   ]),
   ko: row([
     '온라인',
@@ -696,6 +720,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     '채팅 창 띄우기',
     '이 채팅 닫기',
     '이 채팅 다시 시작',
+    '이 채팅은 어땠나요?',
+    '건너뛰기',
   ]),
   nl: row([
     'Online',
@@ -749,6 +775,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Chat laten zweven',
     'Deze chat sluiten',
     'Deze chat opnieuw starten',
+    'Hoe was deze chat?',
+    'Overslaan',
   ]),
   pl: row([
     'Online',
@@ -802,6 +830,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Oderwij czat',
     'Zamknij ten czat',
     'Zacznij ten czat od nowa',
+    'Jak oceniasz ten czat?',
+    'Pomiń',
   ]),
   pt: row([
     'Online',
@@ -855,6 +885,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Chat flutuante',
     'Fechar este chat',
     'Reiniciar este chat',
+    'Como foi este chat?',
+    'Pular',
   ]),
   ru: row([
     'В сети',
@@ -908,6 +940,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Вынести чат в окно',
     'Закрыть этот чат',
     'Начать этот чат заново',
+    'Как вам этот чат?',
+    'Пропустить',
   ]),
   th: row([
     'ออนไลน์',
@@ -961,6 +995,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'แยกหน้าต่างแชท',
     'ปิดแชทนี้',
     'เริ่มแชทนี้ใหม่',
+    'แชทนี้เป็นอย่างไรบ้าง',
+    'ข้าม',
   ]),
   tr: row([
     'Çevrimiçi',
@@ -1014,6 +1050,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Sohbeti yüzdür',
     'Bu sohbeti kapat',
     'Bu sohbeti yeniden başlat',
+    'Bu sohbet nasıldı?',
+    'Atla',
   ]),
   ur: row([
     'آن لائن',
@@ -1067,6 +1105,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'چیٹ کو فلوٹ کریں',
     'یہ چیٹ بند کریں',
     'یہ چیٹ دوبارہ شروع کریں',
+    'یہ چیٹ کیسی رہی؟',
+    'چھوڑیں',
   ]),
   vi: row([
     'Trực tuyến',
@@ -1120,6 +1160,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Tách cửa sổ chat',
     'Đóng cuộc trò chuyện này',
     'Bắt đầu lại cuộc trò chuyện này',
+    'Cuộc trò chuyện này thế nào?',
+    'Bỏ qua',
   ]),
   'zh-CN': row([
     '在线',
@@ -1173,6 +1215,8 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     '悬浮聊天',
     '关闭此聊天',
     '重新开始此聊天',
+    '这次聊天怎么样？',
+    '跳过',
   ]),
 };
 

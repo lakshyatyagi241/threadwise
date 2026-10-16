@@ -363,6 +363,12 @@ export const widgetFeedbackRequestSchema = z.object({
 });
 export type WidgetFeedbackRequest = z.infer<typeof widgetFeedbackRequestSchema>;
 
+/** `POST /widget/<token>/api/rating`: the visitor's stars (1 to 5) for the chat, asked when they choose Close this chat. */
+export const widgetRatingRequestSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+});
+export type WidgetRatingRequest = z.infer<typeof widgetRatingRequestSchema>;
+
 /** The kinds of file a flow bot can show in the chat window. */
 export const WIDGET_MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 export type WidgetMediaKind = (typeof WIDGET_MEDIA_KINDS)[number];

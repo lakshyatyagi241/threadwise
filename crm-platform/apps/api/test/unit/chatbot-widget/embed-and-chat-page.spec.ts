@@ -259,6 +259,8 @@ describe('the cross: Close this chat and Restart this chat', () => {
       expect(page).toContain("'closeThis', 'Close this chat'");
       expect(page).toContain("'restartThis', 'Restart this chat'");
       expect(page).toContain("BASE + 'restart'");
+      expect(page).toContain("BASE + 'rating'");
+      expect(page).toContain('id="ratebox"');
     }
   });
 });

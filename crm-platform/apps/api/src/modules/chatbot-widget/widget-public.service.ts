@@ -5,6 +5,7 @@ import { sql } from 'drizzle-orm';
 import {
   toPublicLauncher,
   widgetFeedbackRequestSchema,
+  widgetRatingRequestSchema,
   widgetMessageRequestSchema,
   type WidgetHistoryResponse,
   type WidgetMessageRequest,
@@ -631,6 +632,28 @@ export class WidgetPublicService {
       }),
     );
     return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
+  /**
+   * The visitor's stars for the chat, asked on Close this chat. It is kept as the conversation's satisfaction answer (the one the
+   * dashboards read); a conversation takes one rating, and a visitor with no conversation yet has nothing to rate.
+   */
+  async rate(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
+    const parsed = widgetRatingRequestSchema.safeParse(rawBody ?? {});
+    if (!parsed.success)
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      const conversationId = resolved?.visitor.conversationId ?? null;
+      if (conversationId === null) throw notFound();
+      await tx.execute(sql`
+        INSERT INTO csat_responses (org_id, conversation_id, rating, sent_at, responded_at)
+        SELECT ${orgId}, ${conversationId}, ${parsed.data.rating}, now(), now()
+        WHERE NOT EXISTS (SELECT 1 FROM csat_responses
+                          WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND rating IS NOT NULL)`);
+    });
+    return { ok: true };
   }
 
   async feedback(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {

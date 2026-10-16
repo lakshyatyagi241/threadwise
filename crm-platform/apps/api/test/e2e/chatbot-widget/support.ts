@@ -150,6 +150,8 @@ export class WidgetApi extends Api {
           .set(from(headers)),
       message: (body: Record<string, unknown>, headers: Record<string, string> = {}) =>
         http().post(`/widget/${token}/api/message`).set(from(headers)).send(body),
+      rating: (body: Record<string, unknown>, headers: Record<string, string> = {}) =>
+        http().post(`/widget/${token}/api/rating`).set(from(headers)).send(body),
       restart: (headers: Record<string, string> = {}) =>
         http().post(`/widget/${token}/api/restart`).set(from(headers)).send({}),
       history: (uuid: string | undefined, since = 0, headers: Record<string, string> = {}) =>

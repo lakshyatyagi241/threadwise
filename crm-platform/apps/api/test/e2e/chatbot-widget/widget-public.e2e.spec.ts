@@ -854,6 +854,34 @@ describe('Restart this chat / Close this chat', () => {
     expect(again.body.messages ?? []).toEqual([]);
   });
 
+  it('keeps the stars asked on Close as the conversation CSAT, once, and only after a chat began', async () => {
+    const { w } = await aiWidget({ name: 'Rating 1' });
+    const uuid = await api.visitor(w.embedToken);
+    expect((await api.pub(w.embedToken).rating({ rating: 5, visitor_uuid: uuid })).status).toBe(
+      404,
+    );
+    await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: uuid });
+    expect((await api.pub(w.embedToken).rating({ rating: 6, visitor_uuid: uuid })).status).toBe(
+      422,
+    );
+    expect((await api.pub(w.embedToken).rating({ rating: 5, visitor_uuid: uuid })).status).toBe(
+      200,
+    );
+    expect((await api.pub(w.embedToken).rating({ rating: 1, visitor_uuid: uuid })).status).toBe(
+      200,
+    );
+    const rows = await h.owner.query(
+      `SELECT rating FROM csat_responses WHERE org_id = $1 AND responded_at IS NOT NULL ORDER BY id DESC LIMIT 1`,
+      [t.orgId],
+    );
+    expect(rows.rows[0].rating).toBe(5);
+    const count = await h.owner.query(
+      `SELECT count(*)::int AS n FROM csat_responses c JOIN chatbot_widget_visitors v ON v.org_id = c.org_id AND v.conversation_id = c.conversation_id WHERE v.org_id = $1 AND v.visitor_uuid = $2`,
+      [t.orgId, uuid],
+    );
+    expect(count.rows[0].n).toBe(1);
+  });
+
   it('answers 404 for an unknown token', async () => {
     expect((await api.pub('nope-nope-nope').restart()).status).toBe(404);
   });
