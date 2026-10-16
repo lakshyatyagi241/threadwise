@@ -249,6 +249,39 @@ describe('RollupService', () => {
     expect(platform.map((r) => [r.bucket, r.n])).toEqual([['2026-10-01', 3]]);
   }, 120_000);
 
+  it('buckets a workspace with an unknown or missing timezone in UTC instead of failing the pass for everyone', async () => {
+    await reset();
+    const bogus = Number(
+      (
+        await owner.query(
+          `INSERT INTO organizations (slug, name) VALUES ('ru-bogus', 'x') RETURNING id`,
+        )
+      ).rows[0].id,
+    );
+    await setTz(bogus, 'Mars/Olympus_Mons');
+    const noSettings = Number(
+      (
+        await owner.query(
+          `INSERT INTO organizations (slug, name) VALUES ('ru-nosettings', 'x') RETURNING id`,
+        )
+      ).rows[0].id,
+    );
+    await owner.query(`DELETE FROM workspace_settings WHERE org_id = $1`, [noSettings]);
+    const occ = '2026-10-01T18:40:00Z';
+    await seed({ org: bogus, type: 3, rec: 0, occ, ck: 1, sk: 1 });
+    await seed({ org: noSettings, type: 3, rec: 1, occ, ck: 1, sk: 1 });
+    await seed({ org: kolkata, type: 3, rec: 2, occ, ck: 1, sk: 1 });
+
+    const pass = await svc.runOnce();
+    expect(pass!.slices).toBeGreaterThan(0);
+    expect((await dayRows(bogus, METRIC.MSG_COUNT)).map((r) => r.bucket)).toEqual(['2026-10-01']);
+    expect((await dayRows(noSettings, METRIC.MSG_COUNT)).map((r) => r.bucket)).toEqual([
+      '2026-10-01',
+    ]);
+    // The healthy workspace in the same slice is unaffected.
+    expect((await dayRows(kolkata, METRIC.MSG_COUNT)).map((r) => r.bucket)).toEqual(['2026-10-02']);
+  }, 120_000);
+
   it('counts both 01:30 events of a DST fall-back night on the same local day', async () => {
     await reset();
     await seed({ org: newYork, type: 3, rec: 0, occ: '2026-11-01T05:30:00Z', ck: 1, sk: 1 });

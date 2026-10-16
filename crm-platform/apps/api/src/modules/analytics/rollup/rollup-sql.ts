@@ -6,7 +6,12 @@ export type Grain = 'hour' | 'day';
 /** `org` writes one row set per workspace in its own timezone; `platform` writes org_id 0 rows across workspaces in UTC. */
 export type Scope = 'org' | 'platform';
 
-const ORG_TZ = sql`coalesce(ws.timezone, 'UTC')`;
+/**
+ * The workspace timezone, or UTC when it is missing or not a zone Postgres knows. The setting is free text up to 64 characters, and an
+ * unknown name makes AT TIME ZONE fail the whole statement: one bad value must never stall the rollup for every other workspace.
+ * (pg_timezone_names lists full names such as Asia/Kolkata; an abbreviation like IST is treated as unknown and falls back to UTC.)
+ */
+const ORG_TZ = sql`coalesce(tz.name, 'UTC')`;
 const UTC_TZ = sql`'UTC'`;
 
 const int = (n: number): SQL => {
@@ -50,7 +55,10 @@ export function rollupSelect(rule: RollupRule, grain: Grain, scope: Scope, windo
   );
   const extra = rule.where ? sql` AND ${sql.raw(rule.where)}` : sql``;
   const join =
-    scope === 'org' ? sql`LEFT JOIN workspace_settings ws ON ws.org_id = e.org_id` : sql``;
+    scope === 'org'
+      ? sql`LEFT JOIN workspace_settings ws ON ws.org_id = e.org_id
+      LEFT JOIN pg_timezone_names tz ON tz.name = ws.timezone`
+      : sql``;
   return sql`
     SELECT ${org} AS org_id, ${int(rule.metric)}::smallint AS metric, ${bucketExpr(grain, scope)} AS bucket,
            ${dimExpr(rule, 0)} AS d1, ${dimExpr(rule, 1)} AS d2, ${dimExpr(rule, 2)} AS d3,

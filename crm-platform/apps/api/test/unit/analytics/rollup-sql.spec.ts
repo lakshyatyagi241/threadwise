@@ -26,7 +26,8 @@ describe('rollupSelect', () => {
     const { sql: text } = render(rollupSelect(rule(METRIC.MSG_COUNT), 'hour', 'org', window));
     expect(text).toMatch(/from an_events e/i);
     expect(text).toMatch(/left join workspace_settings ws on ws\.org_id = e\.org_id/i);
-    expect(text).toMatch(/date_trunc\('hour', e\.occurred_at AT TIME ZONE coalesce\(ws\.timezone/i);
+    expect(text).toMatch(/left join pg_timezone_names tz on tz\.name = ws\.timezone/i);
+    expect(text).toMatch(/date_trunc\('hour', e\.occurred_at AT TIME ZONE coalesce\(tz\.name/i);
     expect(text).toMatch(/e\.type in \(1, 2, 3, 4, 5, 6\)/i);
     expect(text).toMatch(/e\.org_id as org_id/i);
   });

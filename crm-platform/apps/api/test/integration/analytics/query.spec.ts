@@ -4,11 +4,13 @@ import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { METRIC } from '@crm/contracts';
 import { createDbClient, runMigrations, withPrivileged, withTenant, type DbClient } from '@crm/db';
+import { sql } from 'drizzle-orm';
 import { AnalyticsQueryService } from '../../../src/modules/analytics/query/analytics-query.service';
 import {
   RollupService,
   type Privileged,
 } from '../../../src/modules/analytics/rollup/rollup.service';
+import { isolated, serve } from '../../../src/modules/analytics/shadow/metric-source';
 
 /**
  * AnalyticsQueryService against a real Postgres: rollup rows plus the live tail must equal a direct count of the events, wherever the
@@ -397,6 +399,26 @@ describe('AnalyticsQueryService', () => {
     expect((await owner.query(`SELECT to_regclass('public.an_events') AS t`)).rows[0].t).toBe(
       'an_events',
     );
+  }, 60_000);
+
+  it('shadow mode survives a rollup query that fails inside the caller transaction', async () => {
+    await reset();
+    const result = await asTenant(utcA, async (tx) => {
+      const served = await serve(
+        'm',
+        async () => (await tx.execute(sql`SELECT 1 AS one`)).rows.length,
+        // A SQL error here would abort the whole transaction if it were not isolated in a savepoint.
+        () =>
+          isolated(tx, async (inner) => {
+            await inner.execute(sql`SELECT * FROM a_table_that_does_not_exist`);
+            return 0;
+          }),
+        { source: 'shadow', onError: () => undefined },
+      );
+      const stillAlive = await tx.execute(sql`SELECT 2 AS two`);
+      return { served, stillAlive: stillAlive.rows.length };
+    });
+    expect(result).toEqual({ served: 1, stillAlive: 1 });
   }, 60_000);
 
   it('still answers when the cache is down', async () => {

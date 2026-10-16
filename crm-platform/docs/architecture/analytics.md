@@ -34,6 +34,10 @@ Nothing emits events yet and no screen reads a metric: Phase 1 hooks the message
 - **The watermark.** `an_rollup_state.recorded_before` says every event recorded earlier is already in the rollups. A pass adds the events in
   `[watermark, now - 60 s)` and moves the watermark in the same transaction, under an advisory lock. The 60 second lag is more than four times
   the statement timeout, so no open transaction can commit an event behind the watermark.
+- **The one thing the lag cannot cover.** A transaction that stays open longer than the lag (a very long import) and then commits an event that was
+  stamped earlier lands behind the watermark: neither the rollup pass nor the live tail sees it. The nightly reconcile reads everything below the
+  watermark, so it repairs the day rows the next night; the hour rows are not repaired. Keep event writes at the end of the business transaction.
+- **A bad timezone cannot stall the rollup.** The workspace timezone setting is free text; an unknown or missing value is bucketed in UTC.
 - **Business time versus insert time.** Buckets follow `occurred_at`; the scan follows `recorded_at`. A late event therefore adds to an older
   bucket, and replaying is impossible because the watermark moves with the upsert.
 - **Buckets are workspace-local.** Hour and day buckets use the workspace timezone from `workspace_settings` (India's +5:30 comes out right).

@@ -1,4 +1,5 @@
 import { Logger } from '@nestjs/common';
+import type { Tx } from '@crm/db';
 
 /**
  * Where a screen's number comes from while it moves onto the rollups (docs/superpowers/specs/2026-10-16-event-based-analytics-design.md,
@@ -51,8 +52,18 @@ export interface ServeOptions<T> {
 }
 
 /**
+ * Runs `fn` in a savepoint of the caller's transaction. A SQL error in the new query would otherwise abort the whole transaction and take
+ * the legacy answer down with it; wrap the rollup side of a shadow comparison in this whenever it shares the request's transaction.
+ */
+export function isolated<T>(tx: Tx, fn: (tx: Tx) => Promise<T>): Promise<T> {
+  return tx.transaction((sp) => fn(sp as unknown as Tx));
+}
+
+/**
  * Serves a metric from the old query, the new one, or both. In `shadow` mode the caller always gets the legacy value: a difference or a
- * failure of the rollup query is logged and never reaches the user. A failing legacy query fails the request in every mode.
+ * failure of the rollup query is logged and never reaches the user. The two run one after the other (legacy first) because they usually
+ * share one transaction and one connection; give the rollup side `isolated(tx, ...)` so its failure cannot abort that transaction.
+ * A failing legacy query fails the request in every mode.
  */
 export async function serve<T>(
   key: string,
@@ -64,14 +75,16 @@ export async function serve<T>(
   if (source === 'legacy') return legacy();
   if (source === 'rollup') return rollup();
 
-  const [old, next] = await Promise.allSettled([legacy(), rollup()]);
-  if (old.status === 'rejected') throw old.reason;
-  if (next.status === 'rejected') {
-    (opts.onError ?? defaultOnError)(key, next.reason);
-  } else if (!(opts.equal ?? deepEqual)(old.value, next.value)) {
-    (opts.onDiff ?? defaultOnDiff)({ key, legacy: old.value, rollup: next.value });
+  const old = await legacy();
+  try {
+    const next = await rollup();
+    if (!(opts.equal ?? deepEqual)(old, next)) {
+      (opts.onDiff ?? defaultOnDiff)({ key, legacy: old, rollup: next });
+    }
+  } catch (err) {
+    (opts.onError ?? defaultOnError)(key, err);
   }
-  return old.value;
+  return old;
 }
 
 function defaultOnDiff(diff: { key: string; legacy: unknown; rollup: unknown }): void {

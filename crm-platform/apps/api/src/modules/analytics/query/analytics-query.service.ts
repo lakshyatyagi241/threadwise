@@ -85,7 +85,11 @@ export class AnalyticsQueryService {
     }
   }
 
-  async series(tx: Tx, q: SeriesQuery): Promise<SeriesRow[]> {
+  async series(
+    tx: Tx,
+    q: SeriesQuery,
+    opts: { scopeChecked?: boolean } = {},
+  ): Promise<SeriesRow[]> {
     const def = METRIC_BY_ID.get(q.metric);
     const rule = RULE_BY_METRIC.get(q.metric);
     if (!def || !rule) throw new RangeError(`unknown analytics metric ${String(q.metric)}`);
@@ -101,7 +105,7 @@ export class AnalyticsQueryService {
       throw new RangeError('analytics group by must be distinct columns of bucket, d1, d2, d3');
     }
     assertWindow(q, def.windowDaysMax);
-    await this.assertScope(tx, q.orgId);
+    if (!opts.scopeChecked) await this.assertScope(tx, q.orgId);
 
     const scope: Scope = q.orgId === 0 ? 'platform' : 'org';
 
@@ -172,7 +176,7 @@ export class AnalyticsQueryService {
     const run = (async () => {
       const hit = await this.cacheGet(key);
       if (hit) return hit;
-      const rows = await this.series(tx, q);
+      const rows = await this.series(tx, q, { scopeChecked: true });
       await this.cacheSet(key, rows, opts.ttlSeconds);
       return rows;
     })();
