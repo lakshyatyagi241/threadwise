@@ -138,7 +138,9 @@ describe('judging an answer', () => {
       dob: '2012-06-01',
       minorUntil: '2028-06-01',
     });
-    expect(judgeAgeAnswer({ mode: 'dob', dob: '2999-01-01' }, 18, NOW)).toEqual({ kind: 'invalid' });
+    expect(judgeAgeAnswer({ mode: 'dob', dob: '2999-01-01' }, 18, NOW)).toEqual({
+      kind: 'invalid',
+    });
     expect(judgeAgeAnswer({ mode: 'dob' }, 18, NOW)).toEqual({ kind: 'invalid' });
   });
 
@@ -230,10 +232,12 @@ describe('planFlagChange and the system source', () => {
       ok: false,
       reason: 'person_flag',
     });
-    expect(planFlagChange(manual, 'minor', true, 'dob', NOW, { minorUntil: '2030-01-01' })).toEqual({
-      ok: false,
-      reason: 'person_flag',
-    });
+    expect(planFlagChange(manual, 'minor', true, 'dob', NOW, { minorUntil: '2030-01-01' })).toEqual(
+      {
+        ok: false,
+        reason: 'person_flag',
+      },
+    );
   });
 
   it('a person flagging an already dob-flagged contact takes it over and it stops lapsing', () => {
@@ -261,7 +265,9 @@ describe('planFlagChange and the system source', () => {
   });
 
   it('a declaration flag never lapses by itself', () => {
-    const d = planFlagChange(NO_FLAGS, 'minor', true, 'declaration', NOW, { minorUntil: '2030-01-01' });
+    const d = planFlagChange(NO_FLAGS, 'minor', true, 'declaration', NOW, {
+      minorUntil: '2030-01-01',
+    });
     if (!d.ok) throw new Error('unreachable');
     expect(d.next).toMatchObject({ minorSource: 'declaration', minorUntil: null });
   });

@@ -29,7 +29,19 @@ const SAMPLES = 10;
 type Raw = Record<string, unknown>;
 
 /** The header names a phone column may have, after lower-casing and dropping everything but letters and digits. */
-const PHONE_HEADERS = new Set(['phone', 'phonenumber', 'mobile', 'mobilenumber', 'number', 'msisdn', 'tel', 'telephone', 'cell', 'cellphone', 'whatsapp']);
+const PHONE_HEADERS = new Set([
+  'phone',
+  'phonenumber',
+  'mobile',
+  'mobilenumber',
+  'number',
+  'msisdn',
+  'tel',
+  'telephone',
+  'cell',
+  'cellphone',
+  'whatsapp',
+]);
 
 /**
  * The workspace's Do-Not-Call list (BL-181, spec docs/specs/privacy-and-data-governance.md section 11.11): numbers that must not get
@@ -52,7 +64,7 @@ export class DncService {
     return this.db.tx(async (tx) => {
       const match = digits === '' ? sql`true` : sql`e.phone_digits LIKE ${`%${digits}%`}`;
       const bound = cursor
-        ? sql`(e.created_at, e.id) < (${(cursor.createdAtIso ?? cursor.createdAt.toISOString())}::timestamptz, ${cursor.id})`
+        ? sql`(e.created_at, e.id) < (${cursor.createdAtIso ?? cursor.createdAt.toISOString()}::timestamptz, ${cursor.id})`
         : sql`true`;
       const res = await tx.execute(sql`
         SELECT e.id, e.uuid, e.phone, e.source, e.note, e.created_at, u.uuid AS user_uuid, u.full_name,
@@ -153,7 +165,10 @@ export class DncService {
     const invalidSamples: string[] = [];
     let invalid = 0;
     for (const item of raw) {
-      const phone = canonicalizeLocalPhone(item, defaultCountryCode?.replace(/\D/g, '') || undefined);
+      const phone = canonicalizeLocalPhone(
+        item,
+        defaultCountryCode?.replace(/\D/g, '') || undefined,
+      );
       if (!phone) {
         invalid += 1;
         if (invalidSamples.length < SAMPLES) invalidSamples.push(item.slice(0, 40));
@@ -167,9 +182,7 @@ export class DncService {
       for (let i = 0; i < numbers.length; i += CHUNK) {
         const part = numbers.slice(i, i + CHUNK);
         const values = sql.join(
-          part.map(
-            (p) => sql`(${orgId}, ${p}, ${source}, ${note ?? null}, ${ctx.userId ?? null})`,
-          ),
+          part.map((p) => sql`(${orgId}, ${p}, ${source}, ${note ?? null}, ${ctx.userId ?? null})`),
           sql`, `,
         );
         const res = await tx.execute(sql`
@@ -203,7 +216,9 @@ const toEntry = (r: Raw): DncEntry => ({
   phone: r.phone as string,
   source: r.source as DncSource,
   note: (r.note as string | null) ?? null,
-  addedBy: r.user_uuid ? { id: r.user_uuid as string, name: (r.full_name as string | null) ?? null } : null,
+  addedBy: r.user_uuid
+    ? { id: r.user_uuid as string, name: (r.full_name as string | null) ?? null }
+    : null,
   createdAt: new Date(r.created_at as string).toISOString(),
 });
 
@@ -247,7 +262,8 @@ export function phoneCells(text: string): string[] | null {
     first.split(d).length > first.split(best).length ? d : best,
   );
   const head = cellsOf(first, delimiter);
-  const looksLikeNumber = (c: string) => canonicalizeLocalPhone(c, '91') !== null && /\d{7,}/.test(c.replace(/\D/g, ''));
+  const looksLikeNumber = (c: string) =>
+    canonicalizeLocalPhone(c, '91') !== null && /\d{7,}/.test(c.replace(/\D/g, ''));
   const named = head.findIndex((h) => PHONE_HEADERS.has(h.toLowerCase().replace(/[^a-z0-9]/g, '')));
   const headerless = named < 0 && head.some(looksLikeNumber);
   const column = named >= 0 ? named : 0;
@@ -260,4 +276,3 @@ export function phoneCells(text: string): string[] | null {
   }
   return out.slice(0, IMPORT_MAX_NUMBERS + 1);
 }
-

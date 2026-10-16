@@ -56,7 +56,8 @@ export class V1ContactConsentController {
   @Get(':id/privacy')
   @RequireApiScope('contacts:read')
   @ApiOperation({
-    summary: "A contact's privacy flags: minor, guardian consent, Do Not Sell or Share, and the history",
+    summary:
+      "A contact's privacy flags: minor, guardian consent, Do Not Sell or Share, and the history",
   })
   async privacyOf(@Param('id') id: string) {
     return ok((await this.consent.forContact(uuidOrNotFound(id, 'Contact'), { limit: 1 })).privacy);

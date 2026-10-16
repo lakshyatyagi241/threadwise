@@ -91,7 +91,10 @@ export const consentManagerEventSchema = z.object({
     .object({ phone: z.string().max(40).optional(), email: z.string().email().max(200).optional() })
     .refine((p) => Boolean(p.phone || p.email), 'a phone number or an email address is required'),
   purpose: z.enum(['marketing', 'service']),
-  channels: z.array(z.enum(['whatsapp', 'sms', 'email', 'voice'])).min(1).max(4),
+  channels: z
+    .array(z.enum(['whatsapp', 'sms', 'email', 'voice']))
+    .min(1)
+    .max(4),
   action: z.enum(['granted', 'withdrawn']),
   consentArtifactId: z.string().min(1).max(200),
   expiresAt: z.string().datetime().optional(),

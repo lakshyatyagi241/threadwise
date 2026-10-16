@@ -262,12 +262,18 @@ export function DncTab({ canManage }: { canManage: boolean }) {
             <Spinner /> {t('loading')}
           </div>
         ) : list.data.data.length === 0 ? (
-          <EmptyState title={q ? t('noMatch') : t('empty')} description={q ? undefined : t('emptyHint')} />
+          <EmptyState
+            title={q ? t('noMatch') : t('empty')}
+            message={q ? undefined : t('emptyHint')}
+          />
         ) : (
           <>
             <ul className="mt-3 divide-y divide-border" aria-label={t('listTitle')}>
               {list.data.data.map((e) => (
-                <li key={e.id} className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm">
+                <li
+                  key={e.id}
+                  className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm"
+                >
                   <div className="min-w-0">
                     <span dir="ltr" className="font-medium">
                       {e.phone}
@@ -277,7 +283,9 @@ export function DncTab({ canManage }: { canManage: boolean }) {
                       {f.dateTime(new Date(e.createdAt), { dateStyle: 'medium' })}
                       {e.addedBy?.name ? ` · ${e.addedBy.name}` : ''}
                     </span>
-                    {e.note && <p className="break-words text-xs text-muted-foreground">{e.note}</p>}
+                    {e.note && (
+                      <p className="break-words text-xs text-muted-foreground">{e.note}</p>
+                    )}
                   </div>
                   {canManage && (
                     <Button
@@ -330,4 +338,3 @@ export function DncTab({ canManage }: { canManage: boolean }) {
     </div>
   );
 }
-

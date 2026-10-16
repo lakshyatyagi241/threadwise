@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  FORM_FIELD_KINDS,
-  formDefinitionSchema,
-  type FormDefinitionInput,
-} from '@crm/contracts';
+import { FORM_FIELD_KINDS, formDefinitionSchema, type FormDefinitionInput } from '@crm/contracts';
 import { publishProblems } from '../../../src/modules/forms-builder/form-definition-rules';
 import {
   AGE_KEYS,
@@ -56,7 +52,9 @@ describe('the definition', () => {
     expect(two.success).toBe(false);
     const bound = formDefinitionSchema.safeParse({
       title: 'T',
-      steps: [{ id: 's', blocks: [f('a', 'age', { bind: { object: 'contact', property: 'title' } })] }],
+      steps: [
+        { id: 's', blocks: [f('a', 'age', { bind: { object: 'contact', property: 'title' } })] },
+      ],
     });
     expect(bound.success).toBe(false);
   });
@@ -186,9 +184,9 @@ describe('what Publish checks for the gate', () => {
   });
 
   it('asks nothing for the declaration or a gate that is off', () => {
-    expect(
-      publishProblems(withContact([], { enabled: true, mode: 'declaration' }), ctx),
-    ).toEqual([]);
+    expect(publishProblems(withContact([], { enabled: true, mode: 'declaration' }), ctx)).toEqual(
+      [],
+    );
     expect(publishProblems(withContact([], {}), ctx)).toEqual([]);
   });
 });

@@ -1256,7 +1256,9 @@ export class ContactsService {
 
       // The date of birth moved: the flag follows it (flagged, kept, or lifted once the contact is of age).
       if (input.dateOfBirth !== undefined && input.dateOfBirth !== existing.dateOfBirth) {
-        await this.minors.evaluateInTx(tx, ctx.orgId, existing.id, new Date(), { dobChanged: true });
+        await this.minors.evaluateInTx(tx, ctx.orgId, existing.id, new Date(), {
+          dobChanged: true,
+        });
       }
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);

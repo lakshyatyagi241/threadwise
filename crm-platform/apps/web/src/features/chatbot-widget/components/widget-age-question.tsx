@@ -25,7 +25,8 @@ export function WidgetAgeQuestion({
 }) {
   const t = useTranslations('chatbotWidget.builder.age');
   const gate = s.ageGate;
-  const change = (patch: Partial<BuilderState['ageGate']>) => set({ ageGate: { ...gate, ...patch } });
+  const change = (patch: Partial<BuilderState['ageGate']>) =>
+    set({ ageGate: { ...gate, ...patch } });
   return (
     <div data-testid="widget-age-question" className="space-y-2">
       <ToggleRow
@@ -55,7 +56,9 @@ export function WidgetAgeQuestion({
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-[11.5px] text-muted-foreground">{t(`modeHints.${gate.mode}`)}</p>
+            <p className="mt-1 text-[11.5px] text-muted-foreground">
+              {t(`modeHints.${gate.mode}`)}
+            </p>
           </div>
           <div>
             <label htmlFor="wgt-f-ageMin" className={CAPTION}>

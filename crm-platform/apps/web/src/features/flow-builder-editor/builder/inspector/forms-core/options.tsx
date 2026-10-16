@@ -262,7 +262,10 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
                   min={1}
                   max={21}
                   onChange={(v) =>
-                    set('ageMinAge', Number.isNaN(v) ? '' : Math.min(21, Math.max(1, Math.trunc(v))))
+                    set(
+                      'ageMinAge',
+                      Number.isNaN(v) ? '' : Math.min(21, Math.max(1, Math.trunc(v))),
+                    )
                   }
                 />
               </Field>

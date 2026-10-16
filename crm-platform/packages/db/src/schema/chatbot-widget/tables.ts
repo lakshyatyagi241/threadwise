@@ -111,7 +111,10 @@ export const chatbotWidgets = pgTable(
     check('chk_chatbot_widgets_body_bg_kind', sql`${t.bodyBgKind} IN ('color', 'image')`),
     check('chk_chatbot_widgets_status', sql`${t.status} IN ('active', 'paused')`),
     check('chk_chatbot_widgets_launcher_object', sql`jsonb_typeof(${t.launcher}) = 'object'`),
-    check('chk_chatbot_widgets_age_gate_object', sql`jsonb_typeof(${t.ageGate}) = 'object' AND pg_column_size(${t.ageGate}) <= 512`),
+    check(
+      'chk_chatbot_widgets_age_gate_object',
+      sql`jsonb_typeof(${t.ageGate}) = 'object' AND pg_column_size(${t.ageGate}) <= 512`,
+    ),
   ],
 );
 

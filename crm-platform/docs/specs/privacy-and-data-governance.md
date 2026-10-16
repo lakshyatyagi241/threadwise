@@ -644,17 +644,17 @@ in the backlog).
 
 ### 11.6 Built and open
 
-| Id     | Item                                                                                                                                                                                             | State                                              |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
-| BL-172 | Regime profiles and the country suggestion; DPO and grievance officer contacts; children flag; DPDP, CCPA and DND settings (`compliance_settings`)                                               | built (v1)                                         |
-| BL-173 | Sub-processor list (admin-editable) with an optional public page `/trust/<workspace>`, and the DPA template download                                                                             | built (v1)                                         |
-| BL-174 | Compliance checklist: each baseline point and each switched-on profile requirement as built, partial or open, from real workspace data                                                           | built (v1)                                         |
-| BL-175 | Privacy and terms links per workspace, offered to the form builder consent block and the consent-notice editor; optional `termsUrl` beside `privacyUrl`                                          | built (v1)                                         |
-| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                              | built (v1); enforced by BL-177 (built)             |
-| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatchers, per contact time zone (11.5); the DND registry check stays a hook (BL-181)                                         | built, awaiting sign-off                           |
-| BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                               | built (notice, doc); the terms text is the owner's |
-| BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                         | built (v1)                                         |
-| BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | built (v1), section 11.9                           |
+| Id     | Item                                                                                                                                                                                             | State                                                                                                                                 |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| BL-172 | Regime profiles and the country suggestion; DPO and grievance officer contacts; children flag; DPDP, CCPA and DND settings (`compliance_settings`)                                               | built (v1)                                                                                                                            |
+| BL-173 | Sub-processor list (admin-editable) with an optional public page `/trust/<workspace>`, and the DPA template download                                                                             | built (v1)                                                                                                                            |
+| BL-174 | Compliance checklist: each baseline point and each switched-on profile requirement as built, partial or open, from real workspace data                                                           | built (v1)                                                                                                                            |
+| BL-175 | Privacy and terms links per workspace, offered to the form builder consent block and the consent-notice editor; optional `termsUrl` beside `privacyUrl`                                          | built (v1)                                                                                                                            |
+| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                              | built (v1); enforced by BL-177 (built)                                                                                                |
+| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatchers, per contact time zone (11.5); the DND registry check stays a hook (BL-181)                                         | built, awaiting sign-off                                                                                                              |
+| BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                               | built (notice, doc); the terms text is the owner's                                                                                    |
+| BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                         | built (v1)                                                                                                                            |
+| BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | built (v1), section 11.9                                                                                                              |
 | BL-181 | The integrations the placeholders stand for: a DPDP consent manager, a DNC / NDNC registry feed, a breach-notification workflow, the platform sub-processor register inside the app              | partly built (11.11): the DNC list and the consent manager note and contract; registries BL-215, route BL-216; the rest needs counsel |
 
 ### 11.7 HIPAA: not supported
@@ -774,10 +774,10 @@ country is not known, so a French child in a US-only workspace is judged by 13. 
 
 **The age gate on a form** (`definition.ageGate`, off by default). Fields: `mode` (`dob`, `age` or `declaration`), `minAge`, `whenUnder`.
 
-| `whenUnder`       | What the server does with an under-age answer                                                                                                                                                                                                                    |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `block` (default) | Refuses the submission before anything is stored (`FORMS_AGE_BLOCKED`, a neutral message). Nothing about the visitor is kept.                                                                                                                                    |
-| `flag`            | Accepts it, writes the contact, flags it as a minor (source `dob`) and **does not record the marketing agreement** of this submission (the ticked line is stored as seen, but no marketing grant is written).                                                    |
+| `whenUnder`       | What the server does with an under-age answer                                                                                                                                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `block` (default) | Refuses the submission before anything is stored (`FORMS_AGE_BLOCKED`, a neutral message). Nothing about the visitor is kept.                                                                                                                                                                     |
+| `flag`            | Accepts it, writes the contact, flags it as a minor (source `dob`) and **does not record the marketing agreement** of this submission (the ticked line is stored as seen, but no marketing grant is written).                                                                                     |
 | `guardian`        | As `flag`, and the form asks for a parent or guardian (name and an email or phone) before it accepts. The details are kept on the submission and on the contact timeline; **guardian consent stays unrecorded until staff record it** on the Consent card (a link the guardian clicks is BL-214). |
 
 The declaration mode has no age to read: with `block` the box simply has to be ticked (an unticked box is an unanswered question, a 422, and ticking it passes: nobody is turned away), and with `flag` or `guardian` an unticked box is treated like an under-age answer (the contact is flagged with the source `declaration`, which never lapses by itself). The
@@ -811,12 +811,12 @@ would sit in a transcript). [voice-bot-consent-requirements.md](../privacy/voice
 
 **Built.**
 
-| Id     | Item                                                                                                                                                 | State |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| BL-211 | `date_of_birth` property, form fields Date of birth and Age, form age gate with the three actions and the declaration, auto-flag and nightly sweep  | built |
-| BL-212 | Widget intake age question and the flow Ask node validated as Age or Date of birth                                                                   | built |
-| BL-213 | Voice bot age confirmation (the paragraph above)                                                                                                     | spec  |
-| BL-190 | Minor filter, segment fields and list column, import columns, REST v1 read and write, Filter-with-AI knows "minors"                                  | built |
+| Id     | Item                                                                                                                                               | State |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| BL-211 | `date_of_birth` property, form fields Date of birth and Age, form age gate with the three actions and the declaration, auto-flag and nightly sweep | built |
+| BL-212 | Widget intake age question and the flow Ask node validated as Age or Date of birth                                                                 | built |
+| BL-213 | Voice bot age confirmation (the paragraph above)                                                                                                   | spec  |
+| BL-190 | Minor filter, segment fields and list column, import columns, REST v1 read and write, Filter-with-AI knows "minors"                                | built |
 
 ### 11.11 Do-Not-Call list and the DPDP consent manager hook (BL-181, BL-215, BL-216)
 
@@ -845,10 +845,10 @@ manager's real specification is in hand.
 
 **Decisions for the owner (from 11.10 and 11.11).**
 
-| #   | Decision                                                                                                                 | Recommendation                                                                                              |
-| --- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
-| D21 | One minor age per workspace (the highest of the profiles, else 18), not one per contact country                          | Yes for now; per-country ages need the contact's country, which a widget visitor rarely gives                |
-| D22 | A form with `flag` or `guardian` should be refused at publish while the Compliance children question is unanswered       | No (a warning only); a publish block would stop forms of workspaces that have not decided yet                |
-| D23 | Ask for a date of birth by default in any template                                                                        | No: never by default (rule 2). The gallery templates stay as they are                                        |
-| D24 | Keep a visitor from retrying a refused age gate in the same session                                                       | Yes, in the browser only (sessionStorage); the server keeps no trace of a refused visitor                    |
-| D25 | Keep a Do-Not-Call entry when the contact is erased                                                                       | Yes: the entry is a suppression record; the person can ask for its removal through a data request           |
+| #   | Decision                                                                                                           | Recommendation                                                                                    |
+| --- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| D21 | One minor age per workspace (the highest of the profiles, else 18), not one per contact country                    | Yes for now; per-country ages need the contact's country, which a widget visitor rarely gives     |
+| D22 | A form with `flag` or `guardian` should be refused at publish while the Compliance children question is unanswered | No (a warning only); a publish block would stop forms of workspaces that have not decided yet     |
+| D23 | Ask for a date of birth by default in any template                                                                 | No: never by default (rule 2). The gallery templates stay as they are                             |
+| D24 | Keep a visitor from retrying a refused age gate in the same session                                                | Yes, in the browser only (sessionStorage); the server keeps no trace of a refused visitor         |
+| D25 | Keep a Do-Not-Call entry when the contact is erased                                                                | Yes: the entry is a suppression record; the person can ask for its removal through a data request |

@@ -161,7 +161,8 @@ export class AskInputNode implements NodeExecutor {
     variable: string,
   ): Promise<CustomDecision> {
     const p = ctx.node.props;
-    const iso = type === 'date_of_birth' ? flbParseDate(value, flbCleanDateFormat(dateFormat)) : null;
+    const iso =
+      type === 'date_of_birth' ? flbParseDate(value, flbCleanDateFormat(dateFormat)) : null;
     const orgId = ctx.run.orgId;
     const minAge =
       flbCleanMinAge(p.ageMinAge) ??
@@ -218,7 +219,11 @@ export class AskInputNode implements NodeExecutor {
           now: ctx.now(),
         }),
       );
-      ctx.note(verdict.kind === 'under' ? 'under the minimum age: the contact was flagged' : 'age recorded');
+      ctx.note(
+        verdict.kind === 'under'
+          ? 'under the minimum age: the contact was flagged'
+          : 'age recorded',
+      );
     } catch (err) {
       this.logger.warn({ err }, '[FLR] recording the age failed');
       ctx.note(`the age could not be recorded: ${(err as Error).message}`);

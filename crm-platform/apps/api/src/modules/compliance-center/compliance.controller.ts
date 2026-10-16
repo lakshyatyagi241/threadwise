@@ -171,7 +171,9 @@ export class ComplianceController {
   @Delete('dnc/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('settings.compliance.manage')
-  @ApiOperation({ summary: 'Remove a number from the Do-Not-Call list (404 COMPLIANCE_DNC_NOT_FOUND)' })
+  @ApiOperation({
+    summary: 'Remove a number from the Do-Not-Call list (404 COMPLIANCE_DNC_NOT_FOUND)',
+  })
   async removeDnc(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.dnc.remove(id);
   }

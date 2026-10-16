@@ -3,13 +3,7 @@ import { ConsentGate } from '../../../src/modules/contact-consent/consent-gate.s
 import { MinorDetectionService } from '../../../src/modules/contact-consent/minor-detection.service';
 import { startAiStub, WidgetApi, type AiStub } from '../chatbot-widget/support';
 import { tenantWithKey } from '../developer-rest-api-v1/support';
-import {
-  FormsApi,
-  field,
-  startHarness,
-  type Harness,
-  type Tenant,
-} from '../forms-builder/support';
+import { FormsApi, field, startHarness, type Harness, type Tenant } from '../forms-builder/support';
 
 /**
  * How a minor is detected (BL-211, BL-212, BL-190) and the Do-Not-Call list (BL-181), on a real Postgres (restricted role, forced RLS), Redis
@@ -58,7 +52,12 @@ const flagsOf = async (t: Tenant, uuid: string) =>
       [t.orgId, uuid],
     )
   )[0] as
-    | { is_minor: boolean; minor_source: string | null; minor_until: string | null; dob_override_for: string | null }
+    | {
+        is_minor: boolean;
+        minor_source: string | null;
+        minor_until: string | null;
+        dob_override_for: string | null;
+      }
     | undefined;
 
 async function create(t: Tenant, body: Record<string, unknown>) {
@@ -95,7 +94,10 @@ describe('the date of birth on a contact', () => {
   it('refuses a date in the future and one that is not a date', async () => {
     const t = await api.workspace('md-bad');
     for (const dateOfBirth of ['2999-01-01', 'yesterday', '2010-02-30']) {
-      const res = await api.as(t.admin).post('/v2/contacts').send({ name: 'X', phone: phone(), dateOfBirth });
+      const res = await api
+        .as(t.admin)
+        .post('/v2/contacts')
+        .send({ name: 'X', phone: phone(), dateOfBirth });
       expect(res.status, dateOfBirth).toBe(422);
     }
   });
@@ -103,9 +105,18 @@ describe('the date of birth on a contact', () => {
   it('uses the age of the profiles switched on: 16 under gdpr_eu', async () => {
     const t = await api.workspace('md-gdpr');
     const cur = (await api.as(t.admin).get('/v2/compliance/settings')).body;
-    const { suggestion: _s, workspaceTimezone: _w, regimesConfirmedAt: _c, updatedAt: _u, ...doc } = cur;
+    const {
+      suggestion: _s,
+      workspaceTimezone: _w,
+      regimesConfirmedAt: _c,
+      updatedAt: _u,
+      ...doc
+    } = cur;
     if (doc.rowVersion === null) delete doc.rowVersion;
-    const saved = await api.as(t.admin).patch('/v2/compliance/settings').send({ ...doc, regimes: ['gdpr_eu'] });
+    const saved = await api
+      .as(t.admin)
+      .patch('/v2/compliance/settings')
+      .send({ ...doc, regimes: ['gdpr_eu'] });
     expect(saved.status, JSON.stringify(saved.body)).toBe(200);
     const seventeen = await create(t, { name: 'Seventeen', dateOfBirth: day(17, 30) });
     expect(seventeen.isMinor).toBe(false);
@@ -128,8 +139,15 @@ describe('the date of birth on a contact', () => {
     const adult = await create(t, { name: 'Flagged by hand', dateOfBirth: ADULT });
     expect((await flag(t, adult.id, { kind: 'minor', value: true })).status).toBe(201);
     const row2 = (await api.as(t.admin).get(`/v2/contacts/${adult.id}`)).body;
-    await api.as(t.admin).patch(`/v2/contacts/${adult.id}`).send({ dateOfBirth: day(40), rowVersion: row2.rowVersion });
-    expect((await flagsOf(t, adult.id))!).toMatchObject({ is_minor: true, minor_source: 'manual', minor_until: null });
+    await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${adult.id}`)
+      .send({ dateOfBirth: day(40), rowVersion: row2.rowVersion });
+    expect((await flagsOf(t, adult.id))!).toMatchObject({
+      is_minor: true,
+      minor_source: 'manual',
+      minor_until: null,
+    });
   });
 });
 
@@ -142,13 +160,21 @@ describe('the birthday sweep', () => {
       `UPDATE contact_privacy_flags SET minor_until = CURRENT_DATE - 2 WHERE org_id = $1 AND contact_id = (SELECT id FROM contacts WHERE org_id = $1 AND uuid = $2)`,
       [t.orgId, lapsed.id],
     );
-    await q(`UPDATE contacts SET date_of_birth = $3::date WHERE org_id = $1 AND uuid = $2`, [t.orgId, lapsed.id, ADULT]);
+    await q(`UPDATE contacts SET date_of_birth = $3::date WHERE org_id = $1 AND uuid = $2`, [
+      t.orgId,
+      lapsed.id,
+      ADULT,
+    ]);
     // 2. A manual flag with a lapsed-looking date must not be touched.
     const manual = await create(t, { name: 'Manual', dateOfBirth: ADULT });
     await flag(t, manual.id, { kind: 'minor', value: true });
     // 3. A contact written with a date and no evaluation (a path that skipped the service).
     const [raw] = await api.seedContacts(t, [{ name: 'Raw young', phone: phone() }]);
-    await q(`UPDATE contacts SET date_of_birth = $3::date WHERE org_id = $1 AND uuid = $2`, [t.orgId, raw, MINOR]);
+    await q(`UPDATE contacts SET date_of_birth = $3::date WHERE org_id = $1 AND uuid = $2`, [
+      t.orgId,
+      raw,
+      MINOR,
+    ]);
     // 4. A person cleared the flag while the date still said minor: not flagged again.
     const reviewed = await create(t, { name: 'Reviewed', dateOfBirth: MINOR });
     expect((await flag(t, reviewed.id, { kind: 'minor', value: false })).status).toBe(201);
@@ -158,7 +184,10 @@ describe('the birthday sweep', () => {
     expect(out.lifted).toBeGreaterThanOrEqual(1);
     expect(out.flagged).toBeGreaterThanOrEqual(1);
     expect((await flagsOf(t, lapsed.id))!.is_minor).toBe(false);
-    expect((await flagsOf(t, manual.id))!).toMatchObject({ is_minor: true, minor_source: 'manual' });
+    expect((await flagsOf(t, manual.id))!).toMatchObject({
+      is_minor: true,
+      minor_source: 'manual',
+    });
     expect((await flagsOf(t, raw!))!).toMatchObject({ is_minor: true, minor_source: 'dob' });
     expect((await flagsOf(t, reviewed.id))!.is_minor).toBe(false);
 
@@ -170,7 +199,9 @@ describe('the birthday sweep', () => {
   it('keeps an age-answer flag until the latest day the person can turn of age, then lifts it', async () => {
     const t = await api.workspace('md-age');
     const c = await create(t, { name: 'Age only' });
-    const id = Number((await q(`SELECT id FROM contacts WHERE org_id = $1 AND uuid = $2`, [t.orgId, c.id]))[0].id);
+    const id = Number(
+      (await q(`SELECT id FROM contacts WHERE org_id = $1 AND uuid = $2`, [t.orgId, c.id]))[0].id,
+    );
     await q(
       `INSERT INTO contact_privacy_flags (org_id, contact_id, is_minor, minor_since, minor_source, minor_until)
        VALUES ($1, $2, true, now(), 'dob', CURRENT_DATE - 1)
@@ -188,7 +219,11 @@ describe('the age gate on a form', () => {
     field('email', 'email', { required: true, bind: { object: 'contact', property: 'email' } }),
     ...(kind ? [field('how_old', kind, { required: true })] : []),
   ];
-  const def = (gate: Record<string, unknown>, kind: 'date_of_birth' | 'age' | null, extra: Record<string, unknown> = {}) => ({
+  const def = (
+    gate: Record<string, unknown>,
+    kind: 'date_of_birth' | 'age' | null,
+    extra: Record<string, unknown> = {},
+  ) => ({
     title: 'Age gated',
     steps: [{ id: 'main', blocks: ageBlocks(kind) }],
     ageGate: { enabled: true, ...gate },
@@ -197,7 +232,9 @@ describe('the age gate on a form', () => {
 
   it('block: an under-age date of birth is refused before anything is stored; an adult goes through and the date is kept', async () => {
     const t = await api.workspace('fg-block');
-    const form = await api.liveForm(t.admin, { definition: def({ mode: 'dob', whenUnder: 'block' }, 'date_of_birth') });
+    const form = await api.liveForm(t.admin, {
+      definition: def({ mode: 'dob', whenUnder: 'block' }, 'date_of_birth'),
+    });
     const who = email('kid');
     const refused = await api.submit(form.publicKey, { answers: { email: who, how_old: MINOR } });
     expect(refused.status, JSON.stringify(refused.body)).toBe(403);
@@ -216,10 +253,14 @@ describe('the age gate on a form', () => {
 
   it('the public form never carries the action or the minimum of a date of birth question, but the box names its age', async () => {
     const t = await api.workspace('fg-public');
-    const dob = await api.liveForm(t.admin, { definition: def({ mode: 'dob', whenUnder: 'guardian', minAge: 16 }, 'date_of_birth') });
+    const dob = await api.liveForm(t.admin, {
+      definition: def({ mode: 'dob', whenUnder: 'guardian', minAge: 16 }, 'date_of_birth'),
+    });
     const a = (await api.publicGet(dob.publicKey)).body;
     expect(a.ageGate).toEqual({ mode: 'dob', declarationAge: null });
-    const box = await api.liveForm(t.admin, { definition: def({ mode: 'declaration', whenUnder: 'flag', minAge: 16 }, null) });
+    const box = await api.liveForm(t.admin, {
+      definition: def({ mode: 'declaration', whenUnder: 'flag', minAge: 16 }, null),
+    });
     const b = (await api.publicGet(box.publicKey)).body;
     expect(b.ageGate).toEqual({ mode: 'declaration', declarationAge: 16 });
     const off = await api.liveForm(t.admin, {});
@@ -230,7 +271,13 @@ describe('the age gate on a form', () => {
     const t = await api.workspace('fg-flag');
     const form = await api.liveForm(t.admin, {
       definition: def({ mode: 'dob', whenUnder: 'flag' }, 'date_of_birth', {
-        consent: { enabled: true, text: 'Send me offers', required: false, marketing: true, channels: ['email'] },
+        consent: {
+          enabled: true,
+          text: 'Send me offers',
+          required: false,
+          marketing: true,
+          channels: ['email'],
+        },
       }),
     });
     const who = email('flag');
@@ -240,16 +287,26 @@ describe('the age gate on a form', () => {
     });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const c = await api.contactByEmail(t.orgId, who);
-    const f = await q(`SELECT * FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`, [t.orgId, c.id]);
+    const f = await q(`SELECT * FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`, [
+      t.orgId,
+      c.id,
+    ]);
     expect(f[0]).toMatchObject({ is_minor: true, minor_source: 'dob' });
-    expect(await q(`SELECT 1 FROM contact_consent_events WHERE org_id = $1 AND contact_id = $2 AND action = 'granted'`, [t.orgId, c.id])).toHaveLength(0);
+    expect(
+      await q(
+        `SELECT 1 FROM contact_consent_events WHERE org_id = $1 AND contact_id = $2 AND action = 'granted'`,
+        [t.orgId, c.id],
+      ),
+    ).toHaveLength(0);
     const subs = await api.submissions(t.orgId, form.id);
     expect(subs[0].answers._age_gate).toBe('under');
   });
 
   it('guardian: asks for a parent before it accepts, keeps their details on the submission and the timeline', async () => {
     const t = await api.workspace('fg-guard');
-    const form = await api.liveForm(t.admin, { definition: def({ mode: 'age', whenUnder: 'guardian', minAge: 16 }, 'age') });
+    const form = await api.liveForm(t.admin, {
+      definition: def({ mode: 'age', whenUnder: 'guardian', minAge: 16 }, 'age'),
+    });
     const who = email('guard');
     const first = await api.submit(form.publicKey, { answers: { email: who, how_old: 12 } });
     expect(first.status).toBe(422);
@@ -262,36 +319,73 @@ describe('the age gate on a form', () => {
     });
     expect(second.status, JSON.stringify(second.body)).toBe(201);
     const c = await api.contactByEmail(t.orgId, who);
-    expect((await q(`SELECT is_minor FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`, [t.orgId, c.id]))[0].is_minor).toBe(true);
+    expect(
+      (
+        await q(
+          `SELECT is_minor FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`,
+          [t.orgId, c.id],
+        )
+      )[0].is_minor,
+    ).toBe(true);
     // The guardian consent is NOT recorded until a person records it.
-    expect((await q(`SELECT guardian_consent FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`, [t.orgId, c.id]))[0].guardian_consent).toBe(false);
+    expect(
+      (
+        await q(
+          `SELECT guardian_consent FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`,
+          [t.orgId, c.id],
+        )
+      )[0].guardian_consent,
+    ).toBe(false);
     const subs = await api.submissions(t.orgId, form.id);
     const detail = await api.as(t.admin).get(`/v2/forms/${form.id}/submissions/${subs[0].uuid}`);
-    expect(detail.body).toMatchObject({ ageGate: 'under', guardian: { name: 'Asha Rao', email: 'asha@example.test', phone: null } });
-    const timeline = await q(`SELECT title FROM contact_activities WHERE org_id = $1 AND contact_id = $2 AND activity_type = 'guardian_details'`, [t.orgId, c.id]);
+    expect(detail.body).toMatchObject({
+      ageGate: 'under',
+      guardian: { name: 'Asha Rao', email: 'asha@example.test', phone: null },
+    });
+    const timeline = await q(
+      `SELECT title FROM contact_activities WHERE org_id = $1 AND contact_id = $2 AND activity_type = 'guardian_details'`,
+      [t.orgId, c.id],
+    );
     expect(timeline).toHaveLength(1);
   });
 
   it('the box: with block the box only has to be ticked; with flag an unticked box flags the contact', async () => {
     const t = await api.workspace('fg-box');
-    const blockForm = await api.liveForm(t.admin, { definition: def({ mode: 'declaration', whenUnder: 'block', minAge: 16 }, null) });
+    const blockForm = await api.liveForm(t.admin, {
+      definition: def({ mode: 'declaration', whenUnder: 'block', minAge: 16 }, null),
+    });
     const unticked = await api.submit(blockForm.publicKey, { answers: { email: email('b1') } });
     expect(unticked.status).toBe(422);
     expect(unticked.body.code).toBe('FORMS_VALIDATION');
-    const ticked = await api.submit(blockForm.publicKey, { answers: { email: email('b2') }, ageConfirmed: true });
+    const ticked = await api.submit(blockForm.publicKey, {
+      answers: { email: email('b2') },
+      ageConfirmed: true,
+    });
     expect(ticked.status, JSON.stringify(ticked.body)).toBe(201);
 
-    const flagForm = await api.liveForm(t.admin, { definition: def({ mode: 'declaration', whenUnder: 'flag', minAge: 16 }, null) });
+    const flagForm = await api.liveForm(t.admin, {
+      definition: def({ mode: 'declaration', whenUnder: 'flag', minAge: 16 }, null),
+    });
     const who = email('b3');
     expect((await api.submit(flagForm.publicKey, { answers: { email: who } })).status).toBe(201);
     const c = await api.contactByEmail(t.orgId, who);
-    expect((await q(`SELECT minor_source, minor_until FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`, [t.orgId, c.id]))[0]).toEqual({ minor_source: 'declaration', minor_until: null });
+    expect(
+      (
+        await q(
+          `SELECT minor_source, minor_until FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`,
+          [t.orgId, c.id],
+        )
+      )[0],
+    ).toEqual({ minor_source: 'declaration', minor_until: null });
   });
 
   it('publish wants the question for a date-of-birth gate, and wants it required', async () => {
     const t = await api.workspace('fg-pub');
     const missing = await api.createForm(t.admin, { definition: def({ mode: 'dob' }, null) });
-    const res = await api.as(t.admin).post(`/v2/forms/${missing.id}/publish`).send({ rowVersion: missing.rowVersion });
+    const res = await api
+      .as(t.admin)
+      .post(`/v2/forms/${missing.id}/publish`)
+      .send({ rowVersion: missing.rowVersion });
     expect(res.status).toBe(422);
     expect(JSON.stringify(res.body)).toContain('age_gate_field_missing');
   });
@@ -313,23 +407,60 @@ describe('the age question of a chat widget', () => {
     expect(cfg.widget.age_gate).toEqual({ mode: 'dob', declaration_age: null, pending: true });
     const uuid = cfg.visitor.uuid as string;
 
-    const noAnswer = await widgets.pub(w.embedToken).message({ visitor_uuid: uuid, body: 'hi', name: 'Kim', email: email('k') });
+    const noAnswer = await widgets
+      .pub(w.embedToken)
+      .message({ visitor_uuid: uuid, body: 'hi', name: 'Kim', email: email('k') });
     expect(noAnswer.status).toBe(422);
-    const under = await widgets.pub(w.embedToken).message({ visitor_uuid: uuid, body: 'hi', name: 'Kim', email: email('k'), date_of_birth: MINOR });
+    const under = await widgets
+      .pub(w.embedToken)
+      .message({
+        visitor_uuid: uuid,
+        body: 'hi',
+        name: 'Kim',
+        email: email('k'),
+        date_of_birth: MINOR,
+      });
     expect(under.status).toBe(403);
     expect(under.body.code).toBe('age_blocked');
-    expect(await widgets.count(`SELECT count(*) AS n FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id WHERE m.org_id = $1`, [t.orgId])).toBe(0);
+    expect(
+      await widgets.count(
+        `SELECT count(*) AS n FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id WHERE m.org_id = $1`,
+        [t.orgId],
+      ),
+    ).toBe(0);
     // The refused visitor's profile was not kept.
-    expect((await q(`SELECT name, email FROM chatbot_widget_visitors WHERE org_id = $1 AND visitor_uuid = $2`, [t.orgId, uuid]))[0]).toEqual({ name: null, email: null });
+    expect(
+      (
+        await q(
+          `SELECT name, email FROM chatbot_widget_visitors WHERE org_id = $1 AND visitor_uuid = $2`,
+          [t.orgId, uuid],
+        )
+      )[0],
+    ).toEqual({ name: null, email: null });
 
     const who = email('adult');
-    const ok = await widgets.pub(w.embedToken).message({ visitor_uuid: uuid, body: 'hello', name: 'Ada', email: who, date_of_birth: ADULT });
+    const ok = await widgets
+      .pub(w.embedToken)
+      .message({
+        visitor_uuid: uuid,
+        body: 'hello',
+        name: 'Ada',
+        email: who,
+        date_of_birth: ADULT,
+      });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
-    const again = await widgets.pub(w.embedToken).message({ visitor_uuid: uuid, body: 'and again' });
+    const again = await widgets
+      .pub(w.embedToken)
+      .message({ visitor_uuid: uuid, body: 'and again' });
     expect(again.status).toBe(200);
     const cfg2 = (await widgets.pub(w.embedToken).config(uuid)).body;
     expect(cfg2.widget.age_gate.pending).toBe(false);
-    const c = (await q(`SELECT date_of_birth FROM contacts WHERE org_id = $1 AND normalized_email = $2`, [t.orgId, who]))[0];
+    const c = (
+      await q(`SELECT date_of_birth FROM contacts WHERE org_id = $1 AND normalized_email = $2`, [
+        t.orgId,
+        who,
+      ])
+    )[0];
     expect(String(c.date_of_birth).slice(0, 10)).toBe(ADULT);
   });
 
@@ -345,34 +476,46 @@ describe('the age question of a chat widget', () => {
     });
     const uuid = (await widgets.pub(w.embedToken).config()).body.visitor.uuid as string;
     const who = email('young');
-    const res = await widgets.pub(w.embedToken).message({ visitor_uuid: uuid, body: 'hi', email: who, age: '13' });
+    const res = await widgets
+      .pub(w.embedToken)
+      .message({ visitor_uuid: uuid, body: 'hi', email: who, age: '13' });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
-    const c = (await q(`SELECT id FROM contacts WHERE org_id = $1 AND normalized_email = $2`, [t.orgId, who]))[0];
-    const f = (await q(`SELECT is_minor, minor_source FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`, [t.orgId, c.id]))[0];
+    const c = (
+      await q(`SELECT id FROM contacts WHERE org_id = $1 AND normalized_email = $2`, [t.orgId, who])
+    )[0];
+    const f = (
+      await q(
+        `SELECT is_minor, minor_source FROM contact_privacy_flags WHERE org_id = $1 AND contact_id = $2`,
+        [t.orgId, c.id],
+      )
+    )[0];
     expect(f).toEqual({ is_minor: true, minor_source: 'dob' });
   });
 
   it('the widget refuses a guardian action (a chat has no second screen)', async () => {
     const t = await widgets.signup('wg-guard');
-    const res = await widgets.as(t.admin).post('/v2/widgets').send({
-      name: 'Bad',
-      mode: 'whatsapp',
-      position: 'bottom_right',
-      buttonColor: '#075E54',
-      headerTitle: 'x',
-      headerBg: '#075E54',
-      headerTextColor: '#FFFFFF',
-      messageBubbleColor: '#FFFFFF',
-      messageTextColor: '#222222',
-      bodyBgKind: 'color',
-      bodyBgColor: '#ECE5DD',
-      buttonLabel: 'x',
-      actionButtonBg: '#075E54',
-      actionButtonTextColor: '#FFFFFF',
-      targetWhatsappCc: '+91',
-      targetWhatsappNumber: '9876543210',
-      ageGate: { enabled: true, mode: 'dob', whenUnder: 'guardian' },
-    });
+    const res = await widgets
+      .as(t.admin)
+      .post('/v2/widgets')
+      .send({
+        name: 'Bad',
+        mode: 'whatsapp',
+        position: 'bottom_right',
+        buttonColor: '#075E54',
+        headerTitle: 'x',
+        headerBg: '#075E54',
+        headerTextColor: '#FFFFFF',
+        messageBubbleColor: '#FFFFFF',
+        messageTextColor: '#222222',
+        bodyBgKind: 'color',
+        bodyBgColor: '#ECE5DD',
+        buttonLabel: 'x',
+        actionButtonBg: '#075E54',
+        actionButtonTextColor: '#FFFFFF',
+        targetWhatsappCc: '+91',
+        targetWhatsappNumber: '9876543210',
+        ageGate: { enabled: true, mode: 'dob', whenUnder: 'guardian' },
+      });
     expect(res.status).toBe(422);
   });
 });
@@ -394,13 +537,26 @@ describe('minors in lists, segments and the customer API (BL-190)', () => {
     const kid = await create(t, { name: 'Ten', dateOfBirth: MINOR });
     const adult = await create(t, { name: 'Thirty', dateOfBirth: ADULT });
     await create(t, { name: 'No date' });
-    const rules = (r: unknown) => encodeURIComponent(JSON.stringify({ type: 'group', combinator: 'and', children: [r] }));
+    const rules = (r: unknown) =>
+      encodeURIComponent(JSON.stringify({ type: 'group', combinator: 'and', children: [r] }));
     const ids = async (r: unknown) =>
-      ((await api.as(t.admin).get(`/v2/contacts?rules=${rules(r)}`)).body.data as Array<{ id: string }>).map((c) => c.id).sort();
+      (
+        (await api.as(t.admin).get(`/v2/contacts?rules=${rules(r)}`)).body.data as Array<{
+          id: string;
+        }>
+      )
+        .map((c) => c.id)
+        .sort();
     expect(await ids({ type: 'condition', field: 'minor', operator: 'is_true' })).toEqual([kid.id]);
-    expect(await ids({ type: 'condition', field: 'age', operator: 'lt', value: 18 })).toEqual([kid.id]);
-    expect(await ids({ type: 'condition', field: 'age', operator: 'gte', value: 18 })).toEqual([adult.id]);
-    expect(await ids({ type: 'condition', field: 'dateOfBirth', operator: 'before', value: day(20) })).toEqual([adult.id]);
+    expect(await ids({ type: 'condition', field: 'age', operator: 'lt', value: 18 })).toEqual([
+      kid.id,
+    ]);
+    expect(await ids({ type: 'condition', field: 'age', operator: 'gte', value: 18 })).toEqual([
+      adult.id,
+    ]);
+    expect(
+      await ids({ type: 'condition', field: 'dateOfBirth', operator: 'before', value: day(20) }),
+    ).toEqual([adult.id]);
   });
 
   it('imports a date of birth and a minor column, and refuses a day-first date', async () => {
@@ -418,26 +574,42 @@ describe('minors in lists, segments and the customer API (BL-190)', () => {
       .attach('file', Buffer.from(csv), 'people.csv')
       .field('defaultCountryCode', '+91');
     expect(res.status, JSON.stringify(res.body)).toBeLessThan(300);
-    const byName = async (name: string) => (await q(`SELECT id, uuid, date_of_birth FROM contacts WHERE org_id = $1 AND name = $2`, [t.orgId, name]))[0];
+    const byName = async (name: string) =>
+      (
+        await q(`SELECT id, uuid, date_of_birth FROM contacts WHERE org_id = $1 AND name = $2`, [
+          t.orgId,
+          name,
+        ])
+      )[0];
     const kid = await byName('Imp Kid');
     expect(String(kid.date_of_birth).slice(0, 10)).toBe(MINOR);
     expect((await flagsOf(t, kid.uuid))!).toMatchObject({ is_minor: true, minor_source: 'dob' });
     expect(await flagsOf(t, (await byName('Imp Adult')).uuid)).toBeUndefined();
-    expect((await flagsOf(t, (await byName('Imp Yes')).uuid))!).toMatchObject({ is_minor: true, minor_source: 'import' });
+    expect((await flagsOf(t, (await byName('Imp Yes')).uuid))!).toMatchObject({
+      is_minor: true,
+      minor_source: 'import',
+    });
     expect(await byName('Imp Bad')).toBeUndefined();
   });
 
   it('the customer API reads date_of_birth and is_minor, writes the date, and records a flag over /privacy', async () => {
     const { tenant, call } = await tenantWithKey(api, 'ls-v1');
-    const made = await call.post('/contacts').send({ name: 'V1 Kid', phone: phone(), date_of_birth: MINOR });
+    const made = await call
+      .post('/contacts')
+      .send({ name: 'V1 Kid', phone: phone(), date_of_birth: MINOR });
     expect(made.status, JSON.stringify(made.body)).toBeLessThan(300);
     expect(made.body.data).toMatchObject({ date_of_birth: MINOR, is_minor: true });
     const id = made.body.data.id as string;
 
-    const adult = await call.post('/contacts').send({ name: 'V1 Adult', phone: phone(), date_of_birth: ADULT });
+    const adult = await call
+      .post('/contacts')
+      .send({ name: 'V1 Adult', phone: phone(), date_of_birth: ADULT });
     expect(adult.body.data).toMatchObject({ date_of_birth: ADULT, is_minor: false });
     const adultId = adult.body.data.id as string;
-    const flagged = await call.post(`/contacts/${adultId}/privacy`).set('idempotency-key', 'v1-k1').send({ kind: 'minor', value: true });
+    const flagged = await call
+      .post(`/contacts/${adultId}/privacy`)
+      .set('idempotency-key', 'v1-k1')
+      .send({ kind: 'minor', value: true });
     expect(flagged.status, JSON.stringify(flagged.body)).toBe(201);
     expect(flagged.body.data).toMatchObject({ isMinor: true, minorSource: 'api' });
     const shown = await call.get(`/contacts/${adultId}`);
@@ -455,22 +627,31 @@ describe('the Do-Not-Call list (BL-181)', () => {
   const check = (t: Tenant, contactId: number, channel: string) =>
     gate.check(t.orgId, { type: 'contact', id: contactId }, channel, 'marketing_messaging');
   const idOf = async (t: Tenant, uuid: string) =>
-    Number((await q(`SELECT id FROM contacts WHERE org_id = $1 AND uuid = $2`, [t.orgId, uuid]))[0].id);
+    Number(
+      (await q(`SELECT id FROM contacts WHERE org_id = $1 AND uuid = $2`, [t.orgId, uuid]))[0].id,
+    );
 
   it('adds numbers (local ones with the default country), ignores repeats, and counts what is not a number', async () => {
     const t = await api.workspace('dnc-add');
-    const res = await dnc(t).post('/v2/compliance/dnc').send({
-      numbers: ['+91 98765 43210', '098765 43210', '+14155550123', 'hello', '12'],
-      defaultCountryCode: '+91',
-    });
+    const res = await dnc(t)
+      .post('/v2/compliance/dnc')
+      .send({
+        numbers: ['+91 98765 43210', '098765 43210', '+14155550123', 'hello', '12'],
+        defaultCountryCode: '+91',
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     expect(res.body).toMatchObject({ added: 2, alreadyListed: 0, invalid: 2 });
     expect(res.body.invalidSamples).toEqual(['hello', '12']);
-    const again = await dnc(t).post('/v2/compliance/dnc').send({ numbers: ['919876543210'], defaultCountryCode: '91' });
+    const again = await dnc(t)
+      .post('/v2/compliance/dnc')
+      .send({ numbers: ['919876543210'], defaultCountryCode: '91' });
     expect(again.body).toMatchObject({ added: 0, alreadyListed: 1 });
     const list = (await dnc(t).get('/v2/compliance/dnc')).body;
     expect(list.total).toBe(2);
-    expect(list.data.map((e: { phone: string }) => e.phone).sort()).toEqual(['+14155550123', '+919876543210']);
+    expect(list.data.map((e: { phone: string }) => e.phone).sort()).toEqual([
+      '+14155550123',
+      '+919876543210',
+    ]);
     const found = (await dnc(t).get('/v2/compliance/dnc?q=4155')).body;
     expect(found.data).toHaveLength(1);
   });
@@ -484,7 +665,9 @@ describe('the Do-Not-Call list (BL-181)', () => {
     expect(ok.status, JSON.stringify(ok.body)).toBe(201);
     expect(ok.body).toMatchObject({ added: 2, invalid: 1 });
     expect((await dnc(t).get('/v2/compliance/dnc')).body.data[0].source).toBe('registry_export');
-    const headerless = await dnc(t).post('/v2/compliance/dnc/import').send({ csv: '+919833333333\n+919844444444', defaultCountryCode: '91' });
+    const headerless = await dnc(t)
+      .post('/v2/compliance/dnc/import')
+      .send({ csv: '+919833333333\n+919844444444', defaultCountryCode: '91' });
     expect(headerless.body.added).toBe(2);
     const empty = await dnc(t).post('/v2/compliance/dnc/import').send({ csv: '   \n  ' });
     expect(empty.status).toBe(422);
@@ -496,15 +679,26 @@ describe('the Do-Not-Call list (BL-181)', () => {
     const [uuid] = await api.seedContacts(t, [{ name: 'Listed', phone: '+919855555555' }]);
     const id = await idOf(t, uuid!);
     expect((await check(t, id, 'sms')).decision).toBe('allow');
-    await dnc(t).post('/v2/compliance/dnc').send({ numbers: ['+91 98555 55555'] });
+    await dnc(t)
+      .post('/v2/compliance/dnc')
+      .send({ numbers: ['+91 98555 55555'] });
     expect(await check(t, id, 'sms')).toMatchObject({ decision: 'deny', reason: 'on_dnc_list' });
     expect(await check(t, id, 'voice')).toMatchObject({ decision: 'deny', reason: 'on_dnc_list' });
     // WhatsApp, email and service messages are not held by it.
     expect((await check(t, id, 'whatsapp_cloud')).decision).toBe('allow');
     expect((await check(t, id, 'email')).decision).toBe('allow');
-    expect((await gate.check(t.orgId, { type: 'contact', id }, 'sms', 'service_messaging')).decision).toBe('allow');
+    expect(
+      (await gate.check(t.orgId, { type: 'contact', id }, 'sms', 'service_messaging')).decision,
+    ).toBe('allow');
     // A number with no contact is still held.
-    expect(await gate.check(t.orgId, { type: 'phone', phone: '919855555555' }, 'voice', 'marketing_messaging')).toMatchObject({ reason: 'on_dnc_list' });
+    expect(
+      await gate.check(
+        t.orgId,
+        { type: 'phone', phone: '919855555555' },
+        'voice',
+        'marketing_messaging',
+      ),
+    ).toMatchObject({ reason: 'on_dnc_list' });
     // checkMany agrees.
     const many = await gate.checkMany(t.orgId, [id], 'sms', 'marketing_messaging');
     expect(many.counts.on_dnc_list).toBe(1);
@@ -515,10 +709,12 @@ describe('the Do-Not-Call list (BL-181)', () => {
     expect((await dnc(t).delete(`/v2/compliance/dnc/${entry.id}`)).status).toBe(404);
   });
 
-  it('is one workspace\'s own: another workspace sees nothing and is not held by it', async () => {
+  it("is one workspace's own: another workspace sees nothing and is not held by it", async () => {
     const a = await api.workspace('dnc-a');
     const b = await api.workspace('dnc-b');
-    await dnc(a).post('/v2/compliance/dnc').send({ numbers: ['+919866666666'] });
+    await dnc(a)
+      .post('/v2/compliance/dnc')
+      .send({ numbers: ['+919866666666'] });
     expect((await dnc(b).get('/v2/compliance/dnc')).body.total).toBe(0);
     const [uuid] = await api.seedContacts(b, [{ name: 'Same number', phone: '+919866666666' }]);
     expect((await check(b, await idOf(b, uuid!), 'sms')).decision).toBe('allow');
@@ -528,22 +724,53 @@ describe('the Do-Not-Call list (BL-181)', () => {
     const t = await api.workspace('dnc-perm');
     const nobody = await api.member(t, 'plain', [['record.contacts.read']]);
     expect((await api.as(nobody.token).get('/v2/compliance/dnc')).status).toBe(403);
-    expect((await api.as(nobody.token).post('/v2/compliance/dnc').send({ numbers: ['+919877777777'] })).status).toBe(403);
+    expect(
+      (
+        await api
+          .as(nobody.token)
+          .post('/v2/compliance/dnc')
+          .send({ numbers: ['+919877777777'] })
+      ).status,
+    ).toBe(403);
     const reader = await api.member(t, 'reader', [['settings.compliance.read']]);
     expect((await api.as(reader.token).get('/v2/compliance/dnc')).status).toBe(200);
-    expect((await api.as(reader.token).post('/v2/compliance/dnc').send({ numbers: ['+919877777777'] })).status).toBe(403);
+    expect(
+      (
+        await api
+          .as(reader.token)
+          .post('/v2/compliance/dnc')
+          .send({ numbers: ['+919877777777'] })
+      ).status,
+    ).toBe(403);
   });
 
   it('keeps the consent manager registration number with the other consent manager notes', async () => {
     const t = await api.workspace('dnc-cm');
     const cur = (await api.as(t.admin).get('/v2/compliance/settings')).body;
-    const { suggestion: _s, workspaceTimezone: _w, regimesConfirmedAt: _c, updatedAt: _u, ...doc } = cur;
+    const {
+      suggestion: _s,
+      workspaceTimezone: _w,
+      regimesConfirmedAt: _c,
+      updatedAt: _u,
+      ...doc
+    } = cur;
     if (doc.rowVersion === null) delete doc.rowVersion;
-    const saved = await api.as(t.admin).patch('/v2/compliance/settings').send({
-      ...doc,
-      consentManager: { name: 'ConsentCo', url: 'https://consent.example', registrationId: 'DPB-1234' },
-    });
+    const saved = await api
+      .as(t.admin)
+      .patch('/v2/compliance/settings')
+      .send({
+        ...doc,
+        consentManager: {
+          name: 'ConsentCo',
+          url: 'https://consent.example',
+          registrationId: 'DPB-1234',
+        },
+      });
     expect(saved.status, JSON.stringify(saved.body)).toBe(200);
-    expect(saved.body.consentManager).toEqual({ name: 'ConsentCo', url: 'https://consent.example', registrationId: 'DPB-1234' });
+    expect(saved.body.consentManager).toEqual({
+      name: 'ConsentCo',
+      url: 'https://consent.example',
+      registrationId: 'DPB-1234',
+    });
   });
 });

@@ -109,7 +109,8 @@ export function planFlagChange(
         next.minorSource = null;
         next.minorUntil = null;
         // A person who clears the flag while the date still says minor is not overruled by the next sweep.
-        next.dobOverrideFor = source !== 'dob' && opts.dobSaysMinorFor ? opts.dobSaysMinorFor : null;
+        next.dobOverrideFor =
+          source !== 'dob' && opts.dobSaysMinorFor ? opts.dobSaysMinorFor : null;
         if (prior.guardianConsent) {
           next.guardianConsent = false;
           next.guardianSince = null;

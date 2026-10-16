@@ -41,7 +41,8 @@ export interface ComplianceFacts {
 }
 
 /** The columns of a flags row, in the order `toState` reads them. */
-const FLAG_COLUMNS = sql.raw(`is_minor, minor_since, minor_source, to_char(minor_until, 'YYYY-MM-DD') AS minor_until,
+const FLAG_COLUMNS =
+  sql.raw(`is_minor, minor_since, minor_source, to_char(minor_until, 'YYYY-MM-DD') AS minor_until,
       to_char(dob_override_for, 'YYYY-MM-DD') AS dob_override_for, guardian_consent, guardian_since, do_not_sell_share, dns_since, dns_source`);
 
 /** SQL of the contact privacy flags. Every statement is tenant scoped by `org_id` (and by forced RLS underneath). */
@@ -170,8 +171,7 @@ export class ContactPrivacyRepository {
     }
     const policy = r.children_policy as string;
     return {
-      childrenPolicy:
-        policy === 'no_minors' || policy === 'may_include_minors' ? policy : 'unset',
+      childrenPolicy: policy === 'no_minors' || policy === 'may_include_minors' ? policy : 'unset',
       parentalConsentRequired: r.parental_consent_required === true,
       ccpaUs: r.ccpa_us === true,
       minorAge: workspaceMinorAge((r.regimes as ComplianceRegime[] | null) ?? []),
@@ -246,12 +246,7 @@ export class ContactPrivacyRepository {
    * Contacts of one workspace whose date of birth says "younger than the threshold" and who are not flagged, and whom no person has
    * reviewed for that date. `bornAfter` is the birth day that has not yet reached the threshold.
    */
-  async unflaggedYoung(
-    tx: Tx,
-    orgId: number,
-    bornAfter: string,
-    limit: number,
-  ): Promise<number[]> {
+  async unflaggedYoung(tx: Tx, orgId: number, bornAfter: string, limit: number): Promise<number[]> {
     const res = await tx.execute(sql`
       SELECT c.id FROM contacts c
       LEFT JOIN contact_privacy_flags f ON f.org_id = c.org_id AND f.contact_id = c.id

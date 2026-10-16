@@ -834,9 +834,7 @@ function FieldView({
           step={f.kind === 'currency' ? '0.01' : numeric ? 'any' : undefined}
           min={numeric ? f.validation?.min : undefined}
           max={numeric ? f.validation?.max : undefined}
-          maxLength={
-            f.kind === 'age' ? 3 : type === 'text' ? f.validation?.maxLen : undefined
-          }
+          maxLength={f.kind === 'age' ? 3 : type === 'text' ? f.validation?.maxLen : undefined}
           // An age or a date of birth is never offered from the browser's saved answers: nothing coaches the answer (BL-211).
           autoComplete={
             f.kind === 'email'

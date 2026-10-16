@@ -1,4 +1,9 @@
-import { isPlausibleBirthDate, MAX_GATE_AGE, MIN_GATE_AGE, parseAgeAnswer } from '../contact-consent/age';
+import {
+  isPlausibleBirthDate,
+  MAX_GATE_AGE,
+  MIN_GATE_AGE,
+  parseAgeAnswer,
+} from '../contact-consent/age';
 
 /**
  * Validated questions: the Ask node with "Validate as" set to name, email, phone, number, alphanumeric or date. NOT a Reference

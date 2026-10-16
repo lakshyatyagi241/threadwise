@@ -71,7 +71,9 @@ export function AgeCheckSection({
           <FieldBox
             label={t('minAge')}
             hint={t('minAgeHint', { age: age?.workspaceMinorAge ?? 18 })}
-            error={minInvalid ? t('minAgeInvalid', { min: MIN_GATE_AGE, max: MAX_GATE_AGE }) : undefined}
+            error={
+              minInvalid ? t('minAgeInvalid', { min: MIN_GATE_AGE, max: MAX_GATE_AGE }) : undefined
+            }
           >
             {(a) => (
               <Input
@@ -100,8 +102,7 @@ export function AgeCheckSection({
                 value={gate.whenUnder}
                 disabled={disabled}
                 onChange={(e) => {
-                  const whenUnder =
-                    AGE_GATE_ACTIONS.find((m) => m === e.target.value) ?? 'block';
+                  const whenUnder = AGE_GATE_ACTIONS.find((m) => m === e.target.value) ?? 'block';
                   change({ whenUnder });
                 }}
               >

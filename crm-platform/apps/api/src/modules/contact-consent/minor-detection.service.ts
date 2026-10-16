@@ -152,7 +152,15 @@ export class MinorDetectionService {
     ) {
       return 'none';
     }
-    const out = await this.change(tx, orgId, contactId, false, null, { reference: 'age_lapsed' }, now);
+    const out = await this.change(
+      tx,
+      orgId,
+      contactId,
+      false,
+      null,
+      { reference: 'age_lapsed' },
+      now,
+    );
     return out ? 'lifted' : 'none';
   }
 
@@ -236,7 +244,10 @@ export class MinorDetectionService {
         ),
       );
     } catch (err) {
-      this.logger.error({ err: String(err), orgId, contactId }, '[MINOR] sweep could not evaluate a contact');
+      this.logger.error(
+        { err: String(err), orgId, contactId },
+        '[MINOR] sweep could not evaluate a contact',
+      );
       return 'none';
     }
   }

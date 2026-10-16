@@ -143,7 +143,11 @@ export function ProfilesTab({
                 }
               />
             </Field>
-            <Field label={t('dpdp.managerRegistration')} htmlFor="cm-reg" hint={t('dpdp.managerRegistrationHint')}>
+            <Field
+              label={t('dpdp.managerRegistration')}
+              htmlFor="cm-reg"
+              hint={t('dpdp.managerRegistrationHint')}
+            >
               <Input
                 id="cm-reg"
                 dir="ltr"
@@ -151,7 +155,9 @@ export function ProfilesTab({
                 maxLength={60}
                 disabled={!canManage}
                 onChange={(e) =>
-                  patch({ consentManager: { ...form.consentManager, registrationId: e.target.value } })
+                  patch({
+                    consentManager: { ...form.consentManager, registrationId: e.target.value },
+                  })
                 }
               />
             </Field>
