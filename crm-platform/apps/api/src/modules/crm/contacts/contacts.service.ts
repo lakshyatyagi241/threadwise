@@ -12,6 +12,7 @@ import type {
   BulkUpdateContactsInput,
   ContactListResponse,
   ContactResponse,
+  ContactSendWindow,
   ContactSelectItem,
   ContactSelectQuery,
   CreateContactInput,
@@ -52,6 +53,7 @@ import { PersonalDataErasureService } from '../../privacy';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
+import { SendWindowService } from '../../compliance-center';
 import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
@@ -89,6 +91,14 @@ export interface ContactConsentContext {
    * Omitted, every write that carries a claim records its own event.
    */
   dedupeKey?: string;
+}
+
+/** Who set a contact's time zone (BL-193): an API key (or a caller that says `api`) or a person in the app. */
+function timezoneSourceOf(
+  ctx: { actorType?: string },
+  via?: ContactConsentContext,
+): 'staff' | 'api' {
+  return via?.source === 'api' || ctx.actorType === 'api_key' ? 'api' : 'staff';
 }
 
 /** The statuses a write carries, by channel (undefined: not part of the write). */
@@ -192,7 +202,24 @@ export class ContactsService {
     private readonly consent: ContactConsentService,
     private readonly intake: ConsentIntakeService,
     private readonly erasure: PersonalDataErasureService,
+    private readonly sendWindow: SendWindowService,
   ) {}
+
+  /**
+   * The clock marketing messages to this contact are read on and what the quiet hours say about it right now (BL-193): the contact's
+   * stored zone and who set it, the zone the sender would really use, the next allowed send time when it would be held, and how many
+   * messages already wait. Same record scope as reading the contact.
+   */
+  async sendWindowOf(uuid: string): Promise<ContactSendWindow> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+      if (!row) throw AppError.notFound('Contact', uuid);
+      const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      return this.sendWindow.contactWindow(ctx.orgId, row.id, { tx });
+    });
+  }
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
     const ctx = RequestContextStore.require();
@@ -458,6 +485,8 @@ export class ContactsService {
         emailConfirmed: input.emailConfirmed,
         faxNumber: input.faxNumber,
         source: input.source,
+        timezone: input.timezone,
+        timezoneSource: timezoneSourceOf(ctx, via),
         isUnsubscribed: input.isUnsubscribed === true,
         unsubscribedAt: input.isUnsubscribed === true ? new Date() : null,
         data: input.customFields,
@@ -1107,6 +1136,11 @@ export class ContactsService {
       if (input.emailConfirmed !== undefined) values.emailConfirmed = input.emailConfirmed;
       if (input.faxNumber !== undefined) values.faxNumber = input.faxNumber;
       if (input.source !== undefined) values.source = input.source;
+      // The contact's own time zone (BL-193): who set it is recorded with it, so a zone read from the number never replaces a chosen one.
+      if (input.timezone !== undefined) {
+        values.timezone = input.timezone;
+        values.timezoneSource = input.timezone === null ? null : timezoneSourceOf(ctx, via);
+      }
       // Marketing opt-out (TW-CON-017): the timestamp is written with the flag, on every change, so the evidence is never
       // missing (Reference left it empty on a manual change). No change, nothing touched.
       if (input.isUnsubscribed !== undefined && input.isUnsubscribed !== existing.isUnsubscribed) {
@@ -1603,6 +1637,11 @@ export class ContactsService {
           });
           if (plan.status !== undefined) values.status = plan.status;
         }
+        // The contact's own time zone (BL-193), set on every contact of the selection; `null` clears it. Recorded as set by staff.
+        if (input.values.timezone !== undefined) {
+          values.timezone = input.values.timezone;
+          values.timezoneSource = input.values.timezone === null ? null : 'staff';
+        }
         let changedKeys: string[] = [];
         if (propertyPlan) {
           // Merge, don't replace: the contact's other properties stay. A cleared key is removed.
@@ -1620,13 +1659,22 @@ export class ContactsService {
         }
 
         await this.repo.updateFieldsById(rowTx, ctx.orgId, id, values);
-        // The keys that changed are recorded, never their values.
+        // The keys that changed are recorded, never their values (a time zone is not personal data, so its change is).
         await this.audit.record(rowTx, {
           module: MODULE_KEY,
           recordId: id,
           action: 'update',
-          ...(changedKeys.length > 0
-            ? { delta: { customFieldKeys: { old: null, new: changedKeys } } }
+          ...(changedKeys.length > 0 || input.values.timezone !== undefined
+            ? {
+                delta: {
+                  ...(changedKeys.length > 0
+                    ? { customFieldKeys: { old: null, new: changedKeys } }
+                    : {}),
+                  ...(input.values.timezone !== undefined
+                    ? { timezone: { old: existing.timezone, new: input.values.timezone } }
+                    : {}),
+                },
+              }
             : {}),
         });
         await this.outbox.emit(rowTx, {

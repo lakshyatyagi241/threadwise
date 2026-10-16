@@ -187,6 +187,8 @@ describe('contact mapper and schemas (TW-API-022 to 025)', () => {
       phone: '+1 555',
       email: null,
       customFields: { a: 1 },
+      timezone: 'Asia/Kolkata',
+      timezoneSource: 'api',
       createdAt: '2026-01-01T00:00:00.000Z',
       groups: [{ id: 'g1', name: 'G', color: '#000000' }],
     } as unknown as ContactResponse;
@@ -197,6 +199,9 @@ describe('contact mapper and schemas (TW-API-022 to 025)', () => {
       email: null,
       tags: [{ id: 'g1', name: 'G' }],
       attributes: { a: 1 },
+      // BL-193: the contact's own time zone and who set it (a product extension on Reference's contact).
+      timezone: 'Asia/Kolkata',
+      timezone_source: 'api',
       created_at: '2026-01-01T00:00:00.000Z',
     });
   });

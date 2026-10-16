@@ -46,6 +46,7 @@ import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
 import { OwnerControl } from './owner-control';
+import { TimezoneCard } from './timezone-card';
 import { LostReasonDialog, type LostPrompt } from './lost-reason';
 import { isLostStage } from '../lib/stage-flow';
 import { statusAfterMove, statusNotice } from '../lib/status-scope';
@@ -311,6 +312,8 @@ export function ContactDetail({ id }: { id: string }) {
               ])
             }
           />
+          {/* The clock marketing messages are read on and the next time one may go (BL-193), right above the history. */}
+          <TimezoneCard contactId={id} rowVersion={c.rowVersion} />
           <Timeline id={id} />
         </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">

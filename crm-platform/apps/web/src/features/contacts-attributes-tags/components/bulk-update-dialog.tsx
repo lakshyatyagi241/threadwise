@@ -22,9 +22,11 @@ import {
 } from '../lib/stage-flow';
 import { BulkPropertiesSection } from './bulk-properties-section';
 import { LostReasonFields } from './lost-reason';
+import { TimezoneSelect } from './timezone-select';
 
 const KEEP = '';
 const UNASSIGN = '__none__';
+const CLEAR_ZONE = '__clear__';
 
 /**
  * "Update" on the selected contacts: set the stage, the status, the owner and any custom properties of all of them at
@@ -80,6 +82,7 @@ function Form({
 }) {
   const t = useTranslations('contacts-attributes-tags.bulkUpdate');
   const tf = useTranslations('contacts-attributes-tags.form');
+  const tz = useTranslations('contacts-attributes-tags.timezone');
   const uid = useId();
   const options = useStatusOptions();
   const owners = useOwners();
@@ -87,6 +90,7 @@ function Form({
   const [stage, setStage] = useState(KEEP);
   const [status, setStatus] = useState(KEEP);
   const [owner, setOwner] = useState(KEEP);
+  const [zone, setZone] = useState(KEEP);
   const [reason, setReason] = useState<LostReasonAnswer>({ pick: '', text: '' });
   const [showProblems, setShowProblems] = useState(false);
   const registry = useContactFields();
@@ -108,7 +112,11 @@ function Form({
   const lost = stage !== KEEP && isLostStage(stages, stage);
   const problem = lost ? lostReasonProblem(reason, reasons.length > 0) : null;
   const nothing =
-    stage === KEEP && status === KEEP && owner === KEEP && Object.keys(changes).length === 0;
+    stage === KEEP &&
+    status === KEEP &&
+    owner === KEEP &&
+    zone === KEEP &&
+    Object.keys(changes).length === 0;
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -120,6 +128,7 @@ function Form({
       ...(stage !== KEEP ? { lifecycleStage: stage } : {}),
       ...(status !== KEEP ? { status } : {}),
       ...(owner !== KEEP ? { ownerId: owner === UNASSIGN ? null : owner } : {}),
+      ...(zone !== KEEP ? { timezone: zone === CLEAR_ZONE ? null : zone } : {}),
       ...(lost ? lostReasonPayload(reason, reasons.length > 0) : {}),
       ...(customFields ? { customFields } : {}),
     };
@@ -185,6 +194,17 @@ function Form({
             ))}
         </Select>
       </Field>
+      {!ownerOnly && (
+        <Field label={tz('title')} htmlFor={`${uid}-zone`}>
+          <TimezoneSelect
+            id={`${uid}-zone`}
+            value={zone}
+            onChange={setZone}
+            emptyLabel={t('keep')}
+            extra={[{ value: CLEAR_ZONE, label: tz('clear') }]}
+          />
+        </Field>
+      )}
       {!ownerOnly && (
         <BulkPropertiesSection
           fields={registry.data ?? []}

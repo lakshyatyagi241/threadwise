@@ -23,7 +23,8 @@
       "imported": "Nhập từ tệp",
       "createdAt": "Ngày tạo",
       "updatedAt": "Cập nhật lần cuối",
-      "lastActivityAt": "Hoạt động gần nhất"
+      "lastActivityAt": "Hoạt động gần nhất",
+      "timezone": "Múi giờ"
     },
     "fieldGroups": {
       "journey": "Hành trình",

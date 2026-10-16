@@ -461,7 +461,8 @@
         "source": "Origem",
         "consent": "Consentimento de marketing (sim / não)",
         "consentSms": "Consentimento de marketing por SMS (sim / não)",
-        "consentEmail": "Consentimento de marketing por e-mail (sim / não)"
+        "consentEmail": "Consentimento de marketing por e-mail (sim / não)",
+        "timezone": "Fuso horário (ex.: Asia/Kolkata)"
       },
       "notInFile": "Não está no arquivo",
       "columnN": "Coluna {n}",
@@ -518,7 +519,8 @@
         "tag_name_too_long": "nome da etiqueta muito longo",
         "plan_limit_reached": "limite de contatos do plano atingido",
         "tag_limit_reached": "limite de etiquetas do plano atingido",
-        "duplicate_in_file": "número repetido, mesclado a uma linha anterior"
+        "duplicate_in_file": "número repetido, mesclado a uma linha anterior",
+        "invalid_timezone": "fuso horário inválido"
       },
       "statusHint": "Aplicado aos contatos que este arquivo cria.",
       "queued": "Aguardando para iniciar...",
@@ -1430,6 +1432,35 @@
       "scopeMany": "Excluir contatos também apaga suas conversas, mensagens, mídias, arquivos, gravações de chamadas e registros de chamadas. Leads, negócios, tarefas e faturas permanecem.",
       "keepHistory": "Manter o histórico de conversas sem a identidade da pessoa",
       "keepHistoryHint": "As conversas permanecem nos seus registros, mas não apontam mais para a pessoa."
+    },
+    "timezone": {
+      "title": "Fuso horário",
+      "hint": "O horário de silêncio é lido neste relógio. Deixe vazio para usar o país do telefone e depois o seu fuso horário de reserva.",
+      "useAuto": "Pelo número de telefone",
+      "clear": "Limpar o fuso horário",
+      "change": "Alterar",
+      "save": "Salvar",
+      "cancel": "Cancelar",
+      "saved": "Fuso horário salvo.",
+      "failed": "Não foi possível salvar o fuso horário. Recarregue o contato e tente de novo.",
+      "several": "{count} fusos horários (vale o mais rígido)",
+      "localTime": "Lá agora são {time}",
+      "held": "Aguardando o horário de silêncio: {count}",
+      "quiet": {
+        "off": "O horário de silêncio está desativado neste espaço de trabalho.",
+        "open": "Uma mensagem de marketing pode ser enviada agora.",
+        "held": "Uma mensagem de marketing esperaria até {when}."
+      },
+      "source": {
+        "staff": "Definido pela equipe",
+        "import": "Definido por uma importação CSV",
+        "api": "Definido pela API",
+        "contact_field": "Definido no contato",
+        "phone_country": "Deduzido do país do telefone",
+        "window_setting": "Seu fuso horário de reserva (Central de conformidade)",
+        "workspace": "O fuso horário do seu espaço de trabalho",
+        "utc": "UTC (nada mais é conhecido)"
+      }
     }
   }
 }

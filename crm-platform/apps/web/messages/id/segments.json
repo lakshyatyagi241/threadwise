@@ -23,7 +23,8 @@
       "imported": "Diimpor dari file",
       "createdAt": "Dibuat",
       "updatedAt": "Terakhir diperbarui",
-      "lastActivityAt": "Aktivitas terakhir"
+      "lastActivityAt": "Aktivitas terakhir",
+      "timezone": "Zona waktu"
     },
     "fieldGroups": {
       "journey": "Perjalanan",

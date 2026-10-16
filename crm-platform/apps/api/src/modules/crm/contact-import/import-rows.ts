@@ -2,6 +2,7 @@ import {
   GROUP_NAME_MAX,
   IMPORT_FIELDS,
   TAG_NAME_MAX,
+  canonicalZone,
   canonicalizePhone,
   composeDisplayName,
   detectImportColumns,
@@ -29,6 +30,8 @@ export interface ParsedRow {
   memo?: string;
   status?: string;
   source?: string;
+  /** An IANA zone (canonical spelling), only when the file has a time zone column and the cell is a real zone. */
+  timezone?: string;
   groups: string[];
   tags: string[];
   /** What the consent column says, only when a column is mapped (`blank` is left out so a later row for the same number can refine it). */
@@ -143,6 +146,10 @@ export function extractRow(
   const email = cell('email').toLowerCase();
   if (email && (!EMAIL.test(email) || email.length > 255)) return reject('invalid_email');
 
+  const rawZone = cell('timezone');
+  const timezone = rawZone ? canonicalZone(rawZone) : null;
+  if (rawZone && timezone === null) return reject('invalid_timezone');
+
   const groups = splitList(cell('group'));
   if (groups.some((g) => g.length > GROUP_NAME_MAX)) return reject('group_name_too_long');
   const tags = splitList(cell('tags'));
@@ -171,6 +178,7 @@ export function extractRow(
       memo: opt(cell('memo'), 2000),
       status: opt(cell('status'), 64),
       source: opt(cell('source'), 128),
+      ...(timezone ? { timezone } : {}),
       groups,
       tags,
       ...(consentColumn ? { consentColumn } : {}),

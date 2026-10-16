@@ -33,6 +33,9 @@ export interface ResolvedContactFilter {
   unsubscribed?: boolean;
   source?: string;
   status?: string;
+  /** BL-193: the stored time zone is this one / no time zone is stored. */
+  timezone?: string;
+  noTimezone?: boolean;
   /** Date windows, both ends inclusive (a bare day covers the whole day, UTC). */
   createdFrom?: string;
   createdTo?: string;
@@ -117,6 +120,8 @@ export function contactConditions(
   if (f.lifecycleStage) c.push(eq(contacts.lifecycleStage, f.lifecycleStage));
   if (f.status) c.push(eq(contacts.status, f.status));
   if (f.source) c.push(eq(contacts.source, f.source));
+  if (f.timezone) c.push(eq(contacts.timezone, f.timezone));
+  if (f.noTimezone === true) c.push(isNull(contacts.timezone));
   if (f.q) for (const token of searchTokens(f.q)) c.push(tokenCondition(token));
 
   if (f.groupId !== undefined)

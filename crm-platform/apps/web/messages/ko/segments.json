@@ -23,7 +23,8 @@
       "imported": "파일에서 가져옴",
       "createdAt": "생성일",
       "updatedAt": "마지막 수정",
-      "lastActivityAt": "마지막 활동"
+      "lastActivityAt": "마지막 활동",
+      "timezone": "시간대"
     },
     "fieldGroups": {
       "journey": "여정",

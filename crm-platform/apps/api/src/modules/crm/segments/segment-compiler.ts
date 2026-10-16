@@ -244,6 +244,8 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
       return text(sql`${contacts.countryCode}`);
     case 'source':
       return text(sql`${contacts.source}`);
+    case 'timezone':
+      return text(sql`${contacts.timezone}`);
     case 'leadScore':
       return { sql: numberPredicate(sql`${contacts.leadScore}`, op as NumberOperator, c.value) };
     case 'lifecycleStage': {

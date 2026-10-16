@@ -88,6 +88,7 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('groups', 'who', { options: l.groups, optionsFrom: 'group' }),
     sys('owner', 'who', { options: l.users, optionsFrom: 'user' }),
     sys('source', 'who'),
+    sys('timezone', 'who'),
     sys('unsubscribed', 'who'),
     sys('imported', 'who'),
     // created and updated are always set, so "is empty" would never match

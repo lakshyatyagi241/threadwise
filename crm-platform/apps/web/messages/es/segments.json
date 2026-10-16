@@ -23,7 +23,8 @@
       "imported": "Importado desde un archivo",
       "createdAt": "Creado",
       "updatedAt": "Última actualización",
-      "lastActivityAt": "Última actividad"
+      "lastActivityAt": "Última actividad",
+      "timezone": "Zona horaria"
     },
     "fieldGroups": {
       "journey": "Recorrido",

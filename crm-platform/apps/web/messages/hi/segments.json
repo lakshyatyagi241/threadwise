@@ -23,7 +23,8 @@
       "imported": "फ़ाइल से आयात किया गया",
       "createdAt": "बनाया गया",
       "updatedAt": "अंतिम अपडेट",
-      "lastActivityAt": "अंतिम गतिविधि"
+      "lastActivityAt": "अंतिम गतिविधि",
+      "timezone": "समय क्षेत्र"
     },
     "fieldGroups": {
       "journey": "यात्रा",

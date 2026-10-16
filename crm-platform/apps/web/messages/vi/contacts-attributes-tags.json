@@ -461,7 +461,8 @@
         "source": "Nguồn",
         "consent": "Đồng ý tiếp thị (có / không)",
         "consentSms": "Đồng ý tiếp thị qua SMS (có / không)",
-        "consentEmail": "Đồng ý tiếp thị qua email (có / không)"
+        "consentEmail": "Đồng ý tiếp thị qua email (có / không)",
+        "timezone": "Múi giờ (vd: Asia/Kolkata)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -518,7 +519,8 @@
         "tag_name_too_long": "tên thẻ quá dài",
         "plan_limit_reached": "đã đạt giới hạn liên hệ của gói",
         "tag_limit_reached": "đã đạt giới hạn thẻ của gói",
-        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước"
+        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước",
+        "invalid_timezone": "múi giờ không hợp lệ"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -1430,6 +1432,35 @@
       "scopeMany": "Xóa các liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
       "keepHistory": "Giữ lịch sử hội thoại nhưng không kèm danh tính của người này",
       "keepHistoryHint": "Các hội thoại vẫn được giữ làm hồ sơ nhưng không còn liên kết đến người này."
+    },
+    "timezone": {
+      "title": "Múi giờ",
+      "hint": "Giờ yên tĩnh được tính theo đồng hồ này. Để trống để dùng quốc gia của số điện thoại, rồi đến múi giờ dự phòng của bạn.",
+      "useAuto": "Theo số điện thoại",
+      "clear": "Xóa múi giờ",
+      "change": "Thay đổi",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "saved": "Đã lưu múi giờ.",
+      "failed": "Không thể lưu múi giờ. Hãy tải lại liên hệ rồi thử lại.",
+      "several": "{count} múi giờ (áp dụng múi giờ nghiêm ngặt nhất)",
+      "localTime": "Ở đó bây giờ là {time}",
+      "held": "Đang chờ giờ yên tĩnh: {count}",
+      "quiet": {
+        "off": "Giờ yên tĩnh đang tắt cho không gian làm việc này.",
+        "open": "Có thể gửi tin nhắn tiếp thị ngay bây giờ.",
+        "held": "Tin nhắn tiếp thị sẽ chờ đến {when}."
+      },
+      "source": {
+        "staff": "Do nhân viên đặt",
+        "import": "Đặt bởi lần nhập CSV",
+        "api": "Đặt qua API",
+        "contact_field": "Đặt trên liên hệ",
+        "phone_country": "Suy ra từ quốc gia của số điện thoại",
+        "window_setting": "Múi giờ dự phòng của bạn (Trung tâm tuân thủ)",
+        "workspace": "Múi giờ của không gian làm việc",
+        "utc": "UTC (không biết thông tin nào khác)"
+      }
     }
   }
 }

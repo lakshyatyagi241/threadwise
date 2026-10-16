@@ -461,7 +461,8 @@
         "source": "Sumber",
         "consent": "Persetujuan pemasaran (ya / tidak)",
         "consentSms": "Persetujuan pemasaran SMS (ya / tidak)",
-        "consentEmail": "Persetujuan pemasaran email (ya / tidak)"
+        "consentEmail": "Persetujuan pemasaran email (ya / tidak)",
+        "timezone": "Zona waktu (mis. Asia/Kolkata)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -518,7 +519,8 @@
         "tag_name_too_long": "nama tag terlalu panjang",
         "plan_limit_reached": "batas kontak paket tercapai",
         "tag_limit_reached": "batas tag paket tercapai",
-        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya"
+        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
+        "invalid_timezone": "zona waktu tidak valid"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -1430,6 +1432,35 @@
       "scopeMany": "Menghapus kontak juga menghapus percakapan, pesan, media, file, rekaman panggilan, dan log panggilan mereka. Prospek, transaksi, tugas, dan faktur tetap ada.",
       "keepHistory": "Simpan riwayat percakapan tanpa identitas orang tersebut",
       "keepHistoryHint": "Percakapan tetap tersimpan sebagai arsip Anda tetapi tidak lagi mengarah ke orang tersebut."
+    },
+    "timezone": {
+      "title": "Zona waktu",
+      "hint": "Jam tenang dibaca menurut jam ini. Kosongkan untuk memakai negara nomor telepon, lalu zona waktu cadangan Anda.",
+      "useAuto": "Dari nomor telepon",
+      "clear": "Hapus zona waktu",
+      "change": "Ubah",
+      "save": "Simpan",
+      "cancel": "Batal",
+      "saved": "Zona waktu disimpan.",
+      "failed": "Zona waktu tidak dapat disimpan. Muat ulang kontak lalu coba lagi.",
+      "several": "{count} zona waktu (yang paling ketat berlaku)",
+      "localTime": "Di sana sekarang {time}",
+      "held": "Menunggu jam tenang: {count}",
+      "quiet": {
+        "off": "Jam tenang nonaktif untuk ruang kerja ini.",
+        "open": "Pesan pemasaran dapat dikirim sekarang.",
+        "held": "Pesan pemasaran akan menunggu sampai {when}."
+      },
+      "source": {
+        "staff": "Ditetapkan oleh staf",
+        "import": "Ditetapkan oleh impor CSV",
+        "api": "Ditetapkan melalui API",
+        "contact_field": "Ditetapkan pada kontak",
+        "phone_country": "Dibaca dari negara nomor telepon",
+        "window_setting": "Zona waktu cadangan Anda (Pusat kepatuhan)",
+        "workspace": "Zona waktu ruang kerja Anda",
+        "utc": "UTC (tidak ada informasi lain)"
+      }
     }
   }
 }

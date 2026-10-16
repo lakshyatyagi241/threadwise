@@ -23,7 +23,8 @@
       "imported": "Bir dosyadan içe aktarıldı",
       "createdAt": "Oluşturuldu",
       "updatedAt": "Son güncelleme",
-      "lastActivityAt": "Son etkinlik"
+      "lastActivityAt": "Son etkinlik",
+      "timezone": "Saat dilimi"
     },
     "fieldGroups": {
       "journey": "Yolculuk",

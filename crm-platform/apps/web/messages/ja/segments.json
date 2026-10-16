@@ -23,7 +23,8 @@
       "imported": "ファイルからインポート",
       "createdAt": "作成日",
       "updatedAt": "最終更新",
-      "lastActivityAt": "最終アクティビティ"
+      "lastActivityAt": "最終アクティビティ",
+      "timezone": "タイムゾーン"
     },
     "fieldGroups": {
       "journey": "ジャーニー",

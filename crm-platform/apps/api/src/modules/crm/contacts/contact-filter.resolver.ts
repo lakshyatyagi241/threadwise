@@ -45,6 +45,8 @@ export async function resolveContactFilter(
     unsubscribed: input.unsubscribed,
     source: input.source,
     status: input.status,
+    timezone: input.timezone,
+    noTimezone: input.noTimezone,
     createdFrom: input.createdFrom,
     createdTo: input.createdTo,
     updatedFrom: input.updatedFrom,

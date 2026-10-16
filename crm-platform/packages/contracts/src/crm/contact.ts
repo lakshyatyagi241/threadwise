@@ -5,6 +5,7 @@ import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
 import { consentProofSchema } from '../contact-consent/intake';
 import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
+import { contactTimezoneSchema, contactTimezoneSourceSchema } from './contact-timezone';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 import type { InvalidCondition } from '../segments/rules';
 
@@ -60,6 +61,10 @@ export const contactResponseSchema = z.object({
   customFields: z.record(z.unknown()),
   /** Where the contact came from: the import's source knob, "import", an API client... */
   source: z.string().nullable(),
+  /** The contact's own IANA time zone (BL-193): the quiet hours are read on it. Null: read from the number's country, then the workspace. */
+  timezone: z.string().nullable(),
+  /** Who set `timezone`: a person in the app (`staff`), a CSV `import` or the REST `api`. Null when no zone is stored. */
+  timezoneSource: contactTimezoneSourceSchema.nullable(),
   /** Marketing opt-out (TW-CON-017). */
   isUnsubscribed: z.boolean(),
   isArchived: z.boolean(),
@@ -96,6 +101,8 @@ export const createContactSchema = z
     faxNumber: z.string().max(32).optional(),
     /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
     source: z.string().trim().max(128).optional(),
+    /** The contact's own IANA time zone (BL-193), e.g. `Asia/Kolkata`; recorded as set by whoever makes the contact. */
+    timezone: contactTimezoneSchema.optional(),
     /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
     isUnsubscribed: z.boolean().optional(),
     /**
@@ -133,6 +140,8 @@ export const updateContactSchema = z.object({
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
   source: z.string().trim().max(128).nullish(),
+  /** The contact's own IANA time zone (BL-193). `null` clears it (the contact is then read on its number's country, then the workspace). */
+  timezone: contactTimezoneSchema.nullish(),
   /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
   isUnsubscribed: z.boolean().optional(),
   /** The proof that the person agreed to marketing; see `createContactSchema`. Needed when a status changes to `subscribed`. */
@@ -230,6 +239,8 @@ export const bulkUpdateContactsSchema = z.object({
     lostReason: z.string().max(255).nullish(),
     otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
+    /** The IANA time zone to set on every contact (BL-193); `null` clears it. Recorded as set by staff. */
+    timezone: contactTimezoneSchema.nullish(),
     /**
      * Custom properties to set on every contact, by property key. Each key must be an active, editable custom
      * property of the workspace (422 CON_PROPERTY_NOT_EDITABLE otherwise) and each value must fit the property's type

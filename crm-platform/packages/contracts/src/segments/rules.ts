@@ -48,6 +48,8 @@ export const SEGMENT_BUILTIN_FIELDS = {
   /** The dial code stored on the contact (`+91`): what "country" means for a WhatsApp number. */
   countryCode: 'text',
   source: 'text',
+  /** The contact's own IANA time zone (BL-193), e.g. `Asia/Kolkata`. */
+  timezone: 'text',
   leadScore: 'number',
   lifecycleStage: 'option',
   status: 'option',

@@ -42,6 +42,10 @@ export const contactFilterShape = {
   unsubscribed: queryBoolean().optional(),
   source: z.string().max(128).optional(),
   status: z.string().max(64).optional(),
+  /** Contacts whose stored time zone is this one (BL-193), e.g. `Asia/Kolkata`. */
+  timezone: z.string().trim().max(64).optional(),
+  /** Contacts with no stored time zone (read on their number's country, then the workspace). */
+  noTimezone: queryBoolean().optional(),
   /**
    * Date windows, both ends inclusive; a bare day (`2026-10-03`) covers that whole day in UTC. They
    * are the same conditions a segment rule's date operators build (one SQL builder for both).

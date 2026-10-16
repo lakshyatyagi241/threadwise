@@ -23,7 +23,8 @@
       "imported": "ফাইল থেকে আমদানি করা",
       "createdAt": "তৈরির সময়",
       "updatedAt": "সর্বশেষ আপডেট",
-      "lastActivityAt": "সর্বশেষ কার্যকলাপ"
+      "lastActivityAt": "সর্বশেষ কার্যকলাপ",
+      "timezone": "সময় অঞ্চল"
     },
     "fieldGroups": {
       "journey": "যাত্রা",

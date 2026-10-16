@@ -109,6 +109,18 @@ export class ContactsController {
     return this.contacts.setAssignee(body);
   }
 
+  @Get(':id/send-window')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({
+    summary:
+      'The clock marketing messages to this contact are read on, and what the quiet hours say now',
+    description:
+      "The stored time zone and who set it, the zone a send would really use (the stored one, the number's country, the workspace fallback), the next allowed send time when it would be held, and how many messages already wait.",
+  })
+  async sendWindow(@Param('id', ParseUUIDPipe) id: string) {
+    return this.contacts.sendWindowOf(id);
+  }
+
   @Get(':id')
   @RequirePermission('record.contacts.read')
   @ApiOperation({ summary: 'Get one contact by uuid' })

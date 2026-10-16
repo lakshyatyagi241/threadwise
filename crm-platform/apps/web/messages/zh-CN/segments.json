@@ -23,7 +23,8 @@
       "imported": "从文件导入",
       "createdAt": "创建时间",
       "updatedAt": "最后更新",
-      "lastActivityAt": "最后活动"
+      "lastActivityAt": "最后活动",
+      "timezone": "时区"
     },
     "fieldGroups": {
       "journey": "旅程",

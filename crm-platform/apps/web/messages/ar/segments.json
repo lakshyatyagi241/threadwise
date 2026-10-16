@@ -23,7 +23,8 @@
       "imported": "مستورد من ملف",
       "createdAt": "تاريخ الإنشاء",
       "updatedAt": "آخر تحديث",
-      "lastActivityAt": "آخر نشاط"
+      "lastActivityAt": "آخر نشاط",
+      "timezone": "المنطقة الزمنية"
     },
     "fieldGroups": {
       "journey": "الرحلة",

@@ -23,7 +23,8 @@
       "imported": "Geïmporteerd uit een bestand",
       "createdAt": "Aangemaakt",
       "updatedAt": "Laatst bijgewerkt",
-      "lastActivityAt": "Laatste activiteit"
+      "lastActivityAt": "Laatste activiteit",
+      "timezone": "Tijdzone"
     },
     "fieldGroups": {
       "journey": "Traject",

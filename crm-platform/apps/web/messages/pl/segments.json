@@ -23,7 +23,8 @@
       "imported": "Zaimportowano z pliku",
       "createdAt": "Utworzono",
       "updatedAt": "Ostatnia zmiana",
-      "lastActivityAt": "Ostatnia aktywność"
+      "lastActivityAt": "Ostatnia aktywność",
+      "timezone": "Strefa czasowa"
     },
     "fieldGroups": {
       "journey": "Ścieżka",

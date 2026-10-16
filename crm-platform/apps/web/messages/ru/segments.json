@@ -23,7 +23,8 @@
       "imported": "Импортирован из файла",
       "createdAt": "Создан",
       "updatedAt": "Последнее изменение",
-      "lastActivityAt": "Последняя активность"
+      "lastActivityAt": "Последняя активность",
+      "timezone": "Часовой пояс"
     },
     "fieldGroups": {
       "journey": "Путь",

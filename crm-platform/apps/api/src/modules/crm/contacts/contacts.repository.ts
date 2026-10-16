@@ -66,6 +66,9 @@ export interface ContactRow {
   faxNumber: string | null;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
+  /** BL-193: the contact's own IANA time zone and who set it (staff | import | api); both null when none is stored. */
+  timezone: string | null;
+  timezoneSource: string | null;
   source: string | null;
   isUnsubscribed: boolean;
   isArchived: boolean;
@@ -184,6 +187,8 @@ export class ContactsRepository {
       faxNumber: contacts.faxNumber,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
+      timezone: contacts.timezone,
+      timezoneSource: contacts.timezoneSource,
       source: contacts.source,
       isUnsubscribed: contacts.isUnsubscribed,
       isArchived: contacts.isArchived,
@@ -454,6 +459,8 @@ export class ContactsRepository {
       emailConfirmed?: boolean;
       faxNumber?: string | null;
       source?: string | null;
+      timezone?: string | null;
+      timezoneSource?: string | null;
       isUnsubscribed?: boolean;
       unsubscribedAt?: Date | null;
       data: Record<string, unknown>;
@@ -494,6 +501,8 @@ export class ContactsRepository {
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
         source: values.source ?? null,
+        timezone: values.timezone ?? null,
+        timezoneSource: values.timezone ? (values.timezoneSource ?? 'staff') : null,
         isUnsubscribed: values.isUnsubscribed ?? false,
         unsubscribedAt: values.unsubscribedAt ?? null,
         data: values.data,

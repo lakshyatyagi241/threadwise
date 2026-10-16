@@ -426,6 +426,8 @@ export class ContactImportEngine {
           status: o.row.status ?? options.status ?? null,
           // "import" when nothing says otherwise, so the Imported filter and the source column agree
           source: o.row.source ?? options.source ?? 'import',
+          timezone: o.row.timezone ?? null,
+          timezoneSource: o.row.timezone ? 'import' : null,
           importJobId: job.id,
           ownerId: userId,
           createdBy: userId,
@@ -475,6 +477,11 @@ export class ContactImportEngine {
       if (o.row.title) patch.title = o.row.title;
       if (o.row.address) patch.address = o.row.address;
       if (o.row.memo) patch.message = o.row.memo;
+      // A zone in the file fills a contact that has none (or one an earlier import set); it never replaces a zone a person or the API chose.
+      if (o.row.timezone) {
+        patch.timezone = sql`CASE WHEN ${contacts.timezone} IS NULL OR ${contacts.timezoneSource} = 'import' THEN ${o.row.timezone} ELSE ${contacts.timezone} END`;
+        patch.timezoneSource = sql`CASE WHEN ${contacts.timezone} IS NULL OR ${contacts.timezoneSource} = 'import' THEN 'import' ELSE ${contacts.timezoneSource} END`;
+      }
       await tx
         .update(contacts)
         .set(patch)
