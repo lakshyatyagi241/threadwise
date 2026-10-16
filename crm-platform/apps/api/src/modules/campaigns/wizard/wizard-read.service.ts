@@ -13,6 +13,7 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
 import {
   BroadcastsComposeService,
+  PreviousSendsService,
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
   templateRefusals,
@@ -46,6 +47,7 @@ export class WizardReadService {
     private readonly compose: BroadcastsComposeService,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
+    private readonly previousSends: PreviousSendsService,
   ) {}
 
   toTemplate(r: TemplateListRow): WizardTemplate {
@@ -140,6 +142,7 @@ export class WizardReadService {
     return this.db.tx(async (tx) => ({
       groups: await this.repo.groups(tx, orgId),
       segments: await this.repo.segments(tx, orgId, userId),
+      previousSends: await this.previousSends.options(tx, orgId),
     }));
   }
 

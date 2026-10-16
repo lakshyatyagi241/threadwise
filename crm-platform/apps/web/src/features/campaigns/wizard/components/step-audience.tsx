@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { WizardAudience, WizardTemplate } from '@crm/contracts';
+import { hasPreviousSends, type WizardAudience, type WizardTemplate } from '@crm/contracts';
 import { Alert, Button } from '@crm/ui';
 import { audienceTally, selectionKind } from '../lib/audience';
 import { issueFor, type StepIssue } from '../lib/issues';
@@ -11,7 +11,7 @@ import { ContactsTable } from './contacts-table';
 import { CountPanel, type CountQuery } from './count-panel';
 import { CsvUpload } from './csv-upload';
 import { WizardCard } from './parts';
-import { SourcePicker, type SourcesQuery } from './source-picker';
+import { PreviousSourcePicker, SourcePicker, type SourcesQuery } from './source-picker';
 import { TemplatePreview } from './template-preview';
 
 /** The mode to open on: the first one that already holds a selection (a resumed draft), else the contacts table. */
@@ -20,11 +20,12 @@ function firstMode(a: WizardAudience): AudienceMode {
   if (a.groupIds.length > 0) return 'groups';
   if (a.segmentIds.length > 0) return 'segments';
   if (a.csv) return 'csv';
+  if (hasPreviousSends(a.previous)) return 'previous';
   return 'contacts';
 }
 
 /**
- * Step 2: "Broadcast Action" with four ways to choose the audience (contacts table, groups, segments, CSV), each holding its own
+ * Step 2: "Broadcast Action" with five ways to choose the audience (contacts table, groups, segments, CSV, previous sends), each holding its own
  * selection; the audience is the union of them, with opted-out contacts and invalid numbers always left out. On the right: the live
  * count of who will be messaged and the template as the customer will see it.
  */
@@ -71,7 +72,7 @@ export function StepAudience({
 }
 
 /**
- * The four ways to choose the audience, each holding its own selection (the audience is the union of them, opted-out contacts and
+ * The five ways to choose the audience, each holding its own selection (the audience is the union of them, opted-out contacts and
  * invalid numbers always left out). Used by the wizard's step 2 and by the guided campaign's Recipients step.
  */
 export function AudienceBody({
@@ -158,6 +159,19 @@ export function AudienceBody({
         )}
         {mode === 'csv' && (
           <CsvUpload csv={audience.csv} onCsv={(csv) => onAudience({ csv })} disabled={disabled} />
+        )}
+        {mode === 'previous' && (
+          <>
+            <p className="border-b border-border px-4 py-2.5 text-sm text-muted-foreground">
+              {t('previousHint')}
+            </p>
+            <PreviousSourcePicker
+              sources={sources}
+              value={audience.previous}
+              onChange={(previous) => onAudience({ previous })}
+              disabled={disabled}
+            />
+          </>
         )}
       </section>
     </div>

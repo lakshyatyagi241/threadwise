@@ -139,7 +139,8 @@
         "cancel": "Batal",
         "retry": "Coba lagi dengan waktu baru",
         "delete": "Hapus",
-        "deleteHistory": "Hapus dari riwayat"
+        "deleteHistory": "Hapus dari riwayat",
+        "edit": "Edit"
       },
       "empty": {
         "title": "Tidak ada jadwal",
@@ -207,7 +208,8 @@
         "noSenders": "Tidak ada pengirim terhubung. Hubungkan nomor terlebih dahulu.",
         "warming": "Pemanasan",
         "splitHint": "Setiap pengirim yang dicentang menjalankan jadwalnya sendiri dengan bagian audiens yang adil.",
-        "messageType": "Jenis pesan"
+        "messageType": "Jenis pesan",
+        "editSenderHint": "Satu jadwal hanya memiliki satu nomor. Memilih nomor lain akan memindahkan jadwal ke nomor itu dan mencadangkan kembali kuota pemanasannya."
       },
       "audience": {
         "title": "Penerima",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Antrean audiens",
-            "hint": "Tetapkan ulang penerima dari broadcast sebelumnya."
+            "hint": "Targetkan ulang penerima broadcast dan kampanye sebelumnya."
           },
           "number": {
             "title": "Nomor",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Pilih grup",
         "chooseTags": "Pilih satu atau lebih tag",
-        "chooseQueues": "Pilih satu atau lebih broadcast sebelumnya",
+        "chooseQueues": "Pilih satu atau beberapa broadcast atau kampanye sebelumnya",
         "tickAny": "(centang berapa pun)",
         "noGroups": "Belum ada grup",
         "noTags": "Belum ada tag",
-        "noQueues": "Belum ada broadcast yang selesai",
+        "noQueues": "Belum ada broadcast atau kampanye sebelumnya",
         "contacts": "Buka Kontak",
         "broadcast": "Buka Broadcast",
         "tagsHint": "Penerima dihitung ulang saat jadwal dijalankan, sehingga kontak yang baru diberi tag ikut disertakan.",
-        "queuesHint": "Centang broadcast sebanyak yang diinginkan. Penerima otomatis dihapus duplikatnya sebelum dikirim.",
+        "queuesHint": "Centang sebanyak apa pun broadcast atau kampanye. Penerima duplikat dihapus otomatis sebelum pengiriman.",
         "paste": "Tempel nomor",
         "pasteHint": "Kode negara terlebih dahulu, tanpa + di depan. Baris baru atau koma memisahkan entri.",
         "pastePlaceholder": "Satu nomor per baris — sertakan kode negara, tanpa tanda plus",
         "total": "Total penerima:",
-        "optedOut": "{n} dikeluarkan: berhenti berlangganan atau diarsipkan"
+        "optedOut": "{n} dikeluarkan: berhenti berlangganan atau diarsipkan",
+        "kind": {
+          "broadcast": "Broadcast",
+          "campaign": "Kampanye"
+        }
       },
       "message": {
         "title": "Susun pesan",
@@ -275,7 +281,34 @@
         "pickerSearch": "Cari berdasarkan nama atau bahasa…",
         "pickerEmpty": "Tidak ada templat yang cocok.",
         "manageTemplates": "Kelola templat →",
-        "cancel": "Batal"
+        "cancel": "Batal",
+        "pickToPreview": "Pilih templat untuk melihatnya.",
+        "headerMedia": "Header {kind}",
+        "windowNote": "Nomor Cloud API mengirimkan templat yang disetujui meskipun pelanggan tidak mengirim pesan dalam 24 jam terakhir.",
+        "previewSamples": "Pratinjau dengan nilai contoh",
+        "pickerCategories": "Kategori templat",
+        "categories": {
+          "all": "Semua",
+          "marketing": "Pemasaran",
+          "utility": "Utilitas"
+        },
+        "pickerHidden": "{n, plural, other {# templat lagi disembunyikan karena nomor yang dicentang tidak dapat mengirimnya.}}",
+        "file": "File",
+        "chooseFile": "Pilih file untuk dikirim",
+        "fileHint": "Gambar, video, audio, atau dokumen. File disimpan secara privat di ruang kerja Anda.",
+        "limits": "Pada nomor yang Anda pilih: hingga {image} MB untuk gambar, {video} MB untuk video, {audio} MB untuk audio, dan {document} MB untuk dokumen.",
+        "tooBigUpload": "Ukuran file melebihi {mb} MB.",
+        "uploadFailed": "File tidak dapat diunggah. Coba lagi.",
+        "uploading": "Mengunggah…",
+        "replace": "Ganti",
+        "remove": "Hapus",
+        "kinds": {
+          "image": "Gambar",
+          "video": "Video",
+          "audio": "Audio",
+          "document": "Dokumen"
+        },
+        "orLink": "Atau tempel tautan ke file"
       },
       "when": {
         "title": "Kapan dikirim",
@@ -356,7 +389,18 @@
         "daysRequired": "Pilih hari dalam seminggu.",
         "endDateRequired": "Pilih hari terakhir.",
         "endBeforeStart": "Tanggal berakhir sebelum pengiriman pertama.",
-        "testNumber": "Masukkan nomor dengan kode negaranya."
+        "testNumber": "Masukkan nomor dengan kode negaranya.",
+        "mediaTooLarge": "File ini lebih besar dari yang diterima nomor yang dicentang. Pilih file yang lebih kecil.",
+        "mediaType": "Nomor yang dicentang tidak menerima jenis file ini untuk jenis media tersebut.",
+        "templateNotForSender": "Nomor yang dicentang tidak dapat mengirim templat ini: nomor WhatsApp Cloud API hanya mengirim templat yang disetujui Meta. Pilih templat atau nomor lain."
+      },
+      "edit": {
+        "title": "Edit pesan terjadwal",
+        "saved": "Jadwal diperbarui.",
+        "submit": "Simpan perubahan",
+        "stale": "Seseorang mengubah jadwal ini saat Anda mengeditnya. Muat ulang untuk melihat perubahannya; apa yang Anda ketik di sini akan hilang.",
+        "reload": "Muat ulang jadwal",
+        "backToSchedule": "Kembali ke jadwal"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Jalankan sekarang",
         "cancel": "Batal",
         "retry": "Coba lagi dengan waktu baru",
-        "delete": "Hapus"
+        "delete": "Hapus",
+        "edit": "Edit"
       },
       "kpi": {
         "recipients": "Penerima",
@@ -434,7 +479,11 @@
           "delivered": "Terkirim",
           "read": "Dibaca",
           "failed": "Gagal"
-        }
+        },
+        "search": "Cari nama atau nomor",
+        "range": "{from}–{to} dari {total}",
+        "prev": "Sebelumnya",
+        "next": "Berikutnya"
       },
       "config": {
         "eyebrow": "Detail jadwal",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Pratinjau pesan",
         "title": "Yang dilihat penerima",
-        "empty": "(isi kosong)"
+        "empty": "(isi kosong)",
+        "template": "Templat {name} ({language})",
+        "file": "File: {name}"
       },
-      "another": "Jadwalkan lainnya"
+      "another": "Jadwalkan lainnya",
+      "engagement": {
+        "eyebrow": "Interaksi",
+        "title": "Pengiriman dari waktu ke waktu",
+        "legend": "Legenda",
+        "steps": {
+          "queued": "Antre",
+          "sent": "Terkirim",
+          "delivered": "Tersampaikan",
+          "read": "Dibaca",
+          "failed": "Gagal"
+        },
+        "empty": "Belum ada yang terkirim, jadi belum ada yang bisa ditampilkan di grafik.",
+        "perHour": "Total berjalan pada awal setiap jam, dalam {zone}.",
+        "perDay": "Total berjalan pada awal setiap hari, dalam {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} pemanasan",

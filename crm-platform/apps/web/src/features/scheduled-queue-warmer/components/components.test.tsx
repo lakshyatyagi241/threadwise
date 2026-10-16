@@ -325,6 +325,30 @@ describe('composer screen', () => {
     expect(out).toContain('2 left out: opted out or archived');
   });
 
+  it('audience step: the earlier-sends picker lists broadcasts and campaigns with a kind badge', () => {
+    const out = html(
+      <AudienceStep
+        {...step({ recipientType: 'queue', queueIds: [G1] })}
+        options={{
+          ...options,
+          queues: [
+            { id: G1, name: 'Diwali offer', recipients: 500, kind: 'broadcast' },
+            { id: G2, name: 'Spring win-back', recipients: 200, kind: 'campaign' },
+          ],
+        }}
+        previewing={false}
+      />,
+    );
+    expect(out).toContain('Pick one or more past broadcasts or campaigns');
+    expect(out).toContain('Diwali offer');
+    expect(out).toContain('Spring win-back');
+    expect(out).toContain('>Broadcast<');
+    expect(out).toContain('>Campaign<');
+    expect(out.match(/data-testid="send-kind"/g)).toHaveLength(2);
+    const empty = html(<AudienceStep {...step({ recipientType: 'queue' })} previewing={false} />);
+    expect(empty).toContain('No earlier broadcasts or campaigns yet');
+  });
+
   it('message step: counter and personalisation chips; template picker; media link; location', () => {
     expect(html(<MessageStep {...step()} total={120} />)).toContain('/ 1024');
     expect(html(<MessageStep {...step()} total={120} />)).toContain('about 2 min');

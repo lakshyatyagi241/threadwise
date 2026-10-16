@@ -1,5 +1,10 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import {
+  hasPreviousSends,
+  previousSendOptionSchema,
+  previousSendsAudienceSchema,
+} from '../broadcasts/previous-sends';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
@@ -105,6 +110,8 @@ export const wizardAudienceSchema = z.object({
   selection: contactSelectionSchema.nullish(),
   /** The valid numbers of an uploaded CSV. Numbers that are not contacts yet become contacts when the broadcast is launched. */
   csv: wizardCsvRefSchema.nullable().default(null),
+  /** Who earlier broadcasts and campaigns went to, optionally only those who did (or did not) read, reply or click. */
+  previous: previousSendsAudienceSchema.nullish(),
 });
 export type WizardAudience = z.infer<typeof wizardAudienceSchema>;
 export const EMPTY_WIZARD_AUDIENCE: WizardAudience = {
@@ -124,7 +131,8 @@ export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
   a.contactIds.length > 0 ||
   a.allMatching !== null ||
   a.csv !== null ||
-  Boolean(a.selection);
+  Boolean(a.selection) ||
+  hasPreviousSends(a.previous);
 
 // ---------------------------------------------------------------------------------------- variables
 
@@ -390,6 +398,8 @@ export const wizardSegmentSourceSchema = z.object({
 export const wizardAudienceSourcesSchema = z.object({
   groups: z.array(wizardGroupSourceSchema),
   segments: z.array(wizardSegmentSourceSchema),
+  /** Earlier broadcasts and campaigns that went out, newest first (the "Previous sends" source). */
+  previousSends: z.array(previousSendOptionSchema).default([]),
 });
 export type WizardAudienceSources = z.infer<typeof wizardAudienceSourcesSchema>;
 

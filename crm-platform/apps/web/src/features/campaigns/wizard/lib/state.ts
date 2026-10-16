@@ -12,6 +12,7 @@ import {
   type WizardVariableSource,
   type WizardVariables,
 } from '@crm/contracts';
+import { sanitizePrevious } from '../../lib/previous-sends';
 
 /** What a save sends: the keys of the draft that changed. */
 export type DraftPatch = Partial<WizardDraft>;
@@ -112,8 +113,13 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
       return action.senderKey === d.senderKey
         ? state
         : { ...state, draft: { ...d, senderKey: action.senderKey } };
-    case 'audience':
-      return { ...state, draft: { ...d, audience: { ...d.audience, ...action.patch } } };
+    case 'audience': {
+      const patch =
+        action.patch.previous === undefined
+          ? action.patch
+          : { ...action.patch, previous: sanitizePrevious(action.patch.previous) };
+      return { ...state, draft: { ...d, audience: { ...d.audience, ...patch } } };
+    }
     case 'variable': {
       const next = { ...d.variables };
       if (action.source) next[action.slot] = action.source;

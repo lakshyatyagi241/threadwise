@@ -3,7 +3,9 @@ import {
   type CampaignConfig,
   type CampaignType,
   type CreateCampaignInput,
+  type PreviousSendsAudience,
 } from '@crm/contracts';
+import { EMPTY_PREVIOUS, hasPrevious, sanitizePrevious } from './previous-sends';
 
 /** What the campaign builder decides without the network (TW-CAMP-003 to 010). Pure. */
 
@@ -53,6 +55,8 @@ export interface BuilderForm {
   segmentIds: string[];
   manualNumbers: string;
   csvText: string;
+  /** Earlier broadcasts and campaigns whose recipients are added (not rebuilt on edit: the campaign holds its recipients as contacts). */
+  previousSends: PreviousSendsAudience;
 }
 
 export const EMPTY_FORM: BuilderForm = {
@@ -95,6 +99,7 @@ export const EMPTY_FORM: BuilderForm = {
   segmentIds: [],
   manualNumbers: '',
   csvText: '',
+  previousSends: EMPTY_PREVIOUS,
 };
 
 /** Types whose message is typed in the builder. */
@@ -246,6 +251,7 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     segmentIds: f.segmentIds,
     manualNumbers: f.manualNumbers,
     csvText: f.csvText,
+    ...(hasPrevious(f.previousSends) ? { previousSends: sanitizePrevious(f.previousSends) } : {}),
   };
 }
 
@@ -291,6 +297,7 @@ export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[]
     f.groupIds.length +
     f.tagIds.length +
     f.segmentIds.length +
+    f.previousSends.sends.length +
     f.manualNumbers.trim().length +
     f.csvText.trim().length;
   if (!o.draft && audience === 0) out.push('audience');

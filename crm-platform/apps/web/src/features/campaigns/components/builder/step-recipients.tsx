@@ -5,6 +5,7 @@ import { Field, Textarea } from '@crm/ui';
 import type {
   ContactGroupResponse,
   ContactResponse,
+  PreviousSendOption,
   SegmentResponse,
   TagResponse,
 } from '@crm/contracts';
@@ -18,6 +19,8 @@ import {
   type RecipientMode,
 } from '../../lib/wizard-model';
 import { isEmailEngine } from '../../lib/engine-gate';
+import { previousEstimate } from '../../lib/previous-sends';
+import { PreviousSendsPicker } from '../previous-sends-picker';
 import { DownloadIcon } from '../icons';
 import { ChoiceCard, StepCard } from './parts';
 
@@ -35,6 +38,8 @@ export function StepRecipients({
   onCsvTooBig,
   engine = '',
   skipped = null,
+  previousOptions = [],
+  editing = false,
 }: {
   form: BuilderForm;
   patch: (p: Partial<BuilderForm>) => void;
@@ -55,9 +60,14 @@ export function StepRecipients({
   engine?: string;
   /** Email only: what is already known to be skipped (picked contacts with no address, typed or uploaded numbers). */
   skipped?: { contacts: number; numbers: number; total: number } | null;
+  /** Earlier broadcasts and campaigns the "Previous sends" section lists (from the builder's options). */
+  previousOptions?: readonly PreviousSendOption[];
+  /** Editing a saved campaign: its recipients are already contacts, so an earlier choice of previous sends is not shown again. */
+  editing?: boolean;
 }) {
   const t = useTranslations('campaigns.builder');
   const email = isEmailEngine(engine);
+  const estimate = previousEstimate(form.previousSends, previousOptions);
   return (
     <StepCard index="03" title={t('audience.title')} tag={t('audience.tag')}>
       <div
@@ -112,6 +122,35 @@ export function StepRecipients({
           onSegments={(segmentIds) => patch({ segmentIds })}
           onContacts={(contactIds) => patch({ contactIds })}
         />
+      )}
+
+      {mode === 'audience' && (
+        <section
+          aria-labelledby="camp-previous-title"
+          data-testid="builder-previous-sends"
+          className="rounded-xl border border-border p-4"
+        >
+          <h3 id="camp-previous-title" className="text-sm font-semibold">
+            {t('audience.previousTitle')}
+          </h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">{t('audience.previousHint')}</p>
+          {editing && (
+            <p role="note" data-testid="previous-edit-hint" className="mt-1 text-xs text-warning">
+              {t('audience.previousEditHint')}
+            </p>
+          )}
+          <PreviousSendsPicker
+            options={previousOptions}
+            value={form.previousSends}
+            onChange={(previousSends) => patch({ previousSends })}
+            className="mt-3 max-h-[28rem]"
+          />
+          {estimate > 0 && (
+            <p className="mt-2 text-xs font-medium" data-testid="previous-estimate">
+              {t('audience.previousEstimate', { count: estimate })}
+            </p>
+          )}
+        </section>
       )}
 
       {mode === 'csv' && (
