@@ -1166,7 +1166,10 @@
         "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld.",
         "follow_up_template_required": "Kies de sjabloon die elke follow-up verstuurt.",
         "follow_up_flow_required": "Kies de flow die elke follow-up start.",
-        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups."
+        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups.",
+        "sequence_not_recurring": "Sjablonen om de beurt werken alleen met een terugkerende campagne. Kies een terugkerend schema of verwijder de extra sjablonen.",
+        "sequence_with_ab": "Sjablonen om de beurt kunnen niet worden gecombineerd met een A/B-test. Zet de A/B-test uit of verwijder de extra sjablonen.",
+        "sequence_template_required": "Kies een sjabloon voor elke stap in de volgorde of verwijder de lege."
       },
       "template": {
         "previewOnline": "online",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "Geschatte kosten (volledig)",
         "chargedPlan": "Nu van je portemonnee afgeschreven: {amount} (je abonnement dekt {covered} van deze berichten)",
         "chargedWallet": "Van je portemonnee afgeschreven: {amount}",
-        "sumFollowUps": "Follow-ups"
+        "sumFollowUps": "Follow-ups",
+        "sumSequence": "Wordt om de beurt verzonden"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1588,7 +1592,8 @@
           "sent": "Verzonden",
           "delivered": "Afgeleverd",
           "failed": "Mislukt",
-          "retries": "Nieuwe pogingen"
+          "retries": "Nieuwe pogingen",
+          "template": "Sjabloon"
         },
         "retrySummary": "{pending} wachtend, {recovered} hersteld, {exhausted} opgegeven",
         "openRun": "Uitvoering openen",
@@ -1648,7 +1653,9 @@
             "skipped": "Er werd niet aan de voorwaarde voldaan toen deze werd gecontroleerd, dus de reeks eindigde daar.",
             "lapsed": "De bewakingstijd was verstreken voordat het contact reageerde of las, dus de reeks eindigde daar."
           }
-        }
+        },
+        "templatesTitle": "Sjablonen",
+        "templatesInTurn": "{count, plural, one {# sjabloon om de beurt} other {# sjablonen om de beurt}}"
       },
       "panel": {
         "title": "Gemaakt met Broadcast maken",
@@ -1659,7 +1666,8 @@
           "recurring": "Terugkerend"
         },
         "recipients": "{count, plural, one {# ontvanger} other {# ontvangers}}",
-        "next": "Volgende uitvoering {when}"
+        "next": "Volgende uitvoering {when}",
+        "moreTemplates": "+{count} meer"
       },
       "pickers": {
         "selectDate": "Datum selecteren",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, one {uur} other {uur}}",
           "days": "{count, plural, one {dag} other {dagen}}"
         }
+      },
+      "sequence": {
+        "title": "Sjablonen op volgorde",
+        "intro": "Elke run verstuurt het volgende sjabloon uit deze lijst. Run 1 verstuurt het eerste, run 2 het tweede en na het laatste begint de lijst weer bij het eerste.",
+        "notRecurring": "Alleen een terugkerende verzending gebruikt sjablonen om de beurt. Kies een terugkerend schema of verwijder deze sjablonen.",
+        "withAb": "Sjablonen om de beurt kunnen niet samen met een A/B-test worden gebruikt, die al twee sjablonen verstuurt. Zet de A/B-test uit om ze te gebruiken.",
+        "templateLabel": "Sjabloon {position}",
+        "firstMissing": "Nog niet gekozen",
+        "firstHint": "Het sjabloon dat voor de campagne is gekozen. Wijzig het in de sjabloonstap.",
+        "pick": "Kies een sjabloon",
+        "loading": "Laden...",
+        "unavailable": "Niet meer beschikbaar",
+        "up": "Omhoog",
+        "down": "Omlaag",
+        "moveUp": "Sjabloon {position} omhoog",
+        "moveDown": "Sjabloon {position} omlaag",
+        "remove": "Sjabloon {position} verwijderen",
+        "removeShort": "Verwijderen",
+        "removeAll": "Alles verwijderen",
+        "add": "Een sjabloon toevoegen",
+        "count": "{used} van {max} sjablonen",
+        "limitReached": "Limiet bereikt: {max} sjablonen.",
+        "variablesTitle": "Variabelen van sjabloon {position}: {name}"
       }
     },
     "history": {

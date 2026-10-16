@@ -112,6 +112,21 @@ export function SummaryCard({
             <span className="text-muted-foreground">{t('none')}</span>
           )}
         </Row>
+        {draft.templateSequence.length > 0 && (
+          <Row label={t('sumSequence')} step={4} onEdit={onEdit}>
+            <span data-testid="sum-sequence">
+              {[
+                template?.name ?? t('none'),
+                ...draft.templateSequence.map((e) =>
+                  e.templateId === null
+                    ? t('none')
+                    : (templates?.find((x) => x.id === e.templateId)?.name ??
+                      (templates ? t('missingSource') : '-')),
+                ),
+              ].join(', ')}
+            </span>
+          </Row>
+        )}
         <Row label={t('sumSender')} step={1} onEdit={onEdit}>
           {sender ? (
             <span>

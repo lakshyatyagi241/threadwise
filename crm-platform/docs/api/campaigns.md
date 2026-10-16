@@ -395,6 +395,16 @@ built from the meeting's "Add a follow-up": after the campaign message goes out,
 
 The classic builder's pickers (`GET /campaigns/builder`, WhatsApp, not the SMS card) list exactly the templates of `GET /broadcast-wizard/templates`: the broadcast composer's list narrowed to what the wizard offers, so a workspace never has templates in one screen and none in the other.
 
+### Templates in sequence (an addition beyond Reference)
+
+Reference's recurring campaign repeats one template. A recurring broadcast of the guided wizard can send several, in turn: `templateSequence` on the draft, 0 to 9 entries `{ templateId, variables }` after the draft's own `templateId` (so up to 10 templates), each with its own variable mapping (a template has its own placeholders).
+
+- The runs of the series take them in turn, round and round, counted by the runs made so far (an occurrence stepped over after an outage does not use one up): run 1 sends the draft's template, run 2 the first entry, ..., and after the last the sequence starts again.
+- A run's own draft (`wizard.draft` of its campaign) is the series' blueprint with that run's template and mapping and no sequence of its own, so a retry of failed messages, the frequency-cap retries and the follow-up steps of a run read the right template and variables. Follow-ups, pacing, retries and the audience are the series' for every run.
+- Launch: 422 `CAMP_WIZARD_INCOMPLETE` with `sequence_not_recurring` (a sequence on a schedule that does not repeat), `sequence_with_ab` (an A/B test already has two templates), `sequence_template_required` (an entry with no template, or one that does not exist in the workspace, path `templateSequence.<i>.templateId`) or `variable_unmapped` (path `templateSequence.<i>.variables.<slot>`). Each template must be usable from the number, like the first.
+- `GET /broadcasts/:id`: a series has `templateCount` (1 without a sequence) and each run in `runList` has the `templateName` it sent.
+- Not done: the credit check at launch prices the first template only (a sequence with templates of another category can cost more per message); a run whose template was deleted or refused fails with the reason and the series goes on.
+
 ### Test send
 
 `{ "draftId": "...", "recipients": "+919876543210,+14155550123" }`: the draft's template and variables resolved for the first messageable contact of

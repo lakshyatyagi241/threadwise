@@ -130,13 +130,21 @@ For each step, choose when it fires and how long to count:
 
 Set the time as a number of minutes, hours or days (from 1 minute up to 7 days). Step 1 counts from the campaign message, step 2 from the message of step 1, and so on. Then choose **Send a template** (any approved template) or **Start a flow** (one of your flows), and pick it. Each step needs its template or flow before you can continue, and **Remove** deletes a step. The summary in step 3 lists the follow-ups in words. A contact who opted out, whose message failed, or who stopped receiving the chain does not get a later step. A recurring campaign carries its follow-ups to every run.
 
+### Templates in order
+
+A recurring campaign can send a different template on each run. When **When to send** is **Recurring campaign**, the **Templates in order** card appears on the Schedule step (the last step of the guided flow). The template you chose for the campaign is **Template 1** and cannot be changed there. **Add a template** adds a step with a dropdown of the approved templates, up to 10 templates in all; **Up**, **Down** and **Remove** change the order, and **Remove all** empties the list. Run 1 sends template 1, run 2 sends template 2, and so on; after the last one the list starts again from the first.
+
+Each added template has its own variable mapping, because its placeholders can differ. A card titled with its name and position appears once the template is chosen, and every placeholder must be mapped before you can continue. The summary lists them under **Sends in turn**, and the status page shows how many templates are in turn and which template each run sent.
+
+> Templates in order only work with a recurring schedule and cannot be combined with an A/B test. If you switch to another schedule, or turn A/B on, the list stays but is locked, with the reason shown; remove the extra templates or switch back to continue.
+
 ## Launch
 
 The last button reads **Send now**, **Schedule** or **Start recurring**. It opens a confirmation with the name, template, recipients, skipped contacts, estimated cost, schedule and retries. After you confirm you land on the campaign's status page.
 
 ## The status page
 
-It shows the status, the schedule in words, the next run, the runs with their counts, the retry summary, and, under each run that has follow-ups, what every step did: waiting, sent, delivered, read, flows started, skipped (the condition was not met), lapsed (the watch time ran out) and failed. If you have the permission to control campaigns, you can **Pause**, **Resume** or **Cancel** it. When a finished run has failed recipients, **Retry failed (N)** sends again to just those recipients (a recurring campaign does it for every finished run); everyone who already got the message is left alone, and a message is charged only when it is delivered. It asks you to confirm first, and it is not offered while the failing run is still going. Each run links to its campaign page. The page refreshes every 15 seconds.
+It shows the status, the schedule in words, the next run, the runs with their counts, the retry summary, and, under each run that has follow-ups, what every step did: waiting, sent, delivered, read, flows started, skipped (the condition was not met), lapsed (the watch time ran out) and failed. If you have the permission to control campaigns, you can **Pause**, **Resume** or **Cancel** it. When a finished run has failed recipients, **Retry failed (N)** sends again to just those recipients (a recurring campaign does it for every finished run); everyone who already got the message is left alone, and a message is charged only when it is delivered. It asks you to confirm first, and it is not offered while the failing run is still going. Each run links to its campaign page, and shows the template it sent when the campaign sends templates in order. The page refreshes every 15 seconds.
 
 **Export rows** downloads the recipients as a CSV (needs the permission to export campaigns). For a recurring campaign it is one file with a **Run** column, run by run. **Delete** (needs the permission to delete campaigns) removes a one-off campaign that is still waiting for its time or that failed outright, together with its recipients. A recurring campaign can be deleted, with the runs it had planned, only while none of its runs has sent a message; once one has, its history is kept and you cancel it instead. The campaign page of any run has a **Broadcast status** button that opens this page.
 

@@ -1166,7 +1166,10 @@
         "pacing_range": "Smart Delivery'yi kontrol edin: en uzun gecikme en kısadan kısa ya da iki gönderim saatinden yalnızca biri ayarlı.",
         "follow_up_template_required": "Her takip mesajının göndereceği şablonu seçin.",
         "follow_up_flow_required": "Her takip mesajının başlatacağı akışı seçin.",
-        "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın."
+        "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın.",
+        "sequence_not_recurring": "Sırayla gönderilen şablonlar yalnızca yinelenen bir kampanyayla çalışır. Yinelenen bir zamanlama seçin veya ek şablonları kaldırın.",
+        "sequence_with_ab": "Sırayla gönderilen şablonlar A/B testiyle birlikte kullanılamaz. A/B testini kapatın veya ek şablonları kaldırın.",
+        "sequence_template_required": "Sıradaki her adım için bir şablon seçin veya boş olanları kaldırın."
       },
       "template": {
         "previewOnline": "çevrimiçi",
@@ -1425,7 +1428,8 @@
         "estimatedCostFull": "Tahmini maliyet (tam)",
         "chargedPlan": "Şimdi cüzdanınızdan tahsil edilen: {amount} (planınız bu mesajların {covered} tanesini karşılıyor)",
         "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}",
-        "sumFollowUps": "Takip mesajları"
+        "sumFollowUps": "Takip mesajları",
+        "sumSequence": "Sırayla gönderilir"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1588,7 +1592,8 @@
           "sent": "Gönderildi",
           "delivered": "İletildi",
           "failed": "Başarısız",
-          "retries": "Yeniden denemeler"
+          "retries": "Yeniden denemeler",
+          "template": "Şablon"
         },
         "retrySummary": "{pending} bekliyor, {recovered} kurtarıldı, {exhausted} vazgeçildi",
         "openRun": "Çalıştırmayı aç",
@@ -1648,7 +1653,9 @@
             "skipped": "Koşul kontrol edildiğinde sağlanmamıştı, bu yüzden dizi orada sona erdi.",
             "lapsed": "Kişi yanıtlamadan veya okumadan izleme süresi doldu, bu yüzden dizi orada sona erdi."
           }
-        }
+        },
+        "templatesTitle": "Şablonlar",
+        "templatesInTurn": "{count, plural, one {# şablon sırayla} other {# şablon sırayla}}"
       },
       "panel": {
         "title": "Toplu gönderim oluştur ile oluşturuldu",
@@ -1659,7 +1666,8 @@
           "recurring": "Yinelenen"
         },
         "recipients": "{count, plural, one {# alıcı} other {# alıcı}}",
-        "next": "Sonraki çalıştırma {when}"
+        "next": "Sonraki çalıştırma {when}",
+        "moreTemplates": "+{count} daha"
       },
       "pickers": {
         "selectDate": "Tarih seç",
@@ -1745,6 +1753,29 @@
           "hours": "{count, plural, one {saat} other {saat}}",
           "days": "{count, plural, one {gün} other {gün}}"
         }
+      },
+      "sequence": {
+        "title": "Sırayla şablonlar",
+        "intro": "Her çalıştırma bu listedeki bir sonraki şablonu gönderir. 1. çalıştırma ilkini, 2. çalıştırma ikincisini gönderir; sonuncudan sonra liste yeniden ilkinden başlar.",
+        "notRecurring": "Şablonları sırayla yalnızca yinelenen bir gönderim kullanır. Yinelenen bir zamanlama seçin veya bu şablonları kaldırın.",
+        "withAb": "Sırayla gönderilen şablonlar, zaten iki şablon gönderen bir A/B testiyle birlikte kullanılamaz. Kullanmak için A/B testini kapatın.",
+        "templateLabel": "Şablon {position}",
+        "firstMissing": "Henüz seçilmedi",
+        "firstHint": "Kampanya için seçilen şablon. Şablon adımında değiştirin.",
+        "pick": "Şablon seçin",
+        "loading": "Yükleniyor...",
+        "unavailable": "Artık kullanılamıyor",
+        "up": "Yukarı",
+        "down": "Aşağı",
+        "moveUp": "{position}. şablonu yukarı taşı",
+        "moveDown": "{position}. şablonu aşağı taşı",
+        "remove": "{position}. şablonu kaldır",
+        "removeShort": "Kaldır",
+        "removeAll": "Tümünü kaldır",
+        "add": "Şablon ekle",
+        "count": "{used} / {max} şablon",
+        "limitReached": "Sınıra ulaşıldı: {max} şablon.",
+        "variablesTitle": "{position}. şablonun değişkenleri: {name}"
       }
     },
     "history": {

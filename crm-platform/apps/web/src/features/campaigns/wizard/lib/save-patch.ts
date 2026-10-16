@@ -1,6 +1,7 @@
 import {
   WIZARD_FOLLOW_UP_MAX,
   WIZARD_NAME_MAX,
+  WIZARD_TEMPLATE_SEQUENCE_MAX,
   wizardFollowUpSchema,
   wizardRetriesSchema,
   wizardScheduleSchema,
@@ -39,6 +40,17 @@ export function sanitizePatch(patch: DraftPatch): DraftPatch {
     out.followUps = out.followUps
       .filter((f) => wizardFollowUpSchema.safeParse(f).success)
       .slice(0, WIZARD_FOLLOW_UP_MAX);
+  }
+  if (out.templateSequence) {
+    // Every entry keeps its place (the order is the order of the runs); only a mapping the server would refuse is cleaned.
+    out.templateSequence = out.templateSequence.slice(0, WIZARD_TEMPLATE_SEQUENCE_MAX).map((e) => ({
+      ...e,
+      variables: Object.fromEntries(
+        Object.entries(e.variables).filter(
+          ([, source]) => wizardVariableSourceSchema.safeParse(source).success,
+        ),
+      ),
+    }));
   }
   return out;
 }

@@ -106,6 +106,9 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
     return <p className="text-sm text-muted-foreground">{t('noRuns')}</p>;
   }
   const zone = scheduleZone(b.schedule);
+  // The template column only appears for a series that sends templates in turn: one template is already named in the header.
+  const named = b.runList.some((r) => r.templateName);
+  const columns = named ? 9 : 8;
   const when = (iso: string | null) => (iso ? words.instant(new Date(iso), zone) : '-');
   return (
     <div className="overflow-x-auto">
@@ -118,6 +121,7 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
                 'occurrence',
                 'runAt',
                 'status',
+                ...(named ? (['template'] as const) : []),
                 'sent',
                 'delivered',
                 'failed',
@@ -140,6 +144,7 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
                 <td className="px-2 py-1.5">
                   <Chip tone={statusTone(r.status)}>{stateLabel(t, r.status)}</Chip>
                 </td>
+                {named && <td className="px-2 py-1.5">{r.templateName ?? '-'}</td>}
                 <td className="px-2 py-1.5 tabular-nums">{r.counts.sent.toLocaleString()}</td>
                 <td className="px-2 py-1.5 tabular-nums">{r.counts.delivered.toLocaleString()}</td>
                 <td className="px-2 py-1.5 tabular-nums">{r.counts.failed.toLocaleString()}</td>
@@ -163,7 +168,7 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
               </tr>
               {r.followUps.length > 0 && (
                 <tr className="border-b border-border/60">
-                  <td colSpan={8} className="px-2 pb-2.5 pt-0">
+                  <td colSpan={columns} className="px-2 pb-2.5 pt-0">
                     <FollowUpOutcome steps={r.followUps} />
                   </td>
                 </tr>
@@ -349,6 +354,14 @@ export function BroadcastScreen({ id }: { id: string }) {
                 <dt className="text-xs text-muted-foreground">{t('schedule')}</dt>
                 <dd className="text-sm">{words.schedule(b.schedule)}</dd>
               </div>
+              {b.templateCount > 1 && (
+                <div className="sm:col-span-3">
+                  <dt className="text-xs text-muted-foreground">{t('templatesTitle')}</dt>
+                  <dd className="text-sm" data-testid="templates-in-turn">
+                    {t('templatesInTurn', { count: b.templateCount })}
+                  </dd>
+                </div>
+              )}
               <div>
                 <dt className="text-xs text-muted-foreground">{t('nextRun')}</dt>
                 <dd className="text-sm">

@@ -24,6 +24,7 @@ import { CardStyle } from '../wizard/components/parts';
 import { RetriesCard } from '../wizard/components/retries-card';
 import { SaveIndicator } from '../wizard/components/save-indicator';
 import { ScheduleCard } from '../wizard/components/schedule-card';
+import { SequenceCard, SequenceVariables } from '../wizard/components/sequence-card';
 import { SummaryCard } from '../wizard/components/summary-card';
 import { TestSendCard } from '../wizard/components/test-send-card';
 import { useLaunch } from '../wizard/components/use-launch';
@@ -83,6 +84,8 @@ const STEP_OF_VIEW: Record<WizardView, WizardStep> = {
   3: 'compose',
   4: 'schedule',
 };
+
+const isSequencePath = (path: string) => path.startsWith('templateSequence.');
 
 /** The builder step that owns an issue, by the draft path it names. */
 function stepOfIssue(path: string): WizardStep {
@@ -186,7 +189,22 @@ export function GuidedCampaign({
     if (templates.data && draft.templateIdB && !usable.some((x) => x.id === draft.templateIdB))
       dispatch({ type: 'templateB', template: null });
   }, [templates.data, usable, draft.templateIdB, dispatch]);
+  // A template of the sequence the number cannot use is cleared, like the two above.
+  useEffect(() => {
+    if (!templates.data) return;
+    draft.templateSequence.forEach((e, index) => {
+      if (e.templateId && !usable.some((x) => x.id === e.templateId))
+        dispatch({ type: 'sequenceTemplate', index, template: null });
+    });
+  }, [templates.data, usable, draft.templateSequence, dispatch]);
   const slots = useMemo(() => template?.slots.map((s) => s.slot) ?? [], [template]);
+  const slotsSequence = useMemo(
+    () =>
+      draft.templateSequence.map(
+        (e) => usable.find((x) => x.id === e.templateId)?.slots.map((s) => s.slot) ?? [],
+      ),
+    [draft.templateSequence, usable],
+  );
   const slotsB = useMemo(() => templateB?.slots.map((s) => s.slot) ?? [], [templateB]);
 
   const countable = countableAudience(draft.audience);
@@ -199,6 +217,7 @@ export function GuidedCampaign({
   const ctx = {
     slots,
     slotsB,
+    slotsSequence,
     now: new Date(),
     count: countKnown ? count.data : null,
     credit: credit.data,
@@ -216,7 +235,7 @@ export function GuidedCampaign({
       case 'compose':
         return [
           ...v1.filter((i) => i.path === 'templateId' || i.path === 'templateIdB'),
-          ...v3.filter((i) => i.code === 'variable_unmapped'),
+          ...v3.filter((i) => i.code === 'variable_unmapped' && !isSequencePath(i.path)),
         ];
       case 'recipients':
         // Who is picked, and whether the wallet covers them: the Review step's own balance rule.
@@ -225,7 +244,8 @@ export function GuidedCampaign({
           ...v3.filter((i) => BALANCE_CODES.includes(i.code) && !v2.some((x) => x.code === i.code)),
         ];
       case 'schedule':
-        return v4;
+        // The mapping of the sequence's templates sits under the sequence card, so its problems are this step's.
+        return [...v4, ...v3.filter((i) => isSequencePath(i.path))];
       case 'review':
         return v3.filter((i) => i.code !== 'variable_unmapped');
     }
@@ -587,6 +607,25 @@ export function GuidedCampaign({
                             });
                         }}
                       />
+                      <SequenceCard
+                        firstName={template?.name ?? null}
+                        sequence={draft.templateSequence}
+                        recurring={draft.schedule.mode === 'recurring'}
+                        abTesting={draft.abTesting}
+                        templates={usable}
+                        loading={!templates.data}
+                        issues={visible}
+                        dispatch={act}
+                      />
+                      <SequenceVariables
+                        sequence={draft.templateSequence}
+                        templates={usable}
+                        audience={draft.audience}
+                        properties={properties}
+                        issues={issuesOf('schedule')}
+                        showIssues={Boolean(attempted.schedule)}
+                        dispatch={act}
+                      />
                       <AutoEndField
                         value={draft.autoEnd?.at ?? ''}
                         onChange={(at) =>
@@ -642,6 +681,7 @@ export function GuidedCampaign({
                         sources={sources.data}
                         count={count.data}
                         credit={credit.data}
+                        templates={usable}
                         onEdit={(view) => void goTo(STEP_OF_VIEW[view])}
                       />
                     </StepCard>
