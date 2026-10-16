@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import {
   SPEED_TO_LEAD_CHANNELS,
   SPEED_TO_LEAD_MAX_DELAY_MINUTES,
@@ -8,7 +8,7 @@ import {
 } from '@crm/contracts';
 import { Alert, Field, Input, Select, Switch } from '@crm/ui';
 import { useSpeedOptions } from '../api-ops';
-import type { SourceDraft, SpeedDraft } from '../lib/draft';
+import { SPEED_MAX_AGE_CHOICES, type SourceDraft, type SpeedDraft } from '../lib/draft';
 
 /**
  * "First message to a new lead" (BL-014, spec L-16): off by default. The person chooses the channel, the template (and for SMS and
@@ -28,6 +28,7 @@ export function SpeedToLeadSection({
   disabled?: boolean;
 }) {
   const t = useTranslations('lead-sources.form');
+  const format = useFormatter();
   const speed = draft.speed;
   const options = useSpeedOptions(speed.channel, speed.enabled && !disabled);
   const patch = (next: Partial<SpeedDraft>) =>
@@ -36,6 +37,16 @@ export function SpeedToLeadSection({
   const templates = options.data?.templates ?? [];
   const senders = options.data?.senders ?? [];
   const known = templates.some((x) => x.id === speed.templateId);
+  // A limit set some other way than by this list stays visible and selected instead of silently becoming one of the choices.
+  const ages = SPEED_MAX_AGE_CHOICES.includes(Number(speed.maxLeadAge))
+    ? SPEED_MAX_AGE_CHOICES
+    : [...SPEED_MAX_AGE_CHOICES, Number(speed.maxLeadAge)].filter((n) => Number.isFinite(n));
+  const ageLabel = (minutes: number) =>
+    minutes % 1440 === 0
+      ? format.number(minutes / 1440, { style: 'unit', unit: 'day', unitDisplay: 'long' })
+      : minutes % 60 === 0
+        ? format.number(minutes / 60, { style: 'unit', unit: 'hour', unitDisplay: 'long' })
+        : format.number(minutes, { style: 'unit', unit: 'minute', unitDisplay: 'long' });
 
   return (
     <section aria-labelledby="ls-speed-h" className="space-y-4" data-testid="speed-to-lead">
@@ -157,6 +168,27 @@ export function SpeedToLeadSection({
                 invalid={Boolean(error('defaults.speedToLead.delayMinutes'))}
                 onChange={(e) => patch({ delay: e.target.value })}
               />
+            </Field>
+
+            <Field
+              label={t('speed.maxAge')}
+              htmlFor="ls-speed-max-age"
+              hint={t('speed.maxAgeHint')}
+              error={error('defaults.speedToLead.maxLeadAgeMinutes')}
+            >
+              <Select
+                id="ls-speed-max-age"
+                value={speed.maxLeadAge}
+                disabled={disabled}
+                invalid={Boolean(error('defaults.speedToLead.maxLeadAgeMinutes'))}
+                onChange={(e) => patch({ maxLeadAge: e.target.value })}
+              >
+                {ages.map((m) => (
+                  <option key={m} value={String(m)}>
+                    {ageLabel(m)}
+                  </option>
+                ))}
+              </Select>
             </Field>
           </div>
 
