@@ -70,6 +70,17 @@ Companion files: [tasks.md](tasks.md), [deals-pipelines.md](deals-pipelines.md).
 | C44 | A required company property                                     | n/a                                                                                                                        | A create always answers for it; an edit that sends properties answers for all of them; a company that predates the rule stays editable until then; conditional ones honour "show only when"                                                                                                                      | intended D-21 |
 | C45 | Two people edit one company                                     | Last write wins                                                                                                            | `rowVersion` as before; the property values ride in the same write                                                                                                                                                                                                                                               | same (code)   |
 | C46 | Contacts or deals linked to a company the person cannot read    | n/a                                                                                                                        | A company a record already has never blocks an unrelated edit; a deal that takes its contact's company is not checked                                                                                                                                                                                            | intended D-19 |
+| C47 | Company properties as list columns | None | A **Columns** menu (details and every shown property); the first visit is Reference table; the choice is kept in the browser |
+| C48 | Filter the list by a property | None | **Properties** conditions in the segment vocabulary (JSON `props` in the address); invalid property or operator is 422 COMPANY_FILTER_INVALID (e2e) |
+| C49 | Order the list by a property | None | `sort=property`; empty values lowest; a typed keyset cursor paged one by one equals the full order; a crafted cursor is 400 (unit, e2e) |
+| C50 | Company export and import (CSV) | None | Export of the list as filtered and ordered, import with savepoint per row, match-and-fill, scope-aware; own permission keys (e2e) |
+| C51 | Segment rule on the contact company | None | `company.<key>` conditions; a contact with no company is empty (e2e); needs `record.companies.read` |
+| C52 | Merge tags from the company | None | `{{company.*}}` in the shared resolver; `company_name` unchanged; no notes token (unit, e2e) |
+| C53 | Companies in the customer API | None | `/api/v1/companies` with its own scopes and the plan gate (e2e) |
+| C54 | "Generate brief" result | A public deck of counted numbers (no AI), `/b/{token}` and PDF, opened in a new tab | A private AI brief on the company page with copy and regenerate; no public link (intended, D-24) |
+| C55 | What the brief is made from | Company, contacts count, deals, payments of the whole workspace for that id | Only what the caller record scopes show; kinds they may not read are left out and named; no contact name, email, phone or message text is sent (unit, e2e reading the fake model request) |
+| C56 | No AI key | n/a (no AI) | The card says AI is not set up and sends nothing (e2e) |
+| C57 | Brief limits | None | Cached a day for the same facts, 30 second cooldown, 20 an hour a person, metered and audited without the facts (unit, e2e) |
 
 ## Quirks decided (inventory "Open questions & quirks")
 
@@ -96,3 +107,6 @@ Companion files: [tasks.md](tasks.md), [deals-pipelines.md](deals-pipelines.md).
 - The migration was applied to a fresh database only (testcontainers and a throwaway container); the backfill of rows that predate the
   new CHECKs (trim, truncate, name filled from the website) is written but not exercised against a database that already has companies.
 - The Agent preset's new grants on a running environment appear when the 10-minute permission cache expires.
+
+
+- BL-196 and BL-194 (rows C47 to C57): the Columns menu, the Properties filter, the import dialog and the Account brief card were typechecked and checked by logic and server-render tests, never opened in a browser (390 px, right-to-left, dark mode, keyboard, the clipboard). Nothing was compared with the running Reference. The brief was never run against a real model: the end-to-end tests use a local fake that speaks the OpenAI dialect, so each vendor real answer (JSON mode, token counts) is unseen. The company segment rule, the merge tags and the export were exercised against a real Postgres in end-to-end tests but with small data only (no volume run of the property sort).

@@ -105,7 +105,7 @@ export class FieldsService {
 
   /**
    * How many records hold a value for each field of the module ("in use" on the properties screen): contacts and companies keep
-   * their values in a custom-data column. Segments filter on contact properties only.
+   * their values in a custom-data column. Segments filter on contact properties and, through the contact's company, on company ones.
    */
   async usage(query: FieldUsageQuery): Promise<FieldUsageResponse> {
     const ctx = RequestContextStore.require();
@@ -119,16 +119,15 @@ export class FieldsService {
         query.moduleKey === 'contacts'
           ? await this.repo.countContactsByKey(tx, ctx.orgId)
           : await this.repo.countCompaniesByKey(tx, ctx.orgId);
-      const segments =
-        query.moduleKey === 'contacts'
-          ? await segmentUsageCounts(tx, ctx.orgId, 'field')
-          : new Map<string, number>();
+      const segments = await segmentUsageCounts(tx, ctx.orgId, 'field');
+      // A company property is told apart from a contact property of the same key by its `company.` prefix (segment-usage.ts).
+      const segmentRef = (key: string) => (query.moduleKey === 'contacts' ? key : `company.${key}`);
       return {
         data: rows.map((r) => ({
           id: r.uuid,
           key: r.key,
           count: counts.get(r.key) ?? 0,
-          segments: segments.get(r.key) ?? 0,
+          segments: segments.get(segmentRef(r.key)) ?? 0,
         })),
       };
     });
@@ -300,7 +299,9 @@ export class FieldsService {
       const segmentNames =
         existing.moduleKey === 'contacts'
           ? await segmentNamesUsing(tx, ctx.orgId, 'field', existing.key)
-          : [];
+          : existing.moduleKey === 'companies'
+            ? await segmentNamesUsing(tx, ctx.orgId, 'field', `company.${existing.key}`)
+            : [];
       await this.audit.record(tx, {
         module: MODULE_KEY,
         recordId: existing.id,

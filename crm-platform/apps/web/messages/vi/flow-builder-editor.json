@@ -2019,6 +2019,18 @@
         "groupContact": "Thuộc tính liên hệ",
         "groupFlow": "Đã lưu trong luồng này",
         "variableNone": "Không tìm thấy biến"
+      },
+      "askAge": {
+        "minAge": "Tuổi tối thiểu",
+        "minAgeHint": "Để trống để dùng độ tuổi của không gian làm việc trong Trung tâm tuân thủ (18 nếu chưa đặt). Từ 1 đến 21.",
+        "whenUnder": "Nếu câu trả lời dưới độ tuổi đó",
+        "whenUnderHint": "Dù thế nào liên hệ cũng được đánh dấu là chưa thành niên. Khách hàng không bao giờ được cho biết câu trả lời nào là hợp lệ.",
+        "end": "Kết thúc luồng bằng một câu ngắn, trung lập",
+        "continue": "Tiếp tục, và để tôi rẽ nhánh theo câu trả lời",
+        "endText": "Câu kết thúc",
+        "endTextHint": "Được gửi trước khi luồng kết thúc. Đừng nhắc đến tuổi. Để trống sẽ dùng “Chúng tôi không thể tiếp tục.”",
+        "continueNote": "Các bước tiếp theo có thể đọc biến của câu trả lời kèm hậu tố _age_gate (ví dụ answer_age_gate), có giá trị là under hoặc adult. Thêm một Điều kiện để rẽ nhánh, ví dụ để yêu cầu cha mẹ hoặc người giám hộ.",
+        "note": "Chỉ hỏi tuổi ở nơi bạn cần. Câu trả lời được ghi vào liên hệ: ngày sinh được ghi là ngày sinh, và câu trả lời dưới độ tuổi sẽ đánh dấu liên hệ là chưa thành niên."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Số điện thoại",
         "number": "Số",
         "alphanumeric": "Chữ và số",
-        "date": "Ngày"
+        "date": "Ngày",
+        "age": "Tuổi",
+        "date_of_birth": "Ngày sinh"
       },
       "askInputWrong": {
         "text": "Vui lòng thử lại",
@@ -2338,7 +2352,9 @@
         "phone": "Vui lòng nhập số điện thoại hợp lệ",
         "number": "Vui lòng nhập số hợp lệ",
         "alphanumeric": "Vui lòng chỉ dùng chữ và số",
-        "date": "Vui lòng nhập ngày hợp lệ ({format})"
+        "date": "Vui lòng nhập ngày hợp lệ ({format})",
+        "age": "Vui lòng nhập tuổi của bạn bằng một số nguyên",
+        "date_of_birth": "Vui lòng nhập một ngày hợp lệ ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

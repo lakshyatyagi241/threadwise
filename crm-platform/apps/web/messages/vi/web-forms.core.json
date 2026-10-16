@@ -19,7 +19,9 @@
       "checkbox_group": "Chọn nhiều",
       "checkbox": "Hộp kiểm",
       "rating": "Đánh giá",
-      "hidden": "Trường ẩn"
+      "hidden": "Trường ẩn",
+      "date_of_birth": "Ngày sinh",
+      "age": "Tuổi"
     },
     "errors": {
       "network": "Không kết nối được máy chủ. Hãy kiểm tra kết nối và thử lại.",

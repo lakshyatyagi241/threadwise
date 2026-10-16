@@ -15,6 +15,9 @@ export const FIXED_COLUMN_IDS = [
   'leadScore',
   'language',
   'memo',
+  // BL-190 / BL-217: offered, hidden until chosen. Neither can be sorted.
+  'dateOfBirth',
+  'minor',
   'createdOn',
 ] as const;
 export type FixedColumnId = (typeof FIXED_COLUMN_IDS)[number];
@@ -73,6 +76,8 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   leadScore: 'colLeadScore',
   language: 'colLanguage',
   memo: 'colMemo',
+  dateOfBirth: 'colDateOfBirth',
+  minor: 'colMinor',
   createdOn: 'colCreatedOn',
 };
 
@@ -99,6 +104,8 @@ export function allColumns(attributes: readonly AttributeColumn[]): ColumnDef[] 
     fixed('leadScore'),
     fixed('language'),
     fixed('memo'),
+    fixed('dateOfBirth'),
+    fixed('minor'),
     fixed('createdOn'),
   ];
 }
@@ -185,6 +192,8 @@ export function sortKeyOf(id: ColumnId): string | null {
     case 'groups':
     case 'leadScore':
     case 'owner':
+    case 'dateOfBirth':
+    case 'minor':
       return null;
     case 'createdOn':
       return 'createdAt';

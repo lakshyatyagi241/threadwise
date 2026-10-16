@@ -27,6 +27,9 @@ const row = (patch: Partial<FirstReplyRow> = {}): FirstReplyRow => ({
   expiresAt: new Date(NOW.getTime() + 86_400_000),
   attempts: 1,
   sentAt: null,
+  // Submitted a minute before the pipeline scheduled it: fresh.
+  leadReceivedAt: new Date(NOW.getTime() - 60_000),
+  createdAt: NOW,
   ...patch,
 });
 
@@ -152,6 +155,55 @@ describe('the decisions of a first message', () => {
     expect(lastFinish(m)).toMatchObject({ status: 'skipped', reason: 'disabled' });
     expect(m.prepare).not.toHaveBeenCalled();
     expect(m.deliver).not.toHaveBeenCalled();
+  });
+
+  describe('a lead that is too old', () => {
+    const old = (minutes: number) => ({
+      leadReceivedAt: new Date(NOW.getTime() - minutes * 60_000),
+    });
+
+    it('is skipped, never prepared or sent: by default a lead more than an hour old gets no first message', async () => {
+      const m = make({ row: row(old(61)) });
+      await m.svc.processOne(ORG, 1);
+      expect(lastFinish(m)).toMatchObject({ status: 'skipped', reason: 'lead_too_old' });
+      expect(m.prepare).not.toHaveBeenCalled();
+      expect(m.gate).not.toHaveBeenCalled();
+      expect(m.deliver).not.toHaveBeenCalled();
+      // the lead's timeline says why nobody was messaged
+      expect(m.activities).toHaveBeenCalledTimes(1);
+    });
+
+    it('a lead exactly at the limit is still in time', async () => {
+      const m = make({ row: row(old(60)) });
+      await m.svc.processOne(ORG, 1);
+      expect(lastFinish(m).status).toBe('sent');
+    });
+
+    it('is messaged when the workspace raised the limit on purpose', async () => {
+      const m = make({
+        row: row(old(3 * 24 * 60)),
+        source: source(speed({ maxLeadAgeMinutes: 7 * 24 * 60 })),
+      });
+      await m.svc.processOne(ORG, 1);
+      expect(lastFinish(m).status).toBe('sent');
+    });
+
+    it('is judged when it was scheduled, not when it is sent: a message held for business hours does not turn old', async () => {
+      const m = make({
+        row: row({
+          createdAt: new Date(NOW.getTime() - 50 * 60_000),
+          leadReceivedAt: new Date(NOW.getTime() - 60 * 60_000),
+        }),
+      });
+      await m.svc.processOne(ORG, 1);
+      expect(lastFinish(m).status).toBe('sent');
+    });
+
+    it('does not override the consent gate for a lead that is in time', async () => {
+      const m = make({ row: row(old(5)), gate: { decision: 'deny', reason: 'no_grant' } });
+      await m.svc.processOne(ORG, 1);
+      expect(lastFinish(m)).toMatchObject({ status: 'blocked', reason: 'no_consent' });
+    });
   });
 
   it('a paused source sends nothing', async () => {
@@ -360,7 +412,7 @@ describe('schedule (the outbox consumer)', () => {
       },
     }) as OutboxEvent;
 
-  function build(cfg: Record<string, unknown> | null, inserted: boolean) {
+  function build(cfg: Record<string, unknown> | null, inserted: boolean, receivedMinutesAgo = 0) {
     const insertOnce = vi.fn(async () => (inserted ? row({ status: 'scheduled' }) : null));
     const claimOne = vi.fn(async () => false);
     const audit = vi.fn(async () => undefined);
@@ -372,7 +424,14 @@ describe('schedule (the outbox consumer)', () => {
       } as never,
       { insertOnce, claimOne } as never,
       { findByUuid: async () => (cfg === null ? undefined : source(cfg)) } as never,
-      { findByUuid: async () => ({ id: 10, isTest: false, contactId: 5 }) } as never,
+      {
+        findByUuid: async () => ({
+          id: 10,
+          isTest: false,
+          contactId: 5,
+          receivedAt: new Date(Date.now() - receivedMinutesAgo * 60_000),
+        }),
+      } as never,
       {} as never,
       {} as never,
       {} as never,
@@ -420,6 +479,22 @@ describe('schedule (the outbox consumer)', () => {
     const b = build(speed({ delayMinutes: 0 }), true);
     await b.svc.schedule(event());
     expect(b.claimOne).toHaveBeenCalledTimes(1);
+  });
+
+  it('a lead older than the source allows is due now and tried at once, whatever the delay, so it is recorded as skipped', async () => {
+    const b = build(speed({ delayMinutes: 30 }), true, 61);
+    await b.svc.schedule(event());
+    const call = b.insertOnce.mock.calls[0]! as unknown as [unknown, number, { dueAt: Date }];
+    expect(call[2].dueAt.getTime() - Date.now()).toBeLessThan(5_000);
+    expect(b.claimOne).toHaveBeenCalledTimes(1);
+  });
+
+  it('a lead in time keeps the source delay', async () => {
+    const b = build(speed({ delayMinutes: 30 }), true, 59);
+    await b.svc.schedule(event());
+    const call = b.insertOnce.mock.calls[0]! as unknown as [unknown, number, { dueAt: Date }];
+    expect(call[2].dueAt.getTime() - Date.now()).toBeGreaterThan(29 * 60_000);
+    expect(b.claimOne).not.toHaveBeenCalled();
   });
 
   it('a lead that already has its message (a redelivered event) schedules and writes nothing', async () => {

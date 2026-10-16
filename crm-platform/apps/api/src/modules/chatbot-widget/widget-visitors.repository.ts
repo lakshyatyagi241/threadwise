@@ -10,6 +10,8 @@ export interface VisitorRow {
   email: string | null;
   phone: string | null;
   conversationId: number | null;
+  /** When this visitor's answer passed the widget's age gate (BL-218); null = not yet. */
+  ageCheckedAt: Date | null;
 }
 
 interface Raw {
@@ -19,6 +21,7 @@ interface Raw {
   email: string | null;
   phone: string | null;
   conversation_id: number | string | null;
+  age_checked_at: Date | string | null;
 }
 
 const toRow = (r: Raw): VisitorRow => ({
@@ -28,9 +31,10 @@ const toRow = (r: Raw): VisitorRow => ({
   email: r.email,
   phone: r.phone,
   conversationId: r.conversation_id === null ? null : Number(r.conversation_id),
+  ageCheckedAt: r.age_checked_at ? new Date(r.age_checked_at) : null,
 });
 
-const COLUMNS = sql`id, visitor_uuid, name, email, phone, conversation_id`;
+const COLUMNS = sql`id, visitor_uuid, name, email, phone, conversation_id, age_checked_at`;
 
 /** One row per anonymous browser per widget (TW-WGT-011). */
 @Injectable()
@@ -73,6 +77,13 @@ export class WidgetVisitorsRepository {
       UPDATE chatbot_widget_visitors SET last_seen_at = now()
       WHERE org_id = ${orgId} AND id = ${id}
         AND (last_seen_at IS NULL OR last_seen_at < now() - make_interval(secs => ${minAgeSeconds}))`);
+  }
+
+  /** The visitor's answer passed the widget's age gate: they are not asked again. */
+  async markAgeChecked(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE chatbot_widget_visitors SET age_checked_at = COALESCE(age_checked_at, now())
+      WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
   /** Last non-empty write wins; an empty or unchanged value leaves the stored one alone (TW-WGT-014 rule 2). */

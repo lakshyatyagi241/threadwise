@@ -1,4 +1,9 @@
 import type { MessengerButton } from '../../infra/providers/channel-facebook/facebook.port';
+import {
+  buttonAddress,
+  buttonPhone,
+  kindOfButton,
+} from '../../infra/providers/whatsapp/template-vocab';
 
 /** Pure rules of a Messenger broadcast (TW-FB-012 to 014). */
 
@@ -67,12 +72,13 @@ export function messengerButtons(buttons: readonly unknown[]): MessengerButton[]
     const b = dict(raw);
     const title = text(b.text) || text(b.title);
     if (title === '') continue;
-    const type = text(b.type) || 'quick_reply';
+    const kind = kindOfButton(b);
     const t = title.slice(0, 20);
-    const url = text(b.url);
-    const phone = text(b.phone) || text(b.phone_number);
-    if (type === 'url' && url !== '') out.push({ type: 'web_url', title: t, url });
-    else if (type === 'phone' && phone !== '')
+    // Any spelling of the template's buttons: Meta's `URL` with `url`, Reference's `visit_website` with `value`.
+    const url = buttonAddress(b);
+    const phone = buttonPhone(b);
+    if (kind === 'url' && url !== '') out.push({ type: 'web_url', title: t, url });
+    else if (kind === 'phone' && phone !== '')
       out.push({ type: 'phone_number', title: t, payload: phone });
     else out.push({ type: 'postback', title: t, payload: `tqr:${title}` });
   }

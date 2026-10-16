@@ -82,5 +82,23 @@ export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Pr
       if (type.success) rc.fields.set(r.key, { type: type.data as FieldType });
     }
   }
+  if (refs.companyFieldKeys.size > 0) {
+    // The same rule for company properties: deactivated = gone.
+    const rows = await tx
+      .select({ key: fields.key, type: fields.fieldType })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'companies'),
+          eq(fields.isActive, true),
+          inArray(fields.key, [...refs.companyFieldKeys]),
+        ),
+      );
+    for (const r of rows) {
+      const type = fieldTypeSchema.safeParse(r.type);
+      if (type.success) rc.companyFields.set(r.key, { type: type.data as FieldType });
+    }
+  }
   return rc;
 }

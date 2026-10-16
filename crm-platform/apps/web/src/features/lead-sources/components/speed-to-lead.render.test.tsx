@@ -102,6 +102,26 @@ describe('the first-message setting', () => {
     expect(out).toContain('Enter whole minutes from 0 to');
   });
 
+  it('asks how old a lead may be and still be messaged: an hour is selected unless the workspace chose otherwise', () => {
+    const out = html(draft({ enabled: true }));
+    expect(out).toContain('id="ls-speed-max-age"');
+    expect(out).toContain('Do not message leads older than');
+    expect(out).toMatch(/<option value="60" selected="">1 hour<\/option>/);
+    expect(out).toContain('90 days');
+  });
+
+  it('keeps a limit set some other way visible and selected', () => {
+    const out = html(draft({ enabled: true, maxLeadAge: '90' }));
+    expect(out).toMatch(/<option value="90" selected="">/);
+  });
+
+  it('shows the limit problem under its own input', () => {
+    const out = html(draft({ enabled: true, maxLeadAge: '0' }), {
+      problems: { 'defaults.speedToLead.maxLeadAgeMinutes': { key: 'speedMaxAgeRange' } },
+    });
+    expect(out).toContain('Choose how old a lead may be');
+  });
+
   it('keeps a saved template that the list no longer offers visible instead of silently dropping it', () => {
     const out = html(draft({ enabled: true, templateId: ID(99) }));
     expect(out).toContain('The saved template is no longer available');

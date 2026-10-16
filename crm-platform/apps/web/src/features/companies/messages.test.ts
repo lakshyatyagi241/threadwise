@@ -92,6 +92,27 @@ function usedKeys(source: string): string[] {
 const DYNAMIC = [
   ...ERROR_KINDS.map((s) => `errors.${s}`),
   ...SORTS.map((s) => `toolbar.sorts.${s}`),
+  // the brief card's failures and sections are chosen by kind / key (lib/brief.ts, BRIEF_SECTION_KEYS)
+  ...(
+    [
+      'tooSoon',
+      'providerFailed',
+      'limit',
+      'forbidden',
+      'notFound',
+      'network',
+      'unexpected',
+    ] as const
+  ).map((s) => `brief.errors.${s}`),
+  ...(
+    ['activity', 'deals', 'tasks', 'conversations', 'properties', 'risks', 'nextSteps'] as const
+  ).map((s) => `brief.sections.${s}`),
+  ...(['properties', 'contacts', 'deals', 'tasks', 'conversations'] as const).map(
+    (s) => `brief.source.${s}`,
+  ),
+  ...(['default', 'asc', 'desc'] as const).map((s) => `toolbar.directions.${s}`),
+  // the table's optional columns are chosen as `t(column.label.key)` (lib/columns.ts)
+  ...(['website', 'email', 'phone', 'size', 'owner', 'created'] as const).map((s) => `table.${s}`),
   ...Object.keys(FIELD_LABELS).map((s) => `activity.fields.${s}`),
   ...(['required', 'tooLong', 'email', 'invalid', 'ownerInvalid'] as const).map(
     (s) => `form.problems.${s}`,

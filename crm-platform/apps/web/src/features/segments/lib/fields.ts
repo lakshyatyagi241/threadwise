@@ -1,5 +1,6 @@
 import {
   SEGMENT_BUILTIN_FIELDS,
+  SEGMENT_COMPANY_PREFIX,
   SEGMENT_CUSTOM_PREFIX,
   isCustomSegmentField,
   segmentKindForFieldType,
@@ -16,8 +17,14 @@ import { conditionsOf } from './model';
  * the pickers show real choices and a reference to something deleted can be told from one that never existed.
  */
 
-export type FieldGroup = 'journey' | 'who' | 'activity' | 'properties';
-export const FIELD_GROUPS: readonly FieldGroup[] = ['journey', 'who', 'activity', 'properties'];
+export type FieldGroup = 'journey' | 'who' | 'activity' | 'properties' | 'company';
+export const FIELD_GROUPS: readonly FieldGroup[] = [
+  'journey',
+  'who',
+  'activity',
+  'properties',
+  'company',
+];
 
 export interface Choice {
   value: string;
@@ -55,6 +62,8 @@ export interface Lookups {
   groups: readonly Choice[];
   users: readonly Choice[];
   properties: readonly PropertyLookup[];
+  /** The workspace's company properties: a rule on one reads the company the contact belongs to (BL-196). */
+  companyProperties?: readonly PropertyLookup[];
 }
 
 const without = (ops: readonly Operator[], drop: readonly Operator[]) =>
@@ -63,6 +72,7 @@ const without = (ops: readonly Operator[], drop: readonly Operator[]) =>
 export const PROPERTY_PREFIX = SEGMENT_CUSTOM_PREFIX;
 export const propertyFieldId = (key: string) => `${PROPERTY_PREFIX}${key}`;
 export const isPropertyField = (id: string) => isCustomSegmentField(id);
+export const companyFieldId = (key: string) => `${SEGMENT_COMPANY_PREFIX}${key}`;
 
 /** Every field a condition can test, grouped as the picker shows them: Journey, Who, Activity, Properties. */
 export function buildCatalog(l: Lookups): FieldDef[] {
@@ -90,28 +100,40 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('source', 'who'),
     sys('unsubscribed', 'who'),
     sys('imported', 'who'),
+    sys('minor', 'who'),
+    sys('dateOfBirth', 'who'),
+    sys('age', 'who'),
     // created and updated are always set, so "is empty" would never match
     sys('createdAt', 'activity', { operators: without(operatorsForKind('date'), never) }),
     sys('updatedAt', 'activity', { operators: without(operatorsForKind('date'), never) }),
     sys('lastActivityAt', 'activity'),
   ];
-  const custom: FieldDef[] = l.properties.flatMap((p): FieldDef[] => {
-    const kind = segmentKindForFieldType(p.fieldType);
-    if (!kind) return [];
-    return [
-      {
-        id: propertyFieldId(p.key),
-        group: 'properties',
-        kind,
-        label: { text: p.label },
-        operators: operatorsForKind(kind),
-        ...(kind === 'option' || kind === 'multi'
-          ? { options: p.options, optionsFrom: 'property' as const }
-          : {}),
-      },
-    ];
-  });
-  return [...system, ...custom];
+  const fromProperties = (
+    props: readonly PropertyLookup[],
+    group: FieldGroup,
+    idOf: (key: string) => string,
+  ): FieldDef[] =>
+    props.flatMap((p): FieldDef[] => {
+      const kind = segmentKindForFieldType(p.fieldType);
+      if (!kind) return [];
+      return [
+        {
+          id: idOf(p.key),
+          group,
+          kind,
+          label: { text: p.label },
+          operators: operatorsForKind(kind),
+          ...(kind === 'option' || kind === 'multi'
+            ? { options: p.options, optionsFrom: 'property' as const }
+            : {}),
+        },
+      ];
+    });
+  return [
+    ...system,
+    ...fromProperties(l.properties, 'properties', propertyFieldId),
+    ...fromProperties(l.companyProperties ?? [], 'company', companyFieldId),
+  ];
 }
 
 export function fieldsByGroup(

@@ -1877,6 +1877,18 @@
         "groupContact": "Contacteigenschappen",
         "groupFlow": "Opgeslagen in deze flow",
         "variableNone": "Geen variabelen gevonden"
+      },
+      "askAge": {
+        "minAge": "Minimumleeftijd",
+        "minAgeHint": "Laat leeg om de leeftijd van je werkruimte uit het Compliancecentrum te gebruiken (18 als er geen is ingesteld). Tussen 1 en 21.",
+        "whenUnder": "Als het antwoord onder die leeftijd ligt",
+        "whenUnderHint": "Het contact wordt in beide gevallen als minderjarig gemarkeerd. De klant krijgt nooit te horen welk antwoord doorgaat.",
+        "end": "Beëindig de flow met een korte, neutrale regel",
+        "continue": "Ga door en laat me vertakken op het antwoord",
+        "endText": "Slotregel",
+        "endTextHint": "Verzonden voordat de flow eindigt. Noem de leeftijd niet. Leeg gebruikt “We kunnen niet verder.”",
+        "continueNote": "De volgende stappen kunnen de variabele van het antwoord gevolgd door _age_gate lezen (bijvoorbeeld answer_age_gate), die under of adult is. Voeg een Voorwaarde toe om te vertakken, bijvoorbeeld om een ouder of voogd te vragen.",
+        "note": "Vraag alleen naar de leeftijd waar je die nodig hebt. Het antwoord wordt naar het contact geschreven: een geboortedatum als geboortedatum, en een antwoord onder de leeftijd markeert het contact als minderjarig."
       }
     },
     "contracts": {
@@ -2187,7 +2199,9 @@
         "phone": "Telefoonnummer",
         "number": "Getal",
         "alphanumeric": "Letters en cijfers",
-        "date": "Datum"
+        "date": "Datum",
+        "age": "Leeftijd",
+        "date_of_birth": "Geboortedatum"
       },
       "askInputWrong": {
         "text": "Probeer het opnieuw",
@@ -2196,7 +2210,9 @@
         "phone": "Voer een geldig telefoonnummer in",
         "number": "Voer een geldig getal in",
         "alphanumeric": "Gebruik alleen letters en cijfers",
-        "date": "Voer een geldige datum in ({format})"
+        "date": "Voer een geldige datum in ({format})",
+        "age": "Voer je leeftijd in als geheel getal",
+        "date_of_birth": "Voer een geldige datum in ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

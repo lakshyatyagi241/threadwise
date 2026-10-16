@@ -1,3 +1,11 @@
+import {
+  buttonAddress,
+  buttonExample,
+  buttonKindOf,
+  headerFormatOf,
+  sendKindOf,
+} from './template-vocab';
+
 /**
  * The Cloud API `template` object for one recipient (TW-BCAST-017): name, language and the components that carry the
  * header, body, button and carousel parameters. Pure: it knows the approved template and the per-recipient values, nothing
@@ -100,28 +108,12 @@ export function placeholderNames(s: string | null | undefined): string[] {
 
 const isNumeric = (s: string) => s !== '' && !Number.isNaN(Number(s));
 
-/** Which button types carry a send-time parameter, and of which kind. Null means none (phone and catalog buttons are static). */
+/**
+ * Which button types carry a send-time parameter, and of which kind. Null means none (phone, voice call, catalog, flow, OTP and
+ * product-list buttons are static). Any spelling and case: see `template-vocab.ts`. A type nobody knows is a quick reply, as in Reference.
+ */
 export function buttonSubType(type: string): string | null {
-  switch (type.trim().toLowerCase()) {
-    case 'visit_website':
-    case 'url':
-    case 'cta_url':
-      return 'url';
-    case 'copy_code':
-    case 'copy_text':
-    case 'coupon_code':
-      return 'copy_code';
-    case 'call_phone':
-    case 'call':
-    case 'phone':
-    case 'phone_number':
-    case 'cta_call':
-    case 'voice_call':
-    case 'catalog':
-      return null;
-    default:
-      return 'quick_reply';
-  }
+  return sendKindOf(buttonKindOf(type));
 }
 
 /** Does this approved button take a send-time parameter? */
@@ -131,14 +123,20 @@ export function shouldEmitButtonParam(btn: ButtonVar, tplButtons: unknown[]): bo
   if (sub !== 'url') return false;
   const tplBtn = tplButtons[btn.index];
   if (!isDict(tplBtn)) return false;
-  if (['otp_one_tap', 'otp_copy', 'otp'].includes(String(tplBtn.type ?? ''))) return true;
-  const url = String(tplBtn.value ?? tplBtn.url ?? '');
-  return countPlaceholders(url) > 0;
+  // A link takes a parameter only when its address has a placeholder (a fixed link is Meta's own).
+  return countPlaceholders(buttonAddress(tplBtn)) > 0;
 }
 
-function sendButton(btn: ButtonVar) {
+/**
+ * The parameter of a button. An empty value is #131008 for a link or a code as it is for the body, so it falls back to the template's own
+ * example for that button, else "-"; a quick reply's empty payload never gets here (the button then uses its own text).
+ */
+function sendButton(btn: ButtonVar, tplBtn?: unknown) {
   const sub = btn.subType.toLowerCase() || 'url';
-  const value = btn.value;
+  const value =
+    btn.value.trim() === '' && (sub === 'url' || sub === 'copy_code')
+      ? buttonExample(tplBtn) || '-'
+      : btn.value;
   const parameters =
     sub === 'quick_reply'
       ? [{ type: 'payload', payload: value }]
@@ -195,7 +193,7 @@ function documentFilename(vars: SendVars, mediaUrl: string, t: TemplateShape): s
 }
 
 function sendHeader(t: TemplateShape, vars: SendVars) {
-  const type = (t.attachmentType || 'TEXT').toUpperCase();
+  const type = headerFormatOf(t.attachmentType).toUpperCase();
   const isMedia = ['IMAGE', 'VIDEO', 'DOCUMENT'].includes(type);
 
   if (!isMedia && type !== 'LOCATION') {
@@ -263,7 +261,8 @@ function sendCard(index: number, c: CardVars, tplCardButtons: unknown[]) {
     });
   }
   for (const btn of c.buttons ?? []) {
-    if (shouldEmitButtonParam(btn, tplCardButtons)) components.push(sendButton(btn));
+    if (shouldEmitButtonParam(btn, tplCardButtons))
+      components.push(sendButton(btn, tplCardButtons[btn.index]));
   }
   return { card_index: index, components };
 }
@@ -314,7 +313,8 @@ export function buildSend(t: TemplateShape, vars: SendVars): SendTemplatePayload
 
   const tplButtons = asArray(t.buttons);
   for (const btn of vars.buttons ?? []) {
-    if (shouldEmitButtonParam(btn, tplButtons)) send.components.push(sendButton(btn));
+    if (shouldEmitButtonParam(btn, tplButtons))
+      send.components.push(sendButton(btn, tplButtons[btn.index]));
   }
 
   if (t.templateType === 'catalog') {

@@ -209,7 +209,10 @@
       "conditionsChip": "조건: {count}",
       "pqlExampleTag": "태그 {tag}가 붙은 30일간 활동 없는 연락처",
       "pqlExampleStage": "최근 7일 내 생성된 {stage} 연락처",
-      "pqlExampleNoOwner": "담당자가 없는 연락처"
+      "pqlExampleNoOwner": "담당자가 없는 연락처",
+      "colDateOfBirth": "생년월일",
+      "colMinor": "미성년자",
+      "minorBadge": "미성년자"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
       "company": "회사",
       "companyHint": "이 연락처를 조직에 묶습니다.",
-      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요."
+      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요.",
+      "dateOfBirth": "생년월일",
+      "dateOfBirthHint": "선택 사항입니다. 이로 인해 연락처가 미성년자가 되는 경우 미성년자로 표시됩니다."
     },
     "tags": {
       "title": "태그",
@@ -461,7 +466,9 @@
         "source": "출처",
         "consent": "마케팅 동의(예 / 아니요)",
         "consentSms": "SMS 마케팅 동의(예 / 아니요)",
-        "consentEmail": "이메일 마케팅 동의(예 / 아니요)"
+        "consentEmail": "이메일 마케팅 동의(예 / 아니요)",
+        "dateOfBirth": "생년월일 (연도 먼저, 2010-05-04)",
+        "minor": "미성년자 (예를 선택하면 연락처에 표시됨)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "태그 이름이 너무 김",
         "plan_limit_reached": "요금제 연락처 한도 도달",
         "tag_limit_reached": "요금제 태그 한도 도달",
-        "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨"
+        "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨",
+        "invalid_date_of_birth": "생년월일이 생년월일이 될 수 있는 연도 우선 형식의 날짜가 아닙니다"
       },
       "statusHint": "이 파일이 생성하는 연락처에 적용됩니다.",
       "queued": "시작 대기 중...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
       "ownerFailed": "담당자를 변경하지 못했습니다. 다시 시도하세요.",
       "ownerMe": "{name}(나)",
-      "ownerFormer": "이전 멤버"
+      "ownerFormer": "이전 멤버",
+      "dateOfBirth": "생년월일"
     },
     "attributes": {
       "eyebrow": "더보기 / 속성",
@@ -1423,7 +1432,8 @@
         "needsFollowUp": "후속 조치 필요",
         "active": "활성",
         "inactive": "비활성",
-        "unsubscribed": "수신 거부"
+        "unsubscribed": "수신 거부",
+        "minors": "미성년자"
       }
     },
     "erase": {

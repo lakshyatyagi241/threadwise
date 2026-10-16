@@ -53,7 +53,9 @@
           "crm_required_unbound": "Een eigenschap die je workspace verplicht stelt, staat niet in het formulier.",
           "no_contact_point": "Voeg een e-mail- of telefoonveld toe dat aan het contact is gekoppeld, zodat elke inzending aan een persoon kan worden gekoppeld.",
           "payment_no_gateway": "Koppel een betaalgateway die betaallinks kan maken, of schakel betalen uit.",
-          "captcha_not_configured": "CAPTCHA staat op altijd aan, maar het platform heeft geen CAPTCHA. Kies een andere instelling of vraag je platformbeheerder er een toe te voegen."
+          "captcha_not_configured": "CAPTCHA staat op altijd aan, maar het platform heeft geen CAPTCHA. Kies een andere instelling of vraag je platformbeheerder er een toe te voegen.",
+          "age_gate_field_missing": "De leeftijdscontrole heeft een vraag nodig: voeg een veld voor geboortedatum of leeftijd toe, of kies in plaats daarvan het selectievakje.",
+          "age_gate_field_not_required": "De vraag waarop de leeftijdscontrole oordeelt, moet verplicht zijn."
         },
         "code": {
           "no_fields": "Voeg minstens één veld toe.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Je workspace vereist de CRM-eigenschap \"{property}\": voeg die toe aan het formulier en markeer hem als verplicht.",
           "crm_required_optional": "Een veld dat aan een verplichte CRM-eigenschap is gekoppeld, moet verplicht zijn.",
           "redirect_not_https": "Het doeladres moet beginnen met https://.",
-          "too_large": "Het formulier is te groot. Verwijder enkele velden."
+          "too_large": "Het formulier is te groot. Verwijder enkele velden.",
+          "age_gate_field_missing": "De leeftijdscontrole heeft een vraag nodig: voeg een veld voor geboortedatum of leeftijd toe, of kies in plaats daarvan het selectievakje.",
+          "age_gate_field_optional": "De vraag waarop de leeftijdscontrole oordeelt, moet verplicht zijn."
         }
       },
       "versionsTitle": "Versies",

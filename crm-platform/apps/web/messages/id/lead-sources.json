@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Petakan paling banyak {max} properti kustom.",
       "contract": "{message}",
       "speedTemplateRequired": "Pilih template yang akan dikirim.",
-      "speedDelayRange": "Masukkan menit bulat dari 0 hingga {max}."
+      "speedDelayRange": "Masukkan menit bulat dari 0 hingga {max}.",
+      "speedMaxAgeRange": "Pilih usia maksimum sebuah lead, dari 1 menit hingga 90 hari."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Tunggu sebelum mengirim (menit)",
         "delayHint": "Menit bulat dari 0 hingga {max}. 0 berarti langsung dikirim.",
+        "maxAge": "Jangan kirim pesan ke lead yang lebih lama dari",
+        "maxAgeHint": "Lead yang datang terlambat (pengisian ulang, percobaan ulang, sinkronisasi terlewat) tetap disimpan, ditugaskan, dan diberi notifikasi, tetapi tidak menerima pesan pertama jika usianya melebihi batas ini. Pilih waktu yang lebih lama hanya jika Anda ingin lead lama dikirimi pesan. Aturan persetujuan selalu berlaku.",
         "businessHours": "Hanya pada jam kerja",
         "businessHoursHint": "Di luar jam kerja yang diatur di workspace Anda, pesan menunggu hingga jam kerja dibuka.",
         "optionsFailed": "Template dan pengirim tidak dapat dimuat. Coba lagi sebentar lagi."
@@ -646,6 +649,7 @@
         "no_sender": "Tidak ada pengirim yang terhubung",
         "template_unavailable": "Template tidak dapat dikirim",
         "missing_value": "Nilai template untuk kontak ini belum ada",
+        "lead_too_old": "Lead lebih lama dari yang diizinkan pengaturan",
         "provider_error": "Penyedia menolaknya",
         "interrupted": "Terhenti di tengah jalan",
         "expired": "Menunggu terlalu lama",
@@ -791,6 +795,7 @@
           "not_now": "Sumber belum siap: terlalu cepat, atau koneksinya dijeda.",
           "provider_error": "Sumber menolak atau gagal.",
           "credentials_refused": "Sumber menolak kredensial. Hubungkan kembali.",
+          "permission_missing": "Meta tidak mengizinkan Halaman ini membaca lead. Berikan akses lead di Formulir lead Meta, lalu jalankan lagi.",
           "interrupted": "Terhenti. Jalankan lagi.",
           "internal_error": "Terjadi kesalahan internal. Jalankan lagi.",
           "incomplete": "Beberapa prospek tidak diteruskan. Jalankan lagi untuk menyelesaikan.",
@@ -829,7 +834,8 @@
           "tooWide": "Maksimal {days} hari sekaligus.",
           "noSource": "Pilih setidaknya satu sumber."
         },
-        "safe": "Tidak ada yang hilang atau terduplikasi jika Anda menjalankannya lagi; hanya prospek yang belum ada yang ditambahkan."
+        "safe": "Tidak ada yang hilang atau terduplikasi jika Anda menjalankannya lagi; hanya prospek yang belum ada yang ditambahkan.",
+        "speedNote": "Lead hasil pengisian ulang menjadi kontak, ditugaskan ke pemilik, dan memberi tahu tim Anda, seperti lead baru. Mereka tidak dikirimi pesan pertama otomatis jika usianya melebihi batas sumber (satu jam kecuali Anda mengubahnya di pengaturan pesan pertama sumber)."
       }
     },
     "meta": {

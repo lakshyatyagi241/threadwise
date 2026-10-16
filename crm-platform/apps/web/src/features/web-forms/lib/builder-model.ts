@@ -268,6 +268,8 @@ export type DefinitionProblem =
   | { code: 'crm_required_unbound'; property: string; object: string }
   | { code: 'crm_required_optional'; blockId: string }
   | { code: 'redirect_not_https' }
+  | { code: 'age_gate_field_missing' }
+  | { code: 'age_gate_field_optional'; blockId: string }
   | { code: 'too_large' };
 
 const bindKey = (b: { object: string; property: string }) => `${b.object}:${b.property}`;
@@ -330,9 +332,49 @@ export function definitionProblems(
     else if (!field.required) out.push({ code: 'crm_required_optional', blockId: field.id });
   }
 
+  // The age check needs the question it judges, and it has to be required (BL-217). The declaration needs none.
+  if (def.ageGate.enabled && def.ageGate.mode !== 'declaration') {
+    const want = def.ageGate.mode === 'dob' ? 'date_of_birth' : 'age';
+    const q = fields.find((f) => f.kind === want);
+    if (!q) out.push({ code: 'age_gate_field_missing' });
+    else if (!q.required) out.push({ code: 'age_gate_field_optional', blockId: q.id });
+  }
+
   if (def.settings.successMode === 'redirect' && safeRedirect(def.settings.redirectUrl) === null)
     out.push({ code: 'redirect_not_https' });
   return out;
+}
+
+/**
+ * Changes the age check (BL-217) and keeps the form able to ask it: a date-of-birth or age mode adds the question as a REQUIRED field
+ * when the form has none, and makes an existing one required. The declaration mode needs no field.
+ */
+export function withAgeGate(
+  def: Definition,
+  patch: Partial<Definition['ageGate']>,
+  labels: { dob: string; age: string },
+): Definition {
+  const gate = { ...def.ageGate, ...patch };
+  let steps = def.steps;
+  if (gate.enabled && gate.mode !== 'declaration') {
+    const kind: FieldKind = gate.mode === 'dob' ? 'date_of_birth' : 'age';
+    const have = fieldsOf(def).find((f) => f.kind === kind);
+    if (!have) {
+      const q = newField(kind, gate.mode === 'dob' ? labels.dob : labels.age);
+      q.required = true;
+      steps = def.steps.map((s, i) =>
+        i === def.steps.length - 1 ? { ...s, blocks: [...s.blocks, q] } : s,
+      );
+    } else if (!have.required) {
+      steps = def.steps.map((s) => ({
+        ...s,
+        blocks: s.blocks.map((b) =>
+          b.type === 'field' && b.id === have.id ? { ...b, required: true } : b,
+        ),
+      }));
+    }
+  }
+  return { ...def, ageGate: gate, steps };
 }
 
 /** Unsaved changes: the draft on the page differs from what the server has. */

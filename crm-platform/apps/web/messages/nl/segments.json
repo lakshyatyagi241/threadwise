@@ -23,13 +23,17 @@
       "imported": "Geïmporteerd uit een bestand",
       "createdAt": "Aangemaakt",
       "updatedAt": "Laatst bijgewerkt",
-      "lastActivityAt": "Laatste activiteit"
+      "lastActivityAt": "Laatste activiteit",
+      "minor": "Gemarkeerd als minderjarig",
+      "dateOfBirth": "Geboortedatum",
+      "age": "Leeftijd (jaren)"
     },
     "fieldGroups": {
       "journey": "Traject",
       "who": "Wie",
       "activity": "Activiteit",
-      "properties": "Eigenschappen"
+      "properties": "Eigenschappen",
+      "company": "Bedrijfseigenschap"
     },
     "operators": {
       "equals": "is",

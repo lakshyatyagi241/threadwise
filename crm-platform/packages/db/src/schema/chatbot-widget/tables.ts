@@ -63,6 +63,10 @@ export const chatbotWidgets = pgTable(
     launcher: jsonb('launcher')
       .notNull()
       .default(sql`'{}'::jsonb`),
+    // migrations/20261223090000_widget_age_gate.sql: the optional age question of the intake form (BL-218). `{}` = off.
+    ageGate: jsonb('age_gate')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
     // migrations/20261114090000_wgt_flow_bots.sql: the flow bot this widget belongs to, and when its owner first saved Customize.
     flowId: idColumn('flow_id'),
     customizedAt: timestamp('customized_at', { withTimezone: true }),
@@ -107,6 +111,10 @@ export const chatbotWidgets = pgTable(
     check('chk_chatbot_widgets_body_bg_kind', sql`${t.bodyBgKind} IN ('color', 'image')`),
     check('chk_chatbot_widgets_status', sql`${t.status} IN ('active', 'paused')`),
     check('chk_chatbot_widgets_launcher_object', sql`jsonb_typeof(${t.launcher}) = 'object'`),
+    check(
+      'chk_chatbot_widgets_age_gate_object',
+      sql`jsonb_typeof(${t.ageGate}) = 'object' AND pg_column_size(${t.ageGate}) <= 512`,
+    ),
   ],
 );
 
@@ -171,6 +179,8 @@ export const chatbotWidgetVisitors = pgTable(
     ip: text('ip'),
     firstSeenAt: timestamp('first_seen_at', { withTimezone: true }),
     lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
+    // migrations/20261223090000_widget_age_gate.sql: when this visitor's answer passed the widget's age gate (BL-218).
+    ageCheckedAt: timestamp('age_checked_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

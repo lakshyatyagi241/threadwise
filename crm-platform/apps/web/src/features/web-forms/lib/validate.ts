@@ -1,3 +1,4 @@
+import { isPlausibleBirthDate, parseAgeAnswer } from '@crm/contracts';
 import {
   CONSENT_KEY,
   type AnswerValue,
@@ -82,6 +83,15 @@ export function fieldIssue(f: FieldBlock, value: AnswerValue | undefined): Field
         ? null
         : { fieldId: f.id, code: 'invalid_date' };
     }
+    case 'date_of_birth':
+      // A real day that can be a birth date; the page says nothing more than "enter a valid date" (BL-217).
+      return isPlausibleBirthDate(String(value).trim(), new Date())
+        ? null
+        : { fieldId: f.id, code: 'invalid_date' };
+    case 'age':
+      return parseAgeAnswer(String(value)) !== null
+        ? null
+        : { fieldId: f.id, code: 'invalid_number' };
     case 'short_text':
     case 'long_text': {
       const s = String(value);
@@ -136,7 +146,7 @@ export function answersForSubmit(
     if (v === undefined || isBlank(v)) continue;
     if (typeof v === 'string') {
       const text = cleanText(v).trim();
-      if (b.kind === 'number' || b.kind === 'currency' || b.kind === 'rating')
+      if (b.kind === 'number' || b.kind === 'currency' || b.kind === 'rating' || b.kind === 'age')
         out[b.id] = Number(text);
       else out[b.id] = text;
     } else out[b.id] = v;

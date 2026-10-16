@@ -306,7 +306,11 @@
         "numbersCount": "{count} Nummern",
         "emailNote": "E-Mails gehen an die Adresse jedes Kontakts. Kontakte ohne E-Mail-Adresse, doppelte Adressen und abgemeldete Kontakte werden übersprungen.",
         "emailSkipped": "{count, plural, one {# ausgewählter Empfänger hat keine E-Mail-Adresse und wird übersprungen.} other {# ausgewählte Empfänger haben keine E-Mail-Adresse und werden übersprungen.}}",
-        "emailNoAddress": "Eingegebene Nummern und CSV-Zeilen haben keine E-Mail-Adresse und werden deshalb übersprungen. Wähle stattdessen Kontakte, Gruppen, Tags oder Segmente."
+        "emailNoAddress": "Eingegebene Nummern und CSV-Zeilen haben keine E-Mail-Adresse und werden deshalb übersprungen. Wähle stattdessen Kontakte, Gruppen, Tags oder Segmente.",
+        "previousTitle": "Frühere Sendungen",
+        "previousHint": "Fügen Sie die Personen hinzu, an die frühere Broadcasts und Kampagnen gingen, optional nur diejenigen, die gelesen, geantwortet oder geklickt haben.",
+        "previousEstimate": "{count, plural, one {Bis zu # Person aus den früheren Sendungen (Schätzwert: Wer in zwei Sendungen vorkommt, wird doppelt gezählt).} other {Bis zu # Personen aus den früheren Sendungen (Schätzwert: Wer in zwei Sendungen vorkommt, wird doppelt gezählt).}}",
+        "previousEditHint": "Ihre frühere Auswahl der Sendungen wird beim Bearbeiten nicht angezeigt: Diese Kampagne enthält ihre Empfänger bereits als Kontakte. Wählen Sie erneut aus, um weitere Personen hinzuzufügen."
       },
       "message": {
         "title": "Nachricht",
@@ -594,7 +598,8 @@
         "subject": "Betreff",
         "subjectFallback": "Der Kampagnenname",
         "skippedNoEmail": "Übersprungen (keine E-Mail-Adresse)",
-        "estimateEmail": "Das ist eine Schätzung: Ein Kontakt in zwei Gruppen wird doppelt gezählt. Kontakte ohne E-Mail-Adresse in Gruppen, Tags und Segmenten werden beim Start der Kampagne übersprungen."
+        "estimateEmail": "Das ist eine Schätzung: Ein Kontakt in zwei Gruppen wird doppelt gezählt. Kontakte ohne E-Mail-Adresse in Gruppen, Tags und Segmenten werden beim Start der Kampagne übersprungen.",
+        "previousSends": "Frühere Sendungen (bis zu)"
       },
       "ai": {
         "open": "Mit KI erstellen",
@@ -1254,7 +1259,8 @@
           "contacts": "Kontakte",
           "groups": "Gruppen",
           "segments": "Segmente",
-          "csv": "CSV-Datei"
+          "csv": "CSV-Datei",
+          "previous": "Frühere Sendungen"
         },
         "groupsHint": "Gruppen sind Ihre Marketinglisten. Alle in den markierten Gruppen sind enthalten.",
         "segmentsHint": "Segmente füllen sich selbst anhand von Regeln. Alle in den markierten Segmenten sind enthalten.",
@@ -1350,7 +1356,10 @@
         },
         "csvIssuesMore": "{count} weitere sind im Download enthalten.",
         "csvConsentOn": "Sie haben die Einwilligung für diese Nummern bestätigt. Sie werden beim Start des Versands als zugestimmt erfasst.",
-        "csvConsentVersion": "Version des Hinweises: {version}."
+        "csvConsentVersion": "Version des Hinweises: {version}.",
+        "modePrevious": "An frühere Sendungen senden",
+        "previousHint": "Sprechen Sie die Personen erneut an, an die frühere Broadcasts und Kampagnen gingen, optional nur diejenigen, die gelesen, nicht gelesen, geantwortet oder geklickt haben.",
+        "chipPrevious": "{count, plural, one {# frühere Sendung} other {# frühere Sendungen}} ({outcome})"
       },
       "review": {
         "intro": "Prüfen Sie die Kosten, legen Sie fest, womit jede Vorlagenvariable gefüllt wird, und kontrollieren Sie den Broadcast.",
@@ -1429,7 +1438,8 @@
         "chargedPlan": "Jetzt Ihrem Wallet belastet: {amount} (Ihr Tarif deckt {covered} dieser Nachrichten ab)",
         "chargedWallet": "Ihrem Wallet belastet: {amount}",
         "sumFollowUps": "Folgenachrichten",
-        "sumSequence": "Wird im Wechsel gesendet"
+        "sumSequence": "Wird im Wechsel gesendet",
+        "sumPrevious": "Frühere Sendungen: {names} ({outcome})"
       },
       "test": {
         "title": "Eine WhatsApp-Testnachricht senden",
@@ -1912,6 +1922,58 @@
       "loading": "Ihre Nummern werden geladen",
       "noAccessTitle": "Sie können keine Kampagnen erstellen",
       "noAccess": "Bitten Sie einen Workspace-Admin um die Berechtigung, Kampagnen zu erstellen."
+    },
+    "previousSends": {
+      "title": "Frühere Sendungen",
+      "empty": "Noch keine früheren Broadcasts oder Kampagnen",
+      "outcomeLabel": "Wer aus diesen Sendungen",
+      "outcomes": {
+        "all": "Alle Empfänger",
+        "delivered": "Zugestellt",
+        "read": "Gelesen",
+        "not_read": "Nicht gelesen",
+        "replied": "Geantwortet",
+        "not_replied": "Nicht geantwortet",
+        "clicked": "Link angeklickt",
+        "failed": "Fehlgeschlagen"
+      },
+      "outcomeOff": "{name} (nicht für Broadcasts)",
+      "outcomeHint": {
+        "all": "Alle Empfänger: alle Personen, für die die Nachricht bestimmt war. Abgemeldete Kontakte und übersprungene Zeilen sind nicht enthalten.",
+        "delivered": "Zugestellt: die Personen, die sie erreicht hat.",
+        "read": "Gelesen: die Personen, die sie gelesen haben.",
+        "not_read": "Nicht gelesen: die Personen, an die sie gesendet wurde und die sie noch nicht gelesen haben.",
+        "replied": "Geantwortet: die Personen, die darauf geantwortet haben.",
+        "not_replied": "Nicht geantwortet: die Personen, an die sie gesendet wurde und die noch nicht geantwortet haben.",
+        "clicked": "Link angeklickt: die Personen, die einen nachverfolgten Link darin angeklickt haben.",
+        "failed": "Fehlgeschlagen: die Personen, bei denen die Zustellung nicht möglich war."
+      },
+      "broadcastNote": "Ein Broadcast erfasst nur Zustellung und Lesen, daher sind Antworten und Klicks nicht verfügbar, solange einer ausgewählt ist.",
+      "broadcastOff": "Ein Broadcast hat keine Antworten oder Klicks. Wählen Sie ein anderes Ergebnis, um ihn auszuwählen.",
+      "search": "Frühere Sendungen durchsuchen",
+      "searchPlaceholder": "Suchen",
+      "listLabel": "Frühere Broadcasts und Kampagnen",
+      "noMatch": "Keine Treffer für Ihre Suche.",
+      "chosen": "{count} von {max} ausgewählt",
+      "limit": "Sie können bis zu {max} Sendungen auswählen. Entfernen Sie eine Auswahl, um eine andere zu treffen.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Kampagne"
+      },
+      "wentOut": "Gesendet am {date}",
+      "wentOutUnknown": "Datum unbekannt",
+      "recipients": "{count, plural, one {# Empfänger} other {# Empfänger}}",
+      "notRecorded": "Bei einem Broadcast nicht erfasst",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# Person} other {# Personen}}",
+        "delivered": "{count, plural, one {# Person hat sie erhalten} other {# Personen haben sie erhalten}}",
+        "read": "{count, plural, one {# Person hat sie gelesen} other {# Personen haben sie gelesen}}",
+        "not_read": "{count, plural, one {# Person hat sie nicht gelesen} other {# Personen haben sie nicht gelesen}}",
+        "replied": "{count, plural, one {# Person hat geantwortet} other {# Personen haben geantwortet}}",
+        "not_replied": "{count, plural, one {# Person hat nicht geantwortet} other {# Personen haben nicht geantwortet}}",
+        "clicked": "{count, plural, one {# Person hat einen Link angeklickt} other {# Personen haben einen Link angeklickt}}",
+        "failed": "{count, plural, one {# Person, bei der es fehlschlug} other {# Personen, bei denen es fehlschlug}}"
+      }
     }
   }
 }

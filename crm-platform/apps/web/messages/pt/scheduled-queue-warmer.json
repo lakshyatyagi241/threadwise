@@ -139,7 +139,8 @@
         "cancel": "Cancelar",
         "retry": "Tentar novamente com novo horário",
         "delete": "Excluir",
-        "deleteHistory": "Excluir do histórico"
+        "deleteHistory": "Excluir do histórico",
+        "edit": "Editar"
       },
       "empty": {
         "title": "Nenhum agendamento",
@@ -207,7 +208,8 @@
         "noSenders": "Nenhum remetente conectado. Conecte um número primeiro.",
         "warming": "Aquecendo",
         "splitHint": "Cada remetente marcado executa o próprio agendamento com uma parcela justa do público.",
-        "messageType": "Tipo de mensagem"
+        "messageType": "Tipo de mensagem",
+        "editSenderHint": "Um agendamento tem um único número. Se você escolher outro, o agendamento passa para ele e o orçamento de aquecimento é reservado novamente."
       },
       "audience": {
         "title": "Destinatários",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Fila de público",
-            "hint": "Direcione novamente os destinatários de uma transmissão anterior."
+            "hint": "Redirecione para os destinatários de transmissões e campanhas passadas."
           },
           "number": {
             "title": "Números",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Escolha o(s) grupo(s)",
         "chooseTags": "Escolha uma ou mais tags",
-        "chooseQueues": "Escolha uma ou mais transmissões anteriores",
+        "chooseQueues": "Escolha uma ou mais transmissões ou campanhas passadas",
         "tickAny": "(marque quantas quiser)",
         "noGroups": "Nenhum grupo ainda",
         "noTags": "Nenhuma tag ainda",
-        "noQueues": "Nenhuma transmissão concluída ainda",
+        "noQueues": "Ainda não há transmissões nem campanhas anteriores",
         "contacts": "Ir para Contatos",
         "broadcast": "Ir para Transmissões",
         "tagsHint": "Os destinatários são recalculados quando o agendamento dispara, então os contatos marcados recentemente são incluídos.",
-        "queuesHint": "Marque quantas transmissões quiser. Os destinatários são desduplicados automaticamente antes do envio.",
+        "queuesHint": "Marque quantas transmissões ou campanhas quiser. Os destinatários são deduplicados automaticamente antes do envio.",
         "paste": "Cole os números",
         "pasteHint": "Código do país primeiro, sem + no início. Quebras de linha ou vírgulas separam os itens.",
         "pastePlaceholder": "Um número por linha: inclua o código do país, sem o sinal de +",
         "total": "Total de destinatários:",
-        "optedOut": "{n} excluídos: cancelaram o recebimento ou foram arquivados"
+        "optedOut": "{n} excluídos: cancelaram o recebimento ou foram arquivados",
+        "kind": {
+          "broadcast": "Transmissão",
+          "campaign": "Campanha"
+        }
       },
       "message": {
         "title": "Escrever mensagem",
@@ -275,7 +281,34 @@
         "pickerSearch": "Pesquisar por nome ou idioma…",
         "pickerEmpty": "Nenhum modelo corresponde.",
         "manageTemplates": "Gerenciar modelos →",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "pickToPreview": "Escolha um modelo para visualizá-lo.",
+        "headerMedia": "Cabeçalho de {kind}",
+        "windowNote": "Um número da Cloud API entrega um modelo aprovado mesmo que o cliente não tenha escrito nas últimas 24 horas.",
+        "previewSamples": "Pré-visualização com valores de exemplo",
+        "pickerCategories": "Categoria do modelo",
+        "categories": {
+          "all": "Todos",
+          "marketing": "Marketing",
+          "utility": "Utilidade"
+        },
+        "pickerHidden": "{n, plural, one {# modelo a mais está oculto porque um número marcado não pode enviá-lo.} other {# modelos a mais estão ocultos porque um número marcado não pode enviá-los.}}",
+        "file": "Arquivo",
+        "chooseFile": "Escolha um arquivo para enviar",
+        "fileHint": "Imagem, vídeo, áudio ou documento. Ele é armazenado de forma privada no seu espaço de trabalho.",
+        "limits": "Nos números escolhidos: até {image} MB para imagens, {video} MB para vídeo, {audio} MB para áudio e {document} MB para documentos.",
+        "tooBigUpload": "O arquivo é maior que {mb} MB.",
+        "uploadFailed": "Não foi possível enviar o arquivo. Tente novamente.",
+        "uploading": "Enviando…",
+        "replace": "Substituir",
+        "remove": "Remover",
+        "kinds": {
+          "image": "Imagem",
+          "video": "Vídeo",
+          "audio": "Áudio",
+          "document": "Documento"
+        },
+        "orLink": "Ou cole um link para o arquivo"
       },
       "when": {
         "title": "Quando enviar",
@@ -356,7 +389,18 @@
         "daysRequired": "Escolha os dias da semana.",
         "endDateRequired": "Escolha o último dia.",
         "endBeforeStart": "A data de término é anterior ao primeiro envio.",
-        "testNumber": "Digite o número com o código do país."
+        "testNumber": "Digite o número com o código do país.",
+        "mediaTooLarge": "Este arquivo é maior do que um número marcado aceita. Escolha um arquivo menor.",
+        "mediaType": "Um número marcado não aceita este tipo de arquivo para este tipo de mídia.",
+        "templateNotForSender": "Um número marcado não pode enviar este modelo: um número da WhatsApp Cloud API envia apenas modelos aprovados pela Meta. Escolha outro modelo ou outro número."
+      },
+      "edit": {
+        "title": "Editar mensagem agendada",
+        "saved": "Agendamento atualizado.",
+        "submit": "Salvar alterações",
+        "stale": "Alguém alterou este agendamento enquanto você o editava. Recarregue para ver as alterações; o que você digitou aqui será perdido.",
+        "reload": "Recarregar o agendamento",
+        "backToSchedule": "Voltar ao agendamento"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Executar agora",
         "cancel": "Cancelar",
         "retry": "Tentar novamente com novo horário",
-        "delete": "Excluir"
+        "delete": "Excluir",
+        "edit": "Editar"
       },
       "kpi": {
         "recipients": "Destinatários",
@@ -434,7 +479,11 @@
           "delivered": "Entregue",
           "read": "Lida",
           "failed": "Falhou"
-        }
+        },
+        "search": "Pesquisar nome ou número",
+        "range": "{from}–{to} de {total}",
+        "prev": "Anterior",
+        "next": "Próximo"
       },
       "config": {
         "eyebrow": "Detalhes do agendamento",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Prévia da mensagem",
         "title": "O que os destinatários veem",
-        "empty": "(corpo vazio)"
+        "empty": "(corpo vazio)",
+        "template": "Modelo {name} ({language})",
+        "file": "Arquivo: {name}"
       },
-      "another": "Agendar outro"
+      "another": "Agendar outro",
+      "engagement": {
+        "eyebrow": "Engajamento",
+        "title": "Entregas ao longo do tempo",
+        "legend": "Legenda",
+        "steps": {
+          "queued": "Na fila",
+          "sent": "Enviada",
+          "delivered": "Entregue",
+          "read": "Lida",
+          "failed": "Falhou"
+        },
+        "empty": "Nada foi enviado ainda, então não há o que exibir no gráfico.",
+        "perHour": "Totais acumulados no início de cada hora, em {zone}.",
+        "perDay": "Totais acumulados no início de cada dia, em {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} aquecendo",

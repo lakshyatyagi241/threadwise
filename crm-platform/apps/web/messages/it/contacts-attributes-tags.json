@@ -209,7 +209,10 @@
       "conditionsChip": "Condizioni: {count}",
       "pqlExampleTag": "Contatti con il tag {tag} inattivi da 30 giorni",
       "pqlExampleStage": "Contatti in {stage} creati negli ultimi 7 giorni",
-      "pqlExampleNoOwner": "Contatti senza proprietario"
+      "pqlExampleNoOwner": "Contatti senza proprietario",
+      "colDateOfBirth": "Data di nascita",
+      "colMinor": "Minorenne",
+      "minorBadge": "Minorenne"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "Il tuo accesso non ti consente di assegnare questo contatto a quella persona.",
       "company": "Azienda",
       "companyHint": "Raggruppa questo contatto sotto un’organizzazione.",
-      "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo."
+      "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo.",
+      "dateOfBirth": "Data di nascita",
+      "dateOfBirthHint": "Facoltativa. Se rende il contatto un minorenne, il contatto viene contrassegnato come tale."
     },
     "tags": {
       "title": "Tag",
@@ -461,7 +466,9 @@
         "source": "Origine",
         "consent": "Consenso marketing (sì / no)",
         "consentSms": "Consenso marketing via SMS (sì / no)",
-        "consentEmail": "Consenso marketing via email (sì / no)"
+        "consentEmail": "Consenso marketing via email (sì / no)",
+        "dateOfBirth": "Data di nascita (prima l'anno, 2010-05-04)",
+        "minor": "Minorenne (sì contrassegna il contatto)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "nome del tag troppo lungo",
         "plan_limit_reached": "limite di contatti del piano raggiunto",
         "tag_limit_reached": "limite di tag del piano raggiunto",
-        "duplicate_in_file": "numero ripetuto, unito a una riga precedente"
+        "duplicate_in_file": "numero ripetuto, unito a una riga precedente",
+        "invalid_date_of_birth": "la data di nascita non è una data con l'anno per primo che possa essere una data di nascita"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "Il tuo accesso non ti consente di assegnare questo contatto a quella persona.",
       "ownerFailed": "Impossibile cambiare il responsabile. Riprova.",
       "ownerMe": "{name} (io)",
-      "ownerFormer": "Ex membro"
+      "ownerFormer": "Ex membro",
+      "dateOfBirth": "Data di nascita"
     },
     "attributes": {
       "eyebrow": "Altro / Attributi",
@@ -1423,7 +1432,8 @@
         "needsFollowUp": "Da ricontattare",
         "active": "Attivi",
         "inactive": "Inattivi",
-        "unsubscribed": "Disiscritti"
+        "unsubscribed": "Disiscritti",
+        "minors": "Minorenni"
       }
     },
     "erase": {

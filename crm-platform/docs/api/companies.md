@@ -20,6 +20,8 @@ workspace. Literal paths (`stats`, `industries`, `select-data`, `bulk/delete`) a
 | `record.companies.create`                        | no    | create a company                                                                                                                                                                                                     |
 | `record.companies.update`                        | yes   | edit, and link or unlink a company's contacts                                                                                                                                                                        |
 | `record.companies.delete`                        | yes   | delete one company, or bulk delete                                                                                                                                                                                   |
+| `record.companies.export`                        | yes   | `GET /companies/export` (CSV of the list inside the key's scope); Owner, Admin and Manager (20261222090000)                                                                                                          |
+| `record.companies.import`                        | no    | `POST /companies/import`; also needs `record.companies.create`; Owner, Admin and Manager (20261222090000)                                                                                                           |
 | `record.company-properties.read`                 | no    | read the definitions of the workspace's company properties (`/v2/fields`, `/v2/field-sections` with `moduleKey=companies`); the Agent and Manager presets hold it (20261217090000) so the company form can draw them |
 | `record.company-properties.create/update/delete` | no    | define, edit, reorder and deactivate company properties; Owner and Admin only by default                                                                                                                             |
 
@@ -137,13 +139,49 @@ changes nothing writes no audit row and no event and does not move the version.
 | `unassigned`   | owned by nobody; not together with `ownerId` (`422`)                                                |
 | `industry`     | exactly this industry, any case                                                                     |
 | `hasOpenDeals` | only companies with at least one open deal                                                          |
-| `sort`         | `created` (newest first, Reference's order; the default) or `name` (A to Z, case-insensitive)       |
+| `sort`         | `created` (newest first, Reference's order; the default), `name` (A to Z, case-insensitive) or `property` (below) |
+| `sortKey`      | the property key, with `sort=property` (required then)                                              |
+| `sortDir`      | `asc` or `desc`; the default is newest first for `created`, ascending for the others                |
+| `props`        | conditions on company properties, a JSON array (below); at most 10, all of which must hold          |
 | `limit`        | 1 to 200 (default 50); there is no 500-row cap                                                      |
 | `cursor`       | the opaque `page.nextCursor` of the last page                                                       |
 
 The answer is `{ data: Company[], page: { nextCursor, hasMore, limit } }`. The cursor is a keyset over the sort key (the
 `created_at` instant at microsecond precision, or the lower-cased name) plus the row id, so rows that tie are never lost or repeated;
 it is tied to its sort (a `created` cursor against `sort=name` is `400`). A damaged cursor is `400`; an invalid query is `422`.
+
+### Company properties on the list (BL-196)
+
+`props` is `[{ "key": "tier", "operator": "equals", "value": "gold" }, …]`, in the operators and value shapes of segment rules
+([segments.md](segments.md#fields-and-their-operators)): the same predicates, so text, number, date, option, multi-select and checkbox
+properties filter as they do on contacts. The property must exist, be active, stored (not a formula) and not masked, and the operator
+must suit its kind, else `422 COMPANY_FILTER_INVALID` with the path (`props.0.key`, `props.1`); malformed JSON or more than 10
+conditions is `422 VALIDATION_FAILED` (as is `sort=property` without `sortKey`). A company with no value is "empty": `is_empty` and the `not_*` operators hold for it.
+
+`sort=property&sortKey=seats` orders by a property: text and options case-insensitively, numbers, dates and checkboxes by value, and a
+company with no value takes the lowest key (first when ascending, last when descending). A multi-select has no order (`422`). The
+cursor names the order, the key and the direction (`property:seats:asc`) and checks its key against the type it is cast to, so a
+cursor from one order is `400` against another and a crafted key never reaches SQL.
+
+### CSV export and import (BL-196)
+
+`GET /companies/export` takes the filters and order of the list (no `limit` or `cursor`) and `columns`, a comma-separated list of
+`name`, `website`, `email`, `phone`, `industry`, `sizeRange`, `address`, `notes`, `owner`, `createdAt` and `property:<key>`; without
+it, every one of them and every active, stored, unmasked property (headed by its label). It needs `record.companies.export`, applies
+that key's record scope, holds at most 5000 companies (`422 COMPANY_EXPORT_TOO_LARGE`; narrow it with a filter), writes a UTF-8 BOM,
+guards free-text cells against spreadsheet formulas (`=`, `+`, `-`, `@` get a leading apostrophe; a phone and a date do not) and writes
+an audit row (module `company_exports`, action `export`: the number of rows and the columns).
+
+`POST /companies/import` takes `{ "csv": "<text>", "matchExisting": true }`. The first line names the columns, in any case: `name`,
+`website`, `email`, `phone`, `industry`, `size`, `address`, `notes`, `owner` (an active member's email or full name; ambiguous or
+unknown is a row failure) and any editable company property by label or key; others are listed in `ignoredColumns`. A row needs a name
+or a website. Every row is checked by the form's own rules (limits, a valid email, typed property values, required properties) in a
+savepoint of its own, so a bad row is `failed: [{ line, field, message }]` while the rest are kept. With `matchExisting`, a company
+with the same website (every common spelling of the host), else the same name, has only its empty fields filled and is counted as
+`updated` or `unchanged`; it is looked up inside the caller's `record.companies.update` scope, and outside it the row creates a new
+company, as the form would. Up to 1000 rows and 1 MB; a file with no header, no name or website column or too many rows is
+`422 COMPANY_IMPORT_INVALID`. It needs `record.companies.import` and `record.companies.create`. Each created company is audited and
+announces `company.created` as if made by hand.
 
 `GET /companies/stats` takes the same filters (not `sort`, `limit` or `cursor`) and answers the three tiles:
 
@@ -239,6 +277,47 @@ The contact side is `contact.updated` on aggregate `contacts` (payload adds `com
 
 `companyId` on `POST/PATCH /contacts` and `POST/PATCH /deals` (and `POST/PATCH /tasks`, which already took it). Putting a company on a contact or a deal needs `record.companies.read` and the company inside the caller's record scope: a company outside it is `404 NOT_FOUND`, never `403`, so a company is not revealed to exist; without the capability it is `403 FORBIDDEN`. Both answers carry the field (`errors: [{ path: "companyId" }]`) so a form says it at the company field. A company the record already has never blocks an unrelated edit (only a _new_ link is checked), a deal that takes its contact's company is not a choice and is not checked, and a request with no grants (a flow, an import, a public form) is not scoped, as everywhere else in the CRM. Tasks keep their existing rule (the company must be in the workspace).
 
+## Generate brief (BL-194)
+
+`GET /companies/:id/brief` and `POST /companies/:id/brief`, in `modules/company-briefs`. Both need the sales pipeline plan feature and
+`record.companies.read`; the company must be inside the caller's scope (`404` outside it). Reference's Client Brief was a deck of the
+numbers it could count, with no AI, under a public token link (`/b/{token}`) and a PDF. Here an AI model writes the brief **for the
+person who asks** and it is shown on the company page; there is no public link (see the parity file).
+
+- **State.** `GET` answers `{ available, brief, sources }` and calls no model. `available` is false when no AI key is available to the
+  workspace (its own key for anthropic, openai, gemini, mistral, deepseek or groq, else the platform's). `brief` is the caller's own
+  latest brief of this company or `null`: `{ id, content, sources, generatedAt, model, stale }`, where `content` is
+  `{ summary, sections: [{ key, bullets }] }` (keys `activity`, `deals`, `tasks`, `conversations`, `properties`, `risks`,
+  `nextSteps`, at most 8 bullets of 400 characters) and `stale` is true when the CRM has changed since (the digest of the facts
+  differs).
+- **Generate.** `POST` takes `{ "regenerate": false }` and answers `{ brief, cached }`. The same facts within 24 hours return the stored
+  brief without a model call (`cached: true`); `regenerate: true` always writes anew. A second generation of the same company by the
+  same person within 30 seconds is `429 COMPANY_BRIEF_RATE_LIMITED`, and the route is also throttled at 20 a person an hour. No key is
+  `422 COMPANY_BRIEF_AI_UNAVAILABLE` and nothing is sent anywhere; a vendor failure or an answer that is not a brief is
+  `502 COMPANY_BRIEF_PROVIDER_FAILED` and the stored brief is kept. A key paid by the platform asks the workspace's monthly allowance
+  first (`AiTokenMeter.guard`); every call writes the token ledger.
+- **What is read, and as whom.** Everything is read as the caller through the services and record scopes of the screens: the company
+  (`record.companies.read` scope), contacts counted by lifecycle stage and last activity date (`record.contacts.read` scope), deals
+  (`record.deals.read` scope: the figures per currency and the ten most recent), open tasks (`record.tasks.read` scope), conversations
+  with the company's contacts (`inbox.conversation.read`, the inbox visibility rule `visibleToSql`, counts and the last message date)
+  and the company properties (`record.company-properties.read`; hidden, masked, system and computed ones are skipped). A kind the
+  caller may not read is left out and `sources` says so. Because the result depends on the caller, the stored brief is per company and
+  per person (`company_briefs`, unique on `(org_id, company_id, user_id)`), also the cache.
+- **What is sent to the model.** Counts, dates, amounts, lifecycle stages, stage names, short titles of deals and tasks, the company's
+  name, industry, size and property values. Never a contact's name, email, phone or address, the company's own email, phone or
+  address, the company's notes (free text that often names people), or the text of any message. Titles and values are cut and have emails and runs of seven or more digits replaced by
+  `[email]` and `[number]` (`maskPersonalText`). The facts go in as data and the prompt tells the model to ignore instructions inside
+  them; its answer is parsed strictly (unknown sections, repeats and empty bullets dropped) and rendered as text.
+- **Audit and privacy.** An audit row (module `company_briefs`, the company id) records who generated, the provider, model, which side
+  paid, the token counts and which kinds of records were used; never the facts or the text. The workspace AI-use switches and notices
+  of the privacy spec (BL-149) are not built yet, so there is nothing to read; the card carries its own notice of what is sent. When
+  they exist the brief must read the `ai_content_processing` switch (recorded in the backlog).
+- **Copilot.** The AI CRM Copilot's `generate_brief` tool (read kind) takes a company name, picks the company the caller can read whose
+  name matches best and calls the same service as the caller, so the scopes, privacy rules, cache and limits are the same. Its answer
+  carries the summary and the sections for the model to relay.
+- **Tests with no real AI.** The model is reached through the single-completion port the flow AI node uses (`FLOW_AI_PORT`); the
+  vendor base URLs can be overridden by environment (`FLR_AI_OPENAI_BASE_URL`, ...), which is how the end-to-end tests run a local fake.
+
 ## Not built here
 
-The "Generate brief" button on the company page (the client brief feature is not built: BL-194). The AI copilot's company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`; its `generate_brief` waits for the same feature. See "Not built here" in the inventory.
+Reference's public brief link and PDF (`/b/{token}`, `/b/{token}/pdf`) and briefs for a contact or a deal (BL-224). The AI copilot's other company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`. A company saved view / saved filter (the list's state lives in the address; segments are of contacts). See "Not built here" in the inventory.

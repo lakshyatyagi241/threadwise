@@ -2,8 +2,9 @@
 
 import { useId, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { WizardAudienceSources } from '@crm/contracts';
+import type { PreviousSendsAudience, WizardAudienceSources } from '@crm/contracts';
 import { Input } from '@crm/ui';
+import { PreviousSendsPicker } from '../../components/previous-sends-picker';
 import { toggleId } from '../lib/audience';
 import { ChoiceCard, Chip, ErrorBlock, Skeleton } from './parts';
 
@@ -166,6 +167,44 @@ export function SourcePicker({
       chosen={chosen}
       onChange={onChange}
       disabled={disabled}
+    />
+  );
+}
+
+/** Earlier broadcasts and campaigns, with the outcome that narrows who is taken from them (one mode of the audience step). */
+export function PreviousSourcePicker({
+  sources,
+  value,
+  onChange,
+  disabled,
+}: {
+  sources: SourcesQuery;
+  value: PreviousSendsAudience | null | undefined;
+  onChange: (next: PreviousSendsAudience) => void;
+  disabled?: boolean | undefined;
+}) {
+  const t = useTranslations('campaigns.wizard.audience');
+  if (sources.isPending) {
+    return (
+      <div className="p-4">
+        <Skeleton label={t('loadingSources')} lines={5} />
+      </div>
+    );
+  }
+  if (sources.isError) {
+    return (
+      <div className="p-4">
+        <ErrorBlock error={sources.error} onRetry={() => void sources.refetch()} />
+      </div>
+    );
+  }
+  return (
+    <PreviousSendsPicker
+      options={sources.data?.previousSends ?? []}
+      value={value}
+      onChange={onChange}
+      disabled={disabled}
+      className="flex-1 p-4"
     />
   );
 }

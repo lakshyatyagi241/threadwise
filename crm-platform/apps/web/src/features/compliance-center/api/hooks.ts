@@ -8,6 +8,7 @@ export const KEYS = {
   settings: ['compliance-center', 'settings'] as const,
   checklist: ['compliance-center', 'checklist'] as const,
   subprocessors: ['compliance-center', 'subprocessors'] as const,
+  dnc: ['compliance-center', 'dnc'] as const,
   links: ['compliance-center', 'links'] as const,
 };
 
@@ -29,6 +30,17 @@ export function useComplianceChecklist(enabled: boolean) {
     retry: false,
     staleTime: 0,
     queryFn: ({ signal }) => complianceApi.checklist(signal),
+  });
+}
+
+/** One page of the Do-Not-Call list; `q` narrows by a part of the number. */
+export function useDncList(enabled: boolean, q: string, cursor: string | undefined) {
+  return useQuery({
+    queryKey: [...KEYS.dnc, q, cursor ?? ''] as const,
+    enabled,
+    retry: false,
+    staleTime: 5_000,
+    queryFn: ({ signal }) => complianceApi.dnc({ q: q || undefined, cursor, limit: 50 }, signal),
   });
 }
 

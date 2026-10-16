@@ -299,6 +299,41 @@
           "held": "{count, plural, other {# kiriman ditahan sebagai spam.}}",
           "review": "Tinjau"
         }
+      },
+      "age": {
+        "title": "Pemeriksaan usia",
+        "description": "Tanyakan usia hanya jika Anda memerlukannya. Biarkan nonaktif untuk sebagian besar formulir.",
+        "enable": "Periksa usia pengunjung",
+        "enableHint": "Nonaktif secara default. Aktifkan jika aturan ruang kerja Anda mengharuskannya, atau bisnis Anda melayani anak di bawah umur. Formulir tidak pernah memberi tahu pengunjung jawaban mana yang lolos.",
+        "mode": "Cara bertanya",
+        "modes": {
+          "declaration": "Sebuah kotak centang: “Saya menyatakan bahwa usia saya minimal N tahun”",
+          "age": "Tanyakan usianya",
+          "dob": "Tanyakan tanggal lahirnya"
+        },
+        "modeHints": {
+          "declaration": "Tidak ada data usia yang disimpan. Data paling sedikit.",
+          "age": "Bilangan bulat. Digunakan untuk pemeriksaan; hanya hasilnya yang disimpan.",
+          "dob": "Disimpan pada kontak sebagai tanggal lahir. Gunakan hanya jika Anda memerlukan tanggalnya."
+        },
+        "minAge": "Usia minimum",
+        "minAgeHint": "Kosongkan untuk memakai usia ruang kerja Anda ({age}). Antara 1 dan 21.",
+        "minAgeInvalid": "Masukkan bilangan bulat dari {min} sampai {max}.",
+        "whenUnder": "Jika pengunjung berusia di bawah itu",
+        "actions": {
+          "block": "Jangan terima pengiriman",
+          "flag": "Terima, tandai kontak sebagai di bawah umur, jangan catat persetujuan pemasaran",
+          "guardian": "Seperti di atas, dan minta data orang tua atau wali"
+        },
+        "actionHints": {
+          "block": "Tidak ada yang disimpan dan pengunjung melihat pesan netral. Dengan kotak centang, pengunjung cukup mencentangnya.",
+          "flag": "Kontak ditandai sebagai di bawah umur. Baris persetujuan pada pengiriman ini disimpan apa adanya, tetapi tidak ada persetujuan pemasaran yang dicatat.",
+          "guardian": "Nama dan kontak orang tua atau wali disimpan bersama pengiriman dan pada lini masa kontak. Persetujuan mereka tidak dicatat sampai seseorang mencatatnya di kartu Persetujuan."
+        },
+        "declarationBlockNote": "Dengan kotak centang dan pengaturan ini tidak ada yang ditolak: kotak harus dicentang agar formulir dapat dikirim.",
+        "childrenUnanswered": "Pusat kepatuhan Anda belum menjawab pertanyaan tentang anak-anak, sehingga pemasaran untuk anak di bawah umur yang ditandai dicatat tetapi tidak ditahan.",
+        "childrenLink": "Buka Pusat kepatuhan",
+        "neutralNote": "Jangan tulis usia minimum di teks bantuan kolom atau di deskripsi: halaman tidak boleh menyebutkan jawaban mana yang lolos."
       }
     }
   }

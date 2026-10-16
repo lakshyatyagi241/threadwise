@@ -209,7 +209,10 @@
       "conditionsChip": "Điều kiện: {count}",
       "pqlExampleTag": "Liên hệ gắn thẻ {tag} không hoạt động 30 ngày",
       "pqlExampleStage": "Liên hệ {stage} tạo trong 7 ngày qua",
-      "pqlExampleNoOwner": "Liên hệ chưa có người phụ trách"
+      "pqlExampleNoOwner": "Liên hệ chưa có người phụ trách",
+      "colDateOfBirth": "Ngày sinh",
+      "colMinor": "Chưa thành niên",
+      "minorBadge": "Chưa thành niên"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó.",
       "company": "Công ty",
       "companyHint": "Nhóm liên hệ này vào một tổ chức.",
-      "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này."
+      "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này.",
+      "dateOfBirth": "Ngày sinh",
+      "dateOfBirthHint": "Không bắt buộc. Nếu ngày sinh khiến liên hệ là người chưa thành niên, liên hệ sẽ được đánh dấu như vậy."
     },
     "tags": {
       "title": "Thẻ",
@@ -461,7 +466,9 @@
         "source": "Nguồn",
         "consent": "Đồng ý tiếp thị (có / không)",
         "consentSms": "Đồng ý tiếp thị qua SMS (có / không)",
-        "consentEmail": "Đồng ý tiếp thị qua email (có / không)"
+        "consentEmail": "Đồng ý tiếp thị qua email (có / không)",
+        "dateOfBirth": "Ngày sinh (năm trước, 2010-05-04)",
+        "minor": "Chưa thành niên (có sẽ đánh dấu liên hệ)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "tên thẻ quá dài",
         "plan_limit_reached": "đã đạt giới hạn liên hệ của gói",
         "tag_limit_reached": "đã đạt giới hạn thẻ của gói",
-        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước"
+        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước",
+        "invalid_date_of_birth": "ngày sinh không phải là ngày viết theo thứ tự năm trước có thể là ngày sinh"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó.",
       "ownerFailed": "Không thể đổi người phụ trách. Hãy thử lại.",
       "ownerMe": "{name} (tôi)",
-      "ownerFormer": "Thành viên cũ"
+      "ownerFormer": "Thành viên cũ",
+      "dateOfBirth": "Ngày sinh"
     },
     "attributes": {
       "eyebrow": "Thêm / Thuộc tính",
@@ -1423,7 +1432,8 @@
         "needsFollowUp": "Cần theo dõi",
         "active": "Đang hoạt động",
         "inactive": "Không hoạt động",
-        "unsubscribed": "Đã hủy đăng ký"
+        "unsubscribed": "Đã hủy đăng ký",
+        "minors": "Người chưa thành niên"
       }
     },
     "erase": {

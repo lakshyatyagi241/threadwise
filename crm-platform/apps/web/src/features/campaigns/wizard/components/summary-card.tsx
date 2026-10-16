@@ -15,6 +15,7 @@ import { useSegmentCatalog } from '@/features/segments/api/lookups';
 import { summarize } from '@/features/segments/lib/summary';
 import { useSummaryContext } from '@/features/segments/components/use-summary';
 import { audienceNames, editorFromRules, selectionKind } from '../lib/audience';
+import { hasPrevious, previousNames } from '../../lib/previous-sends';
 import { formatMinor } from '../lib/money';
 import type { WizardView } from '../lib/state';
 import { useWaitText } from './follow-ups-card';
@@ -80,6 +81,7 @@ export function SummaryCard({
   const t = useTranslations('campaigns.wizard.review');
   const ta = useTranslations('campaigns.wizard.audience');
   const tc = useTranslations('campaigns.wizard.categories');
+  const tp = useTranslations('campaigns.previousSends');
   const tf = useTranslations('campaigns.wizard.fields');
   const locale = useLocale();
   const tf2 = useTranslations('campaigns.wizard.followUps');
@@ -160,6 +162,19 @@ export function SummaryCard({
             {names.groups.length > 0 && <li>{t('sumGroups', { names: list(names.groups) })}</li>}
             {names.segments.length > 0 && (
               <li>{t('sumSegments', { names: list(names.segments) })}</li>
+            )}
+            {hasPrevious(draft.audience.previous) && (
+              <li>
+                {t('sumPrevious', {
+                  names: list(
+                    previousNames(draft.audience.previous, sources?.previousSends).map((x) => ({
+                      name: x.name,
+                      found: x.found,
+                    })),
+                  ),
+                  outcome: tp(`outcomes.${draft.audience.previous?.outcome ?? 'all'}`),
+                })}
+              </li>
             )}
             {draft.audience.csv && (
               <li>

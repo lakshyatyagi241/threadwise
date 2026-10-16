@@ -115,7 +115,14 @@
         "consentAt": "Verildiği zaman",
         "noConsent": "Bu form onay istemedi.",
         "links": "Kayıtlar",
-        "actions": "İşlemler"
+        "actions": "İşlemler",
+        "ageCheck": "Yaş kontrolü",
+        "ageOutcome": "Sonuç",
+        "ageUnder": "En düşük yaşın altında. Gönderim kabul edildi ve kişi reşit olmayan olarak işaretlendi; pazarlama onayı kaydedilmedi.",
+        "guardianName": "Ebeveyn veya vasi",
+        "guardianEmail": "Vasi e-postası",
+        "guardianPhone": "Vasi telefonu",
+        "guardianNote": "Ziyaretçi tarafından verildi, doğrulanmadı. Onayları, biri kişinin Onay kartında kaydedene kadar kayıtlı değildir."
       },
       "actions": {
         "retry": "Yeniden dene",

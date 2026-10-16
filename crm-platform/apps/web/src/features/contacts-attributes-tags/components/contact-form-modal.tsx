@@ -518,6 +518,16 @@ function ContactForm({
             onChange={(e) => set('language', e.target.value)}
           />
         </Field>
+        <Field label={t('dateOfBirth')} htmlFor={id('dob')} hint={t('dateOfBirthHint')}>
+          <Input
+            id={id('dob')}
+            type="date"
+            value={values.dateOfBirth}
+            min="1900-01-01"
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => set('dateOfBirth', e.target.value)}
+          />
+        </Field>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">

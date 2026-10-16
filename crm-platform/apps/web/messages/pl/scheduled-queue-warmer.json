@@ -139,7 +139,8 @@
         "cancel": "Anuluj",
         "retry": "Ponów z nowym czasem",
         "delete": "Usuń",
-        "deleteHistory": "Usuń z historii"
+        "deleteHistory": "Usuń z historii",
+        "edit": "Edytuj"
       },
       "empty": {
         "title": "Brak harmonogramów",
@@ -207,7 +208,8 @@
         "noSenders": "Brak połączonego nadawcy. Najpierw połącz numer.",
         "warming": "Rozgrzewanie",
         "splitHint": "Każdy zaznaczony nadawca uruchamia własny harmonogram z równym udziałem w odbiorcach.",
-        "messageType": "Typ wiadomości"
+        "messageType": "Typ wiadomości",
+        "editSenderHint": "Harmonogram ma jeden numer. Wybranie innego przenosi harmonogram na ten numer i ponownie rezerwuje jego limit rozgrzewki."
       },
       "audience": {
         "title": "Odbiorcy",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Kolejka odbiorców",
-            "hint": "Ponownie dotrzyj do odbiorców wcześniejszej wiadomości masowej."
+            "hint": "Ponownie dotrzyj do odbiorców wcześniejszych broadcastów i kampanii."
           },
           "number": {
             "title": "Numery",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Wybierz grupę/grupy",
         "chooseTags": "Wybierz jeden lub więcej tagów",
-        "chooseQueues": "Wybierz jedną lub więcej wcześniejszych wiadomości masowych",
+        "chooseQueues": "Wybierz jeden lub więcej wcześniejszych broadcastów albo kampanii",
         "tickAny": "(zaznacz dowolną liczbę)",
         "noGroups": "Brak grup",
         "noTags": "Brak tagów",
-        "noQueues": "Brak zakończonych wiadomości masowych",
+        "noQueues": "Nie ma jeszcze wcześniejszych broadcastów ani kampanii",
         "contacts": "Przejdź do kontaktów",
         "broadcast": "Przejdź do wiadomości masowych",
         "tagsHint": "Odbiorcy są przeliczani w momencie uruchomienia harmonogramu, więc uwzględniane są nowo otagowane kontakty.",
-        "queuesHint": "Zaznacz dowolną liczbę wiadomości masowych. Odbiorcy są automatycznie deduplikowani przed wysyłką.",
+        "queuesHint": "Zaznacz dowolną liczbę broadcastów lub kampanii. Duplikaty odbiorców są automatycznie usuwane przed wysyłką.",
         "paste": "Wklej numery",
         "pasteHint": "Najpierw kierunkowy kraju, bez + na początku. Pozycje oddzielaj nowymi wierszami lub przecinkami.",
         "pastePlaceholder": "Jeden numer w wierszu — z kierunkowym kraju, bez znaku +",
         "total": "Łączna liczba odbiorców:",
-        "optedOut": "{n} pominiętych: zrezygnowali lub zarchiwizowani"
+        "optedOut": "{n} pominiętych: zrezygnowali lub zarchiwizowani",
+        "kind": {
+          "broadcast": "Broadcast",
+          "campaign": "Kampania"
+        }
       },
       "message": {
         "title": "Utwórz wiadomość",
@@ -275,7 +281,34 @@
         "pickerSearch": "Szukaj według nazwy lub języka…",
         "pickerEmpty": "Brak pasujących szablonów.",
         "manageTemplates": "Zarządzaj szablonami →",
-        "cancel": "Anuluj"
+        "cancel": "Anuluj",
+        "pickToPreview": "Wybierz szablon, aby go zobaczyć.",
+        "headerMedia": "Nagłówek: {kind}",
+        "windowNote": "Numer Cloud API dostarcza zatwierdzony szablon nawet wtedy, gdy klient nie napisał w ciągu ostatnich 24 godzin.",
+        "previewSamples": "Podgląd z przykładowymi wartościami",
+        "pickerCategories": "Kategoria szablonu",
+        "categories": {
+          "all": "Wszystkie",
+          "marketing": "Marketing",
+          "utility": "Usługowe"
+        },
+        "pickerHidden": "{n, plural, one {# kolejny szablon jest ukryty, bo zaznaczony numer nie może go wysłać.} few {# kolejne szablony są ukryte, bo zaznaczony numer nie może ich wysłać.} many {# kolejnych szablonów jest ukrytych, bo zaznaczony numer nie może ich wysłać.} other {# kolejnego szablonu jest ukrytych, bo zaznaczony numer nie może ich wysłać.}}",
+        "file": "Plik",
+        "chooseFile": "Wybierz plik do wysłania",
+        "fileHint": "Obraz, wideo, dźwięk lub dokument. Plik jest przechowywany prywatnie w Twoim obszarze roboczym.",
+        "limits": "Na wybranych numerach: do {image} MB dla obrazów, {video} MB dla wideo, {audio} MB dla dźwięku i {document} MB dla dokumentów.",
+        "tooBigUpload": "Plik jest większy niż {mb} MB.",
+        "uploadFailed": "Nie udało się przesłać pliku. Spróbuj ponownie.",
+        "uploading": "Przesyłanie…",
+        "replace": "Zastąp",
+        "remove": "Usuń",
+        "kinds": {
+          "image": "Obraz",
+          "video": "Wideo",
+          "audio": "Dźwięk",
+          "document": "Dokument"
+        },
+        "orLink": "Lub wklej link do pliku"
       },
       "when": {
         "title": "Kiedy wysłać",
@@ -356,7 +389,18 @@
         "daysRequired": "Wybierz dni tygodnia.",
         "endDateRequired": "Wybierz ostatni dzień.",
         "endBeforeStart": "Data końcowa jest przed pierwszą wysyłką.",
-        "testNumber": "Wpisz numer z kierunkowym kraju."
+        "testNumber": "Wpisz numer z kierunkowym kraju.",
+        "mediaTooLarge": "Ten plik jest większy, niż akceptuje zaznaczony numer. Wybierz mniejszy plik.",
+        "mediaType": "Zaznaczony numer nie akceptuje tego typu pliku dla tego rodzaju multimediów.",
+        "templateNotForSender": "Zaznaczony numer nie może wysłać tego szablonu: numer WhatsApp Cloud API wysyła tylko szablony zatwierdzone przez Meta. Wybierz inny szablon lub numer."
+      },
+      "edit": {
+        "title": "Edytuj zaplanowaną wiadomość",
+        "saved": "Harmonogram zaktualizowany.",
+        "submit": "Zapisz zmiany",
+        "stale": "Ktoś zmienił ten harmonogram, gdy go edytowałeś. Załaduj go ponownie, aby zobaczyć zmiany; to, co tu wpisano, zostanie utracone.",
+        "reload": "Załaduj harmonogram ponownie",
+        "backToSchedule": "Wróć do harmonogramu"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Uruchom teraz",
         "cancel": "Anuluj",
         "retry": "Ponów z nowym czasem",
-        "delete": "Usuń"
+        "delete": "Usuń",
+        "edit": "Edytuj"
       },
       "kpi": {
         "recipients": "Odbiorcy",
@@ -434,7 +479,11 @@
           "delivered": "Dostarczono",
           "read": "Przeczytano",
           "failed": "Nieudane"
-        }
+        },
+        "search": "Szukaj nazwy lub numeru",
+        "range": "{from}–{to} z {total}",
+        "prev": "Poprzednia",
+        "next": "Następna"
       },
       "config": {
         "eyebrow": "Szczegóły harmonogramu",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Podgląd wiadomości",
         "title": "Co widzą odbiorcy",
-        "empty": "(pusta treść)"
+        "empty": "(pusta treść)",
+        "template": "Szablon {name} ({language})",
+        "file": "Plik: {name}"
       },
-      "another": "Zaplanuj kolejną"
+      "another": "Zaplanuj kolejną",
+      "engagement": {
+        "eyebrow": "Zaangażowanie",
+        "title": "Dostarczanie w czasie",
+        "legend": "Legenda",
+        "steps": {
+          "queued": "W kolejce",
+          "sent": "Wysłano",
+          "delivered": "Dostarczono",
+          "read": "Odczytano",
+          "failed": "Niepowodzenie"
+        },
+        "empty": "Nic jeszcze nie wysłano, więc nie ma czego pokazać na wykresie.",
+        "perHour": "Sumy narastające na początku każdej godziny, strefa: {zone}.",
+        "perDay": "Sumy narastające na początku każdego dnia, strefa: {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} w rozgrzewce",

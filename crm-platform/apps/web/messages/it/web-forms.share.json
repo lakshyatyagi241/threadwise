@@ -299,6 +299,41 @@
           "held": "{count, plural, one {1 invio è trattenuto come spam.} many {# di invii sono trattenuti come spam.} other {# invii sono trattenuti come spam.}}",
           "review": "Rivedili"
         }
+      },
+      "age": {
+        "title": "Controllo dell'età",
+        "description": "Chiedi l'età solo dove ti serve. Lascia disattivato per la maggior parte dei moduli.",
+        "enable": "Controlla l'età del visitatore",
+        "enableHint": "Disattivato per impostazione predefinita. Attivalo se le regole del tuo spazio di lavoro lo richiedono o se la tua attività si rivolge a minorenni. Il modulo non dice mai al visitatore quale risposta è accettata.",
+        "mode": "Come chiedere",
+        "modes": {
+          "declaration": "Una casella: \"Confermo di avere almeno N anni\"",
+          "age": "Chiedi l'età",
+          "dob": "Chiedi la data di nascita"
+        },
+        "modeHints": {
+          "declaration": "Non viene conservato nulla sull'età. Il minimo dei dati.",
+          "age": "Un numero intero. Viene usato per il controllo; viene conservato solo il risultato.",
+          "dob": "Salvata sul contatto come data di nascita. Usala solo se ti serve la data."
+        },
+        "minAge": "Età minima",
+        "minAgeHint": "Lascia vuoto per usare l'età del tuo spazio di lavoro ({age}). Tra 1 e 21.",
+        "minAgeInvalid": "Inserisci un numero intero da {min} a {max}.",
+        "whenUnder": "Se il visitatore ha meno di questa età",
+        "actions": {
+          "block": "Non accettare l'invio",
+          "flag": "Accettalo, contrassegna il contatto come minorenne, non registrare alcun consenso al marketing",
+          "guardian": "Come sopra, e chiedi un genitore o un tutore"
+        },
+        "actionHints": {
+          "block": "Non viene memorizzato nulla e il visitatore vede un messaggio neutro. Con la casella, il visitatore deve solo spuntarla.",
+          "flag": "Il contatto viene contrassegnato come minorenne. La riga di consenso di questo invio viene memorizzata come mostrata, ma non viene registrato alcun accordo di marketing.",
+          "guardian": "Il nome e il contatto del genitore o tutore vengono conservati con l'invio e nella cronologia del contatto. Il suo consenso non viene registrato finché una persona non lo registra nella scheda Consenso."
+        },
+        "declarationBlockNote": "Con la casella e questa impostazione nessuno viene respinto: la casella deve essere spuntata per inviare il modulo.",
+        "childrenUnanswered": "Il tuo Centro di conformità non ha risposto alla domanda sui minori, quindi il marketing verso un minorenne contrassegnato viene registrato ma non trattenuto.",
+        "childrenLink": "Apri il Centro di conformità",
+        "neutralNote": "Non scrivere l'età minima nel testo di aiuto di un campo né nella descrizione: la pagina non deve dire quale risposta è accettata."
       }
     }
   }

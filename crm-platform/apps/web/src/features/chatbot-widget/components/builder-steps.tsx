@@ -10,6 +10,7 @@ import { CheckIcon, EngineGlyph, ExternalIcon } from './icons';
 import { ColorField } from './color-field';
 import { PhoneField } from './phone-field';
 import { ToggleRow } from './toggle-row';
+import { WidgetAgeQuestion } from './widget-age-question';
 
 const INPUT =
   'w-full rounded-lg border bg-background px-3 py-2 text-[12.5px] outline-none focus-visible:border-brand focus-visible:ring-4 focus-visible:ring-brand/10';
@@ -427,6 +428,9 @@ export function VoiceStep({ s, set, flash, plain, widgetId }: StepProps) {
           ))}
         </div>
       </fieldset>
+      <div className="mt-4">
+        <WidgetAgeQuestion s={s} set={set} />
+      </div>
       {(s.collectEmail || s.collectPhone) && (
         <div className="mt-4">
           <ConsentNoticeEditor scope="widget" refId={widgetId ?? ''} disabled={!widgetId} />

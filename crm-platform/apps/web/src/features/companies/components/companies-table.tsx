@@ -3,13 +3,20 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
+import type { FieldResponse } from '@crm/contracts';
+import { displayValue } from '@/features/contacts-attributes-tags/lib/field-values';
 import type { CompanyResponse } from '../api/schemas';
+import { isPropId, type ColumnDef } from '../lib/columns';
 import { formatTotals } from '../lib/money';
 import type { CheckState } from '../lib/selection';
 import { TrashIcon } from './icons';
 
 export interface CompaniesTableProps {
   rows: readonly CompanyResponse[];
+  /** The columns drawn, in order (the company column is always first). */
+  columns: readonly ColumnDef[];
+  /** The workspace's company properties, to show a property column's value the way its type reads. */
+  fields: readonly FieldResponse[];
   selected: ReadonlySet<string>;
   headerState: CheckState;
   /** Delete buttons and the selection column show only for someone who may delete. */
@@ -24,17 +31,59 @@ export interface CompaniesTableProps {
 const count = (n: number | null | undefined, locale: string): string =>
   n === null || n === undefined ? '—' : new Intl.NumberFormat(locale).format(n);
 
+/** The figures are right aligned, the rest start-aligned. */
+const NUMERIC = new Set(['contacts', 'openDeals', 'wonValue']);
+
 /**
  * Reference's list (TW-CTP-002): Company, Industry, Contacts, Open deals, Won value, and a delete button on each row. The whole row
- * opens the company; the name is a real link so keyboard and middle-click work.
+ * opens the company; the name is a real link so keyboard and middle-click work. "Columns" adds the company's other details and its
+ * properties (BL-196); without a choice the table is Reference's.
  */
 export function CompaniesTable(p: CompaniesTableProps) {
   const t = useTranslations('companies.table');
+  const tc = useTranslations('companies.common');
   const locale = useLocale();
   const header = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (header.current) header.current.indeterminate = p.headerState === 'some';
   }, [p.headerState]);
+
+  const fieldByKey = new Map(p.fields.map((f) => [f.key, f]));
+  const labelOf = (c: ColumnDef) => ('key' in c.label ? t(c.label.key) : c.label.text);
+  const date = (iso: string) =>
+    new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso));
+
+  const cell = (c: ColumnDef, row: CompanyResponse) => {
+    if (isPropId(c.id)) {
+      const key = c.id.slice('prop:'.length);
+      const field = fieldByKey.get(key);
+      const raw = row.customFields[key];
+      const text = field
+        ? displayValue(field, raw, { yes: tc('yes'), no: tc('no') })
+        : raw === undefined || raw === null
+          ? ''
+          : String(raw);
+      return text || '—';
+    }
+    switch (c.id) {
+      case 'industry':
+        return row.industry || '—';
+      case 'website':
+        return row.website || '—';
+      case 'email':
+        return row.email || '—';
+      case 'phone':
+        return row.phone || '—';
+      case 'size':
+        return row.sizeRange || '—';
+      case 'owner':
+        return row.owner?.name || '—';
+      case 'created':
+        return date(row.createdAt);
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -53,21 +102,15 @@ export function CompaniesTable(p: CompaniesTableProps) {
                 />
               </th>
             )}
-            <th scope="col" className="px-4 py-3 text-start font-medium">
-              {t('company')}
-            </th>
-            <th scope="col" className="px-4 py-3 text-start font-medium">
-              {t('industry')}
-            </th>
-            <th scope="col" className="px-4 py-3 text-end font-medium">
-              {t('contacts')}
-            </th>
-            <th scope="col" className="px-4 py-3 text-end font-medium">
-              {t('openDeals')}
-            </th>
-            <th scope="col" className="px-4 py-3 text-end font-medium">
-              {t('wonValue')}
-            </th>
+            {p.columns.map((c) => (
+              <th
+                key={c.id}
+                scope="col"
+                className={`px-4 py-3 font-medium ${NUMERIC.has(c.id) ? 'text-end' : 'text-start'}`}
+              >
+                {labelOf(c)}
+              </th>
+            ))}
             <th scope="col" className="w-16 px-4 py-3 text-end font-medium">
               <span className="sr-only">{t('actions')}</span>
             </th>
@@ -94,35 +137,58 @@ export function CompaniesTable(p: CompaniesTableProps) {
                     />
                   </td>
                 )}
-                <td className="max-w-xs px-4 py-3 font-semibold">
-                  <Link
-                    href={`/companies/${c.id}`}
-                    dir="auto"
-                    onClick={(e) => e.stopPropagation()}
-                    className="block truncate outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary"
-                    title={c.name}
-                  >
-                    {c.name}
-                  </Link>
-                </td>
-                <td className="px-4 py-3 text-muted-foreground" dir="auto">
-                  {c.industry || '—'}
-                </td>
-                <td className="px-4 py-3 text-end font-mono tabular-nums">
-                  {count(c.rollup.contacts, locale)}
-                </td>
-                <td className="px-4 py-3 text-end font-mono tabular-nums">
-                  {count(c.rollup.deals?.open, locale)}
-                </td>
-                <td className="px-4 py-3 text-end font-mono tabular-nums">
-                  {c.rollup.deals === null ? (
-                    '—'
-                  ) : won.length === 0 ? (
-                    <span className="text-muted-foreground">{count(0, locale)}</span>
-                  ) : (
-                    won.map((line) => <div key={line}>{line}</div>)
-                  )}
-                </td>
+                {p.columns.map((col) => {
+                  switch (col.id) {
+                    case 'company':
+                      return (
+                        <td key={col.id} className="max-w-xs px-4 py-3 font-semibold">
+                          <Link
+                            href={`/companies/${c.id}`}
+                            dir="auto"
+                            onClick={(e) => e.stopPropagation()}
+                            className="block truncate outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary"
+                            title={c.name}
+                          >
+                            {c.name}
+                          </Link>
+                        </td>
+                      );
+                    case 'contacts':
+                      return (
+                        <td key={col.id} className="px-4 py-3 text-end font-mono tabular-nums">
+                          {count(c.rollup.contacts, locale)}
+                        </td>
+                      );
+                    case 'openDeals':
+                      return (
+                        <td key={col.id} className="px-4 py-3 text-end font-mono tabular-nums">
+                          {count(c.rollup.deals?.open, locale)}
+                        </td>
+                      );
+                    case 'wonValue':
+                      return (
+                        <td key={col.id} className="px-4 py-3 text-end font-mono tabular-nums">
+                          {c.rollup.deals === null ? (
+                            '—'
+                          ) : won.length === 0 ? (
+                            <span className="text-muted-foreground">{count(0, locale)}</span>
+                          ) : (
+                            won.map((line) => <div key={line}>{line}</div>)
+                          )}
+                        </td>
+                      );
+                    default:
+                      return (
+                        <td
+                          key={col.id}
+                          className="max-w-56 truncate px-4 py-3 text-muted-foreground"
+                          dir="auto"
+                        >
+                          {cell(col, c)}
+                        </td>
+                      );
+                  }
+                })}
                 <td className="px-4 py-3 text-end" onClick={(e) => e.stopPropagation()}>
                   {p.canDelete && (
                     <button

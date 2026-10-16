@@ -209,7 +209,10 @@
       "conditionsChip": "Bedingungen: {count}",
       "pqlExampleTag": "Kontakte mit dem Tag {tag}, 30 Tage nicht aktiv",
       "pqlExampleStage": "Kontakte in {stage}, in den letzten 7 Tagen erstellt",
-      "pqlExampleNoOwner": "Kontakte ohne Besitzer"
+      "pqlExampleNoOwner": "Kontakte ohne Besitzer",
+      "colDateOfBirth": "Geburtsdatum",
+      "colMinor": "Minderjährig",
+      "minorBadge": "Minderjährig"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen.",
       "company": "Unternehmen",
       "companyHint": "Ordnet diesen Kontakt einem Unternehmen zu.",
-      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld."
+      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld.",
+      "dateOfBirth": "Geburtsdatum",
+      "dateOfBirthHint": "Optional. Wenn der Kontakt dadurch minderjährig ist, wird er als minderjährig markiert."
     },
     "tags": {
       "title": "Tags",
@@ -461,7 +466,9 @@
         "source": "Quelle",
         "consent": "Marketing-Einverständnis (ja / nein)",
         "consentSms": "SMS-Marketing-Einwilligung (ja / nein)",
-        "consentEmail": "E-Mail-Marketing-Einwilligung (ja / nein)"
+        "consentEmail": "E-Mail-Marketing-Einwilligung (ja / nein)",
+        "dateOfBirth": "Geburtsdatum (Jahr zuerst, 2010-05-04)",
+        "minor": "Minderjährig (Ja markiert den Kontakt)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "Tag-Name zu lang",
         "plan_limit_reached": "Kontaktlimit des Tarifs erreicht",
         "tag_limit_reached": "Tag-Limit des Tarifs erreicht",
-        "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt"
+        "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt",
+        "invalid_date_of_birth": "Das Geburtsdatum ist kein Datum mit dem Jahr zuerst, das ein Geburtsdatum sein kann"
       },
       "statusHint": "Wird auf Kontakte angewendet, die diese Datei erstellt.",
       "queued": "Warten auf den Start...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen.",
       "ownerFailed": "Der Verantwortliche konnte nicht geändert werden. Versuche es erneut.",
       "ownerMe": "{name} (ich)",
-      "ownerFormer": "Ehemaliges Mitglied"
+      "ownerFormer": "Ehemaliges Mitglied",
+      "dateOfBirth": "Geburtsdatum"
     },
     "attributes": {
       "eyebrow": "Mehr / Attribute",
@@ -1423,7 +1432,8 @@
         "needsFollowUp": "Nachfassen nötig",
         "active": "Aktiv",
         "inactive": "Inaktiv",
-        "unsubscribed": "Abgemeldet"
+        "unsubscribed": "Abgemeldet",
+        "minors": "Minderjährige"
       }
     },
     "erase": {

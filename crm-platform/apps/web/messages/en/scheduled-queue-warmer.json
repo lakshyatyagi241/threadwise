@@ -225,7 +225,7 @@
           },
           "queue": {
             "title": "Audience queue",
-            "hint": "Re-target a past broadcast's recipients."
+            "hint": "Re-target the recipients of past broadcasts and campaigns."
           },
           "number": {
             "title": "Numbers",
@@ -234,15 +234,19 @@
         },
         "chooseGroups": "Choose group(s)",
         "chooseTags": "Pick one or more tags",
-        "chooseQueues": "Pick one or more past broadcasts",
+        "chooseQueues": "Pick one or more past broadcasts or campaigns",
         "tickAny": "(tick any number)",
         "noGroups": "No groups yet",
         "noTags": "No tags yet",
-        "noQueues": "No completed broadcasts yet",
+        "noQueues": "No earlier broadcasts or campaigns yet",
         "contacts": "Go to Contacts",
         "broadcast": "Go to Broadcasts",
         "tagsHint": "Recipients are recalculated when the schedule fires, so newly tagged contacts are included.",
-        "queuesHint": "Tick any number of broadcasts. Recipients are de-duplicated automatically before sending.",
+        "queuesHint": "Tick any number of broadcasts or campaigns. Recipients are de-duplicated automatically before sending.",
+        "kind": {
+          "broadcast": "Broadcast",
+          "campaign": "Campaign"
+        },
         "paste": "Paste numbers",
         "pasteHint": "Country code first, no leading +. Newlines or commas separate entries.",
         "pastePlaceholder": "One number per line — include the country code, no plus sign",

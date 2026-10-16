@@ -299,6 +299,41 @@
           "held": "{count, plural, one {1 inzending is vastgehouden als spam.} other {# inzendingen zijn vastgehouden als spam.}}",
           "review": "Bekijken"
         }
+      },
+      "age": {
+        "title": "Leeftijdscontrole",
+        "description": "Vraag alleen naar de leeftijd waar je die nodig hebt. Laat dit bij de meeste formulieren uit.",
+        "enable": "De leeftijd van de bezoeker controleren",
+        "enableHint": "Standaard uit. Zet het aan als de regels van je werkruimte erom vragen, of je bedrijf minderjarigen bedient. Het formulier zegt de bezoeker nooit welk antwoord doorgaat.",
+        "mode": "Hoe te vragen",
+        "modes": {
+          "declaration": "Een selectievakje: “Ik bevestig dat ik minstens N jaar oud ben”",
+          "age": "Vraag naar hun leeftijd",
+          "dob": "Vraag naar hun geboortedatum"
+        },
+        "modeHints": {
+          "declaration": "Er wordt niets over hun leeftijd bewaard. Zo min mogelijk gegevens.",
+          "age": "Een geheel getal. Het wordt gebruikt voor de controle; alleen de uitkomst wordt bewaard.",
+          "dob": "Bij het contact opgeslagen als geboortedatum. Gebruik dit alleen als je de datum nodig hebt."
+        },
+        "minAge": "Minimumleeftijd",
+        "minAgeHint": "Laat leeg om de leeftijd van je werkruimte te gebruiken ({age}). Tussen 1 en 21.",
+        "minAgeInvalid": "Voer een geheel getal van {min} tot {max} in.",
+        "whenUnder": "Als de bezoeker jonger is dan die leeftijd",
+        "actions": {
+          "block": "Accepteer de inzending niet",
+          "flag": "Accepteer de inzending, markeer het contact als minderjarig, leg geen marketingtoestemming vast",
+          "guardian": "Zoals hierboven, en vraag om een ouder of voogd"
+        },
+        "actionHints": {
+          "block": "Er wordt niets opgeslagen en de bezoeker ziet een neutraal bericht. Bij het selectievakje hoeft de bezoeker het alleen aan te vinken.",
+          "flag": "Het contact wordt als minderjarig gemarkeerd. De toestemmingsregel van deze inzending wordt opgeslagen zoals getoond, maar er wordt geen marketingtoestemming vastgelegd.",
+          "guardian": "De naam en het contact van de ouder of voogd worden bewaard bij de inzending en op de tijdlijn van het contact. Hun toestemming wordt pas vastgelegd als een persoon die vastlegt op de Toestemmingskaart."
+        },
+        "declarationBlockNote": "Met het selectievakje en deze instelling wordt niemand geweigerd: het vakje moet worden aangevinkt om het formulier te verzenden.",
+        "childrenUnanswered": "Je Compliancecentrum heeft de vraag over kinderen niet beantwoord, dus marketing aan een gemarkeerde minderjarige wordt vastgelegd maar niet achtergehouden.",
+        "childrenLink": "Compliancecentrum openen",
+        "neutralNote": "Schrijf de minimumleeftijd niet in de helptekst van een veld of in de beschrijving: de pagina hoort niet te zeggen welk antwoord doorgaat."
       }
     }
   }

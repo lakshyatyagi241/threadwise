@@ -23,6 +23,10 @@ export interface FirstReplyRow {
   expiresAt: Date;
   attempts: number;
   sentAt: Date | null;
+  /** When the lead was submitted at its provider (the lead event's `received_at`). */
+  leadReceivedAt: Date;
+  /** When the pipeline scheduled this message. */
+  createdAt: Date;
 }
 
 const toRow = (r: Raw): FirstReplyRow => ({
@@ -40,10 +44,12 @@ const toRow = (r: Raw): FirstReplyRow => ({
   expiresAt: new Date(r.expires_at as string),
   attempts: Number(r.attempts),
   sentAt: d(r.sent_at),
+  leadReceivedAt: new Date(r.lead_received_at as string),
+  createdAt: new Date(r.created_at as string),
 });
 
 const SELECT = sql`
-  SELECT f.*, e.uuid AS lead_event_uuid, e.is_test, e.source_id
+  SELECT f.*, e.uuid AS lead_event_uuid, e.is_test, e.source_id, e.received_at AS lead_received_at
   FROM lead_first_replies f
   JOIN lead_events e ON e.org_id = f.org_id AND e.id = f.lead_event_id`;
 

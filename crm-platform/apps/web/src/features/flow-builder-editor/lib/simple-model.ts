@@ -522,6 +522,8 @@ const PRESET_VAR: Record<string, string> = {
   number: 'number',
   alphanumeric: 'code',
   date: 'date',
+  age: 'age',
+  date_of_birth: 'date_of_birth',
 };
 
 /** A step's name on its card: a question shows what it checks (`Email`), the others their type. */

@@ -25,6 +25,22 @@ export interface MergeContact {
   groups: string[];
   /** contacts.data: attribute values keyed by attribute key, and whatever integrations wrote. */
   data: Record<string, unknown>;
+  /** The contact's company, when it has one the loader could read. */
+  company?: MergeCompany | null;
+}
+
+/** The company the contact belongs to: what `{{company.industry}}` and `{{company.<property>}}` read. */
+export interface MergeCompany {
+  name: string | null;
+  website: string | null;
+  email: string | null;
+  phone: string | null;
+  industry: string | null;
+  sizeRange: string | null;
+  address: string | null;
+  notes: string | null;
+  /** companies.data: the values of the workspace's company properties, by property key. */
+  data: Record<string, unknown>;
 }
 
 export interface MergeContext {
@@ -82,11 +98,55 @@ function contactColumn(key: string, c: MergeContact): string | undefined {
   }
 }
 
+/** The built-in columns of a company a token can name: `{{company.industry}}`. `company.name` is not one (see `companyToken`). */
+const COMPANY_COLUMNS: Record<string, keyof Omit<MergeCompany, 'data' | 'name'>> = {
+  website: 'website',
+  email: 'email',
+  phone: 'phone',
+  industry: 'industry',
+  size: 'sizeRange',
+  size_range: 'sizeRange',
+  address: 'address',
+};
+
+/**
+ * The value of a company token for the contact's company, or undefined when the token is not one or there is nothing to put there.
+` * `company.<column>` is a built-in column of the company (not its internal notes), `company.<key>` one of the workspace's company properties, and
+ * `company` / `contact_company` the company's name. `company_name` is NOT the contact's company: it is the sender's business name,
+ * as since TW-CON-048, so a template that uses it keeps saying the same thing. The dotted spelling normalises to the underscore one
+ * (`company.industry` is `company_industry`), so a saved reply, a template and a broadcast read it the same way.
+ */
+function companyToken(
+  normalized: string,
+  company: MergeCompany | null | undefined,
+): string | undefined {
+  if (!company) return undefined;
+  if (normalized === 'company' || normalized === 'contact_company') {
+    const v = text(company.name);
+    return v === '' ? undefined : v;
+  }
+  if (!normalized.startsWith('company_') || normalized === 'company_name') return undefined;
+  const rest = normalized.slice('company_'.length);
+  const column = COMPANY_COLUMNS[rest];
+  if (column) {
+    const v = text(company[column]);
+    return v === '' ? undefined : v;
+  }
+  for (const [k, v] of Object.entries(company.data)) {
+    if (normalizeMergeKey(k) === rest) {
+      const t = text(v);
+      if (t !== '') return t;
+    }
+  }
+  return undefined;
+}
+
 /**
  * One token to its value. Lookup order (TW-CON-048), for the key and its alias:
  *   1. a contact column     2. the contact's own attribute value (empty ones skipped)
  *   3. the workspace attribute's default (active attributes only)
- *   4. system tokens: today, business_name, company_name
+ *   4. the contact's company: company.industry, company.<property>, company (BL-196)
+ *   5. system tokens: today, business_name, company_name
  * Nothing found is the empty string, never the braces: a customer must not receive "{{city}}".
  */
 export function resolveToken(
@@ -112,6 +172,10 @@ export function resolveToken(
   for (const key of candidates) {
     const fallback = ctx.attributeDefaults.get(key);
     if (fallback) return { key: canonical, value: fallback, source: 'attribute_default' };
+  }
+  for (const key of candidates) {
+    const fromCompany = companyToken(key, ctx.contact?.company);
+    if (fromCompany !== undefined) return { key: canonical, value: fromCompany, source: 'company' };
   }
   const system: Record<string, string> = {
     today: ctx.system.today,

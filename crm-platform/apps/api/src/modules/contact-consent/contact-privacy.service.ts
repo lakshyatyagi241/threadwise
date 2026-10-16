@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  isUnderAge,
   minorRuleOf,
   type ContactPrivacy,
   type PrivacyFlagEvent,
@@ -37,6 +38,8 @@ export interface PrivacyChangeInput {
   idempotencyKey: string;
   /** Append nothing when the flag already has this value (the browser signal repeats on every submission). */
   onlyIfChanged?: boolean;
+  /** `minor` on with source `dob`: the day the flag lapses by itself (see `minorUntilForBirth`, `minorUntilForAge`). */
+  minorUntil?: string | null;
 }
 
 export interface PrivacyChangeOutcome {
@@ -46,6 +49,8 @@ export interface PrivacyChangeOutcome {
   changed: boolean;
   /** Guardian consent was refused because the contact is not flagged as a minor. */
   notMinor?: boolean;
+  /** The system (source `dob`) left a flag alone that a person, the API, an import or a flow had set. */
+  kept?: boolean;
 }
 
 const NOTHING: PrivacyChangeOutcome = { recorded: false, changed: false };
@@ -73,8 +78,24 @@ export class ContactPrivacyService {
   ): Promise<PrivacyChangeOutcome> {
     const occurredAt = clampToNow(input.occurredAt);
     const prior = await this.repo.lockFlags(tx, orgId, input.contactId);
-    const plan = planFlagChange(prior, input.kind, input.value, input.source, occurredAt);
-    if (!plan.ok) return { recorded: false, changed: false, notMinor: true };
+    // A person clearing the flag while the date of birth still says "minor": remember the date, so the sweep does not undo their decision.
+    let dobSaysMinorFor: string | null = null;
+    if (input.kind === 'minor' && !input.value && input.source !== 'dob' && prior.isMinor) {
+      const dob = await this.repo.dateOfBirth(tx, orgId, input.contactId);
+      if (dob) {
+        const facts = await this.repo.complianceFacts(tx, orgId);
+        if (isUnderAge(dob, facts.minorAge, occurredAt)) dobSaysMinorFor = dob;
+      }
+    }
+    const plan = planFlagChange(prior, input.kind, input.value, input.source, occurredAt, {
+      minorUntil: input.minorUntil ?? null,
+      dobSaysMinorFor,
+    });
+    if (!plan.ok) {
+      return plan.reason === 'person_flag'
+        ? { recorded: false, changed: false, kept: true }
+        : { recorded: false, changed: false, notMinor: true };
+    }
     if (input.onlyIfChanged && !plan.changed) return NOTHING;
 
     const evidence = cleanEvidence(input.evidence);
@@ -124,6 +145,28 @@ export class ContactPrivacyService {
       });
     }
     return { recorded: true, changed: plan.changed };
+  }
+
+  /** Which of these contacts (by uuid) are flagged as minors (the customer API's contact list). */
+  minorUuids(tx: Tx, orgId: number, uuids: readonly string[]): Promise<Set<string>> {
+    return this.repo.minorUuids(tx, orgId, uuids);
+  }
+
+  /** The age below which a person is a minor in this workspace (BL-217): the highest of the profiles' ages, else 18. */
+  async minorAge(tx: Tx, orgId: number): Promise<number> {
+    return (await this.repo.complianceFacts(tx, orgId)).minorAge;
+  }
+
+  /** What a form's or a widget's age settings explain themselves with (BL-217): the minor age, and whether the children question is answered. */
+  async ageContext(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ workspaceMinorAge: number; childrenAnswered: boolean }> {
+    const facts = await this.repo.complianceFacts(tx, orgId);
+    return {
+      workspaceMinorAge: facts.minorAge,
+      childrenAnswered: facts.childrenPolicy !== 'unset' || facts.parentalConsentRequired,
+    };
   }
 
   /** A person (or an API caller) turns a flag on or off for a contact. */
@@ -243,6 +286,7 @@ export class ContactPrivacyService {
       minorSource: flags.minorSource,
       guardianConsent: flags.guardianConsent,
       guardianSince: flags.guardianSince,
+      minorUntil: flags.minorSource === 'dob' ? flags.minorUntil : null,
       doNotSellShare: flags.doNotSellShare,
       doNotSellShareSince: flags.doNotSellShareSince,
       doNotSellShareSource: flags.doNotSellShareSource,

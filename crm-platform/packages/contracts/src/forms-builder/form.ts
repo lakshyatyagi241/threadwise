@@ -307,5 +307,7 @@ export const formProtectionSchema = z.object({
   }),
   blockedThisMonth: z.number().int().min(0),
   heldAsSpam: z.number().int().min(0),
+  /** What the age gate's settings need to explain themselves (BL-217): the workspace's minor age, and whether its children question is answered. */
+  age: z.object({ workspaceMinorAge: z.number().int(), childrenAnswered: z.boolean() }),
 });
 export type FormProtection = z.infer<typeof formProtectionSchema>;

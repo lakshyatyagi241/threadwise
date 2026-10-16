@@ -23,6 +23,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   BroadcastsComposeService,
+  PreviousSendsService,
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
   type SenderDirectory,
@@ -68,6 +69,7 @@ export class CampaignsReadService {
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     private readonly wizardRead: WizardReadService,
+    private readonly previousSends: PreviousSendsService,
   ) {}
 
   async list(q: ListCampaignsQuery): Promise<CampaignListResponse> {
@@ -184,6 +186,7 @@ export class CampaignsReadService {
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),
       flows: await this.repo.flowsForOrg(tx, orgId),
+      previousSends: await this.previousSends.options(tx, orgId),
       requiresApprovedTemplates: (await this.senders.defaultEngine(tx, orgId)) === 'waba',
     }));
   }

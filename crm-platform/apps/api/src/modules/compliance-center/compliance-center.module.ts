@@ -3,6 +3,7 @@ import { ContactConsentModule } from '../contact-consent';
 import { ComplianceChecklistService } from './compliance-checklist.service';
 import { ComplianceSettingsService } from './compliance-settings.service';
 import { ComplianceController } from './compliance.controller';
+import { DncService } from './dnc.service';
 import { ComplianceRepository } from './compliance.repository';
 import { PublicTrustController } from './public-trust.controller';
 import { PublicTrustService } from './public-trust.service';
@@ -21,6 +22,7 @@ import { SubprocessorsService } from './subprocessors.service';
     ComplianceRepository,
     ComplianceSettingsService,
     SubprocessorsService,
+    DncService,
     ComplianceChecklistService,
     PublicTrustService,
   ],

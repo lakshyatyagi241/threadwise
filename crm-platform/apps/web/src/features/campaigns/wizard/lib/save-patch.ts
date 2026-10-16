@@ -8,6 +8,7 @@ import {
   wizardVariableSourceSchema,
   type WizardVariables,
 } from '@crm/contracts';
+import { sanitizePrevious } from '../../lib/previous-sends';
 import type { DraftPatch } from './state';
 
 /**
@@ -24,6 +25,10 @@ export function sanitizePatch(patch: DraftPatch): DraftPatch {
       if (wizardVariableSourceSchema.safeParse(source).success) clean[slot] = source;
     }
     out.variables = clean;
+  }
+  if (out.audience?.previous) {
+    // At most 20 earlier sends and a known outcome (a ticked broadcast has no replies or clicks); the server refuses the rest.
+    out.audience = { ...out.audience, previous: sanitizePrevious(out.audience.previous) };
   }
   if (out.schedule && !wizardScheduleSchema.safeParse(out.schedule).success) delete out.schedule;
   if (out.retries) {

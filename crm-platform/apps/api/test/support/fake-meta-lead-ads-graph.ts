@@ -2,6 +2,7 @@ import type { GraphResult } from '../../src/infra/providers/channel-facebook/fac
 import { MetaLeadAdsGraphClient } from '../../src/infra/providers/meta-lead-ads/meta-lead-ads-graph.client';
 import type {
   FormLeads,
+  FormLeadsPage,
   GraphLead,
   LeadForm,
   MetaLeadAdsPageApi,
@@ -17,6 +18,7 @@ export type FakeMethod =
   | 'getForm'
   | 'getLead'
   | 'listFormLeads'
+  | 'pageFormLeads'
   | 'subscribedFields'
   | 'subscribeLeadgen'
   | 'unsubscribeLeadgen';
@@ -38,7 +40,7 @@ export class FakeMetaLeadAds {
   /** Webhook fields held per Page. */
   fields = new Map<string, string[]>();
   /** A method that answers with a Graph error instead of its data, until cleared. */
-  failures = new Map<FakeMethod, { code: number; error: string }>();
+  failures = new Map<FakeMethod, { code: number; error: string; times: number; after: number }>();
   /** When true, a subscribe is accepted but the field never shows up (what a silent permission refusal looks like). */
   swallowSubscribe = false;
   private original: MetaLeadAdsGraphClient['forPage'] | null = null;
@@ -52,8 +54,18 @@ export class FakeMetaLeadAds {
     this.swallowSubscribe = false;
   }
 
-  fail(method: FakeMethod, code: number, error = 'Graph said no'): void {
-    this.failures.set(method, { code, error });
+  /**
+   * Makes a method answer with a Graph error: for the next `times` calls (until cleared when omitted), after letting `after` calls
+   * through ("the first window answers, the second never does").
+   */
+  fail(
+    method: FakeMethod,
+    code: number,
+    error = 'Graph said no',
+    times = Infinity,
+    after = 0,
+  ): void {
+    this.failures.set(method, { code, error, times, after });
   }
 
   callsTo(method: FakeMethod): FakeCall[] {
@@ -61,9 +73,11 @@ export class FakeMetaLeadAds {
   }
 
   install(): void {
+    const forPage = (token: string, pageId: string) => this.page(token, pageId);
     this.original = MetaLeadAdsGraphClient.prototype.forPage;
-    MetaLeadAdsGraphClient.prototype.forPage = (token: string, pageId: string) =>
-      this.page(token, pageId);
+    MetaLeadAdsGraphClient.prototype.forPage = function (token: string, pageId: string) {
+      return forPage(token, pageId);
+    };
   }
 
   uninstall(): void {
@@ -78,7 +92,16 @@ export class FakeMetaLeadAds {
     ): GraphResult<T> => {
       this.calls.push({ method, token, pageId, args });
       const f = this.failures.get(method);
-      return f ? { ok: false, code: f.code, error: f.error } : fn();
+      if (f && f.after > 0) {
+        f.after -= 1;
+        return fn();
+      }
+      if (f) {
+        f.times -= 1;
+        if (f.times <= 0) this.failures.delete(method);
+        return { ok: false, code: f.code, error: f.error };
+      }
+      return fn();
     };
     return {
       listForms: () =>
@@ -105,6 +128,28 @@ export class FakeMetaLeadAds {
               .filter((l) => (l.createdTime ? Date.parse(l.createdTime) / 1000 > since : true))
               .sort((a, b) => Date.parse(a.createdTime ?? '') - Date.parse(b.createdTime ?? ''));
             return ok({ leads: all.slice(-max), capped: all.length > max });
+          }),
+        ),
+      pageFormLeads: (formId, w) =>
+        Promise.resolve(
+          run<FormLeadsPage>('pageFormLeads', [formId, w], () => {
+            // Newest first, like Meta; the cursor is the offset of the next lead in that order.
+            const all = (this.leads.get(formId) ?? [])
+              .filter((l) => {
+                if (!l.createdTime) return true;
+                const t = Date.parse(l.createdTime) / 1000;
+                return (
+                  t > w.sinceEpochSeconds &&
+                  (w.untilEpochSeconds === null || t < w.untilEpochSeconds)
+                );
+              })
+              .sort((a, b) => Date.parse(b.createdTime ?? '') - Date.parse(a.createdTime ?? ''));
+            const start = w.after ? Number(w.after) : 0;
+            const end = start + w.limit;
+            return ok({
+              leads: all.slice(start, end),
+              next: end < all.length ? String(end) : null,
+            });
           }),
         ),
       subscribedFields: () =>

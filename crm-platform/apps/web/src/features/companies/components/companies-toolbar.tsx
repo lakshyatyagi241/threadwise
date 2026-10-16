@@ -1,10 +1,17 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Input, Select } from '@crm/ui';
-import type { CompanySort } from '@crm/contracts';
+import type { CompanySortDir } from '@crm/contracts';
 import type { Member } from '../api/schemas';
-import { SORTS, hasActiveFilter, type CompanyFilters } from '../lib/filters';
+import {
+  SORTS,
+  hasActiveFilter,
+  sortFromValue,
+  sortValue,
+  type CompanyFilters,
+} from '../lib/filters';
 import { RefreshIcon, SearchIcon } from './icons';
 
 export interface CompaniesToolbarProps {
@@ -15,6 +22,10 @@ export interface CompaniesToolbarProps {
   onChange: (patch: Partial<CompanyFilters>) => void;
   members: readonly Member[];
   industries: readonly string[];
+  /** The company properties the list can be ordered by (BL-196): the select value `property:<key>` and the property label. */
+  sortProperties?: ReadonlyArray<{ key: string; label: string }>;
+  /** The property conditions and the columns menu: pieces of the toolbar that belong to this build. */
+  extra?: ReactNode;
   onRefresh: () => void;
   refreshing: boolean;
 }
@@ -85,20 +96,39 @@ export function CompaniesToolbar(p: CompaniesToolbarProps) {
       <Select
         aria-label={t('sort')}
         className="h-10 w-auto min-w-32"
-        value={f.sort}
-        onChange={(e) => p.onChange({ sort: e.target.value as CompanySort })}
+        value={sortValue(f)}
+        onChange={(e) => p.onChange(sortFromValue(e.target.value))}
       >
         {SORTS.map((s) => (
           <option key={s} value={s}>
             {t(`sorts.${s}`)}
           </option>
         ))}
+        {(p.sortProperties ?? []).map((o) => (
+          <option key={o.key} value={`property:${o.key}`}>
+            {t('sortByProperty', { name: o.label })}
+          </option>
+        ))}
       </Select>
+      <Select
+        aria-label={t('direction')}
+        className="h-10 w-auto min-w-32"
+        value={f.sortDir}
+        onChange={(e) => p.onChange({ sortDir: e.target.value as CompanySortDir | '' })}
+      >
+        <option value="">{t('directions.default')}</option>
+        <option value="asc">{t('directions.asc')}</option>
+        <option value="desc">{t('directions.desc')}</option>
+      </Select>
+
+      {p.extra}
 
       {active && (
         <Button
           variant="ghost"
-          onClick={() => p.onChange({ q: '', owner: '', industry: '', openDeals: false })}
+          onClick={() =>
+            p.onChange({ q: '', owner: '', industry: '', openDeals: false, props: [] })
+          }
         >
           {t('clear')}
         </Button>
