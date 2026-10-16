@@ -1,4 +1,4 @@
-import { obj, parseTurn, TOP_KEYS } from '../inbox/parse';
+import { obj, parseTurn, sentInteractiveFrom, TOP_KEYS } from '../inbox/parse';
 import { iso, plain, primaryKey, scrub, str, toDate, type Doc } from '../util';
 import { c, rest } from './common';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Row, Soft } from './types';
@@ -164,6 +164,10 @@ export const inbox: HandlerSpec = {
       scrub(
         plain({
           historySync: true,
+          // the buttons under a bot message (Visit our website, Call now ...): the inbox draws them from meta.sentInteractive
+          ...(out && turn.kind === 'interactive'
+            ? { sentInteractive: sentInteractiveFrom(turn.legacy.interactive, turn.body) }
+            : {}),
           legacy: compact({
             src: 'waboo',
             sessionId: str(doc.session_id),

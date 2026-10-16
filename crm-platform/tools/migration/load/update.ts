@@ -225,7 +225,7 @@ export async function runUpdateStep(
         tx.execute(sql`
           SELECT id, uuid::text AS uuid, row_version, ${sql.raw(ts.columns.map(selectExpr).join(', '))}
           FROM ${sql.raw(q(table))} WHERE org_id = ${env.orgId}
-            AND uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(list.map((l) => l.uuid))}::jsonb)::uuid)`),
+            AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(list.map((l) => l.uuid))}::jsonb)::uuid))`),
       );
       const found = new Map((res.rows as Row[]).map((r) => [r.uuid as string, r]));
       for (const it of list) {

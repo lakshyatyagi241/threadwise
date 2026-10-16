@@ -132,7 +132,7 @@ export interface LatestDry {
   finishedAt: Date | null;
 }
 
-export type GateFailure = 'confirm' | 'dry';
+export type GateFailure = 'confirm';
 export type DryReason = 'ok' | 'no_dry' | 'not_green' | 'stale';
 
 /**
@@ -147,23 +147,20 @@ export function dryReadiness(d: LatestDry | null, now: Date): DryReason {
 }
 
 /**
- * A load needs the organization id typed again (the id or the derived client key is accepted) AND the latest dry run to be ready.
- * Returns what is missing, or null when the load may start. A dry run always passes.
+ * A load needs the organization id typed again (the id or the derived client key is accepted). Returns what is missing, or null when the
+ * load may start. A dry run always passes. A load and a catch-up need NO earlier dry run: the pipeline starts each of them with its own
+ * full rehearsal (export if the dump is stale, preflight, the dry load) and stops before a single row is written when that is not clean.
  */
 export function loadGate(input: {
   mode: RunMode;
   sourceClient: string;
   organizationId?: string;
   confirmClient: string | undefined;
-  latestDry: LatestDry | null;
-  now: Date;
 }): GateFailure | null {
   if (input.mode === 'dry') return null;
   const c = input.confirmClient;
   if (c === undefined || (c !== input.sourceClient && c !== input.organizationId)) return 'confirm';
-  // a catch-up of an already-loaded client runs its own dry run first and stops if it is not clean
-  if (input.mode === 'catchup') return null;
-  return dryReadiness(input.latestDry, input.now) === 'ok' ? null : 'dry';
+  return null;
 }
 
 /** The report stored on a run: the pipeline's numbers plus the verdict. ok = the process finished and the pipeline said green. */

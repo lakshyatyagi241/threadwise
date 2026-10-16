@@ -32,7 +32,15 @@ export interface CoreLoadOptions {
 }
 
 interface Core {
-  workspace: { id: string; businessId: string; status?: string; provider?: string; credits?: { currency?: string } };
+  workspace: {
+    id: string;
+    businessId: string;
+    status?: string;
+    provider?: string;
+    credits?: { currency?: string };
+    /** the workspace's time zone as geta_core keeps it: the IANA names are in utc[] (Waboo shows every time in it) */
+    timezone?: { utc?: string[] };
+  };
   business: { id: string; name?: string; domain?: string; schemaName?: string };
   subscription: {
     id: string;
@@ -56,6 +64,17 @@ interface Core {
 }
 
 const PLAN_SLUG = /^[a-z0-9_]{1,32}$/;
+
+/** An IANA zone name (Asia/Kolkata) or null: only a name the runtime knows is ever written. */
+const ianaOf = (z: unknown): string | null => {
+  if (typeof z !== 'string' || !/^[A-Za-z_]+(\/[A-Za-z0-9_+-]+){1,2}$/.test(z)) return null;
+  try {
+    new Intl.DateTimeFormat('en', { timeZone: z });
+    return z;
+  } catch {
+    return null;
+  }
+};
 export const slugOfPlan = (code: string): string =>
   code.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 32);
 
@@ -139,6 +158,10 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
     o.log(`  core  ${o.client}: org ${orgId}; Waboo plan ${s.planCode} -> platform plan "${plan.slug}" (hidden), price ${plan.amount}`);
     o.log(`  core  limits changed: ${Object.entries(plan.limits).filter(([k, v]) => baseRow.limits[k] !== v).map(([k, v]) => `${k}=${v}`).join(', ') || 'none'}; ${plan.notes.join('; ') || 'no feature closed'}`);
 
+    // --- time zone: Waboo shows every time in the workspace's zone; WaDesk shows it in organizations.settings.timezone (and workspace_settings.timezone), default UTC ------
+    const tz = (core.workspace.timezone?.utc ?? []).map(ianaOf).find((z): z is string => z !== null) ?? null;
+    o.log(`  core  time zone: ${tz ?? 'not stated in geta_core (stays as it is)'}; WaDesk shows times in it (only replaces the default UTC)`);
+
     // --- role grants (computed in both modes) ------------------------------------------------------------------------------------
     const config = loadAccessConfig();
     const roleDocs = await collect(new NdjsonDirSource(o.dumpsDir).read(o.client, 'roles'));
@@ -211,6 +234,16 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         UPDATE org_plan_state SET plan_ends_at = ${periodEnd}::timestamptz, trial_ends_at = NULL, billing_cycle = 'monthly',
                updated_at = now(), row_version = row_version + 1
         WHERE org_id = ${orgId}`);
+      // the zone the app shows times in: the user's own, else the organization's settings.timezone (account.service resolveTimezone).
+      // Only an unset value is filled and only the untouched default is replaced: a zone a person already chose is theirs.
+      if (tz) {
+        await tx.execute(sql`
+          UPDATE organizations SET settings = settings || ${JSON.stringify({ timezone: tz })}::jsonb, updated_at = now()
+          WHERE id = ${orgId} AND coalesce(settings ->> 'timezone', '') = ''`);
+        await tx.execute(sql`
+          UPDATE workspace_settings SET timezone = ${tz}, updated_at = now(), row_version = row_version + 1
+          WHERE org_id = ${orgId} AND timezone = 'UTC'`);
+      }
       return ins.rows.length > 0;
     });
     o.log(`  core  plan "${plan.slug}": ${planInserted ? 'created' : 'already existed, left as it is'}; organization on it; plan ends ${periodEnd ?? 'n/a'}`);

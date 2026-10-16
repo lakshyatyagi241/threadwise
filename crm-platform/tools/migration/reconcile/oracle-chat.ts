@@ -20,6 +20,8 @@ export interface OracleOptions {
   botToExt: Map<string, string>;
   keepDeletedContactChats: boolean;
   threadStatus: 'waboo' | 'closed';
+  /** visitor_logs: session_id -> its current conversation_status and recency (written from the README, "Chat") */
+  sessionStatus: Map<string, { status: string; ms: number }>;
   assignAgents: boolean;
   windowHours: number;
   /** the dump time: the partition window is measured from it */
@@ -121,7 +123,8 @@ function unstorable(v: unknown): boolean {
 
 const TEXT_KEYS = ['text', 'message', 'body', 'caption', 'content', 'value', 'title'];
 const URL_KEYS = ['url', 'link', 'image', 'video', 'audio', 'document', 'file', 'media', 'src'];
-const blank = (v: unknown): boolean => v === null || v === undefined || (typeof v === 'string' && v.trim() === '');
+const blank = (v: unknown): boolean =>
+  v === null || v === undefined || (typeof v === 'string' && v.trim() === '');
 const httpUrl = (v: unknown): boolean => typeof v === 'string' && /^https?:\/\//i.test(v.trim());
 
 /**
@@ -212,11 +215,19 @@ function certainBody(doc: Doc): {
         parts.push(...interactiveParts(el.interactive));
         const k = interactiveKind(el.interactive);
         if (kind === undefined || kind === 'interactive') kind = k;
-      }
-      else if (isObj(el) && el.type === 'share-location' && isObj(el.value))
+      } else if (isObj(el) && el.type === 'share-location' && isObj(el.value))
         parts.push(...[el.value.name, el.value.address].map(shown).filter((x) => x !== ''));
-      else if (isObj(el) && typeof el.text === 'string' && el.text.trim() !== '') parts.push(el.text);
-      else sure = false; // a body is only certain for a plain string or a non-blank `text`
+      else if (isObj(el) && typeof el.text === 'string' && el.text.trim() !== '')
+        parts.push(el.text);
+      else if (
+        isObj(el) &&
+        text(el.type).toLowerCase() === 'text' &&
+        typeof el.value === 'string' &&
+        el.value.trim() !== '' &&
+        Object.keys(el).every((k) => k === 'id' || k === 'type' || k === 'value')
+      )
+        parts.push(el.value); // {id?, type: 'text', value: '...'}: 10,483 of Karma's 10,599 otherwise-unverified turns
+      else sure = false; // a body is only certain for a plain string or a non-blank `text` / `value` of a text element
     }
     if (!present) return { dir: 'out', empty: true };
     return parts.length > 0 && sure ? { dir: 'out', body: parts.join('\n') } : { dir: 'out' };
@@ -230,7 +241,8 @@ function certainBody(doc: Doc): {
     // value is blank or absent, or an object / array: empty when nothing in it, nor a url next to it, nor a text user_query shows
     const anyUrl = Object.values(uqo).some(httpUrl);
     const c = blank(v) ? 'none' : content(v);
-    if (c === 'none' && !anyUrl) return uqText !== null ? { dir: 'in', body: uqText } : { dir: 'in', empty: true };
+    if (c === 'none' && !anyUrl)
+      return uqText !== null ? { dir: 'in', body: uqText } : { dir: 'in', empty: true };
     return { dir: 'in' };
   }
   if (uq !== undefined && uq !== null && uq !== '') {
@@ -275,9 +287,17 @@ interface Rec {
   provider: string | null;
   name: string | null;
   statusRaw: string | null;
+  session: string | null;
   agentId: string | null;
   contactCands: string[];
 }
+
+/** The first n UTF-16 units, not ending in half an emoji (the rule of the loader: a lone surrogate is not valid JSON for Postgres). Own copy: the oracle shares no code with the loader. */
+const head = (s: string, n: number): string => {
+  if (s.length <= n) return s;
+  const c = s.charCodeAt(n - 1);
+  return s.slice(0, c >= 0xd800 && c <= 0xdbff ? n - 1 : n);
+};
 
 export async function oracleChat(
   docs: AsyncIterable<Doc>,
@@ -362,6 +382,7 @@ export async function oracleChat(
       provider: provider !== '' && provider.length <= 512 ? provider : null,
       name: text(context.visitor_name) || null,
       statusRaw: text(user.conversation_status).toLowerCase() || null,
+      session: text(doc.session_id) || null,
       agentId: agent ? text(agent.id) || null : null,
       contactCands: [text(user.contact_id), text(context.contact_id)].filter((x) => x !== ''),
     };
@@ -376,8 +397,7 @@ export async function oracleChat(
       senderKind: sender,
       bodyMd5: cb.body === undefined ? undefined : md5(cb.body),
       kind: cb.kind,
-      bodyHead:
-        cb.body === undefined ? undefined : cb.body.replace(/\s+/g, ' ').trim().slice(0, 200),
+      bodyHead: cb.body === undefined ? undefined : head(cb.body.replace(/\s+/g, ' ').trim(), 200),
       provider: rec.provider,
       providerCol: provider || null,
       rawDigits: peer.raw,
@@ -476,7 +496,13 @@ export async function oracleChat(
     const last = kept[kept.length - 1]!;
     const newestWith = (f: (r: Rec) => boolean): Rec | undefined => [...kept].reverse().find(f);
     const nm = newestWith((r) => r.name !== null);
-    const st = newestWith((r) => r.statusRaw !== null)?.statusRaw ?? null;
+    // README "Chat": the status of the thread's newest visitor_logs session wins; the newest turn that names one is the fallback
+    let live: { status: string; ms: number } | null = null;
+    for (const r of kept) {
+      const v = r.session !== null ? o.sessionStatus.get(r.session) : undefined;
+      if (v && (live === null || v.ms > live.ms)) live = v;
+    }
+    const st = live?.status ?? newestWith((r) => r.statusRaw !== null)?.statusRaw ?? null;
     const status: 'open' | 'closed' =
       o.threadStatus === 'closed' || st === 'closed' ? 'closed' : 'open';
     const ag = newestWith((r) => r.agentId !== null);
@@ -500,7 +526,7 @@ export async function oracleChat(
       status,
       resolvedAt: status === 'closed' ? new Date(last.ms).toISOString() : null,
       peerName: nm?.name ?? null,
-      title: nm?.name ? nm.name.slice(0, 200) : `+${peer}`,
+      title: nm?.name ? head(nm.name, 200) : `+${peer}`,
       contactId,
       contactViaPhone: viaPhone,
       assigneeId,

@@ -168,15 +168,21 @@ function reconcileArgs(cfg, { steps, skipSteps } = {}) {
 
 // ---------- remote command construction (exported for the tests) -----------------------------------------------------------------------
 /** docker compose run of one shell line inside the worker container (desk-api image). stdin is /dev/null: compose swallows here-docs. */
-function containerRun(srv, inner, { mounts = [], env = [] } = {}) {
+function containerRun(srv, inner, { mounts = [], env = [], memMb = 0 } = {}) {
   const m = [
     `${srv.mig}/bundle:/mig/bundle:ro`,
     `${srv.mig}/dumps:/mig/dumps:ro`,
     `${srv.mig}/out:/mig/out`,
     ...mounts,
   ];
+  // The worker service is capped at 1 GB in docker-compose.yml. A big client's verifier (Karma: 190,000 charge and 74,000 chat documents)
+  // needs more than 768 MB of heap, so memMb gives THIS container a larger cap through an override file written next to the dumps (the
+  // deployed stack is not touched), with the heap at 82% of it.
+  const heap = memMb > 0 ? Math.floor(memMb * 0.82) : /^\d{3,4}$/.test(process.env.CYCLE_NODE_HEAP_MB || '') ? process.env.CYCLE_NODE_HEAP_MB : 384;
+  const over = memMb > 0 ? `printf 'services:\\n  worker:\\n    mem_limit: ${memMb}m\\n' > ${shq(`${srv.mig}/mem-override.yml`)} && ` : '';
+  const files = memMb > 0 ? ` -f docker-compose.yml -f ${shq(`${srv.mig}/mem-override.yml`)}` : '';
   return (
-    `cd ${shq(srv.app)} && docker compose --env-file .env run --rm --no-deps -T --user 10001:10001 -e NODE_OPTIONS=--max-old-space-size=${/^\d{3,4}$/.test(process.env.CYCLE_NODE_HEAP_MB || '') ? process.env.CYCLE_NODE_HEAP_MB : 384}` +
+    `${over}cd ${shq(srv.app)} && docker compose${files} --env-file .env run --rm --no-deps -T --user 10001:10001 -e NODE_OPTIONS=--max-old-space-size=${heap}` +
     ['', ...env.map((e) => `-e ${e}`), ...m.map((v) => `-v ${shq(v)}`)].join(' ') +
     ` worker sh -c ${shq(inner)} </dev/null`
   );
@@ -511,7 +517,9 @@ async function cmdReconcile(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const r = await runShown(
     srv,
-    containerRun(srv, migrateInner(reconcileArgs(cfg, { steps: flags.steps, skipSteps: flags['skip-steps'] }))),
+    containerRun(srv, migrateInner(reconcileArgs(cfg, { steps: flags.steps, skipSteps: flags['skip-steps'] })), {
+      memMb: Number(process.env.CYCLE_VERIFY_MEM_MB) > 0 ? Number(process.env.CYCLE_VERIFY_MEM_MB) : 1500,
+    }),
     'reconcile',
     `reconcile-${cfg.client}.txt`,
   );
@@ -606,6 +614,34 @@ async function cmdChatRelink(srv, cfg, flags = {}) {
   if (cfg.channelMap) a.push('--channel-map', inMig(cfg, cfg.channelMap));
   if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
   const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-relink (APPLY)' : 'chat-relink (dry run)', `chat-relink-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
+/** Close the conversations an earlier load wrote open that Waboo has closed (the status of the newest visitor_logs session; never reopens, never touches a conversation a person resolved). Reads the dump and the database. Dry run unless --apply. */
+async function cmdChatStatus(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['chat-status', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (cfg.channelMap) a.push('--channel-map', inMig(cfg, cfg.channelMap));
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-status (APPLY)' : 'chat-status (dry run)', `chat-status-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
+/** Rebuild the wallet statement as Waboo shows it (daily WhatsApp charges and reverts, AI charges, top-ups, purchases) chained to the live balance in dumps/<client>/core.json. Replaces the ledger rows this tool wrote; refuses a ledger with other rows. Dry run unless --apply. */
+async function cmdWalletHistory(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['wallet-history', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'wallet-history (APPLY)' : 'wallet-history (dry run)', `wallet-history-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
+/** Give the bot messages an earlier load wrote without their buttons (Visit our website, Call now ...) the meta.sentInteractive the inbox draws them from. Reads only the database. Dry run unless --apply. */
+async function cmdChatButtons(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['chat-buttons', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-buttons (APPLY)' : 'chat-buttons (dry run)', `chat-buttons-${cfg.client}.txt`);
   return r.code === 0 ? 0 : 1;
 }
 
@@ -835,9 +871,9 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
-const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'files', 'core-load', 'wallet-sync', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
+const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'files', 'core-load', 'wallet-sync', 'wallet-history', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
 /** steps that only make sense for a client that is ALREADY loaded: --catch-up adds them; a fresh load never runs them (a fresh load reads everything once) */
-const CATCHUP_ONLY = new Set(['update', 'usage-append']);
+const CATCHUP_ONLY = new Set(['update', 'chat-status', 'chat-buttons', 'usage-append']);
 /** steps a catch-up refuses: flow-state would publish flows again (the flows are already live) */
 const CATCHUP_SKIPPED = new Set(['flow-state']);
 /** free memory (MB, MemAvailable) the server must have: one migrate container uses up to ~400 MB next to the live stack and the 1 GB Postgres */
@@ -910,26 +946,56 @@ const exportArgs = (client, db, force = false) => [
 function runExport(client, db, force = false) {
   const bin = process.env.MONGO_EXPORT_BIN || KIT_EXPORT;
   if (!fs.existsSync(bin)) refuse(`the exporter ${bin} does not exist (set MONGO_EXPORT_BIN)`);
-  return new Promise((res) => {
-    const c = spawn(process.execPath, [bin, ...exportArgs(client, db, force)], {
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
-    for (const s of [c.stdout, c.stderr]) {
-      let tail = '';
-      s.on('data', (d) => {
-        tail += d.toString('utf8');
-        const p = tail.split('\n');
-        tail = p.pop();
-        for (const l of p) console.log('  export: ' + maskPII(l));
+  // A network or VPN drop can freeze the stream of a big collection for good (Karma: the upload of a 163 MB collection stopped 1.4 MB
+  // short and nothing noticed for over two hours). So an attempt that prints nothing for IDLE minutes is stopped and the export is
+  // resumed: a collection whose server file and record already match is skipped, the unfinished one starts again.
+  const idleMs = (Number(process.env.CYCLE_EXPORT_IDLE_MIN) > 0 ? Number(process.env.CYCLE_EXPORT_IDLE_MIN) : 10) * 60_000;
+  const attempt = () =>
+    new Promise((res) => {
+      const c = spawn(process.execPath, [bin, ...exportArgs(client, db, force)], {
+        stdio: ['ignore', 'pipe', 'pipe'],
       });
-      s.on('close', () => tail && console.log('  export: ' + maskPII(tail)));
-    }
-    c.on('error', () => res(1));
-    c.on('close', (code) => {
-      summary('export', code);
-      res(code === 0 ? 0 : 1);
+      let last = Date.now();
+      let stalled = false;
+      const dog = setInterval(() => {
+        if (Date.now() - last > idleMs) {
+          stalled = true;
+          console.log(`  export: no progress for ${Math.round(idleMs / 60000)} minutes, stopping this attempt`);
+          c.kill();
+        }
+      }, 15_000);
+      for (const s of [c.stdout, c.stderr]) {
+        let tail = '';
+        s.on('data', (d) => {
+          last = Date.now();
+          tail += d.toString('utf8');
+          const p = tail.split('\n');
+          tail = p.pop();
+          for (const l of p) console.log('  export: ' + maskPII(l));
+        });
+        s.on('close', () => tail && console.log('  export: ' + maskPII(tail)));
+      }
+      c.on('error', () => {
+        clearInterval(dog);
+        res(1);
+      });
+      c.on('close', (code) => {
+        clearInterval(dog);
+        res(stalled ? 'stalled' : code === 0 ? 0 : 1);
+      });
     });
-  });
+  return (async () => {
+    for (let n = 1; n <= 3; n++) {
+      const r = await attempt();
+      if (r === 0 || r === 1) {
+        summary('export', r);
+        return r;
+      }
+      console.log(`  export: attempt ${n} of 3 stalled${n < 3 ? '; resuming' : ''}`);
+    }
+    summary('export', 1);
+    return 1;
+  })();
 }
 
 function runComplete(client) {
@@ -1045,7 +1111,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       // the credits group holds the wallet OPENING (a second opening would be a second balance); wallet-sync brings the balance up to date instead
       const skip = [...new Set(['credits', ...String(flags['skip-steps'] || '').split(',').filter(Boolean)])].join(',');
       flags = { ...flags, 'force-export': true, 'with-dry-run': true, 'skip-steps': skip };
-      console.log('migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, files, core-load, wallet-sync, usage-append');
+      console.log('migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, usage-append');
     }
     if (!shared.memChecked) {
       await assertStaging(srv);
@@ -1064,6 +1130,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'core-load' || cfg.coreFile) && // needs the geta_core snapshot (core-opening.cjs) named in the client config
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
+      (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
       (s !== 'flow-state' || cfg.flowState !== 'inactive'), // "flowState": "inactive" in the client config keeps every flow a draft
   );
   const ctxL = {};
@@ -1099,6 +1166,9 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     'core-load': () => cmdCoreLoad(srv, cfg, { ...flags, apply: true }),
     files: async () => (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
     'wallet-sync': () => cmdWalletSync(srv, cfg, { ...flags, apply: true }),
+    'wallet-history': () => cmdWalletHistory(srv, cfg, { ...flags, apply: true }),
+    'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
+    'chat-buttons': () => cmdChatButtons(srv, cfg, { ...flags, apply: true }),
     'usage-append': () => cmdUsageAppend(srv, cfg, { ...flags, apply: true }),
     'flow-state': () => cmdFlowState(srv, cfg, { ...flags, apply: true }),
     load: () => cmdLoad(srv, cfg, flags, ctxL),
@@ -1383,6 +1453,7 @@ const COMMANDS = [
   'core-load',
   'flow-state',
   'wallet-sync',
+  'wallet-history',
   'usage-charges-append',
   'update',
   'files-plan',
@@ -1392,6 +1463,8 @@ const COMMANDS = [
   'cutover',
   'chat-reparse',
   'chat-relink',
+  'chat-status',
+  'chat-buttons',
   'campaign-link',
   'pricing-seed',
   'load',
@@ -1432,6 +1505,7 @@ async function main(argv) {
     migrate: () => cmdMigrate(srv, cfg, flags),
     'core-load': () => cmdCoreLoad(srv, cfg, flags),
     'wallet-sync': () => cmdWalletSync(srv, cfg, flags),
+    'wallet-history': () => cmdWalletHistory(srv, cfg, flags),
     'usage-charges-append': () => cmdUsageAppend(srv, cfg, flags),
     'files-plan': () => cmdFiles(srv, cfg, 'plan'),
     'files-copy': () => cmdFiles(srv, cfg, 'copy', flags),
@@ -1442,6 +1516,8 @@ async function main(argv) {
     cutover: () => cmdCutover(srv, cfg, flags),
     'chat-reparse': () => cmdChatReparse(srv, cfg, flags),
     'chat-relink': () => cmdChatRelink(srv, cfg, flags),
+    'chat-status': () => cmdChatStatus(srv, cfg, flags),
+    'chat-buttons': () => cmdChatButtons(srv, cfg, flags),
     'campaign-link': () => cmdCampaignLink(srv, cfg, flags),
   };
   if (cmd !== 'all-dry') return timed(cmd, one[cmd]);

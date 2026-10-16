@@ -3,7 +3,6 @@ import type { Runner } from './runner';
 import {
   applyStep,
   buildReport,
-  dryReadiness,
   finalState,
   scrub,
   type BatchStatus,
@@ -47,16 +46,9 @@ export interface ExecStore {
 
 export type ExecOutcome = 'completed' | 'red' | 'failed' | 'blocked' | 'skipped' | 'busy';
 
-export const BLOCK_REASON: Record<'no_dry' | 'not_green' | 'stale', string> = {
-  no_dry: 'Blocked: no dry run exists for this organization. Nothing was loaded.',
-  not_green: 'Blocked: the latest dry run for this organization is not green. Nothing was loaded.',
-  stale:
-    'Blocked: the latest green dry run is more than 24 hours old. Run a new dry run. Nothing was loaded.',
-};
-
 /**
- * Runs one queued run. For a load the dry-run gate is re-checked HERE, right before it starts (it was also checked at enqueue):
- * if the latest dry run is not green and fresh, the run is blocked and the pipeline is never started.
+ * Runs one queued run. A load needs no earlier dry run: the pipeline starts with its own rehearsal and stops before it writes anything
+ * when that is not clean, so a bad organization ends as a failed run with nothing loaded.
  */
 export async function executeRun(
   d: { store: ExecStore; runner: Runner; now?: () => Date; timeoutMin: number },
@@ -65,14 +57,6 @@ export async function executeRun(
   const now = d.now ?? (() => new Date());
   const head = await d.store.peek(uuid);
   if (!head || head.status !== 'queued') return 'skipped';
-
-  if (head.mode === 'load') {
-    const reason = dryReadiness(await d.store.latestDry(head.sourceClient), now());
-    if (reason !== 'ok') {
-      await d.store.block(uuid, BLOCK_REASON[reason]);
-      return 'blocked';
-    }
-  }
 
   const run = await d.store.begin(uuid);
   if (run === 'busy') return 'busy';

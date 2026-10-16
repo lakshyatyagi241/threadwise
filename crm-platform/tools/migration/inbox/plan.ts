@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import type { Source } from '../extract/source';
 import type { Soft, TargetRef } from '../transform/types';
-import { badText, docKeys, plain, primaryKey, scrub, str, uuidv5, type Doc } from '../util';
+import { badText, docKeys, plain, primaryKey, scrub, str, toDate, uuidv5, type Doc } from '../util';
 import type { InboxSettings } from './config';
 import { createdAtOf, obj, parseTurn } from './parse';
 import { defaultTitle, normalizePeerKey, previewOf } from './peer';
@@ -175,6 +175,20 @@ export async function buildChatPlan(a: PlanInput): Promise<ChatPlan> {
   const win = partitionWindow(a.referenceAt);
   const seenKeys = new Set<string>();
   const hash = createHash('sha256');
+
+  // The CURRENT status of a chat session is in visitor_logs (conversation_status, one row per session); the status printed on a chat turn
+  // is only a snapshot from when that turn was written and is often empty. A thread takes the status of its newest session here, and
+  // falls back to its turns when no visitor_logs row names one (README, "Chat").
+  const sessionStatus = new Map<string, { status: 'open' | 'closed'; ms: number }>();
+  if (a.source.collections(a.client).includes('visitor_logs'))
+    for await (const v of a.source.read(a.client, 'visitor_logs')) {
+      const sid = str(v.session_id);
+      const st = str(v.conversation_status)?.toLowerCase();
+      if (!sid || (st !== 'open' && st !== 'closed')) continue;
+      const ms = toDate(v.last_message_time ?? v.updatedAt)?.getTime() ?? 0;
+      const prev = sessionStatus.get(sid);
+      if (!prev || ms >= prev.ms) sessionStatus.set(sid, { status: st, ms });
+    }
 
   const reject = (
     key: string,
@@ -446,7 +460,12 @@ export async function buildChatPlan(a: PlanInput): Promise<ChatPlan> {
     };
     const last = keep[keep.length - 1]!;
     const peerName = newest((c) => c.peerName);
-    const statusRaw = newest((c) => c.statusRaw)?.toLowerCase() ?? null;
+    let live: { status: 'open' | 'closed'; ms: number } | null = null;
+    for (const c of keep) {
+      const v = c.sessionId ? sessionStatus.get(c.sessionId) : undefined;
+      if (v && (!live || v.ms > live.ms)) live = v;
+    }
+    const statusRaw = live?.status ?? newest((c) => c.statusRaw)?.toLowerCase() ?? null;
     let status: 'open' | 'closed' = 'open';
     if (settings.threadStatus === 'closed') status = 'closed';
     else if (statusRaw === 'closed') status = 'closed';
