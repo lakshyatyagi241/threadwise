@@ -17,7 +17,14 @@ export const ERROR_KINDS = [
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
 
-export function errorKind(error: unknown): ErrorKind {
+/**
+ * What the failed call was asking for. A `NOT_FOUND` answer to one company's call (`record`) means that company is gone; the same
+ * code on a call for a collection (`list`: the companies list, the tiles, a search) can only mean the route is not there, which
+ * says nothing about any company, so it reads as "not available" and never as "That company no longer exists".
+ */
+export type ErrorContext = 'record' | 'list';
+
+export function errorKind(error: unknown, context: ErrorContext = 'record'): ErrorKind {
   if (!(error instanceof ApiError)) return 'network';
   switch (error.code) {
     case ERROR_CODES.FORBIDDEN:
@@ -31,7 +38,7 @@ export function errorKind(error: unknown): ErrorKind {
     case ERROR_CODES.RATE_LIMITED:
       return 'rateLimited';
     case ERROR_CODES.NOT_FOUND:
-      return 'notFound';
+      return context === 'list' ? 'unavailable' : 'notFound';
     case ERROR_CODES.PLAN_FEATURE_LOCKED:
       return 'planDisabled';
     case ERROR_CODES.COMPANY_OWNER_INVALID:

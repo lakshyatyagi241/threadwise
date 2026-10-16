@@ -25,6 +25,7 @@ import { LinkedDeals } from './linked-deals';
  */
 export function CompanyDetail({ id }: { id: string }) {
   const t = useTranslations('companies.detail');
+  const tList = useTranslations('companies.list');
   const tToast = useTranslations('companies.toast');
   const locale = useLocale();
   const router = useRouter();
@@ -76,8 +77,10 @@ export function CompanyDetail({ id }: { id: string }) {
     return (
       <section>
         {back}
-        {kind === 'notFound' || kind === 'unavailable' ? (
+        {kind === 'notFound' ? (
           <EmptyState title={t('notFoundTitle')} message={t('notFound')} />
+        ) : kind === 'unavailable' ? (
+          <EmptyState title={tList('unavailableTitle')} message={tList('unavailable')} />
         ) : (
           <ErrorLine error={company.error} onRetry={() => void company.refetch()} />
         )}

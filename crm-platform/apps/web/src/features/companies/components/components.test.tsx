@@ -6,12 +6,14 @@ import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
-import type { CompanyResponse, SessionResponse } from '@crm/contracts';
+import { ERROR_CODES, type CompanyResponse, type SessionResponse } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { ActivityCard } from './activity-card';
 import { CompaniesTable, type CompaniesTableProps } from './companies-table';
 import { CompaniesToolbar, type CompaniesToolbarProps } from './companies-toolbar';
 import { CompanyFormModal } from './company-form-modal';
+import { ErrorLine } from './error-line';
 import { CompanyLink } from './company-link';
 import { LinkedContacts } from './linked-contacts';
 import { LinkedDeals } from './linked-deals';
@@ -263,5 +265,30 @@ describe('the company page cards (loading state of each)', () => {
   it('deals and activity: heading and a loading line', () => {
     expect(html(<LinkedDeals companyId={id} />)).toContain('Loading deals');
     expect(html(<ActivityCard companyId={id} />)).toContain('Loading activity');
+  });
+});
+
+describe('ErrorLine: a failed call is described by what failed (BL-034)', () => {
+  const notFound = new ApiError(404, ERROR_CODES.NOT_FOUND, 'Not found');
+
+  it('a 404 for one company says the company no longer exists', () => {
+    expect(html(<ErrorLine error={notFound} />)).toContain('That company no longer exists.');
+  });
+
+  it('a 404 for the list or a search never says so: the route is not available', () => {
+    const out = html(<ErrorLine error={notFound} context="list" />);
+    expect(out).not.toContain('no longer exists');
+    expect(out).toContain('Companies are not available on this server yet.');
+  });
+
+  it('a server error and a lost connection keep their own sentences, with a retry button', () => {
+    const server = html(
+      <ErrorLine error={new ApiError(500, 'INTERNAL', 'x')} context="list" onRetry={() => {}} />,
+    );
+    expect(server).toContain('Something went wrong. Try again in a moment.');
+    expect(server).toContain('Try again</button>');
+    const offline = html(<ErrorLine error={new TypeError('Failed to fetch')} context="list" />);
+    expect(offline).toContain('Could not reach the server.');
+    expect(offline).not.toContain('no longer exists');
   });
 });
