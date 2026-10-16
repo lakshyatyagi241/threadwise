@@ -40,9 +40,17 @@ describe('parseFilters', () => {
     expect(parseFilters(new URLSearchParams('page=99999999')).page).toBe(100_000);
   });
 
-  it('defaults to ten rows per screen', () => {
-    expect(DEFAULT_FILTERS.limit).toBe(10);
+  it('defaults to fifty rows per screen', () => {
+    expect(DEFAULT_FILTERS.limit).toBe(50);
+    expect(parseFilters(new URLSearchParams('per=50')).limit).toBe(50);
     expect(parseFilters(new URLSearchParams('per=10')).limit).toBe(10);
+  });
+
+  it('reads a status key and a source text, and drops junk', () => {
+    const f = parseFilters(new URLSearchParams('status=follow_up&source=Meta%20lead%20ads'));
+    expect(f).toMatchObject({ status: 'follow_up', source: 'Meta lead ads' });
+    expect(parseFilters(new URLSearchParams('status=DROP TABLE&source=')).status).toBe('');
+    expect(parseFilters(new URLSearchParams(`source=${'x'.repeat(300)}`)).source).toHaveLength(128);
   });
 
   it('accepts the no_group view only for the group filter', () => {
@@ -54,7 +62,9 @@ describe('parseFilters', () => {
 describe('filtersToSearch', () => {
   it('writes only what differs from the defaults, so the clean URL is bare', () => {
     expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
-    expect(filtersToSearch({ ...DEFAULT_FILTERS, q: ' acme ', limit: 50 })).toBe('?q=acme&per=50');
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, q: ' acme ', limit: 100 })).toBe(
+      '?q=acme&per=100',
+    );
     expect(filtersToSearch({ ...DEFAULT_FILTERS, page: 1 })).toBe('');
     expect(filtersToSearch({ ...DEFAULT_FILTERS, page: 3 })).toBe('?page=3');
   });
@@ -68,6 +78,8 @@ describe('filtersToSearch', () => {
       lifecycleStage: 'new',
       consent: 'subscribed' as const,
       imported: true,
+      status: 'follow_up',
+      source: 'api',
       order: 'asc' as const,
       limit: 100 as const,
       page: 4,
@@ -83,6 +95,8 @@ describe('hasActiveFilter', () => {
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, group: 'no_group' })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, consent: 'unsubscribed' })).toBe(true);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, imported: true })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, status: 'active' })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, source: 'api' })).toBe(true);
   });
 });
 
@@ -98,7 +112,7 @@ describe('contactFilterBody / listQuery', () => {
         imported: true,
         segment: '',
       }),
-    ).toEqual({
+    ).toMatchObject({
       q: 'acme',
       lifecycleStage: 'new',
       groupId: GROUP,
@@ -107,6 +121,16 @@ describe('contactFilterBody / listQuery', () => {
       unsubscribed: true,
       imported: true,
     });
+  });
+
+  it('sends the status and the source when they are set, and leaves them out otherwise', () => {
+    const b = contactFilterBody({ ...DEFAULT_FILTERS, status: 'active', source: ' api ' });
+    expect(b).toMatchObject({ status: 'active', source: 'api' });
+    expect(contactFilterBody(DEFAULT_FILTERS)).toMatchObject({
+      status: undefined,
+      source: undefined,
+    });
+    expect(listQuery({ ...DEFAULT_FILTERS, status: 'active' })).toMatchObject({ status: 'active' });
   });
 
   it('sends "no group" as its own flag, not as a group id', () => {

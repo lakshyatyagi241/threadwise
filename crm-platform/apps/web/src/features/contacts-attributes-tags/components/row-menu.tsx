@@ -17,6 +17,7 @@ export function RowMenu({
   className,
   trigger,
   width = PANEL_W,
+  focus = 'first',
   children,
 }: {
   label: string;
@@ -25,6 +26,8 @@ export function RowMenu({
   trigger?: ReactNode;
   /** Panel width in px. */
   width?: number;
+  /** `none`: leave the focus alone when it opens (a panel that puts it on its own search box). */
+  focus?: 'first' | 'none';
   /** Items; a function receives `close`. */
   children: (close: () => void) => ReactNode;
 }) {
@@ -51,7 +54,7 @@ export function RowMenu({
         '[role="menuitem"]:not([aria-disabled="true"])',
       ) ?? []),
     ];
-    items()[0]?.focus();
+    if (focus === 'first') items()[0]?.focus();
     const onPress = (e: PointerEvent) => {
       const target = e.target as Node;
       if (!panel.current?.contains(target) && !button.current?.contains(target)) setOpen(false);
@@ -82,7 +85,7 @@ export function RowMenu({
       window.removeEventListener('resize', onMove);
       window.removeEventListener('scroll', onMove, true);
     };
-  }, [open]);
+  }, [open, focus]);
 
   return (
     <>

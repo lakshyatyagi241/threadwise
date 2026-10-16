@@ -27,7 +27,14 @@ interface Tag {
  * The tags on the stage row under the contact's name (they flow into that row): the attached ones with a remove button and "Add tag", which opens a small panel to pick
  * several workspace tags at once (it stays open) or to type a name and press Enter to create a new tag and attach it.
  */
-export function ContactQuickTags({ contactId }: { contactId: string }) {
+export function ContactQuickTags({
+  contactId,
+  labelled = false,
+}: {
+  contactId: string;
+  /** Draw "+ Add tag" as a text chip instead of the round tag icon (the contact header and the owner card). */
+  labelled?: boolean;
+}) {
   const t = useTranslations('contacts-attributes-tags.tags');
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -128,10 +135,18 @@ export function ContactQuickTags({ contactId }: { contactId: string }) {
             onClick={() => setOpen((o) => !o)}
             title={t('add')}
             aria-label={t('add')}
-            className="inline-flex size-8 items-center justify-center rounded-full border border-dashed border-border text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+            className={cn(
+              'inline-flex items-center justify-center rounded-full border border-dashed border-border text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary',
+              labelled ? 'h-7 gap-1 px-2.5 text-xs font-medium' : 'size-8',
+            )}
           >
             {change.isPending ? (
               <Spinner label={t('saving')} />
+            ) : labelled ? (
+              <>
+                <span aria-hidden="true">+</span>
+                {t('add')}
+              </>
             ) : (
               <svg
                 viewBox="0 0 24 24"

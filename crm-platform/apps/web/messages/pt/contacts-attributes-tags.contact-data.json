@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Negócios",
+        "loading": "Carregando negócios",
+        "empty": "Este contato ainda não tem negócios.",
+        "unavailable": "Os negócios não estão disponíveis no seu plano ou o seu perfil não inclui acesso a eles.",
+        "listLabel": "Negócios deste contato",
+        "openRollup": "{count, plural, one {# negócio em aberto} other {# negócios em aberto}}",
+        "wonRollup": "{count, plural, one {# negócio ganho} other {# negócios ganhos}}",
+        "noValue": "Sem valor",
+        "capped": "Mostrando os primeiros {count} negócios. Os totais acima incluem todos.",
+        "pipeline": "Funil {name}",
+        "closes": "Fechamento previsto {date}",
+        "owner": "Responsável {name}",
+        "status": {
+          "open": "Em aberto",
+          "won": "Ganho",
+          "lost": "Perdido"
+        }
+      },
+      "conversations": {
+        "title": "Conversas",
+        "loading": "Carregando conversas",
+        "empty": "Nenhuma conversa encontrada para este contato.",
+        "listLabel": "Conversas deste contato",
+        "unread": "{count, plural, one {# mensagem não lida} other {# mensagens não lidas}}",
+        "open": "Abrir",
+        "openLabel": "Abrir a conversa {title}",
+        "noPreview": "Ainda sem mensagens",
+        "lastMessage": "Última mensagem {time}",
+        "assignedTo": "Atribuída a {name}",
+        "unassigned": "Sem responsável",
+        "footnote": "Encontradas pelo telefone, e-mail ou nome do contato. Conversas arquivadas não aparecem.",
+        "status": {
+          "open": "Aberta",
+          "pending": "Pendente",
+          "snoozed": "Adiada",
+          "resolved": "Resolvida",
+          "closed": "Fechada",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Histórico de campos do contato",
+        "title": "Histórico de campos do contato",
+        "close": "Fechar",
+        "loading": "Carregando o histórico",
+        "empty": "Nenhuma alteração de campo foi registrada para este contato.",
+        "loadMore": "Carregar mais",
+        "changedTo": "alterado para",
+        "noValue": "vazio",
+        "by": "Por {actor}",
+        "actor": {
+          "user": "um usuário",
+          "system": "o sistema",
+          "api": "a API"
+        },
+        "fields": {
+          "name": "Nome",
+          "firstName": "Nome",
+          "lastName": "Sobrenome",
+          "email": "E-mail",
+          "phone": "Telefone",
+          "companyId": "Empresa",
+          "ownerId": "Responsável",
+          "lifecycleStage": "Estágio do ciclo de vida",
+          "lifecycleState": "Situação do ciclo de vida",
+          "status": "Status",
+          "lostReason": "Motivo da perda",
+          "leadScore": "Pontuação do lead",
+          "source": "Origem",
+          "isUnsubscribed": "Cancelou a inscrição"
+        }
+      },
+      "stats": {
+        "title": "Estatísticas de comunicação",
+        "loading": "Carregando as estatísticas",
+        "conversations": "Conversas",
+        "unread": "Mensagens não lidas",
+        "lastInbound": "Última mensagem recebida",
+        "lastOutbound": "Última mensagem enviada",
+        "calls": "Chamadas",
+        "callsAnswered": "Chamadas atendidas",
+        "callsMissed": "Chamadas perdidas",
+        "callMinutes": "Minutos de chamada",
+        "openTasks": "Tarefas em aberto",
+        "leadScore": "Pontuação do lead",
+        "lastActivity": "Última atividade",
+        "created": "Criado",
+        "none": "Nenhum ainda",
+        "atLeast": "{count}+",
+        "footnote": "Os números de mensagens cobrem as conversas encontradas para este contato (por telefone, e-mail ou nome). Os números de chamadas cobrem o último ano, pelo telefone ou nome.",
+        "callsPartial": "Havia mais chamadas do que foi possível ler, então os números de chamadas podem estar abaixo do real."
+      }
+    }
+  }
+}
