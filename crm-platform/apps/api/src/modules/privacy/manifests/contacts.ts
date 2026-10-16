@@ -214,7 +214,7 @@ export const consentLedger = defineHolder({
       link: { by: 'phone', column: 'phone_digits' },
       disposition: 'retain',
       reason:
-        'The workspace's Do-Not-Call list is the suppression record that stops marketing calls and texts to a number. Erasing the person must not make the number callable again, so the entry stays (a number and a source, no name); a data request can still remove it on purpose.',
+        'The Do-Not-Call list of the workspace is the suppression record that stops marketing calls and texts to a number. Erasing the person must not make the number callable again, so the entry stays (a number and a source, no name); a data request can still remove it on purpose.',
       tier: 'records',
       categories: ['identifier'],
       pii: ['phone', 'note'],

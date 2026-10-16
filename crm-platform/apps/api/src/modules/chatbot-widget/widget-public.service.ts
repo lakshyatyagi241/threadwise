@@ -509,7 +509,7 @@ export class WidgetPublicService {
         if (contactId === null) return;
         const v = age.verdict;
         await this.minors.applyAnswer(sp as Tx, orgId, contactId, {
-          dob: v.kind !== 'invalid' && v.mode === 'dob' ? (v.dob ?? null) : null,
+          dob: v.mode === 'dob' ? (v.dob ?? null) : null,
           under:
             v.kind === 'under'
               ? {
@@ -706,7 +706,7 @@ export class WidgetPublicService {
       welcomeMessage: widget.welcomeMessage,
       assistantUuid: widget.assistantUuid,
     };
-    const peer = await this.flowPeer(orgId, widget, req, forInbox, {});
+    const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
     const mime = stored.mime;
     await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
       providerMessageId: `wgt-${randomUUID()}`,
