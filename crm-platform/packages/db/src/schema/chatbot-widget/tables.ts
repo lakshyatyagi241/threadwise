@@ -190,7 +190,6 @@ export const chatbotWidgetVisitors = pgTable(
       foreignColumns: [chatbotWidgets.orgId, chatbotWidgets.id],
     }).onDelete('cascade'),
     index('idx_chatbot_widget_visitors_conversation_id').on(t.orgId, t.conversationId),
-    index('idx_chatbot_widget_visitors_widget_id').on(t.orgId, t.widgetId),
     // migrations/20261010100100_wgt_public_lookup.sql
     index('idx_chatbot_widget_visitors_uuid_widget').on(t.orgId, t.widgetId, t.visitorUuid),
   ],

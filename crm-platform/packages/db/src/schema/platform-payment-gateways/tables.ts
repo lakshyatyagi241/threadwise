@@ -102,7 +102,6 @@ export const payments = pgTable(
     index('idx_payments_contact_id').on(t.orgId, t.contactId),
     index('idx_payments_deal_id').on(t.orgId, t.dealId),
     index('idx_payments_invoice_id').on(t.orgId, t.invoiceId),
-    index('idx_payments_paid_at').on(t.orgId, t.paidAt),
     index('idx_payments_wa_order_id').on(t.orgId, t.waOrderId),
   ],
 );
