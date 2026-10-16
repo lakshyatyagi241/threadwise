@@ -100,7 +100,9 @@ export function CallingProvider({
   const served = useIceServers(canCall && iceServers === undefined);
   const rules = useRecordingSettings(canCall);
   const rulesRef = useRef<CallRecordingSettings | null>(null);
-  rulesRef.current = rules.data ?? null;
+  useEffect(() => {
+    rulesRef.current = rules.data ?? null;
+  }, [rules.data]);
   const source = iceServers ?? served.data?.servers;
   const ice = useMemo(() => parseIceServers(source), [source]);
 
