@@ -53,7 +53,7 @@ The bearer header is read first; `X-Api-Key` is used when there is no usable bea
 ### Scopes
 
 A key may carry scopes named `<resource>:read` or `<resource>:write`. `<resource>:write` also grants `<resource>:read`. A key with
-no scopes has full access, as in Reference. Resources: `account`, `contacts`, `contact-groups`, `deals`, `flows`, `templates`,
+no scopes has full access, as in Reference. Resources: `account`, `contacts`, `contact-groups`, `deals`, `companies`, `flows`, `templates`,
 `auto-replies`, `broadcasts`, `campaigns`, `scheduled`, `messages`, `media`, `conversations`, `devices`, `webhooks`.
 
 A call outside the key's scopes is `403 forbidden` with a message naming the scope (`needs the "contacts:write" scope`). The scope is
@@ -361,6 +361,7 @@ did. Boolean fields accept `true`, `false`, `1`, `0`, `"1"`, `"0"`.
 | Contacts       | `GET /contacts`, `GET /contacts/{id}`, `POST /contacts`, `PUT` and `PATCH /contacts/{id}`, `DELETE /contacts/{id}`                                                    |
 | Contact groups | `GET /contact-groups`, `POST /contact-groups`, `DELETE /contact-groups/{id}`                                                                                          |
 | Deals          | `GET /deals`, `GET /deals/{id}`, `POST /deals`, `PUT` and `PATCH /deals/{id}`, `DELETE /deals/{id}`                                                                   |
+| Companies      | `GET /companies`, `GET /companies/{id}`, `POST /companies`, `PUT` and `PATCH /companies/{id}`, `DELETE /companies/{id}` (an extension: Reference's API has none)       |
 | Templates      | `GET /templates`, `GET /templates/categories`, `GET /templates/{id}`, `POST /templates`, `PUT /templates/{id}`, `DELETE /templates/{id}`, `POST /templates/{id}/send` |
 | Flows          | `GET /flows`, `GET /flows/{id}`, `POST /flows/{id}/enroll`, `GET /flows/{id}/subscribers`                                                                             |
 | Broadcasts     | `POST /broadcasts`, `GET /broadcasts`, `GET /broadcasts/{id}`, `GET /broadcasts/{id}/recipients`, `POST /broadcasts/{id}/stop`                                        |
@@ -717,6 +718,29 @@ The deal is looked up first and the body validated second, so an unknown id with
 #### `DELETE /deals/{id}`
 
 Scope `deals:write`. Deletes the deal and its timeline. `200`: `{ "data": { "id": "…", "deleted": true } }`.
+
+### Companies
+
+An extension of this product (Reference's API has no companies), BL-196. Scopes `companies:read` and `companies:write`
+(`record.companies.read`, and `.create`/`.update`/`.delete` for the key, at record scope `all`). Every route needs the plan feature
+`sales_pipeline` (`403 plan_feature_disabled`), checked before validation and any lookup, as for deals.
+
+A company is `{ id, name, website, email, phone, industry, size_range, address, notes, owner_user_id, custom_fields, created_at,
+updated_at }`. `custom_fields` holds the workspace's company properties by key; a value must fit its property and a required property
+must be answered (`422`, the `details` name `custom_fields.<key>`).
+
+- `GET /companies`: newest first; query `limit`, `per_page`, `cursor`, `search` (substring of the name), `industry`, `owner_user_id`.
+  A filter that matches nothing is an empty list, not an error.
+- `GET /companies/{id}`: `404 not_found` for an unknown, foreign or malformed id.
+- `POST /companies`: `name` is required (max 191); the others as above. Omitting `owner_user_id` makes the key's member the owner; a
+  blank one means nobody; a value that is not an active member is `422` on `owner_user_id`.
+- `PUT` and `PATCH /companies/{id}`: change only the fields sent, `null` clears one that can be empty, `custom_fields` merge (a `null`
+  value clears that key). The id is looked up before the body is validated. An update that loses a race on the row version is retried
+  once.
+- `DELETE /companies/{id}`: its contacts, deals, tasks and every other record that pointed at it are kept and unlinked.
+
+Writes go through the same service as the dashboard, so they are audited, announce `company.created/updated/deleted` and obey the
+same rules.
 
 ### Templates
 

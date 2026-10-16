@@ -1,13 +1,19 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
+  checkConditionValue,
+  segmentKindForFieldType,
   type BulkCompanyIdsInput,
   type CompanyActivityPage,
   type CompanyBulkResult,
   type CompanyContactsPage,
   type CompanyIndustriesResponse,
+  type CompanyPropertyFilter,
   type CompanyResponse,
   type CompanySelectItem,
+  type CompanySort,
+  type CompanySortDir,
   type CompanySelectQuery,
   type CompanyStatsQuery,
   type CompanyStatsResponse,
@@ -31,24 +37,31 @@ import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, contactScopeCondition, ContactsRepository } from '../contacts';
 import { assertOwnerWithinScope } from '../owner-scope';
 import { addTo, moneyList, type CurrencySums } from '../deals/deal-money';
+import { propertySort } from '../property-predicates';
 import { companyEventPayload, companyRollup, toCompanyResponse } from './companies.mapper';
 import {
   CompaniesRepository,
   companyScopeCondition,
   type CompanyFilter,
+  type CompanyListInput,
   type CompanyPatch,
   type CompanyRow,
 } from './companies.repository';
-import { assertRequiredProperties, mergeProperties } from './company-properties';
-import { encodeCompanyCursor, encodeIdCursor, foldActivity } from './company-rules';
+import {
+  assertRequiredProperties,
+  mergeProperties,
+  type CompanyPropertyDef,
+} from './company-properties';
+import {
+  companySortId,
+  encodeCompanyCursor,
+  hostLabel,
+  encodeIdCursor,
+  foldActivity,
+} from './company-rules';
 
 export const COMPANY_MODULE = 'companies';
 
-/** A company made from a website alone is named after it: "acme.co.uk" becomes "Acme". */
-const hostLabel = (host: string): string => {
-  const label = host.split('.')[0] ?? host;
-  return (label.charAt(0).toUpperCase() + label.slice(1)).slice(0, 191);
-};
 const DISPLAY_PREFIX = 'COM';
 
 /** The filter fields a list and the stats share, as they arrive from a query. */
@@ -58,7 +71,17 @@ interface FilterInput {
   unassigned?: boolean;
   industry?: string;
   hasOpenDeals?: boolean;
+  props?: CompanyPropertyFilter[];
 }
+
+/** What a list or an export orders by. */
+interface SortInput {
+  sort: CompanySort;
+  sortKey?: string;
+  sortDir?: CompanySortDir;
+}
+
+type PropertyKind = NonNullable<ReturnType<typeof segmentKindForFieldType>>;
 
 type Delta = Record<string, { old: unknown; new: unknown }>;
 
@@ -95,13 +118,11 @@ export class CompaniesService {
   ): Promise<PageResponse<CompanyResponse>> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const filter = await this.resolveFilter(tx, ctx.orgId, query);
-      if (!filter)
+      const args = await this.listArgs(tx, ctx.orgId, query, scope);
+      if (!args)
         return { data: [], page: { nextCursor: null, hasMore: false, limit: query.limit } };
       const rows = await this.repo.list(tx, ctx.orgId, {
-        filter,
-        scope: companyScopeCondition(ctx.orgId, scope, ctx.userId),
-        sort: query.sort,
+        ...args,
         cursor: query.cursor,
         limit: query.limit,
       });
@@ -114,8 +135,12 @@ export class CompaniesService {
           nextCursor:
             hasMore && last
               ? encodeCompanyCursor(
-                  query.sort,
-                  query.sort === 'name' ? last.nameKey : last.createdAtIso,
+                  companySortId(args.sort, args.property?.key, args.dir ?? 'desc'),
+                  args.sort === 'property'
+                    ? (last.sortKey ?? '')
+                    : args.sort === 'name'
+                      ? last.nameKey
+                      : last.createdAtIso,
                   last.id,
                 )
               : null,
@@ -124,6 +149,44 @@ export class CompaniesService {
         },
       };
     });
+  }
+
+  /**
+   * The filter, the scope and the order of a list or an export, with every uuid and property resolved (the list and the file agree
+   * because both are built here). `null` means the filter names something that is not in this workspace: the answer is empty.
+   */
+  async listArgs(
+    tx: Tx,
+    orgId: number,
+    query: FilterInput & SortInput,
+    scope: RecordScope,
+  ): Promise<Omit<CompanyListInput, 'cursor' | 'limit'> | null> {
+    const ctx = RequestContextStore.require();
+    const filter = await this.resolveFilter(tx, orgId, query);
+    if (!filter) return null;
+    const dir = query.sortDir ?? (query.sort === 'created' ? 'desc' : 'asc');
+    let property: CompanyListInput['property'];
+    if (query.sort === 'property') {
+      const key = query.sortKey!;
+      const known = (await this.filterableProperties(tx, orgId)).get(key);
+      const by = known ? propertySort(sql`c.data`, key, known.kind) : undefined;
+      if (!by) {
+        throw new AppError(
+          ERROR_CODES.COMPANY_FILTER_INVALID,
+          'The list cannot be ordered by that property.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+          [{ path: 'sortKey', message: known ? 'cannot be ordered' : 'not a company property' }],
+        );
+      }
+      property = { key, sort: by };
+    }
+    return {
+      filter,
+      scope: companyScopeCondition(orgId, scope, ctx.userId),
+      sort: query.sort,
+      property,
+      dir,
+    };
   }
 
   /** The tiles over the list, inside the same filter and scope (Reference computed them from the rows it had loaded). */
@@ -289,8 +352,18 @@ export class CompaniesService {
   // --- writes ----------------------------------------------------------------------------------------------------------
 
   async create(input: CreateCompanyInput): Promise<CompanyResponse> {
+    return this.db.tx((tx) => this.createIn(tx, input));
+  }
+
+  /** `create`, inside the caller's transaction (the CSV import makes each row in its own savepoint). */
+  async createIn(
+    tx: Tx,
+    input: CreateCompanyInput,
+    /** The workspace's company properties, when the caller already read them (an import makes many companies). */
+    knownDefs?: readonly CompanyPropertyDef[],
+  ): Promise<CompanyResponse> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
+    {
       // Omitted means the caller (so a record scope of `own` keeps sight of what its holder creates); null means nobody.
       const ownerId =
         input.ownerId === undefined
@@ -298,7 +371,7 @@ export class CompaniesService {
           : await this.resolveOwner(tx, ctx.orgId, input.ownerId);
       await this.assertOwnerAllowed(tx, 'record.companies.create', ownerId);
       // The workspace's company properties: a value must fit its property, and a required one must be answered (even when none is sent).
-      const defs = await this.repo.propertyDefs(tx, ctx.orgId);
+      const defs = knownDefs ?? (await this.repo.propertyDefs(tx, ctx.orgId));
       const { next: data, changed: customKeys } = mergeProperties(
         defs,
         input.customFields ?? {},
@@ -339,7 +412,7 @@ export class CompaniesService {
         payload: companyEventPayload(row),
       });
       return (await this.toResponses(tx, ctx.orgId, [row]))[0]!;
-    });
+    }
   }
 
   /**
@@ -703,6 +776,56 @@ export class CompaniesService {
       const id = await this.repo.resolveUserId(tx, orgId, f.ownerId);
       if (id === undefined) return null;
       out.ownerId = id;
+    }
+    if (f.props && f.props.length > 0) out.props = await this.resolveProps(tx, orgId, f.props);
+    return out;
+  }
+
+  /** The company properties a list can filter or order by: active and stored, by key, with the kind that decides their operators. */
+  private async filterableProperties(
+    tx: Tx,
+    orgId: number,
+  ): Promise<Map<string, { def: CompanyPropertyDef; kind: PropertyKind }>> {
+    const out = new Map<string, { def: CompanyPropertyDef; kind: PropertyKind }>();
+    for (const def of await this.repo.propertyDefs(tx, orgId)) {
+      const kind = segmentKindForFieldType(def.fieldType);
+      if (def.isActive && !def.isMasked && kind) out.set(def.key, { def, kind });
+    }
+    return out;
+  }
+
+  /** Property conditions checked against the registry: a missing, inactive or computed property, or an operator that does not suit it, is 422. */
+  private async resolveProps(
+    tx: Tx,
+    orgId: number,
+    props: readonly CompanyPropertyFilter[],
+  ): Promise<NonNullable<CompanyFilter['props']>> {
+    const known = await this.filterableProperties(tx, orgId);
+    const problems: Array<{ path: string; message: string }> = [];
+    const out: NonNullable<CompanyFilter['props']> = [];
+    props.forEach((p, i) => {
+      const entry = known.get(p.key);
+      if (!entry) {
+        problems.push({
+          path: `props.${i}.key`,
+          message: 'not a company property you can filter by',
+        });
+        return;
+      }
+      const why = checkConditionValue(entry.kind, p.operator, p.value);
+      if (why) {
+        problems.push({ path: `props.${i}`, message: why });
+        return;
+      }
+      out.push({ key: p.key, kind: entry.kind, operator: p.operator, value: p.value });
+    });
+    if (problems.length > 0) {
+      throw new AppError(
+        ERROR_CODES.COMPANY_FILTER_INVALID,
+        `A property condition cannot be used: ${problems.map((p) => p.message).join('; ')}.`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        problems,
+      );
     }
     return out;
   }

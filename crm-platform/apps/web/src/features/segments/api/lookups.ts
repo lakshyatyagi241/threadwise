@@ -9,6 +9,7 @@ import {
   statusChoices,
   useContactFields,
   useGroups,
+  useModuleFields,
   useStatusOptions,
   useTags,
 } from '@/features/contacts-attributes-tags';
@@ -63,9 +64,13 @@ export function useSegmentCatalog(): SegmentCatalog {
   const groups = useGroups();
   const fields = useContactFields();
   const people = usePeople();
+  // Company properties are offered to someone who may read their definitions; a refusal just leaves the group out (it is not a failure
+  // of the builder, so it is not counted in `ready` or `failed`).
+  const companyFields = useModuleFields('companies', false);
 
   const all = [statusOptions, tags, groups, fields, people];
-  const ready = all.every((q) => q.isSuccess || q.isError);
+  // A rule on a company property is judged deleted only once the company properties have answered (or been refused).
+  const ready = [...all, companyFields].every((q) => q.isSuccess || q.isError);
   const failed = all.some((q) => q.isError);
 
   const lookups = useMemo<Lookups>(
@@ -92,8 +97,17 @@ export function useSegmentCatalog(): SegmentCatalog {
           .sort((a, b) => a.position - b.position)
           .map((o) => ({ value: o.value, label: o.label })),
       })),
+      companyProperties: (companyFields.data ?? []).filter(isUsableProperty).map((f) => ({
+        key: f.key,
+        label: f.label,
+        fieldType: f.fieldType,
+        options: (f.options ?? [])
+          .filter((o) => !o.isHidden)
+          .sort((a, b) => a.position - b.position)
+          .map((o) => ({ value: o.value, label: o.label })),
+      })),
     }),
-    [statusOptions.data, tags.data, groups.data, fields.data, people.data, tf],
+    [statusOptions.data, tags.data, groups.data, fields.data, people.data, companyFields.data, tf],
   );
   const catalog = useMemo(() => buildCatalog(lookups), [lookups]);
   const names = useMemo(

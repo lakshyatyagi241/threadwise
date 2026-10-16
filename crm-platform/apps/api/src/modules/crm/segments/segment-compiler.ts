@@ -4,7 +4,9 @@ import {
   builtinFieldKind,
   checkConditionValue,
   collectConditions,
+  companyFieldKey,
   customFieldKey,
+  isCompanySegmentField,
   segmentKindForFieldType,
   type FieldType,
   type InvalidCondition,
@@ -17,10 +19,8 @@ import {
 } from '@crm/contracts';
 import { minorCondition, tokenCondition, searchTokens } from '../contacts/contact-conditions';
 import {
-  booleanTextPredicate,
   datePredicate,
   groupsPredicate,
-  multiPredicate,
   numberPredicate,
   tagsPredicate,
   textPredicate,
@@ -29,6 +29,7 @@ import {
   type SetOperator,
   type TextOperator,
 } from '../contacts/contact-predicates';
+import { operandStrings, propertyPredicate } from '../property-predicates';
 
 const { contacts } = schema;
 
@@ -45,6 +46,8 @@ export interface RuleContext {
   statuses: Set<string>;
   /** Active contact properties by key. */
   fields: Map<string, { type: FieldType }>;
+  /** Active company properties by key (a `company.<key>` rule reads the contact's company). */
+  companyFields: Map<string, { type: FieldType }>;
 }
 
 export const emptyRuleContext = (): RuleContext => ({
@@ -54,6 +57,7 @@ export const emptyRuleContext = (): RuleContext => ({
   stages: new Set(),
   statuses: new Set(),
   fields: new Map(),
+  companyFields: new Map(),
 });
 
 export interface CompiledRules {
@@ -70,6 +74,7 @@ export interface RuleRefs {
   stageValues: Set<string>;
   statusValues: Set<string>;
   fieldKeys: Set<string>;
+  companyFieldKeys: Set<string>;
 }
 
 export const emptyRuleRefs = (): RuleRefs => ({
@@ -79,6 +84,7 @@ export const emptyRuleRefs = (): RuleRefs => ({
   stageValues: new Set(),
   statusValues: new Set(),
   fieldKeys: new Set(),
+  companyFieldKeys: new Set(),
 });
 
 /** Adds what `rules` points at to `into` (or to a new set). */
@@ -103,18 +109,15 @@ export function collectRuleRefs(rules: SegmentGroup, into?: RuleRefs): RuleRefs 
         values.forEach((v) => refs.statusValues.add(v));
         break;
       default:
-        if (builtinFieldKind(c.field) === undefined) refs.fieldKeys.add(customFieldKey(c.field));
+        if (isCompanySegmentField(c.field)) refs.companyFieldKeys.add(companyFieldKey(c.field));
+        else if (builtinFieldKind(c.field) === undefined)
+          refs.fieldKeys.add(customFieldKey(c.field));
     }
   }
   return refs;
 }
 
-/** The scalar or list operand as strings (empty for operators without one). */
-function valuesOf(c: SegmentCondition): string[] {
-  const v = c.value;
-  if (v === undefined || (typeof v === 'object' && !Array.isArray(v))) return [];
-  return (Array.isArray(v) ? v : [v]).map(String);
-}
+const valuesOf = (c: SegmentCondition): string[] => operandStrings(c.value);
 
 type Verdict = { sql: SQL } | { invalid: SegmentInvalidReason; message: string; refs: string[] };
 
@@ -123,9 +126,6 @@ const invalid = (reason: SegmentInvalidReason, message: string, refs: string[] =
   message,
   refs,
 });
-
-/** `contacts.data ->> key`, the key bound as a parameter. */
-const dataText = (key: string): SQL => sql`(${contacts.data} ->> ${key}::text)`;
 
 /**
  * Turns a rule tree into one SQL condition over `contacts`, through the same predicates the contacts
@@ -168,18 +168,19 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
   const op: SegmentOperator = c.operator;
   const builtin = builtinFieldKind(c.field);
 
+  const onCompany = isCompanySegmentField(c.field);
   let kind: SegmentFieldKind;
   let key = '';
   if (builtin !== undefined) {
     kind = builtin;
   } else {
-    key = customFieldKey(c.field);
-    const def = rc.fields.get(key);
+    key = onCompany ? companyFieldKey(c.field) : customFieldKey(c.field);
+    const def = (onCompany ? rc.companyFields : rc.fields).get(key);
     if (!def)
       return invalid(
         'field_deleted',
-        `The property "${key}" does not exist (it may have been deleted).`,
-        [key],
+        `The ${onCompany ? 'company property' : 'property'} "${key}" does not exist (it may have been deleted).`,
+        [onCompany ? c.field : key],
       );
     const k = segmentKindForFieldType(def.type);
     if (!k) {
@@ -201,36 +202,15 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
   });
 
   if (builtin === undefined) {
-    switch (kind) {
-      case 'text':
-        return text(dataText(key));
-      case 'option':
-        return text(dataText(key), true);
-      case 'number':
-        return {
-          sql: numberPredicate(
-            sql`segment_safe_numeric(${dataText(key)})`,
-            op as NumberOperator,
-            c.value,
-          ),
-        };
-      case 'date':
-        return {
-          sql: datePredicate(
-            sql`segment_safe_timestamptz(${dataText(key)})`,
-            op as DateOperator,
-            c.value,
-          ),
-        };
-      case 'boolean':
-        return { sql: booleanTextPredicate(dataText(key), op === 'is_true') };
-      case 'multi':
-        return {
-          sql: multiPredicate(sql`(${contacts.data} -> ${key}::text)`, op as SetOperator, values),
-        };
-      default:
-        return invalid('operator_unsupported', `A ${kind} value cannot be used on a property.`);
-    }
+    // A company property is read off the contact's company: a contact with no company has no value (so "is empty" and the "not"
+    // operators hold for it, as for a contact that has the property blank).
+    const data = onCompany
+      ? sql`(SELECT co.data FROM companies co WHERE co.org_id = ${contacts.orgId} AND co.id = ${contacts.companyId})`
+      : sql`${contacts.data}`;
+    const predicate = propertyPredicate(data, key, kind, op, c.value);
+    return predicate
+      ? { sql: predicate }
+      : invalid('operator_unsupported', `A ${kind} value cannot be used on a property.`);
   }
 
   switch (c.field) {

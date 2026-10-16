@@ -32,7 +32,8 @@
       "journey": "Hành trình",
       "who": "Ai",
       "activity": "Hoạt động",
-      "properties": "Thuộc tính"
+      "properties": "Thuộc tính",
+      "company": "Thuộc tính công ty"
     },
     "operators": {
       "equals": "là",

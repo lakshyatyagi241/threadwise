@@ -32,7 +32,8 @@
       "journey": "Ścieżka",
       "who": "Kto",
       "activity": "Aktywność",
-      "properties": "Właściwości"
+      "properties": "Właściwości",
+      "company": "Właściwość firmy"
     },
     "operators": {
       "equals": "jest",

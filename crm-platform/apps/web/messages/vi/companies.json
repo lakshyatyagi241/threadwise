@@ -4,7 +4,9 @@
       "companies": "Công ty"
     },
     "common": {
-      "dismiss": "Bỏ qua"
+      "dismiss": "Bỏ qua",
+      "yes": "Có",
+      "no": "Không"
     },
     "errors": {
       "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
@@ -18,7 +20,10 @@
       "planDisabled": "Gói của bạn không bao gồm công ty. Hãy nâng cấp để mở khóa.",
       "ownerInvalid": "Người phụ trách phải là thành viên đang hoạt động của không gian làm việc này.",
       "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
-      "retry": "Thử lại"
+      "retry": "Thử lại",
+      "filterInvalid": "Không thể dùng một trong các điều kiện thuộc tính. Hãy kiểm tra thuộc tính và giá trị của nó.",
+      "exportTooLarge": "Có quá nhiều công ty cho một tệp. Hãy thu hẹp danh sách bằng bộ lọc rồi xuất lại.",
+      "importInvalid": "Không thể nhập tệp này. Tệp cần có dòng đầu tiên đặt tên các cột, gồm cột name hoặc website, và tối đa 1.000 công ty."
     },
     "list": {
       "eyebrow": "CRM · Tổ chức",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Xóa công ty",
       "deleteManyMessage": "{count, plural, other {Xóa # công ty này? Các liên hệ và giao dịch của chúng được giữ lại và chỉ bị bỏ liên kết.}}",
       "delete": "Xóa",
-      "keep": "Giữ lại"
+      "keep": "Giữ lại",
+      "export": "Xuất",
+      "import": "Nhập"
     },
     "toolbar": {
       "label": "Lọc công ty",
@@ -69,7 +76,14 @@
         "name": "Tên A đến Z"
       },
       "clear": "Xóa",
-      "refresh": "Làm mới"
+      "refresh": "Làm mới",
+      "sortByProperty": "Bởi {name}",
+      "direction": "Hướng",
+      "directions": {
+        "default": "Hướng thường dùng",
+        "asc": "Tăng dần",
+        "desc": "Giảm dần"
+      }
     },
     "table": {
       "label": "Công ty",
@@ -82,7 +96,13 @@
       "wonValue": "Giá trị thắng",
       "actions": "Thao tác",
       "delete": "Xóa công ty",
-      "deleteNamed": "Xóa công ty {name}"
+      "deleteNamed": "Xóa công ty {name}",
+      "website": "Website",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "size": "Quy mô",
+      "owner": "Người phụ trách",
+      "created": "Ngày tạo"
     },
     "form": {
       "eyebrow": "Công ty",
@@ -136,7 +156,8 @@
       "contactUnlinkFailed": "Không thể gỡ liên hệ. Hãy thử lại.",
       "contactsLinked": "{count, plural, other {Đã thêm # liên hệ vào công ty.}}",
       "contactsLinkedSome": "{count, plural, other {Đã thêm # liên hệ}}, {failed, plural, other {# liên hệ không thể thêm.}}",
-      "contactsLinkFailed": "Không thể thêm các liên hệ. Hãy thử lại."
+      "contactsLinkFailed": "Không thể thêm các liên hệ. Hãy thử lại.",
+      "exportFailed": "Không thể tạo tệp xuất. Hãy thử lại sau giây lát."
     },
     "detail": {
       "back": "Tất cả công ty",
@@ -163,7 +184,8 @@
       "updated": "Thay đổi lần cuối",
       "properties": "Thuộc tính",
       "yes": "Có",
-      "no": "Không"
+      "no": "Không",
+      "generateBrief": "Tạo bản tóm tắt"
     },
     "contacts": {
       "title": "Liên hệ",
@@ -263,6 +285,92 @@
         "visibleHint": "Hiển thị trên biểu mẫu công ty và trang công ty.",
         "conditionsHint": "Ẩn thuộc tính này trên biểu mẫu công ty cho đến khi thuộc tính khác có giá trị.",
         "deactivateNote": "Việc lưu sẽ ẩn thuộc tính này khỏi biểu mẫu và trang công ty. Các giá trị mà công ty đang giữ vẫn được lưu."
+      }
+    },
+    "columns": {
+      "button": "Cột",
+      "label": "Chọn cột",
+      "hint": "Bảng sẽ ghi nhớ lựa chọn của bạn trên trình duyệt này.",
+      "reset": "Quay lại các cột thường dùng"
+    },
+    "propertyFilters": {
+      "button": "Thuộc tính",
+      "label": "Lọc theo thuộc tính công ty",
+      "hint": "Hiển thị các công ty thỏa mãn tất cả điều kiện sau.",
+      "none": "Chưa có điều kiện nào.",
+      "noProperties": "Chưa có thuộc tính công ty nào có thể lọc. Hãy thêm trong Cài đặt, Thuộc tính công ty.",
+      "property": "Thuộc tính của điều kiện {n}",
+      "operator": "Toán tử của điều kiện {n}",
+      "value": "Giá trị của điều kiện {n}",
+      "remove": "Xóa điều kiện {n}",
+      "add": "Thêm điều kiện",
+      "clear": "Xóa tất cả",
+      "apply": "Áp dụng"
+    },
+    "import": {
+      "eyebrow": "Công ty",
+      "title": "Nhập công ty",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "done": "Xong",
+      "start": "Nhập",
+      "file": "Tệp CSV",
+      "choose": "Chọn tệp CSV",
+      "change": "Chọn tệp khác",
+      "tooBig": "Tệp quá lớn. Hãy chia nhỏ và nhập từng phần.",
+      "intro": "Dòng đầu tiên đặt tên các cột: name (hoặc website), email, phone, industry, size, address, notes, owner (email hoặc tên của một thành viên) và bất kỳ thuộc tính công ty nào theo nhãn của nó. Tối đa {max} công ty mỗi tệp.",
+      "match": "Bổ sung thông tin cho các công ty đã có",
+      "matchHint": "Công ty có cùng website (hoặc cùng tên nếu không có website) sẽ được điền các trường còn trống. Những gì đã có sẽ không bị thay đổi.",
+      "summary": "{total, plural, one {Đã đọc # dòng} other {Đã đọc # dòng}}: {created} đã tạo, {updated} đã bổ sung, {unchanged} không đổi, {failed} chưa nhập được.",
+      "ignored": "Các cột này không được nhận dạng và đã bị bỏ qua: {columns}.",
+      "failedTitle": "{count, plural, one {# dòng chưa được nhập} other {# dòng chưa được nhập}}",
+      "line": "Dòng {line}",
+      "moreFailed": "{count, plural, one {Và # mục nữa.} other {Và # mục nữa.}}"
+    },
+    "brief": {
+      "title": "Tóm tắt tài khoản",
+      "subtitle": "Do AI viết từ dữ liệu CRM mà bạn có thể thấy. Hãy kiểm tra trước khi dựa vào.",
+      "loading": "Đang tải bản tóm tắt",
+      "unavailableTitle": "AI chưa được thiết lập cho không gian làm việc này",
+      "unavailable": "Bản tóm tắt do một mô hình AI viết, và không gian làm việc này chưa có khóa AI nên không có gì được gửi đi.",
+      "addKey": "Thêm khóa AI",
+      "askAdmin": "Hãy nhờ quản trị viên thêm khóa AI.",
+      "empty": "Nhận bản tóm tắt ngắn về công ty này: họ là ai, các giao dịch và công việc, mức độ hoạt động của cuộc trò chuyện, rủi ro và việc nên làm tiếp theo.",
+      "generate": "Tạo bản tóm tắt",
+      "regenerate": "Viết lại",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép bản tóm tắt.",
+      "copyFailed": "Không thể sao chép bản tóm tắt. Hãy chọn văn bản và sao chép thủ công.",
+      "copyTitle": "{name}: tóm tắt tài khoản",
+      "stale": "CRM đã thay đổi kể từ khi bản tóm tắt này được viết. Hãy viết lại để có bản mới nhất.",
+      "writtenBy": "Viết ngày {date} bởi {model}. AI có thể sai.",
+      "notice": "Mô hình nhận số lượng, ngày tháng, số tiền và tiêu đề ngắn. Mô hình không bao giờ nhận tên liên hệ, địa chỉ email, số điện thoại, ghi chú công ty hay nội dung tin nhắn, và các số cùng địa chỉ email trong tiêu đề sẽ được xóa trước.",
+      "basedOn": "Dựa trên: {kinds}. Chỉ tính những gì vai trò của bạn được phép xem.",
+      "basedOnNone": "Chỉ dựa trên thông tin công ty: vai trò của bạn không hiển thị liên hệ, giao dịch, công việc hay cuộc trò chuyện.",
+      "errors": {
+        "tooSoon": "Một bản tóm tắt vừa được viết cách đây ít phút. Hãy chờ một chút trước khi yêu cầu lại.",
+        "providerFailed": "Dịch vụ AI không thể viết bản tóm tắt. Hãy thử lại sau giây lát.",
+        "limit": "Hạn mức AI tạm thời đã hết. Hãy thử lại sau hoặc liên hệ quản trị viên.",
+        "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+        "notFound": "Công ty đó không còn tồn tại.",
+        "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",
+        "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát."
+      },
+      "sections": {
+        "activity": "Hoạt động gần đây",
+        "deals": "Giao dịch",
+        "tasks": "Công việc",
+        "conversations": "Cuộc trò chuyện",
+        "properties": "Thuộc tính chính",
+        "risks": "Rủi ro",
+        "nextSteps": "Bước tiếp theo"
+      },
+      "source": {
+        "properties": "thuộc tính công ty",
+        "contacts": "liên hệ",
+        "deals": "giao dịch",
+        "tasks": "công việc",
+        "conversations": "cuộc trò chuyện"
       }
     }
   }

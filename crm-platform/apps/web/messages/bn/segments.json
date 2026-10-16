@@ -32,7 +32,8 @@
       "journey": "যাত্রা",
       "who": "কে",
       "activity": "কার্যকলাপ",
-      "properties": "বৈশিষ্ট্য"
+      "properties": "বৈশিষ্ট্য",
+      "company": "কোম্পানি প্রপার্টি"
     },
     "operators": {
       "equals": "হয়",
