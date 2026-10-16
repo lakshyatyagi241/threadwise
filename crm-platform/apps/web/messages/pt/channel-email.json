@@ -120,7 +120,13 @@
       "limitDefault": "Padrão da plataforma",
       "limitPerHour": "{count, plural, one {# e-mail por hora} other {# e-mails por hora}}",
       "limitSaved": "Limite de envios salvo.",
-      "needsReauthImap": "O servidor de e-mail recusou a senha salva. Reconecte e digite a senha novamente."
+      "needsReauthImap": "O servidor de e-mail recusou a senha salva. Reconecte e digite a senha novamente.",
+      "test": "Testar conexão",
+      "testing": "Testando",
+      "lag": "Atraso",
+      "lagUnderMinute": "Menos de um minuto",
+      "lagMinutes": "{count, plural, one {# minuto} other {# minutos}}",
+      "lagHours": "{count, plural, one {# hora} other {# horas}}"
     },
     "outcome": {
       "connected": "Caixa de e-mail conectada. Os e-mails dos últimos 7 dias estão sendo buscados na caixa de entrada.",
@@ -325,6 +331,26 @@
         "smtpAuth": "O servidor de saída (SMTP) recusou o usuário ou a senha. Confira e tente novamente.",
         "unreachable": "Não foi possível alcançar o servidor de e-mail ou o certificado dele não é válido. Confira servidor, porta e segurança.",
         "generic": "Não foi possível conectar a caixa. Tente novamente."
+      },
+      "test": {
+        "button": "Testar credenciais",
+        "testing": "Testando",
+        "imap": "Entrada (IMAP)",
+        "smtp": "Saída (SMTP)",
+        "ok": "Login realizado.",
+        "inbox": "Login realizado. A caixa de entrada tem {count, plural, one {# mensagem} other {# mensagens}}.",
+        "smtpOk": "Login realizado. Nada foi enviado.",
+        "note": "Nada foi salvo e nenhum e-mail foi enviado.",
+        "tooMany": "Testes demais em pouco tempo. Aguarde um minuto e tente de novo.",
+        "failed": "Não foi possível executar o teste. Tente de novo.",
+        "reasons": {
+          "auth_failed": "O servidor recusou o nome de usuário ou a senha.",
+          "tls": "Não foi possível verificar a conexão segura. Confira o nome do servidor e a configuração de segurança.",
+          "unreachable": "Não foi possível alcançar o servidor. Confira o servidor, a porta e a configuração de segurança.",
+          "blocked_address": "Este endereço de servidor não é permitido.",
+          "rejected": "O servidor recusou a solicitação.",
+          "unknown": "O servidor não respondeu como esperado."
+        }
       }
     },
     "sharing": {

@@ -30,10 +30,13 @@ Unofficial API (QR-paired) or Twilio number.
 3. Add screens and fields from the field list: headings, short text, paragraphs, email, phone number, number,
    date, and the choice fields (dropdown, radio buttons, checkboxes). Mark a field **Required** if the customer
    must answer it before continuing.
-4. Set the **Send button label** (what the final button on the form says) and an optional **Thank-you note** shown
+4. For each field, you can pick what it **maps to**: a contact field (full name, first name, last name, email,
+   job title, language, address) or any of your workspace's custom properties. Leave it as "Don't save to a
+   contact property" to only keep the answer in the submission. A heading has nothing to map — it has no answer.
+5. Set the **Send button label** (what the final button on the form says) and an optional **Thank-you note** shown
    after submission.
-5. Select **Save draft** to keep working later, or **Save & publish** to push it live to WhatsApp.
-6. In the flow builder, add a **WhatsApp Form** node and pick this form from the list — only published forms are
+6. Select **Save draft** to keep working later, or **Save & publish** to push it live to WhatsApp.
+7. In the flow builder, add a **WhatsApp Form** node and pick this form from the list — only published forms are
    offered there.
 
 ## Editing a published form
@@ -45,6 +48,10 @@ publishing is safe to repeat; it reuses the same WhatsApp Flow instead of creati
 
 Open a form's **Submissions** page to see every answer, newest first, with the customer's name and phone number
 alongside each field. Select **Export CSV** to download the full list.
+
+A field mapped to a contact property is saved onto the contact the moment they submit — a deleted or deactivated
+custom property is skipped silently rather than failing the submission, so an old mapping never blocks a new
+answer from being kept. The contact's phone number can never be overwritten this way.
 
 ## If publishing fails
 

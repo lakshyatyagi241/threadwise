@@ -49,7 +49,8 @@
       "delete": "删除",
       "cancel": "取消",
       "deleted": "规则已删除。",
-      "deleteFailed": "无法删除规则。"
+      "deleteFailed": "无法删除规则。",
+      "businessHours": "营业时间"
     },
     "rules": {
       "someone": "某位客服",
@@ -397,6 +398,38 @@
       },
       "testSkipped": "因无人可用而被跳过：{names}",
       "testOff": "上方的开关处于关闭状态，所以这里只显示开启后会发生的情况。"
+    },
+    "businessHours": {
+      "eyebrow": "自动分配",
+      "title": "营业时间",
+      "subtitle": "使用营业时间的规则和 SLA 目标只计算这些时段内的时间。",
+      "close": "关闭",
+      "loading": "正在加载营业时间",
+      "loadFailed": "无法加载营业时间。",
+      "timezone": "时区",
+      "timezoneHint": "上方所有日期和时间均以此时区为准。",
+      "timezoneOwnerOnly": "只有工作区所有者可以更改时区。",
+      "days": "营业日和时间",
+      "day": {
+        "mon": "星期一",
+        "tue": "星期二",
+        "wed": "星期三",
+        "thu": "星期四",
+        "fri": "星期五",
+        "sat": "星期六",
+        "sun": "星期日"
+      },
+      "from": "开始",
+      "to": "结束",
+      "problem": {
+        "required": "请填写两个时间。",
+        "order": "结束时间必须晚于开始时间。"
+      },
+      "note": "已关闭的日期全天不营业。在保存之前，工作区视为全天营业。",
+      "cancel": "取消",
+      "save": "保存营业时间",
+      "saved": "营业时间已保存",
+      "saveFailed": "保存失败"
     }
   }
 }

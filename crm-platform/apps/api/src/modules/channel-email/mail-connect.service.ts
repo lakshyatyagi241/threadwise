@@ -22,7 +22,7 @@ import { MailDriverError } from './drivers/mail-driver';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import { MailAccess } from './mail-access.service';
 import { MailChannelSync } from './mail-channel.sync';
-import { publicSummaryOf, sealConnection } from './mail-connection';
+import { passwordConnectionOf, publicSummaryOf, sealConnection } from './mail-connection';
 import { mailboxLimit, notConfigured } from './mail-errors';
 import { MailPlan } from './mail-plan';
 import {
@@ -259,16 +259,7 @@ export class MailConnectService {
       if (limit > 0 && active >= limit) throw mailboxLimit(limit);
     }
 
-    const connection: PasswordConnection = {
-      imap: { ...input.imap },
-      smtp: {
-        host: input.smtp.host,
-        port: input.smtp.port,
-        security: input.smtp.security,
-        username: input.smtp.username ?? input.imap.username,
-        password: input.smtp.password ?? input.imap.password,
-      },
-    };
+    const connection: PasswordConnection = passwordConnectionOf(input);
     let account: MailAccountProfile;
     try {
       account = await driver.verify(connection);

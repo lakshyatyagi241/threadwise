@@ -95,7 +95,21 @@
         "required": "مطلوب",
         "removeField": "إزالة",
         "options": "الخيارات (مفصولة بفواصل)",
-        "optionsPlaceholder": "خيار 1، خيار 2، خيار 3"
+        "optionsPlaceholder": "خيار 1، خيار 2، خيار 3",
+        "mapsTo": "يُربط بـ",
+        "mapsToHint": "احفظ هذه الإجابة في خاصية جهة اتصال عند إرسال النموذج.",
+        "mapsToNone": "عدم الحفظ في خاصية جهة اتصال",
+        "mapsToSystemGroup": "حقول جهة الاتصال",
+        "mapsToCustomGroup": "خصائص مخصصة",
+        "mapsToSystem": {
+          "name": "الاسم الكامل",
+          "first_name": "الاسم الأول",
+          "last_name": "اسم العائلة",
+          "email": "البريد الإلكتروني",
+          "title": "المسمى الوظيفي",
+          "language": "اللغة",
+          "address": "العنوان"
+        }
       },
       "fieldKind": {
         "heading": "عنوان",

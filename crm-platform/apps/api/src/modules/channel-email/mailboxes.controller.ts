@@ -14,14 +14,17 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   connectImapMailboxSchema,
   startMailboxConnectSchema,
+  testImapMailboxSchema,
   updateMailboxSchema,
   type ConnectImapMailboxInput,
   type StartMailboxConnectInput,
+  type TestImapMailboxInput,
   type UpdateMailboxInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
+import { MailConnectionTester } from './mail-connection-test.service';
 import { MailConnectService } from './mail-connect.service';
 import { MailboxesService } from './mailboxes.service';
 
@@ -56,6 +59,7 @@ export class MailboxesController {
   constructor(
     private readonly mailboxes: MailboxesService,
     private readonly connect: MailConnectService,
+    private readonly tester: MailConnectionTester,
   ) {}
 
   @Get()
@@ -93,6 +97,30 @@ export class MailboxesController {
   async connectImap(@Body(zodPipe(connectImapMailboxSchema)) body: ConnectImapMailboxInput) {
     const row = await this.connect.connectWithPassword(body);
     return this.mailboxes.get(row.uuid);
+  }
+
+  @Post('test-imap')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
+  @ApiOperation({
+    summary: 'Test IMAP/SMTP settings without saving them',
+    description:
+      'Tries both servers with the settings in the body: connect, sign in and open the INBOX (IMAP); connect, greet and sign in (SMTP). Nothing is stored and nothing is sent. Both sides are always tried and each answers on its own (`ok`, the failed step, a reason code and a sentence), so a refused password never hides a wrong port. 429 MAIL_RATE_LIMITED after 6 tests a minute per workspace; 422 for a body that is not settings. The SSRF guard and certificate checks of connect apply.',
+  })
+  testImap(@Body(zodPipe(testImapMailboxSchema)) body: TestImapMailboxInput) {
+    return this.tester.testNew(body);
+  }
+
+  @Post(':id/test')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('mail.mailboxes.manage', 'mail.mailboxes.manage_personal')
+  @ApiOperation({
+    summary: 'Test a connected IMAP/SMTP mailbox with its saved login',
+    description:
+      'Same answer as `test-imap`, using the login the mailbox already holds (it never leaves the server). Works on a mailbox that needs reconnecting, which is when it helps most. 409 MAIL_MAILBOX_UNAVAILABLE for a disconnected mailbox; 422 MAIL_PROVIDER_UNSUPPORTED for Gmail or Microsoft 365 (they have no password to test); acting on it needs the same right as Sync now.',
+  })
+  testStored(@Param('id', ParseUUIDPipe) id: string) {
+    return this.tester.testStored(id);
   }
 
   @Patch(':id')

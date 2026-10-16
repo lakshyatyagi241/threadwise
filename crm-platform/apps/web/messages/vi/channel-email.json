@@ -120,7 +120,13 @@
       "limitDefault": "Mặc định của nền tảng",
       "limitPerHour": "{count, plural, other {# email mỗi giờ}}",
       "limitSaved": "Đã lưu giới hạn gửi.",
-      "needsReauthImap": "Máy chủ thư đã từ chối mật khẩu đã lưu. Hãy kết nối lại và nhập lại mật khẩu."
+      "needsReauthImap": "Máy chủ thư đã từ chối mật khẩu đã lưu. Hãy kết nối lại và nhập lại mật khẩu.",
+      "test": "Kiểm tra kết nối",
+      "testing": "Đang kiểm tra",
+      "lag": "Chậm",
+      "lagUnderMinute": "Dưới một phút",
+      "lagMinutes": "{count, plural, other {# phút}}",
+      "lagHours": "{count, plural, other {# giờ}}"
     },
     "outcome": {
       "connected": "Đã kết nối hộp thư. Email trong 7 ngày gần nhất đang được lấy về hộp thư đến.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Máy chủ thư đi (SMTP) đã từ chối tên người dùng hoặc mật khẩu. Hãy kiểm tra và thử lại.",
         "unreachable": "Không thể kết nối tới máy chủ thư hoặc chứng chỉ của nó không hợp lệ. Hãy kiểm tra máy chủ, cổng và bảo mật.",
         "generic": "Không thể kết nối hộp thư. Hãy thử lại."
+      },
+      "test": {
+        "button": "Kiểm tra thông tin đăng nhập",
+        "testing": "Đang kiểm tra",
+        "imap": "Thư đến (IMAP)",
+        "smtp": "Thư đi (SMTP)",
+        "ok": "Đăng nhập thành công.",
+        "inbox": "Đăng nhập thành công. Hộp thư đến có {count, plural, other {# thư}}.",
+        "smtpOk": "Đăng nhập thành công. Không có gì được gửi đi.",
+        "note": "Không có gì được lưu và không có email nào được gửi.",
+        "tooMany": "Quá nhiều lần kiểm tra trong thời gian ngắn. Hãy đợi một phút rồi thử lại.",
+        "failed": "Không thể chạy kiểm tra. Hãy thử lại.",
+        "reasons": {
+          "auth_failed": "Máy chủ từ chối tên người dùng hoặc mật khẩu.",
+          "tls": "Không thể xác minh kết nối bảo mật. Hãy kiểm tra tên máy chủ và cài đặt bảo mật.",
+          "unreachable": "Không thể kết nối tới máy chủ. Hãy kiểm tra máy chủ, cổng và cài đặt bảo mật.",
+          "blocked_address": "Địa chỉ máy chủ này không được phép.",
+          "rejected": "Máy chủ đã từ chối yêu cầu.",
+          "unknown": "Máy chủ không phản hồi như mong đợi."
+        }
       }
     },
     "sharing": {

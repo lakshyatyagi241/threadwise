@@ -20,15 +20,50 @@ Scrape `http://<container>:9464/metrics` with `Authorization: Bearer <token>`, j
 (`deploy/observability/prometheus.yml` is the template, token read from a file). Load `deploy/observability/event-loop.rules.yml`
 into Prometheus. Without `OBS_METRICS_PORT` the process still measures and still logs `event loop blocked`, but nothing scrapes it.
 
-**Verified end to end, locally:** `node tools/event-loop-audit/scrape-demo.mjs [--stall]` runs the BUILT API and worker as real
-processes, a real `prom/prometheus` container with these files, and asks Prometheus what it sees: both targets up, the series present
-with the expected labels, all 11 rules loaded and evaluating, a real job visible, `RuntimeMetricsTargetDown` firing when the worker is
-killed and, with `--stall`, `EventLoopBlockingWithImpact` firing from a stall injected into the live API through its inspector.
-Needs Docker and the built API (`pnpm --filter @crm/api build`); about 10 minutes, 25 with `--stall`.
+### Production (Hostinger stack): one command, opt-in
 
-**Not wired into `deploy/hostinger/docker-compose.yml`:** that stack has no Prometheus or Grafana service and the `OBS_*` variables are
-not set on `api`/`worker`. Adding them is a deployment decision (a new service and memory on the VPS, where the metrics are kept), not
-something the repo has settled; until then production emits the metrics and logs the blocked-loop line, and nothing stores them.
+```bash
+cd /opt/desk && ./deploy/hostinger/observability-up.sh   # next to docker-compose.yml and .env
+```
+
+It makes `OBS_METRICS_TOKEN`, asks for the URL alerts go to (a webhook that accepts Alertmanager's JSON; hidden input), pulls
+`prom/prometheus:v2.55.0` and `prom/alertmanager:v0.27.0`, and starts `api`, `worker`, a `probe` and the two collectors with
+`deploy/hostinger/observability.compose.yml`. Nothing is published to the internet or routed through Traefik; look with
+`docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/alerts`
+or an SSH tunnel. It restarts `api` and `worker`, so run it in a quiet minute. Without the overlay the base compose file keeps the
+metrics listener off (`OBS_METRICS_PORT` defaults to 0), exactly as before. Memory added: Prometheus 384m, Alertmanager 128m, probe 128m.
+
+The listener refuses to start on a non-loopback address without `OBS_METRICS_TOKEN` and logs why; an unauthenticated `/metrics`
+would be reachable by anything on the network.
+
+**Not yet done on any real server.** The files are validated (`docker compose config`, bash syntax) and the same three processes and
+the same Prometheus and Alertmanager config files run in the demo, but no host has been changed.
+
+### What pages whom
+
+| Alert                                                                   | Severity | Meaning                                                                                 |
+| ----------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------- |
+| `EventLoopBlockingWithImpact`, `WorkerEventLoopBlockingWithQueueImpact` | critical | Sustained loop degradation plus callers or the queue visibly hurting                    |
+| `ApiCallerLatencyHigh`, `ApiProbeFailing`                               | critical | A client outside the API process sees p95 over 1 s, or the probe fails                  |
+| `EventLoopLongStallCritical`                                            | critical | One window with the loop blocked over 10 s (no hold; a single block pages)              |
+| `RuntimeMetricsTargetDown`                                              | critical | A scrape target has been down for 2 minutes (process dead, or blocked longer than that) |
+| `EventLoopLongStallWarning`, delay and utilization warnings             | warning  | Over 2 s once; sustained delay or utilization. Not for waking people                    |
+
+The 2 s and 10 s long-stall thresholds are judgement calls, not measured limits: change them in `event-loop.rules.yml` and in
+`event-loop.rules.test.yml` together. `alertmanager.yml` has a single webhook receiver and no per-severity routing, so warnings and criticals go to the same place; split
+them there when the destination is chosen (its comments show Slack and PagerDuty receivers). One inhibit rule keeps a warning quiet
+while a critical with the same `service` and `instance` is firing. Slack and Discord webhooks do not accept Alertmanager's JSON as it is.
+
+**Verified end to end, locally:** `node tools/event-loop-audit/scrape-demo.mjs [--stall]` runs the BUILT API, worker and probe as
+real processes, a real `prom/prometheus` and `prom/alertmanager` with the files from `deploy/observability` (addresses and
+intervals only are rewritten), and a small HTTP server standing in for the alert destination. It checks: all three targets up and
+labelled as the rules expect, the series present, all 15 rules loaded and evaluating, a real job visible, nothing firing when idle;
+with `--stall` also a 1.5 s API stall (`EventLoopBlockingWithImpact` and `ApiCallerLatencyHigh` fire; callers and the probe see
+over a second, the server's request histogram sees 7 ms), a 600 ms worker stall with 20,000 queued jobs
+(`WorkerEventLoopBlockingWithQueueImpact` fires), one 12 s block (`EventLoopLongStallCritical` fires), the killed worker
+(`RuntimeMetricsTargetDown`), and that firing and resolved notifications reach the receiver. Needs Docker and the built API
+(`pnpm --filter @crm/api build`); about 10 minutes, 35 with `--stall`. `--phases=api,worker,long` picks phases. Results of the last
+run: `evidence/scrape-demo.json`.
 
 Two things that differ from what the code emits, seen in the real scrape:
 
@@ -45,7 +80,7 @@ docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom
 docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/event-loop.rules.test.yml
 ```
 
-`check` validates syntax and PromQL (11 rules). `test` feeds synthetic series and asserts which alerts fire at which time, including the
+`check` validates syntax and PromQL (15 rules). `test` feeds synthetic series and asserts which alerts fire at which time, including the
 near-misses that must not page: high utilization alone, high delay with fast requests or a fast queue, a live heartbeat, a scrape
 target that is not ours. Both run in the `event-loop` job of `quality.yml`. Mutation-checked: loosening the API impact threshold, the
 worker queue threshold or the stale threshold makes the matching case fail.
@@ -55,17 +90,19 @@ timing, and that anyone gets paged. Change a threshold or add an alert only toge
 
 ## Reading the signals
 
-| You see                          | It usually means                                       | Check                                                      |
-| -------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------- |
-| Delay p95/p99 up **and** CPU up  | Synchronous CPU work                                   | CPU profile (below); the `slowestRequests` in the log line |
-| API latency up, delay low        | Slow DB / network / dependency                         | Traces, query timings. Not a loop problem                  |
-| Delay up, request histogram flat | A blocked loop: requests queue BEFORE the handler runs | Trust the loop delay; callers see it, the histogram cannot |
-| Delay up with GC pause max up    | Allocation pressure                                    | Heap trend, large temporary arrays/strings                 |
-| ELU high, delay low              | Busy but responsive                                    | Capacity headroom, not a defect. Do not "fix" it           |
-| Low host CPU, severe delay       | One core blocked, sync I/O or cgroup throttling        | `crm_container_cpu_throttled_*`, per-instance panel        |
-| Delay creeping up over hours     | Leak or buildup                                        | Heap/RSS, `crm_process_active_resources`, queue depth      |
-| One instance bad, others fine    | Bad pod or a hot tenant routed to it                   | Compare by `instance` label                                |
-| `RuntimeMetricsStale`            | Loop blocked for over a minute, or the process is gone | Process state first, scrape second                         |
+| You see                          | It usually means                                       | Check                                                                                      |
+| -------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Delay p95/p99 up **and** CPU up  | Synchronous CPU work                                   | CPU profile (below); the `slowestRequests` in the log line                                 |
+| API latency up, delay low        | Slow DB / network / dependency                         | Traces, query timings. Not a loop problem                                                  |
+| Delay up, request histogram flat | A blocked loop: requests queue BEFORE the handler runs | Trust the loop delay; callers see it, the histogram cannot                                 |
+| Delay up with GC pause max up    | Allocation pressure                                    | Heap trend, large temporary arrays/strings                                                 |
+| ELU high, delay low              | Busy but responsive                                    | Capacity headroom, not a defect. Do not "fix" it                                           |
+| Low host CPU, severe delay       | One core blocked, sync I/O or cgroup throttling        | `crm_container_cpu_throttled_*`, per-instance panel                                        |
+| Delay creeping up over hours     | Leak or buildup                                        | Heap/RSS, `crm_process_active_resources`, queue depth                                      |
+| One instance bad, others fine    | Bad pod or a hot tenant routed to it                   | Compare by `instance` label                                                                |
+| `RuntimeMetricsStale`            | The scrape answers but the report is old (loop stuck)  | Process state first, scrape second. A dead process is `RuntimeMetricsTargetDown`, not this |
+| `ApiCallerLatencyHigh`           | Callers wait over 1 s, as timed by the probe process   | Loop delay (blocked loop) vs DB/network (loop quiet); the probe's own `crm_probe_up`       |
+| `EventLoopLongStallCritical`     | One window with the loop blocked over 10 s             | The `event loop blocked` log line for that minute; the profile steps below                 |
 
 Healthy reading: a 10 ms-resolution histogram reports about 10 ms at p50 (about 15 ms on Windows). That is the resolution floor, not delay.
 

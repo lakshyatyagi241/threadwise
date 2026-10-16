@@ -29,6 +29,7 @@ import {
   KEYS,
 } from '../api/routing';
 import { namesSummary, whenChips } from '../lib/summary';
+import { BusinessHoursDialog } from './business-hours-dialog';
 
 const isCode = (e: unknown, code: string) => e instanceof ApiError && e.code === code;
 const reason = (e: unknown, fallback: string) =>
@@ -53,6 +54,7 @@ export function AutoAssignmentScreen() {
   const assignees = useAssignees(canRead);
   const [busy, setBusy] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<RoutingRule | null>(null);
+  const [hoursOpen, setHoursOpen] = useState(false);
 
   const rows = useMemo(() => rules.data?.pages.flatMap((p) => p.data) ?? [], [rules.data]);
   const first = rules.data?.pages[0];
@@ -140,25 +142,38 @@ export function AutoAssignmentScreen() {
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{t('title')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
         </div>
-        {canManage && !locked && (
-          <div className="text-end">
-            {atLimit ? (
-              <Button disabled>{t('create')}</Button>
-            ) : (
-              <Link href="/auto-assignment/new">
-                <Button>{t('create')}</Button>
-              </Link>
-            )}
-            {first?.limit != null && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                {atLimit
-                  ? t('limitReached', { limit: first.limit })
-                  : t('limitUsed', { used: first.total, limit: first.limit })}
-              </p>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap items-start justify-end gap-2">
+          {canRead && !locked && (
+            <Button variant="secondary" onClick={() => setHoursOpen(true)}>
+              {t('businessHours')}
+            </Button>
+          )}
+          {canManage && !locked && (
+            <div className="text-end">
+              {atLimit ? (
+                <Button disabled>{t('create')}</Button>
+              ) : (
+                <Link href="/auto-assignment/new">
+                  <Button>{t('create')}</Button>
+                </Link>
+              )}
+              {first?.limit != null && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {atLimit
+                    ? t('limitReached', { limit: first.limit })
+                    : t('limitUsed', { used: first.total, limit: first.limit })}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </header>
+
+      <BusinessHoursDialog
+        open={hoursOpen}
+        canManage={canManage}
+        onClose={() => setHoursOpen(false)}
+      />
 
       {!locked && (
         <div className="flex flex-wrap items-start justify-between gap-4 rounded-xl border border-border bg-background p-4">

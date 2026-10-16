@@ -19,6 +19,7 @@ function build(opts: { channel?: boolean; live?: unknown }) {
     runs as never,
     engine as never,
     {} as never,
+    {} as never,
   );
   return { resume, runs, engine };
 }

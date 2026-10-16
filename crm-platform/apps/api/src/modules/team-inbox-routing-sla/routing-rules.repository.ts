@@ -279,12 +279,45 @@ export class RoutingRulesRepository {
       WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
+  /**
+   * The schedule (`workspace_settings.business_hours`, JSON text, null when never saved) and the zone the owner set on the workspace
+   * (`organizations.settings.timezone`, the one the profile and every other screen read; `workspace_settings.timezone` is never written).
+   */
   async businessHours(tx: Tx, orgId: number): Promise<{ hours: unknown; timezone: string }> {
-    const res = await tx.execute(
-      sql`SELECT business_hours, timezone FROM workspace_settings WHERE org_id = ${orgId}`,
-    );
+    const res = await tx.execute(sql`
+      SELECT ws.business_hours, COALESCE(o.settings ->> 'timezone', 'UTC') AS timezone
+      FROM organizations o
+      LEFT JOIN workspace_settings ws ON ws.org_id = o.id
+      WHERE o.id = ${orgId}`);
     const r = rowsOf(res)[0];
     return { hours: r?.business_hours ?? null, timezone: (r?.timezone as string | null) ?? 'UTC' };
+  }
+
+  /** Who the workspace owner is (the uuid the org settings name), null when the workspace names none. */
+  async ownerUuid(tx: Tx, orgId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT settings ->> 'ownerUserId' AS owner FROM organizations WHERE id = ${orgId}`,
+    );
+    return (rowsOf(res)[0]?.owner as string | null | undefined) ?? null;
+  }
+
+  async userUuid(tx: Tx, orgId: number, userId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid::text AS uuid FROM users WHERE org_id = ${orgId} AND id = ${userId}`,
+    );
+    return (rowsOf(res)[0]?.uuid as string | undefined) ?? null;
+  }
+
+  async setBusinessHours(tx: Tx, orgId: number, hours: string): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO workspace_settings (org_id, business_hours) VALUES (${orgId}, ${hours})
+      ON CONFLICT (org_id) DO UPDATE SET business_hours = EXCLUDED.business_hours`);
+  }
+
+  async setOrgTimezone(tx: Tx, orgId: number, zone: string): Promise<void> {
+    await tx.execute(sql`
+      UPDATE organizations SET settings = settings || jsonb_build_object('timezone', ${zone}::text)
+      WHERE id = ${orgId}`);
   }
 
   /** The contact matches the compiled segment rules (a condition over `contacts`). */

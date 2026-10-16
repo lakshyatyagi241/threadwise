@@ -5,6 +5,7 @@ import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import { BroadcastsModule, EngineSenderRegistry } from '../broadcasts';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
 import { ContactConsentModule } from '../contact-consent';
+import { CrmModule } from '../crm';
 import { EmailTemplatesModule } from '../email-templates';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
@@ -38,6 +39,7 @@ import { MailboxesService } from './mailboxes.service';
     BroadcastsModule,
     ChatConversationsModule,
     ContactConsentModule,
+    CrmModule,
     EmailTemplatesModule,
     PlatformSettingsModule,
     PlansCoreModule,

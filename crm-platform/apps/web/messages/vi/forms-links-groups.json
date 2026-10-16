@@ -95,7 +95,21 @@
         "required": "Bắt buộc",
         "removeField": "Xóa",
         "options": "Tùy chọn (cách nhau bằng dấu phẩy)",
-        "optionsPlaceholder": "Tùy chọn 1, Tùy chọn 2, Tùy chọn 3"
+        "optionsPlaceholder": "Tùy chọn 1, Tùy chọn 2, Tùy chọn 3",
+        "mapsTo": "Ánh xạ tới",
+        "mapsToHint": "Lưu câu trả lời này vào thuộc tính liên hệ khi biểu mẫu được gửi.",
+        "mapsToNone": "Không lưu vào thuộc tính liên hệ",
+        "mapsToSystemGroup": "Trường liên hệ",
+        "mapsToCustomGroup": "Thuộc tính tùy chỉnh",
+        "mapsToSystem": {
+          "name": "Họ và tên",
+          "first_name": "Tên",
+          "last_name": "Họ",
+          "email": "Email",
+          "title": "Chức danh",
+          "language": "Ngôn ngữ",
+          "address": "Địa chỉ"
+        }
       },
       "fieldKind": {
         "heading": "Đề mục",

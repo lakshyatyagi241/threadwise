@@ -120,7 +120,13 @@
       "limitDefault": "Platformstandaard",
       "limitPerHour": "{count, plural, one {# e-mail per uur} other {# e-mails per uur}}",
       "limitSaved": "Verzendlimiet opgeslagen.",
-      "needsReauthImap": "De mailserver weigerde het opgeslagen wachtwoord. Koppel opnieuw en voer het wachtwoord nogmaals in."
+      "needsReauthImap": "De mailserver weigerde het opgeslagen wachtwoord. Koppel opnieuw en voer het wachtwoord nogmaals in.",
+      "test": "Verbinding testen",
+      "testing": "Bezig met testen",
+      "lag": "Achterstand",
+      "lagUnderMinute": "Minder dan een minuut",
+      "lagMinutes": "{count, plural, one {# minuut} other {# minuten}}",
+      "lagHours": "{count, plural, one {# uur} other {# uur}}"
     },
     "outcome": {
       "connected": "Mailbox verbonden. E-mail van de afgelopen 7 dagen wordt in de inbox opgehaald.",
@@ -325,6 +331,26 @@
         "smtpAuth": "De uitgaande server (SMTP) weigerde de gebruikersnaam of het wachtwoord. Controleer ze en probeer het opnieuw.",
         "unreachable": "De mailserver is niet bereikbaar of het certificaat is ongeldig. Controleer server, poort en beveiliging.",
         "generic": "Kon de mailbox niet koppelen. Probeer het opnieuw."
+      },
+      "test": {
+        "button": "Inloggegevens testen",
+        "testing": "Bezig met testen",
+        "imap": "Inkomend (IMAP)",
+        "smtp": "Uitgaand (SMTP)",
+        "ok": "Ingelogd.",
+        "inbox": "Ingelogd. De inbox bevat {count, plural, one {# bericht} other {# berichten}}.",
+        "smtpOk": "Ingelogd. Er is niets verzonden.",
+        "note": "Er is niets opgeslagen en er is geen e-mail verzonden.",
+        "tooMany": "Te veel tests in korte tijd. Wacht een minuut en probeer het opnieuw.",
+        "failed": "De test kon niet worden uitgevoerd. Probeer het opnieuw.",
+        "reasons": {
+          "auth_failed": "De server heeft de gebruikersnaam of het wachtwoord geweigerd.",
+          "tls": "De beveiligde verbinding kon niet worden geverifieerd. Controleer de servernaam en de beveiligingsinstelling.",
+          "unreachable": "De server is niet bereikbaar. Controleer de server, de poort en de beveiligingsinstelling.",
+          "blocked_address": "Dit serveradres is niet toegestaan.",
+          "rejected": "De server heeft het verzoek geweigerd.",
+          "unknown": "De server antwoordde niet zoals verwacht."
+        }
       }
     },
     "sharing": {

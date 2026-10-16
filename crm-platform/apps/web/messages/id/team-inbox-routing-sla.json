@@ -49,7 +49,8 @@
       "delete": "Hapus",
       "cancel": "Batal",
       "deleted": "Aturan dihapus.",
-      "deleteFailed": "Aturan tidak dapat dihapus."
+      "deleteFailed": "Aturan tidak dapat dihapus.",
+      "businessHours": "Jam kerja"
     },
     "rules": {
       "someone": "seorang agen",
@@ -397,6 +398,38 @@
       },
       "testSkipped": "Dilewati karena tidak ada yang tersedia: {names}",
       "testOff": "Sakelar di atas nonaktif, jadi ini hanya menunjukkan apa yang akan terjadi setelah diaktifkan."
+    },
+    "businessHours": {
+      "eyebrow": "Penugasan otomatis",
+      "title": "Jam kerja",
+      "subtitle": "Aturan dan target SLA yang memakai jam kerja hanya menghitung waktu di dalam jam ini.",
+      "close": "Tutup",
+      "loading": "Memuat jam kerja",
+      "loadFailed": "Jam kerja tidak dapat dimuat.",
+      "timezone": "Zona waktu",
+      "timezoneHint": "Semua hari dan jam di atas mengikuti zona waktu ini.",
+      "timezoneOwnerOnly": "Hanya pemilik ruang kerja yang dapat mengubah zona waktu.",
+      "days": "Jam buka",
+      "day": {
+        "mon": "Senin",
+        "tue": "Selasa",
+        "wed": "Rabu",
+        "thu": "Kamis",
+        "fri": "Jumat",
+        "sat": "Sabtu",
+        "sun": "Minggu"
+      },
+      "from": "Dari",
+      "to": "Sampai",
+      "problem": {
+        "required": "Isi kedua jam.",
+        "order": "Jam tutup harus setelah jam buka."
+      },
+      "note": "Hari yang dinonaktifkan tutup sepanjang hari. Sampai Anda menyimpan, ruang kerja dianggap buka sepanjang waktu.",
+      "cancel": "Batal",
+      "save": "Simpan jam",
+      "saved": "Jam kerja disimpan",
+      "saveFailed": "Gagal menyimpan"
     }
   }
 }

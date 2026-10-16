@@ -185,7 +185,6 @@ export const faqVariations = pgTable(
       sql`${t.embedState} <> 'ready' or (${t.embedding} is not null and ${t.embeddingModel} is not null)`,
     ),
     // `uq_faq_variations_text` (unique on faq_id and lower(btrim(text))) is an expression index: the SQL migration declares it.
-    index('idx_faq_variations_faq').on(t.orgId, t.faqId),
     index('idx_faq_variations_pending')
       .on(t.orgId, t.id)
       .where(sql`${t.embedState} = 'pending'`),

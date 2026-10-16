@@ -49,7 +49,8 @@
       "delete": "Usuń",
       "cancel": "Anuluj",
       "deleted": "Reguła usunięta.",
-      "deleteFailed": "Nie udało się usunąć reguły."
+      "deleteFailed": "Nie udało się usunąć reguły.",
+      "businessHours": "Godziny pracy"
     },
     "rules": {
       "someone": "agent",
@@ -397,6 +398,38 @@
       },
       "testSkipped": "Pominięto, bo nikt nie był dostępny: {names}",
       "testOff": "Przełącznik powyżej jest wyłączony, więc to tylko podgląd tego, co się stanie po jego włączeniu."
+    },
+    "businessHours": {
+      "eyebrow": "Automatyczne przypisywanie",
+      "title": "Godziny pracy",
+      "subtitle": "Reguły i cele SLA, które uwzględniają godziny pracy, liczą czas tylko w tych godzinach.",
+      "close": "Zamknij",
+      "loading": "Wczytywanie godzin pracy",
+      "loadFailed": "Nie udało się wczytać godzin pracy.",
+      "timezone": "Strefa czasowa",
+      "timezoneHint": "Wszystkie dni i godziny powyżej są podane w tej strefie czasowej.",
+      "timezoneOwnerOnly": "Strefę czasową może zmienić tylko właściciel obszaru roboczego.",
+      "days": "Godziny otwarcia",
+      "day": {
+        "mon": "Poniedziałek",
+        "tue": "Wtorek",
+        "wed": "Środa",
+        "thu": "Czwartek",
+        "fri": "Piątek",
+        "sat": "Sobota",
+        "sun": "Niedziela"
+      },
+      "from": "Od",
+      "to": "Do",
+      "problem": {
+        "required": "Podaj obie godziny.",
+        "order": "Godzina zamknięcia musi być późniejsza niż godzina otwarcia."
+      },
+      "note": "Wyłączony dzień jest zamknięty przez cały dzień. Dopóki nie zapiszesz, obszar roboczy jest uznawany za otwarty non stop.",
+      "cancel": "Anuluj",
+      "save": "Zapisz godziny",
+      "saved": "Zapisano godziny pracy",
+      "saveFailed": "Nie udało się zapisać"
     }
   }
 }
