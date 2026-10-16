@@ -1289,6 +1289,7 @@
       "optedOut": "Ten kontakt zrezygnował z komunikacji. Nie można wysyłać wiadomości.",
       "noPhone": "Ten kontakt nie ma numeru telefonu.",
       "noEmail": "Ten kontakt nie ma adresu e-mail.",
+      "phoneMasked": "Ten numer jest ukryty dla Twojej roli.",
       "number": "Wyślij z",
       "numberHint": "Numer WhatsApp, z którego zostanie wysłana wiadomość.",
       "noChannel": "Nie podłączono żadnego numeru WhatsApp. Najpierw podłącz go w Kanałach.",

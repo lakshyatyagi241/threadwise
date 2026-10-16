@@ -1289,6 +1289,7 @@
       "optedOut": "Dit contact heeft zich afgemeld voor communicatie. Er kunnen geen berichten worden verzonden.",
       "noPhone": "Dit contact heeft geen telefoonnummer.",
       "noEmail": "Dit contact heeft geen e-mailadres.",
+      "phoneMasked": "Dit nummer is verborgen voor jouw rol.",
       "number": "Verzenden vanaf",
       "numberHint": "Het WhatsApp-nummer waarmee het bericht wordt verzonden.",
       "noChannel": "Er is geen WhatsApp-nummer gekoppeld. Koppel er eerst een in Kanalen.",

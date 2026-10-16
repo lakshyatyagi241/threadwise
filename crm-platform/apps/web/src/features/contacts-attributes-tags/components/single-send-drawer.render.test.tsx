@@ -106,3 +106,18 @@ describe('SingleSendDrawer — email', () => {
     expect(html).toContain('This contact has no email address.');
   });
 });
+
+describe('SingleSendDrawer — sms', () => {
+  it('offers a live sms: link to open the person\'s own app for a real number', () => {
+    const html = render({ row: row(), channel: 'sms' }, []);
+    expect(html).toContain('href="sms:+91 98765 43210"');
+    expect(html).not.toContain('Number is hidden for your role.');
+  });
+
+  it('disables the link instead of building a dead sms: href for a masked number', () => {
+    const html = render({ row: row({ phone: '+xxxxxxxx0025' }), channel: 'sms' }, []);
+    expect(html).not.toContain('href="sms:');
+    expect(html).toContain('aria-disabled="true"');
+    expect(html).toContain('Number is hidden for your role.');
+  });
+});

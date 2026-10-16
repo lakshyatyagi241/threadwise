@@ -1289,6 +1289,7 @@
       "optedOut": "Dieser Kontakt hat der Kommunikation widersprochen. Nachrichten können nicht gesendet werden.",
       "noPhone": "Dieser Kontakt hat keine Telefonnummer.",
       "noEmail": "Dieser Kontakt hat keine E-Mail-Adresse.",
+      "phoneMasked": "Diese Nummer ist für Ihre Rolle ausgeblendet.",
       "number": "Senden von",
       "numberHint": "Die WhatsApp-Nummer, über die die Nachricht gesendet wird.",
       "noChannel": "Es ist keine WhatsApp-Nummer verbunden. Verbinden Sie zuerst eine unter Kanäle.",

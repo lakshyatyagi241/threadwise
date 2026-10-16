@@ -1289,6 +1289,7 @@
       "optedOut": "Este contacto ha dejado de recibir comunicaciones. No se pueden enviar mensajes.",
       "noPhone": "Este contacto no tiene número de teléfono.",
       "noEmail": "Este contacto no tiene correo electrónico.",
+      "phoneMasked": "El número está oculto para tu rol.",
       "number": "Enviar desde",
       "numberHint": "El número de WhatsApp desde el que se envía el mensaje.",
       "noChannel": "No hay ningún número de WhatsApp conectado. Conecta uno primero en Canales.",

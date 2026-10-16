@@ -1289,6 +1289,7 @@
       "optedOut": "该联系人已退订通信，无法发送消息。",
       "noPhone": "该联系人没有电话号码。",
       "noEmail": "该联系人没有邮箱地址。",
+      "phoneMasked": "该号码对您的角色不可见。",
       "number": "发送自",
       "numberHint": "发送消息所使用的 WhatsApp 号码。",
       "noChannel": "尚未连接 WhatsApp 号码，请先在“渠道”中连接。",

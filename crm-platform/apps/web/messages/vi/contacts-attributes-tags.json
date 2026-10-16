@@ -1289,6 +1289,7 @@
       "optedOut": "Liên hệ này đã từ chối nhận liên lạc. Không thể gửi tin nhắn.",
       "noPhone": "Liên hệ này chưa có số điện thoại.",
       "noEmail": "Liên hệ này chưa có địa chỉ email.",
+      "phoneMasked": "Số này bị ẩn đối với vai trò của bạn.",
       "number": "Gửi từ",
       "numberHint": "Số WhatsApp dùng để gửi tin nhắn.",
       "noChannel": "Chưa kết nối số WhatsApp nào. Hãy kết nối một số trong Kênh trước.",

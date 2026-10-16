@@ -1289,6 +1289,7 @@
       "optedOut": "Este contato optou por não receber comunicações. Não é possível enviar mensagens.",
       "noPhone": "Este contato não tem número de telefone.",
       "noEmail": "Este contato não tem endereço de e-mail.",
+      "phoneMasked": "Este número está oculto para a sua função.",
       "number": "Enviar de",
       "numberHint": "O número do WhatsApp pelo qual a mensagem é enviada.",
       "noChannel": "Nenhum número do WhatsApp conectado. Conecte um em Canais primeiro.",
