@@ -87,6 +87,15 @@ export class FieldOptionsRepository {
     return rows[0];
   }
 
+  /** uuid -> row for every uuid that exists in the workspace, in one query. Unknown uuids are absent. */
+  async findByUuids(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, FieldOptionRow>> {
+    if (uuids.length === 0) return new Map();
+    const rows = await this.baseQuery(tx).where(
+      and(eq(fieldOptions.orgId, orgId), inArray(fieldOptions.uuid, uuids)),
+    );
+    return new Map(rows.map((r) => [r.uuid, r]));
+  }
+
   async nextPosition(tx: Tx, orgId: number, fieldId: number): Promise<number> {
     const rows = await tx
       .select({ max: sql<number>`coalesce(max(${fieldOptions.position}), -1)` })
