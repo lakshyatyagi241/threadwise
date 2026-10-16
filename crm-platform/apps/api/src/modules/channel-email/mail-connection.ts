@@ -39,6 +39,27 @@ export function openConnection(
   }
 }
 
+/**
+ * The two logins of an IMAP/SMTP form: the outgoing server signs in with the incoming user name and password unless the form gave its
+ * own. One place, so connecting and testing build exactly the same connection.
+ */
+export function passwordConnectionOf(input: {
+  imap: PasswordConnection['imap'];
+  smtp: Omit<PasswordConnection['smtp'], 'username' | 'password'> &
+    Partial<Pick<PasswordConnection['smtp'], 'username' | 'password'>>;
+}): PasswordConnection {
+  return {
+    imap: { ...input.imap },
+    smtp: {
+      host: input.smtp.host,
+      port: input.smtp.port,
+      security: input.smtp.security,
+      username: input.smtp.username ?? input.imap.username,
+      password: input.smtp.password ?? input.imap.password,
+    },
+  };
+}
+
 /** The non-secret summary the hub shows. */
 export function publicSummaryOf(connection: PasswordConnection): Record<string, unknown> {
   return {

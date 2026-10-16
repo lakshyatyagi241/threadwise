@@ -5,9 +5,16 @@ import { useState } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, ConfirmDialog, Input, useToast } from '@crm/ui';
-import type { MailboxResponse } from '@crm/contracts';
+import type { MailboxResponse, MailConnectionTestResponse } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
-import { KEYS, removeMailbox, renameMailbox, setSendLimit, syncMailbox } from '../api/mailboxes';
+import {
+  KEYS,
+  removeMailbox,
+  renameMailbox,
+  setSendLimit,
+  syncMailbox,
+  testMailbox,
+} from '../api/mailboxes';
 import { mailErrorKey } from '../lib/api-errors';
 import {
   canRemove,
@@ -19,6 +26,8 @@ import {
   statusView,
   type MailboxAccess,
 } from '../lib/hub-model';
+import { lagIsHigh, lagView, testErrorKey } from '../lib/test-view';
+import { ConnectionTestResult } from './connection-test-result';
 
 const dateTime = (iso: string, locale: string, timeZone?: string) =>
   new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
@@ -44,6 +53,7 @@ export function MailboxCard({
 }) {
   const canManage = access.canAct;
   const t = useTranslations('email.card');
+  const tt = useTranslations('email.imap.test');
   const root = useTranslations('email');
   const locale = useLocale();
   const timeZone = useTimeZone();
@@ -55,6 +65,8 @@ export function MailboxCard({
   const [draft, setDraft] = useState(mailbox.displayName);
   const [limitEditing, setLimitEditing] = useState(false);
   const [limitDraft, setLimitDraft] = useState('');
+  const [testing, setTesting] = useState(false);
+  const [tested, setTested] = useState<MailConnectionTestResponse | null>(null);
   const status = statusView(mailbox.status);
   const href = access.canOpen ? inboxHref(mailbox) : null;
   const limit = sendLimitDraft(limitDraft, mailbox.sendLimitPerHour);
@@ -82,6 +94,20 @@ export function MailboxCard({
     }
   };
 
+  /** "Test connection" on an IMAP mailbox: the server tries the stored login on both servers; nothing changes and nothing is sent. */
+  const runTest = async () => {
+    setTesting(true);
+    setTested(null);
+    try {
+      setTested(await testMailbox(mailbox.id));
+    } catch (e) {
+      toast(tt(e instanceof ApiError ? testErrorKey(e.code) : 'failed'), 'danger');
+    } finally {
+      setTesting(false);
+    }
+  };
+
+  const lag = lagView(mailbox.syncLagSeconds);
   const row = 'flex items-center justify-between gap-3 text-xs';
   return (
     <div
@@ -222,6 +248,17 @@ export function MailboxCard({
                   : t('neverSynced')}
               </span>
             </div>
+            {lag && (
+              <div className={row}>
+                <span className="text-muted-foreground">{t('lag')}</span>
+                <span
+                  className={lagIsHigh(mailbox.syncLagSeconds) ? 'font-mono text-warning' : 'font-mono'}
+                  data-testid="email-lag"
+                >
+                  {lag.key === 'lagUnderMinute' ? t(lag.key) : t(lag.key, { count: lag.count })}
+                </span>
+              </div>
+            )}
             <div className={row}>
               <span className="text-muted-foreground">{t('conversations')}</span>
               <span className="font-mono">{mailbox.conversationCount}</span>
@@ -308,6 +345,12 @@ export function MailboxCard({
         )}
       </div>
 
+      {tested && (
+        <div className="border-t border-border px-4 py-3">
+          <ConnectionTestResult result={tested} />
+        </div>
+      )}
+
       {(href || canManage) && (
         <div className="flex flex-wrap items-center justify-end gap-2 border-t border-border px-4 py-3">
           {href && (
@@ -318,6 +361,18 @@ export function MailboxCard({
             >
               {t('openInbox')}
             </Link>
+          )}
+          {canManage && mailbox.provider === 'imap' && mailbox.status !== 'disconnected' && (
+            <Button
+              size="sm"
+              variant="secondary"
+              className="rounded-full"
+              disabled={busy || testing}
+              onClick={() => void runTest()}
+              data-testid="email-test-connection"
+            >
+              {testing ? t('testing') : t('test')}
+            </Button>
           )}
           {canManage && canSync(mailbox) && (
             <Button

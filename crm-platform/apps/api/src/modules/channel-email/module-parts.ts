@@ -13,6 +13,7 @@ import { MailOutboundAttachments } from './mail-outbound-attachments.service';
 import { MailSignaturesController } from './mail-signatures.controller';
 import { MailSignaturesRepository } from './mail-signatures.repository';
 import { MailSignaturesService } from './mail-signatures.service';
+import { MailConnectionTester } from './mail-connection-test.service';
 import { MailGraphPushController } from './mail-graph-push.controller';
 import { MailGraphPushService } from './mail-graph-push.service';
 import { MailPushController } from './mail-push.controller';
@@ -59,6 +60,8 @@ export const MAIL_EXTRA_PROVIDERS: Provider[] = [
   GoogleOidcVerifier,
   MailPushRepository,
   MailPushService,
+  // E-08 test credentials
+  MailConnectionTester,
   // E-17 Graph change notifications
   MailGraphPushService,
   // E-19 contact timeline

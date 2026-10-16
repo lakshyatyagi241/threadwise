@@ -120,7 +120,13 @@
       "limitDefault": "Default platform",
       "limitPerHour": "{count, plural, other {# email per jam}}",
       "limitSaved": "Batas kirim disimpan.",
-      "needsReauthImap": "Server email menolak kata sandi yang tersimpan. Hubungkan kembali dan masukkan kata sandi lagi."
+      "needsReauthImap": "Server email menolak kata sandi yang tersimpan. Hubungkan kembali dan masukkan kata sandi lagi.",
+      "test": "Uji koneksi",
+      "testing": "Menguji",
+      "lag": "Tertinggal",
+      "lagUnderMinute": "Kurang dari semenit",
+      "lagMinutes": "{count, plural, other {# menit}}",
+      "lagHours": "{count, plural, other {# jam}}"
     },
     "outcome": {
       "connected": "Kotak surat terhubung. Email dari 7 hari terakhir sedang diambil ke inbox.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Server keluar (SMTP) menolak nama pengguna atau kata sandi. Periksa lalu coba lagi.",
         "unreachable": "Tidak dapat menjangkau server email atau sertifikatnya tidak valid. Periksa server, port, dan keamanan.",
         "generic": "Tidak dapat menghubungkan kotak surat. Coba lagi."
+      },
+      "test": {
+        "button": "Uji kredensial",
+        "testing": "Menguji",
+        "imap": "Masuk (IMAP)",
+        "smtp": "Keluar (SMTP)",
+        "ok": "Berhasil masuk.",
+        "inbox": "Berhasil masuk. Kotak masuk berisi {count, plural, other {# pesan}}.",
+        "smtpOk": "Berhasil masuk. Tidak ada yang dikirim.",
+        "note": "Tidak ada yang disimpan dan tidak ada email yang dikirim.",
+        "tooMany": "Terlalu banyak pengujian dalam waktu singkat. Tunggu semenit lalu coba lagi.",
+        "failed": "Pengujian tidak dapat dijalankan. Coba lagi.",
+        "reasons": {
+          "auth_failed": "Server menolak nama pengguna atau kata sandi.",
+          "tls": "Koneksi aman tidak dapat diverifikasi. Periksa nama server dan pengaturan keamanan.",
+          "unreachable": "Server tidak dapat dijangkau. Periksa server, port, dan pengaturan keamanan.",
+          "blocked_address": "Alamat server ini tidak diizinkan.",
+          "rejected": "Server menolak permintaan.",
+          "unknown": "Server tidak menjawab seperti yang diharapkan."
+        }
       }
     },
     "sharing": {

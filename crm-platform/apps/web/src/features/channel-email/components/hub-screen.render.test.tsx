@@ -298,6 +298,32 @@ describe('email hub', () => {
     expect(html).toContain('>Reconnect<');
   });
 
+  it('offers Test connection on an IMAP mailbox (also one that needs reconnecting), not on Gmail, a disconnected one or to a reader', () => {
+    search = '';
+    manage = true;
+    const imap = (o: Partial<MailboxResponse>) => page({ data: [box({ provider: 'imap', ...o })] });
+    expect(imap({})).toContain('data-testid="email-test-connection"');
+    expect(imap({ status: 'needs_reauth' })).toContain('>Test connection<');
+    expect(imap({ status: 'disconnected' })).not.toContain('email-test-connection');
+    expect(page({ data: [box()] })).not.toContain('email-test-connection');
+    manage = false;
+    expect(imap({})).not.toContain('email-test-connection');
+    manage = true;
+  });
+
+  it('shows how far behind a connected mailbox is, in minutes or hours, and warns when it is far behind', () => {
+    search = '';
+    manage = true;
+    const lag = (seconds: number | null) => page({ data: [box({ syncLagSeconds: seconds })] });
+    expect(lag(20)).toContain('Under a minute');
+    expect(lag(300)).toContain('5 minutes');
+    expect(lag(300)).not.toContain('text-warning"');
+    expect(lag(7_300)).toContain('2 hours');
+    expect(lag(7_300)).toContain('data-testid="email-lag"');
+    expect(lag(900)).toMatch(/text-warning[^>]*data-testid="email-lag"/);
+    expect(lag(null)).not.toContain('email-lag');
+  });
+
   it('hides the manage actions from someone who can only read', () => {
     search = '';
     manage = false;
