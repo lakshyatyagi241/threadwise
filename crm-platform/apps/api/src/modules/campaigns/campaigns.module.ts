@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { CAMPAIGN_AI_PORT } from '../../infra/providers/campaigns/campaign-ai.port';
-import { HttpCampaignAiAdapter } from '../../infra/providers/campaigns/http-campaign-ai.adapter';
 import { CAMPAIGN_AI_IMAGE_PORT } from '../../infra/providers/campaigns/campaign-ai-image.port';
 import { HttpCampaignAiImageAdapter } from '../../infra/providers/campaigns/http-campaign-ai-image.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
@@ -115,7 +113,6 @@ import { WizardRepository } from './wizard/wizard.repository';
     WizardBroadcastsService,
     FixtureReceiptQueue,
     FixtureRegistrar,
-    { provide: CAMPAIGN_AI_PORT, useClass: HttpCampaignAiAdapter },
     { provide: CAMPAIGN_AI_IMAGE_PORT, useClass: HttpCampaignAiImageAdapter },
     CampaignAiImageService,
     { provide: CAMPAIGN_PLAN_GATE, useClass: PlanCampaignGate },
