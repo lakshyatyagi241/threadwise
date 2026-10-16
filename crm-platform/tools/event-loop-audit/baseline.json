@@ -4,6 +4,7 @@
     "apps/api/src/modules/addons-extension-registry/zip-reader.ts::sync-zlib::inflateRawSync::readEntry": 1,
     "apps/api/src/modules/ai-agents-training/file-extract.ts::sync-zlib::inflateRawSync::readZipEntry": 1,
     "apps/api/src/modules/appointments-booking/google-calendar-state.ts::sync-crypto::hkdfSync::deriveStateKey": 1,
+    "apps/api/src/modules/appointments-booking/microsoft-calendar-state.ts::sync-crypto::hkdfSync::deriveMicrosoftKey": 1,
     "apps/api/src/modules/audit-log/audit-log-export.runner.ts::sync-zlib::gzipSync::build": 2,
     "apps/api/src/modules/channel-email/mail-state.ts::sync-crypto::hkdfSync::deriveStateKey": 1,
     "apps/api/src/modules/chat-conversations/message-log-archive.service.ts::sync-zlib::gzipSync::archiveDay": 1,
