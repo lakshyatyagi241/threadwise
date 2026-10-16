@@ -37,7 +37,7 @@
       "id": 6,
       "criterion": "Actionable warning and critical alert rules active",
       "status": "PARTIAL",
-      "evidence": "deploy/observability/event-loop.rules.yml passes promtool check (11 rules) and promtool test (11 case groups on synthetic series, mutation-checked, including the near-misses that must not page). Loaded in a REAL Prometheus scraping a real API and worker (scrape-demo.mjs, 25/25): all 11 evaluate without error, nothing fires when idle, RuntimeMetricsTargetDown fires when the worker is killed, and EventLoopBlockingWithImpact fires from a real stall injected into the live API. That run exposed a defect (the request histogram cannot see queueing behind a blocked loop, so the original impact condition could never be true) which is fixed. Still not 'active': no production Prometheus, no receiver, the worker critical alert never fired from a real stall, and blocks of roughly 10 s to 2 min are not paged (EL-B13)."
+      "evidence": "deploy/observability/event-loop.rules.yml passes promtool check (15 rules) and promtool test (synthetic series, mutation-checked, including the near-misses that must not page). Loaded in a REAL Prometheus with a real Alertmanager scraping a real API, worker and probe (scrape-demo.mjs --stall, 40/41 with the one miss a demo timing bug fixed and rerun 26/26): all 15 evaluate, nothing fires when idle, and these fired from real stalls injected into live processes and were delivered to a receiver as firing (and, for the API stall, resolved): EventLoopBlockingWithImpact, ApiCallerLatencyHigh, WorkerEventLoopBlockingWithQueueImpact (20,000 queued jobs), EventLoopLongStallCritical (one 12 s block), RuntimeMetricsTargetDown (killed worker). Still not 'active': nothing runs on a real server (the opt-in overlay deploy/hostinger/observability.compose.yml is validated, not deployed), the receiver was a local HTTP server not a real chat or pager, and the 2 s / 10 s long-stall thresholds are judgement calls awaiting an owner decision."
     },
     {
       "id": 7,
@@ -67,10 +67,10 @@
   "verifiedCount": 3,
   "openSevereRegressions": "none known; no comparison possible without a baseline",
   "nextActions": [
-    "EL-B02 decide and wire a production Prometheus and receiver; EL-B01/B03 fire WorkerEventLoopBlockingWithQueueImpact from a real worker stall",
-    "EL-B12 caller-visible API latency (the in-process request histogram misses queueing behind the loop); EL-B13 decide how to treat 10 s to 2 min stalls",
-    "EL-B02/B03 stand up a Prometheus scrape, validate the rules with promtool",
-    "EL-B05 choose and add a load tool, build the workload mix, record idle/normal/peak/spike baselines",
-    "EL-B06 add the p99 regression comparison to CI"
+    "EL-B02 run deploy/hostinger/observability-up.sh on the server and supply the alert destination; EL-B14 send one real test alert through that destination",
+    "EL-B15 move the probe to the public ingress; confirm or change the 2 s / 10 s long-stall thresholds (owner decision)",
+    "EL-B05 load tool and baselines (separate change)",
+    "EL-B06 add the p99 regression comparison to CI",
+    "EL-B04 dashboards"
   ]
 }
