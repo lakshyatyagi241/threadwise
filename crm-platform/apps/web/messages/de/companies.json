@@ -112,6 +112,17 @@
         "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
         "invalid": "Einige Eingaben sind ungültig.",
         "ownerInvalid": "Der Eigentümer muss ein aktives Mitglied dieses Workspace sein."
+      },
+      "propertiesTitle": "Eigenschaften",
+      "propertiesHint": "einzurichten unter Einstellungen, Unternehmenseigenschaften",
+      "propertyProblems": {
+        "invalid": "Dieser Wert passt nicht zur Eigenschaft.",
+        "notEditable": "Diese Eigenschaft kann nicht mehr bearbeitet werden. Schließen Sie das Formular und öffnen Sie es erneut.",
+        "required": "Diese Eigenschaft ist erforderlich.",
+        "number": "Geben Sie eine Zahl ein.",
+        "integer": "Geben Sie eine ganze Zahl ein.",
+        "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "url": "Geben Sie einen vollständigen Link ein, der mit http:// oder https:// beginnt."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Adresse",
       "createdBy": "Erstellt von",
       "created": "Erstellt",
-      "updated": "Zuletzt geändert"
+      "updated": "Zuletzt geändert",
+      "properties": "Eigenschaften",
+      "yes": "Ja",
+      "no": "Nein"
     },
     "contacts": {
       "title": "Kontakte",
@@ -211,6 +225,44 @@
         "address": "Adresse",
         "notes": "Notizen",
         "owner": "Eigentümer"
+      },
+      "propertiesChanged": "Geänderte Eigenschaften:"
+    },
+    "picker": {
+      "search": "Unternehmen suchen",
+      "results": "Unternehmen",
+      "searching": "Suche läuft",
+      "none": "Kein Unternehmen passt.",
+      "unavailable": "Die Unternehmen können gerade nicht durchsucht werden.",
+      "create": "„{name}“ anlegen",
+      "creating": "Unternehmen wird angelegt",
+      "clear": "Unternehmen entfernen",
+      "loading": "Unternehmen wird geladen",
+      "unknown": "Unternehmen nicht verfügbar",
+      "createFailed": "Das Unternehmen konnte nicht angelegt werden. Versuchen Sie es erneut.",
+      "createForbidden": "Sie dürfen keine Unternehmen anlegen."
+    },
+    "properties": {
+      "title": "Unternehmenseigenschaften",
+      "subtitle": "Alles, was ein Unternehmen speichern kann, an einem Ort: Ihre eigenen Eigenschaften, in Abschnitte gegliedert.",
+      "section": {
+        "hint": "Abschnitte gruppieren die Eigenschaften im Unternehmensformular und auf der Unternehmensseite."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# Unternehmen} other {# Unternehmen}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# Unternehmen hat} other {# Unternehmen haben}} einen Wert für diese Eigenschaft. Die Werte bleiben erhalten, aber die Eigenschaft verschwindet aus dem Unternehmensformular und von der Unternehmensseite.",
+        "unused": "Noch kein Unternehmen hat einen Wert für diese Eigenschaft."
+      },
+      "modal": {
+        "newTitle": "Unternehmenseigenschaft hinzufügen",
+        "descriptionHint": "Wird im Unternehmensformular unter dem Feld angezeigt.",
+        "optionsNote": "Das Entfernen einer Option ändert Unternehmen, die sie bereits haben, nicht; sie behalten den gespeicherten Wert.",
+        "requiredHint": "Das Unternehmensformular lässt sich ohne Wert nicht speichern.",
+        "visibleHint": "Im Unternehmensformular und auf der Unternehmensseite anzeigen.",
+        "conditionsHint": "Diese Eigenschaft im Unternehmensformular ausblenden, bis eine andere Eigenschaft einen Wert hat.",
+        "deactivateNote": "Beim Speichern wird diese Eigenschaft im Formular und auf der Unternehmensseite ausgeblendet. Die Werte der Unternehmen bleiben erhalten."
       }
     }
   }

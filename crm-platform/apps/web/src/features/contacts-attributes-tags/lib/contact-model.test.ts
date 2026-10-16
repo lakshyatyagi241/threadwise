@@ -271,6 +271,51 @@ describe('contact form <-> API mapping', () => {
     expect(back.isUnsubscribed).toBe(false);
   });
 
+  it('the company: opens from the contact, goes out on create only when chosen, and on edit only when it changed (null clears)', () => {
+    const co = '5f1c1e0e-2f4b-4a58-9c1e-1d7a0f0f0001';
+    expect(contactToForm(row({ companyId: co })).companyId).toBe(co);
+    expect(contactToForm(row({ companyId: null })).companyId).toBe('');
+    expect(toCreatePayload({ ...EMPTY_FORM, firstName: 'A' }, [])).not.toHaveProperty('companyId');
+    expect(toCreatePayload({ ...EMPTY_FORM, firstName: 'A', companyId: co }, [])).toMatchObject({
+      companyId: co,
+    });
+    const base = { ...EMPTY_FORM, firstName: 'A' };
+    expect(
+      toUpdatePayload(
+        { ...base, companyId: co },
+        [],
+        1,
+        false,
+        {},
+        undefined,
+        undefined,
+        null,
+        null,
+        co,
+      ),
+    ).not.toHaveProperty('companyId');
+    expect(toUpdatePayload({ ...base, companyId: '' }, [], 1, false)).not.toHaveProperty(
+      'companyId',
+    );
+    expect(toUpdatePayload({ ...base, companyId: co }, [], 1, false)).toMatchObject({
+      companyId: co,
+    });
+    expect(
+      toUpdatePayload(
+        { ...base, companyId: '' },
+        [],
+        1,
+        false,
+        {},
+        undefined,
+        undefined,
+        null,
+        null,
+        co,
+      ),
+    ).toMatchObject({ companyId: null });
+  });
+
   it('writes the group-independent extras under the reserved keys', () => {
     const cf = customFieldsFromForm({ ...EMPTY_FORM, title: 'Dr', memo: ' note ' }, []);
     expect(cf).toMatchObject({ title: 'Dr', memo: 'note', middle_name: null });

@@ -112,6 +112,17 @@
         "email": "Masukkan alamat email yang valid.",
         "invalid": "Sebagian yang dimasukkan tidak valid.",
         "ownerInvalid": "Pemilik harus anggota aktif workspace ini."
+      },
+      "propertiesTitle": "Properti",
+      "propertiesHint": "diatur di Pengaturan, Properti perusahaan",
+      "propertyProblems": {
+        "invalid": "Nilai ini tidak sesuai dengan properti.",
+        "notEditable": "Properti ini tidak dapat diedit lagi. Tutup formulir lalu buka kembali.",
+        "required": "Properti ini wajib diisi.",
+        "number": "Masukkan angka.",
+        "integer": "Masukkan bilangan bulat.",
+        "email": "Masukkan alamat email yang valid.",
+        "url": "Masukkan tautan lengkap yang diawali http:// atau https://."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Alamat",
       "createdBy": "Dibuat oleh",
       "created": "Dibuat",
-      "updated": "Terakhir diubah"
+      "updated": "Terakhir diubah",
+      "properties": "Properti",
+      "yes": "Ya",
+      "no": "Tidak"
     },
     "contacts": {
       "title": "Kontak",
@@ -211,6 +225,44 @@
         "address": "Alamat",
         "notes": "Catatan",
         "owner": "Pemilik"
+      },
+      "propertiesChanged": "Properti yang diubah:"
+    },
+    "picker": {
+      "search": "Cari perusahaan",
+      "results": "Perusahaan",
+      "searching": "Mencari",
+      "none": "Tidak ada perusahaan yang cocok.",
+      "unavailable": "Perusahaan tidak dapat dicari saat ini.",
+      "create": "Buat “{name}”",
+      "creating": "Membuat perusahaan",
+      "clear": "Hapus perusahaan",
+      "loading": "Memuat perusahaan",
+      "unknown": "Perusahaan tidak tersedia",
+      "createFailed": "Perusahaan tidak dapat dibuat. Coba lagi.",
+      "createForbidden": "Anda tidak memiliki izin untuk membuat perusahaan."
+    },
+    "properties": {
+      "title": "Properti perusahaan",
+      "subtitle": "Semua yang dapat disimpan sebuah perusahaan, dalam satu tempat: properti milik Anda sendiri, dikelompokkan ke dalam bagian.",
+      "section": {
+        "hint": "Bagian mengelompokkan properti pada formulir perusahaan dan halaman perusahaan."
+      },
+      "row": {
+        "contacts": "{count, plural, other {# perusahaan}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, other {# perusahaan memiliki}} nilai untuk properti ini. Nilainya tetap disimpan, tetapi properti menghilang dari formulir perusahaan dan halaman perusahaan.",
+        "unused": "Belum ada perusahaan yang memiliki nilai untuk properti ini."
+      },
+      "modal": {
+        "newTitle": "Tambah properti perusahaan",
+        "descriptionHint": "Ditampilkan di bawah kolom pada formulir perusahaan.",
+        "optionsNote": "Menghapus opsi tidak mengubah perusahaan yang sudah memilikinya; nilai tersimpan tetap dipertahankan.",
+        "requiredHint": "Formulir perusahaan tidak dapat disimpan tanpa nilai.",
+        "visibleHint": "Tampilkan di formulir perusahaan dan halaman perusahaan.",
+        "conditionsHint": "Sembunyikan properti ini di formulir perusahaan sampai properti lain memiliki nilai.",
+        "deactivateNote": "Menyimpan akan menyembunyikan properti ini dari formulir dan halaman perusahaan. Nilai yang dimiliki perusahaan tetap disimpan."
       }
     }
   }

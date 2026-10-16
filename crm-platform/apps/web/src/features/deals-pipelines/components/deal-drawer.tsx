@@ -6,12 +6,12 @@ import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, cn, useToast } from '@crm/ui';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
-import { CompanyLink } from '@/features/companies';
+import { CompanyLink, CompanyPicker, useCanPickCompany } from '@/features/companies';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useDealDetail, useMembers } from '../api/hooks';
 import { dealsApi } from '../api/service';
 import type { ContactRef, Deal, Pipeline, UpdateDealInput } from '../api/schemas';
-import { errorKind } from '../lib/errors';
+import { errorKind, fieldErrors } from '../lib/errors';
 import { currencyChoices, formatMoney, minorExponent, toMajorInput, toMinor } from '../lib/money';
 import { DealActivity } from './deal-activity';
 import { ContactPicker } from './contact-picker';
@@ -73,6 +73,7 @@ function DrawerBody({
   onMoveStage,
 }: DealDrawerProps & { deal: Deal }) {
   const t = useTranslations('deals-pipelines.drawer');
+  const canPickCompany = useCanPickCompany();
   const locale = useLocale();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -96,7 +97,15 @@ function DrawerBody({
       toast(t('saved'), 'success');
     } catch (e) {
       const kind = errorKind(e);
-      toast(kind === 'conflict' ? t('conflict') : `${t('saveFailed')} ${errorText(e)}`, 'danger');
+      // The server names the field when the company is the problem (one the person's record scope does not reach).
+      toast(
+        kind === 'conflict'
+          ? t('conflict')
+          : fieldErrors(e).companyId
+            ? `${t('saveFailed')} ${t('companyRefused')}`
+            : `${t('saveFailed')} ${errorText(e)}`,
+        'danger',
+      );
       if (kind === 'conflict') void qc.invalidateQueries({ queryKey: KEYS.deal(deal.id) });
     }
   }
@@ -214,16 +223,31 @@ function DrawerBody({
             onChange={(c: ContactRef | null) => void save({ contactId: c?.id ?? null })}
           />
           {!deal.contact && <p className="text-xs text-muted-foreground">{t('noContact')}</p>}
-          {deal.company && (
-            <p className="text-xs text-muted-foreground">
-              <CompanyLink
-                id={deal.company.id}
-                name={deal.company.name}
-                className="hover:text-foreground hover:underline"
-              >
-                {t('company', { name: deal.company.name })}
-              </CompanyLink>
-            </p>
+          {canPickCompany && (canWrite || deal.company) ? (
+            <div className="space-y-1.5 pt-1">
+              <label htmlFor="drawer-company" className="text-xs font-medium text-muted-foreground">
+                {t('companyLabel')}
+              </label>
+              <CompanyPicker
+                id="drawer-company"
+                value={deal.company}
+                disabled={!canWrite}
+                linkToCompany
+                onChange={(c) => void save({ companyId: c?.id ?? null })}
+              />
+            </div>
+          ) : (
+            deal.company && (
+              <p className="text-xs text-muted-foreground">
+                <CompanyLink
+                  id={deal.company.id}
+                  name={deal.company.name}
+                  className="hover:text-foreground hover:underline"
+                >
+                  {t('company', { name: deal.company.name })}
+                </CompanyLink>
+              </p>
+            )
           )}
           {deal.contact && (
             <div className="flex flex-wrap gap-2">

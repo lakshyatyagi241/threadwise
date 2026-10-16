@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Flow builder"
+      "flowBuilder": "Flow builder",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Admin - Project settings",
@@ -1024,6 +1025,37 @@
             "advanced": "Advanced only"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "The Microsoft app every workspace connects its Outlook or Microsoft 365 calendar through.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra app"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Allow workspaces to connect Outlook",
+            "hint": "Off: no workspace can connect, and nothing is read from or written to any Outlook calendar. Connected calendars are kept."
+          },
+          "clientId": {
+            "label": "Application (client) ID",
+            "hint": "From the Microsoft Entra admin center, App registrations, Overview. Empty uses MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Stored encrypted and never shown again. Empty keeps the saved one; MICROSOFT_CALENDAR_CLIENT_SECRET is the fallback."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common allows work, school and personal accounts; use a directory (tenant) ID for a single-tenant app. Empty uses MICROSOFT_CALENDAR_TENANT, else common."
+          },
+          "redirectUri": {
+            "label": "Redirect URI override",
+            "hint": "Leave empty to use the address above. It must match a redirect URI on the app exactly."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Flow builder",
         "description": "The default flow builder for every workspace: Simple step-by-step or Advanced canvas. A workspace can override it.",
         "tags": "Simple / Advanced / Automation"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "The Microsoft app workspaces use to connect their Outlook and Microsoft 365 calendars for bookings.",
+        "tags": "Microsoft / OAuth / Outlook / Calendar"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Flows that already exist",
               "body": "Changing this setting never changes or deletes a flow. A flow keeps working; it is only opened in the builder that is on. A workspace that picked its own builder keeps it until it chooses the platform default again."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Appointments",
+        "description": "One Microsoft Entra app for the whole platform. Each workspace then connects its own Outlook or Microsoft 365 calendar from Appointments, Settings, and never sees the client id or secret.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra app",
+            "description": "Without a client id and secret, workspaces see Outlook as not available and bookings carry on without it. Google Calendar is not affected."
+          }
+        },
+        "guide": {
+          "title": "Set it up in Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. App registration",
+              "body": "In the Microsoft Entra admin center create an app registration for accounts in any organizational directory and personal Microsoft accounts, and copy the Application (client) ID here. Keep the tenant as common unless you chose a narrower option."
+            },
+            "redirect": {
+              "title": "2. Redirect URI and secret",
+              "body": "Add the redirect URI shown on this page as a Web redirect, then create a client secret under Certificates and secrets and paste its value here. Note when it expires: after that date every workspace's calendar stops until a new secret is saved."
+            },
+            "permissions": {
+              "title": "3. API permissions",
+              "body": "Add the delegated Microsoft Graph permissions Calendars.ReadWrite, User.Read and offline_access, and nothing else. For general use, complete publisher verification; a customer's tenant may also require an administrator to approve the app."
+            },
+            "workspaces": {
+              "title": "4. Workspaces connect",
+              "body": "Paste the client id and secret here and save. Admins then connect from Appointments, Settings."
             }
           }
         }

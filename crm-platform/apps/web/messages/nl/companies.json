@@ -112,6 +112,17 @@
         "email": "Voer een geldig e-mailadres in.",
         "invalid": "Een deel van wat is ingevuld is ongeldig.",
         "ownerInvalid": "De eigenaar moet een actief lid van deze workspace zijn."
+      },
+      "propertiesTitle": "Eigenschappen",
+      "propertiesHint": "in te stellen onder Instellingen, Bedrijfseigenschappen",
+      "propertyProblems": {
+        "invalid": "Deze waarde past niet bij de eigenschap.",
+        "notEditable": "Deze eigenschap kan niet meer worden bewerkt. Sluit het formulier en open het opnieuw.",
+        "required": "Deze eigenschap is verplicht.",
+        "number": "Voer een getal in.",
+        "integer": "Voer een geheel getal in.",
+        "email": "Voer een geldig e-mailadres in.",
+        "url": "Voer een volledige link in die met http:// of https:// begint."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Adres",
       "createdBy": "Gemaakt door",
       "created": "Gemaakt",
-      "updated": "Laatst gewijzigd"
+      "updated": "Laatst gewijzigd",
+      "properties": "Eigenschappen",
+      "yes": "Ja",
+      "no": "Nee"
     },
     "contacts": {
       "title": "Contacten",
@@ -211,6 +225,44 @@
         "address": "Adres",
         "notes": "Notities",
         "owner": "Eigenaar"
+      },
+      "propertiesChanged": "Gewijzigde eigenschappen:"
+    },
+    "picker": {
+      "search": "Bedrijven zoeken",
+      "results": "Bedrijven",
+      "searching": "Zoeken",
+      "none": "Geen bedrijf komt overeen.",
+      "unavailable": "Bedrijven kunnen nu niet worden doorzocht.",
+      "create": "“{name}” aanmaken",
+      "creating": "Bedrijf wordt aangemaakt",
+      "clear": "Bedrijf verwijderen",
+      "loading": "Bedrijf laden",
+      "unknown": "Bedrijf niet beschikbaar",
+      "createFailed": "Het bedrijf kon niet worden aangemaakt. Probeer het opnieuw.",
+      "createForbidden": "U hebt geen toestemming om bedrijven aan te maken."
+    },
+    "properties": {
+      "title": "Bedrijfseigenschappen",
+      "subtitle": "Alles wat een bedrijf kan bewaren, op één plek: je eigen eigenschappen, gegroepeerd in secties.",
+      "section": {
+        "hint": "Secties groeperen eigenschappen in het bedrijfsformulier en op de bedrijfspagina."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# bedrijf} other {# bedrijven}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# bedrijf heeft} other {# bedrijven hebben}} een waarde voor deze eigenschap. De waarden blijven bewaard, maar de eigenschap verdwijnt uit het bedrijfsformulier en van de bedrijfspagina.",
+        "unused": "Nog geen enkel bedrijf heeft een waarde voor deze eigenschap."
+      },
+      "modal": {
+        "newTitle": "Een bedrijfseigenschap toevoegen",
+        "descriptionHint": "Wordt onder het veld getoond in het bedrijfsformulier.",
+        "optionsNote": "Een optie verwijderen verandert niets aan bedrijven die haar al hebben; zij behouden de opgeslagen waarde.",
+        "requiredHint": "Het bedrijfsformulier kan niet worden opgeslagen zonder waarde.",
+        "visibleHint": "Toon haar in het bedrijfsformulier en op de bedrijfspagina.",
+        "conditionsHint": "Verberg deze eigenschap in het bedrijfsformulier totdat een andere eigenschap een waarde heeft.",
+        "deactivateNote": "Opslaan verbergt deze eigenschap in het formulier en op de bedrijfspagina. Waarden die bedrijven hebben blijven bewaard."
       }
     }
   }

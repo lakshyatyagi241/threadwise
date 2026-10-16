@@ -194,6 +194,7 @@ export class GoogleCalendarAdapter implements CalendarSyncPort {
             calendarId,
             meetUrl,
             etag,
+            provider: 'google',
           } satisfies CalendarEventResult;
         },
         { capability: 'calendar' },

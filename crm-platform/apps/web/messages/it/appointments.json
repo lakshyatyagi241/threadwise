@@ -1057,7 +1057,200 @@
         "badHours": "Correggi gli orari evidenziati negli orari di lavoro."
       },
       "notAvailable": "Le impostazioni di prenotazione a livello di workspace non sono disponibili su questo server. Ogni tipo di prenotazione ha invece i propri orari, fuso orario, promemoria e messaggi.",
-      "openTypes": "Apri i tipi di prenotazione"
+      "openTypes": "Apri i tipi di prenotazione",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Collega un calendario Microsoft in cui scrivere le prenotazioni confermate e i cui orari di occupato chiudono gli slot.",
+        "provider": "Calendario Outlook",
+        "providerSub": "Microsoft 365 e Outlook.com",
+        "status": {
+          "unavailable": "Non disponibile",
+          "disconnected": "Non collegato",
+          "connected": "Collegato",
+          "needs_reconnect": "Richiede un nuovo collegamento"
+        },
+        "loading": "Verifica del collegamento in corso",
+        "unavailableTitle": "Outlook non è ancora configurato per questa piattaforma",
+        "unavailableBody": "L'amministratore della piattaforma deve registrare l'app Microsoft (Admin, Impostazioni, Microsoft Calendar) prima che uno spazio di lavoro possa collegarsi. Le tue prenotazioni non sono interessate.",
+        "disconnectedBody": "Non collegato. Il collegamento apre Microsoft, dove scegli l'account e accetti di condividere l'accesso al calendario.",
+        "disconnectedReadOnly": "Non collegato. Chiedi a un amministratore dello spazio di lavoro di collegarlo.",
+        "reconnectTitle": "Microsoft ha smesso di accettare il collegamento",
+        "reconnectBody": "L'accesso è stato revocato o è scaduto, quindi le prenotazioni non vengono scritte nel tuo calendario e i suoi orari di occupato non vengono letti. Collegalo di nuovo per riprendere.",
+        "reconnectBodyAccount": "L'accesso per {account} è stato revocato o è scaduto, quindi le prenotazioni non vengono scritte nel tuo calendario e i suoi orari di occupato non vengono letti. Collegalo di nuovo per riprendere.",
+        "account": "Account Microsoft",
+        "calendar": "Calendario",
+        "primaryCalendar": "Il tuo calendario principale",
+        "connectedAgo": "Collegato {when}",
+        "writesHere": "Le prenotazioni confermate vengono scritte in questo calendario.",
+        "readsOnly": "Vengono letti solo i suoi orari di occupato. Le prenotazioni vengono scritte nell'altro calendario.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft sta limitando le richieste. Le prenotazioni vengono riprovate automaticamente.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft ha negato l'accesso a questo calendario. Verifica che l'account abbia una casella di posta e possa condividere il proprio calendario.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft non ha risposto. Verrà riprovato automaticamente."
+        },
+        "errors": {
+          "notConfigured": "Outlook non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di registrare l'app Microsoft.",
+          "notConnected": "Nessun calendario Outlook è collegato. Ricarica la pagina e collegalo di nuovo.",
+          "providerFailed": "Microsoft non ha risposto. Riprova tra un attimo.",
+          "notYours": "Questo collegamento è stato avviato da un'altra persona, quindi non è stato collegato nulla. Chiedi a lei di collegarlo, oppure premi tu Collega.",
+          "invalidTicket": "Questo collegamento non può più essere confermato. Premi Collega per ricominciare."
+        },
+        "loadingCalendars": "Caricamento dei tuoi calendari",
+        "chooseLabel": "Scrivi le prenotazioni in",
+        "chooseHint": "Sono elencati solo i calendari che questo account può modificare. Gli eventi già scritti restano dove sono.",
+        "choosePlaceholder": "Scegli un calendario",
+        "chooseOptionPrimary": "{name} (calendario principale)",
+        "chooseSave": "Usa questo calendario",
+        "chooseCancel": "Annulla",
+        "saving": "Salvataggio in corso",
+        "connect": "Collega Outlook",
+        "reconnect": "Ricollega Outlook",
+        "redirecting": "Apertura di Microsoft",
+        "choose": "Scegli calendario",
+        "disconnect": "Scollega",
+        "disconnected": "Outlook scollegato.",
+        "calendarSaved": "Calendario salvato.",
+        "confirm": {
+          "title": "Collegare questo account Microsoft?",
+          "body": "Microsoft ti ha riportato qui per completare il collegamento di un account a {workspace}. Continua solo se l'hai avviato tu stesso poco fa.",
+          "confirm": "Collega",
+          "working": "Collegamento in corso",
+          "cancel": "Annulla"
+        },
+        "confirmOff": {
+          "title": "Scollegare Outlook?",
+          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario Outlook e i suoi orari di occupato non vengono più letti. Gli eventi già presenti nel tuo calendario restano lì. Per revocare l'autorizzazione dal lato Microsoft, rimuovi l'app nel tuo account Microsoft.",
+          "confirm": "Scollega",
+          "cancel": "Mantieni"
+        },
+        "outcome": {
+          "connected": "Outlook collegato. Le prenotazioni confermate ora vanno nel tuo calendario.",
+          "denied": "L'accesso non è stato concesso su Microsoft, quindi non è stato collegato nulla.",
+          "failed": "Il collegamento non è stato completato. Riprova; se continua a non funzionare, chiedi all'amministratore della piattaforma di controllare l'app Microsoft.",
+          "expired": "Il tentativo ha richiesto troppo tempo. Premi Collega per ricominciare.",
+          "not_configured": "Outlook non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di registrare l'app Microsoft.",
+          "missing_scope": "Microsoft non ha concesso l'autorizzazione al calendario necessaria. Collega di nuovo e lascia selezionate tutte le caselle.",
+          "cancelled": "Hai annullato. Non è stato collegato nulla."
+        },
+        "whatTitle": "Cosa fa",
+        "what": {
+          "freeBusy": "Legge gli orari di occupato dal tuo calendario, così gli orari prenotati o bloccati non vengono proposti.",
+          "writeBack": "Scrive le prenotazioni confermate nel tuo calendario come eventi e invita il cliente.",
+          "teams": "Aggiunge un link a una riunione Teams ai servizi online (account di lavoro e scuola)."
+        },
+        "hint": "Le prenotazioni funzionano anche senza. Se è collegato anche Google, gli orari di occupato vengono letti da entrambi e ogni prenotazione viene scritta in uno solo."
+      },
+      "writeTarget": {
+        "title": "Dove vengono scritte le prenotazioni",
+        "description": "Gli orari di occupato vengono letti da ogni calendario collegato. Ogni prenotazione viene scritta in uno solo di essi.",
+        "label": "Scrivi le prenotazioni in",
+        "hint": "Automatico usa Google Calendar quando funziona, altrimenti Outlook. Cambiandolo, gli eventi delle prenotazioni future vengono spostati nel calendario che scegli.",
+        "auto": "Automatico",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "non collegato",
+        "saved": "Salvato.",
+        "backfill": {
+          "body": "{count, plural, one {# prenotazione confermata nei prossimi 90 giorni non è} many {# prenotazioni confermate nei prossimi 90 giorni non sono} other {# prenotazioni confermate nei prossimi 90 giorni non sono}} ancora nel calendario di destinazione. Vengono scritte automaticamente dopo che colleghi o cambi calendario.",
+          "action": "Scrivile ora",
+          "working": "Messa in coda",
+          "queued": "Le stiamo scrivendo nel tuo calendario in background.",
+          "notConnected": "Nessun calendario è collegato, quindi non c'è dove scriverle."
+        }
+      },
+      "feeds": {
+        "title": "Altri calendari (iCal)",
+        "description": "Iscriviti a un calendario tramite il suo indirizzo iCal, così i suoi orari di occupato chiudono gli slot. Viene usato solo quando sei occupato: nient'altro viene mostrato o conservato.",
+        "loading": "Caricamento dei tuoi calendari",
+        "empty": "Nessun calendario sottoscritto per ora.",
+        "status": {
+          "pending": "Non ancora letto",
+          "ok": "Funzionante",
+          "error": "Problema"
+        },
+        "paused": "In pausa",
+        "neverRead": "Non ancora letto.",
+        "lastRead": "Letto {when}.",
+        "busyCount": "{count, plural, one {# blocco di occupato} many {# blocchi di occupato} other {# blocchi di occupato}} nei prossimi 180 giorni",
+        "allDayLabel": "Gli eventi di tutto il giorno bloccano la giornata",
+        "pause": "Metti in pausa",
+        "resume": "Riprendi",
+        "refresh": "Leggi ora",
+        "reading": "Lettura in corso",
+        "remove": "Annulla iscrizione",
+        "removed": "Iscrizione al calendario annullata.",
+        "added": "Calendario sottoscritto.",
+        "addTitle": "Iscriviti a un calendario",
+        "nameLabel": "Nome",
+        "namePlaceholder": "Orario del team",
+        "urlLabel": "Indirizzo del calendario",
+        "urlHint": "Un indirizzo che inizia con https:// o webcal:// e termina con .ics. Viene verificato subito, poi salvato cifrato e non più mostrato.",
+        "add": "Iscriviti",
+        "adding": "Lettura del calendario",
+        "hint": "Non iscriverti al calendario in cui vengono scritte le tue prenotazioni: un servizio con più postazioni vedrebbe i propri eventi come occupati. Un feed viene letto circa ogni 15 minuti, quindi una modifica può impiegare altrettanto per comparire.",
+        "confirmRemove": {
+          "title": "Annullare l'iscrizione a questo calendario?",
+          "message": "Gli orari bloccati da {name} tornano subito liberi. Il calendario in sé non viene toccato.",
+          "confirm": "Annulla iscrizione",
+          "cancel": "Mantieni"
+        },
+        "errors": {
+          "invalid": "Inserisci un indirizzo che inizia con https://, http:// o webcal://, senza nome utente né password.",
+          "duplicate": "Questo spazio di lavoro è già iscritto a quel calendario.",
+          "limit": "Uno spazio di lavoro può iscriversi a 10 calendari. Annulla prima l'iscrizione a uno di essi."
+        },
+        "reason": {
+          "unreachable": "Impossibile raggiungere l'indirizzo. Verifica che sia corretto e pubblico.",
+          "timeout": "Il calendario ha impiegato troppo tempo a rispondere.",
+          "not_found": "Non è stato trovato nulla a quell'indirizzo. Potrebbe essere stato rimosso dalla pubblicazione.",
+          "forbidden": "Il calendario ha negato l'accesso. Assicurati che sia pubblicato per chiunque abbia il link.",
+          "server_error": "Il server del calendario ha avuto un problema. Verrà riprovato automaticamente.",
+          "redirect_loop": "L'indirizzo ci rimanda in un ciclo senza fine.",
+          "not_a_calendar": "Quell'indirizzo non è un calendario iCal. Dovrebbe terminare con .ics.",
+          "too_large": "Quel calendario è troppo grande per essere letto.",
+          "blocked_address": "Quell'indirizzo punta a una rete privata, il che non è consentito.",
+          "unknown": "Non è stato possibile leggere quell'indirizzo come calendario."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# evento usa un fuso orario che non conosciamo ed è stato letto nel fuso orario del tuo spazio di lavoro.} many {# di eventi usano un fuso orario che non conosciamo e sono stati letti nel fuso orario del tuo spazio di lavoro.} other {# eventi usano un fuso orario che non conosciamo e sono stati letti nel fuso orario del tuo spazio di lavoro.}}",
+          "unsupportedRule": "{count, plural, one {# evento ricorrente usa} many {# eventi ricorrenti usano} other {# eventi ricorrenti usano}} una regola che non supportiamo: solo la prima occorrenza blocca il tempo.",
+          "truncated": "Questo calendario ha più blocchi di occupato di quelli che conserviamo, quindi alcuni mancano."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Le mie prenotazioni nella mia app di calendario",
+        "description": "Iscrivi Apple Calendar, Outlook o Google Calendar alle tue prenotazioni.",
+        "loading": "Caricamento del tuo link",
+        "none": "Non hai ancora un link.",
+        "make": "Crea il mio link",
+        "making": "Creazione in corso",
+        "made": "Il tuo link è pronto.",
+        "linkLabel": "Il tuo link",
+        "copy": "Copia link",
+        "copied": "Link copiato.",
+        "copyFailed": "Impossibile copiare automaticamente. Seleziona il link e copialo.",
+        "open": "Apri nella mia app di calendario",
+        "rotate": "Crea un nuovo link",
+        "stop": "Interrompi la condivisione",
+        "stopped": "Il tuo link non funziona più.",
+        "lastUsed": "Un'app di calendario lo ha letto l'ultima volta {when}.",
+        "neverUsed": "Nessuna app di calendario lo ha ancora letto.",
+        "warning": "Chiunque abbia questo link vede i titoli, gli orari e i luoghi delle tue prenotazioni. Tienilo privato. Non mostra mai numeri di telefono, indirizzi e-mail o note.",
+        "hint": "Vedi ciò che puoi vedere nell'elenco delle prenotazioni. La tua app di calendario aggiorna il feed con i propri tempi, spesso ogni poche ore.",
+        "confirmRotate": {
+          "title": "Creare un nuovo link?",
+          "message": "Il vecchio link smette di funzionare subito. Le app di calendario che lo usano hanno bisogno del nuovo.",
+          "confirm": "Crea un nuovo link"
+        },
+        "confirmStop": {
+          "title": "Interrompere la condivisione delle prenotazioni?",
+          "message": "Il tuo link smette di funzionare subito. Le app di calendario che lo usano non mostreranno più nulla di nuovo.",
+          "confirm": "Interrompi la condivisione"
+        },
+        "confirmCancel": "Mantieni"
+      }
     },
     "linked": {
       "title": "Appuntamenti",

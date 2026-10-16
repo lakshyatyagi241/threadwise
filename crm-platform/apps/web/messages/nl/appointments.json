@@ -1057,7 +1057,200 @@
         "badHours": "Corrigeer de gemarkeerde tijden in de kantooruren."
       },
       "notAvailable": "Workspacebrede boekingsinstellingen zijn niet beschikbaar op deze server. Elk boekingstype heeft in plaats daarvan zijn eigen uren, tijdzone, herinneringen en berichten.",
-      "openTypes": "Boekingstypen openen"
+      "openTypes": "Boekingstypen openen",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Koppel een Microsoft-agenda zodat bevestigde boekingen erin worden geschreven en de bezette tijden ervan tijdsloten sluiten.",
+        "provider": "Outlook-agenda",
+        "providerSub": "Microsoft 365 en Outlook.com",
+        "status": {
+          "unavailable": "Niet beschikbaar",
+          "disconnected": "Niet gekoppeld",
+          "connected": "Gekoppeld",
+          "needs_reconnect": "Opnieuw koppelen vereist"
+        },
+        "loading": "Verbinding controleren",
+        "unavailableTitle": "Outlook is nog niet ingesteld voor dit platform",
+        "unavailableBody": "Je platformbeheerder moet eerst de Microsoft-app registreren (Admin, Instellingen, Microsoft Calendar) voordat een werkruimte kan koppelen. Je boekingen worden hierdoor niet beïnvloed.",
+        "disconnectedBody": "Niet gekoppeld. Bij het koppelen open je Microsoft, waar je het account kiest en toestemming geeft om de agenda te delen.",
+        "disconnectedReadOnly": "Niet gekoppeld. Vraag een beheerder van de werkruimte om te koppelen.",
+        "reconnectTitle": "Microsoft accepteert de koppeling niet meer",
+        "reconnectBody": "De toegang is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Koppel opnieuw om verder te gaan.",
+        "reconnectBodyAccount": "De toegang voor {account} is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Koppel opnieuw om verder te gaan.",
+        "account": "Microsoft-account",
+        "calendar": "Agenda",
+        "primaryCalendar": "Je hoofdagenda",
+        "connectedAgo": "Gekoppeld {when}",
+        "writesHere": "Bevestigde boekingen worden naar deze agenda geschreven.",
+        "readsOnly": "Alleen de bezette tijden worden gelezen. Boekingen worden naar je andere agenda geschreven.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft beperkt het aantal verzoeken. Boekingen worden automatisch opnieuw geprobeerd.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft weigerde toegang tot deze agenda. Controleer of het account een mailbox heeft en de agenda mag delen.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft reageerde niet. Het wordt automatisch opnieuw geprobeerd."
+        },
+        "errors": {
+          "notConfigured": "Outlook is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Microsoft-app te registreren.",
+          "notConnected": "Er is geen Outlook-agenda gekoppeld. Laad de pagina opnieuw en koppel opnieuw.",
+          "providerFailed": "Microsoft reageerde niet. Probeer het zo meteen opnieuw.",
+          "notYours": "Deze koppeling is door iemand anders gestart, dus er is niets gekoppeld. Vraag diegene om te koppelen, of druk zelf op Koppelen.",
+          "invalidTicket": "Deze koppeling kan niet meer worden bevestigd. Druk op Koppelen om opnieuw te beginnen."
+        },
+        "loadingCalendars": "Je agenda's laden",
+        "chooseLabel": "Boekingen schrijven naar",
+        "chooseHint": "Alleen agenda's die dit account kan bewerken worden getoond. Gebeurtenissen die al zijn geschreven, blijven waar ze zijn.",
+        "choosePlaceholder": "Kies een agenda",
+        "chooseOptionPrimary": "{name} (hoofdagenda)",
+        "chooseSave": "Deze agenda gebruiken",
+        "chooseCancel": "Annuleren",
+        "saving": "Opslaan",
+        "connect": "Outlook koppelen",
+        "reconnect": "Outlook opnieuw koppelen",
+        "redirecting": "Microsoft openen",
+        "choose": "Agenda kiezen",
+        "disconnect": "Ontkoppelen",
+        "disconnected": "Outlook ontkoppeld.",
+        "calendarSaved": "Agenda opgeslagen.",
+        "confirm": {
+          "title": "Dit Microsoft-account koppelen?",
+          "body": "Microsoft heeft je teruggestuurd om het koppelen van een account aan {workspace} af te ronden. Ga alleen verder als je dit zelf zojuist hebt gestart.",
+          "confirm": "Koppelen",
+          "working": "Koppelen",
+          "cancel": "Annuleren"
+        },
+        "confirmOff": {
+          "title": "Outlook ontkoppelen?",
+          "message": "Nieuwe boekingen gaan niet meer naar je Outlook-agenda en de bezette tijden ervan worden niet meer gelezen. Gebeurtenissen die al in je agenda staan, blijven daar. Om de toestemming ook aan de kant van Microsoft in te trekken, verwijder je de app in je Microsoft-account.",
+          "confirm": "Ontkoppelen",
+          "cancel": "Behouden"
+        },
+        "outcome": {
+          "connected": "Outlook gekoppeld. Bevestigde boekingen gaan nu naar je agenda.",
+          "denied": "Er is geen toegang verleend bij Microsoft, dus er is niets gekoppeld.",
+          "failed": "Het koppelen is niet voltooid. Probeer het opnieuw; als het blijft mislukken, vraag dan je platformbeheerder om de Microsoft-app te controleren.",
+          "expired": "Die poging duurde te lang. Druk op Koppelen om opnieuw te beginnen.",
+          "not_configured": "Outlook is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Microsoft-app te registreren.",
+          "missing_scope": "Microsoft heeft de benodigde agendatoestemming niet gegeven. Koppel opnieuw en laat alle vakjes aangevinkt.",
+          "cancelled": "Je hebt geannuleerd. Er is niets gekoppeld."
+        },
+        "whatTitle": "Wat dit doet",
+        "what": {
+          "freeBusy": "Leest bezette tijden uit je agenda zodat geboekte of geblokkeerde tijden niet worden aangeboden.",
+          "writeBack": "Schrijft bevestigde boekingen als afspraken naar je agenda en nodigt de klant uit.",
+          "teams": "Voegt een Teams-vergaderlink toe aan online diensten (werk- en schoolaccounts)."
+        },
+        "hint": "Boekingen werken ook zonder. Als ook Google is gekoppeld, worden bezette tijden uit beide gelezen en wordt elke boeking naar één ervan geschreven."
+      },
+      "writeTarget": {
+        "title": "Waar boekingen naartoe worden geschreven",
+        "description": "Bezette tijden worden uit elke gekoppelde agenda gelezen. Elke boeking wordt naar één ervan geschreven.",
+        "label": "Boekingen schrijven naar",
+        "hint": "Automatisch gebruikt Google Calendar als dat werkt, anders Outlook. Bij een wijziging worden de gebeurtenissen van aankomende boekingen verplaatst naar de agenda die je kiest.",
+        "auto": "Automatisch",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "niet gekoppeld",
+        "saved": "Opgeslagen.",
+        "backfill": {
+          "body": "{count, plural, one {# bevestigde boeking in de komende 90 dagen staat} other {# bevestigde boekingen in de komende 90 dagen staan}} nog niet in de agenda waar ze naartoe gaan. Ze worden automatisch geschreven nadat je agenda's koppelt of wijzigt.",
+          "action": "Nu schrijven",
+          "working": "In de wachtrij plaatsen",
+          "queued": "Ze worden op de achtergrond naar je agenda geschreven.",
+          "notConnected": "Er is geen agenda gekoppeld, dus er is geen plek om ze naartoe te schrijven."
+        }
+      },
+      "feeds": {
+        "title": "Andere agenda's (iCal)",
+        "description": "Abonneer je met het iCal-adres op een agenda zodat de bezette tijden ervan tijdsloten sluiten. Alleen wanneer je bezet bent wordt gebruikt: verder wordt er niets van getoond of bewaard.",
+        "loading": "Je agenda's laden",
+        "empty": "Nog geen agenda's geabonneerd.",
+        "status": {
+          "pending": "Nog niet gelezen",
+          "ok": "Werkt",
+          "error": "Probleem"
+        },
+        "paused": "Gepauzeerd",
+        "neverRead": "Nog niet gelezen.",
+        "lastRead": "Gelezen {when}.",
+        "busyCount": "{count, plural, one {# bezet blok} other {# bezette blokken}} in de komende 180 dagen",
+        "allDayLabel": "Evenementen van een hele dag blokkeren de dag",
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "refresh": "Nu lezen",
+        "reading": "Lezen",
+        "remove": "Abonnement opzeggen",
+        "removed": "Abonnement op agenda opgezegd.",
+        "added": "Geabonneerd op agenda.",
+        "addTitle": "Abonneren op een agenda",
+        "nameLabel": "Naam",
+        "namePlaceholder": "Teamrooster",
+        "urlLabel": "Agenda-adres",
+        "urlHint": "Een adres dat begint met https:// of webcal:// en eindigt op .ics. Het wordt nu gecontroleerd, daarna versleuteld opgeslagen en nooit meer getoond.",
+        "add": "Abonneren",
+        "adding": "Agenda lezen",
+        "hint": "Abonneer je niet op de agenda waarnaar je boekingen worden geschreven: een dienst met meerdere plaatsen zou zijn eigen gebeurtenissen als bezet zien. Een feed wordt ongeveer elke 15 minuten gelezen, dus een wijziging daar kan zo lang duren voordat die zichtbaar is.",
+        "confirmRemove": {
+          "title": "Abonnement op deze agenda opzeggen?",
+          "message": "Tijden die door {name} werden geblokkeerd, zijn meteen weer vrij. De agenda zelf wordt niet aangepast.",
+          "confirm": "Abonnement opzeggen",
+          "cancel": "Behouden"
+        },
+        "errors": {
+          "invalid": "Voer een adres in dat begint met https://, http:// of webcal://, zonder gebruikersnaam of wachtwoord erin.",
+          "duplicate": "Deze werkruimte is al geabonneerd op die agenda.",
+          "limit": "Een werkruimte kan zich op 10 agenda's abonneren. Zeg eerst een abonnement op."
+        },
+        "reason": {
+          "unreachable": "Het adres kon niet worden bereikt. Controleer of het klopt en openbaar is.",
+          "timeout": "De agenda deed er te lang over om te antwoorden.",
+          "not_found": "Op dat adres is niets gevonden. Mogelijk is het niet meer gepubliceerd.",
+          "forbidden": "De agenda weigerde toegang. Controleer of hij is gepubliceerd voor iedereen met de link.",
+          "server_error": "De server van de agenda had een probleem. Het wordt automatisch opnieuw geprobeerd.",
+          "redirect_loop": "Het adres stuurt ons in cirkels rond.",
+          "not_a_calendar": "Dat adres is geen iCal-agenda. Het moet eindigen op .ics.",
+          "too_large": "Die agenda is te groot om te lezen.",
+          "blocked_address": "Dat adres verwijst naar een privénetwerk, wat niet is toegestaan.",
+          "unknown": "Dat adres kon niet als agenda worden gelezen."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# afspraak gebruikt een tijdzone die we niet kennen en is gelezen in de tijdzone van je werkruimte.} other {# afspraken gebruiken een tijdzone die we niet kennen en zijn gelezen in de tijdzone van je werkruimte.}}",
+          "unsupportedRule": "{count, plural, one {# terugkerende gebeurtenis gebruikt} other {# terugkerende gebeurtenissen gebruiken}} een regel die we niet ondersteunen: alleen de eerste keer blokkeert tijd.",
+          "truncated": "Deze agenda heeft meer bezette blokken dan we bewaren, dus sommige ontbreken."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mijn boekingen in mijn agenda-app",
+        "description": "Abonneer Apple Calendar, Outlook of Google Calendar op je boekingen.",
+        "loading": "Je link laden",
+        "none": "Je hebt nog geen link.",
+        "make": "Mijn link aanmaken",
+        "making": "Aanmaken",
+        "made": "Je link is klaar.",
+        "linkLabel": "Je link",
+        "copy": "Link kopiëren",
+        "copied": "Link gekopieerd.",
+        "copyFailed": "Automatisch kopiëren is niet gelukt. Selecteer de link en kopieer hem zelf.",
+        "open": "Openen in mijn agenda-app",
+        "rotate": "Nieuwe link maken",
+        "stop": "Delen stoppen",
+        "stopped": "Je link werkt niet meer.",
+        "lastUsed": "Een agenda-app heeft hem voor het laatst gelezen {when}.",
+        "neverUsed": "Geen enkele agenda-app heeft hem al gelezen.",
+        "warning": "Iedereen met deze link ziet de titels, tijden en plaatsen van je boekingen. Houd hem privé. Telefoonnummers, e-mailadressen en notities worden nooit getoond.",
+        "hint": "Je ziet wat je ook in de boekingenlijst kunt zien. Je agenda-app vernieuwt de feed volgens een eigen schema, vaak om de paar uur.",
+        "confirmRotate": {
+          "title": "Nieuwe link maken?",
+          "message": "De oude link werkt meteen niet meer. Agenda-apps die hem gebruiken, hebben de nieuwe nodig.",
+          "confirm": "Nieuwe link maken"
+        },
+        "confirmStop": {
+          "title": "Delen van je boekingen stoppen?",
+          "message": "Je link werkt meteen niet meer. Agenda-apps die hem gebruiken, tonen niets nieuws meer.",
+          "confirm": "Delen stoppen"
+        },
+        "confirmCancel": "Behouden"
+      }
     },
     "linked": {
       "title": "Afspraken",

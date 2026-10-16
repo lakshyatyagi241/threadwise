@@ -1,0 +1,19 @@
+[Unit]
+Description=Threadwise deploy webhook (GitHub push to main)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+User=deskci
+Group=deskci
+EnvironmentFile=-/etc/desk-ci/webhook.env
+ExecStart=/usr/bin/python3 /opt/desk-ci/webhook.py
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

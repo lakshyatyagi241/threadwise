@@ -112,6 +112,17 @@
         "email": "Geçerli bir e-posta adresi girin.",
         "invalid": "Girilenlerin bir kısmı geçerli değil.",
         "ownerInvalid": "Sahibi bu çalışma alanının etkin bir üyesi olmalıdır."
+      },
+      "propertiesTitle": "Özellikler",
+      "propertiesHint": "Ayarlar, Şirket özellikleri altında kurulur",
+      "propertyProblems": {
+        "invalid": "Bu değer özelliğe uymuyor.",
+        "notEditable": "Bu özellik artık düzenlenemiyor. Formu kapatıp yeniden açın.",
+        "required": "Bu özellik zorunludur.",
+        "number": "Bir sayı girin.",
+        "integer": "Bir tam sayı girin.",
+        "email": "Geçerli bir e-posta adresi girin.",
+        "url": "http:// veya https:// ile başlayan tam bir bağlantı girin."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Adres",
       "createdBy": "Oluşturan",
       "created": "Oluşturulma",
-      "updated": "Son değişiklik"
+      "updated": "Son değişiklik",
+      "properties": "Özellikler",
+      "yes": "Evet",
+      "no": "Hayır"
     },
     "contacts": {
       "title": "Kişiler",
@@ -211,6 +225,44 @@
         "address": "Adres",
         "notes": "Notlar",
         "owner": "Sahip"
+      },
+      "propertiesChanged": "Değişen özellikler:"
+    },
+    "picker": {
+      "search": "Şirket ara",
+      "results": "Şirketler",
+      "searching": "Aranıyor",
+      "none": "Eşleşen şirket yok.",
+      "unavailable": "Şirketler şu anda aranamıyor.",
+      "create": "“{name}” oluştur",
+      "creating": "Şirket oluşturuluyor",
+      "clear": "Şirketi kaldır",
+      "loading": "Şirket yükleniyor",
+      "unknown": "Şirket kullanılamıyor",
+      "createFailed": "Şirket oluşturulamadı. Tekrar deneyin.",
+      "createForbidden": "Şirket oluşturma izniniz yok."
+    },
+    "properties": {
+      "title": "Şirket özellikleri",
+      "subtitle": "Bir şirketin saklayabildiği her şey tek yerde: kendi özelliklerin, bölümlere göre gruplanmış.",
+      "section": {
+        "hint": "Bölümler, şirket formunda ve şirket sayfasında özellikleri gruplar."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# şirket} other {# şirket}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# şirketin} other {# şirketin}} bu özellik için bir değeri var. Değerler korunur, ancak özellik şirket formundan ve şirket sayfasından kalkar.",
+        "unused": "Henüz hiçbir şirketin bu özellik için değeri yok."
+      },
+      "modal": {
+        "newTitle": "Şirket özelliği ekle",
+        "descriptionHint": "Şirket formunda alanın altında gösterilir.",
+        "optionsNote": "Bir seçeneği kaldırmak, onu zaten taşıyan şirketleri değiştirmez; kayıtlı değeri korurlar.",
+        "requiredHint": "Şirket formu değer olmadan kaydedilmez.",
+        "visibleHint": "Şirket formunda ve şirket sayfasında göster.",
+        "conditionsHint": "Başka bir özelliğin değeri olana kadar bu özelliği şirket formunda gizle.",
+        "deactivateNote": "Kaydetmek bu özelliği formdan ve şirket sayfasından gizler. Şirketlerin taşıdığı değerler korunur."
       }
     }
   }

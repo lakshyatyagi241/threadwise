@@ -43,9 +43,20 @@ import { TagMenu } from './tag-menu';
 import { TemplatePicker } from './template-picker';
 import { AssignMenu } from './assign-menu';
 import { TriageMenu } from './triage-menu';
-import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
+import {
+  AlertIcon,
+  BackIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  PanelIcon,
+  RefreshIcon,
+  SearchIcon,
+} from './icons';
 import { MessageStream } from './message-stream';
+import { ThreadSearch } from './thread-search';
 import { Avatar, ChannelTag } from './parts';
+
+const UUID_KEY = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export interface ThreadPaneProps {
   conversationId: string;
@@ -126,6 +137,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   const canExportLogs = useCan('inbox.logs.export');
   const canOpenGroups = useCan('wa.groups.read');
   const { detail, thread } = props;
+  const [searching, setSearching] = useState(false);
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   // The message the next send answers. It belongs to one thread: another conversation starts without it.
@@ -214,21 +226,23 @@ export function ThreadPane(props: ThreadPaneProps) {
         {detail ? (
           <>
             <Avatar id={detail.id} name={detail.title} />
-            <div className="min-w-0 flex-1">
+            <div className={cn('min-w-0 flex-1', searching && 'hidden')}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <h2 className="truncate text-base font-semibold" data-testid="inbox-thread-title">
                   {detail.title}
                 </h2>
                 {resolved && <Badge tone="success">{t(`status.${detail.status}`)}</Badge>}
-                {detail.status === 'spam' && <Badge tone="danger">{t('status.spam')}</Badge>}
                 {detail.status === 'snoozed' && <Badge tone="warning">{t('status.snoozed')}</Badge>}
                 {win && <WindowBadge view={win} />}
                 <SlaBadge status={detail.slaStatus} nowMs={props.nowMs} />
               </div>
               <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-                <span dir="ltr" className="font-mono">
-                  {detail.peerKey}
-                </span>
+                {/* A website visitor's key is a generated id: it tells an agent nothing, so it is not shown. */}
+                {!UUID_KEY.test(detail.peerKey) && (
+                  <span dir="ltr" className="font-mono">
+                    {detail.peerKey}
+                  </span>
+                )}
                 <ChannelTag decorative kind={detail.channel.kind} name={detail.channel.name} />
                 <span className="truncate">{detail.channel.name}</span>
                 {personalGroup && canOpenGroups && (
@@ -264,89 +278,116 @@ export function ThreadPane(props: ThreadPaneProps) {
             )}
           </div>
         )}
-        <div className="flex shrink-0 items-center gap-1">
-          {detail && (
-            <CallButton
-              conversationId={detail.id}
-              displayName={detail.title}
-              contactId={detail.contact?.id}
-            />
-          )}
-          {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
-            <AssignMenu
-              current={detail.assignment.user}
-              meId={props.assignMenu.meId}
-              canAssign={props.assignMenu.canAssign}
-              busy={props.assignMenu.busy}
-              onAssign={props.assignMenu.onAssign}
-            />
-          )}
-          {detail &&
-            !props.assignMenu &&
-            !props.panelOpen &&
-            !detail.assignment.user &&
-            props.can.assignSelf && (
+        {searching && detail ? (
+          <ThreadSearch
+            key={detail.id}
+            messages={thread.state.messages}
+            onClose={() => setSearching(false)}
+            className="flex-1"
+          />
+        ) : (
+          <div className="flex shrink-0 items-center gap-1">
+            {detail && (
+              <CallButton
+                conversationId={detail.id}
+                displayName={detail.title}
+                contactId={detail.contact?.id}
+              />
+            )}
+            {detail && props.tags && (
+              <TagMenu
+                applied={detail.labels}
+                busy={props.tags.busy}
+                canCreate={props.tags.canCreate}
+                onApply={props.tags.onApply}
+                onWithdraw={props.tags.onWithdraw}
+              />
+            )}
+            {detail && props.triage && (
+              <TriageMenu
+                priority={detail.priority}
+                snoozed={detail.status === 'snoozed'}
+                canPriority={props.can.priority ?? false}
+                canSnooze={props.can.snooze ?? false}
+                canWake={props.can.resolve}
+                busy={props.triage.busy}
+                onPriority={props.triage.onPriority}
+                onSnooze={props.triage.onSnooze}
+                onWake={props.triage.onWake}
+              />
+            )}
+            {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
+              <AssignMenu
+                current={detail.assignment.user}
+                meId={props.assignMenu.meId}
+                canAssign={props.assignMenu.canAssign}
+                busy={props.assignMenu.busy}
+                onAssign={props.assignMenu.onAssign}
+              />
+            )}
+            {detail &&
+              !props.assignMenu &&
+              !props.panelOpen &&
+              !detail.assignment.user &&
+              props.can.assignSelf && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  data-testid="inbox-assign-self"
+                  onClick={props.onAssignSelf}
+                  className="hidden sm:inline-flex"
+                >
+                  {t('assignToMe')}
+                </Button>
+              )}
+            {detail && props.can.resolve && (
               <Button
                 variant="secondary"
                 size="sm"
-                data-testid="inbox-assign-self"
-                onClick={props.onAssignSelf}
-                className="hidden sm:inline-flex"
+                data-testid="inbox-resolve"
+                className="h-9 gap-1.5 rounded-full px-3"
+                disabled={props.resolving}
+                onClick={props.onToggleResolved}
+                title={t('resolveShortcut')}
               >
-                {t('assignToMe')}
+                {props.resolving ? (
+                  <Spinner />
+                ) : resolved ? (
+                  <RefreshIcon width={14} height={14} />
+                ) : (
+                  <CheckCircleIcon width={14} height={14} />
+                )}
+                <span>{resolved ? t('reopen') : t('resolve')}</span>
               </Button>
             )}
-          {detail && props.tags && (
-            <TagMenu
-              applied={detail.labels}
-              busy={props.tags.busy}
-              canCreate={props.tags.canCreate}
-              onApply={props.tags.onApply}
-              onWithdraw={props.tags.onWithdraw}
-            />
-          )}
-          {detail && props.triage && (
-            <TriageMenu
-              priority={detail.priority}
-              snoozed={detail.status === 'snoozed'}
-              canPriority={props.can.priority ?? false}
-              canSnooze={props.can.snooze ?? false}
-              canWake={props.can.resolve}
-              busy={props.triage.busy}
-              onPriority={props.triage.onPriority}
-              onSnooze={props.triage.onSnooze}
-              onWake={props.triage.onWake}
-            />
-          )}
-          {detail && props.can.resolve && (
-            <Button
-              variant="secondary"
-              size="sm"
-              data-testid="inbox-resolve"
-              className="size-9 rounded-full px-0"
-              disabled={props.resolving}
-              onClick={props.onToggleResolved}
-              title={t('resolveShortcut')}
-            >
-              {props.resolving ? <Spinner /> : <CheckCircleIcon width={14} height={14} />}
-              <span className="sr-only">{resolved ? t('reopen') : t('resolve')}</span>
-            </Button>
-          )}
-          <button
-            type="button"
-            data-testid="inbox-panel-toggle"
-            aria-pressed={props.panelOpen}
-            aria-label={props.panelOpen ? t('hidePanel') : t('showPanel')}
-            title={props.panelOpen ? t('hidePanel') : t('showPanel')}
-            onClick={props.onTogglePanel}
-            className={cn(
-              'flex size-9 items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
-              props.panelOpen ? 'bg-muted text-foreground' : 'text-muted-foreground',
+            {detail && (
+              <button
+                type="button"
+                data-testid="inbox-thread-search-open"
+                aria-label={t('searchOpen')}
+                title={t('searchOpen')}
+                onClick={() => setSearching(true)}
+                className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <SearchIcon />
+              </button>
             )}
-          >
-            <PanelIcon />
-          </button>
-        </div>
+            <button
+              type="button"
+              data-testid="inbox-panel-toggle"
+              aria-pressed={props.panelOpen}
+              aria-label={props.panelOpen ? t('hidePanel') : t('showPanel')}
+              title={props.panelOpen ? t('hidePanel') : t('showPanel')}
+              onClick={props.onTogglePanel}
+              className={cn(
+                'flex size-9 items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+                props.panelOpen ? 'bg-muted text-foreground' : 'text-muted-foreground',
+              )}
+            >
+              <PanelIcon />
+            </button>
+          </div>
+        )}
       </header>
 
       <MessageStream

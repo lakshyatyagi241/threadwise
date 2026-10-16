@@ -123,10 +123,16 @@ export class CampaignSweeper {
       SELECT id, uuid, org_id, timezone, schedule_type, retry_failed FROM wpcampaigns
       WHERE status = 'running' AND coalesce(last_run_at, created_at) < now() - ${`${STALLED_SECONDS} seconds`}::interval
       ORDER BY coalesce(last_run_at, created_at) LIMIT 100`);
+    // The setting is per workspace, so read it once per workspace in this sweep, not once per stalled campaign.
+    const attemptsByOrg = new Map<number, number>();
     for (const r of res.rows as unknown as Row[]) {
       const orgId = Number(r.org_id);
       const id = Number(r.id);
-      const { retryAttempts } = await this.settings.get(tx, orgId);
+      let retryAttempts = attemptsByOrg.get(orgId);
+      if (retryAttempts === undefined) {
+        retryAttempts = (await this.settings.get(tx, orgId)).retryAttempts;
+        attemptsByOrg.set(orgId, retryAttempts);
+      }
       const pending = await tx.execute(sql`
         SELECT 1 FROM wp_campaign_contacts
         WHERE org_id = ${orgId} AND campaign_id = ${id}

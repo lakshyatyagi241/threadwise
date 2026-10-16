@@ -100,7 +100,8 @@
       "views": {
         "list": "List",
         "board": "Board by due date"
-      }
+      },
+      "linkCompany": "A company"
     },
     "table": {
       "scrollArea": "Tasks table",
@@ -204,7 +205,8 @@
         "notesTooLong": "The notes are too long (5000 characters at most).",
         "dueInvalid": "That date is not valid.",
         "assigneeInvalid": "That person is not an active member of this workspace."
-      }
+      },
+      "company": "Company"
     },
     "drawer": {
       "loading": "Loading task",
@@ -268,7 +270,8 @@
       "searching": "Searching",
       "unavailable": "Search is not available right now.",
       "none": "No matches.",
-      "unlink": "Remove the link"
+      "unlink": "Remove the link",
+      "searchCompany": "Search companies"
     },
     "errors": {
       "network": "We could not reach the server. Check your connection and try again.",
@@ -323,7 +326,8 @@
       "loadMore": "Load more",
       "loadMoreDone": "Load more completed",
       "showDone": "Show completed",
-      "hideDone": "Hide completed"
+      "hideDone": "Hide completed",
+      "gone": "The record these tasks belong to is no longer available."
     }
   }
 }

@@ -44,9 +44,6 @@
         "unassigned": "미배정",
         "unread": "읽지 않음"
       },
-      "statusFilter": "상태",
-      "statusOpen": "진행 중",
-      "statusAll": "모든 상태",
       "status": {
         "open": "진행 중",
         "pending": "대기",
@@ -61,7 +58,6 @@
         "high": "높음",
         "urgent": "긴급"
       },
-      "channelFilter": "채널",
       "allChannels": "모든 채널",
       "archived": "보관됨",
       "backToInbox": "수신함으로 돌아가기",
@@ -107,7 +103,48 @@
         }
       },
       "select": "선택",
-      "selectDone": "완료"
+      "selectDone": "완료",
+      "filters": {
+        "open": "필터",
+        "openActive": "필터 ({count}개 켜짐)",
+        "title": "필터",
+        "close": "닫기",
+        "reset": "초기화",
+        "cancel": "취소",
+        "apply": "적용",
+        "status": "채팅 상태",
+        "statusHint": "선택하지 않으면 열림 및 대기 중인 채팅이 표시됩니다.",
+        "conversation": "대화",
+        "any": "전체",
+        "assigned": "배정됨",
+        "unassigned": "미배정",
+        "unattended": "미확인",
+        "labels": "태그",
+        "channels": "채널",
+        "agents": "상담원",
+        "sortBy": "정렬",
+        "recent": "최신순",
+        "old": "오래된순",
+        "dateRange": "기간 (마지막 활동)",
+        "from": "시작일",
+        "to": "종료일",
+        "select": "옵션 선택",
+        "search": "검색",
+        "noMatch": "일치 항목 없음",
+        "today": "오늘",
+        "last7": "최근 7일",
+        "last30": "최근 30일",
+        "thisMonth": "이번 달",
+        "clearDates": "날짜 지우기",
+        "previousMonth": "이전 달",
+        "nextMonth": "다음 달"
+      },
+      "rowMenu": "{name}에 대한 더 많은 작업",
+      "priorityMenu": "우선순위",
+      "statusFilter": "상태",
+      "statusOpen": "진행 중",
+      "statusAll": "모든 상태",
+      "channelFilter": "채널"
     },
     "status": {
       "received": "수신됨",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "새 메시지: {text}",
       "attachment": "첨부 파일",
       "jumpLatest": "최신 메시지로 이동",
-      "jumpLatestNew": "{count, plural, other {새 메시지 #개}}"
+      "jumpLatestNew": "{count, plural, other {새 메시지 #개}}",
+      "searchOpen": "이 채팅에서 검색",
+      "searchPlaceholder": "이 채팅에서 검색",
+      "searchCount": "{total}개 중 {current}번째",
+      "searchNone": "일치 항목 없음",
+      "searchPrev": "이전 결과",
+      "searchNext": "다음 결과",
+      "searchClose": "검색 닫기"
     },
     "groupThread": {
       "openGroup": "그룹 열기",
@@ -454,7 +498,13 @@
         "pickTeam": "이 대화에 배정할 팀 선택",
         "noTeam": "팀 없음",
         "onLeave": "휴가 중",
-        "onLeaveUntil": "{date}까지 휴가 중"
+        "onLeaveUntil": "{date}까지 휴가 중",
+        "availability": {
+          "online": "온라인",
+          "away": "자리 비움",
+          "busy": "바쁨",
+          "offline": "오프라인"
+        }
       },
       "presence": {
         "online": "온라인",

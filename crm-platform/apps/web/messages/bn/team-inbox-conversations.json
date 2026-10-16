@@ -44,9 +44,6 @@
         "unassigned": "বরাদ্দবিহীন",
         "unread": "অপঠিত"
       },
-      "statusFilter": "স্ট্যাটাস",
-      "statusOpen": "খোলা",
-      "statusAll": "সব স্ট্যাটাস",
       "status": {
         "open": "খোলা",
         "pending": "মুলতুবি",
@@ -61,7 +58,6 @@
         "high": "উচ্চ",
         "urgent": "জরুরি"
       },
-      "channelFilter": "চ্যানেল",
       "allChannels": "সব চ্যানেল",
       "archived": "আর্কাইভ করা",
       "backToInbox": "ইনবক্সে ফিরে যান",
@@ -107,7 +103,48 @@
         }
       },
       "select": "নির্বাচন",
-      "selectDone": "সম্পন্ন"
+      "selectDone": "সম্পন্ন",
+      "filters": {
+        "open": "ফিল্টার",
+        "openActive": "ফিল্টার ({count}টি চালু)",
+        "title": "ফিল্টার",
+        "close": "বন্ধ করুন",
+        "reset": "রিসেট",
+        "cancel": "বাতিল",
+        "apply": "প্রয়োগ করুন",
+        "status": "চ্যাটের অবস্থা",
+        "statusHint": "কিছু না বাছলে খোলা ও অপেক্ষমাণ চ্যাট দেখায়।",
+        "conversation": "কথোপকথন",
+        "any": "যেকোনো",
+        "assigned": "অ্যাসাইন করা",
+        "unassigned": "অ্যাসাইন করা নয়",
+        "unattended": "উত্তরহীন",
+        "labels": "ট্যাগ",
+        "channels": "চ্যানেল",
+        "agents": "এজেন্ট",
+        "sortBy": "সাজান",
+        "recent": "সাম্প্রতিক",
+        "old": "পুরনো",
+        "dateRange": "তারিখের পরিসর (শেষ কার্যকলাপ)",
+        "from": "থেকে",
+        "to": "পর্যন্ত",
+        "select": "একটি বিকল্প বেছে নিন",
+        "search": "খুঁজুন",
+        "noMatch": "কিছু মেলেনি",
+        "today": "আজ",
+        "last7": "গত ৭ দিন",
+        "last30": "গত ৩০ দিন",
+        "thisMonth": "এই মাস",
+        "clearDates": "তারিখ মুছুন",
+        "previousMonth": "আগের মাস",
+        "nextMonth": "পরের মাস"
+      },
+      "rowMenu": "{name}-এর আরও অ্যাকশন",
+      "priorityMenu": "অগ্রাধিকার",
+      "statusFilter": "স্ট্যাটাস",
+      "statusOpen": "খোলা",
+      "statusAll": "সব স্ট্যাটাস",
+      "channelFilter": "চ্যানেল"
     },
     "status": {
       "received": "পাওয়া গেছে",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "নতুন মেসেজ: {text}",
       "attachment": "একটি সংযুক্তি",
       "jumpLatest": "সর্বশেষ মেসেজে যান",
-      "jumpLatestNew": "{count, plural, one {# টি নতুন মেসেজ} other {# টি নতুন মেসেজ}}"
+      "jumpLatestNew": "{count, plural, one {# টি নতুন মেসেজ} other {# টি নতুন মেসেজ}}",
+      "searchOpen": "এই চ্যাটে খুঁজুন",
+      "searchPlaceholder": "এই চ্যাটে খুঁজুন",
+      "searchCount": "{total}-এর মধ্যে {current}",
+      "searchNone": "কিছু মেলেনি",
+      "searchPrev": "আগের ফল",
+      "searchNext": "পরের ফল",
+      "searchClose": "অনুসন্ধান বন্ধ করুন"
     },
     "groupThread": {
       "openGroup": "গ্রুপ খুলুন",
@@ -454,7 +498,13 @@
         "pickTeam": "এই কথোপকথনের জন্য একটি টিম বেছে নিন",
         "noTeam": "কোনো টিম নেই",
         "onLeave": "ছুটিতে আছেন",
-        "onLeaveUntil": "{date} পর্যন্ত ছুটিতে"
+        "onLeaveUntil": "{date} পর্যন্ত ছুটিতে",
+        "availability": {
+          "online": "অনলাইন",
+          "away": "দূরে",
+          "busy": "ব্যস্ত",
+          "offline": "অফলাইন"
+        }
       },
       "presence": {
         "online": "অনলাইন",

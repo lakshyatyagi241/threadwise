@@ -1057,7 +1057,200 @@
         "badHours": "Korrigieren Sie die markierten Zeiten in den Geschäftszeiten."
       },
       "notAvailable": "Workspace-weite Buchungseinstellungen sind auf diesem Server nicht verfügbar. Stattdessen hat jeder Buchungstyp eigene Zeiten, Zeitzone, Erinnerungen und Nachrichten.",
-      "openTypes": "Buchungstypen öffnen"
+      "openTypes": "Buchungstypen öffnen",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Verbinden Sie einen Microsoft-Kalender, damit bestätigte Buchungen dort eingetragen werden und seine Belegtzeiten Termine sperren.",
+        "provider": "Outlook-Kalender",
+        "providerSub": "Microsoft 365 und Outlook.com",
+        "status": {
+          "unavailable": "Nicht verfügbar",
+          "disconnected": "Nicht verbunden",
+          "connected": "Verbunden",
+          "needs_reconnect": "Erneut verbinden erforderlich"
+        },
+        "loading": "Verbindung wird geprüft",
+        "unavailableTitle": "Outlook ist für diese Plattform noch nicht eingerichtet",
+        "unavailableBody": "Ihr Plattformadministrator muss die Microsoft-App registrieren (Admin, Einstellungen, Microsoft Calendar), bevor ein Arbeitsbereich sich verbinden kann. Ihre Buchungen sind davon nicht betroffen.",
+        "disconnectedBody": "Nicht verbunden. Beim Verbinden öffnet sich Microsoft, wo Sie das Konto auswählen und der Freigabe des Kalenderzugriffs zustimmen.",
+        "disconnectedReadOnly": "Nicht verbunden. Bitten Sie einen Administrator des Arbeitsbereichs, die Verbindung herzustellen.",
+        "reconnectTitle": "Microsoft akzeptiert die Verbindung nicht mehr",
+        "reconnectBody": "Der Zugriff wurde widerrufen oder ist abgelaufen. Deshalb werden Buchungen nicht in Ihren Kalender eingetragen und seine Belegtzeiten nicht gelesen. Verbinden Sie erneut, um fortzufahren.",
+        "reconnectBodyAccount": "Der Zugriff für {account} wurde widerrufen oder ist abgelaufen. Deshalb werden Buchungen nicht in Ihren Kalender eingetragen und seine Belegtzeiten nicht gelesen. Verbinden Sie erneut, um fortzufahren.",
+        "account": "Microsoft-Konto",
+        "calendar": "Kalender",
+        "primaryCalendar": "Ihr Hauptkalender",
+        "connectedAgo": "Verbunden {when}",
+        "writesHere": "Bestätigte Buchungen werden in diesen Kalender eingetragen.",
+        "readsOnly": "Es werden nur seine Belegtzeiten gelesen. Buchungen werden in Ihren anderen Kalender eingetragen.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft begrenzt die Anfragen. Buchungen werden automatisch erneut versucht.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft hat den Zugriff auf diesen Kalender verweigert. Prüfen Sie, ob das Konto ein Postfach hat und seinen Kalender freigeben darf.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft hat nicht geantwortet. Es wird automatisch erneut versucht."
+        },
+        "errors": {
+          "notConfigured": "Outlook ist für diese Plattform nicht eingerichtet. Bitten Sie Ihren Plattformadministrator, die Microsoft-App zu registrieren.",
+          "notConnected": "Es ist kein Outlook-Kalender verbunden. Laden Sie die Seite neu und verbinden Sie erneut.",
+          "providerFailed": "Microsoft hat nicht geantwortet. Versuchen Sie es in einem Moment erneut.",
+          "notYours": "Diese Verbindung wurde von jemand anderem gestartet, daher wurde nichts verbunden. Bitten Sie die Person, die Verbindung herzustellen, oder klicken Sie selbst auf Verbinden.",
+          "invalidTicket": "Diese Verbindung kann nicht mehr bestätigt werden. Klicken Sie auf Verbinden, um neu zu beginnen."
+        },
+        "loadingCalendars": "Ihre Kalender werden geladen",
+        "chooseLabel": "Buchungen eintragen in",
+        "chooseHint": "Es werden nur Kalender aufgelistet, die dieses Konto bearbeiten kann. Bereits eingetragene Termine bleiben, wo sie sind.",
+        "choosePlaceholder": "Kalender auswählen",
+        "chooseOptionPrimary": "{name} (Hauptkalender)",
+        "chooseSave": "Diesen Kalender verwenden",
+        "chooseCancel": "Abbrechen",
+        "saving": "Wird gespeichert",
+        "connect": "Outlook verbinden",
+        "reconnect": "Outlook erneut verbinden",
+        "redirecting": "Microsoft wird geöffnet",
+        "choose": "Kalender auswählen",
+        "disconnect": "Trennen",
+        "disconnected": "Outlook wurde getrennt.",
+        "calendarSaved": "Kalender gespeichert.",
+        "confirm": {
+          "title": "Dieses Microsoft-Konto verbinden?",
+          "body": "Microsoft hat Sie zurückgeleitet, um die Verbindung eines Kontos mit {workspace} abzuschließen. Fahren Sie nur fort, wenn Sie dies soeben selbst gestartet haben.",
+          "confirm": "Verbinden",
+          "working": "Verbindung wird hergestellt",
+          "cancel": "Abbrechen"
+        },
+        "confirmOff": {
+          "title": "Outlook trennen?",
+          "message": "Neue Buchungen werden nicht mehr in Ihren Outlook-Kalender eingetragen und seine Belegtzeiten werden nicht mehr gelesen. Termine, die bereits in Ihrem Kalender stehen, bleiben erhalten. Um die Berechtigung auf Seiten von Microsoft zu widerrufen, entfernen Sie die App in Ihrem Microsoft-Konto.",
+          "confirm": "Trennen",
+          "cancel": "Beibehalten"
+        },
+        "outcome": {
+          "connected": "Outlook ist verbunden. Bestätigte Buchungen werden jetzt in Ihren Kalender eingetragen.",
+          "denied": "Der Zugriff wurde bei Microsoft nicht gewährt, daher wurde nichts verbunden.",
+          "failed": "Das Verbinden wurde nicht abgeschlossen. Versuchen Sie es erneut. Wenn es weiterhin fehlschlägt, bitten Sie Ihren Plattformadministrator, die Microsoft-App zu prüfen.",
+          "expired": "Dieser Versuch hat zu lange gedauert. Klicken Sie auf Verbinden, um neu zu beginnen.",
+          "not_configured": "Outlook ist für diese Plattform nicht eingerichtet. Bitten Sie Ihren Plattformadministrator, die Microsoft-App zu registrieren.",
+          "missing_scope": "Microsoft hat die erforderliche Kalenderberechtigung nicht erteilt. Verbinden Sie erneut und lassen Sie alle Kästchen angehakt.",
+          "cancelled": "Sie haben abgebrochen. Es wurde nichts verbunden."
+        },
+        "whatTitle": "Was das bewirkt",
+        "what": {
+          "freeBusy": "Liest die Belegtzeiten aus Ihrem Kalender, damit gebuchte oder gesperrte Zeiten nicht angeboten werden.",
+          "writeBack": "Trägt bestätigte Buchungen als Termine in Ihren Kalender ein und lädt den Kunden ein.",
+          "teams": "Fügt Online-Services einen Teams-Meeting-Link hinzu (Geschäfts-, Schul- oder Unikonten)."
+        },
+        "hint": "Buchungen funktionieren auch ohne diese Verbindung. Ist zusätzlich Google verbunden, werden die Belegtzeiten aus beiden gelesen und jede Buchung wird in einen der beiden Kalender eingetragen."
+      },
+      "writeTarget": {
+        "title": "Wohin Buchungen eingetragen werden",
+        "description": "Belegtzeiten werden aus allen verbundenen Kalendern gelesen. Jede Buchung wird in einen davon eingetragen.",
+        "label": "Buchungen eintragen in",
+        "hint": "Automatisch verwendet Google Calendar, solange er funktioniert, andernfalls Outlook. Bei einer Änderung werden die Termine der anstehenden Buchungen in den gewählten Kalender verschoben.",
+        "auto": "Automatisch",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "nicht verbunden",
+        "saved": "Gespeichert.",
+        "backfill": {
+          "body": "{count, plural, one {# bestätigte Buchung der nächsten 90 Tage ist} other {# bestätigte Buchungen der nächsten 90 Tage sind}} noch nicht in dem Kalender, in den sie gehören. Sie werden automatisch eingetragen, nachdem Sie Kalender verbinden oder wechseln.",
+          "action": "Jetzt eintragen",
+          "working": "Wird eingereiht",
+          "queued": "Die Buchungen werden im Hintergrund in Ihren Kalender eingetragen.",
+          "notConnected": "Es ist kein Kalender verbunden, daher gibt es keinen Ort zum Eintragen."
+        }
+      },
+      "feeds": {
+        "title": "Weitere Kalender (iCal)",
+        "description": "Abonnieren Sie einen Kalender über seine iCal-Adresse, damit seine Belegtzeiten Termine sperren. Verwendet wird nur, wann Sie beschäftigt sind: Nichts sonst daraus wird angezeigt oder gespeichert.",
+        "loading": "Ihre Kalender werden geladen",
+        "empty": "Noch keine Kalender abonniert.",
+        "status": {
+          "pending": "Noch nicht gelesen",
+          "ok": "Funktioniert",
+          "error": "Problem"
+        },
+        "paused": "Pausiert",
+        "neverRead": "Noch nicht gelesen.",
+        "lastRead": "Gelesen {when}.",
+        "busyCount": "{count, plural, one {# Belegtblock} other {# Belegtblöcke}} in den nächsten 180 Tagen",
+        "allDayLabel": "Ganztägige Termine sperren den Tag",
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "refresh": "Jetzt lesen",
+        "reading": "Wird gelesen",
+        "remove": "Abo beenden",
+        "removed": "Kalenderabo beendet.",
+        "added": "Kalender abonniert.",
+        "addTitle": "Kalender abonnieren",
+        "nameLabel": "Name",
+        "namePlaceholder": "Dienstplan des Teams",
+        "urlLabel": "Kalenderadresse",
+        "urlHint": "Eine Adresse, die mit https:// oder webcal:// beginnt und auf .ics endet. Sie wird jetzt geprüft, dann verschlüsselt gespeichert und nie wieder angezeigt.",
+        "add": "Abonnieren",
+        "adding": "Kalender wird gelesen",
+        "hint": "Abonnieren Sie nicht den Kalender, in den Ihre Buchungen eingetragen werden: Ein Service mit mehreren Plätzen würde seine eigenen Termine als belegt ansehen. Ein Feed wird etwa alle 15 Minuten gelesen, daher kann eine Änderung dort so lange dauern, bis sie sichtbar wird.",
+        "confirmRemove": {
+          "title": "Dieses Kalenderabo beenden?",
+          "message": "Von {name} gesperrte Zeiten sind sofort wieder frei. Der Kalender selbst wird nicht verändert.",
+          "confirm": "Abo beenden",
+          "cancel": "Beibehalten"
+        },
+        "errors": {
+          "invalid": "Geben Sie eine Adresse ein, die mit https://, http:// oder webcal:// beginnt und keinen Benutzernamen und kein Passwort enthält.",
+          "duplicate": "Dieser Arbeitsbereich hat diesen Kalender bereits abonniert.",
+          "limit": "Ein Arbeitsbereich kann 10 Kalender abonnieren. Beenden Sie zuerst ein Abo."
+        },
+        "reason": {
+          "unreachable": "Die Adresse war nicht erreichbar. Prüfen Sie, ob sie stimmt und öffentlich ist.",
+          "timeout": "Der Kalender hat zu lange für die Antwort gebraucht.",
+          "not_found": "Unter dieser Adresse wurde nichts gefunden. Möglicherweise wurde die Veröffentlichung aufgehoben.",
+          "forbidden": "Der Kalender hat den Zugriff verweigert. Stellen Sie sicher, dass er für alle mit dem Link veröffentlicht ist.",
+          "server_error": "Der Server des Kalenders hatte ein Problem. Es wird automatisch erneut versucht.",
+          "redirect_loop": "Die Adresse leitet uns im Kreis herum.",
+          "not_a_calendar": "Diese Adresse ist kein iCal-Kalender. Sie sollte auf .ics enden.",
+          "too_large": "Dieser Kalender ist zu groß zum Lesen.",
+          "blocked_address": "Diese Adresse verweist auf ein privates Netzwerk, was nicht erlaubt ist.",
+          "unknown": "Diese Adresse konnte nicht als Kalender gelesen werden."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# Termin verwendet eine uns unbekannte Zeitzone und wurde in der Zeitzone Ihres Arbeitsbereichs gelesen.} other {# Termine verwenden eine uns unbekannte Zeitzone und wurden in der Zeitzone Ihres Arbeitsbereichs gelesen.}}",
+          "unsupportedRule": "{count, plural, one {# wiederkehrender Termin verwendet} other {# wiederkehrende Termine verwenden}} eine nicht unterstützte Regel: Nur das erste Vorkommen sperrt Zeit.",
+          "truncated": "Dieser Kalender hat mehr Belegtblöcke, als wir speichern, daher fehlen einige."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Meine Buchungen in meiner Kalender-App",
+        "description": "Abonnieren Sie Ihre Buchungen in Apple Calendar, Outlook oder Google Calendar.",
+        "loading": "Ihr Link wird geladen",
+        "none": "Sie haben noch keinen Link.",
+        "make": "Meinen Link erstellen",
+        "making": "Wird erstellt",
+        "made": "Ihr Link ist bereit.",
+        "linkLabel": "Ihr Link",
+        "copy": "Link kopieren",
+        "copied": "Link kopiert.",
+        "copyFailed": "Automatisches Kopieren war nicht möglich. Markieren Sie den Link und kopieren Sie ihn.",
+        "open": "In meiner Kalender-App öffnen",
+        "rotate": "Neuen Link erstellen",
+        "stop": "Freigabe beenden",
+        "stopped": "Ihr Link funktioniert nicht mehr.",
+        "lastUsed": "Eine Kalender-App hat ihn zuletzt {when} gelesen.",
+        "neverUsed": "Bisher hat keine Kalender-App ihn gelesen.",
+        "warning": "Jeder, der diesen Link hat, sieht die Titel, Zeiten und Orte Ihrer Buchungen. Halten Sie ihn privat. Telefonnummern, E-Mail-Adressen und Notizen werden nie angezeigt.",
+        "hint": "Sie sehen das, was Sie auch in der Buchungsliste sehen. Ihre Kalender-App aktualisiert den Feed nach ihrem eigenen Zeitplan, oft alle paar Stunden.",
+        "confirmRotate": {
+          "title": "Neuen Link erstellen?",
+          "message": "Der alte Link funktioniert sofort nicht mehr. Kalender-Apps, die ihn verwenden, benötigen den neuen.",
+          "confirm": "Neuen Link erstellen"
+        },
+        "confirmStop": {
+          "title": "Freigabe Ihrer Buchungen beenden?",
+          "message": "Ihr Link funktioniert sofort nicht mehr. Kalender-Apps, die ihn verwenden, zeigen nichts Neues mehr an.",
+          "confirm": "Freigabe beenden"
+        },
+        "confirmCancel": "Beibehalten"
+      }
     },
     "linked": {
       "title": "Termine",

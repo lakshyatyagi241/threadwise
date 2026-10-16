@@ -59,24 +59,25 @@ from a deal timeline task). `notes` is encrypted at rest and returned decrypted;
 
 ## Routes
 
-| Route                       | Capability            | Notes                                                                               |
-| --------------------------- | --------------------- | ----------------------------------------------------------------------------------- |
-| `GET /tasks`                | `record.tasks.read`   | cursor-paged list (below)                                                           |
-| `GET /tasks/my`             | `record.tasks.read`   | the same query with `mine=true` forced: tasks assigned to the caller                |
-| `GET /tasks/counts`         | `record.tasks.read`   | bucket counts for the tab badges                                                    |
-| `POST /tasks`               | `record.tasks.create` | 201                                                                                 |
-| `GET /tasks/:id`            | `record.tasks.read`   |                                                                                     |
-| `PATCH /tasks/:id`          | `record.tasks.update` | needs `rowVersion` (409 `ROW_VERSION_CONFLICT`); absent keeps, `null` clears        |
-| `PUT /tasks/:id/links`      | `record.tasks.update` | `{ contactId?, dealId?, companyId? }`; `null` unlinks; no version (last write wins) |
-| `POST /tasks/:id/complete`  | `record.tasks.update` | `{ rowVersion? }`; idempotent                                                       |
-| `POST /tasks/:id/reopen`    | `record.tasks.update` | `{ rowVersion? }`; idempotent; arms the reminder again                              |
-| `DELETE /tasks/:id`         | `record.tasks.delete` | 204                                                                                 |
-| `POST /tasks/bulk/complete` | `record.tasks.update` | `{ ids }` (1 to 200)                                                                |
-| `POST /tasks/bulk/reopen`   | `record.tasks.update` | `{ ids }`                                                                           |
-| `POST /tasks/bulk/assign`   | `record.tasks.update` | `{ ids, assigneeId }` (`null` unassigns)                                            |
-| `POST /tasks/bulk/delete`   | `record.tasks.delete` | `{ ids }`                                                                           |
-| `GET /contacts/:id/tasks`   | `record.tasks.read`   | that contact's tasks; the list's filters and paging, minus the link filters         |
-| `GET /deals/:id/tasks`      | `record.tasks.read`   | that deal's tasks, including those added from the deal timeline                     |
+| Route                       | Capability            | Notes                                                                                                                                          |
+| --------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /tasks`                | `record.tasks.read`   | cursor-paged list (below)                                                                                                                      |
+| `GET /tasks/my`             | `record.tasks.read`   | the same query with `mine=true` forced: tasks assigned to the caller                                                                           |
+| `GET /tasks/counts`         | `record.tasks.read`   | bucket counts for the tab badges                                                                                                               |
+| `POST /tasks`               | `record.tasks.create` | 201                                                                                                                                            |
+| `GET /tasks/:id`            | `record.tasks.read`   |                                                                                                                                                |
+| `PATCH /tasks/:id`          | `record.tasks.update` | needs `rowVersion` (409 `ROW_VERSION_CONFLICT`); absent keeps, `null` clears                                                                   |
+| `PUT /tasks/:id/links`      | `record.tasks.update` | `{ contactId?, dealId?, companyId? }`; `null` unlinks; no version (last write wins)                                                            |
+| `POST /tasks/:id/complete`  | `record.tasks.update` | `{ rowVersion? }`; idempotent                                                                                                                  |
+| `POST /tasks/:id/reopen`    | `record.tasks.update` | `{ rowVersion? }`; idempotent; arms the reminder again                                                                                         |
+| `DELETE /tasks/:id`         | `record.tasks.delete` | 204                                                                                                                                            |
+| `POST /tasks/bulk/complete` | `record.tasks.update` | `{ ids }` (1 to 200)                                                                                                                           |
+| `POST /tasks/bulk/reopen`   | `record.tasks.update` | `{ ids }`                                                                                                                                      |
+| `POST /tasks/bulk/assign`   | `record.tasks.update` | `{ ids, assigneeId }` (`null` unassigns)                                                                                                       |
+| `POST /tasks/bulk/delete`   | `record.tasks.delete` | `{ ids }`                                                                                                                                      |
+| `GET /contacts/:id/tasks`   | `record.tasks.read`   | that contact's tasks; the list's filters and paging, minus the link filters                                                                    |
+| `GET /deals/:id/tasks`      | `record.tasks.read`   | that deal's tasks, including those added from the deal timeline                                                                                |
+| `GET /companies/:id/tasks`  | `record.tasks.read`   | that company's tasks (the company page's card); also needs `record.companies.read` on the company, whose record scope applies (404 outside it) |
 
 ### Create and edit
 

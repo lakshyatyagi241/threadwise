@@ -358,6 +358,11 @@
         "label": "Compliancecentrum",
         "description": "Hulpmiddelen om je te helpen je privacyverplichtingen na te komen: de wetten waaronder je werkt, privacycontacten, mededelingen en links, subverwerkers, stille uren en een checklist van wat er is ingericht.",
         "keywords": "compliance, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, functionaris gegevensbescherming, klachtenfunctionaris, subverwerker, dpa, verwerkersovereenkomst, voorwaarden, privacybeleid, stille uren, niet bellen, checklist, kinderen"
+      },
+      "company-properties": {
+        "label": "Bedrijfseigenschappen",
+        "description": "Voeg de velden toe die je bij elk bedrijf wilt bewaren.",
+        "keywords": "aangepaste velden, velden, verplicht, keuzelijst, organisatie, account"
       }
     },
     "title": "Instellingen",

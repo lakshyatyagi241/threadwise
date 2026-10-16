@@ -89,7 +89,7 @@ export class SlotsService {
   }
 
   /**
-   * The calendar's busy intervals for a range, or none when the type names no calendar, nothing is connected or the call fails (an
+   * The calendars' busy intervals for a range (every connected calendar and feed), or none when nothing is connected or the call fails (an
    * outage must not stop bookings: Reference fell back to its own bookings only, and so does this).
    */
   async busyFor(
@@ -99,8 +99,7 @@ export class SlotsService {
     toMs: number,
   ): Promise<EngineBusy[]> {
     try {
-      const status = await this.calendar.status(orgId);
-      if (!status.connected) return [];
+      // The calendar port itself answers "nothing busy" for a workspace with nothing connected; it unions every source it has.
       const busy = await this.calendar.freeBusy(
         orgId,
         lt.children.integration?.calendarId ?? null,

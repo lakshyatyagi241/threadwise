@@ -90,7 +90,8 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'website',
     icon: 'globe',
-    tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements'],
+    // The customer menu's order is part of how the site looks, and it makes room in Settings, which is at the page limit.
+    tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements', 'menu-order'],
   },
   {
     id: 'whatsapp',
@@ -144,10 +145,10 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-footer',
       'settings-seo',
       'settings-pwa',
-      'menu-order',
       'settings-mail',
       'settings-campaigns',
       'settings-google-calendar',
+      'settings-microsoft-calendar',
       'settings-google-mail',
       'settings-microsoft-mail',
       'settings-flow-builder',

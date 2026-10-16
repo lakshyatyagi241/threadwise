@@ -44,9 +44,6 @@
         "unassigned": "Nicht zugewiesen",
         "unread": "Ungelesen"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Offen",
-      "statusAll": "Alle Status",
       "status": {
         "open": "Offen",
         "pending": "Ausstehend",
@@ -61,7 +58,6 @@
         "high": "Hoch",
         "urgent": "Dringend"
       },
-      "channelFilter": "Kanal",
       "allChannels": "Alle Kanäle",
       "archived": "Archiviert",
       "backToInbox": "Zurück zum Posteingang",
@@ -107,7 +103,48 @@
         }
       },
       "select": "Auswählen",
-      "selectDone": "Fertig"
+      "selectDone": "Fertig",
+      "filters": {
+        "open": "Filter",
+        "openActive": "Filter ({count} aktiv)",
+        "title": "Filter",
+        "close": "Schließen",
+        "reset": "Zurücksetzen",
+        "cancel": "Abbrechen",
+        "apply": "Anwenden",
+        "status": "Chat-Status",
+        "statusHint": "Ohne Auswahl erscheinen offene und ausstehende Chats.",
+        "conversation": "Konversation",
+        "any": "Beliebig",
+        "assigned": "Zugewiesen",
+        "unassigned": "Nicht zugewiesen",
+        "unattended": "Unbeachtet",
+        "labels": "Tags",
+        "channels": "Kanäle",
+        "agents": "Agenten",
+        "sortBy": "Sortieren nach",
+        "recent": "Neueste",
+        "old": "Älteste",
+        "dateRange": "Zeitraum (letzte Aktivität)",
+        "from": "Von",
+        "to": "Bis",
+        "select": "Option auswählen",
+        "search": "Suchen",
+        "noMatch": "Keine Treffer",
+        "today": "Heute",
+        "last7": "Letzte 7 Tage",
+        "last30": "Letzte 30 Tage",
+        "thisMonth": "Dieser Monat",
+        "clearDates": "Datum löschen",
+        "previousMonth": "Vorheriger Monat",
+        "nextMonth": "Nächster Monat"
+      },
+      "rowMenu": "Weitere Aktionen für {name}",
+      "priorityMenu": "Priorität",
+      "statusFilter": "Status",
+      "statusOpen": "Offen",
+      "statusAll": "Alle Status",
+      "channelFilter": "Kanal"
     },
     "status": {
       "received": "Empfangen",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "Neue Nachricht: {text}",
       "attachment": "ein Anhang",
       "jumpLatest": "Zur neuesten Nachricht springen",
-      "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
+      "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}",
+      "searchOpen": "In diesem Chat suchen",
+      "searchPlaceholder": "In diesem Chat suchen",
+      "searchCount": "{current} von {total}",
+      "searchNone": "Keine Treffer",
+      "searchPrev": "Vorheriger Treffer",
+      "searchNext": "Nächster Treffer",
+      "searchClose": "Suche schließen"
     },
     "groupThread": {
       "openGroup": "Gruppe öffnen",
@@ -454,7 +498,13 @@
         "pickTeam": "Wählen Sie ein Team für diese Unterhaltung",
         "noTeam": "Kein Team",
         "onLeave": "Abwesend",
-        "onLeaveUntil": "Abwesend bis {date}"
+        "onLeaveUntil": "Abwesend bis {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Abwesend",
+          "busy": "Beschäftigt",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

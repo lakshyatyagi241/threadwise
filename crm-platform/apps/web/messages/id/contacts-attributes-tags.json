@@ -348,7 +348,10 @@
       "ownerMe": "{name} (saya)",
       "ownerFormer": "Mantan anggota",
       "ownerHelp": "Siapa yang menangani kontak ini. Anda hanya dapat memilih orang yang diizinkan oleh akses Anda.",
-      "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut."
+      "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
+      "company": "Perusahaan",
+      "companyHint": "Mengelompokkan kontak ini di bawah sebuah organisasi.",
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom."
     },
     "tags": {
       "title": "Tag",

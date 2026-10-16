@@ -181,7 +181,10 @@
         "valueInvalid": "Informe um número, por exemplo 1250.50.",
         "valueTooLarge": "Esse valor é grande demais.",
         "stageInvalid": "Escolha um estágio deste funil."
-      }
+      },
+      "company": "Empresa",
+      "companyHint": "Deixe em branco para usar a empresa do contato.",
+      "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo."
     },
     "contact": {
       "unlink": "Remover contato",
@@ -221,7 +224,9 @@
       "deleteTitle": "Excluir este negócio?",
       "deleteMessage": "“{title}” e sua linha do tempo serão removidos. Esta ação não pode ser desfeita.",
       "cancel": "Cancelar",
-      "company": "Empresa: {name}"
+      "company": "Empresa: {name}",
+      "companyLabel": "Empresa",
+      "companyRefused": "Você não pode usar essa empresa."
     },
     "activity": {
       "title": "Atividade",

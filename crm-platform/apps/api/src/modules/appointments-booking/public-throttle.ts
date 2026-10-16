@@ -24,6 +24,8 @@ const LIMITS = {
   manageRead: { ip: 120, target: 60 },
   /** Rescheduling or cancelling through a manage link. */
   manageWrite: { ip: 20, target: 10 },
+  /** A calendar app reading a person's bookings feed. */
+  feed: { ip: 60, target: 30 },
 } as const;
 const WINDOW_SECONDS = 60;
 

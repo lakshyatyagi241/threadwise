@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { ContactConsentModule } from '../contact-consent';
 import { AppointmentsBookingModule } from './appointments-booking.module';
 import { AppointmentCalendarConsumer } from './appointment-calendar.consumer';
+import { CalendarBackfillConsumer } from './calendar-backfill.consumer';
+import { CalendarBackfillProcessor } from './calendar-backfill.jobs';
+import { IcsFeedRefreshProcessor, IcsFeedRefreshScheduler } from './ics-feeds.jobs';
 import { CalendarReconcileProcessor, CalendarReconcileScheduler } from './calendar-reconcile.jobs';
 import { GoogleConsentSweepService } from './google-consent-sweep.service';
 import { CalendarReconcileService } from './calendar-reconcile.service';
@@ -11,7 +14,8 @@ import { AppointmentReminderSweepService } from './appointment-reminder-sweep.se
 
 /**
  * The reminder and lifecycle sweeps, the outbox consumers that send booking messages and write calendar events, and the bounded reconcile
- * of upcoming appointments against their Google events (TW-GACC-011). Imported ONLY by
+ * of upcoming appointments against their Google events (TW-GACC-011), and the back-fill of calendar events after a connect, a reconnect or a
+ * change of provider (BL-035). Imported ONLY by
  * WorkersModule (the worker process): an API pod that also swept would multiply the polling load on the database, and a consumer
  * registers itself with the kernel's OutboxSubscriberRegistry, which the drain loop in that process fans events out to.
  */
@@ -22,6 +26,10 @@ import { AppointmentReminderSweepService } from './appointment-reminder-sweep.se
     AppointmentLifecycleSweepService,
     AppointmentMessageConsumer,
     AppointmentCalendarConsumer,
+    CalendarBackfillConsumer,
+    CalendarBackfillProcessor,
+    IcsFeedRefreshProcessor,
+    IcsFeedRefreshScheduler,
     CalendarReconcileService,
     CalendarReconcileProcessor,
     CalendarReconcileScheduler,

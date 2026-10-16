@@ -348,7 +348,10 @@
       "ownerMe": "{name} (ik)",
       "ownerFormer": "Voormalig lid",
       "ownerHelp": "Wie zich om dit contact bekommert. Je kunt alleen mensen kiezen die je toegang toestaat.",
-      "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen."
+      "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
+      "company": "Bedrijf",
+      "companyHint": "Plaatst dit contact onder een organisatie.",
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
     },
     "tags": {
       "title": "Tags",

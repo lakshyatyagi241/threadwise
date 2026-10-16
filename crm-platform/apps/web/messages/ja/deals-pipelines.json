@@ -181,7 +181,10 @@
         "valueInvalid": "1250.50 のように数値を入力してください。",
         "valueTooLarge": "その値は大きすぎます。",
         "stageInvalid": "このパイプラインのステージを選択してください。"
-      }
+      },
+      "company": "会社",
+      "companyHint": "空のままにすると連絡先の会社が使われます。",
+      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。"
     },
     "contact": {
       "unlink": "連絡先を削除",
@@ -221,7 +224,9 @@
       "deleteTitle": "この案件を削除しますか？",
       "deleteMessage": "「{title}」とそのタイムラインが削除されます。この操作は元に戻せません。",
       "cancel": "キャンセル",
-      "company": "会社：{name}"
+      "company": "会社：{name}",
+      "companyLabel": "会社",
+      "companyRefused": "その会社は使用できません。"
     },
     "activity": {
       "title": "アクティビティ",

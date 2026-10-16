@@ -6,4 +6,7 @@ export * from './booking-type';
 export * from './slots';
 export * from './appointment';
 export * from './calendar';
+export * from './calendar-providers';
+export * from './calendar-feeds';
+export * from './booking-tools';
 export * from './public';

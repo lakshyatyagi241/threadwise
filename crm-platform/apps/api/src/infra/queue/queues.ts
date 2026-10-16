@@ -88,6 +88,10 @@ export const QUEUES = {
   CALLING_READINESS: 'calling-readiness',
   /** One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message. */
   CALENDAR_RECONCILE: 'calendar-reconcile',
+  /** One job per workspace that just (re)connected a calendar or changed where bookings go: writes the events its upcoming bookings are missing (BL-035). Own queue: a slow calendar must not hold a booking message. */
+  CALENDAR_BACKFILL: 'calendar-backfill',
+  /** One job per iCal feed that is due: reads the subscribed calendar's busy time (BL-035). Own queue: somebody else's slow server must not hold a booking message. */
+  CALENDAR_ICS_REFRESH: 'calendar-ics-refresh',
   /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
   WECHAT_BROADCAST: 'wechat-broadcast',
 } as const;

@@ -112,6 +112,17 @@
         "email": "Hãy nhập địa chỉ email hợp lệ.",
         "invalid": "Một số thông tin đã nhập không hợp lệ.",
         "ownerInvalid": "Người phụ trách phải là thành viên đang hoạt động của không gian làm việc này."
+      },
+      "propertiesTitle": "Thuộc tính",
+      "propertiesHint": "thiết lập tại Cài đặt, Thuộc tính công ty",
+      "propertyProblems": {
+        "invalid": "Giá trị này không phù hợp với thuộc tính.",
+        "notEditable": "Không thể chỉnh sửa thuộc tính này nữa. Hãy đóng biểu mẫu và mở lại.",
+        "required": "Thuộc tính này là bắt buộc.",
+        "number": "Hãy nhập một số.",
+        "integer": "Hãy nhập một số nguyên.",
+        "email": "Hãy nhập địa chỉ email hợp lệ.",
+        "url": "Hãy nhập liên kết đầy đủ bắt đầu bằng http:// hoặc https://."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Địa chỉ",
       "createdBy": "Người tạo",
       "created": "Ngày tạo",
-      "updated": "Thay đổi lần cuối"
+      "updated": "Thay đổi lần cuối",
+      "properties": "Thuộc tính",
+      "yes": "Có",
+      "no": "Không"
     },
     "contacts": {
       "title": "Liên hệ",
@@ -211,6 +225,44 @@
         "address": "Địa chỉ",
         "notes": "Ghi chú",
         "owner": "Người phụ trách"
+      },
+      "propertiesChanged": "Thuộc tính đã thay đổi:"
+    },
+    "picker": {
+      "search": "Tìm công ty",
+      "results": "Công ty",
+      "searching": "Đang tìm",
+      "none": "Không có công ty nào khớp.",
+      "unavailable": "Hiện không thể tìm công ty.",
+      "create": "Tạo “{name}”",
+      "creating": "Đang tạo công ty",
+      "clear": "Gỡ công ty",
+      "loading": "Đang tải công ty",
+      "unknown": "Công ty không khả dụng",
+      "createFailed": "Không thể tạo công ty. Hãy thử lại.",
+      "createForbidden": "Bạn không có quyền tạo công ty."
+    },
+    "properties": {
+      "title": "Thuộc tính công ty",
+      "subtitle": "Mọi thứ một công ty có thể lưu, ở một nơi: các thuộc tính của riêng bạn, được nhóm thành các phần.",
+      "section": {
+        "hint": "Các phần nhóm thuộc tính trên biểu mẫu công ty và trang công ty."
+      },
+      "row": {
+        "contacts": "{count, plural, other {# công ty}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, other {# công ty có}} giá trị cho thuộc tính này. Các giá trị vẫn được giữ, nhưng thuộc tính sẽ biến mất khỏi biểu mẫu công ty và trang công ty.",
+        "unused": "Chưa có công ty nào có giá trị cho thuộc tính này."
+      },
+      "modal": {
+        "newTitle": "Thêm thuộc tính công ty",
+        "descriptionHint": "Hiển thị bên dưới trường trong biểu mẫu công ty.",
+        "optionsNote": "Xóa một tùy chọn không làm thay đổi các công ty đã có tùy chọn đó; họ giữ nguyên giá trị đã lưu.",
+        "requiredHint": "Biểu mẫu công ty sẽ không lưu nếu thiếu giá trị.",
+        "visibleHint": "Hiển thị trên biểu mẫu công ty và trang công ty.",
+        "conditionsHint": "Ẩn thuộc tính này trên biểu mẫu công ty cho đến khi thuộc tính khác có giá trị.",
+        "deactivateNote": "Việc lưu sẽ ẩn thuộc tính này khỏi biểu mẫu và trang công ty. Các giá trị mà công ty đang giữ vẫn được lưu."
       }
     }
   }

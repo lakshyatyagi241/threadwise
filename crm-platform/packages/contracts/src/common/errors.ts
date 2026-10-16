@@ -486,6 +486,12 @@ export const ERROR_CODES = {
   // companies (TW-CTP)
   /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
   COMPANY_OWNER_INVALID: 'COMPANY_OWNER_INVALID',
+  /** A custom value names a company property that is not editable here (not defined, inactive, hidden, read-only or computed). */
+  COMPANY_PROPERTY_NOT_EDITABLE: 'COMPANY_PROPERTY_NOT_EDITABLE',
+  /** A custom value does not fit its property's type (not a number, not one of the options, not a date, ...). */
+  COMPANY_PROPERTY_INVALID: 'COMPANY_PROPERTY_INVALID',
+  /** A property the workspace marked required has no value (honouring its "show only when" rule). */
+  COMPANY_REQUIRED_PROPERTY_MISSING: 'COMPANY_REQUIRED_PROPERTY_MISSING',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)
@@ -679,6 +685,18 @@ export const ERROR_CODES = {
   APPT_CALENDAR_NOT_CONNECTED: 'APPT_CALENDAR_NOT_CONNECTED',
   /** Google did not answer or refused the request (details are logged, not returned). */
   APPT_CALENDAR_PROVIDER_FAILED: 'APPT_CALENDAR_PROVIDER_FAILED',
+  /** Confirming a calendar connection that someone else started (a forwarded link), or in another workspace. Nothing was requested from the provider. */
+  APPT_CALENDAR_CONFIRM_NOT_YOURS: 'APPT_CALENDAR_CONFIRM_NOT_YOURS',
+  /** The calendar connection ticket is malformed, expired or already used: press Connect again. */
+  APPT_CALENDAR_CONFIRM_INVALID: 'APPT_CALENDAR_CONFIRM_INVALID',
+  /** The iCal feed address is not an address we can read (not http/https/webcal, credentials in it, too long). */
+  APPT_ICS_FEED_INVALID: 'APPT_ICS_FEED_INVALID',
+  /** The feed address was fetched and is not a usable calendar (details: one path `url` with the reason code: unreachable, not_a_calendar, too_large, ...). */
+  APPT_ICS_FEED_UNREADABLE: 'APPT_ICS_FEED_UNREADABLE',
+  /** The workspace already subscribes to that address. */
+  APPT_ICS_FEED_DUPLICATE: 'APPT_ICS_FEED_DUPLICATE',
+  /** The workspace is at its limit of iCal feeds. */
+  APPT_ICS_FEED_LIMIT: 'APPT_ICS_FEED_LIMIT',
 
   // catalog and products (TW-CAT)
   /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */
