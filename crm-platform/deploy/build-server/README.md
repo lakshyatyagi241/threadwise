@@ -20,7 +20,33 @@ production server 187.127.155.227   /opt/desk/ci-entry.sh
 ```
 
 `release` is the same script the old GitHub Actions job used (`.github/workflows/deploy.yml`, now blocked by the account's billing).
-A failed **build** stops before production is touched. A failed **release** rolls back to the previous tag by itself.
+A failed **build** stops before production is touched. A failed **release** moves traffic back to the live slot and leaves the previous
+release running (see the zero-downtime section below).
+
+## Zero-downtime release (blue-green)
+
+The public site runs as two slots, **blue** and **green**, each an API and a web container. A release:
+
+1. checks that the migrations it adds are expand-only (`migration-lint.py`, on this host, before anything is built);
+2. takes a database dump and runs the migrations (the live slot keeps serving on the old code meanwhile);
+3. starts the **idle** slot on the new image and waits until its healthchecks pass;
+4. moves the public routes to it by rewriting `/etc/dokploy/traefik/dynamic/desk.yml` (Traefik reloads it at once, no restart), then checks
+   `/ready` and `/login` through the public address five times;
+5. restarts the single worker on the new image (one instance only, its schedulers must not run twice; the worker has no public traffic);
+6. keeps the old slot running for a minute so requests and websocket clients already on it finish (clients reconnect on their own), then stops it.
+
+If any step fails, traffic goes back to the live slot and the idle slot is stopped. The rehearsal on this build server
+(`/root/rehearse.sh` on 72.61.225.38, not part of the repo) probes the public routes through Traefik for the whole run.
+
+**Migrations must be expand-only.** The live slot is still running while the migrations of a release run, so a migration that drops or
+renames a column or table, changes a column's type, adds a NOT NULL column without a default, changes an enum or empties a table fails this
+release. Make the change in two releases: add the new shape first, switch the code, then remove the old shape in a later release. A
+migration that must do one of these things can carry a `-- bluegreen-ok: <reason>` line, which is then a reviewed exception in the diff.
+Dropping and re-adding a constraint or trigger under the same name (a widened check) is allowed.
+
+**Memory.** While both slots run, the host needs room for one more API (about 1 GB at most) and one more web (about 768 MB at most). A
+release refuses to start when less than `BLUE_GREEN_MIN_MEM_MB` (default 1200 MB) is available, before anything changes. The production host
+currently has about 1.5 GB available, which is below the comfortable margin: see the known limits below.
 
 ## What runs where
 
@@ -46,8 +72,8 @@ Nothing secret is in this repository.
 - Like the old workflow's `paths: crm-platform/**`, a push that changes **nothing under `crm-platform/`** since the last released commit (a root
   README, docs elsewhere in the repository) is not released. The log says so and `deployed` is left as it was.
 - The tag is the 9-character commit hash, as `ship.sh` uses. The last two releases stay on the production host for rollback.
-- There is **no test or CI gate**: the Docker builds type-check the API and the web app (that stopped the bad builds so far), but unit
-  tests, the migrations-from-scratch check and the security scans do not run here. Run `pnpm test` and the migration check before merging
+- There is **no test or CI gate**: the Docker builds type-check the API and the web app (that stopped the bad builds so far), and the
+  expand-only migration check runs, but unit tests, the migrations-from-scratch check and the security scans do not run here. Run `pnpm test` and the migration check before merging
   anything large. Migrations only go forward; the pre-release dump taken by `release` is the way back from a bad one.
 
 ## Operate
@@ -112,6 +138,9 @@ Checks that need no server: `deploy/build-server/tests/checks.test.sh` (webhook 
   `workflow_dispatch` only) when billing is restored.
 - **MinIO image:** the stack needs `minio/minio:latest` preloaded on each host (`pull_policy: never`), and that repository is no longer on Docker Hub.
   A new host cannot pull it; copy it from a host that has it (`docker save minio/minio:latest | ssh <host> docker load`) or move to a maintained fork.
+- **Blue-green needs memory on the production host.** Two slots of API and web run during each switch. The host has about 1.5 GB
+  available against the roughly 0.8 GB the extra slot needs. Add RAM to the production host, or move other apps off it, before relying on
+  the switch in production. Until then a release refuses with a clear message and changes nothing.
 - **Dokploy** is installed on the build server (panel on port 3000, reachable through an SSH tunnel) but has **no admin account and manages
   nothing**: this pipeline does not use it, except that its Traefik terminates TLS for the webhook. Moving the deploy into Dokploy itself (Applications
   with a build server and a registry, the database services as a compose on the production host) is possible but is a restructure of production and
