@@ -5,6 +5,7 @@ summary: Bring a personal number's recent chats and contacts into the shared inb
 area: inbox
 order: 42
 documents: [nav:devices]
+features: [personal_history_full]
 keywords:
   [
     import chats,
