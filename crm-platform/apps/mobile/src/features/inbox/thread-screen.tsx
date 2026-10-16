@@ -469,6 +469,7 @@ export function ThreadScreen() {
               onChange={setDraft}
               onSend={onSend}
               onOpenReplies={() => setRepliesOpen(true)}
+              onOpenTemplates={() => setTemplatesOpen(true)}
               onToggleNote={canNote ? () => setMode('note') : undefined}
             />
           )

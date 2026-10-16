@@ -344,12 +344,23 @@ describe('ThreadScreen', () => {
       expect(screen.queryByRole('button', { name: 'Send' })).toBeNull();
     });
 
-    it('shows the message box, not the template bar, while the window is open', async () => {
+    it('shows the message box, not the closed-window notice, while the window is open', async () => {
       arrange();
       await show();
       await loaded();
       expect(screen.getByLabelText('Message')).toBeTruthy();
-      expect(screen.queryByRole('button', { name: 'Send Template' })).toBeNull();
+      expect(screen.queryByText(NOTICE)).toBeNull();
+    });
+
+    it('still lets the agent send a template from the message box while the window is open', async () => {
+      offer([option()]);
+      arrange();
+      await show();
+      await loaded();
+      expect(templatesCall).not.toHaveBeenCalled();
+      await fireEvent.press(screen.getByRole('button', { name: 'Send Template' }));
+      expect(await screen.findByRole('button', { name: 'order_update' })).toBeTruthy();
+      expect(templatesCall).toHaveBeenCalledWith(CONVERSATION_ID, '', expect.anything());
     });
 
     it('lists the templates of the number, greying out the ones the app cannot fill in with the reason', async () => {
