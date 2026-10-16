@@ -49,7 +49,8 @@
       "delete": "Delete",
       "cancel": "Cancel",
       "deleted": "Rule deleted.",
-      "deleteFailed": "Could not delete the rule."
+      "deleteFailed": "Could not delete the rule.",
+      "businessHours": "Business hours"
     },
     "rules": {
       "someone": "an agent",
@@ -397,6 +398,38 @@
       },
       "testSkipped": "Passed over because nobody was available: {names}",
       "testOff": "The switch above is off, so this is only what would happen once it is on."
+    },
+    "businessHours": {
+      "eyebrow": "Auto-assignment",
+      "title": "Business hours",
+      "subtitle": "Rules and SLA targets that use business hours count time only inside these hours.",
+      "close": "Close",
+      "loading": "Loading business hours",
+      "loadFailed": "Business hours could not be loaded.",
+      "timezone": "Time zone",
+      "timezoneHint": "The time zone every day and time above is in.",
+      "timezoneOwnerOnly": "Only the workspace owner can change the time zone.",
+      "days": "Opening hours",
+      "day": {
+        "mon": "Monday",
+        "tue": "Tuesday",
+        "wed": "Wednesday",
+        "thu": "Thursday",
+        "fri": "Friday",
+        "sat": "Saturday",
+        "sun": "Sunday"
+      },
+      "from": "From",
+      "to": "To",
+      "problem": {
+        "required": "Enter both times.",
+        "order": "The closing time must be after the opening time."
+      },
+      "note": "A day that is switched off is closed all day. Until you save, the workspace counts as open all the time.",
+      "cancel": "Cancel",
+      "save": "Save hours",
+      "saved": "Business hours saved",
+      "saveFailed": "Save failed"
     }
   }
 }

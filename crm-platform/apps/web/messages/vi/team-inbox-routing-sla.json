@@ -49,7 +49,8 @@
       "delete": "Xóa",
       "cancel": "Hủy",
       "deleted": "Đã xóa quy tắc.",
-      "deleteFailed": "Không thể xóa quy tắc."
+      "deleteFailed": "Không thể xóa quy tắc.",
+      "businessHours": "Giờ làm việc"
     },
     "rules": {
       "someone": "một nhân viên",
@@ -397,6 +398,38 @@
       },
       "testSkipped": "Bị bỏ qua vì không ai rảnh: {names}",
       "testOff": "Công tắc phía trên đang tắt, nên đây chỉ là những gì sẽ xảy ra khi bật."
+    },
+    "businessHours": {
+      "eyebrow": "Tự động phân công",
+      "title": "Giờ làm việc",
+      "subtitle": "Các quy tắc và mục tiêu SLA dùng giờ làm việc chỉ tính thời gian trong các khung giờ này.",
+      "close": "Đóng",
+      "loading": "Đang tải giờ làm việc",
+      "loadFailed": "Không thể tải giờ làm việc.",
+      "timezone": "Múi giờ",
+      "timezoneHint": "Tất cả các ngày và giờ ở trên theo múi giờ này.",
+      "timezoneOwnerOnly": "Chỉ chủ sở hữu không gian làm việc mới có thể đổi múi giờ.",
+      "days": "Ngày và giờ làm việc",
+      "day": {
+        "mon": "Thứ Hai",
+        "tue": "Thứ Ba",
+        "wed": "Thứ Tư",
+        "thu": "Thứ Năm",
+        "fri": "Thứ Sáu",
+        "sat": "Thứ Bảy",
+        "sun": "Chủ Nhật"
+      },
+      "from": "Từ",
+      "to": "Đến",
+      "problem": {
+        "required": "Nhập cả hai giờ.",
+        "order": "Giờ đóng cửa phải sau giờ mở cửa."
+      },
+      "note": "Ngày đã tắt sẽ đóng cửa cả ngày. Cho đến khi bạn lưu, không gian làm việc được coi là mở cửa suốt thời gian.",
+      "cancel": "Hủy",
+      "save": "Lưu giờ",
+      "saved": "Đã lưu giờ làm việc",
+      "saveFailed": "Lưu không thành công"
     }
   }
 }

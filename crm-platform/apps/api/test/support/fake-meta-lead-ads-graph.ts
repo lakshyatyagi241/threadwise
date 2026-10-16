@@ -61,11 +61,9 @@ export class FakeMetaLeadAds {
   }
 
   install(): void {
-    const self = this;
     this.original = MetaLeadAdsGraphClient.prototype.forPage;
-    MetaLeadAdsGraphClient.prototype.forPage = function (token: string, pageId: string) {
-      return self.page(token, pageId);
-    };
+    MetaLeadAdsGraphClient.prototype.forPage = (token: string, pageId: string) =>
+      this.page(token, pageId);
   }
 
   uninstall(): void {
@@ -73,7 +71,11 @@ export class FakeMetaLeadAds {
   }
 
   private page(token: string, pageId: string): MetaLeadAdsPageApi {
-    const run = <T>(method: FakeMethod, args: unknown[], fn: () => GraphResult<T>): GraphResult<T> => {
+    const run = <T>(
+      method: FakeMethod,
+      args: unknown[],
+      fn: () => GraphResult<T>,
+    ): GraphResult<T> => {
       this.calls.push({ method, token, pageId, args });
       const f = this.failures.get(method);
       return f ? { ok: false, code: f.code, error: f.error } : fn();
@@ -106,7 +108,9 @@ export class FakeMetaLeadAds {
           }),
         ),
       subscribedFields: () =>
-        Promise.resolve(run('subscribedFields', [], () => ok([...(this.fields.get(pageId) ?? [])]))),
+        Promise.resolve(
+          run('subscribedFields', [], () => ok([...(this.fields.get(pageId) ?? [])])),
+        ),
       subscribeLeadgen: () =>
         Promise.resolve(
           run('subscribeLeadgen', [], () => {
