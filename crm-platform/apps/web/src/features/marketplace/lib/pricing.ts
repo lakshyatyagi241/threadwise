@@ -1,6 +1,7 @@
 import {
   MARKET_PACK_SLUG_RE,
   marketCheckoutPath,
+  type MarketBillingPeriod,
   type MarketCardPricing,
   type MarketInstallation,
   type MarketSubscribeResult,
@@ -96,6 +97,8 @@ export type PriceLineKey = (typeof PRICE_LINE_KEYS)[number];
 
 export interface PriceLine {
   key: PriceLineKey;
+  /** The yearly price, formatted, when the app can also be bought for a year (only on the `monthly` line). */
+  annualPrice: string | null;
   /** The monthly list price, formatted, whenever the app is paid and priced. */
   price: string | null;
   /** Set while the workspace may start the free trial (and only then): the days, for the chip. */
@@ -106,7 +109,7 @@ type PricingFields = Pick<
   MarketCardPricing,
   'model' | 'access' | 'amount' | 'currency' | 'trialAvailable' | 'trialDays'
 > &
-  Partial<Pick<MarketCardPricing, 'billingMode'>>;
+  Partial<Pick<MarketCardPricing, 'billingMode' | 'annualAmount'>>;
 
 const priceOf = (
   p: Pick<MarketCardPricing, 'amount' | 'currency'>,
@@ -114,20 +117,31 @@ const priceOf = (
 ): string | null =>
   p.amount !== null && p.currency !== null ? formatMoney(p.amount, p.currency, locale) : null;
 
+/** The yearly price, formatted, when the app can be bought for a year. */
+const annualOf = (
+  p: Partial<Pick<MarketCardPricing, 'annualAmount' | 'currency'>>,
+  locale: string,
+): string | null =>
+  p.annualAmount != null && p.currency != null
+    ? formatMoney(p.annualAmount, p.currency, locale)
+    : null;
+
 export function priceLine(p: PricingFields, locale: string): PriceLine {
   if (p.model === 'free' || p.access === 'free')
-    return { key: 'free', price: null, trialDays: null };
+    return { key: 'free', price: null, annualPrice: null, trialDays: null };
   const price = priceOf(p, locale);
   switch (p.access) {
     case 'included':
-      return { key: 'included', price: null, trialDays: null };
+      return { key: 'included', price: null, annualPrice: null, trialDays: null };
     case 'entitled':
-      return { key: 'subscribed', price, trialDays: null };
+      return { key: 'subscribed', price, annualPrice: null, trialDays: null };
     case 'not_for_sale':
-      return { key: 'notForSale', price: null, trialDays: null };
+      return { key: 'notForSale', price: null, annualPrice: null, trialDays: null };
     case 'subscription_required': {
       const trialDays = p.trialAvailable && p.trialDays > 0 ? p.trialDays : null;
-      return price ? { key: 'monthly', price, trialDays } : { key: 'paid', price: null, trialDays };
+      return price
+        ? { key: 'monthly', price, annualPrice: annualOf(p, locale), trialDays }
+        : { key: 'paid', price: null, annualPrice: null, trialDays };
     }
   }
 }
@@ -178,12 +192,19 @@ export function pricingView(
  */
 export type Acquire =
   | { kind: 'install' }
-  | { kind: 'subscribe'; price: string | null; trialDays: number | null; automatic: boolean }
+  | {
+      kind: 'subscribe';
+      price: string | null;
+      /** The price of a year, formatted, when the app can be bought yearly. */
+      annualPrice: string | null;
+      trialDays: number | null;
+      automatic: boolean;
+    }
   | { kind: 'notForSale' };
 
 export function acquireFor(
   p: Pick<MarketCardPricing, 'access' | 'amount' | 'currency' | 'trialAvailable' | 'trialDays'> &
-    Partial<Pick<MarketCardPricing, 'billingMode'>>,
+    Partial<Pick<MarketCardPricing, 'billingMode' | 'annualAmount'>>,
   locale: string,
 ): Acquire {
   switch (p.access) {
@@ -191,6 +212,7 @@ export function acquireFor(
       return {
         kind: 'subscribe',
         price: priceOf(p, locale),
+        annualPrice: annualOf(p, locale),
         trialDays: p.trialAvailable && p.trialDays > 0 ? p.trialDays : null,
         automatic: p.billingMode === 'recurring',
       };
@@ -201,7 +223,13 @@ export function acquireFor(
   }
 }
 
-export const subscribeBody = (startTrial: boolean): SubscribeAppRequest => ({ startTrial });
+export const subscribeBody = (
+  startTrial: boolean,
+  period: MarketBillingPeriod = 'monthly',
+): SubscribeAppRequest => ({
+  startTrial,
+  ...(period === 'yearly' && !startTrial ? { period } : {}),
+});
 
 /** Only the add-on checkout page is a place Subscribe may send the browser. */
 const CHECKOUT_PATH = /^\/billing\/checkout\/[A-Za-z0-9_-]{1,64}(?:\?[^\s#]*)?$/;
@@ -272,11 +300,15 @@ export interface SubscriptionView {
   status: MarketSubscriptionStatus;
   tone: ChipTone;
   date: { kind: SubscriptionDateKind; iso: string | null };
-  /** What the last payment was, per month, formatted; null for a trial or a comp. */
+  /** What the last payment was, for its period, formatted; null for a trial or a comp. */
   lastPayment: string | null;
+  /** The period that payment bought: the sentence says "per month" or "per year". */
+  period: MarketBillingPeriod;
   /** The listing's price now when it differs from the last payment: what the next payment will be (formatted). */
   nextPayment: string | null;
   actions: { cancel: boolean; resume: boolean; renew: RenewKind | null };
+  /** The price is locked (grandfathered): the next payment is `lastPayment` whatever the app costs now, until the subscription ends. */
+  priceLocked: boolean;
   /** The card renews it on its own: Cancel stops that, and the confirmation says the card will not be charged again. */
   autoRenew: boolean;
   /** The last card renewal failed and the app still works until `date` (the grace days): the page says to fix the payment. */
@@ -351,8 +383,10 @@ export function subscriptionView(sub: MarketSubscription, locale: string): Subsc
         ? formatMoney(sub.amount, sub.currency, locale)
         : null,
     nextPayment: next,
+    period: sub.period,
     actions: { cancel: sub.actions.canCancel, resume: sub.actions.canResume, renew },
     autoRenew: sub.autoRenew,
+    priceLocked: sub.priceLocked,
     paymentFailed: sub.paymentFailedAt !== null && sub.status === 'past_due',
     comp: sub.source === 'comp',
     cannotRenew: sub.source !== 'comp' && sub.status === 'ended' && !sub.actions.canRenew,
@@ -461,6 +495,7 @@ export interface UninstallRenewal {
 export function uninstallRenewal(
   sub: Pick<MarketSubscription, 'status' | 'source' | 'currentPeriodEnd'> | null | undefined,
 ): UninstallRenewal | null {
-  if (!sub || sub.source === 'comp' || (sub.status !== 'active' && sub.status !== 'past_due')) return null;
+  if (!sub || sub.source === 'comp' || (sub.status !== 'active' && sub.status !== 'past_due'))
+    return null;
   return { paidUntil: sub.currentPeriodEnd };
 }

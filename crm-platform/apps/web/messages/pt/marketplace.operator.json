@@ -58,7 +58,8 @@
           "trialing": "Em teste",
           "comped": "Cortesia",
           "canceling": "Encerrando",
-          "ended": "Encerrada"
+          "ended": "Encerrada",
+          "past_due": "Pagamento falhou"
         },
         "subscriptionSource": {
           "purchase": "Compra",
@@ -92,7 +93,8 @@
         "request": "Não foi possível concluir a requisição.",
         "unexpected": "Algo deu errado do nosso lado. Tente novamente; se continuar, informe o ID da requisição.",
         "subscriptionState": "Isso não é possível no estado atual da assinatura. Um espaço de trabalho que já paga não pode receber cortesia (cancele a assinatura primeiro), um app gratuito não tem o que conceder, e uma assinatura encerrada não pode ser cancelada novamente.",
-        "subscriptionNotFound": "Essa assinatura não foi encontrada. Pode ter sido removida. Recarregue a lista."
+        "subscriptionNotFound": "Essa assinatura não foi encontrada. Pode ter sido removida. Recarregue a lista.",
+        "renewalNotStopped": "Não foi possível interromper a renovação no cartão no provedor de pagamento, então nada foi alterado e o espaço de trabalho ainda pode ser cobrado. Tente novamente em instantes ou encerre a renovação no painel do provedor."
       },
       "list": {
         "title": "Catálogo do Marketplace",
@@ -658,12 +660,13 @@
         "free": "Grátis",
         "perMonth": "/ mês",
         "trial": "{count, plural, one {# dia de teste} other {# dias de teste}}",
-        "notOnSale": "Não está à venda"
+        "notOnSale": "Não está à venda",
+        "perYear": "/ ano"
       },
       "pricing": {
         "title": "Preços",
         "description": "Defina se este app é grátis ou pago e quanto custa. Vale o seu preço: o manifesto do desenvolvedor apenas sugere um.",
-        "billing": "Um app pago é vendido como um prazo mensal pré-pago: um complemento de cobrança comprado pelo checkout normal. Ainda não há renovação automática no cartão, então um espaço de trabalho paga de novo quando o mês está quase no fim. Uma mudança de preço vale para novas assinaturas e para o próximo pagamento de cada assinante; um período já pago nunca é alterado.",
+        "billing": "Um app pago é vendido como um complemento de cobrança comprado pelo checkout normal. Por padrão, é um prazo mensal pré-pago: o espaço de trabalho paga de novo quando o mês está quase no fim. Escolha \"Renovação automática no cartão\" abaixo para cobrar o cartão do espaço de trabalho automaticamente todo mês. Uma mudança de preço vale para novas assinaturas e para o próximo pagamento de cada assinante pré-pago; um período já pago nunca é alterado, e um assinante cujo cartão já renova mantém o preço da assinatura no provedor até assinar novamente.",
         "readOnly": "Somente leitura. Alterar os preços exige a permissão da plataforma {permission}.",
         "visibility": {
           "label": "Status da listagem",
@@ -693,7 +696,7 @@
           "trialDays": "Período de teste grátis (dias)",
           "trialDaysHint": "0 para sem teste, no máximo {max}. Cada espaço de trabalho tem um teste por app.",
           "annualAmount": "Preço anual (opcional)",
-          "annualAmountHint": "Guardado para depois. A cobrança anual ainda não foi construída, então os espaços de trabalho não podem pagar por ano hoje.",
+          "annualAmountHint": "O preço de um ano. Deixe vazio para vender o app apenas mensalmente. Um espaço de trabalho que escolher o plano anual paga esse valor uma vez por ano, ou no cartão todo ano quando o app é renovado no cartão.",
           "purchasable": "À venda",
           "purchasableHint": "Quando desativado, nenhum espaço de trabalho novo pode assinar. Os que já assinam ainda podem renovar."
         },
@@ -763,6 +766,27 @@
             "paid": "Os assinantes mantêm o tempo que já pagaram. Não há reembolso.",
             "action": "Tornar grátis"
           }
+        },
+        "billingMode": {
+          "legend": "Como renova",
+          "one_time": {
+            "label": "Mês pré-pago",
+            "hint": "O espaço de trabalho paga de novo quando o mês está quase no fim."
+          },
+          "recurring": {
+            "label": "Renovação automática no cartão",
+            "hint": "O provedor de pagamento cobra o cartão todo mês até o espaço de trabalho cancelar."
+          },
+          "note": "Vale para novas assinaturas. Uma assinatura que já está em andamento mantém a forma como foi comprada. Requer um gateway de pagamento compatível com assinaturas."
+        },
+        "priceLock": {
+          "label": "Manter os assinantes no preço que pagaram na primeira vez",
+          "hint": "Assim, uma mudança de preço vale só para novos assinantes. Ativar isto também trava os assinantes atuais no último pagamento; desativar não destrava ninguém. A trava termina quando a assinatura termina."
+        },
+        "withdrawn": {
+          "title": "Reembolsar os assinantes deste app retirado",
+          "hint": "O app foi retirado no meio dos períodos que seus assinantes pagaram. Devolva a cada um a parte do último pagamento a partir do momento da retirada.",
+          "action": "Reembolsar tempo não usado..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Encerradas",
           "mrr": "Receita mensal",
           "mrrNone": "Ainda não há assinantes pagantes",
-          "mrrCurrency": "Receita mensal, {currency}"
+          "mrrCurrency": "Receita mensal, {currency}",
+          "pastDue": "Pagamento falhou"
         },
         "summary": {
           "emptyTitle": "Ainda não há apps pagos",
@@ -871,7 +896,8 @@
             "canceling": "Terminando",
             "ended": "Encerradas",
             "total": "Total",
-            "mrr": "Receita mensal"
+            "mrr": "Receita mensal",
+            "pastDue": "Pagamento falhou"
           },
           "free": "Grátis",
           "totals": "Todos os apps",
@@ -905,7 +931,9 @@
           "compUntil": "Cortesia até {date}",
           "compOpen": "Cortesia até você encerrar",
           "endedOn": "Encerrada em {date}",
-          "none": "Sem data de término"
+          "none": "Sem data de término",
+          "renewsOn": "Renova em {date}",
+          "graceUntil": "Carência até {date}"
         },
         "noCharge": "Sem cobrança",
         "compBy": "Cortesia dada por {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Nenhuma assinatura corresponde",
         "noMatchMessage": "Nada corresponde a estes filtros. Tente outros.",
         "clearFilters": "Limpar filtros",
-        "loadMore": "Carregar mais"
+        "loadMore": "Carregar mais",
+        "unlockPrice": "Destravar preço",
+        "refundUnused": "Reembolsar tempo não usado"
+      },
+      "unlockDialog": {
+        "eyebrow": "Preço travado",
+        "title": "Destravar o preço de {workspace}",
+        "close": "Fechar",
+        "back": "Voltar",
+        "confirm": "Destravar preço",
+        "summary": "{workspace} paga por {app} o preço que pagou na primeira vez. Ao destravar, o próximo pagamento passa a ser o preço atual do app.",
+        "effectPrepaid": "O próximo pagamento, após o período pago até {date}, será o preço atual.",
+        "effectCard": "O cartão renova o app pelo preço antigo no provedor de pagamento, então a renovação no cartão é encerrada ao fim do período pago ({date}). Eles são avisados e podem assinar de novo pelo preço atual.",
+        "reason": "Motivo (mantido na trilha de auditoria)",
+        "done": "{workspace} não está mais em preço travado para {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Reembolso",
+        "title": "Reembolsar o tempo não usado de {workspace}",
+        "close": "Fechar",
+        "back": "Voltar",
+        "summary": "Devolve, pelo provedor de pagamento, a parte do último pagamento de {app} que ainda está pela frente. Nada é devolvido duas vezes: ao executar de novo, só o que restou é devolvido.",
+        "working": "Calculando o valor...",
+        "paid": "Último pagamento",
+        "unused": "Parte não usada",
+        "already": "Já reembolsado",
+        "refundable": "A reembolsar agora",
+        "nothing": "Não há nada a reembolsar: o período terminou, nenhum pagamento por gateway foi encontrado ou a parte não usada já foi devolvida.",
+        "endNow": "Encerrar também a assinatura agora",
+        "endNowHint": "A instalação é pausada e os dados são mantidos. Sem isso, o app continua funcionando até o fim do período.",
+        "reason": "Motivo (fica na trilha de auditoria e é enviado ao provedor de pagamento)",
+        "confirm": "Reembolsar {amount}",
+        "done": "{amount} reembolsados a {workspace} por {app}.",
+        "refused": "O provedor de pagamento recusou o reembolso: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "App retirado",
+        "title": "Reembolsar os assinantes de {name}",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "intro": "Examina cada assinatura paga de {name} e devolve, pelo provedor de pagamento, a parte do último pagamento que ainda estava pela frente quando o app foi retirado. Veja primeiro a pré-visualização; nada é devolvido duas vezes.",
+        "preview": "Pré-visualizar",
+        "owed": "{count, plural, one {# assinante tem reembolso a receber} other {# assinantes têm reembolso a receber}}",
+        "nobody": "Ninguém tem nada a receber no momento.",
+        "more": "Há mais assinaturas do que uma execução processa. Execute de novo para continuar.",
+        "reason": "Motivo (fica na trilha de auditoria e é enviado ao provedor de pagamento)",
+        "run": "{count, plural, one {Reembolsar # assinante} other {Reembolsar # assinantes}}",
+        "continue": "Continuar com as próximas assinaturas",
+        "result": "Reembolsados: {refunded}, com falha: {failed}.",
+        "someFailed": "Alguns reembolsos não foram concluídos (o provedor recusou ou não foi possível contatá-lo). Eles estão listados na trilha de auditoria; ao executar de novo, são tentados mais uma vez.",
+        "done": "{count, plural, one {# assinante de {name} reembolsado.} other {# assinantes de {name} reembolsados.}}"
       }
     }
   }

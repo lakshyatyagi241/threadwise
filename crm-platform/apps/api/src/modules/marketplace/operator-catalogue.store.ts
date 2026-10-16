@@ -325,6 +325,7 @@ export class OperatorCatalogueStore {
       currency: string | null;
       annualAmount: string | null;
       billingMode: 'one_time' | 'recurring';
+      priceLock: boolean;
       trialDays: number;
       purchasable: boolean;
       includedPlanFeature: string | null;
@@ -338,7 +339,7 @@ export class OperatorCatalogueStore {
     const res = await tx.execute(sql`
       UPDATE marketplace_apps SET
         pricing_model = ${p.model}, price_amount = ${p.amount}::numeric, price_currency = ${p.currency},
-        annual_amount = ${p.annualAmount}::numeric, billing_mode = ${p.billingMode}, trial_days = ${p.trialDays},
+        annual_amount = ${p.annualAmount}::numeric, billing_mode = ${p.billingMode}, price_lock = ${p.priceLock}, trial_days = ${p.trialDays},
         purchasable = ${p.purchasable},
         included_plan_feature = ${p.includedPlanFeature}, included_min_plan = ${p.includedMinPlan},
         grants_plan_features = ${textArray(p.grantsPlanFeatures)}, grandfather_existing = ${p.grandfatherExisting},
@@ -363,16 +364,18 @@ export class OperatorCatalogueStore {
       features: string[];
       /** `recurring`: the add-on is sold as an autopay subscription (`plans.billing_mode`). */
       billingMode: 'one_time' | 'recurring';
+      /** The price of a year, or null when the app is monthly only. */
+      annualAmount: string | null;
     },
   ): Promise<void> {
     await tx.execute(sql`
       INSERT INTO plans (slug, kind, name, amount, currency, billing_unit, billing_duration, is_free, is_lifetime, is_active, sort_order,
-                         cta_label, limits, features, marketplace_app_id, billing_mode)
+                         cta_label, limits, features, marketplace_app_id, billing_mode, annual_amount)
       VALUES (${p.slug}, 'addon', ${p.name}, ${p.amount}::numeric, ${p.currency}, 'months', 1, false, false, true, 9000,
-              'Subscribe', '{}'::jsonb, ${jsonb(Object.fromEntries(p.features.map((k) => [k, true])))}, ${p.appId}, ${p.billingMode})
+              'Subscribe', '{}'::jsonb, ${jsonb(Object.fromEntries(p.features.map((k) => [k, true])))}, ${p.appId}, ${p.billingMode}, ${p.annualAmount}::numeric)
       ON CONFLICT (marketplace_app_id) WHERE marketplace_app_id IS NOT NULL DO UPDATE SET
         name = EXCLUDED.name, amount = EXCLUDED.amount, currency = EXCLUDED.currency, is_active = true,
-        features = EXCLUDED.features, billing_mode = EXCLUDED.billing_mode`);
+        features = EXCLUDED.features, billing_mode = EXCLUDED.billing_mode, annual_amount = EXCLUDED.annual_amount`);
   }
 
   /** The app is free now: its add-on can no longer be bought. Workspaces that hold it keep it until it ends. */

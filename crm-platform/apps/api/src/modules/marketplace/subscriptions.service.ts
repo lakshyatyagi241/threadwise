@@ -119,9 +119,15 @@ export class SubscriptionsService {
       if (ev.availability === 'not_visible') throw this.notFound();
       const now = new Date();
       const view = app.sub ? toSubscriptionView(app.sub, app.pricing, app.status, now) : null;
+      // A yearly subscription needs a yearly price on the listing: asking for one that is not offered is a mistake, not a monthly purchase.
+      if (!input.startTrial && input.period === 'yearly' && app.pricing.annualAmount === null)
+        throw AppError.validation('This app is not sold yearly.', [
+          { path: 'period', message: 'There is no yearly price for this app.' },
+        ]);
+      const period = input.startTrial ? 'monthly' : input.period;
       const checkout = {
         packSlug: marketPackSlug(app.uuid),
-        path: marketCheckoutPath(marketPackSlug(app.uuid)),
+        path: marketCheckoutPath(marketPackSlug(app.uuid), app.slug, period),
       };
 
       if (input.startTrial) {

@@ -9,6 +9,7 @@ import {
   type MarketOperatorSubscription,
   type MarketSubscriptionStatus,
   type MarketSubscriptionSummaryRow,
+  type UnlockSubscriptionPriceRequest,
 } from '@crm/contracts';
 import type { SubscriptionListFilters } from '../api';
 import { textRule, type TextRule } from './confirmations';
@@ -183,6 +184,25 @@ export function cancelCheck(
   const reason = textRule(d.reason, OPERATOR_NOTE_MIN, OPERATOR_NOTE_MAX);
   return { reason, canSubmit: reason.ok && cancelChoices(s).includes(d.when) };
 }
+
+/** Only a subscription on a locked price can be released from it. */
+export const canUnlockPrice = (
+  s: Pick<MarketOperatorSubscription, 'priceLocked' | 'status'>,
+): boolean => s.priceLocked && s.status !== 'ended';
+
+export interface UnlockCheck {
+  reason: TextRule;
+  canSubmit: boolean;
+}
+
+export function unlockCheck(reason: string): UnlockCheck {
+  const rule = textRule(reason, OPERATOR_NOTE_MIN, OPERATOR_NOTE_MAX);
+  return { reason: rule, canSubmit: rule.ok };
+}
+
+export const unlockPayload = (reason: string): UnlockSubscriptionPriceRequest => ({
+  reason: reason.trim(),
+});
 
 export function cancelPayload(d: CancelDraft): CancelOperatorSubscriptionRequest {
   return { immediate: d.when === 'now', reason: d.reason.trim() };

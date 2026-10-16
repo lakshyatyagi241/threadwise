@@ -23,6 +23,7 @@ import { OperatorCatalogueStore } from './operator-catalogue.store';
 import { OperatorInsightsService } from './operator-insights.service';
 import { OperatorPricingService } from './operator-pricing.service';
 import { PricingAccess } from './pricing-access.service';
+import { ProrationService } from './proration.service';
 import { PlatformMarketplaceController } from './platform-marketplace.controller';
 import { MarketplaceLeadPullBinding, MarketplaceLeadPullProvider } from './lead-pull.provider';
 import { PullBackfillService } from './pull-backfill.service';
@@ -81,6 +82,7 @@ import { SubscriptionsService } from './subscriptions.service';
     MarketSubscriptionLifecycle,
     SubscriptionsService,
     OperatorPricingService,
+    ProrationService,
     PullRunService,
     PullSyncService,
     PullBackfillService,

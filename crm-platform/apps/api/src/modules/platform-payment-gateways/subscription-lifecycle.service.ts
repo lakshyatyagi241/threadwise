@@ -373,10 +373,16 @@ export class SubscriptionLifecycleService {
     const plan = planRes.rows[0] as
       { billing_unit: BillingUnit; billing_duration: number } | undefined;
     if (!plan) return;
-    const next = windowAfterEvent(new Date(), cur, end, extend, {
-      unit: plan.billing_unit,
-      duration: plan.billing_duration,
-    });
+    // A yearly subscription renews by the year, whatever the monthly cadence of the pack says.
+    const next = windowAfterEvent(
+      new Date(),
+      cur,
+      end,
+      extend,
+      sub.billingCycle === 'yearly'
+        ? { unit: 'years', duration: 1 }
+        : { unit: plan.billing_unit, duration: plan.billing_duration },
+    );
     if (!next) return;
     await tx.execute(sql`
       UPDATE workspace_addons SET ends_at = ${next.toISOString()}::timestamptz, status = 'active'

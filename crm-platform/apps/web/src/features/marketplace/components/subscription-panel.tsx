@@ -61,7 +61,18 @@ export function SubscriptionPanel({
           )}
         </div>
         {view.lastPayment && (
-          <p className="text-muted-foreground">{t('lastPayment', { price: view.lastPayment })}</p>
+          <p className="text-muted-foreground">
+            {t(view.period === 'yearly' ? 'lastPaymentYear' : 'lastPayment', {
+              price: view.lastPayment,
+            })}
+          </p>
+        )}
+        {view.priceLocked && view.lastPayment && (
+          <p className="text-muted-foreground" data-testid="price-locked">
+            {t(view.period === 'yearly' ? 'priceLockedYear' : 'priceLocked', {
+              price: view.lastPayment,
+            })}
+          </p>
         )}
         {view.paymentFailed && (
           <Alert tone="warning" data-testid="payment-failed">
@@ -70,7 +81,9 @@ export function SubscriptionPanel({
         )}
         {view.nextPayment && (
           <Alert tone="info" data-testid="price-change">
-            {t('nextPayment', { price: view.nextPayment })}
+            {t(view.period === 'yearly' ? 'nextPaymentYear' : 'nextPayment', {
+              price: view.nextPayment,
+            })}
           </Alert>
         )}
         {view.comp && <p className="text-muted-foreground">{t('compNote')}</p>}

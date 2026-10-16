@@ -144,7 +144,8 @@
         "notForSale": "Not for sale",
         "paid": "Paid app",
         "addOn": "Add-on",
-        "trial": "{days}-day free trial"
+        "trial": "{days}-day free trial",
+        "monthlyOrYearly": "{price} / month or {annual} / year"
       },
       "installs": "{count, plural, one {# install} other {# installs}}",
       "version": "Version {version}",
@@ -825,7 +826,14 @@
         "free": "{name} is free."
       },
       "hintPriceAuto": "{price} per month, charged to your card automatically every month until you cancel.",
-      "hintAuto": "Your card is charged automatically every month until you cancel."
+      "hintAuto": "Your card is charged automatically every month until you cancel.",
+      "period": {
+        "legend": "Billing period",
+        "monthly": "Monthly, {price}",
+        "yearly": "Yearly, {price}"
+      },
+      "hintYear": "{price} per year, paid at checkout. Each payment covers one year.",
+      "hintYearAuto": "{price} per year, charged to your card automatically every year until you cancel."
     },
     "subscription": {
       "title": "Subscription",
@@ -879,7 +887,11 @@
       "noCheckout": "Checkout is not available for this app right now. Try again in a moment.",
       "paymentFailed": "The last card payment for this app did not go through. The app keeps working until {date} while the payment provider tries again. Pay now, or fix your payment method, to avoid a pause.",
       "paymentFailedNoDate": "The last card payment for this app did not go through. The app keeps working while the payment provider tries again. Pay now, or fix your payment method, to avoid a pause.",
-      "autoRenewHint": "Your card is charged automatically on the renewal date. Cancel before then to stop it."
+      "autoRenewHint": "Your card is charged automatically on the renewal date. Cancel before then to stop it.",
+      "lastPaymentYear": "Last payment: {price} per year",
+      "nextPaymentYear": "The price of this app changed. Your next payment will be {price} per year.",
+      "priceLocked": "Your price is locked at {price} per month. It stays the same while you stay subscribed, even if the price of the app changes.",
+      "priceLockedYear": "Your price is locked at {price} per year. It stays the same while you stay subscribed, even if the price of the app changes."
     },
     "tools": {
       "open": "Open",
@@ -889,6 +901,24 @@
       },
       "soon": "Soon",
       "upgrade": "Upgrade"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Payment received",
+        "message": "Thank you. Your subscription is active and the app is ready to use."
+      },
+      "pending": {
+        "title": "Confirming your payment",
+        "message": "The payment provider has not confirmed the payment yet. This page updates when it does; you do not need to pay again."
+      },
+      "failed": {
+        "title": "The payment did not go through",
+        "message": "Nothing was charged. Subscribe again to try another way of paying."
+      },
+      "cancelled": {
+        "title": "Payment cancelled",
+        "message": "Nothing was charged. Subscribe again whenever you are ready."
+      }
     }
   }
 }

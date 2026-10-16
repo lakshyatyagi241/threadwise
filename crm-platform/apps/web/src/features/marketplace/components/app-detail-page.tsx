@@ -18,6 +18,7 @@ import {
   PricingBlock,
   SubscribeActions,
 } from './pricing-parts';
+import { PaymentReturnBanner } from './payment-return-banner';
 import { RiskCallout, ScopeList } from './scope-list';
 import { SubscriptionPanel } from './subscription-panel';
 import {
@@ -87,6 +88,8 @@ export function AppDetail({ app }: { app: MarketAppDetail }) {
         href={mktRoutes.browse(app.kind)}
         label={app.kind === 'mini_app' ? t('backToApps') : t('backToIntegrations')}
       />
+
+      <PaymentReturnBanner />
 
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex min-w-0 flex-1 basis-80 items-start gap-4">

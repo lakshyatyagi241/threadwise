@@ -58,7 +58,8 @@
           "trialing": "试用中",
           "comped": "赠予",
           "canceling": "即将结束",
-          "ended": "已结束"
+          "ended": "已结束",
+          "past_due": "付款失败"
         },
         "subscriptionSource": {
           "purchase": "购买",
@@ -92,7 +93,8 @@
         "request": "无法完成请求。",
         "unexpected": "我们这边出现了问题。请重试；如果问题持续，请提供请求 ID。",
         "subscriptionState": "在订阅的当前状态下无法执行此操作。已付费的工作区无法赠予（请先取消其订阅）；免费应用无需赠予；已结束的订阅无法再次取消。",
-        "subscriptionNotFound": "未找到该订阅。它可能已被移除。请重新加载列表。"
+        "subscriptionNotFound": "未找到该订阅。它可能已被移除。请重新加载列表。",
+        "renewalNotStopped": "无法在支付服务商处停止银行卡续订，因此未做任何更改，工作区仍可能被扣款。请稍后重试，或在服务商后台中结束该订阅。"
       },
       "list": {
         "title": "应用市场目录",
@@ -658,12 +660,13 @@
         "free": "免费",
         "perMonth": "/ 月",
         "trial": "{count, plural, other {# 天试用}}",
-        "notOnSale": "未上架销售"
+        "notOnSale": "未上架销售",
+        "perYear": "/ 年"
       },
       "pricing": {
         "title": "定价",
         "description": "决定此应用免费还是付费及价格。以你设定的价格为准:开发者清单中的价格仅作建议。",
-        "billing": "付费应用以按月预付的方式出售:即通过常规结算流程购买的计费附加包。目前尚不支持自动扣款续费,因此工作区会在当月即将结束时再次付款。价格变更适用于新订阅以及每位订阅者的下一次付款;已付费的周期不会受到影响。",
+        "billing": "付费应用以计费附加包的形式出售，通过常规结算流程购买。默认为按月预付：工作区在当月即将结束时再次付款。选择下方的“银行卡自动续订”，则改为每月自动从工作区的银行卡扣款。价格变更适用于新订阅以及每位预付订阅者的下一次付款；已付费的周期不会受到影响；已设为银行卡自动续订的订阅者，在重新订阅之前，仍沿用其在支付服务商订阅上的价格。",
         "readOnly": "只读。修改定价需要平台权限 {permission}。",
         "visibility": {
           "label": "上架状态",
@@ -693,7 +696,7 @@
           "trialDays": "免费试用(天)",
           "trialDaysHint": "填 0 表示不提供试用,最多 {max} 天。每个工作区每款应用仅可享受一次试用。",
           "annualAmount": "年费(可选)",
-          "annualAmountHint": "先行保存,供以后使用。年度计费尚未开发,因此工作区目前无法按年付费。",
+          "annualAmountHint": "一年的价格。留空则该应用仅按月销售。选择按年付费的工作区每年支付一次；若应用通过银行卡续订，则每年从银行卡扣款。",
           "purchasable": "在售",
           "purchasableHint": "关闭后,新工作区将无法订阅。已订阅的工作区仍可续费。"
         },
@@ -763,6 +766,27 @@
             "paid": "订阅者保留其已付费的时长,不予退款。",
             "action": "设为免费"
           }
+        },
+        "billingMode": {
+          "legend": "续订方式",
+          "one_time": {
+            "label": "预付一个月",
+            "hint": "工作区在当月即将结束时再次付款。"
+          },
+          "recurring": {
+            "label": "银行卡自动续订",
+            "hint": "支付服务商每月自动从银行卡扣款，直到工作区取消。"
+          },
+          "note": "适用于新订阅。已在运行的订阅保持其购买时的方式。需要支持订阅的支付网关。"
+        },
+        "priceLock": {
+          "label": "让订阅者保持其首次支付的价格",
+          "hint": "这样，价格变更只会影响新订阅者。开启此项还会把当前订阅者锁定在其最近一次付款的价格；关闭则不会解锁任何人。订阅结束时，锁定随之结束。"
+        },
+        "withdrawn": {
+          "title": "向此已下架应用的订阅者退款",
+          "hint": "该应用在订阅者已付费的周期中途被下架。从下架时刻起，向每位订阅者退还其最近一次付款中对应的部分。",
+          "action": "退还未使用时长..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "已结束",
           "mrr": "月收入",
           "mrrNone": "暂无付费订阅者",
-          "mrrCurrency": "月收入({currency})"
+          "mrrCurrency": "月收入({currency})",
+          "pastDue": "付款失败"
         },
         "summary": {
           "emptyTitle": "暂无付费应用",
@@ -871,7 +896,8 @@
             "canceling": "即将结束",
             "ended": "已结束",
             "total": "合计",
-            "mrr": "月收入"
+            "mrr": "月收入",
+            "pastDue": "付款失败"
           },
           "free": "免费",
           "totals": "所有应用",
@@ -905,7 +931,9 @@
           "compUntil": "赠送至 {date}",
           "compOpen": "赠送直至你结束为止",
           "endedOn": "已于 {date} 结束",
-          "none": "无结束日期"
+          "none": "无结束日期",
+          "renewsOn": "{date} 续订",
+          "graceUntil": "宽限期至 {date}"
         },
         "noCharge": "不收费",
         "compBy": "由 {operator} 赠送:{note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "没有匹配的订阅",
         "noMatchMessage": "没有符合这些筛选条件的内容。请尝试其他条件。",
         "clearFilters": "清除筛选",
-        "loadMore": "加载更多"
+        "loadMore": "加载更多",
+        "unlockPrice": "解锁价格",
+        "refundUnused": "退还未使用时长"
+      },
+      "unlockDialog": {
+        "eyebrow": "锁定价格",
+        "title": "解锁 {workspace} 的价格",
+        "close": "关闭",
+        "back": "返回",
+        "confirm": "解锁价格",
+        "summary": "{workspace} 按其首次为 {app} 支付的价格付费。解锁后，其下一次付款将按该应用的当前价格计算。",
+        "effectPrepaid": "在付费至 {date} 的周期结束后，其下一次付款将按当前价格计算。",
+        "effectCard": "其银行卡在支付服务商处仍按旧价格为该应用续订，因此将在已付费周期结束时（{date}）终止银行卡续订。系统会通知对方，对方可按当前价格重新订阅。",
+        "reason": "原因（记入审计日志）",
+        "done": "{workspace} 的 {app} 已不再是锁定价格。"
+      },
+      "prorateDialog": {
+        "eyebrow": "退款",
+        "title": "退还 {workspace} 的未使用时长",
+        "close": "关闭",
+        "back": "返回",
+        "summary": "通过支付服务商，退还 {app} 最近一次付款中尚未使用的部分。不会重复退款：再次执行只会退还剩余部分。",
+        "working": "正在计算金额...",
+        "paid": "最近一次付款",
+        "unused": "未使用部分",
+        "already": "已退款",
+        "refundable": "本次退款",
+        "nothing": "没有可退款项：周期已结束、未找到通过支付网关的付款，或未使用部分已退还。",
+        "endNow": "同时立即结束订阅",
+        "endNowHint": "安装将暂停，其数据将被保留。若不勾选，应用会继续运行到周期结束。",
+        "reason": "原因（保存在审计记录中，并发送给支付服务商）",
+        "confirm": "退款 {amount}",
+        "done": "已就 {app} 向 {workspace} 退款 {amount}。",
+        "refused": "支付服务商拒绝了退款：{reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "已下架应用",
+        "title": "向 {name} 的订阅者退款",
+        "close": "关闭",
+        "cancel": "取消",
+        "intro": "检查 {name} 的每个付费订阅，并通过支付服务商退还其最近一次付款中在应用下架时仍未使用的部分。请先预览；不会重复退款。",
+        "preview": "预览",
+        "owed": "{count, plural, other {# 位订阅者可获退款}}",
+        "nobody": "目前没有需要退款的订阅者。",
+        "more": "订阅数量超出单次运行的处理上限。请再次运行以继续。",
+        "reason": "原因（保存在审计记录中，并发送给支付服务商）",
+        "run": "{count, plural, other {向 # 位订阅者退款}}",
+        "continue": "继续处理后续订阅",
+        "result": "已退款 {refunded}，失败 {failed}。",
+        "someFailed": "部分退款未成功（支付服务商拒绝或无法连接）。它们已列在审计记录中；再次运行会重试。",
+        "done": "{count, plural, other {已向 {name} 的 # 位订阅者退款。}}"
       }
     }
   }

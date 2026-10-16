@@ -213,6 +213,18 @@ export function PricingFields({
             <p className="text-xs text-muted-foreground">{t('billingMode.note')}</p>
           </fieldset>
 
+          <Checkbox
+            id={id('price-lock')}
+            label={
+              <span>
+                {t('priceLock.label')}
+                <span className="block text-xs text-muted-foreground">{t('priceLock.hint')}</span>
+              </span>
+            }
+            checked={draft.priceLock}
+            onChange={(e) => onChange({ priceLock: e.target.checked })}
+          />
+
           <div className="flex items-start gap-3">
             <Switch
               id={id('on-sale')}

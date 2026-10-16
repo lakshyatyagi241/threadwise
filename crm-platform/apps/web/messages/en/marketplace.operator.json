@@ -660,7 +660,8 @@
         "free": "Free",
         "perMonth": "/ month",
         "trial": "{count, plural, one {# day trial} other {# days trial}}",
-        "notOnSale": "Not on sale"
+        "notOnSale": "Not on sale",
+        "perYear": "/ year"
       },
       "pricing": {
         "title": "Pricing",
@@ -695,7 +696,7 @@
           "trialDays": "Free trial (days)",
           "trialDaysHint": "0 for no trial, at most {max}. A workspace gets one trial per app.",
           "annualAmount": "Yearly price (optional)",
-          "annualAmountHint": "Stored for later. Annual billing is not built yet, so workspaces cannot pay yearly today.",
+          "annualAmountHint": "The price of a year. Leave it empty to sell the app monthly only. A workspace that chooses yearly pays this once a year, or by card every year when the app renews by card.",
           "purchasable": "On sale",
           "purchasableHint": "When off, no new workspace can subscribe. Workspaces that already subscribe can still renew."
         },
@@ -777,6 +778,15 @@
             "hint": "The payment provider charges the card every month until the workspace cancels."
           },
           "note": "Applies to new subscriptions. A subscription that is already running keeps the way it was bought. Needs a payment gateway that supports subscriptions."
+        },
+        "priceLock": {
+          "label": "Keep subscribers on the price they first paid",
+          "hint": "A price change then reaches new subscribers only. Turning this on also locks today's subscribers at their last payment; turning it off unlocks nobody. A lock ends when the subscription ends."
+        },
+        "withdrawn": {
+          "title": "Refund the subscribers of this withdrawn app",
+          "hint": "The app was withdrawn in the middle of the periods its subscribers paid for. Return each one the share of their last payment from the moment it was withdrawn.",
+          "action": "Refund unused time..."
         }
       },
       "grandfather": {
@@ -934,7 +944,57 @@
         "noMatchTitle": "No subscription matches",
         "noMatchMessage": "Nothing matches these filters. Try different ones.",
         "clearFilters": "Clear filters",
-        "loadMore": "Load more"
+        "loadMore": "Load more",
+        "unlockPrice": "Unlock price",
+        "refundUnused": "Refund unused time"
+      },
+      "unlockDialog": {
+        "eyebrow": "Locked price",
+        "title": "Unlock the price for {workspace}",
+        "close": "Close",
+        "back": "Back",
+        "confirm": "Unlock price",
+        "summary": "{workspace} pays the price it first paid for {app}. Unlocking makes its next payment the current price of the app.",
+        "effectPrepaid": "Their next payment, after the period paid until {date}, is the current price.",
+        "effectCard": "Their card renews the app at the old price at the payment provider, so the card renewal is ended at the end of the period paid for ({date}). They are told, and can subscribe again at the current price.",
+        "reason": "Reason (kept in the audit trail)",
+        "done": "{workspace} is no longer on a locked price for {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Refund",
+        "title": "Refund unused time for {workspace}",
+        "close": "Close",
+        "back": "Back",
+        "summary": "Returns the part of the last payment for {app} that is still ahead, through the payment provider. Nothing is returned twice: running it again returns only what is left.",
+        "working": "Working out the amount...",
+        "paid": "Last payment",
+        "unused": "Unused share",
+        "already": "Already refunded",
+        "refundable": "To refund now",
+        "nothing": "There is nothing to refund: the period is over, no payment through a gateway was found, or the unused share was already returned.",
+        "endNow": "Also end the subscription now",
+        "endNowHint": "The installation is paused and its data kept. Without this the app keeps running to the end of the period.",
+        "reason": "Reason (kept in the audit trail and sent to the payment provider)",
+        "confirm": "Refund {amount}",
+        "done": "Refunded {amount} to {workspace} for {app}.",
+        "refused": "The payment provider refused the refund: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Withdrawn app",
+        "title": "Refund the subscribers of {name}",
+        "close": "Close",
+        "cancel": "Cancel",
+        "intro": "Looks at every paid subscription of {name} and returns the share of its last payment that was still ahead when the app was withdrawn, through the payment provider. Preview first; nothing is returned twice.",
+        "preview": "Preview",
+        "owed": "{count, plural, one {# subscriber is owed a refund} other {# subscribers are owed a refund}}",
+        "nobody": "Nobody is owed anything right now.",
+        "more": "There are more subscriptions than one run handles. Run it again to continue.",
+        "reason": "Reason (kept in the audit trail and sent to the payment provider)",
+        "run": "{count, plural, one {Refund # subscriber} other {Refund # subscribers}}",
+        "continue": "Continue with the next subscriptions",
+        "result": "Refunded {refunded}, failed {failed}.",
+        "someFailed": "Some refunds did not go through (the provider refused or could not be reached). They are listed in the audit trail; running it again tries them once more.",
+        "done": "{count, plural, one {Refunded # subscriber of {name}.} other {Refunded # subscribers of {name}.}}"
       }
     }
   }

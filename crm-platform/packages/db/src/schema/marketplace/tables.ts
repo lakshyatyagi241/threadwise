@@ -107,7 +107,12 @@ export const marketplaceApps = pgTable(
     /** The operator may comp the workspaces that already have the granted features (an explicit action). */
     grandfatherExisting: boolean('grandfather_existing').notNull().default(false),
     /** `recurring`: the card renews the app on its own (the app's add-on is an autopay pack); `one_time`: a prepaid month, renewed by paying again. */
-    billingMode: text('billing_mode').$type<'one_time' | 'recurring'>().notNull().default('one_time'),
+    billingMode: text('billing_mode')
+      .$type<'one_time' | 'recurring'>()
+      .notNull()
+      .default('one_time'),
+    /** New subscriptions keep the price they first pay (20261225090300). */
+    priceLock: boolean('price_lock').notNull().default(false),
     createdByOperatorId: idColumn('created_by_operator_id').references(() => platformOperators.id, {
       onDelete: 'set null',
     }),
@@ -590,7 +595,7 @@ export const marketplaceSubscriptions = pgTable(
     canceledAt: timestamp('canceled_at', { withTimezone: true }),
     lapsedAt: timestamp('lapsed_at', { withTimezone: true }),
     renewalsCount: integer('renewals_count').notNull().default(0),
-    /** A live provider subscription will charge this one again; cleared when it ends for any reason (20261222090000). */
+    /** A live provider subscription will charge this one again; cleared when it ends for any reason (20261225090000). */
     autorenew: boolean('autorenew').notNull().default(false),
     /** The provider reported a failed renewal charge and has not recovered; `graceEndsAt` is when the app stops working if it does not. */
     paymentFailedAt: timestamp('payment_failed_at', { withTimezone: true }),
@@ -599,6 +604,15 @@ export const marketplaceSubscriptions = pgTable(
     lastRenewedAt: timestamp('last_renewed_at', { withTimezone: true }),
     /** The provider subscription was ended while the app was still paid; a cancellation cannot be taken back. Cleared when a new autopay starts. */
     autorenewStoppedAt: timestamp('autorenew_stopped_at', { withTimezone: true }),
+    /** The period end the last renewal reminder was sent for (20261225090100); due while it differs from `currentPeriodEnd`. */
+    remindedPeriodEnd: timestamp('reminded_period_end', { withTimezone: true }),
+    /** How the last payment was bought; `amount` is its price for that period (20261225090200). */
+    billingPeriod: text('billing_period')
+      .$type<'monthly' | 'yearly'>()
+      .notNull()
+      .default('monthly'),
+    /** The next payment is `amount` whatever the listing costs now (20261225090300); ends with the subscription. */
+    priceLocked: boolean('price_locked').notNull().default(false),
     compedByOperatorId: idColumn('comped_by_operator_id').references(() => platformOperators.id, {
       onDelete: 'set null',
     }),
@@ -628,6 +642,11 @@ export const marketplaceSubscriptions = pgTable(
     check(
       'chk_marketplace_subscriptions_grace',
       sql`${t.graceEndsAt} is null or ${t.paymentFailedAt} is not null`,
+    ),
+    check('chk_marketplace_subscriptions_period', sql`${t.billingPeriod} in ('monthly', 'yearly')`),
+    check(
+      'chk_marketplace_subscriptions_price_lock',
+      sql`not ${t.priceLocked} or (${t.source} = 'purchase' and ${t.amount} is not null and ${t.currency} is not null)`,
     ),
     check(
       'chk_marketplace_subscriptions_autorenew',

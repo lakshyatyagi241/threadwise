@@ -145,6 +145,7 @@ export class FulfilmentService {
         orgId: order.orgId,
         pack: order.planSlug,
         orderId: order.id,
+        period: order.billingPeriod,
       });
       return res.created ? 'addon_granted' : 'nothing';
     }

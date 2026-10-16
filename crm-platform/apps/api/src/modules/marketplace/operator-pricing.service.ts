@@ -18,6 +18,7 @@ import {
   type MarketSubscriptionStatus,
   type MarketSubscriptionSummary,
   type SetMarketPricingInput,
+  type UnlockSubscriptionPriceInput,
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { AuthAuditService } from '../auth';
@@ -54,6 +55,11 @@ const DERIVED_STATUS = sql.raw(`
        WHEN s.source = 'comp' THEN 'comped'
        ELSE 'active' END`);
 
+/** A subscription's list price per month: a yearly payment counts as one twelfth, rounded to the cent. */
+const MONTHLY_AMOUNT = sql.raw(
+  `CASE WHEN s.billing_period = 'yearly' THEN round(s.amount / 12, 2) ELSE s.amount END`,
+);
+
 const toSubscription = (r: Raw): MarketOperatorSubscription => ({
   id: r.uuid as string,
   app: { id: r.app_uuid as string, slug: r.app_slug as string, name: r.app_name as string },
@@ -68,8 +74,10 @@ const toSubscription = (r: Raw): MarketOperatorSubscription => ({
   canceledAt: iso(r.canceled_at),
   lapsedAt: iso(r.lapsed_at),
   renewals: Number(r.renewals_count),
+  period: r.billing_period === 'yearly' ? 'yearly' : 'monthly',
   cancelAtPeriodEnd: r.cancel_at_period_end as boolean,
   autoRenew: r.autorenew === true,
+  priceLocked: r.price_locked === true,
   paymentFailedAt: iso(r.payment_failed_at),
   graceEndsAt: iso(r.grace_ends_at),
   compNote: (r.comp_note as string | null) ?? null,
@@ -79,7 +87,7 @@ const toSubscription = (r: Raw): MarketOperatorSubscription => ({
 const SUBSCRIPTION_SELECT = sql.raw(`
   s.id, s.uuid, s.org_id, s.source, s.amount::text AS amount, s.currency, s.started_at, s.current_period_end, s.trial_ends_at,
   s.canceled_at, s.lapsed_at, s.renewals_count, s.cancel_at_period_end, s.comp_note, s.started_at::text AS k0,
-  s.autorenew, s.payment_failed_at, s.grace_ends_at,
+  s.autorenew, s.payment_failed_at, s.grace_ends_at, s.billing_period, s.price_locked,
   a.uuid AS app_uuid, a.slug AS app_slug, a.name AS app_name, o.uuid AS org_uuid, o.name AS org_name, op.full_name AS comp_by`);
 const SUBSCRIPTION_FROM = sql`
   FROM marketplace_subscriptions s
@@ -176,6 +184,7 @@ export class OperatorPricingService {
           currency,
           annualAmount: annual,
           billingMode: paid ? input.billingMode : 'one_time',
+          priceLock: paid ? input.priceLock : false,
           trialDays: paid ? input.trialDays : 0,
           purchasable: input.purchasable,
           includedPlanFeature: paid ? (input.includedPlanFeature ?? null) : null,
@@ -187,6 +196,17 @@ export class OperatorPricingService {
         input.rowVersion,
       );
       if (!ok) throw AppError.rowVersionConflict('App');
+      // Turning the lock on locks the subscribers who pay today at what their ledger row holds (their last payment); turning it off never
+      // unlocks anyone: they were promised the price.
+      let lockedNow = 0;
+      if (paid && input.priceLock && !before.priceLock) {
+        const res = await tx.execute(sql`
+          UPDATE marketplace_subscriptions SET price_locked = true
+          WHERE app_id = ${app.id} AND status = 'active' AND source = 'purchase' AND amount IS NOT NULL AND currency IS NOT NULL
+            AND NOT price_locked
+          RETURNING 1`);
+        lockedNow = (res.rows as unknown[]).length;
+      }
       if (paid) {
         await this.store.upsertPack(tx, {
           appId: app.id,
@@ -196,6 +216,7 @@ export class OperatorPricingService {
           currency: currency!,
           features: [marketEntitlementKey(app.slug), ...input.grantsPlanFeatures],
           billingMode: input.billingMode,
+          annualAmount: annual,
         });
       } else if (app.packExists) {
         await this.store.deactivatePack(tx, app.id);
@@ -213,6 +234,8 @@ export class OperatorPricingService {
             currency,
             annualAmount: annual,
             billingMode: paid ? input.billingMode : 'one_time',
+            priceLock: paid ? input.priceLock : false,
+            lockedNow,
             trialDays: paid ? input.trialDays : 0,
             purchasable: input.purchasable,
             includedPlanFeature: paid ? (input.includedPlanFeature ?? null) : null,
@@ -233,6 +256,7 @@ export class OperatorPricingService {
     priceAmount: string | null;
     priceCurrency: string | null;
     billingMode: string;
+    priceLock: boolean;
     trialDays: number;
     purchasable: boolean;
     grantsPlanFeatures: string[];
@@ -243,6 +267,7 @@ export class OperatorPricingService {
       amount: p.priceAmount,
       currency: p.priceCurrency,
       billingMode: p.billingMode,
+      priceLock: p.priceLock,
       trialDays: p.trialDays,
       purchasable: p.purchasable,
     };
@@ -316,12 +341,12 @@ export class OperatorPricingService {
         WHERE a.pricing_model <> 'free' OR EXISTS (SELECT 1 FROM marketplace_subscriptions x WHERE x.app_id = a.id)
         GROUP BY a.id ORDER BY a.name`);
       const mrrRes = await tx.execute(sql`
-        SELECT a.uuid, s.currency, sum(s.amount)::text AS amount
+        SELECT a.uuid, s.currency, sum(${MONTHLY_AMOUNT})::text AS amount
         FROM marketplace_subscriptions s JOIN marketplace_apps a ON a.id = s.app_id
         WHERE ${DERIVED_STATUS} = 'active' AND s.source = 'purchase' AND s.amount IS NOT NULL AND s.currency IS NOT NULL
         GROUP BY a.uuid, s.currency ORDER BY s.currency`);
       const totalRes = await tx.execute(sql`
-        SELECT s.currency, sum(s.amount)::text AS amount
+        SELECT s.currency, sum(${MONTHLY_AMOUNT})::text AS amount
         FROM marketplace_subscriptions s
         WHERE ${DERIVED_STATUS} = 'active' AND s.source = 'purchase' AND s.amount IS NOT NULL AND s.currency IS NOT NULL
         GROUP BY s.currency ORDER BY s.currency`);
@@ -568,6 +593,53 @@ export class OperatorPricingService {
     // transaction. Re-running a cancel "now" on an ended subscription repeats this step.
     if (out.pause) await this.lifecycle.pauseIfNotEntitled(out.orgId, out.appId);
     return this.oneSubscription(out.subscriptionUuid);
+  }
+
+  /**
+   * Releases one subscriber from their locked price (`platform.market.pricing`): their next payment is the listing's price. A subscriber
+   * whose card renews the app keeps the old price at the payment provider, so that card renewal is ended first (at the end of the period
+   * already paid for) and the workspace subscribes again at the new price; when the provider cannot confirm nothing is changed.
+   */
+  async unlockPrice(
+    uuid: string,
+    input: UnlockSubscriptionPriceInput,
+    operatorId: number,
+  ): Promise<MarketOperatorSubscription> {
+    const live = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT org_id, pack_id, autorenew, price_locked FROM marketplace_subscriptions WHERE uuid = ${uuid}::uuid`);
+      return res.rows[0] as
+        { org_id: string; pack_id: string; autorenew: boolean; price_locked: boolean } | undefined;
+    });
+    if (!live)
+      throw new AppError(
+        ERROR_CODES.MKT_SUBSCRIPTION_NOT_FOUND,
+        'Subscription not found',
+        HttpStatus.NOT_FOUND,
+      );
+    const cardEnded =
+      live.price_locked && live.autorenew
+        ? await this.lifecycle.stopCardRenewal(Number(live.org_id), Number(live.pack_id), {
+            atCycleEnd: true,
+            reason: 'operator',
+            actor: { id: operatorId, type: 'platform_operator' },
+          })
+        : false;
+    await this.store.tx(async (tx) => {
+      const r = await this.lifecycle.releasePrice(tx, {
+        uuid,
+        reason: input.reason,
+        operatorId,
+        cardEnded,
+      });
+      await this.audit.record(tx, {
+        event: 'platform.market.subscription_price_unlocked',
+        status: 'warning',
+        orgId: r.orgId,
+        payload: { operator: operatorId, reason: input.reason, cardRenewalEnded: cardEnded },
+      });
+    });
+    return this.oneSubscription(uuid);
   }
 
   private async oneSubscription(uuid: string): Promise<MarketOperatorSubscription> {

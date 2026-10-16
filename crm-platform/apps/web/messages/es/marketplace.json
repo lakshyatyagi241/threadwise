@@ -61,7 +61,8 @@
       "notForSale": "Esta app no se está vendiendo a nuevos suscriptores en este momento.",
       "trialUnavailable": "La prueba gratuita no está disponible para esta app en tu espacio de trabajo.",
       "subscriptionNotFound": "Tu espacio de trabajo no tiene una suscripción a esta app.",
-      "subscriptionState": "Eso no encaja con el estado actual de la suscripción. Recarga para ver el estado más reciente."
+      "subscriptionState": "Eso no encaja con el estado actual de la suscripción. Recarga para ver el estado más reciente.",
+      "renewalNotStopped": "No hemos podido detener la renovación automática en el proveedor de pagos, así que no se ha cambiado nada y aún se te puede cobrar en la tarjeta. Inténtalo de nuevo en un momento."
     },
     "chips": {
       "installed": "Instalada",
@@ -77,7 +78,8 @@
       "trialing": "Prueba gratuita",
       "comped": "Cortesía",
       "canceling": "Sin renovación",
-      "subscriptionEnded": "Suscripción finalizada"
+      "subscriptionEnded": "Suscripción finalizada",
+      "pastDue": "Pago fallido"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "No en venta",
         "paid": "App de pago",
         "addOn": "Complemento",
-        "trial": "Prueba gratuita de {days} días"
+        "trial": "Prueba gratuita de {days} días",
+        "monthlyOrYearly": "{price} / mes o {annual} / año"
       },
       "installs": "{count, plural, one {# instalación} other {# instalaciones}}",
       "version": "Versión {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "No en venta",
         "message": "Esta app no se está vendiendo a nuevos suscriptores en este momento."
-      }
+      },
+      "autoRenewNote": "Facturación mensual a través de la facturación de tu espacio de trabajo. Tu tarjeta se cobra automáticamente cada mes en la fecha de renovación hasta que canceles."
     },
     "subscribe": {
       "subscribe": "Suscribirse",
@@ -820,7 +824,16 @@
         "included": "{name} está incluida en tu plan.",
         "already_entitled": "Tu espacio de trabajo ya tiene acceso a {name}.",
         "free": "{name} es gratis."
-      }
+      },
+      "hintPriceAuto": "{price} al mes, cobrados automáticamente en tu tarjeta cada mes hasta que canceles.",
+      "hintAuto": "Tu tarjeta se cobra automáticamente cada mes hasta que canceles.",
+      "period": {
+        "legend": "Periodo de facturación",
+        "monthly": "Mensual, {price}",
+        "yearly": "Anual, {price}"
+      },
+      "hintYear": "{price} al año, pagados al finalizar la compra. Cada pago cubre un año.",
+      "hintYearAuto": "{price} al año, cobrados automáticamente en tu tarjeta cada año hasta que canceles."
     },
     "subscription": {
       "title": "Suscripción",
@@ -829,7 +842,8 @@
         "trialing": "Prueba gratuita",
         "comped": "Cortesía",
         "canceling": "Sin renovación",
-        "ended": "Finalizada"
+        "ended": "Finalizada",
+        "past_due": "Pago fallido"
       },
       "date": {
         "paidUntil": "Pagada hasta el {date}",
@@ -838,7 +852,9 @@
         "compOpen": "Acceso de cortesía, sin fecha de fin",
         "cancelingUntil": "Sin renovación. Activa hasta el {date}",
         "endedOn": "Suscripción finalizada el {date}",
-        "endedNoDate": "Suscripción finalizada"
+        "endedNoDate": "Suscripción finalizada",
+        "renewsOn": "Se renueva el {date}",
+        "graceUntil": "Pago fallido. Funciona hasta el {date}"
       },
       "lastPayment": "Último pago: {price} al mes",
       "nextPayment": "El precio de esta app ha cambiado. Tu próximo pago será de {price} al mes.",
@@ -849,7 +865,8 @@
         "resubscribe": "Volver a suscribirse",
         "subscribe": "Suscribirse ahora",
         "resume": "Reanudar suscripción",
-        "cancel": "Cancelar suscripción"
+        "cancel": "Cancelar suscripción",
+        "payNow": "Pagar ahora"
       },
       "cancelConfirm": {
         "title": "¿Cancelar la suscripción a {name}?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name} seguirá activa hasta que termine el periodo pagado y después se pausará. Tus datos y ajustes se conservan.",
         "afterwards": "No se cobrará nada más y puedes volver a suscribirte en cualquier momento.",
         "confirm": "Cancelar suscripción",
-        "keep": "Mantener suscripción"
+        "keep": "Mantener suscripción",
+        "messageAuto": "No se volverá a cobrar tu tarjeta. {name} seguirá activa hasta el {date} y después se pausará. Tus datos y ajustes se conservan.",
+        "messageAutoNoDate": "No se volverá a cobrar tu tarjeta. {name} seguirá activa hasta que termine el periodo pagado y después se pausará. Tus datos y ajustes se conservan."
       },
       "toast": {
         "canceled": "Suscripción cancelada. Seguirá activa hasta el {date}.",
@@ -865,7 +884,14 @@
         "resumed": "Suscripción reanudada."
       },
       "working": "Procesando",
-      "noCheckout": "El pago no está disponible para esta app ahora mismo. Inténtalo de nuevo en unos minutos."
+      "noCheckout": "El pago no está disponible para esta app ahora mismo. Inténtalo de nuevo en unos minutos.",
+      "paymentFailed": "El último pago con tarjeta de esta app no se ha completado. La app sigue funcionando hasta el {date} mientras el proveedor de pagos lo reintenta. Paga ahora, o corrige tu método de pago, para evitar una pausa.",
+      "paymentFailedNoDate": "El último pago con tarjeta de esta app no se ha completado. La app sigue funcionando mientras el proveedor de pagos lo reintenta. Paga ahora, o corrige tu método de pago, para evitar una pausa.",
+      "autoRenewHint": "Tu tarjeta se cobra automáticamente en la fecha de renovación. Cancela antes para evitarlo.",
+      "lastPaymentYear": "Último pago: {price} al año",
+      "nextPaymentYear": "El precio de esta app ha cambiado. Tu próximo pago será de {price} al año.",
+      "priceLocked": "Tu precio está fijado en {price} al mes. Se mantiene mientras sigas suscrito, aunque cambie el precio de la app.",
+      "priceLockedYear": "Tu precio está fijado en {price} al año. Se mantiene mientras sigas suscrito, aunque cambie el precio de la app."
     },
     "tools": {
       "open": "Abrir",
@@ -875,6 +901,24 @@
       },
       "soon": "Pronto",
       "upgrade": "Mejorar plan"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Pago recibido",
+        "message": "Gracias. Tu suscripción está activa y la app ya está lista para usar."
+      },
+      "pending": {
+        "title": "Confirmando tu pago",
+        "message": "El proveedor de pagos aún no ha confirmado el pago. Esta página se actualiza cuando lo haga; no hace falta que pagues de nuevo."
+      },
+      "failed": {
+        "title": "El pago no se completó",
+        "message": "No se ha cobrado nada. Suscríbete de nuevo para probar otra forma de pago."
+      },
+      "cancelled": {
+        "title": "Pago cancelado",
+        "message": "No se ha cobrado nada. Suscríbete de nuevo cuando quieras."
+      }
     }
   }
 }

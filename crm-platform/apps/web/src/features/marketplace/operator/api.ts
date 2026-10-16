@@ -12,7 +12,9 @@ import {
   marketOperatorRequestSchema,
   marketOperatorSubscriptionListSchema,
   marketOperatorSubscriptionSchema,
+  marketProrationSchema,
   marketPublishResultSchema,
+  marketWithdrawnRefundSchema,
   marketSubscriptionSummarySchema,
   marketUsageSchema,
   type CancelOperatorSubscriptionRequest,
@@ -24,8 +26,11 @@ import {
   type MarketRequestStatus,
   type MarketSubscriptionSource,
   type MarketSubscriptionStatus,
+  type ProrateSubscriptionRequest,
+  type RefundWithdrawnAppRequest,
   type SaveMarketVersionInput,
   type SetMarketPricingRequest,
+  type UnlockSubscriptionPriceRequest,
   type UpdateMarketAppInput,
   type UpdateMarketCategoryInput,
   type UpdateMarketRequestInput,
@@ -279,6 +284,30 @@ export const grandfatherSubscriptions = (ref: string, body: GrandfatherSubscript
     method: 'POST',
     body,
     schema: marketGrandfatherResultSchema,
+  });
+
+/** The unused share of the last payment of one subscription: `dryRun: true` (the default) works the amount out, `false` returns it. */
+export const prorateSubscription = (id: string, body: ProrateSubscriptionRequest) =>
+  operatorFetch(`${ROOT}/subscriptions/${seg(id)}/prorate`, {
+    method: 'POST',
+    body,
+    schema: marketProrationSchema,
+  });
+
+/** The unused share from the moment a killed app was withdrawn, for every subscriber (200 per call). */
+export const refundWithdrawnApp = (ref: string, body: RefundWithdrawnAppRequest) =>
+  operatorFetch(`${ROOT}/apps/${seg(ref)}/refund-unused`, {
+    method: 'POST',
+    body,
+    schema: marketWithdrawnRefundSchema,
+  });
+
+/** Releases one subscriber from their locked price; the next payment is the listing's price. */
+export const unlockSubscriptionPrice = (id: string, body: UnlockSubscriptionPriceRequest) =>
+  operatorFetch(`${ROOT}/subscriptions/${seg(id)}/unlock-price`, {
+    method: 'POST',
+    body,
+    schema: marketOperatorSubscriptionSchema,
   });
 
 export const cancelSubscription = (id: string, body: CancelOperatorSubscriptionRequest) =>

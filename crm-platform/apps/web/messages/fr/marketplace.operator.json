@@ -58,7 +58,8 @@
           "trialing": "En essai",
           "comped": "Offert",
           "canceling": "Se termine",
-          "ended": "Terminé"
+          "ended": "Terminé",
+          "past_due": "Paiement échoué"
         },
         "subscriptionSource": {
           "purchase": "Achat",
@@ -92,7 +93,8 @@
         "request": "La requête n’a pas pu être traitée.",
         "unexpected": "Une erreur est survenue de notre côté. Réessayez ; si le problème persiste, indiquez l’ID de la demande.",
         "subscriptionState": "Ce n’est pas possible dans l’état actuel de l’abonnement. Un espace de travail qui paie déjà ne peut pas recevoir d’accès offert (résiliez d’abord son abonnement), une application gratuite n’a rien à offrir, et un abonnement terminé ne peut plus être résilié.",
-        "subscriptionNotFound": "Cet abonnement est introuvable. Il a peut-être été supprimé. Rechargez la liste."
+        "subscriptionNotFound": "Cet abonnement est introuvable. Il a peut-être été supprimé. Rechargez la liste.",
+        "renewalNotStopped": "Le renouvellement par carte n’a pas pu être arrêté auprès du prestataire de paiement : rien n’a été modifié et l’espace de travail peut encore être débité. Réessayez dans un instant, ou mettez-y fin dans le tableau de bord du prestataire."
       },
       "list": {
         "title": "Catalogue du Marketplace",
@@ -658,12 +660,13 @@
         "free": "Gratuit",
         "perMonth": "/ mois",
         "trial": "{count, plural, one {# jour d’essai} other {# jours d’essai}}",
-        "notOnSale": "Non en vente"
+        "notOnSale": "Non en vente",
+        "perYear": "/ an"
       },
       "pricing": {
         "title": "Tarification",
         "description": "Décidez si cette application est gratuite ou payante, et son prix. Votre tarification fait foi : le manifeste du développeur ne fait que proposer un prix.",
-        "billing": "Une application payante est vendue sous forme de période mensuelle prépayée : un module complémentaire de facturation acheté via le paiement habituel. Il n’existe pas encore de renouvellement automatique par carte, donc un espace de travail paie à nouveau lorsque son mois touche à sa fin. Un changement de prix s’applique aux nouveaux abonnements et au prochain paiement de chaque abonné ; une période déjà payée n’est jamais modifiée.",
+        "billing": "Une application payante est vendue comme un module complémentaire de facturation acheté via le paiement habituel. Par défaut, il s’agit d’une période mensuelle prépayée : un espace de travail paie à nouveau lorsque son mois touche à sa fin. Choisissez « La carte renouvelle automatiquement » ci-dessous pour débiter à la place la carte de l’espace de travail automatiquement chaque mois. Un changement de prix s’applique aux nouveaux abonnements et au prochain paiement de chaque abonné prépayé ; une période déjà payée n’est jamais modifiée, et un abonné dont la carte se renouvelle déjà conserve le prix de son abonnement chez le prestataire jusqu’à ce qu’il se réabonne.",
         "readOnly": "Lecture seule. Modifier la tarification nécessite l’autorisation de plateforme {permission}.",
         "visibility": {
           "label": "Statut de la fiche",
@@ -693,7 +696,7 @@
           "trialDays": "Essai gratuit (jours)",
           "trialDaysHint": "0 pour aucun essai, {max} maximum. Un espace de travail obtient un seul essai par application.",
           "annualAmount": "Prix annuel (facultatif)",
-          "annualAmountHint": "Enregistré pour plus tard. La facturation annuelle n’est pas encore disponible : les espaces de travail ne peuvent pas payer à l’année aujourd’hui.",
+          "annualAmountHint": "Le prix d’une année. Laissez vide pour vendre l’application uniquement au mois. Un espace de travail qui choisit l’annuel paie ce montant une fois par an, ou par carte chaque année lorsque l’application se renouvelle par carte.",
           "purchasable": "En vente",
           "purchasableHint": "Lorsque désactivé, aucun nouvel espace de travail ne peut s’abonner. Les espaces déjà abonnés peuvent toujours renouveler."
         },
@@ -763,6 +766,27 @@
             "paid": "Les abonnés conservent le temps déjà payé. Il n’est pas remboursé.",
             "action": "Rendre gratuit"
           }
+        },
+        "billingMode": {
+          "legend": "Mode de renouvellement",
+          "one_time": {
+            "label": "Mois prépayé",
+            "hint": "L’espace de travail paie à nouveau lorsque son mois touche à sa fin."
+          },
+          "recurring": {
+            "label": "La carte renouvelle automatiquement",
+            "hint": "Le prestataire de paiement débite la carte chaque mois jusqu’à ce que l’espace de travail résilie."
+          },
+          "note": "S’applique aux nouveaux abonnements. Un abonnement déjà en cours conserve le mode dans lequel il a été acheté. Nécessite une passerelle de paiement compatible avec les abonnements."
+        },
+        "priceLock": {
+          "label": "Garder les abonnés au prix qu’ils ont payé au départ",
+          "hint": "Un changement de prix ne concerne alors que les nouveaux abonnés. L’activer verrouille aussi les abonnés actuels sur leur dernier paiement ; le désactiver ne déverrouille personne. Un verrouillage prend fin avec l’abonnement."
+        },
+        "withdrawn": {
+          "title": "Rembourser les abonnés de cette application retirée",
+          "hint": "L’application a été retirée en cours de période alors que ses abonnés avaient déjà payé. Rendez à chacun la part de son dernier paiement à partir du moment du retrait.",
+          "action": "Rembourser le temps inutilisé..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Terminés",
           "mrr": "Revenu mensuel",
           "mrrNone": "Aucun abonné payant pour l’instant",
-          "mrrCurrency": "Revenu mensuel, {currency}"
+          "mrrCurrency": "Revenu mensuel, {currency}",
+          "pastDue": "Paiement échoué"
         },
         "summary": {
           "emptyTitle": "Aucune application payante pour l’instant",
@@ -871,7 +896,8 @@
             "canceling": "Se terminant",
             "ended": "Terminés",
             "total": "Total",
-            "mrr": "Revenu mensuel"
+            "mrr": "Revenu mensuel",
+            "pastDue": "Paiement échoué"
           },
           "free": "Gratuit",
           "totals": "Toutes les applications",
@@ -905,7 +931,9 @@
           "compUntil": "Offert jusqu’au {date}",
           "compOpen": "Offert jusqu’à ce que vous y mettiez fin",
           "endedOn": "Terminé le {date}",
-          "none": "Sans date de fin"
+          "none": "Sans date de fin",
+          "renewsOn": "Renouvelé le {date}",
+          "graceUntil": "Délai de grâce jusqu’au {date}"
         },
         "noCharge": "Sans frais",
         "compBy": "Offert par {operator} : {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Aucun abonnement ne correspond",
         "noMatchMessage": "Rien ne correspond à ces filtres. Essayez-en d’autres.",
         "clearFilters": "Effacer les filtres",
-        "loadMore": "Charger plus"
+        "loadMore": "Charger plus",
+        "unlockPrice": "Déverrouiller le prix",
+        "refundUnused": "Rembourser le temps inutilisé"
+      },
+      "unlockDialog": {
+        "eyebrow": "Prix verrouillé",
+        "title": "Déverrouiller le prix de {workspace}",
+        "close": "Fermer",
+        "back": "Retour",
+        "confirm": "Déverrouiller le prix",
+        "summary": "{workspace} paie pour {app} le prix qu’il a payé au départ. Le déverrouillage fait du prochain paiement le prix actuel de l’application.",
+        "effectPrepaid": "Son prochain paiement, après la période payée jusqu’au {date}, sera au prix actuel.",
+        "effectCard": "Sa carte renouvelle l’application à l’ancien prix chez le prestataire de paiement ; le renouvellement par carte est donc arrêté à la fin de la période payée ({date}). Il est prévenu et peut se réabonner au prix actuel.",
+        "reason": "Motif (conservé dans le journal d’audit)",
+        "done": "{workspace} n’a plus de prix verrouillé pour {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Remboursement",
+        "title": "Rembourser le temps inutilisé de {workspace}",
+        "close": "Fermer",
+        "back": "Retour",
+        "summary": "Rend, via le prestataire de paiement, la part du dernier paiement de {app} qui reste à courir. Rien n’est remboursé deux fois : un nouveau lancement ne rembourse que ce qui reste.",
+        "working": "Calcul du montant...",
+        "paid": "Dernier paiement",
+        "unused": "Part inutilisée",
+        "already": "Déjà remboursé",
+        "refundable": "À rembourser maintenant",
+        "nothing": "Il n’y a rien à rembourser : la période est terminée, aucun paiement par passerelle n’a été trouvé ou la part inutilisée a déjà été rendue.",
+        "endNow": "Mettre aussi fin à l’abonnement maintenant",
+        "endNowHint": "L’installation est suspendue et ses données sont conservées. Sans cette option, l’application continue de fonctionner jusqu’à la fin de la période.",
+        "reason": "Motif (conservé dans le journal d’audit et transmis au prestataire de paiement)",
+        "confirm": "Rembourser {amount}",
+        "done": "{amount} remboursés à {workspace} pour {app}.",
+        "refused": "Le prestataire de paiement a refusé le remboursement : {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Application retirée",
+        "title": "Rembourser les abonnés de {name}",
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "intro": "Examine chaque abonnement payant de {name} et rend, via le prestataire de paiement, la part de son dernier paiement qui restait à courir lors du retrait de l’application. Commencez par l’aperçu ; rien n’est remboursé deux fois.",
+        "preview": "Aperçu",
+        "owed": "{count, plural, one {# abonné a droit à un remboursement} other {# abonnés ont droit à un remboursement}}",
+        "nobody": "Personne n’a droit à un remboursement pour le moment.",
+        "more": "Il y a plus d’abonnements qu’un seul lancement n’en traite. Relancez pour continuer.",
+        "reason": "Motif (conservé dans le journal d’audit et transmis au prestataire de paiement)",
+        "run": "{count, plural, one {Rembourser # abonné} other {Rembourser # abonnés}}",
+        "continue": "Continuer avec les abonnements suivants",
+        "result": "Remboursés : {refunded}, échecs : {failed}.",
+        "someFailed": "Certains remboursements n’ont pas abouti (le prestataire les a refusés ou n’a pas pu être joint). Ils figurent dans le journal d’audit ; un nouveau lancement les retente.",
+        "done": "{count, plural, one {# abonné de {name} remboursé.} other {# abonnés de {name} remboursés.}}"
       }
     }
   }

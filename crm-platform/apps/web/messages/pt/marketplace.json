@@ -61,7 +61,8 @@
       "notForSale": "Este app não está sendo vendido para novos assinantes no momento.",
       "trialUnavailable": "O teste gratuito não está disponível para este app no seu espaço de trabalho.",
       "subscriptionNotFound": "Seu espaço de trabalho não tem assinatura deste app.",
-      "subscriptionState": "Isso não corresponde ao estado atual da assinatura. Recarregue para ver o estado mais recente."
+      "subscriptionState": "Isso não corresponde ao estado atual da assinatura. Recarregue para ver o estado mais recente.",
+      "renewalNotStopped": "Não foi possível interromper a renovação automática no provedor de pagamento, então nada foi alterado e seu cartão ainda pode ser cobrado. Tente novamente em instantes."
     },
     "chips": {
       "installed": "Instalado",
@@ -77,7 +78,8 @@
       "trialing": "Teste gratuito",
       "comped": "Cortesia",
       "canceling": "Não será renovado",
-      "subscriptionEnded": "Assinatura encerrada"
+      "subscriptionEnded": "Assinatura encerrada",
+      "pastDue": "Pagamento falhou"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Não está à venda",
         "paid": "App pago",
         "addOn": "Complemento",
-        "trial": "Teste gratuito de {days} dias"
+        "trial": "Teste gratuito de {days} dias",
+        "monthlyOrYearly": "{price} / mês ou {annual} / ano"
       },
       "installs": "{count, plural, one {# instalação} other {# instalações}}",
       "version": "Versão {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "Não está à venda",
         "message": "Este app não está sendo vendido a novos assinantes no momento."
-      }
+      },
+      "autoRenewNote": "Cobrado mensalmente pela cobrança do seu espaço de trabalho. Seu cartão é cobrado automaticamente todo mês na data de renovação até você cancelar."
     },
     "subscribe": {
       "subscribe": "Assinar",
@@ -820,7 +824,16 @@
         "included": "{name} está incluído no seu plano.",
         "already_entitled": "Seu espaço de trabalho já tem acesso a {name}.",
         "free": "{name} é gratuito."
-      }
+      },
+      "hintPriceAuto": "{price} por mês, cobrado automaticamente no seu cartão todo mês até você cancelar.",
+      "hintAuto": "Seu cartão é cobrado automaticamente todo mês até você cancelar.",
+      "period": {
+        "legend": "Período de cobrança",
+        "monthly": "Mensal, {price}",
+        "yearly": "Anual, {price}"
+      },
+      "hintYear": "{price} por ano, pago no checkout. Cada pagamento cobre um ano.",
+      "hintYearAuto": "{price} por ano, cobrado automaticamente no seu cartão todo ano até você cancelar."
     },
     "subscription": {
       "title": "Assinatura",
@@ -829,7 +842,8 @@
         "trialing": "Teste gratuito",
         "comped": "Cortesia",
         "canceling": "Não será renovado",
-        "ended": "Encerrada"
+        "ended": "Encerrada",
+        "past_due": "Pagamento falhou"
       },
       "date": {
         "paidUntil": "Pago até {date}",
@@ -838,7 +852,9 @@
         "compOpen": "Acesso de cortesia, sem data de término",
         "cancelingUntil": "Não será renovado. Ativo até {date}",
         "endedOn": "Assinatura encerrada em {date}",
-        "endedNoDate": "Assinatura encerrada"
+        "endedNoDate": "Assinatura encerrada",
+        "renewsOn": "Renova em {date}",
+        "graceUntil": "Pagamento falhou. Funciona até {date}"
       },
       "lastPayment": "Último pagamento: {price} por mês",
       "nextPayment": "O preço deste app mudou. Seu próximo pagamento será de {price} por mês.",
@@ -849,7 +865,8 @@
         "resubscribe": "Assinar novamente",
         "subscribe": "Assinar agora",
         "resume": "Retomar assinatura",
-        "cancel": "Cancelar assinatura"
+        "cancel": "Cancelar assinatura",
+        "payNow": "Pagar agora"
       },
       "cancelConfirm": {
         "title": "Cancelar a assinatura de {name}?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name} permanece ativo até o fim do período pago, depois será pausado. Seus dados e configurações são mantidos.",
         "afterwards": "Nada mais será cobrado, e você pode assinar novamente a qualquer momento.",
         "confirm": "Cancelar assinatura",
-        "keep": "Manter assinatura"
+        "keep": "Manter assinatura",
+        "messageAuto": "Seu cartão não será mais cobrado. {name} permanece ativo até {date}, depois será pausado. Seus dados e configurações são mantidos.",
+        "messageAutoNoDate": "Seu cartão não será mais cobrado. {name} permanece ativo até o fim do período pago, depois será pausado. Seus dados e configurações são mantidos."
       },
       "toast": {
         "canceled": "Assinatura cancelada. Ela permanece ativa até {date}.",
@@ -865,7 +884,14 @@
         "resumed": "Assinatura retomada."
       },
       "working": "Processando",
-      "noCheckout": "O checkout não está disponível para este app no momento. Tente novamente em instantes."
+      "noCheckout": "O checkout não está disponível para este app no momento. Tente novamente em instantes.",
+      "paymentFailed": "O último pagamento no cartão deste app não foi concluído. O app continua funcionando até {date} enquanto o provedor de pagamento tenta novamente. Pague agora, ou corrija sua forma de pagamento, para evitar uma pausa.",
+      "paymentFailedNoDate": "O último pagamento no cartão deste app não foi concluído. O app continua funcionando enquanto o provedor de pagamento tenta novamente. Pague agora, ou corrija sua forma de pagamento, para evitar uma pausa.",
+      "autoRenewHint": "Seu cartão é cobrado automaticamente na data de renovação. Cancele antes disso para evitar a cobrança.",
+      "lastPaymentYear": "Último pagamento: {price} por ano",
+      "nextPaymentYear": "O preço deste app mudou. Seu próximo pagamento será de {price} por ano.",
+      "priceLocked": "Seu preço está travado em {price} por mês. Ele continua o mesmo enquanto você permanecer assinante, mesmo que o preço do app mude.",
+      "priceLockedYear": "Seu preço está travado em {price} por ano. Ele continua o mesmo enquanto você permanecer assinante, mesmo que o preço do app mude."
     },
     "tools": {
       "open": "Abrir",
@@ -875,6 +901,24 @@
       },
       "soon": "Em breve",
       "upgrade": "Fazer upgrade"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Pagamento recebido",
+        "message": "Obrigado. Sua assinatura está ativa e o app está pronto para usar."
+      },
+      "pending": {
+        "title": "Confirmando seu pagamento",
+        "message": "O provedor de pagamento ainda não confirmou o pagamento. Esta página é atualizada quando ele confirmar; você não precisa pagar de novo."
+      },
+      "failed": {
+        "title": "O pagamento não foi concluído",
+        "message": "Nada foi cobrado. Assine novamente para tentar outra forma de pagamento."
+      },
+      "cancelled": {
+        "title": "Pagamento cancelado",
+        "message": "Nada foi cobrado. Assine novamente quando quiser."
+      }
     }
   }
 }
