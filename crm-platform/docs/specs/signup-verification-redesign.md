@@ -14,7 +14,7 @@ has three issues:
    workspace name to a separate step (`/register/workspace`, WD-AUTH-008).
 3. **Verification doesn't match the product's current direction.** Email verification today is
    a clickable link (WD-AUTH-015); the reference flow (Geta's own production signup) uses a
-   6-digit code entered inline, with password collected *last*, after verification.
+   6-digit code entered inline, with password collected _last_, after verification.
 
 ## Goals
 
@@ -80,14 +80,14 @@ instead of silently creating a second account.
 
 ### Components
 
-| Area | Change |
-| --- | --- |
-| `@crm/contracts` | New request/response shapes: `signupStart`, `signupVerifyCode`, `signupResendCode`, `signupSetPassword`. Each carries the opaque pending token, never the raw pending state. |
-| API — new | A focused service (e.g. `signup-verification.service.ts`) owning the Redis-backed pending-signup state and the three-step lifecycle. Mirrors the existing `RegistrationOtpService` shape (code generation, hashing, expiry, attempts, cooldown) but keyed by the pending token, not a session. |
-| API — `signup.service.ts` | `create()` moves to run only after step 3; drops `orgName`/`orgSlug` input; adds provisional-name generation; adds the cross-org duplicate-check query (new repository method, modeled on the directory-level email lookup `login.service.ts` already does for the workspace switcher). |
-| API — mail | New code-based email template, distinct from the existing WD-AUTH-015 link template (which stays in place for any flows that still use it, e.g. re-verification of an existing unverified account). |
-| Web — `signup-form.tsx` | Split into three step components: collect (name/email/phone, no workspace name, no password), verify-code (can closely mirror the existing `otp-form.tsx` shape), set-password. `StepList` copy updates to match the new step names. |
-| Web — onboarding | No change. `workspace-step.tsx` already collects name (prefilled via `suggestedName`), industry, size, country, currency, timezone. |
+| Area                      | Change                                                                                                                                                                                                                                                                                         |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@crm/contracts`          | New request/response shapes: `signupStart`, `signupVerifyCode`, `signupResendCode`, `signupSetPassword`. Each carries the opaque pending token, never the raw pending state.                                                                                                                   |
+| API — new                 | A focused service (e.g. `signup-verification.service.ts`) owning the Redis-backed pending-signup state and the three-step lifecycle. Mirrors the existing `RegistrationOtpService` shape (code generation, hashing, expiry, attempts, cooldown) but keyed by the pending token, not a session. |
+| API — `signup.service.ts` | `create()` moves to run only after step 3; drops `orgName`/`orgSlug` input; adds provisional-name generation; adds the cross-org duplicate-check query (new repository method, modeled on the directory-level email lookup `login.service.ts` already does for the workspace switcher).        |
+| API — mail                | New code-based email template, distinct from the existing WD-AUTH-015 link template (which stays in place for any flows that still use it, e.g. re-verification of an existing unverified account).                                                                                            |
+| Web — `signup-form.tsx`   | Split into three step components: collect (name/email/phone, no workspace name, no password), verify-code (can closely mirror the existing `otp-form.tsx` shape), set-password. `StepList` copy updates to match the new step names.                                                           |
+| Web — onboarding          | No change. `workspace-step.tsx` already collects name (prefilled via `suggestedName`), industry, size, country, currency, timezone.                                                                                                                                                            |
 
 ### Error handling
 

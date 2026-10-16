@@ -83,7 +83,11 @@ describe('PasswordEntry (the signed-in-stage part of step 3)', () => {
 
   it('falls back to the default minimum when the policy could not be read', () => {
     const html = renderGuest(
-      createElement(PasswordEntry, { initial: stage(), config: makeConfig(), passwordPolicy: null }),
+      createElement(PasswordEntry, {
+        initial: stage(),
+        config: makeConfig(),
+        passwordPolicy: null,
+      }),
     );
     expect(html).toContain('At least 8 characters.');
   });
@@ -141,7 +145,7 @@ describe('a duplicate-identity rejection at the password step (AUTH_IDENTITY_EXI
     // match, it must stay false so FormError actually renders.
     const skipFieldMessage = Boolean(
       mapped.key === 'passwordPolicy' ||
-        (fieldMessageFor(mapped) && mapped.fieldErrors[fieldMessageFor(mapped) as string]),
+      (fieldMessageFor(mapped) && mapped.fieldErrors[fieldMessageFor(mapped) as string]),
     );
     expect(skipFieldMessage).toBe(false);
     const html = renderGuest(createElement(FormError, { error: mapped, skipFieldMessage }));

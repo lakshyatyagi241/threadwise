@@ -21,40 +21,42 @@
 
 ## Review Focus
 
-- **Email already verified under the old link-based flow, now mid-migration**: an account created before this change with `email_verified_at` set must still log in normally — this change only touches the *signup* path, never an existing row. Task 3's duplicate-check test must confirm an existing verified account blocks a *new* signup with the same email, not that it breaks their own login.
+- **Email already verified under the old link-based flow, now mid-migration**: an account created before this change with `email_verified_at` set must still log in normally — this change only touches the _signup_ path, never an existing row. Task 3's duplicate-check test must confirm an existing verified account blocks a _new_ signup with the same email, not that it breaks their own login.
 - **Phone omitted at step 1**: `phone` is optional in `signupRequestSchema` today (required only when OTP is active) and must stay optional in the new `signupStartRequestSchema` — a workspace with WhatsApp OTP off must not force a phone number just because this flow exists. Task 1's schema test must cover phone-omitted.
 - **Resend spam**: the 60-second cooldown must be enforced server-side (not just disabled on the client), since the email-send is the costly operation. Task 4's test must call resend twice inside the cooldown window and expect the same `otpCooldown`-style error `signup-otp` already uses.
 - **Abandoned step 1 or step 2, never reaching step 3**: no `users`/`organizations` row may exist. Task 5's e2e test must stage a signup, let the Redis key expire (or delete it directly in the test), and confirm no DB row was created — not just that a later verify fails.
-- **Duplicate check race**: two concurrent signup attempts with the same brand-new email, both passing the duplicate check before either commits. Task 6's test exercises this against the real `provisionOrganization` unique-slug retry loop that already exists, confirming the second request gets a clean, user-facing duplicate error rather than a raw constraint violation (there is no unique DB constraint on `email` to catch this at the database layer, so the application-level check *is* the only guard — note this as a known, accepted race window in the task, not something to silently "fix" with a migration, since Global Constraints forbids a new migration here).
+- **Duplicate check race**: two concurrent signup attempts with the same brand-new email, both passing the duplicate check before either commits. Task 6's test exercises this against the real `provisionOrganization` unique-slug retry loop that already exists, confirming the second request gets a clean, user-facing duplicate error rather than a raw constraint violation (there is no unique DB constraint on `email` to catch this at the database layer, so the application-level check _is_ the only guard — note this as a known, accepted race window in the task, not something to silently "fix" with a migration, since Global Constraints forbids a new migration here).
 
 ---
 
 ## File Structure
 
-| File | Responsibility |
-| --- | --- |
-| `packages/contracts/src/auth-registration-security/signup.ts` | New request/response schemas for the three-step flow (modify, additive) |
-| `apps/api/src/modules/auth/support/redis-keys.ts` | New `AuthKeys.signupEmailStage` key builder (modify, additive) |
-| `apps/api/src/modules/auth/platform/tenant-directory.ts` | New `identityExists()` cross-org check (modify, additive) |
-| `apps/api/src/modules/auth/flows/signup.service.ts` | New `start()`, `verifyEmailCode()`, `resendEmailCode()`, `setPassword()` methods; `create()` keeps its current signature and is called by `setPassword()` (modify, additive) |
-| `apps/api/src/modules/auth/mail/mail.service.ts` | New `sendSignupCode()` method (modify, additive) |
-| `apps/api/src/modules/auth/controllers/registration.controller.ts` | Four new routes under `signup/` (modify, additive) |
-| `apps/web/src/features/auth-registration-security/guest/signup-start-form.tsx` | New: step 1 (name/email/phone) |
-| `apps/web/src/features/auth-registration-security/guest/signup-verify-email-form.tsx` | New: step 2 (code entry), modeled on `otp-form.tsx` |
-| `apps/web/src/features/auth-registration-security/guest/signup-password-form.tsx` | New: step 3 (password + terms) |
-| `apps/web/src/features/auth-registration-security/guest/signup-form.tsx` | Rewritten: thin router between the three step components (modify) |
-| `apps/web/src/features/auth-registration-security/guest/signup-challenge.ts` | New: sessionStorage helpers for the pre-account token, modeled on `otp-challenge.ts` |
-| `apps/web/messages/en/auth-registration-security.json`, `ar/...json` | New copy for the three steps |
+| File                                                                                  | Responsibility                                                                                                                                                               |
+| ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/contracts/src/auth-registration-security/signup.ts`                         | New request/response schemas for the three-step flow (modify, additive)                                                                                                      |
+| `apps/api/src/modules/auth/support/redis-keys.ts`                                     | New `AuthKeys.signupEmailStage` key builder (modify, additive)                                                                                                               |
+| `apps/api/src/modules/auth/platform/tenant-directory.ts`                              | New `identityExists()` cross-org check (modify, additive)                                                                                                                    |
+| `apps/api/src/modules/auth/flows/signup.service.ts`                                   | New `start()`, `verifyEmailCode()`, `resendEmailCode()`, `setPassword()` methods; `create()` keeps its current signature and is called by `setPassword()` (modify, additive) |
+| `apps/api/src/modules/auth/mail/mail.service.ts`                                      | New `sendSignupCode()` method (modify, additive)                                                                                                                             |
+| `apps/api/src/modules/auth/controllers/registration.controller.ts`                    | Four new routes under `signup/` (modify, additive)                                                                                                                           |
+| `apps/web/src/features/auth-registration-security/guest/signup-start-form.tsx`        | New: step 1 (name/email/phone)                                                                                                                                               |
+| `apps/web/src/features/auth-registration-security/guest/signup-verify-email-form.tsx` | New: step 2 (code entry), modeled on `otp-form.tsx`                                                                                                                          |
+| `apps/web/src/features/auth-registration-security/guest/signup-password-form.tsx`     | New: step 3 (password + terms)                                                                                                                                               |
+| `apps/web/src/features/auth-registration-security/guest/signup-form.tsx`              | Rewritten: thin router between the three step components (modify)                                                                                                            |
+| `apps/web/src/features/auth-registration-security/guest/signup-challenge.ts`          | New: sessionStorage helpers for the pre-account token, modeled on `otp-challenge.ts`                                                                                         |
+| `apps/web/messages/en/auth-registration-security.json`, `ar/...json`                  | New copy for the three steps                                                                                                                                                 |
 
 ---
 
 ### Task 1: Contracts — the three-step signup request/response shapes
 
 **Files:**
+
 - Modify: `packages/contracts/src/auth-registration-security/signup.ts`
 - Test: `packages/contracts/src/auth-registration-security/signup.test.ts` (create if it doesn't exist)
 
 **Interfaces:**
+
 - Produces: `signupStartRequestSchema`/`SignupStartRequest`, `signupStartResponseSchema`/`SignupStartResponse`, `signupVerifyEmailCodeRequestSchema`/`SignupVerifyEmailCodeRequest`, `signupResendEmailCodeRequestSchema`/`SignupResendEmailCodeRequest`, `signupResendEmailCodeResponseSchema`/`SignupResendEmailCodeResponse`, `signupSetPasswordRequestSchema`/`SignupSetPasswordRequest` — all consumed by Task 4 (API) and Tasks 7-9 (web).
 
 - [ ] **Step 1: Write the failing test**
@@ -70,7 +72,10 @@ import {
 
 describe('signupStartRequestSchema', () => {
   it('accepts name + email with no phone', () => {
-    const r = signupStartRequestSchema.safeParse({ fullName: 'Ada Lovelace', email: 'ada@example.com' });
+    const r = signupStartRequestSchema.safeParse({
+      fullName: 'Ada Lovelace',
+      email: 'ada@example.com',
+    });
     expect(r.success).toBe(true);
   });
   it('rejects a missing email', () => {
@@ -188,10 +193,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 2: Redis key for the pre-account signup stage
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/support/redis-keys.ts`
 - Test: `apps/api/src/modules/auth/support/redis-keys.test.ts` (extend if it exists, else create)
 
 **Interfaces:**
+
 - Produces: `AuthKeys.signupEmailStage(token: string): string` — consumed by Task 3.
 
 - [ ] **Step 1: Write the failing test**
@@ -241,10 +248,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 3: Cross-org identity-exists check
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/platform/tenant-directory.ts`
 - Test: `apps/api/test/unit/auth-registration-security/tenant-directory.spec.ts` (create if no matching unit test file exists for this class — check first)
 
 **Interfaces:**
+
 - Consumes: `this.db.privileged(...)` (already used by `activeOrgsForEmail` in the same file — identical pattern).
 - Produces: `TenantDirectory.identityExists(email: string, phoneE164: string | null): Promise<boolean>` — consumed by Task 4.
 
@@ -319,10 +328,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 4: `MailService.sendSignupCode`
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/mail/mail.service.ts`
 - Test: `apps/api/src/modules/auth/mail/mail.service.spec.ts` (extend existing, following its current mocking pattern for `MAIL_PORT`)
 
 **Interfaces:**
+
 - Consumes: `MAIL_PORT`'s `send({ to, subject, text, html })` (already injected in this class).
 - Produces: `MailService.sendSignupCode(to: string, name: string, code: string, ttlMinutes: number): Promise<boolean>` — consumed by Task 5.
 
@@ -386,10 +397,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 5: `SignupService.start()` — collect + duplicate check + send code
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/flows/signup.service.ts`
 - Test: `apps/api/test/e2e/auth-registration-security/auth-signup-social.e2e.spec.ts` or a new sibling `auth-signup-email-verify.e2e.spec.ts` (create the new file — this flow is large enough to own its own spec; follow the existing e2e spec's harness import pattern exactly, from `./harness`)
 
 **Interfaces:**
+
 - Consumes: `SignupStartRequest` (Task 1), `AuthKeys.signupEmailStage` (Task 2), `TenantDirectory.identityExists` (Task 3), `MailService.sendSignupCode` (Task 4), `randomNumericCode` from `../support/crypto-utils` (existing, used by the phone-OTP path), `hash` from `@node-rs/argon2` (existing import in this file).
 - Produces: `SignupService.start(req: SignupStartRequest, meta: ClientMeta): Promise<SignupStartResponse>` — consumed by Task 8 (controller route) and Task 7 (web step 1).
 
@@ -518,10 +531,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 6: `SignupService.verifyEmailCode()` and `resendEmailCode()`
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/flows/signup.service.ts`
 - Test: same e2e file as Task 5
 
 **Interfaces:**
+
 - Consumes: `EmailStage` (Task 5), `AuthKeys.signupEmailStage` (Task 2).
 - Produces: `SignupService.verifyEmailCode(req: SignupVerifyEmailCodeRequest): Promise<SignupVerifyEmailCodeResponse>`, `SignupService.resendEmailCode(req: SignupResendEmailCodeRequest): Promise<SignupResendEmailCodeResponse>` — consumed by Task 8, Task 8.
 
@@ -532,14 +547,20 @@ describe('POST /v2/auth/signup/verify-email-code', () => {
   it('marks the stage verified on a correct code', async () => {
     // start a stage, pull the code from the test mail sink the way other e2e specs already do
     // (check how auth-signup-social.e2e.spec.ts or otp-delivery.e2e.spec.ts reads the sent code in tests)
-    const { token, code } = await harness.startSignupAndReadCode({ fullName: 'Ada', email: `v-${Date.now()}@example.test` });
+    const { token, code } = await harness.startSignupAndReadCode({
+      fullName: 'Ada',
+      email: `v-${Date.now()}@example.test`,
+    });
     const res = await harness.post('/v2/auth/signup/verify-email-code', { token, code });
     expect(res.status).toBe(200);
     expect(res.body.token).toBe(token);
   });
 
   it('rejects a wrong code without consuming the attempt budget silently', async () => {
-    const { token } = await harness.startSignupAndReadCode({ fullName: 'Ada', email: `w-${Date.now()}@example.test` });
+    const { token } = await harness.startSignupAndReadCode({
+      fullName: 'Ada',
+      email: `w-${Date.now()}@example.test`,
+    });
     const res = await harness.post('/v2/auth/signup/verify-email-code', { token, code: '000000' });
     expect(res.status).toBe(400);
   });
@@ -547,7 +568,10 @@ describe('POST /v2/auth/signup/verify-email-code', () => {
 
 describe('POST /v2/auth/signup/resend-email-code', () => {
   it('rejects a second resend inside the cooldown', async () => {
-    const { token } = await harness.startSignupAndReadCode({ fullName: 'Ada', email: `r-${Date.now()}@example.test` });
+    const { token } = await harness.startSignupAndReadCode({
+      fullName: 'Ada',
+      email: `r-${Date.now()}@example.test`,
+    });
     await harness.post('/v2/auth/signup/resend-email-code', { token });
     const second = await harness.post('/v2/auth/signup/resend-email-code', { token });
     expect(second.status).toBe(429);
@@ -633,10 +657,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 7: `SignupService.setPassword()` — create the account
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/flows/signup.service.ts`
 - Test: same e2e file
 
 **Interfaces:**
+
 - Consumes: `EmailStage` (verified, Task 6), existing `create(data: SignupData, opts: CreateOptions, meta: ClientMeta): Promise<Authenticated>` (unchanged signature, called internally).
 - Produces: `SignupService.setPassword(req: SignupSetPasswordRequest, meta: ClientMeta): Promise<SignupResponse>` — consumed by Task 8, Task 9 (web).
 
@@ -645,7 +671,10 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ```ts
 describe('POST /v2/auth/signup/set-password', () => {
   it('creates the account once verified, with an auto-generated workspace name', async () => {
-    const { token } = await harness.startSignupAndVerify({ fullName: 'Ada Lovelace', email: `p-${Date.now()}@example.test` });
+    const { token } = await harness.startSignupAndVerify({
+      fullName: 'Ada Lovelace',
+      email: `p-${Date.now()}@example.test`,
+    });
     const res = await harness.post('/v2/auth/signup/set-password', {
       token,
       password: 'Sup3rSecret!',
@@ -656,8 +685,14 @@ describe('POST /v2/auth/signup/set-password', () => {
   });
 
   it('rejects when the email was never verified', async () => {
-    const { token } = await harness.post('/v2/auth/signup/start', { fullName: 'Ada', email: `nv-${Date.now()}@example.test` }).then((r) => r.body);
-    const res = await harness.post('/v2/auth/signup/set-password', { token, password: 'Sup3rSecret!', acceptTerms: true });
+    const { token } = await harness
+      .post('/v2/auth/signup/start', { fullName: 'Ada', email: `nv-${Date.now()}@example.test` })
+      .then((r) => r.body);
+    const res = await harness.post('/v2/auth/signup/set-password', {
+      token,
+      password: 'Sup3rSecret!',
+      acceptTerms: true,
+    });
     expect(res.status).toBe(403);
   });
 });
@@ -734,9 +769,11 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 8: Wire the four new routes
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/controllers/registration.controller.ts`
 
 **Interfaces:**
+
 - Consumes: Tasks 1, 5, 6, 7's schemas and service methods.
 - Produces: `POST /v2/auth/signup/start`, `POST /v2/auth/signup/verify-email-code`, `POST /v2/auth/signup/resend-email-code`, `POST /v2/auth/signup/set-password` — consumed by Task 9-11 (web).
 
@@ -798,11 +835,13 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 9: Web — step 1 (collect) and the shared pending-token helper
 
 **Files:**
+
 - Create: `apps/web/src/features/auth-registration-security/guest/signup-challenge.ts` (modeled on `otp-challenge.ts`: sessionStorage read/write/clear for the pending token + masked email + expiry, same shape as `StoredChallenge`)
 - Create: `apps/web/src/features/auth-registration-security/guest/signup-start-form.tsx`
 - Test: `apps/web/src/features/auth-registration-security/guest/signup-start-form.render.test.ts`
 
 **Interfaces:**
+
 - Consumes: `signupStartRequestSchema`, `signupStartResponseSchema` (Task 1), `callApi` (existing, `bff.ts`).
 - Produces: a stored pending-token record readable by Task 10's verify step (same sessionStorage key convention `otp-challenge.ts` already uses, renamed for this flow — check that file's exact key string and mirror the naming, e.g. `signup-email-pending`).
 
@@ -836,6 +875,7 @@ Expected: FAIL — module doesn't exist.
 - [ ] **Step 3: Write minimal implementation**
 
 Base this closely on the CURRENT `signup-form.tsx`'s field rendering for `fullName`, `email`, `phone` (reuse `Input`, `PhoneInput`, `PhoneValue`/`evaluatePhone`/`pickDefaultCountry` exactly as that file already does), but:
+
 - remove `orgName`/`orgSlug`/`password`/`confirmPassword`/`acceptTerms` entirely (those move to Tasks 10-11)
 - on submit, call `callApi('/auth/signup/start', { method: 'POST', body: parsed.data, schema: signupStartResponseSchema })` (not `postBff` — this call doesn't issue a session)
 - on success, store the token/maskedEmail/expiry via the new `signup-challenge.ts` helper and `router.push('/signup/verify-email')` (a new route — see Task 12)
@@ -901,10 +941,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 10: Web — step 2 (verify code), modeled on `otp-form.tsx`
 
 **Files:**
+
 - Create: `apps/web/src/features/auth-registration-security/guest/signup-verify-email-form.tsx`
 - Test: `apps/web/src/features/auth-registration-security/guest/signup-verify-email-form.render.test.ts`
 
 **Interfaces:**
+
 - Consumes: `readSignupStage`/`saveSignupStage` (Task 9), `signupVerifyEmailCodeRequestSchema`/`Response`, `signupResendEmailCodeRequestSchema`/`Response` (Task 1), `callApi`.
 - Produces: on success, advances to step 3 (`router.push('/signup/password')`), token unchanged in storage but now implicitly verified server-side.
 
@@ -926,8 +968,9 @@ Expected: FAIL — module doesn't exist.
 - [ ] **Step 3: Write minimal implementation**
 
 Copy `otp-form.tsx`'s structure (the single-text-input-styled-as-boxes code field, countdown hooks, resend button, error mapping) near-verbatim, swapping:
+
 - the stored-state type from `StoredChallenge` to `StoredSignupStage` (Task 9)
-- the verify call from `postBff('signup-otp', ...)` to `callApi('/auth/signup/verify-email-code', { method: 'POST', body: { token, code }, schema: signupVerifyEmailCodeResponseSchema })` — this one does *not* issue a session (no account exists yet), so it must be `callApi`, not `postBff`
+- the verify call from `postBff('signup-otp', ...)` to `callApi('/auth/signup/verify-email-code', { method: 'POST', body: { token, code }, schema: signupVerifyEmailCodeResponseSchema })` — this one does _not_ issue a session (no account exists yet), so it must be `callApi`, not `postBff`
 - the resend call to `callApi('/auth/signup/resend-email-code', { method: 'POST', body: { token }, schema: signupResendEmailCodeResponseSchema })`
 - on verify success: `router.push('/signup/password')` instead of `completeSignIn`
 
@@ -950,13 +993,15 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 11: Web — step 3 (password) and the signup router rewrite
 
 **Files:**
+
 - Create: `apps/web/src/features/auth-registration-security/guest/signup-password-form.tsx`
 - Modify: `apps/web/src/features/auth-registration-security/guest/signup-form.tsx` (becomes a thin step router)
 - Modify: `apps/web/src/features/auth-registration-security/guest/shell.render.test.ts` (the design-6 tests from the earlier Geta-design work render `page: 'register'` through `signup-form.tsx` — confirm they still pass against the new router)
 - Test: `apps/web/src/features/auth-registration-security/guest/signup-password-form.render.test.ts`
 
 **Interfaces:**
-- Consumes: `readSignupStage`/`clearSignupStage` (Task 9), `signupSetPasswordRequestSchema` (Task 1), `bffSignupResponseSchema` (existing), `postBff` (existing — this call *does* issue a session), `completeSignIn` (existing, used by the current `signup-form.tsx`).
+
+- Consumes: `readSignupStage`/`clearSignupStage` (Task 9), `signupSetPasswordRequestSchema` (Task 1), `bffSignupResponseSchema` (existing), `postBff` (existing — this call _does_ issue a session), `completeSignIn` (existing, used by the current `signup-form.tsx`).
 
 - [ ] **Step 1: Write the failing test**
 
@@ -980,10 +1025,18 @@ Reuse the current `signup-form.tsx`'s `password`/`confirmPassword`/`acceptTerms`
 
 ```tsx
 const stage = readSignupStage();
-if (!stage) { router.push('/signup'); return; }
+if (!stage) {
+  router.push('/signup');
+  return;
+}
 const res = await postBff(
   'signup-set-password',
-  { token: stage.token, password, acceptTerms: agree ? (true as const) : (false as unknown as true), ...(referral ? { referralCode: referral } : {}) },
+  {
+    token: stage.token,
+    password,
+    acceptTerms: agree ? (true as const) : (false as unknown as true),
+    ...(referral ? { referralCode: referral } : {}),
+  },
   bffSignupResponseSchema, // existing — same discriminated union signup already used, still covers otp_required for the phone-OTP case
 );
 clearSignupStage();
@@ -1034,12 +1087,14 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 12: i18n copy (en + ar) and `StepList` update
 
 **Files:**
+
 - Modify: `apps/web/messages/en/auth-registration-security.json`
 - Modify: `apps/web/messages/ar/auth-registration-security.json`
 - Modify: `apps/web/src/features/auth-registration-security/guest/step-list.tsx` (its `STEPS` array / translation keys — confirm against the file read earlier in this session whether "account" already covers this step or needs renaming, since workspace name no longer lives in step 1)
 - Test: `apps/web/src/features/auth-registration-security/guest/message-keys.test.ts` (the existing repo-wide check that every `t('key')` call resolves — this is the test for this task, not a new one)
 
 **Interfaces:**
+
 - Consumes: nothing new.
 - Produces: translation keys for all copy introduced in Tasks 9-11 (field labels, step titles, error copy, resend countdown text) — matching the exact key paths the new components call.
 
@@ -1075,10 +1130,12 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 ### Task 13: Social login — same duplicate check
 
 **Files:**
+
 - Modify: `apps/api/src/modules/auth/flows/social-auth.service.ts` (find the exact file via `grep -rn "class SocialAuthService"` — this session's earlier research confirmed a `social.callback` method exists on `SocialAuthService`, injected into `registration.controller.ts`)
 - Test: whatever existing social e2e spec covers `social/:provider/callback` (confirmed to exist at `apps/api/test/e2e/auth-registration-security/auth-signup-social.e2e.spec.ts` from this session's earlier exploration)
 
 **Interfaces:**
+
 - Consumes: `TenantDirectory.identityExists` (Task 3).
 
 - [ ] **Step 1: Write the failing test**
@@ -1087,7 +1144,9 @@ Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>"
 it('rejects a Google sign-in whose email already has an account in another org', async () => {
   const email = `social-dup-${Date.now()}@example.test`;
   await harness.seedExistingUser({ email });
-  const res = await harness.socialCallback('google', { email /* ...whatever shape the existing social callback tests already build */ });
+  const res = await harness.socialCallback('google', {
+    email /* ...whatever shape the existing social callback tests already build */,
+  });
   expect(res.status).toBe(409);
 });
 ```
@@ -1099,7 +1158,7 @@ Expected: FAIL
 
 - [ ] **Step 3: Write minimal implementation**
 
-Find the exact point in `social-auth.service.ts`'s `callback()` where it decides "no existing user with this email, provision a new account" (it must already branch on this, since social login for a *returning* user must behave differently from a *new* one) and add the `identityExists` check immediately before that branch, throwing the same `AUTH_IDENTITY_EXISTS` error Task 5 added — but only on the "new account" branch, never when the OAuth email matches an account that already belongs to the signed-in flow's own org (a returning user logging in via Google must keep working).
+Find the exact point in `social-auth.service.ts`'s `callback()` where it decides "no existing user with this email, provision a new account" (it must already branch on this, since social login for a _returning_ user must behave differently from a _new_ one) and add the `identityExists` check immediately before that branch, throwing the same `AUTH_IDENTITY_EXISTS` error Task 5 added — but only on the "new account" branch, never when the OAuth email matches an account that already belongs to the signed-in flow's own org (a returning user logging in via Google must keep working).
 
 - [ ] **Step 4: Run test to verify it passes**
 
