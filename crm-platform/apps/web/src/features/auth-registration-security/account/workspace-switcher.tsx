@@ -55,7 +55,6 @@ export function WorkspaceSwitcher() {
     queryFn: authApi.workspaces,
     meta: BACKGROUND_META,
     staleTime: 60_000,
-    retry: false,
   });
 
   const [open, setOpen] = useState(false);
