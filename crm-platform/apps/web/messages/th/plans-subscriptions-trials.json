@@ -81,7 +81,8 @@
       "sms": "ช่องทาง SMS",
       "help_agent": "ผู้ช่วยด้านความช่วยเหลือ",
       "email_channel": "ช่องทางอีเมล (Gmail)",
-      "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)"
+      "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)",
+      "ai_crm_copilot": "AI CRM Copilot"
     },
     "limitGroups": {
       "messaging": "การส่งข้อความ",

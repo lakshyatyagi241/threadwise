@@ -1,10 +1,9 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import type { ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { AGENT_IGNORE } from '@/lib/agent-marks';
-import { parseMarkup, type Segment } from '../lib/format';
+import { WhatsAppText } from '@/components/whatsapp-text';
 import type { PreviewModel } from '../lib/form-model';
 import {
   CopyIcon,
@@ -20,42 +19,9 @@ import {
 /** The fixed code shown in the authentication layout (display only). */
 const AUTH_SAMPLE_CODE = '482913';
 
-function renderSegments(segs: Segment[], keyBase = 'k'): ReactNode[] {
-  return segs.map((s, i) => {
-    const key = `${keyBase}${i}`;
-    switch (s.kind) {
-      case 'text':
-        return s.text.split('\n').map((line, j, all) => (
-          <span key={`${key}-${j}`}>
-            {line}
-            {j < all.length - 1 && <br />}
-          </span>
-        ));
-      case 'var':
-        return (
-          <span key={key} className="rounded bg-success/15 px-1 font-medium text-success">
-            {`{{${s.token}}}`}
-          </span>
-        );
-      case 'code':
-        return (
-          <code key={key} className="font-mono text-[0.9em]">
-            {s.text}
-          </code>
-        );
-      case 'bold':
-        return <strong key={key}>{renderSegments(s.children, key)}</strong>;
-      case 'italic':
-        return <em key={key}>{renderSegments(s.children, key)}</em>;
-      case 'strike':
-        return <del key={key}>{renderSegments(s.children, key)}</del>;
-    }
-  });
-}
-
 /** Body text in WhatsApp's markup, rendered as elements (no HTML injection). Unfilled `{{tokens}}` show as pills. */
 export function FormattedText({ text }: { text: string }) {
-  return <>{renderSegments(parseMarkup(text))}</>;
+  return <WhatsAppText text={text} variables />;
 }
 
 export function ButtonIcon({ kind }: { kind: PreviewModel['buttons'][number]['kind'] }) {
@@ -141,14 +107,14 @@ export function MessageBubble({
         <>
           <MediaBlock model={model} />
           {model.headerKind === 'text' && model.headerText && (
-            <p className="mb-1 font-semibold break-words">
+            <div className="mb-1 font-semibold break-words">
               <FormattedText text={model.headerText} />
-            </p>
+            </div>
           )}
           {model.body ? (
-            <p {...AGENT_IGNORE} className="break-words" data-testid="bubble-body">
+            <div {...AGENT_IGNORE} className="break-words" data-testid="bubble-body">
               <FormattedText text={model.body} />
-            </p>
+            </div>
           ) : (
             <p className="text-muted-foreground">{t('bodyEmpty')}</p>
           )}

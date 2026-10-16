@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Yaşam döngüsü aşaması",
         "status": "Durum",
         "groups": "Gruplar",
+        "owner": "Sahip",
         "opt_out": "Pazarlamadan çıkış"
       },
       "types": {

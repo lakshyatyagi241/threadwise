@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Lifecycle stage",
         "status": "Status",
         "groups": "Groups",
+        "owner": "Owner",
         "opt_out": "Marketing opt-out"
       },
       "types": {

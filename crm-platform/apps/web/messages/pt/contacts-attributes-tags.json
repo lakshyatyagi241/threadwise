@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Estágio do ciclo de vida",
         "status": "Status",
         "groups": "Grupos",
+        "owner": "Responsável",
         "opt_out": "Cancelamento de marketing"
       },
       "types": {

@@ -15,6 +15,7 @@ import { BroadcastsRepository } from './broadcasts.repository';
 import { BroadcastsService } from './broadcasts.service';
 import { ChannelsController } from './channels.controller';
 import { ChannelsRepository } from './channels.repository';
+import { WechatAvailabilityService } from './wechat-availability.service';
 import { ChannelsService } from './channels.service';
 import { ChatInboxIngest } from './chat-inbox-ingest';
 import { InboundService } from './inbound.service';
@@ -37,6 +38,7 @@ const XML_BODY_LIMIT = '64kb';
     ChannelsRepository,
     ChannelsService,
     WechatTokenService,
+    WechatAvailabilityService,
     InboundService,
     ChatInboxIngest,
     WechatChannelAdapter,

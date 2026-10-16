@@ -10,6 +10,7 @@
       "intro": "Verbinden Sie einen offiziellen WeChat-Account (zertifizierter Service-Account). Eingehende Nachrichten landen in Ihrem gemeinsamen Team-Posteingang, und Antworten, Stichwortregeln und automatische Antworten funktionieren genau wie bei jedem anderen Kanal.",
       "broadcasts": "Rundsendungen",
       "loadError": "Ihre WeChat-Kanäle konnten nicht geladen werden.",
+      "unavailableCountry": "WeChat ist in Ihrem Land nicht verfügbar. In diesem Arbeitsbereich können Sie keinen WeChat-Kanal verbinden oder WeChat-Nachrichten senden.",
       "connectTitle": "Kanal verbinden",
       "connectBody": "Fügen Sie AppID, AppSecret und den Server-Token aus der WeChat Official Accounts Platform ein (Einstellungen → Grundkonfiguration).",
       "connect": "WeChat verbinden",

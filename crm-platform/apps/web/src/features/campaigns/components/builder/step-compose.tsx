@@ -414,7 +414,7 @@ export function StepCompose({
               {engine === 'waba' || engine === 'twilio' || engine === 'baileys'
                 ? t(`templateEmpty.${engine}`)
                 : t('noTemplates')}{' '}
-              <Link href="/templates/create" className="font-semibold text-brand hover:underline">
+              <Link href="/templates/new" className="font-semibold text-brand hover:underline">
                 {t('createTemplate')}
               </Link>
             </p>

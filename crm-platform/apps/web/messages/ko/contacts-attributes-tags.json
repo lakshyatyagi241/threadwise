@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "라이프사이클 단계",
         "status": "상태",
         "groups": "그룹",
+        "owner": "담당자",
         "opt_out": "마케팅 수신 거부"
       },
       "types": {

@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Giai đoạn vòng đời",
         "status": "Trạng thái",
         "groups": "Nhóm",
+        "owner": "Người phụ trách",
         "opt_out": "Từ chối tiếp thị"
       },
       "types": {

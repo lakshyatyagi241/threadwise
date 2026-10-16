@@ -10,6 +10,7 @@
       "intro": "একটি WeChat অফিশিয়াল অ্যাকাউন্ট (সার্টিফায়েড সার্ভিস অ্যাকাউন্ট) সংযুক্ত করুন। আগত বার্তা আপনার শেয়ার্ড টিম ইনবক্সে আসে, আর উত্তর, কীওয়ার্ড নিয়ম ও অটো-রেসপন্ডার অন্য সব চ্যানেলের মতোই কাজ করে।",
       "broadcasts": "ব্রডকাস্ট",
       "loadError": "আপনার WeChat চ্যানেলগুলো লোড করা যায়নি।",
+      "unavailableCountry": "আপনার দেশে WeChat পাওয়া যায় না। এই ওয়ার্কস্পেস থেকে WeChat চ্যানেল যুক্ত করা বা WeChat বার্তা পাঠানো যাবে না।",
       "connectTitle": "চ্যানেল সংযুক্ত করুন",
       "connectBody": "WeChat Official Accounts Platform (সেটিংস → Basic Configuration) থেকে AppID, AppSecret এবং সার্ভার Token এখানে পেস্ট করুন।",
       "connect": "WeChat সংযুক্ত করুন",

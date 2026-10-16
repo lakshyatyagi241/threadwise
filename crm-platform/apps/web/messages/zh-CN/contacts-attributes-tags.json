@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "生命周期阶段",
         "status": "状态",
         "groups": "群组",
+        "owner": "负责人",
         "opt_out": "营销退订"
       },
       "types": {

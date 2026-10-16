@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Étape du cycle de vie",
         "status": "Statut",
         "groups": "Groupes",
+        "owner": "Propriétaire",
         "opt_out": "Désabonnement marketing"
       },
       "types": {

@@ -198,6 +198,7 @@ export class WizardBroadcastsService {
       counts: await this.repo.runCounts(tx, orgId, c.id),
       retries: this.retries(draft, await this.repo.retryTotals(tx, orgId, [c.id])),
       followUps: await this.repo.followUpTotals(tx, orgId, c.id, draft.followUps.length),
+      templateName: c.templateName,
     };
   }
 
@@ -215,6 +216,7 @@ export class WizardBroadcastsService {
       mode: draft.schedule.mode,
       templateId: c.templateUuid,
       templateName: c.templateName,
+      templateCount: 1,
       nextRunAt: c.status === 'scheduled' && c.runAt ? c.runAt.toISOString() : null,
       lastRunAt: c.lastRunAt ? c.lastRunAt.toISOString() : null,
       runs: c.status === 'scheduled' || c.status === 'paused' ? 0 : 1,
@@ -243,6 +245,7 @@ export class WizardBroadcastsService {
       mode: 'recurring',
       templateId: s.templateUuid,
       templateName: s.templateName,
+      templateCount: 1 + draft.templateSequence.length,
       nextRunAt: s.status === 'active' && s.nextRunAt ? s.nextRunAt.toISOString() : null,
       lastRunAt: s.lastOccurrenceAt ? s.lastOccurrenceAt.toISOString() : null,
       runs: s.occurrencesCreated,

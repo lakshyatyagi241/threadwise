@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Etap cyklu życia",
         "status": "Status",
         "groups": "Grupy",
+        "owner": "Właściciel",
         "opt_out": "Rezygnacja z marketingu"
       },
       "types": {

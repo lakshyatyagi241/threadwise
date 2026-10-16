@@ -1028,6 +1028,7 @@
         "lifecycle_stage": "Fase del ciclo di vita",
         "status": "Stato",
         "groups": "Gruppi",
+        "owner": "Responsabile",
         "opt_out": "Disiscrizione dal marketing"
       },
       "types": {

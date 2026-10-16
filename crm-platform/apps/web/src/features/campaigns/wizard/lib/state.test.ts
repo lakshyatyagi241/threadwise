@@ -167,3 +167,106 @@ describe('follow-ups', () => {
     expect(draftPatch(edited.draft, cleared.draft)).toEqual({ followUps: [] });
   });
 });
+
+describe('template sequence', () => {
+  const tpl = (n: number) => template({ id: uuid(n), slots: [slot('body', 1, 'first_name')] });
+  const withSeq = () => {
+    let s = initialState();
+    for (const n of [5, 6, 7]) {
+      s = wizardReducer(s, { type: 'sequenceAdd' });
+      s = wizardReducer(s, {
+        type: 'sequenceTemplate',
+        index: s.draft.templateSequence.length - 1,
+        template: tpl(n),
+      });
+    }
+    return s;
+  };
+  const ids = (s: ReturnType<typeof initialState>) =>
+    s.draft.templateSequence.map((e) => e.templateId);
+
+  it('adds empty entries, up to nine, and the save patch names the key', () => {
+    let s = initialState();
+    const before = s.draft;
+    for (let i = 0; i < 12; i++) s = wizardReducer(s, { type: 'sequenceAdd' });
+    expect(s.draft.templateSequence).toHaveLength(9);
+    expect(s.draft.templateSequence[0]).toEqual({ templateId: null, variables: {} });
+    expect(Object.keys(draftPatch(before, s.draft))).toEqual(['templateSequence']);
+  });
+
+  it('picking a template keeps the mapping that still fits; the same pick is a no-op', () => {
+    let s = withSeq();
+    s = wizardReducer(s, {
+      type: 'sequenceVariable',
+      index: 1,
+      slot: 'body.1',
+      source: { kind: 'fixed', text: 'x' },
+    });
+    s = wizardReducer(s, {
+      type: 'sequenceVariable',
+      index: 1,
+      slot: 'body.9',
+      source: { kind: 'fixed', text: 'y' },
+    });
+    const same = wizardReducer(s, { type: 'sequenceTemplate', index: 1, template: tpl(6) });
+    expect(same).toBe(s);
+    const next = wizardReducer(s, { type: 'sequenceTemplate', index: 1, template: tpl(8) });
+    expect(next.draft.templateSequence[1]).toEqual({
+      templateId: uuid(8),
+      variables: { 'body.1': { kind: 'fixed', text: 'x' } },
+    });
+    const cleared = wizardReducer(s, { type: 'sequenceTemplate', index: 1, template: null });
+    expect(cleared.draft.templateSequence[1]).toEqual({ templateId: null, variables: {} });
+  });
+
+  it('sets, clears and replaces the mapping of one entry only', () => {
+    let s = withSeq();
+    s = wizardReducer(s, {
+      type: 'sequenceVariable',
+      index: 2,
+      slot: 'body.1',
+      source: { kind: 'fixed', text: 'z' },
+    });
+    expect(s.draft.templateSequence[2]!.variables['body.1']).toEqual({ kind: 'fixed', text: 'z' });
+    expect(s.draft.templateSequence[0]!.variables).toEqual({});
+    s = wizardReducer(s, { type: 'sequenceVariable', index: 2, slot: 'body.1', source: null });
+    expect(s.draft.templateSequence[2]!.variables).toEqual({});
+    s = wizardReducer(s, {
+      type: 'sequenceVariables',
+      index: 0,
+      variables: { 'body.1': { kind: 'field', field: 'email', fallback: null } },
+    });
+    expect(s.draft.templateSequence[0]!.variables).toHaveProperty('body.1');
+    expect(wizardReducer(s, { type: 'sequenceVariable', index: 8, slot: 'a', source: null })).toBe(
+      s,
+    );
+  });
+
+  it('moves an entry with its mapping, and refuses to move past either end', () => {
+    let s = withSeq();
+    s = wizardReducer(s, {
+      type: 'sequenceVariable',
+      index: 0,
+      slot: 'body.1',
+      source: { kind: 'fixed', text: 'first' },
+    });
+    const down = wizardReducer(s, { type: 'sequenceMove', index: 0, by: 1 });
+    expect(ids(down)).toEqual([uuid(6), uuid(5), uuid(7)]);
+    expect(down.draft.templateSequence[1]!.variables['body.1']).toEqual({
+      kind: 'fixed',
+      text: 'first',
+    });
+    expect(ids(wizardReducer(down, { type: 'sequenceMove', index: 1, by: -1 }))).toEqual(ids(s));
+    expect(wizardReducer(s, { type: 'sequenceMove', index: 0, by: -1 })).toBe(s);
+    expect(wizardReducer(s, { type: 'sequenceMove', index: 2, by: 1 })).toBe(s);
+  });
+
+  it('removes one entry or all of them', () => {
+    const s = withSeq();
+    expect(ids(wizardReducer(s, { type: 'sequenceRemove', index: 1 }))).toEqual([uuid(5), uuid(7)]);
+    expect(wizardReducer(s, { type: 'sequenceRemove', index: 5 })).toBe(s);
+    const none = wizardReducer(s, { type: 'sequenceClear' });
+    expect(none.draft.templateSequence).toEqual([]);
+    expect(wizardReducer(none, { type: 'sequenceClear' })).toBe(none);
+  });
+});

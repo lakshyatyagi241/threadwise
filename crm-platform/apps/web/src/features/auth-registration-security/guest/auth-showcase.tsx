@@ -199,7 +199,7 @@ export function GetaMark({
         >
           <path d="M17.6 8.3A6.6 6.6 0 1 0 18.6 13h-6.1" />
         </svg>
-        <span className="absolute -bottom-px -right-px size-[5px] rounded-full bg-(--auth-geta-ink)" />
+        <span className="absolute -bottom-px -end-px size-[5px] rounded-full bg-(--auth-geta-ink)" />
       </span>
       <span
         className={cn(
