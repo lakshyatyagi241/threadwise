@@ -62,6 +62,7 @@ A source can reply to a new lead by itself, so the person hears from you in minu
 - **Send from**: for SMS and email, the number or the shared mailbox. Leave it as the first connected one if you have only one.
 - **Wait before sending**: 0 to 60 minutes.
 - **Only during business hours**: outside the hours set for your workspace, the message waits for them to open.
+- **Do not message leads older than**: one hour unless you choose otherwise (up to 90 days). A lead that reaches you late, for example from a backfill, a retry or a missed sync, is still saved, assigned and announced to your team, but it gets no first message once it is older than this. Choose a longer time only if you want old leads messaged. The consent checks below still apply.
 
 The message goes only to a lead that becomes a **new** contact, once. A contact who comes back, or a test lead, gets none. It is sent through the same checks as every other message you start:
 
@@ -69,7 +70,7 @@ The message goes only to a lead that becomes a **new** contact, once. A contact 
 - **Quiet hours** hold a marketing message until they end.
 - **Your plan's limits and your wallet** apply. An empty wallet or a channel that is not connected holds the message; it goes when that is fixed, or is dropped after a day.
 
-What happened to each lead's first message shows on the lead (**Leads received**, then the lead) and on the contact's timeline: **Sent**, **Held** (with the reason and the next try), **Blocked** (opted out, no consent, plan limit), **Skipped** (no number or address, no connected sender, the template is gone, or a value the template needs, such as a name, is missing) or **Failed**. If a name is missing, give the workspace attribute a default value (for example "there") so the template can still be filled.
+What happened to each lead's first message shows on the lead (**Leads received**, then the lead) and on the contact's timeline: **Sent**, **Held** (with the reason and the next try), **Blocked** (opted out, no consent, plan limit), **Skipped** (no number or address, no connected sender, the template is gone, a value the template needs, such as a name, is missing, or the lead is older than the limit above) or **Failed**. If a name is missing, give the workspace attribute a default value (for example "there") so the template can still be filled.
 
 ## Lead inbox: every lead in one place
 
@@ -81,7 +82,11 @@ The **Lead inbox** tab lists every lead any of your sources received, newest fir
 
 ### Sync now and backfill
 
-Sources that can be asked for their leads (the portals you installed from the Marketplace) are listed under the table. **Sync now** fetches what is new; the source's own limit decides how soon you can do it again and the screen says how long to wait. **Backfill...** pulls a past date range again (up to 90 days, and no further back than the source keeps leads). Both run in the background, one at a time per source, and show their progress and counts: new leads, leads you already had, and leads that could not be handed over. Leads you already have are recognised, so running a backfill twice adds nothing twice. Managers can start them; everyone who can see Social leads can watch.
+Sources that can be asked for their leads are listed under the table: the portals you installed from the Marketplace, and each **Meta lead form** you picked. **Sync now** fetches what is new; the source's own limit decides how soon you can do it again and the screen says how long to wait. **Backfill...** pulls a past date range again (up to 90 days, and no further back than the source keeps leads; Meta keeps a lead for about 90 days). Both run in the background, one at a time per source, and show their progress and counts: new leads, leads you already had, and leads that could not be handed over. Leads you already have are recognised, so running a backfill twice adds nothing twice. Managers can start them; everyone who can see Social leads can watch.
+
+Backfilled leads are treated like new ones: they become contacts, are assigned to an owner by the source's rule and notify your team. What they do **not** get is the automatic first message, unless they are younger than the source's **Do not message leads older than** limit (one hour by default). Consent works exactly as for any lead: a Meta lead is recorded as having agreed only when it ticked the form's own consent checkbox.
+
+If Meta slows a run down, it waits and tries again by itself; if Meta keeps asking it to wait, the run ends **Partly done** with "The source asked us to wait", and what it already brought in is kept. Run it again later. A run that fails with "Meta did not allow this Page to read leads" or "The source refused the credentials" needs you to open **Meta lead forms**, grant lead access or reconnect the Page, and run it again.
 
 ## Plan and access
 
@@ -91,7 +96,7 @@ The tile needs the **Lead sources** plan feature and permission to read lead sou
 
 - **A lead needs review.** The reason is shown, such as no email or phone, or an unreadable phone number. Fix the mapping or the default country code, then retry.
 - **Nothing arrives.** Check the source is not paused, the URL is current and, with a shared secret, that your tool sends it in the `X-Webhook-Secret` header.
-- **Nothing arrives from a Meta form.** Open the Page on the Ads tab: lead sync must be on, the state must read **Receiving leads**, and the form must be picked. Fix a **Needs lead access** or **Needs reconnect** state first.
+- **Nothing arrives from a Meta form.** Open the Page on the Ads tab: lead sync must be on, the state must read **Receiving leads**, and the form must be picked. Fix a **Needs lead access** or **Needs reconnect** state first. To bring in a lead that was missed, use **Sync now** on the Lead inbox tab.
 - **You lost the URL or token.** They cannot be shown again. Rotate the token to get a new URL.
 
 ## Proof of consent with a lead
