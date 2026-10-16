@@ -14,12 +14,14 @@ workspace. Literal paths (`stats`, `industries`, `select-data`, `bulk/delete`) a
 
 ## Capabilities
 
-| Key                       | Scope | Grants                                                                   |
-| ------------------------- | ----- | ------------------------------------------------------------------------ |
-| `record.companies.read`   | yes   | list, tiles, industries, picker, get, a company's contacts, its activity |
-| `record.companies.create` | no    | create a company                                                         |
-| `record.companies.update` | yes   | edit, and link or unlink a company's contacts                            |
-| `record.companies.delete` | yes   | delete one company, or bulk delete                                       |
+| Key                                              | Scope | Grants                                                                                                                                                                                                               |
+| ------------------------------------------------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `record.companies.read`                          | yes   | list, tiles, industries, picker, get, a company's contacts, its activity                                                                                                                                             |
+| `record.companies.create`                        | no    | create a company                                                                                                                                                                                                     |
+| `record.companies.update`                        | yes   | edit, and link or unlink a company's contacts                                                                                                                                                                        |
+| `record.companies.delete`                        | yes   | delete one company, or bulk delete                                                                                                                                                                                   |
+| `record.company-properties.read`                 | no    | read the definitions of the workspace's company properties (`/v2/fields`, `/v2/field-sections` with `moduleKey=companies`); the Agent and Manager presets hold it (20261217090000) so the company form can draw them |
+| `record.company-properties.create/update/delete` | no    | define, edit, reorder and deactivate company properties; Owner and Admin only by default                                                                                                                             |
 
 The Owner, Admin and Manager presets hold all four at scope `all`. The Agent preset gets read and create at `all` (companies are
 shared accounts, so an Agent can pick any of them on a deal) and update at `own`; it cannot delete. The Viewer preset has none. The
@@ -41,6 +43,7 @@ gets `null` for that part of the rollup.
   "sizeRange": "11-50",
   "address": "1 Main St",
   "notes": "Key account",
+  "customFields": { "tier": "gold", "seats": 12 },
   "owner": { "id": "…", "name": "Asha" },
   "createdBy": { "id": "…", "name": "Asha" },
   "rollup": {
@@ -68,23 +71,24 @@ added across currencies, in the currency's own decimals (Reference summed minor 
 
 ## Routes
 
-| Route                                       | Capability                | Notes                                                                                                |
-| ------------------------------------------- | ------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `GET /companies`                            | `record.companies.read`   | cursor-paged list (below)                                                                            |
-| `GET /companies/stats`                      | `record.companies.read`   | the three tiles for the same filters                                                                 |
-| `GET /companies/industries`                 | `record.companies.read`   | the distinct industries typed so far (the industry filter's options)                                 |
-| `GET /companies/select-data`                | `record.companies.read`   | picker rows `{id, name, industry}` (Reference: `GET companies/search`)                               |
-| `POST /companies`                           | `record.companies.create` | 201                                                                                                  |
-| `GET /companies/:id`                        | `record.companies.read`   | with its rollup                                                                                      |
-| `PATCH /companies/:id`                      | `record.companies.update` | needs `rowVersion` (409 `ROW_VERSION_CONFLICT`); absent keeps, `null` or `""` clears                 |
-| `DELETE /companies/:id`                     | `record.companies.delete` | 204; contacts, deals and every other record that pointed at it are kept and unlinked                 |
-| `POST /companies/bulk/delete`               | `record.companies.delete` | `{ ids }` (1 to 100)                                                                                 |
-| `GET /companies/:id/contacts`               | `record.companies.read`   | the company's contacts, newest first, cursor-paged; needs `record.contacts.read`                     |
-| `POST /companies/:id/contacts`              | `record.companies.update` | `{ contactIds }` (1 to 100): put existing contacts under the company; needs `record.contacts.update` |
-| `DELETE /companies/:id/contacts/:contactId` | `record.companies.update` | 204; take a contact out of the company (404 when it is not one of its contacts)                      |
-| `GET /companies/:id/activity`               | `record.companies.read`   | who changed what, newest first, cursor-paged                                                         |
-| `GET /deals?companyId=:id`                  | `record.deals.read`       | the company's deals (the deals module; the company page uses it)                                     |
-| `GET /tasks?companyId=:id`                  | `record.tasks.read`       | the company's tasks (the tasks module)                                                               |
+| Route                                       | Capability                | Notes                                                                                                                                                                     |
+| ------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /companies`                            | `record.companies.read`   | cursor-paged list (below)                                                                                                                                                 |
+| `GET /companies/stats`                      | `record.companies.read`   | the three tiles for the same filters                                                                                                                                      |
+| `GET /companies/industries`                 | `record.companies.read`   | the distinct industries typed so far (the industry filter's options)                                                                                                      |
+| `GET /companies/select-data`                | `record.companies.read`   | picker rows `{id, name, industry}` (Reference: `GET companies/search`)                                                                                                    |
+| `POST /companies`                           | `record.companies.create` | 201                                                                                                                                                                       |
+| `GET /companies/:id`                        | `record.companies.read`   | with its rollup                                                                                                                                                           |
+| `PATCH /companies/:id`                      | `record.companies.update` | needs `rowVersion` (409 `ROW_VERSION_CONFLICT`); absent keeps, `null` or `""` clears                                                                                      |
+| `DELETE /companies/:id`                     | `record.companies.delete` | 204; contacts, deals and every other record that pointed at it are kept and unlinked                                                                                      |
+| `POST /companies/bulk/delete`               | `record.companies.delete` | `{ ids }` (1 to 100)                                                                                                                                                      |
+| `GET /companies/:id/contacts`               | `record.companies.read`   | the company's contacts, newest first, cursor-paged; needs `record.contacts.read`                                                                                          |
+| `POST /companies/:id/contacts`              | `record.companies.update` | `{ contactIds }` (1 to 100): put existing contacts under the company; needs `record.contacts.update`                                                                      |
+| `DELETE /companies/:id/contacts/:contactId` | `record.companies.update` | 204; take a contact out of the company (404 when it is not one of its contacts)                                                                                           |
+| `GET /companies/:id/activity`               | `record.companies.read`   | who changed what, newest first, cursor-paged                                                                                                                              |
+| `GET /deals?companyId=:id`                  | `record.deals.read`       | the company's deals (the deals module; the company page uses it)                                                                                                          |
+| `GET /tasks?companyId=:id`                  | `record.tasks.read`       | the company's tasks, filtered from the whole tasks list (the tasks module; the Tasks screen's "Linked to a company" filter)                                               |
+| `GET /companies/:id/tasks`                  | `record.tasks.read`       | the company page's tasks card: same filters and paging as `GET /tasks`; also needs `record.companies.read` on the company (its record scope applies: outside it is `404`) |
 
 ### Create and edit
 
@@ -109,6 +113,15 @@ field is trimmed and an empty string means "nothing" (it clears the field on edi
 omitted means the caller, `null` means nobody; anyone who is not an **active member of this workspace** is
 `422 COMPANY_OWNER_INVALID`. Duplicate names are allowed. A create writes `display_id` (`COM-nnnnn`), an audit row and
 `company.created`.
+
+### Custom properties (`customFields`)
+
+A workspace defines its own company fields in Settings, Company properties (the shared field registry with `moduleKey: companies`, the same screen as Contact properties). Their values are stored in the company's `data` column and travel as `customFields`, by property key; a key with no value is absent. A create takes `customFields` and an edit merges it: a key sent changes, `null` or a blank value (blank text, an empty list, an unticked checkbox) clears it, a key left out keeps its value.
+
+- Only an **editable** property can be written: defined for companies, active, not a system property, not hidden, not read-only, not a formula. Anything else is `422 COMPANY_PROPERTY_NOT_EDITABLE`, naming each `customFields.<key>`. Only keys whose value _changes_ are held to this, so a form that sends back everything it loaded still saves.
+- A value must fit its property's type: whole number, number, boolean (checkbox), a real calendar date (`YYYY-MM-DD`), date and time, an http(s) link, an email address, one of the options (dropdown), a list of options (multi-select), text otherwise. Otherwise `422 COMPANY_PROPERTY_INVALID`. Text values are at most 4000 characters, lists at most 100 items (`422 VALIDATION_FAILED` from the contract).
+- A property marked **required** (checkboxes excepted) must have a value, honouring its "show only when" rule: `422 COMPANY_REQUIRED_PROPERTY_MISSING`. A create is always held to it; an edit only when it sends `customFields` (a company that predates a new required property stays editable).
+- The audit row and `company.updated` name the properties that changed (`customFieldKeys`), never their values. The properties screen's "In use" count (`GET /fields/usage?moduleKey=companies`) is the number of companies holding a value. Deactivating a property keeps the values; a form submission that maps a field to a company property fills blanks the same way as before.
 
 An edit takes only the fields it changes plus the `rowVersion` that was read. The name cannot be cleared (`422`). An edit that
 changes nothing writes no audit row and no event and does not move the version.
@@ -222,8 +235,10 @@ The contact side is `contact.updated` on aggregate `contacts` (payload adds `com
 | Deal drawer     | "Company: name" linking to the company (the deal already carries `company: {id, name}`)      |
 | Deals and tasks | `companyId` on create and edit, `GET /deals?companyId=`, `GET /tasks?companyId=`             |
 
+## Linking a company from a contact, a deal or a task
+
+`companyId` on `POST/PATCH /contacts` and `POST/PATCH /deals` (and `POST/PATCH /tasks`, which already took it). Putting a company on a contact or a deal needs `record.companies.read` and the company inside the caller's record scope: a company outside it is `404 NOT_FOUND`, never `403`, so a company is not revealed to exist; without the capability it is `403 FORBIDDEN`. Both answers carry the field (`errors: [{ path: "companyId" }]`) so a form says it at the company field. A company the record already has never blocks an unrelated edit (only a _new_ link is checked), a deal that takes its contact's company is not a choice and is not checked, and a request with no grants (a flow, an import, a public form) is not scoped, as everywhere else in the CRM. Tasks keep their existing rule (the company must be in the workspace).
+
 ## Not built here
 
-The "Generate brief" button on the company page (the client brief feature is not built), the AI copilot's company tools (owned by
-the AI domain; they call `CompaniesService`), a company's tasks card, a company picker on the contact and deal forms, and a company
-properties screen. See "Not built here" in the inventory.
+The "Generate brief" button on the company page (the client brief feature is not built: BL-191). The AI copilot's company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`; its `generate_brief` waits for the same feature. See "Not built here" in the inventory.
