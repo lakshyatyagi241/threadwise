@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "Yardım asistanı",
             "email_channel": "E-posta (Gmail) kanalı",
-            "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)"
+            "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

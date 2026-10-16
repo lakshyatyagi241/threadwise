@@ -23,6 +23,7 @@ import {
   type PublicFormSubmitInput,
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
+import { Throttle } from '../platform-infrastructure';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { isGpcSignal } from '../contact-consent';
@@ -121,6 +122,7 @@ export class PublicFormsController {
   }
 
   @Get(':publicKey/submissions/:token')
+  @Throttle({ limit: 60, windowSeconds: 60, by: 'ip' })
   @Header('Cache-Control', 'no-store')
   @Header('X-Robots-Tag', 'noindex, nofollow')
   @ApiOperation({

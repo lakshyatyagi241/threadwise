@@ -3,7 +3,6 @@ import {
   WFL_ERROR_CODES,
   type SaveWaFormInput,
   type WaForm,
-  type WaFormDefinition,
   type WaFormList,
   type WaFormListQuery,
   type WaFormPickerList,
@@ -179,20 +178,31 @@ export class WaFormsService {
     // Flow management is a Meta-Graph-only API (apps/api/src/infra/providers/forms-links-groups/wa-form-flows.client.ts
     // refuses anything else), so only a direct Meta connection is "usable" here — an Interakt or registry-proxied
     // number would otherwise be accepted and its credentials sent to the wrong host.
-    const isUsableMetaConnection = (conn: WabaConnection | null | undefined): conn is WabaConnection =>
-      Boolean(conn && !conn.registry && conn.provider === 'meta' && conn.wabaId && conn.accessToken);
+    const isUsableMetaConnection = (
+      conn: WabaConnection | null | undefined,
+    ): conn is WabaConnection =>
+      Boolean(
+        conn && !conn.registry && conn.provider === 'meta' && conn.wabaId && conn.accessToken,
+      );
 
     // On a retry/republish of an already-provisioned form, keep using the WABA connection that owns its existing
     // Meta Flow id — picking a different (e.g. newer) connection would call Flow-management with the wrong
     // account's credentials against a flow id that belongs to another WABA.
     const orderedConfigIds =
-      form.meta_flow_id && form.provider_config_id && candidateConfigIds.includes(form.provider_config_id)
-        ? [form.provider_config_id, ...candidateConfigIds.filter((id) => id !== form.provider_config_id)]
+      form.meta_flow_id &&
+      form.provider_config_id &&
+      candidateConfigIds.includes(form.provider_config_id)
+        ? [
+            form.provider_config_id,
+            ...candidateConfigIds.filter((id) => id !== form.provider_config_id),
+          ]
         : candidateConfigIds;
 
     let resolved: { configId: number; conn: WabaConnection } | null = null;
     for (const configId of orderedConfigIds) {
-      const r = await this.db.tx((tx) => this.connections.resolveConnection(tx, ctx.orgId, { id: configId }));
+      const r = await this.db.tx((tx) =>
+        this.connections.resolveConnection(tx, ctx.orgId, { id: configId }),
+      );
       if (isUsableMetaConnection(r?.conn)) {
         resolved = { configId, conn: r.conn };
         break;
@@ -220,7 +230,9 @@ export class WaFormsService {
       if (flowId !== form.meta_flow_id) {
         // Save the newly-minted flow id now, before upload/publish can fail — otherwise a retry re-reads
         // meta_flow_id as still NULL and mints another orphaned Meta Flow object on every failed attempt.
-        await this.db.tx((tx) => this.repo.saveFlowId(tx, ctx.orgId, form.id, flowId, resolved!.configId));
+        await this.db.tx((tx) =>
+          this.repo.saveFlowId(tx, ctx.orgId, form.id, flowId, resolved!.configId),
+        );
       }
       const { validationErrors } = await this.flows.uploadFlowJson(resolved.conn, flowId, flowJson);
       if (validationErrors.length > 0) {
@@ -258,8 +270,13 @@ export class WaFormsService {
           : err instanceof AppError
             ? err
             : new AppError(WFL_ERROR_CODES.WFL_FORM_PUBLISH_FAILED, String(err), 422);
-      await this.db.tx((tx) => this.repo.markPublishFailed(tx, ctx.orgId, form.id, appError.message));
-      this.logger.warn({ orgId: ctx.orgId, formId: form.id, err: String(err) }, 'wa_form publish failed');
+      await this.db.tx((tx) =>
+        this.repo.markPublishFailed(tx, ctx.orgId, form.id, appError.message),
+      );
+      this.logger.warn(
+        { orgId: ctx.orgId, formId: form.id, err: String(err) },
+        'wa_form publish failed',
+      );
       throw appError;
     }
   }

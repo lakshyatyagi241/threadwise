@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "Asistente de ayuda",
             "email_channel": "Canal de correo (Gmail)",
-            "personal_history_full": "Importación del historial completo (WhatsApp personal)"
+            "personal_history_full": "Importación del historial completo (WhatsApp personal)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "Continuar gratis",

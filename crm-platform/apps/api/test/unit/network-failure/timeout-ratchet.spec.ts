@@ -16,8 +16,8 @@ const REVIEWED_WITHOUT_TIMEOUT: Record<string, string> = {
   'infra/providers/ai-agents-training/training-url-fetcher.port.ts': 'port type only',
   'infra/providers/marketplace/pull.connector.ts':
     'the caller passes an AbortController signal that also covers reading the body',
-  'infra/providers/whatsapp-cloud-api-waba/waba-http.ts':
-    'a thin wrapper; send() builds the init with AbortSignal.timeout',
+  'infra/providers/whatsapp-cloud-api-waba/abortable-fetch.ts':
+    'the socket-closing primitive; every caller passes a signal (WabaHttp always sets AbortSignal.timeout)',
   'modules/chatbot-widget/chat-page.ts': 'browser script inside a page template, not a server call',
   'modules/install-update-licensing/install-update-licensing.module.ts':
     'only provides the injectable; the consumer passes AbortSignal.timeout',

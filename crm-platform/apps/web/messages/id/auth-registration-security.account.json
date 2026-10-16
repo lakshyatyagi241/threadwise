@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "Asisten Bantuan",
             "email_channel": "Kanal email (Gmail)",
-            "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)"
+            "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "Lanjut gratis",
