@@ -86,6 +86,11 @@ export function PricingBlock({ pricing }: { pricing: MarketCardPricing }) {
           <p data-testid="trial-offer">{t('trialOffer', { days: view.line.trialDays })}</p>
         )}
         {view.prepaidNote && <p className="text-muted-foreground">{t('prepaidNote')}</p>}
+        {view.autoRenewNote && (
+          <p className="text-muted-foreground" data-testid="auto-renew-note">
+            {t('autoRenewNote')}
+          </p>
+        )}
         {view.line.key === 'notForSale' && (
           <p className="text-muted-foreground">{t('notForSale.message')}</p>
         )}
@@ -140,7 +145,9 @@ export function SubscribeActions({
       </div>
       {hint && (
         <p className="text-xs text-muted-foreground">
-          {acquire.price ? t('hintPrice', { price: acquire.price }) : t('hint')}
+          {acquire.price
+            ? t(acquire.automatic ? 'hintPriceAuto' : 'hintPrice', { price: acquire.price })
+            : t(acquire.automatic ? 'hintAuto' : 'hint')}
         </p>
       )}
       <p aria-live="polite" className="sr-only">

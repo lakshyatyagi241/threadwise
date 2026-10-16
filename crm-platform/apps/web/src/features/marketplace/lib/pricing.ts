@@ -12,8 +12,9 @@ import type { Chip, ChipTone } from './install-state';
 
 /**
  * What a workspace is told about price and subscription, and what it may do about it. Pure: the components only draw it. A paid app is a
- * MONTHLY PREPAID term sold as a billing add-on and renewed by paying again (there is no automatic card renewal), so every sentence
- * built from these says "paid until", "renew" and "ended", never "renews automatically".
+ * monthly term sold as a billing add-on. By default it is PREPAID and renewed by paying again, and then every sentence says "paid until",
+ * "renew" and "ended". Only where the operator made the listing `recurring` and the card really renews it (`autoRenew` on the subscription)
+ * does a sentence say "renews on": the words follow what the payment provider will actually do.
  */
 
 // --- money -----------------------------------------------------------------------------------------------------------------------
@@ -104,7 +105,8 @@ export interface PriceLine {
 type PricingFields = Pick<
   MarketCardPricing,
   'model' | 'access' | 'amount' | 'currency' | 'trialAvailable' | 'trialDays'
->;
+> &
+  Partial<Pick<MarketCardPricing, 'billingMode'>>;
 
 const priceOf = (
   p: Pick<MarketCardPricing, 'amount' | 'currency'>,
@@ -137,8 +139,10 @@ export type IncludedNote = (typeof INCLUDED_NOTE_KEYS)[number];
 /** The app page's pricing block: the price line plus which notes apply. */
 export interface PricingView {
   line: PriceLine;
-  /** Paid and in play: the "one prepaid month, pay again to keep it" note applies. */
+  /** Paid and in play, renewed by paying again: the "one prepaid month, pay again to keep it" note applies. */
   prepaidNote: boolean;
+  /** Paid and in play, renewed by the card: the "renews automatically every month until you cancel" note applies. */
+  autoRenewNote: boolean;
   /** Under `included`: which rule made it free (`plan` when the server did not say). */
   includedNote: IncludedNote | null;
 }
@@ -148,9 +152,12 @@ export function pricingView(
   locale: string,
 ): PricingView {
   const line = priceLine(p, locale);
+  const inPlay = line.key === 'monthly' || line.key === 'paid' || line.key === 'subscribed';
+  const automatic = p.billingMode === 'recurring';
   return {
     line,
-    prepaidNote: line.key === 'monthly' || line.key === 'paid' || line.key === 'subscribed',
+    prepaidNote: inPlay && !automatic,
+    autoRenewNote: inPlay && automatic,
     includedNote:
       line.key !== 'included'
         ? null
@@ -171,11 +178,12 @@ export function pricingView(
  */
 export type Acquire =
   | { kind: 'install' }
-  | { kind: 'subscribe'; price: string | null; trialDays: number | null }
+  | { kind: 'subscribe'; price: string | null; trialDays: number | null; automatic: boolean }
   | { kind: 'notForSale' };
 
 export function acquireFor(
-  p: Pick<MarketCardPricing, 'access' | 'amount' | 'currency' | 'trialAvailable' | 'trialDays'>,
+  p: Pick<MarketCardPricing, 'access' | 'amount' | 'currency' | 'trialAvailable' | 'trialDays'> &
+    Partial<Pick<MarketCardPricing, 'billingMode'>>,
   locale: string,
 ): Acquire {
   switch (p.access) {
@@ -184,6 +192,7 @@ export function acquireFor(
         kind: 'subscribe',
         price: priceOf(p, locale),
         trialDays: p.trialAvailable && p.trialDays > 0 ? p.trialDays : null,
+        automatic: p.billingMode === 'recurring',
       };
     case 'not_for_sale':
       return { kind: 'notForSale' };
@@ -234,6 +243,8 @@ export function subscribeNext(
 /** Which sentence carries the date: message keys under `marketplace.subscription.date`. */
 export type SubscriptionDateKind =
   | 'paidUntil'
+  | 'renewsOn'
+  | 'graceUntil'
   | 'trialEnds'
   | 'compUntil'
   | 'compOpen'
@@ -243,6 +254,8 @@ export type SubscriptionDateKind =
   | 'none';
 export const SUBSCRIPTION_DATE_KINDS: readonly SubscriptionDateKind[] = [
   'paidUntil',
+  'renewsOn',
+  'graceUntil',
   'trialEnds',
   'compUntil',
   'compOpen',
@@ -252,7 +265,7 @@ export const SUBSCRIPTION_DATE_KINDS: readonly SubscriptionDateKind[] = [
 ];
 
 /** The pay button's wording: Renew while it runs, Resubscribe once it ended, Subscribe for a trial. Keys under `subscription.actions`. */
-export const RENEW_KINDS = ['renew', 'resubscribe', 'subscribe'] as const;
+export const RENEW_KINDS = ['renew', 'resubscribe', 'subscribe', 'payNow'] as const;
 export type RenewKind = (typeof RENEW_KINDS)[number];
 
 export interface SubscriptionView {
@@ -264,6 +277,10 @@ export interface SubscriptionView {
   /** The listing's price now when it differs from the last payment: what the next payment will be (formatted). */
   nextPayment: string | null;
   actions: { cancel: boolean; resume: boolean; renew: RenewKind | null };
+  /** The card renews it on its own: Cancel stops that, and the confirmation says the card will not be charged again. */
+  autoRenew: boolean;
+  /** The last card renewal failed and the app still works until `date` (the grace days): the page says to fix the payment. */
+  paymentFailed: boolean;
   /** The platform team gave this access: nothing here can end it, and the person is told so. */
   comp: boolean;
   /** It ended and cannot be bought again: the platform stopped selling the app. A comp is the operator's, so it never says this. */
@@ -275,6 +292,7 @@ const STATUS_TONE: Record<MarketSubscriptionStatus, ChipTone> = {
   trialing: 'neutral',
   comped: 'neutral',
   canceling: 'warning',
+  past_due: 'warning',
   ended: 'danger',
 };
 
@@ -296,9 +314,13 @@ function dateOf(sub: MarketSubscription): SubscriptionView['date'] {
       return sub.currentPeriodEnd
         ? { kind: 'compUntil', iso: sub.currentPeriodEnd }
         : { kind: 'compOpen', iso: null };
+    case 'past_due': {
+      const iso = sub.graceEndsAt ?? sub.currentPeriodEnd;
+      return iso ? { kind: 'graceUntil', iso } : { kind: 'none', iso: null };
+    }
     case 'active':
       return sub.currentPeriodEnd
-        ? { kind: 'paidUntil', iso: sub.currentPeriodEnd }
+        ? { kind: sub.autoRenew ? 'renewsOn' : 'paidUntil', iso: sub.currentPeriodEnd }
         : { kind: 'none', iso: null };
   }
 }
@@ -306,6 +328,7 @@ function dateOf(sub: MarketSubscription): SubscriptionView['date'] {
 function renewKind(sub: MarketSubscription): RenewKind | null {
   if (!sub.actions.canRenew) return null;
   if (sub.status === 'ended') return sub.source === 'trial' ? 'subscribe' : 'resubscribe';
+  if (sub.status === 'past_due') return 'payNow';
   return sub.status === 'trialing' ? 'subscribe' : 'renew';
 }
 
@@ -329,6 +352,8 @@ export function subscriptionView(sub: MarketSubscription, locale: string): Subsc
         : null,
     nextPayment: next,
     actions: { cancel: sub.actions.canCancel, resume: sub.actions.canResume, renew },
+    autoRenew: sub.autoRenew,
+    paymentFailed: sub.paymentFailedAt !== null && sub.status === 'past_due',
     comp: sub.source === 'comp',
     cannotRenew: sub.source !== 'comp' && sub.status === 'ended' && !sub.actions.canRenew,
   };
@@ -342,6 +367,7 @@ export const SUBSCRIPTION_CHIP_KEYS = [
   'trialing',
   'comped',
   'canceling',
+  'pastDue',
   'subscriptionEnded',
 ] as const;
 
@@ -361,6 +387,8 @@ export function subscriptionChip(i: {
       return { key: 'comped', tone: 'neutral' };
     case 'canceling':
       return { key: 'canceling', tone: 'warning' };
+    case 'past_due':
+      return { key: 'pastDue', tone: 'warning' };
     default:
       return null;
   }
@@ -433,6 +461,6 @@ export interface UninstallRenewal {
 export function uninstallRenewal(
   sub: Pick<MarketSubscription, 'status' | 'source' | 'currentPeriodEnd'> | null | undefined,
 ): UninstallRenewal | null {
-  if (!sub || sub.source === 'comp' || sub.status !== 'active') return null;
+  if (!sub || sub.source === 'comp' || (sub.status !== 'active' && sub.status !== 'past_due')) return null;
   return { paidUntil: sub.currentPeriodEnd };
 }

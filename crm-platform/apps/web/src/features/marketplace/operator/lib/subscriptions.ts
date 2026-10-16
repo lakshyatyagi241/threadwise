@@ -73,6 +73,7 @@ export const SUBSCRIPTION_STATUS_TONE: Record<MarketSubscriptionStatus, ChipTone
   trialing: 'neutral',
   comped: 'neutral',
   canceling: 'warning',
+  past_due: 'warning',
   ended: 'neutral',
 };
 
@@ -80,8 +81,12 @@ export const subscriptionStatusTone = (s: MarketSubscriptionStatus): ChipTone =>
   SUBSCRIPTION_STATUS_TONE[s];
 
 export type PeriodKind =
-  /** Paid access runs to the date; no automatic renewal exists, so it is "paid until", not "renews on". */
+  /** Paid access runs to the date and the workspace pays again by hand: "paid until". */
   | 'paidUntil'
+  /** The card renews it on the date (a provider subscription is live): "renews on". */
+  | 'renewsOn'
+  /** The last card renewal failed: the app keeps working until the date (the grace days). */
+  | 'graceUntil'
   | 'trialEnds'
   /** Not renewing: access stops on the date. */
   | 'endsOn'
@@ -99,7 +104,10 @@ export interface PeriodInfo {
 
 /** What the renewal column says about a row, by its state. The screen turns the kind into words and formats the date. */
 export function periodInfo(
-  s: Pick<MarketOperatorSubscription, 'status' | 'currentPeriodEnd' | 'trialEndsAt' | 'lapsedAt'>,
+  s: Pick<
+    MarketOperatorSubscription,
+    'status' | 'currentPeriodEnd' | 'trialEndsAt' | 'lapsedAt' | 'autoRenew' | 'graceEndsAt'
+  >,
 ): PeriodInfo {
   switch (s.status) {
     case 'ended': {
@@ -118,9 +126,13 @@ export function periodInfo(
       return s.currentPeriodEnd
         ? { kind: 'compUntil', date: s.currentPeriodEnd }
         : { kind: 'compOpen', date: null };
+    case 'past_due': {
+      const date = s.graceEndsAt ?? s.currentPeriodEnd;
+      return date ? { kind: 'graceUntil', date } : { kind: 'none', date: null };
+    }
     case 'active':
       return s.currentPeriodEnd
-        ? { kind: 'paidUntil', date: s.currentPeriodEnd }
+        ? { kind: s.autoRenew ? 'renewsOn' : 'paidUntil', date: s.currentPeriodEnd }
         : { kind: 'none', date: null };
   }
 }
@@ -257,6 +269,7 @@ export function sumCounts(rows: readonly MarketSubscriptionSummaryRow[]): Summar
     trialing: 0,
     comped: 0,
     canceling: 0,
+    pastDue: 0,
     ended: 0,
     total: 0,
   };
@@ -265,6 +278,7 @@ export function sumCounts(rows: readonly MarketSubscriptionSummaryRow[]): Summar
     out.trialing += r.counts.trialing;
     out.comped += r.counts.comped;
     out.canceling += r.counts.canceling;
+    out.pastDue += r.counts.pastDue;
     out.ended += r.counts.ended;
     out.total += r.counts.total;
   }

@@ -58,7 +58,8 @@
           "trialing": "On trial",
           "comped": "Comped",
           "canceling": "Ending",
-          "ended": "Ended"
+          "ended": "Ended",
+          "past_due": "Payment failed"
         },
         "subscriptionSource": {
           "purchase": "Purchase",
@@ -92,7 +93,8 @@
         "request": "The request could not be completed.",
         "unexpected": "Something went wrong on our side. Try again; if it keeps happening, quote the request id.",
         "subscriptionState": "That is not possible in the subscription's current state. A workspace that already pays cannot be comped (cancel its subscription first), a free app has nothing to comp, and an ended subscription cannot be cancelled again.",
-        "subscriptionNotFound": "That subscription was not found. It may have been removed. Reload the list."
+        "subscriptionNotFound": "That subscription was not found. It may have been removed. Reload the list.",
+        "renewalNotStopped": "The card renewal could not be stopped at the payment provider, so nothing was changed and the workspace can still be charged. Try again in a moment, or end it in the provider's dashboard."
       },
       "list": {
         "title": "Marketplace catalogue",
@@ -663,7 +665,7 @@
       "pricing": {
         "title": "Pricing",
         "description": "Decide whether this app is free or paid and what it costs. Your pricing is the one that counts: the developer's manifest only proposes one.",
-        "billing": "A paid app is sold as a monthly prepaid term: a billing add-on bought through the normal checkout. There is no automatic card renewal yet, so a workspace pays again when its month is nearly over. A price change applies to new subscriptions and to each subscriber's next payment; a period already paid for is never touched.",
+        "billing": "A paid app is sold as a billing add-on bought through the normal checkout. By default it is a monthly prepaid term: a workspace pays again when its month is nearly over. Choose \"The card renews it\" below to charge the workspace's card automatically every month instead. A price change applies to new subscriptions and to each prepaid subscriber's next payment; a period already paid for is never touched, and a subscriber whose card already renews keeps the price on their provider subscription until they subscribe again.",
         "readOnly": "Read only. Changing the pricing needs the platform permission {permission}.",
         "visibility": {
           "label": "Listing status",
@@ -763,6 +765,18 @@
             "paid": "Subscribers keep the time they already paid for. It is not refunded.",
             "action": "Make it free"
           }
+        },
+        "billingMode": {
+          "legend": "How it renews",
+          "one_time": {
+            "label": "Prepaid month",
+            "hint": "The workspace pays again when its month is nearly over."
+          },
+          "recurring": {
+            "label": "The card renews it",
+            "hint": "The payment provider charges the card every month until the workspace cancels."
+          },
+          "note": "Applies to new subscriptions. A subscription that is already running keeps the way it was bought. Needs a payment gateway that supports subscriptions."
         }
       },
       "grandfather": {
@@ -856,7 +870,8 @@
           "ended": "Ended",
           "mrr": "Monthly revenue",
           "mrrNone": "No paying subscribers yet",
-          "mrrCurrency": "Monthly revenue, {currency}"
+          "mrrCurrency": "Monthly revenue, {currency}",
+          "pastDue": "Payment failed"
         },
         "summary": {
           "emptyTitle": "No paid apps yet",
@@ -871,7 +886,8 @@
             "canceling": "Ending",
             "ended": "Ended",
             "total": "Total",
-            "mrr": "Monthly revenue"
+            "mrr": "Monthly revenue",
+            "pastDue": "Payment failed"
           },
           "free": "Free",
           "totals": "All apps",
@@ -905,7 +921,9 @@
           "compUntil": "Comp until {date}",
           "compOpen": "Comp until you end it",
           "endedOn": "Ended {date}",
-          "none": "No end date"
+          "none": "No end date",
+          "renewsOn": "Renews {date}",
+          "graceUntil": "Grace until {date}"
         },
         "noCharge": "No charge",
         "compBy": "Comped by {operator}: {note}",

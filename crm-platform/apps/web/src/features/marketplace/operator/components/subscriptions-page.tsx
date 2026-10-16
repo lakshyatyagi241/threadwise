@@ -240,6 +240,11 @@ function SummarySection({
           value={totals.canceling}
           tone={totals.canceling > 0 ? 'warning' : 'default'}
         />
+        <StatTile
+          label={tk('pastDue')}
+          value={totals.pastDue}
+          tone={totals.pastDue > 0 ? 'warning' : 'default'}
+        />
         <StatTile label={tk('ended')} value={totals.ended} />
         {mrr.length === 0 ? (
           <StatTile label={tk('mrr')} value="-" hint={tk('mrrNone')} />
@@ -270,7 +275,7 @@ function SummarySection({
                   <th scope="col" className="px-3 py-2 text-start font-medium">
                     {t('cols.price')}
                   </th>
-                  {(['active', 'trialing', 'comped', 'canceling', 'ended', 'total'] as const).map(
+                  {(['active', 'trialing', 'comped', 'canceling', 'pastDue', 'ended', 'total'] as const).map(
                     (c) => (
                       <th key={c} scope="col" className="px-3 py-2 text-end font-medium">
                         {t(`cols.${c}`)}
@@ -299,7 +304,7 @@ function SummarySection({
                         />
                       )}
                     </td>
-                    {(['active', 'trialing', 'comped', 'canceling', 'ended', 'total'] as const).map(
+                    {(['active', 'trialing', 'comped', 'canceling', 'pastDue', 'ended', 'total'] as const).map(
                       (c) => (
                         <td key={c} className="px-3 py-2 text-end tabular-nums">
                           {r.counts[c]}
@@ -317,7 +322,7 @@ function SummarySection({
                   <th scope="row" className="px-3 py-2 text-start" colSpan={2}>
                     {t('totals')}
                   </th>
-                  {(['active', 'trialing', 'comped', 'canceling', 'ended', 'total'] as const).map(
+                  {(['active', 'trialing', 'comped', 'canceling', 'pastDue', 'ended', 'total'] as const).map(
                     (c) => (
                       <td key={c} className="px-3 py-2 text-end tabular-nums">
                         {totals[c]}
