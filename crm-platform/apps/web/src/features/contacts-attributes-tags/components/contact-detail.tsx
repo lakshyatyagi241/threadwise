@@ -323,7 +323,7 @@ function StageStepper({ contact }: { contact: ContactRow }) {
                     active
                       ? 'border-brand bg-brand font-semibold text-brand-foreground'
                       : done
-                        ? 'border-brand/30 bg-brand/10 text-brand hover:bg-brand/15'
+                        ? 'border-brand/30 bg-brand/10 text-foreground hover:bg-brand/15'
                         : 'border-border bg-background text-muted-foreground hover:bg-muted',
                   )}
                 >
