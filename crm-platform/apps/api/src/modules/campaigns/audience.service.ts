@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { Tx } from '@crm/db';
+import { hasPreviousSends, type PreviousSendsAudience } from '@crm/contracts';
 import { cleanNumbers, parseCsv, parseManualNumbers } from './campaign-rules';
 import { ContactsService, SegmentsService } from '../crm';
 import { CampaignsRepository } from './campaigns.repository';
@@ -11,6 +12,8 @@ export interface AudienceInput {
   segmentIds?: readonly string[];
   manualNumbers?: string;
   csvText?: string;
+  /** Who earlier broadcasts and campaigns went to (optionally only those who read, replied...). */
+  previousSends?: PreviousSendsAudience | null;
 }
 
 /** Whether the form carried any audience at all (an edit that sent none leaves the recipients alone). */
@@ -20,7 +23,8 @@ export const hasAudience = (a: AudienceInput): boolean =>
     (a.tagIds?.length ?? 0) +
     (a.segmentIds?.length ?? 0) +
     (a.manualNumbers?.trim().length ?? 0) +
-    (a.csvText?.trim().length ?? 0) >
+    (a.csvText?.trim().length ?? 0) +
+    (hasPreviousSends(a.previousSends) ? 1 : 0) >
   0;
 
 /**
@@ -48,6 +52,7 @@ export class CampaignAudienceService {
       ...(await this.repo.groupMemberIds(tx, orgId, input.groupIds ?? [])),
       ...(await this.repo.tagMemberIds(tx, orgId, input.tagIds ?? [])),
       ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
+      ...(await this.repo.previousSendContactIds(tx, orgId, input.previousSends)),
     ];
 
     const csv = parseCsv(input.csvText ?? '');

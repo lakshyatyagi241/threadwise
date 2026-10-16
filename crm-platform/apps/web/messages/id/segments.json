@@ -23,7 +23,10 @@
       "imported": "Diimpor dari file",
       "createdAt": "Dibuat",
       "updatedAt": "Terakhir diperbarui",
-      "lastActivityAt": "Aktivitas terakhir"
+      "lastActivityAt": "Aktivitas terakhir",
+      "minor": "Ditandai di bawah umur",
+      "dateOfBirth": "Tanggal lahir",
+      "age": "Usia (tahun)"
     },
     "fieldGroups": {
       "journey": "Perjalanan",

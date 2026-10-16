@@ -254,7 +254,34 @@
         "off": "No",
         "none": "Nessuno"
       },
-      "colorSwatch": "{label} (campione)"
+      "colorSwatch": "{label} (campione)",
+      "age": {
+        "enable": "Chiedi l'età prima che inizi la chat",
+        "enableHint": "Disattivato per impostazione predefinita. Usalo solo se le regole del tuo spazio di lavoro lo richiedono o se i tuoi visitatori possono essere minorenni. La chat non dice mai quale risposta è accettata.",
+        "mode": "Come chiedere",
+        "modes": {
+          "declaration": "Una casella: \"Confermo di avere almeno N anni\"",
+          "age": "Chiedi l'età",
+          "dob": "Chiedi la data di nascita"
+        },
+        "modeHints": {
+          "declaration": "Non viene conservato nulla sull'età. Il minimo dei dati.",
+          "age": "Un numero intero. Viene usato per il controllo; viene conservato solo il risultato.",
+          "dob": "Salvata sul contatto come data di nascita. Usala solo se ti serve la data."
+        },
+        "minAge": "Età minima",
+        "minAgeHint": "Lascia vuoto per usare l'età del tuo spazio di lavoro dal Centro di conformità (18 se non ne è impostata nessuna). Tra 1 e 21.",
+        "whenUnder": "Se il visitatore ha meno di questa età",
+        "actions": {
+          "block": "Non avviare la chat",
+          "flag": "Avvia la chat e contrassegna il contatto come minorenne"
+        },
+        "actionHints": {
+          "block": "Non viene memorizzato nulla sul visitatore, che vede un messaggio neutro. Con la casella, il visitatore deve solo spuntarla.",
+          "flag": "La chat prosegue e, quando il visitatore ha fornito un numero di telefono o un'email, il contatto viene contrassegnato come minorenne."
+        },
+        "contactNote": "L'età viene registrata su un contatto solo dopo che il visitatore ha fornito un numero di telefono o un indirizzo email."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widget WhatsApp",

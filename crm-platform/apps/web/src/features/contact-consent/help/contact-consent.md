@@ -135,3 +135,16 @@ The **Consent** card of a contact also has a **Privacy flags** part. Each switch
 - **Global Privacy Control.** When a visitor's browser sends the Global Privacy Control signal (`Sec-GPC: 1`) with a public form submission or a message to your website chat widget, and the CCPA profile is on, the contact it belongs to is opted out of sale and sharing, with the source **Global Privacy Control**. Nothing else about the visitor's browser is kept. In the chat widget the contact must exist for the visitor, which happens once they give a phone number or an email address. This does not subscribe or unsubscribe anyone from marketing.
 
 Minor and Do Not Sell or Share badges also show beside the contact's name. Changing a flag needs **contacts.consent.manage**; seeing them needs **contacts.consent.read**. Nothing in the product sells or shares contact data with third parties today, so Do Not Sell or Share is a record that any future path must respect.
+
+## How a minor is detected
+
+Names, emails and phone numbers say nothing about age, so a contact is only marked as a minor when something tells us. There are four ways, and none of them asks everyone by default:
+
+- **A date of birth.** The contact has a **Date of birth** (on its page, in an import column, from a form or chat question, or through the API). If the person is under your workspace's age, the contact is flagged as a minor with the source "date of birth". The flag lapses by itself on the birthday: a nightly check lifts it, and only flags that came from a date of birth. A flag a colleague set, or one from a request, an import, a flow or a declaration box, is never lifted by a birthday. If a colleague switches a date-of-birth flag off, it stays off.
+- **A form, chat or flow question.** A form can have an age check, the website chat can ask for an age before the chat starts, and a flow can ask it with an Ask step. See [forms](help:forms-builder), [website chat bots](help:website-chat-bots) and [flows](help:flows). An under-age answer flags the contact. The page never says which answer passes.
+- **A person.** Switch **Minor** on, on the Consent card, when a customer says they are a child or you learn it on a call.
+- **A flow.** A flow can set the flag when it learns the customer is a minor.
+
+In the contact list, the **Minors** view shows the flagged contacts, and the contact filter and segments know "minor". In an import, map a column to **Date of birth**. The REST API reads and writes `date_of_birth` and reads `is_minor`; the flag itself is read and changed on `/privacy` of a contact.
+
+Asking a date of birth is data you collect, so ask it only where you need it. The least data is the box "I confirm I am at least N years old", which keeps nothing about the age.

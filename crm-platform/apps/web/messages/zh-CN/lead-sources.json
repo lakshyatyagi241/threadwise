@@ -135,6 +135,8 @@
         },
         "delay": "发送前等待（分钟）",
         "delayHint": "0 到 {max} 之间的整数分钟。0 表示立即发送。",
+        "maxAge": "不向早于以下时间的线索发送消息",
+        "maxAgeHint": "延迟到达的线索（回填、重试、漏掉的同步）仍会被保存、分配并发出通知，但超过此时效后不会收到首条消息。只有在确实想给旧线索发消息时才选择更长的时间。同意规则始终适用。",
         "businessHours": "仅在营业时间内发送",
         "businessHoursHint": "如果超出您工作区设置的营业时间，消息会等到营业时间开始后再发送。",
         "optionsFailed": "无法加载模板和发送方。请稍后再试。"
@@ -496,7 +498,8 @@
       "customFieldsTooMany": "最多映射 {max} 个自定义属性。",
       "contract": "{message}",
       "speedTemplateRequired": "请选择要发送的模板。",
-      "speedDelayRange": "请输入 0 到 {max} 之间的整数分钟数。"
+      "speedDelayRange": "请输入 0 到 {max} 之间的整数分钟数。",
+      "speedMaxAgeRange": "请选择线索的最长时效，范围为 1 分钟到 90 天。"
     },
     "kinds": {
       "webhook": "Webhook",
@@ -646,6 +649,7 @@
         "no_sender": "没有已连接的发送方",
         "template_unavailable": "无法发送该模板",
         "missing_value": "该联系人缺少模板所需的值",
+        "lead_too_old": "线索早于设置允许的时效",
         "provider_error": "服务商拒绝了该消息",
         "interrupted": "已中断",
         "expired": "等待时间过长",
@@ -791,6 +795,7 @@
           "not_now": "来源尚未就绪：请求过于频繁，或其连接已暂停。",
           "provider_error": "来源拒绝了请求或请求失败。",
           "credentials_refused": "来源拒绝了凭据。请重新连接。",
+          "permission_missing": "Meta 未允许此主页读取线索。请在 Meta 线索表单中授予线索访问权限，然后重新运行。",
           "interrupted": "已中断。请重新运行。",
           "internal_error": "发生内部错误。请重新运行。",
           "incomplete": "部分线索未能交付。请重新运行以完成。",
@@ -829,7 +834,8 @@
           "tooWide": "每次最多 {days} 天。",
           "noSource": "请至少选择一个来源。"
         },
-        "safe": "重复运行不会丢失或重复任何数据，只会补上缺失的线索。"
+        "safe": "重复运行不会丢失或重复任何数据，只会补上缺失的线索。",
+        "speedNote": "回填的线索与新线索一样会成为联系人、分配给负责人并通知团队。如果线索早于来源的时效上限（除非你在来源的首条消息设置中修改过，否则为 1 小时），则不会发送自动首条消息。"
       }
     },
     "meta": {

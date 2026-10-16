@@ -270,7 +270,7 @@ export class FlowTriggerService {
           await tx.execute(sql`
             INSERT INTO flow_segment_state (org_id, flow_id, contact_id, inside)
             VALUES (${orgId}, ${f.id}, ${contactId}, ${inside})
-            ON CONFLICT (flow_id, contact_id) DO UPDATE SET inside = EXCLUDED.inside, updated_at = now()`);
+            ON CONFLICT (org_id, flow_id, contact_id) DO UPDATE SET inside = EXCLUDED.inside, updated_at = now()`);
           return res.rows[0]?.inside === true;
         });
         // Only a contact the flow saw inside and now finds outside has left; each departure is its own reason.

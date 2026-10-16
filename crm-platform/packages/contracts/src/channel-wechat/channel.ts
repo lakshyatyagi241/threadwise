@@ -57,7 +57,21 @@ export const wechatChannelSchema = z.object({
 });
 export type WechatChannel = z.infer<typeof wechatChannelSchema>;
 
-export const wechatChannelListSchema = z.object({ data: z.array(wechatChannelSchema) });
+/**
+ * Whether WeChat may be used by this workspace at all, decided by its country (WeChat is not allowed in India). When `available`
+ * is false the workspace cannot connect a channel, start a broadcast or send to WeChat; existing channel rows are kept.
+ */
+export const wechatAvailabilitySchema = z.object({
+  available: z.boolean(),
+  /** The country the decision was made on (ISO 3166-1 alpha-2), or null when the workspace has not saved one. */
+  country: z.string().nullable(),
+});
+export type WechatAvailability = z.infer<typeof wechatAvailabilitySchema>;
+
+export const wechatChannelListSchema = z.object({
+  data: z.array(wechatChannelSchema),
+  availability: wechatAvailabilitySchema,
+});
 export type WechatChannelList = z.infer<typeof wechatChannelListSchema>;
 
 /** The two values the person pastes into the WeChat console. The Token is the one they chose, shown back to those who manage the channel. */

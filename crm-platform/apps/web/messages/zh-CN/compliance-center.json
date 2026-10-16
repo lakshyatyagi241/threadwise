@@ -18,7 +18,8 @@
       "notices": "告知声明",
       "links": "隐私与条款链接",
       "subprocessors": "子处理者",
-      "windows": "免打扰时段与通话"
+      "windows": "免打扰时段与通话",
+      "dnc": "禁止来电"
     },
     "saveBar": {
       "unsaved": "您有未保存的更改。",
@@ -35,7 +36,8 @@
       "duplicate": "您已列出同名的子处理者。",
       "rateLimited": "请求过多。请稍候再试。",
       "validation": "部分值无效。请检查表单后重试。",
-      "unexpected": "出了点问题。请重试。"
+      "unexpected": "出了点问题。请重试。",
+      "dncInvalid": "无法读取该文件:其中没有电话号码,或一次包含的号码过多。"
     },
     "problems": {
       "httpsOnly": "请输入以 https:// 开头的地址。",
@@ -322,7 +324,9 @@
         "hint": "DPDP 法案允许个人通过已注册的同意管理者管理其同意。如果您使用了,请在此填写其名称。",
         "managerName": "同意管理者",
         "managerUrl": "同意管理者链接",
-        "placeholderNote": "这仅是备注。目前尚未与任何同意管理者对接。"
+        "placeholderNote": "这仅是备注。目前尚未与任何同意管理者对接。",
+        "managerRegistration": "同意管理者注册编号",
+        "managerRegistrationHint": "数据保护委员会为您的同意管理者登记的编号。仅作备注。"
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "新加坡 Do Not Call",
           "custom": "您自己的名单"
         },
-        "note": "这仅是备注。目前尚未据登记库进行核对。"
+        "note": "这仅是备注。目前尚未据登记库进行核对。",
+        "listNote": "“禁止来电”名单(最后一个标签页)中的号码已不会收到营销电话和短信。"
       },
       "enforcedNote": "免打扰时段内，营销消息会暂缓到时段结束；通话时段之外的电话会被拒绝。按每位联系人所在的当地时间判断。24 小时窗口内的回复和服务类通知不会被暂缓。"
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "暂缓至 {when}（免打扰时段）",
       "heldCount": "{count} 条因免打扰时段暂缓"
+    },
+    "dnc": {
+      "intro": "无论同意记录如何,此名单中的号码都不会收到语音或 SMS 营销。WhatsApp、电子邮件和服务消息不受其限制。此处不会对照任何国家登记库进行检查:请添加您有权下载的摘录。",
+      "addTitle": "添加号码",
+      "numbers": "电话号码",
+      "numbersHint": "每行一个,或用逗号分隔。每次最多 {max} 个;更多请使用文件。",
+      "country": "本地号码的国家/地区代码",
+      "countryHint": "没有国家/地区代码的号码将按此代码解读。",
+      "note": "备注",
+      "noteHint": "选填。说明这些号码被列入名单的原因。",
+      "add": "添加到名单",
+      "adding": "正在添加...",
+      "or": "或",
+      "import": "从 CSV 文件添加",
+      "importing": "正在读取文件...",
+      "importHint": "使用名为 phone、mobile 或 number 的列,否则使用第一列。大文件会分批读取。",
+      "fromRegistry": "该文件是我有权使用的登记库摘录",
+      "progress": "正在发送第 {done} 部分,共 {of} 部分...",
+      "added": "{count, plural, =0 {没有可添加的新号码} one {已添加 # 个号码} other {已添加 # 个号码}}",
+      "result": "已添加 {added} 个,{already} 个已在名单中,{invalid} 个不是电话号码。",
+      "invalidSamples": "例如:{samples}",
+      "listTitle": "名单中的号码",
+      "total": "{count, plural, =0 {名单中没有号码} one {名单中有 # 个号码} other {名单中有 # 个号码}}",
+      "search": "查找号码",
+      "loading": "正在加载名单...",
+      "empty": "还没有号码",
+      "emptyHint": "添加要求不被来电或短信打扰的号码,或您可以使用的登记库摘录。",
+      "noMatch": "没有匹配的号码",
+      "source": {
+        "manual": "手动添加",
+        "import": "来自文件",
+        "contact_request": "本人要求",
+        "registry_export": "登记库摘录"
+      },
+      "remove": "移除",
+      "removeLabel": "将 {phone} 从名单中移除",
+      "removed": "号码已从名单中移除",
+      "newer": "较新",
+      "older": "较早",
+      "confirm": {
+        "title": "移除此号码?",
+        "message": "除非该联系人已撤回同意,否则 {phone} 将可以再次收到营销电话和短信。仅在本人要求或误添加时才移除。",
+        "confirm": "移除号码",
+        "cancel": "保留"
+      }
     }
   }
 }

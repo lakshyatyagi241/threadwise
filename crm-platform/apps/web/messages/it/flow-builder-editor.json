@@ -1877,6 +1877,18 @@
         "groupContact": "Proprietà del contatto",
         "groupFlow": "Salvate in questo flusso",
         "variableNone": "Nessuna variabile trovata"
+      },
+      "askAge": {
+        "minAge": "Età minima",
+        "minAgeHint": "Lascia vuoto per usare l'età del tuo spazio di lavoro dal Centro di conformità (18 se non ne è impostata nessuna). Tra 1 e 21.",
+        "whenUnder": "Se la risposta è inferiore a questa età",
+        "whenUnderHint": "In ogni caso il contatto viene contrassegnato come minorenne. Al cliente non viene mai detto quale risposta è accettata.",
+        "end": "Concludi il flusso con una frase breve e neutra",
+        "continue": "Prosegui e lasciami creare un ramo in base alla risposta",
+        "endText": "Frase di chiusura",
+        "endTextHint": "Inviata prima della fine del flusso. Non menzionare l'età. Se vuota, usa \"Non siamo in grado di continuare.\"",
+        "continueNote": "I passaggi successivi possono leggere la variabile della risposta seguita da _age_gate (ad esempio answer_age_gate), che vale under oppure adult. Aggiungi una Condizione per creare un ramo, ad esempio per chiedere un genitore o un tutore.",
+        "note": "Chiedi l'età solo dove ti serve. La risposta viene scritta sul contatto: una data di nascita come data di nascita, e una risposta sotto l'età minima contrassegna il contatto come minorenne."
       }
     },
     "contracts": {
@@ -2187,7 +2199,9 @@
         "phone": "Numero di telefono",
         "number": "Numero",
         "alphanumeric": "Lettere e numeri",
-        "date": "Data"
+        "date": "Data",
+        "age": "Età",
+        "date_of_birth": "Data di nascita"
       },
       "askInputWrong": {
         "text": "Riprova",
@@ -2196,7 +2210,9 @@
         "phone": "Inserisci un numero di telefono valido",
         "number": "Inserisci un numero valido",
         "alphanumeric": "Usa solo lettere e numeri",
-        "date": "Inserisci una data valida ({format})"
+        "date": "Inserisci una data valida ({format})",
+        "age": "Inserisci la tua età come numero intero",
+        "date_of_birth": "Inserisci una data valida ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

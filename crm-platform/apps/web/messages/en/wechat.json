@@ -10,6 +10,7 @@
       "intro": "Connect a WeChat Official Account (certified Service Account). Inbound lands in your shared Team Inbox and replies, keyword rules and auto-responders work exactly like every other channel.",
       "broadcasts": "Broadcasts",
       "loadError": "Could not load your WeChat channels.",
+      "unavailableCountry": "WeChat is not available in your country. You cannot connect a channel or send WeChat messages from this workspace.",
       "connectTitle": "Connect a channel",
       "connectBody": "Paste the AppID, AppSecret and the server Token from the WeChat Official Accounts Platform (Settings → Basic Configuration).",
       "connect": "Connect WeChat",

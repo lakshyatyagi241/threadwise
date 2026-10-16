@@ -33,6 +33,8 @@ const reply = (channel: FirstReplyRow['channel']): FirstReplyRow => ({
   expiresAt: NOW,
   attempts: 1,
   sentAt: null,
+  leadReceivedAt: new Date('2026-10-14T05:59:00Z'),
+  createdAt: new Date('2026-10-14T06:00:00Z'),
 });
 
 const contact = (patch: Record<string, unknown> = {}) =>

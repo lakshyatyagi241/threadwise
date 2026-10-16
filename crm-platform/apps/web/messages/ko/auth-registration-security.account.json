@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "도움말 어시스턴트",
             "email_channel": "이메일(Gmail) 채널",
-            "personal_history_full": "전체 기록 가져오기 (개인 WhatsApp)"
+            "personal_history_full": "전체 기록 가져오기 (개인 WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "무료로 계속",

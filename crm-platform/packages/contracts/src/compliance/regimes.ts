@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_MINOR_AGE } from '../contact-consent/age';
 import type { ConsentRegime } from '../contact-consent/vocabulary';
 
 /**
@@ -299,6 +300,11 @@ const minutes = (hhmm: string): number => {
   const [h, m] = hhmm.split(':');
   return Number(h) * 60 + Number(m);
 };
+
+/** The age below which a person is a minor in this workspace: the highest of the switched-on profiles' ages, else 18 (BL-217, spec 11.10). */
+export function workspaceMinorAge(regimes: readonly ComplianceRegime[]): number {
+  return effectivePolicy(regimes).minorAge ?? DEFAULT_MINOR_AGE;
+}
 
 export interface EffectivePolicy {
   /** Opt-in before marketing: true as soon as one profile asks for it. */

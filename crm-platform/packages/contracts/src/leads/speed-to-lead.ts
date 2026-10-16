@@ -15,6 +15,14 @@ export type SpeedToLeadChannel = z.infer<typeof speedToLeadChannelSchema>;
 /** How long after the lead arrives the message may go: 0 is at once, at most an hour (a longer wait is a follow-up, not speed). */
 export const SPEED_TO_LEAD_MAX_DELAY_MINUTES = 60;
 
+/**
+ * A lead older than this when it reaches the pipeline gets no first message by default. "Speed to lead" is about the person who just
+ * asked; a backfill, a retry of an old lead or a sweep that finds a lead late must not message someone days after they filled a form.
+ */
+export const SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES = 60;
+/** The most a workspace may raise it to: a lead is kept about 90 days by the providers that keep them at all. */
+export const SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES = 90 * 24 * 60;
+
 export const speedToLeadSchema = z.object({
   /** Off until the admin turns it on. */
   enabled: z.boolean().default(false),
@@ -33,6 +41,17 @@ export const speedToLeadSchema = z.object({
   delayMinutes: z.number().int().min(0).max(SPEED_TO_LEAD_MAX_DELAY_MINUTES).default(0),
   /** Wait for the workspace's business hours (Settings > Business hours) instead of messaging a lead at night. */
   businessHoursOnly: z.boolean().default(false),
+  /**
+   * The oldest a lead may be (minutes since it was submitted at the provider) and still get the first message. Default one hour: a lead
+   * pulled in by a backfill, a retry or a late sweep is older than that, so it is stored and assigned but not messaged. Raise it to
+   * message older leads on purpose; the consent rules still apply to every message.
+   */
+  maxLeadAgeMinutes: z
+    .number()
+    .int()
+    .min(1)
+    .max(SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES)
+    .default(SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES),
 });
 export type SpeedToLead = z.infer<typeof speedToLeadSchema>;
 
@@ -44,6 +63,7 @@ export const SPEED_TO_LEAD_OFF: SpeedToLead = {
   senderId: null,
   delayMinutes: 0,
   businessHoursOnly: false,
+  maxLeadAgeMinutes: SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
 };
 
 /**
@@ -54,7 +74,7 @@ export const SPEED_TO_LEAD_OFF: SpeedToLead = {
  *  held       waiting for a window to open (quiet hours, business hours) or for a channel that is down; it goes by itself
  *  sent       handed to the dispatcher (WhatsApp: queued on the conversation, where delivery shows; SMS and email: accepted by the provider)
  *  blocked    the ConsentGate, the plan or the wallet said no; nothing was sent and nothing will be
- *  skipped    there was nothing to send (no phone or email, no sender, the template is gone, the setting was switched off)
+ *  skipped    there was nothing to send (no phone or email, no sender, the template is gone, the setting was switched off, the lead too old)
  *  failed     the send itself failed, or it was interrupted
  */
 export const LEAD_FIRST_REPLY_STATUSES = [
@@ -100,6 +120,7 @@ export const LEAD_FIRST_REPLY_REASONS = [
   'no_sender',
   'template_unavailable',
   'missing_value',
+  'lead_too_old',
   // failed
   'provider_error',
   'interrupted',

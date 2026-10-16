@@ -19,7 +19,9 @@
       "checkbox_group": "Çoklu seçim",
       "checkbox": "Onay kutusu",
       "rating": "Puanlama",
-      "hidden": "Gizli alan"
+      "hidden": "Gizli alan",
+      "date_of_birth": "Doğum tarihi",
+      "age": "Yaş"
     },
     "errors": {
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",

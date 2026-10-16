@@ -23,7 +23,10 @@
       "imported": "ফাইল থেকে আমদানি করা",
       "createdAt": "তৈরির সময়",
       "updatedAt": "সর্বশেষ আপডেট",
-      "lastActivityAt": "সর্বশেষ কার্যকলাপ"
+      "lastActivityAt": "সর্বশেষ কার্যকলাপ",
+      "minor": "নাবালক হিসেবে চিহ্নিত",
+      "dateOfBirth": "জন্মতারিখ",
+      "age": "বয়স (বছর)"
     },
     "fieldGroups": {
       "journey": "যাত্রা",

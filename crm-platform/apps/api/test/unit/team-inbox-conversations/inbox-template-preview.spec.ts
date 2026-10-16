@@ -38,6 +38,18 @@ describe('template preview: the pieces', () => {
       { type: 'url', text: 'Track' },
       { type: 'copy_code', text: '' },
     ]);
+    // A fixed link and a call number travel with the button; a link with a `{{n}}` does not (its final address is not known here).
+    expect(
+      previewButtonsOf([
+        { type: 'URL', text: 'Visit', url: 'https://example.com' },
+        { type: 'URL', text: 'Track', url: 'https://example.com/{{1}}' },
+        { type: 'PHONE_NUMBER', text: 'Call', phone_number: ' +15550100100 ' },
+      ]),
+    ).toEqual([
+      { type: 'url', text: 'Visit', url: 'https://example.com' },
+      { type: 'url', text: 'Track' },
+      { type: 'phone', text: 'Call', phone: '+15550100100' },
+    ]);
     expect(previewButtonsOf(null)).toEqual([]);
     expect(previewButtonsOf({})).toEqual([]);
   });

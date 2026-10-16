@@ -174,10 +174,6 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
       'Registry of broadcast engines; the audience is gated in BroadcastsService.resolveAudience.',
   },
   {
-    path: 'modules/broadcasts/broadcast-dispatch.service.ts',
-    reason: `${GAP} the audience is gated when the broadcast is created; a send-time re-check of the recipients is still to do.`,
-  },
-  {
     path: 'modules/channel-email/drivers/driver-providers.ts',
     reason: 'Provider wiring of the mail drivers; reached only through the email adapter.',
   },

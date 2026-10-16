@@ -84,6 +84,25 @@ Both windows are off until you switch them on and save. Once they are on:
 
 > The Do Not Call or DND registry is a note. Nothing is checked against it yet. Broadcasts on LINE, Facebook and Instagram are not held yet. A recurring campaign sends the recipients it held at its next occurrence, so put its time outside your quiet hours.
 
+## Do not call list
+
+The **Do not call** tab holds the phone numbers that must get no marketing by voice call or SMS, whatever their consent history says. A number on the list is refused for those two kinds of marketing with the reason "on the do not call list". WhatsApp, email and service messages (replies, order and appointment notices) are not held back by it.
+
+- **Add numbers** by typing or pasting them, one per line or separated by commas. A number without its country code is read with the **Country code for local numbers** you pick. You can add a short note, such as why they are listed.
+- **Add from a CSV file** reads the column named phone, mobile or number, else the first column. A big file is sent in parts and the screen shows the progress. Tick the box when the file is an extract from a registry you are entitled to use; the numbers are then shown as "Registry extract".
+- The result says how many numbers were added, how many were already on the list and how many were not a phone number, with a few examples.
+- **Remove** takes a number off the list after a confirmation. Remove one only if the person asked you to or it was added by mistake. It can then get marketing again unless the contact withdrew consent.
+
+> Nothing is checked against a national registry (for example India NDNC or the United States Do Not Call registry) from here. Download the extract you are entitled to and add it to the list. A live registry check needs credentials from the registry and is not built yet.
+
+Seeing the list needs permission to read the Compliance center. Adding and removing numbers needs permission to manage it, and each change is recorded in the audit log.
+
+## The age at which a person counts as a minor
+
+Under **Laws and regions**, "Treat a person as a minor under" shows the age used in your workspace: the highest age among the profiles you switched on (13 for the United States, 16 for the EU, 18 for India DPDP and when no profile is on). Forms, the website chat and flows start from this age, and each can use its own. See [forms](help:forms-builder) and [website chat bots](help:website-chat-bots) for how an age is asked.
+
+The consent manager note for India DPDP also has a registration number field. It is a note only: nothing is connected to a consent manager yet.
+
 ## Who can do what
 
 People with the read permission can see everything and cannot change it. People who may manage the Compliance center can save changes. Writing the default notice also needs permission to manage consent. Each change is recorded in the audit log, without the officer's contact details.

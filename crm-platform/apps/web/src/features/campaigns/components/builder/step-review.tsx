@@ -119,6 +119,12 @@ export function StepReview({
               <dt>{t('numbers')}</dt>
               <dd className="font-semibold">{totals.numbers}</dd>
             </div>
+            {form.previousSends.sends.length > 0 && (
+              <div className="flex justify-between" data-testid="review-previous">
+                <dt>{t('previousSends')}</dt>
+                <dd className="font-semibold">{totals.previous}</dd>
+              </div>
+            )}
             <div className="flex justify-between border-t border-border pt-1.5">
               <dt>{t('total')}</dt>
               <dd className="font-semibold">{totals.total}</dd>

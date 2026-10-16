@@ -19,7 +19,9 @@
       "checkbox_group": "Mehrfachauswahl",
       "checkbox": "Kontrollkästchen",
       "rating": "Bewertung",
-      "hidden": "Verstecktes Feld"
+      "hidden": "Verstecktes Feld",
+      "date_of_birth": "Geburtsdatum",
+      "age": "Alter"
     },
     "errors": {
       "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",

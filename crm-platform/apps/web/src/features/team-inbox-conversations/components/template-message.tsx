@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import type { MessageTemplate, MessageTemplateButton } from '@crm/contracts';
+import { templateButtonHref } from '../lib/template-button';
+import { BubbleButton, BubbleButtonList } from '@/components/whatsapp-button';
 import {
   CopyIcon,
   FileIcon,
@@ -30,7 +32,7 @@ const MEDIA_ICON = {
 
 /**
  * A template message as WhatsApp shows it: the header (its text, or a marker for a file the thread does not keep), the body with the
- * values filled in, the footer, and the buttons as rows. A record of what was sent: the buttons do nothing here. Without `preview`
+ * values filled in, the footer, and the buttons as rows. A record of what was sent: a URL or call button with a fixed target opens it; the others are only drawn. Without `preview`
  * (the template was deleted, or the message came in a realtime event) it is the name and the body only.
  */
 export function TemplateMessage({
@@ -78,14 +80,11 @@ export function TemplateMessage({
         </p>
       )}
       {preview && preview.buttons.length > 0 && (
-        <ul
-          className="mt-1 space-y-1 border-t border-border pt-1.5"
-          data-testid="inbox-template-buttons"
-        >
+        <BubbleButtonList testId="inbox-template-buttons">
           {preview.buttons.map((b, i) => (
             <TemplateButtonRow key={i} button={b} />
           ))}
-        </ul>
+        </BubbleButtonList>
       )}
     </div>
   );
@@ -106,23 +105,26 @@ function MediaMarker({ format }: { format: 'image' | 'video' | 'document' | 'loc
   );
 }
 
-/** One button, drawn like WhatsApp's: a full-width outlined row with an icon. Not interactive; a screen reader hears "Button: <text>". */
+/**
+ * One button, drawn like WhatsApp's: a full-width outlined row with an icon. A URL or call button with a fixed target is a link (it
+ * opens the page or dials the number); the others are drawn without one. A screen reader hears "Button: <text>".
+ */
 function TemplateButtonRow({ button }: { button: MessageTemplateButton }) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const Icon = BUTTON_ICON[button.type];
   const label =
     button.text.trim() ||
     (button.type === 'copy_code' ? t('templateCopyCode') : t('templateButtonUnnamed'));
+  const href = templateButtonHref(button);
   return (
-    <li
-      className="flex w-full items-center justify-center gap-1.5 rounded-md border border-border px-2 py-1.5 text-xs font-medium text-primary"
-      data-button-type={button.type}
+    <BubbleButton
+      href={href}
+      dataType={button.type}
+      linkTestId="inbox-template-button-link"
+      icon={<Icon width={14} height={14} aria-hidden />}
+      label={label}
     >
-      <Icon width={14} height={14} />
       <span className="sr-only">{t('templateButtonPrefix')}</span>
-      <span dir="auto" className="min-w-0 truncate">
-        {label}
-      </span>
-    </li>
+    </BubbleButton>
   );
 }

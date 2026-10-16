@@ -259,7 +259,15 @@ export const scheduleOptionsSchema = z.object({
   ),
   groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.number().int() })),
   tags: z.array(z.object({ id: uuidSchema, name: z.string(), contacts: z.number().int() })),
-  queues: z.array(z.object({ id: uuidSchema, name: z.string(), recipients: z.number().int() })),
+  /** Earlier sends that can be the recipients: broadcasts and campaigns (a campaign's id is a campaign uuid). */
+  queues: z.array(
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      recipients: z.number().int(),
+      kind: z.enum(['broadcast', 'campaign']).default('broadcast'),
+    }),
+  ),
   templates: z.array(scheduleTemplateSchema),
   minLeadMinutes: z.number().int(),
 });

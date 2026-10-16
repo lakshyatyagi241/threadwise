@@ -2019,6 +2019,18 @@
         "groupContact": "Properti kontak",
         "groupFlow": "Tersimpan di flow ini",
         "variableNone": "Variabel tidak ditemukan"
+      },
+      "askAge": {
+        "minAge": "Usia minimum",
+        "minAgeHint": "Kosongkan untuk memakai usia ruang kerja Anda dari Pusat kepatuhan (18 jika belum diatur). Antara 1 dan 21.",
+        "whenUnder": "Jika jawabannya di bawah usia itu",
+        "whenUnderHint": "Kontak ditandai sebagai di bawah umur dalam kedua kasus. Pelanggan tidak pernah diberi tahu jawaban mana yang lolos.",
+        "end": "Akhiri alur dengan kalimat singkat yang netral",
+        "continue": "Lanjutkan, dan biarkan saya membuat percabangan berdasarkan jawaban",
+        "endText": "Kalimat penutup",
+        "endTextHint": "Dikirim sebelum alur berakhir. Jangan menyebut usia. Jika kosong, dipakai “Kami tidak dapat melanjutkan.”",
+        "continueNote": "Langkah berikutnya dapat membaca variabel jawaban diikuti _age_gate (misalnya answer_age_gate), yang bernilai under atau adult. Tambahkan Kondisi untuk membuat percabangan, misalnya untuk meminta orang tua atau wali.",
+        "note": "Tanyakan usia hanya jika Anda memerlukannya. Jawaban ditulis ke kontak: tanggal lahir sebagai tanggal lahir, dan jawaban di bawah usia menandai kontak sebagai di bawah umur."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Nomor telepon",
         "number": "Angka",
         "alphanumeric": "Huruf dan angka",
-        "date": "Tanggal"
+        "date": "Tanggal",
+        "age": "Usia",
+        "date_of_birth": "Tanggal lahir"
       },
       "askInputWrong": {
         "text": "Silakan coba lagi",
@@ -2338,7 +2352,9 @@
         "phone": "Masukkan nomor telepon yang valid",
         "number": "Masukkan angka yang valid",
         "alphanumeric": "Gunakan huruf dan angka saja",
-        "date": "Masukkan tanggal yang valid ({format})"
+        "date": "Masukkan tanggal yang valid ({format})",
+        "age": "Masukkan usia Anda sebagai bilangan bulat",
+        "date_of_birth": "Masukkan tanggal yang valid ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

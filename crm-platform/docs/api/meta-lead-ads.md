@@ -131,6 +131,41 @@ about 90), oldest first, at most 2000 per form per run, and ingests those the pi
 which starts when the form is picked, so a form brings in leads from then on and no surprise backlog) moves only when the read reached the end and
 every delivery succeeded; otherwise the next run reads the window again. A failed event is processed again by the pipeline's own `failed` rule.
 
+## Sync now and backfill (BL-204, BL-210)
+
+Every picked form is a pullable lead source in the lead inbox (`MetaLeadPullProvider`, registered in `LEAD_PULL_REGISTRY` by
+`MetaLeadPullBinding` once the application is up, in the HTTP process and the worker; the leads module never imports this module). The
+lead inbox's **Sync now** and **Backfill...** (`/v2/lead-inbox/sources/:id/sync`, `/v2/lead-inbox/backfill`, see [leads.md](leads.md)) work
+for Meta forms with the same limits as for a portal: one run at a time per form, a minute between pulls, ten minutes between backfills, a
+range of at most 90 days (Meta keeps a lead about that long; further back is 422 `LEAD_BACKFILL_RANGE_INVALID`), progress and errors in
+`lead_sync_runs`, run by the `lead-sync` worker. `MetaLeadPullService.run` is the pull:
+
+- **Sync now** reads from the form's sweep checkpoint less the sweep's 2 hour overlap to now and, when every lead was handed over, moves the
+  checkpoint like a sweep. A **backfill** reads the range asked for (clamped to the 90 days Meta keeps and to now) and never touches the
+  checkpoint. A form brings in leads from the moment it is picked until someone asks for a backfill: the screen is the only way back in time.
+- **Windows.** The range is cut into 7 day windows, oldest first. Each window is read page by page (`pageFormLeads`: 100 leads a request,
+  `time_created` between two bounds, Meta's cursor for the next page), then handed to the pipeline oldest first. A window that holds more than
+  1000 leads is thrown away and read again as two halves (down to one hour; an hour with more than 5000 leads is read to 5000 and the run
+  ends `partial / incomplete`). `windowsDone` of `windowsTotal` is the progress bar; the total grows when a window is cut.
+- **Idempotent.** Every lead is stored under Meta's `leadgen_id` (the pipeline's key). Leads the pipeline already holds are filtered out first
+  (`LeadIngestPort.settled`) and counted as "already known"; the rest go through `LeadgenService.deliver`, the same function as the webhook
+  and the sweep. A second backfill of the same range writes nothing and notifies nobody.
+- **Rate limits and backoff.** At most one request a second per run. A request Meta slowed down (codes 4, 17, 32, 341, 613, 80000 to 80014)
+  is waited out for 30, 60, 120, then 240 seconds and tried again; one that merely failed (1, 2, a network error) for 2, 5, 15, then 30
+  seconds. The wait is cut into 10 second pieces and the run reports after each, so it never looks dead (the sweep frees a run silent for 20
+  minutes). When the retries run out the run ends `partial` with `too_soon` ("the source asked us to wait") for a rate limit, or
+  `provider_error`, keeping everything already handed over; running it again finishes the job.
+- **Refusals.** A revoked token (190 and relatives) ends the run `failed / credentials_refused` and a withheld permission `failed /
+permission_missing`, and both are written on the Page (and the form) exactly as a refused sweep does, so the Meta screen shows **Needs
+  reconnect** or **Needs lead access**. A Page with lead sync off, a Page that is not connected or a paused source is `failed / not_active`,
+  and a Page connected without the lead permissions is `failed / permission_missing`; Meta is not asked in either case.
+- **Consent is unchanged.** The lead goes through `toNormalisedLead`, so consent is the ticked checkbox of the form's own disclaimer with its
+  wording and nothing else; being backfilled adds nothing and takes nothing away. A backfilled lead is limited by the same cached form wording
+  the webhook uses.
+- **Not speed-to-lead.** The first message is decided by the source's `speedToLead.maxLeadAgeMinutes` (default one hour, see
+  [leads.md](leads.md)): a backfilled lead is older, so it is stored, assigned and notified but not messaged, unless the workspace raised the
+  limit on purpose.
+
 ## Data
 
 `meta_lead_pages` (per Page: sync on/off, `subscribed_at`, `last_lead_at`, `last_sweep_at`, `last_error`, `last_error_kind` token / permission /
@@ -146,7 +181,7 @@ Audit rows: modules `meta_lead_pages` and `meta_lead_forms` (insert, update, del
 ## Ports and providers
 
 - `META_LEAD_ADS_GRAPH` (`infra/providers/meta-lead-ads/meta-lead-ads.port.ts`): `forPage(token, pageId)` with `listForms`, `getForm`, `getLead`,
-  `listFormLeads`, `subscribedFields`, `subscribeLeadgen`, `unsubscribeLeadgen`. Every call returns `{ ok, data?, error?, code? }` and never throws.
+  `listFormLeads`, `pageFormLeads` (one page of a window, for the pull), `subscribedFields`, `subscribeLeadgen`, `unsubscribeLeadgen`. Every call returns `{ ok, data?, error?, code? }` and never throws.
   The adapter reads the Meta app (id, secret, Graph version) from the Facebook channel's settings (`FACEBOOK_GRAPH.settings`: `FB_APP_ID` or
   `META_APP_ID`, `FB_APP_SECRET` or `WHATSAPP_APP_SECRET`, `FB_WEBHOOK_VERIFY_TOKEN` or `WHATSAPP_VERIFY_TOKEN`, `FB_GRAPH_VERSION` or
   `META_GRAPH_VERSION`). No new environment variable. The token travels in an `Authorization` header only; a paging address is followed only when it
@@ -163,5 +198,6 @@ Audit rows: modules `meta_lead_pages` and `meta_lead_forms` (insert, update, del
 - **Reference to the form is the source.** One form, one source: mapping, owner and deal rules are per form, as the spec asks (L-05, L-07, L-08).
 - **IDs are not columns.** `contact_attributions` keeps names; Meta's ids stay in the stored payload (30 day retention by default). A column per id
   waits for the Meta Ads domain (BL-043).
-- **Not built:** backfill of leads from before a form was picked and a "sync now" button (L-18, BL-204); campaign and ad-name enrichment when a lead
-  arrives without names; conversions API back to Meta.
+- **Not built:** campaign and ad-name enrichment when a lead arrives without names; conversions API back to Meta. Backfill and "Sync now"
+  are built and tested against a fake Meta only (BL-204); the `LESS_THAN` bound of Meta's `time_created` filter and the real paging cursors
+  have not been seen on a real Page (BL-205).

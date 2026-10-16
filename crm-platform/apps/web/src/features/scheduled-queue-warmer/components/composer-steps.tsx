@@ -213,6 +213,7 @@ export function AudienceStep({
     key: 'groupIds' | 'tagIds' | 'queueIds',
     label: (x: T) => string,
     count: (x: T) => number,
+    badge?: (x: T) => string,
   ) => (
     <div className="grid max-h-72 gap-2 overflow-y-auto sm:grid-cols-2">
       {items.map((x) => (
@@ -230,6 +231,14 @@ export function AudienceStep({
             className="size-4 accent-[var(--primary)]"
           />
           <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium">{label(x)}</span>
+          {badge && (
+            <span
+              data-testid="send-kind"
+              className="shrink-0 rounded-full border border-border bg-muted px-2 py-0.5 text-[10.5px] font-medium text-muted-foreground"
+            >
+              {badge(x)}
+            </span>
+          )}
           <span className="font-mono text-[10.5px] text-muted-foreground">
             {count(x).toLocaleString('en-US')}
           </span>
@@ -303,6 +312,7 @@ export function AudienceStep({
                 'queueIds',
                 (g) => g.name,
                 (g) => g.recipients,
+                (g) => t(`audience.kind.${g.kind}`),
               )}
           <p className="mt-1.5 text-xs text-muted-foreground">{t('audience.queuesHint')}</p>
         </div>

@@ -26,6 +26,10 @@ export interface RowView {
   attributes: AttributeChip[];
   /** Every custom attribute value of the contact as display text, by key (for the attribute columns). */
   custom: Record<string, string>;
+  /** `YYYY-MM-DD` or null (BL-217). */
+  dateOfBirth: string | null;
+  /** Flagged as a minor (BL-190). */
+  isMinor: boolean;
   /** ISO timestamp the contact was created. */
   createdAt: string;
   /** The lead score and who set it ('ai' = the AI lead scorer); null when the contact has none. */
@@ -63,6 +67,8 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     tags: row.tags ?? [],
     attributes: attributeChips(row.customFields, attributeLabels),
     custom: customValues(row.customFields),
+    dateOfBirth: row.dateOfBirth,
+    isMinor: row.isMinor,
     createdAt: row.createdAt,
     leadScore: row.leadScore,
     leadScoreSource: row.leadScoreSource,

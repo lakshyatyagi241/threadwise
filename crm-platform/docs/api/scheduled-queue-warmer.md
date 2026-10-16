@@ -7,7 +7,7 @@ Base `/v2`. Contracts: `packages/contracts/src/scheduled-queue-warmer/index.ts`.
 | Method and path                                            | What                                                                                                                                                        |
 | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GET /scheduled?tab=&q=&limit=&offset=`                    | schedules with tab counts, search and the next one due                                                                                                      |
-| `GET /scheduled/options`                                   | senders (with `warming`), groups, tags, earlier broadcasts, templates, the lead time                                                                        |
+| `GET /scheduled/options`                                   | senders (with `warming`), groups, tags, earlier sends (`queues`: broadcasts and campaigns, each with `kind`), templates, the lead time                                                                        |
 | `POST /scheduled/audience-preview`                         | `{total, optedOut, sample}` for a draft audience                                                                                                            |
 | `POST /scheduled`                                          | create (idempotent); one schedule per sender when the audience is split                                                                                     |
 | `GET /scheduled/:id`                                       | detail with recipients (first 200) and counts by status                                                                                                     |
@@ -21,6 +21,8 @@ Base `/v2`. Contracts: `packages/contracts/src/scheduled-queue-warmer/index.ts`.
 | `DELETE /scheduled/:id`                                    | delete (204)                                                                                                                                                |
 | `GET /warmer`                                              | every number with profile, budget today, sent today, health                                                                                                 |
 | `PUT /warmer/:key`                                         | save a number's profile; key is `<engine>:<uuid>`                                                                                                           |
+
+A schedule with `recipientType: "queue"` takes `queueIds` of earlier broadcasts or campaigns (a uuid is one or the other); a campaign's recipients are those who were not skipped or opted out. The guided wizard and the classic builder can also target them with an outcome filter (see [campaigns](campaigns.md#previous-sends-as-the-audience-an-addition-beyond-reference)).
 
 Create checks, in order: plan flag, plan limit, timezone and a start at least 2 minutes ahead, the message, senders (forged or stale keys are
 dropped), audience (opted-out and archived contacts are left out), the send guard (emergency halt, content), the wallet, the warmer's budget for

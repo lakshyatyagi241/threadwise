@@ -23,7 +23,10 @@
       "imported": "Nhập từ tệp",
       "createdAt": "Ngày tạo",
       "updatedAt": "Cập nhật lần cuối",
-      "lastActivityAt": "Hoạt động gần nhất"
+      "lastActivityAt": "Hoạt động gần nhất",
+      "minor": "Đã đánh dấu là chưa thành niên",
+      "dateOfBirth": "Ngày sinh",
+      "age": "Tuổi (năm)"
     },
     "fieldGroups": {
       "journey": "Hành trình",

@@ -306,7 +306,11 @@
         "numbersCount": "{count}件の番号",
         "emailNote": "メールは各連絡先のアドレスに送信されます。メールアドレスのない連絡先、重複したアドレス、配信停止した連絡先はスキップされます。",
         "emailSkipped": "メールアドレスがなくスキップされる選択済みの受信者：{count}件",
-        "emailNoAddress": "入力した番号とCSVの行にはメールアドレスがないため、スキップされます。代わりに連絡先、グループ、タグ、セグメントを選択してください。"
+        "emailNoAddress": "入力した番号とCSVの行にはメールアドレスがないため、スキップされます。代わりに連絡先、グループ、タグ、セグメントを選択してください。",
+        "previousTitle": "過去の配信",
+        "previousHint": "過去の一斉配信やキャンペーンの配信先を追加します。既読、返信、クリックした人だけに絞ることもできます。",
+        "previousEstimate": "{count, plural, other {過去の配信から最大#人(概算: 2件の配信に含まれる人は2回数えられます)。}}",
+        "previousEditHint": "編集時には、以前に選択した過去の配信は表示されません。このキャンペーンの受信者はすでに連絡先として保存されています。さらに追加するには、もう一度選択してください。"
       },
       "message": {
         "title": "メッセージ",
@@ -594,7 +598,8 @@
         "subject": "件名",
         "subjectFallback": "キャンペーン名",
         "skippedNoEmail": "スキップ（メールアドレスなし）",
-        "estimateEmail": "これは概算です。2つのグループに属する連絡先は2回カウントされます。グループ、タグ、セグメント内でメールアドレスのない連絡先は、キャンペーンの実行時にスキップされます。"
+        "estimateEmail": "これは概算です。2つのグループに属する連絡先は2回カウントされます。グループ、タグ、セグメント内でメールアドレスのない連絡先は、キャンペーンの実行時にスキップされます。",
+        "previousSends": "過去の配信(最大)"
       },
       "ai": {
         "open": "AIで作成",
@@ -1166,7 +1171,10 @@
         "pacing_range": "Smart Delivery を確認してください。最長の遅延が最短より短いか、2つの送信時刻の片方しか設定されていません。",
         "follow_up_template_required": "各フォローアップで送信するテンプレートを選択してください。",
         "follow_up_flow_required": "各フォローアップで開始するフローを選択してください。",
-        "follow_up_cloud_api_only": "フォローアップは WhatsApp Cloud API の番号でのみ使用できます。ステップ1で番号を選択するか、フォローアップを削除してください。"
+        "follow_up_cloud_api_only": "フォローアップは WhatsApp Cloud API の番号でのみ使用できます。ステップ1で番号を選択するか、フォローアップを削除してください。",
+        "sequence_not_recurring": "順番に送るテンプレートは、繰り返しキャンペーンでのみ使えます。繰り返しのスケジュールを選ぶか、追加のテンプレートを削除してください。",
+        "sequence_with_ab": "順番に送るテンプレートは A/B テストと併用できません。A/B テストをオフにするか、追加のテンプレートを削除してください。",
+        "sequence_template_required": "順番の各ステップにテンプレートを選ぶか、空のものを削除してください。"
       },
       "template": {
         "previewOnline": "オンライン",
@@ -1251,7 +1259,8 @@
           "contacts": "連絡先",
           "groups": "グループ",
           "segments": "セグメント",
-          "csv": "CSVファイル"
+          "csv": "CSVファイル",
+          "previous": "過去の配信"
         },
         "groupsHint": "グループはマーケティングリストです。チェックしたグループの全員が含まれます。",
         "segmentsHint": "セグメントはルールに基づいて自動的に更新されます。チェックしたセグメントの全員が含まれます。",
@@ -1347,7 +1356,10 @@
         },
         "csvIssuesMore": "さらに{count}件がダウンロードに含まれています。",
         "csvConsentOn": "これらの番号の同意を確認しました。配信開始時に同意済みとして記録されます。",
-        "csvConsentVersion": "通知のバージョン: {version}。"
+        "csvConsentVersion": "通知のバージョン: {version}。",
+        "modePrevious": "過去の配信先に送信",
+        "previousHint": "過去の一斉配信やキャンペーンの配信先に再度送信します。既読、未読、返信、クリックした人だけに絞ることもできます。",
+        "chipPrevious": "{count, plural, other {過去の配信#件}}({outcome})"
       },
       "review": {
         "intro": "コストを確認し、各テンプレート変数に何を入力するかを指定して、一斉配信を確認します。",
@@ -1425,7 +1437,9 @@
         "estimatedCostFull": "概算費用(全額)",
         "chargedPlan": "今回ウォレットから請求される金額: {amount}(これらのメッセージのうち {covered} 件はプランでまかなわれます)",
         "chargedWallet": "ウォレットから請求される金額: {amount}",
-        "sumFollowUps": "フォローアップ"
+        "sumFollowUps": "フォローアップ",
+        "sumSequence": "順番に送信",
+        "sumPrevious": "過去の配信: {names}({outcome})"
       },
       "test": {
         "title": "WhatsAppテストメッセージを送信",
@@ -1588,7 +1602,8 @@
           "sent": "送信済み",
           "delivered": "配信済み",
           "failed": "失敗",
-          "retries": "再試行"
+          "retries": "再試行",
+          "template": "テンプレート"
         },
         "retrySummary": "待機{pending}件、回復{recovered}件、断念{exhausted}件",
         "openRun": "実行を開く",
@@ -1648,7 +1663,9 @@
             "skipped": "確認時に条件を満たしていなかったため、シーケンスはそこで終了しました。",
             "lapsed": "コンタクトが返信または既読にする前に監視時間が終了したため、シーケンスはそこで終了しました。"
           }
-        }
+        },
+        "templatesTitle": "テンプレート",
+        "templatesInTurn": "{count, plural, other {#件のテンプレートを順番に送信}}"
       },
       "panel": {
         "title": "一斉配信の作成で作成",
@@ -1659,7 +1676,8 @@
           "recurring": "定期"
         },
         "recipients": "{count, plural, other {#人の受信者}}",
-        "next": "次回の実行 {when}"
+        "next": "次回の実行 {when}",
+        "moreTemplates": "他に{count}件"
       },
       "pickers": {
         "selectDate": "日付を選択",
@@ -1745,6 +1763,29 @@
           "hours": "{count, plural, other {時間}}",
           "days": "{count, plural, other {日}}"
         }
+      },
+      "sequence": {
+        "title": "テンプレートの順番",
+        "intro": "実行ごとに、このリストの次のテンプレートを送信します。1回目は1番目、2回目は2番目を送り、最後の次はまた最初から始まります。",
+        "notRecurring": "テンプレートを順番に送れるのは繰り返し配信だけです。繰り返しのスケジュールを選ぶか、これらのテンプレートを削除してください。",
+        "withAb": "順番に送るテンプレートは、すでに2つのテンプレートを送る A/B テストとは併用できません。使うには A/B テストをオフにしてください。",
+        "templateLabel": "テンプレート{position}",
+        "firstMissing": "未選択",
+        "firstHint": "キャンペーンに選んだテンプレートです。テンプレートのステップで変更できます。",
+        "pick": "テンプレートを選択",
+        "loading": "読み込み中...",
+        "unavailable": "利用できなくなりました",
+        "up": "上へ",
+        "down": "下へ",
+        "moveUp": "テンプレート{position}を上へ移動",
+        "moveDown": "テンプレート{position}を下へ移動",
+        "remove": "テンプレート{position}を削除",
+        "removeShort": "削除",
+        "removeAll": "すべて削除",
+        "add": "テンプレートを追加",
+        "count": "{used} / {max} 件のテンプレート",
+        "limitReached": "上限に達しました：テンプレートは{max}件までです。",
+        "variablesTitle": "テンプレート{position}の変数：{name}"
       }
     },
     "history": {
@@ -1881,6 +1922,58 @@
       "loading": "番号を読み込み中",
       "noAccessTitle": "キャンペーンを作成できません",
       "noAccess": "キャンペーンを作成する権限をワークスペース管理者に依頼してください。"
+    },
+    "previousSends": {
+      "title": "過去の配信",
+      "empty": "過去の一斉配信やキャンペーンはまだありません",
+      "outcomeLabel": "それらの配信の対象者",
+      "outcomes": {
+        "all": "配信先の全員",
+        "delivered": "配信済み",
+        "read": "既読",
+        "not_read": "未読",
+        "replied": "返信あり",
+        "not_replied": "返信なし",
+        "clicked": "リンクをクリック",
+        "failed": "失敗"
+      },
+      "outcomeOff": "{name}(一斉配信では利用不可)",
+      "outcomeHint": {
+        "all": "配信先の全員: メッセージの送信対象だった全員です。配信停止した連絡先とスキップされた行は含まれません。",
+        "delivered": "配信済み: メッセージが届いた人です。",
+        "read": "既読: メッセージを読んだ人です。",
+        "not_read": "未読: 送信されたものの、まだ読んでいない人です。",
+        "replied": "返信あり: メッセージに返信した人です。",
+        "not_replied": "返信なし: 送信されたものの、まだ返信していない人です。",
+        "clicked": "リンクをクリック: メッセージ内のトラッキングリンクをクリックした人です。",
+        "failed": "失敗: 配信できなかった人です。"
+      },
+      "broadcastNote": "一斉配信では配信と既読のみが記録されるため、チェック中は返信とクリックを選べません。",
+      "broadcastOff": "一斉配信には返信やクリックがありません。チェックするには別の結果を選んでください。",
+      "search": "過去の配信を検索",
+      "searchPlaceholder": "検索",
+      "listLabel": "過去の一斉配信とキャンペーン",
+      "noMatch": "検索条件に一致するものはありません。",
+      "chosen": "{max}件中{count}件を選択",
+      "limit": "選択できる配信は最大{max}件です。別のものを選ぶには、いずれかのチェックを外してください。",
+      "kind": {
+        "broadcast": "一斉配信",
+        "campaign": "キャンペーン"
+      },
+      "wentOut": "送信日 {date}",
+      "wentOutUnknown": "日付不明",
+      "recipients": "{count, plural, other {#人の受信者}}",
+      "notRecorded": "一斉配信では記録されません",
+      "outcomeCounts": {
+        "all": "{count, plural, other {#人}}",
+        "delivered": "{count, plural, other {#人に配信済み}}",
+        "read": "{count, plural, other {#人が既読}}",
+        "not_read": "{count, plural, other {#人が未読}}",
+        "replied": "{count, plural, other {#人が返信}}",
+        "not_replied": "{count, plural, other {#人が未返信}}",
+        "clicked": "{count, plural, other {#人がリンクをクリック}}",
+        "failed": "{count, plural, other {#人に配信失敗}}"
+      }
     }
   }
 }

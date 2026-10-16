@@ -299,6 +299,41 @@
           "held": "{count, plural, one {1 envio está retido como spam.} other {# envios estão retidos como spam.}}",
           "review": "Revisar"
         }
+      },
+      "age": {
+        "title": "Verificação de idade",
+        "description": "Peça a idade somente onde precisar. Deixe desativado na maioria dos formulários.",
+        "enable": "Verificar a idade do visitante",
+        "enableHint": "Desativado por padrão. Ative se as regras do seu espaço de trabalho exigirem ou se sua empresa atende menores. O formulário nunca informa ao visitante qual resposta é aceita.",
+        "mode": "Como perguntar",
+        "modes": {
+          "declaration": "Uma caixa: \"Confirmo que tenho pelo menos N anos\"",
+          "age": "Pedir a idade",
+          "dob": "Pedir a data de nascimento"
+        },
+        "modeHints": {
+          "declaration": "Nada sobre a idade é guardado. O mínimo de dados.",
+          "age": "Um número inteiro. É usado na verificação; apenas o resultado é guardado.",
+          "dob": "Salva no contato como data de nascimento. Use somente se precisar da data."
+        },
+        "minAge": "Idade mínima",
+        "minAgeHint": "Deixe vazio para usar a idade do seu espaço de trabalho ({age}). Entre 1 e 21.",
+        "minAgeInvalid": "Informe um número inteiro de {min} a {max}.",
+        "whenUnder": "Se o visitante tiver menos que essa idade",
+        "actions": {
+          "block": "Não aceitar o envio",
+          "flag": "Aceitar, marcar o contato como menor e não registrar consentimento de marketing",
+          "guardian": "Como acima, e pedir um dos pais ou responsável"
+        },
+        "actionHints": {
+          "block": "Nada sobre o visitante é armazenado e ele vê uma mensagem neutra. Com a caixa, o visitante só precisa marcá-la.",
+          "flag": "O contato é marcado como menor. A linha de consentimento deste envio é armazenada como exibida, mas nenhum acordo de marketing é registrado.",
+          "guardian": "O nome e o contato do responsável ou dos pais são guardados com o envio e na linha do tempo do contato. O consentimento deles não é registrado até que uma pessoa o registre no cartão de Consentimento."
+        },
+        "declarationBlockNote": "Com a caixa e esta configuração ninguém é recusado: a caixa precisa ser marcada para enviar o formulário.",
+        "childrenUnanswered": "Sua Central de conformidade não respondeu à pergunta sobre crianças, então o marketing de um menor marcado é registrado, mas não retido.",
+        "childrenLink": "Abrir a Central de conformidade",
+        "neutralNote": "Não escreva a idade mínima no texto de ajuda de um campo nem na descrição: a página não deve informar qual resposta é aceita."
       }
     }
   }

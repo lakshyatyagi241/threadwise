@@ -208,6 +208,7 @@ export class WidgetsService {
       collectName: input.collectName,
       collectEmail: input.collectEmail,
       collectPhone: input.collectPhone,
+      ageGate: input.ageGate,
       allowedDomains: input.allowedDomains,
       launcher: input.launcher,
     };
@@ -320,6 +321,7 @@ export class WidgetsService {
           collectName: src.collectName,
           collectEmail: src.collectEmail,
           collectPhone: src.collectPhone,
+          ageGate: src.ageGate,
           allowedDomains: src.allowedDomains,
           launcher: src.launcher,
         },
@@ -670,6 +672,9 @@ function diff(
   for (const k of AUDITED) if (a[k] !== b[k]) out[k] = { old: a[k], new: b[k] };
   if (JSON.stringify(a.launcher) !== JSON.stringify(b.launcher)) {
     out.launcher = { old: a.launcher, new: b.launcher };
+  }
+  if (JSON.stringify(a.ageGate) !== JSON.stringify(b.ageGate)) {
+    out.ageGate = { old: a.ageGate, new: b.ageGate };
   }
   if (JSON.stringify(a.allowedDomains) !== JSON.stringify(b.allowedDomains)) {
     out.allowedDomains = { old: a.allowedDomains, new: b.allowedDomains };

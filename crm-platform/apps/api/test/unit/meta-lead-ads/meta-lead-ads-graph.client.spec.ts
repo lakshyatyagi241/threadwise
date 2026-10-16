@@ -160,6 +160,120 @@ describe('the leads of a form since a time', () => {
   });
 });
 
+describe('one page of the leads of a form in a window (Sync now and backfill)', () => {
+  it('asks for the lead of a window with both bounds, a hundred at a time, newest first as Meta gives them', async () => {
+    answers.push(() => ({ json: { data: [{ id: '2' }, { id: '1' }] } }));
+    const r = await page().pageFormLeads('5', {
+      sinceEpochSeconds: 1_700_000_000,
+      untilEpochSeconds: 1_700_600_000,
+      after: null,
+      limit: 100,
+    });
+    expect(r.ok).toBe(true);
+    expect(r.data?.leads.map((l) => l.id)).toEqual(['2', '1']);
+    expect(r.data?.next).toBeNull();
+    expect(calls[0]!.url.pathname).toBe('/v21.0/5/leads');
+    expect(calls[0]!.url.searchParams.get('limit')).toBe('100');
+    expect(calls[0]!.url.searchParams.has('after')).toBe(false);
+    expect(JSON.parse(calls[0]!.url.searchParams.get('filtering')!)).toEqual([
+      { field: 'time_created', operator: 'GREATER_THAN', value: 1_700_000_000 },
+      { field: 'time_created', operator: 'LESS_THAN', value: 1_700_600_000 },
+    ]);
+  });
+
+  it('has no upper bound when none is asked for, and never asks for more than a hundred', async () => {
+    answers.push(() => ({ json: { data: [] } }));
+    await page().pageFormLeads('5', {
+      sinceEpochSeconds: -5,
+      untilEpochSeconds: null,
+      after: null,
+      limit: 5000,
+    });
+    expect(JSON.parse(calls[0]!.url.searchParams.get('filtering')!)).toEqual([
+      { field: 'time_created', operator: 'GREATER_THAN', value: 0 },
+    ]);
+    expect(calls[0]!.url.searchParams.get('limit')).toBe('100');
+  });
+
+  it('hands back the cursor of the next page, and sends it back as `after`', async () => {
+    answers.push(() => ({
+      json: {
+        data: [{ id: '3' }],
+        paging: {
+          cursors: { after: 'QVFI-cursor/with+odd=chars', before: 'b' },
+          next: 'https://graph.facebook.com/v21.0/5/leads?after=x',
+        },
+      },
+    }));
+    const first = await page().pageFormLeads('5', {
+      sinceEpochSeconds: 0,
+      untilEpochSeconds: null,
+      after: null,
+      limit: 100,
+    });
+    expect(first.data?.next).toBe('QVFI-cursor/with+odd=chars');
+
+    answers.push(() => ({ json: { data: [{ id: '2' }] } }));
+    await page().pageFormLeads('5', {
+      sinceEpochSeconds: 0,
+      untilEpochSeconds: null,
+      after: first.data!.next,
+      limit: 100,
+    });
+    expect(calls[1]!.url.searchParams.get('after')).toBe('QVFI-cursor/with+odd=chars');
+  });
+
+  it('the last page has cursors but no `next`: the read ends', async () => {
+    answers.push(() => ({
+      json: { data: [{ id: '1' }], paging: { cursors: { after: 'z', before: 'a' } } },
+    }));
+    const r = await page().pageFormLeads('5', {
+      sinceEpochSeconds: 0,
+      untilEpochSeconds: null,
+      after: null,
+      limit: 100,
+    });
+    expect(r.data?.next).toBeNull();
+  });
+
+  it('retries without the newer fields on a Graph version that does not have them', async () => {
+    answers.push(() => ({
+      status: 400,
+      json: { error: { code: 100, message: 'Tried accessing nonexisting field (platform)' } },
+    }));
+    answers.push(() => ({ json: { data: [{ id: '1' }] } }));
+    const r = await page().pageFormLeads('5', {
+      sinceEpochSeconds: 0,
+      untilEpochSeconds: null,
+      after: null,
+      limit: 100,
+    });
+    expect(r.data?.leads).toHaveLength(1);
+    expect(calls[0]!.url.searchParams.get('fields')).toContain('platform');
+    expect(calls[1]!.url.searchParams.get('fields')).not.toContain('platform');
+  });
+
+  it('carries Meta’s refusal and its code as a plain result, the token only ever in a header', async () => {
+    answers.push(() => ({
+      status: 400,
+      json: { error: { code: 613, message: 'Calls to this api have exceeded the rate limit.' } },
+    }));
+    const r = await page().pageFormLeads('5', {
+      sinceEpochSeconds: 0,
+      untilEpochSeconds: null,
+      after: null,
+      limit: 100,
+    });
+    expect(r).toEqual({
+      ok: false,
+      error: 'Calls to this api have exceeded the rate limit.',
+      code: 613,
+    });
+    expect(calls[0]!.headers.Authorization).toBe('Bearer page-token');
+    expect(calls[0]!.url.toString()).not.toContain('page-token');
+  });
+});
+
 describe('the Page’s webhook subscription', () => {
   const held = (fields: string[]) => ({
     json: { data: [{ id: '222', subscribed_fields: fields }] },

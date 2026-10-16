@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-api-waba.env';
+import { abortableFetch } from './abortable-fetch';
 import { assertPublicUrl } from './provider-url-guard';
 import { WabaApiError } from './waba-errors';
 
@@ -70,7 +71,7 @@ export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 @Injectable()
 export class WabaHttp {
   /** Resolved per call so a test (or a runtime patch) that replaces global fetch is honoured. */
-  fetchImpl: FetchLike = (input, init) => fetch(input, init);
+  fetchImpl: FetchLike = abortableFetch;
 
   constructor(@Inject(WABA_ENV) private readonly env: WabaEnv) {}
 

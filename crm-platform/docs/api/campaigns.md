@@ -281,7 +281,7 @@ request and response shapes are `broadcast-wizard.ts` and `recurrence.ts` in `@c
 
 | Method and path                                  | Key     | What it does                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /templates`                                 | create  | Approved templates (not OTP, number connected) with `slots` (`body.1`, `header.1`, `button.0`), language and category                                                                                                                                                                                                                                                                                            |
+| `GET /templates`                                 | create  | Approved templates (not OTP, not an SMS template, number connected, nothing the campaign gate would refuse) with `slots` (`body.1`, `header.1`, `button.0`), language and category                                                                                                                                                                                                                                                                                            |
 | `GET /audience-sources`                          | create  | `groups` and `segments` with `memberCount` (a segment's is its last stored count)                                                                                                                                                                                                                                                                                                                                |
 | `POST /audience/count`                           | create  | `{ audience }` to `matching`, `optedOut`, `invalidNumber`, `recipients`, `countries`, `approximate`, `invalidConditions`                                                                                                                                                                                                                                                                                         |
 | `POST /drafts`, `GET /drafts/:id`                | create  | Start and read a draft. A draft takes whatever is filled in so far                                                                                                                                                                                                                                                                                                                                               |
@@ -390,6 +390,40 @@ built from the meeting's "Add a follow-up": after the campaign message goes out,
   `CampaignReceiptsService` records the step's own delivery and read, and emits `message.delivery_reported`). A resend of a recipient restarts its chain.
 - Limits: a follow-up template is a second marketing message to someone who has not engaged, and Meta may refuse it with its frequency cap (`131049`). The step is given its claim back and tried again every 24 hours, for up to seven days after its base time, then logged `failed` with the provider's text and the chain ends. A step whose worker died after claiming it is logged `failed` (`interrupted before the provider answered`), never sent again. A paused campaign's recipients are not looked at until it resumes (a watching step may then have lapsed).
 - `GET /broadcast-wizard/broadcasts/:id`: `runList[].followUps` has, per step, `waiting`, `sent`, `delivered`, `read`, `flowsStarted`, `skipped`, `lapsed`, `failed`.
+
+### The same templates in both builders
+
+The classic builder's pickers (`GET /campaigns/builder`, WhatsApp, not the SMS card) list exactly the templates of `GET /broadcast-wizard/templates`: the broadcast composer's list narrowed to what the wizard offers, so a workspace never has templates in one screen and none in the other.
+
+### Templates in sequence (an addition beyond Reference)
+
+Reference's recurring campaign repeats one template. A recurring broadcast of the guided wizard can send several, in turn: `templateSequence` on the draft, 0 to 9 entries `{ templateId, variables }` after the draft's own `templateId` (so up to 10 templates), each with its own variable mapping (a template has its own placeholders).
+
+- The runs of the series take them in turn, round and round, counted by the runs made so far (an occurrence stepped over after an outage does not use one up): run 1 sends the draft's template, run 2 the first entry, ..., and after the last the sequence starts again.
+- A run's own draft (`wizard.draft` of its campaign) is the series' blueprint with that run's template and mapping and no sequence of its own, so a retry of failed messages, the frequency-cap retries and the follow-up steps of a run read the right template and variables. Follow-ups, pacing, retries and the audience are the series' for every run.
+- Launch: 422 `CAMP_WIZARD_INCOMPLETE` with `sequence_not_recurring` (a sequence on a schedule that does not repeat), `sequence_with_ab` (an A/B test already has two templates), `sequence_template_required` (an entry with no template, or one that does not exist in the workspace, path `templateSequence.<i>.templateId`) or `variable_unmapped` (path `templateSequence.<i>.variables.<slot>`). Each template must be usable from the number, like the first.
+- `GET /broadcasts/:id`: a series has `templateCount` (1 without a sequence) and each run in `runList` has the `templateName` it sent.
+- Not done: the credit check at launch prices the first template only (a sequence with templates of another category can cost more per message); a run whose template was deleted or refused fails with the reason and the series goes on.
+
+### Previous sends as the audience (an addition beyond Reference)
+
+Reference's Scheduled composer can take "Previous broadcast" as its recipients (broadcasts only). Here every audience can, and a send is a broadcast or a campaign (each run of a recurring broadcast is a campaign). `previous` on the wizard's audience and `previousSends` on the classic create and update bodies are `{ "sends": [{ "kind": "broadcast" | "campaign", "id": "<uuid>" }], "outcome": "all" }`, up to 20 sends. A contact in several is one recipient; it is another source like a group (the audience is the union), and opted-out and unusable numbers are still left out last.
+
+`outcome` narrows the contacts of those sends:
+
+| outcome | who |
+| --- | --- |
+| `all` | everyone the message was meant for (a recipient who was skipped or opted out is not one) |
+| `delivered` | it reached their phone (delivered or read) |
+| `read` | they read it (a reply counts: they saw it) |
+| `not_read` | it was sent to them and they did not read it, nor reply |
+| `replied`, `not_replied` | they replied / it was sent and they did not (campaigns only) |
+| `clicked` | they clicked a tracked link (campaigns only) |
+| `failed` | it could not be delivered to them |
+
+A broadcast records delivery and reading only, so `replied`, `not_replied` and `clicked` with a broadcast in the list are 422 (`previous_outcome_unsupported`). A send of another workspace matches nobody (the lookup is by the send's own organization).
+
+The picker's rows: `GET /broadcast-wizard/audience-sources` has `previousSends` and `GET /campaigns/builder` has `previousSends`: finished broadcasts and every campaign that has gone out, newest first (100), each with `recipients`, `delivered`, `read`, `failed` and, for a campaign, `replied` and `clicked`. The Scheduled composer's `queues` (`GET /scheduled/options`) lists the same sends with `kind`, and its `queueIds` take a broadcast's or a campaign's uuid (no outcome filter there, as in Reference). The classic builder's edit form rebuilds its recipients from the campaign's resolved contacts, so a previous-sends choice is not shown again on edit.
 
 ### Test send
 

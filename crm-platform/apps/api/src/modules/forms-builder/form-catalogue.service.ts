@@ -16,6 +16,7 @@ import {
   supportsPaymentLinks,
 } from '../checkout-orders-merchant-payments';
 import { CaptchaService } from '../auth';
+import { ContactPrivacyService } from '../contact-consent';
 import { ContactsRepository } from '../crm';
 import { FORM_TEMPLATES } from './form-templates';
 import { FormsRepository } from './forms.repository';
@@ -76,6 +77,7 @@ const CONTACT_BUILTINS: readonly Builtin[] = [
   { property: 'address', label: 'Full address', type: 'long_text', kind: 'long_text' },
   ...addressParts(false),
   { property: 'message', label: 'Message', type: 'long_text', kind: 'long_text' },
+  { property: 'date_of_birth', label: 'Date of birth', type: 'date', kind: 'date_of_birth' },
 ];
 const COMPANY_BUILTINS: readonly Builtin[] = [
   { property: 'name', label: 'Company name', type: 'text', kind: 'short_text' },
@@ -125,6 +127,7 @@ export class FormCatalogueService {
     private readonly contacts: ContactsRepository,
     private readonly gateways: WorkspaceGatewayResolver,
     private readonly captcha: CaptchaService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   async properties(object: FormBindObject): Promise<FormPropertyList> {
@@ -187,9 +190,11 @@ export class FormCatalogueService {
     const ctx = RequestContextStore.require();
     const config = await this.captcha.publicConfig();
     const counts = await this.db.tx((tx) => this.repo.protectionCounts(tx, ctx.orgId, new Date()));
+    const age = await this.db.tx((tx) => this.privacy.ageContext(tx, ctx.orgId));
     return {
       captcha: { available: config !== null, version: config?.version ?? null },
       ...counts,
+      age,
     };
   }
 

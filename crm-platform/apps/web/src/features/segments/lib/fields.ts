@@ -100,6 +100,9 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('source', 'who'),
     sys('unsubscribed', 'who'),
     sys('imported', 'who'),
+    sys('minor', 'who'),
+    sys('dateOfBirth', 'who'),
+    sys('age', 'who'),
     // created and updated are always set, so "is empty" would never match
     sys('createdAt', 'activity', { operators: without(operatorsForKind('date'), never) }),
     sys('updatedAt', 'activity', { operators: without(operatorsForKind('date'), never) }),

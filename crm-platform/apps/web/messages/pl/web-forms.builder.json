@@ -53,7 +53,9 @@
           "crm_required_unbound": "Formularz nie zawiera właściwości wymaganej przez Twoją przestrzeń roboczą.",
           "no_contact_point": "Dodaj pole e-mail lub telefonu powiązane z kontaktem, aby każde zgłoszenie można było przypisać do osoby.",
           "payment_no_gateway": "Połącz bramkę płatności, która potrafi tworzyć linki do płatności, lub wyłącz płatności.",
-          "captcha_not_configured": "CAPTCHA jest ustawiona jako zawsze włączona, ale platforma nie ma CAPTCHA. Wybierz inne ustawienie lub poproś administratora platformy o jej dodanie."
+          "captcha_not_configured": "CAPTCHA jest ustawiona jako zawsze włączona, ale platforma nie ma CAPTCHA. Wybierz inne ustawienie lub poproś administratora platformy o jej dodanie.",
+          "age_gate_field_missing": "Sprawdzenie wieku wymaga pytania: dodaj pole daty urodzenia lub wieku albo wybierz zamiast tego pole wyboru.",
+          "age_gate_field_not_required": "Pytanie, które ocenia sprawdzenie wieku, musi być wymagane."
         },
         "code": {
           "no_fields": "Dodaj co najmniej jedno pole.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Twoja przestrzeń robocza wymaga właściwości CRM „{property}”: dodaj ją do formularza i oznacz jako wymaganą.",
           "crm_required_optional": "Pole powiązane z wymaganą właściwością CRM musi być wymagane.",
           "redirect_not_https": "Adres przekierowania musi zaczynać się od https://.",
-          "too_large": "Formularz jest za duży. Usuń niektóre pola."
+          "too_large": "Formularz jest za duży. Usuń niektóre pola.",
+          "age_gate_field_missing": "Sprawdzenie wieku wymaga pytania: dodaj pole daty urodzenia lub wieku albo wybierz zamiast tego pole wyboru.",
+          "age_gate_field_optional": "Pytanie, które ocenia sprawdzenie wieku, musi być wymagane."
         }
       },
       "versionsTitle": "Wersje",

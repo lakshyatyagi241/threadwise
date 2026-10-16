@@ -117,6 +117,23 @@ export interface SafeFetchOptions {
   maxBytes?: number;
 }
 
+/** The DNS answers for `host`, or a rejection once `ms` has passed (the resolver itself has no deadline). */
+function lookupWithin(host: string, ms: number): Promise<{ address: string; family: number }[]> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('DNS lookup timed out')), ms);
+    dnsLookup(host, { all: true }).then(
+      (addresses) => {
+        clearTimeout(timer);
+        resolve(addresses);
+      },
+      (cause: unknown) => {
+        clearTimeout(timer);
+        reject(cause);
+      },
+    );
+  });
+}
+
 /**
  * The one door for fetching a URL a user typed (TW-NODE-028): media for a send today, webhooks and HTTP nodes later.
  *
@@ -218,10 +235,11 @@ export class SafeFetch {
       throw new UnsafeMediaUrlError('Media URL must be http(s).');
     }
     const host = target.hostname.replace(/^\[|\]$/g, '');
+    // The name lookup is part of the request's deadline: a slow resolver must not hold the call past `timeoutMs`.
     const addresses =
       isIP(host) !== 0
         ? [{ address: host, family: isIP(host) }]
-        : await dnsLookup(host, { all: true }).catch(() => {
+        : await lookupWithin(host, timeoutMs).catch(() => {
             throw new UnsafeMediaUrlError('Media host could not be resolved.');
           });
     if (addresses.length === 0 || addresses.some((a) => this.isBlocked(a.address))) {
@@ -230,7 +248,7 @@ export class SafeFetch {
     const pinned = addresses[0]!;
     const open = target.protocol === 'https:' ? httpsRequest : httpRequest;
     return new Promise<IncomingMessage>((resolve, reject) => {
-      let deadline: NodeJS.Timeout | undefined;
+      let deadline: NodeJS.Timeout | undefined = undefined;
       const req = open(
         target,
         {

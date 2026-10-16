@@ -43,6 +43,7 @@ import { missingRequired, requiredPropertiesError } from './required-properties'
 import {
   ConsentIntakeService,
   ContactConsentService,
+  MinorDetectionService,
   hasProof,
   intakeEvidence,
   planIntakeGrants,
@@ -192,6 +193,7 @@ export class ContactsService {
     private readonly consent: ContactConsentService,
     private readonly intake: ConsentIntakeService,
     private readonly erasure: PersonalDataErasureService,
+    private readonly minors: MinorDetectionService,
   ) {}
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
@@ -457,6 +459,7 @@ export class ContactsService {
           (plan.fillStatus.includes('email') ? 'subscribed' : undefined),
         emailConfirmed: input.emailConfirmed,
         faxNumber: input.faxNumber,
+        dateOfBirth: input.dateOfBirth,
         source: input.source,
         isUnsubscribed: input.isUnsubscribed === true,
         unsubscribedAt: input.isUnsubscribed === true ? new Date() : null,
@@ -477,6 +480,10 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
+      // A date of birth that makes the contact a minor sets the flag in the same transaction (BL-217).
+      if (input.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, ctx.orgId, created.id, new Date(), { dobChanged: true });
+      }
       // A contact created already opted out leaves its proof in the consent ledger (it is never invented for the other case).
       if (input.isUnsubscribed === true) {
         await this.consent.recordInTx(tx, ctx.orgId, {
@@ -1106,6 +1113,7 @@ export class ContactsService {
       }
       if (input.emailConfirmed !== undefined) values.emailConfirmed = input.emailConfirmed;
       if (input.faxNumber !== undefined) values.faxNumber = input.faxNumber;
+      if (input.dateOfBirth !== undefined) values.dateOfBirth = input.dateOfBirth;
       if (input.source !== undefined) values.source = input.source;
       // Marketing opt-out (TW-CON-017): the timestamp is written with the flag, on every change, so the evidence is never
       // missing (Reference left it empty on a manual change). No change, nothing touched.
@@ -1243,6 +1251,13 @@ export class ContactsService {
           evidence: via?.evidence,
           actorUserId: ctx.userId,
           keyBase: via?.dedupeKey ?? `edit:${existing.uuid}:${existing.rowVersion}:grant`,
+        });
+      }
+
+      // The date of birth moved: the flag follows it (flagged, kept, or lifted once the contact is of age).
+      if (input.dateOfBirth !== undefined && input.dateOfBirth !== existing.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, ctx.orgId, existing.id, new Date(), {
+          dobChanged: true,
         });
       }
 

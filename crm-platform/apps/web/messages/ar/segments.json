@@ -23,7 +23,10 @@
       "imported": "مستورد من ملف",
       "createdAt": "تاريخ الإنشاء",
       "updatedAt": "آخر تحديث",
-      "lastActivityAt": "آخر نشاط"
+      "lastActivityAt": "آخر نشاط",
+      "minor": "مصنّف كقاصر",
+      "dateOfBirth": "تاريخ الميلاد",
+      "age": "العمر (بالسنوات)"
     },
     "fieldGroups": {
       "journey": "الرحلة",

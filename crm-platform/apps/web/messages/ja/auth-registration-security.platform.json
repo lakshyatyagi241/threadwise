@@ -1439,7 +1439,8 @@
             "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。",
             "help_agent": "アプリ内のヘルプアシスタント。やりたいことを普通の言葉で伝えると、本人のセッションで案内または代行し、リスクのある操作の前には必ず確認します。AIトークンを消費します。",
             "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。",
-            "personal_history_full": "個人用WhatsApp番号を初めて連携する際に、チャット履歴をすべてインポートできます。最近のチャットのインポートは、個人用番号を含むすべてのプランで利用できます。"
+            "personal_history_full": "個人用WhatsApp番号を初めて連携する際に、チャット履歴をすべてインポートできます。最近のチャットのインポートは、個人用番号を含むすべてのプランで利用できます。",
+            "ai_crm_copilot": "連絡先から AI で見込み顧客を見つけてスコアを付けます。"
           },
           "units": {
             "days": "日",
@@ -1624,7 +1625,8 @@
             "sms": "SMSチャネル",
             "help_agent": "ヘルプアシスタント（AI、トークンを消費）",
             "email_channel": "メール(Gmail)チャネル",
-            "personal_history_full": "チャット全履歴のインポート(個人用WhatsApp)"
+            "personal_history_full": "チャット全履歴のインポート(個人用WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "この項目は必須です。",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "オーロラ",
             "description": "すりガラス風のカードの背後に、やわらかく光る色。"
+          },
+          "geta": {
+            "name": "Geta 分割",
+            "description": "片側にフォーム、もう片側に数値を載せたアニメーションのブランドパネル。"
           }
         },
         "fields": {
