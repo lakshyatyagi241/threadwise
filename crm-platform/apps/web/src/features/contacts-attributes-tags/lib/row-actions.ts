@@ -14,8 +14,23 @@ export interface QuickActions {
   email: string | null;
 }
 
-/** Digits (and a leading +) of a phone number as typed or formatted; empty when there are none. */
+/**
+ * Whether a phone string is the server's masked display form (apps/api/src/modules/crm/contacts/phone-mask.ts),
+ * not the real number. A real phone number never contains a letter; the API's mask only ever inserts literal
+ * `x` placeholders for the digits a caller without `contacts.phone.reveal` may not see — so a bare `/x/i` test
+ * is a cheap, unambiguous signal, with no need to parse the masking shape itself.
+ */
+export function isMaskedPhone(phone: string): boolean {
+  return /x/i.test(phone);
+}
+
+/**
+ * Digits (and a leading +) of a phone number as typed or formatted; empty when there are none, and empty for a
+ * masked number too — a `tel:`/`wa.me` link built from `xxxxxxxx0025` would dial a wrong, meaningless target
+ * instead of the real contact, which is worse than disabling the action.
+ */
 export function phoneDigits(phone: string): string {
+  if (isMaskedPhone(phone)) return '';
   const trimmed = phone.trim();
   const digits = trimmed.replace(/\D/g, '');
   if (!digits) return '';

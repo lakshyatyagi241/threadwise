@@ -1350,6 +1350,7 @@
       "optedOut": "Bu kişi iletişimden çıktı. Mesaj gönderilemez.",
       "noPhone": "Bu kişinin telefon numarası yok.",
       "noEmail": "Bu kişinin e-posta adresi yok.",
+      "phoneMasked": "Bu numara rolünüz için gizlenmiştir.",
       "number": "Gönderen",
       "numberHint": "Mesajın gönderileceği WhatsApp numarası.",
       "noChannel": "Bağlı bir WhatsApp numarası yok. Önce Kanallar bölümünden bir numara bağlayın.",

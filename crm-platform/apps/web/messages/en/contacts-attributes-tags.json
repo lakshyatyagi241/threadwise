@@ -1350,6 +1350,7 @@
       "optedOut": "This contact has opted out of communication. Messages cannot be sent.",
       "noPhone": "This contact has no phone number.",
       "noEmail": "This contact has no email address.",
+      "phoneMasked": "Number is hidden for your role.",
       "number": "Send from",
       "numberHint": "The WhatsApp number the message goes out on.",
       "noChannel": "No WhatsApp number is connected. Connect one in Channels first.",
