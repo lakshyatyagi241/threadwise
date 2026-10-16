@@ -52,10 +52,13 @@ export class SlaClockService {
       if (targets.firstResponseMinutes === null && targets.resolutionMinutes === null) {
         return { started: false as const, reason: 'no_targets' as const };
       }
+      // The schedule and the zone the owner set on the workspace (see RoutingRulesRepository.businessHours).
       const settings = (
-        await tx.execute(
-          sql`SELECT business_hours, timezone FROM workspace_settings WHERE org_id = ${orgId}`,
-        )
+        await tx.execute(sql`
+          SELECT ws.business_hours, COALESCE(o.settings ->> 'timezone', 'UTC') AS timezone
+          FROM organizations o
+          LEFT JOIN workspace_settings ws ON ws.org_id = o.id
+          WHERE o.id = ${orgId}`)
       ).rows[0] as { business_hours?: unknown; timezone?: string | null } | undefined;
       const hours = settings?.business_hours ?? null;
       const zone = settings?.timezone ?? 'UTC';

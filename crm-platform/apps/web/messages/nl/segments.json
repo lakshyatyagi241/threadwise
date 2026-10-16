@@ -26,13 +26,15 @@
       "lastActivityAt": "Laatste activiteit",
       "minor": "Gemarkeerd als minderjarig",
       "dateOfBirth": "Geboortedatum",
-      "age": "Leeftijd (jaren)"
+      "age": "Leeftijd (jaren)",
+      "timezone": "Tijdzone"
     },
     "fieldGroups": {
       "journey": "Traject",
       "who": "Wie",
       "activity": "Activiteit",
-      "properties": "Eigenschappen"
+      "properties": "Eigenschappen",
+      "company": "Bedrijfseigenschap"
     },
     "operators": {
       "equals": "is",

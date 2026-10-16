@@ -113,6 +113,10 @@ With a verified Meta number the builder walks you through sending an approved Wh
 
 Type one or more phone numbers in the format `+91xxxxxxxxxx`, separated by commas (up to 10). **Send Test** stays off until every number is valid. Tracking is not enabled for tests, and credits are deducted for the WhatsApp messages the test sends. Each number shows sent, delivered, read or failed, with the error and the amount charged. You need the permission to test campaigns to use this.
 
+## Quiet hours and the test
+
+A test of a marketing template to a number whose local time is inside your quiet hours (Compliance center) is held, not refused: its row in the test log says Held until a time, and it is sent then. A utility template is sent at once.
+
 ## When to send
 
 - **Send now** sends right away, once.

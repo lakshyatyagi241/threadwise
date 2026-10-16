@@ -2,11 +2,13 @@
 
 import { useInfiniteQuery, useQuery, type QueryClient } from '@tanstack/react-query';
 import {
+  businessHoursSchema,
   inboxAssigneesResponseSchema,
   routingRuleListResponseSchema,
   routingRuleSchema,
   routingSettingsSchema,
   type CreateRoutingRuleInput,
+  type UpdateBusinessHoursInput,
   type UpdateRoutingRuleInput,
 } from '@crm/contracts';
 import { z } from 'zod';
@@ -18,6 +20,7 @@ export const KEYS = {
   list: (q: string) => ['routing-rules', 'list', q] as const,
   rule: (id: string) => ['routing-rules', 'rule', id] as const,
   settings: ['routing-rules', 'settings'] as const,
+  businessHours: ['routing-rules', 'business-hours'] as const,
   assignees: ['routing-rules', 'assignees'] as const,
 };
 
@@ -61,6 +64,14 @@ export const routingApi = {
       method: 'PUT',
       body: { keepContactAgent },
       schema: routingSettingsSchema,
+    }),
+  businessHours: (signal?: AbortSignal) =>
+    apiFetch('/inbox/routing/business-hours', { schema: businessHoursSchema, signal }),
+  updateBusinessHours: (input: UpdateBusinessHoursInput) =>
+    apiFetch('/inbox/routing/business-hours', {
+      method: 'PUT',
+      body: input,
+      schema: businessHoursSchema,
     }),
   assignees: (signal?: AbortSignal) =>
     apiFetch('/inbox/assignees', { schema: inboxAssigneesResponseSchema, signal }),
@@ -106,6 +117,18 @@ export function useRoutingSettings(enabled: boolean) {
     enabled,
     retry: false,
     queryFn: ({ signal }) => routingApi.settings(signal),
+  });
+}
+
+/** The workspace's business hours (the schedule and the time zone), read by the "Business hours" dialog. */
+export function useBusinessHours(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.businessHours,
+    enabled,
+    retry: false,
+    // The dialog's form is filled from this once per opening; a background refetch must not wipe what the person is typing.
+    refetchOnWindowFocus: false,
+    queryFn: ({ signal }) => routingApi.businessHours(signal),
   });
 }
 

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { clampPage, pageWindow, rangeLabel, totalPages } from './pagination';
+import {
+  clampPage,
+  JUMP_REACH,
+  pageWindow,
+  rangeLabel,
+  reachableSlots,
+  totalPages,
+} from './pagination';
 
 describe('totalPages', () => {
   it('rounds up and is never below one', () => {
@@ -60,5 +67,39 @@ describe('rangeLabel', () => {
     expect(rangeLabel(1, 10, 10, 53)).toEqual({ from: 1, to: 10, total: 53 });
     expect(rangeLabel(6, 10, 3, 53)).toEqual({ from: 51, to: 53, total: 53 });
     expect(rangeLabel(1, 10, 0, 0)).toEqual({ from: 0, to: 0, total: 0 });
+  });
+});
+
+describe('reachableSlots', () => {
+  it('lists every page of a short list', () => {
+    expect(reachableSlots(1, 1)).toEqual([1]);
+    expect(reachableSlots(2, 5)).toEqual([1, 2, 3, 4, 5]);
+  });
+
+  it('stops ten pages ahead of the current one, with no gap that leads nowhere', () => {
+    // 609 pages (30,442 contacts at 50 a page): the first page offers 1 2 3 4 5 and nothing after
+    expect(reachableSlots(1, 609)).toEqual([1, 2, 3, 4, 5]);
+    expect(reachableSlots(300, 609)).toEqual([1, 'gap', 298, 299, 300, 301, 302]);
+  });
+
+  it('shows the last page once it is within reach', () => {
+    expect(reachableSlots(10, 20)).toEqual([1, 'gap', 8, 9, 10, 11, 12, 'gap', 20]);
+    expect(reachableSlots(1, 11)).toEqual([1, 2, 3, 4, 5, 'gap', 11]);
+    expect(reachableSlots(1, 12)).toEqual([1, 2, 3, 4, 5]);
+    expect(reachableSlots(2, 12)).toEqual([1, 2, 3, 4, 5, 'gap', 12]);
+  });
+
+  it('counts a page already loaded further on as the reach', () => {
+    expect(reachableSlots(1, 40, 30)).toEqual([1, 2, 3, 4, 5, 'gap', 40]);
+  });
+
+  it('never offers going back out of reach: earlier pages are always cheap', () => {
+    const slots = reachableSlots(600, 609);
+    expect(slots[0]).toBe(1);
+    expect(slots).toContain(609);
+  });
+
+  it('exposes the reach it uses', () => {
+    expect(JUMP_REACH).toBe(10);
   });
 });

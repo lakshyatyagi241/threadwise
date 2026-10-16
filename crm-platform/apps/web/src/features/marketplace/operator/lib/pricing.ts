@@ -7,6 +7,7 @@ import {
   normaliseMarketMoney,
   planFeatureOwnableByApp,
   type MarketAppPricingModel,
+  type MarketBillingMode,
   type MarketPricingView,
   type SetMarketPricingRequest,
 } from '@crm/contracts';
@@ -30,6 +31,10 @@ export interface PricingDraft {
   currency: string;
   /** Yearly price as typed; empty for none. */
   annualAmount: string;
+  /** `recurring`: the card renews the app on its own; `one_time`: a prepaid month, renewed by paying again. */
+  billingMode: MarketBillingMode;
+  /** Keep each subscriber on the price they first paid until their subscription ends. */
+  priceLock: boolean;
   /** Whole days as typed; empty counts as none. */
   trialDays: string;
   /** Off: no NEW subscriptions (existing subscribers may keep renewing). */
@@ -82,6 +87,8 @@ export function draftFromPricing(p: MarketPricingView): PricingDraft {
     amount: p.amount ?? '',
     currency: p.currency ?? '',
     annualAmount: p.annualAmount ?? '',
+    billingMode: p.billingMode,
+    priceLock: p.priceLock,
     trialDays: String(p.trialDays),
     purchasable: p.purchasable,
     includedPlanFeature: p.includedPlanFeature ?? '',
@@ -113,6 +120,8 @@ function normalisedPaid(d: PricingDraft) {
     amount: cleanMoney(d.amount),
     currency: d.currency.trim().toUpperCase(),
     annualAmount: cleanMoney(d.annualAmount),
+    billingMode: d.billingMode,
+    priceLock: d.priceLock,
     trialDays: cleanDays(d.trialDays),
     purchasable: d.purchasable,
     includedPlanFeature: cleanCode(d.includedPlanFeature),
@@ -155,6 +164,8 @@ export function pricingPayload(d: PricingDraft, rowVersion: number): SetMarketPr
     amount: n.amount,
     currency: n.currency,
     annualAmount: orNull(n.annualAmount),
+    billingMode: n.billingMode,
+    priceLock: n.priceLock,
     // An invalid text is NaN here, which the contract refuses: the form never sends it (`pricingProblems` blocks the save first).
     trialDays: /^\d+$/.test(n.trialDays) ? Number(n.trialDays) : Number.NaN,
     purchasable: n.purchasable,

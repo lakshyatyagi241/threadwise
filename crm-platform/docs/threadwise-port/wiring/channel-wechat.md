@@ -56,3 +56,7 @@ All behind `@RequirePlanFeature('extra_channels')` except the two public routes.
 - The inbox's template picker lists WhatsApp templates only: no inbox screen sends a WeChat template message yet (the adapter accepts one).
 - The consent gate: `broadcast-sender.service.ts` is a known gap (WeChat resolves the audience of an all-followers or tag send).
 - Plan flags `access_wechat`, `wechat_broadcasts`, `wechat_channels_limit` and the platform switch `wechat_enabled` collapse into `extra_channels`; the cap and the switch are not enforced.
+
+## Quiet hours (BL-191, product extension)
+
+Not in Reference. A WeChat broadcast is ONE mass-send call to followers WeChat resolves, so it cannot be split per contact. `BroadcastSenderService.runLocked` asks `SendWindowService.check` on the workspace fallback clock (the zone chosen in Compliance center, else the workspace's): inside the quiet hours the broadcast stays `sending` with `wechat_broadcasts.held_until`, `scheduleWake` queues a delayed job on `wechat-broadcast`, and the run returns `held`. At the opening the call is made (the `clientmsgid` guard is untouched). A held broadcast is not "stuck": `staleSending` ignores it, so the Retry button does not appear and a retry cannot make a second mass send. The list row shows `heldUntil` with `compliance-center.hold.heldUntil`. Migration `20261225090000`.

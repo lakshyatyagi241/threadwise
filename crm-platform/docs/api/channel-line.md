@@ -117,3 +117,7 @@ writes each outcome at once and recomputes the counters from the rows. Each batc
 (blocked, not a friend, invalid user, forbidden, not found, no longer, cannot send messages) mark the person `blocked`, any other `failed`.
 A sent message is copied into the person's thread as an outbound message (`source: broadcast`). Events:
 `line.broadcast.created|started|paused|retry_requested|deleted`.
+
+## Quiet hours (BL-191)
+
+LINE broadcasts are marketing, so a recipient whose contact's local time is inside the workspace's quiet hours (Compliance center) is held, not denied: the recipient stays `pending`, the rest of the audience is sent, the broadcast stays `sending`, and a delayed job takes the held recipients up at the first opening, asking the ConsentGate again. `GET` of the broadcast list returns `held` (how many wait) and `heldUntil` (the first instant one of them may be messaged) on each broadcast. See [compliance.md](compliance.md).

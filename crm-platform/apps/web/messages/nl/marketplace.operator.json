@@ -58,7 +58,8 @@
           "trialing": "Op proef",
           "comped": "Gratis toegekend",
           "canceling": "Eindigt",
-          "ended": "Beëindigd"
+          "ended": "Beëindigd",
+          "past_due": "Betaling mislukt"
         },
         "subscriptionSource": {
           "purchase": "Aankoop",
@@ -92,7 +93,8 @@
         "request": "Het verzoek kon niet worden voltooid.",
         "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw; blijft het gebeuren, geef dan het verzoek-ID door.",
         "subscriptionState": "Dat is niet mogelijk in de huidige status van het abonnement. Een workspace die al betaalt, kan niet gratis worden gemaakt (zeg eerst het abonnement op), een gratis app heeft niets om gratis te maken, en een beëindigd abonnement kan niet opnieuw worden opgezegd.",
-        "subscriptionNotFound": "Dat abonnement is niet gevonden. Het is mogelijk verwijderd. Laad de lijst opnieuw."
+        "subscriptionNotFound": "Dat abonnement is niet gevonden. Het is mogelijk verwijderd. Laad de lijst opnieuw.",
+        "renewalNotStopped": "De verlenging met de kaart kon bij de betaalprovider niet worden gestopt, dus er is niets gewijzigd en de workspace kan nog steeds worden belast. Probeer het over een moment opnieuw, of beëindig de verlenging in het dashboard van de provider."
       },
       "list": {
         "title": "Marketplace-catalogus",
@@ -658,12 +660,13 @@
         "free": "Gratis",
         "perMonth": "/ maand",
         "trial": "{count, plural, one {# dag proefperiode} other {# dagen proefperiode}}",
-        "notOnSale": "Niet te koop"
+        "notOnSale": "Niet te koop",
+        "perYear": "/ jaar"
       },
       "pricing": {
         "title": "Prijzen",
         "description": "Bepaal of deze app gratis of betaald is en wat hij kost. Jouw prijs telt: het manifest van de ontwikkelaar stelt er alleen een voor.",
-        "billing": "Een betaalde app wordt verkocht als een maandelijkse vooruitbetaalde termijn: een facturatie-add-on die via de gewone checkout wordt gekocht. Er is nog geen automatische verlenging met creditcard, dus een workspace betaalt opnieuw wanneer de maand bijna voorbij is. Een prijswijziging geldt voor nieuwe abonnementen en voor de volgende betaling van elke abonnee; een periode die al betaald is, wordt nooit aangepast.",
+        "billing": "Een betaalde app wordt verkocht als een facturatie-add-on die via de gewone checkout wordt gekocht. Standaard is dat een maandelijkse vooruitbetaalde termijn: een workspace betaalt opnieuw wanneer de maand bijna voorbij is. Kies hieronder “De kaart verlengt het” om in plaats daarvan elke maand automatisch de kaart van de workspace te belasten. Een prijswijziging geldt voor nieuwe abonnementen en voor de volgende betaling van elke vooruitbetalende abonnee; een periode die al betaald is, wordt nooit aangepast, en een abonnee van wie de kaart al verlengt, houdt de prijs van zijn abonnement bij de provider totdat hij zich opnieuw abonneert.",
         "readOnly": "Alleen-lezen. Het wijzigen van de prijzen vereist het platformrecht {permission}.",
         "visibility": {
           "label": "Status van de vermelding",
@@ -693,7 +696,7 @@
           "trialDays": "Gratis proefperiode (dagen)",
           "trialDaysHint": "0 voor geen proefperiode, maximaal {max}. Een workspace krijgt één proefperiode per app.",
           "annualAmount": "Jaarprijs (optioneel)",
-          "annualAmountHint": "Wordt voor later opgeslagen. Jaarlijkse facturatie is nog niet gebouwd, dus workspaces kunnen nu nog niet jaarlijks betalen.",
+          "annualAmountHint": "De prijs voor een jaar. Laat leeg om de app alleen maandelijks te verkopen. Een workspace die jaarlijks kiest, betaalt dit één keer per jaar, of elk jaar via kaart als de app per kaart wordt verlengd.",
           "purchasable": "Te koop",
           "purchasableHint": "Als dit uit staat, kan geen nieuwe workspace zich abonneren. Workspaces die al een abonnement hebben, kunnen nog steeds verlengen."
         },
@@ -763,6 +766,27 @@
             "paid": "Abonnees behouden de tijd die ze al hebben betaald. Die wordt niet terugbetaald.",
             "action": "Gratis maken"
           }
+        },
+        "billingMode": {
+          "legend": "Hoe het wordt verlengd",
+          "one_time": {
+            "label": "Vooruitbetaalde maand",
+            "hint": "De workspace betaalt opnieuw wanneer de maand bijna voorbij is."
+          },
+          "recurring": {
+            "label": "De kaart verlengt het",
+            "hint": "De betaalprovider belast de kaart elke maand totdat de workspace opzegt."
+          },
+          "note": "Geldt voor nieuwe abonnementen. Een abonnement dat al loopt, behoudt de manier waarop het is gekocht. Vereist een betaalgateway die abonnementen ondersteunt."
+        },
+        "priceLock": {
+          "label": "Abonnees op de prijs houden die ze als eerste betaalden",
+          "hint": "Een prijswijziging geldt dan alleen voor nieuwe abonnees. Als je dit aanzet, worden ook de huidige abonnees vastgezet op hun laatste betaling; als je het uitzet, wordt niemand ontgrendeld. Een vergrendeling eindigt wanneer het abonnement eindigt."
+        },
+        "withdrawn": {
+          "title": "Abonnees van deze ingetrokken app terugbetalen",
+          "hint": "De app is ingetrokken midden in de periodes die abonnees hebben betaald. Betaal ieder het deel van de laatste betaling terug vanaf het moment van intrekking.",
+          "action": "Ongebruikte tijd terugbetalen..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Beëindigd",
           "mrr": "Maandelijkse omzet",
           "mrrNone": "Nog geen betalende abonnees",
-          "mrrCurrency": "Maandelijkse omzet, {currency}"
+          "mrrCurrency": "Maandelijkse omzet, {currency}",
+          "pastDue": "Betaling mislukt"
         },
         "summary": {
           "emptyTitle": "Nog geen betaalde apps",
@@ -871,7 +896,8 @@
             "canceling": "Eindigend",
             "ended": "Beëindigd",
             "total": "Totaal",
-            "mrr": "Maandelijkse omzet"
+            "mrr": "Maandelijkse omzet",
+            "pastDue": "Betaling mislukt"
           },
           "free": "Gratis",
           "totals": "Alle apps",
@@ -905,7 +931,9 @@
           "compUntil": "Gratis tot {date}",
           "compOpen": "Gratis totdat je het beëindigt",
           "endedOn": "Beëindigd {date}",
-          "none": "Geen einddatum"
+          "none": "Geen einddatum",
+          "renewsOn": "Verlenging {date}",
+          "graceUntil": "Respijtperiode tot {date}"
         },
         "noCharge": "Geen kosten",
         "compBy": "Gratis toegekend door {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Geen abonnement gevonden",
         "noMatchMessage": "Geen enkel resultaat voldoet aan deze filters. Probeer andere filters.",
         "clearFilters": "Filters wissen",
-        "loadMore": "Meer laden"
+        "loadMore": "Meer laden",
+        "unlockPrice": "Prijs ontgrendelen",
+        "refundUnused": "Ongebruikte tijd terugbetalen"
+      },
+      "unlockDialog": {
+        "eyebrow": "Vergrendelde prijs",
+        "title": "De prijs van {workspace} ontgrendelen",
+        "close": "Sluiten",
+        "back": "Terug",
+        "confirm": "Prijs ontgrendelen",
+        "summary": "{workspace} betaalt de prijs die het als eerste betaalde voor {app}. Door te ontgrendelen wordt de volgende betaling de huidige prijs van de app.",
+        "effectPrepaid": "De volgende betaling, na de periode die tot {date} is betaald, is de huidige prijs.",
+        "effectCard": "Hun kaart verlengt de app tegen de oude prijs bij de betaalprovider, dus de kaartverlenging wordt beëindigd aan het eind van de betaalde periode ({date}). Ze krijgen bericht en kunnen zich opnieuw abonneren tegen de huidige prijs.",
+        "reason": "Reden (bewaard in het auditlogboek)",
+        "done": "{workspace} heeft voor {app} geen vergrendelde prijs meer."
+      },
+      "prorateDialog": {
+        "eyebrow": "Terugbetaling",
+        "title": "Ongebruikte tijd terugbetalen voor {workspace}",
+        "close": "Sluiten",
+        "back": "Terug",
+        "summary": "Betaalt via de betaalprovider het deel van de laatste betaling voor {app} terug dat nog te gaan is. Niets wordt twee keer terugbetaald: opnieuw uitvoeren betaalt alleen terug wat er nog is.",
+        "working": "Bedrag berekenen...",
+        "paid": "Laatste betaling",
+        "unused": "Ongebruikt deel",
+        "already": "Al terugbetaald",
+        "refundable": "Nu terug te betalen",
+        "nothing": "Er valt niets terug te betalen: de periode is voorbij, er is geen betaling via een gateway gevonden, of het ongebruikte deel is al terugbetaald.",
+        "endNow": "Beëindig het abonnement ook nu",
+        "endNowHint": "De installatie wordt gepauzeerd en de gegevens blijven bewaard. Zonder dit blijft de app draaien tot het einde van de periode.",
+        "reason": "Reden (bewaard in het auditlog en naar de betaalprovider gestuurd)",
+        "confirm": "{amount} terugbetalen",
+        "done": "{amount} terugbetaald aan {workspace} voor {app}.",
+        "refused": "De betaalprovider heeft de terugbetaling geweigerd: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Ingetrokken app",
+        "title": "Abonnees van {name} terugbetalen",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "intro": "Bekijkt elk betaald abonnement van {name} en betaalt via de betaalprovider het deel van de laatste betaling terug dat nog te gaan was toen de app werd ingetrokken. Bekijk eerst een voorbeeld; niets wordt twee keer terugbetaald.",
+        "preview": "Voorbeeld",
+        "owed": "{count, plural, one {# abonnee heeft recht op terugbetaling} other {# abonnees hebben recht op terugbetaling}}",
+        "nobody": "Op dit moment heeft niemand iets tegoed.",
+        "more": "Er zijn meer abonnementen dan één run aankan. Voer opnieuw uit om door te gaan.",
+        "reason": "Reden (bewaard in het auditlog en naar de betaalprovider gestuurd)",
+        "run": "{count, plural, one {# abonnee terugbetalen} other {# abonnees terugbetalen}}",
+        "continue": "Doorgaan met de volgende abonnementen",
+        "result": "{refunded} terugbetaald, {failed} mislukt.",
+        "someFailed": "Sommige terugbetalingen zijn niet gelukt (de provider weigerde of was niet bereikbaar). Ze staan in het auditlog; opnieuw uitvoeren probeert ze nog een keer.",
+        "done": "{count, plural, one {# abonnee van {name} terugbetaald.} other {# abonnees van {name} terugbetaald.}}"
       }
     }
   }

@@ -18,7 +18,8 @@ export const BACKFILL_EVENTS = [
 /**
  * Queues the back-fill when one of `BACKFILL_EVENTS` happens (BL-035). Nothing is written here: the job looks at what is missing and writes
  * it, so a connect that changes nothing (the Google account page adding Sheets) costs one cheap query. Runs in the worker process under the
- * event's own tenant.
+ * event's own tenant. A redelivered event is harmless: the job id is per workspace (`calendar-backfill-<orgId>`), so the queue holds one
+ * back-fill however many times the event arrives.
  */
 @Injectable()
 export class CalendarBackfillConsumer implements OutboxSubscriber, OnModuleInit {
@@ -34,6 +35,7 @@ export class CalendarBackfillConsumer implements OutboxSubscriber, OnModuleInit 
     this.registry.register(this);
   }
 
+  /** A redelivered event is harmless: the job id is fixed per workspace, so a second enqueue while the first job is still queued is a no-op. */
   async handle(event: OutboxEvent): Promise<void> {
     await this.queue.enqueue(event.orgId);
   }

@@ -458,7 +458,8 @@ function EmailForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   if (mailboxes.length === 0)
     return <p className="text-sm text-muted-foreground">{t('noMailbox')}</p>;
 
-  const canSend = Boolean(conversation.data) && subject.trim() !== '' && body.trim() !== '' && !send.isPending;
+  const canSend =
+    Boolean(conversation.data) && subject.trim() !== '' && body.trim() !== '' && !send.isPending;
 
   return (
     <form
@@ -472,11 +473,7 @@ function EmailForm({ row, onClose }: { row: RowView; onClose: () => void }) {
         <label htmlFor="ss-mailbox" className="text-sm font-medium">
           {t('mailbox')}
         </label>
-        <Select
-          id="ss-mailbox"
-          value={mailboxId}
-          onChange={(e) => setMailboxId(e.target.value)}
-        >
+        <Select id="ss-mailbox" value={mailboxId} onChange={(e) => setMailboxId(e.target.value)}>
           {mailboxes.length > 1 && <option value="">{t('mailboxPlaceholder')}</option>}
           {mailboxes.map((m) => (
             <option key={m.id} value={m.id}>

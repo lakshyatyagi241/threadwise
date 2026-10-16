@@ -31,6 +31,7 @@ export function notificationText(
   if (group === 'broadcasts') return sendingText(t, n);
   if (group === 'team_chat') return teamChatText(t, n);
   if (group === 'whatsapp_groups') return groupText(t, n);
+  if (group === 'billing') return billingText(t, n);
   const task = text(n.data?.taskTitle);
   const actor = text(n.data?.actorName);
   const body = actor
@@ -187,6 +188,33 @@ function groupText(
     title: name ? t(`${base}.title`, { name, count }) : t(`${base}.titleNoName`, { count }),
     body,
   };
+}
+
+/**
+ * The paid-app notices (BL-076): the renewal reminder, the failed card payment and the ended subscription. The row carries the app's name
+ * and the end of the period in its data; without the name the server's English wording is shown. Which reminder sentence applies follows
+ * what will really happen (the card renews it, it is paid until a date, or it was cancelled).
+ */
+function billingText(
+  t: Translator,
+  n: Pick<NotificationResponse, 'type' | 'title' | 'body' | 'data'>,
+): { title: string; body: string | null } {
+  const d = n.data ?? {};
+  const name = firstText(d, 'app');
+  const base = `types.${n.type}`;
+  if (!name) return { title: t(`${base}.titleNoName`), body: n.body };
+  const iso = typeof d.periodEnd === 'string' ? new Date(d.periodEnd) : null;
+  // The message formats it (`{date, date, medium}`) from a timestamp, in the reader's language.
+  const date = iso && !Number.isNaN(iso.getTime()) ? iso.getTime() : null;
+  if (n.type === 'marketplace_renewal_due') {
+    if (!date) return { title: t(`${base}.title`, { name }), body: n.body };
+    const kind = d.canceling === true ? 'Ending' : d.autoRenew === true ? 'Auto' : 'Manual';
+    return {
+      title: t(`${base}.title${kind}`, { name, date }),
+      body: t(`${base}.body${kind}`, { name, date }),
+    };
+  }
+  return { title: t(`${base}.title`, { name }), body: t(`${base}.body`, { name }) };
 }
 
 /** Team chat: a colleague mentioned me in a channel, or wrote to me directly (collapsed rows carry a count). */

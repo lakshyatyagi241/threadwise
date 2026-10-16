@@ -22,6 +22,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { chatChannels } from '../chat-conversations/channels';
 import { conversations } from '../chat-conversations/tables';
+import { contactActivities } from '../contact-detail';
 import { citext, createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
 
@@ -277,6 +278,37 @@ export const mailOutboundAttachments = pgTable(
     index('idx_mail_outbound_attachments_expiry')
       .on(t.expiresAt)
       .where(sql`${t.usedAt} is null`),
+  ],
+);
+
+/**
+ * The Email channel's ledger of the mail it already wrote onto a contact's timeline (E-19): `dedupeKey` is `<mailbox uuid>:in:<provider
+ * message id>` or `<mailbox uuid>:out:<Message-ID>`. Mirrors migrations/20261225090000_mail_timeline_entries.sql.
+ */
+export const mailTimelineEntries = pgTable(
+  'mail_timeline_entries',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    dedupeKey: text('dedupe_key').notNull(),
+    activityId: idColumn('activity_id').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('mail_timeline_entries_org_id_dedupe_key_key').on(t.orgId, t.dedupeKey),
+    foreignKey({
+      name: 'mail_timeline_entries_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('chk_mail_timeline_entries_key', sql`char_length(${t.dedupeKey}) between 1 and 500`),
+    foreignKey({
+      name: 'fk_mail_timeline_entries_activity',
+      columns: [t.orgId, t.activityId],
+      foreignColumns: [contactActivities.orgId, contactActivities.id],
+    }).onDelete('cascade'),
+    index('idx_mail_timeline_entries_activity').on(t.orgId, t.activityId),
   ],
 );
 

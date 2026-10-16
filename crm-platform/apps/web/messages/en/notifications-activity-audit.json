@@ -164,6 +164,26 @@
         "title": "Test notification",
         "titleNoName": "Test notification",
         "bodyNoActor": "If you can read this, live notifications are working."
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} renews on {date, date, medium}",
+        "bodyAuto": "Your card will be charged automatically on that date to renew {name}. Cancel before then to stop it.",
+        "titleManual": "{name} is paid until {date, date, medium}",
+        "bodyManual": "{name} does not renew by itself. Pay again before that date to keep it running without a pause.",
+        "titleEnding": "{name} ends on {date, date, medium}",
+        "bodyEnding": "You cancelled {name}, so it stops working on that date. Subscribe again before then to keep it.",
+        "title": "{name}: renewal coming up",
+        "titleNoName": "A paid app renewal is coming up"
+      },
+      "marketplace_payment_failed": {
+        "title": "Payment for {name} failed",
+        "body": "The card payment did not go through. The app keeps working for a few days while the payment provider tries again. Pay now, or fix your payment method, to avoid a pause.",
+        "titleNoName": "A paid app payment failed"
+      },
+      "marketplace_subscription_ended": {
+        "title": "{name} subscription ended",
+        "body": "The app is paused and its data and settings are kept. Subscribe again to switch it back on.",
+        "titleNoName": "A paid app subscription ended"
       }
     },
     "live": {
@@ -195,7 +215,10 @@
         "waba_group_suspension_cleared": "WhatsApp group active again",
         "device_group_join_request": "Request to join a group",
         "device_group_removed": "Removed from a WhatsApp group",
-        "test": "Test notification"
+        "test": "Test notification",
+        "marketplace_renewal_due": "Paid app renewal coming up",
+        "marketplace_payment_failed": "Paid app payment failed",
+        "marketplace_subscription_ended": "Paid app subscription ended"
       },
       "generic": "You have a new notification",
       "paused": "Live updates are paused, so new alerts can arrive up to a minute late. Reload the page to reconnect."
@@ -383,6 +406,18 @@
         "test": {
           "label": "Test notification",
           "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."
+        },
+        "marketplace_renewal_due": {
+          "label": "Paid app renewal reminder",
+          "hint": "A paid app's period ends in a few days: it renews by card, is paid until a date, or was cancelled and ends."
+        },
+        "marketplace_payment_failed": {
+          "label": "Paid app payment failed",
+          "hint": "The card renewal of a paid app did not go through and needs your attention."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Paid app subscription ended",
+          "hint": "A paid app's subscription ended and the app was paused."
         }
       },
       "loading": "Loading your preferences",

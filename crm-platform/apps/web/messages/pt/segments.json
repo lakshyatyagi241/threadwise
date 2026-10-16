@@ -26,13 +26,15 @@
       "lastActivityAt": "Última atividade",
       "minor": "Marcado como menor",
       "dateOfBirth": "Data de nascimento",
-      "age": "Idade (anos)"
+      "age": "Idade (anos)",
+      "timezone": "Fuso horário"
     },
     "fieldGroups": {
       "journey": "Jornada",
       "who": "Quem",
       "activity": "Atividade",
-      "properties": "Propriedades"
+      "properties": "Propriedades",
+      "company": "Propriedade da empresa"
     },
     "operators": {
       "equals": "é",

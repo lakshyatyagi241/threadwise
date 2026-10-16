@@ -102,6 +102,7 @@ export const API_SCOPE_RESOURCES = [
   'contacts',
   'contact-groups',
   'deals',
+  'companies',
   'flows',
   'templates',
   'auto-replies',

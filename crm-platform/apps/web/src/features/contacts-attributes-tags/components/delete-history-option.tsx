@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import { useTranslations } from 'next-intl';
 import { Checkbox } from '@crm/ui';
 
@@ -17,11 +18,13 @@ export function DeleteHistoryOption({
   onChange: (keep: boolean) => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.erase');
+  // Several confirmations (the list's, the selection's, the quick view's) can be on the page at once: one id each.
+  const id = useId();
   return (
     <div className="mt-3 space-y-3">
       <p>{many ? t('scopeMany') : t('scope')}</p>
       <Checkbox
-        id={many ? 'keep-history-bulk' : 'keep-history'}
+        id={id}
         label={t('keepHistory')}
         checked={keepHistory}
         onChange={(e) => onChange(e.target.checked)}

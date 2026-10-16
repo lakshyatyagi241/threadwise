@@ -39,6 +39,7 @@ export function ViewsBar({
   onSelect,
   onPreset,
   meId,
+  count,
   can,
 }: {
   /** The filters on screen now (what "Create view" and "Save current filters" keep). */
@@ -56,6 +57,8 @@ export function ViewsBar({
   onPreset: (preset: PresetView) => void;
   /** The signed-in person (what "My contacts" means). */
   meId: string;
+  /** How many contacts the open view holds, shown in a pill beside its name; absent while that is not known. */
+  count?: number;
   can: { create: boolean; update: boolean; delete: boolean };
 }) {
   const t = useTranslations(NS);
@@ -87,7 +90,7 @@ export function ViewsBar({
           aria-expanded={pickerOpen}
           aria-label={t('picker.title')}
           onClick={() => setPickerOpen((o) => !o)}
-          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-primary bg-background px-4 text-sm font-medium text-primary outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           <span className="truncate">
             {activeId === ''
@@ -96,6 +99,11 @@ export function ViewsBar({
                 : t('all')
               : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
           </span>
+          {count !== undefined && (
+            <span className="rounded-full bg-primary/10 px-2 text-[11px] font-semibold leading-5 tabular-nums">
+              {count.toLocaleString()}
+            </span>
+          )}
           <ChevronDownIcon className="size-3.5" />
         </button>
         <Popover

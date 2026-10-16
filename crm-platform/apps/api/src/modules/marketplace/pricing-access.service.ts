@@ -141,6 +141,8 @@ export function cardPricing(f: PricingFacts, ev: PricingEvaluation): MarketCardP
     model: f.pricing.pricingModel,
     amount: f.pricing.priceAmount,
     currency: f.pricing.priceCurrency,
+    billingMode: f.pricing.billingMode,
+    annualAmount: f.pricing.annualAmount,
     trialDays: f.pricing.trialDays,
     trialAvailable: trialAvailable({
       model: f.pricing.pricingModel,
@@ -154,7 +156,7 @@ export function cardPricing(f: PricingFacts, ev: PricingEvaluation): MarketCardP
     includedBy: ev.access === 'included' ? ev.includedBy : null,
     checkoutPath:
       paid && (ev.access === 'subscription_required' || ev.access === 'entitled')
-        ? marketCheckoutPath(marketPackSlug(f.uuid))
+        ? marketCheckoutPath(marketPackSlug(f.uuid), f.slug)
         : null,
   };
 }

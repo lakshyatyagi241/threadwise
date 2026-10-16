@@ -3,6 +3,8 @@ import { sql, type SQL } from 'drizzle-orm';
 import {
   ALLOW,
   decideSendWindow,
+  type ContactSendWindow,
+  type ContactTimezoneSource,
   policyOfSettings,
   resolveContactZones,
   windowActive,
@@ -53,6 +55,8 @@ interface ContactFacts {
   id: number;
   timezone: string | null;
   phone: string | null;
+  /** The contact's normalized number as digits, to match a send that only knows a phone. */
+  digits: string | null;
 }
 
 /**
@@ -166,6 +170,154 @@ export class SendWindowService {
     return summarise(decisions);
   }
 
+  /**
+   * An audience known only by phone numbers (a store's customers, a typed test recipient): the same windows, each number matched to its
+   * contact when there is one, else read on the country code of the number itself. Keyed by the number as digits.
+   */
+  async checkPhones(
+    orgId: number,
+    kind: SendWindowKind,
+    phones: readonly string[],
+    options: SendWindowOptions = {},
+  ): Promise<Map<string, SendWindowDecision>> {
+    const now = options.now ?? this.now();
+    const unique = [...new Set(phones.map((p) => p.replace(/\D+/g, '')).filter((d) => d !== ''))];
+    const decisions = new Map<string, SendWindowDecision>();
+    try {
+      const policy = options.policy ?? (await this.policy(orgId, options.tx));
+      if (!windowActive(policy, kind) || unique.length === 0) {
+        for (const d of unique) decisions.set(d, ALLOW);
+        return decisions;
+      }
+      const keys = await this.run(orgId, options.tx, (t) => this.timezoneKeys(t, orgId));
+      const memo = new Map<string, SendWindowDecision>();
+      for (let i = 0; i < unique.length; i += CHUNK) {
+        const part = unique.slice(i, i + CHUNK);
+        const where = sql`c.normalized_phone IN (${sql.join(
+          part.flatMap((d) => [sql`${d}`, sql`${`+${d}`}`]),
+          sql`, `,
+        )})`;
+        const rows = await this.run(orgId, options.tx, (t) => this.factRows(t, orgId, where, keys));
+        const byDigits = new Map<string, ContactFacts>();
+        for (const r of rows) if (r.digits && !byDigits.has(r.digits)) byDigits.set(r.digits, r);
+        for (const d of part) {
+          const f = byDigits.get(d);
+          const resolved = resolveContactZones(policy, {
+            timezone: f?.timezone ?? null,
+            phone: f?.phone ?? phoneOfTarget({ phone: d }),
+          });
+          const key = `${resolved.source}|${resolved.zones.join(',')}|${resolved.fallback.zone}`;
+          let dec = memo.get(key);
+          if (!dec) {
+            dec = decideSendWindow(kind, policy, resolved, now);
+            memo.set(key, dec);
+          }
+          decisions.set(d, dec);
+        }
+      }
+    } catch (err) {
+      const d = this.unreadable(orgId, err, now);
+      decisions.clear();
+      for (const p of unique) decisions.set(p, d);
+    }
+    return decisions;
+  }
+
+  /**
+   * The clock marketing messages to ONE contact are read on, what the quiet hours say about it right now, and what is already waiting
+   * (BL-193). The same facts and the same rule as a send, so the screen can never disagree with the sender.
+   */
+  async contactWindow(
+    orgId: number,
+    contactId: number,
+    options: SendWindowOptions = {},
+  ): Promise<ContactSendWindow> {
+    const now = options.now ?? this.now();
+    const policy = options.policy ?? (await this.policy(orgId, options.tx));
+    const facts = await this.contactFacts(orgId, { contactId }, options.tx);
+    const stored = await this.run(orgId, options.tx, async (t) => {
+      const res = await t.execute(sql`
+        SELECT timezone, timezone_source FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`);
+      const r = (res.rows as Raw[])[0];
+      return {
+        timezone: typeof r?.timezone === 'string' ? r.timezone : null,
+        source: (typeof r?.timezone_source === 'string'
+          ? r.timezone_source
+          : null) as ContactTimezoneSource | null,
+      };
+    });
+    const resolved = resolveContactZones(policy, {
+      timezone: facts?.timezone ?? null,
+      phone: facts?.phone ?? null,
+    });
+    const decision = decideSendWindow('message', policy, resolved, now);
+    const single = resolved.zones.length === 1 ? (resolved.zones[0] ?? null) : null;
+    const held = await this.run(orgId, options.tx, (t) => this.heldFor(t, orgId, contactId));
+    return {
+      timezone: stored.timezone,
+      timezoneSource: stored.timezone === null ? null : (stored.source ?? 'staff'),
+      clock: {
+        zones: resolved.zones,
+        zone: single,
+        source: resolved.source,
+        localTime: single ? localClock(now, single) : null,
+      },
+      quietHours: !windowActive(policy, 'message')
+        ? 'off'
+        : decision.decision === 'hold'
+          ? 'held'
+          : 'open',
+      nextSendAt: decision.decision === 'hold' ? decision.until : null,
+      heldCount: held.count,
+      heldUntil: held.until?.toISOString() ?? null,
+    };
+  }
+
+  /** What is already waiting for the quiet hours for one contact, across every sender that holds. */
+  private async heldFor(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+  ): Promise<{ count: number; until: Date | null }> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n, min(at) AS until FROM (
+        SELECT held_until AS at FROM broadcast_contacts
+          WHERE org_id = ${orgId} AND contact_id = ${contactId} AND status = 'pending' AND held_until IS NOT NULL
+        UNION ALL
+        SELECT held_until FROM wp_campaign_contacts
+          WHERE org_id = ${orgId} AND contact_id = ${contactId} AND status = 'queued' AND held_until IS NOT NULL
+        UNION ALL
+        SELECT held_until FROM scheduled_message_contacts
+          WHERE org_id = ${orgId} AND contact_id = ${contactId} AND status = 'pending' AND held_until IS NOT NULL
+        UNION ALL
+        SELECT r.held_until FROM line_broadcast_recipients r
+          JOIN conversations c ON c.org_id = r.org_id AND c.id = r.conversation_id
+          WHERE r.org_id = ${orgId} AND c.contact_id = ${contactId} AND r.status = 'pending' AND r.held_until IS NOT NULL
+        UNION ALL
+        SELECT r.held_until FROM facebook_broadcast_recipients r
+          JOIN conversations c ON c.org_id = r.org_id AND c.id = r.conversation_id
+          WHERE r.org_id = ${orgId} AND c.contact_id = ${contactId} AND r.status = 'pending' AND r.held_until IS NOT NULL
+        UNION ALL
+        SELECT r.held_until FROM telegram_broadcast_recipients r
+          JOIN conversations c ON c.org_id = r.org_id AND c.id = r.conversation_id
+          WHERE r.org_id = ${orgId} AND c.contact_id = ${contactId} AND r.status = 'pending' AND r.held_until IS NOT NULL
+        UNION ALL
+        SELECT r.held_until FROM viber_broadcast_recipients r
+          JOIN conversations c ON c.org_id = r.org_id AND c.id = r.conversation_id
+          WHERE r.org_id = ${orgId} AND c.contact_id = ${contactId} AND r.status = 'pending' AND r.held_until IS NOT NULL
+        UNION ALL
+        SELECT (m.meta -> 'hold' ->> 'until')::timestamptz FROM messages m
+          JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+          WHERE m.org_id = ${orgId} AND c.contact_id = ${contactId} AND m.direction = 'out' AND m.status = 'queued'
+            AND m.meta ? 'hold' AND m.created_at > now() - interval '7 days'
+      ) x`);
+    const r = (res.rows as Raw[])[0];
+    return {
+      count: Number(r?.n ?? 0),
+      until: r?.until ? new Date(r.until as string) : null,
+    };
+  }
+
   // --- facts ------------------------------------------------------------------------------------------------------------------
 
   private async contactFacts(
@@ -197,8 +349,12 @@ export class SendWindowService {
     where: SQL,
     keys: readonly string[],
   ): Promise<ContactFacts[]> {
+    // The zone stored on the contact (BL-193) wins over the older time zone property.
     const tz = sql.join(
-      keys.map((k) => sql`NULLIF(btrim(c.data ->> ${k}), '')`),
+      [
+        sql`NULLIF(btrim(c.timezone), '')`,
+        ...keys.map((k) => sql`NULLIF(btrim(c.data ->> ${k}), '')`),
+      ],
       sql`, `,
     );
     const res = await tx.execute(sql`
@@ -210,6 +366,10 @@ export class SendWindowService {
       id: Number(r.id),
       timezone: typeof r.tz === 'string' ? r.tz : null,
       phone: phoneForZone(r),
+      digits:
+        typeof r.normalized_phone === 'string'
+          ? r.normalized_phone.replace(/\D+/g, '') || null
+          : null,
     }));
   }
 
@@ -243,6 +403,16 @@ export class SendWindowService {
  */
 export function holdsPurpose(ledgerPurpose: 'marketing' | 'utility' | null | undefined): boolean {
   return ledgerPurpose === 'marketing';
+}
+
+/** `HH:mm` on the clock of `zone` at `at`. */
+function localClock(at: Date, zone: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone: zone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).format(at);
 }
 
 function summarise(decisions: Map<number, SendWindowDecision>): SendWindowMany {

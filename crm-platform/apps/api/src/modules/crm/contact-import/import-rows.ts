@@ -2,6 +2,7 @@ import {
   GROUP_NAME_MAX,
   IMPORT_FIELDS,
   TAG_NAME_MAX,
+  canonicalZone,
   canonicalizePhone,
   composeDisplayName,
   detectImportColumns,
@@ -30,6 +31,8 @@ export interface ParsedRow {
   memo?: string;
   status?: string;
   source?: string;
+  /** An IANA zone (canonical spelling), only when the file has a time zone column and the cell is a real zone. */
+  timezone?: string;
   /** A year-first date of birth that can be believed (BL-190). */
   dateOfBirth?: string;
   /** The minor column said yes: flag the contact (source `import`). No, blank and unknown words are left out: a file never clears a flag. */
@@ -148,6 +151,10 @@ export function extractRow(
   const email = cell('email').toLowerCase();
   if (email && (!EMAIL.test(email) || email.length > 255)) return reject('invalid_email');
 
+  const rawZone = cell('timezone');
+  const timezone = rawZone ? canonicalZone(rawZone) : null;
+  if (rawZone && timezone === null) return reject('invalid_timezone');
+
   const groups = splitList(cell('group'));
   if (groups.some((g) => g.length > GROUP_NAME_MAX)) return reject('group_name_too_long');
   const tags = splitList(cell('tags'));
@@ -182,6 +189,7 @@ export function extractRow(
       memo: opt(cell('memo'), 2000),
       status: opt(cell('status'), 64),
       source: opt(cell('source'), 128),
+      ...(timezone ? { timezone } : {}),
       ...(dateOfBirth ? { dateOfBirth } : {}),
       ...(minor ? { minor: true as const } : {}),
       groups,

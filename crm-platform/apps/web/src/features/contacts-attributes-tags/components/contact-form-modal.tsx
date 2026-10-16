@@ -56,6 +56,7 @@ import {
 import { CustomFieldsSection, isFormField } from './custom-fields-section';
 import { ErrorLine } from './error-line';
 import { LostReasonFields, useLostReasonChoices } from './lost-reason';
+import { TimezoneSelect } from './timezone-select';
 import {
   OTHER_REASON,
   isLostStage,
@@ -119,6 +120,7 @@ function ContactForm({
   const t = useTranslations('contacts-attributes-tags.form');
   const tt = useTranslations('contacts-attributes-tags.tags');
   const tl = useTranslations('contacts-attributes-tags.lost');
+  const tz = useTranslations('contacts-attributes-tags.timezone');
   const canPickCompany = useCanPickCompany();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -270,6 +272,7 @@ function ContactForm({
             contact.leadScore,
             contact.ownerId,
             contact.companyId,
+            contact.timezone,
           ),
         );
         const before = initialGroups.current;
@@ -516,6 +519,13 @@ function ContactForm({
             maxLength={80}
             placeholder={t('languagePlaceholder')}
             onChange={(e) => set('language', e.target.value)}
+          />
+        </Field>
+        <Field label={tz('title')} htmlFor={id('timezone')} hint={tz('hint')}>
+          <TimezoneSelect
+            id={id('timezone')}
+            value={values.timezone}
+            onChange={(zone) => set('timezone', zone)}
           />
         </Field>
         <Field label={t('dateOfBirth')} htmlFor={id('dob')} hint={t('dateOfBirthHint')}>

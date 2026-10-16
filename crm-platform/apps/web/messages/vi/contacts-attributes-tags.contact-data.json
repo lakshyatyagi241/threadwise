@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Giao dịch",
+        "loading": "Đang tải giao dịch",
+        "empty": "Liên hệ này chưa có giao dịch nào.",
+        "unavailable": "Giao dịch không có trong gói của bạn, hoặc vai trò của bạn không có quyền truy cập.",
+        "listLabel": "Giao dịch của liên hệ này",
+        "openRollup": "{count, plural, other {# giao dịch đang mở}}",
+        "wonRollup": "{count, plural, other {# giao dịch đã thắng}}",
+        "noValue": "Chưa có giá trị",
+        "capped": "Đang hiển thị {count} giao dịch đầu tiên. Tổng ở trên tính cho tất cả.",
+        "pipeline": "Quy trình bán hàng {name}",
+        "closes": "Dự kiến chốt {date}",
+        "owner": "Người phụ trách {name}",
+        "status": {
+          "open": "Đang mở",
+          "won": "Thắng",
+          "lost": "Thua"
+        }
+      },
+      "conversations": {
+        "title": "Hội thoại",
+        "loading": "Đang tải hội thoại",
+        "empty": "Không tìm thấy hội thoại nào của liên hệ này.",
+        "listLabel": "Hội thoại của liên hệ này",
+        "unread": "{count, plural, other {# tin nhắn chưa đọc}}",
+        "open": "Mở",
+        "openLabel": "Mở hội thoại {title}",
+        "noPreview": "Chưa có tin nhắn",
+        "lastMessage": "Tin nhắn gần nhất {time}",
+        "assignedTo": "Giao cho {name}",
+        "unassigned": "Chưa giao",
+        "footnote": "Tìm theo số điện thoại, địa chỉ email hoặc tên của liên hệ. Hội thoại đã lưu trữ không được liệt kê.",
+        "status": {
+          "open": "Đang mở",
+          "pending": "Đang chờ",
+          "snoozed": "Tạm hoãn",
+          "resolved": "Đã giải quyết",
+          "closed": "Đã đóng",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Lịch sử trường liên hệ",
+        "title": "Lịch sử trường liên hệ",
+        "close": "Đóng",
+        "loading": "Đang tải lịch sử",
+        "empty": "Chưa ghi nhận thay đổi trường nào của liên hệ này.",
+        "loadMore": "Tải thêm",
+        "changedTo": "đổi thành",
+        "noValue": "trống",
+        "by": "Bởi {actor}",
+        "actor": {
+          "user": "một người dùng",
+          "system": "hệ thống",
+          "api": "API"
+        },
+        "fields": {
+          "name": "Họ và tên",
+          "firstName": "Tên",
+          "lastName": "Họ",
+          "email": "Email",
+          "phone": "Điện thoại",
+          "companyId": "Công ty",
+          "ownerId": "Người phụ trách",
+          "lifecycleStage": "Giai đoạn vòng đời",
+          "lifecycleState": "Trạng thái vòng đời",
+          "status": "Trạng thái",
+          "lostReason": "Lý do thua",
+          "leadScore": "Điểm khách hàng tiềm năng",
+          "source": "Nguồn",
+          "isUnsubscribed": "Đã hủy đăng ký"
+        }
+      },
+      "stats": {
+        "title": "Thống kê giao tiếp",
+        "loading": "Đang tải thống kê",
+        "conversations": "Hội thoại",
+        "unread": "Tin nhắn chưa đọc",
+        "lastInbound": "Tin nhắn nhận gần nhất",
+        "lastOutbound": "Tin nhắn gửi gần nhất",
+        "calls": "Cuộc gọi",
+        "callsAnswered": "Cuộc gọi đã nghe",
+        "callsMissed": "Cuộc gọi nhỡ",
+        "callMinutes": "Số phút gọi",
+        "openTasks": "Tác vụ đang mở",
+        "leadScore": "Điểm khách hàng tiềm năng",
+        "lastActivity": "Hoạt động gần nhất",
+        "created": "Ngày tạo",
+        "none": "Chưa có",
+        "atLeast": "{count}+",
+        "footnote": "Số liệu tin nhắn tính trên các hội thoại tìm được của liên hệ này (theo số điện thoại, địa chỉ email hoặc tên). Số liệu cuộc gọi tính trong một năm gần nhất, khớp theo số điện thoại hoặc tên.",
+        "callsPartial": "Có nhiều cuộc gọi khớp hơn mức có thể đọc, nên số liệu cuộc gọi có thể thiếu."
+      }
+    }
+  }
+}

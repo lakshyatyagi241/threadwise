@@ -497,6 +497,18 @@ export const ERROR_CODES = {
   COMPANY_PROPERTY_INVALID: 'COMPANY_PROPERTY_INVALID',
   /** A property the workspace marked required has no value (honouring its "show only when" rule). */
   COMPANY_REQUIRED_PROPERTY_MISSING: 'COMPANY_REQUIRED_PROPERTY_MISSING',
+  /** A condition or order on the companies list names a property that does not exist, is inactive, is computed or does not suit the operator. */
+  COMPANY_FILTER_INVALID: 'COMPANY_FILTER_INVALID',
+  /** The CSV of a company import cannot be read at all (no header, no name column, too many rows). Row-level problems are reported per row. */
+  COMPANY_IMPORT_INVALID: 'COMPANY_IMPORT_INVALID',
+  /** A company export would hold more rows than one file may (COMPANY_EXPORT_MAX): narrow it with the filters. */
+  COMPANY_EXPORT_TOO_LARGE: 'COMPANY_EXPORT_TOO_LARGE',
+  /** "Generate brief": no AI key is available to this workspace (its own, or the platform's), so nothing was sent anywhere. */
+  COMPANY_BRIEF_AI_UNAVAILABLE: 'COMPANY_BRIEF_AI_UNAVAILABLE',
+  /** "Generate brief": the AI provider refused the key or failed; the previous brief, if any, is kept. */
+  COMPANY_BRIEF_PROVIDER_FAILED: 'COMPANY_BRIEF_PROVIDER_FAILED',
+  /** "Generate brief": the company was asked for a brief again too soon. */
+  COMPANY_BRIEF_RATE_LIMITED: 'COMPANY_BRIEF_RATE_LIMITED',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)

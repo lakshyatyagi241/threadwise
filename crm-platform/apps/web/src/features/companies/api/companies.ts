@@ -8,12 +8,14 @@ import {
 } from '@tanstack/react-query';
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
+import { toApiError } from '@/lib/api/errors';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { chunk } from '../lib/selection';
 import {
   companyActivityPageSchema,
   companyBulkResultSchema,
   companyContactsPageSchema,
+  companyImportResultSchema,
   companyIndustriesResponseSchema,
   companyPageResponseSchema,
   companyResponseSchema,
@@ -98,6 +100,34 @@ export const companiesApi = {
     });
     return page.data;
   },
+  /** The CSV of the list as it is filtered and ordered, with the chosen columns (needs `record.companies.export`). */
+  async exportCsv(query: Query, columns: readonly string[], signal?: AbortSignal): Promise<Blob> {
+    const params = new URLSearchParams();
+    for (const [k, v] of Object.entries({ ...query, columns: columns.join(',') }))
+      if (v !== undefined && v !== '') params.set(k, String(v));
+    const res = await fetch(`/api/v2/companies/export?${params.toString()}`, {
+      headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+      credentials: 'same-origin',
+      signal,
+    });
+    if (!res.ok) {
+      let json: unknown;
+      try {
+        json = await res.json();
+      } catch {
+        json = undefined;
+      }
+      throw toApiError(res.status, json, res.headers.get('x-request-id'));
+    }
+    return res.blob();
+  },
+  /** The text of a CSV file in, what was made and what was not out (needs `record.companies.import`). */
+  importCsv: (csv: string, matchExisting: boolean) =>
+    apiFetch('/companies/import', {
+      method: 'POST',
+      body: { csv, matchExisting },
+      schema: companyImportResultSchema,
+    }),
   async searchContacts(q: string, signal?: AbortSignal): Promise<ContactHit[]> {
     const page = await apiFetch('/contacts', {
       query: { q: q.trim() || undefined, limit: 15 },

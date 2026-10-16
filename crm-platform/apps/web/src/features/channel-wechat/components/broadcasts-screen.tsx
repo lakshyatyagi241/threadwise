@@ -36,6 +36,8 @@ const pillLink =
  */
 export function BroadcastsScreen() {
   const t = useTranslations('wechat.broadcasts');
+  // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
+  const tHold = useTranslations('compliance-center.hold');
   const qc = useQueryClient();
   const { toast } = useToast();
   const canManage = useCan('wechat.broadcasts.manage');
@@ -157,6 +159,14 @@ export function BroadcastsScreen() {
                         >
                           {t(`status.${b.status}`)}
                         </span>
+                        {b.heldUntil && (
+                          <div
+                            className="mt-1 font-mono text-[10.5px] text-warning"
+                            data-testid="broadcast-held"
+                          >
+                            {tHold('heldUntil', { when: new Date(b.heldUntil).toLocaleString() })}
+                          </div>
+                        )}
                       </td>
                       <td className="px-5 py-3">
                         {canManage && (

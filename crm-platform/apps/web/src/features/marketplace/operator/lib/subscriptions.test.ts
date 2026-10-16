@@ -333,10 +333,18 @@ describe('the summary', () => {
   it('adds the counts of every app', () => {
     const rows = [
       summaryRow({
-        counts: { active: 5, trialing: 2, comped: 1, canceling: 1, ended: 3, total: 12 },
+        counts: {
+          active: 5,
+          trialing: 2,
+          comped: 1,
+          canceling: 1,
+          pastDue: 1,
+          ended: 3,
+          total: 12,
+        },
       }),
       summaryRow({
-        counts: { active: 1, trialing: 0, comped: 2, canceling: 0, ended: 1, total: 4 },
+        counts: { active: 1, trialing: 0, comped: 2, canceling: 0, pastDue: 0, ended: 1, total: 4 },
       }),
     ];
     expect(sumCounts(rows)).toEqual({
@@ -344,6 +352,7 @@ describe('the summary', () => {
       trialing: 2,
       comped: 3,
       canceling: 1,
+      pastDue: 1,
       ended: 4,
       total: 16,
     });
@@ -352,6 +361,7 @@ describe('the summary', () => {
       trialing: 0,
       comped: 0,
       canceling: 0,
+      pastDue: 0,
       ended: 0,
       total: 0,
     });

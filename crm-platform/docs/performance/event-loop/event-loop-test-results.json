@@ -3,12 +3,70 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "tools/event-loop-audit/load/run-load.mjs (k6 0.49.0, the built API and worker, Postgres and Redis containers; idle, normal, peak, spike, 10 minute soak)",
+      "status": "RAN; baselines recorded, NOT stable",
+      "ranOn": "2026-10-16, branch claude/event-loop-load-baselines, commit 18f84c6 (before the rebase onto main)",
+      "rawData": "evidence/load-baseline.json (final run), evidence/load-run1-collapse-10-40-120.json (first run at higher rates)",
+      "history": [
+        "First full run at 10 / 40 / 120 req/s: the stack answered at 10 req/s (p50 0.8 s) and collapsed at 40 (16 % failed, 2,425 iterations dropped) with the API's loop delay p99 near 43 ms throughout. Rates lowered to 5 / 20 / 60.",
+        "Three diagnostic runs showed the same workload giving caller p50 of 39 ms, 226 ms and 235 ms on different occasions; Postgres sessions were mostly idle in transaction, waiting on the API. A host-to-container round-trip calibration, a /health control and a pg_stat_activity sampler were added.",
+        "Final run at 5 / 20 / 60 req/s: normal p95 0.5 s, peak p95 6.3 s (1 % failed), spike p50 12.7 s (12 % failed), soak 10 minutes 0 failures with flat memory; loop delay p99 25 to 33 ms in every profile."
+      ],
+      "notShown": [
+        "a repeatable result (the environment moved several-fold between runs)",
+        "production-shaped rates",
+        "12 h or 24 h soak",
+        "webhooks, broadcasts, automations, reporting, a populated inbox",
+        "the cause of the seconds-long wait in the authenticated path (EL-B16)"
+      ]
+    },
+    {
       "suite": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
       "command": "vitest run test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
       "status": "PASSED",
       "tests": 27,
       "passed": 27,
       "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
+    },
+    {
+      "suite": "tools/event-loop-audit/scrape-demo.mjs --stall (real Prometheus v2.55.0 + Alertmanager v0.27.0, the built API, worker and probe as separate processes, Postgres and Redis containers, a local HTTP receiver)",
+      "status": "PASSED after one fix to the demo itself",
+      "ranOn": "2026-10-16, branch claude/event-loop-ops-wiring",
+      "rawData": "evidence/scrape-demo.json",
+      "history": [
+        "Earlier branch (API and worker only, no Alertmanager, no probe): run 1 21/21, run 2 23/24 (EventLoopBlockingWithImpact did not fire because the request histogram cannot see queueing; rule fixed), run 3 25/25.",
+        "This branch, full run with --stall (about 35 minutes): 40/41. The one FAIL, 'a healthy /health reads fast from the probe', read the quantile before rate() had two samples (n/a): a timing bug in the demo, not in the probe. Every other check passed, including WorkerEventLoopBlockingWithQueueImpact from a real worker stall with 20,000 queued jobs, EventLoopLongStallCritical from a real 12 s block, ApiCallerLatencyHigh, and firing plus resolved notifications at the receiver.",
+        "Fix: the demo waits for the quantile (up to 60 s). Rerun without the stall phases (about 10 minutes): 26/26, the probe's healthy /health p95 reads 0.024 s. The stall phases were NOT rerun after that fix; evidence/scrape-demo.json is the 40/41 full run."
+      ],
+      "observed": {
+        "apiStall": "1.5 s busy every 1.7 s: loop delay p95 1.515 s, callers 1.474 s, probe 2.258 s, API request histogram 0.007 s",
+        "workerStall": "600 ms busy every 0.7 s with 20,000 queued jobs: loop delay p95 0.607 s, job wait p95 1,283 s, 4,193 jobs done",
+        "longBlock": "one 12.0 s block: delay max 12.088 s, EventLoopLongStallCritical and EventLoopLongStallWarning fired, up dipped to 0, RuntimeMetricsTargetDown stayed inactive"
+      },
+      "notShown": [
+        "a production deployment (the overlay was validated, not run on a server)",
+        "delivery to a real chat or pager destination (the receiver is a local HTTP server in the script)",
+        "any realistic traffic: the load was the stall driver, a /health poller and queue jobs",
+        "the probe through the public ingress"
+      ]
+    },
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure (probe.spec.ts 11 + job-metrics.spec.ts 17 + event-loop-monitor.spec.ts 27)",
+      "status": "PASSED",
+      "tests": 55,
+      "passed": 55,
+      "ranOn": "2026-10-16, branch claude/event-loop-ops-wiring",
+      "note": "probe.spec.ts covers the metrics-listener guard (loopback / token), the target parser, probeOnce and Prober against real local HTTP servers (ok, 5xx, hang, closed port, slow), no-overlap rounds, and a child-process server whose loop is blocked 400 ms of every 600 ms: the probe sees over 200 ms. The first run had 11 failures because the new exports were missing from the module's index.ts; fixed. eslint clean; tsc --noEmit on the API clean after rebuilding the shared packages (stale dist of @crm/contracts caused unrelated errors before)."
+    },
+    {
+      "suite": "deploy/hostinger (observability.compose.yml, observability-up.sh, docker-compose.yml)",
+      "status": "PASSED (static)",
+      "note": "docker compose config on the base file and on base+overlay with dummy env and secret files; bash -n on observability-up.sh (run in a bash container). The script itself has not been run, and nothing was deployed."
+    },
+    {
+      "suite": "deploy/observability/event-loop.rules.yml with promtool, after the rule change",
+      "status": "PASSED",
+      "note": "check rules: 15 rules; test rules: SUCCESS on the extended file (added: probe job down, a 3 s stall (warning only, resolves), a 12 s stall (critical on the worker), a quiet 0.1 s, ApiCallerLatencyHigh slow / pending / fine, ApiProbeFailing). Earlier: 11 rules, 11 case groups."
     },
     {
       "suite": "apps/api/test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (booted worker module, Postgres and Redis containers)",
@@ -156,11 +214,10 @@
     }
   ],
   "notVerified": [
-    "Prometheus rules (promtool)",
-    "scrape of a real container",
+    "a Prometheus/Alertmanager/probe stack on a real server",
+    "delivery to a real chat or pager destination",
     "dashboards",
-    "any load, spike or soak test of the real application",
-    "queue job metrics",
+    "a 12 h or 24 h soak, or any load test on a dedicated host",
     "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
   ]
 }

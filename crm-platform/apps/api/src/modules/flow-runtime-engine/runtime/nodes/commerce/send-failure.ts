@@ -1,4 +1,5 @@
 import type { NodeContext, NodeResult, SendOutcome } from '../../types';
+import { haltOf } from '../../halt';
 
 /**
  * What a failed send does to a commerce node: the channel being down halts the run (it tries again by itself); any other refusal ends
@@ -9,7 +10,7 @@ export function sendFailed(
   mode: 'skip' | 'end',
   ctx: NodeContext,
 ): NodeResult | null {
-  if (out.halt) return { kind: 'halt', reason: out.error };
+  if (out.halt) return haltOf(out);
   ctx.note(`send failed: ${out.error}`);
   return mode === 'end' ? { kind: 'fail', code: out.code, reason: out.error } : null;
 }

@@ -26,13 +26,15 @@
       "lastActivityAt": "Son etkinlik",
       "minor": "Reşit olmayan olarak işaretlendi",
       "dateOfBirth": "Doğum tarihi",
-      "age": "Yaş (yıl)"
+      "age": "Yaş (yıl)",
+      "timezone": "Saat dilimi"
     },
     "fieldGroups": {
       "journey": "Yolculuk",
       "who": "Kim",
       "activity": "Etkinlik",
-      "properties": "Özellikler"
+      "properties": "Özellikler",
+      "company": "Şirket özelliği"
     },
     "operators": {
       "equals": "eşittir",

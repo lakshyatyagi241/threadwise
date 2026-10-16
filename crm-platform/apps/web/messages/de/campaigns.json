@@ -1475,9 +1475,11 @@
           "sent": "Gesendet",
           "delivered": "Zugestellt",
           "read": "Gelesen",
-          "failed": "Fehlgeschlagen"
+          "failed": "Fehlgeschlagen",
+          "held": "Zurückgehalten"
         },
-        "charged": "Belastet: {amount}"
+        "charged": "Belastet: {amount}",
+        "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)"
       },
       "send": {
         "whenTitle": "Sendezeitpunkt",

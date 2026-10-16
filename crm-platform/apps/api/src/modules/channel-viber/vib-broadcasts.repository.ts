@@ -42,6 +42,10 @@ export interface RecipientRow {
   userId: string;
   title: string | null;
   conversationId: number | null;
+  /** The user's contact, for the quiet hours and the consent check. */
+  contactId: number | null;
+  /** The recipient was held for the quiet hours and is being released now (BL-191). */
+  wasHeld: boolean;
 }
 
 interface Raw {
@@ -279,24 +283,39 @@ export class VibBroadcastsRepository {
   }
 
   /** Claims the next users: no two workers ever hold the same one. */
-  async claim(tx: Tx, orgId: number, broadcastId: number, limit: number): Promise<RecipientRow[]> {
+  async claim(
+    tx: Tx,
+    orgId: number,
+    broadcastId: number,
+    limit: number,
+    /** Only recipients after this id: a run visits each recipient once, so one it held for the quiet hours is not claimed again by the same run. */
+    afterId = 0,
+  ): Promise<RecipientRow[]> {
     // A materialized CTE: a subquery inside `IN (...)` may be re-run by the planner and claim more than `limit` rows.
     const res = await tx.execute(sql`
       WITH picked AS MATERIALIZED (
         SELECT id FROM viber_broadcast_recipients
         WHERE org_id = ${orgId} AND viber_broadcast_id = ${broadcastId} AND status = 'pending'
+          -- A recipient held for the quiet hours (BL-191) is left alone until its hour has come.
+          AND (held_until IS NULL OR held_until <= now()) AND id > ${afterId}
         ORDER BY id LIMIT ${limit} FOR UPDATE SKIP LOCKED
+      ), claimed AS (
+        UPDATE viber_broadcast_recipients r SET status = 'processing'
+        FROM picked
+        WHERE r.org_id = ${orgId} AND r.id = picked.id
+        RETURNING r.id, r.viber_user_id, r.title, r.conversation_id, (r.held_until IS NOT NULL) AS was_held
       )
-      UPDATE viber_broadcast_recipients r SET status = 'processing'
-      FROM picked
-      WHERE r.org_id = ${orgId} AND r.id = picked.id
-      RETURNING r.id, r.viber_user_id, r.title, r.conversation_id`);
+      SELECT cl.id, cl.viber_user_id, cl.title, cl.conversation_id, cl.was_held, c.contact_id
+      FROM claimed cl
+      LEFT JOIN conversations c ON c.org_id = ${orgId} AND c.id = cl.conversation_id`);
     return (
       res.rows as unknown as Array<{
         id: number | string;
         viber_user_id: string;
         title: string | null;
         conversation_id: number | string | null;
+        was_held: boolean;
+        contact_id: number | string | null;
       }>
     )
       .map((r) => ({
@@ -304,6 +323,8 @@ export class VibBroadcastsRepository {
         userId: r.viber_user_id,
         title: r.title,
         conversationId: r.conversation_id === null ? null : Number(r.conversation_id),
+        contactId: r.contact_id === null ? null : Number(r.contact_id),
+        wasHeld: r.was_held === true,
       }))
       .sort((a, b) => a.id - b.id);
   }
@@ -327,6 +348,7 @@ export class VibBroadcastsRepository {
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE viber_broadcast_recipients SET status = ${v.status}, message_token = ${v.messageToken ?? null},
+             held_until = NULL, held_reason = NULL,
              error = ${v.error ? v.error.slice(0, 255) : null}, sent_at = CASE WHEN ${v.status === 'sent'} THEN now() ELSE sent_at END
       WHERE org_id = ${orgId} AND id = ${id}`);
   }

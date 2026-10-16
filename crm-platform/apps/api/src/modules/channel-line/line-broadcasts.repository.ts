@@ -41,7 +41,7 @@ export interface RecipientRow {
   userId: string;
   title: string | null;
   conversationId: number | null;
-  /** The thread's contact, for the consent check. */
+  /** The thread's contact, for the consent check and the quiet hours. */
   contactId: number | null;
 }
 
@@ -281,12 +281,21 @@ export class LineBroadcastsRepository {
   }
 
   /** Claims the next people: no two workers ever hold the same one. */
-  async claim(tx: Tx, orgId: number, broadcastId: number, limit: number): Promise<RecipientRow[]> {
+  async claim(
+    tx: Tx,
+    orgId: number,
+    broadcastId: number,
+    limit: number,
+    /** Only recipients after this id: a run visits each recipient once, so one it held for the quiet hours is not claimed again by the same run. */
+    afterId = 0,
+  ): Promise<RecipientRow[]> {
     // A materialized CTE: a subquery inside `IN (...)` may be re-run by the planner and claim more than `limit` rows.
     const res = await tx.execute(sql`
       WITH picked AS MATERIALIZED (
         SELECT id FROM line_broadcast_recipients
         WHERE org_id = ${orgId} AND line_broadcast_id = ${broadcastId} AND status = 'pending'
+          -- A recipient held for the quiet hours (BL-191) is left alone until its hour has come.
+          AND (held_until IS NULL OR held_until <= now()) AND id > ${afterId}
         ORDER BY id LIMIT ${limit} FOR UPDATE SKIP LOCKED
       ), claimed AS (
         UPDATE line_broadcast_recipients r SET status = 'processing'
@@ -338,6 +347,7 @@ export class LineBroadcastsRepository {
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE line_broadcast_recipients SET status = ${v.status}, provider_message_id = ${v.providerMessageId ?? null},
+             held_until = NULL, held_reason = NULL,
              error = ${v.error ? v.error.slice(0, 255) : null}, sent_at = CASE WHEN ${v.status === 'sent'} THEN now() ELSE sent_at END
       WHERE org_id = ${orgId} AND id = ${id}`);
   }

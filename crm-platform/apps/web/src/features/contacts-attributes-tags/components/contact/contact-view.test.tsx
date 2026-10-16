@@ -1,0 +1,196 @@
+import { describe, expect, it } from 'vitest';
+import {
+  makeSession,
+  renderAccount,
+} from '@/features/auth-registration-security/account/render-test-utils';
+import type { ContactRow } from '../../api/schemas';
+import { ContactQuickView } from '../contact-quick-view';
+import { SectionNav } from '../contact-detail';
+import { ComplianceCard, LocationCard, SubscriptionCard } from './cards';
+import { OptInPill, ScoreRing, SocialIcons } from './parts';
+
+/** The quick view's and the details page's own pieces, in English and Arabic, from the real messages (a missing key fails the render). */
+
+const ID = '294dca7c-5806-4548-9035-dcca9befc7b1';
+const can = (...keys: string[]) =>
+  makeSession({ permissions: Object.fromEntries(keys.map((k) => [k, 'all'])) });
+
+const contact = (over: Partial<ContactRow> = {}) =>
+  ({
+    id: ID,
+    displayId: null,
+    name: 'Aarav Sharma',
+    firstName: 'Aarav',
+    lastName: 'Sharma',
+    email: 'aarav@example.com',
+    phone: '+919876543210',
+    companyId: null,
+    ownerId: null,
+    lifecycleState: 'active',
+    lifecycleStage: 'new',
+    status: null,
+    leadScore: null,
+    whatsappSubscriptionStatus: null,
+    smsSubscriptionStatus: null,
+    emailSubscriptionStatus: null,
+    isUnsubscribed: false,
+    isMinor: false,
+    dateOfBirth: null,
+    lastActivityAt: null,
+    source: null,
+    customFields: {},
+    rowVersion: 1,
+    createdAt: '2026-03-05T12:00:00.000Z',
+    updatedAt: '2026-03-05T12:00:00.000Z',
+    ...over,
+  }) as unknown as ContactRow;
+
+describe('SubscriptionCard', () => {
+  it('says Yes only for a subscribed channel and No for the others', () => {
+    const out = renderAccount(
+      <SubscriptionCard contact={contact({ whatsappSubscriptionStatus: 'subscribed' })} />,
+      { session: can('contacts.consent.read') },
+    );
+    expect(out).toContain('Subscription status');
+    expect(out.match(/>Yes</g)).toHaveLength(1);
+    expect(out.match(/>No</g)).toHaveLength(2);
+    expect(out).toContain('WhatsApp');
+    expect(out).toContain('SMS');
+  });
+
+  it('shows every channel as No in red, with the reason, for a contact who opted out', () => {
+    const out = renderAccount(
+      <SubscriptionCard
+        contact={contact({ whatsappSubscriptionStatus: 'subscribed', isUnsubscribed: true })}
+      />,
+      { session: can('contacts.consent.read') },
+    );
+    expect(out.match(/>Yes</g)).toBeNull();
+    expect(out.match(/border-danger\/30 bg-danger\/10 text-danger/g)).toHaveLength(3);
+    expect(out).toContain('opted out of marketing messages');
+  });
+
+  it('links to the consent card only for someone who may read it', () => {
+    const withLink = renderAccount(<SubscriptionCard contact={contact()} />, {
+      session: can('contacts.consent.read'),
+    });
+    expect(withLink).toContain(`href="/contacts/${ID}/consent"`);
+    const without = renderAccount(<SubscriptionCard contact={contact()} />, { session: can() });
+    expect(without).not.toContain('/consent');
+  });
+
+  it('reads in Arabic', () => {
+    const out = renderAccount(<SubscriptionCard contact={contact()} />, {
+      locale: 'ar',
+      session: can('contacts.consent.read'),
+    });
+    expect(out).toContain('حالة الاشتراك');
+  });
+});
+
+describe('ScoreRing and the pills', () => {
+  it('draws the score with its band, and a dash when there is none', () => {
+    const hot = renderAccount(<ScoreRing score={92} label="Lead score 92, Hot" />);
+    expect(hot).toContain('aria-label="Lead score 92, Hot"');
+    expect(hot).toContain('stroke-success');
+    expect(hot).toContain('>92<');
+    expect(renderAccount(<ScoreRing score={50} label="x" />)).toContain('stroke-warning');
+    expect(renderAccount(<ScoreRing score={10} label="x" />)).toContain('stroke-muted-foreground');
+    const none = renderAccount(<ScoreRing score={null} label="Not scored" />);
+    expect(none).toContain('—');
+    expect(none).not.toContain('stroke-success');
+  });
+
+  it('the opt-in pill is green, grey or red', () => {
+    expect(renderAccount(<OptInPill value="yes" />)).toContain('text-success');
+    expect(renderAccount(<OptInPill value="no" />)).toContain('text-muted-foreground');
+    expect(renderAccount(<OptInPill value="out" />)).toContain('text-danger');
+  });
+
+  it('shows social links only for http(s) addresses and opens them safely', () => {
+    const out = renderAccount(
+      <SocialIcons
+        contact={contact({
+          customFields: { linkedin_url: 'https://linkedin.com/in/ana', facebook: 'javascript:x' },
+        })}
+      />,
+    );
+    expect(out).toContain('href="https://linkedin.com/in/ana"');
+    expect(out).toContain('rel="noopener noreferrer"');
+    expect(out).not.toContain('javascript:');
+    expect(renderAccount(<SocialIcons contact={contact()} />)).toBe('');
+  });
+});
+
+describe('LocationCard and ComplianceCard', () => {
+  it('names the country of the number and shows the time zone property', () => {
+    const out = renderAccount(
+      <LocationCard
+        contact={contact({ customFields: { timezone: 'Asia/Kolkata', address: '12 MG Road' } })}
+      />,
+      { seed: [[['cat', 'fields', false], []]] },
+    );
+    expect(out).toContain('India');
+    expect(out).toContain('Asia/Kolkata');
+    expect(out).toContain('12 MG Road');
+  });
+
+  it('shows the minor flag from the list row and the opt-out state', () => {
+    const out = renderAccount(
+      <ComplianceCard contact={contact({ isMinor: true, isUnsubscribed: true })} />,
+      { session: can() },
+    );
+    expect(out).toContain('Opted out of marketing');
+    expect(out).toContain('Minor');
+  });
+});
+
+describe('details page sub-nav', () => {
+  const nav = (current: 'overview' | 'notes', permissions: string[]) =>
+    renderAccount(
+      <SectionNav
+        contactId={ID}
+        current={current}
+        core={['overview', 'activities', 'notes']}
+        related={permissions.includes('record.deals.read') ? ['deals', 'consent'] : ['consent']}
+      />,
+      { session: can(...permissions) },
+    );
+
+  it('lists the sections with the current one marked and a link each', () => {
+    const out = nav('notes', ['record.deals.read']);
+    expect(out).toContain('Contact details');
+    expect(out).toContain('Related');
+    expect(out).toContain(`href="/contacts/${ID}"`);
+    expect(out).toContain(`href="/contacts/${ID}/notes"`);
+    expect(out).toContain(`href="/contacts/${ID}/deals"`);
+    expect(out.match(/aria-current="page"/g)).toHaveLength(1);
+  });
+
+  it('scrolls sideways on a phone and stacks on a wide screen', () => {
+    const out = nav('overview', []);
+    expect(out).toContain('overflow-x-auto');
+    expect(out).toContain('lg:flex-col');
+  });
+});
+
+describe('ContactQuickView', () => {
+  it('is a named dialog that stays shut and empty without a contact', () => {
+    const out = renderAccount(
+      <ContactQuickView
+        contactId=""
+        panel="overview"
+        composer={false}
+        previousId={null}
+        nextId={null}
+        position={null}
+        onNavigate={() => undefined}
+        onPanel={() => undefined}
+        onClose={() => undefined}
+      />,
+    );
+    expect(out).toContain('<dialog');
+    expect(out).toContain('aria-label="Contact quick view"');
+    expect(out).not.toContain('Contact sections');
+  });
+});

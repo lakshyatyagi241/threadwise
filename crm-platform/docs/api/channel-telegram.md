@@ -114,3 +114,7 @@ at once and recomputes the counters from the rows. Refusals that mean the person
 found", ...) mark the chat `blocked`, any other `failed`. A file is sent by address or upload once; Telegram's file id is then reused
 for everyone after. A sent message is copied into the chat's thread as an outbound message (`source: telegram_broadcast`). Events:
 `telegram.broadcast.created|started|paused|retry_requested|deleted`.
+
+## Quiet hours (BL-191)
+
+Telegram broadcasts are marketing, so a recipient whose contact's local time is inside the workspace's quiet hours (Compliance center) is held, not denied: the recipient stays `pending`, the rest of the audience is sent, the broadcast stays `sending`, and a delayed job takes the held recipients up at the first opening, asking the ConsentGate again. `GET` of the broadcast list returns `held` (how many wait) and `heldUntil` (the first instant one of them may be messaged) on each broadcast. See [compliance.md](compliance.md).

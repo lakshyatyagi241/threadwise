@@ -61,7 +61,8 @@
       "notForSale": "Aplikasi ini tidak sedang dijual ke pelanggan baru.",
       "trialUnavailable": "Uji coba gratis tidak tersedia untuk aplikasi ini di workspace Anda.",
       "subscriptionNotFound": "Workspace Anda tidak memiliki langganan untuk aplikasi ini.",
-      "subscriptionState": "Itu tidak sesuai dengan status langganan saat ini. Muat ulang untuk melihat status terbaru."
+      "subscriptionState": "Itu tidak sesuai dengan status langganan saat ini. Muat ulang untuk melihat status terbaru.",
+      "renewalNotStopped": "Perpanjangan otomatis tidak dapat dihentikan di penyedia pembayaran, jadi tidak ada yang diubah dan kartu Anda masih dapat ditagih. Coba lagi sebentar lagi."
     },
     "chips": {
       "installed": "Terpasang",
@@ -77,7 +78,8 @@
       "trialing": "Uji coba gratis",
       "comped": "Diberikan gratis",
       "canceling": "Tidak diperpanjang",
-      "subscriptionEnded": "Langganan berakhir"
+      "subscriptionEnded": "Langganan berakhir",
+      "pastDue": "Pembayaran gagal"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Tidak dijual",
         "paid": "Aplikasi berbayar",
         "addOn": "Add-on",
-        "trial": "Uji coba gratis {days} hari"
+        "trial": "Uji coba gratis {days} hari",
+        "monthlyOrYearly": "{price} / bulan atau {annual} / tahun"
       },
       "installs": "{count, plural, other {# pemasangan}}",
       "version": "Versi {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "Tidak dijual",
         "message": "Aplikasi ini sedang tidak dijual ke pelanggan baru."
-      }
+      },
+      "autoRenewNote": "Ditagih bulanan melalui penagihan workspace Anda. Kartu Anda ditagih otomatis setiap bulan pada tanggal perpanjangan sampai Anda membatalkan."
     },
     "subscribe": {
       "subscribe": "Berlangganan",
@@ -820,7 +824,16 @@
         "included": "{name} termasuk dalam paket Anda.",
         "already_entitled": "Workspace Anda sudah memiliki akses ke {name}.",
         "free": "{name} gratis."
-      }
+      },
+      "hintPriceAuto": "{price} per bulan, ditagihkan otomatis ke kartu Anda setiap bulan sampai Anda membatalkan.",
+      "hintAuto": "Kartu Anda ditagih otomatis setiap bulan sampai Anda membatalkan.",
+      "period": {
+        "legend": "Periode penagihan",
+        "monthly": "Bulanan, {price}",
+        "yearly": "Tahunan, {price}"
+      },
+      "hintYear": "{price} per tahun, dibayar saat checkout. Setiap pembayaran mencakup satu tahun.",
+      "hintYearAuto": "{price} per tahun, ditagihkan otomatis ke kartu Anda setiap tahun sampai Anda membatalkan."
     },
     "subscription": {
       "title": "Langganan",
@@ -829,7 +842,8 @@
         "trialing": "Uji coba gratis",
         "comped": "Diberikan gratis",
         "canceling": "Tidak diperpanjang",
-        "ended": "Berakhir"
+        "ended": "Berakhir",
+        "past_due": "Pembayaran gagal"
       },
       "date": {
         "paidUntil": "Dibayar hingga {date}",
@@ -838,7 +852,9 @@
         "compOpen": "Akses gratis, tanpa tanggal berakhir",
         "cancelingUntil": "Tidak diperpanjang. Aktif hingga {date}",
         "endedOn": "Langganan berakhir {date}",
-        "endedNoDate": "Langganan berakhir"
+        "endedNoDate": "Langganan berakhir",
+        "renewsOn": "Diperpanjang {date}",
+        "graceUntil": "Pembayaran gagal. Tetap berjalan hingga {date}"
       },
       "lastPayment": "Pembayaran terakhir: {price} per bulan",
       "nextPayment": "Harga aplikasi ini berubah. Pembayaran berikutnya Anda adalah {price} per bulan.",
@@ -849,7 +865,8 @@
         "resubscribe": "Berlangganan lagi",
         "subscribe": "Berlangganan sekarang",
         "resume": "Lanjutkan langganan",
-        "cancel": "Batalkan langganan"
+        "cancel": "Batalkan langganan",
+        "payNow": "Bayar sekarang"
       },
       "cancelConfirm": {
         "title": "Batalkan langganan {name}?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name} tetap aktif hingga masa yang sudah Anda bayar berakhir, lalu dijeda. Data dan pengaturan Anda tetap disimpan.",
         "afterwards": "Tidak ada tagihan lagi, dan Anda dapat berlangganan lagi kapan saja.",
         "confirm": "Batalkan langganan",
-        "keep": "Pertahankan langganan"
+        "keep": "Pertahankan langganan",
+        "messageAuto": "Kartu Anda tidak akan ditagih lagi. {name} tetap aktif hingga {date}, lalu dijeda. Data dan pengaturan Anda tetap disimpan.",
+        "messageAutoNoDate": "Kartu Anda tidak akan ditagih lagi. {name} tetap aktif hingga masa yang sudah Anda bayar berakhir, lalu dijeda. Data dan pengaturan Anda tetap disimpan."
       },
       "toast": {
         "canceled": "Langganan dibatalkan. Tetap aktif hingga {date}.",
@@ -865,7 +884,14 @@
         "resumed": "Langganan dilanjutkan."
       },
       "working": "Memproses",
-      "noCheckout": "Checkout untuk aplikasi ini sedang tidak tersedia. Coba lagi sebentar lagi."
+      "noCheckout": "Checkout untuk aplikasi ini sedang tidak tersedia. Coba lagi sebentar lagi.",
+      "paymentFailed": "Pembayaran kartu terakhir untuk aplikasi ini tidak berhasil. Aplikasi tetap berjalan hingga {date} selagi penyedia pembayaran mencoba lagi. Bayar sekarang, atau perbaiki metode pembayaran Anda, agar tidak dijeda.",
+      "paymentFailedNoDate": "Pembayaran kartu terakhir untuk aplikasi ini tidak berhasil. Aplikasi tetap berjalan selagi penyedia pembayaran mencoba lagi. Bayar sekarang, atau perbaiki metode pembayaran Anda, agar tidak dijeda.",
+      "autoRenewHint": "Kartu Anda ditagih otomatis pada tanggal perpanjangan. Batalkan sebelum tanggal itu untuk menghentikannya.",
+      "lastPaymentYear": "Pembayaran terakhir: {price} per tahun",
+      "nextPaymentYear": "Harga aplikasi ini berubah. Pembayaran berikutnya Anda adalah {price} per tahun.",
+      "priceLocked": "Harga Anda dikunci di {price} per bulan. Harga ini tidak berubah selama Anda tetap berlangganan, meskipun harga aplikasi berubah.",
+      "priceLockedYear": "Harga Anda dikunci di {price} per tahun. Harga ini tidak berubah selama Anda tetap berlangganan, meskipun harga aplikasi berubah."
     },
     "tools": {
       "open": "Buka",
@@ -875,6 +901,24 @@
       },
       "soon": "Segera hadir",
       "upgrade": "Tingkatkan"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Pembayaran diterima",
+        "message": "Terima kasih. Langganan Anda aktif dan aplikasi siap digunakan."
+      },
+      "pending": {
+        "title": "Mengonfirmasi pembayaran Anda",
+        "message": "Penyedia pembayaran belum mengonfirmasi pembayaran ini. Halaman ini akan diperbarui saat sudah dikonfirmasi; Anda tidak perlu membayar lagi."
+      },
+      "failed": {
+        "title": "Pembayaran tidak berhasil",
+        "message": "Tidak ada yang ditagihkan. Berlangganan lagi untuk mencoba cara pembayaran lain."
+      },
+      "cancelled": {
+        "title": "Pembayaran dibatalkan",
+        "message": "Tidak ada yang ditagihkan. Berlangganan lagi kapan pun Anda siap."
+      }
     }
   }
 }

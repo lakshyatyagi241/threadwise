@@ -7,16 +7,37 @@ import { fieldTypeSchema } from '@crm/contracts';
 import { IMPORT_FIELDS, IMPORT_REJECT_REASONS, SYSTEM_ATTRIBUTES } from '@crm/contracts';
 
 /**
- * The domain's strings live in messages/<locale>/contacts-attributes-tags.json. These checks keep English and Arabic in
- * step and make sure no component asks for a key that is missing (next-intl would print the key path instead of text).
+ * The domain's strings live in messages/<locale>/contacts-attributes-tags.json and in the slices named
+ * `contacts-attributes-tags.<part>.json` (the contact quick view and details sections), which the app merges. These checks
+ * keep English and Arabic in step and make sure no component asks for a key that is missing (next-intl would print the key
+ * path instead of text).
  */
 const WEB = resolve(__dirname, '../../..');
-const FILE = 'contacts-attributes-tags.json';
 const ROOT_KEY = 'contacts-attributes-tags';
 
 type Tree = { [key: string]: string | Tree };
+
+function merge(base: Tree, over: Tree): Tree {
+  const out: Tree = { ...base };
+  for (const [k, v] of Object.entries(over)) {
+    const b = out[k];
+    out[k] =
+      typeof v === 'object' && typeof b === 'object' ? merge(b as Tree, v as Tree) : (v as Tree);
+  }
+  return out;
+}
+
 const load = (locale: string): Tree =>
-  JSON.parse(readFileSync(join(WEB, 'messages', locale, FILE), 'utf8')) as Tree;
+  readdirSync(join(WEB, 'messages', locale))
+    .filter(
+      (f) => f === `${ROOT_KEY}.json` || (f.startsWith(`${ROOT_KEY}.`) && f.endsWith('.json')),
+    )
+    .sort()
+    .reduce<Tree>(
+      (all, f) =>
+        merge(all, JSON.parse(readFileSync(join(WEB, 'messages', locale, f), 'utf8')) as Tree),
+      {},
+    );
 
 function flatten(tree: Tree, prefix = ''): Record<string, string> {
   const out: Record<string, string> = {};
@@ -92,6 +113,13 @@ const DYNAMIC_PREFIXES = [
   'properties.typeHelp.',
   // the stage meaning radios: `modal.meaning.${m}` and `${m}Hint`
   'stages.modal.meaning.',
+  // the contact quick view's rail (`rail_${section}`), the details sub-nav, the channel and social names, the add-column groups
+  'contact.quick.rail_',
+  'contact.nav.section.',
+  'contact.subscription.channel.',
+  'contact.social.',
+  'list.columnGroup.',
+  'list.col',
 ];
 
 describe('message keys used in code', () => {
@@ -105,6 +133,8 @@ describe('message keys used in code', () => {
     let checked = 0;
     for (const file of files) {
       for (const key of usedKeys(readFileSync(file, 'utf8'))) {
+        // Another domain's strings (the consent card's privacy flags, the lead attribution labels) are checked by that domain.
+        if (!key.startsWith(`${ROOT_KEY}.`)) continue;
         checked++;
         if (!(key in en)) missing.push(`${file.replace(WEB, '')}: ${key}`);
       }

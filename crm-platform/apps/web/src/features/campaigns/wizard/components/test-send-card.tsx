@@ -35,6 +35,11 @@ function ResultRow({
       </span>
       <Chip tone={testTone(r.status)}>{t(`status.${r.status}`)}</Chip>
       {when && <span className="text-xs text-muted-foreground">{when}</span>}
+      {r.status === 'held' && r.heldUntil && (
+        <span className="text-xs text-warning" data-testid="test-send-held">
+          {t('heldUntil', { when: new Date(r.heldUntil).toLocaleString(locale) })}
+        </span>
+      )}
       {r.chargedMinor > 0 && currency && (
         <span className="text-xs text-muted-foreground">
           {t('charged', { amount: formatMinor(r.chargedMinor, currency, locale) })}

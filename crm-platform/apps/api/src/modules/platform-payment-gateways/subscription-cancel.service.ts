@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { AddonFulfilmentHooks } from '../addons-extension-registry';
+import { announceAddonTerm } from './addon-term';
 import { GatewayService } from './gateway.service';
 import { PaygwStore } from './paygw.store';
 import { toSub, type SubRow } from './subscription-row';
@@ -32,6 +34,7 @@ export class SubscriptionCancelService {
     private readonly store: PaygwStore,
     private readonly gateways: GatewayService,
     private readonly outbox: OutboxService,
+    private readonly hooks: AddonFulfilmentHooks,
   ) {}
 
   /**
@@ -57,11 +60,44 @@ export class SubscriptionCancelService {
     return ended;
   }
 
+  /**
+   * Ends the other card renewals of the same Marketplace app in a workspace, now, except the one that belongs to `exceptOrderNumber` (the
+   * purchase that is replacing them). An app is ONE subscription: a workspace that subscribes again (to restart after a failed payment, or
+   * to pay early) must not be charged by two provider subscriptions every cycle. Only Marketplace add-ons: a plain add-on pack is a
+   * boost that stacks on purpose. Returns how many were ended.
+   */
+  async endSupersededAppSubscriptions(
+    orgId: number,
+    packSlug: string,
+    exceptOrderNumber: string,
+  ): Promise<number> {
+    const rows = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT ${COLS} FROM subscriptions s
+        JOIN plans p ON p.slug = s.plan_id AND p.marketplace_app_id IS NOT NULL
+        WHERE s.org_id = ${orgId} AND s.kind = 'addon' AND s.plan_id = ${packSlug} AND s.status IN ('active', 'past_due')
+          AND COALESCE(s.meta ->> 'order_number', '') <> ${exceptOrderNumber}
+        ORDER BY s.id`);
+      return (res.rows as Raw[]).map(toSub);
+    });
+    let ended = 0;
+    for (const sub of rows) {
+      if (await this.end(sub, { atCycleEnd: false, reason: 'superseded' })) ended += 1;
+    }
+    return ended;
+  }
+
   /** Ends one subscription (an operator or the workspace chose to). `null` when it was not renewing any more. */
   async endOne(
     orgId: number,
     subscriptionId: number,
-    opts: { atCycleEnd: boolean; reason: EndReason; actor?: { id: number | null; type: string } },
+    opts: {
+      atCycleEnd: boolean;
+      reason: EndReason;
+      actor?: { id: number | null; type: string };
+      /** See `EndOptions.strict`. */
+      strict?: boolean;
+    },
   ): Promise<RemoteOutcome | null> {
     const sub = await this.store.tx(async (tx) => {
       const res = await tx.execute(sql`
@@ -88,6 +124,14 @@ export class SubscriptionCancelService {
   ): Promise<boolean | RemoteOutcome | null> {
     // The provider is called with no transaction open.
     const remote = await this.remote(sub, opts.atCycleEnd);
+    if (opts.strict && !stopped(remote)) {
+      // The provider is still going to charge: the row stays as it was, so nothing says the renewal ended when it did not.
+      this.logger.warn(
+        { gateway: sub.gateway, subscription: sub.id, remote },
+        'the provider subscription could not be stopped; the local row was left unchanged',
+      );
+      return withOutcome ? remote : false;
+    }
     const changed = await this.store.tx(async (tx) => {
       const meta = {
         cancel: { ...remote, reason_code: opts.reason, at_cycle_end: opts.atCycleEnd },
@@ -116,6 +160,8 @@ export class SubscriptionCancelService {
           remote: remote.result,
         },
       });
+      // The Marketplace's ledger of an add-on that sells an app learns that its card renewal is over.
+      await announceAddonTerm(tx, this.hooks, sub, 'ended', { reason: opts.reason });
       return true;
     });
     if (withOutcome) return changed ? remote : null;
@@ -151,7 +197,17 @@ interface EndOptions {
   atCycleEnd: boolean;
   reason: EndReason;
   actor?: { id: number | null; type: string };
+  /**
+   * The caller promises the person that the charging stops, so the local row is only marked cancelled when the provider confirmed (or there
+   * is no provider subscription to stop). Without it the row is always marked, even when the provider call failed, so a row we meant to end
+   * is never treated as renewing; the failure is then recorded in `meta.cancel` for an operator to finish.
+   */
+  strict?: boolean;
 }
+
+/** The provider no longer charges: it said ok, or there was nothing to stop (a row with no provider subscription id). */
+const stopped = (r: RemoteOutcome): boolean =>
+  r.result === 'ok' || (r.result === 'unsupported' && r.reason === 'no_gateway_subscription_id');
 
 const COLS =
   sql.raw(`s.org_id, s.id, s.user_id, s.gateway, s.gateway_subscription_id, s.gateway_plan_id, s.gateway_customer_id,

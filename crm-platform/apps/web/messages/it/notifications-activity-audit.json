@@ -164,6 +164,26 @@
         "title": "Notifica di prova",
         "titleNoName": "Notifica di prova",
         "bodyNoActor": "Se riesci a leggere questo, le notifiche in tempo reale funzionano."
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} si rinnova il {date, date, medium}",
+        "bodyAuto": "La tua carta verrà addebitata automaticamente in quella data per rinnovare {name}. Annulla prima di allora per evitarlo.",
+        "titleManual": "{name}: pagato fino al {date, date, medium}",
+        "bodyManual": "{name} non si rinnova automaticamente. Paga di nuovo prima di quella data per mantenerla attiva senza interruzioni.",
+        "titleEnding": "{name} termina il {date, date, medium}",
+        "bodyEnding": "Hai annullato {name}, quindi smetterà di funzionare in quella data. Abbonati di nuovo prima di allora per mantenerla.",
+        "title": "{name}: rinnovo in arrivo",
+        "titleNoName": "Rinnovo di un’app a pagamento in arrivo"
+      },
+      "marketplace_payment_failed": {
+        "title": "Pagamento di {name} non riuscito",
+        "body": "Il pagamento con carta non è andato a buon fine. L’app continua a funzionare per alcuni giorni mentre il provider di pagamento riprova. Paga ora, o correggi il metodo di pagamento, per evitare la pausa.",
+        "titleNoName": "Pagamento di un’app a pagamento non riuscito"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Abbonamento a {name} terminato",
+        "body": "L’app è in pausa e i suoi dati e le sue impostazioni sono conservati. Abbonati di nuovo per riattivarla.",
+        "titleNoName": "Abbonamento a un’app a pagamento terminato"
       }
     },
     "live": {
@@ -195,7 +215,10 @@
         "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo",
         "device_group_join_request": "Richiesta di ingresso in un gruppo",
         "device_group_removed": "Rimosso da un gruppo WhatsApp",
-        "test": "Notifica di prova"
+        "test": "Notifica di prova",
+        "marketplace_renewal_due": "Rinnovo di un’app a pagamento in arrivo",
+        "marketplace_payment_failed": "Pagamento di un’app a pagamento non riuscito",
+        "marketplace_subscription_ended": "Abbonamento a un’app a pagamento terminato"
       },
       "generic": "Hai una nuova notifica",
       "paused": "Gli aggiornamenti in tempo reale sono in pausa, quindi i nuovi avvisi possono arrivare con un ritardo fino a un minuto. Ricarica la pagina per riconnetterti."
@@ -383,6 +406,18 @@
         "appointment_calendar_drift": {
           "label": "Appuntamento non sincronizzato con Google Calendar",
           "hint": "L'evento di Google Calendar di un prossimo appuntamento è stato eliminato, spostato o ha subito modifiche agli invitati. L'appuntamento non viene modificato: sei tu a scegliere cosa fare."
+        },
+        "marketplace_renewal_due": {
+          "label": "Promemoria di rinnovo di un’app a pagamento",
+          "hint": "Il periodo di un’app a pagamento termina tra pochi giorni: si rinnova con la carta, è pagato fino a una data oppure è stato annullato e sta per terminare."
+        },
+        "marketplace_payment_failed": {
+          "label": "Pagamento di un’app a pagamento non riuscito",
+          "hint": "Il rinnovo con carta di un’app a pagamento non è andato a buon fine e richiede la tua attenzione."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Abbonamento a un’app a pagamento terminato",
+          "hint": "L’abbonamento a un’app a pagamento è terminato e l’app è stata messa in pausa."
         }
       },
       "loading": "Caricamento delle tue preferenze",

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
@@ -71,6 +71,7 @@ const isLeadSource = (m: MarketManifest, r: MarketRecipe | null): boolean =>
  */
 @Injectable()
 export class InstallationsService {
+  private readonly logger = new Logger(InstallationsService.name);
   private readonly publicBase: string;
 
   constructor(
@@ -558,7 +559,7 @@ export class InstallationsService {
    */
   async uninstall(uuid: string, input: UninstallAppInput): Promise<void> {
     const ctx = RequestContextStore.require();
-    const leadSource = await this.db.tx(async (tx) => {
+    const { leadSource, cardPackId } = await this.db.tx(async (tx) => {
       const row = await this.lock(tx, ctx.orgId, uuid);
       const manifest = readManifest(row.manifest);
       const recipe = readRecipe(row.recipe);
@@ -574,7 +575,7 @@ export class InstallationsService {
       });
       await this.repo.delete(tx, ctx.orgId, row.id);
       // Uninstalling a paid app stops its renewal (the admin was told). The period already paid for stays, so reinstalling inside it is free.
-      const stoppedRenewal = await this.subscriptions.cancelOnUninstall(
+      const renewal = await this.subscriptions.cancelOnUninstall(
         tx,
         ctx.orgId,
         ctx.userId,
@@ -601,12 +602,25 @@ export class InstallationsService {
           kind: row.app.kind,
           dataChoice: input.dataChoice,
           scopes: row.grantedScopes,
-          renewalStopped: stoppedRenewal,
+          renewalStopped: renewal.changed,
         },
       });
-      return manifest !== null && isLeadSource(manifest, recipe);
+      return {
+        leadSource: manifest !== null && isLeadSource(manifest, recipe),
+        cardPackId: renewal.cardPackId,
+      };
     });
     if (leadSource) await this.pipeline.releaseSource(ctx.orgId, uuid);
+    // The card renewal of a paid app is ended at the payment provider too (after the commit: the provider is called with no transaction
+    // open). The period already paid for stays. Never fails the uninstall: the person has left, and a renewal that could not be stopped is
+    // logged for the operator and still shows on the Subscriptions screen.
+    if (cardPackId !== null) {
+      try {
+        await this.subscriptions.stopCardRenewalAfterUninstall(ctx.orgId, ctx.userId, cardPackId);
+      } catch (err) {
+        this.logger.error({ err, org: ctx.orgId, pack: cardPackId }, 'stopping the card renewal after an uninstall failed');
+      }
+    }
   }
 
   // --- test, sample, rotate -------------------------------------------------------------------------------------------------------

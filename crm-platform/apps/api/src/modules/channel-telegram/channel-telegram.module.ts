@@ -27,13 +27,21 @@ import { TgBroadcastsController } from './tg-broadcasts.controller';
 import { TgBroadcastsRepository } from './tg-broadcasts.repository';
 import { TgBroadcastsService } from './tg-broadcasts.service';
 import { WebhookController } from './webhook.controller';
+import { SendWindowModule } from '../compliance-center';
+import { ContactConsentModule } from '../contact-consent';
 
 /**
  * The Telegram channel (TG). The shim below stands in for a service another domain owns; it is replaced by binding the real
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule, CrmModule, PlatformSettingsModule],
+  imports: [
+    ChatConversationsModule,
+    CrmModule,
+    PlatformSettingsModule,
+    SendWindowModule,
+    ContactConsentModule,
+  ],
   controllers: [BotsController, TgBroadcastsController, WebhookController],
   providers: [
     CryptoService,

@@ -29,6 +29,8 @@ export interface BroadcastRow {
   lastError: string | null;
   startedAt: Date | null;
   finishedAt: Date | null;
+  /** BL-191: the whole mass send waits for the workspace's quiet hours until this instant. Null = not held. */
+  heldUntil: Date | null;
   createdAt: Date;
   updatedAt: Date;
   rowVersion: number;
@@ -59,6 +61,7 @@ interface Raw {
   last_error: string | null;
   started_at: Date | string | null;
   finished_at: Date | string | null;
+  held_until: Date | string | null;
   created_at: Date | string;
   updated_at: Date | string;
   row_version: number;
@@ -67,7 +70,7 @@ interface Raw {
 const SELECT = sql.raw(`
   SELECT b.id, b.uuid, b.name, b.wechat_channel_id, c.uuid AS channel_uuid, c.account_name AS channel_name, t.uuid AS template_uuid,
          b.body, b.audience, b.tag_id, b.mass_msg_id, b.status, b.total, b.sent, b.failed, b.last_error, b.started_at, b.finished_at,
-         b.created_at, b.updated_at, b.row_version
+         b.held_until, b.created_at, b.updated_at, b.row_version
   FROM wechat_broadcasts b
   JOIN wechat_channels c ON c.org_id = b.org_id AND c.id = b.wechat_channel_id
   LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id`);
@@ -92,6 +95,7 @@ const toRow = (r: Raw): BroadcastRow => ({
   lastError: r.last_error,
   startedAt: date(r.started_at),
   finishedAt: date(r.finished_at),
+  heldUntil: date(r.held_until),
   createdAt: new Date(r.created_at),
   updatedAt: new Date(r.updated_at),
   rowVersion: r.row_version,
@@ -251,10 +255,22 @@ export class BroadcastsRepository {
   }
 
   /** WeChat took the mass send: done, with its id; the picked recipients are sent. */
+  /** The mass send waits for the quiet hours (BL-191): still `sending`, with the instant it may go. `null` clears the hold. */
+  async setHeld(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    hold: { until: string; reason: string } | null,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wechat_broadcasts SET held_until = ${hold?.until ?? null}::timestamptz, held_reason = ${hold?.reason ?? null}
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
   async markDone(tx: Tx, orgId: number, id: number, massMsgId: string | null): Promise<void> {
     await tx.execute(sql`
       UPDATE wechat_broadcasts SET status = 'done', mass_msg_id = ${massMsgId}, sent = total, failed = 0, last_error = NULL,
-             finished_at = now()
+             held_until = NULL, held_reason = NULL, finished_at = now()
       WHERE org_id = ${orgId} AND id = ${id}`);
     await tx.execute(sql`
       UPDATE wechat_broadcast_recipients SET status = 'sent', error = NULL, sent_at = now()

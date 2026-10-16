@@ -26,13 +26,15 @@
       "lastActivityAt": "Hoạt động gần nhất",
       "minor": "Đã đánh dấu là chưa thành niên",
       "dateOfBirth": "Ngày sinh",
-      "age": "Tuổi (năm)"
+      "age": "Tuổi (năm)",
+      "timezone": "Múi giờ"
     },
     "fieldGroups": {
       "journey": "Hành trình",
       "who": "Ai",
       "activity": "Hoạt động",
-      "properties": "Thuộc tính"
+      "properties": "Thuộc tính",
+      "company": "Thuộc tính công ty"
     },
     "operators": {
       "equals": "là",

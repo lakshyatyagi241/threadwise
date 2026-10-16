@@ -1,6 +1,8 @@
 import {
   connectImapMailboxSchema,
+  testImapMailboxSchema,
   type ConnectImapMailboxInput,
+  type TestImapMailboxInput,
   type ImapSummary,
   type MailScope,
   type MailTlsMode,
@@ -234,6 +236,49 @@ export function buildImapInput(
     // The checks above cover what a person can get wrong; anything the contract still refuses is pinned to the address.
     return { ok: false, errors: { address: 'invalid' } };
   }
+  return { ok: true, input: parsed.data };
+}
+
+/**
+ * The body of "Test credentials": only the server fields are needed (a test stores nothing, so the address and the name may still be
+ * empty). Same rules as {@link buildImapInput} for the fields it checks.
+ */
+export function buildTestInput(
+  form: ImapForm,
+): { ok: true; input: TestImapMailboxInput } | { ok: false; errors: ImapErrors } {
+  const errors: ImapErrors = {};
+  const need = (field: ImapField, value: string) => {
+    if (value.trim() === '') errors[field] = 'required';
+  };
+  need('imapHost', form.imapHost);
+  need('imapUsername', form.imapUsername);
+  need('smtpHost', form.smtpHost);
+  if (form.imapPassword === '') errors.imapPassword = 'required';
+  if (!errors.imapHost && !HOST.test(form.imapHost.trim())) errors.imapHost = 'invalid';
+  if (!errors.smtpHost && !HOST.test(form.smtpHost.trim())) errors.smtpHost = 'invalid';
+  if (!portOk(form.imapPort)) errors.imapPort = 'invalid';
+  if (!portOk(form.smtpPort)) errors.smtpPort = 'invalid';
+  if (!form.sameCredentials) {
+    need('smtpUsername', form.smtpUsername);
+    if (form.smtpPassword === '') errors.smtpPassword = 'required';
+  }
+  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  const parsed = testImapMailboxSchema.safeParse({
+    imap: {
+      host: form.imapHost,
+      port: Number(form.imapPort),
+      security: form.imapSecurity,
+      username: form.imapUsername,
+      password: form.imapPassword,
+    },
+    smtp: {
+      host: form.smtpHost,
+      port: Number(form.smtpPort),
+      security: form.smtpSecurity,
+      ...(form.sameCredentials ? {} : { username: form.smtpUsername, password: form.smtpPassword }),
+    },
+  });
+  if (!parsed.success) return { ok: false, errors: { imapHost: 'invalid' } };
   return { ok: true, input: parsed.data };
 }
 

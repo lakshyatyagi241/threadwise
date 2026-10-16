@@ -4,7 +4,9 @@
       "companies": "Empresas"
     },
     "common": {
-      "dismiss": "Descartar"
+      "dismiss": "Descartar",
+      "yes": "Sí",
+      "no": "No"
     },
     "errors": {
       "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
@@ -18,7 +20,10 @@
       "planDisabled": "Tu plan no incluye empresas. Mejora tu plan para desbloquearlas.",
       "ownerInvalid": "El propietario debe ser un miembro activo de este espacio de trabajo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "filterInvalid": "No se puede usar una de las condiciones de propiedad. Revisa la propiedad y su valor.",
+      "exportTooLarge": "Son demasiadas empresas para un solo archivo. Acota la lista con un filtro y vuelve a exportar.",
+      "importInvalid": "No se puede importar ese archivo. Necesita una primera línea con los nombres de las columnas, incluida una columna name o website, y un máximo de 1.000 empresas."
     },
     "list": {
       "eyebrow": "CRM · Organizaciones",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Eliminar empresas",
       "deleteManyMessage": "{count, plural, one {¿Eliminar esta empresa? Sus contactos y negocios se conservan y solo se desvinculan.} other {¿Eliminar estas # empresas? Sus contactos y negocios se conservan y solo se desvinculan.}}",
       "delete": "Eliminar",
-      "keep": "Conservar"
+      "keep": "Conservar",
+      "export": "Exportar",
+      "import": "Importar"
     },
     "toolbar": {
       "label": "Filtrar empresas",
@@ -69,7 +76,14 @@
         "name": "Nombre de A a Z"
       },
       "clear": "Borrar",
-      "refresh": "Actualizar"
+      "refresh": "Actualizar",
+      "sortByProperty": "Por {name}",
+      "direction": "Dirección",
+      "directions": {
+        "default": "Dirección habitual",
+        "asc": "Ascendente",
+        "desc": "Descendente"
+      }
     },
     "table": {
       "label": "Empresas",
@@ -82,7 +96,13 @@
       "wonValue": "Valor ganado",
       "actions": "Acciones",
       "delete": "Eliminar empresa",
-      "deleteNamed": "Eliminar la empresa {name}"
+      "deleteNamed": "Eliminar la empresa {name}",
+      "website": "Sitio web",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "size": "Tamaño",
+      "owner": "Propietario",
+      "created": "Creación"
     },
     "form": {
       "eyebrow": "Empresa",
@@ -136,7 +156,8 @@
       "contactUnlinkFailed": "No se pudo quitar el contacto. Inténtalo de nuevo.",
       "contactsLinked": "{count, plural, one {# contacto añadido a la empresa.} other {# contactos añadidos a la empresa.}}",
       "contactsLinkedSome": "{count, plural, one {# contacto añadido} other {# contactos añadidos}}, {failed, plural, one {# no se pudo añadir.} other {# no se pudieron añadir.}}",
-      "contactsLinkFailed": "No se pudieron añadir los contactos. Inténtalo de nuevo."
+      "contactsLinkFailed": "No se pudieron añadir los contactos. Inténtalo de nuevo.",
+      "exportFailed": "No se pudo generar la exportación. Inténtalo de nuevo en un momento."
     },
     "detail": {
       "back": "Todas las empresas",
@@ -163,7 +184,8 @@
       "updated": "Último cambio",
       "properties": "Propiedades",
       "yes": "Sí",
-      "no": "No"
+      "no": "No",
+      "generateBrief": "Generar resumen"
     },
     "contacts": {
       "title": "Contactos",
@@ -263,6 +285,92 @@
         "visibleHint": "Mostrarla en el formulario de empresa y en su página.",
         "conditionsHint": "Oculta esta propiedad en el formulario de empresa hasta que otra propiedad tenga un valor.",
         "deactivateNote": "Al guardar, esta propiedad se ocultará del formulario y de la página de empresa. Los valores que tienen las empresas se conservan."
+      }
+    },
+    "columns": {
+      "button": "Columnas",
+      "label": "Elegir columnas",
+      "hint": "La tabla recuerda tu elección en este navegador.",
+      "reset": "Volver a las columnas habituales"
+    },
+    "propertyFilters": {
+      "button": "Propiedades",
+      "label": "Filtrar por propiedades de la empresa",
+      "hint": "Muestra las empresas que cumplen todas estas condiciones.",
+      "none": "Aún no hay ninguna condición.",
+      "noProperties": "Todavía no se puede filtrar por ninguna propiedad de empresa. Añade una en Ajustes, Propiedades de empresa.",
+      "property": "Propiedad de la condición {n}",
+      "operator": "Operador de la condición {n}",
+      "value": "Valor de la condición {n}",
+      "remove": "Quitar la condición {n}",
+      "add": "Añadir una condición",
+      "clear": "Borrar todo",
+      "apply": "Aplicar"
+    },
+    "import": {
+      "eyebrow": "Empresas",
+      "title": "Importar empresas",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "done": "Listo",
+      "start": "Importar",
+      "file": "Archivo CSV",
+      "choose": "Elige un archivo CSV",
+      "change": "Elegir otro archivo",
+      "tooBig": "El archivo es demasiado grande. Divídelo e importa las partes.",
+      "intro": "La primera línea nombra las columnas: name (o website), email, phone, industry, size, address, notes, owner (el correo o el nombre de un miembro) y cualquier propiedad de empresa por su etiqueta. Hasta {max} empresas por archivo.",
+      "match": "Completar empresas que ya existen",
+      "matchHint": "A una empresa con el mismo sitio web (o, si no tiene, el mismo nombre) se le completan los campos vacíos. No se cambia nada de lo que ya tiene.",
+      "summary": "{total, plural, one {# fila leída} other {# filas leídas}}: {created} creadas, {updated} completadas, {unchanged} sin cambios, {failed} no importadas.",
+      "ignored": "Estas columnas no se reconocieron y se omitieron: {columns}.",
+      "failedTitle": "{count, plural, one {# fila no se importó} other {# filas no se importaron}}",
+      "line": "Línea {line}",
+      "moreFailed": "{count, plural, one {Y # más.} other {Y # más.}}"
+    },
+    "brief": {
+      "title": "Resumen de la cuenta",
+      "subtitle": "Escrito por AI a partir de los datos del CRM que puedes ver. Revísalo antes de confiar en él.",
+      "loading": "Cargando el resumen",
+      "unavailableTitle": "AI no está configurada en este espacio de trabajo",
+      "unavailable": "Un resumen lo escribe un modelo de AI, y este espacio de trabajo no tiene clave de AI, así que no se envió nada a ningún sitio.",
+      "addKey": "Añadir una clave de AI",
+      "askAdmin": "Pide a un administrador que añada una clave de AI.",
+      "empty": "Obtén un resumen breve de esta empresa: quién es, sus negocios y tareas, qué tan activa es la conversación, los riesgos y qué hacer a continuación.",
+      "generate": "Generar resumen",
+      "regenerate": "Volver a escribir",
+      "copy": "Copiar",
+      "copied": "Resumen copiado.",
+      "copyFailed": "No se pudo copiar el resumen. Selecciona el texto y cópialo a mano.",
+      "copyTitle": "{name}: resumen de la cuenta",
+      "stale": "El CRM ha cambiado desde que se escribió este resumen. Vuelve a escribirlo para tener uno actualizado.",
+      "writtenBy": "Escrito el {date} por {model}. AI puede equivocarse.",
+      "notice": "El modelo recibe recuentos, fechas, importes y títulos cortos. Nunca recibe nombres de contactos, direcciones de correo, números de teléfono, notas de empresa ni texto de mensajes, y los números y las direcciones de correo de los títulos se eliminan antes.",
+      "basedOn": "Basado en: {kinds}. Solo se cuenta lo que tu rol te permite ver.",
+      "basedOnNone": "Basado solo en los datos de la empresa: tu rol no muestra contactos, negocios, tareas ni conversaciones.",
+      "errors": {
+        "tooSoon": "Hace un momento se escribió un resumen. Espera un poco antes de volver a pedirlo.",
+        "providerFailed": "El servicio de AI no pudo escribir el resumen. Inténtalo de nuevo en un momento.",
+        "limit": "La cuota de AI está agotada por ahora. Inténtalo más tarde o pide ayuda a un administrador.",
+        "forbidden": "No tienes permiso para hacer eso.",
+        "notFound": "Esa empresa ya no existe.",
+        "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+        "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento."
+      },
+      "sections": {
+        "activity": "Actividad reciente",
+        "deals": "Negocios",
+        "tasks": "Tareas",
+        "conversations": "Conversaciones",
+        "properties": "Propiedades clave",
+        "risks": "Riesgos",
+        "nextSteps": "Próximos pasos"
+      },
+      "source": {
+        "properties": "propiedades de la empresa",
+        "contacts": "contactos",
+        "deals": "negocios",
+        "tasks": "tareas",
+        "conversations": "conversaciones"
       }
     }
   }
