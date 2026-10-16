@@ -19,7 +19,8 @@
       "googleCalendar": "Kalendarz Google",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Kreator przepływów"
+      "flowBuilder": "Kreator przepływów",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Admin - Ustawienia projektu",
@@ -1024,6 +1025,37 @@
             "advanced": "Tylko zaawansowany"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Aplikacja Microsoft, przez którą każdy obszar roboczy łączy swój kalendarz Outlook lub Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikacja Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Zezwalaj obszarom roboczym na łączenie Outlook",
+            "hint": "Wyłączone: żaden obszar roboczy nie może się połączyć, a z żadnego kalendarza Outlook nic nie jest odczytywane ani do niego zapisywane. Połączone kalendarze zostają zachowane."
+          },
+          "clientId": {
+            "label": "Identyfikator aplikacji (klienta)",
+            "hint": "Z centrum administracyjnego Microsoft Entra, Rejestracje aplikacji, Przegląd. Puste pole używa MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Klucz tajny klienta",
+            "hint": "Przechowywany w postaci zaszyfrowanej i nigdy więcej nie wyświetlany. Puste pole zachowuje zapisany klucz; zapasowo używany jest MICROSOFT_CALENDAR_CLIENT_SECRET."
+          },
+          "tenant": {
+            "label": "Dzierżawa",
+            "hint": "common zezwala na konta służbowe, szkolne i osobiste; dla aplikacji jednodzierżawowej użyj identyfikatora katalogu (dzierżawy). Puste pole używa MICROSOFT_CALENDAR_TENANT, a w przeciwnym razie common."
+          },
+          "redirectUri": {
+            "label": "Własny URI przekierowania",
+            "hint": "Pozostaw puste, aby użyć powyższego adresu. Musi dokładnie odpowiadać jednemu z URI przekierowania w aplikacji."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Kreator przepływów",
         "description": "Domyślny kreator przepływów dla każdej przestrzeni roboczej: Prosty krok po kroku lub Zaawansowany na płótnie. Przestrzeń robocza może to nadpisać.",
         "tags": "Prosty / Zaawansowany / Automatyzacja"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Aplikacja Microsoft, przez którą obszary robocze łączą swoje kalendarze Outlook i Microsoft 365 na potrzeby rezerwacji.",
+        "tags": "Microsoft / OAuth / Outlook / Kalendarz"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Istniejące przepływy",
               "body": "Zmiana tego ustawienia nigdy nie zmienia ani nie usuwa przepływu. Przepływ nadal działa; jest tylko otwierany w kreatorze, który jest włączony. Przestrzeń robocza, która wybrała własny kreator, zachowuje go, dopóki ponownie nie wybierze domyślnego dla platformy."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Spotkania",
+        "description": "Jedna aplikacja Microsoft Entra dla całej platformy. Każdy obszar roboczy łączy następnie własny kalendarz Outlook lub Microsoft 365 w sekcji Spotkania, Ustawienia, i nigdy nie widzi identyfikatora klienta ani klucza tajnego.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikacja Microsoft Entra",
+            "description": "Bez identyfikatora i klucza tajnego klienta obszary robocze widzą Outlook jako niedostępny, a rezerwacje działają dalej bez niego. Google Calendar nie jest tym dotknięty."
+          }
+        },
+        "guide": {
+          "title": "Skonfiguruj to w Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Rejestracja aplikacji",
+              "body": "W centrum administracyjnym Microsoft Entra utwórz rejestrację aplikacji dla kont w dowolnym katalogu organizacji oraz osobistych kont Microsoft i skopiuj tutaj identyfikator aplikacji (klienta). Pozostaw dzierżawę jako common, chyba że wybrano węższą opcję."
+            },
+            "redirect": {
+              "title": "2. URI przekierowania i klucz tajny",
+              "body": "Dodaj URI przekierowania widoczny na tej stronie jako przekierowanie typu Web, a następnie utwórz klucz tajny klienta w sekcji Certyfikaty i klucze tajne i wklej tutaj jego wartość. Zanotuj datę jego wygaśnięcia: po tym dniu kalendarze wszystkich obszarów roboczych przestaną działać, dopóki nie zostanie zapisany nowy klucz."
+            },
+            "permissions": {
+              "title": "3. Uprawnienia API",
+              "body": "Dodaj delegowane uprawnienia Microsoft Graph Calendars.ReadWrite, User.Read i offline_access i nic więcej. Do ogólnego użytku przejdź weryfikację wydawcy; dzierżawa klienta może też wymagać zatwierdzenia aplikacji przez administratora."
+            },
+            "workspaces": {
+              "title": "4. Obszary robocze się łączą",
+              "body": "Wklej tutaj identyfikator i klucz tajny klienta i zapisz. Administratorzy mogą wtedy połączyć kalendarz w sekcji Spotkania, Ustawienia."
             }
           }
         }

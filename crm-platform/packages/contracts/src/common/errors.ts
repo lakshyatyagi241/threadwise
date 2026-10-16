@@ -685,6 +685,18 @@ export const ERROR_CODES = {
   APPT_CALENDAR_NOT_CONNECTED: 'APPT_CALENDAR_NOT_CONNECTED',
   /** Google did not answer or refused the request (details are logged, not returned). */
   APPT_CALENDAR_PROVIDER_FAILED: 'APPT_CALENDAR_PROVIDER_FAILED',
+  /** Confirming a calendar connection that someone else started (a forwarded link), or in another workspace. Nothing was requested from the provider. */
+  APPT_CALENDAR_CONFIRM_NOT_YOURS: 'APPT_CALENDAR_CONFIRM_NOT_YOURS',
+  /** The calendar connection ticket is malformed, expired or already used: press Connect again. */
+  APPT_CALENDAR_CONFIRM_INVALID: 'APPT_CALENDAR_CONFIRM_INVALID',
+  /** The iCal feed address is not an address we can read (not http/https/webcal, credentials in it, too long). */
+  APPT_ICS_FEED_INVALID: 'APPT_ICS_FEED_INVALID',
+  /** The feed address was fetched and is not a usable calendar (details: one path `url` with the reason code: unreachable, not_a_calendar, too_large, ...). */
+  APPT_ICS_FEED_UNREADABLE: 'APPT_ICS_FEED_UNREADABLE',
+  /** The workspace already subscribes to that address. */
+  APPT_ICS_FEED_DUPLICATE: 'APPT_ICS_FEED_DUPLICATE',
+  /** The workspace is at its limit of iCal feeds. */
+  APPT_ICS_FEED_LIMIT: 'APPT_ICS_FEED_LIMIT',
 
   // catalog and products (TW-CAT)
   /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */

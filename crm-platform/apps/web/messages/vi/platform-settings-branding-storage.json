@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Trình tạo luồng"
+      "flowBuilder": "Trình tạo luồng",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Quản trị - Cài đặt dự án",
@@ -1024,6 +1025,37 @@
             "advanced": "Chỉ Advanced"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Ứng dụng Microsoft mà mọi không gian làm việc dùng để kết nối lịch Outlook hoặc Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Ứng dụng Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Cho phép không gian làm việc kết nối Outlook",
+            "hint": "Tắt: không không gian làm việc nào có thể kết nối, và không có gì được đọc từ hoặc ghi vào bất kỳ lịch Outlook nào. Các lịch đã kết nối vẫn được giữ lại."
+          },
+          "clientId": {
+            "label": "Application (client) ID",
+            "hint": "Lấy từ Microsoft Entra admin center, App registrations, Overview. Để trống sẽ dùng MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Khóa bí mật của ứng dụng",
+            "hint": "Được lưu dưới dạng mã hóa và không bao giờ hiển thị lại. Để trống sẽ giữ khóa đã lưu; MICROSOFT_CALENDAR_CLIENT_SECRET là giá trị dự phòng."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common cho phép tài khoản cơ quan, trường học và cá nhân; hãy dùng ID thư mục (tenant) cho ứng dụng đơn tenant. Để trống sẽ dùng MICROSOFT_CALENDAR_TENANT, nếu không có thì dùng common."
+          },
+          "redirectUri": {
+            "label": "Ghi đè URI chuyển hướng",
+            "hint": "Để trống để dùng địa chỉ ở trên. Địa chỉ này phải khớp chính xác với một URI chuyển hướng của ứng dụng."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Trình tạo luồng",
         "description": "Trình tạo luồng mặc định cho mọi không gian làm việc: Simple từng bước hoặc Advanced dạng canvas. Một không gian làm việc có thể ghi đè tùy chọn này.",
         "tags": "Simple / Advanced / Tự động hóa"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Ứng dụng Microsoft mà các không gian làm việc dùng để kết nối lịch Outlook và Microsoft 365 cho việc đặt lịch.",
+        "tags": "Microsoft / OAuth / Outlook / Lịch"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Các luồng đã có sẵn",
               "body": "Thay đổi cài đặt này không bao giờ thay đổi hay xóa luồng. Luồng vẫn hoạt động; chỉ là nó được mở trong trình tạo đang được bật. Không gian làm việc đã chọn trình tạo riêng sẽ giữ nguyên cho đến khi họ chọn lại mặc định của nền tảng."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Lịch hẹn",
+        "description": "Một ứng dụng Microsoft Entra cho toàn bộ nền tảng. Sau đó, mỗi không gian làm việc tự kết nối lịch Outlook hoặc Microsoft 365 của mình từ Lịch hẹn, Cài đặt, và không bao giờ thấy client id hay khóa bí mật.",
+        "sections": {
+          "oauth": {
+            "title": "Ứng dụng Microsoft Entra",
+            "description": "Nếu chưa có client id và khóa bí mật, các không gian làm việc sẽ thấy Outlook ở trạng thái không khả dụng và các lượt đặt lịch vẫn tiếp tục hoạt động mà không có nó. Google Calendar không bị ảnh hưởng."
+          }
+        },
+        "guide": {
+          "title": "Thiết lập trong Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Đăng ký ứng dụng",
+              "body": "Trong Microsoft Entra admin center, hãy tạo một đăng ký ứng dụng cho tài khoản trong mọi thư mục tổ chức và tài khoản Microsoft cá nhân, rồi sao chép Application (client) ID vào đây. Giữ tenant là common trừ khi bạn đã chọn một tùy chọn hẹp hơn."
+            },
+            "redirect": {
+              "title": "2. URI chuyển hướng và khóa bí mật",
+              "body": "Thêm URI chuyển hướng hiển thị trên trang này dưới dạng Web redirect, sau đó tạo khóa bí mật trong Certificates and secrets và dán giá trị của nó vào đây. Hãy ghi lại ngày hết hạn: sau ngày đó, lịch của mọi không gian làm việc sẽ ngừng hoạt động cho đến khi lưu khóa bí mật mới."
+            },
+            "permissions": {
+              "title": "3. Quyền API",
+              "body": "Thêm các quyền Microsoft Graph dạng delegated là Calendars.ReadWrite, User.Read và offline_access, không thêm gì khác. Để dùng rộng rãi, hãy hoàn tất xác minh nhà phát hành; tenant của khách hàng cũng có thể yêu cầu quản trị viên phê duyệt ứng dụng."
+            },
+            "workspaces": {
+              "title": "4. Các không gian làm việc kết nối",
+              "body": "Dán client id và khóa bí mật vào đây rồi lưu. Sau đó quản trị viên sẽ kết nối từ Lịch hẹn, Cài đặt."
             }
           }
         }
