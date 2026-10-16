@@ -1019,6 +1019,7 @@
         "lifecycle_stage": "ライフサイクルステージ",
         "status": "ステータス",
         "groups": "グループ",
+        "owner": "担当者",
         "opt_out": "マーケティング配信停止"
       },
       "types": {

@@ -64,6 +64,7 @@ export const BUILT_IN_PROPERTIES: readonly BuiltInProperty[] = [
   { key: 'lifecycle_stage', type: 'select', required: false, manage: '/contact-stages' },
   { key: 'status', type: 'select', required: false, manage: '/contact-stages' },
   { key: 'groups', type: 'multiselect', required: false, manage: '/contact-groups' },
+  { key: 'owner', type: 'select', required: false },
   { key: 'opt_out', type: 'checkbox', required: false },
 ];
 

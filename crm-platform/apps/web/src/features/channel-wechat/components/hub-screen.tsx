@@ -24,6 +24,8 @@ export function HubScreen() {
   const canBroadcasts = useCan('wechat.broadcasts.read');
   const [open, setOpen] = useState(false);
   const list = channels.data?.data ?? [];
+  // Banned in some countries (India): the workspace cannot connect a channel or send, and the entry points stay hidden.
+  const blocked = channels.data !== undefined && !channels.data.availability.available;
 
   return (
     <main className="mx-auto max-w-none space-y-6 px-4 py-7 sm:px-6 lg:px-7">
@@ -40,7 +42,7 @@ export function HubScreen() {
           </h1>
           <p className="mt-2 max-w-xl text-[13px] text-muted-foreground">{t('intro')}</p>
         </div>
-        {list.length > 0 && canBroadcasts && (
+        {list.length > 0 && canBroadcasts && !blocked && (
           <Link
             href="/wechat/broadcasts"
             className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full px-4 text-xs font-semibold text-white"
@@ -53,13 +55,14 @@ export function HubScreen() {
       </div>
 
       {channels.isError && <Alert tone="danger">{t('loadError')}</Alert>}
+      {blocked && <Alert tone="warning">{t('unavailableCountry')}</Alert>}
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="min-w-0 space-y-6">
           <section className="rounded-2xl border border-border bg-background p-6 shadow-sm">
             <h2 className="text-[22px] leading-tight">{t('connectTitle')}</h2>
             <p className="mt-1 text-[12.5px] text-muted-foreground">{t('connectBody')}</p>
-            {canManage && (
+            {canManage && !blocked && (
               <button
                 type="button"
                 onClick={() => setOpen(true)}

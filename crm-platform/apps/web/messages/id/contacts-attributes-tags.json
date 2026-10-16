@@ -1019,6 +1019,7 @@
         "lifecycle_stage": "Tahap siklus hidup",
         "status": "Status",
         "groups": "Grup",
+        "owner": "Pemilik",
         "opt_out": "Berhenti menerima pemasaran"
       },
       "types": {

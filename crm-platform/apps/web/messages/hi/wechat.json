@@ -10,6 +10,7 @@
       "intro": "WeChat ऑफिशियल अकाउंट (प्रमाणित सर्विस अकाउंट) कनेक्ट करें। आने वाले संदेश आपके साझा टीम इनबॉक्स में आते हैं, और जवाब, कीवर्ड नियम और ऑटो-रेस्पॉन्डर बिल्कुल बाकी चैनलों की तरह काम करते हैं।",
       "broadcasts": "ब्रॉडकास्ट",
       "loadError": "आपके WeChat चैनल लोड नहीं हो सके।",
+      "unavailableCountry": "WeChat आपके देश में उपलब्ध नहीं है। इस वर्कस्पेस से न तो WeChat चैनल जोड़ा जा सकता है और न WeChat संदेश भेजे जा सकते हैं।",
       "connectTitle": "चैनल कनेक्ट करें",
       "connectBody": "WeChat Official Accounts Platform (सेटिंग्स → Basic Configuration) से AppID, AppSecret और सर्वर Token यहाँ पेस्ट करें।",
       "connect": "WeChat कनेक्ट करें",
