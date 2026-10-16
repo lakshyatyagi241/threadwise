@@ -337,7 +337,7 @@ export async function verifyCampaigns(a: CampaignVerifyArgs): Promise<BResult> {
         sql.raw(`
         SELECT id, uuid::text AS uuid, ${[...new Set([...campaignCols, ...defaults])].map((c) => colExpr(c)).join(', ')}
         FROM wpcampaigns WHERE org_id = ${orgId}
-          AND uuid IN (SELECT jsonb_array_elements_text('${quote(JSON.stringify(part.map((c) => c.uuid)))}'::jsonb)::uuid)`),
+          AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text('${quote(JSON.stringify(part.map((c) => c.uuid)))}'::jsonb)::uuid))`),
       ),
     );
     const byUuid = new Map(rowsOf<Record<string, unknown>>(res).map((r) => [String(r.uuid), r]));
@@ -400,7 +400,7 @@ export async function verifyCampaigns(a: CampaignVerifyArgs): Promise<BResult> {
                  .join(', ')}
         FROM wp_campaign_contacts r LEFT JOIN wpcampaigns c ON c.org_id = r.org_id AND c.id = r.campaign_id
         WHERE r.org_id = ${orgId}
-          AND r.uuid IN (SELECT jsonb_array_elements_text('${quote(JSON.stringify(part.map((r) => r.uuid)))}'::jsonb)::uuid)`),
+          AND r.uuid = ANY (ARRAY(SELECT jsonb_array_elements_text('${quote(JSON.stringify(part.map((r) => r.uuid)))}'::jsonb)::uuid))`),
       ),
     );
     const byUuid = new Map(rowsOf<Record<string, unknown>>(res).map((r) => [String(r.uuid), r]));

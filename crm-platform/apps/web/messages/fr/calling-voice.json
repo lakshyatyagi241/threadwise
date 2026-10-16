@@ -89,7 +89,8 @@
       "NETWORK": "Erreur réseau : veuillez réessayer.",
       "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer.",
       "CALL_PLAYBACK_LINK_INVALID": "Ce lien d'enregistrement a expiré. Appuyez à nouveau sur lecture pour en obtenir un nouveau.",
-      "CALL_RANGE_INVALID": "Ces dates sont incohérentes : le début ne doit pas être après la fin, la période ne peut pas dépasser un an et le fuseau horaire doit être valide."
+      "CALL_RANGE_INVALID": "Ces dates sont incohérentes : le début ne doit pas être après la fin, la période ne peut pas dépasser un an et le fuseau horaire doit être valide.",
+      "CALL_OUTSIDE_WINDOW": "Ce contact est en dehors de vos heures d’appel, aucun appel n’a donc été passé. La plage d’appel s’ouvre {when}."
     },
     "settings": {
       "title": "Appels",

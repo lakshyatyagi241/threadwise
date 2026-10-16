@@ -1,5 +1,6 @@
 import { Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { BroadcastsModule, WARMER_GATE, type WarmerGate } from '../broadcasts';
+import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -29,6 +30,7 @@ import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
   imports: [
     BroadcastsModule,
     ContactConsentModule,
+    SendWindowModule,
     CrmModule,
     PlansCoreModule,
     PlatformSettingsModule,

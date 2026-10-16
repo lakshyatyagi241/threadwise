@@ -241,4 +241,4 @@ The contact side is `contact.updated` on aggregate `contacts` (payload adds `com
 
 ## Not built here
 
-The "Generate brief" button on the company page (the client brief feature is not built: BL-191). The AI copilot's company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`; its `generate_brief` waits for the same feature. See "Not built here" in the inventory.
+The "Generate brief" button on the company page (the client brief feature is not built: BL-194). The AI copilot's company tools (`find_company`, `create_company`, `link_contact_company`) exist in the AI CRM Copilot and call `CompaniesService`; its `generate_brief` waits for the same feature. See "Not built here" in the inventory.

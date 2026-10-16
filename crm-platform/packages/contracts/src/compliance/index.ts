@@ -4,3 +4,4 @@ export * from './regimes';
 export * from './settings';
 export * from './checklist';
 export * from './dpa';
+export * from './send-window';

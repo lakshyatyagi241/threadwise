@@ -23,6 +23,21 @@ Scrape `http://<container>:9464/metrics` with `Authorization: Bearer <token>`, j
 Nothing here is wired into `deploy/hostinger/docker-compose.yml` yet: no Prometheus or Grafana service exists in the repo. NOT VERIFIED
 end to end until one scrapes a real container.
 
+### Check the alert rules (no Prometheus needed)
+
+```bash
+docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 check rules /rules/event-loop.rules.yml
+docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/event-loop.rules.test.yml
+```
+
+`check` validates syntax and PromQL (11 rules). `test` feeds synthetic series and asserts which alerts fire at which time, including the
+near-misses that must not page: high utilization alone, high delay with fast requests or a fast queue, a live heartbeat, a scrape
+target that is not ours. Both run in the `event-loop` job of `quality.yml`. Mutation-checked: loosening the API impact threshold, the
+worker queue threshold or the stale threshold makes the matching case fail.
+
+What this does not prove: that a real Prometheus scraping a real process produces these series with these labels and the same
+timing, and that anyone gets paged. Change a threshold or add an alert only together with a case in `event-loop.rules.test.yml`.
+
 ## Reading the signals
 
 | You see                         | It usually means                                       | Check                                                      |

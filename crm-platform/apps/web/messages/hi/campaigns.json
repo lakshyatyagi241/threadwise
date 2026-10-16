@@ -864,7 +864,8 @@
         "clicked": "क्लिक किया",
         "showing": "{total} में से {shown} दिखाए जा रहे हैं",
         "prev": "पिछला पेज",
-        "next": "अगला पेज"
+        "next": "अगला पेज",
+        "heldUntil": "{when} तक रोका गया (शांत घंटे)"
       },
       "engagement": {
         "opened": "खोला",
@@ -1032,7 +1033,8 @@
         "badge": "लाइव",
         "updated": "अपडेट: {time}",
         "queued": "{count} भेजे जाने की प्रतीक्षा में",
-        "processing": "{count} अभी भेजे जा रहे हैं"
+        "processing": "{count} अभी भेजे जा रहे हैं",
+        "held": "{count} शांत घंटों के कारण रोके गए"
       },
       "statistics": {
         "loadFailed": "आँकड़े लोड नहीं हो सके।",

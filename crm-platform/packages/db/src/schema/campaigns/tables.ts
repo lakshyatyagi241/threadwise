@@ -310,6 +310,9 @@ export const wpCampaignContacts = pgTable(
     status: text('status').notNull().default('queued'),
     sendAttempts: smallint('send_attempts').notNull().default(0),
     nextAttemptAt: timestamp('next_attempt_at', { withTimezone: true }),
+    /** BL-177: the instant this recipient may be messaged after the workspace's quiet hours, and why. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     phoneNumber: text('phone_number'),
     recipientName: text('recipient_name'),
     whatsappMessageId: text('whatsapp_message_id'),
@@ -366,6 +369,13 @@ export const wpCampaignContacts = pgTable(
     index('idx_wp_campaign_contacts_retry_open')
       .on(t.orgId, t.campaignId)
       .where(sql`retry_state IN ('scheduled', 'sending', 'sent')`),
+    check(
+      'ck_wp_campaign_contacts_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
+    index('idx_wp_campaign_contacts_held')
+      .on(t.orgId, t.campaignId, t.heldUntil)
+      .where(sql`held_until IS NOT NULL`),
     foreignKey({
       name: 'fk_wp_campaign_contacts_org',
       columns: [t.orgId],

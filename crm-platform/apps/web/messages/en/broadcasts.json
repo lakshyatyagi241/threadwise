@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Paused: the daily sending cap was reached. It resumes by itself after {when}.",
         "halt": "Paused: sending is halted for this workspace. It resumes when the halt is lifted.",
-        "manual": "Paused."
+        "manual": "Paused.",
+        "quiet_hours": "Paused: some recipients are in their quiet hours. It resumes by itself after {when}."
       },
       "delete": "Delete",
       "deleteTitle": "Delete broadcast?",
@@ -145,7 +146,8 @@
         "queued": "Queued",
         "queuedHint": "awaiting send",
         "failed": "Failed",
-        "failedPct": "{pct}% failure rate"
+        "failedPct": "{pct}% failure rate",
+        "queuedHeld": "{count} held for the quiet hours"
       },
       "tab": {
         "overview": "Overview",
@@ -193,7 +195,8 @@
         "lastClick": "Last click: {when}",
         "empty": "No recipients attached.",
         "more": "Load more",
-        "loading": "Loading"
+        "loading": "Loading",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "failures": {
         "kicker": "Failure reasons",

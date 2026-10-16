@@ -4,9 +4,10 @@
     "unitIntegration": 41,
     "staticGate": 1,
     "benchmarks": 3,
-    "total": 45
+    "alertRuleCases": 9,
+    "total": 54
   },
-  "coverageAgainstTarget": "45 of 280 (about 16%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
+  "coverageAgainstTarget": "54 of 280 (about 19%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
   "categories": [
     {
       "name": "Instrumentation unit/integration",
@@ -80,8 +81,9 @@
     {
       "name": "Alerting, telemetry and operational",
       "target": 30,
-      "implemented": 0,
-      "note": "deploy/observability/event-loop.rules.yml exists and parses as YAML; PromQL was NOT validated with promtool and no alert has been fired against a real Prometheus."
+      "implemented": 9,
+      "file": "deploy/observability/event-loop.rules.test.yml (promtool test rules, 9 case groups over all 11 rules, mutation-checked)",
+      "note": "Rules pass promtool check and test on synthetic series. No alert has been fired against a real Prometheus, no receiver is configured, and telemetry/operational checks (stale-metric end to end, restart continuity) are still missing."
     }
   ]
 }

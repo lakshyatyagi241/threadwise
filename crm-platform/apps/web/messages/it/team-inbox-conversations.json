@@ -232,7 +232,9 @@
         "undone": "Cambio di fase annullato: di nuovo in {stage}.",
         "undoneToast": "Fase ripristinata a {stage}.",
         "couldNotUndo": "Questa modifica non può più essere annullata: il contatto è andato avanti o è già stata annullata."
-      }
+      },
+      "heldUntil": "Trattenuto fino a {when}",
+      "heldWhy": "Questo messaggio di marketing attende la fine delle tue ore di silenzio. Verrà inviato allora, se nel frattempo il contatto non si è disiscritto."
     },
     "media": {
       "openImage": "Apri immagine {name}",

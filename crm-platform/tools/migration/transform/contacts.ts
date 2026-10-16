@@ -15,6 +15,7 @@ import {
   str,
   toDate,
   type Doc,
+  cutText,
 } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { SourceIndex } from './source-index';
@@ -323,7 +324,7 @@ export const contacts: HandlerSpec = {
         reason: 'source longer than the 128-character column limit',
         detail: source,
       });
-      source = source.slice(0, 128);
+      source = cutText(source, 128);
     }
 
     const wa = subscriptionStatus(doc.whatsapp_subscription_status, ctx.idx);
@@ -338,6 +339,12 @@ export const contacts: HandlerSpec = {
       const s = scrub(plain(v));
       dropped.push(...s.redacted.map((p) => `${k}.${p}`));
       setOwn(data, k, s.value);
+    }
+    // Waboo lists Created Time and Modified Time as contact fields; WaDesk keeps them in created_at / updated_at. The same instants are also
+    // kept in data (ISO text) so the two read-only field rows of the contact page have a value to show (README, "Contact properties").
+    for (const k of ['created_time', 'modified_time'] as const) {
+      const d = toDate(doc[k]);
+      if (d) setOwn(data, k, d.toISOString());
     }
     if (dropped.length > 0) {
       soft.push({

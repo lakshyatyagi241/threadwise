@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Đã tạm dừng: đã đạt giới hạn gửi hằng ngày. Sẽ tự động tiếp tục sau {when}.",
         "halt": "Đã tạm dừng: việc gửi bị dừng đối với không gian làm việc này. Sẽ tiếp tục khi lệnh dừng được gỡ bỏ.",
-        "manual": "Đã tạm dừng."
+        "manual": "Đã tạm dừng.",
+        "quiet_hours": "Đã tạm dừng: một số người nhận đang trong giờ yên tĩnh. Sẽ tự tiếp tục sau {when}."
       },
       "delete": "Xóa",
       "deleteTitle": "Xóa đợt gửi hàng loạt?",
@@ -145,7 +146,8 @@
         "queued": "Đang chờ",
         "queuedHint": "chờ gửi",
         "failed": "Thất bại",
-        "failedPct": "Tỷ lệ thất bại {pct}%"
+        "failedPct": "Tỷ lệ thất bại {pct}%",
+        "queuedHeld": "{count} đang tạm giữ vì giờ yên tĩnh"
       },
       "tab": {
         "overview": "Tổng quan",
@@ -193,7 +195,8 @@
         "lastClick": "Lần nhấp gần nhất: {when}",
         "empty": "Chưa có người nhận nào được đính kèm.",
         "more": "Tải thêm",
-        "loading": "Đang tải"
+        "loading": "Đang tải",
+        "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
       },
       "failures": {
         "kicker": "Lý do thất bại",

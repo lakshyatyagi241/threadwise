@@ -232,7 +232,9 @@
         "undone": "Aşama değişikliği geri alındı: tekrar {stage}.",
         "undoneToast": "Aşama {stage} olarak geri yüklendi.",
         "couldNotUndo": "Bu değişiklik artık geri alınamaz: kişi ilerledi veya değişiklik zaten geri alındı."
-      }
+      },
+      "heldUntil": "{when} tarihine kadar bekletiliyor",
+      "heldWhy": "Bu pazarlama mesajı sessiz saatlerinizin bitmesini bekliyor. Bu arada kişi abonelikten çıkmadıysa o zaman gönderilecek."
     },
     "media": {
       "openImage": "{name} görselini aç",

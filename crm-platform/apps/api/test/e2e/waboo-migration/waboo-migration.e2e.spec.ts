@@ -102,31 +102,13 @@ describe('waboo migration runs', () => {
     expect([400, 422]).toContain(res.status);
   });
 
-  it('gates a load on the typed client key and a green dry run from the last 24 hours', async () => {
+  it('gates a load on the typed client key only: no earlier dry run is needed (the pipeline rehearses first)', async () => {
     const body = { sourceClient: 'gated', sourceDb: 'waboo_gated', mode: 'load' };
 
     const noConfirm = await ops('post', '/runs').send(body);
     expect(noConfirm.status).toBe(422);
     expect(code(noConfirm)).toBe('WMIG_CONFIRM_MISMATCH');
 
-    const noDry = await ops('post', '/runs').send({ ...body, confirmClient: 'gated' });
-    expect(noDry.status).toBe(422);
-    expect(code(noDry)).toBe('WMIG_DRY_RUN_REQUIRED');
-
-    // A dry run that finished red does not unlock a load.
-    await h.owner.query(
-      `INSERT INTO waboo_migration_runs (source_client, source_db, mode, status, report, finished_at)
-       VALUES ('gated', 'waboo_gated', 'dry', 'completed', '{"green":false}'::jsonb, now())`,
-    );
-    expect(code(await ops('post', '/runs').send({ ...body, confirmClient: 'gated' }))).toBe(
-      'WMIG_DRY_RUN_REQUIRED',
-    );
-
-    // A green one does, but only if it is recent and the confirmation matches.
-    await h.owner.query(
-      `INSERT INTO waboo_migration_runs (source_client, source_db, mode, status, report, finished_at)
-       VALUES ('gated', 'waboo_gated', 'dry', 'completed', '{"green":true}'::jsonb, now())`,
-    );
     expect(code(await ops('post', '/runs').send({ ...body, confirmClient: 'other' }))).toBe(
       'WMIG_CONFIRM_MISMATCH',
     );

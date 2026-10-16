@@ -1,4 +1,4 @@
-import { isDeleted, str, type Doc } from '../util';
+import { cutText, isDeleted, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
 
@@ -47,7 +47,7 @@ const slots = (text: string | null, example: unknown, key: 'body_text' | 'header
   const ex = examplesOf(example, key);
   return t.map((k, i) => {
     const e = ex[i]?.trim();
-    return { num: i + 1, key: k, ...(e ? { example: e.slice(0, 200) } : {}) };
+    return { num: i + 1, key: k, ...(e ? { example: cutText(e, 200) } : {}) };
   });
 };
 

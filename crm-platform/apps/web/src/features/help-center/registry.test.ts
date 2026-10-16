@@ -27,6 +27,13 @@ describe('help registry', () => {
     expect(bad).toEqual([]);
   });
 
+  it('every features entry is a real plan feature key', () => {
+    const bad = HELP_DOCS.flatMap((d) =>
+      d.features.filter((k) => !isPlanFeatureKey(k)).map((k) => `${d.id}: ${k}`),
+    );
+    expect(bad).toEqual([]);
+  });
+
   it("a guide on a menu screen sits in that screen's menu group, or in a help-only area", () => {
     const helpOnly = new Set(['settings', 'account', 'getting-started']);
     const bad = HELP_DOCS.flatMap((d) => {

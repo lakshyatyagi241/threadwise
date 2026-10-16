@@ -232,7 +232,9 @@
         "undone": "Zmiana etapu cofnięta: z powrotem {stage}.",
         "undoneToast": "Etap przywrócono na {stage}.",
         "couldNotUndo": "Tej zmiany nie można już cofnąć: kontakt poszedł dalej albo zmianę już cofnięto."
-      }
+      },
+      "heldUntil": "Wstrzymano do {when}",
+      "heldWhy": "Ta wiadomość marketingowa czeka na koniec Twoich godzin ciszy. Zostanie wysłana wtedy, o ile kontakt w międzyczasie się nie wypisał."
     },
     "media": {
       "openImage": "Otwórz obraz {name}",

@@ -251,8 +251,8 @@ describe('profile rows', () => {
     expect(row(on, 'calling_window').status).toBe('built');
     expect(row(on, 'dnd_registry').status).toBe('partial');
     expect(row(on, 'windows_enforcement')).toMatchObject({
-      status: 'partial',
-      detail: 'notEnforced',
+      status: 'built',
+      detail: 'enforced',
     });
     const off = buildChecklist(facts(), ['trai_in']);
     expect(off.items.find((i) => i.id === 'windows_enforcement')).toBeUndefined();

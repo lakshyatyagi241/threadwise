@@ -864,7 +864,8 @@
         "clicked": "클릭함",
         "showing": "{total}개 중 {shown}개 표시",
         "prev": "이전 페이지",
-        "next": "다음 페이지"
+        "next": "다음 페이지",
+        "heldUntil": "{when}까지 보류됨 (방해 금지 시간)"
       },
       "engagement": {
         "opened": "열람함",
@@ -1032,7 +1033,8 @@
         "badge": "실시간",
         "updated": "{time} 업데이트",
         "queued": "{count}건 발송 대기 중",
-        "processing": "{count}건 지금 발송 중"
+        "processing": "{count}건 지금 발송 중",
+        "held": "{count}건이 방해 금지 시간 때문에 보류됨"
       },
       "statistics": {
         "loadFailed": "통계를 불러오지 못했습니다.",

@@ -232,7 +232,9 @@
         "undone": "Mudança de etapa desfeita: de volta a {stage}.",
         "undoneToast": "Etapa restaurada para {stage}.",
         "couldNotUndo": "Esta mudança não pode mais ser desfeita: o contato avançou ou já foi desfeita."
-      }
+      },
+      "heldUntil": "Retida até {when}",
+      "heldWhy": "Esta mensagem de marketing aguarda o fim do seu horário de silêncio. Será enviada então, se o contato não tiver cancelado a inscrição nesse meio-tempo."
     },
     "media": {
       "openImage": "Abrir imagem {name}",

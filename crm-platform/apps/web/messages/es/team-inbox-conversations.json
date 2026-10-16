@@ -232,7 +232,9 @@
         "undone": "Cambio de etapa deshecho: de vuelta a {stage}.",
         "undoneToast": "Etapa restablecida a {stage}.",
         "couldNotUndo": "Este cambio ya no se puede deshacer: el contacto avanzó o ya se deshizo."
-      }
+      },
+      "heldUntil": "En espera hasta {when}",
+      "heldWhy": "Este mensaje de marketing espera a que terminen tus horas de silencio. Se enviará entonces, si el contacto no se ha dado de baja mientras tanto."
     },
     "media": {
       "openImage": "Abrir imagen {name}",

@@ -1,4 +1,4 @@
-import { isDeleted, primaryKey, str, toDate, type Doc } from '../util';
+import { cutText, isDeleted, primaryKey, str, toDate, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
 
@@ -41,9 +41,9 @@ export function labelOf(raw: string): string {
   try {
     const u = new URL(raw.trim());
     const text = `${u.host}${u.pathname}`.replace(/\/+$/, '');
-    return (text || raw.trim()).slice(0, LABEL_MAX);
+    return cutText(text || raw.trim(), LABEL_MAX);
   } catch {
-    return raw.trim().slice(0, LABEL_MAX);
+    return cutText(raw.trim(), LABEL_MAX);
   }
 }
 

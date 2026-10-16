@@ -1,4 +1,9 @@
-import { emailMetaSchema, type EmailMeta, type MessageResponse } from '@crm/contracts';
+import {
+  emailMetaSchema,
+  sendHoldSchema,
+  type EmailMeta,
+  type MessageResponse,
+} from '@crm/contracts';
 import type { MessageRow } from './messages.repository';
 
 /** Mints the short-lived url of a stored file for one reader; null leaves the url out (the realtime payload has no single reader). */
@@ -246,6 +251,18 @@ function legacyView(row: MessageRow): {
   return null;
 }
 
+/**
+ * Why a queued marketing message is waiting (`meta.hold`, written when the dispatcher met the quiet hours, BL-177). Only while the
+ * message is still `queued`: once it is sent or failed the hold is history (the event log keeps it).
+ */
+function holdOf(row: MessageRow): MessageResponse['hold'] {
+  if (row.direction !== 'out' || row.status !== 'queued' || row.meta.hold === undefined) {
+    return undefined;
+  }
+  const parsed = sendHoldSchema.safeParse(row.meta.hold);
+  return parsed.success ? parsed.data : undefined;
+}
+
 /** An email message's `meta.email` block, validated on the way out (a row written by an older build or by hand never breaks the response). */
 function emailOf(row: MessageRow): EmailMeta | undefined {
   if (row.meta.email === undefined) return undefined;
@@ -324,6 +341,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
           }
         : null,
     status: row.status,
+    hold: holdOf(row),
     failure: row.status === 'failed' ? { code: row.failureCode, reason: row.failureReason } : null,
     clientMessageId: row.clientMessageId,
     replyToMessageId: row.replyToMessageUuid,

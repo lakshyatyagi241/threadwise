@@ -78,6 +78,8 @@ const REVIEWED = [
   },
   { file: 'load/core.ts', api: 'readFileSync', why: 'dumps/<client>/core.json under SOURCE_DUMPS_DIR (geta_core facts, no credentials)' },
   { file: 'load/walletsync.ts', api: 'readFileSync', why: 'dumps/<client>/core.json under SOURCE_DUMPS_DIR (the geta_core balance, no credentials)' },
+  { file: 'reconcile/credits.ts', api: 'readFileSync', why: 'dumps/<client>/core.json next to the dump files (the verifier recomputes the wallet history from it; no credentials)' },
+  { file: 'load/wallethistory.ts', api: 'readFileSync', why: 'dumps/<client>/core.json under SOURCE_DUMPS_DIR (the geta_core balance, timezone, top-ups and purchases; no credentials)' },
   { file: 'load/cutover.ts', api: 'readFileSync', why: 'the reconcile.md report under --out (/mig/out/<client>/reconcile.md), a path the caller passes in; no credentials' },
   { file: 'extract/source.ts', api: 'createReadStream', why: 'dump files under SOURCE_DUMPS_DIR' },
   { file: 'extract/source.ts', api: 'existsSync', why: 'SOURCE_DUMPS_DIR' },

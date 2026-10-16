@@ -864,7 +864,8 @@
         "clicked": "คลิกแล้ว",
         "showing": "แสดง {shown} จาก {total}",
         "prev": "หน้าก่อนหน้า",
-        "next": "หน้าถัดไป"
+        "next": "หน้าถัดไป",
+        "heldUntil": "พักไว้จนถึง {when} (ช่วงเวลางดรบกวน)"
       },
       "engagement": {
         "opened": "เปิดแล้ว",
@@ -1032,7 +1033,8 @@
         "badge": "สด",
         "updated": "อัปเดต {time}",
         "queued": "{count} รายการรอส่ง",
-        "processing": "{count} รายการกำลังส่งอยู่"
+        "processing": "{count} รายการกำลังส่งอยู่",
+        "held": "{count} รายการถูกพักไว้เพราะช่วงเวลางดรบกวน"
       },
       "statistics": {
         "loadFailed": "โหลดสถิติไม่สำเร็จ",

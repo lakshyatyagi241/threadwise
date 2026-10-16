@@ -864,7 +864,8 @@
         "clicked": "hizo clic",
         "showing": "Mostrando {shown} de {total}",
         "prev": "Página anterior",
-        "next": "Página siguiente"
+        "next": "Página siguiente",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "engagement": {
         "opened": "Abiertos",
@@ -1032,7 +1033,8 @@
         "badge": "En vivo",
         "updated": "actualizado {time}",
         "queued": "{count} en espera de envío",
-        "processing": "{count} enviándose ahora"
+        "processing": "{count} enviándose ahora",
+        "held": "{count} en espera por las horas de silencio"
       },
       "statistics": {
         "loadFailed": "No se pudieron cargar las estadísticas.",

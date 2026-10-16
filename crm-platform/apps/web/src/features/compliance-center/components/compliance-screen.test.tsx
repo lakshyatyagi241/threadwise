@@ -193,10 +193,10 @@ describe('the Compliance center', () => {
     expect((testid(host, 'save-settings') as HTMLButtonElement).disabled).toBe(false);
   });
 
-  it('the windows tab says in plain words that nothing is enforced yet', async () => {
+  it('the windows tab says in plain words what is held and what is not', async () => {
     state.tab = 'windows';
     await show();
-    expect(testid(m!.host, 'not-enforced')?.textContent).toContain(text('windows.notEnforced'));
+    expect(testid(m!.host, 'enforced-note')?.textContent).toContain(text('windows.enforcedNote'));
   });
 
   it('asks the children question and shows the parental switch only when minors may be included', async () => {

@@ -304,6 +304,36 @@ describe('detail tabs', () => {
       html(<RecipientsTable rows={[]} timezone="UTC" empty="No recipients attached." />),
     ).toContain('No recipients attached.');
   });
+
+  it('recipients: a held recipient says when it may go (BL-177)', () => {
+    const held = html(
+      <RecipientsTable
+        rows={[
+          {
+            contactId: 'c9',
+            name: 'Ravi',
+            phone: '+919800000009',
+            status: 'pending',
+            error: null,
+            providerMessageId: null,
+            queuedAt: '2026-10-02T10:00:00.000Z',
+            heldUntil: '2026-10-03T03:30:00.000Z',
+            heldReason: 'quiet_hours',
+            sentAt: null,
+            deliveredAt: null,
+            readAt: null,
+            clicks: 0,
+            lastClickAt: null,
+          },
+        ]}
+        timezone="UTC"
+        empty="none"
+      />,
+    );
+    expect(held).toContain('data-testid="recipient-held"');
+    expect(held).toContain('Held until');
+    expect(held).toContain('quiet hours');
+  });
 });
 
 describe('charts', () => {

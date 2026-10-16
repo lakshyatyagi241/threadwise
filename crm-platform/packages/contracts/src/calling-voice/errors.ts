@@ -19,6 +19,11 @@ export const CALL_ERROR_CODES = {
   CALL_META_REFUSED: 'CALL_META_REFUSED',
   /** The customer has not allowed calls yet: a permission request was sent instead, and no call was placed. */
   CALL_PERMISSION_REQUESTED: 'CALL_PERMISSION_REQUESTED',
+  /**
+   * The workspace's calling window is closed for this contact (BL-177). A live call cannot wait, so it is refused, with the instant the window
+   * opens in the problem's details (`opensAt`, ISO 8601) and the clock it was read on (`zone`). Nothing was placed and nothing was sent. 422.
+   */
+  CALL_OUTSIDE_WINDOW: 'CALL_OUTSIDE_WINDOW',
   /** The call was already taken (another teammate accepted it) or has moved on: nothing was changed. */
   CALL_STATE_CONFLICT: 'CALL_STATE_CONFLICT',
   /** The recording could not be stored. */

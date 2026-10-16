@@ -99,7 +99,8 @@ export function settingsDelta(
 /**
  * The Compliance center's settings (BL-172, BL-175, BL-176): the profiles switched on, the officer contacts, the links, the children
  * flag, the extras of the DPDP and CCPA profiles, and the quiet hours, calling window and DND choice. The country SUGGESTS profiles
- * (`suggestion`); nothing is switched on until a person saves a choice. The windows are stored, not enforced (BL-177).
+ * (`suggestion`); nothing is switched on until a person saves a choice. The windows are enforced by `SendWindowService` (BL-177): a
+ * marketing send inside the quiet hours is held, a dial outside the calling window is refused. The DND choice is still a note.
  */
 @Injectable()
 export class ComplianceSettingsService {

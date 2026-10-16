@@ -1,6 +1,7 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
+import { ApiError } from '@/lib/api/errors';
 import { CallError, callErrorKey, serverWorded } from '../lib/calls';
 import { metaReasonOf } from '../lib/readiness';
 
@@ -14,10 +15,25 @@ import { metaReasonOf } from '../lib/readiness';
  */
 export function useErrorText(): (error: unknown, opts?: { reasons?: boolean }) => string {
   const t = useTranslations('calling-voice');
+  const format = useFormatter();
   return (error, opts) => {
     if (error instanceof CallError) {
       const base = t(`failures.${error.kind}`);
       return error.detail ? `${base}: ${error.detail}` : base;
+    }
+    // The workspace's calling window is closed for this contact (BL-177): the answer names the instant it opens, in the reader's clock.
+    if (callErrorKey(error) === 'CALL_OUTSIDE_WINDOW') {
+      const opens =
+        error instanceof ApiError
+          ? error.fieldErrors.find((e) => e.path === 'opensAt')?.message
+          : null;
+      const at = opens ? new Date(opens) : null;
+      return t('errors.CALL_OUTSIDE_WINDOW', {
+        when:
+          at && !Number.isNaN(at.getTime())
+            ? format.dateTime(at, { dateStyle: 'medium', timeStyle: 'short' })
+            : '',
+      });
     }
     // Meta's refusals carry a stable reason the words are chosen by; its own sentence is only the fallback for a reason nobody has named.
     if (callErrorKey(error) === 'CALL_COEXISTENCE_UNSUPPORTED')
