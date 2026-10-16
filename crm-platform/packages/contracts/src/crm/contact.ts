@@ -58,6 +58,8 @@ export const contactResponseSchema = z.object({
   faxNumber: z.string().nullable(),
   /** Built-in personal property (BL-211): `YYYY-MM-DD`, or null. A date that makes the contact a minor sets the minor flag (source `dob`). */
   dateOfBirth: z.string().nullable(),
+  /** The contact is flagged as a minor (BL-190). Server-derived from the privacy flags; set through the Consent card or `POST /v1/contacts/:id/privacy`. */
+  isMinor: z.boolean(),
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
   customFields: z.record(z.unknown()),

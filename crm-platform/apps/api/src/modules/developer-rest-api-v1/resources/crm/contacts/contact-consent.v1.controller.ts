@@ -1,9 +1,14 @@
 import { Body, Get, Headers, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
-import { recordConsentSchema, type RecordConsentInput } from '@crm/contracts';
+import {
+  recordConsentSchema,
+  recordPrivacyFlagSchema,
+  type RecordConsentInput,
+  type RecordPrivacyFlagInput,
+} from '@crm/contracts';
 import { Idempotent } from '../../../../../common/decorators';
 import { zodPipe } from '../../../../../common/pipes/zod-validation.pipe';
-import { ContactConsentService } from '../../../../contact-consent';
+import { ContactConsentService, ContactPrivacyService } from '../../../../contact-consent';
 import { RequireApiScope } from '../../../auth/api-scope';
 import { V1Controller } from '../../../http/v1-controller.decorator';
 import { ok } from '../../../http/v1-envelope';
@@ -15,7 +20,10 @@ import { uuidOrNotFound } from '../v1-ids';
  */
 @V1Controller('contacts')
 export class V1ContactConsentController {
-  constructor(private readonly consent: ContactConsentService) {}
+  constructor(
+    private readonly consent: ContactConsentService,
+    private readonly privacy: ContactPrivacyService,
+  ) {}
 
   @Get(':id/consent')
   @RequireApiScope('contacts:read')
@@ -43,5 +51,33 @@ export class V1ContactConsentController {
     return ok(
       await this.consent.record(uuidOrNotFound(id, 'Contact'), { ...body, source: 'api' }, key),
     );
+  }
+
+  @Get(':id/privacy')
+  @RequireApiScope('contacts:read')
+  @ApiOperation({
+    summary: "A contact's privacy flags: minor, guardian consent, Do Not Sell or Share, and the history",
+  })
+  async privacyOf(@Param('id') id: string) {
+    return ok((await this.consent.forContact(uuidOrNotFound(id, 'Contact'), { limit: 1 })).privacy);
+  }
+
+  @Post(':id/privacy')
+  @Idempotent()
+  @HttpCode(HttpStatus.CREATED)
+  @RequireApiScope('contacts:write')
+  @ApiOperation({
+    summary: 'Turn a privacy flag on or off: minor, guardian consent, or Do Not Sell or Share',
+    description:
+      'Guardian consent needs a note (422 CONSENT_NOTE_REQUIRED) and a contact that is flagged as a minor (422 CONSENT_PRIVACY_NOT_MINOR). It never creates a marketing grant. A repeat with the same Idempotency-Key records nothing. The source is stored as "api".',
+  })
+  async recordPrivacy(
+    @Param('id') id: string,
+    @Body(zodPipe(recordPrivacyFlagSchema)) body: RecordPrivacyFlagInput,
+    @Headers('idempotency-key') key?: string,
+  ) {
+    const uuid = uuidOrNotFound(id, 'Contact');
+    await this.privacy.record(uuid, { ...body, source: 'api' }, key);
+    return ok((await this.consent.forContact(uuid, { limit: 1 })).privacy);
   }
 }

@@ -15,7 +15,7 @@ import {
   type SegmentNode,
   type SegmentOperator,
 } from '@crm/contracts';
-import { tokenCondition, searchTokens } from '../contacts/contact-conditions';
+import { minorCondition, tokenCondition, searchTokens } from '../contacts/contact-conditions';
 import {
   booleanTextPredicate,
   datePredicate,
@@ -306,6 +306,21 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
           op === 'is_true'
             ? sql`${contacts.importJobId} IS NOT NULL`
             : sql`${contacts.importJobId} IS NULL`,
+      };
+    case 'minor':
+      return { sql: minorCondition(op === 'is_true') };
+    case 'dateOfBirth':
+      return {
+        sql: datePredicate(sql`${contacts.dateOfBirth}::timestamptz`, op as DateOperator, c.value),
+      };
+    case 'age':
+      // Whole years on the earliest calendar date on Earth (UTC minus 12 hours), like the minor flag; no date, no age.
+      return {
+        sql: numberPredicate(
+          sql`(CASE WHEN ${contacts.dateOfBirth} IS NULL THEN NULL ELSE EXTRACT(YEAR FROM age((timezone('UTC', now()) - interval '12 hours')::date, ${contacts.dateOfBirth}))::int END)`,
+          op as NumberOperator,
+          c.value,
+        ),
       };
     case 'search': {
       const tokens = searchTokens(String(c.value));

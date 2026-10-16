@@ -10,6 +10,7 @@ import {
   type V1UpdateContact,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../../../common/context/request-context';
+import { ContactPrivacyService } from '../../../../contact-consent';
 import { AppError } from '../../../../../common/errors/app-error';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import { AuditService } from '../../../../../kernel/audit/audit.service';
@@ -73,6 +74,7 @@ export class V1ContactsService {
     private readonly groups: ContactGroupsService,
     private readonly extras: ContactExtrasRepository,
     private readonly audit: AuditService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   async list(query: { limit: number; cursor?: string; search?: string }) {
@@ -85,7 +87,15 @@ export class V1ContactsService {
     if (!parsed.success) throw invalid('search', 'The search is not valid.');
     // 'all': a key sees the whole workspace (TW-API-022), not just the records of the member who minted it.
     const res = await this.contacts.list(parsed.data, 'all');
-    return { data: res.data.map(toV1Contact), page: res.page };
+    const ctx = RequestContextStore.require();
+    const minors = await this.db.tx((tx) =>
+      this.privacy.minorUuids(
+        tx,
+        ctx.orgId,
+        res.data.map((c) => c.id),
+      ),
+    );
+    return { data: res.data.map((c) => toV1Contact(c, minors.has(c.id))), page: res.page };
   }
 
   async show(id: string): Promise<V1Contact> {
@@ -143,6 +153,7 @@ export class V1ContactsService {
         source: 'api',
         isUnsubscribed: body.is_unsubscribed === true,
         consent: toProof(body.consent),
+        ...(body.date_of_birth ? { dateOfBirth: body.date_of_birth } : {}),
         customFields: body.attributes ?? {},
       },
       { source: 'api', evidence: { apiKeyId: apiKeyRef(ctx) } },
@@ -181,6 +192,7 @@ export class V1ContactsService {
       if (has(raw, 'first_name')) input.firstName = body.first_name ?? null;
       if (has(raw, 'last_name')) input.lastName = body.last_name ?? null;
       if (has(raw, 'is_unsubscribed')) input.isUnsubscribed = body.is_unsubscribed === true;
+      if (has(raw, 'date_of_birth')) input.dateOfBirth = body.date_of_birth ?? null;
       if (has(raw, 'consent')) input.consent = toProof(body.consent);
 
       if (has(raw, 'name') || has(raw, 'first_name')) {
@@ -272,7 +284,8 @@ export class V1ContactsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact');
       const chips = await this.repo.groupChips(tx, ctx.orgId, [row.id]);
-      return toV1Contact(toContactResponse(row, { groups: chips }));
+      const minors = await this.privacy.minorUuids(tx, ctx.orgId, [row.uuid]);
+      return toV1Contact(toContactResponse(row, { groups: chips }), minors.has(row.uuid));
     });
   }
 
