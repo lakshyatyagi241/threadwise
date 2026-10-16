@@ -41,7 +41,10 @@ const serverUrlSchema = z
   .trim()
   .max(191)
   .refine((v) => v === '' || httpUrl(v), 'Enter a valid Server URL (http:// or https://).')
-  .refine((v) => v === '' || !httpUrl(v) || bridgeHostAllowed(v), 'That address cannot be a bridge.');
+  .refine(
+    (v) => v === '' || !httpUrl(v) || bridgeHostAllowed(v),
+    'That address cannot be a bridge.',
+  );
 
 export const nodePacingSchema = z.object({
   /** Seconds between consecutive sends. */
@@ -102,7 +105,10 @@ export const nodeBridgeTestRequestSchema = z.object({
     .string()
     .trim()
     .max(191)
-    .refine((v) => v === '' || (httpUrl(v) && bridgeHostAllowed(v)), 'Enter a valid Server URL (http:// or https://).'),
+    .refine(
+      (v) => v === '' || (httpUrl(v) && bridgeHostAllowed(v)),
+      'Enter a valid Server URL (http:// or https://).',
+    ),
   /** Blank tests with the stored token. */
   token: z.string().trim().max(191).optional(),
 });

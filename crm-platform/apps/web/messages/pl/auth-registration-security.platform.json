@@ -1439,7 +1439,8 @@
             "sms": "SMS tylko do wysyłki przez Twilio lub MSG91: połącz nadawców, wysyłaj transmisje i kampanie SMS.",
             "help_agent": "Asystent pomocy w aplikacji: użytkownicy opisują zadanie zwykłymi słowami, a asystent prowadzi ich przez nie lub wykonuje je w ich sesji, pytając o zgodę przed wszystkim, co ryzykowne. Zużywa tokeny AI.",
             "email_channel": "Połącz skrzynki Gmail i Google Workspace ze skrzynką odbiorczą zespołu. Tym przełącznikiem steruje płatna aplikacja E-mail.",
-            "personal_history_full": "Pozwala osobistemu numerowi WhatsApp zaimportować pełną historię czatów przy pierwszym połączeniu. Import ostatnich czatów jest dostępny w każdym planie z numerami osobistymi."
+            "personal_history_full": "Pozwala osobistemu numerowi WhatsApp zaimportować pełną historię czatów przy pierwszym połączeniu. Import ostatnich czatów jest dostępny w każdym planie z numerami osobistymi.",
+            "ai_crm_copilot": "Znajduje i ocenia leady za pomocą AI z Twoich kontaktów."
           },
           "units": {
             "days": "Dni",
@@ -1624,7 +1625,8 @@
             "sms": "Kanał SMS",
             "help_agent": "Asystent pomocy (AI, zużywa tokeny)",
             "email_channel": "Kanał e-mail (Gmail)",
-            "personal_history_full": "Import pełnej historii czatów (osobisty WhatsApp)"
+            "personal_history_full": "Import pełnej historii czatów (osobisty WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "To pole jest wymagane.",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "Zorza",
             "description": "Miękka poświata koloru za matową kartą."
+          },
+          "geta": {
+            "name": "Podział Geta",
+            "description": "Formularz z jednej strony, animowany panel marki ze statystykami z drugiej."
           }
         },
         "fields": {

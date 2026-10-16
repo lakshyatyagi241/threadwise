@@ -127,15 +127,17 @@ describe('the six guest designs', () => {
     expect(html).toContain('backdrop-blur-xl');
   });
 
-  it('design 6 is the Geta split: a 540 px form column on the left, the pitch and stats on an indigo panel on the right', () => {
+  it('design 6 is the Geta split: a half-width form column on the left, the pitch and stats on an ink panel on the right', () => {
     const html = shell(6);
-    expect(html).toContain('lg:grid-cols-[540px_1fr]');
+    expect(html).toContain('sm:w-1/2');
+    expect(html).toContain('bg-(--auth-geta-ink)');
     expect(html).toContain('auth-geta');
     expect(html).toContain('MARKETING EYEBROW');
     expect(html).toContain('Marketing heading');
     expect(html).toContain('Marketing sub copy');
     // The brand mark sits in the form column, not gated to small screens only.
     expect(at(html, 'Acme')).toBeLessThan(at(html, 'FORM BODY'));
+    expect(at(html, 'FORM BODY')).toBeLessThan(at(html, 'MARKETING EYEBROW'));
     expect(html).not.toContain('lg:hidden');
   });
 

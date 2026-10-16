@@ -224,8 +224,34 @@ export async function runDbProbe({ ownerUrl, appUrl, log = () => {} }) {
       ])
         add(table, s, c, 'BLOCKED', `seed failed: ${msg}`);
     } else {
+      // A platform-owned table (its only policies are privileged-only, e.g. the lifecycle log, the purge queue and the operator's
+      // migration runs) has no tenant policy by design: a tenant seeing its own rows there is not a control to pass. The denial
+      // checks below still apply to it, so a tenant reading or writing a foreign row is still a failure.
+      const policies = (
+        await owner.query(
+          `select qual, with_check from pg_policies where schemaname = 'public' and tablename = $1`,
+          [table],
+        )
+      ).rows;
+      const platformOnly =
+        policies.length > 0 &&
+        policies.every(
+          (p) =>
+            /app_is_privileged\(\)/.test(`${p.qual ?? ''}${p.with_check ?? ''}`) &&
+            !/current_org_id\(\)/.test(`${p.qual ?? ''}${p.with_check ?? ''}`),
+        );
       const own = await countAs(A, table, `org_id = ${A}`);
-      add(table, 'read-own', 'MT-012', own >= 1 ? 'PASSED' : 'FAILED', `rows=${own}`);
+      if (platformOnly) {
+        add(
+          table,
+          'read-own',
+          'MT-012',
+          'NOT_APPLICABLE',
+          'platform-owned: privileged-only policy, no tenant rows by design',
+        );
+      } else {
+        add(table, 'read-own', 'MT-012', own >= 1 ? 'PASSED' : 'FAILED', `rows=${own}`);
+      }
       const xt = await countAs(A, table, `org_id = ${B}`);
       add(table, 'read-xt', 'MT-012', xt === 0 ? 'PASSED' : 'FAILED', `rows=${xt}`);
       const none = await countAs(null, table, `org_id in (${A},${B})`);
@@ -243,14 +269,25 @@ export async function runDbProbe({ ownerUrl, appUrl, log = () => {} }) {
           return out;
         });
       const foreignJoins = await joinCount(B);
-      const ownJoins = await joinCount(A);
-      add(
-        table,
-        'join-xt',
-        'MT-016',
-        foreignJoins.every((n) => n === 0) && ownJoins.every((n) => n >= 1) ? 'PASSED' : 'FAILED',
-        `foreign=${foreignJoins.join('/')} own=${ownJoins.join('/')}`,
-      );
+      if (platformOnly) {
+        // No tenant pairs to control with; the foreign pairings must still come back empty.
+        add(
+          table,
+          'join-xt',
+          'MT-016',
+          foreignJoins.every((n) => n === 0) ? 'PASSED' : 'FAILED',
+          `foreign=${foreignJoins.join('/')} (platform-owned: no tenant pairs to control)`,
+        );
+      } else {
+        const ownJoins = await joinCount(A);
+        add(
+          table,
+          'join-xt',
+          'MT-016',
+          foreignJoins.every((n) => n === 0) && ownJoins.every((n) => n >= 1) ? 'PASSED' : 'FAILED',
+          `foreign=${foreignJoins.join('/')} own=${ownJoins.join('/')}`,
+        );
+      }
 
       const mutate = async (scenario, control, sql) => {
         let affected = -1;
