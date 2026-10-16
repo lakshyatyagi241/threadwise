@@ -401,6 +401,7 @@
     "signOutNo": "Không",
     "signOutYes": "Có, đăng xuất",
     "tasks": "Công việc",
+    "deals": "Giao dịch",
     "dashboard": "Bảng điều khiển",
     "allContacts": "Tất cả liên hệ",
     "newContact": "Liên hệ mới",
@@ -1118,6 +1119,245 @@
         "dueInvalid": "Không thể dùng ngày giờ đến hạn này.",
         "assigneeInvalid": "Không thể giao công việc cho người này. Hãy chọn người phụ trách khác.",
         "contactInvalid": "Không thể liên kết liên hệ này."
+      }
+    }
+  },
+  "deals": {
+    "title": "Giao dịch",
+    "add": "Giao dịch mới",
+    "cancel": "Hủy",
+    "unassigned": "Chưa phân công",
+    "unknownContact": "Liên hệ chưa đặt tên",
+    "planLocked": {
+      "title": "Gói này không bao gồm giao dịch.",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc nâng cấp gói."
+    },
+    "denied": {
+      "title": "Bạn không thể xem giao dịch",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc cấp cho bạn quyền truy cập giao dịch.",
+      "createTitle": "Bạn không thể thêm giao dịch",
+      "createHint": "Hãy nhờ quản trị viên không gian làm việc cho phép bạn thêm giao dịch.",
+      "editTitle": "Bạn không thể sửa giao dịch",
+      "editHint": "Hãy nhờ quản trị viên không gian làm việc cho phép bạn sửa giao dịch."
+    },
+    "errors": {
+      "conflict": "Giao dịch này đã được người khác thay đổi. Hãy xem lại rồi thử lần nữa.",
+      "notFound": "Giao dịch này không còn tồn tại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác đó.",
+      "lostReasonRequired": "Hãy chọn hoặc nhập lý do giao dịch này thất bại.",
+      "ownerInvalid": "Người đó không thể phụ trách giao dịch này.",
+      "stageMismatch": "Giai đoạn đó không thuộc quy trình này.",
+      "noWonStage": "Quy trình này không có giai đoạn Thành công.",
+      "noLostStage": "Quy trình này không có giai đoạn Thất bại.",
+      "noOpenStage": "Quy trình này không có giai đoạn mở để mở lại giao dịch."
+    },
+    "status": {
+      "open": "Đang mở",
+      "won": "Thành công",
+      "lost": "Thất bại"
+    },
+    "source": {
+      "manual": "Thêm thủ công",
+      "inbox": "Hộp thư",
+      "order": "Đơn hàng",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Biểu mẫu",
+      "api": "API",
+      "flow": "Luồng",
+      "facebook": "Facebook",
+      "ai": "Trợ lý AI",
+      "lead_ad": "Nguồn khách hàng tiềm năng"
+    },
+    "view": {
+      "label": "Chế độ xem",
+      "board": "Bảng",
+      "list": "Danh sách"
+    },
+    "pipeline": {
+      "label": "Quy trình"
+    },
+    "search": {
+      "open": "Tìm giao dịch",
+      "close": "Đóng tìm kiếm",
+      "label": "Tìm kiếm",
+      "placeholder": "Tìm theo tên giao dịch"
+    },
+    "filter": {
+      "open": "Lọc giao dịch",
+      "title": "Lọc giao dịch",
+      "owner": "Người phụ trách",
+      "source": "Nguồn",
+      "status": "Trạng thái",
+      "any": "Bất kỳ",
+      "mine": "Của tôi",
+      "unassigned": "Chưa phân công",
+      "ownersFailed": "Không thể tải nhóm. Hãy thử lại."
+    },
+    "kpi": {
+      "openPipeline": "Quy trình đang mở",
+      "openDeals": "Giao dịch đang mở: {{n}}",
+      "forecast": "Dự báo",
+      "forecastHint": "Có trọng số theo giai đoạn",
+      "wonThisMonth": "Thành công trong tháng này",
+      "dealsCount": "Giao dịch: {{n}}",
+      "winRate": "Tỷ lệ thắng",
+      "winRateHint": "Thành công trên số giao dịch đã đóng"
+    },
+    "stages": {
+      "label": "Giai đoạn",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Giao dịch: {{n}}",
+      "weighted": "Có trọng số {{amount}}"
+    },
+    "empty": {
+      "title": "Không tìm thấy giao dịch nào.",
+      "hint": "Các giao dịch bạn thêm sẽ hiển thị tại đây.",
+      "filteredHint": "Hãy thử bộ lọc hoặc tìm kiếm khác."
+    },
+    "noPipelines": {
+      "title": "Chưa có quy trình",
+      "hint": "Hãy nhờ quản trị viên không gian làm việc thiết lập quy trình bán hàng."
+    },
+    "card": {
+      "noContact": "Chưa có khách hàng",
+      "more": "Thêm thao tác cho {{title}}",
+      "due": {
+        "overdue": "Quá hạn · {{when}}",
+        "today": "Đến hạn hôm nay",
+        "upcoming": "Đóng {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Giao dịch này đã được người khác thay đổi. Danh sách đã được làm mới.",
+      "moved": "Đã chuyển sang {{stage}}.",
+      "wonDone": "Đã đánh dấu thành công.",
+      "lostDone": "Đã đánh dấu thất bại.",
+      "reopened": "Đã mở lại giao dịch."
+    },
+    "actions": {
+      "open": "Mở giao dịch",
+      "moveTo": "Chuyển đến giai đoạn",
+      "markWon": "Đánh dấu thành công",
+      "markLost": "Đánh dấu thất bại",
+      "reopen": "Mở lại",
+      "edit": "Sửa giao dịch",
+      "delete": "Xóa giao dịch"
+    },
+    "move": {
+      "title": "Chuyển đến giai đoạn"
+    },
+    "lost": {
+      "title": "Đánh dấu thất bại",
+      "intro": "Bạn có thể cho biết vì sao giao dịch này thất bại.",
+      "introRequired": "Không gian làm việc của bạn yêu cầu nêu lý do cho mọi giao dịch thất bại.",
+      "other": "Khác",
+      "details": "Lý do",
+      "needed": "Hãy thêm lý do để tiếp tục.",
+      "confirm": "Đánh dấu thất bại",
+      "presets": {
+        "price": "Giá quá cao",
+        "competitor": "Chọn đối thủ",
+        "noBudget": "Không có ngân sách",
+        "noResponse": "Không phản hồi",
+        "timing": "Thời điểm không phù hợp",
+        "notFit": "Không phù hợp"
+      }
+    },
+    "delete": {
+      "title": "Xóa giao dịch",
+      "message": "Xóa \"{{title}}\" và dòng thời gian của nó? Không thể hoàn tác.",
+      "confirm": "Xóa"
+    },
+    "details": {
+      "title": "Chi tiết giao dịch",
+      "customer": "Khách hàng",
+      "noContact": "Chưa liên kết khách hàng.",
+      "openContact": "Mở liên hệ",
+      "message": "Nhắn tin trên WhatsApp",
+      "company": "Công ty: {{name}}",
+      "details": "Chi tiết",
+      "owner": "Người phụ trách",
+      "expectedClose": "Ngày đóng dự kiến",
+      "noClose": "Không có ngày",
+      "source": "Nguồn",
+      "created": "Ngày tạo",
+      "wonAt": "Thành công vào",
+      "lostAt": "Thất bại vào",
+      "notes": "Ghi chú",
+      "lostReason": "Thất bại: {{reason}}",
+      "conflict": "Giao dịch này đã được người khác thay đổi. Đã tải lại."
+    },
+    "timeline": {
+      "title": "Dòng thời gian",
+      "empty": "Chưa có hoạt động nào trên giao dịch này.",
+      "type": "Loại mục",
+      "placeholder": "Viết ghi chú, tóm tắt cuộc gọi hoặc công việc",
+      "add": "Thêm vào dòng thời gian",
+      "date": "Ngày đến hạn",
+      "dateHint": "Không bắt buộc, ví dụ 2026-10-31.",
+      "dateInvalid": "Nhập một ngày hợp lệ, ví dụ 2026-10-31.",
+      "time": "Giờ đến hạn",
+      "timeHint": "Không bắt buộc, ví dụ 14:30. Nếu bỏ trống, công việc đến hạn lúc 09:00.",
+      "timeInvalid": "Nhập giờ theo dạng 14:30.",
+      "types": {
+        "note": "Ghi chú",
+        "call": "Cuộc gọi",
+        "task": "Công việc"
+      },
+      "kinds": {
+        "note": "Ghi chú",
+        "call": "Cuộc gọi",
+        "message": "Tin nhắn",
+        "email": "Email",
+        "meeting": "Cuộc họp",
+        "task": "Công việc",
+        "stage_change": "Đổi giai đoạn"
+      },
+      "system": "Hệ thống",
+      "stageChange": "Chuyển từ {{from}} sang {{to}}",
+      "placed": "Đặt vào {{to}}",
+      "stageChanged": "Đã đổi giai đoạn",
+      "dueOn": "Hạn {{when}}",
+      "assignedTo": "Cho {{name}}",
+      "markDone": "Đánh dấu xong",
+      "reopenTask": "Mở lại công việc",
+      "done": "Xong"
+    },
+    "form": {
+      "addTitle": "Giao dịch mới",
+      "editTitle": "Sửa giao dịch",
+      "save": "Lưu giao dịch",
+      "saving": "Đang lưu giao dịch",
+      "title": "Tên giao dịch",
+      "titlePlaceholder": "Ví dụ: 40 giấy phép cho Acme",
+      "value": "Giá trị",
+      "currency": "Tiền tệ",
+      "stage": "Giai đoạn bắt đầu",
+      "owner": "Người phụ trách",
+      "ownerMe": "Tôi",
+      "ownerNone": "Chưa phân công",
+      "ownerPick": "Chọn người phụ trách",
+      "ownerLoading": "Đang tải nhóm",
+      "ownerFailed": "Không thể tải nhóm.",
+      "contact": "Khách hàng",
+      "contactNone": "Chưa có khách hàng",
+      "contactPick": "Chọn khách hàng",
+      "contactSearchLabel": "Tìm kiếm",
+      "contactSearchPlaceholder": "Tên, số điện thoại hoặc email",
+      "contactEmpty": "Không tìm thấy liên hệ nào.",
+      "contactFailed": "Không thể tải liên hệ.",
+      "expectedClose": "Ngày đóng dự kiến",
+      "expectedCloseHint": "Không bắt buộc, ví dụ 2026-10-31.",
+      "conflict": "Giao dịch này đã được người khác thay đổi. Đã tải lại: hãy xem lại và lưu lần nữa.",
+      "errors": {
+        "titleRequired": "Nhập tên giao dịch.",
+        "titleTooLong": "Tên quá dài.",
+        "valueInvalid": "Nhập số tiền như 1250.50, với số chữ số thập phân không vượt quá của loại tiền tệ.",
+        "closeInvalid": "Nhập một ngày hợp lệ, ví dụ 2026-10-31.",
+        "notesTooLong": "Ghi chú quá dài."
       }
     }
   },

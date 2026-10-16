@@ -15,7 +15,7 @@ import {
   team,
 } from '@/test/tasks-fixtures';
 import * as api from './api';
-import { fromDueAt, toDueAt } from './dates';
+import { fromDueAt, toDueAt } from '@/lib/format/dates';
 import { TaskFormScreen } from './task-form-screen';
 
 jest.mock('./api');

@@ -421,6 +421,7 @@
     "signOutNo": "Não",
     "signOutYes": "Sim, sair",
     "tasks": "Tarefas",
+    "deals": "Negócios",
     "dashboard": "Painel",
     "allContacts": "Todos os contatos",
     "newContact": "Novo contato",
@@ -1154,6 +1155,245 @@
         "dueInvalid": "Este prazo (data e hora) não pode ser usado.",
         "assigneeInvalid": "Essa pessoa não pode receber tarefas. Escolha outro responsável.",
         "contactInvalid": "Este contato não pode ser vinculado."
+      }
+    }
+  },
+  "deals": {
+    "title": "Negócios",
+    "add": "Novo negócio",
+    "cancel": "Cancelar",
+    "unassigned": "Sem responsável",
+    "unknownContact": "Contato sem nome",
+    "planLocked": {
+      "title": "Os negócios não estão incluídos neste plano.",
+      "hint": "Peça ao administrador do espaço de trabalho para mudar de plano."
+    },
+    "denied": {
+      "title": "Você não pode ver negócios",
+      "hint": "Peça ao administrador do espaço de trabalho para dar a você acesso aos negócios.",
+      "createTitle": "Você não pode adicionar negócios",
+      "createHint": "Peça ao administrador do espaço de trabalho para permitir que você adicione negócios.",
+      "editTitle": "Você não pode editar negócios",
+      "editHint": "Peça ao administrador do espaço de trabalho para permitir que você edite negócios."
+    },
+    "errors": {
+      "conflict": "Este negócio foi alterado por outra pessoa. Veja-o novamente e tente de novo.",
+      "notFound": "Este negócio não existe mais.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "lostReasonRequired": "Escolha ou escreva um motivo para a perda deste negócio.",
+      "ownerInvalid": "Essa pessoa não pode ser responsável por este negócio.",
+      "stageMismatch": "Esse estágio não pertence a este funil.",
+      "noWonStage": "Este funil não tem estágio Ganho.",
+      "noLostStage": "Este funil não tem estágio Perdido.",
+      "noOpenStage": "Este funil não tem um estágio em aberto para reabrir o negócio."
+    },
+    "status": {
+      "open": "Em aberto",
+      "won": "Ganho",
+      "lost": "Perdido"
+    },
+    "source": {
+      "manual": "Adicionado manualmente",
+      "inbox": "Caixa de entrada",
+      "order": "Pedido",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formulário",
+      "api": "API",
+      "flow": "Fluxo",
+      "facebook": "Facebook",
+      "ai": "Assistente de IA",
+      "lead_ad": "Origem do lead"
+    },
+    "view": {
+      "label": "Visualização",
+      "board": "Quadro",
+      "list": "Lista"
+    },
+    "pipeline": {
+      "label": "Funil"
+    },
+    "search": {
+      "open": "Buscar negócios",
+      "close": "Fechar busca",
+      "label": "Buscar",
+      "placeholder": "Buscar pelo nome do negócio"
+    },
+    "filter": {
+      "open": "Filtrar negócios",
+      "title": "Filtrar negócios",
+      "owner": "Responsável",
+      "source": "Origem",
+      "status": "Status",
+      "any": "Qualquer",
+      "mine": "Meus",
+      "unassigned": "Sem responsável",
+      "ownersFailed": "Não foi possível carregar a equipe. Tente novamente."
+    },
+    "kpi": {
+      "openPipeline": "Funil em aberto",
+      "openDeals": "Negócios em aberto: {{n}}",
+      "forecast": "Previsão",
+      "forecastHint": "Ponderada por estágio",
+      "wonThisMonth": "Ganhos neste mês",
+      "dealsCount": "Negócios: {{n}}",
+      "winRate": "Taxa de ganho",
+      "winRateHint": "Ganhos entre os negócios fechados"
+    },
+    "stages": {
+      "label": "Estágios",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Negócios: {{n}}",
+      "weighted": "Ponderado {{amount}}"
+    },
+    "empty": {
+      "title": "Nenhum negócio encontrado.",
+      "hint": "Os negócios que você adicionar aparecerão aqui.",
+      "filteredHint": "Tente outro filtro ou outra busca."
+    },
+    "noPipelines": {
+      "title": "Ainda não há funil",
+      "hint": "Peça ao administrador do espaço de trabalho para configurar um funil de vendas."
+    },
+    "card": {
+      "noContact": "Sem cliente",
+      "more": "Mais ações para {{title}}",
+      "due": {
+        "overdue": "Atrasado · {{when}}",
+        "today": "Fecha hoje",
+        "upcoming": "Fecha em {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Este negócio foi alterado por outra pessoa. A lista foi atualizada.",
+      "moved": "Movido para {{stage}}.",
+      "wonDone": "Marcado como ganho.",
+      "lostDone": "Marcado como perdido.",
+      "reopened": "Negócio reaberto."
+    },
+    "actions": {
+      "open": "Abrir negócio",
+      "moveTo": "Mover para o estágio",
+      "markWon": "Marcar como ganho",
+      "markLost": "Marcar como perdido",
+      "reopen": "Reabrir",
+      "edit": "Editar negócio",
+      "delete": "Excluir negócio"
+    },
+    "move": {
+      "title": "Mover para o estágio"
+    },
+    "lost": {
+      "title": "Marcar como perdido",
+      "intro": "Você pode informar por que este negócio foi perdido.",
+      "introRequired": "Seu espaço de trabalho exige um motivo para cada negócio perdido.",
+      "other": "Outro",
+      "details": "Motivo",
+      "needed": "Informe um motivo para continuar.",
+      "confirm": "Marcar como perdido",
+      "presets": {
+        "price": "Preço alto demais",
+        "competitor": "Escolheu um concorrente",
+        "noBudget": "Sem orçamento",
+        "noResponse": "Sem resposta",
+        "timing": "Momento inadequado",
+        "notFit": "Não é um bom encaixe"
+      }
+    },
+    "delete": {
+      "title": "Excluir negócio",
+      "message": "Excluir \"{{title}}\" e sua linha do tempo? Esta ação não pode ser desfeita.",
+      "confirm": "Excluir"
+    },
+    "details": {
+      "title": "Detalhes do negócio",
+      "customer": "Cliente",
+      "noContact": "Nenhum cliente vinculado.",
+      "openContact": "Abrir contato",
+      "message": "Enviar mensagem no WhatsApp",
+      "company": "Empresa: {{name}}",
+      "details": "Detalhes",
+      "owner": "Responsável",
+      "expectedClose": "Fechamento previsto",
+      "noClose": "Sem data",
+      "source": "Origem",
+      "created": "Criado em",
+      "wonAt": "Ganho em",
+      "lostAt": "Perdido em",
+      "notes": "Notas",
+      "lostReason": "Perdido: {{reason}}",
+      "conflict": "Este negócio foi alterado por outra pessoa. Ele foi recarregado."
+    },
+    "timeline": {
+      "title": "Linha do tempo",
+      "empty": "Ainda não aconteceu nada neste negócio.",
+      "type": "Tipo de registro",
+      "placeholder": "Escreva uma nota, o resumo de uma ligação ou uma tarefa",
+      "add": "Adicionar à linha do tempo",
+      "date": "Dia de vencimento",
+      "dateHint": "Opcional, por exemplo 2026-10-31.",
+      "dateInvalid": "Informe um dia válido, por exemplo 2026-10-31.",
+      "time": "Hora de vencimento",
+      "timeHint": "Opcional, por exemplo 14:30. Sem ela, a tarefa vence às 09:00.",
+      "timeInvalid": "Informe uma hora, por exemplo 14:30.",
+      "types": {
+        "note": "Nota",
+        "call": "Ligação",
+        "task": "Tarefa"
+      },
+      "kinds": {
+        "note": "Nota",
+        "call": "Ligação",
+        "message": "Mensagem",
+        "email": "E-mail",
+        "meeting": "Reunião",
+        "task": "Tarefa",
+        "stage_change": "Mudança de estágio"
+      },
+      "system": "Sistema",
+      "stageChange": "Movido de {{from}} para {{to}}",
+      "placed": "Colocado em {{to}}",
+      "stageChanged": "Estágio alterado",
+      "dueOn": "Vence {{when}}",
+      "assignedTo": "Para {{name}}",
+      "markDone": "Marcar como concluída",
+      "reopenTask": "Reabrir tarefa",
+      "done": "Concluída"
+    },
+    "form": {
+      "addTitle": "Novo negócio",
+      "editTitle": "Editar negócio",
+      "save": "Salvar negócio",
+      "saving": "Salvando negócio",
+      "title": "Nome do negócio",
+      "titlePlaceholder": "Por exemplo, 40 licenças para a Acme",
+      "value": "Valor",
+      "currency": "Moeda",
+      "stage": "Estágio inicial",
+      "owner": "Responsável",
+      "ownerMe": "Eu",
+      "ownerNone": "Sem responsável",
+      "ownerPick": "Escolher um responsável",
+      "ownerLoading": "Carregando a equipe",
+      "ownerFailed": "Não foi possível carregar a equipe.",
+      "contact": "Cliente",
+      "contactNone": "Sem cliente",
+      "contactPick": "Escolher um cliente",
+      "contactSearchLabel": "Buscar",
+      "contactSearchPlaceholder": "Nome, telefone ou e-mail",
+      "contactEmpty": "Nenhum contato encontrado.",
+      "contactFailed": "Não foi possível carregar os contatos.",
+      "expectedClose": "Dia previsto de fechamento",
+      "expectedCloseHint": "Opcional, por exemplo 2026-10-31.",
+      "conflict": "Este negócio foi alterado por outra pessoa. Ele foi recarregado: confira e salve novamente.",
+      "errors": {
+        "titleRequired": "Informe um nome para o negócio.",
+        "titleTooLong": "O nome é longo demais.",
+        "valueInvalid": "Informe um valor como 1250.50, com no máximo as casas decimais da moeda.",
+        "closeInvalid": "Informe um dia válido, por exemplo 2026-10-31.",
+        "notesTooLong": "As notas são longas demais."
       }
     }
   },

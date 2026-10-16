@@ -16,7 +16,7 @@ import { messageForError } from '@/lib/api/error-message';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { formatMoment } from './dates';
+import { formatMoment } from '@/lib/format/dates';
 import { DetailRow } from './detail-row';
 import { PriorityBadge } from './priority-badge';
 import { firstParam } from './route-params';

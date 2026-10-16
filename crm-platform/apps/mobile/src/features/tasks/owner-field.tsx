@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { PickerField, PickerOption } from './picker-row';
+import { PickerField, PickerOption } from '@/components/ui/picker-row';
 import type { AssigneeChoice } from './task-validation';
 import { useAssignees } from './use-tasks';
 

@@ -16,7 +16,7 @@ import {
   sessionTasksReadOnly,
 } from '@/test/tasks-fixtures';
 import * as api from './api';
-import { formatMoment } from './dates';
+import { formatMoment } from '@/lib/format/dates';
 import { TaskDetailsScreen } from './task-details-screen';
 
 jest.mock('./api');

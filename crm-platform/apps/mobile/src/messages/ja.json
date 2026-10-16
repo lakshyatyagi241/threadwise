@@ -401,6 +401,7 @@
     "signOutNo": "いいえ",
     "signOutYes": "はい、ログアウト",
     "tasks": "タスク",
+    "deals": "案件",
     "dashboard": "ダッシュボード",
     "allContacts": "すべての連絡先",
     "newContact": "新しい連絡先",
@@ -1118,6 +1119,245 @@
         "dueInvalid": "この期限の日時は使用できません。",
         "assigneeInvalid": "このユーザーにはタスクを割り当てられません。別の担当者を選択してください。",
         "contactInvalid": "この連絡先は紐づけできません。"
+      }
+    }
+  },
+  "deals": {
+    "title": "案件",
+    "add": "新しい案件",
+    "cancel": "キャンセル",
+    "unassigned": "未割り当て",
+    "unknownContact": "名前のない連絡先",
+    "planLocked": {
+      "title": "このプランには案件が含まれていません。",
+      "hint": "プランのアップグレードをワークスペースの管理者に依頼してください。"
+    },
+    "denied": {
+      "title": "案件を表示できません",
+      "hint": "案件へのアクセス権を付与するよう、ワークスペースの管理者に依頼してください。",
+      "createTitle": "案件を追加できません",
+      "createHint": "案件を追加できるよう、ワークスペースの管理者に依頼してください。",
+      "editTitle": "案件を編集できません",
+      "editHint": "案件を編集できるよう、ワークスペースの管理者に依頼してください。"
+    },
+    "errors": {
+      "conflict": "他のユーザーがこの案件を変更しました。内容を確認して、もう一度お試しください。",
+      "notFound": "この案件は存在しません。",
+      "forbidden": "その操作を行う権限がありません。",
+      "lostReasonRequired": "この案件を失注にする理由を選択または入力してください。",
+      "ownerInvalid": "このユーザーはこの案件の担当者にできません。",
+      "stageMismatch": "そのステージはこのパイプラインに属していません。",
+      "noWonStage": "このパイプラインには成約ステージがありません。",
+      "noLostStage": "このパイプラインには失注ステージがありません。",
+      "noOpenStage": "このパイプラインには、再開先となる進行中のステージがありません。"
+    },
+    "status": {
+      "open": "進行中",
+      "won": "成約",
+      "lost": "失注"
+    },
+    "source": {
+      "manual": "手動で追加",
+      "inbox": "受信トレイ",
+      "order": "注文",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "フォーム",
+      "api": "API",
+      "flow": "フロー",
+      "facebook": "Facebook",
+      "ai": "AIアシスタント",
+      "lead_ad": "リードソース"
+    },
+    "view": {
+      "label": "表示",
+      "board": "ボード",
+      "list": "リスト"
+    },
+    "pipeline": {
+      "label": "パイプライン"
+    },
+    "search": {
+      "open": "案件を検索",
+      "close": "検索を閉じる",
+      "label": "検索",
+      "placeholder": "案件名で検索"
+    },
+    "filter": {
+      "open": "案件をフィルター",
+      "title": "案件をフィルター",
+      "owner": "担当者",
+      "source": "ソース",
+      "status": "ステータス",
+      "any": "すべて",
+      "mine": "自分",
+      "unassigned": "未割り当て",
+      "ownersFailed": "チームを読み込めませんでした。もう一度お試しください。"
+    },
+    "kpi": {
+      "openPipeline": "進行中のパイプライン",
+      "openDeals": "進行中の案件: {{n}}",
+      "forecast": "加重予測",
+      "forecastHint": "ステージ別に加重",
+      "wonThisMonth": "今月の成約",
+      "dealsCount": "案件数: {{n}}",
+      "winRate": "成約率",
+      "winRateHint": "完了した案件に占める成約の割合"
+    },
+    "stages": {
+      "label": "ステージ",
+      "tab": "{{name}}、{{n}}件"
+    },
+    "column": {
+      "count": "案件数: {{n}}",
+      "weighted": "加重 {{amount}}"
+    },
+    "empty": {
+      "title": "案件が見つかりません。",
+      "hint": "追加した案件がここに表示されます。",
+      "filteredHint": "別のフィルターまたは検索を試してください。"
+    },
+    "noPipelines": {
+      "title": "パイプラインはまだありません",
+      "hint": "営業パイプラインを設定するよう、ワークスペースの管理者に依頼してください。"
+    },
+    "card": {
+      "noContact": "顧客なし",
+      "more": "{{title}} のその他の操作",
+      "due": {
+        "overdue": "期限超過 · {{when}}",
+        "today": "本日完了予定",
+        "upcoming": "完了予定 {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "他のユーザーがこの案件を変更しました。リストを更新しました。",
+      "moved": "{{stage}}に移動しました。",
+      "wonDone": "成約にしました。",
+      "lostDone": "失注にしました。",
+      "reopened": "案件を再開しました。"
+    },
+    "actions": {
+      "open": "案件を開く",
+      "moveTo": "ステージを移動",
+      "markWon": "成約にする",
+      "markLost": "失注にする",
+      "reopen": "再開",
+      "edit": "案件を編集",
+      "delete": "案件を削除"
+    },
+    "move": {
+      "title": "ステージを移動"
+    },
+    "lost": {
+      "title": "失注にする",
+      "intro": "この案件が失注した理由を入力できます。",
+      "introRequired": "失注した案件には、必ず理由の入力が必要です。",
+      "other": "その他",
+      "details": "理由",
+      "needed": "続行するには理由を入力してください。",
+      "confirm": "失注にする",
+      "presets": {
+        "price": "価格が高すぎる",
+        "competitor": "競合他社を選択",
+        "noBudget": "予算なし",
+        "noResponse": "返答なし",
+        "timing": "タイミングが悪い",
+        "notFit": "適合しない"
+      }
+    },
+    "delete": {
+      "title": "案件を削除",
+      "message": "「{{title}}」とそのタイムラインを削除しますか？この操作は元に戻せません。",
+      "confirm": "削除"
+    },
+    "details": {
+      "title": "案件の詳細",
+      "customer": "顧客",
+      "noContact": "顧客が紐付けられていません。",
+      "openContact": "連絡先を開く",
+      "message": "WhatsAppでメッセージ",
+      "company": "会社: {{name}}",
+      "details": "詳細",
+      "owner": "担当者",
+      "expectedClose": "完了予定日",
+      "noClose": "日付なし",
+      "source": "ソース",
+      "created": "作成日",
+      "wonAt": "成約日",
+      "lostAt": "失注日",
+      "notes": "メモ",
+      "lostReason": "失注: {{reason}}",
+      "conflict": "他のユーザーがこの案件を変更しました。再読み込みしました。"
+    },
+    "timeline": {
+      "title": "タイムライン",
+      "empty": "この案件にはまだ何も記録されていません。",
+      "type": "エントリーの種類",
+      "placeholder": "メモ、通話の要約、タスクを入力",
+      "add": "タイムラインに追加",
+      "date": "期限日",
+      "dateHint": "任意。例: 2026-10-31",
+      "dateInvalid": "2026-10-31のように、実在する日付を入力してください。",
+      "time": "期限時刻",
+      "timeHint": "任意。例: 14:30。空欄の場合、タスクの期限は09:00になります。",
+      "timeInvalid": "14:30のような形式で時刻を入力してください。",
+      "types": {
+        "note": "メモ",
+        "call": "通話",
+        "task": "タスク"
+      },
+      "kinds": {
+        "note": "メモ",
+        "call": "通話",
+        "message": "メッセージ",
+        "email": "メール",
+        "meeting": "ミーティング",
+        "task": "タスク",
+        "stage_change": "ステージ変更"
+      },
+      "system": "システム",
+      "stageChange": "{{from}}から{{to}}へ移動",
+      "placed": "{{to}}に配置",
+      "stageChanged": "ステージ変更",
+      "dueOn": "期限 {{when}}",
+      "assignedTo": "担当: {{name}}",
+      "markDone": "完了にする",
+      "reopenTask": "タスクを再開",
+      "done": "完了"
+    },
+    "form": {
+      "addTitle": "新しい案件",
+      "editTitle": "案件を編集",
+      "save": "案件を保存",
+      "saving": "保存中",
+      "title": "案件名",
+      "titlePlaceholder": "例: Acme社向け40ライセンス",
+      "value": "金額",
+      "currency": "通貨",
+      "stage": "開始ステージ",
+      "owner": "担当者",
+      "ownerMe": "自分",
+      "ownerNone": "未割り当て",
+      "ownerPick": "担当者を選択",
+      "ownerLoading": "チームを読み込み中",
+      "ownerFailed": "チームを読み込めませんでした。",
+      "contact": "顧客",
+      "contactNone": "顧客なし",
+      "contactPick": "顧客を選択",
+      "contactSearchLabel": "検索",
+      "contactSearchPlaceholder": "名前、電話番号、メールアドレス",
+      "contactEmpty": "連絡先が見つかりません。",
+      "contactFailed": "連絡先を読み込めませんでした。",
+      "expectedClose": "完了予定日",
+      "expectedCloseHint": "任意。例: 2026-10-31",
+      "conflict": "他のユーザーがこの案件を変更しました。再読み込みしたので、内容を確認して、もう一度保存してください。",
+      "errors": {
+        "titleRequired": "案件名を入力してください。",
+        "titleTooLong": "案件名が長すぎます。",
+        "valueInvalid": "1250.50のように、通貨の小数桁数以内で金額を入力してください。",
+        "closeInvalid": "2026-10-31のように、実在する日付を入力してください。",
+        "notesTooLong": "メモが長すぎます。"
       }
     }
   },

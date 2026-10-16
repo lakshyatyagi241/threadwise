@@ -411,6 +411,7 @@
     "signOutNo": "Nee",
     "signOutYes": "Ja, uitloggen",
     "tasks": "Taken",
+    "deals": "Deals",
     "dashboard": "Dashboard",
     "allContacts": "Alle contacten",
     "newContact": "Nieuw contact",
@@ -1136,6 +1137,245 @@
         "dueInvalid": "Deze deadline kan niet worden gebruikt.",
         "assigneeInvalid": "Aan die persoon kunnen geen taken worden toegewezen. Kies een andere eigenaar.",
         "contactInvalid": "Dit contact kan niet worden gekoppeld."
+      }
+    }
+  },
+  "deals": {
+    "title": "Deals",
+    "add": "Nieuwe deal",
+    "cancel": "Annuleren",
+    "unassigned": "Niet toegewezen",
+    "unknownContact": "Contact zonder naam",
+    "planLocked": {
+      "title": "Deals zijn niet inbegrepen in dit abonnement.",
+      "hint": "Vraag de beheerder van je workspace om het abonnement te upgraden."
+    },
+    "denied": {
+      "title": "Je kunt geen deals zien",
+      "hint": "Vraag de beheerder van je workspace om je toegang tot deals te geven.",
+      "createTitle": "Je kunt geen deals toevoegen",
+      "createHint": "Vraag de beheerder van je workspace om je deals te laten toevoegen.",
+      "editTitle": "Je kunt geen deals bewerken",
+      "editHint": "Vraag de beheerder van je workspace om je deals te laten bewerken."
+    },
+    "errors": {
+      "conflict": "Deze deal is door iemand anders gewijzigd. Bekijk hem opnieuw en probeer het nog eens.",
+      "notFound": "Deze deal bestaat niet meer.",
+      "forbidden": "Je hebt hiervoor geen toestemming.",
+      "lostReasonRequired": "Kies of schrijf een reden voor het verlies van deze deal.",
+      "ownerInvalid": "Die persoon kan deze deal niet beheren.",
+      "stageMismatch": "Die fase hoort niet bij deze pipeline.",
+      "noWonStage": "Deze pipeline heeft geen fase Gewonnen.",
+      "noLostStage": "Deze pipeline heeft geen fase Verloren.",
+      "noOpenStage": "Deze pipeline heeft geen open fase om naar te heropenen."
+    },
+    "status": {
+      "open": "Open",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    },
+    "source": {
+      "manual": "Handmatig toegevoegd",
+      "inbox": "Inbox",
+      "order": "Bestelling",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formulier",
+      "api": "API",
+      "flow": "Flow",
+      "facebook": "Facebook",
+      "ai": "AI-assistent",
+      "lead_ad": "Leadbron"
+    },
+    "view": {
+      "label": "Weergave",
+      "board": "Bord",
+      "list": "Lijst"
+    },
+    "pipeline": {
+      "label": "Pipeline"
+    },
+    "search": {
+      "open": "Deals zoeken",
+      "close": "Zoeken sluiten",
+      "label": "Zoeken",
+      "placeholder": "Zoeken op dealnaam"
+    },
+    "filter": {
+      "open": "Deals filteren",
+      "title": "Deals filteren",
+      "owner": "Eigenaar",
+      "source": "Bron",
+      "status": "Status",
+      "any": "Alle",
+      "mine": "Van mij",
+      "unassigned": "Niet toegewezen",
+      "ownersFailed": "Het team kon niet worden geladen. Probeer het opnieuw."
+    },
+    "kpi": {
+      "openPipeline": "Open pipeline",
+      "openDeals": "Open deals: {{n}}",
+      "forecast": "Prognose",
+      "forecastHint": "Gewogen per fase",
+      "wonThisMonth": "Gewonnen deze maand",
+      "dealsCount": "Deals: {{n}}",
+      "winRate": "Winstpercentage",
+      "winRateHint": "Gewonnen van afgesloten deals"
+    },
+    "stages": {
+      "label": "Fasen",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Deals: {{n}}",
+      "weighted": "Gewogen {{amount}}"
+    },
+    "empty": {
+      "title": "Geen deals gevonden.",
+      "hint": "Deals die je toevoegt verschijnen hier.",
+      "filteredHint": "Probeer een ander filter of een andere zoekopdracht."
+    },
+    "noPipelines": {
+      "title": "Nog geen pipeline",
+      "hint": "Vraag de beheerder van je workspace om een verkooppipeline in te stellen."
+    },
+    "card": {
+      "noContact": "Geen klant",
+      "more": "Meer acties voor {{title}}",
+      "due": {
+        "overdue": "Te laat · {{when}}",
+        "today": "Vandaag aan de beurt",
+        "upcoming": "Sluit {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Deze deal is door iemand anders gewijzigd. De lijst is vernieuwd.",
+      "moved": "Verplaatst naar {{stage}}.",
+      "wonDone": "Als gewonnen gemarkeerd.",
+      "lostDone": "Als verloren gemarkeerd.",
+      "reopened": "Deal heropend."
+    },
+    "actions": {
+      "open": "Deal openen",
+      "moveTo": "Naar fase verplaatsen",
+      "markWon": "Markeren als gewonnen",
+      "markLost": "Markeren als verloren",
+      "reopen": "Heropenen",
+      "edit": "Deal bewerken",
+      "delete": "Deal verwijderen"
+    },
+    "move": {
+      "title": "Naar fase verplaatsen"
+    },
+    "lost": {
+      "title": "Markeren als verloren",
+      "intro": "Je kunt aangeven waarom deze deal verloren is gegaan.",
+      "introRequired": "Je workspace vraagt om een reden voor elke verloren deal.",
+      "other": "Anders",
+      "details": "Reden",
+      "needed": "Geef een reden op om door te gaan.",
+      "confirm": "Markeren als verloren",
+      "presets": {
+        "price": "Prijs te hoog",
+        "competitor": "Koos een concurrent",
+        "noBudget": "Geen budget",
+        "noResponse": "Geen reactie",
+        "timing": "Slecht getimed",
+        "notFit": "Geen goede match"
+      }
+    },
+    "delete": {
+      "title": "Deal verwijderen",
+      "message": "\"{{title}}\" en de tijdlijn verwijderen? Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Verwijderen"
+    },
+    "details": {
+      "title": "Dealdetails",
+      "customer": "Klant",
+      "noContact": "Geen klant gekoppeld.",
+      "openContact": "Contact openen",
+      "message": "Bericht sturen op WhatsApp",
+      "company": "Bedrijf: {{name}}",
+      "details": "Details",
+      "owner": "Eigenaar",
+      "expectedClose": "Verwachte afsluiting",
+      "noClose": "Geen datum",
+      "source": "Bron",
+      "created": "Aangemaakt",
+      "wonAt": "Gewonnen op",
+      "lostAt": "Verloren op",
+      "notes": "Notities",
+      "lostReason": "Verloren: {{reason}}",
+      "conflict": "Deze deal is door iemand anders gewijzigd. Hij is opnieuw geladen."
+    },
+    "timeline": {
+      "title": "Tijdlijn",
+      "empty": "Er is nog niets gebeurd met deze deal.",
+      "type": "Soort item",
+      "placeholder": "Schrijf een notitie, gespreksverslag of taak",
+      "add": "Aan tijdlijn toevoegen",
+      "date": "Deadlinedag",
+      "dateHint": "Optioneel, bijvoorbeeld 2026-10-31.",
+      "dateInvalid": "Voer een geldige dag in, bijvoorbeeld 2026-10-31.",
+      "time": "Deadlinetijd",
+      "timeHint": "Optioneel, bijvoorbeeld 14:30. Zonder tijd is de taak om 09:00 aan de beurt.",
+      "timeInvalid": "Voer een tijd in, bijvoorbeeld 14:30.",
+      "types": {
+        "note": "Notitie",
+        "call": "Gesprek",
+        "task": "Taak"
+      },
+      "kinds": {
+        "note": "Notitie",
+        "call": "Gesprek",
+        "message": "Bericht",
+        "email": "E-mail",
+        "meeting": "Afspraak",
+        "task": "Taak",
+        "stage_change": "Fasewijziging"
+      },
+      "system": "Systeem",
+      "stageChange": "Verplaatst van {{from}} naar {{to}}",
+      "placed": "Geplaatst in {{to}}",
+      "stageChanged": "Fase gewijzigd",
+      "dueOn": "Deadline {{when}}",
+      "assignedTo": "Voor {{name}}",
+      "markDone": "Als klaar markeren",
+      "reopenTask": "Taak heropenen",
+      "done": "Klaar"
+    },
+    "form": {
+      "addTitle": "Nieuwe deal",
+      "editTitle": "Deal bewerken",
+      "save": "Deal opslaan",
+      "saving": "Deal opslaan",
+      "title": "Naam van deal",
+      "titlePlaceholder": "Bijvoorbeeld: 40 licenties voor Acme",
+      "value": "Waarde",
+      "currency": "Valuta",
+      "stage": "Startfase",
+      "owner": "Eigenaar",
+      "ownerMe": "Ik",
+      "ownerNone": "Niet toegewezen",
+      "ownerPick": "Kies een eigenaar",
+      "ownerLoading": "Team laden",
+      "ownerFailed": "Het team kon niet worden geladen.",
+      "contact": "Klant",
+      "contactNone": "Geen klant",
+      "contactPick": "Kies een klant",
+      "contactSearchLabel": "Zoeken",
+      "contactSearchPlaceholder": "Naam, telefoon of e-mail",
+      "contactEmpty": "Geen contacten gevonden.",
+      "contactFailed": "Contacten konden niet worden geladen.",
+      "expectedClose": "Verwachte afsluitdag",
+      "expectedCloseHint": "Optioneel, bijvoorbeeld 2026-10-31.",
+      "conflict": "Deze deal is door iemand anders gewijzigd. Hij is opnieuw geladen: bekijk hem en sla opnieuw op.",
+      "errors": {
+        "titleRequired": "Voer een naam voor de deal in.",
+        "titleTooLong": "De naam is te lang.",
+        "valueInvalid": "Voer een bedrag in zoals 1250.50, met niet meer decimalen dan de valuta heeft.",
+        "closeInvalid": "Voer een geldige dag in, bijvoorbeeld 2026-10-31.",
+        "notesTooLong": "De notities zijn te lang."
       }
     }
   },

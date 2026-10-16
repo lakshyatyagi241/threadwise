@@ -411,6 +411,7 @@
     "signOutNo": "Nein",
     "signOutYes": "Ja, abmelden",
     "tasks": "Aufgaben",
+    "deals": "Deals",
     "dashboard": "Dashboard",
     "allContacts": "Alle Kontakte",
     "newContact": "Neuer Kontakt",
@@ -1136,6 +1137,245 @@
         "dueInvalid": "Dieses Fälligkeitsdatum mit Uhrzeit kann nicht verwendet werden.",
         "assigneeInvalid": "Dieser Person können keine Aufgaben zugewiesen werden. Wählen Sie einen anderen Verantwortlichen.",
         "contactInvalid": "Dieser Kontakt kann nicht verknüpft werden."
+      }
+    }
+  },
+  "deals": {
+    "title": "Deals",
+    "add": "Neuer Deal",
+    "cancel": "Abbrechen",
+    "unassigned": "Nicht zugewiesen",
+    "unknownContact": "Kontakt ohne Namen",
+    "planLocked": {
+      "title": "Deals sind in diesem Tarif nicht enthalten.",
+      "hint": "Bitten Sie die Administration Ihres Workspaces, den Tarif zu erweitern."
+    },
+    "denied": {
+      "title": "Sie dürfen Deals nicht ansehen",
+      "hint": "Bitten Sie die Administration Ihres Workspaces, Ihnen Zugriff auf Deals zu geben.",
+      "createTitle": "Sie dürfen keine Deals hinzufügen",
+      "createHint": "Bitten Sie die Administration Ihres Workspaces, Ihnen das Hinzufügen von Deals zu erlauben.",
+      "editTitle": "Sie dürfen Deals nicht bearbeiten",
+      "editHint": "Bitten Sie die Administration Ihres Workspaces, Ihnen das Bearbeiten von Deals zu erlauben."
+    },
+    "errors": {
+      "conflict": "Dieser Deal wurde von jemand anderem geändert. Sehen Sie ihn sich erneut an und versuchen Sie es noch einmal.",
+      "notFound": "Dieser Deal existiert nicht mehr.",
+      "forbidden": "Sie haben keine Berechtigung dafür.",
+      "lostReasonRequired": "Wählen Sie einen Grund für den verlorenen Deal oder schreiben Sie einen.",
+      "ownerInvalid": "Diese Person kann den Deal nicht übernehmen.",
+      "stageMismatch": "Diese Phase gehört nicht zu dieser Pipeline.",
+      "noWonStage": "Diese Pipeline hat keine Phase „Gewonnen“.",
+      "noLostStage": "Diese Pipeline hat keine Phase „Verloren“.",
+      "noOpenStage": "Diese Pipeline hat keine offene Phase zum Wiedereröffnen."
+    },
+    "status": {
+      "open": "Offen",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    },
+    "source": {
+      "manual": "Manuell hinzugefügt",
+      "inbox": "Posteingang",
+      "order": "Bestellung",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formular",
+      "api": "API",
+      "flow": "Flow",
+      "facebook": "Facebook",
+      "ai": "KI-Assistent",
+      "lead_ad": "Lead-Quelle"
+    },
+    "view": {
+      "label": "Ansicht",
+      "board": "Board",
+      "list": "Liste"
+    },
+    "pipeline": {
+      "label": "Pipeline"
+    },
+    "search": {
+      "open": "Deals durchsuchen",
+      "close": "Suche schließen",
+      "label": "Suche",
+      "placeholder": "Nach Deal-Name suchen"
+    },
+    "filter": {
+      "open": "Deals filtern",
+      "title": "Deals filtern",
+      "owner": "Verantwortlicher",
+      "source": "Quelle",
+      "status": "Status",
+      "any": "Alle",
+      "mine": "Meine",
+      "unassigned": "Nicht zugewiesen",
+      "ownersFailed": "Das Team konnte nicht geladen werden. Versuchen Sie es erneut."
+    },
+    "kpi": {
+      "openPipeline": "Offene Pipeline",
+      "openDeals": "Offene Deals: {{n}}",
+      "forecast": "Prognose",
+      "forecastHint": "Nach Phase gewichtet",
+      "wonThisMonth": "Diesen Monat gewonnen",
+      "dealsCount": "Deals: {{n}}",
+      "winRate": "Gewinnrate",
+      "winRateHint": "Gewonnen von abgeschlossenen Deals"
+    },
+    "stages": {
+      "label": "Phasen",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Deals: {{n}}",
+      "weighted": "Gewichtet {{amount}}"
+    },
+    "empty": {
+      "title": "Keine Deals gefunden.",
+      "hint": "Deals, die Sie hinzufügen, erscheinen hier.",
+      "filteredHint": "Versuchen Sie einen anderen Filter oder eine andere Suche."
+    },
+    "noPipelines": {
+      "title": "Noch keine Pipeline",
+      "hint": "Bitten Sie die Administration Ihres Workspaces, eine Sales-Pipeline einzurichten."
+    },
+    "card": {
+      "noContact": "Kein Kunde",
+      "more": "Weitere Aktionen für {{title}}",
+      "due": {
+        "overdue": "Überfällig · {{when}}",
+        "today": "Heute fällig",
+        "upcoming": "Abschluss {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Dieser Deal wurde von jemand anderem geändert. Die Liste wurde aktualisiert.",
+      "moved": "Nach {{stage}} verschoben.",
+      "wonDone": "Als gewonnen markiert.",
+      "lostDone": "Als verloren markiert.",
+      "reopened": "Deal wieder geöffnet."
+    },
+    "actions": {
+      "open": "Deal öffnen",
+      "moveTo": "In Phase verschieben",
+      "markWon": "Als gewonnen markieren",
+      "markLost": "Als verloren markieren",
+      "reopen": "Wieder öffnen",
+      "edit": "Deal bearbeiten",
+      "delete": "Deal löschen"
+    },
+    "move": {
+      "title": "In Phase verschieben"
+    },
+    "lost": {
+      "title": "Als verloren markieren",
+      "intro": "Sie können angeben, warum dieser Deal verloren wurde.",
+      "introRequired": "Ihr Workspace verlangt für jeden verlorenen Deal einen Grund.",
+      "other": "Sonstiges",
+      "details": "Grund",
+      "needed": "Geben Sie einen Grund an, um fortzufahren.",
+      "confirm": "Als verloren markieren",
+      "presets": {
+        "price": "Preis zu hoch",
+        "competitor": "Für Wettbewerber entschieden",
+        "noBudget": "Kein Budget",
+        "noResponse": "Keine Antwort",
+        "timing": "Schlechtes Timing",
+        "notFit": "Passt nicht"
+      }
+    },
+    "delete": {
+      "title": "Deal löschen",
+      "message": "„{{title}}“ und den Verlauf löschen? Dies kann nicht rückgängig gemacht werden.",
+      "confirm": "Löschen"
+    },
+    "details": {
+      "title": "Deal-Details",
+      "customer": "Kunde",
+      "noContact": "Kein Kunde verknüpft.",
+      "openContact": "Kontakt öffnen",
+      "message": "Per WhatsApp schreiben",
+      "company": "Unternehmen: {{name}}",
+      "details": "Details",
+      "owner": "Verantwortlicher",
+      "expectedClose": "Erwarteter Abschluss",
+      "noClose": "Kein Datum",
+      "source": "Quelle",
+      "created": "Erstellt",
+      "wonAt": "Gewonnen am",
+      "lostAt": "Verloren am",
+      "notes": "Notizen",
+      "lostReason": "Verloren: {{reason}}",
+      "conflict": "Dieser Deal wurde von jemand anderem geändert. Er wurde neu geladen."
+    },
+    "timeline": {
+      "title": "Verlauf",
+      "empty": "Zu diesem Deal ist noch nichts passiert.",
+      "type": "Art des Eintrags",
+      "placeholder": "Notiz, Anrufzusammenfassung oder Aufgabe schreiben",
+      "add": "Zum Verlauf hinzufügen",
+      "date": "Fälligkeitstag",
+      "dateHint": "Optional, zum Beispiel 2026-10-31.",
+      "dateInvalid": "Geben Sie einen gültigen Tag ein, zum Beispiel 2026-10-31.",
+      "time": "Fälligkeitszeit",
+      "timeHint": "Optional, zum Beispiel 14:30. Ohne Angabe ist die Aufgabe um 09:00 fällig.",
+      "timeInvalid": "Geben Sie eine Uhrzeit ein, zum Beispiel 14:30.",
+      "types": {
+        "note": "Notiz",
+        "call": "Anruf",
+        "task": "Aufgabe"
+      },
+      "kinds": {
+        "note": "Notiz",
+        "call": "Anruf",
+        "message": "Nachricht",
+        "email": "E-Mail",
+        "meeting": "Termin",
+        "task": "Aufgabe",
+        "stage_change": "Phasenwechsel"
+      },
+      "system": "System",
+      "stageChange": "Von {{from}} nach {{to}} verschoben",
+      "placed": "In {{to}} eingeordnet",
+      "stageChanged": "Phase geändert",
+      "dueOn": "Fällig {{when}}",
+      "assignedTo": "Für {{name}}",
+      "markDone": "Als erledigt markieren",
+      "reopenTask": "Aufgabe wieder öffnen",
+      "done": "Erledigt"
+    },
+    "form": {
+      "addTitle": "Neuer Deal",
+      "editTitle": "Deal bearbeiten",
+      "save": "Deal speichern",
+      "saving": "Deal wird gespeichert",
+      "title": "Deal-Name",
+      "titlePlaceholder": "Zum Beispiel: 40 Lizenzen für Acme",
+      "value": "Wert",
+      "currency": "Währung",
+      "stage": "Startphase",
+      "owner": "Verantwortlicher",
+      "ownerMe": "Ich",
+      "ownerNone": "Nicht zugewiesen",
+      "ownerPick": "Verantwortlichen wählen",
+      "ownerLoading": "Team wird geladen",
+      "ownerFailed": "Das Team konnte nicht geladen werden.",
+      "contact": "Kunde",
+      "contactNone": "Kein Kunde",
+      "contactPick": "Kunden wählen",
+      "contactSearchLabel": "Suche",
+      "contactSearchPlaceholder": "Name, Telefon oder E-Mail",
+      "contactEmpty": "Keine Kontakte gefunden.",
+      "contactFailed": "Kontakte konnten nicht geladen werden.",
+      "expectedClose": "Erwarteter Abschlusstag",
+      "expectedCloseHint": "Optional, zum Beispiel 2026-10-31.",
+      "conflict": "Dieser Deal wurde von jemand anderem geändert. Er wurde neu geladen: Prüfen Sie ihn und speichern Sie erneut.",
+      "errors": {
+        "titleRequired": "Geben Sie einen Namen für den Deal ein.",
+        "titleTooLong": "Der Name ist zu lang.",
+        "valueInvalid": "Geben Sie einen Betrag wie 1250.50 ein, mit höchstens so vielen Dezimalstellen wie die Währung hat.",
+        "closeInvalid": "Geben Sie einen gültigen Tag ein, zum Beispiel 2026-10-31.",
+        "notesTooLong": "Die Notizen sind zu lang."
       }
     }
   },

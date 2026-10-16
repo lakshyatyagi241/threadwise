@@ -22,7 +22,7 @@ import {
   type TaskListFilters,
   type TaskListSource,
 } from './api';
-import { useActionKeys } from './use-action-keys';
+import { useActionKeys } from '@/lib/query/use-action-keys';
 
 /** Rows asked for at a time; the list asks for the next page when the person scrolls to the end. */
 export const PAGE_SIZE = 50;

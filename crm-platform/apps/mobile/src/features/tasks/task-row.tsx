@@ -7,7 +7,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { formatMoment } from './dates';
+import { formatMoment } from '@/lib/format/dates';
 import { PriorityBadge } from './priority-badge';
 
 const CIRCLE = 24;

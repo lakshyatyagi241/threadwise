@@ -13,9 +13,9 @@ import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { PickerField, PickerOption } from './picker-row';
+import { PickerField, PickerOption } from '@/components/ui/picker-row';
 import type { ContactChoice } from './task-validation';
-import { SEARCH_DEBOUNCE_MS, useDebounced } from './use-debounced';
+import { SEARCH_DEBOUNCE_MS, useDebounced } from '@/lib/hooks/use-debounced';
 import { useContactChoices } from './use-tasks';
 
 interface Props {

@@ -1,0 +1,65 @@
+# Open the deals from the Menu, add a deal in the open stage, move it to another stage, add a note to its timeline and delete it.
+#
+#   maestro test apps/mobile/.maestro/deals.yaml \
+#     -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<seeded password>
+#
+# Credentials come from -e, never from this file. Needs an emulator or simulator set to English, a development or preview build
+# installed, and the local API running; the account must not have MFA enabled and must be allowed to read, add, change and delete
+# deals (an owner or admin) on a plan with the sales pipeline. The workspace's default pipeline needs its first two stages (New Lead
+# and Qualified in a fresh workspace; the flow moves the deal to the second one by the name given in STAGE_TWO).
+# The deal it adds is deleted again at the end, so a run leaves nothing behind.
+# NOT YET RUN: no Maestro was available when this was written.
+appId: ${APP_ID}
+env:
+  STAGE_TWO: 'Qualified'
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- assertVisible: 'Good (morning|afternoon|evening).*'
+# The Deals screen is under the Menu tab.
+- tapOn: 'Menu'
+- scrollUntilVisible:
+    element: 'Deals'
+- tapOn: 'Deals'
+- assertVisible: 'Open pipeline'
+- assertVisible: 'Win rate'
+# Add a deal in the stage that is open.
+- tapOn: 'New deal'
+- assertVisible: 'Deal name'
+- tapOn: 'Deal name'
+- inputText: 'Maestro test deal'
+- tapOn: 'Value'
+- inputText: '1250.50'
+- hideKeyboard
+- tapOn: 'Save deal'
+# Saving opens the new deal.
+- assertVisible: 'Maestro test deal'
+- assertVisible: '.*1,250.50.*'
+- assertVisible: 'Mark as won'
+# Move it to the second stage.
+- tapOn: 'Move to stage'
+- tapOn: ${STAGE_TWO}
+- assertVisible: ${STAGE_TWO}
+# Add a note to its timeline.
+- scrollUntilVisible:
+    element: 'Add to timeline'
+- tapOn: 'Write a note, a call summary or a task'
+- inputText: 'First call done'
+- hideKeyboard
+- tapOn: 'Add to timeline'
+- assertVisible: 'First call done'
+# Delete it, with the confirmation.
+- scrollUntilVisible:
+    element: 'Delete deal'
+    direction: UP
+- tapOn: 'Delete deal'
+- tapOn: 'Delete'
+- assertVisible: 'Open pipeline'
+- assertNotVisible: 'Maestro test deal'

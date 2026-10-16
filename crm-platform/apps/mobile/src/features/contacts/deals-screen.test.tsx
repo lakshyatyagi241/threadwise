@@ -51,6 +51,12 @@ describe('ContactDealsScreen', () => {
     expect(listCall).toHaveBeenCalledWith(contactId, expect.anything());
   });
 
+  it('opens a deal on its own screen when its row is pressed', async () => {
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: dealA.title }));
+    expect(router.push).toHaveBeenCalledWith({ pathname: '/deal/[id]', params: { id: dealA.id } });
+  });
+
   it('says there are no deals', async () => {
     listCall.mockResolvedValue({ ...contactDeals, deals: [] });
     await show();

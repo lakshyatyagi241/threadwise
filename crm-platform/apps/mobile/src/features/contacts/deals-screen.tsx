@@ -2,7 +2,14 @@ import type { DealResponse } from '@crm/contracts';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { EmptyState } from '@/components/ui/empty-state';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
@@ -13,21 +20,26 @@ import { ErrorCard } from './record-parts';
 import { failureKindOf, firstParam, joinMeta } from './record-support';
 import { useContactDeals } from './use-deals';
 
-function DealRowBase({ deal }: { deal: DealResponse }) {
+function DealRowBase({ deal, onOpen }: { deal: DealResponse; onOpen: (id: string) => void }) {
   const { colors } = useTheme();
   return (
-    <View style={[styles.row, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={deal.title}
+      onPress={() => onOpen(deal.id)}
+      style={[styles.row, { backgroundColor: colors.surface, borderColor: colors.border }]}
+    >
       <Text numberOfLines={2}>{deal.title}</Text>
       <Text variant="caption" muted>
         {joinMeta([deal.stage.name, `${deal.value} ${deal.currency}`])}
       </Text>
-    </View>
+    </Pressable>
   );
 }
 const DealRow = memo(DealRowBase);
 
 /**
- * A contact's deals (/contact-deals?contactId=…), open ones first, read only. The API answers with one list of at most 50 and
+ * A contact's deals (/contact-deals?contactId=…), open ones first; a deal opens its own screen. The API answers with one list of at most 50 and
  * the open and won totals, not pages. Reading them needs `record.deals.read`; a workspace without the sales pipeline is
  * refused the same way and sees the "can't view" message.
  */
@@ -47,6 +59,7 @@ export function ContactDealsScreen() {
     else if (contactId) router.replace({ pathname: '/contact/[id]', params: { id: contactId } });
     else router.replace('/contacts');
   };
+  const openDeal = (id: string) => router.push({ pathname: '/deal/[id]', params: { id } });
   const refresh = async () => {
     setRefreshing(true);
     await list.refetch();
@@ -95,7 +108,7 @@ export function ContactDealsScreen() {
         testID="deals-list"
         data={list.data.deals}
         keyExtractor={(deal) => deal.id}
-        renderItem={({ item }) => <DealRow deal={item} />}
+        renderItem={({ item }) => <DealRow deal={item} onOpen={openDeal} />}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} />}
         ListEmptyComponent={
           <EmptyState icon="cash-outline" title={t('contactDeals.empty.title')} />

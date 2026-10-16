@@ -431,6 +431,7 @@
     "signOutNo": "Nie",
     "signOutYes": "Tak, wyloguj",
     "tasks": "Zadania",
+    "deals": "Transakcje",
     "dashboard": "Panel",
     "allContacts": "Wszystkie kontakty",
     "newContact": "Nowy kontakt",
@@ -1172,6 +1173,245 @@
         "dueInvalid": "Tego terminu i godziny nie można użyć.",
         "assigneeInvalid": "Tej osobie nie można przypisywać zadań. Wybierz innego właściciela.",
         "contactInvalid": "Tego kontaktu nie można powiązać."
+      }
+    }
+  },
+  "deals": {
+    "title": "Transakcje",
+    "add": "Nowa transakcja",
+    "cancel": "Anuluj",
+    "unassigned": "Nieprzypisana",
+    "unknownContact": "Kontakt bez nazwy",
+    "planLocked": {
+      "title": "Transakcje nie są częścią tego planu.",
+      "hint": "Poproś administratora przestrzeni roboczej o zmianę planu na wyższy."
+    },
+    "denied": {
+      "title": "Nie możesz przeglądać transakcji",
+      "hint": "Poproś administratora przestrzeni roboczej o dostęp do transakcji.",
+      "createTitle": "Nie możesz dodawać transakcji",
+      "createHint": "Poproś administratora przestrzeni roboczej o możliwość dodawania transakcji.",
+      "editTitle": "Nie możesz edytować transakcji",
+      "editHint": "Poproś administratora przestrzeni roboczej o możliwość edytowania transakcji."
+    },
+    "errors": {
+      "conflict": "Ta transakcja została zmieniona przez kogoś innego. Zobacz ją ponownie i spróbuj jeszcze raz.",
+      "notFound": "Ta transakcja już nie istnieje.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "lostReasonRequired": "Wybierz lub wpisz powód przegranej tej transakcji.",
+      "ownerInvalid": "Ta osoba nie może być właścicielem tej transakcji.",
+      "stageMismatch": "Ten etap nie należy do tego lejka.",
+      "noWonStage": "Ten lejek nie ma etapu Wygrana.",
+      "noLostStage": "Ten lejek nie ma etapu Przegrana.",
+      "noOpenStage": "Ten lejek nie ma otwartego etapu, do którego można ją otworzyć ponownie."
+    },
+    "status": {
+      "open": "Otwarta",
+      "won": "Wygrana",
+      "lost": "Przegrana"
+    },
+    "source": {
+      "manual": "Dodano ręcznie",
+      "inbox": "Skrzynka odbiorcza",
+      "order": "Zamówienie",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formularz",
+      "api": "API",
+      "flow": "Przepływ",
+      "facebook": "Facebook",
+      "ai": "Asystent AI",
+      "lead_ad": "Źródło leada"
+    },
+    "view": {
+      "label": "Widok",
+      "board": "Tablica",
+      "list": "Lista"
+    },
+    "pipeline": {
+      "label": "Lejek"
+    },
+    "search": {
+      "open": "Szukaj transakcji",
+      "close": "Zamknij wyszukiwanie",
+      "label": "Szukaj",
+      "placeholder": "Szukaj według nazwy transakcji"
+    },
+    "filter": {
+      "open": "Filtruj transakcje",
+      "title": "Filtruj transakcje",
+      "owner": "Właściciel",
+      "source": "Źródło",
+      "status": "Status",
+      "any": "Dowolne",
+      "mine": "Moje",
+      "unassigned": "Nieprzypisane",
+      "ownersFailed": "Nie udało się wczytać zespołu. Spróbuj ponownie."
+    },
+    "kpi": {
+      "openPipeline": "Otwarty lejek",
+      "openDeals": "Otwarte transakcje: {{n}}",
+      "forecast": "Prognoza",
+      "forecastHint": "Ważona według etapu",
+      "wonThisMonth": "Wygrane w tym miesiącu",
+      "dealsCount": "Transakcje: {{n}}",
+      "winRate": "Wskaźnik wygranych",
+      "winRateHint": "Wygrane spośród zamkniętych"
+    },
+    "stages": {
+      "label": "Etapy",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Transakcje: {{n}}",
+      "weighted": "Ważona {{amount}}"
+    },
+    "empty": {
+      "title": "Nie znaleziono transakcji.",
+      "hint": "Dodane transakcje pojawią się tutaj.",
+      "filteredHint": "Spróbuj innego filtra lub wyszukiwania."
+    },
+    "noPipelines": {
+      "title": "Brak lejka",
+      "hint": "Poproś administratora przestrzeni roboczej o skonfigurowanie lejka sprzedaży."
+    },
+    "card": {
+      "noContact": "Brak klienta",
+      "more": "Więcej działań dla: {{title}}",
+      "due": {
+        "overdue": "Zaległa · {{when}}",
+        "today": "Termin dzisiaj",
+        "upcoming": "Zamyka się {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Ta transakcja została zmieniona przez kogoś innego. Lista została odświeżona.",
+      "moved": "Przeniesiono do etapu {{stage}}.",
+      "wonDone": "Oznaczono jako wygraną.",
+      "lostDone": "Oznaczono jako przegraną.",
+      "reopened": "Transakcję otwarto ponownie."
+    },
+    "actions": {
+      "open": "Otwórz transakcję",
+      "moveTo": "Przenieś do etapu",
+      "markWon": "Oznacz jako wygraną",
+      "markLost": "Oznacz jako przegraną",
+      "reopen": "Otwórz ponownie",
+      "edit": "Edytuj transakcję",
+      "delete": "Usuń transakcję"
+    },
+    "move": {
+      "title": "Przenieś do etapu"
+    },
+    "lost": {
+      "title": "Oznacz jako przegraną",
+      "intro": "Możesz podać, dlaczego ta transakcja została przegrana.",
+      "introRequired": "Twoja przestrzeń robocza wymaga powodu dla każdej przegranej transakcji.",
+      "other": "Inny",
+      "details": "Powód",
+      "needed": "Podaj powód, aby kontynuować.",
+      "confirm": "Oznacz jako przegraną",
+      "presets": {
+        "price": "Zbyt wysoka cena",
+        "competitor": "Wybrano konkurenta",
+        "noBudget": "Brak budżetu",
+        "noResponse": "Brak odpowiedzi",
+        "timing": "Zły moment",
+        "notFit": "Brak dopasowania"
+      }
+    },
+    "delete": {
+      "title": "Usuń transakcję",
+      "message": "Usunąć „{{title}}” i jej oś czasu? Tej operacji nie można cofnąć.",
+      "confirm": "Usuń"
+    },
+    "details": {
+      "title": "Szczegóły transakcji",
+      "customer": "Klient",
+      "noContact": "Brak powiązanego klienta.",
+      "openContact": "Otwórz kontakt",
+      "message": "Napisz na WhatsApp",
+      "company": "Firma: {{name}}",
+      "details": "Szczegóły",
+      "owner": "Właściciel",
+      "expectedClose": "Oczekiwane zamknięcie",
+      "noClose": "Brak daty",
+      "source": "Źródło",
+      "created": "Utworzono",
+      "wonAt": "Wygrana dnia",
+      "lostAt": "Przegrana dnia",
+      "notes": "Notatki",
+      "lostReason": "Przegrana: {{reason}}",
+      "conflict": "Ta transakcja została zmieniona przez kogoś innego. Wczytano ją ponownie."
+    },
+    "timeline": {
+      "title": "Oś czasu",
+      "empty": "W tej transakcji nic jeszcze się nie wydarzyło.",
+      "type": "Rodzaj wpisu",
+      "placeholder": "Napisz notatkę, podsumowanie rozmowy lub zadanie",
+      "add": "Dodaj do osi czasu",
+      "date": "Dzień terminu",
+      "dateHint": "Opcjonalnie, na przykład 2026-10-31.",
+      "dateInvalid": "Podaj prawidłowy dzień, na przykład 2026-10-31.",
+      "time": "Godzina terminu",
+      "timeHint": "Opcjonalnie, na przykład 14:30. Bez niej termin zadania to 09:00.",
+      "timeInvalid": "Podaj godzinę, na przykład 14:30.",
+      "types": {
+        "note": "Notatka",
+        "call": "Rozmowa",
+        "task": "Zadanie"
+      },
+      "kinds": {
+        "note": "Notatka",
+        "call": "Rozmowa",
+        "message": "Wiadomość",
+        "email": "E-mail",
+        "meeting": "Spotkanie",
+        "task": "Zadanie",
+        "stage_change": "Zmiana etapu"
+      },
+      "system": "System",
+      "stageChange": "Przeniesiono z etapu {{from}} do {{to}}",
+      "placed": "Umieszczono w etapie {{to}}",
+      "stageChanged": "Zmieniono etap",
+      "dueOn": "Termin: {{when}}",
+      "assignedTo": "Dla: {{name}}",
+      "markDone": "Oznacz jako zrobione",
+      "reopenTask": "Otwórz zadanie ponownie",
+      "done": "Zrobione"
+    },
+    "form": {
+      "addTitle": "Nowa transakcja",
+      "editTitle": "Edytuj transakcję",
+      "save": "Zapisz transakcję",
+      "saving": "Zapisywanie transakcji",
+      "title": "Nazwa transakcji",
+      "titlePlaceholder": "Na przykład: 40 licencji dla Acme",
+      "value": "Wartość",
+      "currency": "Waluta",
+      "stage": "Etap początkowy",
+      "owner": "Właściciel",
+      "ownerMe": "Ja",
+      "ownerNone": "Nieprzypisana",
+      "ownerPick": "Wybierz właściciela",
+      "ownerLoading": "Wczytywanie zespołu",
+      "ownerFailed": "Nie udało się wczytać zespołu.",
+      "contact": "Klient",
+      "contactNone": "Brak klienta",
+      "contactPick": "Wybierz klienta",
+      "contactSearchLabel": "Szukaj",
+      "contactSearchPlaceholder": "Nazwa, telefon lub e-mail",
+      "contactEmpty": "Nie znaleziono kontaktów.",
+      "contactFailed": "Nie udało się wczytać kontaktów.",
+      "expectedClose": "Oczekiwany dzień zamknięcia",
+      "expectedCloseHint": "Opcjonalnie, na przykład 2026-10-31.",
+      "conflict": "Ta transakcja została zmieniona przez kogoś innego. Wczytano ją ponownie: sprawdź ją i zapisz jeszcze raz.",
+      "errors": {
+        "titleRequired": "Wpisz nazwę transakcji.",
+        "titleTooLong": "Nazwa jest zbyt długa.",
+        "valueInvalid": "Wpisz kwotę, na przykład 1250.50, z nie większą liczbą miejsc po przecinku niż ma waluta.",
+        "closeInvalid": "Podaj prawidłowy dzień, na przykład 2026-10-31.",
+        "notesTooLong": "Notatki są zbyt długie."
       }
     }
   },

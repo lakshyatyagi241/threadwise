@@ -411,6 +411,7 @@
     "signOutNo": "No",
     "signOutYes": "Yes, sign out",
     "tasks": "Tasks",
+    "deals": "Deals",
     "dashboard": "Dashboard",
     "allContacts": "All contacts",
     "newContact": "New contact",
@@ -1136,6 +1137,245 @@
         "dueInvalid": "This due date and time can't be used.",
         "assigneeInvalid": "That person can't be given tasks. Choose another owner.",
         "contactInvalid": "This contact can't be linked."
+      }
+    }
+  },
+  "deals": {
+    "title": "Deals",
+    "add": "New deal",
+    "cancel": "Cancel",
+    "unassigned": "Unassigned",
+    "unknownContact": "Unnamed contact",
+    "planLocked": {
+      "title": "Deals are not included in this plan.",
+      "hint": "Ask your workspace admin to upgrade the plan."
+    },
+    "denied": {
+      "title": "You can't see deals",
+      "hint": "Ask your workspace admin to give you access to deals.",
+      "createTitle": "You can't add deals",
+      "createHint": "Ask your workspace admin to let you add deals.",
+      "editTitle": "You can't edit deals",
+      "editHint": "Ask your workspace admin to let you edit deals."
+    },
+    "errors": {
+      "conflict": "This deal was changed by someone else. Look at it again and try once more.",
+      "notFound": "This deal no longer exists.",
+      "forbidden": "You don't have permission to do that.",
+      "lostReasonRequired": "Choose or write a reason for losing this deal.",
+      "ownerInvalid": "That person can't own this deal.",
+      "stageMismatch": "That stage doesn't belong to this pipeline.",
+      "noWonStage": "This pipeline has no Won stage.",
+      "noLostStage": "This pipeline has no Lost stage.",
+      "noOpenStage": "This pipeline has no open stage to reopen into."
+    },
+    "status": {
+      "open": "Open",
+      "won": "Won",
+      "lost": "Lost"
+    },
+    "source": {
+      "manual": "Added by hand",
+      "inbox": "Inbox",
+      "order": "Order",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Form",
+      "api": "API",
+      "flow": "Flow",
+      "facebook": "Facebook",
+      "ai": "AI assistant",
+      "lead_ad": "Lead source"
+    },
+    "view": {
+      "label": "View",
+      "board": "Board",
+      "list": "List"
+    },
+    "pipeline": {
+      "label": "Pipeline"
+    },
+    "search": {
+      "open": "Search deals",
+      "close": "Close search",
+      "label": "Search",
+      "placeholder": "Search by deal name"
+    },
+    "filter": {
+      "open": "Filter deals",
+      "title": "Filter deals",
+      "owner": "Owner",
+      "source": "Source",
+      "status": "Status",
+      "any": "Any",
+      "mine": "Mine",
+      "unassigned": "Unassigned",
+      "ownersFailed": "Couldn't load the team. Try again."
+    },
+    "kpi": {
+      "openPipeline": "Open pipeline",
+      "openDeals": "Open deals: {{n}}",
+      "forecast": "Forecast",
+      "forecastHint": "Weighted by stage",
+      "wonThisMonth": "Won this month",
+      "dealsCount": "Deals: {{n}}",
+      "winRate": "Win rate",
+      "winRateHint": "Won of closed deals"
+    },
+    "stages": {
+      "label": "Stages",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Deals: {{n}}",
+      "weighted": "Weighted {{amount}}"
+    },
+    "empty": {
+      "title": "No deals found.",
+      "hint": "Deals you add show up here.",
+      "filteredHint": "Try a different filter or search."
+    },
+    "noPipelines": {
+      "title": "No pipeline yet",
+      "hint": "Ask your workspace admin to set up a sales pipeline."
+    },
+    "card": {
+      "noContact": "No customer",
+      "more": "More actions for {{title}}",
+      "due": {
+        "overdue": "Overdue · {{when}}",
+        "today": "Due today",
+        "upcoming": "Closes {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "This deal was changed by someone else. The list has been refreshed.",
+      "moved": "Moved to {{stage}}.",
+      "wonDone": "Marked as won.",
+      "lostDone": "Marked as lost.",
+      "reopened": "Deal reopened."
+    },
+    "actions": {
+      "open": "Open deal",
+      "moveTo": "Move to stage",
+      "markWon": "Mark as won",
+      "markLost": "Mark as lost",
+      "reopen": "Reopen",
+      "edit": "Edit deal",
+      "delete": "Delete deal"
+    },
+    "move": {
+      "title": "Move to stage"
+    },
+    "lost": {
+      "title": "Mark as lost",
+      "intro": "You can say why this deal was lost.",
+      "introRequired": "Your workspace needs a reason for every lost deal.",
+      "other": "Other",
+      "details": "Reason",
+      "needed": "Add a reason to continue.",
+      "confirm": "Mark as lost",
+      "presets": {
+        "price": "Price too high",
+        "competitor": "Chose a competitor",
+        "noBudget": "No budget",
+        "noResponse": "No response",
+        "timing": "Bad timing",
+        "notFit": "Not a fit"
+      }
+    },
+    "delete": {
+      "title": "Delete deal",
+      "message": "Delete \"{{title}}\" and its timeline? This can't be undone.",
+      "confirm": "Delete"
+    },
+    "details": {
+      "title": "Deal details",
+      "customer": "Customer",
+      "noContact": "No customer linked.",
+      "openContact": "Open contact",
+      "message": "Message on WhatsApp",
+      "company": "Company: {{name}}",
+      "details": "Details",
+      "owner": "Owner",
+      "expectedClose": "Expected close",
+      "noClose": "No date",
+      "source": "Source",
+      "created": "Created",
+      "wonAt": "Won on",
+      "lostAt": "Lost on",
+      "notes": "Notes",
+      "lostReason": "Lost: {{reason}}",
+      "conflict": "This deal was changed by someone else. It has been reloaded."
+    },
+    "timeline": {
+      "title": "Timeline",
+      "empty": "Nothing has happened on this deal yet.",
+      "type": "Kind of entry",
+      "placeholder": "Write a note, a call summary or a task",
+      "add": "Add to timeline",
+      "date": "Due day",
+      "dateHint": "Optional, like 2026-10-31.",
+      "dateInvalid": "Enter a real day like 2026-10-31.",
+      "time": "Due time",
+      "timeHint": "Optional, like 14:30. Without it the task is due at 09:00.",
+      "timeInvalid": "Enter a time like 14:30.",
+      "types": {
+        "note": "Note",
+        "call": "Call",
+        "task": "Task"
+      },
+      "kinds": {
+        "note": "Note",
+        "call": "Call",
+        "message": "Message",
+        "email": "Email",
+        "meeting": "Meeting",
+        "task": "Task",
+        "stage_change": "Stage change"
+      },
+      "system": "System",
+      "stageChange": "Moved from {{from}} to {{to}}",
+      "placed": "Placed in {{to}}",
+      "stageChanged": "Stage changed",
+      "dueOn": "Due {{when}}",
+      "assignedTo": "For {{name}}",
+      "markDone": "Mark done",
+      "reopenTask": "Reopen task",
+      "done": "Done"
+    },
+    "form": {
+      "addTitle": "New deal",
+      "editTitle": "Edit deal",
+      "save": "Save deal",
+      "saving": "Saving deal",
+      "title": "Deal name",
+      "titlePlaceholder": "For example, 40 seats for Acme",
+      "value": "Value",
+      "currency": "Currency",
+      "stage": "Starting stage",
+      "owner": "Owner",
+      "ownerMe": "Me",
+      "ownerNone": "Unassigned",
+      "ownerPick": "Choose an owner",
+      "ownerLoading": "Loading the team",
+      "ownerFailed": "Couldn't load the team.",
+      "contact": "Customer",
+      "contactNone": "No customer",
+      "contactPick": "Choose a customer",
+      "contactSearchLabel": "Search",
+      "contactSearchPlaceholder": "Name, phone or email",
+      "contactEmpty": "No contacts found.",
+      "contactFailed": "Couldn't load contacts.",
+      "expectedClose": "Expected close day",
+      "expectedCloseHint": "Optional, like 2026-10-31.",
+      "conflict": "This deal was changed by someone else. It has been reloaded: look it over and save again.",
+      "errors": {
+        "titleRequired": "Enter a name for the deal.",
+        "titleTooLong": "The name is too long.",
+        "valueInvalid": "Enter an amount like 1250.50, with no more decimals than the currency has.",
+        "closeInvalid": "Enter a real day like 2026-10-31.",
+        "notesTooLong": "The notes are too long."
       }
     }
   },

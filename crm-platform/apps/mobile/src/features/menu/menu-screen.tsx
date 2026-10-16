@@ -195,6 +195,12 @@ export function MenuScreen() {
             faded={faded('record.tasks.read')}
             onPress={() => go('record.tasks.read', '/tasks')}
           />
+          <Row
+            icon="cash-outline"
+            label={t('menu.deals')}
+            faded={faded('record.deals.read')}
+            onPress={() => go('record.deals.read', '/deals')}
+          />
         </Section>
         {noAccess ? (
           <View style={styles.notice}>

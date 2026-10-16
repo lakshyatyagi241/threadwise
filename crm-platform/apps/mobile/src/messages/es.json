@@ -421,6 +421,7 @@
     "signOutNo": "No",
     "signOutYes": "Sí, cerrar sesión",
     "tasks": "Tareas",
+    "deals": "Negocios",
     "dashboard": "Panel",
     "allContacts": "Todos los contactos",
     "newContact": "Nuevo contacto",
@@ -1154,6 +1155,245 @@
         "dueInvalid": "Esta fecha y hora de vencimiento no se pueden usar.",
         "assigneeInvalid": "A esa persona no se le pueden asignar tareas. Elige otro responsable.",
         "contactInvalid": "Este contacto no se puede vincular."
+      }
+    }
+  },
+  "deals": {
+    "title": "Negocios",
+    "add": "Nuevo negocio",
+    "cancel": "Cancelar",
+    "unassigned": "Sin asignar",
+    "unknownContact": "Contacto sin nombre",
+    "planLocked": {
+      "title": "Los negocios no están incluidos en este plan.",
+      "hint": "Pide al administrador de tu espacio de trabajo que mejore el plan."
+    },
+    "denied": {
+      "title": "No puedes ver negocios",
+      "hint": "Pide al administrador de tu espacio de trabajo que te dé acceso a los negocios.",
+      "createTitle": "No puedes añadir negocios",
+      "createHint": "Pide al administrador de tu espacio de trabajo que te permita añadir negocios.",
+      "editTitle": "No puedes editar negocios",
+      "editHint": "Pide al administrador de tu espacio de trabajo que te permita editar negocios."
+    },
+    "errors": {
+      "conflict": "Otra persona cambió este negocio. Revísalo de nuevo e inténtalo otra vez.",
+      "notFound": "Este negocio ya no existe.",
+      "forbidden": "No tienes permiso para hacer eso.",
+      "lostReasonRequired": "Elige o escribe un motivo para marcar este negocio como perdido.",
+      "ownerInvalid": "Esa persona no puede ser responsable de este negocio.",
+      "stageMismatch": "Esa etapa no pertenece a este embudo.",
+      "noWonStage": "Este embudo no tiene etapa de Ganado.",
+      "noLostStage": "Este embudo no tiene etapa de Perdido.",
+      "noOpenStage": "Este embudo no tiene una etapa abierta donde reabrirlo."
+    },
+    "status": {
+      "open": "Abierto",
+      "won": "Ganado",
+      "lost": "Perdido"
+    },
+    "source": {
+      "manual": "Añadido a mano",
+      "inbox": "Bandeja",
+      "order": "Pedido",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formulario",
+      "api": "API",
+      "flow": "Flujo",
+      "facebook": "Facebook",
+      "ai": "Asistente de IA",
+      "lead_ad": "Origen del lead"
+    },
+    "view": {
+      "label": "Vista",
+      "board": "Tablero",
+      "list": "Lista"
+    },
+    "pipeline": {
+      "label": "Embudo"
+    },
+    "search": {
+      "open": "Buscar negocios",
+      "close": "Cerrar búsqueda",
+      "label": "Buscar",
+      "placeholder": "Buscar por nombre del negocio"
+    },
+    "filter": {
+      "open": "Filtrar negocios",
+      "title": "Filtrar negocios",
+      "owner": "Responsable",
+      "source": "Origen",
+      "status": "Estado",
+      "any": "Cualquiera",
+      "mine": "Míos",
+      "unassigned": "Sin asignar",
+      "ownersFailed": "No se pudo cargar el equipo. Inténtalo de nuevo."
+    },
+    "kpi": {
+      "openPipeline": "Embudo abierto",
+      "openDeals": "Negocios abiertos: {{n}}",
+      "forecast": "Pronóstico",
+      "forecastHint": "Ponderado por etapa",
+      "wonThisMonth": "Ganados este mes",
+      "dealsCount": "Negocios: {{n}}",
+      "winRate": "Tasa de éxito",
+      "winRateHint": "Ganados entre los cerrados"
+    },
+    "stages": {
+      "label": "Etapas",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Negocios: {{n}}",
+      "weighted": "Ponderado {{amount}}"
+    },
+    "empty": {
+      "title": "No se encontraron negocios.",
+      "hint": "Los negocios que añadas aparecerán aquí.",
+      "filteredHint": "Prueba con otro filtro o búsqueda."
+    },
+    "noPipelines": {
+      "title": "Aún no hay embudo",
+      "hint": "Pide al administrador de tu espacio de trabajo que configure un embudo de ventas."
+    },
+    "card": {
+      "noContact": "Sin cliente",
+      "more": "Más acciones para {{title}}",
+      "due": {
+        "overdue": "Vencido · {{when}}",
+        "today": "Vence hoy",
+        "upcoming": "Cierra {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Otra persona cambió este negocio. Se actualizó la lista.",
+      "moved": "Movido a {{stage}}.",
+      "wonDone": "Marcado como ganado.",
+      "lostDone": "Marcado como perdido.",
+      "reopened": "Negocio reabierto."
+    },
+    "actions": {
+      "open": "Abrir negocio",
+      "moveTo": "Mover a la etapa",
+      "markWon": "Marcar como ganado",
+      "markLost": "Marcar como perdido",
+      "reopen": "Reabrir",
+      "edit": "Editar negocio",
+      "delete": "Eliminar negocio"
+    },
+    "move": {
+      "title": "Mover a la etapa"
+    },
+    "lost": {
+      "title": "Marcar como perdido",
+      "intro": "Puedes indicar por qué se perdió este negocio.",
+      "introRequired": "Tu espacio de trabajo exige un motivo para cada negocio perdido.",
+      "other": "Otro",
+      "details": "Motivo",
+      "needed": "Añade un motivo para continuar.",
+      "confirm": "Marcar como perdido",
+      "presets": {
+        "price": "Precio demasiado alto",
+        "competitor": "Eligió a un competidor",
+        "noBudget": "Sin presupuesto",
+        "noResponse": "Sin respuesta",
+        "timing": "Mal momento",
+        "notFit": "No encaja"
+      }
+    },
+    "delete": {
+      "title": "Eliminar negocio",
+      "message": "¿Eliminar “{{title}}” y su cronología? Esta acción no se puede deshacer.",
+      "confirm": "Eliminar"
+    },
+    "details": {
+      "title": "Detalles del negocio",
+      "customer": "Cliente",
+      "noContact": "Sin cliente vinculado.",
+      "openContact": "Abrir contacto",
+      "message": "Escribir por WhatsApp",
+      "company": "Empresa: {{name}}",
+      "details": "Detalles",
+      "owner": "Responsable",
+      "expectedClose": "Cierre previsto",
+      "noClose": "Sin fecha",
+      "source": "Origen",
+      "created": "Creado",
+      "wonAt": "Ganado el",
+      "lostAt": "Perdido el",
+      "notes": "Notas",
+      "lostReason": "Perdido: {{reason}}",
+      "conflict": "Otra persona cambió este negocio. Se volvió a cargar."
+    },
+    "timeline": {
+      "title": "Cronología",
+      "empty": "Aún no ha pasado nada en este negocio.",
+      "type": "Tipo de entrada",
+      "placeholder": "Escribe una nota, el resumen de una llamada o una tarea",
+      "add": "Añadir a la cronología",
+      "date": "Día de vencimiento",
+      "dateHint": "Opcional, por ejemplo 2026-10-31.",
+      "dateInvalid": "Introduce un día válido, por ejemplo 2026-10-31.",
+      "time": "Hora de vencimiento",
+      "timeHint": "Opcional, por ejemplo 14:30. Sin hora, la tarea vence a las 09:00.",
+      "timeInvalid": "Introduce una hora, por ejemplo 14:30.",
+      "types": {
+        "note": "Nota",
+        "call": "Llamada",
+        "task": "Tarea"
+      },
+      "kinds": {
+        "note": "Nota",
+        "call": "Llamada",
+        "message": "Mensaje",
+        "email": "Correo",
+        "meeting": "Reunión",
+        "task": "Tarea",
+        "stage_change": "Cambio de etapa"
+      },
+      "system": "Sistema",
+      "stageChange": "Movido de {{from}} a {{to}}",
+      "placed": "Colocado en {{to}}",
+      "stageChanged": "Etapa cambiada",
+      "dueOn": "Vence {{when}}",
+      "assignedTo": "Para {{name}}",
+      "markDone": "Marcar como hecha",
+      "reopenTask": "Reabrir tarea",
+      "done": "Hecha"
+    },
+    "form": {
+      "addTitle": "Nuevo negocio",
+      "editTitle": "Editar negocio",
+      "save": "Guardar negocio",
+      "saving": "Guardando negocio",
+      "title": "Nombre del negocio",
+      "titlePlaceholder": "Por ejemplo, 40 licencias para Acme",
+      "value": "Valor",
+      "currency": "Moneda",
+      "stage": "Etapa inicial",
+      "owner": "Responsable",
+      "ownerMe": "Yo",
+      "ownerNone": "Sin asignar",
+      "ownerPick": "Elige un responsable",
+      "ownerLoading": "Cargando el equipo",
+      "ownerFailed": "No se pudo cargar el equipo.",
+      "contact": "Cliente",
+      "contactNone": "Sin cliente",
+      "contactPick": "Elige un cliente",
+      "contactSearchLabel": "Buscar",
+      "contactSearchPlaceholder": "Nombre, teléfono o correo electrónico",
+      "contactEmpty": "No se encontraron contactos.",
+      "contactFailed": "No se pudieron cargar los contactos.",
+      "expectedClose": "Día de cierre previsto",
+      "expectedCloseHint": "Opcional, por ejemplo 2026-10-31.",
+      "conflict": "Otra persona cambió este negocio. Se volvió a cargar: revísalo y vuelve a guardar.",
+      "errors": {
+        "titleRequired": "Introduce un nombre para el negocio.",
+        "titleTooLong": "El nombre es demasiado largo.",
+        "valueInvalid": "Introduce un importe como 1250.50, sin más decimales de los que tiene la moneda.",
+        "closeInvalid": "Introduce un día válido, por ejemplo 2026-10-31.",
+        "notesTooLong": "Las notas son demasiado largas."
       }
     }
   },

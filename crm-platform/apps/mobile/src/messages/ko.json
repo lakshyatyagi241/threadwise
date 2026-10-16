@@ -401,6 +401,7 @@
     "signOutNo": "아니요",
     "signOutYes": "예, 로그아웃",
     "tasks": "작업",
+    "deals": "딜",
     "dashboard": "대시보드",
     "allContacts": "모든 연락처",
     "newContact": "새 연락처",
@@ -1118,6 +1119,245 @@
         "dueInvalid": "이 기한 날짜와 시간은 사용할 수 없습니다.",
         "assigneeInvalid": "이 사용자에게는 작업을 배정할 수 없습니다. 다른 담당자를 선택하세요.",
         "contactInvalid": "이 연락처는 연결할 수 없습니다."
+      }
+    }
+  },
+  "deals": {
+    "title": "딜",
+    "add": "새 딜",
+    "cancel": "취소",
+    "unassigned": "미배정",
+    "unknownContact": "이름 없는 연락처",
+    "planLocked": {
+      "title": "이 요금제에는 딜이 포함되어 있지 않습니다.",
+      "hint": "워크스페이스 관리자에게 요금제 업그레이드를 요청하세요."
+    },
+    "denied": {
+      "title": "딜을 볼 수 없습니다",
+      "hint": "워크스페이스 관리자에게 딜 접근 권한을 요청하세요.",
+      "createTitle": "딜을 추가할 수 없습니다",
+      "createHint": "워크스페이스 관리자에게 딜 추가 권한을 요청하세요.",
+      "editTitle": "딜을 수정할 수 없습니다",
+      "editHint": "워크스페이스 관리자에게 딜 수정 권한을 요청하세요."
+    },
+    "errors": {
+      "conflict": "다른 사용자가 이 딜을 변경했습니다. 내용을 확인하고 다시 시도하세요.",
+      "notFound": "이 딜은 더 이상 존재하지 않습니다.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "lostReasonRequired": "이 딜이 실패한 사유를 선택하거나 입력하세요.",
+      "ownerInvalid": "이 사용자는 이 딜의 담당자가 될 수 없습니다.",
+      "stageMismatch": "해당 단계는 이 파이프라인에 속하지 않습니다.",
+      "noWonStage": "이 파이프라인에는 성사 단계가 없습니다.",
+      "noLostStage": "이 파이프라인에는 실패 단계가 없습니다.",
+      "noOpenStage": "이 파이프라인에는 다시 열 수 있는 진행 중 단계가 없습니다."
+    },
+    "status": {
+      "open": "진행 중",
+      "won": "성사",
+      "lost": "실패"
+    },
+    "source": {
+      "manual": "직접 추가",
+      "inbox": "수신함",
+      "order": "주문",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "양식",
+      "api": "API",
+      "flow": "플로우",
+      "facebook": "Facebook",
+      "ai": "AI 어시스턴트",
+      "lead_ad": "리드 출처"
+    },
+    "view": {
+      "label": "보기",
+      "board": "보드",
+      "list": "목록"
+    },
+    "pipeline": {
+      "label": "파이프라인"
+    },
+    "search": {
+      "open": "딜 검색",
+      "close": "검색 닫기",
+      "label": "검색",
+      "placeholder": "딜 이름으로 검색"
+    },
+    "filter": {
+      "open": "딜 필터",
+      "title": "딜 필터",
+      "owner": "담당자",
+      "source": "출처",
+      "status": "상태",
+      "any": "전체",
+      "mine": "내 딜",
+      "unassigned": "미배정",
+      "ownersFailed": "팀을 불러오지 못했습니다. 다시 시도하세요."
+    },
+    "kpi": {
+      "openPipeline": "진행 중인 파이프라인",
+      "openDeals": "진행 중인 딜: {{n}}",
+      "forecast": "가중 예측",
+      "forecastHint": "단계별 가중치 적용",
+      "wonThisMonth": "이번 달 성사",
+      "dealsCount": "딜: {{n}}",
+      "winRate": "성사율",
+      "winRateHint": "종료된 딜 중 성사 비율"
+    },
+    "stages": {
+      "label": "단계",
+      "tab": "{{name}}, {{n}}건"
+    },
+    "column": {
+      "count": "딜: {{n}}",
+      "weighted": "가중 {{amount}}"
+    },
+    "empty": {
+      "title": "딜을 찾을 수 없습니다.",
+      "hint": "추가한 딜이 여기에 표시됩니다.",
+      "filteredHint": "다른 필터나 검색어를 사용해 보세요."
+    },
+    "noPipelines": {
+      "title": "파이프라인이 아직 없습니다",
+      "hint": "워크스페이스 관리자에게 영업 파이프라인 설정을 요청하세요."
+    },
+    "card": {
+      "noContact": "고객 없음",
+      "more": "{{title}}에 대한 더 보기",
+      "due": {
+        "overdue": "기한 경과 · {{when}}",
+        "today": "오늘 마감",
+        "upcoming": "마감 예정 {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "다른 사용자가 이 딜을 변경했습니다. 목록을 새로 고쳤습니다.",
+      "moved": "{{stage}}(으)로 이동했습니다.",
+      "wonDone": "성사로 표시했습니다.",
+      "lostDone": "실패로 표시했습니다.",
+      "reopened": "딜을 다시 열었습니다."
+    },
+    "actions": {
+      "open": "딜 열기",
+      "moveTo": "단계 이동",
+      "markWon": "성사로 표시",
+      "markLost": "실패로 표시",
+      "reopen": "다시 열기",
+      "edit": "딜 수정",
+      "delete": "딜 삭제"
+    },
+    "move": {
+      "title": "단계 이동"
+    },
+    "lost": {
+      "title": "실패로 표시",
+      "intro": "이 딜이 실패한 이유를 입력할 수 있습니다.",
+      "introRequired": "워크스페이스에서는 실패한 모든 딜에 사유가 필요합니다.",
+      "other": "기타",
+      "details": "사유",
+      "needed": "계속하려면 사유를 입력하세요.",
+      "confirm": "실패로 표시",
+      "presets": {
+        "price": "가격이 너무 높음",
+        "competitor": "경쟁사 선택",
+        "noBudget": "예산 없음",
+        "noResponse": "응답 없음",
+        "timing": "시기가 맞지 않음",
+        "notFit": "적합하지 않음"
+      }
+    },
+    "delete": {
+      "title": "딜 삭제",
+      "message": "\"{{title}}\"과(와) 타임라인을 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
+      "confirm": "삭제"
+    },
+    "details": {
+      "title": "딜 상세",
+      "customer": "고객",
+      "noContact": "연결된 고객이 없습니다.",
+      "openContact": "연락처 열기",
+      "message": "WhatsApp으로 메시지 보내기",
+      "company": "회사: {{name}}",
+      "details": "세부 정보",
+      "owner": "담당자",
+      "expectedClose": "예상 마감일",
+      "noClose": "날짜 없음",
+      "source": "출처",
+      "created": "생성일",
+      "wonAt": "성사일",
+      "lostAt": "실패일",
+      "notes": "메모",
+      "lostReason": "실패: {{reason}}",
+      "conflict": "다른 사용자가 이 딜을 변경했습니다. 다시 불러왔습니다."
+    },
+    "timeline": {
+      "title": "타임라인",
+      "empty": "이 딜에는 아직 기록이 없습니다.",
+      "type": "항목 유형",
+      "placeholder": "메모, 통화 요약 또는 작업을 입력하세요",
+      "add": "타임라인에 추가",
+      "date": "기한 날짜",
+      "dateHint": "선택 사항. 예: 2026-10-31",
+      "dateInvalid": "2026-10-31처럼 실제 날짜를 입력하세요.",
+      "time": "기한 시간",
+      "timeHint": "선택 사항. 예: 14:30. 비워 두면 작업 기한은 09:00입니다.",
+      "timeInvalid": "14:30처럼 시간을 입력하세요.",
+      "types": {
+        "note": "메모",
+        "call": "통화",
+        "task": "작업"
+      },
+      "kinds": {
+        "note": "메모",
+        "call": "통화",
+        "message": "메시지",
+        "email": "이메일",
+        "meeting": "미팅",
+        "task": "작업",
+        "stage_change": "단계 변경"
+      },
+      "system": "시스템",
+      "stageChange": "{{from}}에서 {{to}}(으)로 이동",
+      "placed": "{{to}}에 배치됨",
+      "stageChanged": "단계 변경됨",
+      "dueOn": "기한 {{when}}",
+      "assignedTo": "담당: {{name}}",
+      "markDone": "완료로 표시",
+      "reopenTask": "작업 다시 열기",
+      "done": "완료"
+    },
+    "form": {
+      "addTitle": "새 딜",
+      "editTitle": "딜 수정",
+      "save": "딜 저장",
+      "saving": "딜 저장 중",
+      "title": "딜 이름",
+      "titlePlaceholder": "예: Acme 40석 계약",
+      "value": "금액",
+      "currency": "통화",
+      "stage": "시작 단계",
+      "owner": "담당자",
+      "ownerMe": "나",
+      "ownerNone": "미배정",
+      "ownerPick": "담당자 선택",
+      "ownerLoading": "팀을 불러오는 중",
+      "ownerFailed": "팀을 불러오지 못했습니다.",
+      "contact": "고객",
+      "contactNone": "고객 없음",
+      "contactPick": "고객 선택",
+      "contactSearchLabel": "검색",
+      "contactSearchPlaceholder": "이름, 전화번호 또는 이메일",
+      "contactEmpty": "연락처를 찾을 수 없습니다.",
+      "contactFailed": "연락처를 불러오지 못했습니다.",
+      "expectedClose": "예상 마감일",
+      "expectedCloseHint": "선택 사항. 예: 2026-10-31",
+      "conflict": "다른 사용자가 이 딜을 변경했습니다. 다시 불러왔으니 내용을 확인하고 다시 저장하세요.",
+      "errors": {
+        "titleRequired": "딜 이름을 입력하세요.",
+        "titleTooLong": "이름이 너무 깁니다.",
+        "valueInvalid": "1250.50처럼 통화의 소수 자릿수를 넘지 않는 금액을 입력하세요.",
+        "closeInvalid": "2026-10-31처럼 실제 날짜를 입력하세요.",
+        "notesTooLong": "메모가 너무 깁니다."
       }
     }
   },

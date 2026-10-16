@@ -421,6 +421,7 @@
     "signOutNo": "No",
     "signOutYes": "Sì, esci",
     "tasks": "Task",
+    "deals": "Trattative",
     "dashboard": "Dashboard",
     "allContacts": "Tutti i contatti",
     "newContact": "Nuovo contatto",
@@ -1154,6 +1155,245 @@
         "dueInvalid": "Questa data e ora di scadenza non è utilizzabile.",
         "assigneeInvalid": "A questa persona non si possono assegnare task. Scegli un altro responsabile.",
         "contactInvalid": "Questo contatto non può essere collegato."
+      }
+    }
+  },
+  "deals": {
+    "title": "Trattative",
+    "add": "Nuova trattativa",
+    "cancel": "Annulla",
+    "unassigned": "Non assegnata",
+    "unknownContact": "Contatto senza nome",
+    "planLocked": {
+      "title": "Le trattative non sono incluse in questo piano.",
+      "hint": "Chiedi all'amministratore del workspace di passare a un piano superiore."
+    },
+    "denied": {
+      "title": "Non puoi vedere le trattative",
+      "hint": "Chiedi all'amministratore del workspace di darti accesso alle trattative.",
+      "createTitle": "Non puoi aggiungere trattative",
+      "createHint": "Chiedi all'amministratore del workspace di consentirti di aggiungere trattative.",
+      "editTitle": "Non puoi modificare le trattative",
+      "editHint": "Chiedi all'amministratore del workspace di consentirti di modificare le trattative."
+    },
+    "errors": {
+      "conflict": "Questa trattativa è stata modificata da qualcun altro. Controllala di nuovo e riprova.",
+      "notFound": "Questa trattativa non esiste più.",
+      "forbidden": "Non hai il permesso di farlo.",
+      "lostReasonRequired": "Scegli o scrivi un motivo per segnare questa trattativa come persa.",
+      "ownerInvalid": "Questa persona non può essere responsabile di questa trattativa.",
+      "stageMismatch": "Questa fase non appartiene a questa pipeline.",
+      "noWonStage": "Questa pipeline non ha una fase Vinta.",
+      "noLostStage": "Questa pipeline non ha una fase Persa.",
+      "noOpenStage": "Questa pipeline non ha una fase aperta in cui riaprirla."
+    },
+    "status": {
+      "open": "Aperta",
+      "won": "Vinta",
+      "lost": "Persa"
+    },
+    "source": {
+      "manual": "Aggiunta a mano",
+      "inbox": "Inbox",
+      "order": "Ordine",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Modulo",
+      "api": "API",
+      "flow": "Flow",
+      "facebook": "Facebook",
+      "ai": "Assistente IA",
+      "lead_ad": "Origine del lead"
+    },
+    "view": {
+      "label": "Vista",
+      "board": "Bacheca",
+      "list": "Elenco"
+    },
+    "pipeline": {
+      "label": "Pipeline"
+    },
+    "search": {
+      "open": "Cerca trattative",
+      "close": "Chiudi ricerca",
+      "label": "Cerca",
+      "placeholder": "Cerca per nome della trattativa"
+    },
+    "filter": {
+      "open": "Filtra trattative",
+      "title": "Filtra trattative",
+      "owner": "Responsabile",
+      "source": "Origine",
+      "status": "Stato",
+      "any": "Qualsiasi",
+      "mine": "Mie",
+      "unassigned": "Non assegnate",
+      "ownersFailed": "Impossibile caricare il team. Riprova."
+    },
+    "kpi": {
+      "openPipeline": "Pipeline aperta",
+      "openDeals": "Trattative aperte: {{n}}",
+      "forecast": "Previsione",
+      "forecastHint": "Ponderata per fase",
+      "wonThisMonth": "Vinte questo mese",
+      "dealsCount": "Trattative: {{n}}",
+      "winRate": "Tasso di vittoria",
+      "winRateHint": "Vinte sulle chiuse"
+    },
+    "stages": {
+      "label": "Fasi",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Trattative: {{n}}",
+      "weighted": "Ponderato {{amount}}"
+    },
+    "empty": {
+      "title": "Nessuna trattativa trovata.",
+      "hint": "Le trattative che aggiungi appariranno qui.",
+      "filteredHint": "Prova con un altro filtro o un'altra ricerca."
+    },
+    "noPipelines": {
+      "title": "Ancora nessuna pipeline",
+      "hint": "Chiedi all'amministratore del workspace di configurare una pipeline di vendita."
+    },
+    "card": {
+      "noContact": "Nessun cliente",
+      "more": "Altre azioni per {{title}}",
+      "due": {
+        "overdue": "In ritardo · {{when}}",
+        "today": "Si chiude oggi",
+        "upcoming": "Chiusura {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Questa trattativa è stata modificata da qualcun altro. L'elenco è stato aggiornato.",
+      "moved": "Spostata in {{stage}}.",
+      "wonDone": "Segnata come vinta.",
+      "lostDone": "Segnata come persa.",
+      "reopened": "Trattativa riaperta."
+    },
+    "actions": {
+      "open": "Apri trattativa",
+      "moveTo": "Sposta nella fase",
+      "markWon": "Segna come vinta",
+      "markLost": "Segna come persa",
+      "reopen": "Riapri",
+      "edit": "Modifica trattativa",
+      "delete": "Elimina trattativa"
+    },
+    "move": {
+      "title": "Sposta nella fase"
+    },
+    "lost": {
+      "title": "Segna come persa",
+      "intro": "Puoi indicare perché questa trattativa è stata persa.",
+      "introRequired": "Il tuo workspace richiede un motivo per ogni trattativa persa.",
+      "other": "Altro",
+      "details": "Motivo",
+      "needed": "Aggiungi un motivo per continuare.",
+      "confirm": "Segna come persa",
+      "presets": {
+        "price": "Prezzo troppo alto",
+        "competitor": "Ha scelto un concorrente",
+        "noBudget": "Nessun budget",
+        "noResponse": "Nessuna risposta",
+        "timing": "Momento sbagliato",
+        "notFit": "Non adatta"
+      }
+    },
+    "delete": {
+      "title": "Elimina trattativa",
+      "message": "Eliminare «{{title}}» e la sua cronologia? L'operazione non può essere annullata.",
+      "confirm": "Elimina"
+    },
+    "details": {
+      "title": "Dettagli della trattativa",
+      "customer": "Cliente",
+      "noContact": "Nessun cliente collegato.",
+      "openContact": "Apri contatto",
+      "message": "Scrivi su WhatsApp",
+      "company": "Azienda: {{name}}",
+      "details": "Dettagli",
+      "owner": "Responsabile",
+      "expectedClose": "Chiusura prevista",
+      "noClose": "Nessuna data",
+      "source": "Origine",
+      "created": "Creata",
+      "wonAt": "Vinta il",
+      "lostAt": "Persa il",
+      "notes": "Note",
+      "lostReason": "Persa: {{reason}}",
+      "conflict": "Questa trattativa è stata modificata da qualcun altro. È stata ricaricata."
+    },
+    "timeline": {
+      "title": "Cronologia",
+      "empty": "Su questa trattativa non è ancora successo nulla.",
+      "type": "Tipo di voce",
+      "placeholder": "Scrivi una nota, il riepilogo di una chiamata o un task",
+      "add": "Aggiungi alla cronologia",
+      "date": "Giorno di scadenza",
+      "dateHint": "Facoltativo, ad esempio 2026-10-31.",
+      "dateInvalid": "Inserisci un giorno valido, ad esempio 2026-10-31.",
+      "time": "Ora di scadenza",
+      "timeHint": "Facoltativo, ad esempio 14:30. Senza ora il task scade alle 09:00.",
+      "timeInvalid": "Inserisci un'ora, ad esempio 14:30.",
+      "types": {
+        "note": "Nota",
+        "call": "Chiamata",
+        "task": "Task"
+      },
+      "kinds": {
+        "note": "Nota",
+        "call": "Chiamata",
+        "message": "Messaggio",
+        "email": "Email",
+        "meeting": "Riunione",
+        "task": "Task",
+        "stage_change": "Cambio di fase"
+      },
+      "system": "Sistema",
+      "stageChange": "Spostata da {{from}} a {{to}}",
+      "placed": "Inserita in {{to}}",
+      "stageChanged": "Fase modificata",
+      "dueOn": "Scadenza {{when}}",
+      "assignedTo": "Per {{name}}",
+      "markDone": "Segna come completato",
+      "reopenTask": "Riapri task",
+      "done": "Completato"
+    },
+    "form": {
+      "addTitle": "Nuova trattativa",
+      "editTitle": "Modifica trattativa",
+      "save": "Salva trattativa",
+      "saving": "Salvataggio della trattativa",
+      "title": "Nome della trattativa",
+      "titlePlaceholder": "Ad esempio, 40 licenze per Acme",
+      "value": "Valore",
+      "currency": "Valuta",
+      "stage": "Fase iniziale",
+      "owner": "Responsabile",
+      "ownerMe": "Io",
+      "ownerNone": "Non assegnata",
+      "ownerPick": "Scegli un responsabile",
+      "ownerLoading": "Caricamento del team",
+      "ownerFailed": "Impossibile caricare il team.",
+      "contact": "Cliente",
+      "contactNone": "Nessun cliente",
+      "contactPick": "Scegli un cliente",
+      "contactSearchLabel": "Cerca",
+      "contactSearchPlaceholder": "Nome, telefono o email",
+      "contactEmpty": "Nessun contatto trovato.",
+      "contactFailed": "Impossibile caricare i contatti.",
+      "expectedClose": "Giorno di chiusura previsto",
+      "expectedCloseHint": "Facoltativo, ad esempio 2026-10-31.",
+      "conflict": "Questa trattativa è stata modificata da qualcun altro. È stata ricaricata: controllala e salva di nuovo.",
+      "errors": {
+        "titleRequired": "Inserisci un nome per la trattativa.",
+        "titleTooLong": "Il nome è troppo lungo.",
+        "valueInvalid": "Inserisci un importo come 1250.50, con non più decimali di quelli della valuta.",
+        "closeInvalid": "Inserisci un giorno valido, ad esempio 2026-10-31.",
+        "notesTooLong": "Le note sono troppo lunghe."
       }
     }
   },

@@ -411,6 +411,7 @@
     "signOutNo": "Hayır",
     "signOutYes": "Evet, çıkış yap",
     "tasks": "Görevler",
+    "deals": "Fırsatlar",
     "dashboard": "Panel",
     "allContacts": "Tüm kişiler",
     "newContact": "Yeni kişi",
@@ -1136,6 +1137,245 @@
         "dueInvalid": "Bu son tarih ve saat kullanılamaz.",
         "assigneeInvalid": "Bu kişiye görev atanamaz. Başka bir sahip seçin.",
         "contactInvalid": "Bu kişi bağlanamaz."
+      }
+    }
+  },
+  "deals": {
+    "title": "Fırsatlar",
+    "add": "Yeni fırsat",
+    "cancel": "İptal",
+    "unassigned": "Atanmamış",
+    "unknownContact": "Adsız kişi",
+    "planLocked": {
+      "title": "Fırsatlar bu plana dahil değil.",
+      "hint": "Çalışma alanı yöneticinizden planı yükseltmesini isteyin."
+    },
+    "denied": {
+      "title": "Fırsatları göremezsiniz",
+      "hint": "Çalışma alanı yöneticinizden fırsatlara erişim vermesini isteyin.",
+      "createTitle": "Fırsat ekleyemezsiniz",
+      "createHint": "Çalışma alanı yöneticinizden fırsat eklemenize izin vermesini isteyin.",
+      "editTitle": "Fırsatları düzenleyemezsiniz",
+      "editHint": "Çalışma alanı yöneticinizden fırsatları düzenlemenize izin vermesini isteyin."
+    },
+    "errors": {
+      "conflict": "Bu fırsatı başka biri değiştirdi. Yeniden açıp tekrar deneyin.",
+      "notFound": "Bu fırsat artık mevcut değil.",
+      "forbidden": "Bunu yapma izniniz yok.",
+      "lostReasonRequired": "Bu fırsatın neden kaybedildiğini seçin veya yazın.",
+      "ownerInvalid": "Bu kişi fırsatın sahibi olamaz.",
+      "stageMismatch": "Bu aşama bu hatta ait değil.",
+      "noWonStage": "Bu hatta Kazanıldı aşaması yok.",
+      "noLostStage": "Bu hatta Kaybedildi aşaması yok.",
+      "noOpenStage": "Bu hatta fırsatı yeniden açabileceğiniz açık bir aşama yok."
+    },
+    "status": {
+      "open": "Açık",
+      "won": "Kazanıldı",
+      "lost": "Kaybedildi"
+    },
+    "source": {
+      "manual": "Elle eklendi",
+      "inbox": "Gelen kutusu",
+      "order": "Sipariş",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Form",
+      "api": "API",
+      "flow": "Akış",
+      "facebook": "Facebook",
+      "ai": "Yapay zekâ asistanı",
+      "lead_ad": "Potansiyel müşteri kaynağı"
+    },
+    "view": {
+      "label": "Görünüm",
+      "board": "Pano",
+      "list": "Liste"
+    },
+    "pipeline": {
+      "label": "Hat"
+    },
+    "search": {
+      "open": "Fırsatlarda ara",
+      "close": "Aramayı kapat",
+      "label": "Ara",
+      "placeholder": "Fırsat adına göre ara"
+    },
+    "filter": {
+      "open": "Fırsatları filtrele",
+      "title": "Fırsatları filtrele",
+      "owner": "Sahip",
+      "source": "Kaynak",
+      "status": "Durum",
+      "any": "Herhangi",
+      "mine": "Benim",
+      "unassigned": "Atanmamış",
+      "ownersFailed": "Ekip yüklenemedi. Tekrar deneyin."
+    },
+    "kpi": {
+      "openPipeline": "Açık hat",
+      "openDeals": "Açık fırsatlar: {{n}}",
+      "forecast": "Tahmin",
+      "forecastHint": "Aşamaya göre ağırlıklı",
+      "wonThisMonth": "Bu ay kazanılan",
+      "dealsCount": "Fırsatlar: {{n}}",
+      "winRate": "Kazanma oranı",
+      "winRateHint": "Kapanan fırsatlar içinde kazanılan"
+    },
+    "stages": {
+      "label": "Aşamalar",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Fırsatlar: {{n}}",
+      "weighted": "Ağırlıklı {{amount}}"
+    },
+    "empty": {
+      "title": "Fırsat bulunamadı.",
+      "hint": "Eklediğiniz fırsatlar burada görünür.",
+      "filteredHint": "Farklı bir filtre veya arama deneyin."
+    },
+    "noPipelines": {
+      "title": "Henüz hat yok",
+      "hint": "Çalışma alanı yöneticinizden bir satış hattı kurmasını isteyin."
+    },
+    "card": {
+      "noContact": "Müşteri yok",
+      "more": "{{title}} için diğer işlemler",
+      "due": {
+        "overdue": "Gecikmiş · {{when}}",
+        "today": "Bugün kapanıyor",
+        "upcoming": "Kapanış: {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Bu fırsatı başka biri değiştirdi. Liste yenilendi.",
+      "moved": "{{stage}} aşamasına taşındı.",
+      "wonDone": "Kazanıldı olarak işaretlendi.",
+      "lostDone": "Kaybedildi olarak işaretlendi.",
+      "reopened": "Fırsat yeniden açıldı."
+    },
+    "actions": {
+      "open": "Fırsatı aç",
+      "moveTo": "Aşamaya taşı",
+      "markWon": "Kazanıldı olarak işaretle",
+      "markLost": "Kaybedildi olarak işaretle",
+      "reopen": "Yeniden aç",
+      "edit": "Fırsatı düzenle",
+      "delete": "Fırsatı sil"
+    },
+    "move": {
+      "title": "Aşamaya taşı"
+    },
+    "lost": {
+      "title": "Kaybedildi olarak işaretle",
+      "intro": "Bu fırsatın neden kaybedildiğini belirtebilirsiniz.",
+      "introRequired": "Çalışma alanınız her kaybedilen fırsat için bir neden istiyor.",
+      "other": "Diğer",
+      "details": "Neden",
+      "needed": "Devam etmek için bir neden ekleyin.",
+      "confirm": "Kaybedildi olarak işaretle",
+      "presets": {
+        "price": "Fiyat çok yüksek",
+        "competitor": "Rakibi seçti",
+        "noBudget": "Bütçe yok",
+        "noResponse": "Yanıt yok",
+        "timing": "Zamanlama uygun değil",
+        "notFit": "Uygun değil"
+      }
+    },
+    "delete": {
+      "title": "Fırsatı sil",
+      "message": "\"{{title}}\" ve zaman çizelgesi silinsin mi? Bu işlem geri alınamaz.",
+      "confirm": "Sil"
+    },
+    "details": {
+      "title": "Fırsat ayrıntıları",
+      "customer": "Müşteri",
+      "noContact": "Bağlı müşteri yok.",
+      "openContact": "Kişiyi aç",
+      "message": "WhatsApp'ta mesaj gönder",
+      "company": "Şirket: {{name}}",
+      "details": "Ayrıntılar",
+      "owner": "Sahip",
+      "expectedClose": "Beklenen kapanış",
+      "noClose": "Tarih yok",
+      "source": "Kaynak",
+      "created": "Oluşturulma",
+      "wonAt": "Kazanılma tarihi",
+      "lostAt": "Kaybedilme tarihi",
+      "notes": "Notlar",
+      "lostReason": "Kaybedildi: {{reason}}",
+      "conflict": "Bu fırsatı başka biri değiştirdi. Yeniden yüklendi."
+    },
+    "timeline": {
+      "title": "Zaman çizelgesi",
+      "empty": "Bu fırsatta henüz bir şey olmadı.",
+      "type": "Kayıt türü",
+      "placeholder": "Not, arama özeti veya görev yazın",
+      "add": "Zaman çizelgesine ekle",
+      "date": "Bitiş günü",
+      "dateHint": "İsteğe bağlı, örneğin 2026-10-31.",
+      "dateInvalid": "Geçerli bir gün girin, örneğin 2026-10-31.",
+      "time": "Bitiş saati",
+      "timeHint": "İsteğe bağlı, örneğin 14:30. Girilmezse görev 09:00'da biter.",
+      "timeInvalid": "Bir saat girin, örneğin 14:30.",
+      "types": {
+        "note": "Not",
+        "call": "Arama",
+        "task": "Görev"
+      },
+      "kinds": {
+        "note": "Not",
+        "call": "Arama",
+        "message": "Mesaj",
+        "email": "E-posta",
+        "meeting": "Toplantı",
+        "task": "Görev",
+        "stage_change": "Aşama değişikliği"
+      },
+      "system": "Sistem",
+      "stageChange": "{{from}} aşamasından {{to}} aşamasına taşındı",
+      "placed": "{{to}} aşamasına yerleştirildi",
+      "stageChanged": "Aşama değişti",
+      "dueOn": "Bitiş: {{when}}",
+      "assignedTo": "Kişi: {{name}}",
+      "markDone": "Tamamlandı olarak işaretle",
+      "reopenTask": "Görevi yeniden aç",
+      "done": "Tamamlandı"
+    },
+    "form": {
+      "addTitle": "Yeni fırsat",
+      "editTitle": "Fırsatı düzenle",
+      "save": "Fırsatı kaydet",
+      "saving": "Fırsat kaydediliyor",
+      "title": "Fırsat adı",
+      "titlePlaceholder": "Örneğin, Acme için 40 lisans",
+      "value": "Değer",
+      "currency": "Para birimi",
+      "stage": "Başlangıç aşaması",
+      "owner": "Sahip",
+      "ownerMe": "Ben",
+      "ownerNone": "Atanmamış",
+      "ownerPick": "Sahip seçin",
+      "ownerLoading": "Ekip yükleniyor",
+      "ownerFailed": "Ekip yüklenemedi.",
+      "contact": "Müşteri",
+      "contactNone": "Müşteri yok",
+      "contactPick": "Müşteri seçin",
+      "contactSearchLabel": "Ara",
+      "contactSearchPlaceholder": "Ad, telefon veya e-posta",
+      "contactEmpty": "Kişi bulunamadı.",
+      "contactFailed": "Kişiler yüklenemedi.",
+      "expectedClose": "Beklenen kapanış günü",
+      "expectedCloseHint": "İsteğe bağlı, örneğin 2026-10-31.",
+      "conflict": "Bu fırsatı başka biri değiştirdi. Yeniden yüklendi: gözden geçirip tekrar kaydedin.",
+      "errors": {
+        "titleRequired": "Fırsat için bir ad girin.",
+        "titleTooLong": "Ad çok uzun.",
+        "valueInvalid": "1250.50 gibi bir tutar girin; para biriminin izin verdiğinden fazla ondalık olmasın.",
+        "closeInvalid": "Geçerli bir gün girin, örneğin 2026-10-31.",
+        "notesTooLong": "Notlar çok uzun."
       }
     }
   },

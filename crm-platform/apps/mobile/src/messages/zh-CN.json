@@ -401,6 +401,7 @@
     "signOutNo": "否",
     "signOutYes": "是，退出登录",
     "tasks": "任务",
+    "deals": "交易",
     "dashboard": "仪表盘",
     "allContacts": "所有联系人",
     "newContact": "新建联系人",
@@ -1118,6 +1119,245 @@
         "dueInvalid": "无法使用此截止日期和时间。",
         "assigneeInvalid": "无法给该用户分配任务。请选择其他负责人。",
         "contactInvalid": "无法关联此联系人。"
+      }
+    }
+  },
+  "deals": {
+    "title": "交易",
+    "add": "新建交易",
+    "cancel": "取消",
+    "unassigned": "未分配",
+    "unknownContact": "未命名联系人",
+    "planLocked": {
+      "title": "此套餐不包含交易功能。",
+      "hint": "请联系工作区管理员升级套餐。"
+    },
+    "denied": {
+      "title": "您无权查看交易",
+      "hint": "请联系工作区管理员，为您开通交易权限。",
+      "createTitle": "您无权添加交易",
+      "createHint": "请联系工作区管理员，允许您添加交易。",
+      "editTitle": "您无权编辑交易",
+      "editHint": "请联系工作区管理员，允许您编辑交易。"
+    },
+    "errors": {
+      "conflict": "此交易已被其他人修改。请重新查看后再试。",
+      "notFound": "此交易已不存在。",
+      "forbidden": "您无权执行此操作。",
+      "lostReasonRequired": "请选择或填写交易丢失的原因。",
+      "ownerInvalid": "该用户不能成为此交易的负责人。",
+      "stageMismatch": "该阶段不属于此管道。",
+      "noWonStage": "此管道没有“已成交”阶段。",
+      "noLostStage": "此管道没有“已丢失”阶段。",
+      "noOpenStage": "此管道没有可供重新打开的进行中阶段。"
+    },
+    "status": {
+      "open": "进行中",
+      "won": "已成交",
+      "lost": "已丢失"
+    },
+    "source": {
+      "manual": "手动添加",
+      "inbox": "收件箱",
+      "order": "订单",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "表单",
+      "api": "API",
+      "flow": "流程",
+      "facebook": "Facebook",
+      "ai": "AI 助手",
+      "lead_ad": "线索来源"
+    },
+    "view": {
+      "label": "视图",
+      "board": "看板",
+      "list": "列表"
+    },
+    "pipeline": {
+      "label": "管道"
+    },
+    "search": {
+      "open": "搜索交易",
+      "close": "关闭搜索",
+      "label": "搜索",
+      "placeholder": "按交易名称搜索"
+    },
+    "filter": {
+      "open": "筛选交易",
+      "title": "筛选交易",
+      "owner": "负责人",
+      "source": "来源",
+      "status": "状态",
+      "any": "不限",
+      "mine": "我的",
+      "unassigned": "未分配",
+      "ownersFailed": "无法加载团队。请重试。"
+    },
+    "kpi": {
+      "openPipeline": "进行中的管道",
+      "openDeals": "进行中的交易：{{n}}",
+      "forecast": "加权预测",
+      "forecastHint": "按阶段加权",
+      "wonThisMonth": "本月成交",
+      "dealsCount": "交易：{{n}}",
+      "winRate": "成交率",
+      "winRateHint": "已结束交易中的成交占比"
+    },
+    "stages": {
+      "label": "阶段",
+      "tab": "{{name}}，{{n}}"
+    },
+    "column": {
+      "count": "交易：{{n}}",
+      "weighted": "加权 {{amount}}"
+    },
+    "empty": {
+      "title": "未找到交易。",
+      "hint": "您添加的交易会显示在这里。",
+      "filteredHint": "请尝试其他筛选条件或搜索词。"
+    },
+    "noPipelines": {
+      "title": "暂无管道",
+      "hint": "请联系工作区管理员设置销售管道。"
+    },
+    "card": {
+      "noContact": "无客户",
+      "more": "{{title}} 的更多操作",
+      "due": {
+        "overdue": "已逾期 · {{when}}",
+        "today": "今天截止",
+        "upcoming": "预计成交 {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "此交易已被其他人修改。列表已刷新。",
+      "moved": "已移至 {{stage}}。",
+      "wonDone": "已标记为成交。",
+      "lostDone": "已标记为丢失。",
+      "reopened": "交易已重新打开。"
+    },
+    "actions": {
+      "open": "打开交易",
+      "moveTo": "移至阶段",
+      "markWon": "标记为成交",
+      "markLost": "标记为丢失",
+      "reopen": "重新打开",
+      "edit": "编辑交易",
+      "delete": "删除交易"
+    },
+    "move": {
+      "title": "移至阶段"
+    },
+    "lost": {
+      "title": "标记为丢失",
+      "intro": "您可以说明这笔交易丢失的原因。",
+      "introRequired": "您的工作区要求为每笔丢失的交易填写原因。",
+      "other": "其他",
+      "details": "原因",
+      "needed": "请填写原因后继续。",
+      "confirm": "标记为丢失",
+      "presets": {
+        "price": "价格过高",
+        "competitor": "选择了竞争对手",
+        "noBudget": "没有预算",
+        "noResponse": "无回应",
+        "timing": "时机不对",
+        "notFit": "不太合适"
+      }
+    },
+    "delete": {
+      "title": "删除交易",
+      "message": "要删除“{{title}}”及其时间线吗？此操作无法撤销。",
+      "confirm": "删除"
+    },
+    "details": {
+      "title": "交易详情",
+      "customer": "客户",
+      "noContact": "未关联客户。",
+      "openContact": "打开联系人",
+      "message": "通过 WhatsApp 发消息",
+      "company": "公司：{{name}}",
+      "details": "详情",
+      "owner": "负责人",
+      "expectedClose": "预计成交日期",
+      "noClose": "无日期",
+      "source": "来源",
+      "created": "创建时间",
+      "wonAt": "成交时间",
+      "lostAt": "丢失时间",
+      "notes": "备注",
+      "lostReason": "丢失：{{reason}}",
+      "conflict": "此交易已被其他人修改，已重新加载。"
+    },
+    "timeline": {
+      "title": "时间线",
+      "empty": "此交易暂无任何动态。",
+      "type": "条目类型",
+      "placeholder": "写下备注、通话摘要或任务",
+      "add": "添加到时间线",
+      "date": "截止日期",
+      "dateHint": "选填，例如 2026-10-31。",
+      "dateInvalid": "请输入有效日期，例如 2026-10-31。",
+      "time": "截止时间",
+      "timeHint": "选填，例如 14:30。留空则任务截止时间为 09:00。",
+      "timeInvalid": "请输入时间，例如 14:30。",
+      "types": {
+        "note": "备注",
+        "call": "通话",
+        "task": "任务"
+      },
+      "kinds": {
+        "note": "备注",
+        "call": "通话",
+        "message": "消息",
+        "email": "邮件",
+        "meeting": "会议",
+        "task": "任务",
+        "stage_change": "阶段变更"
+      },
+      "system": "系统",
+      "stageChange": "已从 {{from}} 移至 {{to}}",
+      "placed": "已放入 {{to}}",
+      "stageChanged": "阶段已更改",
+      "dueOn": "截止 {{when}}",
+      "assignedTo": "负责人：{{name}}",
+      "markDone": "标记为完成",
+      "reopenTask": "重新打开任务",
+      "done": "已完成"
+    },
+    "form": {
+      "addTitle": "新建交易",
+      "editTitle": "编辑交易",
+      "save": "保存交易",
+      "saving": "正在保存交易",
+      "title": "交易名称",
+      "titlePlaceholder": "例如：Acme 40 个席位",
+      "value": "金额",
+      "currency": "货币",
+      "stage": "起始阶段",
+      "owner": "负责人",
+      "ownerMe": "我",
+      "ownerNone": "未分配",
+      "ownerPick": "选择负责人",
+      "ownerLoading": "正在加载团队",
+      "ownerFailed": "无法加载团队。",
+      "contact": "客户",
+      "contactNone": "无客户",
+      "contactPick": "选择客户",
+      "contactSearchLabel": "搜索",
+      "contactSearchPlaceholder": "姓名、电话或电子邮件",
+      "contactEmpty": "未找到联系人。",
+      "contactFailed": "无法加载联系人。",
+      "expectedClose": "预计成交日期",
+      "expectedCloseHint": "选填，例如 2026-10-31。",
+      "conflict": "此交易已被其他人修改，已重新加载。请检查后重新保存。",
+      "errors": {
+        "titleRequired": "请输入交易名称。",
+        "titleTooLong": "名称过长。",
+        "valueInvalid": "请输入金额，例如 1250.50，小数位数不要超过该货币的位数。",
+        "closeInvalid": "请输入有效日期，例如 2026-10-31。",
+        "notesTooLong": "备注过长。"
       }
     }
   },

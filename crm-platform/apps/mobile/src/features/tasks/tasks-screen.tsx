@@ -33,7 +33,7 @@ import { TaskActionsSheet } from './task-actions-sheet';
 import { TaskFilterModal } from './task-filter-modal';
 import { TaskRow } from './task-row';
 import { TaskSkeleton } from './task-skeleton';
-import { SEARCH_DEBOUNCE_MS, useDebounced } from './use-debounced';
+import { SEARCH_DEBOUNCE_MS, useDebounced } from '@/lib/hooks/use-debounced';
 import { taskListsKey, useDeleteTask, useTaskList, useToggleTask } from './use-tasks';
 
 const FAB_SIZE = 52;

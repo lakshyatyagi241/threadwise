@@ -401,6 +401,7 @@
     "signOutNo": "Tidak",
     "signOutYes": "Ya, keluar",
     "tasks": "Tugas",
+    "deals": "Deals",
     "dashboard": "Dasbor",
     "allContacts": "Semua kontak",
     "newContact": "Kontak baru",
@@ -1118,6 +1119,245 @@
         "dueInvalid": "Tanggal dan waktu tenggat ini tidak dapat digunakan.",
         "assigneeInvalid": "Orang tersebut tidak dapat diberi tugas. Pilih pemilik lain.",
         "contactInvalid": "Kontak ini tidak dapat ditautkan."
+      }
+    }
+  },
+  "deals": {
+    "title": "Deals",
+    "add": "Deal baru",
+    "cancel": "Batal",
+    "unassigned": "Belum ditugaskan",
+    "unknownContact": "Kontak tanpa nama",
+    "planLocked": {
+      "title": "Deals tidak termasuk dalam paket ini.",
+      "hint": "Minta admin workspace Anda untuk meningkatkan paket."
+    },
+    "denied": {
+      "title": "Anda tidak dapat melihat Deals",
+      "hint": "Minta admin workspace Anda untuk memberi Anda akses ke Deals.",
+      "createTitle": "Anda tidak dapat menambah Deal",
+      "createHint": "Minta admin workspace Anda untuk mengizinkan Anda menambah Deal.",
+      "editTitle": "Anda tidak dapat mengedit Deal",
+      "editHint": "Minta admin workspace Anda untuk mengizinkan Anda mengedit Deal."
+    },
+    "errors": {
+      "conflict": "Deal ini diubah oleh orang lain. Lihat lagi lalu coba sekali lagi.",
+      "notFound": "Deal ini sudah tidak ada.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+      "lostReasonRequired": "Pilih atau tulis alasan Deal ini kalah.",
+      "ownerInvalid": "Orang tersebut tidak dapat menjadi pemilik Deal ini.",
+      "stageMismatch": "Tahap tersebut bukan bagian dari pipeline ini.",
+      "noWonStage": "Pipeline ini tidak memiliki tahap Menang.",
+      "noLostStage": "Pipeline ini tidak memiliki tahap Kalah.",
+      "noOpenStage": "Pipeline ini tidak memiliki tahap terbuka untuk membuka kembali Deal."
+    },
+    "status": {
+      "open": "Terbuka",
+      "won": "Menang",
+      "lost": "Kalah"
+    },
+    "source": {
+      "manual": "Ditambahkan manual",
+      "inbox": "Kotak masuk",
+      "order": "Pesanan",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formulir",
+      "api": "API",
+      "flow": "Flow",
+      "facebook": "Facebook",
+      "ai": "Asisten AI",
+      "lead_ad": "Sumber prospek"
+    },
+    "view": {
+      "label": "Tampilan",
+      "board": "Papan",
+      "list": "Daftar"
+    },
+    "pipeline": {
+      "label": "Pipeline"
+    },
+    "search": {
+      "open": "Cari Deals",
+      "close": "Tutup pencarian",
+      "label": "Cari",
+      "placeholder": "Cari berdasarkan nama Deal"
+    },
+    "filter": {
+      "open": "Filter Deals",
+      "title": "Filter Deals",
+      "owner": "Pemilik",
+      "source": "Sumber",
+      "status": "Status",
+      "any": "Apa saja",
+      "mine": "Milik saya",
+      "unassigned": "Belum ditugaskan",
+      "ownersFailed": "Tim tidak dapat dimuat. Coba lagi."
+    },
+    "kpi": {
+      "openPipeline": "Pipeline terbuka",
+      "openDeals": "Deal terbuka: {{n}}",
+      "forecast": "Perkiraan",
+      "forecastHint": "Berbobot menurut tahap",
+      "wonThisMonth": "Menang bulan ini",
+      "dealsCount": "Deals: {{n}}",
+      "winRate": "Tingkat kemenangan",
+      "winRateHint": "Menang dari Deal yang ditutup"
+    },
+    "stages": {
+      "label": "Tahap",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Deals: {{n}}",
+      "weighted": "Berbobot {{amount}}"
+    },
+    "empty": {
+      "title": "Deal tidak ditemukan.",
+      "hint": "Deal yang Anda tambahkan akan muncul di sini.",
+      "filteredHint": "Coba filter atau pencarian lain."
+    },
+    "noPipelines": {
+      "title": "Belum ada pipeline",
+      "hint": "Minta admin workspace Anda untuk menyiapkan pipeline penjualan."
+    },
+    "card": {
+      "noContact": "Tanpa pelanggan",
+      "more": "Tindakan lainnya untuk {{title}}",
+      "due": {
+        "overdue": "Terlambat · {{when}}",
+        "today": "Jatuh tempo hari ini",
+        "upcoming": "Ditutup {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Deal ini diubah oleh orang lain. Daftar telah dimuat ulang.",
+      "moved": "Dipindahkan ke {{stage}}.",
+      "wonDone": "Ditandai menang.",
+      "lostDone": "Ditandai kalah.",
+      "reopened": "Deal dibuka kembali."
+    },
+    "actions": {
+      "open": "Buka Deal",
+      "moveTo": "Pindahkan ke tahap",
+      "markWon": "Tandai menang",
+      "markLost": "Tandai kalah",
+      "reopen": "Buka kembali",
+      "edit": "Edit Deal",
+      "delete": "Hapus Deal"
+    },
+    "move": {
+      "title": "Pindahkan ke tahap"
+    },
+    "lost": {
+      "title": "Tandai kalah",
+      "intro": "Anda dapat menyebutkan mengapa Deal ini kalah.",
+      "introRequired": "Workspace Anda mewajibkan alasan untuk setiap Deal yang kalah.",
+      "other": "Lainnya",
+      "details": "Alasan",
+      "needed": "Tambahkan alasan untuk melanjutkan.",
+      "confirm": "Tandai kalah",
+      "presets": {
+        "price": "Harga terlalu tinggi",
+        "competitor": "Memilih pesaing",
+        "noBudget": "Tidak ada anggaran",
+        "noResponse": "Tidak ada respons",
+        "timing": "Waktu kurang tepat",
+        "notFit": "Kurang cocok"
+      }
+    },
+    "delete": {
+      "title": "Hapus Deal",
+      "message": "Hapus \"{{title}}\" beserta linimasanya? Tindakan ini tidak dapat dibatalkan.",
+      "confirm": "Hapus"
+    },
+    "details": {
+      "title": "Detail Deal",
+      "customer": "Pelanggan",
+      "noContact": "Belum ada pelanggan tertaut.",
+      "openContact": "Buka kontak",
+      "message": "Kirim pesan di WhatsApp",
+      "company": "Perusahaan: {{name}}",
+      "details": "Detail",
+      "owner": "Pemilik",
+      "expectedClose": "Perkiraan penutupan",
+      "noClose": "Tanpa tanggal",
+      "source": "Sumber",
+      "created": "Dibuat",
+      "wonAt": "Menang pada",
+      "lostAt": "Kalah pada",
+      "notes": "Catatan",
+      "lostReason": "Kalah: {{reason}}",
+      "conflict": "Deal ini diubah oleh orang lain. Deal telah dimuat ulang."
+    },
+    "timeline": {
+      "title": "Linimasa",
+      "empty": "Belum ada aktivitas pada Deal ini.",
+      "type": "Jenis entri",
+      "placeholder": "Tulis catatan, ringkasan panggilan, atau tugas",
+      "add": "Tambah ke linimasa",
+      "date": "Tanggal tenggat",
+      "dateHint": "Opsional, misalnya 2026-10-31.",
+      "dateInvalid": "Masukkan tanggal yang valid, misalnya 2026-10-31.",
+      "time": "Waktu tenggat",
+      "timeHint": "Opsional, misalnya 14:30. Tanpa waktu, tugas jatuh tempo pukul 09:00.",
+      "timeInvalid": "Masukkan waktu seperti 14:30.",
+      "types": {
+        "note": "Catatan",
+        "call": "Panggilan",
+        "task": "Tugas"
+      },
+      "kinds": {
+        "note": "Catatan",
+        "call": "Panggilan",
+        "message": "Pesan",
+        "email": "Email",
+        "meeting": "Rapat",
+        "task": "Tugas",
+        "stage_change": "Perubahan tahap"
+      },
+      "system": "Sistem",
+      "stageChange": "Dipindahkan dari {{from}} ke {{to}}",
+      "placed": "Ditempatkan di {{to}}",
+      "stageChanged": "Tahap diubah",
+      "dueOn": "Tenggat {{when}}",
+      "assignedTo": "Untuk {{name}}",
+      "markDone": "Tandai selesai",
+      "reopenTask": "Buka kembali tugas",
+      "done": "Selesai"
+    },
+    "form": {
+      "addTitle": "Deal baru",
+      "editTitle": "Edit Deal",
+      "save": "Simpan Deal",
+      "saving": "Menyimpan Deal",
+      "title": "Nama Deal",
+      "titlePlaceholder": "Misalnya, 40 lisensi untuk Acme",
+      "value": "Nilai",
+      "currency": "Mata uang",
+      "stage": "Tahap awal",
+      "owner": "Pemilik",
+      "ownerMe": "Saya",
+      "ownerNone": "Belum ditugaskan",
+      "ownerPick": "Pilih pemilik",
+      "ownerLoading": "Memuat tim",
+      "ownerFailed": "Tim tidak dapat dimuat.",
+      "contact": "Pelanggan",
+      "contactNone": "Tanpa pelanggan",
+      "contactPick": "Pilih pelanggan",
+      "contactSearchLabel": "Cari",
+      "contactSearchPlaceholder": "Nama, telepon, atau email",
+      "contactEmpty": "Kontak tidak ditemukan.",
+      "contactFailed": "Kontak tidak dapat dimuat.",
+      "expectedClose": "Perkiraan tanggal penutupan",
+      "expectedCloseHint": "Opsional, misalnya 2026-10-31.",
+      "conflict": "Deal ini diubah oleh orang lain. Deal telah dimuat ulang: tinjau lalu simpan lagi.",
+      "errors": {
+        "titleRequired": "Masukkan nama Deal.",
+        "titleTooLong": "Nama terlalu panjang.",
+        "valueInvalid": "Masukkan jumlah seperti 1250.50, dengan desimal tidak lebih banyak dari mata uangnya.",
+        "closeInvalid": "Masukkan tanggal yang valid, misalnya 2026-10-31.",
+        "notesTooLong": "Catatan terlalu panjang."
       }
     }
   },

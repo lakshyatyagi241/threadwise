@@ -421,6 +421,7 @@
     "signOutNo": "Non",
     "signOutYes": "Oui, se déconnecter",
     "tasks": "Tâches",
+    "deals": "Opportunités",
     "dashboard": "Tableau de bord",
     "allContacts": "Tous les contacts",
     "newContact": "Nouveau contact",
@@ -1154,6 +1155,245 @@
         "dueInvalid": "Cette date et cette heure d’échéance ne peuvent pas être utilisées.",
         "assigneeInvalid": "Cette personne ne peut pas recevoir de tâches. Choisissez un autre propriétaire.",
         "contactInvalid": "Ce contact ne peut pas être lié."
+      }
+    }
+  },
+  "deals": {
+    "title": "Opportunités",
+    "add": "Nouvelle opportunité",
+    "cancel": "Annuler",
+    "unassigned": "Non attribuée",
+    "unknownContact": "Contact sans nom",
+    "planLocked": {
+      "title": "Les opportunités ne sont pas incluses dans ce forfait.",
+      "hint": "Demandez à l’administrateur de votre espace de travail de passer à un forfait supérieur."
+    },
+    "denied": {
+      "title": "Vous ne pouvez pas voir les opportunités",
+      "hint": "Demandez à l’administrateur de votre espace de travail de vous donner accès aux opportunités.",
+      "createTitle": "Vous ne pouvez pas ajouter d’opportunités",
+      "createHint": "Demandez à l’administrateur de votre espace de travail de vous autoriser à ajouter des opportunités.",
+      "editTitle": "Vous ne pouvez pas modifier les opportunités",
+      "editHint": "Demandez à l’administrateur de votre espace de travail de vous autoriser à modifier les opportunités."
+    },
+    "errors": {
+      "conflict": "Cette opportunité a été modifiée par quelqu’un d’autre. Consultez-la à nouveau et réessayez.",
+      "notFound": "Cette opportunité n’existe plus.",
+      "forbidden": "Vous n’avez pas l’autorisation d’effectuer cette action.",
+      "lostReasonRequired": "Choisissez ou saisissez un motif pour marquer cette opportunité comme perdue.",
+      "ownerInvalid": "Cette personne ne peut pas être propriétaire de cette opportunité.",
+      "stageMismatch": "Cette étape n’appartient pas à ce pipeline.",
+      "noWonStage": "Ce pipeline n’a pas d’étape Gagnée.",
+      "noLostStage": "Ce pipeline n’a pas d’étape Perdue.",
+      "noOpenStage": "Ce pipeline n’a pas d’étape ouverte dans laquelle la rouvrir."
+    },
+    "status": {
+      "open": "Ouverte",
+      "won": "Gagnée",
+      "lost": "Perdue"
+    },
+    "source": {
+      "manual": "Ajoutée à la main",
+      "inbox": "Boîte de réception",
+      "order": "Commande",
+      "shopify": "Shopify",
+      "woo": "WooCommerce",
+      "form": "Formulaire",
+      "api": "API",
+      "flow": "Flux",
+      "facebook": "Facebook",
+      "ai": "Assistant IA",
+      "lead_ad": "Source du lead"
+    },
+    "view": {
+      "label": "Vue",
+      "board": "Tableau",
+      "list": "Liste"
+    },
+    "pipeline": {
+      "label": "Pipeline"
+    },
+    "search": {
+      "open": "Rechercher des opportunités",
+      "close": "Fermer la recherche",
+      "label": "Recherche",
+      "placeholder": "Rechercher par nom d’opportunité"
+    },
+    "filter": {
+      "open": "Filtrer les opportunités",
+      "title": "Filtrer les opportunités",
+      "owner": "Propriétaire",
+      "source": "Source",
+      "status": "Statut",
+      "any": "Tous",
+      "mine": "Les miennes",
+      "unassigned": "Non attribuées",
+      "ownersFailed": "Impossible de charger l’équipe. Réessayez."
+    },
+    "kpi": {
+      "openPipeline": "Pipeline ouvert",
+      "openDeals": "Opportunités ouvertes : {{n}}",
+      "forecast": "Prévision",
+      "forecastHint": "Pondérée par étape",
+      "wonThisMonth": "Gagnées ce mois-ci",
+      "dealsCount": "Opportunités : {{n}}",
+      "winRate": "Taux de réussite",
+      "winRateHint": "Gagnées parmi les clôturées"
+    },
+    "stages": {
+      "label": "Étapes",
+      "tab": "{{name}}, {{n}}"
+    },
+    "column": {
+      "count": "Opportunités : {{n}}",
+      "weighted": "Pondéré {{amount}}"
+    },
+    "empty": {
+      "title": "Aucune opportunité trouvée.",
+      "hint": "Les opportunités que vous ajoutez apparaissent ici.",
+      "filteredHint": "Essayez un autre filtre ou une autre recherche."
+    },
+    "noPipelines": {
+      "title": "Aucun pipeline pour le moment",
+      "hint": "Demandez à l’administrateur de votre espace de travail de configurer un pipeline de vente."
+    },
+    "card": {
+      "noContact": "Aucun client",
+      "more": "Plus d’actions pour {{title}}",
+      "due": {
+        "overdue": "En retard · {{when}}",
+        "today": "Clôture aujourd’hui",
+        "upcoming": "Clôture {{when}}"
+      }
+    },
+    "list": {
+      "conflict": "Cette opportunité a été modifiée par quelqu’un d’autre. La liste a été actualisée.",
+      "moved": "Déplacée vers {{stage}}.",
+      "wonDone": "Marquée comme gagnée.",
+      "lostDone": "Marquée comme perdue.",
+      "reopened": "Opportunité rouverte."
+    },
+    "actions": {
+      "open": "Ouvrir l’opportunité",
+      "moveTo": "Déplacer vers l’étape",
+      "markWon": "Marquer comme gagnée",
+      "markLost": "Marquer comme perdue",
+      "reopen": "Rouvrir",
+      "edit": "Modifier l’opportunité",
+      "delete": "Supprimer l’opportunité"
+    },
+    "move": {
+      "title": "Déplacer vers l’étape"
+    },
+    "lost": {
+      "title": "Marquer comme perdue",
+      "intro": "Vous pouvez indiquer pourquoi cette opportunité a été perdue.",
+      "introRequired": "Votre espace de travail exige un motif pour chaque opportunité perdue.",
+      "other": "Autre",
+      "details": "Motif",
+      "needed": "Ajoutez un motif pour continuer.",
+      "confirm": "Marquer comme perdue",
+      "presets": {
+        "price": "Prix trop élevé",
+        "competitor": "A choisi un concurrent",
+        "noBudget": "Pas de budget",
+        "noResponse": "Aucune réponse",
+        "timing": "Mauvais moment",
+        "notFit": "Ne convient pas"
+      }
+    },
+    "delete": {
+      "title": "Supprimer l’opportunité",
+      "message": "Supprimer « {{title}} » et son historique ? Cette action est irréversible.",
+      "confirm": "Supprimer"
+    },
+    "details": {
+      "title": "Détails de l’opportunité",
+      "customer": "Client",
+      "noContact": "Aucun client lié.",
+      "openContact": "Ouvrir le contact",
+      "message": "Écrire sur WhatsApp",
+      "company": "Entreprise : {{name}}",
+      "details": "Détails",
+      "owner": "Propriétaire",
+      "expectedClose": "Clôture prévue",
+      "noClose": "Aucune date",
+      "source": "Source",
+      "created": "Créée le",
+      "wonAt": "Gagnée le",
+      "lostAt": "Perdue le",
+      "notes": "Notes",
+      "lostReason": "Perdue : {{reason}}",
+      "conflict": "Cette opportunité a été modifiée par quelqu’un d’autre. Elle a été rechargée."
+    },
+    "timeline": {
+      "title": "Chronologie",
+      "empty": "Rien ne s’est encore passé sur cette opportunité.",
+      "type": "Type d’entrée",
+      "placeholder": "Écrivez une note, un résumé d’appel ou une tâche",
+      "add": "Ajouter à la chronologie",
+      "date": "Jour d’échéance",
+      "dateHint": "Facultatif, par exemple 2026-10-31.",
+      "dateInvalid": "Saisissez un jour valide, par exemple 2026-10-31.",
+      "time": "Heure d’échéance",
+      "timeHint": "Facultatif, par exemple 14:30. Sans heure, la tâche est due à 09:00.",
+      "timeInvalid": "Saisissez une heure, par exemple 14:30.",
+      "types": {
+        "note": "Note",
+        "call": "Appel",
+        "task": "Tâche"
+      },
+      "kinds": {
+        "note": "Note",
+        "call": "Appel",
+        "message": "Message",
+        "email": "E-mail",
+        "meeting": "Réunion",
+        "task": "Tâche",
+        "stage_change": "Changement d’étape"
+      },
+      "system": "Système",
+      "stageChange": "Déplacée de {{from}} vers {{to}}",
+      "placed": "Placée dans {{to}}",
+      "stageChanged": "Étape modifiée",
+      "dueOn": "Échéance {{when}}",
+      "assignedTo": "Pour {{name}}",
+      "markDone": "Marquer comme terminée",
+      "reopenTask": "Rouvrir la tâche",
+      "done": "Terminée"
+    },
+    "form": {
+      "addTitle": "Nouvelle opportunité",
+      "editTitle": "Modifier l’opportunité",
+      "save": "Enregistrer l’opportunité",
+      "saving": "Enregistrement de l’opportunité",
+      "title": "Nom de l’opportunité",
+      "titlePlaceholder": "Par exemple, 40 licences pour Acme",
+      "value": "Valeur",
+      "currency": "Devise",
+      "stage": "Étape de départ",
+      "owner": "Propriétaire",
+      "ownerMe": "Moi",
+      "ownerNone": "Non attribuée",
+      "ownerPick": "Choisir un propriétaire",
+      "ownerLoading": "Chargement de l’équipe",
+      "ownerFailed": "Impossible de charger l’équipe.",
+      "contact": "Client",
+      "contactNone": "Aucun client",
+      "contactPick": "Choisir un client",
+      "contactSearchLabel": "Recherche",
+      "contactSearchPlaceholder": "Nom, téléphone ou e-mail",
+      "contactEmpty": "Aucun contact trouvé.",
+      "contactFailed": "Impossible de charger les contacts.",
+      "expectedClose": "Jour de clôture prévu",
+      "expectedCloseHint": "Facultatif, par exemple 2026-10-31.",
+      "conflict": "Cette opportunité a été modifiée par quelqu’un d’autre. Elle a été rechargée : vérifiez-la puis enregistrez à nouveau.",
+      "errors": {
+        "titleRequired": "Saisissez un nom pour l’opportunité.",
+        "titleTooLong": "Le nom est trop long.",
+        "valueInvalid": "Saisissez un montant comme 1250.50, avec au plus le nombre de décimales de la devise.",
+        "closeInvalid": "Saisissez un jour valide, par exemple 2026-10-31.",
+        "notesTooLong": "Les notes sont trop longues."
       }
     }
   },
