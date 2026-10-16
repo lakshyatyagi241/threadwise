@@ -2,18 +2,22 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
-  type CalendarCallbackOutcome,
+  GOOGLE_CAPABILITIES,
+  googleCapabilitiesOf,
+  googleCapabilityRestricted,
   type CalendarCallbackQuery,
   type CalendarConnectStartInput,
   type CalendarConnectStartResponse,
   type CalendarListResponse,
   type CalendarStatusResponse,
+  type GoogleAccountResponse,
+  type GoogleCapability,
+  type GoogleConnectResponse,
   type SelectCalendarInput,
 } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
-import { GOOGLE_CALENDAR_REQUIRED_SCOPES } from '../../config/domains/appointments-booking.env';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -21,22 +25,18 @@ import {
   GoogleCalendarError,
 } from '../../infra/providers/appointments-booking';
 import { AuditService } from '../../kernel/audit/audit.service';
+import { RbacService } from '../../kernel/rbac/rbac.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
+import { GoogleConsentService } from './google-consent.service';
 import { GoogleCalendarConfig } from './google-calendar-config.service';
 import { GoogleCalendarConnectionRepository } from './google-calendar-connection.repository';
-import {
-  deriveStateKey,
-  newState,
-  returnUrl,
-  signState,
-  STATE_TTL_SECONDS,
-  verifyState,
-} from './google-calendar-state';
+import { deriveStateKey } from './google-calendar-state';
 import {
   CALENDAR_AUDIT_MODULE,
   CalendarNotConnectedError,
   GoogleCalendarTokens,
+  grantCovers,
 } from './google-calendar-tokens.service';
 
 const DEFAULT_RETURN = '/appointments/settings';
@@ -66,6 +66,8 @@ export class GoogleCalendarConnectService {
     private readonly crypto: CryptoService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly rbac: RbacService,
+    private readonly consent: GoogleConsentService,
     env: ConfigService<Env, true>,
   ) {
     this.stateKey = deriveStateKey(env.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }));
@@ -83,14 +85,17 @@ export class GoogleCalendarConnectService {
       this.tokens.connection(orgId, { fresh: true }),
       this.config.credentials(),
     ]);
-    // Without a platform client nothing can be refreshed or written, whatever the stored grant says.
+    // Without a platform client nothing can be refreshed or written, whatever the stored grant says. An account connected for Sheets only
+    // has no calendar yet: for the calendar card it is "disconnected" (Connect adds the calendar permissions to what it already has).
     const status = !creds
       ? 'unavailable'
       : !conn
         ? 'disconnected'
-        : conn.status === 'active'
-          ? 'connected'
-          : 'needs_reconnect';
+        : conn.status !== 'active'
+          ? 'needs_reconnect'
+          : grantCovers(conn, 'calendar')
+            ? 'connected'
+            : 'disconnected';
     return {
       provider: 'google',
       connected: status === 'connected',
@@ -104,27 +109,82 @@ export class GoogleCalendarConnectService {
     };
   }
 
-  /** The consent URL, bound to this workspace and admin. The browser is sent there by the web app. */
+  /** The consent URL for the calendar, bound to this workspace and admin. The browser is sent there by the web app. */
   async start(input: CalendarConnectStartInput): Promise<CalendarConnectStartResponse> {
-    const ctx = RequestContextStore.require();
-    const creds = await this.config.credentials();
-    if (!creds) {
+    const orgId = RequestContextStore.require().orgId;
+    const held = await this.tokens.connection(orgId, { fresh: true });
+    // The grant is the whole workspace's Google account: a booking-settings editor may connect the calendar, but may not replace an
+    // account that Sheets, Docs or Forms also use unless they may manage the Google account. A reconnect asks for what was held.
+    this.requireManageWhenShared(held);
+    const heldCapabilities = held ? googleCapabilitiesOf(held.scopes) : [];
+    const started = await this.begin(
+      ['calendar', ...heldCapabilities],
+      input.returnTo ?? DEFAULT_RETURN,
+    );
+    if (!started) {
       throw new AppError(
         ERROR_CODES.APPT_CALENDAR_NOT_CONFIGURED,
         'Google Calendar is not set up for this platform. Ask your platform administrator to add the Google OAuth client.',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const state = signState(
-      newState(
-        { orgId: ctx.orgId, userId: ctx.userId, returnTo: input.returnTo ?? DEFAULT_RETURN },
-        Date.now(),
-      ),
-      this.stateKey,
-    );
+    return started;
+  }
+
+  /**
+   * The consent URL for any set of capabilities (the Google account page): Google is asked only for the scopes of what was ticked, and
+   * `include_granted_scopes` keeps what the account already has. Null when the platform has no Google client.
+   */
+  async begin(
+    capabilities: readonly GoogleCapability[],
+    returnTo: string,
+  ): Promise<GoogleConnectResponse | null> {
+    return this.consent.start(capabilities, returnTo);
+  }
+
+  /** The Google account page's view of the connection: state, the account, which capabilities the grant covers, and the last failure. */
+  async account(): Promise<GoogleAccountResponse> {
+    return this.accountOf(RequestContextStore.require().orgId);
+  }
+
+  async accountOf(orgId: number): Promise<GoogleAccountResponse> {
+    const [conn, creds] = await Promise.all([
+      this.tokens.connection(orgId, { fresh: true }),
+      this.config.credentials(),
+    ]);
+    const granted = new Set(googleCapabilitiesOf(conn?.scopes));
     return {
-      url: this.client.authorizeUrl(creds, state),
-      expiresInSeconds: STATE_TTL_SECONDS,
+      status: !creds
+        ? 'unavailable'
+        : !conn
+          ? 'disconnected'
+          : conn.status === 'active'
+            ? 'connected'
+            : 'needs_reconnect',
+      account: conn?.accountEmail ?? null,
+      connectedAt: conn?.connectedAt.toISOString() ?? null,
+      capabilities: GOOGLE_CAPABILITIES.map((key) => ({
+        key,
+        granted: granted.has(key),
+        restricted: googleCapabilityRestricted(key),
+      })),
+      calendarId: conn?.calendarId ?? null,
+      calendarName: conn
+        ? (conn.calendarName ?? (conn.calendarId === 'primary' ? null : conn.calendarId))
+        : null,
+      lastError:
+        conn?.lastErrorCode && conn.lastErrorAt
+          ? {
+              code: conn.lastErrorCode,
+              at: conn.lastErrorAt.toISOString(),
+              capability: (GOOGLE_CAPABILITIES as readonly string[]).includes(
+                conn.lastErrorCapability ?? '',
+              )
+                ? (conn.lastErrorCapability as GoogleCapability)
+                : null,
+            }
+          : null,
+      lastUsedAt: conn?.lastUsedAt?.toISOString() ?? null,
     };
   }
 
@@ -132,7 +192,9 @@ export class GoogleCalendarConnectService {
   async calendars(): Promise<CalendarListResponse> {
     const orgId = RequestContextStore.require().orgId;
     try {
-      const list = await this.tokens.withToken(orgId, (token) => this.client.listCalendars(token));
+      const list = await this.tokens.withToken(orgId, (token) => this.client.listCalendars(token), {
+        capability: 'calendar',
+      });
       return { data: list };
     } catch (err) {
       throw this.asApiError(err);
@@ -145,8 +207,10 @@ export class GoogleCalendarConnectService {
     let name: string | null;
     try {
       // The choice is checked against the account's own list: a typed id the account cannot write to would fail every booking later.
-      const list = await this.tokens.withToken(ctx.orgId, (token) =>
-        this.client.listCalendars(token),
+      const list = await this.tokens.withToken(
+        ctx.orgId,
+        (token) => this.client.listCalendars(token),
+        { capability: 'calendar' },
       );
       const picked = list.find((c) => c.id === input.calendarId);
       if (!picked) {
@@ -160,7 +224,9 @@ export class GoogleCalendarConnectService {
     }
     await this.db.tx(async (tx) => {
       const conn = await this.repo.find(tx, ctx.orgId, true);
-      if (!conn || conn.status !== 'active') throw this.notConnected();
+      if (!conn || conn.status !== 'active' || !grantCovers(conn, 'calendar')) {
+        throw this.notConnected();
+      }
       await this.repo.setCalendar(tx, ctx.orgId, conn.id, input.calendarId, name);
       await this.audit.record(tx, {
         module: CALENDAR_AUDIT_MODULE,
@@ -185,6 +251,7 @@ export class GoogleCalendarConnectService {
     const ctx = RequestContextStore.require();
     const conn = await this.tokens.connection(ctx.orgId, { fresh: true });
     if (!conn) return this.statusOf(ctx.orgId);
+    this.requireManageWhenShared(conn);
     try {
       await this.client.revoke(this.crypto.decrypt(conn.refreshTokenEnc));
     } catch (err) {
@@ -217,104 +284,24 @@ export class GoogleCalendarConnectService {
 
   // --- the public callback ---------------------------------------------------------------------------------------------
 
-  /**
-   * Completes the consent: verifies the signed state, trades the code for tokens, checks Google granted what the work needs, reads the
-   * account, and stores the sealed grant. Always ends in a redirect back to the page the admin came from with `?calendar=<outcome>`;
-   * nothing about Google's answer is shown on this address.
-   */
-  async callback(query: CalendarCallbackQuery): Promise<string> {
-    const checked = verifyState(query.state ?? '', this.stateKey, Date.now());
-    if (!checked.ok) {
-      // No trustworthy state: nobody to bind this to, nothing is stored.
-      this.logger.warn({ reason: checked.reason }, 'Google Calendar callback with a bad state');
-      return returnUrl(
-        this.webUrl,
-        DEFAULT_RETURN,
-        checked.reason === 'expired' ? 'expired' : 'failed',
-      );
-    }
-    const { state } = checked;
-    const done = (outcome: CalendarCallbackOutcome) =>
-      returnUrl(this.webUrl, state.returnTo, outcome);
-
-    if (query.error) return done('denied');
-    if (!query.code) return done('failed');
-    const creds = await this.config.credentials();
-    if (!creds) return done('not_configured');
-
-    try {
-      const grant = await this.client.exchangeCode(creds, query.code);
-      const granted = new Set(grant.scope.split(/\s+/).filter(Boolean));
-      if (GOOGLE_CALENDAR_REQUIRED_SCOPES.some((s) => !granted.has(s))) {
-        // The person unticked a permission on Google's screen. What was just granted is withdrawn rather than left dangling.
-        await this.client.revoke(grant.refreshToken ?? grant.accessToken).catch(() => undefined);
-        return done('missing_scope');
-      }
-      const account = await this.client
-        .userinfo(grant.accessToken)
-        .catch(() => ({ sub: null, email: null }));
-
-      const stored = await RequestContextStore.run(
-        {
-          requestId: `calendar-connect-${state.nonce}`,
-          orgId: state.orgId,
-          actorType: 'user',
-          actorId: state.userId,
-          userId: state.userId,
-        },
-        () =>
-          this.db.txAs({ orgId: state.orgId, userId: state.userId }, async (tx) => {
-            const before = await this.repo.find(tx, state.orgId, true);
-            // Google issues a refresh token on every consent here (`prompt=consent`); if one ever does not arrive, the same account
-            // keeps the one it had.
-            const refreshTokenEnc = grant.refreshToken
-              ? this.crypto.encrypt(grant.refreshToken)
-              : before && before.accountSub !== null && before.accountSub === account.sub
-                ? before.refreshTokenEnc
-                : null;
-            if (!refreshTokenEnc) return false;
-            const row = await this.repo.upsert(tx, state.orgId, {
-              connectedBy: state.userId,
-              accountEmail: account.email,
-              accountSub: account.sub,
-              refreshTokenEnc,
-              accessTokenEnc: this.crypto.encrypt(grant.accessToken),
-              accessTokenExpiresAt: new Date(Date.now() + grant.expiresInSeconds * 1000),
-              scopes: [...granted].join(' '),
-            });
-            await this.audit.record(tx, {
-              module: CALENDAR_AUDIT_MODULE,
-              recordId: row.id,
-              action: before ? 'update' : 'insert',
-              delta: { status: { old: before?.status ?? 'disconnected', new: 'connected' } },
-            });
-            await this.outbox.emit(tx, {
-              orgId: state.orgId,
-              aggregateModule: CALENDAR_AUDIT_MODULE,
-              aggregateId: row.id,
-              eventType: 'appointment_calendar.connected',
-              payload: { uuid: row.uuid, provider: 'google' },
-            });
-            return true;
-          }),
-      );
-      if (!stored) {
-        this.logger.warn(
-          { orgId: state.orgId },
-          'Google returned no refresh token: nothing stored',
-        );
-        await this.client.revoke(grant.accessToken).catch(() => undefined);
-        return done('failed');
-      }
-      this.adapter.forget(state.orgId);
-      return done('connected');
-    } catch (err) {
-      this.logger.warn({ orgId: state.orgId, err }, 'Google Calendar connect failed');
-      return done('failed');
-    }
+  /** Google's redirect: see `GoogleConsentService` (the grant is parked, and stored only when the same admin confirms it). */
+  callback(query: CalendarCallbackQuery): Promise<string> {
+    return this.consent.callback(query);
   }
 
   // --- internals -------------------------------------------------------------------------------------------------------
+
+  /**
+   * The calendar routes need only `record.booking-types.update`, but the grant they act on is shared. When it also carries Sheets, Docs, Forms
+   * or the file list, replacing or withdrawing it takes `google.account.manage`, so a booking editor cannot switch off every Google step.
+   */
+  private requireManageWhenShared(conn: { scopes: string | null } | null | undefined): void {
+    if (!conn || googleCapabilitiesOf(conn.scopes).every((c) => c === 'calendar')) return;
+    const grants = RequestContextStore.require().grants;
+    if (!grants || !this.rbac.can(grants, 'google.account.manage').allowed) {
+      throw AppError.forbidden('google.account.manage');
+    }
+  }
 
   private notConnected(): AppError {
     return new AppError(

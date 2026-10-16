@@ -44,6 +44,7 @@ export function toCompanyResponse(row: CompanyRow, rollup: CompanyRollup): Compa
     sizeRange: row.sizeRange,
     address: row.address,
     notes: row.notes,
+    customFields: row.data,
     owner: row.ownerUuid ? { id: row.ownerUuid, name: row.ownerName ?? '' } : null,
     createdBy: row.createdByUuid ? { id: row.createdByUuid, name: row.createdByName ?? '' } : null,
     rollup,

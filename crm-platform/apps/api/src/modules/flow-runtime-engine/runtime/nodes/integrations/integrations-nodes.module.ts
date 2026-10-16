@@ -1,17 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ApiLibraryModule } from '../../../../api-library';
 import { CrmModule } from '../../../../crm';
+import { GoogleAccountModule } from '../../../../google-account';
 import {
   AI_CALL,
   AiCallUnavailable,
 } from '../../../../../infra/providers/flow-runtime-engine/ai-call.port';
-import { HttpGoogleWorkspace } from '../../../../../infra/providers/flow-runtime-engine/google-workspace.http.adapter';
-import {
-  GOOGLE_ACCESS_TOKENS,
-  GOOGLE_WORKSPACE,
-  NoGoogleAccount,
-  type GoogleAccessTokens,
-} from '../../../../../infra/providers/flow-runtime-engine/google-workspace.port';
 import {
   MYSQL_QUERY,
   MysqlDriverUnavailable,
@@ -24,12 +18,12 @@ import { IntegrationNodes } from './integrations-nodes';
 /**
  * Imports the domains this node group calls (their public modules only); never the flow runtime module (it imports this one).
  *
- * Provider wiring: Google calls the REST APIs with the workspace's token, and no token store exists yet (`NoGoogleAccount`), so
- * the nodes report "no Google account connected" until one is bound to GOOGLE_ACCESS_TOKENS. MySQL has no driver installed and the
- * calling domain is not wired to flows: those two defaults fail with a stated reason. Rebind the tokens to go live.
+ * Provider wiring: Google is the workspace's one Google account (`GoogleAccountModule` binds `GOOGLE_WORKSPACE` over its grant; a
+ * workspace with nothing connected gets a step that FAILS with `GOOGLE_ACCOUNT_NOT_CONNECTED` and "Connect Google" in the run log and run view; Reference went on silently). MySQL has
+ * no driver installed and the calling domain is not wired to flows: those two defaults fail with a stated reason.
  */
 @Module({
-  imports: [CrmModule, ApiLibraryModule],
+  imports: [CrmModule, ApiLibraryModule, GoogleAccountModule],
   providers: [
     SafeFetch,
     FlowRefResolver,
@@ -37,13 +31,7 @@ import { IntegrationNodes } from './integrations-nodes';
     ApiLibraryNodes,
     { provide: MYSQL_QUERY, useClass: MysqlDriverUnavailable },
     { provide: AI_CALL, useClass: AiCallUnavailable },
-    { provide: GOOGLE_ACCESS_TOKENS, useClass: NoGoogleAccount },
-    {
-      provide: GOOGLE_WORKSPACE,
-      useFactory: (tokens: GoogleAccessTokens) => new HttpGoogleWorkspace(tokens),
-      inject: [GOOGLE_ACCESS_TOKENS],
-    },
   ],
-  exports: [IntegrationNodes, ApiLibraryNodes, GOOGLE_ACCESS_TOKENS, MYSQL_QUERY, AI_CALL],
+  exports: [IntegrationNodes, ApiLibraryNodes, MYSQL_QUERY, AI_CALL],
 })
 export class IntegrationNodesModule {}

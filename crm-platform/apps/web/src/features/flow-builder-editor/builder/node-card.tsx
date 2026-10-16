@@ -17,6 +17,8 @@ import { NODE_W } from '../lib/graph-ops';
 import { AskFileCardBody, AskLocationCardBody } from './ask-media/cards';
 import { opensNodeOnDoubleClick } from './node-open';
 import { NodePreview } from './node-preview';
+import { SubflowCardBody } from './subflow-card';
+import { storedNames } from '../lib/stored-names';
 
 /** The two Ask for file / location cards carry their own title (as the other product draws them) and an editable body. */
 const ASK_CARD_TITLE_KEY: Record<string, string> = {
@@ -172,9 +174,24 @@ export const NodeCard = memo(function NodeCard({
         <AskFileCardBody node={node} onPatch={onPatch} />
       ) : node.type === 'ask_location' ? (
         <AskLocationCardBody node={node} onPatch={onPatch} />
+      ) : node.type === 'subflow' ? (
+        <SubflowCardBody node={node} ctx={ctx} onPatch={onPatch} />
       ) : (
         <NodePreview node={node} ctx={ctx} />
       )}
+
+      {storedNames(node.data).length > 0 ? (
+        <div className="flex flex-wrap gap-1 px-3 pb-2">
+          {storedNames(node.data).map((n) => (
+            <code
+              key={n}
+              className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10.5px] text-brand"
+            >
+              {n}
+            </code>
+          ))}
+        </div>
+      ) : null}
 
       {multi ? (
         <div className="border-t border-[var(--flb-rule)] px-2 pt-1 pb-2">

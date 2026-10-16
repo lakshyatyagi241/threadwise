@@ -19,7 +19,8 @@
       "googleCalendar": "Google Agenda",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Flowbouwer"
+      "flowBuilder": "Flowbouwer",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Beheer - Projectinstellingen",
@@ -906,7 +907,7 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "De Google OAuth-client waarmee elke werkruimte haar agenda verbindt.",
+        "description": "De Google OAuth-client waarmee elke werkruimte haar Google-account verbindt, voor de agenda, Sheets, Docs en Formulieren.",
         "sections": {
           "oauth": {
             "title": "Google OAuth-client"
@@ -914,8 +915,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Werkruimtes toestaan Google Agenda te verbinden",
-            "hint": "Uit: geen enkele werkruimte kan verbinden en er wordt niets naar of uit een agenda geschreven of gelezen."
+            "label": "Werkruimtes toestaan Google te verbinden",
+            "hint": "Uit: geen enkele werkruimte kan verbinden en er wordt niets van of naar Google gelezen of geschreven (agenda, Sheets, Docs, Formulieren)."
           },
           "clientId": {
             "label": "Client-ID",
@@ -1022,6 +1023,37 @@
           "mode": {
             "simple": "Alleen simpel",
             "advanced": "Alleen geavanceerd"
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "De Microsoft-app waarmee elke werkruimte haar Outlook- of Microsoft 365-agenda koppelt.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra-app"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Werkruimten toestaan Outlook te koppelen",
+            "hint": "Uit: geen enkele werkruimte kan koppelen en er wordt niets gelezen uit of geschreven naar een Outlook-agenda. Gekoppelde agenda's blijven bewaard."
+          },
+          "clientId": {
+            "label": "Toepassings-ID (client-ID)",
+            "hint": "Uit het Microsoft Entra-beheercentrum, App-registraties, Overzicht. Leeg gebruikt MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Clientgeheim",
+            "hint": "Versleuteld opgeslagen en nooit meer getoond. Leeg behoudt het opgeslagen geheim; MICROSOFT_CALENDAR_CLIENT_SECRET is de terugvaloptie."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common staat werk-, school- en persoonlijke accounts toe; gebruik een directory-ID (tenant-ID) voor een app met één tenant. Leeg gebruikt MICROSOFT_CALENDAR_TENANT, anders common."
+          },
+          "redirectUri": {
+            "label": "Omleidings-URI overschrijven",
+            "hint": "Laat leeg om het adres hierboven te gebruiken. Het moet exact overeenkomen met een omleidings-URI van de app."
           }
         }
       }
@@ -1134,8 +1166,8 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "De Google OAuth-client waarmee werkruimtes hun agenda verbinden voor afspraken en bezette tijden.",
-        "tags": "Google / OAuth / Agenda"
+        "description": "De Google OAuth-client waarmee werkruimtes hun Google-account verbinden voor afspraken, Sheets, Docs en Formulieren.",
+        "tags": "Google / OAuth / Agenda / Sheets"
       },
       "googleMail": {
         "title": "Gmail-e-mail",
@@ -1151,6 +1183,11 @@
         "title": "Flowbouwer",
         "description": "De standaard flowbouwer voor elke werkruimte: Simpel stap voor stap of Geavanceerd canvas. Een werkruimte kan dit overschrijven.",
         "tags": "Simpel / Geavanceerd / Automatisering"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "De Microsoft-app waarmee werkruimten hun Outlook- en Microsoft 365-agenda's voor boekingen koppelen.",
+        "tags": "Microsoft / OAuth / Outlook / Agenda"
       }
     },
     "signup": {
@@ -1703,11 +1740,11 @@
       "googleCalendar": {
         "title": "Google Agenda",
         "eyebrow": "Beheer - Afspraken",
-        "description": "Eén Google Cloud OAuth-client voor het hele platform. Elke werkruimte verbindt daarna haar eigen Google-account via Afspraken, Instellingen; een werkruimte ziet het client-ID of -geheim nooit.",
+        "description": "Eén Google Cloud OAuth-client voor het hele platform. Elke werkruimte verbindt daarna haar eigen Google-account via Google-account in Instellingen en kiest welke toestemmingen ze geeft; een werkruimte ziet het client-ID of -geheim nooit.",
         "sections": {
           "oauth": {
             "title": "Google OAuth-client",
-            "description": "Zonder client-ID en -geheim zien werkruimtes Google Agenda als niet beschikbaar en lopen afspraken door zonder agenda."
+            "description": "Zonder client-ID en -geheim zien werkruimtes Google als niet beschikbaar, lopen afspraken door zonder agenda en worden de Google-stappen in flows overgeslagen."
           }
         },
         "guide": {
@@ -1715,7 +1752,7 @@
           "items": {
             "project": {
               "title": "1. Project en API",
-              "body": "Maak in de Google Cloud Console een project aan en schakel de Google Calendar API in."
+              "body": "Maak in de Google Cloud Console een project aan en schakel de API's van Google Calendar, Google Sheets, Google Docs, Google Drive en Google Forms in. Een toestemming werkt alleen als de bijbehorende API is ingeschakeld."
             },
             "redirect": {
               "title": "2. OAuth-client",
@@ -1723,11 +1760,11 @@
             },
             "consent": {
               "title": "3. Toestemmingsscherm",
-              "body": "Voeg de scopes calendar.events, calendar.freebusy en calendar.calendarlist.readonly toe en publiceer daarna de app: in Testing beëindigt Google elke toestemming na 7 dagen en moeten werkruimtes opnieuw verbinden."
+              "body": "Voeg de scopes toe die het product vraagt (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) en publiceer daarna de app: in Testing beëindigt Google elke toestemming na 7 dagen en moeten werkruimtes opnieuw verbinden. De drive-scopes zijn beperkt en vereisen een beoordeling door Google."
             },
             "workspaces": {
               "title": "4. Werkruimtes verbinden",
-              "body": "Plak het client-ID en -geheim hier en sla op. Beheerders verbinden daarna via Afspraken, Instellingen, Google Agenda."
+              "body": "Plak het client-ID en -geheim hier en sla op. Beheerders verbinden daarna via Instellingen, Integraties, Google-account, of via Afspraken, Instellingen, Google Agenda."
             }
           }
         }
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Bestaande flows",
               "body": "Het wijzigen van deze instelling verandert of verwijdert nooit een flow. Een flow blijft werken; hij wordt alleen geopend in de bouwer die aan staat. Een werkruimte die zelf een bouwer koos, houdt die tot ze weer de platformstandaard kiest."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Afspraken",
+        "description": "Eén Microsoft Entra-app voor het hele platform. Elke werkruimte koppelt vervolgens haar eigen Outlook- of Microsoft 365-agenda via Afspraken, Instellingen en ziet nooit de client-ID of het geheim.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra-app",
+            "description": "Zonder client-ID en geheim zien werkruimten Outlook als niet beschikbaar en gaan boekingen er gewoon zonder door. Google Calendar wordt hierdoor niet beïnvloed."
+          }
+        },
+        "guide": {
+          "title": "Stel het in via Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. App-registratie",
+              "body": "Maak in het Microsoft Entra-beheercentrum een app-registratie aan voor accounts in een willekeurige organisatiemap en persoonlijke Microsoft-accounts, en kopieer de toepassings-ID (client-ID) hierheen. Houd de tenant op common, tenzij je een beperktere optie hebt gekozen."
+            },
+            "redirect": {
+              "title": "2. Omleidings-URI en geheim",
+              "body": "Voeg de omleidings-URI die op deze pagina staat toe als webomleiding, maak daarna onder Certificaten en geheimen een clientgeheim aan en plak de waarde ervan hier. Noteer wanneer het verloopt: na die datum stopt de agenda van elke werkruimte totdat een nieuw geheim is opgeslagen."
+            },
+            "permissions": {
+              "title": "3. API-machtigingen",
+              "body": "Voeg de gedelegeerde Microsoft Graph-machtigingen Calendars.ReadWrite, User.Read en offline_access toe, en niets anders. Voltooi voor algemeen gebruik de publisher-verificatie; in de tenant van een klant kan ook goedkeuring van de app door een beheerder nodig zijn."
+            },
+            "workspaces": {
+              "title": "4. Werkruimten koppelen",
+              "body": "Plak hier de client-ID en het geheim en sla op. Beheerders koppelen daarna via Afspraken, Instellingen."
             }
           }
         }

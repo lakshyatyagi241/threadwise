@@ -43,7 +43,7 @@ describe('ConditionForm group editor', () => {
     const html = render({ conditionGroup: tree });
     expect(count(html, /data-cond-group=/g)).toBe(2);
     expect(count(html, /ruleLabel/g)).toBe(3);
-    expect(html).toContain('border-l-2');
+    expect(html).toContain('border-s-2');
     expect(count(html, />\s*\+ addRule</g) + count(html, /\+ <!-- -->addRule/g)).toBe(2);
     expect(html).toContain('addGroup');
     expect(html).toContain('removeGroup');

@@ -15,6 +15,7 @@ import {
   WARMER_GATE,
   type OutgoingMessage,
 } from '../../../src/modules/broadcasts';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { MergeTagService } from '../../../src/modules/crm';
 import {
   CAMPAIGN_BILLING,
@@ -31,6 +32,7 @@ import {
   FixtureEngineSender,
   type FixtureReceipt,
 } from '../../../src/modules/campaigns/fixture/fixture-engine-sender';
+import { WizardFollowUpService } from '../../../src/modules/campaigns/wizard/wizard-follow-up.service';
 import { WizardRetryService } from '../../../src/modules/campaigns/wizard/wizard-retry.service';
 import { WizardRunService } from '../../../src/modules/campaigns/wizard/wizard-run.service';
 import { WizardSeriesService } from '../../../src/modules/campaigns/wizard/wizard-series.service';
@@ -61,6 +63,11 @@ export interface Lab {
   dispatch: CampaignDispatchService;
   series: WizardSeriesService;
   retries: WizardRetryService;
+  followUps: WizardFollowUpService;
+  /** The flows the follow-up steps started (the flow runtime is a stub here). */
+  flowCalls: Array<{ orgId: number; flowId: number; contactId: number; campaignId: number }>;
+  /** The Cloud API receipt path, for a delivery or read report the sandbox does not make by itself. */
+  receipts: CampaignReceiptsService;
   /** Applies the sandbox's queued reports the way the Cloud API webhook does. */
   flush(): Promise<number>;
   /** Runs a campaign now (what the BullMQ processor would do). */
@@ -73,6 +80,8 @@ export function buildLab(h: Harness): Lab {
   const runtime = get<PacingRuntime>(PacingRuntime);
   const clock = { now: new Date() };
   runtime.now = () => clock.now;
+  // The quiet hours (BL-177) are read on the same clock.
+  get<SendWindowService>(SendWindowService).now = () => clock.now;
   runtime.sleep = () => Promise.resolve();
   runtime.random = () => 0.5;
 
@@ -157,6 +166,33 @@ export function buildLab(h: Harness): Lab {
     get(TEMPLATE_DIRECTORY),
   );
   const receipts = get<CampaignReceiptsService>(CampaignReceiptsService);
+  const flowCalls: Lab['flowCalls'] = [];
+  const followUps = new WizardFollowUpService(
+    db,
+    repo,
+    events,
+    engines,
+    merge,
+    tracker,
+    runtime,
+    get(SENDER_DIRECTORY),
+    get(TEMPLATE_DIRECTORY),
+    get(CAMPAIGN_BILLING),
+    {
+      available: true,
+      start: (_tx, orgId, i) => {
+        flowCalls.push({
+          orgId,
+          flowId: i.flowId,
+          contactId: i.contactId,
+          campaignId: i.campaignId,
+        });
+        return Promise.resolve({ ok: true, error: null });
+      },
+    },
+    undefined,
+    get<SendWindowService>(SendWindowService),
+  );
   const tests = get<WizardTestSendService>(WizardTestSendService);
 
   return {
@@ -169,6 +205,9 @@ export function buildLab(h: Harness): Lab {
     dispatch,
     series,
     retries,
+    followUps,
+    flowCalls,
+    receipts,
     enqueued,
     run: (orgId, campaignId) =>
       RequestContextStore.run(

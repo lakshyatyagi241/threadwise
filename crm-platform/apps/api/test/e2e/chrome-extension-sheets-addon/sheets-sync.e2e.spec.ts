@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { SheetsContactsService } from '../../../src/modules/chrome-extension-sheets-addon/sheets-contacts.service';
 import {
   Api,
   FULL_GRANTS,
@@ -706,5 +707,35 @@ describe('shops and products: the Reference add-on behaviour (TW-EXT-008 to 010)
     });
     const shopAudit = await rows(h, 'audit_log', t, `module = 'storefronts'`);
     expect(shopAudit.map((a) => a.action)).toEqual(['insert']);
+  });
+});
+
+describe('the consent ledger lookup compares an exact prefix, never a pattern', () => {
+  it('a key with % or _ matches only itself', async () => {
+    const { t, call } = await workspace('es-prefix');
+    await call.post('/contacts/sync', {
+      rows: [{ ref: 2, name: 'Pat', email: 'pat@example.com' }],
+    });
+    const [contact] = await contactRows(t);
+    const uuid = String(contact!.uuid);
+    const put = (key: string) =>
+      h.owner.query(
+        `INSERT INTO contact_consent_events (org_id, contact_id, channel, action, source, idempotency_key)
+         VALUES ($1, $2, 'whatsapp', 'granted', 'api', $3)`,
+        [t.orgId, contact!.id, key],
+      );
+    const svc = h.app.get(SheetsContactsService);
+    // Keys that a LIKE pattern would wrongly match: `_` as "any character", `%` as "anything".
+    await put('axb:1');
+    await put('cxxd:1');
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, 'a_b:')).toBe(false);
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, 'c%d:')).toBe(false);
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, '%:')).toBe(false);
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, 'axb:')).toBe(true);
+    await put('a_b:1');
+    await put('c%d:1');
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, 'a_b:')).toBe(true);
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, 'c%d:')).toBe(true);
+    expect(await svc.ledgerHasKeyPrefix(t.orgId, uuid, 'zzz:')).toBe(false);
   });
 });

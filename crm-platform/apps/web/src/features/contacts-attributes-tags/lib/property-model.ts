@@ -6,6 +6,7 @@ import {
   type FieldResponse,
   type FieldSectionResponse,
   type FieldType,
+  type ModuleKey,
   type UpdateFieldInput,
 } from '@crm/contracts';
 import { ATTRIBUTE_KEY, ATTRIBUTE_KEY_MAX } from './attribute-model';
@@ -244,9 +245,12 @@ export function configFromDraft(
   return text ? { ...rest, description: text } : rest;
 }
 
-export function toCreateBody(d: PropertyDraft): CreateFieldInput {
+export function toCreateBody(
+  d: PropertyDraft,
+  moduleKey: ModuleKey = 'contacts',
+): CreateFieldInput {
   return {
-    moduleKey: 'contacts',
+    moduleKey,
     sectionId: d.sectionId,
     key: d.key.trim(),
     label: d.label.trim(),

@@ -1,0 +1,172 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "حساب Google",
+        "description": "اربط حساب Google واحدًا لـ Calendar وSheets وDocs وForms وMeet في تدفقاتك.",
+        "keywords": "google, حساب google, تقويم, calendar, sheets, جداول البيانات, docs, مستندات, forms, نماذج, meet, drive, oauth, ربط google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "تجاهل"
+    },
+    "page": {
+      "eyebrow": "مساحة العمل",
+      "title": "حساب Google",
+      "subtitle": "اربطه مرة واحدة. يشغّل حساب Google نفسه تقويم الحجز وروابط Meet وخطوات Sheets وDocs وForms في تدفقاتك.",
+      "loading": "جارٍ تحميل حساب Google...",
+      "forbidden": {
+        "title": "لا يمكنك فتح هذه الصفحة",
+        "body": "دورك لا يتضمن عرض حساب Google. اطلب ذلك من مشرف مساحة العمل."
+      },
+      "status": {
+        "unavailable": "غير مُعدّ",
+        "disconnected": "غير مرتبط",
+        "connected": "مرتبط",
+        "needs_reconnect": "يحتاج إلى إعادة الربط"
+      },
+      "outcome": {
+        "connected": "تم ربط حساب Google.",
+        "denied": "لم يتم ربط Google: أُلغيت شاشة الأذونات.",
+        "failed": "لم يكتمل ربط Google. حاول مرة أخرى.",
+        "expired": "انتهت صلاحية محاولة الربط تلك. اضغط الزر للبدء من جديد.",
+        "not_configured": "Google غير مُعدّ لهذه المنصة بعد. اطلب من مسؤول المنصة.",
+        "missing_scope": "لم تمنح Google كل الأذونات التي طلبتها. ما كان مسموحًا به سابقًا يعمل كما هو؛ أضف الأذونات الناقصة مرة أخرى وأبقِ كل المربعات محددة.",
+        "cancelled": "لقد ألغيت العملية. لم يتم ربط أي حساب."
+      },
+      "actions": {
+        "connect": "ربط حساب Google",
+        "reconnect": "إعادة ربط Google",
+        "addPermissions": "إضافة أذونات",
+        "disconnect": "فصل",
+        "working": "جارٍ فتح Google...",
+        "retry": "حاول مرة أخرى"
+      },
+      "unavailable": {
+        "title": "Google غير مُعدّ لهذه المنصة",
+        "body": "يجب على مسؤول المنصة إضافة عميل Google OAuth قبل أن يتمكن أي شخص من الربط. وإلى ذلك الحين ستفشل خطوات Google في تدفقاتك برسالة توضح ذلك، وتستمر الحجوزات بدون تقويم."
+      },
+      "reconnect": {
+        "title": "توقفت Google عن قبول هذا الاتصال",
+        "body": "سُحب الإذن أو تغيّرت كلمة المرور أو انتهت صلاحية التفويض. اربط مرة أخرى لاستعادته؛ خياراتك محفوظة.",
+        "bodyAccount": "توقفت Google عن قبول {account}. اربطه مرة أخرى لاستعادته؛ خياراتك محفوظة."
+      },
+      "stats": {
+        "status": "الحالة",
+        "calendars": "التقويمات",
+        "calendarsValue": "{count} متاح",
+        "calendarsNone": "لا شيء",
+        "permissions": "الأذونات",
+        "permissionsValue": "{granted} من {total}",
+        "lastUsed": "آخر استخدام",
+        "never": "أبدًا",
+        "live": "نشط",
+        "idle": "خامل"
+      },
+      "account": {
+        "title": "الحساب المرتبط",
+        "email": "الحساب",
+        "calendar": "التقويم للحجوزات وMeet",
+        "primaryCalendar": "تقويمك الرئيسي",
+        "changeCalendar": "تغيير التقويم",
+        "connectedAgo": "رُبط {when}",
+        "none": "لا يوجد حساب Google مرتبط.",
+        "noneBody": "إلى أن تقوم بالربط، ستفشل خطوات Google في تدفقاتك برسالة تطلب ربط Google، ولن تتم إضافة الحجوزات إلى أي تقويم."
+      },
+      "permissions": {
+        "title": "ما الذي يمكن استخدام Google من أجله",
+        "intro": "حدّد ما تريد السماح به. تعرض Google هذه الأذونات بالضبط على شاشتها، ويمكنك إضافة المزيد لاحقًا دون فقدان ما سُمح به سابقًا.",
+        "allowed": "مسموح",
+        "notAllowed": "غير مسموح",
+        "allow": "السماح",
+        "restricted": "مقيّد من Google",
+        "restrictedNote": "تعامل Google هذا الإذن على أنه مقيّد: تحتاج المنصة إلى مراجعة Google ليعمل مع كثير من مساحات العمل. أبقِه متوقفًا ما لم تكن بحاجة إليه.",
+        "nothingTicked": "حدّد إذنًا واحدًا على الأقل.",
+        "calendar": {
+          "name": "Calendar",
+          "body": "أضف الحجوزات وروابط Meet إلى تقويمك وأخفِ الأوقات المشغولة عن صفحة الحجز.",
+          "usedBy": "تقويم الحجز وخطوتا حجز موعد وGoogle Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "body": "أضف صفًا إلى جدول، أو ابحث عن صف، أو افحص خلية، أو انسخ صفًا إلى جهة اتصال.",
+          "usedBy": "Google Sheets وفحص حقل Google Sheet وحفظ جهة اتصال من Google Sheet"
+        },
+        "docs": {
+          "name": "Docs وDrive",
+          "body": "انسخ مستند قالب واملأه وشارك النسخة برابط.",
+          "usedBy": "خطوة Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "body": "اقرأ الرابط العام لنموذج ليتمكن التدفق من إرساله إلى العميل.",
+          "usedBy": "خطوة Google Form"
+        },
+        "drive_listing": {
+          "name": "قائمة ملفات Drive",
+          "body": "اعرض جداولك ومستنداتك ونماذجك بأسمائها في منشئ التدفقات لتختار بدل لصق رابط.",
+          "usedBy": "منتقيات الملفات في منشئ التدفقات"
+        }
+      },
+      "lastError": {
+        "title": "آخر مشكلة أبلغت عنها Google",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "لم تعد Google تقبل الحساب المرتبط. اربط مرة أخرى.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "عميل Google الخاص بالمنصة مفقود أو متوقف.",
+        "GOOGLE_API_NOT_ENABLED": "لم يفعّل مشروع Google Cloud الخاص بالمنصة واجهة API تحتاجها هذه الميزة. يجب على مسؤول المنصة تفعيلها.",
+        "GOOGLE_SCOPE_MISSING": "احتاجت خطوة إلى إذن لم يُمنح لهذا الحساب. أضفه أعلاه.",
+        "GOOGLE_RATE_LIMITED": "تحدّ Google الطلبات حاليًا. تُعاد محاولة الخطوات بعد قليل.",
+        "GOOGLE_UNAVAILABLE": "لم تستجب Google. تُعاد المحاولة عند الاستخدام التالي.",
+        "other": "أبلغت Google عن مشكلة."
+      },
+      "usedBy": {
+        "title": "يستخدمه",
+        "book": "خطوة حجز موعد",
+        "meet": "خطوة Google Meet",
+        "sheets": "خطوات Google Sheets",
+        "docs": "خطوة Google Docs",
+        "forms": "خطوة Google Form",
+        "flow": "تدفق"
+      },
+      "disconnectConfirm": {
+        "title": "فصل Google؟",
+        "body": "تتوقف مزامنة التقويم للحجوزات وكل خطوات Google في تدفقاتك إلى أن تربط مرة أخرى. تبقى الأحداث والملفات التي أُنشئت سابقًا في Google.",
+        "confirm": "فصل",
+        "cancel": "إبقاء الربط"
+      },
+      "disconnected": "تم فصل حساب Google.",
+      "failure": {
+        "notConfigured": "Google غير مُعدّ لهذه المنصة. اطلب من مسؤول المنصة.",
+        "generic": "حدث خطأ ما. حاول مرة أخرى."
+      },
+      "privacy": {
+        "title": "الخصوصية",
+        "body": "تُطلب فقط الأذونات التي تحددها. يُخزَّن الاتصال مشفّرًا ويخص مساحة العمل ولا تستخدمه إلا الميزات المذكورة هنا. الفصل يسحبه لدى Google."
+      }
+    },
+    "consent": {
+      "title": "تأكيد ربط Google",
+      "loading": "جارٍ تحميل ربط Google الخاص بك...",
+      "question": "هل تريد ربط {email} بـ {workspace} للحصول على {permissions}؟",
+      "permissions": "الأذونات",
+      "notGiven": "غير ممنوح",
+      "missing": "لم يمنح Google: {permissions}. إذا أكدت، فسيتم ربط ما تم منحه فقط.",
+      "replaces": "سيحل هذا محل حساب Google {email} المتصل حاليًا. وسيتم سحب صلاحية وصول الحساب القديم.",
+      "onlyYou": "لا يمكن إتمام هذه العملية إلا من الشخص الذي ضغط على ربط، ومن مساحة العمل هذه. إذا أرسل لك أحد هذا الرابط فلا تؤكده، وأغلق الصفحة.",
+      "unknownAccount": "حساب Google هذا",
+      "confirm": "تأكيد",
+      "cancel": "إلغاء",
+      "working": "جارٍ المعالجة...",
+      "failure": {
+        "notYours": "بدأ شخص آخر هذا الربط مع Google، لذلك لم يتم الربط. اطلب منه أن يقوم بالربط بنفسه.",
+        "expired": "استغرق تأكيد ربط Google هذا وقتًا طويلًا. عد إلى الصفحة السابقة واضغط على ربط مرة أخرى.",
+        "used": "تم تأكيد ربط Google هذا أو إلغاؤه أو رفضه بالفعل. عد إلى الصفحة السابقة واضغط على ربط مرة أخرى إذا كنت لا تزال بحاجة إليه.",
+        "notFound": "ربط Google هذا ليس بانتظار التأكيد، أو أنه يخص مساحة عمل أخرى.",
+        "generic": "حدث خطأ ما ولم يتم تغيير أي شيء. حاول مرة أخرى.",
+        "nothingConnected": "لم يتم ربط أي حساب."
+      }
+    }
+  }
+}

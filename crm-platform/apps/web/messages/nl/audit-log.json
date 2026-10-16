@@ -92,7 +92,8 @@
       "api_keys": "API-sleutels",
       "audit-log": "Auditlogboek",
       "audit-log-exports": "Exports van het auditlogboek",
-      "contact_consent_exports": "Exports van toestemmingsbewijzen"
+      "contact_consent_exports": "Exports van toestemmingsbewijzen",
+      "revenue-report-exports": "Omzetrapportbestanden"
     },
     "table": {
       "caption": "Audititems, nieuwste eerst. Tijden worden getoond in jouw tijdzone ({zone}).",

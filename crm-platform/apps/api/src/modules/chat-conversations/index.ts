@@ -19,6 +19,7 @@ export {
   type DispatchResult,
   type QueueCheckOptions,
 } from './channel-dispatcher.service';
+export { SendHeldError } from './send-held.error';
 export { ChannelAdapterRegistry } from './channel-adapter.registry';
 export { ChannelRegistryService } from './channel-registry.service';
 export { ChannelIngestPublisher } from './channel-ingest.publisher';

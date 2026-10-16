@@ -255,6 +255,29 @@ export class CallsRepository {
     return num(rowsOf(res)[0]?.id);
   }
 
+  /**
+   * Did this person reach us in the last `hours` hours: a message on the conversation, or a call they placed? A call back to someone who
+   * asked for one is service, not marketing, and the calling window does not apply to it (BL-177).
+   */
+  async contactedUsRecently(
+    tx: Tx,
+    orgId: number,
+    q: { conversationId: number | null; phone: string; hours: number },
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT (
+        EXISTS (
+          SELECT 1 FROM conversations
+          WHERE org_id = ${orgId} AND id = ${q.conversationId} AND last_inbound_at > now() - make_interval(hours => ${q.hours})
+        ) OR EXISTS (
+          SELECT 1 FROM wa_calls
+          WHERE org_id = ${orgId} AND direction = 'USER_INITIATED' AND from_phone = ${q.phone}
+            AND started_at > now() - make_interval(hours => ${q.hours})
+        )
+      ) AS yes`);
+    return (rowsOf(res)[0]?.yes as boolean | undefined) === true;
+  }
+
   // --- permission ledger -----------------------------------------------------------------------------------------------------
 
   async permission(

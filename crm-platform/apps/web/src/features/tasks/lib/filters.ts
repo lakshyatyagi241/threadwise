@@ -17,9 +17,10 @@ export interface TaskFilters {
   priority: TaskPriority | '';
   /** A member id, `none` for unassigned, or empty for everyone. */
   assignee: string;
-  /** Linked contact / deal (a uuid) or empty. */
+  /** Linked contact / deal / company (a uuid) or empty. */
   contact: string;
   deal: string;
+  company: string;
   view: TasksView;
   /** The task whose drawer is open (`?task=`). */
   task: string;
@@ -33,6 +34,7 @@ export const DEFAULT_FILTERS: TaskFilters = {
   assignee: '',
   contact: '',
   deal: '',
+  company: '',
   view: 'list',
   task: '',
 };
@@ -62,6 +64,7 @@ export function parseFilters(search: SearchLike): TaskFilters {
     assignee: assignee === 'none' || UUID.test(assignee) ? assignee : '',
     contact: id(search.get('contact')),
     deal: id(search.get('deal')),
+    company: id(search.get('company')),
     view: search.get('view') === 'board' ? 'board' : 'list',
     task: id(search.get('task')),
   };
@@ -77,6 +80,7 @@ export function filtersToSearch(f: TaskFilters): string {
   if (f.assignee) p.set('assignee', f.assignee);
   if (f.contact) p.set('contact', f.contact);
   if (f.deal) p.set('deal', f.deal);
+  if (f.company) p.set('company', f.company);
   if (f.view === 'board') p.set('view', 'board');
   if (f.task) p.set('task', f.task);
   const s = p.toString();
@@ -85,7 +89,7 @@ export function filtersToSearch(f: TaskFilters): string {
 
 /** Anything the toolbar narrowed (the tab and the view do not count). */
 export function hasActiveFilter(
-  f: Pick<TaskFilters, 'q' | 'priority' | 'assignee' | 'contact' | 'deal'> & {
+  f: Pick<TaskFilters, 'q' | 'priority' | 'assignee' | 'contact' | 'deal' | 'company'> & {
     status?: StatusFilter;
     tab?: TaskTab;
   },
@@ -96,6 +100,7 @@ export function hasActiveFilter(
     f.assignee !== '' ||
     f.contact !== '' ||
     f.deal !== '' ||
+    f.company !== '' ||
     (f.tab === 'all' && f.status !== undefined && f.status !== 'open')
   );
 }
@@ -111,6 +116,7 @@ export function sharedQuery(f: TaskFilters): QueryValues {
     unassigned: f.assignee === 'none' ? true : undefined,
     contactId: f.contact || undefined,
     dealId: f.deal || undefined,
+    companyId: f.company || undefined,
   };
 }
 

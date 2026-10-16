@@ -73,7 +73,9 @@
       "edit": "Edit template",
       "viewTitle": "View details & Meta review status",
       "delete": "Delete",
-      "deleteNamed": "Delete {name}"
+      "deleteNamed": "Delete {name}",
+      "curl": "cURL: send this template with the API",
+      "curlNamed": "cURL to send {name}"
     },
     "library": {
       "title": "Template library",
@@ -346,6 +348,11 @@
         "saved": "Saved as a draft.",
         "warnings": "Worth a look before Meta reviews it:",
         "open": "Open the template"
+      },
+      "ai": {
+        "open": "Build with AI",
+        "applied": "Template draft filled from AI. Review it before you submit.",
+        "authHint": "Authentication templates have a fixed text, so there is nothing to draft."
       }
     },
     "detail": {
@@ -426,7 +433,146 @@
         "PROMOTIONAL": "Marketing language not allowed in this category.",
         "TAG_CONTENT_MISMATCH": "Category does not match the content (e.g. promotional copy in a UTILITY template).",
         "SCAM": "Meta flagged the template as a potential scam. Review claims and language."
+      },
+      "curl": {
+        "title": "Send with the API (cURL)",
+        "intro": "Send this approved template to one number. Replace the sample values with your own.",
+        "copy": "Copy",
+        "copied": "Copied",
+        "copyFailed": "Could not copy. Select the text and copy it by hand.",
+        "keyHint": "Replace YOUR_API_KEY with your API key.",
+        "keyLink": "Get an API key",
+        "loading": "Checking your API keys…",
+        "noKey": "This workspace has no API key yet. Create an API key first, then use this cURL.",
+        "keysUnknown": "Could not check your API keys. Open the Developers page to create or review a key, then use this cURL.",
+        "createKey": "Create an API key"
       }
+    },
+    "ai": {
+      "eyebrow": "Templates / AI",
+      "title": "Build with",
+      "titleAccent": "AI",
+      "close": "Close",
+      "cancel": "Cancel",
+      "generate": "Generate template",
+      "intro": "Draft a WhatsApp template from a short brief: name, header, body, footer and buttons. Nothing is submitted until you do it yourself.",
+      "model": "AI model",
+      "modelsError": "Could not load the models.",
+      "noModels": "No AI provider is enabled for this workspace. Ask an admin to enable one.",
+      "loadingModels": "Loading models…",
+      "pickModel": "Select a model",
+      "yourKey": "your key",
+      "business": "Business name",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Industry",
+      "pickIndustry": "Select industry",
+      "occasion": "Occasion",
+      "pickOccasion": "Select occasion",
+      "purpose": "Purpose",
+      "pickPurpose": "Select purpose",
+      "action": "Primary action",
+      "pickAction": "Select primary action",
+      "tone": "Tone",
+      "pickTone": "Select tone",
+      "language": "Language",
+      "languageHint": "The draft is written in the language of the form.",
+      "notes": "Custom prompt",
+      "notesNote": "optional / max 2000",
+      "notesPlaceholder": "Anything specific you want included: variables, links, must-have phrasing, what to avoid…",
+      "industries": {
+        "retail": "Retail / E-commerce",
+        "food": "Food & Beverage",
+        "healthcare": "Healthcare",
+        "education": "Education",
+        "travel": "Travel & Hospitality",
+        "finance": "Finance & Banking",
+        "realEstate": "Real Estate",
+        "beauty": "Beauty & Wellness",
+        "logistics": "Logistics & Delivery",
+        "services": "Professional Services",
+        "nonprofit": "Non-profit",
+        "other": "Other"
+      },
+      "occasions": {
+        "launch": "Product launch",
+        "sale": "Sale / discount",
+        "orderConfirmation": "Order confirmation",
+        "shipping": "Shipping update",
+        "appointment": "Appointment reminder",
+        "welcome": "Welcome / onboarding",
+        "feedback": "Feedback request",
+        "abandonedCart": "Abandoned cart",
+        "reengage": "Re-engagement",
+        "event": "Event invitation",
+        "festival": "Festival greeting",
+        "other": "Other"
+      },
+      "purposes": {
+        "inform": "Inform",
+        "promote": "Promote",
+        "confirm": "Confirm",
+        "remind": "Remind",
+        "collectFeedback": "Collect feedback",
+        "reengage": "Re-engage",
+        "purchase": "Drive a purchase",
+        "booking": "Drive a booking"
+      },
+      "actions": {
+        "website": "Visit website",
+        "call": "Call us",
+        "book": "Book an appointment",
+        "order": "Place an order",
+        "catalog": "View catalog",
+        "code": "Reply with a code",
+        "other": "Other"
+      },
+      "tones": {
+        "friendly": "Friendly",
+        "professional": "Professional",
+        "concise": "Concise",
+        "empathetic": "Empathetic",
+        "excited": "Excited",
+        "formal": "Formal"
+      },
+      "errors": {
+        "businessRequired": "Business name is required.",
+        "noKey": "No AI provider is enabled for this workspace. Ask an admin to add a key.",
+        "limitReached": "This workspace has used its AI allowance for the month.",
+        "providerFailed": "The AI provider did not answer. Try again in a moment.",
+        "badJson": "The model's answer was not a usable template. Try again or refine the brief.",
+        "invalid": "Check the brief: the business name is required and some fields are too long.",
+        "forbidden": "You do not have permission to create templates.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "failed": "Could not generate the template. Try again."
+      }
+    },
+    "gallery": {
+      "title": "Template gallery",
+      "intro": "Ready-made WhatsApp templates by use. Pick one and it opens as a new template you can change before you save it.",
+      "search": "Search the gallery",
+      "categoryFilter": "Gallery categories",
+      "all": "All",
+      "loading": "Loading the gallery",
+      "loadError": "The gallery could not be loaded.",
+      "retry": "Try again",
+      "empty": "No template matches",
+      "emptyHint": "Try another word or choose another category.",
+      "use": "Use this template",
+      "useNamed": "Use the template {name}",
+      "count": "{count, plural, one {# template} other {# templates}}",
+      "categories": {
+        "ecommerce": "Ecommerce",
+        "food_delivery": "Food delivery",
+        "festival_season": "Festival season",
+        "education": "Education",
+        "travel": "Travel",
+        "others": "Others"
+      }
+    },
+    "home": {
+      "label": "Template views",
+      "saved": "Saved templates",
+      "gallery": "Template gallery"
     }
   }
 }

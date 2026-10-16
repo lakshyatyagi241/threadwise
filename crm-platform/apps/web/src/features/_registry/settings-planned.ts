@@ -24,9 +24,6 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   tile('channels', 'channels', '/channels', 'channels', 0),
   tile('channels', 'tiktok', '/channels/tiktok', 'tiktok', 50),
 
-  // Data and customization
-  tile('data', 'tags', '/tags', 'tag', 40),
-
   // Automation and AI
   tile('automation', 'auto-reply', '/auto-reply', 'reply', 20),
 

@@ -6,7 +6,18 @@ area: store
 order: 40
 documents: [nav:store-coupons]
 routes: [/store/coupons]
-keywords: [coupon, discount code, promo code, percent off, flat discount, free shipping, usage limit, expiry, checkout]
+keywords:
+  [
+    coupon,
+    discount code,
+    promo code,
+    percent off,
+    flat discount,
+    free shipping,
+    usage limit,
+    expiry,
+    checkout,
+  ]
 ---
 
 ## What it is for

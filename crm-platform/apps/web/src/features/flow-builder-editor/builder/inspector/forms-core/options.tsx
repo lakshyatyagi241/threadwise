@@ -1,6 +1,8 @@
 'use client';
 
 import { ButtonIcon } from '../../button-icon';
+import { ButtonActionPicker } from '../../button-action-picker';
+import { buttonActionOf, buttonActionPatch } from '../../../lib/button-actions';
 import {
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
@@ -43,7 +45,15 @@ function setStringOption(options: unknown, i: number, value: string): string[] {
   return asArray(options).map((v, j) => (j === i ? value : String(v ?? '')));
 }
 
-export function ButtonsForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+export function ButtonsForm({
+  node,
+  data: d,
+  set,
+  setMany,
+  env,
+  addOption,
+  removeOption,
+}: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   return (
     <>
@@ -58,13 +68,7 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
               index={i}
               value={o}
               onChange={(v) => set('options', setStringOption(d.options, i, v))}
-              onRemove={() => {
-                set(
-                  'optionIcons',
-                  asArray(d.optionIcons).filter((_, j) => j !== i),
-                );
-                removeOption(i);
-              }}
+              onRemove={() => removeOption(i)}
             />
             <div className="-mt-1 mb-2 ps-6">
               <ButtonIcon
@@ -77,6 +81,15 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
                     ),
                   )
                 }
+              />
+            </div>
+            <div className="mb-3 ps-6">
+              <ButtonActionPicker
+                value={buttonActionOf(d, i)}
+                ctx={env.ctx}
+                loading={env.loading}
+                flowId={env.flowId}
+                onChange={(next) => setMany(buttonActionPatch(d, i, next))}
               />
             </div>
           </div>

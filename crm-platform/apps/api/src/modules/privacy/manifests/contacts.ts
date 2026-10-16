@@ -159,7 +159,8 @@ export const contactsGroupsTags = defineHolder({
 export const consentLedger = defineHolder({
   key: 'consent.ledger',
   module: 'contact-consent',
-  description: 'Consent events (append-only proof) and the derived state per channel and purpose.',
+  description:
+    'Consent events (append-only proof) and the derived state per channel and purpose, and the contact privacy flags (minor, guardian consent, Do Not Sell or Share) with their events.',
   subjects: ['contact'],
   tables: [
     {
@@ -181,6 +182,29 @@ export const consentLedger = defineHolder({
       parent: 'contacts',
       tier: 'core',
       categories: ['behaviour'],
+      pii: [],
+      retention: 'With the contact.',
+    },
+    {
+      table: 'contact_privacy_events',
+      link: CONTACT,
+      disposition: 'fk_null',
+      parent: 'contacts',
+      reason:
+        'Append-only proof of a privacy flag change (minor, guardian consent, Do Not Sell or Share). The foreign key unlinks it from the contact when the contact is deleted; evidence holds ids and references, never an address, IP or message text.',
+      tier: 'core',
+      categories: ['behaviour', 'special_risk'],
+      pii: ['note'],
+      retention:
+        'Kept as proof of the opt-out or the guardian consent, without a link to a person.',
+    },
+    {
+      table: 'contact_privacy_flags',
+      link: CONTACT,
+      disposition: 'cascade',
+      parent: 'contacts',
+      tier: 'core',
+      categories: ['special_risk'],
       pii: [],
       retention: 'With the contact.',
     },

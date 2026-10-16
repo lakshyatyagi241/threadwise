@@ -41,7 +41,10 @@
       "notStarted": "Można to zrobić dopiero po rozpoczęciu rezerwacji.",
       "alreadyStarted": "Ta rezerwacja już się rozpoczęła, więc nie można jej już zmienić.",
       "bookingOff": "Rezerwacja tej usługi jest teraz niedostępna.",
-      "notDeletable": "Nie można tego usunąć, gdy ma nadchodzące rezerwacje."
+      "notDeletable": "Nie można tego usunąć, gdy ma nadchodzące rezerwacje.",
+      "notDrifted": "Ta rezerwacja jest już zgodna z wydarzeniem w Google. Dane zostały odświeżone.",
+      "calendarNotConnected": "Google Calendar nie jest połączony. Połącz go ponownie na stronie konta Google i spróbuj jeszcze raz.",
+      "calendarFailed": "Google nie odpowiedział lub odrzucił zmianę. Spróbuj ponownie za chwilę."
     },
     "picker": {
       "timeZone": "Strefa czasowa",
@@ -156,7 +159,8 @@
       "yesterday": "Wczoraj",
       "rowLabel": "Otwórz rezerwację: {title}",
       "noName": "Brak nazwy",
-      "needsReview": "Wymaga przeglądu"
+      "needsReview": "Wymaga przeglądu",
+      "outOfSync": "Kalendarz niezsynchronizowany"
     },
     "row": {
       "moreFor": "Więcej akcji dla: {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Rezerwacja przeniesiona na nowy termin.",
       "linkCopied": "Link zarządzania skopiowany.",
       "copyFailed": "Nie udało się skopiować linku.",
-      "declined": "Prośba odrzucona."
+      "declined": "Prośba odrzucona.",
+      "calendarPushed": "Wysłano do Google: wydarzenie jest teraz zgodne z tą rezerwacją.",
+      "calendarAccepted": {
+        "cancelled": "Zmiana z Google zaakceptowana: rezerwacja została anulowana.",
+        "rescheduled": "Zmiana z Google zaakceptowana: rezerwacja została przeniesiona na nowy termin.",
+        "acknowledged": "Zmiana z Google zaakceptowana. Rezerwacja pozostaje bez zmian."
+      }
     },
     "typesList": {
       "breadcrumb": "Ścieżka nawigacji",
@@ -962,7 +972,7 @@
         "calendarSaved": "Kalendarz zapisany.",
         "confirmOff": {
           "title": "Rozłączyć Kalendarz Google?",
-          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza, a jego zajęte terminy nie będą już odczytywane. Wydarzenia już w kalendarzu pozostaną, a Google zostanie poproszone o wycofanie tego dostępu.",
+          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza, a jego zajęte terminy nie będą już odczytywane. Kroki Google w Twoich przepływach też przestaną działać, ponieważ korzystają z tego samego połączenia. Wydarzenia już w kalendarzu pozostaną, a Google zostanie poproszone o wycofanie tego dostępu.",
           "confirm": "Rozłącz",
           "cancel": "Zachowaj"
         },
@@ -972,7 +982,8 @@
           "failed": "Łączenie nie zostało ukończone. Spróbuj ponownie; jeśli nadal się nie udaje, poproś administratora platformy o sprawdzenie konfiguracji Google.",
           "expired": "Ta próba trwała zbyt długo. Naciśnij Połącz, aby zacząć od nowa.",
           "not_configured": "Kalendarz Google nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o dodanie klienta Google OAuth.",
-          "missing_scope": "Google nie przyznało wszystkich wymaganych uprawnień do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola."
+          "missing_scope": "Google nie przyznało wszystkich wymaganych uprawnień do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola.",
+          "cancelled": "Anulowano. Nic nie zostało połączone."
         },
         "whatTitle": "Co to robi",
         "what": {
@@ -1046,7 +1057,200 @@
         "badHours": "Popraw zaznaczone godziny w godzinach pracy."
       },
       "notAvailable": "Ustawienia rezerwacji dla całej przestrzeni roboczej nie są dostępne na tym serwerze. Zamiast tego każdy typ rezerwacji ma własne godziny, strefę czasową, przypomnienia i wiadomości.",
-      "openTypes": "Otwórz typy rezerwacji"
+      "openTypes": "Otwórz typy rezerwacji",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Połącz kalendarz Microsoft, aby potwierdzone rezerwacje były do niego zapisywane, a jego zajęte terminy blokowały wolne terminy.",
+        "provider": "Kalendarz Outlook",
+        "providerSub": "Microsoft 365 i Outlook.com",
+        "status": {
+          "unavailable": "Niedostępne",
+          "disconnected": "Niepołączone",
+          "connected": "Połączone",
+          "needs_reconnect": "Wymaga ponownego połączenia"
+        },
+        "loading": "Sprawdzanie połączenia",
+        "unavailableTitle": "Outlook nie jest jeszcze skonfigurowany dla tej platformy",
+        "unavailableBody": "Administrator platformy musi zarejestrować aplikację Microsoft (Admin, Ustawienia, Microsoft Calendar), zanim obszar roboczy będzie mógł się połączyć. Twoje rezerwacje nie są przez to dotknięte.",
+        "disconnectedBody": "Niepołączone. Po kliknięciu Połącz otworzy się Microsoft, gdzie wybierzesz konto i zgodzisz się na udostępnienie dostępu do kalendarza.",
+        "disconnectedReadOnly": "Niepołączone. Poproś administratora obszaru roboczego o połączenie.",
+        "reconnectTitle": "Microsoft przestał akceptować połączenie",
+        "reconnectBody": "Dostęp został wycofany lub wygasł, więc rezerwacje nie są zapisywane w Twoim kalendarzu, a jego zajęte terminy nie są odczytywane. Połącz ponownie, aby wznowić.",
+        "reconnectBodyAccount": "Dostęp dla konta {account} został wycofany lub wygasł, więc rezerwacje nie są zapisywane w Twoim kalendarzu, a jego zajęte terminy nie są odczytywane. Połącz ponownie, aby wznowić.",
+        "account": "Konto Microsoft",
+        "calendar": "Kalendarz",
+        "primaryCalendar": "Twój główny kalendarz",
+        "connectedAgo": "Połączono {when}",
+        "writesHere": "Potwierdzone rezerwacje są zapisywane w tym kalendarzu.",
+        "readsOnly": "Odczytywane są tylko jego zajęte terminy. Rezerwacje są zapisywane w Twoim drugim kalendarzu.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft ogranicza liczbę żądań. Rezerwacje będą ponawiane automatycznie.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft odmówił dostępu do tego kalendarza. Sprawdź, czy konto ma skrzynkę pocztową i może udostępniać swój kalendarz.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft nie odpowiedział. Ponowna próba nastąpi automatycznie."
+        },
+        "errors": {
+          "notConfigured": "Outlook nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o zarejestrowanie aplikacji Microsoft.",
+          "notConnected": "Żaden kalendarz Outlook nie jest połączony. Odśwież stronę i połącz ponownie.",
+          "providerFailed": "Microsoft nie odpowiedział. Spróbuj ponownie za chwilę.",
+          "notYours": "To połączenie zostało rozpoczęte przez kogoś innego, więc nic nie zostało połączone. Poproś tę osobę o połączenie lub kliknij Połącz samodzielnie.",
+          "invalidTicket": "Tego połączenia nie można już potwierdzić. Kliknij Połącz, aby zacząć od nowa."
+        },
+        "loadingCalendars": "Wczytywanie Twoich kalendarzy",
+        "chooseLabel": "Zapisuj rezerwacje w",
+        "chooseHint": "Na liście są tylko kalendarze, które to konto może edytować. Zapisane już wydarzenia pozostają tam, gdzie są.",
+        "choosePlaceholder": "Wybierz kalendarz",
+        "chooseOptionPrimary": "{name} (kalendarz główny)",
+        "chooseSave": "Użyj tego kalendarza",
+        "chooseCancel": "Anuluj",
+        "saving": "Zapisywanie",
+        "connect": "Połącz Outlook",
+        "reconnect": "Połącz ponownie Outlook",
+        "redirecting": "Otwieranie Microsoft",
+        "choose": "Wybierz kalendarz",
+        "disconnect": "Rozłącz",
+        "disconnected": "Outlook został rozłączony.",
+        "calendarSaved": "Kalendarz został zapisany.",
+        "confirm": {
+          "title": "Połączyć to konto Microsoft?",
+          "body": "Microsoft przekierował Cię z powrotem, aby dokończyć łączenie konta z obszarem roboczym {workspace}. Kontynuuj tylko wtedy, gdy sam(a) rozpocząłeś(-ęłaś) to przed chwilą.",
+          "confirm": "Połącz",
+          "working": "Łączenie",
+          "cancel": "Anuluj"
+        },
+        "confirmOff": {
+          "title": "Rozłączyć Outlook?",
+          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza Outlook, a jego zajęte terminy nie będą już odczytywane. Wydarzenia, które już są w Twoim kalendarzu, pozostaną w nim. Aby wycofać uprawnienie po stronie Microsoft, usuń aplikację na swoim koncie Microsoft.",
+          "confirm": "Rozłącz",
+          "cancel": "Zostaw"
+        },
+        "outcome": {
+          "connected": "Outlook został połączony. Potwierdzone rezerwacje trafiają teraz do Twojego kalendarza.",
+          "denied": "Dostęp nie został przyznany w Microsoft, więc nic nie zostało połączone.",
+          "failed": "Łączenie nie zostało dokończone. Spróbuj ponownie; jeśli problem się powtarza, poproś administratora platformy o sprawdzenie aplikacji Microsoft.",
+          "expired": "Ta próba trwała zbyt długo. Kliknij Połącz, aby zacząć od nowa.",
+          "not_configured": "Outlook nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o zarejestrowanie aplikacji Microsoft.",
+          "missing_scope": "Microsoft nie przyznał wymaganego uprawnienia do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola.",
+          "cancelled": "Anulowano. Nic nie zostało połączone."
+        },
+        "whatTitle": "Co to robi",
+        "what": {
+          "freeBusy": "Odczytuje zajęte terminy z Twojego kalendarza, aby nie proponować terminów już zarezerwowanych lub zablokowanych.",
+          "writeBack": "Zapisuje potwierdzone rezerwacje w Twoim kalendarzu jako wydarzenia i zaprasza klienta.",
+          "teams": "Dodaje link do spotkania Teams do usług online (konta służbowe i szkolne)."
+        },
+        "hint": "Rezerwacje działają także bez tego. Jeśli połączono również Google, zajęte terminy są odczytywane z obu kalendarzy, a każda rezerwacja jest zapisywana w jednym z nich."
+      },
+      "writeTarget": {
+        "title": "Gdzie zapisywane są rezerwacje",
+        "description": "Zajęte terminy są odczytywane z każdego połączonego kalendarza. Każda rezerwacja jest zapisywana w jednym z nich.",
+        "label": "Zapisuj rezerwacje w",
+        "hint": "Tryb automatyczny używa Google Calendar, gdy działa, a w przeciwnym razie Outlook. Zmiana przenosi wydarzenia nadchodzących rezerwacji do wybranego kalendarza.",
+        "auto": "Automatycznie",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "niepołączone",
+        "saved": "Zapisano.",
+        "backfill": {
+          "body": "W kalendarzu, do którego trafiają rezerwacje, nie ma jeszcze {count, plural, one {# potwierdzonej rezerwacji} few {# potwierdzonych rezerwacji} many {# potwierdzonych rezerwacji} other {# potwierdzonej rezerwacji}} z najbliższych 90 dni. Zostaną zapisane automatycznie po połączeniu lub zmianie kalendarza.",
+          "action": "Zapisz je teraz",
+          "working": "Dodawanie do kolejki",
+          "queued": "Zapisywanie ich w Twoim kalendarzu w tle.",
+          "notConnected": "Żaden kalendarz nie jest połączony, więc nie ma gdzie ich zapisać."
+        }
+      },
+      "feeds": {
+        "title": "Inne kalendarze (iCal)",
+        "description": "Subskrybuj kalendarz przez jego adres iCal, aby jego zajęte terminy blokowały wolne terminy. Używane są wyłącznie informacje o tym, kiedy jesteś zajęty: nic więcej z niego nie jest wyświetlane ani przechowywane.",
+        "loading": "Wczytywanie Twoich kalendarzy",
+        "empty": "Nie subskrybujesz jeszcze żadnych kalendarzy.",
+        "status": {
+          "pending": "Jeszcze nie odczytano",
+          "ok": "Działa",
+          "error": "Problem"
+        },
+        "paused": "Wstrzymano",
+        "neverRead": "Jeszcze nie odczytano.",
+        "lastRead": "Odczytano {when}.",
+        "busyCount": "{count, plural, one {# zajęty blok} few {# zajęte bloki} many {# zajętych bloków} other {# zajętego bloku}} w ciągu najbliższych 180 dni",
+        "allDayLabel": "Wydarzenia całodniowe blokują cały dzień",
+        "pause": "Wstrzymaj",
+        "resume": "Wznów",
+        "refresh": "Odczytaj teraz",
+        "reading": "Odczytywanie",
+        "remove": "Anuluj subskrypcję",
+        "removed": "Subskrypcja kalendarza została anulowana.",
+        "added": "Kalendarz został zasubskrybowany.",
+        "addTitle": "Subskrybuj kalendarz",
+        "nameLabel": "Nazwa",
+        "namePlaceholder": "Grafik zespołu",
+        "urlLabel": "Adres kalendarza",
+        "urlHint": "Adres, który zaczyna się od https:// lub webcal:// i kończy na .ics. Jest sprawdzany od razu, a następnie przechowywany w postaci zaszyfrowanej i nigdy więcej nie wyświetlany.",
+        "add": "Subskrybuj",
+        "adding": "Odczytywanie kalendarza",
+        "hint": "Nie subskrybuj kalendarza, do którego zapisywane są Twoje rezerwacje: usługa wielostanowiskowa zobaczyłaby własne wydarzenia jako zajęte. Kanał jest odczytywany mniej więcej co 15 minut, więc zmiana w nim może być widoczna dopiero po tym czasie.",
+        "confirmRemove": {
+          "title": "Anulować subskrypcję tego kalendarza?",
+          "message": "Terminy zablokowane przez {name} od razu znów będą wolne. Sam kalendarz nie zostanie zmieniony.",
+          "confirm": "Anuluj subskrypcję",
+          "cancel": "Zostaw"
+        },
+        "errors": {
+          "invalid": "Wpisz adres zaczynający się od https://, http:// lub webcal://, bez nazwy użytkownika i hasła.",
+          "duplicate": "Ten obszar roboczy już subskrybuje ten kalendarz.",
+          "limit": "Obszar roboczy może subskrybować 10 kalendarzy. Najpierw anuluj subskrypcję jednego z nich."
+        },
+        "reason": {
+          "unreachable": "Nie udało się połączyć z tym adresem. Sprawdź, czy jest poprawny i publiczny.",
+          "timeout": "Kalendarz odpowiadał zbyt długo.",
+          "not_found": "Pod tym adresem nic nie znaleziono. Mógł zostać wycofany z publikacji.",
+          "forbidden": "Kalendarz odmówił dostępu. Upewnij się, że jest opublikowany dla każdego, kto ma link.",
+          "server_error": "Serwer kalendarza zgłosił problem. Ponowna próba nastąpi automatycznie.",
+          "redirect_loop": "Adres przekierowuje nas w kółko.",
+          "not_a_calendar": "Ten adres nie jest kalendarzem iCal. Powinien kończyć się na .ics.",
+          "too_large": "Ten kalendarz jest zbyt duży, aby go odczytać.",
+          "blocked_address": "Ten adres wskazuje na sieć prywatną, co jest niedozwolone.",
+          "unknown": "Nie udało się odczytać tego adresu jako kalendarza."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# wydarzenie używa nieznanej nam strefy czasowej i zostało odczytane w strefie czasowej Twojego obszaru roboczego.} few {# wydarzenia używają nieznanej nam strefy czasowej i zostały odczytane w strefie czasowej Twojego obszaru roboczego.} many {# wydarzeń używa nieznanej nam strefy czasowej i zostało odczytanych w strefie czasowej Twojego obszaru roboczego.} other {# wydarzenia używają nieznanej nam strefy czasowej i zostały odczytane w strefie czasowej Twojego obszaru roboczego.}}",
+          "unsupportedRule": "{count, plural, one {# wydarzenie cykliczne używa} few {# wydarzenia cykliczne używają} many {# wydarzeń cyklicznych używa} other {# wydarzenia cyklicznego używa}} reguły, której nie obsługujemy: czas blokuje tylko pierwsze wystąpienie.",
+          "truncated": "Ten kalendarz ma więcej zajętych bloków, niż przechowujemy, więc część z nich brakuje."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Moje rezerwacje w mojej aplikacji kalendarza",
+        "description": "Zasubskrybuj swoje rezerwacje w Apple Calendar, Outlook lub Google Calendar.",
+        "loading": "Wczytywanie Twojego linku",
+        "none": "Nie masz jeszcze linku.",
+        "make": "Utwórz mój link",
+        "making": "Tworzenie",
+        "made": "Twój link jest gotowy.",
+        "linkLabel": "Twój link",
+        "copy": "Kopiuj link",
+        "copied": "Link skopiowany.",
+        "copyFailed": "Nie udało się skopiować automatycznie. Zaznacz link i skopiuj go ręcznie.",
+        "open": "Otwórz w mojej aplikacji kalendarza",
+        "rotate": "Utwórz nowy link",
+        "stop": "Przestań udostępniać",
+        "stopped": "Twój link już nie działa.",
+        "lastUsed": "Aplikacja kalendarza ostatnio odczytała go {when}.",
+        "neverUsed": "Żadna aplikacja kalendarza jeszcze go nie odczytała.",
+        "warning": "Każdy, kto ma ten link, widzi tytuły, terminy i miejsca Twoich rezerwacji. Zachowaj go w tajemnicy. Nigdy nie pokazuje numerów telefonów, adresów e-mail ani notatek.",
+        "hint": "Widzisz to, co możesz zobaczyć na liście rezerwacji. Twoja aplikacja kalendarza odświeża kanał we własnym rytmie, często co kilka godzin.",
+        "confirmRotate": {
+          "title": "Utworzyć nowy link?",
+          "message": "Stary link przestanie działać natychmiast. Aplikacje kalendarza, które go używają, będą potrzebować nowego.",
+          "confirm": "Utwórz nowy link"
+        },
+        "confirmStop": {
+          "title": "Przestać udostępniać rezerwacje?",
+          "message": "Twój link przestanie działać natychmiast. Aplikacje kalendarza, które go używają, nie pokażą niczego nowego.",
+          "confirm": "Przestań udostępniać"
+        },
+        "confirmCancel": "Zostaw"
+      }
     },
     "linked": {
       "title": "Spotkania",
@@ -1060,6 +1264,36 @@
       "loadMore": "Załaduj więcej",
       "loadMorePast": "Załaduj więcej minionych",
       "noType": "Spotkanie"
+    },
+    "sync": {
+      "title": "Kalendarz niezsynchronizowany",
+      "reason": {
+        "event_deleted": "Wydarzenie zostało usunięte lub anulowane w Google Calendar.",
+        "event_missing": "Nie można już znaleźć tego wydarzenia w Google Calendar.",
+        "time_changed": "Wydarzenie zostało przeniesione na inny termin w Google Calendar.",
+        "attendees_changed": "Goście wydarzenia zostali zmienieni w Google Calendar."
+      },
+      "googleShows": "Google pokazuje: {time}",
+      "notChanged": "Ta rezerwacja nie została zmieniona. Wybierz, która wersja jest prawidłowa.",
+      "found": "Znaleziono: {when}",
+      "push": "Wyślij nasz termin do Google",
+      "accept": "Zaakceptuj zmianę z Google",
+      "keep": "Nie teraz",
+      "acceptTitle": {
+        "cancel": "Anulować tę rezerwację?",
+        "reschedule": "Przenieść tę rezerwację na termin z Google?",
+        "acknowledge": "Zaakceptować gości widocznych w Google?"
+      },
+      "acceptMessage": {
+        "cancel": "Wydarzenie zostało usunięte z Google, więc ta rezerwacja zostanie anulowana, a jej termin znów będzie wolny. Klient zostanie powiadomiony, tak jak przy każdym anulowaniu.",
+        "reschedule": "Ta rezerwacja zostanie przeniesiona na {time}. Klient zostanie poinformowany o nowym terminie, tak jak przy każdej zmianie terminu.",
+        "acknowledge": "Sama rezerwacja się nie zmienia. Lista gości z Google zostanie zapamiętana, a to powiadomienie zniknie."
+      },
+      "acceptConfirm": {
+        "cancel": "Anuluj rezerwację",
+        "reschedule": "Przenieś rezerwację",
+        "acknowledge": "Zaakceptuj"
+      }
     }
   }
 }

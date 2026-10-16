@@ -335,7 +335,7 @@ function ButtonSample({ type, colour }: { type: LauncherButtonType; colour: stri
   const t = useTranslations('chatbotWidget.whatsappBuilder');
   return type === 'pill' ? (
     <span
-      className="inline-flex h-11 items-center gap-2 rounded-full pl-3 pr-4 text-[13px] font-bold text-white shadow-md"
+      className="inline-flex h-11 items-center gap-2 rounded-full ps-3 pe-4 text-[13px] font-bold text-white shadow-md"
       style={{ background: gradient(colour) }}
     >
       <WhatsappGlyph className="size-6" />

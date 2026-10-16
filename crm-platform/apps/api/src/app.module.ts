@@ -35,6 +35,7 @@ import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
+import { GoogleAccountModule } from './modules/google-account';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CallingVoiceModule } from './modules/calling-voice';
 import { CampaignsModule } from './modules/campaigns';
@@ -100,8 +101,10 @@ import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
+import { MetaLeadAdsModule } from './modules/meta-lead-ads';
 import { FormsBuilderModule } from './modules/forms-builder';
 import { FormsLinksGroupsModule } from './modules/forms-links-groups';
+import { AiCopilotLeadFinderModule } from './modules/ai-copilot-lead-finder';
 import { MarketplaceModule } from './modules/marketplace';
 import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -217,6 +220,7 @@ import { HealthModule } from './health/health.module';
     CrmModule,
     DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
+    GoogleAccountModule,
     NotificationsModule,
     BroadcastsModule,
     CampaignsModule,
@@ -262,8 +266,10 @@ import { HealthModule } from './health/health.module';
     WorkspacesTeamsTenancyModule,
     WorkspaceImpersonationModule,
     LeadsModule,
+    MetaLeadAdsModule,
     FormsBuilderModule,
     FormsLinksGroupsModule,
+    AiCopilotLeadFinderModule,
     MarketplaceModule,
     ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each

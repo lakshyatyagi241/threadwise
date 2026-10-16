@@ -44,9 +44,6 @@
         "unassigned": "未割り当て",
         "unread": "未読"
       },
-      "statusFilter": "ステータス",
-      "statusOpen": "未対応",
-      "statusAll": "すべてのステータス",
       "status": {
         "open": "未対応",
         "pending": "保留中",
@@ -61,7 +58,6 @@
         "high": "高",
         "urgent": "緊急"
       },
-      "channelFilter": "チャネル",
       "allChannels": "すべてのチャネル",
       "archived": "アーカイブ",
       "backToInbox": "受信箱に戻る",
@@ -107,7 +103,49 @@
         }
       },
       "select": "選択",
-      "selectDone": "完了"
+      "selectDone": "完了",
+      "filters": {
+        "open": "フィルター",
+        "openActive": "フィルター（{count}件オン）",
+        "title": "フィルター",
+        "close": "閉じる",
+        "reset": "リセット",
+        "cancel": "キャンセル",
+        "apply": "適用",
+        "status": "チャットの状態",
+        "statusHint": "何も選ばない場合は、オープンと保留のチャットが表示されます。",
+        "conversation": "会話",
+        "any": "すべて",
+        "assigned": "割り当て済み",
+        "unassigned": "未割り当て",
+        "unattended": "未対応",
+        "labels": "タグ",
+        "channels": "チャネル",
+        "agents": "担当者",
+        "sortBy": "並べ替え",
+        "recent": "新しい順",
+        "old": "古い順",
+        "dateRange": "期間（最終アクティビティ）",
+        "from": "開始日",
+        "to": "終了日",
+        "select": "オプションを選択",
+        "search": "検索",
+        "noMatch": "一致なし",
+        "today": "今日",
+        "last7": "過去7日間",
+        "last30": "過去30日間",
+        "thisMonth": "今月",
+        "clearDates": "日付をクリア",
+        "previousMonth": "前の月",
+        "nextMonth": "次の月"
+      },
+      "rowMenu": "{name} のその他の操作",
+      "priorityMenu": "優先度",
+      "statusFilter": "ステータス",
+      "statusOpen": "未対応",
+      "statusAll": "すべてのステータス",
+      "channelFilter": "チャネル",
+      "selectRow": "{name} を選択"
     },
     "status": {
       "received": "受信済み",
@@ -232,7 +270,9 @@
         "undone": "ステージの変更を取り消しました:「{stage}」に戻りました。",
         "undoneToast": "ステージを「{stage}」に戻しました。",
         "couldNotUndo": "この変更はもう取り消せません。連絡先が先に進んだか、すでに取り消されています。"
-      }
+      },
+      "heldUntil": "{when} まで保留",
+      "heldWhy": "このマーケティングメッセージは、通知を控える時間帯の終了を待っています。その間に連絡先が配信停止していなければ、終了後に送信されます。"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "新しいメッセージ: {text}",
       "attachment": "添付ファイル",
       "jumpLatest": "最新へ移動",
-      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}"
+      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}",
+      "searchOpen": "このチャット内を検索",
+      "searchPlaceholder": "このチャット内を検索",
+      "searchCount": "{current} / {total}",
+      "searchNone": "一致なし",
+      "searchPrev": "前の一致",
+      "searchNext": "次の一致",
+      "searchClose": "検索を閉じる"
     },
     "groupThread": {
       "openGroup": "グループを開く",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "返信テンプレート",
-      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。"
+      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。",
+      "toolbar": {
+        "label": "メッセージの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "underline": "下線",
+        "strike": "取り消し線",
+        "bullets": "箇条書き",
+        "numbers": "番号付きリスト",
+        "ai": {
+          "open": "スマートAIアシスタント",
+          "noModel": "このワークスペースではAIモデルが有効になっていません",
+          "title": "スマートAIアシスタント",
+          "condense": "要約",
+          "condenseHint": "文章を短く簡潔にします",
+          "fix": "文法を修正",
+          "fixHint": "文法とスペルの誤りを直します",
+          "positive": "前向きなトーン",
+          "positiveHint": "文章をより前向きで明るくします",
+          "translate": "翻訳",
+          "translateHint": "別の言語に翻訳します",
+          "selectLanguage": "言語を選択",
+          "searchLanguages": "言語を検索…",
+          "noLanguage": "一致する言語がありません",
+          "working": "処理中…",
+          "empty": "先にメッセージを入力してください。",
+          "failed": "AIが文章を変更できませんでした。もう一度お試しください。"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",
@@ -452,7 +527,13 @@
         "pickTeam": "この会話のチームを選択",
         "noTeam": "チームなし",
         "onLeave": "休暇中",
-        "onLeaveUntil": "{date}まで休暇中"
+        "onLeaveUntil": "{date}まで休暇中",
+        "availability": {
+          "online": "オンライン",
+          "away": "離席中",
+          "busy": "取り込み中",
+          "offline": "オフライン"
+        }
       },
       "presence": {
         "online": "オンライン",

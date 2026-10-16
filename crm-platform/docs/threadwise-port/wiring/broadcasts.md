@@ -44,3 +44,7 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 - `OpenWarmerGate`: nothing is held. Reference's WhatsApp Warmer (number warm-up) is a separate feature that is not in the port; `scheduled-queue-warmer` is the scheduled-send queue, not that. Blocked on a warmer domain.
 - `OpenBroadcastPlanGate`: no `broadcast` flag in the plan catalogue (the numeric cap `broadcasts` is enforced).
 - Marketing media upload (`POST /v2/media/marketing`) lives here and serves campaigns, Telegram and Facebook as well.
+
+## Quiet hours and calling windows (BL-177, product extension)
+
+Not in Reference. `BroadcastDispatchService` asks `SendWindowService` (compliance-center) for each slice of recipients of a MARKETING template (a utility or authentication template is never asked). A recipient inside the workspace's quiet hours on its own clock stays `pending` with `broadcast_contacts.held_until` / `held_reason`; the rest is sent; the broadcast is paused with reason `quiet_hours` and `BroadcastResumeService` resumes it after the first `held_until`. A released recipient is checked with the ConsentGate again. Read side: `counts.held` (detail), `held` (live), `heldUntil` / `heldReason` (recipients), the pause banner `broadcasts.detail.paused.quiet_hours`. Spec: privacy-and-data-governance.md 11.5.

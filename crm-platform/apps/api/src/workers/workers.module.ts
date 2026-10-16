@@ -51,12 +51,14 @@ import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-wo
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
 import { PrivacyWorkerModule } from '../modules/privacy/privacy-worker.module';
 import { AuditLogWorkerModule } from '../modules/audit-log/audit-log-worker.module';
+import { RevenueReportWorkerModule } from '../modules/crm/revenue-report/revenue-report-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { LeadsWorkerModule } from '../modules/leads';
+import { MetaLeadAdsWorkerModule } from '../modules/meta-lead-ads';
 import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
@@ -106,6 +108,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactConsentWorkerModule,
     PrivacyWorkerModule,
     AuditLogWorkerModule,
+    RevenueReportWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
@@ -132,6 +135,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     WhatsappDevicesBaileysWorkerModule,
     NodeCatalogBridgeModule,
     LeadsWorkerModule,
+    MetaLeadAdsWorkerModule,
     FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,

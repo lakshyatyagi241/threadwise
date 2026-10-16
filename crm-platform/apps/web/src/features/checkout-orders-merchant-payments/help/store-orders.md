@@ -5,7 +5,17 @@ summary: See every order from your storefront and WhatsApp, move it through its 
 area: store
 order: 20
 documents: [nav:store-orders]
-keywords: [orders, order status, payment link, checkout link, invoice, cash on delivery, storefront, whatsapp order]
+keywords:
+  [
+    orders,
+    order status,
+    payment link,
+    checkout link,
+    invoice,
+    cash on delivery,
+    storefront,
+    whatsapp order,
+  ]
 ---
 
 ## What it is for

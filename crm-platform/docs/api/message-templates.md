@@ -15,6 +15,7 @@ Contracts: `@crm/contracts` (`message-templates`). Every route is tenant-scoped:
 | `POST /sync`        | `tpl.templates.sync`              | Body `{connectionId}`. Pull every template of one number. Returns `{created, updated, missing, total}`.                                                                 |
 | `POST /lint`        | `tpl.templates.create`            | The form's instant feedback: `{issues, normalized, metaPayload}`. Nothing saved, nothing sent.                                                                          |
 | `POST /media`       | `tpl.templates.create` (+ `sync`) | Multipart `file` + `connectionId`. JPG/PNG up to 5 MB, MP4/3GP up to 16 MB, PDF up to 100 MB; content is checked, not the name. Returns `{handle, fileName, mimeType}`. |
+| `POST /ai-generate` | `tpl.templates.create`            | "Build with AI" (TW-TPL-016): a business brief in, a template draft out. Nothing saved, nothing sent to Meta. See below.                                       |
 
 ## Behaviour worth knowing
 
@@ -25,3 +26,21 @@ Contracts: `@crm/contracts` (`message-templates`). Every route is tenant-scoped:
 - **Failures from Meta** on refresh, sync and media are 422 `TPL_META_REJECTED` (Meta's reason in `detail`) or, for a throttle or outage, 503 `WABA_PROVIDER_UNAVAILABLE`.
 - **Stale sweep:** a worker job every ten minutes re-reads templates PENDING on Meta for more than an hour and unchecked for 30 minutes (queue `tpl-sweep`, 50 per pass).
 - **Events** (outbox): `template.created`, `template.updated`, `template.submitted`, `template.submit_failed`, `template.status_changed`, `template.synced`, `template.deleted`.
+
+
+## Build with AI (TW-TPL-016)
+
+`POST /v2/templates/ai-generate` (200, `tpl.templates.create`): a brief in, a template draft out. Nothing is stored and nothing goes to Meta; the form fills its own fields and the person reviews before submitting. The model picker is `GET /v2/ai/models`.
+
+Request: `provider` (`openai`, `anthropic`, `gemini`), `model`, `businessName` (required, 191), `metaCategory` (`MARKETING` default, or `UTILITY`; AUTHENTICATION templates are not drafted), `language` (a Meta code, default `en_US`), and optional `industry`, `occasion`, `purpose`, `action` (120), `tone` (60), `customPrompt` (2,000).
+
+Response: `{ template: { name, header, body, footer, buttons[] }, model }`. Every field is cut to what the form and Meta take: the name is made a lower-case slug (60), the header and footer lose any variable (60), the body is 1,024, at most three buttons (label 25): `URL` needs an http(s) address, `PHONE_NUMBER` a phone number, `QUICK_REPLY` is dropped when a link button is present (Meta's order rule). A button the model got wrong is dropped, not repaired.
+
+The key is the workspace's own when its plan allows one, else the platform's; a call on the platform's key counts against the monthly token allowance, and the tokens are written to the usage ledger either way. The key is never returned.
+Errors are the campaign builder's: 422 `CAMP_AI_NO_KEY`, 422 `CAMP_AI_LIMIT_REACHED`, 502 `CAMP_AI_PROVIDER_FAILED`, 422 `CAMP_AI_BAD_JSON` (the model answered prose, or an empty body).
+
+Differences from Reference, on purpose: no carousel draft (a carousel needs cards with their own media; recorded as blocked in the inventory), no copy-code button (Meta reviews an example code a model cannot know), and Reference's `visit_website` / `call_phone` button names are the form's `URL` / `PHONE_NUMBER`.
+
+## API cURL example (web only)
+
+`tpl.templates.api_curl` lets a person see the "Send with the API (cURL)" card on an approved template and the cURL shortcut on its library card. It is shown only together with `api.keys.read`, and it tells the person to create an API key first when the workspace has no live key. It grants no API access by itself: the example calls `POST /api/v1/templates/{id}/send`, which an API key still authorises.

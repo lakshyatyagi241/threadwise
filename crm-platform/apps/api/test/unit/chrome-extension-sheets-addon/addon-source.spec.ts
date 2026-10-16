@@ -345,7 +345,7 @@ describe('webhook trigger helpers', () => {
       ['', '', ''],
       ['Cy', 'cy@x.io', 'done'],
     ];
-    const state = { 'Sheet1!2': api.rowHash_(lines[0]) };
+    const state: Record<string, string> = { 'Sheet1!2': api.rowHash_(lines[0]) };
     expect(api.changedRows_(lines, 'Sheet1', 2, state).map((r: { row: number }) => r.row)).toEqual([
       5,
     ]);

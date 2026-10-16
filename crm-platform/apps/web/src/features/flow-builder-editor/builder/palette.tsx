@@ -79,7 +79,7 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
 
   return (
     <aside
-      className="flow-palette relative z-20 flex w-[260px] shrink-0 flex-col border-r border-border bg-background"
+      className="flow-palette relative z-20 flex w-[260px] shrink-0 flex-col border-e border-border bg-background"
       aria-label={t('ariaLabel')}
     >
       <div className="border-b border-border px-4 pt-4 pb-3">

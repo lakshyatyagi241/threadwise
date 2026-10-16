@@ -647,8 +647,43 @@
         "notes": "Notas adicionales",
         "notesNote": "opcional / máx. 2000",
         "notesPlaceholder": "Cualquier detalle: frases imprescindibles, lo que hay que evitar, pautas de la voz de la marca…",
-        "failed": "No se pudo generar la campaña. Inténtalo de nuevo.",
-        "applied": "Se completó el texto de la campaña. Revísalo antes de continuar."
+        "applied": "Se completó el texto de la campaña. Revísalo antes de continuar.",
+        "pictureApplied": "La imagen se adjuntó a la campaña. Compruébala en la tarjeta Adjunto.",
+        "errors": {
+          "noKey": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que añada una clave.",
+          "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+          "providerFailed": "El proveedor de IA no respondió. Inténtalo de nuevo en un momento.",
+          "badJson": "No se pudo leer la respuesta del modelo. Inténtalo de nuevo o cambia el resumen.",
+          "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+          "forbidden": "No tienes permiso para crear campañas.",
+          "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+          "failed": "No se pudo generar la campaña. Inténtalo de nuevo."
+        },
+        "picture": {
+          "label": "Crear también una imagen",
+          "hint": "Genera una imagen a partir del mismo resumen y la adjunta a la campaña. Usa tu cuota de OpenAI.",
+          "needsOpenAi": "Las imágenes requieren una clave de OpenAI. Elige un modelo de OpenAI para activarlo.",
+          "noAttachment": "El número elegido envía solo texto, así que no hay dónde adjuntar una imagen.",
+          "size": "Formato de la imagen",
+          "sizes": {
+            "square": "Cuadrada",
+            "landscape": "Horizontal",
+            "portrait": "Vertical"
+          },
+          "textKept": "Se completó el texto de la campaña. Solo falta la imagen.",
+          "retry": "Reintentar la imagen",
+          "errors": {
+            "noKey": "Las imágenes requieren una clave de OpenAI y no hay ninguna activada en este espacio de trabajo.",
+            "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+            "providerFailed": "El servicio de imágenes no respondió. Inténtalo de nuevo en un momento.",
+            "badJson": "El servicio de imágenes devolvió una respuesta inesperada. Inténtalo de nuevo.",
+            "imageRefused": "OpenAI se negó a generar esta imagen. Cambia el producto, la oferta o las notas e inténtalo de nuevo.",
+            "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+            "forbidden": "No tienes permiso para crear campañas.",
+            "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+            "failed": "No se pudo crear la imagen. Inténtalo de nuevo."
+          }
+        }
       },
       "switch": {
         "title": "¿Usar el flujo guiado?",
@@ -829,7 +864,8 @@
         "clicked": "hizo clic",
         "showing": "Mostrando {shown} de {total}",
         "prev": "Página anterior",
-        "next": "Página siguiente"
+        "next": "Página siguiente",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "engagement": {
         "opened": "Abiertos",
@@ -997,7 +1033,8 @@
         "badge": "En vivo",
         "updated": "actualizado {time}",
         "queued": "{count} en espera de envío",
-        "processing": "{count} enviándose ahora"
+        "processing": "{count} enviándose ahora",
+        "held": "{count} en espera por las horas de silencio"
       },
       "statistics": {
         "loadFailed": "No se pudieron cargar las estadísticas.",
@@ -1126,7 +1163,10 @@
         "auto_end_in_past": "La fecha de finalización automática ya pasó.",
         "auto_end_before_send": "La fecha de finalización automática debe ser posterior a la hora de envío.",
         "auto_end_recurring": "Una campaña recurrente termina según su propia regla: borra la fecha de finalización automática.",
-        "pacing_range": "Revisa Smart Delivery: el retraso máximo es menor que el mínimo, o solo se ha definido una de las dos horas de envío."
+        "pacing_range": "Revisa Smart Delivery: el retraso máximo es menor que el mínimo, o solo se ha definido una de las dos horas de envío.",
+        "follow_up_template_required": "Elige la plantilla que envía cada seguimiento.",
+        "follow_up_flow_required": "Elige el flujo que inicia cada seguimiento.",
+        "follow_up_cloud_api_only": "Los seguimientos solo funcionan con un número de WhatsApp Cloud API. Elige uno en el paso 1 o quita los seguimientos."
       },
       "template": {
         "previewOnline": "en línea",
@@ -1160,7 +1200,9 @@
         "senderLabel": "Enviar desde",
         "senderHint": "El número de WhatsApp desde el que se envía esta difusión.",
         "pickSender": "Elige un número",
-        "classicOption": "editor clásico"
+        "classicOption": "editor clásico",
+        "buildWithAi": "Crear con IA",
+        "aiNote": "Redacta una plantilla nueva con IA. La revisas en la página de la plantilla; después Meta la revisa antes de poder enviarla, así que vuelve y selecciónala cuando esté aprobada."
       },
       "audience": {
         "selectionTitle": "Elegidos en el Centro de contactos",
@@ -1382,7 +1424,8 @@
         "sumCsv": "Archivo CSV {name}: {count, plural, one {# número válido} other {# números válidos}}",
         "estimatedCostFull": "Coste estimado (total)",
         "chargedPlan": "Se cobra ahora de tu monedero: {amount} (tu plan cubre {covered} de estos mensajes)",
-        "chargedWallet": "Se cobra de tu monedero: {amount}"
+        "chargedWallet": "Se cobra de tu monedero: {amount}",
+        "sumFollowUps": "Seguimientos"
       },
       "test": {
         "title": "Enviar un mensaje de prueba de WhatsApp",
@@ -1587,7 +1630,25 @@
         "exportFailed": "No se pudo descargar la exportación.",
         "deleteTitle": "¿Eliminar esta difusión?",
         "deleteOne": "Elimina esta difusión y sus destinatarios. No se puede deshacer.",
-        "deleteSeries": "Elimina esta difusión recurrente y las ejecuciones que tenía planificadas. No se ha enviado nada, así que no se pierde historial. No se puede deshacer."
+        "deleteSeries": "Elimina esta difusión recurrente y las ejecuciones que tenía planificadas. No se ha enviado nada, así que no se pierde historial. No se puede deshacer.",
+        "followUps": {
+          "title": "Seguimientos",
+          "step": "Seguimiento {step}",
+          "count": {
+            "waiting": "{count} en espera",
+            "sent": "{count} enviados",
+            "delivered": "{count} entregados",
+            "read": "{count} leídos",
+            "flowsStarted": "{count} flujos iniciados",
+            "skipped": "{count} omitidos",
+            "lapsed": "{count} caducados",
+            "failed": "{count} fallidos"
+          },
+          "hint": {
+            "skipped": "La condición no se cumplía cuando se comprobó, así que la secuencia terminó ahí.",
+            "lapsed": "El tiempo de vigilancia se agotó antes de que el contacto respondiera o leyera, así que la secuencia terminó ahí."
+          }
+        }
       },
       "panel": {
         "title": "Creadas con Crear difusión",
@@ -1618,6 +1679,72 @@
         "body": "{number} ({engine}) se envía desde el editor clásico, que empieza de cero. Esta campaña se guarda como borrador y permanece en tu lista de Campañas, para que puedas retomarla.",
         "confirm": "Abrir el editor clásico",
         "cancel": "Quedarme aquí"
+      },
+      "followUps": {
+        "title": "Seguimientos",
+        "intro": "Envía otro mensaje o inicia un flujo según lo que haga el contacto después del mensaje de la campaña. Hasta 3 pasos seguidos.",
+        "cloudOnly": "Los seguimientos necesitan un número de WhatsApp Cloud API, porque dependen de los informes de lectura y respuesta de Meta. Elige uno en el paso 1.",
+        "add": "Añadir un seguimiento",
+        "count": "{used} de {max} seguimientos",
+        "limitReached": "Límite alcanzado: {max} seguimientos.",
+        "stepTitle": "Seguimiento {step}",
+        "measuredFromCampaign": "Se cuenta desde el mensaje de la campaña.",
+        "measuredFromStep": "Se cuenta desde el mensaje del seguimiento {step}.",
+        "remove": "Quitar el seguimiento {step}",
+        "removeShort": "Quitar",
+        "triggerLabel": "Cuando el contacto",
+        "trigger": {
+          "replied": "Responde",
+          "read": "Lee el mensaje",
+          "not_replied": "No ha respondido",
+          "not_read": "No ha leído el mensaje"
+        },
+        "triggerHelp": {
+          "replied": "Se activa en el momento en que responde, si ocurre dentro del tiempo que definas. Si no, la secuencia termina.",
+          "read": "Se activa en el momento en que lo lee, si ocurre dentro del tiempo que definas. Si no, la secuencia termina.",
+          "not_replied": "Espera el tiempo que definas y se activa si no ha respondido. Si respondió, la secuencia termina.",
+          "not_read": "Espera el tiempo que definas y se activa si no lo ha leído. Si lo leyó, la secuencia termina."
+        },
+        "watchLabel": "Vigilar hasta",
+        "waitLabel": "Esperar",
+        "unitLabel": "Unidad de tiempo",
+        "duration": {
+          "minutes": "{count, plural, one {# minuto} many {# minutos} other {# minutos}}",
+          "hours": "{count, plural, one {# hora} many {# horas} other {# horas}}",
+          "days": "{count, plural, one {# día} many {# días} other {# días}}"
+        },
+        "actionLabel": "Entonces",
+        "action": {
+          "template": "Enviar una plantilla",
+          "flow": "Iniciar un flujo"
+        },
+        "templateLabel": "Plantilla que se envía",
+        "flowLabel": "Flujo que se inicia",
+        "pickTemplate": "Elegir una plantilla",
+        "pickFlow": "Elegir un flujo",
+        "loading": "Cargando...",
+        "unavailable": "Ya no está disponible",
+        "noTemplates": "Aún no hay plantillas aprobadas.",
+        "createTemplate": "Crear una plantilla",
+        "noFlows": "Aún no hay flujos.",
+        "createFlow": "Crear un flujo",
+        "flowsError": "No se pudieron cargar los flujos. Inténtalo de nuevo más tarde.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Si responde en {wait}",
+          "read": "Si lo lee en {wait}",
+          "not_replied": "Si no ha respondido tras {wait}",
+          "not_read": "Si no lo ha leído tras {wait}"
+        },
+        "does": {
+          "template": "enviar {name}",
+          "flow": "iniciar el flujo {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuto} many {minutos} other {minutos}}",
+          "hours": "{count, plural, one {hora} many {horas} other {horas}}",
+          "days": "{count, plural, one {día} many {días} other {días}}"
+        }
       }
     },
     "history": {

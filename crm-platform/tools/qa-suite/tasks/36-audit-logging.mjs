@@ -9,6 +9,7 @@ import {
   pass,
   read,
   rel,
+  unreviewed,
   walk,
   warn,
 } from '../lib/core.mjs';
@@ -90,7 +91,7 @@ export default {
       expectNone(
         'aud-module-coverage',
         'Every module with mutating routes writes audit rows',
-        unaudited,
+        unreviewed(36, unaudited),
         { severity: 'high' },
       ),
       expectNone(

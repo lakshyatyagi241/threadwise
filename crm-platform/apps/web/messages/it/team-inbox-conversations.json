@@ -44,9 +44,6 @@
         "unassigned": "Non assegnate",
         "unread": "Non lette"
       },
-      "statusFilter": "Stato",
-      "statusOpen": "Aperte",
-      "statusAll": "Tutti gli stati",
       "status": {
         "open": "Aperta",
         "pending": "In attesa",
@@ -61,7 +58,6 @@
         "high": "Alta",
         "urgent": "Urgente"
       },
-      "channelFilter": "Canale",
       "allChannels": "Tutti i canali",
       "archived": "Archiviate",
       "backToInbox": "Torna all’Inbox",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Seleziona",
-      "selectDone": "Fine"
+      "selectDone": "Fine",
+      "filters": {
+        "open": "Filtri",
+        "openActive": "Filtri ({count} attivi)",
+        "title": "Filtri",
+        "close": "Chiudi",
+        "reset": "Reimposta",
+        "cancel": "Annulla",
+        "apply": "Applica",
+        "status": "Stato della chat",
+        "statusHint": "Senza scelta si vedono le chat aperte e in sospeso.",
+        "conversation": "Conversazione",
+        "any": "Qualsiasi",
+        "assigned": "Assegnata",
+        "unassigned": "Non assegnata",
+        "unattended": "Senza risposta",
+        "labels": "Tag",
+        "channels": "Canali",
+        "agents": "Agenti",
+        "sortBy": "Ordina per",
+        "recent": "Recenti",
+        "old": "Meno recenti",
+        "dateRange": "Intervallo di date (ultima attività)",
+        "from": "Dal",
+        "to": "Al",
+        "select": "Seleziona un’opzione",
+        "search": "Cerca",
+        "noMatch": "Nessun risultato",
+        "today": "Oggi",
+        "last7": "Ultimi 7 giorni",
+        "last30": "Ultimi 30 giorni",
+        "thisMonth": "Questo mese",
+        "clearDates": "Cancella date",
+        "previousMonth": "Mese precedente",
+        "nextMonth": "Mese successivo"
+      },
+      "rowMenu": "Altre azioni per {name}",
+      "priorityMenu": "Priorità",
+      "statusFilter": "Stato",
+      "statusOpen": "Aperte",
+      "statusAll": "Tutti gli stati",
+      "channelFilter": "Canale",
+      "selectRow": "Seleziona {name}"
     },
     "status": {
       "received": "Ricevuto",
@@ -232,7 +270,9 @@
         "undone": "Cambio di fase annullato: di nuovo in {stage}.",
         "undoneToast": "Fase ripristinata a {stage}.",
         "couldNotUndo": "Questa modifica non può più essere annullata: il contatto è andato avanti o è già stata annullata."
-      }
+      },
+      "heldUntil": "Trattenuto fino a {when}",
+      "heldWhy": "Questo messaggio di marketing attende la fine delle tue ore di silenzio. Verrà inviato allora, se nel frattempo il contatto non si è disiscritto."
     },
     "media": {
       "openImage": "Apri immagine {name}",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "Nuovo messaggio: {text}",
       "attachment": "un allegato",
       "jumpLatest": "Vai ai più recenti",
-      "jumpLatestNew": "{count, plural, one {# nuovo messaggio} other {# nuovi messaggi}}"
+      "jumpLatestNew": "{count, plural, one {# nuovo messaggio} other {# nuovi messaggi}}",
+      "searchOpen": "Cerca in questa chat",
+      "searchPlaceholder": "Cerca in questa chat",
+      "searchCount": "{current} di {total}",
+      "searchNone": "Nessun risultato",
+      "searchPrev": "Risultato precedente",
+      "searchNext": "Risultato successivo",
+      "searchClose": "Chiudi ricerca"
     },
     "groupThread": {
       "openGroup": "Apri gruppo",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "Risposte salvate",
-      "savedReplyIssues": "Non compilate e lasciate così com'erano ({count}): {list}. Correggi prima di inviare."
+      "savedReplyIssues": "Non compilate e lasciate così com'erano ({count}): {list}. Correggi prima di inviare.",
+      "toolbar": {
+        "label": "Formattazione del messaggio",
+        "bold": "Grassetto",
+        "italic": "Corsivo",
+        "underline": "Sottolineato",
+        "strike": "Barrato",
+        "bullets": "Elenco puntato",
+        "numbers": "Elenco numerato",
+        "ai": {
+          "open": "Assistente IA intelligente",
+          "noModel": "Nessun modello di IA è attivo per questo spazio",
+          "title": "Assistente IA intelligente",
+          "condense": "Sintetizza",
+          "condenseHint": "Rendi il testo più breve e conciso",
+          "fix": "Correggi la grammatica",
+          "fixHint": "Correggi errori di grammatica e ortografia",
+          "positive": "Tono positivo",
+          "positiveHint": "Rendi il testo più positivo e vivace",
+          "translate": "Traduci",
+          "translateHint": "Traduci in altre lingue",
+          "selectLanguage": "Seleziona lingua",
+          "searchLanguages": "Cerca lingue…",
+          "noLanguage": "Nessuna lingua corrisponde",
+          "working": "Elaborazione…",
+          "empty": "Scrivi prima un messaggio.",
+          "failed": "L’IA non ha potuto modificare il testo. Riprova."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Note e cronologia",
@@ -452,7 +527,13 @@
         "pickTeam": "Scegli un team per questa conversazione",
         "noTeam": "Nessun team",
         "onLeave": "In ferie",
-        "onLeaveUntil": "In ferie fino al {date}"
+        "onLeaveUntil": "In ferie fino al {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Assente",
+          "busy": "Occupato",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

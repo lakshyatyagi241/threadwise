@@ -72,6 +72,14 @@ function toSettings(r: Raw): SettingsRow {
   };
 }
 
+/** The window columns of the settings row, with the workspace time zone (see `windowFacts`). */
+export interface WindowFacts {
+  quietHours: ComplianceSettingsValues['quietHours'];
+  callingWindow: ComplianceSettingsValues['callingWindow'];
+  windowTimezone: string | null;
+  workspaceTimezone: string | null;
+}
+
 interface SubRow extends Subprocessor {
   internalId: number;
 }
@@ -102,6 +110,31 @@ export class ComplianceRepository {
     const res = await tx.execute(sql`SELECT * FROM compliance_settings WHERE org_id = ${orgId}`);
     const r = res.rows[0] as Raw | undefined;
     return r ? toSettings(r) : null;
+  }
+
+  /** What the send-window decision needs, in one cheap statement: the window columns and the workspace time zone. */
+  async windowFacts(tx: Tx, orgId: number): Promise<WindowFacts> {
+    const res = await tx.execute(sql`
+      SELECT s.quiet_hours_enabled, s.quiet_start, s.quiet_end, s.calling_window_enabled, s.calling_start, s.calling_end,
+             s.calling_days, s.window_timezone, o.settings->>'timezone' AS workspace_timezone
+      FROM organizations o LEFT JOIN compliance_settings s ON s.org_id = o.id
+      WHERE o.id = ${orgId}`);
+    const r = (res.rows[0] ?? {}) as Raw;
+    return {
+      quietHours: {
+        enabled: r.quiet_hours_enabled === true,
+        start: str(r.quiet_start) || '21:00',
+        end: str(r.quiet_end) || '08:00',
+      },
+      callingWindow: {
+        enabled: r.calling_window_enabled === true,
+        start: str(r.calling_start) || '08:00',
+        end: str(r.calling_end) || '21:00',
+        days: (Array.isArray(r.calling_days) ? r.calling_days : []).map(Number),
+      },
+      windowTimezone: strOrNull(r.window_timezone),
+      workspaceTimezone: strOrNull(r.workspace_timezone),
+    };
   }
 
   /**

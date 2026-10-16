@@ -1,4 +1,4 @@
-import { isDeleted, plain, primaryKey, scrub, slug, str, type Doc } from '../util';
+import { cutText, isDeleted, plain, primaryKey, scrub, slug, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
 
@@ -190,7 +190,7 @@ export const apiLibrary: HandlerSpec = {
         if (sensitive(key)) {
           headers.push({ key, value: '', secret: true });
           if (text !== '') soft.push({ code: 'API_HEADER_SECRET_BLANKED', reason: 'a secret-looking header keeps its name with an empty value (the secret goes through the encrypted path)', detail: { header: key } });
-        } else headers.push({ key, value: text.slice(0, 4000), secret: false });
+        } else headers.push({ key, value: cutText(text, 4000), secret: false });
       }
       if (headers.length > 30) return { kind: 'quarantine', code: 'TOO_MANY_HEADERS', reason: 'more than 30 headers' };
     }

@@ -131,13 +131,6 @@ export function InsightsScreen() {
                   threshold={settings.data?.threshold ?? null}
                 />
               </div>
-              <p className="rounded-md bg-muted/60 p-3 text-sm">{t('hist.advice')}</p>
-              <Link
-                href={href('settings')}
-                className="text-sm font-medium underline underline-offset-2"
-              >
-                {t('hist.tune')}
-              </Link>
             </SectionCard>
           </div>
 

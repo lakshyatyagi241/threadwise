@@ -407,7 +407,7 @@ export function FeatureFlows({ ctx, def }: P) {
                 </div>
 
                 <div className="hairline rounded-2xl bg-paper-50 grid-bg p-5 relative h-[360px] overflow-hidden">
-                  <div className="absolute top-6 left-6 hairline rounded-xl bg-white shadow-sm p-3 w-[180px]">
+                  <div className="absolute top-6 start-6 hairline rounded-xl bg-white shadow-sm p-3 w-[180px]">
                     <div className="mono text-[9px] uppercase tracking-widest text-accent-coral">
                       trigger
                     </div>
@@ -416,7 +416,7 @@ export function FeatureFlows({ ctx, def }: P) {
                   </div>
 
                   <svg
-                    className="absolute top-[60px] left-[170px] w-[140px] h-[60px]"
+                    className="absolute top-[60px] start-[170px] w-[140px] h-[60px]"
                     viewBox="0 0 140 60"
                     fill="none"
                   >
@@ -434,7 +434,7 @@ export function FeatureFlows({ ctx, def }: P) {
                     />
                   </svg>
 
-                  <div className="absolute top-[100px] left-[260px] hairline rounded-xl bg-white shadow-sm p-3 w-[150px]">
+                  <div className="absolute top-[100px] start-[260px] hairline rounded-xl bg-white shadow-sm p-3 w-[150px]">
                     <div className="mono text-[9px] uppercase tracking-widest text-accent-amber">
                       delay
                     </div>
@@ -443,7 +443,7 @@ export function FeatureFlows({ ctx, def }: P) {
                   </div>
 
                   <svg
-                    className="absolute top-[140px] left-[400px] w-[140px] h-[60px]"
+                    className="absolute top-[140px] start-[400px] w-[140px] h-[60px]"
                     viewBox="0 0 140 60"
                     fill="none"
                   >
@@ -461,7 +461,7 @@ export function FeatureFlows({ ctx, def }: P) {
                     />
                   </svg>
 
-                  <div className="absolute top-[180px] left-[490px] hairline rounded-xl bg-white shadow-sm p-3 w-[200px]">
+                  <div className="absolute top-[180px] start-[490px] hairline rounded-xl bg-white shadow-sm p-3 w-[200px]">
                     <div className="mono text-[9px] uppercase tracking-widest text-wa-deep">
                       message · template
                     </div>
@@ -470,7 +470,7 @@ export function FeatureFlows({ ctx, def }: P) {
                   </div>
 
                   <svg
-                    className="absolute top-[200px] left-[700px] w-[120px] h-[120px]"
+                    className="absolute top-[200px] start-[700px] w-[120px] h-[120px]"
                     viewBox="0 0 120 120"
                     fill="none"
                   >
@@ -488,7 +488,7 @@ export function FeatureFlows({ ctx, def }: P) {
                     />
                   </svg>
 
-                  <div className="absolute top-[130px] right-6 hairline border-wa-green/40 rounded-xl bg-wa-bubble shadow-sm p-3 w-[180px]">
+                  <div className="absolute top-[130px] end-6 hairline border-wa-green/40 rounded-xl bg-wa-bubble shadow-sm p-3 w-[180px]">
                     <div className="mono text-[9px] uppercase tracking-widest text-wa-deep">
                       if paid · exit
                     </div>
@@ -496,7 +496,7 @@ export function FeatureFlows({ ctx, def }: P) {
                     <div className="text-[10px] text-ink-500 mono mt-0.5">tag: converted</div>
                   </div>
 
-                  <div className="absolute bottom-6 right-6 hairline rounded-xl bg-white shadow-sm p-3 w-[180px]">
+                  <div className="absolute bottom-6 end-6 hairline rounded-xl bg-white shadow-sm p-3 w-[180px]">
                     <div className="mono text-[9px] uppercase tracking-widest text-accent-coral">
                       if no purchase · 23h
                     </div>
@@ -504,7 +504,7 @@ export function FeatureFlows({ ctx, def }: P) {
                     <div className="text-[10px] text-ink-500 mono mt-0.5">+ 10% coupon</div>
                   </div>
 
-                  <div className="absolute bottom-3 left-3 hairline rounded-md bg-white px-2 py-1 mono text-[9px] text-ink-500">
+                  <div className="absolute bottom-3 start-3 hairline rounded-md bg-white px-2 py-1 mono text-[9px] text-ink-500">
                     <span className="text-accent-coral">●</span> trigger ·{' '}
                     <span className="text-accent-amber">●</span> delay ·{' '}
                     <span className="text-wa-deep">●</span> message ·{' '}
@@ -737,7 +737,7 @@ export function FeatureInbox({ ctx, def }: P) {
                   </div>
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 bg-white hairline rounded-xl p-2 flex items-center gap-2">
+                <div className="absolute bottom-4 start-4 end-4 bg-white hairline rounded-xl p-2 flex items-center gap-2">
                   <span className="w-7 h-7 rounded-md hairline flex items-center justify-center text-ink-500">
                     +
                   </span>

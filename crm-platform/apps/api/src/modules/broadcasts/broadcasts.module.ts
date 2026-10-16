@@ -1,5 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
@@ -54,6 +55,7 @@ import {
     PlansCoreModule,
     CrmModule,
     ContactConsentModule,
+    SendWindowModule,
     forwardRef(() => NodeBridgeRuntimeModule),
     WalletMessageBillingModule,
     PlatformSettingsModule,
@@ -66,6 +68,7 @@ import {
     MarketingMediaController,
   ],
   exports: [
+    MarketingMediaService,
     BroadcastsService,
     BroadcastsReadService,
     BroadcastReceiptsService,

@@ -1,5 +1,6 @@
 'use client';
 
+import { FormattedText } from './formatted-text';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { cn } from '@crm/ui';
@@ -211,7 +212,7 @@ function MessageBody({
         <div className="space-y-1">
           {referralCard}
           <p dir="auto" className="whitespace-pre-wrap break-words">
-            {caption}
+            <FormattedText text={caption} />
           </p>
         </div>
       );
@@ -250,7 +251,7 @@ function MessageBody({
       {visual}
       {caption ? (
         <p dir="auto" className="whitespace-pre-wrap break-words">
-          {caption}
+          <FormattedText text={caption} />
         </p>
       ) : !visual ? (
         <p className="text-xs italic text-muted-foreground">{t('unavailable')}</p>
@@ -528,6 +529,11 @@ export const MessageBubble = memo(function MessageBubble({
             {clockTime(m.createdAt, locale, timeZone)}
           </time>
           {out && <Ticks status={m.status} />}
+          {out && m.hold && (
+            <span data-testid="inbox-message-held" className="text-warning" title={t('heldWhy')}>
+              {t('heldUntil', { when: fullStamp(m.hold.until, locale, timeZone) })}
+            </span>
+          )}
           {tally && (
             <span data-testid="inbox-group-tally" className="flex items-center gap-1">
               <span>
@@ -624,7 +630,7 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
           )}
           {p.body && (
             <p dir="auto" className="whitespace-pre-wrap break-words">
-              {displayMentions(p.body, p.mentions)}
+              <FormattedText text={displayMentions(p.body, p.mentions) ?? ''} />
             </p>
           )}
         </div>
@@ -704,7 +710,7 @@ export function NoteBubble({
           )}
         </div>
         <p dir="auto" className="whitespace-pre-wrap break-words">
-          {note.body}
+          <FormattedText text={note.body} />
         </p>
       </div>
     </li>

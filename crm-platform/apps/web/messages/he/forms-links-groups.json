@@ -130,15 +130,24 @@
       "loading": "טוען קישורים…",
       "retry": "ניסיון חוזר",
       "searchPlaceholder": "חיפוש לפי שם או קישור",
-      "create": { "cta": "קישור חדש" },
+      "create": {
+        "cta": "קישור חדש"
+      },
       "stats": {
         "all": "כל הקישורים",
         "live": "פעילים",
         "totalClicks": "סך הקליקים",
         "avgClicks": "קליקים בממוצע / קישור"
       },
-      "tabs": { "all": "הכול", "live": "פעילים", "paused": "מושהים" },
-      "status": { "live": "פעיל", "paused": "מושהה" },
+      "tabs": {
+        "all": "הכול",
+        "live": "פעילים",
+        "paused": "מושהים"
+      },
+      "status": {
+        "live": "פעיל",
+        "paused": "מושהה"
+      },
       "empty": {
         "title": "אין עדיין קישורים",
         "description": "צרו קישור לשיתוף בפרסומות, בביוגרפיה או בקוד QR."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "חזרה לקישורים",
         "newHeading": "קישור חדש",
-        "step": { "destination": "יעד", "message": "הודעת פתיחה", "tracking": "מעקב" },
+        "step": {
+          "destination": "יעד",
+          "message": "הודעת פתיחה",
+          "tracking": "מעקב"
+        },
         "name": "שם",
         "status": "סטטוס",
         "countryCode": "קוד מדינה",
@@ -194,6 +207,14 @@
         "shortUrl": "קישור מקוצר",
         "waUrl": "קישור WhatsApp",
         "qrAlt": "קוד QR לקישור זה"
+      },
+      "public": {
+        "missingTitle": "הקישור לא נמצא",
+        "missingBody": "הקישור הזה אינו קיים או שנמחק.",
+        "goneTitle": "הקישור אינו פעיל עוד",
+        "goneBody": "הקישור הזה מושהה או פג תוקף.",
+        "errorTitle": "משהו השתבש",
+        "errorBody": "לא הצלחנו לפתוח את הקישור הזה. אנא נסה שוב."
       }
     }
   }

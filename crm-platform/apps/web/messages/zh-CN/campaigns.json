@@ -647,8 +647,43 @@
         "notes": "补充说明",
         "notesNote": "可选 / 最多 2000 个字符",
         "notesPlaceholder": "任何具体要求：必须包含的措辞、需避免的内容、品牌语气提示…",
-        "failed": "无法生成营销活动，请重试。",
-        "applied": "营销活动文案已填入。继续之前请先检查。"
+        "applied": "营销活动文案已填入。继续之前请先检查。",
+        "pictureApplied": "图片已附加到营销活动。请在“附件”卡片中查看。",
+        "errors": {
+          "noKey": "此工作区未启用任何 AI 服务商。请联系管理员添加密钥。",
+          "limitReached": "此工作区本月的 AI 额度已用完。",
+          "providerFailed": "AI 服务商未响应。请稍后重试。",
+          "badJson": "无法解析模型的回复。请重试或修改简介。",
+          "invalid": "请检查简介：商家名称为必填项，部分字段过长。",
+          "forbidden": "您没有创建营销活动的权限。",
+          "network": "无法连接服务器。请检查网络连接后重试。",
+          "failed": "无法生成营销活动。请重试。"
+        },
+        "picture": {
+          "label": "同时生成图片",
+          "hint": "根据同一简介生成一张图片并附加到营销活动。将使用您的 OpenAI 额度。",
+          "needsOpenAi": "生成图片需要 OpenAI 密钥。请选择 OpenAI 模型以启用此功能。",
+          "noAttachment": "您选择的号码只发送文本，因此无法附加图片。",
+          "size": "图片形状",
+          "sizes": {
+            "square": "方形",
+            "landscape": "横向",
+            "portrait": "纵向"
+          },
+          "textKept": "营销活动文本已填写。仅图片缺失。",
+          "retry": "重试生成图片",
+          "errors": {
+            "noKey": "生成图片需要 OpenAI 密钥，而此工作区未启用任何密钥。",
+            "limitReached": "此工作区本月的 AI 额度已用完。",
+            "providerFailed": "图片服务未响应。请稍后重试。",
+            "badJson": "图片服务返回了意外内容。请重试。",
+            "imageRefused": "OpenAI 拒绝生成此图片。请修改产品、优惠或备注后重试。",
+            "invalid": "请检查简介：商家名称为必填项，部分字段过长。",
+            "forbidden": "您没有创建营销活动的权限。",
+            "network": "无法连接服务器。请检查网络连接后重试。",
+            "failed": "无法生成图片。请重试。"
+          }
+        }
       },
       "switch": {
         "title": "使用引导流程？",
@@ -829,7 +864,8 @@
         "clicked": "已点击",
         "showing": "显示 {total} 项中的 {shown} 项",
         "prev": "上一页",
-        "next": "下一页"
+        "next": "下一页",
+        "heldUntil": "暂缓至 {when}（免打扰时段）"
       },
       "engagement": {
         "opened": "已打开",
@@ -997,7 +1033,8 @@
         "badge": "实时",
         "updated": "更新于 {time}",
         "queued": "{count} 条等待发送",
-        "processing": "{count} 条正在发送"
+        "processing": "{count} 条正在发送",
+        "held": "{count} 条因免打扰时段暂缓"
       },
       "statistics": {
         "loadFailed": "无法加载统计数据。",
@@ -1126,7 +1163,10 @@
         "auto_end_in_past": "自动结束日期已过。",
         "auto_end_before_send": "自动结束日期必须晚于发送时间。",
         "auto_end_recurring": "重复营销活动按其自身规则结束：请清除自动结束日期。",
-        "pacing_range": "请检查 Smart Delivery：最长延迟短于最短延迟，或两个发送时间只设置了其中一个。"
+        "pacing_range": "请检查 Smart Delivery：最长延迟短于最短延迟，或两个发送时间只设置了其中一个。",
+        "follow_up_template_required": "请选择每个跟进要发送的模板。",
+        "follow_up_flow_required": "请选择每个跟进要启动的流程。",
+        "follow_up_cloud_api_only": "跟进仅适用于 WhatsApp Cloud API 号码。请在第 1 步中选择一个号码，或移除跟进。"
       },
       "template": {
         "previewOnline": "在线",
@@ -1160,7 +1200,9 @@
         "senderLabel": "发送自",
         "senderHint": "发送此群发所用的 WhatsApp 号码。",
         "pickSender": "选择号码",
-        "classicOption": "经典构建器"
+        "classicOption": "经典构建器",
+        "buildWithAi": "使用 AI 生成",
+        "aiNote": "使用 AI 起草新模板。您可在模板页面查看；随后 Meta 会对其进行审核，通过后才能发送，请在审核通过后返回选择。"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",
@@ -1382,7 +1424,8 @@
         "sumCsv": "CSV 文件 {name}：{count, plural, other {# 个有效号码}}",
         "estimatedCostFull": "预估费用（全部）",
         "chargedPlan": "现从您的钱包扣款：{amount}（您的套餐覆盖其中 {covered} 条消息）",
-        "chargedWallet": "从您的钱包扣款：{amount}"
+        "chargedWallet": "从您的钱包扣款：{amount}",
+        "sumFollowUps": "跟进"
       },
       "test": {
         "title": "发送 WhatsApp 测试消息",
@@ -1587,7 +1630,25 @@
         "exportFailed": "无法下载导出文件。",
         "deleteTitle": "删除此群发？",
         "deleteOne": "将删除此群发及其收件人，且无法撤销。",
-        "deleteSeries": "将删除此循环群发及其已计划的运行。尚未发送任何消息，因此不会丢失历史记录。此操作无法撤销。"
+        "deleteSeries": "将删除此循环群发及其已计划的运行。尚未发送任何消息，因此不会丢失历史记录。此操作无法撤销。",
+        "followUps": {
+          "title": "跟进",
+          "step": "跟进 {step}",
+          "count": {
+            "waiting": "{count} 个等待中",
+            "sent": "{count} 个已发送",
+            "delivered": "{count} 个已送达",
+            "read": "{count} 个已读",
+            "flowsStarted": "{count} 个流程已启动",
+            "skipped": "{count} 个已跳过",
+            "lapsed": "{count} 个已失效",
+            "failed": "{count} 个失败"
+          },
+          "hint": {
+            "skipped": "检查时未满足条件，因此序列到此结束。",
+            "lapsed": "在联系人回复或阅读之前，监测时间已到，因此序列到此结束。"
+          }
+        }
       },
       "panel": {
         "title": "通过“创建群发”创建",
@@ -1618,6 +1679,72 @@
         "body": "{number}（{engine}）需通过经典构建器发送，该构建器将从头开始。此营销活动会保存为草稿并保留在您的营销活动列表中，您可以随时回来继续。",
         "confirm": "打开经典构建器",
         "cancel": "留在此处"
+      },
+      "followUps": {
+        "title": "跟进",
+        "intro": "根据联系人在收到营销活动消息后的行为，再发送一条消息或启动一个流程。最多可连续设置 3 步。",
+        "cloudOnly": "跟进需要 WhatsApp Cloud API 号码，因为它依赖 Meta 的已读和回复回执。请在第 1 步中选择一个号码。",
+        "add": "添加跟进",
+        "count": "{used} / {max} 个跟进",
+        "limitReached": "已达上限：{max} 个跟进。",
+        "stepTitle": "跟进 {step}",
+        "measuredFromCampaign": "从营销活动消息开始计算。",
+        "measuredFromStep": "从跟进 {step} 的消息开始计算。",
+        "remove": "移除跟进 {step}",
+        "removeShort": "移除",
+        "triggerLabel": "当联系人",
+        "trigger": {
+          "replied": "回复",
+          "read": "阅读了消息",
+          "not_replied": "尚未回复",
+          "not_read": "尚未阅读消息"
+        },
+        "triggerHelp": {
+          "replied": "若在设定时间内收到回复，将立即触发；否则序列结束。",
+          "read": "若在设定时间内被阅读，将立即触发；否则序列结束。",
+          "not_replied": "等待设定的时间后，若联系人仍未回复则触发；若已回复，序列结束。",
+          "not_read": "等待设定的时间后，若联系人仍未阅读则触发；若已阅读，序列结束。"
+        },
+        "watchLabel": "最长监测时间",
+        "waitLabel": "等待",
+        "unitLabel": "时间单位",
+        "duration": {
+          "minutes": "{count, plural, other {# 分钟}}",
+          "hours": "{count, plural, other {# 小时}}",
+          "days": "{count, plural, other {# 天}}"
+        },
+        "actionLabel": "然后",
+        "action": {
+          "template": "发送模板",
+          "flow": "启动流程"
+        },
+        "templateLabel": "要发送的模板",
+        "flowLabel": "要启动的流程",
+        "pickTemplate": "选择模板",
+        "pickFlow": "选择流程",
+        "loading": "加载中...",
+        "unavailable": "已不可用",
+        "noTemplates": "暂无已审核通过的模板。",
+        "createTemplate": "创建模板",
+        "noFlows": "暂无流程。",
+        "createFlow": "创建流程",
+        "flowsError": "无法加载流程，请稍后重试。",
+        "line": "{when}：{what}",
+        "when": {
+          "replied": "如果在 {wait} 内回复",
+          "read": "如果在 {wait} 内阅读",
+          "not_replied": "如果 {wait} 后仍未回复",
+          "not_read": "如果 {wait} 后仍未阅读"
+        },
+        "does": {
+          "template": "发送 {name}",
+          "flow": "启动流程 {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, other {分钟}}",
+          "hours": "{count, plural, other {小时}}",
+          "days": "{count, plural, other {天}}"
+        }
       }
     },
     "history": {

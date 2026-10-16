@@ -32,7 +32,6 @@ export function useUnreadCount() {
     refetchInterval: interval,
     refetchOnWindowFocus: true,
     staleTime: 15_000,
-    retry: false,
   });
 }
 

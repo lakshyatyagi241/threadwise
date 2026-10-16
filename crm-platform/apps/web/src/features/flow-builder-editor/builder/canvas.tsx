@@ -43,6 +43,12 @@ interface Props {
   onMoved: (next: CanvasState) => void;
   onConnect: (from: { nodeId: string; handleId: string }, targetId: string) => void;
   onDropNode: (type: string, x: number, y: number) => void;
+  /** A dragged connection was let go on empty canvas: where (world coordinates, and pixels inside the canvas). */
+  onDropEmpty?: (
+    from: { nodeId: string; handleId: string },
+    world: { x: number; y: number },
+    screen: { x: number; y: number },
+  ) => void;
   onDeleteEdge: (id: string) => void;
   /** A control on a card (the Ask for file / location prompt, extensions, property) changed the node's data. */
   onPatchNode?: (nodeId: string, patch: Record<string, unknown>) => void;
@@ -77,6 +83,7 @@ export function Canvas({
   onMoved,
   onConnect,
   onDropNode,
+  onDropEmpty,
   onDeleteEdge,
   onPatchNode,
   onOpenNode,
@@ -297,6 +304,13 @@ export function Canvas({
         } else {
           const card = el?.closest('[data-node-id]');
           if (card) onConnect(pendingFrom, card.getAttribute('data-node-id')!);
+          else if (onDropEmpty && wrapperRef.current?.contains(el)) {
+            const r = wrapperRef.current.getBoundingClientRect();
+            onDropEmpty(pendingFrom, toWorld(e.clientX, e.clientY), {
+              x: e.clientX - r.left,
+              y: e.clientY - r.top,
+            });
+          }
         }
         setPendingFrom(null);
         setTempEdge(null);
@@ -310,7 +324,7 @@ export function Canvas({
       window.removeEventListener('pointerup', onUp);
       window.removeEventListener('pointercancel', onUp);
     };
-  }, [pendingFrom, onConnect, onLive, onMoved, setPan, setZoom, toWorld, wrapperRef]);
+  }, [pendingFrom, onConnect, onDropEmpty, onLive, onMoved, setPan, setZoom, toWorld, wrapperRef]);
 
   // Escape cancels a connection that is being drawn (the builder also clears the selection on the same key).
   useEffect(() => {
@@ -404,7 +418,7 @@ export function Canvas({
       style={{ cursor: pendingFrom ? 'crosshair' : 'default' }}
     >
       <div
-        className="absolute top-0 left-0 origin-top-left"
+        className="absolute top-0 start-0 origin-top-left"
         style={{
           transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
           transformOrigin: '0 0',

@@ -29,6 +29,7 @@ Appointments lists every booking your customers made, from chat, from your booki
 - The tab counts follow the search and type, not the status.
 - The list loads more bookings at the bottom. A calendar shows the first bookings of the range if there are very many.
 - **Booking types**, **Settings** and **New booking type** in the top bar open the set-up screens.
+- **Calendar out of sync.** When Google Calendar is connected, the app looks about once an hour at the Google event of each confirmed booking in the next 60 days. If the event was deleted, cannot be found, was moved or had its guests changed in Google, the booking shows **Calendar out of sync** with the reason, and the person who owns it gets one notification. The booking itself is never changed on its own. With the update permission you choose **Push our time back to Google** (the event is written again from the booking) or **Accept Google's change** (a moved event moves the booking and a deleted event cancels it, with the usual messages to the customer, after you confirm).
 
 ## Plan and access
 
@@ -38,5 +39,6 @@ You need permission to view appointments. Confirming, moving, completing and can
 
 - **No bookings appear.** Check the tab and the filters. A booking with a past start time is under **Past**.
 - **Mark no-show is missing.** It appears only after a confirmed booking's start time has passed.
+- **Calendar out of sync stays after you pushed.** Google may have refused the change; the message says why. Check that Google Calendar is connected in [Appointment settings](help:appointments-settings).
 - **"That time was just taken" or a conflict message.** Someone else changed the booking. Reload to see the latest version.
 - Booking types and hours are set up in [Booking types](help:appointments-booking-types) and [Appointment settings](help:appointments-settings).

@@ -5,7 +5,22 @@ summary: Browse mini apps and integrations, install them after reviewing their p
 area: apps
 order: 10
 documents: [nav:marketplace]
-keywords: [marketplace, apps, mini apps, integrations, install, uninstall, permissions, connect, lead sources, request, add-on, available add-ons, subscribe]
+keywords:
+  [
+    marketplace,
+    apps,
+    mini apps,
+    integrations,
+    install,
+    uninstall,
+    permissions,
+    connect,
+    lead sources,
+    request,
+    add-on,
+    available add-ons,
+    subscribe,
+  ]
 ---
 
 ## What it is for

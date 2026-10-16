@@ -130,15 +130,24 @@
       "loading": "Links laden…",
       "retry": "Opnieuw proberen",
       "searchPlaceholder": "Zoek op naam of link",
-      "create": { "cta": "Nieuwe link" },
+      "create": {
+        "cta": "Nieuwe link"
+      },
       "stats": {
         "all": "Alle links",
         "live": "Actief",
         "totalClicks": "Totaal aantal klikken",
         "avgClicks": "Gem. klikken / link"
       },
-      "tabs": { "all": "Alle", "live": "Actief", "paused": "Gepauzeerd" },
-      "status": { "live": "Actief", "paused": "Gepauzeerd" },
+      "tabs": {
+        "all": "Alle",
+        "live": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "status": {
+        "live": "Actief",
+        "paused": "Gepauzeerd"
+      },
       "empty": {
         "title": "Nog geen links",
         "description": "Maak een link om te delen in advertenties, bio's of een QR-code."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "Terug naar links",
         "newHeading": "Nieuwe link",
-        "step": { "destination": "Bestemming", "message": "Startbericht", "tracking": "Tracking" },
+        "step": {
+          "destination": "Bestemming",
+          "message": "Startbericht",
+          "tracking": "Tracking"
+        },
         "name": "Naam",
         "status": "Status",
         "countryCode": "Landcode",
@@ -194,6 +207,14 @@
         "shortUrl": "Verkorte link",
         "waUrl": "WhatsApp-link",
         "qrAlt": "QR-code voor deze link"
+      },
+      "public": {
+        "missingTitle": "Link niet gevonden",
+        "missingBody": "Deze link bestaat niet of is verwijderd.",
+        "goneTitle": "Link niet meer actief",
+        "goneBody": "Deze link is gepauzeerd of verlopen.",
+        "errorTitle": "Er is iets misgegaan",
+        "errorBody": "We konden deze link niet openen. Probeer het opnieuw."
       }
     }
   }

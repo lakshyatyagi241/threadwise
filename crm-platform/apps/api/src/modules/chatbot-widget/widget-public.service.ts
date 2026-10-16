@@ -12,10 +12,14 @@ import {
   type WidgetPublicConfig,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
-import type { ConsentChannel } from '@crm/contracts';
+import { noticeGrantChannels, type ConsentChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { ChannelIngestPublisher } from '../chat-conversations';
-import { ConsentIntakeService, ConsentNoticeService } from '../contact-consent';
+import {
+  ConsentIntakeService,
+  ConsentNoticeService,
+  ContactPrivacyService,
+} from '../contact-consent';
 import {
   ASSISTANT_DIRECTORY,
   INBOX_GATEWAY,
@@ -69,6 +73,8 @@ export interface PublicRequest {
   inputUuid: string;
   headerUuid: string;
   secure: boolean;
+  /** The browser sent the Global Privacy Control signal (`Sec-GPC: 1`). */
+  gpc?: boolean;
 }
 
 interface Located {
@@ -107,6 +113,7 @@ export class WidgetPublicService {
     private readonly ingest: ChannelIngestPublisher,
     private readonly notices: ConsentNoticeService,
     private readonly consentIntake: ConsentIntakeService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   /** The widget behind a token, whatever its status; undefined for a malformed, unknown or rotated token. */
@@ -343,6 +350,7 @@ export class WidgetPublicService {
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
       await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
+      await this.recordGpc(tx, orgId, widget.uuid, conversation.id, fresh, req);
       const inbound = await this.inbox.insertInbound(
         tx,
         orgId,
@@ -431,9 +439,10 @@ export class WidgetPublicService {
           phone: visitor.phone,
         });
         if (contactId === null) return;
-        const channels: ConsentChannel[] = [];
-        if (phoneDigits(visitor.phone) !== '') channels.push('whatsapp');
-        if (visitor.email) channels.push('email');
+        const channels: ConsentChannel[] = noticeGrantChannels(notice, {
+          phone: phoneDigits(visitor.phone) !== '',
+          email: Boolean(visitor.email),
+        });
         if (channels.length === 0) return;
         await this.consentIntake.grant(sp as Tx, orgId, {
           contactId,
@@ -451,6 +460,38 @@ export class WidgetPublicService {
       });
     } catch (err) {
       this.logger.warn({ err: String(err) }, '[WGT] consent could not be recorded');
+    }
+  }
+
+  /**
+   * The visitor's browser sent the Global Privacy Control signal (`Sec-GPC: 1`): record the Do Not Sell or Share opt-out of the thread's
+   * contact, but only when the workspace has `ccpa_us` on and the visitor has given a phone or an email (otherwise there is no contact
+   * to record it for; a later message that carries one does). Once per visitor of this widget. Best effort in a savepoint, like the
+   * consent line: a failure never loses the visitor's message. Nothing but the widget id is kept as evidence.
+   */
+  private async recordGpc(
+    tx: Tx,
+    orgId: number,
+    widgetUuid: string,
+    conversationId: number,
+    visitor: VisitorForInbox,
+    req: PublicRequest,
+  ): Promise<void> {
+    if (req.gpc !== true) return;
+    try {
+      await tx.transaction(async (sp) => {
+        const contactId = await this.inbox.contactOf(sp as Tx, orgId, conversationId, {
+          email: visitor.email,
+          phone: visitor.phone,
+        });
+        if (contactId === null) return;
+        await this.privacy.recordGpc(sp as Tx, orgId, contactId, {
+          keyBase: `widget:${widgetUuid}:${visitor.visitorUuid}`,
+          evidence: { widgetId: widgetUuid },
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, '[WGT] GPC opt-out could not be recorded');
     }
   }
 
@@ -476,6 +517,7 @@ export class WidgetPublicService {
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
       await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
+      await this.recordGpc(tx, orgId, widget.uuid, conversation.id, fresh, req);
       return {
         peerKey: visitor.visitorUuid,
         peerName: fresh.name,
@@ -613,6 +655,25 @@ export class WidgetPublicService {
    * A visitor's thumbs up or down on a line the bot sent them, kept on that line (`meta.feedback`) for the team to read. Only a line of
    * the visitor's own thread can be marked; anything else is the same 404.
    */
+  /**
+   * "Restart this chat" and "Close this chat": the visitor starts over with a fresh visitor (and so a fresh conversation); the old
+   * thread stays in the team inbox as it was. The new uuid is returned for the cookie and the window's own storage.
+   */
+  async restart(
+    token: string,
+    req: PublicRequest,
+  ): Promise<{ widgetUuid: string; visitorUuid: string }> {
+    const { orgId, widget } = await this.locateActive(token);
+    const visitor = await this.db.txAs({ orgId }, (tx) =>
+      this.visitors.create(tx, orgId, widget.id, {
+        referrer: req.referer.slice(0, 1024),
+        userAgent: req.userAgent.slice(0, 512),
+        ip: req.ip,
+      }),
+    );
+    return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
   async feedback(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
     const parsed = widgetFeedbackRequestSchema.safeParse(rawBody ?? {});
     if (!parsed.success)

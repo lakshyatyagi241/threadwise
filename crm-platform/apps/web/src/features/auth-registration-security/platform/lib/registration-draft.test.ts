@@ -45,7 +45,10 @@ describe('sign-up protection settings', () => {
       domains: ['rival.com', 'other.io', 'sub.third.co.uk'],
       invalid: null,
     });
-    const { patch } = buildRegistrationPatch(base, draftOf({ blockedEmailDomains: 'A.com\nb.com' }));
+    const { patch } = buildRegistrationPatch(
+      base,
+      draftOf({ blockedEmailDomains: 'A.com\nb.com' }),
+    );
     expect(patch).toEqual({ blockedEmailDomains: ['a.com', 'b.com'] });
     expect(registrationSettingsPatchSchema.safeParse(patch).success).toBe(true);
   });
@@ -70,9 +73,9 @@ describe('sign-up protection settings', () => {
         .blockedEmailDomains,
     ).toEqual({ code: 'tooMany', max: 500 });
     const withList = { ...base, blockedEmailDomains: ['a.com'] };
-    expect(
-      buildRegistrationPatch(withList, { ...registrationToDraft(withList) }).patch,
-    ).toEqual({});
+    expect(buildRegistrationPatch(withList, { ...registrationToDraft(withList) }).patch).toEqual(
+      {},
+    );
   });
 
   it('maps API paths to the new controls', () => {

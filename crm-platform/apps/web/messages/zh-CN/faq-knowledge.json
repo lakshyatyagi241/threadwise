@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "测试",
         "unanswered": "未回答",
-        "insights": "数据洞察",
-        "settings": "设置"
+        "insights": "数据洞察"
       },
       "unansweredCount": "{count, plural, other {# 条未回答的消息}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "此流程已达到 FAQ 上限。请删除未使用的 FAQ 或变体，或请平台管理员提高上限。"
     },
     "banner": {
-      "enabledToast": "FAQ 自动回答已开启。",
-      "engineOff": "平台已关闭 FAQ 自动回答。在重新开启之前，客户收不到 FAQ 回答。",
-      "modelChanged": "你调整此阈值后，平台更换了 AI 模型。得分已发生变化，请重新检查灵敏度。",
-      "reviewSensitivity": "检查灵敏度",
-      "offNoRight": "请让拥有 faq.settings.manage 权限的人（通常是工作区管理员）开启。",
-      "enable": "开启 FAQ 自动回答",
-      "offTitle": "此流程的 FAQ 应答已关闭",
-      "offBody": "你可以编写和测试此流程的 FAQ，但在你开启之前，客户不会收到回答。"
+      "engineOff": "平台已关闭 FAQ 自动回答。在重新开启之前，客户收不到 FAQ 回答。"
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "启用中",
         "paused": "已暂停",
-        "variations": "问法",
-        "pending": "索引中",
-        "pendingHint": "数秒内生效",
-        "failed": "索引失败",
-        "failedHint": "需要处理"
+        "variations": "问法"
       },
-      "failedBanner": "{count, plural, other {# 条问法}}索引失败，暂时无法匹配客户消息。",
-      "showFailed": "查看有失败项的 FAQ",
       "search": "搜索 FAQ",
       "searchPlaceholder": "搜索问题和问法",
       "filter": {
         "status": "状态",
         "anyStatus": "任意状态",
         "category": "分类",
-        "anyCategory": "任意分类",
-        "indexing": "索引",
-        "anyIndexing": "全部",
-        "pending": "仍在索引",
-        "failed": "失败"
+        "anyCategory": "任意分类"
       },
       "status": {
         "active": "启用中",
@@ -108,7 +90,6 @@
       "col": {
         "question": "问题",
         "answer": "答案",
-        "indexing": "生效的问法",
         "answered": "已回答（90 天）",
         "status": "状态",
         "actions": "操作"
@@ -130,12 +111,6 @@
         "rowBody": "“{question}”及其所有问法将被永久删除，无法恢复。",
         "delete": "删除",
         "cancel": "取消"
-      },
-      "indexing": {
-        "summary": "{ready} 条生效，{pending} 条索引中，{failed} 条失败",
-        "ready": "{count} 条生效",
-        "pending": "{count} 条索引中",
-        "failed": "{count} 条失败"
       },
       "stepMissing": "步骤丢失",
       "subtitle": "客户在 {flow} 中提出的问题以及机器人的回答。这些 FAQ 仅在此流程内应答。",
@@ -202,14 +177,6 @@
           "other": "其他流程的某个步骤",
           "otherHint": "将对话转交给另一个流程。"
         }
-      },
-      "advanced": {
-        "title": "高级：仅针对此 FAQ 的灵敏度",
-        "custom": "为此 FAQ 使用自定义灵敏度",
-        "sliderLabel": "匹配分数不低于",
-        "body": "默认情况下，每条 FAQ 使用此流程的灵敏度。如果某条 FAQ 匹配过于频繁（调高）或过少（调低），请使用自定义值。",
-        "workspace": "此流程的灵敏度为 {value}%。",
-        "following": "沿用此流程的灵敏度（{value}%）。"
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "添加",
       "pasteMany": "批量粘贴",
       "full": "此 FAQ 已达到 {max} 条问法的上限。",
-      "failedNotice": "{count, plural, other {# 条问法}}索引失败。请编辑并保存该问法以重试。",
       "suggest": "用 AI 建议",
       "suggestSaveFirst": "请先保存 FAQ，然后 AI 才能给出问法建议。",
       "suggesting": "正在向 AI 获取建议",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, other {# 行}}超出问法数量上限，已排除。",
         "more": "另有 {count} 条",
         "add": "添加 {count, plural, other {# 条问法}}"
-      },
-      "state": {
-        "ready": "生效中",
-        "pending": "索引中",
-        "pendingHint": "已保存，几秒后开始匹配。",
-        "failed": "失败",
-        "failedHint": "请编辑并保存该问法以重试。",
-        "noReason": "未给出原因"
       },
       "confirm": {
         "title": "移除此问法？",
@@ -539,9 +497,7 @@
       },
       "hist": {
         "title": "消息得分分布",
-        "hint": "每根柱子代表一个得分区间，虚线是当前灵敏度。",
-        "advice": "如果出现错误回答，请调高阈值；如果太多消息没得到回答，请调低。",
-        "tune": "调整灵敏度"
+        "hint": "每根柱子代表一个得分区间，虚线是当前灵敏度。"
       },
       "top": {
         "title": "热门 FAQ",
@@ -568,98 +524,6 @@
         "bucketTooltip": "{from}-{to}%：已回答 {answered}，未回答 {unanswered}",
         "thresholdMarker": "阈值 {value}%"
       }
-    },
-    "settings": {
-      "title": "FAQ 设置",
-      "unsaved": "有未保存的更改",
-      "discard": "放弃",
-      "save": "保存设置",
-      "saved": "设置已保存。",
-      "readOnly": "你可以查看这些设置。修改需要 faq.settings.manage 权限，通常由工作区管理员持有。",
-      "engineOff": "平台已关闭 FAQ 自动回答。你在此做的设置会在重新开启后生效。",
-      "conflict": "其他人已保存了这些设置。请重新加载查看他们的版本，然后再修改一次。",
-      "reload": "重新加载设置",
-      "modelChanged": {
-        "title": "请检查灵敏度",
-        "body": "你调整此阈值后，平台更换了 AI 模型。得分已发生变化，请重新检查灵敏度。保存即表示确认。"
-      },
-      "enable": {
-        "title": "FAQ 自动回答",
-        "on": "开",
-        "off": "关",
-        "label": "使用此流程的 FAQ 回答客户",
-        "onBody": "此流程上线期间，未被任何关键词触发器或运行中流程处理的客户消息，会与此流程的 FAQ 进行比较。机器人会回复最佳答案，或将客户转到 FAQ 指向的步骤。",
-        "offBody": "此流程的 FAQ 不会回答客户。你仍可编写和测试它们。"
-      },
-      "sens": {
-        "title": "灵敏度",
-        "hint": "消息需要多接近才算匹配。得分对应模型 {model}。",
-        "label": "匹配分数至少达到以下值时回答",
-        "presets": "灵敏度预设",
-        "preset": {
-          "strict": "严格",
-          "balanced": "均衡",
-          "forgiving": "宽松"
-        },
-        "looser": "回答更多",
-        "stricter": "回答更少",
-        "recommendedMark": "推荐 {value}%",
-        "explain": "设为 {value}% 时，只有最佳匹配得分达到 {value}% 或更高才会回答。值越高，回答越少但越稳妥；值越低，回答越多，但答错的可能性也越高。",
-        "useRecommended": "使用推荐值（{value}%）",
-        "modelScale": "得分只在同一模型内可比较。如果平台更换了模型（{model}），请重新检查这个数值。"
-      },
-      "margin": {
-        "title": "歧义保护",
-        "hint": "防止机器人在得分几乎相同的两个 FAQ 之间乱猜。",
-        "label": "领先第二名的最小差距",
-        "off": "关",
-        "explain": "当最佳 FAQ 领先第二名的幅度低于此值时，机器人会保持沉默，并把消息记为未回答。如果你的 FAQ 很少重叠，可以保持关闭。"
-      },
-      "log": {
-        "title": "日志中的客户消息",
-        "label": "在匹配日志中保留客户消息",
-        "onBody": "每条消息的文本会保留 90 天，方便你了解回答或未回答的原因并据此改进，之后会被删除。",
-        "offBody": "只保留得分和结果，不保留文本。你仍能看到机器人的回答频率，但无法从未回答的消息中学习。"
-      },
-      "facts": {
-        "title": "模型与限额",
-        "model": "嵌入模型",
-        "faqs": "FAQ",
-        "variations": "已使用的问法",
-        "perFaq": "每个 FAQ 允许的问法数",
-        "of": "{used} / {max}"
-      },
-      "how": {
-        "title": "匹配的工作原理",
-        "exact": "完全匹配：消息与已保存的问法相同（不区分大小写和空格）。",
-        "semantic": "语义匹配：消息按语义与所有生效的问法比较，因此措辞不同也能匹配。",
-        "trigram": "拼写回退：如果 AI 服务商不可用，则改为逐字母比较，只能识别错别字。",
-        "threshold": "最佳得分会与灵敏度比较。高于灵敏度时，FAQ 回答；低于时，消息会列入“未回答”。",
-        "verify": "二次核对（可选）：刚刚达到灵敏度的匹配可由小型聊天模型再核对一次，它只能拦截回答。"
-      },
-      "who": "修改这些设置需要 faq.settings.manage 权限。",
-      "leave": {
-        "title": "不保存就离开？",
-        "body": "你对这些设置的更改尚未保存。",
-        "leave": "离开",
-        "stay": "留下"
-      },
-      "verify": {
-        "title": "对临界匹配进行二次核对",
-        "hint": "小型聊天模型会再次核对刚刚达到阈值的匹配。",
-        "unavailable": "平台已关闭二次核对，即使你在此开启也不会运行。请联系平台管理员。",
-        "label": "用二次核对检查临界匹配",
-        "on": "开启",
-        "off": "关闭",
-        "onBody": "当匹配刚好越过阈值时，小型聊天模型会阅读客户的消息和 FAQ，判断回答是否合适。它只能回答“否”，不会促成任何回答。",
-        "offBody": "所有达到阈值的匹配都会直接回答，不再二次核对。",
-        "bandLabel": "多接近算临界匹配",
-        "bandValue": "+{value}%",
-        "explainOn": "得分在 {from}% 到 {to}% 之间的匹配会由 {model} 核对。若结果为“否”，则不会发送回答，该消息会显示在“未回答”中。",
-        "explainOff": "得分达到 {threshold}% 及以上的匹配都会回答。开启二次核对，可让最接近阈值的匹配再核对一次。",
-        "cost": "每次核对都会把客户的消息和 FAQ 的问题发送给模型：约几百个 token，并会让临界回复多花约一秒。不在该范围内的匹配不会被核对。如果核对失败、不可用或达到每小时上限，则按没有核对的情况处理，匹配照常生效。"
-      },
-      "subtitle": "为 {flow} 开启 FAQ 应答，并调整消息需要多接近才算匹配。"
     },
     "flowNode": {
       "start": "流程的开头",

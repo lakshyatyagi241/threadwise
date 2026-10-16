@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Copier le code",
       "buttonUnnamed": "Bouton",
-      "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}"
+      "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}",
+      "live": "Aperçu en direct",
+      "business": "Bloomly",
+      "online": "en ligne"
     },
     "card": {
       "rejected": "Rejeté : {reason}",
       "view": "Afficher",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "curl": "cURL : envoyer ce modèle avec l'API",
+      "curlNamed": "cURL pour envoyer {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standard",
+        "media": "Média",
+        "auth": "Authentification",
+        "carousel": "Carrousel",
+        "catalog": "Catalogue",
+        "limited_time_offer": "Offre à durée limitée"
+      },
+      "rejectedLabel": "Refusé :",
+      "viewTitle": "Voir les détails et le statut de révision Meta",
+      "deleteNamed": "Supprimer {name}"
     },
     "library": {
       "title": "Bibliothèque de modèles",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Aucun modèle ne correspond",
       "emptyFilteredBody": "Modifiez ou effacez les filtres pour voir plus de modèles.",
       "clearFilters": "Effacer les filtres",
-      "loadMore": "Charger plus"
+      "loadMore": "Charger plus",
+      "crumb": "Campagnes / Modèles",
+      "titleA": "Modèle",
+      "titleB": "bibliothèque",
+      "tipTitle": "Astuce",
+      "tip": "Soumettez des modèles au texte clair et adapté aux variables ('{{name}}', '{{order_id}}'). Les délais d'approbation restent sous 24 h lorsque le corps évite les termes promotionnels et correspond à la catégorie Meta choisie.",
+      "statusTitle": "Statut",
+      "statusTab": {
+        "all": "Tous",
+        "approved": "Approuvé",
+        "pending": "En cours d'examen",
+        "rejected": "Refusé"
+      },
+      "quickStartTitle": "Démarrage rapide",
+      "quickStart": "Lisez les <link>consignes relatives aux modèles</link> avant de soumettre à Meta pour garder des délais d'approbation sous 24 h.",
+      "createTemplate": "Créer un modèle",
+      "syncFailedLabel": "Échec de la synchronisation depuis Meta :",
+      "categories": "Catégories",
+      "tabAll": "Toutes",
+      "sortLabel": "Trier les modèles",
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name-asc": "Nom A→Z",
+        "name-desc": "Nom Z→A"
+      },
+      "showing": "Affichage de",
+      "of": "sur",
+      "filteredTemplates": "modèles filtrés",
+      "showingRange": "Affichage de 1 à {shown} sur {total} modèles",
+      "legend": {
+        "approved": "Approuvés",
+        "pending": "En cours d'examen",
+        "rejected": "Refusés"
+      },
+      "helpLabel": "Aide - 0{n}",
+      "help": {
+        "one": {
+          "title": "Qu'est-ce qu'un modèle de message ?",
+          "body": "Un format de message pré-approuvé exigé par Meta pour démarrer de nouvelles conversations avec des clients en dehors de la fenêtre de service de 24 heures."
+        },
+        "two": {
+          "title": "Comment réduire les délais d'approbation ?",
+          "body": "Gardez le corps du message clair, évitez un langage trop promotionnel dans les catégories Utilitaire et fournissez toujours des valeurs d'exemple pour les variables."
+        },
+        "three": {
+          "title": "Pourquoi mon modèle a-t-il été refusé ?",
+          "body": "Les causes courantes sont un format incorrect, une catégorie inadaptée ou un contenu abusif. Consultez le motif du refus et modifiez le modèle pour le soumettre à nouveau."
+        }
+      }
     },
     "delete": {
       "title": "Supprimer le modèle",
@@ -289,6 +355,11 @@
         "saved": "Enregistré en brouillon.",
         "warnings": "À vérifier avant l’examen par Meta :",
         "open": "Ouvrir le modèle"
+      },
+      "ai": {
+        "open": "Créer avec l'IA",
+        "applied": "Brouillon du modèle rempli par l'IA. Relisez-le avant de le soumettre.",
+        "authHint": "Les modèles d'authentification ont un texte fixe, il n'y a donc rien à rédiger."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Suspendu par Meta. Il ne peut pas être envoyé tant que Meta n’a pas levé la suspension.",
         "pausedUntil": "Suspendu par Meta jusqu’au {when}.",
         "disabled": "Désactivé par Meta. Il ne peut pas être envoyé.",
-        "deleted": "Meta ne liste plus ce modèle. Il est conservé ici ; synchronisez à nouveau ou supprimez-le."
+        "deleted": "Meta ne liste plus ce modèle. Il est conservé ici ; synchronisez à nouveau ou supprimez-le.",
+        "notSubmitted": "Pas encore soumis à Meta",
+        "notSubmittedBody": "Ce modèle est enregistré ici mais n'a pas d'ID de modèle Meta : Meta ne l'a jamais accepté, c'est pourquoi il ne peut être ni examiné ni envoyé. Soumettez-le pour lancer la révision.",
+        "notSubmittedNoWaba": "Ce modèle n'a pas d'ID de modèle Meta. Connectez un compte WhatsApp Business (WABA), puis soumettez-le pour révision.",
+        "pendingBody": "La plupart des modèles sont approuvés en quelques minutes ; Meta peut prendre jusqu'à 48 heures. Cette page s'actualise automatiquement toutes les 30 secondes tant que le statut est en attente.",
+        "submittedAgo": "Soumis {when}",
+        "checkedAgo": "dernière vérification {when}",
+        "code": "Code :",
+        "pausedBody": "Des retours négatifs répétés (blocages ou signalements de spam) ont mis ce modèle en pause. Son score de qualité doit remonter avant qu'il puisse être réenvoyé."
       },
       "facts": {
         "title": "Synchronisation Meta",
@@ -354,7 +433,171 @@
         "title": "Données envoyées à Meta",
         "hint": "Ce qui est envoyé à Meta pour examen, exactement tel que construit.",
         "empty": "Rien n’a encore été construit."
+      },
+      "curl": {
+        "title": "Envoyer avec l'API (cURL)",
+        "intro": "Envoyez ce modèle approuvé à un numéro. Remplacez les valeurs d'exemple par les vôtres.",
+        "copy": "Copier",
+        "copied": "Copié",
+        "copyFailed": "Copie impossible. Sélectionnez le texte et copiez-le à la main.",
+        "keyHint": "Remplacez YOUR_API_KEY par votre clé d'API.",
+        "keyLink": "Obtenir une clé d'API",
+        "loading": "Vérification de vos clés d'API…",
+        "noKey": "Cet espace de travail n'a pas encore de clé d'API. Créez d'abord une clé d'API, puis utilisez ce cURL.",
+        "keysUnknown": "Impossible de vérifier vos clés d'API. Ouvrez la page Développeurs pour créer ou consulter une clé, puis utilisez ce cURL.",
+        "createKey": "Créer une clé d'API"
+      },
+      "refreshNow": "Actualiser maintenant",
+      "editTemplate": "Modifier le modèle",
+      "editResubmit": "Modifier et soumettre à nouveau",
+      "submitToMeta": "Soumettre à Meta",
+      "wabaAccount": "Compte WhatsApp Business",
+      "noWaba": "Aucun compte WABA connecté.",
+      "connectOne": "En connecter un",
+      "noWabaTail": "pour soumettre des modèles à Meta.",
+      "related": "Associés",
+      "useInBroadcast": "Utiliser dans une diffusion",
+      "crumbTemplates": "Modèles",
+      "crumbDetail": "Détail",
+      "notSubmittedPill": "Non soumis",
+      "qualityPill": "Qualité · {quality}",
+      "preview": {
+        "title": "Aperçu",
+        "hint": "Aspect dans WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Le contenu a été signalé comme abusif ou menaçant.",
+        "INVALID_FORMAT": "Le format enfreint les règles de modèles de Meta (variables, sauts de ligne, longueur).",
+        "PROMOTIONAL": "Langage marketing non autorisé dans cette catégorie.",
+        "TAG_CONTENT_MISMATCH": "La catégorie ne correspond pas au contenu (p. ex. texte promotionnel dans un modèle UTILITY).",
+        "SCAM": "Meta a signalé le modèle comme une arnaque potentielle. Vérifiez les affirmations et le langage."
       }
+    },
+    "ai": {
+      "eyebrow": "Modèles / IA",
+      "title": "Créer avec",
+      "titleAccent": "l'IA",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "generate": "Générer le modèle",
+      "intro": "Rédigez un modèle WhatsApp à partir d'un court brief : nom, en-tête, corps, pied de page et boutons. Rien n'est soumis tant que vous ne le faites pas vous-même.",
+      "model": "Modèle d'IA",
+      "modelsError": "Impossible de charger les modèles.",
+      "noModels": "Aucun fournisseur d'IA n'est activé pour cet espace de travail. Demandez à un administrateur d'en activer un.",
+      "loadingModels": "Chargement des modèles…",
+      "pickModel": "Sélectionner un modèle",
+      "yourKey": "votre clé",
+      "business": "Nom de l'entreprise",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Secteur d'activité",
+      "pickIndustry": "Sélectionner un secteur",
+      "occasion": "Occasion",
+      "pickOccasion": "Sélectionner une occasion",
+      "purpose": "Objectif",
+      "pickPurpose": "Sélectionner un objectif",
+      "action": "Action principale",
+      "pickAction": "Sélectionner une action principale",
+      "tone": "Ton",
+      "pickTone": "Sélectionner un ton",
+      "language": "Langue",
+      "languageHint": "Le brouillon est rédigé dans la langue du formulaire.",
+      "notes": "Instructions personnalisées",
+      "notesNote": "facultatif / 2000 max.",
+      "notesPlaceholder": "Tout élément précis à inclure : variables, liens, formulations obligatoires, ce qu'il faut éviter…",
+      "industries": {
+        "retail": "Commerce de détail / E-commerce",
+        "food": "Restauration et boissons",
+        "healthcare": "Santé",
+        "education": "Éducation",
+        "travel": "Voyage et hôtellerie",
+        "finance": "Finance et banque",
+        "realEstate": "Immobilier",
+        "beauty": "Beauté et bien-être",
+        "logistics": "Logistique et livraison",
+        "services": "Services professionnels",
+        "nonprofit": "Association à but non lucratif",
+        "other": "Autre"
+      },
+      "occasions": {
+        "launch": "Lancement de produit",
+        "sale": "Soldes / remise",
+        "orderConfirmation": "Confirmation de commande",
+        "shipping": "Suivi d'expédition",
+        "appointment": "Rappel de rendez-vous",
+        "welcome": "Bienvenue / intégration",
+        "feedback": "Demande d'avis",
+        "abandonedCart": "Panier abandonné",
+        "reengage": "Réengagement",
+        "event": "Invitation à un événement",
+        "festival": "Vœux de fête",
+        "other": "Autre"
+      },
+      "purposes": {
+        "inform": "Informer",
+        "promote": "Promouvoir",
+        "confirm": "Confirmer",
+        "remind": "Rappeler",
+        "collectFeedback": "Recueillir des avis",
+        "reengage": "Réengager",
+        "purchase": "Inciter à l'achat",
+        "booking": "Inciter à réserver"
+      },
+      "actions": {
+        "website": "Visiter le site web",
+        "call": "Appelez-nous",
+        "book": "Prendre rendez-vous",
+        "order": "Passer commande",
+        "catalog": "Voir le catalogue",
+        "code": "Répondre avec un code",
+        "other": "Autre"
+      },
+      "tones": {
+        "friendly": "Amical",
+        "professional": "Professionnel",
+        "concise": "Concis",
+        "empathetic": "Empathique",
+        "excited": "Enthousiaste",
+        "formal": "Formel"
+      },
+      "errors": {
+        "businessRequired": "Le nom de l'entreprise est obligatoire.",
+        "noKey": "Aucun fournisseur d'IA n'est activé pour cet espace de travail. Demandez à un administrateur d'ajouter une clé.",
+        "limitReached": "Cet espace de travail a épuisé son quota d'IA pour le mois.",
+        "providerFailed": "Le fournisseur d'IA n'a pas répondu. Réessayez dans un instant.",
+        "badJson": "La réponse du modèle n'était pas un modèle exploitable. Réessayez ou précisez le brief.",
+        "invalid": "Vérifiez le brief : le nom de l'entreprise est obligatoire et certains champs sont trop longs.",
+        "forbidden": "Vous n'avez pas l'autorisation de créer des modèles.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "failed": "Impossible de générer le modèle. Réessayez."
+      }
+    },
+    "gallery": {
+      "title": "Galerie de modèles",
+      "intro": "Des modèles WhatsApp prêts à l'emploi, par usage. Choisissez-en un : il s'ouvre comme un nouveau modèle que vous pouvez modifier avant de l'enregistrer.",
+      "search": "Rechercher dans la galerie",
+      "categoryFilter": "Catégories de la galerie",
+      "all": "Tous",
+      "loading": "Chargement de la galerie",
+      "loadError": "La galerie n'a pas pu être chargée.",
+      "retry": "Réessayer",
+      "empty": "Aucun modèle ne correspond",
+      "emptyHint": "Essayez un autre mot ou choisissez une autre catégorie.",
+      "use": "Utiliser ce modèle",
+      "useNamed": "Utiliser le modèle {name}",
+      "count": "{count, plural, one {# modèle} other {# modèles}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Livraison de repas",
+        "festival_season": "Période des fêtes",
+        "education": "Éducation",
+        "travel": "Voyage",
+        "others": "Autres"
+      }
+    },
+    "home": {
+      "label": "Vues des modèles",
+      "saved": "Modèles enregistrés",
+      "gallery": "Galerie de modèles"
     }
   }
 }

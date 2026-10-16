@@ -343,18 +343,17 @@ export function FlowsScreen() {
         {/* a div: the app shell already provides the page's one main landmark (a second one fails WCAG landmark rules) */}
         <div>
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            {/* The heading block is Inter, weight 600, like the dashboard's and the campaigns'. */}
+            <div className="font-[family-name:var(--font-inter)] font-semibold">
+              <div className="mb-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t('workspace')} · {orgName}
               </div>
-              <h1 className="font-serif text-[32px] leading-[1.05] font-normal tracking-tight sm:text-[38px] lg:text-[44px]">
-                {t('title')}{' '}
-                <span className="text-brand not-italic font-['Plus_Jakarta_Sans',system-ui,sans-serif]">
-                  {t('titleAccent')}
-                </span>
-                .
+              <h1 className="text-[32px] leading-[1.05] tracking-tight">
+                {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>.
               </h1>
-              <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
+              <p className="mt-2 max-w-2xl text-[13px] font-semibold text-muted-foreground">
+                {t('subtitle')}
+              </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {canUpdate && overview.data ? (

@@ -40,7 +40,6 @@ export function useInboxUnreadCount(enabled: boolean): number | null {
       typeof document !== 'undefined' && document.visibilityState === 'hidden' ? false : interval,
     refetchOnWindowFocus: true,
     staleTime: 15_000,
-    retry: false,
   });
   return enabled ? (query.data?.unread ?? null) : null;
 }

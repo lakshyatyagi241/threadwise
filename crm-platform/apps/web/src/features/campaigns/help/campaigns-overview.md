@@ -45,7 +45,7 @@ The panel on the right shows a live preview of the message and the recipients, s
 
 **Build with AI** (top right) opens a short brief: the AI model, your business name, product, goal, tone, call to action, audience and offer. It writes a name, message, footer, link button and up to three quick replies into the Compose step for you to review and edit. It needs an AI provider that your workspace or the platform has switched on; the model list is empty otherwise.
 
-> A verified Meta number keeps the same five steps but fills them with the guided logic instead: a template dropdown with its variables, contacts, groups, segments or a CSV, scheduling, recurring sends and retries, a credit check and a test message. See [Create a campaign](help:campaigns-create). Past, scheduled and recurring campaigns are all on the **Campaigns** list, each with its state.
+> A verified Meta number keeps the same five steps but fills them with the guided logic instead: a template dropdown with its variables, contacts, groups, segments or a CSV, scheduling, recurring sends, retries, follow-up messages or flows after the campaign message, a credit check and a test message. See [Create a campaign](help:campaigns-create). Past, scheduled and recurring campaigns are all on the **Campaigns** list, each with its state.
 
 ## Options and settings
 
@@ -56,6 +56,10 @@ The panel on the right shows a live preview of the message and the recipients, s
 - The list filters by status and message type. Each card offers the actions its status allows, and you can tick several cards to delete them together.
 - **New campaign** opens the campaign builder straight away when WhatsApp is your only channel. When you also have SMS, Email, Telegram, a Facebook Page or Instagram connected, it first asks you to pick a channel. WhatsApp, SMS and Email open the campaign builder; Telegram, Facebook and Instagram open their own composer, which sends to the people who already messaged that bot, Page or account (Facebook only within 24 hours of their last message).
 - A campaign page has the tabs **Overview**, **Statistics**, **Messages**, **Engagement**, **Replies**, **Failures** and **Opt-outs**. While a campaign is scheduled or running, a **Live** line above the numbers shows when they were last read, and the numbers refresh every 12 seconds while the tab is on screen. The **Recipients** tile also says how many are still waiting to send and how many are being sent right now. When the campaign finishes the refresh stops and the final numbers stay. The **Statistics** tab shows where every recipient is right now (each counted once, so the rows add up to the audience), the delivery, read, reply, click and failure rates, and the campaign's timeline: when it was created, when it was set to start, when the first message went out, the last run and when it finished.
+
+## Quiet hours
+
+If your workspace set quiet hours in the [Compliance center](help:compliance-center), a marketing campaign (and a template broadcast) does not message a contact inside them, read on that contact's own clock. Those recipients stay queued and show **Held until** a time, the rest of the audience is sent, and the campaign is scheduled again for the first opening. Before a held recipient is sent, consent is checked again. A campaign that sends only utility templates is never held. A recurring campaign sends its held recipients at its next occurrence.
 
 ## Plan and access
 

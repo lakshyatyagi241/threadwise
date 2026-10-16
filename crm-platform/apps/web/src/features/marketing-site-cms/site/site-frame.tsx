@@ -213,7 +213,7 @@ export async function SiteFrame({
           <div className="flex-1" />
           <nav
             aria-label={t('navLabel')}
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-7 text-[13.5px] text-ink-700 lg:flex"
+            className="absolute start-1/2 hidden -translate-x-1/2 rtl:translate-x-1/2 items-center gap-7 text-[13.5px] text-ink-700 lg:flex"
           >
             {navLinks.map((i) => {
               const href = fc(`nav.link${i}_url`) || '#';
@@ -228,7 +228,7 @@ export async function SiteFrame({
                 >
                   <T ctx={ctx} k={`nav.link${i}_label`} />
                   {active && (
-                    <span className="absolute -bottom-[22px] left-0 right-0 h-[2px] bg-wa-deep" />
+                    <span className="absolute -bottom-[22px] start-0 end-0 h-[2px] bg-wa-deep" />
                   )}
                 </Link>
               );

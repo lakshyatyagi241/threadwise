@@ -10,6 +10,7 @@ import {
   CONVERSATIONS_FACADE,
   ChannelDispatcher,
   ChannelRegistryService,
+  SendHeldError,
   type ConversationsFacade,
 } from '../../chat-conversations';
 import { WalletGateService } from '../../wallet-message-billing';
@@ -169,6 +170,16 @@ export class FlowSender {
   }
 
   private outcomeOf(err: unknown): SendOutcome {
+    // Quiet hours (BL-177): a marketing message of a flow the business started waits for the hours to open. The run halts (it asks again
+    // every `HALT_RETRY_MS`, well inside its seven day limit) and the same step runs again; the message is neither skipped nor failed.
+    if (err instanceof SendHeldError) {
+      return {
+        ok: false,
+        code: 'SEND_HELD',
+        error: `Held for the quiet hours until ${err.hold.until}`,
+        halt: true,
+      };
+    }
     if (err instanceof AppError) {
       return { ok: false, code: err.code, error: err.message, halt: HALT_CODES.has(err.code) };
     }

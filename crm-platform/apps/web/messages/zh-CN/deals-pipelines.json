@@ -181,7 +181,10 @@
         "valueInvalid": "请输入数字，例如 1250.50。",
         "valueTooLarge": "该值过大。",
         "stageInvalid": "请从此管道中选择阶段。"
-      }
+      },
+      "company": "公司",
+      "companyHint": "留空则使用联系人的公司。",
+      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。"
     },
     "contact": {
       "unlink": "移除联系人",
@@ -221,7 +224,9 @@
       "deleteTitle": "删除此交易？",
       "deleteMessage": "“{title}”及其时间线将被移除。此操作无法撤销。",
       "cancel": "取消",
-      "company": "公司：{name}"
+      "company": "公司：{name}",
+      "companyLabel": "公司",
+      "companyRefused": "你不能使用该公司。"
     },
     "activity": {
       "title": "活动",

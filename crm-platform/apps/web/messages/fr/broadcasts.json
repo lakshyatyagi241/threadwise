@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "En pause : le plafond d’envoi quotidien a été atteint. Elle reprend automatiquement après {when}.",
         "halt": "En pause : l’envoi est suspendu pour cet espace de travail. Il reprend quand la suspension est levée.",
-        "manual": "En pause."
+        "manual": "En pause.",
+        "quiet_hours": "En pause : certains destinataires sont dans leurs heures de silence. L’envoi reprend tout seul après {when}."
       },
       "delete": "Supprimer",
       "deleteTitle": "Supprimer la diffusion ?",
@@ -145,7 +146,8 @@
         "queued": "En file d’attente",
         "queuedHint": "en attente d’envoi",
         "failed": "Échoués",
-        "failedPct": "{pct} % de taux d’échec"
+        "failedPct": "{pct} % de taux d’échec",
+        "queuedHeld": "{count} retenus pendant les heures de silence"
       },
       "tab": {
         "overview": "Vue d’ensemble",
@@ -193,7 +195,8 @@
         "lastClick": "Dernier clic : {when}",
         "empty": "Aucun destinataire associé.",
         "more": "Charger plus",
-        "loading": "Chargement"
+        "loading": "Chargement",
+        "heldUntil": "Retenu jusqu’à {when} (heures de silence)"
       },
       "failures": {
         "kicker": "Raisons des échecs",

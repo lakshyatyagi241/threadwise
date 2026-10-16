@@ -348,7 +348,10 @@
       "ownerMe": "{name} (ik)",
       "ownerFormer": "Voormalig lid",
       "ownerHelp": "Wie zich om dit contact bekommert. Je kunt alleen mensen kiezen die je toegang toestaat.",
-      "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen."
+      "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
+      "company": "Bedrijf",
+      "companyHint": "Plaatst dit contact onder een organisatie.",
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
     },
     "tags": {
       "title": "Tags",
@@ -1279,6 +1282,14 @@
       "number": "Verzenden vanaf",
       "numberHint": "Het WhatsApp-nummer waarmee het bericht wordt verzonden.",
       "noChannel": "Er is geen WhatsApp-nummer gekoppeld. Koppel er eerst een in Kanalen.",
+      "mailbox": "Verzenden vanaf",
+      "mailboxPlaceholder": "Selecteer een postvak",
+      "mailboxHint": "Het gekoppelde postvak waarvandaan de e-mail wordt verzonden.",
+      "noMailbox": "Er is geen postvak gekoppeld. Koppel er eerst een bij Kanalen.",
+      "subject": "Onderwerp",
+      "subjectPlaceholder": "Waar gaat dit over?",
+      "body": "Bericht",
+      "bodyPlaceholder": "Schrijf je e-mail…",
       "template": "WhatsApp-sjabloon",
       "templatePlaceholder": "Selecteer een sjabloon",
       "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
@@ -1295,12 +1306,10 @@
       "callPermission": "Het contact heeft nog geen toestemming gegeven voor oproepen. Bij het bellen wordt eerst om toestemming gevraagd.",
       "callReady": "Klaar om {phone} te bellen.",
       "later": {
-        "sms": "Sms verzenden vanuit de CRM is nog niet beschikbaar.",
-        "email": "E-mail verzenden vanuit de CRM is nog niet beschikbaar."
+        "sms": "Sms verzenden vanuit de CRM is nog niet beschikbaar."
       },
       "openApp": {
-        "sms": "Openen in je berichten-app",
-        "email": "Openen in je e-mailapp"
+        "sms": "Openen in je berichten-app"
       }
     },
     "views": {

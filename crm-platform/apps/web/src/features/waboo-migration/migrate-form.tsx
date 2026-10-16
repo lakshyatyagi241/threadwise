@@ -9,7 +9,7 @@ import { operatorFetch } from '@/features/auth-registration-security/platform/op
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { WMIG_DB_RE, errorKind } from './lib/errors';
 import { localToIso, runAtProblem } from './lib/run-at';
-import { RUNS_QUERY_KEY, READINESS_KEY, useReadiness } from './queries';
+import { RUNS_QUERY_KEY } from './queries';
 import { RunAtField } from './run-at-field';
 
 const NS = 'waboo-migration.form';
@@ -23,7 +23,6 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
   const t = useTranslations(NS);
   const tc = useTranslations('waboo-migration.confirm');
   const te = useTranslations('waboo-migration.common.errors');
-  const tr = useTranslations('waboo-migration.readiness');
   const toast = useToast();
   const qc = useQueryClient();
   const id = useId();
@@ -37,9 +36,8 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
   const orgOk = WMIG_DB_RE.test(org);
   const scheduleBad = runAtProblem(runAt, new Date()) !== null;
   const valid = orgOk && !scheduleBad;
-  const readiness = useReadiness(orgOk ? [org] : []);
-  const ready = readiness.data?.data[0];
-  const canLoad = valid && ready?.canLoad === true;
+  // no earlier dry run is needed: a migration starts with its own full rehearsal and loads nothing when that is not clean
+  const canLoad = valid;
 
   const start = useMutation({
     mutationFn: (mode: 'dry' | 'load' | 'catchup') =>
@@ -58,10 +56,7 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
       setConfirming(false);
       setTyped('');
       toast.success(runAt ? t('scheduled') : t('queued'));
-      await Promise.all([
-        qc.invalidateQueries({ queryKey: RUNS_QUERY_KEY }),
-        qc.invalidateQueries({ queryKey: READINESS_KEY }),
-      ]);
+      await Promise.all([qc.invalidateQueries({ queryKey: RUNS_QUERY_KEY })]);
       onStarted(run);
     },
     onError: (err) => {
@@ -95,15 +90,6 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
         </Field>
         <RunAtField value={runAt} onChange={setRunAt} />
       </div>
-      {orgOk && ready && (
-        <Alert tone={ready.canLoad ? (ready.verdict === 'amber' ? 'warning' : 'success') : 'info'}>
-          {ready.canLoad
-            ? ready.verdict === 'amber'
-              ? tr('okReview')
-              : tr('ok')
-            : tr(ready.reason as 'no_dry' | 'not_green' | 'stale')}
-        </Alert>
-      )}
       {problem && !confirming && <Alert tone="danger">{problem}</Alert>}
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={() => start.mutate('dry')} disabled={!valid || busy}>
@@ -154,7 +140,9 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
         }
       >
         <div className="space-y-4">
-          <p className="text-sm">{tc(confirmMode === 'catchup' ? 'catchupBody' : 'body', { org })}</p>
+          <p className="text-sm">
+            {tc(confirmMode === 'catchup' ? 'catchupBody' : 'body', { org })}
+          </p>
           <Field label={tc('label', { org })} htmlFor={`${id}-confirm`}>
             <Input
               id={`${id}-confirm`}

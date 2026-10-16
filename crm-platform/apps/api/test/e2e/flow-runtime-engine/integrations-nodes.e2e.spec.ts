@@ -234,29 +234,33 @@ describe('MySQL and AI call nodes', () => {
 });
 
 describe('Google nodes', () => {
-  it('without a connected Google account the nodes report it and the flow continues', async () => {
+  it('without Google set up for the platform the Google step fails the run, with the code and what to do', async () => {
     const a = await arrange(
       'flrnog',
       [
         node('s', 'google_sheets', { sheetId: 'S1', columns: ['{{name}}'] }),
-        node('d', 'google_docs', { templateId: 'T1' }),
         node('m', 'message', { text: 'done' }),
       ],
-      [edge('s', 'd'), edge('d', 'm')],
+      [edge('s', 'm')],
       'nogo',
     );
     const peer = nextPeer();
     await say(a.t, a.ch, peer, 'nogo');
-    expect(await untilSent(p, a.t, a.ch, peer, 2)).toEqual([
-      "Sorry, couldn't generate your document right now. Please try again later.",
-      'done',
-    ]);
-    const run = await untilRun(p, a.t, a.flowId, 'completed', (r) => r.status === 'completed');
-    const log = await p.h.owner.query(
-      `SELECT detail::text AS d FROM flow_run_steps WHERE run_id = $1`,
-      [run.id],
+    const run = await untilRun(p, a.t, a.flowId, 'failed', (r) => r.status === 'failed');
+    const row = (
+      await p.h.owner.query(`SELECT failure_code, failure_reason FROM flow_runs WHERE id = $1`, [
+        run.id,
+      ])
+    ).rows[0];
+    expect(row.failure_code).toBe('GOOGLE_ACCOUNT_NOT_CONFIGURED');
+    expect(row.failure_reason).toContain('[GOOGLE_ACCOUNT_NOT_CONFIGURED]');
+    // The step after it never ran.
+    const sent = await p.h.owner.query(
+      `SELECT m.body FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+       WHERE c.org_id = $1 AND c.peer_key = $2 AND m.direction = 'out'`,
+      [a.t.orgId, peer],
     );
-    expect(log.rows.map((r) => r.d).join('\n')).toContain('No Google account connected');
+    expect(sent.rows.map((r) => r.body)).not.toContain('done');
   });
 
   it('Sheets, Docs and Meet use the workspace and the variables of the run', async () => {
@@ -264,7 +268,7 @@ describe('Google nodes', () => {
       await import('../../../src/infra/providers/flow-runtime-engine/google-workspace.port');
     const g = await port<Record<string, (...a: unknown[]) => Promise<unknown>>>(GOOGLE_WORKSPACE);
     const append = vi
-      .spyOn(g as never, 'appendSheetRow' as never)
+      .spyOn(g as never, 'appendSheetRows' as never)
       .mockResolvedValue(undefined as never);
     const doc = vi
       .spyOn(g as never, 'generateDoc' as never)
@@ -295,7 +299,7 @@ describe('Google nodes', () => {
       ]);
       expect(append.mock.calls[0]).toMatchObject([
         a.t.orgId,
-        { sheetId: 'S1', tabName: 'Leads', values: ['Asha', ''] },
+        { sheetId: 'S1', tabName: 'Leads', rows: [['Asha', '']] },
       ]);
       expect(doc.mock.calls[0]![1]).toMatchObject({ templateId: 'T1', newTitle: 'For Asha' });
       expect(meet.mock.calls[0]![1]).toMatchObject({ title: 'Chat with Asha' });

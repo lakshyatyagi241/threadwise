@@ -5,7 +5,23 @@ summary: Check that a number is ready for calls, turn calling on, then place and
 area: settings
 order: 20
 documents: [tile:calling]
-keywords: [calls, voice, phone, call button, incoming call, record call, microphone, permission, readiness, checklist, test call, turn, messaging limit, webhook]
+keywords:
+  [
+    calls,
+    voice,
+    phone,
+    call button,
+    incoming call,
+    record call,
+    microphone,
+    permission,
+    readiness,
+    checklist,
+    test call,
+    turn,
+    messaging limit,
+    webhook,
+  ]
 ---
 
 ## What it is for
@@ -55,6 +71,10 @@ When calling is on and the number is not blocked, **Place a test call** appears 
 ## Plan and access
 
 The Calling tile needs the **WhatsApp calling** plan feature and the right to use calling. Without that right you cannot call at all. Turning calling on or off needs the calling management right. Without it you can see each number's state, but the buttons are hidden.
+
+## Calling hours
+
+If your workspace turned on a calling window in the [Compliance center](help:compliance-center), a call you place outside it is not made. The message says when the window opens, read on the contact's own clock. A call back to someone who messaged or called you in the last 24 hours is not refused.
 
 ## If something looks wrong
 

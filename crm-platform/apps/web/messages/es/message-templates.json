@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Copiar código",
       "buttonUnnamed": "Botón",
-      "moreButtons": "{count, plural, one {+# botón más} other {+# botones más}}"
+      "moreButtons": "{count, plural, one {+# botón más} other {+# botones más}}",
+      "live": "Vista previa en vivo",
+      "business": "Bloomly",
+      "online": "en línea"
     },
     "card": {
       "rejected": "Rechazada: {reason}",
       "view": "Ver",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "curl": "cURL: enviar esta plantilla con la API",
+      "curlNamed": "cURL para enviar {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Estándar",
+        "media": "Multimedia",
+        "auth": "Autenticación",
+        "carousel": "Carrusel",
+        "catalog": "Catálogo",
+        "limited_time_offer": "Oferta por tiempo limitado"
+      },
+      "rejectedLabel": "Rechazada:",
+      "viewTitle": "Ver detalles y estado de revisión de Meta",
+      "deleteNamed": "Eliminar {name}"
     },
     "library": {
       "title": "Biblioteca de plantillas",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Ninguna plantilla coincide",
       "emptyFilteredBody": "Cambia o borra los filtros para ver más plantillas.",
       "clearFilters": "Borrar filtros",
-      "loadMore": "Cargar más"
+      "loadMore": "Cargar más",
+      "crumb": "Campañas / Plantillas",
+      "titleA": "Plantilla",
+      "titleB": "biblioteca",
+      "tipTitle": "Consejo",
+      "tip": "Envía plantillas con textos claros y aptos para variables ('{{name}}', '{{order_id}}'). Los tiempos de aprobación se mantienen por debajo de 24 h cuando el cuerpo evita gatillos promocionales y coincide con la categoría de Meta elegida.",
+      "statusTitle": "Estado",
+      "statusTab": {
+        "all": "Todas",
+        "approved": "Aprobada",
+        "pending": "En revisión",
+        "rejected": "Rechazada"
+      },
+      "quickStartTitle": "Inicio rápido",
+      "quickStart": "Lee las <link>Directrices de plantillas</link> antes de enviar a Meta para mantener los tiempos de aprobación por debajo de 24 h.",
+      "createTemplate": "Crear plantilla",
+      "syncFailedLabel": "Error al sincronizar desde Meta:",
+      "categories": "Categorías",
+      "tabAll": "Todas",
+      "sortLabel": "Ordenar plantillas",
+      "sort": {
+        "newest": "Más recientes",
+        "oldest": "Más antiguas",
+        "name-asc": "Nombre A→Z",
+        "name-desc": "Nombre Z→A"
+      },
+      "showing": "Mostrando",
+      "of": "de",
+      "filteredTemplates": "plantillas filtradas",
+      "showingRange": "Mostrando 1-{shown} de {total} plantillas",
+      "legend": {
+        "approved": "Aprobadas",
+        "pending": "En revisión",
+        "rejected": "Rechazadas"
+      },
+      "helpLabel": "Ayuda - 0{n}",
+      "help": {
+        "one": {
+          "title": "¿Qué es un mensaje de plantilla?",
+          "body": "Un formato de mensaje preaprobado que Meta exige para iniciar nuevas conversaciones con clientes fuera de la ventana de servicio de 24 horas."
+        },
+        "two": {
+          "title": "¿Cómo mejorar los tiempos de aprobación?",
+          "body": "Mantén el cuerpo del mensaje claro, evita un lenguaje demasiado promocional en las categorías de Utilidad y siempre incluye valores de ejemplo para las variables."
+        },
+        "three": {
+          "title": "¿Por qué fue rechazada mi plantilla?",
+          "body": "Los motivos comunes incluyen formato incorrecto, categoría que no coincide o contenido abusivo. Revisa el motivo del rechazo y edita para reenviar."
+        }
+      }
     },
     "delete": {
       "title": "Eliminar plantilla",
@@ -289,6 +355,11 @@
         "saved": "Guardada como borrador.",
         "warnings": "Conviene revisarlo antes de que Meta lo revise:",
         "open": "Abrir la plantilla"
+      },
+      "ai": {
+        "open": "Crear con IA",
+        "applied": "Borrador de plantilla completado con IA. Revísalo antes de enviarlo.",
+        "authHint": "Las plantillas de autenticación tienen un texto fijo, así que no hay nada que redactar."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Pausada por Meta. No se puede enviar hasta que Meta levante la pausa.",
         "pausedUntil": "Pausada por Meta hasta {when}.",
         "disabled": "Desactivada por Meta. No se puede enviar.",
-        "deleted": "Meta ya no muestra esta plantilla. Se conserva aquí; sincroniza de nuevo o elimínala."
+        "deleted": "Meta ya no muestra esta plantilla. Se conserva aquí; sincroniza de nuevo o elimínala.",
+        "notSubmitted": "Aún no enviada a Meta",
+        "notSubmittedBody": "Esta plantilla está guardada aquí pero no tiene ID de plantilla de Meta: Meta nunca la aceptó, por eso no se puede revisar ni enviar. Envíala para iniciar la revisión.",
+        "notSubmittedNoWaba": "Esta plantilla no tiene ID de plantilla de Meta. Conecta una cuenta de WhatsApp Business (WABA) y luego envíala a revisión.",
+        "pendingBody": "La mayoría de las plantillas se aprueban en minutos; Meta permite hasta 48 horas. Esta página se actualiza automáticamente cada 30 segundos mientras el estado esté pendiente.",
+        "submittedAgo": "Enviada {when}",
+        "checkedAgo": "última comprobación {when}",
+        "code": "Código:",
+        "pausedBody": "Comentarios negativos repetidos (bloqueos o denuncias de spam) pausaron esta plantilla. Su puntuación de calidad debe recuperarse antes de poder enviarla de nuevo."
       },
       "facts": {
         "title": "Sincronización con Meta",
@@ -354,7 +433,171 @@
         "title": "Contenido enviado a Meta",
         "hint": "Lo que se envía a Meta para revisión, exactamente como se construye.",
         "empty": "Todavía no hay nada construido."
+      },
+      "curl": {
+        "title": "Enviar con la API (cURL)",
+        "intro": "Envía esta plantilla aprobada a un número. Cambia los valores de ejemplo por los tuyos.",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "copyFailed": "No se pudo copiar. Selecciona el texto y cópialo a mano.",
+        "keyHint": "Cambia YOUR_API_KEY por tu clave de API.",
+        "keyLink": "Obtener una clave de API",
+        "loading": "Comprobando tus claves de API…",
+        "noKey": "Este espacio de trabajo aún no tiene clave de API. Crea primero una clave de API y luego usa este cURL.",
+        "keysUnknown": "No se pudieron comprobar tus claves de API. Abre la página Desarrolladores para crear o revisar una clave y luego usa este cURL.",
+        "createKey": "Crear una clave de API"
+      },
+      "refreshNow": "Actualizar ahora",
+      "editTemplate": "Editar plantilla",
+      "editResubmit": "Editar y reenviar",
+      "submitToMeta": "Enviar a Meta",
+      "wabaAccount": "Cuenta de WhatsApp Business",
+      "noWaba": "No hay ninguna cuenta WABA conectada.",
+      "connectOne": "Conectar una",
+      "noWabaTail": "para enviar plantillas a Meta.",
+      "related": "Relacionado",
+      "useInBroadcast": "Usar en una difusión",
+      "crumbTemplates": "Plantillas",
+      "crumbDetail": "Detalle",
+      "notSubmittedPill": "No enviada",
+      "qualityPill": "Calidad · {quality}",
+      "preview": {
+        "title": "Vista previa",
+        "hint": "Cómo se ve en WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "El contenido fue marcado como abusivo o amenazante.",
+        "INVALID_FORMAT": "El formato infringe las reglas de plantillas de Meta (marcadores, saltos de línea, longitud).",
+        "PROMOTIONAL": "Lenguaje de marketing no permitido en esta categoría.",
+        "TAG_CONTENT_MISMATCH": "La categoría no coincide con el contenido (p. ej., texto promocional en una plantilla UTILITY).",
+        "SCAM": "Meta marcó la plantilla como posible estafa. Revisa las afirmaciones y el lenguaje."
       }
+    },
+    "ai": {
+      "eyebrow": "Plantillas / IA",
+      "title": "Crear con",
+      "titleAccent": "IA",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "generate": "Generar plantilla",
+      "intro": "Redacta una plantilla de WhatsApp a partir de un breve resumen: nombre, encabezado, cuerpo, pie y botones. No se envía nada hasta que lo hagas tú.",
+      "model": "Modelo de IA",
+      "modelsError": "No se pudieron cargar los modelos.",
+      "noModels": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que active uno.",
+      "loadingModels": "Cargando modelos…",
+      "pickModel": "Selecciona un modelo",
+      "yourKey": "tu clave",
+      "business": "Nombre del negocio",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Sector",
+      "pickIndustry": "Selecciona un sector",
+      "occasion": "Ocasión",
+      "pickOccasion": "Selecciona una ocasión",
+      "purpose": "Finalidad",
+      "pickPurpose": "Selecciona una finalidad",
+      "action": "Acción principal",
+      "pickAction": "Selecciona una acción principal",
+      "tone": "Tono",
+      "pickTone": "Selecciona un tono",
+      "language": "Idioma",
+      "languageHint": "El borrador se redacta en el idioma del formulario.",
+      "notes": "Instrucciones personalizadas",
+      "notesNote": "opcional / máx. 2000",
+      "notesPlaceholder": "Cualquier detalle que quieras incluir: variables, enlaces, frases obligatorias, qué evitar…",
+      "industries": {
+        "retail": "Comercio minorista / comercio electrónico",
+        "food": "Alimentación y bebidas",
+        "healthcare": "Salud",
+        "education": "Educación",
+        "travel": "Viajes y hostelería",
+        "finance": "Finanzas y banca",
+        "realEstate": "Inmobiliaria",
+        "beauty": "Belleza y bienestar",
+        "logistics": "Logística y reparto",
+        "services": "Servicios profesionales",
+        "nonprofit": "Sin ánimo de lucro",
+        "other": "Otro"
+      },
+      "occasions": {
+        "launch": "Lanzamiento de producto",
+        "sale": "Rebajas / descuento",
+        "orderConfirmation": "Confirmación de pedido",
+        "shipping": "Actualización de envío",
+        "appointment": "Recordatorio de cita",
+        "welcome": "Bienvenida / incorporación",
+        "feedback": "Solicitud de opinión",
+        "abandonedCart": "Carrito abandonado",
+        "reengage": "Reactivación de clientes",
+        "event": "Invitación a evento",
+        "festival": "Felicitación festiva",
+        "other": "Otra"
+      },
+      "purposes": {
+        "inform": "Informar",
+        "promote": "Promocionar",
+        "confirm": "Confirmar",
+        "remind": "Recordar",
+        "collectFeedback": "Recopilar opiniones",
+        "reengage": "Reactivar clientes",
+        "purchase": "Impulsar una compra",
+        "booking": "Impulsar una reserva"
+      },
+      "actions": {
+        "website": "Visitar el sitio web",
+        "call": "Llamarnos",
+        "book": "Reservar una cita",
+        "order": "Hacer un pedido",
+        "catalog": "Ver catálogo",
+        "code": "Responder con un código",
+        "other": "Otra"
+      },
+      "tones": {
+        "friendly": "Cercano",
+        "professional": "Profesional",
+        "concise": "Conciso",
+        "empathetic": "Empático",
+        "excited": "Entusiasta",
+        "formal": "Formal"
+      },
+      "errors": {
+        "businessRequired": "El nombre del negocio es obligatorio.",
+        "noKey": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que añada una clave.",
+        "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+        "providerFailed": "El proveedor de IA no respondió. Inténtalo de nuevo en un momento.",
+        "badJson": "La respuesta del modelo no era una plantilla utilizable. Inténtalo de nuevo o ajusta el resumen.",
+        "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+        "forbidden": "No tienes permiso para crear plantillas.",
+        "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+        "failed": "No se pudo generar la plantilla. Inténtalo de nuevo."
+      }
+    },
+    "gallery": {
+      "title": "Galería de plantillas",
+      "intro": "Plantillas de WhatsApp listas para usar, por tipo de uso. Elige una y se abre como una plantilla nueva que puedes cambiar antes de guardarla.",
+      "search": "Buscar en la galería",
+      "categoryFilter": "Categorías de la galería",
+      "all": "Todas",
+      "loading": "Cargando la galería",
+      "loadError": "No se pudo cargar la galería.",
+      "retry": "Intentar de nuevo",
+      "empty": "Ninguna plantilla coincide",
+      "emptyHint": "Prueba otra palabra o elige otra categoría.",
+      "use": "Usar esta plantilla",
+      "useNamed": "Usar la plantilla {name}",
+      "count": "{count, plural, one {# plantilla} other {# plantillas}}",
+      "categories": {
+        "ecommerce": "Comercio electrónico",
+        "food_delivery": "Reparto de comida",
+        "festival_season": "Temporada de fiestas",
+        "education": "Educación",
+        "travel": "Viajes",
+        "others": "Otras"
+      }
+    },
+    "home": {
+      "label": "Vistas de plantillas",
+      "saved": "Plantillas guardadas",
+      "gallery": "Galería de plantillas"
     }
   }
 }

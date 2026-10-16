@@ -5,7 +5,29 @@ summary: Connect Gmail, Microsoft 365 or IMAP mailboxes, shared or personal, che
 area: settings
 order: 70
 documents: [nav:email, tile:email]
-keywords: [email, gmail, google workspace, microsoft 365, outlook, imap, smtp, personal mailbox, email sharing, mailbox, shared inbox, support email, cc, bcc, reconnect, sync, attachments, signature, rich text, bounce]
+keywords:
+  [
+    email,
+    gmail,
+    google workspace,
+    microsoft 365,
+    outlook,
+    imap,
+    smtp,
+    personal mailbox,
+    email sharing,
+    mailbox,
+    shared inbox,
+    support email,
+    cc,
+    bcc,
+    reconnect,
+    sync,
+    attachments,
+    signature,
+    rich text,
+    bounce,
+  ]
 ---
 
 ## What it is for

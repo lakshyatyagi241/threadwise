@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "עורך תהליכים"
+      "flowBuilder": "עורך תהליכים",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "מנהל - הגדרות פרויקט",
@@ -906,7 +907,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "לקוח OAuth של Google שדרכו כל סביבת עבודה מחברת את היומן שלה.",
+        "description": "לקוח OAuth של Google שדרכו כל סביבת עבודה מחברת את חשבון Google שלה, עבור לוח השנה, Sheets, Docs ו-Forms.",
         "sections": {
           "oauth": {
             "title": "לקוח OAuth של Google"
@@ -914,8 +915,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "אפשרו לסביבות עבודה לחבר את Google Calendar",
-            "hint": "כבוי: אף סביבת עבודה לא יכולה לחבר, ואין כתיבה או קריאה מיומן."
+            "label": "אפשרו לסביבות עבודה לחבר את Google",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה לחבר, ואין קריאה או כתיבה מ-Google או אליו (לוח שנה, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "Client ID",
@@ -1022,6 +1023,37 @@
           "mode": {
             "simple": "פשוט בלבד",
             "advanced": "מתקדם בלבד"
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "אפליקציית Microsoft שדרכה כל סביבת עבודה מחברת את יומן Outlook או Microsoft 365 שלה.",
+        "sections": {
+          "oauth": {
+            "title": "אפליקציית Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "לאפשר לסביבות עבודה להתחבר ל-Outlook",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה להתחבר, ושום דבר לא נקרא מיומני Outlook או נכתב אליהם. יומנים מחוברים נשמרים."
+          },
+          "clientId": {
+            "label": "מזהה אפליקציה (לקוח)",
+            "hint": "ממרכז הניהול של Microsoft Entra, רישומי אפליקציות, סקירה כללית. אם השדה ריק, נעשה שימוש ב-MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "סוד לקוח",
+            "hint": "נשמר מוצפן ולא מוצג שוב לעולם. אם השדה ריק, הסוד השמור נשאר; MICROSOFT_CALENDAR_CLIENT_SECRET משמש כברירת מחדל חלופית."
+          },
+          "tenant": {
+            "label": "דייר (Tenant)",
+            "hint": "common מאפשר חשבונות עבודה, בית ספר ואישיים; לאפליקציה לדייר יחיד השתמשו במזהה ספרייה (דייר). אם השדה ריק, נעשה שימוש ב-MICROSOFT_CALENDAR_TENANT, ואם אין, ב-common."
+          },
+          "redirectUri": {
+            "label": "עקיפת כתובת ההפניה",
+            "hint": "השאירו ריק כדי להשתמש בכתובת שלמעלה. היא חייבת להתאים בדיוק לכתובת הפניה שמוגדרת באפליקציה."
           }
         }
       }
@@ -1134,8 +1166,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור היומן לצורך הזמנות ושעות תפוסות.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור חשבון Google שלהן להזמנות, Sheets, Docs ו-Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "דוא\"ל Gmail",
@@ -1151,6 +1183,11 @@
         "title": "עורך תהליכים",
         "description": "עורך התהליכים שברירת המחדל לכל סביבת עבודה: פשוט שלב אחר שלב או קנבס מתקדם. סביבת עבודה יכולה לעקוף זאת.",
         "tags": "פשוט / מתקדם / אוטומציה"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "אפליקציית Microsoft שבה סביבות עבודה מחברות את יומני Outlook ו-Microsoft 365 שלהן עבור הזמנות.",
+        "tags": "Microsoft / OAuth / Outlook / יומן"
       }
     },
     "signup": {
@@ -1703,11 +1740,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "מנהל - פגישות",
-        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה. כל סביבת עבודה מחברת אחר כך את חשבון Google שלה מ-Appointments, Settings; סביבת עבודה לעולם לא רואה את מזהה הלקוח או את הסוד.",
+        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה. כל סביבת עבודה מחברת אחר כך את חשבון Google שלה מהעמוד חשבון Google בהגדרות, ובוחרת אילו הרשאות לתת; סביבת עבודה לעולם לא רואה את מזהה הלקוח או את הסוד.",
         "sections": {
           "oauth": {
             "title": "לקוח OAuth של Google",
-            "description": "בלי מזהה לקוח וסוד, סביבות העבודה רואות את Google Calendar כלא זמין, וההזמנות ממשיכות בלי יומן."
+            "description": "בלי מזהה לקוח וסוד, סביבות העבודה רואות את Google כלא זמין, ההזמנות ממשיכות בלי לוח שנה ושלבי Google בתהליכים מדולגים."
           }
         },
         "guide": {
@@ -1715,7 +1752,7 @@
           "items": {
             "project": {
               "title": "1. פרויקט ו-API",
-              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את Google Calendar API."
+              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את ה-API של Google Calendar, Google Sheets, Google Docs, Google Drive ו-Google Forms. הרשאה פועלת רק כשה-API שלה מופעל."
             },
             "redirect": {
               "title": "2. לקוח OAuth",
@@ -1723,11 +1760,11 @@
             },
             "consent": {
               "title": "3. מסך הסכמה",
-              "body": "הוסיפו את ההרשאות calendar.events, calendar.freebusy ו-calendar.calendarlist.readonly, ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש."
+              "body": "הוסיפו את ההרשאות (scopes) שהמוצר מבקש (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש. ההרשאות של drive מוגבלות ודורשות בדיקה של Google."
             },
             "workspaces": {
               "title": "4. סביבות העבודה מתחברות",
-              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. מנהלים מתחברים לאחר מכן מ-Appointments, Settings, Google Calendar."
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. מנהלים מתחברים לאחר מכן מהגדרות, אינטגרציות, חשבון Google, או מ-Appointments, Settings, Google Calendar."
             }
           }
         }
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "תהליכים קיימים",
               "body": "שינוי ההגדרה הזו לעולם לא משנה או מוחק תהליך. תהליך ממשיך לפעול; הוא רק נפתח בעורך שפעיל. סביבת עבודה שבחרה עורך משלה שומרת עליו עד שתבחר שוב את ברירת המחדל של הפלטפורמה."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - פגישות",
+        "description": "אפליקציית Microsoft Entra אחת לכל הפלטפורמה. כל סביבת עבודה מחברת אחר כך את יומן Outlook או Microsoft 365 שלה מתוך פגישות, הגדרות, ולעולם לא רואה את מזהה הלקוח או הסוד.",
+        "sections": {
+          "oauth": {
+            "title": "אפליקציית Microsoft Entra",
+            "description": "בלי מזהה לקוח וסוד, סביבות עבודה יראו את Outlook כלא זמין, וההזמנות ימשיכו לפעול בלעדיו. Google Calendar אינו מושפע."
+          }
+        },
+        "guide": {
+          "title": "הגדרה ב-Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. רישום אפליקציה",
+              "body": "במרכז הניהול של Microsoft Entra צרו רישום אפליקציה עבור חשבונות בכל ספרייה ארגונית וחשבונות Microsoft אישיים, והעתיקו לכאן את מזהה האפליקציה (לקוח). השאירו את הדייר כ-common אלא אם בחרתם אפשרות מצומצמת יותר."
+            },
+            "redirect": {
+              "title": "2. כתובת הפניה וסוד",
+              "body": "הוסיפו את כתובת ההפניה שמוצגת בדף הזה כהפניית Web, ואז צרו סוד לקוח תחת אישורים וסודות (Certificates and secrets) והדביקו כאן את ערכו. רשמו לעצמכם מתי הוא יפוג: אחרי התאריך הזה היומן של כל סביבות העבודה יפסיק לפעול עד ששומרים סוד חדש."
+            },
+            "permissions": {
+              "title": "3. הרשאות API",
+              "body": "הוסיפו את הרשאות Microsoft Graph המואצלות Calendars.ReadWrite, User.Read ו-offline_access, ושום דבר אחר. לשימוש כללי יש להשלים אימות מפרסם; ייתכן שדייר של לקוח ידרוש גם שמנהל יאשר את האפליקציה."
+            },
+            "workspaces": {
+              "title": "4. סביבות עבודה מתחברות",
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. אחר כך מנהלים יכולים להתחבר מתוך פגישות, הגדרות."
             }
           }
         }

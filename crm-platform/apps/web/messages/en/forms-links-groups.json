@@ -170,7 +170,11 @@
       "builder": {
         "back": "Back to links",
         "newHeading": "New link",
-        "step": { "destination": "Destination", "message": "Starter message", "tracking": "Tracking" },
+        "step": {
+          "destination": "Destination",
+          "message": "Starter message",
+          "tracking": "Tracking"
+        },
         "name": "Name",
         "status": "Status",
         "countryCode": "Country code",
@@ -194,6 +198,14 @@
         "shortUrl": "Short link",
         "waUrl": "WhatsApp link",
         "qrAlt": "QR code for this link"
+      },
+      "public": {
+        "missingTitle": "Link not found",
+        "missingBody": "This link doesn't exist, or has been deleted.",
+        "goneTitle": "Link no longer active",
+        "goneBody": "This link is paused or has expired.",
+        "errorTitle": "Something went wrong",
+        "errorBody": "We couldn't open this link. Please try again."
       }
     }
   }

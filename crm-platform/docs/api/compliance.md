@@ -27,7 +27,7 @@ Roles: Owner and Admin everything; Manager `settings.compliance.read` (migration
 
 `regimes` (any of `gdpr_eu`, `uk_gdpr`, `dpdp_in`, `ccpa_us`, `tcpa_us`, `trai_in`, `lgpd_br`, `pdpa_sg`, `generic`), `privacyUrl`, `termsUrl`
 (https only), `dpo` and `grievanceOfficer` (name, email, phone, address), `childrenPolicy` (`unset`, `no_minors`, `may_include_minors`),
-`parentalConsentRequired`, `offerSaleShareOptOut`, `optOutNoticeUrl`, `consentManager` (name, url: a placeholder), `quietHours` (enabled,
+`parentalConsentRequired` (with `childrenPolicy`, the rule the ConsentGate applies to a contact flagged as a minor, BL-180), `offerSaleShareOptOut`, `optOutNoticeUrl`, `consentManager` (name, url: a placeholder), `quietHours` (enabled,
 start, end: may cross midnight), `callingWindow` (enabled, start, end, ISO weekdays), `windowTimezone` (IANA or null for the workspace's),
 `dndRegistry` (`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`: a note), `secondaryNoticeLocale` (the second DPDP notice language),
 `subprocessorsPublic`.
@@ -38,8 +38,26 @@ must exist; the second language is not English; a link is https. Otherwise 422 `
 **The country only suggests.** The billing country of the latest paid order (a free-text field, read as an ISO code or a common name) wins
 over the country given at onboarding. Nothing is switched on by a suggestion: the profiles listed in `regimes` are only those a person saved.
 
-**Quiet hours, calling windows and the DND registry are stored, not enforced** (BL-177). The pure helpers `isInsideWindow` and
-`minutesOfDayIn` in `@crm/contracts` are tested for the day the dispatcher defers sends.
+**Quiet hours and calling windows are enforced by deferring, not denying** (BL-177); the DND registry is still a note (BL-181). Spec:
+[section 11.5](../specs/privacy-and-data-governance.md). The decision is `SendWindowService` (`apps/api/src/modules/compliance-center`, module
+`SendWindowModule`) over the pure `decideSendWindow` / `resolveContactZones` in `@crm/contracts` (`compliance/send-window.ts`):
+
+| Sender                                   | Marketing send inside the quiet hours                                                                                                                          |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Inbox, REST API v1 (`ChannelDispatcher`) | accepted; the message stays `queued` with `meta.hold`, event `held`, its `message-dispatch` job is delayed to the opening; `MessageResponse.hold` while queued |
+| Flows (`FlowSender`)                     | the run halts (`SEND_HELD`) and tries again every 5 minutes                                                                                                    |
+| Broadcasts                               | recipient stays `pending` with `held_until`; the rest is sent; the broadcast is `paused` with reason `quiet_hours` and resumes by itself                       |
+| Campaigns and guided follow-ups          | recipient back to `queued` with `held_until` (the claim skips it); the campaign is scheduled again for the first opening                                       |
+| Scheduled messages                       | recipient stays `pending` with `held_until`; the schedule pauses until the first opening (the due sweep resumes it)                                            |
+| Dial (`POST /v2/calling/calls/dial`)     | **refused**, 422 `CALL_OUTSIDE_WINDOW` with `opensAt`, `zone`, `zoneSource` in the details; a call back to someone who contacted us in 24 hours is exempt      |
+
+Only the `marketing` ledger purpose is asked: replies in the 24 hour window, utility and authentication templates, booking notices are never
+held. The window is the one the workspace switched on (a profile only suggests hours). The ConsentGate runs first (a denied contact is refused,
+never merely held) and **again at release**. Which clock: the contact's time zone property (a contact property of type `timezone`, else a
+property keyed `timezone`), the country code of the number (a country spanning hours must be inside the hours in all its zones), the zone
+chosen in the settings (`windowTimezone` is the fallback), the workspace zone, UTC. When the windows cannot be read a marketing send waits
+five minutes. Migration `20261216090000_quiet_hours_hold.sql` adds the `held` message event and `held_until`/`held_reason` to
+`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table).
 
 ## Strictest wins
 

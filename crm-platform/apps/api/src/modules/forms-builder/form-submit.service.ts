@@ -3,8 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
   canonicalizeLocalPhone,
+  consentChannels,
   ERROR_CODES,
   formRateLimitsSchema,
+  type FormConsentChannel,
   type FormDefinition,
   type PublicFormSubmitInput,
   type PublicFormSubmitResponse,
@@ -29,7 +31,7 @@ import {
 import { coerceCustomValue, normaliseLeadEmail, pickOwner } from '../leads';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { createHash } from 'node:crypto';
-import { ContactConsentService } from '../contact-consent';
+import { ContactConsentService, ContactPrivacyService } from '../contact-consent';
 import { resolveConsent, type ConsentOutcome } from './form-consent';
 import { computeAmount } from './form-payment-rules';
 import { FormPaymentsService, type Payer } from './form-payments.service';
@@ -69,7 +71,15 @@ export interface PublicRequestMeta {
   userAgent?: string;
   /** The `Origin` header, when a browser sent one. */
   origin?: string;
+  /** The browser sent the Global Privacy Control signal (`Sec-GPC: 1`). Recorded as a Do Not Sell or Share opt-out when the workspace has `ccpa_us` on. */
+  gpc?: boolean;
 }
+
+/** What the sender's browser signalled beyond the answers. Today only the Global Privacy Control. */
+interface Signals {
+  gpc: boolean;
+}
+const NO_SIGNALS: Signals = { gpc: false };
 
 type Outcome =
   | {
@@ -142,6 +152,7 @@ export class FormSubmitService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly consentLedger: ContactConsentService,
+    private readonly privacy: ContactPrivacyService,
     config: ConfigService<Env, true>,
   ) {
     this.ipSecret = `forms-ip:${config.get('JWT_ACCESS_SECRET', { infer: true })}`;
@@ -292,6 +303,7 @@ export class FormSubmitService {
             validated.values,
             consent,
             gatewaySlug,
+            { gpc: meta.gpc === true },
           );
           return { ...plain, pay: opened };
         }),
@@ -342,6 +354,12 @@ export class FormSubmitService {
     const version = await this.forms.findVersionById(tx, orgId, versionId);
     if (!version) throw notFound();
     const def = readDefinition(version.definition);
+    // The channels are the ones of the wording the visitor saw (the submission's own version), not of a later republish.
+    const seen =
+      sub.versionId === versionId
+        ? version
+        : ((await this.forms.findVersionById(tx, orgId, sub.versionId)) ?? version);
+    const seenChannels = consentChannels(readDefinition(seen.definition).consent);
     await this.subs.markRetry(tx, orgId, sub.id);
     const consent: ConsentOutcome = sub.consent
       ? {
@@ -349,14 +367,14 @@ export class FormSubmitService {
           missing: false,
           marketingOptIn: sub.consent.given && def.consent.marketing,
           serviceAgreed: sub.consent.given && !def.consent.marketing,
-          coversSms: def.consent.coversSms,
+          channels: seenChannels,
         }
       : {
           stored: null,
           missing: false,
           marketingOptIn: false,
           serviceAgreed: false,
-          coversSms: false,
+          channels: [],
         };
     // A staff re-run of a form that takes payment opens its attempt as well (staff then get the link from the submission screen).
     const gatewaySlug = def.payment.enabled ? await this.payments.assertGateway(orgId) : '';
@@ -384,9 +402,10 @@ export class FormSubmitService {
     values: Record<string, StoredAnswer>,
     consent: ConsentOutcome,
     gatewaySlug: string,
+    signals: Signals = NO_SIGNALS,
   ): Promise<{ payment: PaymentRow; payer: Payer } | null> {
     const mapped = mapAnswers(def, values);
-    const outcome = await this.writeCrm(tx, orgId, form, def, sub, mapped, consent);
+    const outcome = await this.writeCrm(tx, orgId, form, def, sub, mapped, consent, signals);
     if (outcome.kind === 'review') {
       await this.review(tx, orgId, form, sub, outcome.reason);
       return null;
@@ -524,6 +543,7 @@ export class FormSubmitService {
     sub: SubmissionRow,
     mapped: MappedSubmission,
     consent: ConsentOutcome,
+    signals: Signals,
   ): Promise<Outcome> {
     const name = contactDisplayName(mapped.contact);
     const email = normaliseLeadEmail(mapped.contact.builtin.email ?? null);
@@ -593,7 +613,7 @@ export class FormSubmitService {
         found.uuid,
         email,
         phone?.e164 ?? null,
-        consent.coversSms,
+        consent.channels,
       );
     } else if (consent.serviceAgreed) {
       await this.recordServiceAgreement(
@@ -604,9 +624,11 @@ export class FormSubmitService {
         found.contactId,
         email,
         phone?.e164 ?? null,
-        consent.coversSms,
+        consent.channels,
       );
     }
+
+    if (signals.gpc) await this.recordGpc(tx, orgId, form, sub, found.contactId);
 
     await this.activities.insert(tx, orgId, {
       contactId: found.contactId,
@@ -638,6 +660,30 @@ export class FormSubmitService {
             )
           : undefined,
     };
+  }
+
+  /**
+   * The browser sent the Global Privacy Control signal with this submission: record the contact's Do Not Sell or Share opt-out, but
+   * only when the workspace has the `ccpa_us` profile on (the service checks). Best effort in a savepoint: a failure here never loses
+   * the visitor's submission. It writes no marketing grant and changes nothing about the consent line.
+   */
+  private async recordGpc(
+    tx: Tx,
+    orgId: number,
+    form: FormRow,
+    sub: SubmissionRow,
+    contactId: number,
+  ): Promise<void> {
+    try {
+      await tx.transaction(async (sp) => {
+        await this.privacy.recordGpc(sp as Tx, orgId, contactId, {
+          keyBase: `form:${sub.uuid}`,
+          evidence: { formId: form.uuid, submissionId: sub.uuid },
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err), form: form.uuid }, 'could not record the GPC opt-out');
+    }
   }
 
   /**
@@ -925,7 +971,7 @@ export class FormSubmitService {
     contactUuid: string,
     email: string | null,
     phone: string | null,
-    coversSms: boolean,
+    channels: readonly FormConsentChannel[],
   ): Promise<void> {
     const row = (await this.contactRepo.findById(tx, orgId, contactId))!;
     if (row.isUnsubscribed) return;
@@ -933,9 +979,9 @@ export class FormSubmitService {
     // text and its version), the form and the submission. Never the visitor's IP. A form cannot override a STOP (respectWithdrawn).
     const given = sub.consent;
     for (const channel of [
-      ...(phone ? (['whatsapp'] as const) : []),
-      ...(phone && coversSms ? (['sms'] as const) : []),
-      ...(email ? (['email'] as const) : []),
+      ...(phone && channels.includes('whatsapp') ? (['whatsapp'] as const) : []),
+      ...(phone && channels.includes('sms') ? (['sms'] as const) : []),
+      ...(email && channels.includes('email') ? (['email'] as const) : []),
     ]) {
       await this.consentLedger.recordInTx(tx, orgId, {
         contactId,
@@ -955,9 +1001,12 @@ export class FormSubmitService {
       });
     }
     const patch: Record<string, unknown> = {};
-    if (email && !row.emailSubscriptionStatus) patch.emailSubscriptionStatus = 'subscribed';
-    if (phone && !row.whatsappSubscriptionStatus) patch.whatsappSubscriptionStatus = 'subscribed';
-    if (phone && coversSms && !row.smsSubscriptionStatus) patch.smsSubscriptionStatus = 'subscribed';
+    if (email && channels.includes('email') && !row.emailSubscriptionStatus)
+      patch.emailSubscriptionStatus = 'subscribed';
+    if (phone && channels.includes('whatsapp') && !row.whatsappSubscriptionStatus)
+      patch.whatsappSubscriptionStatus = 'subscribed';
+    if (phone && channels.includes('sms') && !row.smsSubscriptionStatus)
+      patch.smsSubscriptionStatus = 'subscribed';
     if (Object.keys(patch).length === 0) return;
     await this.contactRepo.updateFieldsById(tx, orgId, contactId, { ...patch, updatedBy: null });
     await this.audit.record(tx, {
@@ -999,14 +1048,14 @@ export class FormSubmitService {
     contactId: number,
     email: string | null,
     phone: string | null,
-    coversSms: boolean,
+    channels: readonly FormConsentChannel[],
   ): Promise<void> {
     const given = sub.consent;
     if (!given) return;
     for (const channel of [
-      ...(phone ? (['whatsapp'] as const) : []),
-      ...(phone && coversSms ? (['sms'] as const) : []),
-      ...(email ? (['email'] as const) : []),
+      ...(phone && channels.includes('whatsapp') ? (['whatsapp'] as const) : []),
+      ...(phone && channels.includes('sms') ? (['sms'] as const) : []),
+      ...(email && channels.includes('email') ? (['email'] as const) : []),
     ]) {
       await this.consentLedger.recordInTx(tx, orgId, {
         contactId,

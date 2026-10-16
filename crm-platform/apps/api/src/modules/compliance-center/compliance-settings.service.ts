@@ -14,6 +14,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { ConsentPolicyService } from '../contact-consent';
 import { ComplianceRepository, type SettingsRow } from './compliance.repository';
 
 const MODULE_KEY = 'compliance_settings';
@@ -98,7 +99,8 @@ export function settingsDelta(
 /**
  * The Compliance center's settings (BL-172, BL-175, BL-176): the profiles switched on, the officer contacts, the links, the children
  * flag, the extras of the DPDP and CCPA profiles, and the quiet hours, calling window and DND choice. The country SUGGESTS profiles
- * (`suggestion`); nothing is switched on until a person saves a choice. The windows are stored, not enforced (BL-177).
+ * (`suggestion`); nothing is switched on until a person saves a choice. The windows are enforced by `SendWindowService` (BL-177): a
+ * marketing send inside the quiet hours is held, a dial outside the calling window is refused. The DND choice is still a note.
  */
 @Injectable()
 export class ComplianceSettingsService {
@@ -107,6 +109,7 @@ export class ComplianceSettingsService {
     private readonly repo: ComplianceRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consentPolicy: ConsentPolicyService,
   ) {}
 
   /** The saved values, or the defaults for a workspace that never saved. */
@@ -172,6 +175,8 @@ export class ComplianceSettingsService {
         payload: { regimes: values.regimes },
       });
     });
+    // The ConsentGate caches the children setting (minor rule) for a minute; this process sees the new one at once (BL-180).
+    this.consentPolicy.invalidateMinorRule(orgId);
     return this.get();
   }
 

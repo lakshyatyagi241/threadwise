@@ -348,7 +348,10 @@
       "ownerMe": "{name} (yo)",
       "ownerFormer": "Ex miembro",
       "ownerHelp": "Quién se encarga de este contacto. Solo puedes elegir a personas que tu acceso permita.",
-      "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona."
+      "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona.",
+      "company": "Empresa",
+      "companyHint": "Agrupa este contacto bajo una organización.",
+      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo."
     },
     "tags": {
       "title": "Etiquetas",
@@ -1279,6 +1282,14 @@
       "number": "Enviar desde",
       "numberHint": "El número de WhatsApp desde el que se envía el mensaje.",
       "noChannel": "No hay ningún número de WhatsApp conectado. Conecta uno primero en Canales.",
+      "mailbox": "Enviar desde",
+      "mailboxPlaceholder": "Selecciona un buzón",
+      "mailboxHint": "El buzón conectado desde el que se envía el correo.",
+      "noMailbox": "No hay ningún buzón conectado. Conecta uno en Canales primero.",
+      "subject": "Asunto",
+      "subjectPlaceholder": "¿De qué se trata?",
+      "body": "Mensaje",
+      "bodyPlaceholder": "Escribe tu correo…",
       "template": "Plantilla de WhatsApp",
       "templatePlaceholder": "Selecciona una plantilla",
       "noTemplates": "No hay plantillas aprobadas para este número.",
@@ -1295,12 +1306,10 @@
       "callPermission": "El contacto aún no ha permitido llamadas. Antes de llamar se le pide permiso.",
       "callReady": "Listo para llamar a {phone}.",
       "later": {
-        "sms": "Todavía no está disponible enviar SMS desde el CRM.",
-        "email": "Todavía no está disponible enviar correos desde el CRM."
+        "sms": "Todavía no está disponible enviar SMS desde el CRM."
       },
       "openApp": {
-        "sms": "Abrir en tu app de mensajes",
-        "email": "Abrir en tu app de correo"
+        "sms": "Abrir en tu app de mensajes"
       }
     },
     "views": {

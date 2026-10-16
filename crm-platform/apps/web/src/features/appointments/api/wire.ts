@@ -70,6 +70,7 @@ export function toAppointment(r: AppointmentResponse): Appointment {
     customer: { name: r.invitee.name, phone: r.invitee.phone, email: r.invitee.email },
     location: r.location,
     meetUrl: r.meetUrl,
+    calendarSync: r.calendar.sync ?? null,
     answers: r.answers.map((a) => ({
       label: a.label,
       answer: a.value,

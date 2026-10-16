@@ -130,15 +130,24 @@
       "loading": "Links werden geladen…",
       "retry": "Erneut versuchen",
       "searchPlaceholder": "Nach Name oder Link suchen",
-      "create": { "cta": "Neuer Link" },
+      "create": {
+        "cta": "Neuer Link"
+      },
       "stats": {
         "all": "Alle Links",
         "live": "Live",
         "totalClicks": "Klicks gesamt",
         "avgClicks": "Ø Klicks / Link"
       },
-      "tabs": { "all": "Alle", "live": "Live", "paused": "Pausiert" },
-      "status": { "live": "Live", "paused": "Pausiert" },
+      "tabs": {
+        "all": "Alle",
+        "live": "Live",
+        "paused": "Pausiert"
+      },
+      "status": {
+        "live": "Live",
+        "paused": "Pausiert"
+      },
       "empty": {
         "title": "Noch keine Links",
         "description": "Erstellen Sie einen Link zum Teilen in Anzeigen, Bios oder einem QR-Code."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "Zurück zu Links",
         "newHeading": "Neuer Link",
-        "step": { "destination": "Ziel", "message": "Starternachricht", "tracking": "Tracking" },
+        "step": {
+          "destination": "Ziel",
+          "message": "Starternachricht",
+          "tracking": "Tracking"
+        },
         "name": "Name",
         "status": "Status",
         "countryCode": "Landesvorwahl",
@@ -194,6 +207,14 @@
         "shortUrl": "Kurzlink",
         "waUrl": "WhatsApp-Link",
         "qrAlt": "QR-Code für diesen Link"
+      },
+      "public": {
+        "missingTitle": "Link nicht gefunden",
+        "missingBody": "Dieser Link existiert nicht oder wurde gelöscht.",
+        "goneTitle": "Link nicht mehr aktiv",
+        "goneBody": "Dieser Link ist pausiert oder abgelaufen.",
+        "errorTitle": "Etwas ist schiefgelaufen",
+        "errorBody": "Dieser Link konnte nicht geöffnet werden. Bitte versuche es erneut."
       }
     }
   }

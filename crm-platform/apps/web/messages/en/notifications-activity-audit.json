@@ -376,6 +376,10 @@
           "label": "Chat nobody could take",
           "hint": "Routing found nobody for a new chat because the people it chose are on leave. Assign it by hand."
         },
+        "appointment_calendar_drift": {
+          "label": "Appointment out of sync with Google Calendar",
+          "hint": "An upcoming appointment's Google Calendar event was deleted, moved or had its guests changed. The appointment is not changed; you choose what to do."
+        },
         "test": {
           "label": "Test notification",
           "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."

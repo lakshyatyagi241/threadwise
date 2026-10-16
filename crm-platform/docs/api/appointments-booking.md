@@ -210,7 +210,7 @@ elapsed minutes, so a 23-hour day offers 23 hours and a 25-hour day 25.
   "cancelledAt": null,
   "cancelledBy": null,
   "cancelReason": null,
-  "calendar": { "eventId": null, "calendarId": null },
+  "calendar": { "eventId": null, "calendarId": null, "sync": null },
   "manageUrl": "https://app.example/b/manage/<token>",
   "rowVersion": 2,
   "createdAt": "…",
@@ -247,6 +247,8 @@ Any other move is `409 APPT_INVALID_TRANSITION` with `from` and `to`. The four f
 | `GET /appointments/calendar`                                                       | `record.appointments.read`   | `{ provider, connected, account, status, calendarId, calendarName, connectedAt }`: `status` is `unavailable` (the platform has no Google client), `disconnected`, `connected` or `needs_reconnect`. See Google Calendar                                                                        |
 | `POST /appointments`                                                               | `record.appointments.create` | _idempotent_; 201. `bookingTypeId`, `startsAt`, `contactId` or `invitee`, `notes`, `answers`, `hostId`, `ignoreAvailability`, `notify`                                                                                                                                                         |
 | `GET /appointments/:id`                                                            | `record.appointments.read`   | includes `manageUrl`                                                                                                                                                                                                                                                                           |
+| `POST /appointments/:id/calendar/push`                                             | `record.appointments.update` | "Push our time back to Google": rewrites the Google event from the appointment (a deleted event returns under its id); `{ appointment, result: { done: 'pushed', applied: null } }`. `409 GOOGLE_SYNC_NOT_DRIFTED`, `409 APPT_CALENDAR_NOT_CONNECTED`, `502 APPT_CALENDAR_PROVIDER_FAILED`     |
+| `POST /appointments/:id/calendar/accept`                                           | `record.appointments.update` | "Accept Google's change" `{ notify? }`: re-reads the event and applies it through the usual rules (deleted or missing cancels, moved reschedules, guests acknowledged): `result.applied` is `cancelled`, `rescheduled` or `acknowledged`. `409 GOOGLE_SYNC_NOT_DRIFTED`                        |
 | `GET /appointments/:id/ics`                                                        | `record.appointments.read`   | `text/calendar` attachment                                                                                                                                                                                                                                                                     |
 | `PATCH /appointments/:id`                                                          | `record.appointments.update` | needs `rowVersion`; `title`, `description`, `location`, `notes`, `hostId`, `contactId`, `invitee`; `null` clears                                                                                                                                                                               |
 | `POST /appointments/:id/reschedule`                                                | `record.appointments.update` | `{ startsAt, ignoreAvailability?, notify?, rowVersion? }`; pending or confirmed, not started; keeps the status                                                                                                                                                                                 |
@@ -350,7 +352,10 @@ Every appointment event also carries `uuid`, `status`, `startsAt`, `endsAt`, `ti
 - **Calendar consumer** (`booked | confirmed | rescheduled | cancelled | declined`): writes or updates the event for a confirmed booking
   and stores `calendar.eventId` and `meetUrl`; deletes it on cancel or decline. A failure throws (the drain retries); the port is idempotent
   on the stored event id (and, before there is one, on the appointment: see Google Calendar). Nothing happens when no calendar is
-  connected or the grant needs reconnecting.
+  connected or the grant needs reconnecting; the events missed then are written later by the **back-fill** (below).
+- **Calendar back-fill consumer** (`appointment_calendar.connected | provider_selected`): queues the workspace's back-fill job (queue
+  `calendar-backfill`, one workspace per job): see "Back-fill after a reconnect".
+- **iCal feed read** (every minute the scheduler claims the due feeds; queue `calendar-ics-refresh`, one feed per job): see "iCal calendars".
 
 ## Google Calendar (TW-APPT-012, 028, 029; D-08)
 
@@ -358,9 +363,12 @@ One Google account per workspace, connected by an admin through Google's consent
 OAuth client once for everyone (console, _Admin, Settings, Google Calendar_: client id, client secret, optional redirect URI override,
 and a switch); a workspace never sees them. Setting that client up in Google Cloud: `docs/runbooks/google-calendar-setup.md`.
 
+This is the same connection as the workspace's Google account (`docs/api/google-account.md`): the flow builder's Sheets, Docs, Forms and Meet steps use it too, each with its own
+permission. An account connected for Sheets only reads as `disconnected` here until the calendar permission is added (the Connect button then asks for the calendar and keeps the rest).
+
 **What is asked of Google:** `openid`, `email`, `calendar.events` (write events, Meet), `calendar.freebusy` and
-`calendar.calendarlist.readonly`. Reference asked for Calendar, Sheets, Docs, Drive and Forms in one consent; only calendar access is asked
-here. The consent URL carries `access_type=offline` and `prompt=consent`, so Google issues a refresh token on every consent. A consent with
+`calendar.calendarlist.readonly` for the calendar capability; the other capabilities are asked only when an admin ticks them on the Google account page. Reference asked for
+Calendar, Sheets, Docs, Drive and Forms in one consent. The consent URL carries `access_type=offline` and `prompt=consent`, so Google issues a refresh token on every consent. A consent with
 a calendar scope unticked is withdrawn again and stores nothing (`?calendar=missing_scope`).
 
 ### Where the client comes from
@@ -374,7 +382,7 @@ redirect URI is `<APP_URL>/v2/public/appointments/calendar/google/callback`. Wit
 
 Environment for the adapter (all optional, defaults are Google's own addresses; they exist so tests can aim at a local stand-in):
 `GOOGLE_OAUTH_AUTH_URL`, `GOOGLE_OAUTH_TOKEN_URL`, `GOOGLE_OAUTH_REVOKE_URL`, `GOOGLE_USERINFO_URL`, `GOOGLE_CALENDAR_API_URL`,
-`GOOGLE_HTTP_TIMEOUT_MS` (8000), `GOOGLE_BUSY_CACHE_SECONDS` (30), `GOOGLE_BUSY_BACKOFF_SECONDS` (20).
+`GOOGLE_HTTP_TIMEOUT_MS` (8000), `GOOGLE_BUSY_CACHE_SECONDS` (30), `GOOGLE_BUSY_BACKOFF_SECONDS` (20), and the retry policy `GOOGLE_RETRIES` (2), `GOOGLE_RETRY_BASE_MS` (300), `GOOGLE_RETRY_AFTER_CAP_SECONDS` (5): a 429, 5xx, timeout or network error is repeated with random jitter (never the busy-time lookup a visitor waits on, never the one-time code exchange); a `Retry-After` beyond the cap is not slept on, it is handed to the outbox.
 
 ### Routes
 
@@ -416,7 +424,7 @@ its own primary calendar.
   calendar since.
 - A failure throws, so the drain retries with backoff; a request Google refuses as bad (a 400) will not succeed on retry and ends in the
   outbox's dead letters. While the connection is not usable (never connected, `needs_reconnect`, the client removed) the consumer does
-  nothing and does not throw: **events for bookings made in that time are not written later; a reconnect does not back-fill.**
+  nothing and does not throw; the bookings made in that time get their events from the **back-fill** after the next connect (below).
 
 ### Busy time
 
@@ -448,15 +456,190 @@ No Google Cloud OAuth client existed when this was built, so nothing has run aga
 behaviour of an app in Testing or Production, Google's real error bodies, Meet creation timing and the `privateExtendedProperty` filter of
 `events.list` are taken from the documentation and need a first real run (runbook, "Check it works").
 
+## Outlook / Microsoft 365 calendar (BL-035)
+
+A second provider behind the same calendar port. A workspace connects one Microsoft account (work, school or personal) the same way it connects Google; the
+platform operator registers the Entra app once for everyone ([runbook](../runbooks/microsoft-calendar-setup.md): this is the part only the owner can do, and
+**nothing here was run against a real Microsoft tenant**). Nothing in the booking code knows a provider: it talks to the port, which is fronted by
+`MultiCalendarAdapter`.
+
+**Two providers, one event.** Busy time is the UNION of every connected calendar (an Outlook meeting closes a slot even when bookings go to Google). A booking's
+event is written to exactly ONE provider, the workspace's **write provider**: the admin's explicit choice while that provider is usable, else Google when usable
+(what every workspace had before), else Microsoft, else none. A calendar id a booking type names belongs to the write provider; the other provider is read from
+its own chosen calendar. One provider failing leaves the other's busy time in force; only when every source fails does the slot lookup offer slots without
+calendar data (and log it). Each appointment remembers the provider that holds its event (`appointments.calendar_provider`; empty with an event id means Google),
+so a later change or delete goes to the same calendar. When the write provider changes, the next change to a booking (or the back-fill) removes the event from
+the previous provider (best effort: that grant may be gone) and writes a fresh one in the new.
+
+### Routes (`/v2`)
+
+| Route                                                  | Capability                    | Notes                                                                                                                                                                                                                                                                                    |
+| ------------------------------------------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /appointments/calendar/overview`                  | `record.appointments.read`    | `{ writeProvider, preferredProvider, providers: [{ provider, status, account, calendarId, calendarName, connectedAt, lastErrorCode, active }], backfillPending }`; `status` is `unavailable`, `disconnected`, `connected` or `needs_reconnect`                                           |
+| `PUT /appointments/calendar/provider`                  | `record.booking-types.update` | `{ provider: "google" \| "microsoft" \| null }` (null = automatic). `409 APPT_CALENDAR_NOT_CONNECTED` for a provider that is not usable. Audited (`appointment_calendar_preference`), event `appointment_calendar.provider_selected`                                                     |
+| `POST /appointments/calendar/backfill`                 | `record.booking-types.update` | queues the back-fill now: `{ queued, pending }`; `queued: false` when no calendar is connected                                                                                                                                                                                           |
+| `POST /appointments/calendar/microsoft/start`          | `record.booking-types.update` | `{ returnTo? }`; 200 `{ url, expiresInSeconds }`: Microsoft's consent URL with a signed state (10 minutes, bound to the workspace and the admin). `422 APPT_CALENDAR_NOT_CONFIGURED` without the platform app                                                                            |
+| `GET /public/appointments/calendar/microsoft/callback` | none (the signed `state`)     | Microsoft's redirect. Verifies the state and answers **302** to `<WEB_APP_URL><returnTo>?outlook=confirm&ticket=...`, or `?outlook=denied`, `failed`, `expired`, `not_configured`. **It exchanges nothing**                                                                              |
+| `POST /appointments/calendar/microsoft/confirm`        | `record.booking-types.update` | `{ ticket }`: only the admin who pressed Connect, in that workspace (`403 APPT_CALENDAR_CONFIRM_NOT_YOURS`); exchanges the code and stores the grant: `{ outcome: connected or missing_scope, returnTo }`. `410 APPT_CALENDAR_CONFIRM_INVALID` for an expired, malformed or spent ticket |
+| `GET /appointments/calendar/microsoft/calendars`       | `record.booking-types.update` | the calendars the account can edit, the default first. `409 APPT_CALENDAR_NOT_CONNECTED`, `502 APPT_CALENDAR_PROVIDER_FAILED`                                                                                                                                                            |
+| `PUT /appointments/calendar/microsoft/calendar`        | `record.booking-types.update` | `{ calendarId }`, one of the listed ids (else `422`, path `calendarId`); returns the provider's card                                                                                                                                                                                     |
+| `POST /appointments/calendar/microsoft/disconnect`     | `record.booking-types.update` | deletes the sealed tokens (Microsoft has no way for an app to withdraw a person's consent: they remove it at myaccount.microsoft.com); idempotent; clears a choice that named Microsoft                                                                                                  |
+
+All staff routes also need the plan's appointment booking (`422 PLAN_FEATURE_LOCKED`). Connect, choose, needs-reconnect and disconnect are each audited (module
+`appointment_calendar_microsoft`) and emit `appointment_calendar.connected | calendar_selected | needs_reconnect | disconnected` with `provider: "microsoft"` in
+the same transaction as the write.
+
+**The confirmation, and why it differs from Google's.** Google's callback exchanges the code and _parks_ the tokens until the admin confirms, withdrawing them at
+Google if the wrong person does. Microsoft offers no way to withdraw a token we were given, so Microsoft's callback exchanges nothing: it verifies the signed
+state, then seals the code into a ticket (HMAC-signed, five minutes, bound to the workspace and the admin) and sends the browser to the settings page, where the
+same signed-in admin presses Confirm. Only then is the code exchanged. A forwarded consent link opens a page that refuses it (`APPT_CALENDAR_CONFIRM_NOT_YOURS`),
+and nothing was ever requested from Microsoft for it. A code is good once at Microsoft, so a replayed ticket fails (`APPT_CALENDAR_CONFIRM_INVALID`) and leaves
+the connection as it was.
+
+**What is asked of Microsoft** (delegated; nothing about mail, files or contacts): `openid`, `email`, `offline_access`, `User.Read`, `Calendars.ReadWrite`. A
+grant that lacks `Calendars.ReadWrite`, or comes back with no refresh token, stores nothing (`outcome: missing_scope`).
+
+**Console and environment.** The platform operator's group `microsoftCalendar` (`GET|PATCH /platform/settings/groups/microsoftCalendar`): `enabled` (default on),
+`clientId`, `tenant` (`common` by default), `redirectUri` (optional override) and the write-only secret `clientSecret` (sealed, never returned; `extra.redirectUri`
+is the address to register at Microsoft; default `<APP_URL>/v2/public/appointments/calendar/microsoft/callback`). A field left empty falls back to
+`MICROSOFT_CALENDAR_CLIENT_ID`, `_CLIENT_SECRET`, `_TENANT`, `_REDIRECT_URI`. Adapter tuning (defaults are Microsoft's own addresses; they exist so tests can aim
+at a stand-in): `MICROSOFT_CALENDAR_LOGIN_URL`, `_GRAPH_URL`, `_HTTP_TIMEOUT_MS` (8000), `_RETRIES` (2), `_RETRY_BASE_MS` (300), `_RETRY_AFTER_CAP_SECONDS` (5),
+`_BUSY_CACHE_SECONDS` (30), `_BUSY_BACKOFF_SECONDS` (20).
+
+### Storage
+
+`appointment_microsoft_connections` (migration `20261217090000`): one row per workspace, forced RLS, composite FK to the admin who connected, the same shape as
+the Google row, with the refresh and the cached access token sealed with the credentials key (key rotation applies). Microsoft **rotates** refresh tokens: a
+refresh returns a new one, which replaces the stored one in the same statement (guarded on the token that was used, so a refresh that loses a race to another
+process writes nothing; both are valid at Microsoft). `appointment_calendar_preferences`: the admin's choice of write provider (no row = automatic).
+`appointments.calendar_provider`: which provider holds the event.
+
+### Events
+
+- Graph does not let a client choose an event id, so a create carries `transactionId` (the appointment uuid), Graph's own key for a repeated POST; a create that
+  still meets a conflict finds the event by the private property written on it (`crmAppointment`) and updates that one. Update, delete and read address an event
+  by its id alone (unique in the mailbox, whichever calendar holds it); an event somebody deleted in Outlook is created again by the next change.
+- Written: subject (the booking type's name), body, location, start and end (UTC), the customer as a required attendee (Outlook sends the invitation), reminder
+  on, shown as busy, and two private properties (`crmManaged`, `crmAppointment`). Cancel and decline delete the event (Outlook sends the cancellation to the
+  guest); a 404 counts as deleted.
+- A virtual type (or `createMeet`) asks for a **Teams** meeting (work or school accounts) and stores the join link as `meetUrl`. A refusal of the room (a
+  personal account has none) is retried without it: the booking keeps its event and has no link.
+- A type's own calendar override (`calendar.calendarId`) is a Google calendar's id and is not used for Outlook: events go to the calendar the admin chose on the
+  Outlook card.
+
+### Busy time
+
+The `calendarView` of the chosen calendar over the window (recurring meetings are already expanded): `showAs` busy, tentative, out of office or unknown block;
+free and working elsewhere do not, and cancelled meetings do not. Cached `MICROSOFT_CALENDAR_BUSY_CACHE_SECONDS` per workspace, calendar and window; a failure
+means no busy data from this calendar and a short back-off. A group type (capacity above one) removes this platform's own events (found by `crmManaged`) from the
+busy time, as for Google.
+
+### Tokens and refusals
+
+Refresh within a minute of expiry, concurrent refreshes in one process coalesced; a 401 from Graph refreshes once and repeats the call. **`invalid_grant`**
+(revoked, 90 days unused, password changed, conditional access) marks the connection `needs_reconnect` once, audited, with an outbox event; the card asks for a
+new consent and nothing is read or written until then. `invalid_client` (the platform's secret is wrong or expired) is not the workspace's fault and does not
+touch its connection. Account-level failures (throttling, access denied, outage) show on the card as `lastErrorCode` until the next success.
+
+### Not built (recorded)
+
+- The hourly **drift check** (TW-GACC-011) reads Google events only: an Outlook event edited in Outlook is not reported as drifted, and push/accept do not apply to it (BL-200).
+- A per-booking-type Outlook calendar; Teams links for personal accounts.
+- Everything above is verified against a local stand-in written from Microsoft's documentation (`test/e2e/appointments-booking/fake-microsoft.ts`), never against Microsoft itself.
+
+## Back-fill after a reconnect (BL-035)
+
+A booking made while no calendar was connected (or while the grant needed reconnecting) has no event, and an event is lost with an account that was replaced.
+After `appointment_calendar.connected` (first connect, reconnect, another account) or `appointment_calendar.provider_selected`, a worker job writes the missing events:
+
+- **Which bookings:** `confirmed`, not yet ended, starting within **90 days**, whose event is not in the calendar bookings go to now (none, or held by the other provider). Nothing older, nothing further out, nothing pending or cancelled is touched.
+- **How:** it only calls the same writer a live booking change calls, so a back-filled event is the event a live one would be. It is **idempotent**: a booking that already has its event in the right calendar is not a candidate; one being written by its own outbox event at the same moment meets the same idempotent write; the booking is read again at the moment of writing, so one cancelled meanwhile is deleted or skipped, never written.
+- **Bounded:** at most 200 bookings per pass, 50 per page, a 120 ms pause between writes, in start order; a pass that stops at its limit queues the next from where it stopped, 30 seconds later. One Redis lock per workspace.
+- **Failure:** a calendar that cannot be asked (outage, throttling, a grant that just died) stops the pass and throws, so the queue retries with backoff (4 attempts, 60 s base); what was written stays written. One booking the calendar refuses as bad or forbidden is counted and the pass moves on; five refused in a row end the pass (the refusal is then the account's, not the booking's).
+- **Trail:** one audit row (`appointment_calendar_backfill`, record = the workspace) and one event `appointment_calendar.backfilled` (`provider`, `written`, `failed`, `moreWaiting`; counts only, never a name or a link) per pass that did something.
+- **By hand:** `POST /appointments/calendar/backfill` queues the same job; `GET /appointments/calendar/overview` reports `backfillPending`.
+
+## iCal calendars: a read-only busy source, and your bookings as a subscription (BL-035)
+
+Two directions, both through ICS (RFC 5545). Neither needs an OAuth client or the platform operator.
+
+### IN: other calendars as busy time
+
+A workspace subscribes to a calendar it cannot connect with a sign-in (Apple, Fastmail, a school or club timetable, a Google or Outlook calendar published as a secret address). The feed is **read-only and only ever contributes busy time**: no event of it is imported, shown to anyone,
+stored (beyond when the person is busy) or sent anywhere. The slot engine reads the stored intervals from the database in one indexed query, so a slot lookup never waits on someone else's server.
+
+| Route                                               | Capability                    | Notes                                                                                                                                                                                                                                                                                                                                           |
+| --------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /appointments/calendar/ics-feeds`              | `record.booking-types.read`   | `{ data: [{ id, name, host, isActive, blockAllDay, status, errorCode, lastFetchedAt, lastSuccessAt, calendarName, eventCount, busyCount, warnings, rowVersion, createdAt }] }`. **Never the address**: only its host                                                                                                                            |
+| `POST /appointments/calendar/ics-feeds`             | `record.booking-types.update` | _idempotent_; `{ name, url, blockAllDay? }`. The address (`https://`, `http://`, `webcal://`) is **read once before anything is saved**. `422 APPT_ICS_FEED_INVALID` (not an address we read; credentials in it), `422 APPT_ICS_FEED_UNREADABLE` (details `url` with the reason), `409 APPT_ICS_FEED_DUPLICATE`, `422 APPT_ICS_FEED_LIMIT` (10) |
+| `PATCH /appointments/calendar/ics-feeds/:id`        | `record.booking-types.update` | `{ name?, isActive?, blockAllDay?, rowVersion }` (`409 ROW_VERSION_CONFLICT`); resuming or changing the all-day rule reads the feed again at once                                                                                                                                                                                               |
+| `POST /appointments/calendar/ics-feeds/:id/refresh` | `record.booking-types.update` | reads now; a feed read within the last 30 seconds is left alone                                                                                                                                                                                                                                                                                 |
+| `DELETE /appointments/calendar/ics-feeds/:id`       | `record.booking-types.update` | 204; the slots it was closing are free again at once                                                                                                                                                                                                                                                                                            |
+
+The reason codes of an unreadable feed (`errorCode`, and the detail of `APPT_ICS_FEED_UNREADABLE`): `unreachable`, `timeout`, `not_found`, `forbidden`, `server_error`, `redirect_loop`, `not_a_calendar`, `too_large`, `blocked_address`.
+
+**The address is a secret.** Published-calendar addresses carry a token, so it is sealed with the credentials key (`url_enc`), never returned, never in an audit row, an outbox event or a log line (only the host and the reason code are). **The server is not a way into its own network:** every fetch goes through the shared guarded client, which
+refuses loopback, private, link-local and CGNAT destinations at the socket's own DNS lookup (no gap for DNS rebinding), caps the answer at 5 MB, and never follows a redirect by itself; the fetcher follows at most four by hand and checks each hop as a fresh request (iCloud's published calendars redirect to another host). `ICS_FEED_ALLOW_PRIVATE_ADDRESSES` exists for tests only and is off.
+
+**How a feed is read.** The worker's scheduler (every minute) claims the feeds that are due and queues one job each (queue `calendar-ics-refresh`, a Redis lock per feed); a healthy feed is read every 15 minutes with a conditional GET (`ETag`, `Last-Modified`), a failing one at 15 minutes doubling up to 6 hours, and the busy intervals of the last good read stay while it fails. A feed
+that has not been read successfully for **7 days** contributes nothing. The status, counts and tags of a read are monitoring columns: they do not bump `row_version`, so an admin editing a feed never gets a 409 because of a refresh.
+
+**What counts as busy** (`ics-feed-parser.ts`, pure and unit-tested): a VEVENT that is not `STATUS:CANCELLED` and not `TRANSP:TRANSPARENT`; all-day events block their whole local day unless the feed is set to ignore them; a point in time with no end blocks nothing. Recurring events are expanded for the window (today minus a day to 180 days ahead):
+`DAILY`, `WEEKLY`, `MONTHLY`, `YEARLY` with `INTERVAL`, `COUNT`, `UNTIL`, `BYDAY` (with ordinals), `BYMONTHDAY`, `BYMONTH`, `BYSETPOS`, `WKST`, plus `RDATE`, `EXDATE` and `RECURRENCE-ID` overrides; the expansion is done on the wall clock of the event's zone, so a 9:00 meeting stays at 9:00 across a daylight-saving change.
+Time zones: an IANA name as is, the Windows names Outlook writes mapped, floating times and unknown zones read in the feed's `X-WR-TIMEZONE` or the workspace's zone. **Anything it cannot interpret is counted, not guessed away:** an unknown zone (`warnings.unknownZone`), a rule it does not support (HOURLY, BYYEARDAY, BYWEEKNO ...: only the first occurrence is used, `warnings.unsupportedRule`), more than 5,000
+blocks (`warnings.truncated`); the settings card shows all three. A body that is not an iCalendar (an HTML sign-in page) is `not_a_calendar`, never read as "no events".
+
+**Limits, recorded.** A feed of the calendar that bookings are written to counts a multi-seat service's own events as busy (a feed has no way to mark them as ours) and a cancelled booking's slot stays blocked until the next read: do not subscribe to the booking calendar. Basic-auth feeds, CalDAV and two-way sync are not built (BL-202).
+
+Storage (migration `20261218090000`): `calendar_ics_feeds` (forced RLS, composite FK to the admin, unique per address, monitoring trigger), `calendar_ics_busy` (the stored intervals, replaced as a whole by each good read, cascade on delete). Audit module `calendar_ics_feed`; outbox `calendar_ics_feed.created | updated | deleted` (a uuid, never the address).
+
+### OUT: my bookings in my calendar app
+
+| Route                                         | Capability                                | Notes                                                                                                                                                                                                                                         |
+| --------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /appointments/calendar/bookings-feed`    | `record.appointments.read`                | `{ url, createdAt, lastUsedAt }` of the signed-in person's link (`url: null` until they make one)                                                                                                                                             |
+| `POST /appointments/calendar/bookings-feed`   | `record.appointments.read`                | makes the link, or replaces it with a new one (the old stops working at once); audit + outbox `appointment_feed.created \| rotated`                                                                                                           |
+| `DELETE /appointments/calendar/bookings-feed` | `record.appointments.read`                | 204; stops the feed; audit + outbox `appointment_feed.revoked`                                                                                                                                                                                |
+| `GET /public/appointments/feed/<token>.ics`   | none (the 43-character token in the path) | `text/calendar`. 404 for an unknown, revoked or malformed link (the same answer, no query for a malformed one). Throttled per IP and per link. `Cache-Control: private, max-age=300`, `X-Robots-Tag: noindex`, `Referrer-Policy: no-referrer` |
+
+The token is 256 random bits; only its SHA-256 is a lookup key and an encrypted copy lets the person copy the link again. **What the feed shows is decided when it is read**, from the person's CURRENT record scope over appointments (own, team or all) and their current status: a person who loses the capability or is deactivated sees an empty feed (or none), with the same link.
+Pending and confirmed bookings from 30 days ago to 180 days ahead, at most 2,000, each with the booking's title, time, place and status (`TENTATIVE` for a pending one) and **nothing else**: no phone, e-mail, notes, answers or manage link, because calendar apps cache the feed on their own servers. The token never appears in an audit row, an event or a log line.
+
+## Tools for agents and chatbots (BL-035): the contract, not yet bound
+
+An AI agent or a chatbot that can be given tools books the way a person does: see what is offered, pick a time, confirm, change it later. **The contract is written** (`packages/contracts/src/appointments/booking-tools.ts`: four tool definitions with JSON Schema and Zod arguments and results, a `parseBookingToolCall` that validates what a model sent, the stable refusal codes, and the rules below), and **nothing is bound to it yet**, because the customer-facing AI has nothing to bind it to:
+
+- **AI Agent Studio** (`ai-agents-training`) stores assistants and their training sources and the chat widget (`chatbot-widget`, `WidgetAiReplyService`) answers with `AiChatPort.complete`: **one prompt, one text answer**, no tool definitions, no tool-call loop.
+- **The flow runtime** has no tool registry. Its Book appointment node (below, "For the flow-runtime domain") already books through chat with fixed steps, and its AI step is a single completion.
+- The only tool-calling loop in the repository is the **staff** AI CRM Copilot (`ai-copilot-lead-finder`: `AiCrmProviderPort.runTurn`, `AiCrmToolkitService`, confirm-before-act for writes). It acts as the signed-in staff member, not as a customer's assistant, belongs to another domain's zone, and is a different audience; adding appointment tools there is a follow-up (BL-201), not part of this change.
+
+Building a tool-calling loop for the customer-facing AI is a design of its own (provider support for tools, the confirmation turn, metering, safety review), so it was not started here.
+
+| Tool                     | Kind  | Maps to (the existing service)                                                                                                 |
+| ------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `list_services`          | read  | `BookingOffersService.offer(orgId)`: the active types, their questions, what is due to book, and the plan gate                 |
+| `check_availability`     | read  | `BookingOffersService.days` / `.times`, or the slot engine over a date window: at most 9 times, soonest first, at most 14 days |
+| `book_appointment`       | write | `BookingOffersService.reserve` then `.book(orgId, input)`: actor `bot`, source `chat`, the same engine and guards              |
+| `reschedule_appointment` | write | the customer's own move (`PublicBookingService.reschedule` rules): an offered slot, not started, pending or confirmed          |
+
+**Rules a binding must keep** (they are in the contract's header, and `parseBookingToolCall` enforces the checkable ones):
+
+1. **One booking path.** The tools call the services above; there is no second way to book. The double-booking guarantee, the plan cap, `maxPerDay`, buffers and the calendar's busy time (every connected calendar and iCal feed) apply exactly as for a person.
+2. **A write needs the customer's explicit yes** in the conversation (`confirmed: true`). The binding stops at the call, shows the service, the time in the customer's zone and any amount due, and runs only after a clear confirmation turn. `parseBookingToolCall` refuses a write with `confirmed` not true as `not_confirmed`.
+3. **Identity comes from the conversation, never from the model.** A reschedule takes no phone, e-mail or contact id: the appointment must belong to the conversation's contact, else `not_found` (never `forbidden`: no oracle for other people's bookings). A booking made through the tool is attached to the conversation's contact; a name, phone or e-mail is accepted only for a visitor with no contact yet, through the same find-or-create the booking page uses.
+4. **Consent and privacy.** Booking records no marketing consent and grants none. The confirmation and reminder messages it triggers are **utility** messages (the ConsentGate does not hold them). Results carry no phone, e-mail, notes or answers of anyone; the manage link is returned only for the same customer, in the same thread. The schemas drop anything beyond the contract.
+5. **Idempotent and bounded.** A write carries an idempotency key (`<conversation id>:<tool call id>`), so a retried call books once; a conversation may do at most 3 booking writes; `check_availability` returns at most 9 times.
+6. **Refusals are results.** `{ ok: false, code, message }` with the codes `unavailable`, `unknown_service`, `slot_unavailable`, `slot_taken`, `answers_invalid`, `not_found`, `not_changeable`, `too_many_writes`, `not_confirmed`, so the model can say something true instead of the turn failing.
+
 ## Ports (what other domains plug in)
 
-| Port (token)                                     | File                                                                      | Stub adapter                         | Who binds the real one                                    |
-| ------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------ | --------------------------------------------------------- |
-| `CalendarSyncPort` (`APPOINTMENT_CALENDAR`)      | `apps/api/src/infra/providers/appointments-booking/calendar-sync.port.ts` | `NoCalendarSync` (not connected)     | bound here: `GoogleCalendarAdapter` (see Google Calendar) |
-| `AppointmentMessenger` (`APPOINTMENT_MESSENGER`) | `.../appointment-messenger.port.ts`                                       | `NoAppointmentMessenger` (`skipped`) | the channel domains (WhatsApp, email)                     |
+| Port (token)                                     | File                                                                      | Stub adapter                         | Who binds the real one                                                                         |
+| ------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `CalendarSyncPort` (`APPOINTMENT_CALENDAR`)      | `apps/api/src/infra/providers/appointments-booking/calendar-sync.port.ts` | `NoCalendarSync` (not connected)     | bound here: `MultiCalendarAdapter` over `GoogleCalendarAdapter` and `MicrosoftCalendarAdapter` |
+| `AppointmentMessenger` (`APPOINTMENT_MESSENGER`) | `.../appointment-messenger.port.ts`                                       | `NoAppointmentMessenger` (`skipped`) | the channel domains (WhatsApp, email)                                                          |
 
 Override the token in a module (`{ provide: APPOINTMENT_MESSENGER, useClass: ... }`); the stubs are what a deployment has until then.
-The calendar port is served by `GoogleCalendarAdapter` (`NoCalendarSync` stays as the reference "nothing connected" behaviour). The Sheets
+The calendar port is served by `MultiCalendarAdapter` over the Google and Outlook adapters (`NoCalendarSync` stays as the reference "nothing connected" behaviour). The Sheets
 append is not built (`blocked`: it is the Sheets half of TW-APPT-012 and 029, and its scope is not requested).
 
 **For the flow-runtime domain** (the "Book appointment" node, TW-APPT-034) call `BookingOffersService` (exported from the barrel, no HTTP):
@@ -464,3 +647,10 @@ append is not built (`blocked`: it is the Sheets half of TW-APPT-012 and 029, an
 (nine to a page), `reserve(orgId, typeId, startsAt, sessionRef)` (a ten-minute soft lock), `book(orgId, input)` (the same engine and guard,
 as actor `bot`, source `chat`). Subscribe to `appointment.booked` for the `appointment_booked` trigger and the notification toggle.
 **For the payments domain**: consume `appointment.payment_due`, call `AppointmentsService.recordPayment` when settled.
+
+## Calendar drift (TW-GACC-011)
+
+`calendar.sync` on an appointment is `{ state: in_sync | drifted | null, reason, detectedAt, googleStartsAt, googleEndsAt, checkedAt }`. A worker reconcile (queue `calendar-reconcile`, one workspace per job, Redis lock, about hourly, only confirmed
+appointments with an event in the next 60 days, each read about once an hour) compares the Google event with what we last wrote and records `drifted` with one of `event_deleted`, `event_missing`, `time_changed`, `attendees_changed`. It never
+changes the appointment; the first detection writes an audit row and the outbox event `appointment.calendar_drifted` (one in-app notification, type `appointment_calendar_drift`, to the host or the person who booked). Our own writes and a guest
+answering are not drift. Plan section 8: [google-workspace-build.md](../threadwise-port/plan/google-workspace-build.md).

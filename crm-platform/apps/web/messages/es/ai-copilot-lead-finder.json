@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Copiloto de IA para CRM"
+    },
+    "errors": {
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "AICRM_NO_AI_PROVIDER": "No hay ningún proveedor de IA configurado. Pide a tu administrador que añada una clave de IA.",
+      "AICRM_PROVIDER_FAILED": "El servicio de IA devolvió un error. Inténtalo de nuevo.",
+      "VALIDATION_FAILED": "Revisa los campos resaltados e inténtalo de nuevo.",
+      "PLAN_FEATURE_LOCKED": "Mejora tu plan para usar esta función."
+    },
+    "chat": {
+      "title": "Copiloto de IA para CRM",
+      "subtitle": "Pídele que busque o cree contactos y negocios, mueva etapas del embudo o genere un informe.",
+      "loading": "Cargando…",
+      "thinking": "Pensando…",
+      "emptyState": "Saluda o pregunta algo como \"¿qué negocios están abiertos?\"",
+      "inputPlaceholder": "Pregúntale al Copiloto…",
+      "send": "Enviar",
+      "resetConversation": "Restablecer conversación",
+      "recentActions": "Acciones recientes",
+      "noRecentActions": "Todavía no hay acciones.",
+      "notice": {
+        "settingsSaved": "Configuración guardada."
+      },
+      "settings": {
+        "title": "Canal de personal en WhatsApp",
+        "waCopilotToggle": "Permitir que el personal chatee con el Copiloto por WhatsApp (aún no disponible)"
+      }
+    }
+  }
+}

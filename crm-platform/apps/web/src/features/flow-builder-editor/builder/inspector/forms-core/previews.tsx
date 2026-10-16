@@ -415,7 +415,7 @@ export function LocationPreview({ d }: { d: Data }) {
             <path d="M20 0 L18 30 L24 30 L22 0Z" fill="#5C9A75" opacity="0.45" />
             <path d="M70 0 L67 38 L74 38 L71 0Z" fill="#5C9A75" opacity="0.4" />
           </svg>
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-full">
+          <span className="absolute start-1/2 top-1/2 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-full">
             <svg
               viewBox="0 0 16 16"
               className="h-[18px] w-[18px] text-[#E87A5D]"

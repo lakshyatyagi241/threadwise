@@ -17,7 +17,8 @@
       "unexpected": "Qualcosa è andato storto. Riprova.",
       "exportInProgress": "È già in preparazione un file di prova. Attendi che termini, poi riprova.",
       "exportNotReady": "Il file non è pronto oppure è scaduto. Prepara un nuovo file.",
-      "noticeTargetMissing": "Quel widget, quella pagina di prenotazione o quel negozio non esiste più."
+      "noticeTargetMissing": "Quel widget, quella pagina di prenotazione o quel negozio non esiste più.",
+      "notMinor": "Il consenso del tutore può essere registrato solo per un contatto contrassegnato come minorenne."
     },
     "settings": {
       "title": "Consenso e risposte STOP",
@@ -142,7 +143,8 @@
         "widget": "Chat del sito web",
         "booking": "Pagina di prenotazione",
         "commerce": "Checkout del negozio",
-        "lead": "Acquisizione lead"
+        "lead": "Acquisizione lead",
+        "gpc": "Global Privacy Control"
       },
       "by": "da {name}",
       "evidence": {
@@ -165,7 +167,8 @@
         "storeFlag": "Impostazione del negozio",
         "leadSourceId": "Fonte del lead",
         "leadFormId": "Modulo lead",
-        "adId": "Annuncio"
+        "adId": "Annuncio",
+        "guardianConsentRef": "Riferimento del consenso del tutore"
       },
       "dialog": {
         "titleGranted": "Segna come iscritto",
@@ -181,6 +184,50 @@
         "close": "Chiudi",
         "savedGranted": "Segnato come iscritto.",
         "savedWithdrawn": "Segnato come disiscritto."
+      },
+      "privacy": {
+        "title": "Indicatori di privacy",
+        "saved": "Salvato.",
+        "minorLabel": "Minorenne",
+        "minorOn": "Contrassegnato come minorenne dal {date}.",
+        "minorOff": "Non contrassegnato come minorenne.",
+        "rule": {
+          "off": "Il tuo spazio di lavoro non ha risposto alla domanda sui minori nel Centro di conformità, quindi il marketing verso questo contatto non viene trattenuto.",
+          "guardian": "Il marketing verso questo contatto è trattenuto finché non è registrato il consenso di un genitore o tutore.",
+          "block": "Il marketing verso questo contatto è trattenuto perché il tuo spazio di lavoro dichiara di non trattare dati di minori."
+        },
+        "guardianBadge": "Consenso del tutore registrato",
+        "guardianLabel": "Consenso di genitore o tutore",
+        "guardianOn": "Registrato dal {date}. È solo una prova e non iscrive il contatto.",
+        "guardianOff": "Non registrato.",
+        "recordGuardian": "Registra il consenso del tutore",
+        "clearGuardian": "Rimuovi",
+        "dnsLabel": "Non vendere né condividere",
+        "dnsOn": "Opposizione dal {date} ({source}).",
+        "dnsOff": "Nessuna opposizione.",
+        "history": "Cronologia privacy",
+        "event": {
+          "minor": {
+            "on": "Contrassegnato come minorenne",
+            "off": "Contrassegno di minorenne rimosso"
+          },
+          "guardian_consent": {
+            "on": "Consenso del tutore registrato",
+            "off": "Consenso del tutore rimosso"
+          },
+          "sale_share_opt_out": {
+            "on": "Opposizione a vendita e condivisione",
+            "off": "Opposizione rimossa"
+          }
+        },
+        "dialog": {
+          "title": "Registra il consenso del tutore",
+          "intro": "Registra che un genitore o tutore ha acconsentito. È solo una prova: non iscrive il contatto al marketing.",
+          "note": "Come hanno acconsentito? (obbligatorio)",
+          "noteHint": "Per esempio: ha firmato il modulo cartaceo allo sportello. Non scrivere nome o recapiti del tutore.",
+          "ref": "Riferimento (facoltativo)",
+          "refHint": "Un numero di modulo o un id documento da poter ritrovare in seguito."
+        }
       }
     },
     "composer": {
@@ -302,7 +349,9 @@
         "consent_evidence_recorded": "Consentito: l'avviso è stato dato e la persona ha acconsentito.",
         "purpose_not_enabled": "Non consentito: lo spazio di lavoro non l'ha attivato.",
         "consent_declined": "Non consentito: la persona ha rifiutato.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Non consentito: questo contatto è contrassegnato come minorenne e il tuo spazio di lavoro trattiene il marketing.",
+        "sale_share_opted_out": "Non consentito: il contatto si è opposto alla vendita o alla condivisione dei suoi dati."
       }
     },
     "notice": {
@@ -334,7 +383,16 @@
       "termsUrlHint": "Deve iniziare con https://",
       "useWorkspacePrivacy": "Usa il link alla privacy del mio spazio di lavoro",
       "useWorkspaceTerms": "Usa il link ai termini del mio spazio di lavoro",
-      "useWorkspaceText": "Usa il testo predefinito del mio spazio di lavoro"
+      "useWorkspaceText": "Usa il testo predefinito del mio spazio di lavoro",
+      "statement": "Accetto di ricevere aggiornamenti e offerte su {channels}. Posso rispondere STOP in qualsiasi momento per annullare l'iscrizione.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Canali coperti da questo consenso",
+      "channelsHint": "La persona viene iscritta solo ai canali selezionati qui e il testo del consenso li indica. Un canale viene usato solo se la persona fornisce il telefono o l’e-mail corrispondente.",
+      "channelsUse": "Aggiorna il testo con questi canali"
     }
   }
 }

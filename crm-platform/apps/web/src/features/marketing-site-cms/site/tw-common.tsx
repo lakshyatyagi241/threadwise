@@ -67,7 +67,7 @@ export function PageHero({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
   return (
     <section className="relative overflow-hidden bg-paper-0" data-section={def.slug} id={def.slug}>
       <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-      <div className="blur-bub absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full bg-wa-mint/50" />
+      <div className="blur-bub absolute -end-32 -top-32 h-[520px] w-[520px] rounded-full bg-wa-mint/50" />
       <div className="relative mx-auto max-w-[1360px] px-4 py-20 sm:px-7 lg:py-28">
         <Badge ctx={ctx} k={k('eyebrow')} />
         <T
@@ -303,7 +303,7 @@ export function CtaFinal({ ctx, def }: { ctx: SiteCtx; def: CmsSection }) {
     >
       <div className="reveal relative overflow-hidden rounded-[36px] bg-gradient-to-br from-wa-deep via-wa-teal to-ink-950 px-6 py-12 text-paper-0 sm:px-10 sm:py-16 lg:px-12 lg:py-20">
         <div className="dot-pattern absolute inset-0 opacity-20" />
-        <div className="blur-bub absolute -bottom-32 -right-32 h-[400px] w-[400px] rounded-full bg-wa-green/20" />
+        <div className="blur-bub absolute -bottom-32 -end-32 h-[400px] w-[400px] rounded-full bg-wa-green/20" />
         <div className="relative max-w-3xl">
           <T
             ctx={ctx}

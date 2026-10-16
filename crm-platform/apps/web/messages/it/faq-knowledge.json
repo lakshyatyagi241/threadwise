@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "Prova",
         "unanswered": "Senza risposta",
-        "insights": "Statistiche",
-        "settings": "Impostazioni"
+        "insights": "Statistiche"
       },
       "unansweredCount": "{count, plural, one {# messaggio senza risposta} other {# messaggi senza risposta}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Questo flusso ha raggiunto il limite di FAQ. Elimina le FAQ o le varianti inutilizzate, oppure chiedi all’amministratore della piattaforma di aumentarlo."
     },
     "banner": {
-      "enabledToast": "Le risposte FAQ sono attive.",
-      "engineOff": "Le risposte FAQ sono state disattivate dalla piattaforma. I clienti non ricevono risposte FAQ finché non vengono riattivate.",
-      "modelChanged": "La piattaforma ha cambiato il modello AI dopo che hai regolato questa soglia. I punteggi sono cambiati, quindi rivedi la sensibilità.",
-      "reviewSensitivity": "Rivedi la sensibilità",
-      "offNoRight": "Chiedi a chi ha il permesso faq.settings.manage (di solito un amministratore dello spazio di lavoro) di attivarle.",
-      "enable": "Attiva le risposte FAQ",
-      "offTitle": "Le risposte FAQ sono DISATTIVATE per questo flusso",
-      "offBody": "Puoi scrivere e testare le FAQ di questo flusso, ma i clienti non ricevono risposte finché non lo attivi."
+      "engineOff": "Le risposte FAQ sono state disattivate dalla piattaforma. I clienti non ricevono risposte FAQ finché non vengono riattivate."
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "Attive",
         "paused": "In pausa",
-        "variations": "Formulazioni",
-        "pending": "Indicizzazione",
-        "pendingHint": "Attive in pochi secondi",
-        "failed": "Indicizzazione non riuscita",
-        "failedHint": "Richiede attenzione"
+        "variations": "Formulazioni"
       },
-      "failedBanner": "{count, plural, one {# formulazione non è stata indicizzata} other {# formulazioni non sono state indicizzate}}, quindi non può ancora corrispondere ai messaggi dei clienti.",
-      "showFailed": "Mostra FAQ con errori",
       "search": "Cerca FAQ",
       "searchPlaceholder": "Cerca domande e formulazioni",
       "filter": {
         "status": "Stato",
         "anyStatus": "Qualsiasi stato",
         "category": "Categoria",
-        "anyCategory": "Qualsiasi categoria",
-        "indexing": "Indicizzazione",
-        "anyIndexing": "Qualsiasi",
-        "pending": "In indicizzazione",
-        "failed": "Non riuscita"
+        "anyCategory": "Qualsiasi categoria"
       },
       "status": {
         "active": "Attiva",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Domanda",
         "answer": "Risposta",
-        "indexing": "Formulazioni attive",
         "answered": "Risposte (90 giorni)",
         "status": "Stato",
         "actions": "Azioni"
@@ -130,12 +111,6 @@
         "rowBody": "\"{question}\" e tutte le sue formulazioni verranno eliminate definitivamente. L'operazione non può essere annullata.",
         "delete": "Elimina",
         "cancel": "Annulla"
-      },
-      "indexing": {
-        "summary": "{ready} attive, {pending} in indicizzazione, {failed} non riuscite",
-        "ready": "{count} attive",
-        "pending": "{count} in indicizzazione",
-        "failed": "{count} non riuscite"
       },
       "stepMissing": "Passaggio mancante",
       "subtitle": "Le domande che i clienti fanno in {flow} e ciò che risponde il bot. Queste FAQ rispondono solo all’interno di questo flusso.",
@@ -202,14 +177,6 @@
           "other": "Un passaggio di un altro flusso",
           "otherHint": "Passa la conversazione a un flusso diverso."
         }
-      },
-      "advanced": {
-        "title": "Avanzate: sensibilità solo per questa FAQ",
-        "custom": "Usa una sensibilità personalizzata per questa FAQ",
-        "sliderLabel": "Corrispondenza pari o superiore a",
-        "body": "Per impostazione predefinita ogni FAQ usa la sensibilità di questo flusso. Usa un valore personalizzato quando questa corrisponde troppo facilmente (aumentalo) o troppo raramente (diminuiscilo).",
-        "workspace": "La sensibilità di questo flusso è {value}%.",
-        "following": "Segue la sensibilità di questo flusso ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Aggiungi",
       "pasteMany": "Incolla più righe",
       "full": "Questa FAQ ha raggiunto il limite di {max} formulazioni.",
-      "failedNotice": "{count, plural, one {# formulazione non è stata indicizzata} other {# formulazioni non sono state indicizzate}}. Modifica e salva la formulazione per riprovare.",
       "suggest": "Suggerisci con l'AI",
       "suggestSaveFirst": "Salva prima la FAQ, poi l'AI potrà suggerire formulazioni.",
       "suggesting": "Richiesta di suggerimenti all'AI in corso",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# riga non rientra} other {# righe non rientrano}} nel limite di formulazioni ed {count, plural, one {è esclusa} other {sono escluse}}.",
         "more": "e altre {count}",
         "add": "Aggiungi {count, plural, one {# formulazione} other {# formulazioni}}"
-      },
-      "state": {
-        "ready": "Attiva",
-        "pending": "In indicizzazione",
-        "pendingHint": "Salvata. Inizierà a corrispondere tra pochi secondi.",
-        "failed": "Non riuscita",
-        "failedHint": "Modifica e salva la formulazione per riprovare.",
-        "noReason": "Nessun motivo indicato"
       },
       "confirm": {
         "title": "Rimuovere questa formulazione?",
@@ -539,9 +497,7 @@
       },
       "hist": {
         "title": "Punteggi dei messaggi",
-        "hint": "Ogni barra è una fascia di punteggio. La linea tratteggiata è la tua sensibilità attuale.",
-        "advice": "Aumenta la soglia se passano risposte sbagliate, abbassala se troppi messaggi restano senza risposta.",
-        "tune": "Cambia sensibilità"
+        "hint": "Ogni barra è una fascia di punteggio. La linea tratteggiata è la tua sensibilità attuale."
       },
       "top": {
         "title": "FAQ più usate",
@@ -568,98 +524,6 @@
         "bucketTooltip": "{from}-{to}%: {answered} con risposta, {unanswered} senza risposta",
         "thresholdMarker": "Soglia {value}%"
       }
-    },
-    "settings": {
-      "title": "Impostazioni FAQ",
-      "unsaved": "Modifiche non salvate",
-      "discard": "Scarta",
-      "save": "Salva impostazioni",
-      "saved": "Impostazioni salvate.",
-      "readOnly": "Puoi vedere queste impostazioni. Per modificarle serve il permesso faq.settings.manage, di solito assegnato agli amministratori dello spazio di lavoro.",
-      "engineOff": "Le risposte FAQ sono disattivate dalla piattaforma. Ciò che imposti qui verrà applicato quando saranno riattivate.",
-      "conflict": "Qualcun altro ha salvato queste impostazioni. Ricarica per vedere la sua versione, poi rifai la modifica.",
-      "reload": "Ricarica impostazioni",
-      "modelChanged": {
-        "title": "Rivedi la sensibilità",
-        "body": "La piattaforma ha cambiato il modello AI dopo che hai regolato questa soglia. I punteggi sono cambiati, quindi rivedi la sensibilità. Salvando la confermi."
-      },
-      "enable": {
-        "title": "Risposte FAQ",
-        "on": "Attivo",
-        "off": "Disattivo",
-        "label": "Rispondi ai clienti con le FAQ di questo flusso",
-        "onBody": "Finché questo flusso è attivo, un messaggio del cliente che nessun trigger a parola chiave né flusso in esecuzione ha gestito viene confrontato con le FAQ di questo flusso. Il bot risponde con la risposta migliore oppure manda il cliente al passaggio indicato dalla FAQ.",
-        "offBody": "Le FAQ di questo flusso non rispondono ai clienti. Puoi comunque scriverle e testarle."
-      },
-      "sens": {
-        "title": "Sensibilità",
-        "hint": "Quanto deve corrispondere un messaggio. I punteggi dipendono dal modello {model}.",
-        "label": "Rispondi quando la corrispondenza è almeno",
-        "presets": "Preset di sensibilità",
-        "preset": {
-          "strict": "Rigorosa",
-          "balanced": "Equilibrata",
-          "forgiving": "Tollerante"
-        },
-        "looser": "Risponde di più",
-        "stricter": "Risponde di meno",
-        "recommendedMark": "consigliato {value}%",
-        "explain": "Al {value}%, un messaggio riceve risposta solo se la sua migliore corrispondenza ottiene almeno {value}%. Più alto significa meno risposte ma più sicure; più basso significa più risposte e maggior rischio di sbagliare.",
-        "useRecommended": "Usa il valore consigliato ({value}%)",
-        "modelScale": "I punteggi sono confrontabili solo all'interno di uno stesso modello. Se la piattaforma cambia il modello ({model}), rivedi questo valore."
-      },
-      "margin": {
-        "title": "Protezione dall'ambiguità",
-        "hint": "Evita che il bot tiri a indovinare tra due FAQ con punteggio quasi uguale.",
-        "label": "Vantaggio minimo sulla seconda migliore",
-        "off": "Disattivata",
-        "explain": "Se la FAQ migliore supera la seconda di meno di questo valore, il bot resta in silenzio e registra il messaggio come senza risposta. Lascia disattivata se le tue FAQ si sovrappongono raramente."
-      },
-      "log": {
-        "title": "Messaggi dei clienti nel registro",
-        "label": "Conserva i messaggi dei clienti nel registro delle corrispondenze",
-        "onBody": "Il testo di ogni messaggio viene conservato per 90 giorni, così puoi capire perché ha ricevuto o no una risposta e imparare da esso. Poi viene eliminato.",
-        "offBody": "Vengono conservati solo punteggi ed esiti, mai il testo. Puoi comunque vedere quanto spesso risponde il bot, ma non puoi imparare dai messaggi senza risposta."
-      },
-      "facts": {
-        "title": "Modello e limiti",
-        "model": "Modello AI per il confronto",
-        "faqs": "FAQ",
-        "variations": "Formulazioni in uso",
-        "perFaq": "Formulazioni consentite per FAQ",
-        "of": "{used} di {max}"
-      },
-      "how": {
-        "title": "Come funziona il confronto",
-        "exact": "Esatto: il messaggio coincide con una formulazione salvata, senza considerare maiuscole e spaziatura.",
-        "semantic": "Significato: il messaggio viene confrontato per significato con ogni formulazione attiva, quindi anche parole diverse possono corrispondere.",
-        "trigram": "Confronto ortografico: se il provider AI non è disponibile, vengono confrontate le lettere, il che individua solo gli errori di battitura.",
-        "threshold": "Il punteggio migliore viene confrontato con la sensibilità. Sopra, la FAQ risponde; sotto, il messaggio finisce tra quelli Senza risposta.",
-        "verify": "Secondo controllo (facoltativo): una corrispondenza che ha appena raggiunto la sensibilità può essere ricontrollata da un piccolo modello di chat, che può soltanto trattenere una risposta."
-      },
-      "who": "Per modificare queste impostazioni serve il permesso faq.settings.manage.",
-      "leave": {
-        "title": "Uscire senza salvare?",
-        "body": "Le modifiche a queste impostazioni non sono state salvate.",
-        "leave": "Esci",
-        "stay": "Resta"
-      },
-      "verify": {
-        "title": "Secondo controllo per i casi al limite",
-        "hint": "Un piccolo modello di chat ricontrolla le corrispondenze che hanno appena raggiunto la soglia.",
-        "unavailable": "La piattaforma ha disattivato il secondo controllo, quindi non viene eseguito anche se lo attivi qui. Rivolgiti all'amministratore della piattaforma.",
-        "label": "Ricontrolla i casi al limite con un secondo parere",
-        "on": "Attivo",
-        "off": "Disattivato",
-        "onBody": "Quando una corrispondenza supera la soglia di poco, un piccolo modello di chat legge il messaggio del cliente e la FAQ e dice se la risposta è adatta. Può solo dire no: non fa mai partire una risposta.",
-        "offBody": "Ogni corrispondenza che raggiunge la soglia riceve risposta senza un secondo controllo.",
-        "bandLabel": "Quanto vicino alla soglia è un caso al limite",
-        "bandValue": "+{value}%",
-        "explainOn": "Le corrispondenze con un punteggio da {from}% fino a {to}% vengono controllate da {model}. Un \"no\" significa che non viene inviata alcuna risposta e il messaggio compare in Senza risposta.",
-        "explainOff": "Ogni corrispondenza con un punteggio di {threshold}% o più riceve risposta. Attiva il secondo controllo per far ricontrollare i casi più al limite.",
-        "cost": "Ogni controllo invia al modello il messaggio del cliente e la domanda della FAQ: poche centinaia di token, e aggiunge circa un secondo a una risposta al limite. Le corrispondenze fuori dall'intervallo non vengono mai controllate. Se il controllo fallisce, non è disponibile o si raggiunge il limite orario, la corrispondenza resta valida come se non ci fosse alcun controllo."
-      },
-      "subtitle": "Attiva le risposte FAQ per {flow} e regola quanto un messaggio deve corrispondere."
     },
     "flowNode": {
       "start": "L'inizio del flow",

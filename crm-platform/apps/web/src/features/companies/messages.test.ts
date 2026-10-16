@@ -97,6 +97,27 @@ const DYNAMIC = [
     (s) => `form.problems.${s}`,
   ),
   ...(['open', 'won', 'lost'] as const).map((s) => `deals.status.${s}`),
+  // the property value messages are chosen by kind (`tProp(kind)`)
+  ...(['required', 'number', 'integer', 'email', 'url', 'invalid', 'notEditable'] as const).map(
+    (s) => `form.propertyProblems.${s}`,
+  ),
+  // the Company properties screen is the Contact properties screen with these words for the module's own records, chosen as
+  // `copy('<key>')` in apps/web/src/features/contacts-attributes-tags (see lib/module-copy.ts)
+  ...[
+    'title',
+    'subtitle',
+    'section.hint',
+    'row.contacts',
+    'deactivate.inUse',
+    'deactivate.unused',
+    'modal.newTitle',
+    'modal.descriptionHint',
+    'modal.optionsNote',
+    'modal.requiredHint',
+    'modal.visibleHint',
+    'modal.conditionsHint',
+    'modal.deactivateNote',
+  ].map((s) => `properties.${s}`),
   ...(['insert', 'update', 'delete'] as const).map((s) => `activity.actions.${s}`),
   'nav.companies',
 ];

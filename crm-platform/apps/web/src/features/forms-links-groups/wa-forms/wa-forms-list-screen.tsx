@@ -5,7 +5,12 @@ import { useState } from 'react';
 import type { WaForm } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, EmptyState, Spinner, StatTile } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useCreateWaForm, useDeleteWaForm, useDuplicateWaForm, useWaForms } from '../api/wa-forms-hooks';
+import {
+  useCreateWaForm,
+  useDeleteWaForm,
+  useDuplicateWaForm,
+  useWaForms,
+} from '../api/wa-forms-hooks';
 import { useErrorText } from '../components/use-error-text';
 
 const STATUS_TONE: Record<string, 'success' | 'warning' | 'neutral'> = {
@@ -39,7 +44,16 @@ export function WaFormsListScreen() {
         audienceType: 'lead_capture',
         submissionCap: 0,
         sendButtonLabel: 'Send',
-        definition: { screens: [{ id: 'A', fields: [{ id: 'name', kind: 'short_text', label: t('create.defaultField'), required: true }] }] },
+        definition: {
+          screens: [
+            {
+              id: 'A',
+              fields: [
+                { id: 'name', kind: 'short_text', label: t('create.defaultField'), required: true },
+              ],
+            },
+          ],
+        },
       },
       {
         onSuccess: (form) => {
@@ -129,7 +143,9 @@ export function WaFormsListScreen() {
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{t(`audience.${form.audienceType}`)}</td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {t(`audience.${form.audienceType}`)}
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground">{form.fieldsCount}</td>
                     <td className="px-4 py-3">
                       <a href={`/wa-forms/${form.id}/submissions`} className="hover:underline">
@@ -153,7 +169,8 @@ export function WaFormsListScreen() {
                             disabled={duplicate.isPending}
                             onClick={() =>
                               duplicate.mutate(form.id, {
-                                onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
+                                onError: (err) =>
+                                  setNotice({ tone: 'danger', text: errorText(err).text }),
                               })
                             }
                           >

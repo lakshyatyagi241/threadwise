@@ -348,7 +348,10 @@
       "ownerMe": "{name} (moi)",
       "ownerFormer": "Ancien membre",
       "ownerHelp": "La personne qui s'occupe de ce contact. Vous ne pouvez choisir que les personnes autorisées par votre accès.",
-      "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne."
+      "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
+      "company": "Entreprise",
+      "companyHint": "Rattache ce contact à une organisation.",
+      "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ."
     },
     "tags": {
       "title": "Étiquettes",
@@ -1279,6 +1282,14 @@
       "number": "Envoyer depuis",
       "numberHint": "Le numéro WhatsApp depuis lequel le message est envoyé.",
       "noChannel": "Aucun numéro WhatsApp n'est connecté. Connectez-en un d'abord dans Canaux.",
+      "mailbox": "Envoyer depuis",
+      "mailboxPlaceholder": "Sélectionner une boîte mail",
+      "mailboxHint": "La boîte mail connectée depuis laquelle l'e-mail est envoyé.",
+      "noMailbox": "Aucune boîte mail n'est connectée. Connectez-en une dans Canaux d'abord.",
+      "subject": "Objet",
+      "subjectPlaceholder": "De quoi s'agit-il ?",
+      "body": "Message",
+      "bodyPlaceholder": "Rédigez votre e-mail…",
       "template": "Modèle WhatsApp",
       "templatePlaceholder": "Sélectionner un modèle",
       "noTemplates": "Aucun modèle approuvé pour ce numéro.",
@@ -1295,12 +1306,10 @@
       "callPermission": "Le contact n'a pas encore autorisé les appels. L'appel lui demande d'abord son autorisation.",
       "callReady": "Prêt à appeler le {phone}.",
       "later": {
-        "sms": "L'envoi de SMS depuis le CRM n'est pas encore disponible.",
-        "email": "L'envoi d'e-mails depuis le CRM n'est pas encore disponible."
+        "sms": "L'envoi de SMS depuis le CRM n'est pas encore disponible."
       },
       "openApp": {
-        "sms": "Ouvrir dans votre application de messages",
-        "email": "Ouvrir dans votre application de messagerie"
+        "sms": "Ouvrir dans votre application de messages"
       }
     },
     "views": {

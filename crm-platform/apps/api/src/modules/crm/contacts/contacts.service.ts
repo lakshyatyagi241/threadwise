@@ -31,6 +31,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { DisplayIdService } from '../../../kernel/identifiers/display-id.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { assertCompanyReadable, companyLinkRefused } from '../companies/company-link';
 import { countWithTimeout } from '../segments/segment-count';
 import { contactConditions, contactScopeCondition, whereOf } from './contact-conditions';
 import { resolveContactFilter } from './contact-filter.resolver';
@@ -289,7 +290,38 @@ export class ContactsService {
     });
   }
 
+  private async lockIdentities(
+    tx: Tx,
+    orgId: number,
+    email: string | undefined,
+    phone: string | undefined,
+  ): Promise<void> {
+    const keys = [
+      email ? `email:${email.trim().toLowerCase()}` : null,
+      phone ? `phone:${phone}` : null,
+    ]
+      .filter((k): k is string => k !== null)
+      .sort();
+    for (const k of keys) {
+      await tx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-identity:${orgId}:${k}`}, 0))`,
+      );
+    }
+  }
+
   async create(input: CreateContactInput, via?: ContactConsentContext): Promise<ContactResponse> {
+    return (await this.createOrMatch(input, via)).contact;
+  }
+
+  /**
+   * `create`, saying whether a contact was made or an existing one (same email or phone) was returned. A caller that reports "created"
+   * (an import, the Sheets add-on) needs the difference; two requests for one new person at once make one contact, and only one of them
+   * created it.
+   */
+  async createOrMatch(
+    input: CreateContactInput,
+    via?: ContactConsentContext,
+  ): Promise<{ contact: ContactResponse; created: boolean }> {
     const ctx = RequestContextStore.require();
 
     // One canonicaliser for create, import and dedupe (TW-CON-013). The contract already insists
@@ -309,6 +341,11 @@ export class ContactsService {
     this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
 
     return this.db.tx(async (tx) => {
+      // Serialise creates of the same person: the identity lookup below and the insert are separate statements, so two requests for one
+      // new email or phone (a sheet row sent twice, a form and a flow at once) would both find nobody and both insert. A transaction-scoped
+      // advisory lock keyed on org and normalised identity makes the second wait for the first to commit, then find it. Locks are taken in
+      // sorted order so two creates sharing one identity cannot deadlock; they are released at commit or rollback.
+      await this.lockIdentities(tx, ctx.orgId, input.email, phone);
       // Omitted: the creator (Reference stamped `user_id` with the caller). `null`: nobody, which a caller whose
       // record scope is own/team is refused below (the contact would vanish from their own list).
       const ownerId =
@@ -341,11 +378,14 @@ export class ContactsService {
           );
           // The same person agreeing again is still an agreement: the grant lands on the contact they already are.
           const regranted = await this.grantOnMatch(tx, ctx, existing, input, via);
-          return toContactResponse(
-            regranted
-              ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
-              : existing,
-          );
+          return {
+            contact: toContactResponse(
+              regranted
+                ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
+                : existing,
+            ),
+            created: false,
+          };
         }
       }
 
@@ -471,7 +511,7 @@ export class ContactsService {
       });
 
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
-      return toContactResponse(row!);
+      return { contact: toContactResponse(row!), created: true };
     });
   }
 
@@ -1129,7 +1169,7 @@ export class ContactsService {
       }
       if (input.companyId !== undefined) {
         values.companyId = input.companyId
-          ? await this.requireCompany(tx, ctx.orgId, input.companyId)
+          ? await this.requireCompany(tx, ctx.orgId, input.companyId, existing.companyId)
           : null;
       }
 
@@ -1248,6 +1288,7 @@ export class ContactsService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact', uuid);
+      await this.repo.lockById(tx, ctx.orgId, existing.id);
       const deleteScope = this.rbac.can(ctx.grants!, 'record.contacts.delete').scope;
       await assertContactScope(
         tx,
@@ -1358,13 +1399,20 @@ export class ContactsService {
     return id;
   }
 
+  /**
+   * A company to link: in this workspace (404 otherwise), and, when the link is new, one the caller may read (the capability and
+   * their record scope). A company the contact already has stays linkable by someone who cannot read it, so saving an unrelated
+   * field of a contact never fails on it.
+   */
   private async requireCompany(
     tx: Parameters<typeof this.repo.resolveCompanyId>[0],
     orgId: number,
     uuid: string,
+    current: number | null = null,
   ) {
     const id = await this.repo.resolveCompanyId(tx, orgId, uuid);
-    if (id === undefined) throw AppError.notFound('Company', uuid);
+    if (id === undefined) throw companyLinkRefused('notFound');
+    if (id !== current) await assertCompanyReadable(tx, this.rbac, orgId, id);
     return id;
   }
 
@@ -1616,14 +1664,17 @@ export class ContactsService {
     const succeeded: string[] = [];
     const failed: BulkResult['failed'] = [];
 
+    // One query for the whole batch (up to BULK_IDS_MAX uuids), not one per row.
+    const ids = await this.repo.idsByUuid(tx, orgId, uuids);
+
     for (const uuid of uuids) {
-      const row = await this.repo.findByUuid(tx, orgId, uuid);
-      if (!row) {
+      const id = ids.get(uuid);
+      if (id === undefined) {
         failed.push({ id: uuid, code: ERROR_CODES.NOT_FOUND, message: 'Contact not found' });
         continue;
       }
       try {
-        await tx.transaction((rowTx) => fn(rowTx, row.id, uuid));
+        await tx.transaction((rowTx) => fn(rowTx, id, uuid));
         succeeded.push(uuid);
       } catch (err) {
         const message = err instanceof AppError ? err.message : 'Unexpected error';

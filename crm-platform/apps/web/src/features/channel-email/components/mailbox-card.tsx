@@ -10,6 +10,7 @@ import { ApiError } from '@/lib/api/errors';
 import { KEYS, removeMailbox, renameMailbox, setSendLimit, syncMailbox } from '../api/mailboxes';
 import { mailErrorKey } from '../lib/api-errors';
 import {
+  canRemove,
   canSync,
   inboxHref,
   nameDraft,
@@ -339,7 +340,7 @@ export function MailboxCard({
               {t('reconnect')}
             </Button>
           )}
-          {canManage && (
+          {canManage && canRemove(mailbox) && (
             <Button
               size="sm"
               variant="secondary"
@@ -353,7 +354,7 @@ export function MailboxCard({
         </div>
       )}
 
-      {canManage && (
+      {canManage && canRemove(mailbox) && (
         <ConfirmDialog
           open={confirming}
           tone="danger"

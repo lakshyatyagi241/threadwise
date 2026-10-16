@@ -408,8 +408,8 @@ describe('the checklist reads the workspace data', () => {
     expect(item(c, 'notice_languages')).toMatchObject({ status: 'partial', detail: 'noSecond' });
     expect(item(c, 'quiet_hours').status).toBe('built');
     expect(item(c, 'windows_enforcement')).toMatchObject({
-      status: 'partial',
-      detail: 'notEnforced',
+      status: 'built',
+      detail: 'enforced',
     });
     expect(JSON.stringify(c)).not.toMatch(/compliant/i);
   });

@@ -100,7 +100,8 @@
       "views": {
         "list": "Elenco",
         "board": "Board per scadenza"
-      }
+      },
+      "linkCompany": "Un’azienda"
     },
     "table": {
       "scrollArea": "Tabella dei task",
@@ -204,7 +205,8 @@
         "notesTooLong": "Le note sono troppo lunghe (massimo 5000 caratteri).",
         "dueInvalid": "Questa data non è valida.",
         "assigneeInvalid": "Questa persona non è un membro attivo del Workspace."
-      }
+      },
+      "company": "Azienda"
     },
     "drawer": {
       "loading": "Caricamento del task",
@@ -268,7 +270,8 @@
       "searching": "Ricerca in corso",
       "unavailable": "La ricerca non è disponibile al momento.",
       "none": "Nessun risultato.",
-      "unlink": "Rimuovi il collegamento"
+      "unlink": "Rimuovi il collegamento",
+      "searchCompany": "Cerca aziende"
     },
     "errors": {
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -323,7 +326,8 @@
       "loadMore": "Carica altre",
       "loadMoreDone": "Carica altre completate",
       "showDone": "Mostra completate",
-      "hideDone": "Nascondi completate"
+      "hideDone": "Nascondi completate",
+      "gone": "Il record a cui appartengono queste attività non è più disponibile."
     }
   }
 }

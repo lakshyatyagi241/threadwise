@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Duraklatıldı: günlük gönderim sınırına ulaşıldı. {when} sonrasında kendiliğinden devam eder.",
         "halt": "Duraklatıldı: bu çalışma alanı için gönderim durduruldu. Durdurma kaldırıldığında devam eder.",
-        "manual": "Duraklatıldı."
+        "manual": "Duraklatıldı.",
+        "quiet_hours": "Duraklatıldı: bazı alıcılar sessiz saatlerinde. {when} sonrasında kendiliğinden devam eder."
       },
       "delete": "Sil",
       "deleteTitle": "Toplu gönderim silinsin mi?",
@@ -145,7 +146,8 @@
         "queued": "Sırada",
         "queuedHint": "gönderim bekliyor",
         "failed": "Başarısız",
-        "failedPct": "%{pct} hata oranı"
+        "failedPct": "%{pct} hata oranı",
+        "queuedHeld": "{count} kişi sessiz saatler nedeniyle bekletiliyor"
       },
       "tab": {
         "overview": "Genel bakış",
@@ -193,7 +195,8 @@
         "lastClick": "Son tıklama: {when}",
         "empty": "Ekli alıcı yok.",
         "more": "Daha fazla yükle",
-        "loading": "Yükleniyor"
+        "loading": "Yükleniyor",
+        "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
       },
       "failures": {
         "kicker": "Hata nedenleri",

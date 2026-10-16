@@ -89,6 +89,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'member_leave_started',
   /** Routing found nobody for a new chat because the people it wanted are on leave (BL-112). Told to the leads. */
   'assignment_blocked_by_leave',
+  /** An appointment's Google Calendar event no longer matches it (moved, deleted or its guests changed). Told once, to the appointment's owner. */
+  'appointment_calendar_drift',
 ] as const;
 
 /** Every type a person can set preferences for. */

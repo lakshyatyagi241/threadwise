@@ -35,7 +35,8 @@
       "cancel": "Anuluj",
       "create": "Utwórz źródło",
       "created": "Utworzono źródło: {name}",
-      "mappingSaved": "Mapowanie zapisane"
+      "mappingSaved": "Mapowanie zapisane",
+      "planLimitUsed": "Wykorzystano {used} z {limit} źródeł leadów, więc nie można utworzyć nowego źródła."
     },
     "form": {
       "name": "Nazwa źródła",
@@ -66,7 +67,8 @@
         "contact": "Kontakt",
         "owner": "Właściciel",
         "deal": "Szansa sprzedaży",
-        "notify": "Powiadomienia"
+        "notify": "Powiadomienia",
+        "speed": "Pierwsza wiadomość do nowego leada"
       },
       "membersFailed": "Nie udało się wczytać zespołu, więc nie można teraz wybrać osób. Odśwież stronę, aby spróbować ponownie.",
       "countryCode": "Domyślny kod kraju",
@@ -104,7 +106,39 @@
       "notifyOwner": "Powiadom właściciela kontaktu",
       "notifyOwnerHint": "Powiadomienie w aplikacji, gdy wpłynie nowy lead. Leady testowe nigdy nie powiadamiają.",
       "notifyUsers": "Powiadom także",
-      "notifyUsersHint": "Na przykład Twój kierownik sprzedaży. Do 20 osób."
+      "notifyUsersHint": "Na przykład Twój kierownik sprzedaży. Do 20 osób.",
+      "speed": {
+        "enabled": "Wysyłaj pierwszą wiadomość automatycznie",
+        "enabledHint": "Domyślnie wyłączone. Gdy nowy lead zostanie kontaktem, wiadomość zostanie wysłana automatycznie, o ile pozwalają na to zgoda, godziny ciszy, Twój plan i portfel.",
+        "consentNote": "Zgoda nigdy nie jest zakładana. Szablon użytkowy WhatsApp to wiadomość serwisowa. Szablon marketingowy, SMS lub e-mail to wiadomość marketingowa: wymaga zarejestrowanej zgody, jeśli wymaga jej Twój obszar roboczy, czeka do końca godzin ciszy i jest blokowana dla kontaktu, który zrezygnował z komunikacji. Lead, który przychodzi z dowodem zgody, zapisuje ją.",
+        "channel": "Kanał",
+        "channels": {
+          "whatsapp": "Szablon WhatsApp",
+          "sms": "SMS",
+          "email": "E-mail"
+        },
+        "template": "Szablon",
+        "templateChoose": "Wybierz szablon",
+        "templateNone": "Brak szablonów dla tego kanału",
+        "templateUnavailable": "Zapisany szablon nie jest już dostępny",
+        "templateHint": {
+          "whatsapp": "Zatwierdzone szablony, które wymagają tylko danych kontaktu (np. imienia). Szablony wymagające pliku lub zmiennej z linkiem nie są wyświetlane.",
+          "sms": "Zatwierdzone szablony SMS.",
+          "email": "Współdzielone szablony e-mail. Szablonu osobistego nie można użyć."
+        },
+        "sender": "Wyślij z",
+        "senderDefault": "Pierwszy połączony",
+        "senderUnavailable": "Zapisany nadawca nie jest już połączony",
+        "senderHint": {
+          "sms": "Numer SMS, z którego wychodzi wiadomość.",
+          "email": "Współdzielona skrzynka, z której wychodzi wiadomość."
+        },
+        "delay": "Opóźnienie przed wysłaniem (w minutach)",
+        "delayHint": "Pełne minuty od 0 do {max}. Wartość 0 oznacza wysłanie od razu.",
+        "businessHours": "Tylko w godzinach pracy",
+        "businessHoursHint": "Poza godzinami pracy ustawionymi w Twoim obszarze roboczym wiadomość czeka na ich rozpoczęcie.",
+        "optionsFailed": "Nie udało się wczytać szablonów i nadawców. Spróbuj ponownie za chwilę."
+      }
     },
     "mapping": {
       "contact": "Pola kontaktu",
@@ -210,7 +244,7 @@
       "bodyRotated": "Stary adres URL przestał działać od razu. Ten nowy jest pokazany tylko teraz.",
       "url": "Adres URL webhooka",
       "copyUrl": "Kopiuj adres URL",
-      "noOrigin": "Dodaj adres swojego API przed tą ścieżką, aby uzyskać pełny adres URL.",
+      "noOrigin": "Publiczny adres API platformy nie jest ustawiony, więc nie udało się zbudować pełnego adresu URL. Poproś osobę zarządzającą platformą o jego ustawienie. Do tego czasu dodaj adres swojego API przed tą ścieżką.",
       "token": "Token",
       "copyToken": "Kopiuj token",
       "secretHint": "To źródło wymaga też wspólnego sekretu: nadawca musi wysłać go w nagłówku {header}.",
@@ -218,7 +252,8 @@
       "sampleHelp": "W Zapier lub Make użyj akcji Webhooks, która wysyła JSON na adres URL. To polecenie wysyła jeden przykładowy lead.",
       "copied": "Skopiowałem adres URL i token i zapisałem je w bezpiecznym miejscu",
       "done": "Skopiowałem, kontynuuj",
-      "doneHint": "Najpierw zaznacz pole. Po tym czasie token nie będzie już możliwy do wyświetlenia."
+      "doneHint": "Najpierw zaznacz pole. Po tym czasie token nie będzie już możliwy do wyświetlenia.",
+      "notPublic": "Publiczny adres API platformy wskazuje na adres prywatny lub lokalny, do którego platformy reklamowe nie mają dostępu, dlatego pełny adres URL nie jest wyświetlany. Poproś osobę zarządzającą platformą o ustawienie adresu publicznego, a następnie zrotuj token, aby uzyskać pełny adres URL."
     },
     "test": {
       "title": "Wyślij lead testowy",
@@ -296,7 +331,9 @@
           "body": "Jego adres URL przestanie działać, a zapisane z nim leady zostaną usunięte. Kontakty, które już utworzyło, pozostaną. Tej operacji nie można cofnąć.",
           "action": "Usuń źródło"
         }
-      }
+      },
+      "metaForm": "Leady przychodzą z Meta. To źródło nie ma adresu URL ani tokenu; zarządzaj formularzem (mapuj pytania, przypisanie i deal albo zatrzymaj go) na karcie Reklamy.",
+      "metaFormLink": "Otwórz formularze leadów Meta"
     },
     "events": {
       "title": "Otrzymane leady",
@@ -352,7 +389,8 @@
       "retried": "Ponowiono. Lead ma teraz status",
       "payload": "Zapisany ładunek",
       "loadingPayload": "Otwieranie ładunku",
-      "purged": "Surowy ładunek został usunięty po {days} dniach. Lead i jego kontakt pozostają."
+      "purged": "Surowy ładunek został usunięty po {days} dniach. Lead i jego kontakt pozostają.",
+      "firstReply": "Pierwsza wiadomość"
     },
     "attribution": {
       "title": "Atrybucja leada",
@@ -416,8 +454,25 @@
         "stage_not_in_pipeline": "Ten etap należy do innego lejka.",
         "pipeline_required": "Wybierz lejek, do którego należy ten etap.",
         "unknown_or_lost_stage": "Ten etap cyklu życia nie istnieje lub jest etapem utraconym.",
-        "unknown_or_inactive_user": "Jedna z wybranych osób nie jest aktywnym członkiem tej przestrzeni roboczej."
-      }
+        "unknown_or_inactive_user": "Jedna z wybranych osób nie jest aktywnym członkiem tej przestrzeni roboczej.",
+        "template_required": "Wybierz szablon do wysłania.",
+        "template_not_found": "Ten szablon nie istnieje dla tego kanału w tym obszarze roboczym.",
+        "template_not_sendable": "Tego szablonu nie można wysłać: nie jest zatwierdzony, jest wstrzymany albo wymaga pliku lub zmiennej z linkiem.",
+        "sender_not_found": "Ten nadawca nie jest połączony."
+      },
+      "planLimitUsed": "Wykorzystano {used} z {limit} źródeł leadów. Zmień plan na wyższy lub usuń źródło, którego już nie używasz.",
+      "syncNotSupported": "To źródło samo przysyła swoje leady, więc nie ma czego pobierać.",
+      "syncInProgress": "Leady z tego źródła są właśnie pobierane. Poczekaj na zakończenie.",
+      "syncTooSoon": "To źródło zostało przed chwilą odpytane. Spróbuj ponownie za {seconds} s.",
+      "syncTooSoonNoWait": "To źródło zostało przed chwilą odpytane. Spróbuj ponownie za jakiś czas.",
+      "backfillRange": "Nie można pobrać tego zakresu: sięga dalej wstecz, niż źródło przechowuje leady, albo w przyszłość.",
+      "mlaNotConfigured": "Meta nie jest skonfigurowana w tej instalacji. Administrator musi najpierw dodać aplikację Meta.",
+      "mlaLeadAccessMissing": "Ta Strona nie ma uprawnień, których Meta wymaga do odczytu leadów. Przyznaj dostęp do leadów i spróbuj ponownie.",
+      "mlaPageReconnect": "Meta nie akceptuje już połączenia tej Strony. Połącz Stronę ponownie i spróbuj jeszcze raz.",
+      "mlaSubscribeFailed": "Meta nie włączyła dostarczania leadów dla tej Strony. Sprawdź, czy aplikacja Meta ma uprawnienie leads i czy webhook Strony jest skonfigurowany, a następnie spróbuj ponownie.",
+      "mlaFormsUnavailable": "Meta nie zwróciła formularzy leadów. Spróbuj ponownie za chwilę.",
+      "mlaFormNotFound": "Ten formularz nie należy już do formularzy leadów tej Strony. Odśwież listę i spróbuj ponownie.",
+      "mlaSyncOff": "Włącz synchronizację leadów dla tej Strony, zanim wybierzesz formularze."
     },
     "problems": {
       "nameRequired": "Nadaj źródłu nazwę.",
@@ -439,7 +494,9 @@
       "propertyDuplicate": "Ta właściwość jest zmapowana dwukrotnie.",
       "pathRequired": "Wskaż, gdzie w danych przychodzi wartość.",
       "customFieldsTooMany": "Zmapuj co najwyżej {max} niestandardowych właściwości.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Wybierz szablon do wysłania.",
+      "speedDelayRange": "Wpisz pełne minuty od 0 do {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -502,7 +559,8 @@
       "tabs": {
         "ads": "Reklamy",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead wymaga uwagi} few {# leady wymagają uwagi} many {# leadów wymaga uwagi} other {# leada wymaga uwagi}}"
+        "attention": "{count, plural, one {# lead wymaga uwagi} few {# leady wymagają uwagi} many {# leadów wymaga uwagi} other {# leada wymaga uwagi}}",
+        "inbox": "Skrzynka leadów"
       }
     },
     "ads": {
@@ -520,7 +578,7 @@
         },
         "meta": {
           "name": "Formularze leadów Meta",
-          "body": "Reklamy leadowe na Facebooku i Instagramie, bezpośrednio z Twojej strony."
+          "body": "Reklamy typu lead na Facebooku i Instagramie, ze Strony prosto do Twoich kontaktów."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -534,7 +592,8 @@
           "name": "Google Ads",
           "body": "Rozszerzenia formularzy leadów Google Ads."
         }
-      }
+      },
+      "dismissNotice": "Odrzuć"
     },
     "sources": {
       "emptyTitle": "Brak źródeł",
@@ -553,7 +612,430 @@
       "connector": "Przez Marketplace",
       "endsIn": "Kończy się na {hint}",
       "noEvents": "Brak leadów",
-      "needsAttention": "{count, plural, one {# lead} few {# leady} many {# leadów} other {# leada}}"
+      "needsAttention": "{count, plural, one {# lead} few {# leady} many {# leadów} other {# leada}}",
+      "metaDelivery": "Z Meta"
+    },
+    "hookAddress": {
+      "title": "Nowe adresy URL webhooków będą niepełne",
+      "notConfigured": "Publiczny adres API platformy nie jest ustawiony. Poproś osobę zarządzającą platformą o jego ustawienie; do tego czasu nowe źródło może pokazywać tylko ścieżkę swojego adresu URL.",
+      "notPublic": "Publiczny adres API platformy wskazuje na adres prywatny lub lokalny, do którego platformy reklamowe nie mają dostępu. Poproś osobę zarządzającą platformą o ustawienie adresu publicznego."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Zaplanowana",
+        "sending": "Wysyłanie",
+        "held": "Wstrzymana",
+        "sent": "Wysłana",
+        "blocked": "Zablokowana",
+        "skipped": "Pominięta",
+        "failed": "Nie powiodło się"
+      },
+      "reasons": {
+        "quiet_hours": "Czeka na koniec godzin ciszy",
+        "outside_business_hours": "Czeka na godziny pracy",
+        "channel_unavailable": "Kanał nie jest połączony",
+        "wallet_empty": "Portfel jest pusty",
+        "send_halted": "Wysyłanie jest wstrzymane",
+        "opted_out": "Kontakt zrezygnował z komunikacji",
+        "no_consent": "Brak zarejestrowanej zgody",
+        "minor": "Kontakt jest oznaczony jako niepełnoletni",
+        "plan_limit": "Osiągnięto limit planu",
+        "disabled": "Ustawienie zostało wyłączone",
+        "source_paused": "Źródło leadów jest wstrzymane",
+        "no_contact_point": "Brak numeru lub adresu dla tego kanału",
+        "no_sender": "Brak połączonego nadawcy",
+        "template_unavailable": "Nie można wysłać szablonu",
+        "missing_value": "Brakuje wartości szablonu dla tego kontaktu",
+        "provider_error": "Dostawca odrzucił wiadomość",
+        "interrupted": "Wysyłka została przerwana",
+        "expired": "Czekała zbyt długo",
+        "internal_error": "Błąd wewnętrzny"
+      },
+      "nextTry": "Następna próba",
+      "sentAt": "Wysłano"
+    },
+    "inbox": {
+      "intro": "Wszystkie leady odebrane przez Twoje źródła, także te, które nie mogły stać się kontaktem. Otwórz lead, aby zobaczyć powód, i ponów te, które czekają.",
+      "chipsLabel": "Filtruj według statusu",
+      "loading": "Wczytywanie leadów",
+      "more": "Wczytaj więcej",
+      "chips": {
+        "all": "Wszystkie",
+        "attention": "Wymagają uwagi",
+        "needs_review": "Do sprawdzenia",
+        "failed": "Nieudane",
+        "created": "Utworzone",
+        "updated": "Zaktualizowane",
+        "duplicate": "Duplikaty"
+      },
+      "filters": {
+        "source": "Źródło",
+        "allSources": "Wszystkie źródła",
+        "reason": "Powód",
+        "anyReason": "Dowolny powód",
+        "range": "Odebrano",
+        "ranges": {
+          "all": "Dowolny czas",
+          "day": "Ostatnie 24 godziny",
+          "week": "Ostatnie 7 dni",
+          "month": "Ostatnie 30 dni",
+          "custom": "Wybierz daty"
+        },
+        "from": "Od",
+        "to": "Do (włącznie)",
+        "rangeOrder": "Data końcowa jest wcześniejsza niż początkowa.",
+        "tests": "Leady testowe",
+        "testChoices": {
+          "all": "Pokaż",
+          "only": "Tylko leady testowe",
+          "hide": "Ukryj"
+        },
+        "search": "Identyfikator leada zaczyna się od",
+        "searchHint": "Przeszukiwany jest tylko własny identyfikator leada nadany przez nadawcę, nigdy imiona, numery ani adresy.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Szukaj",
+        "reset": "Wróć do leadów, które czekają",
+        "showAll": "Pokaż wszystko"
+      },
+      "table": {
+        "caption": "Leady odebrane przez wszystkie źródła",
+        "received": "Odebrano",
+        "source": "Źródło",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Powód",
+        "firstMessage": "Pierwsza wiadomość",
+        "actions": "Akcje",
+        "select": "Zaznacz lead {id}",
+        "test": "Test",
+        "view": "Otwórz",
+        "retry": "Ponów"
+      },
+      "empty": {
+        "attentionTitle": "Nic na Ciebie nie czeka",
+        "attention": "Każdy odebrany lead stał się kontaktem. Leady do sprawdzenia lub nieudane pojawią się tutaj.",
+        "filteredTitle": "Brak pasujących leadów",
+        "filtered": "Żadne leady nie pasują do tych filtrów."
+      },
+      "bulk": {
+        "selectPage": "Zaznacz leady na tej stronie, które można ponowić",
+        "selected": "{count, plural, one {Zaznaczono # lead} few {Zaznaczono # leady} many {Zaznaczono # leadów} other {Zaznaczono # leada}}",
+        "retry": "Ponów zaznaczone",
+        "limit": "Maksymalnie {max} naraz."
+      },
+      "result": {
+        "retried": "{count, plural, one {Ponowiono # lead.} few {Ponowiono # leady.} many {Ponowiono # leadów.} other {Ponowiono # leada.}}",
+        "fixed": "{count, plural, one {# lead stał się kontaktem.} few {# leady stały się kontaktami.} many {# leadów stało się kontaktami.} other {# leada stało się kontaktami.}}",
+        "stillWaiting": "{count, plural, one {# lead nadal wymaga sprawdzenia.} few {# leady nadal wymagają sprawdzenia.} many {# leadów nadal wymaga sprawdzenia.} other {# leada nadal wymaga sprawdzenia.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {Nie znaleziono # leada.} few {Nie znaleziono # leadów.} many {Nie znaleziono # leadów.} other {Nie znaleziono # leada.}}",
+          "not_retryable": "{count, plural, one {# lead już nie czeka.} few {# leady już nie czekają.} many {# leadów już nie czeka.} other {# leada już nie czeka.}}",
+          "payload_purged": "{count, plural, one {# lead nie ma już zapisanych danych do ponowienia.} few {# leady nie mają już zapisanych danych do ponowienia.} many {# leadów nie ma już zapisanych danych do ponowienia.} other {# leada nie ma już zapisanych danych do ponowienia.}}",
+          "source_paused": "{count, plural, one {# lead należy do wstrzymanego źródła.} few {# leady należą do wstrzymanych źródeł.} many {# leadów należy do wstrzymanych źródeł.} other {# leada należy do wstrzymanych źródeł.}}",
+          "error": "{count, plural, one {Nie udało się ponowić # leada.} few {Nie udało się ponowić # leadów.} many {Nie udało się ponowić # leadów.} other {Nie udało się ponowić # leada.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Zamknij",
+        "retry": "Ponów",
+        "auditNote": "Otwarcie leada jest zapisywane w dzienniku audytu. Dane osobowe w nim są ukryte.",
+        "source": "Źródło",
+        "lead": "Identyfikator leada",
+        "received": "Odebrano",
+        "processed": "Przetworzono",
+        "notProcessed": "Nieprzetworzony",
+        "attempts": "Próby",
+        "duplicates": "Dostarczono ponownie",
+        "deliveredAgain": "{count, plural, one {# raz} few {# razy} many {# razy} other {# raza}}",
+        "reason": "Powód",
+        "firstReply": "Pierwsza wiadomość",
+        "contact": "Kontakt",
+        "openContact": "Otwórz kontakt",
+        "error": "Błąd",
+        "payload": "Co przysłał nadawca",
+        "showOriginal": "Pokaż oryginał",
+        "maskedNote": "Numery telefonów, adresy e-mail, imiona i nazwiska, adresy oraz dowolny tekst są ukryte. Sekrety zostały usunięte.",
+        "nothingToMask": "W tym leadzie nie ma danych osobowych do ukrycia.",
+        "originalNote": "Oryginalne dane, pokazane, ponieważ zarządzasz źródłami leadów. Ich wyświetlenie zostało zapisane w dzienniku audytu.",
+        "loadingPayload": "Wczytywanie danych",
+        "purged": "Dane zostały usunięte po upływie okresu przechowywania, więc nie ma czego pokazać ani ponowić."
+      },
+      "pull": {
+        "title": "Synchronizacja i uzupełnianie",
+        "intro": "O leady można zapytać te źródła. Synchronizuj teraz pobiera to, co nowe; Uzupełnij pobiera ponownie leady z minionego zakresu dat. Leady, które już masz, są rozpoznawane i nie są dodawane dwa razy.",
+        "backfill": "Uzupełnij...",
+        "history": "Ostatnie synchronizacje i uzupełnienia",
+        "syncNow": "Synchronizuj teraz",
+        "syncStarted": "Synchronizowanie: {name}",
+        "paused": "To źródło jest wstrzymane. Wznów je, aby pobierać jego leady.",
+        "nextSync": "Można zsynchronizować ponownie",
+        "syncReady": "Można zsynchronizować teraz. Co najmniej {seconds} s między żądaniami.",
+        "reach": "Uzupełnianie sięga {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} wstecz.",
+        "never": "Jeszcze nie pobrano.",
+        "progress": "{percent} procent",
+        "counts": "Pobrano: {fetched}, nowe: {accepted}, już znane: {duplicates}, nieprzekazane: {failed}",
+        "kinds": {
+          "sync": "Synchronizacja",
+          "backfill": "Uzupełnianie"
+        },
+        "statuses": {
+          "queued": "W kolejce",
+          "running": "W toku",
+          "done": "Gotowe",
+          "partial": "Częściowo gotowe",
+          "failed": "Nieudane"
+        },
+        "errors": {
+          "too_soon": "Źródło poprosiło o odczekanie.",
+          "not_now": "Źródło nie było gotowe: za wcześnie dla niego lub jego połączenie jest wstrzymane.",
+          "provider_error": "Źródło odmówiło lub zgłosiło błąd.",
+          "credentials_refused": "Źródło odrzuciło dane uwierzytelniające. Połącz je ponownie.",
+          "interrupted": "Przerwano. Uruchom ponownie.",
+          "internal_error": "Błąd wewnętrzny. Uruchom ponownie.",
+          "incomplete": "Nie wszystkie leady zostały przekazane. Uruchom ponownie, aby dokończyć.",
+          "not_supported": "To źródło tego nie obsługuje.",
+          "not_active": "Połączenie nie jest aktywne.",
+          "range_too_old": "Źródło nie przechowuje leadów z tak dawna.",
+          "range_invalid": "Zakres jest nieprawidłowy."
+        }
+      },
+      "backfill": {
+        "title": "Uzupełnij zakres dat",
+        "intro": "Pobierz ponownie leady z minionych dni ze źródeł, które je przechowują, do {days} dni naraz. Leady już odebrane są rozpoznawane i nic nie zapisują.",
+        "from": "Od",
+        "to": "Do (włącznie)",
+        "sources": "Źródła",
+        "noSources": "Żadnego źródła nie można uzupełnić.",
+        "submit": "Rozpocznij uzupełnianie",
+        "cancel": "Anuluj",
+        "close": "Zamknij",
+        "done": "Gotowe",
+        "started": "{count, plural, one {Rozpoczęto uzupełnianie} few {Rozpoczęto # uzupełnienia} many {Rozpoczęto # uzupełnień} other {Rozpoczęto # uzupełnienia}}",
+        "skippedTitle": "Niektóre źródła nie zostały pobrane:",
+        "skipped": {
+          "not_supported": "nie obsługuje uzupełniania",
+          "paused": "jest wstrzymane",
+          "in_progress": "jest właśnie pobierane",
+          "too_soon": "zostało pobrane przed chwilą",
+          "range_too_old": "nie przechowuje leadów z tak dawna",
+          "not_found": "nie zostało znalezione"
+        },
+        "problems": {
+          "fromRequired": "Wybierz pierwszy dzień.",
+          "toRequired": "Wybierz ostatni dzień.",
+          "order": "Ostatni dzień jest przed pierwszym.",
+          "future": "Pierwszy dzień jest w przyszłości.",
+          "tooWide": "Najwyżej {days} dni naraz.",
+          "noSource": "Wybierz co najmniej jedno źródło."
+        },
+        "safe": "Nic nie zostanie utracone ani zduplikowane, jeśli uruchomisz to ponownie; dodawane są tylko brakujące leady."
+      }
+    },
+    "meta": {
+      "heading": "Formularze leadów Meta",
+      "intro": "Przenoś leady z reklam typu lead na Facebooku i Instagramie prosto do swoich kontaktów. Połącz Stronę na Facebooku, włącz dla niej synchronizację leadów, a potem wybierz formularze leadów do pobierania.",
+      "loading": "Wczytywanie formularzy leadów Meta",
+      "pagesLabel": "Połączone Strony na Facebooku",
+      "planLocked": "Formularze leadów Meta wymagają planu z funkcją Leady z social mediów oraz dodatkowymi kanałami (Facebook). Przejdź na wyższy plan, aby z nich korzystać.",
+      "metaSaid": "Meta podała:",
+      "requestId": "ID żądania:",
+      "connectPage": "Połącz Stronę na Facebooku",
+      "connectAnother": "Połącz kolejną Stronę",
+      "connectNeedsPermission": "Połączenie Strony wymaga również uprawnienia {permission}.",
+      "card": {
+        "checking": "Sprawdzanie połączenia",
+        "unavailable": "Nie udało się wczytać stanu połączenia. Otwórz panel, aby spróbować ponownie.",
+        "notConfigured": "Jeszcze nie skonfigurowano w tej instalacji",
+        "noPages": "Nie połączono jeszcze żadnej Strony na Facebooku",
+        "summary": "Połączone: {pages, plural, one {# Strona} few {# Strony} many {# Stron} other {# Strony}}, wybrane: {forms, plural, one {# formularz} few {# formularze} many {# formularzy} other {# formularza}}",
+        "attention": "{count, plural, one {# Strona wymaga uwagi} few {# Strony wymagają uwagi} many {# Stron wymaga uwagi} other {# Strony wymaga uwagi}}",
+        "open": "Otwórz formularze leadów Meta",
+        "close": "Ukryj formularze leadów Meta"
+      },
+      "notConfigured": {
+        "title": "Meta nie jest jeszcze skonfigurowana",
+        "body": "Formularze leadów Meta wymagają aplikacji Meta w tej instalacji. Poproś administratora przestrzeni roboczej o jej dodanie, a potem wróć tutaj, aby połączyć Stronę.",
+        "bodyManage": "Ta instalacja nie ma jeszcze aplikacji Meta, więc nie można połączyć Stron na potrzeby reklam typu lead. Administrator musi najpierw dodać aplikację Meta (ID aplikacji i secret). Potem zarejestruj webhook zgodnie z opisem poniżej."
+      },
+      "noPages": {
+        "title": "Nie połączono Strony na Facebooku",
+        "body": "Połącz Stronę na Facebooku, na której działają Twoje reklamy typu lead. Zobaczysz prośbę o uprawnienia, których Meta wymaga do odczytu leadów.",
+        "bodyNoManage": "Nie połączono jeszcze żadnej Strony na Facebooku. Poproś osobę, która może zarządzać źródłami leadów, o jej połączenie."
+      },
+      "setup": {
+        "title": "Ustawienia webhooka dla aplikacji Meta",
+        "summary": "Ustawienia webhooka dla aplikacji Meta",
+        "intro": "Meta dostarcza nowe leady na adres wywołania zwrotnego. Administrator rejestruje go raz w panelu aplikacji Meta.",
+        "callbackUrl": "Adres URL wywołania zwrotnego",
+        "copyUrl": "Kopiuj adres URL",
+        "verifyToken": "Token weryfikacyjny",
+        "verifyTokenSet": "Ustawiono w tej instalacji",
+        "verifyTokenMissing": "Nie ustawiono",
+        "verifyTokenHelp": "Meta nie może potwierdzić adresu wywołania zwrotnego, dopóki ta instalacja nie ma tokenu weryfikacyjnego. Ustaw go w ustawieniach Facebooka tej instalacji.",
+        "steps": {
+          "callback": "W panelu aplikacji Meta otwórz Webhooks, wybierz obiekt Page i wklej powyższy adres URL wywołania zwrotnego.",
+          "verify": "Gdy Meta poprosi o token weryfikacyjny, wpisz ten z ustawień Facebooka tej instalacji, a następnie zweryfikuj i zapisz.",
+          "subscribe": "Zasubskrybuj obiekt Page do pola {field}."
+        },
+        "scopes": "Uprawnienia wymagane przy logowaniu: {scopes}.",
+        "scopesFromConfiguration": "Uprawnienia wymagane przy logowaniu pochodzą z Twojej konfiguracji logowania Meta."
+      },
+      "pageStatus": {
+        "connected": "Strona połączona",
+        "disconnected": "Strona odłączona",
+        "expired": "Połączenie wygasło",
+        "error": "Błąd Strony"
+      },
+      "leadAccess": {
+        "granted": "Dostęp do leadów przyznany",
+        "missing": "Brak dostępu do leadów"
+      },
+      "syncState": {
+        "off": "Synchronizacja leadów wyłączona",
+        "subscribed": "Odbiera leady",
+        "needs_lead_access": "Wymaga dostępu do leadów",
+        "needs_reconnect": "Wymaga ponownego połączenia",
+        "error": "Błąd"
+      },
+      "page": {
+        "pageId": "ID Strony",
+        "missingScopes": "Brakujące uprawnienia:",
+        "lastLead": "Ostatni lead",
+        "lastSweep": "Ostatnie sprawdzenie",
+        "subscribedAt": "Synchronizacja leadów włączona od",
+        "never": "Nigdy",
+        "formsConnected": "Wybrane formularze",
+        "lastError": "Ostatni błąd:",
+        "grant": "Przyznaj dostęp do leadów",
+        "reconnect": "Połącz ponownie",
+        "enable": "Włącz synchronizację leadów",
+        "disable": "Wyłącz synchronizację leadów",
+        "chooseForms": "Wybierz formularze leadów",
+        "hideForms": "Ukryj formularze leadów",
+        "enabledToast": "Synchronizacja leadów włączona dla: {name}",
+        "disabledToast": "Synchronizacja leadów wyłączona dla: {name}",
+        "stateHelp": {
+          "off": "Synchronizacja leadów jest wyłączona. Włącz ją, aby zacząć odbierać leady tej Strony.",
+          "subscribed": "Synchronizacja leadów jest włączona. Nowe leady z wybranych formularzy docierają w ciągu chwili, a regularne sprawdzanie pobiera te, które zostały pominięte.",
+          "needs_lead_access": "Synchronizacja leadów jest włączona, ale ta Strona została połączona bez uprawnień, których Meta wymaga do odczytu leadów. Przyznaj dostęp do leadów, aby kontynuować.",
+          "needs_reconnect": "Meta nie akceptuje już połączenia tej Strony. Połącz Stronę ponownie, aby znów odbierać leady.",
+          "error": "Meta odrzuciła coś przy ostatniej próbie. Komunikat poniżej mówi co; zniknie po następnej udanej próbie."
+        },
+        "hints": {
+          "needManage": "Zmiana synchronizacji leadów wymaga uprawnienia {permission}.",
+          "needFacebook": "Przyznanie dostępu lub ponowne połączenie wymaga również uprawnienia {permission}, ponieważ zapisuje połączenie Strony.",
+          "enableNeedsAccess": "Najpierw przyznaj dostęp do leadów; Meta odrzuca synchronizację leadów dla Strony bez niego.",
+          "enableNeedsReconnect": "Najpierw połącz Stronę ponownie; jej połączenie już nie działa.",
+          "pickNeedsSync": "Włącz synchronizację leadów, aby wybrać formularze.",
+          "pickNeedsAccess": "Przyznaj dostęp do leadów, aby wybrać formularze.",
+          "pickNeedsReconnect": "Połącz Stronę ponownie, aby wybrać formularze."
+        },
+        "confirmOff": {
+          "title": "Wyłączyć synchronizację leadów dla: {name}?",
+          "body": "Ta Strona przestanie otrzymywać nowe leady z Meta. Wybrane formularze i już zapisane leady zostaną zachowane, a synchronizację leadów możesz włączyć ponownie w dowolnej chwili.",
+          "action": "Wyłącz synchronizację leadów",
+          "cancel": "Anuluj"
+        }
+      },
+      "forms": {
+        "title": "Formularze leadów: {name}",
+        "intro": "To formularze leadów, które Meta wymienia dla tej Strony. Wybierz formularz, aby pobierać jego leady; każdy wybrany formularz staje się źródłem leadów na karcie Webhook.",
+        "refresh": "Odśwież listę",
+        "loading": "Wczytywanie formularzy leadów z Meta",
+        "emptyTitle": "Brak formularzy leadów",
+        "empty": "Ta Strona nie ma jeszcze formularzy leadów. Utwórz formularz w Meta Ads Manager lub na Stronie, a potem odśwież tę listę.",
+        "caption": "Formularze leadów Strony",
+        "col": {
+          "form": "Formularz",
+          "status": "Status w Meta",
+          "leads": "Leady",
+          "questions": "Pytania",
+          "consent": "Pole zgody",
+          "connected": "Połączony",
+          "lastLead": "Ostatni lead",
+          "lastError": "Ostatni błąd",
+          "actions": "Akcje"
+        },
+        "formId": "ID formularza",
+        "formStatus": {
+          "ACTIVE": "Aktywny",
+          "ARCHIVED": "Zarchiwizowany",
+          "DELETED": "Usunięty",
+          "DRAFT": "Wersja robocza",
+          "unknown": "Nieznany"
+        },
+        "leadsUnknown": "Nie podano przez Meta",
+        "consentYes": "Ma pole zgody",
+        "consentNo": "Brak",
+        "connected": "Połączony",
+        "notConnected": "Niewybrany",
+        "noLeads": "Brak leadów",
+        "pick": "Wybierz",
+        "pickFor": "Wybierz: {name}",
+        "stop": "Zatrzymaj",
+        "stopFor": "Zatrzymaj: {name}",
+        "mapFields": "Mapuj pola",
+        "mapFieldsFor": "Mapuj pola: {name}",
+        "rules": "Przypisanie i deal",
+        "rulesFor": "Przypisanie i deal: {name}",
+        "openSource": "Otwórz źródło",
+        "openSourceFor": "Otwórz źródło leadów: {name}",
+        "pickedToast": "Wybrano: {name}",
+        "stoppedToast": "Zatrzymano: {name}",
+        "confirmStop": {
+          "title": "Przestać pobierać leady z: {name}?",
+          "body": "Źródło leadów dla tego formularza i zapisane w nim leady zostaną usunięte. Kontakty już utworzone na ich podstawie pozostaną. Możesz później ponownie wybrać ten formularz.",
+          "action": "Przestań pobierać leady",
+          "cancel": "Anuluj"
+        }
+      },
+      "mapping": {
+        "title": "Mapuj pola: {name}",
+        "close": "Zamknij",
+        "noSource": "Nie znaleziono źródła leadów tego formularza. Odśwież listę i spróbuj ponownie.",
+        "loading": "Wczytywanie źródła leadów",
+        "intro": "Wybierz, gdzie w kontakcie trafia każda odpowiedź z tego formularza. Pytanie pozostawione jako Automatycznie jest wyszukiwane pod zwykłymi nazwami, takimi jak email lub phone_number.",
+        "suggested": "Uzupełniliśmy je na podstawie typu każdego pytania. Sprawdź je i zapisz.",
+        "multiUse": "Zapisane mapowanie używało tego samego pytania dla więcej niż jednego pola ({keys}). Przy zapisie zostanie zachowane tylko pierwsze.",
+        "noQuestions": "Meta nie wymieniła żadnych pytań dla tego formularza, więc nie ma czego mapować. Zwykłe nazwy są nadal wyszukiwane.",
+        "ignore": "Automatycznie (bez mapowania tutaj)",
+        "contactFields": "Pola kontaktu",
+        "contactProperties": "Właściwości kontaktu",
+        "problems": {
+          "duplicateTarget": "Inne pytanie trafia już do tego pola. Wybierz inne.",
+          "propertyKey": "Ten klucz właściwości jest nieprawidłowy."
+        },
+        "conflict": "Ktoś inny zmienił to źródło leadów. Wczytaj ponownie, aby zobaczyć jego wersję; Twoje niezapisane wybory zostaną utracone.",
+        "cancel": "Anuluj",
+        "save": "Zapisz mapowanie",
+        "saved": "Zapisano mapowanie pól: {name}"
+      },
+      "rules": {
+        "title": "Przypisanie i deal: {name}",
+        "close": "Zamknij",
+        "noSource": "Nie znaleziono źródła leadów tego formularza. Odśwież listę i spróbuj ponownie.",
+        "loading": "Wczytywanie źródła leadów",
+        "intro": "Zdecyduj, kto jest właścicielem kontaktów tworzonych przez ten formularz, czy dla każdego leada otwierany jest deal i kto dostaje powiadomienie. Zmiany dotyczą leadów, które przyjdą po zapisaniu.",
+        "conflict": "Ktoś inny zmienił to źródło leadów. Wczytaj ponownie, aby zobaczyć jego wersję; Twoje niezapisane zmiany zostaną utracone.",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "saved": "Zapisano przypisanie i deal: {name}"
+      },
+      "health": {
+        "title": "Stan formularza leadów Meta",
+        "loading": "Sprawdzanie formularza",
+        "notConnected": "To źródło nie jest już powiązane z formularzem leadów Meta, więc nie ma czego sprawdzać. Wybierz formularz ponownie na karcie Reklamy.",
+        "page": "Strona",
+        "form": "Formularz",
+        "state": "Synchronizacja leadów",
+        "leadAccess": "Dostęp do leadów",
+        "lastLead": "Ostatni lead",
+        "never": "Brak leadów",
+        "lastError": "Ostatni błąd:",
+        "fixHint": "Aby to naprawić, otwórz kartę Reklamy: przyznaj dostęp do leadów, połącz Stronę ponownie lub ponownie włącz synchronizację leadów.",
+        "openAds": "Otwórz kartę Reklamy"
+      }
     }
   }
 }

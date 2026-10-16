@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "AI CRM 코파일럿"
+    },
+    "errors": {
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "AICRM_NO_AI_PROVIDER": "AI 제공자가 설정되어 있지 않습니다. 관리자에게 AI 키를 추가해 달라고 요청하세요.",
+      "AICRM_PROVIDER_FAILED": "AI 서비스가 오류를 반환했습니다. 다시 시도해 주세요.",
+      "VALIDATION_FAILED": "강조 표시된 필드를 확인하고 다시 시도해 주세요.",
+      "PLAN_FEATURE_LOCKED": "이 기능을 사용하려면 플랜을 업그레이드하세요."
+    },
+    "chat": {
+      "title": "AI CRM 코파일럿",
+      "subtitle": "연락처와 거래를 찾거나 생성하고, 파이프라인 단계를 이동하고, 보고서를 실행하도록 요청해 보세요.",
+      "loading": "로딩 중…",
+      "thinking": "생각 중…",
+      "emptyState": "안녕이라고 인사하거나 \"진행 중인 거래가 뭐야?\"처럼 질문해 보세요",
+      "inputPlaceholder": "코파일럿에게 물어보세요…",
+      "send": "보내기",
+      "resetConversation": "대화 초기화",
+      "recentActions": "최근 작업",
+      "noRecentActions": "아직 작업이 없습니다.",
+      "notice": {
+        "settingsSaved": "설정이 저장되었습니다."
+      },
+      "settings": {
+        "title": "WhatsApp 직원 채널",
+        "waCopilotToggle": "직원이 WhatsApp을 통해 코파일럿과 채팅할 수 있도록 허용(아직 사용할 수 없음)"
+      }
+    }
+  }
+}

@@ -165,7 +165,7 @@
             "unset": "Rispondi alla domanda sui minori in Contatti e minori.",
             "minorsNoParental": "Possono esserci minori, ma il consenso dei genitori è disattivato. Questo profilo considera minore chiunque abbia meno di {age} anni.",
             "no_minors": "Non tratti consapevolmente i dati di minori. Questo profilo considera minore chiunque abbia meno di {age} anni.",
-            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. La conservazione delle prove per ogni contatto non è ancora disponibile."
+            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. Contrassegna un contatto come minorenne sulla sua scheda di consenso e registra lì il consenso del tutore."
           }
         },
         "opt_out_notice": {
@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Orari di silenzio e fasce di chiamata non sono ancora applicati",
+          "title": "Ore di silenzio e finestre di chiamata sono applicate",
           "detail": {
-            "notEnforced": "I tuoi orari di silenzio e la tua fascia di chiamata sono salvati, ma per ora nulla trattiene un messaggio né blocca una chiamata al di fuori di essi. Organizzati di conseguenza."
+            "enforced": "I messaggi di marketing durante le ore di silenzio vengono trattenuti fino alla loro fine, e una chiamata fuori dalla finestra di chiamata viene rifiutata indicando quando si apre. Le risposte entro la finestra di 24 ore e gli avvisi di servizio non vengono mai trattenuti. Il registro DND è solo una nota: per ora non viene verificato nulla."
           }
         }
       }
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Dati dei minori",
-        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi detenere dati di minori, così vengono mostrate le regole giuste.",
+        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi trattenere dati di minori, così vengono mostrate le regole giuste. Dopo la risposta, il marketing verso un contatto contrassegnato come minorenne viene trattenuto: sempre se non tratti consapevolmente dati di minori, e finché non è registrato il consenso del tutore se possono esserci minori.",
         "policy": "Minori tra i tuoi contatti",
         "policies": {
           "unset": "Nessuna risposta ancora",
@@ -352,7 +352,7 @@
           "may_include_minors": "Tra i nostri contatti possono esserci minori"
         },
         "parental": "Per i minori è richiesto il consenso dei genitori",
-        "parentalHint": "Un indicatore che registra la tua politica. Raccogliere e conservare le prove del consenso dei genitori per ogni contatto non è ancora disponibile.",
+        "parentalHint": "Registra la tua politica e trattiene il marketing verso i contatti contrassegnati come minorenni finché non è registrato il consenso del tutore. Contrassegni un contatto come minorenne e registri quel consenso sulla sua scheda di consenso.",
         "age": "I profili che hai attivato considerano minore chiunque abbia meno di {age} anni.",
         "dpdpNeedsAnswer": "Il profilo DPDP ti chiede di rispondere a questa domanda."
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Queste impostazioni sono salvate, ma non ancora applicate. Un messaggio non viene trattenuto e una chiamata non viene bloccata al di fuori degli orari che imposti. Pianifica invii e chiamate di conseguenza.",
-      "intro": "Alcune norme limitano quando i messaggi e le chiamate di marketing possono raggiungere le persone. Registra qui i tuoi orari di lavoro.",
+      "intro": "Alcune regole limitano quando i messaggi di marketing e le chiamate possono raggiungere le persone. Imposta qui i tuoi orari: un messaggio di marketing inviato nelle ore di silenzio attende e parte quando finiscono, e una chiamata fuori dalla finestra di chiamata non viene effettuata.",
       "quiet": {
         "title": "Orari di silenzio per i messaggi",
-        "hint": "Orari in cui non vuoi che i messaggi di marketing raggiungano le persone. Il periodo può attraversare la mezzanotte.",
+        "hint": "Ore in cui i messaggi di marketing non partono. Attendono e vengono inviati quando le ore finiscono. Il periodo può superare la mezzanotte.",
         "enabled": "Orari di silenzio attivi",
         "start": "Silenzio dalle",
         "end": "Silenzio fino alle"
       },
       "calling": {
         "title": "Fascia di chiamata",
-        "hint": "Gli unici orari in cui effettuare chiamate di marketing, nei giorni che scegli.",
+        "hint": "Le uniche ore in cui si effettuano chiamate di marketing, nei giorni che scegli. Una chiamata fuori da esse viene rifiutata e indica quando si apre la finestra.",
         "enabled": "Fascia di chiamata attiva",
         "start": "Chiamate dalle",
         "end": "Chiamate fino alle",
@@ -407,8 +406,8 @@
       },
       "suggested": "Le leggi che hai attivato suggeriscono dalle {start} alle {end}.",
       "zone": {
-        "label": "Fuso orario",
-        "hint": "Gli orari vengono letti in questo fuso. Il fuso del tuo spazio di lavoro è {zone}.",
+        "label": "Fuso orario di riserva",
+        "hint": "Gli orari si leggono sull’orologio del singolo contatto: la sua proprietà del fuso orario, altrimenti il prefisso internazionale del numero. Questo fuso si usa quando nessuno dei due è noto. Il fuso del tuo spazio di lavoro è {zone}.",
         "workspace": "Fuso orario dello spazio di lavoro ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Il tuo elenco"
         },
         "note": "È solo una nota. Per ora non viene verificato nulla su alcun registro."
-      }
+      },
+      "enforcedNote": "Le ore di silenzio trattengono un messaggio di marketing fino alla loro fine, e la finestra di chiamata rifiuta una chiamata fuori da essa. Si usa l’orologio di ciascun contatto. Le risposte entro la finestra di 24 ore e gli avvisi di servizio non vengono mai trattenuti."
     },
     "subprocessors": {
       "intro": "I fornitori che trattano dati personali per il tuo spazio di lavoro: che cosa fanno, quali dati ricevono e dove. Puoi pubblicare l'elenco su una pagina pubblica.",
@@ -487,6 +487,10 @@
       "privacy": "Informativa sulla privacy",
       "terms": "Termini",
       "notFound": "Pagina non trovata"
+    },
+    "hold": {
+      "heldUntil": "Trattenuto fino a {when} (ore di silenzio)",
+      "heldCount": "{count} trattenuti per le ore di silenzio"
     }
   }
 }

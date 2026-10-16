@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "已暂停：已达到每日发送上限。将在{when}之后自动继续。",
         "halt": "已暂停：此工作区的发送已被中止。解除中止后将自动继续。",
-        "manual": "已暂停。"
+        "manual": "已暂停。",
+        "quiet_hours": "已暂停：部分收件人处于免打扰时段。{when} 之后将自动恢复。"
       },
       "delete": "删除",
       "deleteTitle": "删除群发？",
@@ -145,7 +146,8 @@
         "queued": "排队中",
         "queuedHint": "等待发送",
         "failed": "失败",
-        "failedPct": "失败率 {pct}%"
+        "failedPct": "失败率 {pct}%",
+        "queuedHeld": "{count} 条因免打扰时段暂缓"
       },
       "tab": {
         "overview": "概览",
@@ -193,7 +195,8 @@
         "lastClick": "最近点击：{when}",
         "empty": "未关联收件人。",
         "more": "加载更多",
-        "loading": "加载中"
+        "loading": "加载中",
+        "heldUntil": "暂缓至 {when}（免打扰时段）"
       },
       "failures": {
         "kicker": "失败原因",

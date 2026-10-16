@@ -21,7 +21,8 @@ const HEAL_EVERY_TICKS = 12;
  * - A row is claimed with `FOR UPDATE SKIP LOCKED` and its attempt counted; the vendor is called with no transaction open.
  * - A Redis lock per workspace keeps two worker pods from embedding the same workspace at once.
  * - The vector is stored only if the text is still what was embedded; an edit meanwhile leaves the row pending for the next tick.
- * - After MAX_EMBED_ATTEMPTS the row is `failed`; the screens show it with a Retry (and the reason, never the vendor's body).
+ * - After MAX_EMBED_ATTEMPTS the row is `failed`; the self-heal pass puts it back in the queue, so every phrasing gets indexed without an
+ *   operator or a user pressing Retry. The reason is kept on the row (never the vendor's body).
  */
 @Injectable()
 export class FaqEmbedWorker {
@@ -43,7 +44,8 @@ export class FaqEmbedWorker {
     this.running = true;
     try {
       // About once a minute: re-queue vectors made with a model that is no longer the current one (a switch can race a batch that was
-      // already being embedded). Cheap when there are none; the platform's own model change queues them at once.
+      // already being embedded), and retry the rows that gave up, so indexing passes by default. Cheap when there are none; the
+      // platform's own model change queues them at once.
       if (this.ticks++ % HEAL_EVERY_TICKS === 0) await this.healStale();
       await this.runOnce();
     } catch (err) {
@@ -53,10 +55,10 @@ export class FaqEmbedWorker {
     }
   }
 
-  /** Puts back in the queue every ready vector that belongs to another model than the current one. Returns how many. */
+  /** Puts back in the queue every ready vector that belongs to another model than the current one, and every row that gave up. Returns how many. */
   async healStale(): Promise<number> {
     const { embeddingModel } = await this.config.getFresh();
-    const n = await this.db.privileged((tx) => this.repo.markStale(tx, embeddingModel, false));
+    const n = await this.db.privileged((tx) => this.repo.markStale(tx, embeddingModel, true));
     if (n > 0) this.logger.log({ n, embeddingModel }, 'faq vectors of an older model re-queued');
     return n;
   }

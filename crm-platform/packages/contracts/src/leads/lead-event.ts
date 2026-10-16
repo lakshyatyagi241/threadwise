@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { cursorSchema, pageInfoSchema } from '../common/pagination';
 import { uuidSchema } from '../common/ids';
+import { leadFirstReplyResponseSchema } from './speed-to-lead';
 
 /**
  * Lead events: every delivery a lead source received, with what the pipeline did with it. A lead is never dropped: one that cannot
@@ -76,6 +77,8 @@ export const leadEventResponseSchema = z.object({
   duplicateCount: z.number().int(),
   receivedAt: z.string().datetime(),
   processedAt: z.string().datetime().nullable(),
+  /** The automatic first message of this lead and where it stands; null when the source sends none (or it was switched off at the time). */
+  firstReply: leadFirstReplyResponseSchema.nullable(),
 });
 export type LeadEventResponse = z.infer<typeof leadEventResponseSchema>;
 

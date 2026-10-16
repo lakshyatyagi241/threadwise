@@ -6,7 +6,9 @@ describe('act-as PII masking and export block', () => {
   it('masks phone, email, name and text but keeps ids and shape', () => {
     const out = maskPersonalData({
       id: 'abc',
-      items: [{ phone: '+919876543210', email: 'jane@acme.com', fullName: 'Jane Doe', notes: 'secret' }],
+      items: [
+        { phone: '+919876543210', email: 'jane@acme.com', fullName: 'Jane Doe', notes: 'secret' },
+      ],
     }) as { id: string; items: Array<Record<string, string>> };
     expect(out.id).toBe('abc');
     expect(out.items[0]).toEqual({
@@ -18,7 +20,11 @@ describe('act-as PII masking and export block', () => {
   });
 
   it('refuses exports and downloads even on GET', () => {
-    for (const url of ['/v2/contacts/export', '/v2/contacts/exports/1/download', '/v2/flows/1/export']) {
+    for (const url of [
+      '/v2/contacts/export',
+      '/v2/contacts/exports/1/download',
+      '/v2/flows/1/export',
+    ]) {
       expect(impersonationVerdict(url, 'GET', false)).toBe('forbidden');
     }
     expect(impersonationVerdict('/v2/contacts', 'POST', true)).toBe('read_only');

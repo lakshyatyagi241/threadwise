@@ -37,6 +37,7 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, GrantedScope, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentBookingGuard } from './booking-plan';
 import { GoogleCalendarConnectService } from './google-calendar-connect.service';
@@ -55,6 +56,7 @@ export class AppointmentsController {
   constructor(
     private readonly appts: AppointmentsService,
     private readonly google: GoogleCalendarConnectService,
+    private readonly sync: AppointmentCalendarSyncService,
   ) {}
 
   @Get()
@@ -173,6 +175,37 @@ export class AppointmentsController {
     @GrantedScope('record.appointments.update') scope: RecordScope,
   ) {
     return this.appts.cancel(id, body, scope);
+  }
+
+  @Post(':id/calendar/push')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('record.appointments.update')
+  @ApiOperation({
+    summary: 'Push our time back to Google (the event is out of sync)',
+    description:
+      "Writes the appointment's Google event again from the appointment (a deleted event comes back under the same id). The appointment is not changed. 409 GOOGLE_SYNC_NOT_DRIFTED when the event is not out of sync; 409 APPT_CALENDAR_NOT_CONNECTED; 502 APPT_CALENDAR_PROVIDER_FAILED.",
+  })
+  pushCalendar(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GrantedScope('record.appointments.update') scope: RecordScope,
+  ) {
+    return this.sync.push(id, scope);
+  }
+
+  @Post(':id/calendar/accept')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('record.appointments.update')
+  @ApiOperation({
+    summary: "Accept Google's change (the event is out of sync)",
+    description:
+      "Reads the event again and applies what Google shows through the usual appointment rules: a deleted or missing event cancels the appointment, a moved event reschedules it to Google's start, changed guests are acknowledged. `notify` (default true) tells the customer as any staff cancel or move does. 409 GOOGLE_SYNC_NOT_DRIFTED when there is nothing to decide.",
+  })
+  acceptCalendar(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(appointmentActionSchema)) body: AppointmentActionInput,
+    @GrantedScope('record.appointments.update') scope: RecordScope,
+  ) {
+    return this.sync.accept(id, body, scope);
   }
 
   @Post(':id/confirm')

@@ -1,4 +1,4 @@
-import { isDeleted, str, type Doc } from '../util';
+import { cutText, isDeleted, str, type Doc } from '../util';
 import type { Source } from '../extract/source';
 import { c, times } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
@@ -53,11 +53,11 @@ export async function* readWithAttachments(a: {
 
 /** WaDesk's contract for a file name (createContactFileSchema): no path separator, not "." / "..", no control character, 1..255. */
 export function cleanFileName(raw: string): string {
-  const n = [...raw]
+  const n0 = [...raw]
     .map((ch) => (ch === '/' || ch === '\\' ? '_' : ch.charCodeAt(0) < 32 ? '' : ch))
     .join('')
-    .trim()
-    .slice(0, 255);
+    .trim();
+  const n = cutText(n0, 255);
   return n === '.' || n === '..' ? '' : n;
 }
 

@@ -17,7 +17,8 @@
       "unexpected": "Algo deu errado. Tente novamente.",
       "exportInProgress": "Um arquivo de comprovação já está sendo preparado. Aguarde a conclusão e tente novamente.",
       "exportNotReady": "Esse arquivo não está pronto ou expirou. Prepare um novo.",
-      "noticeTargetMissing": "Esse widget, página de reservas ou loja já não existe."
+      "noticeTargetMissing": "Esse widget, página de reservas ou loja já não existe.",
+      "notMinor": "O consentimento do responsável só pode ser registrado para um contato marcado como menor."
     },
     "settings": {
       "title": "Consentimento e respostas STOP",
@@ -142,7 +143,8 @@
         "widget": "Chat do site",
         "booking": "Página de reservas",
         "commerce": "Checkout da loja",
-        "lead": "Captação de leads"
+        "lead": "Captação de leads",
+        "gpc": "Global Privacy Control"
       },
       "by": "por {name}",
       "evidence": {
@@ -165,7 +167,8 @@
         "storeFlag": "Configuração da loja",
         "leadSourceId": "Origem do lead",
         "leadFormId": "Formulário de lead",
-        "adId": "Anúncio"
+        "adId": "Anúncio",
+        "guardianConsentRef": "Referência do consentimento do responsável"
       },
       "dialog": {
         "titleGranted": "Marcar como inscrito",
@@ -181,6 +184,50 @@
         "close": "Fechar",
         "savedGranted": "Marcado como inscrito.",
         "savedWithdrawn": "Marcado como não inscrito."
+      },
+      "privacy": {
+        "title": "Marcadores de privacidade",
+        "saved": "Salvo.",
+        "minorLabel": "Menor",
+        "minorOn": "Marcado como menor desde {date}.",
+        "minorOff": "Não está marcado como menor.",
+        "rule": {
+          "off": "Seu espaço de trabalho não respondeu à pergunta sobre crianças na Central de conformidade, então o marketing para este contato não é retido.",
+          "guardian": "O marketing para este contato fica retido até o consentimento de um dos pais ou responsável estar registrado.",
+          "block": "O marketing para este contato fica retido porque seu espaço de trabalho informa que não trata dados de menores."
+        },
+        "guardianBadge": "Consentimento do responsável registrado",
+        "guardianLabel": "Consentimento dos pais ou responsável",
+        "guardianOn": "Registrado desde {date}. É apenas uma prova e não inscreve o contato.",
+        "guardianOff": "Não registrado.",
+        "recordGuardian": "Registrar consentimento do responsável",
+        "clearGuardian": "Remover",
+        "dnsLabel": "Não vender nem compartilhar",
+        "dnsOn": "Recusa desde {date} ({source}).",
+        "dnsOff": "Sem recusa.",
+        "history": "Histórico de privacidade",
+        "event": {
+          "minor": {
+            "on": "Marcado como menor",
+            "off": "Marca de menor removida"
+          },
+          "guardian_consent": {
+            "on": "Consentimento do responsável registrado",
+            "off": "Consentimento do responsável removido"
+          },
+          "sale_share_opt_out": {
+            "on": "Recusou a venda e o compartilhamento",
+            "off": "Recusa removida"
+          }
+        },
+        "dialog": {
+          "title": "Registrar consentimento do responsável",
+          "intro": "Registre que um dos pais ou o responsável concordou. É apenas uma prova: não inscreve o contato no marketing.",
+          "note": "Como concordaram? (obrigatório)",
+          "noteHint": "Por exemplo: assinou o formulário em papel no balcão. Não escreva o nome nem os dados de contato do responsável.",
+          "ref": "Referência (opcional)",
+          "refHint": "Um número de formulário ou id de documento que você possa consultar depois."
+        }
       }
     },
     "composer": {
@@ -302,7 +349,9 @@
         "consent_evidence_recorded": "Permitido: o aviso foi entregue e a pessoa concordou.",
         "purpose_not_enabled": "Não permitido: o espaço de trabalho não ativou isto.",
         "consent_declined": "Não permitido: a pessoa recusou.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Não permitido: este contato está marcado como menor e seu espaço de trabalho retém o marketing.",
+        "sale_share_opted_out": "Não permitido: o contato recusou a venda ou o compartilhamento de seus dados."
       }
     },
     "notice": {
@@ -334,7 +383,16 @@
       "termsUrlHint": "Deve começar com https://",
       "useWorkspacePrivacy": "Usar o link de privacidade do meu espaço de trabalho",
       "useWorkspaceTerms": "Usar o link de termos do meu espaço de trabalho",
-      "useWorkspaceText": "Usar o texto padrão do meu espaço de trabalho"
+      "useWorkspaceText": "Usar o texto padrão do meu espaço de trabalho",
+      "statement": "Concordo em receber novidades e ofertas pelo {channels}. Posso responder STOP a qualquer momento para cancelar.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Canais cobertos por este consentimento",
+      "channelsHint": "A pessoa só é inscrita nos canais marcados aqui, e o texto do consentimento os cita. Um canal só é usado se a pessoa informar o telefone ou o e-mail correspondente.",
+      "channelsUse": "Atualizar o texto com estes canais"
     }
   }
 }

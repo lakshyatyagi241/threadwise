@@ -20,7 +20,7 @@ export const KEYS = {
   counts: ['tasks', 'counts'] as const,
   task: (id: string) => ['tasks', 'task', id] as const,
   members: ['tasks', 'members'] as const,
-  ref: (kind: 'contact' | 'deal', id: string) => ['tasks', 'ref', kind, id] as const,
+  ref: (kind: 'contact' | 'deal' | 'company', id: string) => ['tasks', 'ref', kind, id] as const,
 };
 
 /** Keeps the development stand-in (when it is on) in step with who is signed in. Call it once near the top of a screen. */
@@ -101,8 +101,8 @@ export function useMembers() {
   });
 }
 
-/** A contact or deal known only by id (it arrived in the address): its name for the filter chip. */
-export function useRecordRef(kind: 'contact' | 'deal', id: string) {
+/** A contact, deal or company known only by id (it arrived in the address): its name for the filter chip. */
+export function useRecordRef(kind: 'contact' | 'deal' | 'company', id: string) {
   return useQuery({
     queryKey: KEYS.ref(kind, id),
     enabled: id !== '',
@@ -117,6 +117,10 @@ export function useRecordRef(kind: 'contact' | 'deal', id: string) {
           label: c.name || [c.firstName, c.lastName].filter(Boolean).join(' ') || c.phone || '',
           hint: c.phone,
         };
+      }
+      if (kind === 'company') {
+        const co = await tasksApi.companyById(id, signal);
+        return { id: co.id, label: co.name, hint: co.industry };
       }
       const d = await tasksApi.dealById(id, signal);
       return { id: d.id, label: d.title };

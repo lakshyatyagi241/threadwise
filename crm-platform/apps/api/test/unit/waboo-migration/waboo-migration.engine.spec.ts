@@ -347,17 +347,12 @@ describe('executeRun', () => {
     expect(await executeRun(deps(w), 'r1')).toBe('skipped');
     expect(w.order).toEqual([]);
   });
-  it('a load re-checks the green dry run right before it starts and is blocked, never loaded', async () => {
-    for (const [dry, text] of [
-      [null, 'no dry run'],
-      [{ ...greenDry(), green: false }, 'not green'],
-      [greenDry(30), 'more than 24 hours'],
-    ] as const) {
+  it('a load needs no earlier dry run: it starts whatever the latest dry run says (its pipeline rehearses first)', async () => {
+    for (const dry of [null, { ...greenDry(), green: false }, greenDry(30)] as const) {
       const w = world({ runs: [{ client: 'a', mode: 'load', dry }] });
-      expect(await executeRun(deps(w), 'r1')).toBe('blocked');
-      expect(w.rows[0]!.status).toBe('blocked');
-      expect(w.rows[0]!.error).toContain(text);
-      expect(w.order, 'the pipeline must not be started').toEqual([]);
+      expect(await executeRun(deps(w), 'r1')).toBe('completed');
+      expect(w.rows[0]!.status).toBe('completed');
+      expect(w.order, 'the pipeline runs').toEqual(['a']);
     }
   });
   it('a load with a fresh green dry run goes ahead', async () => {
@@ -398,7 +393,7 @@ describe('batch: sequential execution', () => {
     expect(w.rows[2]!.error).toBe(STOP_REASON);
     expect(w.order).toEqual(['a', 'b']);
   });
-  it('stop-on-failure also stops on a red verdict and on a blocked load', async () => {
+  it('stop-on-failure also stops on a red verdict', async () => {
     const red = world({
       runs: ['a', 'b'].map((client) => ({ client })),
       report: (c) => ({ green: c !== 'a', unaccounted: c === 'a' ? 1 : 0 }),
@@ -408,20 +403,8 @@ describe('batch: sequential execution', () => {
       'B1',
     );
     expect(red.rows.map((r) => r.status)).toEqual(['completed', 'cancelled']);
-    const blocked = world({
-      runs: [
-        { client: 'a', mode: 'load', dry: null },
-        { client: 'b', mode: 'load' },
-      ],
-    });
-    await runBatch(
-      { store: batchStore(blocked, true).store, execute: (u) => executeRun(deps(blocked), u) },
-      'B1',
-    );
-    expect(blocked.rows.map((r) => r.status)).toEqual(['blocked', 'cancelled']);
-    expect(blocked.order).toEqual([]);
   });
-  it('in a bulk load an organization whose dry run is no longer green is skipped as blocked and the others still load', async () => {
+  it('in a bulk load every organization loads, whatever its earlier dry run says', async () => {
     const w = world({
       runs: [
         { client: 'a', mode: 'load' },
@@ -431,9 +414,9 @@ describe('batch: sequential execution', () => {
     });
     const b = batchStore(w, false);
     await runBatch({ store: b.store, execute: (u) => executeRun(deps(w), u) }, 'B1');
-    expect(w.rows.map((r) => r.status)).toEqual(['completed', 'blocked', 'completed']);
-    expect(w.order).toEqual(['a', 'c']);
-    expect(b.status()).toBe('failed');
+    expect(w.rows.map((r) => r.status)).toEqual(['completed', 'completed', 'completed']);
+    expect(w.order).toEqual(['a', 'b', 'c']);
+    expect(b.status()).toBe('completed');
   });
   it('a cancelled batch runs nothing more and stays cancelled', async () => {
     const w = world({ runs: ['a', 'b', 'c'].map((client) => ({ client })) });

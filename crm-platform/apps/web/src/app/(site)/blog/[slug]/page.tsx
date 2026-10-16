@@ -52,7 +52,7 @@ export default async function BlogPost({ params }: Props) {
       <article className="bg-paper-0">
         <div className="relative overflow-hidden">
           <div className="grid-bg pointer-events-none absolute inset-0 opacity-25" />
-          <div className="blur-bub absolute -right-24 -top-28 h-[440px] w-[440px] rounded-full bg-wa-mint/40" />
+          <div className="blur-bub absolute -end-24 -top-28 h-[440px] w-[440px] rounded-full bg-wa-mint/40" />
           <header className="relative mx-auto max-w-[760px] px-4 pb-8 pt-20 sm:px-6">
             <nav className="mono mb-7 flex items-center gap-2 text-[11px] uppercase tracking-widest text-ink-500">
               <Link href="/" className="hover:text-wa-deep">

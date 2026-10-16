@@ -165,7 +165,7 @@
             "unset": "Answer the children question under Contacts and children.",
             "minorsNoParental": "Minors may be included, but parental consent is off. This profile treats anyone under {age} as a minor.",
             "no_minors": "You do not knowingly process the data of minors. This profile treats anyone under {age} as a minor.",
-            "may_include_minors": "Parental consent is switched on for people under {age}. Keeping the evidence per contact is not built yet."
+            "may_include_minors": "Parental consent is switched on for people under {age}. Mark a contact as a minor on its Consent card and record the guardian's consent there."
           }
         },
         "opt_out_notice": {
@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Quiet hours and calling windows are not enforced yet",
+          "title": "Quiet hours and calling windows are enforced",
           "detail": {
-            "notEnforced": "Your quiet hours and calling window are saved, but nothing holds a message or blocks a call outside them yet. Plan around them yourself."
+            "enforced": "Marketing messages inside your quiet hours are held until they end, and a call outside your calling window is refused with the time it opens. Replies inside the 24-hour window and utility notices are never held. The DND registry is a note: nothing is checked against it yet."
           }
         }
       }
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Children's data",
-        "hint": "This product is for businesses. Say whether you may hold the data of minors, so the right rules are shown.",
+        "hint": "This product is for businesses. Say whether you may hold the data of minors, so the right rules are shown. Once you answer, marketing to a contact marked as a minor is held back: always when you do not knowingly process minors, and until the guardian's consent is on record when minors may be included.",
         "policy": "Minors among your contacts",
         "policies": {
           "unset": "Not answered yet",
@@ -352,7 +352,7 @@
           "may_include_minors": "Minors may be among our contacts"
         },
         "parental": "Parental consent is required for minors",
-        "parentalHint": "A flag that records your policy. Collecting and keeping parental consent evidence per contact is not built yet.",
+        "parentalHint": "Records your policy, and holds marketing to contacts marked as minors until the guardian's consent is on record. You mark a contact as a minor, and record that consent, on its Consent card.",
         "age": "The profiles you switched on treat anyone under {age} as a minor.",
         "dpdpNeedsAnswer": "The DPDP profile asks you to answer this question."
       }
@@ -379,18 +379,18 @@
       }
     },
     "windows": {
-      "notEnforced": "These settings are saved, but not enforced yet. A message is not held back and a call is not blocked outside the hours you set. Plan your sending and calling around them.",
-      "intro": "Some rules restrict when marketing messages and calls may reach people. Record the hours you work to here.",
+      "enforcedNote": "Quiet hours hold a marketing message until they end, and the calling window refuses a call outside it. Each contact's own clock is used. Replies inside the 24-hour window and utility notices are never held.",
+      "intro": "Some rules limit when marketing messages and calls may reach people. Set your hours here: a marketing message sent in the quiet hours waits and goes when they end, and a call outside the calling window is not placed.",
       "quiet": {
         "title": "Quiet hours for messages",
-        "hint": "Hours in which you do not want marketing messages to reach people. The period may cross midnight.",
+        "hint": "Hours in which marketing messages do not go out. They wait, and are sent when the hours end. The period may cross midnight.",
         "enabled": "Quiet hours on",
         "start": "Quiet from",
         "end": "Quiet until"
       },
       "calling": {
         "title": "Calling window",
-        "hint": "The only hours marketing calls should be made, on the days you pick.",
+        "hint": "The only hours marketing calls are placed, on the days you pick. A call outside them is refused, and says when the window opens.",
         "enabled": "Calling window on",
         "start": "Calls from",
         "end": "Calls until",
@@ -407,8 +407,8 @@
       },
       "suggested": "The laws you switched on suggest {start} to {end}.",
       "zone": {
-        "label": "Time zone",
-        "hint": "The hours are read in this zone. Your workspace zone is {zone}.",
+        "label": "Fallback time zone",
+        "hint": "The hours are read on the contact's own clock: their time zone property, else the country code of their number. This zone is used when neither is known. Your workspace zone is {zone}.",
         "workspace": "Workspace time zone ({zone})"
       },
       "dnd": {
@@ -423,6 +423,10 @@
         },
         "note": "This is a note only. Nothing is checked against a registry yet."
       }
+    },
+    "hold": {
+      "heldUntil": "Held until {when} (quiet hours)",
+      "heldCount": "{count} held for the quiet hours"
     },
     "subprocessors": {
       "intro": "The vendors that process personal data for your workspace: what they do, what data they get and where. You can publish the list on a public page.",

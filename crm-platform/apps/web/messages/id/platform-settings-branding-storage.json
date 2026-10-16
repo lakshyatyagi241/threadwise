@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Pembuat alur"
+      "flowBuilder": "Pembuat alur",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Admin - Pengaturan proyek",
@@ -906,7 +907,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "Klien OAuth Google yang digunakan setiap workspace untuk menghubungkan kalendernya.",
+        "description": "Klien OAuth Google yang digunakan setiap workspace untuk menghubungkan akun Google-nya, untuk kalender, Sheets, Docs, dan Forms.",
         "sections": {
           "oauth": {
             "title": "Klien OAuth Google"
@@ -914,8 +915,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Izinkan workspace menghubungkan Google Calendar",
-            "hint": "Nonaktif: tidak ada workspace yang dapat terhubung, dan tidak ada yang ditulis atau dibaca dari kalender."
+            "label": "Izinkan workspace menghubungkan Google",
+            "hint": "Nonaktif: tidak ada workspace yang dapat terhubung, dan tidak ada yang dibaca dari atau ditulis ke Google (kalender, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "Client ID",
@@ -1022,6 +1023,37 @@
           "mode": {
             "simple": "Hanya Simple",
             "advanced": "Hanya Advanced"
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Aplikasi Microsoft yang digunakan setiap ruang kerja untuk menghubungkan kalender Outlook atau Microsoft 365 mereka.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikasi Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Izinkan ruang kerja menghubungkan Outlook",
+            "hint": "Nonaktif: tidak ada ruang kerja yang dapat terhubung, dan tidak ada yang dibaca dari atau ditulis ke kalender Outlook mana pun. Kalender yang sudah terhubung tetap disimpan."
+          },
+          "clientId": {
+            "label": "ID aplikasi (klien)",
+            "hint": "Dari pusat admin Microsoft Entra, Pendaftaran aplikasi, Ikhtisar. Jika kosong, memakai MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Rahasia klien",
+            "hint": "Disimpan terenkripsi dan tidak pernah ditampilkan lagi. Jika kosong, rahasia yang tersimpan tetap dipakai; MICROSOFT_CALENDAR_CLIENT_SECRET menjadi cadangannya."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common mengizinkan akun kerja, sekolah, dan pribadi; gunakan ID direktori (tenant) untuk aplikasi single-tenant. Jika kosong, memakai MICROSOFT_CALENDAR_TENANT, atau common."
+          },
+          "redirectUri": {
+            "label": "Penggantian URI pengalihan",
+            "hint": "Biarkan kosong untuk memakai alamat di atas. Harus sama persis dengan salah satu URI pengalihan pada aplikasi."
           }
         }
       }
@@ -1134,8 +1166,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "Klien OAuth Google yang digunakan workspace untuk menghubungkan kalender mereka untuk pemesanan dan jadwal sibuk.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "Klien OAuth Google yang digunakan workspace untuk menghubungkan akun Google mereka untuk pemesanan, Sheets, Docs, dan Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Email Gmail",
@@ -1151,6 +1183,11 @@
         "title": "Pembuat alur",
         "description": "Pembuat alur default untuk setiap workspace: Simple langkah demi langkah atau kanvas Advanced. Workspace dapat menggantinya.",
         "tags": "Simple / Advanced / Otomatisasi"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "Aplikasi Microsoft yang digunakan ruang kerja untuk menghubungkan kalender Outlook dan Microsoft 365 mereka untuk pemesanan.",
+        "tags": "Microsoft / OAuth / Outlook / Kalender"
       }
     },
     "signup": {
@@ -1703,11 +1740,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Admin - Janji temu",
-        "description": "Satu klien OAuth Google Cloud untuk seluruh platform. Setiap workspace kemudian menghubungkan akun Google-nya sendiri dari Janji temu, Pengaturan; workspace tidak pernah melihat client id atau secret.",
+        "description": "Satu klien OAuth Google Cloud untuk seluruh platform. Setiap workspace kemudian menghubungkan akun Google-nya sendiri dari Akun Google di Pengaturan, dan memilih izin yang diberikan; workspace tidak pernah melihat client id atau secret.",
         "sections": {
           "oauth": {
             "title": "Klien OAuth Google",
-            "description": "Tanpa client id dan secret, workspace melihat Google Calendar sebagai tidak tersedia dan pemesanan tetap berjalan tanpa kalender."
+            "description": "Tanpa client id dan secret, workspace melihat Google sebagai tidak tersedia, pemesanan tetap berjalan tanpa kalender, dan langkah Google di alur dilewati."
           }
         },
         "guide": {
@@ -1715,7 +1752,7 @@
           "items": {
             "project": {
               "title": "1. Proyek dan API",
-              "body": "Di Google Cloud Console, buat proyek dan aktifkan Google Calendar API."
+              "body": "Di Google Cloud Console, buat proyek dan aktifkan API Google Calendar, Google Sheets, Google Docs, Google Drive, dan Google Forms. Sebuah izin hanya berfungsi jika API-nya diaktifkan."
             },
             "redirect": {
               "title": "2. Klien OAuth",
@@ -1723,11 +1760,11 @@
             },
             "consent": {
               "title": "3. Layar persetujuan",
-              "body": "Tambahkan scope calendar.events, calendar.freebusy, dan calendar.calendarlist.readonly, lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang."
+              "body": "Tambahkan scope yang diminta produk (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), lalu publikasikan aplikasi: dalam mode Testing, Google mengakhiri setiap izin setelah 7 hari dan workspace harus terhubung ulang. Scope drive bersifat terbatas dan memerlukan peninjauan Google."
             },
             "workspaces": {
               "title": "4. Workspace terhubung",
-              "body": "Tempel client id dan secret di sini lalu simpan. Admin kemudian terhubung dari Janji temu, Pengaturan, Google Calendar."
+              "body": "Tempel client id dan secret di sini lalu simpan. Admin kemudian terhubung dari Pengaturan, Integrasi, Akun Google, atau dari Janji temu, Pengaturan, Google Calendar."
             }
           }
         }
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Alur yang sudah ada",
               "body": "Mengubah pengaturan ini tidak pernah mengubah atau menghapus alur. Alur tetap berfungsi; alur hanya dibuka di pembuat yang aktif. Workspace yang memilih pembuatnya sendiri tetap menggunakannya hingga memilih default platform lagi."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Janji temu",
+        "description": "Satu aplikasi Microsoft Entra untuk seluruh platform. Setiap ruang kerja kemudian menghubungkan kalender Outlook atau Microsoft 365 miliknya sendiri dari Janji temu, Pengaturan, dan tidak pernah melihat ID klien maupun rahasianya.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikasi Microsoft Entra",
+            "description": "Tanpa ID klien dan rahasia, ruang kerja melihat Outlook sebagai tidak tersedia dan pemesanan tetap berjalan tanpanya. Google Calendar tidak terpengaruh."
+          }
+        },
+        "guide": {
+          "title": "Siapkan di Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Pendaftaran aplikasi",
+              "body": "Di pusat admin Microsoft Entra, buat pendaftaran aplikasi untuk akun di direktori organisasi mana pun dan akun Microsoft pribadi, lalu salin ID aplikasi (klien) ke sini. Biarkan tenant tetap common kecuali Anda memilih opsi yang lebih sempit."
+            },
+            "redirect": {
+              "title": "2. URI pengalihan dan rahasia",
+              "body": "Tambahkan URI pengalihan yang tampil di halaman ini sebagai pengalihan Web, lalu buat rahasia klien di bawah Sertifikat dan rahasia dan tempel nilainya di sini. Catat kapan rahasia itu kedaluwarsa: setelah tanggal tersebut kalender semua ruang kerja berhenti berfungsi sampai rahasia baru disimpan."
+            },
+            "permissions": {
+              "title": "3. Izin API",
+              "body": "Tambahkan izin Microsoft Graph delegasi Calendars.ReadWrite, User.Read, dan offline_access, tanpa yang lain. Untuk penggunaan umum, selesaikan verifikasi penerbit; tenant pelanggan juga mungkin mengharuskan administrator menyetujui aplikasi."
+            },
+            "workspaces": {
+              "title": "4. Ruang kerja menghubungkan",
+              "body": "Tempel ID klien dan rahasia di sini lalu simpan. Admin kemudian dapat menghubungkan dari Janji temu, Pengaturan."
             }
           }
         }

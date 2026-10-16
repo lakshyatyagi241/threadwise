@@ -47,8 +47,10 @@ export function unitsOf(
 }
 
 /**
- * A screen is covered when some guide lists it under `documents`. A plan feature is covered when a guide is gated on it, or when a
- * guide documents a screen whose own gates carry it (the screen's gate is the guide's gate).
+ * A screen is covered when some guide lists it under `documents`. A plan feature is covered when a guide is gated on it, when a
+ * guide documents a screen whose own gates carry it (the screen's gate is the guide's gate), or when a guide names it in
+ * `features` (it explains the feature without being gated by it — the right choice when the feature unlocks only part of what
+ * the guide covers).
  */
 export function coverage(input: CoverageInput): CoverageReport {
   const units = new Set(unitsOf(input.nav, input.tiles, input.planFeatureKeys));
@@ -71,6 +73,7 @@ export function coverage(input: CoverageInput): CoverageReport {
       if (feature) covered.add(`feature:${feature}`);
     }
     if (doc.gates.planFeature) covered.add(`feature:${doc.gates.planFeature}`);
+    for (const feature of doc.features) covered.add(`feature:${feature}`);
   }
 
   const pendingUnits = new Set(input.pending.map((p) => p.unit));

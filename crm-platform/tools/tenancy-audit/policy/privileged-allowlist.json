@@ -24,6 +24,16 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/appointments-booking/calendar-reconcile.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker scheduler only (no controller reaches it); the privileged step claims due workspaces from appointment_calendar_connections across tenants and returns only org ids, the pass for each runs under that workspace's own txAs with a per-workspace Redis lock",
+    "reviewedOn": "2026-10-15"
+  },
+  "modules/appointments-booking/google-consent.service.ts": {
+    "status": "reviewed",
+    "reason": "the expired-confirmation sweep only (called by the worker, no controller reaches it); the privileged step lists expired google_consent_requests across tenants, each is then ended and its parked grant withdrawn under that row's own txAs. Every request path of the service runs under the caller's tenant transaction",
+    "reviewedOn": "2026-10-15"
+  },
   "modules/appointments-booking/public-booking.service.ts": {
     "status": "reviewed",
     "reason": "pre-tenant public lookup by slug / token hash, then pins ctx.orgId to the hit"

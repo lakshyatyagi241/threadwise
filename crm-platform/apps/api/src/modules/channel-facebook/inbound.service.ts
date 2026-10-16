@@ -1,7 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
 import { sql } from 'drizzle-orm';
+import type { Queue } from 'bullmq';
+import { META_LEADGEN_JOB, type MetaLeadgenJob } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
+import { QUEUES } from '../../infra/queue/queues';
 import {
   FACEBOOK_GRAPH,
   type FacebookGraphFactory,
@@ -18,6 +22,7 @@ import { PLACEHOLDER_NAME } from './_shims/chat-inbox-ingest';
 import {
   readComment,
   readEntries,
+  readLeadgen,
   readMessaging,
   type DmInput,
   type PageEntry,
@@ -49,6 +54,7 @@ export class InboundService {
     @Inject(FACEBOOK_GRAPH) private readonly graph: FacebookGraphFactory,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
     @Inject(INBOUND_HOOKS) private readonly hooks: InboundHooks,
+    @InjectQueue(QUEUES.META_LEADGEN) private readonly leadgen: Queue<MetaLeadgenJob>,
   ) {}
 
   verify(mode: string, token: string): boolean {
@@ -94,6 +100,9 @@ export class InboundService {
       for (const value of entry.feed) {
         await this.guard(orgId, page, 'feed', () => this.comment(orgId, page, value));
       }
+      for (const value of entry.leadgen) {
+        await this.guard(orgId, page, 'leadgen', () => this.queueLead(orgId, page, value));
+      }
     }
   }
 
@@ -108,6 +117,28 @@ export class InboundService {
     } catch (err) {
       this.logger.warn({ err, orgId, page: page.id }, `facebook ${what} ingest failed`);
     }
+  }
+
+  /**
+   * A new lead on a lead form. The webhook carries ids only, so nothing is fetched here: the event is queued (one job per workspace and
+   * lead, so Meta's redelivery of the same event is one job) and the lead ads worker reads the lead from Meta and hands it to the lead
+   * pipeline. Whether this Page has lead sync on, and the form was picked, is the worker's to decide.
+   */
+  private async queueLead(
+    orgId: number,
+    page: PageRow,
+    value: Record<string, unknown>,
+  ): Promise<void> {
+    const lead = readLeadgen(value);
+    if (!lead) return;
+    const job: MetaLeadgenJob = {
+      orgId,
+      pageId: page.pageId,
+      leadgenId: lead.leadgenId,
+      formId: lead.formId,
+      adId: lead.adId,
+    };
+    await this.leadgen.add(META_LEADGEN_JOB, job, { jobId: `leadgen-${orgId}-${lead.leadgenId}` });
   }
 
   private async messaging(

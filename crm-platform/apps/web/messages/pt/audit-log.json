@@ -92,7 +92,8 @@
       "api_keys": "Chaves de API",
       "audit-log": "Log de auditoria",
       "audit-log-exports": "Exportações do log de auditoria",
-      "contact_consent_exports": "Exportações de comprovante de consentimento"
+      "contact_consent_exports": "Exportações de comprovante de consentimento",
+      "revenue-report-exports": "Arquivos do relatório de receita"
     },
     "table": {
       "caption": "Entradas de auditoria, da mais recente para a mais antiga. Os horários são exibidos no seu fuso horário ({zone}).",

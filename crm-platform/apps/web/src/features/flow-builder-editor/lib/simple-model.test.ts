@@ -832,3 +832,91 @@ describe('a button that hands the visitor to a person', () => {
     expect(problems(d, { senderRequired: false })).toEqual([]);
   });
 });
+
+describe('API call and JS function steps (the Actions list)', () => {
+  const docWith = (type: 'api_library' | 'code') => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    const a = newStep(type, [m]);
+    const after = newStep('message', [m, a]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, a);
+    d = insertStep(d, 0, 2, after);
+    return { d, a };
+  };
+
+  it('are offered in the + menu on WhatsApp and not on a website chat bot', () => {
+    expect(stepKindsFor('chat').map((k) => k.key)).toEqual(
+      expect.arrayContaining(['api-library', 'code']),
+    );
+    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('api-library');
+    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('code');
+  });
+
+  it('start with their own result name, never one another step already saves', () => {
+    const first = newStep('api_library', []);
+    const second = newStep('api_library', [first]);
+    expect(first.data.save).toBe('api_response_1');
+    expect(second.data.save).toBe('api_response_2');
+    expect(newStep('code', [first]).data.save).toBe('result_1');
+  });
+
+  it('say what is missing: an API to call, code to run', () => {
+    const { d } = docWith('api_library');
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: choose the API to call.',
+    );
+    const c = docWith('code');
+    c.d = updateStep(c.d, c.a.id, { data: { code: '' } });
+    expect(problems(c.d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: write the code to run.',
+    );
+  });
+
+  it('an API step carries on to the next step on success and on error, and reads back as a plain step', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    const from = g.flowEdges.filter((e) => e.source === a.id);
+    expect(from.map((e) => e.sourceHandle).sort()).toEqual(['error', 'success']);
+    expect(new Set(from.map((e) => e.target)).size).toBe(1);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok)
+      expect(back.doc.journeys[0]!.steps.map((s) => s.type)).toEqual([
+        'message',
+        'api_library',
+        'message',
+      ]);
+  });
+
+  it('an API step whose error ends the flow keeps doing so after a save from the Simple builder', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    g.flowEdges = g.flowEdges.filter((e) => !(e.source === a.id && e.sourceHandle === 'error'));
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (!back.ok) return;
+    const again = toGraph(back.doc);
+    expect(again.flowEdges.filter((e) => e.source === a.id).map((e) => e.sourceHandle)).toEqual([
+      'success',
+    ]);
+  });
+
+  it('a graph whose API error wire goes elsewhere is left to the Advanced builder', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    const stray = g.flowEdges.find((e) => e.source === a.id && e.sourceHandle === 'error')!;
+    stray.target = g.flowNodes[0]!.id;
+    expect(toSimple(g).ok).toBe(false);
+  });
+
+  it('a JS function step is a plain step with one exit', () => {
+    const { d, a } = docWith('code');
+    const g = toGraph(d);
+    expect(g.flowEdges.filter((e) => e.source === a.id).map((e) => e.sourceHandle)).toEqual([
+      'out',
+    ]);
+    expect(toSimple(g).ok).toBe(true);
+  });
+});

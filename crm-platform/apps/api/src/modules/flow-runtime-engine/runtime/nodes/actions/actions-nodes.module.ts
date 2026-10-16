@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SafeFetch } from '../../../../../infra/providers/node-bridge-runtime/safe-fetch';
 import { AuthModule } from '../../../../auth';
 import { ChatConversationsModule } from '../../../../chat-conversations';
+import { ContactConsentModule } from '../../../../contact-consent';
 import { CrmModule } from '../../../../crm';
 import { TeamInboxConversationsModule } from '../../../../team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from '../../../../team-inbox-routing-sla';
@@ -17,6 +18,7 @@ import { SocialHandoffNode } from './social-handoff-node';
   imports: [
     AuthModule,
     ChatConversationsModule,
+    ContactConsentModule,
     CrmModule,
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,

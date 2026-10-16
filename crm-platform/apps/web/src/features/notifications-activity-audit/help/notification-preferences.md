@@ -5,7 +5,27 @@ summary: Choose how each event reaches you (bell, pop-up, sound, browser notific
 area: account
 order: 25
 documents: [nav:notification-prefs]
-keywords: [notifications, preferences, bell, pop-up, toast, sound, push, browser notifications, mute, alerts, devices, broadcasts, team chat, reset, iphone, blocked, test notification, live updates paused]
+keywords:
+  [
+    notifications,
+    preferences,
+    bell,
+    pop-up,
+    toast,
+    sound,
+    push,
+    browser notifications,
+    mute,
+    alerts,
+    devices,
+    broadcasts,
+    team chat,
+    reset,
+    iphone,
+    blocked,
+    test notification,
+    live updates paused,
+  ]
 ---
 
 ## What it is for

@@ -379,6 +379,10 @@
         "test": {
           "label": "测试通知",
           "hint": "你在“浏览器通知”中发送的测试，用来查看铃铛、弹窗和标签页标题是否正常。"
+        },
+        "appointment_calendar_drift": {
+          "label": "预约与 Google Calendar 不同步",
+          "hint": "即将到来的预约在 Google Calendar 中的日程被删除、改期或参与者被更改。预约本身不会改变，由您决定如何处理。"
         }
       },
       "loading": "正在加载你的偏好设置",

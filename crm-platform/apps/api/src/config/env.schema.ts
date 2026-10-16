@@ -101,6 +101,8 @@ export const envSchema = z.object({
   /** Where chat media lives when the platform storage settings name no bucket: `local` (this container's disk) or `s3` (the S3_* bucket). */
   MEDIA_STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   S3_ENDPOINT: z.string().url().optional(),
+  /** The address outsiders (a browser, a WhatsApp provider) use to reach the bucket when `S3_ENDPOINT` is a private one such as `http://minio:9000`; links are signed against it. */
+  S3_PUBLIC_ENDPOINT: z.string().url().optional(),
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET_MEDIA: z.string().default('crm-media'),
   S3_BUCKET_DOCUMENTS: z.string().default('crm-documents'),
@@ -116,6 +118,10 @@ export const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_SECURE: booleanish.default(false),
+  /** Which MailPort adapter auth-providers.module.ts binds: 'smtp' (Mailpit locally, any SMTP relay in prod) or 'resend' (Resend's HTTP API). */
+  MAIL_PROVIDER: z.enum(['smtp', 'resend']).default('smtp'),
+  /** Required when MAIL_PROVIDER=resend; unused otherwise. Never has a default. */
+  RESEND_API_KEY: z.string().optional(),
 
   // --- web app / branding (links in transactional mail, OAuth redirects) ----
   WEB_APP_URL: z.string().url().default('http://localhost:3001'),

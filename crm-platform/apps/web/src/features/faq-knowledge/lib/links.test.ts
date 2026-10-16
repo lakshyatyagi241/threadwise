@@ -9,15 +9,14 @@ describe('where a flow keeps its FAQs', () => {
     expect(faqHref(FLOW)).toBe(`/flows/simple/${FLOW}?tab=faqs`);
     expect(faqHref(FLOW, 'list')).toBe(`/flows/simple/${FLOW}?tab=faqs`);
     expect(faqHref(FLOW, 'new')).toBe(`/flows/simple/${FLOW}?tab=faqs&view=new`);
-    expect(faqHref(FLOW, 'settings')).toBe(`/flows/simple/${FLOW}?tab=faqs&view=settings`);
     expect(faqHref(FLOW, { faqId: FAQ })).toBe(`/flows/simple/${FLOW}?tab=faqs&view=${FAQ}`);
   });
 
-  it('reads every deep link: list, new, an FAQ id, test, unanswered, insights, settings', () => {
+  it('reads every deep link: list, new, an FAQ id, test, unanswered, insights', () => {
     expect(parseFaqLocation('list')).toEqual({ view: 'list' });
     expect(parseFaqLocation('new')).toEqual({ view: 'new' });
     expect(parseFaqLocation(FAQ)).toEqual({ view: 'edit', id: FAQ });
-    for (const v of ['test', 'unanswered', 'insights', 'settings'] as const)
+    for (const v of ['test', 'unanswered', 'insights'] as const)
       expect(parseFaqLocation(v)).toEqual({ view: v });
   });
 
@@ -25,6 +24,7 @@ describe('where a flow keeps its FAQs', () => {
     expect(parseFaqLocation(null)).toEqual({ view: 'list' });
     expect(parseFaqLocation('')).toEqual({ view: 'list' });
     expect(parseFaqLocation('nope')).toEqual({ view: 'list' });
+    expect(parseFaqLocation('settings')).toEqual({ view: 'list' });
     expect(parseFaqLocation('not-a-uuid-123')).toEqual({ view: 'list' });
   });
 

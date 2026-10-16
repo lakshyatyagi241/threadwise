@@ -5,7 +5,8 @@ summary: Prepare a CSV file, upload it from Contacts, check the preview, then im
 area: getting-started
 order: 30
 documents: [nav:contacts]
-keywords: [import, csv, upload, bulk upload, contacts, spreadsheet, migrate, duplicates, groups, tags]
+keywords:
+  [import, csv, upload, bulk upload, contacts, spreadsheet, migrate, duplicates, groups, tags]
 ---
 
 ## What it is for

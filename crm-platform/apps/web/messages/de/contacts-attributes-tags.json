@@ -348,7 +348,10 @@
       "ownerMe": "{name} (ich)",
       "ownerFormer": "Ehemaliges Mitglied",
       "ownerHelp": "Wer sich um diesen Kontakt kümmert. Du kannst nur Personen auswählen, die dein Zugriff erlaubt.",
-      "ownerOutOfScope": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen."
+      "ownerOutOfScope": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen.",
+      "company": "Unternehmen",
+      "companyHint": "Ordnet diesen Kontakt einem Unternehmen zu.",
+      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld."
     },
     "tags": {
       "title": "Tags",
@@ -1279,6 +1282,14 @@
       "number": "Senden von",
       "numberHint": "Die WhatsApp-Nummer, über die die Nachricht gesendet wird.",
       "noChannel": "Es ist keine WhatsApp-Nummer verbunden. Verbinden Sie zuerst eine unter Kanäle.",
+      "mailbox": "Senden von",
+      "mailboxPlaceholder": "Postfach auswählen",
+      "mailboxHint": "Das verbundene Postfach, von dem die E-Mail gesendet wird.",
+      "noMailbox": "Es ist kein Postfach verbunden. Verbinde zuerst eines unter Kanäle.",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Worum geht es?",
+      "body": "Nachricht",
+      "bodyPlaceholder": "Schreibe deine E-Mail…",
       "template": "WhatsApp-Vorlage",
       "templatePlaceholder": "Vorlage auswählen",
       "noTemplates": "Keine genehmigten Vorlagen für diese Nummer.",
@@ -1295,12 +1306,10 @@
       "callPermission": "Der Kontakt hat Anrufe noch nicht erlaubt. Vor dem Anruf wird um seine Erlaubnis gebeten.",
       "callReady": "Bereit zum Anruf bei {phone}.",
       "later": {
-        "sms": "Das Senden von SMS aus dem CRM ist noch nicht verfügbar.",
-        "email": "Das Senden von E-Mails aus dem CRM ist noch nicht verfügbar."
+        "sms": "Das Senden von SMS aus dem CRM ist noch nicht verfügbar."
       },
       "openApp": {
-        "sms": "In Ihrer Nachrichten-App öffnen",
-        "email": "In Ihrer Mail-App öffnen"
+        "sms": "In Ihrer Nachrichten-App öffnen"
       }
     },
     "views": {

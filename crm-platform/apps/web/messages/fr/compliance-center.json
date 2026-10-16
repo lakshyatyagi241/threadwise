@@ -165,7 +165,7 @@
             "unset": "Répondez à la question sur les enfants dans Contacts et enfants.",
             "minorsNoParental": "Des mineurs peuvent être inclus, mais le consentement parental est désactivé. Ce profil considère comme mineure toute personne de moins de {age} ans.",
             "no_minors": "Vous ne traitez pas sciemment les données de mineurs. Ce profil considère comme mineure toute personne de moins de {age} ans.",
-            "may_include_minors": "Le consentement parental est activé pour les personnes de moins de {age} ans. La conservation des preuves par contact n’est pas encore disponible."
+            "may_include_minors": "Le consentement parental est activé pour les personnes de moins de {age} ans. Marquez un contact comme mineur sur sa fiche de consentement et enregistrez-y le consentement du tuteur."
           }
         },
         "opt_out_notice": {
@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Les heures de silence et les plages d’appel ne sont pas encore appliquées",
+          "title": "Les heures de silence et les plages d’appel sont appliquées",
           "detail": {
-            "notEnforced": "Vos heures de silence et votre plage d’appel sont enregistrées, mais rien ne retient encore un message ni ne bloque un appel en dehors de celles-ci. Organisez-vous en conséquence."
+            "enforced": "Les messages marketing pendant vos heures de silence sont retenus jusqu’à leur fin, et un appel hors de votre plage d’appel est refusé avec l’heure d’ouverture. Les réponses dans la fenêtre de 24 heures et les notifications de service ne sont jamais retenues. Le registre DND est une simple note : rien n’est encore vérifié avec lui."
           }
         }
       }
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Données d’enfants",
-        "hint": "Ce produit s’adresse aux entreprises. Indiquez si vous pouvez détenir des données de mineurs, afin que les bonnes règles s’affichent.",
+        "hint": "Ce produit s'adresse aux entreprises. Indiquez si vous pouvez détenir des données de mineurs afin d'afficher les règles adaptées. Une fois la réponse donnée, le marketing vers un contact marqué comme mineur est retenu : toujours si vous ne traitez pas sciemment de données de mineurs, et tant que le consentement du tuteur n'est pas enregistré si des mineurs peuvent figurer parmi vos contacts.",
         "policy": "Mineurs parmi vos contacts",
         "policies": {
           "unset": "Pas encore de réponse",
@@ -352,7 +352,7 @@
           "may_include_minors": "Des mineurs peuvent figurer parmi nos contacts"
         },
         "parental": "Le consentement parental est requis pour les mineurs",
-        "parentalHint": "Un indicateur qui enregistre votre politique. La collecte et la conservation des preuves de consentement parental par contact ne sont pas encore disponibles.",
+        "parentalHint": "Enregistre votre politique et retient le marketing vers les contacts marqués comme mineurs tant que le consentement du tuteur n'est pas enregistré. Vous marquez un contact comme mineur, et enregistrez ce consentement, sur sa fiche de consentement.",
         "age": "Les profils que vous avez activés considèrent comme mineure toute personne de moins de {age} ans.",
         "dpdpNeedsAnswer": "Le profil DPDP vous demande de répondre à cette question."
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Ces paramètres sont enregistrés, mais pas encore appliqués. Un message n’est pas retenu et un appel n’est pas bloqué en dehors des heures définies. Organisez vos envois et vos appels en conséquence.",
-      "intro": "Certaines règles limitent les moments où les messages et appels marketing peuvent atteindre les personnes. Indiquez ici vos heures de travail.",
+      "intro": "Certaines règles limitent les moments où les messages marketing et les appels peuvent atteindre les gens. Définissez vos horaires ici : un message marketing envoyé pendant les heures de silence attend et part à leur fin, et aucun appel n’est passé en dehors de la plage d’appel.",
       "quiet": {
         "title": "Heures de silence pour les messages",
-        "hint": "Heures pendant lesquelles vous ne souhaitez pas que des messages marketing parviennent aux personnes. La période peut passer minuit.",
+        "hint": "Heures pendant lesquelles les messages marketing ne partent pas. Ils attendent et sont envoyés à la fin de ces heures. La période peut passer minuit.",
         "enabled": "Heures de silence activées",
         "start": "Silence à partir de",
         "end": "Silence jusqu’à"
       },
       "calling": {
         "title": "Plage d’appel",
-        "hint": "Les seules heures où des appels marketing doivent être passés, les jours que vous choisissez.",
+        "hint": "Les seules heures où les appels marketing sont passés, les jours que vous choisissez. Un appel en dehors est refusé et indique quand la plage s’ouvre.",
         "enabled": "Plage d’appel activée",
         "start": "Appels à partir de",
         "end": "Appels jusqu’à",
@@ -407,8 +406,8 @@
       },
       "suggested": "Les lois que vous avez activées suggèrent de {start} à {end}.",
       "zone": {
-        "label": "Fuseau horaire",
-        "hint": "Les heures sont lues dans ce fuseau. Le fuseau de votre espace de travail est {zone}.",
+        "label": "Fuseau horaire de secours",
+        "hint": "Les heures se lisent sur l’horloge du contact : sa propriété de fuseau horaire, sinon l’indicatif pays de son numéro. Ce fuseau sert quand aucun des deux n’est connu. Le fuseau de votre espace de travail est {zone}.",
         "workspace": "Fuseau horaire de l’espace de travail ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Votre propre liste"
         },
         "note": "Ceci est une simple note. Rien n’est encore vérifié par rapport à un registre."
-      }
+      },
+      "enforcedNote": "Les heures de silence retiennent un message marketing jusqu’à leur fin, et la plage d’appel refuse un appel en dehors. L’horloge de chaque contact est utilisée. Les réponses dans la fenêtre de 24 heures et les notifications de service ne sont jamais retenues."
     },
     "subprocessors": {
       "intro": "Les prestataires qui traitent des données personnelles pour votre espace de travail : ce qu’ils font, quelles données ils reçoivent et où. Vous pouvez publier la liste sur une page publique.",
@@ -487,6 +487,10 @@
       "privacy": "Politique de confidentialité",
       "terms": "Conditions",
       "notFound": "Page introuvable"
+    },
+    "hold": {
+      "heldUntil": "Retenu jusqu’à {when} (heures de silence)",
+      "heldCount": "{count} retenus pendant les heures de silence"
     }
   }
 }

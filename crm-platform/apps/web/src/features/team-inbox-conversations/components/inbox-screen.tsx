@@ -8,6 +8,7 @@ import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import {
   uuidSchema,
   type ConversationPriority,
+  type ConversationSummary,
   type EmailReplyExtras,
   type MessageResponse,
   type WaGroupMention,
@@ -28,6 +29,8 @@ import { cloudGroupBlock, isGroupSendBlocked } from '../lib/group-thread';
 import { DEFAULT_FILTERS, filtersKey, tagsFromParam, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
+import type { AiModelChoice } from './composer-toolbar';
+import { useAiModels } from '@/features/ai-keys-usage-admin';
 import { ContactPanel } from './contact-panel';
 import { BulkBar } from './bulk-bar';
 import { ConversationList } from './conversation-list';
@@ -136,6 +139,21 @@ export function InboxScreen() {
   const list = useConversationList(filters, meId);
   const bulk = useBulkSelection(list.state.rows, filtersKey(filters), list.refresh);
   const channelsQ = useChannels();
+  // The Smart AI Assistant of the composer asks the first model of a vendor the rewrite route can call.
+  const aiModels = useAiModels();
+  const aiModel = useMemo(
+    () =>
+      aiModels.data?.data
+        .map((m) => ({ provider: m.provider as string, value: m.value }))
+        .find(
+          (m): m is AiModelChoice =>
+            m.provider === 'openai' ||
+            m.provider === 'anthropic' ||
+            m.provider === 'gemini' ||
+            m.provider === 'openrouter',
+        ) ?? null,
+    [aiModels.data],
+  );
   const channels = channelsQ.data?.data;
   const unofficial = useUnofficialWhatsapp();
   // The channel filter and picker offer personal-number (QR) channels only while the platform has that engine on.
@@ -324,6 +342,17 @@ export function InboxScreen() {
       if (ok) toast(t('priorityChanged'));
     },
     [detail.detail, can.priority, guarded, list, toast, t],
+  );
+  // The row's three-dot menu: the same priority change as the thread header, for any row in the list.
+  const setRowPriority = useCallback(
+    async (row: ConversationSummary, priority: ConversationPriority) => {
+      if (!can.priority || row.priority === priority) return;
+      const ok = await guarded(async () => {
+        list.placeRow(await inboxApi.setPriority(row.id, row.rowVersion, priority));
+      });
+      if (ok) toast(t('priorityChanged'));
+    },
+    [can.priority, guarded, list, toast, t],
   );
   const snooze = useCallback(
     async (preset: SnoozePreset) => {
@@ -553,7 +582,7 @@ export function InboxScreen() {
     <div className="space-y-2">
       <div
         data-testid="inbox-frame"
-        className="flex h-[calc(100dvh-7.5rem)] min-h-[30rem] overflow-hidden rounded-xl border border-border bg-background md:h-[calc(100dvh-9rem)]"
+        className="relative flex h-[calc(100dvh-7.5rem)] min-h-[30rem] overflow-hidden rounded-xl border border-border bg-background md:h-[calc(100dvh-9rem)]"
       >
         <aside
           aria-label={t('listRegion')}
@@ -571,6 +600,7 @@ export function InboxScreen() {
             activeId={selectedId}
             nowMs={nowMs}
             onOpen={(id) => open(id)}
+            onRowPriority={can.priority ? (r, p) => void setRowPriority(r, p) : undefined}
             onLoadMore={list.loadMore}
             onRefresh={() => {
               list.refresh();
@@ -587,6 +617,7 @@ export function InboxScreen() {
                     selection: bulk.selection,
                     onToggleSelecting: bulk.toggleSelecting,
                     onSelect: bulk.select,
+                    onPick: bulk.pick,
                     bar: (
                       <BulkBar
                         count={bulk.selection.size}
@@ -655,6 +686,7 @@ export function InboxScreen() {
               mode={mode}
               onMode={setMode}
               composerRef={composerRef}
+              aiModel={aiModel}
               panelOpen={panelOpen}
               onTogglePanel={togglePanel}
               onBack={back}
@@ -669,6 +701,12 @@ export function InboxScreen() {
               onRetryMessage={retryMessage}
               resolving={resolving}
               onAssignSelf={() => void assign({ userId: meId })}
+              assignMenu={{
+                meId,
+                canAssign: can.assign,
+                busy: assigning,
+                onAssign: (change) => void assign(change),
+              }}
               onRetryDetail={() => void detail.refetch()}
             />
           ) : (
@@ -679,7 +717,7 @@ export function InboxScreen() {
         {selectedId && isXl && inlineOpen && panel && (
           <aside
             aria-label={t('panelRegion')}
-            className="hidden min-h-0 w-80 shrink-0 overflow-y-auto border-s border-border xl:block thin-scrollbar"
+            className="relative hidden min-h-0 w-80 shrink-0 overflow-y-auto border-s border-border xl:block thin-scrollbar"
           >
             {panel}
           </aside>

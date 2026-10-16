@@ -102,12 +102,22 @@ export function CrmDashboardScreen() {
             </p>
           )}
         </div>
-        <Link
-          href="/deals"
-          className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-        >
-          {t('openBoard')}
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          {data?.invoices && (
+            <Link
+              href="/crm/revenue"
+              className="inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:opacity-90"
+            >
+              {t('revenueReport')}
+            </Link>
+          )}
+          <Link
+            href="/deals"
+            className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
+          >
+            {t('openBoard')}
+          </Link>
+        </div>
       </header>
 
       <FiltersBar

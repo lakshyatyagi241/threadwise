@@ -5,7 +5,8 @@ summary: Set the footer line added to the messages your workspace sends, or send
 area: settings
 order: 30
 documents: [tile:branding]
-keywords: [branding, footer, white label, signature, message footer, remove branding, platform footer]
+keywords:
+  [branding, footer, white label, signature, message footer, remove branding, platform footer]
 ---
 
 ## What it is for

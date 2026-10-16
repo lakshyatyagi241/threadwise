@@ -5,7 +5,8 @@ summary: Open one flow run to see why it ended, what it is waiting for, its step
 area: automation
 order: 32
 documents: [nav:flow-runtime]
-keywords: [flow log, run detail, step log, why it ended, failed run, retry, variables, error log, halted]
+keywords:
+  [flow log, run detail, step log, why it ended, failed run, retry, variables, error log, halted]
 ---
 
 ## What it is for

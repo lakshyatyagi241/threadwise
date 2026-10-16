@@ -129,6 +129,13 @@ export class CatalogController {
     return this.connection.autodetect();
   }
 
+  @Get('login-config')
+  @RequirePermission('cat.catalog.manage')
+  @ApiOperation({ summary: 'The Meta app and configuration for the catalog login popup' })
+  loginConfig() {
+    return this.connection.loginConfig();
+  }
+
   @Post('create')
   @HttpCode(HttpStatus.OK)
   @Idempotent()

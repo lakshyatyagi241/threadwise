@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Network-Failure Test Report</title>
+<style>
+  :root { --bg:#fff; --fg:#1b1f24; --muted:#5b6570; --line:#d8dee4; --card:#f6f8fa; --ok:#1a7f37; --warn:#9a6700; --bad:#cf222e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0d1117; --fg:#e6edf3; --muted:#8b949e; --line:#30363d; --card:#161b22; --ok:#3fb950; --warn:#d29922; --bad:#f85149; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:26px; margin:0 0 4px; } h2 { font-size:19px; margin:32px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  p, li { max-width:75ch; } .muted { color:var(--muted); }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:8px 0; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; } th { background:var(--card); }
+  code { background:var(--card); padding:1px 5px; border-radius:4px; font-size:13px; }
+  .pill { display:inline-block; padding:1px 9px; border-radius:99px; font-size:12px; font-weight:600; border:1px solid currentColor; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:12px 0; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px; } .stat b { font-size:24px; display:block; }
+</style>
+</head>
+<body>
+<main>
+<h1>Network-failure test report</h1>
+<p class="muted">QA sheet 3, item 18 &middot; P1 &middot; owner Vedant &middot; run 2026-10-15 &middot; branch <code>vedant/qa/network-failure</code> from main 8b51c01a5</p>
+
+<p><b>Target:</b> automated suite with &ge;95% P0/P1 scenario coverage and zero flaky P0 tests.
+<b>Status:</b> <span class="pill warn">In Process &mdash; the outbound HTTP half is done and fixed; outage cases for the database, Redis and queues are not</span></p>
+
+<div class="grid">
+  <div class="stat"><b>33</b>new tests (27 API + 6 web)</div>
+  <div class="stat"><b>5</b>real defects found, all 5 fixed</div>
+  <div class="stat"><b>0</b>flaky (suite runs in about 4 s)</div>
+  <div class="stat"><b>~45</b>web fetch calls still to review</div>
+</div>
+
+<h2>1. Method</h2>
+<p>A local server that misbehaves on purpose (<code>test/unit/network-failure/fault-server.ts</code>, bound to 127.0.0.1 only) is pointed at the real outbound clients. Each fault is run with a 300 ms deadline, and each run must (1) end within the deadline plus 1.2 s, (2) end with an error the caller can classify, and (3) leave no socket open on the server side.</p>
+<table>
+<tr><th>Fault</th><th>What the server does</th></tr>
+<tr><td>refused</td><td>nothing listens on the port</td></tr>
+<tr><td>reset</td><td>accepts, then drops the connection with no answer</td></tr>
+<tr><td>hang</td><td>accepts and never answers</td></tr>
+<tr><td>headers-then-hang</td><td>sends 200 and part of a body, then goes silent</td></tr>
+<tr><td>truncated</td><td>promises 1000 bytes, sends 11, closes</td></tr>
+<tr><td>drip</td><td>sends 200, then one byte every 50 ms (a slow-loris answer)</td></tr>
+<tr><td>huge</td><td>streams far more than any cap, fast</td></tr>
+<tr><td>5xx, 503 with Retry-After, bad JSON, empty 200</td><td>ordinary but awkward answers</td></tr>
+</table>
+<p>Clients tested: <code>guardedRequest</code> (customer webhooks, webhook fan-out, WooCommerce), <code>SafeFetch</code> (API Library, flow Webhook node, media), <code>WabaHttp</code> (WhatsApp Cloud API and Interakt), and the web app's proxy to the API. A ratchet test also scans every outbound call in the API and fails if a new one has no timeout.</p>
+
+<h2>2. Findings</h2>
+<table>
+<tr><th>#</th><th>Finding</th><th>Impact</th><th>Severity</th><th>Status</th></tr>
+<tr><td>N1</td><td><code>WabaHttp</code>: a 200 whose body is cut off, times out or is reset came back as <code>{}</code> and looked like a success (the read error was swallowed).</td><td>A WhatsApp call can look successful with no message id; the caller cannot tell sent from unknown.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: a read failure on a 200 is a network error (<code>WabaApiError</code>, status 0). Error statuses keep their status error.</td></tr>
+<tr><td>N2</td><td><code>guardedRequest</code> had only an idle timeout, so a target that sends a byte every few seconds was never cut off.</td><td>A tenant's own webhook endpoint could hold shared delivery workers indefinitely: one tenant degrades delivery for all.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: <code>timeoutMs</code> is an overall deadline.</td></tr>
+<tr><td>N3</td><td><code>SafeFetch</code> had the same idle-only timeout.</td><td>The same effect on flow and API Library workers, with tenant-typed URLs.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: overall deadline covering the answer and the body.</td></tr>
+<tr><td>N4</td><td><code>guardedRequest</code> kept reading an oversize answer to the end after its size cap, only discarding the bytes.</td><td>A hostile or broken target keeps a connection streaming (the server was still sending 2.7 s after the cap).</td><td><span class="pill warn">Low</span></td><td class="ok">Fixed: stops at the cap and closes the connection.</td></tr>
+<tr><td>N5</td><td>The web app's proxy to the API, and its session and token-refresh calls, had no timeout and no handling of a down API: a stalled API hung every request and page render that reads the session, and a refused connection became an unhandled 500.</td><td>The front door freezes or crashes when the backend has a bad moment.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: 30 s deadline to the first byte (a streaming body is not cut off); the proxy answers 504 <code>UPSTREAM_TIMEOUT</code> or 502 <code>UPSTREAM_UNAVAILABLE</code> with no token or address in the body.</td></tr>
+</table>
+<p>What already behaved correctly: <code>WabaHttp</code> had a total deadline, classified reset / hang / refused as status-0 network errors, and never put the bearer token in an error message. <code>guardedRequest</code> and <code>SafeFetch</code> ended correctly on refused, reset, hang, truncated and headers-then-hang.</p>
+
+<h2>3. Evidence</h2>
+<table>
+<tr><th>Check</th><th>Before the fixes</th><th>After</th></tr>
+<tr><td><code>guardedRequest</code>, <code>SafeFetch</code>: drip</td><td class="bad">test timed out at 5 s (never ended)</td><td class="ok">ends within the deadline</td></tr>
+<tr><td><code>guardedRequest</code>: oversize answer</td><td class="bad">connection still streaming after 2.7 s</td><td class="ok">closed at the cap</td></tr>
+<tr><td><code>WabaHttp</code>: headers-then-hang, truncated, drip</td><td class="bad">returned <code>{}</code> as a success (3 cases)</td><td class="ok">typed network error</td></tr>
+<tr><td>API network-failure suite</td><td>6 of 25 failed</td><td class="ok">25 / 25 and the ratchet 2 / 2</td></tr>
+<tr><td>Web proxy outage tests</td><td>did not exist (the old code threw)</td><td class="ok">6 / 6</td></tr>
+<tr><td>Related suites (SSRF, net, webhook fan-out, safe-fetch, url-fetcher)</td><td>pass</td><td class="ok">pass</td></tr>
+</table>
+
+<h2>4. Not done (why this item is not Completed)</h2>
+<ul>
+  <li><b>Database and Redis outages.</b> Not tested: what the API does when Postgres or Redis stops, restarts, or answers slowly (readiness, in-flight requests, pool recovery). It needs a running stack with containers I can stop; it was not run here.</li>
+  <li><b>Queues.</b> Worker behaviour when a job's upstream fails: retries, back-off, dead letters, duplicate sends on retry. This overlaps items 69 to 72 (owner Lakshya) and needs the real queue.</li>
+  <li><b>The other outbound clients</b> (Telegram, Facebook, payment gateways, AI vendors) use <code>AbortSignal.timeout</code>, which is a total deadline, so they pass the timeout ratchet, but their error classification was not exercised with the fault server.</li>
+  <li><b>About 45 server-side <code>fetch</code> calls in the web app</b> (feature API helpers, storefront and form proxies, dashboards) still have no timeout. Only the proxy and session calls on every request were fixed here.</li>
+  <li><b>Browser-side offline behaviour</b> (what the UI shows when the network drops) needs a browser and belongs with item 10 (Playwright).</li>
+</ul>
+
+<h2>5. Limits</h2>
+<ul>
+  <li>All faults are injected at the HTTP layer on loopback. TLS failures, DNS failure and packet loss are not simulated.</li>
+  <li>Timing assertions use a 300 ms deadline and a 1.2 s allowance; on a heavily loaded CI runner they may need a wider allowance.</li>
+  <li>A 30 s first-byte deadline in the web proxy is a judgement call; an endpoint that legitimately takes longer than 30 s to start answering would now get a 504. None is known.</li>
+</ul>
+
+<h2>6. Files</h2>
+<p>New: <code>apps/api/test/unit/network-failure/{fault-server,clients.spec,timeout-ratchet.spec}.ts</code>, <code>apps/web/src/lib/auth/{upstream.ts,upstream.test.ts}</code>. Changed: <code>apps/api/src/infra/net/guarded-http.ts</code>, <code>infra/providers/node-bridge-runtime/safe-fetch.ts</code>, <code>infra/providers/whatsapp-cloud-api-waba/waba-http.ts</code>, <code>apps/web/src/lib/auth/{proxy.ts,server.ts}</code>.</p>
+</main>
+</body>
+</html>

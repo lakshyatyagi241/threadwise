@@ -193,6 +193,37 @@ export function readInteractive(i: Doc): InteractiveRead {
   return { parts, mediaUrl, mediaKind, keep };
 }
 
+/**
+ * The buttons of a bot reply in the shape the inbox draws under a sent interactive message (`meta.sentInteractive`: type
+ * `buttons` | `cta_url`, see the message mapper). `interactive` is what `readInteractive` kept (`meta.legacy.interactive`: one object or
+ * an array), `body` the message text, which already holds header, body and footer. Waboo's buttons are `action.buttons[]`, each
+ * `{type: link | mobile | flow | live_agent, value: {text, url}}`; the text is the title. One link button alone is a `cta_url`
+ * (with its link icon); anything else is a plain list of titles (WaDesk draws no phone / flow button of its own). null: no buttons.
+ */
+export function sentInteractiveFrom(
+  interactive: unknown,
+  body: string | null,
+): Record<string, unknown> | null {
+  const list = Array.isArray(interactive) ? interactive : [interactive];
+  for (const el of list) {
+    const raw = obj(obj(el)?.action)?.buttons;
+    if (!Array.isArray(raw)) continue;
+    const buttons = raw
+      .map((b) => ({
+        type: str(obj(b)?.type),
+        title: str(obj(obj(b)?.value)?.text),
+        url: str(obj(obj(b)?.value)?.url),
+      }))
+      .filter((b): b is { type: string | null; title: string; url: string | null } => b.title !== null);
+    if (buttons.length === 0 || !body) continue;
+    const only = buttons[0]!;
+    if (buttons.length === 1 && only.type === 'link' && only.url && isUrl(only.url))
+      return { type: 'cta_url', body, text: only.title, url: only.url };
+    return { type: 'buttons', body, buttons: buttons.map((b) => ({ title: b.title })) };
+  }
+  return null;
+}
+
 /** A `share-location` element: `{type, value: {name, address, latitude, longitude, url}}`. The maps url is NOT a file. */
 function readLocation(el: Doc): { parts: string[]; keep: Record<string, unknown> } | null {
   if (str(el.type)?.toLowerCase() !== 'share-location') return null;

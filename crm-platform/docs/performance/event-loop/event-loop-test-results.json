@@ -1,0 +1,166 @@
+{
+  "ranOn": "2026-10-15, Windows 11, Node v22.17.0, repo on OneDrive (slow collect times)",
+  "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
+  "results": [
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
+      "command": "vitest run test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
+      "status": "PASSED",
+      "tests": 27,
+      "passed": 27,
+      "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
+    },
+    {
+      "suite": "apps/api/test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (booted worker module, Postgres and Redis containers)",
+      "status": "PASSED",
+      "ranOn": "2026-10-16, branch claude/event-loop-job-retries",
+      "checks": [
+        "WorkerModule initialised with lifecycle hooks (moduleRef.init(), not just compile())",
+        "more than 20 WorkerHost processors found, each with a completed and a failed listener",
+        "a real job on the tpl-sweep queue through the real TemplateSweepProcessor and a real migrated database: completed, duration and wait observed, no retries"
+      ],
+      "durationSeconds": 208,
+      "note": "The first attempt reused the full API harness (startHarness) and timed out at 240 s in beforeAll, with an afterAll that then crashed on an undefined harness. Rewritten to start only Postgres, Redis and the migrations, as the harness does, and to tolerate a failed setup. During the boot the monitor logged several 'event loop blocked' lines (max delay 287 ms to 1268 ms): that is vitest transforming TypeScript on a OneDrive disk, not the compiled worker, and says nothing about production."
+    },
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure (job-metrics.spec.ts 17 + event-loop-monitor.spec.ts 27)",
+      "status": "PASSED",
+      "tests": 44,
+      "passed": 44,
+      "ranOn": "2026-10-16",
+      "note": "A first run had 1 failure in my earlier cgroup test, which slept a fixed 50 ms for an async file read. That and the GC test (also a fixed sleep) now poll with a 5 s limit."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker, throwaway Redis)",
+      "status": "PASSED",
+      "checks": 8,
+      "note": "Adds the retries check: the retried job started twice, so crm_queue_job_retries_total is exactly 1."
+    },
+    {
+      "suite": "deploy/observability/event-loop.rules.yml with promtool v2.55.0 (docker image prom/prometheus:v2.55.0)",
+      "status": "PASSED",
+      "ranOn": "2026-10-15, branch claude/event-loop-rules-promtool",
+      "checks": [
+        "promtool check rules: SUCCESS, 11 rules found",
+        "promtool test rules event-loop.rules.test.yml: SUCCESS, 9 case groups"
+      ],
+      "mutationCheck": "On a scratch copy, loosening the API impact threshold (0.5 s to 0.0001), the worker queue threshold (30 s to 0.0001) and the stale threshold (60 s to 6000) each made the matching case FAIL (EventLoopBlockingWithImpact, WorkerEventLoopBlockingWithQueueImpact, RuntimeMetricsStale). The suite can fail.",
+      "note": "Synthetic series only. NOT shown: a real Prometheus scraping a real process, label sets as the app emits them, delivery to a receiver."
+    },
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure/job-metrics.spec.ts",
+      "status": "PASSED",
+      "tests": 15,
+      "passed": 15,
+      "ranOn": "2026-10-15, branch claude/event-loop-job-metrics",
+      "note": "Run together with event-loop-monitor.spec.ts: 42/42. Includes one test that boots a real Nest application context to check the module wiring. Typecheck of the app config and ESLint of the changed API files are clean."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker, throwaway redis:7-alpine in Docker)",
+      "status": "PASSED",
+      "checks": 7,
+      "note": "The first run FAILED 4 of 7 and found a bug (a promoted delayed job's delay was counted as queue wait, because BullMQ resets job.delay to 0) and a wrong assumption (BullMQ emits failed/completed only at a job's final state). Both fixed, rerun 7/7. Uses the library's own worker, not the app's processors: the booted app worker has NOT been run."
+    },
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure (all 7 files)",
+      "status": "PASSED",
+      "tests": 162,
+      "passed": 162,
+      "note": "Run before the code-review fixes, when the monitor spec had 24 tests."
+    },
+    {
+      "suite": "apps/api/test/unit/contacts-attributes-tags/bulk-and-filter.spec.ts",
+      "status": "PASSED",
+      "tests": 22,
+      "passed": 22,
+      "note": "Covers the contact bulk code changed by EL-001; it does not call downloadExport or the export save, so the async zlib path itself is covered only by the byte-equivalence check below."
+    },
+    {
+      "suite": "async zlib equivalence (scratch script, not committed)",
+      "status": "PASSED",
+      "detail": "gzip async output byte-identical to gzipSync and round-trips, 6 inputs from 0 B to 23.6 MB"
+    },
+    {
+      "suite": "apps/api full unit suite",
+      "command": "vitest run test/unit",
+      "status": "FAILED (8 tests in 2 files, none touching this change)",
+      "tests": 9360,
+      "passed": 9350,
+      "failed": 8,
+      "skipped": 2,
+      "files": { "passed": 598, "failed": 2 },
+      "failures": [
+        {
+          "file": "test/unit/infra/boundaries.matrix.spec.ts",
+          "tests": 4,
+          "reason": "outbox consumer files (calling-voice, flow-runtime-engine) are reported as neither explained nor listed in the idempotency audit; paths print with backslashes"
+        },
+        {
+          "file": "test/unit/security/encryption-audit.spec.ts",
+          "tests": 4,
+          "reason": "offenders are crypto.service.ts, india.drivers.ts and seal.ts, printed as common\\\\crypto\\\\crypto.service.ts against forward-slash allow-lists (Windows path separator)"
+        }
+      ],
+      "attribution": "The offending files are not ones this change touches, and the path form matches the known Windows separator problems in this repo. Not re-run on main to prove it; treat as environment/other-work failures, not as passed.",
+      "note": "Run before the code-review fixes."
+    },
+    {
+      "suite": "tsc app config (apps/api tsconfig.json)",
+      "status": "PASSED",
+      "note": "No errors, run after the fixes."
+    },
+    {
+      "suite": "tsc spec config (apps/api tsconfig.spec.json)",
+      "status": "FAILED elsewhere",
+      "note": "Two errors in test/integration/catalog-products/variant-channels.spec.ts and test/unit/chrome-extension-sheets-addon/addon-source.spec.ts, neither touched here. No error in the files of this change."
+    },
+    { "suite": "eslint on changed API files", "status": "PASSED" },
+    {
+      "suite": "dependency-cruiser (pnpm --filter @crm/api arch)",
+      "status": "PASSED",
+      "note": "0 errors, 3 existing no-orphans warnings"
+    },
+    {
+      "suite": "event-loop static gate (scan.mjs --check)",
+      "status": "PASSED",
+      "detail": "31 baselined runtime suspects; fails (exit 1) on an injected new fs call, on a same-count swap, and on a while(true) whose only return is inside a callback"
+    },
+    {
+      "suite": "audit:tenancy --static / audit:authz / audit:auth",
+      "status": "NOT A PASS FOR THIS CHANGE",
+      "note": "Existing findings only: TI-xxx backlog, and public-route-drift for 3 consent/forms routes already on main. No new finding from this change."
+    },
+    {
+      "suite": "pnpm audit --prod --audit-level high",
+      "status": "2 existing high advisories",
+      "note": "No dependency or lockfile change in this work."
+    },
+    {
+      "suite": "pre-pr gate (gate.sh)",
+      "status": "NOT RUN as a whole",
+      "note": "Its parts were run individually as listed. The web typecheck, i18n and web-lint steps were not run."
+    }
+  ],
+  "benchmarks": [
+    {
+      "name": "monitor overhead and detection",
+      "file": "evidence/bench-monitor.json",
+      "status": "RAN",
+      "caveat": "bare http server, same machine as the load generator"
+    },
+    {
+      "name": "sync vs async zlib loop hold",
+      "file": "evidence/zlib-hold.json",
+      "status": "RAN",
+      "caveat": "synthetic NDJSON, one machine"
+    }
+  ],
+  "notVerified": [
+    "Prometheus rules (promtool)",
+    "scrape of a real container",
+    "dashboards",
+    "any load, spike or soak test of the real application",
+    "queue job metrics",
+    "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
+  ]
+}

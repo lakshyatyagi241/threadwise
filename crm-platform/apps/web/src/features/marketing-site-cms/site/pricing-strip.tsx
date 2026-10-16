@@ -47,7 +47,7 @@ function Card({ card, yearly, href }: { card: PricingCard; yearly: boolean; href
       {hl && (
         <>
           <div className="dot-pattern absolute inset-0 opacity-15" />
-          <div className="blur-bub absolute -right-32 -top-32 h-[300px] w-[300px] rounded-full bg-wa-green/20" />
+          <div className="blur-bub absolute -end-32 -top-32 h-[300px] w-[300px] rounded-full bg-wa-green/20" />
         </>
       )}
       <div className="relative flex flex-1 flex-col">

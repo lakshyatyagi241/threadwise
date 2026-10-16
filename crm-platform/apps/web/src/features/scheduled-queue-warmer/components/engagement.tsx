@@ -121,6 +121,8 @@ export function RecipientsTable({
   totalRecipients: number;
 }) {
   const t = useTranslations('scheduled-queue-warmer.detail');
+  // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
+  const tHold = useTranslations('compliance-center.hold');
   const errorText = useErrorText();
   const [status, setStatus] = useState<(typeof RECIPIENT_FILTERS)[number]>('all');
   const [text, setText] = useState('');
@@ -155,6 +157,11 @@ export function RecipientsTable({
             {t('recipients.eyebrow')}
           </div>
           <h2 className="text-lg font-semibold">{t('recipients.title')}</h2>
+          {(counts.held ?? 0) > 0 && (
+            <p className="mt-0.5 text-xs text-warning" data-testid="recipients-held-count">
+              {tHold('heldCount', { count: counts.held ?? 0 })}
+            </p>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Input
@@ -244,7 +251,14 @@ export function RecipientsTable({
                       {when ? formatWhen(when, timezone) : '—'}
                     </td>
                     <td className="px-4 py-2.5 text-[11.5px] text-muted-foreground">
-                      {r.error ?? '—'}
+                      {r.error ??
+                        (r.heldUntil ? (
+                          <span className="text-warning" data-testid="recipient-held">
+                            {tHold('heldUntil', { when: formatWhen(r.heldUntil, timezone) })}
+                          </span>
+                        ) : (
+                          '—'
+                        ))}
                     </td>
                   </tr>
                 );

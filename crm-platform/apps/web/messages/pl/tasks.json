@@ -100,7 +100,8 @@
       "views": {
         "list": "Lista",
         "board": "Tablica wg terminu"
-      }
+      },
+      "linkCompany": "Firma"
     },
     "table": {
       "scrollArea": "Tabela zadań",
@@ -204,7 +205,8 @@
         "notesTooLong": "Notatki są za długie (maksymalnie 5000 znaków).",
         "dueInvalid": "Ta data jest nieprawidłowa.",
         "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej."
-      }
+      },
+      "company": "Firma"
     },
     "drawer": {
       "loading": "Wczytywanie zadania",
@@ -268,7 +270,8 @@
       "searching": "Wyszukiwanie",
       "unavailable": "Wyszukiwanie jest teraz niedostępne.",
       "none": "Brak wyników.",
-      "unlink": "Usuń powiązanie"
+      "unlink": "Usuń powiązanie",
+      "searchCompany": "Szukaj firm"
     },
     "errors": {
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -323,7 +326,8 @@
       "loadMore": "Wczytaj więcej",
       "loadMoreDone": "Wczytaj więcej ukończonych",
       "showDone": "Pokaż ukończone",
-      "hideDone": "Ukryj ukończone"
+      "hideDone": "Ukryj ukończone",
+      "gone": "Rekord, do którego należą te zadania, nie jest już dostępny."
     }
   }
 }

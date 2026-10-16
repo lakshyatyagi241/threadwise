@@ -348,7 +348,10 @@
       "ownerMe": "{name} (saya)",
       "ownerFormer": "Mantan anggota",
       "ownerHelp": "Siapa yang menangani kontak ini. Anda hanya dapat memilih orang yang diizinkan oleh akses Anda.",
-      "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut."
+      "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
+      "company": "Perusahaan",
+      "companyHint": "Mengelompokkan kontak ini di bawah sebuah organisasi.",
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom."
     },
     "tags": {
       "title": "Tag",
@@ -1279,6 +1282,14 @@
       "number": "Kirim dari",
       "numberHint": "Nomor WhatsApp yang digunakan untuk mengirim pesan.",
       "noChannel": "Belum ada nomor WhatsApp yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
+      "mailbox": "Kirim dari",
+      "mailboxPlaceholder": "Pilih kotak surat",
+      "mailboxHint": "Kotak surat yang terhubung dan menjadi sumber pengiriman email.",
+      "noMailbox": "Belum ada kotak surat yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
+      "subject": "Subjek",
+      "subjectPlaceholder": "Ini tentang apa?",
+      "body": "Pesan",
+      "bodyPlaceholder": "Tulis email Anda…",
       "template": "Templat WhatsApp",
       "templatePlaceholder": "Pilih templat",
       "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
@@ -1295,12 +1306,10 @@
       "callPermission": "Kontak belum mengizinkan panggilan. Izin mereka akan diminta lebih dulu sebelum menelepon.",
       "callReady": "Siap menelepon {phone}.",
       "later": {
-        "sms": "Pengiriman SMS dari CRM belum tersedia.",
-        "email": "Pengiriman email dari CRM belum tersedia."
+        "sms": "Pengiriman SMS dari CRM belum tersedia."
       },
       "openApp": {
-        "sms": "Buka di aplikasi pesan Anda",
-        "email": "Buka di aplikasi email Anda"
+        "sms": "Buka di aplikasi pesan Anda"
       }
     },
     "views": {

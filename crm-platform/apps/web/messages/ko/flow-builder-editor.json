@@ -717,7 +717,8 @@
             "ask": "고객에게 질문",
             "handoff": "인계",
             "logic": "결정",
-            "answer": "답변"
+            "answer": "답변",
+            "action": "액션"
           },
           "blockedTitle": "버튼과 목록은 플로우를 끝내므로 마지막에만 둘 수 있습니다.",
           "blockedTitleFaq": "FAQ로 답변에는 출구가 두 개 있어 맨 마지막에만 둘 수 있습니다."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "답변함",
             "no_match": "일치 없음"
-          }
+          },
+          "close": "닫기",
+          "clickToEdit": "클릭하여 편집",
+          "outsideToSave": "변경 사항을 저장하려면 바깥 아무 곳이나 클릭하세요",
+          "addCondition": "이 단계 뒤에 조건 추가",
+          "conditionLast": "조건은 이 부분을 끝내므로 맨 끝에만 둘 수 있습니다.",
+          "duplicateTitle": "이 단계를 복제할까요?",
+          "duplicateBody": "바로 뒤에 사본이 추가됩니다.",
+          "deleteTitle": "이 단계를 삭제할까요?",
+          "deleteBody": "단계가 플로우에서 제거됩니다.",
+          "stage": "단계 {stage}",
+          "storedIn": "값은 연락처의 <b>{property}</b> 속성에 저장됩니다",
+          "actions": "액션",
+          "actionsHint": "이 단계 바로 뒤에 실행되는 단계를 추가합니다.",
+          "actionsBlocked": "자기 부분을 끝내는 단계 뒤에는 다른 단계가 올 수 없습니다."
         },
         "editors": {
           "linkLabel": "연결 대상",
@@ -1317,7 +1332,8 @@
             "date_field_match": "예약: 연락처의 날짜 기준(생일 등)",
             "schedule": "예약: 특정 날짜와 시간",
             "shopify_event": "커머스: Shopify 스토어 이벤트",
-            "woocommerce_event": "커머스: WooCommerce 스토어 이벤트"
+            "woocommerce_event": "커머스: WooCommerce 스토어 이벤트",
+            "segment_leave": "오디언스: 연락처가 세그먼트에서 나갈 때"
           },
           "tagsLoading": "태그를 불러오는 중…",
           "tagPick": "— 태그 선택 —",
@@ -1411,7 +1427,8 @@
             "productId": "상품 ID (선택 사항)",
             "productIdHint": "비워 두면 주문의 모든 상품에 해당합니다.",
             "storeNote": "고객은 전화번호로 저장된 연락처와 매칭됩니다. 주문으로 새 연락처가 만들어지지는 않습니다. “장바구니 담기”와 “상품 조회”는 제공되지 않습니다. 스토어에서 해당 이벤트를 전달하지 않기 때문입니다.",
-            "updatedNote": "사람이 직접 또는 가져오기로 연락처를 변경할 때마다 실행됩니다. 다른 플로우가 한 변경으로는 시작되지 않습니다."
+            "updatedNote": "사람이 직접 또는 가져오기로 연락처를 변경할 때마다 실행됩니다. 다른 플로우가 한 변경으로는 시작되지 않습니다.",
+            "segmentLeaveHint": "이 세그먼트 안에 있던 연락처가 업데이트, 태그 지정 또는 목록 추가 후 세그먼트 밖에 있는 것으로 확인될 때마다 한 번 실행됩니다. 연락처가 나간 것은 플로우가 먼저 세그먼트 안에 있는 것을 확인한 경우에만 감지됩니다."
           }
         }
       },
@@ -1701,7 +1718,21 @@
           "setupOpen": "폼 열기 → <mono>⋮ 메뉴</mono> → <mono>스크립트 편집기</mono>",
           "setupDownload": "<link>스크립트(.gs) 다운로드</link> 후 붙여넣기",
           "setupTrigger": "트리거 추가: <mono>onFormSubmit</mono> · 폼에서 · 폼 제출 시",
-          "setupWarning": "이 스크립트가 없으면 폼 응답은 Google 폼에 기록되지만 플로우는 재개되지 않습니다."
+          "setupWarning": "이 스크립트가 없으면 폼 응답은 Google 폼에 기록되지만 플로우는 재개되지 않습니다.",
+          "noListing": "Google 계정 페이지에서 Drive 파일 목록 권한이 부여되지 않아 파일을 나열할 수 없습니다. 대신 링크나 ID를 붙여 넣으세요.",
+          "connection": {
+            "open": "Google 계정 열기",
+            "permission": {
+              "calendar": "캘린더",
+              "sheets": "Sheets",
+              "docs": "Docs 및 Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "이 플랫폼에는 Google이 설정되어 있지 않아 플로우를 실행하면 이 단계가 실패합니다.",
+            "disconnected": "연결된 Google 계정이 없어 플로우를 실행하면 이 단계가 실패합니다. 먼저 Google을 연결해 주세요.",
+            "needsReconnect": "연결된 계정을 Google이 더 이상 허용하지 않아 플로우를 실행하면 이 단계가 실패합니다. 먼저 Google을 다시 연결해 주세요.",
+            "missing": "연결된 Google 계정에 {permission} 권한이 부여되지 않아 플로우를 실행하면 이 단계가 실패합니다."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1983,42 @@
         "label": "아이콘(선택 사항)",
         "add": "아이콘 추가",
         "saveFirst": "아이콘을 추가하려면 봇을 한 번 저장하세요."
+      },
+      "buttonAction": {
+        "label": "버튼을 눌렀을 때 동작",
+        "kind": {
+          "none": "다음 단계로 이동",
+          "flow": "플로우 연결",
+          "live_agent": "라이브 상담원",
+          "opt_in": "수신 동의",
+          "opt_out": "수신 거부"
+        },
+        "pickFlow": "플로우 선택",
+        "loadingFlows": "플로우 불러오는 중…",
+        "flowMissing": "플로우 {id} (찾을 수 없음)",
+        "hint": {
+          "flow": "이 연락처에 대해 선택한 플로우를 시작하며, 대화는 그곳에서 이어집니다. 이 버튼 뒤에는 아무것도 연결되지 않습니다.",
+          "live_agent": "선택한 팀에 대화를 넘깁니다. 이 버튼 뒤에는 아무것도 연결되지 않습니다.",
+          "opt_in": "연락처를 마케팅 메시지 수신 동의로 표시한 뒤, 이 버튼 뒤에 연결된 단계로 이어집니다.",
+          "opt_out": "연락처를 마케팅 메시지 수신 거부로 표시한 뒤, 이 버튼 뒤에 연결된 단계로 이어집니다."
+        }
+      },
+      "messageTools": {
+        "format": "텍스트 서식",
+        "bold": "굵게",
+        "italic": "기울임",
+        "strike": "취소선",
+        "mono": "고정폭",
+        "bullet": "글머리 기호 목록",
+        "numbered": "번호 목록",
+        "emoji": "이모지",
+        "emojiSearch": "이모지 검색",
+        "emojiNone": "이모지를 찾을 수 없습니다",
+        "variable": "변수 삽입",
+        "variableSearch": "변수 검색",
+        "groupContact": "연락처 속성",
+        "groupFlow": "이 플로우에 저장됨",
+        "variableNone": "변수를 찾을 수 없습니다"
       }
     },
     "contracts": {
@@ -2316,7 +2383,8 @@
         "date_field_match": "날짜 일치 시",
         "schedule": "일정 시",
         "shopify_event": "Shopify 이벤트 발생 시",
-        "woocommerce_event": "WooCommerce 이벤트 발생 시"
+        "woocommerce_event": "WooCommerce 이벤트 발생 시",
+        "segment_leave": "세그먼트 이탈 시"
       },
       "ports": {
         "manual": "수동",
@@ -2470,6 +2538,14 @@
         "faq": {
           "label": "FAQ로 답변",
           "help": "고객 메시지를 FAQ와 대조합니다. 이 플로를 끝냅니다. FAQ가 답변하면 한 출구, 아니면 다른 출구로 나갑니다"
+        },
+        "apiLibrary": {
+          "label": "API 호출",
+          "help": "API 라이브러리의 API를 호출합니다"
+        },
+        "code": {
+          "label": "JS 함수",
+          "help": "작은 JavaScript 코드를 실행합니다"
         }
       },
       "typeLabel": {
@@ -2487,7 +2563,9 @@
         "assign": "상담원에게 배정",
         "carousel": "캐러셀",
         "condition": "조건",
-        "faq": "FAQ로 답변"
+        "faq": "FAQ로 답변",
+        "api_library": "API 호출",
+        "code": "JS 함수"
       },
       "stepLabel": {
         "questionOf": "질문 · {kind}"
@@ -2528,7 +2606,10 @@
         "carouselCards": "단계 {stage}: 카드를 하나 이상 추가하고 모든 카드에 제목을 지정하세요.",
         "carouselButtons": "단계 {stage}: 모든 버튼에 이름을 지정하고, 무언가를 여는 버튼에는 링크, 번호 또는 주소를 입력하세요.",
         "conditionIncomplete": "단계 {stage}: 조건의 규칙을 완성하세요(각 규칙에 변수와 값).",
-        "faqMinScore": "{stage}단계: 최소 점수는 0.05~0.99여야 합니다. 또는 플로우 설정을 사용하세요."
+        "faqMinScore": "{stage}단계: 최소 점수는 0.05~0.99여야 합니다. 또는 플로우 설정을 사용하세요.",
+        "chooseFlow": "단계 {stage}: 버튼이 시작할 플로우를 선택하세요.",
+        "chooseApi": "단계 {stage}: 호출할 API를 선택하세요.",
+        "writeCode": "단계 {stage}: 실행할 코드를 작성하세요."
       },
       "faqSummary": "{hasCategory, select, true {내 FAQ에서 · {category}} other {내 FAQ에서}}"
     },

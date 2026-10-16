@@ -165,7 +165,7 @@
             "unset": "Responda à pergunta sobre crianças em Contatos e menores.",
             "minorsNoParental": "Pode haver menores, mas o consentimento dos pais ou responsáveis está desativado. Este perfil considera menor qualquer pessoa com menos de {age} anos.",
             "no_minors": "Você não trata, de forma consciente, dados de menores. Este perfil considera menor qualquer pessoa com menos de {age} anos.",
-            "may_include_minors": "O consentimento dos pais ou responsáveis está ativado para pessoas com menos de {age} anos. Guardar a evidência por contato ainda não está disponível."
+            "may_include_minors": "O consentimento dos pais está ativado para pessoas com menos de {age} anos. Marque um contato como menor no cartão de consentimento dele e registre ali o consentimento do responsável."
           }
         },
         "opt_out_notice": {
@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Horário de silêncio e janelas de chamadas ainda não são aplicados",
+          "title": "Horário de silêncio e janelas de chamadas são aplicados",
           "detail": {
-            "notEnforced": "Seu horário de silêncio e sua janela de chamadas estão salvos, mas nada retém uma mensagem nem bloqueia uma chamada fora deles por enquanto. Planeje-se por conta própria."
+            "enforced": "As mensagens de marketing dentro do seu horário de silêncio ficam retidas até ele terminar, e uma ligação fora da sua janela de chamadas é recusada informando quando ela abre. Respostas dentro da janela de 24 horas e avisos utilitários nunca são retidos. O registro DND é apenas uma anotação: nada é verificado nele ainda."
           }
         }
       }
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Dados de crianças e adolescentes",
-        "hint": "Este produto é para empresas. Informe se você pode ter dados de menores, para que as regras certas sejam exibidas.",
+        "hint": "Este produto é para empresas. Diga se você pode manter dados de menores, para que as regras certas sejam mostradas. Depois de responder, o marketing para um contato marcado como menor fica retido: sempre que você não trata dados de menores de propósito, e até o consentimento do responsável estar registrado quando menores podem estar incluídos.",
         "policy": "Menores entre os seus contatos",
         "policies": {
           "unset": "Ainda sem resposta",
@@ -352,7 +352,7 @@
           "may_include_minors": "Pode haver menores entre os nossos contatos"
         },
         "parental": "O consentimento dos pais ou responsáveis é exigido para menores",
-        "parentalHint": "Um indicador que registra a sua política. Coletar e guardar a evidência do consentimento dos pais ou responsáveis por contato ainda não está disponível.",
+        "parentalHint": "Registra sua política e retém o marketing para contatos marcados como menores até o consentimento do responsável estar registrado. Você marca um contato como menor e registra esse consentimento no cartão de consentimento dele.",
         "age": "Os perfis que você ativou tratam como menor qualquer pessoa com menos de {age} anos.",
         "dpdpNeedsAnswer": "O perfil DPDP pede que você responda a esta pergunta."
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Estas configurações são salvas, mas ainda não são aplicadas. Nenhuma mensagem é retida e nenhuma chamada é bloqueada fora do horário que você definir. Planeje seus envios e chamadas em torno delas.",
-      "intro": "Algumas regras restringem quando mensagens e chamadas de marketing podem chegar às pessoas. Registre aqui o seu horário de trabalho.",
+      "intro": "Algumas regras limitam quando mensagens de marketing e ligações podem chegar às pessoas. Defina seus horários aqui: uma mensagem de marketing enviada no horário de silêncio espera e sai quando ele termina, e uma ligação fora da janela de chamadas não é feita.",
       "quiet": {
         "title": "Horário de silêncio para mensagens",
-        "hint": "Horário em que você não quer que mensagens de marketing cheguem às pessoas. O período pode atravessar a meia-noite.",
+        "hint": "Horas em que mensagens de marketing não saem. Elas esperam e são enviadas quando o período termina. O período pode atravessar a meia-noite.",
         "enabled": "Horário de silêncio ativado",
         "start": "Silêncio a partir de",
         "end": "Silêncio até"
       },
       "calling": {
         "title": "Janela de chamadas",
-        "hint": "Os únicos horários em que chamadas de marketing devem ser feitas, nos dias que você escolher.",
+        "hint": "As únicas horas em que ligações de marketing são feitas, nos dias que você escolher. Uma ligação fora delas é recusada e informa quando a janela abre.",
         "enabled": "Janela de chamadas ativada",
         "start": "Chamadas a partir de",
         "end": "Chamadas até",
@@ -407,8 +406,8 @@
       },
       "suggested": "As leis que você ativou sugerem das {start} às {end}.",
       "zone": {
-        "label": "Fuso horário",
-        "hint": "Os horários são lidos neste fuso. O fuso do seu espaço de trabalho é {zone}.",
+        "label": "Fuso horário de reserva",
+        "hint": "As horas são lidas no relógio do próprio contato: a propriedade de fuso horário dele ou, se não houver, o código do país do número. Este fuso é usado quando nenhum dos dois é conhecido. O fuso do seu espaço de trabalho é {zone}.",
         "workspace": "Fuso horário do espaço de trabalho ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Sua própria lista"
         },
         "note": "É apenas uma nota. Nada é conferido em nenhum cadastro ainda."
-      }
+      },
+      "enforcedNote": "O horário de silêncio retém uma mensagem de marketing até terminar, e a janela de chamadas recusa uma ligação fora dela. O relógio de cada contato é usado. Respostas dentro da janela de 24 horas e avisos utilitários nunca são retidos."
     },
     "subprocessors": {
       "intro": "Os fornecedores que tratam dados pessoais para o seu espaço de trabalho: o que fazem, que dados recebem e onde. Você pode publicar a lista em uma página pública.",
@@ -487,6 +487,10 @@
       "privacy": "Política de privacidade",
       "terms": "Termos",
       "notFound": "Página não encontrada"
+    },
+    "hold": {
+      "heldUntil": "Retido até {when} (horário de silêncio)",
+      "heldCount": "{count} retidas pelo horário de silêncio"
     }
   }
 }

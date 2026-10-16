@@ -41,7 +41,10 @@
       "notStarted": "Cela n’est possible qu’une fois la réservation commencée.",
       "alreadyStarted": "Cette réservation a déjà commencé, elle ne peut donc plus être modifiée.",
       "bookingOff": "La réservation n’est pas disponible pour ce service pour le moment.",
-      "notDeletable": "Impossible de le supprimer tant qu’il a des réservations à venir."
+      "notDeletable": "Impossible de le supprimer tant qu’il a des réservations à venir.",
+      "notDrifted": "Cette réservation correspond déjà à son événement Google. Elle a été rechargée.",
+      "calendarNotConnected": "Google Calendar n'est pas connecté. Reconnectez-le depuis la page du compte Google, puis réessayez.",
+      "calendarFailed": "Google n'a pas répondu ou a refusé la modification. Réessayez dans un instant."
     },
     "picker": {
       "timeZone": "Fuseau horaire",
@@ -156,7 +159,8 @@
       "yesterday": "Hier",
       "rowLabel": "Ouvrir la réservation : {title}",
       "noName": "Sans nom",
-      "needsReview": "À examiner"
+      "needsReview": "À examiner",
+      "outOfSync": "Calendrier désynchronisé"
     },
     "row": {
       "moreFor": "Plus d’actions pour {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Réservation déplacée au nouveau créneau.",
       "linkCopied": "Lien de gestion copié.",
       "copyFailed": "Le lien n’a pas pu être copié.",
-      "declined": "Demande refusée."
+      "declined": "Demande refusée.",
+      "calendarPushed": "Envoyé à Google : l'événement correspond maintenant à cette réservation.",
+      "calendarAccepted": {
+        "cancelled": "Modification de Google acceptée : la réservation a été annulée.",
+        "rescheduled": "Modification de Google acceptée : la réservation a été déplacée au nouvel horaire.",
+        "acknowledged": "Modification de Google acceptée. La réservation reste inchangée."
+      }
     },
     "typesList": {
       "breadcrumb": "Fil d’Ariane",
@@ -962,7 +972,7 @@
         "calendarSaved": "Calendrier enregistré.",
         "confirmOff": {
           "title": "Déconnecter Google Calendar ?",
-          "message": "Les nouvelles réservations ne vont plus dans votre calendrier et ses créneaux occupés ne sont plus lus. Les événements déjà présents dans votre calendrier y restent, et Google est invité à retirer cet accès.",
+          "message": "Les nouvelles réservations ne vont plus dans votre calendrier et ses créneaux occupés ne sont plus lus. Les étapes Google de vos flux s’arrêtent aussi, car elles partagent cette connexion. Les événements déjà présents dans votre calendrier y restent, et Google est invité à retirer cet accès.",
           "confirm": "Déconnecter",
           "cancel": "Le conserver"
         },
@@ -972,7 +982,8 @@
           "failed": "La connexion ne s’est pas terminée. Réessayez ; si l’échec persiste, demandez à l’administrateur de votre plateforme de vérifier la configuration Google.",
           "expired": "Cette tentative a pris trop de temps. Appuyez sur Connecter pour recommencer.",
           "not_configured": "Google Calendar n’est pas configuré pour cette plateforme. Demandez à l’administrateur de votre plateforme d’ajouter le client OAuth Google.",
-          "missing_scope": "Google n’a pas accordé toutes les autorisations de calendrier nécessaires. Reconnectez-vous en gardant toutes les cases cochées."
+          "missing_scope": "Google n’a pas accordé toutes les autorisations de calendrier nécessaires. Reconnectez-vous en gardant toutes les cases cochées.",
+          "cancelled": "Vous avez annulé. Rien n'a été connecté."
         },
         "whatTitle": "Ce que cela fait",
         "what": {
@@ -1046,7 +1057,200 @@
         "badHours": "Corrigez les heures en surbrillance dans les horaires d’ouverture."
       },
       "notAvailable": "Les paramètres de réservation à l’échelle de l’espace de travail ne sont pas disponibles sur ce serveur. Chaque type de réservation porte à la place ses propres horaires, fuseau horaire, rappels et messages.",
-      "openTypes": "Ouvrir les types de réservation"
+      "openTypes": "Ouvrir les types de réservation",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Connectez un calendrier Microsoft pour que les réservations confirmées y soient inscrites et que ses périodes d’occupation bloquent les créneaux.",
+        "provider": "Calendrier Outlook",
+        "providerSub": "Microsoft 365 et Outlook.com",
+        "status": {
+          "unavailable": "Non disponible",
+          "disconnected": "Non connecté",
+          "connected": "Connecté",
+          "needs_reconnect": "Reconnexion nécessaire"
+        },
+        "loading": "Vérification de la connexion",
+        "unavailableTitle": "Outlook n’est pas encore configuré pour cette plateforme",
+        "unavailableBody": "L’administrateur de votre plateforme doit enregistrer l’application Microsoft (Admin, Paramètres, Microsoft Calendar) avant qu’un espace de travail puisse se connecter. Vos réservations ne sont pas affectées.",
+        "disconnectedBody": "Non connecté. La connexion ouvre Microsoft, où vous choisissez le compte et acceptez de partager l’accès au calendrier.",
+        "disconnectedReadOnly": "Non connecté. Demandez à un administrateur de l’espace de travail de le connecter.",
+        "reconnectTitle": "Microsoft n’accepte plus la connexion",
+        "reconnectBody": "L’accès a été retiré ou a expiré : les réservations ne sont plus inscrites dans votre calendrier et ses périodes d’occupation ne sont plus lues. Reconnectez-vous pour reprendre.",
+        "reconnectBodyAccount": "L’accès de {account} a été retiré ou a expiré : les réservations ne sont plus inscrites dans votre calendrier et ses périodes d’occupation ne sont plus lues. Reconnectez-vous pour reprendre.",
+        "account": "Compte Microsoft",
+        "calendar": "Calendrier",
+        "primaryCalendar": "Votre calendrier principal",
+        "connectedAgo": "Connecté {when}",
+        "writesHere": "Les réservations confirmées sont inscrites dans ce calendrier.",
+        "readsOnly": "Seules ses périodes d’occupation sont lues. Les réservations sont inscrites dans votre autre calendrier.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft limite les requêtes. Les réservations sont renvoyées automatiquement.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft a refusé l’accès à ce calendrier. Vérifiez que le compte possède une boîte aux lettres et peut partager son calendrier.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft n’a pas répondu. Une nouvelle tentative est faite automatiquement."
+        },
+        "errors": {
+          "notConfigured": "Outlook n’est pas configuré pour cette plateforme. Demandez à l’administrateur de votre plateforme d’enregistrer l’application Microsoft.",
+          "notConnected": "Aucun calendrier Outlook n’est connecté. Rechargez la page et reconnectez-vous.",
+          "providerFailed": "Microsoft n’a pas répondu. Réessayez dans un instant.",
+          "notYours": "Cette connexion a été lancée par quelqu’un d’autre, donc rien n’a été connecté. Demandez-lui de se connecter, ou appuyez vous-même sur Connecter.",
+          "invalidTicket": "Cette connexion ne peut plus être confirmée. Appuyez sur Connecter pour recommencer."
+        },
+        "loadingCalendars": "Chargement de vos calendriers",
+        "chooseLabel": "Inscrire les réservations dans",
+        "chooseHint": "Seuls les calendriers que ce compte peut modifier sont listés. Les événements déjà inscrits restent où ils sont.",
+        "choosePlaceholder": "Choisir un calendrier",
+        "chooseOptionPrimary": "{name} (calendrier principal)",
+        "chooseSave": "Utiliser ce calendrier",
+        "chooseCancel": "Annuler",
+        "saving": "Enregistrement",
+        "connect": "Connecter Outlook",
+        "reconnect": "Reconnecter Outlook",
+        "redirecting": "Ouverture de Microsoft",
+        "choose": "Choisir le calendrier",
+        "disconnect": "Déconnecter",
+        "disconnected": "Outlook déconnecté.",
+        "calendarSaved": "Calendrier enregistré.",
+        "confirm": {
+          "title": "Connecter ce compte Microsoft ?",
+          "body": "Microsoft vous a renvoyé ici pour terminer la connexion d’un compte à {workspace}. Ne continuez que si vous avez lancé cette opération vous-même il y a un instant.",
+          "confirm": "Connecter",
+          "working": "Connexion en cours",
+          "cancel": "Annuler"
+        },
+        "confirmOff": {
+          "title": "Déconnecter Outlook ?",
+          "message": "Les nouvelles réservations ne seront plus inscrites dans votre calendrier Outlook et ses périodes d’occupation ne seront plus lues. Les événements déjà présents dans votre calendrier y restent. Pour retirer l’autorisation côté Microsoft, supprimez l’application dans votre compte Microsoft.",
+          "confirm": "Déconnecter",
+          "cancel": "Conserver"
+        },
+        "outcome": {
+          "connected": "Outlook est connecté. Les réservations confirmées sont désormais inscrites dans votre calendrier.",
+          "denied": "L’accès n’a pas été accordé sur Microsoft, donc rien n’a été connecté.",
+          "failed": "La connexion n’a pas abouti. Réessayez ; si le problème persiste, demandez à l’administrateur de votre plateforme de vérifier l’application Microsoft.",
+          "expired": "Cette tentative a pris trop de temps. Appuyez sur Connecter pour recommencer.",
+          "not_configured": "Outlook n’est pas configuré pour cette plateforme. Demandez à l’administrateur de votre plateforme d’enregistrer l’application Microsoft.",
+          "missing_scope": "Microsoft n’a pas accordé l’autorisation d’accès au calendrier nécessaire. Reconnectez-vous en laissant toutes les cases cochées.",
+          "cancelled": "Vous avez annulé. Rien n’a été connecté."
+        },
+        "whatTitle": "À quoi cela sert",
+        "what": {
+          "freeBusy": "Lit les périodes d’occupation de votre calendrier pour ne pas proposer les horaires réservés ou bloqués.",
+          "writeBack": "Inscrit les réservations confirmées dans votre calendrier sous forme d’événements et invite le client.",
+          "teams": "Ajoute un lien de réunion Teams aux services en ligne (comptes professionnels et scolaires)."
+        },
+        "hint": "Les réservations fonctionnent sans cela. Si Google est aussi connecté, les périodes d’occupation sont lues dans les deux et chaque réservation est inscrite dans l’un d’eux."
+      },
+      "writeTarget": {
+        "title": "Où les réservations sont inscrites",
+        "description": "Les périodes d’occupation sont lues dans chaque calendrier connecté. Chaque réservation est inscrite dans l’un d’eux.",
+        "label": "Inscrire les réservations dans",
+        "hint": "Automatique utilise Google Calendar lorsqu’il fonctionne, sinon Outlook. Le changement déplace les événements des réservations à venir vers le calendrier choisi.",
+        "auto": "Automatique",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "non connecté",
+        "saved": "Enregistré.",
+        "backfill": {
+          "body": "{count, plural, one {# réservation confirmée des 90 prochains jours n’est pas encore} many {# de réservations confirmées des 90 prochains jours ne sont pas encore} other {# réservations confirmées des 90 prochains jours ne sont pas encore}} dans le calendrier prévu. L’inscription se fait automatiquement après la connexion ou le changement de calendrier.",
+          "action": "Les inscrire maintenant",
+          "working": "Mise en file d’attente",
+          "queued": "Inscription dans votre calendrier en arrière-plan.",
+          "notConnected": "Aucun calendrier n’est connecté, il n’y a donc nulle part où les inscrire."
+        }
+      },
+      "feeds": {
+        "title": "Autres calendriers (iCal)",
+        "description": "Abonnez-vous à un calendrier par son adresse iCal pour que ses périodes d’occupation bloquent les créneaux. Seules les périodes où vous êtes occupé sont utilisées : rien d’autre n’est affiché ni conservé.",
+        "loading": "Chargement de vos calendriers",
+        "empty": "Aucun calendrier abonné pour l’instant.",
+        "status": {
+          "pending": "Pas encore lu",
+          "ok": "Fonctionne",
+          "error": "Problème"
+        },
+        "paused": "En pause",
+        "neverRead": "Pas encore lu.",
+        "lastRead": "Lu {when}.",
+        "busyCount": "{count, plural, one {# période d’occupation} many {# de périodes d’occupation} other {# périodes d’occupation}} dans les 180 prochains jours",
+        "allDayLabel": "Les événements sur toute la journée bloquent le jour",
+        "pause": "Mettre en pause",
+        "resume": "Reprendre",
+        "refresh": "Lire maintenant",
+        "reading": "Lecture en cours",
+        "remove": "Se désabonner",
+        "removed": "Désabonnement du calendrier effectué.",
+        "added": "Abonnement au calendrier effectué.",
+        "addTitle": "S’abonner à un calendrier",
+        "nameLabel": "Nom",
+        "namePlaceholder": "Planning de l’équipe",
+        "urlLabel": "Adresse du calendrier",
+        "urlHint": "Une adresse qui commence par https:// ou webcal:// et se termine par .ics. Elle est vérifiée maintenant, puis stockée chiffrée et jamais affichée de nouveau.",
+        "add": "S’abonner",
+        "adding": "Lecture du calendrier",
+        "hint": "Ne vous abonnez pas au calendrier dans lequel vos réservations sont inscrites : un service multi-places verrait ses propres événements comme des périodes d’occupation. Un flux est lu environ toutes les 15 minutes, donc une modification peut mettre autant de temps à apparaître.",
+        "confirmRemove": {
+          "title": "Se désabonner de ce calendrier ?",
+          "message": "Les horaires bloqués par {name} sont de nouveau libres immédiatement. Le calendrier lui-même n’est pas modifié.",
+          "confirm": "Se désabonner",
+          "cancel": "Conserver"
+        },
+        "errors": {
+          "invalid": "Saisissez une adresse qui commence par https://, http:// ou webcal://, sans nom d’utilisateur ni mot de passe.",
+          "duplicate": "Cet espace de travail est déjà abonné à ce calendrier.",
+          "limit": "Un espace de travail peut s’abonner à 10 calendriers. Désabonnez-vous d’abord de l’un d’eux."
+        },
+        "reason": {
+          "unreachable": "L’adresse est inaccessible. Vérifiez qu’elle est correcte et publique.",
+          "timeout": "Le calendrier a mis trop de temps à répondre.",
+          "not_found": "Rien n’a été trouvé à cette adresse. Elle a peut-être été dépubliée.",
+          "forbidden": "Le calendrier a refusé l’accès. Vérifiez qu’il est publié pour toute personne disposant du lien.",
+          "server_error": "Le serveur du calendrier a rencontré un problème. Une nouvelle tentative est faite automatiquement.",
+          "redirect_loop": "L’adresse nous renvoie en boucle.",
+          "not_a_calendar": "Cette adresse n’est pas un calendrier iCal. Elle devrait se terminer par .ics.",
+          "too_large": "Ce calendrier est trop volumineux pour être lu.",
+          "blocked_address": "Cette adresse pointe vers un réseau privé, ce qui n’est pas autorisé.",
+          "unknown": "Cette adresse n’a pas pu être lue comme un calendrier."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# événement utilise un fuseau horaire que nous ne connaissons pas et a été lu dans le fuseau horaire de votre espace de travail.} many {# d'événements utilisent un fuseau horaire que nous ne connaissons pas et ont été lus dans le fuseau horaire de votre espace de travail.} other {# événements utilisent un fuseau horaire que nous ne connaissons pas et ont été lus dans le fuseau horaire de votre espace de travail.}}",
+          "unsupportedRule": "{count, plural, one {# événement récurrent utilise} many {# d’événements récurrents utilisent} other {# événements récurrents utilisent}} une règle non prise en charge : seule la première occurrence bloque du temps.",
+          "truncated": "Ce calendrier contient plus de périodes d’occupation que nous n’en conservons, donc certaines manquent."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mes réservations dans mon application de calendrier",
+        "description": "Abonnez Apple Calendar, Outlook ou Google Calendar à vos réservations.",
+        "loading": "Chargement de votre lien",
+        "none": "Vous n’avez pas encore de lien.",
+        "make": "Créer mon lien",
+        "making": "Création en cours",
+        "made": "Votre lien est prêt.",
+        "linkLabel": "Votre lien",
+        "copy": "Copier le lien",
+        "copied": "Lien copié.",
+        "copyFailed": "Copie automatique impossible. Sélectionnez le lien et copiez-le.",
+        "open": "Ouvrir dans mon application de calendrier",
+        "rotate": "Créer un nouveau lien",
+        "stop": "Arrêter le partage",
+        "stopped": "Votre lien ne fonctionne plus.",
+        "lastUsed": "Une application de calendrier l’a lu pour la dernière fois {when}.",
+        "neverUsed": "Aucune application de calendrier ne l’a encore lu.",
+        "warning": "Toute personne qui possède ce lien voit les titres, les horaires et les lieux de vos réservations. Gardez-le privé. Il n’affiche jamais les numéros de téléphone, les adresses e-mail ni les notes.",
+        "hint": "Vous voyez ce que vous pouvez voir dans la liste des réservations. Votre application de calendrier actualise le flux selon son propre rythme, souvent toutes les quelques heures.",
+        "confirmRotate": {
+          "title": "Créer un nouveau lien ?",
+          "message": "L’ancien lien cesse de fonctionner immédiatement. Les applications de calendrier qui l’utilisent auront besoin du nouveau.",
+          "confirm": "Créer un nouveau lien"
+        },
+        "confirmStop": {
+          "title": "Arrêter le partage de vos réservations ?",
+          "message": "Votre lien cesse de fonctionner immédiatement. Les applications de calendrier qui l’utilisent n’afficheront plus rien de nouveau.",
+          "confirm": "Arrêter le partage"
+        },
+        "confirmCancel": "Conserver"
+      }
     },
     "linked": {
       "title": "Rendez-vous",
@@ -1060,6 +1264,36 @@
       "loadMore": "Charger plus",
       "loadMorePast": "Charger plus de passés",
       "noType": "Rendez-vous"
+    },
+    "sync": {
+      "title": "Calendrier désynchronisé",
+      "reason": {
+        "event_deleted": "L'événement a été supprimé ou annulé dans Google Calendar.",
+        "event_missing": "L'événement est introuvable dans Google Calendar.",
+        "time_changed": "L'événement a été déplacé à un autre horaire dans Google Calendar.",
+        "attendees_changed": "Les invités de l'événement ont été modifiés dans Google Calendar."
+      },
+      "googleShows": "Google affiche : {time}",
+      "notChanged": "Cette réservation n'a pas été modifiée. Choisissez la version correcte.",
+      "found": "Trouvé : {when}",
+      "push": "Renvoyer notre horaire à Google",
+      "accept": "Accepter la modification de Google",
+      "keep": "Pas maintenant",
+      "acceptTitle": {
+        "cancel": "Annuler cette réservation ?",
+        "reschedule": "Déplacer cette réservation à l'horaire de Google ?",
+        "acknowledge": "Accepter les invités affichés par Google ?"
+      },
+      "acceptMessage": {
+        "cancel": "L'événement n'existe plus dans Google : cette réservation est donc annulée et son créneau redevient libre. Le client en est informé, comme pour toute annulation.",
+        "reschedule": "Cette réservation est déplacée à {time}. Le client est informé du nouvel horaire, comme pour tout report.",
+        "acknowledge": "La réservation elle-même ne change pas. La liste d'invités de Google est conservée et cet avis disparaît."
+      },
+      "acceptConfirm": {
+        "cancel": "Annuler la réservation",
+        "reschedule": "Déplacer la réservation",
+        "acknowledge": "Accepter"
+      }
     }
   }
 }

@@ -80,6 +80,19 @@ export function useGoogleFiles(kind: 'sheets' | 'docs' | 'forms') {
 }
 
 /**
+ * Whether the workspace's Google account is usable, and which permissions it covers (no account details): the Google steps warn from
+ * it. Fails quietly for a role that cannot read it, so the steps show no notice rather than an error.
+ */
+export function useGoogleSummary() {
+  return useQuery({
+    queryKey: ['flb', 'google', 'status'],
+    queryFn: ({ signal }) => flowsApi.googleStatus(signal),
+    retry: false,
+    staleTime: 30_000,
+  });
+}
+
+/**
  * The FAQ categories of THIS flow and how many FAQs it has, for the "Answer from FAQ" node: the node answers from the FAQs of the
  * flow it sits in. Read through the flow's FAQ list (`limit=1`) whose `stats` carry both. Needs `faq.entries.read`: without it the
  * query fails and the form keeps what the node already holds. A flow that has not been saved yet (`null`) has no FAQs and nothing

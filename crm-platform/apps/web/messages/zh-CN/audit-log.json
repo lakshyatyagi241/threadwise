@@ -92,7 +92,8 @@
       "api_keys": "API 密钥",
       "audit-log": "审计日志",
       "audit-log-exports": "审计日志导出",
-      "contact_consent_exports": "授权证明导出"
+      "contact_consent_exports": "授权证明导出",
+      "revenue-report-exports": "收入报表文件"
     },
     "table": {
       "caption": "审计条目，最新的在前。时间按你的时区（{zone}）显示。",

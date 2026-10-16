@@ -717,7 +717,8 @@
             "ask": "Interroger le client",
             "handoff": "Transférer",
             "logic": "Décider",
-            "answer": "Réponse"
+            "answer": "Réponse",
+            "action": "Actions"
           },
           "blockedTitle": "Les boutons et listes terminent un flux, ils ne peuvent donc être placés qu’en dernier.",
           "blockedTitleFaq": "« Réponse depuis la FAQ » a deux sorties, elle ne peut donc venir qu'en dernier."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "Répondu",
             "no_match": "Aucune correspondance"
-          }
+          },
+          "close": "Fermer",
+          "clickToEdit": "Cliquez pour modifier",
+          "outsideToSave": "Cliquez n'importe où à l'extérieur pour enregistrer les modifications",
+          "addCondition": "Ajouter une condition après cette étape",
+          "conditionLast": "Une condition termine cette partie : elle ne peut venir qu'en dernier.",
+          "duplicateTitle": "Dupliquer cette étape ?",
+          "duplicateBody": "Une copie est ajoutée juste après.",
+          "deleteTitle": "Supprimer cette étape ?",
+          "deleteBody": "L'étape est retirée du flow.",
+          "stage": "Étape {stage}",
+          "storedIn": "Les valeurs seront enregistrées dans la propriété <b>{property}</b> du contact",
+          "actions": "Actions",
+          "actionsHint": "Ajouter une étape qui s'exécute juste après celle-ci.",
+          "actionsBlocked": "Une étape qui termine sa partie ne peut pas être suivie d'une autre."
         },
         "editors": {
           "linkLabel": "Où cela mène",
@@ -1317,7 +1332,8 @@
             "date_field_match": "Programmation : par rapport à une date du contact (anniversaire…)",
             "schedule": "Programmation : à une date et une heure",
             "shopify_event": "Commerce : un événement de boutique Shopify",
-            "woocommerce_event": "Commerce : un événement de boutique WooCommerce"
+            "woocommerce_event": "Commerce : un événement de boutique WooCommerce",
+            "segment_leave": "Audience : quand un contact quitte un segment"
           },
           "tagsLoading": "Chargement des étiquettes…",
           "tagPick": "— choisir une étiquette —",
@@ -1411,7 +1427,8 @@
             "productId": "ID du produit (facultatif)",
             "productIdHint": "Vide = n'importe quel produit de la commande.",
             "storeNote": "Le client est associé à un contact enregistré par son numéro de téléphone ; aucun contact n'est créé pour une commande. « Ajouté au panier » et « produit consulté » ne sont pas proposés : la boutique ne les transmet pas.",
-            "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas."
+            "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas.",
+            "segmentLeaveHint": "S'exécute une fois chaque fois qu'un contact qui se trouvait dans ce segment est constaté en dehors après avoir été mis à jour, étiqueté ou listé. Le départ d'un contact n'est détecté que si le flux l'a d'abord vu dans le segment."
           }
         }
       },
@@ -1701,7 +1718,21 @@
           "setupOpen": "Ouvrez votre formulaire → <mono>menu ⋮</mono> → <mono>Éditeur de script</mono>",
           "setupDownload": "<link>Téléchargez le script (.gs)</link> et collez-le",
           "setupTrigger": "Ajoutez un déclencheur : <mono>onFormSubmit</mono> · Depuis le formulaire · À l’envoi du formulaire",
-          "setupWarning": "Sans ce script, le formulaire enregistrera toujours les réponses dans Google Forms, mais le flux ne reprendra pas."
+          "setupWarning": "Sans ce script, le formulaire enregistrera toujours les réponses dans Google Forms, mais le flux ne reprendra pas.",
+          "noListing": "Vos fichiers ne peuvent pas être listés, car l’autorisation de liste des fichiers Drive n’a pas été accordée sur la page du compte Google. Collez plutôt le lien ou l’identifiant.",
+          "connection": {
+            "open": "Ouvrir le compte Google",
+            "permission": {
+              "calendar": "Agenda",
+              "sheets": "Sheets",
+              "docs": "Docs et Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google n'est pas configuré pour cette plateforme : cette étape échouera à l'exécution du flux.",
+            "disconnected": "Aucun compte Google n'est connecté : cette étape échouera à l'exécution du flux. Connectez d'abord Google.",
+            "needsReconnect": "Google n'accepte plus le compte connecté : cette étape échouera à l'exécution du flux. Reconnectez d'abord Google.",
+            "missing": "Le compte Google connecté n'a pas reçu l'autorisation {permission} : cette étape échouera à l'exécution du flux."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1983,42 @@
         "label": "Icône (facultatif)",
         "add": "Ajouter une icône",
         "saveFirst": "Enregistrez le bot une fois pour ajouter une icône."
+      },
+      "buttonAction": {
+        "label": "Action au clic sur le bouton",
+        "kind": {
+          "none": "Passer à l'étape suivante",
+          "flow": "Connecter un flow",
+          "live_agent": "Agent en direct",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Choisir un flow",
+        "loadingFlows": "Chargement des flows…",
+        "flowMissing": "Flow {id} (introuvable)",
+        "hint": {
+          "flow": "Lance le flow choisi pour ce contact, et la conversation continue là-bas. Rien n'est relié après ce bouton.",
+          "live_agent": "Transfère la conversation à l'équipe choisie. Rien n'est relié après ce bouton.",
+          "opt_in": "Marque le contact comme abonné aux messages marketing, puis passe à l'étape reliée après ce bouton.",
+          "opt_out": "Marque le contact comme désabonné des messages marketing, puis passe à l'étape reliée après ce bouton."
+        }
+      },
+      "messageTools": {
+        "format": "Mise en forme du texte",
+        "bold": "Gras",
+        "italic": "Italique",
+        "strike": "Barré",
+        "mono": "Monospace",
+        "bullet": "Liste à puces",
+        "numbered": "Liste numérotée",
+        "emoji": "Emoji",
+        "emojiSearch": "Rechercher un emoji",
+        "emojiNone": "Aucun emoji trouvé",
+        "variable": "Insérer une variable",
+        "variableSearch": "Rechercher des variables",
+        "groupContact": "Propriétés du contact",
+        "groupFlow": "Enregistrées dans ce flow",
+        "variableNone": "Aucune variable trouvée"
       }
     },
     "contracts": {
@@ -2316,7 +2383,8 @@
         "date_field_match": "à la correspondance d'une date",
         "schedule": "selon le planning",
         "shopify_event": "à un événement Shopify",
-        "woocommerce_event": "à un événement WooCommerce"
+        "woocommerce_event": "à un événement WooCommerce",
+        "segment_leave": "à la sortie du segment"
       },
       "ports": {
         "manual": "manuel",
@@ -2470,6 +2538,14 @@
         "faq": {
           "label": "Réponse depuis la FAQ",
           "help": "Compare le message du client à vos FAQ. Termine ce flux : une sortie si une FAQ a répondu, une autre sinon"
+        },
+        "apiLibrary": {
+          "label": "Appel d'API",
+          "help": "Appeler une API de votre bibliothèque d'API"
+        },
+        "code": {
+          "label": "Fonction JS",
+          "help": "Exécuter un petit morceau de JavaScript"
         }
       },
       "typeLabel": {
@@ -2487,7 +2563,9 @@
         "assign": "Assigner à un agent",
         "carousel": "Carrousel",
         "condition": "Condition",
-        "faq": "Réponse depuis la FAQ"
+        "faq": "Réponse depuis la FAQ",
+        "api_library": "Appel d'API",
+        "code": "Fonction JS"
       },
       "stepLabel": {
         "questionOf": "Question · {kind}"
@@ -2528,7 +2606,10 @@
         "carouselCards": "Étape {stage} : ajoutez au moins une carte et donnez un titre à chaque carte.",
         "carouselButtons": "Étape {stage} : donnez un nom à chaque bouton, et un lien, un numéro ou une adresse là où il ouvre quelque chose.",
         "conditionIncomplete": "Étape {stage} : terminez les règles de la condition (une variable et une valeur dans chacune).",
-        "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage du flux."
+        "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage du flux.",
+        "chooseFlow": "Étape {stage} : choisissez le flow que le bouton lance.",
+        "chooseApi": "Étape {stage} : choisissez l'API à appeler.",
+        "writeCode": "Étape {stage} : écrivez le code à exécuter."
       },
       "faqSummary": "{hasCategory, select, true {Depuis vos FAQ · {category}} other {Depuis vos FAQ}}"
     },

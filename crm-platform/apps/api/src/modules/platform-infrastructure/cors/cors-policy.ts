@@ -21,3 +21,21 @@ export function corsOriginFor(origins: readonly string[], nodeEnv: string): Cors
 export function corsIsClosedInProduction(origins: readonly string[], nodeEnv: string): boolean {
   return origins.length === 0 && nodeEnv === 'production';
 }
+
+/** Response headers a browser client may read (the throttle's headers, TW-INFRA-010, and the request id). */
+export const STAFF_EXPOSED_HEADERS = [
+  'x-request-id',
+  'retry-after',
+  'x-ratelimit-limit',
+  'x-ratelimit-remaining',
+  'x-ratelimit-reset',
+];
+
+/** The staff API's CORS options: the listed origins only, with credentials. The customer API has its own (`v1-cors.ts`). */
+export function staffCorsOptions(origins: readonly string[], nodeEnv: string) {
+  return {
+    origin: corsOriginFor(origins, nodeEnv),
+    credentials: true,
+    exposedHeaders: STAFF_EXPOSED_HEADERS,
+  };
+}

@@ -92,7 +92,8 @@
       "api_keys": "API কী",
       "audit-log": "অডিট লগ",
       "audit-log-exports": "অডিট লগ এক্সপোর্ট",
-      "contact_consent_exports": "সম্মতির প্রমাণ এক্সপোর্ট"
+      "contact_consent_exports": "সম্মতির প্রমাণ এক্সপোর্ট",
+      "revenue-report-exports": "রাজস্ব রিপোর্টের ফাইল"
     },
     "table": {
       "caption": "অডিট এন্ট্রি, নতুনগুলো আগে। সময় আপনার টাইম জোনে ({zone}) দেখানো হয়েছে।",

@@ -92,7 +92,8 @@
       "api_keys": "Klucze API",
       "audit-log": "Dziennik audytu",
       "audit-log-exports": "Eksporty dziennika audytu",
-      "contact_consent_exports": "Eksporty dowodów zgody"
+      "contact_consent_exports": "Eksporty dowodów zgody",
+      "revenue-report-exports": "Pliki raportu przychodów"
     },
     "table": {
       "caption": "Wpisy audytu, od najnowszych. Czas jest podany w Twojej strefie czasowej ({zone}).",

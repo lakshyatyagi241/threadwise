@@ -3,17 +3,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Button, Drawer, Input, Select, useToast } from '@crm/ui';
+import { Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton, useCallEligibility, useDirectCall } from '@/features/calling-voice';
 import {
   openConversation,
+  sendEmail,
   sendTemplate,
   useChannels,
   useConversationTemplates,
   useOpenConversation,
 } from '../api/single-send';
 import {
+  emailChannels,
   missingSlots,
   previewOf,
   sendBlock,
@@ -173,6 +175,8 @@ function Body({ target, onClose }: { target: SingleSendTarget; onClose: () => vo
         <WhatsAppForm row={row} onClose={onClose} />
       ) : channel === 'call' ? (
         <CallPanel row={row} />
+      ) : channel === 'email' ? (
+        <EmailForm row={row} onClose={onClose} />
       ) : (
         <NotAvailable row={row} channel={channel} />
       )}
@@ -400,18 +404,140 @@ function CallPanel({ row }: { row: RowView }) {
   );
 }
 
-function NotAvailable({ row, channel }: { row: RowView; channel: 'sms' | 'email' }) {
+function NotAvailable({ row, channel }: { row: RowView; channel: 'sms' }) {
   const t = useTranslations(NS);
-  const href = channel === 'sms' ? `sms:${row.phone}` : `mailto:${row.email.trim()}`;
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">{t(`later.${channel}`)}</p>
       <a
-        href={href}
+        href={`sms:${row.phone}`}
         className="inline-flex h-9 items-center rounded-md border border-border bg-background px-3 text-sm font-medium hover:bg-muted"
       >
         {t(`openApp.${channel}`)}
       </a>
     </div>
+  );
+}
+
+function EmailForm({ row, onClose }: { row: RowView; onClose: () => void }) {
+  const t = useTranslations(NS);
+  const { toast } = useToast();
+  const qc = useQueryClient();
+  const channels = useChannels(true);
+  const mailboxes = useMemo(() => emailChannels(channels.data?.data ?? []), [channels.data]);
+  const [chosenMailbox, setMailboxId] = useState('');
+  const [subject, setSubject] = useState('');
+  const [body, setBody] = useState('');
+
+  // One mailbox is the obvious choice; with several the person picks.
+  const mailboxId = chosenMailbox || (mailboxes.length === 1 ? mailboxes[0]!.id : '');
+  const conversation = useOpenConversation(row.id, mailboxId);
+
+  const send = useMutation({
+    mutationFn: () =>
+      sendEmail(conversation.data!.id, {
+        subject: subject.trim(),
+        body: body.trim(),
+        clientMessageId: crypto.randomUUID(),
+      }),
+    onSuccess: () => {
+      toast(t('sent', { name: row.name || row.email }), 'success');
+      void qc.invalidateQueries({ queryKey: ['inbox'] });
+      onClose();
+    },
+    onError: (e) =>
+      toast(t('failed', { message: e instanceof Error ? e.message : String(e) }), 'danger'),
+  });
+
+  if (channels.isPending)
+    return (
+      <p role="status" className="text-sm text-muted-foreground">
+        {t('loading')}
+      </p>
+    );
+  if (mailboxes.length === 0)
+    return <p className="text-sm text-muted-foreground">{t('noMailbox')}</p>;
+
+  const canSend = Boolean(conversation.data) && subject.trim() !== '' && body.trim() !== '' && !send.isPending;
+
+  return (
+    <form
+      className="space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (canSend) send.mutate();
+      }}
+    >
+      <div className="space-y-1">
+        <label htmlFor="ss-mailbox" className="text-sm font-medium">
+          {t('mailbox')}
+        </label>
+        <Select
+          id="ss-mailbox"
+          value={mailboxId}
+          onChange={(e) => setMailboxId(e.target.value)}
+        >
+          {mailboxes.length > 1 && <option value="">{t('mailboxPlaceholder')}</option>}
+          {mailboxes.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.name}
+              {m.displayAddress ? ` (${m.displayAddress})` : ''}
+            </option>
+          ))}
+        </Select>
+        <p className="text-xs text-muted-foreground">{t('mailboxHint')}</p>
+      </div>
+
+      {conversation.isError && (
+        <p role="alert" className="text-sm text-danger">
+          {t('openFailed', {
+            message: conversation.error instanceof Error ? conversation.error.message : '',
+          })}
+        </p>
+      )}
+
+      {mailboxId && conversation.isPending && (
+        <p role="status" className="text-sm text-muted-foreground">
+          {t('loading')}
+        </p>
+      )}
+
+      {conversation.data && (
+        <>
+          <div className="space-y-1">
+            <label htmlFor="ss-subject" className="text-sm font-medium">
+              {t('subject')}
+            </label>
+            <Input
+              id="ss-subject"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              placeholder={t('subjectPlaceholder')}
+            />
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="ss-body" className="text-sm font-medium">
+              {t('body')}
+            </label>
+            <Textarea
+              id="ss-body"
+              rows={8}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder={t('bodyPlaceholder')}
+            />
+          </div>
+        </>
+      )}
+
+      <div className="flex justify-end gap-2 border-t border-border pt-3">
+        <Button type="button" variant="secondary" onClick={onClose}>
+          {t('cancel')}
+        </Button>
+        <Button type="submit" variant="brand" disabled={!canSend}>
+          {send.isPending ? t('sending') : t('send')}
+        </Button>
+      </div>
+    </form>
   );
 }

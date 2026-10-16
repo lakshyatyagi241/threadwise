@@ -348,7 +348,10 @@
       "ownerMe": "{name}(自分)",
       "ownerFormer": "元メンバー",
       "ownerHelp": "この連絡先の担当者です。アクセス権で許可されているユーザーのみ選択できます。",
-      "ownerOutOfScope": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。"
+      "ownerOutOfScope": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
+      "company": "会社",
+      "companyHint": "この連絡先を組織にまとめます。",
+      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。"
     },
     "tags": {
       "title": "タグ",
@@ -1279,6 +1282,14 @@
       "number": "送信元",
       "numberHint": "メッセージの送信に使用するWhatsApp番号です。",
       "noChannel": "WhatsApp番号が接続されていません。先にチャネルで接続してください。",
+      "mailbox": "送信元",
+      "mailboxPlaceholder": "メールボックスを選択",
+      "mailboxHint": "メールの送信元となる接続済みのメールボックスです。",
+      "noMailbox": "接続されているメールボックスがありません。先に「チャネル」で接続してください。",
+      "subject": "件名",
+      "subjectPlaceholder": "件名を入力してください",
+      "body": "本文",
+      "bodyPlaceholder": "メールを入力してください…",
       "template": "WhatsAppテンプレート",
       "templatePlaceholder": "テンプレートを選択",
       "noTemplates": "この番号で承認済みのテンプレートがありません。",
@@ -1295,12 +1306,10 @@
       "callPermission": "この連絡先はまだ通話を許可していません。通話するにはまず相手の許可が必要です。",
       "callReady": "{phone} に発信できます。",
       "later": {
-        "sms": "CRMからのSMS送信はまだ利用できません。",
-        "email": "CRMからのメール送信はまだ利用できません。"
+        "sms": "CRMからのSMS送信はまだ利用できません。"
       },
       "openApp": {
-        "sms": "メッセージアプリで開く",
-        "email": "メールアプリで開く"
+        "sms": "メッセージアプリで開く"
       }
     },
     "views": {

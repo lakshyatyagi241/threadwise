@@ -7,7 +7,21 @@ order: 50
 documents: [nav:store]
 gates:
   permission: store.payments.view
-keywords: [payments, paid, awaiting payment, cash on delivery, collected, reference, whatsapp pay, direct pay method, razorpay, payu, billdesk, zaakpay]
+keywords:
+  [
+    payments,
+    paid,
+    awaiting payment,
+    cash on delivery,
+    collected,
+    reference,
+    whatsapp pay,
+    direct pay method,
+    razorpay,
+    payu,
+    billdesk,
+    zaakpay,
+  ]
 routes: [/store/payments]
 ---
 

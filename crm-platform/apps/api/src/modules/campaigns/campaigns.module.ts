@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { CAMPAIGN_AI_PORT } from '../../infra/providers/campaigns/campaign-ai.port';
-import { HttpCampaignAiAdapter } from '../../infra/providers/campaigns/http-campaign-ai.adapter';
+import { CAMPAIGN_AI_IMAGE_PORT } from '../../infra/providers/campaigns/campaign-ai-image.port';
+import { HttpCampaignAiImageAdapter } from '../../infra/providers/campaigns/http-campaign-ai-image.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlanCampaignGate } from './_shims/plan-gate';
 import { PlatformCampaignSettings } from './_shims/platform-campaign-settings';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BroadcastsModule } from '../broadcasts';
+import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { ChatConversationsModule } from '../chat-conversations';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
@@ -22,6 +23,8 @@ import {
 import { WalletCampaignBilling } from './_shims/wallet-billing';
 import { CampaignAudienceService } from './audience.service';
 import { CampaignAiController } from './campaign-ai.controller';
+import { CampaignAiImageController } from './campaign-ai-image.controller';
+import { CampaignAiImageService } from './campaign-ai-image.service';
 import { CampaignAiService } from './campaign-ai.service';
 import { CampaignCallbacksController } from './campaign-callbacks.controller';
 import { CampaignCallbacksService } from './campaign-callbacks.service';
@@ -61,6 +64,7 @@ import { WizardRepository } from './wizard/wizard.repository';
  */
 @Module({
   imports: [
+    SendWindowModule,
     AiKeysUsageAdminModule,
     BroadcastsModule,
     ContactConsentModule,
@@ -74,6 +78,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     // The wizard's own route base, so nothing it serves can be shadowed by `campaigns/:id`.
     WizardController,
     CampaignAiController,
+    CampaignAiImageController,
     CampaignsController,
     CampaignsReadController,
     BroadcastSummaryController,
@@ -108,7 +113,8 @@ import { WizardRepository } from './wizard/wizard.repository';
     WizardBroadcastsService,
     FixtureReceiptQueue,
     FixtureRegistrar,
-    { provide: CAMPAIGN_AI_PORT, useClass: HttpCampaignAiAdapter },
+    { provide: CAMPAIGN_AI_IMAGE_PORT, useClass: HttpCampaignAiImageAdapter },
+    CampaignAiImageService,
     { provide: CAMPAIGN_PLAN_GATE, useClass: PlanCampaignGate },
     { provide: CAMPAIGN_BILLING, useClass: WalletCampaignBilling },
     { provide: CAMPAIGN_FLOW_STARTER, useClass: NoFlowStarter },

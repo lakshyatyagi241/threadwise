@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { companiesApi, invalidateCompanies, useCompany } from '../api/companies';
+import { LinkedTasks } from '@/features/tasks';
 import { errorKind } from '../lib/errors';
 import { websiteHref } from '../lib/form';
 import { formatTotals } from '../lib/money';
@@ -17,6 +18,7 @@ import { ErrorLine } from './error-line';
 import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
 import { LinkedContacts } from './linked-contacts';
 import { LinkedDeals } from './linked-deals';
+import { PropertiesCard } from './properties-card';
 
 /**
  * `/companies/[id]` (TW-CTP-005): Reference's company 360. Name and contact line, the three rollup tiles, the company's contacts and
@@ -25,6 +27,7 @@ import { LinkedDeals } from './linked-deals';
  */
 export function CompanyDetail({ id }: { id: string }) {
   const t = useTranslations('companies.detail');
+  const tList = useTranslations('companies.list');
   const tToast = useTranslations('companies.toast');
   const locale = useLocale();
   const router = useRouter();
@@ -76,8 +79,10 @@ export function CompanyDetail({ id }: { id: string }) {
     return (
       <section>
         {back}
-        {kind === 'notFound' || kind === 'unavailable' ? (
+        {kind === 'notFound' ? (
           <EmptyState title={t('notFoundTitle')} message={t('notFound')} />
+        ) : kind === 'unavailable' ? (
+          <EmptyState title={tList('unavailableTitle')} message={tList('unavailable')} />
         ) : (
           <ErrorLine error={company.error} onRetry={() => void company.refetch()} />
         )}
@@ -169,6 +174,8 @@ export function CompanyDetail({ id }: { id: string }) {
             )}
             {canReadDeals && <LinkedDeals companyId={id} />}
           </div>
+          <LinkedTasks kind="company" id={id} label={c.name} />
+          <PropertiesCard company={c} />
           {c.notes && (
             <section
               aria-labelledby="company-notes"

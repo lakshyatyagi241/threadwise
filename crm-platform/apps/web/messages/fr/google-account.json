@@ -1,0 +1,172 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Compte Google",
+        "description": "Connectez un compte Google pour Calendar, Sheets, Docs, Forms et Meet dans vos flux.",
+        "keywords": "google, compte google, agenda, calendar, tableur, sheets, documents, docs, formulaires, forms, meet, drive, oauth, connecter google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Fermer"
+    },
+    "page": {
+      "eyebrow": "Espace de travail",
+      "title": "Compte Google",
+      "subtitle": "Connectez-le une seule fois. Le même compte Google alimente votre agenda de réservation, les liens Meet et les étapes Sheets, Docs et Forms de vos flux.",
+      "loading": "Chargement de votre compte Google...",
+      "forbidden": {
+        "title": "Vous ne pouvez pas ouvrir cette page",
+        "body": "Votre rôle n’inclut pas l’affichage du compte Google. Demandez à un administrateur de l’espace de travail."
+      },
+      "status": {
+        "unavailable": "Non configuré",
+        "disconnected": "Non connecté",
+        "connected": "Connecté",
+        "needs_reconnect": "Reconnexion nécessaire"
+      },
+      "outcome": {
+        "connected": "Compte Google connecté.",
+        "denied": "Google n’a pas été connecté : l’écran d’autorisation a été annulé.",
+        "failed": "La connexion à Google ne s’est pas terminée. Réessayez.",
+        "expired": "Cette tentative de connexion a expiré. Appuyez sur le bouton pour recommencer.",
+        "not_configured": "Google n’est pas encore configuré pour cette plateforme. Demandez à votre administrateur de la plateforme.",
+        "missing_scope": "Google n’a pas accordé toutes les autorisations demandées. Celles déjà accordées fonctionnent toujours ; ajoutez de nouveau les manquantes et laissez toutes les cases cochées.",
+        "cancelled": "Vous avez annulé. Rien n'a été connecté."
+      },
+      "actions": {
+        "connect": "Connecter un compte Google",
+        "reconnect": "Reconnecter Google",
+        "addPermissions": "Ajouter des autorisations",
+        "disconnect": "Déconnecter",
+        "working": "Ouverture de Google...",
+        "retry": "Réessayer"
+      },
+      "unavailable": {
+        "title": "Google n’est pas configuré pour cette plateforme",
+        "body": "L'administrateur de la plateforme doit d'abord ajouter le client OAuth Google pour que quiconque puisse se connecter. D'ici là, les étapes Google de vos flux échouent avec un message explicite, et les réservations continuent sans calendrier."
+      },
+      "reconnect": {
+        "title": "Google n’accepte plus cette connexion",
+        "body": "L’autorisation a été retirée, le mot de passe a changé ou l’accès a expiré. Reconnectez-vous pour la rétablir ; vos choix sont conservés.",
+        "bodyAccount": "Google n’accepte plus {account}. Reconnectez-le pour le rétablir ; vos choix sont conservés."
+      },
+      "stats": {
+        "status": "Statut",
+        "calendars": "Agendas",
+        "calendarsValue": "{count} disponible(s)",
+        "calendarsNone": "aucun",
+        "permissions": "Autorisations",
+        "permissionsValue": "{granted} sur {total}",
+        "lastUsed": "Dernière utilisation",
+        "never": "jamais",
+        "live": "actif",
+        "idle": "inactif"
+      },
+      "account": {
+        "title": "Compte connecté",
+        "email": "Compte",
+        "calendar": "Agenda pour les réservations et Meet",
+        "primaryCalendar": "Votre agenda principal",
+        "changeCalendar": "Changer d’agenda",
+        "connectedAgo": "Connecté {when}",
+        "none": "Aucun compte Google n’est lié.",
+        "noneBody": "Tant que vous n'êtes pas connecté, les étapes Google de vos flux échouent avec un message vous invitant à connecter Google, et les réservations ne sont pas ajoutées à un calendrier."
+      },
+      "permissions": {
+        "title": "Ce pour quoi Google peut être utilisé",
+        "intro": "Cochez ce que vous souhaitez autoriser. Google affiche exactement ces autorisations sur son écran, et vous pourrez en ajouter d’autres plus tard sans perdre celles déjà accordées.",
+        "allowed": "Autorisé",
+        "notAllowed": "Non autorisé",
+        "allow": "Autoriser",
+        "restricted": "Restreint par Google",
+        "restrictedNote": "Google considère cette autorisation comme restreinte : la plateforme a besoin de la validation de Google pour qu’elle fonctionne pour de nombreux espaces de travail. Laissez-la désactivée sauf si vous en avez besoin.",
+        "nothingTicked": "Cochez au moins une autorisation.",
+        "calendar": {
+          "name": "Agenda",
+          "body": "Ajoutez les réservations et les liens Meet à votre agenda et masquez les créneaux occupés sur la page de réservation.",
+          "usedBy": "Agenda de réservation, étapes Réserver un rendez-vous et Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "body": "Ajouter une ligne à une feuille, rechercher une ligne, vérifier une cellule ou copier une ligne dans un contact.",
+          "usedBy": "Google Sheets, Vérifier un champ Google Sheet, Enregistrer un contact depuis Google Sheet"
+        },
+        "docs": {
+          "name": "Docs et Drive",
+          "body": "Copier un document modèle, le remplir et partager la copie par lien.",
+          "usedBy": "Étape Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "body": "Lire le lien public d’un formulaire pour que le flux puisse l’envoyer au client.",
+          "usedBy": "Étape Google Form"
+        },
+        "drive_listing": {
+          "name": "Liste des fichiers Drive",
+          "body": "Lister vos feuilles, documents et formulaires par nom dans le générateur de flux, pour les choisir au lieu de coller un lien.",
+          "usedBy": "Sélecteurs de fichiers du générateur de flux"
+        }
+      },
+      "lastError": {
+        "title": "Le dernier problème signalé par Google",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google n’accepte plus le compte connecté. Reconnectez-vous.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Le client Google de la plateforme est absent ou désactivé.",
+        "GOOGLE_API_NOT_ENABLED": "Le projet Google Cloud de la plateforme n’a pas activé une API nécessaire à cette fonctionnalité. L’administrateur de la plateforme doit l’activer.",
+        "GOOGLE_SCOPE_MISSING": "Une étape avait besoin d’une autorisation que ce compte n’a pas reçue. Ajoutez-la ci-dessus.",
+        "GOOGLE_RATE_LIMITED": "Google limite actuellement les requêtes. Les étapes sont retentées un peu plus tard.",
+        "GOOGLE_UNAVAILABLE": "Google n’a pas répondu. Une nouvelle tentative a lieu à la prochaine utilisation.",
+        "other": "Google a signalé un problème."
+      },
+      "usedBy": {
+        "title": "Utilisé par",
+        "book": "Étape Réserver un rendez-vous",
+        "meet": "Étape Google Meet",
+        "sheets": "Étapes Google Sheets",
+        "docs": "Étape Google Docs",
+        "forms": "Étape Google Form",
+        "flow": "flux"
+      },
+      "disconnectConfirm": {
+        "title": "Déconnecter Google ?",
+        "body": "La synchronisation de l’agenda pour les réservations et toutes les étapes Google de vos flux s’arrêtent jusqu’à ce que vous vous reconnectiez. Les événements et fichiers déjà créés restent dans Google.",
+        "confirm": "Déconnecter",
+        "cancel": "Rester connecté"
+      },
+      "disconnected": "Compte Google déconnecté.",
+      "failure": {
+        "notConfigured": "Google n’est pas configuré pour cette plateforme. Demandez à votre administrateur de la plateforme.",
+        "generic": "Une erreur s’est produite. Réessayez."
+      },
+      "privacy": {
+        "title": "Confidentialité",
+        "body": "Seules les autorisations que vous cochez sont demandées. La connexion est stockée chiffrée, appartient à l’espace de travail et n’est utilisée que par les fonctionnalités listées ici. La déconnexion la retire chez Google."
+      }
+    },
+    "consent": {
+      "title": "Confirmer la connexion Google",
+      "loading": "Chargement de votre connexion Google...",
+      "question": "Connecter {email} à {workspace} pour {permissions} ?",
+      "permissions": "Autorisations",
+      "notGiven": "non accordée",
+      "missing": "Google n'a pas accordé : {permissions}. Si vous confirmez, seul ce qui a été accordé sera connecté.",
+      "replaces": "Cela remplace le compte Google {email} actuellement connecté. L'accès de l'ancien compte est révoqué.",
+      "onlyYou": "Seule la personne qui a cliqué sur Connecter peut terminer cette opération, depuis cet espace de travail. Si quelqu'un vous a envoyé ce lien, ne le confirmez pas : fermez la page.",
+      "unknownAccount": "ce compte Google",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "working": "Traitement en cours...",
+      "failure": {
+        "notYours": "Cette connexion Google a été lancée par quelqu'un d'autre et n'a donc pas été établie. Demandez à cette personne de la connecter elle-même.",
+        "expired": "La confirmation de cette connexion Google a pris trop de temps. Revenez en arrière et cliquez de nouveau sur Connecter.",
+        "used": "Cette connexion Google a déjà été confirmée, annulée ou refusée. Revenez en arrière et cliquez de nouveau sur Connecter si vous en avez encore besoin.",
+        "notFound": "Cette connexion Google n'attend pas de confirmation, ou elle appartient à un autre espace de travail.",
+        "generic": "Une erreur s'est produite et rien n'a été modifié. Réessayez.",
+        "nothingConnected": "Rien n'a été connecté."
+      }
+    }
+  }
+}

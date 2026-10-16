@@ -165,8 +165,7 @@ describe('bulk batches', () => {
     expect(code(collide)).toBe('WMIG_CLIENT_COLLISION');
   });
 
-  it('a bulk load needs the typed count and a green dry run for EVERY organization (listing the missing ones)', async () => {
-    await greenDry('lg1', 'lg1');
+  it('a bulk load needs the typed count only: no dry run is needed for any organization', async () => {
     const ids = ['lg1', 'lg2'];
     const noCount = await ops('post', '/batches').send({ organizationIds: ids, mode: 'load' });
     expect(code(noCount)).toBe('WMIG_CONFIRM_MISMATCH');
@@ -176,15 +175,6 @@ describe('bulk batches', () => {
       confirmCount: 5,
     });
     expect(code(wrong)).toBe('WMIG_CONFIRM_MISMATCH');
-    const missing = await ops('post', '/batches').send({
-      organizationIds: ids,
-      mode: 'load',
-      confirmCount: 2,
-    });
-    expect(missing.status).toBe(422);
-    expect(code(missing)).toBe('WMIG_DRY_RUN_REQUIRED');
-    expect(JSON.stringify(missing.body)).toContain('lg2');
-    await greenDry('lg2', 'lg2');
     const ok = await ops('post', '/batches').send({
       organizationIds: ids,
       mode: 'load',

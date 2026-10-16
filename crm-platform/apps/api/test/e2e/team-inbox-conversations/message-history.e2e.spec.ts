@@ -987,7 +987,10 @@ describe('the export', () => {
       .get(`/v2/inbox/message-logs/exports/${created.id}/download`);
     expect(dl.status).toBe(200);
     expect(dl.headers['content-disposition']).toMatch(/message-history-.*\.csv/);
-    const lines = dl.text.slice(dl.text.startsWith(String.fromCharCode(0xfeff)) ? 1 : 0).trim().split('\r\n');
+    const lines = dl.text
+      .slice(dl.text.startsWith(String.fromCharCode(0xfeff)) ? 1 : 0)
+      .trim()
+      .split('\r\n');
     expect(lines[0]).toBe(
       'ID,Source,When (UTC),Direction,Phone,Contact,Status,Type,Body,Channel,Template,Campaign / broadcast / schedule,Error code,Error message',
     );

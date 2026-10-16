@@ -18,32 +18,32 @@ export function HeroHome({ ctx, def, children }: P & { children?: ReactNode }) {
     <>
       <section className="relative overflow-hidden bg-paper-0">
         <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
-        <div className="absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
-        <div className="absolute -bottom-40 -left-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
+        <div className="absolute -top-32 -end-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
+        <div className="absolute -bottom-40 -start-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
 
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[4%] left-[2%] opacity-30 rotate-[-8deg]">
-            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[4%] start-[2%] opacity-30 rotate-[-8deg]">
+            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-se-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-wa-deep">🌷 Order shipped</div>
-              <div className="text-[9px] text-wa-deep/60 mono text-right">14:08 ✓✓</div>
+              <div className="text-[9px] text-wa-deep/60 mono text-end">14:08 ✓✓</div>
             </div>
           </div>
-          <div className="absolute top-[93%] left-[2%] opacity-25 rotate-[5deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[93%] start-[2%] opacity-25 rotate-[5deg]">
+            <div className="bg-white hairline rounded-2xl rounded-ss-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">Out for delivery</div>
-              <div className="text-[9px] text-ink-500 mono text-right">14:09</div>
+              <div className="text-[9px] text-ink-500 mono text-end">14:09</div>
             </div>
           </div>
-          <div className="absolute top-[4%] right-[2%] opacity-30 rotate-[7deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[4%] end-[2%] opacity-30 rotate-[7deg]">
+            <div className="bg-white hairline rounded-2xl rounded-ss-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">Track order →</div>
-              <div className="text-[9px] text-ink-500 mono text-right">14:10</div>
+              <div className="text-[9px] text-ink-500 mono text-end">14:10</div>
             </div>
           </div>
-          <div className="absolute top-[93%] right-[2%] opacity-25 rotate-[-6deg]">
-            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[93%] end-[2%] opacity-25 rotate-[-6deg]">
+            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-se-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-wa-deep">+10% off coupon 🎁</div>
-              <div className="text-[9px] text-wa-deep/60 mono text-right">14:11 ✓✓</div>
+              <div className="text-[9px] text-wa-deep/60 mono text-end">14:11 ✓✓</div>
             </div>
           </div>
         </div>
@@ -165,7 +165,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
           />
         </svg>
 
-        <div className="absolute left-1/2 -translate-x-1/2 top-2 z-30">
+        <div className="absolute start-1/2 -translate-x-1/2 rtl:translate-x-1/2 top-2 z-30">
           <div className="hairline glass rounded-full px-3 py-1.5 inline-flex items-center gap-2 shadow-sm">
             <svg
               viewBox="0 0 16 16"
@@ -288,7 +288,10 @@ export function TwoDeviceStage({ ctx, def }: P) {
                     <span className="ring-out"></span>
                     <span className="ring-out r2"></span>
                     <span className="ring-out r3"></span>
-                    <button className="relative w-12 h-12 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+                    <div
+                      aria-hidden="true"
+                      className="relative w-12 h-12 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+                    >
                       <svg
                         viewBox="0 0 24 24"
                         className="w-5 h-5 -translate-x-[1px] translate-y-[1px]"
@@ -301,7 +304,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
                         <path d="M22 2L11 13" />
                         <path d="M22 2l-7 20-4-9-9-4 20-7z" />
                       </svg>
-                    </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -315,7 +318,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
             className="hidden lg:flex col-span-2 flex-col items-center justify-end gap-2.5 relative"
             style={{ zIndex: '35', paddingTop: '120px' }}
           >
-            <div className="absolute top-[125px] left-1/2 -translate-x-1/2 w-px h-[calc(100%-130px)] bg-gradient-to-b from-wa-green/0 via-wa-green/60 to-wa-deep/0"></div>
+            <div className="absolute top-[125px] start-1/2 -translate-x-1/2 rtl:translate-x-1/2 w-px h-[calc(100%-130px)] bg-gradient-to-b from-wa-green/0 via-wa-green/60 to-wa-deep/0"></div>
 
             <div className="relative hairline glass rounded-2xl bg-white px-5 py-4 shadow-md text-center w-[140px]">
               <div className="mono text-[9px] uppercase tracking-[0.18em] text-wa-deep mb-1.5 flex items-center justify-center gap-1.5">
@@ -474,7 +477,10 @@ export function TwoDeviceStage({ ctx, def }: P) {
                   <div className="flex-1 bg-white hairline rounded-full px-3 py-2 text-[11px] text-ink-400">
                     Type a message…
                   </div>
-                  <button className="w-8 h-8 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-sm hover:scale-105 transition-transform">
+                  <div
+                    aria-hidden="true"
+                    className="w-8 h-8 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-sm hover:scale-105 transition-transform"
+                  >
                     <svg
                       viewBox="0 0 24 24"
                       className="w-3.5 h-3.5"
@@ -487,11 +493,11 @@ export function TwoDeviceStage({ ctx, def }: P) {
                       <path d="M22 2L11 13" />
                       <path d="M22 2l-7 20-4-9-9-4 20-7z" />
                     </svg>
-                  </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="absolute -top-3 -right-3 hairline glass rounded-xl px-3 py-2 shadow-md float-y-2">
+              <div className="absolute -top-3 -end-3 hairline glass rounded-xl px-3 py-2 shadow-md float-y-2">
                 <div className="flex items-center gap-2">
                   <span className="relative flex w-2 h-2">
                     <span className="absolute inset-0 rounded-full bg-wa-green pulse-dot"></span>

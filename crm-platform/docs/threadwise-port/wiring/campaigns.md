@@ -29,6 +29,7 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 | GET          | `/v2/broadcasts/:id/summary`, `/v2/broadcasts/:id/summary/people` (served by `summary/broadcast-summary.controller.ts`) | `bcast.broadcasts.read` (same)                                                                             |
 | POST         | `/v2/campaigns`                                                                                                         | `camp.campaigns.create`                                                                                    |
 | POST         | `/v2/campaigns/ai-generate`                                                                                             | `camp.campaigns.create` ("Build with AI")                                                                  |
+| POST         | `/v2/campaigns/ai-image`                                                                                                | `camp.campaigns.create` (ADDITION, "Build with AI" picture)                                                |
 | POST         | `/v2/campaigns/bulk-delete`                                                                                             | `camp.campaigns.delete`                                                                                    |
 | PUT          | `/v2/campaigns/:id`                                                                                                     | `camp.campaigns.update`                                                                                    |
 | GET          | `/v2/broadcast-wizard/templates`, `/audience-sources`                                                                   | `camp.campaigns.create` (ADDITION, TW-CAMP-029/030)                                                        |
@@ -54,11 +55,11 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 
 ## Tables read or written
 
-`camp_campaign_lookup`, `camp_receipt_lookup`, `camp_series`, `camp_retry_attempts`, `camp_test_sends`, `camp_test_receipt_lookup` (functions), `segments`, `usage_charges`, `channels`, `contact_group_members`, `contact_groups`, `contact_tags`, `contacts`, `conversation_tag`, `conversations`, `devices`, `flows`, `picked`, `r`, `tags`, `wa_link_clicks`, `wa_provider_configs`, `wa_templates`, `wp_campaign_contacts`, `wpcampaigns`
+`camp_campaign_lookup`, `camp_receipt_lookup`, `camp_series`, `camp_retry_attempts`, `camp_follow_up_attempts`, `camp_follow_up_receipt_lookup` (function), `camp_test_sends`, `camp_test_receipt_lookup` (functions), `segments`, `usage_charges`, `channels`, `contact_group_members`, `contact_groups`, `contact_tags`, `contacts`, `conversation_tag`, `conversations`, `devices`, `flows`, `picked`, `r`, `tags`, `wa_link_clicks`, `wa_provider_configs`, `wa_templates`, `wp_campaign_contacts`, `wpcampaigns`
 
 ## Queues and workers
 
-`CAMPAIGN` (runs, and the sandbox's `fixture-receipt` reports). Interval services in the campaigns worker: `WizardWorker.planTick` (recurring series planner) and `retryTick` (frequency-cap retries).
+`CAMPAIGN` (runs, and the sandbox's `fixture-receipt` reports). Interval services in the campaigns worker: `WizardWorker.planTick` (recurring series planner), `retryTick` (frequency-cap retries) and `followUpTick` (follow-up steps, `WizardFollowUpService`).
 
 ## Outbox events emitted
 
@@ -94,3 +95,9 @@ Blocked (recorded, not silently dropped):
 - `CAMP-EMAIL-B2` Replies and clicks counters for an email campaign (`campaign.contact_replied`, link tracking). Reference's mail runner had neither; the reply lands in the inbox thread of the mail.
 - `CAMP-EMAIL-B3` A mailbox that needs reconnecting mid-run fails each remaining recipient with the reason (resend failed after reconnecting) instead of pausing the campaign.
 - `CAMP-EMAIL-B4` Campaign mail with attachments or rich HTML (Reference's mail runner sends the escaped text only).
+- Follow-up steps (ADDITION, from the meeting's "Add a follow-up"; Reference has none): `followUps` on the wizard draft, `wpcampaigns.follow_up_count`, `wp_campaign_contacts.follow_up_*`, log `camp_follow_up_attempts`. Cloud API numbers only. A flow step uses the same `CampaignFlowStarter` seam as a flow campaign. Reply detection reads the inbox (`messages` direction `in` of the contact's conversations).
+- Build with AI (TW-CAMP-002, TW-CAMP-038): text through `CAMPAIGN_AI_PORT`, the picture through `CAMPAIGN_AI_IMAGE_PORT` (`infra/providers/campaigns`, OpenAI only), both with `AiKeyResolver` / `AiTokenMeter`; the picture is stored by `MarketingMediaService` (broadcasts barrel). The guided wizard has its own entry: a template draft (`POST /v2/templates/ai-generate`) handed to the template form, because the wizard sends approved templates, not free text.
+
+## Quiet hours and calling windows (BL-177, product extension)
+
+Not in Reference. `CampaignDispatchService.loop` asks `SendWindowService` per claimed slice for a marketing campaign (a utility-template-only campaign is never asked). A held recipient goes back to `queued` with `wp_campaign_contacts.held_until`; `CampaignsRepository.claim` skips it until then; `finish` schedules the campaign again for the minute of the first opening (stop `quiet`). The ConsentGate screens the audience again at every run start. `WizardFollowUpService` defers a marketing follow-up step (`follow_up_check_at` moves to the opening). Read side: `held` (live), `heldUntil` / `heldReason` (recipients), the live hint `campaigns.detail.live.held`. A recurring campaign carries its held recipients to its next occurrence (BL-192).

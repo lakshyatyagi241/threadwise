@@ -313,7 +313,7 @@ async function assertNoStrayMessages(env: Env, plan: ChatPlan): Promise<void> {
         (
           await tx.execute(sql`
             SELECT count(*)::int AS n FROM messages
-            WHERE org_id = ${env.orgId} AND uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(uuids)}::jsonb)::uuid)`)
+            WHERE org_id = ${env.orgId} AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(uuids)}::jsonb)::uuid))`)
         ).rows[0]!.n,
       ),
     );
@@ -458,7 +458,7 @@ async function beforeInsert(tx: TenantTx, ctx: Ctx, table: string, rows: Row[]):
            (SELECT count(*) FROM messages m WHERE m.org_id = c.org_id AND m.conversation_id = c.id)::int AS n,
            (SELECT coalesce(max(m.seq), 0) FROM messages m WHERE m.org_id = c.org_id AND m.conversation_id = c.id)::int AS mx
     FROM conversations c
-    WHERE c.org_id = ${ctx.orgId} AND c.uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(wanted)}::jsonb)::uuid)
+    WHERE c.org_id = ${ctx.orgId} AND c.uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(wanted)}::jsonb)::uuid))
     FOR UPDATE OF c`);
   const have = new Map(
     (

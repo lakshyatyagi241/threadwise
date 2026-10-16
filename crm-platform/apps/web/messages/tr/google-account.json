@@ -1,0 +1,172 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google hesabı",
+        "description": "Akışlarınızda Takvim, Sheets, Docs, Forms ve Meet için tek bir Google hesabı bağlayın.",
+        "keywords": "google, google hesabı, takvim, calendar, e-tablo, sheets, belge, docs, form, forms, meet, drive, oauth, google bağla"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "page": {
+      "eyebrow": "Çalışma alanı",
+      "title": "Google hesabı",
+      "subtitle": "Bir kez bağlayın. Aynı Google hesabı rezervasyon takviminizi, Meet bağlantılarını ve akışlarınızdaki Sheets, Docs ve Forms adımlarını çalıştırır.",
+      "loading": "Google hesabınız yükleniyor...",
+      "forbidden": {
+        "title": "Bu sayfayı açamazsınız",
+        "body": "Rolünüz Google hesabını görüntülemeyi içermiyor. Çalışma alanı yöneticisine danışın."
+      },
+      "status": {
+        "unavailable": "Kurulmadı",
+        "disconnected": "Bağlı değil",
+        "connected": "Bağlı",
+        "needs_reconnect": "Yeniden bağlanmalı"
+      },
+      "outcome": {
+        "connected": "Google hesabı bağlandı.",
+        "denied": "Google bağlanmadı: izin ekranı iptal edildi.",
+        "failed": "Google bağlantısı tamamlanmadı. Tekrar deneyin.",
+        "expired": "Bu bağlantı denemesinin süresi doldu. Yeniden başlamak için düğmeye basın.",
+        "not_configured": "Google bu platform için henüz kurulmadı. Platform yöneticinize danışın.",
+        "missing_scope": "Google istediğiniz tüm izinleri vermedi. Önceden verilen izinler çalışmaya devam eder; eksik olanları yeniden ekleyin ve tüm kutuları işaretli bırakın.",
+        "cancelled": "İptal ettiniz. Hiçbir şey bağlanmadı."
+      },
+      "actions": {
+        "connect": "Google hesabını bağla",
+        "reconnect": "Google'ı yeniden bağla",
+        "addPermissions": "İzin ekle",
+        "disconnect": "Bağlantıyı kes",
+        "working": "Google açılıyor...",
+        "retry": "Tekrar dene"
+      },
+      "unavailable": {
+        "title": "Google bu platform için kurulmadı",
+        "body": "Kimse bağlanamadan önce platform yöneticisinin Google OAuth istemcisini eklemesi gerekir. O zamana kadar akışlarınızdaki Google adımları bunu belirten bir iletiyle başarısız olur, randevular ise takvim olmadan devam eder."
+      },
+      "reconnect": {
+        "title": "Google bu bağlantıyı artık kabul etmiyor",
+        "body": "İzin geri çekildi, parola değişti veya yetkinin süresi doldu. Geri yüklemek için yeniden bağlanın; seçimleriniz korunur.",
+        "bodyAccount": "Google artık {account} hesabını kabul etmiyor. Geri yüklemek için yeniden bağlayın; seçimleriniz korunur."
+      },
+      "stats": {
+        "status": "Durum",
+        "calendars": "Takvimler",
+        "calendarsValue": "{count} kullanılabilir",
+        "calendarsNone": "yok",
+        "permissions": "İzinler",
+        "permissionsValue": "{granted} / {total}",
+        "lastUsed": "Son kullanım",
+        "never": "hiç",
+        "live": "etkin",
+        "idle": "boşta"
+      },
+      "account": {
+        "title": "Bağlı hesap",
+        "email": "Hesap",
+        "calendar": "Rezervasyonlar ve Meet için takvim",
+        "primaryCalendar": "Ana takvim",
+        "changeCalendar": "Takvimi değiştir",
+        "connectedAgo": "Bağlanma: {when}",
+        "none": "Bağlı bir Google hesabı yok.",
+        "noneBody": "Bağlanana kadar akışlarınızdaki Google adımları, Google'ı bağlamanızı söyleyen bir iletiyle başarısız olur ve randevular takvime eklenmez."
+      },
+      "permissions": {
+        "title": "Google ne için kullanılabilir",
+        "intro": "İzin vermek istediklerinizi işaretleyin. Google, ekranında tam olarak bu izinleri gösterir ve daha sonra önceden verilenleri kaybetmeden yenilerini ekleyebilirsiniz.",
+        "allowed": "İzin verildi",
+        "notAllowed": "İzin verilmedi",
+        "allow": "İzin ver",
+        "restricted": "Google tarafından kısıtlı",
+        "restrictedNote": "Google bu izni kısıtlı sayar: birçok çalışma alanında çalışması için platformun Google incelemesinden geçmesi gerekir. İhtiyacınız yoksa kapalı bırakın.",
+        "nothingTicked": "En az bir izin işaretleyin.",
+        "calendar": {
+          "name": "Takvim",
+          "body": "Rezervasyonları ve Meet bağlantılarını takviminize ekleyin, meşgul saatleri rezervasyon sayfasında gizleyin.",
+          "usedBy": "Rezervasyon takvimi, Randevu al ve Google Meet adımları"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "body": "Bir sayfaya satır ekleyin, satır arayın, bir hücreyi kontrol edin veya bir satırı kişiye kopyalayın.",
+          "usedBy": "Google Sheets, Google Sheet alanını kontrol et, Google Sheet'ten kişi kaydet"
+        },
+        "docs": {
+          "name": "Docs ve Drive",
+          "body": "Şablon belgeyi kopyalayın, doldurun ve kopyayı bağlantıyla paylaşın.",
+          "usedBy": "Google Docs adımı"
+        },
+        "forms": {
+          "name": "Forms",
+          "body": "Bir formun herkese açık bağlantısını okuyun; böylece akış bunu müşteriye gönderebilir.",
+          "usedBy": "Google Form adımı"
+        },
+        "drive_listing": {
+          "name": "Drive dosya listesi",
+          "body": "Akış oluşturucuda e-tablolarınızı, belgelerinizi ve formlarınızı adıyla listeleyin; bağlantı yapıştırmak yerine seçebilirsiniz.",
+          "usedBy": "Akış oluşturucudaki dosya seçiciler"
+        }
+      },
+      "lastError": {
+        "title": "Google'ın bildirdiği son sorun",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google artık bağlı hesabı kabul etmiyor. Yeniden bağlanın.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Platformun Google istemcisi eksik veya kapalı.",
+        "GOOGLE_API_NOT_ENABLED": "Platformun Google Cloud projesinde bu özelliğin ihtiyaç duyduğu bir API etkinleştirilmemiş. Platform yöneticisinin etkinleştirmesi gerekir.",
+        "GOOGLE_SCOPE_MISSING": "Bir adım, bu hesaba verilmemiş bir izne ihtiyaç duydu. Yukarıdan ekleyin.",
+        "GOOGLE_RATE_LIMITED": "Google şu anda istekleri sınırlıyor. Adımlar kısa süre sonra yeniden denenir.",
+        "GOOGLE_UNAVAILABLE": "Google yanıt vermedi. Bir sonraki kullanımda yeniden denenir.",
+        "other": "Google bir sorun bildirdi."
+      },
+      "usedBy": {
+        "title": "Kullanan",
+        "book": "Randevu al adımı",
+        "meet": "Google Meet adımı",
+        "sheets": "Google Sheets adımları",
+        "docs": "Google Docs adımı",
+        "forms": "Google Form adımı",
+        "flow": "akış"
+      },
+      "disconnectConfirm": {
+        "title": "Google bağlantısı kesilsin mi?",
+        "body": "Yeniden bağlanana kadar rezervasyonlar için takvim eşitlemesi ve akışlarınızdaki tüm Google adımları durur. Önceden oluşturulan etkinlikler ve dosyalar Google'da kalır.",
+        "confirm": "Bağlantıyı kes",
+        "cancel": "Bağlı kalsın"
+      },
+      "disconnected": "Google hesabının bağlantısı kesildi.",
+      "failure": {
+        "notConfigured": "Google bu platform için kurulmadı. Platform yöneticinize danışın.",
+        "generic": "Bir şeyler ters gitti. Tekrar deneyin."
+      },
+      "privacy": {
+        "title": "Gizlilik",
+        "body": "Yalnızca işaretlediğiniz izinler istenir. Bağlantı şifrelenmiş olarak saklanır, çalışma alanına aittir ve yalnızca burada listelenen özellikler tarafından kullanılır. Bağlantıyı kesmek erişimi Google'da geri çeker."
+      }
+    },
+    "consent": {
+      "title": "Google bağlantısını onayla",
+      "loading": "Google bağlantınız yükleniyor...",
+      "question": "{email} hesabı, {permissions} için {workspace} çalışma alanına bağlansın mı?",
+      "permissions": "İzinler",
+      "notGiven": "verilmedi",
+      "missing": "Google şunları vermedi: {permissions}. Onaylarsanız yalnızca verilenler bağlanır.",
+      "replaces": "Bu işlem, şu anda bağlı olan {email} Google hesabının yerini alır. Eski hesabın erişimi kaldırılır.",
+      "onlyYou": "Bunu yalnızca Bağlan düğmesine basan kişi, bu çalışma alanından tamamlayabilir. Bu bağlantıyı size başka biri gönderdiyse onaylamayın, sayfayı kapatın.",
+      "unknownAccount": "bu Google hesabı",
+      "confirm": "Onayla",
+      "cancel": "İptal",
+      "working": "İşleniyor...",
+      "failure": {
+        "notYours": "Bu Google bağlantısı başka biri tarafından başlatıldığı için bağlanmadı. Kendisinden bağlantıyı kendisinin kurmasını isteyin.",
+        "expired": "Bu Google bağlantısının onaylanması çok uzun sürdü. Geri dönüp Bağlan düğmesine yeniden basın.",
+        "used": "Bu Google bağlantısı zaten onaylandı, iptal edildi veya reddedildi. Hâlâ gerekiyorsa geri dönüp Bağlan düğmesine yeniden basın.",
+        "notFound": "Bu Google bağlantısı onay beklemiyor veya başka bir çalışma alanına ait.",
+        "generic": "Bir sorun oluştu ve hiçbir şey değiştirilmedi. Lütfen tekrar deneyin.",
+        "nothingConnected": "Hiçbir şey bağlanmadı."
+      }
+    }
+  }
+}

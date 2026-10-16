@@ -3310,3 +3310,10 @@ Everything marked QUIRK or "static reading" below comes from reading the source 
   }
 }
 ```
+
+## Port notes: the Google account behind TW-FLB-055 to 059 (TW-GACC)
+
+The Google Meet, Sheets, Docs and Form nodes (TW-FLB-055, 057, 058, 059) and their file pickers depend on the workspace's Google account, which Reference serves from
+`/google-account` and `GoogleFlowNodeController`. The inventory did not list that page as a feature; it is built as **TW-GACC-001 to 007** and recorded in
+[wiring/google-account.md](../wiring/google-account.md), [parity/google-account.md](../parity/google-account.md) and [plan/google-workspace-build.md](../plan/google-workspace-build.md). The pickers answer with
+the account's files (needs the Drive file list permission) and `GET /flows/builder-context/google/status` feeds the inspector notice.

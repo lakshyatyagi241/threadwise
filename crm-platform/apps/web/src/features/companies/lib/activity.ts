@@ -20,6 +20,7 @@ export const isFieldKey = (f: string): f is FieldKey => f in FIELD_LABELS;
 export type ChangeView =
   | { kind: 'field'; field: FieldKey; old: string | null; new: string | null }
   | { kind: 'contactLinked' | 'contactUnlinked'; contact: { id: string; name: string | null } }
+  | { kind: 'properties'; keys: string[] }
   | { kind: 'other'; field: string };
 
 const asText = (v: unknown): string | null => {
@@ -41,6 +42,12 @@ export function changeViews(entry: Pick<CompanyActivityEntry, 'changes'>): Chang
   for (const c of entry.changes) {
     if (isFieldKey(c.field)) {
       out.push({ kind: 'field', field: c.field, old: asText(c.old), new: asText(c.new) });
+    } else if (c.field === 'customFieldKeys') {
+      // The trail names which properties changed, never their values (a property can hold anything a person typed).
+      const keys = Array.isArray(c.new)
+        ? c.new.filter((k): k is string => typeof k === 'string')
+        : [];
+      if (keys.length > 0) out.push({ kind: 'properties', keys });
     } else if (c.field === 'contactLinked' || c.field === 'contactUnlinked') {
       const contact = asContact(c.field === 'contactLinked' ? c.new : c.old);
       if (contact) out.push({ kind: c.field, contact });

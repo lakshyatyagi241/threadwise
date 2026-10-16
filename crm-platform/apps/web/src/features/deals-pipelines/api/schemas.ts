@@ -204,6 +204,8 @@ export interface UpdateDealInput {
   currency?: string;
   ownerId?: string | null;
   contactId?: string | null;
+  /** The company (uuid); null clears it. Omit to keep it. */
+  companyId?: string | null;
   expectedCloseDate?: string | null;
 }
 

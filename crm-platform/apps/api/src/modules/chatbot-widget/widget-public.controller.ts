@@ -26,6 +26,7 @@ import {
 import { ApiExcludeController } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators';
+import { isGpcSignal } from '../contact-consent';
 import { pickChatLocale } from './chat-page-text';
 import {
   NOT_FOUND_SCRIPT,
@@ -78,6 +79,7 @@ export class WidgetPublicController {
       inputUuid: typeof inputUuid === 'string' ? inputUuid.trim() : '',
       headerUuid: (Array.isArray(header) ? header[0] : header)?.trim() ?? '',
       secure: req.secure,
+      gpc: isGpcSignal(req.headers['sec-gpc']),
     };
   }
 
@@ -214,6 +216,26 @@ export class WidgetPublicController {
     res
       .status(200)
       .json(await this.widgets.feedback(token, this.publicRequest(req, inputUuid), body));
+  }
+
+  /** The visitor chose "Restart this chat" or "Close this chat": a fresh visitor, so the next load is a new conversation. */
+  @Post('api/restart')
+  async restart(
+    @Param('token') token: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const out = await this.widgets.restart(token, this.publicRequest(req, undefined));
+    res.cookie(`wgt_vid_${out.widgetUuid}`, out.visitorUuid, {
+      maxAge: YEAR_MS,
+      httpOnly: true,
+      path: '/',
+      secure: req.secure,
+      sameSite: req.secure ? 'none' : 'lax',
+    });
+    res.status(200).json({ ok: true, visitor_uuid: out.visitorUuid });
   }
 
   @Get('api/history')

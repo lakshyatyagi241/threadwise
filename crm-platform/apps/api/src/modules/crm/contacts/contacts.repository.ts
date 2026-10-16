@@ -405,6 +405,24 @@ export class ContactsRepository {
     return rows[0] as ContactRow | undefined;
   }
 
+  /**
+   * Locks the contact row for the rest of the transaction. A delete takes it before erasing the history, so a new conversation
+   * cannot link to the contact in between and keep its messages after the contact is gone.
+   */
+  async lockById(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`SELECT 1 FROM contacts WHERE org_id = ${orgId} AND id = ${id} FOR UPDATE`);
+  }
+
+  /** uuid -> internal id for every uuid that exists in the workspace, in one query. Unknown uuids are simply absent. */
+  async idsByUuid(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, number>> {
+    if (uuids.length === 0) return new Map();
+    const rows = await tx
+      .select({ uuid: contacts.uuid, id: contacts.id })
+      .from(contacts)
+      .where(and(eq(contacts.orgId, orgId), inArray(contacts.uuid, uuids)));
+    return new Map(rows.map((r) => [r.uuid, r.id]));
+  }
+
   async findById(tx: Tx, orgId: number, id: number): Promise<ContactRow | undefined> {
     const rows = await this.baseQuery(tx).where(
       and(eq(contacts.orgId, orgId), eq(contacts.id, id)),

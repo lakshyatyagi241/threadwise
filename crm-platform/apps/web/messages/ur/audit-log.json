@@ -92,7 +92,8 @@
       "api_keys": "API کیز",
       "audit-log": "آڈٹ لاگ",
       "audit-log-exports": "آڈٹ لاگ ایکسپورٹس",
-      "contact_consent_exports": "رضامندی کے ثبوت کی ایکسپورٹس"
+      "contact_consent_exports": "رضامندی کے ثبوت کی ایکسپورٹس",
+      "revenue-report-exports": "ریونیو رپورٹ کی فائلیں"
     },
     "table": {
       "caption": "آڈٹ اندراجات، نئے سب سے اوپر۔ اوقات آپ کے ٹائم زون ({zone}) میں دکھائے گئے ہیں۔",

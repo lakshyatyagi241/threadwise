@@ -145,11 +145,6 @@
         "description": "Edita tus embudos de negocios, etapas y motivos de pérdida.",
         "keywords": "negocios, etapas de venta, tablero, motivo de pérdida, embudo"
       },
-      "tags": {
-        "label": "Etiquetas",
-        "description": "Crea y organiza las etiquetas usadas en contactos y chats.",
-        "keywords": "etiquetas, color"
-      },
       "saved-replies": {
         "label": "Respuestas guardadas",
         "description": "Escribe respuestas reutilizables que tu equipo pueda enviar con un clic.",
@@ -374,6 +369,11 @@
         "label": "Centro de cumplimiento normativo",
         "description": "Herramientas que te ayudan a cumplir tus obligaciones de privacidad: las leyes que te afectan, contactos de privacidad, avisos y enlaces, subencargados, horas de silencio y una lista de verificación de lo que ya tienes en marcha.",
         "keywords": "cumplimiento, privacidad, rgpd, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, delegado de protección de datos, responsable de reclamaciones, subencargado, dpa, términos, política de privacidad, horas de silencio, no llamar, lista de verificación, menores"
+      },
+      "company-properties": {
+        "label": "Propiedades de empresa",
+        "description": "Añade los campos que quieres conservar en cada empresa.",
+        "keywords": "campos personalizados, campos, obligatorio, desplegable, organización, cuenta"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

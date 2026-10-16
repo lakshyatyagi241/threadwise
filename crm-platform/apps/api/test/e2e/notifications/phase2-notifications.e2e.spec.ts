@@ -781,10 +781,9 @@ describe('broadcast, campaign and scheduled message outcomes', () => {
     expect((await mine())[0]!.body).toBe('Campaign "A/B test" finished. 7 sent, 6 failed.');
 
     // Finished again with new counts, unread: still one row, the newest counts, run count 2.
-    await p.h.owner.query(
-      `UPDATE wpcampaigns SET sent_count = 9, failed_count = 4 WHERE id = $1`,
-      [c.id],
-    );
+    await p.h.owner.query(`UPDATE wpcampaigns SET sent_count = 9, failed_count = 4 WHERE id = $1`, [
+      c.id,
+    ]);
     await finish();
     await deliver();
     await finish();

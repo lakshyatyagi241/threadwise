@@ -89,7 +89,8 @@
       "NETWORK": "Netzwerkfehler – bitte versuchen Sie es erneut.",
       "UNEXPECTED": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       "CALL_PLAYBACK_LINK_INVALID": "Dieser Aufnahme-Link ist abgelaufen. Drücke erneut auf Wiedergabe, um einen neuen zu erhalten.",
-      "CALL_RANGE_INVALID": "Diese Daten ergeben keinen Sinn: Der Beginn darf nicht nach dem Ende liegen, ein Zeitraum darf höchstens ein Jahr umfassen und die Zeitzone muss gültig sein."
+      "CALL_RANGE_INVALID": "Diese Daten ergeben keinen Sinn: Der Beginn darf nicht nach dem Ende liegen, ein Zeitraum darf höchstens ein Jahr umfassen und die Zeitzone muss gültig sein.",
+      "CALL_OUTSIDE_WINDOW": "Dieser Kontakt liegt außerhalb Ihrer Anrufzeiten, daher wurde kein Anruf getätigt. Das Anruffenster öffnet {when}."
     },
     "settings": {
       "title": "Anrufe",

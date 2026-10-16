@@ -44,9 +44,6 @@
         "unassigned": "Unassigned",
         "unread": "Unread"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Open",
-      "statusAll": "Every status",
       "status": {
         "open": "Open",
         "pending": "Pending",
@@ -61,7 +58,6 @@
         "high": "High",
         "urgent": "Urgent"
       },
-      "channelFilter": "Channel",
       "allChannels": "All channels",
       "archived": "Archived",
       "backToInbox": "Back to the inbox",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Select",
-      "selectDone": "Done"
+      "selectDone": "Done",
+      "filters": {
+        "open": "Filters",
+        "openActive": "Filters ({count} on)",
+        "title": "Filters",
+        "close": "Close",
+        "reset": "Reset",
+        "cancel": "Cancel",
+        "apply": "Apply",
+        "status": "Chat status",
+        "statusHint": "Nothing chosen shows open and pending chats.",
+        "conversation": "Conversation",
+        "any": "Any",
+        "assigned": "Assigned",
+        "unassigned": "Unassigned",
+        "unattended": "Unattended",
+        "labels": "Tags",
+        "channels": "Channels",
+        "agents": "Agents",
+        "sortBy": "Sort by",
+        "recent": "Recent",
+        "old": "Old",
+        "dateRange": "Date range (last activity)",
+        "from": "From",
+        "to": "To",
+        "select": "Select an option",
+        "search": "Search",
+        "noMatch": "No match",
+        "today": "Today",
+        "last7": "Last 7 days",
+        "last30": "Last 30 days",
+        "thisMonth": "This month",
+        "clearDates": "Clear dates",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month"
+      },
+      "rowMenu": "More actions for {name}",
+      "priorityMenu": "Priority",
+      "statusFilter": "Status",
+      "statusOpen": "Open",
+      "statusAll": "Every status",
+      "channelFilter": "Channel",
+      "selectRow": "Select {name}"
     },
     "status": {
       "received": "Received",
@@ -232,7 +270,9 @@
         "undone": "Stage change undone: back to {stage}.",
         "undoneToast": "Stage put back to {stage}.",
         "couldNotUndo": "This change cannot be undone any more: the contact moved on, or it was already undone."
-      }
+      },
+      "heldUntil": "Held until {when}",
+      "heldWhy": "This marketing message is waiting for your quiet hours to end. It is sent then, if the contact has not unsubscribed in the meantime."
     },
     "media": {
       "openImage": "Open image {name}",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "New message: {text}",
       "attachment": "an attachment",
       "jumpLatest": "Jump to latest",
-      "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}"
+      "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}",
+      "searchOpen": "Search in this chat",
+      "searchPlaceholder": "Search in this chat",
+      "searchCount": "{current} of {total}",
+      "searchNone": "No match",
+      "searchPrev": "Previous match",
+      "searchNext": "Next match",
+      "searchClose": "Close search"
     },
     "groupThread": {
       "openGroup": "Open group",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "Saved replies",
-      "savedReplyIssues": "Not filled in and left as written ({count}): {list}. Fix before you send."
+      "savedReplyIssues": "Not filled in and left as written ({count}): {list}. Fix before you send.",
+      "toolbar": {
+        "label": "Message formatting",
+        "bold": "Bold",
+        "italic": "Italic",
+        "underline": "Underline",
+        "strike": "Strikethrough",
+        "bullets": "Bulleted list",
+        "numbers": "Numbered list",
+        "ai": {
+          "open": "Smart AI Assistant",
+          "noModel": "No AI model is enabled for this workspace",
+          "title": "Smart AI Assistant",
+          "condense": "Condense",
+          "condenseHint": "Make text shorter and more concise",
+          "fix": "Fix Grammar",
+          "fixHint": "Correct grammar and spelling errors",
+          "positive": "Positive Tone",
+          "positiveHint": "Make text more positive and upbeat",
+          "translate": "Translate",
+          "translateHint": "Translate to different languages",
+          "selectLanguage": "Select Language",
+          "searchLanguages": "Search languages…",
+          "noLanguage": "No language matches",
+          "working": "Working on it…",
+          "empty": "Write a message first.",
+          "failed": "The AI could not change the text. Try again."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notes and timeline",
@@ -452,7 +527,13 @@
         "pickTeam": "Choose a team for this conversation",
         "noTeam": "No team",
         "onLeave": "On leave",
-        "onLeaveUntil": "On leave until {date}"
+        "onLeaveUntil": "On leave until {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Away",
+          "busy": "Busy",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

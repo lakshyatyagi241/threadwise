@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "AI CRM Copilot"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "AICRM_NO_AI_PROVIDER": "No AI provider is configured. Ask your admin to add an AI key.",
+      "AICRM_PROVIDER_FAILED": "The AI service returned an error. Please try again.",
+      "VALIDATION_FAILED": "Check the highlighted fields and try again.",
+      "PLAN_FEATURE_LOCKED": "Upgrade your plan to use this feature."
+    },
+    "chat": {
+      "title": "AI CRM Copilot",
+      "subtitle": "Ask it to find or create contacts and deals, move pipeline stages, or run a report.",
+      "loading": "Loading…",
+      "thinking": "Thinking…",
+      "emptyState": "Say hello, or ask something like \"what deals are open?\"",
+      "inputPlaceholder": "Ask the Copilot…",
+      "send": "Send",
+      "resetConversation": "Reset conversation",
+      "recentActions": "Recent actions",
+      "noRecentActions": "No actions yet.",
+      "notice": {
+        "settingsSaved": "Setting saved."
+      },
+      "settings": {
+        "title": "WhatsApp staff channel",
+        "waCopilotToggle": "Let staff chat with the Copilot over WhatsApp (not available yet)"
+      }
+    }
+  }
+}

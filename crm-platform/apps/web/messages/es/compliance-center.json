@@ -165,7 +165,7 @@
             "unset": "Responde a la pregunta sobre menores en Contactos y menores.",
             "minorsNoParental": "Puede haber menores, pero el consentimiento parental está desactivado. Este perfil considera menor a cualquier persona de menos de {age} años.",
             "no_minors": "No tratas conscientemente datos de menores. Este perfil considera menor a cualquier persona de menos de {age} años.",
-            "may_include_minors": "El consentimiento parental está activado para menores de {age} años. Conservar las pruebas por contacto aún no está disponible."
+            "may_include_minors": "El consentimiento parental está activado para menores de {age}. Marca un contacto como menor en su tarjeta de consentimiento y registra allí el consentimiento del tutor."
           }
         },
         "opt_out_notice": {
@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Las horas de silencio y las franjas de llamadas aún no se aplican",
+          "title": "Las horas de silencio y las ventanas de llamadas se aplican",
           "detail": {
-            "notEnforced": "Tus horas de silencio y tu franja de llamadas están guardadas, pero por ahora nada retiene un mensaje ni bloquea una llamada fuera de ellas. Organízate tú mismo en consecuencia."
+            "enforced": "Los mensajes de marketing dentro de tus horas de silencio se retienen hasta que terminan, y una llamada fuera de tu ventana de llamadas se rechaza indicando cuándo se abre. Las respuestas dentro de la ventana de 24 horas y los avisos de utilidad nunca se retienen. El registro DND es solo una nota: todavía no se comprueba nada con él."
           }
         }
       }
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Datos de menores",
-        "hint": "Este producto es para empresas. Indica si puedes tener datos de menores, para que se muestren las reglas adecuadas.",
+        "hint": "Este producto es para empresas. Indica si puedes tener datos de menores para que se muestren las reglas adecuadas. Al responder, el marketing a un contacto marcado como menor se frena: siempre si no tratas datos de menores a sabiendas, y hasta que conste el consentimiento del tutor si puede haber menores.",
         "policy": "Menores entre tus contactos",
         "policies": {
           "unset": "Aún sin responder",
@@ -352,7 +352,7 @@
           "may_include_minors": "Puede haber menores entre nuestros contactos"
         },
         "parental": "Se exige consentimiento parental para los menores",
-        "parentalHint": "Un indicador que registra tu política. Recopilar y conservar las pruebas del consentimiento parental por contacto aún no está disponible.",
+        "parentalHint": "Registra tu política y frena el marketing a los contactos marcados como menores hasta que conste el consentimiento del tutor. Marcas un contacto como menor y registras ese consentimiento en su tarjeta de consentimiento.",
         "age": "Los perfiles que has activado consideran menor a cualquier persona de menos de {age} años.",
         "dpdpNeedsAnswer": "El perfil DPDP te pide que respondas a esta pregunta."
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Estos ajustes se guardan, pero aún no se aplican. No se retiene ningún mensaje ni se bloquea ninguna llamada fuera de las horas que definas. Organiza tus envíos y llamadas en consecuencia.",
-      "intro": "Algunas normas restringen cuándo pueden llegar a las personas los mensajes y las llamadas de marketing. Registra aquí tu horario de trabajo.",
+      "intro": "Algunas normas limitan cuándo los mensajes de marketing y las llamadas pueden llegar a las personas. Define aquí tus horarios: un mensaje de marketing enviado en las horas de silencio espera y sale cuando terminan, y no se realiza una llamada fuera de la ventana de llamadas.",
       "quiet": {
         "title": "Horas de silencio para mensajes",
-        "hint": "Horas en las que no quieres que los mensajes de marketing lleguen a las personas. El periodo puede cruzar la medianoche.",
+        "hint": "Horas en las que no salen mensajes de marketing. Esperan y se envían cuando terminan. El periodo puede cruzar la medianoche.",
         "enabled": "Horas de silencio activadas",
         "start": "Silencio desde",
         "end": "Silencio hasta"
       },
       "calling": {
         "title": "Franja de llamadas",
-        "hint": "Las únicas horas en las que deberían hacerse llamadas de marketing, en los días que elijas.",
+        "hint": "Las únicas horas en que se hacen llamadas de marketing, en los días que elijas. Una llamada fuera de ellas se rechaza e indica cuándo se abre la ventana.",
         "enabled": "Franja de llamadas activada",
         "start": "Llamadas desde",
         "end": "Llamadas hasta",
@@ -407,8 +406,8 @@
       },
       "suggested": "Las leyes que has activado sugieren de {start} a {end}.",
       "zone": {
-        "label": "Zona horaria",
-        "hint": "Las horas se interpretan en esta zona. La zona de tu espacio de trabajo es {zone}.",
+        "label": "Zona horaria de respaldo",
+        "hint": "Las horas se leen según el reloj de cada contacto: su propiedad de zona horaria o, si no, el prefijo de país de su número. Esta zona se usa cuando no se conoce ninguna. La zona de tu espacio de trabajo es {zone}.",
         "workspace": "Zona horaria del espacio de trabajo ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Tu propia lista"
         },
         "note": "Es solo una nota. Todavía no se comprueba nada con ningún registro."
-      }
+      },
+      "enforcedNote": "Las horas de silencio retienen un mensaje de marketing hasta que terminan, y la ventana de llamadas rechaza una llamada fuera de ella. Se usa el reloj de cada contacto. Las respuestas dentro de la ventana de 24 horas y los avisos de utilidad nunca se retienen."
     },
     "subprocessors": {
       "intro": "Los proveedores que tratan datos personales para tu espacio de trabajo: qué hacen, qué datos reciben y dónde. Puedes publicar la lista en una página pública.",
@@ -487,6 +487,10 @@
       "privacy": "Política de privacidad",
       "terms": "Términos",
       "notFound": "Página no encontrada"
+    },
+    "hold": {
+      "heldUntil": "En espera hasta {when} (horas de silencio)",
+      "heldCount": "{count} en espera por las horas de silencio"
     }
   }
 }

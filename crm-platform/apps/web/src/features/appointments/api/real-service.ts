@@ -5,6 +5,7 @@ import {
   bookingTypeListResponseSchema,
   bookingTypeResponseSchema,
   calendarConnectStartResponseSchema,
+  calendarDriftActionSchema,
   calendarListResponseSchema,
   calendarStatusResponseSchema,
   previewSlotsResponseSchema,
@@ -19,6 +20,7 @@ import { call, callPublic } from './http';
 import type {
   Appointment,
   AppointmentCounts,
+  CalendarDriftResult,
   BookingSettings,
   BookingSettingsInput,
   BookingType,
@@ -75,6 +77,12 @@ const appointmentPage = appointmentPageResponseSchema.transform((p) => ({
   nextCursor: p.page.nextCursor,
   hasMore: p.page.hasMore,
 }));
+const driftAction = z
+  .object({ appointment: appointmentResponseSchema, result: calendarDriftActionSchema })
+  .transform((r): { appointment: Appointment; result: CalendarDriftResult } => ({
+    appointment: toAppointment(r.appointment),
+    result: r.result,
+  }));
 const counts = appointmentCountsResponseSchema.transform((c): AppointmentCounts => ({
   upcoming: c.upcoming,
   past: c.past,
@@ -115,6 +123,16 @@ export const realAppointmentsApi = {
     call(`/appointments/${id}/decline`, { method: 'POST', body: {}, schema: appointmentOne }),
   cancel: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/cancel`, { method: 'POST', body: {}, schema: appointmentOne }),
+  /** "Push our time back to Google": the event is written again from the appointment. The appointment is not changed. */
+  pushCalendar: (id: string) =>
+    call(`/appointments/${id}/calendar/push`, { method: 'POST', body: {}, schema: driftAction }),
+  /** "Accept Google's change": applied through the usual appointment rules; `notify` tells the customer of a move or a cancel. */
+  acceptCalendar: (id: string, notify: boolean) =>
+    call(`/appointments/${id}/calendar/accept`, {
+      method: 'POST',
+      body: { notify },
+      schema: driftAction,
+    }),
   complete: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/complete`, { method: 'POST', body: {}, schema: appointmentOne }),
   noShow: (id: string): Promise<Appointment> =>

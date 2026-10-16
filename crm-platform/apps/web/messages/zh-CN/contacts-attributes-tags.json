@@ -348,7 +348,10 @@
       "ownerMe": "{name}(我)",
       "ownerFormer": "已离开的成员",
       "ownerHelp": "负责这个联系人的人。只能选择您的权限允许的人员。",
-      "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。"
+      "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。",
+      "company": "公司",
+      "companyHint": "将此联系人归入某个组织。",
+      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。"
     },
     "tags": {
       "title": "标签",
@@ -1279,6 +1282,14 @@
       "number": "发送自",
       "numberHint": "发送消息所使用的 WhatsApp 号码。",
       "noChannel": "尚未连接 WhatsApp 号码，请先在“渠道”中连接。",
+      "mailbox": "发件邮箱",
+      "mailboxPlaceholder": "选择一个邮箱",
+      "mailboxHint": "用于发送此邮件的已连接邮箱。",
+      "noMailbox": "尚未连接邮箱。请先在“渠道”中连接一个。",
+      "subject": "主题",
+      "subjectPlaceholder": "这封邮件是关于什么的？",
+      "body": "正文",
+      "bodyPlaceholder": "撰写您的邮件…",
       "template": "WhatsApp 模板",
       "templatePlaceholder": "选择模板",
       "noTemplates": "此号码没有已审核通过的模板。",
@@ -1295,12 +1306,10 @@
       "callPermission": "该联系人尚未允许通话，通话前需先征得其同意。",
       "callReady": "准备拨打 {phone}。",
       "later": {
-        "sms": "暂不支持从 CRM 发送短信。",
-        "email": "暂不支持从 CRM 发送邮件。"
+        "sms": "暂不支持从 CRM 发送短信。"
       },
       "openApp": {
-        "sms": "在短信应用中打开",
-        "email": "在邮件应用中打开"
+        "sms": "在短信应用中打开"
       }
     },
     "views": {

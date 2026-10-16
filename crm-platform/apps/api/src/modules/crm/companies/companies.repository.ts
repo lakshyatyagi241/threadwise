@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { CompanySort, RecordScope } from '@crm/contracts';
+import type { CompanySort, FieldType, RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import {
   companyDomainSpellings,
@@ -8,6 +8,7 @@ import {
   decodeIdCursor,
   escapeLike,
 } from './company-rules';
+import type { CompanyPropertyDef } from './company-properties';
 
 /** One company as the SQL returns it, with the owner and the creator already joined (names and uuids, never ids on the wire). */
 export interface CompanyRow {
@@ -26,6 +27,8 @@ export interface CompanyRow {
   sizeRange: string | null;
   address: string | null;
   notes: string | null;
+  /** The values of the workspace's company properties (the `data` column), by property key. */
+  data: Record<string, unknown>;
   ownerId: number | null;
   ownerUuid: string | null;
   ownerName: string | null;
@@ -53,6 +56,8 @@ export interface CompanyPatch {
   size_range?: string | null;
   address?: string | null;
   notes?: string | null;
+  /** The whole object to store (the caller merged it). */
+  data?: Record<string, unknown>;
   owner_id?: number | null;
 }
 
@@ -91,6 +96,10 @@ const toRow = (r: Raw): CompanyRow => ({
   sizeRange: s(r.size_range),
   address: s(r.address),
   notes: s(r.notes),
+  data:
+    r.data && typeof r.data === 'object' && !Array.isArray(r.data)
+      ? (r.data as Record<string, unknown>)
+      : {},
   ownerId: n(r.owner_id),
   ownerUuid: s(r.owner_uuid),
   ownerName: s(r.owner_name),
@@ -107,7 +116,7 @@ const ISO = `'YYYY-MM-DD"T"HH24:MI:SS.US"Z"'`;
 const SELECT = sql`
   SELECT c.id, c.uuid, c.display_id, c.name, lower(c.name) AS name_key,
          to_char(c.created_at at time zone 'UTC', ${sql.raw(ISO)}) AS created_at_iso,
-         c.domain, c.email::text AS email, c.phone, c.industry, c.size_range, c.address, c.notes,
+         c.domain, c.email::text AS email, c.phone, c.industry, c.size_range, c.address, c.notes, c.data,
          c.owner_id, ou.uuid AS owner_uuid, ou.full_name AS owner_name,
          c.created_by, cu.uuid AS created_by_uuid, cu.full_name AS created_by_name,
          c.row_version, c.created_at, c.updated_at
@@ -328,15 +337,16 @@ export class CompaniesRepository {
       sizeRange: string | null;
       address: string | null;
       notes: string | null;
+      data: Record<string, unknown>;
       ownerId: number | null;
       createdBy: number | null;
       displayId: string;
     },
   ): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO companies (org_id, name, domain, email, phone, industry, size_range, address, notes, owner_id, created_by, display_id)
+      INSERT INTO companies (org_id, name, domain, email, phone, industry, size_range, address, notes, data, owner_id, created_by, display_id)
       VALUES (${orgId}, ${v.name}, ${v.domain}, ${v.email}, ${v.phone}, ${v.industry}, ${v.sizeRange}, ${v.address}, ${v.notes},
-              ${v.ownerId}, ${v.createdBy}, ${v.displayId})
+              ${JSON.stringify(v.data)}::jsonb, ${v.ownerId}, ${v.createdBy}, ${v.displayId})
       RETURNING id
     `);
     return Number((res.rows[0] as { id: number | string }).id);
@@ -441,7 +451,12 @@ export class CompaniesRepository {
   ): Promise<boolean> {
     const sets: SQL[] = [];
     for (const [col, value] of Object.entries(patch)) {
-      if (value !== undefined) sets.push(sql`${sql.raw(col)} = ${value}`);
+      if (value === undefined) continue;
+      sets.push(
+        col === 'data'
+          ? sql`data = ${JSON.stringify(value)}::jsonb`
+          : sql`${sql.raw(col)} = ${value}`,
+      );
     }
     if (sets.length === 0) return true;
     const res = await tx.execute(sql`
@@ -594,6 +609,56 @@ export class CompaniesRepository {
     for (const r of res.rows as Array<{ uuid: string; name: string | null }>)
       out.set(r.uuid, r.name);
     return out;
+  }
+
+  /**
+   * The workspace's company properties (the field registry, module `companies`) with their pickable options and their "show only when"
+   * conditions, in registry order, inactive ones included (the write rules decide what each state allows).
+   */
+  async propertyDefs(tx: Tx, orgId: number): Promise<CompanyPropertyDef[]> {
+    const rows = (
+      await tx.execute(sql`
+        SELECT id, key, label, field_type, is_required, is_hidden, is_read_only, is_active, is_system
+        FROM fields WHERE org_id = ${orgId} AND module_key = 'companies' ORDER BY position, id
+      `)
+    ).rows as Raw[];
+    if (rows.length === 0) return [];
+    const optionRows = (
+      await tx.execute(sql`
+        SELECT o.field_id, o.value FROM field_options o
+        JOIN fields f ON f.org_id = o.org_id AND f.id = o.field_id
+        WHERE o.org_id = ${orgId} AND f.module_key = 'companies' AND NOT o.is_hidden
+      `)
+    ).rows as Raw[];
+    const depRows = (
+      await tx.execute(sql`
+        SELECT d.field_id, p.key AS parent_key, d.depends_on_value, po.value AS option_value
+        FROM field_dependencies d
+        JOIN fields f ON f.org_id = d.org_id AND f.id = d.field_id
+        JOIN fields p ON p.org_id = d.org_id AND p.id = d.depends_on_field_id
+        LEFT JOIN field_options po ON po.org_id = d.org_id AND po.id = d.depends_on_option_id
+        WHERE d.org_id = ${orgId} AND f.module_key = 'companies'
+      `)
+    ).rows as Raw[];
+    return rows.map((r) => ({
+      key: r.key as string,
+      label: r.label as string,
+      fieldType: r.field_type as FieldType,
+      isRequired: r.is_required === true,
+      isHidden: r.is_hidden === true,
+      isReadOnly: r.is_read_only === true,
+      isActive: r.is_active === true,
+      isSystem: r.is_system === true,
+      options: optionRows
+        .filter((o) => Number(o.field_id) === Number(r.id))
+        .map((o) => o.value as string),
+      conditions: depRows
+        .filter((d) => Number(d.field_id) === Number(r.id))
+        .map((d) => ({
+          parentKey: d.parent_key as string,
+          wanted: s(d.depends_on_value) ?? s(d.option_value),
+        })),
+    }));
   }
 
   /** True if `userId` is on a team `actorUserId` is also on: the 'team' record-scope check for one company. */

@@ -230,7 +230,7 @@ function AddContactsModal({ companyId, onClose }: { companyId: string; onClose: 
             <Spinner /> {t('loading')}
           </div>
         ) : hits.isError ? (
-          <ErrorLine error={hits.error} onRetry={() => void hits.refetch()} />
+          <ErrorLine error={hits.error} context="list" onRetry={() => void hits.refetch()} />
         ) : rows.length === 0 ? (
           <EmptyState title={t('noneTitle')} message={t('none')} />
         ) : (

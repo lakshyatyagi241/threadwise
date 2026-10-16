@@ -1,0 +1,26 @@
+{
+  "status": "NOT VERIFIED: no regression comparison exists yet.",
+  "why": "A regression needs a stored baseline and a later run in the same environment. The only stored baseline is the monitor micro-benchmark, which has been run once.",
+  "regressions": [],
+  "gates": [
+    {
+      "gate": "static blocking-operation gate",
+      "command": "node tools/event-loop-audit/scan.mjs --check",
+      "status": "working locally: exits 1 on a new runtime-path suspect (verified with an injected probe file), 0 on the committed baseline of 31",
+      "wiredInto": [
+        ".github/workflows/quality.yml job 'event-loop' (manual workflow, has never run on GitHub: Actions jobs do not start on this account)",
+        "crm-platform/.claude/skills/pre-pr/scripts/gate.sh",
+        "pnpm audit:event-loop"
+      ]
+    },
+    {
+      "gate": "event-loop p99 regression vs baseline in CI",
+      "status": "NOT IMPLEMENTED",
+      "needs": [
+        "a performance environment",
+        "a stored baseline per benchmark scenario",
+        "a comparison script with tolerance derived from run-to-run spread"
+      ]
+    }
+  ]
+}

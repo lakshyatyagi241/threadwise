@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Pausiert: Das tägliche Sendelimit wurde erreicht. Der Versand wird nach {when} automatisch fortgesetzt.",
         "halt": "Pausiert: Der Versand ist für diesen Workspace gestoppt. Er wird fortgesetzt, sobald der Stopp aufgehoben wird.",
-        "manual": "Pausiert."
+        "manual": "Pausiert.",
+        "quiet_hours": "Pausiert: Einige Empfänger sind in ihren Ruhezeiten. Der Versand läuft nach {when} von selbst weiter."
       },
       "delete": "Löschen",
       "deleteTitle": "Broadcast löschen?",
@@ -145,7 +146,8 @@
         "queued": "In Warteschlange",
         "queuedHint": "wartet auf Versand",
         "failed": "Fehlgeschlagen",
-        "failedPct": "{pct} % Fehlerrate"
+        "failedPct": "{pct} % Fehlerrate",
+        "queuedHeld": "{count} wegen der Ruhezeiten zurückgehalten"
       },
       "tab": {
         "overview": "Übersicht",
@@ -193,7 +195,8 @@
         "lastClick": "Letzter Klick: {when}",
         "empty": "Keine Empfänger zugeordnet.",
         "more": "Mehr laden",
-        "loading": "Wird geladen"
+        "loading": "Wird geladen",
+        "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)"
       },
       "failures": {
         "kicker": "Fehlerursachen",

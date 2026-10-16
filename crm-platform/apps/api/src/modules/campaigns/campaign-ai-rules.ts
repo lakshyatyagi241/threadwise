@@ -1,4 +1,8 @@
-import type { CampaignAiGenerateInput, CampaignAiGenerateResponse } from '@crm/contracts';
+import type {
+  CampaignAiGenerateInput,
+  CampaignAiGenerateResponse,
+  CampaignAiImageInput,
+} from '@crm/contracts';
 
 /** What the model is told. Strict JSON only, so the builder can paste each field without parsing prose. */
 export const CAMPAIGN_AI_SYSTEM_PROMPT = `You write WhatsApp marketing-campaign messages. Output STRICT JSON only —
@@ -63,4 +67,18 @@ export function parseCampaignCopy(raw: string): CampaignAiGenerateResponse['camp
     buttonUrl: cut(o.button_url, 1024),
     quickReplies: replies.slice(0, 3).map((r) => cut(r, 25)),
   };
+}
+
+/** What one generated picture counts for on the AI usage ledger: images are priced per picture, so the ledger gets a flat token-equivalent. */
+export const AI_IMAGE_TOKEN_EQUIVALENT = 4000;
+
+/** The prompt the image model reads: the brief as one description, with the rules that keep a marketing picture usable. */
+export function imagePromptOf(i: CampaignAiImageInput): string {
+  const parts = [`A clean, professional marketing picture for the business "${i.businessName}".`];
+  if (i.product) parts.push(`It shows or evokes: ${i.product}.`);
+  if (i.offer) parts.push(`The promotion behind it: ${i.offer}.`);
+  if (i.tone) parts.push(`Mood: ${i.tone}.`);
+  if (i.customPrompt) parts.push(i.customPrompt);
+  parts.push("No text, no letters, no logos, no watermark, no real people's faces.");
+  return parts.join(' ');
 }

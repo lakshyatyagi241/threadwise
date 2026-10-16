@@ -130,15 +130,24 @@
       "loading": "Memuat tautan…",
       "retry": "Coba lagi",
       "searchPlaceholder": "Cari berdasarkan nama atau tautan",
-      "create": { "cta": "Tautan baru" },
+      "create": {
+        "cta": "Tautan baru"
+      },
       "stats": {
         "all": "Semua tautan",
         "live": "Aktif",
         "totalClicks": "Total klik",
         "avgClicks": "Rata-rata klik / tautan"
       },
-      "tabs": { "all": "Semua", "live": "Aktif", "paused": "Dijeda" },
-      "status": { "live": "Aktif", "paused": "Dijeda" },
+      "tabs": {
+        "all": "Semua",
+        "live": "Aktif",
+        "paused": "Dijeda"
+      },
+      "status": {
+        "live": "Aktif",
+        "paused": "Dijeda"
+      },
       "empty": {
         "title": "Belum ada tautan",
         "description": "Buat tautan untuk dibagikan di iklan, bio, atau kode QR."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "Kembali ke tautan",
         "newHeading": "Tautan baru",
-        "step": { "destination": "Tujuan", "message": "Pesan pembuka", "tracking": "Pelacakan" },
+        "step": {
+          "destination": "Tujuan",
+          "message": "Pesan pembuka",
+          "tracking": "Pelacakan"
+        },
         "name": "Nama",
         "status": "Status",
         "countryCode": "Kode negara",
@@ -194,6 +207,14 @@
         "shortUrl": "Tautan singkat",
         "waUrl": "Tautan WhatsApp",
         "qrAlt": "Kode QR untuk tautan ini"
+      },
+      "public": {
+        "missingTitle": "Tautan tidak ditemukan",
+        "missingBody": "Tautan ini tidak ada, atau telah dihapus.",
+        "goneTitle": "Tautan tidak lagi aktif",
+        "goneBody": "Tautan ini dijeda atau telah kedaluwarsa.",
+        "errorTitle": "Terjadi kesalahan",
+        "errorBody": "Kami tidak dapat membuka tautan ini. Silakan coba lagi."
       }
     }
   }

@@ -497,7 +497,7 @@ export function PhonePreview({
             </span>
             <span
               aria-hidden="true"
-              className="absolute left-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rounded-full bg-black"
+              className="absolute start-1/2 top-1.5 h-4 w-20 -translate-x-1/2 rtl:translate-x-1/2 rounded-full bg-black"
             />
             <span aria-hidden="true" className="text-[10px]">
               ●●●

@@ -23,16 +23,16 @@ starts.
 
 ## Read
 
-| Method and path                 | What it returns                                                                                                                                                                                                                                                                                 |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /campaigns`                | `data` (12 a page), `page`, `stats`, `statusCounts`, `messageTypes`, `deliveryHealth`, `queueHealth`. Query `status`, `type`, `range`, `q`, `page`                                                                                                                                              |
-| `GET /campaigns/builder`        | `senders`, `templates`, `groups` and `tags` with member counts, `flows`, `requiresApprovedTemplates`. `?channel=sms` or `?channel=email` scopes the senders and templates to that channel (see Email campaigns)                                                                                 |
-| `GET /campaigns/sample-csv`     | `campaign-recipients-sample.csv`: `name,country_code,phone` and two rows                                                                                                                                                                                                                        |
-| `GET /campaigns/:id/config`     | The whole campaign for the edit form, with `recipientContactIds` and the end date as typed (`expiresAtLocal`)                                                                                                                                                                                   |
-| `GET /campaigns/:id`            | Rates, funnel, hourly and daily charts, outcomes, per-variant results, preview, audience, failures, replies, opt-outs                                                                                                                                                                           |
-| `GET /campaigns/:id/live`       | Live stats, polled every 12 s while `inFlight` (scheduled or running): `status`, `inFlight`, `counts`, `queued` (waiting to send), `processing` (claimed by a run now), `rates`, newest failures, failure summary, `fetchedAt`. Recounted from the recipient rows on every call                 |
-| `GET /campaigns/:id/statistics` | Statistics: `breakdown` (every recipient once, at its status, adds up to `total`), the cumulative `counts` and `rates`, and the `lifecycle` (created, scheduled for, first message, last run, completed). Both reads need `camp.campaigns.read` and answer 404 for another workspace's campaign |
-| `GET /campaigns/:id/recipients` | The recipient log, 50 a page, filter `status`, search `q` (name or phone)                                                                                                                                                                                                                       |
+| Method and path                 | What it returns                                                                                                                                                                                                                                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /campaigns`                | `data` (12 a page), `page`, `stats`, `statusCounts`, `messageTypes`, `deliveryHealth`, `queueHealth`. Query `status`, `type`, `range`, `q`, `page`                                                                                                                                                                                   |
+| `GET /campaigns/builder`        | `senders`, `templates`, `groups` and `tags` with member counts, `flows`, `requiresApprovedTemplates`. `?channel=sms` or `?channel=email` scopes the senders and templates to that channel (see Email campaigns)                                                                                                                      |
+| `GET /campaigns/sample-csv`     | `campaign-recipients-sample.csv`: `name,country_code,phone` and two rows                                                                                                                                                                                                                                                             |
+| `GET /campaigns/:id/config`     | The whole campaign for the edit form, with `recipientContactIds` and the end date as typed (`expiresAtLocal`)                                                                                                                                                                                                                        |
+| `GET /campaigns/:id`            | Rates, funnel, hourly and daily charts, outcomes, per-variant results, preview, audience, failures, replies, opt-outs                                                                                                                                                                                                                |
+| `GET /campaigns/:id/live`       | Live stats, polled every 12 s while `inFlight` (scheduled or running): `status`, `inFlight`, `counts`, `queued` (waiting to send), `held` (of the queued, waiting for the quiet hours), `processing` (claimed by a run now), `rates`, newest failures, failure summary, `fetchedAt`. Recounted from the recipient rows on every call |
+| `GET /campaigns/:id/statistics` | Statistics: `breakdown` (every recipient once, at its status, adds up to `total`), the cumulative `counts` and `rates`, and the `lifecycle` (created, scheduled for, first message, last run, completed). Both reads need `camp.campaigns.read` and answer 404 for another workspace's campaign                                      |
+| `GET /campaigns/:id/recipients` | The recipient log, 50 a page, filter `status`, search `q` (name or phone)                                                                                                                                                                                                                                                            |
 
 Every count comes from the recipient rows. The list and the detail also finish a campaign whose recipients are all resolved
 (`completed`, or `failed` when nothing was sent), so the screens never disagree with the log. Phone numbers are shown in full
@@ -207,6 +207,21 @@ The wallet is never asked (no launch precheck, no per-recipient charge): email h
 
 The recipients list and the export show the contact's address where other campaigns show the phone. Reports, receipts and the wallet: a mail has no delivery receipt (Gmail only says `sent`), the outbox's delivery report is not emitted for it and nothing is charged.
 
+### The picture (an addition beyond Reference)
+
+`POST /campaigns/ai-image` (200, needs `camp.campaigns.create`): a brief in, one generated image out, stored as a marketing upload (the same storage and link rules as `POST /media/marketing`) so the builder can attach it to the campaign. Reference's builder writes the text only.
+
+Request: `provider` (only `openai`), `model` (default `gpt-image-1`), `businessName` (required), optional `product`, `offer`, `tone`, `customPrompt` (up to 1,000, what the picture should show), `size` (`1024x1024` default, `1536x1024`, `1024x1536`). The prompt sent asks for a clean marketing picture and bans text, logos, watermarks and real people's faces.
+
+Response: `{ image: { url, name, mime, kind: "image", size }, model }`. The image comes back from the vendor as base64 (no address of the vendor's is ever fetched) and is stored under the workspace's folder.
+
+The key and allowance rules are the text generation's. An image is priced per picture, so the usage ledger gets a flat 4,000 token-equivalent per picture (billed against the key's side). A refused or failed call writes nothing and stores nothing.
+
+- 422 `CAMP_AI_NO_KEY` / `CAMP_AI_LIMIT_REACHED`: as for the text.
+- 422 `CAMP_AI_IMAGE_REFUSED`: the vendor's safety system refused the prompt.
+- 502 `CAMP_AI_PROVIDER_FAILED`: the vendor failed, timed out (90 s) or returned no image.
+- 422 (validation): the workspace storage is local, so a provider could not fetch the file; cloud object storage must be on.
+
 ## Run
 
 | Method and path                | What it does                                                                                                               |
@@ -230,6 +245,11 @@ daily limit), the gap (none for official engines; the platform gap with 20 perce
 the others; a batch pause every `batchSize`), the variant's content, merge, link tracking, billing, the send and its record.
 
 - **Retries:** a refused send keeps the row `failed` with a next attempt at `60 s x 2^(n-1)` (at most an hour); after 3 attempts it is final. Meta's ecosystem throttle (131049) is tried twice, 6 h and 12 h apart.
+- **Quiet hours (BL-177):** a MARKETING campaign puts a recipient whose local time is inside the workspace's quiet hours back to `queued` with
+  `held_until` / `held_reason` (the claim skips it until then), sends the rest, and is scheduled again for the minute the first of them opens.
+  The ConsentGate screens the audience again at the start of every run. A utility-only campaign is never held. A guided campaign's follow-up
+  step is looked at again when the hours end. The live stats carry `held` (of `queued`) and the recipients list `heldUntil` / `heldReason`. A
+  recurring campaign sends its held recipients at its next occurrence (BL-192).
 - **End:** completed; or `scheduled` again for the closed window, tomorrow's quota or the retries; a recurring campaign moves to its next date with every recipient queued again.
 - **End date:** the operator's `expiresAt`, else (not Baileys, not deliberately paced) 24 hours after the first send. Past it, what was not sent is failed ("auto-expired") and the campaign ends.
 - A custom message needs an engine that can send one; the Cloud API cannot (Reference's rule), so those recipients fail for good with the reason.
@@ -343,6 +363,33 @@ and recorded). Slots sit on a grid anchored at the first send; a slot a long out
 day. A claim whose worker died with no attempt logged goes back; one with an attempt logged ends the retries (a message that may have gone out is
 never resent). No extra cost: the wallet charges a message when its delivery is reported, once per provider message id, and a failed message is not
 charged, so a retry is charged only if it is delivered. The 6 h / 12 h backoff of TW-CAMP-012 is not applied to a wizard campaign.
+
+### Follow-up steps (an addition beyond Reference)
+
+`followUps` on the draft, 0 to 3 steps in order, for Cloud API numbers (`waba:` sender) only. Reference's campaign screens have no such step; it is
+built from the meeting's "Add a follow-up": after the campaign message goes out, a recipient's reaction (or silence) triggers another message or starts a flow.
+
+```json
+{ "trigger": "not_read", "waitMinutes": 120, "action": { "kind": "template", "templateId": "<uuid>" } }
+{ "trigger": "replied",  "waitMinutes": 1440, "action": { "kind": "flow", "flowId": "<uuid>" } }
+```
+
+- `trigger`: `replied`, `read` (watch for `waitMinutes`: the step fires the moment the event happens and lapses, ending the chain, when the time runs out first)
+  or `not_replied`, `not_read` (wait `waitMinutes`, then fire if the event did not happen; an event before then ends the chain at once).
+  `waitMinutes` is 1 to 10080 (seven days). Step 1 is measured from the campaign message, step 2 from step 1's message, and so on.
+- `action`: an approved template sent from the campaign's number (the template's own variable defaults fill it), or a published flow started for the recipient.
+- Launch: 422 `CAMP_WIZARD_INCOMPLETE` with `follow_up_template_required`, `follow_up_flow_required` (path `followUps.<i>.action`) or `follow_up_cloud_api_only` (path `followUps`).
+  A template must be usable from the number (same check as the campaign's template), a flow must exist in the workspace. A recurring series carries the steps to every run.
+- `reply` is a message from the contact in the inbox after the base time; the first one since the campaign went out also becomes the recipient's `response` (its statistics
+  and the `campaign.contact_replied` event). `read` is the provider's read report of the message before the step.
+- Worker (`WizardFollowUpService`, every 10 seconds): `arm` puts a recipient whose message went out into its chain (`wp_campaign_contacts.follow_up_state`, `follow_up_next`,
+  `follow_up_base_at`, `follow_up_check_at`); `run` claims the recipients due to be looked at (one worker takes each; a crashed one only delays it) and decides: wait, fire, skip or lapse.
+  A step is logged in `camp_follow_up_attempts` with a unique `(recipient, step)` row BEFORE the provider is called, so it happens at most once. A recipient who opted out, whose
+  consent is gone, whose message failed, or whose wallet cannot pay never gets a later step; the log row says why. The campaign's Smart Delivery gap spaces the sends.
+- Cost: a template follow-up is charged like any campaign message, by the wallet once its delivery is reported (`camp_follow_up_receipt_lookup` names the attempt of the message id,
+  `CampaignReceiptsService` records the step's own delivery and read, and emits `message.delivery_reported`). A resend of a recipient restarts its chain.
+- Limits: a follow-up template is a second marketing message to someone who has not engaged, and Meta may refuse it with its frequency cap (`131049`). The step is given its claim back and tried again every 24 hours, for up to seven days after its base time, then logged `failed` with the provider's text and the chain ends. A step whose worker died after claiming it is logged `failed` (`interrupted before the provider answered`), never sent again. A paused campaign's recipients are not looked at until it resumes (a watching step may then have lapsed).
+- `GET /broadcast-wizard/broadcasts/:id`: `runList[].followUps` has, per step, `waiting`, `sent`, `delivered`, `read`, `flowsStarted`, `skipped`, `lapsed`, `failed`.
 
 ### Test send
 
