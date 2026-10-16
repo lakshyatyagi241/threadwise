@@ -6,6 +6,11 @@ import { QUEUES } from '../../infra/queue/queues';
 export interface CampaignJob {
   orgId: number;
   campaignId: number;
+  /**
+   * BL-192: not a run of the campaign but the catch-up of a recurring one: it sends only the recipients the quiet hours held back in the
+   * occurrence that just ended, at their first opening, and leaves the campaign's schedule alone.
+   */
+  catchUp?: boolean;
 }
 
 /**
@@ -19,13 +24,19 @@ export class CampaignJobs {
 
   constructor(@InjectQueue(QUEUES.CAMPAIGN) private readonly queue: Queue<CampaignJob>) {}
 
-  async enqueue(orgId: number, campaignId: number, uuid: string, delayMs = 0): Promise<boolean> {
+  async enqueue(
+    orgId: number,
+    campaignId: number,
+    uuid: string,
+    delayMs = 0,
+    catchUp = false,
+  ): Promise<boolean> {
     try {
       await this.queue.add(
         'run',
-        { orgId, campaignId },
+        catchUp ? { orgId, campaignId, catchUp: true } : { orgId, campaignId },
         {
-          jobId: `${uuid}-${Date.now()}`,
+          jobId: `${uuid}-${catchUp ? 'catchup-' : ''}${Date.now()}`,
           delay: Math.max(0, delayMs),
           removeOnComplete: 100,
           removeOnFail: 100,

@@ -24,7 +24,7 @@ import type { OutboundMessage, RunState, SendOutcome } from './types';
 export const CHAT_MEDIA_PREFIX = 'chatmedia:';
 
 /** How long a channel that is down or capped is left alone before the run tries again. */
-export const HALT_RETRY_MS = 5 * 60_000;
+export { HALT_RETRY_MS } from './halt';
 
 const HALT_CODES: ReadonlySet<string> = new Set([
   ERROR_CODES.CHANNEL_DISCONNECTED,
@@ -178,6 +178,8 @@ export class FlowSender {
         code: 'SEND_HELD',
         error: `Held for the quiet hours until ${err.hold.until}`,
         halt: true,
+        // The run wakes at the opening itself (BL-192), not on the usual five minute retry.
+        retryAt: err.hold.until,
       };
     }
     if (err instanceof AppError) {

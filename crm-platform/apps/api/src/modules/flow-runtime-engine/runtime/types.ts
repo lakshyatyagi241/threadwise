@@ -183,7 +183,14 @@ export type OutboundMessage =
 export type SendOutcome =
   | { ok: true }
   /** The message did not go out. `halt`: the channel is down or capped, so the run should wait and try again, not fail. */
-  | { ok: false; error: string; code: string; halt: boolean };
+  | {
+      ok: false;
+      error: string;
+      code: string;
+      halt: boolean;
+      /** BL-192: the instant to try again, when it is known (a send held for the quiet hours): ISO 8601. */
+      retryAt?: string;
+    };
 
 /** What a node asks the engine to do next. */
 export type NodeResult =
@@ -203,7 +210,7 @@ export type NodeResult =
       missPort?: number;
       missVars?: Record<string, unknown>;
     }
-  | { kind: 'halt'; reason: string }
+  | { kind: 'halt'; reason: string; retryAt?: string }
   | { kind: 'fail'; code: string; reason: string };
 
 export interface NodeContext {
@@ -281,7 +288,7 @@ export type Transition =
       failureCode?: string;
       failureReason?: string;
     }
-  | { t: 'halt'; reason: string }
+  | { t: 'halt'; reason: string; retryAt?: string }
   /** The reply was not an answer: nothing changes. */
   | { t: 'none' };
 

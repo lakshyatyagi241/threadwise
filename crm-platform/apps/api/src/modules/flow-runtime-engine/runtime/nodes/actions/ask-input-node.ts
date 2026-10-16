@@ -24,6 +24,7 @@ import type {
   NodeResult,
   SendOutcome,
 } from '../../types';
+import { haltOf } from '../../halt';
 
 /**
  * The checked question (`AskInput`): an Ask whose author chose "Validate as" name, email, phone, number, alphanumeric or date. Not
@@ -309,7 +310,7 @@ export class AskInputNode implements NodeExecutor {
   }
 
   private sendFailed(out: Extract<SendOutcome, { ok: false }>, ctx: NodeContext): NodeResult {
-    if (out.halt) return { kind: 'halt', reason: out.error };
+    if (out.halt) return haltOf(out);
     ctx.note(`send failed: ${out.error}`);
     return { kind: 'fail', code: out.code, reason: out.error };
   }
