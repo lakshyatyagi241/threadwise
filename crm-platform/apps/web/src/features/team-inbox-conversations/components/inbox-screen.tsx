@@ -669,6 +669,12 @@ export function InboxScreen() {
               onRetryMessage={retryMessage}
               resolving={resolving}
               onAssignSelf={() => void assign({ userId: meId })}
+              assignMenu={{
+                meId,
+                canAssign: can.assign,
+                busy: assigning,
+                onAssign: (change) => void assign(change),
+              }}
               onRetryDetail={() => void detail.refetch()}
             />
           ) : (
