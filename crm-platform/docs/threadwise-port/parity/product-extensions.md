@@ -461,6 +461,18 @@ What is added on top of the reference, and why:
 
 Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).
 
+## Contacts list, quick view and contact page (owner request 2026-10-16): the layout patterns of the owner's own platform, not in Reference
+
+The project owner asked for the Contact Hub to be less busy and to follow the patterns of their company platform. What changes against Extension 2 (the Contact Hub): one slim
+toolbar (search, Filter, Columns with a count, Create View, list/board, Add Contact, "..." menu, refresh) instead of the Select Segment, Select Tag, Owner, Sort, Send Campaign and
+More Actions buttons; segment, tag, owner, stage, status, minor flag, consent, source, the AI filter and the advanced conditions all sit in the Filter popover with removable chips under
+the toolbar; sorting, hiding and filtering are on the column headers and a "+" at the end of the header row adds a column; the bulk actions appear in a bar only while rows are ticked;
+the footer says "Showing 1-50 of N" with numbered pages and the page size and stays at the bottom while the rows scroll. A contact's name opens a quick view (a right-hand drawer, the
+list dimmed behind it, `?contact=<id>` in the address) and "See all details" opens a contact page with a section sub-nav, a lifecycle stage stepper with the status bar, and sections for
+notes, meetings, files, conversations, communication stats, deals and the field history. No feature of the old screens was dropped; every control is mapped in
+[wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) and each difference from the reference platform is listed in
+[contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contacts list, quick view and details redesign"). Nothing needed a new endpoint or contract.
+
 ## Message History: delivered, read, cost, more filters and the delivery timeline (TW-CHAT-039 to 042)
 
 Reference's `/message-history` is kept as it is (see [message-history.md](message-history.md) for the differences that fix its bugs). The project owner's brief for this screen asked for these additions, which Reference does not have:

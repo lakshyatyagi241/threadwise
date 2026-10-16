@@ -343,3 +343,76 @@ Reported 2026-10-13: "I cannot find the contact owner when editing a contact, no
 Tests run on this change: unit (columns, filters, form payloads, render in English and Arabic of the form field, the table cell, the toolbar menu, the profile control and the Owner-only dialog; contracts and SQL of the owner filter and of the segment rules), API end to end on real Postgres (create and edit with an owner, scope refusals for `own` and `team`, the assignable flag, the filter with several people and nobody, an `own` member never widening what they see, tenant isolation, `POST /contacts/bulk/owner` by ids and by filter with its audit and outbox trail, the export column).
 
 **Not verified**: the screens in a real browser against the running Reference (no Playwright twin was run for this change; nothing was started against a browser), the keyboard and focus behaviour of the new menus, the layout at 390 px and in right-to-left beyond the markup checks, large books (the 50,000 cap is covered by the existing selection code, not by a 50,000-row run), and the Arabic wording by a native reader.
+
+## Contacts list, quick view and details redesign (owner request 2026-10-16): patterns of the owner's own platform, not Reference
+
+The owner asked for the Contact Hub's busy toolbar (Select Segment, Select Tag, Owner, Sort, Send Campaign, More Actions) to be replaced by the patterns of
+their company platform (geta-platform: one slim toolbar, a Filter popover, a Columns button with a count, a "+" add-column header, a pinned footer
+with page numbers, a right-hand quick view and a contact page with a section sub-nav and a lifecycle stepper). Only the layout was read from the
+owner's browser; nothing was copied. This replaces Extension 2's toolbar and footer for the list and adds a quick view and a details page that Reference
+does not have (Reference's detail page never rendered). Plan, control-by-control mapping and the data each section reads:
+[wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md). No migration, endpoint or contract was added; the notes, meetings, files, activities,
+deals and field-history endpoints that already existed now have a screen.
+
+### Intended differences from the reference platform
+
+| #   | Where                  | Reference platform (screenshots)                                                      | Ours, and why                                                                                                                                                                                                               |
+| --- | ---------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R01 | Footer page numbers    | 1 2 3 4 5 ... 609, any number jumps                                                   | 1 2 3 4 5 and ten pages beyond the current one, then "Page N of M". The API is cursor-only (OFFSET is banned), so a far page is reached by loading the ones before it (BL-229)                                              |
+| R02 | Sort arrows            | on Phone, Email, Lifecycle, WhatsApp, Owner, Created                                  | only where `CONTACT_SORT_FIELDS` allows (name, phone, email, stage, status, language, memo, created, custom attributes); opt-in, owner, company, source and last activity have none (BL-228)                                |
+| R03 | Default order          | name A to Z                                                                           | newest first, as before; the Created at header carries the arrow                                                                                                                                                            |
+| R04 | WhatsApp opt-in column | Yes / No                                                                              | Yes (subscribed label, not opted out), grey No (nothing recorded), red No (opted out of marketing). The label is the contact's; the consent ledger is the proof behind it                                                   |
+| R05 | Column choice          | per user                                                                              | per browser, and per saved view on the server (a view keeps its own columns); no per-user server store exists (BL-227)                                                                                                      |
+| R06 | Row hover actions      | "..." only in the screenshot                                                          | details, edit, note, call, email, WhatsApp, chat and "...", each by permission; the old round SMS icon is the "Send SMS" item of the menu; on a touch screen only the "..." menu shows                                      |
+| R07 | Page size              | 25 / 50 / 100                                                                         | 10 / 25 / 50 / 100 / 200 (the sizes the screen already had), default 50                                                                                                                                                     |
+| R08 | Name click             | opens the quick view                                                                  | same; a modified click (new tab) opens the details page                                                                                                                                                                     |
+| R09 | Quick view tabs        | Contact information, Social media, Web analytics, Facebook form fields, Custom fields | Contact information, Social media (only when the contact has a profile link), Lead source (our first and latest lead touch instead of Facebook form fields), Custom fields. No Web analytics: no visit data exists (BL-230) |
+| R10 | Job title              | inline editable                                                                       | inline editable when the workspace has a `job_title` property; otherwise the line is not shown (a custom value needs a registered property)                                                                                 |
+| R11 | Files                  | upload                                                                                | read-only list; the API stores a name and a storage key only (BL-226)                                                                                                                                                       |
+| R12 | Communication stats    | not seen                                                                              | tiles built from existing data only (chats found for the contact, calls, open tasks); no sent / delivered / read counts per contact exist                                                                                   |
+| R13 | Conversations          | not seen                                                                              | the inbox list searched by phone, email or name and filtered to the contact id; archived chats and chats with no contact link are not found                                                                                 |
+| R14 | Details page sections  | Overview ... Files                                                                    | the same seven plus Tasks, Deals, Appointments, Invoices and documents, Lead source, Company, Consent and Field history, so nothing the old page had is lost                                                                |
+| R15 | Lifecycle              | stages and a status bar                                                               | our stages (won and lost flags, lost reason dialog) and the statuses valid in the stage (the API's linking rule); the toast says what happened to the status                                                                |
+| R16 | Mobile                 | not seen                                                                              | the table scrolls sideways under a frozen name column; the quick view takes the whole width; the details sub-nav is a scrolling strip                                                                                       |
+
+### Checks run (2026-10-16, our own app on a local dev server against the isolated API, signed in as the seeded workspace admin)
+
+- Unit and render tests: columns, filters (status, source, minor), applied chips, pagination reach, sections, quick-view URL and arrow keys, subscription,
+  overview helpers, the toolbar, table, footer, selection bar, the cards, the sub-nav and the closed quick view (English and Arabic), plus the notes,
+  meetings, files, conversations, stats, deals and field-history sections. Type check and ESLint of `apps/web` clean; all 21 locales validated with
+  `i18n-tool check`.
+- Browser (Playwright, installed Chromium 1228), desktop 1440 px and 390 px, light, dark and right-to-left (Arabic): list, filter popover, columns panel,
+  add-column picker, hover actions, quick view (open, previous/next with the arrow keys, Esc, the URL), details page and its sections, selection bar.
+  Screenshots: `C:\project\wadesk-port\_work\parity\contacts-ui-refresh\` (named `NN-what-device-scheme-locale.png`; `flows/` holds the functional run).
+- Functional run: page 2 range, a filter chip added and removed, the minor filter, "Clear all", a column added from "+" and kept after a reload and hidden
+  again, sorting from the header menu, the selection bar's Assign owner opening the update dialog on the owner, a note written from the quick view
+  (composer focused) and listed on the page, a stage moved on the stepper and a status set, a meeting logged from the action bar and listed under
+  Activities, the task modal opened linked to the contact, the company dialog.
+- Accessibility (scripted audit in the browser): every control has an accessible name, dialogs are named, no duplicate ids, no focusable control inside an
+  aria-hidden subtree, the tab order runs search, Filter, Columns, Create View, the layout buttons and Add Contact, focus lands in the quick view when it opens
+  and returns to the name link when it closes.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                                                         | Fix                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| The hover icons covered the name, so a click on the name hit "Edit"                                                            | the name truncates while the actions are shown                                       |
+| The "+" picker closed itself when the table scrolled sideways to reach it                                                      | the "+" header cell is frozen at the end                                             |
+| The arrow keys did nothing once the contact had loaded (focus fell to the page)                                                | the listener is on the document and the drawer takes focus when the contact is shown |
+| Saving a meeting (or closing any dialog opened from the drawer) closed the quick view: React passes a nested dialog's close up | the drawer closes only on its own close event                                        |
+| Two delete confirmations shared one checkbox id                                                                                | an id per instance                                                                   |
+| The details header squeezed the name to nothing on a phone                                                                     | the name block wraps under the buttons                                               |
+| `relativeTime` used the clock without a `now`                                                                                  | `useNow`                                                                             |
+| The selection bar was taller than the view row, so the table jumped when rows were ticked                                      | both rows have the same minimum height                                               |
+
+### Not verified, and why
+
+- A workspace with 30,000 contacts: the isolated stack holds 86 contacts. The footer, the ten-page reach and the add-column picker with many properties
+  were read from code and tests only (BL-231).
+- The isolated API is an older main build than the merged contracts: a small local proxy added `dateOfBirth` and `isMinor` to contact answers so our web
+  build could be viewed. The minor filter and column were not run against a server that implements them.
+- Conversations, communication stats, deals and field history were opened, but the stack had no chats, calls or deals for the test contacts, so only their
+  empty and loading states were seen.
+- Sending a WhatsApp, SMS or email message and placing a call from the new icons (no connected channel here); the chat icon's open-conversation path.
+- Translations of the new strings are machine-drafted: no native review (BL-231). Screen-reader use of the drawer was not tried.
+- Firefox and Safari; the footer's page buttons in right-to-left with a long page list.

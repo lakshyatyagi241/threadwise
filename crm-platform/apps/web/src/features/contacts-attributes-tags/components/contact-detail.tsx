@@ -119,7 +119,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
 }
 
 /** The sub-nav: a vertical list on a wide screen, a scrolling strip of tabs on a narrow one. */
-function SectionNav({
+export function SectionNav({
   contactId,
   current,
   core,
@@ -187,7 +187,7 @@ function DetailHeader({
   return (
     <header className="rounded-xl border border-border bg-background p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
-        <div className="flex min-w-0 flex-1 items-start gap-4">
+        <div className="flex min-w-0 flex-[1_1_18rem] items-start gap-4">
           <ContactAvatar
             id={contact.id}
             name={name}

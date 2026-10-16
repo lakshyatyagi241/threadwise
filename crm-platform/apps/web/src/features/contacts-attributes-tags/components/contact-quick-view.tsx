@@ -130,7 +130,11 @@ export function ContactQuickView(p: QuickViewProps) {
     <dialog
       ref={ref}
       aria-label={t('title')}
-      onClose={p.onClose}
+      // React lets a nested dialog's `close` event reach this handler too (the meeting, task or edit dialog opened from the action bar):
+      // only the drawer's own close closes the drawer.
+      onClose={(e) => {
+        if (e.target === e.currentTarget) p.onClose();
+      }}
       onClick={(e) => {
         if (e.target === ref.current) p.onClose();
       }}

@@ -847,7 +847,7 @@ export function ContactsScreen() {
             />
           ) : (
             canReadViews && (
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <div className="flex min-h-[3.25rem] flex-wrap items-center gap-x-4 gap-y-2">
                 <ViewsBar
                   filters={filters}
                   defaultLimit={sizeDefault}

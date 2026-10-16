@@ -48,7 +48,7 @@ export function SelectionBar(p: SelectionBarProps) {
     <div
       role="region"
       aria-label={t('label')}
-      className="relative flex flex-wrap items-center gap-2 rounded-lg border border-brand/30 bg-brand/5 px-3 py-2"
+      className="relative flex min-h-[3.25rem] flex-wrap items-center gap-2 rounded-lg border border-brand/30 bg-brand/5 px-3 py-2"
     >
       <span className="text-sm font-semibold" aria-live="polite">
         {p.count === null ? t('allMatching') : t('selected', { count: p.count })}

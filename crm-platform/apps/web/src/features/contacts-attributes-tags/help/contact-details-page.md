@@ -4,7 +4,7 @@ title: Contact details page
 summary: One contact in full: the lifecycle stage and status, every field, notes, files, conversations, deals, tasks, consent and the history of changes.
 area: audience
 order: 12
-documents: []
+documents: [nav:contacts]
 keywords: [contact, profile, details, overview, activities, notes, files, deals, tasks, consent, history, stage, status, lead score]
 ---
 

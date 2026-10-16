@@ -4,7 +4,7 @@ title: Contact quick view
 summary: Open a contact in a panel beside the list: see and change the essentials, add a note, task or meeting and message them without leaving the list.
 area: audience
 order: 11
-documents: []
+documents: [nav:contacts]
 keywords: [contact, drawer, preview, panel, note, task, meeting, lead score, subscription, owner, previous, next]
 ---
 

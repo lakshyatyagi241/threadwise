@@ -15,7 +15,7 @@ keywords: [customers, people, leads, import, csv, export, duplicates, tags, bulk
 ## How to use it
 
 1. Open **Contacts** in the CRM area of the menu, or go to `/contacts`. The page reads **Contacts / List**.
-2. Search by name, number or email in the search box (press Ctrl K or Command K to jump to it). Select **Filter** to narrow the list by segment or group, tag, owner, lifecycle stage, status, consent or source, to describe the people you want in plain words with **Filter with AI**, or to build exact conditions (custom properties, a time zone property, dates) with **Add advanced filter**. Every filter you turn on shows as a chip under the toolbar; select the cross on a chip to remove it, or **Clear all**.
+2. Search by name, number or email in the search box (press Ctrl K or Command K to jump to it). Select **Filter** to narrow the list by segment or group, tag, owner, lifecycle stage, status, minor flag, consent or source, to describe the people you want in plain words with **Filter with AI**, or to build exact conditions (custom properties, a time zone property, dates) with **Add advanced filter**. Every filter you turn on shows as a chip under the toolbar; select the cross on a chip to remove it, or **Clear all**.
 3. Select **Add Contact**. A first name and a mobile number or email address are required.
 4. Select a name to open the **quick view**, a panel on the right with the contact's details, while the list stays visible behind it. See [Contact quick view](help:contact-quick-view). To open the full page, hover the row and select the open icon, or choose **See all details**. See [Contact details page](help:contact-details-page).
 5. Change a stage from the table by selecting the stage chip. A lost stage asks for a reason.

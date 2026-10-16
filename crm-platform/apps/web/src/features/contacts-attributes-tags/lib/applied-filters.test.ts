@@ -12,6 +12,9 @@ const names: ChipNames = {
     owner: 'Owner',
     stage: 'Stage',
     status: 'Status',
+    minor: 'Minor',
+    minorYes: 'Flagged as a minor',
+    minorNo: 'Not flagged',
     consent: 'Consent',
     source: 'Source',
     conditions: 'Conditions',
@@ -77,6 +80,16 @@ describe('appliedFilterChips', () => {
       imported: false,
       segment: '',
     });
+  });
+
+  it('makes a chip for the minor filter, yes or no', () => {
+    expect(appliedFilterChips({ ...DEFAULT_FILTERS, minor: 'yes' }, names)[0]).toMatchObject({
+      label: 'Minor: Flagged as a minor',
+      clear: { minor: '' },
+    });
+    expect(appliedFilterChips({ ...DEFAULT_FILTERS, minor: 'no' }, names)[0]!.label).toBe(
+      'Minor: Not flagged',
+    );
   });
 
   it('names a group, the quick lists and a person who left', () => {
