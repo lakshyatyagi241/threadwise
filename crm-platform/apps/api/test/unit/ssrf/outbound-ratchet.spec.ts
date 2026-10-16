@@ -21,10 +21,14 @@ const REVIEWED_BARE_FETCH: Record<string, string> = {
     'wraps safeGet, which re-checks every hop',
   'infra/providers/ai-agents-training/training-url-fetcher.port.ts': 'port type only',
   'infra/providers/auth-registration-security/recaptcha.adapter.ts': 'fixed Google host',
+  'infra/providers/auth-registration-security/resend-mail.adapter.ts':
+    'fixed api.resend.com host (RESEND_API_URL constant), never caller input',
   'infra/providers/auth-registration-security/social-oauth.adapters.ts':
     'fixed Google / Facebook hosts',
   'infra/providers/ai-copilot-lead-finder/http-ai-crm-provider.adapter.ts':
     'fixed OpenAI, Anthropic and Gemini hosts; the base URL override is deploy-time env, never user input',
+  'infra/providers/appointments-booking/ics-feed.fetcher.ts':
+    'a method named fetch (the port and its class); every request goes through guardedRequest, which re-checks each hop and caps the bytes',
   'infra/providers/channel-email/google-http.ts': 'fixed Google hosts',
   'infra/providers/channel-email/google-oidc.verifier.ts':
     'fixed Google JWKS URL (env override is deploy-time)',
