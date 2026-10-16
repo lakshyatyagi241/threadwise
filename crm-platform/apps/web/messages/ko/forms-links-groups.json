@@ -95,7 +95,21 @@
         "required": "필수",
         "removeField": "삭제",
         "options": "옵션(쉼표로 구분)",
-        "optionsPlaceholder": "옵션 1, 옵션 2, 옵션 3"
+        "optionsPlaceholder": "옵션 1, 옵션 2, 옵션 3",
+        "mapsTo": "연결 대상",
+        "mapsToHint": "양식 제출 시 이 답변을 연락처 속성에 저장합니다.",
+        "mapsToNone": "연락처 속성에 저장하지 않음",
+        "mapsToSystemGroup": "연락처 필드",
+        "mapsToCustomGroup": "사용자 지정 속성",
+        "mapsToSystem": {
+          "name": "전체 이름",
+          "first_name": "이름",
+          "last_name": "성",
+          "email": "이메일",
+          "title": "직함",
+          "language": "언어",
+          "address": "주소"
+        }
       },
       "fieldKind": {
         "heading": "제목",

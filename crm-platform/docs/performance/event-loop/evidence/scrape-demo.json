@@ -1,147 +1,419 @@
 {
-  "generatedAt": "2026-10-16T16:12:29.203Z",
-  "node": "v22.17.0",
-  "prometheus": "prom/prometheus:v2.55.0",
-  "aborted": false,
-  "results": [
-    {
-      "name": "the metrics listener refuses a scrape without the token",
-      "ok": true
-    },
-    {
-      "name": "Prometheus has both targets up",
-      "ok": true,
-      "detail": "crm-api=up crm-worker=up"
-    },
-    {
-      "name": "target labels are the job names the rules expect",
-      "ok": true
-    },
-    {
-      "name": "crm_event_loop_delay_p99_seconds present for the api and the worker",
-      "ok": true,
-      "detail": "api,worker"
-    },
-    {
-      "name": "crm_event_loop_delay_max_seconds present for the api and the worker",
-      "ok": true,
-      "detail": "api,worker"
-    },
-    {
-      "name": "crm_event_loop_utilization_ratio present for the api and the worker",
-      "ok": true,
-      "detail": "api,worker"
-    },
-    {
-      "name": "crm_process_heap_used_bytes present for the api and the worker",
-      "ok": true,
-      "detail": "api,worker"
-    },
-    {
-      "name": "crm_process_rss_bytes present for the api and the worker",
-      "ok": true,
-      "detail": "api,worker"
-    },
-    {
-      "name": "crm_runtime_last_report_timestamp_seconds present for the api and the worker",
-      "ok": true,
-      "detail": "api,worker"
-    },
-    {
-      "name": "series carry service, instance and the scrape job",
-      "ok": true,
-      "detail": {
-        "__name__": "crm_event_loop_delay_p99_seconds",
-        "exported_instance": "Lakshya:27336",
-        "instance": "host.docker.internal:9464",
-        "job": "crm-api",
-        "service": "api"
-      }
-    },
-    {
-      "name": "a healthy idle loop reads in a sane range (under 0.5 s)",
-      "ok": true,
-      "detail": "api=0.122224639 worker=0.018825215"
-    },
-    {
-      "name": "the heartbeat timestamp is fresh (under 30 s old)",
-      "ok": true,
-      "detail": "api=6.7s worker=3.7s"
-    },
-    {
-      "name": "a job run by the real worker shows as completed in Prometheus",
-      "ok": true,
-      "detail": "service=worker"
-    },
-    {
-      "name": "Prometheus loaded all 11 alert rules",
-      "ok": true,
-      "detail": 11
-    },
-    {
-      "name": "every rule evaluates without error",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "name": "nothing is firing on a healthy idle stack",
-      "ok": true,
-      "detail": ""
-    },
-    {
-      "name": "Prometheus sees the injected stall as a large max delay",
-      "ok": true,
-      "detail": "0.59 s"
-    },
-    {
-      "name": "callers waited far longer than the request histogram shows (the histogram cannot see time queued behind the loop)",
-      "ok": true,
-      "detail": "client 0.592 s vs server 0.005 s"
-    },
-    {
-      "name": "EventLoopBlockingWithImpact fires from a real, sustained stall in a real process",
-      "ok": true,
-      "detail": {
-        "alertname": "EventLoopBlockingWithImpact",
-        "exported_instance": "Lakshya:27336",
-        "instance": "host.docker.internal:9464",
-        "job": "crm-api",
-        "service": "api",
-        "severity": "critical"
-      }
-    },
-    {
-      "name": "the loop recovers once the stall stops",
-      "ok": true,
-      "detail": "max delay 0.018 s"
-    },
-    {
-      "name": "Prometheus sees the killed worker as down",
-      "ok": true
-    },
-    {
-      "name": "RuntimeMetricsTargetDown goes pending first (the 2 m hold)",
-      "ok": true,
-      "detail": "pending"
-    },
-    {
-      "name": "RuntimeMetricsTargetDown fires for the worker",
-      "ok": true,
-      "detail": {
-        "alertname": "RuntimeMetricsTargetDown",
-        "instance": "host.docker.internal:9465",
-        "job": "crm-worker",
-        "severity": "critical"
-      }
-    },
-    {
-      "name": "the API target stays up while the worker is down",
-      "ok": true
-    },
-    {
-      "name": "RuntimeMetricsStale does NOT fire for a dead process (its series just vanish; TargetDown covers it)",
-      "ok": true,
-      "detail": 0
-    }
-  ]
+ "generatedAt": "2026-10-16T16:56:54.299Z",
+ "node": "v22.17.0",
+ "prometheus": "prom/prometheus:v2.55.0",
+ "alertmanager": "prom/alertmanager:v0.27.0",
+ "phases": [
+  "api",
+  "worker",
+  "long"
+ ],
+ "aborted": false,
+ "delivered": [
+  {
+   "name": "EventLoopDelayP99Warning",
+   "status": "firing",
+   "at": 1792169278506,
+   "labels": {
+    "alertname": "EventLoopDelayP99Warning",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "ApiCallerLatencyHigh",
+   "status": "firing",
+   "at": 1792169278510,
+   "labels": {
+    "alertname": "ApiCallerLatencyHigh",
+    "severity": "critical",
+    "target": "health"
+   }
+  },
+  {
+   "name": "ApiCallerLatencyHigh",
+   "status": "firing",
+   "at": 1792169278510,
+   "labels": {
+    "alertname": "ApiCallerLatencyHigh",
+    "severity": "critical",
+    "target": "ready"
+   }
+  },
+  {
+   "name": "EventLoopDelayP95Warning",
+   "status": "firing",
+   "at": 1792169278510,
+   "labels": {
+    "alertname": "EventLoopDelayP95Warning",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "EventLoopBlockingWithImpact",
+   "status": "firing",
+   "at": 1792169288478,
+   "labels": {
+    "alertname": "EventLoopBlockingWithImpact",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "EventLoopBlockingWithImpact",
+   "status": "resolved",
+   "at": 1792169563502,
+   "labels": {
+    "alertname": "EventLoopBlockingWithImpact",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "ApiCallerLatencyHigh",
+   "status": "resolved",
+   "at": 1792169563508,
+   "labels": {
+    "alertname": "ApiCallerLatencyHigh",
+    "severity": "critical",
+    "target": "health"
+   }
+  },
+  {
+   "name": "ApiCallerLatencyHigh",
+   "status": "resolved",
+   "at": 1792169563508,
+   "labels": {
+    "alertname": "ApiCallerLatencyHigh",
+    "severity": "critical",
+    "target": "ready"
+   }
+  },
+  {
+   "name": "EventLoopDelayP99Warning",
+   "status": "resolved",
+   "at": 1792169603516,
+   "labels": {
+    "alertname": "EventLoopDelayP99Warning",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "EventLoopDelayP95Warning",
+   "status": "resolved",
+   "at": 1792169608510,
+   "labels": {
+    "alertname": "EventLoopDelayP95Warning",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "EventLoopDelayP95Warning",
+   "status": "firing",
+   "at": 1792169628445,
+   "labels": {
+    "alertname": "EventLoopDelayP95Warning",
+    "exported_instance": "Lakshya:50356",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "service": "worker",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "EventLoopDelayP99Warning",
+   "status": "firing",
+   "at": 1792169638471,
+   "labels": {
+    "alertname": "EventLoopDelayP99Warning",
+    "exported_instance": "Lakshya:50356",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "service": "worker",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "WorkerEventLoopBlockingWithQueueImpact",
+   "status": "firing",
+   "at": 1792169643468,
+   "labels": {
+    "alertname": "WorkerEventLoopBlockingWithQueueImpact",
+    "exported_instance": "Lakshya:50356",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "service": "worker",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "EventLoopLongStallWarning",
+   "status": "firing",
+   "at": 1792169683445,
+   "labels": {
+    "alertname": "EventLoopLongStallWarning",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "warning"
+   }
+  },
+  {
+   "name": "EventLoopLongStallCritical",
+   "status": "firing",
+   "at": 1792169683445,
+   "labels": {
+    "alertname": "EventLoopLongStallCritical",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "RuntimeMetricsTargetDown",
+   "status": "firing",
+   "at": 1792169813453,
+   "labels": {
+    "alertname": "RuntimeMetricsTargetDown",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "severity": "critical"
+   }
+  }
+ ],
+ "results": [
+  {
+   "name": "the metrics listener refuses a scrape without the token",
+   "ok": true
+  },
+  {
+   "name": "Prometheus has all three targets up",
+   "ok": true,
+   "detail": "crm-api=up crm-probe=up crm-worker=up"
+  },
+  {
+   "name": "target labels are the job names the rules expect",
+   "ok": true
+  },
+  {
+   "name": "Prometheus found Alertmanager",
+   "ok": true,
+   "detail": "http://alertmanager:9093/api/v2/alerts"
+  },
+  {
+   "name": "crm_event_loop_delay_p99_seconds present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_event_loop_delay_max_seconds present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_event_loop_utilization_ratio present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_process_heap_used_bytes present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_process_rss_bytes present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "crm_runtime_last_report_timestamp_seconds present for the api and the worker",
+   "ok": true,
+   "detail": "api,worker"
+  },
+  {
+   "name": "series carry service, instance and the scrape job",
+   "ok": true,
+   "detail": {
+    "__name__": "crm_event_loop_delay_p99_seconds",
+    "exported_instance": "Lakshya:50056",
+    "instance": "host.docker.internal:9464",
+    "job": "crm-api",
+    "service": "api"
+   }
+  },
+  {
+   "name": "a healthy idle loop reads in a sane range (under 0.5 s)",
+   "ok": true,
+   "detail": "api=0.018661375 worker=0.020086783"
+  },
+  {
+   "name": "the heartbeat timestamp is fresh (under 30 s old)",
+   "ok": true,
+   "detail": "api=6.3s worker=7.3s"
+  },
+  {
+   "name": "the probe reports both targets up",
+   "ok": true,
+   "detail": "health=1 ready=1"
+  },
+  {
+   "name": "a healthy /health reads fast from the probe (p95 under 0.25 s)",
+   "ok": false,
+   "detail": "n/a s"
+  },
+  {
+   "name": "a job run by the real worker shows as completed in Prometheus",
+   "ok": true,
+   "detail": "service=worker"
+  },
+  {
+   "name": "Prometheus loaded all 15 alert rules",
+   "ok": true,
+   "detail": 15
+  },
+  {
+   "name": "every rule evaluates without error",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "nothing is firing on a healthy idle stack",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "Prometheus sees the injected stall as a large max delay",
+   "ok": true,
+   "detail": "1.524 s"
+  },
+  {
+   "name": "callers and the probe saw the stall; the server request histogram did not",
+   "ok": true,
+   "detail": "load 1.474 / probe 2.258 / server 0.007 s"
+  },
+  {
+   "name": "EventLoopBlockingWithImpact fires from a real, sustained API stall",
+   "ok": true,
+   "detail": "crm-api"
+  },
+  {
+   "name": "ApiCallerLatencyHigh (the probe, outside the API process) fires from the same stall",
+   "ok": true,
+   "detail": "health"
+  },
+  {
+   "name": "the API loop recovers once the stall stops",
+   "ok": true,
+   "detail": "max delay 0.028 s"
+  },
+  {
+   "name": "WorkerEventLoopBlockingWithQueueImpact fires from a real worker stall with a real queue backlog",
+   "ok": true,
+   "detail": "crm-worker"
+  },
+  {
+   "name": "the worker loop recovers once the stall stops",
+   "ok": true,
+   "detail": "max delay 0.024 s"
+  },
+  {
+   "name": "EventLoopLongStallCritical fires for a single 12 s block (no hold)",
+   "ok": true,
+   "detail": "12.088"
+  },
+  {
+   "name": "EventLoopLongStallWarning fires too",
+   "ok": true
+  },
+  {
+   "name": "the blocked API failed at least one scrape (up dipped to 0)",
+   "ok": true,
+   "detail": "min up 0"
+  },
+  {
+   "name": "Prometheus sees the killed worker as down",
+   "ok": true
+  },
+  {
+   "name": "RuntimeMetricsTargetDown goes pending first (the 2 m hold)",
+   "ok": true,
+   "detail": "pending"
+  },
+  {
+   "name": "RuntimeMetricsTargetDown fires for the worker",
+   "ok": true,
+   "detail": {
+    "alertname": "RuntimeMetricsTargetDown",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "the API target stays up while the worker is down",
+   "ok": true
+  },
+  {
+   "name": "RuntimeMetricsStale does NOT fire for a dead process (its series vanish; TargetDown covers it)",
+   "ok": true
+  },
+  {
+   "name": "a firing notification reached the receiver (RuntimeMetricsTargetDown)",
+   "ok": true
+  },
+  {
+   "name": "the notification carries the labels an on-call person needs",
+   "ok": true,
+   "detail": {
+    "alertname": "RuntimeMetricsTargetDown",
+    "instance": "host.docker.internal:9465",
+    "job": "crm-worker",
+    "severity": "critical"
+   }
+  },
+  {
+   "name": "EventLoopBlockingWithImpact was delivered as firing",
+   "ok": true
+  },
+  {
+   "name": "ApiCallerLatencyHigh was delivered as firing",
+   "ok": true
+  },
+  {
+   "name": "WorkerEventLoopBlockingWithQueueImpact was delivered as firing",
+   "ok": true
+  },
+  {
+   "name": "EventLoopLongStallCritical was delivered as firing",
+   "ok": true
+  },
+  {
+   "name": "a RESOLVED notification reached the receiver once the stall was over",
+   "ok": true
+  }
+ ]
 }

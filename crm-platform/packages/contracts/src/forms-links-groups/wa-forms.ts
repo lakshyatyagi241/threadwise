@@ -50,6 +50,25 @@ export const WA_FORM_CHOICE_FIELD_KINDS: readonly WaFormFieldKind[] = [
   'checkbox',
 ];
 
+/**
+ * A field's `mapsTo`, when it names one of these, writes the submitted answer onto that contact column instead of (or as well
+ * as) a custom property — the same set the flow engine's "Update contact field" step writes
+ * (`FLOW_CONTACT_COLUMNS` in `apps/api/.../crm/contacts/contacts.service.ts`; keep the two in sync). Phone is deliberately not
+ * here: it is the contact's identity key and is never overwritten by a form answer.
+ */
+export const WA_FORM_SYSTEM_MAP_FIELDS = [
+  'name',
+  'first_name',
+  'last_name',
+  'email',
+  'title',
+  'language',
+  'address',
+] as const;
+export type WaFormSystemMapField = (typeof WA_FORM_SYSTEM_MAP_FIELDS)[number];
+
+export const WA_FORM_MAPS_TO_MAX = 64;
+
 export const waFormFieldSchema = z.object({
   /** Client-generated (`fld_<6-char-random>`), stable across autosaves — never server-assigned. */
   id: z.string().min(1).max(40),
@@ -59,6 +78,14 @@ export const waFormFieldSchema = z.object({
   placeholder: z.string().trim().max(300).optional(),
   helperText: z.string().trim().max(300).optional(),
   options: z.array(z.string().trim().min(1).max(200)).max(50).optional(),
+  /**
+   * Writes the answer onto this contact property at submission time: one of `WA_FORM_SYSTEM_MAP_FIELDS`, or the key of an
+   * active custom contact attribute. Unmapped (the default) leaves the contact untouched — Reference never does this mapping
+   * at all, so a blank `mapsTo` keeps the submission exactly as before. A key typed by hand that names nothing active is
+   * silently skipped at submission time (same rule as the flow engine's own field writer), not an error: a deleted attribute
+   * must not break future submissions.
+   */
+  mapsTo: z.string().trim().min(1).max(WA_FORM_MAPS_TO_MAX).optional(),
 });
 export type WaFormField = z.infer<typeof waFormFieldSchema>;
 

@@ -4,6 +4,7 @@ import { TeamAnalyticsController } from './team-analytics.controller';
 import { TeamAnalyticsService } from './team-analytics.service';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { AssigneesService } from './assignees.service';
+import { BusinessHoursService } from './business-hours.service';
 import { AssignmentController } from './assignment.controller';
 import { AssignmentService } from './assignment.service';
 import { BulkActionsService } from './bulk-actions.service';
@@ -35,6 +36,7 @@ import { RoutingRulesService } from './routing-rules.service';
     AssignmentService,
     BulkActionsService,
     AssigneesService,
+    BusinessHoursService,
     RoutingRulesRepository,
     RoutingRulesService,
     RoutingEngine,

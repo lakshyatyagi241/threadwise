@@ -6,6 +6,7 @@ import {
   type InboundMessageListener,
   type InboundStoredEvent,
 } from '../../../../chat-conversations';
+import { ContactsService } from '../../../../crm';
 import {
   EcomOrderHooks,
   type EcomFlowOrder,
@@ -19,7 +20,7 @@ import {
 import { FlowEngine } from '../../engine.service';
 import { RunRepository } from '../../run.repository';
 import type { RunState } from '../../types';
-import { parseFormToken, WaFormRecords } from './wa-form-records';
+import { flattenAnswer, parseFormToken, WaFormRecords } from './wa-form-records';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -48,6 +49,7 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     private readonly runs: RunRepository,
     private readonly engine: FlowEngine,
     private readonly forms: WaFormRecords,
+    private readonly contacts: ContactsService,
   ) {}
 
   onModuleInit(): void {
@@ -104,6 +106,8 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
         return false;
       });
 
+    if (recorded && e.contactId !== null) await this.applyFieldMappings(e.orgId, e.contactId, parsed.formId, answers);
+
     const run = await this.runOf(e.orgId, parsed.runRef);
     const mine =
       run &&
@@ -119,6 +123,38 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
       flowToken: token,
     });
     return r === 'routed' || recorded;
+  }
+
+  /**
+   * A field the form builder marked "maps to a contact property" writes its answer onto the contact that submitted (TW-WFL, net
+   * addition: Reference never does this). Reuses the flow engine's own safe field writer (`ContactsService.setFieldFromFlow`) —
+   * same contact-column allow-list and active-custom-attribute check as the "Update contact field" step, so a mapping that names
+   * a since-deleted attribute is skipped, not an error, and phone can never be overwritten by a form answer. Best effort: one
+   * field failing to write never fails the submission itself, which is already kept.
+   */
+  private async applyFieldMappings(
+    orgId: number,
+    contactId: number,
+    formId: number,
+    answers: Record<string, unknown>,
+  ): Promise<void> {
+    let mappings: Record<string, string>;
+    try {
+      mappings = await this.forms.fieldMappings(orgId, formId);
+    } catch (err) {
+      this.logger.warn({ orgId, formId, err }, '[FLR] could not read the form field mappings');
+      return;
+    }
+    for (const { fieldId, mapsTo, value } of writesFor(mappings, answers)) {
+      try {
+        await this.contacts.setFieldFromFlow(orgId, contactId, mapsTo, value);
+      } catch (err) {
+        this.logger.warn(
+          { orgId, formId, fieldId, mapsTo, err },
+          '[FLR] a form answer could not be saved on the contact',
+        );
+      }
+    }
   }
 
   private async catalogOrder(e: InboundStoredEvent): Promise<boolean> {
@@ -168,6 +204,20 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     if (!UUID.test(ref)) return null;
     return this.db.txAs({ orgId }, (tx) => this.runs.byUuid(tx, orgId, ref));
   }
+}
+
+/** Of a form's field mappings, the ones this submission actually has a non-blank answer for, flattened and ready to write. */
+export function writesFor(
+  mappings: Record<string, string>,
+  answers: Record<string, unknown>,
+): Array<{ fieldId: string; mapsTo: string; value: string }> {
+  const out: Array<{ fieldId: string; mapsTo: string; value: string }> = [];
+  for (const [fieldId, mapsTo] of Object.entries(mappings)) {
+    if (!(fieldId in answers)) continue;
+    const value = flattenAnswer(answers[fieldId]);
+    if (value !== '') out.push({ fieldId, mapsTo, value });
+  }
+  return out;
 }
 
 /** Hears `whatsapp.order.received` (TW-WABA-042) and hands the cart to `CommerceResume`. Worker only, like the resume itself. */

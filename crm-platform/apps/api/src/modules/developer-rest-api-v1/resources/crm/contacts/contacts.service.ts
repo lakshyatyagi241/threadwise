@@ -95,7 +95,9 @@ export class V1ContactsService {
     });
     if (!parsed.success) throw invalid('search', 'The search is not valid.');
     // 'all': a key sees the whole workspace (TW-API-022), not just the records of the member who minted it.
-    const res = await this.contacts.list(parsed.data, 'all');
+    // canRevealPhone: true for the same reason read() below passes it — this surface is out of
+    // scope for the contacts.phone.reveal gate added to the staff Contacts screen.
+    const res = await this.contacts.list(parsed.data, 'all', { canRevealPhone: true });
     const ctx = RequestContextStore.require();
     const minors = await this.db.tx((tx) =>
       this.privacy.minorUuids(
@@ -296,7 +298,13 @@ export class V1ContactsService {
       if (!row) throw AppError.notFound('Contact');
       const chips = await this.repo.groupChips(tx, ctx.orgId, [row.id]);
       const minors = await this.privacy.minorUuids(tx, ctx.orgId, [row.uuid]);
-      return toV1Contact(toContactResponse(row, { groups: chips }), minors.has(row.uuid));
+      // Developer REST API v1 is a separate surface from the staff Contacts screen and out of
+      // scope for the contacts.phone.reveal gate added there (docs/threadwise-port/README.md
+      // follow-up) — unmasked, as before, pending its own pass.
+      return toV1Contact(
+        toContactResponse(row, { groups: chips, canRevealPhone: true }),
+        minors.has(row.uuid),
+      );
     });
   }
 

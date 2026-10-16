@@ -69,6 +69,11 @@ export const mailboxResponseSchema = z.object({
   lastSyncedAt: z.string().datetime().nullable(),
   /** Why the last sync or send failed; null when healthy. */
   lastError: z.string().nullable(),
+  /**
+   * Seconds since the last successful sync of a connected mailbox: how far behind the inbox may be (the sweep syncs about once a minute,
+   * push within seconds). Null when never synced or not connected. Absent on a summary row.
+   */
+  syncLagSeconds: z.number().int().nullable().optional(),
   /** Conversations from this mailbox. */
   conversationCount: z.number().int(),
   rowVersion: z.number().int(),
@@ -154,6 +159,53 @@ export const connectImapMailboxSchema = z.object({
   mailboxId: uuidSchema.optional(),
 });
 export type ConnectImapMailboxInput = z.infer<typeof connectImapMailboxSchema>;
+
+/**
+ * "Test credentials" (IMAP/SMTP): the same settings as {@link connectImapMailboxSchema} without the mailbox identity. Nothing is stored and
+ * nothing is sent: the server only connects, signs in, opens the INBOX and says hello to the SMTP server.
+ */
+export const testImapMailboxSchema = z.object({
+  imap: connectImapMailboxSchema.shape.imap,
+  smtp: connectImapMailboxSchema.shape.smtp,
+});
+export type TestImapMailboxInput = z.infer<typeof testImapMailboxSchema>;
+
+/** The step of a test that failed: IMAP connect, login and opening the INBOX; SMTP connect (with the greeting) and sign-in. */
+export const MAIL_TEST_STEPS = ['connect', 'login', 'inbox', 'auth'] as const;
+export const mailTestStepSchema = z.enum(MAIL_TEST_STEPS);
+export type MailTestStep = z.infer<typeof mailTestStepSchema>;
+
+/** Why a test failed, as a short code the screen can word (our own words also come in `message`). */
+export const MAIL_TEST_REASONS = [
+  'auth_failed',
+  'tls',
+  'unreachable',
+  'blocked_address',
+  'rejected',
+  'unknown',
+] as const;
+export const mailTestReasonSchema = z.enum(MAIL_TEST_REASONS);
+export type MailTestReason = z.infer<typeof mailTestReasonSchema>;
+
+export const mailTestSideSchema = z.object({
+  ok: z.boolean(),
+  /** The step that failed; null when `ok`. */
+  failedStep: mailTestStepSchema.nullable(),
+  reason: mailTestReasonSchema.nullable(),
+  /** One sentence in our words (never the server's text, a host or a password); null when `ok`. */
+  message: z.string().nullable(),
+  /** IMAP only, when `ok`: how many messages the INBOX holds. */
+  inboxMessages: z.number().int().nullable(),
+});
+export type MailTestSide = z.infer<typeof mailTestSideSchema>;
+
+/** Both sides are always tested, so one run tells the person everything that is wrong. */
+export const mailConnectionTestResponseSchema = z.object({
+  ok: z.boolean(),
+  imap: mailTestSideSchema,
+  smtp: mailTestSideSchema,
+});
+export type MailConnectionTestResponse = z.infer<typeof mailConnectionTestResponseSchema>;
 
 /** What the hub can change on a mailbox besides its name: the hourly send cap (null = platform default). */
 export const MAIL_SEND_LIMIT_MAX = 10_000;

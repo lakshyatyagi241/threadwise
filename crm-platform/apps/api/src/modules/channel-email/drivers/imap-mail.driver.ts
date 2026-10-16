@@ -1,4 +1,5 @@
 import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import type { MailConnectionTestResponse, MailTestSide } from '@crm/contracts';
 import { channelEmailEnv } from '../../../config/domains/channel-email.env';
 import { buildMime } from '../../../infra/providers/channel-email';
 import { BlockedHostError } from '../../../infra/providers/channel-email/imap/host-guard';
@@ -33,6 +34,14 @@ import {
   type PasswordMailDriver,
 } from './mail-driver';
 import { MailDriverRegistry } from './mail-driver.registry';
+import {
+  INBOX_FAILED,
+  failedSide,
+  imapStepOf,
+  okSide,
+  smtpStepOf,
+  testResult,
+} from '../mail-test-rules';
 
 /** Messages whose metadata is read in one round trip. */
 const INFO_CHUNK = 200;
@@ -138,6 +147,42 @@ export class ImapMailDriver implements PasswordMailDriver, OnModuleInit {
     }
     const user = connection.imap.username;
     return { address: user.includes('@') ? user.toLowerCase() : '', sub: null, name: null };
+  }
+
+  /** Both servers, each on its own: a refused IMAP password does not hide a wrong SMTP port. */
+  async test(connection: PasswordConnection): Promise<MailConnectionTestResponse> {
+    return testResult(await this.testImap(connection), await this.testSmtp(connection));
+  }
+
+  private async testImap(connection: PasswordConnection): Promise<MailTestSide> {
+    let session: ImapSession | null = null;
+    let signedIn = false;
+    try {
+      session = await this.imap.connect(connection.imap);
+      signedIn = true;
+      const box = await session.openInbox();
+      return okSide(box.exists);
+    } catch (err) {
+      const failure = this.fail(err, 'imap', 'verify');
+      const step = imapStepOf(failure, signedIn);
+      // A good sign-in that cannot open the INBOX is not the server's connection or password: it gets its own sentence.
+      return failedSide(
+        step,
+        step === 'inbox' ? { ...failureParts(failure), message: INBOX_FAILED } : failure,
+      );
+    } finally {
+      await session?.close().catch(() => undefined);
+    }
+  }
+
+  private async testSmtp(connection: PasswordConnection): Promise<MailTestSide> {
+    try {
+      await this.smtp.verify(connection.smtp);
+      return okSide();
+    } catch (err) {
+      const failure = this.fail(err, 'smtp', 'verify');
+      return failedSide(smtpStepOf(failure), failure);
+    }
   }
 
   // --- sync ----------------------------------------------------------------------------------------------------------------------
@@ -473,6 +518,12 @@ export class ImapMailDriver implements PasswordMailDriver, OnModuleInit {
     );
   }
 }
+
+const failureParts = (e: MailDriverError) => ({
+  kind: e.kind,
+  providerCode: e.providerCode,
+  message: e.message,
+});
 
 /** The Message-ID a message is keyed by: its own, or the synthetic one from its envelope. */
 function idOf(info: ImapMessageInfo): string {

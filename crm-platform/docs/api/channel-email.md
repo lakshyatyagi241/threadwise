@@ -329,3 +329,37 @@ Deviation from Reference (every linked mailbox there is workspace-wide): a membe
 A mailbox is also an **engine** for campaigns: a campaign whose `senderKey` is `email:<mailbox uuid>` is sent through the mailbox (Gmail, Microsoft or IMAP/SMTP) by `EmailEngineSender`,
 with the mailbox's own limits (`MailSendGuard`: the bounce list and the hourly cap), the consent gate and the signed unsubscribe link, and each mail is written into the mailbox's inbox thread.
 The plan limit `email_monthly` (mails sent in a calendar month, replies and campaign mail together, 0 = unlimited) is new. The whole behaviour is documented in [campaigns.md](campaigns.md#email-campaigns).
+
+## Contact timeline (E-19)
+
+Mail of a **shared** mailbox is written to the contact's Activity Timeline (`GET /v2/contacts/:id/activities`, the CRM's route and record scope) by the Email channel, not by the CRM:
+
+- `activityType` `email_received` (`source: system`, `actorId: null`): title `Email received from <name or address>: <subject>`, `body` the first 240 characters of the text without quoted earlier mail, `occurredAt` when the mail was sent.
+- `activityType` `email_sent` (`source: user` with `actorId` the sender, or `bot` for an automation): title `Email sent to <first recipient> (+N): <subject>`.
+- One entry per message, however often the mail is seen (ledger table `mail_timeline_entries`). Automated mail (auto-reply, list mail, flood-limited mail) and bounce notices get no entry. A **personal** mailbox writes nothing. A thread with no contact yet has no timeline to write to. A failure to write is logged and never fails the sync or the send.
+
+## Microsoft change notifications (E-17)
+
+`POST /v2/public/email/microsoft/push` (public, no bearer; not in the OpenAPI document). `?validationToken=<t>` answers `200 text/plain` with `<t>` (400 when empty or over 1,000 characters; 404 while push is off). A body `{ "value": [ { "subscriptionId", "clientState", "changeType" | "lifecycleEvent", ... } ] }` answers `202` at once (400 when it is not that shape) and queues a sync for each notification whose signed `clientState` and `subscriptionId` match a connected mailbox; the rest are dropped silently. `lifecycleEvent` `reauthorizationRequired` flags the subscription for renewal, `subscriptionRemoved` forgets it, `missed` syncs. Off until `MAIL_GRAPH_PUSH_ENABLED=true`; see the runbook `microsoft-mail-setup.md` section 5.
+
+## Test credentials (E-08) and sync lag (E-11)
+
+`POST /v2/email/mailboxes/test-imap` takes `{ imap: {host, port, security, username, password}, smtp: {host, port, security, username?, password?} }` (the shapes of `connect-imap`, without address, name or scope) and `POST /v2/email/mailboxes/:id/test` takes no body and uses the saved login. Both answer `200`:
+
+```json
+{
+  "ok": false,
+  "imap": {
+    "ok": false,
+    "failedStep": "login",
+    "reason": "auth_failed",
+    "message": "The IMAP server refused the username or password.",
+    "inboxMessages": null
+  },
+  "smtp": { "ok": true, "failedStep": null, "reason": null, "message": null, "inboxMessages": null }
+}
+```
+
+Both sides are always tried. `failedStep`: `connect`, `login`, `inbox` (IMAP) or `connect`, `auth` (SMTP). `reason`: `auth_failed`, `tls`, `unreachable`, `blocked_address`, `rejected`, `unknown`. `message` is one sentence in our words (never a host, banner or password); the web translates from `reason`. `inboxMessages` is the INBOX count on a good IMAP side. Nothing is stored and nothing is sent. Errors: `422` for a body that is not settings, `429 MAIL_RATE_LIMITED` after 6 tests a minute per workspace, `409 MAIL_MAILBOX_UNAVAILABLE` for a disconnected mailbox, `422 MAIL_PROVIDER_UNSUPPORTED` for Gmail/Microsoft, `403`/`404` as for Sync now. Permission `mail.mailboxes.manage` (shared) or `mail.mailboxes.manage_personal` (own personal mailbox); the plan feature `email_channel` applies.
+
+`MailboxResponse.syncLagSeconds` (optional, nullable integer): seconds since the last successful sync of a connected mailbox; null when never synced, not connected, or on a summary row.

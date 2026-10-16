@@ -223,8 +223,17 @@ export class ContactsService {
     });
   }
 
-  async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
+  async list(
+    query: ListContactsQuery,
+    scope: RecordScope,
+    opts?: { canRevealPhone?: boolean },
+  ): Promise<ContactListResponse> {
     const ctx = RequestContextStore.require();
+    // `opts.canRevealPhone` lets a caller that is a different surface entirely (Developer REST
+    // API v1: "a key sees the whole workspace", see its own read()) keep its pre-existing
+    // behaviour instead of inheriting the Contacts-screen grant check below.
+    const canRevealPhone =
+      opts?.canRevealPhone ?? this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
 
     return this.db.tx(async (tx) => {
       const resolution = await resolveContactFilter(tx, ctx.orgId, query);
@@ -266,6 +275,7 @@ export class ContactsService {
         toContactResponse(row, {
           groups: groupChips?.filter((c) => c.contactId === row.id),
           tags: tagChips?.filter((c) => c.contactId === row.id),
+          canRevealPhone,
         }),
       );
 
@@ -315,7 +325,8 @@ export class ContactsService {
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
       await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
-      return toContactResponse(row);
+      const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
+      return toContactResponse(row, { canRevealPhone });
     });
   }
 
@@ -352,6 +363,13 @@ export class ContactsService {
     via?: ContactConsentContext,
   ): Promise<{ contact: ContactResponse; created: boolean }> {
     const ctx = RequestContextStore.require();
+    // A worker/system actor (the inbound-message pipeline below) carries no grants at all and is
+    // never the one a masking rule is meant to restrict — only an HTTP request from a staff user
+    // goes through the permission guard that populates `ctx.grants`, same convention as the
+    // scope fallback a few methods down.
+    const canRevealPhone = ctx.grants
+      ? this.rbac.can(ctx.grants, 'contacts.phone.reveal').allowed
+      : true;
 
     // One canonicaliser for create, import and dedupe (TW-CON-013). The contract already insists
     // on E.164, so this normally changes nothing; it is what keeps the identity key identical to
@@ -408,10 +426,14 @@ export class ContactsService {
           // The same person agreeing again is still an agreement: the grant lands on the contact they already are.
           const regranted = await this.grantOnMatch(tx, ctx, existing, input, via);
           return {
+            // This can return an EXISTING contact matched by email alone — its phone may be
+            // something the caller never typed, so it goes through the same grant check as
+            // list/detail rather than being treated as "the caller already knows this".
             contact: toContactResponse(
               regranted
                 ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
                 : existing,
+              { canRevealPhone },
             ),
             created: false,
           };
@@ -547,7 +569,7 @@ export class ContactsService {
       });
 
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
-      return { contact: toContactResponse(row!), created: true };
+      return { contact: toContactResponse(row!, { canRevealPhone }), created: true };
     });
   }
 
@@ -1084,6 +1106,7 @@ export class ContactsService {
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact', uuid);
+      const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
       const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
       await assertContactScope(
         tx,
@@ -1321,7 +1344,7 @@ export class ContactsService {
         },
       });
 
-      return toContactResponse(after!);
+      return toContactResponse(after!, { canRevealPhone });
     });
   }
 
