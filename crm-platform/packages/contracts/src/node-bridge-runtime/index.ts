@@ -20,7 +20,7 @@ const httpUrl = (v: string) => /^https?:\/\/[^\s/$.?#][^\s]*$/i.test(v);
  * range and the cloud metadata names are never a bridge, and are what a redirect or a typo would otherwise reach.
  */
 export const bridgeHostAllowed = (v: string): boolean => {
-  const m = /^https?:\/\/(?:[^@\/?#]*@)?(\[[^\]]+\]|[^:\/?#]+)/i.exec(v.trim());
+  const m = /^https?:\/\/(?:[^@/?#]*@)?(\[[^\]]+\]|[^:/?#]+)/i.exec(v.trim());
   if (!m) return false;
   const h = m[1]!.toLowerCase().replace(/^\[|\]$/g, '');
   return !(
