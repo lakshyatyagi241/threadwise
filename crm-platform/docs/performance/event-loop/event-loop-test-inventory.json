@@ -7,9 +7,10 @@
     "benchmarks": 3,
     "scrapeDemoChecks": 41,
     "alertRuleCases": 18,
-    "total": 119
+    "loadProfiles": 5,
+    "total": 124
   },
-  "coverageAgainstTarget": "119 of 280 (about 42%). The 280-check target is NOT MET. The categories below show what exists and what is missing. The demo checks are one scripted run of 41 checks, counted once; the 18 alert rule cases are promtool case groups.",
+  "coverageAgainstTarget": "124 of 280 (about 44%). The 280-check target is NOT MET. The categories below show what exists and what is missing. The demo checks are one scripted run of 41 checks, counted once; the 18 alert rule cases are promtool case groups.",
   "categories": [
     {
       "name": "Instrumentation unit/integration",
@@ -49,8 +50,16 @@
     {
       "name": "API/module performance scenarios",
       "target": 70,
-      "implemented": 0,
-      "blockedBy": "No load tool in the repo and no isolated API+Postgres+Redis performance environment"
+      "implemented": 5,
+      "kind": "load profiles (idle, normal, peak, spike, 10 minute soak), one mixed workload",
+      "file": "tools/event-loop-audit/load/run-load.mjs + workload.k6.js",
+      "covers": [
+        "contact list/search/get/create/update, inbox list and counts (empty inbox), a /health control, at chosen rates, on a laptop"
+      ],
+      "missing": [
+        "webhooks, broadcasts, automations, reporting at size, a populated inbox",
+        "a stable dedicated host, production-shaped rates, 12 h and 24 h soaks"
+      ]
     },
     {
       "name": "Worker/concurrency scenarios",

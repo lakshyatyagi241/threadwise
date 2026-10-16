@@ -1,0 +1,1193 @@
+{
+ "generatedAt": "2026-10-16T18:55:12.272Z",
+ "environment": {
+  "commit": "18f84c6358676d8b929213fb9419541985d40d43",
+  "branch": "claude/event-loop-load-baselines",
+  "workingTreeClean": false,
+  "node": "v22.17.0",
+  "os": "win32 10.0.26200",
+  "cpu": "Intel(R) Core(TM) Ultra 7 155H, 22 logical cores, 31.4 GB",
+  "infrastructureProfile": "developer laptop; API, worker, Postgres, Redis and the k6 container all on one machine",
+  "loadGenerator": "grafana/k6:0.49.0",
+  "workload": "tools/event-loop-audit/load/workload.k6.js",
+  "mix": "contact list 52%, search 12%, get 15%, inbox list 8%, inbox counts 4%, create 4%, update 2%, /health 3% (control, no tenant work)",
+  "rates": "normal 5 req/s, peak 20 req/s, spike 5 to 60 req/s (3x peak), soak 5 req/s; open model (arrival rate)",
+  "profilesRequested": [
+   "idle",
+   "normal",
+   "peak",
+   "spike",
+   "soak"
+  ],
+  "seconds": {
+   "normalAndPeak": 120,
+   "idle": 60,
+   "soakMinutes": 10
+  }
+ },
+ "comparabilityWarning": "Valid only against runs from this same machine and Node version. The rates are chosen, not taken from production traffic. The soak is minutes, not hours.",
+ "profiles": {
+  "idle": {
+   "durationSeconds": 60,
+   "api": {
+    "windows": 14,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.54,
+      "mean": 15.6,
+      "max": 16.39
+     },
+     "p95": {
+      "median": 21.56,
+      "mean": 21.9,
+      "max": 39.26
+     },
+     "p99": {
+      "median": 28.87,
+      "mean": 33.46,
+      "max": 73.14
+     },
+     "max": {
+      "median": 42.17,
+      "mean": 65.03,
+      "max": 278.4
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.006,
+     "mean": 0.006,
+     "max": 0.012
+    },
+    "cpuCores": {
+     "median": 0.006,
+     "mean": 0.006,
+     "max": 0.016
+    },
+    "heapUsedMb": {
+     "median": 219.5,
+     "mean": 219.5,
+     "max": 220
+    },
+    "rssMb": {
+     "median": 318.3,
+     "mean": 318.2,
+     "max": 318.3
+    },
+    "gcPauseMaxMs": {
+     "median": 0.97,
+     "mean": 1.25,
+     "max": 6.34
+    }
+   },
+   "worker": {
+    "windows": 14,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.53,
+      "mean": 15.54,
+      "max": 15.71
+     },
+     "p95": {
+      "median": 22.5,
+      "mean": 23.09,
+      "max": 36.24
+     },
+     "p99": {
+      "median": 33.46,
+      "mean": 35.19,
+      "max": 65.37
+     },
+     "max": {
+      "median": 44.07,
+      "mean": 60.15,
+      "max": 157.42
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.025,
+     "mean": 0.035,
+     "max": 0.1
+    },
+    "cpuCores": {
+     "median": 0.037,
+     "mean": 0.039,
+     "max": 0.134
+    },
+    "heapUsedMb": {
+     "median": 205.4,
+     "mean": 204.8,
+     "max": 206.9
+    },
+    "rssMb": {
+     "median": 285.3,
+     "mean": 284.3,
+     "max": 285.6
+    },
+    "gcPauseMaxMs": {
+     "median": 1.69,
+     "mean": 14.09,
+     "max": 94.95
+    }
+   },
+   "blockedWindows": {
+    "warn": 5,
+    "critical": 1
+   },
+   "postgres": {
+    "samples": 34,
+    "note": "non-idle sessions of the app database, summed over samples; \"Lock/...\" or \"Client/ClientRead\" waits and long-running statements show where requests wait",
+    "top": [
+     {
+      "perSample": 0.24,
+      "what": "idle in transaction | Client/ClientRead | begin"
+     },
+     {
+      "perSample": 0.06,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.privileged', 'on', true)"
+     },
+     {
+      "perSample": 0.03,
+      "what": "idle in transaction | Client/ClientRead |  SELECT id, uuid, org_id, status, schedule_type, scheduled_time, next_run_at, timezone, re"
+     },
+     {
+      "perSample": 0.03,
+      "what": "idle in transaction | Client/ClientRead |  WITH claimed AS ( SELECT id, created_at FROM event_outbox WHERE status = 'pending' AND av"
+     }
+    ]
+   },
+   "serverRequestMs": {
+    "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+   },
+   "calibrationAfter": {
+    "postgresSelect1Ms": {
+     "p50": 1.36,
+     "p99": 4.29,
+     "max": 6.02
+    },
+    "redisPingMs": {
+     "p50": 1.26,
+     "p99": 12.17,
+     "max": 13.64
+    }
+   }
+  },
+  "normal": {
+   "durationSeconds": 128,
+   "api": {
+    "windows": 28,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.35,
+      "mean": 15.37,
+      "max": 15.77
+     },
+     "p95": {
+      "median": 21.02,
+      "mean": 22.02,
+      "max": 38.83
+     },
+     "p99": {
+      "median": 25.48,
+      "mean": 38.17,
+      "max": 292.81
+     },
+     "max": {
+      "median": 34.73,
+      "mean": 61.32,
+      "max": 544.21
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.083,
+     "mean": 0.091,
+     "max": 0.391
+    },
+    "cpuCores": {
+     "median": 0.094,
+     "mean": 0.094,
+     "max": 0.222
+    },
+    "heapUsedMb": {
+     "median": 236.5,
+     "mean": 236.1,
+     "max": 254.2
+    },
+    "rssMb": {
+     "median": 352.9,
+     "mean": 341.2,
+     "max": 354.1
+    },
+    "gcPauseMaxMs": {
+     "median": 4.8,
+     "mean": 7.73,
+     "max": 45.22
+    },
+    "heapSlopeMbPerMin": 6.97,
+    "rssSlopeMbPerMin": 20.75
+   },
+   "worker": {
+    "windows": 27,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.5,
+      "mean": 15.49,
+      "max": 15.57
+     },
+     "p95": {
+      "median": 20.89,
+      "mean": 22.13,
+      "max": 35.45
+     },
+     "p99": {
+      "median": 28.07,
+      "mean": 34.71,
+      "max": 94.57
+     },
+     "max": {
+      "median": 43.78,
+      "mean": 60.05,
+      "max": 256.25
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.029,
+     "mean": 0.034,
+     "max": 0.094
+    },
+    "cpuCores": {
+     "median": 0.028,
+     "mean": 0.032,
+     "max": 0.116
+    },
+    "heapUsedMb": {
+     "median": 210.4,
+     "mean": 209.3,
+     "max": 216.5
+    },
+    "rssMb": {
+     "median": 290.4,
+     "mean": 291.9,
+     "max": 300.9
+    },
+    "gcPauseMaxMs": {
+     "median": 2.01,
+     "mean": 3.13,
+     "max": 16.15
+    },
+    "heapSlopeMbPerMin": -3.87,
+    "rssSlopeMbPerMin": 6.86
+   },
+   "blockedWindows": {
+    "warn": 18,
+    "critical": 1
+   },
+   "postgres": {
+    "samples": 67,
+    "note": "non-idle sessions of the app database, summed over samples; \"Lock/...\" or \"Client/ClientRead\" waits and long-running statements show where requests wait",
+    "top": [
+     {
+      "perSample": 0.16,
+      "what": "idle in transaction | Client/ClientRead | begin"
+     },
+     {
+      "perSample": 0.04,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.privileged', 'on', true)"
+     },
+     {
+      "perSample": 0.04,
+      "what": "active | -/- | select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at time zone 'U"
+     },
+     {
+      "perSample": 0.03,
+      "what": "idle in transaction | Client/ClientRead |  WITH claimed AS ( SELECT id, created_at FROM event_outbox WHERE status = 'pending' AND av"
+     },
+     {
+      "perSample": 0.01,
+      "what": "idle in transaction | Client/ClientRead |  SELECT id, uuid, slug, name, status, plan, settings FROM organizations WHERE slug = $1 "
+     },
+     {
+      "perSample": 0.01,
+      "what": "active | -/- |  SELECT c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS channel_kind, ch.n"
+     },
+     {
+      "perSample": 0.01,
+      "what": "idle in transaction | Client/ClientRead |  UPDATE wp_campaign_contacts r SET retry_state = 'scheduled' WHERE r.retry_state = 'sendin"
+     },
+     {
+      "perSample": 0.01,
+      "what": "idle in transaction | Client/ClientRead |  UPDATE wp_campaign_contacts r SET retry_state = 'exhausted' WHERE r.retry_state = 'sendin"
+     }
+    ]
+   },
+   "serverRequestMs": {
+    "p50": 66.23,
+    "p95": 469.84,
+    "p99": 1793.85,
+    "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+   },
+   "client": {
+    "requests": 612,
+    "requestsPerSecond": 5,
+    "failedRate": 0,
+    "droppedIterations": 0,
+    "checkPassRate": 1,
+    "maxVUs": 20,
+    "clientLatency": {
+     "avgMs": 168.39,
+     "p50Ms": 82.32,
+     "p90Ms": 389.27,
+     "p95Ms": 496.51,
+     "p99Ms": 1569.69,
+     "maxMs": 2419.28
+    },
+    "clientLatencyByRoute": {
+     "inbox_counts": {
+      "avgMs": 175.29,
+      "p50Ms": 71.19,
+      "p90Ms": 290.56,
+      "p95Ms": 482.43,
+      "p99Ms": 1619.52,
+      "maxMs": 1969.92
+     },
+     "create": {
+      "avgMs": 159.43,
+      "p50Ms": 130,
+      "p90Ms": 235.5,
+      "p95Ms": 354.59,
+      "p99Ms": 444.84,
+      "maxMs": 467.19
+     },
+     "list": {
+      "avgMs": 170.98,
+      "p50Ms": 77.67,
+      "p90Ms": 396.53,
+      "p95Ms": 481.96,
+      "p99Ms": 1585.72,
+      "maxMs": 2161.78
+     },
+     "health": {
+      "avgMs": 43.59,
+      "p50Ms": 12.54,
+      "p90Ms": 83.06,
+      "p95Ms": 148.55,
+      "p99Ms": 432.98,
+      "maxMs": 521.48
+     },
+     "get": {
+      "avgMs": 153.96,
+      "p50Ms": 66.03,
+      "p90Ms": 296.43,
+      "p95Ms": 449.22,
+      "p99Ms": 1246.12,
+      "maxMs": 2419.28
+     },
+     "update": {
+      "avgMs": 147.15,
+      "p50Ms": 100.86,
+      "p90Ms": 266.27,
+      "p95Ms": 385.37,
+      "p99Ms": 480.65,
+      "maxMs": 504.47
+     },
+     "inbox_list": {
+      "avgMs": 177.41,
+      "p50Ms": 98.96,
+      "p90Ms": 428.89,
+      "p95Ms": 501.73,
+      "p99Ms": 657.95,
+      "maxMs": 688.64
+     },
+     "search": {
+      "avgMs": 201.87,
+      "p50Ms": 100.2,
+      "p90Ms": 327.1,
+      "p95Ms": 694.98,
+      "p99Ms": 1759.84,
+      "maxMs": 2368.87
+     }
+    }
+   },
+   "k6ExitCode": 0,
+   "calibrationAfter": {
+    "postgresSelect1Ms": {
+     "p50": 1.22,
+     "p99": 3.05,
+     "max": 3.13
+    },
+    "redisPingMs": {
+     "p50": 1.09,
+     "p99": 2.02,
+     "max": 2.08
+    }
+   }
+  },
+  "peak": {
+   "durationSeconds": 146,
+   "api": {
+    "windows": 31,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.19,
+      "mean": 14.81,
+      "max": 15.61
+     },
+     "p95": {
+      "median": 21.89,
+      "mean": 23.94,
+      "max": 37.78
+     },
+     "p99": {
+      "median": 32.65,
+      "mean": 35.44,
+      "max": 77.2
+     },
+     "max": {
+      "median": 47.64,
+      "mean": 60.3,
+      "max": 143.92
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.29,
+     "mean": 0.253,
+     "max": 0.643
+    },
+    "cpuCores": {
+     "median": 0.26,
+     "mean": 0.245,
+     "max": 0.527
+    },
+    "heapUsedMb": {
+     "median": 272.7,
+     "mean": 289.3,
+     "max": 387.4
+    },
+    "rssMb": {
+     "median": 429.8,
+     "mean": 428.3,
+     "max": 509
+    },
+    "gcPauseMaxMs": {
+     "median": 8.27,
+     "mean": 13.41,
+     "max": 62.16
+    },
+    "heapSlopeMbPerMin": 31.91,
+    "rssSlopeMbPerMin": 25.77
+   },
+   "worker": {
+    "windows": 32,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.5,
+      "mean": 15.48,
+      "max": 15.7
+     },
+     "p95": {
+      "median": 21.69,
+      "mean": 22.73,
+      "max": 30.31
+     },
+     "p99": {
+      "median": 32.41,
+      "mean": 35.89,
+      "max": 90.83
+     },
+     "max": {
+      "median": 50.36,
+      "mean": 57.81,
+      "max": 139.59
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.045,
+     "mean": 0.047,
+     "max": 0.102
+    },
+    "cpuCores": {
+     "median": 0.037,
+     "mean": 0.041,
+     "max": 0.168
+    },
+    "heapUsedMb": {
+     "median": 212.7,
+     "mean": 211.7,
+     "max": 220.8
+    },
+    "rssMb": {
+     "median": 313.2,
+     "mean": 312.7,
+     "max": 315.6
+    },
+    "gcPauseMaxMs": {
+     "median": 2.14,
+     "mean": 2.57,
+     "max": 11.11
+    },
+    "heapSlopeMbPerMin": -2.42,
+    "rssSlopeMbPerMin": 2.35
+   },
+   "blockedWindows": {
+    "warn": 25,
+    "critical": 0
+   },
+   "postgres": {
+    "samples": 73,
+    "note": "non-idle sessions of the app database, summed over samples; \"Lock/...\" or \"Client/ClientRead\" waits and long-running statements show where requests wait",
+    "top": [
+     {
+      "perSample": 1.56,
+      "what": "idle in transaction | Client/ClientRead | begin"
+     },
+     {
+      "perSample": 1.42,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.org_id', $1, true)"
+     },
+     {
+      "perSample": 1.38,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.user_id', $1, true)"
+     },
+     {
+      "perSample": 0.68,
+      "what": "idle in transaction | Client/ClientRead | select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at time zone 'U"
+     },
+     {
+      "perSample": 0.36,
+      "what": "idle in transaction | Client/ClientRead |  WITH claimed AS ( SELECT id, created_at FROM event_outbox WHERE status = 'pending' AND av"
+     },
+     {
+      "perSample": 0.23,
+      "what": "active | -/- | select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at time zone 'U"
+     },
+     {
+      "perSample": 0.23,
+      "what": "idle in transaction | Client/ClientRead |  SELECT o.plan AS plan_slug, s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.overrides"
+     },
+     {
+      "perSample": 0.18,
+      "what": "idle in transaction | Client/ClientRead | select \"id\", \"key\", \"label\" from \"fields\" where (\"fields\".\"org_id\" = $1 and \"fields\".\"modu"
+     }
+    ]
+   },
+   "serverRequestMs": {
+    "p50": 604.62,
+    "p95": 4770.04,
+    "p99": 8770.53,
+    "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+   },
+   "client": {
+    "requests": 2359,
+    "requestsPerSecond": 16.7,
+    "failedRate": 0.009749894022891056,
+    "droppedIterations": 93,
+    "checkPassRate": 0.9900346620450606,
+    "maxVUs": 143,
+    "clientLatency": {
+     "avgMs": 1511.21,
+     "p50Ms": 668.82,
+     "p90Ms": 3967.48,
+     "p95Ms": 6285.71,
+     "p99Ms": 8437.35,
+     "maxMs": 30100.17
+    },
+    "clientLatencyByRoute": {
+     "list": {
+      "avgMs": 1592.77,
+      "p50Ms": 708.86,
+      "p90Ms": 4157.1,
+      "p95Ms": 6655.06,
+      "p99Ms": 8653.95,
+      "maxMs": 30049.29
+     },
+     "inbox_list": {
+      "avgMs": 1534.03,
+      "p50Ms": 687.65,
+      "p90Ms": 3502.13,
+      "p95Ms": 6435.63,
+      "p99Ms": 7415.33,
+      "maxMs": 14294.7
+     },
+     "inbox_counts": {
+      "avgMs": 2096.69,
+      "p50Ms": 854.29,
+      "p90Ms": 4934.04,
+      "p95Ms": 7067.07,
+      "p99Ms": 13947.27,
+      "maxMs": 30100.17
+     },
+     "update": {
+      "avgMs": 1269.9,
+      "p50Ms": 680.79,
+      "p90Ms": 2816.82,
+      "p95Ms": 4048.31,
+      "p99Ms": 4543.3,
+      "maxMs": 4693.44
+     },
+     "get": {
+      "avgMs": 1334.46,
+      "p50Ms": 644.47,
+      "p90Ms": 2981.49,
+      "p95Ms": 5934.07,
+      "p99Ms": 7632.08,
+      "maxMs": 14114.49
+     },
+     "health": {
+      "avgMs": 111.42,
+      "p50Ms": 54.02,
+      "p90Ms": 241.13,
+      "p95Ms": 442.29,
+      "p99Ms": 804.14,
+      "maxMs": 1511.25
+     },
+     "create": {
+      "avgMs": 2211.13,
+      "p50Ms": 1100.46,
+      "p90Ms": 7212.04,
+      "p95Ms": 7787.64,
+      "p99Ms": 8583.07,
+      "maxMs": 9226.73
+     },
+     "search": {
+      "avgMs": 1368.66,
+      "p50Ms": 721.96,
+      "p90Ms": 3145.8,
+      "p95Ms": 4555.1,
+      "p99Ms": 7542.49,
+      "maxMs": 8384.75
+     }
+    }
+   },
+   "k6ExitCode": 0,
+   "calibrationAfter": {
+    "postgresSelect1Ms": {
+     "p50": 1.17,
+     "p99": 4.15,
+     "max": 4.86
+    },
+    "redisPingMs": {
+     "p50": 1.32,
+     "p99": 4.25,
+     "max": 4.34
+    }
+   }
+  },
+  "spike": {
+   "durationSeconds": 133,
+   "api": {
+    "windows": 29,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.27,
+      "mean": 15.06,
+      "max": 15.7
+     },
+     "p95": {
+      "median": 22.77,
+      "mean": 26.15,
+      "max": 48.96
+     },
+     "p99": {
+      "median": 32.01,
+      "mean": 42.08,
+      "max": 93
+     },
+     "max": {
+      "median": 56.98,
+      "mean": 81.54,
+      "max": 222.82
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.199,
+     "mean": 0.289,
+     "max": 0.797
+    },
+    "cpuCores": {
+     "median": 0.228,
+     "mean": 0.269,
+     "max": 0.816
+    },
+    "heapUsedMb": {
+     "median": 308.6,
+     "mean": 334,
+     "max": 464.5
+    },
+    "rssMb": {
+     "median": 428.2,
+     "mean": 439.2,
+     "max": 570.8
+    },
+    "gcPauseMaxMs": {
+     "median": 7.34,
+     "mean": 11.93,
+     "max": 53
+    },
+    "heapSlopeMbPerMin": 131.25,
+    "rssSlopeMbPerMin": 136.22
+   },
+   "worker": {
+    "windows": 29,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.46,
+      "mean": 15.49,
+      "max": 15.67
+     },
+     "p95": {
+      "median": 22.48,
+      "mean": 23.38,
+      "max": 33.28
+     },
+     "p99": {
+      "median": 32.51,
+      "mean": 35.54,
+      "max": 58.46
+     },
+     "max": {
+      "median": 50.92,
+      "mean": 57.29,
+      "max": 102.5
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.045,
+     "mean": 0.046,
+     "max": 0.089
+    },
+    "cpuCores": {
+     "median": 0.037,
+     "mean": 0.04,
+     "max": 0.091
+    },
+    "heapUsedMb": {
+     "median": 212.8,
+     "mean": 213.1,
+     "max": 221.4
+    },
+    "rssMb": {
+     "median": 315.4,
+     "mean": 315.4,
+     "max": 316.2
+    },
+    "gcPauseMaxMs": {
+     "median": 2.01,
+     "mean": 2.07,
+     "max": 8.7
+    },
+    "heapSlopeMbPerMin": 4.6,
+    "rssSlopeMbPerMin": -0.61
+   },
+   "blockedWindows": {
+    "warn": 25,
+    "critical": 0
+   },
+   "postgres": {
+    "samples": 70,
+    "note": "non-idle sessions of the app database, summed over samples; \"Lock/...\" or \"Client/ClientRead\" waits and long-running statements show where requests wait",
+    "top": [
+     {
+      "perSample": 1.99,
+      "what": "idle in transaction | Client/ClientRead | begin"
+     },
+     {
+      "perSample": 1.64,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.org_id', $1, true)"
+     },
+     {
+      "perSample": 1.56,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.user_id', $1, true)"
+     },
+     {
+      "perSample": 1.34,
+      "what": "idle in transaction | Client/ClientRead | select \"id\", \"key\", \"label\" from \"fields\" where (\"fields\".\"org_id\" = $1 and \"fields\".\"modu"
+     },
+     {
+      "perSample": 0.71,
+      "what": "idle in transaction | Client/ClientRead | select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at time zone 'U"
+     },
+     {
+      "perSample": 0.36,
+      "what": "idle in transaction | Client/ClientRead |  SELECT o.plan AS plan_slug, s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.overrides"
+     },
+     {
+      "perSample": 0.23,
+      "what": "idle in transaction | Client/ClientRead |  WITH claimed AS ( SELECT id, created_at FROM event_outbox WHERE status = 'pending' AND av"
+     },
+     {
+      "perSample": 0.2,
+      "what": "idle in transaction | Client/ClientRead | SELECT status FROM organizations WHERE id = $1"
+     }
+    ]
+   },
+   "serverRequestMs": {
+    "p50": 13537.27,
+    "p95": 28379.04,
+    "p99": 29698.31,
+    "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+   },
+   "client": {
+    "requests": 2346,
+    "requestsPerSecond": 19.2,
+    "failedRate": 0.12318840579710146,
+    "droppedIterations": 1048,
+    "checkPassRate": 0.877444589308996,
+    "maxVUs": 800,
+    "clientLatency": {
+     "avgMs": 12391.98,
+     "p50Ms": 12669.84,
+     "p90Ms": 24435.14,
+     "p95Ms": 25685.91,
+     "p99Ms": 28714.7,
+     "maxMs": 32091.9
+    },
+    "clientLatencyByRoute": {
+     "inbox_list": {
+      "avgMs": 12328.02,
+      "p50Ms": 12397.54,
+      "p90Ms": 22965.53,
+      "p95Ms": 24548.39,
+      "p99Ms": 25428.23,
+      "maxMs": 25781.03
+     },
+     "get": {
+      "avgMs": 12479.75,
+      "p50Ms": 12937.76,
+      "p90Ms": 23420.48,
+      "p95Ms": 25155.2,
+      "p99Ms": 25375.83,
+      "maxMs": 25688.15
+     },
+     "inbox_counts": {
+      "avgMs": 12442.2,
+      "p50Ms": 13562.27,
+      "p90Ms": 21791.68,
+      "p95Ms": 22363.52,
+      "p99Ms": 22964.98,
+      "maxMs": 23044.55
+     },
+     "create": {
+      "avgMs": 13505.72,
+      "p50Ms": 12966.64,
+      "p90Ms": 24325.77,
+      "p95Ms": 25504.45,
+      "p99Ms": 32001.88,
+      "maxMs": 32091.9
+     },
+     "update": {
+      "avgMs": 10211.08,
+      "p50Ms": 8559.79,
+      "p90Ms": 22700.91,
+      "p95Ms": 25484.37,
+      "p99Ms": 25599.37,
+      "maxMs": 25634.2
+     },
+     "search": {
+      "avgMs": 12662.84,
+      "p50Ms": 12891.21,
+      "p90Ms": 24535.96,
+      "p95Ms": 25989.81,
+      "p99Ms": 28970.03,
+      "maxMs": 29348.07
+     },
+     "health": {
+      "avgMs": 159.64,
+      "p50Ms": 75.88,
+      "p90Ms": 223.29,
+      "p95Ms": 385.64,
+      "p99Ms": 1724.64,
+      "maxMs": 4274.45
+     },
+     "list": {
+      "avgMs": 13034.55,
+      "p50Ms": 13070.74,
+      "p90Ms": 24915.15,
+      "p95Ms": 26171.93,
+      "p99Ms": 28899.23,
+      "maxMs": 30227.01
+     }
+    }
+   },
+   "k6ExitCode": 0,
+   "calibrationAfter": {
+    "postgresSelect1Ms": {
+     "p50": 2.98,
+     "p99": 43.89,
+     "max": 44.79
+    },
+    "redisPingMs": {
+     "p50": 1.45,
+     "p99": 3.68,
+     "max": 4.31
+    }
+   }
+  },
+  "soak": {
+   "durationSeconds": 606,
+   "api": {
+    "windows": 123,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.37,
+      "mean": 15.37,
+      "max": 15.58
+     },
+     "p95": {
+      "median": 17.45,
+      "mean": 18.25,
+      "max": 46.56
+     },
+     "p99": {
+      "median": 23.71,
+      "mean": 25.02,
+      "max": 129.83
+     },
+     "max": {
+      "median": 25.36,
+      "mean": 31.06,
+      "max": 169.35
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.096,
+     "mean": 0.097,
+     "max": 0.254
+    },
+    "cpuCores": {
+     "median": 0.103,
+     "mean": 0.115,
+     "max": 0.272
+    },
+    "heapUsedMb": {
+     "median": 239.3,
+     "mean": 239.2,
+     "max": 269.8
+    },
+    "rssMb": {
+     "median": 389.3,
+     "mean": 384.5,
+     "max": 391.1
+    },
+    "gcPauseMaxMs": {
+     "median": 4,
+     "mean": 6.66,
+     "max": 47.84
+    },
+    "heapSlopeMbPerMin": 0.14,
+    "rssSlopeMbPerMin": 2.73
+   },
+   "worker": {
+    "windows": 124,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.47,
+      "mean": 15.46,
+      "max": 15.59
+     },
+     "p95": {
+      "median": 16.53,
+      "mean": 17.49,
+      "max": 26.15
+     },
+     "p99": {
+      "median": 21.04,
+      "mean": 23.14,
+      "max": 65.4
+     },
+     "max": {
+      "median": 24.84,
+      "mean": 30.61,
+      "max": 130.74
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.027,
+     "mean": 0.029,
+     "max": 0.068
+    },
+    "cpuCores": {
+     "median": 0.028,
+     "mean": 0.029,
+     "max": 0.112
+    },
+    "heapUsedMb": {
+     "median": 216.8,
+     "mean": 216.5,
+     "max": 231.6
+    },
+    "rssMb": {
+     "median": 321.3,
+     "mean": 319.8,
+     "max": 322
+    },
+    "gcPauseMaxMs": {
+     "median": 1.87,
+     "mean": 2.08,
+     "max": 74.56
+    },
+    "heapSlopeMbPerMin": -0.51,
+    "rssSlopeMbPerMin": 0.71
+   },
+   "blockedWindows": {
+    "warn": 14,
+    "critical": 1
+   },
+   "postgres": {
+    "samples": 305,
+    "note": "non-idle sessions of the app database, summed over samples; \"Lock/...\" or \"Client/ClientRead\" waits and long-running statements show where requests wait",
+    "top": [
+     {
+      "perSample": 0.16,
+      "what": "idle in transaction | Client/ClientRead | begin"
+     },
+     {
+      "perSample": 0.07,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.org_id', $1, true)"
+     },
+     {
+      "perSample": 0.06,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.user_id', $1, true)"
+     },
+     {
+      "perSample": 0.04,
+      "what": "idle in transaction | Client/ClientRead |  WITH claimed AS ( SELECT id, created_at FROM event_outbox WHERE status = 'pending' AND av"
+     },
+     {
+      "perSample": 0.04,
+      "what": "idle in transaction | Client/ClientRead | select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at time zone 'U"
+     },
+     {
+      "perSample": 0.03,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.privileged', 'on', true)"
+     },
+     {
+      "perSample": 0.02,
+      "what": "active | -/- | select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at time zone 'U"
+     },
+     {
+      "perSample": 0.01,
+      "what": "idle in transaction | Client/ClientRead |  INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta, re"
+     }
+    ]
+   },
+   "serverRequestMs": {
+    "p50": 40.99,
+    "p95": 450.46,
+    "p99": 1864.2,
+    "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+   },
+   "client": {
+    "requests": 3065,
+    "requestsPerSecond": 5.1,
+    "failedRate": 0,
+    "droppedIterations": 0,
+    "checkPassRate": 1,
+    "maxVUs": 20,
+    "clientLatency": {
+     "avgMs": 123.52,
+     "p50Ms": 41.06,
+     "p90Ms": 124.07,
+     "p95Ms": 551.32,
+     "p99Ms": 1900.73,
+     "maxMs": 4532.66
+    },
+    "clientLatencyByRoute": {
+     "search": {
+      "avgMs": 119.81,
+      "p50Ms": 56.8,
+      "p90Ms": 139.35,
+      "p95Ms": 543.51,
+      "p99Ms": 1239.11,
+      "maxMs": 2919.69
+     },
+     "get": {
+      "avgMs": 120.87,
+      "p50Ms": 36.45,
+      "p90Ms": 71.11,
+      "p95Ms": 357.1,
+      "p99Ms": 2667.26,
+      "maxMs": 3518.14
+     },
+     "health": {
+      "avgMs": 23.92,
+      "p50Ms": 7.26,
+      "p90Ms": 42.72,
+      "p95Ms": 102.6,
+      "p99Ms": 279.24,
+      "maxMs": 284.12
+     },
+     "list": {
+      "avgMs": 120.81,
+      "p50Ms": 39.89,
+      "p90Ms": 143.24,
+      "p95Ms": 617.12,
+      "p99Ms": 1755.7,
+      "maxMs": 3985.58
+     },
+     "create": {
+      "avgMs": 249.42,
+      "p50Ms": 83.47,
+      "p90Ms": 125.1,
+      "p95Ms": 1109.5,
+      "p99Ms": 4334.73,
+      "maxMs": 4532.66
+     },
+     "update": {
+      "avgMs": 181.85,
+      "p50Ms": 57.88,
+      "p90Ms": 156.47,
+      "p95Ms": 714.4,
+      "p99Ms": 2410.95,
+      "maxMs": 3766.02
+     },
+     "inbox_counts": {
+      "avgMs": 93.86,
+      "p50Ms": 35.78,
+      "p90Ms": 104.47,
+      "p95Ms": 441.16,
+      "p99Ms": 1182.33,
+      "maxMs": 1274.55
+     },
+     "inbox_list": {
+      "avgMs": 121.04,
+      "p50Ms": 44.69,
+      "p90Ms": 119.61,
+      "p95Ms": 570.78,
+      "p99Ms": 1392.7,
+      "maxMs": 3986.98
+     }
+    }
+   },
+   "k6ExitCode": 0,
+   "calibrationAfter": {
+    "postgresSelect1Ms": {
+     "p50": 1.4,
+     "p99": 2.52,
+     "max": 2.85
+    },
+    "redisPingMs": {
+     "p50": 1.39,
+     "p99": 2.23,
+     "max": 3.06
+    }
+   }
+  }
+ },
+ "dataset": {
+  "workspaces": 1,
+  "contacts": 5000,
+  "conversations": 0,
+  "note": "inbox is empty: inbox routes measure framework, auth and database round-trip only"
+ },
+ "calibrationBefore": {
+  "postgresSelect1Ms": {
+   "p50": 2.3,
+   "p99": 110.75,
+   "max": 146.78
+  },
+  "redisPingMs": {
+   "p50": 1.61,
+   "p99": 21.11,
+   "max": 38.19
+  }
+ }
+}
