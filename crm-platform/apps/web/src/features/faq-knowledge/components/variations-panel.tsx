@@ -7,7 +7,7 @@ import { FAQ_LIMITS, type FaqEmbedState, type FaqVariationSource } from '@crm/co
 import { Alert, Badge, Button, Checkbox, ConfirmDialog, Spinner, Textarea, cn } from '@crm/ui';
 import { errorKey, isEmbeddingUnavailable } from '../lib/errors';
 import { parseVariationLines, variationKey, variationRoom } from '../lib/model';
-import { CheckIcon, EditIcon, LockIcon, SparkIcon, TrashIcon, WarnIcon } from './icons';
+import { EditIcon, LockIcon, SparkIcon, TrashIcon } from './icons';
 import { CARD, focusAfterRemoval } from './parts';
 
 export interface VariationRow {
@@ -56,7 +56,6 @@ export function VariationsPanel(p: VariationsPanelProps) {
   const [suggesting, setSuggesting] = useState(false);
   const addRef = useRef<HTMLInputElement>(null);
 
-  const question = p.rows.find((r) => r.source === 'question');
   const others = p.rows.filter((r) => r.source !== 'question');
   const count = others.length + 1;
   const existing = useMemo(() => [p.question, ...p.rows.map((r) => r.text)], [p.question, p.rows]);
@@ -156,8 +155,6 @@ export function VariationsPanel(p: VariationsPanelProps) {
     }
   };
 
-  const failedCount = others.filter((r) => r.embedState === 'failed').length;
-
   return (
     <section aria-labelledby="faq-var-title" className={cn(CARD, 'overflow-hidden')}>
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border bg-muted/40 px-4 py-3">
@@ -180,9 +177,6 @@ export function VariationsPanel(p: VariationsPanelProps) {
 
       <div className="space-y-4 p-4">
         {error !== null && <VariationError error={error} />}
-        {failedCount > 0 && (
-          <Alert tone="warning">{t('failedNotice', { count: failedCount })}</Alert>
-        )}
 
         <ol className="space-y-2" aria-label={t('listLabel')}>
           <li className="flex items-center gap-3 rounded-md border border-dashed border-border bg-muted/30 px-3 py-2">
@@ -195,7 +189,6 @@ export function VariationsPanel(p: VariationsPanelProps) {
               )}
             </span>
             <Badge>{t('source.question')}</Badge>
-            {question && <IndexState row={question} />}
           </li>
           {others.map((row) => (
             <li
@@ -225,7 +218,6 @@ export function VariationsPanel(p: VariationsPanelProps) {
                 <>
                   <span className="min-w-0 flex-1 break-words text-sm">{row.text}</span>
                   <Badge>{t(`source.${row.source}`)}</Badge>
-                  <IndexState row={row} />
                   {p.canEdit && row.id && (
                     <IconButton
                       label={t('edit', { text: row.text })}
@@ -440,41 +432,6 @@ function IconButton({
     >
       {children}
     </button>
-  );
-}
-
-/** Pending spinner, ready check or failed warning; always a word as well, and the failure reason in the tooltip. */
-export function IndexState({ row }: { row: Pick<VariationRow, 'embedState' | 'embedError'> }) {
-  const t = useTranslations('faq.variations.state');
-  if (!row.embedState) return null;
-  if (row.embedState === 'ready')
-    return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-success">
-        <CheckIcon className="size-3.5" />
-        {t('ready')}
-      </span>
-    );
-  if (row.embedState === 'pending')
-    return (
-      <span
-        className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground"
-        title={t('pendingHint')}
-      >
-        <Spinner />
-        {t('pending')}
-      </span>
-    );
-  return (
-    <span
-      className="inline-flex items-center gap-1 text-xs font-medium text-danger"
-      title={`${row.embedError ?? t('noReason')}. ${t('failedHint')}`}
-    >
-      <WarnIcon className="size-3.5" />
-      {t('failed')}
-      <span className="sr-only">
-        {row.embedError ?? t('noReason')}. {t('failedHint')}
-      </span>
-    </span>
   );
 }
 
