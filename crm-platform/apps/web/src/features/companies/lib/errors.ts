@@ -49,6 +49,24 @@ export function errorKind(error: unknown, context: ErrorContext = 'record'): Err
   return 'unexpected';
 }
 
+/**
+ * Why the server refused a company's custom values, when it did: a required property left empty, a value that does not fit its
+ * property, or a property that cannot be edited. Each names its fields as `customFields.<key>` (see `fieldErrors`).
+ */
+export function propertyErrorKind(error: unknown): 'required' | 'invalid' | 'notEditable' | null {
+  if (!(error instanceof ApiError)) return null;
+  switch (error.code) {
+    case ERROR_CODES.COMPANY_REQUIRED_PROPERTY_MISSING:
+      return 'required';
+    case ERROR_CODES.COMPANY_PROPERTY_INVALID:
+      return 'invalid';
+    case ERROR_CODES.COMPANY_PROPERTY_NOT_EDITABLE:
+      return 'notEditable';
+    default:
+      return null;
+  }
+}
+
 /** The first message the server gave for each field of a refused write, by field path. */
 export function fieldErrors(error: unknown): Record<string, string> {
   const out: Record<string, string> = {};

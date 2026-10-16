@@ -112,6 +112,17 @@
         "email": "Enter a valid email address.",
         "invalid": "Some of what was entered is not valid.",
         "ownerInvalid": "The owner must be an active member of this workspace."
+      },
+      "propertiesTitle": "Properties",
+      "propertiesHint": "Set up under Settings, Company properties",
+      "propertyProblems": {
+        "invalid": "This value does not fit the property.",
+        "notEditable": "This property can no longer be edited. Close the form and open it again.",
+        "required": "This property is required.",
+        "number": "Enter a number.",
+        "integer": "Enter a whole number.",
+        "email": "Enter a valid email address.",
+        "url": "Enter a full link starting with http:// or https://."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Address",
       "createdBy": "Created by",
       "created": "Created",
-      "updated": "Last changed"
+      "updated": "Last changed",
+      "properties": "Properties",
+      "yes": "Yes",
+      "no": "No"
     },
     "contacts": {
       "title": "Contacts",
@@ -211,6 +225,44 @@
         "address": "Address",
         "notes": "Notes",
         "owner": "Owner"
+      },
+      "propertiesChanged": "Changed properties:"
+    },
+    "picker": {
+      "search": "Search companies",
+      "results": "Companies",
+      "searching": "Searching",
+      "none": "No company matches.",
+      "unavailable": "Companies could not be searched right now.",
+      "create": "Create “{name}”",
+      "creating": "Creating company",
+      "clear": "Remove the company",
+      "loading": "Loading company",
+      "unknown": "Company unavailable",
+      "createFailed": "Could not create the company. Try again.",
+      "createForbidden": "You do not have permission to create companies."
+    },
+    "properties": {
+      "title": "Company properties",
+      "subtitle": "Everything a company can store, in one place: your own properties, grouped into sections.",
+      "section": {
+        "hint": "Sections group properties on the company form and the company page."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# company} other {# companies}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# company has} other {# companies have}} a value for this property. The values are kept, but the property disappears from the company form and the company page.",
+        "unused": "No company has a value for this property yet."
+      },
+      "modal": {
+        "newTitle": "Add a company property",
+        "descriptionHint": "Shown under the field on the company form.",
+        "optionsNote": "Removing an option does not change companies that already have it; they keep the stored value.",
+        "requiredHint": "The company form will not save without a value.",
+        "visibleHint": "Show it on the company form and the company page.",
+        "conditionsHint": "Hide this property on the company form until another property has a value.",
+        "deactivateNote": "Saving will hide this property from the form and the company page. Values companies hold are kept."
       }
     }
   }

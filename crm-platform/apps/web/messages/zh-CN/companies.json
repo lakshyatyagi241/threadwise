@@ -112,6 +112,17 @@
         "email": "请输入有效的电子邮箱地址。",
         "invalid": "输入的部分内容无效。",
         "ownerInvalid": "负责人必须是此工作区的活跃成员。"
+      },
+      "propertiesTitle": "属性",
+      "propertiesHint": "请在设置，公司属性下配置",
+      "propertyProblems": {
+        "invalid": "此值与该属性不匹配。",
+        "notEditable": "此属性已无法再编辑。请关闭表单后重新打开。",
+        "required": "此属性为必填项。",
+        "number": "请输入数字。",
+        "integer": "请输入整数。",
+        "email": "请输入有效的电子邮箱地址。",
+        "url": "请输入以 http:// 或 https:// 开头的完整链接。"
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "地址",
       "createdBy": "创建者",
       "created": "创建时间",
-      "updated": "最后更改"
+      "updated": "最后更改",
+      "properties": "属性",
+      "yes": "是",
+      "no": "否"
     },
     "contacts": {
       "title": "联系人",
@@ -211,6 +225,44 @@
         "address": "地址",
         "notes": "备注",
         "owner": "负责人"
+      },
+      "propertiesChanged": "已更改的属性："
+    },
+    "picker": {
+      "search": "搜索公司",
+      "results": "公司",
+      "searching": "正在搜索",
+      "none": "没有匹配的公司。",
+      "unavailable": "目前无法搜索公司。",
+      "create": "创建“{name}”",
+      "creating": "正在创建公司",
+      "clear": "移除公司",
+      "loading": "正在加载公司",
+      "unknown": "公司不可用",
+      "createFailed": "无法创建公司，请重试。",
+      "createForbidden": "你没有创建公司的权限。"
+    },
+    "properties": {
+      "title": "公司属性",
+      "subtitle": "公司可以保存的所有内容集中在一处：您自己的属性，按分区归类。",
+      "section": {
+        "hint": "分区会在公司表单和公司页面上对属性进行分组。"
+      },
+      "row": {
+        "contacts": "{count, plural, other {# 家公司}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, other {# 家公司}}拥有此属性的值。这些值会保留，但该属性将从公司表单和公司页面中消失。",
+        "unused": "目前还没有公司拥有此属性的值。"
+      },
+      "modal": {
+        "newTitle": "添加公司属性",
+        "descriptionHint": "显示在公司表单中字段的下方。",
+        "optionsNote": "移除选项不会改变已经使用该选项的公司；它们会保留已存储的值。",
+        "requiredHint": "没有值时，公司表单无法保存。",
+        "visibleHint": "在公司表单和公司页面上显示。",
+        "conditionsHint": "在公司表单中隐藏此属性，直到另一个属性有值。",
+        "deactivateNote": "保存后，此属性将从表单和公司页面中隐藏。公司已有的值会保留。"
       }
     }
   }

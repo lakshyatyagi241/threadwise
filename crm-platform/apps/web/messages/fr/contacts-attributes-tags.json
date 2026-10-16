@@ -348,7 +348,10 @@
       "ownerMe": "{name} (moi)",
       "ownerFormer": "Ancien membre",
       "ownerHelp": "La personne qui s'occupe de ce contact. Vous ne pouvez choisir que les personnes autorisées par votre accès.",
-      "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne."
+      "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
+      "company": "Entreprise",
+      "companyHint": "Rattache ce contact à une organisation.",
+      "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ."
     },
     "tags": {
       "title": "Étiquettes",

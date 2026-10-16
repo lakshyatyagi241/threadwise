@@ -44,6 +44,17 @@ describe('changeViews (the activity card)', () => {
     ).toEqual([{ kind: 'other', field: 'somethingNew' }]);
   });
 
+  it('a change of company properties names the properties, never their values', () => {
+    expect(
+      changeViews({
+        changes: [{ field: 'customFieldKeys', old: null, new: ['tier', 'seats'] }],
+      }),
+    ).toEqual([{ kind: 'properties', keys: ['tier', 'seats'] }]);
+    expect(changeViews({ changes: [{ field: 'customFieldKeys', old: null, new: 'x' }] })).toEqual(
+      [],
+    );
+  });
+
   it('numbers and booleans become text', () => {
     expect(changeViews({ changes: [{ field: 'name', old: 5, new: true }] })).toEqual([
       { kind: 'field', field: 'name', old: '5', new: 'true' },

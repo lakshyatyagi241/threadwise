@@ -348,7 +348,10 @@
       "ownerMe": "{name} (ja)",
       "ownerFormer": "Były członek",
       "ownerHelp": "Kto opiekuje się tym kontaktem. Możesz wybrać tylko osoby dozwolone przez Twój dostęp.",
-      "ownerOutOfScope": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby."
+      "ownerOutOfScope": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby.",
+      "company": "Firma",
+      "companyHint": "Przypisuje ten kontakt do organizacji.",
+      "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole."
     },
     "tags": {
       "title": "Tagi",

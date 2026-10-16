@@ -100,7 +100,8 @@
       "views": {
         "list": "Danh sách",
         "board": "Bảng theo hạn chót"
-      }
+      },
+      "linkCompany": "Một công ty"
     },
     "table": {
       "scrollArea": "Bảng công việc",
@@ -204,7 +205,8 @@
         "notesTooLong": "Ghi chú quá dài (tối đa 5000 ký tự).",
         "dueInvalid": "Ngày này không hợp lệ.",
         "assigneeInvalid": "Người này không phải thành viên đang hoạt động của không gian làm việc."
-      }
+      },
+      "company": "Công ty"
     },
     "drawer": {
       "loading": "Đang tải công việc",
@@ -268,7 +270,8 @@
       "searching": "Đang tìm",
       "unavailable": "Hiện chưa thể tìm kiếm.",
       "none": "Không có kết quả phù hợp.",
-      "unlink": "Gỡ liên kết"
+      "unlink": "Gỡ liên kết",
+      "searchCompany": "Tìm công ty"
     },
     "errors": {
       "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
@@ -323,7 +326,8 @@
       "loadMore": "Tải thêm",
       "loadMoreDone": "Tải thêm mục đã hoàn thành",
       "showDone": "Hiện đã hoàn thành",
-      "hideDone": "Ẩn đã hoàn thành"
+      "hideDone": "Ẩn đã hoàn thành",
+      "gone": "Bản ghi chứa các công việc này không còn khả dụng."
     }
   }
 }

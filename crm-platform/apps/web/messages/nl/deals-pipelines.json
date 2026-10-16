@@ -181,7 +181,10 @@
         "valueInvalid": "Voer een getal in, bijvoorbeeld 1250.50.",
         "valueTooLarge": "Die waarde is te groot.",
         "stageInvalid": "Kies een fase uit deze pipeline."
-      }
+      },
+      "company": "Bedrijf",
+      "companyHint": "Laat leeg om het bedrijf van het contact te gebruiken.",
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
     },
     "contact": {
       "unlink": "Contact verwijderen",
@@ -221,7 +224,9 @@
       "deleteTitle": "Deze deal verwijderen?",
       "deleteMessage": "\"{title}\" en de bijbehorende tijdlijn worden verwijderd. Dit kan niet ongedaan worden gemaakt.",
       "cancel": "Annuleren",
-      "company": "Bedrijf: {name}"
+      "company": "Bedrijf: {name}",
+      "companyLabel": "Bedrijf",
+      "companyRefused": "U kunt dat bedrijf niet gebruiken."
     },
     "activity": {
       "title": "Activiteit",

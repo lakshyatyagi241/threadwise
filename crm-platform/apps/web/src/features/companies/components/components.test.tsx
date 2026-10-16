@@ -15,6 +15,7 @@ import { CompaniesToolbar, type CompaniesToolbarProps } from './companies-toolba
 import { CompanyFormModal } from './company-form-modal';
 import { ErrorLine } from './error-line';
 import { CompanyLink } from './company-link';
+import { CompanyPicker } from './company-picker';
 import { LinkedContacts } from './linked-contacts';
 import { LinkedDeals } from './linked-deals';
 import { DEFAULT_FILTERS } from '../lib/filters';
@@ -52,6 +53,7 @@ const company = (over: Partial<CompanyResponse> = {}): CompanyResponse => ({
   sizeRange: '11-50',
   address: '1 Main St',
   notes: 'Key account',
+  customFields: {},
   owner: { id: 'u1', name: 'Asha Rao' },
   createdBy: null,
   rollup: {
@@ -283,12 +285,61 @@ describe('ErrorLine: a failed call is described by what failed (BL-034)', () => 
 
   it('a server error and a lost connection keep their own sentences, with a retry button', () => {
     const server = html(
-      <ErrorLine error={new ApiError(500, 'INTERNAL', 'x')} context="list" onRetry={() => {}} />,
+      <ErrorLine
+        error={new ApiError(500, 'INTERNAL', 'x')}
+        context="list"
+        onRetry={() => undefined}
+      />,
     );
     expect(server).toContain('Something went wrong. Try again in a moment.');
     expect(server).toContain('Try again</button>');
     const offline = html(<ErrorLine error={new TypeError('Failed to fetch')} context="list" />);
     expect(offline).toContain('Could not reach the server.');
     expect(offline).not.toContain('no longer exists');
+  });
+});
+
+describe('CompanyPicker (the company field of the contact and deal forms)', () => {
+  const ID = '294dca7c-5806-4548-9035-dcca9befc7b1';
+  const noop = () => undefined;
+
+  it('with nothing chosen it is a search box (a combobox) that offers no list until it is used', () => {
+    const out = html(<CompanyPicker value={null} onChange={noop} id="f-company" />);
+    expect(out).toContain('role="combobox"');
+    expect(out).toContain('placeholder="Search companies"');
+    expect(out).toContain('id="f-company"');
+    expect(out).not.toContain('role="listbox"');
+  });
+
+  it('with a company chosen it shows the name, escaped, and a button that removes it', () => {
+    const out = html(
+      <CompanyPicker value={{ id: ID, name: '<script>x</script> Acme' }} onChange={noop} />,
+    );
+    expect(out).toContain('&lt;script&gt;x&lt;/script&gt; Acme');
+    expect(out).not.toContain('<script>');
+    expect(out).toContain('aria-label="Remove the company"');
+    expect(out).not.toContain('role="combobox"');
+  });
+
+  it('read-only (disabled): the name stays, the remove button goes', () => {
+    const out = html(<CompanyPicker value={{ id: ID, name: 'Acme' }} onChange={noop} disabled />);
+    expect(out).toContain('Acme');
+    expect(out).not.toContain('Remove the company');
+  });
+
+  it('a drawer can make the name a link to the company; a form does not (leaving would lose what was typed)', () => {
+    const linked = html(
+      <CompanyPicker value={{ id: ID, name: 'Acme' }} onChange={noop} linkToCompany />,
+    );
+    expect(linked).toContain(`href="/companies/${ID}"`);
+    expect(html(<CompanyPicker value={{ id: ID, name: 'Acme' }} onChange={noop} />)).not.toContain(
+      'href=',
+    );
+  });
+
+  it('a company known only by id says it is loading until its name arrives', () => {
+    expect(
+      html(<CompanyPicker value={{ id: ID }} onChange={noop} />, ['record.companies.read']),
+    ).toContain('Loading company');
   });
 });

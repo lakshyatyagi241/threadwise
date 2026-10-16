@@ -112,6 +112,17 @@
         "email": "Saisissez une adresse e-mail valide.",
         "invalid": "Certaines des informations saisies ne sont pas valides.",
         "ownerInvalid": "Le propriétaire doit être un membre actif de cet espace de travail."
+      },
+      "propertiesTitle": "Propriétés",
+      "propertiesHint": "à configurer dans Paramètres, Propriétés d’entreprise",
+      "propertyProblems": {
+        "invalid": "Cette valeur ne convient pas à la propriété.",
+        "notEditable": "Cette propriété ne peut plus être modifiée. Fermez le formulaire et rouvrez-le.",
+        "required": "Cette propriété est obligatoire.",
+        "number": "Saisissez un nombre.",
+        "integer": "Saisissez un nombre entier.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "url": "Saisissez un lien complet commençant par http:// ou https://."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Adresse",
       "createdBy": "Créée par",
       "created": "Créée",
-      "updated": "Dernière modification"
+      "updated": "Dernière modification",
+      "properties": "Propriétés",
+      "yes": "Oui",
+      "no": "Non"
     },
     "contacts": {
       "title": "Contacts",
@@ -211,6 +225,44 @@
         "address": "Adresse",
         "notes": "Notes",
         "owner": "Propriétaire"
+      },
+      "propertiesChanged": "Propriétés modifiées :"
+    },
+    "picker": {
+      "search": "Rechercher des entreprises",
+      "results": "Entreprises",
+      "searching": "Recherche en cours",
+      "none": "Aucune entreprise ne correspond.",
+      "unavailable": "Impossible de rechercher des entreprises pour le moment.",
+      "create": "Créer « {name} »",
+      "creating": "Création de l’entreprise",
+      "clear": "Retirer l’entreprise",
+      "loading": "Chargement de l’entreprise",
+      "unknown": "Entreprise indisponible",
+      "createFailed": "Impossible de créer l’entreprise. Réessayez.",
+      "createForbidden": "Vous n’avez pas l’autorisation de créer des entreprises."
+    },
+    "properties": {
+      "title": "Propriétés d’entreprise",
+      "subtitle": "Tout ce qu’une entreprise peut contenir, au même endroit : vos propres propriétés, regroupées en sections.",
+      "section": {
+        "hint": "Les sections regroupent les propriétés dans le formulaire d’entreprise et sur sa page."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# entreprise} other {# entreprises}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# entreprise a} other {# entreprises ont}} une valeur pour cette propriété. Les valeurs sont conservées, mais la propriété disparaît du formulaire d’entreprise et de sa page.",
+        "unused": "Aucune entreprise n’a encore de valeur pour cette propriété."
+      },
+      "modal": {
+        "newTitle": "Ajouter une propriété d’entreprise",
+        "descriptionHint": "Affiché sous le champ dans le formulaire d’entreprise.",
+        "optionsNote": "Retirer une option ne modifie pas les entreprises qui l’ont déjà ; elles gardent la valeur enregistrée.",
+        "requiredHint": "Le formulaire d’entreprise ne s’enregistre pas sans valeur.",
+        "visibleHint": "L’afficher dans le formulaire d’entreprise et sur sa page.",
+        "conditionsHint": "Masquer cette propriété dans le formulaire d’entreprise tant qu’une autre propriété n’a pas de valeur.",
+        "deactivateNote": "L’enregistrement masquera cette propriété du formulaire et de la page d’entreprise. Les valeurs détenues par les entreprises sont conservées."
       }
     }
   }

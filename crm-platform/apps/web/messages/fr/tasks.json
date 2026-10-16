@@ -100,7 +100,8 @@
       "views": {
         "list": "Liste",
         "board": "Tableau par échéance"
-      }
+      },
+      "linkCompany": "Une entreprise"
     },
     "table": {
       "scrollArea": "Tableau des tâches",
@@ -204,7 +205,8 @@
         "notesTooLong": "Les notes sont trop longues (5 000 caractères maximum).",
         "dueInvalid": "Cette date n’est pas valide.",
         "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail."
-      }
+      },
+      "company": "Entreprise"
     },
     "drawer": {
       "loading": "Chargement de la tâche",
@@ -268,7 +270,8 @@
       "searching": "Recherche en cours",
       "unavailable": "La recherche n’est pas disponible pour le moment.",
       "none": "Aucun résultat.",
-      "unlink": "Retirer le lien"
+      "unlink": "Retirer le lien",
+      "searchCompany": "Rechercher des entreprises"
     },
     "errors": {
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
@@ -323,7 +326,8 @@
       "loadMore": "Charger plus",
       "loadMoreDone": "Charger plus de tâches terminées",
       "showDone": "Afficher les tâches terminées",
-      "hideDone": "Masquer les tâches terminées"
+      "hideDone": "Masquer les tâches terminées",
+      "gone": "L’enregistrement auquel ces tâches appartiennent n’est plus disponible."
     }
   }
 }

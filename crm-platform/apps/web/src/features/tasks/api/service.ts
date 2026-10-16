@@ -12,12 +12,15 @@ import { chunk } from '../lib/selection';
 import type { TaskPatch } from '../lib/task-form';
 import { call, callReal } from './http';
 import {
+  companyHitListSchema,
+  companyHitSchema,
   contactHitPageSchema,
   contactHitSchema,
   dealHitPageSchema,
   dealHitSchema,
   memberPageSchema,
   type BulkOutcome,
+  type CompanyHit,
   type ContactHit,
   type DealHit,
   type Member,
@@ -31,11 +34,12 @@ export interface TaskPageResult {
   hasMore: boolean;
 }
 
-/** Where a list of tasks comes from: the whole workspace, or the tasks of one contact or deal. */
-export type TaskSource = { kind: 'all' } | { kind: 'contact' | 'deal'; id: string };
+/** Where a list of tasks comes from: the whole workspace, or the tasks of one contact, deal or company. */
+export type TaskSource = { kind: 'all' } | { kind: 'contact' | 'deal' | 'company'; id: string };
 
+const SOURCE_PATH = { contact: 'contacts', deal: 'deals', company: 'companies' } as const;
 const pathOf = (s: TaskSource) =>
-  s.kind === 'all' ? '/tasks' : `/${s.kind === 'contact' ? 'contacts' : 'deals'}/${s.id}/tasks`;
+  s.kind === 'all' ? '/tasks' : `/${SOURCE_PATH[s.kind]}/${s.id}/tasks`;
 
 function outcome(r: TaskBulkResult): BulkOutcome {
   return { changed: r.succeeded.length, failed: r.failed.length };
@@ -125,11 +129,20 @@ export const tasksApi = {
     });
     return page.data;
   },
-  /** One contact or deal by id, for a filter that arrived in the address with no name. */
+  /** Companies of the caller's record scope by a part of the name (the picker endpoint, at most 15). */
+  searchCompanies: (q: string, signal?: AbortSignal): Promise<CompanyHit[]> =>
+    callReal('/companies/select-data', {
+      query: { q: q.trim() || undefined, limit: 15 },
+      schema: companyHitListSchema,
+      signal,
+    }),
+  /** One contact, deal or company by id, for a filter that arrived in the address with no name. */
   contactById: (id: string, signal?: AbortSignal): Promise<ContactHit> =>
     callReal(`/contacts/${id}`, { schema: contactHitSchema, signal }),
   dealById: (id: string, signal?: AbortSignal): Promise<DealHit> =>
     callReal(`/deals/${id}`, { schema: dealHitSchema, signal }),
+  companyById: (id: string, signal?: AbortSignal): Promise<CompanyHit> =>
+    callReal(`/companies/${id}`, { schema: companyHitSchema, signal }),
   async searchDeals(q: string, signal?: AbortSignal): Promise<DealHit[]> {
     const page = await callReal('/deals', {
       query: { q: q.trim() || undefined, limit: 15 },

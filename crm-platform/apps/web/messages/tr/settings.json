@@ -374,6 +374,11 @@
         "label": "Uyumluluk merkezi",
         "description": "Gizlilik yükümlülüklerinizi yerine getirmenize yardımcı araçlar: tabi olduğunuz yasalar, gizlilik iletişim kişileri, bildirimler ve bağlantılar, alt işleyiciler, sessiz saatler ve nelerin hazır olduğunu gösteren bir kontrol listesi.",
         "keywords": "uyumluluk, gizlilik, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, şikâyet görevlisi, alt işleyici, dpa, şartlar, gizlilik politikası, sessiz saatler, do not call, kontrol listesi, çocuklar"
+      },
+      "company-properties": {
+        "label": "Şirket özellikleri",
+        "description": "Her şirkette tutmak istediğiniz alanları ekleyin.",
+        "keywords": "özel alanlar, alanlar, zorunlu, açılır liste, kuruluş, hesap"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

@@ -381,6 +381,7 @@ export function TasksScreen() {
                             assignee: '',
                             contact: '',
                             deal: '',
+                            company: '',
                           });
                         }}
                       >

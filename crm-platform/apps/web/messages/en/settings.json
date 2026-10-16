@@ -374,6 +374,11 @@
         "label": "Contact assignment",
         "description": "Give new contacts and deals to the right person automatically, skipping people on leave.",
         "keywords": "assign, owner, round robin, new contact, new deal, leave, lead routing"
+      },
+      "company-properties": {
+        "label": "Company properties",
+        "description": "Add the fields you want to keep on every company.",
+        "keywords": "custom fields, fields, required, dropdown, organization, account"
       }
     },
     "backToMarketplace": "Back to Marketplace"

@@ -181,7 +181,10 @@
         "valueInvalid": "Bir sayı girin, örneğin 1250.50.",
         "valueTooLarge": "Bu değer çok büyük.",
         "stageInvalid": "Bu hattan bir aşama seçin."
-      }
+      },
+      "company": "Şirket",
+      "companyHint": "Kişinin şirketini kullanmak için boş bırakın.",
+      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin."
     },
     "contact": {
       "unlink": "Kişiyi kaldır",
@@ -221,7 +224,9 @@
       "deleteTitle": "Bu fırsat silinsin mi?",
       "deleteMessage": "\"{title}\" ve zaman çizelgesi kaldırılacak. Bu işlem geri alınamaz.",
       "cancel": "İptal",
-      "company": "Şirket: {name}"
+      "company": "Şirket: {name}",
+      "companyLabel": "Şirket",
+      "companyRefused": "Bu şirketi kullanamazsınız."
     },
     "activity": {
       "title": "Etkinlik",

@@ -112,6 +112,17 @@
         "email": "Inserisci un indirizzo email valido.",
         "invalid": "Alcuni dei dati inseriti non sono validi.",
         "ownerInvalid": "Il responsabile deve essere un membro attivo di questo Workspace."
+      },
+      "propertiesTitle": "Proprietà",
+      "propertiesHint": "configurate in Impostazioni, Proprietà delle aziende",
+      "propertyProblems": {
+        "invalid": "Questo valore non è adatto alla proprietà.",
+        "notEditable": "Questa proprietà non può più essere modificata. Chiudi il modulo e riaprilo.",
+        "required": "Questa proprietà è obbligatoria.",
+        "number": "Inserisci un numero.",
+        "integer": "Inserisci un numero intero.",
+        "email": "Inserisci un indirizzo email valido.",
+        "url": "Inserisci un link completo che inizi con http:// o https://."
       }
     },
     "toast": {
@@ -149,7 +160,10 @@
       "address": "Indirizzo",
       "createdBy": "Creata da",
       "created": "Creata",
-      "updated": "Ultima modifica"
+      "updated": "Ultima modifica",
+      "properties": "Proprietà",
+      "yes": "Sì",
+      "no": "No"
     },
     "contacts": {
       "title": "Contatti",
@@ -211,6 +225,44 @@
         "address": "Indirizzo",
         "notes": "Note",
         "owner": "Responsabile"
+      },
+      "propertiesChanged": "Proprietà modificate:"
+    },
+    "picker": {
+      "search": "Cerca aziende",
+      "results": "Aziende",
+      "searching": "Ricerca in corso",
+      "none": "Nessuna azienda corrisponde.",
+      "unavailable": "Al momento non è possibile cercare le aziende.",
+      "create": "Crea «{name}»",
+      "creating": "Creazione dell’azienda",
+      "clear": "Rimuovi l’azienda",
+      "loading": "Caricamento azienda",
+      "unknown": "Azienda non disponibile",
+      "createFailed": "Impossibile creare l’azienda. Riprova.",
+      "createForbidden": "Non hai l’autorizzazione per creare aziende."
+    },
+    "properties": {
+      "title": "Proprietà delle aziende",
+      "subtitle": "Tutto ciò che un’azienda può contenere, in un unico posto: le tue proprietà personalizzate, raggruppate in sezioni.",
+      "section": {
+        "hint": "Le sezioni raggruppano le proprietà nel modulo dell’azienda e nella sua pagina."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# azienda} other {# aziende}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# azienda ha} other {# aziende hanno}} un valore per questa proprietà. I valori vengono conservati, ma la proprietà scompare dal modulo dell’azienda e dalla sua pagina.",
+        "unused": "Nessuna azienda ha ancora un valore per questa proprietà."
+      },
+      "modal": {
+        "newTitle": "Aggiungi una proprietà dell’azienda",
+        "descriptionHint": "Mostrato sotto il campo nel modulo dell’azienda.",
+        "optionsNote": "Rimuovere un’opzione non modifica le aziende che già la hanno; mantengono il valore salvato.",
+        "requiredHint": "Il modulo dell’azienda non si salva senza un valore.",
+        "visibleHint": "Mostrala nel modulo dell’azienda e nella sua pagina.",
+        "conditionsHint": "Nascondi questa proprietà nel modulo dell’azienda finché un’altra proprietà non ha un valore.",
+        "deactivateNote": "Il salvataggio nasconderà questa proprietà dal modulo e dalla pagina dell’azienda. I valori che le aziende hanno vengono conservati."
       }
     }
   }

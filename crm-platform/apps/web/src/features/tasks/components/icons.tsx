@@ -129,6 +129,11 @@ export const ClockIcon = (p: IconProps) => (
     <path d="M12 7v5l3 2" />
   </Svg>
 );
+export const BuildingIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 21V8l8-5v18M12 21V10l8 3v8M3 21h18M8 10h.01M8 14h.01M8 18h.01M16 15h.01M16 18h.01" />
+  </Svg>
+);
 export const DealIcon = (p: IconProps) => (
   <Svg {...p}>
     <path d="M12 3l8.5 6.4L17.2 20H6.8L3.5 9.4 12 3Z" />
