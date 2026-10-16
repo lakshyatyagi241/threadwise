@@ -62,7 +62,12 @@ export const userProfiles = pgTable(
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
-  (t) => [primaryKey({ columns: [t.orgId, t.userId] })],
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.userId] }),
+    index('idx_user_profiles_phone_e164')
+      .on(t.phoneE164)
+      .where(sql`${t.phoneE164} IS NOT NULL`),
+  ],
 );
 
 export const userAvatars = pgTable(

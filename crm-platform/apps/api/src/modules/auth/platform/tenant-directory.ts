@@ -167,17 +167,21 @@ export class TenantDirectory {
    */
   async identityExists(email: string, phoneE164: string | null): Promise<boolean> {
     return this.db.privileged(async (tx) => {
+      // Two independent EXISTS probes, each on its own indexed column (idx_users_email,
+      // idx_user_profiles_phone_e164), instead of one LEFT JOIN with OR: a join across two tables
+      // can't use either index for the OR, so it fell back to a full scan on this public,
+      // unauthenticated, privileged() query.
       const res = await tx.execute(
         phoneE164
           ? sql`
-              SELECT 1 FROM users u
-              LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
-              WHERE u.email = ${email} OR p.phone_e164 = ${phoneE164}
-              LIMIT 1
+              SELECT
+                EXISTS(SELECT 1 FROM users WHERE email = ${email})
+                OR EXISTS(SELECT 1 FROM user_profiles WHERE phone_e164 = ${phoneE164})
+                AS found
             `
-          : sql`SELECT 1 FROM users WHERE email = ${email} LIMIT 1`,
+          : sql`SELECT EXISTS(SELECT 1 FROM users WHERE email = ${email}) AS found`,
       );
-      return res.rows.length > 0;
+      return (res.rows[0] as { found: boolean } | undefined)?.found === true;
     });
   }
 
