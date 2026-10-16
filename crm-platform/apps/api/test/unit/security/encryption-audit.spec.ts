@@ -146,7 +146,10 @@ function files(dir: string, out: string[] = []): string[] {
   }
   return out;
 }
-const ALL = files(SRC).map((p) => ({ p: relative(SRC, p).split(sep).join('/'), s: readFileSync(p, 'utf8') }));
+const ALL = files(SRC).map((p) => ({
+  p: relative(SRC, p).split(sep).join('/'),
+  s: readFileSync(p, 'utf8'),
+}));
 
 describe('source guards', () => {
   it('no secret, token, key or code is made with Math.random', () => {

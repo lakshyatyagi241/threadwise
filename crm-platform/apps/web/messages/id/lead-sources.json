@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "Tahap ini termasuk pipeline lain.",
         "pipeline_required": "Pilih pipeline tempat tahap ini berada.",
         "unknown_or_lost_stage": "Tahap siklus hidup ini tidak ada atau merupakan tahap hilang.",
-        "unknown_or_inactive_user": "Salah satu orang yang dipilih bukan anggota aktif workspace ini."
+        "unknown_or_inactive_user": "Salah satu orang yang dipilih bukan anggota aktif workspace ini.",
+        "template_required": "Pilih template yang akan dikirim.",
+        "template_not_found": "Template ini tidak ada untuk saluran ini di workspace ini.",
+        "template_not_sendable": "Template ini tidak dapat dikirim: belum disetujui, dijeda, atau membutuhkan file atau variabel tautan.",
+        "sender_not_found": "Pengirim ini tidak terhubung."
       },
       "planLimitUsed": "Anda telah menggunakan {used} dari {limit} sumber prospek. Tingkatkan paket Anda atau hapus sumber yang tidak lagi Anda gunakan."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "Properti ini dipetakan dua kali.",
       "pathRequired": "Tentukan di bagian mana dari payload nilai ini berada.",
       "customFieldsTooMany": "Petakan paling banyak {max} properti kustom.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Pilih template yang akan dikirim.",
+      "speedDelayRange": "Masukkan menit bulat dari 0 hingga {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "Kontak",
         "owner": "Pemilik",
         "deal": "Deal",
-        "notify": "Notifikasi"
+        "notify": "Notifikasi",
+        "speed": "Pesan pertama untuk prospek baru"
       },
       "membersFailed": "Kami tidak dapat memuat tim Anda, jadi anggota tim belum bisa dipilih. Muat ulang halaman untuk mencoba lagi.",
       "countryCode": "Kode negara default",
@@ -290,7 +297,39 @@
       "notifyOwner": "Beri tahu pemilik kontak",
       "notifyOwnerHint": "Notifikasi dalam aplikasi saat prospek baru masuk. Prospek uji tidak pernah memicu notifikasi.",
       "notifyUsers": "Juga beri tahu",
-      "notifyUsersHint": "Misalnya manajer penjualan Anda. Maksimal 20 orang."
+      "notifyUsersHint": "Misalnya manajer penjualan Anda. Maksimal 20 orang.",
+      "speed": {
+        "enabled": "Kirim pesan pertama secara otomatis",
+        "enabledHint": "Nonaktif secara default. Saat prospek baru menjadi kontak, pesan terkirim otomatis jika persetujuan, jam tenang, paket, dan dompet Anda mengizinkan.",
+        "consentNote": "Persetujuan tidak pernah diasumsikan. Template utilitas WhatsApp adalah pesan layanan. Template pemasaran, SMS, atau email adalah pesan pemasaran: memerlukan persetujuan yang tercatat jika workspace Anda mewajibkannya, menunggu jam tenang berakhir, dan diblokir untuk kontak yang berhenti berlangganan. Prospek yang datang dengan bukti persetujuan akan mencatatnya.",
+        "channel": "Saluran",
+        "channels": {
+          "whatsapp": "Template WhatsApp",
+          "sms": "SMS",
+          "email": "Email"
+        },
+        "template": "Template",
+        "templateChoose": "Pilih template",
+        "templateNone": "Tidak ada template untuk saluran ini",
+        "templateUnavailable": "Template yang tersimpan tidak lagi tersedia",
+        "templateHint": {
+          "whatsapp": "Template yang disetujui dan hanya membutuhkan kontak (misalnya nama). Template yang membutuhkan file atau variabel tautan tidak ditampilkan.",
+          "sms": "Template SMS yang disetujui.",
+          "email": "Template email bersama. Template pribadi tidak dapat digunakan."
+        },
+        "sender": "Kirim dari",
+        "senderDefault": "Yang pertama terhubung",
+        "senderUnavailable": "Pengirim yang tersimpan tidak lagi terhubung",
+        "senderHint": {
+          "sms": "Nomor SMS tempat pesan dikirim.",
+          "email": "Kotak surat bersama tempat pesan dikirim."
+        },
+        "delay": "Tunggu sebelum mengirim (menit)",
+        "delayHint": "Menit bulat dari 0 hingga {max}. 0 berarti langsung dikirim.",
+        "businessHours": "Hanya pada jam kerja",
+        "businessHoursHint": "Di luar jam kerja yang diatur di workspace Anda, pesan menunggu hingga jam kerja dibuka.",
+        "optionsFailed": "Template dan pengirim tidak dapat dimuat. Coba lagi sebentar lagi."
+      }
     },
     "mapping": {
       "contact": "Field kontak",
@@ -539,7 +578,8 @@
       "retried": "Dicoba ulang. Prospek sekarang",
       "payload": "Payload tersimpan",
       "loadingPayload": "Membuka payload",
-      "purged": "Payload mentah dihapus setelah {days} hari. Prospek dan kontaknya tetap ada."
+      "purged": "Payload mentah dihapus setelah {days} hari. Prospek dan kontaknya tetap ada.",
+      "firstReply": "Pesan pertama"
     },
     "attribution": {
       "title": "Atribusi prospek",
@@ -562,6 +602,40 @@
       "title": "URL webhook baru akan tidak lengkap",
       "notConfigured": "Alamat API publik platform belum diatur. Minta pengelola platform ini untuk mengaturnya; sampai saat itu, sumber baru hanya dapat menampilkan path dari URL-nya.",
       "notPublic": "Alamat API publik platform mengarah ke alamat privat atau lokal yang tidak dapat dijangkau platform iklan. Minta pengelola platform ini untuk mengatur alamat publik."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Dijadwalkan",
+        "sending": "Mengirim",
+        "held": "Ditahan",
+        "sent": "Terkirim",
+        "blocked": "Diblokir",
+        "skipped": "Dilewati",
+        "failed": "Gagal"
+      },
+      "reasons": {
+        "quiet_hours": "Menunggu jam tenang berakhir",
+        "outside_business_hours": "Menunggu jam kerja",
+        "channel_unavailable": "Saluran tidak terhubung",
+        "wallet_empty": "Dompet kosong",
+        "send_halted": "Pengiriman dihentikan",
+        "opted_out": "Kontak berhenti berlangganan",
+        "no_consent": "Tidak ada persetujuan yang tercatat",
+        "minor": "Kontak ditandai sebagai di bawah umur",
+        "plan_limit": "Batas paket tercapai",
+        "disabled": "Pengaturan dimatikan",
+        "source_paused": "Sumber prospek dijeda",
+        "no_contact_point": "Tidak ada nomor atau alamat untuk saluran ini",
+        "no_sender": "Tidak ada pengirim yang terhubung",
+        "template_unavailable": "Template tidak dapat dikirim",
+        "missing_value": "Nilai template untuk kontak ini belum ada",
+        "provider_error": "Penyedia menolaknya",
+        "interrupted": "Terhenti di tengah jalan",
+        "expired": "Menunggu terlalu lama",
+        "internal_error": "Kesalahan internal"
+      },
+      "nextTry": "Percobaan berikutnya",
+      "sentAt": "Terkirim"
     }
   }
 }

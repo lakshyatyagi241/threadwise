@@ -281,7 +281,10 @@ describe('the archive sweep and the export', () => {
       logs.downloadExport(requested.id),
     );
     expect(fileName).toMatch(/^message-log-.*\.csv$/);
-    const csv = (await streamText(stream)).replace(/^\uFEFF/, '').trim().split('\r\n');
+    const csv = (await streamText(stream))
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .split('\r\n');
     expect(csv[0]).toContain('Time (UTC),Message ID,Recipient');
     const dataLines = csv.slice(1).filter((l) => l.includes(message.id));
     expect(dataLines).toHaveLength(before);

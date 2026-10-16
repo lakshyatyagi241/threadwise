@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "Bu aşama farklı bir satış hattına ait.",
         "pipeline_required": "Bu aşamanın ait olduğu satış hattını seçin.",
         "unknown_or_lost_stage": "Bu yaşam döngüsü aşaması yok veya kayıp aşaması.",
-        "unknown_or_inactive_user": "Seçilen kişilerden biri bu çalışma alanının aktif bir üyesi değil."
+        "unknown_or_inactive_user": "Seçilen kişilerden biri bu çalışma alanının aktif bir üyesi değil.",
+        "template_required": "Gönderilecek şablonu seçin.",
+        "template_not_found": "Bu şablon, bu çalışma alanında bu kanal için mevcut değil.",
+        "template_not_sendable": "Bu şablon gönderilemez: onaylı değil, duraklatılmış veya dosya ya da bağlantı değişkeni gerektiriyor.",
+        "sender_not_found": "Bu gönderenin bağlantısı yok."
       },
       "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız. Planınızı yükseltin veya artık kullanmadığınız bir kaynağı silin."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "Bu özellik iki kez eşleştirilmiş.",
       "pathRequired": "Değerin veri içinde nerede olduğunu belirtin.",
       "customFieldsTooMany": "En fazla {max} özel özelliği eşleştirin.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Gönderilecek şablonu seçin.",
+      "speedDelayRange": "0 ile {max} arasında tam dakika girin."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "Kişi",
         "owner": "Sahip",
         "deal": "Fırsat",
-        "notify": "Bildirimler"
+        "notify": "Bildirimler",
+        "speed": "Yeni potansiyel müşteriye ilk mesaj"
       },
       "membersFailed": "Ekibiniz yüklenemedi, bu yüzden şu anda kişi seçilemiyor. Tekrar denemek için sayfayı yenileyin.",
       "countryCode": "Varsayılan ülke kodu",
@@ -290,7 +297,39 @@
       "notifyOwner": "Kişinin sahibine haber ver",
       "notifyOwnerHint": "Yeni bir potansiyel müşteri geldiğinde uygulama içi bildirim. Test potansiyel müşterileri bildirim göndermez.",
       "notifyUsers": "Ayrıca bilgilendir",
-      "notifyUsersHint": "Örneğin satış müdürünüz. En fazla 20 kişi."
+      "notifyUsersHint": "Örneğin satış müdürünüz. En fazla 20 kişi.",
+      "speed": {
+        "enabled": "İlk mesajı otomatik gönder",
+        "enabledHint": "Varsayılan olarak kapalıdır. Yeni bir potansiyel müşteri kişiye dönüştüğünde; rıza, sessiz saatler, planınız ve cüzdanınız izin veriyorsa bir mesaj kendiliğinden gönderilir.",
+        "consentNote": "Rıza hiçbir zaman varsayılmaz. WhatsApp utility şablonu bir hizmet mesajıdır. Pazarlama şablonu, SMS veya e-posta ise pazarlama mesajıdır: çalışma alanınızın gerektirdiği durumlarda kayıtlı rıza ister, sessiz saatlerin bitmesini bekler ve mesaj almayı reddetmiş kişiye gönderilmez. Rıza kanıtıyla gelen bir potansiyel müşterinin rızası kaydedilir.",
+        "channel": "Kanal",
+        "channels": {
+          "whatsapp": "WhatsApp şablonu",
+          "sms": "SMS",
+          "email": "E-posta"
+        },
+        "template": "Şablon",
+        "templateChoose": "Şablon seçin",
+        "templateNone": "Bu kanal için kullanılabilir şablon yok",
+        "templateUnavailable": "Kayıtlı şablon artık kullanılamıyor",
+        "templateHint": {
+          "whatsapp": "Yalnızca kişi bilgisine (örneğin ad) ihtiyaç duyan onaylı şablonlar. Dosya veya bağlantı değişkeni gerektiren şablonlar listelenmez.",
+          "sms": "Onaylı SMS şablonları.",
+          "email": "Paylaşılan e-posta şablonları. Kişisel şablon kullanılamaz."
+        },
+        "sender": "Gönderen",
+        "senderDefault": "Bağlı olan ilk gönderen",
+        "senderUnavailable": "Kayıtlı gönderenin bağlantısı artık yok",
+        "senderHint": {
+          "sms": "Mesajın gönderildiği SMS numarası.",
+          "email": "Mesajın gönderildiği paylaşılan posta kutusu."
+        },
+        "delay": "Göndermeden önce bekleme süresi (dakika)",
+        "delayHint": "0 ile {max} arasında tam dakika. 0 hemen gönderir.",
+        "businessHours": "Yalnızca çalışma saatlerinde",
+        "businessHoursHint": "Çalışma alanınızda belirlenen çalışma saatlerinin dışında mesaj, bu saatlerin başlamasını bekler.",
+        "optionsFailed": "Şablonlar ve gönderenler yüklenemedi. Biraz sonra yeniden deneyin."
+      }
     },
     "mapping": {
       "contact": "Kişi alanları",
@@ -539,7 +578,8 @@
       "retried": "Yeniden denendi. Potansiyel müşteri artık",
       "payload": "Saklanan yük",
       "loadingPayload": "Ham yük açılıyor",
-      "purged": "Ham yük {days} gün sonra temizlendi. Potansiyel müşteri ve kişisi kalır."
+      "purged": "Ham yük {days} gün sonra temizlendi. Potansiyel müşteri ve kişisi kalır.",
+      "firstReply": "İlk mesaj"
     },
     "attribution": {
       "title": "Potansiyel müşteri atfı",
@@ -562,6 +602,40 @@
       "title": "Yeni webhook URL'leri eksik olacak",
       "notConfigured": "Platformun herkese açık API adresi ayarlanmamış. Bu platformu yöneten kişiden adresi ayarlamasını isteyin; o zamana kadar yeni bir kaynak URL'sinin yalnızca yolunu gösterebilir.",
       "notPublic": "Platformun herkese açık API adresi, reklam platformlarının erişemeyeceği özel veya yerel bir adresi gösteriyor. Bu platformu yöneten kişiden herkese açık bir adres ayarlamasını isteyin."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Zamanlandı",
+        "sending": "Gönderiliyor",
+        "held": "Bekletildi",
+        "sent": "Gönderildi",
+        "blocked": "Engellendi",
+        "skipped": "Atlandı",
+        "failed": "Başarısız"
+      },
+      "reasons": {
+        "quiet_hours": "Sessiz saatlerin bitmesi bekleniyor",
+        "outside_business_hours": "Çalışma saatleri bekleniyor",
+        "channel_unavailable": "Kanal bağlı değil",
+        "wallet_empty": "Cüzdan boş",
+        "send_halted": "Gönderim durduruldu",
+        "opted_out": "Kişi mesaj almayı reddetti",
+        "no_consent": "Kayıtlı rıza yok",
+        "minor": "Kişi reşit olmayan olarak işaretli",
+        "plan_limit": "Planın sınırına ulaşıldı",
+        "disabled": "Ayar kapatıldı",
+        "source_paused": "Potansiyel müşteri kaynağı duraklatıldı",
+        "no_contact_point": "Bu kanal için numara veya adres yok",
+        "no_sender": "Bağlı gönderen yok",
+        "template_unavailable": "Şablon gönderilemiyor",
+        "missing_value": "Bu kişi için bir şablon değeri eksik",
+        "provider_error": "Sağlayıcı reddetti",
+        "interrupted": "Yarıda kesildi",
+        "expired": "Çok uzun süre bekledi",
+        "internal_error": "Dahili hata"
+      },
+      "nextTry": "Sonraki deneme",
+      "sentAt": "Gönderildi"
     }
   }
 }

@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "Esta etapa pertence a outro funil.",
         "pipeline_required": "Escolha o funil ao qual esta etapa pertence.",
         "unknown_or_lost_stage": "Esta etapa do ciclo de vida não existe ou é uma etapa de perda.",
-        "unknown_or_inactive_user": "Uma das pessoas selecionadas não é membro ativo deste espaço de trabalho."
+        "unknown_or_inactive_user": "Uma das pessoas selecionadas não é membro ativo deste espaço de trabalho.",
+        "template_required": "Escolha o modelo a ser enviado.",
+        "template_not_found": "Este modelo não existe para este canal neste espaço de trabalho.",
+        "template_not_sendable": "Este modelo não pode ser enviado: não está aprovado, está pausado ou exige um arquivo ou uma variável de link.",
+        "sender_not_found": "Este remetente não está conectado."
       },
       "planLimitUsed": "Você usou {used} de {limit} fontes de leads. Faça upgrade do plano ou exclua uma fonte que você não usa mais."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "Esta propriedade está mapeada duas vezes.",
       "pathRequired": "Informe onde no payload está o valor.",
       "customFieldsTooMany": "Mapeie no máximo {max} propriedades personalizadas.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Escolha o modelo a ser enviado.",
+      "speedDelayRange": "Informe minutos inteiros de 0 a {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "O contato",
         "owner": "Responsável",
         "deal": "Negócio",
-        "notify": "Notificações"
+        "notify": "Notificações",
+        "speed": "Primeira mensagem para um novo lead"
       },
       "membersFailed": "Não foi possível carregar sua equipe, então não é possível escolher pessoas agora. Recarregue a página para tentar novamente.",
       "countryCode": "Código de país padrão",
@@ -290,7 +297,39 @@
       "notifyOwner": "Avisar o responsável pelo contato",
       "notifyOwnerHint": "Uma notificação no aplicativo quando chega um novo lead. Leads de teste nunca notificam.",
       "notifyUsers": "Avisar também",
-      "notifyUsersHint": "Por exemplo, seu gerente de vendas. Até 20 pessoas."
+      "notifyUsersHint": "Por exemplo, seu gerente de vendas. Até 20 pessoas.",
+      "speed": {
+        "enabled": "Enviar uma primeira mensagem automaticamente",
+        "enabledHint": "Desativado por padrão. Quando um novo lead se torna contato, uma mensagem é enviada automaticamente, se o consentimento, o horário de silêncio, seu plano e sua carteira permitirem.",
+        "consentNote": "O consentimento nunca é presumido. Um modelo utilitário do WhatsApp é uma mensagem de serviço. Um modelo de marketing, um SMS ou um e-mail é marketing: exige consentimento registrado quando seu espaço de trabalho o requer, aguarda o fim do horário de silêncio e é bloqueado para um contato que cancelou o recebimento. Um lead que chega com prova de consentimento o registra.",
+        "channel": "Canal",
+        "channels": {
+          "whatsapp": "Modelo do WhatsApp",
+          "sms": "SMS",
+          "email": "E-mail"
+        },
+        "template": "Modelo",
+        "templateChoose": "Escolha um modelo",
+        "templateNone": "Nenhum modelo disponível para este canal",
+        "templateUnavailable": "O modelo salvo não está mais disponível",
+        "templateHint": {
+          "whatsapp": "Modelos aprovados que só precisam do contato (um nome, por exemplo). Modelos que exigem um arquivo ou uma variável de link não aparecem na lista.",
+          "sms": "Modelos de SMS aprovados.",
+          "email": "Modelos de e-mail compartilhados. Não é possível usar um modelo pessoal."
+        },
+        "sender": "Enviar de",
+        "senderDefault": "O primeiro conectado",
+        "senderUnavailable": "O remetente salvo não está mais conectado",
+        "senderHint": {
+          "sms": "O número de SMS de onde a mensagem sai.",
+          "email": "A caixa de correio compartilhada de onde a mensagem sai."
+        },
+        "delay": "Aguardar antes de enviar (minutos)",
+        "delayHint": "Minutos inteiros de 0 a {max}. 0 envia na hora.",
+        "businessHours": "Somente em horário comercial",
+        "businessHoursHint": "Fora do horário comercial definido no seu espaço de trabalho, a mensagem aguarda a abertura.",
+        "optionsFailed": "Não foi possível carregar os modelos e os remetentes. Tente novamente em instantes."
+      }
     },
     "mapping": {
       "contact": "Campos do contato",
@@ -539,7 +578,8 @@
       "retried": "Tentado novamente. O lead agora está",
       "payload": "Payload armazenado",
       "loadingPayload": "Abrindo o payload",
-      "purged": "O payload bruto foi apagado após {days} dias. O lead e seu contato permanecem."
+      "purged": "O payload bruto foi apagado após {days} dias. O lead e seu contato permanecem.",
+      "firstReply": "Primeira mensagem"
     },
     "attribution": {
       "title": "Atribuição do lead",
@@ -562,6 +602,40 @@
       "title": "As novas URLs de webhook ficarão incompletas",
       "notConfigured": "O endereço público da API da plataforma não está definido. Peça a quem administra a plataforma para defini-lo; até lá, uma nova fonte só poderá mostrar o caminho da sua URL.",
       "notPublic": "O endereço público da API da plataforma aponta para um endereço privado ou local que as plataformas de anúncios não conseguem acessar. Peça a quem administra a plataforma para definir um endereço público."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Agendada",
+        "sending": "Enviando",
+        "held": "Retida",
+        "sent": "Enviada",
+        "blocked": "Bloqueada",
+        "skipped": "Ignorada",
+        "failed": "Falhou"
+      },
+      "reasons": {
+        "quiet_hours": "Aguardando o fim do horário de silêncio",
+        "outside_business_hours": "Aguardando o horário comercial",
+        "channel_unavailable": "O canal não está conectado",
+        "wallet_empty": "A carteira está vazia",
+        "send_halted": "O envio está suspenso",
+        "opted_out": "O contato cancelou o recebimento",
+        "no_consent": "Sem consentimento registrado",
+        "minor": "O contato está marcado como menor de idade",
+        "plan_limit": "O limite do plano foi atingido",
+        "disabled": "A configuração foi desativada",
+        "source_paused": "A fonte de leads está pausada",
+        "no_contact_point": "Sem número ou endereço para este canal",
+        "no_sender": "Nenhum remetente conectado",
+        "template_unavailable": "O modelo não pode ser enviado",
+        "missing_value": "Falta um valor do modelo para este contato",
+        "provider_error": "O provedor recusou",
+        "interrupted": "Foi interrompido",
+        "expired": "Esperou tempo demais",
+        "internal_error": "Erro interno"
+      },
+      "nextTry": "Próxima tentativa",
+      "sentAt": "Enviada"
     }
   }
 }

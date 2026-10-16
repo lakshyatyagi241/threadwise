@@ -55,6 +55,10 @@ export const LEAD_DETAIL_CODES = [
   'pipeline_required',
   'unknown_or_lost_stage',
   'unknown_or_inactive_user',
+  'template_required',
+  'template_not_found',
+  'template_not_sendable',
+  'sender_not_found',
 ] as const;
 const DETAIL_SET: ReadonlySet<string> = new Set(LEAD_DETAIL_CODES);
 

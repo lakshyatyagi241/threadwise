@@ -13,6 +13,8 @@ import {
   type LeadSourceResponse,
   type ListLeadEventsQuery,
   type PreviewLeadMappingInput,
+  type SpeedToLeadOptionsQuery,
+  type SpeedToLeadOptionsResponse,
   type RotateLeadSourceTokenResponse,
   type SendTestLeadInput,
   type SendTestLeadResponse,
@@ -26,7 +28,12 @@ import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { EmailTemplatesReader } from '../email-templates';
+import { TemplatesRepository } from '../message-templates';
 import { LeadEventsRepository, type LeadEventRow } from './lead-events.repository';
+import { LeadFirstMessageLookups } from './lead-first-message.lookups';
+import { factsOf } from './lead-first-message.templates';
+import { templateProblem } from './lead-first-reply.rules';
 import { LeadHookAddressService, hookUrlFor } from './lead-hook-address';
 import { LeadIngestService } from './lead-ingest.service';
 import { leadConsentFromBody } from './lead-consent';
@@ -78,6 +85,9 @@ export class LeadSourcesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly hookAddress: LeadHookAddressService,
+    private readonly firstMessage: LeadFirstMessageLookups,
+    private readonly templates: TemplatesRepository,
+    private readonly emailTemplates: EmailTemplatesReader,
   ) {}
 
   /** What create and rotate hand back once: the token, its path, and the complete public address (or why there is none). */
@@ -104,6 +114,48 @@ export class LeadSourcesService {
   async get(uuid: string): Promise<LeadSourceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => toLeadSourceResponse(await this.mustFind(tx, ctx.orgId, uuid)));
+  }
+
+  /**
+   * What the speed-to-lead pickers offer for a channel. WhatsApp: approved templates a lead can fill from the contact alone (no media
+   * or variable in the header, no dynamic button). SMS: approved SMS templates and the connected numbers. Email: shared templates
+   * and the connected shared mailboxes. Names and a line of text; nothing of a contact.
+   */
+  async speedToLeadOptions(query: SpeedToLeadOptionsQuery): Promise<SpeedToLeadOptionsResponse> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const line = (text: string) => text.replace(/\s+/g, ' ').trim().slice(0, 120);
+      if (query.channel === 'email') {
+        const [templates, boxes] = await Promise.all([
+          this.firstMessage.sharedEmailTemplates(tx, ctx.orgId, 100),
+          this.firstMessage.sharedMailboxes(tx, ctx.orgId),
+        ]);
+        return {
+          templates: templates.map((t) => ({ id: t.uuid, name: t.name, preview: line(t.subject) })),
+          senders: boxes.map((b) => ({ id: b.uuid, label: b.label })),
+        };
+      }
+      const uuids = await this.firstMessage.approvedTemplateUuids(
+        tx,
+        ctx.orgId,
+        query.channel,
+        100,
+      );
+      const rows = await this.templates.findManyByUuids(tx, ctx.orgId, uuids);
+      const sendable = rows.filter(
+        (r) => query.channel === 'sms' || templateProblem(factsOf(r), new Date()) === null,
+      );
+      const senders =
+        query.channel === 'sms' ? await this.firstMessage.smsSenders(tx, ctx.orgId) : [];
+      return {
+        templates: sendable.map((r) => ({
+          id: r.uuid,
+          name: r.templateName,
+          preview: line(r.templateBody),
+        })),
+        senders: senders.map((x) => ({ id: x.uuid, label: x.label })),
+      };
+    });
   }
 
   // --- create / update / delete -------------------------------------------------------------------------------------------------
@@ -511,6 +563,50 @@ export class LeadSourcesService {
     }
   }
 
+  /**
+   * The first message of a new lead (BL-014): a source that switches it on must name a template this channel can actually send, and,
+   * when it names a sender, one that is connected. Nothing is checked while it is off, so a half-made setting can be saved as a draft.
+   */
+  private async checkSpeedToLead(
+    tx: Tx,
+    orgId: number,
+    s: LeadSourceDefaults['speedToLead'],
+    bad: Array<{ path: string; message: string }>,
+  ): Promise<void> {
+    if (!s.enabled) return;
+    const at = 'defaults.speedToLead';
+    if (!s.templateId) {
+      bad.push({ path: `${at}.templateId`, message: 'template_required' });
+      return;
+    }
+    if (s.channel === 'email') {
+      try {
+        await this.emailTemplates.purposeForReply(tx, orgId, -1, s.templateId);
+      } catch {
+        bad.push({ path: `${at}.templateId`, message: 'template_not_found' });
+      }
+    } else {
+      const tpl = await this.templates.findByUuid(tx, orgId, s.templateId);
+      const channel = tpl ? await this.firstMessage.templateChannel(tx, orgId, s.templateId) : null;
+      if (!tpl || channel !== (s.channel === 'sms' ? 'sms' : 'whatsapp')) {
+        bad.push({ path: `${at}.templateId`, message: 'template_not_found' });
+      } else if (
+        s.channel === 'sms'
+          ? tpl.status !== 'approved' && tpl.status !== 'public'
+          : templateProblem(factsOf(tpl), new Date()) !== null
+      ) {
+        bad.push({ path: `${at}.templateId`, message: 'template_not_sendable' });
+      }
+    }
+    if (s.senderId && s.channel !== 'whatsapp') {
+      const sender =
+        s.channel === 'sms'
+          ? await this.firstMessage.smsSender(tx, orgId, s.senderId)
+          : await this.firstMessage.mailbox(tx, orgId, s.senderId);
+      if (!sender) bad.push({ path: `${at}.senderId`, message: 'sender_not_found' });
+    }
+  }
+
   /** Every user, pipeline, stage and lifecycle stage a source points at must belong to this workspace (and the users be active). */
   private async validateDefaults(tx: Tx, orgId: number, d: LeadSourceDefaults): Promise<void> {
     const bad: Array<{ path: string; message: string }> = [];
@@ -549,6 +645,7 @@ export class LeadSourcesService {
     if (d.lifecycleStage && !(await this.repo.stageUsable(tx, orgId, d.lifecycleStage))) {
       bad.push({ path: 'defaults.lifecycleStage', message: 'unknown_or_lost_stage' });
     }
+    await this.checkSpeedToLead(tx, orgId, d.speedToLead, bad);
     if (bad.length > 0) {
       throw new AppError(
         ERROR_CODES.LEAD_DEFAULTS_INVALID,

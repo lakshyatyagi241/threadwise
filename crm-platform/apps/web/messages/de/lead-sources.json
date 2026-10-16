@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "Diese Phase gehört zu einer anderen Pipeline.",
         "pipeline_required": "Wählen Sie die Pipeline, zu der diese Phase gehört.",
         "unknown_or_lost_stage": "Diese Lebenszyklusphase existiert nicht oder ist eine verlorene Phase.",
-        "unknown_or_inactive_user": "Eine der ausgewählten Personen ist kein aktives Mitglied dieses Workspace."
+        "unknown_or_inactive_user": "Eine der ausgewählten Personen ist kein aktives Mitglied dieses Workspace.",
+        "template_required": "Wählen Sie die Vorlage aus, die gesendet werden soll.",
+        "template_not_found": "Diese Vorlage gibt es für diesen Kanal in diesem Workspace nicht.",
+        "template_not_sendable": "Diese Vorlage kann nicht gesendet werden: Sie ist nicht genehmigt, pausiert oder benötigt eine Datei- oder Link-Variable.",
+        "sender_not_found": "Dieser Absender ist nicht verbunden."
       },
       "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt. Upgraden Sie Ihren Tarif oder löschen Sie eine Quelle, die Sie nicht mehr verwenden."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "Diese Eigenschaft ist doppelt zugeordnet.",
       "pathRequired": "Geben Sie an, wo sich der Wert im Payload befindet.",
       "customFieldsTooMany": "Ordnen Sie höchstens {max} benutzerdefinierte Eigenschaften zu.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Wählen Sie die Vorlage aus, die gesendet werden soll.",
+      "speedDelayRange": "Geben Sie ganze Minuten von 0 bis {max} ein."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "Der Kontakt",
         "owner": "Verantwortlicher",
         "deal": "Deal",
-        "notify": "Benachrichtigungen"
+        "notify": "Benachrichtigungen",
+        "speed": "Erste Nachricht an einen neuen Lead"
       },
       "membersFailed": "Ihr Team konnte nicht geladen werden, daher können gerade keine Personen ausgewählt werden. Laden Sie die Seite neu, um es erneut zu versuchen.",
       "countryCode": "Standard-Ländervorwahl",
@@ -290,7 +297,39 @@
       "notifyOwner": "Den Verantwortlichen des Kontakts benachrichtigen",
       "notifyOwnerHint": "Eine In-App-Benachrichtigung, wenn ein neuer Lead eingeht. Test-Leads lösen nie eine Benachrichtigung aus.",
       "notifyUsers": "Zusätzlich benachrichtigen",
-      "notifyUsersHint": "Zum Beispiel Ihre Vertriebsleitung. Bis zu 20 Personen."
+      "notifyUsersHint": "Zum Beispiel Ihre Vertriebsleitung. Bis zu 20 Personen.",
+      "speed": {
+        "enabled": "Erste Nachricht automatisch senden",
+        "enabledHint": "Standardmäßig aus. Sobald ein neuer Lead zum Kontakt wird, geht automatisch eine Nachricht raus, sofern Einwilligung, Ruhezeiten, Tarif und Guthaben das zulassen.",
+        "consentNote": "Eine Einwilligung wird nie vorausgesetzt. Eine WhatsApp-Utility-Vorlage ist eine Servicenachricht. Eine Marketing-Vorlage, eine SMS oder eine E-Mail gilt als Marketing: Sie erfordert eine dokumentierte Einwilligung, wo Ihr Workspace sie verlangt, wartet das Ende der Ruhezeiten ab und wird für Kontakte, die sich abgemeldet haben, blockiert. Ein Lead, der mit Einwilligungsnachweis eingeht, speichert diese Einwilligung.",
+        "channel": "Kanal",
+        "channels": {
+          "whatsapp": "WhatsApp-Vorlage",
+          "sms": "SMS",
+          "email": "E-Mail"
+        },
+        "template": "Vorlage",
+        "templateChoose": "Vorlage auswählen",
+        "templateNone": "Für diesen Kanal ist keine Vorlage verfügbar",
+        "templateUnavailable": "Die gespeicherte Vorlage ist nicht mehr verfügbar",
+        "templateHint": {
+          "whatsapp": "Genehmigte Vorlagen, die nur den Kontakt benötigen (zum Beispiel einen Namen). Vorlagen mit Datei- oder Link-Variable werden nicht angezeigt.",
+          "sms": "Genehmigte SMS-Vorlagen.",
+          "email": "Gemeinsame E-Mail-Vorlagen. Persönliche Vorlagen können nicht verwendet werden."
+        },
+        "sender": "Senden von",
+        "senderDefault": "Der erste verbundene",
+        "senderUnavailable": "Der gespeicherte Absender ist nicht mehr verbunden",
+        "senderHint": {
+          "sms": "Die SMS-Nummer, von der die Nachricht gesendet wird.",
+          "email": "Das gemeinsame Postfach, von dem die Nachricht gesendet wird."
+        },
+        "delay": "Wartezeit vor dem Senden (Minuten)",
+        "delayHint": "Ganze Minuten von 0 bis {max}. Bei 0 wird sofort gesendet.",
+        "businessHours": "Nur zu Geschäftszeiten",
+        "businessHoursHint": "Außerhalb der in Ihrem Workspace festgelegten Geschäftszeiten wartet die Nachricht, bis diese beginnen.",
+        "optionsFailed": "Die Vorlagen und Absender konnten nicht geladen werden. Versuchen Sie es gleich noch einmal."
+      }
     },
     "mapping": {
       "contact": "Kontaktfelder",
@@ -539,7 +578,8 @@
       "retried": "Erneut verarbeitet. Der Lead ist jetzt",
       "payload": "Gespeicherte Nutzdaten",
       "loadingPayload": "Nutzdaten werden geöffnet",
-      "purged": "Die Rohdaten wurden nach {days} Tagen gelöscht. Der Lead und sein Kontakt bleiben erhalten."
+      "purged": "Die Rohdaten wurden nach {days} Tagen gelöscht. Der Lead und sein Kontakt bleiben erhalten.",
+      "firstReply": "Erste Nachricht"
     },
     "attribution": {
       "title": "Lead-Zuordnung",
@@ -562,6 +602,40 @@
       "title": "Neue Webhook-URLs sind unvollständig",
       "notConfigured": "Die öffentliche API-Adresse der Plattform ist nicht festgelegt. Bitten Sie die Person, die diese Plattform betreibt, sie festzulegen; bis dahin kann eine neue Quelle nur den Pfad ihrer URL anzeigen.",
       "notPublic": "Die öffentliche API-Adresse der Plattform verweist auf eine private oder lokale Adresse, die Werbeplattformen nicht erreichen können. Bitten Sie die Person, die diese Plattform betreibt, eine öffentliche Adresse festzulegen."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Geplant",
+        "sending": "Wird gesendet",
+        "held": "Zurückgehalten",
+        "sent": "Gesendet",
+        "blocked": "Blockiert",
+        "skipped": "Übersprungen",
+        "failed": "Fehlgeschlagen"
+      },
+      "reasons": {
+        "quiet_hours": "Wartet auf das Ende der Ruhezeiten",
+        "outside_business_hours": "Wartet auf die Geschäftszeiten",
+        "channel_unavailable": "Der Kanal ist nicht verbunden",
+        "wallet_empty": "Das Guthaben ist aufgebraucht",
+        "send_halted": "Das Senden ist angehalten",
+        "opted_out": "Der Kontakt hat sich abgemeldet",
+        "no_consent": "Keine dokumentierte Einwilligung",
+        "minor": "Der Kontakt ist als minderjährig markiert",
+        "plan_limit": "Das Limit des Tarifs ist erreicht",
+        "disabled": "Die Einstellung wurde ausgeschaltet",
+        "source_paused": "Die Lead-Quelle ist pausiert",
+        "no_contact_point": "Keine Nummer oder Adresse für diesen Kanal",
+        "no_sender": "Kein verbundener Absender",
+        "template_unavailable": "Die Vorlage kann nicht gesendet werden",
+        "missing_value": "Für diesen Kontakt fehlt ein Vorlagenwert",
+        "provider_error": "Der Anbieter hat es abgelehnt",
+        "interrupted": "Der Vorgang wurde unterbrochen",
+        "expired": "Es hat zu lange gewartet",
+        "internal_error": "Ein interner Fehler"
+      },
+      "nextTry": "Nächster Versuch",
+      "sentAt": "Gesendet am"
     }
   }
 }

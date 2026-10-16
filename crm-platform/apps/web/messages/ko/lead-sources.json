@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "이 단계는 다른 파이프라인에 속합니다.",
         "pipeline_required": "이 단계가 속한 파이프라인을 선택하세요.",
         "unknown_or_lost_stage": "이 라이프사이클 단계는 존재하지 않거나 실패 단계입니다.",
-        "unknown_or_inactive_user": "선택한 사용자 중 한 명이 이 워크스페이스의 활성 구성원이 아닙니다."
+        "unknown_or_inactive_user": "선택한 사용자 중 한 명이 이 워크스페이스의 활성 구성원이 아닙니다.",
+        "template_required": "발송할 템플릿을 선택하세요.",
+        "template_not_found": "이 워크스페이스의 이 채널에는 해당 템플릿이 없습니다.",
+        "template_not_sendable": "이 템플릿은 발송할 수 없습니다. 승인되지 않았거나, 일시 중지되었거나, 파일 또는 링크 변수가 필요합니다.",
+        "sender_not_found": "이 발신 계정은 연결되어 있지 않습니다."
       },
       "planLimitUsed": "리드 소스 {limit}개 중 {used}개를 사용했습니다. 요금제를 업그레이드하거나 더 이상 사용하지 않는 소스를 삭제하세요."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "이 속성이 두 번 매핑되어 있습니다.",
       "pathRequired": "페이로드에서 값이 있는 위치를 입력하세요.",
       "customFieldsTooMany": "사용자 지정 속성은 최대 {max}개까지 매핑할 수 있습니다.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "발송할 템플릿을 선택하세요.",
+      "speedDelayRange": "0부터 {max} 사이의 정수(분)로 입력하세요."
     },
     "kinds": {
       "webhook": "웹훅",
@@ -252,7 +258,8 @@
         "contact": "연락처",
         "owner": "담당자",
         "deal": "거래",
-        "notify": "알림"
+        "notify": "알림",
+        "speed": "신규 리드에게 보내는 첫 메시지"
       },
       "membersFailed": "팀 정보를 불러오지 못해 지금은 사람을 선택할 수 없습니다. 페이지를 새로고침해 다시 시도하세요.",
       "countryCode": "기본 국가 코드",
@@ -290,7 +297,39 @@
       "notifyOwner": "연락처 담당자에게 알림",
       "notifyOwnerHint": "새 리드가 들어오면 앱 내 알림을 보냅니다. 테스트 리드는 알림을 보내지 않습니다.",
       "notifyUsers": "추가로 알릴 사람",
-      "notifyUsersHint": "예: 영업 관리자. 최대 20명."
+      "notifyUsersHint": "예: 영업 관리자. 최대 20명.",
+      "speed": {
+        "enabled": "첫 메시지를 자동으로 보내기",
+        "enabledHint": "기본값은 꺼짐입니다. 새 리드가 연락처가 되면 동의, 방해 금지 시간, 요금제, 지갑 조건이 허용하는 경우 메시지가 자동으로 발송됩니다.",
+        "consentNote": "동의는 절대 자동으로 간주되지 않습니다. WhatsApp 유틸리티 템플릿은 서비스 메시지입니다. 마케팅 템플릿, SMS, 이메일은 마케팅으로 분류되며, 워크스페이스에서 요구하는 경우 기록된 동의가 필요하고, 방해 금지 시간이 끝날 때까지 대기하며, 수신 거부한 연락처에는 차단됩니다. 동의 증빙과 함께 들어온 리드는 해당 동의가 기록됩니다.",
+        "channel": "채널",
+        "channels": {
+          "whatsapp": "WhatsApp 템플릿",
+          "sms": "SMS",
+          "email": "이메일"
+        },
+        "template": "템플릿",
+        "templateChoose": "템플릿 선택",
+        "templateNone": "이 채널에서 사용할 수 있는 템플릿이 없습니다",
+        "templateUnavailable": "저장된 템플릿을 더 이상 사용할 수 없습니다",
+        "templateHint": {
+          "whatsapp": "연락처 정보(예: 이름)만 필요한 승인된 템플릿입니다. 파일이나 링크 변수가 필요한 템플릿은 표시되지 않습니다.",
+          "sms": "승인된 SMS 템플릿입니다.",
+          "email": "공유 이메일 템플릿입니다. 개인 템플릿은 사용할 수 없습니다."
+        },
+        "sender": "발신 계정",
+        "senderDefault": "처음 연결된 계정",
+        "senderUnavailable": "저장된 발신 계정의 연결이 해제되었습니다",
+        "senderHint": {
+          "sms": "메시지를 보낼 SMS 번호입니다.",
+          "email": "메시지를 보낼 공유 메일함입니다."
+        },
+        "delay": "발송 전 대기 시간(분)",
+        "delayHint": "0부터 {max} 사이의 정수(분)로 입력하세요. 0이면 즉시 발송합니다.",
+        "businessHours": "영업시간에만 발송",
+        "businessHoursHint": "워크스페이스에 설정된 영업시간이 아닐 때는 영업시간이 시작될 때까지 메시지가 대기합니다.",
+        "optionsFailed": "템플릿과 발신 계정을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+      }
     },
     "mapping": {
       "contact": "연락처 필드",
@@ -539,7 +578,8 @@
       "retried": "재시도했습니다. 리드 상태는 이제",
       "payload": "저장된 페이로드",
       "loadingPayload": "페이로드 여는 중",
-      "purged": "원본 페이로드는 {days}일 후 삭제되었습니다. 리드와 연락처는 유지됩니다."
+      "purged": "원본 페이로드는 {days}일 후 삭제되었습니다. 리드와 연락처는 유지됩니다.",
+      "firstReply": "첫 메시지"
     },
     "attribution": {
       "title": "리드 유입 귀속",
@@ -562,6 +602,40 @@
       "title": "새 webhook URL이 불완전하게 표시됩니다",
       "notConfigured": "플랫폼의 공개 API 주소가 설정되지 않았습니다. 이 플랫폼을 운영하는 담당자에게 설정을 요청하세요. 설정되기 전까지 새 소스에는 URL의 경로만 표시됩니다.",
       "notPublic": "플랫폼의 공개 API 주소가 광고 플랫폼에서 접근할 수 없는 사설 또는 로컬 주소를 가리키고 있습니다. 이 플랫폼을 운영하는 담당자에게 공개 주소 설정을 요청하세요."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "예약됨",
+        "sending": "발송 중",
+        "held": "보류됨",
+        "sent": "발송됨",
+        "blocked": "차단됨",
+        "skipped": "건너뜀",
+        "failed": "실패"
+      },
+      "reasons": {
+        "quiet_hours": "방해 금지 시간이 끝나기를 기다리는 중",
+        "outside_business_hours": "영업시간을 기다리는 중",
+        "channel_unavailable": "채널이 연결되어 있지 않습니다",
+        "wallet_empty": "지갑 잔액이 없습니다",
+        "send_halted": "발송이 중단되었습니다",
+        "opted_out": "연락처가 수신을 거부했습니다",
+        "no_consent": "기록된 동의가 없습니다",
+        "minor": "연락처가 미성년자로 표시되어 있습니다",
+        "plan_limit": "요금제 한도에 도달했습니다",
+        "disabled": "설정이 꺼졌습니다",
+        "source_paused": "리드 소스가 일시 중지되었습니다",
+        "no_contact_point": "이 채널에 사용할 번호 또는 주소가 없습니다",
+        "no_sender": "연결된 발신 계정이 없습니다",
+        "template_unavailable": "템플릿을 발송할 수 없습니다",
+        "missing_value": "이 연락처에 필요한 템플릿 값이 없습니다",
+        "provider_error": "제공업체에서 거부했습니다",
+        "interrupted": "중단되었습니다",
+        "expired": "너무 오래 대기했습니다",
+        "internal_error": "내부 오류"
+      },
+      "nextTry": "다음 시도",
+      "sentAt": "발송 시각"
     }
   }
 }

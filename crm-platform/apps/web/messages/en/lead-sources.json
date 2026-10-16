@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "This stage belongs to a different pipeline.",
         "pipeline_required": "Choose the pipeline this stage belongs to.",
         "unknown_or_lost_stage": "This lifecycle stage does not exist or is a lost stage.",
-        "unknown_or_inactive_user": "One of the selected people is not an active member of this workspace."
+        "unknown_or_inactive_user": "One of the selected people is not an active member of this workspace.",
+        "template_required": "Choose the template to send.",
+        "template_not_found": "This template does not exist for this channel in this workspace.",
+        "template_not_sendable": "This template cannot be sent: it is not approved, it is paused, or it needs a file or a link variable.",
+        "sender_not_found": "This sender is not connected."
       },
       "planLimitUsed": "You have used {used} of {limit} lead sources. Upgrade your plan or delete a source you no longer use."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "This property is mapped twice.",
       "pathRequired": "Say where in the payload the value is.",
       "customFieldsTooMany": "Map at most {max} custom properties.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Choose the template to send.",
+      "speedDelayRange": "Enter whole minutes from 0 to {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "The contact",
         "owner": "Owner",
         "deal": "Deal",
-        "notify": "Notifications"
+        "notify": "Notifications",
+        "speed": "First message to a new lead"
       },
       "membersFailed": "We could not load your team, so people cannot be chosen right now. Reload the page to try again.",
       "countryCode": "Default country code",
@@ -290,7 +297,39 @@
       "notifyOwner": "Tell the contact's owner",
       "notifyOwnerHint": "An in-app notification when a new lead comes in. Test leads never notify.",
       "notifyUsers": "Also tell",
-      "notifyUsersHint": "For example your sales manager. Up to 20 people."
+      "notifyUsersHint": "For example your sales manager. Up to 20 people.",
+      "speed": {
+        "enabled": "Send a first message automatically",
+        "enabledHint": "Off by default. When a new lead becomes a contact, a message goes out on its own, if consent, quiet hours, your plan and your wallet allow it.",
+        "consentNote": "Consent is never assumed. A WhatsApp utility template is a service message. A marketing template, an SMS or an email is marketing: it needs a recorded consent where your workspace requires one, waits out quiet hours, and is blocked for a contact who opted out. A lead that arrives with proof of consent records it.",
+        "channel": "Channel",
+        "channels": {
+          "whatsapp": "WhatsApp template",
+          "sms": "SMS",
+          "email": "Email"
+        },
+        "template": "Template",
+        "templateChoose": "Choose a template",
+        "templateNone": "No template is available for this channel",
+        "templateUnavailable": "The saved template is no longer available",
+        "templateHint": {
+          "whatsapp": "Approved templates that only need the contact (a name, for example). Templates that need a file or a link variable are not listed.",
+          "sms": "Approved SMS templates.",
+          "email": "Shared email templates. A personal template cannot be used."
+        },
+        "sender": "Send from",
+        "senderDefault": "The first connected one",
+        "senderUnavailable": "The saved sender is no longer connected",
+        "senderHint": {
+          "sms": "The SMS number the message leaves from.",
+          "email": "The shared mailbox the message leaves from."
+        },
+        "delay": "Wait before sending (minutes)",
+        "delayHint": "Whole minutes from 0 to {max}. 0 sends at once.",
+        "businessHours": "Only during business hours",
+        "businessHoursHint": "Outside the business hours set in your workspace, the message waits for them to open.",
+        "optionsFailed": "The templates and senders could not be loaded. Try again in a moment."
+      }
     },
     "mapping": {
       "contact": "Contact fields",
@@ -539,7 +578,8 @@
       "retried": "Retried. The lead is now",
       "payload": "Stored payload",
       "loadingPayload": "Opening the payload",
-      "purged": "The raw payload was purged after {days} days. The lead and its contact stay."
+      "purged": "The raw payload was purged after {days} days. The lead and its contact stay.",
+      "firstReply": "First message"
     },
     "attribution": {
       "title": "Lead attribution",
@@ -562,6 +602,40 @@
       "title": "New webhook URLs will be incomplete",
       "notConfigured": "The platform's public API address is not set. Ask whoever runs this platform to set it; until then a new source can only show the path of its URL.",
       "notPublic": "The platform's public API address points at a private or local address that ad platforms cannot reach. Ask whoever runs this platform to set a public address."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Scheduled",
+        "sending": "Sending",
+        "held": "Held",
+        "sent": "Sent",
+        "blocked": "Blocked",
+        "skipped": "Skipped",
+        "failed": "Failed"
+      },
+      "reasons": {
+        "quiet_hours": "Waiting for quiet hours to end",
+        "outside_business_hours": "Waiting for business hours",
+        "channel_unavailable": "The channel is not connected",
+        "wallet_empty": "The wallet is empty",
+        "send_halted": "Sending is halted",
+        "opted_out": "The contact opted out",
+        "no_consent": "No recorded consent",
+        "minor": "The contact is flagged as a minor",
+        "plan_limit": "The plan's limit is reached",
+        "disabled": "The setting was switched off",
+        "source_paused": "The lead source is paused",
+        "no_contact_point": "No number or address for this channel",
+        "no_sender": "No connected sender",
+        "template_unavailable": "The template cannot be sent",
+        "missing_value": "A template value is missing for this contact",
+        "provider_error": "The provider refused it",
+        "interrupted": "It was interrupted",
+        "expired": "It waited too long",
+        "internal_error": "An internal error"
+      },
+      "nextTry": "Next try",
+      "sentAt": "Sent"
     }
   }
 }

@@ -63,12 +63,24 @@ Written by this domain in other domains' tables: `contacts` (create through `Con
 | WIRE-LEAD-022 | `hookUrl` / `hookUrlProblem` on create and rotate, `hookAddress` on the list; built from the raw `APP_URL`, refused when missing or private | `lead-hook-address.ts` (`resolveHookBase`), `LeadSourcesService`; web: `RevealPanel`, `HookAddressNotice` (the client no longer guesses one) |
 | WIRE-LEAD-023 | The plan-limit problem of a create carries `limit`, `used`, `limitValue`; the wizard says "You have used 5 of 5 lead sources"               | `PlanEntitlementService.assertWithinLimit` (unchanged), `lead-sources/lib/errors.ts` (`planLimitUsed`)                                       |
 
+## Speed-to-lead (BL-014, L-16)
+
+| Id            | What                                                                                                                          | Where                                                                                                                                                           |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-LEAD-024 | The setting `defaults.speedToLead` (off by default) and its validation against the workspace                                  | `speed-to-lead.ts` (contracts), `LeadSourcesService.checkSpeedToLead`; web: `SpeedToLeadSection` in the source's rules step and detail page                     |
+| WIRE-LEAD-025 | Pickers for the setting: `GET /lead-sources/speed-to-lead/options` (manage permission alone)                                  | `LeadSourcesService.speedToLeadOptions`, `LeadFirstMessageLookups`; web `api-ops.ts`                                                                            |
+| WIRE-LEAD-026 | Consumer on `lead.created`: one `lead_first_replies` row per lead (migration `20261220090000`), audit, `lead.first_reply.*`   | `LeadFirstReplyConsumer`, `LeadFirstReplyService.schedule` in `LeadsWorkerModule`                                                                               |
+| WIRE-LEAD-027 | The sweep that sends what is due and frees abandoned claims                                                                   | `LeadFirstReplySweepService` (every 10 s), `LeadFirstReplyService.processDue`                                                                                   |
+| WIRE-LEAD-028 | The checks before a send: source active, business hours, quiet hours (`SendWindowService`), ConsentGate, then the dispatcher  | `LeadFirstReplyService.decide`; WhatsApp through `ConversationsFacade.enqueueOutbound`, SMS and email through `EngineSenderRegistry` (`LeadFirstMessageSender`) |
+| WIRE-LEAD-029 | Where the result shows: `firstReply` on every lead event, the event drawer, the contact's activity timeline (`speed_to_lead`) | `leads.mapper.ts`, `FirstReply` component, `ContactActivitiesRepository.insert`                                                                                 |
+| WIRE-LEAD-030 | Email template rendering with no agent behind it                                                                              | `EmailTemplatesService.renderShared` (email-templates barrel; shared templates only)                                                                            |
+
 ## Not built, recorded
 
-| Id            | What                                                                                                 | Status                                               |
-| ------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)                                          | blocked on the Facebook module and Meta app review   |
-| WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15)                                   | blocked on partner approval                          |
-| WIRE-LEAD-019 | Speed-to-lead first message (L-16), backfill and "sync now" (L-18), Zapier and Make templates (L-19) | later phases                                         |
-| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL                                   | integrations domain (the ported `incoming_webhooks`) |
-| WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                                                      | the UI agent                                         |
+| Id            | What                                                               | Status                                               |
+| ------------- | ------------------------------------------------------------------ | ---------------------------------------------------- |
+| WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)        | blocked on the Facebook module and Meta app review   |
+| WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15) | blocked on partner approval                          |
+| WIRE-LEAD-019 | Backfill and "sync now" (L-18), Zapier and Make templates (L-19)   | later phases (speed-to-lead is WIRE-LEAD-024 to 030) |
+| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL | integrations domain (the ported `incoming_webhooks`) |
+| WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                    | the UI agent                                         |

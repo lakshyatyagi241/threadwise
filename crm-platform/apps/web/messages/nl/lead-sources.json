@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "Deze fase hoort bij een andere pipeline.",
         "pipeline_required": "Kies de pipeline waar deze fase bij hoort.",
         "unknown_or_lost_stage": "Deze levenscyclusfase bestaat niet of is een verloren fase.",
-        "unknown_or_inactive_user": "Een van de geselecteerde personen is geen actief lid van deze workspace."
+        "unknown_or_inactive_user": "Een van de geselecteerde personen is geen actief lid van deze workspace.",
+        "template_required": "Kies het sjabloon dat verzonden moet worden.",
+        "template_not_found": "Dit sjabloon bestaat niet voor dit kanaal in deze werkruimte.",
+        "template_not_sendable": "Dit sjabloon kan niet worden verzonden: het is niet goedgekeurd, gepauzeerd of heeft een bestand of linkvariabele nodig.",
+        "sender_not_found": "Deze afzender is niet verbonden."
       },
       "planLimitUsed": "Je hebt {used} van de {limit} leadbronnen gebruikt. Upgrade je abonnement of verwijder een bron die je niet meer gebruikt."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "Deze eigenschap is dubbel gekoppeld.",
       "pathRequired": "Geef aan waar in de payload de waarde staat.",
       "customFieldsTooMany": "Koppel maximaal {max} aangepaste eigenschappen.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Kies het sjabloon dat verzonden moet worden.",
+      "speedDelayRange": "Voer hele minuten in van 0 tot {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "Het contact",
         "owner": "Eigenaar",
         "deal": "Deal",
-        "notify": "Meldingen"
+        "notify": "Meldingen",
+        "speed": "Eerste bericht aan een nieuwe lead"
       },
       "membersFailed": "We konden je team niet laden, daardoor kun je nu niemand kiezen. Laad de pagina opnieuw om het opnieuw te proberen.",
       "countryCode": "Standaard landcode",
@@ -290,7 +297,39 @@
       "notifyOwner": "Het contact van de eigenaar laten weten",
       "notifyOwnerHint": "Een melding in de app wanneer een nieuwe lead binnenkomt. Testleads sturen nooit een melding.",
       "notifyUsers": "Ook laten weten aan",
-      "notifyUsersHint": "Bijvoorbeeld je salesmanager. Tot 20 personen."
+      "notifyUsersHint": "Bijvoorbeeld je salesmanager. Tot 20 personen.",
+      "speed": {
+        "enabled": "Automatisch een eerste bericht sturen",
+        "enabledHint": "Standaard uit. Wanneer een nieuwe lead een contact wordt, gaat er vanzelf een bericht uit, als toestemming, stille uren, je abonnement en je tegoed dat toelaten.",
+        "consentNote": "Toestemming wordt nooit aangenomen. Een WhatsApp-utilitysjabloon is een servicebericht. Een marketingsjabloon, een SMS of een e-mail is marketing: daarvoor is een vastgelegde toestemming nodig als je werkruimte dat vereist, het wacht tot de stille uren voorbij zijn en het wordt geblokkeerd voor een contact dat zich heeft afgemeld. Een lead die met bewijs van toestemming binnenkomt, legt die vast.",
+        "channel": "Kanaal",
+        "channels": {
+          "whatsapp": "WhatsApp-sjabloon",
+          "sms": "SMS",
+          "email": "E-mail"
+        },
+        "template": "Sjabloon",
+        "templateChoose": "Kies een sjabloon",
+        "templateNone": "Er is geen sjabloon beschikbaar voor dit kanaal",
+        "templateUnavailable": "Het opgeslagen sjabloon is niet meer beschikbaar",
+        "templateHint": {
+          "whatsapp": "Goedgekeurde sjablonen die alleen het contact nodig hebben (bijvoorbeeld een naam). Sjablonen met een bestand of een linkvariabele worden niet getoond.",
+          "sms": "Goedgekeurde SMS-sjablonen.",
+          "email": "Gedeelde e-mailsjablonen. Een persoonlijk sjabloon kan niet worden gebruikt."
+        },
+        "sender": "Verzenden vanaf",
+        "senderDefault": "De eerste verbonden afzender",
+        "senderUnavailable": "De opgeslagen afzender is niet meer verbonden",
+        "senderHint": {
+          "sms": "Het SMS-nummer waarmee het bericht wordt verstuurd.",
+          "email": "De gedeelde mailbox waarmee het bericht wordt verstuurd."
+        },
+        "delay": "Wachttijd vóór verzending (minuten)",
+        "delayHint": "Hele minuten van 0 tot {max}. Bij 0 wordt direct verzonden.",
+        "businessHours": "Alleen tijdens kantooruren",
+        "businessHoursHint": "Buiten de kantooruren die in je werkruimte zijn ingesteld, wacht het bericht tot ze beginnen.",
+        "optionsFailed": "De sjablonen en afzenders konden niet worden geladen. Probeer het zo meteen opnieuw."
+      }
     },
     "mapping": {
       "contact": "Contactvelden",
@@ -539,7 +578,8 @@
       "retried": "Opnieuw geprobeerd. De lead is nu",
       "payload": "Opgeslagen payload",
       "loadingPayload": "De payload wordt geopend",
-      "purged": "De ruwe payload is na {days} dagen opgeschoond. De lead en het contact blijven bestaan."
+      "purged": "De ruwe payload is na {days} dagen opgeschoond. De lead en het contact blijven bestaan.",
+      "firstReply": "Eerste bericht"
     },
     "attribution": {
       "title": "Leadtoeschrijving",
@@ -562,6 +602,40 @@
       "title": "Nieuwe webhook-URL's zijn onvolledig",
       "notConfigured": "Het openbare API-adres van het platform is niet ingesteld. Vraag degene die dit platform beheert om het in te stellen; tot die tijd kan een nieuwe bron alleen het pad van zijn URL tonen.",
       "notPublic": "Het openbare API-adres van het platform verwijst naar een privé- of lokaal adres dat advertentieplatforms niet kunnen bereiken. Vraag degene die dit platform beheert om een openbaar adres in te stellen."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Gepland",
+        "sending": "Wordt verzonden",
+        "held": "In de wacht",
+        "sent": "Verzonden",
+        "blocked": "Geblokkeerd",
+        "skipped": "Overgeslagen",
+        "failed": "Mislukt"
+      },
+      "reasons": {
+        "quiet_hours": "Wacht tot de stille uren voorbij zijn",
+        "outside_business_hours": "Wacht op kantooruren",
+        "channel_unavailable": "Het kanaal is niet verbonden",
+        "wallet_empty": "Het tegoed is op",
+        "send_halted": "Verzenden is stopgezet",
+        "opted_out": "Het contact heeft zich afgemeld",
+        "no_consent": "Geen vastgelegde toestemming",
+        "minor": "Het contact is gemarkeerd als minderjarig",
+        "plan_limit": "De limiet van het abonnement is bereikt",
+        "disabled": "De instelling is uitgeschakeld",
+        "source_paused": "De leadbron is gepauzeerd",
+        "no_contact_point": "Geen nummer of adres voor dit kanaal",
+        "no_sender": "Geen verbonden afzender",
+        "template_unavailable": "Het sjabloon kan niet worden verzonden",
+        "missing_value": "Er ontbreekt een sjabloonwaarde voor dit contact",
+        "provider_error": "De provider heeft het geweigerd",
+        "interrupted": "Het is onderbroken",
+        "expired": "Het heeft te lang gewacht",
+        "internal_error": "Een interne fout"
+      },
+      "nextTry": "Volgende poging",
+      "sentAt": "Verzonden"
     }
   }
 }

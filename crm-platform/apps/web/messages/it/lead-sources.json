@@ -45,7 +45,11 @@
         "stage_not_in_pipeline": "Questa fase appartiene a un'altra pipeline.",
         "pipeline_required": "Scegli la pipeline a cui appartiene questa fase.",
         "unknown_or_lost_stage": "Questa fase del ciclo di vita non esiste o è una fase persa.",
-        "unknown_or_inactive_user": "Una delle persone selezionate non è un membro attivo di questo spazio di lavoro."
+        "unknown_or_inactive_user": "Una delle persone selezionate non è un membro attivo di questo spazio di lavoro.",
+        "template_required": "Scegli il template da inviare.",
+        "template_not_found": "Questo template non esiste per questo canale in questo workspace.",
+        "template_not_sendable": "Questo template non può essere inviato: non è approvato, è in pausa oppure richiede un file o una variabile link.",
+        "sender_not_found": "Questo mittente non è connesso."
       },
       "planLimitUsed": "Hai usato {used} fonti di lead su {limit}. Passa a un piano superiore o elimina una fonte che non usi più."
     },
@@ -69,7 +73,9 @@
       "propertyDuplicate": "Questa proprietà è mappata due volte.",
       "pathRequired": "Indica dove si trova il valore nel payload.",
       "customFieldsTooMany": "Mappa al massimo {max} proprietà personalizzate.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Scegli il template da inviare.",
+      "speedDelayRange": "Inserisci minuti interi da 0 a {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -252,7 +258,8 @@
         "contact": "Il contatto",
         "owner": "Responsabile",
         "deal": "Trattativa",
-        "notify": "Notifiche"
+        "notify": "Notifiche",
+        "speed": "Primo messaggio a un nuovo lead"
       },
       "membersFailed": "Non è stato possibile caricare il team, quindi al momento non si possono scegliere persone. Ricarica la pagina per riprovare.",
       "countryCode": "Prefisso internazionale predefinito",
@@ -290,7 +297,39 @@
       "notifyOwner": "Avvisa il responsabile del contatto",
       "notifyOwnerHint": "Una notifica nell’app quando arriva un nuovo lead. I lead di prova non inviano notifiche.",
       "notifyUsers": "Avvisa anche",
-      "notifyUsersHint": "Per esempio il tuo responsabile vendite. Fino a 20 persone."
+      "notifyUsersHint": "Per esempio il tuo responsabile vendite. Fino a 20 persone.",
+      "speed": {
+        "enabled": "Invia automaticamente un primo messaggio",
+        "enabledHint": "Disattivato per impostazione predefinita. Quando un nuovo lead diventa un contatto, un messaggio parte da solo, se consenso, ore di silenzio, piano e wallet lo consentono.",
+        "consentNote": "Il consenso non è mai dato per scontato. Un template WhatsApp di tipo utility è un messaggio di servizio. Un template marketing, un SMS o un'email sono marketing: richiedono un consenso registrato dove il tuo workspace lo prevede, attendono la fine delle ore di silenzio e vengono bloccati per un contatto che ha revocato il consenso. Un lead che arriva con la prova del consenso lo registra.",
+        "channel": "Canale",
+        "channels": {
+          "whatsapp": "Template WhatsApp",
+          "sms": "SMS",
+          "email": "Email"
+        },
+        "template": "Template",
+        "templateChoose": "Scegli un template",
+        "templateNone": "Nessun template è disponibile per questo canale",
+        "templateUnavailable": "Il template salvato non è più disponibile",
+        "templateHint": {
+          "whatsapp": "Template approvati che richiedono solo il contatto (ad esempio un nome). I template che richiedono un file o una variabile link non sono elencati.",
+          "sms": "Template SMS approvati.",
+          "email": "Template email condivisi. Un template personale non può essere usato."
+        },
+        "sender": "Invia da",
+        "senderDefault": "Il primo connesso",
+        "senderUnavailable": "Il mittente salvato non è più connesso",
+        "senderHint": {
+          "sms": "Il numero SMS da cui parte il messaggio.",
+          "email": "La casella condivisa da cui parte il messaggio."
+        },
+        "delay": "Attesa prima dell'invio (minuti)",
+        "delayHint": "Minuti interi da 0 a {max}. Con 0 l'invio è immediato.",
+        "businessHours": "Solo durante l'orario di lavoro",
+        "businessHoursHint": "Fuori dall'orario di lavoro impostato nel tuo workspace, il messaggio attende l'apertura.",
+        "optionsFailed": "Non è stato possibile caricare i template e i mittenti. Riprova tra un momento."
+      }
     },
     "mapping": {
       "contact": "Campi del contatto",
@@ -539,7 +578,8 @@
       "retried": "Riprovato. Il lead ora è",
       "payload": "Payload memorizzato",
       "loadingPayload": "Apertura del payload",
-      "purged": "Il payload grezzo è stato eliminato dopo {days} giorni. Il lead e il suo contatto restano."
+      "purged": "Il payload grezzo è stato eliminato dopo {days} giorni. Il lead e il suo contatto restano.",
+      "firstReply": "Primo messaggio"
     },
     "attribution": {
       "title": "Attribuzione del lead",
@@ -562,6 +602,40 @@
       "title": "I nuovi URL del webhook saranno incompleti",
       "notConfigured": "L'indirizzo pubblico dell'API della piattaforma non è impostato. Chiedi a chi gestisce la piattaforma di impostarlo; fino ad allora una nuova fonte potrà mostrare solo il percorso del suo URL.",
       "notPublic": "L'indirizzo pubblico dell'API della piattaforma punta a un indirizzo privato o locale che le piattaforme pubblicitarie non possono raggiungere. Chiedi a chi gestisce la piattaforma di impostare un indirizzo pubblico."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Pianificato",
+        "sending": "Invio in corso",
+        "held": "In sospeso",
+        "sent": "Inviato",
+        "blocked": "Bloccato",
+        "skipped": "Saltato",
+        "failed": "Non riuscito"
+      },
+      "reasons": {
+        "quiet_hours": "In attesa della fine delle ore di silenzio",
+        "outside_business_hours": "In attesa dell'orario di lavoro",
+        "channel_unavailable": "Il canale non è connesso",
+        "wallet_empty": "Il wallet è vuoto",
+        "send_halted": "L'invio è sospeso",
+        "opted_out": "Il contatto ha revocato il consenso",
+        "no_consent": "Nessun consenso registrato",
+        "minor": "Il contatto è segnalato come minorenne",
+        "plan_limit": "Il limite del piano è stato raggiunto",
+        "disabled": "L'impostazione è stata disattivata",
+        "source_paused": "La fonte dei lead è in pausa",
+        "no_contact_point": "Nessun numero o indirizzo per questo canale",
+        "no_sender": "Nessun mittente connesso",
+        "template_unavailable": "Il template non può essere inviato",
+        "missing_value": "Manca un valore del template per questo contatto",
+        "provider_error": "Il provider lo ha rifiutato",
+        "interrupted": "È stato interrotto",
+        "expired": "Ha atteso troppo a lungo",
+        "internal_error": "Un errore interno"
+      },
+      "nextTry": "Prossimo tentativo",
+      "sentAt": "Inviato il"
     }
   }
 }

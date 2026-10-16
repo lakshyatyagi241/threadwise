@@ -67,7 +67,8 @@
         "contact": "Kontakt",
         "owner": "Właściciel",
         "deal": "Szansa sprzedaży",
-        "notify": "Powiadomienia"
+        "notify": "Powiadomienia",
+        "speed": "Pierwsza wiadomość do nowego leada"
       },
       "membersFailed": "Nie udało się wczytać zespołu, więc nie można teraz wybrać osób. Odśwież stronę, aby spróbować ponownie.",
       "countryCode": "Domyślny kod kraju",
@@ -105,7 +106,39 @@
       "notifyOwner": "Powiadom właściciela kontaktu",
       "notifyOwnerHint": "Powiadomienie w aplikacji, gdy wpłynie nowy lead. Leady testowe nigdy nie powiadamiają.",
       "notifyUsers": "Powiadom także",
-      "notifyUsersHint": "Na przykład Twój kierownik sprzedaży. Do 20 osób."
+      "notifyUsersHint": "Na przykład Twój kierownik sprzedaży. Do 20 osób.",
+      "speed": {
+        "enabled": "Wysyłaj pierwszą wiadomość automatycznie",
+        "enabledHint": "Domyślnie wyłączone. Gdy nowy lead zostanie kontaktem, wiadomość zostanie wysłana automatycznie, o ile pozwalają na to zgoda, godziny ciszy, Twój plan i portfel.",
+        "consentNote": "Zgoda nigdy nie jest zakładana. Szablon użytkowy WhatsApp to wiadomość serwisowa. Szablon marketingowy, SMS lub e-mail to wiadomość marketingowa: wymaga zarejestrowanej zgody, jeśli wymaga jej Twój obszar roboczy, czeka do końca godzin ciszy i jest blokowana dla kontaktu, który zrezygnował z komunikacji. Lead, który przychodzi z dowodem zgody, zapisuje ją.",
+        "channel": "Kanał",
+        "channels": {
+          "whatsapp": "Szablon WhatsApp",
+          "sms": "SMS",
+          "email": "E-mail"
+        },
+        "template": "Szablon",
+        "templateChoose": "Wybierz szablon",
+        "templateNone": "Brak szablonów dla tego kanału",
+        "templateUnavailable": "Zapisany szablon nie jest już dostępny",
+        "templateHint": {
+          "whatsapp": "Zatwierdzone szablony, które wymagają tylko danych kontaktu (np. imienia). Szablony wymagające pliku lub zmiennej z linkiem nie są wyświetlane.",
+          "sms": "Zatwierdzone szablony SMS.",
+          "email": "Współdzielone szablony e-mail. Szablonu osobistego nie można użyć."
+        },
+        "sender": "Wyślij z",
+        "senderDefault": "Pierwszy połączony",
+        "senderUnavailable": "Zapisany nadawca nie jest już połączony",
+        "senderHint": {
+          "sms": "Numer SMS, z którego wychodzi wiadomość.",
+          "email": "Współdzielona skrzynka, z której wychodzi wiadomość."
+        },
+        "delay": "Opóźnienie przed wysłaniem (w minutach)",
+        "delayHint": "Pełne minuty od 0 do {max}. Wartość 0 oznacza wysłanie od razu.",
+        "businessHours": "Tylko w godzinach pracy",
+        "businessHoursHint": "Poza godzinami pracy ustawionymi w Twoim obszarze roboczym wiadomość czeka na ich rozpoczęcie.",
+        "optionsFailed": "Nie udało się wczytać szablonów i nadawców. Spróbuj ponownie za chwilę."
+      }
     },
     "mapping": {
       "contact": "Pola kontaktu",
@@ -354,7 +387,8 @@
       "retried": "Ponowiono. Lead ma teraz status",
       "payload": "Zapisany ładunek",
       "loadingPayload": "Otwieranie ładunku",
-      "purged": "Surowy ładunek został usunięty po {days} dniach. Lead i jego kontakt pozostają."
+      "purged": "Surowy ładunek został usunięty po {days} dniach. Lead i jego kontakt pozostają.",
+      "firstReply": "Pierwsza wiadomość"
     },
     "attribution": {
       "title": "Atrybucja leada",
@@ -418,7 +452,11 @@
         "stage_not_in_pipeline": "Ten etap należy do innego lejka.",
         "pipeline_required": "Wybierz lejek, do którego należy ten etap.",
         "unknown_or_lost_stage": "Ten etap cyklu życia nie istnieje lub jest etapem utraconym.",
-        "unknown_or_inactive_user": "Jedna z wybranych osób nie jest aktywnym członkiem tej przestrzeni roboczej."
+        "unknown_or_inactive_user": "Jedna z wybranych osób nie jest aktywnym członkiem tej przestrzeni roboczej.",
+        "template_required": "Wybierz szablon do wysłania.",
+        "template_not_found": "Ten szablon nie istnieje dla tego kanału w tym obszarze roboczym.",
+        "template_not_sendable": "Tego szablonu nie można wysłać: nie jest zatwierdzony, jest wstrzymany albo wymaga pliku lub zmiennej z linkiem.",
+        "sender_not_found": "Ten nadawca nie jest połączony."
       },
       "planLimitUsed": "Wykorzystano {used} z {limit} źródeł leadów. Zmień plan na wyższy lub usuń źródło, którego już nie używasz."
     },
@@ -442,7 +480,9 @@
       "propertyDuplicate": "Ta właściwość jest zmapowana dwukrotnie.",
       "pathRequired": "Wskaż, gdzie w danych przychodzi wartość.",
       "customFieldsTooMany": "Zmapuj co najwyżej {max} niestandardowych właściwości.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Wybierz szablon do wysłania.",
+      "speedDelayRange": "Wpisz pełne minuty od 0 do {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -562,6 +602,40 @@
       "title": "Nowe adresy URL webhooków będą niepełne",
       "notConfigured": "Publiczny adres API platformy nie jest ustawiony. Poproś osobę zarządzającą platformą o jego ustawienie; do tego czasu nowe źródło może pokazywać tylko ścieżkę swojego adresu URL.",
       "notPublic": "Publiczny adres API platformy wskazuje na adres prywatny lub lokalny, do którego platformy reklamowe nie mają dostępu. Poproś osobę zarządzającą platformą o ustawienie adresu publicznego."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Zaplanowana",
+        "sending": "Wysyłanie",
+        "held": "Wstrzymana",
+        "sent": "Wysłana",
+        "blocked": "Zablokowana",
+        "skipped": "Pominięta",
+        "failed": "Nie powiodło się"
+      },
+      "reasons": {
+        "quiet_hours": "Czeka na koniec godzin ciszy",
+        "outside_business_hours": "Czeka na godziny pracy",
+        "channel_unavailable": "Kanał nie jest połączony",
+        "wallet_empty": "Portfel jest pusty",
+        "send_halted": "Wysyłanie jest wstrzymane",
+        "opted_out": "Kontakt zrezygnował z komunikacji",
+        "no_consent": "Brak zarejestrowanej zgody",
+        "minor": "Kontakt jest oznaczony jako niepełnoletni",
+        "plan_limit": "Osiągnięto limit planu",
+        "disabled": "Ustawienie zostało wyłączone",
+        "source_paused": "Źródło leadów jest wstrzymane",
+        "no_contact_point": "Brak numeru lub adresu dla tego kanału",
+        "no_sender": "Brak połączonego nadawcy",
+        "template_unavailable": "Nie można wysłać szablonu",
+        "missing_value": "Brakuje wartości szablonu dla tego kontaktu",
+        "provider_error": "Dostawca odrzucił wiadomość",
+        "interrupted": "Wysyłka została przerwana",
+        "expired": "Czekała zbyt długo",
+        "internal_error": "Błąd wewnętrzny"
+      },
+      "nextTry": "Następna próba",
+      "sentAt": "Wysłano"
     }
   }
 }

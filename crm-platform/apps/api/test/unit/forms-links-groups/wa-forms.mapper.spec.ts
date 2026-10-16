@@ -33,7 +33,12 @@ describe('toWaFormResponse legacy normalization', () => {
             title: 'When',
             fields: [
               { type: 'date', name: 'day', label: 'Day', required: true },
-              { type: 'radio', name: 'slot', label: 'Slot', options: [{ id: 'am', title: 'Morning' }] },
+              {
+                type: 'radio',
+                name: 'slot',
+                label: 'Slot',
+                options: [{ id: 'am', title: 'Morning' }],
+              },
             ],
           },
         ],
@@ -51,7 +56,11 @@ describe('toWaFormResponse legacy normalization', () => {
   });
 
   it('maps unknown audience to other and empty definition to one screen', () => {
-    const out = toWaFormResponse({ ...base, audience_type: 'weird', definition_json: null } as unknown as WaFormRow);
+    const out = toWaFormResponse({
+      ...base,
+      audience_type: 'weird',
+      definition_json: null,
+    } as unknown as WaFormRow);
     expect(out.audienceType).toBe('other');
     expect(out.definition.screens).toHaveLength(1);
   });

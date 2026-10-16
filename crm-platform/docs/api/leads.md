@@ -97,6 +97,7 @@ source shows `hasSecret`. No other response, audit row or outbox event carries a
 | `DELETE /lead-sources/:id`                     | manage     | 204. The URL stops, its events go with it, contacts it made stay (their attribution stays, its source link is cleared)                                |
 | `POST /lead-sources/:id/rotate-token`          | manage     | a new token, returned once; the old URL answers 404 from the next request (422 for a connector, which has no token)                                   |
 | `POST /lead-sources/:id/mapping-preview`       | manage     | what a (saved or draft) mapping makes of a payload; writes nothing                                                                                    |
+| `GET /lead-sources/speed-to-lead/options`      | manage     | for a `channel`: the templates it can send and the connected senders (names only), for the first-message pickers                                      |
 | `POST /lead-sources/:id/test`                  | manage     | a sample (or the posted payload) through the real pipeline, flagged as a test; 409 `LEAD_SOURCE_PAUSED`                                               |
 | `GET /lead-sources/:id/events`                 | read       | recent events, newest first, cursor paged; filters `status`, `isTest`, `limit` (1 to 100), `cursor`                                                   |
 | `GET /lead-sources/:id/events/:eventId`        | manage     | one event with its stored payload (audited)                                                                                                           |
@@ -199,6 +200,55 @@ flagged `isTest`, creates real rows the admin can delete, and never notifies nor
 **Retry** re-runs the stored payload under the source's CURRENT mapping, defaults, plan and quota: fix the mapping or the default country code,
 upgrade the plan, then retry. 409 `LEAD_EVENT_NOT_RETRYABLE` for any other status, 409 `LEAD_PAYLOAD_PURGED`, 409 `LEAD_SOURCE_PAUSED`.
 
+## Speed-to-lead: the first message to a new lead (BL-014, L-16)
+
+A source can send a new lead a first message by itself. It is `defaults.speedToLead` (so it has no route of its own; it is saved with the
+source, off by default):
+
+```json
+{
+  "enabled": true,
+  "channel": "whatsapp",
+  "templateId": "…",
+  "senderId": null,
+  "delayMinutes": 0,
+  "businessHoursOnly": false
+}
+```
+
+- **Channel and template.** `whatsapp`: an approved WhatsApp template the contact alone can fill (a body with variables the template's own
+  variable map takes from the contact; no media header, no variable in the header or in a button link, not an authentication template). The
+  number that sends it is the template's. `sms`: an approved SMS template, sent from `senderId` or the primary connected number. `email`: a
+  shared email template (a personal one is its author's), sent as the text version from `senderId` or the oldest connected shared mailbox
+  (never a personal mailbox). Saving with `enabled` checks all of this against the workspace (422 `LEAD_DEFAULTS_INVALID`, details
+  `template_required`, `template_not_found`, `template_not_sendable`, `sender_not_found` under `defaults.speedToLead.*`).
+- **When.** On `lead.created` only: a lead that becomes a NEW contact. A returning contact (`lead.updated`) and a test lead get none. The
+  message is due after `delayMinutes` (0 to 60). With `businessHoursOnly` and the workspace's business hours set, it is held until they open
+  (no hours set means always open). A held message that has not gone within 24 hours ends `failed / expired`.
+- **Never twice.** One row per lead event in `lead_first_replies` (`UNIQUE (org_id, lead_event_id)`): a redelivered outbox event, a second
+  worker and a retry of the lead meet the same row. The WhatsApp message carries the row's uuid as its `clientMessageId`, so even a
+  repeated attempt returns the first message. An SMS or an email has no such key at the provider, so one whose claim was interrupted is
+  `failed / interrupted` and is never sent again by itself.
+- **What decides whether it goes** (in this order; the worker, not the screen): the setting is still on and the source active; business
+  hours; the template, sender and address for the channel (`skipped` with a reason when one is missing); quiet hours; the ConsentGate;
+  then the dispatcher of the channel (WhatsApp: `ConversationsFacade.enqueueOutbound`, which checks the connection, the plan's monthly cap,
+  the wallet, the emergency halt and the consent again and holds a marketing template for the quiet hours; SMS and email: the broadcast
+  engines, which check the sender, the plan's cap and, for email, the bounce list and the unsubscribe link).
+- **Consent is never inferred.** A WhatsApp **utility** template is a service message (allowed unless the contact withdrew the service
+  purpose on that channel); a **marketing** template is marketing. SMS and email have no template categories in this product and every
+  one the business starts is marketing: it needs a recorded grant on the channel where the workspace requires one, waits out quiet hours,
+  and is blocked for a contact who opted out. A lead that arrives with proof of consent (BL-168) has a grant in the ledger and the gate sees
+  it; one that did not is asked about as a stranger. There is no override.
+- **Result.** `scheduled`, `sending`, `held` (quiet hours, business hours, channel down, wallet empty, sending halted: goes by itself),
+  `sent` (handed to the dispatcher: WhatsApp is queued on the contact's conversation, where delivery shows; SMS and email are accepted by
+  the provider), `blocked` (opted out, no consent, minor, plan limit: final), `skipped` (nothing to send: no number or address, no sender,
+  template gone, a template value the contact lacks, setting off, source paused), `failed`. The `reason` is a stable code, never provider
+  text. It is on every lead event as `firstReply`, in the lead inbox, and on the contact's timeline as an activity of type `speed_to_lead`
+  (title and reason only: never the message or an address). Audit rows: module `lead_first_replies`. Outbox: `lead.first_reply.scheduled`
+  and `lead.first_reply.<status>`.
+- **Where it runs.** `LeadFirstReplyConsumer` (the outbox consumer, schedules) and `LeadFirstReplySweepService` (every 10 seconds, sends what
+  is due and frees abandoned claims) in `LeadsWorkerModule`, the worker process only.
+
 ## Attribution (L-03)
 
 `GET /contacts/:id/attribution`:
@@ -298,8 +348,7 @@ a mapping can be fixed and the lead retried. A connector source (`kind: connecto
   domain's own hook inspector.
 - **Open questions** (spec section 9) answered: 9 retention 30 days, per source up to a year; 11 deals off until the admin enables them; 12 a
   per-source default country code, a number that cannot be read is `invalid_phone` when there is no email and ignored when there is one.
-- **Not built here:** Meta lead ads, TikTok and LinkedIn doors (L-06, L-13, L-14: their kinds exist, no door does); an automatic first message
-  (L-16); backfill and manual sync (L-18); Reference's per-hook flow enrolment, template send and forward URL (see the parity file); the web screens;
+- **Not built here:** Meta lead ads, TikTok and LinkedIn doors (L-06, L-13, L-14: their kinds exist, no door does); backfill and manual sync (L-18); Reference's per-hook flow enrolment, template send and forward URL (see the parity file); the web screens;
   the operator console toggles for provider credentials (nothing to configure for a webhook).
 - `lead_sources.secret_enc` is sealed with the credentials key like other secrets, but is not yet listed in the re-encryption command's targets
   (`auth/maintenance/reencrypt-secrets.ts`), the same as the other domains' sealed columns.

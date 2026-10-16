@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { LeadEventStatus } from '@crm/contracts';
+import type { LeadEventStatus, LeadFirstReplyStatus, SpeedToLeadChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../common/pagination/cursor';
 
@@ -8,6 +8,16 @@ type Raw = Record<string, unknown>;
 const s = (v: unknown): string | null => (v === null || v === undefined ? null : (v as string));
 const d = (v: unknown): Date | null => (v ? new Date(v as string) : null);
 const n = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
+
+/** The automatic first message of a lead, as the event's joined columns carry it (null when the source sent none). */
+export interface FirstReplyView {
+  channel: SpeedToLeadChannel;
+  status: LeadFirstReplyStatus;
+  reason: string | null;
+  dueAt: Date;
+  sentAt: Date | null;
+  attempts: number;
+}
 
 export interface LeadEventRow {
   id: number;
@@ -35,6 +45,7 @@ export interface LeadEventRow {
   createdAt: Date;
   updatedAt: Date;
   rowVersion: number;
+  firstReply: FirstReplyView | null;
 }
 
 const toRow = (r: Raw): LeadEventRow => ({
@@ -61,15 +72,29 @@ const toRow = (r: Raw): LeadEventRow => ({
   createdAt: new Date(r.created_at as string),
   updatedAt: new Date(r.updated_at as string),
   rowVersion: Number(r.row_version),
+  firstReply:
+    r.fr_status === null || r.fr_status === undefined
+      ? null
+      : {
+          channel: r.fr_channel as SpeedToLeadChannel,
+          status: r.fr_status as LeadFirstReplyStatus,
+          reason: s(r.fr_reason),
+          dueAt: new Date(r.fr_due_at as string),
+          sentAt: d(r.fr_sent_at),
+          attempts: Number(r.fr_attempts),
+        },
 });
 
 const SELECT = sql`
   SELECT e.*, to_char(e.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso,
-         s.uuid AS source_uuid, c.uuid AS contact_uuid, dl.uuid AS deal_uuid
+         s.uuid AS source_uuid, c.uuid AS contact_uuid, dl.uuid AS deal_uuid,
+         f.channel AS fr_channel, f.status AS fr_status, f.reason AS fr_reason, f.due_at AS fr_due_at,
+         f.sent_at AS fr_sent_at, f.attempts AS fr_attempts
   FROM lead_events e
   JOIN lead_sources s ON s.org_id = e.org_id AND s.id = e.source_id
   LEFT JOIN contacts c ON c.org_id = e.org_id AND c.id = e.contact_id
-  LEFT JOIN deals dl ON dl.org_id = e.org_id AND dl.id = e.deal_id`;
+  LEFT JOIN deals dl ON dl.org_id = e.org_id AND dl.id = e.deal_id
+  LEFT JOIN lead_first_replies f ON f.org_id = e.org_id AND f.lead_event_id = e.id`;
 
 export interface ClaimInput {
   sourceId: number;

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { speedToLeadSchema } from './speed-to-lead';
 
 /**
  * Lead sources: the doors into the lead pipeline (docs/specs/email-channel-and-social-leads.md, L-01..L-12). A source says where leads
@@ -156,6 +157,8 @@ export const leadSourceDefaultsSchema = z.object({
   owner: leadOwnerRuleSchema.default({ mode: 'unassigned', userIds: [] }),
   deal: leadDealRuleSchema.default({ enabled: false, title: '{{name}} ({{source}})' }),
   notify: leadNotifyRuleSchema.default({ owner: true, userIds: [] }),
+  /** An automatic first message to a new lead (BL-014, L-16). Off by default. */
+  speedToLead: speedToLeadSchema.default({}),
 });
 export type LeadSourceDefaults = z.infer<typeof leadSourceDefaultsSchema>;
 

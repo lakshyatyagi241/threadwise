@@ -114,7 +114,11 @@ describe('manual CRM create and update', () => {
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const ev = await events(t, res.body.id);
     expect(ev.map((e) => e.channel).sort()).toEqual(['email', 'whatsapp']);
-    expect(await statusOf(t, res.body.id)).toEqual({ wa: 'subscribed', em: 'subscribed', sms: null });
+    expect(await statusOf(t, res.body.id)).toEqual({
+      wa: 'subscribed',
+      em: 'subscribed',
+      sms: null,
+    });
   });
 
   it('a contact with no status and no consent block has NO ledger event (nothing is invented)', async () => {
@@ -171,7 +175,11 @@ describe('manual CRM create and update', () => {
     const again = await api
       .as(t.admin)
       .patch(`/v2/contacts/${made.body.id}`)
-      .send({ whatsappSubscriptionStatus: 'subscribed', name: 'Upd 2', rowVersion: ok.body.rowVersion });
+      .send({
+        whatsappSubscriptionStatus: 'subscribed',
+        name: 'Upd 2',
+        rowVersion: ok.body.rowVersion,
+      });
     expect(again.status, JSON.stringify(again.body)).toBe(200);
     expect(await events(t, made.body.id)).toHaveLength(1);
   });
@@ -195,7 +203,11 @@ describe('manual CRM create and update', () => {
     const res = await api
       .as(t.admin)
       .post('/v2/contacts')
-      .send({ name: 'Stopper', phone: '+919811000007', consent: { note: 'Filled the form again' } });
+      .send({
+        name: 'Stopper',
+        phone: '+919811000007',
+        consent: { note: 'Filled the form again' },
+      });
     expect(res.status).toBe(201);
     const ev = await events(t, uuid!);
     expect(ev.filter((e) => e.action === 'granted')).toHaveLength(0);
@@ -316,7 +328,10 @@ describe('Google Sheets add-on', () => {
     const res = await call.post('/contacts/sync', {
       rows: [{ email: 'sheet3@example.com', consent: 'no' }, { email: 'sheet4@example.com' }],
     });
-    expect(res.body.results.map((r: { status: string }) => r.status)).toEqual(['created', 'created']);
+    expect(res.body.results.map((r: { status: string }) => r.status)).toEqual([
+      'created',
+      'created',
+    ]);
     const n = await h.owner.query(
       `SELECT count(*)::int AS n FROM contact_consent_events WHERE org_id = $1`,
       [t.orgId],

@@ -29,6 +29,23 @@ keywords: [lead ads, webhook, zapier, make, forms, capture, attribution, campaig
 - **Leads received** shows each lead and its outcome. Open a lead for details and select **Retry** on one that needs review or failed.
 - **Send a test lead** creates a real contact marked as a test. Nobody is notified.
 
+## Send a first message to a new lead
+
+A source can reply to a new lead by itself, so the person hears from you in minutes. It is off by default. On the source's **What happens to a lead** step (or its settings page), turn on **Send a first message automatically** and choose:
+
+- **Channel**: a **WhatsApp template**, an **SMS** or an **email**. The list shows only templates that channel can really send: for WhatsApp, approved templates that need nothing but the contact (a name, for example); for email, shared templates.
+- **Send from**: for SMS and email, the number or the shared mailbox. Leave it as the first connected one if you have only one.
+- **Wait before sending**: 0 to 60 minutes.
+- **Only during business hours**: outside the hours set for your workspace, the message waits for them to open.
+
+The message goes only to a lead that becomes a **new** contact, once. A contact who comes back, or a test lead, gets none. It is sent through the same checks as every other message you start:
+
+- **Consent is never assumed.** A WhatsApp utility template is a service message. A marketing template, an SMS or an email is marketing: where your workspace requires recorded consent, the contact needs it, and a contact who opted out is never messaged. A lead that arrives with proof of consent records it (see below).
+- **Quiet hours** hold a marketing message until they end.
+- **Your plan's limits and your wallet** apply. An empty wallet or a channel that is not connected holds the message; it goes when that is fixed, or is dropped after a day.
+
+What happened to each lead's first message shows on the lead (**Leads received**, then the lead) and on the contact's timeline: **Sent**, **Held** (with the reason and the next try), **Blocked** (opted out, no consent, plan limit), **Skipped** (no number or address, no connected sender, the template is gone, or a value the template needs, such as a name, is missing) or **Failed**. If a name is missing, give the workspace attribute a default value (for example "there") so the template can still be filled.
+
 ## Plan and access
 
 The tile needs the **Lead sources** plan feature and permission to read lead sources. Without the feature the screen offers **Upgrade plan**. When you have reached the number of sources your plan allows, creating another says how many you use, for example **You have used 5 of 5 lead sources**. Creating, changing, pausing, rotating, deleting, testing and retrying need the manage permission; with read access only you can look.

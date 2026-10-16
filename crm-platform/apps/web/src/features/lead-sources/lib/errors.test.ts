@@ -127,6 +127,19 @@ describe('leadError', () => {
     }
   });
 
+  it('translates the detail codes of the first-message setting', () => {
+    const e = leadError(
+      err(422, ERROR_CODES.LEAD_DEFAULTS_INVALID, [
+        { path: 'defaults.speedToLead.templateId', message: 'template_not_found' },
+        { path: 'defaults.speedToLead.senderId', message: 'sender_not_found' },
+      ]),
+    );
+    expect(e.issues).toEqual([
+      { path: 'defaults.speedToLead.templateId', key: 'details.template_not_found' },
+      { path: 'defaults.speedToLead.senderId', key: 'details.sender_not_found' },
+    ]);
+  });
+
   it('asks for a reload on a row version conflict', () => {
     expect(leadError(err(409, ERROR_CODES.ROW_VERSION_CONFLICT))).toMatchObject({
       kind: 'conflict',
