@@ -13,7 +13,6 @@ import {
   Field,
   Input,
   Select,
-  Slider,
   Spinner,
   Tabs,
   Textarea,
@@ -347,7 +346,6 @@ function EditorBody({
     draft.answerType === 'flow' &&
     entry.flowName === null &&
     draft.flowId === entry.flowId;
-  const customThreshold = draft.thresholdOverride !== null;
 
   return (
     <form onSubmit={submit} className="space-y-4" noValidate>
@@ -556,58 +554,6 @@ function EditorBody({
             />
           </SectionCard>
 
-          <details className="rounded-xl border border-border bg-background">
-            <summary className="cursor-pointer rounded-xl px-4 py-3 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary">
-              {t('advanced.title')}
-            </summary>
-            <div className="space-y-3 border-t border-border p-4">
-              <p className="text-sm text-muted-foreground">{t('advanced.body')}</p>
-              <label className="flex items-center gap-2 text-sm font-medium">
-                <input
-                  type="checkbox"
-                  className="size-4 accent-[var(--primary)]"
-                  checked={customThreshold}
-                  disabled={readOnly}
-                  onChange={(e) =>
-                    set({ thresholdOverride: e.target.checked ? (s?.threshold ?? 0.5) : null })
-                  }
-                />
-                {t('advanced.custom')}
-              </label>
-              {customThreshold ? (
-                <div className="space-y-1">
-                  <label htmlFor="faq-threshold" className="text-sm font-medium">
-                    {t('advanced.sliderLabel')}:{' '}
-                    <span className="tabular-nums">
-                      {Math.round((draft.thresholdOverride ?? 0) * 100)}%
-                    </span>
-                  </label>
-                  <Slider
-                    id="faq-threshold"
-                    min={FAQ_LIMITS.thresholdMin}
-                    max={FAQ_LIMITS.thresholdMax}
-                    step={0.01}
-                    value={draft.thresholdOverride ?? 0.5}
-                    disabled={readOnly}
-                    aria-valuetext={`${Math.round((draft.thresholdOverride ?? 0) * 100)}%`}
-                    onValueChange={(v) => set({ thresholdOverride: Math.round(v * 100) / 100 })}
-                  />
-                  {fieldError('thresholdOverride') && (
-                    <p role="alert" className="text-xs text-danger">
-                      {fieldError('thresholdOverride')}
-                    </p>
-                  )}
-                  <p className="text-xs text-muted-foreground">
-                    {t('advanced.workspace', { value: Math.round((s?.threshold ?? 0) * 100) })}
-                  </p>
-                </div>
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  {t('advanced.following', { value: Math.round((s?.threshold ?? 0) * 100) })}
-                </p>
-              )}
-            </div>
-          </details>
         </div>
 
         <div className="space-y-4">

@@ -178,14 +178,6 @@
           "otherHint": "대화를 다른 플로우로 넘깁니다."
         }
       },
-      "advanced": {
-        "title": "고급: 이 FAQ만의 민감도",
-        "custom": "이 FAQ에 사용자 지정 민감도 사용",
-        "sliderLabel": "다음 이상일 때 매칭",
-        "body": "기본적으로 모든 FAQ는 이 플로우의 민감도를 사용합니다. 이 FAQ가 너무 쉽게 매칭되면 값을 높이고, 너무 드물게 매칭되면 낮춰 사용자 지정 값을 쓰세요.",
-        "workspace": "이 플로우의 민감도는 {value}%입니다.",
-        "following": "이 플로우의 민감도({value}%)를 따릅니다."
-      },
       "problem": {
         "question": {
           "required": "고객이 하는 질문을 작성하세요.",

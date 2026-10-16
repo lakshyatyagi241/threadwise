@@ -81,7 +81,7 @@ The check costs a few hundred tokens and adds about a second to a borderline rep
 
 ## Limits
 
-The platform's limits on FAQs and phrasings apply to each flow. You can set a different sensitivity on one FAQ under **Advanced** in its editor.
+The platform's limits on FAQs and phrasings apply to each flow.
 
 ## If something looks wrong
 

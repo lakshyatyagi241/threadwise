@@ -178,14 +178,6 @@
           "otherHint": "Pasar la conversación a un flujo distinto."
         }
       },
-      "advanced": {
-        "title": "Avanzado: sensibilidad solo para esta pregunta frecuente",
-        "custom": "Usar una sensibilidad personalizada para esta pregunta frecuente",
-        "sliderLabel": "Coincidir desde",
-        "body": "Por defecto, cada FAQ usa la sensibilidad de este flujo. Usa un valor personalizado cuando esta coincida demasiado (súbelo) o muy poco (bájalo).",
-        "workspace": "La sensibilidad de este flujo es {value} %.",
-        "following": "Sigue la sensibilidad de este flujo ({value} %)."
-      },
       "problem": {
         "question": {
           "required": "Escribe la pregunta que hacen los clientes.",

@@ -178,14 +178,6 @@
           "otherHint": "Die Unterhaltung an einen anderen Flow übergeben."
         }
       },
-      "advanced": {
-        "title": "Erweitert: Empfindlichkeit nur für diese FAQ",
-        "custom": "Eigene Empfindlichkeit für diese FAQ verwenden",
-        "sliderLabel": "Zutreffend ab",
-        "body": "Standardmäßig verwendet jede FAQ die Empfindlichkeit dieses Flows. Nutzen Sie einen eigenen Wert, wenn diese FAQ zu schnell (erhöhen) oder zu selten (senken) passt.",
-        "workspace": "Die Empfindlichkeit dieses Flows beträgt {value}%.",
-        "following": "Folgt der Empfindlichkeit dieses Flows ({value}%)."
-      },
       "problem": {
         "question": {
           "required": "Schreiben Sie die Frage, die Kunden stellen.",
