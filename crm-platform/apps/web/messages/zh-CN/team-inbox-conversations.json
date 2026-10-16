@@ -144,7 +144,8 @@
       "statusFilter": "状态",
       "statusOpen": "打开",
       "statusAll": "所有状态",
-      "channelFilter": "渠道"
+      "channelFilter": "渠道",
+      "selectRow": "选择 {name}"
     },
     "status": {
       "received": "已接收",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "快捷回复",
-      "savedReplyIssues": "未填写并保持原样（{count}）：{list}。请在发送前修正。"
+      "savedReplyIssues": "未填写并保持原样（{count}）：{list}。请在发送前修正。",
+      "toolbar": {
+        "label": "消息格式",
+        "bold": "加粗",
+        "italic": "斜体",
+        "underline": "下划线",
+        "strike": "删除线",
+        "bullets": "项目符号列表",
+        "numbers": "编号列表",
+        "ai": {
+          "open": "智能 AI 助手",
+          "noModel": "此工作区未启用任何 AI 模型",
+          "title": "智能 AI 助手",
+          "condense": "精简",
+          "condenseHint": "让文字更简短精炼",
+          "fix": "修正语法",
+          "fixHint": "纠正语法和拼写错误",
+          "positive": "积极语气",
+          "positiveHint": "让文字更积极、更有活力",
+          "translate": "翻译",
+          "translateHint": "翻译成其他语言",
+          "selectLanguage": "选择语言",
+          "searchLanguages": "搜索语言…",
+          "noLanguage": "没有匹配的语言",
+          "working": "处理中…",
+          "empty": "请先写一条消息。",
+          "failed": "AI 无法修改文本，请重试。"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "备注与时间线",

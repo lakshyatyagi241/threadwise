@@ -16,6 +16,14 @@ import { SlaBadge } from './sla-badge';
 import { Avatar, ChannelTag } from './parts';
 import { FlagIcon, MoreIcon, PinIcon } from './icons';
 
+/** A priority drawn like a tag: a pill in the priority's own colour (urgent red, high orange, low green, normal blue). */
+const PRIORITY_CHIP: Record<ConversationPriority, string> = {
+  urgent: 'border-danger/30 bg-danger/10 text-danger',
+  high: 'border-warning/40 bg-warning/10 text-warning',
+  normal: 'border-primary/30 bg-primary/10 text-primary',
+  low: 'border-success/30 bg-success/10 text-success',
+};
+
 export interface ConversationRowProps {
   row: ConversationSummary;
   active: boolean;
@@ -28,6 +36,8 @@ export interface ConversationRowProps {
   onSelect?: (id: string, shift: boolean) => void;
   /** Present when the caller may change priority: shows the row's three-dot menu. */
   onPriority?: (row: ConversationSummary, priority: ConversationPriority) => void;
+  /** Present when the caller may use bulk actions: a tick shows on the avatar while the pointer is on the row. */
+  onPick?: (id: string, shift: boolean) => void;
 }
 
 /** True when the last message in the thread went out (so the preview starts with "You:"). */
@@ -53,6 +63,7 @@ export const ConversationRow = memo(function ConversationRow({
   selected = false,
   onSelect,
   onPriority,
+  onPick,
 }: ConversationRowProps) {
   const [menu, setMenu] = useState(false);
   const t = useTranslations('team-inbox-conversations.list');
@@ -169,7 +180,7 @@ export const ConversationRow = memo(function ConversationRow({
             )}
             <SlaBadge status={row.slaStatus} nowMs={nowMs} compact />
             {row.labels.slice(0, 2).map((l) => (
-              <TagChip key={l.id} tag={l} />
+              <TagChip key={l.id} tag={l} className="px-2 py-0.5 text-[11px]" />
             ))}
             {row.labels.length > 2 && (
               <span className="text-[10px] text-muted-foreground">+{row.labels.length - 2}</span>
@@ -196,7 +207,14 @@ export const ConversationRow = memo(function ConversationRow({
               </span>
             )}
             {row.priority !== 'normal' && (
-              <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
+              <span
+                data-testid="inbox-row-priority"
+                className={cn(
+                  'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium',
+                  PRIORITY_CHIP[row.priority],
+                )}
+              >
+                <FlagIcon className="size-3" aria-hidden="true" />
                 {t(`priority.${row.priority}`)}
               </span>
             )}
@@ -217,6 +235,17 @@ export const ConversationRow = memo(function ConversationRow({
           </span>
         </span>
       </button>
+      {onPick && !selecting && (
+        <button
+          type="button"
+          data-testid="inbox-row-pick"
+          aria-label={t('selectRow', { name: row.title })}
+          onClick={(e) => onPick(row.id, e.shiftKey)}
+          className="absolute start-3 top-3 grid size-10 place-items-center rounded-full bg-background/95 opacity-0 shadow-sm ring-1 ring-border transition group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary max-md:hidden"
+        >
+          <span aria-hidden="true" className="size-4 rounded border-2 border-muted-foreground/60" />
+        </button>
+      )}
       {onPriority && !selecting && (
         <div className="absolute end-2 top-8">
           <button
@@ -267,7 +296,7 @@ export const ConversationRow = memo(function ConversationRow({
                       : p === 'high'
                         ? 'text-warning'
                         : p === 'low'
-                          ? 'text-muted-foreground'
+                          ? 'text-success'
                           : 'text-primary',
                   )}
                 />

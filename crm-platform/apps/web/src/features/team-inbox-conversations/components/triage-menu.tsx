@@ -21,7 +21,7 @@ export interface TriageMenuProps {
 }
 
 const FLAG_TONE: Record<ConversationPriority, string> = {
-  low: 'text-muted-foreground',
+  low: 'text-success',
   normal: 'text-primary',
   high: 'text-warning',
   urgent: 'text-danger',

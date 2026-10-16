@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Badge, Button, Select, Spinner, Tabs, Textarea, cn } from '@crm/ui';
+import { Badge, Button, Select, Spinner, Textarea, cn } from '@crm/ui';
 import {
   NOTE_BODY_MAX,
   type ConversationEvent,
@@ -18,7 +18,15 @@ import { KEYS, useAssignees, useTimeline } from '../api/hooks';
 import { leaveDayText } from '../lib/leave-mark';
 import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
-import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
+import {
+  CheckCircleIcon,
+  ChatIcon,
+  ClockIcon,
+  ExternalIcon,
+  NoteIcon,
+  TrashIcon,
+  UserPlusIcon,
+} from './icons';
 import { Avatar, ChannelTag, useErrorText } from './parts';
 import { TagGroups, type TagGroupsProps } from './tag-groups';
 
@@ -56,59 +64,85 @@ export function ContactPanel(props: ContactPanelProps) {
   const { detail } = props;
   const contactId = detail.contactSummary?.id ?? detail.contact?.id ?? null;
 
+  const tp = useTranslations('team-inbox-conversations.panel.past');
+  type SectionId = 'notes' | 'timeline' | 'past';
+  const [open, setOpen] = useState<SectionId | null>('notes');
+  const sections: Array<{
+    id: SectionId;
+    title: string;
+    icon: React.ReactNode;
+    content: React.ReactNode;
+  }> = [
+    {
+      id: 'notes',
+      title: props.notes.length > 0 ? `${t('notes.tab')} (${props.notes.length})` : t('notes.tab'),
+      icon: <NoteIcon className="size-4" />,
+      content: <NotesTab {...props} />,
+    },
+    {
+      id: 'timeline',
+      title: t('timeline.tab'),
+      icon: <ClockIcon className="size-4" />,
+      content: <TimelineTab conversationId={detail.id} />,
+    },
+    ...(detail.pastConversations.length > 0
+      ? [
+          {
+            id: 'past' as const,
+            title: tp('title'),
+            icon: <ChatIcon className="size-4" />,
+            content: (
+              <PastConversations
+                items={detail.pastConversations}
+                nowMs={props.nowMs}
+                onOpen={props.onOpenConversation}
+              />
+            ),
+          },
+        ]
+      : []),
+  ];
   return (
-    <div className="space-y-4 p-4" data-testid="inbox-contact-panel">
-      <ContactSummary detail={detail} contactId={contactId} />
+    <div className="flex min-h-full" data-testid="inbox-contact-panel">
+      <div className="min-w-0 flex-1 space-y-4 p-4">
+        <ContactSummary detail={detail} contactId={contactId} />
 
-      <TagGroups
-        detail={detail}
-        contactId={contactId}
-        canEditContact={props.canEditContact ?? false}
-        tags={props.tags}
-      />
-
-      <LeadScoreSection detail={detail} contactId={contactId} />
-
-      <AssigneeSection {...props} />
-
-      <section aria-label={t('tabsLabel')}>
-        <Tabs
-          defaultValue="notes"
-          items={[
-            {
-              id: 'notes',
-              label:
-                props.notes.length > 0
-                  ? `${t('notes.tab')} (${props.notes.length})`
-                  : t('notes.tab'),
-              content: <NotesTab {...props} />,
-            },
-            {
-              id: 'timeline',
-              label: t('timeline.tab'),
-              content: <TimelineTab conversationId={detail.id} />,
-            },
-          ]}
+        <TagGroups
+          detail={detail}
+          contactId={contactId}
+          canEditContact={props.canEditContact ?? false}
+          tags={props.tags}
         />
-      </section>
 
-      <PastConversations
-        items={detail.pastConversations}
-        nowMs={props.nowMs}
-        onOpen={props.onOpenConversation}
-      />
+        <LeadScoreSection detail={detail} contactId={contactId} />
 
-      {contactId && (
-        <div className="space-y-3" data-testid="inbox-contact-links">
-          <LinkedTasks
-            kind="contact"
-            id={contactId}
-            label={detail.contactSummary?.name ?? detail.contact?.name ?? undefined}
-            compact
-          />
-          <LinkedAppointments contactId={contactId} />
-        </div>
-      )}
+        <AssigneeSection {...props} />
+
+        {sections.map((sec) => (
+          <PanelSection
+            key={sec.id}
+            id={sec.id}
+            title={sec.title}
+            icon={sec.icon}
+            open={open === sec.id}
+            onToggle={() => setOpen(open === sec.id ? null : sec.id)}
+          >
+            {sec.content}
+          </PanelSection>
+        ))}
+
+        {contactId && (
+          <div className="space-y-3" data-testid="inbox-contact-links">
+            <LinkedTasks
+              kind="contact"
+              id={contactId}
+              label={detail.contactSummary?.name ?? detail.contact?.name ?? undefined}
+              compact
+            />
+            <LinkedAppointments contactId={contactId} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -429,9 +463,10 @@ function NotesTab(props: ContactPanelProps) {
             }}
           />
           <div className="flex items-center justify-between gap-2">
-            <p className="text-[11px] text-muted-foreground">{t('hint')}</p>
+            <p className="min-w-0 flex-1 text-[11px] text-muted-foreground">{t('hint')}</p>
             <Button
               size="sm"
+              className="shrink-0 whitespace-nowrap"
               data-testid="inbox-note-add"
               disabled={!trimmed || busy}
               onClick={() => void add()}
@@ -573,10 +608,7 @@ function PastConversations({
   const timeZone = useTimeZone();
   if (items.length === 0) return null;
   return (
-    <section aria-label={t('title')} className="space-y-2" data-testid="inbox-past">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {t('title')}
-      </h3>
+    <div data-testid="inbox-past">
       <ul className="space-y-1">
         {items.map((p) => (
           <li key={p.id}>
@@ -596,6 +628,61 @@ function PastConversations({
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+/** One collapsible block of the right pane: a header (icon, title, chevron) that opens and closes it. */
+function PanelSection({
+  id,
+  title,
+  icon,
+  open,
+  onToggle,
+  children,
+}: {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <section
+      id={`inbox-panel-section-${id}`}
+      className="rounded-lg border border-border bg-background shadow-sm"
+    >
+      <h3>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={`inbox-panel-body-${id}`}
+          data-testid={`inbox-panel-section-${id}`}
+          onClick={onToggle}
+          className="flex w-full items-center gap-2 px-3 py-2.5 text-start text-sm font-semibold hover:bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <span className="text-primary">{icon}</span>
+          <span className="flex-1">{title}</span>
+          <svg
+            viewBox="0 0 16 16"
+            className={cn('size-3.5 text-muted-foreground transition', open && 'rotate-180')}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6.5 8 10l4-3.5" />
+          </svg>
+        </button>
+      </h3>
+      {open && (
+        <div id={`inbox-panel-body-${id}`} className="border-t border-border p-3">
+          {children}
+        </div>
+      )}
     </section>
   );
 }

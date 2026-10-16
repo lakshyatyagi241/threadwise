@@ -144,7 +144,8 @@
       "statusFilter": "Status",
       "statusOpen": "Terbuka",
       "statusAll": "Semua status",
-      "channelFilter": "Channel"
+      "channelFilter": "Channel",
+      "selectRow": "Pilih {name}"
     },
     "status": {
       "received": "Diterima",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "Balasan tersimpan",
-      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim."
+      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim.",
+      "toolbar": {
+        "label": "Format pesan",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "underline": "Garis bawah",
+        "strike": "Coret",
+        "bullets": "Daftar berpoin",
+        "numbers": "Daftar bernomor",
+        "ai": {
+          "open": "Asisten AI Cerdas",
+          "noModel": "Tidak ada model AI yang diaktifkan untuk ruang kerja ini",
+          "title": "Asisten AI Cerdas",
+          "condense": "Ringkas",
+          "condenseHint": "Buat teks lebih pendek dan padat",
+          "fix": "Perbaiki tata bahasa",
+          "fixHint": "Koreksi kesalahan tata bahasa dan ejaan",
+          "positive": "Nada positif",
+          "positiveHint": "Buat teks lebih positif dan ceria",
+          "translate": "Terjemahkan",
+          "translateHint": "Terjemahkan ke bahasa lain",
+          "selectLanguage": "Pilih bahasa",
+          "searchLanguages": "Cari bahasa…",
+          "noLanguage": "Tidak ada bahasa yang cocok",
+          "working": "Sedang diproses…",
+          "empty": "Tulis pesan terlebih dahulu.",
+          "failed": "AI tidak dapat mengubah teks. Coba lagi."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",

@@ -144,7 +144,8 @@
       "statusFilter": "الحالة",
       "statusOpen": "مفتوحة",
       "statusAll": "كل الحالات",
-      "channelFilter": "القناة"
+      "channelFilter": "القناة",
+      "selectRow": "تحديد {name}"
     },
     "status": {
       "received": "مستلمة",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "الردود المحفوظة",
-      "savedReplyIssues": "لم تُملأ ({count}) وبقيت كما كُتبت: {list}. صحّحها قبل الإرسال."
+      "savedReplyIssues": "لم تُملأ ({count}) وبقيت كما كُتبت: {list}. صحّحها قبل الإرسال.",
+      "toolbar": {
+        "label": "تنسيق الرسالة",
+        "bold": "غامق",
+        "italic": "مائل",
+        "underline": "تسطير",
+        "strike": "يتوسطه خط",
+        "bullets": "قائمة نقطية",
+        "numbers": "قائمة مرقمة",
+        "ai": {
+          "open": "مساعد الذكاء الاصطناعي",
+          "noModel": "لا يوجد نموذج ذكاء اصطناعي مفعّل لهذه المساحة",
+          "title": "مساعد الذكاء الاصطناعي",
+          "condense": "اختصار",
+          "condenseHint": "اجعل النص أقصر وأكثر إيجازًا",
+          "fix": "تصحيح القواعد",
+          "fixHint": "صحّح الأخطاء النحوية والإملائية",
+          "positive": "نبرة إيجابية",
+          "positiveHint": "اجعل النص أكثر إيجابية وحيوية",
+          "translate": "ترجمة",
+          "translateHint": "الترجمة إلى لغات مختلفة",
+          "selectLanguage": "اختر اللغة",
+          "searchLanguages": "ابحث عن لغة…",
+          "noLanguage": "لا توجد لغة مطابقة",
+          "working": "جارٍ العمل…",
+          "empty": "اكتب رسالة أولًا.",
+          "failed": "تعذّر على الذكاء الاصطناعي تغيير النص. حاول مرة أخرى."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "الملاحظات والسجل الزمني",

@@ -144,7 +144,8 @@
       "statusFilter": "Stato",
       "statusOpen": "Aperte",
       "statusAll": "Tutti gli stati",
-      "channelFilter": "Canale"
+      "channelFilter": "Canale",
+      "selectRow": "Seleziona {name}"
     },
     "status": {
       "received": "Ricevuto",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "Risposte salvate",
-      "savedReplyIssues": "Non compilate e lasciate così com'erano ({count}): {list}. Correggi prima di inviare."
+      "savedReplyIssues": "Non compilate e lasciate così com'erano ({count}): {list}. Correggi prima di inviare.",
+      "toolbar": {
+        "label": "Formattazione del messaggio",
+        "bold": "Grassetto",
+        "italic": "Corsivo",
+        "underline": "Sottolineato",
+        "strike": "Barrato",
+        "bullets": "Elenco puntato",
+        "numbers": "Elenco numerato",
+        "ai": {
+          "open": "Assistente IA intelligente",
+          "noModel": "Nessun modello di IA è attivo per questo spazio",
+          "title": "Assistente IA intelligente",
+          "condense": "Sintetizza",
+          "condenseHint": "Rendi il testo più breve e conciso",
+          "fix": "Correggi la grammatica",
+          "fixHint": "Correggi errori di grammatica e ortografia",
+          "positive": "Tono positivo",
+          "positiveHint": "Rendi il testo più positivo e vivace",
+          "translate": "Traduci",
+          "translateHint": "Traduci in altre lingue",
+          "selectLanguage": "Seleziona lingua",
+          "searchLanguages": "Cerca lingue…",
+          "noLanguage": "Nessuna lingua corrisponde",
+          "working": "Elaborazione…",
+          "empty": "Scrivi prima un messaggio.",
+          "failed": "L’IA non ha potuto modificare il testo. Riprova."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Note e cronologia",

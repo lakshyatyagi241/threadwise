@@ -29,6 +29,8 @@ import { cloudGroupBlock, isGroupSendBlocked } from '../lib/group-thread';
 import { DEFAULT_FILTERS, filtersKey, tagsFromParam, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
+import type { AiModelChoice } from './composer-toolbar';
+import { useAiModels } from '@/features/ai-keys-usage-admin';
 import { ContactPanel } from './contact-panel';
 import { BulkBar } from './bulk-bar';
 import { ConversationList } from './conversation-list';
@@ -137,6 +139,21 @@ export function InboxScreen() {
   const list = useConversationList(filters, meId);
   const bulk = useBulkSelection(list.state.rows, filtersKey(filters), list.refresh);
   const channelsQ = useChannels();
+  // The Smart AI Assistant of the composer asks the first model of a vendor the rewrite route can call.
+  const aiModels = useAiModels();
+  const aiModel = useMemo(
+    () =>
+      aiModels.data?.data
+        .map((m) => ({ provider: m.provider as string, value: m.value }))
+        .find(
+          (m): m is AiModelChoice =>
+            m.provider === 'openai' ||
+            m.provider === 'anthropic' ||
+            m.provider === 'gemini' ||
+            m.provider === 'openrouter',
+        ) ?? null,
+    [aiModels.data],
+  );
   const channels = channelsQ.data?.data;
   const unofficial = useUnofficialWhatsapp();
   // The channel filter and picker offer personal-number (QR) channels only while the platform has that engine on.
@@ -600,6 +617,7 @@ export function InboxScreen() {
                     selection: bulk.selection,
                     onToggleSelecting: bulk.toggleSelecting,
                     onSelect: bulk.select,
+                    onPick: bulk.pick,
                     bar: (
                       <BulkBar
                         count={bulk.selection.size}
@@ -668,6 +686,7 @@ export function InboxScreen() {
               mode={mode}
               onMode={setMode}
               composerRef={composerRef}
+              aiModel={aiModel}
               panelOpen={panelOpen}
               onTogglePanel={togglePanel}
               onBack={back}
