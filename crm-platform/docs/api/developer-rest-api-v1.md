@@ -1716,3 +1716,7 @@ Add a file name (`crm.e2e.spec.ts`, `automation.e2e.spec.ts`, `bulk.e2e.spec.ts`
 `call` object (`get`, `post`, `put`, `delete`, `raw`) that sends `Authorization: Bearer <key>` to `/api/v1`.
 
 Before opening a pull request run the `pre-pr` skill; a change to this page that touches a contract also needs the contracts build.
+
+## Date of birth and the minor flag (BL-190, product extension)
+
+Not in Reference. `date_of_birth` (`YYYY-MM-DD`, `null` clears it) is accepted on `POST /v1/contacts` and `PUT|PATCH /v1/contacts/:id`; every contact carries `date_of_birth` and `is_minor`. A date that makes the contact a minor flags it in the same request (source `dob`). `GET /v1/contacts/:id/privacy` (`contacts:read`) and `POST /v1/contacts/:id/privacy` (`contacts:write`, `Idempotency-Key`; body `{ kind: minor | guardian_consent | sale_share_opt_out, value, note?, evidence? }`, source stored as `api`) read and write the flags; guardian consent needs a note (422 `CONSENT_NOTE_REQUIRED`) and a flagged minor (422 `CONSENT_PRIVACY_NOT_MINOR`) and never creates a marketing grant.

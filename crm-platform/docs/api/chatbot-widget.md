@@ -118,3 +118,11 @@ uuid), `messages` and a `contacts` row through `_shims/sql-inbox-gateway.ts` unt
 message (`sender_kind = 'customer'`, status `received`); the opening line and the assistant's replies are `sender_kind = 'bot'`. An outbound `messages` row in the visitor's
 conversation reaches the visitor on the next poll. As in Reference (QUIRK), ANY outbound line after the opening line silences the AI for that thread, so the assistant answers a
 conversation's first message only. Data model: [chat-conversations.md](chat-conversations.md).
+
+## Age question on the intake form (BL-212)
+
+`ageGate` on a widget (`POST/PATCH /v2/widgets`, `PUT` of a flow bot's look): `{ enabled, mode: dob | age | declaration, minAge, whenUnder: block | flag }` (a chat has no second screen, so `guardian` is refused). Off by default. The intake form shows it only for a visitor who has not passed it.
+
+- `GET /widget/:token/api/config` carries `widget.age_gate: { mode, declaration_age, pending }` (the age only for the box).
+- `POST /widget/:token/api/message` accepts `date_of_birth`, `age`, `age_confirmed`. The gate is judged before any visitor, thread or profile is stored: `block` answers 403 `{ ok: false, code: 'age_blocked' }` and stores nothing; a missing answer is 422 (`errors.age`). A visitor who passed (`chatbot_widget_visitors.age_checked_at`) is not asked again.
+- `flag` lets the chat go on; once the visitor has a phone number or an email the contact gets the date of birth (younger date wins) and, if under, the minor flag (source `dob`).

@@ -1,7 +1,7 @@
 # Privacy and data governance: platform-wide design and audit
 
 Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) and BL-168 to BL-171 (round 2: lead capture proof, click-to-WhatsApp referral as evidence, import and wizard CSV notice and per-channel grants, the consent line of web forms) are built** (section 4.3.2); the rest is still design. **BL-172 to BL-181 (Compliance center v1: regime profiles, officer contacts, sub-processor list, terms and privacy
-links, quiet hours and calling windows stored, checklist) are section 11.** **BL-180 (contact-level extras: the minor flag with guardian consent evidence, Do Not Sell or Share, the Global Privacy Control signal) is built** (section 11.9). Backlog: BL-140 to BL-153
+links, quiet hours and calling windows stored, checklist) are section 11.** **BL-180 (contact-level extras: the minor flag with guardian consent evidence, Do Not Sell or Share, the Global Privacy Control signal) is built** (section 11.9). **How a minor is detected (date of birth, the form and chat age check, the birthday sweep: BL-211, BL-212, BL-190) and the Do-Not-Call list (BL-181) are sections 11.10 and 11.11.** Backlog: BL-140 to BL-153
 ([backlog.md](../backlog.md) section O), BL-172 to BL-181 (section Q). Not legal advice: see section 10.
 
 ## How to read the evidence
@@ -655,7 +655,7 @@ in the backlog).
 | BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                               | built (notice, doc); the terms text is the owner's |
 | BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                         | built (v1)                                         |
 | BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | built (v1), section 11.9                           |
-| BL-181 | The integrations the placeholders stand for: a DPDP consent manager, a DNC / NDNC registry feed, a breach-notification workflow, the platform sub-processor register inside the app              | open (needs owner decisions and counsel)           |
+| BL-181 | The integrations the placeholders stand for: a DPDP consent manager, a DNC / NDNC registry feed, a breach-notification workflow, the platform sub-processor register inside the app              | partly built (11.11): the DNC list and the consent manager note and contract; registries BL-215, route BL-216; the rest needs counsel |
 
 ### 11.7 HIPAA: not supported
 
@@ -724,8 +724,7 @@ recorded once per visitor and widget.
 
 **Limits (recorded as follow-ups BL-188 to BL-190).** Audience counts that use SQL predicates (the campaign wizard preview) do not apply the
 minor hold; the dispatchers do, through `checkMany`. A staff retry of a form submission that needed review does not re-apply the signal (it
-is not stored on the submission). There is no minor filter on the contact list, no import column and no REST v1 write for the flags (the
-v1 consent read now carries `privacy`).
+is not stored on the submission). There was no minor filter on the contact list, no import column and no REST v1 write for the flags; they are built with section 11.10 (BL-190).
 
 **Decisions for the owner (from this section).**
 
@@ -781,7 +780,7 @@ country is not known, so a French child in a US-only workspace is judged by 13. 
 | `flag`            | Accepts it, writes the contact, flags it as a minor (source `dob`) and **does not record the marketing agreement** of this submission (the ticked line is stored as seen, but no marketing grant is written).                                                    |
 | `guardian`        | As `flag`, and the form asks for a parent or guardian (name and an email or phone) before it accepts. The details are kept on the submission and on the contact timeline; **guardian consent stays unrecorded until staff record it** on the Consent card (a link the guardian clicks is BL-214). |
 
-The declaration mode has no "under" answer: an unticked box is treated like one (`block` refuses, `flag` and `guardian` accept as above). The
+The declaration mode has no age to read: with `block` the box simply has to be ticked (an unticked box is an unanswered question, a 422, and ticking it passes: nobody is turned away), and with `flag` or `guardian` an unticked box is treated like an under-age answer (the contact is flagged with the source `declaration`, which never lapses by itself). The
 question is required while the gate is on. Whether a flagged minor's marketing is then **held** by the ConsentGate depends on the children
 setting (11.9: `off` only records), so the builder warns when the gate is on and the children question is not answered (D18 stays open, D22).
 
