@@ -254,7 +254,34 @@
         "off": "Uit",
         "none": "Geen"
       },
-      "colorSwatch": "{label} (kleurstaal)"
+      "colorSwatch": "{label} (kleurstaal)",
+      "age": {
+        "enable": "Vraag naar de leeftijd voordat de chat begint",
+        "enableHint": "Standaard uit. Gebruik dit alleen als de regels van je werkruimte erom vragen of je bezoekers minderjarig kunnen zijn. De chat zegt nooit welk antwoord doorgaat.",
+        "mode": "Hoe te vragen",
+        "modes": {
+          "declaration": "Een selectievakje: “Ik bevestig dat ik minstens N jaar oud ben”",
+          "age": "Vraag naar hun leeftijd",
+          "dob": "Vraag naar hun geboortedatum"
+        },
+        "modeHints": {
+          "declaration": "Er wordt niets over hun leeftijd bewaard. Zo min mogelijk gegevens.",
+          "age": "Een geheel getal. Het wordt gebruikt voor de controle; alleen de uitkomst wordt bewaard.",
+          "dob": "Bij het contact opgeslagen als geboortedatum. Gebruik dit alleen als je de datum nodig hebt."
+        },
+        "minAge": "Minimumleeftijd",
+        "minAgeHint": "Laat leeg om de leeftijd van je werkruimte uit het Compliancecentrum te gebruiken (18 als er geen is ingesteld). Tussen 1 en 21.",
+        "whenUnder": "Als de bezoeker jonger is dan die leeftijd",
+        "actions": {
+          "block": "Start de chat niet",
+          "flag": "Start de chat en markeer het contact als minderjarig"
+        },
+        "actionHints": {
+          "block": "Er wordt niets over de bezoeker opgeslagen en die ziet een neutraal bericht. Bij het selectievakje hoeft de bezoeker het alleen aan te vinken.",
+          "flag": "De chat gaat door en zodra de bezoeker een telefoonnummer of e-mailadres heeft opgegeven, wordt het contact als minderjarig gemarkeerd."
+        },
+        "contactNote": "De leeftijd wordt pas bij een contact vastgelegd als de bezoeker een telefoonnummer of e-mailadres heeft opgegeven."
+      }
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp-widget",

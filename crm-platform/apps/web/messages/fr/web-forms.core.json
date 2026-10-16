@@ -19,7 +19,9 @@
       "checkbox_group": "Choix multiple",
       "checkbox": "Case à cocher",
       "rating": "Note",
-      "hidden": "Champ masqué"
+      "hidden": "Champ masqué",
+      "date_of_birth": "Date de naissance",
+      "age": "Âge"
     },
     "errors": {
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",

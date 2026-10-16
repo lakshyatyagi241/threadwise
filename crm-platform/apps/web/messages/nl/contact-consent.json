@@ -144,7 +144,9 @@
         "booking": "Boekingspagina",
         "commerce": "Winkelkassa",
         "lead": "Leadregistratie",
-        "gpc": "Global Privacy Control"
+        "gpc": "Global Privacy Control",
+        "dob": "Geboortedatum of leeftijd",
+        "declaration": "Leeftijd niet bevestigd"
       },
       "by": "door {name}",
       "evidence": {
@@ -227,7 +229,9 @@
           "noteHint": "Bijvoorbeeld: het papieren formulier aan de balie ondertekend. Schrijf geen naam of contactgegevens van de voogd op.",
           "ref": "Referentie (optioneel)",
           "refHint": "Een formuliernummer of document-id die je later kunt opzoeken."
-        }
+        },
+        "minorFrom": "Ingesteld op basis van de opgegeven geboortedatum of leeftijd. Het vervalt vanzelf op {date}, tenzij een persoon het behoudt.",
+        "minorFromDeclaration": "Ingesteld omdat de leeftijd niet is bevestigd in een formulier. Het blijft staan tot een persoon het wist."
       }
     },
     "composer": {
@@ -351,7 +355,8 @@
         "consent_declined": "Niet toegestaan: de persoon weigerde.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Niet toegestaan: dit contact is als minderjarig gemarkeerd en je werkruimte houdt marketing tegen.",
-        "sale_share_opted_out": "Niet toegestaan: het contact heeft zich afgemeld voor verkoop of delen van zijn gegevens."
+        "sale_share_opted_out": "Niet toegestaan: het contact heeft zich afgemeld voor verkoop of delen van zijn gegevens.",
+        "on_dnc_list": "Op je Niet-bellen-lijst: geen marketingoproepen of SMS-berichten naar dit nummer"
       }
     },
     "notice": {

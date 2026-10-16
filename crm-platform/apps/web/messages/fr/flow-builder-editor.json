@@ -2019,6 +2019,18 @@
         "groupContact": "Propriétés du contact",
         "groupFlow": "Enregistrées dans ce flow",
         "variableNone": "Aucune variable trouvée"
+      },
+      "askAge": {
+        "minAge": "Âge minimum",
+        "minAgeHint": "Laissez vide pour utiliser l'âge de votre espace de travail défini dans le Centre de conformité (18 si aucun n'est défini). Entre 1 et 21.",
+        "whenUnder": "Si la réponse est inférieure à cet âge",
+        "whenUnderHint": "Dans tous les cas, le contact est marqué comme mineur. Le client n'est jamais informé de la réponse acceptée.",
+        "end": "Terminer le flow par une phrase courte et neutre",
+        "continue": "Continuer et me laisser créer une branche selon la réponse",
+        "endText": "Phrase de clôture",
+        "endTextHint": "Envoyée avant la fin du flow. Ne mentionnez pas l'âge. Si le champ est vide, « Nous ne pouvons pas continuer. » est utilisé.",
+        "continueNote": "Les étapes suivantes peuvent lire la variable de la réponse suivie de _age_gate (par exemple answer_age_gate), qui vaut under ou adult. Ajoutez une Condition pour créer une branche, par exemple pour demander un parent ou un tuteur.",
+        "note": "Ne demandez l'âge que là où vous en avez besoin. La réponse est écrite sur le contact : une date de naissance comme date de naissance, et une réponse inférieure à l'âge minimum marque le contact comme mineur."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Numéro de téléphone",
         "number": "Nombre",
         "alphanumeric": "Lettres et chiffres",
-        "date": "Date"
+        "date": "Date",
+        "age": "Âge",
+        "date_of_birth": "Date de naissance"
       },
       "askInputWrong": {
         "text": "Veuillez réessayer",
@@ -2338,7 +2352,9 @@
         "phone": "Veuillez saisir un numéro de téléphone valide",
         "number": "Veuillez saisir un nombre valide",
         "alphanumeric": "Veuillez n’utiliser que des lettres et des chiffres",
-        "date": "Veuillez saisir une date valide ({format})"
+        "date": "Veuillez saisir une date valide ({format})",
+        "age": "Veuillez saisir votre âge sous forme de nombre entier",
+        "date_of_birth": "Veuillez saisir une date valide ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

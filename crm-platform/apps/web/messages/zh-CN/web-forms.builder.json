@@ -53,7 +53,9 @@
           "crm_required_unbound": "表单中缺少工作区要求的属性。",
           "no_contact_point": "请添加与联系人关联的邮箱或电话字段，以便将每份提交与对应的人匹配。",
           "payment_no_gateway": "请连接可生成支付链接的支付网关，或关闭支付。",
-          "captcha_not_configured": "CAPTCHA 已设置为始终开启，但平台没有 CAPTCHA。请选择其他设置，或联系平台管理员添加。"
+          "captcha_not_configured": "CAPTCHA 已设置为始终开启，但平台没有 CAPTCHA。请选择其他设置，或联系平台管理员添加。",
+          "age_gate_field_missing": "年龄检查需要对应的问题:请添加出生日期或年龄字段,或改用复选框。",
+          "age_gate_field_not_required": "年龄检查所判断的问题必须设为必填。"
         },
         "code": {
           "no_fields": "请至少添加一个字段。",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "工作区要求使用 CRM 属性“{property}”：请将其添加到表单并设为必填。",
           "crm_required_optional": "关联到必填 CRM 属性的字段必须设为必填。",
           "redirect_not_https": "跳转地址必须以 https:// 开头。",
-          "too_large": "表单过大，请删除部分字段。"
+          "too_large": "表单过大，请删除部分字段。",
+          "age_gate_field_missing": "年龄检查需要对应的问题:请添加出生日期或年龄字段,或改用复选框。",
+          "age_gate_field_optional": "年龄检查所判断的问题必须设为必填。"
         }
       },
       "versionsTitle": "版本",

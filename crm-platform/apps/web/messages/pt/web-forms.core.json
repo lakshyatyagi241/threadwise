@@ -19,7 +19,9 @@
       "checkbox_group": "Múltipla escolha",
       "checkbox": "Caixa de seleção",
       "rating": "Avaliação",
-      "hidden": "Campo oculto"
+      "hidden": "Campo oculto",
+      "date_of_birth": "Data de nascimento",
+      "age": "Idade"
     },
     "errors": {
       "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",

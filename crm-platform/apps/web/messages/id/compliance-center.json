@@ -18,7 +18,8 @@
       "notices": "Pemberitahuan",
       "links": "Tautan privasi dan ketentuan",
       "subprocessors": "Sub-pemroses",
-      "windows": "Jam tenang dan panggilan"
+      "windows": "Jam tenang dan panggilan",
+      "dnc": "Jangan hubungi"
     },
     "saveBar": {
       "unsaved": "Anda memiliki perubahan yang belum disimpan.",
@@ -35,7 +36,8 @@
       "duplicate": "Anda sudah mencantumkan sub-pemroses dengan nama itu.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
-      "unexpected": "Terjadi kesalahan. Coba lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "dncInvalid": "Berkas tidak dapat dibaca: tidak berisi nomor telepon, atau terlalu banyak nomor sekaligus."
     },
     "problems": {
       "httpsOnly": "Gunakan alamat yang diawali dengan https://.",
@@ -322,7 +324,9 @@
         "hint": "UU DPDP memungkinkan orang mengelola persetujuan melalui pengelola persetujuan terdaftar. Sebutkan milik Anda di sini jika Anda menggunakannya.",
         "managerName": "Pengelola persetujuan",
         "managerUrl": "Tautan pengelola persetujuan",
-        "placeholderNote": "Ini hanya catatan. Belum ada yang terhubung ke pengelola persetujuan."
+        "placeholderNote": "Ini hanya catatan. Belum ada yang terhubung ke pengelola persetujuan.",
+        "managerRegistration": "Nomor registrasi Consent Manager",
+        "managerRegistrationHint": "Nomor yang diberikan Dewan Perlindungan Data saat mendaftarkan Consent Manager Anda. Hanya sebagai catatan."
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "Do Not Call Singapura",
           "custom": "Daftar Anda sendiri"
         },
-        "note": "Ini hanya catatan. Belum ada yang diperiksa terhadap suatu daftar."
+        "note": "Ini hanya catatan. Belum ada yang diperiksa terhadap suatu daftar.",
+        "listNote": "Nomor pada daftar Jangan hubungi Anda (tab terakhir) sudah dikecualikan dari panggilan dan pesan teks pemasaran."
       },
       "enforcedNote": "Jam tenang menahan pesan pemasaran sampai selesai, dan jendela panggilan menolak panggilan di luarnya. Jam masing-masing kontak yang dipakai. Balasan dalam jendela 24 jam dan pemberitahuan layanan tidak pernah ditahan."
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "Ditahan sampai {when} (jam tenang)",
       "heldCount": "{count} ditahan karena jam tenang"
+    },
+    "dnc": {
+      "intro": "Nomor pada daftar ini tidak mendapat pemasaran lewat suara atau SMS, apa pun riwayat persetujuannya. WhatsApp, email, dan pesan layanan tidak ditahan olehnya. Tidak ada pemeriksaan ke registri nasional dari sini: tambahkan ekstrak yang berhak Anda unduh.",
+      "addTitle": "Tambah nomor",
+      "numbers": "Nomor telepon",
+      "numbersHint": "Satu per baris, atau dipisahkan koma. Maksimal {max} sekaligus; gunakan berkas untuk lebih banyak.",
+      "country": "Kode negara untuk nomor lokal",
+      "countryHint": "Nomor yang ditulis tanpa kode negara dibaca dengan kode ini.",
+      "note": "Catatan",
+      "noteHint": "Opsional. Alasan nomor-nomor ini dicantumkan.",
+      "add": "Tambahkan ke daftar",
+      "adding": "Menambahkan...",
+      "or": "atau",
+      "import": "Tambahkan dari berkas CSV",
+      "importing": "Membaca berkas...",
+      "importHint": "Kolom bernama phone, mobile, atau number, jika tidak ada maka kolom pertama. Berkas besar dibaca bertahap.",
+      "fromRegistry": "Berkas ini adalah ekstrak dari registri yang berhak saya gunakan",
+      "progress": "Mengirim bagian {done} dari {of}...",
+      "added": "{count, plural, =0 {Tidak ada nomor baru untuk ditambahkan} one {# nomor ditambahkan} other {# nomor ditambahkan}}",
+      "result": "{added} ditambahkan, {already} sudah ada di daftar, {invalid} bukan nomor telepon.",
+      "invalidSamples": "Contoh: {samples}",
+      "listTitle": "Nomor dalam daftar",
+      "total": "{count, plural, =0 {Tidak ada nomor dalam daftar} one {# nomor dalam daftar} other {# nomor dalam daftar}}",
+      "search": "Cari nomor",
+      "loading": "Memuat daftar...",
+      "empty": "Belum ada nomor",
+      "emptyHint": "Tambahkan nomor yang meminta untuk tidak dihubungi lewat telepon atau pesan teks, atau ekstrak dari registri yang boleh Anda gunakan.",
+      "noMatch": "Tidak ada nomor yang cocok",
+      "source": {
+        "manual": "Ditambahkan manual",
+        "import": "Dari berkas",
+        "contact_request": "Diminta oleh orangnya",
+        "registry_export": "Ekstrak registri"
+      },
+      "remove": "Hapus",
+      "removeLabel": "Hapus {phone} dari daftar",
+      "removed": "Nomor dihapus dari daftar",
+      "newer": "Terbaru",
+      "older": "Terlama",
+      "confirm": {
+        "title": "Hapus nomor ini?",
+        "message": "{phone} dapat kembali menerima panggilan dan pesan teks pemasaran, kecuali kontak telah menarik persetujuannya. Hapus hanya jika orangnya memintanya atau nomor ini ditambahkan karena kesalahan.",
+        "confirm": "Hapus nomor",
+        "cancel": "Pertahankan"
+      }
     }
   }
 }

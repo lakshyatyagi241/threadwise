@@ -144,7 +144,9 @@
         "booking": "Página de reservas",
         "commerce": "Pago en la tienda",
         "lead": "Captación de leads",
-        "gpc": "Control Global de Privacidad"
+        "gpc": "Control Global de Privacidad",
+        "dob": "Fecha de nacimiento o edad",
+        "declaration": "Edad sin confirmar"
       },
       "by": "por {name}",
       "evidence": {
@@ -227,7 +229,9 @@
           "noteHint": "Por ejemplo: firmó el formulario en papel en el mostrador. No escribas el nombre ni los datos de contacto del tutor.",
           "ref": "Referencia (opcional)",
           "refHint": "Un número de formulario o un id de documento que puedas consultar después."
-        }
+        },
+        "minorFrom": "Se marca a partir de la fecha de nacimiento o la edad indicada. Se levanta sola el {date}, salvo que una persona la mantenga.",
+        "minorFromDeclaration": "Se marca porque la edad no se confirmó en un formulario. Permanece hasta que una persona la quite."
       }
     },
     "composer": {
@@ -351,7 +355,8 @@
         "consent_declined": "No permitido: la persona rechazó.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "No permitido: este contacto está marcado como menor y tu espacio de trabajo frena el marketing.",
-        "sale_share_opted_out": "No permitido: el contacto se excluyó de la venta o el uso compartido de sus datos."
+        "sale_share_opted_out": "No permitido: el contacto se excluyó de la venta o el uso compartido de sus datos.",
+        "on_dnc_list": "En tu lista No llamar: sin llamadas ni mensajes de marketing a este número"
       }
     },
     "notice": {

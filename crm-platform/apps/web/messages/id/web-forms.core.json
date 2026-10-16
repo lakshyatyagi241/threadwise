@@ -19,7 +19,9 @@
       "checkbox_group": "Pilihan ganda",
       "checkbox": "Kotak centang",
       "rating": "Peringkat",
-      "hidden": "Kolom tersembunyi"
+      "hidden": "Kolom tersembunyi",
+      "date_of_birth": "Tanggal lahir",
+      "age": "Usia"
     },
     "errors": {
       "network": "Server tidak dapat dihubungi. Periksa koneksi Anda dan coba lagi.",

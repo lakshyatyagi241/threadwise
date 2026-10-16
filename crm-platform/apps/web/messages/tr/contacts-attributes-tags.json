@@ -209,7 +209,10 @@
       "conditionsChip": "Koşullar: {count}",
       "pqlExampleTag": "{tag} etiketli ve 30 gündür etkin olmayan kişiler",
       "pqlExampleStage": "Son 7 günde oluşturulan {stage} kişileri",
-      "pqlExampleNoOwner": "Sahibi olmayan kişiler"
+      "pqlExampleNoOwner": "Sahibi olmayan kişiler",
+      "colDateOfBirth": "Doğum tarihi",
+      "colMinor": "Reşit olmayan",
+      "minorBadge": "Reşit olmayan"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
       "company": "Şirket",
       "companyHint": "Bu kişiyi bir kuruluşun altında gruplar.",
-      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin."
+      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin.",
+      "dateOfBirth": "Doğum tarihi",
+      "dateOfBirthHint": "İsteğe bağlı. Kişiyi reşit olmayan yapıyorsa kişi öyle işaretlenir."
     },
     "tags": {
       "title": "Etiketler",
@@ -461,7 +466,9 @@
         "source": "Kaynak",
         "consent": "Pazarlama izni (evet / hayır)",
         "consentSms": "SMS pazarlama onayı (evet / hayır)",
-        "consentEmail": "E-posta pazarlama onayı (evet / hayır)"
+        "consentEmail": "E-posta pazarlama onayı (evet / hayır)",
+        "dateOfBirth": "Doğum tarihi (önce yıl, 2010-05-04)",
+        "minor": "Reşit olmayan (evet kişiyi işaretler)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "etiket adı çok uzun",
         "plan_limit_reached": "plan kişi sınırına ulaşıldı",
         "tag_limit_reached": "plan etiket sınırına ulaşıldı",
-        "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi"
+        "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
+        "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
       "ownerFailed": "Sahip değiştirilemedi. Tekrar deneyin.",
       "ownerMe": "{name} (ben)",
-      "ownerFormer": "Eski üye"
+      "ownerFormer": "Eski üye",
+      "dateOfBirth": "Doğum tarihi"
     },
     "attributes": {
       "eyebrow": "Diğer / Öznitelikler",
@@ -1422,7 +1431,8 @@
         "needsFollowUp": "Takip gerekenler",
         "active": "Aktif",
         "inactive": "Pasif",
-        "unsubscribed": "Abonelikten çıkanlar"
+        "unsubscribed": "Abonelikten çıkanlar",
+        "minors": "Reşit olmayanlar"
       }
     },
     "erase": {

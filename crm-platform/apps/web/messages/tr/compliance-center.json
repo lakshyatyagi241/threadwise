@@ -18,7 +18,8 @@
       "notices": "Bildirimler",
       "links": "Gizlilik ve şart bağlantıları",
       "subprocessors": "Alt işleyiciler",
-      "windows": "Sessiz saatler ve aramalar"
+      "windows": "Sessiz saatler ve aramalar",
+      "dnc": "Aranmayacaklar"
     },
     "saveBar": {
       "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
@@ -35,7 +36,8 @@
       "duplicate": "Bu adla listelenmiş bir alt işleyiciniz zaten var.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "dncInvalid": "Dosya okunamadı: içinde telefon numarası yok veya tek seferde çok fazla numara var."
     },
     "problems": {
       "httpsOnly": "https:// ile başlayan bir adres kullanın.",
@@ -322,7 +324,9 @@
         "hint": "DPDP Yasası, kişilerin onayı kayıtlı bir onay yöneticisi aracılığıyla yönetmesine izin verir. Kullanıyorsanız buraya kendinizinkini yazın.",
         "managerName": "Onay yöneticisi",
         "managerUrl": "Onay yöneticisi bağlantısı",
-        "placeholderNote": "Bu yalnızca bir nottur. Henüz hiçbir şey bir onay yöneticisine bağlı değil."
+        "placeholderNote": "Bu yalnızca bir nottur. Henüz hiçbir şey bir onay yöneticisine bağlı değil.",
+        "managerRegistration": "Onay Yöneticisi kayıt numarası",
+        "managerRegistrationHint": "Veri Koruma Kurulunun Onay Yöneticinizi kaydettiği numara. Yalnızca not amaçlıdır."
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "Singapur Do Not Call",
           "custom": "Kendi listeniz"
         },
-        "note": "Bu yalnızca bir nottur. Henüz hiçbir şey bir kayıtla karşılaştırılmıyor."
+        "note": "Bu yalnızca bir nottur. Henüz hiçbir şey bir kayıtla karşılaştırılmıyor.",
+        "listNote": "Aranmayacaklar listenizdeki numaralar (son sekme) pazarlama aramalarından ve mesajlarından zaten hariç tutulur."
       },
       "enforcedNote": "Sessiz saatler bir pazarlama mesajını bitene kadar bekletir, arama penceresi de dışındaki aramaları reddeder. Her kişinin kendi saati kullanılır. 24 saatlik pencere içindeki yanıtlar ve hizmet bildirimleri asla bekletilmez."
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)",
       "heldCount": "{count} kişi sessiz saatler nedeniyle bekletiliyor"
+    },
+    "dnc": {
+      "intro": "Bu listedeki numaralara, onay geçmişi ne olursa olsun sesli veya SMS ile pazarlama yapılmaz. WhatsApp, e-posta ve hizmet mesajları bundan etkilenmez. Buradan bir ulusal kayıtla karşılaştırma yapılmaz: indirme hakkınız olan listeyi ekleyin.",
+      "addTitle": "Numara ekle",
+      "numbers": "Telefon numaraları",
+      "numbersHint": "Her satıra bir numara veya virgülle ayırın. Bir seferde en fazla {max}; daha fazlası için dosyayı kullanın.",
+      "country": "Yerel numaralar için ülke kodu",
+      "countryHint": "Ülke kodu olmadan yazılmış bir numara bu kodla okunur.",
+      "note": "Not",
+      "noteHint": "İsteğe bağlı. Bu numaraların neden listelendiği.",
+      "add": "Listeye ekle",
+      "adding": "Ekleniyor...",
+      "or": "veya",
+      "import": "CSV dosyasından ekle",
+      "importing": "Dosya okunuyor...",
+      "importHint": "phone, mobile veya number adlı sütun, yoksa ilk sütun. Büyük dosya parçalar hâlinde okunur.",
+      "fromRegistry": "Dosya, kullanma hakkım olan bir kayıttan alınmış listedir",
+      "progress": "{of} parçadan {done}. gönderiliyor...",
+      "added": "{count, plural, =0 {Eklenecek yeni numara yok} one {# numara eklendi} other {# numara eklendi}}",
+      "result": "{added} eklendi, {already} zaten listede, {invalid} telefon numarası değil.",
+      "invalidSamples": "Örneğin: {samples}",
+      "listTitle": "Listedeki numaralar",
+      "total": "{count, plural, =0 {Listede numara yok} one {Listede # numara var} other {Listede # numara var}}",
+      "search": "Numara bul",
+      "loading": "Liste yükleniyor...",
+      "empty": "Henüz numara yok",
+      "emptyHint": "Aranmak veya mesaj almak istemeyenlerin numaralarını ya da kullanabileceğiniz bir kayıttan alınmış listeyi ekleyin.",
+      "noMatch": "Eşleşen numara yok",
+      "source": {
+        "manual": "Elle eklendi",
+        "import": "Dosyadan",
+        "contact_request": "Kişi talep etti",
+        "registry_export": "Kayıttan alınan liste"
+      },
+      "remove": "Kaldır",
+      "removeLabel": "{phone} numarasını listeden kaldır",
+      "removed": "Numara listeden kaldırıldı",
+      "newer": "Daha yeni",
+      "older": "Daha eski",
+      "confirm": {
+        "title": "Bu numara kaldırılsın mı?",
+        "message": "Kişi onayını geri çekmediyse {phone} numarası yeniden pazarlama arama ve mesajları alabilir. Yalnızca kişi istediyse veya yanlışlıkla eklendiyse kaldırın.",
+        "confirm": "Numarayı kaldır",
+        "cancel": "Tut"
+      }
     }
   }
 }

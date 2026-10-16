@@ -299,6 +299,41 @@
           "held": "{count, plural, other {# lượt gửi đang bị giữ lại vì là spam.}}",
           "review": "Xem lại"
         }
+      },
+      "age": {
+        "title": "Kiểm tra tuổi",
+        "description": "Chỉ hỏi tuổi ở nơi bạn cần. Với hầu hết biểu mẫu, hãy để tắt.",
+        "enable": "Kiểm tra tuổi của khách truy cập",
+        "enableHint": "Mặc định tắt. Hãy bật nếu quy định của không gian làm việc yêu cầu, hoặc doanh nghiệp của bạn phục vụ người chưa thành niên. Biểu mẫu không bao giờ cho khách biết câu trả lời nào là hợp lệ.",
+        "mode": "Cách hỏi",
+        "modes": {
+          "declaration": "Một ô đánh dấu: “Tôi xác nhận mình ít nhất N tuổi”",
+          "age": "Hỏi tuổi của họ",
+          "dob": "Hỏi ngày sinh của họ"
+        },
+        "modeHints": {
+          "declaration": "Không lưu bất kỳ thông tin nào về tuổi. Ít dữ liệu nhất.",
+          "age": "Một số nguyên. Dùng để kiểm tra; chỉ lưu kết quả.",
+          "dob": "Được lưu vào liên hệ dưới dạng ngày sinh. Chỉ dùng khi bạn cần ngày sinh."
+        },
+        "minAge": "Tuổi tối thiểu",
+        "minAgeHint": "Để trống để dùng độ tuổi của không gian làm việc ({age}). Từ 1 đến 21.",
+        "minAgeInvalid": "Nhập một số nguyên từ {min} đến {max}.",
+        "whenUnder": "Nếu khách truy cập dưới độ tuổi đó",
+        "actions": {
+          "block": "Không chấp nhận lượt gửi",
+          "flag": "Chấp nhận, đánh dấu liên hệ là chưa thành niên, không ghi nhận đồng ý nhận tiếp thị",
+          "guardian": "Như trên, và yêu cầu thông tin cha mẹ hoặc người giám hộ"
+        },
+        "actionHints": {
+          "block": "Không lưu gì và khách truy cập thấy một thông báo trung lập. Với ô đánh dấu, khách chỉ cần đánh dấu vào ô.",
+          "flag": "Liên hệ được đánh dấu là chưa thành niên. Dòng đồng ý của lượt gửi này được lưu như hiển thị, nhưng không ghi nhận sự đồng ý nhận tiếp thị.",
+          "guardian": "Tên và thông tin liên hệ của cha mẹ hoặc người giám hộ được lưu cùng lượt gửi và trên dòng thời gian của liên hệ. Sự đồng ý của họ không được ghi nhận cho đến khi có người ghi nhận trên thẻ Đồng ý nhận tin."
+        },
+        "declarationBlockNote": "Với ô đánh dấu và cài đặt này, không ai bị từ chối: phải đánh dấu ô thì mới gửi được biểu mẫu.",
+        "childrenUnanswered": "Trung tâm tuân thủ của bạn chưa trả lời câu hỏi về trẻ em, nên hoạt động tiếp thị tới người chưa thành niên đã được đánh dấu vẫn được ghi nhận nhưng không bị giữ lại.",
+        "childrenLink": "Mở Trung tâm tuân thủ",
+        "neutralNote": "Đừng ghi tuổi tối thiểu trong văn bản trợ giúp của trường hoặc trong phần mô tả: trang không nên cho biết câu trả lời nào là hợp lệ."
       }
     }
   }
