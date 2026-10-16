@@ -3,10 +3,17 @@
 Runs on a shared Dokploy host: Docker Compose project `desk` in `/opt/desk` (web, api, worker, postgres+pgvector, redis,
 minio). The host's Traefik owns 80/443 and issues the TLS certificate (resolver `letsencrypt`); this stack publishes no ports
 and routes through container labels on `dokploy-network`: `/v2`, `/socket.io`, `/health`, `/ready`, `/api/v1` (the customer REST API), `/public/v1` (the signed partner API: leads, flows) and `/docs/api.json` (its OpenAPI document) go to the API,
-everything else to the web app. Images are built on a workstation and loaded over SSH (`ship.sh`), never on the host.
+everything else to the web app. Images are built elsewhere and loaded over SSH, never on this host: a push to `main` is built on the **build
+server** and released here automatically ([../build-server/README.md](../build-server/README.md)); `ship.sh` does the same by hand from a workstation.
 Memory is capped per container (about 4 GB in total) because the host runs many other apps.
 
 ## Ship / update
+
+**Normally nothing to do:** merging to `main` triggers the build server, which builds the images and runs `release` here (database dump, migrate,
+restart, health check, automatic rollback). Progress, logs, manual runs, rollback and key rotation:
+[../build-server/README.md](../build-server/README.md). Do not run `ship.sh` while a pipeline run is in progress.
+
+By hand from a workstation (needs Docker and the `desk_deploy` key; builds on your machine, so it needs about 8 GB of free memory):
 
 ```bash
 SERVER=root@<host> SSH_KEY=~/.ssh/<deploy key> deploy/hostinger/ship.sh
