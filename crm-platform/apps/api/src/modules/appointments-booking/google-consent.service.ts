@@ -287,7 +287,7 @@ export class GoogleConsentService {
       // They are detached (no event id, no drift state), so the reconcile never reads them as "missing" and the next change to a booking
       // writes a fresh event in the new account.
       if (before && before.accountSub !== null && before.accountSub !== locked.accountSub) {
-        await this.appts.detachGoogleEvents(tx, ctx.orgId);
+        await this.appts.detachEvents(tx, ctx.orgId, 'google');
       }
       await this.audit.record(tx, {
         module: CALENDAR_AUDIT_MODULE,

@@ -153,6 +153,8 @@ export const appointments = pgTable(
     orderId: idColumn('order_id'),
     calendarEventId: text('calendar_event_id'),
     calendarId: text('calendar_id'),
+    /** Which provider holds the event (`google` | `microsoft`). Null with an event id means Google: every event written before Outlook existed. */
+    calendarProvider: text('calendar_provider'),
     /** The bounded reconcile against the Google event (null until the first look): `in_sync` or `drifted`, and why. */
     googleSyncState: text('google_sync_state'),
     googleSyncReason: text('google_sync_reason'),
@@ -246,6 +248,10 @@ export const appointments = pgTable(
     index('idx_appointments_contact_id').on(t.orgId, t.contactId),
     index('idx_appointments_conversation_id').on(t.orgId, t.conversationId),
     index('idx_appointments_calendar_event_id').on(t.orgId, t.calendarEventId),
+    check(
+      'chk_appointments_calendar_provider',
+      sql`${t.calendarProvider} is null or ${t.calendarProvider} in ('google', 'microsoft')`,
+    ),
     check(
       'chk_appointments_google_sync_state',
       sql`${t.googleSyncState} is null or ${t.googleSyncState} in ('in_sync', 'drifted', 'unreadable')`,
@@ -697,6 +703,100 @@ export const appointmentCalendarConnections = pgTable(
 export type AppointmentCalendarConnectionsRow = typeof appointmentCalendarConnections.$inferSelect;
 export type NewAppointmentCalendarConnectionsRow =
   typeof appointmentCalendarConnections.$inferInsert;
+
+/**
+ * The workspace's connected Outlook / Microsoft 365 calendar (BL-035). Mirrors migrations/20261217090000_appt_microsoft_calendar.sql: one row
+ * per workspace, tokens sealed with the credentials key; Microsoft rotates the refresh token, so it is replaced on every refresh.
+ */
+export const appointmentMicrosoftConnections = pgTable(
+  'appointment_microsoft_connections',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    connectedBy: idColumn('connected_by'),
+    accountEmail: text('account_email'),
+    accountSub: text('account_sub'),
+    refreshTokenEnc: text('refresh_token_enc').notNull(),
+    accessTokenEnc: text('access_token_enc'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+    scopes: text('scopes'),
+    calendarId: text('calendar_id').notNull().default('primary'),
+    calendarName: text('calendar_name'),
+    status: text('status').notNull().default('active'),
+    statusReason: text('status_reason'),
+    statusAt: timestamp('status_at', { withTimezone: true }).notNull().defaultNow(),
+    connectedAt: timestamp('connected_at', { withTimezone: true }).notNull().defaultNow(),
+    lastErrorCode: text('last_error_code'),
+    lastErrorAt: timestamp('last_error_at', { withTimezone: true }),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('appointment_microsoft_connections_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'appointment_microsoft_connections_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_microsoft_connections_org').on(t.orgId),
+    check(
+      'chk_appointment_microsoft_connections_status',
+      sql`${t.status} in ('active', 'needs_reconnect')`,
+    ),
+    check(
+      'chk_appointment_microsoft_connections_last_error',
+      sql`(${t.lastErrorCode} is null) = (${t.lastErrorAt} is null)`,
+    ),
+    foreignKey({
+      name: 'fk_appointment_microsoft_connections_connected_by',
+      columns: [t.orgId, t.connectedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_appointment_microsoft_connections_connected_by').on(t.orgId, t.connectedBy),
+  ],
+);
+
+export type AppointmentMicrosoftConnectionsRow =
+  typeof appointmentMicrosoftConnections.$inferSelect;
+
+/** Which connected calendar bookings are written to (an admin's choice; no row = automatic). Mirrors the same migration. */
+export const appointmentCalendarPreferences = pgTable(
+  'appointment_calendar_preferences',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    provider: text('provider').notNull(),
+    updatedBy: idColumn('updated_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('appointment_calendar_preferences_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'appointment_calendar_preferences_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_calendar_preferences_org').on(t.orgId),
+    check(
+      'chk_appointment_calendar_preferences_provider',
+      sql`${t.provider} in ('google', 'microsoft')`,
+    ),
+    foreignKey({
+      name: 'fk_appointment_calendar_preferences_updated_by',
+      columns: [t.orgId, t.updatedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_appointment_calendar_preferences_updated_by').on(t.orgId, t.updatedBy),
+  ],
+);
 
 /**
  * One Google consent in flight (TW-GACC-010): created when an admin presses Connect, filled by the public callback with what Google returned

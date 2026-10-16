@@ -75,7 +75,13 @@ export class AppointmentCalendarSyncService {
     const ctx = RequestContextStore.require();
     let event;
     try {
-      event = await this.calendar.readEvent(ctx.orgId, row.calendarId, row.calendarEventId!);
+      // Only an appointment with a Google event can be drifted (the reconcile reads Google events only).
+      event = await this.calendar.readEvent(
+        ctx.orgId,
+        row.calendarId,
+        row.calendarEventId!,
+        'google',
+      );
     } catch (err) {
       throw this.asApiError(err);
     }

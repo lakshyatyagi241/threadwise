@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   APPOINTMENT_CALENDAR,
+  eventProviderOf,
   type CalendarSyncPort,
 } from '../../infra/providers/appointments-booking';
 import { AppointmentsRepository } from './appointments.repository';
@@ -18,6 +19,8 @@ import { BookingTypesRepository } from './booking-types.repository';
  */
 @Injectable()
 export class AppointmentCalendarWriter {
+  private readonly logger = new Logger(AppointmentCalendarWriter.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly appts: AppointmentsRepository,
@@ -45,15 +48,17 @@ export class AppointmentCalendarWriter {
     });
     if (!work) return 'skipped';
     const { row, type, integration } = work;
+    // The provider that holds the event now (an event with none recorded was written to Google, the only provider there was).
+    const heldBy = row.calendarEventId ? eventProviderOf(row.calendarProvider) : null;
     // An event that exists lives in the calendar it was written to, even when the type has been pointed at another one since: update and
-    // delete go there. A first write goes where the type says.
+    // delete go there. A first write goes where the type says (a calendar id the type names is a Google calendar's).
     const calendarId = row.calendarEventId
       ? (row.calendarId ?? integration?.calendarId ?? null)
       : (integration?.calendarId ?? row.calendarId ?? null);
 
     if (row.status === 'cancelled' || row.status === 'declined') {
       if (!row.calendarEventId) return 'skipped';
-      await this.calendar.deleteEvent(orgId, calendarId, row.calendarEventId);
+      await this.calendar.deleteEvent(orgId, calendarId, row.calendarEventId, heldBy ?? undefined);
       // We removed it ourselves: nothing to reconcile any more.
       await this.db.txAs({ orgId, userId: null }, (tx) =>
         this.appts.update(tx, orgId, row.id, undefined, {
@@ -69,10 +74,31 @@ export class AppointmentCalendarWriter {
     // Only a confirmed booking is a commitment worth a calendar event (a pending request or an unpaid hold is not).
     if (row.status !== 'confirmed') return 'skipped';
 
+    // Events are written to ONE provider. When the event sits in the other one (the workspace changed provider), it is removed there
+    // (best effort: that grant may be gone) and written fresh here, instead of patching an id that means nothing to this calendar.
+    const writeTo = this.calendar.writeTarget ? await this.calendar.writeTarget(orgId) : heldBy;
+    if (this.calendar.writeTarget && !writeTo) return 'skipped';
+    let existingEventId = row.calendarEventId;
+    let firstCalendarId = calendarId;
+    if (existingEventId && writeTo !== null && heldBy !== writeTo) {
+      await this.calendar
+        .deleteEvent(orgId, calendarId, existingEventId, heldBy ?? undefined)
+        .catch((err: unknown) =>
+          this.logger.warn(
+            { orgId, appointment: row.uuid, from: heldBy, err: String(err) },
+            'could not remove the event from the previous calendar provider',
+          ),
+        );
+      existingEventId = null;
+      firstCalendarId = null;
+    }
+    // A calendar id the booking type names is one of Google's calendars: Microsoft writes to the workspace's chosen calendar.
+    const targetCalendarId = writeTo === 'microsoft' ? null : firstCalendarId;
+
     const result = await this.calendar.upsertEvent({
       orgId,
       appointmentId: row.uuid,
-      calendarId,
+      calendarId: targetCalendarId,
       title: type?.name ?? row.title,
       description: row.description,
       location: row.location,
@@ -82,14 +108,15 @@ export class AppointmentCalendarWriter {
       attendeeEmail: row.inviteeEmail,
       attendeeName: row.inviteeName,
       createMeet: integration?.createMeet ?? type?.locationType === 'virtual',
-      existingEventId: row.calendarEventId,
+      existingEventId,
     });
     if (!result) return 'skipped';
     const now = new Date();
     await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.appts.update(tx, orgId, row.id, undefined, {
         calendar_event_id: result.eventId,
-        calendar_id: result.calendarId ?? calendarId,
+        calendar_id: result.calendarId ?? targetCalendarId,
+        calendar_provider: result.provider ?? writeTo ?? null,
         meet_url: result.meetUrl ?? row.meetUrl,
         google_event_etag: result.etag ?? null,
         google_pushed_at: now,
