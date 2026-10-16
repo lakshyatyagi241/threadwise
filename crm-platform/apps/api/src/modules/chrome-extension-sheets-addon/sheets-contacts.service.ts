@@ -187,7 +187,10 @@ export class SheetsContactsService {
       if (!caller.holds('record.contacts.update')) {
         return failedRow(index, ref, ERROR_CODES.FORBIDDEN, 'Your role cannot edit contacts.');
       }
-      const current = toContactResponse(found);
+      // Used only to diff against the sheet row below, never serialized back to the add-on as
+      // this contact's own phone display — unmasked so the diff compares real values, not the
+      // Contacts-screen masked string against the sheet's raw one.
+      const current = toContactResponse(found, { canRevealPhone: true });
       let patch = this.patchOf(current, c);
       // A row that only repeats a consent the ledger already holds changes nothing: it is "unchanged", not another update.
       if (
