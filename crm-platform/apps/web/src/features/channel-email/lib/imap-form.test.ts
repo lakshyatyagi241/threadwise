@@ -134,7 +134,11 @@ describe('Test credentials input', () => {
     const built = buildTestInput(filled({ address: '', displayName: '' }));
     expect(built.ok).toBe(true);
     if (built.ok) {
-      expect(built.input.imap).toMatchObject({ host: 'imap.acme.com', port: 993, password: 'secret' });
+      expect(built.input.imap).toMatchObject({
+        host: 'imap.acme.com',
+        port: 993,
+        password: 'secret',
+      });
       expect(built.input.smtp).toEqual({ host: 'smtp.acme.com', port: 465, security: 'ssl' });
       expect(JSON.stringify(built.input)).not.toContain('address');
     }

@@ -3,15 +3,15 @@ import {
   GRAPH_SUBSCRIPTION_MINUTES,
   actionOf,
   clientStateOf,
-  deriveClientStateKey,
   isPublicHttpsUrl,
   notificationsOf,
   renewalDue,
   verifyClientState,
 } from '../../../src/modules/channel-email/graph-push-rules';
+import { deriveStateKey } from '../../../src/modules/channel-email/mail-state';
 
-const key = deriveClientStateKey(Buffer.alloc(32, 9).toString('base64'));
-const other = deriveClientStateKey(Buffer.alloc(32, 8).toString('base64'));
+const key = deriveStateKey(Buffer.alloc(32, 9).toString('base64'));
+const other = deriveStateKey(Buffer.alloc(32, 8).toString('base64'));
 const UUID = '0b6f0c0e-7a54-4e3b-9d6e-0a1b2c3d4e5f';
 
 describe('clientState (the secret Graph hands back with every notification)', () => {

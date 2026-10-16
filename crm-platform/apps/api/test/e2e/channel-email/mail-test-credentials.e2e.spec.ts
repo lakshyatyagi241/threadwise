@@ -27,7 +27,13 @@ const login = () => ({
 async function insertMailbox(
   tenant: Tenant,
   address: string,
-  o: { provider?: string; status?: string; scope?: string; owner?: number; syncedAgoSec?: number } = {},
+  o: {
+    provider?: string;
+    status?: string;
+    scope?: string;
+    owner?: number;
+    syncedAgoSec?: number;
+  } = {},
 ): Promise<string> {
   const provider = o.provider ?? 'imap';
   const sealed =
@@ -90,17 +96,23 @@ describe('E-08: testing settings before connecting', () => {
 
   it('stores nothing and sends nothing: no mailbox appears, nothing is queued', async () => {
     const before = (
-      await rig.p.h.owner.query(`SELECT count(*)::int AS n FROM mail_mailboxes WHERE org_id = $1`, [t.orgId])
+      await rig.p.h.owner.query(`SELECT count(*)::int AS n FROM mail_mailboxes WHERE org_id = $1`, [
+        t.orgId,
+      ])
     ).rows[0].n;
     await as().post('/v2/email/mailboxes/test-imap').send(body());
     const after = (
-      await rig.p.h.owner.query(`SELECT count(*)::int AS n FROM mail_mailboxes WHERE org_id = $1`, [t.orgId])
+      await rig.p.h.owner.query(`SELECT count(*)::int AS n FROM mail_mailboxes WHERE org_id = $1`, [
+        t.orgId,
+      ])
     ).rows[0].n;
     expect(after).toBe(before);
   });
 
   it('refuses a body that is not settings', async () => {
-    const res = await as().post('/v2/email/mailboxes/test-imap').send({ imap: { host: 'x' } });
+    const res = await as()
+      .post('/v2/email/mailboxes/test-imap')
+      .send({ imap: { host: 'x' } });
     expect([400, 422]).toContain(res.status);
     const bad = await as()
       .post('/v2/email/mailboxes/test-imap')
@@ -109,11 +121,17 @@ describe('E-08: testing settings before connecting', () => {
   });
 
   it('needs a signed-in person who may manage mailboxes, and the add-on', async () => {
-    expect((await rig.p.api.http().post('/v2/email/mailboxes/test-imap').send(body())).status).toBe(401);
+    expect((await rig.p.api.http().post('/v2/email/mailboxes/test-imap').send(body())).status).toBe(
+      401,
+    );
     const nobody = await rig.p.api.member(t, 'nomail', [['inbox.conversation.read']]);
-    expect((await as(nobody.token).post('/v2/email/mailboxes/test-imap').send(body())).status).toBe(403);
+    expect((await as(nobody.token).post('/v2/email/mailboxes/test-imap').send(body())).status).toBe(
+      403,
+    );
     const personal = await rig.p.api.member(t, 'persmail', [['mail.mailboxes.manage_personal']]);
-    expect((await as(personal.token).post('/v2/email/mailboxes/test-imap').send(body())).status).toBe(200);
+    expect(
+      (await as(personal.token).post('/v2/email/mailboxes/test-imap').send(body())).status,
+    ).toBe(200);
     const locked = await rig.p.api.signup('mtc-locked');
     await setMailPlan(rig.p, locked.orgId, { feature: false });
     const res = await as(locked.admin).post('/v2/email/mailboxes/test-imap').send(body());
@@ -156,8 +174,12 @@ describe('E-08: testing a connected mailbox with its saved login', () => {
 
   it('follows the same right as Sync now: managing personal mailboxes does not open the company’s', async () => {
     const shared = await insertMailbox(t, 'shared@acme.test');
-    const personalOnly = await rig.p.api.member(t, 'persmail2', [['mail.mailboxes.manage_personal']]);
-    expect((await as(personalOnly.token).post(`/v2/email/mailboxes/${shared}/test`)).status).toBe(403);
+    const personalOnly = await rig.p.api.member(t, 'persmail2', [
+      ['mail.mailboxes.manage_personal'],
+    ]);
+    expect((await as(personalOnly.token).post(`/v2/email/mailboxes/${shared}/test`)).status).toBe(
+      403,
+    );
   });
 
   it('is limited to a few runs a minute per workspace (429 MAIL_RATE_LIMITED)', async () => {
@@ -184,7 +206,9 @@ describe('E-11: how far behind a mailbox is', () => {
     const res = await as(lag.admin).get('/v2/email/mailboxes');
     expect(res.status).toBe(200);
     const by = (a: string) =>
-      (res.body.data as Array<{ address: string; syncLagSeconds: number | null }>).find((m) => m.address === a)!;
+      (res.body.data as Array<{ address: string; syncLagSeconds: number | null }>).find(
+        (m) => m.address === a,
+      )!;
     expect(by('lag-connected@acme.test').syncLagSeconds).toBeGreaterThanOrEqual(300);
     expect(by('lag-connected@acme.test').syncLagSeconds).toBeLessThan(360);
     expect(by('lag-never@acme.test').syncLagSeconds).toBeNull();

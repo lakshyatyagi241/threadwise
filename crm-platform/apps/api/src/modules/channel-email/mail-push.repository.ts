@@ -43,7 +43,10 @@ export class MailPushRepository {
   }
 
   /** Every mailbox of `provider` that has a push registration or could get one (connected), for the renewal sweep. */
-  async pushCandidates(tx: Tx, provider: 'google' | 'microsoft' = 'google'): Promise<PushMailbox[]> {
+  async pushCandidates(
+    tx: Tx,
+    provider: 'google' | 'microsoft' = 'google',
+  ): Promise<PushMailbox[]> {
     const res = await tx.execute(sql`
       SELECT org_id, uuid, status, sync_cursor, push_state FROM mail_mailboxes
        WHERE provider = ${provider} AND (push_state IS NOT NULL OR status = 'connected')

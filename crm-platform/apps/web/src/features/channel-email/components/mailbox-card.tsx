@@ -252,7 +252,9 @@ export function MailboxCard({
               <div className={row}>
                 <span className="text-muted-foreground">{t('lag')}</span>
                 <span
-                  className={lagIsHigh(mailbox.syncLagSeconds) ? 'font-mono text-warning' : 'font-mono'}
+                  className={
+                    lagIsHigh(mailbox.syncLagSeconds) ? 'font-mono text-warning' : 'font-mono'
+                  }
                   data-testid="email-lag"
                 >
                   {lag.key === 'lagUnderMinute' ? t(lag.key) : t(lag.key, { count: lag.count })}

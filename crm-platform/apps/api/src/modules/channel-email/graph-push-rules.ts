@@ -1,6 +1,7 @@
-import { createHmac, hkdfSync, timingSafeEqual } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { z } from 'zod';
+import { MAIL_MICROSOFT_PUSH_PATH } from '@crm/contracts';
 
 // Pure rules of Microsoft Graph change notifications (E-17, the Microsoft half of TW-MAIL-033). No I/O.
 
@@ -9,20 +10,11 @@ export const GRAPH_SUBSCRIPTION_KIND = 'graph-subscription';
 /** The only resource watched: new mail in the Inbox, the same folder the delta sync reads. */
 export const GRAPH_SUBSCRIPTION_RESOURCE = "me/mailFolders('inbox')/messages";
 /** The public route Microsoft calls (notifications, lifecycle events and the validation handshake all arrive here). */
-export const MICROSOFT_PUSH_PATH = '/v2/public/email/microsoft/push';
+export const MICROSOFT_PUSH_PATH = MAIL_MICROSOFT_PUSH_PATH;
 /** What we ask for. Graph allows at most 4230 minutes (under three days) for mail; a little less leaves room for clock skew. */
 export const GRAPH_SUBSCRIPTION_MINUTES = 4_200;
 /** The longest validation token we echo: Microsoft's are a few hundred characters at most. */
 export const VALIDATION_TOKEN_MAX = 1_000;
-
-const INFO = 'crm/channel-email/graph-push-client-state/v1';
-
-/** The key `clientState` values are signed with: derived from the credentials key under a label of its own. */
-export function deriveClientStateKey(credentialsKeyBase64: string): Buffer {
-  return Buffer.from(
-    hkdfSync('sha256', Buffer.from(credentialsKeyBase64, 'base64'), Buffer.alloc(0), INFO, 32),
-  );
-}
 
 const mac = (key: Buffer, orgId: number, mailboxUuid: string): string =>
   createHmac('sha256', key).update(`graph-push:${orgId}:${mailboxUuid}`).digest('base64url');
@@ -30,7 +22,9 @@ const mac = (key: Buffer, orgId: number, mailboxUuid: string): string =>
 /**
  * The secret Microsoft hands back with every notification of a subscription (`clientState`, at most 128 characters). It names the
  * workspace and mailbox and carries an HMAC of both, so a notification can be checked without storing a secret per subscription and a
- * forged one (anyone can POST to a public URL) is recognised by its signature alone.
+ * forged one (anyone can POST to a public URL) is recognised by its signature alone. The key is the mail state key (`deriveStateKey`,
+ * HKDF of the credentials key); the signed text starts with `graph-push:`, which no OAuth state payload (base64url JSON) can, so the
+ * two uses of the key cannot be swapped.
  */
 export const clientStateOf = (key: Buffer, orgId: number, mailboxUuid: string): string =>
   `${orgId}.${mailboxUuid}.${mac(key, orgId, mailboxUuid)}`;
@@ -106,7 +100,14 @@ export function renewalDue(
   return t - nowMs <= Math.min(renewBeforeMs, cap);
 }
 
-const PRIVATE_V4 = [/^10\./, /^127\./, /^169\.254\./, /^192\.168\./, /^172\.(1[6-9]|2\d|3[01])\./, /^0\./];
+const PRIVATE_V4 = [
+  /^10\./,
+  /^127\./,
+  /^169\.254\./,
+  /^192\.168\./,
+  /^172\.(1[6-9]|2\d|3[01])\./,
+  /^0\./,
+];
 
 /**
  * Microsoft calls the notification URL from the internet: it must be HTTPS on a public host. A localhost, `.local`, `.internal` or private

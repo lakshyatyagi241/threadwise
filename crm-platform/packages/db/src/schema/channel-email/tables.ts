@@ -302,10 +302,7 @@ export const mailTimelineEntries = pgTable(
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
-    check(
-      'chk_mail_timeline_entries_key',
-      sql`char_length(${t.dedupeKey}) between 1 and 500`,
-    ),
+    check('chk_mail_timeline_entries_key', sql`char_length(${t.dedupeKey}) between 1 and 500`),
     foreignKey({
       name: 'fk_mail_timeline_entries_activity',
       columns: [t.orgId, t.activityId],

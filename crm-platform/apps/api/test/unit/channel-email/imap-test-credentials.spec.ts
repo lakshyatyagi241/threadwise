@@ -11,8 +11,20 @@ import { INBOX_FAILED } from '../../../src/modules/channel-email/mail-test-rules
  */
 const SECRET = 'hunter2-never-shown';
 const connection: PasswordConnection = {
-  imap: { host: 'imap.acme.test', port: 993, security: 'ssl', username: 'support', password: SECRET },
-  smtp: { host: 'smtp.acme.test', port: 465, security: 'ssl', username: 'support', password: SECRET },
+  imap: {
+    host: 'imap.acme.test',
+    port: 993,
+    security: 'ssl',
+    username: 'support',
+    password: SECRET,
+  },
+  smtp: {
+    host: 'smtp.acme.test',
+    port: 465,
+    security: 'ssl',
+    username: 'support',
+    password: SECRET,
+  },
 };
 
 const coded = (code: string, extra: Record<string, unknown> = {}) =>

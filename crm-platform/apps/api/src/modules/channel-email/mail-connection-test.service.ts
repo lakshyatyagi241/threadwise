@@ -45,7 +45,10 @@ export class MailConnectionTester {
     const ctx = RequestContextStore.require();
     await this.throttle(ctx.orgId);
     const result = await this.drivers.password('imap').test(passwordConnectionOf(input));
-    this.logger.log({ orgId: ctx.orgId, userId: ctx.userId, ok: result.ok }, 'mail credentials tested');
+    this.logger.log(
+      { orgId: ctx.orgId, userId: ctx.userId, ok: result.ok },
+      'mail credentials tested',
+    );
     return result;
   }
 
@@ -85,7 +88,11 @@ export class MailConnectionTester {
   }
 
   private async throttle(orgId: number): Promise<void> {
-    const over = await this.limits.hitAndCheck(`mail:test:${orgId}`, TEST_WINDOW_MS, TEST_LIMIT_PER_MINUTE);
+    const over = await this.limits.hitAndCheck(
+      `mail:test:${orgId}`,
+      TEST_WINDOW_MS,
+      TEST_LIMIT_PER_MINUTE,
+    );
     if (over) {
       throw new AppError(
         ERROR_CODES.MAIL_RATE_LIMITED,

@@ -3,11 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { MAIL_MICROSOFT_CALLBACK_PATH } from '@crm/contracts';
 import { channelEmailEnv } from '../../config/domains/channel-email.env';
 import type { Env } from '../../config/env.schema';
+import { deriveStateKey } from './mail-state';
 import type { MicrosoftMailCredentials } from '../../infra/providers/channel-email';
 import {
   MICROSOFT_PUSH_PATH,
   clientStateOf,
-  deriveClientStateKey,
   isPublicHttpsUrl,
   verifyClientState,
 } from './graph-push-rules';
@@ -40,9 +40,7 @@ export class MicrosoftMailConfig {
     config: ConfigService<Env, true>,
   ) {
     this.appUrl = config.get('APP_URL', { infer: true }).replace(/\/$/, '');
-    this.clientStateKey = deriveClientStateKey(
-      config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }),
-    );
+    this.clientStateKey = deriveStateKey(config.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }));
   }
 
   /** The address registered at Microsoft when the operator does not override it. */
@@ -112,7 +110,8 @@ export class MicrosoftMailConfig {
     }
     return {
       notificationUrl,
-      clientStateFor: (orgId, mailboxUuid) => clientStateOf(this.clientStateKey, orgId, mailboxUuid),
+      clientStateFor: (orgId, mailboxUuid) =>
+        clientStateOf(this.clientStateKey, orgId, mailboxUuid),
       verify: (clientState) => verifyClientState(this.clientStateKey, clientState),
     };
   }

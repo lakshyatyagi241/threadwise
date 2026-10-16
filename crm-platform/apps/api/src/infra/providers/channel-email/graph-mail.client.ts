@@ -284,7 +284,9 @@ export class GraphMailClient {
     id: string,
     expirationDateTime: string,
   ): Promise<{ id: string; expirationDateTime: string }> {
-    const body = await this.api(token, 'PATCH', `/subscriptions/${enc(id)}`, { expirationDateTime });
+    const body = await this.api(token, 'PATCH', `/subscriptions/${enc(id)}`, {
+      expirationDateTime,
+    });
     return subscriptionOf({ id, ...body });
   }
 

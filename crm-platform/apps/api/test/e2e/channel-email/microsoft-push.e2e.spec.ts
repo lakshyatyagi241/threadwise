@@ -41,7 +41,10 @@ const row = async (address: string) =>
   (await p.h.owner.query(`SELECT * FROM mail_mailboxes WHERE address = $1`, [address]))
     .rows[0] as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 const sweep = () => p.h.app.get(MailPushService).sweep();
-const post = (body: unknown) => request(p.h.app.getHttpServer()).post(PUSH).send(body as object);
+const post = (body: unknown) =>
+  request(p.h.app.getHttpServer())
+    .post(PUSH)
+    .send(body as object);
 const deltaCalls = () => fake.count('GET', /\/mailFolders\/inbox\/messages\/delta$/);
 const convCount = async (address: string) =>
   Number(
@@ -115,7 +118,9 @@ describe('E-17: off until the operator switches it on', () => {
     expect(await sweep()).toMatchObject({ started: 0, renewed: 0 });
     expect(fake.subscriptions.size).toBe(0);
     expect((await row(A1)).push_state).toBeNull();
-    expect((await request(p.h.app.getHttpServer()).post(PUSH).query({ validationToken: 'x' })).status).toBe(404);
+    expect(
+      (await request(p.h.app.getHttpServer()).post(PUSH).query({ validationToken: 'x' })).status,
+    ).toBe(404);
   });
 });
 
@@ -147,22 +152,33 @@ describe('E-17: the subscription', () => {
   });
 
   it('is left alone while far from its end, and the hub reports push as active', async () => {
-    const before = fake.count('PATCH', /\/subscriptions\//) + fake.count('POST', /\/subscriptions$/);
+    const before =
+      fake.count('PATCH', /\/subscriptions\//) + fake.count('POST', /\/subscriptions$/);
     expect(await sweep()).toMatchObject({ started: 0, renewed: 0 });
-    expect(fake.count('PATCH', /\/subscriptions\//) + fake.count('POST', /\/subscriptions$/)).toBe(before);
+    expect(fake.count('PATCH', /\/subscriptions\//) + fake.count('POST', /\/subscriptions$/)).toBe(
+      before,
+    );
     const list = await p.api.as(t.admin).get('/v2/email/mailboxes');
     expect(list.body.data.every((m: { pushActive: boolean }) => m.pushActive)).toBe(true);
   });
 
   it('answers the validation handshake as plain text and refuses an empty or oversized token', async () => {
-    const ok = await request(p.h.app.getHttpServer()).post(PUSH).query({ validationToken: 'abc 123+x' });
+    const ok = await request(p.h.app.getHttpServer())
+      .post(PUSH)
+      .query({ validationToken: 'abc 123+x' });
     expect(ok.status).toBe(200);
     expect(ok.headers['content-type']).toMatch(/^text\/plain/);
     expect(ok.headers['x-content-type-options']).toBe('nosniff');
     expect(ok.text).toBe('abc 123+x');
-    expect((await request(p.h.app.getHttpServer()).post(PUSH).query({ validationToken: '' })).status).toBe(400);
     expect(
-      (await request(p.h.app.getHttpServer()).post(PUSH).query({ validationToken: 'x'.repeat(1_001) })).status,
+      (await request(p.h.app.getHttpServer()).post(PUSH).query({ validationToken: '' })).status,
+    ).toBe(400);
+    expect(
+      (
+        await request(p.h.app.getHttpServer())
+          .post(PUSH)
+          .query({ validationToken: 'x'.repeat(1_001) })
+      ).status,
     ).toBe(400);
   });
 
@@ -176,7 +192,9 @@ describe('E-17: the subscription', () => {
     expect(fake.subscriptionsOf(A1)).toHaveLength(1);
     expect(subOf(A1).id).toBe(id);
     expect(subOf(A1).expires).toBeGreaterThan(Date.now() + 40 * 3_600_000);
-    expect(Date.parse((await row(A1)).push_state.expiresAt)).toBeGreaterThan(Date.now() + 40 * 3_600_000);
+    expect(Date.parse((await row(A1)).push_state.expiresAt)).toBeGreaterThan(
+      Date.now() + 40 * 3_600_000,
+    );
   });
 
   it('is created again when Graph no longer has it', async () => {
@@ -192,26 +210,39 @@ describe('E-17: the subscription', () => {
 describe('E-17: a notification', () => {
   it('syncs the mailbox it names: the new mail is a conversation within seconds, read through the delta cursor', async () => {
     const before = await convCount(A1);
-    fake.deliver(A1, { conversationId: 'push-1', subject: 'Pushed hello', from: 'new@example.com' });
+    fake.deliver(A1, {
+      conversationId: 'push-1',
+      subject: 'Pushed hello',
+      from: 'new@example.com',
+    });
     const res = await post(fake.notification(subOf(A1)));
     expect(res.status).toBe(202);
     await until('the pushed mail', async () => ((await convCount(A1)) > before ? true : undefined));
   });
 
   it('is dropped silently when forged: a wrong clientState, another mailbox’s subscription id, an unknown one or garbage', async () => {
-    fake.deliver(A1, { conversationId: 'push-2', subject: 'Should wait', from: 'late@example.com' });
+    fake.deliver(A1, {
+      conversationId: 'push-2',
+      subject: 'Should wait',
+      from: 'late@example.com',
+    });
     const calls = deltaCalls();
     const before = await convCount(A1);
     const sub = subOf(A1);
     const other = subOf(A2);
     expect((await post(fake.notification(sub, { clientState: 'forged' }))).status).toBe(202);
     expect(
-      (await post(fake.notification(sub, { clientState: `${t.orgId}.${randomUUID()}.${'A'.repeat(43)}` })))
-        .status,
+      (
+        await post(
+          fake.notification(sub, { clientState: `${t.orgId}.${randomUUID()}.${'A'.repeat(43)}` }),
+        )
+      ).status,
     ).toBe(202);
     // A genuine clientState of A1 carried by A2's subscription id.
     expect((await post(fake.notification(sub, { subscriptionId: other.id }))).status).toBe(202);
-    expect((await post(fake.notification(sub, { subscriptionId: 'sub-unknown' }))).status).toBe(202);
+    expect((await post(fake.notification(sub, { subscriptionId: 'sub-unknown' }))).status).toBe(
+      202,
+    );
     expect((await post({ nope: true })).status).toBe(400);
     expect((await post('not json')).status).toBe(400);
     await ms(1_500);
@@ -231,8 +262,13 @@ describe('E-17: a notification', () => {
 describe('E-17: lifecycle events', () => {
   it('reauthorizationRequired flags the subscription for renewal and the sweep renews it', async () => {
     const id = subOf(A1).id;
-    expect((await post(fake.notification(subOf(A1), { lifecycleEvent: 'reauthorizationRequired' }))).status).toBe(202);
-    await until('the flag', async () => ((await row(A1)).push_state?.renewNow === true ? true : undefined));
+    expect(
+      (await post(fake.notification(subOf(A1), { lifecycleEvent: 'reauthorizationRequired' })))
+        .status,
+    ).toBe(202);
+    await until('the flag', async () =>
+      (await row(A1)).push_state?.renewNow === true ? true : undefined,
+    );
     const patches = fake.count('PATCH', /\/subscriptions\//);
     expect(await sweep()).toMatchObject({ renewed: 1, failed: 0 });
     expect(fake.count('PATCH', /\/subscriptions\//)).toBe(patches + 1);
@@ -243,7 +279,9 @@ describe('E-17: lifecycle events', () => {
   it('subscriptionRemoved forgets the subscription and the sweep makes a new one', async () => {
     const old = subOf(A1);
     fake.dropSubscription(old.id);
-    expect((await post(fake.notification(old, { lifecycleEvent: 'subscriptionRemoved' }))).status).toBe(202);
+    expect(
+      (await post(fake.notification(old, { lifecycleEvent: 'subscriptionRemoved' }))).status,
+    ).toBe(202);
     await until('forgotten', async () => ((await row(A1)).push_state === null ? true : undefined));
     expect(await sweep()).toMatchObject({ started: 1, failed: 0 });
     expect(subOf(A1).id).not.toBe(old.id);
@@ -282,7 +320,9 @@ describe('E-17: failures and the end of a mailbox', () => {
 
   it('disconnecting a mailbox deletes its subscription at Microsoft and forgets it here', async () => {
     const id = subOf(A2).id;
-    const res = await p.api.as(t.admin).delete(`/v2/email/mailboxes/${(await row(A2)).uuid as string}`);
+    const res = await p.api
+      .as(t.admin)
+      .delete(`/v2/email/mailboxes/${(await row(A2)).uuid as string}`);
     expect(res.status).toBe(204);
     expect(fake.subscriptions.has(id)).toBe(false);
     expect((await row(A2)).push_state).toBeNull();

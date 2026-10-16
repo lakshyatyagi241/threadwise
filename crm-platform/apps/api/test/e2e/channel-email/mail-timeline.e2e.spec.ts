@@ -42,16 +42,18 @@ const timeline = async (email: string, token = t.admin) => {
 const mailEntries = async (email: string) => {
   const res = await timeline(email);
   expect(res.status, JSON.stringify(res.body)).toBe(200);
-  return (res.body.data as Array<Record<string, any>>).filter((a) => // eslint-disable-line @typescript-eslint/no-explicit-any
+  return (res.body.data as Array<Record<string, any>>).filter((a) =>
+    // eslint-disable-line @typescript-eslint/no-explicit-any
     String(a.activityType).startsWith('email_'),
   );
 };
 const ledgerCount = async () =>
   Number(
     (
-      await rig.p.h.owner.query(`SELECT count(*)::int AS n FROM mail_timeline_entries WHERE org_id = $1`, [
-        t.orgId,
-      ])
+      await rig.p.h.owner.query(
+        `SELECT count(*)::int AS n FROM mail_timeline_entries WHERE org_id = $1`,
+        [t.orgId],
+      )
     ).rows[0].n,
   );
 
@@ -108,9 +110,10 @@ describe('E-19: a received mail is a line on the contact timeline', () => {
     const timelineSvc = rig.p.h.app.get(MailTimeline);
     const mailbox = { uuid: mailboxUuid, scope: 'shared' as const };
     const [conv] = (
-      await rig.p.h.owner.query(`SELECT uuid FROM conversations WHERE org_id = $1 AND peer_key = 't:th-1'`, [
-        t.orgId,
-      ])
+      await rig.p.h.owner.query(
+        `SELECT uuid FROM conversations WHERE org_id = $1 AND peer_key = 't:th-1'`,
+        [t.orgId],
+      )
     ).rows as Array<{ uuid: string }>;
     const mail = {
       providerMessageId: 'a-message-the-sync-already-recorded',
@@ -119,8 +122,20 @@ describe('E-19: a received mail is a line on the contact timeline', () => {
       sentAt: new Date(),
       automated: false,
     };
-    const first = await timelineSvc.recordInbound(t.orgId, mailbox, { conversationUuid: conv!.uuid }, mail, 'hi');
-    const second = await timelineSvc.recordInbound(t.orgId, mailbox, { conversationUuid: conv!.uuid }, mail, 'hi');
+    const first = await timelineSvc.recordInbound(
+      t.orgId,
+      mailbox,
+      { conversationUuid: conv!.uuid },
+      mail,
+      'hi',
+    );
+    const second = await timelineSvc.recordInbound(
+      t.orgId,
+      mailbox,
+      { conversationUuid: conv!.uuid },
+      mail,
+      'hi',
+    );
     expect([first, second]).toEqual(['written', 'duplicate']);
     expect(await mailEntries('ana@example.com')).toHaveLength(2);
   });
@@ -157,9 +172,10 @@ describe('E-19: a received mail is a line on the contact timeline', () => {
 describe('E-19: a sent reply is a line on the contact timeline', () => {
   it('writes one entry for the reply, by the person who sent it, and a repeated request adds nothing', async () => {
     const [conv] = (
-      await rig.p.h.owner.query(`SELECT uuid FROM conversations WHERE org_id = $1 AND peer_key = 't:th-1'`, [
-        t.orgId,
-      ])
+      await rig.p.h.owner.query(
+        `SELECT uuid FROM conversations WHERE org_id = $1 AND peer_key = 't:th-1'`,
+        [t.orgId],
+      )
     ).rows as Array<{ uuid: string }>;
     const clientMessageId = randomUUID();
     const body = {
@@ -171,7 +187,9 @@ describe('E-19: a sent reply is a line on the contact timeline', () => {
     const res = await as().post(`/v2/inbox/conversations/${conv!.uuid}/messages`).send(body);
     expect(res.status, JSON.stringify(res.body)).toBe(202);
     await until('reply sent', async () => {
-      const r = await rig.p.h.owner.query(`SELECT status FROM messages WHERE uuid = $1`, [res.body.id]);
+      const r = await rig.p.h.owner.query(`SELECT status FROM messages WHERE uuid = $1`, [
+        res.body.id,
+      ]);
       return r.rows[0]?.status === 'sent' ? true : undefined;
     });
     await until('timeline entry', async () =>
@@ -179,7 +197,9 @@ describe('E-19: a sent reply is a line on the contact timeline', () => {
         ? true
         : undefined,
     );
-    const sent = (await mailEntries('ana@example.com')).filter((e) => e.activityType === 'email_sent');
+    const sent = (await mailEntries('ana@example.com')).filter(
+      (e) => e.activityType === 'email_sent',
+    );
     expect(sent).toHaveLength(1);
     expect(sent[0]).toMatchObject({
       title: 'Email sent to ana@example.com: Your order',
@@ -209,16 +229,19 @@ describe('E-19: who may read it, and which mailboxes write', () => {
       .as(other.admin)
       .get(`/v2/contacts/${await contactUuid('ana@example.com')}/activities`);
     expect(res.status).toBe(404);
-    const rows = await rig.p.h.owner.query(`SELECT count(*)::int AS n FROM mail_timeline_entries WHERE org_id = $1`, [
-      other.orgId,
-    ]);
+    const rows = await rig.p.h.owner.query(
+      `SELECT count(*)::int AS n FROM mail_timeline_entries WHERE org_id = $1`,
+      [other.orgId],
+    );
     expect(rows.rows[0].n).toBe(0);
   });
 
   it('a personal mailbox writes nothing to the shared timeline', async () => {
     const before = await ledgerCount();
     const owner = (
-      await rig.p.h.owner.query(`SELECT id FROM users WHERE org_id = $1 ORDER BY id LIMIT 1`, [t.orgId])
+      await rig.p.h.owner.query(`SELECT id FROM users WHERE org_id = $1 ORDER BY id LIMIT 1`, [
+        t.orgId,
+      ])
     ).rows[0].id;
     await rig.p.h.owner.query(
       `UPDATE mail_mailboxes SET scope = 'personal', owner_user_id = $3 WHERE org_id = $1 AND uuid = $2`,

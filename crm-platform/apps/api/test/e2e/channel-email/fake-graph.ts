@@ -149,7 +149,8 @@ export class FakeGraph {
    * What Graph does when it validates a notification URL: it POSTs `?validationToken=<token>` and wants the token back as text within 10 s.
    * A test points this at the real API route; without one the validation fails (Graph cannot reach the address).
    */
-  validator: ((url: string, token: string) => Promise<{ status: number; text: string }>) | null = null;
+  validator: ((url: string, token: string) => Promise<{ status: number; text: string }>) | null =
+    null;
   private uploads = new Map<
     string,
     { draft: string; email: string; name: string; mime: string; chunks: Buffer[] }
@@ -367,7 +368,11 @@ export class FakeGraph {
   ): Promise<{ status: number; body?: unknown }> {
     const live = token ? this.accessTokens.get(token) : undefined;
     if (!live?.valid) {
-      return graphError(401, 'InvalidAuthenticationToken', 'Access token has expired or is not yet valid.');
+      return graphError(
+        401,
+        'InvalidAuthenticationToken',
+        'Access token has expired or is not yet valid.',
+      );
     }
     const one = /^\/v1\.0\/subscriptions\/([^/]+)$/.exec(path);
     const shape = (x: FakeSubscription) => ({
@@ -394,7 +399,9 @@ export class FakeGraph {
         return graphError(400, 'ValidationError', 'clientState is longer than 128 characters.');
       }
       const token0 = `vt-${++this.seq}-${Math.random().toString(36).slice(2)}`;
-      const checked = this.validator ? await this.validator(notificationUrl, token0).catch(() => null) : null;
+      const checked = this.validator
+        ? await this.validator(notificationUrl, token0).catch(() => null)
+        : null;
       if (!checked || checked.status !== 200 || checked.text !== token0) {
         return graphError(
           400,
@@ -421,7 +428,8 @@ export class FakeGraph {
     }
     if (one && method === 'PATCH') {
       const expires = checkExpiry(body.expirationDateTime);
-      if (expires === null) return graphError(400, 'ValidationError', 'The expiration is not valid.');
+      if (expires === null)
+        return graphError(400, 'ValidationError', 'The expiration is not valid.');
       sub!.expires = expires;
       return { status: 200, body: shape(sub!) };
     }

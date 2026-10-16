@@ -3,11 +3,12 @@ import { ERROR_CODES } from '@crm/contracts';
 
 /** One side of a test as the screen words it: ok (with the INBOX count for IMAP), or the failure reason (a key under `email.imap.test.reasons`). */
 export type SideView =
-  | { ok: true; inboxMessages: number | null }
-  | { ok: false; reason: MailTestReason };
+  { ok: true; inboxMessages: number | null } | { ok: false; reason: MailTestReason };
 
 export const sideView = (s: MailTestSide): SideView =>
-  s.ok ? { ok: true, inboxMessages: s.inboxMessages } : { ok: false, reason: s.reason ?? 'unknown' };
+  s.ok
+    ? { ok: true, inboxMessages: s.inboxMessages }
+    : { ok: false, reason: s.reason ?? 'unknown' };
 
 /** A refused run (rate limit) is its own message; everything else that is not a test result is the generic one. */
 export const testErrorKey = (code: string): 'tooMany' | 'failed' =>

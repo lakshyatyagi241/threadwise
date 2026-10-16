@@ -59,7 +59,10 @@ const label = (p: TimelinePerson): string => {
  * The first lines of what the person wrote, on one line: quoted earlier mail (`> ...`) and the "On <date>, <name> wrote:" lead-in are
  * dropped, whitespace is collapsed, and it is cut at `max` characters. Null when nothing is left (a mail with only a picture or files).
  */
-export function previewOf(text: string | null | undefined, max = TIMELINE_PREVIEW_MAX): string | null {
+export function previewOf(
+  text: string | null | undefined,
+  max = TIMELINE_PREVIEW_MAX,
+): string | null {
   if (!text) return null;
   const kept: string[] = [];
   for (const line of text.split(/\r?\n/)) {

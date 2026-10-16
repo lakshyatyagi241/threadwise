@@ -39,7 +39,12 @@ describe('steps', () => {
 
 describe('results', () => {
   it('a failed side carries its step, reason and sentence, never a count', () => {
-    expect(failedSide('login', f('auth_failed', 'imap', 'The IMAP server refused the username or password.'))).toEqual({
+    expect(
+      failedSide(
+        'login',
+        f('auth_failed', 'imap', 'The IMAP server refused the username or password.'),
+      ),
+    ).toEqual({
       ok: false,
       failedStep: 'login',
       reason: 'auth_failed',
