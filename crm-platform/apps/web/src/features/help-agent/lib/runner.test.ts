@@ -136,16 +136,22 @@ const done = (text = 'finished', success = true): ScriptedStep => ({
 });
 
 describe('help agent: the library really drives the page through our gate', () => {
-  it('loads the library and finds elements through the selector map the gate depends on (fails the build if a version changes it)', async () => {
-    const libs = await loadLibs();
-    const controller = new libs.PageController({ enableMask: false });
-    await (controller as unknown as PageController).updateTree();
-    expect(
-      elementAt(controller, indexOfFirst(controller as unknown as PageController, 'save'))?.id,
-    ).toBe('save');
-    expect(elementAt(controller, 9999)).toBeNull();
-    expect(elementAt({}, 0)).toBeNull();
-  });
+  it(
+    'loads the library and finds elements through the selector map the gate depends on (fails the build if a version changes it)',
+    async () => {
+      const libs = await loadLibs();
+      const controller = new libs.PageController({ enableMask: false });
+      await (controller as unknown as PageController).updateTree();
+      expect(
+        elementAt(controller, indexOfFirst(controller as unknown as PageController, 'save'))?.id,
+      ).toBe('save');
+      expect(elementAt(controller, 9999)).toBeNull();
+      expect(elementAt({}, 0)).toBeNull();
+    },
+    // Loads the real library into a fresh jsdom environment; routinely takes 4-5s on its own
+    // and the default 5000ms budget leaves no margin under any concurrent load.
+    15000,
+  );
 
   it('presses a harmless button without asking', async () => {
     const h = harness([{ click: 'open' }, done()]);
