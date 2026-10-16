@@ -157,6 +157,9 @@ class CallMonitorService : Service() {
       return
     }
     val intent = summaryIntent()
+    // Kept for the app too: if it could not be opened from here (no "display over other apps"), the app opens the same screen
+    // when the person comes back to it (see `takeEnded`).
+    ended = Ended(intent.dataString.orEmpty(), SystemClock.elapsedRealtime())
     var opened = false
     if (Settings.canDrawOverlays(this)) {
       // Opened while the card is still up: a window of the app on screen is what lets it start a screen from the background.
@@ -186,7 +189,18 @@ class CallMonitorService : Service() {
     (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(NOTIFICATION_ENDED, notification)
   }
 
+  private class Ended(val url: String, val at: Long)
+
   companion object {
+    @Volatile private var ended: Ended? = null
+
+    /** The "log this call" address of the call that just ended, once; null when there is none or it is old. */
+    fun takeEnded(): String? {
+      val last = ended ?: return null
+      ended = null
+      return if (SystemClock.elapsedRealtime() - last.at <= ENDED_VALID_MS) last.url else null
+    }
+
     const val ACTION_START = "expo.modules.callmonitor.START"
     const val ACTION_STOP = "expo.modules.callmonitor.STOP"
     private const val CHANNEL_ONGOING = "call_monitor_ongoing"
@@ -196,5 +210,8 @@ class CallMonitorService : Service() {
 
     /** How long to wait for the call to start before giving up (the dialler may be left open for a while). */
     private const val WAIT_FOR_CALL_MS = 90_000L
+
+    /** How long after a call ended the app still offers to log it when the person comes back to it. */
+    private const val ENDED_VALID_MS = 10 * 60_000L
   }
 }

@@ -1,22 +1,52 @@
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { AppState } from 'react-native';
+import { takeEndedCall } from '@/lib/device/call-monitor';
 import { markAppLeft, takeReturnedCall } from '@/lib/device/pending-call';
+
+/** How long the "log this call" screen the call-monitor service opens by itself is given to appear before the app opens it. */
+const SERVICE_GRACE_MS = 1000;
+
+/** The query of the address the service builds (`<scheme>:///call-summary?contactId=…&name=…&startedAt=…&durationSec=…`). */
+function summaryParams(url: string): Record<string, string> | null {
+  const [location = '', query = ''] = url.split('#')[0]?.split('?') ?? [];
+  if (!location.endsWith('/call-summary')) return null;
+  const params: Record<string, string> = {};
+  for (const pair of query.split('&')) {
+    const [key = '', value = ''] = pair.split('=');
+    if (key) params[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, ' '));
+  }
+  return params;
+}
+
+/** Opens the sheet for a call the service saw end and could not open the screen for (no "display over other apps"). */
+function openEndedCall(router: ReturnType<typeof useRouter>): void {
+  const url = takeEndedCall();
+  const params = url ? summaryParams(url) : null;
+  if (params) router.push({ pathname: '/call-summary', params });
+}
 
 /**
  * Where nothing hears the call end (iOS, or Android without the phone-state permission), the call placed from the app is
- * offered for logging when the person comes back to the app. Mount it once, in the signed-in layout.
+ * offered for logging when the person comes back to the app. Where the call-monitor service heard it end but could not open the
+ * screen from the background, the same happens (after a moment, so a screen the service did open is not opened twice: that screen
+ * takes the call away when it appears). Mount it once, in the signed-in layout.
  */
 export function useCallReturn(): void {
   const router = useRouter();
   useEffect(() => {
+    let grace: ReturnType<typeof setTimeout> | undefined;
     const subscription = AppState.addEventListener('change', (state) => {
       if (state !== 'active') {
         markAppLeft();
         return;
       }
       const call = takeReturnedCall();
-      if (!call?.party.contactId) return;
+      if (!call?.party.contactId) {
+        clearTimeout(grace);
+        grace = setTimeout(() => openEndedCall(router), SERVICE_GRACE_MS);
+        return;
+      }
       router.push({
         pathname: '/call-summary',
         params: {
@@ -27,6 +57,9 @@ export function useCallReturn(): void {
         },
       });
     });
-    return () => subscription.remove();
+    return () => {
+      clearTimeout(grace);
+      subscription.remove();
+    };
   }, [router]);
 }

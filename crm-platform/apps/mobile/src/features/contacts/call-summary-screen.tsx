@@ -1,6 +1,6 @@
 import { createContactActivitySchema } from '@crm/contracts';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -16,6 +16,8 @@ import { SegmentedControl } from '@/components/ui/segmented-control';
 import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
 import { messageForError } from '@/lib/api/error-message';
+import { takeEndedCall } from '@/lib/device/call-monitor';
+import { forgetCall } from '@/lib/device/pending-call';
 import { can, useSession } from '@/lib/session/use-session';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -61,6 +63,11 @@ export function CallSummaryScreen() {
   const [openedAt] = useState(() => Date.now());
   const startedAt = wholeNumber(firstParam(params.startedAt), openedAt);
   const create = useCreateActivity(contactId);
+  // This call is on screen now: the app must not offer it a second time when the person comes back to it (`use-call-return`).
+  useEffect(() => {
+    takeEndedCall();
+    forgetCall();
+  }, []);
 
   const [status, setStatus] = useState<Status>('completed');
   const [duration, setDuration] = useState(

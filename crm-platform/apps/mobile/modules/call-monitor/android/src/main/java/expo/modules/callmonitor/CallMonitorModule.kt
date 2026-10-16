@@ -37,6 +37,9 @@ class CallMonitorModule : Module() {
       ContextCompat.startForegroundService(context, intent)
     }
 
+    /** The "log this call" address of the call that just ended, handed over once (null when there is none). */
+    Function("takeEndedCall") { CallMonitorService.takeEnded() }
+
     Function("stop") {
       context.stopService(Intent(context, CallMonitorService::class.java))
     }

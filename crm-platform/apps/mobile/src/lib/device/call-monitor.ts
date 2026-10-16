@@ -21,6 +21,7 @@ interface NativeCallMonitor {
   openOverlaySettings(): void;
   start(options: Record<string, string>): void;
   stop(): void;
+  takeEndedCall(): string | null;
 }
 
 /** The Android module in `modules/call-monitor`. It is absent on iOS, in tests and in a build made before the module existed. */
@@ -96,5 +97,18 @@ export function stopCallMonitor(): void {
     nativeModule()?.stop();
   } catch (error) {
     log.exception(error, 'device.call_monitor_stop_failed');
+  }
+}
+
+/**
+ * The "log this call" address of the call the service just saw end, handed over once; null when there is none (or this build
+ * is older than the call-monitor module's hand-over). The service opens that screen itself when it can; this is how the app finds
+ * out about a call it could not open the screen for, when the person comes back to the app.
+ */
+export function takeEndedCall(): string | null {
+  try {
+    return nativeModule()?.takeEndedCall() ?? null;
+  } catch {
+    return null;
   }
 }
