@@ -4,10 +4,13 @@ import { ButtonIcon } from '../../button-icon';
 import { ButtonActionPicker } from '../../button-action-picker';
 import { buttonActionOf, buttonActionPatch } from '../../../lib/button-actions';
 import {
+  FLB_AGE_END_TEXT,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
+  flbCleanAgeWhenUnder,
   flbCleanAskInputType,
   flbCleanDateFormat,
+  flbIsAgeInput,
 } from '@crm/contracts';
 import { useTranslations } from 'next-intl';
 import { askInputLabel, askInputWrongText, dateFormatLabel } from '../../../lib/contract-text';
@@ -217,6 +220,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   const ts = useTranslations('flb.builder.simple.editors');
+  const ta = useTranslations('flb.builder.askAge');
   const tf = useFlb();
   const unofficial = useUnofficialWhatsapp();
   const options = asArray(d.options);
@@ -240,7 +244,8 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       </Field>
       {checked ? (
         <>
-          {flbCleanAskInputType(d.validate) === 'date' ? (
+          {flbCleanAskInputType(d.validate) === 'date' ||
+          flbCleanAskInputType(d.validate) === 'date_of_birth' ? (
             <Field label={t('askDateFormat')} hint={t('askDateFormatHint')}>
               <SelectInput
                 value={flbCleanDateFormat(d.dateFormat)}
@@ -248,6 +253,46 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
                 onChange={(v) => set('dateFormat', v)}
               />
             </Field>
+          ) : null}
+          {flbIsAgeInput(flbCleanAskInputType(d.validate)) ? (
+            <>
+              <Field label={ta('minAge')} hint={ta('minAgeHint')}>
+                <NumberInput
+                  value={d.ageMinAge}
+                  min={1}
+                  max={21}
+                  onChange={(v) =>
+                    set(
+                      'ageMinAge',
+                      Number.isNaN(v) ? '' : Math.min(21, Math.max(1, Math.trunc(v))),
+                    )
+                  }
+                />
+              </Field>
+              <Field label={ta('whenUnder')} hint={ta('whenUnderHint')}>
+                <SelectInput
+                  value={flbCleanAgeWhenUnder(d.ageWhenUnder)}
+                  options={[
+                    { v: 'end', l: ta('end') },
+                    { v: 'continue', l: ta('continue') },
+                  ]}
+                  onChange={(v) => set('ageWhenUnder', v)}
+                />
+              </Field>
+              {flbCleanAgeWhenUnder(d.ageWhenUnder) === 'end' ? (
+                <Field label={ta('endText')} hint={ta('endTextHint')}>
+                  <TextArea
+                    value={d.ageEndText}
+                    rows={2}
+                    placeholder={FLB_AGE_END_TEXT}
+                    onChange={(v) => set('ageEndText', v)}
+                  />
+                </Field>
+              ) : (
+                <p className="text-xs text-muted-foreground">{ta('continueNote')}</p>
+              )}
+              <p className="text-xs text-muted-foreground">{ta('note')}</p>
+            </>
           ) : null}
           {flbCleanAskInputType(d.validate) === 'phone' ? (
             <Field hint={ts('ask.verifyOtpHint')}>

@@ -115,7 +115,14 @@
         "consentAt": "Đồng ý lúc",
         "noConsent": "Biểu mẫu này không yêu cầu đồng ý.",
         "links": "Bản ghi",
-        "actions": "Hành động"
+        "actions": "Hành động",
+        "ageCheck": "Kiểm tra tuổi",
+        "ageOutcome": "Kết quả",
+        "ageUnder": "Dưới tuổi tối thiểu. Lượt gửi đã được chấp nhận và liên hệ đã được đánh dấu là chưa thành niên; sự đồng ý nhận tiếp thị không được ghi nhận.",
+        "guardianName": "Cha mẹ hoặc người giám hộ",
+        "guardianEmail": "Email người giám hộ",
+        "guardianPhone": "Điện thoại người giám hộ",
+        "guardianNote": "Do khách truy cập cung cấp, chưa được kiểm tra. Sự đồng ý của họ chưa được ghi nhận cho đến khi có người ghi nhận trên thẻ Đồng ý nhận tin của liên hệ."
       },
       "actions": {
         "retry": "Thử lại",

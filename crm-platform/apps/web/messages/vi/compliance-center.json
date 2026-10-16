@@ -18,7 +18,8 @@
       "notices": "Thông báo",
       "links": "Liên kết quyền riêng tư và điều khoản",
       "subprocessors": "Bên xử lý phụ",
-      "windows": "Giờ yên tĩnh và cuộc gọi"
+      "windows": "Giờ yên tĩnh và cuộc gọi",
+      "dnc": "Không gọi"
     },
     "saveBar": {
       "unsaved": "Bạn có thay đổi chưa lưu.",
@@ -35,7 +36,8 @@
       "duplicate": "Bạn đã có một bên xử lý phụ với tên này trong danh sách.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
       "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "dncInvalid": "Không thể đọc tệp: tệp không có số điện thoại nào, hoặc có quá nhiều số trong một lần."
     },
     "problems": {
       "httpsOnly": "Hãy dùng địa chỉ bắt đầu bằng https://.",
@@ -322,7 +324,9 @@
         "hint": "Đạo luật DPDP cho phép mọi người quản lý sự đồng ý thông qua một bên quản lý sự đồng ý đã đăng ký. Hãy ghi tên bên bạn dùng tại đây nếu có.",
         "managerName": "Bên quản lý sự đồng ý",
         "managerUrl": "Liên kết bên quản lý sự đồng ý",
-        "placeholderNote": "Đây chỉ là ghi chú. Hiện chưa kết nối với bên quản lý sự đồng ý nào."
+        "placeholderNote": "Đây chỉ là ghi chú. Hiện chưa kết nối với bên quản lý sự đồng ý nào.",
+        "managerRegistration": "Số đăng ký của Consent Manager",
+        "managerRegistrationHint": "Số mà Hội đồng Bảo vệ Dữ liệu đã đăng ký cho Consent Manager của bạn. Chỉ để ghi chú."
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "Danh sách Không gọi của Singapore",
           "custom": "Danh sách của riêng bạn"
         },
-        "note": "Đây chỉ là ghi chú. Hiện chưa có đối chiếu nào với danh sách."
+        "note": "Đây chỉ là ghi chú. Hiện chưa có đối chiếu nào với danh sách.",
+        "listNote": "Các số trong danh sách Không gọi của bạn (tab cuối cùng) đã bị loại khỏi các cuộc gọi và tin nhắn tiếp thị."
       },
       "enforcedNote": "Giờ yên tĩnh giữ tin nhắn tiếp thị lại cho đến khi kết thúc, còn khung giờ gọi sẽ từ chối cuộc gọi nằm ngoài khung. Hệ thống dùng giờ của từng liên hệ. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ."
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)",
       "heldCount": "{count} đang tạm giữ vì giờ yên tĩnh"
+    },
+    "dnc": {
+      "intro": "Các số trong danh sách này không nhận tiếp thị qua cuộc gọi thoại hoặc SMS, bất kể lịch sử đồng ý ra sao. WhatsApp, email và tin nhắn dịch vụ không bị giữ lại bởi danh sách này. Không có việc đối chiếu với danh sách quốc gia nào từ đây: hãy thêm bản trích xuất mà bạn được phép tải về.",
+      "addTitle": "Thêm số",
+      "numbers": "Số điện thoại",
+      "numbersHint": "Mỗi dòng một số, hoặc phân tách bằng dấu phẩy. Tối đa {max} số mỗi lần; dùng tệp nếu nhiều hơn.",
+      "country": "Mã quốc gia cho số nội địa",
+      "countryHint": "Số viết không có mã quốc gia sẽ được hiểu theo mã này.",
+      "note": "Ghi chú",
+      "noteHint": "Không bắt buộc. Lý do các số này nằm trong danh sách.",
+      "add": "Thêm vào danh sách",
+      "adding": "Đang thêm...",
+      "or": "hoặc",
+      "import": "Thêm từ tệp CSV",
+      "importing": "Đang đọc tệp...",
+      "importHint": "Cột có tên phone, mobile hoặc number, nếu không có thì lấy cột đầu tiên. Tệp lớn được đọc theo từng phần.",
+      "fromRegistry": "Tệp là bản trích xuất từ một danh sách quốc gia mà tôi được phép sử dụng",
+      "progress": "Đang gửi phần {done} trên {of}...",
+      "added": "{count, plural, =0 {Không có số mới để thêm} one {Đã thêm # số} other {Đã thêm # số}}",
+      "result": "Đã thêm {added}, {already} đã có trong danh sách, {invalid} không phải số điện thoại.",
+      "invalidSamples": "Ví dụ: {samples}",
+      "listTitle": "Các số trong danh sách",
+      "total": "{count, plural, =0 {Chưa có số nào trong danh sách} one {# số trong danh sách} other {# số trong danh sách}}",
+      "search": "Tìm một số",
+      "loading": "Đang tải danh sách...",
+      "empty": "Chưa có số nào",
+      "emptyHint": "Thêm các số đã yêu cầu không bị gọi hoặc nhắn tin, hoặc một bản trích xuất từ danh sách mà bạn được phép dùng.",
+      "noMatch": "Không có số nào khớp",
+      "source": {
+        "manual": "Thêm thủ công",
+        "import": "Từ tệp",
+        "contact_request": "Người đó yêu cầu",
+        "registry_export": "Trích xuất từ danh sách quốc gia"
+      },
+      "remove": "Xóa",
+      "removeLabel": "Xóa {phone} khỏi danh sách",
+      "removed": "Đã xóa số khỏi danh sách",
+      "newer": "Mới hơn",
+      "older": "Cũ hơn",
+      "confirm": {
+        "title": "Xóa số này?",
+        "message": "{phone} có thể nhận lại các cuộc gọi và tin nhắn tiếp thị, trừ khi liên hệ đã rút lại sự đồng ý. Chỉ xóa khi người đó yêu cầu hoặc số được thêm nhầm.",
+        "confirm": "Xóa số",
+        "cancel": "Giữ lại"
+      }
     }
   }
 }

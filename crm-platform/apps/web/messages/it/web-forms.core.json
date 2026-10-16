@@ -19,7 +19,9 @@
       "checkbox_group": "Scelta multipla",
       "checkbox": "Casella di controllo",
       "rating": "Valutazione",
-      "hidden": "Campo nascosto"
+      "hidden": "Campo nascosto",
+      "date_of_birth": "Data di nascita",
+      "age": "Età"
     },
     "errors": {
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",

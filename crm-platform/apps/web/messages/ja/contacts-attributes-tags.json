@@ -209,7 +209,10 @@
       "conditionsChip": "条件：{count}",
       "pqlExampleTag": "タグ {tag} が付いた30日間アクティブでない連絡先",
       "pqlExampleStage": "過去7日間に作成された {stage} の連絡先",
-      "pqlExampleNoOwner": "担当者がいない連絡先"
+      "pqlExampleNoOwner": "担当者がいない連絡先",
+      "colDateOfBirth": "生年月日",
+      "colMinor": "未成年",
+      "minorBadge": "未成年"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -351,7 +354,9 @@
       "ownerOutOfScope": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
       "company": "会社",
       "companyHint": "この連絡先を組織にまとめます。",
-      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。"
+      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。",
+      "dateOfBirth": "生年月日",
+      "dateOfBirthHint": "任意。これにより連絡先が未成年になる場合は、未成年として設定されます。"
     },
     "tags": {
       "title": "タグ",
@@ -461,7 +466,9 @@
         "source": "ソース",
         "consent": "マーケティング同意（はい / いいえ）",
         "consentSms": "SMSマーケティング同意(はい / いいえ)",
-        "consentEmail": "メールマーケティング同意(はい / いいえ)"
+        "consentEmail": "メールマーケティング同意(はい / いいえ)",
+        "dateOfBirth": "生年月日(年が先頭、2010-05-04)",
+        "minor": "未成年(「はい」で連絡先に設定)"
       },
       "notInFile": "ファイルにありません",
       "columnN": "列 {n}",
@@ -518,7 +525,8 @@
         "tag_name_too_long": "タグ名が長すぎます",
         "plan_limit_reached": "プランの連絡先上限に達しました",
         "tag_limit_reached": "プランのタグ上限に達しました",
-        "duplicate_in_file": "重複した番号、前の行に統合"
+        "duplicate_in_file": "重複した番号、前の行に統合",
+        "invalid_date_of_birth": "生年月日が、生年月日として成立する年が先頭の日付ではありません"
       },
       "statusHint": "このファイルで作成される連絡先に適用されます。",
       "queued": "開始を待機中...",
@@ -578,7 +586,8 @@
       "ownerForbidden": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
       "ownerFailed": "担当者を変更できませんでした。もう一度お試しください。",
       "ownerMe": "{name}(自分)",
-      "ownerFormer": "元メンバー"
+      "ownerFormer": "元メンバー",
+      "dateOfBirth": "生年月日"
     },
     "attributes": {
       "eyebrow": "その他 / 属性",
@@ -1423,7 +1432,8 @@
         "needsFollowUp": "要フォローアップ",
         "active": "アクティブ",
         "inactive": "非アクティブ",
-        "unsubscribed": "配信停止"
+        "unsubscribed": "配信停止",
+        "minors": "未成年者"
       }
     },
     "erase": {

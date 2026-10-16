@@ -77,3 +77,13 @@ Under **Channels this consent covers** tick the channels you will use: WhatsApp,
 - **Unticked**: if the box is optional and the visitor leaves it empty, nothing is recorded about consent. The submission still keeps the wording that was shown.
 
 Someone who already stopped a channel is not turned back on by a new submission.
+
+## Age check
+
+Two field kinds, **Date of birth** and **Age**, save the answer on the contact (a date of birth as its date of birth). Add one only where you need it. Under **Settings**, **Age check** judges the answer before anything is saved. It is off by default.
+
+1. Choose how to ask: a box "I confirm I am at least N years old" (nothing about the age is kept) or a date of birth field.
+2. Leave the minimum age empty to use your workspace's age from the [Compliance center](help:compliance-center) (13, 16 or 18 by the laws you switched on), or set your own between 1 and 21.
+3. Choose what happens when the answer is under the age: **Do not accept the submission**, with a neutral message, **Accept it, flag the contact as a minor, record no marketing consent**, or the same and **ask for a parent or guardian**, whose name and contact are kept with the submission.
+
+The form never tells the visitor which answer passes, so do not write the age in a field's help text. The question the check judges must be required. When the answer is under the age and the action is to accept, the consent line of that submission is stored as shown but no marketing agreement is recorded. Nothing is pre-ticked.

@@ -115,7 +115,14 @@
         "consentAt": "Dato il",
         "noConsent": "Questo modulo non chiedeva il consenso.",
         "links": "Record",
-        "actions": "Azioni"
+        "actions": "Azioni",
+        "ageCheck": "Controllo dell'età",
+        "ageOutcome": "Risultato",
+        "ageUnder": "Sotto l'età minima. L'invio è stato accettato e il contatto è stato contrassegnato come minorenne; il consenso al marketing non è stato registrato.",
+        "guardianName": "Genitore o tutore",
+        "guardianEmail": "Email del tutore",
+        "guardianPhone": "Telefono del tutore",
+        "guardianNote": "Fornito dal visitatore, non verificato. Il suo consenso non è registrato finché una persona non lo registra nella scheda Consenso del contatto."
       },
       "actions": {
         "retry": "Riprova",

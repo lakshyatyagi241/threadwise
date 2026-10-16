@@ -1,6 +1,16 @@
 import type { PublicFormSubmitInput } from '@crm/contracts';
 import { answersForSubmit } from './validate';
-import { CONSENT_KEY, type Answers, type FieldIssue, type FormShape } from './types';
+import {
+  AGE_CONFIRMED_KEY,
+  CONSENT_KEY,
+  GUARDIAN_EMAIL_KEY,
+  GUARDIAN_NAME_KEY,
+  GUARDIAN_PHONE_KEY,
+  pageAgeGate,
+  type Answers,
+  type FieldIssue,
+  type FormShape,
+} from './types';
 
 /** The body of `POST /v2/public/forms/:publicKey/submit` (spec section 7.2): the contract's own type, so a change there stops here. */
 export type SubmitPayload = PublicFormSubmitInput;
@@ -18,6 +28,10 @@ export type SubmitOutcome =
   | { ok: false; kind: 'rate_limited'; retryAfterSeconds: number | null }
   | { ok: false; kind: 'closed' }
   | { ok: false; kind: 'payment_unavailable' }
+  /** The age check refused the submission (BL-217). The page says so neutrally and does not offer another try in this session. */
+  | { ok: false; kind: 'age_blocked' }
+  /** The age check wants a parent or guardian before it accepts (BL-217). */
+  | { ok: false; kind: 'guardian_required' }
   | { ok: false; kind: 'error' };
 
 const KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const;
@@ -42,6 +56,8 @@ export function hiddenValues(page: {
   return out;
 }
 
+const text = (v: unknown): string => (typeof v === 'string' ? v.trim() : '');
+
 export function buildPayload(
   def: FormShape,
   answers: Answers,
@@ -53,10 +69,25 @@ export function buildPayload(
     captchaToken?: string;
   },
 ): SubmitPayload {
+  const guardianName = text(answers[GUARDIAN_NAME_KEY]);
+  const guardianEmail = text(answers[GUARDIAN_EMAIL_KEY]);
+  const guardianPhone = text(answers[GUARDIAN_PHONE_KEY]);
   return {
     idempotencyKey: ctx.idempotencyKey,
     answers: answersForSubmit(def, answers),
     hidden: hiddenValues(ctx.page),
+    ...(pageAgeGate(def)?.mode === 'declaration'
+      ? { ageConfirmed: answers[AGE_CONFIRMED_KEY] === true }
+      : {}),
+    ...(guardianName
+      ? {
+          guardian: {
+            name: guardianName,
+            ...(guardianEmail ? { email: guardianEmail } : {}),
+            ...(guardianPhone ? { phone: guardianPhone } : {}),
+          },
+        }
+      : {}),
     ...(def.consent.enabled
       ? { consent: { given: answers[CONSENT_KEY] === true, textVersion: def.consent.version } }
       : {}),

@@ -53,7 +53,9 @@
           "crm_required_unbound": "Una proprietà richiesta dal tuo workspace non è nel modulo.",
           "no_contact_point": "Aggiungi un campo email o telefono collegato al contatto, così ogni invio può essere associato a una persona.",
           "payment_no_gateway": "Collega un gateway di pagamento in grado di creare link di pagamento, oppure disattiva il pagamento.",
-          "captcha_not_configured": "Il CAPTCHA è impostato su sempre attivo, ma la piattaforma non ha un CAPTCHA. Scegli un'altra impostazione oppure chiedi all'amministratore della piattaforma di aggiungerne uno."
+          "captcha_not_configured": "Il CAPTCHA è impostato su sempre attivo, ma la piattaforma non ha un CAPTCHA. Scegli un'altra impostazione oppure chiedi all'amministratore della piattaforma di aggiungerne uno.",
+          "age_gate_field_missing": "Il controllo dell'età ha bisogno della sua domanda: aggiungi un campo per la data di nascita o per l'età, oppure scegli invece la casella.",
+          "age_gate_field_not_required": "La domanda su cui si basa il controllo dell'età deve essere obbligatoria."
         },
         "code": {
           "no_fields": "Aggiungi almeno un campo.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Il tuo workspace richiede la proprietà CRM «{property}»: aggiungila al modulo e contrassegnala come obbligatoria.",
           "crm_required_optional": "Un campo collegato a una proprietà CRM obbligatoria deve essere obbligatorio.",
           "redirect_not_https": "L’indirizzo di reindirizzamento deve iniziare con https://.",
-          "too_large": "Il modulo è troppo grande. Rimuovi alcuni campi."
+          "too_large": "Il modulo è troppo grande. Rimuovi alcuni campi.",
+          "age_gate_field_missing": "Il controllo dell'età ha bisogno della sua domanda: aggiungi un campo per la data di nascita o per l'età, oppure scegli invece la casella.",
+          "age_gate_field_optional": "La domanda su cui si basa il controllo dell'età deve essere obbligatoria."
         }
       },
       "versionsTitle": "Versioni",

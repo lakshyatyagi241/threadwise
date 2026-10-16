@@ -23,7 +23,10 @@
       "imported": "นำเข้าจากไฟล์",
       "createdAt": "สร้างเมื่อ",
       "updatedAt": "อัปเดตล่าสุด",
-      "lastActivityAt": "กิจกรรมล่าสุด"
+      "lastActivityAt": "กิจกรรมล่าสุด",
+      "minor": "ทำเครื่องหมายเป็นผู้เยาว์แล้ว",
+      "dateOfBirth": "วันเกิด",
+      "age": "อายุ (ปี)"
     },
     "fieldGroups": {
       "journey": "เส้นทาง",

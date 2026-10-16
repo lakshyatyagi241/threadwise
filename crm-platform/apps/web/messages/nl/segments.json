@@ -23,7 +23,10 @@
       "imported": "Geïmporteerd uit een bestand",
       "createdAt": "Aangemaakt",
       "updatedAt": "Laatst bijgewerkt",
-      "lastActivityAt": "Laatste activiteit"
+      "lastActivityAt": "Laatste activiteit",
+      "minor": "Gemarkeerd als minderjarig",
+      "dateOfBirth": "Geboortedatum",
+      "age": "Leeftijd (jaren)"
     },
     "fieldGroups": {
       "journey": "Traject",

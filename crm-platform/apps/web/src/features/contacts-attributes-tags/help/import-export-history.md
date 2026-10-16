@@ -44,3 +44,7 @@ If your file has a column that says whether each person agreed to marketing, map
 ## Consent notice and SMS or email consent
 
 When you tick **I have consent to message these contacts**, two optional boxes appear: the notice or lawful basis the contacts agreed under (for example "Opted in at checkout, privacy notice v3") and its version. They are kept with each recorded consent as proof. If your file has columns for SMS consent or email consent (headers such as "SMS consent" or "Email opt-in"), map them to **SMS marketing consent (yes / no)** and **Email marketing consent (yes / no)**. Those channels are recorded only for rows that say yes; email also needs an email address on the row. A file with no such column records WhatsApp only.
+
+## Date of birth and minor columns
+
+Map a column to **Date of birth** to save it on the contact. Write it as year first, for example 2010-05-04. A row whose date of birth is not a real, believable date is rejected and listed with the reason; a blank cell is simply no date. A contact whose date of birth shows they are under your workspace's age is flagged as a minor with the source "date of birth". Map a column to **Minor (yes / no)** to flag the rows that say yes, with the file as proof. A no, a blank cell or an unknown word changes nothing, and a file never clears a minor flag.

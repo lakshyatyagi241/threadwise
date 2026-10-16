@@ -1136,6 +1136,34 @@ export function SubmissionDrawer({
               )}
             </Section>
 
+            {(d.ageGate !== null || d.guardian !== null) && (
+              <Section title={t('drawer.ageCheck')}>
+                <dl className="space-y-2" data-testid="age-check">
+                  {d.ageGate !== null && (
+                    <Row label={t('drawer.ageOutcome')}>{t('drawer.ageUnder')}</Row>
+                  )}
+                  {d.guardian !== null && (
+                    <>
+                      <Row label={t('drawer.guardianName')}>{d.guardian.name}</Row>
+                      {d.guardian.email && (
+                        <Row label={t('drawer.guardianEmail')}>
+                          <span dir="ltr">{d.guardian.email}</span>
+                        </Row>
+                      )}
+                      {d.guardian.phone && (
+                        <Row label={t('drawer.guardianPhone')}>
+                          <span dir="ltr">{d.guardian.phone}</span>
+                        </Row>
+                      )}
+                    </>
+                  )}
+                </dl>
+                {d.guardian !== null && (
+                  <p className="mt-2 text-xs text-muted-foreground">{t('drawer.guardianNote')}</p>
+                )}
+              </Section>
+            )}
+
             <Section title={t('drawer.consent')}>
               {d.consent ? (
                 <dl className="space-y-2" data-testid="consent">

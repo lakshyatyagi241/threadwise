@@ -23,7 +23,10 @@
       "imported": "Importé depuis un fichier",
       "createdAt": "Créé le",
       "updatedAt": "Dernière mise à jour",
-      "lastActivityAt": "Dernière activité"
+      "lastActivityAt": "Dernière activité",
+      "minor": "Marqué comme mineur",
+      "dateOfBirth": "Date de naissance",
+      "age": "Âge (années)"
     },
     "fieldGroups": {
       "journey": "Parcours",

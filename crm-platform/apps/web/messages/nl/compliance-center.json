@@ -18,7 +18,8 @@
       "notices": "Mededelingen",
       "links": "Links naar privacy en voorwaarden",
       "subprocessors": "Subverwerkers",
-      "windows": "Stille uren en gesprekken"
+      "windows": "Stille uren en gesprekken",
+      "dnc": "Niet bellen"
     },
     "saveBar": {
       "unsaved": "Je hebt niet-opgeslagen wijzigingen.",
@@ -35,7 +36,8 @@
       "duplicate": "Je hebt al een subverwerker met die naam.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
-      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "dncInvalid": "Het bestand kon niet worden gelezen: het bevat geen telefoonnummers, of te veel tegelijk."
     },
     "problems": {
       "httpsOnly": "Gebruik een adres dat begint met https://.",
@@ -322,7 +324,9 @@
         "hint": "Volgens de DPDP Act kunnen mensen hun toestemming beheren via een geregistreerde toestemmingsbeheerder. Noem hier de jouwe als je er een gebruikt.",
         "managerName": "Toestemmingsbeheerder",
         "managerUrl": "Link naar toestemmingsbeheerder",
-        "placeholderNote": "Dit is alleen een notitie. Er is nog niets gekoppeld aan een toestemmingsbeheerder."
+        "placeholderNote": "Dit is alleen een notitie. Er is nog niets gekoppeld aan een toestemmingsbeheerder.",
+        "managerRegistration": "Registratienummer van de toestemmingsbeheerder",
+        "managerRegistrationHint": "Het nummer waaronder de Data Protection Board je toestemmingsbeheerder heeft geregistreerd. Alleen een notitie."
       }
     },
     "contacts": {
@@ -420,7 +424,8 @@
           "sg_dnc": "Do Not Call Singapore",
           "custom": "Je eigen lijst"
         },
-        "note": "Dit is alleen een notitie. Er wordt nog niets tegen een register gecontroleerd."
+        "note": "Dit is alleen een notitie. Er wordt nog niets tegen een register gecontroleerd.",
+        "listNote": "Nummers op je Niet-bellen-lijst (het laatste tabblad) worden al achtergehouden bij marketingoproepen en SMS-berichten."
       },
       "enforcedNote": "Stille uren houden een marketingbericht vast tot ze voorbij zijn, en het belvenster weigert een gesprek erbuiten. De klok van elk contact wordt gebruikt. Antwoorden binnen het 24-uursvenster en servicemeldingen worden nooit vastgehouden."
     },
@@ -491,6 +496,51 @@
     "hold": {
       "heldUntil": "Vastgehouden tot {when} (stille uren)",
       "heldCount": "{count} vastgehouden wegens stille uren"
+    },
+    "dnc": {
+      "intro": "Nummers op deze lijst krijgen geen marketing via spraak of SMS, wat de toestemmingsgeschiedenis ook zegt. WhatsApp, e-mail en servicemeldingen worden er niet door tegengehouden. Hier wordt niets gecontroleerd tegen een nationaal register: voeg het uittreksel toe dat je mag downloaden.",
+      "addTitle": "Nummers toevoegen",
+      "numbers": "Telefoonnummers",
+      "numbersHint": "Eén per regel, of gescheiden door komma's. Maximaal {max} tegelijk; gebruik het bestand voor meer.",
+      "country": "Landcode voor lokale nummers",
+      "countryHint": "Een nummer zonder landcode wordt met deze landcode gelezen.",
+      "note": "Notitie",
+      "noteHint": "Optioneel. Waarom deze nummers op de lijst staan.",
+      "add": "Aan de lijst toevoegen",
+      "adding": "Toevoegen...",
+      "or": "of",
+      "import": "Toevoegen uit een CSV-bestand",
+      "importing": "Bestand lezen...",
+      "importHint": "De kolom met de naam phone, mobile of number, anders de eerste kolom. Een groot bestand wordt in delen gelezen.",
+      "fromRegistry": "Het bestand is een uittreksel uit een register dat ik mag gebruiken",
+      "progress": "Deel {done} van {of} verzenden...",
+      "added": "{count, plural, =0 {Niets nieuws toe te voegen} one {# nummer toegevoegd} other {# nummers toegevoegd}}",
+      "result": "{added} toegevoegd, {already} stonden al op de lijst, {invalid} zijn geen telefoonnummer.",
+      "invalidSamples": "Bijvoorbeeld: {samples}",
+      "listTitle": "Nummers op de lijst",
+      "total": "{count, plural, =0 {Geen nummers op de lijst} one {# nummer op de lijst} other {# nummers op de lijst}}",
+      "search": "Zoek een nummer",
+      "loading": "Lijst laden...",
+      "empty": "Nog geen nummers",
+      "emptyHint": "Voeg de nummers toe van mensen die niet gebeld of per SMS benaderd willen worden, of een uittreksel uit een register dat je mag gebruiken.",
+      "noMatch": "Geen enkel nummer komt overeen",
+      "source": {
+        "manual": "Handmatig toegevoegd",
+        "import": "Uit een bestand",
+        "contact_request": "De persoon vroeg erom",
+        "registry_export": "Registeruittreksel"
+      },
+      "remove": "Verwijderen",
+      "removeLabel": "{phone} van de lijst verwijderen",
+      "removed": "Nummer van de lijst verwijderd",
+      "newer": "Nieuwer",
+      "older": "Ouder",
+      "confirm": {
+        "title": "Dit nummer verwijderen?",
+        "message": "{phone} kan weer marketingoproepen en SMS-berichten ontvangen, tenzij het contact de toestemming heeft ingetrokken. Verwijder het alleen als de persoon erom vroeg of het per ongeluk is toegevoegd.",
+        "confirm": "Nummer verwijderen",
+        "cancel": "Behouden"
+      }
     }
   }
 }

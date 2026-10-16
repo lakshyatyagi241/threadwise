@@ -34,7 +34,8 @@
         "too_long": "Voer maximaal {max} tekens in.",
         "pattern": "Dit voldoet niet aan het verwachte formaat.",
         "invalid_option": "Kies een van de vermelde opties.",
-        "invalid_amount": "Vul een bedrag in binnen het toegestane bereik."
+        "invalid_amount": "Vul een bedrag in binnen het toegestane bereik.",
+        "guardian_required": "Voeg de naam en een e-mailadres of telefoonnummer van een ouder of voogd toe."
       },
       "closedTitle": "Dit formulier is gesloten",
       "payTitle": "Nog één stap",
@@ -59,7 +60,15 @@
         "missingTitle": "We konden deze betaling niet vinden",
         "missingBody": "De link is mogelijk onjuist of te oud."
       },
-      "termsOfService": "Voorwaarden"
+      "termsOfService": "Voorwaarden",
+      "ageDeclaration": "Ik bevestig dat ik minstens {age} jaar oud ben",
+      "ageBlockedTitle": "We kunnen niet verder",
+      "ageBlockedBody": "Bedankt voor je interesse. We kunnen deze inzending niet accepteren.",
+      "guardianTitle": "Een ouder of voogd",
+      "guardianIntro": "Voeg de gegevens van een ouder of voogd toe.",
+      "guardianName": "Naam",
+      "guardianEmail": "E-mail",
+      "guardianPhone": "Telefoon"
     }
   }
 }

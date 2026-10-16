@@ -204,3 +204,14 @@ the Do Not Sell or Share opt-out of the contact that the submission or thread re
 `ccpa_us` on. The web relay `/api/public/forms/*` forwards the header. Evidence: `formId` and `submissionId` (form) or `widgetId` (widget),
 nothing else about the request. Already opted out: nothing more is written. It never changes marketing consent. A widget visitor has a
 contact once they give a phone number or an email address.
+
+## How a minor is detected (BL-217, BL-218, BL-190)
+
+Spec: [privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 11.10.
+
+- **Date of birth.** `dateOfBirth` (`YYYY-MM-DD`, not in the future) on `POST /v2/contacts` and `PATCH /v2/contacts/:id` (`null` clears it); `GET` returns `dateOfBirth` and `isMinor`. A date under the workspace's minor age flags the contact in the same request: source `dob`, an expiry in `privacy.minorUntil`. The workspace's age is the highest `minorAge` of the Compliance profiles switched on, else 18.
+- **Flag sources.** `privacy.minorSource` can now also be `dob`, `import`, `flow` or `declaration`. Only `dob` lapses by itself (the nightly sweep at 03:35); a flag set by a person, the API, an import or a flow stays until a person clears it. A person who clears a `dob` flag while the date still says minor is not overruled until the date changes.
+- **Filter and segments.** `GET /v2/contacts?minor=true|false`; segment rule fields `minor` (is_true / is_false), `dateOfBirth` (date operators) and `age` (number operators, whole years, empty without a date). Also in "select all matching" bulk actions.
+- **Import.** CSV columns `dateOfBirth` (year first, `2010-05-04`; a day-first date rejects the row as `invalid_date_of_birth`) and `minor` (yes flags the contact with source `import`; no and blank change nothing).
+- **Customer API.** `date_of_birth` and `is_minor` on every contact; `GET /v1/contacts/:id/privacy` and `POST /v1/contacts/:id/privacy` (`contacts:read` / `contacts:write`, body as `privacy-events`, source stored as `api`).
+- **Gate.** New closed-set reason `on_dnc_list` (see the Compliance API).
