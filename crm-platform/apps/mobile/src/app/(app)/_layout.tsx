@@ -15,6 +15,8 @@ export default function AppLayout() {
     <>
       <ThemeSync />
       <Stack screenOptions={{ headerShown: false }}>
+        {/* Listed first: the first screen declared here is the one the stack starts on, and it must be the tabs. */}
+        <Stack.Screen name="(tabs)" />
         {/* The "log this call" sheet slides up over whatever is on screen, so the person is not taken away from it. */}
         <Stack.Screen
           name="call-summary"
