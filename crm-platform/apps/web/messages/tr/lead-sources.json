@@ -87,7 +87,8 @@
       "customFieldsTooMany": "En fazla {max} özel özelliği eşleştirin.",
       "contract": "{message}",
       "speedTemplateRequired": "Gönderilecek şablonu seçin.",
-      "speedDelayRange": "0 ile {max} arasında tam dakika girin."
+      "speedDelayRange": "0 ile {max} arasında tam dakika girin.",
+      "speedMaxAgeRange": "Bir lead en fazla ne kadar eski olabilir seçin: 1 dakikadan 90 güne kadar."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Göndermeden önce bekleme süresi (dakika)",
         "delayHint": "0 ile {max} arasında tam dakika. 0 hemen gönderir.",
+        "maxAge": "Şundan eski lead’lere mesaj gönderme",
+        "maxAgeHint": "Geç gelen bir lead (geriye dönük aktarım, yeniden deneme, kaçırılan eşitleme) yine de kaydedilir, atanır ve bildirilir; ancak bu süreden eskiyse ilk mesajı almaz. Eski lead’lere mesaj gitmesini istiyorsanız daha uzun bir süre seçin. Onay kuralları her zaman geçerlidir.",
         "businessHours": "Yalnızca çalışma saatlerinde",
         "businessHoursHint": "Çalışma alanınızda belirlenen çalışma saatlerinin dışında mesaj, bu saatlerin başlamasını bekler.",
         "optionsFailed": "Şablonlar ve gönderenler yüklenemedi. Biraz sonra yeniden deneyin."
@@ -646,6 +649,7 @@
         "no_sender": "Bağlı gönderen yok",
         "template_unavailable": "Şablon gönderilemiyor",
         "missing_value": "Bu kişi için bir şablon değeri eksik",
+        "lead_too_old": "Lead, ayarın izin verdiğinden daha eskiydi",
         "provider_error": "Sağlayıcı reddetti",
         "interrupted": "Yarıda kesildi",
         "expired": "Çok uzun süre bekledi",
@@ -791,6 +795,7 @@
           "not_now": "Kaynak hazır değildi: istek çok erken geldi veya bağlantısı duraklatılmış.",
           "provider_error": "Kaynak isteği reddetti veya başarısız oldu.",
           "credentials_refused": "Kaynak kimlik bilgilerini reddetti. Bağlantıyı yeniden kurun.",
+          "permission_missing": "Meta bu Sayfanın lead’leri okumasına izin vermedi. Meta lead formları altında lead erişimi verin ve yeniden çalıştırın.",
           "interrupted": "Yarıda kesildi. Yeniden çalıştırın.",
           "internal_error": "Dahili bir hata oluştu. Yeniden çalıştırın.",
           "incomplete": "Bazı potansiyel müşteriler aktarılamadı. Tamamlamak için yeniden çalıştırın.",
@@ -829,7 +834,8 @@
           "tooWide": "Tek seferde en fazla {days} gün.",
           "noSource": "En az bir kaynak seçin."
         },
-        "safe": "Yeniden çalıştırırsanız hiçbir şey kaybolmaz veya çoğalmaz; yalnızca eksik potansiyel müşteriler eklenir."
+        "safe": "Yeniden çalıştırırsanız hiçbir şey kaybolmaz veya çoğalmaz; yalnızca eksik potansiyel müşteriler eklenir.",
+        "speedNote": "Geriye dönük aktarılan lead’ler yeni lead’ler gibi kişi olur, bir sahibe atanır ve ekibinize bildirilir. Kaynağın sınırından eskilerse otomatik ilk mesaj gönderilmez (kaynağın ilk mesaj ayarında değiştirmediyseniz bir saat)."
       }
     },
     "meta": {

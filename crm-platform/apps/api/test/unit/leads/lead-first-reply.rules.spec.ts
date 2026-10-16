@@ -3,6 +3,7 @@ import { ERROR_CODES, LEAD_FIRST_REPLY_REASONS } from '@crm/contracts';
 import {
   FIRST_REPLY_EXPIRY_MS,
   dueAtOf,
+  isLeadTooOld,
   nextBusinessOpening,
   reasonText,
   templateProblem,
@@ -20,6 +21,18 @@ describe('dueAtOf', () => {
     expect(dueAtOf(now, 0)).toEqual(now);
     expect(dueAtOf(now, 45)).toEqual(T('2026-10-16T10:45:00Z'));
     expect(FIRST_REPLY_EXPIRY_MS).toBe(24 * 3_600_000);
+  });
+});
+
+describe('isLeadTooOld', () => {
+  const at = T('2026-10-16T10:00:00Z');
+  it('is true only past the limit', () => {
+    expect(isLeadTooOld(T('2026-10-16T09:00:00Z'), at, 60)).toBe(false);
+    expect(isLeadTooOld(T('2026-10-16T08:59:59Z'), at, 60)).toBe(true);
+    expect(isLeadTooOld(T('2026-10-13T10:00:00Z'), at, 3 * 24 * 60)).toBe(false);
+  });
+  it('treats a submission time in the future (a skewed clock) as fresh', () => {
+    expect(isLeadTooOld(T('2026-10-16T10:30:00Z'), at, 60)).toBe(false);
   });
 });
 

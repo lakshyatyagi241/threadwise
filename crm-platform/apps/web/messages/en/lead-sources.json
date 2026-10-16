@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Map at most {max} custom properties.",
       "contract": "{message}",
       "speedTemplateRequired": "Choose the template to send.",
-      "speedDelayRange": "Enter whole minutes from 0 to {max}."
+      "speedDelayRange": "Enter whole minutes from 0 to {max}.",
+      "speedMaxAgeRange": "Choose how old a lead may be, from 1 minute to 90 days."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Wait before sending (minutes)",
         "delayHint": "Whole minutes from 0 to {max}. 0 sends at once.",
+        "maxAge": "Do not message leads older than",
+        "maxAgeHint": "A lead that arrives late (a backfill, a retry, a missed sync) is still stored, assigned and notified, but gets no first message once it is older than this. Choose a longer time only if you want old leads messaged. The consent rules always apply.",
         "businessHours": "Only during business hours",
         "businessHoursHint": "Outside the business hours set in your workspace, the message waits for them to open.",
         "optionsFailed": "The templates and senders could not be loaded. Try again in a moment."
@@ -646,6 +649,7 @@
         "no_sender": "No connected sender",
         "template_unavailable": "The template cannot be sent",
         "missing_value": "A template value is missing for this contact",
+        "lead_too_old": "The lead was older than the setting allows",
         "provider_error": "The provider refused it",
         "interrupted": "It was interrupted",
         "expired": "It waited too long",
@@ -791,6 +795,7 @@
           "not_now": "The source was not ready: too soon for it, or its connection is paused.",
           "provider_error": "The source refused or failed.",
           "credentials_refused": "The source refused the credentials. Reconnect it.",
+          "permission_missing": "Meta did not allow this Page to read leads. Grant lead access under Meta lead forms, then run it again.",
           "interrupted": "It was interrupted. Run it again.",
           "internal_error": "An internal error. Run it again.",
           "incomplete": "Some leads were not handed over. Run it again to finish.",
@@ -829,7 +834,8 @@
           "tooWide": "At most {days} days at a time.",
           "noSource": "Choose at least one source."
         },
-        "safe": "Nothing is lost or duplicated if you run it again; it only adds the leads that are missing."
+        "safe": "Nothing is lost or duplicated if you run it again; it only adds the leads that are missing.",
+        "speedNote": "Backfilled leads become contacts, are assigned to an owner and notify your team, like new leads. They are not sent the automatic first message when they are older than the source's limit (one hour unless you changed it in the source's first message setting)."
       }
     },
     "meta": {
