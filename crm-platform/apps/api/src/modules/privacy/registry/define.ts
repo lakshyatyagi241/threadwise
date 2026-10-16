@@ -138,9 +138,14 @@ async function updateRows(
   subject: ResolvedSubject,
   set: Readonly<Record<string, import('./types').Replacement>>,
 ): Promise<number> {
+  // audit_log is append-only except for this erasure's redaction (migration 20261217090000): the setting is on for this one
+  // statement and the transaction, and the database accepts only a NULL `delta` on contacts rows.
+  const redacting = spec.table === 'audit_log';
+  if (redacting) await ctx.tx.execute(sql`SELECT set_config('app.audit_redact', 'on', true)`);
   const res = await ctx.tx.execute(sql`
     WITH u AS (UPDATE ${sql.identifier(spec.table)} SET ${setClause(set)} WHERE ${rowsOf(spec, subject)} RETURNING 1)
     SELECT count(*)::int AS n FROM u`);
+  if (redacting) await ctx.tx.execute(sql`SELECT set_config('app.audit_redact', 'off', true)`);
   return Number((res.rows[0] as { n: number }).n);
 }
 
