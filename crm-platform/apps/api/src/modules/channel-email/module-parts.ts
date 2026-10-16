@@ -17,6 +17,8 @@ import { MailPushController } from './mail-push.controller';
 import { MailPushRepository } from './mail-push.repository';
 import { MailPushService } from './mail-push.service';
 import { MailPushSweep } from './mail-push.sweep';
+import { MailTimelineRepository } from './mail-timeline.repository';
+import { MailTimeline } from './mail-timeline.service';
 
 /**
  * Where the Phase 2 features plug into `ChannelEmailModule` / `ChannelEmailWorkerModule` without editing them: each feature appends to
@@ -53,6 +55,9 @@ export const MAIL_EXTRA_PROVIDERS: Provider[] = [
   GoogleOidcVerifier,
   MailPushRepository,
   MailPushService,
+  // E-19 contact timeline
+  MailTimelineRepository,
+  MailTimeline,
 ];
 
 /** What `ChannelEmailModule` exports (to the worker module and to other modules). */
