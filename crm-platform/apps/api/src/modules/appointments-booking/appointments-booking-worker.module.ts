@@ -4,6 +4,7 @@ import { AppointmentsBookingModule } from './appointments-booking.module';
 import { AppointmentCalendarConsumer } from './appointment-calendar.consumer';
 import { CalendarBackfillConsumer } from './calendar-backfill.consumer';
 import { CalendarBackfillProcessor } from './calendar-backfill.jobs';
+import { IcsFeedRefreshProcessor, IcsFeedRefreshScheduler } from './ics-feeds.jobs';
 import { CalendarReconcileProcessor, CalendarReconcileScheduler } from './calendar-reconcile.jobs';
 import { GoogleConsentSweepService } from './google-consent-sweep.service';
 import { CalendarReconcileService } from './calendar-reconcile.service';
@@ -27,6 +28,8 @@ import { AppointmentReminderSweepService } from './appointment-reminder-sweep.se
     AppointmentCalendarConsumer,
     CalendarBackfillConsumer,
     CalendarBackfillProcessor,
+    IcsFeedRefreshProcessor,
+    IcsFeedRefreshScheduler,
     CalendarReconcileService,
     CalendarReconcileProcessor,
     CalendarReconcileScheduler,

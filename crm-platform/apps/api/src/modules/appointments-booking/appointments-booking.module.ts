@@ -4,6 +4,8 @@ import {
   APPOINTMENT_CALENDAR,
   APPOINTMENT_MESSENGER,
   GoogleCalendarClient,
+  HttpIcsFeedFetcher,
+  ICS_FEED_FETCHER,
   MicrosoftCalendarClient,
   NoAppointmentMessenger,
 } from '../../infra/providers/appointments-booking';
@@ -20,14 +22,23 @@ import { AppointmentsSupport } from './appointments.support';
 import { AppointmentBookingGuard, AppointmentPlan } from './booking-plan';
 import { BookingOffersService } from './booking-offers.service';
 import { BookingService } from './booking.service';
+import { BookingsFeedService } from './bookings-feed.service';
 import { BookingTypesController } from './booking-types.controller';
 import { BookingTypesRepository } from './booking-types.repository';
 import { BookingTypesService } from './booking-types.service';
 import { CalendarBackfillQueue } from './calendar-backfill.jobs';
 import { CalendarBackfillService } from './calendar-backfill.service';
 import { CalendarOverviewService } from './calendar-overview.service';
+import {
+  BookingsFeedController,
+  BookingsFeedPublicController,
+  IcsFeedsController,
+} from './calendar-feeds.controller';
 import { CalendarProviders } from './calendar-providers.service';
 import { ContactLinkService } from './contact-link.service';
+import { IcsBusySource } from './ics-busy.source';
+import { IcsFeedsRepository } from './ics-feeds.repository';
+import { IcsFeedsService } from './ics-feeds.service';
 import { GoogleConsentRepository } from './google-consent.repository';
 import { GoogleConsentService } from './google-consent.service';
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
@@ -86,6 +97,10 @@ import { SlotsService } from './slots.service';
     MicrosoftCalendarController,
     MicrosoftCalendarCallbackController,
     CalendarProvidersController,
+    // Read-only iCal subscriptions, a person's own bookings feed, and the public feed a calendar app reads.
+    IcsFeedsController,
+    BookingsFeedController,
+    BookingsFeedPublicController,
   ],
   providers: [
     CryptoService,
@@ -122,6 +137,11 @@ import { SlotsService } from './slots.service';
     CalendarBackfillService,
     CalendarBackfillQueue,
     CalendarOverviewService,
+    IcsFeedsRepository,
+    IcsFeedsService,
+    IcsBusySource,
+    BookingsFeedService,
+    { provide: ICS_FEED_FETCHER, useClass: HttpIcsFeedFetcher },
     MultiCalendarAdapter,
     // The booking code talks to ONE port; it fronts the workspace's Google and Outlook calendars.
     { provide: APPOINTMENT_CALENDAR, useExisting: MultiCalendarAdapter },
@@ -147,6 +167,9 @@ import { SlotsService } from './slots.service';
     CalendarBackfillQueue,
     // The worker's back-fill job runs it.
     CalendarBackfillService,
+    // The worker's iCal feed read runs them.
+    IcsFeedsService,
+    IcsFeedsRepository,
   ],
 })
 export class AppointmentsBookingModule {}

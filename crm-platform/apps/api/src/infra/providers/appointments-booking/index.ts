@@ -10,3 +10,4 @@ export * from './microsoft-calendar.client';
 export * from './microsoft-calendar.errors';
 export * from './microsoft-calendar.mapping';
 export * from './microsoft-transport';
+export * from './ics-feed.fetcher';

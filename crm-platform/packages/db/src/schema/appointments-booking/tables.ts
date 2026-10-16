@@ -799,6 +799,129 @@ export const appointmentCalendarPreferences = pgTable(
 );
 
 /**
+ * A workspace's read-only iCal subscription (BL-035). Mirrors migrations/20261218090000_appt_ics_feeds.sql: the address is sealed, only its host is
+ * kept for display, and the busy intervals it contributes are in `calendarIcsBusy`.
+ */
+export const calendarIcsFeeds = pgTable(
+  'calendar_ics_feeds',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    name: text('name').notNull(),
+    urlEnc: text('url_enc').notNull(),
+    urlHost: text('url_host').notNull(),
+    urlHash: text('url_hash').notNull(),
+    blockAllDay: boolean('block_all_day').notNull().default(true),
+    isActive: boolean('is_active').notNull().default(true),
+    status: text('status').notNull().default('pending'),
+    lastErrorCode: text('last_error_code'),
+    lastFetchedAt: timestamp('last_fetched_at', { withTimezone: true }),
+    lastSuccessAt: timestamp('last_success_at', { withTimezone: true }),
+    nextFetchAt: timestamp('next_fetch_at', { withTimezone: true }).notNull().defaultNow(),
+    consecutiveFailures: integer('consecutive_failures').notNull().default(0),
+    etag: text('etag'),
+    lastModified: text('last_modified'),
+    calendarName: text('calendar_name'),
+    eventCount: integer('event_count').notNull().default(0),
+    busyCount: integer('busy_count').notNull().default(0),
+    warnings: jsonb('warnings')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('calendar_ics_feeds_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'calendar_ics_feeds_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_calendar_ics_feeds_url').on(t.orgId, t.urlHash),
+    check('chk_calendar_ics_feeds_status', sql`${t.status} in ('pending', 'ok', 'error')`),
+    check('chk_calendar_ics_feeds_name', sql`char_length(${t.name}) between 1 and 80`),
+    check(
+      'chk_calendar_ics_feeds_error',
+      sql`(${t.status} = 'error') = (${t.lastErrorCode} is not null)`,
+    ),
+    foreignKey({
+      name: 'fk_calendar_ics_feeds_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_calendar_ics_feeds_created_by').on(t.orgId, t.createdBy),
+    index('idx_calendar_ics_feeds_due')
+      .on(t.nextFetchAt)
+      .where(sql`${t.isActive}`),
+  ],
+);
+
+/** The busy intervals of a feed, replaced as a whole by each good read. */
+export const calendarIcsBusy = pgTable(
+  'calendar_ics_busy',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    feedId: idColumn('feed_id').notNull(),
+    startsAt: timestamp('starts_at', { withTimezone: true }).notNull(),
+    endsAt: timestamp('ends_at', { withTimezone: true }).notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    foreignKey({
+      name: 'calendar_ics_busy_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('chk_calendar_ics_busy_range', sql`${t.endsAt} > ${t.startsAt}`),
+    foreignKey({
+      name: 'fk_calendar_ics_busy_feed',
+      columns: [t.orgId, t.feedId],
+      foreignColumns: [calendarIcsFeeds.orgId, calendarIcsFeeds.id],
+    }).onDelete('cascade'),
+    index('idx_calendar_ics_busy_feed').on(t.orgId, t.feedId),
+    index('idx_calendar_ics_busy_window').on(t.orgId, t.startsAt, t.endsAt),
+  ],
+);
+
+/** One token per person for their own bookings feed (BL-035). Same migration. */
+export const appointmentFeedTokens = pgTable(
+  'appointment_feed_tokens',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id').notNull(),
+    tokenHash: text('token_hash').notNull(),
+    tokenEnc: text('token_enc').notNull(),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('appointment_feed_tokens_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'appointment_feed_tokens_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_feed_tokens_user').on(t.orgId, t.userId),
+    unique('uq_appointment_feed_tokens_hash').on(t.tokenHash),
+    foreignKey({
+      name: 'fk_appointment_feed_tokens_user',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
  * One Google consent in flight (TW-GACC-010): created when an admin presses Connect, filled by the public callback with what Google returned
  * (sealed), consumed once by the same admin's confirmation. See migration 20261208090000_gacc_drift_and_consent.sql.
  */

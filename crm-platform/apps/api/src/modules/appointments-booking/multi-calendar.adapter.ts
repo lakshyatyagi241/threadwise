@@ -10,6 +10,7 @@ import type {
   CalendarSyncPort,
 } from '../../infra/providers/appointments-booking';
 import { CalendarProviders } from './calendar-providers.service';
+import { IcsBusySource } from './ics-busy.source';
 
 /**
  * The calendar port the booking code talks to (`APPOINTMENT_CALENDAR`): it fronts the provider adapters of a workspace.
@@ -26,7 +27,10 @@ export class MultiCalendarAdapter implements CalendarSyncPort {
   readonly provider = 'multi';
   private readonly logger = new Logger(MultiCalendarAdapter.name);
 
-  constructor(private readonly providers: CalendarProviders) {}
+  constructor(
+    private readonly providers: CalendarProviders,
+    private readonly ics: IcsBusySource,
+  ) {}
 
   /** Connected means a booking's event would be written right now; `account` is that provider's account. */
   async status(orgId: number): Promise<CalendarStatus> {
@@ -57,14 +61,18 @@ export class MultiCalendarAdapter implements CalendarSyncPort {
       this.providers.connected(orgId),
       this.providers.writeProvider(orgId),
     ]);
-    if (connected.length === 0) return [];
-    const settled = await Promise.allSettled(
-      connected.map((p) =>
-        this.providers
-          .adapter(p)
-          .freeBusy(orgId, p === write ? calendarId : null, from, to, options),
-      ),
-    );
+    // The iCal feeds are a busy source of their own: one indexed query, with or without a connected provider.
+    const sources: Array<{ name: string; run: () => Promise<CalendarBusyInterval[]> }> = [
+      ...connected.map((p) => ({
+        name: p as string,
+        run: () =>
+          this.providers
+            .adapter(p)
+            .freeBusy(orgId, p === write ? calendarId : null, from, to, options),
+      })),
+      { name: 'ics', run: () => this.ics.busy(orgId, from, to) },
+    ];
+    const settled = await Promise.allSettled(sources.map((src) => src.run()));
     const busy: CalendarBusyInterval[] = [];
     let failure: unknown;
     let failed = 0;
@@ -74,12 +82,12 @@ export class MultiCalendarAdapter implements CalendarSyncPort {
         failed += 1;
         failure ??= r.reason;
         this.logger.warn(
-          { orgId, provider: connected[i], err: String(r.reason) },
+          { orgId, source: sources[i]!.name, err: String(r.reason) },
           'one calendar could not be read: its busy time is left out',
         );
       }
     });
-    if (failed === connected.length) throw failure;
+    if (failed === sources.length) throw failure;
     return busy;
   }
 

@@ -51,7 +51,12 @@ function setup(preference: 'google' | 'microsoft' | null = null) {
   const db = { txAs: vi.fn(async (_ctx: unknown, fn: (tx: unknown) => unknown) => fn({})) };
   const providers = new CalendarProviders(db as never, g.port as never, m.port as never);
   vi.spyOn(providers, 'readPreference').mockResolvedValue(preference);
-  return { g, m, providers, multi: new MultiCalendarAdapter(providers) };
+  const ics = { busy: vi.fn(async () => [] as CalendarBusyInterval[]), fail: false };
+  const source = {
+    busy: async (...a: unknown[]) =>
+      ics.fail ? Promise.reject(new Error('feeds are down')) : ics.busy(...(a as [])),
+  };
+  return { g, m, providers, ics, multi: new MultiCalendarAdapter(providers, source as never) };
 }
 
 const REQUEST = { orgId: 1, appointmentId: 'a' } as CalendarEventRequest;
@@ -130,7 +135,7 @@ describe('the multi-provider calendar port', () => {
   });
 
   it("one calendar failing leaves the other's busy time; all failing throws, so the caller offers slots without calendar data", async () => {
-    const { multi, g, m } = setup();
+    const { multi, g, m, ics } = setup();
     g.state.fail = true;
     m.state.busy = [block('2026-10-05T11:00:00Z', '2026-10-05T12:00:00Z')];
     const partial = await multi.freeBusy(
@@ -141,12 +146,32 @@ describe('the multi-provider calendar port', () => {
     );
     expect(partial).toHaveLength(1);
     m.state.fail = true;
+    ics.fail = true;
     await expect(
       multi.freeBusy(1, null, at('2026-10-05T00:00:00Z'), at('2026-10-06T00:00:00Z')),
     ).rejects.toThrow(/is down/);
   });
 
-  it('nothing connected means nothing busy, without asking anyone', async () => {
+  it('iCal feeds are one more source: they close slots with no calendar connected, and a failing feed leaves the others', async () => {
+    const { multi, g, m, ics } = setup();
+    g.state.connected = false;
+    m.state.connected = false;
+    ics.busy.mockResolvedValueOnce([block('2026-10-05T09:00:00Z', '2026-10-05T10:00:00Z')]);
+    expect(
+      await multi.freeBusy(1, null, at('2026-10-05T00:00:00Z'), at('2026-10-06T00:00:00Z')),
+    ).toHaveLength(1);
+    // Everything failing (the feed too) is the only case that throws.
+    g.state.connected = true;
+    m.state.connected = true;
+    m.state.busy = [block('2026-10-05T11:00:00Z', '2026-10-05T12:00:00Z')];
+    ics.fail = true;
+    g.state.fail = true;
+    expect(
+      await multi.freeBusy(1, null, at('2026-10-05T00:00:00Z'), at('2026-10-06T00:00:00Z')),
+    ).toHaveLength(1);
+  });
+
+  it('nothing connected means nothing busy, without asking any calendar', async () => {
     const { multi, g, m } = setup();
     g.state.connected = false;
     m.state.connected = false;
