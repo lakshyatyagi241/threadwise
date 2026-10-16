@@ -1019,6 +1019,7 @@
         "lifecycle_stage": "Lebenszyklusphase",
         "status": "Status",
         "groups": "Gruppen",
+        "owner": "Verantwortlicher",
         "opt_out": "Marketing-Abmeldung"
       },
       "types": {

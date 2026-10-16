@@ -1019,6 +1019,7 @@
         "lifecycle_stage": "Levenscyclusfase",
         "status": "Status",
         "groups": "Groepen",
+        "owner": "Eigenaar",
         "opt_out": "Afmelding voor marketing"
       },
       "types": {

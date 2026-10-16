@@ -1019,6 +1019,7 @@
         "lifecycle_stage": "Etapa del ciclo de vida",
         "status": "Estado",
         "groups": "Grupos",
+        "owner": "Responsable",
         "opt_out": "Baja de marketing"
       },
       "types": {
