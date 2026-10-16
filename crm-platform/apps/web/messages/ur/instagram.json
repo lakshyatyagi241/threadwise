@@ -85,7 +85,8 @@
       "outsideWindow": "24 گھنٹے کے بعد",
       "selected": "{count, plural, one {# منتخب} other {# منتخب}}",
       "sent": "Instagram براڈکاسٹ بھیجا گیا — {sent} پہنچے{failed, plural, =0 {} other {، # ناکام}}۔",
-      "sentNone": "کسی بھی وصول کنندہ کو نہیں بھیجا جا سکا۔ Instagram کنکشن چیک کریں۔"
+      "sentNone": "کسی بھی وصول کنندہ کو نہیں بھیجا جا سکا۔ Instagram کنکشن چیک کریں۔",
+      "skipped": "رضامندی کی وجہ سے پیغام نہیں بھیجا گیا: {count}"
     }
   }
 }

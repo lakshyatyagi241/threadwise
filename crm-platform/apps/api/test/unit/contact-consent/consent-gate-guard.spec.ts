@@ -32,6 +32,17 @@ const gateAware = (text: string) => GATE_MARKERS.some((m) => text.includes(m));
 // The providers folder DEFINES the ports and adapters; the check is about the callers in `modules/`.
 const modules = files(join(SRC, 'modules'));
 
+/** The broadcast senders and the consent channel each one asks the gate about. Instagram's broadcasts page is `broadcasts.service.ts`. */
+const BROADCAST_SENDER_CHANNEL: Record<string, string> = {
+  'modules/channel-facebook/fb-broadcast-sender.service.ts': 'facebook',
+  'modules/channel-telegram/tg-broadcast-sender.service.ts': 'telegram',
+  'modules/channel-viber/vib-broadcast-sender.service.ts': 'viber',
+  'modules/channel-line/line-broadcast-sender.service.ts': 'line',
+  'modules/channel-wechat/broadcast-sender.service.ts': 'wechat',
+  'modules/channel-instagram/broadcasts.service.ts': 'instagram',
+};
+const BROADCAST_SENDERS = Object.keys(BROADCAST_SENDER_CHANNEL);
+
 describe('ConsentGate guard', () => {
   it('every file that touches a send primitive asks the gate or is on the allow-list', () => {
     const allowed = new Set(CONSENT_GATE_ALLOWLIST.map((e) => e.path));
@@ -76,8 +87,45 @@ describe('ConsentGate guard', () => {
       'modules/calling-voice/call-actions.service.ts',
       'modules/broadcasts/broadcasts.service.ts',
       'modules/campaigns/campaign-dispatch.service.ts',
+      ...BROADCAST_SENDERS,
     ];
     const missing = must.filter((p) => !gateAware(readFileSync(join(SRC, p), 'utf8')));
     expect(missing).toEqual([]);
+  });
+
+  /**
+   * The broadcast senders of the social and messaging channels (BL-141 follow-up). Being "gate-aware" is not enough for them: they once
+   * asked the gate only for a recipient released from the quiet hours, so the FIRST send went out unchecked and this test passed. Each
+   * must put every recipient through `gateRecipients` (marketing purpose, its own consent channel), and none may condition the gate on a
+   * held flag again.
+   */
+  it('every broadcast sender asks the gate for every recipient, not only a released one', () => {
+    const problems: string[] = [];
+    for (const [path, channel] of Object.entries(BROADCAST_SENDER_CHANNEL)) {
+      const text = readFileSync(join(SRC, path), 'utf8');
+      const flat = text.replace(/\s+/g, ' ');
+      if (!/gateRecipients\(/.test(flat)) problems.push(`${path}: does not call gateRecipients`);
+      if (!new RegExp(`gateRecipients\\([^)]*'${channel}'`).test(flat)) {
+        problems.push(`${path}: does not ask for the '${channel}' consent channel`);
+      }
+      // The old shape: the gate asked only about the recipients a hold had released (`filter((r) => r.wasHeld ...)`).
+      if (/wasHeld\s*&&/.test(flat) || /held_until\s*!==\s*null/.test(flat)) {
+        problems.push(`${path}: asks the gate only for a recipient that was held`);
+      }
+      if (/service_messaging|'utility'/.test(text)) {
+        problems.push(`${path}: a broadcast is marketing, it must not claim a service purpose`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+
+  it('the broadcast senders are not on the allow-list (a known gap would hide a missing check)', () => {
+    const allowed = new Set(CONSENT_GATE_ALLOWLIST.map((e) => e.path));
+    expect(BROADCAST_SENDERS.filter((p) => allowed.has(p))).toEqual([]);
+  });
+
+  it('no KNOWN GAP is left for a broadcast sender', () => {
+    const gaps = CONSENT_GATE_ALLOWLIST.filter((e) => e.reason.startsWith('KNOWN GAP'));
+    expect(gaps.filter((g) => /broadcast-sender|broadcasts\.service/.test(g.path))).toEqual([]);
   });
 });

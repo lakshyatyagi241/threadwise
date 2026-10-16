@@ -3,6 +3,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import {
   ERROR_CODES,
+  type ConsentGateReason,
   type IgCompose,
   type IgSendResult,
   type SendIgBroadcastInput,
@@ -18,7 +19,7 @@ import {
   splitByQuietHours,
   type WakeQueue,
 } from '../compliance-center';
-import { ConsentGate } from '../contact-consent';
+import { ConsentGate, countSkipReasons, gateRecipients } from '../contact-consent';
 import {
   INSTAGRAM_BRIDGE,
   type InstagramBridgeFactory,
@@ -76,6 +77,10 @@ export interface IgHeldJob {
  * is HELD, not denied. The answer counts it as `held` with the first instant it goes, and a delayed job (queue `ig-pull`, job
  * `held-broadcast`) sends it at the opening, reading the hours and the consent again; the engine's 24 hour rule still decides at that
  * moment. The inbox composer is a person answering a person and is never held.
+ *
+ * Consent (BL-141): the broadcasts page asks the ConsentGate for every thread before anything is sent (purpose marketing, channel
+ * instagram), on the first send and on a release alike. A person it refuses is not messaged; the answer counts them as `skipped` with the
+ * gate's reason codes in `skippedReasons`. The composer is never asked: it is service.
  */
 @Injectable()
 export class BroadcastsService {
@@ -179,14 +184,18 @@ export class BroadcastsService {
       if (why !== null && errors.length < ERRORS_SHOWN) errors.push(clipError(why));
     };
 
-    // Quiet hours: one statement for the whole audience; only the broadcasts page is asked.
+    // Consent and quiet hours: one statement each for the whole audience; only the broadcasts page is asked (a reply typed in the inbox
+    // composer is a person answering a person). The ConsentGate comes first: a person it refuses is not messaged and is not merely held.
     const holds = new Map<string, { until: string }>();
+    const refused = new Map<string, ConsentGateReason>();
     if (p.marketing === true) {
       const rows = ids.flatMap((id) => {
         const t = found.get(id);
         return t && t.channel === 'instagram' ? [{ id, contactId: t.contactId }] : [];
       });
-      const split = await splitByQuietHours(this.sendWindow, ctx.orgId, rows);
+      const gated = await gateRecipients(this.gate, ctx.orgId, rows, 'instagram');
+      for (const s of gated.skipped) refused.set(s.row.id, s.reason);
+      const split = await splitByQuietHours(this.sendWindow, ctx.orgId, gated.go);
       for (const h of split.held) holds.set(h.row.id, h.hold);
     }
     const heldItems: IgHeldJob['items'] = [];
@@ -200,6 +209,9 @@ export class BroadcastsService {
           if (!thread || thread.channel !== 'instagram') return fail(null);
           const engineId = engineThreadId(thread.rawJid);
           if (engineId === '') return fail(null);
+
+          // Refused by the ConsentGate: not messaged, counted by reason (nothing is kept as a broadcast record, the answer is the record).
+          if (refused.has(id)) return;
 
           const text = p.text(thread.title);
           // Held, not denied: kept for the delayed run; the rest of the audience carries on.
@@ -240,8 +252,12 @@ export class BroadcastsService {
         heldUntil = null;
       }
     }
-    this.logger.log({ orgId: ctx.orgId, sent, failed, held }, 'instagram reply-only send done');
-    return { sent, failed, errors, held, heldUntil };
+    const skippedReasons = countSkipReasons([...refused.values()].map((reason) => ({ reason })));
+    this.logger.log(
+      { orgId: ctx.orgId, sent, failed, held, skipped: refused.size, skippedReasons },
+      'instagram reply-only send done',
+    );
+    return { sent, failed, errors, held, heldUntil, skipped: refused.size, skippedReasons };
   }
 
   /** One message into one thread, and its copy into the thread. A mirror that fails is logged, never undoes the send. */
@@ -299,20 +315,23 @@ export class BroadcastsService {
 
   /**
    * The delayed run for the people the quiet hours held back (worker). The hours are read again for each (a person whose clock is
-   * still inside them waits for their own opening), the ConsentGate is asked again, and the engine's 24 hour rule decides at send time.
+   * still inside them waits for their own opening), the ConsentGate is asked again (a STOP that arrived meanwhile still stops it), and the
+   * engine's 24 hour rule decides at send time.
    */
-  async releaseHeld(job: IgHeldJob): Promise<{ sent: number; failed: number; held: number }> {
+  async releaseHeld(
+    job: IgHeldJob,
+  ): Promise<{ sent: number; failed: number; held: number; skipped: number }> {
     const { orgId, userId } = job;
     try {
       await this.plan.assertBroadcast(orgId);
     } catch {
       this.logger.warn({ orgId }, 'held Instagram send dropped: the plan no longer has broadcasts');
-      return { sent: 0, failed: job.items.length, held: 0 };
+      return { sent: 0, failed: job.items.length, held: 0, skipped: 0 };
     }
     const conn = await this.engines.connection('instagram');
     if (conn.url === '' || conn.secret === '') {
       this.logger.warn({ orgId }, 'held Instagram send dropped: Instagram is not connected');
-      return { sent: 0, failed: job.items.length, held: 0 };
+      return { sent: 0, failed: job.items.length, held: 0, skipped: 0 };
     }
     const api = this.bridge.with(conn);
     const found = new Map(
@@ -331,19 +350,13 @@ export class BroadcastsService {
       return t && t.channel === 'instagram' ? [{ ...i, contactId: t.contactId }] : [];
     });
     const split = await splitByQuietHours(this.sendWindow, orgId, rows);
-    const recheck = await this.gate.checkMany(
-      orgId,
-      split.go.flatMap((r) => (r.contactId === null ? [] : [r.contactId])),
-      'instagram',
-      'marketing_messaging',
-    );
+    const gated = await gateRecipients(this.gate, orgId, split.go, 'instagram');
 
     let sent = 0;
     let failed = 0;
-    for (const r of split.go) {
-      const verdict = r.contactId === null ? undefined : recheck.decisions.get(r.contactId);
+    for (const r of gated.go) {
       const thread = found.get(r.threadId);
-      if (!thread || verdict?.decision === 'deny') {
+      if (!thread) {
         failed += 1;
         continue;
       }
@@ -365,9 +378,16 @@ export class BroadcastsService {
       );
     }
     this.logger.log(
-      { orgId, sent, failed, held: split.held.length },
+      {
+        orgId,
+        sent,
+        failed,
+        held: split.held.length,
+        skipped: gated.skipped.length,
+        skippedReasons: countSkipReasons(gated.skipped),
+      },
       'instagram held send released',
     );
-    return { sent, failed, held: split.held.length };
+    return { sent, failed, held: split.held.length, skipped: gated.skipped.length };
   }
 }

@@ -9,6 +9,9 @@ import {
   type MessengerButton,
 } from '../../../src/infra/providers/channel-facebook/facebook.port';
 import { FbBroadcastSenderService } from '../../../src/modules/channel-facebook/fb-broadcast-sender.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { ConsentKit, refusedWith } from '../contact-consent/broadcast-consent.support';
 import {
   Api,
   bearer,
@@ -542,5 +545,187 @@ describe('isolation and access', () => {
       .set('idempotency-key', randomUUID())
       .send({ name: 'x', pageId: randomUUID(), body: 'x', psids: ['1'] });
     expect(denied.status).toBe(403);
+  });
+});
+
+describe('BL-141: the first send of a Messenger broadcast asks the ConsentGate', () => {
+  const kit = () => new ConsentKit(h, api);
+
+  /** The person's thread (inside the 24 hour window) with a contact of their own. */
+  async function person(t: Tenant, page: Page, psid: string) {
+    const conversationId = await thread(t, page, psid, 1);
+    return kit().forConversation(t, conversationId, 'facebook', `fbc-${psid}`);
+  }
+  const byPsid = (rows: Awaited<ReturnType<typeof recipients>>) =>
+    Object.fromEntries(rows.map((r) => [r.psid as string, r]));
+
+  it('an opted-out person is not messaged and keeps the gate reason, even inside the 24 hour window', async () => {
+    const t = await api.signup('fbc1');
+    const page = await connectPage(t, 'P1');
+    const stopped = await person(t, page, '1001');
+    const ledger = await person(t, page, '1002');
+    const granted = await person(t, page, '1003');
+    await person(t, page, '1004');
+    await kit().unsubscribe(t, stopped.id);
+    await kit().record(t, ledger.uuid, 'facebook', 'withdrawn');
+    await kit().record(t, granted.uuid, 'facebook', 'granted');
+
+    const made = await create(t, page, { psids: psids(4) });
+    await post(t, `broadcasts/${made.body.id}/start`);
+    expect(await run(t, made.body.id)).toBe('done');
+
+    expect(calls.map((c) => c.psid)).toEqual(['1003', '1004']);
+    const rows = byPsid(await recipients(made.body.id));
+    expect(rows['1001']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows['1002']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows['1003']).toMatchObject({ status: 'sent', error: null });
+    expect(rows['1004']).toMatchObject({ status: 'sent', error: null });
+    expect(await broadcast(made.body.id)).toMatchObject({ status: 'done', sent: 2, blocked: 2 });
+  });
+
+  it('with the workspace switch on a person needs a recorded grant; one with no contact has none', async () => {
+    const t = await api.signup('fbc2');
+    const page = await connectPage(t, 'P1');
+    const granted = await person(t, page, '1001');
+    await person(t, page, '1002');
+    await thread(t, page, '1003', 1); // never became a contact
+    await kit().record(t, granted.uuid, 'facebook', 'granted');
+    await kit().setSwitch(t, true);
+
+    const made = await create(t, page, { psids: psids(3) });
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+
+    expect(calls.map((c) => c.psid)).toEqual(['1001']);
+    const rows = byPsid(await recipients(made.body.id));
+    for (const psid of ['1002', '1003']) {
+      expect(rows[psid]).toMatchObject({
+        status: 'blocked',
+        error: refusedWith('no_consent_recorded'),
+      });
+    }
+  });
+
+  it('with the switch off (the default) a person with no grant is messaged', async () => {
+    const t = await api.signup('fbc3');
+    const page = await connectPage(t, 'P1');
+    await person(t, page, '1001');
+    await thread(t, page, '1002', 1);
+    const made = await create(t, page, { psids: psids(2) });
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+    expect(calls.map((c) => c.psid)).toEqual(['1001', '1002']);
+  });
+
+  it('the consent reason wins over the 24 hour window; a consenting person outside the window is still blocked by the window', async () => {
+    const t = await api.signup('fbc4');
+    const page = await connectPage(t, 'P1');
+    const stopped = await person(t, page, '1001');
+    await kit().unsubscribe(t, stopped.id);
+    const lateId = await thread(t, page, '1002', 1);
+    await kit().forConversation(t, lateId, 'facebook', 'fbc-1002');
+    const made = await create(t, page, { psids: ['1001', '1002'] });
+    // A draft only offers people inside the window; the window closes for the second one while the broadcast waits to be sent.
+    await h.owner.query(
+      `UPDATE conversations SET last_inbound_at = now() - interval '30 hours' WHERE org_id = $1 AND id = $2`,
+      [t.orgId, lateId],
+    );
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+    expect(calls).toHaveLength(0);
+    const rows = byPsid(await recipients(made.body.id));
+    expect(rows['1001']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows['1002']).toMatchObject({
+      status: 'blocked',
+      error: 'Outside the 24-hour messaging window.',
+    });
+  });
+
+  it('a contact flagged as a minor is skipped when the workspace says no minors', async () => {
+    const t = await api.signup('fbc5');
+    const page = await connectPage(t, 'P1');
+    const child = await person(t, page, '1001');
+    await person(t, page, '1002');
+    await kit().minor(t, child.id);
+    const made = await create(t, page, { psids: psids(2) });
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await run(t, made.body.id);
+    expect(calls.map((c) => c.psid)).toEqual(['1002']);
+    expect(byPsid(await recipients(made.body.id))['1001']).toMatchObject({
+      status: 'blocked',
+      error: refusedWith('subject_minor'),
+    });
+  });
+
+  it('a service message is never blocked: STOP, the switch and a minor flag do not stop a reply or a utility notice', async () => {
+    const t = await api.signup('fbc6');
+    const page = await connectPage(t, 'P1');
+    const c = await person(t, page, '1001');
+    await kit().unsubscribe(t, c.id);
+    await kit().minor(t, c.id);
+    await kit().setSwitch(t, true);
+    const gate = h.app.get(ConsentGate);
+    const subject = { type: 'contact', id: c.id } as const;
+    expect((await gate.check(t.orgId, subject, 'facebook', 'marketing_messaging')).decision).toBe(
+      'deny',
+    );
+    expect(
+      await gate.check(t.orgId, subject, 'facebook', 'service_messaging', undefined, {
+        replyWindowOpen: true,
+      }),
+    ).toEqual({ decision: 'allow', reason: 'inbound_reply_window' });
+    expect(await gate.check(t.orgId, subject, 'facebook', 'service_messaging')).toEqual({
+      decision: 'allow',
+      reason: 'utility_exempt',
+    });
+  });
+
+  describe('held for the quiet hours, then released', () => {
+    const EVENING = new Date('2030-10-15T16:00:00Z');
+    const MORNING = new Date('2030-10-16T03:31:00Z');
+
+    it('is asked again on release: a person who unsubscribed while they waited is not messaged', async () => {
+      const window = h.app.get(SendWindowService);
+      const realNow = window.now;
+      window.now = () => EVENING;
+      try {
+        const t = await api.signup('fbc7');
+        const page = await connectPage(t, 'P1');
+        await h.owner.query(
+          `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, '21:00', '09:00')`,
+          [t.orgId],
+        );
+        const first = await person(t, page, '1001');
+        const second = await person(t, page, '1002');
+        for (const c of [first, second]) {
+          await h.owner.query(
+            `UPDATE contacts SET data = jsonb_build_object('timezone', 'Asia/Kolkata') WHERE org_id = $1 AND id = $2`,
+            [t.orgId, c.id],
+          );
+        }
+        const made = await create(t, page, { psids: psids(2) });
+        await post(t, `broadcasts/${made.body.id}/start`);
+        expect(await run(t, made.body.id)).toBe('held');
+        expect(calls).toHaveLength(0);
+
+        await kit().unsubscribe(t, first.id);
+        window.now = () => MORNING;
+        await h.owner.query(
+          `UPDATE facebook_broadcast_recipients SET held_until = now() - interval '1 minute' WHERE org_id = $1 AND held_until IS NOT NULL`,
+          [t.orgId],
+        );
+        // The 24 hour window must still be open at release for the other one: keep the thread fresh.
+        await h.owner.query(`UPDATE conversations SET last_inbound_at = now() WHERE org_id = $1`, [
+          t.orgId,
+        ]);
+        expect(await run(t, made.body.id)).toBe('done');
+        expect(calls.map((c) => c.psid)).toEqual(['1002']);
+        const rows = byPsid(await recipients(made.body.id));
+        expect(rows['1001']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+        expect(rows['1002']).toMatchObject({ status: 'sent' });
+      } finally {
+        window.now = realNow;
+      }
+    });
   });
 });

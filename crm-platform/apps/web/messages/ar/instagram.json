@@ -85,7 +85,8 @@
       "outsideWindow": "خارج الـ24 ساعة",
       "selected": "{count, plural, zero {لا شيء محدد} one {تم تحديد واحد} two {تم تحديد اثنين} few {تم تحديد #} many {تم تحديد #} other {تم تحديد #}}",
       "sent": "تم إرسال بث Instagram — تم تسليم {sent}{failed, plural, =0 {} other {، وفشل #}}.",
-      "sentNone": "تعذّر الإرسال إلى أي مستلم. تحقق من اتصال Instagram."
+      "sentNone": "تعذّر الإرسال إلى أي مستلم. تحقق من اتصال Instagram.",
+      "skipped": "لم تُرسل رسائل بسبب الموافقة: {count}"
     }
   }
 }

@@ -70,9 +70,9 @@ five minutes. Migration `20261216090000_quiet_hours_hold.sql` adds the `held` me
 **The remaining senders (BL-191), how they differ.** Every social broadcast is marketing, so it is always asked (no purpose to read). A
 recipient with a conversation is read on its contact's clock (the conversation's `contact_id`); one without (a group, a person who never
 became a contact) on the workspace fallback clock. Wake-up: a BullMQ delayed job on the sender's own queue, named by broadcast and opening so
-asking twice queues once; if Redis is down the recipients stay `pending` with `held_until` and the next Start (or run) takes them up. At release
-the ConsentGate is asked again for LINE (every batch), and for a released recipient on Messenger, Telegram, Viber and Instagram (a recipient that
-was never held keeps the check those senders had before: none). Messenger still checks its 24 hour window at send time, so a person whose
+asking twice queues once; if Redis is down the recipients stay `pending` with `held_until` and the next Start (or run) takes them up. The
+ConsentGate is asked for every recipient of these senders before anything is sent (BL-141 follow-up): on the first send and again at release, so
+the quiet hours never let a refused person through and a STOP that arrived while a message waited still stops it. Messenger still checks its 24 hour window at send time, so a person whose
 window closed while they waited is `blocked` with a note saying so. WeChat cannot be split per contact, so the whole mass send waits on the
 workspace clock. Commerce broadcasts and the wizard test send hold only a MARKETING template (a utility one is a notice). Not covered: the
 event messages of a store (abandoned cart, order status) and the one-off sends of other screens.

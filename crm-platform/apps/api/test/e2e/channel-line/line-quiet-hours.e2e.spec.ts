@@ -4,6 +4,8 @@ import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { QUEUES } from '../../../src/infra/queue/queues';
 import { SendWindowService } from '../../../src/modules/compliance-center';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { ConsentKit, refusedWith } from '../contact-consent/broadcast-consent.support';
 import { LineBroadcastSenderService } from '../../../src/modules/channel-line/line-broadcast-sender.service';
 import {
   Api,
@@ -212,5 +214,95 @@ describe('BL-191: a LINE broadcast is held, not denied, in the quiet hours', () 
     expect(await sender.run(t.orgId, b.id)).toBe('skipped');
     expect(pushed()).toEqual([]);
     expect((await recipients(b.uuid))[0]).toMatchObject({ status: 'pending' });
+  });
+});
+
+describe('BL-141: every LINE batch asks the ConsentGate, on the first send as on a release', () => {
+  const kit = () => new ConsentKit(h, api);
+  const contactOf = async (t: Tenant, n: number) =>
+    (await kit().contact(t, 'line', userId(n))) as { id: number; uuid: string };
+  const byUser = (rows: Awaited<ReturnType<typeof recipients>>) =>
+    Object.fromEntries(rows.map((r) => [r.line_user_id, r]));
+
+  it('an opted-out person is not messaged and keeps the gate reason; a withdrawn ledger, a granted one and a plain one behave', async () => {
+    const { t, c } = await arrange('lcg1', [null, null, null, null], false);
+    await kit().unsubscribe(t, (await contactOf(t, 1)).id);
+    await kit().record(t, (await contactOf(t, 2)).uuid, 'line', 'withdrawn');
+    await kit().record(t, (await contactOf(t, 3)).uuid, 'line', 'granted');
+    const b = await started(t, c, 4);
+
+    expect(await sender.run(t.orgId, b.id)).toBe('done');
+
+    expect(pushed()).toEqual([userId(3), userId(4)]);
+    const rows = byUser(await recipients(b.uuid));
+    expect(rows[userId(1)]).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows[userId(2)]).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows[userId(3)]).toMatchObject({ status: 'sent', error: null });
+    expect(rows[userId(4)]).toMatchObject({ status: 'sent', error: null });
+    expect(await broadcast(b.uuid)).toMatchObject({ status: 'done', sent: 2, blocked: 2 });
+  });
+
+  it('with the workspace switch on a person needs a recorded grant; one with no contact has none', async () => {
+    const { t, c } = await arrange('lcg2', [null, null, null], false);
+    await kit().record(t, (await contactOf(t, 1)).uuid, 'line', 'granted');
+    const orphan = await contactOf(t, 3);
+    await h.owner.query(
+      `UPDATE conversations SET contact_id = NULL WHERE org_id = $1 AND contact_id = $2`,
+      [t.orgId, orphan.id],
+    );
+    await kit().setSwitch(t, true);
+    const b = await started(t, c, 3);
+
+    await sender.run(t.orgId, b.id);
+
+    expect(pushed()).toEqual([userId(1)]);
+    const rows = byUser(await recipients(b.uuid));
+    for (const n of [2, 3]) {
+      expect(rows[userId(n)]).toMatchObject({
+        status: 'blocked',
+        error: refusedWith('no_consent_recorded'),
+      });
+    }
+  });
+
+  it('with the switch off (the default) a person with no grant is messaged', async () => {
+    const { t, c } = await arrange('lcg3', [null, null], false);
+    const b = await started(t, c, 2);
+    await sender.run(t.orgId, b.id);
+    expect(pushed()).toEqual([userId(1), userId(2)]);
+  });
+
+  it('a contact flagged as a minor is skipped when the workspace says no minors', async () => {
+    const { t, c } = await arrange('lcg4', [null, null], false);
+    await kit().minor(t, (await contactOf(t, 1)).id);
+    const b = await started(t, c, 2);
+    await sender.run(t.orgId, b.id);
+    expect(pushed()).toEqual([userId(2)]);
+    expect(byUser(await recipients(b.uuid))[userId(1)]).toMatchObject({
+      status: 'blocked',
+      error: refusedWith('subject_minor'),
+    });
+  });
+
+  it('a service message is never blocked: STOP, the switch and a minor flag do not stop a reply or a utility notice', async () => {
+    const { t } = await arrange('lcg5', [null], false);
+    const person = await contactOf(t, 1);
+    await kit().unsubscribe(t, person.id);
+    await kit().minor(t, person.id);
+    await kit().setSwitch(t, true);
+    const gate = h.app.get(ConsentGate);
+    const subject = { type: 'contact', id: person.id } as const;
+    expect((await gate.check(t.orgId, subject, 'line', 'marketing_messaging')).decision).toBe(
+      'deny',
+    );
+    expect(
+      await gate.check(t.orgId, subject, 'line', 'service_messaging', undefined, {
+        replyWindowOpen: true,
+      }),
+    ).toEqual({ decision: 'allow', reason: 'inbound_reply_window' });
+    expect(await gate.check(t.orgId, subject, 'line', 'service_messaging')).toEqual({
+      decision: 'allow',
+      reason: 'utility_exempt',
+    });
   });
 });

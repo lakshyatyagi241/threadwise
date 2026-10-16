@@ -30,7 +30,7 @@ import {
   scheduleWake,
   splitByQuietHours,
 } from '../compliance-center';
-import { ConsentGate } from '../contact-consent';
+import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 
 export type FbRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
 
@@ -49,7 +49,11 @@ const OUTSIDE_AFTER_HOLD =
  *
  * Quiet hours (BL-191): a person whose local time is inside the workspace's quiet hours is HELD, not denied. They go back to `pending`
  * with the instant they may be messaged, the rest of the audience goes, and when only held people are left a delayed job takes them up at
- * the first opening. At release the ConsentGate is asked again and the 24 hour window is checked again, as it is for every send.
+ * the first opening. At release the 24 hour window is checked again, as it is for every send.
+ *
+ * Consent (BL-141): every batch asks the ConsentGate first (purpose marketing, channel facebook), so the first send is screened like a
+ * release is. A broadcast is marketing even inside the 24 hour window: that window decides whether Meta lets the Page write, not whether
+ * the person agreed to marketing. Someone the gate refuses is `blocked` with `Not messaged: consent (<reason>)`.
  */
 @Injectable()
 export class FbBroadcastSenderService {
@@ -108,27 +112,17 @@ export class FbBroadcastSenderService {
       if (batch.length === 0) return this.finish(orgId, current);
       lastId = Math.max(...batch.map((r) => r.id));
 
-      const windows = await splitByQuietHours(this.sendWindow, orgId, batch);
+      // Every person is asked, on the first send and on a release alike (BL-141): someone who unsubscribed, or has no recorded consent
+      // while the workspace requires it, is `blocked` with the gate's reason, never messaged and never dropped without a trace.
+      const gated = await gateRecipients(this.gate, orgId, batch, 'facebook');
+      const refused = new Map(gated.skipped.map((s) => [s.row.id, s.reason]));
+      const windows = await splitByQuietHours(this.sendWindow, orgId, gated.go);
       const held = new Map(windows.held.map((h) => [h.row.id, h.hold]));
-      // A person released from a hold may have unsubscribed while they waited: the gate is asked again (BL-141).
-      const released = batch.filter((r) => r.wasHeld && r.contactId !== null);
-      const recheck =
-        released.length > 0
-          ? await this.gate.checkMany(
-              orgId,
-              released.map((r) => r.contactId as number),
-              'facebook',
-              'marketing_messaging',
-            )
-          : null;
 
       for (const r of batch) {
-        const verdict = r.contactId === null ? undefined : recheck?.decisions.get(r.contactId);
-        if (verdict && verdict.decision === 'deny') {
-          await this.mark(orgId, r.id, {
-            status: 'blocked',
-            error: `Not messaged: consent (${verdict.reason})`,
-          });
+        const why = refused.get(r.id);
+        if (why) {
+          await this.mark(orgId, r.id, { status: 'blocked', error: consentSkipNote(why) });
           continue;
         }
         const hold = held.get(r.id);
