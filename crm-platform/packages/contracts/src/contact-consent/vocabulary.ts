@@ -52,6 +52,9 @@ export const CONSENT_SOURCES = [
   // Lead capture (BL-168, migration 20261205090000): the agreement was given on a lead form or ad that a connector or the generic lead
   // webhook delivered, and the sender passed the proof (wording, version, time, form or ad) along with the lead.
   'lead',
+  // WhatsApp Form submission (TW-WFL, migration 20261225090000, net addition -- Reference never captures consent on a form): a field
+  // mapped to a consent privacy key agreed on a WhatsApp Form, distinct from the web-forms feature's own `form` source.
+  'wa_form',
 ] as const;
 export const consentSourceSchema = z.enum(CONSENT_SOURCES);
 export type ConsentSource = z.infer<typeof consentSourceSchema>;

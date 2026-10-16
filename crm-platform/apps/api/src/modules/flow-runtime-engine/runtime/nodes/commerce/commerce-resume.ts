@@ -1,11 +1,13 @@
 import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { judgeAgeAnswer, WA_FORM_PRIVACY_MAP_KIND, type WaFormPrivacyMapField } from '@crm/contracts';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import {
   InboundMessageHooks,
   type InboundMessageListener,
   type InboundStoredEvent,
 } from '../../../../chat-conversations';
+import { ContactPrivacyService, MinorDetectionService } from '../../../../contact-consent';
 import { ContactsService } from '../../../../crm';
 import {
   EcomOrderHooks,
@@ -20,7 +22,9 @@ import {
 import { FlowEngine } from '../../engine.service';
 import { RunRepository } from '../../run.repository';
 import type { RunState } from '../../types';
-import { flattenAnswer, parseFormToken, WaFormRecords } from './wa-form-records';
+import { flattenAnswer, parseFormToken, WaFormRecords, type FieldMapping } from './wa-form-records';
+
+const PRIVACY_MAP_FIELDS = new Set<string>(Object.keys(WA_FORM_PRIVACY_MAP_KIND));
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -50,6 +54,8 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     private readonly engine: FlowEngine,
     private readonly forms: WaFormRecords,
     private readonly contacts: ContactsService,
+    private readonly minors: MinorDetectionService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   onModuleInit(): void {
@@ -106,7 +112,8 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
         return false;
       });
 
-    if (recorded && e.contactId !== null) await this.applyFieldMappings(e.orgId, e.contactId, parsed.formId, answers);
+    if (recorded && e.contactId !== null)
+      await this.applyFieldMappings(e.orgId, e.contactId, parsed.formId, token, answers);
 
     const run = await this.runOf(e.orgId, parsed.runRef);
     const mine =
@@ -126,28 +133,41 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
   }
 
   /**
-   * A field the form builder marked "maps to a contact property" writes its answer onto the contact that submitted (TW-WFL, net
-   * addition: Reference never does this). Reuses the flow engine's own safe field writer (`ContactsService.setFieldFromFlow`) —
-   * same contact-column allow-list and active-custom-attribute check as the "Update contact field" step, so a mapping that names
-   * a since-deleted attribute is skipped, not an error, and phone can never be overwritten by a form answer. Best effort: one
-   * field failing to write never fails the submission itself, which is already kept.
+   * A field the form builder marked "maps to" writes its answer onto the contact that submitted (TW-WFL, net addition: Reference
+   * never does this). A contact property or a custom attribute reuses the flow engine's own safe field writer
+   * (`ContactsService.setFieldFromFlow`) — same contact-column allow-list and active-custom-attribute check as the "Update
+   * contact field" step, so a mapping that names a since-deleted attribute is skipped, not an error, and phone can never be
+   * overwritten by a form answer. A privacy key (age/date-of-birth/consent) goes through `applyPrivacyMapping` instead. Best
+   * effort throughout: one field failing to write never fails the submission itself, which is already kept.
    */
   private async applyFieldMappings(
     orgId: number,
     contactId: number,
     formId: number,
+    flowToken: string,
     answers: Record<string, unknown>,
   ): Promise<void> {
-    let mappings: Record<string, string>;
+    let mappings: Record<string, FieldMapping>;
     try {
       mappings = await this.forms.fieldMappings(orgId, formId);
     } catch (err) {
       this.logger.warn({ orgId, formId, err }, '[FLR] could not read the form field mappings');
       return;
     }
-    for (const { fieldId, mapsTo, value } of writesFor(mappings, answers)) {
+    for (const { fieldId, mapsTo, kind, label, value } of writesFor(mappings, answers)) {
       try {
-        await this.contacts.setFieldFromFlow(orgId, contactId, mapsTo, value);
+        if (PRIVACY_MAP_FIELDS.has(mapsTo)) {
+          await this.applyPrivacyMapping(
+            orgId,
+            contactId,
+            { formId, flowToken, fieldId, label },
+            mapsTo as WaFormPrivacyMapField,
+            kind,
+            value,
+          );
+        } else {
+          await this.contacts.setFieldFromFlow(orgId, contactId, mapsTo, value);
+        }
       } catch (err) {
         this.logger.warn(
           { orgId, formId, fieldId, mapsTo, err },
@@ -155,6 +175,52 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
         );
       }
     }
+  }
+
+  /**
+   * A field mapped to a privacy key answers an age/minor check or a consent grant instead of a contact property (TW-WFL net
+   * addition — WhatsApp Forms had neither before). `privacyActionFor` decides what the answer means, purely; this just carries
+   * that decision out against the real services.
+   */
+  private async applyPrivacyMapping(
+    orgId: number,
+    contactId: number,
+    ctx: { formId: number; flowToken: string; fieldId: string; label: string },
+    mapsTo: WaFormPrivacyMapField,
+    kind: string,
+    value: string,
+  ): Promise<void> {
+    const minAge = await this.db.txAs({ orgId, userId: null }, (tx) => this.privacy.minorAge(tx, orgId));
+    const action = privacyActionFor(mapsTo, kind, value, minAge, new Date());
+    if (action.kind === 'kind_mismatch') {
+      this.logger.warn(
+        { orgId, formId: ctx.formId, fieldId: ctx.fieldId, mapsTo, kind },
+        '[FLR] a privacy mapping is on the wrong field kind: skipped',
+      );
+      return;
+    }
+    if (action.kind === 'none') return;
+    const evidence = { formId: String(ctx.formId), fieldId: ctx.fieldId };
+
+    if (action.kind === 'flag_minor') {
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.minors.flagFromAnswer(tx, orgId, contactId, {
+          source: action.source,
+          minorUntil: action.minorUntil,
+          evidence,
+        }),
+      );
+      return;
+    }
+
+    await this.contacts.grantFromIntake(orgId, contactId, {
+      channel: 'whatsapp',
+      purpose: action.purpose,
+      source: 'wa_form',
+      text: ctx.label || undefined,
+      evidence,
+      idempotencyKey: `wa_form:${ctx.flowToken}:${ctx.fieldId}`,
+    });
   }
 
   private async catalogOrder(e: InboundStoredEvent): Promise<boolean> {
@@ -208,16 +274,51 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
 
 /** Of a form's field mappings, the ones this submission actually has a non-blank answer for, flattened and ready to write. */
 export function writesFor(
-  mappings: Record<string, string>,
+  mappings: Record<string, FieldMapping>,
   answers: Record<string, unknown>,
-): Array<{ fieldId: string; mapsTo: string; value: string }> {
-  const out: Array<{ fieldId: string; mapsTo: string; value: string }> = [];
-  for (const [fieldId, mapsTo] of Object.entries(mappings)) {
+): Array<{ fieldId: string; mapsTo: string; kind: string; label: string; value: string }> {
+  const out: Array<{ fieldId: string; mapsTo: string; kind: string; label: string; value: string }> = [];
+  for (const [fieldId, { mapsTo, kind, label }] of Object.entries(mappings)) {
     if (!(fieldId in answers)) continue;
     const value = flattenAnswer(answers[fieldId]);
-    if (value !== '') out.push({ fieldId, mapsTo, value });
+    if (value !== '') out.push({ fieldId, mapsTo, kind, label, value });
   }
   return out;
+}
+
+export type PrivacyAction =
+  | { kind: 'kind_mismatch' }
+  | { kind: 'none' }
+  | { kind: 'flag_minor'; source: 'dob' | 'declaration'; minorUntil: string | null }
+  | { kind: 'grant'; purpose: 'marketing' | 'utility' };
+
+/**
+ * What a privacy-mapped field's answer means, purely: the field's own `kind` must match what the privacy key needs
+ * (`WA_FORM_PRIVACY_MAP_KIND`) — a builder edit that changes a mapped field's kind must not misread the answer. Age/date-of-birth
+ * only flags under `minAge` (an adult answer is `none` — there is no "adult" fact to record); consent always grants (`writesFor`
+ * already filtered out a blank/unticked answer before this runs).
+ */
+export function privacyActionFor(
+  mapsTo: WaFormPrivacyMapField,
+  fieldKind: string,
+  value: string,
+  minAge: number,
+  now: Date,
+): PrivacyAction {
+  if (WA_FORM_PRIVACY_MAP_KIND[mapsTo] !== fieldKind) return { kind: 'kind_mismatch' };
+  if (mapsTo === 'privacy:consent_marketing') return { kind: 'grant', purpose: 'marketing' };
+  if (mapsTo === 'privacy:consent_service') return { kind: 'grant', purpose: 'utility' };
+  const verdict = judgeAgeAnswer(
+    mapsTo === 'privacy:age' ? { mode: 'age', age: value } : { mode: 'dob', dob: value },
+    minAge,
+    now,
+  );
+  if (verdict.kind !== 'under') return { kind: 'none' };
+  return {
+    kind: 'flag_minor',
+    source: verdict.mode === 'declaration' ? 'declaration' : 'dob',
+    minorUntil: verdict.minorUntil,
+  };
 }
 
 /** Hears `whatsapp.order.received` (TW-WABA-042) and hands the cart to `CommerceResume`. Worker only, like the resume itself. */

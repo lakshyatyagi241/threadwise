@@ -24,17 +24,31 @@ export function parseFormToken(token: string): { formId: number; runRef: string 
   return m ? { formId: Number(m[1]), runRef: m[2]! } : null;
 }
 
-/** Field id -> `mapsTo` out of a form's stored `definition_json`, however malformed; never throws. */
-export function extractFieldMappings(definitionJson: unknown): Record<string, string> {
+/**
+ * A field's `mapsTo` plus its own `kind` and `label` -- the privacy mappings (age/date-of-birth/consent) are only valid on one
+ * kind each, and a consent grant's ledger evidence keeps the field's label as the wording the contact actually saw and ticked.
+ */
+export interface FieldMapping {
+  mapsTo: string;
+  kind: string;
+  label: string;
+}
+
+/** Field id -> `{mapsTo, kind, label}` out of a form's stored `definition_json`, however malformed; never throws. */
+export function extractFieldMappings(definitionJson: unknown): Record<string, FieldMapping> {
   const def = definitionJson as
-    | { screens?: Array<{ fields?: Array<{ id?: unknown; mapsTo?: unknown }> }> }
+    | { screens?: Array<{ fields?: Array<{ id?: unknown; kind?: unknown; label?: unknown; mapsTo?: unknown }> }> }
     | null
     | undefined;
-  const out: Record<string, string> = {};
+  const out: Record<string, FieldMapping> = {};
   for (const screen of def?.screens ?? []) {
     for (const field of screen.fields ?? []) {
       if (typeof field.id === 'string' && typeof field.mapsTo === 'string' && field.mapsTo)
-        out[field.id] = field.mapsTo;
+        out[field.id] = {
+          mapsTo: field.mapsTo,
+          kind: typeof field.kind === 'string' ? field.kind : '',
+          label: typeof field.label === 'string' ? field.label : '',
+        };
     }
   }
   return out;
@@ -82,8 +96,8 @@ export class WaFormRecords {
     });
   }
 
-  /** Field id -> `mapsTo` for every field of this form that has one set, read straight off its stored definition. */
-  async fieldMappings(orgId: number, formId: number): Promise<Record<string, string>> {
+  /** Field id -> `{mapsTo, kind}` for every field of this form that has one set, read straight off its stored definition. */
+  async fieldMappings(orgId: number, formId: number): Promise<Record<string, FieldMapping>> {
     return this.db.txAs({ orgId }, async (tx) => {
       const res = await tx.execute(
         sql`SELECT definition_json FROM wa_forms WHERE org_id = ${orgId} AND id = ${formId}`,

@@ -31,8 +31,12 @@ Unofficial API (QR-paired) or Twilio number.
    date, and the choice fields (dropdown, radio buttons, checkboxes). Mark a field **Required** if the customer
    must answer it before continuing.
 4. For each field, you can pick what it **maps to**: a contact field (full name, first name, last name, email,
-   job title, language, address) or any of your workspace's custom properties. Leave it as "Don't save to a
-   contact property" to only keep the answer in the submission. A heading has nothing to map — it has no answer.
+   job title, language, address), any of your workspace's custom properties, or a **Privacy & consent** option on
+   a matching field — **Age** or **Date of birth** on a number or date field (runs the minor check, same rule as
+   the flow builder and the website chat widget), or **Marketing consent** / **Service agreement** on a checkbox
+   field (the checkbox's own label is the wording recorded as what the contact agreed to). Leave it as "Don't save
+   to a contact property" to only keep the answer in the submission. A heading has nothing to map — it has no
+   answer.
 5. Set the **Send button label** (what the final button on the form says) and an optional **Thank-you note** shown
    after submission.
 6. Select **Save draft** to keep working later, or **Save & publish** to push it live to WhatsApp.
@@ -52,6 +56,11 @@ alongside each field. Select **Export CSV** to download the full list.
 A field mapped to a contact property is saved onto the contact the moment they submit — a deleted or deactivated
 custom property is skipped silently rather than failing the submission, so an old mapping never blocks a new
 answer from being kept. The contact's phone number can never be overwritten this way.
+
+An **Age** or **Date of birth** mapping flags the contact as a minor when the answer is under your workspace's
+minor age — an adult answer writes nothing, since there is nothing to flag. A **Marketing consent** checkbox, once
+ticked, grants WhatsApp marketing consent for that contact (nothing is granted for an unticked box); **Service
+agreement** records the same ticked answer as evidence without touching their marketing status.
 
 ## If publishing fails
 

@@ -109,6 +109,13 @@
           "title": "Poste",
           "language": "Langue",
           "address": "Adresse"
+        },
+        "mapsToPrivacyGroup": "Confidentialité et consentement",
+        "mapsToPrivacy": {
+          "age": "Âge (vérification des mineurs)",
+          "date_of_birth": "Date de naissance (vérification des mineurs)",
+          "consent_marketing": "Consentement marketing (WhatsApp)",
+          "consent_service": "Accord de service (hors marketing)"
         }
       },
       "fieldKind": {

@@ -109,6 +109,13 @@
           "title": "عہدہ",
           "language": "زبان",
           "address": "پتہ"
+        },
+        "mapsToPrivacyGroup": "رازداری اور رضامندی",
+        "mapsToPrivacy": {
+          "age": "عمر (نابالغ تصدیق)",
+          "date_of_birth": "تاریخ پیدائش (نابالغ تصدیق)",
+          "consent_marketing": "مارکیٹنگ رضامندی (واٹس ایپ)",
+          "consent_service": "سروس معاہدہ (مارکیٹنگ نہیں)"
         }
       },
       "fieldKind": {

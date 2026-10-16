@@ -109,6 +109,13 @@
           "title": "পদবী",
           "language": "ভাষা",
           "address": "ঈকলাস"
+        },
+        "mapsToPrivacyGroup": "গোপনীয়তা ও সম্মতি",
+        "mapsToPrivacy": {
+          "age": "বয়स (নাবালক যাচাই)",
+          "date_of_birth": "জন্মতারিখ (নাবালক যাচাই)",
+          "consent_marketing": "মার্কেটিং সম্মতি (ক্যাটসঅ্যাপ)",
+          "consent_service": "পরিষেবা চুক্তি (মার্কেটিং নয়)"
         }
       },
       "fieldKind": {

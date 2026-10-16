@@ -109,6 +109,13 @@
           "title": "Job title",
           "language": "Language",
           "address": "Address"
+        },
+        "mapsToPrivacyGroup": "Privacy & consent",
+        "mapsToPrivacy": {
+          "age": "Age (minor check)",
+          "date_of_birth": "Date of birth (minor check)",
+          "consent_marketing": "Marketing consent (WhatsApp)",
+          "consent_service": "Service agreement (not marketing)"
         }
       },
       "fieldKind": {

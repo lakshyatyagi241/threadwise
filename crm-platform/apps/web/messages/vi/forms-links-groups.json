@@ -109,6 +109,13 @@
           "title": "Chức danh",
           "language": "Ngôn ngữ",
           "address": "Địa chỉ"
+        },
+        "mapsToPrivacyGroup": "Quyền riêng tư và sự đồng ý",
+        "mapsToPrivacy": {
+          "age": "Tuổi (kiểm tra vị thành niên)",
+          "date_of_birth": "Ngày sinh (kiểm tra vị thành niên)",
+          "consent_marketing": "Sự đồng ý tiếp thị (WhatsApp)",
+          "consent_service": "Thoả thuận dịch vụ (không phải tiếp thị)"
         }
       },
       "fieldKind": {
