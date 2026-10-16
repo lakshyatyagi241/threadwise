@@ -228,9 +228,12 @@ describe('the API reads no cookie for authentication', () => {
   const SRC = join(__dirname, '../../../src');
   const COOKIE_READ = /req\.cookies|cookie-parser|cookieParser|headers\.cookie|headers\['cookie'\]/;
   const REVIEWED: Record<string, string> = {
-    'modules/chatbot-widget/widget-public.service.ts': 'anonymous visitor id of the public chat widget, not a login',
-    'modules/chatbot-widget/widget-public.controller.ts': 'passes the widget visitor cookie to the service',
-    'modules/platform-infrastructure/observability/sentry.ts': 'removes cookies before an error report is sent',
+    'modules/chatbot-widget/widget-public.service.ts':
+      'anonymous visitor id of the public chat widget, not a login',
+    'modules/chatbot-widget/widget-public.controller.ts':
+      'passes the widget visitor cookie to the service',
+    'modules/platform-infrastructure/observability/sentry.ts':
+      'removes cookies before an error report is sent',
   };
   function* ts(dir: string): Generator<string> {
     for (const n of readdirSync(dir)) {

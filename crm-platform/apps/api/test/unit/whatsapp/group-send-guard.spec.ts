@@ -81,7 +81,9 @@ describe('buildMessageBody: a g: peer is addressed as a group, never as a phone 
   } as never;
 
   it('text goes to the group id verbatim with recipient_type group', () => {
-    const body = buildMessageBody(outboundEnvelopeSchema.parse({ ...common, kind: 'text', body: 'hello' }));
+    const body = buildMessageBody(
+      outboundEnvelopeSchema.parse({ ...common, kind: 'text', body: 'hello' }),
+    );
     expect(body).toMatchObject({
       messaging_product: 'whatsapp',
       recipient_type: 'group',

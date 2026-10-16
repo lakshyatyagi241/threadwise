@@ -19,6 +19,7 @@ import {
   type SourceDraft,
 } from '../lib/draft';
 import type { LeadFieldIssue } from '../lib/errors';
+import { SpeedToLeadSection } from './speed-to-lead-section';
 
 /**
  * The inputs of a source's basics (name, platform label, secret, external id, retention) and of what happens to a lead (defaults).
@@ -536,6 +537,8 @@ export function DefaultsFields({ draft, set, problems, server, disabled }: Field
           />
         </Field>
       </section>
+
+      <SpeedToLeadSection draft={draft} set={set} error={error} disabled={disabled} />
     </div>
   );
 }

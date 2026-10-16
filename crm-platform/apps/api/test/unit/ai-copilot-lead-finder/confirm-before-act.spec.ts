@@ -1,14 +1,30 @@
 import { describe, expect, it } from 'vitest';
-import { AFFIRMATIVE, NEGATIVE, looksLikePhone, maskPhone } from '../../../src/modules/ai-copilot-lead-finder/ai-crm-copilot.service';
+import {
+  AFFIRMATIVE,
+  NEGATIVE,
+  looksLikePhone,
+  maskPhone,
+} from '../../../src/modules/ai-copilot-lead-finder/ai-crm-copilot.service';
 
 describe('AI CRM Copilot: confirm-before-act reply matching', () => {
-  it.each(['yes', 'Yes', 'y', 'yeah', 'yep', 'ok', 'okay', 'confirm', 'confirmed', 'sure', 'do it', 'go', 'proceed'])(
-    'treats "%s" as an affirmative confirmation',
-    (reply) => {
-      expect(AFFIRMATIVE.test(reply)).toBe(true);
-      expect(NEGATIVE.test(reply)).toBe(false);
-    },
-  );
+  it.each([
+    'yes',
+    'Yes',
+    'y',
+    'yeah',
+    'yep',
+    'ok',
+    'okay',
+    'confirm',
+    'confirmed',
+    'sure',
+    'do it',
+    'go',
+    'proceed',
+  ])('treats "%s" as an affirmative confirmation', (reply) => {
+    expect(AFFIRMATIVE.test(reply)).toBe(true);
+    expect(NEGATIVE.test(reply)).toBe(false);
+  });
 
   it.each(['no', 'No', 'n', 'nope', 'cancel', 'stop', "don't", 'dont'])(
     'treats "%s" as a cancellation',

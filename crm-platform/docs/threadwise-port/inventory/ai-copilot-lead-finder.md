@@ -27,9 +27,9 @@ contacts), is explicitly **not** covered by this entry. It is parked to the back
 and already shows as a disabled "coming soon" nav entry (`apps/web/src/features/_registry/planned.ts`) — leave that
 as-is; do not build it as part of this domain's work without a separate decision to pick it up.
 
-| Feature     | Controller         | Model(s)                   | Route prefix | Plan gate         |
-| ----------- | ------------------- | --------------------------- | ------------- | ------------------ |
-| AI CRM Copilot | `AiCrmController` (Reference) → `AiCrmController` (this repo) | `AiCrmAction` (audit log) | `/ai-crm` | `plan:access_ai_agents` (Reference) → `ai_crm_copilot` (new key, this repo) |
+| Feature        | Controller                                                    | Model(s)                  | Route prefix | Plan gate                                                                   |
+| -------------- | ------------------------------------------------------------- | ------------------------- | ------------ | --------------------------------------------------------------------------- |
+| AI CRM Copilot | `AiCrmController` (Reference) → `AiCrmController` (this repo) | `AiCrmAction` (audit log) | `/ai-crm`    | `plan:access_ai_agents` (Reference) → `ai_crm_copilot` (new key, this repo) |
 
 Actors: workspace manager+ (chat); workspace admin+ (the WhatsApp staff-channel toggle, `wa_copilot_enabled` — the
 column already exists in `workspace_settings`, unwired, from an earlier unrelated migration; this domain is the first
@@ -61,9 +61,9 @@ application service, never its repository directly, so RBAC/audit/outbox stay in
    - `create_project` / `list_projects` — Reference's Phase 6 "delivery project" tracking (`Project` model). Gap-check
      (2026-10-15) confirmed no `projects` controller, service, table or feature directory exists anywhere in this
      repo; building it is its own domain-sized unit of work, not a side effect of the copilot.
-   These three tool definitions are *not* registered in this port's toolkit at all (an LLM cannot call a tool it was
-   never told about) rather than registered-but-erroring, so the model never promises something that then fails.
-3. **WhatsApp staff-channel bridge is recorded `blocked`, not built in this PR.** Reference answers the *same*
+     These three tool definitions are _not_ registered in this port's toolkit at all (an LLM cannot call a tool it was
+     never told about) rather than registered-but-erroring, so the model never promises something that then fails.
+3. **WhatsApp staff-channel bridge is recorded `blocked`, not built in this PR.** Reference answers the _same_
    copilot service from an inbound WhatsApp message when `wa_copilot_enabled` is on (a staff member DMs the
    workspace's own number). That requires hooking into the inbound-message pipeline (`node-bridge-runtime` /
    `whatsapp-cloud-api-waba` inbound handling) to recognize a staff sender and divert their message away from the
@@ -83,24 +83,24 @@ application service, never its repository directly, so RBAC/audit/outbox stay in
 
 ## Feature index
 
-| Id            | Feature                                                                      | Status  | Priority | Effort | Depends on     |
-| ------------- | ----------------------------------------------------------------------------- | ------- | -------- | ------ | --------------- |
-| TW-AICRM-001  | Chat engine: multi-provider tool-calling loop, confirm-before-act, audit log | done    | P0       | L      | -               |
-| TW-AICRM-002  | Dashboard chat screen, message/reset endpoints, recent-actions panel        | done    | P0       | M      | TW-AICRM-001    |
-| TW-AICRM-003  | Contact tools: `find_contact`, `create_contact`                             | done    | P0       | S      | TW-AICRM-001    |
-| TW-AICRM-004  | Deal/pipeline tools: `list_deals`, `create_deal`, `move_deal_stage`         | done    | P0       | M      | TW-AICRM-001    |
-| TW-AICRM-005  | Company tools: `find_company`, `create_company`, `link_contact_company`    | done    | P0       | S      | TW-AICRM-001    |
-| TW-AICRM-006  | `sales_report` tool                                                         | done    | P1       | S      | TW-AICRM-004    |
-| TW-AICRM-007  | Invoicing/payment tools: `create_invoice`, `record_payment`, `list_outstanding` | done | P1       | M      | TW-AICRM-001    |
-| TW-AICRM-008  | Task tools: `create_task`, `assign_task`, `complete_task`, `list_my_tasks`  | done    | P1       | M      | TW-AICRM-001    |
-| TW-AICRM-009  | `revenue_report` tool                                                       | done    | P1       | S      | TW-AICRM-007    |
-| TW-AICRM-010  | Quote tools: `create_quote`, `list_quotes` (proposals/estimates)           | done    | P1       | M      | TW-AICRM-001    |
-| TW-AICRM-011  | Messaging tools: `send_message`, `send_quote`                              | done    | P1       | M      | TW-AICRM-010    |
-| TW-AICRM-012  | `generate_brief` tool (client brief/deck)                                   | blocked | P2       | M      | (no Briefs domain) |
-| TW-AICRM-013  | `create_project` / `list_projects` tools                                    | blocked | P2       | M      | (no Projects domain) |
-| TW-AICRM-014  | WhatsApp staff-channel bridge (inbound command routing)                    | blocked | P2       | L      | (cross-domain, inbound pipeline) |
-| TW-AICRM-015  | WhatsApp staff-channel toggle (`wa_copilot_enabled`, admin-only)            | done    | P2       | S      | -               |
-| TW-AICRM-016  | Plan-feature gate (`ai_crm_copilot`) and permissions                        | done    | P0       | S      | -               |
+| Id           | Feature                                                                         | Status  | Priority | Effort | Depends on                       |
+| ------------ | ------------------------------------------------------------------------------- | ------- | -------- | ------ | -------------------------------- |
+| TW-AICRM-001 | Chat engine: multi-provider tool-calling loop, confirm-before-act, audit log    | done    | P0       | L      | -                                |
+| TW-AICRM-002 | Dashboard chat screen, message/reset endpoints, recent-actions panel            | done    | P0       | M      | TW-AICRM-001                     |
+| TW-AICRM-003 | Contact tools: `find_contact`, `create_contact`                                 | done    | P0       | S      | TW-AICRM-001                     |
+| TW-AICRM-004 | Deal/pipeline tools: `list_deals`, `create_deal`, `move_deal_stage`             | done    | P0       | M      | TW-AICRM-001                     |
+| TW-AICRM-005 | Company tools: `find_company`, `create_company`, `link_contact_company`         | done    | P0       | S      | TW-AICRM-001                     |
+| TW-AICRM-006 | `sales_report` tool                                                             | done    | P1       | S      | TW-AICRM-004                     |
+| TW-AICRM-007 | Invoicing/payment tools: `create_invoice`, `record_payment`, `list_outstanding` | done    | P1       | M      | TW-AICRM-001                     |
+| TW-AICRM-008 | Task tools: `create_task`, `assign_task`, `complete_task`, `list_my_tasks`      | done    | P1       | M      | TW-AICRM-001                     |
+| TW-AICRM-009 | `revenue_report` tool                                                           | done    | P1       | S      | TW-AICRM-007                     |
+| TW-AICRM-010 | Quote tools: `create_quote`, `list_quotes` (proposals/estimates)                | done    | P1       | M      | TW-AICRM-001                     |
+| TW-AICRM-011 | Messaging tools: `send_message`, `send_quote`                                   | done    | P1       | M      | TW-AICRM-010                     |
+| TW-AICRM-012 | `generate_brief` tool (client brief/deck)                                       | blocked | P2       | M      | (no Briefs domain)               |
+| TW-AICRM-013 | `create_project` / `list_projects` tools                                        | blocked | P2       | M      | (no Projects domain)             |
+| TW-AICRM-014 | WhatsApp staff-channel bridge (inbound command routing)                         | blocked | P2       | L      | (cross-domain, inbound pipeline) |
+| TW-AICRM-015 | WhatsApp staff-channel toggle (`wa_copilot_enabled`, admin-only)                | done    | P2       | S      | -                                |
+| TW-AICRM-016 | Plan-feature gate (`ai_crm_copilot`) and permissions                            | done    | P0       | S      | -                                |
 
 ## Features
 

@@ -65,6 +65,10 @@ export const LEAD_DETAIL_CODES = [
   'pipeline_required',
   'unknown_or_lost_stage',
   'unknown_or_inactive_user',
+  'template_required',
+  'template_not_found',
+  'template_not_sendable',
+  'sender_not_found',
 ] as const;
 const DETAIL_SET: ReadonlySet<string> = new Set(LEAD_DETAIL_CODES);
 
@@ -90,10 +94,30 @@ function planValues(err: ApiError) {
   };
 }
 
+/** `used` and `limit` as text for a message, only when the problem carries both as whole numbers (never a guess). */
+function planCounts(err: ApiError): { used: string; limit: string } | undefined {
+  const used = Number(detail(err, 'used'));
+  const limit = Number(detail(err, 'limitValue'));
+  return Number.isInteger(used) && Number.isInteger(limit) && used >= 0 && limit > 0
+    ? { used: String(used), limit: String(limit) }
+    : undefined;
+}
+
 /** The issues of a problem that name a field: the contract's own validation messages and the API's detail codes. */
 function issuesOf(err: ApiError, translateCodes: boolean): LeadFieldIssue[] {
   return err.fieldErrors
-    .filter((f) => !['upgradeUrl', 'feature', 'reason', 'retryAfterSeconds'].includes(f.path))
+    .filter(
+      (f) =>
+        ![
+          'upgradeUrl',
+          'feature',
+          'reason',
+          'retryAfterSeconds',
+          'limit',
+          'limitValue',
+          'used',
+        ].includes(f.path),
+    )
     .map((f) =>
       translateCodes
         ? detailIssue(f.path, f.message)
@@ -126,8 +150,13 @@ export function leadError(err: unknown): LeadError {
       return { ...base, kind: 'signedOut', key: 'signedOut' };
     case ERROR_CODES.PLAN_FEATURE_LOCKED:
       return { ...base, kind: 'locked', key: 'planLocked', ...planValues(err) };
-    case ERROR_CODES.PLAN_LIMIT_REACHED:
-      return { ...base, kind: 'planLimit', key: 'planLimit', ...planValues(err) };
+    case ERROR_CODES.PLAN_LIMIT_REACHED: {
+      // The problem carries `used` (how many the workspace has) and `limitValue` (the cap): "You have used 5 of 5 lead sources".
+      const counts = planCounts(err);
+      return counts
+        ? { ...base, kind: 'planLimit', key: 'planLimitUsed', values: counts, ...planValues(err) }
+        : { ...base, kind: 'planLimit', key: 'planLimit', ...planValues(err) };
+    }
     case ERROR_CODES.LEAD_SOURCE_NAME_TAKEN:
       return {
         ...base,
@@ -150,6 +179,18 @@ export function leadError(err: unknown): LeadError {
       return { ...base, kind: 'general', key: 'payloadPurged' };
     case ERROR_CODES.LEAD_SOURCE_PAUSED:
       return { ...base, kind: 'general', key: 'sourcePaused' };
+    case ERROR_CODES.LEAD_SYNC_NOT_SUPPORTED:
+      return { ...base, kind: 'general', key: 'syncNotSupported' };
+    case ERROR_CODES.LEAD_SYNC_IN_PROGRESS:
+      return { ...base, kind: 'general', key: 'syncInProgress' };
+    case ERROR_CODES.LEAD_SYNC_TOO_SOON: {
+      const seconds = detail(err, 'retryAfterSeconds');
+      return seconds
+        ? { ...base, kind: 'general', key: 'syncTooSoon', values: { seconds } }
+        : { ...base, kind: 'general', key: 'syncTooSoonNoWait' };
+    }
+    case ERROR_CODES.LEAD_BACKFILL_RANGE_INVALID:
+      return { ...base, kind: 'general', key: 'backfillRange' };
     case ERROR_CODES.MLA_NOT_CONFIGURED:
       return { ...base, kind: 'general', key: 'mlaNotConfigured' };
     case ERROR_CODES.MLA_LEAD_ACCESS_MISSING:
@@ -204,12 +245,18 @@ export const LEAD_ERROR_KEYS = [
   'signedOut',
   'planLocked',
   'planLimit',
+  'planLimitUsed',
   'nameTaken',
   'mappingInvalid',
   'defaultsInvalid',
   'notRetryable',
   'payloadPurged',
   'sourcePaused',
+  'syncNotSupported',
+  'syncInProgress',
+  'syncTooSoon',
+  'syncTooSoonNoWait',
+  'backfillRange',
   'notFound',
   'rateLimited',
   'rateLimitedWait',

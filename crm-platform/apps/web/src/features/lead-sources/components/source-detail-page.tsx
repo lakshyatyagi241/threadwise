@@ -18,7 +18,6 @@ import {
 } from '../lib/draft';
 import { issuesByPath, leadError, type LeadError } from '../lib/errors';
 import { DEFAULT_EVENT_FILTERS, filtersFromLink, type EventFilters } from '../lib/event-view';
-import type { HookUrlEnv } from '../lib/hook-url';
 import { LEADS_READ, useLeadsCan } from '../lib/permissions';
 import { dismissReveal, needsLeaveGuard, revealOf, type Reveal } from '../lib/reveal';
 import {
@@ -54,11 +53,9 @@ import {
  */
 export function SourceDetailPage({
   id,
-  hookEnv,
   initialEvents,
 }: {
   id: string;
-  hookEnv: HookUrlEnv;
   /** The address's `?events=` value (the "needs attention" badge links with `attention`). */
   initialEvents?: string;
 }) {
@@ -83,19 +80,17 @@ export function SourceDetailPage({
       </div>
     );
   }
-  return <Detail first={q.data} live={q.data} hookEnv={hookEnv} initialEvents={initialEvents} />;
+  return <Detail first={q.data} live={q.data} initialEvents={initialEvents} />;
 }
 
 function Detail({
   first,
   live,
-  hookEnv,
   initialEvents,
 }: {
   first: LeadSourceResponse;
   /** The source as the cache holds it now: counts and the last event stay current without touching the editor. */
   live: LeadSourceResponse;
-  hookEnv: HookUrlEnv;
   initialEvents?: string;
 }) {
   const t = useTranslations('lead-sources.detail');
@@ -331,7 +326,6 @@ function Detail({
       {reveal && (
         <RevealPanel
           reveal={reveal}
-          env={hookEnv}
           hasSecret={base.hasSecret}
           onChange={setReveal}
           onDone={() => setReveal(dismissReveal(reveal))}

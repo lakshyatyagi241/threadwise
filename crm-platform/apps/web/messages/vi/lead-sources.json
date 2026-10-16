@@ -45,8 +45,18 @@
         "stage_not_in_pipeline": "Giai đoạn này thuộc pipeline khác.",
         "pipeline_required": "Chọn pipeline mà giai đoạn này thuộc về.",
         "unknown_or_lost_stage": "Giai đoạn vòng đời này không tồn tại hoặc là giai đoạn thất bại.",
-        "unknown_or_inactive_user": "Một trong những người đã chọn không phải thành viên đang hoạt động của không gian làm việc."
+        "unknown_or_inactive_user": "Một trong những người đã chọn không phải thành viên đang hoạt động của không gian làm việc.",
+        "template_required": "Hãy chọn mẫu tin cần gửi.",
+        "template_not_found": "Mẫu tin này không tồn tại cho kênh này trong không gian làm việc này.",
+        "template_not_sendable": "Không thể gửi mẫu tin này: mẫu chưa được duyệt, đang tạm dừng hoặc cần tệp hay biến liên kết.",
+        "sender_not_found": "Người gửi này chưa được kết nối."
       },
+      "planLimitUsed": "Bạn đã dùng {used}/{limit} nguồn khách hàng tiềm năng. Hãy nâng cấp gói hoặc xóa một nguồn bạn không còn dùng.",
+      "syncNotSupported": "Nguồn này tự gửi khách hàng tiềm năng đến, nên không có gì để kéo về.",
+      "syncInProgress": "Nguồn này đang được kéo dữ liệu. Vui lòng đợi hoàn tất.",
+      "syncTooSoon": "Nguồn này vừa được yêu cầu. Hãy thử lại sau {seconds} giây.",
+      "syncTooSoonNoWait": "Nguồn này vừa được yêu cầu. Hãy thử lại sau một lúc.",
+      "backfillRange": "Không thể kéo khoảng thời gian này: nó lùi xa hơn thời gian nguồn lưu khách hàng tiềm năng, hoặc nằm trong tương lai.",
       "mlaNotConfigured": "Meta chưa được thiết lập trên hệ thống này. Quản trị viên cần thêm ứng dụng Meta trước.",
       "mlaLeadAccessMissing": "Trang này không có các quyền mà Meta yêu cầu để đọc lead. Hãy cấp quyền truy cập lead rồi thử lại.",
       "mlaPageReconnect": "Meta không còn chấp nhận kết nối của Trang này. Hãy kết nối lại Trang rồi thử lại.",
@@ -75,7 +85,9 @@
       "propertyDuplicate": "Thuộc tính này được ánh xạ hai lần.",
       "pathRequired": "Cho biết giá trị nằm ở đâu trong dữ liệu gửi đến.",
       "customFieldsTooMany": "Ánh xạ tối đa {max} thuộc tính tùy chỉnh.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Hãy chọn mẫu tin cần gửi.",
+      "speedDelayRange": "Hãy nhập số phút nguyên từ 0 đến {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -138,7 +150,8 @@
       "tabs": {
         "ads": "Quảng cáo",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# khách hàng tiềm năng cần xử lý}}"
+        "attention": "{count, plural, other {# khách hàng tiềm năng cần xử lý}}",
+        "inbox": "Hộp thư khách tiềm năng"
       }
     },
     "ads": {
@@ -228,7 +241,8 @@
       "skipMapping": "Bỏ qua bây giờ",
       "finish": "Lưu và hoàn tất",
       "revealGone": "URL và token không còn được hiển thị. Nếu bạn chưa lưu lại, hãy mở nguồn và đổi token để nhận URL mới.",
-      "toMapping": "Tiếp tục đến bước ánh xạ"
+      "toMapping": "Tiếp tục đến bước ánh xạ",
+      "planLimitUsed": "Bạn đã dùng {used}/{limit} nguồn khách hàng tiềm năng, nên không thể tạo nguồn mới."
     },
     "form": {
       "name": "Tên nguồn",
@@ -259,7 +273,8 @@
         "contact": "Liên hệ",
         "owner": "Chủ sở hữu",
         "deal": "Thương vụ",
-        "notify": "Thông báo"
+        "notify": "Thông báo",
+        "speed": "Tin nhắn đầu tiên gửi khách hàng tiềm năng mới"
       },
       "membersFailed": "Chúng tôi không tải được nhóm của bạn nên hiện chưa thể chọn người. Tải lại trang để thử lại.",
       "countryCode": "Mã quốc gia mặc định",
@@ -297,7 +312,39 @@
       "notifyOwner": "Thông báo cho chủ sở hữu liên hệ",
       "notifyOwnerHint": "Thông báo trong ứng dụng khi có khách hàng tiềm năng mới. Khách hàng thử nghiệm sẽ không gửi thông báo.",
       "notifyUsers": "Thông báo thêm cho",
-      "notifyUsersHint": "Ví dụ trưởng nhóm bán hàng. Tối đa 20 người."
+      "notifyUsersHint": "Ví dụ trưởng nhóm bán hàng. Tối đa 20 người.",
+      "speed": {
+        "enabled": "Tự động gửi tin nhắn đầu tiên",
+        "enabledHint": "Mặc định tắt. Khi khách hàng tiềm năng mới trở thành liên hệ, tin nhắn sẽ tự động được gửi nếu sự đồng ý, giờ yên tĩnh, gói của bạn và ví cho phép.",
+        "consentNote": "Sự đồng ý không bao giờ được mặc định. Mẫu tin tiện ích (utility) của WhatsApp là tin nhắn dịch vụ. Mẫu tin tiếp thị, SMS hoặc email là tin nhắn tiếp thị: cần có sự đồng ý đã được ghi nhận khi không gian làm việc của bạn yêu cầu, sẽ chờ hết giờ yên tĩnh và bị chặn đối với liên hệ đã từ chối nhận. Khách hàng tiềm năng đến kèm bằng chứng đồng ý sẽ được ghi nhận sự đồng ý đó.",
+        "channel": "Kênh",
+        "channels": {
+          "whatsapp": "Mẫu tin WhatsApp",
+          "sms": "SMS",
+          "email": "Email"
+        },
+        "template": "Mẫu tin",
+        "templateChoose": "Chọn mẫu tin",
+        "templateNone": "Không có mẫu tin nào cho kênh này",
+        "templateUnavailable": "Mẫu tin đã lưu không còn khả dụng",
+        "templateHint": {
+          "whatsapp": "Các mẫu tin đã được duyệt và chỉ cần thông tin liên hệ (ví dụ: tên). Mẫu cần tệp hoặc biến liên kết sẽ không được liệt kê.",
+          "sms": "Các mẫu SMS đã được duyệt.",
+          "email": "Các mẫu email dùng chung. Không thể dùng mẫu cá nhân."
+        },
+        "sender": "Gửi từ",
+        "senderDefault": "Người gửi đầu tiên đã kết nối",
+        "senderUnavailable": "Người gửi đã lưu không còn được kết nối",
+        "senderHint": {
+          "sms": "Số SMS dùng để gửi tin nhắn.",
+          "email": "Hộp thư dùng chung dùng để gửi tin nhắn."
+        },
+        "delay": "Chờ trước khi gửi (phút)",
+        "delayHint": "Số phút nguyên từ 0 đến {max}. 0 là gửi ngay.",
+        "businessHours": "Chỉ trong giờ làm việc",
+        "businessHoursHint": "Ngoài giờ làm việc đã đặt trong không gian làm việc của bạn, tin nhắn sẽ chờ đến khi giờ làm việc bắt đầu.",
+        "optionsFailed": "Không tải được các mẫu tin và người gửi. Hãy thử lại sau giây lát."
+      }
     },
     "mapping": {
       "contact": "Trường liên hệ",
@@ -403,7 +450,7 @@
       "bodyRotated": "URL cũ đã ngừng hoạt động ngay. URL mới này chỉ được hiển thị lần này.",
       "url": "URL webhook",
       "copyUrl": "Sao chép URL",
-      "noOrigin": "Đặt địa chỉ API của bạn trước đường dẫn này để có URL đầy đủ.",
+      "noOrigin": "Địa chỉ API công khai của nền tảng chưa được thiết lập nên không thể tạo URL đầy đủ. Hãy nhờ người vận hành nền tảng này thiết lập địa chỉ đó. Trong lúc chờ, hãy thêm địa chỉ API của bạn vào phía trước đường dẫn này.",
       "token": "Token",
       "copyToken": "Sao chép token",
       "secretHint": "Nguồn này cũng cần khóa bí mật dùng chung: người gửi phải gửi khóa trong tiêu đề {header}.",
@@ -411,7 +458,8 @@
       "sampleHelp": "Trong Zapier hoặc Make, dùng hành động Webhooks để gửi JSON đến URL. Lệnh này gửi một khách hàng tiềm năng mẫu.",
       "copied": "Tôi đã sao chép URL và token vào nơi an toàn",
       "done": "Tôi đã sao chép, tiếp tục",
-      "doneHint": "Hãy tick vào ô trước. Sau bước này sẽ không thể hiển thị lại token."
+      "doneHint": "Hãy tick vào ô trước. Sau bước này sẽ không thể hiển thị lại token.",
+      "notPublic": "Địa chỉ API công khai của nền tảng đang trỏ tới một địa chỉ riêng tư hoặc cục bộ mà các nền tảng quảng cáo không thể truy cập, nên URL đầy đủ không được hiển thị. Hãy nhờ người vận hành nền tảng này thiết lập địa chỉ công khai, sau đó xoay vòng token để nhận URL đầy đủ."
     },
     "test": {
       "title": "Gửi khách hàng tiềm năng thử nghiệm",
@@ -547,7 +595,8 @@
       "retried": "Đã thử lại. Khách hàng tiềm năng hiện là",
       "payload": "Payload đã lưu",
       "loadingPayload": "Đang mở payload",
-      "purged": "Payload thô đã bị xóa sau {days} ngày. Khách hàng tiềm năng và liên hệ của nó vẫn được giữ."
+      "purged": "Payload thô đã bị xóa sau {days} ngày. Khách hàng tiềm năng và liên hệ của nó vẫn được giữ.",
+      "firstReply": "Tin nhắn đầu tiên"
     },
     "attribution": {
       "title": "Nguồn gốc khách hàng tiềm năng",
@@ -565,6 +614,223 @@
       },
       "capturedAt": "Thu nhận",
       "openSource": "Mở nguồn khách hàng tiềm năng"
+    },
+    "hookAddress": {
+      "title": "URL webhook mới sẽ không đầy đủ",
+      "notConfigured": "Địa chỉ API công khai của nền tảng chưa được thiết lập. Hãy nhờ người vận hành nền tảng này thiết lập; cho đến lúc đó, nguồn mới chỉ có thể hiển thị đường dẫn của URL.",
+      "notPublic": "Địa chỉ API công khai của nền tảng đang trỏ tới một địa chỉ riêng tư hoặc cục bộ mà các nền tảng quảng cáo không thể truy cập. Hãy nhờ người vận hành nền tảng này thiết lập địa chỉ công khai."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Đã lên lịch",
+        "sending": "Đang gửi",
+        "held": "Đang giữ lại",
+        "sent": "Đã gửi",
+        "blocked": "Bị chặn",
+        "skipped": "Đã bỏ qua",
+        "failed": "Thất bại"
+      },
+      "reasons": {
+        "quiet_hours": "Đang chờ hết giờ yên tĩnh",
+        "outside_business_hours": "Đang chờ đến giờ làm việc",
+        "channel_unavailable": "Kênh chưa được kết nối",
+        "wallet_empty": "Ví đã hết tiền",
+        "send_halted": "Việc gửi đã bị dừng",
+        "opted_out": "Liên hệ đã từ chối nhận tin",
+        "no_consent": "Chưa có sự đồng ý được ghi nhận",
+        "minor": "Liên hệ được đánh dấu là người chưa thành niên",
+        "plan_limit": "Đã đạt giới hạn của gói",
+        "disabled": "Cài đặt đã bị tắt",
+        "source_paused": "Nguồn khách hàng tiềm năng đang tạm dừng",
+        "no_contact_point": "Không có số hoặc địa chỉ cho kênh này",
+        "no_sender": "Không có người gửi nào được kết nối",
+        "template_unavailable": "Không thể gửi mẫu tin",
+        "missing_value": "Liên hệ này thiếu một giá trị của mẫu tin",
+        "provider_error": "Nhà cung cấp đã từ chối",
+        "interrupted": "Bị gián đoạn",
+        "expired": "Đã chờ quá lâu",
+        "internal_error": "Lỗi nội bộ"
+      },
+      "nextTry": "Lần thử tiếp theo",
+      "sentAt": "Đã gửi"
+    },
+    "inbox": {
+      "intro": "Mọi khách hàng tiềm năng mà các nguồn của bạn đã nhận, kể cả những trường hợp không thể tạo thành liên hệ. Mở một khách hàng tiềm năng để xem lý do và thử lại những trường hợp đang chờ.",
+      "chipsLabel": "Lọc theo trạng thái",
+      "loading": "Đang tải khách hàng tiềm năng",
+      "more": "Tải thêm",
+      "chips": {
+        "all": "Tất cả",
+        "attention": "Cần xử lý",
+        "needs_review": "Cần xem xét",
+        "failed": "Thất bại",
+        "created": "Đã tạo",
+        "updated": "Đã cập nhật",
+        "duplicate": "Trùng lặp"
+      },
+      "filters": {
+        "source": "Nguồn",
+        "allSources": "Tất cả nguồn",
+        "reason": "Lý do",
+        "anyReason": "Mọi lý do",
+        "range": "Thời điểm nhận",
+        "ranges": {
+          "all": "Mọi lúc",
+          "day": "24 giờ qua",
+          "week": "7 ngày qua",
+          "month": "30 ngày qua",
+          "custom": "Chọn ngày"
+        },
+        "from": "Từ",
+        "to": "Đến (bao gồm)",
+        "rangeOrder": "Ngày kết thúc trước ngày bắt đầu.",
+        "tests": "Khách thử nghiệm",
+        "testChoices": {
+          "all": "Hiện",
+          "only": "Chỉ khách thử nghiệm",
+          "hide": "Ẩn"
+        },
+        "search": "Mã khách bắt đầu bằng",
+        "searchHint": "Chỉ tìm theo mã mà bên gửi đặt cho khách hàng tiềm năng, không bao giờ tìm theo tên, số điện thoại hay địa chỉ.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Tìm kiếm",
+        "reset": "Quay lại các trường hợp đang chờ",
+        "showAll": "Hiện tất cả"
+      },
+      "table": {
+        "caption": "Khách hàng tiềm năng nhận được từ mọi nguồn",
+        "received": "Đã nhận",
+        "source": "Nguồn",
+        "lead": "Khách tiềm năng",
+        "status": "Trạng thái",
+        "reason": "Lý do",
+        "firstMessage": "Tin nhắn đầu tiên",
+        "actions": "Thao tác",
+        "select": "Chọn khách tiềm năng {id}",
+        "test": "Thử nghiệm",
+        "view": "Mở",
+        "retry": "Thử lại"
+      },
+      "empty": {
+        "attentionTitle": "Không có gì đang chờ bạn",
+        "attention": "Mọi khách hàng tiềm năng đến đều đã trở thành liên hệ. Những trường hợp cần xem xét hoặc thất bại sẽ hiện ở đây.",
+        "filteredTitle": "Không có kết quả phù hợp",
+        "filtered": "Không có gì khớp với các bộ lọc này."
+      },
+      "bulk": {
+        "selectPage": "Chọn các khách tiềm năng trên trang này có thể thử lại",
+        "selected": "{count, plural, other {Đã chọn # khách tiềm năng}}",
+        "retry": "Thử lại mục đã chọn",
+        "limit": "Tối đa {max} mỗi lần."
+      },
+      "result": {
+        "retried": "{count, plural, other {Đã thử lại # khách tiềm năng.}}",
+        "fixed": "{count, plural, other {# khách đã trở thành liên hệ.}}",
+        "stillWaiting": "{count, plural, other {# khách vẫn cần xem xét.}}",
+        "skipped": {
+          "not_found": "{count, plural, other {Không tìm thấy # khách tiềm năng.}}",
+          "not_retryable": "{count, plural, other {# khách tiềm năng không còn ở trạng thái chờ.}}",
+          "payload_purged": "{count, plural, other {# khách tiềm năng không còn dữ liệu lưu trữ để thử lại.}}",
+          "source_paused": "{count, plural, other {# khách tiềm năng thuộc nguồn đang tạm dừng.}}",
+          "error": "{count, plural, other {Không thể thử lại # khách tiềm năng.}}"
+        }
+      },
+      "drawer": {
+        "title": "Khách tiềm năng",
+        "close": "Đóng",
+        "retry": "Thử lại",
+        "auditNote": "Việc mở khách tiềm năng được ghi vào nhật ký kiểm tra. Dữ liệu cá nhân trong đó đã được ẩn.",
+        "source": "Nguồn",
+        "lead": "Mã khách",
+        "received": "Đã nhận",
+        "processed": "Đã xử lý",
+        "notProcessed": "Chưa xử lý",
+        "attempts": "Số lần thử",
+        "duplicates": "Gửi lại",
+        "deliveredAgain": "{count, plural, other {# lần}}",
+        "reason": "Lý do",
+        "firstReply": "Tin nhắn đầu tiên",
+        "contact": "Liên hệ",
+        "openContact": "Mở liên hệ",
+        "error": "Lỗi",
+        "payload": "Dữ liệu bên gửi đã gửi",
+        "showOriginal": "Hiện bản gốc",
+        "maskedNote": "Số điện thoại, địa chỉ email, tên, địa chỉ và văn bản tự do đã được ẩn. Các thông tin bí mật đã được loại bỏ.",
+        "nothingToMask": "Khách tiềm năng này không có thông tin cá nhân cần ẩn.",
+        "originalNote": "Dữ liệu gốc, được hiển thị vì bạn quản lý các nguồn khách hàng tiềm năng. Việc hiển thị đã được ghi vào nhật ký kiểm tra.",
+        "loadingPayload": "Đang tải dữ liệu",
+        "purged": "Dữ liệu đã bị xóa sau thời gian lưu giữ, nên không có gì để hiển thị hoặc thử lại."
+      },
+      "pull": {
+        "title": "Đồng bộ và lấy lại dữ liệu cũ",
+        "intro": "Có thể yêu cầu các nguồn này gửi khách hàng tiềm năng. Đồng bộ ngay sẽ lấy những khách mới; Lấy lại dữ liệu cũ kéo lại một khoảng ngày trong quá khứ. Khách bạn đã có sẽ được nhận diện và không bị thêm hai lần.",
+        "backfill": "Lấy lại dữ liệu cũ...",
+        "history": "Các lần đồng bộ và lấy lại gần đây",
+        "syncNow": "Đồng bộ ngay",
+        "syncStarted": "Đang đồng bộ {name}",
+        "paused": "Nguồn này đang tạm dừng. Hãy tiếp tục để kéo khách hàng tiềm năng.",
+        "nextSync": "Có thể đồng bộ lại lúc",
+        "syncReady": "Có thể đồng bộ ngay. Giữa các yêu cầu cần cách nhau ít nhất {seconds} giây.",
+        "reach": "Có thể lấy lại dữ liệu cũ tối đa {days, plural, other {# ngày}} trước.",
+        "never": "Chưa kéo lần nào.",
+        "progress": "{percent}%",
+        "counts": "Đã lấy {fetched}, mới {accepted}, đã có sẵn {duplicates}, chưa chuyển được {failed}",
+        "kinds": {
+          "sync": "Đồng bộ",
+          "backfill": "Lấy lại dữ liệu cũ"
+        },
+        "statuses": {
+          "queued": "Đang chờ",
+          "running": "Đang chạy",
+          "done": "Hoàn tất",
+          "partial": "Hoàn tất một phần",
+          "failed": "Thất bại"
+        },
+        "errors": {
+          "too_soon": "Nguồn yêu cầu chúng tôi chờ.",
+          "not_now": "Nguồn chưa sẵn sàng: yêu cầu quá sớm hoặc kết nối đang tạm dừng.",
+          "provider_error": "Nguồn từ chối hoặc gặp lỗi.",
+          "credentials_refused": "Nguồn từ chối thông tin xác thực. Hãy kết nối lại.",
+          "interrupted": "Đã bị gián đoạn. Hãy chạy lại.",
+          "internal_error": "Lỗi nội bộ. Hãy chạy lại.",
+          "incomplete": "Một số khách hàng tiềm năng chưa được chuyển. Hãy chạy lại để hoàn tất.",
+          "not_supported": "Nguồn này không hỗ trợ thao tác đó.",
+          "not_active": "Kết nối không hoạt động.",
+          "range_too_old": "Nguồn không lưu khách hàng tiềm năng xa đến vậy.",
+          "range_invalid": "Khoảng thời gian không hợp lệ."
+        }
+      },
+      "backfill": {
+        "title": "Lấy lại dữ liệu theo khoảng ngày",
+        "intro": "Kéo lại khách hàng tiềm năng của những ngày đã qua từ các nguồn có lưu trữ, tối đa {days} ngày mỗi lần. Khách đã nhận trước đó sẽ được nhận diện và không ghi thêm gì.",
+        "from": "Từ",
+        "to": "Đến (bao gồm)",
+        "sources": "Nguồn",
+        "noSources": "Không có nguồn nào có thể lấy lại dữ liệu cũ.",
+        "submit": "Bắt đầu lấy lại",
+        "cancel": "Hủy",
+        "close": "Đóng",
+        "done": "Xong",
+        "started": "{count, plural, other {Đã bắt đầu # lượt lấy lại dữ liệu cũ}}",
+        "skippedTitle": "Một số nguồn chưa được kéo:",
+        "skipped": {
+          "not_supported": "không hỗ trợ lấy lại dữ liệu cũ",
+          "paused": "đang tạm dừng",
+          "in_progress": "đang được kéo dữ liệu",
+          "too_soon": "vừa được kéo",
+          "range_too_old": "không lưu khách hàng tiềm năng xa đến vậy",
+          "not_found": "không tìm thấy"
+        },
+        "problems": {
+          "fromRequired": "Hãy chọn ngày đầu tiên.",
+          "toRequired": "Hãy chọn ngày cuối cùng.",
+          "order": "Ngày cuối nằm trước ngày đầu.",
+          "future": "Ngày đầu nằm trong tương lai.",
+          "tooWide": "Tối đa {days} ngày mỗi lần.",
+          "noSource": "Hãy chọn ít nhất một nguồn."
+        },
+        "safe": "Chạy lại cũng không mất hay trùng dữ liệu; chỉ những khách còn thiếu mới được thêm vào."
+      }
     },
     "meta": {
       "heading": "Biểu mẫu lead Meta",

@@ -35,7 +35,8 @@
       "cancel": "Anuluj",
       "create": "Utwórz źródło",
       "created": "Utworzono źródło: {name}",
-      "mappingSaved": "Mapowanie zapisane"
+      "mappingSaved": "Mapowanie zapisane",
+      "planLimitUsed": "Wykorzystano {used} z {limit} źródeł leadów, więc nie można utworzyć nowego źródła."
     },
     "form": {
       "name": "Nazwa źródła",
@@ -66,7 +67,8 @@
         "contact": "Kontakt",
         "owner": "Właściciel",
         "deal": "Szansa sprzedaży",
-        "notify": "Powiadomienia"
+        "notify": "Powiadomienia",
+        "speed": "Pierwsza wiadomość do nowego leada"
       },
       "membersFailed": "Nie udało się wczytać zespołu, więc nie można teraz wybrać osób. Odśwież stronę, aby spróbować ponownie.",
       "countryCode": "Domyślny kod kraju",
@@ -104,7 +106,39 @@
       "notifyOwner": "Powiadom właściciela kontaktu",
       "notifyOwnerHint": "Powiadomienie w aplikacji, gdy wpłynie nowy lead. Leady testowe nigdy nie powiadamiają.",
       "notifyUsers": "Powiadom także",
-      "notifyUsersHint": "Na przykład Twój kierownik sprzedaży. Do 20 osób."
+      "notifyUsersHint": "Na przykład Twój kierownik sprzedaży. Do 20 osób.",
+      "speed": {
+        "enabled": "Wysyłaj pierwszą wiadomość automatycznie",
+        "enabledHint": "Domyślnie wyłączone. Gdy nowy lead zostanie kontaktem, wiadomość zostanie wysłana automatycznie, o ile pozwalają na to zgoda, godziny ciszy, Twój plan i portfel.",
+        "consentNote": "Zgoda nigdy nie jest zakładana. Szablon użytkowy WhatsApp to wiadomość serwisowa. Szablon marketingowy, SMS lub e-mail to wiadomość marketingowa: wymaga zarejestrowanej zgody, jeśli wymaga jej Twój obszar roboczy, czeka do końca godzin ciszy i jest blokowana dla kontaktu, który zrezygnował z komunikacji. Lead, który przychodzi z dowodem zgody, zapisuje ją.",
+        "channel": "Kanał",
+        "channels": {
+          "whatsapp": "Szablon WhatsApp",
+          "sms": "SMS",
+          "email": "E-mail"
+        },
+        "template": "Szablon",
+        "templateChoose": "Wybierz szablon",
+        "templateNone": "Brak szablonów dla tego kanału",
+        "templateUnavailable": "Zapisany szablon nie jest już dostępny",
+        "templateHint": {
+          "whatsapp": "Zatwierdzone szablony, które wymagają tylko danych kontaktu (np. imienia). Szablony wymagające pliku lub zmiennej z linkiem nie są wyświetlane.",
+          "sms": "Zatwierdzone szablony SMS.",
+          "email": "Współdzielone szablony e-mail. Szablonu osobistego nie można użyć."
+        },
+        "sender": "Wyślij z",
+        "senderDefault": "Pierwszy połączony",
+        "senderUnavailable": "Zapisany nadawca nie jest już połączony",
+        "senderHint": {
+          "sms": "Numer SMS, z którego wychodzi wiadomość.",
+          "email": "Współdzielona skrzynka, z której wychodzi wiadomość."
+        },
+        "delay": "Opóźnienie przed wysłaniem (w minutach)",
+        "delayHint": "Pełne minuty od 0 do {max}. Wartość 0 oznacza wysłanie od razu.",
+        "businessHours": "Tylko w godzinach pracy",
+        "businessHoursHint": "Poza godzinami pracy ustawionymi w Twoim obszarze roboczym wiadomość czeka na ich rozpoczęcie.",
+        "optionsFailed": "Nie udało się wczytać szablonów i nadawców. Spróbuj ponownie za chwilę."
+      }
     },
     "mapping": {
       "contact": "Pola kontaktu",
@@ -210,7 +244,7 @@
       "bodyRotated": "Stary adres URL przestał działać od razu. Ten nowy jest pokazany tylko teraz.",
       "url": "Adres URL webhooka",
       "copyUrl": "Kopiuj adres URL",
-      "noOrigin": "Dodaj adres swojego API przed tą ścieżką, aby uzyskać pełny adres URL.",
+      "noOrigin": "Publiczny adres API platformy nie jest ustawiony, więc nie udało się zbudować pełnego adresu URL. Poproś osobę zarządzającą platformą o jego ustawienie. Do tego czasu dodaj adres swojego API przed tą ścieżką.",
       "token": "Token",
       "copyToken": "Kopiuj token",
       "secretHint": "To źródło wymaga też wspólnego sekretu: nadawca musi wysłać go w nagłówku {header}.",
@@ -218,7 +252,8 @@
       "sampleHelp": "W Zapier lub Make użyj akcji Webhooks, która wysyła JSON na adres URL. To polecenie wysyła jeden przykładowy lead.",
       "copied": "Skopiowałem adres URL i token i zapisałem je w bezpiecznym miejscu",
       "done": "Skopiowałem, kontynuuj",
-      "doneHint": "Najpierw zaznacz pole. Po tym czasie token nie będzie już możliwy do wyświetlenia."
+      "doneHint": "Najpierw zaznacz pole. Po tym czasie token nie będzie już możliwy do wyświetlenia.",
+      "notPublic": "Publiczny adres API platformy wskazuje na adres prywatny lub lokalny, do którego platformy reklamowe nie mają dostępu, dlatego pełny adres URL nie jest wyświetlany. Poproś osobę zarządzającą platformą o ustawienie adresu publicznego, a następnie zrotuj token, aby uzyskać pełny adres URL."
     },
     "test": {
       "title": "Wyślij lead testowy",
@@ -354,7 +389,8 @@
       "retried": "Ponowiono. Lead ma teraz status",
       "payload": "Zapisany ładunek",
       "loadingPayload": "Otwieranie ładunku",
-      "purged": "Surowy ładunek został usunięty po {days} dniach. Lead i jego kontakt pozostają."
+      "purged": "Surowy ładunek został usunięty po {days} dniach. Lead i jego kontakt pozostają.",
+      "firstReply": "Pierwsza wiadomość"
     },
     "attribution": {
       "title": "Atrybucja leada",
@@ -418,8 +454,18 @@
         "stage_not_in_pipeline": "Ten etap należy do innego lejka.",
         "pipeline_required": "Wybierz lejek, do którego należy ten etap.",
         "unknown_or_lost_stage": "Ten etap cyklu życia nie istnieje lub jest etapem utraconym.",
-        "unknown_or_inactive_user": "Jedna z wybranych osób nie jest aktywnym członkiem tej przestrzeni roboczej."
+        "unknown_or_inactive_user": "Jedna z wybranych osób nie jest aktywnym członkiem tej przestrzeni roboczej.",
+        "template_required": "Wybierz szablon do wysłania.",
+        "template_not_found": "Ten szablon nie istnieje dla tego kanału w tym obszarze roboczym.",
+        "template_not_sendable": "Tego szablonu nie można wysłać: nie jest zatwierdzony, jest wstrzymany albo wymaga pliku lub zmiennej z linkiem.",
+        "sender_not_found": "Ten nadawca nie jest połączony."
       },
+      "planLimitUsed": "Wykorzystano {used} z {limit} źródeł leadów. Zmień plan na wyższy lub usuń źródło, którego już nie używasz.",
+      "syncNotSupported": "To źródło samo przysyła swoje leady, więc nie ma czego pobierać.",
+      "syncInProgress": "Leady z tego źródła są właśnie pobierane. Poczekaj na zakończenie.",
+      "syncTooSoon": "To źródło zostało przed chwilą odpytane. Spróbuj ponownie za {seconds} s.",
+      "syncTooSoonNoWait": "To źródło zostało przed chwilą odpytane. Spróbuj ponownie za jakiś czas.",
+      "backfillRange": "Nie można pobrać tego zakresu: sięga dalej wstecz, niż źródło przechowuje leady, albo w przyszłość.",
       "mlaNotConfigured": "Meta nie jest skonfigurowana w tej instalacji. Administrator musi najpierw dodać aplikację Meta.",
       "mlaLeadAccessMissing": "Ta Strona nie ma uprawnień, których Meta wymaga do odczytu leadów. Przyznaj dostęp do leadów i spróbuj ponownie.",
       "mlaPageReconnect": "Meta nie akceptuje już połączenia tej Strony. Połącz Stronę ponownie i spróbuj jeszcze raz.",
@@ -448,7 +494,9 @@
       "propertyDuplicate": "Ta właściwość jest zmapowana dwukrotnie.",
       "pathRequired": "Wskaż, gdzie w danych przychodzi wartość.",
       "customFieldsTooMany": "Zmapuj co najwyżej {max} niestandardowych właściwości.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Wybierz szablon do wysłania.",
+      "speedDelayRange": "Wpisz pełne minuty od 0 do {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -511,7 +559,8 @@
       "tabs": {
         "ads": "Reklamy",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead wymaga uwagi} few {# leady wymagają uwagi} many {# leadów wymaga uwagi} other {# leada wymaga uwagi}}"
+        "attention": "{count, plural, one {# lead wymaga uwagi} few {# leady wymagają uwagi} many {# leadów wymaga uwagi} other {# leada wymaga uwagi}}",
+        "inbox": "Skrzynka leadów"
       }
     },
     "ads": {
@@ -565,6 +614,223 @@
       "noEvents": "Brak leadów",
       "needsAttention": "{count, plural, one {# lead} few {# leady} many {# leadów} other {# leada}}",
       "metaDelivery": "Z Meta"
+    },
+    "hookAddress": {
+      "title": "Nowe adresy URL webhooków będą niepełne",
+      "notConfigured": "Publiczny adres API platformy nie jest ustawiony. Poproś osobę zarządzającą platformą o jego ustawienie; do tego czasu nowe źródło może pokazywać tylko ścieżkę swojego adresu URL.",
+      "notPublic": "Publiczny adres API platformy wskazuje na adres prywatny lub lokalny, do którego platformy reklamowe nie mają dostępu. Poproś osobę zarządzającą platformą o ustawienie adresu publicznego."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Zaplanowana",
+        "sending": "Wysyłanie",
+        "held": "Wstrzymana",
+        "sent": "Wysłana",
+        "blocked": "Zablokowana",
+        "skipped": "Pominięta",
+        "failed": "Nie powiodło się"
+      },
+      "reasons": {
+        "quiet_hours": "Czeka na koniec godzin ciszy",
+        "outside_business_hours": "Czeka na godziny pracy",
+        "channel_unavailable": "Kanał nie jest połączony",
+        "wallet_empty": "Portfel jest pusty",
+        "send_halted": "Wysyłanie jest wstrzymane",
+        "opted_out": "Kontakt zrezygnował z komunikacji",
+        "no_consent": "Brak zarejestrowanej zgody",
+        "minor": "Kontakt jest oznaczony jako niepełnoletni",
+        "plan_limit": "Osiągnięto limit planu",
+        "disabled": "Ustawienie zostało wyłączone",
+        "source_paused": "Źródło leadów jest wstrzymane",
+        "no_contact_point": "Brak numeru lub adresu dla tego kanału",
+        "no_sender": "Brak połączonego nadawcy",
+        "template_unavailable": "Nie można wysłać szablonu",
+        "missing_value": "Brakuje wartości szablonu dla tego kontaktu",
+        "provider_error": "Dostawca odrzucił wiadomość",
+        "interrupted": "Wysyłka została przerwana",
+        "expired": "Czekała zbyt długo",
+        "internal_error": "Błąd wewnętrzny"
+      },
+      "nextTry": "Następna próba",
+      "sentAt": "Wysłano"
+    },
+    "inbox": {
+      "intro": "Wszystkie leady odebrane przez Twoje źródła, także te, które nie mogły stać się kontaktem. Otwórz lead, aby zobaczyć powód, i ponów te, które czekają.",
+      "chipsLabel": "Filtruj według statusu",
+      "loading": "Wczytywanie leadów",
+      "more": "Wczytaj więcej",
+      "chips": {
+        "all": "Wszystkie",
+        "attention": "Wymagają uwagi",
+        "needs_review": "Do sprawdzenia",
+        "failed": "Nieudane",
+        "created": "Utworzone",
+        "updated": "Zaktualizowane",
+        "duplicate": "Duplikaty"
+      },
+      "filters": {
+        "source": "Źródło",
+        "allSources": "Wszystkie źródła",
+        "reason": "Powód",
+        "anyReason": "Dowolny powód",
+        "range": "Odebrano",
+        "ranges": {
+          "all": "Dowolny czas",
+          "day": "Ostatnie 24 godziny",
+          "week": "Ostatnie 7 dni",
+          "month": "Ostatnie 30 dni",
+          "custom": "Wybierz daty"
+        },
+        "from": "Od",
+        "to": "Do (włącznie)",
+        "rangeOrder": "Data końcowa jest wcześniejsza niż początkowa.",
+        "tests": "Leady testowe",
+        "testChoices": {
+          "all": "Pokaż",
+          "only": "Tylko leady testowe",
+          "hide": "Ukryj"
+        },
+        "search": "Identyfikator leada zaczyna się od",
+        "searchHint": "Przeszukiwany jest tylko własny identyfikator leada nadany przez nadawcę, nigdy imiona, numery ani adresy.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Szukaj",
+        "reset": "Wróć do leadów, które czekają",
+        "showAll": "Pokaż wszystko"
+      },
+      "table": {
+        "caption": "Leady odebrane przez wszystkie źródła",
+        "received": "Odebrano",
+        "source": "Źródło",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Powód",
+        "firstMessage": "Pierwsza wiadomość",
+        "actions": "Akcje",
+        "select": "Zaznacz lead {id}",
+        "test": "Test",
+        "view": "Otwórz",
+        "retry": "Ponów"
+      },
+      "empty": {
+        "attentionTitle": "Nic na Ciebie nie czeka",
+        "attention": "Każdy odebrany lead stał się kontaktem. Leady do sprawdzenia lub nieudane pojawią się tutaj.",
+        "filteredTitle": "Brak pasujących leadów",
+        "filtered": "Żadne leady nie pasują do tych filtrów."
+      },
+      "bulk": {
+        "selectPage": "Zaznacz leady na tej stronie, które można ponowić",
+        "selected": "{count, plural, one {Zaznaczono # lead} few {Zaznaczono # leady} many {Zaznaczono # leadów} other {Zaznaczono # leada}}",
+        "retry": "Ponów zaznaczone",
+        "limit": "Maksymalnie {max} naraz."
+      },
+      "result": {
+        "retried": "{count, plural, one {Ponowiono # lead.} few {Ponowiono # leady.} many {Ponowiono # leadów.} other {Ponowiono # leada.}}",
+        "fixed": "{count, plural, one {# lead stał się kontaktem.} few {# leady stały się kontaktami.} many {# leadów stało się kontaktami.} other {# leada stało się kontaktami.}}",
+        "stillWaiting": "{count, plural, one {# lead nadal wymaga sprawdzenia.} few {# leady nadal wymagają sprawdzenia.} many {# leadów nadal wymaga sprawdzenia.} other {# leada nadal wymaga sprawdzenia.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {Nie znaleziono # leada.} few {Nie znaleziono # leadów.} many {Nie znaleziono # leadów.} other {Nie znaleziono # leada.}}",
+          "not_retryable": "{count, plural, one {# lead już nie czeka.} few {# leady już nie czekają.} many {# leadów już nie czeka.} other {# leada już nie czeka.}}",
+          "payload_purged": "{count, plural, one {# lead nie ma już zapisanych danych do ponowienia.} few {# leady nie mają już zapisanych danych do ponowienia.} many {# leadów nie ma już zapisanych danych do ponowienia.} other {# leada nie ma już zapisanych danych do ponowienia.}}",
+          "source_paused": "{count, plural, one {# lead należy do wstrzymanego źródła.} few {# leady należą do wstrzymanych źródeł.} many {# leadów należy do wstrzymanych źródeł.} other {# leada należy do wstrzymanych źródeł.}}",
+          "error": "{count, plural, one {Nie udało się ponowić # leada.} few {Nie udało się ponowić # leadów.} many {Nie udało się ponowić # leadów.} other {Nie udało się ponowić # leada.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Zamknij",
+        "retry": "Ponów",
+        "auditNote": "Otwarcie leada jest zapisywane w dzienniku audytu. Dane osobowe w nim są ukryte.",
+        "source": "Źródło",
+        "lead": "Identyfikator leada",
+        "received": "Odebrano",
+        "processed": "Przetworzono",
+        "notProcessed": "Nieprzetworzony",
+        "attempts": "Próby",
+        "duplicates": "Dostarczono ponownie",
+        "deliveredAgain": "{count, plural, one {# raz} few {# razy} many {# razy} other {# raza}}",
+        "reason": "Powód",
+        "firstReply": "Pierwsza wiadomość",
+        "contact": "Kontakt",
+        "openContact": "Otwórz kontakt",
+        "error": "Błąd",
+        "payload": "Co przysłał nadawca",
+        "showOriginal": "Pokaż oryginał",
+        "maskedNote": "Numery telefonów, adresy e-mail, imiona i nazwiska, adresy oraz dowolny tekst są ukryte. Sekrety zostały usunięte.",
+        "nothingToMask": "W tym leadzie nie ma danych osobowych do ukrycia.",
+        "originalNote": "Oryginalne dane, pokazane, ponieważ zarządzasz źródłami leadów. Ich wyświetlenie zostało zapisane w dzienniku audytu.",
+        "loadingPayload": "Wczytywanie danych",
+        "purged": "Dane zostały usunięte po upływie okresu przechowywania, więc nie ma czego pokazać ani ponowić."
+      },
+      "pull": {
+        "title": "Synchronizacja i uzupełnianie",
+        "intro": "O leady można zapytać te źródła. Synchronizuj teraz pobiera to, co nowe; Uzupełnij pobiera ponownie leady z minionego zakresu dat. Leady, które już masz, są rozpoznawane i nie są dodawane dwa razy.",
+        "backfill": "Uzupełnij...",
+        "history": "Ostatnie synchronizacje i uzupełnienia",
+        "syncNow": "Synchronizuj teraz",
+        "syncStarted": "Synchronizowanie: {name}",
+        "paused": "To źródło jest wstrzymane. Wznów je, aby pobierać jego leady.",
+        "nextSync": "Można zsynchronizować ponownie",
+        "syncReady": "Można zsynchronizować teraz. Co najmniej {seconds} s między żądaniami.",
+        "reach": "Uzupełnianie sięga {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} wstecz.",
+        "never": "Jeszcze nie pobrano.",
+        "progress": "{percent} procent",
+        "counts": "Pobrano: {fetched}, nowe: {accepted}, już znane: {duplicates}, nieprzekazane: {failed}",
+        "kinds": {
+          "sync": "Synchronizacja",
+          "backfill": "Uzupełnianie"
+        },
+        "statuses": {
+          "queued": "W kolejce",
+          "running": "W toku",
+          "done": "Gotowe",
+          "partial": "Częściowo gotowe",
+          "failed": "Nieudane"
+        },
+        "errors": {
+          "too_soon": "Źródło poprosiło o odczekanie.",
+          "not_now": "Źródło nie było gotowe: za wcześnie dla niego lub jego połączenie jest wstrzymane.",
+          "provider_error": "Źródło odmówiło lub zgłosiło błąd.",
+          "credentials_refused": "Źródło odrzuciło dane uwierzytelniające. Połącz je ponownie.",
+          "interrupted": "Przerwano. Uruchom ponownie.",
+          "internal_error": "Błąd wewnętrzny. Uruchom ponownie.",
+          "incomplete": "Nie wszystkie leady zostały przekazane. Uruchom ponownie, aby dokończyć.",
+          "not_supported": "To źródło tego nie obsługuje.",
+          "not_active": "Połączenie nie jest aktywne.",
+          "range_too_old": "Źródło nie przechowuje leadów z tak dawna.",
+          "range_invalid": "Zakres jest nieprawidłowy."
+        }
+      },
+      "backfill": {
+        "title": "Uzupełnij zakres dat",
+        "intro": "Pobierz ponownie leady z minionych dni ze źródeł, które je przechowują, do {days} dni naraz. Leady już odebrane są rozpoznawane i nic nie zapisują.",
+        "from": "Od",
+        "to": "Do (włącznie)",
+        "sources": "Źródła",
+        "noSources": "Żadnego źródła nie można uzupełnić.",
+        "submit": "Rozpocznij uzupełnianie",
+        "cancel": "Anuluj",
+        "close": "Zamknij",
+        "done": "Gotowe",
+        "started": "{count, plural, one {Rozpoczęto uzupełnianie} few {Rozpoczęto # uzupełnienia} many {Rozpoczęto # uzupełnień} other {Rozpoczęto # uzupełnienia}}",
+        "skippedTitle": "Niektóre źródła nie zostały pobrane:",
+        "skipped": {
+          "not_supported": "nie obsługuje uzupełniania",
+          "paused": "jest wstrzymane",
+          "in_progress": "jest właśnie pobierane",
+          "too_soon": "zostało pobrane przed chwilą",
+          "range_too_old": "nie przechowuje leadów z tak dawna",
+          "not_found": "nie zostało znalezione"
+        },
+        "problems": {
+          "fromRequired": "Wybierz pierwszy dzień.",
+          "toRequired": "Wybierz ostatni dzień.",
+          "order": "Ostatni dzień jest przed pierwszym.",
+          "future": "Pierwszy dzień jest w przyszłości.",
+          "tooWide": "Najwyżej {days} dni naraz.",
+          "noSource": "Wybierz co najmniej jedno źródło."
+        },
+        "safe": "Nic nie zostanie utracone ani zduplikowane, jeśli uruchomisz to ponownie; dodawane są tylko brakujące leady."
+      }
     },
     "meta": {
       "heading": "Formularze leadów Meta",

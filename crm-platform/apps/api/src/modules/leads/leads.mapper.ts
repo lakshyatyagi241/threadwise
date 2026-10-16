@@ -57,6 +57,16 @@ export function toLeadEventResponse(row: LeadEventRow): LeadEventResponse {
     duplicateCount: row.duplicateCount,
     receivedAt: row.receivedAt.toISOString(),
     processedAt: row.processedAt?.toISOString() ?? null,
+    firstReply: row.firstReply
+      ? {
+          channel: row.firstReply.channel,
+          status: row.firstReply.status,
+          reason: row.firstReply.reason,
+          dueAt: row.firstReply.dueAt.toISOString(),
+          sentAt: row.firstReply.sentAt?.toISOString() ?? null,
+          attempts: row.firstReply.attempts,
+        }
+      : null,
   };
 }
 

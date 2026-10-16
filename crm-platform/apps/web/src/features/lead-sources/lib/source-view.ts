@@ -12,6 +12,7 @@ export const ROUTES = {
   list: '/lead-sources',
   webhooks: '/lead-sources?tab=webhook',
   ads: '/lead-sources?tab=ads',
+  inbox: '/lead-sources?tab=inbox',
   create: '/lead-sources/new',
   marketplaceInstalled: '/marketplace/installed',
 } as const;
@@ -22,10 +23,17 @@ export const contactHref = (id: string): string => `/contacts/${encodeURICompone
 /** The link of the "needs attention" badge: the source's events, filtered to the leads that wait. */
 export const attentionHref = (id: string): string => `${sourceHref(id)}?events=attention#events`;
 
-export const TABS = ['ads', 'webhook'] as const;
+export const TABS = ['ads', 'webhook', 'inbox'] as const;
 export type LeadTab = (typeof TABS)[number];
 export const parseTab = (value: string | null | undefined): LeadTab =>
-  value === 'webhook' ? 'webhook' : 'ads';
+  value === 'webhook' || value === 'inbox' ? value : 'ads';
+
+/** Where each tab lives (the tab is the address, so a link to the inbox opens it). */
+export const TAB_ROUTES: Record<LeadTab, string> = {
+  ads: '/lead-sources',
+  webhook: '/lead-sources?tab=webhook',
+  inbox: '/lead-sources?tab=inbox',
+};
 
 /** Kinds shown by name (`lead-sources.kinds.<kind>`). */
 export const SOURCE_KINDS: readonly LeadSourceKind[] = LEAD_SOURCE_KINDS;

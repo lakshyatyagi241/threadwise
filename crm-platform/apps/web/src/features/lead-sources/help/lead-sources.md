@@ -18,7 +18,7 @@ keywords: [lead ads, webhook, zapier, make, forms, capture, attribution, campaig
 2. Select **New source** and work through the wizard:
    1. **Basics**: a name, a platform label, an optional shared secret and how long to keep raw lead data.
    2. **What happens to a lead**: default country code, starting lifecycle stage, tag, owner, optional deal and notifications. Select **Create source**.
-   3. **Connect your sender**: copy the URL and token into your tool. They are shown only once.
+   3. **Connect your sender**: copy the URL and token into your tool. They are shown only once. The URL is complete, with your platform's public address in front. If the platform's public API address has not been set (or points at a private address), you see only the path and a warning; ask whoever runs your platform to set it, then rotate the token to get the full URL.
    4. **Map the fields**: say where each value sits in your tool's data. The **Live preview** shows the result as you type.
 3. Select **Save and finish**, or **Skip for now** to map later.
 
@@ -54,9 +54,38 @@ Each picked form appears as a source on the **Webhook** tab, with the type **Met
 - **Leads received** shows each lead and its outcome. Open a lead for details and select **Retry** on one that needs review or failed.
 - **Send a test lead** creates a real contact marked as a test. Nobody is notified.
 
+## Send a first message to a new lead
+
+A source can reply to a new lead by itself, so the person hears from you in minutes. It is off by default. On the source's **What happens to a lead** step (or its settings page), turn on **Send a first message automatically** and choose:
+
+- **Channel**: a **WhatsApp template**, an **SMS** or an **email**. The list shows only templates that channel can really send: for WhatsApp, approved templates that need nothing but the contact (a name, for example); for email, shared templates.
+- **Send from**: for SMS and email, the number or the shared mailbox. Leave it as the first connected one if you have only one.
+- **Wait before sending**: 0 to 60 minutes.
+- **Only during business hours**: outside the hours set for your workspace, the message waits for them to open.
+
+The message goes only to a lead that becomes a **new** contact, once. A contact who comes back, or a test lead, gets none. It is sent through the same checks as every other message you start:
+
+- **Consent is never assumed.** A WhatsApp utility template is a service message. A marketing template, an SMS or an email is marketing: where your workspace requires recorded consent, the contact needs it, and a contact who opted out is never messaged. A lead that arrives with proof of consent records it (see below).
+- **Quiet hours** hold a marketing message until they end.
+- **Your plan's limits and your wallet** apply. An empty wallet or a channel that is not connected holds the message; it goes when that is fixed, or is dropped after a day.
+
+What happened to each lead's first message shows on the lead (**Leads received**, then the lead) and on the contact's timeline: **Sent**, **Held** (with the reason and the next try), **Blocked** (opted out, no consent, plan limit), **Skipped** (no number or address, no connected sender, the template is gone, or a value the template needs, such as a name, is missing) or **Failed**. If a name is missing, give the workspace attribute a default value (for example "there") so the template can still be filled.
+
+## Lead inbox: every lead in one place
+
+The **Lead inbox** tab lists every lead any of your sources received, newest first, including the ones that could not become a contact. It opens on the leads that wait (**Needs attention**: needs review or failed) with test leads hidden; the chips above the list show the counts and switch to **All**, **Created**, **Duplicates** and the rest.
+
+- **Filter** by source, reason, when it arrived (24 hours, 7 or 30 days, or your own dates), test leads, and the start of the sender's own lead id. Names, numbers and addresses are never searched.
+- **Open** a lead to see why it waits, its first message and the data the sender sent. Phone numbers, email addresses, names, addresses and free text are hidden and secrets removed; **Show the original** reveals them and is recorded in the audit log.
+- **Retry** one lead, or tick several (up to 100 at a time) and select **Retry selected**. Each is processed again from its stored data under the source's current settings, so fix the mapping or the default country code first. A lead already fixed is reported as not waiting and nothing is created twice. A lead whose stored data was deleted after its retention period, or whose source is paused, cannot be retried.
+
+### Sync now and backfill
+
+Sources that can be asked for their leads (the portals you installed from the Marketplace) are listed under the table. **Sync now** fetches what is new; the source's own limit decides how soon you can do it again and the screen says how long to wait. **Backfill...** pulls a past date range again (up to 90 days, and no further back than the source keeps leads). Both run in the background, one at a time per source, and show their progress and counts: new leads, leads you already had, and leads that could not be handed over. Leads you already have are recognised, so running a backfill twice adds nothing twice. Managers can start them; everyone who can see Social leads can watch.
+
 ## Plan and access
 
-The tile needs the **Lead sources** plan feature and permission to read lead sources. Without the feature the screen offers **Upgrade plan**. Creating, changing, pausing, rotating, deleting, testing and retrying need the manage permission; with read access only you can look.
+The tile needs the **Lead sources** plan feature and permission to read lead sources. Without the feature the screen offers **Upgrade plan**. When you have reached the number of sources your plan allows, creating another says how many you use, for example **You have used 5 of 5 lead sources**. Creating, changing, pausing, rotating, deleting, testing and retrying need the manage permission; with read access only you can look.
 
 ## If something looks wrong
 

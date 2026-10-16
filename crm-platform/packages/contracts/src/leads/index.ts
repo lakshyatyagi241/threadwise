@@ -4,3 +4,5 @@
  */
 export * from './lead-source';
 export * from './lead-event';
+export * from './speed-to-lead';
+export * from './lead-inbox';

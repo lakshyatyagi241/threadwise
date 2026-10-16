@@ -48,7 +48,10 @@ describe('every outbound call has a timeout', () => {
   const offenders = [...sources(SRC)]
     .map(
       (p) =>
-        [relative(SRC, p).split(sep).join('/'), callsWithoutTimeout(readFileSync(p, 'utf8'))] as const,
+        [
+          relative(SRC, p).split(sep).join('/'),
+          callsWithoutTimeout(readFileSync(p, 'utf8')),
+        ] as const,
     )
     .filter(([, n]) => n > 0)
     .map(([f]) => f);

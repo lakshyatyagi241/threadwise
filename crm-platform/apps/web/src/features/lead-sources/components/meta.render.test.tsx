@@ -39,7 +39,6 @@ const READ = { 'leads.sources.read': 'all' } as const;
 const MANAGE = { ...READ, 'leads.sources.manage': 'all' } as const;
 const MANAGE_FB = { ...MANAGE, 'fb.pages.manage': 'all' } as const;
 const as = (permissions: Record<string, 'all'>) => ({ session: makeSession({ permissions }) });
-const env = { apiPublicUrl: 'https://api.acme.test' };
 
 const login: MetaLogin = {
   run: () => undefined,
@@ -811,7 +810,7 @@ describe('the page of a Meta form source', () => {
   const detail = (opts: Parameters<typeof renderAccount>[1]) =>
     renderAccount(
       <ToastProvider>
-        <SourceDetailPage id={ID(77)} hookEnv={env} />
+        <SourceDetailPage id={ID(77)} />
       </ToastProvider>,
       opts,
     );

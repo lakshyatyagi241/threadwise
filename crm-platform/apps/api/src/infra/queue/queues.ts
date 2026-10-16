@@ -70,6 +70,8 @@ export const QUEUES = {
   MKT_PULL: 'mkt-pull',
   /** One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll. */
   MKT_INBOUND: 'mkt-inbound',
+  /** One job per "Sync now" or backfill of a pull-capable lead source (lead inbox, L-18): pulls the source's leads and hands them to the pipeline. Own queue: a portal's rate limit makes a backfill take minutes, and it must not hold a lead from another door. */
+  LEAD_SYNC: 'lead-sync',
   /** One job per bell row that may deserve a browser (Web Push) notification (BL-097). Own queue: a slow push service must not hold the outbox consumers or any other job. */
   WEB_PUSH: 'web-push',
   /** One job per connected Gmail mailbox (TW-MAIL-021): reads what arrived since the last sync and stores it in the inbox. Own queue: a slow Google must not hold any other job. */

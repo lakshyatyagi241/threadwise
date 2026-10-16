@@ -45,8 +45,18 @@
         "stage_not_in_pipeline": "Esta etapa pertence a outro funil.",
         "pipeline_required": "Escolha o funil ao qual esta etapa pertence.",
         "unknown_or_lost_stage": "Esta etapa do ciclo de vida não existe ou é uma etapa de perda.",
-        "unknown_or_inactive_user": "Uma das pessoas selecionadas não é membro ativo deste espaço de trabalho."
+        "unknown_or_inactive_user": "Uma das pessoas selecionadas não é membro ativo deste espaço de trabalho.",
+        "template_required": "Escolha o modelo a ser enviado.",
+        "template_not_found": "Este modelo não existe para este canal neste espaço de trabalho.",
+        "template_not_sendable": "Este modelo não pode ser enviado: não está aprovado, está pausado ou exige um arquivo ou uma variável de link.",
+        "sender_not_found": "Este remetente não está conectado."
       },
+      "planLimitUsed": "Você usou {used} de {limit} fontes de leads. Faça upgrade do plano ou exclua uma fonte que você não usa mais.",
+      "syncNotSupported": "Esta origem envia os leads por conta própria, então não há nada para buscar.",
+      "syncInProgress": "Esta origem já está sendo sincronizada. Aguarde a conclusão.",
+      "syncTooSoon": "Esta origem foi consultada há pouco. Tente novamente em {seconds} segundos.",
+      "syncTooSoonNoWait": "Esta origem foi consultada há pouco. Tente novamente daqui a pouco.",
+      "backfillRange": "Não é possível buscar esse período: ele remonta a mais tempo do que a origem guarda os leads, ou chega ao futuro.",
       "mlaNotConfigured": "O Meta não está configurado nesta instalação. Um administrador precisa adicionar o app do Meta primeiro.",
       "mlaLeadAccessMissing": "Esta Página não tem as permissões que o Meta exige para ler leads. Conceda o acesso a leads e tente novamente.",
       "mlaPageReconnect": "O Meta não aceita mais a conexão desta Página. Reconecte a Página e tente novamente.",
@@ -75,7 +85,9 @@
       "propertyDuplicate": "Esta propriedade está mapeada duas vezes.",
       "pathRequired": "Informe onde no payload está o valor.",
       "customFieldsTooMany": "Mapeie no máximo {max} propriedades personalizadas.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Escolha o modelo a ser enviado.",
+      "speedDelayRange": "Informe minutos inteiros de 0 a {max}."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -138,7 +150,8 @@
       "tabs": {
         "ads": "Anúncios",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead precisa de atenção} other {# leads precisam de atenção}}"
+        "attention": "{count, plural, one {# lead precisa de atenção} other {# leads precisam de atenção}}",
+        "inbox": "Caixa de leads"
       }
     },
     "ads": {
@@ -228,7 +241,8 @@
       "skipMapping": "Pular por enquanto",
       "finish": "Salvar e concluir",
       "revealGone": "A URL e o token não são mais exibidos. Se você não os guardou, abra a origem e gere um novo token para obter uma nova URL.",
-      "toMapping": "Continuar para o mapeamento"
+      "toMapping": "Continuar para o mapeamento",
+      "planLimitUsed": "Você usou {used} de {limit} fontes de leads, então nenhuma nova fonte pode ser criada."
     },
     "form": {
       "name": "Nome da origem",
@@ -259,7 +273,8 @@
         "contact": "O contato",
         "owner": "Responsável",
         "deal": "Negócio",
-        "notify": "Notificações"
+        "notify": "Notificações",
+        "speed": "Primeira mensagem para um novo lead"
       },
       "membersFailed": "Não foi possível carregar sua equipe, então não é possível escolher pessoas agora. Recarregue a página para tentar novamente.",
       "countryCode": "Código de país padrão",
@@ -297,7 +312,39 @@
       "notifyOwner": "Avisar o responsável pelo contato",
       "notifyOwnerHint": "Uma notificação no aplicativo quando chega um novo lead. Leads de teste nunca notificam.",
       "notifyUsers": "Avisar também",
-      "notifyUsersHint": "Por exemplo, seu gerente de vendas. Até 20 pessoas."
+      "notifyUsersHint": "Por exemplo, seu gerente de vendas. Até 20 pessoas.",
+      "speed": {
+        "enabled": "Enviar uma primeira mensagem automaticamente",
+        "enabledHint": "Desativado por padrão. Quando um novo lead se torna contato, uma mensagem é enviada automaticamente, se o consentimento, o horário de silêncio, seu plano e sua carteira permitirem.",
+        "consentNote": "O consentimento nunca é presumido. Um modelo utilitário do WhatsApp é uma mensagem de serviço. Um modelo de marketing, um SMS ou um e-mail é marketing: exige consentimento registrado quando seu espaço de trabalho o requer, aguarda o fim do horário de silêncio e é bloqueado para um contato que cancelou o recebimento. Um lead que chega com prova de consentimento o registra.",
+        "channel": "Canal",
+        "channels": {
+          "whatsapp": "Modelo do WhatsApp",
+          "sms": "SMS",
+          "email": "E-mail"
+        },
+        "template": "Modelo",
+        "templateChoose": "Escolha um modelo",
+        "templateNone": "Nenhum modelo disponível para este canal",
+        "templateUnavailable": "O modelo salvo não está mais disponível",
+        "templateHint": {
+          "whatsapp": "Modelos aprovados que só precisam do contato (um nome, por exemplo). Modelos que exigem um arquivo ou uma variável de link não aparecem na lista.",
+          "sms": "Modelos de SMS aprovados.",
+          "email": "Modelos de e-mail compartilhados. Não é possível usar um modelo pessoal."
+        },
+        "sender": "Enviar de",
+        "senderDefault": "O primeiro conectado",
+        "senderUnavailable": "O remetente salvo não está mais conectado",
+        "senderHint": {
+          "sms": "O número de SMS de onde a mensagem sai.",
+          "email": "A caixa de correio compartilhada de onde a mensagem sai."
+        },
+        "delay": "Aguardar antes de enviar (minutos)",
+        "delayHint": "Minutos inteiros de 0 a {max}. 0 envia na hora.",
+        "businessHours": "Somente em horário comercial",
+        "businessHoursHint": "Fora do horário comercial definido no seu espaço de trabalho, a mensagem aguarda a abertura.",
+        "optionsFailed": "Não foi possível carregar os modelos e os remetentes. Tente novamente em instantes."
+      }
     },
     "mapping": {
       "contact": "Campos do contato",
@@ -403,7 +450,7 @@
       "bodyRotated": "A URL antiga deixou de funcionar imediatamente. Esta nova é exibida somente desta vez.",
       "url": "URL do webhook",
       "copyUrl": "Copiar URL",
-      "noOrigin": "Coloque o endereço da sua API antes deste caminho para obter a URL completa.",
+      "noOrigin": "O endereço público da API da plataforma não está definido, então não foi possível montar a URL completa. Peça a quem administra a plataforma para defini-lo. Até lá, coloque o endereço da sua API antes deste caminho.",
       "token": "Token",
       "copyToken": "Copiar token",
       "secretHint": "Esta origem também precisa de um segredo compartilhado: quem envia deve enviá-lo no cabeçalho {header}.",
@@ -411,7 +458,8 @@
       "sampleHelp": "No Zapier ou no Make, use uma ação de Webhooks que envie JSON para a URL. Este comando envia um lead de exemplo.",
       "copied": "Copiei a URL e o token e os guardei em um lugar seguro",
       "done": "Copiei, continuar",
-      "doneHint": "Marque a caixa primeiro. Depois disso, o token não poderá ser exibido novamente."
+      "doneHint": "Marque a caixa primeiro. Depois disso, o token não poderá ser exibido novamente.",
+      "notPublic": "O endereço público da API da plataforma aponta para um endereço privado ou local que as plataformas de anúncios não conseguem acessar, então a URL completa não é exibida. Peça a quem administra a plataforma para definir um endereço público e depois gire o token para obter uma URL completa."
     },
     "test": {
       "title": "Enviar um lead de teste",
@@ -547,7 +595,8 @@
       "retried": "Tentado novamente. O lead agora está",
       "payload": "Payload armazenado",
       "loadingPayload": "Abrindo o payload",
-      "purged": "O payload bruto foi apagado após {days} dias. O lead e seu contato permanecem."
+      "purged": "O payload bruto foi apagado após {days} dias. O lead e seu contato permanecem.",
+      "firstReply": "Primeira mensagem"
     },
     "attribution": {
       "title": "Atribuição do lead",
@@ -565,6 +614,223 @@
       },
       "capturedAt": "Capturado",
       "openSource": "Abrir a origem do lead"
+    },
+    "hookAddress": {
+      "title": "As novas URLs de webhook ficarão incompletas",
+      "notConfigured": "O endereço público da API da plataforma não está definido. Peça a quem administra a plataforma para defini-lo; até lá, uma nova fonte só poderá mostrar o caminho da sua URL.",
+      "notPublic": "O endereço público da API da plataforma aponta para um endereço privado ou local que as plataformas de anúncios não conseguem acessar. Peça a quem administra a plataforma para definir um endereço público."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Agendada",
+        "sending": "Enviando",
+        "held": "Retida",
+        "sent": "Enviada",
+        "blocked": "Bloqueada",
+        "skipped": "Ignorada",
+        "failed": "Falhou"
+      },
+      "reasons": {
+        "quiet_hours": "Aguardando o fim do horário de silêncio",
+        "outside_business_hours": "Aguardando o horário comercial",
+        "channel_unavailable": "O canal não está conectado",
+        "wallet_empty": "A carteira está vazia",
+        "send_halted": "O envio está suspenso",
+        "opted_out": "O contato cancelou o recebimento",
+        "no_consent": "Sem consentimento registrado",
+        "minor": "O contato está marcado como menor de idade",
+        "plan_limit": "O limite do plano foi atingido",
+        "disabled": "A configuração foi desativada",
+        "source_paused": "A fonte de leads está pausada",
+        "no_contact_point": "Sem número ou endereço para este canal",
+        "no_sender": "Nenhum remetente conectado",
+        "template_unavailable": "O modelo não pode ser enviado",
+        "missing_value": "Falta um valor do modelo para este contato",
+        "provider_error": "O provedor recusou",
+        "interrupted": "Foi interrompido",
+        "expired": "Esperou tempo demais",
+        "internal_error": "Erro interno"
+      },
+      "nextTry": "Próxima tentativa",
+      "sentAt": "Enviada"
+    },
+    "inbox": {
+      "intro": "Todos os leads recebidos por qualquer uma das suas origens, inclusive os que não puderam virar contato. Abra um lead para ver o motivo e tente de novo os que estão aguardando.",
+      "chipsLabel": "Filtrar por status",
+      "loading": "Carregando leads",
+      "more": "Carregar mais",
+      "chips": {
+        "all": "Todos",
+        "attention": "Precisam de atenção",
+        "needs_review": "Precisam de revisão",
+        "failed": "Com falha",
+        "created": "Criados",
+        "updated": "Atualizados",
+        "duplicate": "Duplicados"
+      },
+      "filters": {
+        "source": "Origem",
+        "allSources": "Todas as origens",
+        "reason": "Motivo",
+        "anyReason": "Qualquer motivo",
+        "range": "Recebido",
+        "ranges": {
+          "all": "Qualquer período",
+          "day": "Últimas 24 horas",
+          "week": "Últimos 7 dias",
+          "month": "Últimos 30 dias",
+          "custom": "Escolher datas"
+        },
+        "from": "De",
+        "to": "Até (inclusive)",
+        "rangeOrder": "A data final é anterior à data inicial.",
+        "tests": "Leads de teste",
+        "testChoices": {
+          "all": "Mostrar",
+          "only": "Somente leads de teste",
+          "hide": "Ocultar"
+        },
+        "search": "O ID do lead começa com",
+        "searchHint": "Só é pesquisado o ID próprio do lead definido pelo remetente, nunca nomes, números ou endereços.",
+        "searchPlaceholder": "ex.: lead-100",
+        "apply": "Pesquisar",
+        "reset": "Voltar aos leads em espera",
+        "showAll": "Mostrar tudo"
+      },
+      "table": {
+        "caption": "Leads recebidos de todas as origens",
+        "received": "Recebido",
+        "source": "Origem",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Motivo",
+        "firstMessage": "Primeira mensagem",
+        "actions": "Ações",
+        "select": "Selecionar o lead {id}",
+        "test": "Teste",
+        "view": "Abrir",
+        "retry": "Tentar de novo"
+      },
+      "empty": {
+        "attentionTitle": "Nada aguardando você",
+        "attention": "Todos os leads recebidos viraram contatos. Os que precisarem de revisão ou falharem aparecerão aqui.",
+        "filteredTitle": "Nenhum lead encontrado",
+        "filtered": "Nada corresponde a estes filtros."
+      },
+      "bulk": {
+        "selectPage": "Selecionar os leads desta página que podem ser tentados de novo",
+        "selected": "{count, plural, one {# lead selecionado} other {# leads selecionados}}",
+        "retry": "Tentar de novo os selecionados",
+        "limit": "Até {max} por vez."
+      },
+      "result": {
+        "retried": "{count, plural, one {# lead foi processado de novo.} other {# leads foram processados de novo.}}",
+        "fixed": "{count, plural, one {# virou contato.} other {# viraram contatos.}}",
+        "stillWaiting": "{count, plural, one {# ainda precisa de revisão.} other {# ainda precisam de revisão.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {# lead não foi encontrado.} other {# leads não foram encontrados.}}",
+          "not_retryable": "{count, plural, one {# lead não está mais aguardando.} other {# leads não estão mais aguardando.}}",
+          "payload_purged": "{count, plural, one {# lead não tem mais dados armazenados para tentar de novo.} other {# leads não têm mais dados armazenados para tentar de novo.}}",
+          "source_paused": "{count, plural, one {# lead pertence a uma origem pausada.} other {# leads pertencem a origens pausadas.}}",
+          "error": "{count, plural, one {# lead não pôde ser processado de novo.} other {# leads não puderam ser processados de novo.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Fechar",
+        "retry": "Tentar de novo",
+        "auditNote": "A abertura de um lead fica registrada no log de auditoria. Os dados pessoais nele estão ocultos.",
+        "source": "Origem",
+        "lead": "ID do lead",
+        "received": "Recebido",
+        "processed": "Processado",
+        "notProcessed": "Não processado",
+        "attempts": "Tentativas",
+        "duplicates": "Entregue novamente",
+        "deliveredAgain": "{count, plural, one {# vez} other {# vezes}}",
+        "reason": "Motivo",
+        "firstReply": "Primeira mensagem",
+        "contact": "Contato",
+        "openContact": "Abrir o contato",
+        "error": "Erro",
+        "payload": "O que o remetente enviou",
+        "showOriginal": "Mostrar o original",
+        "maskedNote": "Números de telefone, e-mails, nomes, endereços e textos livres estão ocultos. Segredos são removidos.",
+        "nothingToMask": "Não há nada pessoal para ocultar neste lead.",
+        "originalNote": "Os dados originais, exibidos porque você gerencia as origens de leads. A exibição foi registrada no log de auditoria.",
+        "loadingPayload": "Carregando os dados",
+        "purged": "Os dados foram excluídos após o período de retenção, então não há nada para mostrar nem para tentar de novo."
+      },
+      "pull": {
+        "title": "Sincronizar e recuperar",
+        "intro": "Estas origens podem ser consultadas para buscar seus leads. Sincronizar agora busca o que é novo; Recuperar busca de novo um período passado. Leads que você já tem são reconhecidos e não são adicionados duas vezes.",
+        "backfill": "Recuperar...",
+        "history": "Sincronizações e recuperações recentes",
+        "syncNow": "Sincronizar agora",
+        "syncStarted": "Sincronizando {name}",
+        "paused": "Esta origem está pausada. Retome-a para buscar seus leads.",
+        "nextSync": "Poderá ser sincronizada de novo",
+        "syncReady": "Pode ser sincronizada agora. Pelo menos {seconds} segundos entre as solicitações.",
+        "reach": "A recuperação retrocede até {days, plural, one {# dia} other {# dias}}.",
+        "never": "Ainda não foi buscada.",
+        "progress": "{percent} por cento",
+        "counts": "{fetched} obtidos, {accepted} novos, {duplicates} já conhecidos, {failed} não entregues",
+        "kinds": {
+          "sync": "Sincronização",
+          "backfill": "Recuperação"
+        },
+        "statuses": {
+          "queued": "Na fila",
+          "running": "Em execução",
+          "done": "Concluída",
+          "partial": "Parcial",
+          "failed": "Falhou"
+        },
+        "errors": {
+          "too_soon": "A origem pediu que aguardássemos.",
+          "not_now": "A origem não estava pronta: é cedo demais para ela ou a conexão está pausada.",
+          "provider_error": "A origem recusou ou falhou.",
+          "credentials_refused": "A origem recusou as credenciais. Reconecte-a.",
+          "interrupted": "Foi interrompida. Execute de novo.",
+          "internal_error": "Erro interno. Execute de novo.",
+          "incomplete": "Alguns leads não foram entregues. Execute de novo para concluir.",
+          "not_supported": "Esta origem não pode fazer isso.",
+          "not_active": "A conexão não está ativa.",
+          "range_too_old": "A origem não guarda leads de tanto tempo atrás.",
+          "range_invalid": "O período não é válido."
+        }
+      },
+      "backfill": {
+        "title": "Recuperar um período",
+        "intro": "Busque de novo os leads de dias passados nas origens que os guardam, até {days} dias por vez. Leads já recebidos são reconhecidos e não gravam nada.",
+        "from": "De",
+        "to": "Até (inclusive)",
+        "sources": "Origens",
+        "noSources": "Nenhuma origem pode ser recuperada.",
+        "submit": "Iniciar recuperação",
+        "cancel": "Cancelar",
+        "close": "Fechar",
+        "done": "Concluir",
+        "started": "{count, plural, one {Recuperação iniciada} other {# recuperações iniciadas}}",
+        "skippedTitle": "Algumas origens não foram buscadas:",
+        "skipped": {
+          "not_supported": "não permite recuperação",
+          "paused": "está pausada",
+          "in_progress": "já está sendo sincronizada",
+          "too_soon": "foi consultada há pouco",
+          "range_too_old": "não guarda leads de tanto tempo atrás",
+          "not_found": "não foi encontrada"
+        },
+        "problems": {
+          "fromRequired": "Escolha o primeiro dia.",
+          "toRequired": "Escolha o último dia.",
+          "order": "O último dia é anterior ao primeiro.",
+          "future": "O primeiro dia está no futuro.",
+          "tooWide": "No máximo {days} dias por vez.",
+          "noSource": "Escolha pelo menos uma origem."
+        },
+        "safe": "Nada é perdido nem duplicado se você executar de novo; ele só adiciona os leads que faltam."
+      }
     },
     "meta": {
       "heading": "Formulários de leads do Meta",

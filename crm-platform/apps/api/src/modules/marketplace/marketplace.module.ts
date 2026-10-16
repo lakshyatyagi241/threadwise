@@ -23,6 +23,8 @@ import { OperatorInsightsService } from './operator-insights.service';
 import { OperatorPricingService } from './operator-pricing.service';
 import { PricingAccess } from './pricing-access.service';
 import { PlatformMarketplaceController } from './platform-marketplace.controller';
+import { MarketplaceLeadPullBinding, MarketplaceLeadPullProvider } from './lead-pull.provider';
+import { PullBackfillService } from './pull-backfill.service';
 import { PullRunService } from './pull-run.service';
 import { PullSyncService } from './pull-sync.service';
 import { PullStateRepository } from './pull-state.repository';
@@ -78,6 +80,9 @@ import { SubscriptionsService } from './subscriptions.service';
     OperatorPricingService,
     PullRunService,
     PullSyncService,
+    PullBackfillService,
+    MarketplaceLeadPullProvider,
+    MarketplaceLeadPullBinding,
     InboundRunService,
   ],
   exports: [

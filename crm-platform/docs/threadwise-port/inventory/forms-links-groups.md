@@ -18,15 +18,15 @@ the unofficial-API group directory's admin API already exists under `storefront-
 (`StoreGroupsService`/`StoreGroupsController`, `GET /v2/store/groups`) with its Node-side roster sync owned by
 `whatsapp-devices-baileys` (`device-groups.sink.ts`) — also not covered here.
 
-| Feature                                  | Controller               | Model(s)                   | Route prefix                          | Engine requirement                 |
-| ----------------------------------------- | ------------------------- | --------------------------- | -------------------------------------- | ----------------------------------- |
-| WhatsApp Forms                            | `WaFormController`        | `WaForm`, `WaFormSubmission` | `/wa-forms`                            | Cloud API (WABA) only, hard gate    |
-| WhatsApp Link Generator ("click to chat") | `WaChatLinkController`    | `WaChatLink`                | `/wa-links` + public `/l/{slug}`       | engine-agnostic                     |
+| Feature                                   | Controller             | Model(s)                     | Route prefix                     | Engine requirement               |
+| ----------------------------------------- | ---------------------- | ---------------------------- | -------------------------------- | -------------------------------- |
+| WhatsApp Forms                            | `WaFormController`     | `WaForm`, `WaFormSubmission` | `/wa-forms`                      | Cloud API (WABA) only, hard gate |
+| WhatsApp Link Generator ("click to chat") | `WaChatLinkController` | `WaChatLink`                 | `/wa-links` + public `/l/{slug}` | engine-agnostic                  |
 
 **WhatsApp Forms** sends a published Meta WhatsApp Flow ("form") to a customer from inside the flow builder (the
 `wa_form` node, already ported — see `flow-builder-editor.md` TW-FLB-056, do not re-touch) and records every
 submission for review/export. Authoring (build screens/fields, publish to Meta, review submissions, export CSV) is
-owned here; *sending* it at runtime is FLB/FLR's.
+owned here; _sending_ it at runtime is FLB/FLR's.
 
 **WhatsApp Link Generator** mints a trackable short link (`/l/{slug}`) that opens `wa.me` with a pre-filled welcome
 message, for use in ads/bios/QR codes. Click-counted, engine-agnostic (works regardless of which WhatsApp engine the
@@ -86,26 +86,26 @@ workspace contact's mobile — no indexed lookup, a perf note), PLAN (the two no
 
 ## Feature index
 
-| Id         | Feature                                                                  | Status      | Priority | Effort | Depends on              |
-| ---------- | ------------------------------------------------------------------------- | ----------- | -------- | ------ | ------------------------ |
-| TW-WFL-001 | Forms list page, KPI stats and pagination                                 | done        | P0       | M      | -                        |
-| TW-WFL-002 | Form builder UI (field types, screens, live bubble preview)               | done        | P0       | L      | TW-WFL-001               |
-| TW-WFL-003 | Save/autosave pipeline (create-or-update, draft-on-edit-of-published)     | done        | P0       | M      | TW-WFL-002               |
-| TW-WFL-004 | Publish pipeline (Meta Flow create/update, asset upload, encryption key)  | done        | P0       | L      | TW-WFL-003               |
-| TW-WFL-005 | Publish error translation (incl. "Blocked by Integrity")                  | done        | P1       | S      | TW-WFL-004               |
-| TW-WFL-006 | Duplicate / delete a form                                                 | done        | P1       | S      | TW-WFL-001               |
-| TW-WFL-007 | Picker endpoint for the flow builder's `wa_form` node                     | done        | P0       | S      | TW-WFL-003               |
-| TW-WFL-008 | Submission ingest from Meta's `nfm_reply` webhook + flow resume           | blocked     | P0       | L      | TW-WFL-004               |
-| TW-WFL-009 | Submissions list, contact resolution, inbox mirror                        | done        | P0       | M      | TW-WFL-008               |
-| TW-WFL-010 | Submissions CSV export (CSV-injection safe)                               | done        | P1       | S      | TW-WFL-009               |
-| TW-WFL-011 | Engine gate (Cloud API only) and plan-feature gate                        | done        | P0       | S      | -                        |
-| TW-WFL-012 | Links list page, KPI stats, search                                        | done        | P0       | M      | -                        |
-| TW-WFL-013 | Link builder wizard (destination, starter message, tracking)              | done        | P0       | M      | TW-WFL-012               |
-| TW-WFL-014 | Save pipeline (E.164 validation, global slug uniqueness, UTM storage)      | done        | P0       | M      | TW-WFL-013               |
-| TW-WFL-015 | QR code generation for a link                                             | done        | P2       | S      | TW-WFL-014               |
-| TW-WFL-016 | Duplicate / delete a link                                                 | done        | P1       | S      | TW-WFL-012               |
-| TW-WFL-017 | Public redirect + click tracking (`/l/{slug}`)                            | done        | P0       | M      | TW-WFL-014               |
-| TW-WFL-018 | Status filter (live/paused) — implemented for real, not left as dead UI  | done        | P2       | S      | TW-WFL-012               |
+| Id         | Feature                                                                  | Status  | Priority | Effort | Depends on |
+| ---------- | ------------------------------------------------------------------------ | ------- | -------- | ------ | ---------- |
+| TW-WFL-001 | Forms list page, KPI stats and pagination                                | done    | P0       | M      | -          |
+| TW-WFL-002 | Form builder UI (field types, screens, live bubble preview)              | done    | P0       | L      | TW-WFL-001 |
+| TW-WFL-003 | Save/autosave pipeline (create-or-update, draft-on-edit-of-published)    | done    | P0       | M      | TW-WFL-002 |
+| TW-WFL-004 | Publish pipeline (Meta Flow create/update, asset upload, encryption key) | done    | P0       | L      | TW-WFL-003 |
+| TW-WFL-005 | Publish error translation (incl. "Blocked by Integrity")                 | done    | P1       | S      | TW-WFL-004 |
+| TW-WFL-006 | Duplicate / delete a form                                                | done    | P1       | S      | TW-WFL-001 |
+| TW-WFL-007 | Picker endpoint for the flow builder's `wa_form` node                    | done    | P0       | S      | TW-WFL-003 |
+| TW-WFL-008 | Submission ingest from Meta's `nfm_reply` webhook + flow resume          | blocked | P0       | L      | TW-WFL-004 |
+| TW-WFL-009 | Submissions list, contact resolution, inbox mirror                       | done    | P0       | M      | TW-WFL-008 |
+| TW-WFL-010 | Submissions CSV export (CSV-injection safe)                              | done    | P1       | S      | TW-WFL-009 |
+| TW-WFL-011 | Engine gate (Cloud API only) and plan-feature gate                       | done    | P0       | S      | -          |
+| TW-WFL-012 | Links list page, KPI stats, search                                       | done    | P0       | M      | -          |
+| TW-WFL-013 | Link builder wizard (destination, starter message, tracking)             | done    | P0       | M      | TW-WFL-012 |
+| TW-WFL-014 | Save pipeline (E.164 validation, global slug uniqueness, UTM storage)    | done    | P0       | M      | TW-WFL-013 |
+| TW-WFL-015 | QR code generation for a link                                            | done    | P2       | S      | TW-WFL-014 |
+| TW-WFL-016 | Duplicate / delete a link                                                | done    | P1       | S      | TW-WFL-012 |
+| TW-WFL-017 | Public redirect + click tracking (`/l/{slug}`)                           | done    | P0       | M      | TW-WFL-014 |
+| TW-WFL-018 | Status filter (live/paused) — implemented for real, not left as dead UI  | done    | P2       | S      | TW-WFL-012 |
 
 ## Features
 
@@ -166,7 +166,7 @@ workspace contact's mobile — no indexed lookup, a perf note), PLAN (the two no
   WABA's Flows RSA-2048 public key is registered (idempotent, generated once per provider config); publish.
 - **Rules & edge cases:**
   1. `mapCategory()`: `audience_type` → Meta's Flow category enum (`LEAD_GENERATION|SURVEY|APPOINTMENT_BOOKING|
-     CUSTOMER_SUPPORT|SIGN_UP|OTHER`).
+CUSTOMER_SUPPORT|SIGN_UP|OTHER`).
   2. On success: `status=published`, `published_at=now()`, `publish_error=null`. On failure: persist a truncated
      (1000 char) `publish_error`, flash an error, status stays as-is (does not force `draft`).
 - **Source refs:** `WaFormController::publish`, `buildMetaFlowJson`, `ensureFlowsPublicKey`, `mapCategory`.
@@ -251,7 +251,7 @@ workspace contact's mobile — no indexed lookup, a perf note), PLAN (the two no
 - **Source refs:** `WaFormController` `HasMiddleware` closure; `plans-subscriptions-trials.md`.
 - **Port status (done):** the plan feature gate uses the already-registered `forms_and_links` key (on by default —
   Reference's own name for "WhatsApp Flows forms", see `packages/contracts/src/plans-subscriptions-trials/
-  catalogue.ts`), via `@RequirePlanFeature('forms_and_links')` on `WaFormsController`. NOT `form_builder`, the
+catalogue.ts`), via `@RequirePlanFeature('forms_and_links')` on `WaFormsController`. NOT `form_builder`, the
   unrelated web-forms Marketplace app's key. The engine gate (workspace must have a connected Cloud API/WABA
   provider config) is enforced inside `WaFormsService.publish` by requiring usable credentials, rather than
   blocking the whole CRUD surface the way Reference's controller-level redirect does — an intentional, narrower
@@ -309,7 +309,7 @@ workspace contact's mobile — no indexed lookup, a perf note), PLAN (the two no
 
 - **Summary:** Public route, no auth, no CSRF. 404 if slug not found; 410 if `!isActive()` (status≠active or past
   `expires_at`); else atomically increments `click_count` and sets `last_clicked_at=now()` (single `UPDATE ...
-  SET count = count + 1` statement, not read-then-write), then redirects (302) to the `wa.me` URL.
+SET count = count + 1` statement, not read-then-write), then redirects (302) to the `wa.me` URL.
 - **Source refs:** `WaChatLinkController::publicRedirect`.
 - **Port status (done, hardened):** added a Redis-backed per-IP rate limit (Reference has none) since the route is
   unauthenticated and writes on every hit — an intentional hardening addition, not Reference parity.
