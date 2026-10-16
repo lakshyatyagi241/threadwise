@@ -13,8 +13,10 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
 import {
   BroadcastsComposeService,
+  SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
   templateRefusals,
+  type SenderDirectory,
   type TemplateDirectory,
 } from '../../broadcasts';
 import { WizardAudienceService } from './wizard-audience.service';
@@ -43,6 +45,7 @@ export class WizardReadService {
     private readonly audience: WizardAudienceService,
     private readonly compose: BroadcastsComposeService,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
   ) {}
 
   toTemplate(r: TemplateListRow): WizardTemplate {
@@ -72,7 +75,11 @@ export class WizardReadService {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const v2 = await this.templates.wabaTemplatesV2Enabled(tx);
-      const rows = await this.repo.approvedTemplates(tx, orgId);
+      const rows = await this.repo.approvedTemplates(
+        tx,
+        orgId,
+        await this.senders.defaultEngine(tx, orgId),
+      );
       const usable = rows.filter(
         (r) =>
           templateRefusals(
@@ -89,6 +96,42 @@ export class WizardReadService {
           ).length === 0,
       );
       return { data: usable.map((r) => this.toTemplate(r)) };
+    });
+  }
+
+  /**
+   * The uuids of the templates a broadcast may use right now: the wizard's list, and the one the classic builder is held to, so the
+   * two screens never disagree about whether a workspace has a template to send. Same rules as `listTemplates`, read narrowly (only
+   * what the campaign gate looks at), because the builder already reads the templates themselves.
+   */
+  async usableTemplateIds(): Promise<Set<string>> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const v2 = await this.templates.wabaTemplatesV2Enabled(tx);
+      const rows = await this.repo.approvedTemplateFacts(
+        tx,
+        orgId,
+        await this.senders.defaultEngine(tx, orgId),
+      );
+      return new Set(
+        rows
+          .filter(
+            (r) =>
+              templateRefusals(
+                {
+                  templateType: r.templateType,
+                  attachmentType: r.attachmentType,
+                  mediaUrl: r.attachmentFile ? this.templates.mediaUrl(r.attachmentFile) : null,
+                  metaTemplateId: r.metaTemplateId,
+                  metaStatus: r.metaStatus,
+                  pausedUntil: r.pausedUntil,
+                  qualityScore: r.qualityScore,
+                },
+                { wabaTemplatesV2: v2 },
+              ).length === 0,
+          )
+          .map((r) => r.uuid),
+      );
     });
   }
 

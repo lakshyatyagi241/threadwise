@@ -37,6 +37,7 @@ import {
 } from './campaign-rules';
 import { toCampaign, toConfig } from './campaigns.mapper';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
+import { WizardReadService } from './wizard/wizard-read.service';
 
 const DAY = 86_400_000;
 const RANGE_DAYS = { '7d': 7, '30d': 30, '90d': 90 } as const;
@@ -66,6 +67,7 @@ export class CampaignsReadService {
     private readonly compose: BroadcastsComposeService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    private readonly wizardRead: WizardReadService,
   ) {}
 
   async list(q: ListCampaignsQuery): Promise<CampaignListResponse> {
@@ -172,10 +174,13 @@ export class CampaignsReadService {
   async builder(query: BroadcastComposeQuery = {}): Promise<CampaignBuilder> {
     const { orgId } = RequestContextStore.require();
     const base = await this.compose.compose(query);
+    // The WhatsApp templates are the guided wizard's own list (approved, sendable now, not an OTP template, not an SMS one), so both
+    // screens offer the same templates. The SMS card keeps its own list.
+    const usable = query.channel === 'sms' ? null : await this.wizardRead.usableTemplateIds();
     return this.db.tx(async (tx) => ({
       senders: base.senders,
       hidden: base.hidden,
-      templates: base.templates,
+      templates: usable ? base.templates.filter((t) => usable.has(t.id)) : base.templates,
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),
       flows: await this.repo.flowsForOrg(tx, orgId),
