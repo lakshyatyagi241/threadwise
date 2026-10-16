@@ -44,9 +44,6 @@
         "unassigned": "غير معيّنة",
         "unread": "غير مقروءة"
       },
-      "statusFilter": "الحالة",
-      "statusOpen": "مفتوحة",
-      "statusAll": "كل الحالات",
       "status": {
         "open": "مفتوحة",
         "pending": "معلّقة",
@@ -61,7 +58,6 @@
         "high": "عالية",
         "urgent": "عاجلة"
       },
-      "channelFilter": "القناة",
       "allChannels": "كل القنوات",
       "archived": "المؤرشفة",
       "backToInbox": "العودة إلى صندوق الوارد",
@@ -107,7 +103,48 @@
         }
       },
       "select": "تحديد",
-      "selectDone": "تم"
+      "selectDone": "تم",
+      "filters": {
+        "open": "عوامل التصفية",
+        "openActive": "عوامل التصفية ({count} مفعّلة)",
+        "title": "عوامل التصفية",
+        "close": "إغلاق",
+        "reset": "إعادة ضبط",
+        "cancel": "إلغاء",
+        "apply": "تطبيق",
+        "status": "حالة الدردشة",
+        "statusHint": "عند عدم الاختيار تظهر الدردشات المفتوحة والمعلّقة.",
+        "conversation": "المحادثة",
+        "any": "أي",
+        "assigned": "معيّنة",
+        "unassigned": "غير معيّنة",
+        "unattended": "بلا رد",
+        "labels": "الوسوم",
+        "channels": "القنوات",
+        "agents": "الوكلاء",
+        "sortBy": "ترتيب حسب",
+        "recent": "الأحدث",
+        "old": "الأقدم",
+        "dateRange": "النطاق الزمني (آخر نشاط)",
+        "from": "من",
+        "to": "إلى",
+        "select": "اختر خيارًا",
+        "search": "بحث",
+        "noMatch": "لا توجد نتائج",
+        "today": "اليوم",
+        "last7": "آخر 7 أيام",
+        "last30": "آخر 30 يومًا",
+        "thisMonth": "هذا الشهر",
+        "clearDates": "مسح التواريخ",
+        "previousMonth": "الشهر السابق",
+        "nextMonth": "الشهر التالي"
+      },
+      "rowMenu": "المزيد من الإجراءات لـ {name}",
+      "priorityMenu": "الأولوية",
+      "statusFilter": "الحالة",
+      "statusOpen": "مفتوحة",
+      "statusAll": "كل الحالات",
+      "channelFilter": "القناة"
     },
     "status": {
       "received": "مستلمة",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "رسالة جديدة: {text}",
       "attachment": "مرفق",
       "jumpLatest": "الانتقال إلى الأحدث",
-      "jumpLatestNew": "{count, plural, zero {لا رسائل جديدة} one {رسالة جديدة} two {رسالتان جديدتان} few {# رسائل جديدة} many {# رسالة جديدة} other {# رسالة جديدة}}"
+      "jumpLatestNew": "{count, plural, zero {لا رسائل جديدة} one {رسالة جديدة} two {رسالتان جديدتان} few {# رسائل جديدة} many {# رسالة جديدة} other {# رسالة جديدة}}",
+      "searchOpen": "البحث في هذه الدردشة",
+      "searchPlaceholder": "البحث في هذه الدردشة",
+      "searchCount": "{current} من {total}",
+      "searchNone": "لا توجد نتائج",
+      "searchPrev": "النتيجة السابقة",
+      "searchNext": "النتيجة التالية",
+      "searchClose": "إغلاق البحث"
     },
     "groupThread": {
       "openGroup": "فتح المجموعة",
@@ -454,7 +498,13 @@
         "pickTeam": "اختر فريقًا لهذه المحادثة",
         "noTeam": "بلا فريق",
         "onLeave": "في إجازة",
-        "onLeaveUntil": "في إجازة حتى {date}"
+        "onLeaveUntil": "في إجازة حتى {date}",
+        "availability": {
+          "online": "متصل",
+          "away": "بعيد",
+          "busy": "مشغول",
+          "offline": "غير متصل"
+        }
       },
       "presence": {
         "online": "متصل",

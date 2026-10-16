@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, Input, Popover, Spinner } from '@crm/ui';
 import type { ConversationTag } from '@crm/contracts';
+import { TagIcon } from './icons';
 import { useTags } from '../api/hooks';
 import { TagChip } from './tag-chip';
 
@@ -36,11 +37,12 @@ export function TagMenu(props: TagMenuProps) {
         size="sm"
         data-testid="inbox-tag-menu"
         aria-expanded={open}
+        title={t('tag')}
         onPointerDown={(e) => e.stopPropagation()}
         onClick={() => setOpen((v) => !v)}
       >
-        {props.busy ? <Spinner /> : null}
-        {t('tag')}
+        {props.busy ? <Spinner /> : <TagIcon className="size-4" />}
+        <span className="sr-only">{t('tag')}</span>
       </Button>
       <Popover open={open} onClose={() => setOpen(false)} label={t('groups.conversationTitle')}>
         <div className="space-y-2" data-testid="inbox-tag-menu-body">

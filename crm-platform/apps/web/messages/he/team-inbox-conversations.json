@@ -44,9 +44,6 @@
         "unassigned": "לא משויך",
         "unread": "לא נקרא"
       },
-      "statusFilter": "סטטוס",
-      "statusOpen": "פתוחה",
-      "statusAll": "כל הסטטוסים",
       "status": {
         "open": "פתוחה",
         "pending": "ממתינה",
@@ -61,7 +58,6 @@
         "high": "גבוהה",
         "urgent": "דחופה"
       },
-      "channelFilter": "ערוץ",
       "allChannels": "כל הערוצים",
       "archived": "בארכיון",
       "backToInbox": "חזרה לתיבת ההודעות",
@@ -107,7 +103,48 @@
         }
       },
       "select": "בחירה",
-      "selectDone": "סיום"
+      "selectDone": "סיום",
+      "filters": {
+        "open": "מסננים",
+        "openActive": "מסננים ({count} פעילים)",
+        "title": "מסננים",
+        "close": "סגירה",
+        "reset": "איפוס",
+        "cancel": "ביטול",
+        "apply": "החלה",
+        "status": "סטטוס צ׳אט",
+        "statusHint": "ללא בחירה יוצגו צ׳אטים פתוחים וממתינים.",
+        "conversation": "שיחה",
+        "any": "הכול",
+        "assigned": "משויכת",
+        "unassigned": "לא משויכת",
+        "unattended": "ללא מענה",
+        "labels": "תגיות",
+        "channels": "ערוצים",
+        "agents": "סוכנים",
+        "sortBy": "מיון לפי",
+        "recent": "אחרונים",
+        "old": "ישנים",
+        "dateRange": "טווח תאריכים (פעילות אחרונה)",
+        "from": "מתאריך",
+        "to": "עד תאריך",
+        "select": "בחירת אפשרות",
+        "search": "חיפוש",
+        "noMatch": "אין התאמות",
+        "today": "היום",
+        "last7": "7 הימים האחרונים",
+        "last30": "30 הימים האחרונים",
+        "thisMonth": "החודש",
+        "clearDates": "ניקוי תאריכים",
+        "previousMonth": "החודש הקודם",
+        "nextMonth": "החודש הבא"
+      },
+      "rowMenu": "פעולות נוספות עבור {name}",
+      "priorityMenu": "עדיפות",
+      "statusFilter": "סטטוס",
+      "statusOpen": "פתוחה",
+      "statusAll": "כל הסטטוסים",
+      "channelFilter": "ערוץ"
     },
     "status": {
       "received": "התקבלה",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "הודעה חדשה: {text}",
       "attachment": "קובץ מצורף",
       "jumpLatest": "עבור להודעה האחרונה",
-      "jumpLatestNew": "{count, plural, one {הודעה חדשה אחת} two {# הודעות חדשות} other {# הודעות חדשות}}"
+      "jumpLatestNew": "{count, plural, one {הודעה חדשה אחת} two {# הודעות חדשות} other {# הודעות חדשות}}",
+      "searchOpen": "חיפוש בצ׳אט הזה",
+      "searchPlaceholder": "חיפוש בצ׳אט הזה",
+      "searchCount": "{current} מתוך {total}",
+      "searchNone": "אין התאמות",
+      "searchPrev": "התוצאה הקודמת",
+      "searchNext": "התוצאה הבאה",
+      "searchClose": "סגירת החיפוש"
     },
     "groupThread": {
       "openGroup": "פתיחת הקבוצה",
@@ -454,7 +498,13 @@
         "pickTeam": "בחר צוות לשיחה זו",
         "noTeam": "ללא צוות",
         "onLeave": "בחופשה",
-        "onLeaveUntil": "בחופשה עד {date}"
+        "onLeaveUntil": "בחופשה עד {date}",
+        "availability": {
+          "online": "מחובר",
+          "away": "לא זמין",
+          "busy": "עסוק",
+          "offline": "לא מחובר"
+        }
       },
       "presence": {
         "online": "מחובר",

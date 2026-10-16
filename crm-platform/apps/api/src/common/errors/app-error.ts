@@ -11,16 +11,23 @@ import { ERROR_CODES, type ErrorCode } from '@crm/contracts';
 export class AppError extends HttpException {
   readonly code: ErrorCode;
   readonly details?: Array<{ path: string; message: string }>;
+  /**
+   * A 5xx that is a known, handled state and not a fault of ours (an integration the operator has not switched on, a vendor API that is
+   * not enabled). The client still gets the problem response; the server does not log a stack or report it as an incident.
+   */
+  readonly expected: boolean;
 
   constructor(
     code: ErrorCode,
     message: string,
     status: HttpStatus = HttpStatus.BAD_REQUEST,
     details?: Array<{ path: string; message: string }>,
+    expected = false,
   ) {
     super({ code, message }, status);
     this.code = code;
     this.details = details;
+    this.expected = expected;
   }
 
   static notFound(resource: string, id?: string): AppError {

@@ -44,9 +44,6 @@
         "unassigned": "Unassigned",
         "unread": "Unread"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Open",
-      "statusAll": "Every status",
       "status": {
         "open": "Open",
         "pending": "Pending",
@@ -61,7 +58,6 @@
         "high": "High",
         "urgent": "Urgent"
       },
-      "channelFilter": "Channel",
       "allChannels": "All channels",
       "archived": "Archived",
       "backToInbox": "Back to the inbox",
@@ -107,7 +103,48 @@
         }
       },
       "select": "Select",
-      "selectDone": "Done"
+      "selectDone": "Done",
+      "filters": {
+        "open": "Filters",
+        "openActive": "Filters ({count} on)",
+        "title": "Filters",
+        "close": "Close",
+        "reset": "Reset",
+        "cancel": "Cancel",
+        "apply": "Apply",
+        "status": "Chat status",
+        "statusHint": "Nothing chosen shows open and pending chats.",
+        "conversation": "Conversation",
+        "any": "Any",
+        "assigned": "Assigned",
+        "unassigned": "Unassigned",
+        "unattended": "Unattended",
+        "labels": "Tags",
+        "channels": "Channels",
+        "agents": "Agents",
+        "sortBy": "Sort by",
+        "recent": "Recent",
+        "old": "Old",
+        "dateRange": "Date range (last activity)",
+        "from": "From",
+        "to": "To",
+        "select": "Select an option",
+        "search": "Search",
+        "noMatch": "No match",
+        "today": "Today",
+        "last7": "Last 7 days",
+        "last30": "Last 30 days",
+        "thisMonth": "This month",
+        "clearDates": "Clear dates",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month"
+      },
+      "rowMenu": "More actions for {name}",
+      "priorityMenu": "Priority",
+      "statusFilter": "Status",
+      "statusOpen": "Open",
+      "statusAll": "Every status",
+      "channelFilter": "Channel"
     },
     "status": {
       "received": "Received",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "New message: {text}",
       "attachment": "an attachment",
       "jumpLatest": "Jump to latest",
-      "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}"
+      "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}",
+      "searchOpen": "Search in this chat",
+      "searchPlaceholder": "Search in this chat",
+      "searchCount": "{current} of {total}",
+      "searchNone": "No match",
+      "searchPrev": "Previous match",
+      "searchNext": "Next match",
+      "searchClose": "Close search"
     },
     "groupThread": {
       "openGroup": "Open group",
@@ -454,7 +498,13 @@
         "pickTeam": "Choose a team for this conversation",
         "noTeam": "No team",
         "onLeave": "On leave",
-        "onLeaveUntil": "On leave until {date}"
+        "onLeaveUntil": "On leave until {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Away",
+          "busy": "Busy",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

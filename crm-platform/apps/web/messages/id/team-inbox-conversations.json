@@ -44,9 +44,6 @@
         "unassigned": "Belum ditugaskan",
         "unread": "Belum dibaca"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Terbuka",
-      "statusAll": "Semua status",
       "status": {
         "open": "Terbuka",
         "pending": "Tertunda",
@@ -61,7 +58,6 @@
         "high": "Tinggi",
         "urgent": "Mendesak"
       },
-      "channelFilter": "Channel",
       "allChannels": "Semua channel",
       "archived": "Diarsipkan",
       "backToInbox": "Kembali ke inbox",
@@ -107,7 +103,48 @@
         }
       },
       "select": "Pilih",
-      "selectDone": "Selesai"
+      "selectDone": "Selesai",
+      "filters": {
+        "open": "Filter",
+        "openActive": "Filter ({count} aktif)",
+        "title": "Filter",
+        "close": "Tutup",
+        "reset": "Atur ulang",
+        "cancel": "Batal",
+        "apply": "Terapkan",
+        "status": "Status chat",
+        "statusHint": "Tanpa pilihan, chat terbuka dan tertunda ditampilkan.",
+        "conversation": "Percakapan",
+        "any": "Apa saja",
+        "assigned": "Ditugaskan",
+        "unassigned": "Belum ditugaskan",
+        "unattended": "Belum ditangani",
+        "labels": "Tag",
+        "channels": "Kanal",
+        "agents": "Agen",
+        "sortBy": "Urutkan",
+        "recent": "Terbaru",
+        "old": "Terlama",
+        "dateRange": "Rentang tanggal (aktivitas terakhir)",
+        "from": "Dari",
+        "to": "Sampai",
+        "select": "Pilih opsi",
+        "search": "Cari",
+        "noMatch": "Tidak ada yang cocok",
+        "today": "Hari ini",
+        "last7": "7 hari terakhir",
+        "last30": "30 hari terakhir",
+        "thisMonth": "Bulan ini",
+        "clearDates": "Hapus tanggal",
+        "previousMonth": "Bulan sebelumnya",
+        "nextMonth": "Bulan berikutnya"
+      },
+      "rowMenu": "Tindakan lainnya untuk {name}",
+      "priorityMenu": "Prioritas",
+      "statusFilter": "Status",
+      "statusOpen": "Terbuka",
+      "statusAll": "Semua status",
+      "channelFilter": "Channel"
     },
     "status": {
       "received": "Diterima",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "Pesan baru: {text}",
       "attachment": "sebuah lampiran",
       "jumpLatest": "Ke yang terbaru",
-      "jumpLatestNew": "{count, plural, other {# pesan baru}}"
+      "jumpLatestNew": "{count, plural, other {# pesan baru}}",
+      "searchOpen": "Cari di obrolan ini",
+      "searchPlaceholder": "Cari di obrolan ini",
+      "searchCount": "{current} dari {total}",
+      "searchNone": "Tidak ada yang cocok",
+      "searchPrev": "Hasil sebelumnya",
+      "searchNext": "Hasil berikutnya",
+      "searchClose": "Tutup pencarian"
     },
     "groupThread": {
       "openGroup": "Buka grup",
@@ -454,7 +498,13 @@
         "pickTeam": "Pilih tim untuk percakapan ini",
         "noTeam": "Tanpa tim",
         "onLeave": "Sedang cuti",
-        "onLeaveUntil": "Cuti hingga {date}"
+        "onLeaveUntil": "Cuti hingga {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Pergi",
+          "busy": "Sibuk",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Daring",
