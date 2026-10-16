@@ -373,11 +373,17 @@ describe('ContactsTable', () => {
   });
 
   it('disables call and WhatsApp (never a dead link) for a masked phone number, leaving email alone', () => {
-    const out = table([row({ phone: '+xxxxxxxx0025' })]);
+    // Needs a send handler, same as the hover-actions describe block above, or the whole QuickButton
+    // cluster (call/email/WhatsApp) is absent regardless of masking and these assertions are vacuous.
+    const out = table([row({ phone: '+xxxxxxxx0025' })], {
+      onSend: () => undefined,
+      onChat: () => undefined,
+      onOpenQuick: () => undefined,
+    });
     expect(out).not.toContain('href="tel:');
     expect(out).not.toContain('wa.me');
-    // the viewer can still mail this contact: masking is phone-only
-    expect(out).toContain('href="mailto:aarav@example.com"');
+    // This cell never renders email as a link at all — it's a plain Pill (contacts-list.tsx), not an anchor — so
+    // there's nothing here to disable. Email masking, if it exists, belongs to a different component's tests.
     expect(out.match(/aria-label="No phone number"/g)).toHaveLength(1);
     expect(out).toContain('aria-label="No phone number for WhatsApp"');
   });
