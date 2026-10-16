@@ -143,6 +143,16 @@ export function isZone(zone: string | null | undefined): zone is string {
   }
 }
 
+/** The zone as the runtime spells it (`asia/kolkata` becomes `Asia/Kolkata`), or null when it is not a zone it knows. */
+export function canonicalZone(zone: string | null | undefined): string | null {
+  if (!isZone(zone)) return null;
+  try {
+    return formatter(zone.trim()).resolvedOptions().timeZone;
+  } catch {
+    return null;
+  }
+}
+
 const WEEKDAY: Record<string, number> = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 };
 
 interface Local {

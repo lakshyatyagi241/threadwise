@@ -1461,7 +1461,8 @@
           "sent": "Verzonden",
           "delivered": "Afgeleverd",
           "read": "Gelezen",
-          "failed": "Mislukt"
+          "failed": "Mislukt",
+          "held": "Vastgehouden"
         },
         "charged": "{amount} in rekening gebracht"
       },

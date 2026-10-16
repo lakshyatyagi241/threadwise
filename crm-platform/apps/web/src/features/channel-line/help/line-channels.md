@@ -61,6 +61,10 @@ LINE cannot message anyone who has not added your account as a friend, so a broa
 
 Each message sent is also added to that person's conversation in the inbox. Every send is a push message and counts against your LINE monthly allowance. A person who withdrew their consent is skipped and counted as blocked.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), a broadcast does not message someone while it is night for them. Their message waits, the rest of the list is sent, and the row shows how many are held and until when. The broadcast stays **Sending** while anyone waits and finishes by itself when the hours end, so you do not need to press anything. Consent is checked again at that moment, so a person who unsubscribed meanwhile is not messaged. The hours are read on the person's own clock: their contact's time zone, else the country of their number, else your fallback time zone. Pausing a broadcast also stops the held messages.
+
 ## Plan and access
 
 You need the permission to view LINE channels to see the screen, and the manage permission to connect, re-hook, pause, set up rotation or remove a channel. LINE needs a plan that includes extra channels. Broadcasts have their own permissions: one to view the list and one to create, start, pause, retry or delete.

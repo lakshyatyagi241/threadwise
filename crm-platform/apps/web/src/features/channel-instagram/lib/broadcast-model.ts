@@ -49,9 +49,12 @@ export function canSend(s: {
   );
 }
 
-/** What a send came to: nothing went, some went with some failing, or all went. */
-export function outcomeOf(r: IgSendResult): 'none' | 'partial' | 'all' {
-  if (r.sent === 0) return 'none';
+/**
+ * What a send came to: nothing went, some went with some failing, or all went. `held` (BL-191): nothing went and nothing failed, because
+ * everyone is waiting for the workspace's quiet hours to end.
+ */
+export function outcomeOf(r: IgSendResult): 'none' | 'partial' | 'all' | 'held' {
+  if (r.sent === 0) return r.held > 0 && r.failed === 0 ? 'held' : 'none';
   return r.failed > 0 ? 'partial' : 'all';
 }
 

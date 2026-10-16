@@ -408,3 +408,7 @@ registry is a sandbox behind the same `EngineSender` port. It decides from the r
 capping on the first `d` sends (`1049`: the original fails, the first retry goes through; `2049`: also the first retry; `9049`: never), `...0000` is
 undeliverable (131026, not retried), `...9999` is refused on the spot (131030), anything else is delivered. It reports afterwards through the same receipt
 path a webhook takes (a delayed job on the campaign queue). Real Meta behaviour of these paths is not verified here.
+
+## Quiet hours on the wizard test send (BL-191)
+
+`POST /v2/broadcast-wizard/test-send` with a MARKETING template: a number whose local time is inside the workspace's quiet hours gets a result with `status: "held"` and `heldUntil`; the test is sent at the opening by a `test-send-release` job (hours, wallet and draft are checked again). A utility template is sent at once. See [compliance.md](compliance.md).

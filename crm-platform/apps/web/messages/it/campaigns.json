@@ -1461,7 +1461,8 @@
           "sent": "Inviato",
           "delivered": "Consegnato",
           "read": "Letto",
-          "failed": "Non riuscito"
+          "failed": "Non riuscito",
+          "held": "Trattenuto"
         },
         "charged": "Addebitati {amount}"
       },

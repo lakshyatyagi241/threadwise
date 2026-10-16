@@ -638,9 +638,14 @@ What is decided, and for whom:
   else the zone chosen in the settings, else the workspace's, else UTC. A number written without its country code is never guessed.
 - **When the windows cannot be read** (a database error) a marketing send waits five minutes and asks again; it never goes out unchecked.
 
-Still open: a DND check needs a registry feed we do not have (the hook is a setting and a design, no integration; BL-181); the broadcasts of
-LINE, Facebook and Instagram, the one-off test sends, and a recurring campaign's catch-up of held recipients are follow-ups (BL-191 to BL-193
-in the backlog).
+**The remaining senders (BL-191, built).** The broadcasts of LINE, Messenger, Telegram and Viber leave a held recipient `pending` with
+`held_until` and wake themselves with a delayed job at the first opening; a WeChat mass send is one call, so it waits as a whole on the
+workspace clock; the Instagram broadcasts page, the offer and win-back broadcasts of a Shopify or WooCommerce store, and the broadcast wizard's
+test send hold the same way (a delayed job at the opening). Only the marketing purpose is asked: a utility template is never held, and an
+Instagram reply typed in the inbox composer is a person answering a person.
+
+Still open: a DND check needs a registry feed we do not have (the hook is a setting and a design, no integration; BL-181); a recurring
+campaign's catch-up of held recipients and a visible contact time zone are follow-ups (BL-192, BL-193 in the backlog).
 
 ### 11.6 Built and open
 

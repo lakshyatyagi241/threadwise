@@ -27,6 +27,8 @@ import {
  */
 export function BroadcastScreen() {
   const t = useTranslations('instagram.broadcast');
+  // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
+  const tHold = useTranslations('compliance-center.hold');
   const compose = useCompose();
   const [chosenAccount, setChosenAccount] = useState('');
   const [name, setName] = useState('');
@@ -55,7 +57,7 @@ export function BroadcastScreen() {
         threadIds: [...picked],
       });
       setResult(res);
-      if (res.sent > 0) {
+      if (res.sent > 0 || res.held > 0) {
         setPicked(new Set());
         setMessage('');
         setName('');
@@ -90,6 +92,7 @@ export function BroadcastScreen() {
       {compose.isError && <Alert tone="danger">{t('loadError')}</Alert>}
       {error && <Alert tone="danger">{error}</Alert>}
       {result &&
+        outcomeOf(result) !== 'held' &&
         (outcomeOf(result) === 'none' ? (
           <Alert tone="danger">{t('sentNone')}</Alert>
         ) : (
@@ -97,6 +100,16 @@ export function BroadcastScreen() {
             {t('sent', { sent: result.sent, failed: result.failed })}
           </Alert>
         ))}
+      {result && result.held > 0 && (
+        <Alert tone="info">
+          <span data-testid="broadcast-held">
+            {tHold('heldCount', { count: result.held })}
+            {result.heldUntil
+              ? ` · ${tHold('heldUntil', { when: new Date(result.heldUntil).toLocaleString() })}`
+              : ''}
+          </span>
+        </Alert>
+      )}
       {result && result.errors.length > 0 && (
         <ul className="space-y-0.5 text-[11.5px] text-danger">
           {result.errors.map((e, i) => (

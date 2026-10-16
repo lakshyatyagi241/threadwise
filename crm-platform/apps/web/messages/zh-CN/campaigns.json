@@ -1461,7 +1461,8 @@
           "sent": "已发送",
           "delivered": "已送达",
           "read": "已读",
-          "failed": "失败"
+          "failed": "失败",
+          "held": "暂缓"
         },
         "charged": "已扣费 {amount}"
       },

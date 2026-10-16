@@ -1,4 +1,14 @@
+import { getQueueToken } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { RequestContextStore } from '../../../src/common/context/request-context';
+import { QUEUES } from '../../../src/infra/queue/queues';
+import {
+  BroadcastsService,
+  IG_HELD_JOB,
+  type IgHeldJob,
+} from '../../../src/modules/channel-instagram/broadcasts.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import {
   INSTAGRAM_BRIDGE,
   type BridgeReply,
@@ -199,7 +209,7 @@ describe('the broadcasts page (TW-IG-014)', () => {
       threadIds: [asha, nameless, asha],
     });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(res.body).toEqual({ sent: 2, failed: 0, errors: [] });
+    expect(res.body).toEqual({ sent: 2, failed: 0, errors: [], held: 0, heldUntil: null });
     expect(sent.map((s) => [s.thread, s.reply.text]).sort()).toEqual([
       ['a1_555', 'Hi Asha!'],
       ['a1_556', 'Hi there!'],
@@ -240,6 +250,8 @@ describe('the broadcasts page (TW-IG-014)', () => {
       sent: 1,
       failed: 3,
       errors: ['IgDesk HTTP 400: Outside the 24 hour window'],
+      held: 0,
+      heldUntil: null,
     });
     expect(sent.map((s) => s.thread).sort()).toEqual(['a1_1', 'a1_2']);
     // No engine id: the thread is stored, no message was sent for it.
@@ -303,7 +315,7 @@ describe('the inbox composer (TW-IG-013)', () => {
     const t = await api.signup('igbk');
     const id = await thread(t, 'ig:a1_555', 'Asha');
     const res = await composer(t, { body: 'Hello {name}', threadIds: [id] });
-    expect(res.body).toEqual({ sent: 1, failed: 0, errors: [] });
+    expect(res.body).toEqual({ sent: 1, failed: 0, errors: [], held: 0, heldUntil: null });
     expect(sent[0]!.reply).toMatchObject({ type: 'text', text: 'Hello {name}' });
   });
 
@@ -341,5 +353,105 @@ describe('the inbox composer (TW-IG-013)', () => {
       templateId: '00000000-0000-4000-8000-000000000000',
     });
     expect(sent[1]!.reply).toMatchObject({ type: 'text', text: 'typed' });
+  });
+});
+
+describe('BL-191: the broadcasts page is held, not denied, in the quiet hours', () => {
+  /** 2030-10-15 16:00 UTC: 21:30 in India (quiet 21:00 to 09:00), 12:00 in New York (open). */
+  const EVENING = new Date('2030-10-15T16:00:00Z');
+  const MORNING = new Date('2030-10-16T03:31:00Z');
+  const OPENS = '2030-10-16T03:30:00.000Z';
+
+  /** A thread whose contact lives in `zone`, in a workspace with quiet hours 21:00 to 09:00. */
+  async function arrange(label: string, zones: Record<string, string>) {
+    const t = await api.signup(label);
+    await h.owner.query(
+      `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, '21:00', '09:00')`,
+      [t.orgId],
+    );
+    const ids: Record<string, string> = {};
+    let n = 0;
+    for (const [name, zone] of Object.entries(zones)) {
+      const id = await thread(t, `ig:a1_${600 + n++}`, name);
+      const contact = await h.owner.query(
+        `INSERT INTO contacts (org_id, name, data) VALUES ($1, $2, jsonb_build_object('timezone', $3::text)) RETURNING id`,
+        [t.orgId, name, zone],
+      );
+      await h.owner.query(`UPDATE conversations SET contact_id = $2 WHERE uuid = $1`, [
+        id,
+        contact.rows[0].id,
+      ]);
+      ids[name] = id;
+    }
+    return { t, ids };
+  }
+
+  beforeEach(() => {
+    h.app.get(SendWindowService).now = () => EVENING;
+  });
+
+  const heldJobs = async (orgId: number) => {
+    const queue = h.app.get<Queue>(getQueueToken(QUEUES.IG_PULL));
+    return (await queue.getDelayed()).filter(
+      (j) => j.name === IG_HELD_JOB && (j.data as IgHeldJob).orgId === orgId,
+    );
+  };
+  const release = (job: IgHeldJob) =>
+    RequestContextStore.run(
+      { requestId: 'ig-held', orgId: job.orgId, actorType: 'system', actorId: null, userId: null },
+      () => h.app.get(BroadcastsService).releaseHeld(job),
+    );
+
+  it('sends whoever is awake, holds whoever is in their quiet hours, and says so in the answer', async () => {
+    const { t, ids } = await arrange('igq1', { Asha: 'Asia/Kolkata', Ned: 'America/New_York' });
+    const res = await broadcast(t, {
+      name: 'Autumn',
+      message: 'Hi {name}!',
+      threadIds: [ids.Asha, ids.Ned],
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body).toEqual({ sent: 1, failed: 0, errors: [], held: 1, heldUntil: OPENS });
+    expect(sent.map((s) => s.reply.text)).toEqual(['Hi Ned!']);
+
+    const jobs = await heldJobs(t.orgId);
+    expect(jobs).toHaveLength(1);
+    expect((jobs[0]!.data as IgHeldJob).items).toEqual([{ threadId: ids.Asha, text: 'Hi Asha!' }]);
+    expect(jobs[0]!.opts.delay).toBeGreaterThan(11 * 3_600_000);
+  });
+
+  it('releases the held person at the opening, and waits again when asked before', async () => {
+    const { t, ids } = await arrange('igq2', { Asha: 'Asia/Kolkata' });
+    await broadcast(t, { name: 'x', message: 'Hello {name}', threadIds: [ids.Asha] });
+    expect(sent).toHaveLength(0);
+    const job = (await heldJobs(t.orgId))[0]!.data as IgHeldJob;
+
+    // Asked again in the evening: still inside their hours, waits for the same opening.
+    expect(await release(job)).toEqual({ sent: 0, failed: 0, held: 1 });
+    expect(sent).toHaveLength(0);
+
+    h.app.get(SendWindowService).now = () => MORNING;
+    expect(await release(job)).toEqual({ sent: 1, failed: 0, held: 0 });
+    expect(sent.map((s) => s.reply.text)).toEqual(['Hello Asha']);
+    expect(await outbound(t)).toHaveLength(1);
+  });
+
+  it('a person who unsubscribed while the message waited is not messaged on release', async () => {
+    const { t, ids } = await arrange('igq3', { Asha: 'Asia/Kolkata' });
+    await broadcast(t, { name: 'x', message: 'Hello', threadIds: [ids.Asha] });
+    const job = (await heldJobs(t.orgId))[0]!.data as IgHeldJob;
+    await h.owner.query(
+      `UPDATE contacts SET is_unsubscribed = true WHERE org_id = $1 AND name = 'Asha'`,
+      [t.orgId],
+    );
+    h.app.get(SendWindowService).now = () => MORNING;
+    expect(await release(job)).toEqual({ sent: 0, failed: 1, held: 0 });
+    expect(sent).toHaveLength(0);
+  });
+
+  it('the inbox composer is a person answering a person and is never held', async () => {
+    const { t, ids } = await arrange('igq4', { Asha: 'Asia/Kolkata' });
+    const res = await composer(t, { body: 'Hello', threadIds: [ids.Asha] });
+    expect(res.body).toEqual({ sent: 1, failed: 0, errors: [], held: 0, heldUntil: null });
+    expect(await heldJobs(t.orgId)).toHaveLength(0);
   });
 });

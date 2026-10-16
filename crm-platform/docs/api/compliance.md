@@ -49,6 +49,11 @@ over the country given at onboarding. Nothing is switched on by a suggestion: th
 | Broadcasts                               | recipient stays `pending` with `held_until`; the rest is sent; the broadcast is `paused` with reason `quiet_hours` and resumes by itself                       |
 | Campaigns and guided follow-ups          | recipient back to `queued` with `held_until` (the claim skips it); the campaign is scheduled again for the first opening                                       |
 | Scheduled messages                       | recipient stays `pending` with `held_until`; the schedule pauses until the first opening (the due sweep resumes it)                                            |
+| LINE, Messenger, Telegram, Viber broadcasts (BL-191) | recipient goes back to `pending` with `held_until`; the claim skips it; the rest is sent; the run ends and a **delayed job** (`<uuid>-held-<opening>`) takes the held up at the first opening; the list shows `held` and `heldUntil` |
+| WeChat broadcast (BL-191)                | one mass-send call: the whole broadcast waits (`wechat_broadcasts.held_until`), read on the workspace clock, then the call is made at the opening                 |
+| Instagram broadcasts page (BL-191)       | the answer carries `held` and `heldUntil`; a delayed job (`ig-pull` queue, `held-broadcast`) sends them at the opening; the inbox composer is never held        |
+| Shopify / WooCommerce offer and win-back (BL-191) | the log row stays `processed` with `held`; a delayed `broadcast` job with `resume` sends the held customers at the opening and ends the log with both runs' totals |
+| Wizard test send (BL-191)                | a test of a MARKETING template to a number in its quiet hours is logged `held` (`camp_test_sends.held_until`) and a `test-send-release` job on the campaign queue sends it at the opening |
 | Dial (`POST /v2/calling/calls/dial`)     | **refused**, 422 `CALL_OUTSIDE_WINDOW` with `opensAt`, `zone`, `zoneSource` in the details; a call back to someone who contacted us in 24 hours is exempt      |
 
 Only the `marketing` ledger purpose is asked: replies in the 24 hour window, utility and authentication templates, booking notices are never
@@ -57,7 +62,19 @@ never merely held) and **again at release**. Which clock: the contact's time zon
 property keyed `timezone`), the country code of the number (a country spanning hours must be inside the hours in all its zones), the zone
 chosen in the settings (`windowTimezone` is the fallback), the workspace zone, UTC. When the windows cannot be read a marketing send waits
 five minutes. Migration `20261216090000_quiet_hours_hold.sql` adds the `held` message event and `held_until`/`held_reason` to
-`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table).
+`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table). Migration `20261222090000_quiet_hours_senders.sql`
+(BL-191) adds the same two columns to `line_`, `facebook_`, `telegram_` and `viber_broadcast_recipients`, to `wechat_broadcasts` and to
+`camp_test_sends` (status `held`).
+
+**The remaining senders (BL-191), how they differ.** Every social broadcast is marketing, so it is always asked (no purpose to read). A
+recipient with a conversation is read on its contact's clock (the conversation's `contact_id`); one without (a group, a person who never
+became a contact) on the workspace fallback clock. Wake-up: a BullMQ delayed job on the sender's own queue, named by broadcast and opening so
+asking twice queues once; if Redis is down the recipients stay `pending` with `held_until` and the next Start (or run) takes them up. At release
+the ConsentGate is asked again for LINE (every batch), and for a released recipient on Messenger, Telegram, Viber and Instagram (a recipient that
+was never held keeps the check those senders had before: none). Messenger still checks its 24 hour window at send time, so a person whose
+window closed while they waited is `blocked` with a note saying so. WeChat cannot be split per contact, so the whole mass send waits on the
+workspace clock. Commerce broadcasts and the wizard test send hold only a MARKETING template (a utility one is a notice). Not covered: the
+event messages of a store (abandoned cart, order status) and the one-off sends of other screens.
 
 ## Strictest wins
 

@@ -1461,7 +1461,8 @@
           "sent": "Terkirim",
           "delivered": "Tersampaikan",
           "read": "Terbaca",
-          "failed": "Gagal"
+          "failed": "Gagal",
+          "held": "Ditahan"
         },
         "charged": "Dikenakan {amount}"
       },

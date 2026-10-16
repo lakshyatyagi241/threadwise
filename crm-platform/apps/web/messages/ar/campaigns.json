@@ -558,7 +558,8 @@
           "sent": "أُرسلت",
           "delivered": "سُلّمت",
           "read": "قُرئت",
-          "failed": "فشلت"
+          "failed": "فشلت",
+          "held": "مؤجّل"
         },
         "charged": "تم خصم {amount}"
       },

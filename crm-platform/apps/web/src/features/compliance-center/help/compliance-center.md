@@ -76,13 +76,13 @@ Set quiet hours for messages, a calling window with days, a fallback time zone, 
 
 Both windows are off until you switch them on and save. Once they are on:
 
-- **Quiet hours hold marketing messages; they never refuse them.** A marketing message that falls inside the quiet hours waits and is sent when they end. This covers marketing templates sent from the inbox, broadcasts, campaigns (and their follow-up steps), scheduled messages and the marketing messages of a flow. The screen that shows the message says it is held and until when. When it is released the consent is checked again, so a contact who unsubscribed meanwhile is not messaged.
+- **Quiet hours hold marketing messages; they never refuse them.** A marketing message that falls inside the quiet hours waits and is sent when they end. This covers marketing templates sent from the inbox, broadcasts (WhatsApp, LINE, Messenger, Telegram, Viber, WeChat and Instagram), the offers and win-back messages of your store, campaigns (and their follow-up steps), scheduled messages, the test sends of the broadcast wizard and the marketing messages of a flow. The screen that shows the message says it is held and until when. When it is released the consent is checked again, so a contact who unsubscribed meanwhile is not messaged.
 - **Replies and notices are never held.** A reply inside the 24-hour window, a utility or authentication template, a booking notice, and a note to a colleague's number go out at any hour.
 - **The calling window refuses a call outside it.** A call cannot wait in a queue, so a call placed outside the window is not made and the message says when the window opens. A call back to someone who messaged or called you in the last 24 hours is not refused.
 - **The hours are read on the contact's own clock.** First the contact's time zone property (a contact property of type time zone, or one named `timezone`), then the country code of their number (a country with several time zones waits until the hours are right in all of them), then the fallback time zone you choose, then your workspace time zone.
 - **Your laws only suggest hours.** The profiles you switched on show the hours they suggest, but nothing is held until you switch the quiet hours or the calling window on yourself.
 
-> The Do Not Call or DND registry is a note. Nothing is checked against it yet. Broadcasts on LINE, Facebook and Instagram are not held yet. A recurring campaign sends the recipients it held at its next occurrence, so put its time outside your quiet hours.
+> The Do Not Call or DND registry is a note. Nothing is checked against it yet. A recurring campaign sends the recipients it held at its next occurrence, so put its time outside your quiet hours.
 
 ## Who can do what
 

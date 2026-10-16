@@ -1461,7 +1461,8 @@
           "sent": "Envoyé",
           "delivered": "Distribué",
           "read": "Lu",
-          "failed": "Échoué"
+          "failed": "Échoué",
+          "held": "Retenu"
         },
         "charged": "Débité : {amount}"
       },

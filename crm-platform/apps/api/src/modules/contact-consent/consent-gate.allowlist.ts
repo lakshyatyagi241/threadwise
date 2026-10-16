@@ -174,10 +174,6 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
       'Registry of broadcast engines; the audience is gated in BroadcastsService.resolveAudience.',
   },
   {
-    path: 'modules/broadcasts/broadcast-dispatch.service.ts',
-    reason: `${GAP} the audience is gated when the broadcast is created; a send-time re-check of the recipients is still to do.`,
-  },
-  {
     path: 'modules/channel-email/drivers/driver-providers.ts',
     reason: 'Provider wiring of the mail drivers; reached only through the email adapter.',
   },
@@ -223,13 +219,5 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   {
     path: 'modules/channel-wechat/broadcast-sender.service.ts',
     reason: `${GAP} a WeChat mass send is ONE call whose audience (all followers, a tag) WeChat resolves, so it cannot be screened per contact; the picked-users audience could be, and is not yet.`,
-  },
-  {
-    path: 'modules/channel-telegram/tg-broadcast-sender.service.ts',
-    reason: `${GAP} Telegram broadcasts go to bot subscribers by chat id with no contact link; needs the chat to contact mapping first.`,
-  },
-  {
-    path: 'modules/channel-viber/vib-broadcast-sender.service.ts',
-    reason: `${GAP} Viber broadcasts go to channel subscribers by Viber user id; the contact link exists (contacts.channel_uid) but the send-time consent check is still to do.`,
   },
 ];

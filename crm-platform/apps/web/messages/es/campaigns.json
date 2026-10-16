@@ -1461,7 +1461,8 @@
           "sent": "Enviado",
           "delivered": "Entregado",
           "read": "Leído",
-          "failed": "Fallido"
+          "failed": "Fallido",
+          "held": "En espera"
         },
         "charged": "Cobrado {amount}"
       },

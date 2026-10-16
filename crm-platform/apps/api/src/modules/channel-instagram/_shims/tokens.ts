@@ -22,6 +22,8 @@ export interface ThreadRef {
   title: string;
   channel: string | null;
   rawJid: string | null;
+  /** The thread's contact, when it has one: the quiet hours and the consent check are read on it (BL-191). */
+  contactId: number | null;
 }
 
 export interface IngestOutcome {

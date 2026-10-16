@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import type { Redis } from 'ioredis';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -11,13 +13,16 @@ import {
   type WechatResult,
 } from '../../infra/providers/channel-wechat/wechat.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { QUEUES } from '../../infra/queue/queues';
+import { SendWindowService, scheduleWake } from '../compliance-center';
+import type { WechatBroadcastJob } from './broadcasts.service';
 import { BroadcastsRepository, type BroadcastRow } from './broadcasts.repository';
 import { ChannelsRepository } from './channels.repository';
 import { ChatInboxIngest } from './chat-inbox-ingest';
 import { WechatTokenService } from './wechat-token.service';
 import { clipError, clipText, tagIdOf } from './wechat-rules';
 
-export type RunResult = 'skipped' | 'done' | 'failed';
+export type RunResult = 'skipped' | 'done' | 'failed' | 'held';
 
 /** WeChat's answer to a mass send whose `clientmsgid` it has already accepted: the earlier call went through. */
 const DUPLICATE_CLIENT_MSG_ID = 45065;
@@ -33,6 +38,10 @@ const NOT_CONNECTED = 'The WeChat channel for this broadcast is not connected/ac
  * Sends one WeChat broadcast, run by the `wechat-broadcast` worker job. The whole broadcast is ONE mass-send call (every follower, a tag,
  * or the picked OpenIDs), so there is no batch loop: the call is made once and the broadcast ends `done` (with WeChat's `msg_id`) or
  * `failed` (with WeChat's reason, ready for a retry). Only a list audience has recipients to mark sent and a thread to copy the text into.
+ *
+ * Quiet hours (BL-191): a mass send is one call to people WeChat resolves, so it cannot be split per contact. The whole broadcast is read
+ * on the workspace's own clock (the zone chosen in Compliance center, else the workspace's): inside the quiet hours it stays `sending`
+ * with `held_until`, and a delayed job makes the call at the opening. The `clientmsgid` guard is untouched.
  */
 @Injectable()
 export class BroadcastSenderService {
@@ -45,6 +54,8 @@ export class BroadcastSenderService {
     private readonly crypto: CryptoService,
     private readonly tokens: WechatTokenService,
     private readonly inbox: ChatInboxIngest,
+    private readonly sendWindow: SendWindowService,
+    @InjectQueue(QUEUES.WECHAT_BROADCAST) private readonly queue: Queue<WechatBroadcastJob>,
     @Inject(WECHAT_API) private readonly wechat: WechatApi,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
@@ -75,6 +86,33 @@ export class BroadcastSenderService {
       this.channels.findById(tx, orgId, broadcast.channelRowId),
     );
     if (!channel?.active) return this.fail(orgId, broadcast.id, NOT_CONNECTED);
+
+    // Held, not denied: the call is made when the hours open. A mass send is marketing by nature.
+    const window = await this.sendWindow.check(orgId, 'message', {});
+    if (window.decision === 'hold') {
+      await this.db.txAs({ orgId }, (tx) => this.repo.setHeld(tx, orgId, broadcast.id, window));
+      await scheduleWake(
+        this.queue,
+        'send',
+        { orgId, broadcastId: broadcast.id },
+        broadcast.uuid,
+        new Date(window.until),
+        (err) =>
+          this.logger.error(
+            { orgId, broadcast: broadcast.uuid, err },
+            'could not queue the wake-up of a WeChat broadcast held for the quiet hours',
+          ),
+        this.sendWindow.now(),
+      );
+      this.logger.log(
+        { orgId, broadcast: broadcast.uuid, resumeAt: window.until },
+        '[WECH] broadcast waits: held for the quiet hours',
+      );
+      return 'held';
+    }
+    if (broadcast.heldUntil !== null) {
+      await this.db.txAs({ orgId }, (tx) => this.repo.setHeld(tx, orgId, broadcast.id, null));
+    }
 
     const body = broadcast.body ? this.crypto.decrypt(broadcast.body) : '';
     const message: WechatMessage = {

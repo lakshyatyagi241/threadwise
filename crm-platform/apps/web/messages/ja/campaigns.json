@@ -1461,7 +1461,8 @@
           "sent": "送信済み",
           "delivered": "配信済み",
           "read": "既読",
-          "failed": "失敗"
+          "failed": "失敗",
+          "held": "保留中"
         },
         "charged": "{amount}課金"
       },

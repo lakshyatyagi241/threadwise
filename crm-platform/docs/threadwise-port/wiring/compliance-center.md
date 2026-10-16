@@ -50,3 +50,5 @@ the same change as anything that reads or writes the settings below.
 
 BL-191 to BL-193 (quiet hours: the remaining senders, a recurring campaign's held recipients, a visible contact time zone), BL-181 (integrations behind the placeholders), BL-188 to BL-190 (follow-ups of BL-180). BL-180 (contact-level extras) is built: saving the Compliance center drops the gate's cached minor rule. Owner decisions D13 to D17 are in
 the spec, section 11.8.
+
+BL-191 (built): the remaining senders hold the same way. Held-recipient helpers live in `apps/api/src/modules/compliance-center/held-recipients.ts` (`splitByQuietHours`, `holdRecipient`, `heldSummaries`, `scheduleWake`); phone-only audiences use `SendWindowService.checkPhones`. See the per-channel wiring files.

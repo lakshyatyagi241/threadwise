@@ -97,3 +97,7 @@ it to answer a `channel = facebook` thread: `fb:<page>:<psid>` is a DM, `fb:<pag
 ## Queues
 
 `fb-backfill` (one job per connected Page), `fb-broadcast` (one job per broadcast run).
+
+## Quiet hours (BL-191)
+
+Messenger broadcasts are marketing, so a recipient whose contact's local time is inside the workspace's quiet hours (Compliance center) is held, not denied: the recipient stays `pending`, the rest of the audience is sent, the broadcast stays `sending`, and a delayed job takes the held recipients up at the first opening, asking the ConsentGate again. `GET` of the broadcast list returns `held` (how many wait) and `heldUntil` (the first instant one of them may be messaged) on each broadcast. See [compliance.md](compliance.md).

@@ -27,6 +27,8 @@ function ResultRow({
   when?: string;
 }) {
   const t = useTranslations('campaigns.wizard.test');
+  // The quiet-hours wording is shared with the other senders (BL-177); it lives with the Compliance center.
+  const tHold = useTranslations('compliance-center.hold');
   const locale = useLocale();
   return (
     <li className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
@@ -35,6 +37,11 @@ function ResultRow({
       </span>
       <Chip tone={testTone(r.status)}>{t(`status.${r.status}`)}</Chip>
       {when && <span className="text-xs text-muted-foreground">{when}</span>}
+      {r.status === 'held' && r.heldUntil && (
+        <span className="text-xs text-warning" data-testid="test-send-held">
+          {tHold('heldUntil', { when: new Date(r.heldUntil).toLocaleString(locale) })}
+        </span>
+      )}
       {r.chargedMinor > 0 && currency && (
         <span className="text-xs text-muted-foreground">
           {t('charged', { amount: formatMinor(r.chargedMinor, currency, locale) })}

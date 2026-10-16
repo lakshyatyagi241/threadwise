@@ -93,6 +93,9 @@ export const vibBroadcastSchema = z.object({
   seen: z.number().int(),
   /** Whole percent done: (sent + failed) of the total. */
   progress: z.number().int(),
+  /** BL-191: users held for the workspace's quiet hours (still pending), and the first instant one of them may be messaged. */
+  held: z.number().int(),
+  heldUntil: z.string().datetime().nullable(),
   hasMedia: z.boolean(),
   lastError: z.string().nullable(),
   startedAt: z.string().datetime().nullable(),

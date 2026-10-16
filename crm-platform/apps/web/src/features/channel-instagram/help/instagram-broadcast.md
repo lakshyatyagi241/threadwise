@@ -29,6 +29,10 @@ The Instagram broadcast sends one message to people who have already messaged yo
 - **Clear** removes the selection.
 - One send reaches at most 200 conversations. Send again for the rest.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), a person it is night for is not messaged now. The answer after you send says how many are held and until when, and they are sent at that moment, when Instagram's 24-hour window and their consent are checked again. Keep in mind that the 24-hour window may close while a message waits, in which case it is counted as failed. Replies you type in the inbox are never held.
+
 ## Plan and access
 
 You need the Instagram broadcast permission to open this screen. The account itself must be linked on the [Instagram accounts](help:instagram-accounts) page. Your plan must include the Instagram channel.

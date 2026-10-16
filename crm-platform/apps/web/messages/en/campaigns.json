@@ -1451,7 +1451,8 @@
           "sent": "Sent",
           "delivered": "Delivered",
           "read": "Read",
-          "failed": "Failed"
+          "failed": "Failed",
+          "held": "Held"
         },
         "charged": "Charged {amount}"
       },

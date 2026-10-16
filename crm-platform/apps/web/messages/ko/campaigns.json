@@ -1461,7 +1461,8 @@
           "sent": "발송됨",
           "delivered": "전달됨",
           "read": "읽음",
-          "failed": "실패"
+          "failed": "실패",
+          "held": "보류됨"
         },
         "charged": "{amount} 차감됨"
       },

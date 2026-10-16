@@ -69,6 +69,10 @@ WeChat sends the message to the whole audience in one call, so there is no progr
 
 > WeChat allows a Service Account about 4 mass sends a month. This app does not count or block them: WeChat decides, and a refused send shows as Failed with WeChat's reason.
 
+## Quiet hours
+
+A WeChat broadcast is one mass send to followers that WeChat chooses, so it cannot be held person by person. If your workspace has quiet hours in the [Compliance center](help:compliance-center) and it is inside them on your workspace clock (the fallback time zone you chose there, else your workspace time zone), the broadcast stays **Sending** with a note that it is held until the hours end, and it is sent by itself then. Retry does not appear while it waits.
+
 ## Plan and access
 
 WeChat needs the plan feature for extra channels. Seeing the channels, managing them, seeing broadcasts and creating or sending them are four separate permissions. Only people who can manage channels see a channel's Token.

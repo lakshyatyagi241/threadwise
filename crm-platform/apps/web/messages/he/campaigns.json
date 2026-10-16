@@ -1461,7 +1461,8 @@
           "sent": "נשלח",
           "delivered": "נמסר",
           "read": "נקרא",
-          "failed": "נכשל"
+          "failed": "נכשל",
+          "held": "מוחזק"
         },
         "charged": "חויב {amount}"
       },

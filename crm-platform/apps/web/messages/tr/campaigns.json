@@ -1461,7 +1461,8 @@
           "sent": "Gönderildi",
           "delivered": "İletildi",
           "read": "Okundu",
-          "failed": "Başarısız"
+          "failed": "Başarısız",
+          "held": "Bekletiliyor"
         },
         "charged": "Ücretlendirilen: {amount}"
       },

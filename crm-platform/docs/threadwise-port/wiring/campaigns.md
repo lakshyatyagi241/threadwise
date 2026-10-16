@@ -101,3 +101,7 @@ Blocked (recorded, not silently dropped):
 ## Quiet hours and calling windows (BL-177, product extension)
 
 Not in Reference. `CampaignDispatchService.loop` asks `SendWindowService` per claimed slice for a marketing campaign (a utility-template-only campaign is never asked). A held recipient goes back to `queued` with `wp_campaign_contacts.held_until`; `CampaignsRepository.claim` skips it until then; `finish` schedules the campaign again for the minute of the first opening (stop `quiet`). The ConsentGate screens the audience again at every run start. `WizardFollowUpService` defers a marketing follow-up step (`follow_up_check_at` moves to the opening). Read side: `held` (live), `heldUntil` / `heldReason` (recipients), the live hint `campaigns.detail.live.held`. A recurring campaign carries its held recipients to its next occurrence (BL-192).
+
+## Quiet hours on the wizard test send (BL-191, product extension)
+
+Not in Reference. `WizardTestSendService.send` asks `SendWindowService.checkPhones` for the typed numbers when the template is MARKETING. A held number gets a `camp_test_sends` row with status `held`, `held_until`, `held_reason`; the response and the test log carry `heldUntil`; a delayed job `test-send-release` on the campaign queue (`CampaignProcessor`) calls `release`, which reads the hours again, prepares the draft as it is then, asks the wallet's launch rule again and sends through the same port. A draft changed so that it cannot be sent ends the test as `failed` with the reason. Migration `20261222090000`.

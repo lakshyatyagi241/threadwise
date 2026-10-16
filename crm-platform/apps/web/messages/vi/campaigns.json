@@ -1461,7 +1461,8 @@
           "sent": "Đã gửi",
           "delivered": "Đã nhận",
           "read": "Đã đọc",
-          "failed": "Thất bại"
+          "failed": "Thất bại",
+          "held": "Tạm giữ"
         },
         "charged": "Đã tính phí {amount}"
       },

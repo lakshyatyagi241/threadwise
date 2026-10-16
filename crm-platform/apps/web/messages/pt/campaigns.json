@@ -1461,7 +1461,8 @@
           "sent": "Enviada",
           "delivered": "Entregue",
           "read": "Lida",
-          "failed": "Com falha"
+          "failed": "Com falha",
+          "held": "Retido"
         },
         "charged": "Cobrado {amount}"
       },

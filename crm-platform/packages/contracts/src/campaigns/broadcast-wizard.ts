@@ -588,7 +588,7 @@ export const wizardTestSendRequestSchema = z.object({
 });
 export type WizardTestSendRequest = z.infer<typeof wizardTestSendRequestSchema>;
 
-export const WIZARD_TEST_STATUSES = ['sent', 'delivered', 'read', 'failed'] as const;
+export const WIZARD_TEST_STATUSES = ['held', 'sent', 'delivered', 'read', 'failed'] as const;
 
 export const wizardTestResultSchema = z.object({
   id: uuidSchema,
@@ -599,6 +599,8 @@ export const wizardTestResultSchema = z.object({
   errorMessage: z.string().nullable(),
   /** What the wallet was charged for it (0 until delivery is reported, and when the plan covers it). */
   chargedMinor: z.number().int(),
+  /** BL-191: a test of a marketing template held for the workspace's quiet hours goes out at this instant (status `held`). */
+  heldUntil: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),
 });
 export type WizardTestResult = z.infer<typeof wizardTestResultSchema>;
