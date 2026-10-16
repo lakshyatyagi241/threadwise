@@ -116,11 +116,47 @@ const tagIdsParam = z
   )
   .pipe(z.array(uuidSchema).max(20));
 
+const statusListParam = z
+  .string()
+  .optional()
+  .transform((v) =>
+    v
+      ? v
+          .split(',')
+          .map((x) => x.trim())
+          .filter(Boolean)
+      : [],
+  )
+  .pipe(z.array(conversationStatusSchema).max(8));
+
+const dayParam = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .optional();
+
+export const INBOX_SORTS = ['recent', 'old'] as const;
+/** The Conversation filter of the Filters window: who the thread is with, or whether it waits on an agent. */
+export const INBOX_ASSIGNMENT_FILTERS = ['assigned', 'unassigned', 'unattended'] as const;
+
 export const listConversationsQuerySchema = paginationQuerySchema.extend({
   tab: inboxTabSchema.default('all'),
   /** Omitted: the open and pending threads (Reference's default view). `all` removes the filter. */
   status: z.union([conversationStatusSchema, z.literal('all')]).optional(),
+  /** Comma-separated statuses (the Filters window's multi-select); when given it replaces `status`. */
+  statuses: statusListParam,
+  /** `assigned`: an agent has it; `unassigned`: nobody; `unattended`: it has messages nobody has read yet. */
+  assignment: z.enum(INBOX_ASSIGNMENT_FILTERS).optional(),
+  /** Comma-separated agent (user) ids: threads assigned to any of them. */
+  agentIds: tagIdsParam,
+  /** `recent` (default): pinned, then newest activity first. `old`: oldest activity first, pins ignored. */
+  sort: z.enum(INBOX_SORTS).default('recent'),
+  /** Last activity from this day (`YYYY-MM-DD`) ... */
+  from: dayParam,
+  /** ... to the end of this day. */
+  to: dayParam,
   channelId: uuidSchema.optional(),
+  /** Comma-separated channel ids (the Filters window): threads on ANY of them; merged with `channelId`. */
+  channelIds: tagIdsParam,
   /** Comma-separated tag ids (a query string): threads that carry ANY of them. */
   tags: tagIdsParam,
   /** The original name of `tags`, still accepted so saved links and old clients keep working; merged with `tags`. */

@@ -44,9 +44,6 @@
         "unassigned": "غیر تفویض شدہ",
         "unread": "غیر پڑھی"
       },
-      "statusFilter": "حیثیت",
-      "statusOpen": "کھلی",
-      "statusAll": "ہر حیثیت",
       "status": {
         "open": "کھلی",
         "pending": "زیر التوا",
@@ -61,7 +58,6 @@
         "high": "زیادہ",
         "urgent": "فوری"
       },
-      "channelFilter": "چینل",
       "allChannels": "تمام چینلز",
       "archived": "محفوظ شدہ",
       "backToInbox": "ان باکس پر واپس جائیں",
@@ -107,7 +103,48 @@
         }
       },
       "select": "منتخب کریں",
-      "selectDone": "ہو گیا"
+      "selectDone": "ہو گیا",
+      "filters": {
+        "open": "فلٹر",
+        "openActive": "فلٹر ({count} آن)",
+        "title": "فلٹر",
+        "close": "بند کریں",
+        "reset": "ری سیٹ",
+        "cancel": "منسوخ",
+        "apply": "لاگو کریں",
+        "status": "چیٹ کی حالت",
+        "statusHint": "کچھ نہ چنیں تو کھلی اور زیر التوا چیٹس دکھائی جاتی ہیں۔",
+        "conversation": "گفتگو",
+        "any": "کوئی بھی",
+        "assigned": "تفویض شدہ",
+        "unassigned": "غیر تفویض شدہ",
+        "unattended": "غیر توجہ شدہ",
+        "labels": "ٹیگز",
+        "channels": "چینلز",
+        "agents": "ایجنٹس",
+        "sortBy": "ترتیب",
+        "recent": "تازہ ترین",
+        "old": "پرانی",
+        "dateRange": "تاریخ کی حد (آخری سرگرمی)",
+        "from": "سے",
+        "to": "تک",
+        "select": "ایک آپشن منتخب کریں",
+        "search": "تلاش",
+        "noMatch": "کوئی مطابقت نہیں",
+        "today": "آج",
+        "last7": "پچھلے 7 دن",
+        "last30": "پچھلے 30 دن",
+        "thisMonth": "اس ماہ",
+        "clearDates": "تاریخیں صاف کریں",
+        "previousMonth": "پچھلا مہینہ",
+        "nextMonth": "اگلا مہینہ"
+      },
+      "rowMenu": "{name} کے لیے مزید کارروائیاں",
+      "priorityMenu": "ترجیح",
+      "statusFilter": "حیثیت",
+      "statusOpen": "کھلی",
+      "statusAll": "ہر حیثیت",
+      "channelFilter": "چینل"
     },
     "status": {
       "received": "موصول ہوا",
@@ -285,7 +322,14 @@
       "newMessageAnnounce": "نیا پیغام: {text}",
       "attachment": "ایک منسلکہ",
       "jumpLatest": "تازہ ترین پر جائیں",
-      "jumpLatestNew": "{count, plural, one {# نیا پیغام} other {# نئے پیغامات}}"
+      "jumpLatestNew": "{count, plural, one {# نیا پیغام} other {# نئے پیغامات}}",
+      "searchOpen": "اس چیٹ میں تلاش کریں",
+      "searchPlaceholder": "اس چیٹ میں تلاش کریں",
+      "searchCount": "{total} میں سے {current}",
+      "searchNone": "کوئی مطابقت نہیں",
+      "searchPrev": "پچھلا نتیجہ",
+      "searchNext": "اگلا نتیجہ",
+      "searchClose": "تلاش بند کریں"
     },
     "groupThread": {
       "openGroup": "گروپ کھولیں",
@@ -454,7 +498,13 @@
         "pickTeam": "اس گفتگو کے لیے ٹیم منتخب کریں",
         "noTeam": "کوئی ٹیم نہیں",
         "onLeave": "چھٹی پر",
-        "onLeaveUntil": "{date} تک چھٹی پر"
+        "onLeaveUntil": "{date} تک چھٹی پر",
+        "availability": {
+          "online": "آن لائن",
+          "away": "دور",
+          "busy": "مصروف",
+          "offline": "آف لائن"
+        }
       },
       "presence": {
         "online": "آن لائن",

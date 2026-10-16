@@ -57,6 +57,31 @@ export const SavedReplyIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="m13 8-3 8" />
   </Icon>
 );
+/** A funnel: the Filters window's button. */
+export const FilterIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M3 5h18l-7 8v6l-4 2v-8L3 5Z" />
+  </Icon>
+);
+export const TagIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M3 12V4h8l10 10-8 8L3 12Z" />
+    <circle cx="7.5" cy="8.5" r="1.2" />
+  </Icon>
+);
+export const MoreIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <circle cx="12" cy="5" r="1.4" />
+    <circle cx="12" cy="12" r="1.4" />
+    <circle cx="12" cy="19" r="1.4" />
+  </Icon>
+);
+/** A flag: a conversation's priority. */
+export const FlagIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M5 21V4m0 1h12l-2 4 2 4H5" />
+  </Icon>
+);
 export const CloseIcon = (p: SVGProps<SVGSVGElement>) => (
   <Icon {...p}>
     <path d="M6 6l12 12M18 6 6 18" />

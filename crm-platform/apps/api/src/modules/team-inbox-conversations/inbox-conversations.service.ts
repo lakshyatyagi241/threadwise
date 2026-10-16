@@ -110,11 +110,33 @@ export class InboxConversationsService {
         }
         channelId = channel.id;
       }
+      // Several channels (the Filters window): one that is not in this workspace is skipped, and when none is, nothing matches.
+      let channelIds: number[] | undefined;
+      if (query.channelIds.length > 0) {
+        const found = await Promise.all(
+          [...new Set(query.channelIds)].map((u) => this.channels.findByUuid(tx, ctx.orgId, u)),
+        );
+        channelIds = found.filter((c) => c !== null && c !== undefined).map((c) => c!.id);
+        if (channelIds.length === 0) {
+          return {
+            data: [],
+            page: { nextCursor: null, hasMore: false, limit: query.limit },
+            meta: { counts: await this.repo.counts(tx, ctx.orgId, viewer) },
+          };
+        }
+      }
 
       const rows = await this.repo.list(tx, ctx.orgId, viewer, {
         tab: query.tab,
         status: query.status,
+        statuses: query.statuses,
+        assignment: query.assignment,
+        agentIds: [...new Set(query.agentIds)],
+        sort: query.sort,
+        from: query.from,
+        to: query.to,
         channelId,
+        channelIds,
         // `labels` is the original name of the `tags` query parameter; both are read.
         tagIds: [...new Set([...query.tags, ...query.labels])],
         tagScope: query.tagScope,

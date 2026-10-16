@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Popover, Spinner, cn } from '@crm/ui';
 import type { TagScope } from '../lib/list';
 import { useTags } from '../api/hooks';
+import { TagIcon } from './icons';
 import { TagChip } from './tag-chip';
 
 export interface TagFilterProps {
@@ -42,11 +43,19 @@ export function TagFilter({ value, onChange, scope, onScopeChange }: TagFilterPr
         onPointerDown={(e) => e.stopPropagation()}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'flex h-8 items-center gap-1 rounded-md border border-border px-2 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+          'flex h-8 min-w-8 items-center justify-center gap-1 rounded-md border border-border px-2 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
           active > 0 && 'border-primary text-primary',
         )}
       >
-        {active > 0 ? t('filterActive', { count: active }) : t('filter')}
+        <TagIcon className="size-4" />
+        <span className="sr-only">
+          {active > 0 ? t('filterActive', { count: active }) : t('filter')}
+        </span>
+        {active > 0 && (
+          <span aria-hidden="true" className="text-[11px] font-semibold">
+            {active}
+          </span>
+        )}
       </button>
       <Popover
         open={open}
