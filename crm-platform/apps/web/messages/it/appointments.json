@@ -1057,7 +1057,109 @@
         "badHours": "Correggi gli orari evidenziati negli orari di lavoro."
       },
       "notAvailable": "Le impostazioni di prenotazione a livello di workspace non sono disponibili su questo server. Ogni tipo di prenotazione ha invece i propri orari, fuso orario, promemoria e messaggi.",
-      "openTypes": "Apri i tipi di prenotazione"
+      "openTypes": "Apri i tipi di prenotazione",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Collega un calendario Microsoft in cui scrivere le prenotazioni confermate e i cui orari di occupato chiudono gli slot.",
+        "provider": "Calendario Outlook",
+        "providerSub": "Microsoft 365 e Outlook.com",
+        "status": {
+          "unavailable": "Non disponibile",
+          "disconnected": "Non collegato",
+          "connected": "Collegato",
+          "needs_reconnect": "Richiede un nuovo collegamento"
+        },
+        "loading": "Verifica del collegamento in corso",
+        "unavailableTitle": "Outlook non è ancora configurato per questa piattaforma",
+        "unavailableBody": "L'amministratore della piattaforma deve registrare l'app Microsoft (Admin, Impostazioni, Microsoft Calendar) prima che uno spazio di lavoro possa collegarsi. Le tue prenotazioni non sono interessate.",
+        "disconnectedBody": "Non collegato. Il collegamento apre Microsoft, dove scegli l'account e accetti di condividere l'accesso al calendario.",
+        "disconnectedReadOnly": "Non collegato. Chiedi a un amministratore dello spazio di lavoro di collegarlo.",
+        "reconnectTitle": "Microsoft ha smesso di accettare il collegamento",
+        "reconnectBody": "L'accesso è stato revocato o è scaduto, quindi le prenotazioni non vengono scritte nel tuo calendario e i suoi orari di occupato non vengono letti. Collegalo di nuovo per riprendere.",
+        "reconnectBodyAccount": "L'accesso per {account} è stato revocato o è scaduto, quindi le prenotazioni non vengono scritte nel tuo calendario e i suoi orari di occupato non vengono letti. Collegalo di nuovo per riprendere.",
+        "account": "Account Microsoft",
+        "calendar": "Calendario",
+        "primaryCalendar": "Il tuo calendario principale",
+        "connectedAgo": "Collegato {when}",
+        "writesHere": "Le prenotazioni confermate vengono scritte in questo calendario.",
+        "readsOnly": "Vengono letti solo i suoi orari di occupato. Le prenotazioni vengono scritte nell'altro calendario.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft sta limitando le richieste. Le prenotazioni vengono riprovate automaticamente.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft ha negato l'accesso a questo calendario. Verifica che l'account abbia una casella di posta e possa condividere il proprio calendario.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft non ha risposto. Verrà riprovato automaticamente."
+        },
+        "errors": {
+          "notConfigured": "Outlook non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di registrare l'app Microsoft.",
+          "notConnected": "Nessun calendario Outlook è collegato. Ricarica la pagina e collegalo di nuovo.",
+          "providerFailed": "Microsoft non ha risposto. Riprova tra un attimo.",
+          "notYours": "Questo collegamento è stato avviato da un'altra persona, quindi non è stato collegato nulla. Chiedi a lei di collegarlo, oppure premi tu Collega.",
+          "invalidTicket": "Questo collegamento non può più essere confermato. Premi Collega per ricominciare."
+        },
+        "loadingCalendars": "Caricamento dei tuoi calendari",
+        "chooseLabel": "Scrivi le prenotazioni in",
+        "chooseHint": "Sono elencati solo i calendari che questo account può modificare. Gli eventi già scritti restano dove sono.",
+        "choosePlaceholder": "Scegli un calendario",
+        "chooseOptionPrimary": "{name} (calendario principale)",
+        "chooseSave": "Usa questo calendario",
+        "chooseCancel": "Annulla",
+        "saving": "Salvataggio in corso",
+        "connect": "Collega Outlook",
+        "reconnect": "Ricollega Outlook",
+        "redirecting": "Apertura di Microsoft",
+        "choose": "Scegli calendario",
+        "disconnect": "Scollega",
+        "disconnected": "Outlook scollegato.",
+        "calendarSaved": "Calendario salvato.",
+        "confirm": {
+          "title": "Collegare questo account Microsoft?",
+          "body": "Microsoft ti ha riportato qui per completare il collegamento di un account a {workspace}. Continua solo se l'hai avviato tu stesso poco fa.",
+          "confirm": "Collega",
+          "working": "Collegamento in corso",
+          "cancel": "Annulla"
+        },
+        "confirmOff": {
+          "title": "Scollegare Outlook?",
+          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario Outlook e i suoi orari di occupato non vengono più letti. Gli eventi già presenti nel tuo calendario restano lì. Per revocare l'autorizzazione dal lato Microsoft, rimuovi l'app nel tuo account Microsoft.",
+          "confirm": "Scollega",
+          "cancel": "Mantieni"
+        },
+        "outcome": {
+          "connected": "Outlook collegato. Le prenotazioni confermate ora vanno nel tuo calendario.",
+          "denied": "L'accesso non è stato concesso su Microsoft, quindi non è stato collegato nulla.",
+          "failed": "Il collegamento non è stato completato. Riprova; se continua a non funzionare, chiedi all'amministratore della piattaforma di controllare l'app Microsoft.",
+          "expired": "Il tentativo ha richiesto troppo tempo. Premi Collega per ricominciare.",
+          "not_configured": "Outlook non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di registrare l'app Microsoft.",
+          "missing_scope": "Microsoft non ha concesso l'autorizzazione al calendario necessaria. Collega di nuovo e lascia selezionate tutte le caselle.",
+          "cancelled": "Hai annullato. Non è stato collegato nulla."
+        },
+        "whatTitle": "Cosa fa",
+        "what": {
+          "freeBusy": "Legge gli orari di occupato dal tuo calendario, così gli orari prenotati o bloccati non vengono proposti.",
+          "writeBack": "Scrive le prenotazioni confermate nel tuo calendario come eventi e invita il cliente.",
+          "teams": "Aggiunge un link a una riunione Teams ai servizi online (account di lavoro e scuola)."
+        },
+        "hint": "Le prenotazioni funzionano anche senza. Se è collegato anche Google, gli orari di occupato vengono letti da entrambi e ogni prenotazione viene scritta in uno solo."
+      },
+      "writeTarget": {
+        "title": "Dove vengono scritte le prenotazioni",
+        "description": "Gli orari di occupato vengono letti da ogni calendario collegato. Ogni prenotazione viene scritta in uno solo di essi.",
+        "label": "Scrivi le prenotazioni in",
+        "hint": "Automatico usa Google Calendar quando funziona, altrimenti Outlook. Cambiandolo, gli eventi delle prenotazioni future vengono spostati nel calendario che scegli.",
+        "auto": "Automatico",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "non collegato",
+        "saved": "Salvato.",
+        "backfill": {
+          "body": "{count, plural, one {# prenotazione confermata nei prossimi 90 giorni non è} many {# prenotazioni confermate nei prossimi 90 giorni non sono} other {# prenotazioni confermate nei prossimi 90 giorni non sono}} ancora nel calendario di destinazione. Vengono scritte automaticamente dopo che colleghi o cambi calendario.",
+          "action": "Scrivile ora",
+          "working": "Messa in coda",
+          "queued": "Le stiamo scrivendo nel tuo calendario in background.",
+          "notConnected": "Nessun calendario è collegato, quindi non c'è dove scriverle."
+        }
+      }
     },
     "linked": {
       "title": "Appuntamenti",

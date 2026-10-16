@@ -1057,7 +1057,109 @@
         "badHours": "Fix the highlighted times in the business hours."
       },
       "notAvailable": "Workspace-wide booking settings are not available on this server. Each booking type carries its own hours, time zone, reminders and messages instead.",
-      "openTypes": "Open booking types"
+      "openTypes": "Open booking types",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Connect a Microsoft calendar so confirmed bookings are written to it and its busy times close slots.",
+        "provider": "Outlook calendar",
+        "providerSub": "Microsoft 365 and Outlook.com",
+        "status": {
+          "unavailable": "Not available",
+          "disconnected": "Not connected",
+          "connected": "Connected",
+          "needs_reconnect": "Needs reconnecting"
+        },
+        "loading": "Checking the connection",
+        "unavailableTitle": "Outlook is not set up for this platform yet",
+        "unavailableBody": "Your platform administrator has to register the Microsoft app (Admin, Settings, Microsoft Calendar) before a workspace can connect. Your bookings are not affected.",
+        "disconnectedBody": "Not connected. Connecting opens Microsoft, where you choose the account and agree to share calendar access.",
+        "disconnectedReadOnly": "Not connected. Ask a workspace admin to connect it.",
+        "reconnectTitle": "Microsoft stopped accepting the connection",
+        "reconnectBody": "The access was withdrawn or has expired, so bookings are not being written to your calendar and its busy times are not read. Connect again to resume.",
+        "reconnectBodyAccount": "The access for {account} was withdrawn or has expired, so bookings are not being written to your calendar and its busy times are not read. Connect again to resume.",
+        "account": "Microsoft account",
+        "calendar": "Calendar",
+        "primaryCalendar": "Your main calendar",
+        "connectedAgo": "Connected {when}",
+        "writesHere": "Confirmed bookings are written to this calendar.",
+        "readsOnly": "Only its busy times are read. Bookings are written to your other calendar.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft is limiting requests. Bookings are retried automatically.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft refused access to this calendar. Check that the account has a mailbox and may share its calendar.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft did not answer. It is tried again automatically."
+        },
+        "errors": {
+          "notConfigured": "Outlook is not set up for this platform. Ask your platform administrator to register the Microsoft app.",
+          "notConnected": "No Outlook calendar is connected. Reload the page and connect again.",
+          "providerFailed": "Microsoft did not answer. Try again in a moment.",
+          "notYours": "This connection was started by someone else, so nothing was connected. Ask them to connect, or press Connect yourself.",
+          "invalidTicket": "This connection can no longer be confirmed. Press Connect to start again."
+        },
+        "loadingCalendars": "Loading your calendars",
+        "chooseLabel": "Write bookings to",
+        "chooseHint": "Only calendars this account can edit are listed. Events already written stay where they are.",
+        "choosePlaceholder": "Choose a calendar",
+        "chooseOptionPrimary": "{name} (main calendar)",
+        "chooseSave": "Use this calendar",
+        "chooseCancel": "Cancel",
+        "saving": "Saving",
+        "connect": "Connect Outlook",
+        "reconnect": "Reconnect Outlook",
+        "redirecting": "Opening Microsoft",
+        "choose": "Choose calendar",
+        "disconnect": "Disconnect",
+        "disconnected": "Outlook disconnected.",
+        "calendarSaved": "Calendar saved.",
+        "confirm": {
+          "title": "Connect this Microsoft account?",
+          "body": "Microsoft sent you back to finish connecting an account to {workspace}. Only continue if you started this yourself a moment ago.",
+          "confirm": "Connect",
+          "working": "Connecting",
+          "cancel": "Cancel"
+        },
+        "confirmOff": {
+          "title": "Disconnect Outlook?",
+          "message": "New bookings stop going to your Outlook calendar and its busy times are no longer read. Events already in your calendar stay there. To withdraw the permission on Microsoft's side, remove the app in your Microsoft account.",
+          "confirm": "Disconnect",
+          "cancel": "Keep it"
+        },
+        "outcome": {
+          "connected": "Outlook connected. Confirmed bookings now go to your calendar.",
+          "denied": "Access was not granted on Microsoft, so nothing was connected.",
+          "failed": "Connecting did not finish. Try again; if it keeps failing, ask your platform administrator to check the Microsoft app.",
+          "expired": "That attempt took too long. Press Connect to start again.",
+          "not_configured": "Outlook is not set up for this platform. Ask your platform administrator to register the Microsoft app.",
+          "missing_scope": "Microsoft did not give the calendar permission that is needed. Connect again and keep every box ticked.",
+          "cancelled": "You cancelled. Nothing was connected."
+        },
+        "whatTitle": "What this does",
+        "what": {
+          "freeBusy": "Reads busy times from your calendar so booked or blocked times are not offered.",
+          "writeBack": "Writes confirmed bookings to your calendar as events and invites the customer.",
+          "teams": "Adds a Teams meeting link to online services (work and school accounts)."
+        },
+        "hint": "Bookings work without it. With Google connected as well, busy times are read from both and each booking is written to one."
+      },
+      "writeTarget": {
+        "title": "Where bookings are written",
+        "description": "Busy times are read from every connected calendar. Each booking is written to one of them.",
+        "label": "Write bookings to",
+        "hint": "Automatic uses Google Calendar when it works, otherwise Outlook. Changing it moves the upcoming bookings' events to the calendar you pick.",
+        "auto": "Automatic",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "not connected",
+        "saved": "Saved.",
+        "backfill": {
+          "body": "{count, plural, one {# confirmed booking in the next 90 days is} other {# confirmed bookings in the next 90 days are}} not in the calendar they go to yet. They are written automatically after you connect or change calendars.",
+          "action": "Write them now",
+          "working": "Queuing",
+          "queued": "Writing them to your calendar in the background.",
+          "notConnected": "No calendar is connected, so there is nowhere to write them."
+        }
+      }
     },
     "linked": {
       "title": "Appointments",

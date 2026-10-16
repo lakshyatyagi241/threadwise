@@ -1057,7 +1057,109 @@
         "badHours": "请修正营业时间中高亮的时间。"
       },
       "notAvailable": "此服务器不支持工作区级预订设置。改为由每个预订类型各自管理时间、时区、提醒和消息。",
-      "openTypes": "打开预订类型"
+      "openTypes": "打开预订类型",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "连接 Microsoft 日历，已确认的预约会写入该日历，其中的忙碌时间会占用时段。",
+        "provider": "Outlook 日历",
+        "providerSub": "Microsoft 365 和 Outlook.com",
+        "status": {
+          "unavailable": "不可用",
+          "disconnected": "未连接",
+          "connected": "已连接",
+          "needs_reconnect": "需要重新连接"
+        },
+        "loading": "正在检查连接",
+        "unavailableTitle": "此平台尚未设置 Outlook",
+        "unavailableBody": "平台管理员需要先注册 Microsoft 应用（Admin、设置、Microsoft 日历），工作区才能连接。您的预约不受影响。",
+        "disconnectedBody": "未连接。点击连接后会打开 Microsoft，您可以在那里选择账户并同意共享日历访问权限。",
+        "disconnectedReadOnly": "未连接。请联系工作区管理员进行连接。",
+        "reconnectTitle": "Microsoft 已不再接受此连接",
+        "reconnectBody": "访问权限已被撤销或已过期，因此预约不会写入您的日历，也无法读取其中的忙碌时间。请重新连接以恢复。",
+        "reconnectBodyAccount": "{account} 的访问权限已被撤销或已过期，因此预约不会写入您的日历，也无法读取其中的忙碌时间。请重新连接以恢复。",
+        "account": "Microsoft 账户",
+        "calendar": "日历",
+        "primaryCalendar": "您的主日历",
+        "connectedAgo": "{when}已连接",
+        "writesHere": "已确认的预约会写入此日历。",
+        "readsOnly": "仅读取其中的忙碌时间。预约会写入您的另一个日历。",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft 正在限制请求频率，预约会自动重试。",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft 拒绝访问此日历。请检查该账户是否有邮箱，以及是否允许共享其日历。",
+          "MICROSOFT_UNAVAILABLE": "Microsoft 没有响应，将自动重试。"
+        },
+        "errors": {
+          "notConfigured": "此平台尚未设置 Outlook。请联系平台管理员注册 Microsoft 应用。",
+          "notConnected": "尚未连接任何 Outlook 日历。请刷新页面后重新连接。",
+          "providerFailed": "Microsoft 没有响应。请稍后再试。",
+          "notYours": "此连接由其他人发起，因此没有连接任何内容。请让对方进行连接，或自行点击连接。",
+          "invalidTicket": "此连接已无法确认。请点击连接重新开始。"
+        },
+        "loadingCalendars": "正在加载您的日历",
+        "chooseLabel": "将预约写入",
+        "chooseHint": "仅列出此账户可编辑的日历。已写入的事件会保留在原处。",
+        "choosePlaceholder": "选择日历",
+        "chooseOptionPrimary": "{name}（主日历）",
+        "chooseSave": "使用此日历",
+        "chooseCancel": "取消",
+        "saving": "正在保存",
+        "connect": "连接 Outlook",
+        "reconnect": "重新连接 Outlook",
+        "redirecting": "正在打开 Microsoft",
+        "choose": "选择日历",
+        "disconnect": "断开连接",
+        "disconnected": "已断开 Outlook 连接。",
+        "calendarSaved": "日历已保存。",
+        "confirm": {
+          "title": "连接此 Microsoft 账户？",
+          "body": "Microsoft 已将您送回此处，以便完成将账户连接到 {workspace} 的操作。仅当这是您刚才亲自发起的操作时才继续。",
+          "confirm": "连接",
+          "working": "正在连接",
+          "cancel": "取消"
+        },
+        "confirmOff": {
+          "title": "断开 Outlook 连接？",
+          "message": "新预约将不再写入您的 Outlook 日历，也不再读取其中的忙碌时间。日历中已有的事件会保留。若要在 Microsoft 一侧撤销授权，请在您的 Microsoft 账户中移除该应用。",
+          "confirm": "断开连接",
+          "cancel": "保持连接"
+        },
+        "outcome": {
+          "connected": "Outlook 已连接。已确认的预约现在会写入您的日历。",
+          "denied": "Microsoft 上未授予访问权限，因此没有连接任何内容。",
+          "failed": "连接未能完成。请重试；如果仍然失败，请联系平台管理员检查 Microsoft 应用。",
+          "expired": "本次尝试耗时过长。请点击连接重新开始。",
+          "not_configured": "此平台尚未设置 Outlook。请联系平台管理员注册 Microsoft 应用。",
+          "missing_scope": "Microsoft 没有授予所需的日历权限。请重新连接，并勾选所有选项。",
+          "cancelled": "您已取消，没有连接任何内容。"
+        },
+        "whatTitle": "此功能的作用",
+        "what": {
+          "freeBusy": "读取您日历中的忙碌时间，已预约或已占用的时间不会再提供给客户。",
+          "writeBack": "将已确认的预约作为事件写入您的日历，并邀请客户。",
+          "teams": "为线上服务添加 Teams 会议链接（工作或学校账户）。"
+        },
+        "hint": "不连接也能使用预约功能。如果同时连接了 Google，会从两个日历读取忙碌时间，每个预约只写入其中一个。"
+      },
+      "writeTarget": {
+        "title": "预约的写入位置",
+        "description": "会从所有已连接的日历读取忙碌时间。每个预约只写入其中一个日历。",
+        "label": "将预约写入",
+        "hint": "自动模式会优先使用 Google Calendar，无法使用时再用 Outlook。更改后，即将到来的预约事件会移到您选择的日历。",
+        "auto": "自动",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "未连接",
+        "saved": "已保存。",
+        "backfill": {
+          "body": "未来 90 天内有 {count, plural, other {# 个已确认的预约}}尚未写入对应的日历。连接或更改日历后，它们会自动写入。",
+          "action": "立即写入",
+          "working": "正在排队",
+          "queued": "正在后台将它们写入您的日历。",
+          "notConnected": "尚未连接任何日历，无处可写。"
+        }
+      }
     },
     "linked": {
       "title": "预约",

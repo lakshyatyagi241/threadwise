@@ -1057,7 +1057,109 @@
         "badHours": "Corrigez les heures en surbrillance dans les horaires d’ouverture."
       },
       "notAvailable": "Les paramètres de réservation à l’échelle de l’espace de travail ne sont pas disponibles sur ce serveur. Chaque type de réservation porte à la place ses propres horaires, fuseau horaire, rappels et messages.",
-      "openTypes": "Ouvrir les types de réservation"
+      "openTypes": "Ouvrir les types de réservation",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Connectez un calendrier Microsoft pour que les réservations confirmées y soient inscrites et que ses périodes d’occupation bloquent les créneaux.",
+        "provider": "Calendrier Outlook",
+        "providerSub": "Microsoft 365 et Outlook.com",
+        "status": {
+          "unavailable": "Non disponible",
+          "disconnected": "Non connecté",
+          "connected": "Connecté",
+          "needs_reconnect": "Reconnexion nécessaire"
+        },
+        "loading": "Vérification de la connexion",
+        "unavailableTitle": "Outlook n’est pas encore configuré pour cette plateforme",
+        "unavailableBody": "L’administrateur de votre plateforme doit enregistrer l’application Microsoft (Admin, Paramètres, Microsoft Calendar) avant qu’un espace de travail puisse se connecter. Vos réservations ne sont pas affectées.",
+        "disconnectedBody": "Non connecté. La connexion ouvre Microsoft, où vous choisissez le compte et acceptez de partager l’accès au calendrier.",
+        "disconnectedReadOnly": "Non connecté. Demandez à un administrateur de l’espace de travail de le connecter.",
+        "reconnectTitle": "Microsoft n’accepte plus la connexion",
+        "reconnectBody": "L’accès a été retiré ou a expiré : les réservations ne sont plus inscrites dans votre calendrier et ses périodes d’occupation ne sont plus lues. Reconnectez-vous pour reprendre.",
+        "reconnectBodyAccount": "L’accès de {account} a été retiré ou a expiré : les réservations ne sont plus inscrites dans votre calendrier et ses périodes d’occupation ne sont plus lues. Reconnectez-vous pour reprendre.",
+        "account": "Compte Microsoft",
+        "calendar": "Calendrier",
+        "primaryCalendar": "Votre calendrier principal",
+        "connectedAgo": "Connecté {when}",
+        "writesHere": "Les réservations confirmées sont inscrites dans ce calendrier.",
+        "readsOnly": "Seules ses périodes d’occupation sont lues. Les réservations sont inscrites dans votre autre calendrier.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft limite les requêtes. Les réservations sont renvoyées automatiquement.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft a refusé l’accès à ce calendrier. Vérifiez que le compte possède une boîte aux lettres et peut partager son calendrier.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft n’a pas répondu. Une nouvelle tentative est faite automatiquement."
+        },
+        "errors": {
+          "notConfigured": "Outlook n’est pas configuré pour cette plateforme. Demandez à l’administrateur de votre plateforme d’enregistrer l’application Microsoft.",
+          "notConnected": "Aucun calendrier Outlook n’est connecté. Rechargez la page et reconnectez-vous.",
+          "providerFailed": "Microsoft n’a pas répondu. Réessayez dans un instant.",
+          "notYours": "Cette connexion a été lancée par quelqu’un d’autre, donc rien n’a été connecté. Demandez-lui de se connecter, ou appuyez vous-même sur Connecter.",
+          "invalidTicket": "Cette connexion ne peut plus être confirmée. Appuyez sur Connecter pour recommencer."
+        },
+        "loadingCalendars": "Chargement de vos calendriers",
+        "chooseLabel": "Inscrire les réservations dans",
+        "chooseHint": "Seuls les calendriers que ce compte peut modifier sont listés. Les événements déjà inscrits restent où ils sont.",
+        "choosePlaceholder": "Choisir un calendrier",
+        "chooseOptionPrimary": "{name} (calendrier principal)",
+        "chooseSave": "Utiliser ce calendrier",
+        "chooseCancel": "Annuler",
+        "saving": "Enregistrement",
+        "connect": "Connecter Outlook",
+        "reconnect": "Reconnecter Outlook",
+        "redirecting": "Ouverture de Microsoft",
+        "choose": "Choisir le calendrier",
+        "disconnect": "Déconnecter",
+        "disconnected": "Outlook déconnecté.",
+        "calendarSaved": "Calendrier enregistré.",
+        "confirm": {
+          "title": "Connecter ce compte Microsoft ?",
+          "body": "Microsoft vous a renvoyé ici pour terminer la connexion d’un compte à {workspace}. Ne continuez que si vous avez lancé cette opération vous-même il y a un instant.",
+          "confirm": "Connecter",
+          "working": "Connexion en cours",
+          "cancel": "Annuler"
+        },
+        "confirmOff": {
+          "title": "Déconnecter Outlook ?",
+          "message": "Les nouvelles réservations ne seront plus inscrites dans votre calendrier Outlook et ses périodes d’occupation ne seront plus lues. Les événements déjà présents dans votre calendrier y restent. Pour retirer l’autorisation côté Microsoft, supprimez l’application dans votre compte Microsoft.",
+          "confirm": "Déconnecter",
+          "cancel": "Conserver"
+        },
+        "outcome": {
+          "connected": "Outlook est connecté. Les réservations confirmées sont désormais inscrites dans votre calendrier.",
+          "denied": "L’accès n’a pas été accordé sur Microsoft, donc rien n’a été connecté.",
+          "failed": "La connexion n’a pas abouti. Réessayez ; si le problème persiste, demandez à l’administrateur de votre plateforme de vérifier l’application Microsoft.",
+          "expired": "Cette tentative a pris trop de temps. Appuyez sur Connecter pour recommencer.",
+          "not_configured": "Outlook n’est pas configuré pour cette plateforme. Demandez à l’administrateur de votre plateforme d’enregistrer l’application Microsoft.",
+          "missing_scope": "Microsoft n’a pas accordé l’autorisation d’accès au calendrier nécessaire. Reconnectez-vous en laissant toutes les cases cochées.",
+          "cancelled": "Vous avez annulé. Rien n’a été connecté."
+        },
+        "whatTitle": "À quoi cela sert",
+        "what": {
+          "freeBusy": "Lit les périodes d’occupation de votre calendrier pour ne pas proposer les horaires réservés ou bloqués.",
+          "writeBack": "Inscrit les réservations confirmées dans votre calendrier sous forme d’événements et invite le client.",
+          "teams": "Ajoute un lien de réunion Teams aux services en ligne (comptes professionnels et scolaires)."
+        },
+        "hint": "Les réservations fonctionnent sans cela. Si Google est aussi connecté, les périodes d’occupation sont lues dans les deux et chaque réservation est inscrite dans l’un d’eux."
+      },
+      "writeTarget": {
+        "title": "Où les réservations sont inscrites",
+        "description": "Les périodes d’occupation sont lues dans chaque calendrier connecté. Chaque réservation est inscrite dans l’un d’eux.",
+        "label": "Inscrire les réservations dans",
+        "hint": "Automatique utilise Google Calendar lorsqu’il fonctionne, sinon Outlook. Le changement déplace les événements des réservations à venir vers le calendrier choisi.",
+        "auto": "Automatique",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "non connecté",
+        "saved": "Enregistré.",
+        "backfill": {
+          "body": "{count, plural, one {# réservation confirmée des 90 prochains jours n’est pas encore} many {# de réservations confirmées des 90 prochains jours ne sont pas encore} other {# réservations confirmées des 90 prochains jours ne sont pas encore}} dans le calendrier prévu. L’inscription se fait automatiquement après la connexion ou le changement de calendrier.",
+          "action": "Les inscrire maintenant",
+          "working": "Mise en file d’attente",
+          "queued": "Inscription dans votre calendrier en arrière-plan.",
+          "notConnected": "Aucun calendrier n’est connecté, il n’y a donc nulle part où les inscrire."
+        }
+      }
     },
     "linked": {
       "title": "Rendez-vous",

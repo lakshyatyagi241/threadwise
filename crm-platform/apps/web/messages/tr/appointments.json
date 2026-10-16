@@ -1057,7 +1057,109 @@
         "badHours": "Çalışma saatlerindeki vurgulanan saatleri düzeltin."
       },
       "notAvailable": "Çalışma alanı genelinde rezervasyon ayarları bu sunucuda kullanılamıyor. Bunun yerine her rezervasyon türünün kendi saatleri, saat dilimi, hatırlatmaları ve mesajları vardır.",
-      "openTypes": "Rezervasyon türlerini aç"
+      "openTypes": "Rezervasyon türlerini aç",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Onaylanan rezervasyonların yazılması ve meşgul olduğunuz saatlerin slotları kapatması için bir Microsoft takvimi bağlayın.",
+        "provider": "Outlook takvimi",
+        "providerSub": "Microsoft 365 ve Outlook.com",
+        "status": {
+          "unavailable": "Kullanılamıyor",
+          "disconnected": "Bağlı değil",
+          "connected": "Bağlı",
+          "needs_reconnect": "Yeniden bağlanmalı"
+        },
+        "loading": "Bağlantı denetleniyor",
+        "unavailableTitle": "Outlook bu platform için henüz kurulmadı",
+        "unavailableBody": "Bir çalışma alanının bağlanabilmesi için platform yöneticinizin Microsoft uygulamasını kaydetmesi gerekir (Admin, Ayarlar, Microsoft Takvim). Rezervasyonlarınız bundan etkilenmez.",
+        "disconnectedBody": "Bağlı değil. Bağlandığınızda Microsoft açılır; orada hesabı seçer ve takvim erişimini paylaşmayı onaylarsınız.",
+        "disconnectedReadOnly": "Bağlı değil. Bağlamasını çalışma alanı yöneticisinden isteyin.",
+        "reconnectTitle": "Microsoft bağlantıyı artık kabul etmiyor",
+        "reconnectBody": "Erişim geri çekildi veya süresi doldu; bu yüzden rezervasyonlar takviminize yazılmıyor ve takvimdeki meşgul saatler okunmuyor. Devam etmek için yeniden bağlanın.",
+        "reconnectBodyAccount": "{account} hesabının erişimi geri çekildi veya süresi doldu; bu yüzden rezervasyonlar takviminize yazılmıyor ve takvimdeki meşgul saatler okunmuyor. Devam etmek için yeniden bağlanın.",
+        "account": "Microsoft hesabı",
+        "calendar": "Takvim",
+        "primaryCalendar": "Ana takviminiz",
+        "connectedAgo": "Bağlanma zamanı: {when}",
+        "writesHere": "Onaylanan rezervasyonlar bu takvime yazılır.",
+        "readsOnly": "Yalnızca meşgul saatleri okunur. Rezervasyonlar diğer takviminize yazılır.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft istekleri sınırlıyor. Rezervasyonlar otomatik olarak yeniden denenir.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft bu takvime erişimi reddetti. Hesabın bir posta kutusu olduğunu ve takvimini paylaşabildiğini kontrol edin.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft yanıt vermedi. Otomatik olarak yeniden denenir."
+        },
+        "errors": {
+          "notConfigured": "Outlook bu platform için kurulmadı. Platform yöneticinizden Microsoft uygulamasını kaydetmesini isteyin.",
+          "notConnected": "Bağlı bir Outlook takvimi yok. Sayfayı yenileyin ve yeniden bağlanın.",
+          "providerFailed": "Microsoft yanıt vermedi. Birazdan tekrar deneyin.",
+          "notYours": "Bu bağlantıyı başka biri başlattı, bu yüzden hiçbir şey bağlanmadı. Ondan bağlamasını isteyin veya Bağlan düğmesine kendiniz basın.",
+          "invalidTicket": "Bu bağlantı artık onaylanamıyor. Yeniden başlamak için Bağlan düğmesine basın."
+        },
+        "loadingCalendars": "Takvimleriniz yükleniyor",
+        "chooseLabel": "Rezervasyonların yazılacağı yer",
+        "chooseHint": "Yalnızca bu hesabın düzenleyebildiği takvimler listelenir. Daha önce yazılmış etkinlikler olduğu yerde kalır.",
+        "choosePlaceholder": "Bir takvim seçin",
+        "chooseOptionPrimary": "{name} (ana takvim)",
+        "chooseSave": "Bu takvimi kullan",
+        "chooseCancel": "İptal",
+        "saving": "Kaydediliyor",
+        "connect": "Outlook'u bağla",
+        "reconnect": "Outlook'u yeniden bağla",
+        "redirecting": "Microsoft açılıyor",
+        "choose": "Takvim seç",
+        "disconnect": "Bağlantıyı kes",
+        "disconnected": "Outlook bağlantısı kesildi.",
+        "calendarSaved": "Takvim kaydedildi.",
+        "confirm": {
+          "title": "Bu Microsoft hesabı bağlansın mı?",
+          "body": "Microsoft, bir hesabın {workspace} çalışma alanına bağlanmasını tamamlamanız için sizi geri yönlendirdi. Yalnızca bunu birkaç dakika önce kendiniz başlattıysanız devam edin.",
+          "confirm": "Bağla",
+          "working": "Bağlanıyor",
+          "cancel": "İptal"
+        },
+        "confirmOff": {
+          "title": "Outlook bağlantısı kesilsin mi?",
+          "message": "Yeni rezervasyonlar artık Outlook takviminize gitmez ve takvimdeki meşgul saatler okunmaz. Takviminizde zaten bulunan etkinlikler orada kalır. İzni Microsoft tarafında geri çekmek için Microsoft hesabınızdan uygulamayı kaldırın.",
+          "confirm": "Bağlantıyı kes",
+          "cancel": "Vazgeç"
+        },
+        "outcome": {
+          "connected": "Outlook bağlandı. Onaylanan rezervasyonlar artık takviminize gidiyor.",
+          "denied": "Microsoft'ta erişim verilmedi, bu yüzden hiçbir şey bağlanmadı.",
+          "failed": "Bağlantı tamamlanamadı. Tekrar deneyin; sorun sürerse platform yöneticinizden Microsoft uygulamasını kontrol etmesini isteyin.",
+          "expired": "Bu deneme çok uzun sürdü. Yeniden başlamak için Bağlan düğmesine basın.",
+          "not_configured": "Outlook bu platform için kurulmadı. Platform yöneticinizden Microsoft uygulamasını kaydetmesini isteyin.",
+          "missing_scope": "Microsoft gereken takvim iznini vermedi. Yeniden bağlanın ve tüm kutuları işaretli bırakın.",
+          "cancelled": "İptal ettiniz. Hiçbir şey bağlanmadı."
+        },
+        "whatTitle": "Bu ne işe yarar",
+        "what": {
+          "freeBusy": "Takviminizdeki meşgul saatleri okur; böylece dolu veya engellenmiş saatler sunulmaz.",
+          "writeBack": "Onaylanan rezervasyonları takviminize etkinlik olarak yazar ve müşteriyi davet eder.",
+          "teams": "Online hizmetlere bir Teams toplantı bağlantısı ekler (iş ve okul hesapları)."
+        },
+        "hint": "Rezervasyonlar bu olmadan da çalışır. Google da bağlıysa meşgul saatler ikisinden de okunur ve her rezervasyon yalnızca birine yazılır."
+      },
+      "writeTarget": {
+        "title": "Rezervasyonların yazıldığı yer",
+        "description": "Meşgul saatler bağlı her takvimden okunur. Her rezervasyon bunlardan birine yazılır.",
+        "label": "Rezervasyonların yazılacağı yer",
+        "hint": "Otomatik seçenek, çalışıyorsa Google Calendar'ı, aksi halde Outlook'u kullanır. Değiştirirseniz yaklaşan rezervasyonların etkinlikleri seçtiğiniz takvime taşınır.",
+        "auto": "Otomatik",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "bağlı değil",
+        "saved": "Kaydedildi.",
+        "backfill": {
+          "body": "Önümüzdeki 90 gün içindeki {count, plural, one {# onaylı rezervasyon} other {# onaylı rezervasyon}} gitmesi gereken takvimde henüz yok. Takvim bağladığınızda veya değiştirdiğinizde otomatik olarak yazılırlar.",
+          "action": "Şimdi yaz",
+          "working": "Sıraya alınıyor",
+          "queued": "Takviminize arka planda yazılıyor.",
+          "notConnected": "Bağlı bir takvim yok, bu yüzden yazılacak bir yer yok."
+        }
+      }
     },
     "linked": {
       "title": "Randevular",

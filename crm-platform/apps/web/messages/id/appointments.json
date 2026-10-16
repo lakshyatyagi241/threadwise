@@ -1057,7 +1057,109 @@
         "badHours": "Perbaiki waktu yang disorot pada jam kerja."
       },
       "notAvailable": "Pengaturan pemesanan seluruh workspace tidak tersedia di server ini. Setiap jenis pemesanan membawa jam, zona waktu, pengingat, dan pesannya sendiri.",
-      "openTypes": "Buka jenis pemesanan"
+      "openTypes": "Buka jenis pemesanan",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Hubungkan kalender Microsoft agar pemesanan yang dikonfirmasi ditulis ke dalamnya dan waktu sibuknya menutup slot.",
+        "provider": "Kalender Outlook",
+        "providerSub": "Microsoft 365 dan Outlook.com",
+        "status": {
+          "unavailable": "Tidak tersedia",
+          "disconnected": "Belum terhubung",
+          "connected": "Terhubung",
+          "needs_reconnect": "Perlu dihubungkan ulang"
+        },
+        "loading": "Memeriksa koneksi",
+        "unavailableTitle": "Outlook belum disiapkan untuk platform ini",
+        "unavailableBody": "Administrator platform Anda harus mendaftarkan aplikasi Microsoft (Admin, Pengaturan, Microsoft Calendar) sebelum ruang kerja dapat terhubung. Pemesanan Anda tidak terpengaruh.",
+        "disconnectedBody": "Belum terhubung. Saat menghubungkan, Microsoft akan terbuka dan Anda memilih akun serta menyetujui berbagi akses kalender.",
+        "disconnectedReadOnly": "Belum terhubung. Minta admin ruang kerja untuk menghubungkannya.",
+        "reconnectTitle": "Microsoft berhenti menerima koneksi ini",
+        "reconnectBody": "Akses telah dicabut atau kedaluwarsa, sehingga pemesanan tidak ditulis ke kalender Anda dan waktu sibuknya tidak dibaca. Hubungkan lagi untuk melanjutkan.",
+        "reconnectBodyAccount": "Akses untuk {account} telah dicabut atau kedaluwarsa, sehingga pemesanan tidak ditulis ke kalender Anda dan waktu sibuknya tidak dibaca. Hubungkan lagi untuk melanjutkan.",
+        "account": "Akun Microsoft",
+        "calendar": "Kalender",
+        "primaryCalendar": "Kalender utama Anda",
+        "connectedAgo": "Terhubung {when}",
+        "writesHere": "Pemesanan yang dikonfirmasi ditulis ke kalender ini.",
+        "readsOnly": "Hanya waktu sibuknya yang dibaca. Pemesanan ditulis ke kalender Anda yang lain.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft membatasi permintaan. Pemesanan akan dicoba lagi secara otomatis.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft menolak akses ke kalender ini. Pastikan akun tersebut memiliki kotak surat dan boleh membagikan kalendernya.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft tidak merespons. Akan dicoba lagi secara otomatis."
+        },
+        "errors": {
+          "notConfigured": "Outlook belum disiapkan untuk platform ini. Minta administrator platform Anda untuk mendaftarkan aplikasi Microsoft.",
+          "notConnected": "Tidak ada kalender Outlook yang terhubung. Muat ulang halaman lalu hubungkan lagi.",
+          "providerFailed": "Microsoft tidak merespons. Coba lagi sebentar lagi.",
+          "notYours": "Koneksi ini dimulai oleh orang lain, sehingga tidak ada yang dihubungkan. Minta mereka untuk menghubungkan, atau tekan Hubungkan sendiri.",
+          "invalidTicket": "Koneksi ini tidak dapat dikonfirmasi lagi. Tekan Hubungkan untuk memulai ulang."
+        },
+        "loadingCalendars": "Memuat kalender Anda",
+        "chooseLabel": "Tulis pemesanan ke",
+        "chooseHint": "Hanya kalender yang dapat diedit akun ini yang ditampilkan. Acara yang sudah ditulis tetap di tempatnya.",
+        "choosePlaceholder": "Pilih kalender",
+        "chooseOptionPrimary": "{name} (kalender utama)",
+        "chooseSave": "Gunakan kalender ini",
+        "chooseCancel": "Batal",
+        "saving": "Menyimpan",
+        "connect": "Hubungkan Outlook",
+        "reconnect": "Hubungkan ulang Outlook",
+        "redirecting": "Membuka Microsoft",
+        "choose": "Pilih kalender",
+        "disconnect": "Putuskan",
+        "disconnected": "Outlook diputuskan.",
+        "calendarSaved": "Kalender disimpan.",
+        "confirm": {
+          "title": "Hubungkan akun Microsoft ini?",
+          "body": "Microsoft mengarahkan Anda kembali untuk menyelesaikan penghubungan akun ke {workspace}. Lanjutkan hanya jika Anda sendiri yang memulainya beberapa saat lalu.",
+          "confirm": "Hubungkan",
+          "working": "Menghubungkan",
+          "cancel": "Batal"
+        },
+        "confirmOff": {
+          "title": "Putuskan Outlook?",
+          "message": "Pemesanan baru tidak lagi masuk ke kalender Outlook Anda dan waktu sibuknya tidak lagi dibaca. Acara yang sudah ada di kalender Anda tetap di sana. Untuk mencabut izin dari sisi Microsoft, hapus aplikasi tersebut di akun Microsoft Anda.",
+          "confirm": "Putuskan",
+          "cancel": "Pertahankan"
+        },
+        "outcome": {
+          "connected": "Outlook terhubung. Pemesanan yang dikonfirmasi kini masuk ke kalender Anda.",
+          "denied": "Akses tidak diberikan di Microsoft, sehingga tidak ada yang dihubungkan.",
+          "failed": "Proses penghubungan tidak selesai. Coba lagi; jika terus gagal, minta administrator platform Anda memeriksa aplikasi Microsoft.",
+          "expired": "Percobaan itu memakan waktu terlalu lama. Tekan Hubungkan untuk memulai ulang.",
+          "not_configured": "Outlook belum disiapkan untuk platform ini. Minta administrator platform Anda untuk mendaftarkan aplikasi Microsoft.",
+          "missing_scope": "Microsoft tidak memberikan izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tercentang.",
+          "cancelled": "Anda membatalkan. Tidak ada yang dihubungkan."
+        },
+        "whatTitle": "Fungsi fitur ini",
+        "what": {
+          "freeBusy": "Membaca waktu sibuk dari kalender Anda agar waktu yang sudah dipesan atau diblokir tidak ditawarkan.",
+          "writeBack": "Menulis pemesanan yang dikonfirmasi ke kalender Anda sebagai acara dan mengundang pelanggan.",
+          "teams": "Menambahkan tautan rapat Teams ke layanan online (akun kerja dan sekolah)."
+        },
+        "hint": "Pemesanan tetap berjalan tanpa ini. Jika Google juga terhubung, waktu sibuk dibaca dari keduanya dan setiap pemesanan ditulis ke salah satunya."
+      },
+      "writeTarget": {
+        "title": "Tujuan penulisan pemesanan",
+        "description": "Waktu sibuk dibaca dari setiap kalender yang terhubung. Setiap pemesanan ditulis ke salah satunya.",
+        "label": "Tulis pemesanan ke",
+        "hint": "Otomatis memakai Google Calendar jika berfungsi, jika tidak memakai Outlook. Mengubahnya akan memindahkan acara pemesanan mendatang ke kalender yang Anda pilih.",
+        "auto": "Otomatis",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "belum terhubung",
+        "saved": "Tersimpan.",
+        "backfill": {
+          "body": "{count, plural, other {# pemesanan terkonfirmasi dalam 90 hari ke depan}} belum ada di kalender tujuannya. Pemesanan tersebut ditulis otomatis setelah Anda menghubungkan atau mengganti kalender.",
+          "action": "Tulis sekarang",
+          "working": "Mengantrekan",
+          "queued": "Menulisnya ke kalender Anda di latar belakang.",
+          "notConnected": "Tidak ada kalender yang terhubung, jadi tidak ada tempat untuk menulisnya."
+        }
+      }
     },
     "linked": {
       "title": "Janji Temu",

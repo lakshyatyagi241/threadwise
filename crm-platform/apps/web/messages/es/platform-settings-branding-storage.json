@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Editor de flujos"
+      "flowBuilder": "Editor de flujos",
+      "microsoftCalendar": "Calendario de Microsoft"
     },
     "hub": {
       "kicker": "Admin - Ajustes del proyecto",
@@ -1024,6 +1025,37 @@
             "advanced": "Solo avanzado"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Calendario de Microsoft",
+        "description": "La aplicación de Microsoft a través de la cual cada espacio de trabajo conecta su calendario de Outlook o Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Aplicación de Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que los espacios de trabajo conecten Outlook",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectarse y no se lee ni se escribe nada en ningún calendario de Outlook. Los calendarios conectados se conservan."
+          },
+          "clientId": {
+            "label": "ID de aplicación (cliente)",
+            "hint": "Disponible en el centro de administración de Microsoft Entra, Registros de aplicaciones, Información general. Si se deja vacío, se usa MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Secreto de cliente",
+            "hint": "Se guarda cifrado y no se vuelve a mostrar. Si se deja vacío, se conserva el guardado; MICROSOFT_CALENDAR_CLIENT_SECRET es el valor alternativo."
+          },
+          "tenant": {
+            "label": "Inquilino",
+            "hint": "common permite cuentas de trabajo, de centros educativos y personales; usa un ID de directorio (inquilino) para una aplicación de un solo inquilino. Si se deja vacío, se usa MICROSOFT_CALENDAR_TENANT y, si no existe, common."
+          },
+          "redirectUri": {
+            "label": "URI de redirección personalizada",
+            "hint": "Déjala vacía para usar la dirección indicada arriba. Debe coincidir exactamente con una URI de redirección de la aplicación."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Editor de flujos",
         "description": "El editor de flujos predeterminado para todos los espacios de trabajo: Simple paso a paso o Avanzado en lienzo. Un espacio de trabajo puede cambiarlo.",
         "tags": "Simple / Avanzado / Automatización"
+      },
+      "microsoftCalendar": {
+        "title": "Calendario de Microsoft",
+        "description": "La aplicación de Microsoft que usan los espacios de trabajo para conectar sus calendarios de Outlook y Microsoft 365 para las reservas.",
+        "tags": "Microsoft / OAuth / Outlook / Calendario"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Flujos que ya existen",
               "body": "Cambiar este ajuste nunca cambia ni borra un flujo. Un flujo sigue funcionando; solo se abre en el editor que esté activo. Un espacio de trabajo que eligió su propio editor lo conserva hasta que elija de nuevo el predeterminado de la plataforma."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Calendario de Microsoft",
+        "eyebrow": "Admin - Citas",
+        "description": "Una sola aplicación de Microsoft Entra para toda la plataforma. Cada espacio de trabajo conecta después su propio calendario de Outlook o Microsoft 365 desde Citas, Ajustes, y nunca ve el ID de cliente ni el secreto.",
+        "sections": {
+          "oauth": {
+            "title": "Aplicación de Microsoft Entra",
+            "description": "Sin un ID de cliente y un secreto, los espacios de trabajo ven Outlook como no disponible y las reservas continúan sin él. Google Calendar no se ve afectado."
+          }
+        },
+        "guide": {
+          "title": "Configúralo en Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registro de la aplicación",
+              "body": "En el centro de administración de Microsoft Entra, crea un registro de aplicación para cuentas de cualquier directorio organizativo y cuentas personales de Microsoft, y copia aquí el ID de aplicación (cliente). Deja el inquilino como common, salvo que hayas elegido una opción más restringida."
+            },
+            "redirect": {
+              "title": "2. URI de redirección y secreto",
+              "body": "Añade la URI de redirección que aparece en esta página como redirección de tipo Web; después crea un secreto de cliente en Certificados y secretos y pega aquí su valor. Anota cuándo caduca: a partir de esa fecha el calendario de todos los espacios de trabajo deja de funcionar hasta que se guarde un secreto nuevo."
+            },
+            "permissions": {
+              "title": "3. Permisos de API",
+              "body": "Añade los permisos delegados de Microsoft Graph Calendars.ReadWrite, User.Read y offline_access, y ninguno más. Para un uso general, completa la verificación del editor; es posible que el inquilino de un cliente también requiera que un administrador apruebe la aplicación."
+            },
+            "workspaces": {
+              "title": "4. Los espacios de trabajo se conectan",
+              "body": "Pega aquí el ID de cliente y el secreto y guarda. Después, los administradores se conectan desde Citas, Ajustes."
             }
           }
         }

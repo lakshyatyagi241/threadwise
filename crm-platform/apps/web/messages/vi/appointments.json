@@ -1057,7 +1057,109 @@
         "badHours": "Sửa các mốc giờ được đánh dấu trong giờ làm việc."
       },
       "notAvailable": "Máy chủ này không hỗ trợ cài đặt lịch đặt toàn không gian làm việc. Thay vào đó, mỗi loại lịch đặt có giờ, múi giờ, lời nhắc và tin nhắn riêng.",
-      "openTypes": "Mở loại lịch đặt"
+      "openTypes": "Mở loại lịch đặt",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Kết nối lịch Microsoft để các lượt đặt lịch đã xác nhận được ghi vào đó và thời gian bận trong lịch sẽ đóng các khung giờ tương ứng.",
+        "provider": "Lịch Outlook",
+        "providerSub": "Microsoft 365 và Outlook.com",
+        "status": {
+          "unavailable": "Không khả dụng",
+          "disconnected": "Chưa kết nối",
+          "connected": "Đã kết nối",
+          "needs_reconnect": "Cần kết nối lại"
+        },
+        "loading": "Đang kiểm tra kết nối",
+        "unavailableTitle": "Nền tảng này chưa thiết lập Outlook",
+        "unavailableBody": "Quản trị viên nền tảng của bạn cần đăng ký ứng dụng Microsoft (Admin, Cài đặt, Microsoft Calendar) thì không gian làm việc mới có thể kết nối. Các lượt đặt lịch của bạn không bị ảnh hưởng.",
+        "disconnectedBody": "Chưa kết nối. Khi kết nối, Microsoft sẽ mở ra để bạn chọn tài khoản và đồng ý chia sẻ quyền truy cập lịch.",
+        "disconnectedReadOnly": "Chưa kết nối. Hãy nhờ quản trị viên của không gian làm việc kết nối.",
+        "reconnectTitle": "Microsoft đã ngừng chấp nhận kết nối",
+        "reconnectBody": "Quyền truy cập đã bị thu hồi hoặc đã hết hạn, nên các lượt đặt lịch không được ghi vào lịch của bạn và thời gian bận trong lịch không được đọc. Hãy kết nối lại để tiếp tục.",
+        "reconnectBodyAccount": "Quyền truy cập của {account} đã bị thu hồi hoặc đã hết hạn, nên các lượt đặt lịch không được ghi vào lịch của bạn và thời gian bận trong lịch không được đọc. Hãy kết nối lại để tiếp tục.",
+        "account": "Tài khoản Microsoft",
+        "calendar": "Lịch",
+        "primaryCalendar": "Lịch chính của bạn",
+        "connectedAgo": "Đã kết nối {when}",
+        "writesHere": "Các lượt đặt lịch đã xác nhận được ghi vào lịch này.",
+        "readsOnly": "Chỉ đọc thời gian bận của lịch này. Các lượt đặt lịch được ghi vào lịch khác của bạn.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft đang giới hạn số yêu cầu. Các lượt đặt lịch sẽ được thử lại tự động.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft đã từ chối quyền truy cập vào lịch này. Hãy kiểm tra xem tài khoản có hộp thư và được phép chia sẻ lịch hay không.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft không phản hồi. Hệ thống sẽ tự động thử lại."
+        },
+        "errors": {
+          "notConfigured": "Nền tảng này chưa thiết lập Outlook. Hãy nhờ quản trị viên nền tảng đăng ký ứng dụng Microsoft.",
+          "notConnected": "Chưa có lịch Outlook nào được kết nối. Hãy tải lại trang và kết nối lại.",
+          "providerFailed": "Microsoft không phản hồi. Vui lòng thử lại sau giây lát.",
+          "notYours": "Kết nối này do người khác bắt đầu nên chưa có gì được kết nối. Hãy nhờ họ kết nối, hoặc tự bấm Kết nối.",
+          "invalidTicket": "Không thể xác nhận kết nối này nữa. Hãy bấm Kết nối để bắt đầu lại."
+        },
+        "loadingCalendars": "Đang tải các lịch của bạn",
+        "chooseLabel": "Ghi lượt đặt lịch vào",
+        "chooseHint": "Chỉ hiển thị những lịch mà tài khoản này có thể chỉnh sửa. Các sự kiện đã ghi sẽ giữ nguyên vị trí.",
+        "choosePlaceholder": "Chọn một lịch",
+        "chooseOptionPrimary": "{name} (lịch chính)",
+        "chooseSave": "Dùng lịch này",
+        "chooseCancel": "Hủy",
+        "saving": "Đang lưu",
+        "connect": "Kết nối Outlook",
+        "reconnect": "Kết nối lại Outlook",
+        "redirecting": "Đang mở Microsoft",
+        "choose": "Chọn lịch",
+        "disconnect": "Ngắt kết nối",
+        "disconnected": "Đã ngắt kết nối Outlook.",
+        "calendarSaved": "Đã lưu lịch.",
+        "confirm": {
+          "title": "Kết nối tài khoản Microsoft này?",
+          "body": "Microsoft đã đưa bạn quay lại để hoàn tất việc kết nối một tài khoản với {workspace}. Chỉ tiếp tục nếu chính bạn vừa bắt đầu việc này cách đây ít phút.",
+          "confirm": "Kết nối",
+          "working": "Đang kết nối",
+          "cancel": "Hủy"
+        },
+        "confirmOff": {
+          "title": "Ngắt kết nối Outlook?",
+          "message": "Các lượt đặt lịch mới sẽ không còn được gửi vào lịch Outlook của bạn và thời gian bận trong lịch sẽ không còn được đọc. Các sự kiện đã có trong lịch của bạn vẫn được giữ nguyên. Để thu hồi quyền ở phía Microsoft, hãy gỡ ứng dụng trong tài khoản Microsoft của bạn.",
+          "confirm": "Ngắt kết nối",
+          "cancel": "Giữ lại"
+        },
+        "outcome": {
+          "connected": "Đã kết nối Outlook. Các lượt đặt lịch đã xác nhận giờ sẽ được ghi vào lịch của bạn.",
+          "denied": "Quyền truy cập chưa được cấp trên Microsoft nên chưa có gì được kết nối.",
+          "failed": "Việc kết nối chưa hoàn tất. Hãy thử lại; nếu vẫn lỗi, hãy nhờ quản trị viên nền tảng kiểm tra ứng dụng Microsoft.",
+          "expired": "Lần thử đó đã mất quá nhiều thời gian. Hãy bấm Kết nối để bắt đầu lại.",
+          "not_configured": "Nền tảng này chưa thiết lập Outlook. Hãy nhờ quản trị viên nền tảng đăng ký ứng dụng Microsoft.",
+          "missing_scope": "Microsoft không cấp quyền truy cập lịch cần thiết. Hãy kết nối lại và giữ nguyên tất cả các ô đã chọn.",
+          "cancelled": "Bạn đã hủy. Chưa có gì được kết nối."
+        },
+        "whatTitle": "Tính năng này làm gì",
+        "what": {
+          "freeBusy": "Đọc thời gian bận từ lịch của bạn để không đề xuất những khung giờ đã được đặt hoặc bị chặn.",
+          "writeBack": "Ghi các lượt đặt lịch đã xác nhận vào lịch của bạn dưới dạng sự kiện và gửi lời mời cho khách hàng.",
+          "teams": "Thêm liên kết cuộc họp Teams vào các dịch vụ trực tuyến (tài khoản cơ quan và trường học)."
+        },
+        "hint": "Các lượt đặt lịch vẫn hoạt động khi không có tính năng này. Nếu cũng kết nối Google, thời gian bận sẽ được đọc từ cả hai lịch và mỗi lượt đặt lịch được ghi vào một lịch."
+      },
+      "writeTarget": {
+        "title": "Nơi ghi các lượt đặt lịch",
+        "description": "Thời gian bận được đọc từ mọi lịch đã kết nối. Mỗi lượt đặt lịch được ghi vào một trong số đó.",
+        "label": "Ghi lượt đặt lịch vào",
+        "hint": "Chế độ tự động sẽ dùng Google Calendar khi hoạt động được, nếu không thì dùng Outlook. Khi thay đổi, các sự kiện của những lượt đặt lịch sắp tới sẽ được chuyển sang lịch bạn chọn.",
+        "auto": "Tự động",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "chưa kết nối",
+        "saved": "Đã lưu.",
+        "backfill": {
+          "body": "{count, plural, other {# lượt đặt lịch đã xác nhận trong 90 ngày tới}} chưa có trong lịch mà chúng sẽ được ghi vào. Chúng sẽ được ghi tự động sau khi bạn kết nối hoặc đổi lịch.",
+          "action": "Ghi ngay",
+          "working": "Đang xếp hàng",
+          "queued": "Đang ghi chúng vào lịch của bạn trong nền.",
+          "notConnected": "Chưa có lịch nào được kết nối nên không có nơi để ghi."
+        }
+      }
     },
     "linked": {
       "title": "Lịch hẹn",

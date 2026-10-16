@@ -19,7 +19,8 @@
       "googleCalendar": "Google Takvim",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Akış oluşturucu"
+      "flowBuilder": "Akış oluşturucu",
+      "microsoftCalendar": "Microsoft Takvim"
     },
     "hub": {
       "kicker": "Yönetici - Proje ayarları",
@@ -1024,6 +1025,37 @@
             "advanced": "Yalnızca gelişmiş"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Takvim",
+        "description": "Her çalışma alanının Outlook veya Microsoft 365 takvimini bağlamak için kullandığı Microsoft uygulaması.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra uygulaması"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Çalışma alanlarının Outlook bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve hiçbir Outlook takviminden okuma ya da takvime yazma yapılmaz. Bağlı takvimler korunur."
+          },
+          "clientId": {
+            "label": "Uygulama (istemci) kimliği",
+            "hint": "Microsoft Entra yönetim merkezinde Uygulama kayıtları, Genel Bakış bölümünden alınır. Boş bırakılırsa MICROSOFT_CALENDAR_CLIENT_ID kullanılır."
+          },
+          "clientSecret": {
+            "label": "İstemci gizli anahtarı",
+            "hint": "Şifrelenmiş olarak saklanır ve bir daha gösterilmez. Boş bırakılırsa kayıtlı olan korunur; yedek olarak MICROSOFT_CALENDAR_CLIENT_SECRET kullanılır."
+          },
+          "tenant": {
+            "label": "Kiracı",
+            "hint": "common; iş, okul ve kişisel hesaplara izin verir. Tek kiracılı bir uygulama için dizin (kiracı) kimliğini kullanın. Boş bırakılırsa MICROSOFT_CALENDAR_TENANT, o da yoksa common kullanılır."
+          },
+          "redirectUri": {
+            "label": "Yönlendirme URI'sini değiştir",
+            "hint": "Yukarıdaki adresi kullanmak için boş bırakın. Uygulamadaki bir yönlendirme URI'siyle birebir eşleşmelidir."
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "Akış oluşturucu",
         "description": "Her çalışma alanı için varsayılan akış oluşturucu: Basit adım adım veya Gelişmiş tuval. Bir çalışma alanı bunu geçersiz kılabilir.",
         "tags": "Basit / Gelişmiş / Otomasyon"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Takvim",
+        "description": "Çalışma alanlarının rezervasyonlar için Outlook ve Microsoft 365 takvimlerini bağlamakta kullandığı Microsoft uygulaması.",
+        "tags": "Microsoft / OAuth / Outlook / Takvim"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "Mevcut akışlar",
               "body": "Bu ayarı değiştirmek hiçbir akışı değiştirmez veya silmez. Akış çalışmaya devam eder; yalnızca etkin olan oluşturucuda açılır. Kendi oluşturucusunu seçen bir çalışma alanı, platform varsayılanını yeniden seçene kadar onu korur."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Takvim",
+        "eyebrow": "Admin - Randevular",
+        "description": "Tüm platform için tek bir Microsoft Entra uygulaması. Her çalışma alanı kendi Outlook veya Microsoft 365 takvimini Randevular, Ayarlar bölümünden bağlar ve istemci kimliğini ya da gizli anahtarı hiçbir zaman görmez.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra uygulaması",
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Outlook'u kullanılamıyor olarak görür ve rezervasyonlar onsuz sürer. Google Calendar etkilenmez."
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra'da kurun",
+          "items": {
+            "registration": {
+              "title": "1. Uygulama kaydı",
+              "body": "Microsoft Entra yönetim merkezinde, herhangi bir kurumsal dizindeki hesaplar ve kişisel Microsoft hesapları için bir uygulama kaydı oluşturun ve Uygulama (istemci) kimliğini buraya kopyalayın. Daha dar bir seçenek belirlemediyseniz kiracıyı common olarak bırakın."
+            },
+            "redirect": {
+              "title": "2. Yönlendirme URI'si ve gizli anahtar",
+              "body": "Bu sayfada gösterilen yönlendirme URI'sini Web yönlendirmesi olarak ekleyin, ardından Sertifikalar ve gizli anahtarlar bölümünde bir istemci gizli anahtarı oluşturup değerini buraya yapıştırın. Süresinin ne zaman dolacağını not edin: o tarihten sonra yeni bir gizli anahtar kaydedilene kadar tüm çalışma alanlarının takvimi durur."
+            },
+            "permissions": {
+              "title": "3. API izinleri",
+              "body": "Yetki devredilen Microsoft Graph izinlerinden Calendars.ReadWrite, User.Read ve offline_access izinlerini ekleyin, başka hiçbir şey eklemeyin. Genel kullanım için yayıncı doğrulamasını tamamlayın; bir müşterinin kiracısında uygulamayı bir yöneticinin onaylaması da gerekebilir."
+            },
+            "workspaces": {
+              "title": "4. Çalışma alanları bağlanır",
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Ardından yöneticiler Randevular, Ayarlar bölümünden bağlanır."
             }
           }
         }

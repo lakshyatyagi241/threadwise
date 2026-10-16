@@ -1057,7 +1057,109 @@
         "badHours": "영업시간에서 강조 표시된 시간을 수정하세요."
       },
       "notAvailable": "이 서버에서는 워크스페이스 전체 예약 설정을 사용할 수 없습니다. 대신 각 예약 유형이 고유한 시간, 시간대, 알림, 메시지를 가집니다.",
-      "openTypes": "예약 유형 열기"
+      "openTypes": "예약 유형 열기",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Microsoft 캘린더를 연결하면 확정된 예약이 해당 캘린더에 기록되고, 그 캘린더의 바쁜 시간대에는 예약 슬롯이 닫힙니다.",
+        "provider": "Outlook 캘린더",
+        "providerSub": "Microsoft 365 및 Outlook.com",
+        "status": {
+          "unavailable": "사용할 수 없음",
+          "disconnected": "연결되지 않음",
+          "connected": "연결됨",
+          "needs_reconnect": "다시 연결 필요"
+        },
+        "loading": "연결 상태를 확인하는 중",
+        "unavailableTitle": "이 플랫폼에는 아직 Outlook이 설정되어 있지 않습니다",
+        "unavailableBody": "워크스페이스에서 연결하려면 먼저 플랫폼 관리자가 Microsoft 앱을 등록해야 합니다(Admin, 설정, Microsoft 캘린더). 예약에는 영향이 없습니다.",
+        "disconnectedBody": "연결되지 않았습니다. 연결을 시작하면 Microsoft 페이지가 열리며, 계정을 선택하고 캘린더 접근 공유에 동의할 수 있습니다.",
+        "disconnectedReadOnly": "연결되지 않았습니다. 워크스페이스 관리자에게 연결을 요청하세요.",
+        "reconnectTitle": "Microsoft에서 연결을 더 이상 허용하지 않습니다",
+        "reconnectBody": "접근 권한이 철회되었거나 만료되어 예약이 캘린더에 기록되지 않고 바쁜 시간대도 읽지 못하고 있습니다. 다시 연결하면 재개됩니다.",
+        "reconnectBodyAccount": "{account}의 접근 권한이 철회되었거나 만료되어 예약이 캘린더에 기록되지 않고 바쁜 시간대도 읽지 못하고 있습니다. 다시 연결하면 재개됩니다.",
+        "account": "Microsoft 계정",
+        "calendar": "캘린더",
+        "primaryCalendar": "기본 캘린더",
+        "connectedAgo": "{when} 연결됨",
+        "writesHere": "확정된 예약이 이 캘린더에 기록됩니다.",
+        "readsOnly": "바쁜 시간대만 읽습니다. 예약은 다른 캘린더에 기록됩니다.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft에서 요청을 제한하고 있습니다. 예약은 자동으로 다시 시도됩니다.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft에서 이 캘린더에 대한 접근을 거부했습니다. 계정에 메일함이 있고 캘린더 공유가 허용되어 있는지 확인하세요.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft에서 응답하지 않았습니다. 자동으로 다시 시도됩니다."
+        },
+        "errors": {
+          "notConfigured": "이 플랫폼에는 Outlook이 설정되어 있지 않습니다. 플랫폼 관리자에게 Microsoft 앱 등록을 요청하세요.",
+          "notConnected": "연결된 Outlook 캘린더가 없습니다. 페이지를 새로고침한 후 다시 연결하세요.",
+          "providerFailed": "Microsoft에서 응답하지 않았습니다. 잠시 후 다시 시도하세요.",
+          "notYours": "이 연결은 다른 사람이 시작했으므로 아무것도 연결되지 않았습니다. 해당 사용자에게 연결을 요청하거나 직접 연결을 누르세요.",
+          "invalidTicket": "이 연결은 더 이상 확인할 수 없습니다. 연결을 눌러 처음부터 다시 시작하세요."
+        },
+        "loadingCalendars": "캘린더를 불러오는 중",
+        "chooseLabel": "예약을 기록할 캘린더",
+        "chooseHint": "이 계정에서 편집할 수 있는 캘린더만 표시됩니다. 이미 기록된 일정은 그대로 유지됩니다.",
+        "choosePlaceholder": "캘린더 선택",
+        "chooseOptionPrimary": "{name}(기본 캘린더)",
+        "chooseSave": "이 캘린더 사용",
+        "chooseCancel": "취소",
+        "saving": "저장하는 중",
+        "connect": "Outlook 연결",
+        "reconnect": "Outlook 다시 연결",
+        "redirecting": "Microsoft를 여는 중",
+        "choose": "캘린더 선택",
+        "disconnect": "연결 해제",
+        "disconnected": "Outlook 연결이 해제되었습니다.",
+        "calendarSaved": "캘린더가 저장되었습니다.",
+        "confirm": {
+          "title": "이 Microsoft 계정을 연결할까요?",
+          "body": "Microsoft에서 {workspace}에 계정을 연결하는 마지막 단계로 돌아왔습니다. 방금 직접 시작한 경우에만 계속하세요.",
+          "confirm": "연결",
+          "working": "연결하는 중",
+          "cancel": "취소"
+        },
+        "confirmOff": {
+          "title": "Outlook 연결을 해제할까요?",
+          "message": "새 예약이 더 이상 Outlook 캘린더에 기록되지 않고 바쁜 시간대도 읽지 않습니다. 이미 캘린더에 있는 일정은 그대로 남습니다. Microsoft 쪽에서 권한을 철회하려면 Microsoft 계정에서 앱을 제거하세요.",
+          "confirm": "연결 해제",
+          "cancel": "유지"
+        },
+        "outcome": {
+          "connected": "Outlook이 연결되었습니다. 이제 확정된 예약이 캘린더에 기록됩니다.",
+          "denied": "Microsoft에서 접근 권한이 허용되지 않아 아무것도 연결되지 않았습니다.",
+          "failed": "연결이 완료되지 않았습니다. 다시 시도하세요. 계속 실패하면 플랫폼 관리자에게 Microsoft 앱 확인을 요청하세요.",
+          "expired": "시간이 너무 오래 걸렸습니다. 연결을 눌러 처음부터 다시 시작하세요.",
+          "not_configured": "이 플랫폼에는 Outlook이 설정되어 있지 않습니다. 플랫폼 관리자에게 Microsoft 앱 등록을 요청하세요.",
+          "missing_scope": "Microsoft에서 필요한 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 항목을 선택한 상태로 유지하세요.",
+          "cancelled": "취소했습니다. 아무것도 연결되지 않았습니다."
+        },
+        "whatTitle": "기능 설명",
+        "what": {
+          "freeBusy": "캘린더의 바쁜 시간대를 읽어 이미 예약되었거나 차단된 시간은 제공하지 않습니다.",
+          "writeBack": "확정된 예약을 일정으로 캘린더에 기록하고 고객을 초대합니다.",
+          "teams": "온라인 서비스에 Teams 미팅 링크를 추가합니다(회사 및 학교 계정)."
+        },
+        "hint": "연결하지 않아도 예약은 작동합니다. Google도 함께 연결하면 두 곳에서 바쁜 시간대를 읽고, 각 예약은 한 곳에 기록됩니다."
+      },
+      "writeTarget": {
+        "title": "예약이 기록되는 위치",
+        "description": "연결된 모든 캘린더에서 바쁜 시간대를 읽습니다. 각 예약은 그중 한 곳에 기록됩니다.",
+        "label": "예약을 기록할 캘린더",
+        "hint": "자동은 Google Calendar가 정상일 때 이를 사용하고, 그렇지 않으면 Outlook을 사용합니다. 변경하면 예정된 예약의 일정이 선택한 캘린더로 이동합니다.",
+        "auto": "자동",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "연결되지 않음",
+        "saved": "저장되었습니다.",
+        "backfill": {
+          "body": "앞으로 90일 이내에 확정된 예약 {count, plural, other {#건이}} 아직 기록될 캘린더에 없습니다. 캘린더를 연결하거나 변경하면 자동으로 기록됩니다.",
+          "action": "지금 기록",
+          "working": "대기열에 추가하는 중",
+          "queued": "백그라운드에서 캘린더에 기록하고 있습니다.",
+          "notConnected": "연결된 캘린더가 없어 기록할 곳이 없습니다."
+        }
+      }
     },
     "linked": {
       "title": "예약",

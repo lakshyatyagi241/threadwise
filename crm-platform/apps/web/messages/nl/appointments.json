@@ -1057,7 +1057,109 @@
         "badHours": "Corrigeer de gemarkeerde tijden in de kantooruren."
       },
       "notAvailable": "Workspacebrede boekingsinstellingen zijn niet beschikbaar op deze server. Elk boekingstype heeft in plaats daarvan zijn eigen uren, tijdzone, herinneringen en berichten.",
-      "openTypes": "Boekingstypen openen"
+      "openTypes": "Boekingstypen openen",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Koppel een Microsoft-agenda zodat bevestigde boekingen erin worden geschreven en de bezette tijden ervan tijdsloten sluiten.",
+        "provider": "Outlook-agenda",
+        "providerSub": "Microsoft 365 en Outlook.com",
+        "status": {
+          "unavailable": "Niet beschikbaar",
+          "disconnected": "Niet gekoppeld",
+          "connected": "Gekoppeld",
+          "needs_reconnect": "Opnieuw koppelen vereist"
+        },
+        "loading": "Verbinding controleren",
+        "unavailableTitle": "Outlook is nog niet ingesteld voor dit platform",
+        "unavailableBody": "Je platformbeheerder moet eerst de Microsoft-app registreren (Admin, Instellingen, Microsoft Calendar) voordat een werkruimte kan koppelen. Je boekingen worden hierdoor niet beïnvloed.",
+        "disconnectedBody": "Niet gekoppeld. Bij het koppelen open je Microsoft, waar je het account kiest en toestemming geeft om de agenda te delen.",
+        "disconnectedReadOnly": "Niet gekoppeld. Vraag een beheerder van de werkruimte om te koppelen.",
+        "reconnectTitle": "Microsoft accepteert de koppeling niet meer",
+        "reconnectBody": "De toegang is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Koppel opnieuw om verder te gaan.",
+        "reconnectBodyAccount": "De toegang voor {account} is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Koppel opnieuw om verder te gaan.",
+        "account": "Microsoft-account",
+        "calendar": "Agenda",
+        "primaryCalendar": "Je hoofdagenda",
+        "connectedAgo": "Gekoppeld {when}",
+        "writesHere": "Bevestigde boekingen worden naar deze agenda geschreven.",
+        "readsOnly": "Alleen de bezette tijden worden gelezen. Boekingen worden naar je andere agenda geschreven.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft beperkt het aantal verzoeken. Boekingen worden automatisch opnieuw geprobeerd.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft weigerde toegang tot deze agenda. Controleer of het account een mailbox heeft en de agenda mag delen.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft reageerde niet. Het wordt automatisch opnieuw geprobeerd."
+        },
+        "errors": {
+          "notConfigured": "Outlook is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Microsoft-app te registreren.",
+          "notConnected": "Er is geen Outlook-agenda gekoppeld. Laad de pagina opnieuw en koppel opnieuw.",
+          "providerFailed": "Microsoft reageerde niet. Probeer het zo meteen opnieuw.",
+          "notYours": "Deze koppeling is door iemand anders gestart, dus er is niets gekoppeld. Vraag diegene om te koppelen, of druk zelf op Koppelen.",
+          "invalidTicket": "Deze koppeling kan niet meer worden bevestigd. Druk op Koppelen om opnieuw te beginnen."
+        },
+        "loadingCalendars": "Je agenda's laden",
+        "chooseLabel": "Boekingen schrijven naar",
+        "chooseHint": "Alleen agenda's die dit account kan bewerken worden getoond. Gebeurtenissen die al zijn geschreven, blijven waar ze zijn.",
+        "choosePlaceholder": "Kies een agenda",
+        "chooseOptionPrimary": "{name} (hoofdagenda)",
+        "chooseSave": "Deze agenda gebruiken",
+        "chooseCancel": "Annuleren",
+        "saving": "Opslaan",
+        "connect": "Outlook koppelen",
+        "reconnect": "Outlook opnieuw koppelen",
+        "redirecting": "Microsoft openen",
+        "choose": "Agenda kiezen",
+        "disconnect": "Ontkoppelen",
+        "disconnected": "Outlook ontkoppeld.",
+        "calendarSaved": "Agenda opgeslagen.",
+        "confirm": {
+          "title": "Dit Microsoft-account koppelen?",
+          "body": "Microsoft heeft je teruggestuurd om het koppelen van een account aan {workspace} af te ronden. Ga alleen verder als je dit zelf zojuist hebt gestart.",
+          "confirm": "Koppelen",
+          "working": "Koppelen",
+          "cancel": "Annuleren"
+        },
+        "confirmOff": {
+          "title": "Outlook ontkoppelen?",
+          "message": "Nieuwe boekingen gaan niet meer naar je Outlook-agenda en de bezette tijden ervan worden niet meer gelezen. Gebeurtenissen die al in je agenda staan, blijven daar. Om de toestemming ook aan de kant van Microsoft in te trekken, verwijder je de app in je Microsoft-account.",
+          "confirm": "Ontkoppelen",
+          "cancel": "Behouden"
+        },
+        "outcome": {
+          "connected": "Outlook gekoppeld. Bevestigde boekingen gaan nu naar je agenda.",
+          "denied": "Er is geen toegang verleend bij Microsoft, dus er is niets gekoppeld.",
+          "failed": "Het koppelen is niet voltooid. Probeer het opnieuw; als het blijft mislukken, vraag dan je platformbeheerder om de Microsoft-app te controleren.",
+          "expired": "Die poging duurde te lang. Druk op Koppelen om opnieuw te beginnen.",
+          "not_configured": "Outlook is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Microsoft-app te registreren.",
+          "missing_scope": "Microsoft heeft de benodigde agendatoestemming niet gegeven. Koppel opnieuw en laat alle vakjes aangevinkt.",
+          "cancelled": "Je hebt geannuleerd. Er is niets gekoppeld."
+        },
+        "whatTitle": "Wat dit doet",
+        "what": {
+          "freeBusy": "Leest bezette tijden uit je agenda zodat geboekte of geblokkeerde tijden niet worden aangeboden.",
+          "writeBack": "Schrijft bevestigde boekingen als afspraken naar je agenda en nodigt de klant uit.",
+          "teams": "Voegt een Teams-vergaderlink toe aan online diensten (werk- en schoolaccounts)."
+        },
+        "hint": "Boekingen werken ook zonder. Als ook Google is gekoppeld, worden bezette tijden uit beide gelezen en wordt elke boeking naar één ervan geschreven."
+      },
+      "writeTarget": {
+        "title": "Waar boekingen naartoe worden geschreven",
+        "description": "Bezette tijden worden uit elke gekoppelde agenda gelezen. Elke boeking wordt naar één ervan geschreven.",
+        "label": "Boekingen schrijven naar",
+        "hint": "Automatisch gebruikt Google Calendar als dat werkt, anders Outlook. Bij een wijziging worden de gebeurtenissen van aankomende boekingen verplaatst naar de agenda die je kiest.",
+        "auto": "Automatisch",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "niet gekoppeld",
+        "saved": "Opgeslagen.",
+        "backfill": {
+          "body": "{count, plural, one {# bevestigde boeking in de komende 90 dagen staat} other {# bevestigde boekingen in de komende 90 dagen staan}} nog niet in de agenda waar ze naartoe gaan. Ze worden automatisch geschreven nadat je agenda's koppelt of wijzigt.",
+          "action": "Nu schrijven",
+          "working": "In de wachtrij plaatsen",
+          "queued": "Ze worden op de achtergrond naar je agenda geschreven.",
+          "notConnected": "Er is geen agenda gekoppeld, dus er is geen plek om ze naartoe te schrijven."
+        }
+      }
     },
     "linked": {
       "title": "Afspraken",

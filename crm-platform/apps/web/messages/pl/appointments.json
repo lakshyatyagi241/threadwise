@@ -1057,7 +1057,109 @@
         "badHours": "Popraw zaznaczone godziny w godzinach pracy."
       },
       "notAvailable": "Ustawienia rezerwacji dla całej przestrzeni roboczej nie są dostępne na tym serwerze. Zamiast tego każdy typ rezerwacji ma własne godziny, strefę czasową, przypomnienia i wiadomości.",
-      "openTypes": "Otwórz typy rezerwacji"
+      "openTypes": "Otwórz typy rezerwacji",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Połącz kalendarz Microsoft, aby potwierdzone rezerwacje były do niego zapisywane, a jego zajęte terminy blokowały wolne terminy.",
+        "provider": "Kalendarz Outlook",
+        "providerSub": "Microsoft 365 i Outlook.com",
+        "status": {
+          "unavailable": "Niedostępne",
+          "disconnected": "Niepołączone",
+          "connected": "Połączone",
+          "needs_reconnect": "Wymaga ponownego połączenia"
+        },
+        "loading": "Sprawdzanie połączenia",
+        "unavailableTitle": "Outlook nie jest jeszcze skonfigurowany dla tej platformy",
+        "unavailableBody": "Administrator platformy musi zarejestrować aplikację Microsoft (Admin, Ustawienia, Microsoft Calendar), zanim obszar roboczy będzie mógł się połączyć. Twoje rezerwacje nie są przez to dotknięte.",
+        "disconnectedBody": "Niepołączone. Po kliknięciu Połącz otworzy się Microsoft, gdzie wybierzesz konto i zgodzisz się na udostępnienie dostępu do kalendarza.",
+        "disconnectedReadOnly": "Niepołączone. Poproś administratora obszaru roboczego o połączenie.",
+        "reconnectTitle": "Microsoft przestał akceptować połączenie",
+        "reconnectBody": "Dostęp został wycofany lub wygasł, więc rezerwacje nie są zapisywane w Twoim kalendarzu, a jego zajęte terminy nie są odczytywane. Połącz ponownie, aby wznowić.",
+        "reconnectBodyAccount": "Dostęp dla konta {account} został wycofany lub wygasł, więc rezerwacje nie są zapisywane w Twoim kalendarzu, a jego zajęte terminy nie są odczytywane. Połącz ponownie, aby wznowić.",
+        "account": "Konto Microsoft",
+        "calendar": "Kalendarz",
+        "primaryCalendar": "Twój główny kalendarz",
+        "connectedAgo": "Połączono {when}",
+        "writesHere": "Potwierdzone rezerwacje są zapisywane w tym kalendarzu.",
+        "readsOnly": "Odczytywane są tylko jego zajęte terminy. Rezerwacje są zapisywane w Twoim drugim kalendarzu.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft ogranicza liczbę żądań. Rezerwacje będą ponawiane automatycznie.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft odmówił dostępu do tego kalendarza. Sprawdź, czy konto ma skrzynkę pocztową i może udostępniać swój kalendarz.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft nie odpowiedział. Ponowna próba nastąpi automatycznie."
+        },
+        "errors": {
+          "notConfigured": "Outlook nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o zarejestrowanie aplikacji Microsoft.",
+          "notConnected": "Żaden kalendarz Outlook nie jest połączony. Odśwież stronę i połącz ponownie.",
+          "providerFailed": "Microsoft nie odpowiedział. Spróbuj ponownie za chwilę.",
+          "notYours": "To połączenie zostało rozpoczęte przez kogoś innego, więc nic nie zostało połączone. Poproś tę osobę o połączenie lub kliknij Połącz samodzielnie.",
+          "invalidTicket": "Tego połączenia nie można już potwierdzić. Kliknij Połącz, aby zacząć od nowa."
+        },
+        "loadingCalendars": "Wczytywanie Twoich kalendarzy",
+        "chooseLabel": "Zapisuj rezerwacje w",
+        "chooseHint": "Na liście są tylko kalendarze, które to konto może edytować. Zapisane już wydarzenia pozostają tam, gdzie są.",
+        "choosePlaceholder": "Wybierz kalendarz",
+        "chooseOptionPrimary": "{name} (kalendarz główny)",
+        "chooseSave": "Użyj tego kalendarza",
+        "chooseCancel": "Anuluj",
+        "saving": "Zapisywanie",
+        "connect": "Połącz Outlook",
+        "reconnect": "Połącz ponownie Outlook",
+        "redirecting": "Otwieranie Microsoft",
+        "choose": "Wybierz kalendarz",
+        "disconnect": "Rozłącz",
+        "disconnected": "Outlook został rozłączony.",
+        "calendarSaved": "Kalendarz został zapisany.",
+        "confirm": {
+          "title": "Połączyć to konto Microsoft?",
+          "body": "Microsoft przekierował Cię z powrotem, aby dokończyć łączenie konta z obszarem roboczym {workspace}. Kontynuuj tylko wtedy, gdy sam(a) rozpocząłeś(-ęłaś) to przed chwilą.",
+          "confirm": "Połącz",
+          "working": "Łączenie",
+          "cancel": "Anuluj"
+        },
+        "confirmOff": {
+          "title": "Rozłączyć Outlook?",
+          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza Outlook, a jego zajęte terminy nie będą już odczytywane. Wydarzenia, które już są w Twoim kalendarzu, pozostaną w nim. Aby wycofać uprawnienie po stronie Microsoft, usuń aplikację na swoim koncie Microsoft.",
+          "confirm": "Rozłącz",
+          "cancel": "Zostaw"
+        },
+        "outcome": {
+          "connected": "Outlook został połączony. Potwierdzone rezerwacje trafiają teraz do Twojego kalendarza.",
+          "denied": "Dostęp nie został przyznany w Microsoft, więc nic nie zostało połączone.",
+          "failed": "Łączenie nie zostało dokończone. Spróbuj ponownie; jeśli problem się powtarza, poproś administratora platformy o sprawdzenie aplikacji Microsoft.",
+          "expired": "Ta próba trwała zbyt długo. Kliknij Połącz, aby zacząć od nowa.",
+          "not_configured": "Outlook nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o zarejestrowanie aplikacji Microsoft.",
+          "missing_scope": "Microsoft nie przyznał wymaganego uprawnienia do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola.",
+          "cancelled": "Anulowano. Nic nie zostało połączone."
+        },
+        "whatTitle": "Co to robi",
+        "what": {
+          "freeBusy": "Odczytuje zajęte terminy z Twojego kalendarza, aby nie proponować terminów już zarezerwowanych lub zablokowanych.",
+          "writeBack": "Zapisuje potwierdzone rezerwacje w Twoim kalendarzu jako wydarzenia i zaprasza klienta.",
+          "teams": "Dodaje link do spotkania Teams do usług online (konta służbowe i szkolne)."
+        },
+        "hint": "Rezerwacje działają także bez tego. Jeśli połączono również Google, zajęte terminy są odczytywane z obu kalendarzy, a każda rezerwacja jest zapisywana w jednym z nich."
+      },
+      "writeTarget": {
+        "title": "Gdzie zapisywane są rezerwacje",
+        "description": "Zajęte terminy są odczytywane z każdego połączonego kalendarza. Każda rezerwacja jest zapisywana w jednym z nich.",
+        "label": "Zapisuj rezerwacje w",
+        "hint": "Tryb automatyczny używa Google Calendar, gdy działa, a w przeciwnym razie Outlook. Zmiana przenosi wydarzenia nadchodzących rezerwacji do wybranego kalendarza.",
+        "auto": "Automatycznie",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "niepołączone",
+        "saved": "Zapisano.",
+        "backfill": {
+          "body": "W kalendarzu, do którego trafiają rezerwacje, nie ma jeszcze {count, plural, one {# potwierdzonej rezerwacji} few {# potwierdzonych rezerwacji} many {# potwierdzonych rezerwacji} other {# potwierdzonej rezerwacji}} z najbliższych 90 dni. Zostaną zapisane automatycznie po połączeniu lub zmianie kalendarza.",
+          "action": "Zapisz je teraz",
+          "working": "Dodawanie do kolejki",
+          "queued": "Zapisywanie ich w Twoim kalendarzu w tle.",
+          "notConnected": "Żaden kalendarz nie jest połączony, więc nie ma gdzie ich zapisać."
+        }
+      }
     },
     "linked": {
       "title": "Spotkania",

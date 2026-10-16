@@ -1057,7 +1057,109 @@
         "badHours": "Corrija os horários destacados no horário comercial."
       },
       "notAvailable": "As configurações de reserva para todo o espaço de trabalho não estão disponíveis neste servidor. Em vez disso, cada tipo de reserva tem seus próprios horários, fuso horário, lembretes e mensagens.",
-      "openTypes": "Abrir tipos de reserva"
+      "openTypes": "Abrir tipos de reserva",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Conecte um calendário da Microsoft para que as reservas confirmadas sejam gravadas nele e os horários ocupados dele bloqueiem os horários disponíveis.",
+        "provider": "Calendário do Outlook",
+        "providerSub": "Microsoft 365 e Outlook.com",
+        "status": {
+          "unavailable": "Indisponível",
+          "disconnected": "Não conectado",
+          "connected": "Conectado",
+          "needs_reconnect": "Precisa ser reconectado"
+        },
+        "loading": "Verificando a conexão",
+        "unavailableTitle": "O Outlook ainda não foi configurado para esta plataforma",
+        "unavailableBody": "O administrador da sua plataforma precisa registrar o app da Microsoft (Admin, Configurações, Calendário Microsoft) antes que um espaço de trabalho possa se conectar. Suas reservas não são afetadas.",
+        "disconnectedBody": "Não conectado. Ao conectar, a Microsoft é aberta para você escolher a conta e concordar em compartilhar o acesso ao calendário.",
+        "disconnectedReadOnly": "Não conectado. Peça a um administrador do espaço de trabalho para conectá-lo.",
+        "reconnectTitle": "A Microsoft deixou de aceitar a conexão",
+        "reconnectBody": "O acesso foi retirado ou expirou, por isso as reservas não estão sendo gravadas no seu calendário e os horários ocupados dele não estão sendo lidos. Conecte novamente para retomar.",
+        "reconnectBodyAccount": "O acesso de {account} foi retirado ou expirou, por isso as reservas não estão sendo gravadas no seu calendário e os horários ocupados dele não estão sendo lidos. Conecte novamente para retomar.",
+        "account": "Conta Microsoft",
+        "calendar": "Calendário",
+        "primaryCalendar": "Seu calendário principal",
+        "connectedAgo": "Conectado {when}",
+        "writesHere": "As reservas confirmadas são gravadas neste calendário.",
+        "readsOnly": "Somente os horários ocupados dele são lidos. As reservas são gravadas no seu outro calendário.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "A Microsoft está limitando as solicitações. As reservas são reenviadas automaticamente.",
+          "MICROSOFT_ACCESS_DENIED": "A Microsoft recusou o acesso a este calendário. Verifique se a conta tem uma caixa de correio e se pode compartilhar o calendário.",
+          "MICROSOFT_UNAVAILABLE": "A Microsoft não respondeu. Uma nova tentativa é feita automaticamente."
+        },
+        "errors": {
+          "notConfigured": "O Outlook não está configurado para esta plataforma. Peça ao administrador da plataforma para registrar o app da Microsoft.",
+          "notConnected": "Nenhum calendário do Outlook está conectado. Recarregue a página e conecte novamente.",
+          "providerFailed": "A Microsoft não respondeu. Tente novamente em instantes.",
+          "notYours": "Esta conexão foi iniciada por outra pessoa, por isso nada foi conectado. Peça a ela que conecte ou clique você mesmo em Conectar.",
+          "invalidTicket": "Não é mais possível confirmar esta conexão. Clique em Conectar para começar de novo."
+        },
+        "loadingCalendars": "Carregando seus calendários",
+        "chooseLabel": "Gravar reservas em",
+        "chooseHint": "Somente os calendários que esta conta pode editar são listados. Os eventos já gravados permanecem onde estão.",
+        "choosePlaceholder": "Escolha um calendário",
+        "chooseOptionPrimary": "{name} (calendário principal)",
+        "chooseSave": "Usar este calendário",
+        "chooseCancel": "Cancelar",
+        "saving": "Salvando",
+        "connect": "Conectar Outlook",
+        "reconnect": "Reconectar Outlook",
+        "redirecting": "Abrindo a Microsoft",
+        "choose": "Escolher calendário",
+        "disconnect": "Desconectar",
+        "disconnected": "Outlook desconectado.",
+        "calendarSaved": "Calendário salvo.",
+        "confirm": {
+          "title": "Conectar esta conta Microsoft?",
+          "body": "A Microsoft redirecionou você de volta para concluir a conexão de uma conta com {workspace}. Continue somente se você mesmo iniciou isso há instantes.",
+          "confirm": "Conectar",
+          "working": "Conectando",
+          "cancel": "Cancelar"
+        },
+        "confirmOff": {
+          "title": "Desconectar o Outlook?",
+          "message": "As novas reservas deixam de ir para o seu calendário do Outlook e os horários ocupados dele deixam de ser lidos. Os eventos que já estão no seu calendário permanecem lá. Para retirar a permissão do lado da Microsoft, remova o app na sua conta Microsoft.",
+          "confirm": "Desconectar",
+          "cancel": "Manter"
+        },
+        "outcome": {
+          "connected": "Outlook conectado. As reservas confirmadas agora vão para o seu calendário.",
+          "denied": "O acesso não foi concedido na Microsoft, por isso nada foi conectado.",
+          "failed": "A conexão não foi concluída. Tente novamente; se continuar falhando, peça ao administrador da plataforma para verificar o app da Microsoft.",
+          "expired": "Essa tentativa demorou demais. Clique em Conectar para começar de novo.",
+          "not_configured": "O Outlook não está configurado para esta plataforma. Peça ao administrador da plataforma para registrar o app da Microsoft.",
+          "missing_scope": "A Microsoft não concedeu a permissão de calendário necessária. Conecte novamente e mantenha todas as caixas marcadas.",
+          "cancelled": "Você cancelou. Nada foi conectado."
+        },
+        "whatTitle": "O que isto faz",
+        "what": {
+          "freeBusy": "Lê os horários ocupados do seu calendário para que horários reservados ou bloqueados não sejam oferecidos.",
+          "writeBack": "Grava as reservas confirmadas no seu calendário como eventos e convida o cliente.",
+          "teams": "Adiciona um link de reunião do Teams aos serviços online (contas de trabalho e escola)."
+        },
+        "hint": "As reservas funcionam sem isso. Com o Google também conectado, os horários ocupados são lidos de ambos e cada reserva é gravada em um deles."
+      },
+      "writeTarget": {
+        "title": "Onde as reservas são gravadas",
+        "description": "Os horários ocupados são lidos de todos os calendários conectados. Cada reserva é gravada em um deles.",
+        "label": "Gravar reservas em",
+        "hint": "O modo automático usa o Google Calendar quando ele funciona e, caso contrário, o Outlook. Ao alterar, os eventos das próximas reservas são movidos para o calendário que você escolher.",
+        "auto": "Automático",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "não conectado",
+        "saved": "Salvo.",
+        "backfill": {
+          "body": "{count, plural, one {# reserva confirmada nos próximos 90 dias ainda não está} many {# de reservas confirmadas nos próximos 90 dias ainda não estão} other {# reservas confirmadas nos próximos 90 dias ainda não estão}} no calendário para o qual vão. Elas são gravadas automaticamente depois que você conecta ou troca de calendário.",
+          "action": "Gravar agora",
+          "working": "Enfileirando",
+          "queued": "Gravando no seu calendário em segundo plano.",
+          "notConnected": "Nenhum calendário está conectado, então não há onde gravá-las."
+        }
+      }
     },
     "linked": {
       "title": "Agendamentos",

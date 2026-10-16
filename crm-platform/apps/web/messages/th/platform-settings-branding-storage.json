@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "ตัวสร้างโฟลว์"
+      "flowBuilder": "ตัวสร้างโฟลว์",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "ผู้ดูแลระบบ - การตั้งค่าโปรเจกต์",
@@ -1024,6 +1025,37 @@
             "advanced": "Advanced เท่านั้น"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "แอป Microsoft ที่ทุกเวิร์กสเปซใช้เชื่อมต่อปฏิทิน Outlook หรือ Microsoft 365",
+        "sections": {
+          "oauth": {
+            "title": "แอป Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "อนุญาตให้เวิร์กสเปซเชื่อมต่อ Outlook",
+            "hint": "ปิด: ไม่มีเวิร์กสเปซใดเชื่อมต่อได้ และจะไม่มีการอ่านหรือบันทึกข้อมูลกับปฏิทิน Outlook ใด ๆ ปฏิทินที่เชื่อมต่อไว้แล้วจะยังคงอยู่"
+          },
+          "clientId": {
+            "label": "Application (client) ID",
+            "hint": "ดูได้จาก Microsoft Entra admin center, App registrations, Overview หากเว้นว่างไว้จะใช้ MICROSOFT_CALENDAR_CLIENT_ID"
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "จัดเก็บแบบเข้ารหัสและจะไม่แสดงอีก หากเว้นว่างไว้จะใช้ค่าที่บันทึกไว้เดิม โดยมี MICROSOFT_CALENDAR_CLIENT_SECRET เป็นค่าสำรอง"
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common อนุญาตบัญชีที่ทำงาน สถานศึกษา และบัญชีส่วนตัว ส่วนแอปแบบ single-tenant ให้ใช้ directory (tenant) ID หากเว้นว่างไว้จะใช้ MICROSOFT_CALENDAR_TENANT มิฉะนั้นใช้ common"
+          },
+          "redirectUri": {
+            "label": "ระบุ Redirect URI แทนค่าเดิม",
+            "hint": "เว้นว่างไว้เพื่อใช้ที่อยู่ด้านบน ต้องตรงกับ redirect URI ของแอปทุกตัวอักษร"
+          }
+        }
       }
     },
     "cards": {
@@ -1151,6 +1183,11 @@
         "title": "ตัวสร้างโฟลว์",
         "description": "ตัวสร้างโฟลว์เริ่มต้นสำหรับทุกพื้นที่ทำงาน: Simple แบบทีละขั้นตอน หรือ Advanced แบบแคนวาส พื้นที่ทำงานสามารถแทนที่ได้",
         "tags": "Simple / Advanced / Automation"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "แอป Microsoft ที่เวิร์กสเปซใช้เชื่อมต่อปฏิทิน Outlook และ Microsoft 365 สำหรับการจอง",
+        "tags": "Microsoft / OAuth / Outlook / ปฏิทิน"
       }
     },
     "signup": {
@@ -1823,6 +1860,38 @@
             "existing": {
               "title": "โฟลว์ที่มีอยู่แล้ว",
               "body": "การเปลี่ยนการตั้งค่านี้จะไม่เปลี่ยนหรือลบโฟลว์ใดๆ โฟลว์จะทำงานต่อไป เพียงแต่จะเปิดในตัวสร้างที่เปิดใช้อยู่ พื้นที่ทำงานที่เลือกตัวสร้างของตนเองจะคงไว้จนกว่าจะเลือกค่าเริ่มต้นของแพลตฟอร์มอีกครั้ง"
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - การนัดหมาย",
+        "description": "ใช้แอป Microsoft Entra เพียงแอปเดียวสำหรับทั้งแพลตฟอร์ม จากนั้นแต่ละเวิร์กสเปซจะเชื่อมต่อปฏิทิน Outlook หรือ Microsoft 365 ของตนเองได้จากการนัดหมาย, การตั้งค่า โดยไม่เห็น client id หรือ secret",
+        "sections": {
+          "oauth": {
+            "title": "แอป Microsoft Entra",
+            "description": "หากไม่มี client id และ secret เวิร์กสเปซจะเห็นว่า Outlook ไม่พร้อมใช้งาน และการจองจะดำเนินต่อไปได้โดยไม่ใช้ Outlook ส่วน Google Calendar ไม่ได้รับผลกระทบ"
+          }
+        },
+        "guide": {
+          "title": "ตั้งค่าใน Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. การลงทะเบียนแอป",
+              "body": "ใน Microsoft Entra admin center ให้สร้างการลงทะเบียนแอปสำหรับบัญชีในไดเรกทอรีขององค์กรใดก็ได้และบัญชี Microsoft ส่วนตัว แล้วคัดลอก Application (client) ID มาวางที่นี่ ให้คงค่า tenant เป็น common เว้นแต่คุณเลือกตัวเลือกที่แคบกว่า"
+            },
+            "redirect": {
+              "title": "2. Redirect URI และ secret",
+              "body": "เพิ่ม redirect URI ที่แสดงในหน้านี้เป็น Web redirect จากนั้นสร้าง client secret ใน Certificates and secrets แล้ววางค่าของ secret ที่นี่ โปรดจดวันหมดอายุไว้ เพราะหลังวันนั้นปฏิทินของทุกเวิร์กสเปซจะหยุดทำงานจนกว่าจะบันทึก secret ใหม่"
+            },
+            "permissions": {
+              "title": "3. สิทธิ์ของ API",
+              "body": "เพิ่มสิทธิ์ Microsoft Graph แบบ delegated ได้แก่ Calendars.ReadWrite, User.Read และ offline_access และไม่ต้องเพิ่มอย่างอื่น หากใช้งานทั่วไป ให้ดำเนินการยืนยันผู้เผยแพร่ให้เสร็จสิ้น และ tenant ของลูกค้าอาจกำหนดให้ผู้ดูแลระบบอนุมัติแอปด้วย"
+            },
+            "workspaces": {
+              "title": "4. เวิร์กสเปซเชื่อมต่อ",
+              "body": "วาง client id และ secret ที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อได้จากการนัดหมาย, การตั้งค่า"
             }
           }
         }
