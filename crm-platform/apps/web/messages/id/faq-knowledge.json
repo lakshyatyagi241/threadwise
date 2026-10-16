@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "Uji",
         "unanswered": "Belum terjawab",
-        "insights": "Wawasan",
-        "settings": "Pengaturan"
+        "insights": "Wawasan"
       },
       "unansweredCount": "{count, plural, other {# pesan belum terjawab}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Alur ini sudah mencapai batas FAQ. Hapus FAQ atau variasi yang tidak terpakai, atau minta admin platform untuk menaikkannya."
     },
     "banner": {
-      "enabledToast": "Jawaban FAQ aktif.",
-      "engineOff": "Jawaban FAQ dimatikan oleh platform. Pelanggan tidak mendapat jawaban FAQ sampai diaktifkan kembali.",
-      "modelChanged": "Platform mengubah model AI setelah Anda menyetel ambang batas ini. Skor bergeser, jadi tinjau kembali kepekaan Anda.",
-      "reviewSensitivity": "Tinjau kepekaan",
-      "offNoRight": "Minta seseorang yang memiliki izin faq.settings.manage (biasanya admin workspace) untuk mengaktifkannya.",
-      "enable": "Aktifkan jawaban FAQ",
-      "offTitle": "Jawaban FAQ NONAKTIF untuk alur ini",
-      "offBody": "Anda dapat menulis dan menguji FAQ alur ini, tetapi pelanggan tidak mendapat jawaban sampai Anda mengaktifkannya."
+      "engineOff": "Jawaban FAQ dimatikan oleh platform. Pelanggan tidak mendapat jawaban FAQ sampai diaktifkan kembali."
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "Aktif",
         "paused": "Dijeda",
-        "variations": "Variasi",
-        "pending": "Diindeks",
-        "pendingHint": "Aktif dalam hitungan detik",
-        "failed": "Pengindeksan gagal",
-        "failedHint": "Perlu perhatian"
+        "variations": "Variasi"
       },
-      "failedBanner": "{count, plural, other {# variasi}} gagal diindeks, sehingga belum bisa mencocokkan pesan pelanggan.",
-      "showFailed": "Tampilkan FAQ yang gagal",
       "search": "Cari FAQ",
       "searchPlaceholder": "Cari pertanyaan dan variasi",
       "filter": {
         "status": "Status",
         "anyStatus": "Semua status",
         "category": "Kategori",
-        "anyCategory": "Semua kategori",
-        "indexing": "Pengindeksan",
-        "anyIndexing": "Semua",
-        "pending": "Masih diindeks",
-        "failed": "Gagal"
+        "anyCategory": "Semua kategori"
       },
       "status": {
         "active": "Aktif",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Pertanyaan",
         "answer": "Jawaban",
-        "indexing": "Variasi aktif",
         "answered": "Terjawab (90 hari)",
         "status": "Status",
         "actions": "Tindakan"
@@ -130,12 +111,6 @@
         "rowBody": "“{question}” beserta semua variasinya akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.",
         "delete": "Hapus",
         "cancel": "Batal"
-      },
-      "indexing": {
-        "summary": "{ready} aktif, {pending} diindeks, {failed} gagal",
-        "ready": "{count} aktif",
-        "pending": "{count} diindeks",
-        "failed": "{count} gagal"
       },
       "stepMissing": "Langkah hilang",
       "subtitle": "Pertanyaan yang diajukan pelanggan di {flow} dan jawaban bot. FAQ ini hanya menjawab di dalam alur ini.",
@@ -299,7 +274,6 @@
       "add": "Tambah",
       "pasteMany": "Tempel banyak",
       "full": "FAQ ini sudah mencapai batas {max} variasi.",
-      "failedNotice": "{count, plural, other {# variasi}} gagal diindeks. Edit dan simpan variasinya untuk mencoba lagi.",
       "suggest": "Sarankan dengan AI",
       "suggestSaveFirst": "Simpan FAQ terlebih dahulu, lalu AI dapat menyarankan variasi.",
       "suggesting": "Meminta saran dari AI",
@@ -318,14 +292,6 @@
         "overflow": "{count, plural, other {# baris}} tidak muat dalam batas variasi dan dilewati.",
         "more": "dan {count} lainnya",
         "add": "Tambahkan {count, plural, other {# variasi}}"
-      },
-      "state": {
-        "ready": "Aktif",
-        "pending": "Diindeks",
-        "pendingHint": "Tersimpan. Mulai mencocokkan dalam beberapa detik.",
-        "failed": "Gagal",
-        "failedHint": "Edit dan simpan variasinya untuk mencoba lagi.",
-        "noReason": "Tidak ada alasan yang diberikan"
       },
       "confirm": {
         "title": "Hapus variasi ini?",
@@ -539,9 +505,7 @@
       },
       "hist": {
         "title": "Skor pesan",
-        "hint": "Setiap batang adalah rentang skor. Garis putus-putus adalah kepekaan Anda saat ini.",
-        "advice": "Naikkan ambang batas jika jawaban yang salah lolos, turunkan jika terlalu banyak pesan tidak terjawab.",
-        "tune": "Ubah kepekaan"
+        "hint": "Setiap batang adalah rentang skor. Garis putus-putus adalah kepekaan Anda saat ini."
       },
       "top": {
         "title": "FAQ teratas",
@@ -568,98 +532,6 @@
         "bucketTooltip": "{from}-{to}%: {answered} terjawab, {unanswered} belum terjawab",
         "thresholdMarker": "Ambang batas {value}%"
       }
-    },
-    "settings": {
-      "title": "Pengaturan FAQ",
-      "unsaved": "Perubahan belum disimpan",
-      "discard": "Buang",
-      "save": "Simpan pengaturan",
-      "saved": "Pengaturan disimpan.",
-      "readOnly": "Anda dapat melihat pengaturan ini. Mengubahnya memerlukan izin faq.settings.manage, biasanya dimiliki admin workspace.",
-      "engineOff": "Jawaban FAQ dinonaktifkan oleh platform. Apa pun yang Anda atur di sini berlaku setelah diaktifkan kembali.",
-      "conflict": "Orang lain menyimpan pengaturan ini. Muat ulang untuk melihat versinya, lalu ubah lagi.",
-      "reload": "Muat ulang pengaturan",
-      "modelChanged": {
-        "title": "Tinjau kepekaan Anda",
-        "body": "Platform mengubah model AI setelah Anda menyetel ambang batas ini. Skor bergeser, jadi tinjau kembali kepekaan Anda. Menyimpan berarti mengonfirmasinya."
-      },
-      "enable": {
-        "title": "Jawaban FAQ",
-        "on": "Aktif",
-        "off": "Nonaktif",
-        "label": "Jawab pelanggan dengan FAQ alur ini",
-        "onBody": "Selama alur ini aktif, pesan pelanggan yang tidak ditangani pemicu kata kunci maupun alur yang sedang berjalan dibandingkan dengan FAQ alur ini. Bot membalas dengan jawaban terbaik, atau mengarahkan pelanggan ke langkah yang dituju FAQ.",
-        "offBody": "FAQ alur ini tidak menjawab pelanggan. Anda tetap dapat menulis dan mengujinya."
-      },
-      "sens": {
-        "title": "Kepekaan",
-        "hint": "Seberapa dekat pesan harus cocok. Skor milik model {model}.",
-        "label": "Jawab bila kecocokan minimal",
-        "presets": "Preset kepekaan",
-        "preset": {
-          "strict": "Ketat",
-          "balanced": "Seimbang",
-          "forgiving": "Longgar"
-        },
-        "looser": "Lebih banyak menjawab",
-        "stricter": "Lebih sedikit menjawab",
-        "recommendedMark": "disarankan {value}%",
-        "explain": "Pada {value}%, pesan dijawab hanya bila kecocokan terbaiknya bernilai {value}% atau lebih. Lebih tinggi berarti jawaban lebih sedikit tetapi lebih aman; lebih rendah berarti lebih banyak jawaban dan kemungkinan salah lebih besar.",
-        "useRecommended": "Gunakan nilai yang disarankan ({value}%)",
-        "modelScale": "Skor hanya dapat dibandingkan dalam satu model. Jika platform mengubah model ({model}), tinjau angka ini."
-      },
-      "margin": {
-        "title": "Pengaman ambiguitas",
-        "hint": "Mencegah bot menebak di antara dua FAQ yang skornya hampir sama.",
-        "label": "Selisih minimum dari peringkat kedua",
-        "off": "Nonaktif",
-        "explain": "Bila FAQ terbaik unggul dari peringkat kedua kurang dari ini, bot diam dan mencatat pesan sebagai belum terjawab. Biarkan nonaktif jika FAQ Anda jarang tumpang tindih."
-      },
-      "log": {
-        "title": "Pesan pelanggan di log",
-        "label": "Simpan pesan pelanggan di log pencocokan",
-        "onBody": "Teks setiap pesan disimpan selama 90 hari agar Anda bisa melihat mengapa pesan dijawab atau tidak dan belajar darinya. Setelah itu dihapus.",
-        "offBody": "Hanya skor dan hasil yang disimpan, tidak pernah teksnya. Anda tetap bisa melihat seberapa sering bot menjawab, tetapi tidak bisa belajar dari pesan yang belum terjawab."
-      },
-      "facts": {
-        "title": "Model dan batas",
-        "model": "Model embedding",
-        "faqs": "FAQ",
-        "variations": "Variasi terpakai",
-        "perFaq": "Variasi diizinkan per FAQ",
-        "of": "{used} dari {max}"
-      },
-      "how": {
-        "title": "Cara kerja pencocokan",
-        "exact": "Persis: pesan sama dengan variasi yang tersimpan, tanpa memperhatikan huruf besar-kecil dan spasi.",
-        "semantic": "Makna: pesan dibandingkan maknanya dengan setiap variasi aktif, sehingga kata yang berbeda bisa cocok.",
-        "trigram": "Cadangan ejaan: jika penyedia AI tidak tersedia, huruf dibandingkan, yang hanya menangkap salah ketik.",
-        "threshold": "Skor terbaik dibandingkan dengan kepekaan. Di atasnya, FAQ menjawab; di bawahnya, pesan masuk daftar Belum terjawab.",
-        "verify": "Pemeriksaan kedua (opsional): kecocokan yang baru saja mencapai kepekaan dapat diperiksa ulang oleh model obrolan kecil, yang hanya bisa menahan jawaban."
-      },
-      "who": "Mengubah pengaturan ini memerlukan izin faq.settings.manage.",
-      "leave": {
-        "title": "Keluar tanpa menyimpan?",
-        "body": "Perubahan pada pengaturan ini belum disimpan.",
-        "leave": "Keluar",
-        "stay": "Tetap di sini"
-      },
-      "verify": {
-        "title": "Pemeriksaan kedua untuk kecocokan tipis",
-        "hint": "Model obrolan kecil memeriksa ulang kecocokan yang baru saja mencapai ambang batas.",
-        "unavailable": "Platform telah mematikan pemeriksaan kedua, sehingga tidak berjalan meskipun Anda mengaktifkannya di sini. Hubungi admin platform Anda.",
-        "label": "Periksa kecocokan tipis dengan pemeriksaan kedua",
-        "on": "Aktif",
-        "off": "Nonaktif",
-        "onBody": "Saat kecocokan baru saja melewati ambang batas, model obrolan kecil membaca pesan pelanggan dan FAQ, lalu menilai apakah jawabannya sesuai. Model hanya bisa menolak: ia tidak pernah membuat jawaban terkirim.",
-        "offBody": "Setiap kecocokan yang mencapai ambang batas dijawab tanpa pemeriksaan ulang.",
-        "bandLabel": "Seberapa tipis yang dianggap kecocokan tipis",
-        "bandValue": "+{value}%",
-        "explainOn": "Kecocokan dengan skor {from}% hingga {to}% diperiksa oleh {model}. Jika hasilnya \"tidak\", tidak ada jawaban yang dikirim dan pesan muncul di Belum terjawab.",
-        "explainOff": "Setiap kecocokan dengan skor {threshold}% atau lebih dijawab. Aktifkan pemeriksaan kedua agar kecocokan yang paling tipis diperiksa ulang.",
-        "cost": "Setiap pemeriksaan mengirim pesan pelanggan dan pertanyaan FAQ ke model: beberapa ratus token, dan menambah sekitar satu detik pada balasan yang tipis. Kecocokan di luar rentang tidak pernah diperiksa. Jika pemeriksaan gagal, tidak tersedia, atau batas per jam tercapai, kecocokan tetap berlaku seolah tidak ada pemeriksaan."
-      },
-      "subtitle": "Aktifkan jawaban FAQ untuk {flow} dan atur seberapa dekat pesan harus cocok."
     },
     "flowNode": {
       "start": "Awal alur",

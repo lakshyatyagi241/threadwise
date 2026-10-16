@@ -40,7 +40,7 @@ export const faqSettings = pgTable(
   {
     orgId: orgIdColumn(),
     flowId: idColumn('flow_id').notNull(),
-    enabled: boolean('enabled').notNull().default(false),
+    enabled: boolean('enabled').notNull().default(true),
     threshold: numeric('threshold', { precision: 4, scale: 3 }).notNull().default('0.450'),
     minMargin: numeric('min_margin', { precision: 4, scale: 3 }).notNull().default('0.000'),
     logQueries: boolean('log_queries').notNull().default(true),

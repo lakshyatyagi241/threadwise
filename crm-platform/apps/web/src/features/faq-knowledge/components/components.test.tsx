@@ -49,7 +49,6 @@ import { FaqFlowProvider } from './faq-flow';
 import { FaqEditorScreen } from './editor-screen';
 import { InsightsScreen } from './insights-screen';
 import { FaqListScreen } from './list-screen';
-import { SettingsScreen } from './settings-screen';
 import { UnansweredScreen } from './unanswered-screen';
 
 const en = JSON.parse(
@@ -179,7 +178,7 @@ describe('FaqListScreen', () => {
     state.perms = new Set();
     expect(html(<FaqListScreen />)).toContain('You do not have access to this screen');
   });
-  it('shows rows with indexing health, a failed filter link and a missing-flow warning', () => {
+  it('shows rows without indexing metrics, and still warns about a missing flow', () => {
     state.list = listState(
       [
         faq(),
@@ -195,10 +194,11 @@ describe('FaqListScreen', () => {
     );
     const out = html(<FaqListScreen />);
     expect(out).toContain('Where is my order?');
-    expect(out).toContain('2 live');
-    expect(out).toContain('1 failed');
     expect(out).toContain('Flow missing');
-    expect(out).toContain('Show FAQs with failures');
+    expect(out).not.toMatch(/\d+ live/);
+    expect(out).not.toContain('failed');
+    expect(out).not.toContain('Indexing');
+    expect(out).not.toContain('Show FAQs with failures');
   });
   it('shows the step a flow FAQ starts at next to the flow, and warns when that step is gone', () => {
     const flow = {
@@ -426,78 +426,6 @@ describe('DecisionView and the second check', () => {
   });
 });
 
-describe('SettingsScreen', () => {
-  it('is read-only for someone who cannot manage and says who can', () => {
-    state.perms.delete('faq.settings.manage');
-    const out = html(<SettingsScreen />);
-    expect(out).toContain('faq.settings.manage');
-    expect(out).toContain('disabled');
-  });
-  it('asks to review the threshold when the platform changed the model, with a one-click recommended value', () => {
-    state.settings = ok(
-      settings({ modelChanged: true, threshold: 0.6, recommendedThreshold: 0.7 }),
-    );
-    const out = html(<SettingsScreen />);
-    expect(out).toContain('The platform changed the AI model after you tuned this threshold');
-    expect(out).toContain('Use the recommended value (70%)');
-    expect(out).toContain('Strict (80%)');
-    expect(out).toContain('Forgiving (60%)');
-  });
-  const verifySwitch = (out: string) => /<button[^>]*id="faq-verify"[^>]*>/.exec(out)?.[0] ?? '';
-  it('explains the second check in numbers: which scores, which model, what a no means', () => {
-    state.settings = ok(settings({ threshold: 0.5, verifyMode: 'borderline', verifyBand: 0.1 }));
-    const out = html(<SettingsScreen />);
-    expect(out).toContain('Second check for close calls');
-    expect(out).toContain('Matches scoring from 50% up to 60% are checked by openai/gpt-4o-mini.');
-    expect(out).toContain('no answer is sent and the message appears under Unanswered');
-    expect(out).toContain('a few hundred tokens');
-    expect(out).toContain('about a second');
-    expect(out).toContain('+10%');
-    expect(verifySwitch(out)).toContain('aria-checked="true"');
-    expect(verifySwitch(out)).not.toContain('disabled=""');
-    expect(out).toContain('id="faq-verify-band"');
-    expect(out).toContain('Second check (optional)');
-  });
-  it('when the check is off, says every match at the bar is answered', () => {
-    state.settings = ok(settings({ threshold: 0.45, verifyMode: 'off' }));
-    const out = html(<SettingsScreen />);
-    expect(out).toContain('Every match scoring 45% or more is answered.');
-    expect(out).not.toContain('are checked by');
-    expect(verifySwitch(out)).toContain('aria-checked="false"');
-  });
-  it('is disabled with a note when the platform switched the check off', () => {
-    state.settings = ok(settings({ verifyMode: 'borderline', verifyAvailable: false }));
-    const out = html(<SettingsScreen />);
-    expect(out).toContain('The platform has switched the second check off');
-    expect(verifySwitch(out)).toContain('disabled=""');
-    expect(/<input[^>]*id="faq-verify-band"[^>]*>/.exec(out)?.[0]).toContain('disabled=""');
-    expect(out).not.toContain('Second check (optional)');
-  });
-  it('shows the band at both edges and caps the top at 100%', () => {
-    state.settings = ok(settings({ threshold: 0.99, verifyMode: 'borderline', verifyBand: 0.3 }));
-    let out = html(<SettingsScreen />);
-    expect(out).toContain('+30%');
-    expect(out).toContain('from 99% up to 100%');
-    expect(out).toMatch(/<input[^>]*max="0.3"[^>]*id="faq-verify-band"/);
-    state.settings = ok(settings({ verifyMode: 'borderline', verifyBand: 0.01 }));
-    out = html(<SettingsScreen />);
-    expect(out).toContain('+1%');
-    expect(out).toContain('from 45% up to 46%');
-    expect(out).toMatch(/<input[^>]*min="0.01"[^>]*id="faq-verify-band"/);
-  });
-  it('lets a viewer without the manage permission see but not change the check', () => {
-    state.perms.delete('faq.settings.manage');
-    const out = html(<SettingsScreen />);
-    expect(verifySwitch(out)).toContain('disabled=""');
-  });
-  it('shows the model, usage and the explainer', () => {
-    const out = html(<SettingsScreen />);
-    expect(out).toContain('openai/text-embedding-3-large');
-    expect(out).toContain('3 of 500');
-    expect(out).toContain('How matching works');
-  });
-});
-
 describe('UnansweredScreen', () => {
   const row = (over: Record<string, unknown> = {}) => ({
     id: 'l1',
@@ -599,7 +527,7 @@ describe('InsightsScreen', () => {
     });
     const out = html(<InsightsScreen />);
     expect(out).toContain('80%');
-    expect(out).toContain('Raise the threshold if wrong answers slip in');
+    expect(out).not.toContain('Raise the threshold if wrong answers slip in');
     expect(out).toContain('Track my order');
     expect(out).toContain('Threshold 45%');
   });
@@ -692,7 +620,7 @@ describe('FaqEditorScreen', () => {
     state.perms.delete('faq.entries.create');
     expect(html(<FaqEditorScreen />)).toContain('faq.entries.create');
   });
-  it('shows each phrasing with its indexing state for a saved FAQ', () => {
+  it('shows each phrasing without its indexing state for a saved FAQ', () => {
     state.entry = ok({
       id: '00000000-0000-4000-8000-000000000001',
       question: 'Where is my order?',
@@ -743,9 +671,9 @@ describe('FaqEditorScreen', () => {
       ],
     });
     const out = html(<FaqEditorScreen id="00000000-0000-4000-8000-000000000001" />);
-    expect(out).toContain('Indexing');
-    expect(out).toContain('Live');
-    expect(out).toContain('Provider refused');
+    expect(out).not.toContain('Indexing');
+    expect(out).not.toContain('Live');
+    expect(out).not.toContain('Provider refused');
     expect(out).toContain('3 / 60');
     expect(out).toContain('Try it');
   });
