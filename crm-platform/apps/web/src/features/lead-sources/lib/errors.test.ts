@@ -92,6 +92,41 @@ describe('leadError', () => {
     expect(e).toMatchObject({ kind: 'planLimit', key: 'planLimit', upgradeUrl: '/account/plans' });
   });
 
+  it('says how many of the plan are used when the problem carries both numbers (BL-061)', () => {
+    const e = leadError(
+      err(422, ERROR_CODES.PLAN_LIMIT_REACHED, [
+        { path: 'limit', message: 'lead_sources' },
+        { path: 'used', message: '5' },
+        { path: 'limitValue', message: '5' },
+        { path: 'upgradeUrl', message: '/account/plans' },
+      ]),
+    );
+    expect(e).toMatchObject({
+      kind: 'planLimit',
+      key: 'planLimitUsed',
+      values: { used: '5', limit: '5' },
+    });
+    // none of the plan's own details is a problem with a form field
+    expect(e.issues).toEqual([]);
+  });
+
+  it('falls back to the plain plan message when a number is missing or not a whole number', () => {
+    for (const details of [
+      [{ path: 'used', message: '5' }],
+      [{ path: 'limitValue', message: '5' }],
+      [
+        { path: 'used', message: 'five' },
+        { path: 'limitValue', message: '5' },
+      ],
+      [
+        { path: 'used', message: '2' },
+        { path: 'limitValue', message: '0' },
+      ],
+    ]) {
+      expect(leadError(err(422, ERROR_CODES.PLAN_LIMIT_REACHED, details)).key).toBe('planLimit');
+    }
+  });
+
   it('asks for a reload on a row version conflict', () => {
     expect(leadError(err(409, ERROR_CODES.ROW_VERSION_CONFLICT))).toMatchObject({
       kind: 'conflict',

@@ -17,6 +17,7 @@ import {
   type LeadTab,
   type SourceRow,
 } from '../lib/source-view';
+import { HookAddressNotice } from './hook-address-notice';
 import { KindBadge, Loading, NoAccess, RegionError, SourceStatusChip, When } from './ui';
 
 const LINK_BUTTON =
@@ -46,8 +47,9 @@ export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }
     return <RegionError error={list.error} onRetry={() => void list.refetch()} />;
   }
 
-  const rows = sourceRows(list.data ?? []);
-  const waiting = attentionTotal(list.data ?? []);
+  const sources = list.data?.data ?? [];
+  const rows = sourceRows(sources);
+  const waiting = attentionTotal(sources);
   const change = (id: string) => {
     const next = parseTab(id);
     setTab(next);
@@ -188,6 +190,7 @@ export function WebhookTab({ can, rows }: { can: LeadsCan; rows: SourceRow[] }) 
   }
   return (
     <div className="space-y-3">
+      {can.manage && <HookAddressNotice />}
       <div className="overflow-x-auto rounded-md border border-border">
         <table className="w-full min-w-[44rem] border-collapse text-sm">
           <caption className="sr-only">{t('caption')}</caption>

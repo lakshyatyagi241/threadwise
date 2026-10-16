@@ -56,6 +56,13 @@ Written by this domain in other domains' tables: `contacts` (create through `Con
 - Settings: none. A workspace configures a source; the operator console has nothing to switch for a webhook (the Meta, TikTok and LinkedIn
   credentials arrive with those doors).
 
+## Complete webhook address (BL-061)
+
+| Id            | What                                                                                                                                        | Where                                                                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-LEAD-022 | `hookUrl` / `hookUrlProblem` on create and rotate, `hookAddress` on the list; built from the raw `APP_URL`, refused when missing or private | `lead-hook-address.ts` (`resolveHookBase`), `LeadSourcesService`; web: `RevealPanel`, `HookAddressNotice` (the client no longer guesses one) |
+| WIRE-LEAD-023 | The plan-limit problem of a create carries `limit`, `used`, `limitValue`; the wizard says "You have used 5 of 5 lead sources"               | `PlanEntitlementService.assertWithinLimit` (unchanged), `lead-sources/lib/errors.ts` (`planLimitUsed`)                                       |
+
 ## Not built, recorded
 
 | Id            | What                                                                                                 | Status                                               |

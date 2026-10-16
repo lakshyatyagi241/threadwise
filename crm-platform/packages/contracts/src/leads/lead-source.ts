@@ -222,26 +222,49 @@ export const leadSourceResponseSchema = z.object({
 });
 export type LeadSourceResponse = z.infer<typeof leadSourceResponseSchema>;
 
-export const leadSourceListResponseSchema = z.object({ data: z.array(leadSourceResponseSchema) });
+/**
+ * Why the server cannot give a complete webhook address (BL-061). The address is built from the platform's configured public API
+ * address (`APP_URL`); when that is missing or points at a machine the ad platforms cannot reach, the server says so instead of
+ * handing out a wrong address, and the screen tells the person to ask whoever runs the platform to fix the setting.
+ */
+export const LEAD_HOOK_BASE_PROBLEMS = ['base_url_not_configured', 'base_url_not_public'] as const;
+export const leadHookBaseProblemSchema = z.enum(LEAD_HOOK_BASE_PROBLEMS);
+export type LeadHookBaseProblem = z.infer<typeof leadHookBaseProblemSchema>;
+
+/** The public origin of the API as the server knows it. `baseUrl` is null exactly when `problem` is set. */
+export const leadHookAddressSchema = z.object({
+  baseUrl: z.string().nullable(),
+  problem: leadHookBaseProblemSchema.nullable(),
+});
+export type LeadHookAddress = z.infer<typeof leadHookAddressSchema>;
+
+export const leadSourceListResponseSchema = z.object({
+  data: z.array(leadSourceResponseSchema),
+  /** Whether a complete webhook address can be built at all, so the screen warns before a source is created. */
+  hookAddress: leadHookAddressSchema,
+});
 export type LeadSourceListResponse = z.infer<typeof leadSourceListResponseSchema>;
 
-/** Create and rotate: the one time the token is shown. `hookPath` is `LEAD_HOOK_PATH_PREFIX + token`; prefix it with the API's origin. */
+/**
+ * Create and rotate: the one time the token is shown. `hookPath` is `LEAD_HOOK_PATH_PREFIX + token`; `hookUrl` is the complete public
+ * address (the configured API origin in front of it), or null with `hookUrlProblem` saying why the server could not build it.
+ */
 export const leadSourceSecretsResponseSchema = z.object({
   token: z.string(),
   hookPath: z.string(),
+  hookUrl: z.string().nullable(),
+  hookUrlProblem: leadHookBaseProblemSchema.nullable(),
 });
 export type LeadSourceSecretsResponse = z.infer<typeof leadSourceSecretsResponseSchema>;
 
-export const createLeadSourceResponseSchema = leadSourceResponseSchema.extend({
-  token: z.string(),
-  hookPath: z.string(),
-});
+export const createLeadSourceResponseSchema = leadSourceResponseSchema.merge(
+  leadSourceSecretsResponseSchema,
+);
 export type CreateLeadSourceResponse = z.infer<typeof createLeadSourceResponseSchema>;
 
-export const rotateLeadSourceTokenResponseSchema = leadSourceResponseSchema.extend({
-  token: z.string(),
-  hookPath: z.string(),
-});
+export const rotateLeadSourceTokenResponseSchema = leadSourceResponseSchema.merge(
+  leadSourceSecretsResponseSchema,
+);
 export type RotateLeadSourceTokenResponse = z.infer<typeof rotateLeadSourceTokenResponseSchema>;
 
 // --- mapping preview ----------------------------------------------------------------------------------------------------

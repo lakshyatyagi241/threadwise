@@ -5,6 +5,7 @@ import { ContactAttributionController } from './contact-attribution.controller';
 import { ContactAttributionService } from './contact-attribution.service';
 import { LeadHooksController } from './lead-hooks.controller';
 import { LeadHooksService } from './lead-hooks.service';
+import { LeadHookAddressService } from './lead-hook-address';
 import { LeadIngestModule } from './lead-ingest.module';
 import { LeadSourcesController } from './lead-sources.controller';
 import { LeadSourcesService } from './lead-sources.service';
@@ -23,6 +24,7 @@ import { LeadHookThrottle } from './lead-throttle';
     LeadSourcesService,
     LeadHooksService,
     LeadHookThrottle,
+    LeadHookAddressService,
     ContactAttributionService,
   ],
 })

@@ -35,7 +35,8 @@
       "mappingSaved": "映射已保存",
       "planLimit": "已达到套餐的线索来源数量上限，因此无法创建新来源。",
       "planLocked": "您的套餐不包含社交线索。",
-      "upgrade": "升级套餐"
+      "upgrade": "升级套餐",
+      "planLimitUsed": "你已使用 {used} 个线索来源，上限为 {limit} 个，因此无法创建新来源。"
     },
     "form": {
       "name": "来源名称",
@@ -210,7 +211,7 @@
       "bodyRotated": "旧网址已立即失效。此新网址仅显示这一次。",
       "url": "Webhook 网址",
       "copyUrl": "复制网址",
-      "noOrigin": "在此路径前加上您的 API 地址即可得到完整网址。",
+      "noOrigin": "平台的公开 API 地址尚未设置，因此无法生成完整的 URL。请联系运营此平台的人员进行设置。在此之前，请在此路径前加上你的 API 地址。",
       "token": "令牌",
       "copyToken": "复制令牌",
       "secretHint": "此来源还需要共享密钥：发送方必须在 {header} 请求头中发送该密钥。",
@@ -218,7 +219,8 @@
       "sampleHelp": "在 Zapier 或 Make 中，使用向网址发送 JSON 的 Webhooks 操作。此命令将发送一条示例线索。",
       "copied": "我已将网址和令牌保存到安全的地方",
       "done": "我已复制，继续",
-      "doneHint": "请先勾选此框。此后将无法再次显示令牌。"
+      "doneHint": "请先勾选此框。此后将无法再次显示令牌。",
+      "notPublic": "平台的公开 API 地址指向了广告平台无法访问的私有或本地地址，因此不显示完整的 URL。请联系运营此平台的人员设置公开地址，然后轮换令牌以获取完整的 URL。"
     },
     "test": {
       "title": "发送测试线索",
@@ -417,7 +419,8 @@
         "pipeline_required": "请选择此阶段所属的销售管道。",
         "unknown_or_lost_stage": "此生命周期阶段不存在，或为丢失阶段。",
         "unknown_or_inactive_user": "所选人员中有人不是此工作区的有效成员。"
-      }
+      },
+      "planLimitUsed": "你已使用 {used} 个线索来源，上限为 {limit} 个。请升级套餐，或删除不再使用的来源。"
     },
     "problems": {
       "nameRequired": "请为来源命名。",
@@ -554,6 +557,11 @@
       "endsIn": "将于 {hint} 结束",
       "noEvents": "暂无线索",
       "needsAttention": "{count, plural, other {# 条线索}}"
+    },
+    "hookAddress": {
+      "title": "新的 webhook URL 将不完整",
+      "notConfigured": "平台的公开 API 地址尚未设置。请联系运营此平台的人员进行设置；在此之前，新来源只能显示其 URL 的路径部分。",
+      "notPublic": "平台的公开 API 地址指向了广告平台无法访问的私有或本地地址。请联系运营此平台的人员设置公开地址。"
     }
   }
 }

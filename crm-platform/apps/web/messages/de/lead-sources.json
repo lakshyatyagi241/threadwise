@@ -46,7 +46,8 @@
         "pipeline_required": "Wählen Sie die Pipeline, zu der diese Phase gehört.",
         "unknown_or_lost_stage": "Diese Lebenszyklusphase existiert nicht oder ist eine verlorene Phase.",
         "unknown_or_inactive_user": "Eine der ausgewählten Personen ist kein aktives Mitglied dieses Workspace."
-      }
+      },
+      "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt. Upgraden Sie Ihren Tarif oder löschen Sie eine Quelle, die Sie nicht mehr verwenden."
     },
     "problems": {
       "nameRequired": "Geben Sie der Quelle einen Namen.",
@@ -219,7 +220,8 @@
       "skipMapping": "Vorerst überspringen",
       "finish": "Speichern und abschließen",
       "revealGone": "URL und Token werden nicht mehr angezeigt. Falls Sie sie nicht gespeichert haben, öffnen Sie die Quelle und erneuern Sie das Token, um eine neue URL zu erhalten.",
-      "toMapping": "Weiter zur Zuordnung"
+      "toMapping": "Weiter zur Zuordnung",
+      "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt, daher kann keine neue Quelle angelegt werden."
     },
     "form": {
       "name": "Quellenname",
@@ -394,7 +396,7 @@
       "bodyRotated": "Die alte URL hat sofort aufgehört zu funktionieren. Diese neue wird nur jetzt angezeigt.",
       "url": "Webhook-URL",
       "copyUrl": "URL kopieren",
-      "noOrigin": "Stellen Sie Ihre API-Adresse vor diesen Pfad, um die vollständige URL zu erhalten.",
+      "noOrigin": "Die öffentliche API-Adresse der Plattform ist nicht festgelegt, daher konnte die vollständige URL nicht erstellt werden. Bitten Sie die Person, die diese Plattform betreibt, sie festzulegen. Stellen Sie bis dahin die Adresse Ihrer API vor diesen Pfad.",
       "token": "Token",
       "copyToken": "Token kopieren",
       "secretHint": "Diese Quelle benötigt außerdem einen geheimen Schlüssel: der Absender muss ihn im Header {header} senden.",
@@ -402,7 +404,8 @@
       "sampleHelp": "Verwenden Sie in Zapier oder Make eine Webhooks-Aktion, die JSON an die URL sendet. Dieser Befehl sendet einen Beispiel-Lead.",
       "copied": "Ich habe URL und Token an einem sicheren Ort kopiert",
       "done": "Ich habe es kopiert, weiter",
-      "doneHint": "Setzen Sie zuerst das Häkchen. Danach kann das Token nicht erneut angezeigt werden."
+      "doneHint": "Setzen Sie zuerst das Häkchen. Danach kann das Token nicht erneut angezeigt werden.",
+      "notPublic": "Die öffentliche API-Adresse der Plattform verweist auf eine private oder lokale Adresse, die Werbeplattformen nicht erreichen können, daher wird die vollständige URL nicht angezeigt. Bitten Sie die Person, die diese Plattform betreibt, eine öffentliche Adresse festzulegen, und rotieren Sie dann das Token, um eine vollständige URL zu erhalten."
     },
     "test": {
       "title": "Test-Lead senden",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Erfasst",
       "openSource": "Lead-Quelle öffnen"
+    },
+    "hookAddress": {
+      "title": "Neue Webhook-URLs sind unvollständig",
+      "notConfigured": "Die öffentliche API-Adresse der Plattform ist nicht festgelegt. Bitten Sie die Person, die diese Plattform betreibt, sie festzulegen; bis dahin kann eine neue Quelle nur den Pfad ihrer URL anzeigen.",
+      "notPublic": "Die öffentliche API-Adresse der Plattform verweist auf eine private oder lokale Adresse, die Werbeplattformen nicht erreichen können. Bitten Sie die Person, die diese Plattform betreibt, eine öffentliche Adresse festzulegen."
     }
   }
 }

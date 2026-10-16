@@ -25,7 +25,8 @@ Held by the Owner and Admin presets (the trigger on `permission_defs` grants a n
 holds them by default. `GET /contacts/:id/attribution` needs only `record.contacts.read` (and the contact's own record scope).
 
 **Plan.** Every `/lead-sources` route needs the plan feature `lead_sources` (422 `PLAN_FEATURE_LOCKED`, reads too); creating a source counts
-against the plan limit `lead_sources` (0 = unlimited, 422 `PLAN_LIMIT_REACHED`). Both default to open, so a plan row that predates them is
+against the plan limit `lead_sources` (0 = unlimited, 422 `PLAN_LIMIT_REACHED`; the problem's `errors` carry `limit` (`lead_sources`), `used`
+(how many the workspace has) and `limitValue` (the cap), so the screen says "You have used 5 of 5 lead sources"). Both default to open, so a plan row that predates them is
 neither locked nor capped. A workspace whose plan has no lead sources answers its public hooks like an unknown token: 404.
 
 ## The source
@@ -73,7 +74,15 @@ Names are unique per workspace ignoring case (`409 LEAD_SOURCE_NAME_TAKEN`). `ro
 the last-event stamp, which every incoming lead moves, never change it. `needsAttention` counts the source's `needs_review` and `failed`
 events that are not test leads.
 
-**Secrets are write-only.** The URL token is returned once, by create and by rotate (`token`, `hookPath`), and only its SHA-256 and its last
+**The complete address (BL-061).** Create and rotate answer, besides `token` and `hookPath`, a `hookUrl`: the platform's public API address in
+front of the path, built by the server from `APP_URL` (the setting the channel webhooks and the marketplace hooks use). When that address is
+not set, or in production points at the machine itself or a private network (`localhost`, `127.*`, `10.*`, `172.16-31.*`, `192.168.*`,
+`*.local`, `*.internal`), `hookUrl` is `null` and `hookUrlProblem` is `base_url_not_configured` or `base_url_not_public`: no address is
+better than a wrong one that never receives a lead. `GET /lead-sources` carries the same verdict as `hookAddress` (`baseUrl`, `problem`), so
+the screen can warn before a source is created. The raw environment is read, not the schema default (`http://localhost:3000`), so an unset
+`APP_URL` is reported, not papered over.
+
+**Secrets are write-only.** The URL token is returned once, by create and by rotate (`token`, `hookPath`, `hookUrl`), and only its SHA-256 and its last
 four characters are stored. The shared secret (`secret`, 12 to 200 characters) is sealed with the credentials key and never returned: the
 source shows `hasSecret`. No other response, audit row or outbox event carries a token, a hash or a secret.
 

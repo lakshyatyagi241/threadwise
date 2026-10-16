@@ -46,7 +46,8 @@
         "pipeline_required": "Kies de pipeline waar deze fase bij hoort.",
         "unknown_or_lost_stage": "Deze levenscyclusfase bestaat niet of is een verloren fase.",
         "unknown_or_inactive_user": "Een van de geselecteerde personen is geen actief lid van deze workspace."
-      }
+      },
+      "planLimitUsed": "Je hebt {used} van de {limit} leadbronnen gebruikt. Upgrade je abonnement of verwijder een bron die je niet meer gebruikt."
     },
     "problems": {
       "nameRequired": "Geef de bron een naam.",
@@ -219,7 +220,8 @@
       "skipMapping": "Nu overslaan",
       "finish": "Opslaan en afronden",
       "revealGone": "De URL en het token worden niet meer getoond. Als je ze niet hebt bewaard, open je de bron en vernieuw je het token om een nieuwe URL te krijgen.",
-      "toMapping": "Doorgaan naar koppelen"
+      "toMapping": "Doorgaan naar koppelen",
+      "planLimitUsed": "Je hebt {used} van de {limit} leadbronnen gebruikt, dus er kan geen nieuwe bron worden aangemaakt."
     },
     "form": {
       "name": "Naam bron",
@@ -394,7 +396,7 @@
       "bodyRotated": "De oude URL werkt meteen niet meer. Deze nieuwe wordt alleen nu getoond.",
       "url": "Webhook-URL",
       "copyUrl": "URL kopiëren",
-      "noOrigin": "Zet je API-adres voor dit pad om de volledige URL te krijgen.",
+      "noOrigin": "Het openbare API-adres van het platform is niet ingesteld, dus de volledige URL kon niet worden samengesteld. Vraag degene die dit platform beheert om het in te stellen. Zet tot die tijd het adres van je API voor dit pad.",
       "token": "Token",
       "copyToken": "Token kopiëren",
       "secretHint": "Deze bron heeft ook een gedeeld geheim nodig: de verzender moet het meesturen in de header {header}.",
@@ -402,7 +404,8 @@
       "sampleHelp": "Gebruik in Zapier of Make een Webhooks-actie die JSON naar de URL post. Dit commando stuurt één voorbeeldlead.",
       "copied": "Ik heb de URL en het token ergens veilig gekopieerd",
       "done": "Ik heb het gekopieerd, doorgaan",
-      "doneHint": "Vink eerst het vakje aan. Daarna kan het token niet meer worden getoond."
+      "doneHint": "Vink eerst het vakje aan. Daarna kan het token niet meer worden getoond.",
+      "notPublic": "Het openbare API-adres van het platform verwijst naar een privé- of lokaal adres dat advertentieplatforms niet kunnen bereiken, dus de volledige URL wordt niet getoond. Vraag degene die dit platform beheert om een openbaar adres in te stellen en roteer daarna de token om een volledige URL te krijgen."
     },
     "test": {
       "title": "Stuur een testlead",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Vastgelegd",
       "openSource": "Open de leadbron"
+    },
+    "hookAddress": {
+      "title": "Nieuwe webhook-URL's zijn onvolledig",
+      "notConfigured": "Het openbare API-adres van het platform is niet ingesteld. Vraag degene die dit platform beheert om het in te stellen; tot die tijd kan een nieuwe bron alleen het pad van zijn URL tonen.",
+      "notPublic": "Het openbare API-adres van het platform verwijst naar een privé- of lokaal adres dat advertentieplatforms niet kunnen bereiken. Vraag degene die dit platform beheert om een openbaar adres in te stellen."
     }
   }
 }

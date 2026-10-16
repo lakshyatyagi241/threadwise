@@ -46,7 +46,8 @@
         "pipeline_required": "Chọn pipeline mà giai đoạn này thuộc về.",
         "unknown_or_lost_stage": "Giai đoạn vòng đời này không tồn tại hoặc là giai đoạn thất bại.",
         "unknown_or_inactive_user": "Một trong những người đã chọn không phải thành viên đang hoạt động của không gian làm việc."
-      }
+      },
+      "planLimitUsed": "Bạn đã dùng {used}/{limit} nguồn khách hàng tiềm năng. Hãy nâng cấp gói hoặc xóa một nguồn bạn không còn dùng."
     },
     "problems": {
       "nameRequired": "Hãy đặt tên cho nguồn.",
@@ -219,7 +220,8 @@
       "skipMapping": "Bỏ qua bây giờ",
       "finish": "Lưu và hoàn tất",
       "revealGone": "URL và token không còn được hiển thị. Nếu bạn chưa lưu lại, hãy mở nguồn và đổi token để nhận URL mới.",
-      "toMapping": "Tiếp tục đến bước ánh xạ"
+      "toMapping": "Tiếp tục đến bước ánh xạ",
+      "planLimitUsed": "Bạn đã dùng {used}/{limit} nguồn khách hàng tiềm năng, nên không thể tạo nguồn mới."
     },
     "form": {
       "name": "Tên nguồn",
@@ -394,7 +396,7 @@
       "bodyRotated": "URL cũ đã ngừng hoạt động ngay. URL mới này chỉ được hiển thị lần này.",
       "url": "URL webhook",
       "copyUrl": "Sao chép URL",
-      "noOrigin": "Đặt địa chỉ API của bạn trước đường dẫn này để có URL đầy đủ.",
+      "noOrigin": "Địa chỉ API công khai của nền tảng chưa được thiết lập nên không thể tạo URL đầy đủ. Hãy nhờ người vận hành nền tảng này thiết lập địa chỉ đó. Trong lúc chờ, hãy thêm địa chỉ API của bạn vào phía trước đường dẫn này.",
       "token": "Token",
       "copyToken": "Sao chép token",
       "secretHint": "Nguồn này cũng cần khóa bí mật dùng chung: người gửi phải gửi khóa trong tiêu đề {header}.",
@@ -402,7 +404,8 @@
       "sampleHelp": "Trong Zapier hoặc Make, dùng hành động Webhooks để gửi JSON đến URL. Lệnh này gửi một khách hàng tiềm năng mẫu.",
       "copied": "Tôi đã sao chép URL và token vào nơi an toàn",
       "done": "Tôi đã sao chép, tiếp tục",
-      "doneHint": "Hãy tick vào ô trước. Sau bước này sẽ không thể hiển thị lại token."
+      "doneHint": "Hãy tick vào ô trước. Sau bước này sẽ không thể hiển thị lại token.",
+      "notPublic": "Địa chỉ API công khai của nền tảng đang trỏ tới một địa chỉ riêng tư hoặc cục bộ mà các nền tảng quảng cáo không thể truy cập, nên URL đầy đủ không được hiển thị. Hãy nhờ người vận hành nền tảng này thiết lập địa chỉ công khai, sau đó xoay vòng token để nhận URL đầy đủ."
     },
     "test": {
       "title": "Gửi khách hàng tiềm năng thử nghiệm",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Thu nhận",
       "openSource": "Mở nguồn khách hàng tiềm năng"
+    },
+    "hookAddress": {
+      "title": "URL webhook mới sẽ không đầy đủ",
+      "notConfigured": "Địa chỉ API công khai của nền tảng chưa được thiết lập. Hãy nhờ người vận hành nền tảng này thiết lập; cho đến lúc đó, nguồn mới chỉ có thể hiển thị đường dẫn của URL.",
+      "notPublic": "Địa chỉ API công khai của nền tảng đang trỏ tới một địa chỉ riêng tư hoặc cục bộ mà các nền tảng quảng cáo không thể truy cập. Hãy nhờ người vận hành nền tảng này thiết lập địa chỉ công khai."
     }
   }
 }

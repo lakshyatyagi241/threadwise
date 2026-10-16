@@ -46,7 +46,8 @@
         "pipeline_required": "Choisissez le pipeline auquel appartient cette étape.",
         "unknown_or_lost_stage": "Cette étape du cycle de vie n’existe pas ou correspond à une perte.",
         "unknown_or_inactive_user": "L’une des personnes sélectionnées n’est pas membre actif de cet espace de travail."
-      }
+      },
+      "planLimitUsed": "Vous avez utilisé {used} sources de leads sur {limit}. Passez à une offre supérieure ou supprimez une source que vous n'utilisez plus."
     },
     "problems": {
       "nameRequired": "Donnez un nom à la source.",
@@ -219,7 +220,8 @@
       "skipMapping": "Ignorer pour l’instant",
       "finish": "Enregistrer et terminer",
       "revealGone": "L’URL et le jeton ne sont plus affichés. Si vous ne les avez pas conservés, ouvrez la source et régénérez le jeton pour obtenir une nouvelle URL.",
-      "toMapping": "Continuer vers le mappage"
+      "toMapping": "Continuer vers le mappage",
+      "planLimitUsed": "Vous avez utilisé {used} sources de leads sur {limit} : aucune nouvelle source ne peut donc être créée."
     },
     "form": {
       "name": "Nom de la source",
@@ -394,7 +396,7 @@
       "bodyRotated": "L’ancienne URL a cessé de fonctionner immédiatement. Cette nouvelle URL n’est affichée qu’une seule fois.",
       "url": "URL du webhook",
       "copyUrl": "Copier l’URL",
-      "noOrigin": "Placez l’adresse de votre API devant ce chemin pour obtenir l’URL complète.",
+      "noOrigin": "L'adresse publique de l'API de la plateforme n'est pas définie, l'URL complète n'a donc pas pu être construite. Demandez à la personne qui administre cette plateforme de la définir. En attendant, ajoutez l'adresse de votre API devant ce chemin.",
       "token": "Jeton",
       "copyToken": "Copier le jeton",
       "secretHint": "Cette source nécessite aussi un secret partagé : l’expéditeur doit l’envoyer dans l’en-tête {header}.",
@@ -402,7 +404,8 @@
       "sampleHelp": "Dans Zapier ou Make, utilisez une action Webhooks qui envoie du JSON à l’URL. Cette commande envoie un exemple de lead.",
       "copied": "J’ai copié l’URL et le jeton en lieu sûr",
       "done": "Je l’ai copié, continuer",
-      "doneHint": "Cochez d’abord la case. Ensuite, le jeton ne pourra plus être affiché."
+      "doneHint": "Cochez d’abord la case. Ensuite, le jeton ne pourra plus être affiché.",
+      "notPublic": "L'adresse publique de l'API de la plateforme pointe vers une adresse privée ou locale que les plateformes publicitaires ne peuvent pas atteindre ; l'URL complète n'est donc pas affichée. Demandez à la personne qui administre cette plateforme de définir une adresse publique, puis renouvelez le jeton pour obtenir une URL complète."
     },
     "test": {
       "title": "Envoyer un lead de test",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Capturé",
       "openSource": "Ouvrir la source de leads"
+    },
+    "hookAddress": {
+      "title": "Les nouvelles URL de webhook seront incomplètes",
+      "notConfigured": "L'adresse publique de l'API de la plateforme n'est pas définie. Demandez à la personne qui administre cette plateforme de la définir ; d'ici là, une nouvelle source ne pourra afficher que le chemin de son URL.",
+      "notPublic": "L'adresse publique de l'API de la plateforme pointe vers une adresse privée ou locale que les plateformes publicitaires ne peuvent pas atteindre. Demandez à la personne qui administre cette plateforme de définir une adresse publique."
     }
   }
 }

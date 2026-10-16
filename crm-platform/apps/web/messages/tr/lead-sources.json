@@ -46,7 +46,8 @@
         "pipeline_required": "Bu aşamanın ait olduğu satış hattını seçin.",
         "unknown_or_lost_stage": "Bu yaşam döngüsü aşaması yok veya kayıp aşaması.",
         "unknown_or_inactive_user": "Seçilen kişilerden biri bu çalışma alanının aktif bir üyesi değil."
-      }
+      },
+      "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız. Planınızı yükseltin veya artık kullanmadığınız bir kaynağı silin."
     },
     "problems": {
       "nameRequired": "Kaynağa bir ad verin.",
@@ -219,7 +220,8 @@
       "skipMapping": "Şimdilik atla",
       "finish": "Kaydet ve bitir",
       "revealGone": "URL ve belirteç artık gösterilmiyor. Bunları kaydetmediyseniz kaynağı açın ve belirteci yenileyerek yeni bir URL alın.",
-      "toMapping": "Eşlemeye devam et"
+      "toMapping": "Eşlemeye devam et",
+      "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız, bu nedenle yeni kaynak oluşturulamaz."
     },
     "form": {
       "name": "Kaynak adı",
@@ -394,7 +396,7 @@
       "bodyRotated": "Eski URL hemen çalışmayı durdurdu. Bu yeni olan yalnızca bu sefer gösterilir.",
       "url": "Webhook URL'si",
       "copyUrl": "URL'yi kopyala",
-      "noOrigin": "Tam URL için API adresinizi bu yolun önüne ekleyin.",
+      "noOrigin": "Platformun herkese açık API adresi ayarlanmadığı için tam URL oluşturulamadı. Bu platformu yöneten kişiden adresi ayarlamasını isteyin. O zamana kadar bu yolun önüne kendi API adresinizi ekleyin.",
       "token": "Belirteç",
       "copyToken": "Belirteci kopyala",
       "secretHint": "Bu kaynak ayrıca bir paylaşılan gizli anahtar gerektirir: gönderen bunu {header} üstbilgisinde göndermelidir.",
@@ -402,7 +404,8 @@
       "sampleHelp": "Zapier veya Make'te, URL'ye JSON gönderen bir Webhooks eylemi kullanın. Bu komut bir örnek potansiyel müşteri gönderir.",
       "copied": "URL'yi ve belirteci güvenli bir yere kopyaladım",
       "done": "Kopyaladım, devam et",
-      "doneHint": "Önce kutuyu işaretleyin. Bundan sonra belirteç bir daha gösterilemez."
+      "doneHint": "Önce kutuyu işaretleyin. Bundan sonra belirteç bir daha gösterilemez.",
+      "notPublic": "Platformun herkese açık API adresi, reklam platformlarının erişemeyeceği özel veya yerel bir adresi gösteriyor, bu nedenle tam URL gösterilmiyor. Bu platformu yöneten kişiden herkese açık bir adres ayarlamasını isteyin, ardından tam URL'yi almak için belirteci yenileyin."
     },
     "test": {
       "title": "Test potansiyel müşterisi gönder",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Yakalandı",
       "openSource": "Potansiyel müşteri kaynağını aç"
+    },
+    "hookAddress": {
+      "title": "Yeni webhook URL'leri eksik olacak",
+      "notConfigured": "Platformun herkese açık API adresi ayarlanmamış. Bu platformu yöneten kişiden adresi ayarlamasını isteyin; o zamana kadar yeni bir kaynak URL'sinin yalnızca yolunu gösterebilir.",
+      "notPublic": "Platformun herkese açık API adresi, reklam platformlarının erişemeyeceği özel veya yerel bir adresi gösteriyor. Bu platformu yöneten kişiden herkese açık bir adres ayarlamasını isteyin."
     }
   }
 }

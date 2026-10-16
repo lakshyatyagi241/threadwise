@@ -46,7 +46,8 @@
         "pipeline_required": "Choose the pipeline this stage belongs to.",
         "unknown_or_lost_stage": "This lifecycle stage does not exist or is a lost stage.",
         "unknown_or_inactive_user": "One of the selected people is not an active member of this workspace."
-      }
+      },
+      "planLimitUsed": "You have used {used} of {limit} lead sources. Upgrade your plan or delete a source you no longer use."
     },
     "problems": {
       "nameRequired": "Give the source a name.",
@@ -219,7 +220,8 @@
       "skipMapping": "Skip for now",
       "finish": "Save and finish",
       "revealGone": "The URL and token are no longer shown. If you did not keep them, open the source and rotate the token to get a new URL.",
-      "toMapping": "Continue to mapping"
+      "toMapping": "Continue to mapping",
+      "planLimitUsed": "You have used {used} of {limit} lead sources, so no new source can be created."
     },
     "form": {
       "name": "Source name",
@@ -394,7 +396,7 @@
       "bodyRotated": "The old URL stopped working at once. This new one is shown only this time.",
       "url": "Webhook URL",
       "copyUrl": "Copy URL",
-      "noOrigin": "Put your API address in front of this path to get the full URL.",
+      "noOrigin": "The platform's public API address is not set, so the full URL could not be built. Ask whoever runs this platform to set it. Until then, put your API address in front of this path.",
       "token": "Token",
       "copyToken": "Copy token",
       "secretHint": "This source also needs a shared secret: the sender must send it in the {header} header.",
@@ -402,7 +404,8 @@
       "sampleHelp": "In Zapier or Make, use a Webhooks action that posts JSON to the URL. This command sends one sample lead.",
       "copied": "I have copied the URL and token somewhere safe",
       "done": "I have copied it, continue",
-      "doneHint": "Tick the box first. After this the token cannot be shown again."
+      "doneHint": "Tick the box first. After this the token cannot be shown again.",
+      "notPublic": "The platform's public API address points at a private or local address that ad platforms cannot reach, so the full URL is not shown. Ask whoever runs this platform to set a public address, then rotate the token to get a complete URL."
     },
     "test": {
       "title": "Send a test lead",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Captured",
       "openSource": "Open the lead source"
+    },
+    "hookAddress": {
+      "title": "New webhook URLs will be incomplete",
+      "notConfigured": "The platform's public API address is not set. Ask whoever runs this platform to set it; until then a new source can only show the path of its URL.",
+      "notPublic": "The platform's public API address points at a private or local address that ad platforms cannot reach. Ask whoever runs this platform to set a public address."
     }
   }
 }

@@ -52,8 +52,9 @@ const ROOT = '/lead-sources';
 
 // --- sources ------------------------------------------------------------------------------------------------------------------
 
+/** The sources and whether the server can build a complete webhook address at all (`hookAddress`). */
 export const fetchSources = (signal?: AbortSignal) =>
-  apiFetch(ROOT, { schema: leadSourceListResponseSchema, signal }).then((r) => r.data);
+  apiFetch(ROOT, { schema: leadSourceListResponseSchema, signal });
 
 export const fetchSource = (id: string, signal?: AbortSignal) =>
   apiFetch(`${ROOT}/${id}`, { schema: leadSourceResponseSchema, signal });
@@ -65,12 +66,12 @@ export interface WithSecrets {
 
 /** Creates the source and splits the one-time token off the response. */
 export async function createSource(body: CreateLeadSourceInput): Promise<WithSecrets> {
-  const { token, hookPath, ...source } = await apiFetch(ROOT, {
+  const { token, hookPath, hookUrl, hookUrlProblem, ...source } = await apiFetch(ROOT, {
     method: 'POST',
     body,
     schema: createLeadSourceResponseSchema,
   });
-  return { source, secrets: { token, hookPath } };
+  return { source, secrets: { token, hookPath, hookUrl, hookUrlProblem } };
 }
 
 export const updateSource = (id: string, body: UpdateLeadSourceInput) =>
@@ -81,11 +82,11 @@ export const deleteSource = (id: string): Promise<void> =>
   apiFetch(`${ROOT}/${id}`, { method: 'DELETE' });
 
 export async function rotateToken(id: string): Promise<WithSecrets> {
-  const { token, hookPath, ...source } = await apiFetch(`${ROOT}/${id}/rotate-token`, {
-    method: 'POST',
-    schema: rotateLeadSourceTokenResponseSchema,
-  });
-  return { source, secrets: { token, hookPath } };
+  const { token, hookPath, hookUrl, hookUrlProblem, ...source } = await apiFetch(
+    `${ROOT}/${id}/rotate-token`,
+    { method: 'POST', schema: rotateLeadSourceTokenResponseSchema },
+  );
+  return { source, secrets: { token, hookPath, hookUrl, hookUrlProblem } };
 }
 
 export const previewMapping = (id: string, body: PreviewLeadMappingInput, signal?: AbortSignal) =>

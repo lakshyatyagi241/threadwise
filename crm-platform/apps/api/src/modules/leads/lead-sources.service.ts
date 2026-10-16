@@ -27,6 +27,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { LeadEventsRepository, type LeadEventRow } from './lead-events.repository';
+import { LeadHookAddressService, hookUrlFor } from './lead-hook-address';
 import { LeadIngestService } from './lead-ingest.service';
 import { leadConsentFromBody } from './lead-consent';
 import type { NormalisedLead } from './lead-ingest.port';
@@ -76,7 +77,19 @@ export class LeadSourcesService {
     private readonly crypto: CryptoService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly hookAddress: LeadHookAddressService,
   ) {}
+
+  /** What create and rotate hand back once: the token, its path, and the complete public address (or why there is none). */
+  private secretsFor(token: string) {
+    const base = this.hookAddress.current();
+    return {
+      token,
+      hookPath: hookPathFor(token),
+      hookUrl: hookUrlFor(base, token),
+      hookUrlProblem: base.problem,
+    };
+  }
 
   // --- reads -----------------------------------------------------------------------------------------------------------------
 
@@ -84,6 +97,7 @@ export class LeadSourcesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => ({
       data: (await this.repo.list(tx, ctx.orgId)).map(toLeadSourceResponse),
+      hookAddress: this.hookAddress.current(),
     }));
   }
 
@@ -131,7 +145,7 @@ export class LeadSourcesService {
         eventType: 'lead_source.created',
         payload: { uuid: row.uuid, name: row.name, kind: row.kind },
       });
-      return { ...toLeadSourceResponse(row), token, hookPath: hookPathFor(token) };
+      return { ...toLeadSourceResponse(row), ...this.secretsFor(token) };
     });
   }
 
@@ -243,7 +257,7 @@ export class LeadSourcesService {
         payload: { uuid, name: row.name },
       });
       const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
-      return { ...toLeadSourceResponse(after), token, hookPath: hookPathFor(token) };
+      return { ...toLeadSourceResponse(after), ...this.secretsFor(token) };
     });
   }
 

@@ -18,7 +18,7 @@ keywords: [lead ads, webhook, zapier, make, forms, capture, attribution, campaig
 2. Select **New source** and work through the wizard:
    1. **Basics**: a name, a platform label, an optional shared secret and how long to keep raw lead data.
    2. **What happens to a lead**: default country code, starting lifecycle stage, tag, owner, optional deal and notifications. Select **Create source**.
-   3. **Connect your sender**: copy the URL and token into your tool. They are shown only once.
+   3. **Connect your sender**: copy the URL and token into your tool. They are shown only once. The URL is complete, with your platform's public address in front. If the platform's public API address has not been set (or points at a private address), you see only the path and a warning; ask whoever runs your platform to set it, then rotate the token to get the full URL.
    4. **Map the fields**: say where each value sits in your tool's data. The **Live preview** shows the result as you type.
 3. Select **Save and finish**, or **Skip for now** to map later.
 
@@ -31,7 +31,7 @@ keywords: [lead ads, webhook, zapier, make, forms, capture, attribution, campaig
 
 ## Plan and access
 
-The tile needs the **Lead sources** plan feature and permission to read lead sources. Without the feature the screen offers **Upgrade plan**. Creating, changing, pausing, rotating, deleting, testing and retrying need the manage permission; with read access only you can look.
+The tile needs the **Lead sources** plan feature and permission to read lead sources. Without the feature the screen offers **Upgrade plan**. When you have reached the number of sources your plan allows, creating another says how many you use, for example **You have used 5 of 5 lead sources**. Creating, changing, pausing, rotating, deleting, testing and retrying need the manage permission; with read access only you can look.
 
 ## If something looks wrong
 

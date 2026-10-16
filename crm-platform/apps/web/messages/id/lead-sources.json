@@ -46,7 +46,8 @@
         "pipeline_required": "Pilih pipeline tempat tahap ini berada.",
         "unknown_or_lost_stage": "Tahap siklus hidup ini tidak ada atau merupakan tahap hilang.",
         "unknown_or_inactive_user": "Salah satu orang yang dipilih bukan anggota aktif workspace ini."
-      }
+      },
+      "planLimitUsed": "Anda telah menggunakan {used} dari {limit} sumber prospek. Tingkatkan paket Anda atau hapus sumber yang tidak lagi Anda gunakan."
     },
     "problems": {
       "nameRequired": "Beri nama sumber ini.",
@@ -219,7 +220,8 @@
       "skipMapping": "Lewati dulu",
       "finish": "Simpan dan selesai",
       "revealGone": "URL dan token tidak lagi ditampilkan. Jika Anda tidak menyimpannya, buka sumber lalu putar token untuk mendapatkan URL baru.",
-      "toMapping": "Lanjut ke pemetaan"
+      "toMapping": "Lanjut ke pemetaan",
+      "planLimitUsed": "Anda telah menggunakan {used} dari {limit} sumber prospek, sehingga sumber baru tidak dapat dibuat."
     },
     "form": {
       "name": "Nama sumber",
@@ -394,7 +396,7 @@
       "bodyRotated": "URL lama langsung berhenti berfungsi. URL baru ini hanya ditampilkan sekali.",
       "url": "URL webhook",
       "copyUrl": "Salin URL",
-      "noOrigin": "Letakkan alamat API Anda di depan jalur ini untuk mendapatkan URL lengkap.",
+      "noOrigin": "Alamat API publik platform belum diatur, sehingga URL lengkap tidak dapat dibuat. Minta pengelola platform ini untuk mengaturnya. Sementara itu, tambahkan alamat API Anda di depan path ini.",
       "token": "Token",
       "copyToken": "Salin token",
       "secretHint": "Sumber ini juga memerlukan rahasia bersama: pengirim harus mengirimkannya di header {header}.",
@@ -402,7 +404,8 @@
       "sampleHelp": "Di Zapier atau Make, gunakan aksi Webhooks yang mengirim JSON ke URL. Perintah ini mengirim satu contoh prospek.",
       "copied": "Saya sudah menyalin URL dan token ke tempat yang aman",
       "done": "Saya sudah menyalinnya, lanjutkan",
-      "doneHint": "Centang kotak dulu. Setelah ini token tidak dapat ditampilkan lagi."
+      "doneHint": "Centang kotak dulu. Setelah ini token tidak dapat ditampilkan lagi.",
+      "notPublic": "Alamat API publik platform mengarah ke alamat privat atau lokal yang tidak dapat dijangkau platform iklan, sehingga URL lengkap tidak ditampilkan. Minta pengelola platform ini untuk mengatur alamat publik, lalu rotasi token untuk mendapatkan URL yang lengkap."
     },
     "test": {
       "title": "Kirim prospek uji",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Ditangkap",
       "openSource": "Buka sumber prospek"
+    },
+    "hookAddress": {
+      "title": "URL webhook baru akan tidak lengkap",
+      "notConfigured": "Alamat API publik platform belum diatur. Minta pengelola platform ini untuk mengaturnya; sampai saat itu, sumber baru hanya dapat menampilkan path dari URL-nya.",
+      "notPublic": "Alamat API publik platform mengarah ke alamat privat atau lokal yang tidak dapat dijangkau platform iklan. Minta pengelola platform ini untuk mengatur alamat publik."
     }
   }
 }

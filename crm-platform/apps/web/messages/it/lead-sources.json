@@ -46,7 +46,8 @@
         "pipeline_required": "Scegli la pipeline a cui appartiene questa fase.",
         "unknown_or_lost_stage": "Questa fase del ciclo di vita non esiste o è una fase persa.",
         "unknown_or_inactive_user": "Una delle persone selezionate non è un membro attivo di questo spazio di lavoro."
-      }
+      },
+      "planLimitUsed": "Hai usato {used} fonti di lead su {limit}. Passa a un piano superiore o elimina una fonte che non usi più."
     },
     "problems": {
       "nameRequired": "Dai un nome alla fonte.",
@@ -219,7 +220,8 @@
       "skipMapping": "Salta per ora",
       "finish": "Salva e termina",
       "revealGone": "L’URL e il token non vengono più mostrati. Se non li hai salvati, apri la fonte e rigenera il token per ottenere un nuovo URL.",
-      "toMapping": "Continua con la mappatura"
+      "toMapping": "Continua con la mappatura",
+      "planLimitUsed": "Hai usato {used} fonti di lead su {limit}, quindi non è possibile crearne una nuova."
     },
     "form": {
       "name": "Nome della fonte",
@@ -394,7 +396,7 @@
       "bodyRotated": "Il vecchio URL ha smesso di funzionare subito. Questo nuovo viene mostrato solo questa volta.",
       "url": "URL del webhook",
       "copyUrl": "Copia URL",
-      "noOrigin": "Anteponi l’indirizzo della tua API a questo percorso per ottenere l’URL completo.",
+      "noOrigin": "L'indirizzo pubblico dell'API della piattaforma non è impostato, quindi non è stato possibile costruire l'URL completo. Chiedi a chi gestisce la piattaforma di impostarlo. Nel frattempo, anteponi l'indirizzo della tua API a questo percorso.",
       "token": "Token",
       "copyToken": "Copia token",
       "secretHint": "Questa fonte richiede anche un segreto condiviso: il mittente deve inviarlo nell’intestazione {header}.",
@@ -402,7 +404,8 @@
       "sampleHelp": "In Zapier o Make, usa un’azione Webhooks che invia JSON all’URL. Questo comando invia un lead di esempio.",
       "copied": "Ho copiato URL e token in un posto sicuro",
       "done": "Li ho copiati, continua",
-      "doneHint": "Spunta prima la casella. Dopo questo il token non potrà più essere mostrato."
+      "doneHint": "Spunta prima la casella. Dopo questo il token non potrà più essere mostrato.",
+      "notPublic": "L'indirizzo pubblico dell'API della piattaforma punta a un indirizzo privato o locale che le piattaforme pubblicitarie non possono raggiungere, quindi l'URL completo non viene mostrato. Chiedi a chi gestisce la piattaforma di impostare un indirizzo pubblico, poi ruota il token per ottenere un URL completo."
     },
     "test": {
       "title": "Invia un lead di prova",
@@ -554,6 +557,11 @@
       },
       "capturedAt": "Acquisito",
       "openSource": "Apri la fonte lead"
+    },
+    "hookAddress": {
+      "title": "I nuovi URL del webhook saranno incompleti",
+      "notConfigured": "L'indirizzo pubblico dell'API della piattaforma non è impostato. Chiedi a chi gestisce la piattaforma di impostarlo; fino ad allora una nuova fonte potrà mostrare solo il percorso del suo URL.",
+      "notPublic": "L'indirizzo pubblico dell'API della piattaforma punta a un indirizzo privato o locale che le piattaforme pubblicitarie non possono raggiungere. Chiedi a chi gestisce la piattaforma di impostare un indirizzo pubblico."
     }
   }
 }
