@@ -14,6 +14,8 @@ const REVIEWED_WITHOUT_TIMEOUT: Record<string, string> = {
   'infra/providers/ai-agents-training/http-training-url-fetcher.adapter.ts':
     'a method named fetch; the socket call passes timeoutMs to safeGet',
   'infra/providers/ai-agents-training/training-url-fetcher.port.ts': 'port type only',
+  'infra/providers/appointments-booking/ics-feed.fetcher.ts':
+    'a method named fetch (the port and its class); the request is guardedRequest, which is passed timeoutMs',
   'infra/providers/marketplace/pull.connector.ts':
     'the caller passes an AbortController signal that also covers reading the body',
   'infra/providers/whatsapp-cloud-api-waba/abortable-fetch.ts':
