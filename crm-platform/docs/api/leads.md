@@ -259,6 +259,10 @@ export interface LeadIngestResult {
 }
 export interface LeadIngestPort {
   ingest(orgId: number, sourceId: number, lead: NormalisedLead): Promise<LeadIngestResult>;
+  // For a poller (the Meta lead ads sweep): which of these external ids the source already holds and needs no more
+  // (anything but a `failed` event or a `received` one that stalled). Optional; asking first keeps a re-read from counting
+  // every lead as a duplicate delivery.
+  settled?(orgId: number, sourceId: number, externalIds: readonly string[]): Promise<string[]>;
 }
 ```
 
@@ -268,7 +272,7 @@ export const LEAD_SOURCE_DIRECTORY = Symbol('LEAD_SOURCE_DIRECTORY');
 export interface LeadSourceDirectoryPort {
   ensureConnectorSource(
     orgId,
-    { providerKey, externalRef, name },
+    { providerKey, externalRef, name, kind? }, // kind: 'connector' (default) | 'meta_lead_ads'
   ): Promise<{ sourceId: number; sourceUuid: string }>; // idempotent per externalRef
   releaseConnectorSource(orgId, externalRef): Promise<void>;
 }

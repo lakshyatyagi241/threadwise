@@ -20,7 +20,7 @@ Facebook channel's connected Pages ([channel-facebook.md](channel-facebook.md)).
 
 ## Tables
 
-`meta_lead_pages`, `meta_lead_forms` (this domain; migration `20261219090000_meta_lead_ads.sql`, Drizzle in `packages/db/src/schema/meta-lead-ads/`).
+`meta_lead_pages`, `meta_lead_forms` (this domain; migration `20261219090000_mla_meta_lead_ads.sql`, Drizzle in `packages/db/src/schema/meta-lead-ads/`).
 Read here from other domains: `facebook_pages` (Page row, scopes, sealed token: through the channel's `PagesRepository`), `lead_sources` (uuid and
 status of a form's source, a read-only join in `MetaLeadAdsRepository`). Written by this domain in other domains' tables: none directly; the lead
 pipeline writes `lead_sources` (through `LEAD_SOURCE_DIRECTORY`), `lead_events`, `contacts`, `contact_attributions`, `contact_consent_events`,

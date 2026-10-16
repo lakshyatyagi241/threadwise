@@ -1,5 +1,5 @@
 /**
- * meta-lead-ads: Meta lead ads as a door into the lead pipeline. Mirrors migrations/20261219090000_meta_lead_ads.sql.
+ * meta-lead-ads: Meta lead ads as a door into the lead pipeline. Mirrors migrations/20261219090000_mla_meta_lead_ads.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {

@@ -135,7 +135,7 @@ every delivery succeeded; otherwise the next run reads the window again. A faile
 
 `meta_lead_pages` (per Page: sync on/off, `subscribed_at`, `last_lead_at`, `last_sweep_at`, `last_error`, `last_error_kind` token / permission /
 other) and `meta_lead_forms` (per picked form: Meta ids, cached questions and consent wording, `source_id` unique, health and the sweep
-checkpoint). Both tenant tables with forced RLS (migration `20261219090000_meta_lead_ads.sql`). `meta_lead_pages.page_id` has no foreign key to
+checkpoint). Both tenant tables with forced RLS (migration `20261219090000_mla_meta_lead_ads.sql`). `meta_lead_pages.page_id` has no foreign key to
 `facebook_pages`: when a Page is disconnected, `PageDisconnectConsumer` (outbox `facebook.page.disconnected`, worker) first releases the lead
 source of each picked form (the pipeline deletes the source and its stored events; contacts stay) and then removes these rows, unless the Page
 has been connected again meanwhile. Deleting a form's source from the Social leads screen removes the form row (ON DELETE CASCADE).
