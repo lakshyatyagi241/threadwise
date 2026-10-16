@@ -164,6 +164,26 @@
         "title": "Testmelding",
         "titleNoName": "Testmelding",
         "bodyNoActor": "Als je dit kunt lezen, werken livemeldingen."
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} wordt verlengd op {date, date, medium}",
+        "bodyAuto": "Op die datum wordt je kaart automatisch belast om {name} te verlengen. Zeg het abonnement vóór die datum op om dat te voorkomen.",
+        "titleManual": "{name} is betaald tot {date, date, medium}",
+        "bodyManual": "{name} wordt niet vanzelf verlengd. Betaal vóór die datum opnieuw om de app zonder pauze te laten doorlopen.",
+        "titleEnding": "{name} eindigt op {date, date, medium}",
+        "bodyEnding": "Je hebt {name} opgezegd, dus de app stopt op die datum met werken. Abonneer je vóór die datum opnieuw om hem te behouden.",
+        "title": "{name}: verlenging nadert",
+        "titleNoName": "Verlenging van betaalde app nadert"
+      },
+      "marketplace_payment_failed": {
+        "title": "Betaling voor {name} mislukt",
+        "body": "De kaartbetaling is niet doorgegaan. De app blijft nog een paar dagen werken terwijl de betalingsprovider het opnieuw probeert. Betaal nu of herstel je betaalmethode om een pauze te voorkomen.",
+        "titleNoName": "Betaling voor betaalde app mislukt"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Abonnement op {name} beëindigd",
+        "body": "De app is gepauzeerd en de gegevens en instellingen blijven bewaard. Abonneer je opnieuw om hem weer aan te zetten.",
+        "titleNoName": "Abonnement op betaalde app beëindigd"
       }
     },
     "live": {
@@ -195,7 +215,10 @@
         "waba_group_suspension_cleared": "WhatsApp-groep weer actief",
         "device_group_join_request": "Verzoek om deel te nemen aan een groep",
         "device_group_removed": "Verwijderd uit een WhatsApp-groep",
-        "test": "Testmelding"
+        "test": "Testmelding",
+        "marketplace_renewal_due": "Verlenging van betaalde app nadert",
+        "marketplace_payment_failed": "Betaling voor betaalde app mislukt",
+        "marketplace_subscription_ended": "Abonnement op betaalde app beëindigd"
       },
       "generic": "Je hebt een nieuwe melding",
       "paused": "Live-updates zijn gepauzeerd, dus nieuwe meldingen kunnen tot een minuut later aankomen. Laad de pagina opnieuw om opnieuw verbinding te maken."
@@ -383,6 +406,18 @@
         "appointment_calendar_drift": {
           "label": "Afspraak niet gesynchroniseerd met Google Calendar",
           "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
+        },
+        "marketplace_renewal_due": {
+          "label": "Herinnering verlenging betaalde app",
+          "hint": "De periode van een betaalde app eindigt over een paar dagen: hij wordt per kaart verlengd, is betaald tot een bepaalde datum, of is opgezegd en loopt af."
+        },
+        "marketplace_payment_failed": {
+          "label": "Betaling betaalde app mislukt",
+          "hint": "De verlenging per kaart van een betaalde app is niet doorgegaan en vraagt je aandacht."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Abonnement betaalde app beëindigd",
+          "hint": "Het abonnement op een betaalde app is beëindigd en de app is gepauzeerd."
         }
       },
       "loading": "Je voorkeuren laden",
