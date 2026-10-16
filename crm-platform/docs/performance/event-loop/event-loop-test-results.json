@@ -11,6 +11,30 @@
       "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
     },
     {
+      "suite": "tools/event-loop-audit/scrape-demo.mjs --stall (real Prometheus v2.55.0, the built API and worker as separate processes, Postgres and Redis containers)",
+      "status": "PASSED",
+      "checks": 25,
+      "ranOn": "2026-10-16, branch claude/event-loop-prometheus-scrape",
+      "rawData": "evidence/scrape-demo.json",
+      "history": [
+        "Run 1 (no stall phase): 21/21.",
+        "Run 2 (with the stall): 23/24. FAILED: EventLoopBlockingWithImpact did not fire although three warnings did (loop p95 0.607 s, ELU 0.86). Cause: the request histogram read 0.005 s during the stall because a request is timed only from when its handler runs, so the rule's impact leg could not be true for a loop stall.",
+        "Fix: the impact leg now also accepts a loop-delay p95 over 250 ms; two promtool case groups added; the stale-alert description corrected. Run 3: 25/25, with callers measuring a /health p95 of 0.592 s against 0.005 s on the server histogram."
+      ],
+      "notShown": [
+        "production deployment (no Prometheus in deploy/hostinger/docker-compose.yml)",
+        "delivery to a receiver",
+        "the worker critical alert from a real worker stall",
+        "stalls of 10 s to 2 min",
+        "any realistic traffic: the only load was the stall driver, a /health poller and one queue job"
+      ]
+    },
+    {
+      "suite": "deploy/observability/event-loop.rules.yml with promtool, after the rule change",
+      "status": "PASSED",
+      "note": "check rules: 11 rules; test rules: 11 case groups (2 new: a real-stall case that must page with a healthy request histogram, and a moderate-delay case that must not)."
+    },
+    {
       "suite": "apps/api/test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (booted worker module, Postgres and Redis containers)",
       "status": "PASSED",
       "ranOn": "2026-10-16, branch claude/event-loop-job-retries",
