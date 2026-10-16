@@ -219,10 +219,21 @@ export class GraphMediaClient {
 
     for (let hop = 0; ; hop += 1) {
       const host = new URL(url).hostname;
+      const sent = carryAuth ? downloadHeadersFor(host, profile, headers, metaHeaders) : {};
+      // Meta's file host refuses an anonymous request. With no business token to send, the download cannot succeed: say so (reconnect),
+      // instead of sending it bare and reading the refusal as a token verdict.
+      if (
+        carryAuth &&
+        isMetaMediaHost(host) &&
+        host.toLowerCase() !== providerHostOf(profile) &&
+        Object.keys(sent).length === 0
+      ) {
+        throw this.noCredentials();
+      }
       const res = await safeRequest({
         method: 'GET',
         url,
-        headers: carryAuth ? downloadHeadersFor(host, profile, headers, metaHeaders) : {},
+        headers: sent,
         policy,
         requestTimeoutMs: this.cfg.requestTimeoutMs,
         idleTimeoutMs: this.cfg.idleTimeoutMs,
@@ -367,6 +378,12 @@ export class GraphMediaClient {
     return Object.assign(new MediaFetchError(code, detail, f.retryable), { graph: f });
   }
 
+  /**
+   * A refusal of the download address. The lookup right before it used the same channel token and was answered, so a bare 401/403 from
+   * the file host (no Graph error code in the body) means that link was refused: a signed link past its window, or a host that wants a
+   * credential it did not get. It is not a verdict on the token, so it is retryable (a retry runs the lookup again for a fresh link) and
+   * does not tell the reader to reconnect a number that is working. A Graph error code in the answer (190, 200-299) stays an auth failure.
+   */
   private failure(
     status: number,
     body: string,
@@ -374,13 +391,16 @@ export class GraphMediaClient {
     where?: string,
   ): MediaFetchError {
     const f = classifyGraphFailure(status, body, ...secretsIn(headers));
-    const code = f.auth
+    const bareRefusal = (status === 401 || status === 403) && f.code === String(status);
+    const auth = f.auth && !bareRefusal;
+    const code = auth
       ? MEDIA_FAILURE.AUTH
       : f.gone
         ? MEDIA_FAILURE.EXPIRED
         : MEDIA_FAILURE.DOWNLOAD_FAILED;
+    const retryable = bareRefusal || f.retryable;
     const detail = `${f.message} (HTTP ${status}${f.code !== String(status) ? `, code ${f.code}` : ''})`;
-    const err = new MediaFetchError(code, where ? `${detail} at ${where}` : detail, f.retryable);
+    const err = new MediaFetchError(code, where ? `${detail} at ${where}` : detail, retryable);
     return Object.assign(err, { graph: f });
   }
 }
