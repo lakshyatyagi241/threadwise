@@ -181,7 +181,10 @@
         "valueInvalid": "Geben Sie eine Zahl ein, zum Beispiel 1250.50.",
         "valueTooLarge": "Dieser Wert ist zu groß.",
         "stageInvalid": "Wählen Sie eine Phase dieser Pipeline."
-      }
+      },
+      "company": "Unternehmen",
+      "companyHint": "Leer lassen, um das Unternehmen des Kontakts zu verwenden.",
+      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld."
     },
     "contact": {
       "unlink": "Kontakt entfernen",
@@ -221,7 +224,9 @@
       "deleteTitle": "Diesen Deal löschen?",
       "deleteMessage": "„{title}“ und sein Verlauf werden entfernt. Dies kann nicht rückgängig gemacht werden.",
       "cancel": "Abbrechen",
-      "company": "Unternehmen: {name}"
+      "company": "Unternehmen: {name}",
+      "companyLabel": "Unternehmen",
+      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden."
     },
     "activity": {
       "title": "Aktivität",

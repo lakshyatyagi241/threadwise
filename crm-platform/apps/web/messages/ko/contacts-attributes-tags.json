@@ -348,7 +348,10 @@
       "ownerMe": "{name}(나)",
       "ownerFormer": "이전 멤버",
       "ownerHelp": "이 연락처를 관리하는 사람입니다. 내 접근 권한으로 허용된 사람만 선택할 수 있습니다.",
-      "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다."
+      "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
+      "company": "회사",
+      "companyHint": "이 연락처를 조직에 묶습니다.",
+      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요."
     },
     "tags": {
       "title": "태그",

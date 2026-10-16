@@ -348,7 +348,10 @@
       "ownerMe": "{name} (tôi)",
       "ownerFormer": "Thành viên cũ",
       "ownerHelp": "Ai phụ trách liên hệ này. Bạn chỉ có thể chọn những người mà quyền truy cập của bạn cho phép.",
-      "ownerOutOfScope": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó."
+      "ownerOutOfScope": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó.",
+      "company": "Công ty",
+      "companyHint": "Nhóm liên hệ này vào một tổ chức.",
+      "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này."
     },
     "tags": {
       "title": "Thẻ",

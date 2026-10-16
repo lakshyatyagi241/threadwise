@@ -374,6 +374,11 @@
         "label": "Centrum zgodności",
         "description": "Narzędzia, które pomagają wywiązywać się z obowiązków dotyczących prywatności: przepisy, według których działasz, osoby kontaktowe ds. prywatności, informacje i linki, podprocesorzy, godziny ciszy oraz lista kontrolna tego, co jest wdrożone.",
         "keywords": "zgodność, prywatność, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, inspektor ochrony danych, osoba odpowiedzialna za skargi, podprocesor, dpa, regulamin, polityka prywatności, godziny ciszy, do not call, lista kontrolna, dzieci"
+      },
+      "company-properties": {
+        "label": "Właściwości firm",
+        "description": "Dodaj pola, które chcesz zapisywać przy każdej firmie.",
+        "keywords": "pola niestandardowe, pola, wymagane, lista rozwijana, organizacja, konto"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

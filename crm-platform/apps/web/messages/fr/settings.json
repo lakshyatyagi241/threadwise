@@ -374,6 +374,11 @@
         "label": "Centre de conformité",
         "description": "Des outils pour vous aider à respecter vos obligations en matière de vie privée : les lois auxquelles vous êtes soumis, les contacts vie privée, les avis et liens, les sous-traitants ultérieurs, les heures de silence et une liste de contrôle de ce qui est en place.",
         "keywords": "conformité, vie privée, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, délégué à la protection des données, responsable des réclamations, sous-traitant ultérieur, dpa, conditions, politique de confidentialité, heures de silence, do not call, liste de contrôle, enfants"
+      },
+      "company-properties": {
+        "label": "Propriétés des entreprises",
+        "description": "Ajoutez les champs à conserver sur chaque entreprise.",
+        "keywords": "champs personnalisés, champs, obligatoire, liste déroulante, organisation, compte"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

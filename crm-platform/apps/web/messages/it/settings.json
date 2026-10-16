@@ -374,6 +374,11 @@
         "label": "Centro di conformità",
         "description": "Strumenti che ti aiutano a rispettare i tuoi obblighi in materia di privacy: le leggi a cui sei soggetto, contatti privacy, informative e link, sub-responsabili, orari di silenzio e una checklist di ciò che è già attivo.",
         "keywords": "conformità, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, responsabile dei reclami, sub-responsabile, dpa, termini, informativa sulla privacy, orari di silenzio, do not call, checklist, minori"
+      },
+      "company-properties": {
+        "label": "Proprietà delle aziende",
+        "description": "Aggiungi i campi che vuoi mantenere su ogni azienda.",
+        "keywords": "campi personalizzati, campi, obbligatorio, menu a discesa, organizzazione, account"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

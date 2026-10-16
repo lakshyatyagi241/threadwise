@@ -374,6 +374,11 @@
         "label": "Pusat kepatuhan",
         "description": "Alat untuk membantu Anda memenuhi kewajiban privasi: hukum yang berlaku bagi Anda, kontak privasi, pemberitahuan dan tautan, sub-pemroses, jam tenang, dan daftar periksa tentang apa yang sudah tersedia.",
         "keywords": "kepatuhan, privasi, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, petugas pelindungan data, petugas pengaduan, sub-pemroses, dpa, ketentuan, kebijakan privasi, jam tenang, jangan hubungi, daftar periksa, anak-anak"
+      },
+      "company-properties": {
+        "label": "Properti perusahaan",
+        "description": "Tambahkan kolom yang ingin Anda simpan di setiap perusahaan.",
+        "keywords": "kolom kustom, kolom, wajib, dropdown, organisasi, akun"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

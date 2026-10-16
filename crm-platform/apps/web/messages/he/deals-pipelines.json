@@ -181,7 +181,10 @@
         "valueInvalid": "הזינו מספר, לדוגמה 1250.50.",
         "valueTooLarge": "הערך גבוה מדי.",
         "stageInvalid": "בחרו שלב מהצינור הזה."
-      }
+      },
+      "company": "חברה",
+      "companyHint": "השאירו ריק כדי להשתמש בחברה של איש הקשר.",
+      "companyRefused": "אי אפשר להשתמש בחברה הזו. בחרו חברה אחרת או רוקנו את השדה."
     },
     "contact": {
       "unlink": "הסר איש קשר",
@@ -221,7 +224,9 @@
       "deleteTitle": "למחוק עסקה זו?",
       "deleteMessage": "\"{title}\" וציר הזמן שלה יוסרו. לא ניתן לבטל פעולה זו.",
       "cancel": "בטל",
-      "company": "חברה: {name}"
+      "company": "חברה: {name}",
+      "companyLabel": "חברה",
+      "companyRefused": "אי אפשר להשתמש בחברה הזו."
     },
     "activity": {
       "title": "פעילות",

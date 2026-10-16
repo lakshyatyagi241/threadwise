@@ -39,6 +39,7 @@ import {
   type CompanyPatch,
   type CompanyRow,
 } from './companies.repository';
+import { assertRequiredProperties, mergeProperties } from './company-properties';
 import { encodeCompanyCursor, encodeIdCursor, foldActivity } from './company-rules';
 
 export const COMPANY_MODULE = 'companies';
@@ -296,6 +297,14 @@ export class CompaniesService {
           ? ctx.userId
           : await this.resolveOwner(tx, ctx.orgId, input.ownerId);
       await this.assertOwnerAllowed(tx, 'record.companies.create', ownerId);
+      // The workspace's company properties: a value must fit its property, and a required one must be answered (even when none is sent).
+      const defs = await this.repo.propertyDefs(tx, ctx.orgId);
+      const { next: data, changed: customKeys } = mergeProperties(
+        defs,
+        input.customFields ?? {},
+        {},
+      );
+      assertRequiredProperties(defs, data);
       const id = await this.repo.insert(tx, ctx.orgId, {
         name: input.name,
         domain: input.website ?? null,
@@ -305,6 +314,7 @@ export class CompaniesService {
         sizeRange: input.sizeRange ?? null,
         address: input.address ?? null,
         notes: input.notes ?? null,
+        data,
         ownerId,
         createdBy: ctx.userId,
         displayId: await this.displayIds.next(tx, ctx.orgId, COMPANY_MODULE, DISPLAY_PREFIX),
@@ -319,6 +329,7 @@ export class CompaniesService {
           ...(row.website !== null ? { website: { old: null, new: row.website } } : {}),
           ...(row.industry !== null ? { industry: { old: null, new: row.industry } } : {}),
           ...(row.ownerUuid !== null ? { owner: { old: null, new: row.ownerUuid } } : {}),
+          ...(customKeys.length > 0 ? { customFieldKeys: { old: null, new: customKeys } } : {}),
         },
       });
       await this.outbox.emit(tx, {
@@ -399,6 +410,7 @@ export class CompaniesService {
       sizeRange: input.sizeRange,
       address: input.address,
       notes: input.notes,
+      data: {},
       ownerId: input.ownerId,
       createdBy: null,
       displayId: await this.displayIds.next(tx, orgId, COMPANY_MODULE, DISPLAY_PREFIX),
@@ -462,6 +474,16 @@ export class CompaniesService {
         if (owner !== row.ownerId) {
           await this.assertOwnerAllowed(tx, 'record.companies.update', owner, scope);
           patch.owner_id = owner;
+        }
+      }
+      if (input.customFields !== undefined) {
+        // A save that sends properties answers for all of them (a required one cannot be blanked); an edit of other fields does not.
+        const defs = await this.repo.propertyDefs(tx, ctx.orgId);
+        const merged = mergeProperties(defs, input.customFields, row.data);
+        assertRequiredProperties(defs, merged.next);
+        if (merged.changed.length > 0) {
+          patch.data = merged.next;
+          delta.customFieldKeys = { old: null, new: merged.changed };
         }
       }
 

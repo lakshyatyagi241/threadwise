@@ -100,7 +100,8 @@
       "views": {
         "list": "Lista",
         "board": "Tablero por fecha límite"
-      }
+      },
+      "linkCompany": "Una empresa"
     },
     "table": {
       "scrollArea": "Tabla de tareas",
@@ -204,7 +205,8 @@
         "notesTooLong": "Las notas son demasiado largas (5000 caracteres como máximo).",
         "dueInvalid": "Esa fecha no es válida.",
         "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo."
-      }
+      },
+      "company": "Empresa"
     },
     "drawer": {
       "loading": "Cargando tarea",
@@ -268,7 +270,8 @@
       "searching": "Buscando",
       "unavailable": "La búsqueda no está disponible en este momento.",
       "none": "No hay coincidencias.",
-      "unlink": "Quitar el enlace"
+      "unlink": "Quitar el enlace",
+      "searchCompany": "Buscar empresas"
     },
     "errors": {
       "network": "No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
@@ -323,7 +326,8 @@
       "loadMore": "Cargar más",
       "loadMoreDone": "Cargar más completadas",
       "showDone": "Mostrar completadas",
-      "hideDone": "Ocultar completadas"
+      "hideDone": "Ocultar completadas",
+      "gone": "El registro al que pertenecen estas tareas ya no está disponible."
     }
   }
 }

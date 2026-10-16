@@ -181,7 +181,10 @@
         "valueInvalid": "Wpisz liczbę, na przykład 1250.50.",
         "valueTooLarge": "Ta wartość jest zbyt duża.",
         "stageInvalid": "Wybierz etap z tego lejka."
-      }
+      },
+      "company": "Firma",
+      "companyHint": "Zostaw puste, aby użyć firmy kontaktu.",
+      "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole."
     },
     "contact": {
       "unlink": "Usuń kontakt",
@@ -221,7 +224,9 @@
       "deleteTitle": "Usunąć tę transakcję?",
       "deleteMessage": "„{title}” i jej oś czasu zostaną usunięte. Tej operacji nie można cofnąć.",
       "cancel": "Anuluj",
-      "company": "Firma: {name}"
+      "company": "Firma: {name}",
+      "companyLabel": "Firma",
+      "companyRefused": "Nie możesz użyć tej firmy."
     },
     "activity": {
       "title": "Aktywność",

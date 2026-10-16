@@ -181,7 +181,10 @@
         "valueInvalid": "Inserisci un numero, ad esempio 1250.50.",
         "valueTooLarge": "Questo valore è troppo grande.",
         "stageInvalid": "Scegli una fase di questa pipeline."
-      }
+      },
+      "company": "Azienda",
+      "companyHint": "Lascia vuoto per usare l’azienda del contatto.",
+      "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo."
     },
     "contact": {
       "unlink": "Rimuovi contatto",
@@ -221,7 +224,9 @@
       "deleteTitle": "Eliminare questa trattativa?",
       "deleteMessage": "«{title}» e la sua cronologia verranno rimosse. L'operazione non può essere annullata.",
       "cancel": "Annulla",
-      "company": "Azienda: {name}"
+      "company": "Azienda: {name}",
+      "companyLabel": "Azienda",
+      "companyRefused": "Non puoi usare quell’azienda."
     },
     "activity": {
       "title": "Attività",

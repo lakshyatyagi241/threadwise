@@ -290,3 +290,27 @@ export class DealTasksController {
     return this.tasks.forDeal(dealId, query, scope);
   }
 }
+
+/** A company's tasks, for the company page's tasks card. */
+@ApiTags('tasks')
+@ActorKinds('user')
+@UseGuards(SalesPipelineGuard)
+@Controller({ path: 'companies/:companyId/tasks', version: '2' })
+export class CompanyTasksController {
+  constructor(private readonly tasks: TasksService) {}
+
+  @Get()
+  @RequirePermission('record.tasks.read')
+  @ApiOperation({
+    summary: "A company's tasks (same filters and paging as the list)",
+    description:
+      'Needs record.tasks.read, and record.companies.read on the company (its record scope applies: a company the caller cannot see is 404).',
+  })
+  async list(
+    @Param('companyId', ParseUUIDPipe) companyId: string,
+    @Query(zodPipe(listLinkedTasksQuerySchema)) query: ListLinkedTasksQuery,
+    @GrantedScope('record.tasks.read') scope: RecordScope,
+  ) {
+    return this.tasks.forCompany(companyId, query, scope);
+  }
+}
