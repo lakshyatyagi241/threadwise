@@ -75,6 +75,7 @@ async function main(): Promise<void> {
   const durCount = num('crm_queue_job_duration_seconds_count');
   const waitSum = num('crm_queue_job_wait_seconds_sum');
   const durSum = num('crm_queue_job_duration_seconds_sum');
+  const retries = num('crm_queue_job_retries_total');
 
   const checks: Array<[string, boolean, unknown]> = [
     ['completed = ok, retry (2nd attempt), delayed  (3)', completed === 3, completed],
@@ -96,6 +97,11 @@ async function main(): Promise<void> {
     ],
     ['total duration plausible (0.1 s to 3 s)', durSum > 0.1 && durSum < 3, durSum],
     [
+      'retries counted: the retried job started twice, so 1 extra start  (1)',
+      retries === 1,
+      retries,
+    ],
+    [
       'no error text or job name in the output',
       !/expected failure|first attempt fails/.test(out),
       'n/a',
@@ -109,7 +115,7 @@ async function main(): Promise<void> {
   console.log(
     out
       .split('\n')
-      .filter((l) => l.includes(QUEUE) && /jobs_total|_count|_sum/.test(l))
+      .filter((l) => l.includes(QUEUE) && /jobs_total|_count|_sum|retries_total/.test(l))
       .join('\n'),
   );
 

@@ -20,6 +20,7 @@ describe('jobTimings', () => {
     expect(jobTimings({ timestamp: T0, processedOn: T0 + 250, finishedOn: T0 + 1250 })).toEqual({
       waitMs: 250,
       durationMs: 1000,
+      retries: 0,
     });
   });
 
@@ -30,7 +31,7 @@ describe('jobTimings', () => {
       processedOn: T0 + 3_600_300,
       finishedOn: T0 + 3_600_400,
     });
-    expect(t).toEqual({ waitMs: 300, durationMs: 100 });
+    expect(t).toEqual({ waitMs: 300, durationMs: 100, retries: 0 });
   });
 
   it('still excludes the delay when BullMQ has reset job.delay to 0 after promotion', () => {
@@ -42,7 +43,7 @@ describe('jobTimings', () => {
       processedOn: T0 + 1560,
       finishedOn: T0 + 1590,
     });
-    expect(t).toEqual({ waitMs: 60, durationMs: 30 });
+    expect(t).toEqual({ waitMs: 60, durationMs: 30, retries: 0 });
   });
 
   it('uses job.delay when a later change made it the larger one', () => {
@@ -66,14 +67,22 @@ describe('jobTimings', () => {
     expect(t?.waitMs).toBe(0);
   });
 
-  it('records no wait for a retry, but still the duration', () => {
+  it('records no wait for a retry, but still the duration and the number of extra starts', () => {
     const t = jobTimings({
       timestamp: T0,
       attemptsStarted: 3,
       processedOn: T0 + 90_000,
       finishedOn: T0 + 90_500,
     });
-    expect(t).toEqual({ waitMs: null, durationMs: 500 });
+    expect(t).toEqual({ waitMs: null, durationMs: 500, retries: 2 });
+  });
+
+  it('counts no retries for a job that ran once, or when the start count is missing or odd', () => {
+    const base = { timestamp: T0, processedOn: T0 + 5, finishedOn: T0 + 9 };
+    expect(jobTimings({ ...base, attemptsStarted: 1 })?.retries).toBe(0);
+    expect(jobTimings({ ...base, attemptsStarted: 0 })?.retries).toBe(0);
+    expect(jobTimings(base)?.retries).toBe(0);
+    expect(jobTimings({ ...base, attemptsStarted: Number.NaN })?.retries).toBe(0);
   });
 
   it('returns null when the job carries no usable timing', () => {
@@ -123,6 +132,19 @@ describe('attachJobMetrics', () => {
     expect(out).toMatch(/crm_queue_jobs_total\{[^}]*queue="webhook-deliver",outcome="failed"\} 1/);
     expect(out).toMatch(/crm_queue_job_duration_seconds_count\{[^}]*queue="webhook-deliver"\} 1/);
     expect(out).not.toContain('crm_queue_job_wait_seconds');
+    expect(out).toMatch(/crm_queue_job_retries_total\{[^}]*queue="webhook-deliver"\} 1/);
+  });
+
+  it('adds up the extra starts of retried jobs, and records none for jobs that ran once', () => {
+    monitor = new RuntimeMonitor({ service: 'worker', intervalMs: 60_000 });
+    const worker = fakeWorker('msg-dispatch');
+    attachJobMetrics(worker, monitor);
+    const done = { timestamp: T0, processedOn: T0 + 5, finishedOn: T0 + 9 };
+    worker.emit('completed', { ...done, attemptsStarted: 1 });
+    expect(monitor.render()).not.toContain('crm_queue_job_retries_total');
+    worker.emit('completed', { ...done, attemptsStarted: 3 }); // two retries
+    worker.emit('failed', { ...done, attemptsStarted: 5 }); // four retries, then gave up
+    expect(monitor.render()).toMatch(/crm_queue_job_retries_total\{[^}]*queue="msg-dispatch"\} 6/);
   });
 
   it('ignores a failure with no job and never throws into the worker', () => {

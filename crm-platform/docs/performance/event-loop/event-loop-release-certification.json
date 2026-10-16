@@ -7,7 +7,7 @@
       "id": 1,
       "criterion": "All applicable Node.js processes instrumented",
       "status": "PARTIAL",
-      "evidence": "API and worker call startRuntimeMonitor (main.ts, worker.ts). apps/web (Next.js server) is not instrumented. Not booted end to end here: only unit tests and a bare-server benchmark exercise the monitor."
+      "evidence": "API and worker call startRuntimeMonitor (main.ts, worker.ts). apps/web (Next.js server) is not instrumented. The worker module has been booted with lifecycle hooks in an e2e and records a real job through a real processor; the API process has not been booted with the monitor, only a bare-server benchmark and unit tests exercise its side (main.ts middleware wiring is not covered)."
     },
     {
       "id": 2,
@@ -67,7 +67,7 @@
   "verifiedCount": 3,
   "openSevereRegressions": "none known; no comparison possible without a baseline",
   "nextActions": [
-    "EL-B01 confirm job metrics from the booted app worker and count retries",
+    "EL-B01/B03 fire WorkerEventLoopBlockingWithQueueImpact from a real worker stall in a real Prometheus",
     "EL-B02/B03 stand up a Prometheus scrape, validate the rules with promtool",
     "EL-B05 choose and add a load tool, build the workload mix, record idle/normal/peak/spike baselines",
     "EL-B06 add the p99 regression comparison to CI"
