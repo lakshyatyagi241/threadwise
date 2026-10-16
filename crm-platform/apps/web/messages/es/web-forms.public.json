@@ -34,7 +34,8 @@
         "too_long": "Introduce como máximo {max} caracteres.",
         "pattern": "No coincide con el formato esperado.",
         "invalid_option": "Elige una de las opciones de la lista.",
-        "invalid_amount": "Introduce un importe dentro del rango permitido."
+        "invalid_amount": "Introduce un importe dentro del rango permitido.",
+        "guardian_required": "Agrega el nombre y un correo electrónico o teléfono de un padre, madre o tutor."
       },
       "closedTitle": "Este formulario está cerrado",
       "payTitle": "Un paso más",
@@ -59,7 +60,15 @@
         "missingTitle": "No encontramos este pago",
         "missingBody": "Puede que el enlace sea incorrecto o demasiado antiguo."
       },
-      "termsOfService": "Términos"
+      "termsOfService": "Términos",
+      "ageDeclaration": "Confirmo que tengo al menos {age} años",
+      "ageBlockedTitle": "No podemos continuar",
+      "ageBlockedBody": "Gracias por tu interés. No podemos aceptar este envío.",
+      "guardianTitle": "Un padre, madre o tutor",
+      "guardianIntro": "Agrega los datos de un padre, madre o tutor.",
+      "guardianName": "Nombre",
+      "guardianEmail": "Correo electrónico",
+      "guardianPhone": "Teléfono"
     }
   }
 }

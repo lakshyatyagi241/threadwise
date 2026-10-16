@@ -89,6 +89,21 @@ export interface ConnectValues {
 /** `wechat_channels`, always inside the caller's tenant transaction (RLS scopes every statement). */
 @Injectable()
 export class ChannelsRepository {
+  /** The workspace's onboarding country and its billing country (latest paid order), both as saved; Compliance reads them the same way. */
+  async orgCountries(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ onboarding: string | null; billing: string | null }> {
+    const res = await tx.execute(sql`
+      SELECT o.settings->>'country' AS onboarding,
+        (SELECT upper(btrim(x.billing_country)) FROM orders x
+          WHERE x.org_id = o.id AND x.status = 'paid' AND btrim(coalesce(x.billing_country, '')) <> ''
+          ORDER BY x.paid_at DESC NULLS LAST, x.id DESC LIMIT 1) AS billing
+      FROM organizations o WHERE o.id = ${orgId}`);
+    const r = (res.rows[0] ?? {}) as { onboarding?: string | null; billing?: string | null };
+    return { onboarding: r.onboarding ?? null, billing: r.billing ?? null };
+  }
+
   async list(tx: Tx, orgId: number): Promise<ChannelRow[]> {
     const res = await tx.execute(
       sql`SELECT ${COLUMNS} FROM wechat_channels WHERE org_id = ${orgId} ORDER BY id`,

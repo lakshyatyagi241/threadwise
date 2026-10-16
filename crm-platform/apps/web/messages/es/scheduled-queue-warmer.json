@@ -139,7 +139,8 @@
         "cancel": "Cancelar",
         "retry": "Reintentar con nueva hora",
         "delete": "Eliminar",
-        "deleteHistory": "Eliminar del historial"
+        "deleteHistory": "Eliminar del historial",
+        "edit": "Editar"
       },
       "empty": {
         "title": "No hay programaciones",
@@ -207,7 +208,8 @@
         "noSenders": "No hay ningún remitente conectado. Conecta primero un número.",
         "warming": "Calentando",
         "splitHint": "Cada remitente marcado ejecuta su propia programación con una parte equitativa del público.",
-        "messageType": "Tipo de mensaje"
+        "messageType": "Tipo de mensaje",
+        "editSenderHint": "Una programación tiene un solo número. Si eliges otro, la programación se mueve a ese número y se vuelve a reservar su presupuesto de calentamiento."
       },
       "audience": {
         "title": "Destinatarios",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Cola de audiencia",
-            "hint": "Vuelve a usar los destinatarios de una difusión anterior."
+            "hint": "Vuelve a dirigirte a los destinatarios de difusiones y campañas pasadas."
           },
           "number": {
             "title": "Números",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Elige grupo(s)",
         "chooseTags": "Elige una o más etiquetas",
-        "chooseQueues": "Elige una o más difusiones anteriores",
+        "chooseQueues": "Elige una o más difusiones o campañas pasadas",
         "tickAny": "(marca cuantas quieras)",
         "noGroups": "Aún no hay grupos",
         "noTags": "Aún no hay etiquetas",
-        "noQueues": "Aún no hay difusiones completadas",
+        "noQueues": "Aún no hay difusiones ni campañas anteriores",
         "contacts": "Ir a Contactos",
         "broadcast": "Ir a Difusiones",
         "tagsHint": "Los destinatarios se recalculan cuando se ejecuta la programación, así que se incluyen los contactos etiquetados recientemente.",
-        "queuesHint": "Marca cuantas difusiones quieras. Los destinatarios se deduplican automáticamente antes de enviar.",
+        "queuesHint": "Marca tantas difusiones o campañas como quieras. Los destinatarios se deduplican automáticamente antes del envío.",
         "paste": "Pegar números",
         "pasteHint": "Primero el código de país, sin + inicial. Los saltos de línea o las comas separan las entradas.",
         "pastePlaceholder": "Un número por línea: incluye el código de país, sin signo +",
         "total": "Total de destinatarios:",
-        "optedOut": "{n} excluidos: dados de baja o archivados"
+        "optedOut": "{n} excluidos: dados de baja o archivados",
+        "kind": {
+          "broadcast": "Difusión",
+          "campaign": "Campaña"
+        }
       },
       "message": {
         "title": "Redactar mensaje",
@@ -275,7 +281,34 @@
         "pickerSearch": "Buscar por nombre o idioma…",
         "pickerEmpty": "Ninguna plantilla coincide.",
         "manageTemplates": "Gestionar plantillas →",
-        "cancel": "Cancelar"
+        "cancel": "Cancelar",
+        "pickToPreview": "Elige una plantilla para verla.",
+        "headerMedia": "Encabezado: {kind}",
+        "windowNote": "Un número de Cloud API entrega una plantilla aprobada aunque el cliente no haya escrito en las últimas 24 horas.",
+        "previewSamples": "Vista previa con valores de ejemplo",
+        "pickerCategories": "Categoría de plantilla",
+        "categories": {
+          "all": "Todas",
+          "marketing": "Marketing",
+          "utility": "Utilidad"
+        },
+        "pickerHidden": "{n, plural, one {# plantilla más está oculta porque un número marcado no puede enviarla.} other {# plantillas más están ocultas porque un número marcado no puede enviarlas.}}",
+        "file": "Archivo",
+        "chooseFile": "Elige un archivo para enviar",
+        "fileHint": "Imagen, vídeo, audio o documento. Se guarda de forma privada en tu espacio de trabajo.",
+        "limits": "En los números elegidos: hasta {image} MB para imágenes, {video} MB para vídeo, {audio} MB para audio y {document} MB para documentos.",
+        "tooBigUpload": "El archivo supera los {mb} MB.",
+        "uploadFailed": "No se pudo subir el archivo. Inténtalo de nuevo.",
+        "uploading": "Subiendo…",
+        "replace": "Reemplazar",
+        "remove": "Quitar",
+        "kinds": {
+          "image": "Imagen",
+          "video": "Vídeo",
+          "audio": "Audio",
+          "document": "Documento"
+        },
+        "orLink": "O pega un enlace al archivo"
       },
       "when": {
         "title": "Cuándo enviar",
@@ -356,7 +389,18 @@
         "daysRequired": "Elige los días de la semana.",
         "endDateRequired": "Elige el último día.",
         "endBeforeStart": "La fecha de fin es anterior al primer envío.",
-        "testNumber": "Escribe el número con su código de país."
+        "testNumber": "Escribe el número con su código de país.",
+        "mediaTooLarge": "Este archivo supera el tamaño que acepta un número marcado. Elige un archivo más pequeño.",
+        "mediaType": "Un número marcado no acepta este tipo de archivo para este tipo de contenido multimedia.",
+        "templateNotForSender": "Un número marcado no puede enviar esta plantilla: un número de WhatsApp Cloud API solo envía plantillas aprobadas por Meta. Elige otra plantilla u otro número."
+      },
+      "edit": {
+        "title": "Editar mensaje programado",
+        "saved": "Programación actualizada.",
+        "submit": "Guardar cambios",
+        "stale": "Alguien cambió esta programación mientras la editabas. Vuelve a cargarla para ver sus cambios; lo que escribiste aquí se perderá.",
+        "reload": "Recargar la programación",
+        "backToSchedule": "Volver a la programación"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Ejecutar ahora",
         "cancel": "Cancelar",
         "retry": "Reintentar con nueva hora",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "edit": "Editar"
       },
       "kpi": {
         "recipients": "Destinatarios",
@@ -434,7 +479,11 @@
           "delivered": "Entregado",
           "read": "Leído",
           "failed": "Fallido"
-        }
+        },
+        "search": "Buscar por nombre o número",
+        "range": "{from}–{to} de {total}",
+        "prev": "Anterior",
+        "next": "Siguiente"
       },
       "config": {
         "eyebrow": "Detalles de la programación",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Vista previa del mensaje",
         "title": "Lo que ven los destinatarios",
-        "empty": "(cuerpo vacío)"
+        "empty": "(cuerpo vacío)",
+        "template": "Plantilla {name} ({language})",
+        "file": "Archivo: {name}"
       },
-      "another": "Programar otro"
+      "another": "Programar otro",
+      "engagement": {
+        "eyebrow": "Interacción",
+        "title": "Entregas a lo largo del tiempo",
+        "legend": "Leyenda",
+        "steps": {
+          "queued": "En cola",
+          "sent": "Enviado",
+          "delivered": "Entregado",
+          "read": "Leído",
+          "failed": "Fallido"
+        },
+        "empty": "Todavía no se ha enviado nada, así que no hay nada que graficar.",
+        "perHour": "Totales acumulados al inicio de cada hora, en {zone}.",
+        "perDay": "Totales acumulados al inicio de cada día, en {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} calentando",

@@ -114,6 +114,13 @@
         "consentVersion": "Text version",
         "consentAt": "Given at",
         "noConsent": "This form did not ask for consent.",
+        "ageCheck": "Age check",
+        "ageOutcome": "Result",
+        "ageUnder": "Under the minimum age. The submission was accepted and the contact was flagged as a minor; marketing consent was not recorded.",
+        "guardianName": "Parent or guardian",
+        "guardianEmail": "Guardian email",
+        "guardianPhone": "Guardian phone",
+        "guardianNote": "Given by the visitor, not checked. Their consent is not on record until a person records it on the contact's Consent card.",
         "links": "Records",
         "actions": "Actions"
       },

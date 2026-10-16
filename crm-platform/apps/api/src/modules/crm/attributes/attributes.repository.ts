@@ -255,11 +255,63 @@ export class AttributesRepository {
     id: number,
   ): Promise<Omit<MergeContact, 'groups'> | undefined> {
     const res = await tx.execute(sql`
-      SELECT name, first_name AS "firstName", middle_name AS "middleName", last_name AS "lastName",
-             title, phone, country_code AS "countryCode", email::text AS email, address, language, data
-      FROM contacts WHERE org_id = ${orgId} AND id = ${id}
+      SELECT c.name, c.first_name AS "firstName", c.middle_name AS "middleName", c.last_name AS "lastName",
+             c.title, c.phone, c.country_code AS "countryCode", c.email::text AS email, c.address, c.language, c.data,
+             co.id AS "companyRowId", co.name AS "companyName", co.domain AS "companyWebsite", co.email::text AS "companyEmail",
+             co.phone AS "companyPhone", co.industry AS "companyIndustry", co.size_range AS "companySizeRange",
+             co.address AS "companyAddress", co.notes AS "companyNotes", co.data AS "companyData"
+      FROM contacts c
+      LEFT JOIN companies co ON co.org_id = c.org_id AND co.id = c.company_id
+      WHERE c.org_id = ${orgId} AND c.id = ${id}
     `);
-    return res.rows[0] as Omit<MergeContact, 'groups'> | undefined;
+    const r = res.rows[0] as Record<string, unknown> | undefined;
+    if (!r) return undefined;
+    const {
+      companyRowId,
+      companyName,
+      companyWebsite,
+      companyEmail,
+      companyPhone,
+      companyIndustry,
+      companySizeRange,
+      companyAddress,
+      companyNotes,
+      companyData,
+      ...contact
+    } = r;
+    const str = (v: unknown): string | null => (typeof v === 'string' ? v : null);
+    const company: MergeContact['company'] =
+      companyRowId === null || companyRowId === undefined
+        ? null
+        : {
+            name: str(companyName),
+            website: str(companyWebsite),
+            email: str(companyEmail),
+            phone: str(companyPhone),
+            industry: str(companyIndustry),
+            sizeRange: str(companySizeRange),
+            address: str(companyAddress),
+            notes: str(companyNotes),
+            data:
+              companyData && typeof companyData === 'object' && !Array.isArray(companyData)
+                ? (companyData as Record<string, unknown>)
+                : {},
+          };
+    return { ...(contact as Omit<MergeContact, 'groups' | 'company'>), company };
+  }
+
+  /** The company properties a template can use as `{{company.<key>}}`: active, visible, stored (a formula is computed, not stored). */
+  async listCompanyProperties(
+    tx: Tx,
+    orgId: number,
+  ): Promise<Array<{ key: string; label: string }>> {
+    const res = await tx.execute(sql`
+      SELECT key, label FROM fields
+      WHERE org_id = ${orgId} AND module_key = 'companies' AND is_active AND NOT is_hidden AND NOT is_system
+        AND field_type <> 'formula'
+      ORDER BY position, id
+    `);
+    return res.rows as Array<{ key: string; label: string }>;
   }
 
   async orgName(tx: Tx, orgId: number): Promise<string> {

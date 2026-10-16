@@ -1,4 +1,5 @@
 import { createDecipheriv, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { countryCodeOf } from '@crm/contracts';
 
 /** Pure rules of the WeChat channel (WECH): the webhook's signature, its optional AES encryption, its XML and the 48 hour window. */
 
@@ -291,3 +292,21 @@ export const tagIdOf = (tagId: string | null): number => {
 
 /** A broadcast that has been `sending` this long without finishing belongs to a worker that died. */
 export const STALE_SENDING_MINUTES = 15;
+
+// --- where WeChat may be used ----------------------------------------------------------------------------------------------
+
+/** Countries where WeChat is not allowed (ISO 3166-1 alpha-2). India bans WeChat, so no channel can run for an Indian workspace. */
+export const WECHAT_BLOCKED_COUNTRIES: ReadonlySet<string> = new Set(['IN']);
+
+/**
+ * The country a workspace is judged by: its billing country when it has one (the latest paid order), else the country it gave at
+ * onboarding. The same order Compliance uses. Null when neither is a country we can read.
+ */
+export function workspaceCountry(billing: string | null, onboarding: string | null): string | null {
+  return countryCodeOf(billing) ?? countryCodeOf(onboarding);
+}
+
+/** WeChat is usable unless the workspace's country is blocked. An unknown country is not blocked: nothing is taken away without a reason. */
+export function wechatAllowedIn(country: string | null): boolean {
+  return country === null || !WECHAT_BLOCKED_COUNTRIES.has(country);
+}

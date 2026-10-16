@@ -235,7 +235,8 @@ describe.skipIf(!URL)('product variants on the WhatsApp, flow and store-mirror s
   });
 
   describe('store mirror', () => {
-    const mirror = new SqlStoreMirror({} as never);
+    // The mirror's contact, contact-service and consent deps are not used by a product upsert: typed stubs stand in.
+    const mirror = new SqlStoreMirror({} as never, {} as never, {} as never);
     const ctx = { storeUrl: 'demo.myshopify.com', currency: 'USD' };
     const tee = (over: Record<string, unknown> = {}) => ({
       id: 880001,

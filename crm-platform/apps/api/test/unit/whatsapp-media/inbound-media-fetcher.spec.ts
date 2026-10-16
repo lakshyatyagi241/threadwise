@@ -362,3 +362,25 @@ describe('credentials and signed addresses never reach a log or an error', () =>
     expect(graph.dump()).toContain(TOKEN);
   });
 });
+
+describe('an Interakt number with its business token looks the file up on Meta', () => {
+  it('the lookup and the download carry the business token; the partner key never goes to Meta', async () => {
+    const bytes = pngBytes(20_000);
+    graph.add({ id: 'ik-1', bytes, mime: 'image/png' });
+    const interaktWithToken = channel({
+      credentials: { route: 'interakt', authKey: BSP_TOKEN, businessAccountId: '555', accessToken: TOKEN },
+    });
+    const stored = await meta().fetchAndStore(request('ik-1', { channel: interaktWithToken }));
+    expect(stored).toMatchObject({ kind: 'image', size: 20_000 });
+
+    const lookups = graph.of('graph').filter((r) => r.path.includes('/ik-1'));
+    expect(lookups).toHaveLength(1);
+    expect(lookups[0]!.headers.authorization).toBe(`Bearer ${TOKEN}`);
+    expect(lookups[0]!.headers['x-access-token']).toBeUndefined();
+
+    const media = graph.of('media');
+    expect(media).toHaveLength(1);
+    expect(media[0]!.headers.authorization).toBe(`Bearer ${TOKEN}`);
+    expect(media[0]!.headers['x-access-token']).toBeUndefined();
+  });
+});

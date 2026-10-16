@@ -25,6 +25,7 @@ import {
   FIRST_REPLY_MAX_ATTEMPTS,
   FIRST_REPLY_RETRY_MS,
   dueAtOf,
+  isLeadTooOld,
   nextBusinessOpening,
   timelineEntry,
   verdictOfDenial,
@@ -104,7 +105,10 @@ export class LeadFirstReplyService {
         if (!lead || lead.isTest || lead.contactId === null) return null;
 
         const now = new Date();
-        const dueAt = dueAtOf(now, cfg.delayMinutes);
+        // A lead older than the source allows (a backfill, a retry of an old lead, a late sweep) is decided at once: the worker records
+        // it as skipped, so the lead and the contact's timeline say why nobody was messaged, instead of waiting out a delay for nothing.
+        const old = isLeadTooOld(lead.receivedAt, now, cfg.maxLeadAgeMinutes);
+        const dueAt = old ? now : dueAtOf(now, cfg.delayMinutes);
         const row = await this.replies.insertOnce(tx, orgId, {
           leadEventId: lead.id,
           contactId: lead.contactId,
@@ -134,7 +138,7 @@ export class LeadFirstReplyService {
             dueAt: dueAt.toISOString(),
           },
         });
-        return { id: row.id, immediate: cfg.delayMinutes === 0 };
+        return { id: row.id, immediate: old || cfg.delayMinutes === 0 };
       }),
     );
     // No delay: try now instead of waiting for the next sweep. A failure here is not the event's failure; the sweep picks the row up.
@@ -211,6 +215,9 @@ export class LeadFirstReplyService {
     const cfg: SpeedToLead = defaultsOf(source).speedToLead;
     if (!cfg.enabled) return skipped('disabled');
     if (source.status !== 'active') return skipped('source_paused');
+    if (isLeadTooOld(row.leadReceivedAt, row.createdAt, cfg.maxLeadAgeMinutes)) {
+      return skipped('lead_too_old');
+    }
     if (row.attempts > FIRST_REPLY_MAX_ATTEMPTS) return { status: 'failed', reason: 'interrupted' };
     if (now.getTime() > row.expiresAt.getTime()) return { status: 'failed', reason: 'expired' };
     if (!contact) return skipped('no_contact_point');

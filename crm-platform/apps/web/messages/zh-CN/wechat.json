@@ -10,6 +10,7 @@
       "intro": "连接 WeChat 公众号（已认证的服务号）。收到的消息会进入共享的团队收件箱，回复、关键词规则和自动回复的使用方式与其他渠道完全一致。",
       "broadcasts": "群发",
       "loadError": "无法加载你的 WeChat 渠道。",
+      "unavailableCountry": "您所在的国家/地区无法使用微信。在此工作区中无法连接微信渠道或发送微信消息。",
       "connectTitle": "连接渠道",
       "connectBody": "请粘贴来自微信公众平台（设置 → 基本配置）的 AppID、AppSecret 和服务器 Token。",
       "connect": "连接 WeChat",

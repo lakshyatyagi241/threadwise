@@ -2019,6 +2019,18 @@
         "groupContact": "Kontakteigenschaften",
         "groupFlow": "In diesem Flow gespeichert",
         "variableNone": "Keine Variablen gefunden"
+      },
+      "askAge": {
+        "minAge": "Mindestalter",
+        "minAgeHint": "Leer lassen, um das Alter Ihres Arbeitsbereichs aus dem Compliance-Center zu verwenden (18, wenn keines festgelegt ist). Zwischen 1 und 21.",
+        "whenUnder": "Wenn die Antwort darunter liegt",
+        "whenUnderHint": "Der Kontakt wird in jedem Fall als minderjährig markiert. Dem Kunden wird nie gesagt, welche Antwort durchgeht.",
+        "end": "Den Flow mit einem kurzen, neutralen Satz beenden",
+        "continue": "Fortfahren und nach der Antwort verzweigen lassen",
+        "endText": "Abschlusssatz",
+        "endTextHint": "Wird gesendet, bevor der Flow endet. Erwähnen Sie das Alter nicht. Leer verwendet „Wir können leider nicht fortfahren.“",
+        "continueNote": "Die nächsten Schritte können die Variable der Antwort gefolgt von _age_gate lesen (zum Beispiel answer_age_gate); sie lautet under oder adult. Fügen Sie eine Bedingung hinzu, um zu verzweigen, zum Beispiel um nach einem Elternteil oder Vormund zu fragen.",
+        "note": "Fragen Sie nur dort nach dem Alter, wo Sie es brauchen. Die Antwort wird in den Kontakt geschrieben: ein Geburtsdatum als Geburtsdatum, und eine Antwort unter dem Mindestalter markiert den Kontakt als minderjährig."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Telefonnummer",
         "number": "Zahl",
         "alphanumeric": "Buchstaben und Zahlen",
-        "date": "Datum"
+        "date": "Datum",
+        "age": "Alter",
+        "date_of_birth": "Geburtsdatum"
       },
       "askInputWrong": {
         "text": "Bitte versuchen Sie es erneut",
@@ -2338,7 +2352,9 @@
         "phone": "Bitte geben Sie eine gültige Telefonnummer ein",
         "number": "Bitte geben Sie eine gültige Zahl ein",
         "alphanumeric": "Bitte verwenden Sie nur Buchstaben und Zahlen",
-        "date": "Bitte geben Sie ein gültiges Datum ein ({format})"
+        "date": "Bitte geben Sie ein gültiges Datum ein ({format})",
+        "age": "Bitte geben Sie Ihr Alter als ganze Zahl ein",
+        "date_of_birth": "Bitte geben Sie ein gültiges Datum ein ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

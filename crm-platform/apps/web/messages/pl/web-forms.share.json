@@ -299,6 +299,41 @@
           "held": "{count, plural, one {1 zgłoszenie jest wstrzymane jako spam.} few {# zgłoszenia są wstrzymane jako spam.} many {# zgłoszeń jest wstrzymanych jako spam.} other {# zgłoszenia jest wstrzymane jako spam.}}",
           "review": "Przejrzyj"
         }
+      },
+      "age": {
+        "title": "Sprawdzenie wieku",
+        "description": "Pytaj o wiek tylko tam, gdzie jest potrzebny. W większości formularzy zostaw to wyłączone.",
+        "enable": "Sprawdź wiek odwiedzającego",
+        "enableHint": "Domyślnie wyłączone. Włącz, jeśli wymagają tego zasady Twojego obszaru roboczego lub Twoja firma obsługuje osoby niepełnoletnie. Formularz nigdy nie mówi odwiedzającemu, która odpowiedź przechodzi.",
+        "mode": "Jak pytać",
+        "modes": {
+          "declaration": "Pole wyboru: „Potwierdzam, że mam co najmniej N lat”",
+          "age": "Zapytaj o wiek",
+          "dob": "Zapytaj o datę urodzenia"
+        },
+        "modeHints": {
+          "declaration": "Nic o wieku nie jest zapisywane. Najmniej danych.",
+          "age": "Liczba całkowita. Służy do sprawdzenia; zapisywany jest tylko wynik.",
+          "dob": "Zapisywana w kontakcie jako data urodzenia. Używaj tylko wtedy, gdy potrzebujesz daty."
+        },
+        "minAge": "Minimalny wiek",
+        "minAgeHint": "Zostaw puste, aby użyć wieku Twojego obszaru roboczego ({age}). Od 1 do 21.",
+        "minAgeInvalid": "Podaj liczbę całkowitą od {min} do {max}.",
+        "whenUnder": "Jeśli odwiedzający jest poniżej tego wieku",
+        "actions": {
+          "block": "Nie przyjmuj zgłoszenia",
+          "flag": "Przyjmij je, oznacz kontakt jako niepełnoletni, nie zapisuj zgody marketingowej",
+          "guardian": "Jak wyżej i poproś o rodzica lub opiekuna"
+        },
+        "actionHints": {
+          "block": "Nic nie jest zapisywane, a odwiedzający widzi neutralną wiadomość. Przy polu wyboru odwiedzający musi je tylko zaznaczyć.",
+          "flag": "Kontakt zostaje oznaczony jako niepełnoletni. Linijka zgody z tego zgłoszenia jest zapisana tak, jak została wyświetlona, ale zgoda marketingowa nie jest rejestrowana.",
+          "guardian": "Imię i nazwisko oraz dane kontaktowe rodzica lub opiekuna są przechowywane ze zgłoszeniem i na osi czasu kontaktu. Ich zgoda nie jest zapisywana, dopóki nie zapisze jej osoba na karcie Zgoda."
+        },
+        "declarationBlockNote": "Przy polu wyboru i tym ustawieniu nikt nie jest odrzucany: aby wysłać formularz, trzeba zaznaczyć pole.",
+        "childrenUnanswered": "Centrum zgodności nie odpowiedziało na pytanie o dzieci, więc marketing do oznaczonego niepełnoletniego jest zapisywany, ale nie jest wstrzymywany.",
+        "childrenLink": "Otwórz Centrum zgodności",
+        "neutralNote": "Nie wpisuj minimalnego wieku w tekście pomocy pola ani w opisie: strona nie powinna mówić, która odpowiedź przechodzi."
       }
     }
   }

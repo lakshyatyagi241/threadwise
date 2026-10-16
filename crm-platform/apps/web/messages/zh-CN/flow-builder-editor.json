@@ -2019,6 +2019,18 @@
         "groupContact": "联系人属性",
         "groupFlow": "本流程中已保存的",
         "variableNone": "没有找到变量"
+      },
+      "askAge": {
+        "minAge": "最低年龄",
+        "minAgeHint": "留空则使用合规中心中您工作区的年龄(未设置时为 18)。范围为 1 至 21。",
+        "whenUnder": "如果答案低于该年龄",
+        "whenUnderHint": "无论哪种情况,该联系人都会被标记为未成年人。客户永远不会被告知哪个答案可以通过。",
+        "end": "以一句简短、中性的话结束流程",
+        "continue": "继续进行,并让我根据答案设置分支",
+        "endText": "结束语",
+        "endTextHint": "在流程结束前发送。不要提及年龄。留空则使用“我们无法继续。”",
+        "continueNote": "后续步骤可以读取答案变量加上 _age_gate(例如 answer_age_gate),其值为 under 或 adult。添加一个“条件”来设置分支,例如要求提供父母或监护人。",
+        "note": "仅在需要时才询问年龄。答案会写入联系人:出生日期写入出生日期字段,未达年龄的答案会将联系人标记为未成年人。"
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "电话号码",
         "number": "数字",
         "alphanumeric": "字母和数字",
-        "date": "日期"
+        "date": "日期",
+        "age": "年龄",
+        "date_of_birth": "出生日期"
       },
       "askInputWrong": {
         "text": "请重试",
@@ -2338,7 +2352,9 @@
         "phone": "请输入有效的电话号码",
         "number": "请输入有效的数字",
         "alphanumeric": "请仅使用字母和数字",
-        "date": "请输入有效的日期（{format}）"
+        "date": "请输入有效的日期（{format}）",
+        "age": "请以整数输入您的年龄",
+        "date_of_birth": "请输入有效的日期({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

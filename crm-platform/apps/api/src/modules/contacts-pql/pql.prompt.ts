@@ -22,6 +22,8 @@ export interface PqlCatalog {
   statuses: Array<{ value: string; label: string }>;
   /** Custom properties a rule can filter, with the kind that decides their operators. */
   customFields: Array<{ key: string; label: string; kind: SegmentFieldKind }>;
+  /** Company properties: a rule on one reads the company the contact belongs to. */
+  companyFields: Array<{ key: string; label: string; kind: SegmentFieldKind }>;
 }
 
 const list = (rows: string[]): string => (rows.length > 0 ? rows.join('\n') : '(none)');
@@ -50,11 +52,19 @@ export function pqlPrompt(
     'For tags, groups and owner the value is the id from the lists below, never the name. For lifecycleStage and status the value is the value from the lists.',
     'For a country, use field "phone" with operator "starts_with" and the dial code (+91 India, +1 USA or Canada, +44 UK, +971 UAE); countryCode is often empty, so do not use it.',
     'Free words that match a name, email or phone use field "search" with operator "matches".',
+    'Minors, children, kids or underage contacts are field "minor" with operator is_true (adults: is_false). "Under 16" or "older than 40" use field "age" (whole years) with lt, gte or gt; "born before 2010-01-01" uses dateOfBirth with before. Contacts with no date of birth have an empty age.',
     'Custom fields use field "custom.<key>" and only these keys:',
     list(
       catalog.customFields.map(
         (f) =>
           `custom.${f.key} "${f.label}" (${f.kind}): ${SEGMENT_OPERATORS_BY_KIND[f.kind].join(', ')}`,
+      ),
+    ),
+    'Properties of the company a contact belongs to use field "company.<key>" (for "contacts at companies that ...") and only these keys:',
+    list(
+      catalog.companyFields.map(
+        (f) =>
+          `company.${f.key} "${f.label}" (${f.kind}): ${SEGMENT_OPERATORS_BY_KIND[f.kind].join(', ')}`,
       ),
     ),
     'Tags:',

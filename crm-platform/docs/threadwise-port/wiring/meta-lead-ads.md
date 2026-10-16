@@ -35,6 +35,17 @@ has no foreign key to `facebook_pages` on purpose (see the migration and `PageDi
 | WIRE-MLA-008 | Queue `meta-lead-sweep`: one job per Page, queued every 10 minutes | `LeadSweepService` (cron) and `LeadSweepProcessor`, worker only                                             |
 | WIRE-MLA-009 | Outbox consumer `facebook.page.disconnected`                       | `PageDisconnectConsumer` (worker only): releases the sources of the Page's forms, removes the rows          |
 
+## Sync now and backfill (BL-204, BL-210)
+
+| Id           | What                                                                                                                                                | Where                                                                                                                                                                             |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-MLA-014 | A picked form is a pullable source of the lead inbox: capabilities (sync, backfill up to 90 days, a minute between pulls) and the pull itself       | `MetaLeadPullProvider` (`meta-lead-pull.provider.ts`), registered in `LEAD_PULL_REGISTRY` by `MetaLeadPullBinding`; provided by `MetaLeadAdsModule` and `MetaLeadAdsWorkerModule` |
+| WIRE-MLA-015 | The pull: 7 day windows read a page at a time, halved when too big, handed to the pipeline oldest first, paced, backed off, refusals on the Page    | `MetaLeadPullService` (`meta-lead-pull.service.ts`), pure rules in `meta-lead-pull.rules.ts`                                                                                      |
+| WIRE-MLA-016 | One page of a form's leads between two times, with Meta's cursor                                                                                    | port `MetaLeadAdsPageApi.pageFormLeads`, adapter `MetaLeadAdsGraphClient` (`PageApi.pageFormLeads`), fake `test/support/fake-meta-lead-ads-graph.ts`                              |
+| WIRE-MLA-017 | The run is the lead module's: `lead_sync_runs`, queue `lead-sync`, audit `lead_sync_runs`, outbox `lead.sync.*`, 429 `LEAD_SYNC_TOO_SOON`           | [leads.md](leads.md) WIRE-LEAD-033 to 037                                                                                                                                         |
+| WIRE-MLA-018 | Web: the Lead inbox tab lists the form with Sync now and Backfill; the backfill dialog says backfilled leads are not messaged; `permission_missing` | `pull-panel.tsx`, `lib/inbox-view.ts` (`RUN_ERROR_KEYS`), messages `lead-sources.inbox.*`                                                                                         |
+| WIRE-MLA-019 | No first message for an old lead: `speedToLead.maxLeadAgeMinutes` (default 60), reason `lead_too_old`, set in the source's First message section    | [leads.md](leads.md) WIRE-LEAD-038                                                                                                                                                |
+
 ## Upstream feeders and consumers
 
 - **Feeders:** the Facebook channel's connected Page (sealed token, scopes from the token check at connect, `status`), the Meta app settings
@@ -50,9 +61,10 @@ has no foreign key to `facebook_pages` on purpose (see the migration and `PageDi
 
 ## Not built, recorded
 
-| Id           | What                                                                                                                                                  | Status                 |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| WIRE-MLA-010 | Backfill of leads from before a form was picked and a "sync now" button (L-18)                                                                        | BL-204                 |
-| WIRE-MLA-011 | A real call to Meta from this build: first run with the approved app and the Lead Ads Testing Tool                                                    | BL-205; runbook step 5 |
-| WIRE-MLA-012 | Meta ids as columns of `contact_attributions` (campaign, ad set, ad, form ids), campaign and ad name enrichment for a lead that arrives without names | BL-206                 |
-| WIRE-MLA-013 | Live browser verification of the new Ads tab (390 px, RTL, dark)                                                                                      | BL-207                 |
+| Id           | What                                                                                                                                                  | Status                                               |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| WIRE-MLA-010 | Backfill of leads from before a form was picked and a "sync now" button (L-18)                                                                        | built (BL-204), WIRE-MLA-014 to 019; real run BL-211 |
+| WIRE-MLA-020 | Meta `x-app-usage` headers, one pace across several forms of a Page backfilled at once, a per-run "message these old leads" choice                    | BL-212                                               |
+| WIRE-MLA-011 | A real call to Meta from this build: first run with the approved app and the Lead Ads Testing Tool                                                    | BL-205, BL-211; runbook step 5                       |
+| WIRE-MLA-012 | Meta ids as columns of `contact_attributions` (campaign, ad set, ad, form ids), campaign and ad name enrichment for a lead that arrives without names | BL-206                                               |
+| WIRE-MLA-013 | Live browser verification of the new Ads tab (390 px, RTL, dark)                                                                                      | BL-207                                               |

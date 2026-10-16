@@ -445,6 +445,115 @@ describe('the real consent gate', () => {
   });
 });
 
+describe('a lead that is too old (a backfill, a retry, a late sweep)', () => {
+  let t: Tenant;
+  let template: string;
+  beforeAll(async () => {
+    t = await api.signup('stlold');
+    template = await emailTemplate(t, 'Welcome old');
+  });
+
+  /** A lead that was submitted `hours` ago and reaches the pipeline now: the lead event says when it was submitted. */
+  async function lateLead(src: CreatedSource, phone: string, hours: number): Promise<void> {
+    const res = await api.hook(src.hookPath, {
+      name: `Late ${phone}`,
+      email: `late.${phone.replace(/\D/g, '')}@example.test`,
+      phone,
+    });
+    expect(res.status).toBe(200);
+    await api.rows(
+      t.orgId,
+      `UPDATE lead_events SET received_at = now() - ($3 || ' hours')::interval
+        WHERE org_id = $1 AND source_id = (SELECT id FROM lead_sources WHERE org_id = $1 AND uuid = $2::uuid)
+        RETURNING id`,
+      [src.id, String(hours)],
+    );
+  }
+
+  const repliesOf = (src: CreatedSource) =>
+    api.rows(
+      t.orgId,
+      `SELECT f.status, f.reason, f.attempts FROM lead_first_replies f
+         JOIN lead_events e ON e.org_id = f.org_id AND e.id = f.lead_event_id
+         JOIN lead_sources s ON s.org_id = e.org_id AND s.id = e.source_id
+        WHERE f.org_id = $1 AND s.uuid = $2::uuid`,
+      [src.id],
+    );
+
+  it('is stored and made a contact, but not messaged: skipped as lead_too_old, said on the timeline, nothing delivered', async () => {
+    delivered.mockClear();
+    purpose = 'service_messaging';
+    const src = await api.source(t.admin, {
+      name: 'Old default',
+      ...speed(template, { delayMinutes: 30 }),
+    });
+    await lateLead(src, '98000 32001', 3);
+    await drain(t.orgId);
+
+    const rows = await repliesOf(src);
+    // decided at once, whatever the thirty minute delay: a lead 3 hours old is not waited for
+    expect(rows).toEqual([{ status: 'skipped', reason: 'lead_too_old', attempts: 1 }]);
+    expect(delivered).not.toHaveBeenCalled();
+    expect(
+      await api.rows(
+        t.orgId,
+        `SELECT 1 FROM contacts WHERE org_id = $1 AND email = 'late.9800032001@example.test'`,
+      ),
+    ).toHaveLength(1);
+
+    const timeline = await api.rows(
+      t.orgId,
+      `SELECT title, body FROM contact_activities WHERE org_id = $1 AND activity_type = 'speed_to_lead' ORDER BY id DESC LIMIT 1`,
+    );
+    expect(timeline[0]).toMatchObject({
+      title: 'First message by email skipped',
+      body: 'Skipped: the lead is older than the setting allows',
+    });
+  });
+
+  it('a lead just inside the limit still gets its message', async () => {
+    delivered.mockClear();
+    const src = await api.source(t.admin, { name: 'Fresh enough', ...speed(template) });
+    await lateLead(src, '98000 32002', 0.5);
+    await drain(t.orgId);
+    expect(await repliesOf(src)).toEqual([{ status: 'sent', reason: null, attempts: 1 }]);
+    expect(delivered).toHaveBeenCalledTimes(1);
+  });
+
+  it('the workspace can choose to message older leads: a longer limit lets a three hour old lead through', async () => {
+    delivered.mockClear();
+    const src = await api.source(t.admin, {
+      name: 'Old on purpose',
+      ...speed(template, { maxLeadAgeMinutes: 24 * 60 }),
+    });
+    await lateLead(src, '98000 32003', 3);
+    await drain(t.orgId);
+    expect(await repliesOf(src)).toEqual([{ status: 'sent', reason: null, attempts: 1 }]);
+    expect(delivered).toHaveBeenCalledTimes(1);
+  });
+
+  it('the limit is one hour by default, comes back in the source, and is bounded from one minute to ninety days (422)', async () => {
+    const plain = await api.source(t.admin, { name: 'Limit default', ...speed(template) });
+    const got = await api.as(t.admin).get(`/v2/lead-sources/${plain.id}`);
+    expect(got.body.defaults.speedToLead.maxLeadAgeMinutes).toBe(60);
+    for (const bad of [0, -5, 129601, 1.5]) {
+      const res = await api
+        .as(t.admin)
+        .post('/v2/lead-sources')
+        .send({ name: `Bad ${bad}`, ...speed(template, { maxLeadAgeMinutes: bad }) });
+      expect(res.status, String(bad)).toBe(422);
+    }
+    const edge = await api
+      .as(t.admin)
+      .post('/v2/lead-sources')
+      .send({
+        name: 'Ninety days',
+        ...speed(template, { maxLeadAgeMinutes: 129600 }),
+      });
+    expect(edge.status, JSON.stringify(edge.body)).toBe(201);
+  });
+});
+
 describe('the table', () => {
   let a: Tenant;
   let b: Tenant;

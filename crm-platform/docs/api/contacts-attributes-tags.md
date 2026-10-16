@@ -402,3 +402,7 @@ workspace has them). Everything else reuses `record.contacts.*`, `record.tags.*`
 `contact_group.created|updated|deleted|members_changed`, `contact.group_added|group_removed|tag_added|tag_removed`, `tag.contacts_changed`,
 `contact.merged`, `contact.deleted` (also from merges, with `mergedInto`), `contact.exported`, `contact.import_started|import_completed`, and (only with
 `triggerAutomations`) `contact.created` per imported contact. `contact.stage_changed` (payload `previousStage`, `stage`) is emitted when a stage moves.
+
+## Date of birth, minor filter and import columns (BL-190, BL-217)
+
+`dateOfBirth` and `isMinor` on the contact; `minor=true|false` on the list and on every bulk selection filter; segment fields `minor`, `dateOfBirth`, `age`; import columns `dateOfBirth` and `minor`. Details in [contact-consent.md](contact-consent.md) ("How a minor is detected"). The CSV export does not carry the date of birth (it is personal data nobody asked to take out in bulk).

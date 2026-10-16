@@ -49,7 +49,11 @@ function toSettings(r: Raw): SettingsRow {
       parentalConsentRequired: r.parental_consent_required === true,
       offerSaleShareOptOut: r.offer_sale_share_opt_out === true,
       optOutNoticeUrl: strOrNull(r.opt_out_notice_url),
-      consentManager: { name: str(r.consent_manager_name), url: strOrNull(r.consent_manager_url) },
+      consentManager: {
+        name: str(r.consent_manager_name),
+        url: strOrNull(r.consent_manager_url),
+        registrationId: str(r.consent_manager_registration),
+      },
       quietHours: {
         enabled: r.quiet_hours_enabled === true,
         start: str(r.quiet_start),
@@ -158,6 +162,7 @@ export class ComplianceRepository {
       children_policy = ${v.childrenPolicy}, parental_consent_required = ${v.parentalConsentRequired},
       offer_sale_share_opt_out = ${v.offerSaleShareOptOut}, opt_out_notice_url = ${v.optOutNoticeUrl},
       consent_manager_name = ${v.consentManager.name}, consent_manager_url = ${v.consentManager.url},
+      consent_manager_registration = ${v.consentManager.registrationId},
       quiet_hours_enabled = ${v.quietHours.enabled}, quiet_start = ${v.quietHours.start}, quiet_end = ${v.quietHours.end},
       calling_window_enabled = ${v.callingWindow.enabled}, calling_start = ${v.callingWindow.start}, calling_end = ${v.callingWindow.end},
       calling_days = ${pgArray(v.callingWindow.days)}::smallint[],
@@ -169,13 +174,14 @@ export class ComplianceRepository {
         INSERT INTO compliance_settings (org_id, regimes, regimes_confirmed_at, privacy_url, terms_url,
           dpo_name, dpo_email, dpo_phone, dpo_address, grievance_name, grievance_email, grievance_phone, grievance_address,
           children_policy, parental_consent_required, offer_sale_share_opt_out, opt_out_notice_url, consent_manager_name, consent_manager_url,
+          consent_manager_registration,
           quiet_hours_enabled, quiet_start, quiet_end, calling_window_enabled, calling_start, calling_end, calling_days,
           window_timezone, dnd_registry, secondary_notice_locale, subprocessors_public)
         VALUES (${orgId}, ${pgArray(v.regimes)}::text[], ${confirmed ? sql`now()` : sql`NULL`}, ${v.privacyUrl}, ${v.termsUrl},
           ${v.dpo.name}, ${v.dpo.email}, ${v.dpo.phone}, ${v.dpo.address},
           ${v.grievanceOfficer.name}, ${v.grievanceOfficer.email}, ${v.grievanceOfficer.phone}, ${v.grievanceOfficer.address},
           ${v.childrenPolicy}, ${v.parentalConsentRequired}, ${v.offerSaleShareOptOut}, ${v.optOutNoticeUrl},
-          ${v.consentManager.name}, ${v.consentManager.url},
+          ${v.consentManager.name}, ${v.consentManager.url}, ${v.consentManager.registrationId},
           ${v.quietHours.enabled}, ${v.quietHours.start}, ${v.quietHours.end},
           ${v.callingWindow.enabled}, ${v.callingWindow.start}, ${v.callingWindow.end}, ${pgArray(v.callingWindow.days)}::smallint[],
           ${v.windowTimezone}, ${v.dndRegistry}, ${v.secondaryNoticeLocale}, ${v.subprocessorsPublic})

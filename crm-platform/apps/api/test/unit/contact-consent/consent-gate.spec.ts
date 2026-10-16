@@ -239,11 +239,45 @@ describe('ConsentGate truth table', () => {
       { purpose: 'voice_ai_conversation', channel: 'voice', noticeEvidence: { delivered: true } },
       { purpose: 'marketing', minorRule: 'block', facts: facts({ minor: true }) },
       { purpose: 'third_party_sharing', facts: facts({ saleShareOptOut: true }) },
+      { purpose: 'marketing', channel: 'sms', facts: facts({ onDncList: true }) },
     ];
     for (const i of all) seen.add(decide(i).reason);
     seen.add(failureResult(PURPOSE_REGISTRY.marketing_messaging).reason);
     seen.add(failureResult(PURPOSE_REGISTRY.service_messaging).reason);
     expect([...seen].sort()).toEqual([...CONSENT_GATE_REASONS].sort());
+  });
+});
+
+describe('the workspace Do-Not-Call list (BL-181)', () => {
+  const dnc = facts({ onDncList: true });
+
+  it('refuses marketing by SMS and by voice, with its own reason', () => {
+    expect(decide({ purpose: 'marketing', channel: 'sms', facts: dnc })).toMatchObject({
+      decision: 'deny',
+      reason: 'on_dnc_list',
+    });
+    expect(
+      decide({ purpose: 'marketing', channel: 'sms', modality: 'voice', facts: dnc }).reason,
+    ).toBe('on_dnc_list');
+  });
+
+  it('leaves WhatsApp and service messages to their own rules', () => {
+    expect(decide({ purpose: 'marketing', channel: 'whatsapp', facts: dnc }).decision).toBe(
+      'allow',
+    );
+    expect(decide({ purpose: 'service_messaging', channel: 'sms', facts: dnc }).decision).toBe(
+      'allow',
+    );
+  });
+
+  it('is not what a withdrawn consent is reported as', () => {
+    expect(
+      decide({
+        purpose: 'marketing',
+        channel: 'sms',
+        facts: facts({ onDncList: true, unsubscribedFlag: true }),
+      }).reason,
+    ).toBe('withdrawn');
   });
 });
 

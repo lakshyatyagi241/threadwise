@@ -22,6 +22,7 @@ import {
   emptyDraft,
   emptySpeed,
   speedDelay,
+  speedMaxLeadAge,
   firstStepWithProblem,
   isDirty,
   newRow,
@@ -92,6 +93,7 @@ describe('a new draft', () => {
         senderId: null,
         delayMinutes: 0,
         businessHoursOnly: false,
+        maxLeadAgeMinutes: 60,
       },
     });
   });
@@ -346,6 +348,7 @@ describe('draft <-> API body', () => {
         senderId: ID(41),
         delayMinutes: 15,
         businessHoursOnly: true,
+        maxLeadAgeMinutes: 60,
       },
     },
   });
@@ -469,6 +472,7 @@ describe('the first message to a new lead (speed-to-lead)', () => {
       senderId: ID(41),
       delayMinutes: 30,
       businessHoursOnly: true,
+      maxLeadAgeMinutes: 60,
     });
     expect(createLeadSourceSchema.safeParse(buildCreateBody(d)).success).toBe(true);
     const back = draftFromSource(
@@ -505,6 +509,34 @@ describe('the first message to a new lead (speed-to-lead)', () => {
     }
     expect(speedDelay('60')).toBe(60);
     expect(speedDelay('61')).toBeNull();
+  });
+
+  it('does not message old leads unless the workspace chooses: an hour by default, a longer time on purpose', () => {
+    expect(emptySpeed().maxLeadAge).toBe('60');
+    expect(buildSpeed(on().speed).maxLeadAgeMinutes).toBe(60);
+    expect(buildSpeed(on({ maxLeadAge: '10080' }).speed).maxLeadAgeMinutes).toBe(10080);
+    const back = draftFromSource(
+      source({
+        defaults: {
+          ...source().defaults,
+          speedToLead: { ...source().defaults.speedToLead, maxLeadAgeMinutes: 1440 },
+        },
+      }),
+    );
+    expect(back.speed.maxLeadAge).toBe('1440');
+    expect(contractIssues(on({ maxLeadAge: '129600' }))).toEqual({});
+  });
+
+  it('the oldest-lead limit is whole minutes from 1 to 90 days', () => {
+    for (const bad of ['', 'x', '0', '-5', '1.5', '129601', '1e3']) {
+      expect(
+        validateDraft(on({ maxLeadAge: bad }))['defaults.speedToLead.maxLeadAgeMinutes'],
+        bad,
+      ).toEqual({ key: 'speedMaxAgeRange' });
+    }
+    expect(speedMaxLeadAge('129600')).toBe(129600);
+    expect(speedMaxLeadAge(' 60 ')).toBe(60);
+    expect(speedMaxLeadAge('129601')).toBeNull();
   });
 
   it('a problem in it belongs to the rules step and is found by the contract too', () => {

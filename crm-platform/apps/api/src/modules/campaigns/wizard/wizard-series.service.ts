@@ -6,6 +6,7 @@ import {
   recurrenceRuleSchema,
   wizardDraftSchema,
   type RecurrenceRule,
+  type WizardDraft,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
@@ -16,7 +17,7 @@ import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsRepository } from '../campaigns.repository';
 import { blankCampaignFor, campaignColumnsOf } from './wizard-blank';
 import { WizardRunService } from './wizard-run.service';
-import { WizardRepository, type SeriesRow } from './wizard.repository';
+import { WizardRepository, type SeriesRow, type TemplateListRow } from './wizard.repository';
 
 /** Most series planned in one pass. */
 const MAX_PER_PASS = 25;
@@ -40,6 +41,16 @@ const REFUSALS = new Set<string>([
  * it when the rule has ended). Idempotent: the series row is locked while it is planned and a (series, occurrence) pair is unique, so a
  * second worker, a retried job or a repeated tick cannot make a run twice.
  */
+/** Whether a template can be sent now: not paused, not turned down by Meta, quality not red. */
+function sendableNow(
+  t: Pick<TemplateListRow, 'metaTemplateId' | 'metaStatus' | 'pausedUntil' | 'qualityScore'>,
+  now: Date,
+): boolean {
+  if (t.pausedUntil && t.pausedUntil.getTime() > now.getTime()) return false;
+  if (t.metaTemplateId && t.metaStatus !== 'APPROVED') return false;
+  return (t.qualityScore ?? '').toUpperCase() !== 'RED';
+}
+
 @Injectable()
 export class WizardSeriesService {
   private readonly logger = new Logger(WizardSeriesService.name);
@@ -136,7 +147,31 @@ export class WizardSeriesService {
     index: number,
     at: Date,
   ): Promise<{ id: number; uuid: string; enqueue: boolean }> {
-    const draft = wizardDraftSchema.parse(s.blueprint);
+    const blueprint = wizardDraftSchema.parse(s.blueprint);
+    // A sequence of templates: the runs take them in turn, round and round, counted by the runs made so far (a stepped-over occurrence
+    // does not use one up). The run's draft is the blueprint with that template and its own mapping, and no sequence of its own.
+    const turns: Array<{ templateId: string | null; variables: WizardDraft['variables'] } | null> =
+      [null, ...blueprint.templateSequence];
+    const first = s.occurrencesCreated % turns.length;
+    // A template that cannot be sent right now (paused, turned down, quality red, or gone) is passed over for the next one in the turn,
+    // so a series is not derailed for a day by one template; when none can be sent, the planned one fails with its reason.
+    let turn = first;
+    for (let k = 0; k < turns.length; k++) {
+      const at = (first + k) % turns.length;
+      const e = turns[at];
+      const id = e ? e.templateId : blueprint.templateId;
+      const row = id ? await this.repo.templateByUuid(tx, orgId, id) : undefined;
+      if (row && sendableNow(row, this.runtime.now())) {
+        turn = at;
+        break;
+      }
+    }
+    const picked = turns[turn];
+    const draft = {
+      ...blueprint,
+      ...(picked ? { templateId: picked.templateId, variables: picked.variables } : {}),
+      templateSequence: [],
+    };
     const name = `${s.name} #${index + 1}`;
     const date = at.toISOString();
     const zoneDate = rule.timeOfDay;

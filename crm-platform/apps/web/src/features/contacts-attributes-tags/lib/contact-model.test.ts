@@ -51,6 +51,8 @@ function row(over: Partial<ContactRow> = {}): ContactRow {
     emailSubscriptionStatus: null,
     emailConfirmed: false,
     faxNumber: null,
+    dateOfBirth: null,
+    isMinor: false,
     lastActivityAt: null,
     customFields: {},
     isArchived: false,

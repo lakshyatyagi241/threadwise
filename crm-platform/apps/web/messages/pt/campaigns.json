@@ -306,7 +306,11 @@
         "numbersCount": "{count} números",
         "emailNote": "Os e-mails vão para o endereço de cada contato. Contatos sem endereço de e-mail, endereços duplicados e contatos que cancelaram a inscrição são ignorados.",
         "emailSkipped": "{count, plural, one {# destinatário escolhido não tem endereço de e-mail e será ignorado.} other {# destinatários escolhidos não têm endereço de e-mail e serão ignorados.}}",
-        "emailNoAddress": "Números digitados e linhas do CSV não têm endereço de e-mail, por isso são ignorados. Escolha contatos, grupos, tags ou segmentos."
+        "emailNoAddress": "Números digitados e linhas do CSV não têm endereço de e-mail, por isso são ignorados. Escolha contatos, grupos, tags ou segmentos.",
+        "previousTitle": "Envios anteriores",
+        "previousHint": "Adicione as pessoas que receberam transmissões e campanhas anteriores, opcionalmente apenas quem leu, respondeu ou clicou.",
+        "previousEstimate": "{count, plural, one {Até # pessoa dos envios anteriores (uma estimativa: quem está em dois envios é contado duas vezes).} many {Até # de pessoas dos envios anteriores (uma estimativa: quem está em dois envios é contado duas vezes).} other {Até # pessoas dos envios anteriores (uma estimativa: quem está em dois envios é contado duas vezes).}}",
+        "previousEditHint": "Sua escolha anterior de envios não é exibida na edição: esta campanha já guarda seus destinatários como contatos. Escolha novamente para adicionar mais pessoas."
       },
       "message": {
         "title": "Mensagem",
@@ -594,7 +598,8 @@
         "subject": "Assunto",
         "subjectFallback": "O nome da campanha",
         "skippedNoEmail": "Ignorados (sem endereço de e-mail)",
-        "estimateEmail": "É uma estimativa: um contato em dois grupos é contado duas vezes. Contatos sem endereço de e-mail em grupos, tags e segmentos são ignorados quando a campanha é executada."
+        "estimateEmail": "É uma estimativa: um contato em dois grupos é contado duas vezes. Contatos sem endereço de e-mail em grupos, tags e segmentos são ignorados quando a campanha é executada.",
+        "previousSends": "Envios anteriores (até)"
       },
       "ai": {
         "open": "Criar com IA",
@@ -1166,7 +1171,10 @@
         "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido.",
         "follow_up_template_required": "Escolha o modelo que cada acompanhamento envia.",
         "follow_up_flow_required": "Escolha o fluxo que cada acompanhamento inicia.",
-        "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos."
+        "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos.",
+        "sequence_not_recurring": "Modelos em rodízio só funcionam com uma campanha recorrente. Escolha um agendamento recorrente ou remova os modelos extras.",
+        "sequence_with_ab": "Modelos em rodízio não podem ser combinados com um teste A/B. Desative o teste A/B ou remova os modelos extras.",
+        "sequence_template_required": "Escolha um modelo para cada passo da ordem ou remova os vazios."
       },
       "template": {
         "previewOnline": "online",
@@ -1251,7 +1259,8 @@
           "contacts": "Contatos",
           "groups": "Grupos",
           "segments": "Segmentos",
-          "csv": "Arquivo CSV"
+          "csv": "Arquivo CSV",
+          "previous": "Envios anteriores"
         },
         "groupsHint": "Grupos são suas listas de marketing. Todos os integrantes dos grupos marcados são incluídos.",
         "segmentsHint": "Segmentos se preenchem sozinhos a partir de regras. Todos os integrantes dos segmentos marcados são incluídos.",
@@ -1347,7 +1356,10 @@
         },
         "csvIssuesMore": "Mais {count} estão no download.",
         "csvConsentOn": "Confirmou o consentimento destes números. Ficam registados como aceites quando a difusão for lançada.",
-        "csvConsentVersion": "Versão do aviso: {version}."
+        "csvConsentVersion": "Versão do aviso: {version}.",
+        "modePrevious": "Enviar para envios anteriores",
+        "previousHint": "Redirecione para as pessoas que receberam transmissões e campanhas anteriores, opcionalmente apenas quem leu, não leu, respondeu ou clicou.",
+        "chipPrevious": "{count, plural, one {# envio anterior} many {# de envios anteriores} other {# envios anteriores}} ({outcome})"
       },
       "review": {
         "intro": "Confira o custo, diga com o que cada variável do modelo é preenchida e revise a transmissão.",
@@ -1425,7 +1437,9 @@
         "estimatedCostFull": "Custo estimado (total)",
         "chargedPlan": "Cobrado agora da sua carteira: {amount} (seu plano cobre {covered} destas mensagens)",
         "chargedWallet": "Cobrado da sua carteira: {amount}",
-        "sumFollowUps": "Acompanhamentos"
+        "sumFollowUps": "Acompanhamentos",
+        "sumSequence": "Enviado em rodízio",
+        "sumPrevious": "Envios anteriores: {names} ({outcome})"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1588,7 +1602,8 @@
           "sent": "Enviadas",
           "delivered": "Entregues",
           "failed": "Com falha",
-          "retries": "Novas tentativas"
+          "retries": "Novas tentativas",
+          "template": "Modelo"
         },
         "retrySummary": "{pending} aguardando, {recovered} recuperadas, {exhausted} desistiram",
         "openRun": "Abrir execução",
@@ -1648,7 +1663,9 @@
             "skipped": "A condição não foi atendida quando foi verificada, então a sequência terminou ali.",
             "lapsed": "O tempo de monitoramento acabou antes de o contato responder ou ler, então a sequência terminou ali."
           }
-        }
+        },
+        "templatesTitle": "Modelos",
+        "templatesInTurn": "{count, plural, one {# modelo em rodízio} other {# modelos em rodízio}}"
       },
       "panel": {
         "title": "Criadas com Criar transmissão",
@@ -1659,7 +1676,8 @@
           "recurring": "Recorrente"
         },
         "recipients": "{count, plural, one {# destinatário} other {# destinatários}}",
-        "next": "Próxima execução {when}"
+        "next": "Próxima execução {when}",
+        "moreTemplates": "+{count} mais"
       },
       "pickers": {
         "selectDate": "Selecionar data",
@@ -1745,6 +1763,29 @@
           "hours": "{count, plural, one {hora} many {horas} other {horas}}",
           "days": "{count, plural, one {dia} many {dias} other {dias}}"
         }
+      },
+      "sequence": {
+        "title": "Modelos em ordem",
+        "intro": "Cada execução envia o próximo modelo desta lista. A execução 1 envia o primeiro, a 2 o segundo e, depois do último, a lista recomeça pelo primeiro.",
+        "notRecurring": "Só uma transmissão recorrente envia modelos em rodízio. Escolha um agendamento recorrente ou remova estes modelos.",
+        "withAb": "Modelos em rodízio não podem ser usados com um teste A/B, que já envia dois modelos. Desative o teste A/B para usá-los.",
+        "templateLabel": "Modelo {position}",
+        "firstMissing": "Ainda não escolhido",
+        "firstHint": "O modelo escolhido para a campanha. Altere-o na etapa do modelo.",
+        "pick": "Escolha um modelo",
+        "loading": "Carregando...",
+        "unavailable": "Não está mais disponível",
+        "up": "Subir",
+        "down": "Descer",
+        "moveUp": "Subir o modelo {position}",
+        "moveDown": "Descer o modelo {position}",
+        "remove": "Remover o modelo {position}",
+        "removeShort": "Remover",
+        "removeAll": "Remover todos",
+        "add": "Adicionar um modelo",
+        "count": "{used} de {max} modelos",
+        "limitReached": "Limite atingido: {max} modelos.",
+        "variablesTitle": "Variáveis do modelo {position}: {name}"
       }
     },
     "history": {
@@ -1881,6 +1922,58 @@
       "loading": "Carregando seus números",
       "noAccessTitle": "Você não pode criar campanhas",
       "noAccess": "Peça a um administrador do workspace permissão para criar campanhas."
+    },
+    "previousSends": {
+      "title": "Envios anteriores",
+      "empty": "Ainda não há transmissões nem campanhas anteriores",
+      "outcomeLabel": "Quem desses envios",
+      "outcomes": {
+        "all": "Todos os destinatários",
+        "delivered": "Entregue",
+        "read": "Lido",
+        "not_read": "Não leram",
+        "replied": "Responderam",
+        "not_replied": "Não responderam",
+        "clicked": "Clicaram em um link",
+        "failed": "Falhou"
+      },
+      "outcomeOff": "{name} (indisponível para transmissões)",
+      "outcomeHint": {
+        "all": "Todos os destinatários: todas as pessoas a quem a mensagem se destinava. Contatos que cancelaram o recebimento e linhas ignoradas ficam de fora.",
+        "delivered": "Entregue: as pessoas que a receberam.",
+        "read": "Lido: as pessoas que a leram.",
+        "not_read": "Não leram: as pessoas para quem foi enviada e que ainda não a leram.",
+        "replied": "Responderam: as pessoas que responderam.",
+        "not_replied": "Não responderam: as pessoas para quem foi enviada e que ainda não responderam.",
+        "clicked": "Clicaram em um link: as pessoas que clicaram em um link rastreado.",
+        "failed": "Falhou: as pessoas para quem não foi possível entregar."
+      },
+      "broadcastNote": "Uma transmissão registra apenas entrega e leitura, então respostas e cliques não ficam disponíveis enquanto uma estiver marcada.",
+      "broadcastOff": "Uma transmissão não tem respostas nem cliques. Escolha outro resultado para marcá-la.",
+      "search": "Pesquisar envios anteriores",
+      "searchPlaceholder": "Pesquisar",
+      "listLabel": "Transmissões e campanhas anteriores",
+      "noMatch": "Nada corresponde à sua pesquisa.",
+      "chosen": "{count} de {max} escolhidos",
+      "limit": "Você pode escolher até {max} envios. Desmarque um para escolher outro.",
+      "kind": {
+        "broadcast": "Transmissão",
+        "campaign": "Campanha"
+      },
+      "wentOut": "Enviado em {date}",
+      "wentOutUnknown": "Data desconhecida",
+      "recipients": "{count, plural, one {# destinatário} many {# de destinatários} other {# destinatários}}",
+      "notRecorded": "Não registrado em uma transmissão",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# pessoa} many {# de pessoas} other {# pessoas}}",
+        "delivered": "{count, plural, one {# pessoa recebeu} many {# de pessoas receberam} other {# pessoas receberam}}",
+        "read": "{count, plural, one {# pessoa leu} many {# de pessoas leram} other {# pessoas leram}}",
+        "not_read": "{count, plural, one {# pessoa não leu} many {# de pessoas não leram} other {# pessoas não leram}}",
+        "replied": "{count, plural, one {# pessoa respondeu} many {# de pessoas responderam} other {# pessoas responderam}}",
+        "not_replied": "{count, plural, one {# pessoa não respondeu} many {# de pessoas não responderam} other {# pessoas não responderam}}",
+        "clicked": "{count, plural, one {# pessoa clicou em um link} many {# de pessoas clicaram em um link} other {# pessoas clicaram em um link}}",
+        "failed": "{count, plural, one {# pessoa para quem falhou} many {# de pessoas para quem falhou} other {# pessoas para quem falhou}}"
+      }
     }
   }
 }

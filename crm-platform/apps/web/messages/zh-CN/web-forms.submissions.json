@@ -115,7 +115,14 @@
         "consentAt": "同意时间",
         "noConsent": "此表单未请求同意。",
         "links": "记录",
-        "actions": "操作"
+        "actions": "操作",
+        "ageCheck": "年龄检查",
+        "ageOutcome": "结果",
+        "ageUnder": "低于最低年龄。提交已被接受,联系人已被标记为未成年人;未记录营销同意。",
+        "guardianName": "父母或监护人",
+        "guardianEmail": "监护人电子邮件",
+        "guardianPhone": "监护人电话",
+        "guardianNote": "由访客提供,未经核实。在有人于联系人的“同意”卡片上记录之前,其同意不会存档。"
       },
       "actions": {
         "retry": "重试",

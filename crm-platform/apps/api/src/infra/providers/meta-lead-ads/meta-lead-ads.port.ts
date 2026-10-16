@@ -66,6 +66,25 @@ export interface FormLeads {
   capped: boolean;
 }
 
+/** The window and place of one page of a form's leads (see `pageFormLeads`). */
+export interface FormLeadsWindow {
+  /** Leads created after this time (epoch seconds, exclusive). */
+  sinceEpochSeconds: number;
+  /** Leads created before this time (epoch seconds, exclusive); null for no upper bound. */
+  untilEpochSeconds: number | null;
+  /** The cursor `next` of the previous page; null for the first. */
+  after: string | null;
+  /** Leads per page, at most 100. */
+  limit: number;
+}
+
+/** One page of a form's leads, in the order Meta lists them (newest first). */
+export interface FormLeadsPage {
+  leads: GraphLead[];
+  /** The cursor for the page after this one; null when this was the last. */
+  next: string | null;
+}
+
 /** Calls made as one Page, with its token. */
 export interface MetaLeadAdsPageApi {
   /** Every lead form of the Page, with its questions and consent checkboxes; follows Meta's paging. */
@@ -79,6 +98,11 @@ export interface MetaLeadAdsPageApi {
     sinceEpochSeconds: number,
     maxLeads: number,
   ): Promise<GraphResult<FormLeads>>;
+  /**
+   * ONE page of the leads a form received between two times, newest first, with the cursor of the next. The caller owns the loop, so it
+   * can pace its requests, back off when Meta slows it down and report progress between pages (a backfill and "Sync now").
+   */
+  pageFormLeads(formId: string, window: FormLeadsWindow): Promise<GraphResult<FormLeadsPage>>;
   /** The webhook fields this app is subscribed to on the Page. */
   subscribedFields(): Promise<GraphResult<string[]>>;
   /**

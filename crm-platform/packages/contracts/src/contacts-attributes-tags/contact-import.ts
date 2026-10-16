@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isPlausibleBirthDate } from '../contact-consent/age';
 import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema } from '../common/pagination';
 import { queryBoolean } from './query-helpers';
@@ -36,6 +37,9 @@ export const IMPORT_FIELDS = [
   // column is judged by); these two are read only when mapped, and grant only a row that says yes.
   'consentSms',
   'consentEmail',
+  // BL-190: a file may carry a date of birth (written year first, 2010-05-04) and a minor column (yes flags the contact; no and blank do nothing).
+  'dateOfBirth',
+  'minor',
 ] as const;
 export type ImportField = (typeof IMPORT_FIELDS)[number];
 export const importFieldSchema = z.enum(IMPORT_FIELDS);
@@ -104,6 +108,10 @@ export const IMPORT_ALIASES: Record<ImportField, readonly string[]> = {
     'marketingemailconsent',
     'emailmarketingconsent',
   ],
+  /** The date of birth, written year first (2010-05-04, 2010/05/04). Another order is refused for the row: day and month cannot be told apart. */
+  dateOfBirth: ['dateofbirth', 'dob', 'birthdate', 'birthday', 'born', 'birth'],
+  /** Yes flags the contact as a minor (source: import). No, blank and unknown words change nothing: a file never clears a flag. */
+  minor: ['minor', 'isminor', 'child', 'underage', 'under18'],
 };
 
 /** Scan order: the leftmost column wins a field, and a field takes one column. */
@@ -125,6 +133,8 @@ const DETECTION_ORDER: readonly ImportField[] = [
   'consent',
   'consentSms',
   'consentEmail',
+  'dateOfBirth',
+  'minor',
 ];
 
 export function normalizeImportHeader(header: string): string {
@@ -231,6 +241,17 @@ const CONSENT_NO = new Set([
   'नहीं',
 ]);
 
+/**
+ * One cell of the date of birth column: year first (`2010-05-04`, `2010/05/04`, `2010.05.04`), a real day that can be a birth date.
+ * Null for anything else; a blank cell is "no date" and is the caller's to tell apart.
+ */
+export function parseImportBirthDate(cell: string, now: Date = new Date()): string | null {
+  const m = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(cell.trim());
+  if (!m) return null;
+  const iso = `${m[1]}-${m[2]!.padStart(2, '0')}-${m[3]!.padStart(2, '0')}`;
+  return isPlausibleBirthDate(iso, now) ? iso : null;
+}
+
 /** Yes / no spellings of a consent cell: case, spaces, hyphens and accents do not matter. Anything else is `unrecognised` (not granted). */
 export function parseImportConsent(cell: string): ImportConsentValue {
   const raw = cell.trim();
@@ -304,6 +325,8 @@ export const IMPORT_REJECT_REASONS = [
   'tag_name_too_long',
   'plan_limit_reached',
   'tag_limit_reached',
+  /** The date of birth column holds something that is not a year-first date that can be a birth date (BL-190). */
+  'invalid_date_of_birth',
   /** Not an error: the row repeats a number from earlier in the file and was merged into that contact. */
   'duplicate_in_file',
 ] as const;

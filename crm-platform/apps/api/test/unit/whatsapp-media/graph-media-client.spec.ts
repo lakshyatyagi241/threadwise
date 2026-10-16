@@ -192,6 +192,21 @@ describe('download: GET <url>', () => {
     });
   });
 
+  it('a bare 403 from the file host is a refused link, not a rejected token: retryable, never AUTH', async () => {
+    graph.add({ id: 'D3b', bytes: pngBytes(), mime: 'image/png', download: ['403'] });
+    const e = await failure(client().download(metaProfile(), ctx, `${graph.mediaUrl}/files/D3b`));
+    expect(e).toMatchObject({ code: MEDIA_FAILURE.DOWNLOAD_FAILED, retryable: true });
+    expect(e.message).toContain('HTTP 403');
+  });
+
+  it('a Meta file host with no business token to send is a missing credential, sent to no one', async () => {
+    const e = await failure(
+      client().download(bspProfile(), bspCtx, 'https://lookaside.fbsbx.com/files/NOTOKEN'),
+    );
+    expect(e).toMatchObject({ code: MEDIA_FAILURE.NO_CREDENTIALS, retryable: false });
+    expect(graph.of('media')).toHaveLength(0);
+  });
+
   it('follows a redirect on the same host and keeps the credentials; each hop is checked', async () => {
     graph.add({
       id: 'D4a',

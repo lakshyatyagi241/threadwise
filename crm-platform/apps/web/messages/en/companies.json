@@ -4,7 +4,9 @@
       "companies": "Companies"
     },
     "common": {
-      "dismiss": "Dismiss"
+      "dismiss": "Dismiss",
+      "yes": "Yes",
+      "no": "No"
     },
     "errors": {
       "network": "Could not reach the server. Check your connection and try again.",
@@ -18,7 +20,10 @@
       "planDisabled": "Your plan does not include companies. Upgrade to unlock them.",
       "ownerInvalid": "The owner must be an active member of this workspace.",
       "unexpected": "Something went wrong. Try again in a moment.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "filterInvalid": "One of the property conditions cannot be used. Check the property and its value.",
+      "exportTooLarge": "That is too many companies for one file. Narrow the list with a filter and export again.",
+      "importInvalid": "That file cannot be imported. It needs a first line naming the columns, including a name or website column, and at most 1,000 companies."
     },
     "list": {
       "eyebrow": "CRM · Organizations",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Delete companies",
       "deleteManyMessage": "{count, plural, one {Delete this company? Its contacts and deals are kept and just unlinked.} other {Delete these # companies? Their contacts and deals are kept and just unlinked.}}",
       "delete": "Delete",
-      "keep": "Keep"
+      "keep": "Keep",
+      "export": "Export",
+      "import": "Import"
     },
     "toolbar": {
       "label": "Filter companies",
@@ -69,7 +76,14 @@
         "name": "Name A to Z"
       },
       "clear": "Clear",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "sortByProperty": "By {name}",
+      "direction": "Direction",
+      "directions": {
+        "default": "Usual direction",
+        "asc": "Ascending",
+        "desc": "Descending"
+      }
     },
     "table": {
       "label": "Companies",
@@ -82,7 +96,13 @@
       "wonValue": "Won value",
       "actions": "Actions",
       "delete": "Delete company",
-      "deleteNamed": "Delete company {name}"
+      "deleteNamed": "Delete company {name}",
+      "website": "Website",
+      "email": "Email",
+      "phone": "Phone",
+      "size": "Size",
+      "owner": "Owner",
+      "created": "Created"
     },
     "form": {
       "eyebrow": "Company",
@@ -136,7 +156,8 @@
       "contactUnlinkFailed": "Could not remove the contact. Try again.",
       "contactsLinked": "{count, plural, one {# contact added to the company.} other {# contacts added to the company.}}",
       "contactsLinkedSome": "{count, plural, one {# contact added} other {# contacts added}}, {failed, plural, one {# could not be added.} other {# could not be added.}}",
-      "contactsLinkFailed": "Could not add the contacts. Try again."
+      "contactsLinkFailed": "Could not add the contacts. Try again.",
+      "exportFailed": "The export could not be made. Try again in a moment."
     },
     "detail": {
       "back": "All companies",
@@ -163,7 +184,8 @@
       "updated": "Last changed",
       "properties": "Properties",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "generateBrief": "Generate brief"
     },
     "contacts": {
       "title": "Contacts",
@@ -263,6 +285,92 @@
         "visibleHint": "Show it on the company form and the company page.",
         "conditionsHint": "Hide this property on the company form until another property has a value.",
         "deactivateNote": "Saving will hide this property from the form and the company page. Values companies hold are kept."
+      }
+    },
+    "columns": {
+      "button": "Columns",
+      "label": "Choose columns",
+      "hint": "The table remembers your choice in this browser.",
+      "reset": "Back to the usual columns"
+    },
+    "propertyFilters": {
+      "button": "Properties",
+      "label": "Filter by company properties",
+      "hint": "Show companies where all of these hold.",
+      "none": "No condition yet.",
+      "noProperties": "No company property can be filtered yet. Add one in Settings, Company properties.",
+      "property": "Property of condition {n}",
+      "operator": "Operator of condition {n}",
+      "value": "Value of condition {n}",
+      "remove": "Remove condition {n}",
+      "add": "Add a condition",
+      "clear": "Clear all",
+      "apply": "Apply"
+    },
+    "import": {
+      "eyebrow": "Companies",
+      "title": "Import companies",
+      "close": "Close",
+      "cancel": "Cancel",
+      "done": "Done",
+      "start": "Import",
+      "file": "CSV file",
+      "choose": "Choose a CSV file",
+      "change": "Choose another file",
+      "tooBig": "That file is too large. Split it and import the parts.",
+      "intro": "The first line names the columns: name (or website), email, phone, industry, size, address, notes, owner (an email or name of a member) and any company property by its label. Up to {max} companies per file.",
+      "match": "Fill in companies that already exist",
+      "matchHint": "A company with the same website (or, without one, the same name) gets its empty fields filled. Nothing it already has is changed.",
+      "summary": "{total, plural, one {# row read} other {# rows read}}: {created} created, {updated} filled in, {unchanged} unchanged, {failed} not imported.",
+      "ignored": "These columns were not recognised and were skipped: {columns}.",
+      "failedTitle": "{count, plural, one {# row was not imported} other {# rows were not imported}}",
+      "line": "Line {line}",
+      "moreFailed": "{count, plural, one {And # more.} other {And # more.}}"
+    },
+    "brief": {
+      "title": "Account brief",
+      "subtitle": "Written by AI from the CRM data you can see. Check it before you rely on it.",
+      "loading": "Loading the brief",
+      "unavailableTitle": "AI is not set up for this workspace",
+      "unavailable": "A brief is written by an AI model, and this workspace has no AI key, so nothing was sent anywhere.",
+      "addKey": "Add an AI key",
+      "askAdmin": "Ask an admin to add an AI key.",
+      "empty": "Get a short summary of this company: who they are, their deals and tasks, how active the conversation is, the risks and what to do next.",
+      "generate": "Generate brief",
+      "regenerate": "Regenerate",
+      "copy": "Copy",
+      "copied": "Brief copied.",
+      "copyFailed": "The brief could not be copied. Select the text and copy it by hand.",
+      "copyTitle": "{name}: account brief",
+      "stale": "The CRM has changed since this brief was written. Regenerate for a current one.",
+      "writtenBy": "Written {date} by {model}. AI can be wrong.",
+      "notice": "The model gets counts, dates, amounts and short titles. It never gets contact names, email addresses, phone numbers, company notes or message text, and numbers and email addresses in titles are removed first.",
+      "basedOn": "Based on: {kinds}. Only what your role lets you see is counted.",
+      "basedOnNone": "Based on the company details only: your role does not show contacts, deals, tasks or conversations.",
+      "errors": {
+        "tooSoon": "A brief was written a moment ago. Wait a little before asking again.",
+        "providerFailed": "The AI service could not write the brief. Try again in a moment.",
+        "limit": "The AI allowance is used up for now. Try again later or ask an admin.",
+        "forbidden": "You do not have permission to do that.",
+        "notFound": "That company no longer exists.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "unexpected": "Something went wrong. Try again in a moment."
+      },
+      "sections": {
+        "activity": "Recent activity",
+        "deals": "Deals",
+        "tasks": "Tasks",
+        "conversations": "Conversations",
+        "properties": "Key properties",
+        "risks": "Risks",
+        "nextSteps": "Next steps"
+      },
+      "source": {
+        "properties": "company properties",
+        "contacts": "contacts",
+        "deals": "deals",
+        "tasks": "tasks",
+        "conversations": "conversations"
       }
     }
   }

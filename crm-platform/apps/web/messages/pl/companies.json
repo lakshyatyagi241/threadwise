@@ -4,7 +4,9 @@
       "companies": "Firmy"
     },
     "common": {
-      "dismiss": "Odrzuć"
+      "dismiss": "Odrzuć",
+      "yes": "Tak",
+      "no": "Nie"
     },
     "errors": {
       "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -18,7 +20,10 @@
       "planDisabled": "Twój plan nie obejmuje firm. Zmień plan na wyższy, aby je odblokować.",
       "ownerInvalid": "Właściciel musi być aktywnym członkiem tej przestrzeni roboczej.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "retry": "Spróbuj ponownie"
+      "retry": "Spróbuj ponownie",
+      "filterInvalid": "Jednego z warunków właściwości nie można użyć. Sprawdź właściwość i jej wartość.",
+      "exportTooLarge": "To zbyt wiele firm na jeden plik. Zawęź listę filtrem i wyeksportuj ponownie.",
+      "importInvalid": "Tego pliku nie można zaimportować. Pierwszy wiersz musi zawierać nazwy kolumn, w tym kolumnę name lub website, a plik może mieć najwyżej 1000 firm."
     },
     "list": {
       "eyebrow": "CRM · Organizacje",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Usuń firmy",
       "deleteManyMessage": "{count, plural, one {Usunąć tę firmę? Jej kontakty i transakcje zostaną zachowane, tylko odłączone.} few {Usunąć te # firmy? Ich kontakty i transakcje zostaną zachowane, tylko odłączone.} many {Usunąć tych # firm? Ich kontakty i transakcje zostaną zachowane, tylko odłączone.} other {Usunąć te # firmy? Ich kontakty i transakcje zostaną zachowane, tylko odłączone.}}",
       "delete": "Usuń",
-      "keep": "Zachowaj"
+      "keep": "Zachowaj",
+      "export": "Eksportuj",
+      "import": "Importuj"
     },
     "toolbar": {
       "label": "Filtruj firmy",
@@ -69,7 +76,14 @@
         "name": "Nazwa od A do Z"
       },
       "clear": "Wyczyść",
-      "refresh": "Odśwież"
+      "refresh": "Odśwież",
+      "sortByProperty": "Autor: {name}",
+      "direction": "Kierunek",
+      "directions": {
+        "default": "Zwykły kierunek",
+        "asc": "Rosnąco",
+        "desc": "Malejąco"
+      }
     },
     "table": {
       "label": "Firmy",
@@ -82,7 +96,13 @@
       "wonValue": "Wartość wygranych",
       "actions": "Działania",
       "delete": "Usuń firmę",
-      "deleteNamed": "Usuń firmę {name}"
+      "deleteNamed": "Usuń firmę {name}",
+      "website": "Strona internetowa",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "size": "Wielkość",
+      "owner": "Właściciel",
+      "created": "Utworzono"
     },
     "form": {
       "eyebrow": "Firma",
@@ -136,7 +156,8 @@
       "contactUnlinkFailed": "Nie udało się usunąć kontaktu. Spróbuj ponownie.",
       "contactsLinked": "{count, plural, one {Dodano # kontakt do firmy.} few {Dodano # kontakty do firmy.} many {Dodano # kontaktów do firmy.} other {Dodano # kontaktu do firmy.}}",
       "contactsLinkedSome": "{count, plural, one {Dodano # kontakt} few {Dodano # kontakty} many {Dodano # kontaktów} other {Dodano # kontaktu}}, {failed, plural, one {nie udało się dodać #.} few {nie udało się dodać #.} many {nie udało się dodać #.} other {nie udało się dodać #.}}",
-      "contactsLinkFailed": "Nie udało się dodać kontaktów. Spróbuj ponownie."
+      "contactsLinkFailed": "Nie udało się dodać kontaktów. Spróbuj ponownie.",
+      "exportFailed": "Nie udało się utworzyć eksportu. Spróbuj ponownie za chwilę."
     },
     "detail": {
       "back": "Wszystkie firmy",
@@ -163,7 +184,8 @@
       "updated": "Ostatnia zmiana",
       "properties": "Właściwości",
       "yes": "Tak",
-      "no": "Nie"
+      "no": "Nie",
+      "generateBrief": "Utwórz podsumowanie"
     },
     "contacts": {
       "title": "Kontakty",
@@ -263,6 +285,92 @@
         "visibleHint": "Pokazuj w formularzu firmy i na stronie firmy.",
         "conditionsHint": "Ukryj tę właściwość w formularzu firmy, dopóki inna właściwość nie będzie miała wartości.",
         "deactivateNote": "Zapisanie ukryje tę właściwość w formularzu i na stronie firmy. Wartości zapisane w firmach zostaną zachowane."
+      }
+    },
+    "columns": {
+      "button": "Kolumny",
+      "label": "Wybierz kolumny",
+      "hint": "Tabela zapamiętuje Twój wybór w tej przeglądarce.",
+      "reset": "Wróć do zwykłych kolumn"
+    },
+    "propertyFilters": {
+      "button": "Właściwości",
+      "label": "Filtruj według właściwości firmy",
+      "hint": "Pokaż firmy, dla których spełnione są wszystkie te warunki.",
+      "none": "Brak warunków.",
+      "noProperties": "Nie można jeszcze filtrować według żadnej właściwości firmy. Dodaj ją w Ustawieniach, w sekcji Właściwości firmy.",
+      "property": "Właściwość warunku {n}",
+      "operator": "Operator warunku {n}",
+      "value": "Wartość warunku {n}",
+      "remove": "Usuń warunek {n}",
+      "add": "Dodaj warunek",
+      "clear": "Wyczyść wszystko",
+      "apply": "Zastosuj"
+    },
+    "import": {
+      "eyebrow": "Firmy",
+      "title": "Importuj firmy",
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "done": "Gotowe",
+      "start": "Importuj",
+      "file": "Plik CSV",
+      "choose": "Wybierz plik CSV",
+      "change": "Wybierz inny plik",
+      "tooBig": "Ten plik jest za duży. Podziel go i zaimportuj części osobno.",
+      "intro": "Pierwszy wiersz zawiera nazwy kolumn: name (lub website), email, phone, industry, size, address, notes, owner (e-mail lub nazwa członka zespołu) oraz każdą właściwość firmy pod jej etykietą. Maksymalnie {max} firm w pliku.",
+      "match": "Uzupełnij istniejące firmy",
+      "matchHint": "Firmie z tą samą stroną internetową (a bez niej – z tą samą nazwą) zostaną uzupełnione puste pola. To, co już ma, nie zostanie zmienione.",
+      "summary": "{total, plural, one {Odczytane wiersze: #} other {Odczytane wiersze: #}}: utworzono {created}, uzupełniono {updated}, bez zmian {unchanged}, nie zaimportowano {failed}.",
+      "ignored": "Te kolumny nie zostały rozpoznane i pominięto je: {columns}.",
+      "failedTitle": "{count, plural, one {Niezaimportowane wiersze: #} other {Niezaimportowane wiersze: #}}",
+      "line": "Wiersz {line}",
+      "moreFailed": "{count, plural, one {Oraz jeszcze: #.} other {Oraz jeszcze: #.}}"
+    },
+    "brief": {
+      "title": "Podsumowanie konta",
+      "subtitle": "Napisane przez AI na podstawie danych CRM, które możesz zobaczyć. Sprawdź je, zanim na nich polegasz.",
+      "loading": "Ładowanie podsumowania",
+      "unavailableTitle": "AI nie jest skonfigurowane dla tej przestrzeni roboczej",
+      "unavailable": "Podsumowanie pisze model AI, a ta przestrzeń robocza nie ma klucza AI, więc nic nie zostało nigdzie wysłane.",
+      "addKey": "Dodaj klucz AI",
+      "askAdmin": "Poproś administratora o dodanie klucza AI.",
+      "empty": "Uzyskaj krótkie podsumowanie tej firmy: kim jest, jakie ma transakcje i zadania, jak aktywna jest rozmowa, jakie są ryzyka i co zrobić dalej.",
+      "generate": "Utwórz podsumowanie",
+      "regenerate": "Napisz ponownie",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano podsumowanie.",
+      "copyFailed": "Nie udało się skopiować podsumowania. Zaznacz tekst i skopiuj go ręcznie.",
+      "copyTitle": "{name}: podsumowanie konta",
+      "stale": "CRM zmienił się od czasu napisania tego podsumowania. Napisz ponownie, aby uzyskać aktualne.",
+      "writtenBy": "Napisano {date} przez {model}. AI może się mylić.",
+      "notice": "Model otrzymuje liczby, daty, kwoty i krótkie tytuły. Nigdy nie otrzymuje nazwisk kontaktów, adresów e-mail, numerów telefonów, notatek o firmach ani treści wiadomości, a liczby i adresy e-mail w tytułach są wcześniej usuwane.",
+      "basedOn": "Na podstawie: {kinds}. Liczone jest tylko to, co pozwala zobaczyć Twoja rola.",
+      "basedOnNone": "Tylko na podstawie danych firmy: Twoja rola nie pokazuje kontaktów, transakcji, zadań ani rozmów.",
+      "errors": {
+        "tooSoon": "Podsumowanie zostało napisane chwilę temu. Poczekaj trochę, zanim poprosisz ponownie.",
+        "providerFailed": "Usługa AI nie mogła napisać podsumowania. Spróbuj ponownie za chwilę.",
+        "limit": "Limit AI został na razie wykorzystany. Spróbuj później lub zapytaj administratora.",
+        "forbidden": "Nie masz uprawnień, aby to zrobić.",
+        "notFound": "Ta firma już nie istnieje.",
+        "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+      },
+      "sections": {
+        "activity": "Ostatnia aktywność",
+        "deals": "Transakcje",
+        "tasks": "Zadania",
+        "conversations": "Rozmowy",
+        "properties": "Kluczowe właściwości",
+        "risks": "Ryzyka",
+        "nextSteps": "Następne kroki"
+      },
+      "source": {
+        "properties": "właściwości firmy",
+        "contacts": "kontakty",
+        "deals": "transakcje",
+        "tasks": "zadania",
+        "conversations": "rozmowy"
       }
     }
   }

@@ -23,6 +23,19 @@ export const FIRST_REPLY_MAX_ATTEMPTS = 5;
 export const dueAtOf = (now: Date, delayMinutes: number): Date =>
   new Date(now.getTime() + delayMinutes * 60_000);
 
+/**
+ * Whether a lead is too old for an automatic first message: it was submitted at the provider more than `maxAgeMinutes` before the moment
+ * the pipeline scheduled its message. The age is taken at scheduling, not at sending, so the source's own delay (up to an hour) and a
+ * hold for business hours never make a fresh lead "old". A lead whose submission time is in the future (a skewed provider clock) is fresh.
+ */
+export function isLeadTooOld(
+  leadReceivedAt: Date,
+  scheduledAt: Date,
+  maxAgeMinutes: number,
+): boolean {
+  return scheduledAt.getTime() - leadReceivedAt.getTime() > maxAgeMinutes * 60_000;
+}
+
 const STEP_MS = 15 * 60_000;
 const LOOKAHEAD_STEPS = 8 * 24 * 4;
 
@@ -107,6 +120,7 @@ const REASON_TEXT: Record<LeadFirstReplyReason, string> = {
   no_sender: 'no connected sender',
   template_unavailable: 'the template cannot be sent',
   missing_value: 'a template value is missing for this contact',
+  lead_too_old: 'the lead is older than the setting allows',
   provider_error: 'the provider refused it',
   interrupted: 'it was interrupted',
   expired: 'it waited too long',

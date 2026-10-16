@@ -1,0 +1,147 @@
+{
+  "generatedAt": "2026-10-16T16:12:29.203Z",
+  "node": "v22.17.0",
+  "prometheus": "prom/prometheus:v2.55.0",
+  "aborted": false,
+  "results": [
+    {
+      "name": "the metrics listener refuses a scrape without the token",
+      "ok": true
+    },
+    {
+      "name": "Prometheus has both targets up",
+      "ok": true,
+      "detail": "crm-api=up crm-worker=up"
+    },
+    {
+      "name": "target labels are the job names the rules expect",
+      "ok": true
+    },
+    {
+      "name": "crm_event_loop_delay_p99_seconds present for the api and the worker",
+      "ok": true,
+      "detail": "api,worker"
+    },
+    {
+      "name": "crm_event_loop_delay_max_seconds present for the api and the worker",
+      "ok": true,
+      "detail": "api,worker"
+    },
+    {
+      "name": "crm_event_loop_utilization_ratio present for the api and the worker",
+      "ok": true,
+      "detail": "api,worker"
+    },
+    {
+      "name": "crm_process_heap_used_bytes present for the api and the worker",
+      "ok": true,
+      "detail": "api,worker"
+    },
+    {
+      "name": "crm_process_rss_bytes present for the api and the worker",
+      "ok": true,
+      "detail": "api,worker"
+    },
+    {
+      "name": "crm_runtime_last_report_timestamp_seconds present for the api and the worker",
+      "ok": true,
+      "detail": "api,worker"
+    },
+    {
+      "name": "series carry service, instance and the scrape job",
+      "ok": true,
+      "detail": {
+        "__name__": "crm_event_loop_delay_p99_seconds",
+        "exported_instance": "Lakshya:27336",
+        "instance": "host.docker.internal:9464",
+        "job": "crm-api",
+        "service": "api"
+      }
+    },
+    {
+      "name": "a healthy idle loop reads in a sane range (under 0.5 s)",
+      "ok": true,
+      "detail": "api=0.122224639 worker=0.018825215"
+    },
+    {
+      "name": "the heartbeat timestamp is fresh (under 30 s old)",
+      "ok": true,
+      "detail": "api=6.7s worker=3.7s"
+    },
+    {
+      "name": "a job run by the real worker shows as completed in Prometheus",
+      "ok": true,
+      "detail": "service=worker"
+    },
+    {
+      "name": "Prometheus loaded all 11 alert rules",
+      "ok": true,
+      "detail": 11
+    },
+    {
+      "name": "every rule evaluates without error",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "nothing is firing on a healthy idle stack",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Prometheus sees the injected stall as a large max delay",
+      "ok": true,
+      "detail": "0.59 s"
+    },
+    {
+      "name": "callers waited far longer than the request histogram shows (the histogram cannot see time queued behind the loop)",
+      "ok": true,
+      "detail": "client 0.592 s vs server 0.005 s"
+    },
+    {
+      "name": "EventLoopBlockingWithImpact fires from a real, sustained stall in a real process",
+      "ok": true,
+      "detail": {
+        "alertname": "EventLoopBlockingWithImpact",
+        "exported_instance": "Lakshya:27336",
+        "instance": "host.docker.internal:9464",
+        "job": "crm-api",
+        "service": "api",
+        "severity": "critical"
+      }
+    },
+    {
+      "name": "the loop recovers once the stall stops",
+      "ok": true,
+      "detail": "max delay 0.018 s"
+    },
+    {
+      "name": "Prometheus sees the killed worker as down",
+      "ok": true
+    },
+    {
+      "name": "RuntimeMetricsTargetDown goes pending first (the 2 m hold)",
+      "ok": true,
+      "detail": "pending"
+    },
+    {
+      "name": "RuntimeMetricsTargetDown fires for the worker",
+      "ok": true,
+      "detail": {
+        "alertname": "RuntimeMetricsTargetDown",
+        "instance": "host.docker.internal:9465",
+        "job": "crm-worker",
+        "severity": "critical"
+      }
+    },
+    {
+      "name": "the API target stays up while the worker is down",
+      "ok": true
+    },
+    {
+      "name": "RuntimeMetricsStale does NOT fire for a dead process (its series just vanish; TargetDown covers it)",
+      "ok": true,
+      "detail": 0
+    }
+  ]
+}

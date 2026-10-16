@@ -37,6 +37,8 @@ describe('columns', () => {
       'leadScore',
       'language',
       'memo',
+      'dateOfBirth',
+      'minor',
       'createdOn',
     ]);
   });

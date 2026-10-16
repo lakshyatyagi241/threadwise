@@ -4,7 +4,9 @@
       "companies": "Perusahaan"
     },
     "common": {
-      "dismiss": "Tutup"
+      "dismiss": "Tutup",
+      "yes": "Ya",
+      "no": "Tidak"
     },
     "errors": {
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
@@ -18,7 +20,10 @@
       "planDisabled": "Paket Anda tidak menyertakan perusahaan. Upgrade untuk membukanya.",
       "ownerInvalid": "Pemilik harus anggota aktif workspace ini.",
       "unexpected": "Terjadi kesalahan. Coba lagi sesaat lagi.",
-      "retry": "Coba lagi"
+      "retry": "Coba lagi",
+      "filterInvalid": "Salah satu kondisi properti tidak dapat digunakan. Periksa properti dan nilainya.",
+      "exportTooLarge": "Jumlah perusahaan terlalu banyak untuk satu file. Persempit daftar dengan filter lalu ekspor lagi.",
+      "importInvalid": "File itu tidak dapat diimpor. File harus punya baris pertama yang menamai kolom, termasuk kolom name atau website, dan maksimal 1.000 perusahaan."
     },
     "list": {
       "eyebrow": "CRM · Organisasi",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Hapus perusahaan",
       "deleteManyMessage": "{count, plural, one {Hapus perusahaan ini? Kontak dan deal-nya tetap disimpan dan hanya dilepas tautannya.} other {Hapus # perusahaan ini? Kontak dan deal mereka tetap disimpan dan hanya dilepas tautannya.}}",
       "delete": "Hapus",
-      "keep": "Pertahankan"
+      "keep": "Pertahankan",
+      "export": "Ekspor",
+      "import": "Impor"
     },
     "toolbar": {
       "label": "Filter perusahaan",
@@ -69,7 +76,14 @@
         "name": "Nama A sampai Z"
       },
       "clear": "Hapus",
-      "refresh": "Segarkan"
+      "refresh": "Segarkan",
+      "sortByProperty": "Oleh {name}",
+      "direction": "Arah",
+      "directions": {
+        "default": "Arah biasa",
+        "asc": "Menaik",
+        "desc": "Menurun"
+      }
     },
     "table": {
       "label": "Perusahaan",
@@ -82,7 +96,13 @@
       "wonValue": "Nilai dimenangkan",
       "actions": "Tindakan",
       "delete": "Hapus perusahaan",
-      "deleteNamed": "Hapus perusahaan {name}"
+      "deleteNamed": "Hapus perusahaan {name}",
+      "website": "Situs web",
+      "email": "Email",
+      "phone": "Telepon",
+      "size": "Ukuran",
+      "owner": "Pemilik",
+      "created": "Dibuat"
     },
     "form": {
       "eyebrow": "Perusahaan",
@@ -136,7 +156,8 @@
       "contactUnlinkFailed": "Tidak dapat mengeluarkan kontak. Coba lagi.",
       "contactsLinked": "{count, plural, other {# kontak ditambahkan ke perusahaan.}}",
       "contactsLinkedSome": "{count, plural, other {# kontak ditambahkan}}, {failed, plural, other {# tidak dapat ditambahkan.}}",
-      "contactsLinkFailed": "Tidak dapat menambahkan kontak. Coba lagi."
+      "contactsLinkFailed": "Tidak dapat menambahkan kontak. Coba lagi.",
+      "exportFailed": "Ekspor tidak dapat dibuat. Coba lagi sebentar lagi."
     },
     "detail": {
       "back": "Semua perusahaan",
@@ -163,7 +184,8 @@
       "updated": "Terakhir diubah",
       "properties": "Properti",
       "yes": "Ya",
-      "no": "Tidak"
+      "no": "Tidak",
+      "generateBrief": "Buat ringkasan"
     },
     "contacts": {
       "title": "Kontak",
@@ -263,6 +285,92 @@
         "visibleHint": "Tampilkan di formulir perusahaan dan halaman perusahaan.",
         "conditionsHint": "Sembunyikan properti ini di formulir perusahaan sampai properti lain memiliki nilai.",
         "deactivateNote": "Menyimpan akan menyembunyikan properti ini dari formulir dan halaman perusahaan. Nilai yang dimiliki perusahaan tetap disimpan."
+      }
+    },
+    "columns": {
+      "button": "Kolom",
+      "label": "Pilih kolom",
+      "hint": "Tabel mengingat pilihan Anda di browser ini.",
+      "reset": "Kembali ke kolom biasa"
+    },
+    "propertyFilters": {
+      "button": "Properti",
+      "label": "Filter menurut properti perusahaan",
+      "hint": "Tampilkan perusahaan yang memenuhi semua ini.",
+      "none": "Belum ada kondisi.",
+      "noProperties": "Belum ada properti perusahaan yang dapat difilter. Tambahkan satu di Pengaturan, Properti perusahaan.",
+      "property": "Properti kondisi {n}",
+      "operator": "Operator kondisi {n}",
+      "value": "Nilai kondisi {n}",
+      "remove": "Hapus kondisi {n}",
+      "add": "Tambah kondisi",
+      "clear": "Hapus semua",
+      "apply": "Terapkan"
+    },
+    "import": {
+      "eyebrow": "Perusahaan",
+      "title": "Impor perusahaan",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "done": "Selesai",
+      "start": "Impor",
+      "file": "File CSV",
+      "choose": "Pilih file CSV",
+      "change": "Pilih file lain",
+      "tooBig": "File itu terlalu besar. Pecah file lalu impor bagian-bagiannya.",
+      "intro": "Baris pertama menamai kolom: name (atau website), email, phone, industry, size, address, notes, owner (email atau nama anggota) dan properti perusahaan apa pun sesuai labelnya. Maksimal {max} perusahaan per file.",
+      "match": "Lengkapi perusahaan yang sudah ada",
+      "matchHint": "Perusahaan dengan situs web yang sama (atau, jika tidak ada, nama yang sama) akan dilengkapi kolomnya yang kosong. Data yang sudah ada tidak diubah.",
+      "summary": "{total, plural, one {# baris dibaca} other {# baris dibaca}}: {created} dibuat, {updated} dilengkapi, {unchanged} tidak berubah, {failed} tidak diimpor.",
+      "ignored": "Kolom berikut tidak dikenali dan dilewati: {columns}.",
+      "failedTitle": "{count, plural, one {# baris tidak diimpor} other {# baris tidak diimpor}}",
+      "line": "Baris {line}",
+      "moreFailed": "{count, plural, one {Dan # lagi.} other {Dan # lagi.}}"
+    },
+    "brief": {
+      "title": "Ringkasan akun",
+      "subtitle": "Ditulis oleh AI dari data CRM yang dapat Anda lihat. Periksa dulu sebelum Anda mengandalkannya.",
+      "loading": "Memuat ringkasan",
+      "unavailableTitle": "AI belum diatur untuk ruang kerja ini",
+      "unavailable": "Ringkasan ditulis oleh model AI, dan ruang kerja ini tidak punya kunci AI, jadi tidak ada yang dikirim ke mana pun.",
+      "addKey": "Tambah kunci AI",
+      "askAdmin": "Minta admin untuk menambahkan kunci AI.",
+      "empty": "Dapatkan ringkasan singkat perusahaan ini: siapa mereka, deal dan tugasnya, seberapa aktif percakapan, risiko, dan langkah selanjutnya.",
+      "generate": "Buat ringkasan",
+      "regenerate": "Tulis ulang",
+      "copy": "Salin",
+      "copied": "Ringkasan disalin.",
+      "copyFailed": "Ringkasan tidak dapat disalin. Pilih teksnya dan salin secara manual.",
+      "copyTitle": "{name}: ringkasan akun",
+      "stale": "CRM telah berubah sejak ringkasan ini ditulis. Tulis ulang untuk mendapatkan yang terbaru.",
+      "writtenBy": "Ditulis {date} oleh {model}. AI bisa salah.",
+      "notice": "Model menerima jumlah, tanggal, nominal, dan judul singkat. Model tidak pernah menerima nama kontak, alamat email, nomor telepon, catatan perusahaan, atau isi pesan, dan angka serta alamat email pada judul dihapus terlebih dahulu.",
+      "basedOn": "Berdasarkan: {kinds}. Hanya yang boleh dilihat peran Anda yang dihitung.",
+      "basedOnNone": "Hanya berdasarkan detail perusahaan: peran Anda tidak menampilkan kontak, deal, tugas, atau percakapan.",
+      "errors": {
+        "tooSoon": "Ringkasan baru saja dibuat. Tunggu sebentar sebelum meminta lagi.",
+        "providerFailed": "Layanan AI tidak dapat menulis ringkasan. Coba lagi sebentar lagi.",
+        "limit": "Jatah AI sedang habis. Coba lagi nanti atau hubungi admin.",
+        "forbidden": "Anda tidak punya izin untuk melakukannya.",
+        "notFound": "Perusahaan itu sudah tidak ada.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
+        "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+      },
+      "sections": {
+        "activity": "Aktivitas terbaru",
+        "deals": "Deal",
+        "tasks": "Tugas",
+        "conversations": "Percakapan",
+        "properties": "Properti utama",
+        "risks": "Risiko",
+        "nextSteps": "Langkah selanjutnya"
+      },
+      "source": {
+        "properties": "properti perusahaan",
+        "contacts": "kontak",
+        "deals": "deal",
+        "tasks": "tugas",
+        "conversations": "percakapan"
       }
     }
   }

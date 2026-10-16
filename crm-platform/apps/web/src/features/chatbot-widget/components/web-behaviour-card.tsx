@@ -6,6 +6,7 @@ import { cn } from '@crm/ui';
 import { ConsentNoticeEditor } from '@/features/contact-consent';
 import type { BuilderState } from '../lib/builder-model';
 import { ToggleRow } from './toggle-row';
+import { WidgetAgeQuestion } from './widget-age-question';
 
 const INPUT =
   'w-full rounded-lg border border-border bg-background px-3 py-2 text-[13px] outline-none focus:border-brand';
@@ -77,6 +78,9 @@ export function WebBehaviourCard({
           ))}
         </div>
         <p className="mt-1 text-[11.5px] text-muted-foreground">{tv('intakeHint')}</p>
+        <div className="mt-3">
+          <WidgetAgeQuestion s={s} set={set} />
+        </div>
         {(s.collectEmail || s.collectPhone) && (
           <div className="mt-3">
             <ConsentNoticeEditor scope="widget" refId={widgetId ?? ''} disabled={!widgetId} />

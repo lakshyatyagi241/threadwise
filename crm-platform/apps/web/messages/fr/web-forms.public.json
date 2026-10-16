@@ -34,7 +34,8 @@
         "too_long": "Saisissez au plus {max} caractères.",
         "pattern": "Ce champ ne respecte pas le format attendu.",
         "invalid_option": "Choisissez l’une des options proposées.",
-        "invalid_amount": "Saisissez un montant dans la plage autorisée."
+        "invalid_amount": "Saisissez un montant dans la plage autorisée.",
+        "guardian_required": "Ajoutez le nom et une adresse e-mail ou un numéro de téléphone d'un parent ou d'un tuteur."
       },
       "closedTitle": "Ce formulaire est fermé",
       "payTitle": "Plus qu'une étape",
@@ -59,7 +60,15 @@
         "missingTitle": "Paiement introuvable",
         "missingBody": "Le lien est peut-être incorrect ou trop ancien."
       },
-      "termsOfService": "Conditions"
+      "termsOfService": "Conditions",
+      "ageDeclaration": "Je confirme avoir au moins {age} ans",
+      "ageBlockedTitle": "Nous ne pouvons pas continuer",
+      "ageBlockedBody": "Merci de votre intérêt. Nous ne pouvons pas accepter cet envoi.",
+      "guardianTitle": "Un parent ou un tuteur",
+      "guardianIntro": "Veuillez ajouter les coordonnées d'un parent ou d'un tuteur.",
+      "guardianName": "Nom",
+      "guardianEmail": "E-mail",
+      "guardianPhone": "Téléphone"
     }
   }
 }

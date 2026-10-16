@@ -1439,7 +1439,8 @@
             "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
             "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
             "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
-            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir."
+            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir.",
+            "ai_crm_copilot": "Kişilerinizden yapay zekâyla potansiyel müşterileri bulur ve puanlar."
           },
           "units": {
             "days": "Gün",
@@ -1624,7 +1625,8 @@
             "sms": "SMS kanalı",
             "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
             "email_channel": "E-posta (Gmail) kanalı",
-            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)"
+            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Buzlu bir kartın arkasında yumuşak parlayan renk."
+          },
+          "geta": {
+            "name": "Geta bölünmüş",
+            "description": "Bir yanda form, diğer yanda istatistikli hareketli bir marka paneli."
           }
         },
         "fields": {

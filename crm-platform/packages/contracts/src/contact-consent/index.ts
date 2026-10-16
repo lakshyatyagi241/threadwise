@@ -7,3 +7,4 @@ export * from './exports';
 export * from './intake';
 export * from './notice';
 export * from './privacy';
+export * from './age';

@@ -21,6 +21,9 @@
       "source": "Source",
       "unsubscribed": "Opted out of marketing",
       "imported": "Imported from a file",
+      "minor": "Flagged as a minor",
+      "dateOfBirth": "Date of birth",
+      "age": "Age (years)",
       "createdAt": "Created",
       "updatedAt": "Last updated",
       "lastActivityAt": "Last activity"
@@ -29,7 +32,8 @@
       "journey": "Journey",
       "who": "Who",
       "activity": "Activity",
-      "properties": "Properties"
+      "properties": "Properties",
+      "company": "Company property"
     },
     "operators": {
       "equals": "is",

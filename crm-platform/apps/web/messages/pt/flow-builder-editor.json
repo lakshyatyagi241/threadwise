@@ -2019,6 +2019,18 @@
         "groupContact": "Propriedades do contato",
         "groupFlow": "Salvas neste fluxo",
         "variableNone": "Nenhuma variável encontrada"
+      },
+      "askAge": {
+        "minAge": "Idade mínima",
+        "minAgeHint": "Deixe vazio para usar a idade do seu espaço de trabalho na Central de conformidade (18 se nenhuma estiver definida). Entre 1 e 21.",
+        "whenUnder": "Se a resposta for menor que essa idade",
+        "whenUnderHint": "O contato é marcado como menor de qualquer forma. O cliente nunca é informado de qual resposta é aceita.",
+        "end": "Encerrar o fluxo com uma linha curta e neutra",
+        "continue": "Continuar e deixar eu ramificar conforme a resposta",
+        "endText": "Linha de encerramento",
+        "endTextHint": "Enviada antes de o fluxo terminar. Não mencione a idade. Se estiver vazio, usa \"Não podemos continuar.\"",
+        "continueNote": "As próximas etapas podem ler a variável da resposta seguida de _age_gate (por exemplo answer_age_gate), que vale under ou adult. Adicione uma Condição para ramificar, por exemplo para pedir um dos pais ou responsável.",
+        "note": "Peça a idade somente onde precisar. A resposta é gravada no contato: uma data de nascimento como data de nascimento, e uma resposta de menor de idade marca o contato como menor."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Número de telefone",
         "number": "Número",
         "alphanumeric": "Letras e números",
-        "date": "Data"
+        "date": "Data",
+        "age": "Idade",
+        "date_of_birth": "Data de nascimento"
       },
       "askInputWrong": {
         "text": "Tente novamente",
@@ -2338,7 +2352,9 @@
         "phone": "Digite um número de telefone válido",
         "number": "Digite um número válido",
         "alphanumeric": "Use somente letras e números",
-        "date": "Digite uma data válida ({format})"
+        "date": "Digite uma data válida ({format})",
+        "age": "Informe sua idade como um número inteiro",
+        "date_of_birth": "Informe uma data válida ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

@@ -19,7 +19,9 @@
       "checkbox_group": "Wybór wielokrotny",
       "checkbox": "Pole wyboru",
       "rating": "Ocena",
-      "hidden": "Ukryte pole"
+      "hidden": "Ukryte pole",
+      "date_of_birth": "Data urodzenia",
+      "age": "Wiek"
     },
     "errors": {
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
