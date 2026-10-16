@@ -33,6 +33,8 @@ export class GoogleFilesService {
         ERROR_CODES.FLB_INTEGRATION_DISABLED,
         'Google integration is not set up for this platform.',
         HttpStatus.SERVICE_UNAVAILABLE,
+        undefined,
+        true, // a switched-off integration, answered like Reference; not an incident (the builder falls back to typing the id)
       );
     }
     try {
@@ -85,5 +87,12 @@ const MESSAGES: Record<GoogleAccountError['code'], [HttpStatus, string]> = {
 /** A failure as the staff API answers it: the stable code and a sentence of ours, never Google's text. */
 export function toApiError(err: GoogleAccountError): AppError {
   const [status, message] = MESSAGES[err.code];
-  return new AppError(ERROR_CODES[err.code], message, status);
+  // Google's API not being enabled for the platform's project is a setup state the operator fixes, not a fault of ours.
+  return new AppError(
+    ERROR_CODES[err.code],
+    message,
+    status,
+    undefined,
+    err.code === 'GOOGLE_API_NOT_ENABLED',
+  );
 }
