@@ -55,7 +55,7 @@ const rowOf = (v: FaqVariation): VariationRow => ({
   rowVersion: v.rowVersion,
 });
 
-/** A new FAQ or one FAQ of the flow: the question and its answer on the left, every phrasing and its indexing state on the right. */
+/** A new FAQ or one FAQ of the flow: the question and its answer on the left, every phrasing on the right. */
 export function FaqEditorScreen({ id }: { id?: string }) {
   const t = useTranslations('faq.editor');
   const router = useRouter();
