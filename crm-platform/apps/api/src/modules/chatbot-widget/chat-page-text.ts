@@ -54,6 +54,12 @@ export const CHAT_TEXT_KEYS = [
   'pipYes',
   'closeThis',
   'restartThis',
+  // The optional age question of the intake form (BL-212). A missing translation falls back to English in the page.
+  'ageDeclaration',
+  'ageDobLabel',
+  'ageAgeLabel',
+  'ageRequired',
+  'ageBlocked',
 ] as const;
 export type ChatTextKey = (typeof CHAT_TEXT_KEYS)[number];
 
@@ -113,6 +119,11 @@ export const CHAT_TEXT: Record<string, Record<ChatTextKey, string>> = {
     'Float the chat',
     'Close this chat',
     'Restart this chat',
+    'I confirm I am at least {n} years old',
+    'Date of birth',
+    'Your age',
+    'Please answer this question to continue.',
+    'We are not able to continue this chat.',
   ]),
   ar: row([
     'متصل',

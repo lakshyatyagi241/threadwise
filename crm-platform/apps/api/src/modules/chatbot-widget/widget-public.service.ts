@@ -3,9 +3,11 @@ import { HttpException, Inject, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import {
+  judgeAgeAnswer,
   toPublicLauncher,
   widgetFeedbackRequestSchema,
   widgetMessageRequestSchema,
+  type AgeVerdict,
   type WidgetHistoryResponse,
   type WidgetMessageRequest,
   type WidgetMessageResponse,
@@ -19,6 +21,7 @@ import {
   ConsentIntakeService,
   ConsentNoticeService,
   ContactPrivacyService,
+  MinorDetectionService,
 } from '../contact-consent';
 import {
   ASSISTANT_DIRECTORY,
@@ -82,6 +85,11 @@ interface Located {
   widget: WidgetRow;
 }
 
+/** What the age gate decided for one message, to apply once the visitor and the thread exist. */
+interface AgeCheck {
+  verdict: Exclude<AgeVerdict, { kind: 'invalid' }>;
+}
+
 export type OriginCheck =
   | { kind: 'skip' }
   | { kind: 'not_found' }
@@ -114,6 +122,7 @@ export class WidgetPublicService {
     private readonly notices: ConsentNoticeService,
     private readonly consentIntake: ConsentIntakeService,
     private readonly privacy: ContactPrivacyService,
+    private readonly minors: MinorDetectionService,
   ) {}
 
   /** The widget behind a token, whatever its status; undefined for a malformed, unknown or rotated token. */
@@ -257,6 +266,18 @@ export class WidgetPublicService {
       const consent = notice
         ? { text: notice.text, version: notice.version, url: notice.url }
         : null;
+      const gate = widget.ageGate;
+      const ageGate = gate.enabled
+        ? {
+            mode: gate.mode,
+            // Only the box names the age (its sentence must); a date of birth or an age question never says which answer passes.
+            declaration_age:
+              gate.mode === 'declaration'
+                ? (gate.minAge ?? (await this.privacy.minorAge(tx, orgId)))
+                : null,
+            pending: visitor.ageCheckedAt === null,
+          }
+        : null;
       const lines: InboxLine[] =
         visitor.conversationId === null
           ? []
@@ -284,6 +305,7 @@ export class WidgetPublicService {
             collect_name: widget.collectName,
             collect_email: widget.collectEmail,
             collect_phone: widget.collectPhone,
+            age_gate: ageGate,
             whatsapp_url: whatsappUrl(widget),
             launcher: toPublicLauncher(widget.launcher),
             ...(flowUuid ? { flow_uuid: flowUuid } : {}),
@@ -322,6 +344,9 @@ export class WidgetPublicService {
     }
     const data = parsed.data;
 
+    // The age gate (BL-212) is judged BEFORE anything of the visitor is stored: a refused visitor leaves no row, no profile, no age.
+    const age = await this.ageCheck(orgId, widget, req, data);
+
     const forInbox: WidgetForInbox = {
       id: widget.id,
       uuid: widget.uuid,
@@ -332,7 +357,7 @@ export class WidgetPublicService {
     };
 
     // A flow bot's widget: the flow runtime answers, so the visitor's line goes through the inbox's own pipeline.
-    if (widget.flowId !== null) return this.flowMessage(orgId, widget, req, data, forInbox);
+    if (widget.flowId !== null) return this.flowMessage(orgId, widget, req, data, forInbox, age);
 
     // 1. Everything that must commit together: the visitor, the thread, the visitor's line. History is read before the
     //    line is written, so the message is answered once, not also quoted as past conversation.
@@ -351,6 +376,7 @@ export class WidgetPublicService {
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
       await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
       await this.recordGpc(tx, orgId, widget.uuid, conversation.id, fresh, req);
+      await this.applyAge(tx, orgId, widget.uuid, visitor.id, conversation.id, fresh, age);
       const inbound = await this.inbox.insertInbound(
         tx,
         orgId,
@@ -407,6 +433,96 @@ export class WidgetPublicService {
           });
 
     return { ok: true, inbound: { id: stored.inbound.id }, reply };
+  }
+
+  /**
+   * The age gate of the intake form (BL-212, spec 11.10). Off for most widgets. A visitor who already passed is not asked again; any
+   * other visitor must answer on the first message. `block` refuses the chat with a neutral 403 (nothing is stored; the page remembers
+   * for the session), `flag` lets it through and the contact is flagged once it exists. With the box and `block`, an unticked box is
+   * only an unanswered question (422), because nobody has said anything yet.
+   */
+  private async ageCheck(
+    orgId: number,
+    widget: WidgetRow,
+    req: PublicRequest,
+    data: WidgetMessageRequest,
+  ): Promise<AgeCheck | null> {
+    const gate = widget.ageGate;
+    if (!gate.enabled) return null;
+    const known = await this.db.txAs({ orgId }, async (tx) => {
+      const found = await this.resolveVisitor(tx, orgId, widget, req, false);
+      return found?.visitor;
+    });
+    if (known?.ageCheckedAt) return null;
+    const minAge =
+      gate.minAge ?? (await this.db.txAs({ orgId }, (tx) => this.privacy.minorAge(tx, orgId)));
+    const verdict = judgeAgeAnswer(
+      {
+        mode: gate.mode,
+        dob: data.date_of_birth ?? undefined,
+        age: data.age ?? undefined,
+        confirmed: data.age_confirmed === true,
+      },
+      minAge,
+      new Date(),
+    );
+    const unanswered = () =>
+      new WidgetPublicError(422, {
+        message: 'Please answer the question before you continue.',
+        errors: { age: ['required'] },
+      });
+    if (verdict.kind === 'invalid') throw unanswered();
+    if (verdict.kind === 'adult') return { verdict };
+    if (gate.mode === 'declaration' && gate.whenUnder === 'block') throw unanswered();
+    if (gate.whenUnder === 'block') {
+      throw new WidgetPublicError(403, {
+        ok: false,
+        code: 'age_blocked',
+        message: 'We are not able to continue this chat.',
+      });
+    }
+    return { verdict };
+  }
+
+  /**
+   * The visitor passed the gate: remember it (they are not asked again), write the date of birth they gave, and flag the contact when
+   * the answer was under the line. A contact exists only once the visitor gave a phone number or an email, so without one there is
+   * nothing to write to. Best effort in a savepoint: the visitor's message is never lost over it.
+   */
+  private async applyAge(
+    tx: Tx,
+    orgId: number,
+    widgetUuid: string,
+    visitorId: number,
+    conversationId: number,
+    visitor: VisitorForInbox,
+    age: AgeCheck | null,
+  ): Promise<void> {
+    if (!age) return;
+    await this.visitors.markAgeChecked(tx, orgId, visitorId);
+    try {
+      await tx.transaction(async (sp) => {
+        const contactId = await this.inbox.contactOf(sp as Tx, orgId, conversationId, {
+          email: visitor.email,
+          phone: visitor.phone,
+        });
+        if (contactId === null) return;
+        const v = age.verdict;
+        await this.minors.applyAnswer(sp as Tx, orgId, contactId, {
+          dob: v.kind !== 'invalid' && v.mode === 'dob' ? (v.dob ?? null) : null,
+          under:
+            v.kind === 'under'
+              ? {
+                  source: v.mode === 'declaration' ? 'declaration' : 'dob',
+                  minorUntil: v.minorUntil,
+                }
+              : null,
+          evidence: { widgetId: widgetUuid },
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, '[WGT] the age answer could not be applied');
+    }
   }
 
   /**
@@ -502,6 +618,7 @@ export class WidgetPublicService {
     req: PublicRequest,
     forInbox: WidgetForInbox,
     data: Pick<WidgetMessageRequest, 'name' | 'email' | 'phone' | 'consent' | 'consent_version'>,
+    age: AgeCheck | null,
   ): Promise<{ peerKey: string; peerName: string | null; channelUuid: string }> {
     return this.db.txAs({ orgId }, async (tx) => {
       const { visitor } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
@@ -518,6 +635,7 @@ export class WidgetPublicService {
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
       await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
       await this.recordGpc(tx, orgId, widget.uuid, conversation.id, fresh, req);
+      await this.applyAge(tx, orgId, widget.uuid, visitor.id, conversation.id, fresh, age);
       return {
         peerKey: visitor.visitorUuid,
         peerName: fresh.name,
@@ -537,8 +655,9 @@ export class WidgetPublicService {
     req: PublicRequest,
     data: WidgetMessageRequest,
     forInbox: WidgetForInbox,
+    age: AgeCheck | null,
   ): Promise<WidgetMessageResponse> {
-    const prepared = await this.flowPeer(orgId, widget, req, forInbox, data);
+    const prepared = await this.flowPeer(orgId, widget, req, forInbox, data, age);
     const tapped = data.tap_id ? { interactive: { id: data.tap_id, title: data.body } } : undefined;
     await this.ingest.enqueueInbound(orgId, prepared.channelUuid, {
       providerMessageId: `wgt-${randomUUID()}`,

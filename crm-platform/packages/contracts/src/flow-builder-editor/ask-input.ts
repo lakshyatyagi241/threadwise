@@ -1,3 +1,5 @@
+import { isPlausibleBirthDate, MAX_GATE_AGE, MIN_GATE_AGE, parseAgeAnswer } from '../contact-consent/age';
+
 /**
  * Validated questions: the Ask node with "Validate as" set to name, email, phone, number, alphanumeric or date. NOT a Reference
  * behaviour: Reference's Ask saved this setting and never read it. The rules and the default wrong-answer texts follow the console
@@ -15,8 +17,29 @@ export const FLB_ASK_INPUT_TYPES = [
   'number',
   'alphanumeric',
   'date',
+  // The age question (BL-212, spec 11.10): an age in whole years, or a date of birth written in the chosen date format. The answer is
+  // judged against the workspace's minor age (or the node's own) and written to the contact; see `FLB_AGE_*` below.
+  'age',
+  'date_of_birth',
 ] as const;
 export type FlbAskInputType = (typeof FLB_ASK_INPUT_TYPES)[number];
+
+/** An age question: it needs the workspace's age and writes to the contact, unlike the other checked answers. */
+export const flbIsAgeInput = (t: FlbAskInputType): t is 'age' | 'date_of_birth' =>
+  t === 'age' || t === 'date_of_birth';
+
+/** What the run does when the answer is under the age: end with a neutral line, or carry on with `{{var}}_age_gate` = `under`. */
+export const FLB_AGE_WHEN_UNDER = ['end', 'continue'] as const;
+export type FlbAgeWhenUnder = (typeof FLB_AGE_WHEN_UNDER)[number];
+export const flbCleanAgeWhenUnder = (v: unknown): FlbAgeWhenUnder =>
+  v === 'continue' ? 'continue' : 'end';
+/** The line sent when the run ends on an under-age answer and the author wrote none. It does not say why. */
+export const FLB_AGE_END_TEXT = 'We are not able to continue.';
+/** The node's own minimum age (1 to 21), or null for the workspace's. */
+export const flbCleanMinAge = (v: unknown): number | null => {
+  const n = typeof v === 'number' ? v : typeof v === 'string' && v.trim() !== '' ? Number(v) : NaN;
+  return Number.isInteger(n) && n >= MIN_GATE_AGE && n <= MAX_GATE_AGE ? n : null;
+};
 
 export const FLB_ASK_INPUT_LABELS: Record<FlbAskInputType, string> = {
   text: 'Free text',
@@ -26,6 +49,8 @@ export const FLB_ASK_INPUT_LABELS: Record<FlbAskInputType, string> = {
   number: 'Number',
   alphanumeric: 'Letters and numbers',
   date: 'Date',
+  age: 'Age',
+  date_of_birth: 'Date of birth',
 };
 
 /** The date shapes a customer can be asked for: `dd` day, `mm` month, `yyyy` / `yy` year, joined by `-`, `/` or `.`. */
@@ -91,7 +116,10 @@ export function flbAskInputWrongText(type: FlbAskInputType, dateFormat?: unknown
     case 'alphanumeric':
       return 'Please use letters and numbers only';
     case 'date':
+    case 'date_of_birth':
       return `Please enter a valid date (${flbCleanDateFormat(dateFormat).toUpperCase()})`;
+    case 'age':
+      return 'Please enter your age as a whole number';
     default:
       return 'Please try again';
   }
@@ -179,6 +207,16 @@ export function flbAskInputCheck(
       return flbParseDate(text, flbCleanDateFormat(opts.dateFormat)) !== null
         ? { ok: true, value: text }
         : { ok: false };
+    case 'age': {
+      const n = parseAgeAnswer(text);
+      return n === null ? { ok: false } : { ok: true, value: String(n) };
+    }
+    case 'date_of_birth': {
+      const iso = flbParseDate(text, flbCleanDateFormat(opts.dateFormat));
+      return iso !== null && isPlausibleBirthDate(iso, new Date())
+        ? { ok: true, value: text }
+        : { ok: false };
+    }
   }
 }
 

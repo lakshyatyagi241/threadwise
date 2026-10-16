@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { ageGateSchema } from '../contact-consent/age';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import {
   widgetLauncherSchema,
@@ -12,6 +13,17 @@ import {
  * the chat page speak under `/widget/<token>/...`. Field names keep Reference's meaning, renamed to camelCase, with every
  * id a uuid. The public protocol keeps Reference's snake_case JSON because pages already embedded in the wild read it.
  */
+
+/**
+ * The age question of the intake form (BL-212, spec 11.10). The same gate as a form's, except that a chat has no second screen to ask a
+ * parent or guardian on, so `guardian` is not offered: `block` refuses the chat (nothing is stored), `flag` lets it through and flags the
+ * contact. Off by default.
+ */
+export const widgetAgeGateSchema = ageGateSchema.refine((g) => g.whenUnder !== 'guardian', {
+  message: 'a chat cannot ask for a guardian',
+  path: ['whenUnder'],
+});
+export type WidgetAgeGate = z.infer<typeof widgetAgeGateSchema>;
 
 export const WIDGET_MODES = ['ai', 'whatsapp', 'both'] as const;
 export type WidgetMode = (typeof WIDGET_MODES)[number];
@@ -136,6 +148,8 @@ export const widgetFieldsSchema = z.object({
   collectName: z.boolean().optional(),
   collectEmail: z.boolean().optional(),
   collectPhone: z.boolean().optional(),
+  /** Absent leaves the stored gate alone on update and starts with none (off) on create. */
+  ageGate: widgetAgeGateSchema.optional(),
   /**
    * The WhatsApp widget's look and placement (TW-WGT-028, user-requested Interakt reference). Absent leaves the stored
    * config alone on update and starts from the defaults on create; the AI and Both builders never send it.
@@ -196,6 +210,7 @@ export const widgetSchema = z.object({
   collectName: z.boolean(),
   collectEmail: z.boolean(),
   collectPhone: z.boolean(),
+  ageGate: ageGateSchema,
   launcher: widgetLauncherViewSchema,
   allowedDomains: z.array(z.string()),
   embedToken: z.string(),
@@ -393,6 +408,10 @@ export const widgetMessageRequestSchema = z.object({
    */
   consent: z.boolean().nullish(),
   consent_version: z.number().int().min(1).nullish(),
+  /** The intake form's age answer (BL-212): a date of birth (YYYY-MM-DD), an age, or the box "I confirm I am at least N years old". */
+  date_of_birth: z.preprocess(blankToNull, z.string().max(10).nullish()),
+  age: z.preprocess(blankToNull, z.union([z.string().max(3), z.number().int()]).nullish()),
+  age_confirmed: z.boolean().nullish(),
 });
 export type WidgetMessageRequest = z.infer<typeof widgetMessageRequestSchema>;
 
@@ -416,6 +435,19 @@ export const widgetPublicConfigSchema = z.object({
     collect_name: z.boolean(),
     collect_email: z.boolean(),
     collect_phone: z.boolean(),
+    /**
+     * The age question the intake form asks (BL-212), or null. Never the action or, for a date of birth or an age, the minimum:
+     * `declaration_age` is set only for the box, whose wording must name it.
+     */
+    age_gate: z
+      .object({
+        mode: z.enum(['dob', 'age', 'declaration']),
+        declaration_age: z.number().int().nullable(),
+        /** This visitor has not passed the gate yet: the intake form must show the question (BL-212). */
+        pending: z.boolean(),
+      })
+      .nullable()
+      .optional(),
     whatsapp_url: z.string().nullable(),
     /** Look and placement of the WhatsApp launcher (TW-WGT-028); resolved colours and image, snake_case like the rest. */
     launcher: widgetPublicLauncherSchema,
