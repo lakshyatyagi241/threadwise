@@ -51,7 +51,12 @@
         "template_not_sendable": "Bu şablon gönderilemez: onaylı değil, duraklatılmış veya dosya ya da bağlantı değişkeni gerektiriyor.",
         "sender_not_found": "Bu gönderenin bağlantısı yok."
       },
-      "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız. Planınızı yükseltin veya artık kullanmadığınız bir kaynağı silin."
+      "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız. Planınızı yükseltin veya artık kullanmadığınız bir kaynağı silin.",
+      "syncNotSupported": "Bu kaynak potansiyel müşterilerini kendisi gönderir, çekilecek bir şey yok.",
+      "syncInProgress": "Bu kaynak şu anda çekiliyor. Bitmesini bekleyin.",
+      "syncTooSoon": "Bu kaynağa az önce istek gönderildi. {seconds} saniye sonra tekrar deneyin.",
+      "syncTooSoonNoWait": "Bu kaynağa az önce istek gönderildi. Biraz sonra tekrar deneyin.",
+      "backfillRange": "Bu aralık çekilemiyor: kaynağın potansiyel müşterileri sakladığı süreden daha eskiye gidiyor veya gelecekteki tarihleri kapsıyor."
     },
     "problems": {
       "nameRequired": "Kaynağa bir ad verin.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Reklamlar",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# potansiyel müşteri dikkat gerektiriyor}}"
+        "attention": "{count, plural, other {# potansiyel müşteri dikkat gerektiriyor}}",
+        "inbox": "Potansiyel müşteri kutusu"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Sonraki deneme",
       "sentAt": "Gönderildi"
+    },
+    "inbox": {
+      "intro": "Kaynaklarınızın aldığı tüm potansiyel müşteriler, kişiye dönüşemeyenler dahil. Nedenini görmek için bir potansiyel müşteriyi açın ve bekleyenleri yeniden deneyin.",
+      "chipsLabel": "Duruma göre filtrele",
+      "loading": "Potansiyel müşteriler yükleniyor",
+      "more": "Daha fazla yükle",
+      "chips": {
+        "all": "Tümü",
+        "attention": "İlgi bekleyenler",
+        "needs_review": "İnceleme gerekli",
+        "failed": "Başarısız",
+        "created": "Oluşturuldu",
+        "updated": "Güncellendi",
+        "duplicate": "Yinelenenler"
+      },
+      "filters": {
+        "source": "Kaynak",
+        "allSources": "Tüm kaynaklar",
+        "reason": "Neden",
+        "anyReason": "Herhangi bir neden",
+        "range": "Alınma zamanı",
+        "ranges": {
+          "all": "Her zaman",
+          "day": "Son 24 saat",
+          "week": "Son 7 gün",
+          "month": "Son 30 gün",
+          "custom": "Tarih seç"
+        },
+        "from": "Başlangıç",
+        "to": "Bitiş (dahil)",
+        "rangeOrder": "Bitiş tarihi başlangıç tarihinden önce.",
+        "tests": "Test kayıtları",
+        "testChoices": {
+          "all": "Göster",
+          "only": "Yalnızca test kayıtları",
+          "hide": "Gizle"
+        },
+        "search": "Kayıt kimliği şununla başlıyor",
+        "searchHint": "Yalnızca gönderenin kayıt için verdiği kimlik aranır; ad, numara veya adresler asla aranmaz.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Ara",
+        "reset": "Bekleyenlere dön",
+        "showAll": "Tümünü göster"
+      },
+      "table": {
+        "caption": "Tüm kaynakların aldığı potansiyel müşteriler",
+        "received": "Alındı",
+        "source": "Kaynak",
+        "lead": "Potansiyel müşteri",
+        "status": "Durum",
+        "reason": "Neden",
+        "firstMessage": "İlk mesaj",
+        "actions": "İşlemler",
+        "select": "{id} kimlikli kaydı seç",
+        "test": "Test",
+        "view": "Aç",
+        "retry": "Yeniden dene"
+      },
+      "empty": {
+        "attentionTitle": "Bekleyen bir şey yok",
+        "attention": "Gelen tüm potansiyel müşteriler kişiye dönüştü. İnceleme gerektiren veya başarısız olanlar burada görünecek.",
+        "filteredTitle": "Eşleşen kayıt yok",
+        "filtered": "Bu filtrelere uyan bir şey yok."
+      },
+      "bulk": {
+        "selectPage": "Bu sayfada yeniden denenebilecek kayıtları seç",
+        "selected": "{count, plural, other {# potansiyel müşteri seçildi}}",
+        "retry": "Seçilenleri yeniden dene",
+        "limit": "Tek seferde en fazla {max}."
+      },
+      "result": {
+        "retried": "{count, plural, other {# potansiyel müşteri yeniden denendi.}}",
+        "fixed": "{count, plural, other {# tanesi kişiye dönüştü.}}",
+        "stillWaiting": "{count, plural, other {# tanesi hâlâ inceleme bekliyor.}}",
+        "skipped": {
+          "not_found": "{count, plural, other {# potansiyel müşteri bulunamadı.}}",
+          "not_retryable": "{count, plural, other {# potansiyel müşteri artık beklemiyor.}}",
+          "payload_purged": "{count, plural, other {# potansiyel müşterinin yeniden denemek için saklanan verisi kalmamış.}}",
+          "source_paused": "{count, plural, other {# potansiyel müşteri duraklatılmış bir kaynağa ait.}}",
+          "error": "{count, plural, other {# potansiyel müşteri yeniden denenemedi.}}"
+        }
+      },
+      "drawer": {
+        "title": "Potansiyel müşteri",
+        "close": "Kapat",
+        "retry": "Yeniden dene",
+        "auditNote": "Bir kaydın açılması denetim günlüğüne işlenir. İçindeki kişisel veriler gizlidir.",
+        "source": "Kaynak",
+        "lead": "Kayıt kimliği",
+        "received": "Alındı",
+        "processed": "İşlendi",
+        "notProcessed": "İşlenmedi",
+        "attempts": "Deneme sayısı",
+        "duplicates": "Tekrar iletildi",
+        "deliveredAgain": "{count, plural, other {# kez}}",
+        "reason": "Neden",
+        "firstReply": "İlk mesaj",
+        "contact": "Kişi",
+        "openContact": "Kişiyi aç",
+        "error": "Hata",
+        "payload": "Gönderenin ilettiği veri",
+        "showOriginal": "Orijinali göster",
+        "maskedNote": "Telefon numaraları, e-posta adresleri, adlar, adresler ve serbest metin gizlenmiştir. Gizli anahtarlar kaldırılmıştır.",
+        "nothingToMask": "Bu kayıtta gizlenecek kişisel bir veri yok.",
+        "originalNote": "Orijinal veri, potansiyel müşteri kaynaklarını yönettiğiniz için gösteriliyor. Gösterilmesi denetim günlüğüne işlendi.",
+        "loadingPayload": "Veri yükleniyor",
+        "purged": "Veri saklama süresi dolduktan sonra silindi, bu yüzden gösterilecek veya yeniden denenecek bir şey yok."
+      },
+      "pull": {
+        "title": "Senkronizasyon ve geriye dönük çekme",
+        "intro": "Bu kaynaklardan potansiyel müşterileri isteyebilirsiniz. Şimdi senkronize et yenileri getirir; Geriye dönük çek geçmiş bir tarih aralığını yeniden çeker. Zaten sahip olduğunuz kayıtlar tanınır ve ikinci kez eklenmez.",
+        "backfill": "Geriye dönük çek...",
+        "history": "Son senkronizasyonlar ve geriye dönük çekmeler",
+        "syncNow": "Şimdi senkronize et",
+        "syncStarted": "{name} senkronize ediliyor",
+        "paused": "Bu kaynak duraklatıldı. Potansiyel müşterilerini çekmek için devam ettirin.",
+        "nextSync": "Yeniden senkronize edilebilir",
+        "syncReady": "Şimdi senkronize edilebilir. İstekler arasında en az {seconds} saniye olmalı.",
+        "reach": "Geriye dönük çekme {days, plural, other {# gün}} öncesine kadar gider.",
+        "never": "Henüz çekilmedi.",
+        "progress": "%{percent}",
+        "counts": "{fetched} alındı, {accepted} yeni, {duplicates} zaten kayıtlı, {failed} aktarılamadı",
+        "kinds": {
+          "sync": "Senkronizasyon",
+          "backfill": "Geriye dönük çekme"
+        },
+        "statuses": {
+          "queued": "Sırada",
+          "running": "Çalışıyor",
+          "done": "Tamamlandı",
+          "partial": "Kısmen tamamlandı",
+          "failed": "Başarısız"
+        },
+        "errors": {
+          "too_soon": "Kaynak beklememizi istedi.",
+          "not_now": "Kaynak hazır değildi: istek çok erken geldi veya bağlantısı duraklatılmış.",
+          "provider_error": "Kaynak isteği reddetti veya başarısız oldu.",
+          "credentials_refused": "Kaynak kimlik bilgilerini reddetti. Bağlantıyı yeniden kurun.",
+          "interrupted": "Yarıda kesildi. Yeniden çalıştırın.",
+          "internal_error": "Dahili bir hata oluştu. Yeniden çalıştırın.",
+          "incomplete": "Bazı potansiyel müşteriler aktarılamadı. Tamamlamak için yeniden çalıştırın.",
+          "not_supported": "Bu kaynak bunu yapamaz.",
+          "not_active": "Bağlantı etkin değil.",
+          "range_too_old": "Kaynak bu kadar eski potansiyel müşterileri saklamıyor.",
+          "range_invalid": "Aralık geçerli değil."
+        }
+      },
+      "backfill": {
+        "title": "Tarih aralığını geriye dönük çek",
+        "intro": "Geçmiş günlerin potansiyel müşterilerini, bunları saklayan kaynaklardan yeniden çekin; tek seferde en fazla {days} gün. Daha önce alınan kayıtlar tanınır ve hiçbir şey yazılmaz.",
+        "from": "Başlangıç",
+        "to": "Bitiş (dahil)",
+        "sources": "Kaynaklar",
+        "noSources": "Geriye dönük çekilebilecek kaynak yok.",
+        "submit": "Çekmeyi başlat",
+        "cancel": "İptal",
+        "close": "Kapat",
+        "done": "Bitti",
+        "started": "{count, plural, other {# geriye dönük çekme başlatıldı}}",
+        "skippedTitle": "Bazı kaynaklar çekilmedi:",
+        "skipped": {
+          "not_supported": "geriye dönük çekilemiyor",
+          "paused": "duraklatılmış",
+          "in_progress": "zaten çekiliyor",
+          "too_soon": "az önce çekildi",
+          "range_too_old": "bu kadar eski potansiyel müşterileri saklamıyor",
+          "not_found": "bulunamadı"
+        },
+        "problems": {
+          "fromRequired": "İlk günü seçin.",
+          "toRequired": "Son günü seçin.",
+          "order": "Son gün ilk günden önce.",
+          "future": "İlk gün gelecekte.",
+          "tooWide": "Tek seferde en fazla {days} gün.",
+          "noSource": "En az bir kaynak seçin."
+        },
+        "safe": "Yeniden çalıştırırsanız hiçbir şey kaybolmaz veya çoğalmaz; yalnızca eksik potansiyel müşteriler eklenir."
+      }
     }
   }
 }

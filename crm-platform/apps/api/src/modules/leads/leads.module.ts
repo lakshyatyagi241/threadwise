@@ -6,12 +6,17 @@ import { MessageTemplatesModule } from '../message-templates';
 import { ContactAttributionController } from './contact-attribution.controller';
 import { ContactAttributionService } from './contact-attribution.service';
 import { LeadHooksController } from './lead-hooks.controller';
+import { LeadInboxController } from './lead-inbox.controller';
+import { LeadInboxService } from './lead-inbox.service';
 import { LeadHooksService } from './lead-hooks.service';
 import { LeadFirstMessageLookups } from './lead-first-message.lookups';
 import { LeadHookAddressService } from './lead-hook-address';
 import { LeadIngestModule } from './lead-ingest.module';
+import { LeadPullModule } from './lead-pull.module';
 import { LeadSourcesController } from './lead-sources.controller';
 import { LeadSourcesService } from './lead-sources.service';
+import { LeadSyncRunsRepository } from './lead-sync-runs.repository';
+import { LeadSyncService } from './lead-sync.service';
 import { LeadHookThrottle } from './lead-throttle';
 
 /**
@@ -20,8 +25,19 @@ import { LeadHookThrottle } from './lead-throttle';
  * and the payload retention sweep are `LeadsWorkerModule` (the worker process only).
  */
 @Module({
-  imports: [LeadIngestModule, CrmModule, MessageTemplatesModule, EmailTemplatesModule],
-  controllers: [LeadSourcesController, LeadHooksController, ContactAttributionController],
+  imports: [
+    LeadIngestModule,
+    LeadPullModule,
+    CrmModule,
+    MessageTemplatesModule,
+    EmailTemplatesModule,
+  ],
+  controllers: [
+    LeadSourcesController,
+    LeadHooksController,
+    LeadInboxController,
+    ContactAttributionController,
+  ],
   providers: [
     CryptoService,
     LeadSourcesService,
@@ -29,6 +45,9 @@ import { LeadHookThrottle } from './lead-throttle';
     LeadHookThrottle,
     LeadHookAddressService,
     LeadFirstMessageLookups,
+    LeadInboxService,
+    LeadSyncRunsRepository,
+    LeadSyncService,
     ContactAttributionService,
   ],
 })

@@ -51,7 +51,12 @@
         "template_not_sendable": "Esta plantilla no se puede enviar: no está aprobada, está en pausa o requiere un archivo o una variable de enlace.",
         "sender_not_found": "Este remitente no está conectado."
       },
-      "planLimitUsed": "Has usado {used} de {limit} fuentes de leads. Mejora tu plan o elimina una fuente que ya no uses."
+      "planLimitUsed": "Has usado {used} de {limit} fuentes de leads. Mejora tu plan o elimina una fuente que ya no uses.",
+      "syncNotSupported": "Esta fuente envía sus leads por sí sola, así que no hay nada que obtener.",
+      "syncInProgress": "Esta fuente ya se está sincronizando. Espera a que termine.",
+      "syncTooSoon": "Se consultó a esta fuente hace un momento. Inténtalo de nuevo en {seconds} segundos.",
+      "syncTooSoonNoWait": "Se consultó a esta fuente hace un momento. Inténtalo de nuevo en un rato.",
+      "backfillRange": "No se puede obtener ese rango: se remonta más atrás de lo que la fuente conserva los leads, o llega al futuro."
     },
     "problems": {
       "nameRequired": "Ponle un nombre a la fuente.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Anuncios",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead necesita atención} other {# leads necesitan atención}}"
+        "attention": "{count, plural, one {# lead necesita atención} other {# leads necesitan atención}}",
+        "inbox": "Bandeja de leads"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Próximo intento",
       "sentAt": "Enviado"
+    },
+    "inbox": {
+      "intro": "Todos los leads que recibió cualquiera de tus fuentes, incluidos los que no pudieron convertirse en contacto. Abre un lead para ver por qué y reintenta los que están en espera.",
+      "chipsLabel": "Filtrar por estado",
+      "loading": "Cargando leads",
+      "more": "Cargar más",
+      "chips": {
+        "all": "Todos",
+        "attention": "Requieren atención",
+        "needs_review": "Por revisar",
+        "failed": "Con error",
+        "created": "Creados",
+        "updated": "Actualizados",
+        "duplicate": "Duplicados"
+      },
+      "filters": {
+        "source": "Fuente",
+        "allSources": "Todas las fuentes",
+        "reason": "Motivo",
+        "anyReason": "Cualquier motivo",
+        "range": "Recibido",
+        "ranges": {
+          "all": "Cualquier fecha",
+          "day": "Últimas 24 horas",
+          "week": "Últimos 7 días",
+          "month": "Últimos 30 días",
+          "custom": "Elegir fechas"
+        },
+        "from": "Desde",
+        "to": "Hasta (incluida)",
+        "rangeOrder": "La fecha final es anterior a la fecha inicial.",
+        "tests": "Leads de prueba",
+        "testChoices": {
+          "all": "Mostrar",
+          "only": "Solo leads de prueba",
+          "hide": "Ocultar"
+        },
+        "search": "El ID del lead empieza por",
+        "searchHint": "Solo se busca el ID propio del lead que asignó el remitente, nunca nombres, números ni direcciones.",
+        "searchPlaceholder": "p. ej. lead-100",
+        "apply": "Buscar",
+        "reset": "Volver a los leads en espera",
+        "showAll": "Mostrar todo"
+      },
+      "table": {
+        "caption": "Leads recibidos de todas las fuentes",
+        "received": "Recibido",
+        "source": "Fuente",
+        "lead": "Lead",
+        "status": "Estado",
+        "reason": "Motivo",
+        "firstMessage": "Primer mensaje",
+        "actions": "Acciones",
+        "select": "Seleccionar el lead {id}",
+        "test": "Prueba",
+        "view": "Abrir",
+        "retry": "Reintentar"
+      },
+      "empty": {
+        "attentionTitle": "Nada en espera",
+        "attention": "Todos los leads recibidos se convirtieron en contactos. Los que requieran revisión o hayan fallado aparecerán aquí.",
+        "filteredTitle": "Ningún lead coincide",
+        "filtered": "Nada coincide con estos filtros."
+      },
+      "bulk": {
+        "selectPage": "Seleccionar los leads de esta página que se pueden reintentar",
+        "selected": "{count, plural, one {# lead seleccionado} other {# leads seleccionados}}",
+        "retry": "Reintentar seleccionados",
+        "limit": "Hasta {max} a la vez."
+      },
+      "result": {
+        "retried": "{count, plural, one {Se reintentó # lead.} other {Se reintentaron # leads.}}",
+        "fixed": "{count, plural, one {# se convirtió en contacto.} other {# se convirtieron en contactos.}}",
+        "stillWaiting": "{count, plural, one {# sigue por revisar.} other {# siguen por revisar.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {No se encontró # lead.} other {No se encontraron # leads.}}",
+          "not_retryable": "{count, plural, one {# lead ya no está en espera.} other {# leads ya no están en espera.}}",
+          "payload_purged": "{count, plural, one {# lead ya no tiene datos guardados para reintentar.} other {# leads ya no tienen datos guardados para reintentar.}}",
+          "source_paused": "{count, plural, one {# lead pertenece a una fuente en pausa.} other {# leads pertenecen a fuentes en pausa.}}",
+          "error": "{count, plural, one {No se pudo reintentar # lead.} other {No se pudieron reintentar # leads.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Cerrar",
+        "retry": "Reintentar",
+        "auditNote": "Abrir un lead queda registrado en el registro de auditoría. Los datos personales que contiene están ocultos.",
+        "source": "Fuente",
+        "lead": "ID del lead",
+        "received": "Recibido",
+        "processed": "Procesado",
+        "notProcessed": "Sin procesar",
+        "attempts": "Intentos",
+        "duplicates": "Entregado de nuevo",
+        "deliveredAgain": "{count, plural, one {# vez} other {# veces}}",
+        "reason": "Motivo",
+        "firstReply": "Primer mensaje",
+        "contact": "Contacto",
+        "openContact": "Abrir el contacto",
+        "error": "Error",
+        "payload": "Lo que envió el remitente",
+        "showOriginal": "Mostrar el original",
+        "maskedNote": "Los números de teléfono, correos electrónicos, nombres, direcciones y el texto libre están ocultos. Los secretos se eliminan.",
+        "nothingToMask": "Este lead no contiene datos personales que ocultar.",
+        "originalNote": "Los datos originales, visibles porque administras las fuentes de leads. Mostrarlos quedó registrado en el registro de auditoría.",
+        "loadingPayload": "Cargando los datos",
+        "purged": "Los datos se eliminaron al terminar su período de retención, así que no hay nada que mostrar ni reintentar."
+      },
+      "pull": {
+        "title": "Sincronizar y recuperar",
+        "intro": "A estas fuentes se les pueden pedir sus leads. Sincronizar ahora obtiene lo nuevo; Recuperar vuelve a obtener un rango de fechas pasado. Los leads que ya tienes se reconocen y no se añaden dos veces.",
+        "backfill": "Recuperar...",
+        "history": "Sincronizaciones y recuperaciones recientes",
+        "syncNow": "Sincronizar ahora",
+        "syncStarted": "Sincronizando {name}",
+        "paused": "Esta fuente está en pausa. Reanúdala para obtener sus leads.",
+        "nextSync": "Se podrá sincronizar de nuevo",
+        "syncReady": "Se puede sincronizar ahora. Al menos {seconds} segundos entre solicitudes.",
+        "reach": "La recuperación llega hasta {days, plural, one {# día} other {# días}} atrás.",
+        "never": "Aún no se ha obtenido nada.",
+        "progress": "{percent} por ciento",
+        "counts": "{fetched} obtenidos, {accepted} nuevos, {duplicates} ya conocidos, {failed} no entregados",
+        "kinds": {
+          "sync": "Sincronización",
+          "backfill": "Recuperación"
+        },
+        "statuses": {
+          "queued": "En cola",
+          "running": "En curso",
+          "done": "Listo",
+          "partial": "Parcial",
+          "failed": "Fallida"
+        },
+        "errors": {
+          "too_soon": "La fuente pidió que esperemos.",
+          "not_now": "La fuente no estaba lista: es demasiado pronto para ella o su conexión está en pausa.",
+          "provider_error": "La fuente rechazó la solicitud o falló.",
+          "credentials_refused": "La fuente rechazó las credenciales. Vuelve a conectarla.",
+          "interrupted": "Se interrumpió. Ejecútalo de nuevo.",
+          "internal_error": "Error interno. Ejecútalo de nuevo.",
+          "incomplete": "Algunos leads no se entregaron. Ejecútalo de nuevo para terminar.",
+          "not_supported": "Esta fuente no puede hacer eso.",
+          "not_active": "La conexión no está activa.",
+          "range_too_old": "La fuente no conserva leads de tanto tiempo atrás.",
+          "range_invalid": "El rango no es válido."
+        }
+      },
+      "backfill": {
+        "title": "Recuperar un rango de fechas",
+        "intro": "Vuelve a obtener los leads de días pasados de las fuentes que los conservan, hasta {days} días a la vez. Los leads ya recibidos se reconocen y no escriben nada.",
+        "from": "Desde",
+        "to": "Hasta (incluida)",
+        "sources": "Fuentes",
+        "noSources": "Ninguna fuente admite recuperación.",
+        "submit": "Iniciar recuperación",
+        "cancel": "Cancelar",
+        "close": "Cerrar",
+        "done": "Listo",
+        "started": "{count, plural, one {Recuperación iniciada} other {# recuperaciones iniciadas}}",
+        "skippedTitle": "Algunas fuentes no se obtuvieron:",
+        "skipped": {
+          "not_supported": "no admite recuperación",
+          "paused": "está en pausa",
+          "in_progress": "ya se está sincronizando",
+          "too_soon": "se obtuvo hace un momento",
+          "range_too_old": "no conserva leads de tanto tiempo atrás",
+          "not_found": "no se encontró"
+        },
+        "problems": {
+          "fromRequired": "Elige el primer día.",
+          "toRequired": "Elige el último día.",
+          "order": "El último día es anterior al primero.",
+          "future": "El primer día está en el futuro.",
+          "tooWide": "Como máximo {days} días a la vez.",
+          "noSource": "Elige al menos una fuente."
+        },
+        "safe": "No se pierde ni se duplica nada si la ejecutas de nuevo; solo añade los leads que faltan."
+      }
     }
   }
 }

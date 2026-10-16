@@ -47,7 +47,10 @@ const seeds = (['whatsapp', 'sms', 'email'] as const).map(
 
 const html = (
   d: SourceDraft,
-  extra: { locale?: 'en' | 'ar'; problems?: Record<string, { key: string; values?: Record<string, number> }> } = {},
+  extra: {
+    locale?: 'en' | 'ar';
+    problems?: Record<string, { key: string; values?: Record<string, number> }>;
+  } = {},
 ) =>
   renderAccount(
     <DefaultsFields draft={d} set={() => undefined} problems={extra.problems ?? {}} server={{}} />,

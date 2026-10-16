@@ -14,7 +14,7 @@ from the reference: [product-extensions.md](../parity/product-extensions.md), "L
 | WIRE-LEAD-003 | Contact detail  | `GET /v2/contacts/:id/attribution` in `contact-attribution.controller.ts` (gated by `record.contacts.read` and the contact's record scope)                                   |
 | WIRE-LEAD-004 | Permission keys | `leads.sources.read`, `leads.sources.manage` (migration `20261020090100`); Owner and Admin presets only, by the trigger on `permission_defs`                                 |
 | WIRE-LEAD-005 | Plan gate       | `@RequirePlanFeature('lead_sources')` on the management controller; plan limit `lead_sources` on create (`LeadsPlan`); the public door answers 404 when the feature is off   |
-| WIRE-LEAD-006 | Web             | not built (a UI agent follows): a "Social leads" Settings tile (`/lead-sources`, spec 5.6), the contact detail's attribution card, the deals filter value `lead_ad`          |
+| WIRE-LEAD-006 | Web             | built: the Social leads screen (/lead-sources, tabs Ads, Webhook, Lead inbox), the contact detail attribution card, the deals filter value lead_ad                           |
 
 ## Tables
 
@@ -75,12 +75,24 @@ Written by this domain in other domains' tables: `contacts` (create through `Con
 | WIRE-LEAD-029 | Where the result shows: `firstReply` on every lead event, the event drawer, the contact's activity timeline (`speed_to_lead`) | `leads.mapper.ts`, `FirstReply` component, `ContactActivitiesRepository.insert`                                                                                 |
 | WIRE-LEAD-030 | Email template rendering with no agent behind it                                                                              | `EmailTemplatesService.renderShared` (email-templates barrel; shared templates only)                                                                            |
 
+## The lead inbox, sync now and backfill (BL-014, L-17, L-18)
+
+| Id            | What                                                                                                                             | Where                                                                                                                                                 |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| WIRE-LEAD-031 | `/lead-inbox` list, summary, masked detail, retry (one, many): permissions `leads.sources.read` / `.manage`, plan `lead_sources` | `lead-inbox.controller.ts`, `LeadInboxService`, `LeadEventsRepository.inbox`; indexes `idx_lead_events_org_received`, `idx_lead_events_org_attention` |
+| WIRE-LEAD-032 | The payload mask (the audit log's helpers in `common/privacy/pii-mask`)                                                          | `lead-payload-mask.ts`                                                                                                                                |
+| WIRE-LEAD-033 | Pull port and registry; providers register by token                                                                              | `lead-pull.port.ts` (leaf), `LeadPullRegistry` / `LeadPullModule`                                                                                     |
+| WIRE-LEAD-034 | Marketplace as provider: "Sync now" = `PullRunService.run`, backfill = `PullBackfillService`                                     | `marketplace/lead-pull.provider.ts` (`MarketplaceLeadPullBinding` registers on bootstrap), `marketplace/pull-backfill.service.ts`                     |
+| WIRE-LEAD-035 | Runs table, one open run per source, rate limit, audit, outbox `lead.sync.*`                                                     | migration `20261221090000`, `lead_sync_runs`, `LeadSyncService`, `LeadSyncRunsRepository`                                                             |
+| WIRE-LEAD-036 | The worker: queue `lead-sync`, sweep for lost and abandoned runs, 90-day retention of runs                                       | `QUEUES.LEAD_SYNC`, `LeadSyncProcessor`, `LeadSyncSweepService`, `LeadRetentionSweepService`                                                          |
+| WIRE-LEAD-037 | Web: the **Lead inbox** tab of Social leads (`/lead-sources?tab=inbox`), the lead panel, the pull panel with the backfill dialog | `lead-inbox-tab.tsx`, `inbox-drawer.tsx`, `pull-panel.tsx`, `api-ops.ts`, `lib/inbox-view.ts`                                                         |
+
 ## Not built, recorded
 
-| Id            | What                                                               | Status                                               |
-| ------------- | ------------------------------------------------------------------ | ---------------------------------------------------- |
-| WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)        | blocked on the Facebook module and Meta app review   |
-| WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15) | blocked on partner approval                          |
-| WIRE-LEAD-019 | Backfill and "sync now" (L-18), Zapier and Make templates (L-19)   | later phases (speed-to-lead is WIRE-LEAD-024 to 030) |
-| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL | integrations domain (the ported `incoming_webhooks`) |
-| WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                    | the UI agent                                         |
+| Id            | What                                                               | Status                                                              |
+| ------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| WIRE-LEAD-017 | Meta lead ads door, reconciliation sweep, re-consent (L-06)        | blocked on the Facebook module and Meta app review                  |
+| WIRE-LEAD-018 | TikTok and LinkedIn doors (L-13, L-14), Google Ads template (L-15) | blocked on partner approval                                         |
+| WIRE-LEAD-019 | Zapier and Make templates (L-19)                                   | later phases (speed-to-lead and the inbox are WIRE-LEAD-024 to 037) |
+| WIRE-LEAD-020 | Reference's per-hook flow enrolment, template send and forward URL | integrations domain (the ported `incoming_webhooks`)                |
+| WIRE-LEAD-021 | The web screens (WIRE-LEAD-006)                                    | the UI agent                                                        |

@@ -172,14 +172,11 @@ describe('manual CRM create and update', () => {
     expect(ev[0]).toMatchObject({ channel: 'whatsapp', action: 'granted', source: 'manual' });
 
     // The same status sent again is not a new agreement.
-    const again = await api
-      .as(t.admin)
-      .patch(`/v2/contacts/${made.body.id}`)
-      .send({
-        whatsappSubscriptionStatus: 'subscribed',
-        name: 'Upd 2',
-        rowVersion: ok.body.rowVersion,
-      });
+    const again = await api.as(t.admin).patch(`/v2/contacts/${made.body.id}`).send({
+      whatsappSubscriptionStatus: 'subscribed',
+      name: 'Upd 2',
+      rowVersion: ok.body.rowVersion,
+    });
     expect(again.status, JSON.stringify(again.body)).toBe(200);
     expect(await events(t, made.body.id)).toHaveLength(1);
   });

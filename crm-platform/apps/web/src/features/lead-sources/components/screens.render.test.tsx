@@ -102,7 +102,9 @@ describe('Social leads screen: the Ads tab', () => {
   it('shows the pages without the tabs that are not built (Rules, X profile)', () => {
     const html = renderAccount(<LeadSourcesScreen tab="ads" />, { ...as(MANAGE), seed: [LIST] });
     expect(html).toContain('role="tab"');
-    expect(html.match(/role="tab"/g)).toHaveLength(2);
+    // Ads, Webhook and the Lead inbox
+    expect(html.match(/role="tab"/g)).toHaveLength(3);
+    expect(html).toContain('Lead inbox');
     expect(html).not.toContain('X profile');
   });
 });

@@ -249,6 +249,54 @@ source, off by default):
 - **Where it runs.** `LeadFirstReplyConsumer` (the outbox consumer, schedules) and `LeadFirstReplySweepService` (every 10 seconds, sends what
   is due and frees abandoned claims) in `LeadsWorkerModule`, the worker process only.
 
+## The lead inbox (BL-014, L-17, L-18)
+
+One list of every delivery of every source, including the ones that could not become a contact, with retry (one or many) and, for sources
+that can be pulled, "Sync now" and a backfill. Base path `/v2/lead-inbox`; the plan feature `lead_sources` and the two existing capabilities
+(`leads.sources.read` to look, `leads.sources.manage` to open a payload, retry, sync and backfill). **Where it lives in the app:** a third tab,
+**Lead inbox**, on Social leads (`/lead-sources?tab=inbox`), not a route of its own: it is the same permission, plan and place people already
+go for lead problems, and it keeps the source screens one click away.
+
+| Method and path                     | Permission | What                                                                                                                                                                                                                |
+| ----------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /lead-inbox`                   | read       | every source's deliveries, newest received first, cursor paged. Filters: `sourceId`, `status` (`attention` = needs review or failed), `reason`, `isTest`, `from`, `to`, `q` (start of the sender's id). No payloads |
+| `GET /lead-inbox/summary`           | read       | counts per status over the same source and window (default the last 30 days), `attention` and `total`                                                                                                               |
+| `GET /lead-inbox/:id`               | manage     | one delivery with its payload **masked** (`payloadMasked`); audited as `read`                                                                                                                                       |
+| `POST /lead-inbox/:id/retry`        | manage     | the source's own retry (same 409 codes), from the stored payload under the source's current settings                                                                                                                |
+| `POST /lead-inbox/retry`            | manage     | up to 100 ids, one after the other; each answers `retried`, `not_found`, `not_retryable`, `payload_purged`, `source_paused` or `error`; the rest go on                                                              |
+| `GET /lead-inbox/sources`           | read       | the sources that can be pulled: `canSync`, `canBackfill`, `minIntervalSeconds`, `maxBackfillDays`, `nextSyncAt`, the open and the latest run                                                                        |
+| `POST /lead-inbox/sources/:id/sync` | manage     | "Sync now": a run is queued (202); 409 `LEAD_SYNC_NOT_SUPPORTED` / `LEAD_SYNC_IN_PROGRESS`, 429 `LEAD_SYNC_TOO_SOON` with `retryAfterSeconds`                                                                       |
+| `POST /lead-inbox/backfill`         | manage     | `{ from, to, sourceIds? }`: a run per source that can (202); the others are in `skipped` with a reason. At most 90 days, never into the future                                                                      |
+| `GET /lead-inbox/runs`              | read       | recent syncs and backfills with their progress (`windowsDone` of `windowsTotal`, the counts, a stable `error` code)                                                                                                 |
+
+**Masking.** The payload is walked with the platform's own masks (`common/privacy/pii-mask`, the audit log's helpers): a key that names a
+secret is `[REDACTED]`; phone, e-mail and name are masked (`+91 ******210`, `a***@example.test`, `A*** L***`); address and free text are
+hidden; a form-field pair (`{ name: 'phone_number', values: [...] }`) is masked by the pair's name; a bare value that reads as an e-mail or a
+phone number is masked wherever it sits; ids are left alone. The shape is kept so a mapping can be read from it. The unmasked payload is the
+source's own `GET /lead-sources/:id/events/:eventId` (audited as `export`), which the inbox's "Show the original" calls.
+
+**Retry is idempotent.** A retry runs the stored payload through the same pipeline; the event row is the lock (`FOR UPDATE`), moved to
+`received` for the duration, so a second retry of the same lead meets a lead that is not waiting (`not_retryable`) and writes nothing. A
+bulk retry over a page someone else already fixed therefore reports those leads and creates nothing twice.
+
+**Pulling.** The leads module owns the schedule, the limits and the record; the domain that owns a source supplies a provider through the
+leaf port `lead-pull.port.ts` (`LEAD_PULL_REGISTRY`, found by token, so neither module imports the other). A provider says whether it can
+pull a source and how far back it can go, and does the pull, handing every lead to `LEAD_INGEST`, whose idempotency key makes a lead fetched
+twice a no-op. Today the marketplace's pull connectors are the only provider (`MarketplaceLeadPullProvider`): "Sync now" is the poller's
+own step (`PullRunService.run`), a backfill is `PullBackfillService`, window by window from the start of the range, never past its end,
+kept to the portal's minimum interval and pace, a window halved when the answer would not fit; only a portal that answers "the leads
+between two times" (a recipe with a `window`) can backfill. The Meta lead ads door and any later connector register the same way.
+
+- **One at a time per source** is a partial unique index (`uq_lead_sync_runs_active`), not a check in code.
+- **Rate limits.** The source's own minimum interval (and at least a minute) between manual pulls of a source, ten minutes between
+  backfills of it; the provider keeps the portal's limits again before it asks. A refusal is 429 `LEAD_SYNC_TOO_SOON`.
+- **The worker.** Queue `lead-sync`, one job per run (`LeadSyncProcessor`); a sweep every 30 seconds queues a run whose job was lost and ends
+  a running run that stopped reporting for 20 minutes as `failed / interrupted`. A backfill reports after every request to the portal.
+- **Audit and outbox.** Module `lead_sync_runs` (insert by the person who asked, update when it ends); `lead.sync.requested` and
+  `lead.sync.finished`. Runs are kept 90 days (the hourly retention sweep).
+- **Statuses.** `queued`, `running`, `done`, `partial` (stopped early or some leads were not handed over; running it again completes it),
+  `failed`. `error` is a stable code, never the portal's words.
+
 ## Attribution (L-03)
 
 `GET /contacts/:id/attribution`:
@@ -348,7 +396,7 @@ a mapping can be fixed and the lead retried. A connector source (`kind: connecto
   domain's own hook inspector.
 - **Open questions** (spec section 9) answered: 9 retention 30 days, per source up to a year; 11 deals off until the admin enables them; 12 a
   per-source default country code, a number that cannot be read is `invalid_phone` when there is no email and ignored when there is one.
-- **Not built here:** Meta lead ads, TikTok and LinkedIn doors (L-06, L-13, L-14: their kinds exist, no door does); backfill and manual sync (L-18); Reference's per-hook flow enrolment, template send and forward URL (see the parity file); the web screens;
+- **Not built here:** Meta lead ads, TikTok and LinkedIn doors (L-06, L-13, L-14: their kinds exist, no door does); Reference's per-hook flow enrolment, template send and forward URL (see the parity file); the web screens;
   the operator console toggles for provider credentials (nothing to configure for a webhook).
 - `lead_sources.secret_enc` is sealed with the credentials key like other secrets, but is not yet listed in the re-encryption command's targets
   (`auth/maintenance/reencrypt-secrets.ts`), the same as the other domains' sealed columns.

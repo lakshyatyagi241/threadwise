@@ -14,18 +14,23 @@ import { LeadFirstReplyConsumer } from './lead-first-reply.consumer';
 import { LeadFirstReplyService } from './lead-first-reply.service';
 import { LeadFirstReplySweepService } from './lead-first-reply.sweep';
 import { LeadIngestModule } from './lead-ingest.module';
+import { LeadPullModule } from './lead-pull.module';
 import { LeadNotificationConsumer } from './lead-notification.consumer';
 import { LeadRetentionSweepService } from './lead-retention-sweep.service';
+import { LeadSyncRunsRepository } from './lead-sync-runs.repository';
+import { LeadSyncService } from './lead-sync.service';
+import { LeadSyncProcessor, LeadSyncSweepService } from './lead-sync.worker';
 
 /**
  * The outbox consumers that notify people of a new lead and send it a first message (speed-to-lead, BL-014), and the sweeps that purge raw
- * payloads past their retention and work through the first messages that have come due. Imported ONLY by
+ * payloads past their retention, work through the first messages that have come due, and run the pulls of "Sync now" and backfill (the lead inbox, L-18). Imported ONLY by
  * WorkersModule (the worker process): a consumer registers itself with the kernel's OutboxSubscriberRegistry, which the drain loop in that
  * process fans events out to, and an API pod that also swept would multiply the polling load on the database.
  */
 @Module({
   imports: [
     LeadIngestModule,
+    LeadPullModule,
     CrmModule,
     ContactConsentModule,
     SendWindowModule,
@@ -45,6 +50,10 @@ import { LeadRetentionSweepService } from './lead-retention-sweep.service';
     LeadFirstReplyService,
     LeadFirstReplyConsumer,
     LeadFirstReplySweepService,
+    LeadSyncRunsRepository,
+    LeadSyncService,
+    LeadSyncProcessor,
+    LeadSyncSweepService,
   ],
 })
 export class LeadsWorkerModule {}

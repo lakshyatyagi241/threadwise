@@ -161,6 +161,18 @@ export function leadError(err: unknown): LeadError {
       return { ...base, kind: 'general', key: 'payloadPurged' };
     case ERROR_CODES.LEAD_SOURCE_PAUSED:
       return { ...base, kind: 'general', key: 'sourcePaused' };
+    case ERROR_CODES.LEAD_SYNC_NOT_SUPPORTED:
+      return { ...base, kind: 'general', key: 'syncNotSupported' };
+    case ERROR_CODES.LEAD_SYNC_IN_PROGRESS:
+      return { ...base, kind: 'general', key: 'syncInProgress' };
+    case ERROR_CODES.LEAD_SYNC_TOO_SOON: {
+      const seconds = detail(err, 'retryAfterSeconds');
+      return seconds
+        ? { ...base, kind: 'general', key: 'syncTooSoon', values: { seconds } }
+        : { ...base, kind: 'general', key: 'syncTooSoonNoWait' };
+    }
+    case ERROR_CODES.LEAD_BACKFILL_RANGE_INVALID:
+      return { ...base, kind: 'general', key: 'backfillRange' };
     case ERROR_CODES.NOT_FOUND:
       return { ...base, kind: 'notFound', key: 'notFound' };
     case ERROR_CODES.RATE_LIMITED: {
@@ -208,6 +220,11 @@ export const LEAD_ERROR_KEYS = [
   'notRetryable',
   'payloadPurged',
   'sourcePaused',
+  'syncNotSupported',
+  'syncInProgress',
+  'syncTooSoon',
+  'syncTooSoonNoWait',
+  'backfillRange',
   'notFound',
   'rateLimited',
   'rateLimitedWait',

@@ -11,6 +11,7 @@ import { LEADS_READ, useLeadsCan, type LeadsCan } from '../lib/permissions';
 import {
   COMING_SOON_PROVIDERS,
   ROUTES,
+  TAB_ROUTES,
   attentionTotal,
   parseTab,
   sourceRows,
@@ -18,6 +19,7 @@ import {
   type SourceRow,
 } from '../lib/source-view';
 import { HookAddressNotice } from './hook-address-notice';
+import { LeadInboxTab } from './lead-inbox-tab';
 import { KindBadge, Loading, NoAccess, RegionError, SourceStatusChip, When } from './ui';
 
 const LINK_BUTTON =
@@ -26,8 +28,8 @@ const PRIMARY = `${LINK_BUTTON} bg-primary text-primary-foreground hover:opacity
 const SECONDARY = `${LINK_BUTTON} border border-border bg-background text-foreground hover:bg-muted`;
 
 /**
- * `/lead-sources`: Social leads (spec 5.6). Two tabs are built: Ads (where leads can come from) and Webhook (the sources that exist
- * and what they received). The whole screen answers a plan without the feature with the upgrade prompt and a role without the
+ * `/lead-sources`: Social leads (spec 5.6). Three tabs are built: Ads (where leads can come from), Webhook (the sources that exist
+ * and what they received) and Lead inbox (every delivery of every source, retry, sync and backfill). The whole screen answers a plan without the feature with the upgrade prompt and a role without the
  * read key with the key it lacks; the plan check is the API's (422), the screen only explains it.
  */
 export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }) {
@@ -53,7 +55,7 @@ export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }
   const change = (id: string) => {
     const next = parseTab(id);
     setTab(next);
-    router.replace(next === 'ads' ? ROUTES.list : ROUTES.webhooks, { scroll: false });
+    router.replace(TAB_ROUTES[next], { scroll: false });
   };
 
   return (
@@ -98,6 +100,11 @@ export function LeadSourcesScreen({ tab: initialTab = 'ads' }: { tab?: LeadTab }
             ) : (
               <WebhookTab can={can} rows={rows} />
             ),
+          },
+          {
+            id: 'inbox',
+            label: t('tabs.inbox'),
+            content: <LeadInboxTab can={can} />,
           },
         ]}
       />

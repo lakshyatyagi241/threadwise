@@ -46,6 +46,18 @@ The message goes only to a lead that becomes a **new** contact, once. A contact 
 
 What happened to each lead's first message shows on the lead (**Leads received**, then the lead) and on the contact's timeline: **Sent**, **Held** (with the reason and the next try), **Blocked** (opted out, no consent, plan limit), **Skipped** (no number or address, no connected sender, the template is gone, or a value the template needs, such as a name, is missing) or **Failed**. If a name is missing, give the workspace attribute a default value (for example "there") so the template can still be filled.
 
+## Lead inbox: every lead in one place
+
+The **Lead inbox** tab lists every lead any of your sources received, newest first, including the ones that could not become a contact. It opens on the leads that wait (**Needs attention**: needs review or failed) with test leads hidden; the chips above the list show the counts and switch to **All**, **Created**, **Duplicates** and the rest.
+
+- **Filter** by source, reason, when it arrived (24 hours, 7 or 30 days, or your own dates), test leads, and the start of the sender's own lead id. Names, numbers and addresses are never searched.
+- **Open** a lead to see why it waits, its first message and the data the sender sent. Phone numbers, email addresses, names, addresses and free text are hidden and secrets removed; **Show the original** reveals them and is recorded in the audit log.
+- **Retry** one lead, or tick several (up to 100 at a time) and select **Retry selected**. Each is processed again from its stored data under the source's current settings, so fix the mapping or the default country code first. A lead already fixed is reported as not waiting and nothing is created twice. A lead whose stored data was deleted after its retention period, or whose source is paused, cannot be retried.
+
+### Sync now and backfill
+
+Sources that can be asked for their leads (the portals you installed from the Marketplace) are listed under the table. **Sync now** fetches what is new; the source's own limit decides how soon you can do it again and the screen says how long to wait. **Backfill...** pulls a past date range again (up to 90 days, and no further back than the source keeps leads). Both run in the background, one at a time per source, and show their progress and counts: new leads, leads you already had, and leads that could not be handed over. Leads you already have are recognised, so running a backfill twice adds nothing twice. Managers can start them; everyone who can see Social leads can watch.
+
 ## Plan and access
 
 The tile needs the **Lead sources** plan feature and permission to read lead sources. Without the feature the screen offers **Upgrade plan**. When you have reached the number of sources your plan allows, creating another says how many you use, for example **You have used 5 of 5 lead sources**. Creating, changing, pausing, rotating, deleting, testing and retrying need the manage permission; with read access only you can look.

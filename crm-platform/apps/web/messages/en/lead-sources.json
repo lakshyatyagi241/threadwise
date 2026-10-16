@@ -51,7 +51,12 @@
         "template_not_sendable": "This template cannot be sent: it is not approved, it is paused, or it needs a file or a link variable.",
         "sender_not_found": "This sender is not connected."
       },
-      "planLimitUsed": "You have used {used} of {limit} lead sources. Upgrade your plan or delete a source you no longer use."
+      "planLimitUsed": "You have used {used} of {limit} lead sources. Upgrade your plan or delete a source you no longer use.",
+      "syncNotSupported": "This source sends its leads by itself, so there is nothing to pull.",
+      "syncInProgress": "This source is already being pulled. Wait for it to finish.",
+      "syncTooSoon": "This source was asked a moment ago. Try again in {seconds} seconds.",
+      "syncTooSoonNoWait": "This source was asked a moment ago. Try again in a little while.",
+      "backfillRange": "That range cannot be pulled: it reaches back further than the source keeps leads, or into the future."
     },
     "problems": {
       "nameRequired": "Give the source a name.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Ads",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead needs attention} other {# leads need attention}}"
+        "attention": "{count, plural, one {# lead needs attention} other {# leads need attention}}",
+        "inbox": "Lead inbox"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Next try",
       "sentAt": "Sent"
+    },
+    "inbox": {
+      "intro": "Every lead any of your sources received, including the ones that could not become a contact. Open a lead to see why, and retry the ones that wait.",
+      "chipsLabel": "Filter by status",
+      "loading": "Loading leads",
+      "more": "Load more",
+      "chips": {
+        "all": "All",
+        "attention": "Needs attention",
+        "needs_review": "Needs review",
+        "failed": "Failed",
+        "created": "Created",
+        "updated": "Updated",
+        "duplicate": "Duplicates"
+      },
+      "filters": {
+        "source": "Source",
+        "allSources": "All sources",
+        "reason": "Reason",
+        "anyReason": "Any reason",
+        "range": "Received",
+        "ranges": {
+          "all": "Any time",
+          "day": "Last 24 hours",
+          "week": "Last 7 days",
+          "month": "Last 30 days",
+          "custom": "Choose dates"
+        },
+        "from": "From",
+        "to": "To (included)",
+        "rangeOrder": "The end date is before the start date.",
+        "tests": "Test leads",
+        "testChoices": {
+          "all": "Show",
+          "only": "Only test leads",
+          "hide": "Hide"
+        },
+        "search": "Lead id starts with",
+        "searchHint": "Only the sender's own id for the lead is searched, never names, numbers or addresses.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Search",
+        "reset": "Back to the leads that wait",
+        "showAll": "Show everything"
+      },
+      "table": {
+        "caption": "Leads received by all sources",
+        "received": "Received",
+        "source": "Source",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Reason",
+        "firstMessage": "First message",
+        "actions": "Actions",
+        "select": "Select lead {id}",
+        "test": "Test",
+        "view": "Open",
+        "retry": "Retry"
+      },
+      "empty": {
+        "attentionTitle": "Nothing waits for you",
+        "attention": "Every lead that came in became a contact. Leads that need review or failed will appear here.",
+        "filteredTitle": "No leads match",
+        "filtered": "Nothing matches these filters."
+      },
+      "bulk": {
+        "selectPage": "Select the leads on this page that can be retried",
+        "selected": "{count, plural, one {# lead selected} other {# leads selected}}",
+        "retry": "Retry selected",
+        "limit": "Up to {max} at a time."
+      },
+      "result": {
+        "retried": "{count, plural, one {# lead was retried.} other {# leads were retried.}}",
+        "fixed": "{count, plural, one {# became a contact.} other {# became contacts.}}",
+        "stillWaiting": "{count, plural, one {# still needs review.} other {# still need review.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {# lead was not found.} other {# leads were not found.}}",
+          "not_retryable": "{count, plural, one {# lead is not waiting any more.} other {# leads are not waiting any more.}}",
+          "payload_purged": "{count, plural, one {# lead has no stored data left to retry.} other {# leads have no stored data left to retry.}}",
+          "source_paused": "{count, plural, one {# lead belongs to a paused source.} other {# leads belong to paused sources.}}",
+          "error": "{count, plural, one {# lead could not be retried.} other {# leads could not be retried.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Close",
+        "retry": "Retry",
+        "auditNote": "Opening a lead is recorded in the audit log. Personal data in it is hidden.",
+        "source": "Source",
+        "lead": "Lead id",
+        "received": "Received",
+        "processed": "Processed",
+        "notProcessed": "Not processed",
+        "attempts": "Attempts",
+        "duplicates": "Delivered again",
+        "deliveredAgain": "{count, plural, one {# time} other {# times}}",
+        "reason": "Reason",
+        "firstReply": "First message",
+        "contact": "Contact",
+        "openContact": "Open the contact",
+        "error": "Error",
+        "payload": "What the sender sent",
+        "showOriginal": "Show the original",
+        "maskedNote": "Phone numbers, email addresses, names, addresses and free text are hidden. Secrets are removed.",
+        "nothingToMask": "There is nothing personal to hide in this lead.",
+        "originalNote": "The original data, shown because you manage lead sources. Showing it was recorded in the audit log.",
+        "loadingPayload": "Loading the data",
+        "purged": "The data was deleted after its retention period, so there is nothing to show or retry."
+      },
+      "pull": {
+        "title": "Sync and backfill",
+        "intro": "These sources can be asked for their leads. Sync now fetches what is new; Backfill pulls a past date range again. Leads you already have are recognised and not added twice.",
+        "backfill": "Backfill...",
+        "history": "Recent syncs and backfills",
+        "syncNow": "Sync now",
+        "syncStarted": "Syncing {name}",
+        "paused": "This source is paused. Resume it to pull its leads.",
+        "nextSync": "Can be synced again",
+        "syncReady": "Can be synced now. At least {seconds} seconds between requests.",
+        "reach": "Backfill reaches back {days, plural, one {# day} other {# days}}.",
+        "never": "Not pulled yet.",
+        "progress": "{percent} percent",
+        "counts": "{fetched} fetched, {accepted} new, {duplicates} already known, {failed} not handed over",
+        "kinds": {
+          "sync": "Sync",
+          "backfill": "Backfill"
+        },
+        "statuses": {
+          "queued": "Queued",
+          "running": "Running",
+          "done": "Done",
+          "partial": "Partly done",
+          "failed": "Failed"
+        },
+        "errors": {
+          "too_soon": "The source asked us to wait.",
+          "not_now": "The source was not ready: too soon for it, or its connection is paused.",
+          "provider_error": "The source refused or failed.",
+          "credentials_refused": "The source refused the credentials. Reconnect it.",
+          "interrupted": "It was interrupted. Run it again.",
+          "internal_error": "An internal error. Run it again.",
+          "incomplete": "Some leads were not handed over. Run it again to finish.",
+          "not_supported": "This source cannot do that.",
+          "not_active": "The connection is not active.",
+          "range_too_old": "The source does not keep leads that far back.",
+          "range_invalid": "The range is not valid."
+        }
+      },
+      "backfill": {
+        "title": "Backfill a date range",
+        "intro": "Pull the leads of past days again from the sources that keep them, up to {days} days at a time. Leads already received are recognised and write nothing.",
+        "from": "From",
+        "to": "To (included)",
+        "sources": "Sources",
+        "noSources": "No source can be backfilled.",
+        "submit": "Start backfill",
+        "cancel": "Cancel",
+        "close": "Close",
+        "done": "Done",
+        "started": "{count, plural, one {Backfill started} other {# backfills started}}",
+        "skippedTitle": "Some sources were not pulled:",
+        "skipped": {
+          "not_supported": "cannot backfill",
+          "paused": "is paused",
+          "in_progress": "is already being pulled",
+          "too_soon": "was pulled a moment ago",
+          "range_too_old": "does not keep leads that far back",
+          "not_found": "was not found"
+        },
+        "problems": {
+          "fromRequired": "Choose the first day.",
+          "toRequired": "Choose the last day.",
+          "order": "The last day is before the first.",
+          "future": "The first day is in the future.",
+          "tooWide": "At most {days} days at a time.",
+          "noSource": "Choose at least one source."
+        },
+        "safe": "Nothing is lost or duplicated if you run it again; it only adds the leads that are missing."
+      }
     }
   }
 }

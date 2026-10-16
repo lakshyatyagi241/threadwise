@@ -51,7 +51,12 @@
         "template_not_sendable": "このテンプレートは送信できません。承認されていない、一時停止中、またはファイルやリンクの変数が必要です。",
         "sender_not_found": "この送信元は接続されていません。"
       },
-      "planLimitUsed": "リードソースを{limit}件中{used}件使用しています。プランをアップグレードするか、使わなくなったソースを削除してください。"
+      "planLimitUsed": "リードソースを{limit}件中{used}件使用しています。プランをアップグレードするか、使わなくなったソースを削除してください。",
+      "syncNotSupported": "このソースはリードを自動で送信してくるため、取得するものはありません。",
+      "syncInProgress": "このソースは現在取得中です。完了するまでお待ちください。",
+      "syncTooSoon": "このソースには少し前にリクエストしました。{seconds}秒後にもう一度お試しください。",
+      "syncTooSoonNoWait": "このソースには少し前にリクエストしました。しばらくしてからもう一度お試しください。",
+      "backfillRange": "この期間は取得できません。ソースがリードを保持している期間より前、または未来の日付が含まれています。"
     },
     "problems": {
       "nameRequired": "ソースに名前を付けてください。",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "広告",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# 件のリードが要対応です}}"
+        "attention": "{count, plural, other {# 件のリードが要対応です}}",
+        "inbox": "リード受信箱"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "次回の試行",
       "sentAt": "送信日時"
+    },
+    "inbox": {
+      "intro": "ソースが受信したすべてのリードです。連絡先にできなかったものも含まれます。リードを開くと理由を確認でき、待機中のものは再試行できます。",
+      "chipsLabel": "ステータスで絞り込み",
+      "loading": "リードを読み込み中",
+      "more": "さらに読み込む",
+      "chips": {
+        "all": "すべて",
+        "attention": "要対応",
+        "needs_review": "要確認",
+        "failed": "失敗",
+        "created": "作成済み",
+        "updated": "更新済み",
+        "duplicate": "重複"
+      },
+      "filters": {
+        "source": "ソース",
+        "allSources": "すべてのソース",
+        "reason": "理由",
+        "anyReason": "すべての理由",
+        "range": "受信日",
+        "ranges": {
+          "all": "全期間",
+          "day": "過去24時間",
+          "week": "過去7日間",
+          "month": "過去30日間",
+          "custom": "日付を選択"
+        },
+        "from": "開始日",
+        "to": "終了日（含む）",
+        "rangeOrder": "終了日が開始日より前になっています。",
+        "tests": "テストリード",
+        "testChoices": {
+          "all": "表示",
+          "only": "テストリードのみ",
+          "hide": "非表示"
+        },
+        "search": "リードIDの先頭文字",
+        "searchHint": "検索の対象は送信元が付けたリードIDのみです。名前・電話番号・住所などは検索されません。",
+        "searchPlaceholder": "lead-100",
+        "apply": "検索",
+        "reset": "待機中のリードに戻る",
+        "showAll": "すべて表示"
+      },
+      "table": {
+        "caption": "すべてのソースが受信したリード",
+        "received": "受信日時",
+        "source": "ソース",
+        "lead": "リード",
+        "status": "ステータス",
+        "reason": "理由",
+        "firstMessage": "最初のメッセージ",
+        "actions": "操作",
+        "select": "リード {id} を選択",
+        "test": "テスト",
+        "view": "開く",
+        "retry": "再試行"
+      },
+      "empty": {
+        "attentionTitle": "対応が必要なものはありません",
+        "attention": "届いたリードはすべて連絡先になりました。確認が必要なリードや失敗したリードはここに表示されます。",
+        "filteredTitle": "該当するリードがありません",
+        "filtered": "この条件に一致するものはありません。"
+      },
+      "bulk": {
+        "selectPage": "このページで再試行できるリードをすべて選択",
+        "selected": "{count, plural, one {#件のリードを選択中} other {#件のリードを選択中}}",
+        "retry": "選択したものを再試行",
+        "limit": "一度に最大{max}件までです。"
+      },
+      "result": {
+        "retried": "{count, plural, one {#件のリードを再試行しました。} other {#件のリードを再試行しました。}}",
+        "fixed": "{count, plural, one {#件が連絡先になりました。} other {#件が連絡先になりました。}}",
+        "stillWaiting": "{count, plural, one {#件はまだ確認が必要です。} other {#件はまだ確認が必要です。}}",
+        "skipped": {
+          "not_found": "{count, plural, one {#件のリードが見つかりませんでした。} other {#件のリードが見つかりませんでした。}}",
+          "not_retryable": "{count, plural, one {#件のリードはすでに待機中ではありません。} other {#件のリードはすでに待機中ではありません。}}",
+          "payload_purged": "{count, plural, one {#件のリードは再試行できる保存データが残っていません。} other {#件のリードは再試行できる保存データが残っていません。}}",
+          "source_paused": "{count, plural, one {#件のリードは一時停止中のソースのものです。} other {#件のリードは一時停止中のソースのものです。}}",
+          "error": "{count, plural, one {#件のリードを再試行できませんでした。} other {#件のリードを再試行できませんでした。}}"
+        }
+      },
+      "drawer": {
+        "title": "リード",
+        "close": "閉じる",
+        "retry": "再試行",
+        "auditNote": "リードを開いた操作は監査ログに記録されます。個人データは非表示になっています。",
+        "source": "ソース",
+        "lead": "リードID",
+        "received": "受信日時",
+        "processed": "処理日時",
+        "notProcessed": "未処理",
+        "attempts": "試行回数",
+        "duplicates": "再送信",
+        "deliveredAgain": "{count, plural, one {#回} other {#回}}",
+        "reason": "理由",
+        "firstReply": "最初のメッセージ",
+        "contact": "連絡先",
+        "openContact": "連絡先を開く",
+        "error": "エラー",
+        "payload": "送信元から届いたデータ",
+        "showOriginal": "元のデータを表示",
+        "maskedNote": "電話番号、メールアドレス、氏名、住所、自由入力のテキストは非表示です。機密情報は削除されています。",
+        "nothingToMask": "このリードには非表示にする個人情報はありません。",
+        "originalNote": "元のデータです。リードソースを管理する権限があるため表示しています。表示した操作は監査ログに記録されました。",
+        "loadingPayload": "データを読み込み中",
+        "purged": "データは保持期間の経過後に削除されたため、表示も再試行もできません。"
+      },
+      "pull": {
+        "title": "同期とバックフィル",
+        "intro": "これらのソースにはリードを問い合わせることができます。「今すぐ同期」は新しいリードを取得し、「バックフィル」は過去の期間のリードを再取得します。すでにあるリードは認識され、重複して追加されることはありません。",
+        "backfill": "バックフィル...",
+        "history": "最近の同期とバックフィル",
+        "syncNow": "今すぐ同期",
+        "syncStarted": "{name} を同期しています",
+        "paused": "このソースは一時停止中です。リードを取得するには再開してください。",
+        "nextSync": "再度同期できます",
+        "syncReady": "今すぐ同期できます。リクエストの間隔は最低{seconds}秒空けてください。",
+        "reach": "バックフィルでは{days, plural, one {#日} other {#日}}前までさかのぼれます。",
+        "never": "まだ取得していません。",
+        "progress": "{percent}パーセント",
+        "counts": "取得 {fetched} 件、新規 {accepted} 件、既知 {duplicates} 件、未引き渡し {failed} 件",
+        "kinds": {
+          "sync": "同期",
+          "backfill": "バックフィル"
+        },
+        "statuses": {
+          "queued": "キュー待ち",
+          "running": "実行中",
+          "done": "完了",
+          "partial": "一部完了",
+          "failed": "失敗"
+        },
+        "errors": {
+          "too_soon": "ソースから待つよう求められました。",
+          "not_now": "ソースの準備ができていませんでした。間隔が短すぎたか、接続が一時停止中です。",
+          "provider_error": "ソースが要求を拒否したか、処理に失敗しました。",
+          "credentials_refused": "ソースが認証情報を拒否しました。再接続してください。",
+          "interrupted": "中断されました。もう一度実行してください。",
+          "internal_error": "内部エラーが発生しました。もう一度実行してください。",
+          "incomplete": "一部のリードが引き渡されませんでした。もう一度実行して完了させてください。",
+          "not_supported": "このソースではその操作はできません。",
+          "not_active": "接続が有効ではありません。",
+          "range_too_old": "ソースはそれほど過去のリードを保持していません。",
+          "range_invalid": "期間が正しくありません。"
+        }
+      },
+      "backfill": {
+        "title": "期間を指定してバックフィル",
+        "intro": "リードを保持しているソースから、過去の日付のリードを再取得します。一度に最大{days}日分までです。すでに受信済みのリードは認識され、何も書き込まれません。",
+        "from": "開始日",
+        "to": "終了日（含む）",
+        "sources": "ソース",
+        "noSources": "バックフィルできるソースがありません。",
+        "submit": "バックフィルを開始",
+        "cancel": "キャンセル",
+        "close": "閉じる",
+        "done": "完了",
+        "started": "{count, plural, one {バックフィルを開始しました} other {#件のバックフィルを開始しました}}",
+        "skippedTitle": "一部のソースは取得されませんでした:",
+        "skipped": {
+          "not_supported": "はバックフィルできません",
+          "paused": "は一時停止中です",
+          "in_progress": "はすでに取得中です",
+          "too_soon": "は少し前に取得されました",
+          "range_too_old": "はそれほど過去のリードを保持していません",
+          "not_found": "が見つかりませんでした"
+        },
+        "problems": {
+          "fromRequired": "開始日を選択してください。",
+          "toRequired": "終了日を選択してください。",
+          "order": "終了日が開始日より前です。",
+          "future": "開始日が未来の日付です。",
+          "tooWide": "一度に最大{days}日までです。",
+          "noSource": "ソースを1つ以上選択してください。"
+        },
+        "safe": "もう一度実行しても、失われたり重複したりするものはありません。不足しているリードだけが追加されます。"
+      }
     }
   }
 }

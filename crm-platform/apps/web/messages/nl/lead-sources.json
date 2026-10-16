@@ -51,7 +51,12 @@
         "template_not_sendable": "Dit sjabloon kan niet worden verzonden: het is niet goedgekeurd, gepauzeerd of heeft een bestand of linkvariabele nodig.",
         "sender_not_found": "Deze afzender is niet verbonden."
       },
-      "planLimitUsed": "Je hebt {used} van de {limit} leadbronnen gebruikt. Upgrade je abonnement of verwijder een bron die je niet meer gebruikt."
+      "planLimitUsed": "Je hebt {used} van de {limit} leadbronnen gebruikt. Upgrade je abonnement of verwijder een bron die je niet meer gebruikt.",
+      "syncNotSupported": "Deze bron stuurt zijn leads zelf, dus er valt niets op te halen.",
+      "syncInProgress": "Deze bron wordt al opgehaald. Wacht tot het klaar is.",
+      "syncTooSoon": "Deze bron is net nog bevraagd. Probeer het over {seconds} seconden opnieuw.",
+      "syncTooSoonNoWait": "Deze bron is net nog bevraagd. Probeer het over een poosje opnieuw.",
+      "backfillRange": "Dit bereik kan niet worden opgehaald: het reikt verder terug dan de bron leads bewaart, of naar de toekomst."
     },
     "problems": {
       "nameRequired": "Geef de bron een naam.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Advertenties",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead heeft aandacht nodig} other {# leads hebben aandacht nodig}}"
+        "attention": "{count, plural, one {# lead heeft aandacht nodig} other {# leads hebben aandacht nodig}}",
+        "inbox": "Leadinbox"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Volgende poging",
       "sentAt": "Verzonden"
+    },
+    "inbox": {
+      "intro": "Alle leads die je bronnen hebben ontvangen, ook de leads die geen contact konden worden. Open een lead om te zien waarom, en probeer de wachtende leads opnieuw.",
+      "chipsLabel": "Filteren op status",
+      "loading": "Leads laden",
+      "more": "Meer laden",
+      "chips": {
+        "all": "Alle",
+        "attention": "Aandacht nodig",
+        "needs_review": "Te beoordelen",
+        "failed": "Mislukt",
+        "created": "Aangemaakt",
+        "updated": "Bijgewerkt",
+        "duplicate": "Duplicaten"
+      },
+      "filters": {
+        "source": "Bron",
+        "allSources": "Alle bronnen",
+        "reason": "Reden",
+        "anyReason": "Elke reden",
+        "range": "Ontvangen",
+        "ranges": {
+          "all": "Elk moment",
+          "day": "Laatste 24 uur",
+          "week": "Laatste 7 dagen",
+          "month": "Laatste 30 dagen",
+          "custom": "Kies datums"
+        },
+        "from": "Van",
+        "to": "Tot en met",
+        "rangeOrder": "De einddatum ligt vóór de startdatum.",
+        "tests": "Testleads",
+        "testChoices": {
+          "all": "Tonen",
+          "only": "Alleen testleads",
+          "hide": "Verbergen"
+        },
+        "search": "Lead-id begint met",
+        "searchHint": "Er wordt alleen gezocht in de eigen id die de afzender aan de lead gaf, nooit in namen, nummers of adressen.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Zoeken",
+        "reset": "Terug naar de wachtende leads",
+        "showAll": "Alles tonen"
+      },
+      "table": {
+        "caption": "Leads ontvangen door alle bronnen",
+        "received": "Ontvangen",
+        "source": "Bron",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Reden",
+        "firstMessage": "Eerste bericht",
+        "actions": "Acties",
+        "select": "Lead {id} selecteren",
+        "test": "Test",
+        "view": "Openen",
+        "retry": "Opnieuw proberen"
+      },
+      "empty": {
+        "attentionTitle": "Er wacht niets op je",
+        "attention": "Elke binnengekomen lead is een contact geworden. Leads die beoordeeld moeten worden of mislukt zijn, verschijnen hier.",
+        "filteredTitle": "Geen leads gevonden",
+        "filtered": "Niets komt overeen met deze filters."
+      },
+      "bulk": {
+        "selectPage": "Selecteer de leads op deze pagina die opnieuw kunnen worden geprobeerd",
+        "selected": "{count, plural, one {# lead geselecteerd} other {# leads geselecteerd}}",
+        "retry": "Selectie opnieuw proberen",
+        "limit": "Maximaal {max} tegelijk."
+      },
+      "result": {
+        "retried": "{count, plural, one {# lead is opnieuw geprobeerd.} other {# leads zijn opnieuw geprobeerd.}}",
+        "fixed": "{count, plural, one {# lead is een contact geworden.} other {# leads zijn contacten geworden.}}",
+        "stillWaiting": "{count, plural, one {# lead moet nog beoordeeld worden.} other {# leads moeten nog beoordeeld worden.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {# lead is niet gevonden.} other {# leads zijn niet gevonden.}}",
+          "not_retryable": "{count, plural, one {# lead wacht niet meer.} other {# leads wachten niet meer.}}",
+          "payload_purged": "{count, plural, one {# lead heeft geen opgeslagen gegevens meer om opnieuw te proberen.} other {# leads hebben geen opgeslagen gegevens meer om opnieuw te proberen.}}",
+          "source_paused": "{count, plural, one {# lead hoort bij een gepauzeerde bron.} other {# leads horen bij gepauzeerde bronnen.}}",
+          "error": "{count, plural, one {# lead kon niet opnieuw worden geprobeerd.} other {# leads konden niet opnieuw worden geprobeerd.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Sluiten",
+        "retry": "Opnieuw proberen",
+        "auditNote": "Het openen van een lead wordt vastgelegd in het auditlogboek. Persoonsgegevens erin zijn verborgen.",
+        "source": "Bron",
+        "lead": "Lead-id",
+        "received": "Ontvangen",
+        "processed": "Verwerkt",
+        "notProcessed": "Niet verwerkt",
+        "attempts": "Pogingen",
+        "duplicates": "Opnieuw aangeleverd",
+        "deliveredAgain": "{count, plural, one {# keer} other {# keer}}",
+        "reason": "Reden",
+        "firstReply": "Eerste bericht",
+        "contact": "Contact",
+        "openContact": "Contact openen",
+        "error": "Fout",
+        "payload": "Wat de afzender heeft verstuurd",
+        "showOriginal": "Origineel tonen",
+        "maskedNote": "Telefoonnummers, e-mailadressen, namen, adressen en vrije tekst zijn verborgen. Geheimen zijn verwijderd.",
+        "nothingToMask": "Er is niets persoonlijks om te verbergen in deze lead.",
+        "originalNote": "De originele gegevens, getoond omdat je leadbronnen beheert. Het tonen ervan is vastgelegd in het auditlogboek.",
+        "loadingPayload": "Gegevens laden",
+        "purged": "De gegevens zijn verwijderd na hun bewaartermijn, dus er is niets om te tonen of opnieuw te proberen."
+      },
+      "pull": {
+        "title": "Synchroniseren en terugvullen",
+        "intro": "Aan deze bronnen kun je hun leads vragen. Nu synchroniseren haalt op wat nieuw is; Terugvullen haalt de leads van een periode in het verleden opnieuw op. Leads die je al hebt worden herkend en niet dubbel toegevoegd.",
+        "backfill": "Terugvullen...",
+        "history": "Recente synchronisaties en terugvullingen",
+        "syncNow": "Nu synchroniseren",
+        "syncStarted": "{name} wordt gesynchroniseerd",
+        "paused": "Deze bron is gepauzeerd. Hervat hem om zijn leads op te halen.",
+        "nextSync": "Kan opnieuw worden gesynchroniseerd",
+        "syncReady": "Kan nu worden gesynchroniseerd. Minstens {seconds} seconden tussen verzoeken.",
+        "reach": "Terugvullen gaat {days, plural, one {# dag} other {# dagen}} terug.",
+        "never": "Nog niet opgehaald.",
+        "progress": "{percent} procent",
+        "counts": "{fetched} opgehaald, {accepted} nieuw, {duplicates} al bekend, {failed} niet doorgegeven",
+        "kinds": {
+          "sync": "Synchronisatie",
+          "backfill": "Terugvulling"
+        },
+        "statuses": {
+          "queued": "In de wachtrij",
+          "running": "Bezig",
+          "done": "Klaar",
+          "partial": "Gedeeltelijk klaar",
+          "failed": "Mislukt"
+        },
+        "errors": {
+          "too_soon": "De bron vroeg ons te wachten.",
+          "not_now": "De bron was er niet klaar voor: te vroeg voor hem, of zijn verbinding is gepauzeerd.",
+          "provider_error": "De bron weigerde of faalde.",
+          "credentials_refused": "De bron weigerde de inloggegevens. Verbind hem opnieuw.",
+          "interrupted": "Het is onderbroken. Voer het opnieuw uit.",
+          "internal_error": "Interne fout. Voer het opnieuw uit.",
+          "incomplete": "Sommige leads zijn niet doorgegeven. Voer het opnieuw uit om af te maken.",
+          "not_supported": "Deze bron kan dat niet.",
+          "not_active": "De verbinding is niet actief.",
+          "range_too_old": "De bron bewaart leads niet zo lang.",
+          "range_invalid": "Het bereik is ongeldig."
+        }
+      },
+      "backfill": {
+        "title": "Een periode terugvullen",
+        "intro": "Haal de leads van afgelopen dagen opnieuw op bij de bronnen die ze bewaren, tot {days} dagen tegelijk. Reeds ontvangen leads worden herkend en schrijven niets weg.",
+        "from": "Van",
+        "to": "Tot en met",
+        "sources": "Bronnen",
+        "noSources": "Geen enkele bron kan worden teruggevuld.",
+        "submit": "Terugvullen starten",
+        "cancel": "Annuleren",
+        "close": "Sluiten",
+        "done": "Klaar",
+        "started": "{count, plural, one {Terugvulling gestart} other {# terugvullingen gestart}}",
+        "skippedTitle": "Sommige bronnen zijn niet opgehaald:",
+        "skipped": {
+          "not_supported": "kan niet terugvullen",
+          "paused": "is gepauzeerd",
+          "in_progress": "wordt al opgehaald",
+          "too_soon": "is net nog opgehaald",
+          "range_too_old": "bewaart leads niet zo lang",
+          "not_found": "is niet gevonden"
+        },
+        "problems": {
+          "fromRequired": "Kies de eerste dag.",
+          "toRequired": "Kies de laatste dag.",
+          "order": "De laatste dag ligt vóór de eerste.",
+          "future": "De eerste dag ligt in de toekomst.",
+          "tooWide": "Maximaal {days} dagen tegelijk.",
+          "noSource": "Kies minstens één bron."
+        },
+        "safe": "Er gaat niets verloren en er wordt niets dubbel aangemaakt als je het opnieuw uitvoert; alleen ontbrekende leads worden toegevoegd."
+      }
     }
   }
 }

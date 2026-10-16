@@ -135,8 +135,10 @@ describe('the decisions of a first message', () => {
     expect(lastFinish(m)).toMatchObject({ status: 'sent', reason: null, channel: 'whatsapp' });
     expect(lastFinish(m).sentAt).toEqual(NOW);
     expect(m.audit).toHaveBeenCalledTimes(1);
-    expect(m.emit.mock.calls[0]![1]).toMatchObject({ eventType: 'lead.first_reply.sent' });
-    expect(m.activities.mock.calls[0]![2]).toMatchObject({
+    expect((m.emit.mock.calls[0] as unknown[])[1]).toMatchObject({
+      eventType: 'lead.first_reply.sent',
+    });
+    expect((m.activities.mock.calls[0] as unknown[])[2]).toMatchObject({
       contactId: 5,
       activityType: 'speed_to_lead',
       title: 'First message sent by WhatsApp',
@@ -224,7 +226,10 @@ describe('the decisions of a first message', () => {
     expect(lastFinish(m).dueAt).toEqual(new Date('2026-10-14T20:00:00.000Z'));
     expect(m.deliver).not.toHaveBeenCalled();
     expect(m.gate).not.toHaveBeenCalled();
-    expect(m.check.mock.calls[0]![2]).toMatchObject({ contactId: 5, phone: '+919876543210' });
+    expect((m.check.mock.calls[0] as unknown[])[2]).toMatchObject({
+      contactId: 5,
+      phone: '+919876543210',
+    });
   });
 
   it('a service message (a utility template) is never asked about the quiet hours', async () => {
@@ -254,7 +259,7 @@ describe('the decisions of a first message', () => {
       await m.svc.processOne(ORG, 1);
       expect(lastFinish(m)).toMatchObject({ status: 'blocked', reason });
       expect(m.deliver).not.toHaveBeenCalled();
-      expect(m.activities.mock.calls[0]![2]).toMatchObject({
+      expect((m.activities.mock.calls[0] as unknown[])[2]).toMatchObject({
         title: 'First message by WhatsApp not sent',
       });
     });
@@ -404,7 +409,9 @@ describe('schedule (the outbox consumer)', () => {
     expect(call[2].dueAt.getTime() - Date.now()).toBeGreaterThan(19 * 60_000);
     expect(call[2].expiresAt.getTime() - call[2].dueAt.getTime()).toBe(86_400_000);
     expect(b.audit).toHaveBeenCalledTimes(1);
-    expect(b.emit.mock.calls[0]![1]).toMatchObject({ eventType: 'lead.first_reply.scheduled' });
+    expect((b.emit.mock.calls[0] as unknown[])[1]).toMatchObject({
+      eventType: 'lead.first_reply.scheduled',
+    });
     // a delay means no immediate attempt
     expect(b.claimOne).not.toHaveBeenCalled();
   });

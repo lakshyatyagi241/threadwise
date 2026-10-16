@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { LeadEventStatus, LeadFirstReplyStatus, SpeedToLeadChannel } from '@crm/contracts';
+import type {
+  LeadEventStatus,
+  LeadFirstReplyStatus,
+  LeadSourceKind,
+  LeadSourceStatus,
+  SpeedToLeadChannel,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { decodeCursor } from '../../common/pagination/cursor';
+import { decodeCursor, encodeCursor } from '../../common/pagination/cursor';
 
 type Raw = Record<string, unknown>;
 const s = (v: unknown): string | null => (v === null || v === undefined ? null : (v as string));
@@ -24,6 +30,9 @@ export interface LeadEventRow {
   uuid: string;
   sourceId: number;
   sourceUuid: string;
+  sourceName: string;
+  sourceKind: LeadSourceKind;
+  sourceStatus: LeadSourceStatus;
   externalId: string;
   status: LeadEventStatus;
   isTest: boolean;
@@ -39,6 +48,8 @@ export interface LeadEventRow {
   attempts: number;
   duplicateCount: number;
   receivedAt: Date;
+  /** received_at at microsecond precision (the inbox's keyset cursor). */
+  receivedAtIso: string;
   processedAt: Date | null;
   /** created_at at microsecond precision (keyset cursor). */
   createdAtIso: string;
@@ -53,6 +64,9 @@ const toRow = (r: Raw): LeadEventRow => ({
   uuid: r.uuid as string,
   sourceId: Number(r.source_id),
   sourceUuid: r.source_uuid as string,
+  sourceName: r.source_name as string,
+  sourceKind: r.source_kind as LeadSourceKind,
+  sourceStatus: r.source_status as LeadSourceStatus,
   externalId: r.external_id as string,
   status: r.status as LeadEventStatus,
   isTest: r.is_test as boolean,
@@ -67,6 +81,7 @@ const toRow = (r: Raw): LeadEventRow => ({
   attempts: Number(r.attempts),
   duplicateCount: Number(r.duplicate_count),
   receivedAt: new Date(r.received_at as string),
+  receivedAtIso: r.received_at_iso as string,
   processedAt: d(r.processed_at),
   createdAtIso: r.created_at_iso as string,
   createdAt: new Date(r.created_at as string),
@@ -87,7 +102,9 @@ const toRow = (r: Raw): LeadEventRow => ({
 
 const SELECT = sql`
   SELECT e.*, to_char(e.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso,
-         s.uuid AS source_uuid, c.uuid AS contact_uuid, dl.uuid AS deal_uuid,
+         to_char(e.received_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS received_at_iso,
+         s.uuid AS source_uuid, s.name AS source_name, s.kind AS source_kind, s.status AS source_status,
+         c.uuid AS contact_uuid, dl.uuid AS deal_uuid,
          f.channel AS fr_channel, f.status AS fr_status, f.reason AS fr_reason, f.due_at AS fr_due_at,
          f.sent_at AS fr_sent_at, f.attempts AS fr_attempts
   FROM lead_events e
@@ -116,6 +133,38 @@ export type Claim =
 
 /** A `received` event older than this is taken to be abandoned by a crashed process (the pipeline finishes in well under a second). */
 const STALE_RECEIVED_MS = 5 * 60_000;
+
+/** What the inbox narrows by. Every part is optional. */
+export interface InboxFilter {
+  sourceUuid?: string;
+  statuses?: LeadEventStatus[];
+  reason?: string;
+  isTest?: boolean;
+  from?: Date;
+  to?: Date;
+  q?: string;
+}
+
+const escapeLike = (v: string): string => v.replace(/[\\%_]/g, (c) => `\\${c}`);
+
+function inboxWhere(orgId: number, f: InboxFilter): SQL[] {
+  const where: SQL[] = [sql`e.org_id = ${orgId}`];
+  if (f.sourceUuid) where.push(sql`s.uuid = ${f.sourceUuid}::uuid`);
+  if (f.statuses && f.statuses.length > 0) {
+    where.push(
+      sql`e.status IN (${sql.join(
+        f.statuses.map((x) => sql`${x}`),
+        sql`, `,
+      )})`,
+    );
+  }
+  if (f.reason) where.push(sql`e.reason = ${f.reason}`);
+  if (f.isTest !== undefined) where.push(sql`e.is_test = ${f.isTest}`);
+  if (f.from) where.push(sql`e.received_at >= ${f.from.toISOString()}::timestamptz`);
+  if (f.to) where.push(sql`e.received_at < ${f.to.toISOString()}::timestamptz`);
+  if (f.q) where.push(sql`e.external_id LIKE ${`${escapeLike(f.q)}%`} ESCAPE '\\'`);
+  return where;
+}
 
 @Injectable()
 export class LeadEventsRepository {
@@ -212,6 +261,56 @@ export class LeadEventsRepository {
       ${SELECT} WHERE ${sql.join(where, sql` AND `)}
       ORDER BY e.created_at DESC, e.id DESC LIMIT ${f.limit + 1}`);
     return (res.rows as Raw[]).map(toRow);
+  }
+
+  /** One event by its uuid, whichever source it belongs to (the inbox opens a lead without knowing its source). */
+  async findAnyByUuid(tx: Tx, orgId: number, uuid: string): Promise<LeadEventRow | undefined> {
+    const res = await tx.execute(
+      sql`${SELECT} WHERE e.org_id = ${orgId} AND e.uuid = ${uuid}::uuid`,
+    );
+    const r = (res.rows as Raw[])[0];
+    return r ? toRow(r) : undefined;
+  }
+
+  /**
+   * Every source's deliveries, newest RECEIVED first (keyset on `received_at, id`: a lead pulled later but submitted earlier sits where
+   * it was submitted). `q` matches the start of the sender's own id only; nothing personal is searched.
+   */
+  async inbox(
+    tx: Tx,
+    orgId: number,
+    f: InboxFilter & { limit: number; cursor?: string },
+  ): Promise<LeadEventRow[]> {
+    const where = inboxWhere(orgId, f);
+    if (f.cursor) {
+      const c = decodeCursor(f.cursor);
+      where.push(
+        sql`(e.received_at, e.id) < (${c.createdAtIso ?? c.createdAt.toISOString()}::timestamptz, ${c.id})`,
+      );
+    }
+    const res = await tx.execute(sql`
+      ${SELECT} WHERE ${sql.join(where, sql` AND `)}
+      ORDER BY e.received_at DESC, e.id DESC LIMIT ${f.limit + 1}`);
+    return (res.rows as Raw[]).map(toRow);
+  }
+
+  /** The inbox's next-page cursor for the last row of a page. */
+  inboxCursor(last: Pick<LeadEventRow, 'receivedAt' | 'receivedAtIso' | 'id'>): string {
+    return encodeCursor({
+      createdAt: last.receivedAt,
+      createdAtIso: last.receivedAtIso,
+      id: last.id,
+    });
+  }
+
+  /** Deliveries per status over the filter (no status filter of its own: the chips show every status at once). */
+  async inboxCounts(tx: Tx, orgId: number, f: InboxFilter): Promise<Record<string, number>> {
+    const where = inboxWhere(orgId, { ...f, statuses: undefined, reason: undefined });
+    const res = await tx.execute(sql`
+      SELECT e.status, count(*)::int AS n
+      FROM lead_events e JOIN lead_sources s ON s.org_id = e.org_id AND s.id = e.source_id
+      WHERE ${sql.join(where, sql` AND `)} GROUP BY e.status`);
+    return Object.fromEntries((res.rows as Raw[]).map((r) => [r.status as string, Number(r.n)]));
   }
 
   /** The newest event of a source whose payload is still held: what the mapping preview works from. */

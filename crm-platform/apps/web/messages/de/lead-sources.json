@@ -51,7 +51,12 @@
         "template_not_sendable": "Diese Vorlage kann nicht gesendet werden: Sie ist nicht genehmigt, pausiert oder benötigt eine Datei- oder Link-Variable.",
         "sender_not_found": "Dieser Absender ist nicht verbunden."
       },
-      "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt. Upgraden Sie Ihren Tarif oder löschen Sie eine Quelle, die Sie nicht mehr verwenden."
+      "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt. Upgraden Sie Ihren Tarif oder löschen Sie eine Quelle, die Sie nicht mehr verwenden.",
+      "syncNotSupported": "Diese Quelle sendet ihre Leads selbst, daher gibt es nichts abzurufen.",
+      "syncInProgress": "Diese Quelle wird bereits abgerufen. Warten Sie, bis der Vorgang abgeschlossen ist.",
+      "syncTooSoon": "Diese Quelle wurde gerade erst abgefragt. Versuchen Sie es in {seconds} Sekunden erneut.",
+      "syncTooSoonNoWait": "Diese Quelle wurde gerade erst abgefragt. Versuchen Sie es in Kürze erneut.",
+      "backfillRange": "Dieser Zeitraum kann nicht abgerufen werden: Er reicht weiter zurück, als die Quelle Leads aufbewahrt, oder in die Zukunft."
     },
     "problems": {
       "nameRequired": "Geben Sie der Quelle einen Namen.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Anzeigen",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# Lead benötigt Aufmerksamkeit} other {# Leads benötigen Aufmerksamkeit}}"
+        "attention": "{count, plural, one {# Lead benötigt Aufmerksamkeit} other {# Leads benötigen Aufmerksamkeit}}",
+        "inbox": "Lead-Posteingang"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Nächster Versuch",
       "sentAt": "Gesendet am"
+    },
+    "inbox": {
+      "intro": "Alle Leads, die Ihre Quellen empfangen haben – auch die, aus denen kein Kontakt werden konnte. Öffnen Sie einen Lead, um den Grund zu sehen, und wiederholen Sie die wartenden Leads.",
+      "chipsLabel": "Nach Status filtern",
+      "loading": "Leads werden geladen",
+      "more": "Mehr laden",
+      "chips": {
+        "all": "Alle",
+        "attention": "Erfordert Aufmerksamkeit",
+        "needs_review": "Zu prüfen",
+        "failed": "Fehlgeschlagen",
+        "created": "Erstellt",
+        "updated": "Aktualisiert",
+        "duplicate": "Duplikate"
+      },
+      "filters": {
+        "source": "Quelle",
+        "allSources": "Alle Quellen",
+        "reason": "Grund",
+        "anyReason": "Beliebiger Grund",
+        "range": "Empfangen",
+        "ranges": {
+          "all": "Beliebiger Zeitraum",
+          "day": "Letzte 24 Stunden",
+          "week": "Letzte 7 Tage",
+          "month": "Letzte 30 Tage",
+          "custom": "Datum wählen"
+        },
+        "from": "Von",
+        "to": "Bis (einschließlich)",
+        "rangeOrder": "Das Enddatum liegt vor dem Startdatum.",
+        "tests": "Test-Leads",
+        "testChoices": {
+          "all": "Anzeigen",
+          "only": "Nur Test-Leads",
+          "hide": "Ausblenden"
+        },
+        "search": "Lead-ID beginnt mit",
+        "searchHint": "Durchsucht wird nur die eigene ID des Absenders für den Lead, niemals Namen, Nummern oder Adressen.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Suchen",
+        "reset": "Zurück zu den wartenden Leads",
+        "showAll": "Alles anzeigen"
+      },
+      "table": {
+        "caption": "Von allen Quellen empfangene Leads",
+        "received": "Empfangen",
+        "source": "Quelle",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Grund",
+        "firstMessage": "Erste Nachricht",
+        "actions": "Aktionen",
+        "select": "Lead {id} auswählen",
+        "test": "Test",
+        "view": "Öffnen",
+        "retry": "Wiederholen"
+      },
+      "empty": {
+        "attentionTitle": "Nichts wartet auf Sie",
+        "attention": "Jeder eingegangene Lead ist zu einem Kontakt geworden. Leads, die geprüft werden müssen oder fehlgeschlagen sind, erscheinen hier.",
+        "filteredTitle": "Keine passenden Leads",
+        "filtered": "Zu diesen Filtern gibt es keine Treffer."
+      },
+      "bulk": {
+        "selectPage": "Alle Leads dieser Seite auswählen, die wiederholt werden können",
+        "selected": "{count, plural, one {# Lead ausgewählt} other {# Leads ausgewählt}}",
+        "retry": "Auswahl wiederholen",
+        "limit": "Maximal {max} auf einmal."
+      },
+      "result": {
+        "retried": "{count, plural, one {# Lead wurde wiederholt.} other {# Leads wurden wiederholt.}}",
+        "fixed": "{count, plural, one {# wurde zum Kontakt.} other {# wurden zu Kontakten.}}",
+        "stillWaiting": "{count, plural, one {# muss weiterhin geprüft werden.} other {# müssen weiterhin geprüft werden.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {# Lead wurde nicht gefunden.} other {# Leads wurden nicht gefunden.}}",
+          "not_retryable": "{count, plural, one {# Lead wartet nicht mehr.} other {# Leads warten nicht mehr.}}",
+          "payload_purged": "{count, plural, one {# Lead hat keine gespeicherten Daten mehr für eine Wiederholung.} other {# Leads haben keine gespeicherten Daten mehr für eine Wiederholung.}}",
+          "source_paused": "{count, plural, one {# Lead gehört zu einer pausierten Quelle.} other {# Leads gehören zu pausierten Quellen.}}",
+          "error": "{count, plural, one {# Lead konnte nicht wiederholt werden.} other {# Leads konnten nicht wiederholt werden.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Schließen",
+        "retry": "Wiederholen",
+        "auditNote": "Das Öffnen eines Leads wird im Audit-Protokoll festgehalten. Personenbezogene Daten darin sind ausgeblendet.",
+        "source": "Quelle",
+        "lead": "Lead-ID",
+        "received": "Empfangen",
+        "processed": "Verarbeitet",
+        "notProcessed": "Nicht verarbeitet",
+        "attempts": "Versuche",
+        "duplicates": "Erneut zugestellt",
+        "deliveredAgain": "{count, plural, one {# Mal} other {# Mal}}",
+        "reason": "Grund",
+        "firstReply": "Erste Nachricht",
+        "contact": "Kontakt",
+        "openContact": "Kontakt öffnen",
+        "error": "Fehler",
+        "payload": "Was der Absender gesendet hat",
+        "showOriginal": "Original anzeigen",
+        "maskedNote": "Telefonnummern, E-Mail-Adressen, Namen, Adressen und Freitext sind ausgeblendet. Geheime Zugangsdaten werden entfernt.",
+        "nothingToMask": "In diesem Lead gibt es keine personenbezogenen Daten, die ausgeblendet werden müssten.",
+        "originalNote": "Die Originaldaten, angezeigt, weil Sie Lead-Quellen verwalten. Die Anzeige wurde im Audit-Protokoll festgehalten.",
+        "loadingPayload": "Daten werden geladen",
+        "purged": "Die Daten wurden nach Ablauf der Aufbewahrungsfrist gelöscht, daher gibt es nichts anzuzeigen oder zu wiederholen."
+      },
+      "pull": {
+        "title": "Synchronisieren und Nachladen",
+        "intro": "Bei diesen Quellen können Leads abgefragt werden. „Jetzt synchronisieren“ holt neue Leads ab, „Nachladen“ ruft einen zurückliegenden Zeitraum erneut ab. Bereits vorhandene Leads werden erkannt und nicht doppelt angelegt.",
+        "backfill": "Nachladen...",
+        "history": "Letzte Synchronisierungen und Nachladevorgänge",
+        "syncNow": "Jetzt synchronisieren",
+        "syncStarted": "{name} wird synchronisiert",
+        "paused": "Diese Quelle ist pausiert. Setzen Sie sie fort, um ihre Leads abzurufen.",
+        "nextSync": "Wieder synchronisierbar",
+        "syncReady": "Kann jetzt synchronisiert werden. Zwischen zwei Anfragen müssen mindestens {seconds} Sekunden liegen.",
+        "reach": "Nachladen reicht {days, plural, one {# Tag} other {# Tage}} zurück.",
+        "never": "Noch nicht abgerufen.",
+        "progress": "{percent} Prozent",
+        "counts": "{fetched} abgerufen, {accepted} neu, {duplicates} bereits bekannt, {failed} nicht übergeben",
+        "kinds": {
+          "sync": "Synchronisierung",
+          "backfill": "Nachladen"
+        },
+        "statuses": {
+          "queued": "In Warteschlange",
+          "running": "Läuft",
+          "done": "Fertig",
+          "partial": "Teilweise abgeschlossen",
+          "failed": "Fehlgeschlagen"
+        },
+        "errors": {
+          "too_soon": "Die Quelle hat uns gebeten zu warten.",
+          "not_now": "Die Quelle war nicht bereit: zu früh für sie, oder ihre Verbindung ist pausiert.",
+          "provider_error": "Die Quelle hat abgelehnt oder ist fehlgeschlagen.",
+          "credentials_refused": "Die Quelle hat die Zugangsdaten abgelehnt. Verbinden Sie sie erneut.",
+          "interrupted": "Der Vorgang wurde unterbrochen. Führen Sie ihn erneut aus.",
+          "internal_error": "Ein interner Fehler ist aufgetreten. Führen Sie den Vorgang erneut aus.",
+          "incomplete": "Einige Leads wurden nicht übergeben. Führen Sie den Vorgang erneut aus, um ihn abzuschließen.",
+          "not_supported": "Diese Quelle unterstützt das nicht.",
+          "not_active": "Die Verbindung ist nicht aktiv.",
+          "range_too_old": "Die Quelle bewahrt Leads nicht so weit zurück auf.",
+          "range_invalid": "Der Zeitraum ist ungültig."
+        }
+      },
+      "backfill": {
+        "title": "Zeitraum nachladen",
+        "intro": "Ruft die Leads vergangener Tage erneut von den Quellen ab, die sie aufbewahren – bis zu {days} Tage auf einmal. Bereits empfangene Leads werden erkannt und es wird nichts gespeichert.",
+        "from": "Von",
+        "to": "Bis (einschließlich)",
+        "sources": "Quellen",
+        "noSources": "Keine Quelle unterstützt das Nachladen.",
+        "submit": "Nachladen starten",
+        "cancel": "Abbrechen",
+        "close": "Schließen",
+        "done": "Fertig",
+        "started": "{count, plural, one {Nachladen gestartet} other {# Nachladevorgänge gestartet}}",
+        "skippedTitle": "Einige Quellen wurden nicht abgerufen:",
+        "skipped": {
+          "not_supported": "unterstützt kein Nachladen",
+          "paused": "ist pausiert",
+          "in_progress": "wird bereits abgerufen",
+          "too_soon": "wurde gerade erst abgerufen",
+          "range_too_old": "bewahrt Leads nicht so weit zurück auf",
+          "not_found": "wurde nicht gefunden"
+        },
+        "problems": {
+          "fromRequired": "Wählen Sie den ersten Tag.",
+          "toRequired": "Wählen Sie den letzten Tag.",
+          "order": "Der letzte Tag liegt vor dem ersten.",
+          "future": "Der erste Tag liegt in der Zukunft.",
+          "tooWide": "Höchstens {days} Tage auf einmal.",
+          "noSource": "Wählen Sie mindestens eine Quelle."
+        },
+        "safe": "Beim erneuten Ausführen geht nichts verloren und nichts wird doppelt angelegt; es werden nur die fehlenden Leads hinzugefügt."
+      }
     }
   }
 }

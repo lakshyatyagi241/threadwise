@@ -140,6 +140,18 @@ describe('leadError', () => {
     ]);
   });
 
+  it('says how long to wait when a source was asked too soon, and what is wrong with a pull', () => {
+    expect(
+      leadError(
+        err(429, ERROR_CODES.LEAD_SYNC_TOO_SOON, [{ path: 'retryAfterSeconds', message: '42' }]),
+      ),
+    ).toMatchObject({ key: 'syncTooSoon', values: { seconds: '42' } });
+    expect(leadError(err(429, ERROR_CODES.LEAD_SYNC_TOO_SOON)).key).toBe('syncTooSoonNoWait');
+    expect(leadError(err(409, ERROR_CODES.LEAD_SYNC_IN_PROGRESS)).key).toBe('syncInProgress');
+    expect(leadError(err(409, ERROR_CODES.LEAD_SYNC_NOT_SUPPORTED)).key).toBe('syncNotSupported');
+    expect(leadError(err(422, ERROR_CODES.LEAD_BACKFILL_RANGE_INVALID)).key).toBe('backfillRange');
+  });
+
   it('asks for a reload on a row version conflict', () => {
     expect(leadError(err(409, ERROR_CODES.ROW_VERSION_CONFLICT))).toMatchObject({
       kind: 'conflict',
@@ -196,6 +208,10 @@ describe('leadError', () => {
       err(409, ERROR_CODES.LEAD_EVENT_NOT_RETRYABLE),
       err(409, ERROR_CODES.LEAD_PAYLOAD_PURGED),
       err(409, ERROR_CODES.LEAD_SOURCE_PAUSED),
+      err(409, ERROR_CODES.LEAD_SYNC_NOT_SUPPORTED),
+      err(409, ERROR_CODES.LEAD_SYNC_IN_PROGRESS),
+      err(429, ERROR_CODES.LEAD_SYNC_TOO_SOON),
+      err(422, ERROR_CODES.LEAD_BACKFILL_RANGE_INVALID),
       err(422, ERROR_CODES.PLAN_FEATURE_LOCKED),
       err(422, ERROR_CODES.PLAN_LIMIT_REACHED),
       err(409, ERROR_CODES.ROW_VERSION_CONFLICT),

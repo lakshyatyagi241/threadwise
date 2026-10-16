@@ -297,11 +297,15 @@ describe('SMS', () => {
     expect(p.prepared.purpose).toBe('marketing_messaging');
     await p.prepared.deliver();
     expect(m.open).toHaveBeenCalledWith(ORG, expect.objectContaining({ engine: 'sms', id: 8 }));
-    const sent = m.sendText.mock.calls[0]![0] as {
-      to: string;
-      text: string;
-      clientReference: string;
-    };
+    const sent = (
+      m.sendText.mock.calls[0] as unknown as [
+        {
+          to: string;
+          text: string;
+          clientReference: string;
+        },
+      ]
+    )[0];
     expect(sent.to).toBe('919876543210');
     expect(sent.text).toBe('Hi Ada, we got your enquiry.');
     // never mistaken for a campaign or broadcast recipient by the engines and receipt handlers

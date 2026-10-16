@@ -9,6 +9,7 @@
 export { LeadsModule } from './leads.module';
 export { LeadIngestModule } from './lead-ingest.module';
 export { LeadsWorkerModule } from './leads-worker.module';
+export { LeadPullModule } from './lead-pull.module';
 export { LEAD_INGEST } from './lead-ingest.port';
 export type {
   LeadConsent,
@@ -16,6 +17,16 @@ export type {
   LeadIngestResult,
   NormalisedLead,
 } from './lead-ingest.port';
+export { LEAD_PULL_REGISTRY } from './lead-pull.port';
+export type {
+  LeadPullCapabilities,
+  LeadPullProgress,
+  LeadPullProvider,
+  LeadPullRegistryPort,
+  LeadPullRequest,
+  LeadPullResult,
+  LeadPullSource,
+} from './lead-pull.port';
 export { LEAD_SOURCE_DIRECTORY } from './lead-source-directory.port';
 export type { ConnectorSourceInput, LeadSourceDirectoryPort } from './lead-source-directory.port';
 // Shared rules the Forms add-on reuses so a web form and a lead source dedupe, coerce and rotate owners the same way.

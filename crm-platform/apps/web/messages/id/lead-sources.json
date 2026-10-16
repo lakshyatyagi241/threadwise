@@ -51,7 +51,12 @@
         "template_not_sendable": "Template ini tidak dapat dikirim: belum disetujui, dijeda, atau membutuhkan file atau variabel tautan.",
         "sender_not_found": "Pengirim ini tidak terhubung."
       },
-      "planLimitUsed": "Anda telah menggunakan {used} dari {limit} sumber prospek. Tingkatkan paket Anda atau hapus sumber yang tidak lagi Anda gunakan."
+      "planLimitUsed": "Anda telah menggunakan {used} dari {limit} sumber prospek. Tingkatkan paket Anda atau hapus sumber yang tidak lagi Anda gunakan.",
+      "syncNotSupported": "Sumber ini mengirim prospeknya sendiri, jadi tidak ada yang perlu ditarik.",
+      "syncInProgress": "Sumber ini sedang ditarik. Tunggu sampai selesai.",
+      "syncTooSoon": "Sumber ini baru saja diminta. Coba lagi dalam {seconds} detik.",
+      "syncTooSoonNoWait": "Sumber ini baru saja diminta. Coba lagi beberapa saat lagi.",
+      "backfillRange": "Rentang itu tidak dapat ditarik: terlalu jauh ke belakang melebihi masa sumber menyimpan prospek, atau mencakup tanggal di masa depan."
     },
     "problems": {
       "nameRequired": "Beri nama sumber ini.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Iklan",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# prospek perlu perhatian}}"
+        "attention": "{count, plural, other {# prospek perlu perhatian}}",
+        "inbox": "Kotak masuk prospek"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Percobaan berikutnya",
       "sentAt": "Terkirim"
+    },
+    "inbox": {
+      "intro": "Semua prospek yang diterima sumber Anda, termasuk yang tidak dapat menjadi kontak. Buka sebuah prospek untuk melihat alasannya, lalu coba lagi prospek yang menunggu.",
+      "chipsLabel": "Filter berdasarkan status",
+      "loading": "Memuat prospek",
+      "more": "Muat lebih banyak",
+      "chips": {
+        "all": "Semua",
+        "attention": "Perlu perhatian",
+        "needs_review": "Perlu ditinjau",
+        "failed": "Gagal",
+        "created": "Dibuat",
+        "updated": "Diperbarui",
+        "duplicate": "Duplikat"
+      },
+      "filters": {
+        "source": "Sumber",
+        "allSources": "Semua sumber",
+        "reason": "Alasan",
+        "anyReason": "Alasan apa pun",
+        "range": "Diterima",
+        "ranges": {
+          "all": "Kapan saja",
+          "day": "24 jam terakhir",
+          "week": "7 hari terakhir",
+          "month": "30 hari terakhir",
+          "custom": "Pilih tanggal"
+        },
+        "from": "Dari",
+        "to": "Sampai (termasuk)",
+        "rangeOrder": "Tanggal akhir lebih awal dari tanggal mulai.",
+        "tests": "Prospek uji coba",
+        "testChoices": {
+          "all": "Tampilkan",
+          "only": "Hanya prospek uji coba",
+          "hide": "Sembunyikan"
+        },
+        "search": "ID prospek diawali dengan",
+        "searchHint": "Hanya ID prospek dari pengirim yang dicari, tidak pernah nama, nomor, atau alamat.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Cari",
+        "reset": "Kembali ke prospek yang menunggu",
+        "showAll": "Tampilkan semua"
+      },
+      "table": {
+        "caption": "Prospek yang diterima semua sumber",
+        "received": "Diterima",
+        "source": "Sumber",
+        "lead": "Prospek",
+        "status": "Status",
+        "reason": "Alasan",
+        "firstMessage": "Pesan pertama",
+        "actions": "Tindakan",
+        "select": "Pilih prospek {id}",
+        "test": "Uji",
+        "view": "Buka",
+        "retry": "Coba lagi"
+      },
+      "empty": {
+        "attentionTitle": "Tidak ada yang menunggu Anda",
+        "attention": "Semua prospek yang masuk sudah menjadi kontak. Prospek yang perlu ditinjau atau gagal akan muncul di sini.",
+        "filteredTitle": "Tidak ada prospek yang cocok",
+        "filtered": "Tidak ada yang cocok dengan filter ini."
+      },
+      "bulk": {
+        "selectPage": "Pilih prospek di halaman ini yang dapat dicoba lagi",
+        "selected": "{count, plural, other {# prospek dipilih}}",
+        "retry": "Coba lagi yang dipilih",
+        "limit": "Maksimal {max} sekaligus."
+      },
+      "result": {
+        "retried": "{count, plural, other {# prospek dicoba lagi.}}",
+        "fixed": "{count, plural, other {# menjadi kontak.}}",
+        "stillWaiting": "{count, plural, other {# masih perlu ditinjau.}}",
+        "skipped": {
+          "not_found": "{count, plural, other {# prospek tidak ditemukan.}}",
+          "not_retryable": "{count, plural, other {# prospek tidak lagi menunggu.}}",
+          "payload_purged": "{count, plural, other {# prospek tidak memiliki data tersimpan lagi untuk dicoba ulang.}}",
+          "source_paused": "{count, plural, other {# prospek berasal dari sumber yang dijeda.}}",
+          "error": "{count, plural, other {# prospek tidak dapat dicoba lagi.}}"
+        }
+      },
+      "drawer": {
+        "title": "Prospek",
+        "close": "Tutup",
+        "retry": "Coba lagi",
+        "auditNote": "Membuka prospek dicatat di log audit. Data pribadi di dalamnya disembunyikan.",
+        "source": "Sumber",
+        "lead": "ID prospek",
+        "received": "Diterima",
+        "processed": "Diproses",
+        "notProcessed": "Belum diproses",
+        "attempts": "Percobaan",
+        "duplicates": "Dikirim ulang",
+        "deliveredAgain": "{count, plural, other {# kali}}",
+        "reason": "Alasan",
+        "firstReply": "Pesan pertama",
+        "contact": "Kontak",
+        "openContact": "Buka kontak",
+        "error": "Kesalahan",
+        "payload": "Data yang dikirim pengirim",
+        "showOriginal": "Tampilkan data asli",
+        "maskedNote": "Nomor telepon, alamat email, nama, alamat, dan teks bebas disembunyikan. Data rahasia dihapus.",
+        "nothingToMask": "Tidak ada data pribadi yang perlu disembunyikan pada prospek ini.",
+        "originalNote": "Data asli, ditampilkan karena Anda mengelola sumber prospek. Penampilannya dicatat di log audit.",
+        "loadingPayload": "Memuat data",
+        "purged": "Data telah dihapus setelah masa retensinya berakhir, jadi tidak ada yang bisa ditampilkan atau dicoba lagi."
+      },
+      "pull": {
+        "title": "Sinkronisasi dan tarik ulang",
+        "intro": "Sumber-sumber ini dapat diminta prospeknya. Sinkronkan sekarang mengambil yang baru; Tarik ulang mengambil lagi rentang tanggal yang sudah lewat. Prospek yang sudah Anda miliki dikenali dan tidak ditambahkan dua kali.",
+        "backfill": "Tarik ulang...",
+        "history": "Sinkronisasi dan tarik ulang terbaru",
+        "syncNow": "Sinkronkan sekarang",
+        "syncStarted": "Menyinkronkan {name}",
+        "paused": "Sumber ini dijeda. Lanjutkan untuk menarik prospeknya.",
+        "nextSync": "Dapat disinkronkan lagi",
+        "syncReady": "Dapat disinkronkan sekarang. Jeda minimal {seconds} detik antar permintaan.",
+        "reach": "Tarik ulang dapat menjangkau {days, plural, other {# hari}} ke belakang.",
+        "never": "Belum pernah ditarik.",
+        "progress": "{percent}%",
+        "counts": "{fetched} diambil, {accepted} baru, {duplicates} sudah ada, {failed} tidak diteruskan",
+        "kinds": {
+          "sync": "Sinkronisasi",
+          "backfill": "Tarik ulang"
+        },
+        "statuses": {
+          "queued": "Antre",
+          "running": "Berjalan",
+          "done": "Selesai",
+          "partial": "Sebagian selesai",
+          "failed": "Gagal"
+        },
+        "errors": {
+          "too_soon": "Sumber meminta kami menunggu.",
+          "not_now": "Sumber belum siap: terlalu cepat, atau koneksinya dijeda.",
+          "provider_error": "Sumber menolak atau gagal.",
+          "credentials_refused": "Sumber menolak kredensial. Hubungkan kembali.",
+          "interrupted": "Terhenti. Jalankan lagi.",
+          "internal_error": "Terjadi kesalahan internal. Jalankan lagi.",
+          "incomplete": "Beberapa prospek tidak diteruskan. Jalankan lagi untuk menyelesaikan.",
+          "not_supported": "Sumber ini tidak dapat melakukannya.",
+          "not_active": "Koneksi tidak aktif.",
+          "range_too_old": "Sumber tidak menyimpan prospek sejauh itu ke belakang.",
+          "range_invalid": "Rentang tidak valid."
+        }
+      },
+      "backfill": {
+        "title": "Tarik ulang rentang tanggal",
+        "intro": "Tarik lagi prospek hari-hari yang sudah lewat dari sumber yang menyimpannya, hingga {days} hari sekaligus. Prospek yang sudah diterima dikenali dan tidak menulis apa pun.",
+        "from": "Dari",
+        "to": "Sampai (termasuk)",
+        "sources": "Sumber",
+        "noSources": "Tidak ada sumber yang dapat ditarik ulang.",
+        "submit": "Mulai tarik ulang",
+        "cancel": "Batal",
+        "close": "Tutup",
+        "done": "Selesai",
+        "started": "{count, plural, other {# penarikan ulang dimulai}}",
+        "skippedTitle": "Beberapa sumber tidak ditarik:",
+        "skipped": {
+          "not_supported": "tidak mendukung tarik ulang",
+          "paused": "dijeda",
+          "in_progress": "sedang ditarik",
+          "too_soon": "baru saja ditarik",
+          "range_too_old": "tidak menyimpan prospek sejauh itu ke belakang",
+          "not_found": "tidak ditemukan"
+        },
+        "problems": {
+          "fromRequired": "Pilih hari pertama.",
+          "toRequired": "Pilih hari terakhir.",
+          "order": "Hari terakhir lebih awal dari hari pertama.",
+          "future": "Hari pertama berada di masa depan.",
+          "tooWide": "Maksimal {days} hari sekaligus.",
+          "noSource": "Pilih setidaknya satu sumber."
+        },
+        "safe": "Tidak ada yang hilang atau terduplikasi jika Anda menjalankannya lagi; hanya prospek yang belum ada yang ditambahkan."
+      }
     }
   }
 }

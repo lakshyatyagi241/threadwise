@@ -51,7 +51,12 @@
         "template_not_sendable": "Ce modèle ne peut pas être envoyé : il n'est pas approuvé, il est en pause, ou il nécessite un fichier ou une variable de lien.",
         "sender_not_found": "Cet expéditeur n'est pas connecté."
       },
-      "planLimitUsed": "Vous avez utilisé {used} sources de leads sur {limit}. Passez à une offre supérieure ou supprimez une source que vous n'utilisez plus."
+      "planLimitUsed": "Vous avez utilisé {used} sources de leads sur {limit}. Passez à une offre supérieure ou supprimez une source que vous n'utilisez plus.",
+      "syncNotSupported": "Cette source envoie elle-même ses leads, il n’y a donc rien à récupérer.",
+      "syncInProgress": "Cette source est déjà en cours de récupération. Attendez la fin de l’opération.",
+      "syncTooSoon": "Cette source vient d’être interrogée. Réessayez dans {seconds} secondes.",
+      "syncTooSoonNoWait": "Cette source vient d’être interrogée. Réessayez dans un moment.",
+      "backfillRange": "Cette période ne peut pas être récupérée : elle remonte plus loin que la durée de conservation des leads par la source, ou s’étend dans le futur."
     },
     "problems": {
       "nameRequired": "Donnez un nom à la source.",
@@ -138,7 +143,8 @@
       "tabs": {
         "ads": "Publicités",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# lead à traiter} other {# leads à traiter}}"
+        "attention": "{count, plural, one {# lead à traiter} other {# leads à traiter}}",
+        "inbox": "Boîte de réception des leads"
       }
     },
     "ads": {
@@ -636,6 +642,184 @@
       },
       "nextTry": "Prochain essai",
       "sentAt": "Envoyé le"
+    },
+    "inbox": {
+      "intro": "Tous les leads reçus par vos sources, y compris ceux qui n’ont pas pu devenir des contacts. Ouvrez un lead pour en voir la raison et relancez ceux qui sont en attente.",
+      "chipsLabel": "Filtrer par statut",
+      "loading": "Chargement des leads",
+      "more": "Charger plus",
+      "chips": {
+        "all": "Tous",
+        "attention": "À traiter",
+        "needs_review": "À vérifier",
+        "failed": "Échec",
+        "created": "Créé",
+        "updated": "Mis à jour",
+        "duplicate": "Doublons"
+      },
+      "filters": {
+        "source": "Source",
+        "allSources": "Toutes les sources",
+        "reason": "Raison",
+        "anyReason": "Toute raison",
+        "range": "Reçu",
+        "ranges": {
+          "all": "Toute période",
+          "day": "24 dernières heures",
+          "week": "7 derniers jours",
+          "month": "30 derniers jours",
+          "custom": "Choisir les dates"
+        },
+        "from": "Du",
+        "to": "Au (inclus)",
+        "rangeOrder": "La date de fin est antérieure à la date de début.",
+        "tests": "Leads de test",
+        "testChoices": {
+          "all": "Afficher",
+          "only": "Leads de test uniquement",
+          "hide": "Masquer"
+        },
+        "search": "L’ID du lead commence par",
+        "searchHint": "Seul l’ID propre à l’expéditeur est recherché, jamais les noms, numéros ou adresses.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Rechercher",
+        "reset": "Retour aux leads en attente",
+        "showAll": "Tout afficher"
+      },
+      "table": {
+        "caption": "Leads reçus par toutes les sources",
+        "received": "Reçu",
+        "source": "Source",
+        "lead": "Lead",
+        "status": "Statut",
+        "reason": "Raison",
+        "firstMessage": "Premier message",
+        "actions": "Actions",
+        "select": "Sélectionner le lead {id}",
+        "test": "Test",
+        "view": "Ouvrir",
+        "retry": "Réessayer"
+      },
+      "empty": {
+        "attentionTitle": "Rien ne vous attend",
+        "attention": "Tous les leads reçus sont devenus des contacts. Les leads à vérifier ou en échec apparaîtront ici.",
+        "filteredTitle": "Aucun lead ne correspond",
+        "filtered": "Aucun résultat pour ces filtres."
+      },
+      "bulk": {
+        "selectPage": "Sélectionner les leads de cette page qui peuvent être relancés",
+        "selected": "{count, plural, one {# lead sélectionné} other {# leads sélectionnés}}",
+        "retry": "Réessayer la sélection",
+        "limit": "{max} maximum à la fois."
+      },
+      "result": {
+        "retried": "{count, plural, one {# lead a été relancé.} other {# leads ont été relancés.}}",
+        "fixed": "{count, plural, one {# est devenu un contact.} other {# sont devenus des contacts.}}",
+        "stillWaiting": "{count, plural, one {# doit encore être vérifié.} other {# doivent encore être vérifiés.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {# lead est introuvable.} other {# leads sont introuvables.}}",
+          "not_retryable": "{count, plural, one {# lead n’est plus en attente.} other {# leads ne sont plus en attente.}}",
+          "payload_purged": "{count, plural, one {# lead n’a plus de données conservées pour être relancé.} other {# leads n’ont plus de données conservées pour être relancés.}}",
+          "source_paused": "{count, plural, one {# lead appartient à une source en pause.} other {# leads appartiennent à des sources en pause.}}",
+          "error": "{count, plural, one {# lead n’a pas pu être relancé.} other {# leads n’ont pas pu être relancés.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Fermer",
+        "retry": "Réessayer",
+        "auditNote": "L’ouverture d’un lead est enregistrée dans le journal d’audit. Les données personnelles qu’il contient sont masquées.",
+        "source": "Source",
+        "lead": "ID du lead",
+        "received": "Reçu",
+        "processed": "Traité",
+        "notProcessed": "Non traité",
+        "attempts": "Tentatives",
+        "duplicates": "Reçu à nouveau",
+        "deliveredAgain": "{count, plural, one {# fois} other {# fois}}",
+        "reason": "Raison",
+        "firstReply": "Premier message",
+        "contact": "Contact",
+        "openContact": "Ouvrir le contact",
+        "error": "Erreur",
+        "payload": "Ce que l’expéditeur a envoyé",
+        "showOriginal": "Afficher l’original",
+        "maskedNote": "Les numéros de téléphone, adresses e-mail, noms, adresses et textes libres sont masqués. Les secrets sont supprimés.",
+        "nothingToMask": "Ce lead ne contient aucune donnée personnelle à masquer.",
+        "originalNote": "Les données d’origine, affichées parce que vous gérez les sources de leads. Leur affichage a été enregistré dans le journal d’audit.",
+        "loadingPayload": "Chargement des données",
+        "purged": "Les données ont été supprimées à l’issue de leur durée de conservation ; il n’y a donc rien à afficher ni à relancer."
+      },
+      "pull": {
+        "title": "Synchronisation et rattrapage",
+        "intro": "Ces sources peuvent être interrogées pour leurs leads. « Synchroniser maintenant » récupère les nouveautés ; « Rattrapage » récupère à nouveau une période passée. Les leads que vous avez déjà sont reconnus et ne sont pas ajoutés deux fois.",
+        "backfill": "Rattrapage...",
+        "history": "Synchronisations et rattrapages récents",
+        "syncNow": "Synchroniser maintenant",
+        "syncStarted": "Synchronisation de {name}",
+        "paused": "Cette source est en pause. Reprenez-la pour récupérer ses leads.",
+        "nextSync": "Nouvelle synchronisation possible",
+        "syncReady": "Peut être synchronisée maintenant. Au moins {seconds} secondes entre deux requêtes.",
+        "reach": "Le rattrapage remonte jusqu’à {days, plural, one {# jour} other {# jours}}.",
+        "never": "Pas encore récupérée.",
+        "progress": "{percent} pour cent",
+        "counts": "{fetched} récupérés, {accepted} nouveaux, {duplicates} déjà connus, {failed} non transmis",
+        "kinds": {
+          "sync": "Synchronisation",
+          "backfill": "Rattrapage"
+        },
+        "statuses": {
+          "queued": "En file d’attente",
+          "running": "En cours",
+          "done": "Terminé",
+          "partial": "Partiel",
+          "failed": "Échec"
+        },
+        "errors": {
+          "too_soon": "La source nous a demandé d’attendre.",
+          "not_now": "La source n’était pas prête : trop tôt pour elle, ou sa connexion est en pause.",
+          "provider_error": "La source a refusé ou a échoué.",
+          "credentials_refused": "La source a refusé les identifiants. Reconnectez-la.",
+          "interrupted": "L’opération a été interrompue. Relancez-la.",
+          "internal_error": "Une erreur interne s’est produite. Relancez l’opération.",
+          "incomplete": "Certains leads n’ont pas été transmis. Relancez l’opération pour terminer.",
+          "not_supported": "Cette source ne prend pas cela en charge.",
+          "not_active": "La connexion n’est pas active.",
+          "range_too_old": "La source ne conserve pas les leads aussi loin dans le passé.",
+          "range_invalid": "La période n’est pas valide."
+        }
+      },
+      "backfill": {
+        "title": "Rattraper une période",
+        "intro": "Récupérez à nouveau les leads des jours passés auprès des sources qui les conservent, jusqu’à {days} jours à la fois. Les leads déjà reçus sont reconnus et rien n’est écrit.",
+        "from": "Du",
+        "to": "Au (inclus)",
+        "sources": "Sources",
+        "noSources": "Aucune source ne permet le rattrapage.",
+        "submit": "Lancer le rattrapage",
+        "cancel": "Annuler",
+        "close": "Fermer",
+        "done": "Terminé",
+        "started": "{count, plural, one {Rattrapage lancé} other {# rattrapages lancés}}",
+        "skippedTitle": "Certaines sources n’ont pas été interrogées :",
+        "skipped": {
+          "not_supported": "ne permet pas le rattrapage",
+          "paused": "est en pause",
+          "in_progress": "est déjà en cours de récupération",
+          "too_soon": "vient d’être interrogée",
+          "range_too_old": "ne conserve pas les leads aussi loin dans le passé",
+          "not_found": "est introuvable"
+        },
+        "problems": {
+          "fromRequired": "Choisissez le premier jour.",
+          "toRequired": "Choisissez le dernier jour.",
+          "order": "Le dernier jour est antérieur au premier.",
+          "future": "Le premier jour est dans le futur.",
+          "tooWide": "{days} jours au maximum à la fois.",
+          "noSource": "Choisissez au moins une source."
+        },
+        "safe": "Rien n’est perdu ni dupliqué si vous le relancez ; seuls les leads manquants sont ajoutés."
+      }
     }
   }
 }

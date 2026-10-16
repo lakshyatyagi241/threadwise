@@ -3,6 +3,7 @@ import { Client } from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { LeadRetentionSweepService } from '../../../src/modules/leads/lead-retention-sweep.service';
+import { LeadSyncRunsRepository } from '../../../src/modules/leads/lead-sync-runs.repository';
 import {
   LEAD_MANAGE,
   LEAD_READ,
@@ -792,7 +793,10 @@ describe('retention of raw payloads (L-12)', () => {
     expect(days(se! as never)).toBe(1);
     expect(days(le! as never)).toBe(30);
 
-    const sweep = new LeadRetentionSweepService(h.app.get(DatabaseService));
+    const sweep = new LeadRetentionSweepService(
+      h.app.get(DatabaseService),
+      new LeadSyncRunsRepository(),
+    );
     expect(await sweep.sweep()).toBe(0);
 
     await h.owner.query(

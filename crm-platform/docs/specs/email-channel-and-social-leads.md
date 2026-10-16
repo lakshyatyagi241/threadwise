@@ -240,9 +240,9 @@ The Bigin screenshot hides the work behind a third-party connector. We split it 
 - **L-13 TikTok Lead Generation** native connector (OAuth plus webhook or polling), once the TikTok app is approved. Reference's TikTok lead webhook is a reference, but its payload shape was flagged unverified there, so verify against current docs.
 - **L-14 LinkedIn Lead Gen Forms** native connector (Marketing API access is partner-gated; until then LinkedIn uses the webhook door through Zapier/Make).
 - **L-15 Google Ads lead form extensions** through the webhook door template, native later.
-- **L-16 Speed-to-lead:** optional automatic first message (WhatsApp template or email) on new lead, using existing send paths and quota rules.
-- **L-17 Lead inbox view:** a list of recent lead events with status (created, updated, duplicate, needs review, failed) and one-click retry.
-- **L-18 Backfill on connect** (last N days) and a manual "sync now".
+- **L-16 Speed-to-lead:** optional automatic first message (WhatsApp template or email) on new lead, using existing send paths and quota rules. Built (BL-014): see docs/api/leads.md, "Speed-to-lead".
+- **L-17 Lead inbox view:** a list of recent lead events with status (created, updated, duplicate, needs review, failed) and one-click retry. Built (BL-014): a tab of Social leads, see docs/api/leads.md, "The lead inbox".
+- **L-18 Backfill on connect** (last N days) and a manual "sync now". Built for pull-capable sources (BL-014): the inbox's Sync now and Backfill; "on connect" is not automatic, a person starts it.
 - **L-19 Zapier/Make ready-made templates** and a documented sample payload in the docs.
 
 #### P2
