@@ -200,6 +200,84 @@ function startSampler(port) {
     return windows;
   };
 }
+/**
+ * What Postgres is doing while a profile runs: every 2 s, the other sessions of the database grouped by state, wait event and the
+ * first 90 characters of the statement. A slow API with a quiet event loop is waiting on something; this says on what.
+ */
+function startPgSampler(url) {
+  const counts = new Map();
+  let samples = 0;
+  let stopped = false;
+  const loop = (async () => {
+    const c = new Client({ connectionString: url });
+    await c.connect();
+    try {
+      while (!stopped) {
+        try {
+          const r = await c.query(
+            `SELECT state, coalesce(wait_event_type, '-') AS wt, coalesce(wait_event, '-') AS we, left(regexp_replace(query, '\\s+', ' ', 'g'), 90) AS q
+               FROM pg_stat_activity WHERE datname = 'crm' AND pid <> pg_backend_pid() AND backend_type = 'client backend' AND state <> 'idle'`,
+          );
+          samples++;
+          for (const row of r.rows) {
+            const key = `${row.state} | ${row.wt}/${row.we} | ${row.q}`;
+            counts.set(key, (counts.get(key) ?? 0) + 1);
+          }
+        } catch {
+          /* ignore a missed sample */
+        }
+        await sleep(2000);
+      }
+    } finally {
+      await c.end().catch(() => undefined);
+    }
+  })();
+  return async () => {
+    stopped = true;
+    await loop;
+    const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+    return {
+      samples,
+      note: 'non-idle sessions of the app database, summed over samples; "Lock/..." or "Client/ClientRead" waits and long-running statements show where requests wait',
+      top: top.map(([k, n]) => ({
+        perSample: Math.round((n / Math.max(1, samples)) * 100) / 100,
+        what: k,
+      })),
+    };
+  };
+}
+/**
+ * How fast the machine's own plumbing is right now: 100 sequential `SELECT 1` and Redis `PING` round trips from a Node process on
+ * the host to the containers. Two runs of the same workload on the same laptop differed several-fold; this is the number that says
+ * whether two runs are comparable at all (Docker Desktop's port forwarding on Windows is the usual suspect).
+ */
+async function calibrate(pgUrl, redisPort) {
+  const ioredis = require('ioredis');
+  const IORedis = ioredis.default ?? ioredis;
+  const pg = new Client({ connectionString: pgUrl });
+  await pg.connect();
+  const redis = new IORedis({ host: '127.0.0.1', port: redisPort, maxRetriesPerRequest: null });
+  const time = async (fn) => {
+    const xs = [];
+    for (let i = 0; i < 100; i++) {
+      const t = performance.now();
+      await fn();
+      xs.push(performance.now() - t);
+    }
+    xs.sort((a, b) => a - b);
+    const r = (x) => Math.round(x * 100) / 100;
+    return { p50: r(xs[50]), p99: r(xs[98]), max: r(xs[99]) };
+  };
+  try {
+    return {
+      postgresSelect1Ms: await time(() => pg.query('SELECT 1')),
+      redisPingMs: await time(() => redis.ping()),
+    };
+  } finally {
+    await pg.end().catch(() => undefined);
+    redis.disconnect();
+  }
+}
 const stat = (xs) => {
   const v = xs.filter((x) => Number.isFinite(x));
   if (v.length === 0) return undefined;
@@ -503,11 +581,14 @@ try {
   log(`settling ${SETTLE_SECONDS} s`);
   await sleep(SETTLE_SECONDS * 1000);
 
+  results.calibrationBefore = await calibrate(ownerUrl, P.redis);
+  log(`round trips from the host: ${JSON.stringify(results.calibrationBefore)}`);
   for (const profile of PROFILES) {
     log(`profile ${profile} starting`);
     const before = await scrape(P.apiMetrics);
     const stopApi = startSampler(P.apiMetrics);
     const stopWorker = startSampler(P.workerMetrics);
+    const stopPg = startPgSampler(ownerUrl);
     const t0 = Date.now();
     let k6;
     if (profile === 'idle') {
@@ -519,6 +600,7 @@ try {
     await sleep(6000); // one more window, so the last seconds of load are reported
     const apiWindows = await stopApi();
     const workerWindows = await stopWorker();
+    const postgres = await stopPg();
     const after = await scrape(P.apiMetrics);
     const b0 = blockedWindows(before);
     const b1 = blockedWindows(after);
@@ -528,6 +610,7 @@ try {
       api: summariseWindows(apiWindows),
       worker: summariseWindows(workerWindows),
       blockedWindows: { warn: b1.warn - b0.warn, critical: b1.critical - b0.critical },
+      postgres,
       serverRequestMs: {
         p50: q(0.5),
         p95: q(0.95),
@@ -538,6 +621,7 @@ try {
       k6ExitCode: k6?.code,
       k6Failed: k6 && !k6.summary ? k6.tail : undefined,
     };
+    results.profiles[profile].calibrationAfter = await calibrate(ownerUrl, P.redis);
     log(
       `profile ${profile} done: loop delay p99 median ${results.profiles[profile].api.loopDelayMs.p99?.median} ms, max ${results.profiles[profile].api.loopDelayMs.max?.max} ms`,
     );
@@ -580,9 +664,9 @@ writeFileSync(
           'developer laptop; API, worker, Postgres, Redis and the k6 container all on one machine',
         loadGenerator: K6_IMAGE,
         workload: 'tools/event-loop-audit/load/workload.k6.js',
-        mix: 'contact list 55%, search 12%, get 15%, inbox list 8%, inbox counts 4%, create 4%, update 2%',
+        mix: 'contact list 52%, search 12%, get 15%, inbox list 8%, inbox counts 4%, create 4%, update 2%, /health 3% (control, no tenant work)',
         rates:
-          'normal 10 req/s, peak 40 req/s, spike 10 to 120 req/s (3x peak), soak 10 req/s; open model (arrival rate)',
+          'normal 5 req/s, peak 20 req/s, spike 5 to 60 req/s (3x peak), soak 5 req/s; open model (arrival rate)',
         profilesRequested: PROFILES,
         seconds: { normalAndPeak: SECONDS, idle: IDLE_SECONDS, soakMinutes: SOAK_MINUTES },
       },

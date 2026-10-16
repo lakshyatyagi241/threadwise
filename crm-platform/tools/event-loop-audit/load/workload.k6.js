@@ -6,9 +6,10 @@
 //   ORG_SLUG, EMAIL, PASSWORD   the seeded workspace's owner
 //   SECONDS   length of normal / peak (default 120); SOAK_MINUTES for soak (default 10)
 //
-// The arrival rates are CHOSEN, not derived from production traffic (none was available): normal 10 req/s, peak 40 req/s, spike
-// ramps to 120 req/s (3x peak). A first 30 s trial at 20 req/s used about a third of one core in the API, so 40 req/s is a busy but
-// not saturated single process on the machine this was written on, and 120 req/s is meant to saturate it. Open model (constant arrival rate): when the server falls behind, k6 reports dropped iterations and
+// The arrival rates are CHOSEN, not derived from production traffic (none was available): normal 5 req/s, peak 20 req/s, spike
+// ramps to 60 req/s (3x peak). A first full run at 10 / 40 / 120 req/s on the laptop this was written on collapsed at 40 req/s
+// (caller latency of tens of seconds, 16 % failed, thousands of dropped iterations) without the event loop being the cause, so the
+// rates were lowered to keep "peak" in the range where the stack still answers. Re-derive them from real traffic. Open model (constant arrival rate): when the server falls behind, k6 reports dropped iterations and
 // latency grows instead of the load politely slowing down, which is the behaviour a baseline needs to show.
 import http from 'k6/http';
 import { check } from 'k6';
@@ -24,7 +25,7 @@ const SOAK_MINUTES = Number(__ENV.SOAK_MINUTES || 10);
 const scenarios = {
   normal: {
     executor: 'constant-arrival-rate',
-    rate: 10,
+    rate: 5,
     timeUnit: '1s',
     duration: `${SECONDS}s`,
     preAllocatedVUs: 20,
@@ -32,7 +33,7 @@ const scenarios = {
   },
   peak: {
     executor: 'constant-arrival-rate',
-    rate: 40,
+    rate: 20,
     timeUnit: '1s',
     duration: `${SECONDS}s`,
     preAllocatedVUs: 50,
@@ -40,21 +41,21 @@ const scenarios = {
   },
   spike: {
     executor: 'ramping-arrival-rate',
-    startRate: 10,
+    startRate: 5,
     timeUnit: '1s',
     preAllocatedVUs: 100,
     maxVUs: 800,
     stages: [
-      { duration: '20s', target: 10 },
-      { duration: '10s', target: 120 },
-      { duration: '40s', target: 120 },
-      { duration: '10s', target: 10 },
-      { duration: '40s', target: 10 },
+      { duration: '20s', target: 5 },
+      { duration: '10s', target: 60 },
+      { duration: '40s', target: 60 },
+      { duration: '10s', target: 5 },
+      { duration: '40s', target: 5 },
     ],
   },
   soak: {
     executor: 'constant-arrival-rate',
-    rate: 10,
+    rate: 5,
     timeUnit: '1s',
     duration: `${SOAK_MINUTES}m`,
     preAllocatedVUs: 20,
@@ -62,7 +63,16 @@ const scenarios = {
   },
 };
 
-const ROUTES = ['list', 'search', 'get', 'update', 'create', 'inbox_list', 'inbox_counts'];
+const ROUTES = [
+  'list',
+  'search',
+  'get',
+  'update',
+  'create',
+  'inbox_list',
+  'inbox_counts',
+  'health',
+];
 // Naming a threshold per route is what makes k6 export a summary line for each route tag.
 const thresholds = { http_req_failed: ['rate>=0'] };
 for (const r of ROUTES) thresholds[`http_req_duration{name:${r}}`] = ['max>=0'];
@@ -109,14 +119,17 @@ function pick(weights) {
   return weights[0][0];
 }
 
+// `health` is the control: an unauthenticated route that does no tenant work. If it is slow too, the wait is in the process or the
+// network path to it; if it is fast while the rest are slow, the wait is in the authenticated, database-backed path.
 const MIX = [
-  ['list', 55],
+  ['list', 52],
   ['search', 12],
   ['get', 15],
   ['inbox_list', 8],
   ['inbox_counts', 4],
   ['create', 4],
   ['update', 2],
+  ['health', 3],
 ];
 const SEARCH_WORDS = ['Load', 'Contact', 'load1', 'load22', '99', 'example'];
 
@@ -140,6 +153,9 @@ export default function (data) {
     }
     case 'get':
       res = http.get(`${BASE}/v2/contacts/${id}`, { headers: auth, tags: { name: 'get' } });
+      break;
+    case 'health':
+      res = http.get(`${BASE}/health`, { tags: { name: 'health' } });
       break;
     case 'inbox_list':
       res = http.get(`${BASE}/v2/inbox/conversations?limit=25`, {
