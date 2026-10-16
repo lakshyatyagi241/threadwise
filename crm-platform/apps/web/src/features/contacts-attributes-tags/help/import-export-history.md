@@ -27,6 +27,10 @@ This page lists the contact files your workspace has imported and the exports it
 - **Status**: Queued, Running, Completed or Failed. A failed import shows the reason when you hover over it.
 - **Scope** of an export: ticked contacts, or everything matching the filter.
 
+## Time zone column
+
+A column named **timezone**, **time zone** or **tz** sets the contact's IANA time zone, for example `Asia/Kolkata`. A row whose zone is not a real one is rejected and listed as an invalid time zone. A zone in the file fills a contact that has none (or one an earlier import set); it never replaces a zone someone chose. The export has a **timezone** column.
+
 ## Plan and access
 
 The imports list needs the permission to import contacts, and the exports list needs the permission to export them. Owners and Admins hold both by default; a section you may not use is not shown.

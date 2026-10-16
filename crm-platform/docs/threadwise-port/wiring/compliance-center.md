@@ -53,3 +53,5 @@ BL-191 to BL-193 (quiet hours: the remaining senders, a recurring campaign's hel
 the spec, section 11.8.
 
 BL-191 (built): the remaining senders hold the same way. Held-recipient helpers live in `apps/api/src/modules/compliance-center/held-recipients.ts` (`splitByQuietHours`, `holdRecipient`, `heldSummaries`, `scheduleWake`); phone-only audiences use `SendWindowService.checkPhones`. See the per-channel wiring files.
+
+BL-192 and BL-193 (built): a recurring campaign's catch-up and the exact flow wake-up are described in `wiring/campaigns.md` and `wiring/flow-runtime-engine.md`. The contact time zone is the `contacts.timezone` / `timezone_source` pair (`SendWindowService.factRows` reads it before the older property; `SendWindowService.contactWindow` backs `GET /v2/contacts/:id/send-window`; the contact form, the profile `TimezoneCard`, the bulk edit dialog, the import column, the export column, REST v1 and the segment field `timezone` write or read it). A zone from the number's country or the workspace is never stored.

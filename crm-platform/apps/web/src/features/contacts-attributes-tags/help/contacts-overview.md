@@ -53,6 +53,12 @@ Tags come from one workspace library and are used in two places, with two differ
 
 A tag you create in one place is available in the other, and a tag deleted from either place is gone from both. See [Conversation tags](help:inbox-tags) and [Team inbox](help:team-inbox-overview).
 
+## Time zone and quiet hours
+
+Each contact has a **Time zone**, the clock your quiet hours are read on (see [Compliance center](help:compliance-center)). Set it in the contact form, on the contact's page with **Change**, or for several contacts at once with **Update** (pick a zone, or **Clear the time zone**). Leave it empty and the clock is worked out for you: from the country of the phone number, then your fallback time zone, then your workspace's.
+
+The **Time zone** card on a contact's page says which zone is used and why: set by staff, by a CSV import or through the API, or read from the number's country or your workspace. It shows the time there now, whether a marketing message could go now, the next time one may go if it would wait, and how many messages are already waiting. A zone you set is never replaced by one worked out from the number, and a CSV import fills only contacts that have none. Find contacts by zone with **Add condition** and the field **Time zone**.
+
 ## Plan and access
 
 Opening the screen needs permission to read contacts. Creating, editing, deleting, exporting, importing and merging each need their own permission. Your plan can cap the number of contacts; at the cap, adding says so.

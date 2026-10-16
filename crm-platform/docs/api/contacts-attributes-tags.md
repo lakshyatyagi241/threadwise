@@ -406,3 +406,16 @@ workspace has them). Everything else reuses `record.contacts.*`, `record.tags.*`
 ## Date of birth, minor filter and import columns (BL-190, BL-217)
 
 `dateOfBirth` and `isMinor` on the contact; `minor=true|false` on the list and on every bulk selection filter; segment fields `minor`, `dateOfBirth`, `age`; import columns `dateOfBirth` and `minor`. Details in [contact-consent.md](contact-consent.md) ("How a minor is detected"). The CSV export does not carry the date of birth (it is personal data nobody asked to take out in bulk).
+
+## Contact time zone (BL-193)
+
+A contact carries its own IANA time zone, the clock its marketing messages are read on (quiet hours, `docs/api/compliance.md`).
+
+- **Fields.** `timezone` (`Asia/Kolkata`, stored in the runtime's spelling, `asia/kolkata` is accepted) and `timezoneSource` (`staff`, `import`, `api`, or `null` with no zone) on `ContactResponse`; `timezone` on `POST /v2/contacts`, on `PATCH /v2/contacts/:id` (`null` clears it) and in `values` of `POST /v2/contacts/bulk/update` (recorded as `staff`). A name that is not an IANA zone is 422.
+- **Who set it.** The app (form, profile card, bulk edit) writes `staff`; a write with an API key, or by a caller that says `api`, writes `api`; the CSV import writes `import`. An update that does not mention `timezone` keeps it and its source. Clearing writes both as `null`. The audit trail records the change.
+- **Import.** A column named `timezone`, `time zone`, `tz`, `iana` or `contact timezone`. A cell that is not a zone rejects the row (`invalid_timezone`). A zone fills a contact that has none, or one an earlier import set; it never replaces one a person or the API chose.
+- **Export.** A `timezone` column after `owner_email`.
+- **Filter.** `timezone=Asia/Kolkata` and `noTimezone=true` on the list, on every bulk selection filter and on the export; `timezone` is also a field of segment rules ("Add condition", saved segments, Ask in English).
+- **REST v1.** `timezone` (write: create and update, `null` clears) and read-only `timezone_source` on the contact.
+- **`GET /v2/contacts/:id/send-window`** (permission `record.contacts.read`, the contact's record scope). `{ timezone, timezoneSource, clock: { zones, zone, source, localTime }, quietHours: off | open | held, nextSendAt, heldCount, heldUntil }`: the stored zone, the clock a send would really use (`contact_field` for the stored zone or the older property, `phone_country` for the number's country (several zones when the country spans hours), `window_setting` for the fallback zone chosen in Compliance center, `workspace`, `utc`), what the quiet hours say now, and what already waits (broadcast, campaign, scheduled and channel broadcast recipients, queued chat messages). It is the same rule the senders use, so the profile card cannot disagree with a send.
+- **Not stored on purpose.** A zone worked out from the number or the workspace is read on every send, so it is always current and never overwrites a chosen zone. Migration `20261226090000_contact_time_zone.sql` (`contacts.timezone`, `timezone_source`, partial index on the zone).
