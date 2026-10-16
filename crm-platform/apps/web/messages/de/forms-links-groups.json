@@ -95,7 +95,21 @@
         "required": "Erforderlich",
         "removeField": "Entfernen",
         "options": "Optionen (durch Kommas getrennt)",
-        "optionsPlaceholder": "Option 1, Option 2, Option 3"
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Zuordnung zu",
+        "mapsToHint": "Speichert diese Antwort beim Absenden des Formulars in einer Kontakteigenschaft.",
+        "mapsToNone": "Nicht in einer Kontakteigenschaft speichern",
+        "mapsToSystemGroup": "Kontaktfelder",
+        "mapsToCustomGroup": "Benutzerdefinierte Eigenschaften",
+        "mapsToSystem": {
+          "name": "Vollständiger Name",
+          "first_name": "Vorname",
+          "last_name": "Nachname",
+          "email": "E-Mail",
+          "title": "Berufsbezeichnung",
+          "language": "Sprache",
+          "address": "Adresse"
+        }
       },
       "fieldKind": {
         "heading": "Überschrift",

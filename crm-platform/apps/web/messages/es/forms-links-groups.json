@@ -95,7 +95,21 @@
         "required": "Obligatorio",
         "removeField": "Quitar",
         "options": "Opciones (separadas por comas)",
-        "optionsPlaceholder": "Opción 1, Opción 2, Opción 3"
+        "optionsPlaceholder": "Opción 1, Opción 2, Opción 3",
+        "mapsTo": "Se asigna a",
+        "mapsToHint": "Guarda esta respuesta en una propiedad del contacto al enviar el formulario.",
+        "mapsToNone": "No guardar en una propiedad del contacto",
+        "mapsToSystemGroup": "Campos del contacto",
+        "mapsToCustomGroup": "Propiedades personalizadas",
+        "mapsToSystem": {
+          "name": "Nombre completo",
+          "first_name": "Nombre",
+          "last_name": "Apellido",
+          "email": "Correo electrónico",
+          "title": "Cargo",
+          "language": "Idioma",
+          "address": "Dirección"
+        }
       },
       "fieldKind": {
         "heading": "Encabezado",

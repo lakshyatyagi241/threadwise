@@ -24,6 +24,22 @@ export function parseFormToken(token: string): { formId: number; runRef: string 
   return m ? { formId: Number(m[1]), runRef: m[2]! } : null;
 }
 
+/** Field id -> `mapsTo` out of a form's stored `definition_json`, however malformed; never throws. */
+export function extractFieldMappings(definitionJson: unknown): Record<string, string> {
+  const def = definitionJson as
+    | { screens?: Array<{ fields?: Array<{ id?: unknown; mapsTo?: unknown }> }> }
+    | null
+    | undefined;
+  const out: Record<string, string> = {};
+  for (const screen of def?.screens ?? []) {
+    for (const field of screen.fields ?? []) {
+      if (typeof field.id === 'string' && typeof field.mapsTo === 'string' && field.mapsTo)
+        out[field.id] = field.mapsTo;
+    }
+  }
+  return out;
+}
+
 /**
  * The WhatsApp Form tables as the flow runtime needs them (TW-FLR-043): which form a node names and whether it can be sent, and where
  * a submission is written. The forms domain (forms, links and groups) owns the authoring screens and the Meta publishing; the tables
@@ -63,6 +79,16 @@ export class WaFormRecords {
       );
       const r = rowsOf(res)[0];
       return r ? String(r.title ?? '') : null;
+    });
+  }
+
+  /** Field id -> `mapsTo` for every field of this form that has one set, read straight off its stored definition. */
+  async fieldMappings(orgId: number, formId: number): Promise<Record<string, string>> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const res = await tx.execute(
+        sql`SELECT definition_json FROM wa_forms WHERE org_id = ${orgId} AND id = ${formId}`,
+      );
+      return extractFieldMappings(rowsOf(res)[0]?.definition_json);
     });
   }
 
