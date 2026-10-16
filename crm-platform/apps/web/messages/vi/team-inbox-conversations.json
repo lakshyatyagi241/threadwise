@@ -144,7 +144,8 @@
       "statusFilter": "Trạng thái",
       "statusOpen": "Đang mở",
       "statusAll": "Mọi trạng thái",
-      "channelFilter": "Kênh"
+      "channelFilter": "Kênh",
+      "selectRow": "Chọn {name}"
     },
     "status": {
       "received": "Đã nhận",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "Trả lời nhanh",
-      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi."
+      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi.",
+      "toolbar": {
+        "label": "Định dạng tin nhắn",
+        "bold": "In đậm",
+        "italic": "In nghiêng",
+        "underline": "Gạch chân",
+        "strike": "Gạch ngang",
+        "bullets": "Danh sách gạch đầu dòng",
+        "numbers": "Danh sách đánh số",
+        "ai": {
+          "open": "Trợ lý AI thông minh",
+          "noModel": "Không gian làm việc này chưa bật mô hình AI nào",
+          "title": "Trợ lý AI thông minh",
+          "condense": "Rút gọn",
+          "condenseHint": "Làm văn bản ngắn gọn, súc tích hơn",
+          "fix": "Sửa ngữ pháp",
+          "fixHint": "Sửa lỗi ngữ pháp và chính tả",
+          "positive": "Giọng tích cực",
+          "positiveHint": "Làm văn bản tích cực và vui vẻ hơn",
+          "translate": "Dịch",
+          "translateHint": "Dịch sang các ngôn ngữ khác",
+          "selectLanguage": "Chọn ngôn ngữ",
+          "searchLanguages": "Tìm ngôn ngữ…",
+          "noLanguage": "Không có ngôn ngữ phù hợp",
+          "working": "Đang xử lý…",
+          "empty": "Hãy viết tin nhắn trước.",
+          "failed": "AI không thể thay đổi văn bản. Hãy thử lại."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",

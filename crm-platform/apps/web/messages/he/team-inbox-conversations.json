@@ -144,7 +144,8 @@
       "statusFilter": "סטטוס",
       "statusOpen": "פתוחה",
       "statusAll": "כל הסטטוסים",
-      "channelFilter": "ערוץ"
+      "channelFilter": "ערוץ",
+      "selectRow": "בחירת {name}"
     },
     "status": {
       "received": "התקבלה",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "תגובות שמורות",
-      "savedReplyIssues": "לא מולאו ונשארו כפי שנכתבו ({count}): {list}. יש לתקן לפני השליחה."
+      "savedReplyIssues": "לא מולאו ונשארו כפי שנכתבו ({count}): {list}. יש לתקן לפני השליחה.",
+      "toolbar": {
+        "label": "עיצוב הודעה",
+        "bold": "מודגש",
+        "italic": "נטוי",
+        "underline": "קו תחתון",
+        "strike": "קו חוצה",
+        "bullets": "רשימת תבליטים",
+        "numbers": "רשימה ממוספרת",
+        "ai": {
+          "open": "עוזר AI חכם",
+          "noModel": "לא הופעל מודל AI למרחב העבודה הזה",
+          "title": "עוזר AI חכם",
+          "condense": "קיצור",
+          "condenseHint": "קיצור הטקסט והפיכתו לתמציתי",
+          "fix": "תיקון דקדוק",
+          "fixHint": "תיקון שגיאות דקדוק וכתיב",
+          "positive": "טון חיובי",
+          "positiveHint": "הפיכת הטקסט לחיובי ונלהב יותר",
+          "translate": "תרגום",
+          "translateHint": "תרגום לשפות שונות",
+          "selectLanguage": "בחירת שפה",
+          "searchLanguages": "חיפוש שפות…",
+          "noLanguage": "אין שפה תואמת",
+          "working": "בעבודה…",
+          "empty": "כתבו הודעה קודם.",
+          "failed": "ה-AI לא הצליח לשנות את הטקסט. נסו שוב."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "הערות וציר זמן",

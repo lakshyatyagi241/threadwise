@@ -144,7 +144,8 @@
       "statusFilter": "Status",
       "statusOpen": "Open",
       "statusAll": "Every status",
-      "channelFilter": "Channel"
+      "channelFilter": "Channel",
+      "selectRow": "Select {name}"
     },
     "status": {
       "received": "Received",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "Saved replies",
-      "savedReplyIssues": "Not filled in and left as written ({count}): {list}. Fix before you send."
+      "savedReplyIssues": "Not filled in and left as written ({count}): {list}. Fix before you send.",
+      "toolbar": {
+        "label": "Message formatting",
+        "bold": "Bold",
+        "italic": "Italic",
+        "underline": "Underline",
+        "strike": "Strikethrough",
+        "bullets": "Bulleted list",
+        "numbers": "Numbered list",
+        "ai": {
+          "open": "Smart AI Assistant",
+          "noModel": "No AI model is enabled for this workspace",
+          "title": "Smart AI Assistant",
+          "condense": "Condense",
+          "condenseHint": "Make text shorter and more concise",
+          "fix": "Fix Grammar",
+          "fixHint": "Correct grammar and spelling errors",
+          "positive": "Positive Tone",
+          "positiveHint": "Make text more positive and upbeat",
+          "translate": "Translate",
+          "translateHint": "Translate to different languages",
+          "selectLanguage": "Select Language",
+          "searchLanguages": "Search languages…",
+          "noLanguage": "No language matches",
+          "working": "Working on it…",
+          "empty": "Write a message first.",
+          "failed": "The AI could not change the text. Try again."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notes and timeline",

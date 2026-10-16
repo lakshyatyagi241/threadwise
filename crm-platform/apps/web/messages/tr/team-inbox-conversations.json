@@ -144,7 +144,8 @@
       "statusFilter": "Durum",
       "statusOpen": "Açık",
       "statusAll": "Tüm durumlar",
-      "channelFilter": "Kanal"
+      "channelFilter": "Kanal",
+      "selectRow": "{name} seç"
     },
     "status": {
       "received": "Alındı",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "Hazır yanıtlar",
-      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin."
+      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin.",
+      "toolbar": {
+        "label": "Mesaj biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "underline": "Altı çizili",
+        "strike": "Üstü çizili",
+        "bullets": "Madde işaretli liste",
+        "numbers": "Numaralı liste",
+        "ai": {
+          "open": "Akıllı Yapay Zekâ Asistanı",
+          "noModel": "Bu çalışma alanı için etkin bir yapay zekâ modeli yok",
+          "title": "Akıllı Yapay Zekâ Asistanı",
+          "condense": "Kısalt",
+          "condenseHint": "Metni daha kısa ve öz yap",
+          "fix": "Dilbilgisini düzelt",
+          "fixHint": "Dilbilgisi ve yazım hatalarını düzelt",
+          "positive": "Olumlu ton",
+          "positiveHint": "Metni daha olumlu ve neşeli yap",
+          "translate": "Çevir",
+          "translateHint": "Farklı dillere çevir",
+          "selectLanguage": "Dil seç",
+          "searchLanguages": "Dil ara…",
+          "noLanguage": "Eşleşen dil yok",
+          "working": "İşleniyor…",
+          "empty": "Önce bir mesaj yazın.",
+          "failed": "Yapay zekâ metni değiştiremedi. Tekrar deneyin."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",

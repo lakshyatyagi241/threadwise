@@ -169,8 +169,9 @@ export function DashboardScreen() {
     <div className="space-y-5">
       {/* Sticky under the 56px top bar (`top-14`); the bleed (-mx / px) lets its background cover the page padding while the cards scroll beneath it. */}
       <header className="sticky top-14 z-30 -mx-4 -mt-4 flex flex-wrap items-end justify-between gap-3 border-b border-border bg-background px-4 pb-3 pt-4 md:-mx-6 md:-mt-6 md:px-6 md:pt-6">
-        <div className="space-y-1.5">
-          <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+        {/* The whole heading block is Inter, weight 600 (the kicker, the greeting and the line under it). */}
+        <div className="space-y-1.5 font-[family-name:var(--font-inter)] font-semibold">
+          <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             <span>{t('kicker')}</span>
             {syncedAgo !== null && nowMs > 0 && (
               <>
@@ -182,14 +183,14 @@ export function DashboardScreen() {
               </>
             )}
           </p>
-          <h1 className="font-serif text-2xl leading-tight sm:text-4xl">
+          <h1 className="text-2xl leading-tight sm:text-4xl">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
             <em className="text-primary">
               {running > 0 ? t('running', { n: running }) : t('calm')}
             </em>
           </h1>
           {s && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-semibold text-muted-foreground">
               {t(unofficial ? 'subline' : 'sublineOfficial', {
                 date: new Intl.DateTimeFormat(locale, {
                   timeZone: tz,

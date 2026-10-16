@@ -61,6 +61,8 @@ export interface ConversationListProps {
     selection: Selection;
     onToggleSelecting: () => void;
     onSelect: (id: string, shift: boolean) => void;
+    /** The tick that appears on a row under the pointer: starts or extends the selection. */
+    onPick: (id: string, shift: boolean) => void;
     bar: ReactNode;
   };
 }
@@ -310,6 +312,7 @@ export function ConversationList(props: ConversationListProps) {
                 selected={props.bulk?.selection.has(row.id) ?? false}
                 onSelect={props.bulk?.onSelect}
                 onPriority={props.onRowPriority}
+                onPick={props.bulk?.onPick}
               />
             ))}
           </ul>

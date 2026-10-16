@@ -144,7 +144,8 @@
       "statusFilter": "ステータス",
       "statusOpen": "未対応",
       "statusAll": "すべてのステータス",
-      "channelFilter": "チャネル"
+      "channelFilter": "チャネル",
+      "selectRow": "{name} を選択"
     },
     "status": {
       "received": "受信済み",
@@ -467,7 +468,35 @@
         }
       },
       "savedReplies": "返信テンプレート",
-      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。"
+      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。",
+      "toolbar": {
+        "label": "メッセージの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "underline": "下線",
+        "strike": "取り消し線",
+        "bullets": "箇条書き",
+        "numbers": "番号付きリスト",
+        "ai": {
+          "open": "スマートAIアシスタント",
+          "noModel": "このワークスペースではAIモデルが有効になっていません",
+          "title": "スマートAIアシスタント",
+          "condense": "要約",
+          "condenseHint": "文章を短く簡潔にします",
+          "fix": "文法を修正",
+          "fixHint": "文法とスペルの誤りを直します",
+          "positive": "前向きなトーン",
+          "positiveHint": "文章をより前向きで明るくします",
+          "translate": "翻訳",
+          "translateHint": "別の言語に翻訳します",
+          "selectLanguage": "言語を選択",
+          "searchLanguages": "言語を検索…",
+          "noLanguage": "一致する言語がありません",
+          "working": "処理中…",
+          "empty": "先にメッセージを入力してください。",
+          "failed": "AIが文章を変更できませんでした。もう一度お試しください。"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",

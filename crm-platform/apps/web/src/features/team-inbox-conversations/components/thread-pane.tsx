@@ -54,6 +54,7 @@ import {
 } from './icons';
 import { MessageStream } from './message-stream';
 import { ThreadSearch } from './thread-search';
+import type { AiModelChoice } from './composer-toolbar';
 import { Avatar, ChannelTag } from './parts';
 
 const UUID_KEY = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -79,6 +80,8 @@ export interface ThreadPaneProps {
   mode: ComposerMode;
   onMode: (mode: ComposerMode) => void;
   composerRef: Ref<ComposerHandle>;
+  /** The model of the composer's Smart AI Assistant (null: none is enabled). */
+  aiModel?: AiModelChoice | null;
   panelOpen: boolean;
   onTogglePanel: () => void;
   onBack: () => void;
@@ -500,6 +503,7 @@ export function ThreadPane(props: ThreadPaneProps) {
       )}
 
       <Composer
+        aiModel={props.aiModel}
         conversationId={props.conversationId}
         mode={props.mode}
         onMode={props.onMode}
