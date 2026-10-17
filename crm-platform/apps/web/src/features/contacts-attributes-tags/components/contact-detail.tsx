@@ -122,7 +122,8 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
       n: (f?.n ?? 0) + 1,
       ...(opts?.clickedAt ? { clickedAt: opts.clickedAt } : {}),
     });
-    if (target === 'company' || COMPOSE_TABS.includes(current)) setFocus(request);
+    if (target === 'company' || target === 'score' || COMPOSE_TABS.includes(current))
+      setFocus(request);
     else {
       router.push(
         `${sectionHref(id, ACTION_SECTION[target])}?add=${target}${opts?.clickedAt ? `&at=${opts.clickedAt}` : ''}`,
@@ -184,6 +185,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
             onOpenSection={open}
             onAdd={onAdd}
             companyFocusSignal={focus?.target === 'company' ? focus.n : undefined}
+            scoreFocusSignal={focus?.target === 'score' ? focus.n : undefined}
           />
         </aside>
       </div>

@@ -126,6 +126,7 @@ export function ContactSection({
           onAdd={onAdd}
           onOpenSection={onOpenSection}
           companyFocusSignal={signal('company')}
+          scoreFocusSignal={signal('score')}
         />
       );
     case 'activities':

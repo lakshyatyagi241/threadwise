@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { cn } from '@crm/ui';
 import { useStoredChoice } from '../../lib/use-stored-choice';
 import { ChevronDownIcon } from '../icons';
@@ -62,10 +62,19 @@ export function CollapseCard({
   }
   const open = stored === 'open' || forced;
   const bodyId = useId();
+  const root = useRef<HTMLElement>(null);
+  // Asked to open from outside (the lead score chip, "Add company"): bring the card into view, whichever column scrolls.
+  useEffect(() => {
+    if (openSignal) root.current?.scrollIntoView?.({ block: 'nearest' });
+  }, [openSignal]);
   const actionClass =
     'shrink-0 rounded px-1.5 py-0.5 text-xs font-medium text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary';
   return (
-    <section className={cn('rounded-xl border border-border bg-background', className)}>
+    <section
+      ref={root}
+      data-card={id}
+      className={cn('rounded-xl border border-border bg-background', className)}
+    >
       <div className="flex min-h-10 items-center gap-1 pe-2">
         <h3 className="m-0 min-w-0 flex-1">
           <button

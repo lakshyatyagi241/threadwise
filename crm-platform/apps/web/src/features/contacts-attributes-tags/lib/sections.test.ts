@@ -114,6 +114,7 @@ describe('sections', () => {
       meeting: 'meetings',
       company: 'overview',
       call: 'activities',
+      score: 'overview',
     });
     for (const t of ADD_TARGETS) expect(parseAddTarget(t)).toBe(t);
     for (const bad of [null, undefined, '', 'Task', 'tasks', 'constructor']) {
@@ -125,13 +126,14 @@ describe('sections', () => {
     }
   });
 
-  it('sends the action bar to the compose box of the Activity tab, and the company to the overview', () => {
+  it('sends the action bar to the compose box of the Activity tab, and the company and the lead score to the overview', () => {
     expect(ACTION_SECTION).toEqual({
       note: 'activities',
       task: 'activities',
       meeting: 'activities',
       call: 'activities',
       company: 'overview',
+      score: 'overview',
     });
     for (const s of Object.values(ACTION_SECTION)) {
       expect([...TAB_PRIMARY, ...TAB_MORE]).toContain(s);

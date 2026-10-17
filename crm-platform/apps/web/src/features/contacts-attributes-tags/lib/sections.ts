@@ -100,7 +100,7 @@ export function quickTabs(has: (permission: string) => boolean): {
  * What the action bar's Note, Task, Call, Meeting and Add company buttons ask for: no dialog, the screen moves to the section that
  * holds the inline composer and puts the cursor in it.
  */
-export const ADD_TARGETS = ['note', 'task', 'meeting', 'company', 'call'] as const;
+export const ADD_TARGETS = ['note', 'task', 'meeting', 'company', 'call', 'score'] as const;
 export type AddTarget = (typeof ADD_TARGETS)[number];
 
 /**
@@ -114,11 +114,12 @@ export const SECTION_OF_TARGET: Record<AddTarget, SectionId> = {
   meeting: 'meetings',
   company: 'overview',
   call: 'activities',
+  score: 'overview',
 };
 
 /**
  * Where the action bar's buttons go: the Activity tab, whose compose box (Note, Task, Call, Meeting) is the quick way to add anything,
- * with the timeline under it. The company has its card on the overview.
+ * with the timeline under it. The company and the lead score have their cards on the overview (the score chip in the header asks for it).
  */
 export const ACTION_SECTION: Record<AddTarget, SectionId> = {
   note: 'activities',
@@ -126,6 +127,7 @@ export const ACTION_SECTION: Record<AddTarget, SectionId> = {
   meeting: 'activities',
   call: 'activities',
   company: 'overview',
+  score: 'overview',
 };
 
 /** `?add=` value from a URL, or null. */

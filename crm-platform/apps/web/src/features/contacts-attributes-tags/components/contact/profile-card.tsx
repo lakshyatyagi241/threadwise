@@ -4,14 +4,14 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Badge, cn } from '@crm/ui';
 import { ContactPrivacyBadges } from '@/features/contact-consent';
-import { bandOf } from '@/features/lead-scoring';
 import type { ContactRow } from '../../api/schemas';
 import { displayName, isOptedOut } from '../../lib/contact-model';
 import type { AddTarget, SectionId } from '../../lib/sections';
 import { ContactAvatar } from '../chips';
-import { ChevronLeftIcon, StarIcon } from '../icons';
+import { ChevronLeftIcon } from '../icons';
 import { ContactActionBar } from './action-bar';
 import { KeyDetails } from './key-details';
+import { LeadScoreChip } from './lead-score-chip';
 import { JobTitle, SocialIcons } from './parts';
 import { StageControl } from './stage-control';
 
@@ -34,10 +34,8 @@ export function ProfileColumn({
   className?: string;
 }) {
   const t = useTranslations('contacts-attributes-tags.detail');
-  const th = useTranslations('contacts-attributes-tags.contact.header');
   const tn = useTranslations('contacts-attributes-tags.contact.nav');
   const name = displayName(contact) || t('unnamed');
-  const band = contact.leadScore === null ? null : bandOf(contact.leadScore);
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -51,26 +49,14 @@ export function ProfileColumn({
         <div className="flex items-start gap-3">
           <ContactAvatar id={contact.id} name={name} size="lg" className="size-12 text-lg" />
           <div className="min-w-0 flex-1">
-            <h1 className="break-words text-lg font-semibold leading-tight" dir="auto">
-              {name}
-            </h1>
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+              <h1 className="min-w-0 break-words text-lg font-semibold leading-tight" dir="auto">
+                {name}
+              </h1>
+              <LeadScoreChip contact={contact} onOpen={() => onAdd('score')} />
+            </div>
             <JobTitle contact={contact} />
             <div className="mt-1 flex flex-wrap items-center gap-1.5">
-              {band && (
-                <span
-                  title={th('leadScore')}
-                  aria-label={th('leadScoreAria', { score: contact.leadScore ?? 0 })}
-                  className={cn(
-                    'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums',
-                    band === 'hot' && 'border-success/30 bg-success/10 text-success',
-                    band === 'warm' && 'border-warning/30 bg-warning/10 text-warning',
-                    band === 'cold' && 'border-border bg-muted text-muted-foreground',
-                  )}
-                >
-                  <StarIcon className="size-3.5" />
-                  {contact.leadScore}
-                </span>
-              )}
               {isOptedOut(contact) && <Badge tone="warning">{t('optedOut')}</Badge>}
               <ContactPrivacyBadges contactId={contact.id} />
               <SocialIcons contact={contact} />

@@ -20,11 +20,14 @@ export function ContactOverview({
   onAdd,
   onOpenSection,
   companyFocusSignal,
+  scoreFocusSignal,
 }: SectionProps & {
   focus?: FocusRequest | null;
   onAdd?: (target: AddTarget) => void;
   /** Changes whenever something outside (the action menu's "Add company") wants the cursor in the company search. */
   companyFocusSignal?: number;
+  /** Changes whenever something outside (the lead score chip in the header) wants the Lead score card open and in view. */
+  scoreFocusSignal?: number;
   /** Moves to a section in place (the details page and the drawer's tabs). */
   onOpenSection?: (section: SectionId) => void;
 }) {
@@ -42,6 +45,7 @@ export function ContactOverview({
           onOpenSection={onOpenSection}
           onAdd={onAdd}
           companyFocusSignal={companyFocusSignal}
+          scoreFocusSignal={scoreFocusSignal}
         />
       </div>
     );

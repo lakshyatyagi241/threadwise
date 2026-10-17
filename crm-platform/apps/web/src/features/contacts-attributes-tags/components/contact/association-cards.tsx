@@ -212,6 +212,7 @@ export function AssociationCards({
   onOpenSection,
   onAdd,
   companyFocusSignal,
+  scoreFocusSignal,
   className,
 }: {
   contact: ContactRow;
@@ -220,6 +221,8 @@ export function AssociationCards({
   onAdd?: (target: AddTarget) => void;
   /** Changes whenever something outside (the action menu's "Add company") wants the company card open with the cursor in it. */
   companyFocusSignal?: number;
+  /** Changes whenever the lead score chip in the header wants the Lead score card open and in view. */
+  scoreFocusSignal?: number;
   className?: string;
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.record.cards');
@@ -273,6 +276,7 @@ export function AssociationCards({
       </CollapseCard>
       <CollapseCard
         id="score"
+        openSignal={scoreFocusSignal}
         title={t('score')}
         summary={score === null ? t('scoreNone') : `${score} · ${tb(bandOf(score))}`}
       >

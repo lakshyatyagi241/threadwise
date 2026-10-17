@@ -39,6 +39,7 @@ import {
   ExternalLinkIcon,
   XIcon,
 } from './icons';
+import { LeadScoreChip } from './contact/lead-score-chip';
 import { StagePicker } from './stage-picker';
 
 const iconBtn =
@@ -220,6 +221,10 @@ function QuickViewBody({
               <h2 className="min-w-0 truncate text-xl font-semibold leading-tight" dir="auto">
                 {name}
               </h2>
+              <LeadScoreChip
+                contact={contact}
+                onOpen={() => onPanel('overview', { focus: 'score' })}
+              />
               <SocialIcons contact={contact} />
             </div>
             <div className="mt-0.5 min-w-0">
