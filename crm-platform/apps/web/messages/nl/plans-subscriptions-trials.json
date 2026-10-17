@@ -82,7 +82,8 @@
       "help_agent": "Hulpassistent",
       "email_channel": "E-mailkanaal (Gmail)",
       "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI-leadscoring"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -564,7 +565,9 @@
       "continueFree": "Doorgaan gratis",
       "choose": "Kies {name}",
       "back": "Terug",
-      "compare": "Alle abonnementen vergelijken"
+      "compare": "Alle abonnementen vergelijken",
+      "appHint": "{feature} wordt ook als app verkocht in de Marktplaats.",
+      "appLink": "Bekijk de app"
     }
   }
 }

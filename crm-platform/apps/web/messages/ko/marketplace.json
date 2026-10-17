@@ -305,7 +305,8 @@
         "terms": "이용약관",
         "status": "상태 페이지",
         "email": "이메일 지원"
-      }
+      },
+      "open": "열기"
     },
     "install": {
       "backToMarketplace": "마켓플레이스로 돌아가기",

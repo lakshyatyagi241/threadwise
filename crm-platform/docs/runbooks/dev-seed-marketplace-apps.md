@@ -1,8 +1,8 @@
 # Seeding the paid first-party Marketplace apps on a local database
 
-Appointments, Forms and Email (Gmail) are **paid first-party Marketplace apps**. The migrations seed each listing as a **draft with no price** (the price is
+Appointments, Forms, Email (Gmail) and AI lead scoring are **paid first-party Marketplace apps**. The migrations seed each listing as a **draft with no price** (the price is
 the platform operator's decision, so nothing is hard-coded), and no plan includes the feature, so on a fresh developer database no app is
-visible and their routes answer `PLAN_FEATURE_LOCKED`. Three commands do what the operator does in the console, through the same services (so
+visible and their routes answer `PLAN_FEATURE_LOCKED`. Four commands do what the operator does in the console, through the same services (so
 validation, the billing add-on, entitlements and audit rows are identical):
 
 ```bash
@@ -10,17 +10,19 @@ pnpm --filter @crm/api build            # the commands run from dist (like auto-
 pnpm --filter @crm/api seed:forms -- --workspace <slug>          # 799 INR a month, Forms menu appears for that workspace
 pnpm --filter @crm/api seed:email -- --workspace <slug>          # 499 INR a month, Email (Gmail) menu appears for that workspace
 pnpm --filter @crm/api seed:appointments                         # 499 INR a month, comps workspaces already using booking
+pnpm --filter @crm/api seed:lead-scoring -- --workspace <slug>   # 999 INR a month, AI lead scoring; comps workspaces that already used it
 ```
 
 They run from the build because the application's dependency injection needs the compiler's decorator metadata, which `tsx` does not emit, so
 run `pnpm --filter @crm/api build` first and again after you change the code. Run `pnpm --filter @crm/api seed:auth` first if you have never
 created a platform operator (it creates `operator@example.test`).
 
-| Command             | Listing        | Default price   | Grants                | Comps by default                                               |
-| ------------------- | -------------- | --------------- | --------------------- | -------------------------------------------------------------- |
-| `seed:appointments` | `appointments` | 499 INR monthly | `appointment_booking` | workspaces already using booking ("comp existing")             |
-| `seed:forms`        | `forms`        | 799 INR monthly | `form_builder`        | nobody (no workspace used Forms before it existed)             |
-| `seed:email`        | `email`        | 499 INR monthly | `email_channel`       | nobody (no workspace used the Gmail channel before it existed) |
+| Command             | Listing        | Default price   | Grants                | Comps by default                                                                 |
+| ------------------- | -------------- | --------------- | --------------------- | -------------------------------------------------------------------------------- |
+| `seed:appointments` | `appointments` | 499 INR monthly | `appointment_booking` | workspaces already using booking ("comp existing")                               |
+| `seed:forms`        | `forms`        | 799 INR monthly | `form_builder`        | nobody (no workspace used Forms before it existed)                               |
+| `seed:email`        | `email`        | 499 INR monthly | `email_channel`       | nobody (no workspace used the Gmail channel before it existed)                   |
+| `seed:lead-scoring` | `lead-scoring` | 999 INR monthly | `lead_scoring`        | workspaces that already used scoring (switch on, a run in the log, a growth row) |
 
 799 INR is decision D1 of [../specs/forms-builder-app.md](../specs/forms-builder-app.md); no trial by default (a trial only makes sense with the AI
 generations capped).

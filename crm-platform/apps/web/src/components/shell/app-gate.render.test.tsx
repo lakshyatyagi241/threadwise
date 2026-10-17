@@ -10,7 +10,12 @@ vi.mock('next/navigation', () => ({ usePathname: () => nav.path }));
 import { AppGate, closedAppGate, type AppRouteGate } from './app-gate';
 
 const GATES: AppRouteGate[] = [
-  { href: '/appointments', feature: 'appointment_booking', labelKey: 'shell.nav.appointments' },
+  {
+    href: '/appointments',
+    feature: 'appointment_booking',
+    labelKey: 'shell.nav.appointments',
+    listingHref: '/marketplace/app/appointments',
+  },
   // The Warmer exists only while the platform has the unofficial WhatsApp engine on (a platform switch, not a Marketplace app).
   { href: '/warmer', feature: 'unofficial_whatsapp', labelKey: 'shell.nav.appointments' },
 ];
@@ -74,6 +79,19 @@ describe('AppGate', () => {
     expect(noAccess).toContain('Ask a workspace admin');
   });
 
+  it('links straight to the app page when the app has one, and keeps the way to the Marketplace', () => {
+    const html = render('/appointments', [], '/marketplace/apps');
+    expect(html).toContain('href="/marketplace/app/appointments"');
+    expect(html).toContain('See Appointments in the Marketplace');
+    expect(html).toContain('href="/marketplace/apps"');
+  });
+
+  it('links to the app page only for a person who may open the Marketplace', () => {
+    const html = render('/appointments', [], null);
+    expect(html).not.toContain('/marketplace/app/appointments');
+    expect(html).not.toContain('See Appointments in the Marketplace');
+  });
+
   it('renders the page untouched when the app is owned, and on pages of other areas', () => {
     expect(render('/appointments', ['appointment_booking'], '/marketplace/apps')).toContain(
       'APPOINTMENTS PAGE',
@@ -84,6 +102,7 @@ describe('AppGate', () => {
   it('says it in Arabic too, with the app named in Arabic', () => {
     const html = render('/appointments', [], '/marketplace/apps', 'ar');
     expect(html).toContain('المواعيد');
+    expect(html).toContain('عرض');
     expect(html).not.toContain('APPOINTMENTS PAGE');
   });
 });

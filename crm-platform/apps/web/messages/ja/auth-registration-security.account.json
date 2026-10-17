@@ -559,7 +559,8 @@
             "help_agent": "ヘルプアシスタント",
             "email_channel": "メール(Gmail)チャネル",
             "personal_history_full": "全履歴インポート(個人用WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AIリードスコアリング"
           },
           "cta": {
             "continueFree": "無料で続ける",

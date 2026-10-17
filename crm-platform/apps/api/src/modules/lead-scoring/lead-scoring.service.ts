@@ -26,6 +26,7 @@ import {
 import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { AiChargeService } from '../wallet-message-billing';
 import { LeadChatDigestRepository } from './lead-chat-digest.repository';
 import { isChatDigestPilot } from './lead-chat-digest.rules';
@@ -33,6 +34,7 @@ import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository, type RunWrite } from './lead-scoring.repository';
 import {
   AI_PROVIDER,
+  LEAD_SCORING_FEATURE,
   MAX_COMPLETION_TOKENS,
   parseScore,
   resolveCost,
@@ -90,6 +92,7 @@ export class LeadScoringService {
     private readonly meter: AiTokenMeter,
     private readonly audit: AuditService,
     private readonly wallet: AiChargeService,
+    private readonly plans: PlanEntitlementService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadScoreJob>,
   ) {}
@@ -123,6 +126,8 @@ export class LeadScoringService {
       this.repo.getSettings(tx, orgId),
     );
     if (!row?.enabled || !row.autoScore) return;
+    // The plan side comes after the cheap checks above: only a workspace that switched scoring on pays for the entitlement read.
+    if (!(await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))) return;
     await this.enqueue({ orgId, contactId, trigger }, AUTO_DELAY_MS);
   }
 
@@ -158,6 +163,11 @@ export class LeadScoringService {
         );
       }
       return { status: 'skipped', reason: 'not_enabled' };
+    }
+    // The workspace opted in, but the AI lead scoring app is not part of it (never bought, uninstalled, paused or killed): nothing is sent.
+    if (!(await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))) {
+      if (manual) await this.plans.assertFeature(orgId, LEAD_SCORING_FEATURE);
+      return { status: 'skipped', reason: 'feature_off' };
     }
 
     const contact = await this.db.txAs({ orgId, userId: null }, (tx) =>

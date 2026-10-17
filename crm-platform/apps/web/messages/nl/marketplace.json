@@ -305,7 +305,8 @@
         "terms": "Voorwaarden",
         "status": "Statuspagina",
         "email": "E-mailondersteuning"
-      }
+      },
+      "open": "Openen"
     },
     "install": {
       "backToMarketplace": "Terug naar de Marketplace",

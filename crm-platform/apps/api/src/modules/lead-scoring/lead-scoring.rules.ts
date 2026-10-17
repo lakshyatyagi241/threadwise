@@ -1,8 +1,10 @@
-import { LSC_MODELS } from '@crm/contracts';
+import { LSC_MODELS, type PlanFeatureKey } from '@crm/contracts';
 
 /** Pure rules of AI lead scoring: what is sent, how the answer is read, what a call cost. No I/O. */
 
 export const AI_PROVIDER = 'openrouter';
+/** The plan feature the Marketplace app `lead-scoring` grants: scoring (and the growth pilot on top of it) runs only for a workspace that has it. */
+export const LEAD_SCORING_FEATURE = 'lead_scoring' satisfies PlanFeatureKey;
 /** Enough for the JSON answer plus a low-effort reasoning pass. */
 export const MAX_COMPLETION_TOKENS = 900;
 

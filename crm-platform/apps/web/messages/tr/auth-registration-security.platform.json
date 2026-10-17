@@ -1440,7 +1440,8 @@
             "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
             "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
             "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir.",
-            "ai_crm_copilot": "Kişilerinizden yapay zekâyla potansiyel müşterileri bulur ve puanlar."
+            "ai_crm_copilot": "Kişilerinizden yapay zekâyla potansiyel müşterileri bulur ve puanlar.",
+            "lead_scoring": "Kişileri yapay zekayla puanlar ve büyüme pilotunu çalıştırır. Bu anahtarın sahibi Yapay zeka ile potansiyel müşteri puanlama uygulamasıdır."
           },
           "units": {
             "days": "Gün",
@@ -1626,7 +1627,8 @@
             "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
             "email_channel": "E-posta (Gmail) kanalı",
             "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama"
           },
           "problems": {
             "required": "Bu alan zorunludur.",

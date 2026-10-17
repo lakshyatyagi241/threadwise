@@ -33,7 +33,8 @@
       "browse": "עיין ב־Marketplace",
       "back": "חזרה ללוח הבקרה",
       "unofficialTitle": "{app} אינה זמינה",
-      "unofficialBody": "{app} משמש רק עם מספרי WhatsApp אישיים המצומדים באמצעות קוד QR, שאינם מופעלים בסביבת העבודה שלך. WhatsApp מתחבר דרך WhatsApp Business API הרשמי."
+      "unofficialBody": "{app} משמש רק עם מספרי WhatsApp אישיים המצומדים באמצעות קוד QR, שאינם מופעלים בסביבת העבודה שלך. WhatsApp מתחבר דרך WhatsApp Business API הרשמי.",
+      "viewApp": "הצגת {app} ב־Marketplace"
     },
     "closeMenu": "סגור תפריט",
     "mainMenu": "תפריט ראשי",

@@ -25,12 +25,17 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { LeadChatDigestService } from './lead-chat-digest.service';
 import { LeadScoringService } from './lead-scoring.service';
 
-/** AI lead scoring of a workspace: its switch, the log with the cost, scoring one contact now, and the backfill. */
+/**
+ * AI lead scoring of a workspace: its switch, the log with the cost, scoring one contact now, and the backfill. Every route needs the plan
+ * feature `lead_scoring`, which the Marketplace app of the same name grants while it is installed (`422 PLAN_FEATURE_LOCKED` otherwise).
+ */
 @ApiTags('lead-scoring')
 @ActorKinds('user')
+@RequirePlanFeature('lead_scoring')
 @Controller({ path: 'lead-scoring', version: '2' })
 export class LeadScoringController {
   constructor(

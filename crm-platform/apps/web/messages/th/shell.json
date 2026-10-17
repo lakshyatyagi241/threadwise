@@ -33,7 +33,8 @@
       "browse": "เรียกดู Marketplace",
       "back": "กลับไปที่แดชบอร์ด",
       "unofficialTitle": "{app} ใช้ไม่ได้",
-      "unofficialBody": "{app} ใช้เฉพาะกับหมายเลข WhatsApp ส่วนตัวที่จับคู่ด้วยรหัส QR ซึ่งยังไม่เปิดใช้งานสำหรับเวิร์กสเปซของคุณ WhatsApp เชื่อมต่อผ่าน WhatsApp Business API อย่างเป็นทางการ"
+      "unofficialBody": "{app} ใช้เฉพาะกับหมายเลข WhatsApp ส่วนตัวที่จับคู่ด้วยรหัส QR ซึ่งยังไม่เปิดใช้งานสำหรับเวิร์กสเปซของคุณ WhatsApp เชื่อมต่อผ่าน WhatsApp Business API อย่างเป็นทางการ",
+      "viewApp": "ดู {app} ใน Marketplace"
     },
     "closeMenu": "ปิดเมนู",
     "mainMenu": "เมนูหลัก",

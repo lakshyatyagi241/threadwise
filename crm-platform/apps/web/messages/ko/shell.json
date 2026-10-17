@@ -33,7 +33,8 @@
       "browse": "마켓플레이스 둘러보기",
       "back": "대시보드로 돌아가기",
       "unofficialTitle": "{app}을(를) 사용할 수 없습니다",
-      "unofficialBody": "{app}은(는) 이 워크스페이스에서 사용하도록 설정되지 않은 QR 코드 연결 개인 WhatsApp 번호에서만 쓰입니다. WhatsApp은 공식 WhatsApp Business API를 통해 연결됩니다."
+      "unofficialBody": "{app}은(는) 이 워크스페이스에서 사용하도록 설정되지 않은 QR 코드 연결 개인 WhatsApp 번호에서만 쓰입니다. WhatsApp은 공식 WhatsApp Business API를 통해 연결됩니다.",
+      "viewApp": "마켓플레이스에서 {app} 보기"
     },
     "closeMenu": "메뉴 닫기",
     "mainMenu": "주 메뉴",

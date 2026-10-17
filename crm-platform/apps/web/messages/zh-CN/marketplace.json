@@ -305,7 +305,8 @@
         "terms": "条款",
         "status": "状态页",
         "email": "邮件支持"
-      }
+      },
+      "open": "打开"
     },
     "install": {
       "backToMarketplace": "返回应用市场",

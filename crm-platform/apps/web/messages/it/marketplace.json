@@ -305,7 +305,8 @@
         "terms": "Termini",
         "status": "Pagina dello stato",
         "email": "Supporto via email"
-      }
+      },
+      "open": "Apri"
     },
     "install": {
       "backToMarketplace": "Torna al Marketplace",

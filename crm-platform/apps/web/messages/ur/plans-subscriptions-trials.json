@@ -82,7 +82,8 @@
       "help_agent": "مددگار اسسٹنٹ",
       "email_channel": "ای میل (Gmail) چینل",
       "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI لیڈ اسکورنگ"
     },
     "limitGroups": {
       "messaging": "میسجنگ",
@@ -564,7 +565,9 @@
       "continueFree": "مفت جاری رکھیں",
       "choose": "{name} منتخب کریں",
       "back": "واپس جائیں",
-      "compare": "تمام پلانز کا موازنہ کریں"
+      "compare": "تمام پلانز کا موازنہ کریں",
+      "appHint": "{feature} مارکیٹ پلیس میں ایپ کے طور پر بھی فروخت ہوتا ہے۔",
+      "appLink": "ایپ دیکھیں"
     }
   }
 }
