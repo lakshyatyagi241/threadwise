@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
 import type { ContactViewResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { PageFill } from '@/components/shell/page-fill';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
@@ -720,8 +721,8 @@ export function ContactsScreen() {
 
   return (
     <CallingProvider>
-      {/* The content area is exactly as tall as the window under the top bar: the rows scroll inside the card and its footer stays put. */}
-      <div className="flex min-h-[34rem] flex-col gap-3 md:h-[calc(100dvh-3.5rem-3rem)] h-[calc(100dvh-3.5rem-2rem)]">
+      {/* The content area fills the window under the top bar and any notice bars (the shell subtracts them): the rows scroll inside the card and its footer stays put. */}
+      <PageFill minHeight="26rem" className="gap-3">
         <div className="shrink-0 space-y-3">
           <nav aria-label={t('breadcrumb')} className="text-sm text-muted-foreground">
             <ol className="flex items-center gap-1.5">
@@ -1152,7 +1153,7 @@ export function ContactsScreen() {
           }}
           onConfirm={() => void onBulkDelete()}
         />
-      </div>
+      </PageFill>
     </CallingProvider>
   );
 }

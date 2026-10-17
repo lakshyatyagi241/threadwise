@@ -975,7 +975,7 @@ export function ContactsTable({
       aria-label={t('scrollArea')}
       tabIndex={0}
       onScroll={(e) => setScrolled(isScrolledSideways(e.currentTarget.scrollLeft))}
-      className="thin-scrollbar h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+      className="thin-scrollbar relative h-full min-h-0 overflow-auto outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
     >
       <table
         className="w-full table-fixed border-separate border-spacing-0 text-sm"
