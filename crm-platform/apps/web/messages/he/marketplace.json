@@ -305,7 +305,8 @@
         "terms": "תנאי שימוש",
         "status": "דף סטטוס",
         "email": "תמיכה במייל"
-      }
+      },
+      "open": "פתיחה"
     },
     "install": {
       "backToMarketplace": "חזרה ל-Marketplace",

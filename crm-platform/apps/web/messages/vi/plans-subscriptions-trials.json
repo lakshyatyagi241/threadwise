@@ -82,7 +82,8 @@
       "help_agent": "Trợ lý trợ giúp",
       "email_channel": "Kênh email (Gmail)",
       "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",
@@ -564,7 +565,9 @@
       "continueFree": "Tiếp tục miễn phí",
       "choose": "Chọn {name}",
       "back": "Quay lại",
-      "compare": "So sánh tất cả gói"
+      "compare": "So sánh tất cả gói",
+      "appHint": "{feature} cũng được bán dưới dạng ứng dụng trong Chợ ứng dụng.",
+      "appLink": "Xem ứng dụng"
     }
   }
 }

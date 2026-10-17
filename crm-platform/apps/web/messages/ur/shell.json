@@ -33,7 +33,8 @@
       "browse": "مارکیٹ پلیس دیکھیں",
       "back": "ڈیش بورڈ پر واپس جائیں",
       "unofficialTitle": "{app} دستیاب نہیں ہے",
-      "unofficialBody": "{app} صرف QR کوڈ سے جوڑے گئے ذاتی WhatsApp نمبرز کے ساتھ استعمال ہوتی ہے، جو آپ کے ورک اسپیس کے لیے فعال نہیں ہیں۔ WhatsApp آفیشل WhatsApp Business API کے ذریعے جڑتا ہے۔"
+      "unofficialBody": "{app} صرف QR کوڈ سے جوڑے گئے ذاتی WhatsApp نمبرز کے ساتھ استعمال ہوتی ہے، جو آپ کے ورک اسپیس کے لیے فعال نہیں ہیں۔ WhatsApp آفیشل WhatsApp Business API کے ذریعے جڑتا ہے۔",
+      "viewApp": "مارکیٹ پلیس میں {app} دیکھیں"
     },
     "closeMenu": "مینو بند کریں",
     "mainMenu": "مرکزی مینو",

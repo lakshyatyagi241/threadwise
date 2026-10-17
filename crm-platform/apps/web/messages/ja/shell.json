@@ -33,7 +33,8 @@
       "browse": "マーケットプレイスを見る",
       "back": "ダッシュボードに戻る",
       "unofficialTitle": "{app} は利用できません",
-      "unofficialBody": "{app} は、QR コードで連携された個人の WhatsApp 番号でのみ使用します。この番号はお使いのワークスペースでは有効になっていません。WhatsApp は公式の WhatsApp Business API を通じて接続されます。"
+      "unofficialBody": "{app} は、QR コードで連携された個人の WhatsApp 番号でのみ使用します。この番号はお使いのワークスペースでは有効になっていません。WhatsApp は公式の WhatsApp Business API を通じて接続されます。",
+      "viewApp": "マーケットプレイスで{app}を見る"
     },
     "closeMenu": "メニューを閉じる",
     "mainMenu": "メインメニュー",

@@ -45,3 +45,7 @@ You need the permission to view SMS senders to open the screen, and the manage p
 - **"SMS is not available on your plan."** Ask an administrator to upgrade the plan or switch SMS on.
 - **A sender shows Inactive.** Select **Activate**. A sender with no credentials has to be connected again.
 - **A text is billed as several messages.** It is longer than one segment, or it has an emoji or non-Latin character. Shorten it, or remove the character.
+
+## Get it as an app
+
+SMS is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

@@ -38,10 +38,16 @@ type Raw = Record<string, unknown>;
 
 /**
  * Per plan feature: the workspaces that already use it, found by what they have created. Lets the grandfather action reach the workspaces of a
- * feature whose registry default was switched off. Appointments: any booking type or appointment.
+ * feature whose registry default was switched off. Appointments: any booking type or appointment. AI lead scoring: the switch is on, a run is logged or the growth pilot has a row.
  */
 const USAGE_PROBES: Record<string, SQL> = {
   appointment_booking: sql`SELECT DISTINCT org_id FROM booking_types UNION SELECT DISTINCT org_id FROM appointments`,
+  // AI lead scoring: the switch is on, a scoring run is in the log, or the growth pilot has a row (the same probe as migration
+  // 20261228090000, which also gave each of those workspaces an override so nobody waited for the operator's comp).
+  lead_scoring: sql`
+    SELECT org_id FROM lead_scoring_settings WHERE enabled
+    UNION SELECT org_id FROM lead_scoring_runs
+    UNION SELECT org_id FROM growth_settings`,
 };
 
 /** The subscription status a person sees, in SQL: ended, canceling, trialing or comped, active (the same precedence as `deriveSubscriptionStatus`). */

@@ -2,6 +2,7 @@
 import { ERROR_CODES, type LscRun } from '@crm/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
 import { click, mount, text, type Mounted } from '../testing';
 import type { ScoreFields } from '../lib/score';
 
@@ -237,5 +238,41 @@ describe('ScoreCard', () => {
       );
       expect(host.textContent).toContain(text('card.historyEmpty'));
     });
+  });
+});
+
+describe('ScoreCard in a workspace that does not have the AI lead scoring app', () => {
+  const showWithout = async (contact: ScoreFields) => {
+    m = await mount(
+      <PlanFeaturesProvider features={['marketplace']}>
+        <ScoreCard contactId={ID} contact={contact} />
+      </PlanFeaturesProvider>,
+    );
+    return m.host;
+  };
+
+  it('keeps the score a person typed and drops every AI control, even for a role that holds the keys', async () => {
+    const host = await showWithout(MANUAL);
+    expect(host.querySelector('[data-testid="lsc-score"]')?.textContent).toBe('40');
+    expect(host.textContent).toContain('Manual');
+    expect(scoreButton(host)).toBeUndefined();
+    expect(host.textContent).not.toContain(text('card.showHistory'));
+    expect(host.textContent).toContain(text('card.manualNote'));
+  });
+
+  it('shows an AI score it already holds, without the button or the history', async () => {
+    const host = await showWithout(AI);
+    expect(host.querySelector('[data-testid="lsc-score"]')?.textContent).toBe('72');
+    expect(scoreButton(host)).toBeUndefined();
+    expect(host.textContent).not.toContain(text('card.showHistory'));
+  });
+
+  it('shows the button once the workspace has the feature', async () => {
+    m = await mount(
+      <PlanFeaturesProvider features={['marketplace', 'lead_scoring']}>
+        <ScoreCard contactId={ID} contact={NEVER} />
+      </PlanFeaturesProvider>,
+    );
+    expect(scoreButton(m.host)).toBeDefined();
   });
 });

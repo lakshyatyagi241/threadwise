@@ -82,7 +82,8 @@
       "help_agent": "Hilfe-Assistent",
       "email_channel": "E-Mail-Kanal (Gmail)",
       "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "KI-Lead-Scoring"
     },
     "limitGroups": {
       "messaging": "Nachrichten",
@@ -564,7 +565,9 @@
       "continueFree": "Kostenlos fortfahren",
       "choose": "{name} wählen",
       "back": "Zurück",
-      "compare": "Alle Tarife vergleichen"
+      "compare": "Alle Tarife vergleichen",
+      "appHint": "{feature} wird auch als App im Marketplace verkauft.",
+      "appLink": "App ansehen"
     }
   }
 }

@@ -82,7 +82,8 @@
       "help_agent": "सहायता असिस्टेंट",
       "email_channel": "ईमेल (Gmail) चैनल",
       "personal_history_full": "पूरी हिस्ट्री इंपोर्ट (व्यक्तिगत WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI लीड स्कोरिंग"
     },
     "limitGroups": {
       "messaging": "मैसेजिंग",
@@ -564,7 +565,9 @@
       "continueFree": "मुफ़्त जारी रखें",
       "choose": "{name} चुनें",
       "back": "वापस जाएँ",
-      "compare": "सभी प्लान की तुलना करें"
+      "compare": "सभी प्लान की तुलना करें",
+      "appHint": "{feature} मार्केटप्लेस में ऐप के रूप में भी बेचा जाता है।",
+      "appLink": "ऐप देखें"
     }
   }
 }

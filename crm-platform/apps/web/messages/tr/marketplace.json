@@ -305,7 +305,8 @@
         "terms": "Koşullar",
         "status": "Durum sayfası",
         "email": "E-posta desteği"
-      }
+      },
+      "open": "Aç"
     },
     "install": {
       "backToMarketplace": "Pazar yerine dön",

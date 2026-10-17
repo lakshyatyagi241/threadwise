@@ -27,6 +27,8 @@ import { PLANNED_SETTINGS } from '@/features/_registry/settings-planned';
 import { resolveSettings } from '@/features/_registry/settings-resolve';
 import { SETTINGS } from '@/features/_registry/settings.generated';
 import { THEME_COOKIE } from '@/lib/auth/cookies';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
+import { listingPathFor } from '@/features/_registry/app-listings';
 import { getSession, signedOutTarget } from '@/lib/auth/server';
 import { RealtimeProvider } from '@/lib/realtime';
 
@@ -62,6 +64,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     href: n.href,
     feature: n.gates!.app!,
     labelKey: n.labelKey,
+    listingHref: listingPathFor(n.gates!.app!),
   }));
   // Where the "not part of your workspace" screen can send a person: only when they may open the Marketplace.
   const marketplaceHref =
@@ -73,58 +76,62 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     <SessionProvider session={session}>
       {/* Every date and time below is shown in the person's zone: their own choice, else the workspace's, else UTC. */}
       <NextIntlClientProvider timeZone={session.effectiveTimezone}>
-        {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
+        {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact). */}
+        <PlanFeaturesProvider features={enabledFeatures ? [...enabledFeatures] : null}>
+          {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
           The address is read here, on the server, so it can be set per deployment without rebuilding. */}
-        <RealtimeProvider
-          key={`${session.org.id}:${session.user.id}`}
-          url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
-        >
-          {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
-          <LiveNotifications />
-          <HelpProvider entries={help.entries}>
-            {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
-            <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
-              <WalletAppShell
-                user={{
-                  fullName: session.user.displayName ?? session.user.fullName,
-                  email: session.user.email,
-                  avatarUrl: session.user.avatarUrl,
-                }}
-                nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
-                settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
-                theme={theme}
-                navFooter={<WorkspaceSwitcher />}
-                banners={
-                  <>
-                    {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
-                    <ImpersonationBanner key="impersonation" />
-                    <TrialBar />
-                    <BackgroundErrorBanner key="background-error" />
-                    <AccountBanners key="banners" />
-                  </>
-                }
-                bell={<NotificationBell key="bell" />}
-              >
-                <AccountGate>
-                  <AppGate
-                    gates={appGates}
+          <RealtimeProvider
+            key={`${session.org.id}:${session.user.id}`}
+            url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
+          >
+            {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
+            <LiveNotifications />
+            <HelpProvider entries={help.entries}>
+              {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
+              <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
+                <WalletAppShell
+                  user={{
+                    fullName: session.user.displayName ?? session.user.fullName,
+                    email: session.user.email,
+                    avatarUrl: session.user.avatarUrl,
+                  }}
+                  nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
+                  settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
+                  theme={theme}
+                  navFooter={<WorkspaceSwitcher />}
+                  banners={
+                    <>
+                      {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
+                      <ImpersonationBanner key="impersonation" />
+                      <TrialBar />
+                      <BackgroundErrorBanner key="background-error" />
+                      <AccountBanners key="banners" />
+                    </>
+                  }
+                  bell={<NotificationBell key="bell" />}
+                >
+                  <AccountGate>
+                    <AppGate
+                      gates={appGates}
+                      enabled={enabledFeatures ? [...enabledFeatures] : null}
+                      marketplaceHref={marketplaceHref}
+                    >
+                      {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
+                      <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
+                        {children}
+                      </HelpAgentRoot>
+                    </AppGate>
+                  </AccountGate>
+                  <PlanPaywall
+                    gates={paywallGates}
                     enabled={enabledFeatures ? [...enabledFeatures] : null}
-                    marketplaceHref={marketplaceHref}
-                  >
-                    {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
-                    <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
-                      {children}
-                    </HelpAgentRoot>
-                  </AppGate>
-                </AccountGate>
-                <PlanPaywall
-                  gates={paywallGates}
-                  enabled={enabledFeatures ? [...enabledFeatures] : null}
-                />
-              </WalletAppShell>
-            </InboxNavCounts>
-          </HelpProvider>
-        </RealtimeProvider>
+                    canBrowseApps={marketplaceHref !== null}
+                  />
+                </WalletAppShell>
+              </InboxNavCounts>
+            </HelpProvider>
+          </RealtimeProvider>
+        </PlanFeaturesProvider>
       </NextIntlClientProvider>
     </SessionProvider>
   );
