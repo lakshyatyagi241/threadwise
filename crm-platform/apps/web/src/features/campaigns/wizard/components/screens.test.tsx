@@ -196,6 +196,7 @@ describe('status page', () => {
     createdAt: '2026-10-01T00:00:00.000Z',
     updatedAt: '2026-10-05T00:00:00.000Z',
     rowVersion: 2,
+    senders: [],
     draft: draftResponse().draft,
     runList: [
       {

@@ -1210,7 +1210,12 @@
         "pickSender": "Chọn một số",
         "classicOption": "trình tạo cổ điển",
         "buildWithAi": "Tạo bằng AI",
-        "aiNote": "Soạn mẫu mới bằng AI. Bạn xem lại trên trang mẫu; sau đó Meta sẽ xét duyệt trước khi mẫu được gửi đi, vì vậy hãy quay lại chọn mẫu khi đã được phê duyệt."
+        "aiNote": "Soạn mẫu mới bằng AI. Bạn xem lại trên trang mẫu; sau đó Meta sẽ xét duyệt trước khi mẫu được gửi đi, vì vậy hãy quay lại chọn mẫu khi đã được phê duyệt.",
+        "shareToggle": "Chia lượt gửi này cho nhiều số",
+        "shareHint": "Chọn các số dùng để gửi và đặt tỷ lệ cho từng số. Đối tượng được chia theo các tỷ lệ này và mỗi liên hệ chỉ nhận tin từ một số. Tỷ lệ để trống hoặc bằng 0 được tính là 1.",
+        "shareWeight": "Tỷ lệ",
+        "shareWeightLabel": "Tỷ lệ của {name}",
+        "shareKeepOne": "Phải giữ ít nhất một số được chọn."
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Trừ vào ví của bạn: {amount}",
         "sumFollowUps": "Tin theo dõi",
         "sumSequence": "Gửi luân phiên",
-        "sumPrevious": "Lần gửi trước: {names} ({outcome})"
+        "sumPrevious": "Lần gửi trước: {names} ({outcome})",
+        "sumSplit": "Phân chia theo số",
+        "sumSplitCount": "{count, plural, other {# người nhận}} ({percent}%)",
+        "sumSplitPercent": "{percent}% đối tượng"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, other {# người đã nhấp vào liên kết}}",
         "failed": "{count, plural, other {# người gửi thất bại}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Đã gửi từ từng số",
+      "hint": "Lượt gửi này được chia cho nhiều số. Mỗi hàng là một số và những người nhận được giao cho số đó.",
+      "cols": {
+        "number": "Số",
+        "recipients": "Người nhận",
+        "sent": "Đã gửi",
+        "delivered": "Đã chuyển đến",
+        "failed": "Thất bại"
+      },
+      "removed": "(số đã bị xóa)"
     }
   }
 }

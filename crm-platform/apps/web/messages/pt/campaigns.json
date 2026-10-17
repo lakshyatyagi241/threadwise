@@ -1210,7 +1210,12 @@
         "pickSender": "Escolha um número",
         "classicOption": "editor clássico",
         "buildWithAi": "Criar com IA",
-        "aiNote": "Crie um rascunho de modelo com IA. Você o revisa na página do modelo; depois a Meta o analisa antes de ele poder ser enviado, então volte e selecione-o quando for aprovado."
+        "aiNote": "Crie um rascunho de modelo com IA. Você o revisa na página do modelo; depois a Meta o analisa antes de ele poder ser enviado, então volte e selecione-o quando for aprovado.",
+        "shareToggle": "Dividir este envio entre vários números",
+        "shareHint": "Marque os números de envio e dê uma parte a cada um. O público é dividido por essas partes e cada contato recebe a mensagem de um único número. Uma parte vazia ou 0 conta como 1.",
+        "shareWeight": "Parte",
+        "shareWeightLabel": "Parte de {name}",
+        "shareKeepOne": "Pelo menos um número deve continuar marcado."
       },
       "audience": {
         "selectionTitle": "Escolhidos no Hub de Contatos",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Cobrado da sua carteira: {amount}",
         "sumFollowUps": "Acompanhamentos",
         "sumSequence": "Enviado em rodízio",
-        "sumPrevious": "Envios anteriores: {names} ({outcome})"
+        "sumPrevious": "Envios anteriores: {names} ({outcome})",
+        "sumSplit": "Divisão entre números",
+        "sumSplitCount": "{count, plural, one {# destinatário} other {# destinatários}} ({percent}%)",
+        "sumSplitPercent": "{percent}% do público"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# pessoa clicou em um link} many {# de pessoas clicaram em um link} other {# pessoas clicaram em um link}}",
         "failed": "{count, plural, one {# pessoa para quem falhou} many {# de pessoas para quem falhou} other {# pessoas para quem falhou}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Enviado de cada número",
+      "hint": "Este envio foi dividido entre vários números. Cada linha é um número e os destinatários que ele recebeu.",
+      "cols": {
+        "number": "Número",
+        "recipients": "Destinatários",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "failed": "Com falha"
+      },
+      "removed": "(um número que foi removido)"
     }
   }
 }

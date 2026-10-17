@@ -491,9 +491,11 @@ export class WizardFollowUpService {
           ? await this.templates.find(tx, orgId, step.action.templateId)
           : undefined;
         if (!tpl) return { skip: 'template_gone' as const, claimedLog: true };
+        // A recipient of a split send is followed up from the number that sent it the campaign message.
+        const own = await this.campaigns.recipientSender(tx, orgId, c.id);
         const sender = await this.senders.resolveForDispatch(tx, orgId, {
-          provider: camp.provider,
-          deviceId: camp.deviceId,
+          provider: own ? own.provider : camp.provider,
+          deviceId: own ? own.deviceId : camp.deviceId,
         });
         if (!sender) return { skip: 'no_sender' as const, claimedLog: true };
         const base = await this.merge.baseContext(tx, orgId);

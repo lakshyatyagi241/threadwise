@@ -1210,7 +1210,12 @@
         "pickSender": "Elige un número",
         "classicOption": "editor clásico",
         "buildWithAi": "Crear con IA",
-        "aiNote": "Redacta una plantilla nueva con IA. La revisas en la página de la plantilla; después Meta la revisa antes de poder enviarla, así que vuelve y selecciónala cuando esté aprobada."
+        "aiNote": "Redacta una plantilla nueva con IA. La revisas en la página de la plantilla; después Meta la revisa antes de poder enviarla, así que vuelve y selecciónala cuando esté aprobada.",
+        "shareToggle": "Repartir este envío entre varios números",
+        "shareHint": "Marca los números desde los que enviar y asigna una parte a cada uno. La audiencia se reparte según esas partes y cada contacto recibe el mensaje desde un solo número. Una parte vacía o 0 cuenta como 1.",
+        "shareWeight": "Parte",
+        "shareWeightLabel": "Parte de {name}",
+        "shareKeepOne": "Al menos un número debe quedar marcado."
       },
       "audience": {
         "selectionTitle": "Elegidos en el Centro de contactos",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Se cobra de tu monedero: {amount}",
         "sumFollowUps": "Seguimientos",
         "sumSequence": "Se envía por turnos",
-        "sumPrevious": "Envíos anteriores: {names} ({outcome})"
+        "sumPrevious": "Envíos anteriores: {names} ({outcome})",
+        "sumSplit": "Reparto entre números",
+        "sumSplitCount": "{count, plural, one {# destinatario} other {# destinatarios}} ({percent}%)",
+        "sumSplitPercent": "{percent}% de la audiencia"
       },
       "test": {
         "title": "Enviar un mensaje de prueba de WhatsApp",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# persona hizo clic en un enlace} many {# de personas hicieron clic en un enlace} other {# personas hicieron clic en un enlace}}",
         "failed": "{count, plural, one {# persona para la que falló} many {# de personas para las que falló} other {# personas para las que falló}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Enviado desde cada número",
+      "hint": "Este envío se repartió entre varios números. Cada fila es un número y los destinatarios que recibió.",
+      "cols": {
+        "number": "Número",
+        "recipients": "Destinatarios",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "failed": "Fallidos"
+      },
+      "removed": "(un número que se eliminó)"
     }
   }
 }

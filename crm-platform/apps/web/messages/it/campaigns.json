@@ -1210,7 +1210,12 @@
         "pickSender": "Scegli un numero",
         "classicOption": "builder classico",
         "buildWithAi": "Crea con AI",
-        "aiNote": "Crea la bozza di un nuovo template con l'AI. Lo rivedi nella pagina del template; poi Meta lo esamina prima che possa essere inviato, quindi torna a selezionarlo dopo l'approvazione."
+        "aiNote": "Crea la bozza di un nuovo template con l'AI. Lo rivedi nella pagina del template; poi Meta lo esamina prima che possa essere inviato, quindi torna a selezionarlo dopo l'approvazione.",
+        "shareToggle": "Dividi questo invio su più numeri",
+        "shareHint": "Seleziona i numeri da cui inviare e assegna una quota a ciascuno. Il pubblico viene diviso in base a queste quote e ogni contatto riceve il messaggio da un solo numero. Una quota vuota o 0 vale 1.",
+        "shareWeight": "Quota",
+        "shareWeightLabel": "Quota di {name}",
+        "shareKeepOne": "Almeno un numero deve restare selezionato."
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Addebitato sul tuo wallet: {amount}",
         "sumFollowUps": "Follow-up",
         "sumSequence": "Inviato a rotazione",
-        "sumPrevious": "Invii precedenti: {names} ({outcome})"
+        "sumPrevious": "Invii precedenti: {names} ({outcome})",
+        "sumSplit": "Ripartizione tra i numeri",
+        "sumSplitCount": "{count, plural, one {# destinatario} other {# destinatari}} ({percent}%)",
+        "sumSplitPercent": "{percent}% del pubblico"
       },
       "test": {
         "title": "Invia un messaggio WhatsApp di prova",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# persona ha cliccato un link} other {# persone hanno cliccato un link}}",
         "failed": "{count, plural, one {# persona per cui non è riuscito} other {# persone per cui non è riuscito}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Inviato da ogni numero",
+      "hint": "Questo invio è stato diviso su più numeri. Ogni riga è un numero con i destinatari che ha ricevuto.",
+      "cols": {
+        "number": "Numero",
+        "recipients": "Destinatari",
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "failed": "Falliti"
+      },
+      "removed": "(un numero rimosso)"
     }
   }
 }

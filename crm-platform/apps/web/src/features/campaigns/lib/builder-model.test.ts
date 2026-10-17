@@ -93,6 +93,27 @@ describe('previous sends', () => {
   });
 });
 
+describe('sharing a send across several numbers', () => {
+  const shared = {
+    ...ok,
+    senderKeys: ['baileys:1', 'waba:2'],
+    senderShare: { 'baileys:1': 2, 'waba:2': 1 },
+  };
+
+  it('ships the numbers and their weights only when more than one is ticked', () => {
+    const body = toInput(shared);
+    expect(body.senderKeys).toEqual(['baileys:1', 'waba:2']);
+    expect(body.senderShare).toEqual({ 'baileys:1': 2, 'waba:2': 1 });
+    expect(toInput(ok)).not.toHaveProperty('senderKeys');
+    expect(toInput({ ...ok, senderKeys: ['baileys:1'] })).not.toHaveProperty('senderKeys');
+  });
+
+  it('a mail or a flow has no number to share, so nothing is shipped', () => {
+    expect(toInput({ ...shared, senderKey: 'email:1' })).not.toHaveProperty('senderKeys');
+    expect(toInput({ ...shared, type: 'flow' })).not.toHaveProperty('senderKeys');
+  });
+});
+
 describe('toInput', () => {
   it('ships a copy-code button with its code', () => {
     const body = toInput({

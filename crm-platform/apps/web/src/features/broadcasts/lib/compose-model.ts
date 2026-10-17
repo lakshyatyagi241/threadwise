@@ -1,110 +1,9 @@
-import type { ComposeTemplate, CreateBroadcastInput } from '@crm/contracts';
+import type { ComposeTemplate } from '@crm/contracts';
 
-/** The pure half of the compose page (TW-BCAST-004 to 008): form state, share percentages, the request body, the preview text. */
-
-export type ScheduleType = 'now' | 'later';
-
-export interface ComposeForm {
-  name: string;
-  templateId: string;
-  senderKeys: string[];
-  /** Weight per sender key; a missing or non-positive weight is 1 on the server. */
-  shares: Record<string, number>;
-  tagIds: string[];
-  segmentIds: string[];
-  groupIds: string[];
-  contactIds: string[];
-  scheduleType: ScheduleType;
-  sendDate: string;
-  sendTime: string;
-  timezone: string;
-  /** Send-time variable values; null when nothing was filled in. */
-  overrides: Record<string, unknown> | null;
-}
-
-export const EMPTY_FORM: ComposeForm = {
-  name: '',
-  templateId: '',
-  senderKeys: [],
-  shares: {},
-  tagIds: [],
-  segmentIds: [],
-  groupIds: [],
-  contactIds: [],
-  scheduleType: 'now',
-  sendDate: '',
-  sendTime: '',
-  timezone: 'UTC',
-  overrides: null,
-};
+/** The pure helpers the audience picker and the template preview still use (the old broadcast compose page moved into the Campaign wizard). */
 
 export const toggle = (list: readonly string[], id: string): string[] =>
   list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
-
-/**
- * The live "share" percentage beside each ticked sender: its weight over the ticked weights, rounded. A sender that is not
- * ticked has none (null), a ticked one with a zero or bad weight shows 0%.
- */
-export function sharePercents(
-  keys: readonly string[],
-  checked: readonly string[],
-  shares: Record<string, number>,
-): Record<string, number | null> {
-  const weight = (k: string) => {
-    const w = shares[k] ?? 1;
-    return Number.isFinite(w) && w > 0 ? w : 0;
-  };
-  const total = checked.reduce((a, k) => a + weight(k), 0);
-  const out: Record<string, number | null> = {};
-  for (const k of keys) {
-    if (!checked.includes(k)) out[k] = null;
-    else out[k] = total > 0 && weight(k) > 0 ? Math.round((weight(k) / total) * 100) : 0;
-  }
-  return out;
-}
-
-/** Date and time the schedule opens with: today in the zone, and 30 minutes from now (Reference's defaults). */
-export function defaultSchedule(
-  now: Date,
-  timezone: string,
-): { sendDate: string; sendTime: string } {
-  const at = new Date(now.getTime() + 30 * 60_000);
-  const part = (d: Date, o: Intl.DateTimeFormatOptions) =>
-    new Intl.DateTimeFormat('en-CA', { timeZone: timezone, hourCycle: 'h23', ...o }).format(d);
-  const today = part(now, { year: 'numeric', month: '2-digit', day: '2-digit' });
-  const time = part(at, { hour: '2-digit', minute: '2-digit' });
-  return { sendDate: today, sendTime: time };
-}
-
-/** What stops the form from being sent; empty means it can go. The audience is checked by the server (nobody sendable is refused there). */
-export function problems(f: ComposeForm): Array<'name' | 'template' | 'schedule'> {
-  const out: Array<'name' | 'template' | 'schedule'> = [];
-  if (!f.name.trim()) out.push('name');
-  if (!f.templateId) out.push('template');
-  if (f.scheduleType === 'later' && (!f.sendDate || !f.sendTime)) out.push('schedule');
-  return out;
-}
-
-/** The `POST /broadcasts` body: the schedule fields only for a later send, share weights only for the senders that are ticked. */
-export function buildBody(f: ComposeForm): CreateBroadcastInput {
-  const later = f.scheduleType === 'later';
-  const share: Record<string, number> = {};
-  for (const k of f.senderKeys) share[k] = f.shares[k] ?? 1;
-  return {
-    name: f.name.trim(),
-    templateId: f.templateId,
-    contactIds: f.contactIds,
-    groupIds: f.groupIds,
-    tagIds: f.tagIds,
-    segmentIds: f.segmentIds,
-    senderKeys: f.senderKeys,
-    senderShare: share,
-    scheduleType: f.scheduleType,
-    ...(later ? { sendDate: f.sendDate, sendTime: f.sendTime } : {}),
-    timezone: f.timezone,
-    ...(f.overrides && Object.keys(f.overrides).length ? { templateOverrides: f.overrides } : {}),
-  };
-}
 
 // --- preview ---------------------------------------------------------------
 
@@ -208,14 +107,6 @@ export function previewOf(t: ComposeTemplate) {
         ? (t.attachmentType ?? '').toLowerCase()
         : null,
   };
-}
-
-/** The picker's option text: the name, the WABA number it lives on, and the Twilio readiness mark. */
-export function templateOptionLabel(t: ComposeTemplate, twilio: boolean): string {
-  const parts = [t.name];
-  if (t.senderLabel) parts.push(`· ${t.senderLabel}`);
-  if (twilio) parts.push(t.twilioReady ? '✓ Twilio ready' : '· plain text only');
-  return parts.join(' ');
 }
 
 /** Name or phone, case-insensitive: the audience table's search. */

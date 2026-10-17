@@ -4,3 +4,4 @@ export * from './campaign-read';
 export * from './campaign-summary';
 export * from './recurrence';
 export * from './broadcast-wizard';
+export * from './sender-split';

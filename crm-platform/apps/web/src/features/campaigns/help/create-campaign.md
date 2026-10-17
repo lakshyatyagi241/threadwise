@@ -43,6 +43,10 @@ keywords:
     build with ai,
     picture,
     image,
+    several numbers,
+    share,
+    split,
+    weight,
   ]
 ---
 
@@ -108,6 +112,12 @@ With a verified Meta number the builder walks you through sending an approved Wh
 - **Classic builder.** The **Build with AI** button in the top bar opens a short brief: the AI model, business name, product, goal, tone, call to action, audience, offer and notes. **Generate campaign** fills the message, footer, link button and quick replies (up to three buttons) and opens **Compose**; a name you already typed is kept. Nothing is saved until you save or send.
 - **Also create a picture.** Tick it to have one image drawn from the same brief and attached as the campaign's **Attachment** once the text is in. Pick the shape: square, landscape or portrait. Pictures are drawn by OpenAI only, so the box is off until you choose an OpenAI model, and off for senders that cannot carry an image (SMS and email). If the picture fails (no OpenAI key, the monthly allowance used, or OpenAI refusing the request), the text stays in the form and the dialog shows a separate message with **Try the picture again**, which draws only the picture.
 - **Guided flow.** Next to the template list, **Build with AI** drafts a new WhatsApp template (marketing, in US English) and opens the new-template form with the draft filled in. Meta reviews every template before it can be sent, so come back to your draft campaign (it was saved as you went) and pick the template once it is approved. The button shows only if you may create templates.
+
+## Send from several numbers
+
+When you have two or more connected numbers (Meta, Twilio or personal numbers), step 1 of the guided flow shows **Share this send across several numbers** under **Send from**. Tick it to see your numbers as a list. Tick each number to send from and give it a **Share**: the audience is split by those shares, and the percentage beside each number shows the part it gets. Shares of 7 and 3 send 70% and 30% of the audience; a share that is empty or 0 counts as 1. At least one number stays ticked, and one ticked number is the same as picking it in the list.
+
+Every contact is messaged from one number only, never from two. The classic builder has the same option in **Setup**, under **Send from**; a mail campaign or a flow cannot be shared. The **Check and variables** step lists how many recipients each number will send, using the same split the launch uses. The template has to be sendable from every number you ticked: a template made on one Meta account cannot go out from a Meta number of another account, and the launch tells you which number is the problem and sends nothing. Personal numbers are not held to an account. Frequency-cap retries and follow-ups go out from the number that sent the first message, and **Send Test** goes from the first number you ticked. If one number stops being able to send while the campaign runs, only its recipients fail; the others carry on. When the send used several numbers, the campaign page and the broadcast status page show a **Sent from each number** table with recipients, sent, delivered and failed per number.
 
 ## Send a test
 

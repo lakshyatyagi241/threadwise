@@ -1210,7 +1210,12 @@
         "pickSender": "选择号码",
         "classicOption": "经典构建器",
         "buildWithAi": "使用 AI 生成",
-        "aiNote": "使用 AI 起草新模板。您可在模板页面查看；随后 Meta 会对其进行审核，通过后才能发送，请在审核通过后返回选择。"
+        "aiNote": "使用 AI 起草新模板。您可在模板页面查看；随后 Meta 会对其进行审核，通过后才能发送，请在审核通过后返回选择。",
+        "shareToggle": "将本次发送分配到多个号码",
+        "shareHint": "勾选要发送的号码，并为每个号码设置份额。受众按份额拆分，每位联系人只会收到来自一个号码的消息。份额为空或为 0 时按 1 计算。",
+        "shareWeight": "份额",
+        "shareWeightLabel": "{name} 的份额",
+        "shareKeepOne": "至少保留一个号码处于勾选状态。"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "从您的钱包扣款：{amount}",
         "sumFollowUps": "跟进",
         "sumSequence": "轮流发送",
-        "sumPrevious": "以往发送：{names}（{outcome}）"
+        "sumPrevious": "以往发送：{names}（{outcome}）",
+        "sumSplit": "按号码拆分",
+        "sumSplitCount": "{count, plural, other {# 位收件人}} ({percent}%)",
+        "sumSplitPercent": "占受众的 {percent}%"
       },
       "test": {
         "title": "发送 WhatsApp 测试消息",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, other {# 人点击了链接}}",
         "failed": "{count, plural, other {# 人发送失败}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "各号码的发送情况",
+      "hint": "本次发送已分配到多个号码。每一行是一个号码及其分到的收件人。",
+      "cols": {
+        "number": "号码",
+        "recipients": "收件人",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "failed": "失败"
+      },
+      "removed": "（已移除的号码）"
     }
   }
 }

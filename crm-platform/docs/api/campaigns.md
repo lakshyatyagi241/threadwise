@@ -425,6 +425,40 @@ A broadcast records delivery and reading only, so `replied`, `not_replied` and `
 
 The picker's rows: `GET /broadcast-wizard/audience-sources` has `previousSends` and `GET /campaigns/builder` has `previousSends`: finished broadcasts and every campaign that has gone out, newest first (100), each with `recipients`, `delivered`, `read`, `failed` and, for a campaign, `replied` and `clicked`. The Scheduled composer's `queues` (`GET /scheduled/options`) lists the same sends with `kind`, and its `queueIds` take a broadcast's or a campaign's uuid (no outcome filter there, as in Reference). The classic builder's edit form rebuilds its recipients from the campaign's resolved contacts, so a previous-sends choice is not shown again on edit.
 
+### Several numbers sharing one send (an addition; carries Reference's TW-BCAST-006 and 014)
+
+The draft takes `senderKeys` (the numbers a send is shared across, each `<engine>:<uuid>`, up to 50; empty means the one number in `senderKey`) and
+`senderShare` (weight per key, 0 to 1000). `senderKey` stays the first number, the campaign's own (`provider` and `deviceId` of the `wpcampaigns` row);
+a draft saved before this has neither and sends from one number exactly as before. `wizardSenderPicks`, `splitSizes`, `splitAudience` and
+`senderSplit` in `@crm/contracts` are the one definition of the rule, so the Review step shows the counts the launch cuts.
+
+- **Saving a draft** (`PUT /drafts/:id`) checks each pick: connected, and not a mailbox. A pick that is not is a 422 `VALIDATION_FAILED` with
+  `errors[].path` `senderKeys.<n>`.
+- **Launch** resolves the picks again (422 `CAMP_TEMPLATE_NOT_ALLOWED`, path `senderKeys.<n>`, message `sender_not_connected` or `sender_is_mailbox`),
+  then requires the template, variant B, every sequence template and every follow-up template to be sendable from every pick. A template tied to one
+  WhatsApp connection is sendable from numbers of the same Meta account (`wa_provider_configs.meta_json.waba_id`) and the number it is tied to; a template
+  tied to none, from any. Otherwise 422 `CAMP_TEMPLATE_NOT_ALLOWED` with `errors[] = { path: "senderKeys.<n>", message: "template_not_on_sender" }`; nothing is
+  written and the draft stays editable. A send from one number is not checked this way (unchanged).
+- **The split.** The audience (contact order) is cut into sequential slices by weight: a missing, empty, 0 or negative weight counts as 1; each number gets the
+  floor of its share and the leftover goes one at a time to the largest fractions (ties to the number picked first). Every contact lands in exactly one slice and
+  the sizes add up. Each recipient row stores its number in `sender_provider` and `sender_device_id` (null for a one-number send). `wizard.launch.split` keeps
+  `{ key, weight, count }` per number. With fewer contacts than numbers some numbers get nobody.
+- **Wallet.** One precheck for the whole audience: the template's category, and so the price, is the same for every number.
+- **The run.** Each number is a lane: it opens its own sender, holds its own sender lock, paces itself and sends only the recipients on its rows, all lanes at
+  once. The campaign lock, the daily limit and the end state belong to the campaign and are decided once after every lane stopped. A number that cannot be
+  opened fails only its own recipients (`Sender unavailable: ...`); if none can, the campaign fails like an ordinary one. A number another run holds is skipped
+  and the campaign is scheduled again about a minute later.
+- **131049 retries and follow-ups** go out from the number the recipient was first sent from (the campaign's number when the row has none). The test send goes from
+  the first number. A recurring broadcast splits every run the same way; a run that cannot (a number gone, a template no longer fitting) is a refused run.
+- **Any engine.** A Cloud API number, a Twilio number and a personal (device) number can share a send; a mailbox cannot. The template-account rule above
+  applies to Cloud API numbers only. Each lane sends through its own engine's adapter; a personal-number lane waits while the platform switch is off.
+- **Classic campaigns** (`POST /campaigns`, `PUT /campaigns/:id`) take the same `senderKeys` and `senderShare`, and the create cuts the recipients the same way
+  (a flow campaign or a mailbox refuses it: 422 on `senderKeys`). An edit that changes the numbers cuts the recipients already on the campaign again.
+  `GET /campaigns/:id/config` returns `senderKeys` (the campaign's own first) and `senderShare` (the recipients each number was given) for the edit form.
+- **Per-number figures.** `GET /campaigns/:id` and `GET /broadcast-wizard/broadcasts/:id` carry `senders`: `{ key, label, engine, recipients, sent, delivered,
+failed }` per number (a series: all its runs together), in the order the numbers were first used; empty for a send from one number.
+- Not covered: the test send goes from the first number only.
+
 ### Test send
 
 `{ "draftId": "...", "recipients": "+919876543210,+14155550123" }`: the draft's template and variables resolved for the first messageable contact of

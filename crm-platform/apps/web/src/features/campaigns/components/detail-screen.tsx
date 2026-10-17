@@ -1,5 +1,6 @@
 'use client';
 
+import { SenderBreakdown } from './sender-breakdown';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -294,6 +295,8 @@ export function DetailScreen({ id }: { id: string }) {
           </table>
         </div>
       )}
+
+      <SenderBreakdown lines={d.senders} />
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-background p-5 shadow-sm">

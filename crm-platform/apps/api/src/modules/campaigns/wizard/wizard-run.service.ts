@@ -2,6 +2,8 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   retryWindowCloses,
+  splitAudience,
+  wizardSenderPicks,
   type WizardAudienceCount,
   type WizardDraft,
 } from '@crm/contracts';
@@ -17,6 +19,9 @@ import {
   type WalletGate,
 } from '../../broadcasts';
 import { MODULE_KEY } from '../campaign-events';
+import { SenderSharesService, type RunSender } from '../sender-shares.service';
+
+export type { RunSender };
 import { CampaignsRepository } from '../campaigns.repository';
 import { createdWebhook, toSnapshot } from '../campaign-webhook-events';
 import { WizardAudienceService } from './wizard-audience.service';
@@ -82,6 +87,7 @@ export class WizardRunService {
     private readonly review: WizardReviewService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly shares: SenderSharesService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
@@ -133,6 +139,53 @@ export class WizardRunService {
   }
 
   /**
+   * Every number a draft sends from, in the order picked (the first is the primary: the campaign's own number). One pick, or none (an
+   * old draft that falls back to its template's number), is exactly {@link sender}. Several picks (TW-BCAST-006) must each be a
+   * connected number of an engine that can share a send; a pick that is not is refused (422) naming it, so nothing is sent from a number the person
+   * did not choose.
+   */
+  async senderList(
+    tx: Tx,
+    orgId: number,
+    template: TemplateListRow,
+    draft: WizardDraft,
+  ): Promise<RunSender[]> {
+    const picks = wizardSenderPicks(draft);
+    if (picks.length <= 1) {
+      const one = await this.sender(tx, orgId, template, picks[0] ?? null);
+      return [
+        {
+          key: picks[0] ?? '',
+          provider: one.provider,
+          deviceId: one.deviceId,
+          label: '',
+          weight: 1,
+        },
+      ];
+    }
+    return this.shares.resolvePicks(tx, orgId, picks, draft.senderShare);
+  }
+
+  /**
+   * A split send needs the template to be sendable from every picked number. A template tied to one WhatsApp connection (its Meta
+   * account) goes out only from numbers of that same account; a template tied to none goes from any. Refuses (422) with the first
+   * number that cannot send it. A send from one number is not checked here: it behaves as it always did.
+   */
+  async assertUsableOnEvery(
+    tx: Tx,
+    orgId: number,
+    template: Pick<TemplateListRow, 'name' | 'providerConfigId'>,
+    senders: readonly RunSender[],
+  ): Promise<void> {
+    await this.shares.assertTemplateOnEvery(
+      tx,
+      orgId,
+      { name: template.name, providerConfigId: template.providerConfigId },
+      senders,
+    );
+  }
+
+  /**
    * Everything that can refuse a send before a row exists: a connected number, somebody to message, an audience of a size one
    * transaction can write, and a wallet that covers it (422 WALLET_EMPTY). Nothing is written, so the caller's transaction stays clean.
    */
@@ -143,9 +196,12 @@ export class WizardRunService {
     template: TemplateListRow,
   ): Promise<{
     sender: { provider: string; deviceId: number | null };
+    senders: RunSender[];
     count: WizardAudienceCount;
   }> {
-    const sender = await this.sender(tx, orgId, template, draft.senderKey);
+    const senders = await this.senderList(tx, orgId, template, draft);
+    await this.assertUsableOnEvery(tx, orgId, template, senders);
+    const sender = senders[0]!;
     const count = await this.audience.count(tx, orgId, draft.audience);
     if (count.recipients === 0) {
       throw new AppError(
@@ -167,7 +223,7 @@ export class WizardRunService {
       phones: await this.review.gatePhones(tx, orgId, draft.audience),
       category: templateCategory(template.metaCategory, template.category),
     });
-    return { sender, count };
+    return { sender, senders, count };
   }
 
   /**
@@ -175,7 +231,7 @@ export class WizardRunService {
    * left and WALLET_EMPTY when the wallet cannot cover it; the caller's transaction rolls back on either.
    */
   async createRun(tx: Tx, orgId: number, i: RunInput): Promise<RunResult> {
-    const { sender, count } = await this.preflight(tx, orgId, i.draft, i.template);
+    const { sender, senders, count } = await this.preflight(tx, orgId, i.draft, i.template);
 
     // A/B: variant B's template, checked here too so every run of a series (not only the launch) refuses a template that is gone.
     let templateB: TemplateListRow | undefined;
@@ -220,6 +276,16 @@ export class WizardRunService {
       everyone.push(...ids);
       after = ids[ids.length - 1]!;
     }
+    // A split send (TW-BCAST-014): the audience is cut in slices by weight, in contact order, and each contact is messaged from its
+    // slice's number. A send from one number writes no per-recipient number and behaves as before.
+    const slices =
+      senders.length > 1
+        ? splitAudience(
+            everyone,
+            senders.map((x) => x.weight),
+          )
+        : [];
+    const senderOf = this.shares.assign(everyone, senders);
     const variants = options.abTesting
       ? assignVariants(everyone, i.draft.abSplit, Math.random)
       : new Map<number, 'A' | 'B'>();
@@ -228,9 +294,11 @@ export class WizardRunService {
         tx,
         orgId,
         id,
-        everyone
-          .slice(from, from + WRITE_CHUNK)
-          .map((contactId) => ({ contactId, variant: variants.get(contactId) ?? null })),
+        everyone.slice(from, from + WRITE_CHUNK).map((contactId) => ({
+          contactId,
+          variant: variants.get(contactId) ?? null,
+          sender: senderOf.get(contactId) ?? null,
+        })),
       );
     }
     const written = everyone.length;
@@ -244,6 +312,15 @@ export class WizardRunService {
           optedOut: count.optedOut,
           invalidNumber: count.invalidNumber,
           recipients: written,
+          ...(slices.length > 0
+            ? {
+                split: senders.map((x, n) => ({
+                  key: x.key,
+                  weight: x.weight,
+                  count: slices[n]!.length,
+                })),
+              }
+            : {}),
           csvContactsCreated: csv.created,
           csvSkipped: csv.skipped,
         },
