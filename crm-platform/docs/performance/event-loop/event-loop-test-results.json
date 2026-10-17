@@ -3,6 +3,27 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "regression-check.mjs on real run-load.mjs runs (profile normal, 90 s, 300 contacts): 3 baseline recordings, a clean run, a run with a 300 ms block injected every 5 s, a run on a starved host",
+      "status": "RAN: clean passes, injected block fails, starved host is exit 2",
+      "ranOn": "2026-10-17, branch claude/event-loop-regression-check",
+      "rawData": "evidence/regression-gate-local.json",
+      "observed": {
+        "baseline": "worst delay per window 83 / 36 / 53 ms, allowance 148 ms; p99 45 / 27 / 34 ms, allowance 69 ms; share of windows over 250 ms 0.03 / 0 / 0.05, allowance 0.18",
+        "clean": "p99 34 ms, worst 64 ms, no window over 250 ms: exit 0",
+        "injected": "worst 316 ms, 96 % of windows over 250 ms (22 critical windows): exit 1; p99 37 ms, not moved by one block per window",
+        "starvedHost": "worst 155 ms (allowance 148) with Postgres round trip p50 131 ms against 8 to 34 ms: exit 2 (it read as a regression before the gate learned to compare round trips)"
+      },
+      "caveat": "One noisy laptop. Two clean runs beyond the three recorded (the second through ci-regression.sh, exit 0), so the false-alarm rate is NOT measured. One injected shape. The caller p95 was not judged (recorded runs 0.8 s to 6.1 s). The CI job and a CI baseline do not exist yet (EL-B19)."
+    },
+    {
+      "suite": "apps/api unit: regression-check.spec.ts (4) and the gate self-test (16 cases)",
+      "status": "PASSED",
+      "tests": 4,
+      "passed": 4,
+      "ranOn": "2026-10-17",
+      "note": "Allowance from spread with floors; a 300 ms block in most windows fails and the recorded runs pass; no baseline, aborted run, a baseline too noisy for 300 ms are exit 2; failures on a host with far-off round trips are exit 2; a caller p95 whose recorded runs disagree by more than their median is not judged."
+    },
+    {
       "suite": "scrape-demo.mjs --grafana (real API, worker and probe, real Prometheus 2.55 and Alertmanager 0.27, real Grafana 11.3.0)",
       "status": "PASSED (54 of 54 checks)",
       "ranOn": "2026-10-17, branch claude/event-loop-dashboards",
@@ -343,6 +364,7 @@
     "delivery to a real chat or pager destination",
     "dashboards on a real server, viewed in a browser, or used during an incident (they load and every query runs against a real Grafana in the demo)",
     "a 12 h or 24 h soak, or any load test on a dedicated host",
-    "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
+    "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)",
+    "the regression gate on a GitHub runner, a CI baseline, or its false-alarm rate (EL-B19)"
   ]
 }

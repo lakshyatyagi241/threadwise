@@ -52,12 +52,17 @@ const SETTLE_SECONDS = Number(arg('settle-seconds', 60));
 const TRACE = process.argv.includes('--trace');
 // --no-prefetch (with --trace): switch off JwtAuthGuard's early Redis reads, to measure the same build with and without them.
 const NO_PREFETCH = process.argv.includes('--no-prefetch');
+// --inject-block-ms=300: hold the API's event loop that long every --inject-every-s (default 5) while a profile runs, through
+// inject-block.cjs. Only for proving that the regression gate (regression-check.mjs) trips on a real stall; never for a baseline.
+const INJECT_MS = Number(arg('inject-block-ms', 0));
+const INJECT_EVERY_S = Number(arg('inject-every-s', 5));
 
 const P = { pg: 55434, redis: 56381, api: 3997, apiMetrics: 9474, workerMetrics: 9475 };
 const NAMES = { pg: 'el-load-pg', redis: 'el-load-redis' };
 const K6_IMAGE = 'grafana/k6:0.49.0';
 const work = mkdtempSync(join(tmpdir(), 'el-load-'));
 const traceFile = join(work, 'trace.ndjson');
+const injectGo = join(work, 'inject.go');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const docker = (...a) =>
   execFileSync('docker', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -386,6 +391,15 @@ function summariseWindows(windows) {
   return {
     windows: windows.length,
     loopDelayMs: { p50: f('p50', ms), p95: f('p95', ms), p99: f('p99', ms), max: f('max', ms) },
+    // Share of reporting windows whose single worst delay passed 100 ms and 250 ms: the regression gate's measure of "blocks".
+    loopDelayMaxOverShare: (() => {
+      const maxes = windows.map((w) => w.max).filter((x) => Number.isFinite(x));
+      const share = (t) =>
+        maxes.length === 0
+          ? undefined
+          : Math.round((maxes.filter((x) => x > t).length / maxes.length) * 1000) / 1000;
+      return { over100ms: share(0.1), over250ms: share(0.25) };
+    })(),
     eventLoopUtilization: f('elu', (x) => Math.round(x * 1000) / 1000),
     cpuCores: f('cpu', (x) => Math.round(x * 1000) / 1000),
     heapUsedMb: f('heap', mb),
@@ -403,6 +417,8 @@ function runK6(profile, env) {
   const args = [
     'run',
     '--rm',
+    // Docker Desktop resolves host.docker.internal by itself; on Linux (CI) it needs this.
+    '--add-host=host.docker.internal:host-gateway',
     '-v',
     `${join(here)}:/scripts:ro`,
     '-v',
@@ -690,8 +706,18 @@ try {
       OBS_METRICS_PORT: String(P.apiMetrics),
       ...(TRACE ? { TRACE_OUT: traceFile } : {}),
       ...(TRACE && NO_PREFETCH ? { TRACE_NO_PREFETCH: '1' } : {}),
+      ...(INJECT_MS > 0
+        ? {
+            INJECT_BLOCK_MS: String(INJECT_MS),
+            INJECT_BLOCK_EVERY_MS: String(INJECT_EVERY_S * 1000),
+            INJECT_BLOCK_GO: injectGo,
+          }
+        : {}),
     },
-    TRACE ? ['-r', join(here, 'trace-preload.cjs')] : [],
+    [
+      ...(TRACE ? ['-r', join(here, 'trace-preload.cjs')] : []),
+      ...(INJECT_MS > 0 ? ['-r', join(here, 'inject-block.cjs')] : []),
+    ],
   );
   start('worker', 'dist/src/worker.js', {
     WORKER_MODE: 'true',
@@ -783,6 +809,7 @@ try {
     if (TRACE) await sleep(2500); // the preload rewrites its statement counts every 2 s: read a settled copy
     const aggBefore = TRACE ? readAgg(traceFile) : undefined;
     const t0 = Date.now();
+    if (INJECT_MS > 0) writeFileSync(injectGo, '1');
     let k6;
     if (profile === 'idle') {
       await sleep(IDLE_SECONDS * 1000);
@@ -791,6 +818,7 @@ try {
     }
     const seconds = (Date.now() - t0) / 1000;
     await sleep(6000); // one more window, so the last seconds of load are reported
+    if (INJECT_MS > 0) rmSync(injectGo, { force: true });
     const apiWindows = await stopApi();
     const workerWindows = await stopWorker();
     const postgres = await stopPg();
@@ -866,6 +894,7 @@ writeFileSync(
         rates:
           'normal 5 req/s, peak 20 req/s, spike 5 to 60 req/s (3x peak), soak 5 req/s; open model (arrival rate)',
         profilesRequested: PROFILES,
+        injectedBlock: INJECT_MS > 0 ? { ms: INJECT_MS, everySeconds: INJECT_EVERY_S } : undefined,
         seconds: { normalAndPeak: SECONDS, idle: IDLE_SECONDS, soakMinutes: SOAK_MINUTES },
       },
       comparabilityWarning:
