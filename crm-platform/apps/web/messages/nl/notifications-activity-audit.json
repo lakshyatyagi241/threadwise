@@ -165,6 +165,12 @@
         "titleNoName": "Testmelding",
         "bodyNoActor": "Als je dit kunt lezen, werken livemeldingen."
       },
+      "snooze_wake": {
+        "title": "{name} staat weer in je lijst",
+        "titleNoName": "Een gesnoozede chat staat weer in je lijst",
+        "titleTeam": "{name} staat weer voor je team",
+        "titleTeamNoName": "Een gesnoozede chat staat weer voor je team"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} wordt verlengd op {date, date, medium}",
         "bodyAuto": "Op die datum wordt je kaart automatisch belast om {name} te verlengen. Zeg het abonnement vóór die datum op om dat te voorkomen.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Verzoek om deel te nemen aan een groep",
         "device_group_removed": "Verwijderd uit een WhatsApp-groep",
         "test": "Testmelding",
+        "snooze_wake": "Gesnoozede chat is terug",
         "marketplace_renewal_due": "Verlenging van betaalde app nadert",
         "marketplace_payment_failed": "Betaling voor betaalde app mislukt",
         "marketplace_subscription_ended": "Abonnement op betaalde app beëindigd"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Afspraak niet gesynchroniseerd met Google Calendar",
           "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
+        },
+        "snooze_wake": {
+          "label": "Gesnoozede chat komt terug",
+          "hint": "Een gesnoozede chat wordt op het gekozen moment weer geopend en aan jou of je team toegewezen."
         },
         "marketplace_renewal_due": {
           "label": "Herinnering verlenging betaalde app",

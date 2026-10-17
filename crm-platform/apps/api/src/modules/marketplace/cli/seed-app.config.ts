@@ -1,5 +1,5 @@
 /**
- * Per-app configuration of the local-development Marketplace seed commands (`seed:appointments`, `seed:forms`, `seed:email`). Everything that differs
+ * Per-app configuration of the local-development Marketplace seed commands (`seed:appointments`, `seed:forms`, `seed:email`, `seed:lead-scoring`). Everything that differs
  * between the apps lives here; the guarded steps (price, add-on, comp, approve and publish, plan visibility) are shared in
  * seed-app.runner.ts and the argument rules in seed-app.args.ts.
  */
@@ -68,4 +68,19 @@ export const EMAIL_CONFIG: SeedAppConfig = {
   usageNoun: 'mailboxes',
   // Seeded as a mini app by ..._mkt_email_app and converted to an integration (category Messaging and email) by ..._mkt_email_integration.
   migration: '20261119120000_mkt_email_integration',
+};
+
+export const LEAD_SCORING_CONFIG: SeedAppConfig = {
+  slug: 'lead-scoring',
+  label: 'AI lead scoring',
+  command: 'seed:lead-scoring',
+  // The operator prices the listing in the console; this is only the local-development default (about 12 USD a month). No trial by default.
+  defaultPrice: '999',
+  defaultCurrency: 'INR',
+  feature: 'lead_scoring',
+  version: '1.0.0',
+  // The workspaces that already used scoring keep it (migration 20261228090000 gave them an override; the comp is the lasting record).
+  grandfatherExisting: true,
+  usageNoun: 'AI lead scoring',
+  migration: '20261228090000_mkt_lead_scoring_app',
 };

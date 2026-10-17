@@ -33,7 +33,8 @@
       "browse": "Marketplace durchsuchen",
       "back": "Zurück zum Dashboard",
       "unofficialTitle": "{app} ist nicht verfügbar",
-      "unofficialBody": "{app} wird nur mit persönlichen WhatsApp-Nummern verwendet, die per QR-Code gekoppelt werden und für Ihren Workspace nicht aktiviert sind. WhatsApp verbindet sich über die offizielle WhatsApp Business API."
+      "unofficialBody": "{app} wird nur mit persönlichen WhatsApp-Nummern verwendet, die per QR-Code gekoppelt werden und für Ihren Workspace nicht aktiviert sind. WhatsApp verbindet sich über die offizielle WhatsApp Business API.",
+      "viewApp": "{app} im Marketplace ansehen"
     },
     "closeMenu": "Menü schließen",
     "mainMenu": "Hauptmenü",

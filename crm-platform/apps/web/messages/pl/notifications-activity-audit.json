@@ -165,6 +165,12 @@
         "titleNoName": "Powiadomienie testowe",
         "bodyNoActor": "Jeśli możesz to przeczytać, powiadomienia na żywo działają."
       },
+      "snooze_wake": {
+        "title": "{name} wrócił na twoją listę",
+        "titleNoName": "Odłożony czat wrócił na twoją listę",
+        "titleTeam": "{name} wrócił dla twojego zespołu",
+        "titleTeamNoName": "Odłożony czat wrócił dla twojego zespołu"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name}: odnowienie {date, date, medium}",
         "bodyAuto": "W tym dniu Twoja karta zostanie automatycznie obciążona, aby odnowić {name}. Anuluj subskrypcję wcześniej, aby tego uniknąć.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Prośba o dołączenie do grupy",
         "device_group_removed": "Usunięto z grupy WhatsApp",
         "test": "Powiadomienie testowe",
+        "snooze_wake": "Odłożony czat wrócił",
         "marketplace_renewal_due": "Zbliża się odnowienie płatnej aplikacji",
         "marketplace_payment_failed": "Płatność za płatną aplikację nie powiodła się",
         "marketplace_subscription_ended": "Subskrypcja płatnej aplikacji zakończona"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Wizyta niezsynchronizowana z Google Calendar",
           "hint": "Wydarzenie w Google Calendar dotyczące nadchodzącej wizyty zostało usunięte, przeniesione lub zmieniono jego gości. Wizyta nie została zmieniona; to Ty decydujesz, co zrobić."
+        },
+        "snooze_wake": {
+          "label": "Odłożony czat wraca",
+          "hint": "Odłożony czat otwiera się ponownie o wyznaczonej porze i trafia do ciebie lub do zespołu."
         },
         "marketplace_renewal_due": {
           "label": "Przypomnienie o odnowieniu płatnej aplikacji",

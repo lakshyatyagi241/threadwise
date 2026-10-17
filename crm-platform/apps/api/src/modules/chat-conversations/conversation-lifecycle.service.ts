@@ -77,6 +77,30 @@ export class ConversationLifecycleService {
     });
   }
 
+  /** An agent's reply brought a resolved, closed or spam thread back to open (the timeline and the outbox say who did it). */
+  async repliedReopen(
+    tx: Tx,
+    orgId: number,
+    channel: ChannelRow,
+    conv: ConversationRow,
+    from: string,
+    actorUserId: number | null,
+  ): Promise<void> {
+    await this.conversations.insertEvent(tx, orgId, conv.id, {
+      type: 'reopened',
+      actorType: actorUserId === null ? 'system' : 'user',
+      actorUserId,
+      payload: { from, by: 'agent' },
+    });
+    await this.outbox.emit(tx, {
+      aggregateModule: CONVERSATIONS_MODULE,
+      aggregateId: conv.id,
+      eventType: 'conversation.reopened',
+      payload: { ...(await this.payload(tx, orgId, channel, { ...conv, status: 'open' })), from },
+      orgId,
+    });
+  }
+
   /**
    * A customer's message was stored: the one per-message outbox event, read by the conversation notifications (BL-096). Written in the
    * ingest transaction, so a message that committed always has its event and a rolled-back one has none. The event carries ids and an

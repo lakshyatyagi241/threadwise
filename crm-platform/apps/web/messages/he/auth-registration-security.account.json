@@ -559,7 +559,8 @@
             "help_agent": "עוזר העזרה",
             "email_channel": "ערוץ דוא\"ל (Gmail)",
             "personal_history_full": "ייבוא היסטוריה מלאה (WhatsApp אישי)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "דירוג לידים באמצעות AI"
           },
           "cta": {
             "continueFree": "המשך בחינם",

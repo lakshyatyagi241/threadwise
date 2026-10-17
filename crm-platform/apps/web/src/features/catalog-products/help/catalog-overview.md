@@ -50,3 +50,7 @@ Catalog needs the **WhatsApp catalog** plan feature and permission to view the c
 - **Nothing was sent:** the screen lists the reasons. Common ones are no connected number, no recipients, a wallet balance too low to send, or more than 500 recipients.
 - **A product shows failed:** read the message under its Meta status, fix the product (often the image or price) in [Products](help:store-products-overview) and sync again.
 - **A product is missing from Send:** only active products are listed.
+
+## Get it as an app
+
+The WhatsApp catalog and its store orders is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

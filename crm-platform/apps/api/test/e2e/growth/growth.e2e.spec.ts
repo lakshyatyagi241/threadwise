@@ -126,6 +126,17 @@ beforeAll(async () => {
   });
   await h.app.listen(0, '127.0.0.1');
   api = new Api(h);
+  // The growth pilot is built on AI lead scoring, a Marketplace app (plan feature `lead_scoring`, off in every plan). These specs test the
+  // pilot, so every workspace they create is given the feature the way the migration grandfathers a workspace that already uses it.
+  const signup = api.signup.bind(api);
+  api.signup = async (label?: string) => {
+    const t = await signup(label);
+    await h.owner.query(
+      `UPDATE org_plan_state SET overrides = jsonb_set(overrides, '{features}', '{"lead_scoring": true}'::jsonb, true) WHERE org_id = $1`,
+      [t.orgId],
+    );
+    return t;
+  };
 
   const first = await api
     .http()

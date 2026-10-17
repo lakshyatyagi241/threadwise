@@ -20,6 +20,7 @@ import { mktError } from '../lib/errors';
 import { installationChips } from '../lib/install-state';
 import { manageView, uninstallBody } from '../lib/manage';
 import { uninstallRenewal } from '../lib/pricing';
+import { appHomeFor } from '../lib/app-home';
 import { mktRoutes } from '../lib/routes';
 import type { SetupField } from '../lib/setup-form';
 import { CredentialsPanel } from './manage-credentials';
@@ -34,6 +35,7 @@ import {
   ChipView,
   ErrorPanel,
   LINK_BUTTON,
+  LINK_BUTTON_PRIMARY,
   LoadingBlock,
   NeedsPermission,
   PAGE,
@@ -109,6 +111,7 @@ export function ManageScreen({
   reload: () => void;
 }) {
   const t = useTranslations('marketplace.manage');
+  const td = useTranslations('marketplace.detail');
   const f = useFormatter();
   const router = useRouter();
   const qc = useQueryClient();
@@ -118,6 +121,7 @@ export function ManageScreen({
     hasTestPayload: app?.setup?.hasTestPayload ?? false,
   });
   const chips = installationChips(installation, { showUnknown: true });
+  const open = appHomeFor(installation.app.slug, installation.status);
   const fields = fieldsFor(installation, app);
 
   const [confirmPause, setConfirmPause] = useState(false);
@@ -140,6 +144,8 @@ export function ManageScreen({
     setConfirmPause(false);
     if (!out.ok) return;
     setInstallation(out.value);
+    // Pausing or resuming an app turns its screens off or on: the menu and the app gate are read on the server, so they are read again.
+    router.refresh();
     toast(enabled ? t('toast.resumed') : t('toast.paused'));
   };
 
@@ -165,6 +171,7 @@ export function ManageScreen({
     void qc.invalidateQueries({ queryKey: mktKeys.app(installation.app.slug) });
     toast(t('toast.uninstalled', { name: installation.app.name }));
     router.push(mktRoutes.installed);
+    router.refresh();
   };
 
   const checked = installation.health.checkedAt
@@ -208,6 +215,12 @@ export function ManageScreen({
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {open && (
+            <Link href={open} className={LINK_BUTTON_PRIMARY} data-testid="manage-open">
+              {td('open')}
+              <span className="sr-only"> — {installation.app.name}</span>
+            </Link>
+          )}
           <Link href={mktRoutes.app(installation.app.slug)} className={LINK_BUTTON}>
             {t('viewListing')}
           </Link>

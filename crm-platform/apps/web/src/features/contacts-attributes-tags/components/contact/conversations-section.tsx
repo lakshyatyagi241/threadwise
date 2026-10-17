@@ -15,8 +15,6 @@ type Translate = ReturnType<typeof useTranslations>;
 /** Literal keys so every message is visibly used. */
 function statusLabel(t: Translate, status: ConversationSummary['status']): string {
   switch (status) {
-    case 'pending':
-      return t('status.pending');
     case 'snoozed':
       return t('status.snoozed');
     case 'resolved':

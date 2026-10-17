@@ -29,7 +29,8 @@
       "priorityChanged": "优先级已更新",
       "snoozed": "对话已暂时搁置",
       "tagAdded": "已添加标签",
-      "tagRemoved": "已移除标签"
+      "tagRemoved": "已移除标签",
+      "spammed": "会话已标记为垃圾信息。"
     },
     "list": {
       "title": "收件箱",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "打开",
-        "pending": "待处理",
         "snoozed": "已暂停",
         "resolved": "已解决",
         "closed": "已解决",
@@ -113,7 +113,7 @@
         "cancel": "取消",
         "apply": "应用",
         "status": "聊天状态",
-        "statusHint": "不选则显示进行中和待处理的聊天。",
+        "statusHint": "未选择时显示未结束的会话。",
         "conversation": "会话",
         "any": "任意",
         "assigned": "已分配",
@@ -145,7 +145,15 @@
       "statusOpen": "打开",
       "statusAll": "所有状态",
       "channelFilter": "渠道",
-      "selectRow": "选择 {name}"
+      "selectRow": "选择 {name}",
+      "snoozedFor": "已暂停 · {left}",
+      "snoozeLeft": {
+        "due": "即将",
+        "minutes": "{count} 分钟",
+        "hours": "{count} 小时",
+        "days": "{count} 天"
+      },
+      "unsnoozesAt": "{time} 恢复"
     },
     "status": {
       "received": "已接收",
@@ -580,6 +588,8 @@
           "tag_removed": "{actor} 移除了标签",
           "first_response": "已发送首次回复",
           "sla_breach": "已错过回复期限",
+          "spam_flagged": "由 {actor} 标记为垃圾信息",
+          "escalated": "已升级",
           "unknown": "{actor} 执行：{what}"
         },
         "actors": {
@@ -596,7 +606,6 @@
         "noMessages": "无消息",
         "status": {
           "open": "打开",
-          "pending": "待处理",
           "snoozed": "已暂停",
           "resolved": "已解决",
           "closed": "已关闭",
@@ -1015,7 +1024,9 @@
     "triage": {
       "priority": "优先级",
       "snooze": "暂时搁置",
-      "wake": "立即恢复"
+      "wake": "立即恢复",
+      "markSpam": "标记为垃圾信息",
+      "notSpam": "不是垃圾信息"
     },
     "bulk": {
       "barLabel": "批量操作",
@@ -1048,7 +1059,8 @@
       "tagAdd": "添加标签",
       "tagRemove": "移除标签",
       "onLeave": "休假中",
-      "onLeaveUntil": "休假至 {date}"
+      "onLeaveUntil": "休假至 {date}",
+      "spam": "标记为垃圾信息"
     },
     "tags": {
       "tag": "标签",

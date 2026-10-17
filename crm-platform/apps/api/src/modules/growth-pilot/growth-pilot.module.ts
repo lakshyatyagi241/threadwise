@@ -11,6 +11,7 @@ import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { LeadScoringModule } from '../lead-scoring';
 import { NotificationsModule } from '../notifications';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
 import { GrowthActionsService } from './growth-actions.service';
@@ -55,6 +56,7 @@ export const growthEnrichmentProvider = {
     CrmModule,
     LeadScoringModule,
     NotificationsModule,
+    PlansCoreModule,
     TeamInboxConversationsModule,
     TeamInboxRoutingSlaModule,
   ],

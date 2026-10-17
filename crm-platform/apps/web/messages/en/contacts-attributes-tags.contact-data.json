@@ -35,7 +35,6 @@
         "footnote": "Found by the contact's phone number, e-mail address or name. Archived conversations are not listed.",
         "status": {
           "open": "Open",
-          "pending": "Pending",
           "snoozed": "Snoozed",
           "resolved": "Resolved",
           "closed": "Closed",

@@ -9,16 +9,9 @@ import { z } from 'zod';
 
 /**
  * One lifecycle (Reference kept a Quick Send status and an inbox status side by side). `closed` stays because Reference's inbox can reach it
- * separately from `resolved`; `pending` is "waiting on the customer".
+ * separately from `resolved`. Reference's `pending` (waiting on the customer) is removed by the owner's decision.
  */
-export const CONVERSATION_STATUSES = [
-  'open',
-  'pending',
-  'snoozed',
-  'resolved',
-  'closed',
-  'spam',
-] as const;
+export const CONVERSATION_STATUSES = ['open', 'snoozed', 'resolved', 'closed', 'spam'] as const;
 /** The zod schema is `conversationStatusSchema` in common/enums.ts (the platform's mirror of the legal values). */
 export type ConversationStatus = (typeof CONVERSATION_STATUSES)[number];
 

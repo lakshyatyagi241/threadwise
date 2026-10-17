@@ -29,7 +29,8 @@
       "priorityChanged": "تم تحديث الأولوية",
       "snoozed": "تم تأجيل المحادثة",
       "tagAdded": "تمت إضافة الوسم",
-      "tagRemoved": "تمت إزالة الوسم"
+      "tagRemoved": "تمت إزالة الوسم",
+      "spammed": "تم تمييز المحادثة كرسالة مزعجة."
     },
     "list": {
       "title": "صندوق الوارد",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "مفتوحة",
-        "pending": "معلّقة",
         "snoozed": "مؤجلة",
         "resolved": "تم حلها",
         "closed": "تم حلها",
@@ -113,7 +113,7 @@
         "cancel": "إلغاء",
         "apply": "تطبيق",
         "status": "حالة الدردشة",
-        "statusHint": "عند عدم الاختيار تظهر الدردشات المفتوحة والمعلّقة.",
+        "statusHint": "عند عدم اختيار شيء تظهر المحادثات المفتوحة.",
         "conversation": "المحادثة",
         "any": "أي",
         "assigned": "معيّنة",
@@ -145,7 +145,15 @@
       "statusOpen": "مفتوحة",
       "statusAll": "كل الحالات",
       "channelFilter": "القناة",
-      "selectRow": "تحديد {name}"
+      "selectRow": "تحديد {name}",
+      "snoozedFor": "مؤجّلة · {left}",
+      "snoozeLeft": {
+        "due": "الآن",
+        "minutes": "{count, plural, one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+        "hours": "{count, plural, one {ساعة واحدة} two {ساعتان} few {# ساعات} many {# ساعة} other {# ساعة}}",
+        "days": "{count, plural, one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}"
+      },
+      "unsnoozesAt": "تعود في {time}"
     },
     "status": {
       "received": "مستلمة",
@@ -580,6 +588,8 @@
           "tag_removed": "أزال {actor} وسمًا",
           "first_response": "أُرسل أول رد",
           "sla_breach": "فات موعد الرد",
+          "spam_flagged": "علّمها {actor} كرسالة مزعجة",
+          "escalated": "تم التصعيد",
           "unknown": "{what} ({actor})"
         },
         "actors": {
@@ -596,7 +606,6 @@
         "noMessages": "لا توجد رسائل",
         "status": {
           "open": "مفتوحة",
-          "pending": "معلّقة",
           "snoozed": "مؤجلة",
           "resolved": "تم حلها",
           "closed": "مغلقة",
@@ -1015,7 +1024,9 @@
     "triage": {
       "priority": "الأولوية",
       "snooze": "تأجيل",
-      "wake": "إيقاظ الآن"
+      "wake": "إيقاظ الآن",
+      "markSpam": "تمييز كرسالة مزعجة",
+      "notSpam": "ليست رسالة مزعجة"
     },
     "bulk": {
       "barLabel": "إجراءات جماعية",
@@ -1048,7 +1059,8 @@
       "tagAdd": "إضافة وسم",
       "tagRemove": "إزالة وسم",
       "onLeave": "في إجازة",
-      "onLeaveUntil": "في إجازة حتى {date}"
+      "onLeaveUntil": "في إجازة حتى {date}",
+      "spam": "تمييز كرسالة مزعجة"
     },
     "tags": {
       "tag": "وسم",

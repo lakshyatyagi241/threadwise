@@ -82,7 +82,8 @@
       "help_agent": "도움말 어시스턴트",
       "email_channel": "이메일(Gmail) 채널",
       "personal_history_full": "전체 기록 가져오기 (개인 WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI 리드 스코어링"
     },
     "limitGroups": {
       "messaging": "메시징",
@@ -564,7 +565,9 @@
       "continueFree": "무료로 계속",
       "choose": "{name} 선택",
       "back": "뒤로 가기",
-      "compare": "모든 요금제 비교"
+      "compare": "모든 요금제 비교",
+      "appHint": "{feature}은(는) 마켓플레이스에서 앱으로도 판매됩니다.",
+      "appLink": "앱 보기"
     }
   }
 }

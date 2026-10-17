@@ -559,7 +559,8 @@
             "help_agent": "Hilfe-Assistent",
             "email_channel": "E-Mail-Kanal (Gmail)",
             "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "KI-Lead-Scoring"
           },
           "cta": {
             "continueFree": "Kostenlos fortfahren",

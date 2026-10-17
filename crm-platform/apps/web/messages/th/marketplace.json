@@ -305,7 +305,8 @@
         "terms": "ข้อกำหนด",
         "status": "หน้าสถานะ",
         "email": "ติดต่อฝ่ายสนับสนุนทางอีเมล"
-      }
+      },
+      "open": "เปิด"
     },
     "install": {
       "backToMarketplace": "กลับไปยัง Marketplace",

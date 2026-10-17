@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "进行中",
-        "pending": "待处理",
         "resolved": "已解决",
         "closed": "已关闭",
         "snoozed": "已延后"

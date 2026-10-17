@@ -29,7 +29,7 @@ A response target says how long a customer may wait for a first reply, and how l
 
 1. Open **Settings**, go to **Automation** and select **Response targets**.
 2. Under **Add a policy** give it a **Name** and the two targets in minutes: **First reply within** and **Resolve within**. Leave one empty if you do not want that target. 60 is one hour and 1440 is one day.
-3. Choose how the clock runs. **Count business hours only** counts only the hours and time zone you set in your workspace settings, so a message that arrives on Friday evening is not late on Monday morning. **Pause while waiting on the customer** stops a conversation set to pending from being flagged.
+3. Choose how the clock runs. **Count business hours only** counts only the hours and time zone you set in your workspace settings, so a message that arrives on Friday evening is not late on Monday morning.
 4. Optional: open **Targets by priority** and give Low, Normal, High or Urgent their own targets. A priority's target replaces the policy's; leave a box empty to keep the policy's own.
 5. Tick **Make this the default policy** and select **Create policy**. The first policy you create is always the default. A new conversation takes its clock from the default policy.
 6. Use **Edit** and **Delete** on the list. Each row shows its targets and how many conversations have used it.
@@ -38,7 +38,7 @@ In the inbox, a conversation row shows a badge when its clock is within 30 minut
 
 ## What happens when a target is missed
 
-A check runs every minute. A conversation that is open, or pending when the policy does not pause, and has passed its first-reply target while the customer is still waiting, or its resolution target, is flagged once. The timeline records it, and the assignee gets a notification. If nobody holds the conversation the team members are told, and if no team holds it either the people who manage response targets are. A first reply that came late is flagged too.
+A check runs every minute. A conversation that is open and has passed its first-reply target while the customer is still waiting, or its resolution target, is flagged once. The timeline records it, and the assignee gets a notification. If nobody holds the conversation the team members are told, and if no team holds it either the people who manage response targets are. A first reply that came late is flagged too.
 
 A snoozed conversation is checked after it wakes. A resolved, closed or spam conversation is not flagged.
 

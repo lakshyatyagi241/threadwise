@@ -171,17 +171,20 @@ describe('the push preference', () => {
     'new_message',
     'chat_waiting',
     'conversation_assigned',
+    'snooze_wake',
     'mention',
     'task_assigned',
     'teamchat_mention',
     'teamchat_message',
     // A failed subscription payment needs action, so it is the one billing event that also reaches devices.
     'billing_payment_failed',
+    // A marketplace app's failed payment needs the same action from the owner, so it reaches devices too.
+    'marketplace_payment_failed',
     // BL-112: a chat nobody could take because the people it wanted are on leave; the push stays on because a customer is waiting.
     'assignment_blocked_by_leave',
   ];
 
-  it('is on by default only for chat events, assignments, mentions and failed payments, and off for everything noisy', () => {
+  it('is on by default only for chat events, assignments, a snoozed chat coming back, mentions and failed payments, and off for everything noisy', () => {
     for (const type of NOTIFICATION_PREF_TYPES) {
       expect(NOTIFICATION_CATALOG[type].push, type).toBe(ON.includes(type));
     }

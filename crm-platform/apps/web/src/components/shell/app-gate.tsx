@@ -16,6 +16,8 @@ export interface AppRouteGate {
   feature: string;
   /** The menu entry's label key, which names the app on the screen below. */
   labelKey: string;
+  /** The Marketplace page of the app that owns the feature, when it has one: the screen links straight to it. */
+  listingHref?: string | null;
 }
 
 /** Whether the path belongs to an app the workspace does not have. `enabled` null (entitlements unknown) closes nothing. */
@@ -56,6 +58,7 @@ export function AppGate({
       // The unofficial WhatsApp engine is a platform switch, not a Marketplace app: there is nothing to browse for.
       unofficial={closed.feature === UNOFFICIAL_WHATSAPP_FEATURE}
       marketplaceHref={marketplaceHref}
+      listingHref={closed.listingHref ?? null}
     />
   );
 }
@@ -64,10 +67,12 @@ function AppUnavailable({
   labelKey,
   unofficial,
   marketplaceHref: marketplace,
+  listingHref,
 }: {
   labelKey: string;
   unofficial: boolean;
   marketplaceHref: string | null;
+  listingHref: string | null;
 }) {
   const marketplaceHref = unofficial ? null : marketplace;
   const t = useTranslations();
@@ -87,8 +92,20 @@ function AppUnavailable({
         }
         actions={
           <>
+            {marketplaceHref && listingHref && (
+              <Link href={listingHref} className={`${link} bg-primary text-primary-foreground`}>
+                {t('shell.appGate.viewApp', { app })}
+              </Link>
+            )}
             {marketplaceHref && (
-              <Link href={marketplaceHref} className={`${link} bg-primary text-primary-foreground`}>
+              <Link
+                href={marketplaceHref}
+                className={
+                  listingHref
+                    ? `${link} border border-border hover:bg-muted`
+                    : `${link} bg-primary text-primary-foreground`
+                }
+              >
                 {t('shell.appGate.browse')}
               </Link>
             )}

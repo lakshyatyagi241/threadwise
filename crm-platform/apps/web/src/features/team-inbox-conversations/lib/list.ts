@@ -15,7 +15,7 @@ import {
 
 export interface ListFilters {
   tab: InboxTab;
-  /** `open` is the server's default view (open and pending). */
+  /** `open` is the server's default view (the open threads). */
   status: 'open' | ConversationStatus | 'all';
   channelId: string | null;
   /** The Filters window's channels: threads on any of them. */
@@ -80,7 +80,7 @@ export const EMPTY_COUNTS: InboxCounts = { all: 0, mine: 0, unassigned: 0, unrea
 export function listQuery(f: ListFilters): Record<string, string | boolean | undefined> {
   return {
     tab: f.tab,
-    // The server's own default (open and pending) when the status is the default one.
+    // The server's own default (the open threads) when the status is the default one.
     status: f.status === 'open' ? undefined : f.status,
     channelId: f.channelId ?? undefined,
     channelIds: f.channelIds.length > 0 ? f.channelIds.join(',') : undefined,
@@ -160,7 +160,7 @@ export function matchesFilters(
     const ok = f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s]));
     if (!ok.includes(row.status)) return false;
   } else if (f.status === 'open') {
-    if (row.status !== 'open' && row.status !== 'pending') return false;
+    if (row.status !== 'open') return false;
   } else if (f.status !== 'all' && row.status !== f.status) return false;
   if (f.channelId && row.channel.id !== f.channelId) return false;
   if (f.channelIds.length > 0 && !f.channelIds.includes(row.channel.id)) return false;

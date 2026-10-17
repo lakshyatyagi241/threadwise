@@ -82,7 +82,8 @@
       "help_agent": "Помощник",
       "email_channel": "Канал электронной почты (Gmail)",
       "personal_history_full": "Импорт полной истории (личный WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "ИИ-оценка лидов"
     },
     "limitGroups": {
       "messaging": "Переписка",
@@ -564,7 +565,9 @@
       "continueFree": "Продолжить бесплатно",
       "choose": "Выбрать {name}",
       "back": "Назад",
-      "compare": "Сравнить все тарифы"
+      "compare": "Сравнить все тарифы",
+      "appHint": "{feature} также продаётся как приложение в маркетплейсе.",
+      "appLink": "Посмотреть приложение"
     }
   }
 }

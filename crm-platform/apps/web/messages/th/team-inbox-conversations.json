@@ -29,7 +29,8 @@
       "priorityChanged": "อัปเดตลำดับความสำคัญแล้ว",
       "snoozed": "เลื่อนการแจ้งเตือนการสนทนาแล้ว",
       "tagAdded": "เพิ่มแท็กแล้ว",
-      "tagRemoved": "ลบแท็กแล้ว"
+      "tagRemoved": "ลบแท็กแล้ว",
+      "spammed": "ทำเครื่องหมายการสนทนาเป็นสแปมแล้ว"
     },
     "list": {
       "title": "กล่องข้อความ",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "เปิดอยู่",
-        "pending": "รอดำเนินการ",
         "snoozed": "พักไว้",
         "resolved": "ปิดสำเร็จแล้ว",
         "closed": "ปิดสำเร็จแล้ว",
@@ -113,7 +113,7 @@
         "cancel": "ยกเลิก",
         "apply": "ใช้",
         "status": "สถานะแชท",
-        "statusHint": "หากไม่เลือก จะแสดงแชทที่เปิดอยู่และรอดำเนินการ",
+        "statusHint": "หากไม่เลือกอะไร จะแสดงแชทที่เปิดอยู่",
         "conversation": "การสนทนา",
         "any": "ทั้งหมด",
         "assigned": "มอบหมายแล้ว",
@@ -145,7 +145,15 @@
       "statusOpen": "เปิดอยู่",
       "statusAll": "ทุกสถานะ",
       "channelFilter": "ช่องทาง",
-      "selectRow": "เลือก {name}"
+      "selectRow": "เลือก {name}",
+      "snoozedFor": "พักไว้ · {left}",
+      "snoozeLeft": {
+        "due": "ถึงกำหนดแล้ว",
+        "minutes": "{count} นาที",
+        "hours": "{count} ชั่วโมง",
+        "days": "{count} วัน"
+      },
+      "unsnoozesAt": "เปิดอีกครั้ง {time}"
     },
     "status": {
       "received": "ได้รับแล้ว",
@@ -580,6 +588,8 @@
           "tag_removed": "นำแท็กออกโดย {actor}",
           "first_response": "ส่งการตอบกลับแรกแล้ว",
           "sla_breach": "พลาดกำหนดเวลาตอบกลับ",
+          "spam_flagged": "ทำเครื่องหมายเป็นสแปมโดย {actor}",
+          "escalated": "ยกระดับแล้ว",
           "unknown": "{what} โดย {actor}"
         },
         "actors": {
@@ -596,7 +606,6 @@
         "noMessages": "ไม่มีข้อความ",
         "status": {
           "open": "เปิดอยู่",
-          "pending": "รอดำเนินการ",
           "snoozed": "พักไว้",
           "resolved": "ปิดสำเร็จแล้ว",
           "closed": "ปิดแล้ว",
@@ -1015,7 +1024,9 @@
     "triage": {
       "priority": "ลำดับความสำคัญ",
       "snooze": "เลื่อนไปก่อน",
-      "wake": "แสดงอีกครั้งทันที"
+      "wake": "แสดงอีกครั้งทันที",
+      "markSpam": "ทำเครื่องหมายเป็นสแปม",
+      "notSpam": "ไม่ใช่สแปม"
     },
     "bulk": {
       "barLabel": "การดำเนินการแบบกลุ่ม",
@@ -1048,7 +1059,8 @@
       "tagAdd": "เพิ่มแท็ก",
       "tagRemove": "นำแท็กออก",
       "onLeave": "ลาอยู่",
-      "onLeaveUntil": "ลาถึง {date}"
+      "onLeaveUntil": "ลาถึง {date}",
+      "spam": "ทำเครื่องหมายเป็นสแปม"
     },
     "tags": {
       "tag": "แท็ก",

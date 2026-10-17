@@ -28,6 +28,7 @@ import {
   messageSendJobId,
   type MessageSendJob,
 } from './message-dispatch.job';
+import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { previewOf } from './message-rules';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository, type MessageRow } from './messages.repository';
@@ -70,6 +71,9 @@ const startOfUtcMonth = (now: Date): Date =>
  * sends once), the next `seq`, the message and its `queued` event. The job is enqueued after the commit; a message whose enqueue was
  * lost (a crash between the two, Redis down) is picked up by the recovery sweep, which is why the enqueue failing is not an error.
  */
+/** The statuses an agent's reply moves back to open (Reference: a reply to a resolved, closed or spam thread reopens it). */
+const REPLY_REOPENS = ['resolved', 'closed', 'spam'] as const;
+
 @Injectable()
 export class OutboundService {
   private readonly logger = new Logger(OutboundService.name);
@@ -85,6 +89,7 @@ export class OutboundService {
     private readonly wallet: WalletGateService,
     private readonly realtime: ChatRealtimePublisher,
     private readonly view: MessageViewService,
+    private readonly lifecycle: ConversationLifecycleService,
     @InjectQueue(QUEUES.MESSAGE_DISPATCH) private readonly queue: Queue,
   ) {}
 
@@ -212,6 +217,22 @@ export class OutboundService {
             }),
         reaction: isReaction,
       });
+      // A person's reply to a finished or spam thread reopens it, as in Reference; a reaction does not.
+      if (
+        sender.kind === 'agent' &&
+        !isReaction &&
+        REPLY_REOPENS.includes(after.status as (typeof REPLY_REOPENS)[number]) &&
+        (await this.conversations.reopenOnReply(tx, orgId, conv.id))
+      ) {
+        await this.lifecycle.repliedReopen(
+          tx,
+          orgId,
+          channel,
+          after,
+          after.status,
+          sender.userId ?? ctx.userId,
+        );
+      }
       await this.messages.insert(tx, orgId, {
         id: alloc.id,
         createdAt: alloc.createdAt,

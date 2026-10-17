@@ -165,6 +165,12 @@
         "titleNoName": "Thông báo thử",
         "bodyNoActor": "Nếu bạn đọc được dòng này, thông báo trực tiếp đang hoạt động."
       },
+      "snooze_wake": {
+        "title": "{name} đã quay lại danh sách của bạn",
+        "titleNoName": "Cuộc trò chuyện hoãn đã quay lại danh sách của bạn",
+        "titleTeam": "{name} đã quay lại cho nhóm của bạn",
+        "titleTeamNoName": "Cuộc trò chuyện hoãn đã quay lại cho nhóm của bạn"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} gia hạn vào {date, date, medium}",
         "bodyAuto": "Thẻ của bạn sẽ tự động bị trừ tiền vào ngày đó để gia hạn {name}. Hãy hủy trước ngày đó để dừng lại.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Yêu cầu tham gia nhóm",
         "device_group_removed": "Bị xóa khỏi nhóm WhatsApp",
         "test": "Thông báo thử",
+        "snooze_wake": "Cuộc trò chuyện hoãn đã quay lại",
         "marketplace_renewal_due": "Sắp đến hạn gia hạn ứng dụng trả phí",
         "marketplace_payment_failed": "Thanh toán ứng dụng trả phí thất bại",
         "marketplace_subscription_ended": "Đăng ký ứng dụng trả phí đã kết thúc"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Lịch hẹn không đồng bộ với Google Calendar",
           "hint": "Sự kiện Google Calendar của một lịch hẹn sắp tới đã bị xóa, chuyển giờ hoặc thay đổi danh sách khách. Lịch hẹn không bị thay đổi; bạn sẽ chọn cách xử lý."
+        },
+        "snooze_wake": {
+          "label": "Cuộc trò chuyện hoãn quay lại",
+          "hint": "Cuộc trò chuyện hoãn mở lại đúng giờ và được giao cho bạn hoặc nhóm của bạn."
         },
         "marketplace_renewal_due": {
           "label": "Nhắc gia hạn ứng dụng trả phí",

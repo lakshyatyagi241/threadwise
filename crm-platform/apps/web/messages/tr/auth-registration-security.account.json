@@ -559,7 +559,8 @@
             "help_agent": "Yardım asistanı",
             "email_channel": "E-posta (Gmail) kanalı",
             "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

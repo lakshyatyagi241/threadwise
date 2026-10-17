@@ -29,7 +29,8 @@
       "priorityChanged": "Priorität aktualisiert",
       "snoozed": "Unterhaltung zurückgestellt",
       "tagAdded": "Tag hinzugefügt",
-      "tagRemoved": "Tag entfernt"
+      "tagRemoved": "Tag entfernt",
+      "spammed": "Unterhaltung als Spam markiert."
     },
     "list": {
       "title": "Posteingang",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Offen",
-        "pending": "Ausstehend",
         "snoozed": "Zurückgestellt",
         "resolved": "Gelöst",
         "closed": "Gelöst",
@@ -113,7 +113,7 @@
         "cancel": "Abbrechen",
         "apply": "Anwenden",
         "status": "Chat-Status",
-        "statusHint": "Ohne Auswahl erscheinen offene und ausstehende Chats.",
+        "statusHint": "Ohne Auswahl werden offene Chats angezeigt.",
         "conversation": "Konversation",
         "any": "Beliebig",
         "assigned": "Zugewiesen",
@@ -145,7 +145,15 @@
       "statusOpen": "Offen",
       "statusAll": "Alle Status",
       "channelFilter": "Kanal",
-      "selectRow": "{name} auswählen"
+      "selectRow": "{name} auswählen",
+      "snoozedFor": "Zurückgestellt · {left}",
+      "snoozeLeft": {
+        "due": "jetzt fällig",
+        "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+        "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+        "days": "{count, plural, one {# Tag} other {# Tage}}"
+      },
+      "unsnoozesAt": "Wird um {time} wieder geöffnet"
     },
     "status": {
       "received": "Empfangen",
@@ -580,6 +588,8 @@
           "tag_removed": "Tag entfernt von {actor}",
           "first_response": "Erste Antwort gesendet",
           "sla_breach": "Antwortfrist verpasst",
+          "spam_flagged": "Von {actor} als Spam markiert",
+          "escalated": "Eskaliert",
           "unknown": "{what} von {actor}"
         },
         "actors": {
@@ -596,7 +606,6 @@
         "noMessages": "Keine Nachrichten",
         "status": {
           "open": "Offen",
-          "pending": "Ausstehend",
           "snoozed": "Zurückgestellt",
           "resolved": "Gelöst",
           "closed": "Geschlossen",
@@ -1015,7 +1024,9 @@
     "triage": {
       "priority": "Priorität",
       "snooze": "Zurückstellen",
-      "wake": "Jetzt reaktivieren"
+      "wake": "Jetzt reaktivieren",
+      "markSpam": "Als Spam markieren",
+      "notSpam": "Kein Spam"
     },
     "bulk": {
       "barLabel": "Massenaktionen",
@@ -1048,7 +1059,8 @@
       "tagAdd": "Tag hinzufügen",
       "tagRemove": "Tag entfernen",
       "onLeave": "abwesend",
-      "onLeaveUntil": "abwesend bis {date}"
+      "onLeaveUntil": "abwesend bis {date}",
+      "spam": "Als Spam markieren"
     },
     "tags": {
       "tag": "Tag",

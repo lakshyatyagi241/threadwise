@@ -29,7 +29,8 @@
       "priorityChanged": "অগ্রাধিকার আপডেট হয়েছে",
       "snoozed": "কথোপকথন স্থগিত করা হয়েছে",
       "tagAdded": "ট্যাগ যোগ করা হয়েছে",
-      "tagRemoved": "ট্যাগ সরানো হয়েছে"
+      "tagRemoved": "ট্যাগ সরানো হয়েছে",
+      "spammed": "কথোপকথনটি স্প্যাম হিসেবে চিহ্নিত হয়েছে।"
     },
     "list": {
       "title": "ইনবক্স",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "খোলা",
-        "pending": "মুলতুবি",
         "snoozed": "স্নুজ করা",
         "resolved": "সমাধান হয়েছে",
         "closed": "সমাধান হয়েছে",
@@ -113,7 +113,7 @@
         "cancel": "বাতিল",
         "apply": "প্রয়োগ করুন",
         "status": "চ্যাটের অবস্থা",
-        "statusHint": "কিছু না বাছলে খোলা ও অপেক্ষমাণ চ্যাট দেখায়।",
+        "statusHint": "কিছু না বাছলে খোলা চ্যাট দেখানো হয়।",
         "conversation": "কথোপকথন",
         "any": "যেকোনো",
         "assigned": "অ্যাসাইন করা",
@@ -145,7 +145,15 @@
       "statusOpen": "খোলা",
       "statusAll": "সব স্ট্যাটাস",
       "channelFilter": "চ্যানেল",
-      "selectRow": "{name} বেছে নিন"
+      "selectRow": "{name} বেছে নিন",
+      "snoozedFor": "স্নুজ করা · {left}",
+      "snoozeLeft": {
+        "due": "এখনই",
+        "minutes": "{count, plural, one {# মিনিট} other {# মিনিট}}",
+        "hours": "{count, plural, one {# ঘণ্টা} other {# ঘণ্টা}}",
+        "days": "{count, plural, one {# দিন} other {# দিন}}"
+      },
+      "unsnoozesAt": "{time}-এ আবার খুলবে"
     },
     "status": {
       "received": "পাওয়া গেছে",
@@ -580,6 +588,8 @@
           "tag_removed": "{actor} কর্তৃক ট্যাগ সরানো হয়েছে",
           "first_response": "প্রথম উত্তর পাঠানো হয়েছে",
           "sla_breach": "উত্তরের সময়সীমা পেরিয়ে গেছে",
+          "spam_flagged": "{actor} স্প্যাম হিসেবে চিহ্নিত করেছেন",
+          "escalated": "এস্কেলেট করা হয়েছে",
           "unknown": "{actor} কর্তৃক {what}"
         },
         "actors": {
@@ -596,7 +606,6 @@
         "noMessages": "কোনো মেসেজ নেই",
         "status": {
           "open": "খোলা",
-          "pending": "মুলতুবি",
           "snoozed": "স্নুজ করা",
           "resolved": "সমাধান হয়েছে",
           "closed": "বন্ধ",
@@ -1015,7 +1024,9 @@
     "triage": {
       "priority": "অগ্রাধিকার",
       "snooze": "স্থগিত করুন",
-      "wake": "এখনই ফিরিয়ে আনুন"
+      "wake": "এখনই ফিরিয়ে আনুন",
+      "markSpam": "স্প্যাম হিসেবে চিহ্নিত করুন",
+      "notSpam": "স্প্যাম নয়"
     },
     "bulk": {
       "barLabel": "বাল্ক অ্যাকশন",
@@ -1048,7 +1059,8 @@
       "tagAdd": "ট্যাগ যোগ করুন",
       "tagRemove": "ট্যাগ সরান",
       "onLeave": "ছুটিতে",
-      "onLeaveUntil": "{date} পর্যন্ত ছুটিতে"
+      "onLeaveUntil": "{date} পর্যন্ত ছুটিতে",
+      "spam": "স্প্যাম হিসেবে চিহ্নিত করুন"
     },
     "tags": {
       "tag": "ট্যাগ",

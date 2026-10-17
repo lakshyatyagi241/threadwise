@@ -559,7 +559,8 @@
             "help_agent": "হেল্প অ্যাসিস্ট্যান্ট",
             "email_channel": "ইমেল (Gmail) চ্যানেল",
             "personal_history_full": "সম্পূর্ণ ইতিহাস ইমপোর্ট (ব্যক্তিগত WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI লিড স্কোরিং"
           },
           "cta": {
             "continueFree": "ফ্রি-তে চালিয়ে যান",

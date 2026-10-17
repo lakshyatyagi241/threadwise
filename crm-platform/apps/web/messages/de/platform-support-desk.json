@@ -292,7 +292,6 @@
       "firstLabel": "Erste Antwort (Min.)",
       "resolveLabel": "Lösung (Min.)",
       "bizOnly": "Nur Geschäftszeiten",
-      "pause": "Bei Wartezeit des Kunden pausieren",
       "setDefault": "Als Standard festlegen",
       "addPolicy": "Richtlinie hinzufügen",
       "savePolicy": "Richtlinie speichern",

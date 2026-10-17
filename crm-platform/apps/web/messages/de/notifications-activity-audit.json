@@ -165,6 +165,12 @@
         "titleNoName": "Testbenachrichtigung",
         "bodyNoActor": "Wenn du das lesen kannst, funktionieren Live-Benachrichtigungen."
       },
+      "snooze_wake": {
+        "title": "{name} ist wieder in Ihrer Liste",
+        "titleNoName": "Ein zurückgestellter Chat ist wieder in Ihrer Liste",
+        "titleTeam": "{name} ist wieder für Ihr Team da",
+        "titleTeamNoName": "Ein zurückgestellter Chat ist wieder für Ihr Team da"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} verlängert sich am {date, date, medium}",
         "bodyAuto": "Ihre Karte wird an diesem Datum automatisch belastet, um {name} zu verlängern. Kündigen Sie vorher, um das zu verhindern.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Beitrittsanfrage für eine Gruppe",
         "device_group_removed": "Aus einer WhatsApp-Gruppe entfernt",
         "test": "Testbenachrichtigung",
+        "snooze_wake": "Zurückgestellter Chat ist zurück",
         "marketplace_renewal_due": "Verlängerung einer kostenpflichtigen App steht an",
         "marketplace_payment_failed": "Zahlung für kostenpflichtige App fehlgeschlagen",
         "marketplace_subscription_ended": "Abonnement einer kostenpflichtigen App beendet"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Termin nicht synchron mit Google Calendar",
           "hint": "Der Google-Calendar-Eintrag eines bevorstehenden Termins wurde gelöscht, verschoben oder seine Gäste wurden geändert. Der Termin selbst bleibt unverändert; Sie entscheiden, was geschehen soll."
+        },
+        "snooze_wake": {
+          "label": "Zurückgestellter Chat kehrt zurück",
+          "hint": "Ein zurückgestellter Chat wird zur festgelegten Zeit wieder geöffnet und Ihnen oder Ihrem Team zugewiesen."
         },
         "marketplace_renewal_due": {
           "label": "Erinnerung an Verlängerung einer kostenpflichtigen App",

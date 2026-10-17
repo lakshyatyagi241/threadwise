@@ -26,7 +26,6 @@ interface PolicyRow {
   name: string;
   first_response_minutes: number;
   resolution_minutes: number;
-  pause_when_waiting_on_customer: boolean;
   respect_business_hours: boolean;
   is_default: boolean;
   row_version: number;
@@ -45,7 +44,6 @@ const toPolicy = (r: PolicyRow): SlaPolicy => ({
   name: r.name,
   firstResponseMinutes: r.first_response_minutes,
   resolutionMinutes: r.resolution_minutes,
-  pauseWhenWaitingOnCustomer: r.pause_when_waiting_on_customer,
   respectBusinessHours: r.respect_business_hours,
   isDefault: r.is_default,
   rowVersion: r.row_version,
@@ -53,7 +51,7 @@ const toPolicy = (r: PolicyRow): SlaPolicy => ({
 
 const date = (d: Date | string | null): Date | null => (d ? new Date(d) : null);
 const POLICY_COLS = sql`id, uuid, name, first_response_minutes, resolution_minutes,
-  pause_when_waiting_on_customer, respect_business_hours, is_default, row_version`;
+  respect_business_hours, is_default, row_version`;
 
 /**
  * Helpdesk SLA: the platform policies (TW-SUPP-026..028), the per-ticket snapshot (014, 029), the breach ledger and its
@@ -280,9 +278,9 @@ export class SlaService {
         await tx.execute(sql`UPDATE support_sla_policies SET is_default = false WHERE is_default`);
       const res = await tx.execute(sql`
         INSERT INTO support_sla_policies (name, first_response_minutes, resolution_minutes,
-          pause_when_waiting_on_customer, respect_business_hours, is_default)
+          respect_business_hours, is_default)
         VALUES (${input.name}, ${input.firstResponseMinutes}, ${input.resolutionMinutes},
-          ${input.pauseWhenWaitingOnCustomer}, ${input.respectBusinessHours}, ${input.isDefault})
+          ${input.respectBusinessHours}, ${input.isDefault})
         RETURNING ${POLICY_COLS}
       `);
       await this.event(tx, 'platform.support.sla_policy_created', {
@@ -309,7 +307,6 @@ export class SlaService {
       const res = await tx.execute(sql`
         UPDATE support_sla_policies SET name = ${input.name}, first_response_minutes = ${input.firstResponseMinutes},
           resolution_minutes = ${input.resolutionMinutes},
-          pause_when_waiting_on_customer = ${input.pauseWhenWaitingOnCustomer},
           respect_business_hours = ${input.respectBusinessHours}, is_default = ${input.isDefault}
         WHERE id = ${row.id} RETURNING ${POLICY_COLS}
       `);

@@ -4,7 +4,7 @@ title: Growth
 summary: Hot leads, audiences, campaign replies and other things your team can act on, worked out from your chats and campaigns.
 area: automation
 order: 9
-documents: [tile:growth]
+documents: [tile:growth, nav:growth]
 keywords:
   [
     growth,
@@ -30,6 +30,8 @@ Growth turns what AI lead scoring already knows into a short list of things wort
 Growth is a **pilot**. It is only available to workspaces that were added to it. If your workspace is not one of them, the screen says so and nothing is read or changed.
 
 Growth never messages a contact by itself. It suggests; your team decides.
+
+Growth is built on AI lead scoring, so it follows that app: a workspace that does not have AI lead scoring (installed from the **Marketplace**, or kept from before it became an app) does not see the Growth tile, and `/growth` says it isn't part of the workspace. See [AI lead scoring](help:lead-scoring).
 
 ## The Inbox
 

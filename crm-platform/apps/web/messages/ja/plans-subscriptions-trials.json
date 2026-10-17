@@ -82,7 +82,8 @@
       "help_agent": "ヘルプアシスタント",
       "email_channel": "メール(Gmail)チャネル",
       "personal_history_full": "全履歴インポート(個人用WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AIリードスコアリング"
     },
     "limitGroups": {
       "messaging": "メッセージング",
@@ -564,7 +565,9 @@
       "continueFree": "無料で続ける",
       "choose": "{name}を選択",
       "back": "戻る",
-      "compare": "すべてのプランを比較"
+      "compare": "すべてのプランを比較",
+      "appHint": "{feature}はマーケットプレイスでアプリとしても販売されています。",
+      "appLink": "アプリを見る"
     }
   }
 }

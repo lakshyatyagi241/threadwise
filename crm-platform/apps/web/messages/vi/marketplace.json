@@ -305,7 +305,8 @@
         "terms": "Điều khoản",
         "status": "Trang trạng thái",
         "email": "Hỗ trợ qua email"
-      }
+      },
+      "open": "Mở"
     },
     "install": {
       "backToMarketplace": "Quay lại Chợ ứng dụng",

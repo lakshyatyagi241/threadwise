@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "פתוח",
-        "pending": "ממתין",
         "resolved": "נפתר",
         "closed": "סגור",
         "snoozed": "בהשהיה"

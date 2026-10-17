@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "खुली",
-        "pending": "लंबित",
         "resolved": "हल हुई",
         "closed": "बंद",
         "snoozed": "स्नूज़ की गई"

@@ -38,10 +38,10 @@ export const conversationAssignmentSchema = z.object({
 export type ConversationAssignment = z.infer<typeof conversationAssignmentSchema>;
 
 /**
- * `POST /inbox/conversations/:id/status`: resolve, close, reopen, or park a thread as pending (waiting on the customer). The legal moves are
- * `canMoveConversationStatus` below. Snooze and spam have their own routes (they carry a time or a reason).
+ * `POST /inbox/conversations/:id/status`: resolve, close, or reopen a thread. The legal moves are `canMoveConversationStatus` below.
+ * Snooze and spam have their own routes (they carry a time or a reason).
  */
-export const SETTABLE_CONVERSATION_STATUSES = ['open', 'pending', 'resolved', 'closed'] as const;
+export const SETTABLE_CONVERSATION_STATUSES = ['open', 'resolved', 'closed'] as const;
 export const setConversationStatusSchema = z.object({
   rowVersion: z.number().int().positive(),
   status: z.enum(SETTABLE_CONVERSATION_STATUSES),

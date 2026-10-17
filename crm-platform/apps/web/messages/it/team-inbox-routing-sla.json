@@ -89,7 +89,14 @@
       "delete": "Elimina",
       "startsFlow": "Avvia anche il flow {name}",
       "flowOff": "Il flow è disattivato",
-      "flowGone": "Avvia anche un flow eliminato"
+      "flowGone": "Avvia anche un flow eliminato",
+      "markSpamSummary": "Segna la conversazione come spam",
+      "prioritySummary": "Imposta la priorità su {priority}",
+      "tagsSummary": "Aggiunge i tag {tags}",
+      "escalationSummary": "Se nessuno risponde entro {minutes} minuti:",
+      "escalationReassign": "riassegnarla agli agenti di questa regola",
+      "escalationPriority": "impostare la priorità su {priority}",
+      "autoReplySummary": "Invia la risposta: {body}"
     },
     "form": {
       "back": "Assegnazione automatica",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Completa o rimuovi le condizioni sul contatto incomplete.",
         "keywordsMany": "Usa al massimo 20 parole.",
         "targets": "Scegli almeno un agente o un team.",
-        "specific": "Per un agente specifico, scegline esattamente uno."
+        "specific": "Per un agente specifico, scegline esattamente uno.",
+        "actions": "Scegli cosa fa la regola.",
+        "tagsMany": "Usa al massimo 5 tag.",
+        "escalationMinutes": "Un numero intero di minuti da 1 a 1440.",
+        "escalationAction": "Riassegnare, impostare una priorità o entrambe.",
+        "escalationAgents": "Riassegnare richiede agenti in questa regola: sceglili sopra.",
+        "autoReplyEmpty": "Scrivi la risposta o deseleziona l'opzione.",
+        "autoReplyLong": "La risposta è troppo lunga (massimo 1024 caratteri)."
       },
       "whenTitle": "Quando arriva una nuova conversazione",
       "whenHint": "Devono corrispondere tutte le condizioni impostate. Lascia vuota una parte per ignorarla.",
@@ -188,7 +202,23 @@
         "loadFailed": "Non è stato possibile caricare i flow, quindi l’elenco potrebbe essere incompleto."
       },
       "onLeave": "in ferie",
-      "onLeaveUntil": "in ferie fino al {date}"
+      "onLeaveUntil": "in ferie fino al {date}",
+      "actions": "Cosa fa la regola",
+      "actionsHint": "Scegli una o entrambe. Una regola può assegnare la conversazione, segnarla come spam o fare entrambe le cose.",
+      "actionAssign": "Assegna ad agenti o team",
+      "actionMarkSpam": "Segna la conversazione come spam",
+      "setPriority": "Imposta la priorità",
+      "priorityKeep": "Lascia la priorità com'è",
+      "addTags": "Aggiungi tag",
+      "addTagsHint": "Separali con virgole. Un tag che non esiste ancora viene creato.",
+      "escalate": "Se nessuno risponde in tempo, escalare",
+      "escalateHint": "Minuti dal momento in cui la regola scatta, fino a 1440 (un giorno). Una nostra risposta prima lo annulla.",
+      "escalateMinutes": "Minuti senza risposta",
+      "escalateReassign": "Riassegnala agli agenti di questa regola",
+      "escalatePriority": "Poi imposta la priorità",
+      "autoReply": "Invia una risposta automatica",
+      "autoReplyBody": "Testo della risposta",
+      "autoReplyHint": "Inviata come l'azienda al cliente. Fuori dalla finestra di 24 ore non viene inviata una risposta libera."
     },
     "sla": {
       "back": "Torna alle impostazioni",
@@ -206,8 +236,6 @@
       "resolution": "Risolvi entro (minuti)",
       "minutesHint": "Lascia vuoto per nessun obiettivo. 60 è un'ora, 1440 è un giorno.",
       "minutesInvalid": "Usa numeri interi a partire da 1.",
-      "pause": "Metti in pausa in attesa del cliente",
-      "pauseHint": "Una conversazione impostata su in sospeso non viene segnalata.",
       "businessHours": "Conta solo l'orario lavorativo",
       "businessHoursHint": "Usa l'orario e il fuso orario delle impostazioni del tuo spazio di lavoro.",
       "makeDefault": "Imposta come policy predefinita",

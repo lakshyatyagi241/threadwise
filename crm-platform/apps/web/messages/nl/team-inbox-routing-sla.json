@@ -89,7 +89,14 @@
       "delete": "Verwijderen",
       "startsFlow": "Start ook de flow {name}",
       "flowOff": "De flow staat uit",
-      "flowGone": "Start ook een verwijderde flow"
+      "flowGone": "Start ook een verwijderde flow",
+      "markSpamSummary": "Markeert het gesprek als spam",
+      "prioritySummary": "Zet de prioriteit op {priority}",
+      "tagsSummary": "Voegt de tags toe: {tags}",
+      "escalationSummary": "Als niemand binnen {minutes} minuten reageert:",
+      "escalationReassign": "opnieuw toewijzen aan de medewerkers van deze regel",
+      "escalationPriority": "de prioriteit op {priority} zetten",
+      "autoReplySummary": "Stuurt het antwoord: {body}"
     },
     "form": {
       "back": "Automatisch toewijzen",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Maak de contactvoorwaarden die niet compleet zijn af of verwijder ze.",
         "keywordsMany": "Gebruik maximaal 20 woorden.",
         "targets": "Kies minstens één medewerker of team.",
-        "specific": "Kies precies één medewerker voor een specifieke medewerker."
+        "specific": "Kies precies één medewerker voor een specifieke medewerker.",
+        "actions": "Kies wat de regel doet.",
+        "tagsMany": "Gebruik maximaal 5 tags.",
+        "escalationMinutes": "Een geheel aantal minuten van 1 tot 1440.",
+        "escalationAction": "Opnieuw toewijzen, een prioriteit instellen, of beide.",
+        "escalationAgents": "Opnieuw toewijzen heeft medewerkers in deze regel nodig: kies ze hierboven.",
+        "autoReplyEmpty": "Schrijf het antwoord, of vink de optie uit.",
+        "autoReplyLong": "Het antwoord is te lang (maximaal 1024 tekens)."
       },
       "whenTitle": "Wanneer een nieuw gesprek binnenkomt",
       "whenHint": "Elke voorwaarde die je instelt moet kloppen. Laat een onderdeel leeg om het te negeren.",
@@ -188,7 +202,23 @@
         "loadFailed": "De flows konden niet worden geladen, dus de keuze is misschien onvolledig."
       },
       "onLeave": "met verlof",
-      "onLeaveUntil": "met verlof tot {date}"
+      "onLeaveUntil": "met verlof tot {date}",
+      "actions": "Wat de regel doet",
+      "actionsHint": "Kies een of beide. Een regel kan het gesprek toewijzen, als spam markeren, of beide doen.",
+      "actionAssign": "Toewijzen aan medewerkers of teams",
+      "actionMarkSpam": "Markeer het gesprek als spam",
+      "setPriority": "Prioriteit instellen",
+      "priorityKeep": "Prioriteit laten zoals die is",
+      "addTags": "Tags toevoegen",
+      "addTagsHint": "Scheid met komma's. Een tag die nog niet bestaat, wordt aangemaakt.",
+      "escalate": "Als niemand op tijd reageert, escaleren",
+      "escalateHint": "Minuten vanaf het moment dat de regel afgaat, tot 1440 (een dag). Een eerder antwoord van ons annuleert het.",
+      "escalateMinutes": "Minuten zonder antwoord",
+      "escalateReassign": "Opnieuw toewijzen aan de medewerkers van deze regel",
+      "escalatePriority": "Dan de prioriteit instellen",
+      "autoReply": "Een automatisch antwoord sturen",
+      "autoReplyBody": "Tekst van het antwoord",
+      "autoReplyHint": "Wordt namens het bedrijf naar de klant gestuurd. Buiten het venster van 24 uur wordt een vrij antwoord niet verstuurd."
     },
     "sla": {
       "back": "Terug naar instellingen",
@@ -206,8 +236,6 @@
       "resolution": "Oplossen binnen (minuten)",
       "minutesHint": "Laat leeg voor geen doel. 60 is één uur, 1440 is één dag.",
       "minutesInvalid": "Gebruik hele getallen vanaf 1.",
-      "pause": "Pauzeren tijdens wachten op de klant",
-      "pauseHint": "Een gesprek met de status in afwachting wordt niet gemarkeerd.",
       "businessHours": "Alleen kantooruren tellen",
       "businessHoursHint": "Gebruikt de uren en tijdzone uit je werkruimte-instellingen.",
       "makeDefault": "Dit beleid standaard maken",
