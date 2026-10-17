@@ -14,6 +14,7 @@ import {
   WHATSAPP_PROVIDER,
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
+import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { WebhookFanoutService } from '../webhook-fanout';
 import { verifyPayloadProviders, WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { WabaConnectionsRepository } from './waba-connections.repository';
@@ -154,7 +155,8 @@ export class WabaWebhookService {
     if (actionable.length === 0) return { queued: 0 };
     // Meta retries a payload it thinks we missed; the same body is the same job, so a retry is absorbed here.
     const jobId = createHash('sha256').update(input.rawBody).digest('hex');
-    await this.queue.add('payload', { changes: actionable }, { jobId });
+    // A job of this id that already failed would swallow Meta's redelivery and we would still answer 200, so it is replaced (ASYNC-018).
+    await addOrRevive(this.queue, 'payload', { changes: actionable }, { jobId });
     return { queued: actionable.length };
   }
 

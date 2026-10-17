@@ -129,8 +129,15 @@ export const DEFAULT_JOB_OPTIONS = {
  * Queues whose job data is personal (message text, phone numbers, the raw webhook body) drop a job the moment it completes. A failed
  * job still keeps its data for `removeOnFail`, which is the point of keeping failures.
  */
-const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, { removeOnComplete: true }>> = {
-  [QUEUES.WABA_INGEST]: { removeOnComplete: true },
+const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, JobsOptions>> = {
+  // Inbound WhatsApp is the one place a message exists only here once Meta has our 200. The default (5 attempts from 2 s, about 30 s in
+  // all) gave up inside a short database or Redis blip; 10 attempts from 5 s keep a job alive for about 42 minutes (ASYNC-032/036).
+  // Ingest is idempotent (the message ledger's unique key), so a retry never stores a message twice.
+  [QUEUES.WABA_INGEST]: {
+    removeOnComplete: true,
+    attempts: 10,
+    backoff: { type: 'exponential', delay: 5_000 },
+  },
   [QUEUES.WEBHOOK_FORWARD]: { removeOnComplete: true },
 };
 
