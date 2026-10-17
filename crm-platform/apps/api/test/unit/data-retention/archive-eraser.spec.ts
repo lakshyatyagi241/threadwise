@@ -60,6 +60,36 @@ describe('ArchiveEraser', () => {
     expect(await keys()).toEqual([]);
   });
 
+  it('never lists the whole archive: it looks at directories and deletes the one name in each month', async () => {
+    for (let month = 1; month <= 12; month += 1) {
+      const m = String(month).padStart(2, '0');
+      for (const org of [7, 8, 9]) await put(`archive/an_events/2026-${m}/${org}.ndjson.gz`);
+    }
+    const calls: string[] = [];
+    const counting = new Proxy(storage, {
+      get(target, prop, receiver) {
+        const value = Reflect.get(target, prop, receiver);
+        if (typeof value !== 'function') return value;
+        return (...args: unknown[]) => {
+          calls.push(String(prop));
+          return (value as (...a: unknown[]) => unknown).apply(target, args);
+        };
+      },
+    });
+    expect(await new ArchiveEraser(counting).eraseOrg(8)).toBe(12);
+    expect(calls).not.toContain('list');
+    expect(calls).not.toContain('deletePrefix');
+    expect(calls.filter((c) => c === 'listDirs')).toHaveLength(1 + 1); // the root, then the one stream
+    expect(await keys()).toHaveLength(24);
+  });
+
+  it('leaves a directory that is not a stream month alone', async () => {
+    await put('archive/an_events/notes/7.ndjson.gz');
+    await put('archive/an_events/2026-08/7.ndjson.gz');
+    expect(await eraser.eraseOrg(7)).toBe(1);
+    expect(await keys()).toEqual(['archive/an_events/notes/7.ndjson.gz']);
+  });
+
   it('is safe to repeat and says zero when there is nothing', async () => {
     await put('archive/an_events/2026-08/7.ndjson.gz');
     expect(await eraser.eraseOrg(7)).toBe(1);

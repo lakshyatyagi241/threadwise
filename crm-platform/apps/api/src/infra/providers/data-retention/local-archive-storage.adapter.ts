@@ -1,11 +1,12 @@
 import { randomBytes } from 'node:crypto';
 import { createReadStream, type Dirent } from 'node:fs';
-import { copyFile, mkdir, readdir, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readdir, rename, rm, stat, unlink, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve, sep } from 'node:path';
 import type { Readable } from 'node:stream';
 import {
   assertArchiveKey,
   assertArchivePrefix,
+  isArchivePrefix,
   type ArchiveObject,
   type ArchiveStorage,
 } from './archive-storage.port';
@@ -84,8 +85,31 @@ export class LocalArchiveStorage implements ArchiveStorage {
     return out.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
   }
 
-  async delete(key: string): Promise<void> {
-    await rm(this.pathOf(key), { force: true });
+  async listDirs(prefix: string): Promise<string[]> {
+    assertArchivePrefix(prefix);
+    let entries: Dirent[];
+    try {
+      entries = await readdir(this.pathOf(prefix.slice(0, -1)), { withFileTypes: true });
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      if (code === 'ENOENT' || code === 'ENOTDIR') return [];
+      throw err;
+    }
+    return entries
+      .filter((e) => e.isDirectory())
+      .map((e) => `${prefix}${e.name}/`)
+      .filter(isArchivePrefix) // a directory somebody else made, with a name no key can have, is not ours
+      .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  }
+
+  async delete(key: string): Promise<boolean> {
+    try {
+      await unlink(this.pathOf(key));
+      return true;
+    } catch (err) {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') return false;
+      throw err;
+    }
   }
 
   /** Empty directories are left behind: harmless, and removing them could race an upload that is placing a file there. */

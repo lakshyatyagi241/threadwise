@@ -53,6 +53,9 @@ class HookedStorage implements ArchiveStorage {
   list(prefix: string): Promise<ArchiveObject[]> {
     return this.inner.list(prefix);
   }
+  listDirs(prefix: string) {
+    return this.inner.listDirs(prefix);
+  }
   delete(key: string) {
     return this.inner.delete(key);
   }

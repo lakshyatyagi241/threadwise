@@ -8,6 +8,7 @@ import { EMPTY_SHA256, signS3Request, type S3SigningConfig } from '../../net/s3-
 import {
   assertArchiveKey,
   assertArchivePrefix,
+  isArchivePrefix,
   type ArchiveObject,
   type ArchiveStorage,
 } from './archive-storage.port';
@@ -41,7 +42,7 @@ export class S3ArchiveStorage implements ArchiveStorage {
   constructor(private readonly config: S3ArchiveConfig) {}
 
   private raw(
-    method: 'GET' | 'PUT' | 'DELETE',
+    method: 'GET' | 'PUT' | 'HEAD' | 'DELETE',
     key: string,
     opts: { query?: Array<[string, string]>; body?: Body; payloadSha256?: string } = {},
   ): Promise<IncomingMessage> {
@@ -151,9 +152,16 @@ export class S3ArchiveStorage implements ArchiveStorage {
     return this.fail(res, `download of ${key}`);
   }
 
-  async list(prefix: string): Promise<ArchiveObject[]> {
-    assertArchivePrefix(prefix);
-    const out: ArchiveObject[] = [];
+  /**
+   * One listing under `prefix`, following continuation tokens. With a delimiter the server groups keys by the next `/` and
+   * returns the groups as `dirs` instead of the keys inside them, so a directory is one entry however many objects it holds.
+   */
+  private async listPages(
+    prefix: string,
+    delimiter?: string,
+  ): Promise<{ objects: ArchiveObject[]; dirs: string[] }> {
+    const objects: ArchiveObject[] = [];
+    const dirs: string[] = [];
     let token: string | undefined;
     do {
       const query: Array<[string, string]> = [
@@ -161,30 +169,64 @@ export class S3ArchiveStorage implements ArchiveStorage {
         ['max-keys', String(LIST_PAGE)],
         ['prefix', prefix],
       ];
+      if (delimiter) query.push(['delimiter', delimiter]);
       if (token) query.push(['continuation-token', token]);
       const res = await this.raw('GET', '', { query });
       const status = res.statusCode ?? 0;
       if (status === 404) {
         res.resume();
-        return []; // no bucket yet, so nothing archived
+        return { objects: [], dirs: [] }; // no bucket yet, so nothing archived
       }
       if (status < 200 || status >= 300) return this.fail(res, `list ${prefix}`);
       const xml = (await this.drain(res)).toString('utf8');
       for (const m of xml.matchAll(/<Contents>([\s\S]*?)<\/Contents>/g)) {
         const key = /<Key>([\s\S]*?)<\/Key>/.exec(m[1]!)?.[1];
         const size = /<Size>(\d+)<\/Size>/.exec(m[1]!)?.[1];
-        if (key !== undefined) out.push({ key: unescapeXml(key), bytes: Number(size ?? 0) });
+        if (key !== undefined) objects.push({ key: unescapeXml(key), bytes: Number(size ?? 0) });
+      }
+      for (const m of xml.matchAll(
+        /<CommonPrefixes>\s*<Prefix>([\s\S]*?)<\/Prefix>\s*<\/CommonPrefixes>/g,
+      )) {
+        dirs.push(unescapeXml(m[1]!));
       }
       token = /<IsTruncated>true<\/IsTruncated>/.test(xml)
         ? /<NextContinuationToken>([\s\S]*?)<\/NextContinuationToken>/.exec(xml)?.[1]
         : undefined;
       if (token) token = unescapeXml(token);
     } while (token);
-    return out.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
+    return { objects, dirs };
   }
 
-  async delete(key: string): Promise<void> {
+  async list(prefix: string): Promise<ArchiveObject[]> {
+    assertArchivePrefix(prefix);
+    const { objects } = await this.listPages(prefix);
+    return objects.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
+  }
+
+  async listDirs(prefix: string): Promise<string[]> {
+    assertArchivePrefix(prefix);
+    const { dirs } = await this.listPages(prefix, '/');
+    return dirs
+      .filter((dir) => dir.startsWith(prefix) && dir.endsWith('/') && isArchivePrefix(dir))
+      .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  }
+
+  /** Looks first, because a bucket answers DELETE the same way whether or not the object was there. */
+  async delete(key: string): Promise<boolean> {
     assertArchiveKey(key);
+    const head = await this.raw('HEAD', key);
+    const status = head.statusCode ?? 0;
+    if (status === 404) {
+      head.resume();
+      return false;
+    }
+    if (status < 200 || status >= 300) return this.fail(head, `look up ${key}`);
+    head.resume();
+    await this.remove(key);
+    return true;
+  }
+
+  private async remove(key: string): Promise<void> {
     const res = await this.raw('DELETE', key);
     const status = res.statusCode ?? 0;
     if (status === 404 || (status >= 200 && status < 300)) {
@@ -197,7 +239,7 @@ export class S3ArchiveStorage implements ArchiveStorage {
   async deletePrefix(prefix: string): Promise<number> {
     const objects = await this.list(prefix);
     for (let i = 0; i < objects.length; i += DELETE_CONCURRENCY) {
-      await Promise.all(objects.slice(i, i + DELETE_CONCURRENCY).map((o) => this.delete(o.key)));
+      await Promise.all(objects.slice(i, i + DELETE_CONCURRENCY).map((o) => this.remove(o.key)));
     }
     return objects.length;
   }

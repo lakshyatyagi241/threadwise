@@ -96,13 +96,25 @@ export function archiveStorageContract(
       expect(listed.map((o) => o.key)).toEqual(keys);
     }, 120_000);
 
-    it('deletes one object, and a missing one is not an error', async () => {
+    it('deletes one object and says whether it existed; a missing one is not an error', async () => {
       const p = fresh();
       await storage.putBytes(`${p}/x`, Buffer.from('x'));
       await storage.putBytes(`${p}/y`, Buffer.from('y'));
-      await storage.delete(`${p}/x`);
-      await storage.delete(`${p}/x`);
+      expect(await storage.delete(`${p}/x`)).toBe(true);
+      expect(await storage.delete(`${p}/x`)).toBe(false);
+      expect(await storage.delete(`${p}/never`)).toBe(false);
       expect((await storage.list(`${p}/`)).map((o) => o.key)).toEqual([`${p}/y`]);
+    });
+
+    it('lists the immediate sub-directories of a prefix, sorted, without looking inside them', async () => {
+      const p = fresh();
+      for (const k of ['b/1', 'b/deep/2', 'a/3', 'ab/4', 'top']) {
+        await storage.putBytes(`${p}/${k}`, Buffer.from(k));
+      }
+      expect(await storage.listDirs(`${p}/`)).toEqual([`${p}/a/`, `${p}/ab/`, `${p}/b/`]);
+      expect(await storage.listDirs(`${p}/b/`)).toEqual([`${p}/b/deep/`]);
+      expect(await storage.listDirs(`${p}/a/`)).toEqual([]);
+      expect(await storage.listDirs(`${p}/nothing/`)).toEqual([]);
     });
 
     it('deletes exactly the objects under a prefix and says how many', async () => {
@@ -145,6 +157,7 @@ export function archiveStorageContract(
     it('refuses a prefix that is empty, not a directory, or unsafe', async () => {
       for (const prefix of ['', '/', 'a', 'a/b', '../', 'a/../', '/a/']) {
         await expect(storage.list(prefix)).rejects.toThrow(/archive (prefix|key)/);
+        await expect(storage.listDirs(prefix)).rejects.toThrow(/archive (prefix|key)/);
         await expect(storage.deletePrefix(prefix)).rejects.toThrow(/archive (prefix|key)/);
       }
     });

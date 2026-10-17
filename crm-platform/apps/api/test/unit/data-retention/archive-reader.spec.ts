@@ -30,6 +30,7 @@ describe('ArchiveReader', () => {
       return lastStream;
     },
     list: (p) => local.list(p),
+    listDirs: (p) => local.listDirs(p),
     delete: (k) => local.delete(k),
     deletePrefix: (p) => local.deletePrefix(p),
   };

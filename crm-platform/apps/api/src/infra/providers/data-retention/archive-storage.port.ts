@@ -23,8 +23,10 @@ export interface ArchiveStorage {
   openRead(key: string): Promise<Readable | null>;
   /** Every object under a directory prefix (`a/b/`), sorted by key. */
   list(prefix: string): Promise<ArchiveObject[]>;
-  /** Removes one object. A missing object is not an error. */
-  delete(key: string): Promise<void>;
+  /** The immediate sub-directories of a directory prefix (`a/b/` gives `a/b/c/`, `a/b/d/`), sorted. Does not look inside them. */
+  listDirs(prefix: string): Promise<string[]>;
+  /** Removes one object and says whether it existed. A missing object is not an error. */
+  delete(key: string): Promise<boolean>;
   /** Removes every object under a directory prefix and returns how many. */
   deletePrefix(prefix: string): Promise<number>;
 }
@@ -51,6 +53,16 @@ export function assertArchivePrefix(prefix: string): void {
   if (!prefix.endsWith('/'))
     throw new Error(`archive prefix must end with "/": ${JSON.stringify(prefix)}`);
   assertArchiveKey(prefix.slice(0, -1));
+}
+
+/** True when `prefix` would pass `assertArchivePrefix`; for filtering what a store lists, which may hold names that are not ours. */
+export function isArchivePrefix(prefix: string): boolean {
+  try {
+    assertArchivePrefix(prefix);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** Reads a whole stream into memory. For manifests; never for archive objects. */
