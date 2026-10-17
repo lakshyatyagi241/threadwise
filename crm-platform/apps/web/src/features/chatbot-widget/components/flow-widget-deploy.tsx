@@ -209,9 +209,21 @@ export function FlowWidgetDeploy({
             onCopy={() => void copy(snippet, t('copied'))}
           />
           <div className="flex flex-wrap gap-2">
-            <a href={widget.previewUrl} target="_blank" rel="noopener" className={SECONDARY}>
-              {t('preview')}
-            </a>
+            {published ? (
+              <a href={widget.previewUrl} target="_blank" rel="noopener" className={SECONDARY}>
+                {t('preview')}
+              </a>
+            ) : (
+              // The chat page answers "Page not found" until the bot is published, so there is nothing to open yet.
+              <span
+                role="link"
+                aria-disabled="true"
+                data-testid="deploy-preview-disabled"
+                className={`${SECONDARY} cursor-not-allowed opacity-50 hover:border-border hover:text-current`}
+              >
+                {t('preview')}
+              </span>
+            )}
           </div>
         </Step>
 
