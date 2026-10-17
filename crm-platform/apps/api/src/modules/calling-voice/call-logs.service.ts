@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
   CALL_PLAYBACK_TTL_SECONDS,
+  type CallLogSource,
+  type CallOutcome,
   type CallAnalytics,
   type CallAnalyticsQuery,
   type CallLogDetail,
@@ -24,6 +26,7 @@ import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { dayWindow, eachDay, logWindow, recordingMime, timelineNote } from './call-logs.rules';
 import { CallLogsRepository, type Viewer } from './call-logs.repository';
 import { caller, notFound } from './calling-support';
+import { notesPreview } from './logging/call-logging.rules';
 
 type Row = Record<string, unknown>;
 const iso = (v: unknown): string | null => (v ? new Date(v as string).toISOString() : null);
@@ -80,6 +83,9 @@ export function toLogRow(r: Row): CallLogRow {
     durationSec: Number(r.duration_sec ?? 0),
     endReason: (r.end_reason as string | null) ?? null,
     hasRecording: r.has_recording === true,
+    source: ((r.source as CallLogSource | undefined) ?? 'whatsapp') as CallLogSource,
+    outcome: (r.outcome as CallOutcome | null | undefined) ?? null,
+    notesPreview: notesPreview(r.notes as string | null | undefined),
   };
 }
 
@@ -117,6 +123,7 @@ export class CallLogsService {
       numberUuid: q.numberId,
       agentUuid: q.agentId,
       q: q.q || undefined,
+      source: q.source,
     };
     return this.db.tx(async (tx) => {
       const [selection, workspace] = await Promise.all([
@@ -152,7 +159,7 @@ export class CallLogsService {
       if (!r) return null;
       return { r, events: await this.repo.timeline(tx, v.orgId, Number(r.id)) };
     });
-    if (!found) throw notFound('CALL_NOT_FOUND', 'Call');
+    if (!found) return this.entryDetail(v, uuid);
     const { r, events } = found;
     const row = toLogRow(r);
     const timeline: CallTimelineEntry[] = events.map((e) => ({
@@ -175,6 +182,54 @@ export class CallLogsService {
         // The size is read from the store only when the recording is played; the list never touches the disk.
         sizeBytes: null,
         lifecycle: toLifecycle(r),
+      },
+    };
+  }
+
+  /**
+   * The detail of a call that is not a WhatsApp call: who, when, how long, what came of it and what was written. Its timeline is the
+   * line it wrote when it was logged; it has no recording a person can play here (a reference on the provider's side is never returned).
+   */
+  private async entryDetail(v: Viewer, uuid: string): Promise<CallLogDetail> {
+    const r = await this.db.tx((tx) => this.repo.entryByUuid(tx, v, uuid));
+    if (!r) throw notFound('CALL_NOT_FOUND', 'Call');
+    const row = toLogRow(r);
+    return {
+      call: {
+        ...row,
+        answeredAt: null,
+        endedAt: iso(r.ended_at),
+        failureReason: row.status === 'failed' ? (row.outcome ?? null) : null,
+        conversationId: null,
+        notes: (r.notes as string | null) ?? null,
+        followUpTaskId: (r.task_uuid as string | null) ?? null,
+      },
+      timeline: [
+        {
+          type: 'logged',
+          at: iso(r.started_at) ?? new Date().toISOString(),
+          note: row.source ?? null,
+        },
+      ],
+      recording: {
+        available: false,
+        mime: null,
+        sizeBytes: null,
+        lifecycle: {
+          storedAt: null,
+          expiresAt: null,
+          legalHold: false,
+          holdReason: null,
+          deletedAt: null,
+          deletedReason: null,
+          consent: {
+            status: null,
+            method: null,
+            at: null,
+            noticeVersion: null,
+            noticeSha256: null,
+          },
+        },
       },
     };
   }
@@ -227,12 +282,13 @@ export class CallLogsService {
   ): Promise<CallAnalytics> {
     const v = await this.viewer(scope);
     const w = dayWindow(q, now);
-    const [totals, daily, byAgent, heat] = await this.db.tx(async (tx) =>
+    const [totals, daily, byAgent, heat, bySource] = await this.db.tx(async (tx) =>
       Promise.all([
-        this.repo.analyticsTotals(tx, v, w.start, w.end, q.numberId),
-        this.repo.analyticsDaily(tx, v, w.start, w.end, w.tz, q.numberId),
-        this.repo.analyticsByAgent(tx, v, w.start, w.end, q.numberId),
-        this.repo.analyticsHeatmap(tx, v, w.start, w.end, w.tz, q.numberId),
+        this.repo.analyticsTotals(tx, v, w.start, w.end, q.numberId, q.source),
+        this.repo.analyticsDaily(tx, v, w.start, w.end, w.tz, q.numberId, q.source),
+        this.repo.analyticsByAgent(tx, v, w.start, w.end, q.numberId, q.source),
+        this.repo.analyticsHeatmap(tx, v, w.start, w.end, w.tz, q.numberId, q.source),
+        this.repo.analyticsBySource(tx, v, w.start, w.end, q.numberId, q.source),
       ]),
     );
     const byDay = new Map(daily.map((d) => [d.day, d]));
@@ -253,6 +309,7 @@ export class CallLogsService {
         (day) => byDay.get(day) ?? { day, total: 0, answered: 0, missed: 0 },
       ),
       byAgent,
+      bySource,
       heatmap: heat.filter((h) => h.calls > 0),
     };
   }

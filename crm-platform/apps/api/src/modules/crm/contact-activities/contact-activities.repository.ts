@@ -123,4 +123,31 @@ export class ContactActivitiesRepository {
       .returning({ id: contactActivities.id, uuid: contactActivities.uuid });
     return row!;
   }
+
+  /**
+   * Rewrites the words of a line a module wrote itself (the call logging framework keeps its call's line in step when the call is
+   * edited). The manual timeline stays append-only: no route reaches this.
+   */
+  async rewrite(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    values: { title: string; body: string | null; occurredAt?: Date },
+  ): Promise<void> {
+    await tx
+      .update(contactActivities)
+      .set({
+        title: values.title,
+        body: values.body,
+        ...(values.occurredAt ? { occurredAt: values.occurredAt } : {}),
+      })
+      .where(and(eq(contactActivities.orgId, orgId), eq(contactActivities.id, id)));
+  }
+
+  /** Removes a line a module wrote itself (the call it describes was deleted). */
+  async remove(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx
+      .delete(contactActivities)
+      .where(and(eq(contactActivities.orgId, orgId), eq(contactActivities.id, id)));
+  }
 }

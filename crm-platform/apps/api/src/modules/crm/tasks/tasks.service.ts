@@ -195,29 +195,39 @@ export class TasksService {
   // --- writes ----------------------------------------------------------------------------------------------------------
 
   async create(input: CreateTaskInput, source: TaskSource = 'manual'): Promise<TaskResponse> {
+    return this.db.tx((tx) => this.createIn(tx, input, source));
+  }
+
+  /**
+   * `create` inside a transaction the caller owns: for a module that writes a task together with its own row (a follow-up made while a
+   * call is logged), so both commit or neither does.
+   */
+  async createIn(
+    tx: Tx,
+    input: CreateTaskInput,
+    source: TaskSource = 'manual',
+  ): Promise<TaskResponse> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const assigneeId = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
-      await this.assertAssigneeAllowed(
-        tx,
-        assigneeId,
-        ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
-      );
-      const links = await this.resolveLinks(tx, ctx.orgId, input, true);
-      const id = await this.repo.insert(tx, ctx.orgId, {
-        title: input.title,
-        notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
-        priority: input.priority ?? 'medium',
-        dueAt: input.dueAt ? new Date(input.dueAt) : null,
-        assigneeId,
-        createdBy: ctx.userId,
-        contactId: links.contactId ?? null,
-        dealId: links.dealId ?? null,
-        companyId: links.companyId ?? null,
-        source,
-      });
-      return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
+    const assigneeId = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
+    await this.assertAssigneeAllowed(
+      tx,
+      assigneeId,
+      ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
+    );
+    const links = await this.resolveLinks(tx, ctx.orgId, input, true);
+    const id = await this.repo.insert(tx, ctx.orgId, {
+      title: input.title,
+      notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
+      priority: input.priority ?? 'medium',
+      dueAt: input.dueAt ? new Date(input.dueAt) : null,
+      assigneeId,
+      createdBy: ctx.userId,
+      contactId: links.contactId ?? null,
+      dealId: links.dealId ?? null,
+      companyId: links.companyId ?? null,
+      source,
     });
+    return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
   }
 
   async update(uuid: string, input: UpdateTaskInput, scope: RecordScope): Promise<TaskResponse> {

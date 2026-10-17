@@ -144,8 +144,10 @@ CREATE TABLE call_log_entries (
   CONSTRAINT ck_call_log_entries_external CHECK (external_id IS NULL OR char_length(external_id) BETWEEN 1 AND 200),
   CONSTRAINT ck_call_log_entries_label CHECK (number_label IS NULL OR char_length(number_label) <= 80),
   CONSTRAINT ck_call_log_entries_recording_consent CHECK (recording_consent_status IS NULL OR recording_consent_status IN ('granted', 'declined')),
-  -- A reference to a recording is never kept without the consent evidence that allowed it.
-  CONSTRAINT ck_call_log_entries_recording_needs_consent CHECK (recording_ref IS NULL OR (recording_consent_status = 'granted' AND recording_notice_version IS NOT NULL))
+  -- A reference to a recording is never kept without the consent evidence that allowed it. (A CHECK passes on NULL, so each part says
+  -- IS NOT NULL out loud: a missing status must fail, not pass.)
+  CONSTRAINT ck_call_log_entries_recording_needs_consent CHECK (
+    recording_ref IS NULL OR (recording_consent_status IS NOT NULL AND recording_consent_status = 'granted' AND recording_notice_version IS NOT NULL))
 );
 -- The log: newest first inside a window of days, and the by-teammate analytics.
 CREATE INDEX idx_call_log_entries_started ON call_log_entries (org_id, started_at DESC, id DESC);
