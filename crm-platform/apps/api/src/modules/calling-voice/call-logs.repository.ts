@@ -57,7 +57,9 @@ const WA_BRANCH = sql`SELECT 'whatsapp'::text AS source, w.org_id, w.id AS row_i
 const ENTRY_BRANCH = sql`SELECT e.source, e.org_id, e.id AS row_id, e.uuid,
     CASE e.direction WHEN 'inbound' THEN 'USER_INITIATED' ELSE 'BUSINESS_INITIATED' END AS direction,
     CASE WHEN e.outcome IN ('failed', 'wrong_number') THEN 'failed' ELSE 'ended' END AS status,
-    e.duration_sec, e.outcome AS end_reason,
+    e.duration_sec,
+    CASE e.outcome WHEN 'connected' THEN 'COMPLETED' WHEN 'busy' THEN 'BUSY' WHEN 'declined' THEN 'DECLINED'
+      WHEN 'failed' THEN 'FAILED' WHEN 'wrong_number' THEN 'FAILED' ELSE 'NO_ANSWER' END AS end_reason,
     CASE e.direction WHEN 'inbound' THEN regexp_replace(coalesce(e.customer_phone, ''), '[^0-9]', '', 'g')
       ELSE regexp_replace(coalesce(e.our_phone, ''), '[^0-9]', '', 'g') END AS from_phone,
     CASE e.direction WHEN 'inbound' THEN regexp_replace(coalesce(e.our_phone, ''), '[^0-9]', '', 'g')

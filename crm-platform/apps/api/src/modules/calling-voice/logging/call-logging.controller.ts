@@ -62,7 +62,7 @@ export class CallLoggingController {
     private readonly ingest: CallIngestService,
     private readonly settings: CallLoggingSettingsService,
     private readonly connections: TelephonyConnectionsService,
-    private readonly clickToCall: ClickToCallService,
+    private readonly dialling: ClickToCallService,
   ) {}
 
   // --- log a call ------------------------------------------------------------------------------------------------------------------
@@ -126,7 +126,7 @@ export class CallLoggingController {
       'A marketing call to a number on the Do-Not-Call list, or to someone who withdrew, answers deny. Places nothing. Logging the call afterwards is allowed whatever this says.',
   })
   check(@Body(zodPipe(callCheckInputSchema)) body: CallCheckInput) {
-    return this.clickToCall.check(body);
+    return this.dialling.check(body);
   }
 
   @Post('click-to-call')
@@ -139,7 +139,7 @@ export class CallLoggingController {
       'The finished call is logged by the provider callback (source web_click_to_call). 422 CONSENT_OPTED_OUT with reason on_dnc_list for a marketing call to a Do-Not-Call number.',
   })
   place(@Body(zodPipe(clickToCallInputSchema)) body: ClickToCallInput) {
-    return this.clickToCall.place(body);
+    return this.dialling.place(body);
   }
 
   // --- setup -----------------------------------------------------------------------------------------------------------------------

@@ -495,6 +495,7 @@ export function StatusBadge({ status }: { status: CallLogRow['status'] }) {
 function LogTable({ rows }: { rows: CallLogRow[] }) {
   const t = useTranslations('calling-voice.logs.table');
   const ts = useTranslations('calling-voice.logs.source');
+  const to = useTranslations('calling-voice.logs.logCall.outcomes');
   const format = useFormatter();
   const now = useNow({ updateInterval: 60_000 });
   return (
@@ -565,6 +566,9 @@ function LogTable({ rows }: { rows: CallLogRow[] }) {
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={r.status} />
+                {r.outcome && (
+                  <div className="mt-1 text-[11px] text-muted-foreground">{to(r.outcome)}</div>
+                )}
               </td>
               <td className="px-4 py-3 text-end">
                 <Link

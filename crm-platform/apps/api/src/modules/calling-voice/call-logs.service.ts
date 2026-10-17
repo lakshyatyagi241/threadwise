@@ -199,7 +199,7 @@ export class CallLogsService {
         ...row,
         answeredAt: null,
         endedAt: iso(r.ended_at),
-        failureReason: row.status === 'failed' ? (row.outcome ?? null) : null,
+        failureReason: null,
         conversationId: null,
         notes: (r.notes as string | null) ?? null,
         followUpTaskId: (r.task_uuid as string | null) ?? null,
