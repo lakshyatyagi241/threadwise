@@ -16,7 +16,7 @@ const ROUTES: Record<string, { org: number; cfg: number }> = {
 const OWN_SECRET: Record<number, string> = { 21: 'attacker-secret', 22: 'attacker-secret' };
 
 function build() {
-  const queue = { add: vi.fn(async () => undefined) };
+  const queue = { add: vi.fn(async () => undefined), getJob: vi.fn(async () => undefined) };
   const db = {
     primary: {
       execute: vi.fn(async (q: { queryChunks: unknown[] }) => {

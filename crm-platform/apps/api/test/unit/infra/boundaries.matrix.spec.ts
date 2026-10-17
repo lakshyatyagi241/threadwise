@@ -143,7 +143,13 @@ describe('default job options', () => {
       expect(jobOptionsFor(queue).removeOnComplete, queue).toBe(true);
       // Failures stay, bounded, so a dead job can still be debugged.
       expect(jobOptionsFor(queue).removeOnFail, queue).toEqual(DEFAULT_JOB_OPTIONS.removeOnFail);
-      expect(jobOptionsFor(queue).attempts, queue).toBe(DEFAULT_JOB_OPTIONS.attempts);
+      // The inbound WhatsApp queue deliberately retries longer than the default (a message exists only here once Meta has our 200);
+      // the forward queue keeps the default. See queues.spec.ts for the window.
+      if (queue === QUEUES.WABA_INGEST) {
+        expect(jobOptionsFor(queue).attempts, queue).toBeGreaterThan(DEFAULT_JOB_OPTIONS.attempts);
+      } else {
+        expect(jobOptionsFor(queue).attempts, queue).toBe(DEFAULT_JOB_OPTIONS.attempts);
+      }
     }
   });
 
