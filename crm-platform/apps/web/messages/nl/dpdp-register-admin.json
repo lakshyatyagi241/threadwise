@@ -1,0 +1,431 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Gegevensbescherming",
+      "register": "DPDP-register"
+    },
+    "page": {
+      "eyebrow": "Beheer · Team · DPDP-register",
+      "title": "DPDP-register",
+      "disclaimer": "Volgt wat het platform vandaag doet ten opzichte van de DPDP Act en de DPDP Rules. Het is geen conformiteitscertificaat.",
+      "checkedAt": "Gecontroleerd: {time}",
+      "refresh": "Vernieuwen"
+    },
+    "summary": {
+      "label": "Samenvatting van het register",
+      "counts": {
+        "title": "Verplichtingen per status",
+        "counted": "{total, plural, one {# verplichting geteld} other {# verplichtingen geteld}}",
+        "notCounted": "Rijen met ‘Niet van toepassing’ worden getoond maar niet geteld."
+      },
+      "milestones": {
+        "title": "Aankomende data",
+        "names": {
+          "consent_managers": "Registratie van Toestemmingsbeheerders (rule 4)",
+          "main_duties": "Hoofdplichten van de DPDP Rules"
+        },
+        "left": "Nog ongeveer {days, plural, =0 {0 dagen} one {# dag} other {# dagen}}",
+        "passed": "Deze datum is verstreken"
+      },
+      "tiers": {
+        "title": "Sanctieniveaus",
+        "tier": "Sanctieniveau",
+        "hint": "Verplichtingen die niet, deels of ongeverifieerd worden nageleefd, per toepasselijk sanctiemaximum."
+      }
+    },
+    "status": {
+      "following": "Nageleefd",
+      "partial": "Gedeeltelijk",
+      "not_following": "Niet nageleefd",
+      "unverified": "Niet geverifieerd",
+      "not_applicable": "Niet van toepassing"
+    },
+    "result": {
+      "pass": "Geslaagd",
+      "fail": "Mislukt",
+      "unknown": "Onbekend"
+    },
+    "source": {
+      "live": "Live uitgelezen",
+      "attested": "Bevestigd",
+      "code": "Door de code verklaard"
+    },
+    "filters": {
+      "label": "Filteren op status",
+      "all": "Alle",
+      "shown": "{count, plural, one {# verplichting getoond} other {# verplichtingen getoond}}",
+      "empty": {
+        "title": "Geen enkele verplichting past bij dit filter",
+        "message": "Op dit moment heeft geen enkele verplichting deze status.",
+        "reset": "Alles tonen"
+      }
+    },
+    "groups": {
+      "A": "Grondslagen, kennisgeving, toestemming (ss4 to 7, rule 3)",
+      "B": "Rechten en klachten (ss11 to 15, rule 14)",
+      "C": "Bewaring en wissing (s8(7), (8), rule 8)",
+      "D": "Beveiliging (s8(4), (5), rule 6)",
+      "E": "Datalekken (s8(6), rule 7)",
+      "F": "Kinderen (s9, rules 10 to 12, Vierde Bijlage)",
+      "G": "Doorgiften en verwerkers (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Significante gegevensfiduciair (s10, rule 13)",
+      "I": "Bestuur en handhaving (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Werkruimte",
+      "platform": "Platform",
+      "both": "Werkruimte en platform"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Geen sanctieniveau"
+    },
+    "item": {
+      "citation": "Wetsverwijzing",
+      "owner": "Eigenaar",
+      "penalty": "Sanctieniveau",
+      "plan": "Planonderdelen",
+      "conditional": "Alleen indien aangewezen",
+      "checks": "Controles",
+      "noChecks": "Verklaarde status. Nog geen controle leest dit uit."
+    },
+    "check": {
+      "lapsed": "Verlopen",
+      "note": "Notitie:",
+      "evidence": "Link naar bewijs"
+    },
+    "items": {
+      "r01": {
+        "title": "Persoonsgegevens alleen verwerken met toestemming of voor een toegestaan gebruik"
+      },
+      "r02": {
+        "title": "Een zelfstandige, gespecificeerde kennisgeving geven voordat om toestemming wordt gevraagd"
+      },
+      "r03": {
+        "title": "Mensen informeren die toestemming gaven voordat de wet van kracht werd"
+      },
+      "r04": {
+        "title": "Kennisgeving en toestemming aanbieden in het Engels of in een erkende taal"
+      },
+      "r05": {
+        "title": "Toestemming vrij, specifiek, geïnformeerd en ondubbelzinnig laten zijn"
+      },
+      "r06": {
+        "title": "In elk toestemmingsverzoek een contactpersoon tonen"
+      },
+      "r07": {
+        "title": "Toestemming even gemakkelijk laten intrekken als ze gegeven is"
+      },
+      "r08": {
+        "title": "Bij intrekking de verwerking stoppen en verwerkers laten stoppen"
+      },
+      "r09": {
+        "title": "Kennisgeving en toestemming kunnen aantonen"
+      },
+      "r10": {
+        "title": "Vrijwillig verstrekte gegevens alleen voor het genoemde doel gebruiken"
+      },
+      "r11": {
+        "title": "Toestemming accepteren die via een Toestemmingsbeheerder is gegeven of ingetrokken"
+      },
+      "r12": {
+        "title": "Elke uitgaande verzending op het moment van verzenden afhankelijk maken van toestemming"
+      },
+      "r13": {
+        "title": "Bewaarde gegevens, verwerking en ontvangers samenvatten"
+      },
+      "r14": {
+        "title": "Persoonsgegevens op verzoek corrigeren, aanvullen en bijwerken"
+      },
+      "r15": {
+        "title": "Op verzoek wissen, tenzij nodig voor het doel of wettelijk verplicht"
+      },
+      "r16": {
+        "title": "Een gepubliceerd klachtenmechanisme hanteren en binnen 90 dagen antwoorden"
+      },
+      "r17": {
+        "title": "Mensen iemand laten aanwijzen die optreedt bij overlijden of onbekwaamheid"
+      },
+      "r18": {
+        "title": "Publiceren hoe je een verzoek indient en welke identificatie nodig is"
+      },
+      "r19": {
+        "title": "Een contactpunt publiceren en in elk antwoord opnemen"
+      },
+      "r20": {
+        "title": "Identiteit verifiëren, verzoeken beperken en rechtenverzoeken auditen"
+      },
+      "r21": {
+        "title": "Gegevens juist en volledig houden als ze beslissingen sturen"
+      },
+      "r22": {
+        "title": "De rechten respecteren van het eigen personeel van het platform, factuurcontacten en bezoekers"
+      },
+      "r23": {
+        "title": "Gegevens wissen wanneer toestemming wordt ingetrokken of het doel eindigt"
+      },
+      "r24": {
+        "title": "Inactieve gegevens na drie jaar wissen, met 48 uur van tevoren een melding"
+      },
+      "r25": {
+        "title": "Persoonsgegevens en logs minstens een jaar bewaren"
+      },
+      "r26": {
+        "title": "De inactiviteitscyclus van werkruimten uitvoeren"
+      },
+      "r27": {
+        "title": "Gegevens beschermen met versleuteling, maskering of tokens"
+      },
+      "r28": {
+        "title": "Toegang tot computerbronnen beheersen"
+      },
+      "r29": {
+        "title": "Toegang tot persoonsgegevens loggen en bewaken"
+      },
+      "r30": {
+        "title": "Back-ups maken zodat de verwerking na verlies kan doorgaan"
+      },
+      "r31": {
+        "title": "Logs een jaar bewaren om incidenten op te sporen en te onderzoeken"
+      },
+      "r32": {
+        "title": "In elk verwerkerscontract een beveiligingsclausule opnemen"
+      },
+      "r33": {
+        "title": "De geldende beveiligingsmaatregelen kunnen aantonen"
+      },
+      "r34": {
+        "title": "In het algemeen redelijke beveiligingsmaatregelen handhaven"
+      },
+      "r35": {
+        "title": "AI-paden beheersen die contacttekst naar derden sturen"
+      },
+      "r36": {
+        "title": "Elke getroffen persoon zonder vertraging over een datalek informeren"
+      },
+      "r37": {
+        "title": "De Raad voor gegevensbescherming over een datalek informeren en daarna binnen 72 uur rapporteren"
+      },
+      "r38": {
+        "title": "Als verwerker de werkruimte snel genoeg over een datalek informeren"
+      },
+      "r39": {
+        "title": "Verifieerbare toestemming van ouders krijgen voordat gegevens van een kind worden verwerkt"
+      },
+      "r40": {
+        "title": "Geen tracking, gedragsmonitoring of gerichte advertenties voor kinderen"
+      },
+      "r41": {
+        "title": "De vrijstellingen van de Vierde Bijlage toepassen op plichten rond kindgegevens"
+      },
+      "r42": {
+        "title": "De grenzen van de overheid voor doorgifte van gegevens naar het buitenland respecteren"
+      },
+      "r43": {
+        "title": "Verantwoordelijk blijven voor wat verwerkers doen"
+      },
+      "r44": {
+        "title": "De plichten van de Significante gegevensfiduciair nakomen, alleen indien aangewezen"
+      },
+      "r45": {
+        "title": "Binnen zes maanden bewijs leveren voor een onderzoek van de Raad voor gegevensbescherming"
+      },
+      "r46": {
+        "title": "De eigen kennisgevingen van het platform, de acceptatie van voorwaarden en de cookiekeuze bijhouden"
+      },
+      "r47": {
+        "title": "Een contactpunt van het platform en een klachtenroute aanwijzen"
+      }
+    },
+    "details": {
+      "probe_error": "Dit kon nu niet worden uitgelezen, dus het resultaat is onbekend.",
+      "probe_missing": "Er kwam geen uitlezing terug voor deze controle.",
+      "env_missing": "{key} is niet ingesteld, dus dit kon niet worden uitgelezen.",
+      "attestation_missing": "Niemand heeft dit al vastgelegd.",
+      "attestation_expired": "De verklaring die {name} op {date} heeft vastgelegd, is op {expires} verlopen. Ze telt niet meer mee.",
+      "attested_pass": "Door {name} op {date} vastgelegd als aanwezig. Telt mee tot {expires}.",
+      "attested_fail": "Door {name} op {date} vastgelegd als niet aanwezig. Telt mee tot {expires}.",
+      "code_declared": "In de code verklaard, niet gemeten tijdens runtime. De wijziging die het gat dicht, werkt dit bij.",
+      "unrecognised": "Deze console heeft nog geen beschrijving voor dit resultaat ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Operators moeten inloggen met tweefactorauthenticatie",
+        "details": {
+          "mfa_on": "Inloggen met twee factoren is verplicht voor operators.",
+          "mfa_off": "Niet verplicht: operators kunnen inloggen zonder tweede factor."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Beheerders van werkruimten moeten inloggen met tweefactorauthenticatie",
+        "details": {
+          "mfa_on": "Inloggen met twee factoren is verplicht voor beheerders van werkruimten.",
+          "mfa_off": "Niet verplicht: beheerders van werkruimten kunnen inloggen zonder tweede factor."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Het auditlog wordt minstens een jaar bewaard",
+        "details": {
+          "retention_ok": "Bewaard gedurende {days, plural, one {# dag} other {# dagen}}.",
+          "retention_unlimited": "Wordt nooit opgeschoond (0 dagen), dus minstens een jaar bewaard.",
+          "retention_below_floor": "Slechts {days, plural, one {# dag} other {# dagen}} bewaard; de DPDP Rules vragen minstens 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Beëindigde sessies worden minstens een jaar bewaard",
+        "details": {
+          "retention_ok": "Beëindigde sessies worden na {days, plural, one {# dag} other {# dagen}} opgeschoond.",
+          "retention_below_floor": "Beëindigde sessies worden na {days, plural, one {# dag} other {# dagen}} opgeschoond, onder de 365 die de DPDP Rules vragen."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis heeft een wachtwoord nodig of gebruikt TLS",
+        "details": {
+          "redis_auth_on": "Het ingestelde Redis-adres bevat een wachtwoord of gebruikt TLS.",
+          "redis_auth_off": "Het ingestelde Redis-adres heeft geen wachtwoord en gebruikt geen TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Er blijven geen eerdere versleutelingssleutels over in de sleutelring",
+        "details": {
+          "rotation_complete": "Er zijn geen eerdere sleutels ingesteld.",
+          "previous_keys_present": "Eerdere sleutels zijn nog ingesteld, dus de sleutelrotatie is niet afgerond."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "De inactiviteitscyclus van werkruimten is actief",
+        "details": {
+          "lifecycle_on": "Ingeschakeld, geen proefrun, en verwijderen staat aan.",
+          "lifecycle_off": "{enabled, select, true {Ingeschakeld} other {Uitgeschakeld}}, {dryRun, select, true {proefrun aan} other {proefrun uit}}, {deleteEnabled, select, true {verwijderen aan} other {verwijderen uit}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Foutrapporten blijven in India of staan uit",
+        "details": {
+          "sentry_off": "Foutrapportage staat uit, dus er verlaten geen foutgegevens het platform.",
+          "region_india": "Foutrapporten gaan naar een Indiase regio van de leverancier.",
+          "region_outside_india": "Foutrapporten gaan naar de regio {region} van de leverancier, buiten India.",
+          "region_unrecognised": "Het adres voor foutrapportage is geen bekend regionaal adres, dus het land is niet vast te stellen.",
+          "region_unrecognised_host": "Foutrapporten gaan naar {host}, dat geen bekend regionaal adres is, dus het land is niet vast te stellen."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Er is geen AI-sleutel van het platform ingesteld",
+        "details": {
+          "no_platform_key": "Voor geen enkele AI-provider is een platformsleutel ingesteld.",
+          "platform_key_set": "Voor deze is een platformsleutel ingesteld: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Nieuwe werkruimten starten met verplichte marketingtoestemming",
+        "details": {
+          "default_opt_in": "Nieuwe werkruimten starten met verplichte vastgelegde toestemming voor marketing.",
+          "default_opt_out": "Nieuwe werkruimten starten zonder verplichte vastgelegde toestemming voor marketing.",
+          "default_opt_in_counts": "Nieuwe werkruimten starten met verplichte vastgelegde toestemming voor marketing. Bij {on, number} van de {total, number} werkruimten is dat nu verplicht.",
+          "default_opt_out_counts": "Nieuwe werkruimten starten zonder verplichte vastgelegde toestemming voor marketing. Bij {on, number} van de {total, number} werkruimten is dat nu verplicht."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Hostingprovider, regio en gegevenslocaties zijn vastgelegd"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Bewijs van versleuteling van volumes en objectopslag is aanwezig"
+      },
+      "backup_offsite_configured": {
+        "title": "Een verzegelde externe back-up draait en dekt de objectopslag"
+      },
+      "backup_restore_drill": {
+        "title": "In de afgelopen zes maanden is een hersteloefening uitgevoerd"
+      },
+      "security_pentest_report": {
+        "title": "Een extern pentestrapport is aanwezig zonder openstaande kritieke bevindingen"
+      },
+      "legal_counsel_engaged": {
+        "title": "Indiase juridische adviseurs voor gegevensbescherming zijn ingeschakeld"
+      },
+      "legal_vendor_dpas": {
+        "title": "Ondertekende DPA’s zijn aanwezig bij de subverwerkers die persoonsgegevens bewaren"
+      },
+      "governance_contacts_named": {
+        "title": "Privacycontact, incidentcommandant en klachtenverantwoordelijke zijn aangewezen en gepubliceerd"
+      },
+      "pii_column_encryption": {
+        "title": "Telefoon, e-mail en berichttekst van het contact zijn per kolom versleuteld"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "De bevoorrechte database-instelling kan niet vanuit een sessie worden gezet"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Bij wissing blijven geschiedenis en logs een jaar bewaard voordat ze worden verwijderd"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Beveiligingscontroles draaien volgens schema in CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Werkruimten kunnen de AI-paden uitschakelen die contacttekst naar een leverancier sturen"
+      },
+      "transfer_country_killswitch": {
+        "title": "Elke leverancier heeft een landlabel en een land kan worden afgesneden"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "De acceptatie van de DPA door een werkruimte wordt vastgelegd met versie en tijd"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Het doelenregister gebruikt de toestemmingsgebruiken en de gebruiken van section 7 van de Act"
+      }
+    },
+    "attest": {
+      "action": "Bevestigen",
+      "actionFor": "Bevestigen: {check}",
+      "title": "Een verklaring vastleggen",
+      "intro": "Leg vast of dit vandaag klopt. Het telt mee tot het verloopt, daarna gaat de controle terug naar onbekend. Elke verklaring blijft in de geschiedenis.",
+      "result": {
+        "label": "Resultaat",
+        "pass": "Aanwezig (geslaagd)",
+        "fail": "Niet aanwezig (mislukt)"
+      },
+      "note": {
+        "label": "Notitie",
+        "hint": "Wat je hebt gecontroleerd en waar het bewijs staat. Minstens {min} tekens."
+      },
+      "evidence": {
+        "label": "Link naar bewijs (optioneel)",
+        "hint": "Een https-link naar het document of de ticket.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Telt mee gedurende (dagen)",
+        "hint": "{min} tot {max} dagen. Daarna gaat de controle terug naar onbekend."
+      },
+      "problems": {
+        "noteShort": "Schrijf minstens {min} tekens.",
+        "noteLong": "Houd de notitie onder de {max, number} tekens.",
+        "link": "Gebruik een volledige https-link of laat dit leeg.",
+        "range": "Voer een geheel aantal dagen in van {min} tot {max}."
+      },
+      "submit": "Verklaring vastleggen",
+      "saving": "Opslaan",
+      "cancel": "Annuleren",
+      "saved": "Verklaring vastgelegd."
+    },
+    "history": {
+      "action": "Geschiedenis",
+      "actionFor": "Geschiedenis: {check}",
+      "title": "Geschiedenis",
+      "empty": "Voor deze controle is nog niets vastgelegd.",
+      "validUntil": "Geldig tot {date}",
+      "close": "Sluiten"
+    },
+    "errors": {
+      "forbidden": "Je hebt hiervoor niet de juiste rechten.",
+      "request": "Dat verzoek kon niet worden voltooid.",
+      "unexpected": "Er is iets misgegaan aan onze kant. Probeer het zo meteen opnieuw.",
+      "network": "De server was niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer de gemarkeerde velden.",
+      "notFound": "Dat item bestaat niet meer."
+    }
+  }
+}

@@ -1,0 +1,431 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "隐私",
+      "register": "DPDP 登记册"
+    },
+    "page": {
+      "eyebrow": "管理员 · 团队 · DPDP 登记册",
+      "title": "DPDP 登记册",
+      "disclaimer": "跟踪平台目前针对 DPDP Act 和 DPDP Rules 所做的事情。这不是合规证书。",
+      "checkedAt": "检查时间：{time}",
+      "refresh": "刷新"
+    },
+    "summary": {
+      "label": "登记册摘要",
+      "counts": {
+        "title": "按状态统计的义务",
+        "counted": "{total, plural, other {已统计 # 项义务}}",
+        "notCounted": "“不适用”的行会列出，但不计入统计。"
+      },
+      "milestones": {
+        "title": "即将到来的日期",
+        "names": {
+          "consent_managers": "同意管理者登记 (rule 4)",
+          "main_duties": "DPDP Rules 的主要职责"
+        },
+        "left": "还剩约 {days, plural, =0 {0 天} other {# 天}}",
+        "passed": "该日期已过"
+      },
+      "tiers": {
+        "title": "处罚档位",
+        "tier": "处罚档位",
+        "hint": "未遵循、部分遵循或未验证的义务，按适用的处罚上限分组。"
+      }
+    },
+    "status": {
+      "following": "遵循",
+      "partial": "部分遵循",
+      "not_following": "未遵循",
+      "unverified": "未验证",
+      "not_applicable": "不适用"
+    },
+    "result": {
+      "pass": "通过",
+      "fail": "未通过",
+      "unknown": "未知"
+    },
+    "source": {
+      "live": "实时读取",
+      "attested": "人工确认",
+      "code": "代码声明"
+    },
+    "filters": {
+      "label": "按状态筛选",
+      "all": "全部",
+      "shown": "{count, plural, other {显示 # 项义务}}",
+      "empty": {
+        "title": "没有义务符合此筛选条件",
+        "message": "目前没有处于此状态的义务。",
+        "reset": "显示全部"
+      }
+    },
+    "groups": {
+      "A": "依据、告知、同意 (ss4 to 7, rule 3)",
+      "B": "权利与投诉 (ss11 to 15, rule 14)",
+      "C": "保留与删除 (s8(7), (8), rule 8)",
+      "D": "安全 (s8(4), (5), rule 6)",
+      "E": "数据泄露 (s8(6), rule 7)",
+      "F": "儿童 (s9, rules 10 to 12, 第四附表)",
+      "G": "传输与处理者 (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "重大数据受托人 (s10, rule 13)",
+      "I": "治理与执法 (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "工作区",
+      "platform": "平台",
+      "both": "工作区和平台"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "无处罚档位"
+    },
+    "item": {
+      "citation": "法条引用",
+      "owner": "负责人",
+      "penalty": "处罚档位",
+      "plan": "计划项",
+      "conditional": "仅在被认定时",
+      "checks": "检查",
+      "noChecks": "已声明的状态。尚无检查读取它。"
+    },
+    "check": {
+      "lapsed": "已失效",
+      "note": "备注：",
+      "evidence": "证据链接"
+    },
+    "items": {
+      "r01": {
+        "title": "仅在获得同意或属于允许的用途时处理个人数据"
+      },
+      "r02": {
+        "title": "征求同意前提供独立、分项的告知"
+      },
+      "r03": {
+        "title": "通知在法律生效前已同意的人"
+      },
+      "r04": {
+        "title": "以英语或名录所列语言提供告知和同意"
+      },
+      "r05": {
+        "title": "确保同意是自由、具体、知情且明确的"
+      },
+      "r06": {
+        "title": "在每个同意请求中显示联系人"
+      },
+      "r07": {
+        "title": "让撤回同意与给予同意一样容易"
+      },
+      "r08": {
+        "title": "撤回后停止处理，并让处理者也停止"
+      },
+      "r09": {
+        "title": "能够证明告知与同意"
+      },
+      "r10": {
+        "title": "自愿提供的数据只用于所述目的"
+      },
+      "r11": {
+        "title": "接受通过同意管理者给予或撤回的同意"
+      },
+      "r12": {
+        "title": "在每次对外发送时按发送时点的同意进行把关"
+      },
+      "r13": {
+        "title": "汇总所持有的数据、处理方式及接收方"
+      },
+      "r14": {
+        "title": "按请求更正、补全和更新个人数据"
+      },
+      "r15": {
+        "title": "按请求删除，除非为目的或依法所需"
+      },
+      "r16": {
+        "title": "运行已公布的投诉机制，并在 90 天内答复"
+      },
+      "r17": {
+        "title": "允许人们指定在死亡或丧失行为能力时代为行事的人"
+      },
+      "r18": {
+        "title": "公布如何提出请求以及需要哪种标识"
+      },
+      "r19": {
+        "title": "公布联系方式，并写入每一份答复"
+      },
+      "r20": {
+        "title": "核验身份、限制频率并审计权利请求"
+      },
+      "r21": {
+        "title": "在数据用于决策时保持其准确完整"
+      },
+      "r22": {
+        "title": "尊重平台自身员工、账单联系人和访客的权利"
+      },
+      "r23": {
+        "title": "同意被撤回或目的结束时删除数据"
+      },
+      "r24": {
+        "title": "三年未活跃的数据在提前 48 小时通知后删除"
+      },
+      "r25": {
+        "title": "个人数据和日志至少保留一年"
+      },
+      "r26": {
+        "title": "运行工作区不活跃生命周期"
+      },
+      "r27": {
+        "title": "用加密、脱敏或令牌保护数据"
+      },
+      "r28": {
+        "title": "控制对计算机资源的访问"
+      },
+      "r29": {
+        "title": "记录并监控对个人数据的访问"
+      },
+      "r30": {
+        "title": "备份数据，以便丢失后能继续处理"
+      },
+      "r31": {
+        "title": "日志保留一年，用于发现和调查事件"
+      },
+      "r32": {
+        "title": "每份处理者合同都含有安全条款"
+      },
+      "r33": {
+        "title": "能够展示已有的安全措施"
+      },
+      "r34": {
+        "title": "总体上维持合理的安全保障措施"
+      },
+      "r35": {
+        "title": "控制把联系人文本发送给第三方的 AI 路径"
+      },
+      "r36": {
+        "title": "及时通知每一位受泄露影响的人"
+      },
+      "r37": {
+        "title": "把泄露告知数据保护委员会，再在 72 小时内报告"
+      },
+      "r38": {
+        "title": "作为处理者，足够迅速地把泄露告知工作区"
+      },
+      "r39": {
+        "title": "处理儿童数据前获得可验证的家长同意"
+      },
+      "r40": {
+        "title": "不对儿童做追踪、行为监控或定向广告"
+      },
+      "r41": {
+        "title": "对儿童数据义务适用第四附表的豁免"
+      },
+      "r42": {
+        "title": "遵守政府对数据出境的限制"
+      },
+      "r43": {
+        "title": "继续对处理者的行为负责"
+      },
+      "r44": {
+        "title": "履行重大数据受托人的义务，仅在被认定时"
+      },
+      "r45": {
+        "title": "六个月内为数据保护委员会的调查提供证据"
+      },
+      "r46": {
+        "title": "维护平台自身的告知、条款接受和 Cookie 选择"
+      },
+      "r47": {
+        "title": "指定平台联系人和投诉渠道"
+      }
+    },
+    "details": {
+      "probe_error": "目前无法读取，因此结果未知。",
+      "probe_missing": "此检查没有返回任何读数。",
+      "env_missing": "未设置 {key}，因此无法读取。",
+      "attestation_missing": "还没有人记录过。",
+      "attestation_expired": "{name} 于 {date} 记录的声明已在 {expires} 失效，不再计入。",
+      "attested_pass": "{name} 于 {date} 记录为已落实，有效期至 {expires}。",
+      "attested_fail": "{name} 于 {date} 记录为未落实，有效期至 {expires}。",
+      "code_declared": "在代码中声明，并非运行时测得。弥补差距的变更会更新它。",
+      "unrecognised": "此控制台尚无该结果的说明 ({detail})。"
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "运营人员必须使用双因素认证登录",
+        "details": {
+          "mfa_on": "运营人员必须使用双因素登录。",
+          "mfa_off": "未强制：运营人员无需第二因素即可登录。"
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "工作区管理员必须使用双因素认证登录",
+        "details": {
+          "mfa_on": "工作区管理员必须使用双因素登录。",
+          "mfa_off": "未强制：工作区管理员无需第二因素即可登录。"
+        }
+      },
+      "logs_audit_retention": {
+        "title": "审计日志至少保留一年",
+        "details": {
+          "retention_ok": "保留 {days, plural, other {# 天}}。",
+          "retention_unlimited": "从不清理 (0 天)，因此至少保留一年。",
+          "retention_below_floor": "仅保留 {days, plural, other {# 天}}；DPDP Rules 要求至少 365 天。"
+        }
+      },
+      "logs_session_retention": {
+        "title": "已结束的会话至少保留一年",
+        "details": {
+          "retention_ok": "已结束的会话在 {days, plural, other {# 天}}后清除。",
+          "retention_below_floor": "已结束的会话在 {days, plural, other {# 天}}后清除，低于 DPDP Rules 要求的 365 天。"
+        }
+      },
+      "redis_auth": {
+        "title": "Redis 需要密码或使用 TLS",
+        "details": {
+          "redis_auth_on": "已配置的 Redis 地址带有密码或使用 TLS。",
+          "redis_auth_off": "已配置的 Redis 地址没有密码，也未使用 TLS。"
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "密钥环中不再有旧的加密密钥",
+        "details": {
+          "rotation_complete": "未配置旧密钥。",
+          "previous_keys_present": "仍配置着旧密钥，因此密钥轮换尚未完成。"
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "工作区不活跃生命周期正在运行",
+        "details": {
+          "lifecycle_on": "已启用，不是试运行，删除已开启。",
+          "lifecycle_off": "{enabled, select, true {已启用} other {已停用}}，{dryRun, select, true {试运行开} other {试运行关}}，{deleteEnabled, select, true {删除开} other {删除关}}。"
+        }
+      },
+      "errors_vendor_region": {
+        "title": "错误报告留在印度或已关闭",
+        "details": {
+          "sentry_off": "错误报告已关闭，因此没有错误数据离开平台。",
+          "region_india": "错误报告发往服务商位于印度的区域。",
+          "region_outside_india": "错误报告发往服务商的 {region} 区域，位于印度之外。",
+          "region_unrecognised": "错误报告地址不是已知的区域地址，因此无法判断其所在国家。",
+          "region_unrecognised_host": "错误报告发往 {host}，它不是已知的区域地址，因此无法判断其所在国家。"
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "未配置平台 AI 密钥",
+        "details": {
+          "no_platform_key": "没有为任何 AI 提供商配置平台密钥。",
+          "platform_key_set": "已为以下提供商配置平台密钥：{providers}。"
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "新工作区默认要求营销同意",
+        "details": {
+          "default_opt_in": "新工作区默认要求营销必须有已记录的同意。",
+          "default_opt_out": "新工作区默认不要求营销必须有已记录的同意。",
+          "default_opt_in_counts": "新工作区默认要求营销必须有已记录的同意。目前 {total, number} 个工作区中有 {on, number} 个要求。",
+          "default_opt_out_counts": "新工作区默认不要求营销必须有已记录的同意。目前 {total, number} 个工作区中有 {on, number} 个要求。"
+        }
+      },
+      "hosting_region_documented": {
+        "title": "托管服务商、区域和数据所在地已记录在案"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "存有卷和对象存储加密的证据"
+      },
+      "backup_offsite_configured": {
+        "title": "有一份已封存的异地备份在运行，并覆盖对象存储"
+      },
+      "backup_restore_drill": {
+        "title": "最近六个月内做过一次恢复演练"
+      },
+      "security_pentest_report": {
+        "title": "存有外部渗透测试报告，且没有未关闭的严重发现"
+      },
+      "legal_counsel_engaged": {
+        "title": "已聘请印度数据保护法律顾问"
+      },
+      "legal_vendor_dpas": {
+        "title": "存有与持有个人数据的子处理者签署的 DPA"
+      },
+      "governance_contacts_named": {
+        "title": "隐私联系人、事件指挥人和投诉负责人已指定并公布"
+      },
+      "pii_column_encryption": {
+        "title": "联系人的电话、邮箱和消息正文按列加密"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "特权数据库设置无法从会话中设置"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "删除时会先保留历史和日志一年，再予以删除"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "安全检查在 CI 中按计划运行"
+      },
+      "ai_workspace_switch": {
+        "title": "工作区可以关闭把联系人文本发给服务商的 AI 路径"
+      },
+      "transfer_country_killswitch": {
+        "title": "每个服务商都有国家标签，且可以切断某个国家"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "工作区接受 DPA 的操作会连同版本和时间一起记录"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "目的登记使用 Act 的同意用途和 section 7 用途"
+      }
+    },
+    "attest": {
+      "action": "登记确认",
+      "actionFor": "登记确认：{check}",
+      "title": "登记声明",
+      "intro": "记录这一点今天是否属实。它在到期前一直计入，之后检查会回到未知。每条声明都会留在历史中。",
+      "result": {
+        "label": "结果",
+        "pass": "已落实 (通过)",
+        "fail": "未落实 (未通过)"
+      },
+      "note": {
+        "label": "备注",
+        "hint": "你检查了什么，证明在哪里。至少 {min} 个字符。"
+      },
+      "evidence": {
+        "label": "证据链接 (可选)",
+        "hint": "指向文档或工单的 https 链接。",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "有效天数",
+        "hint": "{min} 至 {max} 天。之后检查会回到未知。"
+      },
+      "problems": {
+        "noteShort": "请至少输入 {min} 个字符。",
+        "noteLong": "请把备注控制在 {max, number} 个字符以内。",
+        "link": "请使用完整的 https 链接，或留空。",
+        "range": "请输入 {min} 到 {max} 之间的整数天数。"
+      },
+      "submit": "登记声明",
+      "saving": "保存中",
+      "cancel": "取消",
+      "saved": "声明已登记。"
+    },
+    "history": {
+      "action": "历史记录",
+      "actionFor": "历史记录：{check}",
+      "title": "历史记录",
+      "empty": "此检查尚无任何记录。",
+      "validUntil": "有效期至 {date}",
+      "close": "关闭"
+    },
+    "errors": {
+      "forbidden": "你没有执行此操作的权限。",
+      "request": "无法完成该请求。",
+      "unexpected": "我们这边出了点问题，请稍后重试。",
+      "network": "无法连接到服务器。请检查网络后重试。",
+      "validation": "部分值无效。请检查高亮的字段。",
+      "notFound": "该项目已不存在。"
+    }
+  }
+}

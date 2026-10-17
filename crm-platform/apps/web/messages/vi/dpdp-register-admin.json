@@ -1,0 +1,431 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Quyền riêng tư",
+      "register": "Sổ đăng ký DPDP"
+    },
+    "page": {
+      "eyebrow": "Quản trị · Nhóm · Sổ đăng ký DPDP",
+      "title": "Sổ đăng ký DPDP",
+      "disclaimer": "Theo dõi những gì nền tảng làm hôm nay so với DPDP Act và DPDP Rules. Đây không phải chứng nhận tuân thủ.",
+      "checkedAt": "Đã kiểm tra: {time}",
+      "refresh": "Làm mới"
+    },
+    "summary": {
+      "label": "Tóm tắt sổ đăng ký",
+      "counts": {
+        "title": "Nghĩa vụ theo trạng thái",
+        "counted": "{total, plural, one {# nghĩa vụ được tính} other {# nghĩa vụ được tính}}",
+        "notCounted": "Các dòng “Không áp dụng” được liệt kê nhưng không được tính."
+      },
+      "milestones": {
+        "title": "Các mốc sắp tới",
+        "names": {
+          "consent_managers": "Đăng ký Bên quản lý sự đồng ý (rule 4)",
+          "main_duties": "Các nhiệm vụ chính của DPDP Rules"
+        },
+        "left": "Còn khoảng {days, plural, =0 {0 ngày} one {# ngày} other {# ngày}}",
+        "passed": "Mốc này đã qua"
+      },
+      "tiers": {
+        "title": "Mức phạt",
+        "tier": "Mức phạt",
+        "hint": "Các nghĩa vụ không được thực hiện, thực hiện một phần hoặc chưa xác minh, theo mức trần phạt áp dụng."
+      }
+    },
+    "status": {
+      "following": "Đang thực hiện",
+      "partial": "Một phần",
+      "not_following": "Không thực hiện",
+      "unverified": "Chưa xác minh",
+      "not_applicable": "Không áp dụng"
+    },
+    "result": {
+      "pass": "Đạt",
+      "fail": "Không đạt",
+      "unknown": "Không rõ"
+    },
+    "source": {
+      "live": "Đọc trực tiếp",
+      "attested": "Đã xác nhận",
+      "code": "Khai báo trong mã"
+    },
+    "filters": {
+      "label": "Lọc theo trạng thái",
+      "all": "Tất cả",
+      "shown": "{count, plural, one {Hiển thị # nghĩa vụ} other {Hiển thị # nghĩa vụ}}",
+      "empty": {
+        "title": "Không có nghĩa vụ nào khớp với bộ lọc này",
+        "message": "Hiện không có nghĩa vụ nào ở trạng thái này.",
+        "reset": "Hiện tất cả"
+      }
+    },
+    "groups": {
+      "A": "Căn cứ, thông báo, sự đồng ý (ss4 to 7, rule 3)",
+      "B": "Quyền và khiếu nại (ss11 to 15, rule 14)",
+      "C": "Lưu giữ và xóa (s8(7), (8), rule 8)",
+      "D": "Bảo mật (s8(4), (5), rule 6)",
+      "E": "Vi phạm dữ liệu (s8(6), rule 7)",
+      "F": "Trẻ em (s9, rules 10 to 12, Phụ lục Thứ tư)",
+      "G": "Chuyển dữ liệu và bên xử lý (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Bên được ủy thác dữ liệu trọng yếu (s10, rule 13)",
+      "I": "Quản trị và thực thi (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Không gian làm việc",
+      "platform": "Nền tảng",
+      "both": "Không gian làm việc và nền tảng"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Không có mức phạt"
+    },
+    "item": {
+      "citation": "Trích dẫn luật",
+      "owner": "Người phụ trách",
+      "penalty": "Mức phạt",
+      "plan": "Mục kế hoạch",
+      "conditional": "Chỉ khi được công bố",
+      "checks": "Kiểm tra",
+      "noChecks": "Trạng thái được khai báo. Chưa có kiểm tra nào đọc mục này."
+    },
+    "check": {
+      "lapsed": "Hết hạn",
+      "note": "Ghi chú:",
+      "evidence": "Liên kết bằng chứng"
+    },
+    "items": {
+      "r01": {
+        "title": "Chỉ xử lý dữ liệu cá nhân khi có sự đồng ý hoặc cho mục đích được phép"
+      },
+      "r02": {
+        "title": "Đưa ra thông báo riêng, chi tiết trước khi xin sự đồng ý"
+      },
+      "r03": {
+        "title": "Thông báo cho những người đã đồng ý trước khi luật có hiệu lực"
+      },
+      "r04": {
+        "title": "Cung cấp thông báo và sự đồng ý bằng tiếng Anh hoặc một ngôn ngữ trong danh sách chính thức"
+      },
+      "r05": {
+        "title": "Bảo đảm sự đồng ý tự nguyện, cụ thể, đầy đủ thông tin và rõ ràng"
+      },
+      "r06": {
+        "title": "Hiển thị một người liên hệ trong mọi yêu cầu đồng ý"
+      },
+      "r07": {
+        "title": "Cho phép rút sự đồng ý dễ dàng như khi đã cho"
+      },
+      "r08": {
+        "title": "Khi rút, dừng xử lý và yêu cầu các bên xử lý cũng dừng"
+      },
+      "r09": {
+        "title": "Có thể chứng minh thông báo và sự đồng ý"
+      },
+      "r10": {
+        "title": "Chỉ dùng dữ liệu tự nguyện cung cấp cho mục đích đã nêu"
+      },
+      "r11": {
+        "title": "Chấp nhận sự đồng ý được cho hoặc rút qua Bên quản lý sự đồng ý"
+      },
+      "r12": {
+        "title": "Kiểm tra sự đồng ý tại thời điểm gửi cho mọi lượt gửi đi"
+      },
+      "r13": {
+        "title": "Tóm tắt dữ liệu đang giữ, cách xử lý và ai đã nhận"
+      },
+      "r14": {
+        "title": "Sửa, bổ sung và cập nhật dữ liệu cá nhân theo yêu cầu"
+      },
+      "r15": {
+        "title": "Xóa theo yêu cầu, trừ khi cần cho mục đích hoặc theo luật"
+      },
+      "r16": {
+        "title": "Vận hành cơ chế khiếu nại được công bố và trả lời trong 90 ngày"
+      },
+      "r17": {
+        "title": "Cho phép chỉ định người hành động khi qua đời hoặc mất năng lực"
+      },
+      "r18": {
+        "title": "Công bố cách gửi yêu cầu và cần định danh nào"
+      },
+      "r19": {
+        "title": "Công bố một đầu mối liên hệ và đưa vào mọi phản hồi"
+      },
+      "r20": {
+        "title": "Xác minh danh tính, giới hạn tần suất và kiểm toán các yêu cầu về quyền"
+      },
+      "r21": {
+        "title": "Giữ dữ liệu chính xác và đầy đủ khi dùng để ra quyết định"
+      },
+      "r22": {
+        "title": "Tôn trọng quyền của nhân viên nền tảng, đầu mối thanh toán và khách truy cập"
+      },
+      "r23": {
+        "title": "Xóa dữ liệu khi sự đồng ý bị rút hoặc mục đích kết thúc"
+      },
+      "r24": {
+        "title": "Xóa dữ liệu không hoạt động sau ba năm, báo trước 48 giờ"
+      },
+      "r25": {
+        "title": "Giữ dữ liệu cá nhân và nhật ký ít nhất một năm"
+      },
+      "r26": {
+        "title": "Chạy vòng đời không hoạt động của không gian làm việc"
+      },
+      "r27": {
+        "title": "Bảo vệ dữ liệu bằng mã hóa, che dữ liệu hoặc token"
+      },
+      "r28": {
+        "title": "Kiểm soát quyền truy cập tài nguyên máy tính"
+      },
+      "r29": {
+        "title": "Ghi nhật ký và giám sát việc truy cập dữ liệu cá nhân"
+      },
+      "r30": {
+        "title": "Sao lưu dữ liệu để tiếp tục xử lý sau khi mất mát"
+      },
+      "r31": {
+        "title": "Giữ nhật ký một năm để phát hiện và điều tra sự cố"
+      },
+      "r32": {
+        "title": "Có điều khoản bảo mật trong mọi hợp đồng với bên xử lý"
+      },
+      "r33": {
+        "title": "Có thể chỉ ra các biện pháp bảo mật đang áp dụng"
+      },
+      "r34": {
+        "title": "Nhìn chung duy trì các biện pháp bảo vệ an ninh hợp lý"
+      },
+      "r35": {
+        "title": "Kiểm soát các luồng AI gửi văn bản của liên hệ cho bên thứ ba"
+      },
+      "r36": {
+        "title": "Thông báo không chậm trễ cho từng người bị ảnh hưởng bởi vi phạm"
+      },
+      "r37": {
+        "title": "Báo cho Hội đồng Bảo vệ Dữ liệu về vi phạm, rồi báo cáo trong 72 giờ"
+      },
+      "r38": {
+        "title": "Với tư cách bên xử lý, báo cho không gian làm việc về vi phạm đủ nhanh"
+      },
+      "r39": {
+        "title": "Có sự đồng ý của cha mẹ có thể xác minh trước khi xử lý dữ liệu của trẻ em"
+      },
+      "r40": {
+        "title": "Không theo dõi, giám sát hành vi hay quảng cáo nhắm mục tiêu đối với trẻ em"
+      },
+      "r41": {
+        "title": "Áp dụng các miễn trừ của Phụ lục Thứ tư cho nghĩa vụ về dữ liệu trẻ em"
+      },
+      "r42": {
+        "title": "Tuân theo giới hạn của Chính phủ về chuyển dữ liệu ra nước ngoài"
+      },
+      "r43": {
+        "title": "Vẫn chịu trách nhiệm về những gì bên xử lý làm"
+      },
+      "r44": {
+        "title": "Thực hiện nghĩa vụ của bên được ủy thác dữ liệu trọng yếu, chỉ khi được công bố"
+      },
+      "r45": {
+        "title": "Cung cấp bằng chứng cho cuộc điều tra của Hội đồng Bảo vệ Dữ liệu trong sáu tháng"
+      },
+      "r46": {
+        "title": "Duy trì thông báo riêng của nền tảng, việc chấp nhận điều khoản và lựa chọn cookie"
+      },
+      "r47": {
+        "title": "Chỉ định một đầu mối của nền tảng và kênh khiếu nại"
+      }
+    },
+    "details": {
+      "probe_error": "Hiện chưa đọc được mục này, nên kết quả không rõ.",
+      "probe_missing": "Không có kết quả đọc nào trả về cho kiểm tra này.",
+      "env_missing": "{key} chưa được đặt, nên không đọc được.",
+      "attestation_missing": "Chưa ai ghi nhận mục này.",
+      "attestation_expired": "Tuyên bố do {name} ghi nhận ngày {date} đã hết hạn vào {expires}. Không còn được tính.",
+      "attested_pass": "Được {name} ghi nhận ngày {date} là đã có. Có giá trị đến {expires}.",
+      "attested_fail": "Được {name} ghi nhận ngày {date} là chưa có. Có giá trị đến {expires}.",
+      "code_declared": "Được khai báo trong mã, không đo lúc chạy. Thay đổi khắc phục khoảng trống sẽ cập nhật nó.",
+      "unrecognised": "Bảng điều khiển này chưa có mô tả cho kết quả này ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Người vận hành phải đăng nhập bằng xác thực hai yếu tố",
+        "details": {
+          "mfa_on": "Đăng nhập hai yếu tố là bắt buộc với người vận hành.",
+          "mfa_off": "Không bắt buộc: người vận hành có thể đăng nhập mà không cần yếu tố thứ hai."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Quản trị viên không gian làm việc phải đăng nhập bằng xác thực hai yếu tố",
+        "details": {
+          "mfa_on": "Đăng nhập hai yếu tố là bắt buộc với quản trị viên không gian làm việc.",
+          "mfa_off": "Không bắt buộc: quản trị viên không gian làm việc có thể đăng nhập mà không cần yếu tố thứ hai."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Nhật ký kiểm tra được giữ ít nhất một năm",
+        "details": {
+          "retention_ok": "Được giữ {days, plural, one {# ngày} other {# ngày}}.",
+          "retention_unlimited": "Không bao giờ bị xóa (0 ngày), nên được giữ ít nhất một năm.",
+          "retention_below_floor": "Chỉ được giữ {days, plural, one {# ngày} other {# ngày}}; DPDP Rules yêu cầu ít nhất 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Phiên đã kết thúc được giữ ít nhất một năm",
+        "details": {
+          "retention_ok": "Phiên đã kết thúc bị dọn sau {days, plural, one {# ngày} other {# ngày}}.",
+          "retention_below_floor": "Phiên đã kết thúc bị dọn sau {days, plural, one {# ngày} other {# ngày}}, thấp hơn mức 365 mà DPDP Rules yêu cầu."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis cần mật khẩu hoặc dùng TLS",
+        "details": {
+          "redis_auth_on": "Địa chỉ Redis đã cấu hình có mật khẩu hoặc dùng TLS.",
+          "redis_auth_off": "Địa chỉ Redis đã cấu hình không có mật khẩu và không dùng TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Không còn khóa mã hóa cũ nào trong chùm khóa",
+        "details": {
+          "rotation_complete": "Không có khóa cũ nào được cấu hình.",
+          "previous_keys_present": "Vẫn còn khóa cũ được cấu hình, nên việc xoay khóa chưa xong."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "Vòng đời không hoạt động của không gian làm việc đang chạy",
+        "details": {
+          "lifecycle_on": "Đã bật, không phải chạy thử, và chức năng xóa đang bật.",
+          "lifecycle_off": "{enabled, select, true {Đã bật} other {Đã tắt}}, {dryRun, select, true {chạy thử bật} other {chạy thử tắt}}, {deleteEnabled, select, true {xóa bật} other {xóa tắt}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Báo cáo lỗi ở lại Ấn Độ hoặc bị tắt",
+        "details": {
+          "sentry_off": "Báo cáo lỗi đang tắt, nên không có dữ liệu lỗi nào rời nền tảng.",
+          "region_india": "Báo cáo lỗi được gửi đến một khu vực ở Ấn Độ của nhà cung cấp.",
+          "region_outside_india": "Báo cáo lỗi được gửi đến khu vực {region} của nhà cung cấp, ngoài Ấn Độ.",
+          "region_unrecognised": "Địa chỉ báo cáo lỗi không phải địa chỉ khu vực đã biết, nên không xác định được quốc gia.",
+          "region_unrecognised_host": "Báo cáo lỗi được gửi đến {host}, không phải địa chỉ khu vực đã biết, nên không xác định được quốc gia."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Chưa cấu hình khóa AI của nền tảng",
+        "details": {
+          "no_platform_key": "Chưa cấu hình khóa nền tảng cho bất kỳ nhà cung cấp AI nào.",
+          "platform_key_set": "Đã cấu hình khóa nền tảng cho: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Không gian làm việc mới bắt đầu với sự đồng ý tiếp thị là bắt buộc",
+        "details": {
+          "default_opt_in": "Không gian làm việc mới bắt đầu với sự đồng ý đã ghi nhận là bắt buộc cho tiếp thị.",
+          "default_opt_out": "Không gian làm việc mới bắt đầu mà không bắt buộc sự đồng ý đã ghi nhận cho tiếp thị.",
+          "default_opt_in_counts": "Không gian làm việc mới bắt đầu với sự đồng ý đã ghi nhận là bắt buộc cho tiếp thị. Hiện có {on, number}/{total, number} không gian làm việc yêu cầu điều này.",
+          "default_opt_out_counts": "Không gian làm việc mới bắt đầu mà không bắt buộc sự đồng ý đã ghi nhận cho tiếp thị. Hiện có {on, number}/{total, number} không gian làm việc yêu cầu điều này."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Nhà cung cấp lưu trữ, khu vực và nơi đặt dữ liệu đã được ghi lại"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Có bằng chứng mã hóa ổ đĩa và kho lưu trữ đối tượng"
+      },
+      "backup_offsite_configured": {
+        "title": "Một bản sao lưu ngoại vi được niêm phong đang chạy và bao gồm kho lưu trữ đối tượng"
+      },
+      "backup_restore_drill": {
+        "title": "Đã diễn tập khôi phục trong sáu tháng qua"
+      },
+      "security_pentest_report": {
+        "title": "Có báo cáo kiểm thử xâm nhập bên ngoài, không còn phát hiện nghiêm trọng nào mở"
+      },
+      "legal_counsel_engaged": {
+        "title": "Đã thuê cố vấn pháp lý Ấn Độ về bảo vệ dữ liệu"
+      },
+      "legal_vendor_dpas": {
+        "title": "Có DPA đã ký với các bên xử lý phụ đang giữ dữ liệu cá nhân"
+      },
+      "governance_contacts_named": {
+        "title": "Đầu mối quyền riêng tư, người chỉ huy sự cố và người phụ trách khiếu nại đã được chỉ định và công bố"
+      },
+      "pii_column_encryption": {
+        "title": "Điện thoại, email và nội dung tin nhắn của liên hệ được mã hóa theo cột"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "Cài đặt cơ sở dữ liệu đặc quyền không thể đặt từ một phiên"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Khi xóa, lịch sử và nhật ký được giữ một năm rồi mới xóa"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Các kiểm tra bảo mật chạy theo lịch trong CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Không gian làm việc có thể tắt các luồng AI gửi văn bản của liên hệ cho nhà cung cấp"
+      },
+      "transfer_country_killswitch": {
+        "title": "Mỗi nhà cung cấp có nhãn quốc gia, và có thể chặn một quốc gia"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "Việc không gian làm việc chấp nhận DPA được ghi lại cùng phiên bản và thời gian"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Sổ mục đích dùng các trường hợp sử dụng theo sự đồng ý và theo section 7 của Act"
+      }
+    },
+    "attest": {
+      "action": "Xác nhận",
+      "actionFor": "Xác nhận: {check}",
+      "title": "Ghi nhận một tuyên bố",
+      "intro": "Ghi nhận xem điều này hôm nay có đúng không. Tuyên bố có giá trị đến khi hết hạn, sau đó kiểm tra trở về không rõ. Mọi tuyên bố đều nằm trong lịch sử.",
+      "result": {
+        "label": "Kết quả",
+        "pass": "Đã có (đạt)",
+        "fail": "Chưa có (không đạt)"
+      },
+      "note": {
+        "label": "Ghi chú",
+        "hint": "Bạn đã kiểm tra gì và bằng chứng ở đâu. Ít nhất {min} ký tự."
+      },
+      "evidence": {
+        "label": "Liên kết bằng chứng (không bắt buộc)",
+        "hint": "Một liên kết https tới tài liệu hoặc phiếu.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Có giá trị trong (ngày)",
+        "hint": "Từ {min} đến {max} ngày. Sau đó kiểm tra trở về không rõ."
+      },
+      "problems": {
+        "noteShort": "Viết ít nhất {min} ký tự.",
+        "noteLong": "Giữ ghi chú dưới {max, number} ký tự.",
+        "link": "Dùng liên kết https đầy đủ hoặc để trống.",
+        "range": "Nhập số ngày nguyên từ {min} đến {max}."
+      },
+      "submit": "Ghi nhận tuyên bố",
+      "saving": "Đang lưu",
+      "cancel": "Hủy",
+      "saved": "Đã ghi nhận tuyên bố."
+    },
+    "history": {
+      "action": "Lịch sử",
+      "actionFor": "Lịch sử: {check}",
+      "title": "Lịch sử",
+      "empty": "Chưa có gì được ghi nhận cho kiểm tra này.",
+      "validUntil": "Có giá trị đến {date}",
+      "close": "Đóng"
+    },
+    "errors": {
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "request": "Không thể hoàn tất yêu cầu đó.",
+      "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Vui lòng thử lại sau giây lát.",
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra các trường được đánh dấu.",
+      "notFound": "Mục đó không còn tồn tại."
+    }
+  }
+}

@@ -1,0 +1,431 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Privacidade",
+      "register": "Registro DPDP"
+    },
+    "page": {
+      "eyebrow": "Admin · Equipe · Registro DPDP",
+      "title": "Registro DPDP",
+      "disclaimer": "Acompanha o que a plataforma faz hoje em relação à DPDP Act e às DPDP Rules. Não é um certificado de conformidade.",
+      "checkedAt": "Verificado: {time}",
+      "refresh": "Atualizar"
+    },
+    "summary": {
+      "label": "Resumo do registro",
+      "counts": {
+        "title": "Obrigações por status",
+        "counted": "{total, plural, one {# obrigação contabilizada} other {# obrigações contabilizadas}}",
+        "notCounted": "As linhas «Não se aplica» aparecem na lista, mas não são contadas."
+      },
+      "milestones": {
+        "title": "Próximas datas",
+        "names": {
+          "consent_managers": "Registro de Gerenciadores de Consentimento (rule 4)",
+          "main_duties": "Principais deveres das DPDP Rules"
+        },
+        "left": "Faltam cerca de {days, plural, =0 {0 dias} one {# dia} other {# dias}}",
+        "passed": "Esta data já passou"
+      },
+      "tiers": {
+        "title": "Faixas de penalidade",
+        "tier": "Faixa de penalidade",
+        "hint": "Obrigações não seguidas, seguidas em parte ou não verificadas, agrupadas pelo teto de penalidade aplicável."
+      }
+    },
+    "status": {
+      "following": "Seguida",
+      "partial": "Parcial",
+      "not_following": "Não seguida",
+      "unverified": "Não verificada",
+      "not_applicable": "Não se aplica"
+    },
+    "result": {
+      "pass": "Aprovado",
+      "fail": "Reprovado",
+      "unknown": "Desconhecido"
+    },
+    "source": {
+      "live": "Lido ao vivo",
+      "attested": "Atestado",
+      "code": "Declarado pelo código"
+    },
+    "filters": {
+      "label": "Filtrar por status",
+      "all": "Todas",
+      "shown": "{count, plural, one {# obrigação exibida} other {# obrigações exibidas}}",
+      "empty": {
+        "title": "Nenhuma obrigação corresponde a este filtro",
+        "message": "Nenhuma obrigação tem este status agora.",
+        "reset": "Mostrar todas"
+      }
+    },
+    "groups": {
+      "A": "Fundamentos, aviso e consentimento (ss4 to 7, rule 3)",
+      "B": "Direitos e reclamações (ss11 to 15, rule 14)",
+      "C": "Retenção e eliminação (s8(7), (8), rule 8)",
+      "D": "Segurança (s8(4), (5), rule 6)",
+      "E": "Violação de dados pessoais (s8(6), rule 7)",
+      "F": "Crianças (s9, rules 10 to 12, Quarto Anexo)",
+      "G": "Transferências e operadores (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Fiduciário de Dados Significativo (s10, rule 13)",
+      "I": "Governança e aplicação da lei (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Espaço de trabalho",
+      "platform": "Plataforma",
+      "both": "Espaço de trabalho e plataforma"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Sem faixa de penalidade"
+    },
+    "item": {
+      "citation": "Referência legal",
+      "owner": "Responsável",
+      "penalty": "Faixa de penalidade",
+      "plan": "Itens do plano",
+      "conditional": "Somente se notificado",
+      "checks": "Verificações",
+      "noChecks": "Status declarado. Nenhuma verificação lê isto ainda."
+    },
+    "check": {
+      "lapsed": "Expirada",
+      "note": "Observação:",
+      "evidence": "Link da evidência"
+    },
+    "items": {
+      "r01": {
+        "title": "Tratar dados pessoais apenas com consentimento ou para um uso permitido"
+      },
+      "r02": {
+        "title": "Dar um aviso independente e detalhado antes de pedir o consentimento"
+      },
+      "r03": {
+        "title": "Avisar quem consentiu antes de a Lei entrar em vigor"
+      },
+      "r04": {
+        "title": "Oferecer o aviso e o consentimento em inglês ou em um idioma da lista oficial"
+      },
+      "r05": {
+        "title": "Obter um consentimento livre, específico, informado e inequívoco"
+      },
+      "r06": {
+        "title": "Mostrar uma pessoa de contato em cada pedido de consentimento"
+      },
+      "r07": {
+        "title": "Permitir retirar o consentimento tão facilmente quanto foi dado"
+      },
+      "r08": {
+        "title": "Ao retirá-lo, parar o tratamento e fazer os operadores pararem também"
+      },
+      "r09": {
+        "title": "Conseguir comprovar o aviso e o consentimento"
+      },
+      "r10": {
+        "title": "Usar dados fornecidos voluntariamente só para a finalidade informada"
+      },
+      "r11": {
+        "title": "Aceitar o consentimento dado ou retirado por meio de um Gerenciador de Consentimento"
+      },
+      "r12": {
+        "title": "Condicionar cada envio ao consentimento vigente no momento do envio"
+      },
+      "r13": {
+        "title": "Resumir os dados mantidos, o tratamento e quem os recebeu"
+      },
+      "r14": {
+        "title": "Corrigir, completar e atualizar dados pessoais mediante pedido"
+      },
+      "r15": {
+        "title": "Eliminar mediante pedido, salvo se forem necessários para a finalidade ou por lei"
+      },
+      "r16": {
+        "title": "Manter um mecanismo de reclamações publicado, respondendo em até 90 dias"
+      },
+      "r17": {
+        "title": "Permitir indicar alguém para agir em caso de morte ou incapacidade"
+      },
+      "r18": {
+        "title": "Publicar como fazer um pedido e qual identificador é necessário"
+      },
+      "r19": {
+        "title": "Publicar um contato e incluí-lo em todas as respostas"
+      },
+      "r20": {
+        "title": "Verificar a identidade, limitar a frequência e auditar os pedidos de direitos"
+      },
+      "r21": {
+        "title": "Manter os dados corretos e completos quando orientam decisões"
+      },
+      "r22": {
+        "title": "Respeitar os direitos da equipe da própria plataforma, de contatos de cobrança e de visitantes"
+      },
+      "r23": {
+        "title": "Eliminar os dados quando o consentimento é retirado ou a finalidade termina"
+      },
+      "r24": {
+        "title": "Eliminar dados inativos após três anos, com aviso de 48 horas"
+      },
+      "r25": {
+        "title": "Manter dados pessoais e logs por pelo menos um ano"
+      },
+      "r26": {
+        "title": "Executar o ciclo de vida por inatividade dos espaços de trabalho"
+      },
+      "r27": {
+        "title": "Proteger os dados com criptografia, mascaramento ou tokens"
+      },
+      "r28": {
+        "title": "Controlar o acesso aos recursos computacionais"
+      },
+      "r29": {
+        "title": "Registrar e monitorar o acesso aos dados pessoais"
+      },
+      "r30": {
+        "title": "Fazer backup dos dados para continuar o tratamento após uma perda"
+      },
+      "r31": {
+        "title": "Manter logs por um ano para detectar e investigar incidentes"
+      },
+      "r32": {
+        "title": "Ter uma cláusula de segurança em todo contrato com operador"
+      },
+      "r33": {
+        "title": "Conseguir mostrar as medidas de segurança em vigor"
+      },
+      "r34": {
+        "title": "Manter, em geral, salvaguardas de segurança razoáveis"
+      },
+      "r35": {
+        "title": "Controlar os caminhos de IA que enviam texto de contatos a terceiros"
+      },
+      "r36": {
+        "title": "Avisar sem demora cada pessoa afetada por uma violação"
+      },
+      "r37": {
+        "title": "Avisar o Conselho de Proteção de Dados sobre uma violação e depois relatar em até 72 horas"
+      },
+      "r38": {
+        "title": "Como operador, avisar o espaço de trabalho sobre uma violação com rapidez suficiente"
+      },
+      "r39": {
+        "title": "Obter consentimento parental verificável antes de tratar dados de uma criança"
+      },
+      "r40": {
+        "title": "Sem rastreamento, monitoramento comportamental ou publicidade direcionada para crianças"
+      },
+      "r41": {
+        "title": "Aplicar as isenções do Quarto Anexo aos deveres sobre dados de crianças"
+      },
+      "r42": {
+        "title": "Respeitar os limites do Governo para transferências de dados ao exterior"
+      },
+      "r43": {
+        "title": "Continuar responsável pelo que os operadores fazem"
+      },
+      "r44": {
+        "title": "Atender aos deveres do Fiduciário de Dados Significativo, apenas se notificado"
+      },
+      "r45": {
+        "title": "Apresentar provas para uma investigação do Conselho de Proteção de Dados em até seis meses"
+      },
+      "r46": {
+        "title": "Manter os avisos da própria plataforma, o aceite dos termos e a escolha de cookies"
+      },
+      "r47": {
+        "title": "Nomear um contato da plataforma e um canal de reclamações"
+      }
+    },
+    "details": {
+      "probe_error": "Não foi possível ler isso agora, então o resultado é desconhecido.",
+      "probe_missing": "Nenhuma leitura voltou para esta verificação.",
+      "env_missing": "{key} não está definida, então não foi possível ler.",
+      "attestation_missing": "Ninguém registrou isso ainda.",
+      "attestation_expired": "A declaração registrada por {name} em {date} expirou em {expires}. Ela não conta mais.",
+      "attested_pass": "Registrado como em vigor por {name} em {date}. Vale até {expires}.",
+      "attested_fail": "Registrado como não em vigor por {name} em {date}. Vale até {expires}.",
+      "code_declared": "Declarado no código, não medido em tempo de execução. A mudança que fecha a lacuna o atualiza.",
+      "unrecognised": "Este console ainda não tem uma descrição para este resultado ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Operadores devem entrar com autenticação de dois fatores",
+        "details": {
+          "mfa_on": "O login em dois fatores é exigido dos operadores.",
+          "mfa_off": "Não exigido: os operadores podem entrar sem um segundo fator."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Administradores de espaço de trabalho devem entrar com autenticação de dois fatores",
+        "details": {
+          "mfa_on": "O login em dois fatores é exigido dos administradores de espaço de trabalho.",
+          "mfa_off": "Não exigido: os administradores de espaço de trabalho podem entrar sem um segundo fator."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "O log de auditoria é mantido por pelo menos um ano",
+        "details": {
+          "retention_ok": "Mantido por {days, plural, one {# dia} other {# dias}}.",
+          "retention_unlimited": "Nunca é apagado (0 dia), então fica guardado por pelo menos um ano.",
+          "retention_below_floor": "Mantido por apenas {days, plural, one {# dia} other {# dias}}; as DPDP Rules pedem pelo menos 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Sessões encerradas são mantidas por pelo menos um ano",
+        "details": {
+          "retention_ok": "Sessões encerradas são apagadas após {days, plural, one {# dia} other {# dias}}.",
+          "retention_below_floor": "Sessões encerradas são apagadas após {days, plural, one {# dia} other {# dias}}, abaixo dos 365 que as DPDP Rules pedem."
+        }
+      },
+      "redis_auth": {
+        "title": "O Redis exige senha ou usa TLS",
+        "details": {
+          "redis_auth_on": "O endereço do Redis configurado tem senha ou usa TLS.",
+          "redis_auth_off": "O endereço do Redis configurado não tem senha e não usa TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Nenhuma chave de criptografia anterior resta no chaveiro",
+        "details": {
+          "rotation_complete": "Nenhuma chave anterior está configurada.",
+          "previous_keys_present": "Ainda há chaves anteriores configuradas, então a rotação de chaves não terminou."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "O ciclo de vida por inatividade dos espaços de trabalho está ativo",
+        "details": {
+          "lifecycle_on": "Ativado, sem simulação e com a exclusão ligada.",
+          "lifecycle_off": "{enabled, select, true {Ativado} other {Desativado}}, {dryRun, select, true {simulação ligada} other {simulação desligada}}, {deleteEnabled, select, true {exclusão ligada} other {exclusão desligada}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Relatórios de erros ficam na Índia ou estão desligados",
+        "details": {
+          "sentry_off": "O envio de relatórios de erros está desligado, então nenhum dado de erro sai da plataforma.",
+          "region_india": "Os relatórios de erros vão para uma região da Índia do fornecedor.",
+          "region_outside_india": "Os relatórios de erros vão para a região {region} do fornecedor, fora da Índia.",
+          "region_unrecognised": "O endereço dos relatórios de erros não é um endereço regional conhecido, então não dá para saber o país.",
+          "region_unrecognised_host": "Os relatórios de erros vão para {host}, que não é um endereço regional conhecido, então não dá para saber o país."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Nenhuma chave de IA da plataforma está configurada",
+        "details": {
+          "no_platform_key": "Nenhuma chave da plataforma está configurada para nenhum provedor de IA.",
+          "platform_key_set": "Há uma chave da plataforma configurada para: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Novos espaços de trabalho começam exigindo consentimento de marketing",
+        "details": {
+          "default_opt_in": "Novos espaços de trabalho começam exigindo consentimento registrado para marketing.",
+          "default_opt_out": "Novos espaços de trabalho começam sem exigir consentimento registrado para marketing.",
+          "default_opt_in_counts": "Novos espaços de trabalho começam exigindo consentimento registrado para marketing. {on, number} de {total, number} espaços de trabalho o exigem agora.",
+          "default_opt_out_counts": "Novos espaços de trabalho começam sem exigir consentimento registrado para marketing. {on, number} de {total, number} espaços de trabalho o exigem agora."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Provedor de hospedagem, região e locais dos dados estão documentados"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Há evidência de criptografia dos volumes e do armazenamento de objetos"
+      },
+      "backup_offsite_configured": {
+        "title": "Há um backup externo selado em execução que cobre o armazenamento de objetos"
+      },
+      "backup_restore_drill": {
+        "title": "Um teste de restauração foi feito nos últimos seis meses"
+      },
+      "security_pentest_report": {
+        "title": "Há um relatório de teste de intrusão externo sem achados críticos em aberto"
+      },
+      "legal_counsel_engaged": {
+        "title": "Há assessoria jurídica indiana em proteção de dados contratada"
+      },
+      "legal_vendor_dpas": {
+        "title": "Há DPAs assinados com os suboperadores que guardam dados pessoais"
+      },
+      "governance_contacts_named": {
+        "title": "Contato de privacidade, comandante de incidentes e responsável por reclamações estão nomeados e publicados"
+      },
+      "pii_column_encryption": {
+        "title": "Telefone, e-mail e corpo da mensagem do contato são criptografados por coluna"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "A configuração privilegiada do banco de dados não pode ser alterada a partir de uma sessão"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "A eliminação mantém histórico e logs por um ano antes de apagá-los"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "As verificações de segurança rodam de forma agendada no CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Espaços de trabalho podem desligar os caminhos de IA que enviam texto de contatos a um fornecedor"
+      },
+      "transfer_country_killswitch": {
+        "title": "Cada fornecedor tem uma etiqueta de país, e um país pode ser bloqueado"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "O aceite do DPA por um espaço de trabalho é registrado com versão e hora"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "O registro de finalidades usa os usos de consentimento e de section 7 da Act"
+      }
+    },
+    "attest": {
+      "action": "Atestar",
+      "actionFor": "Atestar: {check}",
+      "title": "Registrar uma declaração",
+      "intro": "Registre se isso é verdade hoje. Vale até expirar; depois a verificação volta para desconhecido. Toda declaração fica no histórico.",
+      "result": {
+        "label": "Resultado",
+        "pass": "Em vigor (aprovado)",
+        "fail": "Não está em vigor (reprovado)"
+      },
+      "note": {
+        "label": "Observação",
+        "hint": "O que você verificou e onde está a prova. Pelo menos {min} caracteres."
+      },
+      "evidence": {
+        "label": "Link da evidência (opcional)",
+        "hint": "Um link https para o documento ou o ticket.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Vale por (dias)",
+        "hint": "{min} a {max} dias. Depois disso, a verificação volta para desconhecido."
+      },
+      "problems": {
+        "noteShort": "Escreva pelo menos {min} caracteres.",
+        "noteLong": "Mantenha a observação com menos de {max, number} caracteres.",
+        "link": "Use um link https completo ou deixe vazio.",
+        "range": "Informe um número inteiro de dias de {min} a {max}."
+      },
+      "submit": "Registrar declaração",
+      "saving": "Salvando",
+      "cancel": "Cancelar",
+      "saved": "Declaração registrada."
+    },
+    "history": {
+      "action": "Histórico",
+      "actionFor": "Histórico: {check}",
+      "title": "Histórico",
+      "empty": "Nada foi registrado para esta verificação ainda.",
+      "validUntil": "Válida até {date}",
+      "close": "Fechar"
+    },
+    "errors": {
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "request": "Não foi possível concluir essa solicitação.",
+      "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+      "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+      "validation": "Alguns valores não são válidos. Verifique os campos destacados.",
+      "notFound": "Esse item não existe mais."
+    }
+  }
+}
