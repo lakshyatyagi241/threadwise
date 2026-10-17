@@ -44,8 +44,6 @@
         "editJobTitle": "Edytuj stanowisko",
         "jobTitleConflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
         "jobTitleFailed": "Nie udało się zapisać stanowiska. Spróbuj ponownie.",
-        "leadScore": "Ocena leada",
-        "leadScoreAria": "Ocena leada: {score}. Pokaż szczegóły oceny.",
         "owner": "Właściciel"
       },
       "social": {

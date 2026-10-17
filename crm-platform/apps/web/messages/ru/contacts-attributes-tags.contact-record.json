@@ -138,6 +138,10 @@
           "noActivity": "Активности пока нет",
           "deals": "Открытые сделки",
           "wonDeals": "{count, plural, =0 {выигранных нет} one {выиграна #} few {выиграно #} many {выиграно #} other {выиграно #}}"
+        },
+        "scoreChip": {
+          "title": "Оценка лида {score} · {band}",
+          "aria": "Оценка лида {score}, {band}. Показать подробности оценки."
         }
       },
       "timeline": {

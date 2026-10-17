@@ -44,8 +44,6 @@
         "editJobTitle": "Jobtitel bearbeiten",
         "jobTitleConflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
         "jobTitleFailed": "Der Jobtitel konnte nicht gespeichert werden. Versuchen Sie es erneut.",
-        "leadScore": "Lead-Score",
-        "leadScoreAria": "Lead-Score {score}. Details zum Score anzeigen.",
         "owner": "Verantwortlicher"
       },
       "social": {

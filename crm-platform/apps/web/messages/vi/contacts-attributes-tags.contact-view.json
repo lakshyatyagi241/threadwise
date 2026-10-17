@@ -44,8 +44,6 @@
         "editJobTitle": "Sửa chức danh",
         "jobTitleConflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
         "jobTitleFailed": "Không thể lưu chức danh. Hãy thử lại.",
-        "leadScore": "Điểm khách hàng tiềm năng",
-        "leadScoreAria": "Điểm khách hàng tiềm năng {score}. Hiện chi tiết điểm.",
         "owner": "Người phụ trách"
       },
       "social": {

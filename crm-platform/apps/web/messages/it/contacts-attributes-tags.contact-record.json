@@ -138,6 +138,10 @@
           "noActivity": "Ancora nessuna attività",
           "deals": "Trattative aperte",
           "wonDeals": "{count, plural, =0 {nessuna vinta} one {1 vinta} other {# vinte}}"
+        },
+        "scoreChip": {
+          "title": "Punteggio lead {score} · {band}",
+          "aria": "Punteggio lead {score}, {band}. Mostra i dettagli del punteggio."
         }
       },
       "timeline": {

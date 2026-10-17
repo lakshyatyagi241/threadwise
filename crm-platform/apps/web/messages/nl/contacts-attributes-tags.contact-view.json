@@ -44,8 +44,6 @@
         "editJobTitle": "Functietitel bewerken",
         "jobTitleConflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
         "jobTitleFailed": "De functietitel kon niet worden opgeslagen. Probeer het opnieuw.",
-        "leadScore": "Leadscore",
-        "leadScoreAria": "Leadscore {score}. Scoredetails tonen.",
         "owner": "Eigenaar"
       },
       "social": {

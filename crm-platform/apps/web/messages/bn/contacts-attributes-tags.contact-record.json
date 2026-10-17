@@ -138,6 +138,10 @@
           "noActivity": "এখনও কোনো কার্যকলাপ নেই",
           "deals": "খোলা ডিল",
           "wonDeals": "{count, plural, =0 {কোনোটি জেতা হয়নি} one {১টি জেতা} other {#টি জেতা}}"
+        },
+        "scoreChip": {
+          "title": "লিড স্কোর {score} · {band}",
+          "aria": "লিড স্কোর {score}, {band}। স্কোরের বিবরণ দেখান।"
         }
       },
       "timeline": {

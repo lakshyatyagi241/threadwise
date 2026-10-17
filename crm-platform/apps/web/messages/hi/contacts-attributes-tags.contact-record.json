@@ -138,6 +138,10 @@
           "noActivity": "अभी कोई गतिविधि नहीं",
           "deals": "खुली डील",
           "wonDeals": "{count, plural, =0 {कोई नहीं जीती} one {1 जीती} other {# जीतीं}}"
+        },
+        "scoreChip": {
+          "title": "लीड स्कोर {score} · {band}",
+          "aria": "लीड स्कोर {score}, {band}। स्कोर का ब्योरा दिखाएं।"
         }
       },
       "timeline": {

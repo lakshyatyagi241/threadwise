@@ -138,6 +138,10 @@
           "noActivity": "Belum ada aktivitas",
           "deals": "Transaksi terbuka",
           "wonDeals": "{count, plural, =0 {belum ada yang menang} other {# menang}}"
+        },
+        "scoreChip": {
+          "title": "Skor prospek {score} · {band}",
+          "aria": "Skor prospek {score}, {band}. Tampilkan detail skor."
         }
       },
       "timeline": {

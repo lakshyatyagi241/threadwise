@@ -44,8 +44,6 @@
         "editJobTitle": "编辑职位",
         "jobTitleConflict": "其他人已先更改了此联系人。已重新加载，请重试。",
         "jobTitleFailed": "无法保存职位。请重试。",
-        "leadScore": "线索评分",
-        "leadScoreAria": "线索评分 {score}。显示评分详情。",
         "owner": "负责人"
       },
       "social": {

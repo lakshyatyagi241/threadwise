@@ -44,8 +44,6 @@
         "editJobTitle": "Edit job title",
         "jobTitleConflict": "Someone else changed this contact first. It was reloaded; try again.",
         "jobTitleFailed": "The job title could not be saved. Try again.",
-        "leadScore": "Lead score",
-        "leadScoreAria": "Lead score {score}. Show the score details.",
         "owner": "Owner"
       },
       "social": {

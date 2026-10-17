@@ -138,6 +138,10 @@
           "noActivity": "Noch keine Aktivität",
           "deals": "Offene Deals",
           "wonDeals": "{count, plural, =0 {keiner gewonnen} one {1 gewonnen} other {# gewonnen}}"
+        },
+        "scoreChip": {
+          "title": "Lead-Score {score} · {band}",
+          "aria": "Lead-Score {score}, {band}. Details zum Score anzeigen."
         }
       },
       "timeline": {

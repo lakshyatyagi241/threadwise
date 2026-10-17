@@ -44,8 +44,6 @@
         "editJobTitle": "Modifica qualifica",
         "jobTitleConflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
         "jobTitleFailed": "Impossibile salvare la qualifica. Riprova.",
-        "leadScore": "Punteggio del lead",
-        "leadScoreAria": "Punteggio del lead {score}. Mostra i dettagli del punteggio.",
         "owner": "Responsabile"
       },
       "social": {

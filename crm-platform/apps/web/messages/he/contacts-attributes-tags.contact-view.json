@@ -44,8 +44,6 @@
         "editJobTitle": "ערוך תפקיד",
         "jobTitleConflict": "מישהו אחר שינה את איש הקשר קודם. הוא נטען מחדש; נסה שוב.",
         "jobTitleFailed": "לא ניתן היה לשמור את התפקיד. נסה שוב.",
-        "leadScore": "דירוג ליד",
-        "leadScoreAria": "דירוג ליד {score}. הצג את פרטי הדירוג.",
         "owner": "בעלים"
       },
       "social": {

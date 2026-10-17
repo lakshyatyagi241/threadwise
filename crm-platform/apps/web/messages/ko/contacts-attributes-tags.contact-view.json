@@ -44,8 +44,6 @@
         "editJobTitle": "직함 수정",
         "jobTitleConflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
         "jobTitleFailed": "직함을 저장하지 못했습니다. 다시 시도하세요.",
-        "leadScore": "리드 점수",
-        "leadScoreAria": "리드 점수 {score}. 점수 세부 정보를 표시합니다.",
         "owner": "담당자"
       },
       "social": {

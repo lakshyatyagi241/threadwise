@@ -44,8 +44,6 @@
         "editJobTitle": "Editar cargo",
         "jobTitleConflict": "Otra persona cambió antes este contacto. Se recargó; inténtalo de nuevo.",
         "jobTitleFailed": "No se pudo guardar el cargo. Inténtalo de nuevo.",
-        "leadScore": "Puntuación del lead",
-        "leadScoreAria": "Puntuación del lead {score}. Mostrar el detalle de la puntuación.",
         "owner": "Responsable"
       },
       "social": {

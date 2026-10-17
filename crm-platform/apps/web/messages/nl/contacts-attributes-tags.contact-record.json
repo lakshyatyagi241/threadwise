@@ -138,6 +138,10 @@
           "noActivity": "Nog geen activiteit",
           "deals": "Openstaande deals",
           "wonDeals": "{count, plural, =0 {geen gewonnen} one {1 gewonnen} other {# gewonnen}}"
+        },
+        "scoreChip": {
+          "title": "Leadscore {score} · {band}",
+          "aria": "Leadscore {score}, {band}. Toon de details van de score."
         }
       },
       "timeline": {

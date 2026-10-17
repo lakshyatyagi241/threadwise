@@ -138,6 +138,10 @@
           "noActivity": "아직 활동 없음",
           "deals": "진행 중인 거래",
           "wonDeals": "{count, plural, =0 {성사 없음} other {# 건 성사}}"
+        },
+        "scoreChip": {
+          "title": "리드 점수 {score} · {band}",
+          "aria": "리드 점수 {score}, {band}. 점수 상세 보기."
         }
       },
       "timeline": {

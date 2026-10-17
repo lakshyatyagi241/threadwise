@@ -44,8 +44,6 @@
         "editJobTitle": "役職を編集",
         "jobTitleConflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
         "jobTitleFailed": "役職を保存できませんでした。もう一度お試しください。",
-        "leadScore": "リードスコア",
-        "leadScoreAria": "リードスコア{score}。スコアの詳細を表示します。",
         "owner": "担当者"
       },
       "social": {

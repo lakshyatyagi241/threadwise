@@ -138,6 +138,10 @@
           "noActivity": "Henüz etkinlik yok",
           "deals": "Açık fırsatlar",
           "wonDeals": "{count, plural, =0 {kazanılan yok} one {1 kazanıldı} other {# kazanıldı}}"
+        },
+        "scoreChip": {
+          "title": "Potansiyel müşteri puanı {score} · {band}",
+          "aria": "Potansiyel müşteri puanı {score}, {band}. Puan ayrıntılarını göster."
         }
       },
       "timeline": {

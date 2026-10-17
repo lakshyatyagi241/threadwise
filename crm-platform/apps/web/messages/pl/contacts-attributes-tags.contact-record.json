@@ -138,6 +138,10 @@
           "noActivity": "Jeszcze brak aktywności",
           "deals": "Otwarte transakcje",
           "wonDeals": "{count, plural, =0 {brak wygranych} one {1 wygrana} few {# wygrane} many {# wygranych} other {# wygranej}}"
+        },
+        "scoreChip": {
+          "title": "Wynik leada {score} · {band}",
+          "aria": "Wynik leada {score}, {band}. Pokaż szczegóły wyniku."
         }
       },
       "timeline": {

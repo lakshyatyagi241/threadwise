@@ -138,6 +138,10 @@
           "noActivity": "עדיין אין פעילות",
           "deals": "עסקאות פתוחות",
           "wonDeals": "{count, plural, =0 {אף אחת לא נסגרה} one {נסגרה אחת} two {נסגרו שתיים} other {נסגרו #}}"
+        },
+        "scoreChip": {
+          "title": "ציון ליד {score} · {band}",
+          "aria": "ציון ליד {score}, {band}. הצג את פרטי הציון."
         }
       },
       "timeline": {

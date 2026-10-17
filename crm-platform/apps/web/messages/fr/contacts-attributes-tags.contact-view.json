@@ -44,8 +44,6 @@
         "editJobTitle": "Modifier le poste",
         "jobTitleConflict": "Quelqu'un d'autre a d'abord modifié ce contact. Il a été rechargé ; réessayez.",
         "jobTitleFailed": "Impossible d'enregistrer le poste. Réessayez.",
-        "leadScore": "Score du lead",
-        "leadScoreAria": "Score du lead {score}. Afficher le détail du score.",
         "owner": "Propriétaire"
       },
       "social": {

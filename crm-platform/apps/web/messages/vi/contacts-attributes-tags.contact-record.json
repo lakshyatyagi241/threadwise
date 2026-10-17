@@ -138,6 +138,10 @@
           "noActivity": "Chưa có hoạt động",
           "deals": "Giao dịch đang mở",
           "wonDeals": "{count, plural, =0 {chưa thắng} other {thắng #}}"
+        },
+        "scoreChip": {
+          "title": "Điểm khách hàng tiềm năng {score} · {band}",
+          "aria": "Điểm khách hàng tiềm năng {score}, {band}. Xem chi tiết điểm."
         }
       },
       "timeline": {

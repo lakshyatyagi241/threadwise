@@ -138,6 +138,10 @@
           "noActivity": "ابھی کوئی سرگرمی نہیں",
           "deals": "کھلی ڈیلز",
           "wonDeals": "{count, plural, =0 {کوئی نہیں جیتی} one {1 جیتی} other {# جیتی}}"
+        },
+        "scoreChip": {
+          "title": "لیڈ اسکور {score} · {band}",
+          "aria": "لیڈ اسکور {score}، {band}۔ اسکور کی تفصیل دکھائیں۔"
         }
       },
       "timeline": {

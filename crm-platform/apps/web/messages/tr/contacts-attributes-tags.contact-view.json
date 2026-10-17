@@ -44,8 +44,6 @@
         "editJobTitle": "İş unvanını düzenle",
         "jobTitleConflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
         "jobTitleFailed": "İş unvanı kaydedilemedi. Tekrar deneyin.",
-        "leadScore": "Potansiyel puanı",
-        "leadScoreAria": "Potansiyel puanı {score}. Puan ayrıntılarını göster.",
         "owner": "Sahip"
       },
       "social": {

@@ -138,6 +138,10 @@
           "noActivity": "Aún no hay actividad",
           "deals": "Negocios abiertos",
           "wonDeals": "{count, plural, =0 {ninguno ganado} one {1 ganado} other {# ganados}}"
+        },
+        "scoreChip": {
+          "title": "Puntuación de lead {score} · {band}",
+          "aria": "Puntuación de lead {score}, {band}. Ver los detalles de la puntuación."
         }
       },
       "timeline": {

@@ -138,6 +138,10 @@
           "noActivity": "ยังไม่มีกิจกรรม",
           "deals": "ดีลที่ยังเปิดอยู่",
           "wonDeals": "{count, plural, =0 {ยังไม่มีที่ชนะ} other {ชนะ #}}"
+        },
+        "scoreChip": {
+          "title": "คะแนนลูกค้าเป้าหมาย {score} · {band}",
+          "aria": "คะแนนลูกค้าเป้าหมาย {score}, {band} แสดงรายละเอียดคะแนน"
         }
       },
       "timeline": {

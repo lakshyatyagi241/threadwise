@@ -138,6 +138,10 @@
           "noActivity": "アクティビティはまだありません",
           "deals": "進行中の取引",
           "wonDeals": "{count, plural, =0 {成約なし} other {成約 # 件}}"
+        },
+        "scoreChip": {
+          "title": "リードスコア {score} · {band}",
+          "aria": "リードスコア {score}、{band}。スコアの詳細を表示します。"
         }
       },
       "timeline": {

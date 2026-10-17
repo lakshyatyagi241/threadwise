@@ -138,6 +138,10 @@
           "noActivity": "暂无活动",
           "deals": "进行中的交易",
           "wonDeals": "{count, plural, =0 {暂无成交} other {成交 # 笔}}"
+        },
+        "scoreChip": {
+          "title": "潜在客户评分 {score} · {band}",
+          "aria": "潜在客户评分 {score}，{band}。显示评分详情。"
         }
       },
       "timeline": {

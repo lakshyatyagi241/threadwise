@@ -44,8 +44,6 @@
         "editJobTitle": "Edit jabatan",
         "jobTitleConflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
         "jobTitleFailed": "Jabatan tidak dapat disimpan. Coba lagi.",
-        "leadScore": "Skor prospek",
-        "leadScoreAria": "Skor prospek {score}. Tampilkan detail skor.",
         "owner": "Pemilik"
       },
       "social": {
