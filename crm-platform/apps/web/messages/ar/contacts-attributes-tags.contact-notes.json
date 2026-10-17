@@ -16,6 +16,7 @@
         "loadMore": "تحميل المزيد",
         "loadingMore": "جارٍ تحميل المزيد من الملاحظات",
         "added": "أُضيفت {when}",
+        "addedBy": "أضافه {name} في {when}",
         "edited": "عُدّلت {when}",
         "edit": "تعديل",
         "editAria": "تعديل الملاحظة المضافة {when}",

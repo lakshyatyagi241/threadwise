@@ -16,6 +16,7 @@
         "loadMore": "Daha fazla yükle",
         "loadingMore": "Daha fazla not yükleniyor",
         "added": "{when} eklendi",
+        "addedBy": "{name} tarafından {when} eklendi",
         "edited": "{when} düzenlendi",
         "edit": "Düzenle",
         "editAria": "{when} eklenen notu düzenle",

@@ -553,16 +553,8 @@
         "offline": "オフライン"
       },
       "notes": {
-        "tab": "メモ",
-        "label": "新しい内部メモ",
-        "placeholder": "チームだけが見られるメモを入力",
-        "hint": "Ctrl+Enter でメモを追加します。",
-        "add": "メモを追加",
-        "addFailed": "メモを保存できませんでした。",
-        "loading": "メモを読み込んでいます",
-        "empty": "メモはまだありません。",
-        "unknownAuthor": "チームメイト",
-        "delete": "このメモを削除"
+        "tab": "連絡先のメモ",
+        "noContact": "この会話にはメモを追加できる連絡先がありません。"
       },
       "timeline": {
         "tab": "タイムライン",

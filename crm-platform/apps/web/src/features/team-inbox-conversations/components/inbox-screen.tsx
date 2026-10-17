@@ -166,7 +166,7 @@ export function InboxScreen() {
     onSent: () => list.refreshCounts(),
   });
   const notesQ = useNotes(selectedId);
-  // The API answers newest first; the thread and the panel both want oldest first (the panel flips it again).
+  // The API answers newest first; the thread wants oldest first.
   const notes = useMemo(
     () =>
       (notesQ.data?.data ?? [])
@@ -560,20 +560,13 @@ export function InboxScreen() {
         assign: can.assign,
         assignSelf: can.assignSelf,
         resolve: can.resolve,
-        note: can.note,
       }}
       presence={presence}
-      notes={notes}
-      notesLoading={notesQ.isPending && selectedId !== null}
-      notesError={notesQ.isError}
       nowMs={nowMs}
       assigning={assigning}
       resolving={resolving}
       onAssign={(change) => void assign(change)}
       onToggleResolved={() => void toggleResolved()}
-      onAddNote={addNote}
-      onDeleteNote={setNoteToDelete}
-      canDeleteNote={canDeleteNote}
       onOpenConversation={(id) => open(id, { focus: false })}
       canEditContact={can.editContact}
       tags={

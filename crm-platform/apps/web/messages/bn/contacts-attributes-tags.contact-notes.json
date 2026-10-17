@@ -16,6 +16,7 @@
         "loadMore": "আরও লোড করুন",
         "loadingMore": "আরও নোট লোড হচ্ছে",
         "added": "যোগ করা হয়েছে {when}",
+        "addedBy": "{name} যোগ করেছেন {when}",
         "edited": "সম্পাদনা করা হয়েছে {when}",
         "edit": "সম্পাদনা",
         "editAria": "{when} যোগ করা নোট সম্পাদনা করুন",

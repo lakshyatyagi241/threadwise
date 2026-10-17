@@ -16,6 +16,7 @@
         "loadMore": "Tải thêm",
         "loadingMore": "Đang tải thêm ghi chú",
         "added": "Thêm {when}",
+        "addedBy": "Thêm {when} bởi {name}",
         "edited": "Sửa {when}",
         "edit": "Sửa",
         "editAria": "Sửa ghi chú thêm {when}",

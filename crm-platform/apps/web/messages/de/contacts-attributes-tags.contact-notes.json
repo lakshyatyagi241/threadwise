@@ -16,6 +16,7 @@
         "loadMore": "Mehr laden",
         "loadingMore": "Weitere Notizen werden geladen",
         "added": "Hinzugefügt {when}",
+        "addedBy": "Hinzugefügt {when} von {name}",
         "edited": "Bearbeitet {when}",
         "edit": "Bearbeiten",
         "editAria": "Notiz bearbeiten, hinzugefügt {when}",

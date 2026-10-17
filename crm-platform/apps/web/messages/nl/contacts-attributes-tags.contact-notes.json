@@ -16,6 +16,7 @@
         "loadMore": "Meer laden",
         "loadingMore": "Meer notities laden",
         "added": "Toegevoegd {when}",
+        "addedBy": "Toegevoegd {when} door {name}",
         "edited": "Bewerkt {when}",
         "edit": "Bewerken",
         "editAria": "Notitie bewerken, toegevoegd {when}",

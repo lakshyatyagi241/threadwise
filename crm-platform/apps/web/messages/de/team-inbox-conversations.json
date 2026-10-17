@@ -553,16 +553,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notizen",
-        "label": "Neue interne Notiz",
-        "placeholder": "Notiz schreiben, die nur Ihr Team sehen kann",
-        "hint": "Strg+Enter fügt die Notiz hinzu.",
-        "add": "Notiz hinzufügen",
-        "addFailed": "Die Notiz konnte nicht gespeichert werden.",
-        "loading": "Notizen werden geladen",
-        "empty": "Noch keine Notizen.",
-        "unknownAuthor": "Ein Teammitglied",
-        "delete": "Diese Notiz löschen"
+        "tab": "Kontaktnotizen",
+        "noContact": "Diese Unterhaltung hat keinen Kontakt, dem Notizen zugeordnet werden könnten."
       },
       "timeline": {
         "tab": "Verlauf",

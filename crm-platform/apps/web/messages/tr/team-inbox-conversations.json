@@ -553,16 +553,8 @@
         "offline": "Çevrimdışı"
       },
       "notes": {
-        "tab": "Notlar",
-        "label": "Yeni dahili not",
-        "placeholder": "Yalnızca ekibinizin görebileceği bir not yazın",
-        "hint": "Ctrl+Enter notu ekler.",
-        "add": "Not ekle",
-        "addFailed": "Not kaydedilemedi.",
-        "loading": "Notlar yükleniyor",
-        "empty": "Henüz not yok.",
-        "unknownAuthor": "Bir ekip arkadaşı",
-        "delete": "Bu notu sil"
+        "tab": "Kişi notları",
+        "noContact": "Bu konuşmada not eklenecek bir kişi yok."
       },
       "timeline": {
         "tab": "Zaman çizelgesi",

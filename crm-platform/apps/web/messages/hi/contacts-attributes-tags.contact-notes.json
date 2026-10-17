@@ -16,6 +16,7 @@
         "loadMore": "और लोड करें",
         "loadingMore": "और नोट्स लोड हो रहे हैं",
         "added": "जोड़ा गया {when}",
+        "addedBy": "{name} ने {when} जोड़ा",
         "edited": "बदला गया {when}",
         "edit": "संपादित करें",
         "editAria": "{when} जोड़ा गया नोट संपादित करें",

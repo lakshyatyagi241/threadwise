@@ -553,16 +553,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notes",
-        "label": "New internal note",
-        "placeholder": "Write a note only your team can see",
-        "hint": "Ctrl+Enter adds the note.",
-        "add": "Add note",
-        "addFailed": "The note could not be saved.",
-        "loading": "Loading notes",
-        "empty": "No notes yet.",
-        "unknownAuthor": "A teammate",
-        "delete": "Delete this note"
+        "tab": "Contact notes",
+        "noContact": "This conversation has no contact to attach notes to."
       },
       "timeline": {
         "tab": "Timeline",
