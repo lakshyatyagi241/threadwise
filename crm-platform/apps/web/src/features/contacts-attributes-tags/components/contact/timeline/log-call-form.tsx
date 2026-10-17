@@ -20,6 +20,9 @@ import { settlePendingCall } from '../call-nudge';
 
 type Direction = (typeof CALL_ENTRY_DIRECTIONS)[number];
 
+/** Outgoing first: it is what is logged most. */
+const DIRECTIONS: readonly Direction[] = ['outbound', 'inbound'];
+
 interface Draft {
   direction: Direction;
   outcome: CallOutcome;
@@ -228,7 +231,7 @@ export function LogCallForm({
           value={draft.direction}
           disabled={log.isPending}
           onChange={(direction) => set({ direction })}
-          options={CALL_ENTRY_DIRECTIONS.map((v) => ({
+          options={DIRECTIONS.map((v) => ({
             value: v,
             text: t(`directionOption.${v}`),
           }))}

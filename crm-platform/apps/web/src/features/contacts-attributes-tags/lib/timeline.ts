@@ -332,27 +332,34 @@ export function fromConversation(c: ConversationSummary): TimelineEntry {
   };
 }
 
-/** Field edits made together (the same moment, the same person) read as one line; the stage and the status stand out in the line. */
+/** Edits by the same person within this long of the first one of the group read as one line. */
+const CHANGE_WINDOW_MS = 5 * 60_000;
+
+/**
+ * Field edits made together (the same person, within five minutes) read as one line, so a busy edit does not drown the timeline;
+ * the stage and the status stand out in the line. The entries come newest first, as the API sends them.
+ */
 export function fromFieldHistory(entries: readonly FieldHistoryEntry[]): TimelineEntry[] {
-  const groups = new Map<string, FieldHistoryEntry[]>();
+  const groups: Array<{ key: string; newest: number; list: FieldHistoryEntry[] }> = [];
   for (const e of entries) {
-    const key = `${e.changedAt}|${e.changedByUserId ?? e.actorType}`;
-    const list = groups.get(key);
-    if (list) list.push(e);
-    else groups.set(key, [e]);
+    const who = e.changedByUserId ?? e.actorType;
+    const at = ms(e.changedAt);
+    const open = groups.find((g) => g.key === who && Math.abs(g.newest - at) <= CHANGE_WINDOW_MS);
+    if (open) open.list.push(e);
+    else groups.push({ key: who, newest: at, list: [e] });
   }
-  return [...groups.entries()].map(([key, list]) => ({
-    id: `change:${key}`,
+  return groups.map((g) => ({
+    id: `change:${g.key}:${g.list[0]!.changedAt}:${g.list[0]!.fieldKey}`,
     kind: 'change' as const,
-    at: list[0]!.changedAt,
-    actorId: list[0]!.changedByUserId,
+    at: g.list[0]!.changedAt,
+    actorId: g.list[0]!.changedByUserId,
     actorName: null,
     upNext: false,
     when: null,
     data: {
       type: 'change' as const,
-      actorType: list[0]!.actorType,
-      fields: list.map((e) => ({ key: e.fieldKey, from: e.oldValue, to: e.newValue })),
+      actorType: g.list[0]!.actorType,
+      fields: g.list.map((e) => ({ key: e.fieldKey, from: e.oldValue, to: e.newValue })),
     },
   }));
 }
@@ -404,11 +411,17 @@ export interface Feed {
  * "Load more" does (`next`); once nothing has older pages everything shows.
  */
 export function mergeFeed(sources: readonly FeedSource[]): Feed {
+  // A task that was just completed can be in the open list and the done list for a moment: it counts once, as done.
+  const seen = new Map<string, TimelineEntry>();
+  for (const s of sources) {
+    for (const e of s.entries) {
+      const before = seen.get(e.id);
+      if (!before || (before.upNext && !e.upNext)) seen.set(e.id, e);
+    }
+  }
   const upNext: TimelineEntry[] = [];
   const dated: TimelineEntry[] = [];
-  for (const s of sources) {
-    for (const e of s.entries) (e.upNext ? upNext : dated).push(e);
-  }
+  for (const e of seen.values()) (e.upNext ? upNext : dated).push(e);
   upNext.sort((a, b) => {
     if (a.when && b.when) return ms(a.when) - ms(b.when);
     if (a.when) return -1;

@@ -199,6 +199,14 @@ describe('mergeFeed', () => {
     expect(feed.next).toEqual([]);
   });
 
+  it('counts a task that is in the open and the done list once, as done', () => {
+    const open = fromTask(task({ id: 'same' }));
+    const done = fromTask(task({ id: 'same', status: 'done', doneAt: '2026-10-05T10:00:00.000Z' }));
+    const feed = mergeFeed([src('tasksOpen', [open]), src('tasksDone', [done])]);
+    expect(feed.upNext).toEqual([]);
+    expect(feed.dated.map((e) => e.id)).toEqual(['task:same']);
+  });
+
   it('holds back entries older than what a source with more pages has loaded', () => {
     // The activity feed is loaded down to 10-08 and has older pages; notes are complete down to 09-01.
     const feed = mergeFeed([

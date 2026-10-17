@@ -1,0 +1,216 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "連絡先のセクション",
+          "group": {
+            "contact": "連絡先",
+            "related": "関連",
+            "record": "レコード"
+          },
+          "section": {
+            "overview": "概要",
+            "activities": "アクティビティ",
+            "conversations": "会話",
+            "notes": "ノート",
+            "tasks": "タスク",
+            "meetings": "ミーティング",
+            "files": "ファイル",
+            "deals": "取引",
+            "appointments": "アポイントメント",
+            "sales": "請求書",
+            "company": "会社",
+            "details": "詳細",
+            "stats": "統計",
+            "lead-source": "ソース",
+            "consent": "同意",
+            "history": "履歴"
+          }
+        },
+        "actions": {
+          "label": "この連絡先に対してできること",
+          "call": "通話",
+          "callWhatsapp": "WhatsAppで通話",
+          "callPhone": "電話で通話",
+          "logCall": "通話を記録",
+          "callMore": "その他の通話方法",
+          "message": "メッセージ",
+          "messageChat": "WhatsAppチャットを開く",
+          "messageTemplate": "WhatsAppテンプレートを送信",
+          "messageEmail": "メールを送信",
+          "messageMore": "その他の連絡方法",
+          "fieldHistory": "フィールド履歴"
+        },
+        "stageStrip": {
+          "noStatus": "ステータスなし"
+        },
+        "keyDetails": {
+          "title": "主な情報",
+          "editAll": "すべて編集",
+          "edit": "{field}を編集",
+          "add": "{field}を追加",
+          "conflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
+          "invalid": "{field}として正しくない可能性があります。",
+          "forbidden": "この連絡先を変更する権限がありません。",
+          "failed": "保存できませんでした。もう一度お試しください。",
+          "owner": "担当者",
+          "city": "市区町村",
+          "showAll": "すべての詳細を表示",
+          "showLess": "表示を減らす",
+          "social": "ソーシャルメディア",
+          "leadSource": "この連絡先の入手元"
+        },
+        "cards": {
+          "tags": "タグとグループ",
+          "tagsSummary": "{tags, plural, =0 {タグなし} other {# 件のタグ}} · {groups, plural, =0 {グループなし} other {# 件のグループ}}",
+          "company": "会社",
+          "companyNone": "まだありません",
+          "timezone": "タイムゾーンと所在地",
+          "timezoneNone": "まだ不明です",
+          "privacy": "プライバシー",
+          "privacyMinor": "未成年",
+          "score": "リードスコア",
+          "scoreNone": "未スコア"
+        },
+        "compose": {
+          "label": "アクティビティに追加",
+          "tabs": "追加する内容",
+          "tab": {
+            "note": "ノート",
+            "task": "タスク",
+            "call": "通話",
+            "meeting": "ミーティング"
+          }
+        },
+        "logCall": {
+          "label": "通話を記録",
+          "direction": "発信者",
+          "directionOption": {
+            "outbound": "こちらから発信",
+            "inbound": "先方から着信"
+          },
+          "minutesPlaceholder": "任意",
+          "notesPlaceholder": "話した内容は？（任意）",
+          "duePreset": {
+            "1": "明日",
+            "3": "3日後",
+            "7": "1週間後"
+          },
+          "saved": "通話を記録しました。",
+          "forbidden": "通話を記録する権限がありません。",
+          "unavailable": "通話の記録はここではまだ使えません。",
+          "failed": "通話を記録できませんでした。内容は失われていません。もう一度お試しください。"
+        },
+        "callNudge": {
+          "question": "{name}さんとの通話はいかがでしたか？",
+          "log": "記録する",
+          "dismiss": "あとで"
+        }
+      },
+      "timeline": {
+        "title": "アクティビティ",
+        "recent": "最近のアクティビティ",
+        "viewAll": "すべてのアクティビティを表示",
+        "filterLabel": "表示",
+        "filters": {
+          "all": "すべて",
+          "messages": "メッセージ",
+          "calls": "通話",
+          "notes": "ノート",
+          "tasks": "タスク",
+          "meetings": "ミーティング",
+          "changes": "変更"
+        },
+        "searchLabel": "この連絡先のアクティビティを検索",
+        "searchPlaceholder": "アクティビティを検索",
+        "clearSearch": "検索をクリア",
+        "searchHint": "読み込み済みの内容だけを検索しています。さらに過去を見るには「もっと読み込む」を押してください。",
+        "groups": {
+          "upNext": "次の予定",
+          "today": "今日",
+          "yesterday": "昨日",
+          "thisWeek": "今週",
+          "earlier": "それ以前"
+        },
+        "loading": "アクティビティを読み込み中...",
+        "loadMore": "もっと読み込む",
+        "noMatch": "一致するものはありません。",
+        "emptyShort": "まだ何もありません。",
+        "showAll": "すべてのアクティビティを表示",
+        "noneYet": "新しいものはまだありません。さらに過去を見るには「もっと読み込む」を押してください。",
+        "partial": "一部のアクティビティを読み込めませんでした。",
+        "retry": "もう一度試す",
+        "empty": {
+          "title": "アクティビティはまだありません",
+          "message": "{name}さんに対する操作は、ノート、通話、メッセージ、タスク、ミーティングのすべてがここに表示されます。",
+          "messageNoName": "この連絡先に対する操作は、ノート、通話、メッセージ、タスク、ミーティングのすべてがここに表示されます。",
+          "note": "ノートを追加",
+          "call": "通話を記録",
+          "task": "タスクを追加",
+          "meeting": "ミーティングを予定"
+        },
+        "entry": {
+          "note": "ノート：{text}",
+          "edited": "編集済み",
+          "task": {
+            "done": "タスク完了：{title}",
+            "overdue": "期限切れ（期限：{when}）",
+            "due": "期限：{when}",
+            "noDue": "期限なし"
+          },
+          "meeting": {
+            "upcoming": "ミーティング：{title}",
+            "past": "面談済み：{title}"
+          },
+          "call": {
+            "inbound": "着信",
+            "outbound": "発信",
+            "call": "通話",
+            "seconds": "{seconds}秒",
+            "minutes": "{minutes}分",
+            "outcome": {
+              "connected": "接続",
+              "noAnswer": "応答なし",
+              "busy": "話し中",
+              "voicemail": "留守電に残した",
+              "wrongNumber": "番号違い",
+              "declined": "拒否",
+              "failed": "失敗",
+              "inProgress": "進行中"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "手動で記録",
+              "telephony": "電話システム",
+              "mobile_app": "モバイルアプリ",
+              "web_click_to_call": "電話"
+            }
+          },
+          "message": {
+            "summary": "{channel}での会話",
+            "unread": "未読{count}件"
+          },
+          "email": {
+            "sent": "メール送信：{title}",
+            "received": "メール受信：{title}"
+          },
+          "change": {
+            "stage": "ステージを{from}から{to}に変更",
+            "field": "{field}を{from}から{to}に変更",
+            "stageAndMore": "ステージを{from}から{to}に変更、ほか{count, plural, other {# 件の詳細}}",
+            "several": "{count, plural, other {# 件の詳細}}を更新"
+          },
+          "consent": {
+            "granted": "{channel}の同意を取得",
+            "withdrawn": "{channel}の同意を撤回",
+            "service": "サービスメッセージ",
+            "marketing": "マーケティングメッセージ"
+          },
+          "by": "{name}さんによる",
+          "system": "システム"
+        }
+      }
+    }
+  }
+}

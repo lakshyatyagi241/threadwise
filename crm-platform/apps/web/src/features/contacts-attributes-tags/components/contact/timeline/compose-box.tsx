@@ -178,10 +178,10 @@ export function ComposeBox({
     e.preventDefault();
     const next = tabs[to]!;
     setActive(next);
-    bump(next);
-    window.requestAnimationFrame(() =>
-      list.current?.querySelectorAll<HTMLElement>('[role="tab"]')[to]?.focus(),
-    );
+    // Arrow keys walk the tabs: the person stays on the tab strip (a form opened by the choice would take the cursor, so the
+    // focus is given back to the tab once the form has been drawn). Clicking a tab is what puts the cursor in its form.
+    const back = () => list.current?.querySelectorAll<HTMLElement>('[role="tab"]')[to]?.focus();
+    window.requestAnimationFrame(() => window.requestAnimationFrame(back));
   };
 
   return (

@@ -346,10 +346,13 @@ export function TimelineRow({
     }
   })();
 
+  // A call the activity feed wrote already says who took it ("..., by Priya").
   const who =
-    entry.actorName ??
-    (entry.actorId ? nameOf(entry.actorId) : undefined) ??
-    (d.type === 'change' && d.actorType === 'system' ? t('entry.system') : null);
+    d.type === 'call' && d.text
+      ? null
+      : (entry.actorName ??
+        (entry.actorId ? nameOf(entry.actorId) : undefined) ??
+        (d.type === 'change' && d.actorType === 'system' ? t('entry.system') : null));
   const stamp = d.type === 'task' && !d.done ? null : when(entry.at);
   const expandable = described.detail !== undefined;
 

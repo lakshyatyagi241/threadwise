@@ -222,7 +222,7 @@ export function SectionNav({
         className={cn(
           'flex shrink-0 items-center justify-between gap-2 whitespace-nowrap rounded-md px-3 py-1.5 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
           current === s
-            ? 'bg-brand/10 font-semibold text-brand'
+            ? 'bg-brand/10 font-semibold text-brand dark:text-primary'
             : 'text-muted-foreground hover:bg-muted hover:text-foreground',
         )}
       >
@@ -247,10 +247,10 @@ export function SectionNav({
           className={cn(
             'flex gap-1 lg:flex-col',
             // On a phone the groups are told apart by a thin line, on a wide screen by a small heading.
-            i > 0 && 'max-lg:ms-1 max-lg:border-s max-lg:border-border max-lg:ps-2',
+            i > 0 && 'max-lg:ms-1 max-lg:border-s max-lg:border-border max-lg:ps-2 lg:mt-3',
           )}
         >
-          <p className="px-3 pb-0.5 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground first:pt-0 max-lg:hidden">
+          <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground max-lg:hidden">
             {t(`group.${g.id}`)}
           </p>
           {g.sections.map(item)}

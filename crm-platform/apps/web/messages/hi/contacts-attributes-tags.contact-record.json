@@ -1,0 +1,216 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "संपर्क के सेक्शन",
+          "group": {
+            "contact": "संपर्क",
+            "related": "संबंधित",
+            "record": "रिकॉर्ड"
+          },
+          "section": {
+            "overview": "ओवरव्यू",
+            "activities": "गतिविधि",
+            "conversations": "बातचीत",
+            "notes": "नोट्स",
+            "tasks": "टास्क",
+            "meetings": "मीटिंग",
+            "files": "फ़ाइलें",
+            "deals": "डील",
+            "appointments": "अपॉइंटमेंट",
+            "sales": "इनवॉइस",
+            "company": "कंपनी",
+            "details": "विवरण",
+            "stats": "आँकड़े",
+            "lead-source": "स्रोत",
+            "consent": "सहमति",
+            "history": "इतिहास"
+          }
+        },
+        "actions": {
+          "label": "इस संपर्क के साथ आप क्या कर सकते हैं",
+          "call": "कॉल करें",
+          "callWhatsapp": "WhatsApp पर कॉल करें",
+          "callPhone": "अपने फ़ोन से कॉल करें",
+          "logCall": "कॉल लॉग करें",
+          "callMore": "कॉल करने के अन्य तरीके",
+          "message": "संदेश",
+          "messageChat": "WhatsApp चैट खोलें",
+          "messageTemplate": "WhatsApp टेम्पलेट भेजें",
+          "messageEmail": "ईमेल भेजें",
+          "messageMore": "लिखने के अन्य तरीके",
+          "fieldHistory": "फ़ील्ड इतिहास"
+        },
+        "stageStrip": {
+          "noStatus": "कोई स्थिति नहीं"
+        },
+        "keyDetails": {
+          "title": "मुख्य विवरण",
+          "editAll": "सब संपादित करें",
+          "edit": "{field} संपादित करें",
+          "add": "{field} जोड़ें",
+          "conflict": "किसी और ने पहले यह संपर्क बदल दिया। इसे फिर से लोड किया गया है; दोबारा कोशिश करें।",
+          "invalid": "यह सही {field} नहीं लगता।",
+          "forbidden": "आपके पास इस संपर्क को बदलने की अनुमति नहीं है।",
+          "failed": "सहेजा नहीं जा सका। फिर कोशिश करें।",
+          "owner": "स्वामी",
+          "city": "शहर",
+          "showAll": "पूरा विवरण देखें",
+          "showLess": "कम दिखाएँ",
+          "social": "सोशल मीडिया",
+          "leadSource": "यह संपर्क कहाँ से आया"
+        },
+        "cards": {
+          "tags": "टैग और ग्रुप",
+          "tagsSummary": "{tags, plural, =0 {कोई टैग नहीं} one {1 टैग} other {# टैग}} · {groups, plural, =0 {कोई ग्रुप नहीं} one {1 ग्रुप} other {# ग्रुप}}",
+          "company": "कंपनी",
+          "companyNone": "अभी तक नहीं",
+          "timezone": "टाइम ज़ोन और स्थान",
+          "timezoneNone": "अभी पता नहीं",
+          "privacy": "गोपनीयता",
+          "privacyMinor": "नाबालिग",
+          "score": "लीड स्कोर",
+          "scoreNone": "अभी स्कोर नहीं हुआ"
+        },
+        "compose": {
+          "label": "गतिविधि में जोड़ें",
+          "tabs": "क्या जोड़ना है",
+          "tab": {
+            "note": "नोट",
+            "task": "टास्क",
+            "call": "कॉल",
+            "meeting": "मीटिंग"
+          }
+        },
+        "logCall": {
+          "label": "कॉल लॉग करें",
+          "direction": "किसने कॉल किया",
+          "directionOption": {
+            "outbound": "मैंने उन्हें कॉल किया",
+            "inbound": "उन्होंने मुझे कॉल किया"
+          },
+          "minutesPlaceholder": "वैकल्पिक",
+          "notesPlaceholder": "क्या बात हुई? (वैकल्पिक)",
+          "duePreset": {
+            "1": "कल",
+            "3": "3 दिन में",
+            "7": "एक हफ़्ते में"
+          },
+          "saved": "कॉल लॉग हो गई।",
+          "forbidden": "आपके पास कॉल लॉग करने की अनुमति नहीं है।",
+          "unavailable": "कॉल लॉग करना यहाँ अभी उपलब्ध नहीं है।",
+          "failed": "कॉल लॉग नहीं हो सकी। कुछ भी खोया नहीं है: फिर कोशिश करें।"
+        },
+        "callNudge": {
+          "question": "{name} के साथ कॉल कैसी रही?",
+          "log": "लॉग करें",
+          "dismiss": "अभी नहीं"
+        }
+      },
+      "timeline": {
+        "title": "गतिविधि",
+        "recent": "हाल की गतिविधि",
+        "viewAll": "सारी गतिविधि देखें",
+        "filterLabel": "दिखाएँ",
+        "filters": {
+          "all": "सभी",
+          "messages": "संदेश",
+          "calls": "कॉल",
+          "notes": "नोट्स",
+          "tasks": "टास्क",
+          "meetings": "मीटिंग",
+          "changes": "बदलाव"
+        },
+        "searchLabel": "इस संपर्क की गतिविधि में खोजें",
+        "searchPlaceholder": "गतिविधि खोजें",
+        "clearSearch": "खोज साफ़ करें",
+        "searchHint": "अब तक जो लोड हुआ है उसी में खोज हो रही है। और पीछे देखने के लिए और लोड करें।",
+        "groups": {
+          "upNext": "आगे",
+          "today": "आज",
+          "yesterday": "बीता कल",
+          "thisWeek": "इस हफ़्ते",
+          "earlier": "पहले"
+        },
+        "loading": "गतिविधि लोड हो रही है...",
+        "loadMore": "और लोड करें",
+        "noMatch": "कुछ नहीं मिला।",
+        "emptyShort": "यहाँ अभी कुछ नहीं है।",
+        "showAll": "सारी गतिविधि दिखाएँ",
+        "noneYet": "अभी इससे नया कुछ नहीं है। और पीछे देखने के लिए और लोड करें।",
+        "partial": "कुछ गतिविधि लोड नहीं हो सकी।",
+        "retry": "फिर कोशिश करें",
+        "empty": {
+          "title": "अभी कोई गतिविधि नहीं",
+          "message": "{name} के साथ आप जो कुछ भी करेंगे वह यहाँ दिखेगा: नोट्स, कॉल, संदेश, टास्क और मीटिंग।",
+          "messageNoName": "इस संपर्क के साथ आप जो कुछ भी करेंगे वह यहाँ दिखेगा: नोट्स, कॉल, संदेश, टास्क और मीटिंग।",
+          "note": "नोट जोड़ें",
+          "call": "कॉल लॉग करें",
+          "task": "टास्क जोड़ें",
+          "meeting": "मीटिंग तय करें"
+        },
+        "entry": {
+          "note": "नोट: {text}",
+          "edited": "संपादित",
+          "task": {
+            "done": "टास्क पूरा: {title}",
+            "overdue": "देर हो गई, अंतिम तारीख {when} थी",
+            "due": "अंतिम तारीख {when}",
+            "noDue": "कोई अंतिम तारीख नहीं"
+          },
+          "meeting": {
+            "upcoming": "मीटिंग: {title}",
+            "past": "मुलाकात हुई: {title}"
+          },
+          "call": {
+            "inbound": "आने वाली कॉल",
+            "outbound": "जाने वाली कॉल",
+            "call": "कॉल",
+            "seconds": "{seconds} सेकंड",
+            "minutes": "{minutes} मिनट",
+            "outcome": {
+              "connected": "बात हुई",
+              "noAnswer": "जवाब नहीं मिला",
+              "busy": "व्यस्त",
+              "voicemail": "वॉइसमेल छोड़ा",
+              "wrongNumber": "गलत नंबर",
+              "declined": "अस्वीकार की गई",
+              "failed": "विफल",
+              "inProgress": "जारी है"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "हाथ से लॉग की गई",
+              "telephony": "फ़ोन सिस्टम",
+              "mobile_app": "मोबाइल ऐप",
+              "web_click_to_call": "फ़ोन"
+            }
+          },
+          "message": {
+            "summary": "{channel} पर बातचीत",
+            "unread": "{count} अनपढ़े"
+          },
+          "email": {
+            "sent": "ईमेल भेजा गया: {title}",
+            "received": "ईमेल मिला: {title}"
+          },
+          "change": {
+            "stage": "चरण {from} से {to} में बदला",
+            "field": "{field} {from} से {to} में बदला",
+            "stageAndMore": "चरण {from} से {to} में बदला, और {count, plural, one {1 और विवरण} other {# और विवरण}}",
+            "several": "{count, plural, one {1 विवरण} other {# विवरण}} अपडेट हुए"
+          },
+          "consent": {
+            "granted": "{channel} की सहमति दी गई",
+            "withdrawn": "{channel} की सहमति वापस ली गई",
+            "service": "सर्विस संदेश",
+            "marketing": "मार्केटिंग संदेश"
+          },
+          "by": "{name} द्वारा",
+          "system": "सिस्टम"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { Select, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
@@ -20,6 +21,13 @@ export function StageStrip({ contact }: { contact: ContactRow }) {
   const stage = useStageChange(contact);
   const current = contact.lifecycleStage;
   const at = stage.stages.findIndex((s) => s.value === current);
+  const list = useRef<HTMLOListElement>(null);
+  // On a narrow screen the line scrolls: keep the contact's own stage in view.
+  useEffect(() => {
+    list.current
+      ?.querySelector<HTMLElement>('[aria-current="step"]')
+      ?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+  }, [current, stage.stages.length]);
   if (stage.stages.length === 0) return null;
   return (
     <section
@@ -27,6 +35,7 @@ export function StageStrip({ contact }: { contact: ContactRow }) {
       className="flex items-center gap-2 rounded-xl border border-border bg-background px-2 py-1.5"
     >
       <ol
+        ref={list}
         aria-label={t('stages')}
         className="thin-scrollbar flex min-w-0 flex-1 items-center gap-1 overflow-x-auto"
       >

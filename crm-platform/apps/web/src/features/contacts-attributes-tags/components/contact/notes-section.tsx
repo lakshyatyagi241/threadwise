@@ -216,7 +216,12 @@ export function NoteComposer({
         <p id={hintId} className="text-xs text-muted-foreground" aria-live="polite">
           {left <= COUNTER_FROM ? t('charsLeft', { count: left }) : t('composerHint')}
         </p>
-        <Button size="sm" disabled={empty || pending} onClick={save}>
+        <Button
+          size="sm"
+          className="shrink-0 whitespace-nowrap"
+          disabled={empty || pending}
+          onClick={save}
+        >
           {pending && <Spinner />}
           {t('save')}
         </Button>

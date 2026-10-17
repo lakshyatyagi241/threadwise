@@ -1,0 +1,216 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "אזורי איש הקשר",
+          "group": {
+            "contact": "איש קשר",
+            "related": "קשור",
+            "record": "רשומה"
+          },
+          "section": {
+            "overview": "סקירה",
+            "activities": "פעילות",
+            "conversations": "שיחות",
+            "notes": "הערות",
+            "tasks": "משימות",
+            "meetings": "פגישות",
+            "files": "קבצים",
+            "deals": "עסקאות",
+            "appointments": "תורים",
+            "sales": "חשבוניות",
+            "company": "חברה",
+            "details": "פרטים",
+            "stats": "סטטיסטיקה",
+            "lead-source": "מקור",
+            "consent": "הסכמה",
+            "history": "היסטוריה"
+          }
+        },
+        "actions": {
+          "label": "מה אפשר לעשות עם איש הקשר הזה",
+          "call": "התקשר",
+          "callWhatsapp": "התקשר ב-WhatsApp",
+          "callPhone": "התקשר מהטלפון שלך",
+          "logCall": "תעד שיחה",
+          "callMore": "דרכים נוספות להתקשר",
+          "message": "הודעה",
+          "messageChat": "פתח את הצ'אט ב-WhatsApp",
+          "messageTemplate": "שלח תבנית WhatsApp",
+          "messageEmail": "שלח אימייל",
+          "messageMore": "דרכים נוספות לכתוב",
+          "fieldHistory": "היסטוריית שדות"
+        },
+        "stageStrip": {
+          "noStatus": "ללא סטטוס"
+        },
+        "keyDetails": {
+          "title": "פרטים עיקריים",
+          "editAll": "ערוך הכול",
+          "edit": "ערוך {field}",
+          "add": "הוסף {field}",
+          "conflict": "מישהו אחר שינה את איש הקשר קודם. הוא נטען מחדש; נסה שוב.",
+          "invalid": "זה לא נראה כמו ערך תקין עבור {field}.",
+          "forbidden": "אין לך הרשאה לשנות איש קשר זה.",
+          "failed": "לא ניתן היה לשמור. נסה שוב.",
+          "owner": "בעלים",
+          "city": "עיר",
+          "showAll": "הצג את כל הפרטים",
+          "showLess": "הצג פחות",
+          "social": "רשתות חברתיות",
+          "leadSource": "מאיפה הגיע איש הקשר הזה"
+        },
+        "cards": {
+          "tags": "תגיות וקבוצות",
+          "tagsSummary": "{tags, plural, =0 {אין תגיות} one {תגית אחת} two {שתי תגיות} other {# תגיות}} · {groups, plural, =0 {אין קבוצות} one {קבוצה אחת} two {שתי קבוצות} other {# קבוצות}}",
+          "company": "חברה",
+          "companyNone": "עדיין אין",
+          "timezone": "אזור זמן ומיקום",
+          "timezoneNone": "עדיין לא ידוע",
+          "privacy": "פרטיות",
+          "privacyMinor": "קטין",
+          "score": "דירוג ליד",
+          "scoreNone": "עדיין לא דורג"
+        },
+        "compose": {
+          "label": "הוסף לפעילות",
+          "tabs": "מה להוסיף",
+          "tab": {
+            "note": "הערה",
+            "task": "משימה",
+            "call": "שיחה",
+            "meeting": "פגישה"
+          }
+        },
+        "logCall": {
+          "label": "תעד שיחה",
+          "direction": "מי התקשר",
+          "directionOption": {
+            "outbound": "אני התקשרתי אליהם",
+            "inbound": "הם התקשרו אליי"
+          },
+          "minutesPlaceholder": "אופציונלי",
+          "notesPlaceholder": "מה נאמר? (אופציונלי)",
+          "duePreset": {
+            "1": "מחר",
+            "3": "בעוד 3 ימים",
+            "7": "בעוד שבוע"
+          },
+          "saved": "השיחה תועדה.",
+          "forbidden": "אין לך הרשאה לתעד שיחות.",
+          "unavailable": "תיעוד שיחות עדיין לא זמין כאן.",
+          "failed": "לא ניתן היה לתעד את השיחה. שום דבר לא אבד: נסה שוב."
+        },
+        "callNudge": {
+          "question": "איך הלכה השיחה עם {name}?",
+          "log": "תעד",
+          "dismiss": "לא עכשיו"
+        }
+      },
+      "timeline": {
+        "title": "פעילות",
+        "recent": "פעילות אחרונה",
+        "viewAll": "הצג את כל הפעילות",
+        "filterLabel": "הצג",
+        "filters": {
+          "all": "הכול",
+          "messages": "הודעות",
+          "calls": "שיחות",
+          "notes": "הערות",
+          "tasks": "משימות",
+          "meetings": "פגישות",
+          "changes": "שינויים"
+        },
+        "searchLabel": "חפש בפעילות של איש הקשר הזה",
+        "searchPlaceholder": "חפש בפעילות",
+        "clearSearch": "נקה את החיפוש",
+        "searchHint": "החיפוש מתבצע רק במה שנטען עד כה. טען עוד כדי להסתכל רחוק יותר אחורה.",
+        "groups": {
+          "upNext": "הבא בתור",
+          "today": "היום",
+          "yesterday": "אתמול",
+          "thisWeek": "השבוע",
+          "earlier": "קודם"
+        },
+        "loading": "טוען פעילות...",
+        "loadMore": "טען עוד",
+        "noMatch": "אין התאמות.",
+        "emptyShort": "עדיין אין כאן כלום.",
+        "showAll": "הצג את כל הפעילות",
+        "noneYet": "אין עדיין משהו חדש יותר. טען עוד כדי להסתכל רחוק יותר אחורה.",
+        "partial": "לא ניתן היה לטעון חלק מהפעילות.",
+        "retry": "נסה שוב",
+        "empty": {
+          "title": "עדיין אין פעילות",
+          "message": "כל מה שתעשה עם {name} יופיע כאן: הערות, שיחות, הודעות, משימות ופגישות.",
+          "messageNoName": "כל מה שתעשה עם איש הקשר הזה יופיע כאן: הערות, שיחות, הודעות, משימות ופגישות.",
+          "note": "הוסף הערה",
+          "call": "תעד שיחה",
+          "task": "הוסף משימה",
+          "meeting": "קבע פגישה"
+        },
+        "entry": {
+          "note": "הערה: {text}",
+          "edited": "נערך",
+          "task": {
+            "done": "משימה הושלמה: {title}",
+            "overdue": "באיחור, המועד היה {when}",
+            "due": "מועד אחרון {when}",
+            "noDue": "ללא מועד אחרון"
+          },
+          "meeting": {
+            "upcoming": "פגישה: {title}",
+            "past": "נפגשו: {title}"
+          },
+          "call": {
+            "inbound": "שיחה נכנסת",
+            "outbound": "שיחה יוצאת",
+            "call": "שיחה",
+            "seconds": "{seconds} שנ'",
+            "minutes": "{minutes} דק'",
+            "outcome": {
+              "connected": "התחברה",
+              "noAnswer": "אין מענה",
+              "busy": "תפוס",
+              "voicemail": "הושארה הודעה קולית",
+              "wrongNumber": "מספר שגוי",
+              "declined": "נדחתה",
+              "failed": "נכשלה",
+              "inProgress": "מתבצעת"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "תועד ידנית",
+              "telephony": "מערכת טלפוניה",
+              "mobile_app": "אפליקציית מובייל",
+              "web_click_to_call": "טלפון"
+            }
+          },
+          "message": {
+            "summary": "שיחה ב-{channel}",
+            "unread": "{count} שלא נקראו"
+          },
+          "email": {
+            "sent": "אימייל נשלח: {title}",
+            "received": "אימייל התקבל: {title}"
+          },
+          "change": {
+            "stage": "השלב שונה מ-{from} ל-{to}",
+            "field": "{field} שונה מ-{from} ל-{to}",
+            "stageAndMore": "השלב שונה מ-{from} ל-{to}, ועוד {count, plural, one {פרט אחד} two {שני פרטים} other {# פרטים}}",
+            "several": "עודכנו {count, plural, one {פרט אחד} two {שני פרטים} other {# פרטים}}"
+          },
+          "consent": {
+            "granted": "ניתנה הסכמה ב-{channel}",
+            "withdrawn": "הסכמה ב-{channel} בוטלה",
+            "service": "הודעות שירות",
+            "marketing": "הודעות שיווקיות"
+          },
+          "by": "על ידי {name}",
+          "system": "מערכת"
+        }
+      }
+    }
+  }
+}

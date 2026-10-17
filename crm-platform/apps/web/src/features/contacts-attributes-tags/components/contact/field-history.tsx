@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { FieldHistoryEntry } from '@crm/contracts';
 import { Button, Drawer, Spinner } from '@crm/ui';

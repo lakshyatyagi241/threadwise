@@ -1,0 +1,216 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "ส่วนต่าง ๆ ของผู้ติดต่อ",
+          "group": {
+            "contact": "ผู้ติดต่อ",
+            "related": "ที่เกี่ยวข้อง",
+            "record": "ข้อมูลระเบียน"
+          },
+          "section": {
+            "overview": "ภาพรวม",
+            "activities": "กิจกรรม",
+            "conversations": "การสนทนา",
+            "notes": "โน้ต",
+            "tasks": "งาน",
+            "meetings": "การประชุม",
+            "files": "ไฟล์",
+            "deals": "ดีล",
+            "appointments": "การนัดหมาย",
+            "sales": "ใบแจ้งหนี้",
+            "company": "บริษัท",
+            "details": "รายละเอียด",
+            "stats": "สถิติ",
+            "lead-source": "แหล่งที่มา",
+            "consent": "การยินยอม",
+            "history": "ประวัติ"
+          }
+        },
+        "actions": {
+          "label": "สิ่งที่ทำได้กับผู้ติดต่อรายนี้",
+          "call": "โทร",
+          "callWhatsapp": "โทรผ่าน WhatsApp",
+          "callPhone": "โทรจากโทรศัพท์ของคุณ",
+          "logCall": "บันทึกการโทร",
+          "callMore": "วิธีโทรอื่น ๆ",
+          "message": "ข้อความ",
+          "messageChat": "เปิดแชท WhatsApp",
+          "messageTemplate": "ส่งเทมเพลต WhatsApp",
+          "messageEmail": "ส่งอีเมล",
+          "messageMore": "วิธีส่งข้อความอื่น ๆ",
+          "fieldHistory": "ประวัติฟิลด์"
+        },
+        "stageStrip": {
+          "noStatus": "ไม่มีสถานะ"
+        },
+        "keyDetails": {
+          "title": "รายละเอียดสำคัญ",
+          "editAll": "แก้ไขทั้งหมด",
+          "edit": "แก้ไข{field}",
+          "add": "เพิ่ม{field}",
+          "conflict": "มีคนอื่นแก้ไขผู้ติดต่อนี้ก่อน โหลดใหม่แล้ว ลองอีกครั้ง",
+          "invalid": "ดูเหมือนไม่ใช่{field}ที่ถูกต้อง",
+          "forbidden": "คุณไม่มีสิทธิ์แก้ไขผู้ติดต่อนี้",
+          "failed": "บันทึกไม่ได้ ลองอีกครั้ง",
+          "owner": "ผู้รับผิดชอบ",
+          "city": "เมือง",
+          "showAll": "แสดงรายละเอียดทั้งหมด",
+          "showLess": "แสดงน้อยลง",
+          "social": "โซเชียลมีเดีย",
+          "leadSource": "ผู้ติดต่อรายนี้มาจากไหน"
+        },
+        "cards": {
+          "tags": "แท็กและกลุ่ม",
+          "tagsSummary": "{tags, plural, =0 {ไม่มีแท็ก} other {# แท็ก}} · {groups, plural, =0 {ไม่มีกลุ่ม} other {# กลุ่ม}}",
+          "company": "บริษัท",
+          "companyNone": "ยังไม่มี",
+          "timezone": "เขตเวลาและที่ตั้ง",
+          "timezoneNone": "ยังไม่ทราบ",
+          "privacy": "ความเป็นส่วนตัว",
+          "privacyMinor": "ผู้เยาว์",
+          "score": "คะแนนลีด",
+          "scoreNone": "ยังไม่ได้ให้คะแนน"
+        },
+        "compose": {
+          "label": "เพิ่มในกิจกรรม",
+          "tabs": "สิ่งที่จะเพิ่ม",
+          "tab": {
+            "note": "โน้ต",
+            "task": "งาน",
+            "call": "การโทร",
+            "meeting": "การประชุม"
+          }
+        },
+        "logCall": {
+          "label": "บันทึกการโทร",
+          "direction": "ใครเป็นคนโทร",
+          "directionOption": {
+            "outbound": "ฉันโทรหาเขา",
+            "inbound": "เขาโทรหาฉัน"
+          },
+          "minutesPlaceholder": "ไม่บังคับ",
+          "notesPlaceholder": "คุยอะไรกันบ้าง (ไม่บังคับ)",
+          "duePreset": {
+            "1": "พรุ่งนี้",
+            "3": "ใน 3 วัน",
+            "7": "ใน 1 สัปดาห์"
+          },
+          "saved": "บันทึกการโทรแล้ว",
+          "forbidden": "คุณไม่มีสิทธิ์บันทึกการโทร",
+          "unavailable": "ยังบันทึกการโทรที่นี่ไม่ได้",
+          "failed": "บันทึกการโทรไม่ได้ ไม่มีข้อมูลสูญหาย ลองอีกครั้ง"
+        },
+        "callNudge": {
+          "question": "การโทรกับ {name} เป็นอย่างไรบ้าง",
+          "log": "บันทึก",
+          "dismiss": "ไว้ทีหลัง"
+        }
+      },
+      "timeline": {
+        "title": "กิจกรรม",
+        "recent": "กิจกรรมล่าสุด",
+        "viewAll": "ดูกิจกรรมทั้งหมด",
+        "filterLabel": "แสดง",
+        "filters": {
+          "all": "ทั้งหมด",
+          "messages": "ข้อความ",
+          "calls": "การโทร",
+          "notes": "โน้ต",
+          "tasks": "งาน",
+          "meetings": "การประชุม",
+          "changes": "การเปลี่ยนแปลง"
+        },
+        "searchLabel": "ค้นหากิจกรรมของผู้ติดต่อรายนี้",
+        "searchPlaceholder": "ค้นหากิจกรรม",
+        "clearSearch": "ล้างการค้นหา",
+        "searchHint": "ค้นหาเฉพาะที่โหลดมาแล้ว โหลดเพิ่มเพื่อดูย้อนหลังไปไกลขึ้น",
+        "groups": {
+          "upNext": "ถัดไป",
+          "today": "วันนี้",
+          "yesterday": "เมื่อวาน",
+          "thisWeek": "สัปดาห์นี้",
+          "earlier": "ก่อนหน้านี้"
+        },
+        "loading": "กำลังโหลดกิจกรรม...",
+        "loadMore": "โหลดเพิ่ม",
+        "noMatch": "ไม่พบรายการที่ตรงกัน",
+        "emptyShort": "ยังไม่มีอะไรที่นี่",
+        "showAll": "แสดงกิจกรรมทั้งหมด",
+        "noneYet": "ยังไม่มีรายการใหม่กว่านี้ โหลดเพิ่มเพื่อดูย้อนหลังไปไกลขึ้น",
+        "partial": "โหลดกิจกรรมบางส่วนไม่ได้",
+        "retry": "ลองอีกครั้ง",
+        "empty": {
+          "title": "ยังไม่มีกิจกรรม",
+          "message": "ทุกสิ่งที่คุณทำกับ {name} จะแสดงที่นี่: โน้ต การโทร ข้อความ งาน และการประชุม",
+          "messageNoName": "ทุกสิ่งที่คุณทำกับผู้ติดต่อรายนี้จะแสดงที่นี่: โน้ต การโทร ข้อความ งาน และการประชุม",
+          "note": "เพิ่มโน้ต",
+          "call": "บันทึกการโทร",
+          "task": "เพิ่มงาน",
+          "meeting": "นัดการประชุม"
+        },
+        "entry": {
+          "note": "โน้ต: {text}",
+          "edited": "แก้ไขแล้ว",
+          "task": {
+            "done": "งานเสร็จแล้ว: {title}",
+            "overdue": "เลยกำหนด ครบกำหนด {when}",
+            "due": "ครบกำหนด {when}",
+            "noDue": "ไม่มีกำหนดส่ง"
+          },
+          "meeting": {
+            "upcoming": "การประชุม: {title}",
+            "past": "พบกันแล้ว: {title}"
+          },
+          "call": {
+            "inbound": "สายเรียกเข้า",
+            "outbound": "สายโทรออก",
+            "call": "การโทร",
+            "seconds": "{seconds} วินาที",
+            "minutes": "{minutes} นาที",
+            "outcome": {
+              "connected": "ติดต่อได้",
+              "noAnswer": "ไม่รับสาย",
+              "busy": "สายไม่ว่าง",
+              "voicemail": "ฝากข้อความเสียง",
+              "wrongNumber": "เบอร์ผิด",
+              "declined": "ปฏิเสธสาย",
+              "failed": "ล้มเหลว",
+              "inProgress": "กำลังดำเนินการ"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "บันทึกเอง",
+              "telephony": "ระบบโทรศัพท์",
+              "mobile_app": "แอปมือถือ",
+              "web_click_to_call": "โทรศัพท์"
+            }
+          },
+          "message": {
+            "summary": "การสนทนาทาง {channel}",
+            "unread": "ยังไม่ได้อ่าน {count}"
+          },
+          "email": {
+            "sent": "ส่งอีเมลแล้ว: {title}",
+            "received": "ได้รับอีเมลแล้ว: {title}"
+          },
+          "change": {
+            "stage": "เปลี่ยนขั้นจาก {from} เป็น {to}",
+            "field": "เปลี่ยน{field}จาก {from} เป็น {to}",
+            "stageAndMore": "เปลี่ยนขั้นจาก {from} เป็น {to} และอีก {count, plural, other {# รายละเอียด}}",
+            "several": "อัปเดต {count, plural, other {# รายละเอียด}} แล้ว"
+          },
+          "consent": {
+            "granted": "ให้ความยินยอมทาง {channel} แล้ว",
+            "withdrawn": "ถอนความยินยอมทาง {channel} แล้ว",
+            "service": "ข้อความบริการ",
+            "marketing": "ข้อความการตลาด"
+          },
+          "by": "โดย {name}",
+          "system": "ระบบ"
+        }
+      }
+    }
+  }
+}

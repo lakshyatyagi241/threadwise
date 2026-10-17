@@ -1,0 +1,216 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Sezioni del contatto",
+          "group": {
+            "contact": "Contatto",
+            "related": "Correlati",
+            "record": "Scheda"
+          },
+          "section": {
+            "overview": "Panoramica",
+            "activities": "Attività",
+            "conversations": "Conversazioni",
+            "notes": "Note",
+            "tasks": "Task",
+            "meetings": "Riunioni",
+            "files": "File",
+            "deals": "Trattative",
+            "appointments": "Appuntamenti",
+            "sales": "Fatture",
+            "company": "Azienda",
+            "details": "Dettagli",
+            "stats": "Statistiche",
+            "lead-source": "Origine",
+            "consent": "Consenso",
+            "history": "Cronologia"
+          }
+        },
+        "actions": {
+          "label": "Cosa puoi fare con questo contatto",
+          "call": "Chiama",
+          "callWhatsapp": "Chiama su WhatsApp",
+          "callPhone": "Chiama dal tuo telefono",
+          "logCall": "Registra una chiamata",
+          "callMore": "Altri modi per chiamare",
+          "message": "Messaggio",
+          "messageChat": "Apri la chat WhatsApp",
+          "messageTemplate": "Invia un template WhatsApp",
+          "messageEmail": "Invia un'e-mail",
+          "messageMore": "Altri modi per scrivere",
+          "fieldHistory": "Cronologia dei campi"
+        },
+        "stageStrip": {
+          "noStatus": "Nessuno stato"
+        },
+        "keyDetails": {
+          "title": "Dettagli principali",
+          "editAll": "Modifica tutto",
+          "edit": "Modifica {field}",
+          "add": "Aggiungi {field}",
+          "conflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
+          "invalid": "Non sembra un valore valido per {field}.",
+          "forbidden": "Non puoi modificare questo contatto.",
+          "failed": "Non è stato possibile salvare. Riprova.",
+          "owner": "Responsabile",
+          "city": "Città",
+          "showAll": "Mostra tutti i dettagli",
+          "showLess": "Mostra meno",
+          "social": "Social media",
+          "leadSource": "Da dove arriva questo contatto"
+        },
+        "cards": {
+          "tags": "Tag e gruppi",
+          "tagsSummary": "{tags, plural, =0 {Nessun tag} one {1 tag} other {# tag}} · {groups, plural, =0 {nessun gruppo} one {1 gruppo} other {# gruppi}}",
+          "company": "Azienda",
+          "companyNone": "Ancora nessuna",
+          "timezone": "Fuso orario e posizione",
+          "timezoneNone": "Non ancora noto",
+          "privacy": "Privacy",
+          "privacyMinor": "Minorenne",
+          "score": "Punteggio del lead",
+          "scoreNone": "Non ancora valutato"
+        },
+        "compose": {
+          "label": "Aggiungi all'attività",
+          "tabs": "Cosa aggiungere",
+          "tab": {
+            "note": "Nota",
+            "task": "Task",
+            "call": "Chiamata",
+            "meeting": "Riunione"
+          }
+        },
+        "logCall": {
+          "label": "Registra una chiamata",
+          "direction": "Chi ha chiamato",
+          "directionOption": {
+            "outbound": "Ho chiamato io",
+            "inbound": "Ha chiamato lui"
+          },
+          "minutesPlaceholder": "Facoltativo",
+          "notesPlaceholder": "Cosa vi siete detti? (facoltativo)",
+          "duePreset": {
+            "1": "Domani",
+            "3": "Tra 3 giorni",
+            "7": "Tra una settimana"
+          },
+          "saved": "Chiamata registrata.",
+          "forbidden": "Non puoi registrare chiamate.",
+          "unavailable": "La registrazione delle chiamate non è ancora disponibile qui.",
+          "failed": "Non è stato possibile registrare la chiamata. Non è andato perso nulla: riprova."
+        },
+        "callNudge": {
+          "question": "Com'è andata la chiamata con {name}?",
+          "log": "Registrala",
+          "dismiss": "Non ora"
+        }
+      },
+      "timeline": {
+        "title": "Attività",
+        "recent": "Attività recente",
+        "viewAll": "Vedi tutta l'attività",
+        "filterLabel": "Mostra",
+        "filters": {
+          "all": "Tutto",
+          "messages": "Messaggi",
+          "calls": "Chiamate",
+          "notes": "Note",
+          "tasks": "Task",
+          "meetings": "Riunioni",
+          "changes": "Modifiche"
+        },
+        "searchLabel": "Cerca nell'attività di questo contatto",
+        "searchPlaceholder": "Cerca nell'attività",
+        "clearSearch": "Cancella la ricerca",
+        "searchHint": "La ricerca riguarda solo ciò che è stato caricato finora. Carica altro per guardare più indietro.",
+        "groups": {
+          "upNext": "Prossimi",
+          "today": "Oggi",
+          "yesterday": "Ieri",
+          "thisWeek": "Questa settimana",
+          "earlier": "Prima"
+        },
+        "loading": "Caricamento dell'attività...",
+        "loadMore": "Carica altro",
+        "noMatch": "Nessun risultato.",
+        "emptyShort": "Ancora niente qui.",
+        "showAll": "Mostra tutta l'attività",
+        "noneYet": "Niente di più recente per ora. Carica altro per guardare più indietro.",
+        "partial": "Non è stato possibile caricare una parte dell'attività.",
+        "retry": "Riprova",
+        "empty": {
+          "title": "Ancora nessuna attività",
+          "message": "Tutto ciò che fai con {name} apparirà qui: note, chiamate, messaggi, task e riunioni.",
+          "messageNoName": "Tutto ciò che fai con questo contatto apparirà qui: note, chiamate, messaggi, task e riunioni.",
+          "note": "Aggiungi una nota",
+          "call": "Registra una chiamata",
+          "task": "Aggiungi un task",
+          "meeting": "Pianifica una riunione"
+        },
+        "entry": {
+          "note": "Nota: {text}",
+          "edited": "Modificata",
+          "task": {
+            "done": "Task completato: {title}",
+            "overdue": "In ritardo, scadeva {when}",
+            "due": "Scade {when}",
+            "noDue": "Nessuna scadenza"
+          },
+          "meeting": {
+            "upcoming": "Riunione: {title}",
+            "past": "Incontro: {title}"
+          },
+          "call": {
+            "inbound": "Chiamata in arrivo",
+            "outbound": "Chiamata in uscita",
+            "call": "Chiamata",
+            "seconds": "{seconds} sec",
+            "minutes": "{minutes} min",
+            "outcome": {
+              "connected": "Connessa",
+              "noAnswer": "Nessuna risposta",
+              "busy": "Occupato",
+              "voicemail": "Messaggio in segreteria",
+              "wrongNumber": "Numero sbagliato",
+              "declined": "Rifiutata",
+              "failed": "Non riuscita",
+              "inProgress": "In corso"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Registrata",
+              "telephony": "Sistema telefonico",
+              "mobile_app": "App mobile",
+              "web_click_to_call": "Telefono"
+            }
+          },
+          "message": {
+            "summary": "Conversazione su {channel}",
+            "unread": "{count} da leggere"
+          },
+          "email": {
+            "sent": "E-mail inviata: {title}",
+            "received": "E-mail ricevuta: {title}"
+          },
+          "change": {
+            "stage": "Fase cambiata da {from} a {to}",
+            "field": "{field} cambiato da {from} a {to}",
+            "stageAndMore": "Fase cambiata da {from} a {to}, e {count, plural, one {1 altro dettaglio} other {# altri dettagli}}",
+            "several": "{count, plural, one {1 dettaglio aggiornato} other {# dettagli aggiornati}}"
+          },
+          "consent": {
+            "granted": "Consenso {channel} dato",
+            "withdrawn": "Consenso {channel} revocato",
+            "service": "Messaggi di servizio",
+            "marketing": "Messaggi di marketing"
+          },
+          "by": "di {name}",
+          "system": "Sistema"
+        }
+      }
+    }
+  }
+}

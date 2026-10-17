@@ -312,7 +312,7 @@ export function ContactActionBar({
                 className={cn(
                   button,
                   messageMenu.length > 0 ? 'rounded-s-md rounded-e-none' : 'rounded-md',
-                  'border-brand/40 bg-brand/10 text-brand hover:bg-brand/20',
+                  'border-brand/40 bg-brand/10 text-brand hover:bg-brand/20 dark:text-primary',
                 )}
               >
                 <ChatIcon className="size-4" />

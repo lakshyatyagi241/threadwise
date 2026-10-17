@@ -1,0 +1,216 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Bagian kontak",
+          "group": {
+            "contact": "Kontak",
+            "related": "Terkait",
+            "record": "Catatan data"
+          },
+          "section": {
+            "overview": "Ringkasan",
+            "activities": "Aktivitas",
+            "conversations": "Percakapan",
+            "notes": "Catatan",
+            "tasks": "Tugas",
+            "meetings": "Rapat",
+            "files": "Berkas",
+            "deals": "Transaksi",
+            "appointments": "Janji temu",
+            "sales": "Faktur",
+            "company": "Perusahaan",
+            "details": "Detail",
+            "stats": "Statistik",
+            "lead-source": "Sumber",
+            "consent": "Persetujuan",
+            "history": "Riwayat"
+          }
+        },
+        "actions": {
+          "label": "Yang bisa Anda lakukan dengan kontak ini",
+          "call": "Panggil",
+          "callWhatsapp": "Panggil lewat WhatsApp",
+          "callPhone": "Panggil dari ponsel Anda",
+          "logCall": "Catat panggilan",
+          "callMore": "Cara lain untuk memanggil",
+          "message": "Pesan",
+          "messageChat": "Buka chat WhatsApp",
+          "messageTemplate": "Kirim templat WhatsApp",
+          "messageEmail": "Kirim email",
+          "messageMore": "Cara lain untuk menulis",
+          "fieldHistory": "Riwayat kolom"
+        },
+        "stageStrip": {
+          "noStatus": "Tanpa status"
+        },
+        "keyDetails": {
+          "title": "Detail utama",
+          "editAll": "Edit semua",
+          "edit": "Edit {field}",
+          "add": "Tambah {field}",
+          "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
+          "invalid": "Itu tampaknya bukan {field} yang valid.",
+          "forbidden": "Anda tidak memiliki izin untuk mengubah kontak ini.",
+          "failed": "Tidak dapat disimpan. Coba lagi.",
+          "owner": "Pemilik",
+          "city": "Kota",
+          "showAll": "Tampilkan semua detail",
+          "showLess": "Tampilkan lebih sedikit",
+          "social": "Media sosial",
+          "leadSource": "Dari mana kontak ini berasal"
+        },
+        "cards": {
+          "tags": "Tag dan grup",
+          "tagsSummary": "{tags, plural, =0 {Tidak ada tag} other {# tag}} · {groups, plural, =0 {tidak ada grup} other {# grup}}",
+          "company": "Perusahaan",
+          "companyNone": "Belum ada",
+          "timezone": "Zona waktu dan lokasi",
+          "timezoneNone": "Belum diketahui",
+          "privacy": "Privasi",
+          "privacyMinor": "Di bawah umur",
+          "score": "Skor prospek",
+          "scoreNone": "Belum diberi skor"
+        },
+        "compose": {
+          "label": "Tambahkan ke aktivitas",
+          "tabs": "Yang ditambahkan",
+          "tab": {
+            "note": "Catatan",
+            "task": "Tugas",
+            "call": "Panggilan",
+            "meeting": "Rapat"
+          }
+        },
+        "logCall": {
+          "label": "Catat panggilan",
+          "direction": "Siapa yang menelepon",
+          "directionOption": {
+            "outbound": "Saya yang menelepon",
+            "inbound": "Mereka yang menelepon saya"
+          },
+          "minutesPlaceholder": "Opsional",
+          "notesPlaceholder": "Apa yang dibicarakan? (opsional)",
+          "duePreset": {
+            "1": "Besok",
+            "3": "3 hari lagi",
+            "7": "Seminggu lagi"
+          },
+          "saved": "Panggilan dicatat.",
+          "forbidden": "Anda tidak dapat mencatat panggilan.",
+          "unavailable": "Pencatatan panggilan belum tersedia di sini.",
+          "failed": "Panggilan tidak dapat dicatat. Tidak ada yang hilang: coba lagi."
+        },
+        "callNudge": {
+          "question": "Bagaimana panggilan dengan {name}?",
+          "log": "Catat",
+          "dismiss": "Nanti saja"
+        }
+      },
+      "timeline": {
+        "title": "Aktivitas",
+        "recent": "Aktivitas terbaru",
+        "viewAll": "Lihat semua aktivitas",
+        "filterLabel": "Tampilkan",
+        "filters": {
+          "all": "Semua",
+          "messages": "Pesan",
+          "calls": "Panggilan",
+          "notes": "Catatan",
+          "tasks": "Tugas",
+          "meetings": "Rapat",
+          "changes": "Perubahan"
+        },
+        "searchLabel": "Cari di aktivitas kontak ini",
+        "searchPlaceholder": "Cari aktivitas",
+        "clearSearch": "Hapus pencarian",
+        "searchHint": "Pencarian hanya mencakup yang sudah dimuat. Muat lebih banyak untuk melihat lebih jauh ke belakang.",
+        "groups": {
+          "upNext": "Berikutnya",
+          "today": "Hari ini",
+          "yesterday": "Kemarin",
+          "thisWeek": "Minggu ini",
+          "earlier": "Sebelumnya"
+        },
+        "loading": "Memuat aktivitas...",
+        "loadMore": "Muat lebih banyak",
+        "noMatch": "Tidak ada yang cocok.",
+        "emptyShort": "Belum ada apa-apa di sini.",
+        "showAll": "Tampilkan semua aktivitas",
+        "noneYet": "Belum ada yang lebih baru. Muat lebih banyak untuk melihat lebih jauh ke belakang.",
+        "partial": "Sebagian aktivitas tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "empty": {
+          "title": "Belum ada aktivitas",
+          "message": "Semua yang Anda lakukan dengan {name} akan muncul di sini: catatan, panggilan, pesan, tugas, dan rapat.",
+          "messageNoName": "Semua yang Anda lakukan dengan kontak ini akan muncul di sini: catatan, panggilan, pesan, tugas, dan rapat.",
+          "note": "Tambah catatan",
+          "call": "Catat panggilan",
+          "task": "Tambah tugas",
+          "meeting": "Jadwalkan rapat"
+        },
+        "entry": {
+          "note": "Catatan: {text}",
+          "edited": "Diedit",
+          "task": {
+            "done": "Tugas selesai: {title}",
+            "overdue": "Terlambat, jatuh tempo {when}",
+            "due": "Jatuh tempo {when}",
+            "noDue": "Tanpa tenggat"
+          },
+          "meeting": {
+            "upcoming": "Rapat: {title}",
+            "past": "Bertemu: {title}"
+          },
+          "call": {
+            "inbound": "Panggilan masuk",
+            "outbound": "Panggilan keluar",
+            "call": "Panggilan",
+            "seconds": "{seconds} dtk",
+            "minutes": "{minutes} mnt",
+            "outcome": {
+              "connected": "Tersambung",
+              "noAnswer": "Tidak dijawab",
+              "busy": "Sibuk",
+              "voicemail": "Meninggalkan pesan suara",
+              "wrongNumber": "Nomor salah",
+              "declined": "Ditolak",
+              "failed": "Gagal",
+              "inProgress": "Sedang berlangsung"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Dicatat",
+              "telephony": "Sistem telepon",
+              "mobile_app": "Aplikasi seluler",
+              "web_click_to_call": "Telepon"
+            }
+          },
+          "message": {
+            "summary": "Percakapan di {channel}",
+            "unread": "{count} belum dibaca"
+          },
+          "email": {
+            "sent": "Email terkirim: {title}",
+            "received": "Email diterima: {title}"
+          },
+          "change": {
+            "stage": "Tahap berubah dari {from} ke {to}",
+            "field": "{field} berubah dari {from} ke {to}",
+            "stageAndMore": "Tahap berubah dari {from} ke {to}, dan {count, plural, other {# detail lagi}}",
+            "several": "{count, plural, other {# detail}} diperbarui"
+          },
+          "consent": {
+            "granted": "Persetujuan {channel} diberikan",
+            "withdrawn": "Persetujuan {channel} dicabut",
+            "service": "Pesan layanan",
+            "marketing": "Pesan pemasaran"
+          },
+          "by": "oleh {name}",
+          "system": "Sistem"
+        }
+      }
+    }
+  }
+}
