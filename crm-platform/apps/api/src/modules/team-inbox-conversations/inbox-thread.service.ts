@@ -352,6 +352,7 @@ export class InboxThreadService {
         );
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
+      this.access.assertNotAssignedToOther(ctx, record);
     });
     return (
       await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
@@ -368,5 +369,6 @@ export class InboxThreadService {
     if (!record) throw conversationNotFound();
     this.access.assertVisible(viewer, record);
     await this.access.assertCan(tx, ctx, PERM.reply, record);
+    this.access.assertNotAssignedToOther(ctx, record);
   }
 }

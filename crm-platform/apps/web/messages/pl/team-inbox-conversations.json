@@ -166,6 +166,7 @@
       "mediaNotFound": "Załącznik wygasł lub został usunięty. Dołącz go ponownie.",
       "statusInvalid": "Ta zmiana nie jest dozwolona przy obecnym statusie rozmowy.",
       "assigneeInvalid": "Tej osoby nie można przypisać do tej rozmowy.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "simulatorDisabled": "Symulator kanałów jest wyłączony na tym serwerze.",
@@ -316,6 +317,7 @@
         "sendTemplate": "Wyślij szablon"
       },
       "readOnly": "Możesz czytać tę rozmowę, ale nie masz uprawnień do odpowiadania.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
       "messagesLabel": "Wiadomości",
       "loadOlder": "Wczytaj wcześniejsze wiadomości",
