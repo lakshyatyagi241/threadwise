@@ -71,7 +71,8 @@ export class WebhookFanoutService {
             jobId: forwardJobId(t.id, input.rawBody),
             attempts: t.maxAttempts,
             backoff: FORWARD_BACKOFF,
-            removeOnComplete: { count: 500, age: 3600 },
+            // The job carries the raw webhook body (message text, phone numbers): drop it once delivered. A failed one stays a day to debug.
+            removeOnComplete: true,
             removeOnFail: { count: 500, age: 24 * 3600 },
           },
         })),
