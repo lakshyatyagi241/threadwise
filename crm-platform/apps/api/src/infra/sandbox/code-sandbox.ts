@@ -7,7 +7,10 @@ import { Worker } from 'node:worker_threads';
  * inputs go in as a JSON string parsed INSIDE the context and the result comes out as a JSON string, so no host object or host
  * constructor chain is ever reachable (`constructor.constructor('return process')()` finds the context's own `Function`, whose global
  * has no `process`); a wall-clock limit on synchronous code (`vm` timeout, with microtasks run inside it) and a hard kill of the worker
- * a second after that; a heap cap per worker (`resourceLimits`), so a runaway allocation kills the worker and not the API.
+ * a second after that; a heap cap per worker (`resourceLimits`), so a runaway allocation kills the worker and not the API; a cap on how
+ * many workers run at once (SANDBOX_MAX_CONCURRENT, default 4) with a bounded queue (SANDBOX_MAX_QUEUED, default 200), so many flows cannot burn every core of the API
+ * at the same time; and no `SharedArrayBuffer`, `Atomics` or `WebAssembly` in the context (no feature needs them, and they are the
+ * usual building blocks of timing side channels).
  *
  * What it does NOT give (the honest ceiling): `node:vm` is not a security boundary against a determined attacker (a V8 escape would
  * land in the worker, which shares the process, the filesystem and the network of the API; it holds no secrets and no database
@@ -30,6 +33,7 @@ const clamp = (n: number, lo: number, hi: number): number => Math.min(Math.max(n
 
 /** The author's code is the body of a function: `return` the value. Inputs are the three names Reference gave it. */
 const wrap = (code: string): string => `
+  delete globalThis.SharedArrayBuffer; delete globalThis.Atomics; delete globalThis.WebAssembly;
   (function () {
     var __ctx = JSON.parse(__inputs);
     var previousResponse = __ctx.previousResponse;
@@ -61,10 +65,64 @@ const WORKER_SOURCE = `
   }
 `;
 
-export function runUserCode(
+/** How many sandbox workers may run at once, read per call so a deployment (or a test) can change it without a restart. */
+const maxConcurrent = (): number =>
+  clamp(Math.trunc(Number(process.env.SANDBOX_MAX_CONCURRENT)) || 4, 1, 32);
+/** A run that would have to wait behind more than this many others, or longer than this, is refused instead of piling up. */
+const maxQueued = (): number =>
+  clamp(Math.trunc(Number(process.env.SANDBOX_MAX_QUEUED)) || 200, 1, 10_000);
+const MAX_QUEUE_WAIT_MS = 15_000;
+
+let running = 0;
+const waiting: Array<{ go: () => void; timer: NodeJS.Timeout }> = [];
+
+const acquire = (): Promise<boolean> => {
+  if (running < maxConcurrent()) {
+    running += 1;
+    return Promise.resolve(true);
+  }
+  if (waiting.length >= maxQueued()) return Promise.resolve(false);
+  return new Promise<boolean>((resolve) => {
+    const entry = {
+      go: () => {
+        clearTimeout(entry.timer);
+        running += 1;
+        resolve(true);
+      },
+      timer: setTimeout(() => {
+        waiting.splice(waiting.indexOf(entry), 1);
+        resolve(false);
+      }, MAX_QUEUE_WAIT_MS),
+    };
+    waiting.push(entry);
+  });
+};
+
+const release = (): void => {
+  running -= 1;
+  waiting.shift()?.go();
+};
+
+export async function runUserCode(
   code: string,
   inputs: Record<string, unknown>,
   options: SandboxOptions = {},
+): Promise<SandboxResult> {
+  if (code.trim() === '') return { ok: true, error: null, result: null };
+  if (!(await acquire())) {
+    return { ok: false, error: 'Code sandbox is busy, try again shortly', result: null };
+  }
+  try {
+    return await execute(code, inputs, options);
+  } finally {
+    release();
+  }
+}
+
+function execute(
+  code: string,
+  inputs: Record<string, unknown>,
+  options: SandboxOptions,
 ): Promise<SandboxResult> {
   const timeoutMs = clamp(Math.trunc(options.timeoutMs ?? 2000) || 2000, 100, 10_000);
   const memoryMb = clamp(Math.trunc(options.memoryMb ?? 16) || 16, 8, 128);
