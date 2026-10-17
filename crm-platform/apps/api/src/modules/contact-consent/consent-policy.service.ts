@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
+import { rawIdentifier } from '../../common/sql/identifier';
 import { minorRuleOf, type MinorRule } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ConsentSettingsService } from './consent-settings.service';
@@ -51,7 +52,7 @@ export class ConsentPolicyService {
 
 /** SQL predicate on a `contacts` alias: has a recorded marketing grant on the channel. Used only when the switch is ON. */
 export function hasGrantedConsentSql(alias: string, channel = 'whatsapp'): SQL {
-  const a = sql.raw(alias);
+  const a = rawIdentifier(alias);
   return sql`EXISTS (
     SELECT 1 FROM contact_consent_state cs
     WHERE cs.org_id = ${a}.org_id AND cs.contact_id = ${a}.id AND cs.channel = ${channel}
