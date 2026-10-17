@@ -316,6 +316,7 @@
         "sendTemplate": "テンプレートを送信"
       },
       "readOnly": "この会話は閲覧できますが、返信する権限がありません。",
+      "resolvedBanner": "この会話は解決済みです。返信するには再開してください。",
       "typing": "{count, plural, other {# 人のチームメイトが入力中}}",
       "messagesLabel": "メッセージ",
       "loadOlder": "以前のメッセージを読み込む",

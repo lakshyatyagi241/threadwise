@@ -316,6 +316,7 @@
         "sendTemplate": "Enviar um modelo"
       },
       "readOnly": "Você pode ler esta conversa, mas não tem permissão para responder.",
+      "resolvedBanner": "Esta conversa foi resolvida. Reabra-a para responder.",
       "typing": "{count, plural, one {Um membro da equipe está digitando} other {# membros da equipe estão digitando}}",
       "messagesLabel": "Mensagens",
       "loadOlder": "Carregar mensagens anteriores",

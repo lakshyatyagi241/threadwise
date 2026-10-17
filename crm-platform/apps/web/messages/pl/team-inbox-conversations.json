@@ -316,6 +316,7 @@
         "sendTemplate": "Wyślij szablon"
       },
       "readOnly": "Możesz czytać tę rozmowę, ale nie masz uprawnień do odpowiadania.",
+      "resolvedBanner": "Ta rozmowa jest rozwiązana. Otwórz ją ponownie, aby odpowiedzieć.",
       "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
       "messagesLabel": "Wiadomości",
       "loadOlder": "Wczytaj wcześniejsze wiadomości",

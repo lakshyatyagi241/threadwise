@@ -316,6 +316,7 @@
         "sendTemplate": "Invia un template"
       },
       "readOnly": "Puoi leggere questa conversazione, ma non hai l’autorizzazione per rispondere.",
+      "resolvedBanner": "Questa conversazione è risolta. Riaprila per rispondere.",
       "typing": "{count, plural, one {Un collega sta scrivendo} other {# colleghi stanno scrivendo}}",
       "messagesLabel": "Messaggi",
       "loadOlder": "Carica messaggi precedenti",

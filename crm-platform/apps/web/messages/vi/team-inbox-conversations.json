@@ -316,6 +316,7 @@
         "sendTemplate": "Gửi mẫu tin nhắn"
       },
       "readOnly": "Bạn có thể đọc cuộc trò chuyện này nhưng không có quyền trả lời.",
+      "resolvedBanner": "Cuộc trò chuyện này đã được giải quyết. Hãy mở lại để trả lời.",
       "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
       "messagesLabel": "Tin nhắn",
       "loadOlder": "Tải tin nhắn trước đó",

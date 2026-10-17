@@ -316,6 +316,7 @@
         "sendTemplate": "Enviar una plantilla"
       },
       "readOnly": "Puedes leer esta conversación, pero no tienes permiso para responder.",
+      "resolvedBanner": "Esta conversación está resuelta. Reábrela para responder.",
       "typing": "{count, plural, one {Un compañero está escribiendo} other {# compañeros están escribiendo}}",
       "messagesLabel": "Mensajes",
       "loadOlder": "Cargar mensajes anteriores",

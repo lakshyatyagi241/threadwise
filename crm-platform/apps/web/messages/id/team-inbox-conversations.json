@@ -316,6 +316,7 @@
         "sendTemplate": "Kirim templat"
       },
       "readOnly": "Anda dapat membaca percakapan ini tetapi tidak memiliki izin untuk membalas.",
+      "resolvedBanner": "Percakapan ini sudah diselesaikan. Buka kembali untuk membalas.",
       "typing": "{count, plural, other {# anggota tim sedang mengetik}}",
       "messagesLabel": "Pesan",
       "loadOlder": "Muat pesan sebelumnya",

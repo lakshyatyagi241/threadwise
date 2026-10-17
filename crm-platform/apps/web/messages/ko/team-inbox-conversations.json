@@ -316,6 +316,7 @@
         "sendTemplate": "템플릿 보내기"
       },
       "readOnly": "이 대화는 볼 수 있지만 답장할 권한이 없습니다.",
+      "resolvedBanner": "이 대화는 해결되었습니다. 답장하려면 다시 여세요.",
       "typing": "{count, plural, other {팀원 #명이 입력 중입니다}}",
       "messagesLabel": "메시지",
       "loadOlder": "이전 메시지 불러오기",

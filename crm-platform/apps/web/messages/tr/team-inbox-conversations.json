@@ -316,6 +316,7 @@
         "sendTemplate": "Şablon gönder"
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
+      "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
       "loadOlder": "Önceki mesajları yükle",

@@ -316,6 +316,7 @@
         "sendTemplate": "Vorlage senden"
       },
       "readOnly": "Sie können diese Unterhaltung lesen, aber Sie sind nicht berechtigt zu antworten.",
+      "resolvedBanner": "Diese Unterhaltung ist gelöst. Öffnen Sie sie erneut, um zu antworten.",
       "typing": "{count, plural, one {Ein Teammitglied schreibt} other {# Teammitglieder schreiben}}",
       "messagesLabel": "Nachrichten",
       "loadOlder": "Frühere Nachrichten laden",
