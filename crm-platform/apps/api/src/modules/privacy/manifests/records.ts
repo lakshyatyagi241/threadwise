@@ -51,6 +51,18 @@ export const leadsRecords = defineHolder({
       retention: 'The raw payload is purged on its own schedule (payload_expires_at).',
     },
     {
+      table: 'lead_first_replies',
+      link: CONTACT,
+      disposition: 'fk_null',
+      parent: 'contacts',
+      reason:
+        'The record of the automatic first message to a new lead (speed to lead): channel, status, timing and a reason code. It holds no message text and no address (the message is rendered at send time), so the foreign key unlinks it from the contact when the contact is deleted and the row stays as the record of what was decided.',
+      tier: 'core',
+      categories: ['communications'],
+      pii: [],
+      retention: 'Forever; one row per lead event. Final rows are not touched again.',
+    },
+    {
       table: 'incoming_webhook_events',
       link: { by: 'contact', column: 'lead_contact_id' },
       disposition: 'anonymise',
