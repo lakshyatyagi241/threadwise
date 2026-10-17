@@ -44,8 +44,6 @@
         "editJobTitle": "Jobtitel bearbeiten",
         "jobTitleConflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
         "jobTitleFailed": "Der Jobtitel konnte nicht gespeichert werden. Versuchen Sie es erneut.",
-        "leadScore": "Lead-Score",
-        "leadScoreAria": "Lead-Score {score}. Details zum Score anzeigen.",
         "owner": "Verantwortlicher"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "Marketing erlaubt",
         "noFlags": "Keine Datenschutzmarkierungen"
       },
-      "overview": {
-        "information": "Kontakt"
-      },
+      "overview": {},
       "tabs": {
         "info": "Kontaktinformationen",
         "social": "Soziale Medien",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "Zurück zur Liste",
         "label": "Kontaktbereiche",
-        "contactDetails": "Kontaktdetails",
         "related": "Verknüpft",
         "section": {
           "overview": "Übersicht",
@@ -172,11 +167,8 @@
         "title": "Lebenszyklus",
         "stages": "Lebenszyklusphase",
         "status": "Status",
-        "noStatuses": "Diese Phase hat keine Status.",
-        "statusChanged": "Status auf {status} gesetzt.",
         "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
-        "forbidden": "Sie haben keine Berechtigung, diesen Kontakt zu ändern.",
-        "statusFailed": "Der Status konnte nicht geändert werden. Versuchen Sie es erneut."
+        "forbidden": "Sie haben keine Berechtigung, diesen Kontakt zu ändern."
       }
     }
   }

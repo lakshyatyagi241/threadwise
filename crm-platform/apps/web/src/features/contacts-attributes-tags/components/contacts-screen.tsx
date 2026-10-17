@@ -31,7 +31,6 @@ import {
   KEYS,
   useContactsPage,
   useContactStats,
-  updateContact,
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';
@@ -96,9 +95,8 @@ import type { SegmentOption, SegmentsState } from './segment-picker';
 import { SelectionBar } from './selection-bar';
 import { DedupeDialog } from './dedupe-dialog';
 import { ErrorLine } from './error-line';
-import { LostReasonDialog, type LostPrompt } from './lost-reason';
-import { isLostStage } from '../lib/stage-flow';
-import { statusAfterMove, statusNotice } from '../lib/status-scope';
+import { useStageMove } from './use-stage-move';
+import { statusAfterMove } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
 import { ViewsBar } from './views-bar';
@@ -178,7 +176,8 @@ export function ContactsScreen() {
   /** A request to put the cursor in an inline composer of the quick view (the row's quick add, the action bar's buttons). */
   const [focus, setFocus] = useState<FocusRequest | null>(null);
   const askFocus = useCallback(
-    (target: AddTarget | null) => setFocus(target ? { target, n: Date.now() } : null),
+    (target: AddTarget | null, clickedAt?: number) =>
+      setFocus(target ? { target, n: Date.now(), ...(clickedAt ? { clickedAt } : {}) } : null),
     [],
   );
   /** Changing any filter, the sort or the page size starts again from page 1 and closes the quick view; only `page` keeps the position. */
@@ -431,8 +430,9 @@ export function ContactsScreen() {
     setPickerRow(null);
   };
   const [busy, setBusy] = useState(false);
-  const [stageBusy, setStageBusy] = useState<string | null>(null);
-  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
+  // Every stage move of the list and the board (the cell's picker, a dragged card) is the shared one: optimistic, with undo.
+  const stageMove = useStageMove();
+  const stageBusy = stageMove.busyId;
   const [exporting, setExporting] = useState(false);
   const deleteTarget = rows.find((r) => r.id === deleteId);
 
@@ -547,57 +547,20 @@ export function ContactsScreen() {
     return true;
   }
 
-  /** The stage cell's menu: saves the new stage of one contact, with the row version the table last read. */
-  async function changeStage(
-    id: string,
-    stage: string,
-    reason?: { lostReason?: string | null; otherLostReason?: string | null },
-  ) {
+  /** The stage cell's picker and the board: moves one contact, with the row version the table last read. */
+  function changeStage(id: string, stage: string, status?: string | null) {
     const row = rows.find((r) => r.id === id);
     if (!row) return;
-    // A lost stage asks why first; nothing is saved until the dialog gives a reason.
-    if (!reason && isLostStage(stages, stage)) {
-      setLostPrompt({
-        contactId: id,
-        contactName: row.name ?? '',
-        stageValue: stage,
-        stageLabel: stages.find((x) => x.value === stage)?.label ?? stage,
-      });
-      return;
-    }
-    setStageBusy(id);
-    try {
-      const saved = await updateContact(id, {
-        lifecycleStage: stage,
-        ...reason,
+    void stageMove.move(
+      {
+        id,
+        name: row.name ?? '',
         rowVersion: row.rowVersion,
-      });
-      setLostPrompt(null);
-      await refresh();
-      // The API keeps the status valid for the stage: say what happened to it, from its answer.
-      const stageName = stages.find((x) => x.value === stage)?.label ?? stage;
-      const notice = statusNotice(row.status, saved.status);
-      toast(
-        notice.kind === 'none'
-          ? ts('changed', { stage: stageName })
-          : notice.kind === 'cleared'
-            ? ts('changedStatusCleared', { stage: stageName })
-            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
-                stage: stageName,
-                status: statuses.find((x) => x.value === notice.status)?.label ?? notice.status,
-              }),
-        'success',
-      );
-    } catch (e) {
-      const kind = errorKind(e);
-      toast(
-        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
-        'danger',
-      );
-      if (kind === 'conflict') await refresh();
-    } finally {
-      setStageBusy(null);
-    }
+        stage: row.lifecycleStage || null,
+        status: row.status || null,
+      },
+      { stage, status },
+    );
   }
 
   async function onDeleteOne() {
@@ -704,9 +667,11 @@ export function ContactsScreen() {
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
     stageChoices: stages,
     onStageChange: canUpdate
-      ? (id: string, stage: string) => void changeStage(id, stage)
+      ? (id: string, stage: string, status?: string | null) => changeStage(id, stage, status)
       : undefined,
     stageBusyId: stageBusy,
+    stageStatusesOf: stageMove.statusesOf,
+    stageDefaultStatusOf: stageMove.defaultStatusOf,
     // Under each stage of the menu: what moving there would do to the contact's status.
     stageStatusHint: (status: string, stage: string) => {
       const move = statusAfterMove(statusOptions.data, status || null, stage);
@@ -1115,7 +1080,7 @@ export function ContactsScreen() {
             goQuick(id, quickPanel, 'replace');
           }}
           onPanel={(section, opts) => {
-            askFocus(opts?.focus ?? null);
+            askFocus(opts?.focus ?? null, opts?.clickedAt);
             goQuick(quickId, section, 'replace');
           }}
           onClose={() => {
@@ -1129,12 +1094,7 @@ export function ContactsScreen() {
           contact={formFor === 'new' || formFor === null ? undefined : formFor}
           onClose={() => setFormFor(null)}
         />
-        <LostReasonDialog
-          prompt={lostPrompt}
-          busy={stageBusy !== null}
-          onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
-          onClose={() => setLostPrompt(null)}
-        />
+        <>{stageMove.dialog}</>
         <BulkUpdateDialog
           open={updateOpen !== null}
           count={sel.allMatching ? (total ?? null) : sel.ids.size}

@@ -21,8 +21,11 @@ interface ToastItem {
 }
 
 interface ToastApi {
-  /** Shows a message; success and info fade after 5 s, errors stay 9 s. Returns an id for `dismiss`. */
-  toast: (message: ReactNode, tone?: ToastTone) => number;
+  /**
+   * Shows a message; success and info fade after 5 s, errors stay 9 s (`durationMs` changes that: an "Undo" stays longer).
+   * Returns an id for `dismiss`.
+   */
+  toast: (message: ReactNode, tone?: ToastTone, opts?: { durationMs?: number }) => number;
   dismiss: (id: number) => void;
 }
 
@@ -56,12 +59,12 @@ export function ToastProvider({
   }, []);
 
   const toast = useCallback(
-    (message: ReactNode, tone: ToastTone = 'success') => {
+    (message: ReactNode, tone: ToastTone = 'success', opts?: { durationMs?: number }) => {
       const id = ++seq.current;
       setItems((cur) => [...cur.slice(-3), { id, message, tone }]);
       timers.current.set(
         id,
-        setTimeout(() => dismiss(id), LIFETIME_MS[tone]),
+        setTimeout(() => dismiss(id), opts?.durationMs ?? LIFETIME_MS[tone]),
       );
       return id;
     },

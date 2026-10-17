@@ -11,12 +11,12 @@ export const FIELD_HISTORY_KEY = (contactId: string) =>
  * per changed field. Needs `record.contacts.read` (the caller already has it to see the contact). The history is fetched when
  * the component using this hook mounts, which for the drawer is when it is opened.
  */
-export function useFieldHistory(contactId: string) {
+export function useFieldHistory(contactId: string, enabled = true) {
   return useCursorList(
     FIELD_HISTORY_KEY(contactId),
     `/contacts/${contactId}/field-history`,
     fieldHistoryEntrySchema,
     { limit: 50 },
-    { retry: 0, retryDelay: 0 },
+    { retry: 0, retryDelay: 0, enabled },
   );
 }

@@ -44,8 +44,6 @@
         "editJobTitle": "编辑职位",
         "jobTitleConflict": "其他人已先更改了此联系人。已重新加载，请重试。",
         "jobTitleFailed": "无法保存职位。请重试。",
-        "leadScore": "线索评分",
-        "leadScoreAria": "线索评分 {score}。显示评分详情。",
         "owner": "负责人"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "允许营销",
         "noFlags": "无隐私标记"
       },
-      "overview": {
-        "information": "联系人"
-      },
+      "overview": {},
       "tabs": {
         "info": "联系人信息",
         "social": "社交媒体",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "返回列表",
         "label": "联系人分区",
-        "contactDetails": "联系人详情",
         "related": "相关",
         "section": {
           "overview": "概览",
@@ -172,11 +167,8 @@
         "title": "生命周期",
         "stages": "生命周期阶段",
         "status": "状态",
-        "noStatuses": "该阶段没有状态。",
-        "statusChanged": "状态已设为 {status}。",
         "conflict": "其他人已先更改了此联系人。已重新加载，请重试。",
-        "forbidden": "您没有更改此联系人的权限。",
-        "statusFailed": "无法更改状态。请重试。"
+        "forbidden": "您没有更改此联系人的权限。"
       }
     }
   }

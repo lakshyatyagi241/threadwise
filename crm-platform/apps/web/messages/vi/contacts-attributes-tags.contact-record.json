@@ -1,0 +1,251 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Các mục của liên hệ",
+          "section": {
+            "overview": "Tổng quan",
+            "activities": "Hoạt động",
+            "conversations": "Hội thoại",
+            "notes": "Ghi chú",
+            "tasks": "Tác vụ",
+            "meetings": "Cuộc họp",
+            "files": "Tệp",
+            "deals": "Giao dịch",
+            "appointments": "Lịch hẹn",
+            "sales": "Hóa đơn",
+            "company": "Công ty",
+            "details": "Chi tiết",
+            "stats": "Thống kê",
+            "lead-source": "Nguồn",
+            "consent": "Sự đồng ý",
+            "history": "Lịch sử"
+          },
+          "more": "Thêm",
+          "moreLabel": "Các mục khác"
+        },
+        "actions": {
+          "label": "Những việc bạn có thể làm với liên hệ này",
+          "call": "Gọi",
+          "callWhatsapp": "Gọi qua WhatsApp",
+          "callPhone": "Gọi bằng điện thoại của bạn",
+          "logCall": "Ghi lại cuộc gọi",
+          "callMore": "Các cách gọi khác",
+          "message": "Nhắn tin",
+          "messageChat": "Mở cuộc trò chuyện WhatsApp",
+          "messageTemplate": "Gửi mẫu WhatsApp",
+          "messageEmail": "Gửi email",
+          "messageMore": "Các cách nhắn khác",
+          "fieldHistory": "Lịch sử trường",
+          "more": "Thêm"
+        },
+        "stageStrip": {
+          "noStatus": "Không có trạng thái"
+        },
+        "keyDetails": {
+          "editAll": "Sửa tất cả",
+          "edit": "Sửa {field}",
+          "add": "Thêm {field}",
+          "conflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
+          "invalid": "Có vẻ đây không phải là {field} hợp lệ.",
+          "forbidden": "Bạn không có quyền thay đổi liên hệ này.",
+          "failed": "Không thể lưu. Hãy thử lại.",
+          "owner": "Người phụ trách",
+          "city": "Thành phố",
+          "showAll": "Hiện tất cả chi tiết",
+          "showLess": "Thu gọn",
+          "social": "Mạng xã hội",
+          "leadSource": "Liên hệ này đến từ đâu",
+          "aboutTitle": "Về liên hệ này"
+        },
+        "cards": {
+          "company": "Công ty",
+          "companyNone": "Chưa có",
+          "timezone": "Múi giờ và vị trí",
+          "timezoneNone": "Chưa biết",
+          "privacy": "Quyền riêng tư",
+          "privacyMinor": "Chưa thành niên",
+          "score": "Điểm khách hàng tiềm năng",
+          "scoreNone": "Chưa chấm điểm",
+          "label": "Liên quan đến liên hệ này",
+          "tasks": "Tác vụ đang mở",
+          "tasksNone": "Không có gì đang chờ.",
+          "deals": "Giao dịch",
+          "dealsNone": "Chưa có giao dịch.",
+          "add": "+ Thêm",
+          "viewAll": "Xem tất cả"
+        },
+        "compose": {
+          "label": "Thêm vào hoạt động",
+          "tabs": "Thêm gì",
+          "tab": {
+            "note": "Ghi chú",
+            "task": "Tác vụ",
+            "call": "Cuộc gọi",
+            "meeting": "Cuộc họp"
+          }
+        },
+        "logCall": {
+          "label": "Ghi lại cuộc gọi",
+          "direction": "Ai đã gọi",
+          "directionOption": {
+            "outbound": "Tôi gọi họ",
+            "inbound": "Họ gọi tôi"
+          },
+          "minutesPlaceholder": "Tùy chọn",
+          "notesPlaceholder": "Đã nói gì? (tùy chọn)",
+          "duePreset": {
+            "1": "Ngày mai",
+            "3": "3 ngày nữa",
+            "7": "Một tuần nữa"
+          },
+          "saved": "Đã ghi lại cuộc gọi.",
+          "forbidden": "Bạn không có quyền ghi lại cuộc gọi.",
+          "unavailable": "Tính năng ghi lại cuộc gọi chưa có ở đây.",
+          "failed": "Không thể ghi lại cuộc gọi. Không mất gì cả: hãy thử lại."
+        },
+        "callNudge": {
+          "question": "Cuộc gọi với {name} thế nào?",
+          "log": "Ghi lại",
+          "dismiss": "Để sau"
+        },
+        "profile": {
+          "label": "Hồ sơ liên hệ"
+        },
+        "stagePicker": {
+          "menu": "Chọn giai đoạn",
+          "search": "Tìm giai đoạn",
+          "none": "Không có giai đoạn nào khớp.",
+          "moveTo": "Chuyển sang {stage}",
+          "statusIn": "Trạng thái trong {stage}",
+          "default": "mặc định",
+          "progress": "{current} trên {total}",
+          "undo": "Hoàn tác",
+          "undone": "Đã chuyển lại về {stage}.",
+          "statusSet": "Đã đặt trạng thái thành {status}.",
+          "prefix": "Giai đoạn"
+        },
+        "summary": {
+          "label": "Tóm tắt",
+          "tasks": "Tác vụ đang mở",
+          "overdue": "{count} quá hạn",
+          "nextDue": "Hạn tiếp theo {when}",
+          "noDue": "Không có hạn",
+          "meeting": "Cuộc họp tiếp theo",
+          "noMeeting": "Chưa lên kế hoạch",
+          "lastActivity": "Hoạt động gần nhất",
+          "noActivity": "Chưa có hoạt động",
+          "deals": "Giao dịch đang mở",
+          "wonDeals": "{count, plural, =0 {chưa thắng} other {thắng #}}"
+        },
+        "scoreChip": {
+          "title": "Điểm khách hàng tiềm năng {score} · {band}",
+          "aria": "Điểm khách hàng tiềm năng {score}, {band}. Xem chi tiết điểm."
+        }
+      },
+      "timeline": {
+        "title": "Hoạt động",
+        "viewAll": "Xem tất cả hoạt động",
+        "filterLabel": "Hiển thị",
+        "filters": {
+          "all": "Tất cả",
+          "messages": "Tin nhắn",
+          "calls": "Cuộc gọi",
+          "notes": "Ghi chú",
+          "tasks": "Tác vụ",
+          "meetings": "Cuộc họp",
+          "changes": "Thay đổi"
+        },
+        "searchLabel": "Tìm trong hoạt động của liên hệ này",
+        "searchPlaceholder": "Tìm hoạt động",
+        "clearSearch": "Xóa tìm kiếm",
+        "searchHint": "Chỉ tìm trong phần đã tải. Tải thêm để xem xa hơn về trước.",
+        "groups": {
+          "upNext": "Sắp tới",
+          "today": "Hôm nay",
+          "yesterday": "Hôm qua",
+          "thisWeek": "Tuần này",
+          "earlier": "Trước đó"
+        },
+        "loading": "Đang tải hoạt động...",
+        "loadMore": "Tải thêm",
+        "noMatch": "Không có kết quả phù hợp.",
+        "emptyShort": "Chưa có gì ở đây.",
+        "showAll": "Hiện tất cả hoạt động",
+        "noneYet": "Chưa có gì mới hơn. Tải thêm để xem xa hơn về trước.",
+        "partial": "Không tải được một phần hoạt động.",
+        "retry": "Thử lại",
+        "empty": {
+          "title": "Chưa có hoạt động",
+          "message": "Mọi việc bạn làm với {name} sẽ hiện ở đây: ghi chú, cuộc gọi, tin nhắn, tác vụ và cuộc họp.",
+          "messageNoName": "Mọi việc bạn làm với liên hệ này sẽ hiện ở đây: ghi chú, cuộc gọi, tin nhắn, tác vụ và cuộc họp.",
+          "note": "Thêm ghi chú",
+          "call": "Ghi lại cuộc gọi",
+          "task": "Thêm tác vụ",
+          "meeting": "Lên lịch cuộc họp"
+        },
+        "entry": {
+          "note": "Ghi chú: {text}",
+          "edited": "Đã sửa",
+          "task": {
+            "done": "Đã xong tác vụ: {title}",
+            "overdue": "Quá hạn, hạn là {when}",
+            "due": "Hạn {when}",
+            "noDue": "Không có hạn"
+          },
+          "meeting": {
+            "upcoming": "Cuộc họp: {title}",
+            "past": "Đã gặp: {title}"
+          },
+          "call": {
+            "inbound": "Cuộc gọi đến",
+            "outbound": "Cuộc gọi đi",
+            "call": "Cuộc gọi",
+            "seconds": "{seconds} giây",
+            "minutes": "{minutes} phút",
+            "outcome": {
+              "connected": "Đã kết nối",
+              "noAnswer": "Không trả lời",
+              "busy": "Máy bận",
+              "voicemail": "Đã để lại thư thoại",
+              "wrongNumber": "Sai số",
+              "declined": "Bị từ chối",
+              "failed": "Thất bại",
+              "inProgress": "Đang diễn ra"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Ghi thủ công",
+              "telephony": "Hệ thống điện thoại",
+              "mobile_app": "Ứng dụng di động",
+              "web_click_to_call": "Điện thoại"
+            }
+          },
+          "message": {
+            "summary": "Hội thoại trên {channel}",
+            "unread": "{count} chưa đọc"
+          },
+          "email": {
+            "sent": "Đã gửi email: {title}",
+            "received": "Đã nhận email: {title}"
+          },
+          "change": {
+            "stage": "Giai đoạn đổi từ {from} sang {to}",
+            "field": "{field} đổi từ {from} sang {to}",
+            "stageAndMore": "Giai đoạn đổi từ {from} sang {to}, và {count, plural, other {# chi tiết nữa}}",
+            "several": "Đã cập nhật {count, plural, other {# chi tiết}}"
+          },
+          "consent": {
+            "granted": "Đã cấp sự đồng ý {channel}",
+            "withdrawn": "Đã rút sự đồng ý {channel}",
+            "service": "Tin nhắn dịch vụ",
+            "marketing": "Tin nhắn tiếp thị"
+          },
+          "by": "bởi {name}",
+          "system": "Hệ thống"
+        }
+      }
+    }
+  }
+}

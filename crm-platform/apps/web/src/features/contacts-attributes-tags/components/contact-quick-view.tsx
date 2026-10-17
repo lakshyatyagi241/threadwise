@@ -13,7 +13,7 @@ import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import { neighbourKey } from '../lib/quick-view';
 import {
-  SECTION_OF_TARGET,
+  ACTION_SECTION,
   quickTabs,
   sectionHref,
   type AddTarget,
@@ -21,8 +21,10 @@ import {
   type QuickSection,
   type SectionId,
 } from '../lib/sections';
+import { CatProviders } from './cat-providers';
 import { ContactAvatar } from './chips';
 import { ContactActionBar } from './contact/action-bar';
+import { CallNudge } from './contact/call-nudge';
 import { JobTitle, SocialIcons } from './contact/parts';
 import { ContactSection } from './contact/sections';
 import { useStageChange } from './contact/use-stage-change';
@@ -37,7 +39,8 @@ import {
   ExternalLinkIcon,
   XIcon,
 } from './icons';
-import { StageMenu } from './stage-menu';
+import { LeadScoreChip } from './contact/lead-score-chip';
+import { StagePicker } from './stage-picker';
 
 const iconBtn =
   'inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40';
@@ -53,7 +56,7 @@ export interface QuickViewProps {
   /** "3 of 50": where the contact stands among the loaded rows, when it is among them. */
   position: { index: number; total: number } | null;
   onNavigate: (id: string) => void;
-  onPanel: (section: SectionId, opts?: { focus?: AddTarget }) => void;
+  onPanel: (section: SectionId, opts?: { focus?: AddTarget; clickedAt?: number }) => void;
   onClose: () => void;
 }
 
@@ -137,32 +140,41 @@ export function ContactQuickView(p: QuickViewProps) {
       tabIndex={-1}
       className="crm-drawer fixed inset-y-0 start-auto end-0 m-0 h-dvh max-h-none w-[min(72rem,100vw)] max-w-none overflow-hidden outline-none border-s border-border bg-background p-0 text-foreground shadow-2xl backdrop:bg-black/40 lg:w-[60vw]"
     >
-      {open &&
-        (contact.isSuccess ? (
-          <QuickViewBody key={contact.data.id} contact={contact.data} {...p} />
-        ) : (
-          <div className="flex h-full flex-col">
-            <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
-              <p className="text-sm text-muted-foreground" role="status">
-                {contact.isError ? t('notFoundTitle') : t('loading')}
-              </p>
-              <button type="button" className={iconBtn} onClick={p.onClose} aria-label={t('close')}>
-                <XIcon />
-              </button>
-            </header>
-            <div className="flex-1 p-5">
-              {contact.isPending ? (
-                <div role="status" className="flex items-center gap-2 text-muted-foreground">
-                  <Spinner /> {t('loading')}
-                </div>
-              ) : contact.isError && errorKind(contact.error) === 'unavailable' ? (
-                <p className="text-sm text-muted-foreground">{t('notFound')}</p>
-              ) : contact.isError ? (
-                <ErrorLine error={contact.error} onRetry={() => void contact.refetch()} />
-              ) : null}
+      {/* A modal dialog makes everything outside it inert: the drawer hosts its own toasts, so a message (and an Undo) raised here can be read and pressed. */}
+      {open && (
+        <CatProviders>
+          {contact.isSuccess ? (
+            <QuickViewBody key={contact.data.id} contact={contact.data} {...p} />
+          ) : (
+            <div className="flex h-full flex-col">
+              <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
+                <p className="text-sm text-muted-foreground" role="status">
+                  {contact.isError ? t('notFoundTitle') : t('loading')}
+                </p>
+                <button
+                  type="button"
+                  className={iconBtn}
+                  onClick={p.onClose}
+                  aria-label={t('close')}
+                >
+                  <XIcon />
+                </button>
+              </header>
+              <div className="flex-1 p-5">
+                {contact.isPending ? (
+                  <div role="status" className="flex items-center gap-2 text-muted-foreground">
+                    <Spinner /> {t('loading')}
+                  </div>
+                ) : contact.isError && errorKind(contact.error) === 'unavailable' ? (
+                  <p className="text-sm text-muted-foreground">{t('notFound')}</p>
+                ) : contact.isError ? (
+                  <ErrorLine error={contact.error} onRetry={() => void contact.refetch()} />
+                ) : null}
+              </div>
             </div>
-          </div>
-        ))}
+          )}
+        </CatProviders>
+      )}
     </dialog>
   );
 }
@@ -209,6 +221,10 @@ function QuickViewBody({
               <h2 className="min-w-0 truncate text-xl font-semibold leading-tight" dir="auto">
                 {name}
               </h2>
+              <LeadScoreChip
+                contact={contact}
+                onOpen={() => onPanel('overview', { focus: 'score' })}
+              />
               <SocialIcons contact={contact} />
             </div>
             <div className="mt-0.5 min-w-0">
@@ -216,13 +232,17 @@ function QuickViewBody({
             </div>
             <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
               {contact.lifecycleStage && (
-                <StageMenu
+                <StagePicker
                   value={contact.lifecycleStage}
-                  choices={stage.stages}
+                  status={contact.status}
+                  stages={stage.stages}
+                  statusesOf={stage.statusesOf}
+                  defaultStatusOf={stage.defaultStatusOf}
+                  hint={stage.hint}
                   name={name}
                   busy={stage.busy}
-                  statusHint={stage.hint}
-                  onChange={canUpdate ? stage.changeStage : undefined}
+                  readOnly={!canUpdate}
+                  onPick={(s, status) => stage.changeStage(s, status)}
                 />
               )}
               {contact.status && (
@@ -281,11 +301,17 @@ function QuickViewBody({
       <div className="shrink-0 border-b border-border px-4 py-2.5 sm:px-5">
         <ContactActionBar
           contact={contact}
-          // Note, Task, Meeting and Add company stay in the drawer: the tab that holds the composer opens with the cursor in it.
-          onAdd={(target) => onPanel(SECTION_OF_TARGET[target], { focus: target })}
+          // Note, Task, Call, Meeting and Add company stay in the drawer: the tab that holds the composer opens with the cursor in it.
+          onAdd={(target) => onPanel(ACTION_SECTION[target], { focus: target })}
           onDeleted={onClose}
         />
       </div>
+      <CallNudge
+        className="mx-3 mt-2 sm:mx-5"
+        contactId={contact.id}
+        name={name}
+        onLog={(clickedAt) => onPanel('activities', { focus: 'call', clickedAt })}
+      />
 
       <QuickTabs
         contactId={contact.id}
@@ -316,6 +342,7 @@ function QuickViewBody({
           contact={contact}
           variant="drawer"
           focus={focus}
+          onAdd={(target) => onPanel(ACTION_SECTION[target], { focus: target })}
           onOpenSection={(s) => {
             if ((shown as SectionId[]).includes(s)) onPanel(s);
             else router.push(sectionHref(contact.id, s));

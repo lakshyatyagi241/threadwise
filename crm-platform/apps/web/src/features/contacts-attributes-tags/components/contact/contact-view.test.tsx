@@ -1,4 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: () => undefined, replace: () => undefined }),
+  usePathname: () => '/contacts/x',
+  useSearchParams: () => new URLSearchParams(),
+}));
 import {
   makeSession,
   renderAccount,
@@ -6,9 +12,9 @@ import {
 import type { ContactRow } from '../../api/schemas';
 import { ContactQuickView, QuickTabs } from '../contact-quick-view';
 import { NOTE_KEYS } from '../../api/notes';
-import { quickTabs } from '../../lib/sections';
-import { SectionNav } from '../contact-detail';
-import { ComplianceCard, LocationCard, SubscriptionCard } from './cards';
+import { pageTabs, quickTabs } from '../../lib/sections';
+import { ContactTabs } from '../contact-detail';
+import { ComplianceBody, LocationBody, SubscriptionBody } from './cards';
 import { OptInPill, ScoreRing, SocialIcons } from './parts';
 
 /** The quick view's and the details page's own pieces, in English and Arabic, from the real messages (a missing key fails the render). */
@@ -47,13 +53,12 @@ const contact = (over: Partial<ContactRow> = {}) =>
     ...over,
   }) as unknown as ContactRow;
 
-describe('SubscriptionCard', () => {
+describe('SubscriptionBody', () => {
   it('says Yes only for a subscribed channel and No for the others', () => {
     const out = renderAccount(
-      <SubscriptionCard contact={contact({ whatsappSubscriptionStatus: 'subscribed' })} />,
+      <SubscriptionBody contact={contact({ whatsappSubscriptionStatus: 'subscribed' })} />,
       { session: can('contacts.consent.read') },
     );
-    expect(out).toContain('Subscription status');
     expect(out.match(/>Yes</g)).toHaveLength(1);
     expect(out.match(/>No</g)).toHaveLength(2);
     expect(out).toContain('WhatsApp');
@@ -62,7 +67,7 @@ describe('SubscriptionCard', () => {
 
   it('shows every channel as No in red, with the reason, for a contact who opted out', () => {
     const out = renderAccount(
-      <SubscriptionCard
+      <SubscriptionBody
         contact={contact({ whatsappSubscriptionStatus: 'subscribed', isUnsubscribed: true })}
       />,
       { session: can('contacts.consent.read') },
@@ -73,20 +78,20 @@ describe('SubscriptionCard', () => {
   });
 
   it('links to the consent card only for someone who may read it', () => {
-    const withLink = renderAccount(<SubscriptionCard contact={contact()} />, {
+    const withLink = renderAccount(<SubscriptionBody contact={contact()} />, {
       session: can('contacts.consent.read'),
     });
     expect(withLink).toContain(`href="/contacts/${ID}/consent"`);
-    const without = renderAccount(<SubscriptionCard contact={contact()} />, { session: can() });
+    const without = renderAccount(<SubscriptionBody contact={contact()} />, { session: can() });
     expect(without).not.toContain('/consent');
   });
 
   it('reads in Arabic', () => {
-    const out = renderAccount(<SubscriptionCard contact={contact()} />, {
+    const out = renderAccount(<SubscriptionBody contact={contact()} />, {
       locale: 'ar',
       session: can('contacts.consent.read'),
     });
-    expect(out).toContain('حالة الاشتراك');
+    expect(out).toContain('دليل كل موافقة');
   });
 });
 
@@ -124,10 +129,10 @@ describe('ScoreRing and the pills', () => {
   });
 });
 
-describe('LocationCard and ComplianceCard', () => {
+describe('LocationBody and ComplianceBody', () => {
   it('names the country of the number and shows the time zone property', () => {
     const out = renderAccount(
-      <LocationCard
+      <LocationBody
         contact={contact({ customFields: { timezone: 'Asia/Kolkata', address: '12 MG Road' } })}
       />,
       { seed: [[['cat', 'fields', false], []]] },
@@ -139,7 +144,7 @@ describe('LocationCard and ComplianceCard', () => {
 
   it('shows the minor flag from the list row and the opt-out state', () => {
     const out = renderAccount(
-      <ComplianceCard contact={contact({ isMinor: true, isUnsubscribed: true })} />,
+      <ComplianceBody contact={contact({ isMinor: true, isUnsubscribed: true })} />,
       { session: can() },
     );
     expect(out).toContain('Opted out of marketing');
@@ -147,32 +152,52 @@ describe('LocationCard and ComplianceCard', () => {
   });
 });
 
-describe('details page sub-nav', () => {
-  const nav = (current: 'overview' | 'notes', permissions: string[]) =>
+describe('details page tab bar', () => {
+  const bar = (current: 'overview' | 'notes', permissions: string[]) =>
     renderAccount(
-      <SectionNav
+      <ContactTabs
         contactId={ID}
         current={current}
-        core={['overview', 'activities', 'notes']}
-        related={permissions.includes('record.deals.read') ? ['deals', 'consent'] : ['consent']}
+        tabs={pageTabs((p) => permissions.includes(p))}
+        counts={{ activities: 3, deals: 2, files: 0 }}
       />,
       { session: can(...permissions) },
     );
 
-  it('lists the sections with the current one marked and a link each', () => {
-    const out = nav('notes', ['record.deals.read']);
-    expect(out).toContain('Contact details');
-    expect(out).toContain('Related');
+  it('has Overview, Activity and Files, the permitted tabs and a More menu, each tab a link', () => {
+    const out = bar('overview', ['record.deals.read', 'inbox.conversation.read']);
+    for (const name of ['Overview', 'Activity', 'Conversations', 'Deals', 'Files']) {
+      expect(out, name).toContain(`>${name}`);
+    }
     expect(out).toContain(`href="/contacts/${ID}"`);
-    expect(out).toContain(`href="/contacts/${ID}/notes"`);
+    expect(out).toContain(`href="/contacts/${ID}/activities"`);
     expect(out).toContain(`href="/contacts/${ID}/deals"`);
+    expect(out).toContain('aria-label="More sections"');
     expect(out.match(/aria-current="page"/g)).toHaveLength(1);
   });
 
-  it('scrolls sideways on a phone and stacks on a wide screen', () => {
-    const out = nav('overview', []);
+  it('puts a small count on Activity and Deals only, and none for zero', () => {
+    const out = bar('overview', ['record.deals.read']);
+    expect(out).toMatch(/Activity<span[^>]*>3<\/span>/);
+    expect(out).toMatch(/Deals<span[^>]*>2<\/span>/);
+    expect(out).not.toMatch(/Files<span/);
+    expect(out).not.toMatch(/Overview<span/);
+  });
+
+  it('leaves out a tab the person may not open, and names the open section on the menu when it is behind More', () => {
+    const out = bar('overview', []);
+    expect(out).not.toContain('/deals');
+    expect(out).not.toContain('Conversations');
+    const inMore = bar('notes', []);
+    expect(inMore).toContain('Notes');
+    expect(inMore).not.toMatch(/>More</);
+  });
+
+  it('scrolls sideways on a phone without a scroll bar, and sticks to the top of the column', () => {
+    const out = bar('overview', []);
     expect(out).toContain('overflow-x-auto');
-    expect(out).toContain('lg:flex-col');
+    expect(out).toContain('[&amp;::-webkit-scrollbar]:hidden');
+    expect(out).toContain('sticky top-0');
   });
 });
 

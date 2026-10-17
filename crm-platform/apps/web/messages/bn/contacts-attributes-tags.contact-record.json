@@ -1,0 +1,251 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "কন্টাক্টের বিভাগ",
+          "section": {
+            "overview": "ওভারভিউ",
+            "activities": "কার্যকলাপ",
+            "conversations": "কথোপকথন",
+            "notes": "নোট",
+            "tasks": "টাস্ক",
+            "meetings": "মিটিং",
+            "files": "ফাইল",
+            "deals": "ডিল",
+            "appointments": "অ্যাপয়েন্টমেন্ট",
+            "sales": "ইনভয়েস",
+            "company": "কোম্পানি",
+            "details": "বিবরণ",
+            "stats": "পরিসংখ্যান",
+            "lead-source": "উৎস",
+            "consent": "সম্মতি",
+            "history": "ইতিহাস"
+          },
+          "more": "আরও",
+          "moreLabel": "আরও বিভাগ"
+        },
+        "actions": {
+          "label": "এই কন্টাক্টের সঙ্গে আপনি যা করতে পারেন",
+          "call": "কল করুন",
+          "callWhatsapp": "WhatsApp-এ কল করুন",
+          "callPhone": "আপনার ফোন থেকে কল করুন",
+          "logCall": "কল লগ করুন",
+          "callMore": "কল করার অন্য উপায়",
+          "message": "মেসেজ",
+          "messageChat": "WhatsApp চ্যাট খুলুন",
+          "messageTemplate": "WhatsApp টেমপ্লেট পাঠান",
+          "messageEmail": "ইমেইল পাঠান",
+          "messageMore": "লেখার অন্য উপায়",
+          "fieldHistory": "ফিল্ডের ইতিহাস",
+          "more": "আরও"
+        },
+        "stageStrip": {
+          "noStatus": "কোনো স্ট্যাটাস নেই"
+        },
+        "keyDetails": {
+          "editAll": "সব সম্পাদনা করুন",
+          "edit": "{field} সম্পাদনা করুন",
+          "add": "{field} যোগ করুন",
+          "conflict": "অন্য কেউ আগে এই কন্টাক্ট বদলে দিয়েছেন। এটি আবার লোড হয়েছে; আবার চেষ্টা করুন।",
+          "invalid": "এটি সঠিক {field} বলে মনে হচ্ছে না।",
+          "forbidden": "এই কন্টাক্ট বদলানোর অনুমতি আপনার নেই।",
+          "failed": "সেভ করা যায়নি। আবার চেষ্টা করুন।",
+          "owner": "মালিক",
+          "city": "শহর",
+          "showAll": "সব বিবরণ দেখুন",
+          "showLess": "কম দেখান",
+          "social": "সোশ্যাল মিডিয়া",
+          "leadSource": "এই কন্টাক্ট কোথা থেকে এসেছে",
+          "aboutTitle": "এই কন্টাক্ট সম্পর্কে"
+        },
+        "cards": {
+          "company": "কোম্পানি",
+          "companyNone": "এখনও নেই",
+          "timezone": "টাইম জোন ও অবস্থান",
+          "timezoneNone": "এখনও জানা নেই",
+          "privacy": "গোপনীয়তা",
+          "privacyMinor": "নাবালক",
+          "score": "লিড স্কোর",
+          "scoreNone": "এখনও স্কোর হয়নি",
+          "label": "এই কন্টাক্টের সঙ্গে সম্পর্কিত",
+          "tasks": "খোলা টাস্ক",
+          "tasksNone": "কিছুই অপেক্ষায় নেই।",
+          "deals": "ডিল",
+          "dealsNone": "এখনও কোনো ডিল নেই।",
+          "add": "+ যোগ করুন",
+          "viewAll": "সব দেখুন"
+        },
+        "compose": {
+          "label": "কার্যকলাপে যোগ করুন",
+          "tabs": "কী যোগ করবেন",
+          "tab": {
+            "note": "নোট",
+            "task": "টাস্ক",
+            "call": "কল",
+            "meeting": "মিটিং"
+          }
+        },
+        "logCall": {
+          "label": "কল লগ করুন",
+          "direction": "কে কল করেছেন",
+          "directionOption": {
+            "outbound": "আমি কল করেছি",
+            "inbound": "তিনি আমাকে কল করেছেন"
+          },
+          "minutesPlaceholder": "ঐচ্ছিক",
+          "notesPlaceholder": "কী কথা হলো? (ঐচ্ছিক)",
+          "duePreset": {
+            "1": "আগামীকাল",
+            "3": "৩ দিনের মধ্যে",
+            "7": "এক সপ্তাহের মধ্যে"
+          },
+          "saved": "কল লগ হয়েছে।",
+          "forbidden": "কল লগ করার অনুমতি আপনার নেই।",
+          "unavailable": "কল লগ করা এখানে এখনও চালু হয়নি।",
+          "failed": "কল লগ করা যায়নি। কিছুই হারায়নি: আবার চেষ্টা করুন।"
+        },
+        "callNudge": {
+          "question": "{name}-এর সঙ্গে কলটি কেমন হলো?",
+          "log": "লগ করুন",
+          "dismiss": "এখন নয়"
+        },
+        "profile": {
+          "label": "কন্টাক্টের প্রোফাইল"
+        },
+        "stagePicker": {
+          "menu": "একটি ধাপ বেছে নিন",
+          "search": "ধাপ খুঁজুন",
+          "none": "কোনো ধাপ মেলেনি।",
+          "moveTo": "{stage}-এ সরান",
+          "statusIn": "{stage}-এ স্ট্যাটাস",
+          "default": "ডিফল্ট",
+          "progress": "{total}-এর মধ্যে {current}",
+          "undo": "পূর্বাবস্থায় ফেরান",
+          "undone": "{stage}-এ ফিরিয়ে আনা হয়েছে।",
+          "statusSet": "স্ট্যাটাস {status} করা হয়েছে।",
+          "prefix": "ধাপ"
+        },
+        "summary": {
+          "label": "সারসংক্ষেপ",
+          "tasks": "খোলা টাস্ক",
+          "overdue": "{count}টি মেয়াদ পেরিয়েছে",
+          "nextDue": "পরের শেষ তারিখ {when}",
+          "noDue": "কোনো শেষ তারিখ নেই",
+          "meeting": "পরের মিটিং",
+          "noMeeting": "কিছু পরিকল্পিত নেই",
+          "lastActivity": "শেষ কার্যকলাপ",
+          "noActivity": "এখনও কোনো কার্যকলাপ নেই",
+          "deals": "খোলা ডিল",
+          "wonDeals": "{count, plural, =0 {কোনোটি জেতা হয়নি} one {১টি জেতা} other {#টি জেতা}}"
+        },
+        "scoreChip": {
+          "title": "লিড স্কোর {score} · {band}",
+          "aria": "লিড স্কোর {score}, {band}। স্কোরের বিবরণ দেখান।"
+        }
+      },
+      "timeline": {
+        "title": "কার্যকলাপ",
+        "viewAll": "সব কার্যকলাপ দেখুন",
+        "filterLabel": "দেখান",
+        "filters": {
+          "all": "সব",
+          "messages": "মেসেজ",
+          "calls": "কল",
+          "notes": "নোট",
+          "tasks": "টাস্ক",
+          "meetings": "মিটিং",
+          "changes": "পরিবর্তন"
+        },
+        "searchLabel": "এই কন্টাক্টের কার্যকলাপে খুঁজুন",
+        "searchPlaceholder": "কার্যকলাপ খুঁজুন",
+        "clearSearch": "সার্চ মুছুন",
+        "searchHint": "এখন পর্যন্ত যা লোড হয়েছে শুধু তাতেই খোঁজা হচ্ছে। আরও পেছনে দেখতে আরও লোড করুন।",
+        "groups": {
+          "upNext": "এরপর",
+          "today": "আজ",
+          "yesterday": "গতকাল",
+          "thisWeek": "এই সপ্তাহ",
+          "earlier": "আগে"
+        },
+        "loading": "কার্যকলাপ লোড হচ্ছে...",
+        "loadMore": "আরও লোড করুন",
+        "noMatch": "কিছু মেলেনি।",
+        "emptyShort": "এখানে এখনও কিছু নেই।",
+        "showAll": "সব কার্যকলাপ দেখান",
+        "noneYet": "এর চেয়ে নতুন কিছু এখনও নেই। আরও পেছনে দেখতে আরও লোড করুন।",
+        "partial": "কিছু কার্যকলাপ লোড করা যায়নি।",
+        "retry": "আবার চেষ্টা করুন",
+        "empty": {
+          "title": "এখনও কোনো কার্যকলাপ নেই",
+          "message": "{name}-এর সঙ্গে আপনি যা কিছু করবেন তা এখানে দেখা যাবে: নোট, কল, মেসেজ, টাস্ক ও মিটিং।",
+          "messageNoName": "এই কন্টাক্টের সঙ্গে আপনি যা কিছু করবেন তা এখানে দেখা যাবে: নোট, কল, মেসেজ, টাস্ক ও মিটিং।",
+          "note": "নোট যোগ করুন",
+          "call": "কল লগ করুন",
+          "task": "টাস্ক যোগ করুন",
+          "meeting": "মিটিং ঠিক করুন"
+        },
+        "entry": {
+          "note": "নোট: {text}",
+          "edited": "সম্পাদিত",
+          "task": {
+            "done": "টাস্ক শেষ: {title}",
+            "overdue": "মেয়াদ পেরিয়ে গেছে, শেষ তারিখ ছিল {when}",
+            "due": "শেষ তারিখ {when}",
+            "noDue": "কোনো শেষ তারিখ নেই"
+          },
+          "meeting": {
+            "upcoming": "মিটিং: {title}",
+            "past": "দেখা হয়েছে: {title}"
+          },
+          "call": {
+            "inbound": "ইনকামিং কল",
+            "outbound": "আউটগোয়িং কল",
+            "call": "কল",
+            "seconds": "{seconds} সেকেন্ড",
+            "minutes": "{minutes} মিনিট",
+            "outcome": {
+              "connected": "সংযুক্ত হয়েছে",
+              "noAnswer": "উত্তর নেই",
+              "busy": "ব্যস্ত",
+              "voicemail": "ভয়েসমেইল রেখেছেন",
+              "wrongNumber": "ভুল নম্বর",
+              "declined": "প্রত্যাখ্যাত",
+              "failed": "ব্যর্থ",
+              "inProgress": "চলছে"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "হাতে লগ করা",
+              "telephony": "ফোন সিস্টেম",
+              "mobile_app": "মোবাইল অ্যাপ",
+              "web_click_to_call": "ফোন"
+            }
+          },
+          "message": {
+            "summary": "{channel}-এ কথোপকথন",
+            "unread": "{count}টি না পড়া"
+          },
+          "email": {
+            "sent": "ইমেইল পাঠানো হয়েছে: {title}",
+            "received": "ইমেইল এসেছে: {title}"
+          },
+          "change": {
+            "stage": "ধাপ {from} থেকে {to}-এ বদলেছে",
+            "field": "{field} {from} থেকে {to}-এ বদলেছে",
+            "stageAndMore": "ধাপ {from} থেকে {to}-এ বদলেছে, এবং আরও {count, plural, one {১টি বিবরণ} other {#টি বিবরণ}}",
+            "several": "{count, plural, one {১টি বিবরণ} other {#টি বিবরণ}} আপডেট হয়েছে"
+          },
+          "consent": {
+            "granted": "{channel} সম্মতি দেওয়া হয়েছে",
+            "withdrawn": "{channel} সম্মতি প্রত্যাহার করা হয়েছে",
+            "service": "সার্ভিস মেসেজ",
+            "marketing": "মার্কেটিং মেসেজ"
+          },
+          "by": "{name}-এর দ্বারা",
+          "system": "সিস্টেম"
+        }
+      }
+    }
+  }
+}

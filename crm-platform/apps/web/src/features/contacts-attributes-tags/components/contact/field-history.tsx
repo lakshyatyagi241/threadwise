@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { FieldHistoryEntry } from '@crm/contracts';
 import { Button, Drawer, Spinner } from '@crm/ui';
@@ -9,13 +8,12 @@ import { fallbackFieldLabel, historyEntryKey, historyValueText } from '../../lib
 import { titleCaseKey } from '../../lib/contact-model';
 import { formatDateTime } from '../../lib/format';
 import { ErrorLine } from '../error-line';
-import { HistoryIcon } from '../icons';
 import { EmptyLine, Panel } from './shared';
 
-type Translate = ReturnType<typeof useTranslations>;
+export type Translate = ReturnType<typeof useTranslations>;
 
 /** The well-known keys through their messages (literal keys, so each is visibly used); anything else is title-cased. */
-function fieldLabel(t: Translate, key: string): string {
+export function fieldLabel(t: Translate, key: string): string {
   switch (key) {
     case 'name':
       return t('fields.name');
@@ -157,19 +155,20 @@ function HistoryRow({ entry }: { entry: FieldHistoryEntry }) {
   );
 }
 
-/** A secondary button "Contact Field History" that opens the history in a drawer on the end edge. */
-export function FieldHistoryButton({ contactId }: { contactId: string }) {
+/** The contact's field history in a drawer on the end edge (the action bar's "..." menu and the history button open it). */
+export function FieldHistoryDrawer({
+  open,
+  onClose,
+  contactId,
+}: {
+  open: boolean;
+  onClose: () => void;
+  contactId: string;
+}) {
   const t = useTranslations('contacts-attributes-tags.contact.history');
-  const [open, setOpen] = useState(false);
   return (
-    <>
-      <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
-        <HistoryIcon />
-        {t('button')}
-      </Button>
-      <Drawer open={open} onClose={() => setOpen(false)} title={t('title')} closeLabel={t('close')}>
-        <FieldHistoryPanel contactId={contactId} showTitle={false} />
-      </Drawer>
-    </>
+    <Drawer open={open} onClose={onClose} title={t('title')} closeLabel={t('close')}>
+      <FieldHistoryPanel contactId={contactId} showTitle={false} />
+    </Drawer>
   );
 }

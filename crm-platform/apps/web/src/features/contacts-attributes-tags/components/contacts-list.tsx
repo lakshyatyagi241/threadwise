@@ -68,7 +68,7 @@ import {
 } from './icons';
 import { AddColumnPicker, ColumnHeaderMenu } from './column-menus';
 import { RowMenu } from './row-menu';
-import { StageMenu } from './stage-menu';
+import { StagePicker } from './stage-picker';
 
 export interface ListHandlers {
   selected: ReadonlySet<string>;
@@ -77,8 +77,11 @@ export interface ListHandlers {
   stageLabel: (value: string) => string;
   /** The workspace's stages in order, for the stage cell's menu. */
   stageChoices?: readonly Choice[];
-  /** Present when the person may edit contacts: the stage cell then opens a menu that calls this. */
-  onStageChange?: (id: string, stage: string) => void;
+  /** Present when the person may edit contacts: the stage cell then opens the stage picker, which calls this. */
+  onStageChange?: (id: string, stage: string, status?: string | null) => void;
+  /** The statuses a stage offers under it in the picker, and its default one. */
+  stageStatusesOf?: (stage: string) => readonly Choice[];
+  stageDefaultStatusOf?: (stage: string) => string | null;
   /** Id of the contact whose stage is being saved. */
   stageBusyId?: string | null;
   /** What moving a contact holding `status` to `stage` does to its status ("Status becomes X"); null = nothing. */
@@ -602,15 +605,19 @@ function StatusCell({
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1">
       {row.stage && (
-        <StageMenu
+        <StagePicker
           value={row.stage}
-          choices={h.stageChoices ?? []}
+          status={row.status || null}
+          stages={h.stageChoices ?? []}
           label={h.stageLabel(row.stage)}
+          statusesOf={h.stageStatusesOf}
+          defaultStatusOf={h.stageDefaultStatusOf}
           name={row.name || t('unnamed')}
           busy={h.stageBusyId === row.id}
           quietCaret
-          onChange={h.onStageChange ? (v) => h.onStageChange?.(row.id, v) : undefined}
-          statusHint={
+          readOnly={!h.onStageChange}
+          onPick={(stage, status) => h.onStageChange?.(row.id, stage, status)}
+          hint={
             h.stageStatusHint
               ? (stage) => h.stageStatusHint?.(row.status, stage) ?? null
               : undefined

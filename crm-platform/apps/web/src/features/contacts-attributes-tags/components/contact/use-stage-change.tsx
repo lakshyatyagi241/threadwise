@@ -1,29 +1,27 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
-import { useMemo, useState, type ReactNode } from 'react';
-import { useTranslations } from 'next-intl';
-import { useToast } from '@crm/ui';
-import { useStatusOptions } from '../../api/attributes';
-import { updateContact } from '../../api/contacts';
+import { useMemo, type ReactNode } from 'react';
 import type { ContactRow } from '../../api/schemas';
-import { displayName, titleCaseKey } from '../../lib/contact-model';
-import { errorKind } from '../../lib/errors';
+import { displayName } from '../../lib/contact-model';
 import { stageChoices, statusChoices, type Choice } from '../../lib/option-sets';
-import { isLostStage } from '../../lib/stage-flow';
-import { statusAfterMove, statusNotice } from '../../lib/status-scope';
-import { LostReasonDialog, type LostPrompt } from '../lost-reason';
-import { useRefreshContact } from './shared';
+import { useStatusOptions } from '../../api/attributes';
+import { useStageMove, type StageTarget } from '../use-stage-move';
+import { useTranslations } from 'next-intl';
 
 export interface StageChange {
+  /** The workspace's stages (the contact's own is kept in the list even when it was switched off). */
   stages: Choice[];
-  /** The statuses valid in the contact's current stage (the status bar). */
+  /** The statuses valid in the contact's current stage. */
   statuses: Choice[];
   statusLabel: (value: string) => string;
+  /** The statuses valid in any stage (the small choices the stage picker shows under a stage). */
+  statusesOf: (stage: string) => Choice[];
+  /** The default status of a stage, if the workspace set one. */
+  defaultStatusOf: (stage: string) => string | null;
   /** What moving to `stage` does to the status the contact holds ("Status becomes X"); null = nothing. */
   hint: (stage: string) => string | null;
-  /** Moves the contact to a stage; a lost stage asks for the reason first. */
-  changeStage: (stage: string) => void;
+  /** Moves the contact to a stage (and, when given, a status); a lost stage asks for the reason first. */
+  changeStage: (stage: string, status?: string | null) => void;
   /** Sets the status within the current stage. */
   changeStatus: (status: string) => void;
   busy: boolean;
@@ -31,20 +29,24 @@ export interface StageChange {
   dialog: ReactNode;
 }
 
+/** What a stage move starts from, read off a contact row. */
+export const stageTargetOf = (c: ContactRow, name = displayName(c)): StageTarget => ({
+  id: c.id,
+  name,
+  rowVersion: c.rowVersion,
+  stage: c.lifecycleStage,
+  status: c.status,
+});
+
 /**
- * Changing a contact's lifecycle stage and status, shared by the quick view and the details page: the stage change keeps the status
- * valid (the API does it and the toast says what happened to it), a lost stage asks why first, and a stale row version is
- * reported instead of overwritten.
+ * Changing one contact's lifecycle stage and status on its own screen (the record page and the quick view): `useStageMove` with this
+ * contact filled in, so the page, the quick view, the list and the board all move a contact the same way.
  */
 export function useStageChange(contact: ContactRow): StageChange {
-  const ts = useTranslations('contacts-attributes-tags.stageMenu');
-  const tf = useTranslations('contacts-attributes-tags.form');
-  const tc = useTranslations('contacts-attributes-tags.contact.stages');
-  const { toast } = useToast();
+  const m = useStageMove();
   const options = useStatusOptions();
-  const refresh = useRefreshContact(contact.id);
-  const [lost, setLost] = useState<LostPrompt | null>(null);
-
+  const tf = useTranslations('contacts-attributes-tags.form');
+  const target = stageTargetOf(contact);
   const stages = useMemo(
     () => stageChoices(options.data, contact.lifecycleStage ?? undefined),
     [options.data, contact.lifecycleStage],
@@ -59,100 +61,18 @@ export function useStageChange(contact: ContactRow): StageChange {
       ),
     [options.data, tf, contact.status, contact.lifecycleStage],
   );
-  const statusLabel = (v: string) =>
-    statusChoices(options.data, (x) => tf(`statuses.${x}`)).find((c) => c.value === v)?.label ??
-    titleCaseKey(v);
-
-  const stageMutation = useMutation({
-    mutationFn: (v: {
-      stage: string;
-      reason?: { lostReason?: string | null; otherLostReason?: string | null };
-    }) =>
-      updateContact(contact.id, {
-        lifecycleStage: v.stage,
-        ...v.reason,
-        rowVersion: contact.rowVersion,
-      }),
-    onSuccess: async (saved) => {
-      setLost(null);
-      await refresh();
-      const stageName =
-        stages.find((s) => s.value === saved.lifecycleStage)?.label ?? saved.lifecycleStage ?? '';
-      // The API keeps the status valid for the stage: say what happened to it, from its answer.
-      const notice = statusNotice(contact.status, saved.status);
-      toast(
-        notice.kind === 'none'
-          ? ts('changed', { stage: stageName })
-          : notice.kind === 'cleared'
-            ? ts('changedStatusCleared', { stage: stageName })
-            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
-                stage: stageName,
-                status: statusLabel(notice.status),
-              }),
-        'success',
-      );
-    },
-    onError: async (e) => {
-      const kind = errorKind(e);
-      toast(
-        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
-        'danger',
-      );
-      if (kind === 'conflict') await refresh();
-    },
-  });
-
-  const statusMutation = useMutation({
-    mutationFn: (status: string) =>
-      updateContact(contact.id, { status, rowVersion: contact.rowVersion }),
-    onSuccess: async (saved) => {
-      await refresh();
-      toast(tc('statusChanged', { status: statusLabel(saved.status ?? '') }), 'success');
-    },
-    onError: async (e) => {
-      const kind = errorKind(e);
-      toast(
-        tc(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'statusFailed'),
-        'danger',
-      );
-      if (kind === 'conflict') await refresh();
-    },
-  });
-
   return {
     stages,
     statuses,
-    statusLabel,
-    hint: (stage) => {
-      const move = statusAfterMove(options.data, contact.status, stage);
-      if (!move.changed) return null;
-      return move.status === null
-        ? ts('willClear')
-        : ts('willReset', { status: statusLabel(move.status) });
-    },
-    changeStage: (stage) => {
-      if (stage === contact.lifecycleStage) return;
-      // A lost stage asks why first; nothing is saved until the dialog gives a reason.
-      if (isLostStage(stages, stage)) {
-        setLost({
-          contactId: contact.id,
-          contactName: displayName(contact),
-          stageValue: stage,
-          stageLabel: stages.find((x) => x.value === stage)?.label ?? stage,
-        });
-      } else stageMutation.mutate({ stage });
-    },
+    statusLabel: m.statusLabel,
+    statusesOf: m.statusesOf,
+    defaultStatusOf: m.defaultStatusOf,
+    hint: (stage) => m.hintFor(contact.status, stage),
+    changeStage: (stage, status) => void m.move(target, { stage, status }),
     changeStatus: (status) => {
-      if (status !== contact.status) statusMutation.mutate(status);
+      if (contact.lifecycleStage) void m.move(target, { stage: contact.lifecycleStage, status });
     },
-    busy: stageMutation.isPending || statusMutation.isPending,
-    dialog: (
-      <LostReasonDialog
-        prompt={lost}
-        busy={stageMutation.isPending}
-        onConfirm={(p, reason) => stageMutation.mutate({ stage: p.stageValue, reason })}
-        onClose={() => setLost(null)}
-      />
-    ),
+    busy: m.busyId === contact.id,
+    dialog: m.dialog,
   };
 }
