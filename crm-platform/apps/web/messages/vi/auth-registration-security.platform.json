@@ -1440,7 +1440,8 @@
             "help_agent": "Trợ lý trợ giúp trong ứng dụng: mọi người yêu cầu một việc bằng lời đơn giản, trợ lý hướng dẫn hoặc làm giúp ngay trên phiên của họ và hỏi trước khi làm điều có rủi ro. Tốn token AI.",
             "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này.",
             "personal_history_full": "Cho phép số WhatsApp cá nhân nhập toàn bộ lịch sử trò chuyện khi liên kết lần đầu. Tính năng nhập các cuộc trò chuyện gần đây có sẵn cho mọi gói có số cá nhân.",
-            "ai_crm_copilot": "Tìm và chấm điểm khách hàng tiềm năng bằng AI từ danh bạ của bạn."
+            "ai_crm_copilot": "Tìm và chấm điểm khách hàng tiềm năng bằng AI từ danh bạ của bạn.",
+            "lead_scoring": "Chấm điểm liên hệ bằng AI và vận hành chương trình thử nghiệm tăng trưởng. Ứng dụng Chấm điểm khách hàng tiềm năng bằng AI quản lý công tắc này."
           },
           "units": {
             "days": "Ngày",
@@ -1626,7 +1627,8 @@
             "help_agent": "Trợ lý trợ giúp (AI, tốn token)",
             "email_channel": "Kênh email (Gmail)",
             "personal_history_full": "Nhập toàn bộ lịch sử trò chuyện (WhatsApp cá nhân)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",

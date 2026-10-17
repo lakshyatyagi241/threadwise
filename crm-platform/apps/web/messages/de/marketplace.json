@@ -305,7 +305,8 @@
         "terms": "Nutzungsbedingungen",
         "status": "Statusseite",
         "email": "E-Mail-Support"
-      }
+      },
+      "open": "Öffnen"
     },
     "install": {
       "backToMarketplace": "Zurück zum Marketplace",

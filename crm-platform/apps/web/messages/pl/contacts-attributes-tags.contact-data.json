@@ -35,7 +35,6 @@
         "footnote": "Znaleziono według numeru telefonu, adresu e-mail lub nazwy kontaktu. Zarchiwizowane rozmowy nie są wyświetlane.",
         "status": {
           "open": "Otwarta",
-          "pending": "Oczekująca",
           "snoozed": "Odłożona",
           "resolved": "Rozwiązana",
           "closed": "Zamknięta",

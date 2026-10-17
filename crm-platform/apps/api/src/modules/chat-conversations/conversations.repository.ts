@@ -230,8 +230,7 @@ export class ConversationsRepository {
    *   - `last_inbound_at` only moves forward, so a late (older) delivery never shortens the window it already opened.
    *   - `window_expires_at` is that time plus the channel's window; the SLA anchor `waiting_since` is set only when nobody is
    *     already waiting, so it measures the oldest unanswered message.
-   *   - A resolved, closed or snoozed thread is reopened by a customer message (Reference: a reply reopens). A pending one ("waiting on
-   *     the customer") goes back to open. Spam stays spam.
+   *   - A resolved, closed or snoozed thread is reopened by a customer message (Reference: a reply reopens). Spam stays spam.
    */
   async applyInbound(
     tx: Tx,
@@ -261,7 +260,7 @@ export class ConversationsRepository {
             unread_count = unread_count + 1,
             waiting_since = COALESCE(waiting_since, ${t.arrivedAt}::timestamptz),
             preview = COALESCE(${t.preview}, preview),
-            status = CASE WHEN status IN ('resolved', 'closed', 'snoozed', 'pending') THEN 'open' ELSE status END,
+            status = CASE WHEN status IN ('resolved', 'closed', 'snoozed') THEN 'open' ELSE status END,
             resolved_at = CASE WHEN status IN ('resolved', 'closed') THEN NULL ELSE resolved_at END,
             resolved_by = CASE WHEN status IN ('resolved', 'closed') THEN NULL ELSE resolved_by END,
             resolved_by_agent_id = CASE WHEN status IN ('resolved', 'closed') THEN NULL ELSE resolved_by_agent_id END,
@@ -334,6 +333,18 @@ export class ConversationsRepository {
       WHERE org_id = ${orgId} AND id = ${id}
       RETURNING ${COLUMNS}`);
     return toConversationRow(rowsOf(res)[0]!);
+  }
+
+  /**
+   * An agent's reply to a resolved, closed or spam thread puts it back in the open list (Reference: a reply reopens it). Returns whether
+   * a row moved. The caller holds the row lock (`applyOutboundQueued` took it) and writes the timeline event.
+   */
+  async reopenOnReply(tx: Tx, orgId: number, id: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE conversations SET status = 'open', resolved_at = NULL, resolved_by = NULL, resolved_by_agent_id = NULL
+      WHERE org_id = ${orgId} AND id = ${id} AND status IN ('resolved', 'closed', 'spam')
+      RETURNING id`);
+    return res.rows.length > 0;
   }
 
   /**

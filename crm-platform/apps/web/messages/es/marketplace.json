@@ -305,7 +305,8 @@
         "terms": "Condiciones",
         "status": "Página de estado",
         "email": "Soporte por correo"
-      }
+      },
+      "open": "Abrir"
     },
     "install": {
       "backToMarketplace": "Volver al Marketplace",

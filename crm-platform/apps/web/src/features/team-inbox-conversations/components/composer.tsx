@@ -122,6 +122,8 @@ export interface ComposerProps {
   onMode: (mode: ComposerMode) => void;
   /** Why free-form replies are off (window closed, channel disconnected, no right): the explanation is shown above by the screen. */
   replyDisabled: boolean;
+  /** The chat is assigned to another agent: the Reply box is locked and this text replaces its placeholder. */
+  lockedHint?: string;
   canReply: boolean;
   canNote: boolean;
   canAttach: boolean;
@@ -812,7 +814,9 @@ export function Composer(props: ComposerProps) {
             onFiles={staged.add}
             onSubmit={() => void submit()}
             disabled={disabled}
-            placeholder={disabled ? t('replyDisabledPlaceholder') : t('replyPlaceholder')}
+            placeholder={
+              disabled ? (props.lockedHint ?? t('replyDisabledPlaceholder')) : t('replyPlaceholder')
+            }
             describedBy={hintId}
             testId="inbox-composer"
           />
@@ -840,7 +844,7 @@ export function Composer(props: ComposerProps) {
               aria-describedby={hintId}
               placeholder={
                 disabled && !isNote
-                  ? t('replyDisabledPlaceholder')
+                  ? (props.lockedHint ?? t('replyDisabledPlaceholder'))
                   : isNote
                     ? t('notePlaceholder')
                     : t('replyPlaceholder')

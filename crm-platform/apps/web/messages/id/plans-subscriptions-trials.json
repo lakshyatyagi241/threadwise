@@ -82,7 +82,8 @@
       "help_agent": "Asisten Bantuan",
       "email_channel": "Kanal email (Gmail)",
       "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Penilaian prospek dengan AI"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -564,7 +565,9 @@
       "continueFree": "Lanjut gratis",
       "choose": "Pilih {name}",
       "back": "Kembali",
-      "compare": "Bandingkan semua paket"
+      "compare": "Bandingkan semua paket",
+      "appHint": "{feature} juga dijual sebagai aplikasi di Marketplace.",
+      "appLink": "Lihat aplikasi"
     }
   }
 }

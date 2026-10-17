@@ -1440,7 +1440,8 @@
             "help_agent": "L’assistant d’aide intégré à l’app : les utilisateurs demandent une tâche avec leurs mots et il les guide ou la réalise dans leur propre session, en demandant avant toute action sensible. Consomme des jetons d’IA.",
             "email_channel": "Connectez des boîtes Gmail et Google Workspace à la boîte de réception d'équipe. L'application payante E-mail contrôle cet interrupteur.",
             "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels.",
-            "ai_crm_copilot": "Trouve et note des prospects avec l'IA à partir de vos contacts."
+            "ai_crm_copilot": "Trouve et note des prospects avec l'IA à partir de vos contacts.",
+            "lead_scoring": "Note les contacts avec l’IA et alimente le pilote de croissance. L’application Scoring des leads par IA gère ce commutateur."
           },
           "units": {
             "days": "Jours",
@@ -1626,7 +1627,8 @@
             "help_agent": "Assistant d’aide (IA, consomme des jetons)",
             "email_channel": "Canal e-mail (Gmail)",
             "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Scoring des leads par IA"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",

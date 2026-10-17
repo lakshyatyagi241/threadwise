@@ -559,7 +559,8 @@
             "help_agent": "Hulpassistent",
             "email_channel": "E-mailkanaal (Gmail)",
             "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI-leadscoring"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

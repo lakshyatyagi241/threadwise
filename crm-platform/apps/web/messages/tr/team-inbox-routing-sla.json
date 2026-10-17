@@ -89,7 +89,14 @@
       "delete": "Sil",
       "startsFlow": "{name} akışını da başlatır",
       "flowOff": "Akış kapalı",
-      "flowGone": "Silinmiş bir akışı da başlatır"
+      "flowGone": "Silinmiş bir akışı da başlatır",
+      "markSpamSummary": "Sohbeti spam olarak işaretler",
+      "prioritySummary": "Önceliği {priority} olarak ayarlar",
+      "tagsSummary": "Etiketleri ekler: {tags}",
+      "escalationSummary": "{minutes} dakika içinde kimse yanıtlamazsa:",
+      "escalationReassign": "bu kuralın temsilcilerine yeniden ata",
+      "escalationPriority": "önceliği {priority} olarak ayarla",
+      "autoReplySummary": "Yanıtı gönderir: {body}"
     },
     "form": {
       "back": "Otomatik atama",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Tamamlanmamış kişi koşullarını bitirin veya kaldırın.",
         "keywordsMany": "En fazla 20 kelime kullanın.",
         "targets": "En az bir temsilci veya ekip seçin.",
-        "specific": "Belirli bir temsilci için tam olarak bir temsilci seçin."
+        "specific": "Belirli bir temsilci için tam olarak bir temsilci seçin.",
+        "actions": "Kuralın ne yapacağını seçin.",
+        "tagsMany": "En fazla 5 etiket kullanın.",
+        "escalationMinutes": "1 ile 1440 arasında tam sayı dakika girin.",
+        "escalationAction": "Yeniden ata, önceliği ayarla veya ikisini de yap.",
+        "escalationAgents": "Yeniden atama için bu kuralda temsilci gerekir: yukarıdan seçin.",
+        "autoReplyEmpty": "Yanıtı yazın veya seçeneği kaldırın.",
+        "autoReplyLong": "Yanıt çok uzun (en fazla 1024 karakter)."
       },
       "whenTitle": "Yeni bir konuşma geldiğinde",
       "whenHint": "Ayarladığınız her koşul eşleşmelidir. Yok sayılması için bir bölümü boş bırakın.",
@@ -188,7 +202,23 @@
         "loadFailed": "Akışlar yüklenemedi, bu yüzden liste eksik olabilir."
       },
       "onLeave": "izinli",
-      "onLeaveUntil": "{date} tarihine kadar izinli"
+      "onLeaveUntil": "{date} tarihine kadar izinli",
+      "actions": "Kuralın yaptığı",
+      "actionsHint": "Birini ya da ikisini seçin. Bir kural sohbeti atayabilir, spam olarak işaretleyebilir ya da ikisini birden yapabilir.",
+      "actionAssign": "Temsilcilere ya da ekiplere ata",
+      "actionMarkSpam": "Sohbeti spam olarak işaretle",
+      "setPriority": "Önceliği ayarla",
+      "priorityKeep": "Önceliği olduğu gibi bırak",
+      "addTags": "Etiket ekle",
+      "addTagsHint": "Virgülle ayırın. Henüz olmayan bir etiket oluşturulur.",
+      "escalate": "Zamanında kimse yanıtlamazsa yükselt",
+      "escalateHint": "Kural çalıştıktan sonraki dakikalar, en fazla 1440 (bir gün). Önce bizim yanıtımız bunu iptal eder.",
+      "escalateMinutes": "Yanıtsız geçen dakika",
+      "escalateReassign": "Bu kuralın temsilcilerine yeniden ata",
+      "escalatePriority": "Sonra önceliği ayarla",
+      "autoReply": "Otomatik yanıt gönder",
+      "autoReplyBody": "Yanıt metni",
+      "autoReplyHint": "Müşteriye işletme adına gönderilir. 24 saatlik pencerenin dışında serbest yanıt gönderilmez."
     },
     "sla": {
       "back": "Ayarlara dön",
@@ -206,8 +236,6 @@
       "resolution": "Çözüm süresi (dakika)",
       "minutesHint": "Hedef istemiyorsanız boş bırakın. 60 bir saat, 1440 bir gündür.",
       "minutesInvalid": "1'den başlayan tam sayılar kullanın.",
-      "pause": "Müşteri beklenirken duraklat",
-      "pauseHint": "Beklemede olarak ayarlanan görüşme işaretlenmez.",
       "businessHours": "Yalnızca çalışma saatlerini say",
       "businessHoursHint": "Çalışma alanı ayarlarınızdaki saatleri ve saat dilimini kullanır.",
       "makeDefault": "Bunu varsayılan politika yap",

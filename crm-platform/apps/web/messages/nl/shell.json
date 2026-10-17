@@ -33,7 +33,8 @@
       "browse": "Blader door de Marktplaats",
       "back": "Terug naar het dashboard",
       "unofficialTitle": "{app} is niet beschikbaar",
-      "unofficialBody": "{app} wordt alleen gebruikt met persoonlijke WhatsApp-nummers die via QR-code zijn gekoppeld, en die zijn niet ingeschakeld voor je workspace. WhatsApp verbindt via de officiële WhatsApp Business API."
+      "unofficialBody": "{app} wordt alleen gebruikt met persoonlijke WhatsApp-nummers die via QR-code zijn gekoppeld, en die zijn niet ingeschakeld voor je workspace. WhatsApp verbindt via de officiële WhatsApp Business API.",
+      "viewApp": "Bekijk {app} in de Marktplaats"
     },
     "closeMenu": "Menu sluiten",
     "mainMenu": "Hoofdmenu",

@@ -32,7 +32,14 @@ export class RoutingInboundListener implements InboundMessageListener, OnModuleI
   }
 
   async onStored(e: InboundStoredEvent): Promise<void> {
-    if (!e.createdConversation && !e.reopenedFrom) return;
+    const input = {
+      orgId: e.orgId,
+      conversationUuid: e.conversationUuid,
+      messageUuid: e.messageUuid,
+      messageText: e.message.kind === 'text' ? e.message.body : null,
+    };
+    // A new or reopened conversation is routed (the rules that assign it, and their per-message actions); a later message of a live one
+    // runs only the per-message actions of the rules (automatic replies, tags, flows), and never reassigns it.
     const outcome = await RequestContextStore.run(
       {
         requestId: `route-${e.messageUuid}`,
@@ -42,12 +49,9 @@ export class RoutingInboundListener implements InboundMessageListener, OnModuleI
         userId: null,
       },
       () =>
-        this.engine.route({
-          orgId: e.orgId,
-          conversationUuid: e.conversationUuid,
-          messageUuid: e.messageUuid,
-          messageText: e.message.kind === 'text' ? e.message.body : null,
-        }),
+        e.createdConversation || e.reopenedFrom
+          ? this.engine.route(input)
+          : this.engine.routeFollowUp(input),
     );
     this.logger.log({ orgId: e.orgId, conversation: e.conversationUuid, ...outcome }, 'routing');
   }

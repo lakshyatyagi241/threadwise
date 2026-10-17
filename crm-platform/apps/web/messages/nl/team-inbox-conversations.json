@@ -29,7 +29,8 @@
       "priorityChanged": "Prioriteit bijgewerkt",
       "snoozed": "Gesprek uitgesteld",
       "tagAdded": "Tag toegevoegd",
-      "tagRemoved": "Tag verwijderd"
+      "tagRemoved": "Tag verwijderd",
+      "spammed": "Gesprek als spam gemarkeerd."
     },
     "list": {
       "title": "Inbox",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Open",
-        "pending": "In behandeling",
         "snoozed": "Gesnoozed",
         "resolved": "Opgelost",
         "closed": "Opgelost",
@@ -113,7 +113,7 @@
         "cancel": "Annuleren",
         "apply": "Toepassen",
         "status": "Chatstatus",
-        "statusHint": "Zonder keuze zie je open en wachtende chats.",
+        "statusHint": "Zonder keuze worden open chats getoond.",
         "conversation": "Gesprek",
         "any": "Alle",
         "assigned": "Toegewezen",
@@ -145,7 +145,15 @@
       "statusOpen": "Open",
       "statusAll": "Alle statussen",
       "channelFilter": "Kanaal",
-      "selectRow": "{name} selecteren"
+      "selectRow": "{name} selecteren",
+      "snoozedFor": "Gesnoozed · {left}",
+      "snoozeLeft": {
+        "due": "nu",
+        "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+        "hours": "{count, plural, one {# uur} other {# uur}}",
+        "days": "{count, plural, one {# dag} other {# dagen}}"
+      },
+      "unsnoozesAt": "Wordt weer open {time}"
     },
     "status": {
       "received": "Ontvangen",
@@ -166,6 +174,7 @@
       "mediaNotFound": "De bijlage is verlopen of verwijderd. Voeg hem opnieuw toe.",
       "statusInvalid": "Die wijziging is niet toegestaan vanuit de huidige status van het gesprek.",
       "assigneeInvalid": "Dit gesprek kan niet aan die persoon worden toegewezen.",
+      "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "forbidden": "Je hebt geen toestemming om dit te doen.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "simulatorDisabled": "De kanaalsimulator is op deze server uitgeschakeld.",
@@ -316,6 +325,8 @@
         "sendTemplate": "Een sjabloon verzenden"
       },
       "readOnly": "Je kunt dit gesprek lezen, maar je hebt geen toestemming om te antwoorden.",
+      "resolvedBanner": "Dit gesprek is opgelost. Heropen het om te antwoorden.",
+      "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
       "messagesLabel": "Berichten",
       "loadOlder": "Eerdere berichten laden",
@@ -577,6 +588,8 @@
           "tag_removed": "Tag verwijderd door {actor}",
           "first_response": "Eerste antwoord verzonden",
           "sla_breach": "Reactietermijn verlopen",
+          "spam_flagged": "Als spam gemarkeerd door {actor}",
+          "escalated": "Geëscaleerd",
           "unknown": "{what} door {actor}"
         },
         "actors": {
@@ -593,7 +606,6 @@
         "noMessages": "Geen berichten",
         "status": {
           "open": "Open",
-          "pending": "In behandeling",
           "snoozed": "Gesnoozed",
           "resolved": "Opgelost",
           "closed": "Gesloten",
@@ -1012,7 +1024,9 @@
     "triage": {
       "priority": "Prioriteit",
       "snooze": "Uitstellen",
-      "wake": "Nu terugzetten"
+      "wake": "Nu terugzetten",
+      "markSpam": "Markeer als spam",
+      "notSpam": "Geen spam"
     },
     "bulk": {
       "barLabel": "Bulkacties",
@@ -1045,7 +1059,8 @@
       "tagAdd": "Tag toevoegen",
       "tagRemove": "Tag verwijderen",
       "onLeave": "met verlof",
-      "onLeaveUntil": "met verlof tot {date}"
+      "onLeaveUntil": "met verlof tot {date}",
+      "spam": "Markeer als spam"
     },
     "tags": {
       "tag": "Tag",

@@ -374,7 +374,7 @@ describe('assign, claim and unassign', () => {
   });
 });
 
-describe('status: resolve, close, reopen, pending, and the guard', () => {
+describe('status: resolve, close, reopen, and the guard', () => {
   let t: Tenant;
   let ch: { id: string };
   let agent: { token: string; userId: number };
@@ -469,22 +469,14 @@ describe('status: resolve, close, reopen, pending, and the guard', () => {
     expect((await eventTypes(agent.token, c.uuid))[0]).toBe('resolved');
   });
 
-  it('pending and back to open are plain status changes with a status_changed event', async () => {
+  it('pending is not a status: the route refuses it (422) and the thread stays open', async () => {
     const c = await inbox.conversation(t, ch.id, {});
     const p = await setStatus(agent.token, c.uuid, {
       rowVersion: await inbox.version(c.uuid),
       status: 'pending',
     });
-    expect(p.body.status).toBe('pending');
-    const o = await setStatus(agent.token, c.uuid, {
-      rowVersion: p.body.rowVersion,
-      status: 'open',
-    });
-    expect(o.body.status).toBe('open');
-    expect(await eventTypes(agent.token, c.uuid)).toEqual(['status_changed', 'status_changed']);
-    const ev = (await api.as(agent.token).get(`/v2/inbox/conversations/${c.uuid}/events`)).body
-      .data;
-    expect(ev[1].payload).toEqual({ from: 'open', to: 'pending' });
+    expect(p.status).toBe(422);
+    expect((await inbox.row(c.uuid)).status).toBe('open');
   });
 
   it('waking a snoozed thread by hand clears the snooze time', async () => {
@@ -799,7 +791,7 @@ describe('timeline', () => {
     await api
       .as(manager.token)
       .post(`/v2/inbox/conversations/${a.uuid}/status`)
-      .send({ rowVersion: await inbox.version(a.uuid), status: 'pending' });
+      .send({ rowVersion: await inbox.version(a.uuid), status: 'resolved' });
     expect(
       (await api.as(manager.token).get(`/v2/inbox/conversations/${a.uuid}/events?cursor=zzz`))
         .status,
@@ -828,7 +820,7 @@ describe('assignees', () => {
       [t.orgId, busy.userId],
     );
     await inbox.conversation(t, ch.id, { assigneeUserId: busy.userId });
-    await inbox.conversation(t, ch.id, { assigneeUserId: busy.userId, status: 'pending' });
+    await inbox.conversation(t, ch.id, { assigneeUserId: busy.userId, status: 'open' });
     await inbox.conversation(t, ch.id, { assigneeUserId: busy.userId, status: 'resolved' });
     await inbox.conversation(t, ch.id, { assigneeUserId: busy.userId, archived: true });
     await h.owner.query(`INSERT INTO teams (org_id, name, color) VALUES ($1,'Sales','#112233')`, [

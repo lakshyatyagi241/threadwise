@@ -40,6 +40,16 @@ Errors are `application/problem+json` with a stable `code` and a `requestId`; th
    shared `ai_token_usage` ledger, so the plan's monthly AI allowance counts them when the platform key pays. The log is kept for
    `retentionDays` (default 90) and deleted by a daily sweep.
 
+## Plan: AI lead scoring is a Marketplace app
+
+Every workspace route needs the plan feature `lead_scoring` (default **off**), which the first-party Marketplace app `lead-scoring` grants while it is installed
+and running (`422 PLAN_FEATURE_LOCKED`, reads included; `reason: app_not_installed` with `installUrl` when the workspace has paid but not installed). A workspace
+that already used scoring when it became an app keeps it: migration `20261228090000` gave each of them an override `features.lead_scoring = true` (see
+[marketplace.md](marketplace.md), "Optional tools as apps"). Background work checks the same feature after the cheap per-workspace checks: automatic scoring and the
+backfill (`LeadScoringService`), the chat reading (`LeadChatDigestService`) and the growth pilot (`GrowthGateService`) do nothing, and send nothing to the AI vendor,
+for a workspace that does not have it. The platform (operator) routes are not plan-gated. The `lsc.%` permission keys carry `plan_feature` and `app_slug`, so the Roles editor
+marks them "install the app" for such a workspace. A contact's own score fields, typed by a person, are part of the contact and are unaffected.
+
 ## Capabilities (workspace)
 
 | Key                   | Grants                                          | Presets               |

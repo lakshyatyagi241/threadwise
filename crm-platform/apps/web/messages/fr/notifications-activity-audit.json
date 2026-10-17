@@ -165,6 +165,12 @@
         "titleNoName": "Notification de test",
         "bodyNoActor": "Si vous pouvez lire ceci, les notifications en direct fonctionnent."
       },
+      "snooze_wake": {
+        "title": "{name} est de retour dans votre liste",
+        "titleNoName": "Une conversation reportée est de retour dans votre liste",
+        "titleTeam": "{name} est de retour pour votre équipe",
+        "titleTeamNoName": "Une conversation reportée est de retour pour votre équipe"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "Renouvellement de {name} le {date, date, medium}",
         "bodyAuto": "Votre carte sera débitée automatiquement à cette date pour renouveler {name}. Résiliez avant cette date pour l’éviter.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Demande d'adhésion à un groupe",
         "device_group_removed": "Retiré d'un groupe WhatsApp",
         "test": "Notification de test",
+        "snooze_wake": "Conversation reportée de retour",
         "marketplace_renewal_due": "Renouvellement d’une application payante à venir",
         "marketplace_payment_failed": "Échec du paiement d’une application payante",
         "marketplace_subscription_ended": "Abonnement d’une application payante terminé"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Rendez-vous désynchronisé de Google Calendar",
           "hint": "L'événement Google Calendar d'un rendez-vous à venir a été supprimé, déplacé ou ses invités ont été modifiés. Le rendez-vous n'est pas modifié ; vous choisissez la suite à donner."
+        },
+        "snooze_wake": {
+          "label": "La conversation reportée revient",
+          "hint": "Une conversation reportée se rouvre à l'heure choisie et vous est attribuée, ou à votre équipe."
         },
         "marketplace_renewal_due": {
           "label": "Rappel de renouvellement d’une application payante",

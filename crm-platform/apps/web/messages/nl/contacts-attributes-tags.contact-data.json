@@ -35,7 +35,6 @@
         "footnote": "Gevonden op telefoonnummer, e-mailadres of naam van het contact. Gearchiveerde gesprekken worden niet getoond.",
         "status": {
           "open": "Open",
-          "pending": "In afwachting",
           "snoozed": "Uitgesteld",
           "resolved": "Opgelost",
           "closed": "Gesloten",

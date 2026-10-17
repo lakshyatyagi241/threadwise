@@ -6,6 +6,7 @@ import type { LscDigest, LscInsight, LscSuggestion } from '@crm/contracts';
 import { Alert, Badge, Button, Spinner, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useDecideSuggestions, useDigestContact, useLscInsight } from '../api/hooks';
+import { useLeadScoringOn } from '../lib/use-enabled';
 import { errorKey } from '../lib/errors';
 import { confidencePercent } from '../lib/suggestions-model';
 import { LinkButton, SparkleIcon, useFormatDate } from './parts';
@@ -23,7 +24,8 @@ export interface ChatInsightCardProps {
  * the contact page of every other workspace is unchanged.
  */
 export function ChatInsightCard({ contactId, onChanged, className }: ChatInsightCardProps) {
-  const canRead = useCan('lsc.runs.read');
+  const on = useLeadScoringOn();
+  const canRead = useCan('lsc.runs.read') && on;
   const q = useLscInsight(contactId, canRead);
   if (!q.data?.active) return null;
   return (
@@ -207,7 +209,8 @@ function SuggestionBox({
 
 function ReadError({ error }: { error: unknown }) {
   const t = useTranslations('lead-scoring.scoreErrors');
-  const canSettings = useCan('lsc.runs.read');
+  const on = useLeadScoringOn();
+  const canSettings = useCan('lsc.runs.read') && on;
   const canKeys = useCan('aiadm.keys.read');
   const key = errorKey(error);
   const tone =

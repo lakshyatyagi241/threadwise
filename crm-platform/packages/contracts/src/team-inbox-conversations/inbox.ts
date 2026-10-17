@@ -21,8 +21,7 @@ import type { ConversationStatus } from '../chat-conversations/enums';
  * anything else with `CONVERSATION_STATUS_INVALID`) and the web (which offers only these buttons). A move to the status the thread
  * already has is a no-op, not an error: resolving twice does not run the side effects twice.
  *
- *   open     -> pending, resolved, closed
- *   pending  -> open, resolved, closed
+ *   open     -> resolved, closed
  *   snoozed  -> open (wake it now), resolved, closed
  *   resolved -> open (reopen), closed
  *   closed   -> open (reopen), resolved
@@ -31,8 +30,7 @@ import type { ConversationStatus } from '../chat-conversations/enums';
  * `snoozed` and `spam` are never a target here: they have their own routes (a time to wake at, a reason).
  */
 const MOVES: Record<ConversationStatus, readonly ConversationStatus[]> = {
-  open: ['pending', 'resolved', 'closed'],
-  pending: ['open', 'resolved', 'closed'],
+  open: ['resolved', 'closed'],
   snoozed: ['open', 'resolved', 'closed'],
   resolved: ['open', 'closed'],
   closed: ['open', 'resolved'],
@@ -131,6 +129,8 @@ export const CONVERSATION_EVENT_TYPES = [
   'note_added',
   'snoozed',
   'auto_unsnoozed',
+  'spam_flagged',
+  'escalated',
   'priority_changed',
   'tag_added',
   'tag_removed',

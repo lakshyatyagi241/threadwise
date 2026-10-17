@@ -152,7 +152,6 @@ describe('SLA policies (TW-SUPP-026, 027, 028)', () => {
     const first = await sup('post', 'sla/policies').send(policy({ isDefault: true }));
     expect(first.status, JSON.stringify(first.body)).toBe(201);
     expect(first.body).toMatchObject({
-      pauseWhenWaitingOnCustomer: false,
       respectBusinessHours: false,
       isDefault: true,
     });

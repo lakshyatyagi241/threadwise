@@ -10,14 +10,18 @@ import { ClockIcon, FlagIcon } from './icons';
 export interface TriageMenuProps {
   priority: ConversationPriority;
   snoozed: boolean;
+  spam: boolean;
   canPriority: boolean;
   canSnooze: boolean;
   /** A wake-up needs the right to change the status (resolve), the same route as reopening. */
   canWake: boolean;
+  /** Marking spam and taking it off spam need the same right (resolve). */
+  canSpam: boolean;
   busy: boolean;
   onPriority: (priority: ConversationPriority) => void;
   onSnooze: (preset: SnoozePreset) => void;
   onWake: () => void;
+  onSpam: () => void;
 }
 
 const FLAG_TONE: Record<ConversationPriority, string> = {
@@ -142,6 +146,28 @@ export function TriageMenu(props: TriageMenuProps) {
           className="h-8 rounded-md border border-border px-2 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
         >
           {t('wake')}
+        </button>
+      )}
+      {props.canSpam && !props.spam && (
+        <button
+          type="button"
+          data-testid="inbox-spam"
+          disabled={props.busy}
+          onClick={props.onSpam}
+          className="h-8 rounded-md border border-border px-2 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+        >
+          {t('markSpam')}
+        </button>
+      )}
+      {props.spam && props.canSpam && (
+        <button
+          type="button"
+          data-testid="inbox-not-spam"
+          disabled={props.busy}
+          onClick={props.onWake}
+          className="h-8 rounded-md border border-border px-2 text-xs hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+        >
+          {t('notSpam')}
         </button>
       )}
     </>

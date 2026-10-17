@@ -242,6 +242,7 @@
       },
       "firstParty": "Built by us",
       "install": "Install",
+      "open": "Open",
       "manage": "Manage",
       "killed": "The platform stopped this app. It can only be uninstalled.",
       "about": "About this app",

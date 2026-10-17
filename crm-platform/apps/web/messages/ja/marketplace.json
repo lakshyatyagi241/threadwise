@@ -305,7 +305,8 @@
         "terms": "利用規約",
         "status": "ステータスページ",
         "email": "メールサポート"
-      }
+      },
+      "open": "開く"
     },
     "install": {
       "backToMarketplace": "マーケットプレイスに戻る",

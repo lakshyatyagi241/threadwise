@@ -6,7 +6,10 @@
       "setup": "Messenger Setup",
       "broadcasts": "Messenger Broadcasts"
     },
-    "common": { "dismiss": "Dismiss", "cancel": "Cancel" },
+    "common": {
+      "dismiss": "Dismiss",
+      "cancel": "Cancel"
+    },
     "hub": {
       "kicker": "Channel · Facebook",
       "title": "Facebook",
@@ -72,7 +75,12 @@
       "connectPage": "Connect a Page",
       "none": "No broadcasts yet. Compose one on the right.",
       "recipients": "{count, plural, one {# recipient} other {# recipients}}",
-      "status": { "sending": "Sending", "done": "Done", "failed": "Failed", "draft": "Draft" },
+      "status": {
+        "sending": "Sending",
+        "done": "Done",
+        "failed": "Failed",
+        "draft": "Draft"
+      },
       "counts": "{sent} sent · {failed} failed · {blocked} blocked",
       "start": "Start sending",
       "started": "Sending started. It continues even if you leave this page.",
@@ -126,7 +134,11 @@
       "notSet": "Not set up",
       "failed": "That did not work. Try again.",
       "footnote": "These settings write to the Facebook Messenger profile via the Graph API and apply to new conversations. Meta may take a moment to propagate changes.",
-      "frame": { "preview": "Preview", "yourPage": "Your Page", "activeNow": "Active now" },
+      "frame": {
+        "preview": "Preview",
+        "yourPage": "Your Page",
+        "activeNow": "Active now"
+      },
       "explainer": {
         "what": "What it is",
         "customer": "How your customers use it",
@@ -233,7 +245,12 @@
         "published": "Published",
         "failed": "Failed"
       },
-      "ranges": { "all": "All time", "7d": "7d", "30d": "30d", "90d": "90d" },
+      "ranges": {
+        "all": "All time",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d"
+      },
       "search": "Search posts…",
       "cols": {
         "post": "Post",
@@ -290,11 +307,26 @@
         "when": "When to post"
       },
       "types": {
-        "photo": { "label": "Photo", "hint": "A single photo post." },
-        "multi_photo": { "label": "Album", "hint": "2–10 photos in one post." },
-        "link": { "label": "Link", "hint": "Share a link with a preview." },
-        "video": { "label": "Video", "hint": "A feed video (MP4 / MOV)." },
-        "reel": { "label": "Reel", "hint": "A vertical short video reel." }
+        "photo": {
+          "label": "Photo",
+          "hint": "A single photo post."
+        },
+        "multi_photo": {
+          "label": "Album",
+          "hint": "2–10 photos in one post."
+        },
+        "link": {
+          "label": "Link",
+          "hint": "Share a link with a preview."
+        },
+        "video": {
+          "label": "Video",
+          "hint": "A feed video (MP4 / MOV)."
+        },
+        "reel": {
+          "label": "Reel",
+          "hint": "A vertical short video reel."
+        }
       },
       "photoUrls": "Paste public image URLs",
       "photoHint": "One per line, up to 10. Uploading a file needs the storage service, which is not connected yet, so use public image addresses.",
@@ -319,7 +351,10 @@
         "label": "Send date & time",
         "hint": "Between 10 minutes and 75 days from now, in your timezone ({tz}). Facebook queues it and publishes it when due."
       },
-      "submit": { "publish": "Publish", "schedule": "Schedule" },
+      "submit": {
+        "publish": "Publish",
+        "schedule": "Schedule"
+      },
       "preview": {
         "live": "Live preview",
         "facebook": "Facebook",
@@ -436,7 +471,6 @@
       },
       "status": {
         "open": "Open",
-        "pending": "Pending",
         "resolved": "Resolved",
         "closed": "Closed",
         "snoozed": "Snoozed"

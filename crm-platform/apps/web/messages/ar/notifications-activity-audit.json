@@ -165,6 +165,12 @@
         "titleNoName": "إشعار تجريبي",
         "bodyNoActor": "إذا كنت تستطيع قراءة هذا، فالإشعارات المباشرة تعمل."
       },
+      "snooze_wake": {
+        "title": "عاد {name} إلى قائمتك",
+        "titleNoName": "عادت محادثة مؤجّلة إلى قائمتك",
+        "titleTeam": "عاد {name} لفريقك",
+        "titleTeamNoName": "عادت محادثة مؤجّلة لفريقك"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "يتجدد {name} في {date, date, medium}",
         "bodyAuto": "سيُخصم من بطاقتك تلقائيًا في هذا التاريخ لتجديد {name}. ألغِ الاشتراك قبله لإيقاف ذلك.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "طلب الانضمام إلى مجموعة",
         "device_group_removed": "تمت الإزالة من مجموعة WhatsApp",
         "test": "إشعار تجريبي",
+        "snooze_wake": "عادت المحادثة المؤجّلة",
         "marketplace_renewal_due": "اقتراب موعد تجديد تطبيق مدفوع",
         "marketplace_payment_failed": "فشل دفع تطبيق مدفوع",
         "marketplace_subscription_ended": "انتهى اشتراك تطبيق مدفوع"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "الموعد غير متزامن مع Google Calendar",
           "hint": "تم حذف حدث موعد قادم في Google Calendar أو نقله أو تغيير ضيوفه. لم يتغير الموعد نفسه، وأنت من يختار الإجراء المناسب."
+        },
+        "snooze_wake": {
+          "label": "تعود المحادثة المؤجّلة",
+          "hint": "تُعاد المحادثة المؤجّلة في موعدها وتُسند إليك أو إلى فريقك."
         },
         "marketplace_renewal_due": {
           "label": "تذكير بتجديد تطبيق مدفوع",

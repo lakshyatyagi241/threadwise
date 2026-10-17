@@ -35,7 +35,6 @@
         "footnote": "Kişinin telefon numarası, e-posta adresi veya adıyla bulundu. Arşivlenmiş görüşmeler listelenmez.",
         "status": {
           "open": "Açık",
-          "pending": "Beklemede",
           "snoozed": "Ertelendi",
           "resolved": "Çözüldü",
           "closed": "Kapalı",

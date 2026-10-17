@@ -29,7 +29,8 @@
       "priorityChanged": "Priorité mise à jour",
       "snoozed": "Conversation mise en veille",
       "tagAdded": "Étiquette ajoutée",
-      "tagRemoved": "Étiquette retirée"
+      "tagRemoved": "Étiquette retirée",
+      "spammed": "Conversation marquée comme spam."
     },
     "list": {
       "title": "Boîte de réception",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Ouverte",
-        "pending": "En attente",
         "snoozed": "Reportée",
         "resolved": "Résolue",
         "closed": "Résolue",
@@ -113,7 +113,7 @@
         "cancel": "Annuler",
         "apply": "Appliquer",
         "status": "Statut du chat",
-        "statusHint": "Sans choix, les chats ouverts et en attente s’affichent.",
+        "statusHint": "Sans choix, les conversations ouvertes s'affichent.",
         "conversation": "Conversation",
         "any": "Toutes",
         "assigned": "Assignée",
@@ -145,7 +145,15 @@
       "statusOpen": "Ouverte",
       "statusAll": "Tous les statuts",
       "channelFilter": "Canal",
-      "selectRow": "Sélectionner {name}"
+      "selectRow": "Sélectionner {name}",
+      "snoozedFor": "Reportée · {left}",
+      "snoozeLeft": {
+        "due": "échue",
+        "minutes": "{count, plural, one {# minute} other {# minutes}}",
+        "hours": "{count, plural, one {# heure} other {# heures}}",
+        "days": "{count, plural, one {# jour} other {# jours}}"
+      },
+      "unsnoozesAt": "Revient {time}"
     },
     "status": {
       "received": "Reçu",
@@ -166,6 +174,7 @@
       "mediaNotFound": "La pièce jointe a expiré ou a été retirée. Joignez-la à nouveau.",
       "statusInvalid": "Cette modification n’est pas autorisée depuis le statut actuel de la conversation.",
       "assigneeInvalid": "Cette personne ne peut pas se voir assigner cette conversation.",
+      "assignedToOther": "Ce chat est attribué à un autre agent. Attribuez-le-vous d'abord pour répondre.",
       "forbidden": "Vous n’avez pas l’autorisation d’effectuer cette action.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "simulatorDisabled": "Le simulateur de canal est désactivé sur ce serveur.",
@@ -316,6 +325,8 @@
         "sendTemplate": "Envoyer un modèle"
       },
       "readOnly": "Vous pouvez lire cette conversation, mais vous n’avez pas l’autorisation d’y répondre.",
+      "resolvedBanner": "Cette conversation est résolue. Rouvrez-la pour répondre.",
+      "assignedToOther": "Ce chat est attribué à un autre agent. Attribuez-le-vous d'abord pour répondre.",
       "typing": "{count, plural, one {Un collègue est en train d’écrire} other {# collègues sont en train d’écrire}}",
       "messagesLabel": "Messages",
       "loadOlder": "Charger les messages précédents",
@@ -577,6 +588,8 @@
           "tag_removed": "Étiquette retirée par {actor}",
           "first_response": "Première réponse envoyée",
           "sla_breach": "Délai de réponse dépassé",
+          "spam_flagged": "Marquée comme spam par {actor}",
+          "escalated": "Escaladée",
           "unknown": "{what} par {actor}"
         },
         "actors": {
@@ -593,7 +606,6 @@
         "noMessages": "Aucun message",
         "status": {
           "open": "Ouverte",
-          "pending": "En attente",
           "snoozed": "Reportée",
           "resolved": "Résolue",
           "closed": "Fermée",
@@ -1012,7 +1024,9 @@
     "triage": {
       "priority": "Priorité",
       "snooze": "Mettre en veille",
-      "wake": "Réactiver maintenant"
+      "wake": "Réactiver maintenant",
+      "markSpam": "Marquer comme spam",
+      "notSpam": "Pas un spam"
     },
     "bulk": {
       "barLabel": "Actions groupées",
@@ -1045,7 +1059,8 @@
       "tagAdd": "Ajouter une étiquette",
       "tagRemove": "Retirer une étiquette",
       "onLeave": "en congé",
-      "onLeaveUntil": "en congé jusqu’au {date}"
+      "onLeaveUntil": "en congé jusqu’au {date}",
+      "spam": "Marquer comme spam"
     },
     "tags": {
       "tag": "Étiquette",

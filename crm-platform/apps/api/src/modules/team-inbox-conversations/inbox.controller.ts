@@ -31,6 +31,7 @@ import {
   sendMessageSchema,
   setConversationPrioritySchema,
   setConversationStatusSchema,
+  markSpamConversationSchema,
   snoozeConversationSchema,
   type CreateConversationNoteInput,
   type CreateMessageLogExportInput,
@@ -45,6 +46,7 @@ import {
   type SendMessageInput,
   type SetConversationPriorityInput,
   type SetConversationStatusInput,
+  type MarkSpamConversationInput,
   type SnoozeConversationInput,
   openConversationSchema,
   type OpenConversationInput,
@@ -93,7 +95,7 @@ export class InboxController {
   @ApiOperation({
     summary: 'The conversation list (cursor paginated)',
     description:
-      'Tabs all / mine / unassigned / unread, status (default: open and pending), channel, search by name, number or last message. `meta.counts` carries the tab badges.',
+      'Tabs all / mine / unassigned / unread, status (default: open), channel, search by name, number or last message. `meta.counts` carries the tab badges.',
   })
   async list(@Query(zodPipe(listConversationsQuerySchema)) query: ListConversationsQuery) {
     return this.conversations.list(query);
@@ -282,7 +284,7 @@ export class InboxController {
   @HttpCode(HttpStatus.OK)
   @RequirePermission('inbox.conversation.resolve')
   @ApiOperation({
-    summary: 'Resolve, close, reopen, or park a conversation as pending',
+    summary: 'Resolve, close, or reopen a conversation',
     description:
       'Requires the rowVersion you read (409 ROW_VERSION_CONFLICT otherwise). A move the state machine does not allow is 422 CONVERSATION_STATUS_INVALID; the status the thread already has is a no-op.',
   })
@@ -314,15 +316,32 @@ export class InboxController {
   @HttpCode(HttpStatus.OK)
   @RequirePermission('inbox.conversation.snooze')
   @ApiOperation({
-    summary: 'Park an open or pending conversation until a time (it reopens by itself)',
+    summary: 'Park a conversation until a time (it reopens by itself)',
     description:
-      '`until` is 1 minute to 365 days ahead. A resolved, closed or spam thread is 422 CONVERSATION_STATUS_INVALID. To wake it now, move it to open with the status route.',
+      '`until` is 1 minute to 365 days ahead. Any status can be snoozed (a resolved, closed or spam thread too). The thread comes back as open at the time; to wake it now, move it to open with the status route.',
   })
   async snooze(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(snoozeConversationSchema)) body: SnoozeConversationInput,
   ) {
     return this.triage.snooze(id, body);
+  }
+
+  @Post('conversations/:id/spam')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.resolve')
+  @ApiOperation({
+    summary:
+      'Mark a conversation as spam (from any status); taking it off spam is the status route (spam to open)',
+    description:
+      'Requires the rowVersion you read (409 ROW_VERSION_CONFLICT otherwise). The thread leaves the live lists and its wake time is dropped. Marking a spam thread again is a no-op.',
+  })
+  async spam(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(markSpamConversationSchema)) body: MarkSpamConversationInput,
+  ) {
+    return this.triage.markSpam(id, body);
   }
 
   // --- notes and the timeline ---------------------------------------------------------------------------------------------------

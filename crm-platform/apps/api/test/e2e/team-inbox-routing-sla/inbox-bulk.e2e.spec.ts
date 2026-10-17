@@ -134,15 +134,15 @@ describe('priority and snooze', () => {
     expect(await triage.wakeDue()).toBe(0);
   });
 
-  it('refuses to snooze a resolved thread (422), a past time (422) and a caller without the permission (403)', async () => {
+  it('snoozes a resolved thread too (Reference: any status), refuses a past time (422) and a caller without the permission (403)', async () => {
     const resolved = await inbox.conversation(t, ch.id, { status: 'resolved' });
     const v = await inbox.version(resolved.uuid);
-    const closed = await api
+    const snoozed = await api
       .as(lead.token)
       .post(`/v2/inbox/conversations/${resolved.uuid}/snooze`)
       .send({ rowVersion: v, until: inAnHour() });
-    expect(closed.status).toBe(422);
-    expect(closed.body.code).toBe('CONVERSATION_STATUS_INVALID');
+    expect(snoozed.status, JSON.stringify(snoozed.body)).toBe(200);
+    expect(snoozed.body.status).toBe('snoozed');
 
     const open = await inbox.conversation(t, ch.id, {});
     const ov = await inbox.version(open.uuid);

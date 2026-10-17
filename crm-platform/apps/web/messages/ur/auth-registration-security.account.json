@@ -559,7 +559,8 @@
             "help_agent": "مددگار اسسٹنٹ",
             "email_channel": "ای میل (Gmail) چینل",
             "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI لیڈ اسکورنگ"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

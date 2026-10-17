@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { LeadChatDigestService, LeadScoringService } from '../../../src/modules/lead-scoring';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import { OutboxDrainService } from '../../../src/workers/outbox-drain.service';
 import { OPERATOR_EMAIL, OPERATOR_PASSWORD } from '../auth-registration-security/harness';
@@ -74,6 +75,24 @@ beforeAll(async () => {
   });
   await h.app.listen(0, '127.0.0.1');
   api = new Api(h);
+  // AI lead scoring is a Marketplace app (plan feature `lead_scoring`, off in every plan). These specs test what scoring does, so every
+  // workspace they create is given the feature the way the migration grandfathers a workspace that already uses it: an override. The
+  // plan side (locked until the app is installed, kept for a workspace that already used it) is in
+  // test/e2e/marketplace/lead-scoring-app.e2e.spec.ts.
+  const signup = api.signup.bind(api);
+  api.signup = async (label?: string) => {
+    const t = await signup(label);
+    await h.owner.query(
+      `UPDATE org_plan_state SET overrides = jsonb_set(overrides, '{features}', '{"lead_scoring": true}'::jsonb, true) WHERE org_id = $1`,
+      [t.orgId],
+    );
+    // Scoring is billed from the workspace wallet since #346 (WALLET_EMPTY without a balance); the specs below were written before that.
+    await h.owner.query(
+      `INSERT INTO wallets (org_id, unit, balance) VALUES ($1, 'USD', 100) ON CONFLICT (org_id, unit) DO UPDATE SET balance = 100`,
+      [t.orgId],
+    );
+    return t;
+  };
   drainer = new OutboxDrainService(h.app.get(DatabaseService), h.app.get(OutboxSubscriberRegistry));
 
   const first = await api
@@ -326,11 +345,12 @@ describe('scoring one contact', () => {
       { name: 'Secret Name', email: 'secret.person@private-corp.example', phone: '+919811112222' },
     ]);
     await ws(t.admin).score(id!);
-    const { LEAD_SCORING_AI_PORT } =
-      await import('../../../src/infra/providers/lead-scoring/lead-scoring-ai.port');
-    const fixture = h.app.get(LEAD_SCORING_AI_PORT, { strict: false }) as {
-      requests: Array<{ system: string; user: string }>;
-    };
+    // The port the scorer itself holds: the contacts search (PQL) provides the same token again, so a lookup by token may return its instance.
+    const fixture = (
+      h.app.get(LeadScoringService) as unknown as {
+        ai: { requests: Array<{ system: string; user: string }> };
+      }
+    ).ai;
     const sent = fixture.requests[fixture.requests.length - 1]!;
     const all = `${sent.system}${sent.user}`;
     expect(all).not.toContain('Secret Name');
@@ -551,15 +571,13 @@ describe('reading the conversation (a pilot feature of the demo workspace)', () 
   let plain: Tenant;
   let channel: number;
 
-  const fixtureRequests = async () => {
-    const { LEAD_SCORING_AI_PORT } =
-      await import('../../../src/infra/providers/lead-scoring/lead-scoring-ai.port');
-    return (
-      h.app.get(LEAD_SCORING_AI_PORT, { strict: false }) as {
-        requests: Array<{ system: string; user: string }>;
+  // The port the chat reading itself holds (see the note in 'sends the vendor facts, not the person').
+  const fixtureRequests = async () =>
+    (
+      h.app.get(LeadChatDigestService) as unknown as {
+        ai: { requests: Array<{ system: string; user: string }> };
       }
-    ).requests;
-  };
+    ).ai.requests;
   const digest = (t: Tenant, id: string) =>
     api.as(t.admin).post(`/v2/lead-scoring/contacts/${id}/digest`);
   const insight = (t: Tenant, id: string) =>

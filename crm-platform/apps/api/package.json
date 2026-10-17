@@ -31,7 +31,8 @@
     "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js",
     "seed:appointments": "node dist/src/modules/marketplace/cli/seed-appointments.js",
     "seed:forms": "node dist/src/modules/marketplace/cli/seed-forms.js",
-    "seed:email": "node dist/src/modules/marketplace/cli/seed-email.js"
+    "seed:email": "node dist/src/modules/marketplace/cli/seed-email.js",
+    "seed:lead-scoring": "node dist/src/modules/marketplace/cli/seed-lead-scoring.js"
   },
   "dependencies": {
     "@clerk/backend": "^3.23.0",

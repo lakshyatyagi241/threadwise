@@ -82,7 +82,8 @@
       "help_agent": "ผู้ช่วยด้านความช่วยเหลือ",
       "email_channel": "ช่องทางอีเมล (Gmail)",
       "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "การให้คะแนนลีดด้วย AI"
     },
     "limitGroups": {
       "messaging": "การส่งข้อความ",
@@ -564,7 +565,9 @@
       "continueFree": "ใช้ฟรีต่อ",
       "choose": "เลือก {name}",
       "back": "กลับ",
-      "compare": "เปรียบเทียบแพ็กเกจทั้งหมด"
+      "compare": "เปรียบเทียบแพ็กเกจทั้งหมด",
+      "appHint": "{feature} ยังขายเป็นแอปใน Marketplace ด้วย",
+      "appLink": "ดูแอป"
     }
   }
 }

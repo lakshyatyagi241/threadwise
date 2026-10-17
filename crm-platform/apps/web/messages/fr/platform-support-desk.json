@@ -292,7 +292,6 @@
       "firstLabel": "1re réponse (min)",
       "resolveLabel": "Résolution (min)",
       "bizOnly": "Heures ouvrées uniquement",
-      "pause": "Suspendre pendant l’attente du client",
       "setDefault": "Définir par défaut",
       "addPolicy": "Ajouter la politique",
       "savePolicy": "Enregistrer la politique",
