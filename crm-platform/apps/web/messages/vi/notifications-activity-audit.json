@@ -164,6 +164,12 @@
         "title": "Thông báo thử",
         "titleNoName": "Thông báo thử",
         "bodyNoActor": "Nếu bạn đọc được dòng này, thông báo trực tiếp đang hoạt động."
+      },
+      "snooze_wake": {
+        "title": "{name} đã quay lại danh sách của bạn",
+        "titleNoName": "Cuộc trò chuyện hoãn đã quay lại danh sách của bạn",
+        "titleTeam": "{name} đã quay lại cho nhóm của bạn",
+        "titleTeamNoName": "Cuộc trò chuyện hoãn đã quay lại cho nhóm của bạn"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "Nhóm WhatsApp hoạt động trở lại",
         "device_group_join_request": "Yêu cầu tham gia nhóm",
         "device_group_removed": "Bị xóa khỏi nhóm WhatsApp",
-        "test": "Thông báo thử"
+        "test": "Thông báo thử",
+        "snooze_wake": "Cuộc trò chuyện hoãn đã quay lại"
       },
       "generic": "Bạn có một thông báo mới",
       "paused": "Cập nhật trực tiếp đang tạm dừng nên cảnh báo mới có thể đến chậm tới một phút. Hãy tải lại trang để kết nối lại."
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "Lịch hẹn không đồng bộ với Google Calendar",
           "hint": "Sự kiện Google Calendar của một lịch hẹn sắp tới đã bị xóa, chuyển giờ hoặc thay đổi danh sách khách. Lịch hẹn không bị thay đổi; bạn sẽ chọn cách xử lý."
+        },
+        "snooze_wake": {
+          "label": "Cuộc trò chuyện hoãn quay lại",
+          "hint": "Cuộc trò chuyện hoãn mở lại đúng giờ và được giao cho bạn hoặc nhóm của bạn."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

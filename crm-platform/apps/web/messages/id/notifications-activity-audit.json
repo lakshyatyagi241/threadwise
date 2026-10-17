@@ -164,6 +164,12 @@
         "title": "Notifikasi uji",
         "titleNoName": "Notifikasi uji",
         "bodyNoActor": "Jika Anda bisa membaca ini, notifikasi langsung berfungsi."
+      },
+      "snooze_wake": {
+        "title": "{name} kembali ke daftar Anda",
+        "titleNoName": "Chat yang ditunda kembali ke daftar Anda",
+        "titleTeam": "{name} kembali untuk tim Anda",
+        "titleTeamNoName": "Chat yang ditunda kembali untuk tim Anda"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "Grup WhatsApp aktif kembali",
         "device_group_join_request": "Permintaan bergabung ke grup",
         "device_group_removed": "Dikeluarkan dari grup WhatsApp",
-        "test": "Notifikasi uji"
+        "test": "Notifikasi uji",
+        "snooze_wake": "Chat yang ditunda kembali"
       },
       "generic": "Anda punya notifikasi baru",
       "paused": "Pembaruan langsung dijeda, sehingga peringatan baru bisa terlambat hingga satu menit. Muat ulang halaman untuk menyambung kembali."
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "Janji temu tidak sinkron dengan Google Calendar",
           "hint": "Acara Google Calendar dari janji temu mendatang dihapus, dipindahkan, atau tamunya diubah. Janji temu tidak diubah; Anda yang memilih tindakan selanjutnya."
+        },
+        "snooze_wake": {
+          "label": "Chat yang ditunda kembali",
+          "hint": "Chat yang ditunda dibuka lagi pada waktunya dan diberikan kepada Anda atau tim Anda."
         }
       },
       "loading": "Memuat preferensi Anda",

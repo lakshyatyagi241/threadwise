@@ -26,7 +26,7 @@ type Flag = (typeof WORKSPACE_FLAGS)[number];
 /** Reference's Workspace::isSuspended: an active frozen, tos_violation or fraud flag blocks the workspace like a suspension. */
 export const BLOCKING_FLAGS: readonly Flag[] = ['frozen', 'tos_violation', 'fraud'];
 
-const OPEN = sql`c.status IN ('open', 'pending')`;
+const OPEN = sql`c.status = 'open'`;
 const iso = (d: Date | string | null): string | null => (d ? new Date(d).toISOString() : null);
 
 interface QueueRow {

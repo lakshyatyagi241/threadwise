@@ -88,7 +88,14 @@
       "delete": "Xóa",
       "startsFlow": "Đồng thời bắt đầu luồng {name}",
       "flowOff": "Luồng đang tắt",
-      "flowGone": "Đồng thời bắt đầu một luồng đã bị xóa"
+      "flowGone": "Đồng thời bắt đầu một luồng đã bị xóa",
+      "markSpamSummary": "Đánh dấu cuộc trò chuyện là spam",
+      "prioritySummary": "Đặt mức ưu tiên thành {priority}",
+      "tagsSummary": "Thêm các thẻ {tags}",
+      "escalationSummary": "Nếu không ai trả lời trong {minutes} phút:",
+      "escalationReassign": "giao lại cho nhân viên của quy tắc này",
+      "escalationPriority": "đặt mức ưu tiên thành {priority}",
+      "autoReplySummary": "Gửi trả lời: {body}"
     },
     "form": {
       "back": "Tự động giao việc",
@@ -117,7 +124,14 @@
         "contactIncomplete": "Hoàn tất hoặc xóa các điều kiện liên hệ chưa đầy đủ.",
         "keywordsMany": "Dùng tối đa 20 từ.",
         "targets": "Chọn ít nhất một nhân viên hoặc nhóm.",
-        "specific": "Chọn đúng một nhân viên khi giao cho một nhân viên cụ thể."
+        "specific": "Chọn đúng một nhân viên khi giao cho một nhân viên cụ thể.",
+        "actions": "Chọn quy tắc sẽ làm gì.",
+        "tagsMany": "Dùng tối đa 5 thẻ.",
+        "escalationMinutes": "Nhập số phút nguyên từ 1 đến 1440.",
+        "escalationAction": "Giao lại, đặt mức ưu tiên, hoặc cả hai.",
+        "escalationAgents": "Giao lại cần nhân viên trong quy tắc này: chọn ở trên.",
+        "autoReplyEmpty": "Viết nội dung trả lời, hoặc bỏ chọn tùy chọn.",
+        "autoReplyLong": "Nội dung trả lời quá dài (tối đa 1024 ký tự)."
       },
       "whenTitle": "Khi có cuộc trò chuyện mới đến",
       "whenHint": "Mọi điều kiện bạn đặt đều phải khớp. Để trống một phần để bỏ qua phần đó.",
@@ -187,7 +201,23 @@
         "loadFailed": "Không thể tải các luồng nên danh sách có thể chưa đầy đủ."
       },
       "onLeave": "đang nghỉ phép",
-      "onLeaveUntil": "nghỉ phép đến {date}"
+      "onLeaveUntil": "nghỉ phép đến {date}",
+      "actions": "Quy tắc làm gì",
+      "actionsHint": "Chọn một hoặc cả hai. Quy tắc có thể giao cuộc trò chuyện, đánh dấu là spam, hoặc cả hai.",
+      "actionAssign": "Giao cho nhân viên hoặc nhóm",
+      "actionMarkSpam": "Đánh dấu cuộc trò chuyện là spam",
+      "setPriority": "Đặt mức ưu tiên",
+      "priorityKeep": "Giữ nguyên mức ưu tiên",
+      "addTags": "Thêm thẻ",
+      "addTagsHint": "Ngăn cách bằng dấu phẩy. Thẻ chưa có sẽ được tạo.",
+      "escalate": "Nếu không ai trả lời kịp, leo thang",
+      "escalateHint": "Số phút kể từ khi quy tắc chạy, tối đa 1440 (một ngày). Chúng tôi trả lời trước sẽ hủy.",
+      "escalateMinutes": "Số phút không có trả lời",
+      "escalateReassign": "Giao lại cho nhân viên của quy tắc này",
+      "escalatePriority": "Sau đó đặt mức ưu tiên",
+      "autoReply": "Gửi trả lời tự động",
+      "autoReplyBody": "Nội dung trả lời",
+      "autoReplyHint": "Được gửi cho khách hàng dưới tên doanh nghiệp. Ngoài cửa sổ 24 giờ, trả lời tự do sẽ không được gửi."
     },
     "sla": {
       "back": "Quay lại Cài đặt",
@@ -205,8 +235,6 @@
       "resolution": "Giải quyết trong (phút)",
       "minutesHint": "Để trống nếu không có mục tiêu. 60 là một giờ, 1440 là một ngày.",
       "minutesInvalid": "Dùng số nguyên từ 1 trở lên.",
-      "pause": "Tạm dừng khi đang chờ khách hàng",
-      "pauseHint": "Cuộc trò chuyện ở trạng thái chờ xử lý sẽ không bị gắn cờ.",
       "businessHours": "Chỉ tính giờ làm việc",
       "businessHoursHint": "Dùng giờ và múi giờ trong cài đặt không gian làm việc của bạn.",
       "makeDefault": "Đặt làm chính sách mặc định",

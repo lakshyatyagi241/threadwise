@@ -49,6 +49,7 @@ export const CHAT_NOTIFICATION_TYPES = [
   'new_message',
   'chat_waiting',
   'conversation_assigned',
+  'snooze_wake',
   'mention',
 ] as const;
 export type ChatNotificationType = (typeof CHAT_NOTIFICATION_TYPES)[number];
@@ -99,6 +100,11 @@ function conversationText(
         title: name ? t(key, { name }) : t(key),
         body: actor ? t(`${base}.body`, { actor }) : preview || null,
       };
+    }
+    case 'snooze_wake': {
+      const team = d.teamAssigned === true;
+      const key = `${base}.${team ? 'titleTeam' : 'title'}${name ? '' : 'NoName'}`;
+      return { title: name ? t(key, { name }) : t(key), body: null };
     }
     case 'mention': {
       const actor = text(d.authorName).trim();

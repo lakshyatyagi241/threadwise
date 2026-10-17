@@ -171,6 +171,7 @@ describe('the push preference', () => {
     'new_message',
     'chat_waiting',
     'conversation_assigned',
+    'snooze_wake',
     'mention',
     'task_assigned',
     'teamchat_mention',
@@ -181,7 +182,7 @@ describe('the push preference', () => {
     'assignment_blocked_by_leave',
   ];
 
-  it('is on by default only for chat events, assignments, mentions and failed payments, and off for everything noisy', () => {
+  it('is on by default only for chat events, assignments, a snoozed chat coming back, mentions and failed payments, and off for everything noisy', () => {
     for (const type of NOTIFICATION_PREF_TYPES) {
       expect(NOTIFICATION_CATALOG[type].push, type).toBe(ON.includes(type));
     }

@@ -341,7 +341,6 @@ export const supportSlaPolicies = pgTable(
     name: text('name').notNull(),
     firstResponseMinutes: integer('first_response_minutes').notNull(),
     resolutionMinutes: integer('resolution_minutes').notNull(),
-    pauseWhenWaitingOnCustomer: boolean('pause_when_waiting_on_customer').notNull().default(false),
     respectBusinessHours: boolean('respect_business_hours').notNull().default(true),
     isDefault: boolean('is_default').notNull().default(false),
     createdAt: createdAt(),

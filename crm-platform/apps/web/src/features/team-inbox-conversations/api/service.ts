@@ -190,6 +190,13 @@ export const inboxApi = {
       method: 'POST',
       body: { rowVersion, status },
     }),
+  /** Marks the thread as spam; taking it off spam is `setStatus(..., 'open')`. */
+  markSpam: (conversationId: string, rowVersion: number) =>
+    apiFetch(`/inbox/conversations/${conversationId}/spam`, {
+      method: 'POST',
+      body: { rowVersion },
+      schema: conversationSummarySchema,
+    }),
 
   notes: (conversationId: string, signal?: AbortSignal) =>
     apiFetch(`/inbox/conversations/${conversationId}/notes`, {

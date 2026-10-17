@@ -164,6 +164,12 @@
         "title": "Notification de test",
         "titleNoName": "Notification de test",
         "bodyNoActor": "Si vous pouvez lire ceci, les notifications en direct fonctionnent."
+      },
+      "snooze_wake": {
+        "title": "{name} est de retour dans votre liste",
+        "titleNoName": "Une conversation reportée est de retour dans votre liste",
+        "titleTeam": "{name} est de retour pour votre équipe",
+        "titleTeamNoName": "Une conversation reportée est de retour pour votre équipe"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "Groupe WhatsApp de nouveau actif",
         "device_group_join_request": "Demande d'adhésion à un groupe",
         "device_group_removed": "Retiré d'un groupe WhatsApp",
-        "test": "Notification de test"
+        "test": "Notification de test",
+        "snooze_wake": "Conversation reportée de retour"
       },
       "generic": "Vous avez une nouvelle notification",
       "paused": "Les mises à jour en direct sont en pause, les nouvelles alertes peuvent donc arriver avec jusqu’à une minute de retard. Rechargez la page pour vous reconnecter."
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "Rendez-vous désynchronisé de Google Calendar",
           "hint": "L'événement Google Calendar d'un rendez-vous à venir a été supprimé, déplacé ou ses invités ont été modifiés. Le rendez-vous n'est pas modifié ; vous choisissez la suite à donner."
+        },
+        "snooze_wake": {
+          "label": "La conversation reportée revient",
+          "hint": "Une conversation reportée se rouvre à l'heure choisie et vous est attribuée, ou à votre équipe."
         }
       },
       "loading": "Chargement de vos préférences",

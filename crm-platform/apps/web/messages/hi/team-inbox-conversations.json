@@ -29,7 +29,8 @@
       "priorityChanged": "प्राथमिकता अपडेट हो गई",
       "snoozed": "बातचीत स्नूज़ की गई",
       "tagAdded": "टैग जोड़ा गया",
-      "tagRemoved": "टैग हटाया गया"
+      "tagRemoved": "टैग हटाया गया",
+      "spammed": "बातचीत को स्पैम के रूप में चिह्नित किया गया।"
     },
     "list": {
       "title": "इनबॉक्स",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "खुली",
-        "pending": "लंबित",
         "snoozed": "स्नूज़ की गई",
         "resolved": "हल की गई",
         "closed": "हल की गई",
@@ -113,7 +113,7 @@
         "cancel": "रद्द करें",
         "apply": "लागू करें",
         "status": "चैट की स्थिति",
-        "statusHint": "कुछ न चुनने पर खुली और लंबित चैट दिखती हैं।",
+        "statusHint": "कुछ न चुनने पर खुली बातचीत दिखती हैं।",
         "conversation": "बातचीत",
         "any": "कोई भी",
         "assigned": "असाइन की गई",
@@ -145,7 +145,15 @@
       "statusOpen": "खुली",
       "statusAll": "हर स्थिति",
       "channelFilter": "चैनल",
-      "selectRow": "{name} चुनें"
+      "selectRow": "{name} चुनें",
+      "snoozedFor": "स्थगित · {left}",
+      "snoozeLeft": {
+        "due": "अभी",
+        "minutes": "{count, plural, one {# मिनट} other {# मिनट}}",
+        "hours": "{count, plural, one {# घंटा} other {# घंटे}}",
+        "days": "{count, plural, one {# दिन} other {# दिन}}"
+      },
+      "unsnoozesAt": "{time} पर फिर खुलेगी"
     },
     "status": {
       "received": "प्राप्त",
@@ -577,6 +585,8 @@
           "tag_removed": "{actor} द्वारा टैग हटाया गया",
           "first_response": "पहला उत्तर भेजा गया",
           "sla_breach": "उत्तर की समय सीमा चूक गई",
+          "spam_flagged": "{actor} ने स्पैम के रूप में चिह्नित किया",
+          "escalated": "बढ़ाया गया",
           "unknown": "{actor} द्वारा {what}"
         },
         "actors": {
@@ -593,7 +603,6 @@
         "noMessages": "कोई संदेश नहीं",
         "status": {
           "open": "खुली",
-          "pending": "लंबित",
           "snoozed": "स्नूज़ की गई",
           "resolved": "हल की गई",
           "closed": "बंद",
@@ -1010,7 +1019,9 @@
     "triage": {
       "priority": "प्राथमिकता",
       "snooze": "स्नूज़ करें",
-      "wake": "अभी जगाएँ"
+      "wake": "अभी जगाएँ",
+      "markSpam": "स्पैम के रूप में चिह्नित करें",
+      "notSpam": "स्पैम नहीं है"
     },
     "bulk": {
       "barLabel": "सामूहिक कार्रवाइयाँ",
@@ -1043,7 +1054,8 @@
       "tagAdd": "टैग जोड़ें",
       "tagRemove": "टैग हटाएँ",
       "onLeave": "छुट्टी पर",
-      "onLeaveUntil": "{date} तक छुट्टी पर"
+      "onLeaveUntil": "{date} तक छुट्टी पर",
+      "spam": "स्पैम के रूप में चिह्नित करें"
     },
     "tags": {
       "tag": "टैग",

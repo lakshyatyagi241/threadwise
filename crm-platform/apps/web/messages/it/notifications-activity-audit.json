@@ -164,6 +164,12 @@
         "title": "Notifica di prova",
         "titleNoName": "Notifica di prova",
         "bodyNoActor": "Se riesci a leggere questo, le notifiche in tempo reale funzionano."
+      },
+      "snooze_wake": {
+        "title": "{name} è tornata nella tua lista",
+        "titleNoName": "Una chat posticipata è tornata nella tua lista",
+        "titleTeam": "{name} è tornata per il tuo team",
+        "titleTeamNoName": "Una chat posticipata è tornata per il tuo team"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo",
         "device_group_join_request": "Richiesta di ingresso in un gruppo",
         "device_group_removed": "Rimosso da un gruppo WhatsApp",
-        "test": "Notifica di prova"
+        "test": "Notifica di prova",
+        "snooze_wake": "Chat posticipata tornata"
       },
       "generic": "Hai una nuova notifica",
       "paused": "Gli aggiornamenti in tempo reale sono in pausa, quindi i nuovi avvisi possono arrivare con un ritardo fino a un minuto. Ricarica la pagina per riconnetterti."
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "Appuntamento non sincronizzato con Google Calendar",
           "hint": "L'evento di Google Calendar di un prossimo appuntamento è stato eliminato, spostato o ha subito modifiche agli invitati. L'appuntamento non viene modificato: sei tu a scegliere cosa fare."
+        },
+        "snooze_wake": {
+          "label": "La chat posticipata torna",
+          "hint": "Una chat posticipata si riapre all'ora scelta e viene assegnata a te o al tuo team."
         }
       },
       "loading": "Caricamento delle tue preferenze",

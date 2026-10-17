@@ -474,15 +474,15 @@ describe('ConversationList states', () => {
   });
   const render = (p: ReturnType<typeof props>) => html(<ConversationList {...p} />);
 
-  it('the status filter offers Open first, one Resolved (no separate Closed), Pending, Snoozed and every status', () => {
+  it('the status filter offers Open first, one Resolved (no separate Closed), Snoozed, Spam and every status', () => {
     const out = render(props());
     const options = [...out.matchAll(/<option value="([^"]*)"[^>]*>([^<]*)<\/option>/g)].map(
       (m) => [m[1], m[2]],
     );
     const status = options.filter(([v]) =>
-      ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
+      ['open', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
     );
-    expect(status.map(([v]) => v)).toEqual(['open', 'pending', 'snoozed', 'resolved', 'all']);
+    expect(status.map(([v]) => v)).toEqual(['open', 'snoozed', 'resolved', 'spam', 'all']);
     expect(status[0]).toEqual(['open', 'Open']);
     expect(out).not.toContain('>Closed<');
     expect(out).toContain('data-testid="inbox-filters-open"');

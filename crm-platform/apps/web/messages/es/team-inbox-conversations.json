@@ -29,7 +29,8 @@
       "priorityChanged": "Prioridad actualizada",
       "snoozed": "Conversación pospuesta",
       "tagAdded": "Etiqueta añadida",
-      "tagRemoved": "Etiqueta quitada"
+      "tagRemoved": "Etiqueta quitada",
+      "spammed": "Conversación marcada como spam."
     },
     "list": {
       "title": "Bandeja de entrada",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Abierta",
-        "pending": "Pendiente",
         "snoozed": "Pospuesta",
         "resolved": "Resuelta",
         "closed": "Resuelta",
@@ -113,7 +113,7 @@
         "cancel": "Cancelar",
         "apply": "Aplicar",
         "status": "Estado del chat",
-        "statusHint": "Sin elegir nada se ven los chats abiertos y pendientes.",
+        "statusHint": "Si no eliges nada, se muestran las conversaciones abiertas.",
         "conversation": "Conversación",
         "any": "Cualquiera",
         "assigned": "Asignada",
@@ -145,7 +145,15 @@
       "statusOpen": "Abierta",
       "statusAll": "Todos los estados",
       "channelFilter": "Canal",
-      "selectRow": "Seleccionar {name}"
+      "selectRow": "Seleccionar {name}",
+      "snoozedFor": "Pospuesta · {left}",
+      "snoozeLeft": {
+        "due": "ahora",
+        "minutes": "{count, plural, one {# minuto} other {# minutos}}",
+        "hours": "{count, plural, one {# hora} other {# horas}}",
+        "days": "{count, plural, one {# día} other {# días}}"
+      },
+      "unsnoozesAt": "Se reactiva el {time}"
     },
     "status": {
       "received": "Recibido",
@@ -577,6 +585,8 @@
           "tag_removed": "Etiqueta quitada por {actor}",
           "first_response": "Primera respuesta enviada",
           "sla_breach": "Plazo de respuesta incumplido",
+          "spam_flagged": "Marcada como spam por {actor}",
+          "escalated": "Escalada",
           "unknown": "{what} por {actor}"
         },
         "actors": {
@@ -593,7 +603,6 @@
         "noMessages": "Sin mensajes",
         "status": {
           "open": "Abierta",
-          "pending": "Pendiente",
           "snoozed": "Pospuesta",
           "resolved": "Resuelta",
           "closed": "Cerrada",
@@ -1010,7 +1019,9 @@
     "triage": {
       "priority": "Prioridad",
       "snooze": "Posponer",
-      "wake": "Reactivar ahora"
+      "wake": "Reactivar ahora",
+      "markSpam": "Marcar como spam",
+      "notSpam": "No es spam"
     },
     "bulk": {
       "barLabel": "Acciones masivas",
@@ -1043,7 +1054,8 @@
       "tagAdd": "Añadir etiqueta",
       "tagRemove": "Quitar etiqueta",
       "onLeave": "de ausencia",
-      "onLeaveUntil": "de ausencia hasta el {date}"
+      "onLeaveUntil": "de ausencia hasta el {date}",
+      "spam": "Marcar como spam"
     },
     "tags": {
       "tag": "Etiqueta",

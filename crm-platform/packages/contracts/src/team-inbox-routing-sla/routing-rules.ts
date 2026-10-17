@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { channelKindSchema } from '../chat-conversations/channels';
+import { conversationPrioritySchema } from '../chat-conversations/enums';
 import { pageInfoSchema } from '../common/pagination';
 import { uuidSchema } from '../common/ids';
 import { segmentRulesSchema } from '../segments/rules';
@@ -11,8 +12,9 @@ import { segmentRulesSchema } from '../segments/rules';
  * match wins unless it says `stopOnMatch: false`; the one rule marked `isFallback` runs only when no other rule matched.
  *
  * Storage (no new table): `routing_rules.conditions` holds `routingConditionsSchema`, `routing_rules.actions` holds a list of action
- * dicts (Reference's shape): one `{ type: 'assign', ... }`, an optional `{ type: 'trigger_flow', flowId }` (start a flow for the conversation)
- * and an optional `{ type: 'note', description }` for the rule's description.
+ * dicts (Reference's shape): an optional `{ type: 'assign', ... }`, an optional `{ type: 'mark_spam' }` (the thread becomes spam), an
+ * optional `{ type: 'trigger_flow', flowId }` (start a flow for the conversation) and an optional `{ type: 'note', description }` for the
+ * rule's description. A rule has at least one of assign, mark_spam, trigger_flow.
  * The round robin cursor (`rrCursor`, the internal id of the agent who got the last one) lives in the assign action and never leaves
  * the server. Port additions beyond the inventory (marked "addition" in the inventory file): `least_busy`/`specific` strategies on a
  * set of agents, the `contact` condition (the shared segment rule tree), `keywords`, `languages`, `channelKinds`, and the
@@ -100,6 +102,69 @@ export const routingAssignSchema = z
   });
 export type RoutingAssign = z.infer<typeof routingAssignSchema>;
 
+/** Whether a rule does anything when it fires: an assignment, marking the thread as spam, or starting a flow. */
+export function hasRoutingActions(v: {
+  assign?: RoutingAssign | null;
+  markSpam?: boolean;
+  priority?: string | null;
+  addTags?: unknown[];
+  escalation?: unknown | null;
+  autoReply?: unknown | null;
+  triggerFlowId?: string | null;
+}): boolean {
+  return (
+    v.assign != null ||
+    v.markSpam === true ||
+    (v.priority ?? null) !== null ||
+    (v.addTags ?? []).length > 0 ||
+    (v.escalation ?? null) !== null ||
+    (v.autoReply ?? null) !== null ||
+    (v.triggerFlowId ?? null) !== null
+  );
+}
+
+export const ROUTING_ESCALATION_MAX_MINUTES = 1440;
+
+/**
+ * A deferred action (Reference's set_escalation): when the conversation is still open with no reply from us this many minutes after the
+ * rule fired, it is reassigned (by this rule's agents, as they are when it fired) and/or its priority is set. A reply from us before that
+ * cancels it.
+ */
+export const routingEscalationSchema = z
+  .object({
+    minutes: z.number().int().min(1).max(ROUTING_ESCALATION_MAX_MINUTES),
+    reassign: z.boolean(),
+    priority: conversationPrioritySchema.nullable(),
+  })
+  .strict()
+  .refine((v) => v.reassign || v.priority !== null, {
+    message: 'Reassign it, set a priority, or both.',
+    path: ['reassign'],
+  });
+export type RoutingEscalation = z.infer<typeof routingEscalationSchema>;
+
+export const ROUTING_AUTO_REPLY_MAX = 1024;
+
+/**
+ * An automatic reply the rule sends to the customer (Reference's `auto_reply`, free text). It runs for the customer's message that matched
+ * (the new conversation's first message, and each later message of a live conversation that matches the rule). Sent as the business, so
+ * the channel's rules apply: outside the 24 hour window a free-form reply is refused and the message is not sent.
+ */
+export const routingAutoReplySchema = z.object({
+  body: z.string().trim().min(1).max(ROUTING_AUTO_REPLY_MAX),
+});
+export type RoutingAutoReply = z.infer<typeof routingAutoReplySchema>;
+
+export const ROUTING_TAG_NAME_MAX = 100;
+export const ROUTING_TAGS_MAX = 5;
+
+/** A tag the rule adds: found by name (case-insensitive, as the tag library is), created with this colour when it is new. */
+export const routingTagSchema = z.object({
+  name: z.string().trim().min(1).max(ROUTING_TAG_NAME_MAX),
+  color: z.string().trim().max(20).nullable(),
+});
+export type RoutingTag = z.infer<typeof routingTagSchema>;
+
 const nameSchema = z.string().trim().min(1).max(ROUTING_NAME_MAX);
 const descriptionSchema = z.string().trim().max(ROUTING_DESCRIPTION_MAX);
 
@@ -119,7 +184,18 @@ export const routingRuleSchema = z.object({
   name: z.string(),
   description: z.string(),
   conditions: routingConditionsSchema,
-  assign: routingAssignSchema,
+  /** Hand the conversation to one of these agents. Null when the rule only marks spam or starts a flow. */
+  assign: routingAssignSchema.nullable(),
+  /** Mark the conversation as spam when the rule fires (Reference's `mark_spam`); it leaves the open list. */
+  markSpam: z.boolean(),
+  /** Set the conversation's priority when the rule fires (Reference's `set_priority`); null leaves it alone. */
+  priority: conversationPrioritySchema.nullable(),
+  /** Tags to add when the rule fires (Reference's `add_tag`). */
+  addTags: z.array(routingTagSchema),
+  /** A deferred reassignment or priority, if no one replies in time (Reference's `set_escalation`). */
+  escalation: routingEscalationSchema.nullable(),
+  /** An automatic reply to the customer (Reference's `auto_reply`); null for none. */
+  autoReply: routingAutoReplySchema.nullable(),
   /** Also start this flow for the conversation when the rule fires. The flow only has to be switched on (publishing is not required). */
   triggerFlow: routingTriggerFlowSchema.nullable(),
   stopOnMatch: z.boolean(),
@@ -185,14 +261,28 @@ export const createRoutingRuleSchema = z
     name: nameSchema,
     description: descriptionSchema.default(''),
     conditions: routingConditionsSchema.default({}),
-    assign: routingAssignSchema,
+    assign: routingAssignSchema.nullable().default(null),
+    markSpam: z.boolean().default(false),
+    priority: conversationPrioritySchema.nullable().default(null),
+    addTags: z.array(routingTagSchema).max(ROUTING_TAGS_MAX).default([]),
+    escalation: routingEscalationSchema.nullable().default(null),
+    autoReply: routingAutoReplySchema.nullable().default(null),
     triggerFlowId: uuidSchema.nullable().default(null),
     stopOnMatch: z.boolean().default(true),
     isFallback: z.boolean().default(false),
     isActive: z.boolean().default(false),
   })
   .strict()
-  .superRefine(conditionsRefine);
+  .superRefine(conditionsRefine)
+  .superRefine((v, ctx) => {
+    if (!hasRoutingActions(v)) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['assign'],
+        message: 'Choose what the rule does: assign it, mark it as spam, or start a flow.',
+      });
+    }
+  });
 export type CreateRoutingRuleInput = z.infer<typeof createRoutingRuleSchema>;
 
 /** `PATCH /inbox/routing/rules/:id`: any subset, with the row version read. A body of only `isActive` is the list's toggle. */
@@ -202,7 +292,12 @@ export const updateRoutingRuleSchema = z
     name: nameSchema.optional(),
     description: descriptionSchema.optional(),
     conditions: routingConditionsSchema.optional(),
-    assign: routingAssignSchema.optional(),
+    assign: routingAssignSchema.nullable().optional(),
+    markSpam: z.boolean().optional(),
+    priority: conversationPrioritySchema.nullable().optional(),
+    addTags: z.array(routingTagSchema).max(ROUTING_TAGS_MAX).optional(),
+    escalation: routingEscalationSchema.nullable().optional(),
+    autoReply: routingAutoReplySchema.nullable().optional(),
     triggerFlowId: uuidSchema.nullable().optional(),
     stopOnMatch: z.boolean().optional(),
     isFallback: z.boolean().optional(),

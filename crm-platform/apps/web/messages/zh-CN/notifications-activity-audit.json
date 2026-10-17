@@ -164,6 +164,12 @@
         "title": "测试通知",
         "titleNoName": "测试通知",
         "bodyNoActor": "如果你能看到这条消息，说明实时通知正常工作。"
+      },
+      "snooze_wake": {
+        "title": "{name} 已回到你的列表",
+        "titleNoName": "已暂停的会话回到了你的列表",
+        "titleTeam": "{name} 已回到你的团队",
+        "titleTeamNoName": "已暂停的会话回到了你的团队"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "WhatsApp 群组已恢复正常",
         "device_group_join_request": "入群申请",
         "device_group_removed": "已被移出 WhatsApp 群组",
-        "test": "测试通知"
+        "test": "测试通知",
+        "snooze_wake": "已暂停的会话已恢复"
       },
       "generic": "你有一条新通知",
       "paused": "实时更新已暂停，新提醒可能延迟最多一分钟。请刷新页面以重新连接。"
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "预约与 Google Calendar 不同步",
           "hint": "即将到来的预约在 Google Calendar 中的日程被删除、改期或参与者被更改。预约本身不会改变，由您决定如何处理。"
+        },
+        "snooze_wake": {
+          "label": "已暂停的会话恢复",
+          "hint": "已暂停的会话会在设定时间重新打开，并分配给你或你的团队。"
         }
       },
       "loading": "正在加载你的偏好设置",

@@ -25,7 +25,7 @@ const oneDecimal = (v: unknown): number | null =>
  *    appear), as in Reference;
  *  - the average first-reply time is over conversations resolved in the window, in calendar minutes, credited to the person the
  *    conversation is assigned to; the total is the same average over every resolved conversation;
- *  - load is the live number of open and pending conversations assigned to the person (Reference kept a counter that drifted).
+ *  - load is the live number of open conversations assigned to the person (Reference kept a counter that drifted).
  */
 @Injectable()
 export class TeamAnalyticsService {
@@ -49,7 +49,7 @@ export class TeamAnalyticsService {
       const onChannel: SQL = channel === null ? sql`` : sql`AND c.channel_id = ${channel}`;
 
       // Day, week (Monday) and month starts in the workspace's zone; an unknown zone name reads as UTC.
-      const unit = sql.raw(range === 'today' ? 'day' : range);
+      const unit = range === 'today' ? 'day' : range;
       const sinceRes = await tx.execute(sql`
         WITH z AS (
           SELECT COALESCE((SELECT name FROM pg_timezone_names WHERE name = o.settings ->> 'timezone'), 'UTC') AS name
@@ -108,7 +108,7 @@ export class TeamAnalyticsService {
                 SELECT u.id, u.uuid, u.full_name, COALESCE(s.status, 'offline') AS status, s.last_seen_at,
                        (SELECT count(*)::int FROM conversations c
                          WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND c.archived = FALSE
-                           AND c.status IN ('open', 'pending')) AS load
+                           AND c.status = 'open') AS load
                 FROM users u LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
                 WHERE u.org_id = ${orgId} AND u.id IN (${sql.join(
                   ids.map((i) => sql`${i}`),

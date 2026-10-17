@@ -90,7 +90,6 @@ describe('SLA policies API', () => {
       name: 'Standard',
       firstResponseMinutes: 30,
       resolutionMinutes: 1440,
-      pauseWhenWaitingOnCustomer: true,
       respectBusinessHours: true,
       isDefault: true,
       conversationCount: 0,
@@ -391,7 +390,7 @@ describe('response clocks', () => {
     ).toHaveLength(1);
   });
 
-  it('the sweep flags a resolution breach, and leaves alone what it must: not due, snoozed, finished, pending with a pausing policy', async () => {
+  it('the sweep flags a resolution breach, and leaves alone what it must: not due, snoozed, finished, spam', async () => {
     const due = await inbox.conversation(t, ch.id, {});
     await seedClock(due.uuid, { resolution: minutesAgo(3) });
     const future = await inbox.conversation(t, ch.id, {});
@@ -404,12 +403,8 @@ describe('response clocks', () => {
     await seedClock(snoozed.uuid, { resolution: minutesAgo(30) });
     const resolved = await inbox.conversation(t, ch.id, { status: 'resolved' });
     await seedClock(resolved.uuid, { resolution: minutesAgo(30) });
-    const pending = await inbox.conversation(t, ch.id, { status: 'pending' });
-    await seedClock(pending.uuid, { resolution: minutesAgo(30) });
-    await h.owner.query(
-      `UPDATE conversations SET sla_policy_id = (SELECT id FROM sla_policies WHERE uuid = $2) WHERE uuid = $1`,
-      [pending.uuid, policyId],
-    );
+    const spam = await inbox.conversation(t, ch.id, { status: 'spam' });
+    await seedClock(spam.uuid, { resolution: minutesAgo(30) });
     await sweeper().sweep();
     expect((await dues(due.uuid)).breached).toBe(true);
     expect(
@@ -418,7 +413,7 @@ describe('response clocks', () => {
       type: 'sla_breach',
       payload: { kind: 'resolution' },
     });
-    for (const c of [future, snoozed, resolved, pending]) {
+    for (const c of [future, snoozed, resolved, spam]) {
       expect((await dues(c.uuid)).breached, c.uuid).toBe(false);
     }
   });

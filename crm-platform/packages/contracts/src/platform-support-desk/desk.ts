@@ -18,7 +18,6 @@ export const slaPolicySchema = z.object({
   name: z.string(),
   firstResponseMinutes: z.number().int(),
   resolutionMinutes: z.number().int(),
-  pauseWhenWaitingOnCustomer: z.boolean(),
   respectBusinessHours: z.boolean(),
   isDefault: z.boolean(),
   rowVersion,
@@ -29,7 +28,6 @@ export const slaPolicyInputSchema = z.object({
   name: z.string().trim().min(1).max(120),
   firstResponseMinutes: z.number().int().min(1).max(10080),
   resolutionMinutes: z.number().int().min(1).max(43200),
-  pauseWhenWaitingOnCustomer: z.boolean().default(false),
   respectBusinessHours: z.boolean().default(true),
   isDefault: z.boolean().default(false),
 });

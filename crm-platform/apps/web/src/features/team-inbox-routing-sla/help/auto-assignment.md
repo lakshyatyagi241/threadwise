@@ -35,7 +35,7 @@ Rules never take a conversation away from someone. A conversation that already h
 1. Open **Settings**, go to **Automation** and select **Auto-assignment**.
 2. Select **Create rule**. Give it a **Rule name** and, if you like, a **Description** for your team.
 3. Under **When a new conversation arrives**, set the conditions. Every part you fill in must match; a part you leave empty is ignored.
-4. Under **Assign to**, choose **How to choose** and tick the agents or teams.
+4. Under **What the rule does**, tick what it should do: **Assign to agents or teams** (then choose **How to choose** and tick the agents or teams), **Mark the conversation as spam**, a priority, tags to add, an automatic reply, or an escalation (after the minutes you choose with no reply from us, it is reassigned to this rule's agents and/or its priority is raised). A rule must do at least one of these.
 5. Select **Save** to keep the rule switched off, or **Save and activate** to start using it at once.
 6. On the list, use the arrows to change the order, the switch to turn a rule on or off, and **Edit**, **Duplicate** or **Delete**.
 

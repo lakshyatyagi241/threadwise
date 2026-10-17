@@ -27,7 +27,6 @@ export const toPolicy = (r: SlaPolicyRow): InboxSlaPolicy => ({
   name: r.name,
   firstResponseMinutes: r.firstResponseMinutes,
   resolutionMinutes: r.resolutionMinutes,
-  pauseWhenWaitingOnCustomer: r.pauseWhenWaitingOnCustomer,
   respectBusinessHours: r.respectBusinessHours,
   priorityOverrides: r.priorityOverrides,
   isDefault: r.isDefault,
@@ -67,7 +66,6 @@ export class SlaPoliciesService {
         name: input.name,
         firstResponseMinutes: input.firstResponseMinutes ?? null,
         resolutionMinutes: input.resolutionMinutes ?? null,
-        pauseWhenWaitingOnCustomer: input.pauseWhenWaitingOnCustomer,
         respectBusinessHours: input.respectBusinessHours,
         priorityOverrides: input.priorityOverrides,
         // The first policy of a workspace is its default: without one nothing would start a clock.
@@ -103,8 +101,6 @@ export class SlaPoliciesService {
           input.resolutionMinutes === undefined
             ? before.resolutionMinutes
             : input.resolutionMinutes,
-        pauseWhenWaitingOnCustomer:
-          input.pauseWhenWaitingOnCustomer ?? before.pauseWhenWaitingOnCustomer,
         respectBusinessHours: input.respectBusinessHours ?? before.respectBusinessHours,
         priorityOverrides: input.priorityOverrides ?? before.priorityOverrides,
         isDefault: input.isDefault ?? before.isDefault,
@@ -119,7 +115,6 @@ export class SlaPoliciesService {
         'name',
         'firstResponseMinutes',
         'resolutionMinutes',
-        'pauseWhenWaitingOnCustomer',
         'respectBusinessHours',
         'isDefault',
       ] as const) {

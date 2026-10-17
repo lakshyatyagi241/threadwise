@@ -29,7 +29,8 @@
       "priorityChanged": "Đã cập nhật mức ưu tiên",
       "snoozed": "Đã tạm ẩn cuộc trò chuyện",
       "tagAdded": "Đã thêm thẻ",
-      "tagRemoved": "Đã bỏ thẻ"
+      "tagRemoved": "Đã bỏ thẻ",
+      "spammed": "Đã đánh dấu cuộc trò chuyện là spam."
     },
     "list": {
       "title": "Hộp thư",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Đang mở",
-        "pending": "Đang chờ",
         "snoozed": "Tạm hoãn",
         "resolved": "Đã giải quyết",
         "closed": "Đã giải quyết",
@@ -113,7 +113,7 @@
         "cancel": "Hủy",
         "apply": "Áp dụng",
         "status": "Trạng thái chat",
-        "statusHint": "Không chọn gì sẽ hiện các chat đang mở và đang chờ.",
+        "statusHint": "Không chọn gì thì hiển thị các cuộc trò chuyện đang mở.",
         "conversation": "Cuộc trò chuyện",
         "any": "Bất kỳ",
         "assigned": "Đã giao",
@@ -145,7 +145,15 @@
       "statusOpen": "Đang mở",
       "statusAll": "Mọi trạng thái",
       "channelFilter": "Kênh",
-      "selectRow": "Chọn {name}"
+      "selectRow": "Chọn {name}",
+      "snoozedFor": "Đã hoãn · {left}",
+      "snoozeLeft": {
+        "due": "đến hạn",
+        "minutes": "{count} phút",
+        "hours": "{count} giờ",
+        "days": "{count} ngày"
+      },
+      "unsnoozesAt": "Mở lại lúc {time}"
     },
     "status": {
       "received": "Đã nhận",
@@ -577,6 +585,8 @@
           "tag_removed": "Thẻ được bỏ bởi {actor}",
           "first_response": "Đã gửi phản hồi đầu tiên",
           "sla_breach": "Đã quá hạn phản hồi",
+          "spam_flagged": "Đã đánh dấu spam bởi {actor}",
+          "escalated": "Đã leo thang",
           "unknown": "{what} bởi {actor}"
         },
         "actors": {
@@ -593,7 +603,6 @@
         "noMessages": "Không có tin nhắn",
         "status": {
           "open": "Đang mở",
-          "pending": "Đang chờ",
           "snoozed": "Tạm hoãn",
           "resolved": "Đã giải quyết",
           "closed": "Đã đóng",
@@ -1010,7 +1019,9 @@
     "triage": {
       "priority": "Ưu tiên",
       "snooze": "Tạm ẩn",
-      "wake": "Hiện lại ngay"
+      "wake": "Hiện lại ngay",
+      "markSpam": "Đánh dấu là spam",
+      "notSpam": "Không phải spam"
     },
     "bulk": {
       "barLabel": "Thao tác hàng loạt",
@@ -1043,7 +1054,8 @@
       "tagAdd": "Thêm thẻ",
       "tagRemove": "Bỏ thẻ",
       "onLeave": "đang nghỉ phép",
-      "onLeaveUntil": "nghỉ phép đến {date}"
+      "onLeaveUntil": "nghỉ phép đến {date}",
+      "spam": "Đánh dấu là spam"
     },
     "tags": {
       "tag": "Thẻ",

@@ -107,7 +107,6 @@ export const slaPolicies = pgTable(
     name: text('name').notNull(),
     firstResponseMinutes: integer('first_response_minutes'),
     resolutionMinutes: integer('resolution_minutes'),
-    pauseWhenWaitingOnCustomer: boolean('pause_when_waiting_on_customer').notNull().default(true),
     respectBusinessHours: boolean('respect_business_hours').notNull().default(true),
     deviceIds: jsonb('device_ids'),
     priorityOverrides: jsonb('priority_overrides'),

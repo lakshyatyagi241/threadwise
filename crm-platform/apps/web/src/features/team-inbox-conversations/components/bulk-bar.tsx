@@ -119,6 +119,15 @@ export function BulkBar(props: BulkBarProps) {
             >
               {t('reopen')}
             </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={disabled}
+              data-testid="inbox-bulk-spam"
+              onClick={() => props.onRun({ type: 'spam' })}
+            >
+              {t('spam')}
+            </Button>
           </>
         )}
         {(can.assign || can.assignSelf) && (

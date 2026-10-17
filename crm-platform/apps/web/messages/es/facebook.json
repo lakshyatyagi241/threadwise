@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "Abierta",
-        "pending": "Pendiente",
         "resolved": "Resuelta",
         "closed": "Cerrada",
         "snoozed": "Pospuesta"

@@ -164,6 +164,12 @@
         "title": "Test notification",
         "titleNoName": "Test notification",
         "bodyNoActor": "If you can read this, live notifications are working."
+      },
+      "snooze_wake": {
+        "title": "{name} is back in your list",
+        "titleNoName": "A snoozed chat is back in your list",
+        "titleTeam": "{name} is back for your team",
+        "titleTeamNoName": "A snoozed chat is back for your team"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "WhatsApp group active again",
         "device_group_join_request": "Request to join a group",
         "device_group_removed": "Removed from a WhatsApp group",
-        "test": "Test notification"
+        "test": "Test notification",
+        "snooze_wake": "Snoozed chat is back"
       },
       "generic": "You have a new notification",
       "paused": "Live updates are paused, so new alerts can arrive up to a minute late. Reload the page to reconnect."
@@ -383,6 +390,10 @@
         "test": {
           "label": "Test notification",
           "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."
+        },
+        "snooze_wake": {
+          "label": "Snoozed chat comes back",
+          "hint": "A snoozed chat reopens at its time and goes to you or to your team."
         }
       },
       "loading": "Loading your preferences",

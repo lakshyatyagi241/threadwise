@@ -164,6 +164,12 @@
         "title": "Testmelding",
         "titleNoName": "Testmelding",
         "bodyNoActor": "Als je dit kunt lezen, werken livemeldingen."
+      },
+      "snooze_wake": {
+        "title": "{name} staat weer in je lijst",
+        "titleNoName": "Een gesnoozede chat staat weer in je lijst",
+        "titleTeam": "{name} staat weer voor je team",
+        "titleTeamNoName": "Een gesnoozede chat staat weer voor je team"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "WhatsApp-groep weer actief",
         "device_group_join_request": "Verzoek om deel te nemen aan een groep",
         "device_group_removed": "Verwijderd uit een WhatsApp-groep",
-        "test": "Testmelding"
+        "test": "Testmelding",
+        "snooze_wake": "Gesnoozede chat is terug"
       },
       "generic": "Je hebt een nieuwe melding",
       "paused": "Live-updates zijn gepauzeerd, dus nieuwe meldingen kunnen tot een minuut later aankomen. Laad de pagina opnieuw om opnieuw verbinding te maken."
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "Afspraak niet gesynchroniseerd met Google Calendar",
           "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
+        },
+        "snooze_wake": {
+          "label": "Gesnoozede chat komt terug",
+          "hint": "Een gesnoozede chat wordt op het gekozen moment weer geopend en aan jou of je team toegewezen."
         }
       },
       "loading": "Je voorkeuren laden",

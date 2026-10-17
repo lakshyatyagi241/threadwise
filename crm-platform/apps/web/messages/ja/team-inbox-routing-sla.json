@@ -88,7 +88,14 @@
       "delete": "削除",
       "startsFlow": "フロー「{name}」も開始します",
       "flowOff": "フローがオフです",
-      "flowGone": "削除されたフローも開始します"
+      "flowGone": "削除されたフローも開始します",
+      "markSpamSummary": "会話をスパムとしてマークします",
+      "prioritySummary": "優先度を {priority} に設定",
+      "tagsSummary": "タグを追加: {tags}",
+      "escalationSummary": "{minutes}分以内に返信がなければ:",
+      "escalationReassign": "このルールの担当者に再割り当て",
+      "escalationPriority": "優先度を {priority} に設定",
+      "autoReplySummary": "返信を送信: {body}"
     },
     "form": {
       "back": "自動割り当て",
@@ -117,7 +124,14 @@
         "contactIncomplete": "未完了の連絡先条件を完成させるか、削除してください。",
         "keywordsMany": "20語以内で入力してください。",
         "targets": "担当者またはチームを1つ以上選択してください。",
-        "specific": "特定の担当者を選ぶ場合は、担当者を1人だけ選択してください。"
+        "specific": "特定の担当者を選ぶ場合は、担当者を1人だけ選択してください。",
+        "actions": "ルールの動作を選んでください。",
+        "tagsMany": "タグは最大5つまでです。",
+        "escalationMinutes": "1〜1440の整数（分）で入力してください。",
+        "escalationAction": "再割り当て、優先度の設定、または両方を選んでください。",
+        "escalationAgents": "再割り当てには、このルールの担当者が必要です。上で選んでください。",
+        "autoReplyEmpty": "返信文を入力するか、この項目のチェックを外してください。",
+        "autoReplyLong": "返信が長すぎます（1024文字まで）。"
       },
       "whenTitle": "新しい会話が届いたとき",
       "whenHint": "設定したすべての条件に一致する必要があります。無視する項目は空欄のままにしてください。",
@@ -187,7 +201,23 @@
         "loadFailed": "フローを読み込めなかったため、一覧が不完全な可能性があります。"
       },
       "onLeave": "休暇中",
-      "onLeaveUntil": "{date}まで休暇中"
+      "onLeaveUntil": "{date}まで休暇中",
+      "actions": "ルールの動作",
+      "actionsHint": "1つまたは両方を選びます。会話の担当割り当て、スパムとしてマーク、またはその両方ができます。",
+      "actionAssign": "担当者またはチームに割り当て",
+      "actionMarkSpam": "会話をスパムとしてマーク",
+      "setPriority": "優先度を設定",
+      "priorityKeep": "優先度は変更しない",
+      "addTags": "タグを追加",
+      "addTagsHint": "カンマで区切ります。まだないタグは作成されます。",
+      "escalate": "返信がないまま時間が過ぎたらエスカレート",
+      "escalateHint": "ルールの発動から分単位で、1440分（1日）まで。こちらが先に返信するとキャンセルされます。",
+      "escalateMinutes": "返信がない分数",
+      "escalateReassign": "このルールの担当者に再割り当て",
+      "escalatePriority": "次に優先度を設定",
+      "autoReply": "自動返信を送る",
+      "autoReplyBody": "返信文",
+      "autoReplyHint": "会社として顧客に送信されます。24時間の対応可能期間外は、自由形式の返信は送信されません。"
     },
     "sla": {
       "back": "設定に戻る",
@@ -205,8 +235,6 @@
       "resolution": "解決までの時間（分）",
       "minutesHint": "空欄にすると目標なしになります。60は1時間、1440は1日です。",
       "minutesInvalid": "1以上の整数を入力してください。",
-      "pause": "お客様の返信待ちの間は一時停止",
-      "pauseHint": "保留中に設定された会話にはフラグが付きません。",
       "businessHours": "営業時間のみをカウント",
       "businessHoursHint": "ワークスペース設定の営業時間とタイムゾーンを使用します。",
       "makeDefault": "このポリシーをデフォルトにする",

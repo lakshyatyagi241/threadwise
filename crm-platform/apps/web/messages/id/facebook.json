@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "Terbuka",
-        "pending": "Menunggu",
         "resolved": "Selesai",
         "closed": "Ditutup",
         "snoozed": "Ditunda"

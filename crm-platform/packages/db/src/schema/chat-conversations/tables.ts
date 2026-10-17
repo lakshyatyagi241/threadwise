@@ -30,14 +30,7 @@ import { slaPolicies } from '../team-inbox-routing-sla/tables';
 import { chatChannels } from './channels';
 
 /** `conversations.status`: one lifecycle. `closed` is Reference's separate "closed" state, kept so no reachable state is lost. */
-export const CONVERSATION_STATUSES = [
-  'open',
-  'pending',
-  'snoozed',
-  'resolved',
-  'closed',
-  'spam',
-] as const;
+export const CONVERSATION_STATUSES = ['open', 'snoozed', 'resolved', 'closed', 'spam'] as const;
 
 export const conversations = pgTable(
   'conversations',

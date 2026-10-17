@@ -27,6 +27,8 @@ export const NOTIFICATION_TYPES = [
   'conversation_assigned',
   /** Someone mentioned me in a conversation note. */
   'mention',
+  /** A snoozed chat reached its time and is open again: told to its assignee, or to the team it is assigned to (Reference: "reopened, follow up"). */
+  'snooze_wake',
   /**
    * An unassigned, open chat has had a customer message nobody answered for N minutes (BL-098): told once per waiting episode to the people
    * who may read and reply, by the worker's sweep (not by an outbox event).

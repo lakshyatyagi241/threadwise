@@ -164,6 +164,12 @@
         "title": "テスト通知",
         "titleNoName": "テスト通知",
         "bodyNoActor": "これが読めていれば、ライブ通知は動作しています。"
+      },
+      "snooze_wake": {
+        "title": "{name} がリストに戻りました",
+        "titleNoName": "スヌーズしたチャットがリストに戻りました",
+        "titleTeam": "{name} がチームに戻りました",
+        "titleTeamNoName": "スヌーズしたチャットがチームに戻りました"
       }
     },
     "live": {
@@ -195,7 +201,8 @@
         "waba_group_suspension_cleared": "WhatsAppグループ再開",
         "device_group_join_request": "グループへの参加リクエスト",
         "device_group_removed": "WhatsAppグループから削除されました",
-        "test": "テスト通知"
+        "test": "テスト通知",
+        "snooze_wake": "スヌーズしたチャットが戻りました"
       },
       "generic": "新しい通知があります",
       "paused": "ライブ更新が一時停止しているため、新しいアラートが最大1分遅れて届くことがあります。ページを再読み込みして再接続してください。"
@@ -383,6 +390,10 @@
         "appointment_calendar_drift": {
           "label": "予約がGoogle Calendarと同期されていません",
           "hint": "今後の予約のGoogle Calendarイベントが削除、移動、またはゲスト変更されました。予約自体は変更されません。対応はお客様が選択できます。"
+        },
+        "snooze_wake": {
+          "label": "スヌーズしたチャットが戻る",
+          "hint": "スヌーズしたチャットは指定時刻に再開され、あなたまたはチームに届きます。"
         }
       },
       "loading": "設定を読み込み中",

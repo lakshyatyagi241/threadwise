@@ -724,7 +724,7 @@ export class GrowthRepository {
     const res = await tx.execute(sql`
       SELECT u.id, u.uuid, u.full_name,
              (SELECT count(*) FROM conversations cv WHERE cv.org_id = u.org_id AND cv.assignee_user_id = u.id
-                 AND cv.status IN ('open', 'pending')) AS open_count
+                 AND cv.status = 'open') AS open_count
         FROM users u WHERE u.org_id = ${orgId} AND u.status = 'active'
        ORDER BY open_count ASC, u.id ASC LIMIT 1`);
     const r = res.rows[0] as Raw | undefined;
