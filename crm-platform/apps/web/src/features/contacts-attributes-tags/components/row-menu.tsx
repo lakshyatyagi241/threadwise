@@ -18,6 +18,9 @@ export function RowMenu({
   trigger,
   width = PANEL_W,
   focus = 'first',
+  icon,
+  titleAttr = true,
+  onOpenChange,
   children,
 }: {
   label: string;
@@ -28,6 +31,12 @@ export function RowMenu({
   width?: number;
   /** `none`: leave the focus alone when it opens (a panel that puts it on its own search box). */
   focus?: 'first' | 'none';
+  /** Replaces the "..." glyph inside the square button (a "+" for a quick add). */
+  icon?: ReactNode;
+  /** Whether the button carries the label as its native tooltip; off when the caller draws its own tooltip. */
+  titleAttr?: boolean;
+  /** Told whenever the panel opens or closes (the hover strip stays visible while its menu is open). */
+  onOpenChange?: (open: boolean) => void;
   /** Items; a function receives `close`. */
   children: (close: () => void) => ReactNode;
 }) {
@@ -36,6 +45,9 @@ export function RowMenu({
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const close = () => setOpen(false);
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
 
   useLayoutEffect(() => {
     if (!open || !button.current) return;
@@ -95,7 +107,7 @@ export function RowMenu({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={label}
-        title={label}
+        title={titleAttr ? label : undefined}
         onClick={() => setOpen((v) => !v)}
         className={cn(
           trigger
@@ -105,7 +117,7 @@ export function RowMenu({
           className,
         )}
       >
-        {trigger ?? <MoreIcon className="size-4" />}
+        {trigger ?? icon ?? <MoreIcon className="size-4" />}
       </button>
       {open &&
         createPortal(

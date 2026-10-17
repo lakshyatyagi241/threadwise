@@ -4,7 +4,9 @@ import {
   renderAccount,
 } from '@/features/auth-registration-security/account/render-test-utils';
 import type { ContactRow } from '../../api/schemas';
-import { ContactQuickView } from '../contact-quick-view';
+import { ContactQuickView, QuickTabs } from '../contact-quick-view';
+import { NOTE_KEYS } from '../../api/notes';
+import { quickTabs } from '../../lib/sections';
 import { SectionNav } from '../contact-detail';
 import { ComplianceCard, LocationCard, SubscriptionCard } from './cards';
 import { OptInPill, ScoreRing, SocialIcons } from './parts';
@@ -180,7 +182,7 @@ describe('ContactQuickView', () => {
       <ContactQuickView
         contactId=""
         panel="overview"
-        composer={false}
+        focus={null}
         previousId={null}
         nextId={null}
         position={null}
@@ -192,5 +194,70 @@ describe('ContactQuickView', () => {
     expect(out).toContain('<dialog');
     expect(out).toContain('aria-label="Contact quick view"');
     expect(out).not.toContain('Contact sections');
+  });
+});
+
+describe('QuickTabs', () => {
+  const page = (data: unknown[], hasMore = false) => ({
+    pages: [{ data, page: { hasMore, nextCursor: hasMore ? 'n' : null, limit: 50 } }],
+    pageParams: [undefined],
+  });
+  const tabs = (perms: string[]) => quickTabs((p) => perms.includes(p));
+  const draw = (
+    perms: string[],
+    current: Parameters<typeof QuickTabs>[0]['current'],
+    more = false,
+  ) =>
+    renderAccount(
+      <QuickTabs contactId={ID} tabs={tabs(perms)} current={current} onSelect={() => undefined} />,
+      {
+        session: can(...perms),
+        seed: [[[...NOTE_KEYS.list(ID), {}], page([{ id: 'n1' }, { id: 'n2' }], more)]],
+      },
+    );
+
+  it('is a tab list: Overview, Activity, Notes, Meetings and Files, Tasks when tasks may be read, and a menu for the rest', () => {
+    const out = draw(['record.tasks.read', 'inbox.conversation.read'], 'notes');
+    expect(out).toContain('role="tablist"');
+    for (const name of ['Overview', 'Activity', 'Notes', 'Tasks', 'Meetings', 'Files']) {
+      expect(out, name).toContain(`>${name}`);
+    }
+    expect(out.match(/role="tab"/g)).toHaveLength(6);
+    // the rest (Conversations, Communication stats, Properties) sit behind "+3 more"
+    expect(out).toContain('+3 more');
+    expect(out).toContain('aria-label="More sections"');
+  });
+
+  it('marks the current tab, with only that tab in the tab order', () => {
+    const out = draw([], 'notes');
+    expect(out.match(/aria-selected="true"/g)).toHaveLength(1);
+    expect(out.match(/tabindex="0"/g)).toHaveLength(1);
+    expect(out).toMatch(/id="qv-tab-notes"[^>]*aria-selected="true"/);
+  });
+
+  it('has no Tasks tab without the permission to read tasks, and no Conversations without the inbox', () => {
+    const out = draw([], 'overview');
+    expect(out).not.toContain('qv-tab-tasks');
+    expect(out).toContain('+2 more');
+  });
+
+  it('shows the count of notes as a small badge, and a + when there are more pages', () => {
+    expect(draw([], 'overview')).toMatch(/>Notes<span[^>]*>2<\/span>/);
+    expect(draw([], 'overview', true)).toMatch(/>Notes<span[^>]*>2\+<\/span>/);
+  });
+
+  it('names the open section on the menu when it is one of the rest', () => {
+    const out = draw(['inbox.conversation.read'], 'conversations');
+    expect(out).toMatch(/Conversations<svg/);
+    expect(out).not.toContain('+3 more');
+  });
+
+  it('reads in Arabic, with logical (not left/right) spacing', () => {
+    const out = renderAccount(
+      <QuickTabs contactId={ID} tabs={tabs([])} current="overview" onSelect={() => undefined} />,
+      { session: can(), locale: 'ar' },
+    );
+    expect(out).toContain('role="tablist"');
+    expect(out).not.toMatch(/\b(?:ml|mr|pl|pr)-\d/);
   });
 });

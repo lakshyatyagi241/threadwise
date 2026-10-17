@@ -62,6 +62,8 @@ export interface ColumnDef {
   id: ColumnId;
   /** Fixed columns: a message key under `contacts-attributes-tags.list`. Attributes: their own name. */
   label: { key: string } | { text: string };
+  /** A shorter heading for the table (the full label is its tooltip), so a narrow column never reads "PHONE NU...". */
+  short?: { key: string };
   attributeKey?: string;
 }
 
@@ -93,6 +95,15 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   source: 'colSource',
 };
 
+/** The columns whose heading is shortened in the table header; the full label stays in the picker and as the tooltip. */
+const SHORT_LABEL: Partial<Record<FixedColumnId, string>> = {
+  phone: 'shortPhone',
+  email: 'shortEmail',
+  stage: 'shortStage',
+  whatsapp: 'shortWhatsapp',
+  createdOn: 'shortCreated',
+};
+
 /**
  * Every column that can exist, in display order: name, phone, the workspace's attributes, then email, tags, and the
  * rest. Attribute columns sit next to the phone because order-style attributes read as part of the contact's identity.
@@ -101,7 +112,11 @@ export function allColumns(
   attributes: readonly AttributeColumn[],
   omit: ReadonlySet<ColumnId> = NO_COLUMNS,
 ): ColumnDef[] {
-  const fixed = (id: FixedColumnId): ColumnDef => ({ id, label: { key: FIXED_LABEL[id] } });
+  const fixed = (id: FixedColumnId): ColumnDef => ({
+    id,
+    label: { key: FIXED_LABEL[id] },
+    ...(SHORT_LABEL[id] ? { short: { key: SHORT_LABEL[id]! } } : {}),
+  });
   return (
     [
       fixed('name'),

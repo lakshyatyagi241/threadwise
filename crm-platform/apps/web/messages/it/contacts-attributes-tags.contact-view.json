@@ -12,13 +12,17 @@
         "next": "Contatto successivo",
         "position": "{index} di {total}",
         "rail": "Sezioni del contatto",
-        "rail_overview": "Panoramica",
-        "rail_activities": "Attività",
-        "rail_conversations": "Conversazioni",
-        "rail_notes": "Note",
-        "rail_stats": "Statistiche di comunicazione",
-        "rail_files": "File",
-        "rail_details": "Proprietà",
+        "moreTabs": "Altre sezioni",
+        "more": "+{count} altre",
+        "tab_overview": "Panoramica",
+        "tab_activities": "Attività",
+        "tab_notes": "Note",
+        "tab_tasks": "Task",
+        "tab_meetings": "Riunioni",
+        "tab_files": "File",
+        "tab_conversations": "Conversazioni",
+        "tab_stats": "Statistiche di comunicazione",
+        "tab_details": "Proprietà",
         "openFull": "Apri nella pagina dei dettagli"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Altre azioni",
         "edit": "Modifica contatto",
         "delete": "Elimina contatto",
-        "close": "Chiudi",
-        "companyHint": "Scegli l'azienda per cui lavora questo contatto. Scegli di nuovo la stessa per lasciarla invariata, oppure cancellala per rimuovere il collegamento.",
-        "companySaved": "Azienda salvata.",
-        "companyFailed": "Impossibile salvare l'azienda. Riprova.",
         "conflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
         "deleteFailed": "Impossibile eliminare il contatto."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Azienda",
-        "change": "Cambia",
-        "add": "Aggiungi azienda",
-        "none": "Questo contatto non è collegato a nessuna azienda."
+        "none": "Questo contatto non è collegato a nessuna azienda.",
+        "hint": "Cerca un'azienda, oppure scrivi un nuovo nome per crearla.",
+        "saved": "Azienda salvata.",
+        "removed": "Azienda rimossa da questo contatto.",
+        "failed": "Impossibile salvare l'azienda. Riprova.",
+        "conflict": "Qualcuno ha modificato prima questo contatto. È stato ricaricato; riprova."
       },
       "sections": {
         "lead-source": "Origine del lead"
@@ -153,6 +156,7 @@
           "details": "Dettagli del contatto",
           "stats": "Statistiche di comunicazione",
           "notes": "Note",
+          "meetings": "Riunioni",
           "files": "File",
           "tasks": "Attività da svolgere",
           "deals": "Trattative",

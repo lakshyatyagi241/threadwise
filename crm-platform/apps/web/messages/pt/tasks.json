@@ -328,6 +328,19 @@
       "showDone": "Mostrar concluídas",
       "hideDone": "Ocultar concluídas",
       "gone": "O registro a que estas tarefas pertencem não está mais disponível."
+    },
+    "inline": {
+      "addTask": "Adicionar tarefa",
+      "rowLabel": "Adicionar uma tarefa",
+      "titleLabel": "Título da tarefa",
+      "titlePlaceholder": "Título da tarefa; pressione Enter para salvar",
+      "due": "Data e hora de vencimento",
+      "assignee": "Atribuir a",
+      "priority": "Prioridade (opcional)",
+      "hint": "Enter salva, Escape fecha.",
+      "save": "Adicionar tarefa",
+      "cancel": "Cancelar",
+      "failed": "Não foi possível salvar a tarefa. Seu texto voltou para o campo."
     }
   }
 }

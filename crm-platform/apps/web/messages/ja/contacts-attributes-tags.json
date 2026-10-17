@@ -97,6 +97,9 @@
       "colGroups": "グループ",
       "colTags": "タグ",
       "colMemo": "メモ",
+      "colDateOfBirth": "生年月日",
+      "colMinor": "未成年",
+      "minorBadge": "未成年",
       "tagFilter": "タグで絞り込み",
       "allTags": "すべてのタグ",
       "consentFilter": "同意状況で絞り込み",
@@ -123,6 +126,7 @@
       "colEmailId": "メールアドレス",
       "colStage": "ステージ",
       "colStatus": "ステータス",
+      "colLeadScore": "リードスコア",
       "colLanguage": "言語",
       "colCreatedOn": "作成日",
       "pagination": "ページ送り",
@@ -139,6 +143,22 @@
       "emailNamed": "{name}にメール",
       "noEmail": "メールアドレスなし",
       "moreFor": "{name}のその他の操作",
+      "message": "メッセージ",
+      "messageNamed": "{name}にメッセージ",
+      "noMessage_noContact": "電話番号もメールアドレスもありません",
+      "noMessage_noChannel": "この連絡先に接続されているWhatsApp番号またはメールボックスがありません",
+      "noMessage_optedOut": "この連絡先はメッセージを受け取らない設定になっています",
+      "quickAdd": "ノート、タスク、ミーティングを追加",
+      "quickAddNamed": "{name}のノート、タスク、ミーティングを追加",
+      "addTask": "タスクを追加",
+      "addMeeting": "ミーティングを予定",
+      "moreTip": "その他",
+      "openNewTab": "新しいタブで開く",
+      "sendEmail": "メールを送信",
+      "copyPhone": "電話番号をコピー",
+      "copyEmail": "メールアドレスをコピー",
+      "copied": "コピーしました",
+      "copyFailed": "コピーできませんでした",
       "view": "表示",
       "addToGroup": "グループに追加",
       "tag": "タグ",
@@ -166,7 +186,6 @@
       "columns": "列",
       "addColumnField": "カスタムフィールドを列として追加",
       "kanbanView": "ボード表示(ステージ別)",
-      "colLeadScore": "リードスコア",
       "colOwner": "担当者",
       "unassigned": "未割り当て",
       "ownerFilter": "担当者で絞り込み",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "タグ {tag} が付いた30日間アクティブでない連絡先",
       "pqlExampleStage": "過去7日間に作成された {stage} の連絡先",
       "pqlExampleNoOwner": "担当者がいない連絡先",
-      "colDateOfBirth": "生年月日",
-      "colMinor": "未成年",
-      "minorBadge": "未成年",
       "breadcrumb": "パンくずリスト",
       "breadcrumbContacts": "連絡先",
       "breadcrumbList": "リスト",
@@ -256,10 +272,7 @@
       "yes": "はい",
       "no": "いいえ",
       "optInOut": "マーケティングメッセージを配信停止",
-      "openDetails": "詳細を開く",
-      "openDetailsNamed": "{name}の詳細を開く",
       "addNote": "ノートを追加",
-      "addNoteNamed": "{name}にノートを追加",
       "chatNamed": "{name}とチャット",
       "openChat": "チャットを開く",
       "sendSms": "SMSを送信",
@@ -267,7 +280,21 @@
       "minorFilter": "未成年フラグで絞り込み",
       "minorYes": "未成年として登録",
       "minorNo": "未成年として登録なし",
-      "allMinor": "すべて"
+      "allMinor": "すべて",
+      "shortPhone": "電話",
+      "shortEmail": "メール",
+      "shortStage": "ステージ",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "作成日",
+      "firstRun": {
+        "title": "最初の連絡先を追加しましょう",
+        "message": "やり取りしている相手を取り込みましょう。連絡先はメッセージ、キャンペーン、タスク、取引に使われます。",
+        "addBody": "1人ずつ入力します。名前と、電話番号またはメールアドレスを入力してください。",
+        "importCsv": "CSVファイルをインポート",
+        "importBody": "スプレッドシートをアップロードし、列を連絡先フィールドに対応付けます。",
+        "connect": "WhatsAppを接続",
+        "connectBody": "番号を接続すると、連絡先からの返信を受け取り、こちらからメッセージを送れます。"
+      }
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "この連絡先に関するメモ",
       "address": "住所",
       "addressPlaceholder": "住所を入力",
+      "dateOfBirth": "生年月日",
+      "dateOfBirthHint": "任意。これにより連絡先が未成年になる場合は、未成年として設定されます。",
       "status": "ステータス",
       "statusNone": "- なし -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
       "company": "会社",
       "companyHint": "この連絡先を組織にまとめます。",
-      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。",
-      "dateOfBirth": "生年月日",
-      "dateOfBirthHint": "任意。これにより連絡先が未成年になる場合は、未成年として設定されます。"
+      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。"
     },
     "tags": {
       "title": "タグ",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "タグ名が長すぎます",
         "plan_limit_reached": "プランの連絡先上限に達しました",
         "tag_limit_reached": "プランのタグ上限に達しました",
-        "duplicate_in_file": "重複した番号、前の行に統合",
         "invalid_date_of_birth": "生年月日が、生年月日として成立する年が先頭の日付ではありません",
+        "duplicate_in_file": "重複した番号、前の行に統合",
         "invalid_timezone": "タイムゾーンが無効です"
       },
       "statusHint": "このファイルで作成される連絡先に適用されます。",
@@ -628,6 +655,7 @@
       "language": "言語",
       "source": "ソース",
       "address": "住所",
+      "dateOfBirth": "生年月日",
       "memo": "メモ",
       "groups": "グループ",
       "consent": "マーケティングメッセージ",
@@ -647,8 +675,7 @@
       "ownerForbidden": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
       "ownerFailed": "担当者を変更できませんでした。もう一度お試しください。",
       "ownerMe": "{name}(自分)",
-      "ownerFormer": "元メンバー",
-      "dateOfBirth": "生年月日"
+      "ownerFormer": "元メンバー"
     },
     "attributes": {
       "eyebrow": "その他 / 属性",
@@ -1391,17 +1418,17 @@
       "changed": "このビューの保存後にフィルターが変更されました",
       "more": "{name} のその他の操作",
       "picker": {
-        "title": "ビューを選択",
-        "create": "新しいビューを作成",
-        "search": "ビューを検索...",
-        "empty": "ビューが見つかりません",
-        "pinned": "タブに表示",
         "favorites": "お気に入り",
         "defaultFilters": "デフォルトのフィルター",
         "createdViews": "作成したビュー",
         "addView": "ビューを追加",
         "markFavorite": "お気に入りに追加",
-        "unmarkFavorite": "お気に入りから外す"
+        "unmarkFavorite": "お気に入りから外す",
+        "title": "ビューを選択",
+        "create": "新しいビューを作成",
+        "search": "ビューを検索...",
+        "empty": "ビューが見つかりません",
+        "pinned": "タブに表示"
       },
       "menu": {
         "rename": "ビュー名を変更",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "自分の連絡先",
+        "unassigned": "未割り当て",
+        "hotLeads": "ホットリード",
         "newThisWeek": "今週の新規",
         "newLastWeek": "先週の新規",
         "recentlyCreated": "最近作成",
@@ -1496,6 +1525,9 @@
         "inactive": "非アクティブ",
         "unsubscribed": "配信停止",
         "minors": "未成年者"
+      },
+      "quick": {
+        "label": "クイックビュー"
       }
     },
     "erase": {

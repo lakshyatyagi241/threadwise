@@ -12,13 +12,17 @@
         "next": "Próximo contato",
         "position": "{index} de {total}",
         "rail": "Seções do contato",
-        "rail_overview": "Visão geral",
-        "rail_activities": "Atividade",
-        "rail_conversations": "Conversas",
-        "rail_notes": "Observações",
-        "rail_stats": "Estatísticas de comunicação",
-        "rail_files": "Arquivos",
-        "rail_details": "Propriedades",
+        "moreTabs": "Mais seções",
+        "more": "+{count} mais",
+        "tab_overview": "Visão geral",
+        "tab_activities": "Atividade",
+        "tab_notes": "Observações",
+        "tab_tasks": "Tarefas",
+        "tab_meetings": "Reuniões",
+        "tab_files": "Arquivos",
+        "tab_conversations": "Conversas",
+        "tab_stats": "Estatísticas de comunicação",
+        "tab_details": "Propriedades",
         "openFull": "Abrir na página de detalhes"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Mais ações",
         "edit": "Editar contato",
         "delete": "Excluir contato",
-        "close": "Fechar",
-        "companyHint": "Escolha a empresa em que este contato trabalha. Escolha-a novamente para manter como está ou limpe para remover o vínculo.",
-        "companySaved": "Empresa salva.",
-        "companyFailed": "Não foi possível salvar a empresa. Tente novamente.",
         "conflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
         "deleteFailed": "Não foi possível excluir o contato."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Empresa",
-        "change": "Alterar",
-        "add": "Adicionar empresa",
-        "none": "Este contato não está vinculado a uma empresa."
+        "none": "Este contato não está vinculado a uma empresa.",
+        "hint": "Pesquise uma empresa ou digite um novo nome para criá-la.",
+        "saved": "Empresa salva.",
+        "removed": "Empresa removida deste contato.",
+        "failed": "Não foi possível salvar a empresa. Tente novamente.",
+        "conflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente."
       },
       "sections": {
         "lead-source": "Origem do lead"
@@ -153,6 +156,7 @@
           "details": "Detalhes do contato",
           "stats": "Estatísticas de comunicação",
           "notes": "Observações",
+          "meetings": "Reuniões",
           "files": "Arquivos",
           "tasks": "Tarefas",
           "deals": "Negócios",

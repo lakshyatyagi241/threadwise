@@ -12,13 +12,17 @@
         "next": "Next contact",
         "position": "{index} of {total}",
         "rail": "Contact sections",
-        "rail_overview": "Overview",
-        "rail_activities": "Activity",
-        "rail_conversations": "Conversations",
-        "rail_notes": "Notes",
-        "rail_stats": "Communication stats",
-        "rail_files": "Files",
-        "rail_details": "Properties",
+        "moreTabs": "More sections",
+        "more": "+{count} more",
+        "tab_overview": "Overview",
+        "tab_activities": "Activity",
+        "tab_notes": "Notes",
+        "tab_tasks": "Tasks",
+        "tab_meetings": "Meetings",
+        "tab_files": "Files",
+        "tab_conversations": "Conversations",
+        "tab_stats": "Communication stats",
+        "tab_details": "Properties",
         "openFull": "Open on the details page"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "More actions",
         "edit": "Edit contact",
         "delete": "Delete contact",
-        "close": "Close",
-        "companyHint": "Pick the company this contact works for. Choose it again to leave it unchanged, or clear it to remove the link.",
-        "companySaved": "Company saved.",
-        "companyFailed": "The company could not be saved. Try again.",
         "conflict": "Someone else changed this contact first. It was reloaded; try again.",
         "deleteFailed": "The contact could not be deleted."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Company",
-        "change": "Change",
-        "add": "Add company",
-        "none": "This contact is not linked to a company."
+        "none": "This contact is not linked to a company.",
+        "hint": "Search for a company, or type a new name to create it.",
+        "saved": "Company saved.",
+        "removed": "Company removed from this contact.",
+        "failed": "The company could not be saved. Try again.",
+        "conflict": "Someone else changed this contact first. It was reloaded; try again."
       },
       "sections": {
         "lead-source": "Lead source"
@@ -153,6 +156,7 @@
           "details": "Contact details",
           "stats": "Communication stats",
           "notes": "Notes",
+          "meetings": "Meetings",
           "files": "Files",
           "tasks": "Tasks",
           "deals": "Deals",

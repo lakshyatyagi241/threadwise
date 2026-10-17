@@ -328,6 +328,19 @@
       "showDone": "완료된 항목 표시",
       "hideDone": "완료된 항목 숨기기",
       "gone": "이 작업이 속한 레코드를 더 이상 사용할 수 없습니다."
+    },
+    "inline": {
+      "addTask": "작업 추가",
+      "rowLabel": "작업 추가",
+      "titleLabel": "작업 제목",
+      "titlePlaceholder": "작업 제목을 입력하고 Enter 키를 눌러 저장하세요",
+      "due": "마감 날짜 및 시간",
+      "assignee": "담당자 지정",
+      "priority": "우선순위(선택)",
+      "hint": "Enter 키는 저장, Escape 키는 닫기입니다.",
+      "save": "작업 추가",
+      "cancel": "취소",
+      "failed": "작업을 저장하지 못했습니다. 입력한 내용은 입력란에 그대로 있습니다."
     }
   }
 }

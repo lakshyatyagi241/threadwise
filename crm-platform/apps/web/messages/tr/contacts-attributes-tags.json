@@ -97,6 +97,9 @@
       "colGroups": "Gruplar",
       "colTags": "Etiketler",
       "colMemo": "Not",
+      "colDateOfBirth": "Doğum tarihi",
+      "colMinor": "Reşit olmayan",
+      "minorBadge": "Reşit olmayan",
       "tagFilter": "Etikete göre filtrele",
       "allTags": "Tüm etiketler",
       "consentFilter": "Onaya göre filtrele",
@@ -123,6 +126,7 @@
       "colEmailId": "E-posta kimliği",
       "colStage": "Aşama",
       "colStatus": "Durum",
+      "colLeadScore": "Potansiyel müşteri puanı",
       "colLanguage": "Dil",
       "colCreatedOn": "Oluşturulma tarihi",
       "pagination": "Sayfalama",
@@ -139,6 +143,22 @@
       "emailNamed": "{name} kişisine e-posta gönder",
       "noEmail": "E-posta adresi yok",
       "moreFor": "{name} için diğer işlemler",
+      "message": "Mesaj",
+      "messageNamed": "{name} kişisine mesaj gönder",
+      "noMessage_noContact": "Telefon numarası veya e-posta adresi yok",
+      "noMessage_noChannel": "Bu kişi için bağlı bir WhatsApp numarası veya posta kutusu yok",
+      "noMessage_optedOut": "Bu kişi mesaj almak için verdiği onayı geri çekti",
+      "quickAdd": "Not, görev veya toplantı ekle",
+      "quickAddNamed": "{name} için not, görev veya toplantı ekle",
+      "addTask": "Görev ekle",
+      "addMeeting": "Toplantı planla",
+      "moreTip": "Diğer",
+      "openNewTab": "Yeni sekmede aç",
+      "sendEmail": "E-posta gönder",
+      "copyPhone": "Telefon numarasını kopyala",
+      "copyEmail": "E-posta adresini kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı",
       "view": "Görüntüle",
       "addToGroup": "Gruba ekle",
       "tag": "Etiketle",
@@ -166,7 +186,6 @@
       "columns": "Sütunlar",
       "addColumnField": "Özel bir alanı sütun olarak ekle",
       "kanbanView": "Pano görünümü (aşamaya göre)",
-      "colLeadScore": "Potansiyel müşteri puanı",
       "colOwner": "Sahip",
       "unassigned": "Atanmamış",
       "ownerFilter": "Sahibe göre filtrele",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "{tag} etiketli ve 30 gündür etkin olmayan kişiler",
       "pqlExampleStage": "Son 7 günde oluşturulan {stage} kişileri",
       "pqlExampleNoOwner": "Sahibi olmayan kişiler",
-      "colDateOfBirth": "Doğum tarihi",
-      "colMinor": "Reşit olmayan",
-      "minorBadge": "Reşit olmayan",
       "breadcrumb": "Sayfa yolu",
       "breadcrumbContacts": "Kişiler",
       "breadcrumbList": "Liste",
@@ -256,10 +272,7 @@
       "yes": "Evet",
       "no": "Hayır",
       "optInOut": "Pazarlama mesajlarından çıktı",
-      "openDetails": "Ayrıntıları aç",
-      "openDetailsNamed": "{name} ayrıntılarını aç",
       "addNote": "Not ekle",
-      "addNoteNamed": "{name} için not ekle",
       "chatNamed": "{name} ile sohbet et",
       "openChat": "Sohbeti aç",
       "sendSms": "SMS gönder",
@@ -267,7 +280,21 @@
       "minorFilter": "Reşit olmayan işaretine göre filtrele",
       "minorYes": "Reşit olmayan olarak işaretli",
       "minorNo": "Reşit olmayan olarak işaretli değil",
-      "allMinor": "Herkes"
+      "allMinor": "Herkes",
+      "shortPhone": "Telefon",
+      "shortEmail": "E-posta",
+      "shortStage": "Aşama",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "Oluşturuldu",
+      "firstRun": {
+        "title": "İlk kişilerinizi ekleyin",
+        "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",
+        "addBody": "Bir kişiyi elle girin: ad ve telefon numarası ya da e-posta adresi.",
+        "importCsv": "CSV dosyası içe aktar",
+        "importBody": "Bir elektronik tablo yükleyin ve sütunlarını kişi alanlarıyla eşleştirin.",
+        "connect": "WhatsApp'ı bağla",
+        "connectBody": "Numaranızı bağlayın; böylece kişiler yanıt verebilir ve onlara mesaj gönderebilirsiniz."
+      }
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "Bu kişi hakkında notlar",
       "address": "Adres",
       "addressPlaceholder": "Adres girin",
+      "dateOfBirth": "Doğum tarihi",
+      "dateOfBirthHint": "İsteğe bağlı. Kişiyi reşit olmayan yapıyorsa kişi öyle işaretlenir.",
       "status": "Durum",
       "statusNone": "- yok -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
       "company": "Şirket",
       "companyHint": "Bu kişiyi bir kuruluşun altında gruplar.",
-      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin.",
-      "dateOfBirth": "Doğum tarihi",
-      "dateOfBirthHint": "İsteğe bağlı. Kişiyi reşit olmayan yapıyorsa kişi öyle işaretlenir."
+      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin."
     },
     "tags": {
       "title": "Etiketler",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "etiket adı çok uzun",
         "plan_limit_reached": "plan kişi sınırına ulaşıldı",
         "tag_limit_reached": "plan etiket sınırına ulaşıldı",
-        "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
         "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil",
+        "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
         "invalid_timezone": "geçersiz saat dilimi"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
@@ -628,6 +655,7 @@
       "language": "Dil",
       "source": "Kaynak",
       "address": "Adres",
+      "dateOfBirth": "Doğum tarihi",
       "memo": "Not",
       "groups": "Gruplar",
       "consent": "Pazarlama mesajları",
@@ -647,8 +675,7 @@
       "ownerForbidden": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
       "ownerFailed": "Sahip değiştirilemedi. Tekrar deneyin.",
       "ownerMe": "{name} (ben)",
-      "ownerFormer": "Eski üye",
-      "dateOfBirth": "Doğum tarihi"
+      "ownerFormer": "Eski üye"
     },
     "attributes": {
       "eyebrow": "Diğer / Öznitelikler",
@@ -1391,17 +1418,17 @@
       "changed": "Filtreler bu görünüm kaydedildikten sonra değişti",
       "more": "{name} için diğer işlemler",
       "picker": {
-        "title": "Görünüm seçin",
-        "create": "Yeni görünüm oluştur",
-        "search": "Görünümlerde ara...",
-        "empty": "Görünüm bulunamadı",
-        "pinned": "Sekmelerde",
         "favorites": "Favoriler",
         "defaultFilters": "Varsayılan filtreler",
         "createdViews": "Oluşturulan görünümler",
         "addView": "Görünüm ekle",
         "markFavorite": "Favori olarak işaretle",
-        "unmarkFavorite": "Favorilerden kaldır"
+        "unmarkFavorite": "Favorilerden kaldır",
+        "title": "Görünüm seçin",
+        "create": "Yeni görünüm oluştur",
+        "search": "Görünümlerde ara...",
+        "empty": "Görünüm bulunamadı",
+        "pinned": "Sekmelerde"
       },
       "menu": {
         "rename": "Görünümü yeniden adlandır",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "Kişilerim",
+        "unassigned": "Atanmamış",
+        "hotLeads": "Sıcak adaylar",
         "newThisWeek": "Bu hafta yeni",
         "newLastWeek": "Geçen hafta yeni",
         "recentlyCreated": "Son oluşturulan",
@@ -1496,6 +1525,9 @@
         "inactive": "Pasif",
         "unsubscribed": "Abonelikten çıkanlar",
         "minors": "Reşit olmayanlar"
+      },
+      "quick": {
+        "label": "Hızlı görünümler"
       }
     },
     "erase": {

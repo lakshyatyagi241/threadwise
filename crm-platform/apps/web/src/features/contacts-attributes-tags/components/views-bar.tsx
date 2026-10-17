@@ -17,6 +17,7 @@ import {
   parsePresetFavorites,
   PRESET_FAVORITES_KEY,
   PRESET_VIEWS,
+  QUICK_PRESETS,
   togglePresetFavorite,
   type PresetView,
 } from '../lib/preset-views';
@@ -82,7 +83,7 @@ export function ViewsBar({
     toast(t('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <div className="relative shrink-0">
         <button
           type="button"
@@ -140,6 +141,32 @@ export function ViewsBar({
             }}
           />
         </Popover>
+      </div>
+      <div
+        role="group"
+        aria-label={t('quick.label')}
+        className="flex flex-wrap items-center gap-1.5"
+      >
+        {QUICK_PRESETS.map((p) => {
+          const on = activeId === '' && preset === p;
+          return (
+            <button
+              key={p}
+              type="button"
+              aria-pressed={on}
+              // Choosing the chip that is on again goes back to all contacts.
+              onClick={() => (on ? onSelect(null) : onPreset(p))}
+              className={cn(
+                'inline-flex h-8 items-center rounded-full border px-3 text-[13px] font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
+                on
+                  ? 'border-brand bg-brand/10 text-brand dark:text-primary'
+                  : 'border-border text-muted-foreground hover:bg-muted hover:text-foreground',
+              )}
+            >
+              {t(`presets.${p}`)}
+            </button>
+          );
+        })}
       </div>
       {tabs
         .filter((v) => v.id === activeId)

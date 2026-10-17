@@ -62,7 +62,7 @@ export function CompanyPicker({
     const label = name ?? (named.isError ? t('unknown') : t('loading'));
     return (
       <div className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm">
-        <BuildingIcon className="text-muted-foreground" />
+        <BuildingIcon className="size-4 text-muted-foreground" />
         <span className="min-w-0 flex-1 truncate font-medium" dir="auto">
           {linkToCompany && name ? (
             <Link
@@ -199,7 +199,7 @@ export function CompanyPicker({
               >
                 {o.kind === 'company' ? (
                   <>
-                    <BuildingIcon className="text-muted-foreground" />
+                    <BuildingIcon className="size-4 text-muted-foreground" />
                     <span className="min-w-0 flex-1 truncate" dir="auto">
                       {o.name}
                     </span>

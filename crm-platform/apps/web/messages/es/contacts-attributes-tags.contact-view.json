@@ -12,13 +12,17 @@
         "next": "Contacto siguiente",
         "position": "{index} de {total}",
         "rail": "Secciones del contacto",
-        "rail_overview": "Resumen",
-        "rail_activities": "Actividad",
-        "rail_conversations": "Conversaciones",
-        "rail_notes": "Notas",
-        "rail_stats": "Estadísticas de comunicación",
-        "rail_files": "Archivos",
-        "rail_details": "Propiedades",
+        "moreTabs": "Más secciones",
+        "more": "+{count} más",
+        "tab_overview": "Resumen",
+        "tab_activities": "Actividad",
+        "tab_notes": "Notas",
+        "tab_tasks": "Tareas",
+        "tab_meetings": "Reuniones",
+        "tab_files": "Archivos",
+        "tab_conversations": "Conversaciones",
+        "tab_stats": "Estadísticas de comunicación",
+        "tab_details": "Propiedades",
         "openFull": "Abrir en la página de detalles"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Más acciones",
         "edit": "Editar contacto",
         "delete": "Eliminar contacto",
-        "close": "Cerrar",
-        "companyHint": "Elige la empresa en la que trabaja este contacto. Elígela de nuevo para dejarla igual, o bórrala para quitar el vínculo.",
-        "companySaved": "Empresa guardada.",
-        "companyFailed": "No se pudo guardar la empresa. Inténtalo de nuevo.",
         "conflict": "Otra persona cambió antes este contacto. Se recargó; inténtalo de nuevo.",
         "deleteFailed": "No se pudo eliminar el contacto."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Empresa",
-        "change": "Cambiar",
-        "add": "Añadir empresa",
-        "none": "Este contacto no está vinculado a ninguna empresa."
+        "none": "Este contacto no está vinculado a ninguna empresa.",
+        "hint": "Busca una empresa o escribe un nombre nuevo para crearla.",
+        "saved": "Empresa guardada.",
+        "removed": "Empresa quitada de este contacto.",
+        "failed": "No se pudo guardar la empresa. Inténtalo de nuevo.",
+        "conflict": "Alguien cambió antes este contacto. Se recargó; inténtalo de nuevo."
       },
       "sections": {
         "lead-source": "Origen del lead"
@@ -153,6 +156,7 @@
           "details": "Detalles del contacto",
           "stats": "Estadísticas de comunicación",
           "notes": "Notas",
+          "meetings": "Reuniones",
           "files": "Archivos",
           "tasks": "Tareas",
           "deals": "Negocios",

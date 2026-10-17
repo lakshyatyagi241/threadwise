@@ -1,11 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Button, Spinner } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { CompanyLink, useCanPickCompany } from '@/features/companies';
 import { ConsentCard } from '@/features/contact-consent';
 import { LinkedAppointments } from '@/features/appointments';
 import { LinkedInvoices } from '@/features/invoicing';
@@ -14,14 +12,14 @@ import { LinkedTasks } from '@/features/tasks';
 import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { useCursorList } from '@/lib/api/use-cursor-list';
 import { displayName } from '../../lib/contact-model';
-import type { SectionId } from '../../lib/sections';
+import type { FocusRequest, SectionId } from '../../lib/sections';
 import { ErrorLine } from '../error-line';
 import { GroupChip } from '../chips';
 import { ConversationsSection } from './conversations-section';
 import { DealsSection } from './deals-section';
 import { FieldHistoryPanel } from './field-history';
 import { FilesSection } from './files-section';
-import { CompanyDialog } from './company-dialog';
+import { CompanyCard } from './company-inline';
 import { MeetingsPanel } from './meetings-section';
 import { NotesSection } from './notes-section';
 import { ContactOverview } from './overview';
@@ -95,12 +93,11 @@ export function TimelinePanel({ contactId }: { contactId: string }) {
   );
 }
 
-/** Activities: the meetings logged with the contact, then the timeline of everything that happened. */
+/** Activities: the clock marketing messages are read on, then the timeline of everything that happened (meetings have their own section). */
 function ActivitiesSection({ contact }: SectionProps) {
   const canRead = useCan('record.contacts.read');
   return (
     <div className="space-y-4">
-      {canRead && <MeetingsPanel contact={contact} />}
       {/* The clock marketing messages are read on and the next time one may go (BL-193), right above the history. */}
       {canRead && <TimezoneCard contactId={contact.id} rowVersion={contact.rowVersion} />}
       <TimelinePanel contactId={contact.id} />
@@ -158,36 +155,6 @@ function DetailsSection({ contact }: SectionProps) {
   );
 }
 
-/** The company the contact belongs to: its name as a link, and the way to change it. */
-function CompanySection({ contact }: SectionProps) {
-  const t = useTranslations('contacts-attributes-tags.contact.company');
-  const canUpdate = useCan('record.contacts.update');
-  const canPick = useCanPickCompany();
-  const [open, setOpen] = useState(false);
-  return (
-    <Panel
-      id={`co-${contact.id}`}
-      title={t('title')}
-      action={
-        canUpdate && canPick ? (
-          <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
-            {contact.companyId ? t('change') : t('add')}
-          </Button>
-        ) : undefined
-      }
-    >
-      {contact.companyId ? (
-        <p className="text-sm font-medium">
-          <CompanyLink id={contact.companyId} />
-        </p>
-      ) : (
-        <EmptyLine>{t('none')}</EmptyLine>
-      )}
-      <CompanyDialog open={open} contact={contact} onClose={() => setOpen(false)} />
-    </Panel>
-  );
-}
-
 /** Lead source: the contact's source and its first and latest lead touch, as rows. */
 function LeadSourcePanel({ contact }: SectionProps) {
   const t = useTranslations('contacts-attributes-tags.contact.sections');
@@ -210,26 +177,35 @@ function SalesSection({ contact }: SectionProps) {
 
 /**
  * One section of a contact by its id: what the sub-nav of the details page and the icon rail of the quick view both draw.
- * `onOpenSection` moves to another section in place (the Subscription card's link to Consent); `composer` asks Notes to put the
- * cursor in its composer (the "Note" button).
+ * `onOpenSection` moves to another section in place (the Subscription card's link to Consent); `focus` asks the section's inline
+ * composer to take the cursor (the "Note", "Task", "Meeting" and "Add company" buttons). Nothing here opens a dialog.
  */
 export function ContactSection({
   section,
   contact,
   variant,
   onOpenSection,
-  composer,
+  focus,
 }: SectionProps & {
   section: SectionId;
   onOpenSection?: (section: SectionId) => void;
-  composer?: boolean;
+  /** Asks the section's inline composer (note, task, meeting, company) to take the cursor: the action bar's buttons and the list's quick add. */
+  focus?: FocusRequest | null;
 }) {
   const refresh = useRefreshContact(contact.id);
   const name = displayName(contact);
   const props = { contact, variant } satisfies SectionProps;
+  const signal = (target: FocusRequest['target']) =>
+    focus?.target === target ? focus.n : undefined;
   switch (section) {
     case 'overview':
-      return <ContactOverview {...props} onOpenSection={onOpenSection} />;
+      return (
+        <ContactOverview
+          {...props}
+          onOpenSection={onOpenSection}
+          companyFocusSignal={signal('company')}
+        />
+      );
     case 'activities':
       return <ActivitiesSection {...props} />;
     case 'conversations':
@@ -239,11 +215,22 @@ export function ContactSection({
     case 'stats':
       return <StatsSection {...props} />;
     case 'notes':
-      return <NotesSection {...props} autoFocusComposer={composer} />;
+      return <NotesSection {...props} focusSignal={signal('note')} />;
+    case 'meetings':
+      return <MeetingsPanel contact={contact} focusSignal={signal('meeting')} />;
     case 'files':
       return <FilesSection {...props} />;
     case 'tasks':
-      return <LinkedTasks kind="contact" id={contact.id} label={name} onChanged={refresh} />;
+      return (
+        <LinkedTasks
+          kind="contact"
+          id={contact.id}
+          label={name}
+          onChanged={refresh}
+          inline
+          focusSignal={signal('task')}
+        />
+      );
     case 'deals':
       return <DealsSection {...props} />;
     case 'appointments':
@@ -253,7 +240,7 @@ export function ContactSection({
     case 'lead-source':
       return <LeadSourcePanel {...props} />;
     case 'company':
-      return <CompanySection {...props} />;
+      return <CompanyCard contact={contact} focusSignal={signal('company')} />;
     case 'consent':
       return <ConsentCard contactId={contact.id} onChanged={refresh} />;
     case 'history':

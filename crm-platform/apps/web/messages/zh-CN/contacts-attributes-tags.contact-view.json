@@ -12,13 +12,17 @@
         "next": "下一位联系人",
         "position": "{index} / {total}",
         "rail": "联系人分区",
-        "rail_overview": "概览",
-        "rail_activities": "活动",
-        "rail_conversations": "会话",
-        "rail_notes": "笔记",
-        "rail_stats": "沟通统计",
-        "rail_files": "文件",
-        "rail_details": "属性",
+        "moreTabs": "更多分区",
+        "more": "+{count} 更多",
+        "tab_overview": "概览",
+        "tab_activities": "活动",
+        "tab_notes": "笔记",
+        "tab_tasks": "任务",
+        "tab_meetings": "会议",
+        "tab_files": "文件",
+        "tab_conversations": "会话",
+        "tab_stats": "沟通统计",
+        "tab_details": "属性",
         "openFull": "在详情页中打开"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "更多操作",
         "edit": "编辑联系人",
         "delete": "删除联系人",
-        "close": "关闭",
-        "companyHint": "选择该联系人所在的公司。再次选择同一公司则保持不变，清除则移除关联。",
-        "companySaved": "公司已保存。",
-        "companyFailed": "无法保存公司。请重试。",
         "conflict": "其他人已先更改了此联系人。已重新加载，请重试。",
         "deleteFailed": "无法删除该联系人。"
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "公司",
-        "change": "更改",
-        "add": "添加公司",
-        "none": "该联系人未关联公司。"
+        "none": "该联系人未关联公司。",
+        "hint": "搜索公司，或输入新名称来创建。",
+        "saved": "公司已保存。",
+        "removed": "已从该联系人移除公司。",
+        "failed": "无法保存公司。请重试。",
+        "conflict": "其他人先更改了此联系人。联系人已重新加载，请重试。"
       },
       "sections": {
         "lead-source": "线索来源"
@@ -153,6 +156,7 @@
           "details": "联系人详情",
           "stats": "沟通统计",
           "notes": "笔记",
+          "meetings": "会议",
           "files": "文件",
           "tasks": "任务",
           "deals": "交易",

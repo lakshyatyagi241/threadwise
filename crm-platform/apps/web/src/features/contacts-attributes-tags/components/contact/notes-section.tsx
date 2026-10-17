@@ -23,8 +23,11 @@ const isSaveKey = (e: KeyboardEvent<HTMLTextAreaElement>) =>
 export function NotesSection({
   contact,
   variant,
-  autoFocusComposer,
-}: SectionProps & { autoFocusComposer?: boolean }) {
+  focusSignal,
+}: SectionProps & {
+  /** Changes whenever something outside (the "Note" button, the row's quick add) wants the cursor in the composer. */
+  focusSignal?: number;
+}) {
   const t = useTranslations('contacts-attributes-tags.contact.notes');
   const format = useFormatter();
   const { toast } = useToast();
@@ -67,7 +70,7 @@ export function NotesSection({
       <div className="space-y-4">
         {canUpdate && (
           <Composer
-            autoFocus={autoFocusComposer}
+            focusSignal={focusSignal}
             pending={create.isPending}
             onSave={(body, done) =>
               create.mutate(
@@ -156,11 +159,11 @@ export function NotesSection({
 }
 
 function Composer({
-  autoFocus,
+  focusSignal,
   pending,
   onSave,
 }: {
-  autoFocus?: boolean;
+  focusSignal?: number;
   pending: boolean;
   onSave: (body: string, done: () => void) => void;
 }) {
@@ -170,9 +173,13 @@ function Composer({
   const id = useId();
   const hintId = `${id}-hint`;
 
+  // Asked for from outside: the cursor goes in and the composer is brought into view.
   useEffect(() => {
-    if (autoFocus) ref.current?.focus();
-  }, [autoFocus]);
+    if (focusSignal === undefined || focusSignal === 0) return;
+    const el = ref.current;
+    el?.focus();
+    el?.scrollIntoView({ block: 'nearest' });
+  }, [focusSignal]);
 
   const empty = draft.trim() === '';
   const left = NOTE_BODY_MAX - draft.length;

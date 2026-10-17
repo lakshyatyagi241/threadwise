@@ -12,13 +12,17 @@
         "next": "Sonraki kişi",
         "position": "{index} / {total}",
         "rail": "Kişi bölümleri",
-        "rail_overview": "Genel bakış",
-        "rail_activities": "Etkinlik",
-        "rail_conversations": "Görüşmeler",
-        "rail_notes": "Notlar",
-        "rail_stats": "İletişim istatistikleri",
-        "rail_files": "Dosyalar",
-        "rail_details": "Özellikler",
+        "moreTabs": "Diğer bölümler",
+        "more": "+{count} diğer",
+        "tab_overview": "Genel bakış",
+        "tab_activities": "Etkinlik",
+        "tab_notes": "Notlar",
+        "tab_tasks": "Görevler",
+        "tab_meetings": "Toplantılar",
+        "tab_files": "Dosyalar",
+        "tab_conversations": "Görüşmeler",
+        "tab_stats": "İletişim istatistikleri",
+        "tab_details": "Özellikler",
         "openFull": "Ayrıntı sayfasında aç"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Diğer eylemler",
         "edit": "Kişiyi düzenle",
         "delete": "Kişiyi sil",
-        "close": "Kapat",
-        "companyHint": "Kişinin çalıştığı şirketi seçin. Değiştirmemek için yeniden seçin, bağlantıyı kaldırmak için temizleyin.",
-        "companySaved": "Şirket kaydedildi.",
-        "companyFailed": "Şirket kaydedilemedi. Tekrar deneyin.",
         "conflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
         "deleteFailed": "Kişi silinemedi."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Şirket",
-        "change": "Değiştir",
-        "add": "Şirket ekle",
-        "none": "Bu kişi bir şirkete bağlı değil."
+        "none": "Bu kişi bir şirkete bağlı değil.",
+        "hint": "Bir şirket arayın veya oluşturmak için yeni bir ad yazın.",
+        "saved": "Şirket kaydedildi.",
+        "removed": "Şirket bu kişiden kaldırıldı.",
+        "failed": "Şirket kaydedilemedi. Tekrar deneyin.",
+        "conflict": "Bu kişiyi önce başka biri değiştirdi. Kişi yeniden yüklendi; tekrar deneyin."
       },
       "sections": {
         "lead-source": "Potansiyel müşteri kaynağı"
@@ -153,6 +156,7 @@
           "details": "Kişi ayrıntıları",
           "stats": "İletişim istatistikleri",
           "notes": "Notlar",
+          "meetings": "Toplantılar",
           "files": "Dosyalar",
           "tasks": "Görevler",
           "deals": "Fırsatlar",

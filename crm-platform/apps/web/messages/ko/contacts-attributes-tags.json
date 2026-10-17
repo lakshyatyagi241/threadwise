@@ -97,6 +97,9 @@
       "colGroups": "그룹",
       "colTags": "태그",
       "colMemo": "메모",
+      "colDateOfBirth": "생년월일",
+      "colMinor": "미성년자",
+      "minorBadge": "미성년자",
       "tagFilter": "태그별 필터",
       "allTags": "모든 태그",
       "consentFilter": "수신 동의별 필터",
@@ -123,6 +126,7 @@
       "colEmailId": "이메일 ID",
       "colStage": "단계",
       "colStatus": "상태",
+      "colLeadScore": "리드 점수",
       "colLanguage": "언어",
       "colCreatedOn": "생성일",
       "pagination": "페이지 이동",
@@ -139,6 +143,22 @@
       "emailNamed": "{name}에게 이메일 보내기",
       "noEmail": "이메일 주소 없음",
       "moreFor": "{name}의 추가 작업",
+      "message": "메시지",
+      "messageNamed": "{name}에게 메시지 보내기",
+      "noMessage_noContact": "전화번호 또는 이메일 주소 없음",
+      "noMessage_noChannel": "이 연락처에 연결된 WhatsApp 번호 또는 메일함 없음",
+      "noMessage_optedOut": "이 연락처는 메시지 수신을 거부했습니다",
+      "quickAdd": "노트, 작업 또는 미팅 추가",
+      "quickAddNamed": "{name}의 노트, 작업 또는 미팅 추가",
+      "addTask": "작업 추가",
+      "addMeeting": "미팅 예약",
+      "moreTip": "더 보기",
+      "openNewTab": "새 탭에서 열기",
+      "sendEmail": "이메일 보내기",
+      "copyPhone": "전화번호 복사",
+      "copyEmail": "이메일 주소 복사",
+      "copied": "복사됨",
+      "copyFailed": "복사하지 못했습니다",
       "view": "보기",
       "addToGroup": "그룹에 추가",
       "tag": "태그",
@@ -166,7 +186,6 @@
       "columns": "열",
       "addColumnField": "사용자 지정 필드를 열로 추가",
       "kanbanView": "보드 보기(단계별)",
-      "colLeadScore": "리드 점수",
       "colOwner": "담당자",
       "unassigned": "미배정",
       "ownerFilter": "담당자로 필터",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "태그 {tag}가 붙은 30일간 활동 없는 연락처",
       "pqlExampleStage": "최근 7일 내 생성된 {stage} 연락처",
       "pqlExampleNoOwner": "담당자가 없는 연락처",
-      "colDateOfBirth": "생년월일",
-      "colMinor": "미성년자",
-      "minorBadge": "미성년자",
       "breadcrumb": "탐색 경로",
       "breadcrumbContacts": "연락처",
       "breadcrumbList": "목록",
@@ -256,10 +272,7 @@
       "yes": "예",
       "no": "아니요",
       "optInOut": "마케팅 메시지 수신 거부",
-      "openDetails": "세부 정보 열기",
-      "openDetailsNamed": "{name}님의 세부 정보 열기",
       "addNote": "노트 추가",
-      "addNoteNamed": "{name}님에게 노트 추가",
       "chatNamed": "{name}님과 채팅",
       "openChat": "채팅 열기",
       "sendSms": "SMS 보내기",
@@ -267,7 +280,21 @@
       "minorFilter": "미성년자 표시로 필터",
       "minorYes": "미성년자로 표시됨",
       "minorNo": "미성년자로 표시되지 않음",
-      "allMinor": "모두"
+      "allMinor": "모두",
+      "shortPhone": "전화",
+      "shortEmail": "이메일",
+      "shortStage": "단계",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "생성일",
+      "firstRun": {
+        "title": "첫 연락처를 추가하세요",
+        "message": "대화하는 사람들을 가져오세요. 연락처는 메시지, 캠페인, 작업, 거래에 사용됩니다.",
+        "addBody": "이름과 전화번호 또는 이메일 주소로 한 명을 직접 입력하세요.",
+        "importCsv": "CSV 파일 가져오기",
+        "importBody": "스프레드시트를 업로드하고 열을 연락처 필드에 맞추세요.",
+        "connect": "WhatsApp 연결",
+        "connectBody": "번호를 연결하면 연락처가 답장할 수 있고 직접 메시지도 보낼 수 있습니다."
+      }
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "이 연락처에 대한 메모",
       "address": "주소",
       "addressPlaceholder": "주소 입력",
+      "dateOfBirth": "생년월일",
+      "dateOfBirthHint": "선택 사항입니다. 이로 인해 연락처가 미성년자가 되는 경우 미성년자로 표시됩니다.",
       "status": "상태",
       "statusNone": "- 없음 -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
       "company": "회사",
       "companyHint": "이 연락처를 조직에 묶습니다.",
-      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요.",
-      "dateOfBirth": "생년월일",
-      "dateOfBirthHint": "선택 사항입니다. 이로 인해 연락처가 미성년자가 되는 경우 미성년자로 표시됩니다."
+      "companyRefused": "해당 회사는 사용할 수 없습니다. 다른 회사를 선택하거나 입력란을 비우세요."
     },
     "tags": {
       "title": "태그",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "태그 이름이 너무 김",
         "plan_limit_reached": "요금제 연락처 한도 도달",
         "tag_limit_reached": "요금제 태그 한도 도달",
-        "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨",
         "invalid_date_of_birth": "생년월일이 생년월일이 될 수 있는 연도 우선 형식의 날짜가 아닙니다",
+        "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨",
         "invalid_timezone": "잘못된 시간대"
       },
       "statusHint": "이 파일이 생성하는 연락처에 적용됩니다.",
@@ -628,6 +655,7 @@
       "language": "언어",
       "source": "출처",
       "address": "주소",
+      "dateOfBirth": "생년월일",
       "memo": "메모",
       "groups": "그룹",
       "consent": "마케팅 메시지",
@@ -647,8 +675,7 @@
       "ownerForbidden": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
       "ownerFailed": "담당자를 변경하지 못했습니다. 다시 시도하세요.",
       "ownerMe": "{name}(나)",
-      "ownerFormer": "이전 멤버",
-      "dateOfBirth": "생년월일"
+      "ownerFormer": "이전 멤버"
     },
     "attributes": {
       "eyebrow": "더보기 / 속성",
@@ -1391,17 +1418,17 @@
       "changed": "이 보기를 저장한 후 필터가 변경되었습니다",
       "more": "{name} 더보기",
       "picker": {
-        "title": "보기 선택",
-        "create": "새 보기 만들기",
-        "search": "보기 검색...",
-        "empty": "보기를 찾을 수 없습니다",
-        "pinned": "탭에 표시",
         "favorites": "즐겨찾기",
         "defaultFilters": "기본 필터",
         "createdViews": "만든 보기",
         "addView": "보기 추가",
         "markFavorite": "즐겨찾기로 표시",
-        "unmarkFavorite": "즐겨찾기에서 제거"
+        "unmarkFavorite": "즐겨찾기에서 제거",
+        "title": "보기 선택",
+        "create": "새 보기 만들기",
+        "search": "보기 검색...",
+        "empty": "보기를 찾을 수 없습니다",
+        "pinned": "탭에 표시"
       },
       "menu": {
         "rename": "보기 이름 바꾸기",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "내 연락처",
+        "unassigned": "미배정",
+        "hotLeads": "핫 리드",
         "newThisWeek": "이번 주 신규",
         "newLastWeek": "지난주 신규",
         "recentlyCreated": "최근 생성",
@@ -1496,6 +1525,9 @@
         "inactive": "비활성",
         "unsubscribed": "수신 거부",
         "minors": "미성년자"
+      },
+      "quick": {
+        "label": "빠른 보기"
       }
     },
     "erase": {

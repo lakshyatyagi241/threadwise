@@ -21,6 +21,7 @@ export function StageMenu({
   busy,
   onChange,
   statusHint,
+  quietCaret,
 }: {
   value: string;
   choices: readonly Choice[];
@@ -32,6 +33,8 @@ export function StageMenu({
   onChange?: (value: string) => void;
   /** What moving to a stage does to the contact's status ("Status becomes X"), shown under that stage; null = nothing. */
   statusHint?: (stage: string) => string | null;
+  /** Draw the caret only while the row is hovered or has focus (inside a `group`), so a long list is not a column of carets. */
+  quietCaret?: boolean;
 }) {
   const t = useTranslations('contacts-attributes-tags.stageMenu');
   const current = choices.find((c) => c.value === value);
@@ -46,7 +49,13 @@ export function StageMenu({
       trigger={
         <span className="inline-flex min-w-0 items-center gap-0.5">
           {badge}
-          <ChevronDownIcon className="size-3 shrink-0 text-muted-foreground" />
+          <ChevronDownIcon
+            className={cn(
+              'size-3 shrink-0 text-muted-foreground',
+              quietCaret &&
+                'opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100',
+            )}
+          />
         </span>
       }
     >
