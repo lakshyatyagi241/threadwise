@@ -12,13 +12,17 @@
         "next": "Następny kontakt",
         "position": "{index} z {total}",
         "rail": "Sekcje kontaktu",
-        "rail_overview": "Przegląd",
-        "rail_activities": "Aktywność",
-        "rail_conversations": "Rozmowy",
-        "rail_notes": "Notatki",
-        "rail_stats": "Statystyki komunikacji",
-        "rail_files": "Pliki",
-        "rail_details": "Właściwości",
+        "moreTabs": "Więcej sekcji",
+        "more": "+{count} więcej",
+        "tab_overview": "Przegląd",
+        "tab_activities": "Aktywność",
+        "tab_notes": "Notatki",
+        "tab_tasks": "Zadania",
+        "tab_meetings": "Spotkania",
+        "tab_files": "Pliki",
+        "tab_conversations": "Rozmowy",
+        "tab_stats": "Statystyki komunikacji",
+        "tab_details": "Właściwości",
         "openFull": "Otwórz na stronie szczegółów"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Więcej działań",
         "edit": "Edytuj kontakt",
         "delete": "Usuń kontakt",
-        "close": "Zamknij",
-        "companyHint": "Wybierz firmę, w której pracuje ten kontakt. Wybierz ją ponownie, aby nic nie zmieniać, lub wyczyść pole, aby usunąć powiązanie.",
-        "companySaved": "Firma zapisana.",
-        "companyFailed": "Nie udało się zapisać firmy. Spróbuj ponownie.",
         "conflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
         "deleteFailed": "Nie udało się usunąć kontaktu."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Firma",
-        "change": "Zmień",
-        "add": "Dodaj firmę",
-        "none": "Ten kontakt nie jest powiązany z żadną firmą."
+        "none": "Ten kontakt nie jest powiązany z żadną firmą.",
+        "hint": "Wyszukaj firmę lub wpisz nową nazwę, aby ją utworzyć.",
+        "saved": "Firma zapisana.",
+        "removed": "Firma usunięta z tego kontaktu.",
+        "failed": "Nie udało się zapisać firmy. Spróbuj ponownie.",
+        "conflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz."
       },
       "sections": {
         "lead-source": "Źródło leada"
@@ -153,6 +156,7 @@
           "details": "Szczegóły kontaktu",
           "stats": "Statystyki komunikacji",
           "notes": "Notatki",
+          "meetings": "Spotkania",
           "files": "Pliki",
           "tasks": "Zadania",
           "deals": "Transakcje",

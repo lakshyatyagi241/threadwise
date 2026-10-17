@@ -12,13 +12,17 @@
         "next": "Nächster Kontakt",
         "position": "{index} von {total}",
         "rail": "Kontaktbereiche",
-        "rail_overview": "Übersicht",
-        "rail_activities": "Aktivität",
-        "rail_conversations": "Gespräche",
-        "rail_notes": "Notizen",
-        "rail_stats": "Kommunikationsstatistik",
-        "rail_files": "Dateien",
-        "rail_details": "Eigenschaften",
+        "moreTabs": "Weitere Bereiche",
+        "more": "+{count} weitere",
+        "tab_overview": "Übersicht",
+        "tab_activities": "Aktivität",
+        "tab_notes": "Notizen",
+        "tab_tasks": "Aufgaben",
+        "tab_meetings": "Meetings",
+        "tab_files": "Dateien",
+        "tab_conversations": "Gespräche",
+        "tab_stats": "Kommunikationsstatistik",
+        "tab_details": "Eigenschaften",
         "openFull": "Auf der Detailseite öffnen"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Weitere Aktionen",
         "edit": "Kontakt bearbeiten",
         "delete": "Kontakt löschen",
-        "close": "Schließen",
-        "companyHint": "Wählen Sie das Unternehmen, für das dieser Kontakt arbeitet. Wählen Sie es erneut, um es unverändert zu lassen, oder leeren Sie das Feld, um die Verknüpfung zu entfernen.",
-        "companySaved": "Unternehmen gespeichert.",
-        "companyFailed": "Das Unternehmen konnte nicht gespeichert werden. Versuchen Sie es erneut.",
         "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
         "deleteFailed": "Der Kontakt konnte nicht gelöscht werden."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Unternehmen",
-        "change": "Ändern",
-        "add": "Unternehmen hinzufügen",
-        "none": "Dieser Kontakt ist keinem Unternehmen zugeordnet."
+        "none": "Dieser Kontakt ist keinem Unternehmen zugeordnet.",
+        "hint": "Suchen Sie nach einem Unternehmen oder geben Sie einen neuen Namen ein, um es anzulegen.",
+        "saved": "Unternehmen gespeichert.",
+        "removed": "Das Unternehmen wurde von diesem Kontakt entfernt.",
+        "failed": "Das Unternehmen konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+        "conflict": "Jemand anderes hat diesen Kontakt zuvor geändert. Er wurde neu geladen; versuchen Sie es erneut."
       },
       "sections": {
         "lead-source": "Lead-Quelle"
@@ -153,6 +156,7 @@
           "details": "Kontaktdetails",
           "stats": "Kommunikationsstatistik",
           "notes": "Notizen",
+          "meetings": "Meetings",
           "files": "Dateien",
           "tasks": "Aufgaben",
           "deals": "Deals",

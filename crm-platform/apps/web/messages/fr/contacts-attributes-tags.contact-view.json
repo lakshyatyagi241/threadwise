@@ -12,13 +12,17 @@
         "next": "Contact suivant",
         "position": "{index} sur {total}",
         "rail": "Sections du contact",
-        "rail_overview": "Aperçu",
-        "rail_activities": "Activité",
-        "rail_conversations": "Conversations",
-        "rail_notes": "Notes",
-        "rail_stats": "Statistiques de communication",
-        "rail_files": "Fichiers",
-        "rail_details": "Propriétés",
+        "moreTabs": "Plus de sections",
+        "more": "+{count} de plus",
+        "tab_overview": "Aperçu",
+        "tab_activities": "Activité",
+        "tab_notes": "Notes",
+        "tab_tasks": "Tâches",
+        "tab_meetings": "Réunions",
+        "tab_files": "Fichiers",
+        "tab_conversations": "Conversations",
+        "tab_stats": "Statistiques de communication",
+        "tab_details": "Propriétés",
         "openFull": "Ouvrir sur la page de détails"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Plus d'actions",
         "edit": "Modifier le contact",
         "delete": "Supprimer le contact",
-        "close": "Fermer",
-        "companyHint": "Choisissez l'entreprise de ce contact. Choisissez-la à nouveau pour ne rien changer, ou effacez-la pour supprimer le lien.",
-        "companySaved": "Entreprise enregistrée.",
-        "companyFailed": "Impossible d'enregistrer l'entreprise. Réessayez.",
         "conflict": "Quelqu'un d'autre a d'abord modifié ce contact. Il a été rechargé ; réessayez.",
         "deleteFailed": "Impossible de supprimer le contact."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Entreprise",
-        "change": "Changer",
-        "add": "Ajouter une entreprise",
-        "none": "Ce contact n'est lié à aucune entreprise."
+        "none": "Ce contact n'est lié à aucune entreprise.",
+        "hint": "Recherchez une entreprise, ou saisissez un nouveau nom pour la créer.",
+        "saved": "Entreprise enregistrée.",
+        "removed": "Entreprise retirée de ce contact.",
+        "failed": "Impossible d’enregistrer l’entreprise. Réessayez.",
+        "conflict": "Quelqu’un d’autre a d’abord modifié ce contact. Il a été rechargé ; réessayez."
       },
       "sections": {
         "lead-source": "Source du lead"
@@ -153,6 +156,7 @@
           "details": "Détails du contact",
           "stats": "Statistiques de communication",
           "notes": "Notes",
+          "meetings": "Réunions",
           "files": "Fichiers",
           "tasks": "Tâches",
           "deals": "Opportunités",

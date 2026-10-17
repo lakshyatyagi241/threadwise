@@ -97,6 +97,9 @@
       "colGroups": "קבוצות",
       "colTags": "תגיות",
       "colMemo": "תזכיר",
+      "colDateOfBirth": "תאריך לידה",
+      "colMinor": "קטין",
+      "minorBadge": "קטין",
       "tagFilter": "סינון לפי תגית",
       "allTags": "כל התגיות",
       "consentFilter": "סינון לפי הסכמה",
@@ -123,6 +126,7 @@
       "colEmailId": "כתובת אימייל",
       "colStage": "שלב",
       "colStatus": "סטטוס",
+      "colLeadScore": "דירוג ליד",
       "colLanguage": "שפה",
       "colCreatedOn": "נוצר ב",
       "pagination": "עימוד",
@@ -139,6 +143,22 @@
       "emailNamed": "שלח אימייל אל {name}",
       "noEmail": "אין כתובת אימייל",
       "moreFor": "פעולות נוספות עבור {name}",
+      "message": "הודעה",
+      "messageNamed": "הודעה אל {name}",
+      "noMessage_noContact": "אין מספר טלפון או כתובת אימייל",
+      "noMessage_noChannel": "אין מספר WhatsApp או תיבת דואר מחוברים לאיש קשר זה",
+      "noMessage_optedOut": "איש קשר זה ביטל קבלת הודעות",
+      "quickAdd": "הוסף הערה, משימה או פגישה",
+      "quickAddNamed": "הוסף הערה, משימה או פגישה עבור {name}",
+      "addTask": "הוסף משימה",
+      "addMeeting": "קבע פגישה",
+      "moreTip": "עוד",
+      "openNewTab": "פתח בכרטיסייה חדשה",
+      "sendEmail": "שלח אימייל",
+      "copyPhone": "העתק מספר טלפון",
+      "copyEmail": "העתק כתובת אימייל",
+      "copied": "הועתק",
+      "copyFailed": "לא ניתן להעתיק",
       "view": "הצג",
       "addToGroup": "הוסף לקבוצה",
       "tag": "תגית",
@@ -166,7 +186,6 @@
       "columns": "עמודות",
       "addColumnField": "הוסף שדה מותאם כעמודה",
       "kanbanView": "תצוגת לוח (לפי שלב)",
-      "colLeadScore": "דירוג ליד",
       "colOwner": "בעלים",
       "unassigned": "לא מוקצה",
       "ownerFilter": "סינון לפי בעלים",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "אנשי קשר עם התגית {tag} שלא פעילים 30 יום",
       "pqlExampleStage": "אנשי קשר בשלב {stage} שנוצרו ב-7 הימים האחרונים",
       "pqlExampleNoOwner": "אנשי קשר ללא בעלים",
-      "colDateOfBirth": "תאריך לידה",
-      "colMinor": "קטין",
-      "minorBadge": "קטין",
       "breadcrumb": "פירורי לחם",
       "breadcrumbContacts": "אנשי קשר",
       "breadcrumbList": "רשימה",
@@ -256,10 +272,7 @@
       "yes": "כן",
       "no": "לא",
       "optInOut": "ביטל קבלת הודעות שיווקיות",
-      "openDetails": "פתח פרטים",
-      "openDetailsNamed": "פתח את הפרטים של {name}",
       "addNote": "הוסף הערה",
-      "addNoteNamed": "הוסף הערה ל-{name}",
       "chatNamed": "שוחח עם {name}",
       "openChat": "פתח צ׳אט",
       "sendSms": "שלח SMS",
@@ -267,7 +280,21 @@
       "minorFilter": "סינון לפי סימון קטין",
       "minorYes": "מסומן כקטין",
       "minorNo": "לא מסומן כקטין",
-      "allMinor": "כולם"
+      "allMinor": "כולם",
+      "shortPhone": "טלפון",
+      "shortEmail": "אימייל",
+      "shortStage": "שלב",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "נוצר",
+      "firstRun": {
+        "title": "הוסף את אנשי הקשר הראשונים שלך",
+        "message": "הכנס את האנשים שאתה מדבר איתם. אנשי הקשר משמשים להודעות, לקמפיינים, למשימות ולעסקאות.",
+        "addBody": "הקלד אדם אחד: שם ומספר טלפון או כתובת אימייל.",
+        "importCsv": "ייבא קובץ CSV",
+        "importBody": "העלה גיליון אלקטרוני והתאם את העמודות שלו לשדות איש הקשר.",
+        "connect": "חבר את WhatsApp",
+        "connectBody": "חבר את המספר שלך כדי שאנשי הקשר יוכלו להשיב ושתוכל לשלוח להם הודעות."
+      }
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "הערות על איש קשר זה",
       "address": "כתובת",
       "addressPlaceholder": "הזן כתובת",
+      "dateOfBirth": "תאריך לידה",
+      "dateOfBirthHint": "אופציונלי. אם זה הופך את איש הקשר לקטין, הוא מסומן ככזה.",
       "status": "סטטוס",
       "statusNone": "- ללא -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה.",
       "company": "חברה",
       "companyHint": "משייך את איש הקשר הזה לארגון.",
-      "companyRefused": "אי אפשר להשתמש בחברה הזו. בחרו חברה אחרת או רוקנו את השדה.",
-      "dateOfBirth": "תאריך לידה",
-      "dateOfBirthHint": "אופציונלי. אם זה הופך את איש הקשר לקטין, הוא מסומן ככזה."
+      "companyRefused": "אי אפשר להשתמש בחברה הזו. בחרו חברה אחרת או רוקנו את השדה."
     },
     "tags": {
       "title": "תגיות",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "שם התגית ארוך מדי",
         "plan_limit_reached": "הגעת למגבלת אנשי הקשר של התוכנית",
         "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית",
-        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת",
         "invalid_date_of_birth": "תאריך הלידה אינו תאריך עם השנה בהתחלה שיכול להיות תאריך לידה",
+        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת",
         "invalid_timezone": "אזור זמן לא תקין"
       },
       "statusHint": "חל על אנשי הקשר שהקובץ יוצר.",
@@ -628,6 +655,7 @@
       "language": "שפה",
       "source": "מקור",
       "address": "כתובת",
+      "dateOfBirth": "תאריך לידה",
       "memo": "הערה",
       "groups": "קבוצות",
       "consent": "הודעות שיווקיות",
@@ -647,8 +675,7 @@
       "ownerForbidden": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה.",
       "ownerFailed": "לא ניתן היה לשנות את הבעלים. נסה שוב.",
       "ownerMe": "{name} (אני)",
-      "ownerFormer": "חבר לשעבר",
-      "dateOfBirth": "תאריך לידה"
+      "ownerFormer": "חבר לשעבר"
     },
     "attributes": {
       "eyebrow": "עוד / מאפיינים",
@@ -1391,17 +1418,17 @@
       "changed": "המסננים השתנו מאז שמירת התצוגה",
       "more": "עוד עבור {name}",
       "picker": {
-        "title": "בחירת תצוגה",
-        "create": "יצירת תצוגה חדשה",
-        "search": "חיפוש תצוגות...",
-        "empty": "לא נמצאו תצוגות",
-        "pinned": "בלשוניות",
         "favorites": "מועדפים",
         "defaultFilters": "מסננים ברירת מחדל",
         "createdViews": "תצוגות שנוצרו",
         "addView": "הוספת תצוגה",
         "markFavorite": "סימון כמועדף",
-        "unmarkFavorite": "הסרה מהמועדפים"
+        "unmarkFavorite": "הסרה מהמועדפים",
+        "title": "בחירת תצוגה",
+        "create": "יצירת תצוגה חדשה",
+        "search": "חיפוש תצוגות...",
+        "empty": "לא נמצאו תצוגות",
+        "pinned": "בלשוניות"
       },
       "menu": {
         "rename": "שינוי שם התצוגה",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "אנשי הקשר שלי",
+        "unassigned": "לא מוקצה",
+        "hotLeads": "לידים חמים",
         "newThisWeek": "חדשים השבוע",
         "newLastWeek": "חדשים בשבוע שעבר",
         "recentlyCreated": "נוצרו לאחרונה",
@@ -1496,6 +1525,9 @@
         "inactive": "לא פעילים",
         "unsubscribed": "בוטלה הרשמתם",
         "minors": "קטינים"
+      },
+      "quick": {
+        "label": "תצוגות מהירות"
       }
     },
     "erase": {

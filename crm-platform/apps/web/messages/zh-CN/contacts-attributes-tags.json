@@ -97,6 +97,9 @@
       "colGroups": "分组",
       "colTags": "标签",
       "colMemo": "备忘",
+      "colDateOfBirth": "出生日期",
+      "colMinor": "未成年人",
+      "minorBadge": "未成年人",
       "tagFilter": "按标签筛选",
       "allTags": "全部标签",
       "consentFilter": "按同意状态筛选",
@@ -123,6 +126,7 @@
       "colEmailId": "电子邮箱",
       "colStage": "阶段",
       "colStatus": "状态",
+      "colLeadScore": "线索评分",
       "colLanguage": "语言",
       "colCreatedOn": "创建时间",
       "pagination": "分页",
@@ -139,6 +143,22 @@
       "emailNamed": "给 {name} 发邮件",
       "noEmail": "无电子邮箱地址",
       "moreFor": "{name} 的更多操作",
+      "message": "发消息",
+      "messageNamed": "给 {name} 发消息",
+      "noMessage_noContact": "没有电话号码或电子邮箱地址",
+      "noMessage_noChannel": "该联系人没有已连接的 WhatsApp 号码或邮箱",
+      "noMessage_optedOut": "该联系人已退订消息",
+      "quickAdd": "添加笔记、任务或会议",
+      "quickAddNamed": "为 {name} 添加笔记、任务或会议",
+      "addTask": "添加任务",
+      "addMeeting": "安排会议",
+      "moreTip": "更多",
+      "openNewTab": "在新标签页中打开",
+      "sendEmail": "发送电子邮件",
+      "copyPhone": "复制电话号码",
+      "copyEmail": "复制电子邮箱地址",
+      "copied": "已复制",
+      "copyFailed": "无法复制",
       "view": "查看",
       "addToGroup": "添加到分组",
       "tag": "标签",
@@ -166,7 +186,6 @@
       "columns": "列",
       "addColumnField": "将自定义字段添加为列",
       "kanbanView": "看板视图（按阶段）",
-      "colLeadScore": "线索评分",
       "colOwner": "负责人",
       "unassigned": "未分配",
       "ownerFilter": "按负责人筛选",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "带有标签 {tag} 且30天未活跃的联系人",
       "pqlExampleStage": "最近7天创建的 {stage} 联系人",
       "pqlExampleNoOwner": "没有负责人的联系人",
-      "colDateOfBirth": "出生日期",
-      "colMinor": "未成年人",
-      "minorBadge": "未成年人",
       "breadcrumb": "面包屑导航",
       "breadcrumbContacts": "联系人",
       "breadcrumbList": "列表",
@@ -256,10 +272,7 @@
       "yes": "是",
       "no": "否",
       "optInOut": "已退订营销消息",
-      "openDetails": "打开详情",
-      "openDetailsNamed": "打开 {name} 的详情",
       "addNote": "添加笔记",
-      "addNoteNamed": "为 {name} 添加笔记",
       "chatNamed": "与 {name} 聊天",
       "openChat": "打开聊天",
       "sendSms": "发送 SMS",
@@ -267,7 +280,21 @@
       "minorFilter": "按未成年人标记筛选",
       "minorYes": "已标记为未成年人",
       "minorNo": "未标记为未成年人",
-      "allMinor": "所有人"
+      "allMinor": "所有人",
+      "shortPhone": "电话",
+      "shortEmail": "邮箱",
+      "shortStage": "阶段",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "创建时间",
+      "firstRun": {
+        "title": "添加您的第一批联系人",
+        "message": "导入您常联系的人。联系人可用于消息、营销活动、任务和交易。",
+        "addBody": "录入一个人：姓名，加上电话号码或电子邮箱。",
+        "importCsv": "导入 CSV 文件",
+        "importBody": "上传电子表格，并将其列匹配到联系人字段。",
+        "connect": "连接 WhatsApp",
+        "connectBody": "连接您的号码，联系人即可回复，您也可以向他们发送消息。"
+      }
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "关于此联系人的备注",
       "address": "地址",
       "addressPlaceholder": "输入地址",
+      "dateOfBirth": "出生日期",
+      "dateOfBirthHint": "选填。如果据此判定为未成年人,该联系人会被标记为未成年人。",
       "status": "状态",
       "statusNone": "- 无 -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。",
       "company": "公司",
       "companyHint": "将此联系人归入某个组织。",
-      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。",
-      "dateOfBirth": "出生日期",
-      "dateOfBirthHint": "选填。如果据此判定为未成年人,该联系人会被标记为未成年人。"
+      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。"
     },
     "tags": {
       "title": "标签",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "标签名称过长",
         "plan_limit_reached": "已达套餐联系人上限",
         "tag_limit_reached": "已达套餐标签上限",
-        "duplicate_in_file": "号码重复，已合并到前面的行",
         "invalid_date_of_birth": "出生日期不是可作为出生日期的年份在前的日期",
+        "duplicate_in_file": "号码重复，已合并到前面的行",
         "invalid_timezone": "时区无效"
       },
       "statusHint": "应用于此文件创建的联系人。",
@@ -628,6 +655,7 @@
       "language": "语言",
       "source": "来源",
       "address": "地址",
+      "dateOfBirth": "出生日期",
       "memo": "备注",
       "groups": "群组",
       "consent": "营销消息",
@@ -647,8 +675,7 @@
       "ownerForbidden": "您的权限不允许将此联系人分配给该人员。",
       "ownerFailed": "无法更改负责人。请重试。",
       "ownerMe": "{name}(我)",
-      "ownerFormer": "已离开的成员",
-      "dateOfBirth": "出生日期"
+      "ownerFormer": "已离开的成员"
     },
     "attributes": {
       "eyebrow": "更多 / 属性",
@@ -1391,17 +1418,17 @@
       "changed": "自保存此视图后，筛选条件已更改",
       "more": "{name} 的更多操作",
       "picker": {
-        "title": "选择视图",
-        "create": "新建视图",
-        "search": "搜索视图...",
-        "empty": "未找到视图",
-        "pinned": "已置于标签页",
         "favorites": "收藏",
         "defaultFilters": "默认筛选",
         "createdViews": "已创建的视图",
         "addView": "添加视图",
         "markFavorite": "标记为收藏",
-        "unmarkFavorite": "取消收藏"
+        "unmarkFavorite": "取消收藏",
+        "title": "选择视图",
+        "create": "新建视图",
+        "search": "搜索视图...",
+        "empty": "未找到视图",
+        "pinned": "已置于标签页"
       },
       "menu": {
         "rename": "重命名视图",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "我的联系人",
+        "unassigned": "未分配",
+        "hotLeads": "热门线索",
         "newThisWeek": "本周新增",
         "newLastWeek": "上周新增",
         "recentlyCreated": "最近创建",
@@ -1496,6 +1525,9 @@
         "inactive": "不活跃",
         "unsubscribed": "已退订",
         "minors": "未成年人"
+      },
+      "quick": {
+        "label": "快速视图"
       }
     },
     "erase": {

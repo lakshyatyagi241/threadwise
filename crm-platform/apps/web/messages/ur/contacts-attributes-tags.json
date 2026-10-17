@@ -97,6 +97,9 @@
       "colGroups": "گروپس",
       "colTags": "ٹیگز",
       "colMemo": "میمو",
+      "colDateOfBirth": "تاریخِ پیدائش",
+      "colMinor": "نابالغ",
+      "minorBadge": "نابالغ",
       "tagFilter": "ٹیگ کے لحاظ سے فلٹر کریں",
       "allTags": "تمام ٹیگز",
       "consentFilter": "رضامندی کے لحاظ سے فلٹر کریں",
@@ -123,6 +126,7 @@
       "colEmailId": "ای میل ID",
       "colStage": "مرحلہ",
       "colStatus": "حالت",
+      "colLeadScore": "لیڈ اسکور",
       "colLanguage": "زبان",
       "colCreatedOn": "بنانے کی تاریخ",
       "pagination": "صفحہ بندی",
@@ -139,6 +143,22 @@
       "emailNamed": "{name} کو ای میل کریں",
       "noEmail": "ای میل ایڈریس نہیں",
       "moreFor": "{name} کے لیے مزید اقدامات",
+      "message": "پیغام",
+      "messageNamed": "{name} کو پیغام بھیجیں",
+      "noMessage_noContact": "فون نمبر یا ای میل ایڈریس نہیں",
+      "noMessage_noChannel": "اس رابطے کے لیے کوئی منسلک WhatsApp نمبر یا میل باکس نہیں",
+      "noMessage_optedOut": "اس رابطے نے پیغامات سے آپٹ آؤٹ کیا ہے",
+      "quickAdd": "نوٹ، ٹاسک یا میٹنگ شامل کریں",
+      "quickAddNamed": "{name} کے لیے نوٹ، ٹاسک یا میٹنگ شامل کریں",
+      "addTask": "ٹاسک شامل کریں",
+      "addMeeting": "میٹنگ شیڈول کریں",
+      "moreTip": "مزید",
+      "openNewTab": "نئے ٹیب میں کھولیں",
+      "sendEmail": "ای میل بھیجیں",
+      "copyPhone": "فون نمبر کاپی کریں",
+      "copyEmail": "ای میل ایڈریس کاپی کریں",
+      "copied": "کاپی ہو گیا",
+      "copyFailed": "کاپی نہیں ہو سکا",
       "view": "دیکھیں",
       "addToGroup": "گروپ میں شامل کریں",
       "tag": "ٹیگ",
@@ -166,7 +186,6 @@
       "columns": "کالمز",
       "addColumnField": "حسب ضرورت فیلڈ کو کالم کے طور پر شامل کریں",
       "kanbanView": "بورڈ منظر (مرحلے کے لحاظ سے)",
-      "colLeadScore": "لیڈ اسکور",
       "colOwner": "مالک",
       "unassigned": "غیر تفویض شدہ",
       "ownerFilter": "مالک کے مطابق فلٹر کریں",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "ٹیگ {tag} والے رابطے جو 30 دن سے غیر فعال ہیں",
       "pqlExampleStage": "پچھلے 7 دنوں میں بنائے گئے {stage} رابطے",
       "pqlExampleNoOwner": "بغیر مالک کے رابطے",
-      "colDateOfBirth": "تاریخِ پیدائش",
-      "colMinor": "نابالغ",
-      "minorBadge": "نابالغ",
       "breadcrumb": "بریڈ کرمب",
       "breadcrumbContacts": "رابطے",
       "breadcrumbList": "فہرست",
@@ -256,10 +272,7 @@
       "yes": "ہاں",
       "no": "نہیں",
       "optInOut": "مارکیٹنگ پیغامات سے آپٹ آؤٹ",
-      "openDetails": "تفصیلات کھولیں",
-      "openDetailsNamed": "{name} کی تفصیلات کھولیں",
       "addNote": "نوٹ شامل کریں",
-      "addNoteNamed": "{name} کے لیے نوٹ شامل کریں",
       "chatNamed": "{name} سے چیٹ کریں",
       "openChat": "چیٹ کھولیں",
       "sendSms": "SMS بھیجیں",
@@ -267,7 +280,21 @@
       "minorFilter": "نابالغ کے نشان سے فلٹر کریں",
       "minorYes": "نابالغ کے طور پر نشان زد",
       "minorNo": "نابالغ کے طور پر نشان زد نہیں",
-      "allMinor": "سب"
+      "allMinor": "سب",
+      "shortPhone": "فون",
+      "shortEmail": "ای میل",
+      "shortStage": "مرحلہ",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "بنایا گیا",
+      "firstRun": {
+        "title": "اپنے پہلے رابطے شامل کریں",
+        "message": "ان لوگوں کو لائیں جن سے آپ بات کرتے ہیں۔ رابطے پیغامات، مہمات، ٹاسکس اور ڈیلز کے لیے استعمال ہوتے ہیں۔",
+        "addBody": "ایک شخص درج کریں: نام اور فون نمبر یا ای میل ایڈریس۔",
+        "importCsv": "CSV فائل امپورٹ کریں",
+        "importBody": "اسپریڈ شیٹ اپ لوڈ کریں اور اس کے کالموں کو رابطے کے فیلڈز سے ملائیں۔",
+        "connect": "WhatsApp کنیکٹ کریں",
+        "connectBody": "اپنا نمبر کنیکٹ کریں تاکہ رابطے جواب دے سکیں اور آپ انہیں پیغام بھیج سکیں۔"
+      }
     },
     "bulk": {
       "label": "منتخب رابطوں کے لیے اقدامات",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "اس رابطے کے بارے میں نوٹس",
       "address": "ایڈریس",
       "addressPlaceholder": "ایڈریس درج کریں",
+      "dateOfBirth": "تاریخِ پیدائش",
+      "dateOfBirthHint": "اختیاری۔ اگر اس سے رابطہ نابالغ بنتا ہے تو رابطے کو نابالغ کے طور پر نشان زد کیا جاتا ہے۔",
       "status": "حالت",
       "statusNone": "- کوئی نہیں -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "آپ کی رسائی اس رابطے کو اس شخص کو تفویض کرنے کی اجازت نہیں دیتی۔",
       "company": "کمپنی",
       "companyHint": "اس رابطے کو کسی تنظیم کے تحت رکھتا ہے۔",
-      "companyRefused": "آپ اس کمپنی کو استعمال نہیں کر سکتے۔ کوئی اور چنیں یا خانہ خالی کریں۔",
-      "dateOfBirth": "تاریخِ پیدائش",
-      "dateOfBirthHint": "اختیاری۔ اگر اس سے رابطہ نابالغ بنتا ہے تو رابطے کو نابالغ کے طور پر نشان زد کیا جاتا ہے۔"
+      "companyRefused": "آپ اس کمپنی کو استعمال نہیں کر سکتے۔ کوئی اور چنیں یا خانہ خالی کریں۔"
     },
     "tags": {
       "title": "ٹیگز",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "ٹیگ کا نام بہت لمبا ہے",
         "plan_limit_reached": "پلان میں رابطوں کی حد پوری ہو چکی ہے",
         "tag_limit_reached": "پلان میں ٹیگ کی حد پوری ہو چکی ہے",
-        "duplicate_in_file": "دہرایا گیا نمبر، پچھلی قطار میں ضم کر دیا گیا",
         "invalid_date_of_birth": "تاریخِ پیدائش پہلے سال والی ایسی تاریخ نہیں جو تاریخِ پیدائش ہو سکے",
+        "duplicate_in_file": "دہرایا گیا نمبر، پچھلی قطار میں ضم کر دیا گیا",
         "invalid_timezone": "غلط ٹائم زون"
       },
       "statusHint": "یہ فائل جو رابطے بناتی ہے ان پر لاگو ہوتا ہے۔",
@@ -628,6 +655,7 @@
       "language": "زبان",
       "source": "ماخذ",
       "address": "پتہ",
+      "dateOfBirth": "تاریخِ پیدائش",
       "memo": "میمو",
       "groups": "گروپس",
       "consent": "مارکیٹنگ پیغامات",
@@ -647,8 +675,7 @@
       "ownerForbidden": "آپ کی رسائی اس رابطے کو اس شخص کو تفویض کرنے کی اجازت نہیں دیتی۔",
       "ownerFailed": "مالک تبدیل نہیں کیا جا سکا۔ دوبارہ کوشش کریں۔",
       "ownerMe": "{name} (میں)",
-      "ownerFormer": "سابق رکن",
-      "dateOfBirth": "تاریخِ پیدائش"
+      "ownerFormer": "سابق رکن"
     },
     "attributes": {
       "eyebrow": "مزید / خصوصیات",
@@ -1391,17 +1418,17 @@
       "changed": "اس ویو کو محفوظ کرنے کے بعد فلٹرز تبدیل ہو گئے ہیں",
       "more": "{name} کے لیے مزید",
       "picker": {
-        "title": "ویو منتخب کریں",
-        "create": "نیا ویو بنائیں",
-        "search": "ویوز تلاش کریں...",
-        "empty": "کوئی ویو نہیں ملا",
-        "pinned": "ٹیبز پر",
         "favorites": "پسندیدہ",
         "defaultFilters": "ڈیفالٹ فلٹرز",
         "createdViews": "بنائے گئے ویوز",
         "addView": "ویو شامل کریں",
         "markFavorite": "پسندیدہ کے طور پر نشان زد کریں",
-        "unmarkFavorite": "پسندیدہ سے ہٹائیں"
+        "unmarkFavorite": "پسندیدہ سے ہٹائیں",
+        "title": "ویو منتخب کریں",
+        "create": "نیا ویو بنائیں",
+        "search": "ویوز تلاش کریں...",
+        "empty": "کوئی ویو نہیں ملا",
+        "pinned": "ٹیبز پر"
       },
       "menu": {
         "rename": "ویو کا نام تبدیل کریں",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "میرے رابطے",
+        "unassigned": "غیر تفویض شدہ",
+        "hotLeads": "گرم لیڈز",
         "newThisWeek": "اس ہفتے نئے",
         "newLastWeek": "پچھلے ہفتے نئے",
         "recentlyCreated": "حال ہی میں بنائے گئے",
@@ -1496,6 +1525,9 @@
         "inactive": "غیر فعال",
         "unsubscribed": "سبسکرپشن ختم کرنے والے",
         "minors": "نابالغ"
+      },
+      "quick": {
+        "label": "فوری ویوز"
       }
     },
     "erase": {

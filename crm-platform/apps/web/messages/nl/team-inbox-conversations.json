@@ -701,6 +701,8 @@
         "format": "{label} mag geen regeleinde, tab of vier spaties op rij bevatten."
       },
       "reason": {
+        "other_number": "Hoort bij een ander WhatsApp-nummer en kan daarom niet vanuit dit gesprek worden verzonden.",
+        "not_linked": "Het kanaal van dit gesprek is niet gekoppeld aan een WhatsApp-nummer, dus er kan geen sjabloon vanuit worden verzonden.",
         "paused": "Gepauzeerd door WhatsApp. Het kan opnieuw worden verzonden zodra de pauze voorbij is.",
         "media_header": "Heeft een koptekst met afbeelding, video of document, die nog niet vanuit de inbox kan worden verzonden.",
         "header_variable": "Heeft een variabele in de koptekst, die nog niet vanuit de inbox kan worden ingevuld.",

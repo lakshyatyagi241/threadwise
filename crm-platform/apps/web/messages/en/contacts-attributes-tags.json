@@ -143,6 +143,22 @@
       "emailNamed": "Email {name}",
       "noEmail": "No email address",
       "moreFor": "More actions for {name}",
+      "message": "Message",
+      "messageNamed": "Message {name}",
+      "noMessage_noContact": "No phone number or email address",
+      "noMessage_noChannel": "No connected WhatsApp number or mailbox for this contact",
+      "noMessage_optedOut": "This contact opted out of messages",
+      "quickAdd": "Add a note, task or meeting",
+      "quickAddNamed": "Add a note, task or meeting for {name}",
+      "addTask": "Add task",
+      "addMeeting": "Schedule meeting",
+      "moreTip": "More",
+      "openNewTab": "Open in a new tab",
+      "sendEmail": "Send email",
+      "copyPhone": "Copy phone number",
+      "copyEmail": "Copy email address",
+      "copied": "Copied",
+      "copyFailed": "Could not copy",
       "view": "View",
       "addToGroup": "Add to group",
       "tag": "Tag",
@@ -256,10 +272,7 @@
       "yes": "Yes",
       "no": "No",
       "optInOut": "Opted out of marketing messages",
-      "openDetails": "Open details",
-      "openDetailsNamed": "Open the details of {name}",
       "addNote": "Add note",
-      "addNoteNamed": "Add a note to {name}",
       "chatNamed": "Chat with {name}",
       "openChat": "Open chat",
       "sendSms": "Send SMS",
@@ -267,7 +280,21 @@
       "minorFilter": "Filter by minor flag",
       "minorYes": "Flagged as a minor",
       "minorNo": "Not flagged as a minor",
-      "allMinor": "Everyone"
+      "allMinor": "Everyone",
+      "shortPhone": "Phone",
+      "shortEmail": "Email",
+      "shortStage": "Stage",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "Created",
+      "firstRun": {
+        "title": "Add your first contacts",
+        "message": "Bring in the people you talk to. Contacts are used for messages, campaigns, tasks and deals.",
+        "addBody": "Type one person in: a name and a phone number or an email address.",
+        "importCsv": "Import a CSV file",
+        "importBody": "Upload a spreadsheet and match its columns to contact fields.",
+        "connect": "Connect WhatsApp",
+        "connectBody": "Connect your number so contacts can reply and you can message them."
+      }
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "My contacts",
+        "unassigned": "Unassigned",
+        "hotLeads": "Hot leads",
         "newThisWeek": "New this week",
         "newLastWeek": "New last week",
         "recentlyCreated": "Recently created",
@@ -1496,6 +1525,9 @@
         "inactive": "Inactive",
         "unsubscribed": "Unsubscribed",
         "minors": "Minors"
+      },
+      "quick": {
+        "label": "Quick views"
       }
     },
     "erase": {

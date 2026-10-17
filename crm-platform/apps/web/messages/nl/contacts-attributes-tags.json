@@ -97,6 +97,9 @@
       "colGroups": "Groepen",
       "colTags": "Tags",
       "colMemo": "Memo",
+      "colDateOfBirth": "Geboortedatum",
+      "colMinor": "Minderjarig",
+      "minorBadge": "Minderjarig",
       "tagFilter": "Filteren op tag",
       "allTags": "Alle tags",
       "consentFilter": "Filteren op toestemming",
@@ -123,6 +126,7 @@
       "colEmailId": "E-mailadres",
       "colStage": "Fase",
       "colStatus": "Status",
+      "colLeadScore": "Leadscore",
       "colLanguage": "Taal",
       "colCreatedOn": "Aangemaakt op",
       "pagination": "Paginering",
@@ -139,6 +143,22 @@
       "emailNamed": "{name} mailen",
       "noEmail": "Geen e-mailadres",
       "moreFor": "Meer acties voor {name}",
+      "message": "Bericht",
+      "messageNamed": "{name} een bericht sturen",
+      "noMessage_noContact": "Geen telefoonnummer of e-mailadres",
+      "noMessage_noChannel": "Geen gekoppeld WhatsApp-nummer of mailbox voor dit contact",
+      "noMessage_optedOut": "Dit contact heeft zich afgemeld voor berichten",
+      "quickAdd": "Een notitie, taak of vergadering toevoegen",
+      "quickAddNamed": "Een notitie, taak of vergadering toevoegen voor {name}",
+      "addTask": "Taak toevoegen",
+      "addMeeting": "Vergadering plannen",
+      "moreTip": "Meer",
+      "openNewTab": "Openen in een nieuw tabblad",
+      "sendEmail": "E-mail sturen",
+      "copyPhone": "Telefoonnummer kopiëren",
+      "copyEmail": "E-mailadres kopiëren",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt",
       "view": "Bekijken",
       "addToGroup": "Aan groep toevoegen",
       "tag": "Taggen",
@@ -166,7 +186,6 @@
       "columns": "Kolommen",
       "addColumnField": "Een aangepast veld als kolom toevoegen",
       "kanbanView": "Bordweergave (per fase)",
-      "colLeadScore": "Leadscore",
       "colOwner": "Eigenaar",
       "unassigned": "Niet toegewezen",
       "ownerFilter": "Filteren op eigenaar",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "Contacten met tag {tag} die 30 dagen niet actief zijn",
       "pqlExampleStage": "{stage}-contacten van de afgelopen 7 dagen",
       "pqlExampleNoOwner": "Contacten zonder eigenaar",
-      "colDateOfBirth": "Geboortedatum",
-      "colMinor": "Minderjarig",
-      "minorBadge": "Minderjarig",
       "breadcrumb": "Kruimelpad",
       "breadcrumbContacts": "Contacten",
       "breadcrumbList": "Lijst",
@@ -256,10 +272,7 @@
       "yes": "Ja",
       "no": "Nee",
       "optInOut": "Afgemeld voor marketingberichten",
-      "openDetails": "Details openen",
-      "openDetailsNamed": "Details van {name} openen",
       "addNote": "Notitie toevoegen",
-      "addNoteNamed": "Notitie toevoegen aan {name}",
       "chatNamed": "Chatten met {name}",
       "openChat": "Chat openen",
       "sendSms": "SMS sturen",
@@ -267,7 +280,21 @@
       "minorFilter": "Filteren op minderjarigenmarkering",
       "minorYes": "Gemarkeerd als minderjarig",
       "minorNo": "Niet gemarkeerd als minderjarig",
-      "allMinor": "Iedereen"
+      "allMinor": "Iedereen",
+      "shortPhone": "Telefoon",
+      "shortEmail": "E-mail",
+      "shortStage": "Fase",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "Aangemaakt",
+      "firstRun": {
+        "title": "Voeg je eerste contacten toe",
+        "message": "Haal de mensen binnen met wie je praat. Contacten gebruik je voor berichten, campagnes, taken en deals.",
+        "addBody": "Voer één persoon in: een naam en een telefoonnummer of e-mailadres.",
+        "importCsv": "Importeer een CSV-bestand",
+        "importBody": "Upload een spreadsheet en koppel de kolommen aan contactvelden.",
+        "connect": "WhatsApp koppelen",
+        "connectBody": "Koppel je nummer zodat contacten kunnen antwoorden en je ze kunt berichten."
+      }
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "Notities over dit contact",
       "address": "Adres",
       "addressPlaceholder": "Voer adres in",
+      "dateOfBirth": "Geboortedatum",
+      "dateOfBirthHint": "Optioneel. Als het contact hierdoor minderjarig is, wordt het als zodanig gemarkeerd.",
       "status": "Status",
       "statusNone": "- geen -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
       "company": "Bedrijf",
       "companyHint": "Plaatst dit contact onder een organisatie.",
-      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
-      "dateOfBirth": "Geboortedatum",
-      "dateOfBirthHint": "Optioneel. Als het contact hierdoor minderjarig is, wordt het als zodanig gemarkeerd."
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
     },
     "tags": {
       "title": "Tags",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "tagnaam te lang",
         "plan_limit_reached": "contactlimiet van abonnement bereikt",
         "tag_limit_reached": "taglimiet van abonnement bereikt",
-        "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
         "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn",
+        "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
         "invalid_timezone": "ongeldige tijdzone"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
@@ -628,6 +655,7 @@
       "language": "Taal",
       "source": "Bron",
       "address": "Adres",
+      "dateOfBirth": "Geboortedatum",
       "memo": "Notitie",
       "groups": "Groepen",
       "consent": "Marketingberichten",
@@ -647,8 +675,7 @@
       "ownerForbidden": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
       "ownerFailed": "De eigenaar kon niet worden gewijzigd. Probeer het opnieuw.",
       "ownerMe": "{name} (ik)",
-      "ownerFormer": "Voormalig lid",
-      "dateOfBirth": "Geboortedatum"
+      "ownerFormer": "Voormalig lid"
     },
     "attributes": {
       "eyebrow": "Meer / Attributen",
@@ -1391,17 +1418,17 @@
       "changed": "Filters zijn gewijzigd sinds deze weergave is opgeslagen",
       "more": "Meer voor {name}",
       "picker": {
-        "title": "Selecteer een weergave",
-        "create": "Nieuwe weergave maken",
-        "search": "Weergaven zoeken...",
-        "empty": "Geen weergaven gevonden",
-        "pinned": "Op tabbladen",
         "favorites": "Favorieten",
         "defaultFilters": "Standaardfilters",
         "createdViews": "Gemaakte weergaven",
         "addView": "Weergave toevoegen",
         "markFavorite": "Markeren als favoriet",
-        "unmarkFavorite": "Verwijderen uit favorieten"
+        "unmarkFavorite": "Verwijderen uit favorieten",
+        "title": "Selecteer een weergave",
+        "create": "Nieuwe weergave maken",
+        "search": "Weergaven zoeken...",
+        "empty": "Geen weergaven gevonden",
+        "pinned": "Op tabbladen"
       },
       "menu": {
         "rename": "Weergave hernoemen",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "Mijn contacten",
+        "unassigned": "Niet toegewezen",
+        "hotLeads": "Hete leads",
         "newThisWeek": "Nieuw deze week",
         "newLastWeek": "Nieuw vorige week",
         "recentlyCreated": "Onlangs aangemaakt",
@@ -1496,6 +1525,9 @@
         "inactive": "Inactief",
         "unsubscribed": "Uitgeschreven",
         "minors": "Minderjarigen"
+      },
+      "quick": {
+        "label": "Snelle weergaven"
       }
     },
     "erase": {

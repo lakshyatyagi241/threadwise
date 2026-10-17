@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isMaskedPhone, menuActions, phoneDigits, quickActions } from './row-actions';
+import { isMaskedPhone, menuActions, messageRoute, phoneDigits, quickActions } from './row-actions';
 
 describe('isMaskedPhone', () => {
   it('recognises the server mask (apps/api/.../phone-mask.ts): a literal x placeholder', () => {
@@ -71,5 +71,45 @@ describe('menuActions', () => {
       'tag',
       'delete',
     ]);
+  });
+});
+
+describe('messageRoute', () => {
+  const both = { phone: '+91 98765 43210', email: 'a@example.com', optedOut: false };
+
+  it('chats on WhatsApp when the contact has a number and a number is connected (or nothing is known yet)', () => {
+    expect(messageRoute(both, { whatsapp: true, email: true })).toEqual({ kind: 'chat' });
+    expect(messageRoute(both)).toEqual({ kind: 'chat' });
+  });
+
+  it('falls back to email through a connected mailbox when WhatsApp cannot carry it', () => {
+    expect(messageRoute(both, { whatsapp: false, email: true })).toEqual({ kind: 'email' });
+    expect(messageRoute({ ...both, phone: '' })).toEqual({ kind: 'email' });
+    // A masked number is no number at all.
+    expect(messageRoute({ ...both, phone: '+xxxxxxxx0025' })).toEqual({ kind: 'email' });
+  });
+
+  it('is blocked, with the reason, when nothing works: never a dead icon', () => {
+    expect(messageRoute({ phone: '', email: '', optedOut: false })).toEqual({
+      kind: 'blocked',
+      reason: 'noContact',
+    });
+    expect(messageRoute(both, { whatsapp: false, email: false })).toEqual({
+      kind: 'blocked',
+      reason: 'noChannel',
+    });
+    expect(messageRoute({ ...both, phone: '' }, { email: false })).toEqual({
+      kind: 'blocked',
+      reason: 'noChannel',
+    });
+  });
+
+  it('does not email a contact who opted out', () => {
+    expect(messageRoute({ phone: '', email: 'a@example.com', optedOut: true })).toEqual({
+      kind: 'blocked',
+      reason: 'optedOut',
+    });
+    // The WhatsApp chat is still opened (a conversation is not a marketing send; the drawer holds the template rules).
+    expect(messageRoute({ ...both, optedOut: true })).toEqual({ kind: 'chat' });
   });
 });

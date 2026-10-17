@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Badge, EmptyState, Spinner, cn } from '@crm/ui';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
@@ -17,9 +17,13 @@ import type { ContactRow } from '../api/schemas';
 import { displayName, formatPhone, isOptedOut } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import {
+  SECTION_OF_TARGET,
+  parseAddTarget,
   sectionHref,
   visibleSections,
+  type AddTarget,
   type CoreSection,
+  type FocusRequest,
   type RelatedSection,
   type SectionId,
 } from '../lib/sections';
@@ -47,10 +51,25 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
   const contact = useContact(id);
   const session = useSession();
   const router = useRouter();
+  const pathname = usePathname();
+  const search = useSearchParams();
   const nav = useMemo(
     () => visibleSections((permission) => permission in session.permissions),
     [session.permissions],
   );
+
+  /** A request to put the cursor in an inline composer of the section on screen (the action bar's buttons, `?add=` from a link). */
+  const [focus, setFocus] = useState<FocusRequest | null>(null);
+  // `?add=task` (or note, meeting, company) opens that section's composer; the parameter is dropped so a reload does not repeat it.
+  const addParam = parseAddTarget(search.get('add'));
+  const [seenAdd, setSeenAdd] = useState<AddTarget | null>(null);
+  if (addParam !== seenAdd) {
+    setSeenAdd(addParam);
+    if (addParam) setFocus((f) => ({ target: addParam, n: (f?.n ?? 0) + 1 }));
+  }
+  useEffect(() => {
+    if (addParam) window.history.replaceState(null, '', pathname);
+  }, [addParam, pathname]);
 
   const back = (
     <Link
@@ -88,6 +107,12 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
   // A section this person cannot open (no permission) falls back to the overview.
   const allowed = [...nav.core, ...nav.related] as SectionId[];
   const current: SectionId = allowed.includes(section) ? section : 'overview';
+  // Note, Task, Meeting and Add company are shortcuts: this page's section that holds the composer opens with the cursor in it.
+  const onAdd = (target: AddTarget) => {
+    const to = SECTION_OF_TARGET[target];
+    if (to === current) setFocus((f) => ({ target, n: (f?.n ?? 0) + 1 }));
+    else router.push(`${sectionHref(id, allowed.includes(to) ? to : 'overview')}?add=${target}`);
+  };
 
   return (
     <CallingProvider>
@@ -101,6 +126,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
           <DetailHeader
             contact={c}
             onOpenSection={(s) => router.push(sectionHref(id, s))}
+            onAdd={onAdd}
             onDeleted={() => router.replace('/contacts')}
           />
           <StageStepper contact={c} />
@@ -108,7 +134,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
             section={current}
             contact={c}
             variant="page"
-            composer={false}
+            focus={focus}
             onOpenSection={(s) => router.push(sectionHref(id, s))}
           />
         </div>
@@ -168,10 +194,12 @@ export function SectionNav({
 function DetailHeader({
   contact,
   onOpenSection,
+  onAdd,
   onDeleted,
 }: {
   contact: ContactRow;
   onOpenSection: (section: SectionId) => void;
+  onAdd: (target: AddTarget) => void;
   onDeleted: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.detail');
@@ -275,7 +303,7 @@ function DetailHeader({
       </div>
       <ContactActionBar
         contact={contact}
-        onOpenSection={(s) => onOpenSection(s)}
+        onAdd={onAdd}
         onDeleted={onDeleted}
         className="mt-4 border-t border-border pt-3"
       />

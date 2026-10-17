@@ -18,7 +18,7 @@ import { MEETING_KEYS } from '../../api/meetings';
 import { NOTE_KEYS } from '../../api/notes';
 import type { ContactRow } from '../../api/schemas';
 import { FilesSection } from './files-section';
-import { MeetingDialog, MeetingsPanel } from './meetings-section';
+import { MeetingsPanel } from './meetings-section';
 import { NotesSection } from './notes-section';
 
 /** Notes, Meetings and Files sections of the contact quick view / details page, rendered to markup (English). */
@@ -198,20 +198,40 @@ describe('Notes section', () => {
   });
 });
 
-describe('Meetings panel and dialog', () => {
-  it('lists meetings with the time range and the location, and Log meeting for people who can update', () => {
+describe('Meetings panel (inline, no dialog)', () => {
+  it('lists meetings with the time range and the location, and Schedule meeting for people who can update', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
       permissions: [UPDATE],
       seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), [meeting()]),
     });
-    expect(out).toContain('>Meetings<');
+    expect(out).toContain('Meetings');
     expect(out).toContain('Product demo');
     expect(out).toContain('Oct 20, 2026');
     expect(out).toContain('At Room 4');
-    expect(out).toContain('Log meeting');
+    expect(out).toContain('Schedule meeting');
     expect(out).toContain('aria-label="Edit the meeting Product demo"');
     expect(out).toContain('aria-label="Delete the meeting Product demo"');
+    // Scheduling is a row, closed until asked for; the only dialog in the panel is the delete confirmation.
+    expect(out).not.toContain('datetime-local');
+    expect(out).not.toContain('aria-label="Schedule a meeting"');
+    expect(out.match(/<dialog/g)).toHaveLength(1);
     expect(out).not.toMatch(NO_PHYSICAL);
+  });
+
+  it('a meeting link is a real link that opens in a new tab; a place stays plain text', () => {
+    const out = render(<MeetingsPanel contact={contact} />, {
+      seed: (qc) =>
+        seedList(qc, MEETING_KEYS.list(CONTACT_ID), [
+          meeting({ location: 'https://meet.example.com/abc' }),
+        ]),
+    });
+    expect(out).toContain('href="https://meet.example.com/abc"');
+    expect(out).toContain('target="_blank"');
+    expect(out).toContain('rel="noopener noreferrer"');
+    const place = render(<MeetingsPanel contact={contact} />, {
+      seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), [meeting()]),
+    });
+    expect(place).not.toContain('href="Room 4"');
   });
 
   it('is read-only without the update permission', () => {
@@ -220,7 +240,7 @@ describe('Meetings panel and dialog', () => {
       seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), [meeting()]),
     });
     expect(out).toContain('Product demo');
-    expect(out).not.toContain('Log meeting');
+    expect(out).not.toContain('Schedule meeting');
     expect(out).not.toContain('>Edit<');
     expect(out).not.toContain('>Delete<');
     expect(out).not.toContain('datetime-local');
@@ -231,10 +251,10 @@ describe('Meetings panel and dialog', () => {
       permissions: [UPDATE],
       seed: (qc) => seedList(qc, MEETING_KEYS.list(CONTACT_ID), []),
     });
-    expect(out).toContain('No meetings logged yet. Use Log meeting to add one.');
+    expect(out).toContain('No meetings yet. Use Schedule meeting to add one.');
   });
 
-  it('a meeting without times says so', () => {
+  it('a meeting without times says so, under its own heading', () => {
     const out = render(<MeetingsPanel contact={contact} />, {
       seed: (qc) =>
         seedList(qc, MEETING_KEYS.list(CONTACT_ID), [
@@ -242,54 +262,40 @@ describe('Meetings panel and dialog', () => {
         ]),
     });
     expect(out).toContain('No time set');
+    expect(out).toContain('No date');
     expect(out).not.toContain('At ');
   });
 
-  it('the log dialog has a required title, two datetime-local inputs and a location, all limited to 255', () => {
-    const out = render(<MeetingDialog open contactId={CONTACT_ID} onClose={() => undefined} />, {
-      permissions: [UPDATE],
+  it('splits upcoming (soonest first) from past (latest first)', () => {
+    const next = new Date(Date.now() + 3 * 86_400_000).toISOString();
+    const later = new Date(Date.now() + 9 * 86_400_000).toISOString();
+    const ago = new Date(Date.now() - 3 * 86_400_000).toISOString();
+    const out = render(<MeetingsPanel contact={contact} />, {
+      seed: (qc) =>
+        seedList(qc, MEETING_KEYS.list(CONTACT_ID), [
+          meeting({
+            id: 'a0000000-0000-4000-8000-000000000001',
+            title: 'Later one',
+            startsAt: later,
+            endsAt: null,
+          }),
+          meeting({
+            id: 'a0000000-0000-4000-8000-000000000002',
+            title: 'Done one',
+            startsAt: ago,
+            endsAt: null,
+          }),
+          meeting({
+            id: 'a0000000-0000-4000-8000-000000000003',
+            title: 'Next one',
+            startsAt: next,
+            endsAt: null,
+          }),
+        ]),
     });
-    expect(out).toContain('Log meeting');
-    expect(out).toContain('>Title<');
-    expect(out).toContain('>Starts at<');
-    expect(out).toContain('>Ends at<');
-    expect(out).toContain('>Location<');
-    expect(out.match(/type="datetime-local"/g)).toHaveLength(2);
-    expect(out.match(/maxLength="255"/g)).toHaveLength(2);
-    expect(out).toContain('Times are in your time zone, UTC.');
-    expect(out).toContain('Save meeting');
-    // Nothing is flagged before the first try to save.
-    expect(out).not.toContain('Enter a title for the meeting.');
-    expect(out).not.toMatch(NO_PHYSICAL);
-  });
-
-  it('the edit dialog starts from the saved meeting, times shown in the viewer zone', () => {
-    const out = render(
-      <MeetingDialog open contactId={CONTACT_ID} meeting={meeting()} onClose={() => undefined} />,
-      { permissions: [UPDATE] },
-    );
-    expect(out).toContain('Edit meeting');
-    expect(out).toContain('value="Product demo"');
-    expect(out).toContain('value="2026-10-20T10:00"');
-    expect(out).toContain('value="2026-10-20T11:00"');
-    expect(out).toContain('value="Room 4"');
-    expect(out).toContain('Save changes');
-  });
-
-  it('flags an end before the start straight away', () => {
-    const out = render(
-      <MeetingDialog
-        open
-        contactId={CONTACT_ID}
-        meeting={meeting({
-          startsAt: '2026-10-20T12:00:00.000Z',
-          endsAt: '2026-10-20T11:00:00.000Z',
-        })}
-        onClose={() => undefined}
-      />,
-    );
-    expect(out).toContain('The end cannot be before the start.');
-    expect(out).toContain('aria-invalid="true"');
+    expect(out.indexOf('Upcoming')).toBeLessThan(out.indexOf('Past'));
+    expect(out.indexOf('Next one')).toBeLessThan(out.indexOf('Later one'));
+    expect(out.indexOf('Later one')).toBeLessThan(out.indexOf('Done one'));
   });
 });
 

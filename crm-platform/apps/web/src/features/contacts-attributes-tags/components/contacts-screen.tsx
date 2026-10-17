@@ -66,8 +66,13 @@ import { clampPage, totalPages } from '../lib/pagination';
 import { defaultPageSize, PAGE_SIZE_KEY } from '../lib/page-size';
 import { neighboursOf, quickViewIdOf, quickViewPanelOf, withQuickView } from '../lib/quick-view';
 import { rowView, type RowView } from '../lib/row-view';
-import type { SectionId } from '../lib/sections';
-import { whatsappChannels, type SendChannel } from '../lib/single-send';
+import {
+  SECTION_OF_TARGET,
+  type AddTarget,
+  type FocusRequest,
+  type SectionId,
+} from '../lib/sections';
+import { emailChannels, whatsappChannels, type SendChannel } from '../lib/single-send';
 import {
   bulkTarget,
   EMPTY_SELECTION,
@@ -97,6 +102,7 @@ import { statusAfterMove, statusNotice } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
 import { ViewsBar } from './views-bar';
+import { FirstRun } from './first-run';
 import { ImportModal } from './import-modal';
 import { DeleteHistoryOption } from './delete-history-option';
 import { BulkPickers } from './bulk-bar';
@@ -157,6 +163,8 @@ export function ContactsScreen() {
   const canReadCompanies = useCan('record.companies.read');
   const canSend = useCan('inbox.conversation.reply');
   const canCall = useCan('call.calls.use');
+  const canTask = useCan('record.tasks.create');
+  const canConnectWhatsapp = useCan('waba.numbers.read');
 
   // The rows-per-page choice is remembered per browser; a `per=` in the URL (a shared link) still wins.
   const [storedSize, setStoredSize] = useStoredValue(PAGE_SIZE_KEY);
@@ -167,7 +175,12 @@ export function ContactsScreen() {
   /** The contact the quick view shows (`?contact=`) and its section (`&panel=`). */
   const quickId = quickViewIdOf(search);
   const quickPanel = quickViewPanelOf(search);
-  const [composer, setComposer] = useState(false);
+  /** A request to put the cursor in an inline composer of the quick view (the row's quick add, the action bar's buttons). */
+  const [focus, setFocus] = useState<FocusRequest | null>(null);
+  const askFocus = useCallback(
+    (target: AddTarget | null) => setFocus(target ? { target, n: Date.now() } : null),
+    [],
+  );
   /** Changing any filter, the sort or the page size starts again from page 1 and closes the quick view; only `page` keeps the position. */
   const setFilters = (patch: Partial<ContactFilters>) => {
     if (patch.limit !== undefined) setStoredSize(String(patch.limit));
@@ -683,7 +696,11 @@ export function ContactsScreen() {
     selected: sel.ids,
     canEdit: canUpdate,
     canDelete,
-    can: { note: canUpdate, call: canCall, send: canSend, chat: canSend },
+    can: { note: canUpdate, task: canTask, call: canCall, send: canSend, chat: canSend },
+    // Unknown while the channel list loads: the Message button then assumes the number or mailbox is there.
+    connected: channels.isSuccess
+      ? { whatsapp: numbers.length > 0, email: emailChannels(channels.data.data).length > 0 }
+      : undefined,
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
     stageChoices: stages,
     onStageChange: canUpdate
@@ -723,11 +740,17 @@ export function ContactsScreen() {
         ? (row: RowView, channel: SendChannel) => setSendTarget({ row, channel })
         : undefined,
     onFilterTag: (tagId: string) => setFilters({ tag: tagId }),
-    onOpenQuick: (id: string, panel?: 'notes') => {
-      setComposer(panel === 'notes');
-      goQuick(id, panel ?? 'overview');
+    onOpenQuick: (id: string, target?: AddTarget) => {
+      askFocus(target ?? null);
+      goQuick(id, target ? SECTION_OF_TARGET[target] : 'overview');
     },
     onChat: canSend ? (row: RowView) => void onChat(row) : undefined,
+    onCopy: (value: string) => {
+      void navigator.clipboard?.writeText(value).then(
+        () => toast(t('copied'), 'success'),
+        () => toast(t('copyFailed'), 'danger'),
+      );
+    },
   };
 
   return (
@@ -860,16 +883,19 @@ export function ContactsScreen() {
                   count={viewId || !filtered ? (viewId ? total : s?.total) : undefined}
                   can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
                 />
-                <p className="text-sm text-muted-foreground">
-                  {t('totalLabel')}{' '}
-                  <strong className="font-semibold tabular-nums text-foreground">
-                    {total === undefined
-                      ? '—'
-                      : list.totalApproximate
-                        ? t('approxTotal', { total })
-                        : total.toLocaleString()}
-                  </strong>
-                </p>
+                {/* One count only: the pill on the view picker says it, except while a filter is on (the pill would be the workspace's). */}
+                {filtered && !viewId && (
+                  <p className="text-sm text-muted-foreground">
+                    {t('totalLabel')}{' '}
+                    <strong className="font-semibold tabular-nums text-foreground">
+                      {total === undefined
+                        ? '—'
+                        : list.totalApproximate
+                          ? t('approxTotal', { total })
+                          : total.toLocaleString()}
+                    </strong>
+                  </p>
+                )}
               </div>
             )
           )}
@@ -966,6 +992,12 @@ export function ContactsScreen() {
               <div className="p-4">
                 <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
               </div>
+            ) : rows.length === 0 && !filtered ? (
+              <FirstRun
+                onAdd={canCreate ? () => setFormFor('new') : undefined}
+                onImport={canImport ? () => setImportOpen(true) : undefined}
+                connectHref={canConnectWhatsapp ? '/channels/whatsapp' : undefined}
+              />
             ) : rows.length === 0 ? (
               <div className="p-4">
                 <EmptyState
@@ -1067,7 +1099,7 @@ export function ContactsScreen() {
         <ContactQuickView
           contactId={quickId}
           panel={quickPanel}
-          composer={composer}
+          focus={focus}
           previousId={neighbours.previous}
           nextId={neighbours.next}
           position={
@@ -1079,15 +1111,15 @@ export function ContactsScreen() {
               : null
           }
           onNavigate={(id) => {
-            setComposer(false);
+            askFocus(null);
             goQuick(id, quickPanel, 'replace');
           }}
           onPanel={(section, opts) => {
-            setComposer(opts?.composer === true);
+            askFocus(opts?.focus ?? null);
             goQuick(quickId, section, 'replace');
           }}
           onClose={() => {
-            setComposer(false);
+            askFocus(null);
             router.replace(`${pathname}${withQuickView(search.toString(), '')}`, { scroll: false });
           }}
         />

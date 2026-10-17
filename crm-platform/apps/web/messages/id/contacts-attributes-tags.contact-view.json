@@ -12,13 +12,17 @@
         "next": "Kontak berikutnya",
         "position": "{index} dari {total}",
         "rail": "Bagian kontak",
-        "rail_overview": "Ringkasan",
-        "rail_activities": "Aktivitas",
-        "rail_conversations": "Percakapan",
-        "rail_notes": "Catatan",
-        "rail_stats": "Statistik komunikasi",
-        "rail_files": "Berkas",
-        "rail_details": "Properti",
+        "moreTabs": "Bagian lainnya",
+        "more": "+{count} lagi",
+        "tab_overview": "Ringkasan",
+        "tab_activities": "Aktivitas",
+        "tab_notes": "Catatan",
+        "tab_tasks": "Tugas",
+        "tab_meetings": "Rapat",
+        "tab_files": "Berkas",
+        "tab_conversations": "Percakapan",
+        "tab_stats": "Statistik komunikasi",
+        "tab_details": "Properti",
         "openFull": "Buka di halaman detail"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Tindakan lainnya",
         "edit": "Edit kontak",
         "delete": "Hapus kontak",
-        "close": "Tutup",
-        "companyHint": "Pilih perusahaan tempat kontak ini bekerja. Pilih lagi untuk membiarkannya tidak berubah, atau kosongkan untuk menghapus tautan.",
-        "companySaved": "Perusahaan disimpan.",
-        "companyFailed": "Perusahaan tidak dapat disimpan. Coba lagi.",
         "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
         "deleteFailed": "Kontak tidak dapat dihapus."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Perusahaan",
-        "change": "Ubah",
-        "add": "Tambah perusahaan",
-        "none": "Kontak ini tidak terhubung ke perusahaan."
+        "none": "Kontak ini tidak terhubung ke perusahaan.",
+        "hint": "Cari perusahaan, atau ketik nama baru untuk membuatnya.",
+        "saved": "Perusahaan disimpan.",
+        "removed": "Perusahaan dihapus dari kontak ini.",
+        "failed": "Perusahaan tidak dapat disimpan. Coba lagi.",
+        "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi."
       },
       "sections": {
         "lead-source": "Sumber prospek"
@@ -153,6 +156,7 @@
           "details": "Detail kontak",
           "stats": "Statistik komunikasi",
           "notes": "Catatan",
+          "meetings": "Rapat",
           "files": "Berkas",
           "tasks": "Tugas",
           "deals": "Transaksi",

@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import type { CreateTaskInput, TaskResponse } from '@crm/contracts';
 import { useToast } from '@crm/ui';
 import { invalidateTasks, patchTaskInCache, removeTaskFromCache } from '../api/hooks';
-import { tasksApi } from '../api/service';
+import { tasksApi, type TaskSource } from '../api/service';
+import { optimisticToggle } from '../lib/inline-tasks';
 import { errorKind } from '../lib/errors';
 import type { TaskPatch } from '../lib/task-form';
 import { useErrorText } from './parts';
@@ -44,6 +45,30 @@ export function useTaskActions() {
         toast(reopening ? t('reopened') : t('completed'), 'success');
         return next;
       } catch (e) {
+        failed(e, 'failed');
+        return null;
+      }
+    },
+
+    /**
+     * Ticks or unticks a task of one record's list like `toggle`, but the list changes before the server has answered; a refusal puts
+     * the row back exactly as it was (and says why). Resolves to the server's task, or null when it failed.
+     */
+    async toggleOptimistic(
+      task: TaskResponse,
+      source: TaskSource,
+      zone?: string,
+    ): Promise<TaskResponse | null> {
+      const reopening = task.status === 'done';
+      const rollback = optimisticToggle(qc, source, task, new Date(), zone);
+      try {
+        const next = reopening ? await tasksApi.reopen(task.id) : await tasksApi.complete(task.id);
+        patchTaskInCache(qc, next);
+        void invalidateTasks(qc);
+        toast(reopening ? t('reopened') : t('completed'), 'success');
+        return next;
+      } catch (e) {
+        rollback();
         failed(e, 'failed');
         return null;
       }

@@ -144,6 +144,7 @@
         "booking": "Booking page",
         "commerce": "Store checkout",
         "lead": "Lead capture",
+        "wa_form": "WhatsApp form",
         "gpc": "Global Privacy Control",
         "dob": "Date of birth or age",
         "declaration": "Age not confirmed"

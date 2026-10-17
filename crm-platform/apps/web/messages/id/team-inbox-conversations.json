@@ -701,6 +701,8 @@
         "format": "{label} tidak boleh berisi ganti baris, tab, atau empat spasi berturut-turut."
       },
       "reason": {
+        "other_number": "Milik nomor WhatsApp lain, jadi tidak bisa dikirim dari percakapan ini.",
+        "not_linked": "Saluran percakapan ini belum tertaut ke nomor WhatsApp, jadi tidak ada templat yang bisa dikirim darinya.",
         "paused": "Dijeda oleh WhatsApp. Dapat dikirim lagi setelah jeda berakhir.",
         "media_header": "Memiliki header gambar, video, atau dokumen, yang belum dapat dikirim dari inbox.",
         "header_variable": "Memiliki variabel di header, yang belum dapat diisi dari inbox.",

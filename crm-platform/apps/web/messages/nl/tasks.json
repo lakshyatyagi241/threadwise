@@ -328,6 +328,19 @@
       "showDone": "Voltooide tonen",
       "hideDone": "Voltooide verbergen",
       "gone": "Het record waartoe deze taken behoren, is niet meer beschikbaar."
+    },
+    "inline": {
+      "addTask": "Taak toevoegen",
+      "rowLabel": "Een taak toevoegen",
+      "titleLabel": "Taaktitel",
+      "titlePlaceholder": "Taaktitel, druk dan op Enter om op te slaan",
+      "due": "Vervaldatum en -tijd",
+      "assignee": "Toewijzen aan",
+      "priority": "Prioriteit (optioneel)",
+      "hint": "Enter slaat op, Escape sluit.",
+      "save": "Taak toevoegen",
+      "cancel": "Annuleren",
+      "failed": "De taak kon niet worden opgeslagen. Je tekst staat weer in het veld."
     }
   }
 }

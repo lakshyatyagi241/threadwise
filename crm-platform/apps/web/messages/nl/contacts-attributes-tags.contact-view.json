@@ -12,13 +12,17 @@
         "next": "Volgend contact",
         "position": "{index} van {total}",
         "rail": "Contactsecties",
-        "rail_overview": "Overzicht",
-        "rail_activities": "Activiteit",
-        "rail_conversations": "Gesprekken",
-        "rail_notes": "Notities",
-        "rail_stats": "Communicatiestatistieken",
-        "rail_files": "Bestanden",
-        "rail_details": "Eigenschappen",
+        "moreTabs": "Meer secties",
+        "more": "+{count} meer",
+        "tab_overview": "Overzicht",
+        "tab_activities": "Activiteit",
+        "tab_notes": "Notities",
+        "tab_tasks": "Taken",
+        "tab_meetings": "Vergaderingen",
+        "tab_files": "Bestanden",
+        "tab_conversations": "Gesprekken",
+        "tab_stats": "Communicatiestatistieken",
+        "tab_details": "Eigenschappen",
         "openFull": "Openen op de detailpagina"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Meer acties",
         "edit": "Contact bewerken",
         "delete": "Contact verwijderen",
-        "close": "Sluiten",
-        "companyHint": "Kies het bedrijf waar dit contact werkt. Kies het opnieuw om het ongewijzigd te laten, of wis het om de koppeling te verwijderen.",
-        "companySaved": "Bedrijf opgeslagen.",
-        "companyFailed": "Het bedrijf kon niet worden opgeslagen. Probeer het opnieuw.",
         "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
         "deleteFailed": "Het contact kon niet worden verwijderd."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Bedrijf",
-        "change": "Wijzigen",
-        "add": "Bedrijf toevoegen",
-        "none": "Dit contact is niet aan een bedrijf gekoppeld."
+        "none": "Dit contact is niet aan een bedrijf gekoppeld.",
+        "hint": "Zoek een bedrijf of typ een nieuwe naam om het aan te maken.",
+        "saved": "Bedrijf opgeslagen.",
+        "removed": "Bedrijf bij dit contact verwijderd.",
+        "failed": "Het bedrijf kon niet worden opgeslagen. Probeer het opnieuw.",
+        "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw."
       },
       "sections": {
         "lead-source": "Leadbron"
@@ -153,6 +156,7 @@
           "details": "Contactdetails",
           "stats": "Communicatiestatistieken",
           "notes": "Notities",
+          "meetings": "Vergaderingen",
           "files": "Bestanden",
           "tasks": "Taken",
           "deals": "Deals",

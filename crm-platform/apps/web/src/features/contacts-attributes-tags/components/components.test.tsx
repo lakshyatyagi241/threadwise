@@ -23,6 +23,7 @@ import { DEFAULT_FILTERS } from '../api/contacts';
 import { ContactsPagination } from './contacts-pagination';
 import { ContactsToolbar, type ContactsToolbarProps } from './contacts-toolbar';
 import { AppliedFilters } from './applied-filters';
+import { FirstRun } from './first-run';
 import { SelectionBar } from './selection-bar';
 import { SlashTextarea } from './slash-picker';
 import { TagsEditor } from './tags-editor';
@@ -255,79 +256,159 @@ describe('ContactsTable', () => {
   describe('the hover actions over the name', () => {
     const send = { onSend: () => undefined, onChat: () => undefined, onOpenQuick: () => undefined };
 
-    it('offers open details, edit, note, call, email, WhatsApp, chat and the menu', () => {
+    it('offers only Message, Call, the quick add and the "..." menu: at most three icons', () => {
       const out = table([row()], send);
-      expect(out).toContain('aria-label="Open the details of Aarav Sharma"');
-      expect(out).toContain('aria-label="Edit Aarav Sharma"');
-      expect(out).toContain('aria-label="Add a note to Aarav Sharma"');
+      expect(out).toContain('aria-label="Message Aarav Sharma"');
       expect(out).toContain('aria-label="Call Aarav Sharma"');
-      expect(out).toContain('aria-label="Email Aarav Sharma"');
-      expect(out).toContain('aria-label="WhatsApp Aarav Sharma"');
-      expect(out).toContain('aria-label="Chat with Aarav Sharma"');
+      expect(out).toContain('aria-label="Add a note, task or meeting for Aarav Sharma"');
       expect(out).toContain('aria-label="More actions for Aarav Sharma"');
-    });
-
-    it('draws an icon only where the person has the permission for it', () => {
-      const out = table([row()], {
-        ...send,
-        canEdit: false,
-        can: { note: false, call: false, send: false, chat: false },
-      });
-      expect(out).toContain('aria-label="Open the details of Aarav Sharma"');
+      // what used to sit beside the name is in the menu now, not an icon of its own
       for (const gone of [
+        'Open the details of',
         'Edit Aarav',
-        'Add a note',
-        'Call Aarav',
+        'Add a note to',
         'Email Aarav',
         'WhatsApp Aarav',
         'Chat with',
       ]) {
         expect(out, gone).not.toContain(`aria-label="${gone}`);
       }
+    });
+
+    it('lays the strip over the end of the name cell, so showing it moves nothing', () => {
+      const out = table([row()], send);
+      // overlaid (absolute, at the end edge), with a fade behind it, not a sibling that takes width
+      expect(out).toContain('absolute inset-y-0 end-0');
+      expect(out).toContain('bg-[linear-gradient(to_right,transparent');
+      expect(out).toContain('rtl:bg-[linear-gradient(to_left,transparent');
+      // the name is not squeezed while the strip is on screen (the old rule truncated it on hover)
+      expect(out).not.toContain('group-hover:max-w-');
+      expect(out).not.toContain('group-focus-within:max-w-');
+    });
+
+    it('shows on hover and keyboard focus, and keeps the menu in view on a narrow or touch screen', () => {
+      const out = table([row()], send);
+      expect(out).toContain('group-hover:opacity-100');
+      expect(out).toContain('focus-within:opacity-100');
+      expect(out).toContain('max-sm:!opacity-100');
+      // icons only where a pointer can hover and there is room; the menu (drawn when opened) repeats them everywhere else
+      expect(out).toContain('hidden sm:[@media(hover:hover)]:flex');
+      // the name leaves room for the always-visible menu on a narrow or touch screen
+      expect(out).toContain('max-sm:max-w-[calc(100%-2rem)]');
+    });
+
+    it('draws an icon only where the person has the permission for it', () => {
+      const out = table([row()], {
+        ...send,
+        canEdit: false,
+        can: { note: false, task: false, call: false, send: false, chat: false },
+      });
+      for (const gone of ['Message Aarav', 'Call Aarav', 'Add a note, task or meeting']) {
+        expect(out, gone).not.toContain(`aria-label="${gone}`);
+      }
       // the menu is still there, with "View"
       expect(out).toContain('aria-label="More actions for Aarav Sharma"');
     });
 
-    it('has no call, email or WhatsApp icon without a send handler', () => {
+    it('keeps the quick add for creating tasks alone (no contact update needed)', () => {
+      const out = table([row()], {
+        ...send,
+        canEdit: false,
+        can: { note: false, task: true, call: false, send: false, chat: false },
+      });
+      expect(out).toContain('aria-label="Add a note, task or meeting for Aarav Sharma"');
+    });
+
+    it('has no call or message icon without a handler for them', () => {
       const out = table([row()]);
       expect(out).not.toContain('Call Aarav Sharma');
+      expect(out).not.toContain('Message Aarav Sharma');
       expect(out).not.toContain('href="tel:');
       expect(out).not.toContain('wa.me');
     });
 
-    it('disables call, email, WhatsApp and chat instead of hiding them when the contact has no phone or email', () => {
+    it('disables Message and Call, with the reason as the tip, when the contact cannot be reached', () => {
       const out = table([row({ phone: '', email: '' })], send);
-      expect(out.match(/aria-label="No phone number"/g)).toHaveLength(1);
-      expect(out).toContain('aria-label="No phone number for WhatsApp"');
-      expect(out).toContain('aria-label="No email address"');
-      expect(out.match(/disabled=""/g)?.length).toBeGreaterThanOrEqual(4);
+      expect(out).toContain('aria-label="No phone number or email address"');
+      expect(out).toContain('aria-label="No phone number"');
+      expect(out.match(/disabled=""/g)?.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('says why Message is off when no channel is connected', () => {
+      const out = table([row()], { ...send, connected: { whatsapp: false, email: false } });
+      expect(out).toContain(
+        'aria-label="No connected WhatsApp number or mailbox for this contact"',
+      );
     });
 
     it('keeps the name a link to the details page, opening the quick view on a plain click', () => {
       const out = table([row()], send);
       expect(out).toContain('href="/contacts/294dca7c-5806-4548-9035-dcca9befc7b1"');
     });
-
-    it('shows the actions on hover and keyboard focus only, and the menu alone on a touch screen', () => {
-      const out = table([row()], send);
-      expect(out).toContain('group-hover:opacity-100');
-      expect(out).toContain('focus-within:opacity-100');
-      expect(out).toContain('[@media(hover:hover)]:flex');
-    });
   });
 
-  it('shows WhatsApp, SMS and email opt-in as Yes / No chips, red when the contact opted out', () => {
+  it('shows WhatsApp, SMS and email opt-in as quiet marks: a green tick, a faint dot, a red cross when opted out', () => {
     const cols = visibleColumns(['name', 'whatsapp', 'sms', 'emailOptIn'], ATTRS);
     const out = table([row()], {}, 'none', cols);
+    // the headings are full labels in tooltips (WhatsApp is shortened in the heading itself)
     for (const title of ['WhatsApp opt-in', 'SMS opt-in', 'Email opt-in']) {
       expect(out, title).toContain(title);
     }
-    expect(out).toContain('border-success/30 bg-success/10 text-success');
-    expect(out).toContain('border-border bg-muted text-muted-foreground');
-    expect(out).toContain('border-danger/30 bg-danger/10 text-danger');
+    expect(out).toContain('bg-success/15 text-success');
+    expect(out).toContain('text-muted-foreground/50');
+    expect(out).toContain('bg-danger/10 text-danger');
+    // tooltips say the state with the channel; the word is for screen readers only, never printed on every row
+    expect(out).toContain('title="WhatsApp opt-in: Yes"');
+    expect(out).toContain('title="SMS opt-in: No"');
     expect(out).toContain('title="Opted out of marketing messages"');
-    expect(out.match(/>Yes</g)).toHaveLength(1);
-    expect(out.match(/>No</g)).toHaveLength(2);
+    expect(out.match(/<span class="sr-only">Yes<\/span>/g)).toHaveLength(1);
+    expect(out.match(/<span class="sr-only">No<\/span>/g)).toHaveLength(2);
+    expect(out).not.toContain('border-success/30 bg-success/10 text-success');
+  });
+
+  it('shortens the headings that were cut off, with the full label as the tooltip', () => {
+    const chosen: ColumnId[] = [
+      'name',
+      'phone',
+      'email',
+      'stage',
+      'whatsapp',
+      'owner',
+      'createdOn',
+    ];
+    const out = html(
+      <ContactsTable
+        rows={[row()]}
+        columns={visibleColumns(chosen, ATTRS)}
+        headerState="none"
+        onToggleAll={() => undefined}
+        sort={{ key: 'createdAt', order: 'desc' }}
+        onSort={() => undefined}
+        {...handlers()}
+      />,
+    );
+    for (const short of ['Phone', 'Email', 'Stage', 'WhatsApp', 'Owner', 'Created']) {
+      expect(out, short).toContain(`<span class="truncate">${short}</span>`);
+    }
+    expect(out).not.toContain('<span class="truncate">Phone Number</span>');
+    expect(out).not.toContain('<span class="truncate">Lifecycle Stage</span>');
+    // the full label is still one hover away
+    expect(out).toContain('title="Sort by Phone Number. Drag');
+    expect(out).toContain('title="Sort by Created On. Drag');
+  });
+
+  it('draws the stage caret only on hover or focus of the row, but always on a touch screen', () => {
+    const out = table([row()], { onStageChange: () => undefined, stageChoices: [] });
+    expect(out).toContain('opacity-0 transition-opacity group-hover:opacity-100');
+    expect(out).toContain('group-focus-within:opacity-100');
+    expect(out).toContain('[@media(hover:none)]:opacity-100');
+  });
+
+  it('mutes the owner avatar', () => {
+    const out = table([row({ ownerId: '11111111-1111-4111-8111-111111111111' })], {
+      ownerLabel: () => 'Asha Rao',
+    });
+    expect(out).toContain('opacity-70 saturate-50');
   });
 
   it('shows the source and the last activity, and a dash for a contact with neither', () => {
@@ -372,9 +453,9 @@ describe('ContactsTable', () => {
     expect(out).not.toContain('aria-label="Add column"');
   });
 
-  it('disables call and WhatsApp (never a dead link) for a masked phone number, leaving email alone', () => {
-    // Needs a send handler, same as the hover-actions describe block above, or the whole QuickButton
-    // cluster (call/email/WhatsApp) is absent regardless of masking and these assertions are vacuous.
+  it('disables Call and keeps Message off the chat (never a dead link) for a masked phone number', () => {
+    // Needs a send handler, same as the hover-actions describe block above, or the whole strip
+    // (message/call) is absent regardless of masking and these assertions are vacuous.
     const out = table([row({ phone: '+xxxxxxxx0025' })], {
       onSend: () => undefined,
       onChat: () => undefined,
@@ -382,10 +463,9 @@ describe('ContactsTable', () => {
     });
     expect(out).not.toContain('href="tel:');
     expect(out).not.toContain('wa.me');
-    // This cell never renders email as a link at all — it's a plain Pill (contacts-list.tsx), not an anchor — so
-    // there's nothing here to disable. Email masking, if it exists, belongs to a different component's tests.
     expect(out.match(/aria-label="No phone number"/g)).toHaveLength(1);
-    expect(out).toContain('aria-label="No phone number for WhatsApp"');
+    // the email is still reachable, so Message is on (as an email), and the menu offers no copy of the masked number
+    expect(out).toContain('aria-label="Message Aarav Sharma"');
   });
 
   it('freezes the checkbox and the name cell and keeps the scroll area focusable', () => {
@@ -828,5 +908,28 @@ describe('SlashTextarea', () => {
     expect(markup).toContain('aria-label="Message"');
     expect(markup).toContain('aria-autocomplete="list"');
     expect(markup).not.toContain('aria-expanded');
+  });
+});
+
+describe('FirstRun', () => {
+  it('offers the three ways to start, each only where the person may', () => {
+    const all = html(
+      <FirstRun
+        onAdd={() => undefined}
+        onImport={() => undefined}
+        connectHref="/channels/whatsapp"
+      />,
+    );
+    expect(all).toContain('Add your first contacts');
+    expect(all).toContain('Create Contacts');
+    expect(all).toContain('Import a CSV file');
+    expect(all).toContain('href="/channels/whatsapp"');
+    expect(all).toContain('Connect WhatsApp');
+    const some = html(<FirstRun onAdd={() => undefined} />);
+    expect(some).not.toContain('Import a CSV file');
+    expect(some).not.toContain('Connect WhatsApp');
+    const none = html(<FirstRun />);
+    expect(none).not.toContain('<button');
+    expect(none).toContain('Add your first contact, or import a CSV file to get started.');
   });
 });

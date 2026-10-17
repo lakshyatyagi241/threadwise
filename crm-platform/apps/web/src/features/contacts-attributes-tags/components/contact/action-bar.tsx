@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { ConfirmDialog, Menu, MenuItem, MenuSeparator, useToast, cn } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useCanPickCompany } from '@/features/companies';
-import { TaskFormModal } from '@/features/tasks';
 import { deleteContact, invalidateContacts } from '../../api/contacts';
 import { useChannels, openConversation } from '../../api/single-send';
 import type { ContactRow } from '../../api/schemas';
@@ -15,7 +14,7 @@ import { displayName } from '../../lib/contact-model';
 import { quickActions } from '../../lib/row-actions';
 import { rowView } from '../../lib/row-view';
 import { whatsappChannels, type SendChannel } from '../../lib/single-send';
-import type { SectionId } from '../../lib/sections';
+import { sectionAllowed, SECTION_OF_TARGET, type AddTarget } from '../../lib/sections';
 import { ContactFormModal } from '../contact-form-modal';
 import { DeleteHistoryOption } from '../delete-history-option';
 import {
@@ -32,9 +31,6 @@ import {
   WhatsAppIcon,
 } from '../icons';
 import { SingleSendDrawer, type SingleSendTarget } from '../single-send-drawer';
-import { CompanyDialog } from './company-dialog';
-import { MeetingDialog } from './meetings-section';
-import { useRefreshContact } from './shared';
 
 const pill =
   'inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-md border border-border bg-background px-2.5 text-[13px] font-medium outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
@@ -45,17 +41,19 @@ const round =
  * The row of things to do with a contact, under the header of the quick view and of the details page: Note, Task, Meeting, Add (or
  * change) company, the four channels (WhatsApp, email, chat, call) and a "..." menu (edit, delete). Each is drawn only where the
  * person holds its permission (the server checks again), and a channel the contact cannot be reached on is disabled with the reason
- * as its tooltip, not hidden. It owns every dialog it opens, so both screens get the same behaviour from one place.
+ * as its tooltip, not hidden. Note, Task, Meeting and Add company are shortcuts: no dialog opens, `onAdd` moves the screen to the
+ * section that holds the inline composer and puts the cursor in it. The edit form, the send drawer and the delete confirmation are
+ * the dialogs it still owns.
  */
 export function ContactActionBar({
   contact,
-  onOpenSection,
+  onAdd,
   onDeleted,
   className,
 }: {
   contact: ContactRow;
-  /** Moves the screen to a section: the Note button opens Notes with the composer ready. */
-  onOpenSection: (section: SectionId, opts?: { composer?: boolean }) => void;
+  /** The Note, Task, Meeting and Add company buttons: show that section's inline composer with the cursor in it. */
+  onAdd: (target: AddTarget) => void;
   /** After the contact was deleted from the "..." menu: leave the screen. */
   onDeleted: () => void;
   className?: string;
@@ -70,14 +68,12 @@ export function ContactActionBar({
   const canSend = useCan('inbox.conversation.reply');
   const canCall = useCan('call.calls.use');
   const canPickCompany = useCanPickCompany();
-  const refresh = useRefreshContact(contact.id);
+  const { permissions } = useSession();
+  const tasksOpen = sectionAllowed(SECTION_OF_TARGET.task, (p) => p in permissions);
   const qc = useQueryClient();
   const router = useRouter();
   const channels = useChannels(canSend);
 
-  const [taskOpen, setTaskOpen] = useState(false);
-  const [meetingOpen, setMeetingOpen] = useState(false);
-  const [companyOpen, setCompanyOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [keepHistory, setKeepHistory] = useState(false);
@@ -120,29 +116,25 @@ export function ContactActionBar({
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
       {canUpdate && (
-        <button
-          type="button"
-          className={pill}
-          onClick={() => onOpenSection('notes', { composer: true })}
-        >
+        <button type="button" className={pill} onClick={() => onAdd('note')}>
           <NoteIcon className="size-4" />
           {t('note')}
         </button>
       )}
-      {canTask && (
-        <button type="button" className={pill} onClick={() => setTaskOpen(true)}>
+      {canTask && tasksOpen && (
+        <button type="button" className={pill} onClick={() => onAdd('task')}>
           <CheckIcon className="size-4" />
           {t('task')}
         </button>
       )}
       {canUpdate && (
-        <button type="button" className={pill} onClick={() => setMeetingOpen(true)}>
+        <button type="button" className={pill} onClick={() => onAdd('meeting')}>
           <CalendarIcon className="size-4" />
           {t('meeting')}
         </button>
       )}
       {canUpdate && canPickCompany && (
-        <button type="button" className={pill} onClick={() => setCompanyOpen(true)}>
+        <button type="button" className={pill} onClick={() => onAdd('company')}>
           <BuildingIcon className="size-4" />
           {contact.companyId ? t('changeCompany') : t('addCompany')}
         </button>
@@ -225,22 +217,6 @@ export function ContactActionBar({
         </span>
       )}
 
-      {taskOpen && (
-        <TaskFormModal
-          link={{ contact: { id: contact.id, label: name } }}
-          onClose={() => setTaskOpen(false)}
-          onSaved={() => {
-            setTaskOpen(false);
-            void refresh();
-          }}
-        />
-      )}
-      <MeetingDialog
-        open={meetingOpen}
-        contactId={contact.id}
-        onClose={() => setMeetingOpen(false)}
-      />
-      <CompanyDialog open={companyOpen} contact={contact} onClose={() => setCompanyOpen(false)} />
       <ContactFormModal open={editing} contact={contact} onClose={() => setEditing(false)} />
       <SingleSendDrawer target={target} onClose={() => setTarget(null)} />
       <ConfirmDialog

@@ -328,6 +328,19 @@
       "showDone": "Afficher les tâches terminées",
       "hideDone": "Masquer les tâches terminées",
       "gone": "L’enregistrement auquel ces tâches appartiennent n’est plus disponible."
+    },
+    "inline": {
+      "addTask": "Ajouter une tâche",
+      "rowLabel": "Ajouter une tâche",
+      "titleLabel": "Titre de la tâche",
+      "titlePlaceholder": "Titre de la tâche, puis appuyez sur Enter pour enregistrer",
+      "due": "Date et heure d’échéance",
+      "assignee": "Assigner à",
+      "priority": "Priorité (facultatif)",
+      "hint": "Enter enregistre, Escape ferme.",
+      "save": "Ajouter une tâche",
+      "cancel": "Annuler",
+      "failed": "Impossible d’enregistrer la tâche. Votre texte est de retour dans le champ."
     }
   }
 }

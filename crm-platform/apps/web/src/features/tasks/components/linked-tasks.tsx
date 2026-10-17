@@ -16,9 +16,11 @@ import {
   useTasksCan,
   useWorkspaceZone,
 } from './parts';
+import { InlineTaskAdd } from './inline-task-add';
 import { QuickAdd, type QuickAddValue } from './quick-add';
 import { TaskFormModal } from './task-form-modal';
 import { useTaskActions } from './use-task-actions';
+import { isPending } from '../lib/inline-tasks';
 
 export interface LinkedTasksProps {
   /** The record whose tasks are listed, and the link a new task gets. */
@@ -31,6 +33,13 @@ export interface LinkedTasksProps {
   className?: string;
   /** Called after a task was added, completed or reopened here (the deal drawer refreshes its timeline, which mirrors them). */
   onChanged?: () => void;
+  /**
+   * The contact's way: adding is a row in the list (title, due date, assignee, priority; Enter saves, Escape closes) and ticking a
+   * task changes the list at once, with no dialog. Without it the quick add opens the New task form, as the deal and company screens do.
+   */
+  inline?: boolean;
+  /** Changes whenever something outside (the "Task" button of the action bar) wants the inline row open and focused. */
+  focusSignal?: number;
 }
 
 /**
@@ -38,7 +47,16 @@ export interface LinkedTasksProps {
  * completed ones, and a link to the Tasks hub filtered to the record. Shared by the contact page, the deal drawer and the
  * company page, so all behave the same. Renders nothing for someone who may not read tasks.
  */
-export function LinkedTasks({ kind, id, label, compact, className, onChanged }: LinkedTasksProps) {
+export function LinkedTasks({
+  kind,
+  id,
+  label,
+  compact,
+  className,
+  onChanged,
+  inline,
+  focusSignal,
+}: LinkedTasksProps) {
   const can = useTasksCan();
   if (!can.read) return null;
   return (
@@ -49,6 +67,8 @@ export function LinkedTasks({ kind, id, label, compact, className, onChanged }: 
       compact={compact}
       className={className}
       onChanged={onChanged}
+      inline={inline}
+      focusSignal={focusSignal}
       can={can}
     />
   );
@@ -61,6 +81,8 @@ function Panel({
   compact,
   className,
   onChanged,
+  inline,
+  focusSignal,
   can,
 }: LinkedTasksProps & { can: ReturnType<typeof useTasksCan> }) {
   const t = useTranslations('tasks.linked');
@@ -124,9 +146,19 @@ function Panel({
         </Link>
       </div>
 
-      {can.create && <QuickAdd compact placeholder={t('addPlaceholder')} onAdd={add} />}
+      {can.create &&
+        (inline ? (
+          <InlineTaskAdd
+            source={source}
+            label={label}
+            focusSignal={focusSignal}
+            onChanged={onChanged}
+          />
+        ) : (
+          <QuickAdd compact placeholder={t('addPlaceholder')} onAdd={add} />
+        ))}
 
-      {form && (
+      {form && !inline && (
         <TaskFormModal
           initialTitle={form.title}
           link={{ [kind]: { id, label: label ?? '' } }}
@@ -160,8 +192,12 @@ function Panel({
                   className="mt-0.5"
                   done={isDone}
                   title={task.title}
-                  disabled={!can.update}
-                  onToggle={() => void actions.toggle(task).then((next) => next && onChanged?.())}
+                  disabled={!can.update || isPending(task.id)}
+                  onToggle={() =>
+                    void (
+                      inline ? actions.toggleOptimistic(task, source, zone) : actions.toggle(task)
+                    ).then((next) => next && onChanged?.())
+                  }
                 />
                 <div className="min-w-0 flex-1">
                   <Link

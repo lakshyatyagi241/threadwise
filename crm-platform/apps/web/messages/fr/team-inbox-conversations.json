@@ -701,6 +701,8 @@
         "format": "{label} ne peut pas contenir de saut de ligne, de tabulation ni quatre espaces consécutifs."
       },
       "reason": {
+        "other_number": "Appartient à un autre numéro WhatsApp, il ne peut donc pas être envoyé depuis cette conversation.",
+        "not_linked": "Le canal de cette conversation n’est lié à aucun numéro WhatsApp : aucun modèle ne peut y être envoyé.",
         "paused": "Suspendu par WhatsApp. Il pourra être renvoyé une fois la suspension terminée.",
         "media_header": "Comporte un en-tête image, vidéo ou document, qui ne peut pas encore être envoyé depuis la boîte de réception.",
         "header_variable": "Comporte une variable dans l’en-tête, qui ne peut pas encore être renseignée depuis la boîte de réception.",

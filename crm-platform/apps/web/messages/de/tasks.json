@@ -328,6 +328,19 @@
       "showDone": "Abgeschlossene anzeigen",
       "hideDone": "Abgeschlossene ausblenden",
       "gone": "Der Datensatz, zu dem diese Aufgaben gehören, ist nicht mehr verfügbar."
+    },
+    "inline": {
+      "addTask": "Aufgabe hinzufügen",
+      "rowLabel": "Eine Aufgabe hinzufügen",
+      "titleLabel": "Aufgabentitel",
+      "titlePlaceholder": "Aufgabentitel, dann zum Speichern Enter drücken",
+      "due": "Fälligkeitsdatum und -uhrzeit",
+      "assignee": "Zuweisen an",
+      "priority": "Priorität (optional)",
+      "hint": "Enter speichert, Escape schließt.",
+      "save": "Aufgabe hinzufügen",
+      "cancel": "Abbrechen",
+      "failed": "Die Aufgabe konnte nicht gespeichert werden. Ihr Text steht wieder im Feld."
     }
   }
 }

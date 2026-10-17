@@ -14,24 +14,25 @@ The **contact details page** is everything about one person in one place. Open i
 
 ## The page
 
-- **The menu on the left.** **Back to listing** returns to the list. **Contact details** holds Overview, Activities, Conversations, Contact details, Communication stats, Notes and Files. **Related** holds Tasks, Deals, Appointments, Invoices and documents, Lead source, Company, Consent and Field history. You only see what your role and plan allow.
-- **The header.** The contact's name, lifecycle stage chip, lead-score star, an opted-out badge, minor and privacy badges, then email, phone, company and owner on one line, their social links, and their tags with **Add tag**. **Contact Field History** and the privacy menu (export or erase the contact's data) are at the end. The action bar under it has **Note**, **Task**, **Meeting**, **Add company**, the WhatsApp, email, chat and phone icons and a **...** menu with **Edit contact** and **Delete contact**.
+- **The menu on the left.** **Back to listing** returns to the list. **Contact details** holds Overview, Activities, Conversations, Contact details, Communication stats, Notes, Meetings and Files. **Related** holds Tasks, Deals, Appointments, Invoices and documents, Lead source, Company, Consent and Field history. You only see what your role and plan allow.
+- **The header.** The contact's name, lifecycle stage chip, lead-score star, an opted-out badge, minor and privacy badges, then email, phone, company and owner on one line, their social links, and their tags with **Add tag**. **Contact Field History** and the privacy menu (export or erase the contact's data) are at the end. The action bar under it has **Note**, **Task**, **Meeting** and **Add company**, which take you to the section that holds that form and put the cursor in it (no pop-up), the WhatsApp, email, chat and phone icons and a **...** menu with **Edit contact** and **Delete contact**.
 - **Lifecycle.** The stages of your workspace run left to right with the contact's stage highlighted and the ones before it tinted. Select a stage to move the contact there. A lost stage asks for a reason. Under it, the **Status** bar lists the statuses that are valid in that stage; select one to set it. Moving to another stage keeps the status valid for it, and the message says what happened to the status.
 
 ## The sections
 
-1. **Overview.** The same tabs and cards as the quick view: contact information, social media, lead source, custom fields; lead score, subscription status, owner and assignment, location and privacy.
-2. **Activities.** Meetings logged with the contact, then the timeline of everything that happened.
+1. **Overview.** The same tabs and cards as the quick view: the company (a search box in place), contact information, social media, lead source, custom fields; lead score, subscription status, owner and assignment, location and privacy.
+2. **Activities.** The time zone card, then the timeline of everything that happened. Meetings have their own section.
 3. **Conversations.** The chats found for this contact, with the channel, the last message, unread count and a link to open the chat in the Team inbox.
 4. **Contact details.** Every field in one list, the groups, and your custom property sections.
 5. **Communication stats.** Figures for the chats, calls and open tasks found for this contact. They cover what exists today; there are no per-contact sent, delivered or read counts.
-6. **Notes.** Write notes about the contact, edit or delete them. A note counts as activity.
-7. **Files.** The files attached to the contact. Uploading is not available yet.
-8. **Tasks, Deals, Appointments, Invoices and documents.** What is linked to the contact. Each is shown only with its own permission, and Deals needs a plan with the sales pipeline.
-9. **Lead source.** Where the contact came from.
-10. **Company.** The linked company; change it here.
-11. **Consent.** The record of what the contact agreed to, when and where, with buttons to record a change. See [Contact consent](help:contact-consent).
-12. **Field history.** Every change made to the contact's fields, newest first, with the person or system that made it.
+6. **Notes.** Write notes about the contact in the box at the top (Ctrl+Enter saves), edit or delete them. A note counts as activity.
+7. **Meetings.** **Schedule meeting** opens a row in the list (title, start, duration, optional link or place); upcoming meetings first, then past ones. Edit and delete work in place.
+8. **Files.** The files attached to the contact. Uploading is not available yet.
+9. **Tasks, Deals, Appointments, Invoices and documents.** What is linked to the contact. On **Tasks**, **Add task** opens a row in the list (title, due date, assignee, optional priority; Enter saves, Esc closes) and the circle completes a task at once. Each is shown only with its own permission, and Deals needs a plan with the sales pipeline.
+10. **Lead source.** Where the contact came from.
+11. **Company.** The linked company; search and change it here, in place.
+12. **Consent.** The record of what the contact agreed to, when and where, with buttons to record a change. See [Contact consent](help:contact-consent).
+13. **Field history.** Every change made to the contact's fields, newest first, with the person or system that made it.
 
 ## Good to know
 

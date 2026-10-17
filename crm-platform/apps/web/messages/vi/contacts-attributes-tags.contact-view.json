@@ -12,13 +12,17 @@
         "next": "Liên hệ tiếp theo",
         "position": "{index} / {total}",
         "rail": "Các phần của liên hệ",
-        "rail_overview": "Tổng quan",
-        "rail_activities": "Hoạt động",
-        "rail_conversations": "Hội thoại",
-        "rail_notes": "Ghi chú",
-        "rail_stats": "Thống kê giao tiếp",
-        "rail_files": "Tệp",
-        "rail_details": "Thuộc tính",
+        "moreTabs": "Các mục khác",
+        "more": "+{count} khác",
+        "tab_overview": "Tổng quan",
+        "tab_activities": "Hoạt động",
+        "tab_notes": "Ghi chú",
+        "tab_tasks": "Tác vụ",
+        "tab_meetings": "Cuộc họp",
+        "tab_files": "Tệp",
+        "tab_conversations": "Hội thoại",
+        "tab_stats": "Thống kê giao tiếp",
+        "tab_details": "Thuộc tính",
         "openFull": "Mở ở trang chi tiết"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "Thao tác khác",
         "edit": "Sửa liên hệ",
         "delete": "Xóa liên hệ",
-        "close": "Đóng",
-        "companyHint": "Chọn công ty mà liên hệ này làm việc. Chọn lại để giữ nguyên, hoặc bỏ chọn để gỡ liên kết.",
-        "companySaved": "Đã lưu công ty.",
-        "companyFailed": "Không thể lưu công ty. Hãy thử lại.",
         "conflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
         "deleteFailed": "Không thể xóa liên hệ."
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "Công ty",
-        "change": "Đổi",
-        "add": "Thêm công ty",
-        "none": "Liên hệ này chưa liên kết với công ty nào."
+        "none": "Liên hệ này chưa liên kết với công ty nào.",
+        "hint": "Tìm công ty, hoặc nhập tên mới để tạo.",
+        "saved": "Đã lưu công ty.",
+        "removed": "Đã gỡ công ty khỏi liên hệ này.",
+        "failed": "Không thể lưu công ty. Hãy thử lại.",
+        "conflict": "Có người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại."
       },
       "sections": {
         "lead-source": "Nguồn khách hàng tiềm năng"
@@ -153,6 +156,7 @@
           "details": "Chi tiết liên hệ",
           "stats": "Thống kê giao tiếp",
           "notes": "Ghi chú",
+          "meetings": "Cuộc họp",
           "files": "Tệp",
           "tasks": "Tác vụ",
           "deals": "Giao dịch",

@@ -113,8 +113,9 @@ const DYNAMIC_PREFIXES = [
   'properties.typeHelp.',
   // the stage meaning radios: `modal.meaning.${m}` and `${m}Hint`
   'stages.modal.meaning.',
-  // the contact quick view's rail (`rail_${section}`), the details sub-nav, the channel and social names, the add-column groups
-  'contact.quick.rail_',
+  // the contact quick view's tabs (`tab_${section}`) and the "Message" button's reasons (`noMessage_${reason}`), the details sub-nav, the channel and social names, the add-column groups
+  'contact.quick.tab_',
+  'list.noMessage_',
   'contact.nav.section.',
   'contact.subscription.channel.',
   'contact.social.',

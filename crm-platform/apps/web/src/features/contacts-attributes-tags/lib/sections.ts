@@ -11,6 +11,7 @@ export const CORE_SECTIONS = [
   'details',
   'stats',
   'notes',
+  'meetings',
   'files',
 ] as const;
 
@@ -65,20 +66,61 @@ export function visibleSections(has: (permission: string) => boolean): {
   };
 }
 
-/** The quick view's icon rail: seven sections, `details` being "Properties". The rest are reached from "See all details". */
-export const RAIL_SECTIONS = [
+/**
+ * The quick view's tab strip: the six sections people work in, then a "+N more" menu with the rest of what the drawer shows
+ * (`details` being "Properties"). Everything else is one click away on the details page ("See all details").
+ */
+export const TAB_PRIMARY = [
   'overview',
   'activities',
-  'conversations',
   'notes',
-  'stats',
+  'tasks',
+  'meetings',
   'files',
+] as const satisfies readonly SectionId[];
+export const TAB_MORE = [
+  'conversations',
+  'stats',
   'details',
-] as const satisfies readonly CoreSection[];
-export type RailSection = (typeof RAIL_SECTIONS)[number];
+] as const satisfies readonly SectionId[];
+export type QuickSection = (typeof TAB_PRIMARY)[number] | (typeof TAB_MORE)[number];
 
-export const railSections = (has: (permission: string) => boolean): RailSection[] =>
-  RAIL_SECTIONS.filter((s) => sectionAllowed(s, has));
+/** The tabs a person sees, split into the strip and its overflow menu; a section whose permission they lack is left out. */
+export function quickTabs(has: (permission: string) => boolean): {
+  primary: QuickSection[];
+  more: QuickSection[];
+} {
+  return {
+    primary: TAB_PRIMARY.filter((s) => sectionAllowed(s, has)),
+    more: TAB_MORE.filter((s) => sectionAllowed(s, has)),
+  };
+}
+
+/**
+ * What the action bar's Note, Task, Meeting and Add company buttons ask for: no dialog, the screen moves to the section that holds
+ * the inline composer and puts the cursor in it.
+ */
+export const ADD_TARGETS = ['note', 'task', 'meeting', 'company'] as const;
+export type AddTarget = (typeof ADD_TARGETS)[number];
+
+/** The section whose inline composer an add target focuses. */
+export const SECTION_OF_TARGET: Record<AddTarget, SectionId> = {
+  note: 'notes',
+  task: 'tasks',
+  meeting: 'meetings',
+  company: 'overview',
+};
+
+/** `?add=` value from a URL, or null. */
+export function parseAddTarget(v: string | null | undefined): AddTarget | null {
+  return (ADD_TARGETS as readonly string[]).includes(v ?? '') ? (v as AddTarget) : null;
+}
+
+/** A request to put the cursor in a section's composer; `n` changes on every request so asking again for the same one still works. */
+export interface FocusRequest {
+  target: AddTarget;
+  n: number;
+}
 
 /** Where a section lives on the details page: the overview is the bare contact URL, everything else adds its id. */
 export function sectionHref(contactId: string, section: SectionId): string {

@@ -15,7 +15,7 @@
 // Honest limits, written into the output too: load generator and server share one machine; the arrival rates are chosen, not taken
 // from production traffic; the soak is minutes, not the 12 h / 24 h the standard asks for; the inbox is empty, so its routes measure
 // framework, auth and database round-trip, not a real conversation list.
-import { execFileSync, spawn } from 'node:child_process';
+import { execFile, execFileSync, spawn } from 'node:child_process';
 import { randomBytes, randomUUID } from 'node:crypto';
 import {
   closeSync,
@@ -48,11 +48,14 @@ const IDLE_SECONDS = Number(arg('idle-seconds', 60));
 const CONTACTS = Number(arg('contacts', 5000));
 const COOLDOWN_SECONDS = 20;
 const SETTLE_SECONDS = Number(arg('settle-seconds', 60));
+// --trace: load trace-preload.cjs into the API and attribute each request's time (see that file). Adds a little overhead of its own.
+const TRACE = process.argv.includes('--trace');
 
 const P = { pg: 55434, redis: 56381, api: 3997, apiMetrics: 9474, workerMetrics: 9475 };
 const NAMES = { pg: 'el-load-pg', redis: 'el-load-redis' };
 const K6_IMAGE = 'grafana/k6:0.49.0';
 const work = mkdtempSync(join(tmpdir(), 'el-load-'));
+const traceFile = join(work, 'trace.ndjson');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const docker = (...a) =>
   execFileSync('docker', a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -278,6 +281,74 @@ async function calibrate(pgUrl, redisPort) {
     redis.disconnect();
   }
 }
+/**
+ * Host-to-container round trips WHILE a profile runs: one `SELECT 1` and one Redis `PING` every second from a separate Node process
+ * connection. If these rise with the load, the path to the containers (Docker Desktop's forwarding) is part of the latency.
+ */
+function startRttSampler(pgUrl, redisPort) {
+  const ioredis = require('ioredis');
+  const IORedis = ioredis.default ?? ioredis;
+  const pgMs = [];
+  const redisMs = [];
+  const dockerCpu = {}; // container -> highest CPU % seen (100 % = one core of the Docker VM)
+  let stopped = false;
+  const statsLoop = (async () => {
+    while (!stopped) {
+      await new Promise((res) => {
+        execFile(
+          'docker',
+          ['stats', '--no-stream', '--format', '{{.Name}} {{.CPUPerc}}'],
+          { encoding: 'utf8' },
+          (err, out) => {
+            if (!err)
+              for (const line of out.split('\n')) {
+                const [name, pct] = line.trim().split(' ');
+                if (name && pct)
+                  dockerCpu[name] = Math.max(dockerCpu[name] ?? 0, parseFloat(pct) || 0);
+              }
+            res();
+          },
+        );
+      });
+      await sleep(5000);
+    }
+  })();
+  const loop = (async () => {
+    const pg = new Client({ connectionString: pgUrl });
+    await pg.connect();
+    const redis = new IORedis({ host: '127.0.0.1', port: redisPort, maxRetriesPerRequest: null });
+    try {
+      while (!stopped) {
+        let t = performance.now();
+        await pg.query('SELECT 1').catch(() => undefined);
+        pgMs.push(performance.now() - t);
+        t = performance.now();
+        await redis.ping().catch(() => undefined);
+        redisMs.push(performance.now() - t);
+        await sleep(1000);
+      }
+    } finally {
+      await pg.end().catch(() => undefined);
+      redis.disconnect();
+    }
+  })();
+  return async () => {
+    stopped = true;
+    await Promise.all([loop, statsLoop]);
+    const q = (xs, p) => {
+      const s = [...xs].sort((a, b) => a - b);
+      return s.length
+        ? Math.round(s[Math.min(s.length - 1, Math.floor(s.length * p))] * 100) / 100
+        : undefined;
+    };
+    const d = (xs) => ({ samples: xs.length, p50: q(xs, 0.5), p95: q(xs, 0.95), max: q(xs, 1) });
+    return {
+      postgresSelect1Ms: d(pgMs),
+      redisPingMs: d(redisMs),
+      dockerContainerCpuMaxPercent: dockerCpu,
+    };
+  };
+}
 const stat = (xs) => {
   const v = xs.filter((x) => Number.isFinite(x));
   if (v.length === 0) return undefined;
@@ -394,6 +465,112 @@ function k6Report(summary) {
   };
 }
 
+// ---- per-request time attribution (--trace) -----------------------------------------------------------------------------------------
+const quantile = (xs, q) => {
+  const s = [...xs].sort((a, b) => a - b);
+  return s.length === 0 ? undefined : s[Math.min(s.length - 1, Math.floor(s.length * q))];
+};
+const round = (x, d = 1) => (x === undefined ? undefined : Math.round(x * 10 ** d) / 10 ** d);
+/** Reads the preload's records for [fromMs, toMs] and says where requests spent their time, overall and per route. */
+function readAgg(file) {
+  try {
+    return JSON.parse(readFileSync(`${file}.agg.json`, 'utf8'));
+  } catch {
+    return { sql: {}, redis: {} };
+  }
+}
+/** The statements and Redis commands a route ran in the window, most expensive first: how often per request and how long each took. */
+function topRoundTrips(before, after, route, requests) {
+  const one = (kind) => {
+    const a = after[kind][route] ?? {};
+    const b = before[kind][route] ?? {};
+    return Object.entries(a)
+      .map(([sig, e]) => ({ sig, n: e.n - (b[sig]?.n ?? 0), ms: e.ms - (b[sig]?.ms ?? 0) }))
+      .filter((e) => e.n > 0)
+      .sort((x, y) => y.ms - x.ms)
+      .slice(0, 12)
+      .map((e) => ({
+        what: e.sig,
+        perRequest: round(e.n / requests, 2),
+        meanMs: round(e.ms / e.n, 2),
+        msPerRequest: round(e.ms / requests, 2),
+      }));
+  };
+  return { statements: one('sql'), redis: one('redis') };
+}
+function summariseTrace(file, fromMs, toMs, aggBefore) {
+  const aggAfter = readAgg(file);
+  let lines = [];
+  try {
+    lines = readFileSync(file, 'utf8').split('\n').filter(Boolean);
+  } catch {
+    return undefined;
+  }
+  const recs = lines.map((l) => JSON.parse(l)).filter((r) => r.at >= fromMs && r.at <= toMs);
+  const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : undefined);
+  const describe = (rs) => ({
+    requests: rs.length,
+    handlerMs: {
+      p50: round(
+        quantile(
+          rs.map((r) => r.dur),
+          0.5,
+        ),
+      ),
+      p95: round(
+        quantile(
+          rs.map((r) => r.dur),
+          0.95,
+        ),
+      ),
+      mean: round(mean(rs.map((r) => r.dur))),
+    },
+    perRequest: {
+      statements: round(mean(rs.map((r) => r.q))),
+      transactions: round(mean(rs.map((r) => r.tx))),
+      connectionsTaken: round(mean(rs.map((r) => r.cn))),
+      redisCommands: round(mean(rs.map((r) => r.rc))),
+    },
+    meanMsPerRequest: {
+      waitingForPoolConnection: round(mean(rs.map((r) => r.cw))),
+      insideStatements: round(mean(rs.map((r) => r.qms))),
+      transactionOpenOutsideStatements: round(mean(rs.map((r) => Math.max(0, r.txw - r.txq)))),
+      insideRedisCommands: round(mean(rs.map((r) => r.rms))),
+    },
+    poolWaitMs: {
+      p95: round(
+        quantile(
+          rs.map((r) => r.cw),
+          0.95,
+        ),
+      ),
+      max: round(Math.max(...rs.map((r) => r.cw))),
+    },
+    meanMsPerStatement: round(
+      mean(rs.map((r) => r.qms)) / Math.max(0.001, mean(rs.map((r) => r.q))),
+      2,
+    ),
+    meanMsPerRedisCommand: round(
+      mean(rs.map((r) => r.rms)) / Math.max(0.001, mean(rs.map((r) => r.rc))),
+      2,
+    ),
+  });
+  const byRoute = {};
+  for (const r of recs) (byRoute[r.route] ??= []).push(r);
+  return {
+    overall: recs.length ? describe(recs) : undefined,
+    routes: Object.fromEntries(
+      Object.entries(byRoute)
+        .filter(([, rs]) => rs.length >= 20)
+        .map(([k, rs]) => [
+          k,
+          { ...describe(rs), roundTrips: topRoundTrips(aggBefore, aggAfter, k, rs.length) },
+        ]),
+    ),
+    note: 'times are measured inside the API process by tools/event-loop-audit/load/trace-preload.cjs; the parts overlap only if a request runs statements in parallel, and handlerMs minus the parts is JS work plus event-loop queueing',
+  };
+}
+
 // ---- main ------------------------------------------------------------------------------------------------------------------------
 const results = { profiles: {} };
 let aborted;
@@ -490,9 +667,9 @@ try {
     OBS_METRICS_HOST: '127.0.0.1',
     OBS_RUNTIME_INTERVAL_SECONDS: '5',
   };
-  const start = (name, entry, extra) => {
+  const start = (name, entry, extra, execArgv = []) => {
     const fd = openSync(join(work, `${name}.log`), 'w');
-    const child = spawn(process.execPath, [entry], {
+    const child = spawn(process.execPath, [...execArgv, entry], {
       cwd: apiDir,
       env: { ...baseEnv, ...extra },
       stdio: ['ignore', fd, fd],
@@ -502,7 +679,12 @@ try {
     child.on('exit', (code) => log(`${name} exited (${code})`));
     return child;
   };
-  start('api', 'dist/src/main.js', { OBS_METRICS_PORT: String(P.apiMetrics) });
+  start(
+    'api',
+    'dist/src/main.js',
+    { OBS_METRICS_PORT: String(P.apiMetrics), ...(TRACE ? { TRACE_OUT: traceFile } : {}) },
+    TRACE ? ['-r', join(here, 'trace-preload.cjs')] : [],
+  );
   start('worker', 'dist/src/worker.js', {
     WORKER_MODE: 'true',
     OBS_METRICS_PORT: String(P.workerMetrics),
@@ -589,6 +771,9 @@ try {
     const stopApi = startSampler(P.apiMetrics);
     const stopWorker = startSampler(P.workerMetrics);
     const stopPg = startPgSampler(ownerUrl);
+    const stopRtt = startRttSampler(ownerUrl, P.redis);
+    if (TRACE) await sleep(2500); // the preload rewrites its statement counts every 2 s: read a settled copy
+    const aggBefore = TRACE ? readAgg(traceFile) : undefined;
     const t0 = Date.now();
     let k6;
     if (profile === 'idle') {
@@ -601,6 +786,7 @@ try {
     const apiWindows = await stopApi();
     const workerWindows = await stopWorker();
     const postgres = await stopPg();
+    const roundTripsDuringProfile = await stopRtt();
     const after = await scrape(P.apiMetrics);
     const b0 = blockedWindows(before);
     const b1 = blockedWindows(after);
@@ -611,6 +797,10 @@ try {
       worker: summariseWindows(workerWindows),
       blockedWindows: { warn: b1.warn - b0.warn, critical: b1.critical - b0.critical },
       postgres,
+      roundTripsDuringProfile,
+      trace: TRACE
+        ? summariseTrace(traceFile, t0, t0 + seconds * 1000 + 6000, aggBefore)
+        : undefined,
       serverRequestMs: {
         p50: q(0.5),
         p95: q(0.95),

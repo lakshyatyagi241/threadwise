@@ -328,6 +328,19 @@
       "showDone": "完了済みを表示",
       "hideDone": "完了済みを非表示",
       "gone": "これらのタスクが属するレコードは利用できなくなりました。"
+    },
+    "inline": {
+      "addTask": "タスクを追加",
+      "rowLabel": "タスクを追加",
+      "titleLabel": "タスク名",
+      "titlePlaceholder": "タスク名を入力し、Enter を押して保存します",
+      "due": "期限の日時",
+      "assignee": "担当者",
+      "priority": "優先度（任意）",
+      "hint": "Enter で保存、Escape で閉じます。",
+      "save": "タスクを追加",
+      "cancel": "キャンセル",
+      "failed": "タスクを保存できませんでした。入力した内容は入力欄に戻してあります。"
     }
   }
 }

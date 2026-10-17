@@ -701,6 +701,8 @@
         "format": "Pole {label} nie może zawierać znaku nowego wiersza, tabulatora ani czterech spacji z rzędu."
       },
       "reason": {
+        "other_number": "Należy do innego numeru WhatsApp, więc nie można go wysłać z tej rozmowy.",
+        "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu.",
         "paused": "Wstrzymany przez WhatsApp. Można go wysłać ponownie po zakończeniu wstrzymania.",
         "media_header": "Ma nagłówek z obrazem, wideo lub dokumentem, którego nie można jeszcze wysłać ze skrzynki odbiorczej.",
         "header_variable": "Ma zmienną w nagłówku, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",

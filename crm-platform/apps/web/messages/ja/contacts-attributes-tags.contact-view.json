@@ -12,13 +12,17 @@
         "next": "次の連絡先",
         "position": "{index} / {total}",
         "rail": "連絡先のセクション",
-        "rail_overview": "概要",
-        "rail_activities": "アクティビティ",
-        "rail_conversations": "会話",
-        "rail_notes": "ノート",
-        "rail_stats": "コミュニケーション統計",
-        "rail_files": "ファイル",
-        "rail_details": "プロパティ",
+        "moreTabs": "その他のセクション",
+        "more": "+{count} 件",
+        "tab_overview": "概要",
+        "tab_activities": "アクティビティ",
+        "tab_notes": "ノート",
+        "tab_tasks": "タスク",
+        "tab_meetings": "ミーティング",
+        "tab_files": "ファイル",
+        "tab_conversations": "会話",
+        "tab_stats": "コミュニケーション統計",
+        "tab_details": "プロパティ",
         "openFull": "詳細ページで開く"
       },
       "actions": {
@@ -31,10 +35,6 @@
         "more": "その他の操作",
         "edit": "連絡先を編集",
         "delete": "連絡先を削除",
-        "close": "閉じる",
-        "companyHint": "この連絡先の勤務先の会社を選択してください。もう一度選ぶと変更されず、クリアするとリンクが解除されます。",
-        "companySaved": "会社を保存しました。",
-        "companyFailed": "会社を保存できませんでした。もう一度お試しください。",
         "conflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
         "deleteFailed": "連絡先を削除できませんでした。"
       },
@@ -134,9 +134,12 @@
       },
       "company": {
         "title": "会社",
-        "change": "変更",
-        "add": "会社を追加",
-        "none": "この連絡先は会社にリンクされていません。"
+        "none": "この連絡先は会社にリンクされていません。",
+        "hint": "会社を検索するか、新しい名前を入力して作成します。",
+        "saved": "会社を保存しました。",
+        "removed": "この連絡先から会社を削除しました。",
+        "failed": "会社を保存できませんでした。もう一度お試しください。",
+        "conflict": "先に他のユーザーがこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。"
       },
       "sections": {
         "lead-source": "リードソース"
@@ -153,6 +156,7 @@
           "details": "連絡先の詳細",
           "stats": "コミュニケーション統計",
           "notes": "ノート",
+          "meetings": "ミーティング",
           "files": "ファイル",
           "tasks": "タスク",
           "deals": "取引",

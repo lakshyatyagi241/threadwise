@@ -328,6 +328,19 @@
       "showDone": "Mostrar completadas",
       "hideDone": "Ocultar completadas",
       "gone": "El registro al que pertenecen estas tareas ya no está disponible."
+    },
+    "inline": {
+      "addTask": "Añadir tarea",
+      "rowLabel": "Añadir una tarea",
+      "titleLabel": "Título de la tarea",
+      "titlePlaceholder": "Título de la tarea y pulsa Enter para guardar",
+      "due": "Fecha y hora límite",
+      "assignee": "Asignar a",
+      "priority": "Prioridad (opcional)",
+      "hint": "Enter guarda, Escape cierra.",
+      "save": "Añadir tarea",
+      "cancel": "Cancelar",
+      "failed": "No se pudo guardar la tarea. Tu texto vuelve a estar en el cuadro."
     }
   }
 }
