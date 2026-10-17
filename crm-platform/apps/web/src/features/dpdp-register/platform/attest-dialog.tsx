@@ -3,7 +3,7 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Field, Input, Modal, Select, Textarea } from '@crm/ui';
+import { Alert, Button, Field, Input, Modal, Select, Textarea } from '@crm/ui';
 import type { DpdpAttestInput, DpdpCheckKey } from '@crm/contracts';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
@@ -64,7 +64,6 @@ function AttestForm({ checkKey, onClose }: { checkKey: DpdpCheckKey; onClose: ()
       toast.success(t('attest.saved'));
       onClose();
     },
-    onError: (error) => toast.error(t(`errors.${errorKind(error)}`)),
     onSettled: () => {
       sending.current = false;
     },
@@ -73,6 +72,7 @@ function AttestForm({ checkKey, onClose }: { checkKey: DpdpCheckKey; onClose: ()
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (save.isPending || sending.current) return;
+    save.reset();
     if (!built.ok) {
       setShowErrors(true);
       const first = FIELD_ORDER.find((field) => built.errors[field]);
@@ -83,7 +83,12 @@ function AttestForm({ checkKey, onClose }: { checkKey: DpdpCheckKey; onClose: ()
     save.mutate(built.body);
   };
 
-  const change = (patch: Partial<AttestDraft>) => setDraft((d) => ({ ...d, ...patch }));
+  // A failure shows inside the dialog: a toast sits behind the modal's backdrop and is not announced while the page is inert.
+  // Editing a field clears it, and so does pressing the button again.
+  const change = (patch: Partial<AttestDraft>) => {
+    if (save.isError) save.reset();
+    setDraft((d) => ({ ...d, ...patch }));
+  };
 
   return (
     <form noValidate onSubmit={submit} className="space-y-4">
@@ -158,6 +163,8 @@ function AttestForm({ checkKey, onClose }: { checkKey: DpdpCheckKey; onClose: ()
           onChange={(e) => change({ expiresInDays: e.target.value })}
         />
       </Field>
+
+      {save.isError && <Alert tone="danger">{t(`errors.${errorKind(save.error)}`)}</Alert>}
 
       <div className="flex justify-end gap-2">
         <Button variant="secondary" onClick={onClose} disabled={save.isPending}>

@@ -717,19 +717,88 @@ describe('the Attest dialog', () => {
     expect(field<HTMLTextAreaElement>('Note').value).toBe('');
   });
 
-  it('keeps the dialog open and says why when the API refuses', async () => {
-    await open();
+  /** The sentences a failed Attest can show, by what went wrong. */
+  const FAILURES: ReadonlyArray<readonly [string, Error, string]> = [
+    [
+      'a refusal (403)',
+      new ApiError(403, 'FORBIDDEN', 'x', 'req-3'),
+      'You do not have permission to do this.',
+    ],
+    [
+      'a server error (500)',
+      new ApiError(500, 'INTERNAL', 'x', 'req-4'),
+      'Something went wrong on our side. Try again in a moment.',
+    ],
+    [
+      'a rejected body (422)',
+      new ApiError(422, 'UNPROCESSABLE', 'x', 'req-5'),
+      'Some values are not valid. Check the highlighted fields.',
+    ],
+    [
+      'no connection',
+      new Error('offline'),
+      'Could not reach the server. Check your connection and try again.',
+    ],
+  ];
+  /** The text of the toast region: the corner live region of the ToastProvider, which is not in the top layer. */
+  const toastText = () => host.querySelector('[aria-live="polite"]')?.textContent ?? '';
+  const failAttest = (error: Error) =>
     fetchMock.mockImplementation(async (path: string, req?: { method?: string }) => {
-      if (req?.method === 'POST') throw new ApiError(403, 'FORBIDDEN', 'x', 'req-3');
+      if (req?.method === 'POST') throw error;
       if (path === '/dpdp-register') return current;
       throw new Error(`unexpected ${path}`);
     });
+
+  it.each(FAILURES)(
+    'keeps the dialog open and shows %s inside it, as an alert, not as a toast',
+    async (_name, error, message) => {
+      await open();
+      failAttest(error);
+      await type(field('Note'), 'Report on file, no open critical');
+      await click(button('Record statement'));
+      await flush();
+      const dialog = openDialog();
+      expect(dialog).not.toBeNull();
+      const alerts = [...dialog!.querySelectorAll('[role="alert"]')].map((a) => a.textContent);
+      expect(alerts).toContain(message);
+      // nothing is left in the toast region, which paints under the modal backdrop
+      expect(toastText()).toBe('');
+      expect(text()).not.toContain('req-');
+      // the draft is kept, so the person can try again
+      expect(field<HTMLTextAreaElement>('Note').value).toBe('Report on file, no open critical');
+    },
+  );
+
+  it('clears the failure when a field is edited', async () => {
+    await open();
+    failAttest(new ApiError(403, 'FORBIDDEN', 'x'));
     await type(field('Note'), 'Report on file, no open critical');
     await click(button('Record statement'));
     await flush();
-    expect(openDialog()).not.toBeNull();
-    expect(text()).toContain('You do not have permission to do this.');
-    expect(text()).not.toContain('req-3');
+    expect(openDialog()!.textContent).toContain('You do not have permission to do this.');
+    await type(field('Note'), 'Report on file, no open critical finding');
+    expect(openDialog()!.textContent).not.toContain('You do not have permission to do this.');
+    await click(button('Record statement'));
+    await flush();
+    expect(openDialog()!.textContent).toContain('You do not have permission to do this.');
+    await type(field('Counts for'), '30');
+    expect(openDialog()!.textContent).not.toContain('You do not have permission to do this.');
+  });
+
+  it('clears the failure when the button is pressed again, and closes when the retry works', async () => {
+    await open();
+    failAttest(new ApiError(500, 'INTERNAL', 'x'));
+    await type(field('Note'), 'Report on file, no open critical');
+    await click(button('Record statement'));
+    await flush();
+    expect(openDialog()!.textContent).toContain('Something went wrong on our side.');
+    serve();
+    await click(button('Record statement'));
+    await flush();
+    expect(openDialog()).toBeNull();
+    expect(callsTo('/dpdp-register/checks/security.pentest_report/attest', 'POST')).toHaveLength(2);
+    // success still uses the toast, which shows once the dialog has closed
+    expect(toastText()).toContain('Statement recorded.');
   });
 
   it('sends only once when the button is pressed twice', async () => {
