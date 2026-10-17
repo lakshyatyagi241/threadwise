@@ -328,6 +328,19 @@
       "showDone": "Hiện đã hoàn thành",
       "hideDone": "Ẩn đã hoàn thành",
       "gone": "Bản ghi chứa các công việc này không còn khả dụng."
+    },
+    "inline": {
+      "addTask": "Thêm công việc",
+      "rowLabel": "Thêm một công việc",
+      "titleLabel": "Tiêu đề công việc",
+      "titlePlaceholder": "Nhập tiêu đề công việc, rồi nhấn Enter để lưu",
+      "due": "Ngày và giờ hạn",
+      "assignee": "Giao cho",
+      "priority": "Ưu tiên (tùy chọn)",
+      "hint": "Nhấn Enter để lưu, Escape để đóng.",
+      "save": "Thêm công việc",
+      "cancel": "Hủy",
+      "failed": "Không thể lưu công việc. Nội dung bạn nhập đã được trả lại vào ô."
     }
   }
 }

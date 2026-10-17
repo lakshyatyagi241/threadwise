@@ -328,6 +328,19 @@
       "showDone": "Tamamlananları göster",
       "hideDone": "Tamamlananları gizle",
       "gone": "Bu görevlerin ait olduğu kayıt artık kullanılamıyor."
+    },
+    "inline": {
+      "addTask": "Görev ekle",
+      "rowLabel": "Bir görev ekle",
+      "titleLabel": "Görev başlığı",
+      "titlePlaceholder": "Görev başlığı, ardından kaydetmek için Enter'a basın",
+      "due": "Son tarih ve saat",
+      "assignee": "Şuna ata",
+      "priority": "Öncelik (isteğe bağlı)",
+      "hint": "Enter kaydeder, Escape kapatır.",
+      "save": "Görev ekle",
+      "cancel": "İptal",
+      "failed": "Görev kaydedilemedi. Metniniz kutuda duruyor."
     }
   }
 }
