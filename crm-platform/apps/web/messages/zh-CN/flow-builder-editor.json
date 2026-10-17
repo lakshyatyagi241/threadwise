@@ -685,6 +685,7 @@
         "anotherPart": "此流程的另一部分。当按钮或列表行指向这里时运行{lost, select, true {：目前没有任何入口指向这里，因此永远不会运行。} other {。}}",
         "addFirstStep": "添加第一个步骤",
         "branchingEnds": "此{kind, select, list {列表} other {按钮组}}会结束这一部分：接下来发送什么取决于客户的选择。",
+        "optionsCarryOn": "每个{kind, select, list {选项行} other {按钮}}都可以开启自己的流程，也可以继续执行下方的下一步。",
         "thenGoTo": "然后前往",
         "confirmImport": {
           "title": "用该文件替换此流程？",
@@ -720,7 +721,7 @@
             "answer": "回答",
             "action": "操作"
           },
-          "blockedTitle": "按钮和列表会结束流程，因此只能放在最后。",
+          "blockedTitle": "此步骤会结束这一部分，因此只能放在最后。",
           "blockedTitleFaq": "“FAQ 回答”有两个出口，因此只能放在最后。"
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "后续去向",
           "linkEnds": "到此结束（不再发送任何内容）",
+          "linkNext": "继续执行下一步",
           "linkOption": "{stage} · {label}{self, select, true {（此步骤）} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ 引向新流程…",
           "question": "问题",

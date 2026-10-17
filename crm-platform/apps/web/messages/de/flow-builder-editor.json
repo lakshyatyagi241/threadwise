@@ -685,6 +685,7 @@
         "anotherPart": "Ein weiterer Teil dieses Flows. Er läuft, wenn eine Schaltfläche oder Listenzeile hierher führt{lost, select, true {: Noch führt nichts hierher, daher würde er nie laufen.} other {.}}",
         "addFirstStep": "Den ersten Schritt hinzufügen",
         "branchingEnds": "Diese {kind, select, list {Liste} other {Schaltflächengruppe}} beendet diesen Teil: Was als Nächstes gesendet wird, hängt davon ab, was der Kunde auswählt.",
+        "optionsCarryOn": "{kind, select, list {Jeder Eintrag} other {Jeder Button}} kann einen eigenen Ablauf starten oder mit dem nächsten Schritt unten weitermachen.",
         "thenGoTo": "Dann weiter zu",
         "confirmImport": {
           "title": "Diesen Flow durch die Datei ersetzen?",
@@ -720,7 +721,7 @@
             "answer": "Antwort",
             "action": "Aktionen"
           },
-          "blockedTitle": "Schaltflächen und Listen beenden einen Flow, daher können sie nur am Ende stehen.",
+          "blockedTitle": "Dieser Schritt beendet diesen Teil und kann deshalb nur ganz am Ende stehen.",
           "blockedTitleFaq": "„Antwort aus FAQ“ hat zwei Ausgänge und kann daher nur als Letztes stehen."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "Wohin das führt",
           "linkEnds": "Endet hier (es wird nichts mehr gesendet)",
+          "linkNext": "Weiter mit dem nächsten Schritt",
           "linkOption": "{stage} · {label}{self, select, true { (dieser Schritt)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Zu einem neuen Flow führen ...",
           "question": "Frage",
