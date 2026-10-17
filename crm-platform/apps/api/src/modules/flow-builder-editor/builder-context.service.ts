@@ -244,7 +244,7 @@ export class BuilderContextService {
             FROM pipeline_stages st JOIN pipelines p ON p.org_id = st.org_id AND p.id = st.pipeline_id
             WHERE st.org_id = ${o} ORDER BY p.sort_order, p.id, st.sort_order, st.id`),
         tx.execute(sql`
-            SELECT uuid, template_name, category, header, template_body, footer, attachment_type, attachment_file, buttons, carousel_data
+            SELECT uuid, template_name, category, header, template_body, footer, attachment_type, attachment_file, buttons, carousel_data, variable_map
             FROM wa_templates WHERE org_id = ${o} AND lower(status) = 'approved' ORDER BY template_name, id`),
         tx.execute(
           sql`SELECT uuid, flow_name, flow_type, is_published FROM flows WHERE org_id = ${o} ORDER BY updated_at DESC, id DESC`,
@@ -340,6 +340,7 @@ export class BuilderContextService {
           attachmentFile: (r.attachment_file as string | null) ?? null,
           buttons: asArray(r.buttons),
           carousel: asArray(r.carousel_data),
+          variables: templateVariables(r.variable_map),
         })),
         flows: rows(flows).map((r) => ({
           id: s(r.uuid),
@@ -533,6 +534,35 @@ function asArray(v: unknown): Array<Record<string, unknown>> {
   return Array.isArray(v)
     ? (v.filter((x) => x && typeof x === 'object') as Array<Record<string, unknown>>)
     : [];
+}
+
+/**
+ * The `{header: [{num, key}], body: [{num, key}]}` map a template stores, as one row per placeholder: the runtime reads each `key`
+ * (a contact detail or a flow variable) when the template is sent. A map in any other shape (or none) has no rows.
+ */
+function templateVariables(
+  raw: unknown,
+): Array<{ section: 'header' | 'body'; slot: string; field: string }> {
+  let map: unknown = raw;
+  if (typeof map === 'string') {
+    try {
+      map = JSON.parse(map);
+    } catch {
+      return [];
+    }
+  }
+  if (!map || typeof map !== 'object' || Array.isArray(map)) return [];
+  const out: Array<{ section: 'header' | 'body'; slot: string; field: string }> = [];
+  for (const section of ['header', 'body'] as const) {
+    const list = (map as Record<string, unknown>)[section];
+    if (!Array.isArray(list)) continue;
+    list.forEach((entry, i) => {
+      const e = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
+      const field = s(e.key).trim();
+      if (field) out.push({ section, slot: s(e.num ?? i + 1), field });
+    });
+  }
+  return out;
 }
 
 function parseModels(raw: unknown): string[] {

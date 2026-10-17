@@ -864,7 +864,10 @@
           "template": {
             "label": "Templat yang disetujui",
             "hint": "Hanya templat yang sudah disetujui untuk nomor WhatsApp Anda yang ditampilkan.",
-            "choose": "Pilih templat…"
+            "choose": "Pilih templat…",
+            "buttons": "Tombol",
+            "variables": "Diisi dari data kontak",
+            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat."
           },
           "cta": {
             "buttonText": "Teks tombol",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur.",
         "chooseFlow": "Langkah {stage}: pilih flow yang dimulai tombol.",
         "chooseApi": "Langkah {stage}: pilih API yang dipanggil.",
-        "writeCode": "Langkah {stage}: tulis kode yang dijalankan."
+        "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",
+        "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil."
       },
       "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
     },

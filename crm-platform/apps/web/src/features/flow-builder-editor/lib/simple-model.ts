@@ -42,6 +42,7 @@ export const SIMPLE_TYPES = [
   'assign',
   'faq',
   'api_library',
+  'webhook',
   'code',
   'ai',
 ] as const;
@@ -514,8 +515,9 @@ export const STEP_KINDS: readonly StepKind[] = [
   kind('cta', 'cta', 'send'),
   kind('template', 'template', 'send'),
   kind('location', 'location', 'send'),
-  kind('delay', 'delay', 'send'),
+  kind('delay', 'delay', 'action'),
   kind('api-library', 'api_library', 'action'),
+  nodeKind('webhook', 'webhook', 'action'),
   kind('code', 'code', 'action'),
   kind('ask', 'ask', 'ask', 'text'),
   kind('ask-name', 'ask', 'ask', 'name'),
@@ -539,6 +541,7 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'ask_file',
   'delay',
   'cta',
+  'webhook',
 ]);
 
 /** The "+" menu entries for a channel: a website chat bot only offers what the widget can render. */
@@ -606,6 +609,7 @@ export function newStep(
   }
   if (type === 'message') data.text = '';
   if (type === 'api_library') data.save = fresh('api_response');
+  if (type === 'webhook') data.save = fresh('webhook_response');
   if (type === 'code') data.save = fresh('result');
   if (type === 'ai') data.save = fresh('reply');
   // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
@@ -879,6 +883,7 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       if (s.type === 'media' && !str(d.url).trim()) bad('addFileLink');
       if (s.type === 'api_library' && !str(d.apiId).trim()) bad('chooseApi');
       if (s.type === 'code' && !str(d.code).trim()) bad('writeCode');
+      if (s.type === 'webhook' && !str(d.url).trim()) bad('webhookUrl');
       if (s.type === 'ask' || s.type === 'ask_file' || s.type === 'ask_location') {
         if (!str(d.prompt).trim()) bad('writeQuestion');
         if (!str(d.var).trim()) bad('nameVariable');
@@ -1055,11 +1060,13 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                               })
                             : s.type === 'api_library'
                               ? str(d.apiName)
-                              : s.type === 'code'
-                                ? str(d.save)
-                                : s.type === 'ai'
-                                  ? str(d.prompt)
-                                  : '';
+                              : s.type === 'webhook'
+                                ? str(d.url)
+                                : s.type === 'code'
+                                  ? str(d.save)
+                                  : s.type === 'ai'
+                                    ? str(d.prompt)
+                                    : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -1082,5 +1089,6 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   faq: msg('simpleModel.typeLabel.faq'),
   api_library: msg('simpleModel.typeLabel.api_library'),
   ai: nodeLabelMsg('ai'),
+  webhook: nodeLabelMsg('webhook'),
   code: msg('simpleModel.typeLabel.code'),
 };

@@ -864,7 +864,10 @@
           "template": {
             "label": "Mẫu đã được duyệt",
             "hint": "Chỉ liệt kê các mẫu mà số WhatsApp của bạn đã được duyệt.",
-            "choose": "Chọn một mẫu…"
+            "choose": "Chọn một mẫu…",
+            "buttons": "Nút",
+            "variables": "Được điền từ thông tin liên hệ",
+            "variablesHint": "Mỗi số được điền khi gửi tin nhắn bằng thông tin liên hệ nêu ở đây. Hãy thay đổi trong mẫu."
           },
           "cta": {
             "buttonText": "Văn bản nút",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng.",
         "chooseFlow": "Bước {stage}: chọn luồng mà nút sẽ bắt đầu.",
         "chooseApi": "Bước {stage}: chọn API cần gọi.",
-        "writeCode": "Bước {stage}: viết mã cần chạy."
+        "writeCode": "Bước {stage}: viết mã cần chạy.",
+        "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi."
       },
       "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
     },

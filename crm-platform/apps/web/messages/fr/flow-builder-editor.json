@@ -864,7 +864,10 @@
           "template": {
             "label": "Modèle approuvé",
             "hint": "Seuls les modèles approuvés pour votre numéro WhatsApp sont listés.",
-            "choose": "Choisir un modèle…"
+            "choose": "Choisir un modèle…",
+            "buttons": "Boutons",
+            "variables": "Rempli à partir du contact",
+            "variablesHint": "Chaque numéro est rempli à l'envoi du message avec l'information du contact indiquée ici. Modifiez-le dans le modèle."
           },
           "cta": {
             "buttonText": "Texte du bouton",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage du flux.",
         "chooseFlow": "Étape {stage} : choisissez le flow que le bouton lance.",
         "chooseApi": "Étape {stage} : choisissez l'API à appeler.",
-        "writeCode": "Étape {stage} : écrivez le code à exécuter."
+        "writeCode": "Étape {stage} : écrivez le code à exécuter.",
+        "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler."
       },
       "faqSummary": "{hasCategory, select, true {Depuis vos FAQ · {category}} other {Depuis vos FAQ}}"
     },

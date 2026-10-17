@@ -1241,7 +1241,7 @@ function TriggerCard({
 }
 
 /** The steps the ⚡ Actions list offers: what can run right after a step. */
-const ACTION_KINDS: readonly string[] = ['api-library', 'code', 'delay'];
+const ACTION_KINDS: readonly string[] = ['api-library', 'webhook', 'code', 'delay'];
 
 function AddMenu({
   onPick,

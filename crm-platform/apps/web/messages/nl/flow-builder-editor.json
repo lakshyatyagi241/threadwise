@@ -1257,7 +1257,10 @@
           "template": {
             "label": "Goedgekeurd sjabloon",
             "hint": "Alleen sjablonen die je WhatsApp-nummer heeft goedgekeurd, worden getoond.",
-            "choose": "Kies een sjabloon…"
+            "choose": "Kies een sjabloon…",
+            "buttons": "Knoppen",
+            "variables": "Ingevuld vanuit het contact",
+            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon."
           },
           "cta": {
             "buttonText": "Knoptekst",
@@ -2485,7 +2488,8 @@
         "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow.",
         "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
         "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
-        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd."
+        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
+        "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },

@@ -864,7 +864,10 @@
           "template": {
             "label": "Genehmigte Vorlage",
             "hint": "Es werden nur Vorlagen angezeigt, die Ihre WhatsApp-Nummer genehmigt hat.",
-            "choose": "Vorlage auswählen ..."
+            "choose": "Vorlage auswählen ...",
+            "buttons": "Schaltflächen",
+            "variables": "Wird aus dem Kontakt befüllt",
+            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage."
           },
           "cta": {
             "buttonText": "Schaltflächentext",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows.",
         "chooseFlow": "Schritt {stage}: Wähle den Flow, den die Schaltfläche startet.",
         "chooseApi": "Schritt {stage}: Wähle die API, die aufgerufen wird.",
-        "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird."
+        "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird.",
+        "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu."
       },
       "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
     },

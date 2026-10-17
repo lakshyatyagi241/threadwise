@@ -864,7 +864,10 @@
           "template": {
             "label": "Zatwierdzony szablon",
             "hint": "Wyświetlane są tylko szablony zatwierdzone dla Twojego numeru WhatsApp.",
-            "choose": "Wybierz szablon…"
+            "choose": "Wybierz szablon…",
+            "buttons": "Przyciski",
+            "variables": "Uzupełniane danymi kontaktu",
+            "variablesHint": "Każdy numer jest uzupełniany podczas wysyłania wiadomości danymi kontaktu wskazanymi tutaj. Zmienisz to w szablonie."
           },
           "cta": {
             "buttonText": "Tekst przycisku",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu.",
         "chooseFlow": "Krok {stage}: wybierz przepływ uruchamiany przez przycisk.",
         "chooseApi": "Krok {stage}: wybierz API do wywołania.",
-        "writeCode": "Krok {stage}: napisz kod do uruchomienia."
+        "writeCode": "Krok {stage}: napisz kod do uruchomienia.",
+        "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania."
       },
       "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
     },

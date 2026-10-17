@@ -864,7 +864,10 @@
           "template": {
             "label": "已审核通过的模板",
             "hint": "仅列出您的 WhatsApp 号码已审核通过的模板。",
-            "choose": "选择模板…"
+            "choose": "选择模板…",
+            "buttons": "按钮",
+            "variables": "由联系人信息填充",
+            "variablesHint": "每个编号会在发送消息时用此处所示的联系人信息填充。请在模板中修改。"
           },
           "cta": {
             "buttonText": "按钮文字",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。",
         "chooseFlow": "步骤 {stage}：请选择该按钮启动的流程。",
         "chooseApi": "步骤 {stage}：请选择要调用的 API。",
-        "writeCode": "步骤 {stage}：请编写要运行的代码。"
+        "writeCode": "步骤 {stage}：请编写要运行的代码。",
+        "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。"
       },
       "faqSummary": "{hasCategory, select, true {来自你的 FAQ · {category}} other {来自你的 FAQ}}"
     },

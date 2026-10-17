@@ -1257,7 +1257,10 @@
           "template": {
             "label": "Template approvato",
             "hint": "Vengono elencati solo i template approvati dal tuo numero WhatsApp.",
-            "choose": "Scegli un template…"
+            "choose": "Scegli un template…",
+            "buttons": "Pulsanti",
+            "variables": "Compilato dai dati del contatto",
+            "variablesHint": "Ogni numero viene compilato all'invio del messaggio con il dato del contatto indicato qui. Modificalo nel modello."
           },
           "cta": {
             "buttonText": "Testo del pulsante",
@@ -2485,7 +2488,8 @@
         "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso.",
         "chooseFlow": "Passo {stage}: scegli il flusso che il pulsante avvia.",
         "chooseApi": "Passo {stage}: scegli l'API da chiamare.",
-        "writeCode": "Passo {stage}: scrivi il codice da eseguire."
+        "writeCode": "Passo {stage}: scrivi il codice da eseguire.",
+        "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare."
       },
       "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
     },
