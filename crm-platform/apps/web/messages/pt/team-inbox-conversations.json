@@ -166,6 +166,7 @@
       "mediaNotFound": "O anexo expirou ou foi removido. Anexe-o novamente.",
       "statusInvalid": "Essa alteração não é permitida no status atual da conversa.",
       "assigneeInvalid": "Esta pessoa não pode receber esta conversa.",
+      "assignedToOther": "Este chat está atribuído a outro agente. Atribua-o a você primeiro para responder.",
       "forbidden": "Você não tem permissão para fazer isso.",
       "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
       "simulatorDisabled": "O simulador de canal está desativado neste servidor.",
@@ -316,6 +317,7 @@
         "sendTemplate": "Enviar um modelo"
       },
       "readOnly": "Você pode ler esta conversa, mas não tem permissão para responder.",
+      "assignedToOther": "Este chat está atribuído a outro agente. Atribua-o a você primeiro para responder.",
       "typing": "{count, plural, one {Um membro da equipe está digitando} other {# membros da equipe estão digitando}}",
       "messagesLabel": "Mensagens",
       "loadOlder": "Carregar mensagens anteriores",

@@ -11,6 +11,8 @@ export const INBOX_ERROR_CODES = {
   INBOX_LABEL_NOT_FOUND: 'INBOX_LABEL_NOT_FOUND',
   /** Naming a tag that does not exist yet creates it, which needs `inbox.tag.manage`. */
   INBOX_LABEL_CREATE_FORBIDDEN: 'INBOX_LABEL_CREATE_FORBIDDEN',
+  /** The conversation is assigned to another agent: only its assignee sends into it (assign it to yourself first). 403. */
+  CONVERSATION_ASSIGNED_TO_OTHER: 'CONVERSATION_ASSIGNED_TO_OTHER',
   /** No such note on this conversation (a note of another conversation or workspace is the same answer). */
   CONVERSATION_NOTE_NOT_FOUND: 'CONVERSATION_NOTE_NOT_FOUND',
   /** A template send was asked for, and the template library (TPL) is not part of this deployment yet. */

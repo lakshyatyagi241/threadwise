@@ -96,6 +96,20 @@ export class InboxAccess {
     if (!conversationVisible(viewer, record)) throw AppError.forbidden(permission);
   }
 
+  /**
+   * 403 when the conversation is assigned to another agent: only the assignee sends into it. An unassigned conversation, or one assigned
+   * to a team or a bot only, is open to every agent who may reply; internal notes are never locked.
+   */
+  assertNotAssignedToOther(ctx: RequestContext, record: ConversationRecord): void {
+    if (record.assigneeUserId !== null && record.assigneeUserId !== ctx.userId) {
+      throw new AppError(
+        ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER,
+        'This chat is assigned to another agent. Assign it to yourself first to reply.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
   private async teamIds(tx: Tx, ctx: RequestContext): Promise<number[]> {
     const res = await tx.execute(
       sql`SELECT team_id FROM team_members WHERE org_id = ${ctx.orgId} AND user_id = ${ctx.userId}`,

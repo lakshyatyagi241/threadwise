@@ -166,6 +166,7 @@
       "mediaNotFound": "Tệp đính kèm đã hết hạn hoặc bị xóa. Hãy đính kèm lại.",
       "statusInvalid": "Không cho phép thay đổi này khi cuộc trò chuyện đang ở trạng thái hiện tại.",
       "assigneeInvalid": "Không thể giao cuộc trò chuyện này cho người đó.",
+      "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "forbidden": "Bạn không có quyền thực hiện thao tác này.",
       "rateLimited": "Quá nhiều yêu cầu. Chờ một lát rồi thử lại.",
       "simulatorDisabled": "Trình mô phỏng kênh đã tắt trên máy chủ này.",
@@ -316,6 +317,7 @@
         "sendTemplate": "Gửi mẫu tin nhắn"
       },
       "readOnly": "Bạn có thể đọc cuộc trò chuyện này nhưng không có quyền trả lời.",
+      "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
       "messagesLabel": "Tin nhắn",
       "loadOlder": "Tải tin nhắn trước đó",

@@ -166,6 +166,7 @@
       "mediaNotFound": "附件已过期或被移除。请重新添加附件。",
       "statusInvalid": "当前会话状态下不允许此更改。",
       "assigneeInvalid": "无法将此会话分配给该用户。",
+      "assignedToOther": "此聊天已分配给其他客服。请先将其分配给自己，然后再回复。",
       "forbidden": "您没有执行此操作的权限。",
       "rateLimited": "请求过于频繁。请稍候再试。",
       "simulatorDisabled": "此服务器已关闭渠道模拟器。",
@@ -316,6 +317,7 @@
         "sendTemplate": "发送模板"
       },
       "readOnly": "您可以查看此会话，但没有回复的权限。",
+      "assignedToOther": "此聊天已分配给其他客服。请先将其分配给自己，然后再回复。",
       "typing": "{count, plural, other {# 位团队成员正在输入}}",
       "messagesLabel": "消息",
       "loadOlder": "加载更早的消息",

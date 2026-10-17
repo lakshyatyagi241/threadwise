@@ -140,6 +140,15 @@ export function ThreadPane(props: ThreadPaneProps) {
   const canExportLogs = useCan('inbox.logs.export');
   const canOpenGroups = useCan('wa.groups.read');
   const { detail, thread } = props;
+  // A chat assigned to another agent is theirs to answer: replying is locked until it is assigned to the viewer (notes stay open).
+  // Unknown viewer (no `assignMenu`) or no assignee: not locked. The API refuses the send as well (CONVERSATION_ASSIGNED_TO_OTHER).
+  const meId = props.assignMenu?.meId;
+  const lockedToOther =
+    props.can.reply &&
+    meId !== undefined &&
+    detail?.assignment.user != null &&
+    detail.assignment.user.id !== meId;
+  const canReply = props.can.reply && !lockedToOther;
   const [searching, setSearching] = useState(false);
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
@@ -152,7 +161,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   // A group of a personal (linked) number reads its members from the group directory for the @mention picker.
   const personalGroup = isPersonalGroupThread(detail?.peerKey, detail?.channel.kind);
   const groupBlock = personalGroup ? personalGroupBlock(detail?.personalGroup) : null;
-  const mentionsOn = personalGroup && props.can.reply && groupBlock === null;
+  const mentionsOn = personalGroup && canReply && groupBlock === null;
   const conversationId = props.conversationId;
   const searchMembers = useCallback(
     async (q: string): Promise<MentionMember[]> =>
@@ -195,14 +204,14 @@ export function ThreadPane(props: ThreadPaneProps) {
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
-    props.can.reply &&
+    canReply &&
     !channelDown &&
     !groupSendBlocked &&
     detail?.channel.kind !== 'email' &&
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail && props.can.reply && !channelDown && !groupLimited && props.mode === 'reply'
+    detail && canReply && !channelDown && !groupLimited && props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
@@ -406,7 +415,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
         onReply={
-          props.can.reply && !replyDisabled && !groupLimited
+          canReply && !replyDisabled && !groupLimited
             ? (message) => {
                 setReply({ conversationId: props.conversationId, message });
                 props.onMode('reply');
@@ -414,7 +423,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         onReact={
-          props.can.reply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
+          canReply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
             ? props.onReact
             : undefined
         }
@@ -426,14 +435,14 @@ export function ThreadPane(props: ThreadPaneProps) {
         onReload={() => void thread.sync()}
       />
 
-      {channelDown && props.channel && props.can.reply && props.mode === 'reply' && (
+      {channelDown && props.channel && canReply && props.mode === 'reply' && (
         <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
       )}
       {win &&
         windowClosed &&
         !channelDown &&
         !groupLimited &&
-        props.can.reply &&
+        canReply &&
         props.mode === 'reply' && (
           <div
             role="status"
@@ -458,7 +467,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             </div>
           </div>
         )}
-      {groupBlock !== null && props.can.reply && props.mode === 'reply' && (
+      {groupBlock !== null && canReply && props.mode === 'reply' && (
         <div
           role="status"
           data-testid="inbox-group-readonly"
@@ -472,7 +481,7 @@ export function ThreadPane(props: ThreadPaneProps) {
           </div>
         </div>
       )}
-      {cloudBlock !== null && props.can.reply && props.mode === 'reply' && (
+      {cloudBlock !== null && canReply && props.mode === 'reply' && (
         <div
           role="status"
           data-testid="inbox-group-cloud-block"
@@ -490,9 +499,30 @@ export function ThreadPane(props: ThreadPaneProps) {
       )}
       {detail?.cloudGroup &&
         cloudBlock === null &&
-        props.can.reply &&
+        canReply &&
         props.mode === 'reply' &&
         !channelDown && <GroupCostLine group={detail.cloudGroup} />}
+      {lockedToOther && props.mode === 'reply' && (
+        <div
+          role="status"
+          data-testid="inbox-assigned-lock"
+          className="flex items-center gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+        >
+          <AlertIcon className="shrink-0 text-muted-foreground" />
+          <p className="min-w-0 flex-1">{t('assignedToOther')}</p>
+          {props.can.assignSelf && (
+            <Button
+              variant="secondary"
+              size="sm"
+              data-testid="inbox-assigned-lock-assign"
+              disabled={props.assignMenu?.busy}
+              onClick={props.onAssignSelf}
+            >
+              {t('assignToMe')}
+            </Button>
+          )}
+        </div>
+      )}
       {!props.can.reply && props.mode === 'reply' && (
         <p
           role="status"
@@ -508,9 +538,10 @@ export function ThreadPane(props: ThreadPaneProps) {
         mode={props.mode}
         onMode={props.onMode}
         replyDisabled={replyDisabled}
-        canReply={props.can.reply}
+        lockedHint={lockedToOther ? t('assignedToOther') : undefined}
+        canReply={canReply}
         canNote={props.can.note}
-        canAttach={isEmail ? props.can.reply : (detail?.capabilities.media.length ?? 0) > 0}
+        canAttach={isEmail ? canReply : (detail?.capabilities.media.length ?? 0) > 0}
         email={
           isEmail
             ? {
@@ -528,7 +559,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
             : undefined
         }
-        savedReplies={props.can.reply ? { channelKind: detail?.channel.kind } : undefined}
+        savedReplies={canReply ? { channelKind: detail?.channel.kind } : undefined}
         canTemplate={canTemplate}
         onTemplate={() => setTemplatesOpen(true)}
         canShare={shareKinds.length > 0}

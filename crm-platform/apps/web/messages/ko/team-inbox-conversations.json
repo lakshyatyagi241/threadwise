@@ -166,6 +166,7 @@
       "mediaNotFound": "첨부 파일이 만료되었거나 삭제되었습니다. 다시 첨부하세요.",
       "statusInvalid": "현재 대화 상태에서는 이 변경을 할 수 없습니다.",
       "assigneeInvalid": "해당 사용자에게는 이 대화를 배정할 수 없습니다.",
+      "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "forbidden": "이 작업을 수행할 권한이 없습니다.",
       "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
       "simulatorDisabled": "이 서버에서는 채널 시뮬레이터가 꺼져 있습니다.",
@@ -316,6 +317,7 @@
         "sendTemplate": "템플릿 보내기"
       },
       "readOnly": "이 대화는 볼 수 있지만 답장할 권한이 없습니다.",
+      "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "typing": "{count, plural, other {팀원 #명이 입력 중입니다}}",
       "messagesLabel": "메시지",
       "loadOlder": "이전 메시지 불러오기",
