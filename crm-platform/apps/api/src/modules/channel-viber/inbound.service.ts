@@ -75,6 +75,8 @@ export class InboundService {
       // A 2xx tells Viber the message is ours, so it is never sent again: answering 200 here lost the customer's message for good.
       // The inbox write is idempotent per provider message id, so a 503 and Viber's own redelivery is safe and bounded by Viber's retry window.
       this.logger.error({ err, orgId, channel: channel.id }, 'viber ingest failed');
+      // A rule the data broke (an AppError) fails the same way on every redelivery: acknowledge it instead of making Viber retry for ever.
+      if (err instanceof AppError) return ack;
       throw new AppError(
         ERROR_CODES.INTERNAL,
         'Could not store the event, please retry',

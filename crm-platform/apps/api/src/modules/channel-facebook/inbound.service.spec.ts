@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { describe, expect, it, vi } from 'vitest';
+import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { InboundService } from './inbound.service';
 
@@ -57,5 +58,12 @@ describe('facebook InboundService durability', () => {
     expect(recordInbound).toHaveBeenCalledTimes(2);
     expect(err).toBeInstanceOf(AppError);
     expect((err as AppError).getStatus()).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+  });
+
+  it('acknowledges when the failure is a rule the data broke (an AppError): redelivery could never succeed', async () => {
+    const svc = build(
+      vi.fn().mockRejectedValue(new AppError(ERROR_CODES.VALIDATION_FAILED, 'bad shape')),
+    );
+    await expect(svc.receive(Buffer.from('{}'), '', payload(dm('m1')))).resolves.toBe('ok');
   });
 });

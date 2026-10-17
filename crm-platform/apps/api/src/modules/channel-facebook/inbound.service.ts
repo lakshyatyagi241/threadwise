@@ -79,7 +79,7 @@ export class InboundService {
       try {
         await this.fanOut(entry, failed);
       } catch (err) {
-        failed.count += 1;
+        if (!(err instanceof AppError)) failed.count += 1;
         this.logger.error({ err, page: entry.pageId }, 'facebook entry failed');
       }
     }
@@ -128,7 +128,8 @@ export class InboundService {
     try {
       await fn();
     } catch (err) {
-      failed.count += 1;
+      // A rule the data broke (an AppError) fails the same way on every redelivery, so it is logged and not retried.
+      if (!(err instanceof AppError)) failed.count += 1;
       this.logger.warn({ err, orgId, page: page.id }, `facebook ${what} ingest failed`);
     }
   }

@@ -101,8 +101,9 @@ describe('AsyncOpsService WhatsApp ingest jobs', () => {
     const { svc, audit, queue } = build({ failedJobs: [a, b] });
     expect(await svc.replayWaba({ limit: 100 }, 42)).toEqual({ replayed: 2, skipped: 0 });
     expect(queue.getFailed).toHaveBeenCalledWith(0, 99);
-    expect(a.retry).toHaveBeenCalledWith('failed');
-    expect(b.retry).toHaveBeenCalledWith('failed');
+    // attemptsMade is already at the limit; without a reset the replayed job would get exactly one attempt and no backoff retries.
+    expect(a.retry).toHaveBeenCalledWith('failed', { resetAttemptsMade: true });
+    expect(b.retry).toHaveBeenCalledWith('failed', { resetAttemptsMade: true });
     expect(audit.record.mock.calls[0]![1]).toMatchObject({
       event: 'platform.async_ops.waba_ingest_replayed',
       actorId: 42,

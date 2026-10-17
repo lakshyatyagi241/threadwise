@@ -96,7 +96,8 @@ export class InboundService {
       try {
         await this.handle(orgId, channel, event, apiOf);
       } catch (err) {
-        failed += 1;
+        // A rule the data broke (an AppError) fails the same way on every redelivery, so it is logged and not retried.
+        if (!(err instanceof AppError)) failed += 1;
         this.logger.error({ err, orgId, channel: channel.id }, 'line event ingest failed');
       }
     }

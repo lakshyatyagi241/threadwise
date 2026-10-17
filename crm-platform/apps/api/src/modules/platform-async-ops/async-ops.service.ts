@@ -124,7 +124,8 @@ export class AsyncOpsService {
     let skipped = 0;
     for (const job of jobs) {
       try {
-        await job.retry('failed');
+        // attemptsMade is already at the limit; without a reset the replayed job would get one attempt and no backoff retries.
+        await job.retry('failed', { resetAttemptsMade: true });
         replayed += 1;
       } catch {
         // No longer failed: another operator replayed it, or it was removed. Not an error for the rest.

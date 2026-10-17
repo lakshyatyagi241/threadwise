@@ -96,6 +96,8 @@ export class InboundService {
       // A 2xx tells Telegram the update is ours, so it is never sent again: answering 200 here lost the message for good. The inbox
       // write is idempotent per update, so a 503 and Telegram's own redelivery (with its backoff) is safe.
       this.logger.error({ err, orgId, bot: bot.id }, 'telegram ingest failed');
+      // A rule the data broke (an AppError) fails the same way on every redelivery: acknowledge it, or one poison update delays the bot.
+      if (err instanceof AppError) return ack('ok');
       throw new AppError(
         ERROR_CODES.INTERNAL,
         'Could not store the update, please retry',
