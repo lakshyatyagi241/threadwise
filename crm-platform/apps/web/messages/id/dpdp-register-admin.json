@@ -246,8 +246,8 @@
       "env_missing": "{key} belum diatur, jadi ini tidak dapat dibaca.",
       "attestation_missing": "Belum ada yang mencatat ini.",
       "attestation_expired": "Pernyataan yang dicatat {name} pada {date} kedaluwarsa pada {expires}. Tidak lagi dihitung.",
-      "attested_pass": "Dicatat sebagai sudah berlaku oleh {name} pada {date}. Dihitung sampai {expires}.",
-      "attested_fail": "Dicatat sebagai belum berlaku oleh {name} pada {date}. Dihitung sampai {expires}.",
+      "attested_pass": "Dicatat oleh {name} pada {date} sebagai sudah diterapkan. Dihitung sampai {expires}.",
+      "attested_fail": "Dicatat oleh {name} pada {date} sebagai belum diterapkan. Dihitung sampai {expires}.",
       "code_declared": "Dideklarasikan dalam kode, tidak diukur saat runtime. Perubahan yang menutup celah akan memperbaruinya.",
       "unrecognised": "Konsol ini belum punya deskripsi untuk hasil ini ({detail})."
     },
@@ -384,8 +384,8 @@
       "intro": "Catat apakah ini benar hari ini. Berlaku sampai kedaluwarsa, lalu pemeriksaan kembali ke tidak diketahui. Setiap pernyataan tetap ada di riwayat.",
       "result": {
         "label": "Hasil",
-        "pass": "Berlaku (lulus)",
-        "fail": "Tidak berlaku (gagal)"
+        "pass": "Sudah diterapkan (lulus)",
+        "fail": "Belum diterapkan (gagal)"
       },
       "note": {
         "label": "Catatan",
