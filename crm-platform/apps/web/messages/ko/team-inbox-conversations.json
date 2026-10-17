@@ -553,16 +553,8 @@
         "offline": "오프라인"
       },
       "notes": {
-        "tab": "메모",
-        "label": "새 내부 메모",
-        "placeholder": "팀만 볼 수 있는 메모를 작성하세요",
-        "hint": "Ctrl+Enter로 메모를 추가합니다.",
-        "add": "메모 추가",
-        "addFailed": "메모를 저장할 수 없습니다.",
-        "loading": "메모를 불러오는 중",
-        "empty": "아직 메모가 없습니다.",
-        "unknownAuthor": "팀원",
-        "delete": "이 메모 삭제"
+        "tab": "연락처 메모",
+        "noContact": "이 대화에는 메모를 추가할 연락처가 없습니다."
       },
       "timeline": {
         "tab": "타임라인",

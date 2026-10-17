@@ -553,16 +553,8 @@
         "offline": "Ngoại tuyến"
       },
       "notes": {
-        "tab": "Ghi chú",
-        "label": "Ghi chú nội bộ mới",
-        "placeholder": "Viết ghi chú chỉ nhóm của bạn mới thấy",
-        "hint": "Ctrl+Enter để thêm ghi chú.",
-        "add": "Thêm ghi chú",
-        "addFailed": "Không thể lưu ghi chú.",
-        "loading": "Đang tải ghi chú",
-        "empty": "Chưa có ghi chú nào.",
-        "unknownAuthor": "Một đồng nghiệp",
-        "delete": "Xóa ghi chú này"
+        "tab": "Ghi chú liên hệ",
+        "noContact": "Cuộc trò chuyện này không có liên hệ để thêm ghi chú."
       },
       "timeline": {
         "tab": "Dòng thời gian",

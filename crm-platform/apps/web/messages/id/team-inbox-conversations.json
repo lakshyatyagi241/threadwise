@@ -553,16 +553,8 @@
         "offline": "Luring"
       },
       "notes": {
-        "tab": "Catatan",
-        "label": "Catatan internal baru",
-        "placeholder": "Tulis catatan yang hanya dapat dilihat tim Anda",
-        "hint": "Ctrl+Enter untuk menambahkan catatan.",
-        "add": "Tambahkan catatan",
-        "addFailed": "Catatan tidak dapat disimpan.",
-        "loading": "Memuat catatan",
-        "empty": "Belum ada catatan.",
-        "unknownAuthor": "Seorang anggota tim",
-        "delete": "Hapus catatan ini"
+        "tab": "Catatan kontak",
+        "noContact": "Percakapan ini tidak memiliki kontak untuk diberi catatan."
       },
       "timeline": {
         "tab": "Linimasa",

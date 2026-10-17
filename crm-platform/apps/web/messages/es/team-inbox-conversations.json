@@ -553,16 +553,8 @@
         "offline": "Sin conexión"
       },
       "notes": {
-        "tab": "Notas",
-        "label": "Nueva nota interna",
-        "placeholder": "Escribe una nota que solo pueda ver tu equipo",
-        "hint": "Ctrl+Intro añade la nota.",
-        "add": "Añadir nota",
-        "addFailed": "No se pudo guardar la nota.",
-        "loading": "Cargando notas",
-        "empty": "Aún no hay notas.",
-        "unknownAuthor": "Un compañero",
-        "delete": "Eliminar esta nota"
+        "tab": "Notas del contacto",
+        "noContact": "Esta conversación no tiene un contacto al que añadir notas."
       },
       "timeline": {
         "tab": "Cronología",

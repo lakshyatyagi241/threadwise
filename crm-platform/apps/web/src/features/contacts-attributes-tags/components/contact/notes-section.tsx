@@ -24,9 +24,13 @@ export function NotesSection({
   contact,
   variant,
   focusSignal,
-}: SectionProps & {
+  bare,
+}: Pick<SectionProps, 'variant'> & {
+  contact: Pick<SectionProps['contact'], 'id'>;
   /** Changes whenever something outside (the "Note" button, the row's quick add) wants the cursor in the composer. */
   focusSignal?: number;
+  /** No card and title of its own: the notes sit inside a section another screen already titles (the inbox's side panel). */
+  bare?: boolean;
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.notes');
   const format = useFormatter();
@@ -64,8 +68,9 @@ export function NotesSection({
   return (
     <Panel
       id={titleId}
-      title={t('title')}
-      bodyClassName={variant === 'drawer' ? 'px-3' : undefined}
+      title={bare ? undefined : t('title')}
+      className={bare ? 'rounded-none border-0 bg-transparent' : undefined}
+      bodyClassName={variant === 'drawer' && !bare ? 'px-3' : undefined}
     >
       <div className="space-y-4">
         {canUpdate && (
