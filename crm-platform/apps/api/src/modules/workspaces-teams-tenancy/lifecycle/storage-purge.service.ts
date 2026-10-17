@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm';
 import { storageKeyIsOwnedBy } from '../../../common/storage-key-owner';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ChatMediaStore } from '../../../infra/providers/chat-conversations/media';
+import { ArchiveEraser, archiveEraseMarkerOrg } from '../../data-retention';
 import { MediaStorageService } from '../../platform-settings-branding-storage';
 
 const BATCH = 100;
@@ -32,6 +33,7 @@ export class StoragePurgeService {
     private readonly db: DatabaseService,
     private readonly media: MediaStorageService,
     @Optional() private readonly chat?: ChatMediaStore,
+    @Optional() private readonly archive?: ArchiveEraser,
   ) {}
 
   @Cron('*/10 * * * *')
@@ -75,8 +77,15 @@ export class StoragePurgeService {
                WHERE id = ${r.id}`);
             continue;
           }
-          await this.chat?.remove(Number(r.org_id), r.storage_key);
-          await this.media.remove(r.storage_key);
+          // The erase leaves one marker per workspace for its cold event archive (not an object key: nothing in media storage to remove).
+          // (A marker that names another workspace than its row already failed the ownership check above.)
+          if (archiveEraseMarkerOrg(r.storage_key) !== null) {
+            if (!this.archive) throw new Error('archive store is not available to this process');
+            await this.archive.eraseOrg(Number(r.org_id));
+          } else {
+            await this.chat?.remove(Number(r.org_id), r.storage_key);
+            await this.media.remove(r.storage_key);
+          }
           await tx.execute(
             sql`UPDATE storage_purge_queue SET purged_at = now(), last_error = NULL WHERE id = ${r.id}`,
           );

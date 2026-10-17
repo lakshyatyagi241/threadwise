@@ -80,3 +80,16 @@ Nothing emits events yet and no screen reads a metric: Phase 1 hooks the message
 | `ANALYTICS_SOURCES`         | `{}`    | JSON map of metric key to `legacy` / `shadow` / `rollup`                        |
 
 Operations: [runbooks/analytics-rollups.md](../runbooks/analytics-rollups.md).
+
+## Retention of the event store
+
+`an_events` keeps 60 days hot. Older months are exported to the cold archive (one gzipped NDJSON object per workspace per month, `contact_id` left out),
+verified against a manifest, and the partition is dropped; the rollups outlive the raw events and the archive is kept forever. `ArchiveReader` reads it back
+for drill-downs past 60 days. The job is off until `RETENTION_ENABLED=true` and starts as a dry run. Design: the spec, section 6;
+operations: [runbooks/data-retention.md](../runbooks/data-retention.md).
+
+| Variable            | Default | Meaning                                                         |
+| ------------------- | ------- | --------------------------------------------------------------- |
+| `RETENTION_ENABLED` | `false` | the nightly retention job                                       |
+| `RETENTION_DRY_RUN` | `true`  | log the plan, change nothing                                    |
+| `ARCHIVE_DRIVER`    | `local` | `s3` for the bucket `S3_BUCKET_ARCHIVE` (default `crm-archive`) |

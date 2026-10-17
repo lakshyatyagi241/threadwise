@@ -179,6 +179,16 @@ export const envSchema = z.object({
   ANALYTICS_ROLLUP_ENABLED: booleanish.default(true),
   /** JSON map of metric key to `legacy` | `shadow` | `rollup`. Anything missing or invalid is `legacy`. */
   ANALYTICS_SOURCES: z.string().default('{}'),
+  // --- data retention (docs/runbooks/data-retention.md) --------------------
+  /** The nightly job that exports closed partitions to the archive and drops them. Off until an operator has run it as a dry run. */
+  RETENTION_ENABLED: booleanish.default(false),
+  /** With the job on: log which months it would archive and change nothing. Set false to archive and drop for real. */
+  RETENTION_DRY_RUN: booleanish.default(true),
+  /** Where closed partitions are archived: `local` (a directory on this host, development only) or `s3` (the S3_* bucket below). */
+  ARCHIVE_DRIVER: z.enum(['local', 's3']).default('local'),
+  /** The directory for `ARCHIVE_DRIVER=local`. Empty means `.archive` under the working directory. */
+  ARCHIVE_LOCAL_DIR: z.string().optional(),
+  S3_BUCKET_ARCHIVE: z.string().default('crm-archive'),
   FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
   FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),

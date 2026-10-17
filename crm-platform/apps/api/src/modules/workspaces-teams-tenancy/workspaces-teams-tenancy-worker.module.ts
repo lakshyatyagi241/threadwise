@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { DataRetentionModule } from '../data-retention';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { LeaveSweepService } from './leave/leave-sweep.service';
 import { LifecycleNotificationConsumer } from './lifecycle/lifecycle-notification.consumer';
@@ -13,7 +14,7 @@ import { StoragePurgeService } from './lifecycle/storage-purge.service';
  * swept would multiply the load. ADR-0028.
  */
 @Module({
-  imports: [PlatformSettingsModule],
+  imports: [PlatformSettingsModule, DataRetentionModule],
   providers: [
     LifecycleRepository,
     LifecycleService,

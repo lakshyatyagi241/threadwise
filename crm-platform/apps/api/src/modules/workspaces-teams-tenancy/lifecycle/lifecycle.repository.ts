@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { archiveEraseMarker } from '../../data-retention';
 import { OWNER_DELETED_GRACE_DAYS } from './lifecycle.policy';
 
 /** One row of the lifecycle view: the org plus its reminder counters for the current cycle. */
@@ -334,6 +335,10 @@ export class LifecycleRepository {
         RETURNING id`);
       filesQueued += res.rows.length;
     }
+    // The cold event archive is keyed by workspace, not by a column of any table; one marker has the purge worker delete its objects.
+    await tx.execute(sql`
+      INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key)
+      VALUES (${id}::bigint, ${uuid}::uuid, ${archiveEraseMarker(id)})`);
     // audit_log / event_outbox / security_events carry field values, IPs and user agents and have no cascading FK.
     await tx.execute(sql`DELETE FROM audit_log WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM event_outbox WHERE org_id = ${id}`);

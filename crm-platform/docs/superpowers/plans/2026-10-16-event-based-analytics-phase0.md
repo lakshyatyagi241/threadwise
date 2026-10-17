@@ -1399,6 +1399,15 @@ Use the `provider-adapter` skill. Read `apps/api/src/infra/providers/platform-se
 
 - [ ] `docs/runbooks/data-retention.md` (what the job does, dry run first, how to restore a month from the archive into a side table, how to check the manifest), update `docs/architecture/scale.md` partition section ("Retention is dropping a partition" now true for registered streams), run the Part A gate steps (A11) on this part.
 
+### Part B as built (differences from the tasks above)
+
+- **Port and adapters live in `apps/api/src/infra/providers/data-retention/`** (the repo's provider convention, like `web-push`), not in the module. The port is stream and file based (`putFile`, `putBytes`, `openRead`, `list`, `delete`, `deletePrefix`), not `Buffer` based: one busy workspace-month does not fit in memory. The S3 adapter has its own small SigV4 client because the existing signers sit in other modules (`offsite-backup`, `platform-settings-branding-storage`) and cross-module internals are not allowed; it is proven against a real MinIO, including 1,010-key pagination and signature rejection.
+- **B1:** `eligibleMonths()` was dropped; the archiver walks the partitions that exist (`existingMonths`) and filters with `isPastLiveWindow()`. `StreamPolicy` gained `idColumn`, and a `RETENTION_POLICIES` token lets tests run the engine on a synthetic stream.
+- **B3 needed a migration:** the runtime roles own no table, so `20261218090000_drop_closed_partition.sql` adds `drop_closed_partition()` (SECURITY DEFINER, EXECUTE for `crm_worker` only, refuses any stream not in `archivable_streams()`, any month closed under 7 days, and the default partition). The archiver exports in one id-ordered pass, verifies by reading every object back, then locks the partition, recounts per workspace and drops in one transaction.
+- **B5:** archive expiry is month end plus `liveDays` plus `archiveDays` (the archive starts when the data leaves the live window). A real run with `ARCHIVE_DRIVER=local` is refused in production.
+- **B6:** instead of `deleteOrgObjects` on the port, the workspace erase queues one `archive-erase/<org>/all` marker in `storage_purge_queue` (durable, retried) and `StoragePurgeService` calls `ArchiveEraser`. `ArchiveReader` also refuses, inside a request, a workspace that is not the request's (operators excepted).
+- **B7:** per-queue options come from `jobOptionsFor()`; the `webhook-forward` producer set its own `removeOnComplete`, so that call site changed too. The compose `logging:` blocks make the first deploy recreate postgres, redis and minio (a few seconds of downtime): release at a quiet hour.
+
 ---
 
 # Part C: Roadmap for Phases 1 to 4
