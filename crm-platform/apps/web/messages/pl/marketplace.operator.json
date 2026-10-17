@@ -58,7 +58,8 @@
           "trialing": "Na okresie próbnym",
           "comped": "Dostęp bezpłatny",
           "canceling": "Kończąca się",
-          "ended": "Zakończona"
+          "ended": "Zakończona",
+          "past_due": "Płatność nieudana"
         },
         "subscriptionSource": {
           "purchase": "Zakup",
@@ -92,7 +93,8 @@
         "request": "Nie udało się zrealizować żądania.",
         "unexpected": "Coś poszło źle po naszej stronie. Spróbuj ponownie; jeśli to się powtarza, podaj ID żądania.",
         "subscriptionState": "Nie jest to możliwe w obecnym stanie subskrypcji. Przestrzeni roboczej, która już płaci, nie można dać dostępu bezpłatnie (najpierw anuluj jej subskrypcję), darmowa aplikacja nie ma czego przyznać, a zakończonej subskrypcji nie można anulować ponownie.",
-        "subscriptionNotFound": "Nie znaleziono tej subskrypcji. Mogła zostać usunięta. Odśwież listę."
+        "subscriptionNotFound": "Nie znaleziono tej subskrypcji. Mogła zostać usunięta. Odśwież listę.",
+        "renewalNotStopped": "Nie udało się zatrzymać odnawiania kartą u operatora płatności, więc nic nie zmieniono i z przestrzeni roboczej nadal mogą być pobierane opłaty. Spróbuj ponownie za chwilę lub zakończ je w panelu operatora."
       },
       "list": {
         "title": "Katalog Marketplace",
@@ -658,12 +660,13 @@
         "free": "Bezpłatna",
         "perMonth": "/ miesiąc",
         "trial": "{count, plural, one {# dzień okresu próbnego} few {# dni okresu próbnego} many {# dni okresu próbnego} other {# dnia okresu próbnego}}",
-        "notOnSale": "Nie jest sprzedawana"
+        "notOnSale": "Nie jest sprzedawana",
+        "perYear": "/ rok"
       },
       "pricing": {
         "title": "Cennik",
         "description": "Zdecyduj, czy ta aplikacja jest bezpłatna, czy płatna, i ile kosztuje. Obowiązuje Twój cennik; propozycja z manifestu dewelopera jest tylko sugestią.",
-        "billing": "Płatna aplikacja sprzedawana jest jako miesięczny okres prepaid: dodatek rozliczeniowy kupowany w zwykłym procesie płatności. Automatycznego odnawiania kartą nie ma jeszcze, więc przestrzeń robocza płaci ponownie, gdy jej miesiąc dobiega końca. Zmiana ceny dotyczy nowych subskrypcji i następnej płatności każdego subskrybenta; okres, za który już zapłacono, nigdy nie jest zmieniany.",
+        "billing": "Płatna aplikacja jest sprzedawana jako dodatek rozliczeniowy kupowany w zwykłym procesie płatności. Domyślnie jest to miesięczny okres prepaid: przestrzeń robocza płaci ponownie, gdy jej miesiąc dobiega końca. Wybierz poniżej „Odnawia karta”, aby zamiast tego pobierać opłatę z karty przestrzeni roboczej automatycznie co miesiąc. Zmiana ceny dotyczy nowych subskrypcji i następnej płatności każdego subskrybenta prepaid; okres, za który już zapłacono, nigdy nie jest zmieniany, a subskrybent, którego subskrypcję już odnawia karta, zachowuje cenę w swojej subskrypcji u operatora do czasu ponownego zasubskrybowania.",
         "readOnly": "Tylko do odczytu. Zmiana cennika wymaga uprawnienia platformy {permission}.",
         "visibility": {
           "label": "Status oferty",
@@ -693,7 +696,7 @@
           "trialDays": "Bezpłatny okres próbny (dni)",
           "trialDaysHint": "0, jeśli bez okresu próbnego; najwyżej {max}. Przestrzeń robocza otrzymuje jeden okres próbny na aplikację.",
           "annualAmount": "Cena roczna (opcjonalnie)",
-          "annualAmountHint": "Zapisywana na później. Rozliczenia roczne nie są jeszcze dostępne, więc przestrzenie robocze nie mogą dziś płacić rocznie.",
+          "annualAmountHint": "Cena za rok. Zostaw puste, aby sprzedawać aplikację tylko miesięcznie. Przestrzeń robocza, która wybierze płatność roczną, płaci tę kwotę raz w roku lub kartą co rok, gdy aplikacja odnawia się kartą.",
           "purchasable": "Sprzedaż",
           "purchasableHint": "Po wyłączeniu nowe przestrzenie robocze nie mogą się subskrybować. Przestrzenie, które już subskrybują, nadal mogą odnawiać."
         },
@@ -763,6 +766,27 @@
             "paid": "Subskrybenci zachowują czas, za który już zapłacili. Nie jest on zwracany.",
             "action": "Ustaw jako bezpłatną"
           }
+        },
+        "billingMode": {
+          "legend": "Sposób odnawiania",
+          "one_time": {
+            "label": "Miesiąc prepaid",
+            "hint": "Przestrzeń robocza płaci ponownie, gdy jej miesiąc dobiega końca."
+          },
+          "recurring": {
+            "label": "Odnawia karta",
+            "hint": "Operator płatności pobiera opłatę z karty co miesiąc, dopóki przestrzeń robocza nie anuluje subskrypcji."
+          },
+          "note": "Dotyczy nowych subskrypcji. Subskrypcja, która już działa, zachowuje sposób, w jaki została kupiona. Wymaga bramki płatności obsługującej subskrypcje."
+        },
+        "priceLock": {
+          "label": "Zachowaj subskrybentom cenę, którą zapłacili po raz pierwszy",
+          "hint": "Zmiana ceny dotyczy wtedy tylko nowych subskrybentów. Włączenie tej opcji blokuje też obecnych subskrybentów na cenie ich ostatniej płatności; wyłączenie nikogo nie odblokowuje. Blokada kończy się wraz z końcem subskrypcji."
+        },
+        "withdrawn": {
+          "title": "Zwróć środki subskrybentom tej wycofanej aplikacji",
+          "hint": "Aplikację wycofano w trakcie okresów opłaconych przez subskrybentów. Zwróć każdemu część ostatniej płatności od momentu wycofania.",
+          "action": "Zwróć niewykorzystany okres..."
         }
       },
       "grandfather": {
@@ -856,7 +880,8 @@
           "ended": "Zakończone",
           "mrr": "Przychód miesięczny",
           "mrrNone": "Brak płacących subskrybentów",
-          "mrrCurrency": "Przychód miesięczny, {currency}"
+          "mrrCurrency": "Przychód miesięczny, {currency}",
+          "pastDue": "Płatność nieudana"
         },
         "summary": {
           "emptyTitle": "Brak płatnych aplikacji",
@@ -871,7 +896,8 @@
             "canceling": "Kończące się",
             "ended": "Zakończone",
             "total": "Razem",
-            "mrr": "Przychód miesięczny"
+            "mrr": "Przychód miesięczny",
+            "pastDue": "Płatność nieudana"
           },
           "free": "Bezpłatna",
           "totals": "Wszystkie aplikacje",
@@ -905,7 +931,9 @@
           "compUntil": "Przyznane do {date}",
           "compOpen": "Przyznane do zakończenia",
           "endedOn": "Zakończono {date}",
-          "none": "Bez daty końcowej"
+          "none": "Bez daty końcowej",
+          "renewsOn": "Odnowienie {date}",
+          "graceUntil": "Okres prolongaty do {date}"
         },
         "noCharge": "Bez opłat",
         "compBy": "Przyznane przez {operator}: {note}",
@@ -916,7 +944,57 @@
         "noMatchTitle": "Brak pasujących subskrypcji",
         "noMatchMessage": "Żadna pozycja nie pasuje do tych filtrów. Spróbuj innych.",
         "clearFilters": "Wyczyść filtry",
-        "loadMore": "Wczytaj więcej"
+        "loadMore": "Wczytaj więcej",
+        "unlockPrice": "Odblokuj cenę",
+        "refundUnused": "Zwróć niewykorzystany okres"
+      },
+      "unlockDialog": {
+        "eyebrow": "Zablokowana cena",
+        "title": "Odblokuj cenę dla przestrzeni roboczej {workspace}",
+        "close": "Zamknij",
+        "back": "Wróć",
+        "confirm": "Odblokuj cenę",
+        "summary": "Przestrzeń robocza {workspace} płaci cenę, którą zapłaciła po raz pierwszy za aplikację {app}. Po odblokowaniu jej następna płatność będzie według aktualnej ceny aplikacji.",
+        "effectPrepaid": "Jej następna płatność, po okresie opłaconym do {date}, będzie według aktualnej ceny.",
+        "effectCard": "Jej karta odnawia aplikację po starej cenie u operatora płatności, więc odnawianie kartą zostanie zakończone z końcem opłaconego okresu ({date}). Zostanie o tym powiadomiona i może ponownie zasubskrybować aplikację po aktualnej cenie.",
+        "reason": "Powód (zapisany w dzienniku audytu)",
+        "done": "Przestrzeń robocza {workspace} nie ma już zablokowanej ceny aplikacji {app}."
+      },
+      "prorateDialog": {
+        "eyebrow": "Zwrot",
+        "title": "Zwróć niewykorzystany okres dla {workspace}",
+        "close": "Zamknij",
+        "back": "Wstecz",
+        "summary": "Zwraca część ostatniej płatności za {app}, która jeszcze przed nami, za pośrednictwem dostawcy płatności. Nic nie jest zwracane dwa razy: ponowne uruchomienie zwraca tylko to, co zostało.",
+        "working": "Obliczanie kwoty...",
+        "paid": "Ostatnia płatność",
+        "unused": "Niewykorzystana część",
+        "already": "Już zwrócono",
+        "refundable": "Do zwrotu teraz",
+        "nothing": "Nie ma nic do zwrotu: okres się skończył, nie znaleziono płatności przez bramkę lub niewykorzystana część została już zwrócona.",
+        "endNow": "Zakończ też subskrypcję teraz",
+        "endNowHint": "Instalacja zostaje wstrzymana, a jej dane zachowane. Bez tego aplikacja działa do końca okresu.",
+        "reason": "Powód (zapisywany w dzienniku audytu i wysyłany do dostawcy płatności)",
+        "confirm": "Zwróć {amount}",
+        "done": "Zwrócono {amount} przestrzeni roboczej {workspace} za {app}.",
+        "refused": "Dostawca płatności odrzucił zwrot: {reason}"
+      },
+      "withdrawnRefund": {
+        "eyebrow": "Wycofana aplikacja",
+        "title": "Zwróć środki subskrybentom aplikacji {name}",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "intro": "Sprawdza każdą płatną subskrypcję aplikacji {name} i zwraca część jej ostatniej płatności, która była jeszcze przed nami w chwili wycofania aplikacji, za pośrednictwem dostawcy płatności. Najpierw wyświetl podgląd; nic nie jest zwracane dwa razy.",
+        "preview": "Podgląd",
+        "owed": "{count, plural, one {Zwrot należy się # subskrybentowi} few {Zwrot należy się # subskrybentom} many {Zwrot należy się # subskrybentom} other {Zwrot należy się # subskrybenta}}",
+        "nobody": "Obecnie nikomu nic się nie należy.",
+        "more": "Subskrypcji jest więcej, niż obsługuje jedno uruchomienie. Uruchom ponownie, aby kontynuować.",
+        "reason": "Powód (zapisywany w dzienniku audytu i wysyłany do dostawcy płatności)",
+        "run": "{count, plural, one {Zwróć środki # subskrybentowi} few {Zwróć środki # subskrybentom} many {Zwróć środki # subskrybentom} other {Zwróć środki # subskrybenta}}",
+        "continue": "Kontynuuj z kolejnymi subskrypcjami",
+        "result": "Zwrócono: {refunded}, nieudane: {failed}.",
+        "someFailed": "Niektóre zwroty nie powiodły się (dostawca je odrzucił lub był nieosiągalny). Są wymienione w dzienniku audytu; ponowne uruchomienie spróbuje ich jeszcze raz.",
+        "done": "{count, plural, one {Zwrócono środki # subskrybentowi aplikacji {name}.} few {Zwrócono środki # subskrybentom aplikacji {name}.} many {Zwrócono środki # subskrybentom aplikacji {name}.} other {Zwrócono środki # subskrybenta aplikacji {name}.}}"
       }
     }
   }

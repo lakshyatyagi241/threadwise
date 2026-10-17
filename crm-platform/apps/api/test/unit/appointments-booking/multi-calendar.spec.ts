@@ -130,8 +130,8 @@ describe('the multi-provider calendar port', () => {
       at('2026-10-05T00:00:00Z'),
       at('2026-10-06T00:00:00Z'),
     );
-    expect(g.spy.freeBusy.mock.calls[0]![1]).toBe('team@example.com');
-    expect(m.spy.freeBusy.mock.calls[0]![1]).toBeNull();
+    expect((g.spy.freeBusy.mock.calls[0] as unknown[])[1]).toBe('team@example.com');
+    expect((m.spy.freeBusy.mock.calls[0] as unknown[])[1]).toBeNull();
   });
 
   it("one calendar failing leaves the other's busy time; all failing throws, so the caller offers slots without calendar data", async () => {

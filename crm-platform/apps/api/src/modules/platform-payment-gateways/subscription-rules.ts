@@ -26,6 +26,8 @@ export interface RecurFacts {
   /** What the buyer ticked. */
   autoRenew: boolean;
   period: 'monthly' | 'yearly';
+  /** A subscription add-on (a Marketplace app) renews yearly too: its provider cadence is a year. A plan bought yearly stays one payment. */
+  yearlyRenews?: boolean;
 }
 
 /**
@@ -36,7 +38,7 @@ export function shouldRecur(f: RecurFacts): boolean {
   if (!f.platformEnabled || !f.driverSupports) return false;
   if (f.isFree || f.isLifetime || f.isCustomQuote) return false;
   if (!(Number(f.planAmount) > 0)) return false;
-  return f.autoRenew && f.period !== 'yearly';
+  return f.autoRenew && (f.period !== 'yearly' || f.yearlyRenews === true);
 }
 
 /**

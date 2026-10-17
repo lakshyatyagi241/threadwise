@@ -29,6 +29,8 @@ export interface BroadcastRow {
   lastError: string | null;
   startedAt: Date | null;
   finishedAt: Date | null;
+  /** BL-191: the whole mass send waits for the workspace's quiet hours until this instant. Null = not held. */
+  heldUntil: Date | null;
   createdAt: Date;
   updatedAt: Date;
   rowVersion: number;
@@ -38,6 +40,8 @@ export interface RecipientRow {
   id: number;
   openid: string;
   conversationId: number | null;
+  /** The thread's contact, for the consent check (BL-141). Null = the follower never became a contact. */
+  contactId: number | null;
 }
 
 interface Raw {
@@ -59,6 +63,7 @@ interface Raw {
   last_error: string | null;
   started_at: Date | string | null;
   finished_at: Date | string | null;
+  held_until: Date | string | null;
   created_at: Date | string;
   updated_at: Date | string;
   row_version: number;
@@ -67,7 +72,7 @@ interface Raw {
 const SELECT = sql.raw(`
   SELECT b.id, b.uuid, b.name, b.wechat_channel_id, c.uuid AS channel_uuid, c.account_name AS channel_name, t.uuid AS template_uuid,
          b.body, b.audience, b.tag_id, b.mass_msg_id, b.status, b.total, b.sent, b.failed, b.last_error, b.started_at, b.finished_at,
-         b.created_at, b.updated_at, b.row_version
+         b.held_until, b.created_at, b.updated_at, b.row_version
   FROM wechat_broadcasts b
   JOIN wechat_channels c ON c.org_id = b.org_id AND c.id = b.wechat_channel_id
   LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id`);
@@ -92,6 +97,7 @@ const toRow = (r: Raw): BroadcastRow => ({
   lastError: r.last_error,
   startedAt: date(r.started_at),
   finishedAt: date(r.finished_at),
+  heldUntil: date(r.held_until),
   createdAt: new Date(r.created_at),
   updatedAt: new Date(r.updated_at),
   rowVersion: r.row_version,
@@ -218,19 +224,52 @@ export class BroadcastsRepository {
 
   async recipients(tx: Tx, orgId: number, broadcastId: number): Promise<RecipientRow[]> {
     const res = await tx.execute(sql`
-      SELECT id, openid, conversation_id FROM wechat_broadcast_recipients
-      WHERE org_id = ${orgId} AND wechat_broadcast_id = ${broadcastId} ORDER BY id`);
+      SELECT r.id, r.openid, r.conversation_id, c.contact_id
+      FROM wechat_broadcast_recipients r
+      LEFT JOIN conversations c ON c.org_id = r.org_id AND c.id = r.conversation_id
+      WHERE r.org_id = ${orgId} AND r.wechat_broadcast_id = ${broadcastId} ORDER BY r.id`);
     return (
       res.rows as unknown as Array<{
         id: number | string;
         openid: string;
         conversation_id: number | string | null;
+        contact_id: number | string | null;
       }>
     ).map((r) => ({
       id: Number(r.id),
       openid: r.openid,
       conversationId: r.conversation_id === null ? null : Number(r.conversation_id),
+      contactId: r.contact_id === null ? null : Number(r.contact_id),
     }));
+  }
+
+  /**
+   * The contacts behind the followers this account already carries as inbox threads (BL-141): who a send to ALL followers or to a TAG
+   * would reach among the people we know. WeChat resolves those audiences itself, so this is the part of it that can be checked.
+   */
+  async knownContactIds(tx: Tx, orgId: number, channelRowId: number): Promise<number[]> {
+    const res = await tx.execute(sql`
+      SELECT DISTINCT c.contact_id
+      FROM conversations c
+      JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      WHERE c.org_id = ${orgId} AND ch.kind = 'wechat' AND ch.external_id = ${String(channelRowId)}
+        AND c.contact_id IS NOT NULL`);
+    return (res.rows as unknown as Array<{ contact_id: number | string }>).map((r) =>
+      Number(r.contact_id),
+    );
+  }
+
+  /** Recipients the consent check refused (BL-141): never messaged, kept with the gate's reason. */
+  async markBlocked(
+    tx: Tx,
+    orgId: number,
+    items: ReadonlyArray<{ id: number; note: string }>,
+  ): Promise<void> {
+    for (const i of items) {
+      await tx.execute(sql`
+        UPDATE wechat_broadcast_recipients SET status = 'blocked', error = ${i.note.slice(0, 255)}, sent_at = NULL
+        WHERE org_id = ${orgId} AND id = ${i.id}`);
+    }
   }
 
   /** `sending` for a send being queued (the start time is now), `failed` with the reason when WeChat refused it. Returns the new row version (it names the queue job). */
@@ -251,14 +290,47 @@ export class BroadcastsRepository {
   }
 
   /** WeChat took the mass send: done, with its id; the picked recipients are sent. */
-  async markDone(tx: Tx, orgId: number, id: number, massMsgId: string | null): Promise<void> {
+  /** The mass send waits for the quiet hours (BL-191): still `sending`, with the instant it may go. `null` clears the hold. */
+  async setHeld(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    hold: { until: string; reason: string } | null,
+  ): Promise<void> {
     await tx.execute(sql`
-      UPDATE wechat_broadcasts SET status = 'done', mass_msg_id = ${massMsgId}, sent = total, failed = 0, last_error = NULL,
-             finished_at = now()
+      UPDATE wechat_broadcasts SET held_until = ${hold?.until ?? null}::timestamptz, held_reason = ${hold?.reason ?? null}
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Done. `sentIds` names the picked recipients the call reached (a list send leaves out whoever the consent check refused, BL-141);
+   * without it every recipient counts as sent, which is the case of a send to all followers or a tag (no recipient rows).
+   */
+  async markDone(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    massMsgId: string | null,
+    sentIds?: readonly number[],
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wechat_broadcasts SET status = 'done', mass_msg_id = ${massMsgId},
+             sent = ${sentIds === undefined ? sql`total` : sql`${sentIds.length}`}, failed = 0, last_error = NULL,
+             held_until = NULL, held_reason = NULL, finished_at = now()
       WHERE org_id = ${orgId} AND id = ${id}`);
     await tx.execute(sql`
       UPDATE wechat_broadcast_recipients SET status = 'sent', error = NULL, sent_at = now()
-      WHERE org_id = ${orgId} AND wechat_broadcast_id = ${id}`);
+      WHERE org_id = ${orgId} AND wechat_broadcast_id = ${id}
+        ${
+          sentIds === undefined
+            ? sql``
+            : sentIds.length === 0
+              ? sql`AND false`
+              : sql`AND id IN (${sql.join(
+                  sentIds.map((n) => sql`${n}::bigint`),
+                  sql`, `,
+                )})`
+        }`);
   }
 
   async remove(tx: Tx, orgId: number, id: number): Promise<void> {

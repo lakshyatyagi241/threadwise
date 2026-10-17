@@ -120,7 +120,13 @@
       "limitDefault": "Valor de la plataforma",
       "limitPerHour": "{count, plural, one {# correo por hora} other {# correos por hora}}",
       "limitSaved": "Límite de envíos guardado.",
-      "needsReauthImap": "El servidor de correo rechazó la contraseña guardada. Reconecta e introduce la contraseña de nuevo."
+      "needsReauthImap": "El servidor de correo rechazó la contraseña guardada. Reconecta e introduce la contraseña de nuevo.",
+      "test": "Probar conexión",
+      "testing": "Probando",
+      "lag": "Retraso",
+      "lagUnderMinute": "Menos de un minuto",
+      "lagMinutes": "{count, plural, one {# minuto} other {# minutos}}",
+      "lagHours": "{count, plural, one {# hora} other {# horas}}"
     },
     "outcome": {
       "connected": "Buzón conectado. Se está descargando a la bandeja el correo de los últimos 7 días.",
@@ -325,6 +331,26 @@
         "smtpAuth": "El servidor de salida (SMTP) rechazó el usuario o la contraseña. Compruébalos e inténtalo de nuevo.",
         "unreachable": "No se pudo llegar al servidor de correo o su certificado no es válido. Revisa el servidor, el puerto y la seguridad.",
         "generic": "No se pudo conectar el buzón. Inténtalo de nuevo."
+      },
+      "test": {
+        "button": "Probar credenciales",
+        "testing": "Probando",
+        "imap": "Entrante (IMAP)",
+        "smtp": "Saliente (SMTP)",
+        "ok": "Inicio de sesión correcto.",
+        "inbox": "Inicio de sesión correcto. La bandeja de entrada tiene {count, plural, one {# mensaje} other {# mensajes}}.",
+        "smtpOk": "Inicio de sesión correcto. No se envió nada.",
+        "note": "No se guardó nada y no se envió ningún correo.",
+        "tooMany": "Demasiadas pruebas en poco tiempo. Espera un minuto e inténtalo de nuevo.",
+        "failed": "No se pudo ejecutar la prueba. Inténtalo de nuevo.",
+        "reasons": {
+          "auth_failed": "El servidor rechazó el nombre de usuario o la contraseña.",
+          "tls": "No se pudo verificar la conexión segura. Revisa el nombre del servidor y el ajuste de seguridad.",
+          "unreachable": "No se pudo llegar al servidor. Revisa el servidor, el puerto y el ajuste de seguridad.",
+          "blocked_address": "Esta dirección de servidor no está permitida.",
+          "rejected": "El servidor rechazó la solicitud.",
+          "unknown": "El servidor no respondió como se esperaba."
+        }
       }
     },
     "sharing": {

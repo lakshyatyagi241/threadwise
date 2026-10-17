@@ -1,21 +1,22 @@
 {
   "planningTarget": 280,
   "implemented": {
-    "unitIntegration": 44,
+    "unitIntegration": 55,
     "e2e": 1,
     "staticGate": 1,
     "benchmarks": 3,
-    "scrapeDemoChecks": 25,
-    "alertRuleCases": 11,
-    "total": 85
+    "scrapeDemoChecks": 41,
+    "alertRuleCases": 18,
+    "loadProfiles": 5,
+    "total": 124
   },
-  "coverageAgainstTarget": "85 of 280 (about 30%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
+  "coverageAgainstTarget": "124 of 280 (about 44%). The 280-check target is NOT MET. The categories below show what exists and what is missing. The demo checks are one scripted run of 41 checks, counted once; the 18 alert rule cases are promtool case groups.",
   "categories": [
     {
       "name": "Instrumentation unit/integration",
       "target": 40,
-      "implemented": 45,
-      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts (27), job-metrics.spec.ts (17: wait/duration math, delay and retry handling, retries counter, labels, discovery of WorkerHost processors, Nest wiring) and test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (1: booted worker module, real processor, real database)",
+      "implemented": 56,
+      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts (27), job-metrics.spec.ts (17: wait/duration math, delay and retry handling, retries counter, labels, discovery of WorkerHost processors, Nest wiring), probe.spec.ts (11: listener guard, target parser, probeOnce/Prober against real local servers, a stalled child-process server seen from outside) and test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (1: booted worker module, real processor, real database)",
       "covers": [
         "histogram ns to ms conversion",
         "empty/NaN histogram is a missing measurement, not zeros",
@@ -49,8 +50,16 @@
     {
       "name": "API/module performance scenarios",
       "target": 70,
-      "implemented": 0,
-      "blockedBy": "No load tool in the repo and no isolated API+Postgres+Redis performance environment"
+      "implemented": 5,
+      "kind": "load profiles (idle, normal, peak, spike, 10 minute soak), one mixed workload",
+      "file": "tools/event-loop-audit/load/run-load.mjs + workload.k6.js",
+      "covers": [
+        "contact list/search/get/create/update, inbox list and counts (empty inbox), a /health control, at chosen rates, on a laptop"
+      ],
+      "missing": [
+        "webhooks, broadcasts, automations, reporting at size, a populated inbox",
+        "a stable dedicated host, production-shaped rates, 12 h and 24 h soaks"
+      ]
     },
     {
       "name": "Worker/concurrency scenarios",

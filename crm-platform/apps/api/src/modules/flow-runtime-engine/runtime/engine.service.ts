@@ -17,7 +17,8 @@ import {
   type Transition,
 } from './engine-core';
 import { FlowRunPublisher } from './flow-run.publisher';
-import { FlowSender, HALT_RETRY_MS } from './flow-sender.service';
+import { FlowSender } from './flow-sender.service';
+import { haltDelayMs } from './halt';
 import { RunRepository, type RunPatch } from './run.repository';
 import {
   MAX_LOGGED_STEPS,
@@ -573,7 +574,7 @@ export class FlowEngine {
       case 'sleep':
         return { next: { seq, delayMs: t.seconds * 1000 } };
       case 'halt':
-        return { next: { seq, delayMs: HALT_RETRY_MS } };
+        return { next: { seq, delayMs: haltDelayMs(t.retryAt, this.now()) } };
       default:
         return { next: null };
     }
@@ -626,7 +627,7 @@ export class FlowEngine {
           ...base,
           status: 'halted',
           haltReason: t.reason.slice(0, 500),
-          resumeAt: new Date(now.getTime() + HALT_RETRY_MS),
+          resumeAt: new Date(now.getTime() + haltDelayMs(t.retryAt, now)),
         };
       case 'end':
         return {

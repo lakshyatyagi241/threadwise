@@ -85,7 +85,8 @@
       "outsideWindow": "Outside 24h",
       "selected": "{count, plural, one {# selected} other {# selected}}",
       "sent": "Instagram broadcast sent — {sent} delivered{failed, plural, =0 {} other {, # failed}}.",
-      "sentNone": "Could not send to any recipient. Check the Instagram connection."
+      "sentNone": "Could not send to any recipient. Check the Instagram connection.",
+      "skipped": "Not messaged because of consent: {count}"
     }
   }
 }

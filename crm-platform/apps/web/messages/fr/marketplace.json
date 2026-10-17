@@ -61,7 +61,8 @@
       "notForSale": "Cette application n’est pas proposée aux nouveaux abonnés pour le moment.",
       "trialUnavailable": "L’essai gratuit n’est pas disponible pour cette application dans votre espace de travail.",
       "subscriptionNotFound": "Votre espace de travail n’a pas d’abonnement à cette application.",
-      "subscriptionState": "Cela ne correspond pas à l’état actuel de l’abonnement. Rechargez pour voir le dernier état."
+      "subscriptionState": "Cela ne correspond pas à l’état actuel de l’abonnement. Rechargez pour voir le dernier état.",
+      "renewalNotStopped": "Nous n’avons pas pu arrêter le renouvellement automatique auprès du prestataire de paiement : rien n’a été modifié et votre carte peut encore être débitée. Réessayez dans un instant."
     },
     "chips": {
       "installed": "Installée",
@@ -77,7 +78,8 @@
       "trialing": "Essai gratuit",
       "comped": "Offert",
       "canceling": "Non renouvelé",
-      "subscriptionEnded": "Abonnement terminé"
+      "subscriptionEnded": "Abonnement terminé",
+      "pastDue": "Paiement échoué"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Non vendu",
         "paid": "Application payante",
         "addOn": "Module complémentaire",
-        "trial": "Essai gratuit de {days} jours"
+        "trial": "Essai gratuit de {days} jours",
+        "monthlyOrYearly": "{price} / mois ou {annual} / an"
       },
       "installs": "{count, plural, one {# installation} other {# installations}}",
       "version": "Version {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "Non vendu",
         "message": "Cette application n’est actuellement pas proposée aux nouveaux abonnés."
-      }
+      },
+      "autoRenewNote": "Facturation mensuelle via la facturation de votre espace de travail. Votre carte est débitée automatiquement chaque mois à la date de renouvellement, jusqu’à ce que vous résiliez."
     },
     "subscribe": {
       "subscribe": "S’abonner",
@@ -820,7 +824,16 @@
         "included": "{name} est incluse dans votre forfait.",
         "already_entitled": "Votre espace de travail a déjà accès à {name}.",
         "free": "{name} est gratuite."
-      }
+      },
+      "hintPriceAuto": "{price} par mois, débités automatiquement sur votre carte chaque mois jusqu’à ce que vous résiliez.",
+      "hintAuto": "Votre carte est débitée automatiquement chaque mois jusqu’à ce que vous résiliez.",
+      "period": {
+        "legend": "Période de facturation",
+        "monthly": "Mensuel, {price}",
+        "yearly": "Annuel, {price}"
+      },
+      "hintYear": "{price} par an, payés au moment du paiement. Chaque paiement couvre un an.",
+      "hintYearAuto": "{price} par an, débités automatiquement sur votre carte chaque année jusqu’à ce que vous résiliez."
     },
     "subscription": {
       "title": "Abonnement",
@@ -829,7 +842,8 @@
         "trialing": "Essai gratuit",
         "comped": "Offert",
         "canceling": "Non renouvelé",
-        "ended": "Terminé"
+        "ended": "Terminé",
+        "past_due": "Paiement échoué"
       },
       "date": {
         "paidUntil": "Payé jusqu’au {date}",
@@ -838,7 +852,9 @@
         "compOpen": "Accès offert, sans date de fin",
         "cancelingUntil": "Non renouvelé. Active jusqu’au {date}",
         "endedOn": "Abonnement terminé le {date}",
-        "endedNoDate": "Abonnement terminé"
+        "endedNoDate": "Abonnement terminé",
+        "renewsOn": "Renouvelée le {date}",
+        "graceUntil": "Paiement échoué. Fonctionne jusqu’au {date}"
       },
       "lastPayment": "Dernier paiement : {price} par mois",
       "nextPayment": "Le prix de cette application a changé. Votre prochain paiement sera de {price} par mois.",
@@ -849,7 +865,8 @@
         "resubscribe": "Se réabonner",
         "subscribe": "S’abonner maintenant",
         "resume": "Reprendre l’abonnement",
-        "cancel": "Résilier l’abonnement"
+        "cancel": "Résilier l’abonnement",
+        "payNow": "Payer maintenant"
       },
       "cancelConfirm": {
         "title": "Résilier l’abonnement à {name} ?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name} reste active jusqu’à la fin de la période payée, puis sera mise en pause. Vos données et paramètres sont conservés.",
         "afterwards": "Plus aucun montant ne sera facturé, et vous pouvez vous réabonner à tout moment.",
         "confirm": "Résilier l’abonnement",
-        "keep": "Conserver l’abonnement"
+        "keep": "Conserver l’abonnement",
+        "messageAuto": "Votre carte ne sera plus débitée. {name} reste active jusqu’au {date}, puis sera mise en pause. Vos données et paramètres sont conservés.",
+        "messageAutoNoDate": "Votre carte ne sera plus débitée. {name} reste active jusqu’à la fin de la période payée, puis sera mise en pause. Vos données et paramètres sont conservés."
       },
       "toast": {
         "canceled": "Abonnement résilié. Il reste actif jusqu’au {date}.",
@@ -865,7 +884,14 @@
         "resumed": "Abonnement repris."
       },
       "working": "En cours",
-      "noCheckout": "Le paiement n’est pas disponible pour cette application pour le moment. Réessayez dans un instant."
+      "noCheckout": "Le paiement n’est pas disponible pour cette application pour le moment. Réessayez dans un instant.",
+      "paymentFailed": "Le dernier paiement par carte pour cette application n’a pas abouti. L’application continue de fonctionner jusqu’au {date} pendant que le prestataire de paiement réessaie. Payez maintenant, ou corrigez votre moyen de paiement, pour éviter une suspension.",
+      "paymentFailedNoDate": "Le dernier paiement par carte pour cette application n’a pas abouti. L’application continue de fonctionner pendant que le prestataire de paiement réessaie. Payez maintenant, ou corrigez votre moyen de paiement, pour éviter une suspension.",
+      "autoRenewHint": "Votre carte est débitée automatiquement à la date de renouvellement. Résiliez avant cette date pour l’éviter.",
+      "lastPaymentYear": "Dernier paiement : {price} par an",
+      "nextPaymentYear": "Le prix de cette application a changé. Votre prochain paiement sera de {price} par an.",
+      "priceLocked": "Votre prix est verrouillé à {price} par mois. Il reste le même tant que vous restez abonné, même si le prix de l’application change.",
+      "priceLockedYear": "Votre prix est verrouillé à {price} par an. Il reste le même tant que vous restez abonné, même si le prix de l’application change."
     },
     "tools": {
       "open": "Ouvrir",
@@ -875,6 +901,24 @@
       },
       "soon": "Bientôt",
       "upgrade": "Mettre à niveau"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Paiement reçu",
+        "message": "Merci. Votre abonnement est actif et l’application est prête à l’emploi."
+      },
+      "pending": {
+        "title": "Confirmation de votre paiement",
+        "message": "Le prestataire de paiement n’a pas encore confirmé le paiement. Cette page se met à jour dès qu’il le fait ; vous n’avez pas besoin de payer à nouveau."
+      },
+      "failed": {
+        "title": "Le paiement n’a pas abouti",
+        "message": "Rien n’a été débité. Abonnez-vous de nouveau pour essayer un autre moyen de paiement."
+      },
+      "cancelled": {
+        "title": "Paiement annulé",
+        "message": "Rien n’a été débité. Abonnez-vous de nouveau quand vous le souhaitez."
+      }
     }
   }
 }

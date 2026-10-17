@@ -1475,9 +1475,11 @@
           "sent": "已发送",
           "delivered": "已送达",
           "read": "已读",
-          "failed": "失败"
+          "failed": "失败",
+          "held": "暂缓"
         },
-        "charged": "已扣费 {amount}"
+        "charged": "已扣费 {amount}",
+        "heldUntil": "暂缓至 {when}（免打扰时段）"
       },
       "send": {
         "whenTitle": "发送时间",

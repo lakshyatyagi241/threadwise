@@ -1475,9 +1475,11 @@
           "sent": "Отправлено",
           "delivered": "Доставлено",
           "read": "Прочитано",
-          "failed": "Ошибка"
+          "failed": "Ошибка",
+          "held": "Отложено"
         },
-        "charged": "Списано {amount}"
+        "charged": "Списано {amount}",
+        "heldUntil": "Отложено до {when} (тихие часы)"
       },
       "send": {
         "whenTitle": "Когда отправить",

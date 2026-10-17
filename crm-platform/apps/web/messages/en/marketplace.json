@@ -61,7 +61,8 @@
       "notForSale": "This app is not being sold to new subscribers right now.",
       "trialUnavailable": "The free trial is not available for this app in your workspace.",
       "subscriptionNotFound": "Your workspace has no subscription to this app.",
-      "subscriptionState": "That does not fit the current state of the subscription. Reload to see the latest state."
+      "subscriptionState": "That does not fit the current state of the subscription. Reload to see the latest state.",
+      "renewalNotStopped": "We could not stop the automatic renewal at the payment provider, so nothing was changed and your card can still be charged. Try again in a moment."
     },
     "chips": {
       "installed": "Installed",
@@ -77,7 +78,8 @@
       "trialing": "Free trial",
       "comped": "Complimentary",
       "canceling": "Not renewing",
-      "subscriptionEnded": "Subscription ended"
+      "subscriptionEnded": "Subscription ended",
+      "pastDue": "Payment failed"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Not for sale",
         "paid": "Paid app",
         "addOn": "Add-on",
-        "trial": "{days}-day free trial"
+        "trial": "{days}-day free trial",
+        "monthlyOrYearly": "{price} / month or {annual} / year"
       },
       "installs": "{count, plural, one {# install} other {# installs}}",
       "version": "Version {version}",
@@ -806,7 +809,8 @@
       "notForSale": {
         "title": "Not for sale",
         "message": "This app is not being sold to new subscribers right now."
-      }
+      },
+      "autoRenewNote": "Billed monthly through your workspace billing. Your card is charged automatically every month on the renewal date until you cancel."
     },
     "subscribe": {
       "subscribe": "Subscribe",
@@ -820,7 +824,16 @@
         "included": "{name} is included in your plan.",
         "already_entitled": "Your workspace already has access to {name}.",
         "free": "{name} is free."
-      }
+      },
+      "hintPriceAuto": "{price} per month, charged to your card automatically every month until you cancel.",
+      "hintAuto": "Your card is charged automatically every month until you cancel.",
+      "period": {
+        "legend": "Billing period",
+        "monthly": "Monthly, {price}",
+        "yearly": "Yearly, {price}"
+      },
+      "hintYear": "{price} per year, paid at checkout. Each payment covers one year.",
+      "hintYearAuto": "{price} per year, charged to your card automatically every year until you cancel."
     },
     "subscription": {
       "title": "Subscription",
@@ -829,7 +842,8 @@
         "trialing": "Free trial",
         "comped": "Complimentary",
         "canceling": "Not renewing",
-        "ended": "Ended"
+        "ended": "Ended",
+        "past_due": "Payment failed"
       },
       "date": {
         "paidUntil": "Paid until {date}",
@@ -838,7 +852,9 @@
         "compOpen": "Complimentary access, no end date",
         "cancelingUntil": "Not renewing. Active until {date}",
         "endedOn": "Subscription ended {date}",
-        "endedNoDate": "Subscription ended"
+        "endedNoDate": "Subscription ended",
+        "renewsOn": "Renews on {date}",
+        "graceUntil": "Payment failed. Works until {date}"
       },
       "lastPayment": "Last payment: {price} per month",
       "nextPayment": "The price of this app changed. Your next payment will be {price} per month.",
@@ -849,7 +865,8 @@
         "resubscribe": "Resubscribe",
         "subscribe": "Subscribe now",
         "resume": "Resume subscription",
-        "cancel": "Cancel subscription"
+        "cancel": "Cancel subscription",
+        "payNow": "Pay now"
       },
       "cancelConfirm": {
         "title": "Cancel the subscription to {name}?",
@@ -857,7 +874,9 @@
         "messageNoDate": "{name} stays active until the period you paid for ends, then it is paused. Your data and settings are kept.",
         "afterwards": "Nothing more will be charged, and you can subscribe again at any time.",
         "confirm": "Cancel subscription",
-        "keep": "Keep subscription"
+        "keep": "Keep subscription",
+        "messageAuto": "Your card will not be charged again. {name} stays active until {date}, then it is paused. Your data and settings are kept.",
+        "messageAutoNoDate": "Your card will not be charged again. {name} stays active until the period you paid for ends, then it is paused. Your data and settings are kept."
       },
       "toast": {
         "canceled": "Subscription cancelled. It stays active until {date}.",
@@ -865,7 +884,14 @@
         "resumed": "Subscription resumed."
       },
       "working": "Working",
-      "noCheckout": "Checkout is not available for this app right now. Try again in a moment."
+      "noCheckout": "Checkout is not available for this app right now. Try again in a moment.",
+      "paymentFailed": "The last card payment for this app did not go through. The app keeps working until {date} while the payment provider tries again. Pay now, or fix your payment method, to avoid a pause.",
+      "paymentFailedNoDate": "The last card payment for this app did not go through. The app keeps working while the payment provider tries again. Pay now, or fix your payment method, to avoid a pause.",
+      "autoRenewHint": "Your card is charged automatically on the renewal date. Cancel before then to stop it.",
+      "lastPaymentYear": "Last payment: {price} per year",
+      "nextPaymentYear": "The price of this app changed. Your next payment will be {price} per year.",
+      "priceLocked": "Your price is locked at {price} per month. It stays the same while you stay subscribed, even if the price of the app changes.",
+      "priceLockedYear": "Your price is locked at {price} per year. It stays the same while you stay subscribed, even if the price of the app changes."
     },
     "tools": {
       "open": "Open",
@@ -875,6 +901,24 @@
       },
       "soon": "Soon",
       "upgrade": "Upgrade"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Payment received",
+        "message": "Thank you. Your subscription is active and the app is ready to use."
+      },
+      "pending": {
+        "title": "Confirming your payment",
+        "message": "The payment provider has not confirmed the payment yet. This page updates when it does; you do not need to pay again."
+      },
+      "failed": {
+        "title": "The payment did not go through",
+        "message": "Nothing was charged. Subscribe again to try another way of paying."
+      },
+      "cancelled": {
+        "title": "Payment cancelled",
+        "message": "Nothing was charged. Subscribe again whenever you are ready."
+      }
     }
   }
 }

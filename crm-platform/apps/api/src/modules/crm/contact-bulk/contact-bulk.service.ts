@@ -497,6 +497,7 @@ export class ContactBulkService {
       'unsubscribed',
       'created_at',
       'owner_email',
+      'timezone',
       ...attributes.map((a) => `attr:${a.key}`),
     ];
 
@@ -549,6 +550,7 @@ export class ContactBulkService {
             row.isUnsubscribed ? 'true' : 'false',
             row.createdAt.toISOString(),
             guardFormula(row.ownerEmail ?? ''),
+            row.timezone ?? '',
             ...attributes.map((a) => {
               const v = row.data?.[a.key];
               return guardFormula(v === null || v === undefined ? '' : String(v));

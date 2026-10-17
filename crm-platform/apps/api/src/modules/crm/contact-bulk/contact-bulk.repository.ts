@@ -32,6 +32,8 @@ export interface ExportRow {
   createdAt: Date;
   /** The owner's login email, or null for an unassigned contact. */
   ownerEmail: string | null;
+  /** BL-193: the contact's stored IANA time zone, or null. */
+  timezone: string | null;
   data: Record<string, unknown>;
 }
 
@@ -277,6 +279,7 @@ export class ContactBulkRepository {
         ownerEmail: sql<
           string | null
         >`(SELECT u.email FROM users u WHERE u.org_id = ${contacts.orgId} AND u.id = ${contacts.ownerId})`,
+        timezone: contacts.timezone,
         data: contacts.data,
       })
       .from(contacts)

@@ -12,6 +12,9 @@ import {
 } from '../../../src/infra/providers/channel-telegram/telegram.port';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { TgBroadcastSenderService } from '../../../src/modules/channel-telegram/tg-broadcast-sender.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { ConsentKit, refusedWith } from '../contact-consent/broadcast-consent.support';
 import {
   Api,
   bearer,
@@ -453,5 +456,184 @@ describe('listing, deleting, isolation, permissions', () => {
       .send({ name: 'x', botId: b.uuid, body: 'x', chatIds: ['1001'] });
     expect(denied.status).toBe(403);
     expect((await api.http().get('/v2/telegram/broadcasts')).status).toBe(401);
+  });
+});
+
+describe('BL-141: the first send of a Telegram broadcast asks the ConsentGate', () => {
+  const kit = () => new ConsentKit(h, api);
+
+  /** The thread behind a chat of a draft, tied to a contact of its own. */
+  async function contactOfChat(t: Tenant, uuid: string, chat: string) {
+    const r = await h.owner.query(
+      `SELECT r.conversation_id FROM telegram_broadcast_recipients r
+         JOIN telegram_broadcasts b ON b.org_id = r.org_id AND b.id = r.telegram_broadcast_id
+        WHERE b.uuid = $1 AND r.chat_id = $2`,
+      [uuid, chat],
+    );
+    return kit().forConversation(t, Number(r.rows[0].conversation_id), 'telegram', `tgc-${chat}`);
+  }
+  const byChat = (rows: Awaited<ReturnType<typeof recipients>>) =>
+    Object.fromEntries(rows.map((r) => [r.chat_id, r]));
+
+  it('an opted-out chat is not messaged and keeps the gate reason; a withdrawn ledger, a granted one and a plain one behave', async () => {
+    const t = await api.signup('tcg1');
+    const b = await botWithChats(t, 4);
+    const made = await create(t, b, { chatIds: ids(4) });
+    const stopped = await contactOfChat(t, made.body.id, '1001');
+    const ledger = await contactOfChat(t, made.body.id, '1002');
+    const granted = await contactOfChat(t, made.body.id, '1003');
+    await contactOfChat(t, made.body.id, '1004');
+    await kit().unsubscribe(t, stopped.id);
+    await kit().record(t, ledger.uuid, 'telegram', 'withdrawn');
+    await kit().record(t, granted.uuid, 'telegram', 'granted');
+
+    await post(t, `broadcasts/${made.body.id}/start`);
+    expect(await sender.run(t.orgId, await runId(made.body.id))).toBe('done');
+
+    expect(calls.map((c) => c.chat)).toEqual(['1003', '1004']);
+    const rows = byChat(await recipients(made.body.id));
+    expect(rows['1001']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows['1002']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+    expect(rows['1003']).toMatchObject({ status: 'sent', error: null });
+    expect(rows['1004']).toMatchObject({ status: 'sent', error: null });
+    expect(await rowOf(made.body.id)).toMatchObject({
+      status: 'done',
+      sent: 2,
+      blocked: 2,
+      total: 4,
+    });
+  });
+
+  it('with the workspace switch on a chat needs a recorded grant: the granted one goes, the rest are skipped', async () => {
+    const t = await api.signup('tcg2');
+    const b = await botWithChats(t, 3);
+    const made = await create(t, b, { chatIds: ids(3) });
+    const granted = await contactOfChat(t, made.body.id, '1001');
+    await contactOfChat(t, made.body.id, '1002');
+    const orphan = await contactOfChat(t, made.body.id, '1003');
+    await kit().record(t, granted.uuid, 'telegram', 'granted');
+    // A chat that never became a contact has nothing on record.
+    await h.owner.query(
+      `UPDATE conversations SET contact_id = NULL WHERE org_id = $1 AND contact_id = $2`,
+      [t.orgId, orphan.id],
+    );
+    await kit().setSwitch(t, true);
+
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await sender.run(t.orgId, await runId(made.body.id));
+
+    expect(calls.map((c) => c.chat)).toEqual(['1001']);
+    const rows = byChat(await recipients(made.body.id));
+    expect(rows['1002']).toMatchObject({
+      status: 'blocked',
+      error: refusedWith('no_consent_recorded'),
+    });
+    expect(rows['1003']).toMatchObject({
+      status: 'blocked',
+      error: refusedWith('no_consent_recorded'),
+    });
+    expect(await rowOf(made.body.id)).toMatchObject({ sent: 1, blocked: 2 });
+  });
+
+  it('with the switch off (the default) a chat with no grant at all is messaged: only withdrawals block', async () => {
+    const t = await api.signup('tcg3');
+    const b = await botWithChats(t, 2);
+    const made = await create(t, b, { chatIds: ids(2) });
+    await contactOfChat(t, made.body.id, '1001');
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await sender.run(t.orgId, await runId(made.body.id));
+    expect(calls.map((c) => c.chat)).toEqual(['1001', '1002']);
+  });
+
+  it('a contact flagged as a minor is skipped when the workspace says no minors', async () => {
+    const t = await api.signup('tcg4');
+    const b = await botWithChats(t, 2);
+    const made = await create(t, b, { chatIds: ids(2) });
+    const child = await contactOfChat(t, made.body.id, '1001');
+    await contactOfChat(t, made.body.id, '1002');
+    await kit().minor(t, child.id);
+    await post(t, `broadcasts/${made.body.id}/start`);
+    await sender.run(t.orgId, await runId(made.body.id));
+    expect(calls.map((c) => c.chat)).toEqual(['1002']);
+    expect(byChat(await recipients(made.body.id))['1001']).toMatchObject({
+      status: 'blocked',
+      error: refusedWith('subject_minor'),
+    });
+  });
+
+  it('a service message is never blocked: STOP, the switch and a minor flag do not stop a reply or a utility notice', async () => {
+    const t = await api.signup('tcg5');
+    const b = await botWithChats(t, 1);
+    const made = await create(t, b, { chatIds: ids(1) });
+    const c = await contactOfChat(t, made.body.id, '1001');
+    await kit().unsubscribe(t, c.id);
+    await kit().minor(t, c.id);
+    await kit().setSwitch(t, true);
+    const gate = h.app.get(ConsentGate);
+    const subject = { type: 'contact', id: c.id } as const;
+    // The broadcast itself is refused ...
+    expect((await gate.check(t.orgId, subject, 'telegram', 'marketing_messaging')).decision).toBe(
+      'deny',
+    );
+    // ... a reply inside the 24 hour window and a utility notice are not.
+    expect(
+      await gate.check(t.orgId, subject, 'telegram', 'service_messaging', undefined, {
+        replyWindowOpen: true,
+      }),
+    ).toEqual({ decision: 'allow', reason: 'inbound_reply_window' });
+    expect(await gate.check(t.orgId, subject, 'telegram', 'service_messaging')).toEqual({
+      decision: 'allow',
+      reason: 'utility_exempt',
+    });
+  });
+
+  describe('held for the quiet hours, then released', () => {
+    const EVENING = new Date('2030-10-15T16:00:00Z');
+    const MORNING = new Date('2030-10-16T03:31:00Z');
+
+    it('is asked again on release: a chat that unsubscribed while it waited is not messaged', async () => {
+      const window = h.app.get(SendWindowService);
+      const realNow = window.now;
+      window.now = () => EVENING;
+      try {
+        const t = await api.signup('tcg6');
+        const b = await botWithChats(t, 2);
+        await h.owner.query(
+          `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, '21:00', '09:00')`,
+          [t.orgId],
+        );
+        const made = await create(t, b, { chatIds: ids(2) });
+        const first = await contactOfChat(t, made.body.id, '1001');
+        const second = await contactOfChat(t, made.body.id, '1002');
+        for (const c of [first, second]) {
+          await h.owner.query(
+            `UPDATE contacts SET data = jsonb_build_object('timezone', 'Asia/Kolkata') WHERE org_id = $1 AND id = $2`,
+            [t.orgId, c.id],
+          );
+        }
+        await post(t, `broadcasts/${made.body.id}/start`);
+        const id = await runId(made.body.id);
+        expect(await sender.run(t.orgId, id)).toBe('held');
+        expect(calls).toHaveLength(0);
+        expect((await recipients(made.body.id)).map((r) => r.status)).toEqual([
+          'pending',
+          'pending',
+        ]);
+
+        await kit().unsubscribe(t, first.id);
+        window.now = () => MORNING;
+        await h.owner.query(
+          `UPDATE telegram_broadcast_recipients SET held_until = now() - interval '1 minute' WHERE org_id = $1 AND held_until IS NOT NULL`,
+          [t.orgId],
+        );
+        expect(await sender.run(t.orgId, id)).toBe('done');
+        expect(calls.map((c) => c.chat)).toEqual(['1002']);
+        const rows = byChat(await recipients(made.body.id));
+        expect(rows['1001']).toMatchObject({ status: 'blocked', error: refusedWith('withdrawn') });
+        expect(rows['1002']).toMatchObject({ status: 'sent' });
+      } finally {
+        window.now = realNow;
+      }
+    });
   });
 });

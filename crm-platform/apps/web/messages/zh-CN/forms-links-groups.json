@@ -95,7 +95,28 @@
         "required": "必填",
         "removeField": "移除",
         "options": "选项（以逗号分隔）",
-        "optionsPlaceholder": "选项 1，选项 2，选项 3"
+        "optionsPlaceholder": "选项 1，选项 2，选项 3",
+        "mapsTo": "映射到",
+        "mapsToHint": "表单提交时将此答案保存到联系人属性中。",
+        "mapsToNone": "不保存到联系人属性",
+        "mapsToSystemGroup": "联系人字段",
+        "mapsToCustomGroup": "自定义属性",
+        "mapsToSystem": {
+          "name": "姓名",
+          "first_name": "名",
+          "last_name": "姓",
+          "email": "电子邮箱",
+          "title": "职位",
+          "language": "语言",
+          "address": "地址"
+        },
+        "mapsToPrivacyGroup": "隐私与同意",
+        "mapsToPrivacy": {
+          "age": "年龄（未成年人检查）",
+          "date_of_birth": "出生日期（未成年人检查）",
+          "consent_marketing": "营销同意（WhatsApp）",
+          "consent_service": "服务协议（非营销）"
+        }
       },
       "fieldKind": {
         "heading": "标题",

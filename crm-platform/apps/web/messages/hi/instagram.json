@@ -85,7 +85,8 @@
       "outsideWindow": "24 घंटे के बाहर",
       "selected": "{count, plural, one {# चुना गया} other {# चुने गए}}",
       "sent": "Instagram ब्रॉडकास्ट भेजा गया — {sent} पहुँचे{failed, plural, =0 {} other {, # विफल}}।",
-      "sentNone": "किसी भी प्राप्तकर्ता को नहीं भेजा जा सका। Instagram कनेक्शन जाँचें।"
+      "sentNone": "किसी भी प्राप्तकर्ता को नहीं भेजा जा सका। Instagram कनेक्शन जाँचें।",
+      "skipped": "सहमति के कारण संदेश नहीं भेजा गया: {count}"
     }
   }
 }

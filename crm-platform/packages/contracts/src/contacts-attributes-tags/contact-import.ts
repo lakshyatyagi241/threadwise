@@ -32,6 +32,8 @@ export const IMPORT_FIELDS = [
   'memo',
   'status',
   'source',
+  // BL-193: the contact's IANA time zone (`Asia/Kolkata`); a zone the file gives never replaces one a person chose.
+  'timezone',
   'consent',
   // BL-170: a file may carry a consent column per channel. `consent` stays the WhatsApp one (and the one a file with no per-channel
   // column is judged by); these two are read only when mapped, and grant only a row that says yes.
@@ -77,6 +79,7 @@ export const IMPORT_ALIASES: Record<ImportField, readonly string[]> = {
   memo: ['memo', 'note', 'notes', 'comment', 'comments'],
   status: ['status'],
   source: ['source'],
+  timezone: ['timezone', 'tz', 'timezonename', 'iana', 'ianatimezone', 'contacttimezone'],
   /** Marketing consent per row (yes / no). Applied only when the person importing ticks the consent confirmation. */
   consent: [
     'consent',
@@ -130,6 +133,7 @@ const DETECTION_ORDER: readonly ImportField[] = [
   'memo',
   'status',
   'source',
+  'timezone',
   'consent',
   'consentSms',
   'consentEmail',
@@ -321,6 +325,7 @@ export const IMPORT_REJECT_REASONS = [
   'missing_phone',
   'invalid_phone',
   'invalid_email',
+  'invalid_timezone',
   'group_name_too_long',
   'tag_name_too_long',
   'plan_limit_reached',

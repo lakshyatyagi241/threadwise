@@ -8,6 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
 import { ERROR_CODES, type CompanyResponse, type SessionResponse } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
+import { visibleColumns } from '../lib/columns';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { ActivityCard } from './activity-card';
 import { CompaniesTable, type CompaniesTableProps } from './companies-table';
@@ -77,6 +78,8 @@ const company = (over: Partial<CompanyResponse> = {}): CompanyResponse => ({
 
 const tableProps = (over: Partial<CompaniesTableProps> = {}): CompaniesTableProps => ({
   rows: [company()],
+  columns: visibleColumns(null, []),
+  fields: [],
   selected: new Set(),
   headerState: 'none',
   canDelete: true,

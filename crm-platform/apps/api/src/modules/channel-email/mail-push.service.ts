@@ -4,6 +4,7 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import { MailPlan } from './mail-plan';
+import { renewalDue } from './graph-push-rules';
 import { historyNotNewer } from './mail-push-rules';
 import { MailPushRepository, type PushMailbox } from './mail-push.repository';
 import { MailSyncPublisher } from './mail-sync.publisher';
@@ -24,7 +25,7 @@ const expiresAtOf = (state: Record<string, unknown> | null): number => {
  *    cursor is behind the history id gets a sync job (fixed job id: bursts and replays collapse into one). A stale or replayed id, an
  *    unknown address or a mailbox of a workspace without the add-on is ignored, silently.
  *  - `sweep`: starts a watch for each connected mailbox that has none (a new connection, or push just configured), renews the ones near
- *    expiry (a watch lasts 7 days), and stops and forgets the ones that lapsed: the mailbox needs reconnecting or is disconnected, push
+ *    expiry (a Gmail watch lasts 7 days, a Graph subscription under 3), and stops and forgets the ones that lapsed: the mailbox needs reconnecting or is disconnected, push
  *    was switched off at the platform, or the renewal kept failing until the watch ran out. A mailbox without a watch is simply polled.
  */
 @Injectable()
@@ -53,14 +54,29 @@ export class MailPushService {
     return queued;
   }
 
-  /** The sweep, over every workspace. Safe to run any number of times. */
+  /** The sweep, over every workspace and every provider that can push (Gmail, Microsoft). Safe to run any number of times. */
   async sweep(now = Date.now()): Promise<PushSweepResult> {
     const out: PushSweepResult = { started: 0, renewed: 0, stopped: 0, failed: 0 };
-    const driver = this.drivers.find('google');
+    for (const provider of ['google', 'microsoft'] as const) {
+      const part = await this.sweepProvider(provider, now);
+      out.started += part.started;
+      out.renewed += part.renewed;
+      out.stopped += part.stopped;
+      out.failed += part.failed;
+    }
+    return out;
+  }
+
+  private async sweepProvider(
+    provider: 'google' | 'microsoft',
+    now: number,
+  ): Promise<PushSweepResult> {
+    const out: PushSweepResult = { started: 0, renewed: 0, stopped: 0, failed: 0 };
+    const driver = this.drivers.find(provider);
     if (!driver?.push) return out;
     const available = await driver.push.available().catch(() => false);
     const renewBeforeMs = channelEmailEnv().MAIL_PUSH_RENEW_BEFORE_HOURS * 3_600_000;
-    const candidates = await this.db.privileged((tx) => this.repo.pushCandidates(tx));
+    const candidates = await this.db.privileged((tx) => this.repo.pushCandidates(tx, provider));
     const entitled = new Map<number, boolean>();
     for (const m of candidates) {
       try {
@@ -78,7 +94,7 @@ export class MailPushService {
           continue;
         }
         const left = expiresAtOf(m.pushState) - now;
-        if (hasWatch && left > renewBeforeMs) continue;
+        if (hasWatch && !renewalDue(m.pushState, now, renewBeforeMs)) continue;
         const state = await this.start(m);
         if (state) {
           if (hasWatch) out.renewed += 1;
@@ -91,7 +107,7 @@ export class MailPushService {
         out.failed += 1;
         this.logger.warn(
           { orgId: m.orgId, mailbox: m.uuid, err: (err as Error).message },
-          'gmail watch could not be started or renewed',
+          'mail push could not be started or renewed',
         );
         // A watch that already ran out cannot be left claiming to be live.
         if (m.pushState && expiresAtOf(m.pushState) <= now) {
@@ -124,7 +140,7 @@ export class MailPushService {
           this.drivers.get(mailbox.provider).push?.stop({ orgId: m.orgId, mailbox, access }),
         ),
       ).catch((err: Error) =>
-        this.logger.warn({ mailbox: m.uuid, err: err.message }, 'gmail watch not withdrawn'),
+        this.logger.warn({ mailbox: m.uuid, err: err.message }, 'mail push not withdrawn'),
       );
     }
     await this.db.txAs({ orgId: m.orgId, userId: null }, async (tx) => {

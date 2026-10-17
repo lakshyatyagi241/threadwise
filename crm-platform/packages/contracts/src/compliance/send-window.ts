@@ -143,6 +143,32 @@ export function isZone(zone: string | null | undefined): zone is string {
   }
 }
 
+let knownZones: string[] | null = null;
+const listedZones = (): string[] => {
+  knownZones ??=
+    typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : [];
+  return knownZones;
+};
+const titleCaseZone = (z: string): string =>
+  z
+    .toLowerCase()
+    .replace(/(^|[/_-])([a-z])/g, (_m, sep: string, c: string) => sep + c.toUpperCase());
+
+/**
+ * The zone with its usual capitalisation (`asia/kolkata` becomes `Asia/Kolkata`), or null when it is not a zone the runtime knows. Only the
+ * capitalisation is repaired: a name is never swapped for another one (the runtime's own canonical form of `Asia/Kolkata` is the older
+ * `Asia/Calcutta`, which is not what a person typed or picked), and `UTC` stays upper case.
+ */
+export function canonicalZone(zone: string | null | undefined): string | null {
+  if (!isZone(zone)) return null;
+  const z = zone.trim();
+  // Anything typed with a capital is taken as it is (`Etc/GMT+5`, `Asia/Kolkata`); only an all lower case name is repaired.
+  if (z !== z.toLowerCase()) return z;
+  const hit = listedZones().find((x) => x.toLowerCase() === z);
+  if (hit) return hit;
+  return z.includes('/') ? titleCaseZone(z) : z.toUpperCase();
+}
+
 const WEEKDAY: Record<string, number> = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 };
 
 interface Local {

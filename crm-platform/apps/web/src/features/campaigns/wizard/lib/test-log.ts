@@ -24,6 +24,8 @@ export type TestTone = 'neutral' | 'success' | 'warning' | 'danger';
 export const testTone = (status: string): TestTone =>
   status === 'failed'
     ? 'danger'
-    : status === 'delivered' || status === 'read'
-      ? 'success'
-      : 'neutral';
+    : status === 'held'
+      ? 'warning'
+      : status === 'delivered' || status === 'read'
+        ? 'success'
+        : 'neutral';

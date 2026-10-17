@@ -1475,9 +1475,11 @@
           "sent": "Terkirim",
           "delivered": "Tersampaikan",
           "read": "Terbaca",
-          "failed": "Gagal"
+          "failed": "Gagal",
+          "held": "Ditahan"
         },
-        "charged": "Dikenakan {amount}"
+        "charged": "Dikenakan {amount}",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "send": {
         "whenTitle": "Kapan dikirim",

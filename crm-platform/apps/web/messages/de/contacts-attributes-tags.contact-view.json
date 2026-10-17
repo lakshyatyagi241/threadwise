@@ -1,0 +1,183 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Kontakt-Schnellansicht",
+        "loading": "Kontakt wird geladen...",
+        "notFoundTitle": "Kontakt nicht gefunden",
+        "notFound": "Er wurde möglicherweise gelöscht, oder Sie haben keinen Zugriff darauf.",
+        "close": "Schließen",
+        "seeAll": "Alle Details anzeigen",
+        "previous": "Vorheriger Kontakt",
+        "next": "Nächster Kontakt",
+        "position": "{index} von {total}",
+        "rail": "Kontaktbereiche",
+        "moreTabs": "Weitere Bereiche",
+        "more": "+{count} weitere",
+        "tab_overview": "Übersicht",
+        "tab_activities": "Aktivität",
+        "tab_notes": "Notizen",
+        "tab_tasks": "Aufgaben",
+        "tab_meetings": "Meetings",
+        "tab_files": "Dateien",
+        "tab_conversations": "Gespräche",
+        "tab_stats": "Kommunikationsstatistik",
+        "tab_details": "Eigenschaften",
+        "openFull": "Auf der Detailseite öffnen"
+      },
+      "actions": {
+        "note": "Notiz",
+        "task": "Aufgabe",
+        "meeting": "Meeting",
+        "addCompany": "Unternehmen hinzufügen",
+        "changeCompany": "Unternehmen ändern",
+        "channels": "Kontakt anschreiben oder anrufen",
+        "more": "Weitere Aktionen",
+        "edit": "Kontakt bearbeiten",
+        "delete": "Kontakt löschen",
+        "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
+        "deleteFailed": "Der Kontakt konnte nicht gelöscht werden."
+      },
+      "header": {
+        "jobTitle": "Jobtitel",
+        "jobTitlePlaceholder": "Jobtitel hinzufügen...",
+        "editJobTitle": "Jobtitel bearbeiten",
+        "jobTitleConflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
+        "jobTitleFailed": "Der Jobtitel konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+        "leadScore": "Lead-Score",
+        "leadScoreAria": "Lead-Score {score}. Details zum Score anzeigen.",
+        "owner": "Verantwortlicher"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Webseite",
+        "open": "Profil auf {network} öffnen"
+      },
+      "subscription": {
+        "title": "Abonnementstatus",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "E-Mail",
+          "sms": "SMS"
+        },
+        "yes": "Ja",
+        "no": "Nein",
+        "optedOut": "Von Marketingnachrichten abgemeldet",
+        "optedOutNote": "Dieser Kontakt hat Marketingnachrichten abgelehnt, daher steht jeder Kanal auf Nein.",
+        "proof": "Den Nachweis für jede Einwilligung finden Sie im Einwilligungsprotokoll.",
+        "openConsent": "Einwilligungskarte öffnen"
+      },
+      "score": {
+        "title": "Lead-Score",
+        "details": "Score-Details",
+        "hideDetails": "Details ausblenden",
+        "none": "Noch nicht bewertet",
+        "aria": "Lead-Score {score}, {band}"
+      },
+      "owner": {
+        "title": "Verantwortlicher und Zuweisung",
+        "owner": "Verantwortlicher",
+        "tags": "Tags",
+        "groups": "Gruppen"
+      },
+      "location": {
+        "title": "Standort",
+        "address": "Adresse",
+        "country": "Land",
+        "timeZone": "Zeitzone",
+        "language": "Sprache"
+      },
+      "compliance": {
+        "title": "Datenschutz",
+        "optedOut": "Von Marketing abgemeldet",
+        "allowed": "Marketing erlaubt",
+        "noFlags": "Keine Datenschutzmarkierungen"
+      },
+      "overview": {
+        "information": "Kontakt"
+      },
+      "tabs": {
+        "info": "Kontaktinformationen",
+        "social": "Soziale Medien",
+        "source": "Lead-Quelle",
+        "custom": "Benutzerdefinierte Felder"
+      },
+      "info": {
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "fax": "Fax",
+        "company": "Unternehmen",
+        "jobTitle": "Jobtitel",
+        "language": "Sprache",
+        "address": "Adresse",
+        "memo": "Anmerkung",
+        "contactId": "Kontakt-ID",
+        "createdAt": "Erstellt am",
+        "lastActivity": "Letzte Aktivität",
+        "source": "Quelle",
+        "noCustomFields": "Dieser Kontakt hat noch keine Werte in benutzerdefinierten Feldern.",
+        "noLeadSource": "Für diesen Kontakt ist keine Lead-Quelle erfasst.",
+        "dateOfBirth": "Geburtsdatum"
+      },
+      "details": {
+        "title": "Kontaktdetails",
+        "stage": "Lebenszyklusphase",
+        "otherProperties": "Weitere Eigenschaften"
+      },
+      "company": {
+        "title": "Unternehmen",
+        "none": "Dieser Kontakt ist keinem Unternehmen zugeordnet.",
+        "hint": "Suchen Sie nach einem Unternehmen oder geben Sie einen neuen Namen ein, um es anzulegen.",
+        "saved": "Unternehmen gespeichert.",
+        "removed": "Das Unternehmen wurde von diesem Kontakt entfernt.",
+        "failed": "Das Unternehmen konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+        "conflict": "Jemand anderes hat diesen Kontakt zuvor geändert. Er wurde neu geladen; versuchen Sie es erneut."
+      },
+      "sections": {
+        "lead-source": "Lead-Quelle"
+      },
+      "nav": {
+        "back": "Zurück zur Liste",
+        "label": "Kontaktbereiche",
+        "contactDetails": "Kontaktdetails",
+        "related": "Verknüpft",
+        "section": {
+          "overview": "Übersicht",
+          "activities": "Aktivitäten",
+          "conversations": "Gespräche",
+          "details": "Kontaktdetails",
+          "stats": "Kommunikationsstatistik",
+          "notes": "Notizen",
+          "meetings": "Meetings",
+          "files": "Dateien",
+          "tasks": "Aufgaben",
+          "deals": "Deals",
+          "appointments": "Termine",
+          "sales": "Rechnungen und Dokumente",
+          "lead-source": "Lead-Quelle",
+          "company": "Unternehmen",
+          "consent": "Einwilligung",
+          "history": "Feldverlauf"
+        }
+      },
+      "stages": {
+        "title": "Lebenszyklus",
+        "stages": "Lebenszyklusphase",
+        "status": "Status",
+        "noStatuses": "Diese Phase hat keine Status.",
+        "statusChanged": "Status auf {status} gesetzt.",
+        "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
+        "forbidden": "Sie haben keine Berechtigung, diesen Kontakt zu ändern.",
+        "statusFailed": "Der Status konnte nicht geändert werden. Versuchen Sie es erneut."
+      }
+    }
+  }
+}

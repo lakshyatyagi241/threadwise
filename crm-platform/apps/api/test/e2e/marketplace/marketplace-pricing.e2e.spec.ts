@@ -604,7 +604,9 @@ describe('a workspace sees the price and has to subscribe', () => {
       access: 'subscription_required',
       includedBy: null,
     });
-    expect(d.pricing.checkoutPath).toMatch(/^\/billing\/checkout\/mkt_[0-9a-f]{20}$/);
+    expect(d.pricing.checkoutPath).toMatch(
+      /^\/billing\/checkout\/mkt_[0-9a-f]{20}\?return=%2Fmarketplace%2Fapp%2Fquote-pro$/,
+    );
     expect(JSON.stringify(d)).not.toContain('Developer proposes');
     const list = marketAppListSchema.parse((await mp(A).get('/apps?kind=mini_app')).body);
     expect(list.data.find((c) => c.slug === 'quote-pro')!.pricing.access).toBe(
@@ -648,7 +650,9 @@ describe('a workspace sees the price and has to subscribe', () => {
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     const out = marketSubscribeResultSchema.parse(res.body);
     expect(out).toMatchObject({ outcome: 'checkout', subscription: null });
-    expect(out.checkout!.path).toBe(`/billing/checkout/${out.checkout!.packSlug}`);
+    expect(out.checkout!.path).toBe(
+      `/billing/checkout/${out.checkout!.packSlug}?return=%2Fmarketplace%2Fapp%2Fquote-pro`,
+    );
     expect((await mp(A).post('/apps/free-app/subscribe', {})).body.outcome).toBe('free');
     expect((await mp(A).post('/apps/nothere/subscribe', {})).status).toBe(404);
     // the trial the app does not offer is refused, and nothing is granted

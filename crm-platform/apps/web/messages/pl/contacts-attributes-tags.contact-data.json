@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Transakcje",
+        "loading": "Wczytywanie transakcji",
+        "empty": "Ten kontakt nie ma jeszcze transakcji.",
+        "unavailable": "Transakcje nie są dostępne w Twoim planie lub Twoja rola nie daje do nich dostępu.",
+        "listLabel": "Transakcje tego kontaktu",
+        "openRollup": "{count, plural, one {# otwarta transakcja} few {# otwarte transakcje} many {# otwartych transakcji} other {# otwartej transakcji}}",
+        "wonRollup": "{count, plural, one {# wygrana transakcja} few {# wygrane transakcje} many {# wygranych transakcji} other {# wygranej transakcji}}",
+        "noValue": "Brak wartości",
+        "capped": "Wyświetlono pierwsze {count} transakcji. Sumy powyżej obejmują wszystkie transakcje.",
+        "pipeline": "Lejek: {name}",
+        "closes": "Przewidywane zamknięcie: {date}",
+        "owner": "Właściciel: {name}",
+        "status": {
+          "open": "Otwarta",
+          "won": "Wygrana",
+          "lost": "Utracona"
+        }
+      },
+      "conversations": {
+        "title": "Rozmowy",
+        "loading": "Wczytywanie rozmów",
+        "empty": "Nie znaleziono rozmów dla tego kontaktu.",
+        "listLabel": "Rozmowy tego kontaktu",
+        "unread": "{count, plural, one {# nieprzeczytana wiadomość} few {# nieprzeczytane wiadomości} many {# nieprzeczytanych wiadomości} other {# nieprzeczytanej wiadomości}}",
+        "open": "Otwórz",
+        "openLabel": "Otwórz rozmowę {title}",
+        "noPreview": "Brak wiadomości",
+        "lastMessage": "Ostatnia wiadomość: {time}",
+        "assignedTo": "Przypisano do: {name}",
+        "unassigned": "Nieprzypisana",
+        "footnote": "Znaleziono według numeru telefonu, adresu e-mail lub nazwy kontaktu. Zarchiwizowane rozmowy nie są wyświetlane.",
+        "status": {
+          "open": "Otwarta",
+          "pending": "Oczekująca",
+          "snoozed": "Odłożona",
+          "resolved": "Rozwiązana",
+          "closed": "Zamknięta",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Historia pól",
+        "title": "Historia pól kontaktu",
+        "close": "Zamknij",
+        "loading": "Wczytywanie historii",
+        "empty": "Dla tego kontaktu nie zapisano jeszcze żadnych zmian pól.",
+        "loadMore": "Wczytaj więcej",
+        "changedTo": "zmieniono na",
+        "noValue": "puste",
+        "by": "Autor: {actor}",
+        "actor": {
+          "user": "użytkownik",
+          "system": "system",
+          "api": "API"
+        },
+        "fields": {
+          "name": "Imię i nazwisko",
+          "firstName": "Imię",
+          "lastName": "Nazwisko",
+          "email": "E-mail",
+          "phone": "Telefon",
+          "companyId": "Firma",
+          "ownerId": "Właściciel",
+          "lifecycleStage": "Etap cyklu życia",
+          "lifecycleState": "Stan cyklu życia",
+          "status": "Status",
+          "lostReason": "Powód utraty",
+          "leadScore": "Ocena leada",
+          "source": "Źródło",
+          "isUnsubscribed": "Wypisany"
+        }
+      },
+      "stats": {
+        "title": "Statystyki komunikacji",
+        "loading": "Wczytywanie statystyk",
+        "conversations": "Rozmowy",
+        "unread": "Nieprzeczytane wiadomości",
+        "lastInbound": "Ostatnia odebrana wiadomość",
+        "lastOutbound": "Ostatnia wysłana wiadomość",
+        "calls": "Połączenia",
+        "callsAnswered": "Odebrane połączenia",
+        "callsMissed": "Nieodebrane połączenia",
+        "callMinutes": "Minuty połączeń",
+        "openTasks": "Otwarte zadania",
+        "leadScore": "Ocena leada",
+        "lastActivity": "Ostatnia aktywność",
+        "created": "Utworzono",
+        "none": "Jeszcze brak",
+        "atLeast": "{count}+",
+        "footnote": "Dane o wiadomościach obejmują rozmowy znalezione dla tego kontaktu (według numeru telefonu, adresu e-mail lub nazwy). Dane o połączeniach obejmują ostatni rok i są dopasowane według numeru telefonu lub nazwy.",
+        "callsPartial": "Dopasowano więcej połączeń, niż udało się odczytać, więc dane o połączeniach mogą być zaniżone."
+      }
+    }
+  }
+}

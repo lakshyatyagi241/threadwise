@@ -161,7 +161,7 @@ describe('bookings made while no calendar was connected', () => {
     const ev = await outboxEvent(a.orgId, 'appointment_calendar.connected');
     await consumer.handle(ev);
     await consumer.handle(ev);
-    const jobs = await queue.getJobs(['wait', 'delayed', 'active']);
+    const jobs = await queue.getJobs(['waiting', 'delayed', 'active']);
     expect(jobs.filter((j) => j.data.orgId === a.orgId)).toHaveLength(1);
     expect(jobs[0]!.id).toBe(`calendar-backfill-${a.orgId}`);
     expect(jobs[0]!.data).toMatchObject({ orgId: a.orgId });
@@ -339,7 +339,7 @@ describe('asking for a back-fill', () => {
     expect(res.body).toEqual({ queued: true, pending: 1 });
     const twice = await api.post(none.admin, '/v2/appointments/calendar/backfill');
     expect(twice.body.queued).toBe(true);
-    const jobs = (await queue.getJobs(['wait', 'delayed', 'active'])).filter(
+    const jobs = (await queue.getJobs(['waiting', 'delayed', 'active'])).filter(
       (j) => j.data.orgId === none.orgId,
     );
     expect(jobs).toHaveLength(1);

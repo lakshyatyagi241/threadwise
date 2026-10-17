@@ -72,8 +72,34 @@ describe('the message and the button', () => {
   });
 
   it('a result is none when nothing went, partial when some failed, all otherwise', () => {
-    expect(outcomeOf({ sent: 0, failed: 3, errors: [] })).toBe('none');
-    expect(outcomeOf({ sent: 2, failed: 1, errors: [] })).toBe('partial');
-    expect(outcomeOf({ sent: 2, failed: 0, errors: [] })).toBe('all');
+    const base = { errors: [], held: 0, heldUntil: null, skipped: 0, skippedReasons: [] };
+    expect(outcomeOf({ ...base, sent: 0, failed: 3 })).toBe('none');
+    expect(outcomeOf({ ...base, sent: 2, failed: 1 })).toBe('partial');
+    expect(outcomeOf({ ...base, sent: 2, failed: 0 })).toBe('all');
+  });
+
+  it('a result where everyone waits for the quiet hours is held, not none (BL-191)', () => {
+    const at = '2026-10-16T03:30:00.000Z';
+    const none = { skipped: 0, skippedReasons: [] };
+    expect(outcomeOf({ sent: 0, failed: 0, errors: [], held: 4, heldUntil: at, ...none })).toBe(
+      'held',
+    );
+    // Some failed while others wait: nothing went, so it still reads as a failure to act on.
+    expect(outcomeOf({ sent: 0, failed: 1, errors: [], held: 3, heldUntil: at, ...none })).toBe(
+      'none',
+    );
+    expect(outcomeOf({ sent: 1, failed: 0, errors: [], held: 3, heldUntil: at, ...none })).toBe(
+      'all',
+    );
+  });
+
+  it('a result where the consent check refused everyone who was not waiting is skipped, not none (BL-141)', () => {
+    const base = { errors: [], held: 0, heldUntil: null };
+    const skippedReasons = [{ reason: 'withdrawn' as const, count: 3 }];
+    expect(outcomeOf({ ...base, sent: 0, failed: 0, skipped: 3, skippedReasons })).toBe('skipped');
+    // Some went, the rest were refused: the send worked, the refusals are listed beside it.
+    expect(outcomeOf({ ...base, sent: 2, failed: 0, skipped: 3, skippedReasons })).toBe('all');
+    // A failure is still a failure to act on.
+    expect(outcomeOf({ ...base, sent: 0, failed: 1, skipped: 2, skippedReasons })).toBe('none');
   });
 });

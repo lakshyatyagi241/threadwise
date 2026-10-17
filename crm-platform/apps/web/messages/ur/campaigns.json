@@ -1475,9 +1475,11 @@
           "sent": "بھیجا گیا",
           "delivered": "ڈیلیور ہوا",
           "read": "پڑھا گیا",
-          "failed": "ناکام"
+          "failed": "ناکام",
+          "held": "روکا گیا"
         },
-        "charged": "{amount} چارج ہوا"
+        "charged": "{amount} چارج ہوا",
+        "heldUntil": "{when} تک روکا گیا (خاموش اوقات)"
       },
       "send": {
         "whenTitle": "کب بھیجنا ہے",

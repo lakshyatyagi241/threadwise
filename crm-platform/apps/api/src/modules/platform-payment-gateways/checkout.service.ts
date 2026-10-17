@@ -55,6 +55,8 @@ interface PlanRow extends PlanPricingFacts {
   currency: string;
   billingDuration: number;
   billingMode: 'one_time' | 'recurring';
+  /** An add-on only: the price of a year when it can be bought yearly (a Marketplace app with a yearly price). */
+  annualAmount: string | null;
   isActive: boolean;
 }
 
@@ -128,7 +130,7 @@ export class CheckoutService {
   private async loadPlan(tx: Tx, slug: string): Promise<PlanRow> {
     const res = await tx.execute(sql`
       SELECT slug, name, subtitle, kind, amount::text AS amount, offer_amount::text AS offer_amount, currency, billing_unit,
-             billing_duration, billing_mode, is_free, is_lifetime, is_custom_quote, is_active
+             billing_duration, billing_mode, annual_amount::text AS annual_amount, is_free, is_lifetime, is_custom_quote, is_active
       FROM plans WHERE slug = ${slug}`);
     const r = res.rows[0] as Record<string, unknown> | undefined;
     if (!r || !r.is_active) throw AppError.notFound('Plan', slug);
@@ -143,6 +145,7 @@ export class CheckoutService {
       billingUnit: r.billing_unit as PlanRow['billingUnit'],
       billingDuration: Number(r.billing_duration),
       billingMode: r.billing_mode === 'recurring' ? 'recurring' : 'one_time',
+      annualAmount: r.kind === 'addon' ? ((r.annual_amount as string | null) ?? null) : null,
       isFree: r.is_free as boolean,
       isLifetime: r.is_lifetime as boolean,
       isCustomQuote: r.is_custom_quote as boolean,
@@ -243,6 +246,21 @@ export class CheckoutService {
     }
   }
 
+  /** The buyer's own locked price for this app's add-on and period, or null. Read in the buyer's transaction (row-level security). */
+  private async lockedPrice(
+    tx: Tx,
+    slug: string,
+    period: 'monthly' | 'yearly',
+  ): Promise<{ amount: string; currency: string } | null> {
+    const res = await tx.execute(sql`
+      SELECT s.amount::text AS amount, s.currency
+      FROM marketplace_subscriptions s JOIN plans p ON p.marketplace_app_id = s.app_id
+      WHERE p.slug = ${slug} AND s.org_id = ${RequestContextStore.require().orgId}
+        AND s.price_locked AND s.status = 'active' AND s.source = 'purchase' AND s.billing_period = ${period}`);
+    const r = res.rows[0] as { amount: string | null; currency: string | null } | undefined;
+    return r?.amount && r.currency ? { amount: r.amount, currency: r.currency } : null;
+  }
+
   private chooseCurrency(
     requested: string | undefined,
     preferred: string,
@@ -272,20 +290,39 @@ export class CheckoutService {
     );
     const { currency, list } = this.chooseCurrency(query.currency, plan.currency, available);
 
-    const chargeable = plan.offerAmount ?? plan.amount;
-    const listMinor = majorToMinor(chargeable, plan.currency);
+    // An add-on with a yearly price (a Marketplace app) is bought for a month or for a year at that price; nothing else is priced this way.
+    const annual = plan.annualAmount;
+    const yearlyPack = annual !== null && query.period === 'yearly';
+    // A subscriber whose price is locked (grandfathered) pays what they first paid for the same period, whatever the listing costs now.
+    const locked =
+      plan.kind === 'addon'
+        ? await this.lockedPrice(tx, plan.slug, yearlyPack ? 'yearly' : 'monthly')
+        : null;
+    const chargeable = locked
+      ? locked.amount
+      : yearlyPack
+        ? annual
+        : (plan.offerAmount ?? plan.amount);
+    const baseCurrency = locked ? locked.currency : plan.currency;
+    const listMinor = majorToMinor(chargeable, baseCurrency);
     const converted =
-      listMinor === null ? null : convertMinor(listMinor, plan.currency, currency, rates);
+      listMinor === null ? null : convertMinor(listMinor, baseCurrency, currency, rates);
     if (converted === null) {
       throw unavailable(
         `This plan cannot be priced in ${currency}.`,
         ERROR_CODES.PAYGW_CURRENCY_UNSUPPORTED,
       );
     }
-    const period = billingPeriodFor(plan, query.period, s.yearlyToggleEnabled);
-    // A natively yearly plan's price is already the yearly price; a monthly plan sold yearly is 12 months less the discount.
+    const period =
+      annual !== null
+        ? yearlyPack
+          ? 'yearly'
+          : 'monthly'
+        : billingPeriodFor(plan, query.period, s.yearlyToggleEnabled);
+    // A natively yearly plan's price is already the yearly price, and so is an add-on's yearly price; a monthly plan sold yearly is 12
+    // months less the discount.
     const subtotal =
-      period === 'yearly' && plan.billingUnit !== 'years'
+      period === 'yearly' && plan.billingUnit !== 'years' && !yearlyPack
         ? yearlyMinor(converted, s.yearlyDiscountPct)
         : converted;
     const parts = breakdown(subtotal, currency, 0n, s.taxEnabled ? s.taxRate : '0');
@@ -294,12 +331,15 @@ export class CheckoutService {
       itemName: plan.name,
       itemSubtitle: plan.subtitle,
       period,
-      periods: [
-        ...(plan.billingUnit === 'years' ? [] : (['monthly'] as const)),
-        ...(billingPeriodFor(plan, 'yearly', s.yearlyToggleEnabled) === 'yearly'
-          ? (['yearly'] as const)
-          : []),
-      ],
+      periods:
+        annual !== null
+          ? ['monthly', 'yearly']
+          : [
+              ...(plan.billingUnit === 'years' ? [] : (['monthly'] as const)),
+              ...(billingPeriodFor(plan, 'yearly', s.yearlyToggleEnabled) === 'yearly'
+                ? (['yearly'] as const)
+                : []),
+            ],
       currency,
       available: list,
       gateways: active.filter((g) => acceptsCurrency(g.supported_currencies, currency)),
@@ -309,8 +349,8 @@ export class CheckoutService {
       planSlug: plan.slug,
       term: {
         name: plan.name,
-        unit: plan.billingUnit,
-        duration: plan.billingDuration,
+        unit: yearlyPack ? 'years' : plan.billingUnit,
+        duration: yearlyPack ? 1 : plan.billingDuration,
         isFree: plan.isFree,
         isLifetime: plan.isLifetime,
         isCustomQuote: plan.isCustomQuote,
@@ -413,6 +453,7 @@ export class CheckoutService {
             planAmount: p.term.listAmount,
             autoRenew: true,
             period: p.period,
+            yearlyRenews: p.term.recurringAddon,
           }),
       })),
       coupon: coupon
@@ -563,6 +604,7 @@ export class CheckoutService {
         // A recurring add-on is a subscription by definition: there is no "buy one cycle" tick for it.
         autoRenew: t.recurringAddon ? true : autoRenew,
         period: priced.period,
+        yearlyRenews: t.recurringAddon,
       });
 
     // 2. the pending order, with its audit row and outbox event, committed before the provider is called.

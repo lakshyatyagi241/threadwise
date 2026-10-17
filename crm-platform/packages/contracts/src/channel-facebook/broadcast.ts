@@ -64,6 +64,9 @@ export const fbBroadcastSchema = z.object({
   blocked: z.number().int(),
   /** Whole percent; blocked counts as done (nothing more can be done for them). */
   progress: z.number().int(),
+  /** BL-191: people held for the workspace's quiet hours (still pending), and the first instant one of them may be messaged. */
+  held: z.number().int(),
+  heldUntil: z.string().datetime().nullable(),
   lastError: z.string().nullable(),
   startedAt: z.string().datetime().nullable(),
   finishedAt: z.string().datetime().nullable(),

@@ -13,6 +13,8 @@ export interface FulfilInput {
   pack: string;
   /** The paid order. Replaying the same order for the same pack is a no-op. */
   orderId: number | null;
+  /** The period the order bought. `yearly` makes a purchase of an add-on that has a yearly price run one year. */
+  period?: 'monthly' | 'yearly';
   now?: Date;
 }
 
@@ -31,6 +33,7 @@ interface PackRow {
   is_lifetime: boolean;
   billing_unit: BillingUnit;
   billing_duration: number;
+  annual_amount: string | null;
   marketplace_app_id: number | null;
 }
 
@@ -65,10 +68,10 @@ export class AddonFulfilmentService {
     // slug first, then uuid (TW-ADD-032 rule 2); an add-on only, never a plan
     const res = await tx.execute(
       UUID.test(input.pack)
-        ? sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration,
+        ? sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration, annual_amount::text AS annual_amount,
                      marketplace_app_id::int AS marketplace_app_id
               FROM plans WHERE kind = 'addon' AND (slug = ${input.pack} OR uuid = ${input.pack}::uuid)`
-        : sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration,
+        : sql`SELECT id::int AS id, slug, is_free, is_lifetime, billing_unit, billing_duration, annual_amount::text AS annual_amount,
                      marketplace_app_id::int AS marketplace_app_id
               FROM plans WHERE kind = 'addon' AND slug = ${input.pack}`,
     );
@@ -89,11 +92,13 @@ export class AddonFulfilmentService {
       // A row with no end (a comp until revoked) has nothing to extend: the new term counts from now.
       currentEnd = c?.ends_at && !c.open_ended ? new Date(c.ends_at) : null;
     }
+    // A yearly order of an add-on that has a yearly price is a year, whatever the monthly cadence of the pack says.
+    const yearly = input.period === 'yearly' && pack.annual_amount !== null;
     const endsAt = addonEndsAt(termBase(now, forApp, currentEnd), {
       isFree: pack.is_free,
       isLifetime: pack.is_lifetime,
-      billingUnit: pack.billing_unit,
-      billingDuration: pack.billing_duration,
+      billingUnit: yearly ? 'years' : pack.billing_unit,
+      billingDuration: yearly ? 1 : pack.billing_duration,
     });
 
     const ins = await tx.execute(sql`

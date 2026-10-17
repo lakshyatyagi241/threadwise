@@ -6,6 +6,7 @@ import {
   parsePresetFavorites,
   presetFilters,
   PRESET_VIEWS,
+  QUICK_PRESETS,
   togglePresetFavorite,
 } from './preset-views';
 
@@ -36,6 +37,26 @@ describe('built-in contact views', () => {
       field: 'lastActivityAt',
       operator: 'is_empty',
     });
+  });
+
+  it('Unassigned and Hot leads are plain filters: the owner filter, and a lead score in the hot band', () => {
+    expect(presetFilters('unassigned', ME).owner).toBe('none');
+    expect(JSON.parse(presetFilters('hotLeads', ME).rules!).children[0]).toMatchObject({
+      field: 'leadScore',
+      operator: 'gte',
+      value: 67,
+    });
+  });
+
+  it('the quick chips are five built-in views, in the order a small business reaches for them', () => {
+    expect([...QUICK_PRESETS]).toEqual([
+      'myContacts',
+      'unassigned',
+      'newThisWeek',
+      'needsFollowUp',
+      'hotLeads',
+    ]);
+    for (const p of QUICK_PRESETS) expect(PRESET_VIEWS).toContain(p);
   });
 
   it('favourites are added, removed and read back, ignoring unknown names', () => {

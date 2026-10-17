@@ -30,6 +30,10 @@ The Shopify screen connects your Shopify store to this workspace. Once connected
 - **Settings** shows the store address, the scopes granted and the registered webhooks. **Disconnect** removes the webhooks and keeps your settings.
 - **Invoices** lists the invoices made from this store's orders. Turn on **Invoice this store's orders automatically** and choose when: placed, paid (the default) or fulfilled. Each order is invoiced once, even if the store sends the event again, and the buyer's copy is queued on WhatsApp, or by email without a phone number. It needs the invoicing feature on your plan.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), an offer or a win-back message that uses a marketing template is not sent to a customer while it is night for them. The rest of the audience is sent, and the held customers are sent when their hours end. The result keeps the totals of both. Customers who unsubscribed meanwhile are skipped. A template in the utility category is never held. Order and abandoned cart messages are not affected.
+
 ## Plan and access
 
 You need the Shopify permission to open the screen. Connecting, syncing and disconnecting need the connect permission. Automations need their own permission, and sending offers needs the broadcast permission. The Shopify integration must be included in your plan.

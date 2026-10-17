@@ -1475,9 +1475,11 @@
           "sent": "ส่งแล้ว",
           "delivered": "ส่งถึงแล้ว",
           "read": "อ่านแล้ว",
-          "failed": "ล้มเหลว"
+          "failed": "ล้มเหลว",
+          "held": "พักไว้"
         },
-        "charged": "เรียกเก็บ {amount}"
+        "charged": "เรียกเก็บ {amount}",
+        "heldUntil": "พักไว้จนถึง {when} (ช่วงเวลางดรบกวน)"
       },
       "send": {
         "whenTitle": "เวลาที่ส่ง",

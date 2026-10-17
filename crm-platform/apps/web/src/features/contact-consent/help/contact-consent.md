@@ -88,6 +88,14 @@ A STOP (or an unsubscribe link, or a person marking the contact as opted out) st
 
 With **Require recorded consent for marketing sends** on, a MARKETING template also needs a recorded consent on that channel; replies never do.
 
+## Broadcasts on Messenger, Telegram, Viber, LINE, WeChat and Instagram
+
+The broadcasts of these channels check consent for every person at the moment they are sent, the first time as well as when a message was held back for the quiet hours. Someone who opted out of marketing (by replying STOP on any channel, through an unsubscribe link, or because a person marked them) is not messaged. With **Require recorded consent for marketing sends** on, a person also needs a recorded consent on that channel; a chat or follower that is not a contact yet has none. A contact marked as a minor is held back when your children setting says so (see below). Replies in a conversation and service notices are never held back by this.
+
+Nobody is dropped silently. On Messenger, Telegram and LINE the person is marked **Blocked** and the broadcast's Blocked count includes them; on Viber they count as **Failed** (Viber has no blocked state); on the Instagram broadcast page the result says how many were not messaged because of consent, with the reason for each group. The reason is the same sentence the contact's Consent card uses, for example "Not allowed: the contact unsubscribed".
+
+WeChat sends one call to an audience that WeChat itself works out. A broadcast to **picked people** leaves out whoever is refused and sends to the rest (it needs at least two people left). A broadcast to **all followers** or to **a tag** cannot leave anyone out, so it is refused, with the reason in the broadcast's error, when your workspace requires recorded consent or when any follower you already know is refused. Send to a picked list instead.
+
 ## The unsubscribe link in marketing emails
 
 A marketing email carries a personal unsubscribe link and the standard one-click unsubscribe header, so the mail app can show its own Unsubscribe button. The link opens a short page (no login) with one button. Pressing it records that the contact opted out of marketing emails, and every marketing path then skips them, including WhatsApp and SMS. A marketing email can only go to someone who is a contact, so there is always a link that works.

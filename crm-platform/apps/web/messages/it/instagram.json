@@ -85,7 +85,8 @@
       "outsideWindow": "Oltre 24 ore",
       "selected": "{count, plural, one {# selezionata} other {# selezionate}}",
       "sent": "Broadcast Instagram inviato: {sent} consegnati{failed, plural, =0 {} other {, # non riusciti}}.",
-      "sentNone": "Impossibile inviare a nessun destinatario. Controlla la connessione a Instagram."
+      "sentNone": "Impossibile inviare a nessun destinatario. Controlla la connessione a Instagram.",
+      "skipped": "Non contattati a causa del consenso: {count}"
     }
   }
 }

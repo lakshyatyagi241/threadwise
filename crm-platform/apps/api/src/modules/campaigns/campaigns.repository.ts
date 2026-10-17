@@ -628,15 +628,28 @@ export class CampaignsRepository {
     id: number,
     maxAttempts: number,
     limit: number,
+    /** BL-192: the catch-up of a recurring campaign takes only the recipients the quiet hours held back, whose hour has come. */
+    onlyHeld = false,
+    /** Recipients this run already held for the quiet hours: not claimed again by it, whatever the clocks say. */
+    skip: readonly number[] = [],
   ): Promise<ClaimedRecipient[]> {
+    const skipSql =
+      skip.length === 0
+        ? sql``
+        : sql`AND r.id NOT IN (${sql.join(
+            skip.map((n) => sql`${n}::bigint`),
+            sql`, `,
+          )})`;
     const res = await tx.execute(sql`
       WITH picked AS MATERIALIZED (
         SELECT r.id, (r.held_until IS NOT NULL) AS was_held FROM wp_campaign_contacts r
         WHERE r.org_id = ${orgId} AND r.campaign_id = ${id}
           -- A recipient held for the quiet hours (BL-177) is left alone until its hour has come.
           AND (r.held_until IS NULL OR r.held_until <= now())
+          AND (${onlyHeld}::boolean = false OR r.held_until IS NOT NULL)
+          ${skipSql}
           AND (r.status = 'queued'
-               OR (r.status = 'failed' AND r.send_attempts < ${maxAttempts}
+               OR (r.status = 'failed' AND ${onlyHeld}::boolean = false AND r.send_attempts < ${maxAttempts}
                    AND (r.next_attempt_at IS NULL OR r.next_attempt_at <= now())))
         ORDER BY r.id LIMIT ${limit} FOR UPDATE SKIP LOCKED
       )
@@ -705,6 +718,28 @@ export class CampaignsRepository {
       WHERE org_id = ${orgId} AND id = ${rowId}`);
   }
 
+  /** The recipients held for the quiet hours whose hour has come (BL-192): the ones a catch-up is about to send. */
+  async heldCandidates(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<Array<{ id: number; contactId: number }>> {
+    const res = await tx.execute(sql`
+      SELECT id, contact_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued'
+        AND held_until IS NOT NULL AND held_until <= now()
+      ORDER BY id`);
+    return (res.rows as Raw[]).map((r) => ({ id: Number(r.id), contactId: Number(r.contact_id) }));
+  }
+
+  /** The earliest instant a held recipient may go, or null when none is held (BL-192). */
+  async nextHeldAt(tx: Tx, orgId: number, id: number): Promise<Date | null> {
+    const res = await tx.execute(sql`
+      SELECT min(held_until) AS at FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued' AND held_until IS NOT NULL`);
+    return date((res.rows[0] as Raw | undefined)?.at);
+  }
+
   /** The recipients waiting for the end of the quiet hours (BL-177). */
   async heldCount(tx: Tx, orgId: number, id: number): Promise<number> {
     const res = await tx.execute(sql`
@@ -760,10 +795,14 @@ export class CampaignsRepository {
     };
   }
 
-  /** A fresh cadence: every recipient is queued again with its retries and backoff cleared. */
+  /**
+   * A fresh cadence: every recipient is queued again with its retries and backoff cleared. A recipient the quiet hours still hold keeps
+   * its `held_until` (BL-192): the catch-up of the occurrence that just ended sends it at its first opening, and if that job is lost the
+   * next run takes it, because the claim takes a held recipient once its hour has come.
+   */
   async requeueAll(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(sql`
-      UPDATE wp_campaign_contacts SET status = 'queued', send_attempts = 0, next_attempt_at = NULL, held_until = NULL, held_reason = NULL
+      UPDATE wp_campaign_contacts SET status = 'queued', send_attempts = 0, next_attempt_at = NULL
       WHERE org_id = ${orgId} AND campaign_id = ${id}`);
   }
 

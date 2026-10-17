@@ -27,6 +27,7 @@ import {
 } from '../../../src/modules/campaigns/_shims/tokens';
 import { CampaignDispatchService } from '../../../src/modules/campaigns/campaign-dispatch.service';
 import { CampaignEvents } from '../../../src/modules/campaigns/campaign-events';
+import type { CampaignJobs } from '../../../src/modules/campaigns/campaign-jobs';
 import { CampaignMirrorService } from '../../../src/modules/campaigns/campaign-mirror.service';
 import { CampaignsRepository } from '../../../src/modules/campaigns/campaigns.repository';
 import {
@@ -50,11 +51,25 @@ let runtime: PacingRuntime;
 let window: SendWindowService;
 let texts: OutgoingText[] = [];
 let templates: OutgoingMessage[] = [];
+/** What the dispatcher asked the queue for (BL-192): the catch-up of a recurring campaign's held recipients. */
+let queued: Array<{
+  orgId: number;
+  campaignId: number;
+  uuid: string;
+  delayMs: number;
+  catchUp: boolean;
+}> = [];
+const fakeJobs = {
+  enqueue: (orgId: number, campaignId: number, uuid: string, delayMs = 0, catchUp = false) => {
+    queued.push({ orgId, campaignId, uuid, delayMs, catchUp });
+    return Promise.resolve(true);
+  },
+} as unknown as CampaignJobs;
 
 /** 21:30 in India (quiet 21:00 to 09:00), 12:00 in New York (open). */
-const EVENING = new Date('2026-10-15T16:00:00Z');
-const MORNING = new Date('2026-10-16T03:31:00Z');
-const OPENS = '2026-10-16T03:30:00.000Z';
+const EVENING = new Date('2030-10-15T16:00:00Z');
+const MORNING = new Date('2030-10-16T03:31:00Z');
+const OPENS = '2030-10-16T03:30:00.000Z';
 
 const setClock = (d: Date) => {
   runtime.now = () => d;
@@ -104,6 +119,7 @@ beforeAll(async () => {
     get<ConsentPolicyService>(ConsentPolicyService),
     get<ConsentGate>(ConsentGate),
     window,
+    fakeJobs,
   );
 }, 240_000);
 
@@ -114,6 +130,7 @@ afterAll(async () => {
 beforeEach(() => {
   texts = [];
   templates = [];
+  queued = [];
   setClock(EVENING);
 });
 
@@ -335,5 +352,152 @@ describe('BL-177: a marketing campaign is deferred, not denied, in the quiet hou
     });
     expect(await run(c)).toBe('finished');
     expect((await rows(c.id))[0]!.status).toBe('sent');
+  });
+});
+
+const catchUp = (c: { orgId: number; id: number }) =>
+  RequestContextStore.run(
+    {
+      requestId: `qh-cu-${c.id}`,
+      orgId: c.orgId,
+      actorType: 'system',
+      actorId: null,
+      userId: null,
+    },
+    () => dispatch.catchUp(c.orgId, c.id),
+  );
+
+/** The recipient rows of a recurring campaign: who was sent, and who is still queued (with or without a hold). */
+const statuses = async (id: number) =>
+  Object.fromEntries((await rows(id)).map((x) => [x.name, x.status]));
+
+/** The hold's hour has passed on the database clock (the app clock is already the morning); the campaign itself is left as it is. */
+async function holdsOpen(c: { id: number }) {
+  await h.owner.query(
+    `UPDATE wp_campaign_contacts SET held_until = now() - interval '1 minute' WHERE campaign_id = $1 AND held_until IS NOT NULL`,
+    [c.id],
+  );
+  setClock(MORNING);
+}
+
+/** A campaign that repeats daily at 16:00 UTC, running its first occurrence now. */
+async function recurring(
+  contacts: Array<{ name: string; zone?: string }>,
+  over: { until?: string } = {},
+) {
+  const c = await campaign(await api.signup(`cr${n++}`), contacts);
+  await h.owner.query(
+    `UPDATE wpcampaigns SET schedule_type = 'recurring', repeat_interval = 'daily', send_date = '2030-10-15', send_time = '16:00',
+            timezone = 'UTC', repeat_until = $2 WHERE id = $1`,
+    [c.id, over.until ?? null],
+  );
+  return c;
+}
+
+describe('BL-192: held recipients of a recurring campaign are sent at the first opening, not at the next occurrence', () => {
+  it('moves to the next date at once and queues a catch-up for the first opening', async () => {
+    const c = await recurring([
+      { name: 'Asha', zone: 'Asia/Kolkata' },
+      { name: 'Ned', zone: 'America/New_York' },
+    ]);
+    expect(await run(c)).toBe('rearmed');
+
+    // The cadence is untouched: tomorrow at the same time.
+    expect(await camp(c.id)).toMatchObject({
+      status: 'scheduled',
+      send_date: '2030-10-16',
+      send_time: '16:00',
+    });
+    // Ned was sent and is queued again for the next occurrence; Asha is still held, not reset.
+    expect(texts).toHaveLength(1);
+    const held = (await rows(c.id)).find((x) => x.name === 'Asha')!;
+    expect(held).toMatchObject({ status: 'queued', held_reason: 'quiet_hours' });
+    expect(held.held_until!.toISOString()).toBe(OPENS);
+    // One catch-up, for the opening (plus the one second margin), flagged as a catch-up.
+    expect(queued).toHaveLength(1);
+    expect(queued[0]).toMatchObject({ campaignId: c.id, uuid: c.uuid, catchUp: true });
+    expect(queued[0]!.delayMs).toBe(Date.parse(OPENS) - EVENING.getTime() + 1_000);
+  });
+
+  it('the catch-up sends only the held recipient, leaves the schedule alone and waits again if asked too early', async () => {
+    const c = await recurring([
+      { name: 'Asha', zone: 'Asia/Kolkata' },
+      { name: 'Ned', zone: 'America/New_York' },
+    ]);
+    await run(c);
+    texts = [];
+    queued = [];
+
+    // Too early: still inside Asha's hours. Nothing is sent and it is queued again for the same opening.
+    expect(await catchUp(c)).toBe('rearmed');
+    expect(texts).toHaveLength(0);
+    expect(queued).toHaveLength(1);
+    expect(queued[0]).toMatchObject({ campaignId: c.id, catchUp: true });
+    queued = [];
+
+    await holdsOpen(c);
+    expect(await catchUp(c)).toBe('finished');
+    expect(texts).toHaveLength(1);
+    const after = await statuses(c.id);
+    expect(after.Asha).toBe('sent');
+    // Ned is not sent a second time: his turn is the next occurrence.
+    expect(after.Ned).toBe('queued');
+    expect(await camp(c.id)).toMatchObject({
+      status: 'scheduled',
+      send_date: '2030-10-16',
+      send_time: '16:00',
+    });
+    expect((await rows(c.id)).every((x) => x.held_until === null)).toBe(true);
+
+    // Nothing is left to catch up.
+    expect(await catchUp(c)).toBe('skipped');
+    expect(texts).toHaveLength(1);
+  });
+
+  it('works for the last occurrence of a campaign too: the campaign is completed and the catch-up still sends', async () => {
+    const c = await recurring([{ name: 'Asha', zone: 'Asia/Kolkata' }], { until: '2030-10-15' });
+    expect(await run(c)).toBe('finished');
+    expect((await camp(c.id)).status).toBe('completed');
+    expect(queued).toHaveLength(1);
+    await holdsOpen(c);
+    expect(await catchUp(c)).toBe('finished');
+    expect(texts).toHaveLength(1);
+    expect((await rows(c.id))[0]).toMatchObject({ status: 'sent', held_until: null });
+    expect((await camp(c.id)).status).toBe('completed');
+  });
+
+  it('a contact who unsubscribed while the message waited is not messaged by the catch-up', async () => {
+    const c = await recurring([
+      { name: 'Asha', zone: 'Asia/Kolkata' },
+      { name: 'Ned', zone: 'America/New_York' },
+    ]);
+    await run(c);
+    texts = [];
+    await h.owner.query(
+      `UPDATE contacts SET is_unsubscribed = true WHERE org_id = $1 AND name = 'Asha'`,
+      [c.orgId],
+    );
+    await holdsOpen(c);
+    await catchUp(c);
+    expect(texts).toHaveLength(0);
+  });
+
+  it('is skipped while the next occurrence is running (that run takes the held recipients whose hour has come)', async () => {
+    const c = await recurring([{ name: 'Asha', zone: 'Asia/Kolkata' }]);
+    await run(c);
+    texts = [];
+    await holdsOpen(c);
+    await h.owner.query(`UPDATE wpcampaigns SET status = 'running' WHERE id = $1`, [c.id]);
+    expect(await catchUp(c)).toBe('skipped');
+    expect(texts).toHaveLength(0);
+    // The run itself takes the held recipient, because its hour has come.
+    expect(await run(c)).toBeDefined();
+    expect(texts).toHaveLength(1);
+  });
+
+  it('a one-time campaign is still scheduled again as a whole, with no catch-up job', async () => {
+    const c = await campaign(await api.signup('cr-once'), [{ name: 'Asha', zone: 'Asia/Kolkata' }]);
+    expect(await run(c)).toBe('rearmed');
+    expect(queued).toHaveLength(0);
   });
 });

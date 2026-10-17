@@ -624,7 +624,7 @@ What is decided, and for whom:
   or broadcast of marketing content, a scheduled message, a proactive flow's free-form message, a marketing mail.
 - **Messages: quiet hours defer.** The window used is the one the workspace switched on (a profile only suggests hours; D13 stands: nothing
   changes without a person saving). Inbox and API sends hold the queue job (`message-dispatch`, delayed to the opening; the message stays
-  `queued` with `meta.hold`, a `held` event, and the thread shows "Held until"); flows halt the run and retry (every 5 minutes, inside the
+  `queued` with `meta.hold`, a `held` event, and the thread shows "Held until"); flows halt the run and wake it at the opening (BL-192; a halt for another reason still retries every 5 minutes, inside the
   run's seven day limit); broadcasts leave the recipient `pending` with `held_until`, send the rest and pause with reason `quiet_hours` (the
   resume sweep continues them); campaigns put the recipient back to `queued` with `held_until` and schedule themselves again for the first
   opening; scheduled messages leave the recipient `pending` and pause until the first opening; a guided campaign's follow-up step is looked
@@ -632,15 +632,29 @@ What is decided, and for whom:
 - **Calls: the calling window refuses.** A live call cannot wait in a queue, so `POST /v2/calling/calls/dial` outside the window answers
   422 `CALL_OUTSIDE_WINDOW` with the instant the window opens, before Meta is asked anything. A call back to someone who messaged or called in
   the last 24 hours is service and is not refused.
-- **Which clock.** The contact's own time zone property (a contact property of type "timezone", else a property keyed `timezone`), else the
+- **Which clock.** The contact's own time zone (the stored `timezone`, set by staff, an import or the API; else a contact property of type "timezone", else a property keyed `timezone`), else the
   country code of their number (one zone for most countries; for a country that spans hours, `+1`, `+7`, `+52`, `+55`, `+61`, `+62`, the
   hours must be right in **every** zone, the strictest reading, and when no moment satisfies all of them the fallback zone alone decides),
   else the zone chosen in the settings, else the workspace's, else UTC. A number written without its country code is never guessed.
 - **When the windows cannot be read** (a database error) a marketing send waits five minutes and asks again; it never goes out unchecked.
 
-Still open: a DND check needs a registry feed we do not have (the hook is a setting and a design, no integration; BL-181); the broadcasts of
-LINE, Facebook and Instagram, the one-off test sends, and a recurring campaign's catch-up of held recipients are follow-ups (BL-191 to BL-193
-in the backlog).
+**The remaining senders (BL-191, built).** The broadcasts of LINE, Messenger, Telegram and Viber leave a held recipient `pending` with
+`held_until` and wake themselves with a delayed job at the first opening; a WeChat mass send is one call, so it waits as a whole on the
+workspace clock; the Instagram broadcasts page, the offer and win-back broadcasts of a Shopify or WooCommerce store, and the broadcast wizard's
+test send hold the same way (a delayed job at the opening). Every recipient of these broadcasts is also put through the ConsentGate before it is sent, first sends included (BL-141 follow-up; a WeChat all-followers or tag send is refused as a whole when it cannot be shown to be clean, BL-243). Only the marketing purpose is asked: a utility template is never held, and an
+Instagram reply typed in the inbox composer is a person answering a person.
+
+**Recurring campaigns and flows (BL-192, built).** A recurring campaign no longer carries its held recipients to the next occurrence: the
+occurrence ends and the campaign moves to its next date at once, and a catch-up job queued for the first opening sends only those
+recipients (the cadence is kept; the ConsentGate is asked again; one still inside their own hours gets another catch-up). A flow held for
+the quiet hours wakes exactly at the opening, not on the five minute retry.
+
+**A visible contact time zone (BL-193, built).** The zone is a column of the contact (`timezone`, `timezone_source`: staff, import or api),
+set on the contact form, in a bulk edit, in a CSV import or through the REST API, and shown on the profile with where the clock comes from
+and the next allowed send time. A zone worked out from the number's country or the workspace is never stored, so it can never replace one a
+person chose; an import fills a contact that has none but never replaces a chosen one.
+
+Still open: a DND check needs a registry feed we do not have (the hook is a setting and a design, no integration; BL-181).
 
 ### 11.6 Built and open
 

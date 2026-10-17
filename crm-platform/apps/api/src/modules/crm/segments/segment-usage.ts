@@ -3,6 +3,7 @@ import {
   builtinFieldKind,
   collectConditions,
   customFieldKey,
+  isCompanySegmentField,
   type SegmentGroup,
   type SegmentUsageKind,
 } from '@crm/contracts';
@@ -30,7 +31,8 @@ function refsOf(row: SegmentRow): Array<{ kind: SegmentUsageKind; ref: string }>
                   : undefined;
     if (!kind) continue;
     if (kind === 'field') {
-      out.push({ kind, ref: customFieldKey(c.field) });
+      // A company property is told apart from a contact property of the same key by its `company.` prefix.
+      out.push({ kind, ref: isCompanySegmentField(c.field) ? c.field : customFieldKey(c.field) });
       continue;
     }
     const v = c.value;

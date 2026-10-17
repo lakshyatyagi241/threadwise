@@ -4,6 +4,7 @@ import {
   IMAP_PRESETS,
   applyPreset,
   buildImapInput,
+  buildTestInput,
   emptyImapForm,
   imapFailureKey,
   imapFormFor,
@@ -125,5 +126,39 @@ describe('IMAP form', () => {
     expect(imapFailureKey(ERROR_CODES.MAIL_SMTP_AUTH_FAILED)).toBe('smtpAuth');
     expect(imapFailureKey(ERROR_CODES.MAIL_IMAP_CONNECT_FAILED)).toBe('unreachable');
     expect(imapFailureKey('OTHER')).toBeNull();
+  });
+});
+
+describe('Test credentials input', () => {
+  it('needs only the server fields: the address and the name may still be empty', () => {
+    const built = buildTestInput(filled({ address: '', displayName: '' }));
+    expect(built.ok).toBe(true);
+    if (built.ok) {
+      expect(built.input.imap).toMatchObject({
+        host: 'imap.acme.com',
+        port: 993,
+        password: 'secret',
+      });
+      expect(built.input.smtp).toEqual({ host: 'smtp.acme.com', port: 465, security: 'ssl' });
+      expect(JSON.stringify(built.input)).not.toContain('address');
+    }
+  });
+  it('sends the SMTP login only when it differs, and reports what is missing or wrong', () => {
+    const own = buildTestInput(
+      filled({ sameCredentials: false, smtpUsername: 'relay', smtpPassword: 'other' }),
+    );
+    expect(own.ok && own.input.smtp).toMatchObject({ username: 'relay', password: 'other' });
+    const bad = buildTestInput(
+      filled({ imapHost: '', imapPassword: '', smtpHost: 'not a host', smtpPort: '70000' }),
+    );
+    expect(bad).toEqual({
+      ok: false,
+      errors: {
+        imapHost: 'required',
+        imapPassword: 'required',
+        smtpHost: 'invalid',
+        smtpPort: 'invalid',
+      },
+    });
   });
 });

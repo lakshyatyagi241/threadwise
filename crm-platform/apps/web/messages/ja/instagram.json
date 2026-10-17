@@ -85,7 +85,8 @@
       "outsideWindow": "24 時間外",
       "selected": "{count, plural, other {# 件選択中}}",
       "sent": "Instagram ブロードキャストを送信しました。{sent} 件配信済み{failed, plural, =0 {} other {、# 件失敗}}。",
-      "sentNone": "どの送信先にも送信できませんでした。Instagram の接続を確認してください。"
+      "sentNone": "どの送信先にも送信できませんでした。Instagram の接続を確認してください。",
+      "skipped": "同意の状況によりメッセージを送らなかった人数: {count}"
     }
   }
 }

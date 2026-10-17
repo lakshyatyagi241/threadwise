@@ -70,6 +70,9 @@ export interface ContactRow {
   isMinor: boolean;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
+  /** BL-193: the contact's own IANA time zone and who set it (staff | import | api); both null when none is stored. */
+  timezone: string | null;
+  timezoneSource: string | null;
   source: string | null;
   isUnsubscribed: boolean;
   isArchived: boolean;
@@ -190,6 +193,8 @@ export class ContactsRepository {
       isMinor: sql<boolean>`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
+      timezone: contacts.timezone,
+      timezoneSource: contacts.timezoneSource,
       source: contacts.source,
       isUnsubscribed: contacts.isUnsubscribed,
       isArchived: contacts.isArchived,
@@ -461,6 +466,8 @@ export class ContactsRepository {
       faxNumber?: string | null;
       dateOfBirth?: string | null;
       source?: string | null;
+      timezone?: string | null;
+      timezoneSource?: string | null;
       isUnsubscribed?: boolean;
       unsubscribedAt?: Date | null;
       data: Record<string, unknown>;
@@ -502,6 +509,8 @@ export class ContactsRepository {
         faxNumber: values.faxNumber ?? null,
         dateOfBirth: values.dateOfBirth ?? null,
         source: values.source ?? null,
+        timezone: values.timezone ?? null,
+        timezoneSource: values.timezone ? (values.timezoneSource ?? 'staff') : null,
         isUnsubscribed: values.isUnsubscribed ?? false,
         unsubscribedAt: values.unsubscribedAt ?? null,
         data: values.data,

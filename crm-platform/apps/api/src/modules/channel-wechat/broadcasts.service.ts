@@ -38,8 +38,11 @@ const refuse = (
   status = HttpStatus.UNPROCESSABLE_ENTITY,
 ) => new AppError(ERROR_CODES[code], message, status);
 
+/** A send that has not moved for a while. One held for the quiet hours (BL-191) is waiting on purpose, not stuck. */
 const staleSending = (r: BroadcastRow, now = Date.now()): boolean =>
-  r.status === 'sending' && r.updatedAt.getTime() < now - STALE_SENDING_MINUTES * 60_000;
+  r.status === 'sending' &&
+  !(r.heldUntil !== null && r.heldUntil.getTime() > now) &&
+  r.updatedAt.getTime() < now - STALE_SENDING_MINUTES * 60_000;
 
 /**
  * WeChat broadcasts (WECH): the followers a channel can reach, composing a draft with a frozen recipient list, and the operator's send,
@@ -80,6 +83,8 @@ export class BroadcastsService {
       failed: r.failed,
       lastError: r.lastError,
       canRetry: r.status === 'failed' || staleSending(r),
+      heldUntil:
+        r.heldUntil && r.heldUntil.getTime() > Date.now() ? r.heldUntil.toISOString() : null,
       startedAt: r.startedAt?.toISOString() ?? null,
       finishedAt: r.finishedAt?.toISOString() ?? null,
       createdAt: r.createdAt.toISOString(),

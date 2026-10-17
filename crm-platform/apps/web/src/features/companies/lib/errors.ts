@@ -13,6 +13,9 @@ export const ERROR_KINDS = [
   'notFound',
   'planDisabled',
   'ownerInvalid',
+  'filterInvalid',
+  'exportTooLarge',
+  'importInvalid',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -43,6 +46,12 @@ export function errorKind(error: unknown, context: ErrorContext = 'record'): Err
       return 'planDisabled';
     case ERROR_CODES.COMPANY_OWNER_INVALID:
       return 'ownerInvalid';
+    case ERROR_CODES.COMPANY_FILTER_INVALID:
+      return 'filterInvalid';
+    case ERROR_CODES.COMPANY_EXPORT_TOO_LARGE:
+      return 'exportTooLarge';
+    case ERROR_CODES.COMPANY_IMPORT_INVALID:
+      return 'importInvalid';
   }
   // A route that is not deployed answers 404 or 501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';

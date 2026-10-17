@@ -684,9 +684,17 @@ export class OperatorCatalogueService {
         status: 'warning',
         payload: { app: app.slug, reason: input.reason, installations: n },
       });
-      return n;
+      return { count: n, appId: app.id };
     });
-    return { app: await this.appView(ref), disabledInstallations: disabled };
+    // After the commit: the payment provider is asked with no transaction open. What was paid for runs to its end, but the card is not
+    // charged again for a withdrawn app.
+    const renewals = await this.subscriptions.stopAllCardRenewals(disabled.appId, 'operator');
+    return {
+      app: await this.appView(ref),
+      disabledInstallations: disabled.count,
+      renewalsStopped: renewals.stopped,
+      renewalsNotStopped: renewals.failed,
+    };
   }
 
   // --- internals ------------------------------------------------------------------------------------------------------------------------

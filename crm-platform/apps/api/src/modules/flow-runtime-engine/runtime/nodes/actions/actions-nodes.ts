@@ -17,6 +17,7 @@ import {
   UUID_RE,
 } from './actions-config';
 import { NumberSender } from './number-sender.service';
+import { haltOf } from '../../halt';
 
 const advance: NodeResult = { kind: 'advance', port: 1 };
 const data = (ctx: NodeContext): Record<string, unknown> => {
@@ -190,7 +191,7 @@ export class ActionNodes implements NodeExecutor {
     }
     const out = await ctx.send({ kind: 'text', body });
     if (out.ok) return advance;
-    if (out.halt) return { kind: 'halt', reason: out.error };
+    if (out.halt) return haltOf(out);
     ctx.note(`send failed: ${out.error}`);
     return advance;
   }

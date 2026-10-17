@@ -29,6 +29,22 @@ Units are seconds and bytes (Prometheus convention); the engineering targets in 
 | `crm_runtime_window_seconds`                                                                                                                                                                                                                                                                                               | gauge                  |                                                                     | Length of the last window                                                                                                                                                              | ELM-007       |
 | `crm_process_start_time_seconds`                                                                                                                                                                                                                                                                                           | gauge                  |                                                                     | Process start; a changing value is a restart                                                                                                                                           | 20 (restarts) |
 
+## The probe process (caller-side latency)
+
+A third process, `dist/src/tools/event-loop-probe.js` (`Prober`), GETs the API from outside its event loop and exports its own series on its own `/metrics` (`service="probe"`, scrape job `crm-probe`). It is the only place the latency a caller sees is measured, because the API's own request histogram cannot see time queued behind a blocked loop.
+
+| Series                                     | Type      | Extra labels                                                      | Meaning                                                                                   |
+| ------------------------------------------ | --------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `crm_probe_http_duration_seconds`          | histogram | `target`, `result` = `ok` \| `bad_status` \| `error` \| `timeout` | Time from sending the request to the end of the response body, timed by the probe process |
+| `crm_probe_up`                             | gauge     | `target`                                                          | 1 if the last round got a 2xx/3xx answer, else 0                                          |
+| `crm_probe_last_success_timestamp_seconds` | gauge     | `target`                                                          | Unix time of the last successful round; absent until the first success                    |
+
+Targets come from `PROBE_TARGETS` (`name=url,name=url`, name `[a-z0-9_-]{1,32}`, http(s) only), `PROBE_INTERVAL_SECONDS` (default 10), `PROBE_TIMEOUT_SECONDS` (default 10). A round never overlaps the previous one. Labels are the configured names only, no URLs or paths. It measures from where it runs: the stack network in the Hostinger overlay, not the public ingress.
+
+## The metrics listener guard
+
+`OBS_METRICS_HOST` other than `127.0.0.1`/`::1`/`localhost` without `OBS_METRICS_TOKEN` makes the process refuse to open the listener and log a warning with the reason (`metricsListenerDecision`). The probe process exits 1 in that case. `OBS_METRICS_PORT` unset stays silent and off.
+
 ## Not covered, on purpose or for now
 
 - **Webhook acknowledgement latency (#17)**: derived from `crm_http_request_duration_seconds` for the webhook route templates; no separate series.
@@ -37,7 +53,7 @@ Units are seconds and bytes (Prometheus convention); the engineering targets in 
   - One observation per job that reaches a **final** state. BullMQ's `completed`/`failed` events do not fire for an attempt that will be retried, so failed attempts that are retried are invisible and `outcome="failed"` understates the real attempt failure rate. `crm_queue_job_retries_total` is the trace they leave: the number of extra starts of jobs that finished (a stall restart counts too, since it also raises `attemptsStarted`). A job that fails every attempt shows as one `failed` plus N-1 retries; one that keeps being retried and never finishes shows nothing yet.
   - Wait excludes the delay the producer asked for (a promoted delayed job reports `job.delay = 0`, so the original `opts.delay` is used), and is **not recorded for a job that needed a retry** (its enqueue time says nothing about queue pressure).
   - Duration is that of the final attempt.
-  - Labels are the queue name and outcome only. Not shown yet: the `WorkerEventLoopBlockingWithQueueImpact` alert firing from a real stall, and any production-shaped queue load.
+  - Labels are the queue name and outcome only. `WorkerEventLoopBlockingWithQueueImpact` has fired from a real worker stall with 20,000 queued jobs (scrape demo). Not shown yet: any production-shaped queue load.
 - **`apps/web` (Next.js server) is not instrumented.**
 
 ## Behaviour on bad data

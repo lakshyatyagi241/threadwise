@@ -36,6 +36,7 @@ import {
   type PricingField,
 } from '../lib/pricing';
 import { GrandfatherDialog } from './grandfather-dialog';
+import { WithdrawnRefundDialog } from './refund-dialogs';
 import { PricingFields } from './pricing-fields';
 import { AppStatusBadge, ErrorLine, Section, textLink } from './ui';
 
@@ -79,6 +80,7 @@ function PricingSection({ app, access }: { app: MarketOperatorAppDetail; access:
   const [serverFields, setServerFields] = useState<Partial<Record<PricingField, string>>>({});
   const [confirming, setConfirming] = useState<Confirming | null>(null);
   const [comping, setComping] = useState(false);
+  const [refundingAll, setRefundingAll] = useState(false);
   const problems = useMemo(() => pricingProblems(draft), [draft]);
   const dirty = isPricingDirty(initial, draft);
   useUnsavedGuard(dirty);
@@ -257,6 +259,21 @@ function PricingSection({ app, access }: { app: MarketOperatorAppDetail; access:
         </div>
       )}
 
+      {canEdit && app.status === 'killed' && app.pricing.model === 'paid_monthly' && (
+        <div
+          className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border p-3 text-sm"
+          data-testid="pricing-withdrawn-refund"
+        >
+          <div className="min-w-0 space-y-0.5">
+            <p className="font-medium">{t('withdrawn.title')}</p>
+            <p className="text-xs text-muted-foreground">{t('withdrawn.hint')}</p>
+          </div>
+          <Button variant="secondary" onClick={() => setRefundingAll(true)}>
+            {t('withdrawn.action')}
+          </Button>
+        </div>
+      )}
+
       {confirming && (
         <ConfirmDialog
           open
@@ -304,6 +321,7 @@ function PricingSection({ app, access }: { app: MarketOperatorAppDetail; access:
         />
       )}
       {comping && <GrandfatherDialog app={app} onClose={() => setComping(false)} />}
+      {refundingAll && <WithdrawnRefundDialog app={app} onClose={() => setRefundingAll(false)} />}
     </Section>
   );
 }

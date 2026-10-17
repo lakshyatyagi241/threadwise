@@ -20,12 +20,14 @@ import {
   PaymentsService,
   SalesDocsService,
 } from '../crm';
+import { CompanyBriefsService } from '../company-briefs';
 import { MembersService } from '../workspaces-teams-tenancy';
 
 const READ_TOOLS = [
   'find_contact',
   'list_deals',
   'find_company',
+  'generate_brief',
   'sales_report',
   'list_outstanding',
   'list_my_tasks',
@@ -57,8 +59,9 @@ export type AiCrmToolName = (typeof READ_TOOLS)[number] | (typeof WRITE_TOOLS)[n
  * intact. Read tools run autonomously; write tools are flagged `write` so the provider adapter stops at the call
  * and the copilot service enforces confirm-before-act — this class never decides that, only executes.
  *
- * Reference's `generate_brief`/`create_project`/`list_projects` tools are not registered: no Briefs-generation or
- * Projects domain exists in this repo yet (docs/threadwise-port/inventory/ai-copilot-lead-finder.md, Open question #2).
+ * `generate_brief` (BL-194) writes the AI brief of a company through `CompanyBriefsService`, as the signed-in member: the same
+ * record scopes, privacy rules and rate limits as the button on the company page. Reference's `create_project`/`list_projects`
+ * tools are not registered: no Projects domain exists in this repo yet.
  */
 @Injectable()
 export class AiCrmToolkitService {
@@ -75,6 +78,7 @@ export class AiCrmToolkitService {
     private readonly members: MembersService,
     private readonly channels: ChannelsFacade,
     private readonly rbac: RbacService,
+    private readonly briefs: CompanyBriefsService,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -145,6 +149,16 @@ export class AiCrmToolkitService {
           type: 'object',
           properties: { query: { type: 'string', description: 'A company name fragment.' } },
           required: ['query'],
+        },
+      },
+      {
+        name: 'generate_brief',
+        description:
+          'Write an AI account brief of a company by name: who they are, deals, tasks, conversation activity, risks and next steps, from the CRM data you can see. Companies only.',
+        parameters: {
+          type: 'object',
+          properties: { name: { type: 'string', description: 'The company name.' } },
+          required: ['name'],
         },
       },
       {
@@ -337,6 +351,8 @@ export class AiCrmToolkitService {
           return await this.moveDealStage(args);
         case 'find_company':
           return await this.findCompany(args);
+        case 'generate_brief':
+          return await this.generateBrief(args);
         case 'create_company':
           return await this.createCompany(args);
         case 'link_contact_company':
@@ -526,6 +542,41 @@ export class AiCrmToolkitService {
     if (!query) return { ok: false, summary: 'Empty company query.', data: {} };
     const rows = await this.companies.selectData({ q: query, limit: 10 }, this.scopeFor('record.companies.read'));
     return { ok: true, summary: `${rows.length} company(ies) found for "${query}".`, data: { companies: rows } };
+  }
+
+  /**
+   * The brief of the company whose name matches best, as the member's own: the facts, the key and the limits are the button's. The
+   * answer carries the brief text for the model to relay; it holds no contact detail (the facts never did).
+   */
+  private async generateBrief(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {
+    const name = this.str(args.name);
+    if (!name) return { ok: false, summary: 'Tell me a company name for the brief.', data: {} };
+    const scope = this.scopeFor('record.companies.read');
+    const matches = await this.companies.selectData({ q: name, limit: 10 }, scope);
+    const company =
+      matches.find((c) => c.name.toLowerCase() === name.toLowerCase()) ?? matches[0];
+    if (!company) return { ok: false, summary: `No company matches "${name}".`, data: {} };
+    try {
+      const { brief, cached } = await this.briefs.generate(company.id, scope, { regenerate: false });
+      return {
+        ok: true,
+        summary: `Brief of ${company.name} ready${cached ? ' (from the last one)' : ''}: ${brief.content.summary}`,
+        data: { company: company.name, content: brief.content, stale: brief.stale },
+        subjectType: 'company',
+        subjectId: null,
+      };
+    } catch (err) {
+      // A brief that cannot be written (no AI key, too soon, the provider down) is an answer to relay, not a crash of the turn.
+      if (
+        err instanceof AppError &&
+        (err.code === ERROR_CODES.COMPANY_BRIEF_AI_UNAVAILABLE ||
+          err.code === ERROR_CODES.COMPANY_BRIEF_RATE_LIMITED ||
+          err.code === ERROR_CODES.COMPANY_BRIEF_PROVIDER_FAILED)
+      ) {
+        return { ok: false, summary: err.message, data: {} };
+      }
+      throw err;
+    }
   }
 
   private async createCompany(args: Record<string, unknown>): Promise<AiCrmToolCallResult> {

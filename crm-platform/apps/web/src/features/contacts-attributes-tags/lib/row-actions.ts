@@ -14,8 +14,23 @@ export interface QuickActions {
   email: string | null;
 }
 
-/** Digits (and a leading +) of a phone number as typed or formatted; empty when there are none. */
+/**
+ * Whether a phone string is the server's masked display form (apps/api/src/modules/crm/contacts/phone-mask.ts),
+ * not the real number. A real phone number never contains a letter; the API's mask only ever inserts literal
+ * `x` placeholders for the digits a caller without `contacts.phone.reveal` may not see — so a bare `/x/i` test
+ * is a cheap, unambiguous signal, with no need to parse the masking shape itself.
+ */
+export function isMaskedPhone(phone: string): boolean {
+  return /x/i.test(phone);
+}
+
+/**
+ * Digits (and a leading +) of a phone number as typed or formatted; empty when there are none, and empty for a
+ * masked number too — a `tel:`/`wa.me` link built from `xxxxxxxx0025` would dial a wrong, meaningless target
+ * instead of the real contact, which is worse than disabling the action.
+ */
 export function phoneDigits(phone: string): string {
+  if (isMaskedPhone(phone)) return '';
   const trimmed = phone.trim();
   const digits = trimmed.replace(/\D/g, '');
   if (!digits) return '';
@@ -42,4 +57,36 @@ export function menuActions(can: { edit: boolean; delete: boolean }): MenuAction
     ...(can.edit ? (['edit', 'group', 'tag'] as const) : []),
     ...(can.delete ? (['delete'] as const) : []),
   ];
+}
+
+/** What the "Message" button of the hover actions does for a contact, decided once so the table and the tests agree. */
+export type MessageRoute =
+  | { kind: 'chat' }
+  | { kind: 'email' }
+  | { kind: 'blocked'; reason: 'noContact' | 'noChannel' | 'optedOut' };
+
+/** Which channels the workspace has connected; `undefined` while that is not known yet (the button then assumes it is). */
+export interface ConnectedChannels {
+  whatsapp?: boolean;
+  email?: boolean;
+}
+
+/**
+ * "Message" picks the best way to write to a contact: the WhatsApp chat when the contact has a usable number and a number is
+ * connected, otherwise an email through a connected mailbox (not for a contact who opted out). When neither works the button is
+ * disabled and `reason` is its tooltip, never a dead icon.
+ */
+export function messageRoute(
+  row: Pick<RowView, 'phone' | 'email' | 'optedOut'>,
+  connected: ConnectedChannels = {},
+): MessageRoute {
+  const hasPhone = phoneDigits(row.phone) !== '';
+  const hasEmail = row.email.trim() !== '';
+  if (hasPhone && connected.whatsapp !== false) return { kind: 'chat' };
+  if (hasEmail && connected.email !== false && !row.optedOut) return { kind: 'email' };
+  if (!hasPhone && !hasEmail) return { kind: 'blocked', reason: 'noContact' };
+  if (hasEmail && row.optedOut && !(hasPhone && connected.whatsapp !== false)) {
+    return { kind: 'blocked', reason: 'optedOut' };
+  }
+  return { kind: 'blocked', reason: 'noChannel' };
 }

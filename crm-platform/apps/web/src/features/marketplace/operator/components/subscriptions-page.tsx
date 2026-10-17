@@ -21,6 +21,7 @@ import {
   NO_SUBSCRIPTION_FILTERS,
   canCancel,
   isFiltered,
+  canUnlockPrice,
   periodInfo,
   subscriptionQuery,
   subscriptionStatusTone,
@@ -29,8 +30,10 @@ import {
   type SubscriptionSourceFilter,
   type SubscriptionStatusFilter,
 } from '../lib/subscriptions';
-import { PerMonth } from './price-cell';
-import { CancelSubscriptionDialog, CompDialog } from './subscription-dialogs';
+import { PerMonth, PerYear } from './price-cell';
+import { CancelSubscriptionDialog, CompDialog, UnlockPriceDialog } from './subscription-dialogs';
+import { ProrateDialog } from './refund-dialogs';
+import { canRefundUnused } from '../lib/refunds';
 import { Failure, LoadingBlock, MarketGate, textLink } from './ui';
 import { useDebounced } from './use-docs-check';
 
@@ -57,6 +60,8 @@ function Subscriptions({ access, initialApp }: { access: MarketAccess; initialAp
   const search = useDebounced(filters.search, 300);
   const wire = subscriptionQuery({ ...filters, search });
   const [cancelling, setCancelling] = useState<MarketOperatorSubscription | null>(null);
+  const [unlocking, setUnlocking] = useState<MarketOperatorSubscription | null>(null);
+  const [refunding, setRefunding] = useState<MarketOperatorSubscription | null>(null);
   const [comping, setComping] = useState(false);
 
   const summary = useQuery({
@@ -175,6 +180,8 @@ function Subscriptions({ access, initialApp }: { access: MarketAccess; initialAp
               rows={rows}
               canAct={access.pricing}
               onCancel={(s) => setCancelling(s)}
+              onUnlock={(s) => setUnlocking(s)}
+              onRefund={(s) => setRefunding(s)}
             />
           )}
           {list.hasNextPage && (
@@ -194,6 +201,10 @@ function Subscriptions({ access, initialApp }: { access: MarketAccess; initialAp
 
       {cancelling && (
         <CancelSubscriptionDialog subscription={cancelling} onClose={() => setCancelling(null)} />
+      )}
+      {refunding && <ProrateDialog subscription={refunding} onClose={() => setRefunding(null)} />}
+      {unlocking && (
+        <UnlockPriceDialog subscription={unlocking} onClose={() => setUnlocking(null)} />
       )}
       {comping && (
         <CompDialog
@@ -240,6 +251,11 @@ function SummarySection({
           value={totals.canceling}
           tone={totals.canceling > 0 ? 'warning' : 'default'}
         />
+        <StatTile
+          label={tk('pastDue')}
+          value={totals.pastDue}
+          tone={totals.pastDue > 0 ? 'warning' : 'default'}
+        />
         <StatTile label={tk('ended')} value={totals.ended} />
         {mrr.length === 0 ? (
           <StatTile label={tk('mrr')} value="-" hint={tk('mrrNone')} />
@@ -270,13 +286,21 @@ function SummarySection({
                   <th scope="col" className="px-3 py-2 text-start font-medium">
                     {t('cols.price')}
                   </th>
-                  {(['active', 'trialing', 'comped', 'canceling', 'ended', 'total'] as const).map(
-                    (c) => (
-                      <th key={c} scope="col" className="px-3 py-2 text-end font-medium">
-                        {t(`cols.${c}`)}
-                      </th>
-                    ),
-                  )}
+                  {(
+                    [
+                      'active',
+                      'trialing',
+                      'comped',
+                      'canceling',
+                      'pastDue',
+                      'ended',
+                      'total',
+                    ] as const
+                  ).map((c) => (
+                    <th key={c} scope="col" className="px-3 py-2 text-end font-medium">
+                      {t(`cols.${c}`)}
+                    </th>
+                  ))}
                   <th scope="col" className="px-3 py-2 text-end font-medium">
                     {t('cols.mrr')}
                   </th>
@@ -299,13 +323,21 @@ function SummarySection({
                         />
                       )}
                     </td>
-                    {(['active', 'trialing', 'comped', 'canceling', 'ended', 'total'] as const).map(
-                      (c) => (
-                        <td key={c} className="px-3 py-2 text-end tabular-nums">
-                          {r.counts[c]}
-                        </td>
-                      ),
-                    )}
+                    {(
+                      [
+                        'active',
+                        'trialing',
+                        'comped',
+                        'canceling',
+                        'pastDue',
+                        'ended',
+                        'total',
+                      ] as const
+                    ).map((c) => (
+                      <td key={c} className="px-3 py-2 text-end tabular-nums">
+                        {r.counts[c]}
+                      </td>
+                    ))}
                     <td className="px-3 py-2 text-end tabular-nums">
                       <MrrLines entries={r.mrr} />
                     </td>
@@ -317,13 +349,21 @@ function SummarySection({
                   <th scope="row" className="px-3 py-2 text-start" colSpan={2}>
                     {t('totals')}
                   </th>
-                  {(['active', 'trialing', 'comped', 'canceling', 'ended', 'total'] as const).map(
-                    (c) => (
-                      <td key={c} className="px-3 py-2 text-end tabular-nums">
-                        {totals[c]}
-                      </td>
-                    ),
-                  )}
+                  {(
+                    [
+                      'active',
+                      'trialing',
+                      'comped',
+                      'canceling',
+                      'pastDue',
+                      'ended',
+                      'total',
+                    ] as const
+                  ).map((c) => (
+                    <td key={c} className="px-3 py-2 text-end tabular-nums">
+                      {totals[c]}
+                    </td>
+                  ))}
                   <td className="px-3 py-2 text-end tabular-nums">
                     <MrrLines entries={mrr} />
                   </td>
@@ -360,10 +400,14 @@ export function SubscriptionsTable({
   rows,
   canAct,
   onCancel,
+  onUnlock,
+  onRefund,
 }: {
   rows: readonly MarketOperatorSubscription[];
   canAct: boolean;
   onCancel: (s: MarketOperatorSubscription) => void;
+  onUnlock: (s: MarketOperatorSubscription) => void;
+  onRefund: (s: MarketOperatorSubscription) => void;
 }) {
   const t = useTranslations(NS);
   const te = useTranslations('marketplace.operator.enums');
@@ -448,13 +492,35 @@ export function SubscriptionsTable({
                 </td>
                 <td className="px-3 py-3 align-top">
                   {s.amount && s.currency ? (
-                    <PerMonth price={formatMoney(s.amount, s.currency, locale)} />
+                    s.period === 'yearly' ? (
+                      <PerYear price={formatMoney(s.amount, s.currency, locale)} />
+                    ) : (
+                      <PerMonth price={formatMoney(s.amount, s.currency, locale)} />
+                    )
                   ) : (
                     <span className="text-muted-foreground">{t('noCharge')}</span>
                   )}
                 </td>
                 {canAct && (
                   <td className="px-3 py-3 text-end align-top">
+                    {canRefundUnused(s) && (
+                      <Button variant="secondary" size="sm" onClick={() => onRefund(s)}>
+                        {t('refundUnused')}
+                        <span className="sr-only">
+                          {' '}
+                          {s.workspace.name}, {s.app.name}
+                        </span>
+                      </Button>
+                    )}
+                    {canUnlockPrice(s) && (
+                      <Button variant="secondary" size="sm" onClick={() => onUnlock(s)}>
+                        {t('unlockPrice')}
+                        <span className="sr-only">
+                          {' '}
+                          {s.workspace.name}, {s.app.name}
+                        </span>
+                      </Button>
+                    )}
                     {canCancel(s) && (
                       <Button variant="secondary" size="sm" onClick={() => onCancel(s)}>
                         {t('cancel')}

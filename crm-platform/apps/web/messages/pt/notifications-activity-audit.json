@@ -164,6 +164,26 @@
         "title": "Notificação de teste",
         "titleNoName": "Notificação de teste",
         "bodyNoActor": "Se você consegue ler isto, as notificações em tempo real estão funcionando."
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} renova em {date, date, medium}",
+        "bodyAuto": "Seu cartão será cobrado automaticamente nessa data para renovar {name}. Cancele antes disso para evitar a cobrança.",
+        "titleManual": "{name} está pago até {date, date, medium}",
+        "bodyManual": "{name} não é renovado automaticamente. Pague novamente antes dessa data para mantê-lo funcionando sem pausa.",
+        "titleEnding": "{name} termina em {date, date, medium}",
+        "bodyEnding": "Você cancelou {name}, então ele deixa de funcionar nessa data. Assine novamente antes disso para mantê-lo.",
+        "title": "{name}: renovação se aproximando",
+        "titleNoName": "Renovação de app pago se aproximando"
+      },
+      "marketplace_payment_failed": {
+        "title": "Falha no pagamento de {name}",
+        "body": "O pagamento no cartão não foi concluído. O app continua funcionando por alguns dias enquanto o provedor de pagamento tenta novamente. Pague agora, ou corrija sua forma de pagamento, para evitar uma pausa.",
+        "titleNoName": "Falha no pagamento de app pago"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Assinatura de {name} encerrada",
+        "body": "O app está pausado e seus dados e configurações são mantidos. Assine novamente para reativá-lo.",
+        "titleNoName": "Assinatura de app pago encerrada"
       }
     },
     "live": {
@@ -195,7 +215,10 @@
         "waba_group_suspension_cleared": "Grupo do WhatsApp ativo novamente",
         "device_group_join_request": "Solicitação para entrar em um grupo",
         "device_group_removed": "Removido de um grupo do WhatsApp",
-        "test": "Notificação de teste"
+        "test": "Notificação de teste",
+        "marketplace_renewal_due": "Renovação de app pago se aproximando",
+        "marketplace_payment_failed": "Falha no pagamento de app pago",
+        "marketplace_subscription_ended": "Assinatura de app pago encerrada"
       },
       "generic": "Você tem uma nova notificação",
       "paused": "As atualizações em tempo real estão pausadas, então novos alertas podem chegar com até um minuto de atraso. Recarregue a página para reconectar."
@@ -383,6 +406,18 @@
         "appointment_calendar_drift": {
           "label": "Agendamento fora de sincronia com o Google Calendar",
           "hint": "O evento do Google Calendar de um agendamento futuro foi excluído, movido ou teve os convidados alterados. O agendamento não é alterado; você escolhe o que fazer."
+        },
+        "marketplace_renewal_due": {
+          "label": "Lembrete de renovação de app pago",
+          "hint": "O período de um app pago termina em alguns dias: ele renova no cartão, está pago até uma data ou foi cancelado e termina."
+        },
+        "marketplace_payment_failed": {
+          "label": "Falha no pagamento de app pago",
+          "hint": "A renovação no cartão de um app pago não foi concluída e precisa da sua atenção."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Assinatura de app pago encerrada",
+          "hint": "A assinatura de um app pago terminou e o app foi pausado."
         }
       },
       "loading": "Carregando suas preferências",

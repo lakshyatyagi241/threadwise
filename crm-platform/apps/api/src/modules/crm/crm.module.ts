@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
+import { SendWindowModule } from '../compliance-center';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AttributesController } from './attributes/attributes.controller';
@@ -8,6 +9,7 @@ import { AttributesRepository } from './attributes/attributes.repository';
 import { AttributesService } from './attributes/attributes.service';
 import { MergeTagService } from './attributes/merge-tag.service';
 import { CompaniesController } from './companies/companies.controller';
+import { CompaniesCsvService } from './companies/companies-csv.service';
 import { CompaniesRepository } from './companies/companies.repository';
 import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
@@ -192,6 +194,7 @@ import { TagsService } from './tags/tags.service';
     PlatformSettingsModule,
     ContactConsentModule,
     PrivacyModule,
+    SendWindowModule,
   ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
@@ -307,6 +310,7 @@ import { TagsService } from './tags/tags.service';
     ContactMeetingsRepository,
     CompaniesRepository,
     CompaniesService,
+    CompaniesCsvService,
     DealsPlan,
     SalesPipelineGuard,
     DealsRepository,
@@ -400,6 +404,7 @@ import { TagsService } from './tags/tags.service';
     ContactActivitiesService,
     ContactMeetingsService,
     CompaniesService,
+    CompaniesRepository,
     DealsService,
     PipelinesService,
     TasksService,

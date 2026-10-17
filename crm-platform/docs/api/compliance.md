@@ -42,22 +42,40 @@ over the country given at onboarding. Nothing is switched on by a suggestion: th
 [section 11.5](../specs/privacy-and-data-governance.md). The decision is `SendWindowService` (`apps/api/src/modules/compliance-center`, module
 `SendWindowModule`) over the pure `decideSendWindow` / `resolveContactZones` in `@crm/contracts` (`compliance/send-window.ts`):
 
-| Sender                                   | Marketing send inside the quiet hours                                                                                                                          |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Inbox, REST API v1 (`ChannelDispatcher`) | accepted; the message stays `queued` with `meta.hold`, event `held`, its `message-dispatch` job is delayed to the opening; `MessageResponse.hold` while queued |
-| Flows (`FlowSender`)                     | the run halts (`SEND_HELD`) and tries again every 5 minutes                                                                                                    |
-| Broadcasts                               | recipient stays `pending` with `held_until`; the rest is sent; the broadcast is `paused` with reason `quiet_hours` and resumes by itself                       |
-| Campaigns and guided follow-ups          | recipient back to `queued` with `held_until` (the claim skips it); the campaign is scheduled again for the first opening                                       |
-| Scheduled messages                       | recipient stays `pending` with `held_until`; the schedule pauses until the first opening (the due sweep resumes it)                                            |
-| Dial (`POST /v2/calling/calls/dial`)     | **refused**, 422 `CALL_OUTSIDE_WINDOW` with `opensAt`, `zone`, `zoneSource` in the details; a call back to someone who contacted us in 24 hours is exempt      |
+| Sender                                               | Marketing send inside the quiet hours                                                                                                                                                                                                                                                                                |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Inbox, REST API v1 (`ChannelDispatcher`)             | accepted; the message stays `queued` with `meta.hold`, event `held`, its `message-dispatch` job is delayed to the opening; `MessageResponse.hold` while queued                                                                                                                                                       |
+| Flows (`FlowSender`)                                 | the run halts (`SEND_HELD`) and its step runs again **at the opening** (`halted` with `resume_at` = the instant the hours open, plus a second), not every 5 minutes                                                                                                                                                  |
+| Broadcasts                                           | recipient stays `pending` with `held_until`; the rest is sent; the broadcast is `paused` with reason `quiet_hours` and resumes by itself                                                                                                                                                                             |
+| Recurring campaigns (BL-192)                         | the occurrence ends at once and the campaign moves to its next date (cadence untouched); a **catch-up** job (`campaign` queue, `catchUp: true`) sends only the recipients held in that occurrence at the first opening, asking the ConsentGate again; a recipient still inside their own hours gets another catch-up |
+| Campaigns and guided follow-ups                      | recipient back to `queued` with `held_until` (the claim skips it); the campaign is scheduled again for the first opening                                                                                                                                                                                             |
+| Scheduled messages                                   | recipient stays `pending` with `held_until`; the schedule pauses until the first opening (the due sweep resumes it)                                                                                                                                                                                                  |
+| LINE, Messenger, Telegram, Viber broadcasts (BL-191) | recipient goes back to `pending` with `held_until`; the claim skips it; the rest is sent; the run ends and a **delayed job** (`<uuid>-held-<opening>`) takes the held up at the first opening; the list shows `held` and `heldUntil`                                                                                 |
+| WeChat broadcast (BL-191)                            | one mass-send call: the whole broadcast waits (`wechat_broadcasts.held_until`), read on the workspace clock, then the call is made at the opening                                                                                                                                                                    |
+| Instagram broadcasts page (BL-191)                   | the answer carries `held` and `heldUntil`; a delayed job (`ig-pull` queue, `held-broadcast`) sends them at the opening; the inbox composer is never held                                                                                                                                                             |
+| Shopify / WooCommerce offer and win-back (BL-191)    | the log row stays `processed` with `held`; a delayed `broadcast` job with `resume` sends the held customers at the opening and ends the log with both runs' totals                                                                                                                                                   |
+| Wizard test send (BL-191)                            | a test of a MARKETING template to a number in its quiet hours is logged `held` (`camp_test_sends.held_until`) and a `test-send-release` job on the campaign queue sends it at the opening                                                                                                                            |
+| Dial (`POST /v2/calling/calls/dial`)                 | **refused**, 422 `CALL_OUTSIDE_WINDOW` with `opensAt`, `zone`, `zoneSource` in the details; a call back to someone who contacted us in 24 hours is exempt                                                                                                                                                            |
 
 Only the `marketing` ledger purpose is asked: replies in the 24 hour window, utility and authentication templates, booking notices are never
 held. The window is the one the workspace switched on (a profile only suggests hours). The ConsentGate runs first (a denied contact is refused,
-never merely held) and **again at release**. Which clock: the contact's time zone property (a contact property of type `timezone`, else a
+never merely held) and **again at release**. Which clock: the contact's own time zone (the stored `contacts.timezone`, BL-193; else a contact property of type `timezone`, else a
 property keyed `timezone`), the country code of the number (a country spanning hours must be inside the hours in all its zones), the zone
 chosen in the settings (`windowTimezone` is the fallback), the workspace zone, UTC. When the windows cannot be read a marketing send waits
 five minutes. Migration `20261216090000_quiet_hours_hold.sql` adds the `held` message event and `held_until`/`held_reason` to
-`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table).
+`broadcast_contacts`, `wp_campaign_contacts` and `scheduled_message_contacts` (no new table). Migration `20261225090000_quiet_hours_senders.sql`
+(BL-191) adds the same two columns to `line_`, `facebook_`, `telegram_` and `viber_broadcast_recipients`, to `wechat_broadcasts` and to
+`camp_test_sends` (status `held`).
+
+**The remaining senders (BL-191), how they differ.** Every social broadcast is marketing, so it is always asked (no purpose to read). A
+recipient with a conversation is read on its contact's clock (the conversation's `contact_id`); one without (a group, a person who never
+became a contact) on the workspace fallback clock. Wake-up: a BullMQ delayed job on the sender's own queue, named by broadcast and opening so
+asking twice queues once; if Redis is down the recipients stay `pending` with `held_until` and the next Start (or run) takes them up. The
+ConsentGate is asked for every recipient of these senders before anything is sent (BL-141 follow-up): on the first send and again at release, so
+the quiet hours never let a refused person through and a STOP that arrived while a message waited still stops it. Messenger still checks its 24 hour window at send time, so a person whose
+window closed while they waited is `blocked` with a note saying so. WeChat cannot be split per contact, so the whole mass send waits on the
+workspace clock. Commerce broadcasts and the wizard test send hold only a MARKETING template (a utility one is a notice). Not covered: the
+event messages of a store (abandoned cart, order status) and the one-off sends of other screens.
 
 ## Strictest wins
 

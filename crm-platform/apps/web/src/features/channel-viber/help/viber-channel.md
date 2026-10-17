@@ -81,6 +81,10 @@ Viber broadcasts send one message to many people who have already opened a chat 
 - A picture or video is sent without buttons. Text with a template's buttons shows them as a keyboard under the message.
 - Each sent message also appears in that person's conversation in the inbox.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), a broadcast does not message someone while it is night for them. Their message waits, the rest of the list is sent, and the row shows how many are held and until when. The broadcast stays **Sending** while anyone waits and finishes by itself when the hours end, so you do not need to press anything. Consent is checked again at that moment, so a person who unsubscribed meanwhile is not messaged. The hours are read on the person's own clock: their contact's time zone, else the country of their number, else your fallback time zone. Pausing a broadcast also stops the held messages.
+
 ## Insights
 
 **Insights** shows, for one channel, seven days of messages received and sent, how many people were active, and how many sent messages were delivered, seen or failed. Pick the channel at the top when you have more than one. It reads from your own inbox, because Viber offers no analytics.
