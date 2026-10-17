@@ -80,6 +80,23 @@ const quote = (id: string): string => `"${id.replace(/"/g, '""')}"`;
 const matches = (name: string, schema: string, list: string[] | undefined): boolean =>
   !!list?.some((x) => x === name || x === `${schema}.${name}`);
 
+const DEFAULT_BATCH = 500;
+const MAX_BATCH = 10_000;
+
+/**
+ * The rows fetched per round trip. It is written into the SQL text (`FETCH ${batch} FROM rot`: a cursor FETCH cannot take a bound
+ * parameter), so it must be provably a small positive integer and anything else is refused, never coerced.
+ */
+export function rotationBatchSize(requested: number | undefined): number {
+  const n = requested ?? DEFAULT_BATCH;
+  if (!Number.isInteger(n) || n < 1 || n > MAX_BATCH) {
+    throw new Error(
+      `Rotation batch size must be an integer from 1 to ${MAX_BATCH}, got ${String(requested)}`,
+    );
+  }
+  return n;
+}
+
 /**
  * Finds every sealed blob in the database and (unless `dryRun`) moves it to the current key (TW-INFRA-023).
  *
@@ -94,7 +111,7 @@ export async function rotateKeys(
   crypto: RotationCrypto,
   options: RotationOptions = {},
 ): Promise<ColumnReport[]> {
-  const batch = options.batchSize ?? 500;
+  const batch = rotationBatchSize(options.batchSize);
   const reports: ColumnReport[] = [];
   const exclude = [...DEFAULT_EXCLUDE, ...(options.exclude ?? [])];
 
