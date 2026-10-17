@@ -90,6 +90,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-whatsapp': 'whatsapp waba meta app embedded signup credentials business cloud api',
   'settings-campaigns': 'campaigns broadcast sending limits rate',
   'settings-google-calendar': 'google calendar oauth appointments sync',
+  'settings-microsoft-calendar':
+    'microsoft outlook office 365 microsoft 365 calendar teams entra azure appointments oauth sync',
   'settings-microsoft-mail':
     'microsoft outlook office 365 microsoft 365 exchange graph entra azure email mailbox oauth inbox add-on credentials',
   'settings-google-mail': 'google gmail email mailbox oauth inbox add-on credentials push pubsub',

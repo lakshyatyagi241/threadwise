@@ -17,7 +17,8 @@
       "unexpected": "Algo salió mal. Inténtalo de nuevo.",
       "exportInProgress": "Ya se está preparando un archivo de prueba. Espera a que termine y vuelve a intentarlo.",
       "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo.",
-      "noticeTargetMissing": "Ese widget, página de reservas o tienda ya no existe."
+      "noticeTargetMissing": "Ese widget, página de reservas o tienda ya no existe.",
+      "notMinor": "El consentimiento del tutor solo se puede registrar para un contacto marcado como menor."
     },
     "settings": {
       "title": "Consentimiento y respuestas STOP",
@@ -142,7 +143,10 @@
         "widget": "Chat del sitio web",
         "booking": "Página de reservas",
         "commerce": "Pago en la tienda",
-        "lead": "Captación de leads"
+        "lead": "Captación de leads",
+        "gpc": "Control Global de Privacidad",
+        "dob": "Fecha de nacimiento o edad",
+        "declaration": "Edad sin confirmar"
       },
       "by": "por {name}",
       "evidence": {
@@ -165,7 +169,8 @@
         "storeFlag": "Ajuste de la tienda",
         "leadSourceId": "Origen del lead",
         "leadFormId": "Formulario de lead",
-        "adId": "Anuncio"
+        "adId": "Anuncio",
+        "guardianConsentRef": "Referencia del consentimiento del tutor"
       },
       "dialog": {
         "titleGranted": "Marcar como suscrito",
@@ -181,6 +186,52 @@
         "close": "Cerrar",
         "savedGranted": "Marcado como suscrito.",
         "savedWithdrawn": "Marcado como dado de baja."
+      },
+      "privacy": {
+        "title": "Indicadores de privacidad",
+        "saved": "Guardado.",
+        "minorLabel": "Menor",
+        "minorOn": "Marcado como menor desde el {date}.",
+        "minorOff": "No está marcado como menor.",
+        "rule": {
+          "off": "Tu espacio de trabajo no ha respondido la pregunta sobre menores en el Centro de cumplimiento, así que no se frena el marketing a este contacto.",
+          "guardian": "El marketing a este contacto se frena hasta que conste el consentimiento de un padre, madre o tutor.",
+          "block": "El marketing a este contacto se frena porque tu espacio de trabajo indica que no trata datos de menores."
+        },
+        "guardianBadge": "Consentimiento del tutor registrado",
+        "guardianLabel": "Consentimiento de padre, madre o tutor",
+        "guardianOn": "Registrado desde el {date}. Es solo una prueba y no suscribe al contacto.",
+        "guardianOff": "No registrado.",
+        "recordGuardian": "Registrar consentimiento del tutor",
+        "clearGuardian": "Quitar",
+        "dnsLabel": "No vender ni compartir",
+        "dnsOn": "Exclusión desde el {date} ({source}).",
+        "dnsOff": "Sin exclusión.",
+        "history": "Historial de privacidad",
+        "event": {
+          "minor": {
+            "on": "Marcado como menor",
+            "off": "Marca de menor quitada"
+          },
+          "guardian_consent": {
+            "on": "Consentimiento del tutor registrado",
+            "off": "Consentimiento del tutor quitado"
+          },
+          "sale_share_opt_out": {
+            "on": "Excluido de la venta y el uso compartido",
+            "off": "Exclusión quitada"
+          }
+        },
+        "dialog": {
+          "title": "Registrar consentimiento del tutor",
+          "intro": "Anota que un padre, madre o tutor dio su consentimiento. Es solo una prueba: no suscribe al contacto al marketing.",
+          "note": "¿Cómo lo dio? (obligatorio)",
+          "noteHint": "Por ejemplo: firmó el formulario en papel en el mostrador. No escribas el nombre ni los datos de contacto del tutor.",
+          "ref": "Referencia (opcional)",
+          "refHint": "Un número de formulario o un id de documento que puedas consultar después."
+        },
+        "minorFrom": "Se marca a partir de la fecha de nacimiento o la edad indicada. Se levanta sola el {date}, salvo que una persona la mantenga.",
+        "minorFromDeclaration": "Se marca porque la edad no se confirmó en un formulario. Permanece hasta que una persona la quite."
       }
     },
     "composer": {
@@ -302,7 +353,10 @@
         "consent_evidence_recorded": "Permitido: el aviso se entregó y la persona aceptó.",
         "purpose_not_enabled": "No permitido: el espacio de trabajo no lo ha activado.",
         "consent_declined": "No permitido: la persona rechazó.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "No permitido: este contacto está marcado como menor y tu espacio de trabajo frena el marketing.",
+        "sale_share_opted_out": "No permitido: el contacto se excluyó de la venta o el uso compartido de sus datos.",
+        "on_dnc_list": "En tu lista No llamar: sin llamadas ni mensajes de marketing a este número"
       }
     },
     "notice": {

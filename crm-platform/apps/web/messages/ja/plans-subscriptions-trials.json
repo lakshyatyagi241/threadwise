@@ -81,7 +81,8 @@
       "sms": "SMSチャネル",
       "help_agent": "ヘルプアシスタント",
       "email_channel": "メール(Gmail)チャネル",
-      "personal_history_full": "全履歴インポート(個人用WhatsApp)"
+      "personal_history_full": "全履歴インポート(個人用WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot"
     },
     "limitGroups": {
       "messaging": "メッセージング",

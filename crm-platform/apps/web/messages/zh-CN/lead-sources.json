@@ -35,7 +35,8 @@
       "mappingSaved": "映射已保存",
       "planLimit": "已达到套餐的线索来源数量上限，因此无法创建新来源。",
       "planLocked": "您的套餐不包含社交线索。",
-      "upgrade": "升级套餐"
+      "upgrade": "升级套餐",
+      "planLimitUsed": "你已使用 {used} 个线索来源，上限为 {limit} 个，因此无法创建新来源。"
     },
     "form": {
       "name": "来源名称",
@@ -66,7 +67,8 @@
         "contact": "联系人",
         "owner": "负责人",
         "deal": "交易",
-        "notify": "通知"
+        "notify": "通知",
+        "speed": "对新线索的首条消息"
       },
       "membersFailed": "无法加载您的团队，目前无法选择人员。请重新加载页面重试。",
       "countryCode": "默认国家/地区代码",
@@ -104,7 +106,41 @@
       "notifyOwner": "通知联系人负责人",
       "notifyOwnerHint": "有新线索进入时在应用内发送通知。测试线索不会发送通知。",
       "notifyUsers": "同时通知",
-      "notifyUsersHint": "例如您的销售经理。最多 20 人。"
+      "notifyUsersHint": "例如您的销售经理。最多 20 人。",
+      "speed": {
+        "enabled": "自动发送首条消息",
+        "enabledHint": "默认关闭。新线索成为联系人后，如果同意授权、免打扰时段、您的套餐和钱包都允许，系统会自动发出一条消息。",
+        "consentNote": "不会默认视为已同意。WhatsApp 实用类模板属于服务消息。营销类模板、SMS 或邮件属于营销消息：在您的工作区有要求时，需要有已记录的同意，会等待免打扰时段结束，并且不会发送给已退订的联系人。随线索一并提交同意凭证的，系统会将其记录下来。",
+        "channel": "渠道",
+        "channels": {
+          "whatsapp": "WhatsApp 模板",
+          "sms": "SMS",
+          "email": "邮件"
+        },
+        "template": "模板",
+        "templateChoose": "选择模板",
+        "templateNone": "此渠道暂无可用模板",
+        "templateUnavailable": "已保存的模板已不可用",
+        "templateHint": {
+          "whatsapp": "已审核通过且只需联系人信息（例如姓名）的模板。需要文件或链接变量的模板不会列出。",
+          "sms": "已审核通过的 SMS 模板。",
+          "email": "共享邮件模板。不能使用个人模板。"
+        },
+        "sender": "发送方",
+        "senderDefault": "第一个已连接的发送方",
+        "senderUnavailable": "已保存的发送方已断开连接",
+        "senderHint": {
+          "sms": "发出消息所用的 SMS 号码。",
+          "email": "发出消息所用的共享邮箱。"
+        },
+        "delay": "发送前等待（分钟）",
+        "delayHint": "0 到 {max} 之间的整数分钟。0 表示立即发送。",
+        "maxAge": "不向早于以下时间的线索发送消息",
+        "maxAgeHint": "延迟到达的线索（回填、重试、漏掉的同步）仍会被保存、分配并发出通知，但超过此时效后不会收到首条消息。只有在确实想给旧线索发消息时才选择更长的时间。同意规则始终适用。",
+        "businessHours": "仅在营业时间内发送",
+        "businessHoursHint": "如果超出您工作区设置的营业时间，消息会等到营业时间开始后再发送。",
+        "optionsFailed": "无法加载模板和发送方。请稍后再试。"
+      }
     },
     "mapping": {
       "contact": "联系人字段",
@@ -210,7 +246,7 @@
       "bodyRotated": "旧网址已立即失效。此新网址仅显示这一次。",
       "url": "Webhook 网址",
       "copyUrl": "复制网址",
-      "noOrigin": "在此路径前加上您的 API 地址即可得到完整网址。",
+      "noOrigin": "平台的公开 API 地址尚未设置，因此无法生成完整的 URL。请联系运营此平台的人员进行设置。在此之前，请在此路径前加上你的 API 地址。",
       "token": "令牌",
       "copyToken": "复制令牌",
       "secretHint": "此来源还需要共享密钥：发送方必须在 {header} 请求头中发送该密钥。",
@@ -218,7 +254,8 @@
       "sampleHelp": "在 Zapier 或 Make 中，使用向网址发送 JSON 的 Webhooks 操作。此命令将发送一条示例线索。",
       "copied": "我已将网址和令牌保存到安全的地方",
       "done": "我已复制，继续",
-      "doneHint": "请先勾选此框。此后将无法再次显示令牌。"
+      "doneHint": "请先勾选此框。此后将无法再次显示令牌。",
+      "notPublic": "平台的公开 API 地址指向了广告平台无法访问的私有或本地地址，因此不显示完整的 URL。请联系运营此平台的人员设置公开地址，然后轮换令牌以获取完整的 URL。"
     },
     "test": {
       "title": "发送测试线索",
@@ -296,7 +333,9 @@
           "body": "其网址将失效，其中存储的线索也会一并删除。已创建的联系人会保留。此操作无法撤销。",
           "action": "删除来源"
         }
-      }
+      },
+      "metaForm": "线索来自 Meta。此来源没有 URL 或令牌；请在广告标签页管理该表单（映射问题、分配和商机，或停止导入）。",
+      "metaFormLink": "打开 Meta 线索表单"
     },
     "events": {
       "title": "已收到的线索",
@@ -352,7 +391,8 @@
       "retried": "已重试。线索现在为",
       "payload": "已存储的负载",
       "loadingPayload": "正在打开负载",
-      "purged": "原始负载已在 {days} 天后清除。线索及其联系人保留。"
+      "purged": "原始负载已在 {days} 天后清除。线索及其联系人保留。",
+      "firstReply": "首条消息"
     },
     "attribution": {
       "title": "线索归因",
@@ -416,8 +456,25 @@
         "stage_not_in_pipeline": "此阶段属于其他销售管道。",
         "pipeline_required": "请选择此阶段所属的销售管道。",
         "unknown_or_lost_stage": "此生命周期阶段不存在，或为丢失阶段。",
-        "unknown_or_inactive_user": "所选人员中有人不是此工作区的有效成员。"
-      }
+        "unknown_or_inactive_user": "所选人员中有人不是此工作区的有效成员。",
+        "template_required": "请选择要发送的模板。",
+        "template_not_found": "此工作区中该渠道下不存在此模板。",
+        "template_not_sendable": "无法发送此模板：它未获批准、已暂停，或需要文件或链接变量。",
+        "sender_not_found": "此发送方未连接。"
+      },
+      "planLimitUsed": "你已使用 {used} 个线索来源，上限为 {limit} 个。请升级套餐，或删除不再使用的来源。",
+      "syncNotSupported": "此来源会自动推送线索，无需手动拉取。",
+      "syncInProgress": "此来源正在拉取中，请等待完成。",
+      "syncTooSoon": "刚刚已请求过此来源，请 {seconds} 秒后再试。",
+      "syncTooSoonNoWait": "刚刚已请求过此来源，请稍后再试。",
+      "backfillRange": "无法拉取该范围：它超出了来源保留线索的时间，或包含未来日期。",
+      "mlaNotConfigured": "此安装尚未设置 Meta。需要管理员先添加 Meta 应用。",
+      "mlaLeadAccessMissing": "此主页没有 Meta 读取线索所需的权限。请授予线索访问权限后重试。",
+      "mlaPageReconnect": "Meta 不再接受此主页的连接。请重新连接主页后重试。",
+      "mlaSubscribeFailed": "Meta 未为此主页开启线索推送。请检查 Meta 应用是否具有线索权限，以及其主页 webhook 是否已设置，然后重试。",
+      "mlaFormsUnavailable": "Meta 没有返回线索表单。请稍后重试。",
+      "mlaFormNotFound": "该表单已不再属于此主页的线索表单。请刷新列表后重试。",
+      "mlaSyncOff": "选择表单之前，请先为此主页开启线索同步。"
     },
     "problems": {
       "nameRequired": "请为来源命名。",
@@ -439,7 +496,10 @@
       "propertyDuplicate": "此属性被重复映射。",
       "pathRequired": "请说明该值在数据负载中的位置。",
       "customFieldsTooMany": "最多映射 {max} 个自定义属性。",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "请选择要发送的模板。",
+      "speedDelayRange": "请输入 0 到 {max} 之间的整数分钟数。",
+      "speedMaxAgeRange": "请选择线索的最长时效，范围为 1 分钟到 90 天。"
     },
     "kinds": {
       "webhook": "Webhook",
@@ -502,7 +562,8 @@
       "tabs": {
         "ads": "广告",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# 条线索需要处理}}"
+        "attention": "{count, plural, other {# 条线索需要处理}}",
+        "inbox": "线索收件箱"
       }
     },
     "ads": {
@@ -520,7 +581,7 @@
         },
         "meta": {
           "name": "Meta 线索表单",
-          "body": "直接从您的主页接收 Facebook 和 Instagram 线索广告。"
+          "body": "Facebook 和 Instagram 线索广告，从你的主页直接进入联系人。"
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -534,7 +595,8 @@
           "name": "Google Ads",
           "body": "Google Ads 线索表单扩展。"
         }
-      }
+      },
+      "dismissNotice": "关闭"
     },
     "sources": {
       "emptyTitle": "暂无来源",
@@ -553,7 +615,433 @@
       "connector": "通过应用市场",
       "endsIn": "将于 {hint} 结束",
       "noEvents": "暂无线索",
-      "needsAttention": "{count, plural, other {# 条线索}}"
+      "needsAttention": "{count, plural, other {# 条线索}}",
+      "metaDelivery": "来自 Meta"
+    },
+    "hookAddress": {
+      "title": "新的 webhook URL 将不完整",
+      "notConfigured": "平台的公开 API 地址尚未设置。请联系运营此平台的人员进行设置；在此之前，新来源只能显示其 URL 的路径部分。",
+      "notPublic": "平台的公开 API 地址指向了广告平台无法访问的私有或本地地址。请联系运营此平台的人员设置公开地址。"
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "已计划",
+        "sending": "发送中",
+        "held": "已暂缓",
+        "sent": "已发送",
+        "blocked": "已拦截",
+        "skipped": "已跳过",
+        "failed": "失败"
+      },
+      "reasons": {
+        "quiet_hours": "等待免打扰时段结束",
+        "outside_business_hours": "等待营业时间",
+        "channel_unavailable": "渠道未连接",
+        "wallet_empty": "钱包余额不足",
+        "send_halted": "发送已暂停",
+        "opted_out": "联系人已退订",
+        "no_consent": "没有已记录的同意",
+        "minor": "联系人被标记为未成年人",
+        "plan_limit": "已达到套餐上限",
+        "disabled": "该设置已关闭",
+        "source_paused": "线索来源已暂停",
+        "no_contact_point": "此渠道没有号码或地址",
+        "no_sender": "没有已连接的发送方",
+        "template_unavailable": "无法发送该模板",
+        "missing_value": "该联系人缺少模板所需的值",
+        "lead_too_old": "线索早于设置允许的时效",
+        "provider_error": "服务商拒绝了该消息",
+        "interrupted": "已中断",
+        "expired": "等待时间过长",
+        "internal_error": "内部错误"
+      },
+      "nextTry": "下次尝试",
+      "sentAt": "发送时间"
+    },
+    "inbox": {
+      "intro": "您所有来源收到的每一条线索，包括未能转为联系人的线索。打开线索可查看原因，并重试处于等待状态的线索。",
+      "chipsLabel": "按状态筛选",
+      "loading": "正在加载线索",
+      "more": "加载更多",
+      "chips": {
+        "all": "全部",
+        "attention": "需要处理",
+        "needs_review": "待审核",
+        "failed": "失败",
+        "created": "已创建",
+        "updated": "已更新",
+        "duplicate": "重复"
+      },
+      "filters": {
+        "source": "来源",
+        "allSources": "所有来源",
+        "reason": "原因",
+        "anyReason": "任意原因",
+        "range": "接收时间",
+        "ranges": {
+          "all": "不限时间",
+          "day": "最近 24 小时",
+          "week": "最近 7 天",
+          "month": "最近 30 天",
+          "custom": "选择日期"
+        },
+        "from": "从",
+        "to": "至（含）",
+        "rangeOrder": "结束日期早于开始日期。",
+        "tests": "测试线索",
+        "testChoices": {
+          "all": "显示",
+          "only": "仅测试线索",
+          "hide": "隐藏"
+        },
+        "search": "线索 ID 开头为",
+        "searchHint": "仅搜索发送方提供的线索 ID，不会搜索姓名、号码或地址。",
+        "searchPlaceholder": "lead-100",
+        "apply": "搜索",
+        "reset": "返回待处理的线索",
+        "showAll": "显示全部"
+      },
+      "table": {
+        "caption": "所有来源收到的线索",
+        "received": "接收时间",
+        "source": "来源",
+        "lead": "线索",
+        "status": "状态",
+        "reason": "原因",
+        "firstMessage": "首条消息",
+        "actions": "操作",
+        "select": "选择线索 {id}",
+        "test": "测试",
+        "view": "打开",
+        "retry": "重试"
+      },
+      "empty": {
+        "attentionTitle": "没有待处理事项",
+        "attention": "收到的线索都已成为联系人。需要审核或失败的线索会显示在这里。",
+        "filteredTitle": "没有匹配的线索",
+        "filtered": "没有符合这些筛选条件的内容。"
+      },
+      "bulk": {
+        "selectPage": "选择本页中可重试的线索",
+        "selected": "{count, plural, other {已选择 # 条线索}}",
+        "retry": "重试所选",
+        "limit": "每次最多 {max} 条。"
+      },
+      "result": {
+        "retried": "{count, plural, other {已重试 # 条线索。}}",
+        "fixed": "{count, plural, other {# 条已成为联系人。}}",
+        "stillWaiting": "{count, plural, other {# 条仍需审核。}}",
+        "skipped": {
+          "not_found": "{count, plural, other {未找到 # 条线索。}}",
+          "not_retryable": "{count, plural, other {# 条线索已不再处于等待状态。}}",
+          "payload_purged": "{count, plural, other {# 条线索已没有可供重试的存储数据。}}",
+          "source_paused": "{count, plural, other {# 条线索所属的来源已暂停。}}",
+          "error": "{count, plural, other {# 条线索无法重试。}}"
+        }
+      },
+      "drawer": {
+        "title": "线索",
+        "close": "关闭",
+        "retry": "重试",
+        "auditNote": "打开线索的操作会记入审计日志。其中的个人数据已隐藏。",
+        "source": "来源",
+        "lead": "线索 ID",
+        "received": "接收时间",
+        "processed": "处理时间",
+        "notProcessed": "未处理",
+        "attempts": "尝试次数",
+        "duplicates": "重复送达",
+        "deliveredAgain": "{count, plural, other {# 次}}",
+        "reason": "原因",
+        "firstReply": "首条消息",
+        "contact": "联系人",
+        "openContact": "打开联系人",
+        "error": "错误",
+        "payload": "发送方发送的内容",
+        "showOriginal": "显示原始内容",
+        "maskedNote": "电话号码、电子邮件地址、姓名、地址和自由文本已隐藏，密钥已移除。",
+        "nothingToMask": "这条线索中没有需要隐藏的个人信息。",
+        "originalNote": "这是原始数据，因您管理线索来源而显示。显示操作已记入审计日志。",
+        "loadingPayload": "正在加载数据",
+        "purged": "数据已在保留期限届满后删除，因此无可显示或重试的内容。"
+      },
+      "pull": {
+        "title": "同步与回填",
+        "intro": "可以向这些来源请求线索。“立即同步”会获取新线索；“回填”会重新拉取过去某个日期范围内的线索。已有的线索会被识别，不会重复添加。",
+        "backfill": "回填...",
+        "history": "最近的同步与回填",
+        "syncNow": "立即同步",
+        "syncStarted": "正在同步 {name}",
+        "paused": "此来源已暂停。请先恢复，再拉取其线索。",
+        "nextSync": "可再次同步的时间",
+        "syncReady": "现在可以同步。两次请求之间至少间隔 {seconds} 秒。",
+        "reach": "回填最多可追溯 {days, plural, other {# 天}}。",
+        "never": "尚未拉取。",
+        "progress": "{percent}%",
+        "counts": "已获取 {fetched} 条，新增 {accepted} 条，已存在 {duplicates} 条，未交付 {failed} 条",
+        "kinds": {
+          "sync": "同步",
+          "backfill": "回填"
+        },
+        "statuses": {
+          "queued": "排队中",
+          "running": "运行中",
+          "done": "已完成",
+          "partial": "部分完成",
+          "failed": "失败"
+        },
+        "errors": {
+          "too_soon": "来源要求我们稍后再试。",
+          "not_now": "来源尚未就绪：请求过于频繁，或其连接已暂停。",
+          "provider_error": "来源拒绝了请求或请求失败。",
+          "credentials_refused": "来源拒绝了凭据。请重新连接。",
+          "permission_missing": "Meta 未允许此主页读取线索。请在 Meta 线索表单中授予线索访问权限，然后重新运行。",
+          "interrupted": "已中断。请重新运行。",
+          "internal_error": "发生内部错误。请重新运行。",
+          "incomplete": "部分线索未能交付。请重新运行以完成。",
+          "not_supported": "此来源不支持该操作。",
+          "not_active": "连接未处于活动状态。",
+          "range_too_old": "来源不保留那么久以前的线索。",
+          "range_invalid": "范围无效。"
+        }
+      },
+      "backfill": {
+        "title": "回填日期范围",
+        "intro": "从保留线索的来源重新拉取过去几天的线索，每次最多 {days} 天。已收到的线索会被识别，不会重复写入。",
+        "from": "从",
+        "to": "至（含）",
+        "sources": "来源",
+        "noSources": "没有可回填的来源。",
+        "submit": "开始回填",
+        "cancel": "取消",
+        "close": "关闭",
+        "done": "完成",
+        "started": "{count, plural, other {已开始 # 个回填任务}}",
+        "skippedTitle": "以下来源未被拉取：",
+        "skipped": {
+          "not_supported": "不支持回填",
+          "paused": "已暂停",
+          "in_progress": "正在拉取中",
+          "too_soon": "刚刚拉取过",
+          "range_too_old": "不保留那么久以前的线索",
+          "not_found": "未找到"
+        },
+        "problems": {
+          "fromRequired": "请选择第一天。",
+          "toRequired": "请选择最后一天。",
+          "order": "最后一天早于第一天。",
+          "future": "第一天是未来的日期。",
+          "tooWide": "每次最多 {days} 天。",
+          "noSource": "请至少选择一个来源。"
+        },
+        "safe": "重复运行不会丢失或重复任何数据，只会补上缺失的线索。",
+        "speedNote": "回填的线索与新线索一样会成为联系人、分配给负责人并通知团队。如果线索早于来源的时效上限（除非你在来源的首条消息设置中修改过，否则为 1 小时），则不会发送自动首条消息。"
+      }
+    },
+    "meta": {
+      "heading": "Meta 线索表单",
+      "intro": "将 Facebook 和 Instagram 线索广告的线索直接导入联系人。连接 Facebook 主页，开启线索同步，然后选择要导入的线索表单。",
+      "loading": "正在加载 Meta 线索表单",
+      "pagesLabel": "已连接的 Facebook 主页",
+      "planLocked": "Meta 线索表单需要同时包含社交线索和附加渠道功能（Facebook）的套餐。请升级后使用。",
+      "metaSaid": "Meta 返回：",
+      "requestId": "请求 ID：",
+      "connectPage": "连接 Facebook 主页",
+      "connectAnother": "连接其他主页",
+      "connectNeedsPermission": "连接主页还需要 {permission} 权限。",
+      "card": {
+        "checking": "正在检查连接",
+        "unavailable": "无法加载连接状态。请打开面板重试。",
+        "notConfigured": "此安装尚未设置",
+        "noPages": "尚未连接 Facebook 主页",
+        "summary": "已连接 {pages, plural, other {# 个主页}}，已选择 {forms, plural, other {# 个表单}}",
+        "attention": "{count, plural, other {# 个主页需要处理}}",
+        "open": "打开 Meta 线索表单",
+        "close": "隐藏 Meta 线索表单"
+      },
+      "notConfigured": {
+        "title": "Meta 尚未设置",
+        "body": "Meta 线索表单需要此安装中有 Meta 应用。请让工作区管理员添加，然后回到这里连接主页。",
+        "bodyManage": "此安装还没有 Meta 应用，因此无法为线索广告连接主页。需要管理员先添加 Meta 应用（应用 ID 和密钥）。完成后，按下方说明注册 webhook。"
+      },
+      "noPages": {
+        "title": "未连接 Facebook 主页",
+        "body": "连接运行线索广告的 Facebook 主页。系统会请求 Meta 读取线索所需的权限。",
+        "bodyNoManage": "尚未连接 Facebook 主页。请让有权管理线索来源的人来连接。"
+      },
+      "setup": {
+        "title": "Meta 应用的 Webhook 设置",
+        "summary": "Meta 应用的 Webhook 设置",
+        "intro": "Meta 会把新线索发送到一个回调地址。管理员只需在 Meta 应用后台注册一次。",
+        "callbackUrl": "回调 URL",
+        "copyUrl": "复制 URL",
+        "verifyToken": "验证令牌",
+        "verifyTokenSet": "已在此安装中设置",
+        "verifyTokenMissing": "未设置",
+        "verifyTokenHelp": "此安装设置验证令牌之前，Meta 无法确认回调地址。请在此安装的 Facebook 设置中设置。",
+        "steps": {
+          "callback": "在 Meta 应用后台打开 Webhooks，选择 Page 对象，并粘贴上方的回调 URL。",
+          "verify": "当 Meta 要求验证令牌时，输入此安装 Facebook 设置中的令牌，然后验证并保存。",
+          "subscribe": "让 Page 对象订阅 {field} 字段。"
+        },
+        "scopes": "登录时请求的权限：{scopes}。",
+        "scopesFromConfiguration": "登录时请求的权限来自你的 Meta 登录配置。"
+      },
+      "pageStatus": {
+        "connected": "主页已连接",
+        "disconnected": "主页已断开",
+        "expired": "连接已过期",
+        "error": "主页错误"
+      },
+      "leadAccess": {
+        "granted": "已授予线索访问权限",
+        "missing": "缺少线索访问权限"
+      },
+      "syncState": {
+        "off": "线索同步已关闭",
+        "subscribed": "正在接收线索",
+        "needs_lead_access": "需要线索访问权限",
+        "needs_reconnect": "需要重新连接",
+        "error": "错误"
+      },
+      "page": {
+        "pageId": "主页 ID",
+        "missingScopes": "缺少的权限：",
+        "lastLead": "最近线索",
+        "lastSweep": "最近检查",
+        "subscribedAt": "线索同步开启时间",
+        "never": "从未",
+        "formsConnected": "已选表单",
+        "lastError": "最近错误：",
+        "grant": "授予线索访问权限",
+        "reconnect": "重新连接",
+        "enable": "开启线索同步",
+        "disable": "关闭线索同步",
+        "chooseForms": "选择线索表单",
+        "hideForms": "隐藏线索表单",
+        "enabledToast": "已为 {name} 开启线索同步",
+        "disabledToast": "已为 {name} 关闭线索同步",
+        "stateHelp": {
+          "off": "线索同步已关闭。开启后即可开始接收此主页的线索。",
+          "subscribed": "线索同步已开启。所选表单的新线索会很快到达，定期检查也会补回遗漏的线索。",
+          "needs_lead_access": "线索同步已开启，但此主页连接时没有 Meta 读取线索所需的权限。请授予线索访问权限后继续。",
+          "needs_reconnect": "Meta 不再接受此主页的连接。请重新连接主页以继续接收线索。",
+          "error": "Meta 在上次尝试时拒绝了某项请求。下方消息说明了原因；下次成功后会自动清除。"
+        },
+        "hints": {
+          "needManage": "更改线索同步需要 {permission} 权限。",
+          "needFacebook": "授予访问权限或重新连接还需要 {permission} 权限，因为这会保存主页的连接信息。",
+          "enableNeedsAccess": "请先授予线索访问权限；没有该权限的主页，Meta 会拒绝线索同步。",
+          "enableNeedsReconnect": "请先重新连接主页；其当前连接已失效。",
+          "pickNeedsSync": "开启线索同步后才能选择表单。",
+          "pickNeedsAccess": "授予线索访问权限后才能选择表单。",
+          "pickNeedsReconnect": "重新连接主页后才能选择表单。"
+        },
+        "confirmOff": {
+          "title": "要关闭 {name} 的线索同步吗？",
+          "body": "此主页将不再从 Meta 接收新线索。你已选的表单和已存储的线索会保留，之后可随时重新开启线索同步。",
+          "action": "关闭线索同步",
+          "cancel": "取消"
+        }
+      },
+      "forms": {
+        "title": "{name} 的线索表单",
+        "intro": "这是 Meta 为此主页列出的线索表单。选择一个表单即可导入其线索；每个已选表单都会成为 Webhook 标签页中的一个线索来源。",
+        "refresh": "刷新列表",
+        "loading": "正在从 Meta 加载线索表单",
+        "emptyTitle": "没有线索表单",
+        "empty": "此主页还没有线索表单。请在 Meta 广告管理工具或主页上创建，然后刷新此列表。",
+        "caption": "主页的线索表单",
+        "col": {
+          "form": "表单",
+          "status": "Meta 状态",
+          "leads": "线索",
+          "questions": "问题",
+          "consent": "同意复选框",
+          "connected": "已连接",
+          "lastLead": "最近线索",
+          "lastError": "最近错误",
+          "actions": "操作"
+        },
+        "formId": "表单 ID",
+        "formStatus": {
+          "ACTIVE": "有效",
+          "ARCHIVED": "已归档",
+          "DELETED": "已删除",
+          "DRAFT": "草稿",
+          "unknown": "未知"
+        },
+        "leadsUnknown": "Meta 未提供",
+        "consentYes": "含同意复选框",
+        "consentNo": "无",
+        "connected": "已连接",
+        "notConnected": "未选择",
+        "noLeads": "暂无线索",
+        "pick": "选择",
+        "pickFor": "选择 {name}",
+        "stop": "停止",
+        "stopFor": "停止 {name}",
+        "mapFields": "映射字段",
+        "mapFieldsFor": "映射 {name} 的字段",
+        "rules": "分配和商机",
+        "rulesFor": "{name} 的分配和商机",
+        "openSource": "打开来源",
+        "openSourceFor": "打开 {name} 的线索来源",
+        "pickedToast": "已选择 {name}",
+        "stoppedToast": "已停止 {name}",
+        "confirmStop": {
+          "title": "要停止导入 {name} 吗？",
+          "body": "此表单的线索来源及其下已存储的线索将被删除。已创建的联系人会保留。之后你可以重新选择该表单。",
+          "action": "停止导入线索",
+          "cancel": "取消"
+        }
+      },
+      "mapping": {
+        "title": "映射字段：{name}",
+        "close": "关闭",
+        "noSource": "找不到此表单的线索来源。请刷新列表后重试。",
+        "loading": "正在加载线索来源",
+        "intro": "选择此表单中每个答案要存入联系人的哪个位置。保持为“自动”的问题会按常用名称查找，例如 email 或 phone_number。",
+        "suggested": "我们已根据每个问题的类型预先填写。请检查后保存。",
+        "multiUse": "已保存的映射把同一个问题用于多个字段（{keys}）。保存时只保留第一个。",
+        "noQuestions": "Meta 没有列出此表单的任何问题，因此没有可映射的内容。仍会按常用名称查找。",
+        "ignore": "自动（不在此映射）",
+        "contactFields": "联系人字段",
+        "contactProperties": "联系人属性",
+        "problems": {
+          "duplicateTarget": "已有另一个问题对应此字段。请选择其他字段。",
+          "propertyKey": "此属性键无效。"
+        },
+        "conflict": "其他人修改了此线索来源。请重新加载以查看对方的版本；你未保存的选择将丢失。",
+        "cancel": "取消",
+        "save": "保存映射",
+        "saved": "已保存 {name} 的字段映射"
+      },
+      "rules": {
+        "title": "分配和商机：{name}",
+        "close": "关闭",
+        "noSource": "找不到此表单的线索来源。请刷新列表后重试。",
+        "loading": "正在加载线索来源",
+        "intro": "决定此表单创建的联系人归谁负责、是否为每条线索创建商机，以及通知谁。更改仅适用于保存之后到达的线索。",
+        "conflict": "其他人修改了此线索来源。请重新加载以查看对方的版本；你未保存的更改将丢失。",
+        "cancel": "取消",
+        "save": "保存",
+        "saved": "已保存 {name} 的分配和商机"
+      },
+      "health": {
+        "title": "Meta 线索表单状态",
+        "loading": "正在检查表单",
+        "notConnected": "此来源已不再关联 Meta 线索表单，因此无需检查。请在广告标签页重新选择该表单。",
+        "page": "主页",
+        "form": "表单",
+        "state": "线索同步",
+        "leadAccess": "线索访问权限",
+        "lastLead": "最近线索",
+        "never": "暂无线索",
+        "lastError": "最近错误：",
+        "fixHint": "要修复，请打开广告标签页：授予线索访问权限、重新连接主页，或重新开启线索同步。",
+        "openAds": "打开广告标签页"
+      }
     }
   }
 }

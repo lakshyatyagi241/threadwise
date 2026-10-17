@@ -193,6 +193,7 @@
         "signupClosed": "Kayıt kapalı. Bir yöneticiden davet isteyin.",
         "slugTaken": "Bu çalışma alanı adresi zaten alınmış.",
         "emailTaken": "Bu e-posta bu çalışma alanında zaten kullanılıyor.",
+        "identityExists": "Bu e-posta veya telefon numarasıyla zaten bir hesap var.",
         "passwordPolicy": "Bu parola güvenlik politikasını karşılamıyor:",
         "tokenInvalid": "Bu bağlantı geçersiz veya süresi dolmuş.",
         "emailUnverified": "Önce e-posta adresinizi onaylayın.",
@@ -364,7 +365,9 @@
         "resendIn": "Kodu {time} içinde yeniden gönder",
         "resending": "Gönderiliyor",
         "resent": "WhatsApp numaranıza yeni bir kod geliyor.",
+        "resentEmail": "Yeni bir kod e-postana gönderiliyor.",
         "wrongNumber": "Yanlış numara mı?",
+        "wrongEmail": "Yanlış e-posta mı?",
         "goBack": "Geri dön",
         "addressTakenHint": "Siz doğrularken bu çalışma alanı adresi alındı. Başka bir adres seçin, size yeni bir kod gönderelim.",
         "chooseAnotherAddress": "Başka bir adres seç"

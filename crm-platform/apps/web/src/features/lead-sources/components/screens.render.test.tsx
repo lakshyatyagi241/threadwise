@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, type LeadHookAddress } from '@crm/contracts';
 import { ToastProvider } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import {
@@ -44,30 +44,36 @@ const waiting = source({
   lastEventAt: null,
 });
 const connector = source({ id: ID(3), name: 'IndiaMART', kind: 'connector', tokenHint: null });
-const LIST = [leadKeys.list, [source(), waiting, connector]] as const;
+/** The list answer as the API sends it: the sources and whether a complete webhook address can be built. */
+const OK_ADDRESS = { baseUrl: 'https://api.acme.test', problem: null } as const;
+const listOf = (data: ReturnType<typeof source>[], hookAddress: LeadHookAddress = OK_ADDRESS) =>
+  [leadKeys.list, { data, hookAddress }] as const;
+const LIST = listOf([source(), waiting, connector]);
 
 describe('Social leads screen: the Ads tab', () => {
   for (const locale of LOCALES) {
-    it(`offers the Webhook and shows the four providers without a door as coming soon in ${locale}`, () => {
+    it(`offers the Webhook and Meta lead forms and shows the three providers without a door as coming soon in ${locale}`, () => {
       const html = renderAccount(<LeadSourcesScreen tab="ads" />, {
         locale,
         ...as(MANAGE),
         seed: [LIST],
       });
       expect(html).toContain('data-testid="provider-webhook"');
-      for (const p of ['meta', 'linkedin', 'tiktok', 'google']) {
+      expect(html).toContain('data-testid="provider-meta"');
+      for (const p of ['linkedin', 'tiktok', 'google']) {
         expect(html).toContain(`data-testid="provider-${p}"`);
       }
+      expect(html.match(/data-coming-soon="true"/g)).toHaveLength(3);
       // The webhook leads to the wizard
       expect(html).toContain('href="/lead-sources/new"');
     });
   }
 
-  it('the coming-soon cards are not links and not buttons, and say what to do until then', () => {
+  it('the three coming-soon cards are not links and not buttons, and say what to do until then', () => {
     const html = renderAccount(
       <AdsTab can={{ read: true, manage: true }} count={0} onOpenSources={() => undefined} />,
     );
-    for (const p of ['meta', 'linkedin', 'tiktok', 'google']) {
+    for (const p of ['linkedin', 'tiktok', 'google']) {
       const card =
         new RegExp(`<div[^>]*data-testid="provider-${p}"[\\s\\S]*?</li>`).exec(html)?.[0] ?? '';
       expect(card, p).not.toBe('');
@@ -98,7 +104,9 @@ describe('Social leads screen: the Ads tab', () => {
   it('shows the pages without the tabs that are not built (Rules, X profile)', () => {
     const html = renderAccount(<LeadSourcesScreen tab="ads" />, { ...as(MANAGE), seed: [LIST] });
     expect(html).toContain('role="tab"');
-    expect(html.match(/role="tab"/g)).toHaveLength(2);
+    // Ads, Webhook and the Lead inbox
+    expect(html.match(/role="tab"/g)).toHaveLength(3);
+    expect(html).toContain('Lead inbox');
     expect(html).not.toContain('X profile');
   });
 });
@@ -139,7 +147,7 @@ describe('Social leads screen: the Webhook tab', () => {
     expect(html).toContain('No sources yet');
     const tiktok = renderAccount(<LeadSourcesScreen tab="webhook" />, {
       ...as(READ),
-      seed: [[leadKeys.list, [source({ kind: 'tiktok', name: 'TikTok forms' })]]],
+      seed: [listOf([source({ kind: 'tiktok', name: 'TikTok forms' })])],
     });
     expect(tiktok).toContain('TikTok forms');
     expect(tiktok).toContain('>TikTok<');
@@ -147,7 +155,7 @@ describe('Social leads screen: the Webhook tab', () => {
   });
 
   it('says there are no sources yet and offers the first one to a person who can create it', () => {
-    const empty = [leadKeys.list, []] as const;
+    const empty = listOf([]);
     const manage = renderAccount(<LeadSourcesScreen tab="webhook" />, {
       ...as(MANAGE),
       seed: [empty],
@@ -161,6 +169,31 @@ describe('Social leads screen: the Webhook tab', () => {
     expect(readOnly).toContain('No sources yet');
     expect(readOnly).not.toContain('/lead-sources/new');
     expect(readOnly).toContain('Ask someone who can manage');
+  });
+
+  it('warns a person who manages sources when the server cannot build a complete webhook address (BL-061)', () => {
+    const none = { baseUrl: null, problem: 'base_url_not_configured' } as const;
+    const manage = renderAccount(<LeadSourcesScreen tab="webhook" />, {
+      ...as(MANAGE),
+      seed: [listOf([source()], none)],
+    });
+    expect(manage).toContain('data-testid="hook-address-notice"');
+    expect(manage).toContain('public API address is not set');
+    const priv = renderAccount(<LeadSourcesScreen tab="webhook" />, {
+      ...as(MANAGE),
+      seed: [listOf([source()], { baseUrl: null, problem: 'base_url_not_public' })],
+    });
+    expect(priv).toContain('private or local address');
+    // nothing to warn about when the address is fine, and a read-only role cannot fix it anyway
+    expect(
+      renderAccount(<LeadSourcesScreen tab="webhook" />, { ...as(MANAGE), seed: [LIST] }),
+    ).not.toContain('hook-address-notice');
+    expect(
+      renderAccount(<LeadSourcesScreen tab="webhook" />, {
+        ...as(READ),
+        seed: [listOf([source()], none)],
+      }),
+    ).not.toContain('hook-address-notice');
   });
 
   it('shows a loading state while the list is on its way', () => {
@@ -216,13 +249,11 @@ describe('access and plan', () => {
 });
 
 describe('create wizard', () => {
-  const env = { apiPublicUrl: 'https://api.acme.test' };
-
   for (const locale of LOCALES) {
     it(`starts on its first step with the basics in ${locale}`, () => {
       const html = renderAccount(
         <ToastProvider>
-          <NewSourcePage hookEnv={env} />
+          <NewSourcePage />
         </ToastProvider>,
         { locale, ...as(MANAGE) },
       );
@@ -241,7 +272,7 @@ describe('create wizard', () => {
   it('needs the manage permission and names it', () => {
     const html = renderAccount(
       <ToastProvider>
-        <NewSourcePage hookEnv={env} />
+        <NewSourcePage />
       </ToastProvider>,
       { ...as(READ) },
     );
@@ -252,7 +283,7 @@ describe('create wizard', () => {
   it('offers the optional shared secret as a write-only password field', () => {
     const html = renderAccount(
       <ToastProvider>
-        <NewSourcePage hookEnv={env} />
+        <NewSourcePage />
       </ToastProvider>,
       { ...as(MANAGE) },
     );
@@ -378,15 +409,21 @@ describe('create wizard', () => {
 });
 
 describe('the one-time reveal', () => {
-  const reveal = revealOf({ token: SECRET_TOKEN, hookPath: SECRET_PATH }, 'created');
-  const env = { apiPublicUrl: 'https://api.acme.test' };
+  const reveal = revealOf(
+    {
+      token: SECRET_TOKEN,
+      hookPath: SECRET_PATH,
+      hookUrl: `https://api.acme.test${SECRET_PATH}`,
+      hookUrlProblem: null,
+    },
+    'created',
+  );
 
   for (const locale of LOCALES) {
     it(`shows the full URL, the token, copy buttons and a sample once, in ${locale}`, () => {
       const html = renderAccount(
         <RevealPanel
           reveal={reveal}
-          env={env}
           hasSecret={false}
           onChange={() => undefined}
           onDone={() => undefined}
@@ -405,7 +442,6 @@ describe('the one-time reveal', () => {
     const open = renderAccount(
       <RevealPanel
         reveal={reveal}
-        env={env}
         hasSecret={false}
         onChange={() => undefined}
         onDone={() => undefined}
@@ -417,7 +453,6 @@ describe('the one-time reveal', () => {
     const confirmed = renderAccount(
       <RevealPanel
         reveal={confirmReveal(reveal, true)}
-        env={env}
         hasSecret={false}
         onChange={() => undefined}
         onDone={() => undefined}
@@ -429,30 +464,55 @@ describe('the one-time reveal', () => {
 
   it('mentions the secret header only for a source that has a shared secret', () => {
     const html = renderAccount(
-      <RevealPanel
-        reveal={reveal}
-        env={env}
-        hasSecret
-        onChange={() => undefined}
-        onDone={() => undefined}
-      />,
+      <RevealPanel reveal={reveal} hasSecret onChange={() => undefined} onDone={() => undefined} />,
     );
     expect(html).toContain('x-webhook-secret');
     expect(html).not.toMatch(/value="[^"]*secret[^"]*"/i);
   });
 
-  it('shows the path with a hint when the API origin is unknown', () => {
+  it('shows the path with the reason, never a guessed address, when the server could not build one', () => {
+    const none = revealOf(
+      {
+        token: SECRET_TOKEN,
+        hookPath: SECRET_PATH,
+        hookUrl: null,
+        hookUrlProblem: 'base_url_not_configured',
+      },
+      'created',
+    );
     const html = renderAccount(
       <RevealPanel
-        reveal={reveal}
-        env={{}}
+        reveal={none}
         hasSecret={false}
         onChange={() => undefined}
         onDone={() => undefined}
       />,
     );
     expect(html).toContain(SECRET_PATH);
-    expect(html).toContain('Put your API address in front of this path');
+    expect(html).toContain('data-testid="hook-address-problem"');
+    expect(html).toContain('public API address is not set');
+    expect(html).not.toContain('https://');
+  });
+
+  it('explains a private address differently from a missing one', () => {
+    const priv = revealOf(
+      {
+        token: SECRET_TOKEN,
+        hookPath: SECRET_PATH,
+        hookUrl: null,
+        hookUrlProblem: 'base_url_not_public',
+      },
+      'rotated',
+    );
+    const html = renderAccount(
+      <RevealPanel
+        reveal={priv}
+        hasSecret={false}
+        onChange={() => undefined}
+        onDone={() => undefined}
+      />,
+    );
+    expect(html).toContain('private or local address');
     expect(html).not.toContain('https://');
   });
 
@@ -462,7 +522,6 @@ describe('the one-time reveal', () => {
       <ConnectStep
         source={source1}
         reveal={reveal}
-        hookEnv={env}
         canManage
         onReveal={() => undefined}
         onDone={() => undefined}
@@ -479,7 +538,6 @@ describe('the one-time reveal', () => {
       <ConnectStep
         source={source1}
         reveal={null}
-        hookEnv={env}
         canManage
         onReveal={() => undefined}
         onDone={() => undefined}

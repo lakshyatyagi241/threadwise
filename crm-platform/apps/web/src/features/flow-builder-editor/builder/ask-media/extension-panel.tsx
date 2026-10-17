@@ -132,7 +132,7 @@ export function ExtensionsPanel({
       role="dialog"
       aria-label={t('panelTitle')}
       data-testid="ask-extensions-panel"
-      className="absolute left-0 top-full z-30 mt-1.5 w-[300px] rounded-xl border border-border bg-background p-3 shadow-lg"
+      className="absolute start-0 top-full z-30 mt-1.5 w-[300px] rounded-xl border border-border bg-background p-3 shadow-lg"
       onPointerDown={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >

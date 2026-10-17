@@ -34,7 +34,8 @@
         "too_long": "Informe no máximo {max} caracteres.",
         "pattern": "Não corresponde ao formato esperado.",
         "invalid_option": "Escolha uma das opções listadas.",
-        "invalid_amount": "Informe um valor dentro do intervalo permitido."
+        "invalid_amount": "Informe um valor dentro do intervalo permitido.",
+        "guardian_required": "Adicione o nome e um e-mail ou telefone de um dos pais ou responsável."
       },
       "closedTitle": "Este formulário está fechado",
       "payTitle": "Mais uma etapa",
@@ -59,7 +60,15 @@
         "missingTitle": "Não encontramos este pagamento",
         "missingBody": "O link pode estar errado ou ser muito antigo."
       },
-      "termsOfService": "Termos"
+      "termsOfService": "Termos",
+      "ageDeclaration": "Confirmo que tenho pelo menos {age} anos",
+      "ageBlockedTitle": "Não podemos continuar",
+      "ageBlockedBody": "Obrigado pelo seu interesse. Não podemos aceitar este envio.",
+      "guardianTitle": "Um dos pais ou responsável",
+      "guardianIntro": "Adicione os dados de um dos pais ou responsável.",
+      "guardianName": "Nome",
+      "guardianEmail": "E-mail",
+      "guardianPhone": "Telefone"
     }
   }
 }

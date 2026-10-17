@@ -17,7 +17,8 @@
       "unexpected": "Terjadi kesalahan. Coba lagi.",
       "exportInProgress": "Berkas bukti sedang disiapkan. Tunggu hingga selesai, lalu coba lagi.",
       "exportNotReady": "Berkas itu belum siap atau sudah kedaluwarsa. Siapkan yang baru.",
-      "noticeTargetMissing": "Widget, halaman pemesanan, atau toko itu sudah tidak ada."
+      "noticeTargetMissing": "Widget, halaman pemesanan, atau toko itu sudah tidak ada.",
+      "notMinor": "Persetujuan wali hanya dapat dicatat untuk kontak yang ditandai di bawah umur."
     },
     "settings": {
       "title": "Persetujuan dan balasan STOP",
@@ -142,7 +143,10 @@
         "widget": "Obrolan situs web",
         "booking": "Halaman pemesanan",
         "commerce": "Checkout toko",
-        "lead": "Penangkapan lead"
+        "lead": "Penangkapan lead",
+        "gpc": "Global Privacy Control",
+        "dob": "Tanggal lahir atau usia",
+        "declaration": "Usia belum dikonfirmasi"
       },
       "by": "oleh {name}",
       "evidence": {
@@ -165,7 +169,8 @@
         "storeFlag": "Pengaturan toko",
         "leadSourceId": "Sumber lead",
         "leadFormId": "Formulir lead",
-        "adId": "Iklan"
+        "adId": "Iklan",
+        "guardianConsentRef": "Referensi persetujuan wali"
       },
       "dialog": {
         "titleGranted": "Tandai sebagai berlangganan",
@@ -181,6 +186,52 @@
         "close": "Tutup",
         "savedGranted": "Ditandai sebagai berlangganan.",
         "savedWithdrawn": "Ditandai sebagai berhenti berlangganan."
+      },
+      "privacy": {
+        "title": "Penanda privasi",
+        "saved": "Tersimpan.",
+        "minorLabel": "Di bawah umur",
+        "minorOn": "Ditandai di bawah umur sejak {date}.",
+        "minorOff": "Tidak ditandai di bawah umur.",
+        "rule": {
+          "off": "Ruang kerja Anda belum menjawab pertanyaan tentang anak di Pusat Kepatuhan, sehingga pemasaran ke kontak ini tidak ditahan.",
+          "guardian": "Pemasaran ke kontak ini ditahan sampai persetujuan orang tua atau wali tercatat.",
+          "block": "Pemasaran ke kontak ini ditahan karena ruang kerja Anda menyatakan tidak memproses data anak di bawah umur."
+        },
+        "guardianBadge": "Persetujuan wali tercatat",
+        "guardianLabel": "Persetujuan orang tua atau wali",
+        "guardianOn": "Tercatat sejak {date}. Ini hanya bukti dan tidak membuat kontak berlangganan.",
+        "guardianOff": "Belum tercatat.",
+        "recordGuardian": "Catat persetujuan wali",
+        "clearGuardian": "Hapus",
+        "dnsLabel": "Jangan jual atau bagikan",
+        "dnsOn": "Menolak sejak {date} ({source}).",
+        "dnsOff": "Tidak menolak.",
+        "history": "Riwayat privasi",
+        "event": {
+          "minor": {
+            "on": "Ditandai di bawah umur",
+            "off": "Tanda di bawah umur dihapus"
+          },
+          "guardian_consent": {
+            "on": "Persetujuan wali dicatat",
+            "off": "Persetujuan wali dihapus"
+          },
+          "sale_share_opt_out": {
+            "on": "Menolak penjualan dan pembagian data",
+            "off": "Penolakan dihapus"
+          }
+        },
+        "dialog": {
+          "title": "Catat persetujuan wali",
+          "intro": "Catat bahwa orang tua atau wali telah setuju. Ini hanya bukti: kontak tidak otomatis berlangganan pemasaran.",
+          "note": "Bagaimana mereka setuju? (wajib)",
+          "noteHint": "Contoh: menandatangani formulir kertas di loket. Jangan tulis nama atau kontak wali.",
+          "ref": "Referensi (opsional)",
+          "refHint": "Nomor formulir atau id dokumen yang bisa Anda cari nanti."
+        },
+        "minorFrom": "Ditetapkan dari tanggal lahir atau usia yang diberikan. Tanda ini hilang sendiri pada {date}, kecuali seseorang mempertahankannya.",
+        "minorFromDeclaration": "Ditetapkan karena usia tidak dikonfirmasi pada formulir. Tetap ada sampai seseorang menghapusnya."
       }
     },
     "composer": {
@@ -302,7 +353,10 @@
         "consent_evidence_recorded": "Diizinkan: pemberitahuan disampaikan dan orang tersebut setuju.",
         "purpose_not_enabled": "Tidak diizinkan: ruang kerja belum mengaktifkannya.",
         "consent_declined": "Tidak diizinkan: orang tersebut menolak.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Tidak diizinkan: kontak ini ditandai di bawah umur dan ruang kerja Anda menahan pemasaran.",
+        "sale_share_opted_out": "Tidak diizinkan: kontak menolak penjualan atau pembagian datanya.",
+        "on_dnc_list": "Ada di daftar Jangan Hubungi Anda: tidak ada panggilan atau pesan teks pemasaran ke nomor ini"
       }
     },
     "notice": {

@@ -17,8 +17,8 @@ export function AboutHero({ ctx, def }: P) {
     <>
       <section className="relative overflow-hidden bg-paper-0">
         <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
-        <div className="absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
-        <div className="absolute -bottom-40 -left-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
+        <div className="absolute -top-32 -end-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
+        <div className="absolute -bottom-40 -start-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
 
         <div className="relative max-w-[1360px] mx-auto px-7 py-28">
           <div className="grid grid-cols-12 gap-8 items-end">
@@ -36,11 +36,11 @@ export function AboutHero({ ctx, def }: P) {
                 ctx={ctx}
                 k={k('intro')}
                 as="p"
-                className="text-[15.5px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[15.5px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
 
               <div className="mt-6 grid grid-cols-3 gap-0 hairline-t hairline-b py-4">
-                <div className="hairline-r pr-4">
+                <div className="hairline-r pe-4">
                   <T
                     ctx={ctx}
                     k={k('stat1_value')}
@@ -68,7 +68,7 @@ export function AboutHero({ ctx, def }: P) {
                     className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5"
                   />
                 </div>
-                <div className="pl-4">
+                <div className="ps-4">
                   <T
                     ctx={ctx}
                     k={k('stat3_value')}
@@ -593,8 +593,8 @@ export function ContactHero({ ctx, def }: P) {
     <>
       <section className="relative overflow-hidden bg-paper-0">
         <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
-        <div className="absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
-        <div className="absolute -bottom-40 -left-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
+        <div className="absolute -top-32 -end-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
+        <div className="absolute -bottom-40 -start-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
 
         <div className="relative max-w-[1360px] mx-auto px-7 py-28">
           <div className="grid grid-cols-12 gap-8 items-end">
@@ -614,11 +614,11 @@ export function ContactHero({ ctx, def }: P) {
                 ctx={ctx}
                 k={k('intro')}
                 as="p"
-                className="text-[15.5px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[15.5px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
 
               <div className="mt-6 grid grid-cols-3 gap-0 hairline-t hairline-b py-4">
-                <div className="hairline-r pr-4">
+                <div className="hairline-r pe-4">
                   <T
                     ctx={ctx}
                     k={k('stat1_value')}
@@ -646,7 +646,7 @@ export function ContactHero({ ctx, def }: P) {
                     className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5"
                   />
                 </div>
-                <div className="pl-4">
+                <div className="ps-4">
                   <T
                     ctx={ctx}
                     k={k('stat3_value')}

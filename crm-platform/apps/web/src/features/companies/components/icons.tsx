@@ -71,3 +71,33 @@ export const RefreshIcon = (p: IconProps) => (
     <path d="M20 11a8 8 0 0 0-14.5-4M4 4v4h4M4 13a8 8 0 0 0 14.5 4M20 20v-4h-4" />
   </Svg>
 );
+export const ColumnsIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 4h18v16H3zM9 4v16M15 4v16" />
+  </Svg>
+);
+export const FilterIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 5h18l-7 8v6l-4 2v-8z" />
+  </Svg>
+);
+export const DownloadIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 4v12M7 11l5 5 5-5M5 20h14" />
+  </Svg>
+);
+export const UploadIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 16V4M7 9l5-5 5 5M5 20h14" />
+  </Svg>
+);
+export const SparklesIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z" />
+  </Svg>
+);
+export const CopyIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M9 9h11v11H9zM5 15V4h11" />
+  </Svg>
+);

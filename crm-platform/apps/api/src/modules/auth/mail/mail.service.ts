@@ -273,4 +273,20 @@ export class MailService {
       ),
     );
   }
+
+  /** The 6-digit code for the signup email step: a literal value, so it is shown as a block, not a link. */
+  sendSignupCode(to: string, name: string, code: string, ttlMinutes: number): Promise<boolean> {
+    const subject = 'Your verification code';
+    return this.deliver(
+      to,
+      subject,
+      `Hi ${name},\n\nYour verification code is ${code}. It expires in ${ttlMinutes} minutes.\n\nIf you did not request this, you can ignore this email.`,
+      this.layout(
+        subject,
+        `<p>Hi ${esc(name)}, enter this code to continue creating your account:</p>
+         <pre style="font-size:28px;letter-spacing:4px;font-weight:700;background:#f8fafc;padding:12px;border-radius:8px;text-align:center">${esc(code)}</pre>
+         <p>It expires in ${ttlMinutes} minutes. If you did not request this, you can ignore this email.</p>`,
+      ),
+    );
+  }
 }

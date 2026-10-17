@@ -131,7 +131,11 @@ function transitionOf(run: RunState, nodeId: string, r: NodeResult, deps: StepDe
         missVars: r.missVars,
       };
     case 'halt':
-      return { t: 'halt', reason: r.reason };
+      return {
+        t: 'halt',
+        reason: r.reason,
+        ...(r.retryAt !== undefined ? { retryAt: r.retryAt } : {}),
+      };
     case 'fail':
       return {
         t: 'end',

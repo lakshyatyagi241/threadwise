@@ -3,6 +3,8 @@ import { MarketplaceModule } from './marketplace.module';
 import { InboundProcessor, InboundSweepService } from './inbound.worker';
 import { PullProcessor, PullSweepService } from './pull.worker';
 import { SubscriptionSweepService } from './subscription-sweep.worker';
+import { NotificationPublisher, NotificationsRepository } from '../notifications';
+import { MarketSubscriptionNotificationsConsumer } from './subscription-notifications.consumer';
 
 /** The pull connectors' schedule and job, the delivery-row retention sweep, and the paid-app subscription sweep. Imported ONLY by WorkersModule: the HTTP app must never run them. */
 @Module({
@@ -13,6 +15,9 @@ import { SubscriptionSweepService } from './subscription-sweep.worker';
     InboundSweepService,
     InboundProcessor,
     SubscriptionSweepService,
+    NotificationsRepository,
+    NotificationPublisher,
+    MarketSubscriptionNotificationsConsumer,
   ],
 })
 export class MarketplaceWorkerModule {}

@@ -95,7 +95,28 @@
         "required": "Obligatoire",
         "removeField": "Supprimer",
         "options": "Options (séparées par des virgules)",
-        "optionsPlaceholder": "Option 1, Option 2, Option 3"
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Associe à",
+        "mapsToHint": "Enregistre cette réponse dans une propriété du contact lors de l'envoi du formulaire.",
+        "mapsToNone": "Ne pas enregistrer dans une propriété du contact",
+        "mapsToSystemGroup": "Champs du contact",
+        "mapsToCustomGroup": "Propriétés personnalisées",
+        "mapsToSystem": {
+          "name": "Nom complet",
+          "first_name": "Prénom",
+          "last_name": "Nom de famille",
+          "email": "E-mail",
+          "title": "Poste",
+          "language": "Langue",
+          "address": "Adresse"
+        },
+        "mapsToPrivacyGroup": "Confidentialité et consentement",
+        "mapsToPrivacy": {
+          "age": "Âge (vérification des mineurs)",
+          "date_of_birth": "Date de naissance (vérification des mineurs)",
+          "consent_marketing": "Consentement marketing (WhatsApp)",
+          "consent_service": "Accord de service (hors marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Titre",
@@ -130,15 +151,24 @@
       "loading": "Chargement des liens…",
       "retry": "Réessayer",
       "searchPlaceholder": "Rechercher par nom ou par lien",
-      "create": { "cta": "Nouveau lien" },
+      "create": {
+        "cta": "Nouveau lien"
+      },
       "stats": {
         "all": "Tous les liens",
         "live": "Actifs",
         "totalClicks": "Clics totaux",
         "avgClicks": "Clics moy. / lien"
       },
-      "tabs": { "all": "Tous", "live": "Actifs", "paused": "En pause" },
-      "status": { "live": "Actif", "paused": "En pause" },
+      "tabs": {
+        "all": "Tous",
+        "live": "Actifs",
+        "paused": "En pause"
+      },
+      "status": {
+        "live": "Actif",
+        "paused": "En pause"
+      },
       "empty": {
         "title": "Aucun lien pour le moment",
         "description": "Créez un lien à partager dans une publicité, une bio ou un code QR."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "Retour aux liens",
         "newHeading": "Nouveau lien",
-        "step": { "destination": "Destination", "message": "Message de départ", "tracking": "Suivi" },
+        "step": {
+          "destination": "Destination",
+          "message": "Message de départ",
+          "tracking": "Suivi"
+        },
         "name": "Nom",
         "status": "Statut",
         "countryCode": "Indicatif du pays",
@@ -194,6 +228,14 @@
         "shortUrl": "Lien court",
         "waUrl": "Lien WhatsApp",
         "qrAlt": "Code QR pour ce lien"
+      },
+      "public": {
+        "missingTitle": "Lien introuvable",
+        "missingBody": "Ce lien n'existe pas ou a été supprimé.",
+        "goneTitle": "Lien plus actif",
+        "goneBody": "Ce lien est en pause ou a expiré.",
+        "errorTitle": "Une erreur est survenue",
+        "errorBody": "Impossible d'ouvrir ce lien. Veuillez réessayer."
       }
     }
   }

@@ -95,7 +95,28 @@
         "required": "Bắt buộc",
         "removeField": "Xóa",
         "options": "Tùy chọn (cách nhau bằng dấu phẩy)",
-        "optionsPlaceholder": "Tùy chọn 1, Tùy chọn 2, Tùy chọn 3"
+        "optionsPlaceholder": "Tùy chọn 1, Tùy chọn 2, Tùy chọn 3",
+        "mapsTo": "Ánh xạ tới",
+        "mapsToHint": "Lưu câu trả lời này vào thuộc tính liên hệ khi biểu mẫu được gửi.",
+        "mapsToNone": "Không lưu vào thuộc tính liên hệ",
+        "mapsToSystemGroup": "Trường liên hệ",
+        "mapsToCustomGroup": "Thuộc tính tùy chỉnh",
+        "mapsToSystem": {
+          "name": "Họ và tên",
+          "first_name": "Tên",
+          "last_name": "Họ",
+          "email": "Email",
+          "title": "Chức danh",
+          "language": "Ngôn ngữ",
+          "address": "Địa chỉ"
+        },
+        "mapsToPrivacyGroup": "Quyền riêng tư và sự đồng ý",
+        "mapsToPrivacy": {
+          "age": "Tuổi (kiểm tra vị thành niên)",
+          "date_of_birth": "Ngày sinh (kiểm tra vị thành niên)",
+          "consent_marketing": "Sự đồng ý tiếp thị (WhatsApp)",
+          "consent_service": "Thoả thuận dịch vụ (không phải tiếp thị)"
+        }
       },
       "fieldKind": {
         "heading": "Đề mục",
@@ -130,15 +151,24 @@
       "loading": "Đang tải liên kết…",
       "retry": "Thử lại",
       "searchPlaceholder": "Tìm theo tên hoặc liên kết",
-      "create": { "cta": "Liên kết mới" },
+      "create": {
+        "cta": "Liên kết mới"
+      },
       "stats": {
         "all": "Tất cả liên kết",
         "live": "Đang hoạt động",
         "totalClicks": "Tổng số lượt nhấp",
         "avgClicks": "TB lượt nhấp / liên kết"
       },
-      "tabs": { "all": "Tất cả", "live": "Đang hoạt động", "paused": "Đã tạm dừng" },
-      "status": { "live": "Hoạt động", "paused": "Tạm dừng" },
+      "tabs": {
+        "all": "Tất cả",
+        "live": "Đang hoạt động",
+        "paused": "Đã tạm dừng"
+      },
+      "status": {
+        "live": "Hoạt động",
+        "paused": "Tạm dừng"
+      },
       "empty": {
         "title": "Chưa có liên kết nào",
         "description": "Tạo một liên kết để chia sẻ trong quảng cáo, tiểu sử hoặc mã QR."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "Về liên kết",
         "newHeading": "Liên kết mới",
-        "step": { "destination": "Đích đến", "message": "Tin nhắn khởi đầu", "tracking": "Theo dõi" },
+        "step": {
+          "destination": "Đích đến",
+          "message": "Tin nhắn khởi đầu",
+          "tracking": "Theo dõi"
+        },
         "name": "Tên",
         "status": "Trạng thái",
         "countryCode": "Mã quốc gia",
@@ -194,6 +228,14 @@
         "shortUrl": "Liên kết ngắn",
         "waUrl": "Liên kết WhatsApp",
         "qrAlt": "Mã QR cho liên kết này"
+      },
+      "public": {
+        "missingTitle": "Không tìm thấy liên kết",
+        "missingBody": "Liên kết này không tồn tại hoặc đã bị xóa.",
+        "goneTitle": "Liên kết không còn hoạt động",
+        "goneBody": "Liên kết này đang tạm dừng hoặc đã hết hạn.",
+        "errorTitle": "Đã xảy ra lỗi",
+        "errorBody": "Không thể mở liên kết này. Vui lòng thử lại."
       }
     }
   }

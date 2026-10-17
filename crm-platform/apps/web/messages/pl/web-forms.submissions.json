@@ -115,7 +115,14 @@
         "consentAt": "Udzielono",
         "noConsent": "Ten formularz nie pytał o zgodę.",
         "links": "Wpisy",
-        "actions": "Działania"
+        "actions": "Działania",
+        "ageCheck": "Sprawdzenie wieku",
+        "ageOutcome": "Wynik",
+        "ageUnder": "Poniżej minimalnego wieku. Zgłoszenie zostało przyjęte, a kontakt oznaczony jako niepełnoletni; zgoda marketingowa nie została zapisana.",
+        "guardianName": "Rodzic lub opiekun",
+        "guardianEmail": "E-mail opiekuna",
+        "guardianPhone": "Telefon opiekuna",
+        "guardianNote": "Podane przez odwiedzającego, niesprawdzone. Zgoda opiekuna nie jest zapisana, dopóki osoba nie zapisze jej na karcie Zgoda kontaktu."
       },
       "actions": {
         "retry": "Ponów",

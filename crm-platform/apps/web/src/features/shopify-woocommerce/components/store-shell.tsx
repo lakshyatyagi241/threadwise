@@ -172,7 +172,7 @@ export function StoreShell({
               <button
                 type="button"
                 onClick={() => setConfirming(true)}
-                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-[13px] text-danger hover:bg-danger/10"
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-start text-[13px] text-danger hover:bg-danger/10"
               >
                 <UnplugIcon className="size-3.5" />
                 {t('disconnect')}

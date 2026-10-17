@@ -326,11 +326,13 @@ export class ContactBulkService {
       if (r.where) {
         const mode = input.eraseHistory === false ? 'anonymise' : 'delete';
         for (;;) {
+          // The batch is locked and the delete takes these exact ids, so the history erased is the history of the rows deleted.
           const ids = await this.repo.nextIds(tx, r.where, DELETE_BATCH);
-          if (ids.length) await this.erasure.eraseContactHistory(tx, ctx.orgId, ids, mode);
-          const n = await this.repo.deleteBatch(tx, ctx.orgId, r.where, DELETE_BATCH, this.meta());
+          if (ids.length === 0) break;
+          await this.erasure.eraseContactHistory(tx, ctx.orgId, ids, mode);
+          const n = await this.repo.deleteIds(tx, ctx.orgId, ids, this.meta());
           changed += n;
-          if (n < DELETE_BATCH) break;
+          if (ids.length < DELETE_BATCH) break;
         }
       }
       return this.result(r, changed);
@@ -495,6 +497,7 @@ export class ContactBulkService {
       'unsubscribed',
       'created_at',
       'owner_email',
+      'timezone',
       ...attributes.map((a) => `attr:${a.key}`),
     ];
 
@@ -547,6 +550,7 @@ export class ContactBulkService {
             row.isUnsubscribed ? 'true' : 'false',
             row.createdAt.toISOString(),
             guardFormula(row.ownerEmail ?? ''),
+            row.timezone ?? '',
             ...attributes.map((a) => {
               const v = row.data?.[a.key];
               return guardFormula(v === null || v === undefined ? '' : String(v));

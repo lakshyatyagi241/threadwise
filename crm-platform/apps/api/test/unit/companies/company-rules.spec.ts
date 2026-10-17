@@ -18,6 +18,7 @@ import {
 import {
   decodeCompanyCursor,
   decodeIdCursor,
+  companySortId,
   encodeCompanyCursor,
   encodeIdCursor,
   escapeLike,
@@ -34,18 +35,30 @@ describe('escapeLike (TW-CTP-002)', () => {
 
 describe('the list cursor (TW-CTP-002)', () => {
   it('round-trips a created key with microseconds and a name key with a pipe in it', () => {
-    const created = encodeCompanyCursor('created', '2026-10-05T10:00:00.123456Z', 42);
-    expect(decodeCompanyCursor(created, 'created')).toEqual({
+    const created = encodeCompanyCursor('created:desc', '2026-10-05T10:00:00.123456Z', 42);
+    expect(decodeCompanyCursor(created, 'created:desc', 'created')).toEqual({
       key: '2026-10-05T10:00:00.123456Z',
       id: 42,
     });
-    const name = encodeCompanyCursor('name', 'acme | sons', 7);
-    expect(decodeCompanyCursor(name, 'name')).toEqual({ key: 'acme | sons', id: 7 });
+    const name = encodeCompanyCursor('name:asc', 'acme | sons', 7);
+    expect(decodeCompanyCursor(name, 'name:asc', 'text')).toEqual({ key: 'acme | sons', id: 7 });
   });
 
-  it('a cursor from one sort cannot be replayed against another', () => {
-    const created = encodeCompanyCursor('created', '2026-10-05T10:00:00.000000Z', 1);
-    expect(() => decodeCompanyCursor(created, 'name')).toThrow(/pagination cursor/);
+  it('a cursor from one sort or direction cannot be replayed against another', () => {
+    const created = encodeCompanyCursor('created:desc', '2026-10-05T10:00:00.000000Z', 1);
+    expect(() => decodeCompanyCursor(created, 'name:asc', 'text')).toThrow(/pagination cursor/);
+    expect(() => decodeCompanyCursor(created, 'created:asc', 'created')).toThrow(
+      /pagination cursor/,
+    );
+    const byTier = encodeCompanyCursor('property:tier:asc', 'gold', 3);
+    expect(() => decodeCompanyCursor(byTier, 'property:plan:asc', 'text')).toThrow(
+      /pagination cursor/,
+    );
+  });
+
+  it('names an order and its direction', () => {
+    expect(companySortId('created', undefined, 'desc')).toBe('created:desc');
+    expect(companySortId('property', 'tier', 'asc')).toBe('property:tier:asc');
   });
 
   it('garbage is a 400, not a 500', () => {
@@ -55,10 +68,32 @@ describe('the list cursor (TW-CTP-002)', () => {
       Buffer.from('[1,2]').toString('base64url'),
       Buffer.from('{"a":1}').toString('base64url'),
     ]) {
-      expect(() => decodeCompanyCursor(raw, 'created')).toThrow(/pagination cursor/);
+      expect(() => decodeCompanyCursor(raw, 'created:desc', 'created')).toThrow(
+        /pagination cursor/,
+      );
     }
     expect(() =>
-      decodeCompanyCursor(encodeCompanyCursor('created', 'not a date', 1), 'created'),
+      decodeCompanyCursor(
+        encodeCompanyCursor('created:desc', 'not a date', 1),
+        'created:desc',
+        'created',
+      ),
+    ).toThrow(/pagination cursor/);
+  });
+
+  it('a key is checked against the type it will be cast to, so a crafted cursor is a 400 and never SQL', () => {
+    const num = (key: string) => encodeCompanyCursor('property:seats:asc', key, 1);
+    expect(decodeCompanyCursor(num('12.5'), 'property:seats:asc', 'numeric').key).toBe('12.5');
+    expect(decodeCompanyCursor(num('-1e30'), 'property:seats:asc', 'numeric').key).toBe('-1e30');
+    expect(() =>
+      decodeCompanyCursor(num('1; DROP TABLE companies'), 'property:seats:asc', 'numeric'),
+    ).toThrow(/pagination cursor/);
+    const when = (key: string) => encodeCompanyCursor('property:renewal:asc', key, 1);
+    expect(decodeCompanyCursor(when('-infinity'), 'property:renewal:asc', 'timestamptz').key).toBe(
+      '-infinity',
+    );
+    expect(() =>
+      decodeCompanyCursor(when('tomorrow-ish'), 'property:renewal:asc', 'timestamptz'),
     ).toThrow(/pagination cursor/);
   });
 
@@ -148,6 +183,7 @@ describe('the rollup (TW-CTP-003, 004)', () => {
       displayId: 'COM-00001',
       name: 'Acme',
       nameKey: 'acme',
+      sortKey: null,
       createdAtIso: '2026-10-05T10:00:00.000000Z',
       website: 'acme.test',
       email: null,
@@ -156,6 +192,7 @@ describe('the rollup (TW-CTP-003, 004)', () => {
       sizeRange: null,
       address: null,
       notes: null,
+      data: { tier: 'gold' },
       ownerId: 9,
       ownerUuid: '22222222-2222-4222-8222-222222222222',
       ownerName: 'Asha',
@@ -170,6 +207,9 @@ describe('the rollup (TW-CTP-003, 004)', () => {
     expect(JSON.stringify(res)).not.toMatch(/"id":5|ownerId|createdById/);
     expect(res.owner).toEqual({ id: row.ownerUuid, name: 'Asha' });
     expect(res.createdBy).toBeNull();
+    // the company's own property values travel as customFields (the `data` column is not a wire name)
+    expect(res.customFields).toEqual({ tier: 'gold' });
+    expect(res).not.toHaveProperty('data');
   });
 });
 

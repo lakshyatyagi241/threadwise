@@ -12,6 +12,7 @@ import {
   Select,
   cn,
 } from '@crm/ui';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useRecordRef } from '../api/hooks';
 import { PRIORITIES, type Member } from '../api/schemas';
 import { COLUMN_IDS, LOCKED_COLUMNS, type ColumnId } from '../lib/columns';
@@ -23,6 +24,9 @@ import {
 } from '../lib/filters';
 import { BoardIcon, ColumnsIcon, KeyboardIcon, ListIcon, RefreshIcon, SearchIcon } from './icons';
 import { RecordPicker } from './record-picker';
+
+/** What the "Linked to" filter points at; empty = any record. */
+type LinkKind = '' | 'contact' | 'deal' | 'company';
 
 /** The screen focuses the search box by this id when "/" is pressed. */
 export const SEARCH_ID = 'tasks-search';
@@ -44,16 +48,30 @@ export interface TasksToolbarProps {
   onHelp: () => void;
 }
 
-/** One compact row: search, status, priority, assignee, linked contact or deal, Clear, then view, columns, refresh. */
+/** One compact row: search, status, priority, assignee, linked contact, deal or company, Clear, then view, columns, refresh. */
 export function TasksToolbar(p: TasksToolbarProps) {
   const t = useTranslations('tasks.toolbar');
   const f = p.filters;
   const active = hasActiveFilter({ ...f, q: p.q });
   // "Linked to" first picks a kind, then the record; only the record filters the list.
-  const [pending, setPending] = useState<'' | 'contact' | 'deal'>('');
-  const linkKind: '' | 'contact' | 'deal' = f.contact ? 'contact' : f.deal ? 'deal' : pending;
-  const linkId = linkKind === 'contact' ? f.contact : linkKind === 'deal' ? f.deal : '';
-  const ref = useRecordRef(linkKind === 'deal' ? 'deal' : 'contact', linkId);
+  const canPickCompany = useCan('record.companies.read');
+  const [pending, setPending] = useState<LinkKind>('');
+  const linkKind: LinkKind = f.contact
+    ? 'contact'
+    : f.deal
+      ? 'deal'
+      : f.company
+        ? 'company'
+        : pending;
+  const linkId =
+    linkKind === 'contact'
+      ? f.contact
+      : linkKind === 'deal'
+        ? f.deal
+        : linkKind === 'company'
+          ? f.company
+          : '';
+  const ref = useRecordRef(linkKind === '' ? 'contact' : linkKind, linkId);
   const views: Array<{ id: TasksView; icon: typeof ListIcon }> = [
     { id: 'list', icon: ListIcon },
     { id: 'board', icon: BoardIcon },
@@ -124,13 +142,16 @@ export function TasksToolbar(p: TasksToolbarProps) {
         className="h-9 w-auto min-w-36"
         value={linkKind}
         onChange={(e) => {
-          setPending(e.target.value as '' | 'contact' | 'deal');
-          p.onChange({ contact: '', deal: '' });
+          setPending(e.target.value as LinkKind);
+          p.onChange({ contact: '', deal: '', company: '' });
         }}
       >
         <option value="">{t('anyLink')}</option>
         <option value="contact">{t('linkContact')}</option>
         <option value="deal">{t('linkDeal')}</option>
+        {(canPickCompany || linkKind === 'company') && (
+          <option value="company">{t('linkCompany')}</option>
+        )}
       </Select>
       {linkKind && (
         <RecordPicker
@@ -138,8 +159,8 @@ export function TasksToolbar(p: TasksToolbarProps) {
           kind={linkKind}
           value={linkId ? (ref.data ?? { id: linkId, label: '…' }) : null}
           onChange={(r) => {
-            if (linkKind === 'contact') p.onChange({ contact: r?.id ?? '', deal: '' });
-            else p.onChange({ deal: r?.id ?? '', contact: '' });
+            const none = { contact: '', deal: '', company: '' };
+            p.onChange({ ...none, [linkKind]: r?.id ?? '' });
           }}
         />
       )}
@@ -158,6 +179,7 @@ export function TasksToolbar(p: TasksToolbarProps) {
               assignee: '',
               contact: '',
               deal: '',
+              company: '',
             });
           }}
         >

@@ -2,9 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
+import { LeadSyncRunsRepository } from './lead-sync-runs.repository';
 
 const BATCH = 1000;
 const MAX_BATCHES = 50;
+/** How long a finished sync or backfill is kept as the record of who pulled what and when. */
+export const SYNC_RUN_RETENTION_DAYS = 90;
 
 /**
  * The retention of raw lead payloads (spec L-12, open question 9: 30 days by default, per source up to a year). A lead's payload is
@@ -20,7 +23,10 @@ export class LeadRetentionSweepService {
   private readonly logger = new Logger(LeadRetentionSweepService.name);
   private running = false;
 
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly runs: LeadSyncRunsRepository,
+  ) {}
 
   @Cron('7 * * * *')
   async run(): Promise<void> {
@@ -29,6 +35,8 @@ export class LeadRetentionSweepService {
     try {
       const purged = await this.sweep();
       if (purged > 0) this.logger.log({ purged }, 'lead payload retention sweep');
+      const pruned = await this.db.privileged((tx) => this.runs.prune(tx, SYNC_RUN_RETENTION_DAYS));
+      if (pruned > 0) this.logger.log({ pruned }, 'lead sync run retention sweep');
     } catch (err) {
       this.logger.error({ err }, 'lead payload retention sweep failed');
     } finally {

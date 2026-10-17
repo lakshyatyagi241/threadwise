@@ -42,6 +42,9 @@ export function WizardBroadcastsPanel() {
               <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                 <span>{t(`mode.${b.mode}`)}</span>
                 {b.templateName && <span>{b.templateName}</span>}
+                {b.templateCount > 1 && (
+                  <span>{t('moreTemplates', { count: b.templateCount - 1 })}</span>
+                )}
                 <span>{t('recipients', { count: b.recipients })}</span>
                 {b.nextRunAt && (
                   <span>

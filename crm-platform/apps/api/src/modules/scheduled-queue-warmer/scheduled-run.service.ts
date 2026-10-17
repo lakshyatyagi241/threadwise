@@ -1,6 +1,12 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { ERROR_CODES, type ConsentGateResult, type PurposeInput } from '@crm/contracts';
+import {
+  ERROR_CODES,
+  holdOf,
+  type ConsentGateResult,
+  type PurposeInput,
+  type SendHold,
+} from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import {
   UNOFFICIAL_ENGINE,
@@ -24,6 +30,7 @@ import {
   nextUtcMidnight,
   type PacingSettingsSource,
 } from '../broadcasts';
+import { SendWindowService } from '../compliance-center';
 import { ConsentGate, purposeOfCategory } from '../contact-consent';
 import { MergeTagService } from '../crm';
 import {
@@ -83,6 +90,8 @@ export class ScheduledRunService {
     private readonly outbox: OutboxService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     private readonly consentGate: ConsentGate,
+    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
+    @Optional() private readonly sendWindow?: SendWindowService,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -197,6 +206,9 @@ export class ScheduledRunService {
       let processed = 0;
       let sinceBatch = 0;
       let lastId = 0;
+      // Quiet hours (BL-177): recipients left `pending` because the hours are closed for them, and the first instant one of them opens.
+      let held = 0;
+      let heldEarliest: Date | null = null;
       for (;;) {
         // Cancelled or paused by hand while it ran: stop, and leave the row as the person set it.
         if (!(await this.stillRunning(orgId, scheduledId))) return 'stopped';
@@ -212,6 +224,8 @@ export class ScheduledRunService {
         // The consent gate runs NOW, at send time, not when the schedule was saved: a STOP since then, or a workspace that has since
         // switched on "require recorded consent", is honoured. One statement for the whole batch.
         const refused = await this.refusedByGate(orgId, batch, prepared);
+        // A MARKETING schedule is held for the quiet hours; a utility template is a notice the person needs and is never held.
+        const windows = await this.heldByWindow(orgId, batch, prepared, refused);
 
         for (const r of batch) {
           lastId = Number(r.id);
@@ -223,6 +237,20 @@ export class ScheduledRunService {
               this.setRecipient(tx, orgId, Number(r.id), 'failed', { error: why }),
             );
             processed++;
+            continue;
+          }
+
+          // Held, not denied: the recipient stays `pending` with the instant it may go; the rest of the audience carries on.
+          const hold = windows.get(Number(r.id));
+          if (hold) {
+            await this.db.tx((tx) =>
+              tx.execute(sql`
+                UPDATE scheduled_message_contacts SET held_until = ${hold.until}::timestamptz, held_reason = ${hold.reason}
+                WHERE org_id = ${orgId} AND id = ${Number(r.id)} AND status = 'pending'`),
+            );
+            held++;
+            const at = new Date(hold.until);
+            if (heldEarliest === null || at.getTime() < heldEarliest.getTime()) heldEarliest = at;
             continue;
           }
 
@@ -268,7 +296,7 @@ export class ScheduledRunService {
               return false;
             }
             const res = await tx.execute(sql`
-              UPDATE scheduled_message_contacts SET status = 'processing'
+              UPDATE scheduled_message_contacts SET status = 'processing', held_until = NULL, held_reason = NULL
               WHERE org_id = ${orgId} AND id = ${Number(r.id)} AND status = 'pending' RETURNING id`);
             return res.rows.length > 0;
           });
@@ -331,7 +359,7 @@ export class ScheduledRunService {
           }
 
           processed++;
-          if (processed < pendingTotal) {
+          if (processed < pendingTotal - held) {
             if (batching && ++sinceBatch >= pacing.batchSize) {
               sinceBatch = 0;
               await this.rest(batchCooldownMs(pacing, this.runtime.random), leaseKey, leaseToken);
@@ -340,6 +368,16 @@ export class ScheduledRunService {
             }
           }
         }
+      }
+      // Everyone who could go has gone. Those held for the quiet hours wait: the schedule pauses until the first of them opens and the due
+      // sweep then runs it again (the consent and the hours are asked once more for each).
+      if (held > 0 && heldEarliest) {
+        await this.pause(orgId, scheduledId, counts, heldEarliest);
+        this.logger.log(
+          { orgId, scheduledId, held, resumeAt: heldEarliest },
+          '[SCHED] paused: recipients held for the quiet hours',
+        );
+        return 'paused';
       }
       await this.finish(orgId, row, counts);
       this.logger.log({ orgId, scheduledId, ...counts }, '[SCHED] run finished');
@@ -381,6 +419,36 @@ export class ScheduledRunService {
       if (d && d.decision === 'deny') refused.set(Number(r.id), reasonText(d));
     }
     return refused;
+  }
+
+  /**
+   * The quiet hours (BL-177): which recipients of this batch wait, by recipient row id. Only a MARKETING schedule is asked about. A typed
+   * number that belongs to no contact is read by its country code. Recipients already refused by the gate are left out.
+   */
+  private async heldByWindow(
+    orgId: number,
+    batch: readonly Recipient[],
+    prepared: PreparedMessage,
+    refused: ReadonlyMap<number, string>,
+  ): Promise<Map<number, SendHold>> {
+    const held = new Map<number, SendHold>();
+    if (!this.sendWindow) return held;
+    const purpose: PurposeInput = prepared.template
+      ? purposeOfCategory(prepared.template.category)
+      : 'marketing_messaging';
+    if (purpose !== 'marketing_messaging') return held;
+    const open = batch.filter((r) => !refused.has(Number(r.id)));
+    const ids = open.filter((r) => r.contact_id !== null).map((r) => Number(r.contact_id));
+    const many = await this.sendWindow.checkMany(orgId, 'message', ids);
+    for (const r of open) {
+      const decision =
+        r.contact_id === null
+          ? await this.sendWindow.check(orgId, 'message', { phone: r.phone })
+          : many.decisions.get(Number(r.contact_id));
+      const hold = decision ? holdOf(decision) : null;
+      if (hold) held.set(Number(r.id), hold);
+    }
+    return held;
   }
 
   private async stillRunning(orgId: number, scheduledId: number): Promise<boolean> {

@@ -25,8 +25,8 @@ import { useTaskActions } from './use-task-actions';
 export interface TaskFormModalProps {
   /** Present: edit this task. Absent: create. */
   task?: TaskResponse;
-  /** Pre-links a new task (from a contact or a deal). */
-  link?: { contact?: RecordRef; deal?: RecordRef };
+  /** Pre-links a new task (from a contact, a deal or a company). A company is shown, not editable here. */
+  link?: { contact?: RecordRef; deal?: RecordRef; company?: RecordRef };
   /** A title typed elsewhere (the quick add on a contact or deal) to start the new task from. */
   initialTitle?: string;
   onClose: () => void;
@@ -53,6 +53,7 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
           title: initialTitle ?? '',
           contactId: link?.contact?.id ?? '',
           dealId: link?.deal?.id ?? '',
+          companyId: link?.company?.id ?? '',
         },
   );
   const [contact, setContact] = useState<RecordRef | null>(
@@ -269,6 +270,14 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             onChange={(e) => set('notes', e.target.value)}
           />
         </Field>
+        {link?.company && (
+          <p className="text-sm text-muted-foreground sm:col-span-2">
+            {t('company')}:{' '}
+            <span className="font-medium text-foreground" dir="auto">
+              {link.company.label}
+            </span>
+          </p>
+        )}
         <p className="text-xs text-muted-foreground sm:col-span-2">{t('reminderHint')}</p>
       </form>
     </Modal>

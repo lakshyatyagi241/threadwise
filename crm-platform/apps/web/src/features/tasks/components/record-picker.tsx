@@ -7,10 +7,10 @@ import { Input, Spinner } from '@crm/ui';
 import { rememberMockRef } from '../api/http';
 import { contactLabel, type RecordRef } from '../api/schemas';
 import { tasksApi } from '../api/service';
-import { CloseIcon, ContactIcon, DealIcon } from './icons';
+import { BuildingIcon, CloseIcon, ContactIcon, DealIcon } from './icons';
 
 /**
- * Links a contact or a deal: search by name (250 ms after typing stops), pick one, or clear the link. Used by the task
+ * Links a contact, a deal or a company: search by name (250 ms after typing stops), pick one, or clear the link. Used by the task
  * form and the drawer, and (compact) by the toolbar's "Linked to" filter.
  */
 export function RecordPicker({
@@ -21,7 +21,7 @@ export function RecordPicker({
   id,
   compact,
 }: {
-  kind: 'contact' | 'deal';
+  kind: 'contact' | 'deal' | 'company';
   value: RecordRef | null;
   onChange: (next: RecordRef | null) => void;
   disabled?: boolean;
@@ -33,7 +33,9 @@ export function RecordPicker({
   const [text, setText] = useState('');
   const [term, setTerm] = useState('');
   const [open, setOpen] = useState(false);
-  const Icon = kind === 'contact' ? ContactIcon : DealIcon;
+  const Icon = kind === 'contact' ? ContactIcon : kind === 'company' ? BuildingIcon : DealIcon;
+  const searchKey =
+    kind === 'contact' ? 'searchContact' : kind === 'company' ? 'searchCompany' : 'searchDeal';
 
   useEffect(() => {
     const h = window.setTimeout(() => setTerm(text), 250);
@@ -49,7 +51,13 @@ export function RecordPicker({
             label: contactLabel(c),
             hint: c.phone,
           }))
-        : (await tasksApi.searchDeals(term, signal)).map((d) => ({ id: d.id, label: d.title })),
+        : kind === 'company'
+          ? (await tasksApi.searchCompanies(term, signal)).map((c) => ({
+              id: c.id,
+              label: c.name,
+              hint: c.industry,
+            }))
+          : (await tasksApi.searchDeals(term, signal)).map((d) => ({ id: d.id, label: d.title })),
     enabled: open && !value,
     retry: false,
     staleTime: 30_000,
@@ -91,8 +99,8 @@ export function RecordPicker({
         id={id}
         value={text}
         disabled={disabled}
-        placeholder={t(kind === 'contact' ? 'searchContact' : 'searchDeal')}
-        aria-label={t(kind === 'contact' ? 'searchContact' : 'searchDeal')}
+        placeholder={t(searchKey)}
+        aria-label={t(searchKey)}
         role="combobox"
         aria-expanded={open}
         aria-controls={listId}

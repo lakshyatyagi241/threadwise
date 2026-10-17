@@ -23,8 +23,10 @@ import {
   type PublicFormSubmitInput,
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
+import { Throttle } from '../platform-infrastructure';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { isGpcSignal } from '../contact-consent';
 import type { Env } from '../../config/env.schema';
 import { buildEmbedScript, EMBED_NOT_FOUND_SCRIPT } from './embed-script';
 import { FormLookupService } from './form-lookup.service';
@@ -47,6 +49,7 @@ const metaOf = (req: Request): PublicRequestMeta => ({
   ip: req.ip,
   userAgent: typeof req.headers['user-agent'] === 'string' ? req.headers['user-agent'] : undefined,
   origin: typeof req.headers.origin === 'string' ? req.headers.origin : undefined,
+  gpc: isGpcSignal(req.headers['sec-gpc']),
 });
 
 /**
@@ -119,6 +122,7 @@ export class PublicFormsController {
   }
 
   @Get(':publicKey/submissions/:token')
+  @Throttle({ limit: 60, windowSeconds: 60, by: 'ip' })
   @Header('Cache-Control', 'no-store')
   @Header('X-Robots-Tag', 'noindex, nofollow')
   @ApiOperation({

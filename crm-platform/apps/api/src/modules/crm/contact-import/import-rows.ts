@@ -2,9 +2,11 @@ import {
   GROUP_NAME_MAX,
   IMPORT_FIELDS,
   TAG_NAME_MAX,
+  canonicalZone,
   canonicalizePhone,
   composeDisplayName,
   detectImportColumns,
+  parseImportBirthDate,
   parseImportConsent,
   type ImportConsentValue,
   type ImportField,
@@ -29,6 +31,12 @@ export interface ParsedRow {
   memo?: string;
   status?: string;
   source?: string;
+  /** An IANA zone (canonical spelling), only when the file has a time zone column and the cell is a real zone. */
+  timezone?: string;
+  /** A year-first date of birth that can be believed (BL-190). */
+  dateOfBirth?: string;
+  /** The minor column said yes: flag the contact (source `import`). No, blank and unknown words are left out: a file never clears a flag. */
+  minor?: true;
   groups: string[];
   tags: string[];
   /** What the consent column says, only when a column is mapped (`blank` is left out so a later row for the same number can refine it). */
@@ -143,10 +151,20 @@ export function extractRow(
   const email = cell('email').toLowerCase();
   if (email && (!EMAIL.test(email) || email.length > 255)) return reject('invalid_email');
 
+  const rawZone = cell('timezone');
+  const timezone = rawZone ? canonicalZone(rawZone) : null;
+  if (rawZone && timezone === null) return reject('invalid_timezone');
+
   const groups = splitList(cell('group'));
   if (groups.some((g) => g.length > GROUP_NAME_MAX)) return reject('group_name_too_long');
   const tags = splitList(cell('tags'));
   if (tags.some((t) => t.length > TAG_NAME_MAX)) return reject('tag_name_too_long');
+
+  // A date of birth must be year first and believable; a blank cell is simply no date.
+  const dobCell = cell('dateOfBirth');
+  const dateOfBirth = dobCell === '' ? undefined : (parseImportBirthDate(dobCell) ?? null);
+  if (dateOfBirth === null) return reject('invalid_date_of_birth');
+  const minor = mapping.minor !== undefined && parseImportConsent(cell('minor')) === 'granted';
 
   const opt = (v: string, max: number): string | undefined => (v ? v.slice(0, max) : undefined);
   const consentColumn = mapping.consent !== undefined;
@@ -171,6 +189,9 @@ export function extractRow(
       memo: opt(cell('memo'), 2000),
       status: opt(cell('status'), 64),
       source: opt(cell('source'), 128),
+      ...(timezone ? { timezone } : {}),
+      ...(dateOfBirth ? { dateOfBirth } : {}),
+      ...(minor ? { minor: true as const } : {}),
       groups,
       tags,
       ...(consentColumn ? { consentColumn } : {}),

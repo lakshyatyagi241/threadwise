@@ -10,6 +10,7 @@
       "intro": "Collega un Account ufficiale WeChat (Account di servizio certificato). I messaggi in arrivo finiscono nella Team Inbox condivisa e le risposte, le regole per parole chiave e le risposte automatiche funzionano esattamente come su tutti gli altri canali.",
       "broadcasts": "Broadcast",
       "loadError": "Impossibile caricare i tuoi canali WeChat.",
+      "unavailableCountry": "WeChat non è disponibile nel tuo paese. Da questo spazio di lavoro non puoi collegare un canale né inviare messaggi WeChat.",
       "connectTitle": "Collega un canale",
       "connectBody": "Incolla AppID, AppSecret e il Token del server dalla piattaforma WeChat Official Accounts (Impostazioni → Configurazione di base).",
       "connect": "Collega WeChat",

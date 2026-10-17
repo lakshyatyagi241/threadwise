@@ -23,13 +23,18 @@
       "imported": "Importato da un file",
       "createdAt": "Creato",
       "updatedAt": "Ultimo aggiornamento",
-      "lastActivityAt": "Ultima attività"
+      "lastActivityAt": "Ultima attività",
+      "minor": "Contrassegnato come minorenne",
+      "dateOfBirth": "Data di nascita",
+      "age": "Età (anni)",
+      "timezone": "Fuso orario"
     },
     "fieldGroups": {
       "journey": "Percorso",
       "who": "Chi",
       "activity": "Attività",
-      "properties": "Proprietà"
+      "properties": "Proprietà",
+      "company": "Proprietà aziendale"
     },
     "operators": {
       "equals": "è",

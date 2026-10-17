@@ -20,7 +20,7 @@ describe('the settings form', () => {
     const f = emptyForm();
     expect(f.privacyUrl).toBe('');
     expect(f.windowTimezone).toBe('');
-    expect(f.consentManager).toEqual({ name: '', url: '' });
+    expect(f.consentManager).toEqual({ name: '', url: '', registrationId: '' });
     expect(f.regimes).toEqual([]);
   });
 

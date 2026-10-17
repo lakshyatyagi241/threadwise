@@ -3,7 +3,12 @@
 import { useId, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
-import { MAIL_TLS_MODES, type MailScope, type MailTlsMode } from '@crm/contracts';
+import {
+  MAIL_TLS_MODES,
+  type MailConnectionTestResponse,
+  type MailScope,
+  type MailTlsMode,
+} from '@crm/contracts';
 import {
   Alert,
   Button,
@@ -16,12 +21,13 @@ import {
   Spinner,
 } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { KEYS, connectImap } from '../api/mailboxes';
+import { KEYS, connectImap, testImap } from '../api/mailboxes';
 import { mailErrorKey } from '../lib/api-errors';
 import {
   IMAP_PRESETS,
   applyPreset,
   buildImapInput,
+  buildTestInput,
   emptyImapForm,
   imapFailureKey,
   withSecurity,
@@ -29,6 +35,8 @@ import {
   type ImapField,
   type ImapForm,
 } from '../lib/imap-form';
+import { testErrorKey } from '../lib/test-view';
+import { ConnectionTestResult } from './connection-test-result';
 
 export interface ImapDialogTarget {
   /** Set when the form reconnects an existing mailbox (address fixed, password asked again). */
@@ -89,10 +97,14 @@ function ImapFormBody({
   const [errors, setErrors] = useState<ImapErrors>({});
   const [failure, setFailure] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [tested, setTested] = useState<MailConnectionTestResponse | null>(null);
   const reconnect = Boolean(target.mailboxId);
 
   const set = <K extends keyof ImapForm>(key: K, value: ImapForm[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
+    // A result describes the settings it was run with: changing one makes it stale.
+    setTested(null);
     if (key in errors) setErrors((e) => ({ ...e, [key]: undefined }));
   };
   const err = (field: ImapField): string | undefined => {
@@ -128,6 +140,27 @@ function ImapFormBody({
       setForm((f) => ({ ...f, imapPassword: '', smtpPassword: '' }));
     } finally {
       setBusy(false);
+    }
+  };
+
+  /** "Test credentials": connects to both servers and signs in; nothing is saved and nothing is sent. */
+  const runTest = async () => {
+    const built = buildTestInput(form);
+    if (!built.ok) {
+      setErrors(built.errors);
+      setFailure(null);
+      setTested(null);
+      return;
+    }
+    setTesting(true);
+    setFailure(null);
+    setTested(null);
+    try {
+      setTested(await testImap(built.input));
+    } catch (e) {
+      setFailure(t(`test.${e instanceof ApiError ? testErrorKey(e.code) : 'failed'}`));
+    } finally {
+      setTesting(false);
     }
   };
 
@@ -367,7 +400,19 @@ function ImapFormBody({
 
       <p className="text-xs text-muted-foreground">{t('verifyNote')}</p>
 
-      <div className="flex justify-end gap-2">
+      {tested && <ConnectionTestResult result={tested} />}
+
+      <div className="flex flex-wrap justify-end gap-2">
+        <Button
+          type="button"
+          variant="secondary"
+          className="me-auto rounded-full"
+          disabled={busy || testing}
+          onClick={() => void runTest()}
+          data-testid="email-imap-test"
+        >
+          {testing && <Spinner />} {testing ? t('test.testing') : t('test.button')}
+        </Button>
         <Button
           type="button"
           variant="secondary"
@@ -380,7 +425,7 @@ function ImapFormBody({
         <Button
           type="submit"
           className="rounded-full"
-          disabled={busy}
+          disabled={busy || testing}
           data-testid="email-imap-submit"
         >
           {busy && <Spinner />}{' '}

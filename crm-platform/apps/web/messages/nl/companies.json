@@ -4,7 +4,9 @@
       "companies": "Bedrijven"
     },
     "common": {
-      "dismiss": "Sluiten"
+      "dismiss": "Sluiten",
+      "yes": "Ja",
+      "no": "Nee"
     },
     "errors": {
       "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
@@ -18,7 +20,10 @@
       "planDisabled": "Je abonnement bevat geen bedrijven. Upgrade om ze te ontgrendelen.",
       "ownerInvalid": "De eigenaar moet een actief lid van deze workspace zijn.",
       "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
-      "retry": "Opnieuw proberen"
+      "retry": "Opnieuw proberen",
+      "filterInvalid": "Een van de eigenschapsvoorwaarden kan niet worden gebruikt. Controleer de eigenschap en de waarde.",
+      "exportTooLarge": "Dat zijn te veel bedrijven voor één bestand. Beperk de lijst met een filter en exporteer opnieuw.",
+      "importInvalid": "Dat bestand kan niet worden geïmporteerd. De eerste regel moet de kolomnamen bevatten, met een name- of website-kolom, en er mogen maximaal 1.000 bedrijven in staan."
     },
     "list": {
       "eyebrow": "CRM · Organisaties",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Bedrijven verwijderen",
       "deleteManyMessage": "{count, plural, one {Dit bedrijf verwijderen? De contacten en deals blijven bewaard en worden alleen losgekoppeld.} other {Deze # bedrijven verwijderen? Hun contacten en deals blijven bewaard en worden alleen losgekoppeld.}}",
       "delete": "Verwijderen",
-      "keep": "Behouden"
+      "keep": "Behouden",
+      "export": "Exporteren",
+      "import": "Importeren"
     },
     "toolbar": {
       "label": "Bedrijven filteren",
@@ -69,7 +76,14 @@
         "name": "Naam A tot Z"
       },
       "clear": "Wissen",
-      "refresh": "Vernieuwen"
+      "refresh": "Vernieuwen",
+      "sortByProperty": "Door {name}",
+      "direction": "Richting",
+      "directions": {
+        "default": "Gebruikelijke richting",
+        "asc": "Oplopend",
+        "desc": "Aflopend"
+      }
     },
     "table": {
       "label": "Bedrijven",
@@ -82,7 +96,13 @@
       "wonValue": "Gewonnen waarde",
       "actions": "Acties",
       "delete": "Bedrijf verwijderen",
-      "deleteNamed": "Bedrijf {name} verwijderen"
+      "deleteNamed": "Bedrijf {name} verwijderen",
+      "website": "Website",
+      "email": "E-mail",
+      "phone": "Telefoon",
+      "size": "Grootte",
+      "owner": "Eigenaar",
+      "created": "Aangemaakt"
     },
     "form": {
       "eyebrow": "Bedrijf",
@@ -112,6 +132,17 @@
         "email": "Voer een geldig e-mailadres in.",
         "invalid": "Een deel van wat is ingevuld is ongeldig.",
         "ownerInvalid": "De eigenaar moet een actief lid van deze workspace zijn."
+      },
+      "propertiesTitle": "Eigenschappen",
+      "propertiesHint": "in te stellen onder Instellingen, Bedrijfseigenschappen",
+      "propertyProblems": {
+        "invalid": "Deze waarde past niet bij de eigenschap.",
+        "notEditable": "Deze eigenschap kan niet meer worden bewerkt. Sluit het formulier en open het opnieuw.",
+        "required": "Deze eigenschap is verplicht.",
+        "number": "Voer een getal in.",
+        "integer": "Voer een geheel getal in.",
+        "email": "Voer een geldig e-mailadres in.",
+        "url": "Voer een volledige link in die met http:// of https:// begint."
       }
     },
     "toast": {
@@ -125,7 +156,8 @@
       "contactUnlinkFailed": "Kan het contact niet verwijderen. Probeer het opnieuw.",
       "contactsLinked": "{count, plural, one {# contact toegevoegd aan het bedrijf.} other {# contacten toegevoegd aan het bedrijf.}}",
       "contactsLinkedSome": "{count, plural, one {# contact toegevoegd} other {# contacten toegevoegd}}, {failed, plural, one {# kon niet worden toegevoegd.} other {# konden niet worden toegevoegd.}}",
-      "contactsLinkFailed": "Kan de contacten niet toevoegen. Probeer het opnieuw."
+      "contactsLinkFailed": "Kan de contacten niet toevoegen. Probeer het opnieuw.",
+      "exportFailed": "De export kon niet worden gemaakt. Probeer het zo meteen opnieuw."
     },
     "detail": {
       "back": "Alle bedrijven",
@@ -149,7 +181,11 @@
       "address": "Adres",
       "createdBy": "Gemaakt door",
       "created": "Gemaakt",
-      "updated": "Laatst gewijzigd"
+      "updated": "Laatst gewijzigd",
+      "properties": "Eigenschappen",
+      "yes": "Ja",
+      "no": "Nee",
+      "generateBrief": "Samenvatting maken"
     },
     "contacts": {
       "title": "Contacten",
@@ -211,6 +247,130 @@
         "address": "Adres",
         "notes": "Notities",
         "owner": "Eigenaar"
+      },
+      "propertiesChanged": "Gewijzigde eigenschappen:"
+    },
+    "picker": {
+      "search": "Bedrijven zoeken",
+      "results": "Bedrijven",
+      "searching": "Zoeken",
+      "none": "Geen bedrijf komt overeen.",
+      "unavailable": "Bedrijven kunnen nu niet worden doorzocht.",
+      "create": "“{name}” aanmaken",
+      "creating": "Bedrijf wordt aangemaakt",
+      "clear": "Bedrijf verwijderen",
+      "loading": "Bedrijf laden",
+      "unknown": "Bedrijf niet beschikbaar",
+      "createFailed": "Het bedrijf kon niet worden aangemaakt. Probeer het opnieuw.",
+      "createForbidden": "U hebt geen toestemming om bedrijven aan te maken."
+    },
+    "properties": {
+      "title": "Bedrijfseigenschappen",
+      "subtitle": "Alles wat een bedrijf kan bewaren, op één plek: je eigen eigenschappen, gegroepeerd in secties.",
+      "section": {
+        "hint": "Secties groeperen eigenschappen in het bedrijfsformulier en op de bedrijfspagina."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# bedrijf} other {# bedrijven}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# bedrijf heeft} other {# bedrijven hebben}} een waarde voor deze eigenschap. De waarden blijven bewaard, maar de eigenschap verdwijnt uit het bedrijfsformulier en van de bedrijfspagina.",
+        "unused": "Nog geen enkel bedrijf heeft een waarde voor deze eigenschap."
+      },
+      "modal": {
+        "newTitle": "Een bedrijfseigenschap toevoegen",
+        "descriptionHint": "Wordt onder het veld getoond in het bedrijfsformulier.",
+        "optionsNote": "Een optie verwijderen verandert niets aan bedrijven die haar al hebben; zij behouden de opgeslagen waarde.",
+        "requiredHint": "Het bedrijfsformulier kan niet worden opgeslagen zonder waarde.",
+        "visibleHint": "Toon haar in het bedrijfsformulier en op de bedrijfspagina.",
+        "conditionsHint": "Verberg deze eigenschap in het bedrijfsformulier totdat een andere eigenschap een waarde heeft.",
+        "deactivateNote": "Opslaan verbergt deze eigenschap in het formulier en op de bedrijfspagina. Waarden die bedrijven hebben blijven bewaard."
+      }
+    },
+    "columns": {
+      "button": "Kolommen",
+      "label": "Kolommen kiezen",
+      "hint": "De tabel onthoudt je keuze in deze browser.",
+      "reset": "Terug naar de standaardkolommen"
+    },
+    "propertyFilters": {
+      "button": "Eigenschappen",
+      "label": "Filteren op bedrijfseigenschappen",
+      "hint": "Toon bedrijven waarvoor al deze voorwaarden gelden.",
+      "none": "Nog geen voorwaarde.",
+      "noProperties": "Er kan nog op geen enkele bedrijfseigenschap worden gefilterd. Voeg er een toe via Instellingen, Bedrijfseigenschappen.",
+      "property": "Eigenschap van voorwaarde {n}",
+      "operator": "Operator van voorwaarde {n}",
+      "value": "Waarde van voorwaarde {n}",
+      "remove": "Voorwaarde {n} verwijderen",
+      "add": "Voorwaarde toevoegen",
+      "clear": "Alles wissen",
+      "apply": "Toepassen"
+    },
+    "import": {
+      "eyebrow": "Bedrijven",
+      "title": "Bedrijven importeren",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "done": "Klaar",
+      "start": "Importeren",
+      "file": "CSV-bestand",
+      "choose": "Kies een CSV-bestand",
+      "change": "Kies een ander bestand",
+      "tooBig": "Dat bestand is te groot. Splits het en importeer de delen apart.",
+      "intro": "De eerste regel bevat de kolomnamen: name (of website), email, phone, industry, size, address, notes, owner (een e-mailadres of naam van een lid) en elke bedrijfseigenschap met zijn label. Maximaal {max} bedrijven per bestand.",
+      "match": "Bestaande bedrijven aanvullen",
+      "matchHint": "Een bedrijf met dezelfde website (of, zonder website, dezelfde naam) krijgt zijn lege velden aangevuld. Wat er al staat, wordt niet gewijzigd.",
+      "summary": "{total, plural, one {# rij gelezen} other {# rijen gelezen}}: {created} aangemaakt, {updated} aangevuld, {unchanged} ongewijzigd, {failed} niet geïmporteerd.",
+      "ignored": "Deze kolommen zijn niet herkend en overgeslagen: {columns}.",
+      "failedTitle": "{count, plural, one {# rij is niet geïmporteerd} other {# rijen zijn niet geïmporteerd}}",
+      "line": "Regel {line}",
+      "moreFailed": "{count, plural, one {En # meer.} other {En # meer.}}"
+    },
+    "brief": {
+      "title": "Accountsamenvatting",
+      "subtitle": "Geschreven door AI op basis van de CRM-gegevens die je kunt zien. Controleer het voordat je erop vertrouwt.",
+      "loading": "Samenvatting laden",
+      "unavailableTitle": "AI is niet ingesteld voor deze werkruimte",
+      "unavailable": "Een samenvatting wordt geschreven door een AI-model en deze werkruimte heeft geen AI-sleutel, dus er is niets verstuurd.",
+      "addKey": "AI-sleutel toevoegen",
+      "askAdmin": "Vraag een beheerder om een AI-sleutel toe te voegen.",
+      "empty": "Krijg een korte samenvatting van dit bedrijf: wie ze zijn, hun deals en taken, hoe actief het gesprek is, de risico's en wat er nu moet gebeuren.",
+      "generate": "Samenvatting maken",
+      "regenerate": "Opnieuw schrijven",
+      "copy": "Kopiëren",
+      "copied": "Samenvatting gekopieerd.",
+      "copyFailed": "De samenvatting kon niet worden gekopieerd. Selecteer de tekst en kopieer hem handmatig.",
+      "copyTitle": "{name}: accountsamenvatting",
+      "stale": "De CRM is gewijzigd sinds deze samenvatting is geschreven. Schrijf opnieuw voor een actuele versie.",
+      "writtenBy": "Geschreven op {date} door {model}. AI kan fouten maken.",
+      "notice": "Het model krijgt aantallen, datums, bedragen en korte titels. Het krijgt nooit namen van contacten, e-mailadressen, telefoonnummers, bedrijfsnotities of berichttekst, en cijfers en e-mailadressen in titels worden eerst verwijderd.",
+      "basedOn": "Gebaseerd op: {kinds}. Alleen wat je rol je laat zien, wordt meegeteld.",
+      "basedOnNone": "Alleen gebaseerd op de bedrijfsgegevens: je rol toont geen contacten, deals, taken of gesprekken.",
+      "errors": {
+        "tooSoon": "Er is net een samenvatting geschreven. Wacht even voordat je het opnieuw vraagt.",
+        "providerFailed": "De AI-service kon de samenvatting niet schrijven. Probeer het zo meteen opnieuw.",
+        "limit": "Het AI-tegoed is voor nu op. Probeer het later opnieuw of vraag het een beheerder.",
+        "forbidden": "Je hebt geen toestemming om dat te doen.",
+        "notFound": "Dat bedrijf bestaat niet meer.",
+        "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+        "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+      },
+      "sections": {
+        "activity": "Recente activiteit",
+        "deals": "Deals",
+        "tasks": "Taken",
+        "conversations": "Gesprekken",
+        "properties": "Belangrijkste eigenschappen",
+        "risks": "Risico's",
+        "nextSteps": "Volgende stappen"
+      },
+      "source": {
+        "properties": "bedrijfseigenschappen",
+        "contacts": "contacten",
+        "deals": "deals",
+        "tasks": "taken",
+        "conversations": "gesprekken"
       }
     }
   }

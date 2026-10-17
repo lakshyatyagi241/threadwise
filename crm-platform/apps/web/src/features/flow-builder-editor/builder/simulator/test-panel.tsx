@@ -121,13 +121,13 @@ export function LogBubble({
     );
   if (entry.kind === 'user')
     return (
-      <div className="max-w-[80%] self-end whitespace-pre-wrap rounded-lg rounded-br-[4px] bg-[var(--flb-mint)] px-3 py-2 text-[#0b1f1c] text-[12.5px] leading-snug">
+      <div className="max-w-[80%] self-end whitespace-pre-wrap rounded-lg rounded-ee-[4px] bg-[var(--flb-mint)] px-3 py-2 text-[#0b1f1c] text-[12.5px] leading-snug">
         {entry.text}
       </div>
     );
   const media = entry.media;
   return (
-    <div className="flex max-w-[80%] flex-col gap-1.5 self-start rounded-lg rounded-bl-[4px] border border-border bg-background px-2.5 py-2">
+    <div className="flex max-w-[80%] flex-col gap-1.5 self-start rounded-lg rounded-es-[4px] border border-border bg-background px-2.5 py-2">
       {media?.url ? (
         media.kind === 'image' ? (
           <FlowImage
@@ -251,7 +251,7 @@ export function TestPanel({
     <div
       role="dialog"
       aria-label={tr('dialogLabel')}
-      className="fixed bottom-6 right-6 z-40 flex max-h-[65vh] w-[380px] flex-col rounded-2xl border border-border bg-background shadow-lg"
+      className="fixed bottom-6 end-6 z-40 flex max-h-[65vh] w-[380px] flex-col rounded-2xl border border-border bg-background shadow-lg"
     >
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div className="flex items-center gap-2">

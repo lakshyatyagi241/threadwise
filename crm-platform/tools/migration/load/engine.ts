@@ -167,6 +167,75 @@ export const ctxOf = (
 export const rowUuid = (client: string, mapCollection: string, key: string, sub: string): string =>
   uuidv5(`${client}|${mapCollection}|${key}${sub}`);
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const INT_RE = /^-?\d+$/;
+const NUM_RE = /^-?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/;
+const TS_RE = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}(:?\d{2})?)?$/;
+
+/**
+ * Why a value cannot go into a column of this Postgres type, or null when it can. Postgres only says "invalid input syntax"
+ * (SQLSTATE 22P02) without naming the column, so every value is judged BEFORE the insert and a bad one is named by table and column
+ * (never by value: a value can be personal data).
+ */
+export function badCell(pg: string, v: unknown): string | null {
+  if (v === null || v === undefined) return null;
+  const t = pg.toLowerCase();
+  if (t === 'uuid') return typeof v === 'string' && UUID_RE.test(v) ? null : 'not a uuid';
+  if (t === 'bigint' || t === 'integer' || t === 'smallint') {
+    const ok =
+      typeof v === 'number' ? Number.isInteger(v) : typeof v === 'string' && INT_RE.test(v);
+    if (!ok) return `not a whole number (${typeof v})`;
+    if (t === 'integer' && Math.abs(Number(v)) > 2_147_483_647) return 'outside the integer range';
+    if (t === 'smallint' && Math.abs(Number(v)) > 32_767) return 'outside the smallint range';
+    return null;
+  }
+  if (t.startsWith('numeric') || t === 'double precision' || t === 'real')
+    return (typeof v === 'number' && Number.isFinite(v)) ||
+      (typeof v === 'string' && NUM_RE.test(v.trim()))
+      ? null
+      : `not a number (${typeof v})`;
+  if (t === 'boolean') return typeof v === 'boolean' ? null : `not a boolean (${typeof v})`;
+  if (t === 'timestamptz' || t === 'timestamp') {
+    if (typeof v !== 'string' || !TS_RE.test(v)) return `not an ISO timestamp (${typeof v})`;
+    const y = Number(v.slice(0, 4));
+    return Number.isNaN(Date.parse(v.replace(' ', 'T'))) || y < 1 || y > 9999
+      ? 'not a valid date'
+      : null;
+  }
+  if (t === 'date')
+    return typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? null : 'not a date';
+  if (t === 'text' || t.startsWith('varchar') || t.startsWith('character')) {
+    if (typeof v === 'string' && LONE.test(v)) return 'holds half of an emoji (a lone surrogate)';
+    return typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean'
+      ? null
+      : `not text (${typeof v})`;
+  }
+  if (t === 'jsonb' || t === 'json')
+    return hasLone(v, 0) ? 'holds half of an emoji (a lone surrogate)' : null;
+  return null; // arrays, time ...: left to the database
+}
+
+/** A string with half of a surrogate pair: not valid in a JSON document Postgres parses (22P02). */
+const LONE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+function hasLone(v: unknown, depth: number): boolean {
+  if (typeof v === 'string') return LONE.test(v);
+  if (depth > 12 || v === null || typeof v !== 'object') return false;
+  for (const x of Array.isArray(v) ? v : Object.values(v as Record<string, unknown>))
+    if (hasLone(x, depth + 1)) return true;
+  return false;
+}
+
+function assertCells(table: string, spec: TableSpec, rows: Array<Row & { uuid?: string }>): void {
+  for (const r of rows)
+    for (const c of spec.columns) {
+      const why = badCell(c.pg, r[c.name]);
+      if (why)
+        throw new Error(
+          `ROW_VALUE_REJECTED: ${table}.${c.name} (${c.pg}) ${why}; row ${r.uuid ?? r.id ?? '?'}. Nothing was written for this batch`,
+        );
+    }
+}
+
 /** One INSERT per table per batch. Returns the uuids that were actually inserted (conflicts are skipped, never overwritten). */
 export async function insertRows(
   tx: TenantTx,
@@ -181,6 +250,11 @@ export async function insertRows(
   const sel = sql.raw(['uuid', ...names].map((n) => `x.${q(n)}`).join(', '));
   const defs = sql.raw(
     ['uuid uuid', ...spec.columns.map((c) => `${q(c.name)} ${c.pg}`)].join(', '),
+  );
+  assertCells(
+    table,
+    spec,
+    items.map((i) => ({ uuid: i.uuid, ...i.row })),
   );
   const json = JSON.stringify(items.map((i) => ({ uuid: i.uuid, ...i.row })));
   const res = await tx.execute(sql`
@@ -226,7 +300,7 @@ async function idsByUuid(
     : sql``;
   const res = await tx.execute(sql`
     SELECT id, uuid::text AS uuid FROM ${sql.raw(q(table))}
-    WHERE org_id = ${orgId} AND uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(uuids)}::jsonb)::uuid) ${bound}`);
+    WHERE org_id = ${orgId} AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(uuids)}::jsonb)::uuid)) ${bound}`);
   for (const r of res.rows as Array<{ id: number; uuid: string }>) out.set(r.uuid, Number(r.id));
   return out;
 }

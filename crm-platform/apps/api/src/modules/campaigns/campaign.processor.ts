@@ -7,6 +7,11 @@ import { QUEUES } from '../../infra/queue/queues';
 import { CampaignDispatchService } from './campaign-dispatch.service';
 import type { CampaignJob } from './campaign-jobs';
 import { FIXTURE_RECEIPT_JOB, FixtureReceiptConsumer } from './fixture/fixture-receipts';
+import {
+  TEST_SEND_RELEASE_JOB,
+  WizardTestSendService,
+  type TestSendReleaseJob,
+} from './wizard/wizard-test-send.service';
 import type { FixtureReceipt } from './fixture/fixture-engine-sender';
 
 const BUSY_RETRY_MS = 15_000;
@@ -22,18 +27,36 @@ export class CampaignProcessor extends WorkerHost {
   constructor(
     private readonly dispatch: CampaignDispatchService,
     private readonly fixtureReceipts: FixtureReceiptConsumer,
+    private readonly tests: WizardTestSendService,
   ) {
     super();
   }
 
-  async process(job: Job<CampaignJob | FixtureReceipt>, token?: string): Promise<string> {
+  async process(
+    job: Job<CampaignJob | FixtureReceipt | TestSendReleaseJob>,
+    token?: string,
+  ): Promise<string> {
+    // A wizard test send the quiet hours held back is released at the opening (BL-191).
+    if (job.name === TEST_SEND_RELEASE_JOB) {
+      const { orgId, testSendId } = job.data as TestSendReleaseJob;
+      return RequestContextStore.run(
+        {
+          requestId: `camp-test-${testSendId}`,
+          orgId,
+          actorType: 'system',
+          actorId: null,
+          userId: null,
+        },
+        () => this.tests.release(orgId, testSendId),
+      );
+    }
     // The sandbox's own delivery reports (CAMP_PROVIDER_MODE=fixture) travel on this queue; they are what a webhook would have been.
     if (job.name === FIXTURE_RECEIPT_JOB) {
       return (await this.fixtureReceipts.deliver(job.data as FixtureReceipt))
         ? 'applied'
         : 'unowned';
     }
-    const { orgId, campaignId } = job.data as CampaignJob;
+    const { orgId, campaignId, catchUp } = job.data as CampaignJob;
     return RequestContextStore.run(
       {
         requestId: `camp-${campaignId}`,
@@ -44,7 +67,10 @@ export class CampaignProcessor extends WorkerHost {
       },
       async () => {
         try {
-          const result = await this.dispatch.run(orgId, campaignId);
+          const result =
+            catchUp === true
+              ? await this.dispatch.catchUp(orgId, campaignId)
+              : await this.dispatch.run(orgId, campaignId);
           if (result === 'busy') {
             // The campaign or its number is in use by another run: wait and try again, without using up a retry.
             await job.moveToDelayed(Date.now() + BUSY_RETRY_MS, token);

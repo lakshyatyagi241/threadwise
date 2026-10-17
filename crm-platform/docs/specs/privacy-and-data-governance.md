@@ -1,7 +1,7 @@
 # Privacy and data governance: platform-wide design and audit
 
 Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) and BL-168 to BL-171 (round 2: lead capture proof, click-to-WhatsApp referral as evidence, import and wizard CSV notice and per-channel grants, the consent line of web forms) are built** (section 4.3.2); the rest is still design. **BL-172 to BL-181 (Compliance center v1: regime profiles, officer contacts, sub-processor list, terms and privacy
-links, quiet hours and calling windows stored, checklist) are section 11.** Backlog: BL-140 to BL-153
+links, quiet hours and calling windows stored, checklist) are section 11.** **BL-180 (contact-level extras: the minor flag with guardian consent evidence, Do Not Sell or Share, the Global Privacy Control signal) is built** (section 11.9). **How a minor is detected (date of birth, the form and chat age check, the birthday sweep: BL-217, BL-218, BL-190) and the Do-Not-Call list (BL-181) are sections 11.10 and 11.11.** Backlog: BL-140 to BL-153
 ([backlog.md](../backlog.md) section O), BL-172 to BL-181 (section Q). Not legal advice: see section 10.
 
 ## How to read the evidence
@@ -395,7 +395,7 @@ distinct permission and is itself audited.
    region exists (D3).
 8. **Cross-border transfers:** list each vendor's hosting region in the register; SCCs / transfer assessments need counsel.
 9. **Children's data:** no age gate exists; the platform is B2B. Policy: tenants must not use it to market to children; the gate adds a
-   `subject_minor` deny reason when a tenant tags a contact as a minor; no processing of minors' voice for AI by default.
+   `subject_minor` deny reason when a tenant tags a contact as a minor (built, BL-180, section 11.9); no processing of minors' voice for AI by default.
 10. **Operator access:** notify the tenant owner when an operator uses act-as (email + audit entry visible to the tenant), time-box the
     token, and finish ADR-0028's privileged-mode fix.
 
@@ -454,7 +454,7 @@ decisions the gate and registry must encode so a voice bot adds a provider, not 
    patterns and masked (`pii` class `financial`).
 8. **Retention and DSAR:** recordings and transcripts follow the table in 4.6; both are registered holders (export returns audio and
    text; erasure deletes objects and transcript rows). Playback and export remain audited.
-9. **Minors and special categories:** the bot ends the sensitive-topic flow and hands off; no recording of detected minors by default.
+9. **Minors and special categories:** the bot ends the sensitive-topic flow and hands off; no recording of detected minors by default. The spoken or DTMF age confirmation that detects a minor is specified in 11.10 (BL-219).
 10. **Provider listing:** every voice, speech-to-text, text-to-speech and LLM vendor is a registry entry before use.
 
 ## 6. Roadmap
@@ -584,8 +584,8 @@ it states design intent, not legal advice (section 10).
 | `uk_gdpr` | United Kingdom       | as `gdpr_eu`, plus PECR (opt-in for electronic marketing); minors under 13                                                                                                                                    | 30 days                            | opt-in                             | none statutory                                  | 72 hours to the ICO                      |
 | `dpdp_in` | India                | **grievance officer** (name and contact) required; **notice in English and one Indian language**; **parental consent flag** for minors under 18; **consent manager placeholder** (name, link; no integration) | 30 days (inferred, not fixed)      | opt-in, withdrawable               | none beyond `trai_in`                           | Board and affected persons (CERT-In 6 h) |
 | `ccpa_us` | United States        | **Do Not Sell or Share** switch and **opt-out notice** link                                                                                                                                                   | 45 days                            | opt-out (opt-in under 16 for sale) | none                                            | per state law                            |
-| `tcpa_us` | United States        | **quiet hours** 21:00 to 08:00 and **calling window** 08:00 to 21:00 (stored; the contact's local time is a follow-up, see 11.5); **DNC registry hook**; recorded opt-in on the checklist                     | n/a                                | opt-in (written)                   | quiet 21:00 to 08:00, calling 08:00 to 21:00    | n/a                                      |
-| `trai_in` | India                | **quiet hours** 21:00 to 09:00 and **calling window** 09:00 to 21:00 (stored, see 11.5); **DND (NDNC) hook**; recorded opt-in on the checklist                                                                | n/a                                | opt-in                             | quiet 21:00 to 09:00, calling 09:00 to 21:00    | CERT-In 6 hours                          |
+| `tcpa_us` | United States        | **quiet hours** 21:00 to 08:00 and **calling window** 08:00 to 21:00 (enforced by deferring, on the contact's local time, see 11.5); **DNC registry hook**; recorded opt-in on the checklist                  | n/a                                | opt-in (written)                   | quiet 21:00 to 08:00, calling 08:00 to 21:00    | n/a                                      |
+| `trai_in` | India                | **quiet hours** 21:00 to 09:00 and **calling window** 09:00 to 21:00 (enforced by deferring, see 11.5); **DND (NDNC) hook**; recorded opt-in on the checklist                                                 | n/a                                | opt-in                             | quiet 21:00 to 09:00, calling 09:00 to 21:00    | CERT-In 6 hours                          |
 | `lgpd_br` | Brazil               | a DPO (encarregado) contact on the checklist; sub-processor locations; the answer time of 15 days                                                                                                             | 15 days                            | opt-in                             | none statutory                                  | "reasonable time" to the ANPD            |
 | `pdpa_sg` | Singapore            | a DPO contact required; Do Not Call registry hook for calls and texts                                                                                                                                         | 30 days                            | opt-in                             | none statutory                                  | 3 days to the PDPC when notifiable       |
 | `generic` | every other country  | nothing extra                                                                                                                                                                                                 | 30 days                            | opt-in recommended                 | none                                            | n/a                                      |
@@ -594,7 +594,7 @@ Country to suggestion (`suggestRegimes`, pure code in `@crm/contracts`): the 27 
 GB: `uk_gdpr`; IN: `dpdp_in` and `trai_in`; US: `ccpa_us` and `tcpa_us`; BR: `lgpd_br`; SG: `pdpa_sg`; anything else: `generic`.
 
 What a profile does **not** do yet: it does not record cookie consent, show a notice at collection, register DLT templates, check a registry, collect parental-consent evidence
-or name a legal basis per purpose. Those belong to the baseline gaps G11 and G12 and to BL-177, BL-180 and BL-181. The Compliance center says only what it checks.
+or name a legal basis per purpose. Those belong to the baseline gaps G11 and G12 and to BL-177 and BL-181. Parental-consent evidence and the contact-level opt-outs are built (BL-180, section 11.9). The Compliance center says only what it checks.
 
 ### 11.4 "The strictest wins": how profiles combine
 
@@ -611,28 +611,65 @@ A profile that is switched off adds nothing, and nothing is switched on without 
 
 ### 11.5 Quiet hours, calling windows, DND hooks
 
-Stored per workspace: quiet hours for messages, a calling window and days for calls, the time zone they are read in (default: the
-workspace's), and a DND registry choice (`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`). **Enforcement is a follow-up (BL-177), on
-purpose.** The ConsentGate answers allow or deny for one send; a quiet hour needs a third answer, **defer until the window opens**, and a
-dispatcher that holds the message and sends it later. A deny would silently drop a broadcast scheduled for 22:00. Until that exists the
-pure helper `isInsideWindow` is tested and the checklist shows "stored, not enforced". Two further limits: the window should be read in
-the **contact's** time zone (the ledger has no contact time zone yet), and a DND check needs a registry feed we do not have (the hook is a
-setting and a design, no integration).
+Stored per workspace: quiet hours for messages, a calling window and days for calls, a fallback time zone, and a DND registry choice
+(`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`). **Enforced by deferring (BL-177, built).** The ConsentGate still answers allow or
+deny for one send; a quiet hour needs a third answer, **hold until the window opens**, which is a separate decision taken right after the
+gate allowed the send (`SendWindowService`, the pure rule `decideSendWindow` in `@crm/contracts`). A deny would silently drop a broadcast
+scheduled for 22:00, so nothing is ever denied for the hour.
+
+What is decided, and for whom:
+
+- **Only the marketing purpose is asked.** A service reply inside the 24 hour window, a utility or authentication template, a booking notice
+  and a note to a colleague's number are never held. Marketing is the gate's `marketing` ledger purpose: a MARKETING template, a campaign
+  or broadcast of marketing content, a scheduled message, a proactive flow's free-form message, a marketing mail.
+- **Messages: quiet hours defer.** The window used is the one the workspace switched on (a profile only suggests hours; D13 stands: nothing
+  changes without a person saving). Inbox and API sends hold the queue job (`message-dispatch`, delayed to the opening; the message stays
+  `queued` with `meta.hold`, a `held` event, and the thread shows "Held until"); flows halt the run and wake it at the opening (BL-192; a halt for another reason still retries every 5 minutes, inside the
+  run's seven day limit); broadcasts leave the recipient `pending` with `held_until`, send the rest and pause with reason `quiet_hours` (the
+  resume sweep continues them); campaigns put the recipient back to `queued` with `held_until` and schedule themselves again for the first
+  opening; scheduled messages leave the recipient `pending` and pause until the first opening; a guided campaign's follow-up step is looked
+  at again when the hours end. At release the ConsentGate is asked again, so a STOP that arrived while the message waited still stops it.
+- **Calls: the calling window refuses.** A live call cannot wait in a queue, so `POST /v2/calling/calls/dial` outside the window answers
+  422 `CALL_OUTSIDE_WINDOW` with the instant the window opens, before Meta is asked anything. A call back to someone who messaged or called in
+  the last 24 hours is service and is not refused.
+- **Which clock.** The contact's own time zone (the stored `timezone`, set by staff, an import or the API; else a contact property of type "timezone", else a property keyed `timezone`), else the
+  country code of their number (one zone for most countries; for a country that spans hours, `+1`, `+7`, `+52`, `+55`, `+61`, `+62`, the
+  hours must be right in **every** zone, the strictest reading, and when no moment satisfies all of them the fallback zone alone decides),
+  else the zone chosen in the settings, else the workspace's, else UTC. A number written without its country code is never guessed.
+- **When the windows cannot be read** (a database error) a marketing send waits five minutes and asks again; it never goes out unchecked.
+
+**The remaining senders (BL-191, built).** The broadcasts of LINE, Messenger, Telegram and Viber leave a held recipient `pending` with
+`held_until` and wake themselves with a delayed job at the first opening; a WeChat mass send is one call, so it waits as a whole on the
+workspace clock; the Instagram broadcasts page, the offer and win-back broadcasts of a Shopify or WooCommerce store, and the broadcast wizard's
+test send hold the same way (a delayed job at the opening). Every recipient of these broadcasts is also put through the ConsentGate before it is sent, first sends included (BL-141 follow-up; a WeChat all-followers or tag send is refused as a whole when it cannot be shown to be clean, BL-243). Only the marketing purpose is asked: a utility template is never held, and an
+Instagram reply typed in the inbox composer is a person answering a person.
+
+**Recurring campaigns and flows (BL-192, built).** A recurring campaign no longer carries its held recipients to the next occurrence: the
+occurrence ends and the campaign moves to its next date at once, and a catch-up job queued for the first opening sends only those
+recipients (the cadence is kept; the ConsentGate is asked again; one still inside their own hours gets another catch-up). A flow held for
+the quiet hours wakes exactly at the opening, not on the five minute retry.
+
+**A visible contact time zone (BL-193, built).** The zone is a column of the contact (`timezone`, `timezone_source`: staff, import or api),
+set on the contact form, in a bulk edit, in a CSV import or through the REST API, and shown on the profile with where the clock comes from
+and the next allowed send time. A zone worked out from the number's country or the workspace is never stored, so it can never replace one a
+person chose; an import fills a contact that has none but never replaces a chosen one.
+
+Still open: a DND check needs a registry feed we do not have (the hook is a setting and a design, no integration; BL-181).
 
 ### 11.6 Built and open
 
-| Id     | Item                                                                                                                                                                                             | State                                              |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
-| BL-172 | Regime profiles and the country suggestion; DPO and grievance officer contacts; children flag; DPDP, CCPA and DND settings (`compliance_settings`)                                               | built (v1)                                         |
-| BL-173 | Sub-processor list (admin-editable) with an optional public page `/trust/<workspace>`, and the DPA template download                                                                             | built (v1)                                         |
-| BL-174 | Compliance checklist: each baseline point and each switched-on profile requirement as built, partial or open, from real workspace data                                                           | built (v1)                                         |
-| BL-175 | Privacy and terms links per workspace, offered to the form builder consent block and the consent-notice editor; optional `termsUrl` beside `privacyUrl`                                          | built (v1)                                         |
-| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                              | built (v1); enforcement is BL-177                  |
-| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatcher, per contact time zone; DND registry check                                                                           | open                                               |
-| BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                               | built (notice, doc); the terms text is the owner's |
-| BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                         | built (v1)                                         |
-| BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | open                                               |
-| BL-181 | The integrations the placeholders stand for: a DPDP consent manager, a DNC / NDNC registry feed, a breach-notification workflow, the platform sub-processor register inside the app              | open (needs owner decisions and counsel)           |
+| Id     | Item                                                                                                                                                                                             | State                                                                                                                                 |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| BL-172 | Regime profiles and the country suggestion; DPO and grievance officer contacts; children flag; DPDP, CCPA and DND settings (`compliance_settings`)                                               | built (v1)                                                                                                                            |
+| BL-173 | Sub-processor list (admin-editable) with an optional public page `/trust/<workspace>`, and the DPA template download                                                                             | built (v1)                                                                                                                            |
+| BL-174 | Compliance checklist: each baseline point and each switched-on profile requirement as built, partial or open, from real workspace data                                                           | built (v1)                                                                                                                            |
+| BL-175 | Privacy and terms links per workspace, offered to the form builder consent block and the consent-notice editor; optional `termsUrl` beside `privacyUrl`                                          | built (v1)                                                                                                                            |
+| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                              | built (v1); enforced by BL-177 (built)                                                                                                |
+| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatchers, per contact time zone (11.5); the DND registry check stays a hook (BL-181)                                         | built, awaiting sign-off                                                                                                              |
+| BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                               | built (notice, doc); the terms text is the owner's                                                                                    |
+| BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                         | built (v1)                                                                                                                            |
+| BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | built (v1), section 11.9                                                                                                              |
+| BL-181 | The integrations the placeholders stand for: a DPDP consent manager, a DNC / NDNC registry feed, a breach-notification workflow, the platform sub-processor register inside the app              | partly built (11.11): the DNC list and the consent manager note and contract; registries BL-221, route BL-222; the rest needs counsel |
 
 ### 11.7 HIPAA: not supported
 
@@ -643,10 +680,189 @@ necessary, audit trails, encryption in transit and at rest, breach notification,
 
 ### 11.8 Decisions for the owner (from this section)
 
-| #   | Decision                                                                                                              | Recommendation                                                 |
-| --- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| D13 | Should accepting a regime profile change the Consent switch ("require recorded consent") by itself?                   | No (today a hint and a link); a silent change would stop sends |
-| D14 | Enforce quiet hours by deferring, which needs a "held until" state in the dispatcher and a contact time zone (BL-177) | Yes, after the contact time zone exists; never as a deny       |
-| D15 | A public `/trust/<workspace>` page for the sub-processor list                                                         | Off by default, a switch per workspace (built so)              |
-| D16 | The platform's own sub-processor register in the app (read-only) next to the workspace list                           | Yes once the owner fills the TODO columns of the register      |
-| D17 | Add the "no PHI" clause to the platform terms and the signup checkbox text                                            | Yes; the wording in the HIPAA note is a draft for counsel      |
+| #   | Decision                                                                                                              | Recommendation                                                        |
+| --- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| D13 | Should accepting a regime profile change the Consent switch ("require recorded consent") by itself?                   | No (today a hint and a link); a silent change would stop sends        |
+| D14 | Enforce quiet hours by deferring, which needs a "held until" state in the dispatcher and a contact time zone (BL-177) | Yes; built (11.5): never a deny, the zone read from the contact first |
+| D15 | A public `/trust/<workspace>` page for the sub-processor list                                                         | Off by default, a switch per workspace (built so)                     |
+| D16 | The platform's own sub-processor register in the app (read-only) next to the workspace list                           | Yes once the owner fills the TODO columns of the register             |
+| D17 | Add the "no PHI" clause to the platform terms and the signup checkbox text                                            | Yes; the wording in the HIPAA note is a draft for counsel             |
+
+### 11.9 Contact-level extras (BL-180)
+
+Status: **built (v1)**. Three facts about one contact that the consent ledger cannot hold, plus the browser signal that sets one of them.
+The words in the product stay "tools to help you comply".
+
+**Where it is stored (decision).** Two additive tables, no existing table or applied migration is touched (migration
+`20261216090000_contact_privacy_flags`): `contact_privacy_events` (append-only, a trigger rejects UPDATE and DELETE, the contact link goes
+to NULL on erasure, unique idempotency key, evidence of ids and references only) and `contact_privacy_flags` (the current value per
+contact, written in the same transaction as the event; cascades with the contact). This is the ledger pattern, in its own tables, because
+the ledger's rows are a grant or a withdrawal of one purpose on one channel (`marketing` / `utility`): "this contact is a minor" and "do
+not sell my data" are not channel consents, and widening the ledger (the BL-140b columns) would change what every send path, the proof
+export and the Consent card mean. The ledger, the gate's marketing reads and the proof export are unchanged. Both tables are registered
+in the personal-data registry (`consent.ledger`), so a rights export carries them and an erasure removes the flags and unlinks the events.
+
+| Flag                 | Meaning                                   | Set by                                                      | Effect                                                                                                                                        |
+| -------------------- | ----------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `minor`              | the contact is under the age of consent   | a person with `contacts.consent.manage` (Consent card, API) | the gate holds MARKETING (`subject_minor`) by the workspace's children setting, below                                                         |
+| `guardian_consent`   | a parent or guardian agreed for the minor | a person; needs a note; only while the contact is a minor   | EVIDENCE only (evidence key `guardianConsentRef`, a reference, never a name). It never writes a marketing grant. It lifts the hold, see below |
+| `sale_share_opt_out` | "Do Not Sell or Share" (CCPA / CPRA)      | a person, the API, or the Global Privacy Control signal     | the gate denies `third_party_sharing` (`sale_share_opted_out`); shown on the contact                                                          |
+
+**The minor rule** (`minorRuleOf`, pure, in `@crm/contracts`): the workspace's Compliance center settings give one of three rules, applied to
+marketing only (service replies, order and appointment notices are never held by the flag):
+
+| Children setting (Compliance center)                        | Rule       | A flagged minor's marketing                                 |
+| ----------------------------------------------------------- | ---------- | ----------------------------------------------------------- |
+| not answered, and parental consent not required             | `off`      | not held: the flag is recorded and shown, today's behaviour |
+| "minors may be included", or "parental consent is required" | `guardian` | held (`subject_minor`) until guardian consent is on record  |
+| "we do not knowingly process the data of minors"            | `block`    | held (`subject_minor`); guardian evidence does not lift it  |
+
+The order inside the gate is: purpose rules, then a withdrawal (`withdrawn`, the more specific fact), then the minor hold, then the
+workspace's "require recorded consent" switch. So guardian consent never replaces a recorded grant: with the strict switch on, a minor with
+guardian evidence still needs a grant in the ledger, written by the usual paths with the usual proof (a grant on the Consent card for a
+minor can carry `guardianConsentRef`). The rule is cached for 60 seconds per process and dropped at once in the process that saves the
+Compliance center. Clearing the minor flag clears guardian consent in the same transaction, as its own history line.
+
+**Do Not Sell or Share.** The API accepts the flag for any workspace (an opt-out is never harmful); the Consent card offers the switch when
+the workspace has `ccpa_us` on, and keeps showing it for a contact that already has it. Nothing in the product sells or shares contact data
+with a third party today (no audience sync, no conversion API), so the flag is the record that any such path must respect: it asks the gate
+for `third_party_sharing`, which already denies without a recorded consent and now says `sale_share_opted_out` for an opted-out contact.
+
+**Global Privacy Control.** `Sec-GPC: 1` is the only value that counts (`isGpcSignal`). On a public form submission
+(`POST /v2/public/forms/:key/submit`, forwarded by the web relay) and on a chat widget message (`POST /widget/:token/api/message`), when
+the workspace has `ccpa_us` on and the submission resolved to a contact, that contact's opt-out is recorded with source `gpc` and evidence
+`formId` + `submissionId` or `widgetId`, as the system of that workspace, in a savepoint (a failure never loses the visitor's data). Nothing
+else about the request (IP, user agent) is kept. A contact already opted out gets no second line. It changes nothing about marketing
+consent: GPC is a sale / share signal, not an unsubscribe. A widget visitor has a contact once they give a phone number or an email;
+recorded once per visitor and widget.
+
+**Limits (recorded as follow-ups BL-188 to BL-190).** Audience counts that use SQL predicates (the campaign wizard preview) do not apply the
+minor hold; the dispatchers do, through `checkMany`. A staff retry of a form submission that needed review does not re-apply the signal (it
+is not stored on the submission). There was no minor filter on the contact list, no import column and no REST v1 write for the flags; they are built with section 11.10 (BL-190).
+
+**Decisions for the owner (from this section).**
+
+| #   | Decision                                                                                                           | Recommendation                                                                                 |
+| --- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| D18 | Should a flagged minor's marketing be held when the children question is NOT answered (today: recorded, not held)? | Yes, after existing workspaces have had time to answer (the checklist shows the question open) |
+| D19 | Should a Global Privacy Control signal also be honoured for workspaces without `ccpa_us` (US state laws list it)?  | No for now: the profile is the switch; a US workspace turns `ccpa_us` on. Counsel to confirm   |
+| D20 | Should `guardian` also require the guardian reference (`guardianConsentRef`), not only the note?                   | No: a note is enough proof for a small business; the reference is optional                     |
+
+### 11.10 How a minor is detected (BL-217, BL-218, BL-219)
+
+Status: **designed here and built in the same change**; the table at the end of this section is kept in step with the code.
+
+**The owner's question.** Forms, widgets and chatbots usually collect a name, an email, a phone number and a text box, and no age. Section
+11.9 gave us a minor flag, but only a person could set it, so in practice nobody would ever be flagged. How is a minor detected?
+
+**Answer, in five rules.**
+
+1. **A flag is a consequence of a fact we hold, not a guess.** The only facts that justify an automatic flag are a date of birth, an
+   age the person gave, or a statement by staff or by a flow author. We never infer age from a name, a number or a message.
+2. **Ask only where it is needed (data minimisation).** The default for every form, widget and flow is **not to ask**. A workspace asks when
+   its Compliance center profile makes it necessary (the highest `minorAge` of the profiles switched on is 13, 16 or 18, section 11.3) or
+   when its business serves minors (children's classes, a school, a toy shop). The builder shows a hint, never a default, and the Compliance
+   checklist does not demand it. An age question that nobody needs would be a privacy problem of our own making.
+3. **Three ways to ask, from least to most data.** A **declaration** ("I confirm I am at least N years old", no date kept), an **age**
+   (a whole number; used for the decision and then forgotten, apart from the result on the flag) and a **date of birth** (kept on the contact as
+   a personal property). The declaration is the right choice for a form whose only risk is "a child filled it in"; a date of birth is
+   for a business that needs it anyway (birthdays, eligibility).
+4. **A neutral screen.** The question never says why it is asked or which answer passes: no "must be 18", no hint under the field, no
+   pre-filled value, no pre-ticked declaration, the same wording whatever the answer, and after a refusal the form does not invite a second
+   try in the same session (the browser remembers it for the session; the server stores **nothing** about a refused submission, not even
+   the date typed). It is a self-declaration and can be false: a reasonable-effort signal, not verification. The words in the product stay
+   "tools to help you comply".
+5. **The result is evidence.** The flag history (11.9) records the source `dob`, the form or flow and the expiry; a declaration is stored
+   on the submission's consent record with its wording and version.
+
+**The property.** `date_of_birth` is a **built-in contact property** (a `date` column on `contacts`, like title or address), not a custom
+field: it must be sortable, filterable and swept by an index, and nobody should be able to delete it. It is personal data of the
+`identifier` class: listed in the personal-data registry for `contacts` (`pii`), so a rights export carries it and an erasure removes it,
+and the audit log never prints its value (it prints that it changed). It is writable by the contact form, the CSV import (column
+`date_of_birth`), REST v1 (`date_of_birth`), forms (field kind "Date of birth") and the flow Ask node. No send path reads it.
+
+**The threshold.** `workspaceMinorAge` = the highest `minorAge` of the switched-on profiles (`effectivePolicy`, 11.4), else **18**
+(13 for `ccpa_us` or `pdpa_sg` alone, 16 for `gdpr_eu`, 18 for `dpdp_in` and `lgpd_br`, 18 for `generic` or no profile). A form or flow may
+set its own `minAge` (1 to 21, e.g. 21 for an alcohol shop); empty means the workspace's. One age per workspace is a limit: the person's own
+country is not known, so a French child in a US-only workspace is judged by 13. Recorded as D21.
+
+**The age gate on a form** (`definition.ageGate`, off by default). Fields: `mode` (`dob`, `age` or `declaration`), `minAge`, `whenUnder`.
+
+| `whenUnder`       | What the server does with an under-age answer                                                                                                                                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `block` (default) | Refuses the submission before anything is stored (`FORMS_AGE_BLOCKED`, a neutral message). Nothing about the visitor is kept.                                                                                                                                                                     |
+| `flag`            | Accepts it, writes the contact, flags it as a minor (source `dob`) and **does not record the marketing agreement** of this submission (the ticked line is stored as seen, but no marketing grant is written).                                                                                     |
+| `guardian`        | As `flag`, and the form asks for a parent or guardian (name and an email or phone) before it accepts. The details are kept on the submission and on the contact timeline; **guardian consent stays unrecorded until staff record it** on the Consent card (a link the guardian clicks is BL-220). |
+
+The declaration mode has no age to read: with `block` the box simply has to be ticked (an unticked box is an unanswered question, a 422, and ticking it passes: nobody is turned away), and with `flag` or `guardian` an unticked box is treated like an under-age answer (the contact is flagged with the source `declaration`, which never lapses by itself). The
+question is required while the gate is on. Whether a flagged minor's marketing is then **held** by the ConsentGate depends on the children
+setting (11.9: `off` only records), so the builder warns when the gate is on and the children question is not answered (D18 stays open, D22).
+
+**Auto-flag and the birthday sweep.** `MinorDetectionService` evaluates a contact whenever its date of birth is written (contact form,
+REST v1, import rows, form, flow, widget), and a nightly sweep (03:35, worker) repairs what slipped through and **unflags a contact who has
+turned of age**. A flag set from a date of birth has the source `dob` and an expiry (`minor_until`: the birthday of the threshold, or for a
+bare age the latest day the person can turn of age). The sweep clears **only** flags whose source is `dob`: a flag set by a person
+(`manual`, `contact_request`), the API, an import column or a flow is never cleared by a birthday. If a person clears a `dob` flag by hand while
+the date of birth still says minor, the contact is marked reviewed for that date and is not flagged again until the date changes. A person who
+sets the flag on a contact that a date of birth had flagged takes it over (source becomes theirs). Birthdays are read on the **earliest
+calendar date on Earth** (UTC minus 12 hours), so a minor never loses the flag a day early.
+
+**Widget and flows.** A widget's intake form can ask for a date of birth, an age or the declaration (same gate; `block` or `flag` only, a
+chat has no second screen for a guardian). A flow's Ask node can validate an answer as **Age** or **Date of birth** with the same
+threshold and an action: end the run with a neutral line (`block`), or continue with `{{var}}_age_gate` = `under` or `adult` and the contact flagged,
+so the author can branch to ask for a guardian. Neither is asked by default; the option has to be placed on purpose.
+
+**Reactive path.** When staff, or a flow, learn that a contact is a minor (a parent writes, a message says so), they set the flag: the
+Consent card (11.9), `POST /v1/contacts/:id/privacy`, the import column `minor`, or the contact filter "Minors" with a bulk selection.
+A person's flag outranks the date of birth until they clear it.
+
+**Voice bot (future, BL-148, BL-219: requirement only, nothing built).** Before any marketing or recording the bot asks, in the person's
+language, a neutral yes/no ("Are you at least N years old?", N being the workspace age), answered by **voice or DTMF** ("press 1 for yes, 2 for
+no"). The answer is evidence on the call and in the ledger: method `spoken_age` or `dtmf_age`, the prompt version and its hash, the time and the call
+id, and no audio kept beyond the call's own recording rules. "No", silence after two prompts or a spoken age under the threshold: the bot sets the
+minor flag (source `flow`), stops marketing and recording, says so neutrally and offers a human. It never asks for a date of birth by voice (the date
+would sit in a transcript). [voice-bot-consent-requirements.md](../privacy/voice-bot-consent-requirements.md) item 14 points here.
+
+**Built.**
+
+| Id     | Item                                                                                                                                               | State |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| BL-217 | `date_of_birth` property, form fields Date of birth and Age, form age gate with the three actions and the declaration, auto-flag and nightly sweep | built |
+| BL-218 | Widget intake age question and the flow Ask node validated as Age or Date of birth                                                                 | built |
+| BL-219 | Voice bot age confirmation (the paragraph above)                                                                                                   | spec  |
+| BL-190 | Minor filter, segment fields and list column, import columns, REST v1 read and write, Filter-with-AI knows "minors"                                | built |
+
+### 11.11 Do-Not-Call list and the DPDP consent manager hook (BL-181, BL-221, BL-222)
+
+**Do-Not-Call list (built).** A workspace-managed list of phone numbers that must not receive **marketing by voice or SMS** (`dnc_entries`: the
+number in E.164, the source `manual`, `import`, `contact_request` or `registry_export`, who added it, a note and a time). Numbers are added by hand, from a
+pasted list or from a CSV (a `phone` column). The ConsentGate asks the list for marketing on the `voice` and `sms` channels and answers `deny` with the
+closed-set reason **`on_dnc_list`**, after a withdrawal and before the minor hold. It never touches service messages (an appointment reminder), WhatsApp or
+email marketing (those follow the ledger), or a contact whose number is not on the list. A number is matched on its digits, so `+91 98765 43210` and
+`919876543210` are one entry. The list holds the workspace's own record of people who asked not to be called: erasing a person's contact **keeps** the entry
+(it is the suppression record that stops a call), registered in the personal-data registry as `retain` with that reason; a data request can still remove it.
+
+**What is not built (BL-221): the registries.** Nothing calls the Indian NDNC (TRAI) registry, the US National Do Not Call Registry, Singapore's DNC
+registry or any scrubbing service: each needs a licence, credentials and a data-processing agreement that only the owner can obtain. The Compliance
+center's `dnd_registry` choice stays a setting, and a workspace can load the extract it is entitled to download into its own list (source
+`registry_export`). When credentials exist, a provider adapter (a port, `dnc_entries` as its cache, a nightly refresh) is the only new code.
+
+**DPDP consent manager hook (a setting and a contract; BL-222 binds it).** Under the DPDP Act a person may manage consent through a registered Consent
+Manager. The Compliance center keeps the manager's **name, registration id and link** (a placeholder before; the registration id is new). The inbound
+contract a manager would call is fixed here so nobody invents it twice, and is **not served yet** (no route, no secret):
+
+`POST /v2/public/consent-manager/:workspaceKey/events` with an HMAC signature header and the body `{ eventId, occurredAt, principal: { phone?, email? },
+purpose: "marketing" | "service", channels: ["whatsapp","sms","email","voice"], action: "granted" | "withdrawn", consentArtifactId, expiresAt? }`. The
+handler would resolve the contact, write a ledger event with source `contact_request` and evidence `reference` = the artifact id, answer `202`, and be
+idempotent on `eventId`. The zod schema is `consentManagerEventSchema` in `@crm/contracts`; BL-222 adds the route, the key and the signature check once a
+manager's real specification is in hand.
+
+**Decisions for the owner (from 11.10 and 11.11).**
+
+| #   | Decision                                                                                                           | Recommendation                                                                                    |
+| --- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| D21 | One minor age per workspace (the highest of the profiles, else 18), not one per contact country                    | Yes for now; per-country ages need the contact's country, which a widget visitor rarely gives     |
+| D22 | A form with `flag` or `guardian` should be refused at publish while the Compliance children question is unanswered | No (a warning only); a publish block would stop forms of workspaces that have not decided yet     |
+| D23 | Ask for a date of birth by default in any template                                                                 | No: never by default (rule 2). The gallery templates stay as they are                             |
+| D24 | Keep a visitor from retrying a refused age gate in the same session                                                | Yes, in the browser only (sessionStorage); the server keeps no trace of a refused visitor         |
+| D25 | Keep a Do-Not-Call entry when the contact is erased                                                                | Yes: the entry is a suppression record; the person can ask for its removal through a data request |

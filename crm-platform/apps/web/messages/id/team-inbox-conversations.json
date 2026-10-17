@@ -44,9 +44,6 @@
         "unassigned": "Belum ditugaskan",
         "unread": "Belum dibaca"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Terbuka",
-      "statusAll": "Semua status",
       "status": {
         "open": "Terbuka",
         "pending": "Tertunda",
@@ -61,7 +58,6 @@
         "high": "Tinggi",
         "urgent": "Mendesak"
       },
-      "channelFilter": "Channel",
       "allChannels": "Semua channel",
       "archived": "Diarsipkan",
       "backToInbox": "Kembali ke inbox",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Pilih",
-      "selectDone": "Selesai"
+      "selectDone": "Selesai",
+      "filters": {
+        "open": "Filter",
+        "openActive": "Filter ({count} aktif)",
+        "title": "Filter",
+        "close": "Tutup",
+        "reset": "Atur ulang",
+        "cancel": "Batal",
+        "apply": "Terapkan",
+        "status": "Status chat",
+        "statusHint": "Tanpa pilihan, chat terbuka dan tertunda ditampilkan.",
+        "conversation": "Percakapan",
+        "any": "Apa saja",
+        "assigned": "Ditugaskan",
+        "unassigned": "Belum ditugaskan",
+        "unattended": "Belum ditangani",
+        "labels": "Tag",
+        "channels": "Kanal",
+        "agents": "Agen",
+        "sortBy": "Urutkan",
+        "recent": "Terbaru",
+        "old": "Terlama",
+        "dateRange": "Rentang tanggal (aktivitas terakhir)",
+        "from": "Dari",
+        "to": "Sampai",
+        "select": "Pilih opsi",
+        "search": "Cari",
+        "noMatch": "Tidak ada yang cocok",
+        "today": "Hari ini",
+        "last7": "7 hari terakhir",
+        "last30": "30 hari terakhir",
+        "thisMonth": "Bulan ini",
+        "clearDates": "Hapus tanggal",
+        "previousMonth": "Bulan sebelumnya",
+        "nextMonth": "Bulan berikutnya"
+      },
+      "rowMenu": "Tindakan lainnya untuk {name}",
+      "priorityMenu": "Prioritas",
+      "statusFilter": "Status",
+      "statusOpen": "Terbuka",
+      "statusAll": "Semua status",
+      "channelFilter": "Channel",
+      "selectRow": "Pilih {name}"
     },
     "status": {
       "received": "Diterima",
@@ -232,7 +270,9 @@
         "undone": "Perubahan tahap diurungkan: kembali ke {stage}.",
         "undoneToast": "Tahap dikembalikan ke {stage}.",
         "couldNotUndo": "Perubahan ini tidak bisa diurungkan lagi: kontak sudah berpindah tahap atau sudah diurungkan."
-      }
+      },
+      "heldUntil": "Ditahan sampai {when}",
+      "heldWhy": "Pesan pemasaran ini menunggu jam tenang Anda berakhir. Pesan akan dikirim saat itu, jika kontak belum berhenti berlangganan."
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "Pesan baru: {text}",
       "attachment": "sebuah lampiran",
       "jumpLatest": "Ke yang terbaru",
-      "jumpLatestNew": "{count, plural, other {# pesan baru}}"
+      "jumpLatestNew": "{count, plural, other {# pesan baru}}",
+      "searchOpen": "Cari di obrolan ini",
+      "searchPlaceholder": "Cari di obrolan ini",
+      "searchCount": "{current} dari {total}",
+      "searchNone": "Tidak ada yang cocok",
+      "searchPrev": "Hasil sebelumnya",
+      "searchNext": "Hasil berikutnya",
+      "searchClose": "Tutup pencarian"
     },
     "groupThread": {
       "openGroup": "Buka grup",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "Balasan tersimpan",
-      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim."
+      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim.",
+      "toolbar": {
+        "label": "Format pesan",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "underline": "Garis bawah",
+        "strike": "Coret",
+        "bullets": "Daftar berpoin",
+        "numbers": "Daftar bernomor",
+        "ai": {
+          "open": "Asisten AI Cerdas",
+          "noModel": "Tidak ada model AI yang diaktifkan untuk ruang kerja ini",
+          "title": "Asisten AI Cerdas",
+          "condense": "Ringkas",
+          "condenseHint": "Buat teks lebih pendek dan padat",
+          "fix": "Perbaiki tata bahasa",
+          "fixHint": "Koreksi kesalahan tata bahasa dan ejaan",
+          "positive": "Nada positif",
+          "positiveHint": "Buat teks lebih positif dan ceria",
+          "translate": "Terjemahkan",
+          "translateHint": "Terjemahkan ke bahasa lain",
+          "selectLanguage": "Pilih bahasa",
+          "searchLanguages": "Cari bahasa…",
+          "noLanguage": "Tidak ada bahasa yang cocok",
+          "working": "Sedang diproses…",
+          "empty": "Tulis pesan terlebih dahulu.",
+          "failed": "AI tidak dapat mengubah teks. Coba lagi."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",
@@ -452,7 +527,13 @@
         "pickTeam": "Pilih tim untuk percakapan ini",
         "noTeam": "Tanpa tim",
         "onLeave": "Sedang cuti",
-        "onLeaveUntil": "Cuti hingga {date}"
+        "onLeaveUntil": "Cuti hingga {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Pergi",
+          "busy": "Sibuk",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Daring",

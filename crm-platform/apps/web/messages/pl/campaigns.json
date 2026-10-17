@@ -306,7 +306,11 @@
         "numbersCount": "{count} numerów",
         "emailNote": "E-maile trafiają na adres każdego kontaktu. Kontakty bez adresu e-mail, powtórzone adresy i kontakty, które zrezygnowały z subskrypcji, są pomijane.",
         "emailSkipped": "Wybrani odbiorcy bez adresu e-mail (zostaną pominięci): {count}",
-        "emailNoAddress": "Wpisane numery i wiersze CSV nie mają adresu e-mail, więc są pomijane. Wybierz zamiast tego kontakty, grupy, tagi lub segmenty."
+        "emailNoAddress": "Wpisane numery i wiersze CSV nie mają adresu e-mail, więc są pomijane. Wybierz zamiast tego kontakty, grupy, tagi lub segmenty.",
+        "previousTitle": "Poprzednie wysyłki",
+        "previousHint": "Dodaj osoby, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko te, które przeczytały, odpowiedziały lub kliknęły.",
+        "previousEstimate": "{count, plural, one {Maksymalnie # osoba z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} few {Maksymalnie # osoby z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} many {Maksymalnie # osób z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} other {Maksymalnie # osoby z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).}}",
+        "previousEditHint": "Twój wcześniejszy wybór poprzednich wysyłek nie jest pokazywany podczas edycji: ta kampania przechowuje już swoich odbiorców jako kontakty. Wybierz ponownie, aby dodać więcej osób."
       },
       "message": {
         "title": "Wiadomość",
@@ -594,7 +598,8 @@
         "subject": "Temat",
         "subjectFallback": "Nazwa kampanii",
         "skippedNoEmail": "Pominięci (brak adresu e-mail)",
-        "estimateEmail": "To szacunek: kontakt w dwóch grupach jest liczony dwa razy. Kontakty bez adresu e-mail w grupach, tagach i segmentach są pomijane po uruchomieniu kampanii."
+        "estimateEmail": "To szacunek: kontakt w dwóch grupach jest liczony dwa razy. Kontakty bez adresu e-mail w grupach, tagach i segmentach są pomijane po uruchomieniu kampanii.",
+        "previousSends": "Poprzednie wysyłki (maks.)"
       },
       "ai": {
         "open": "Twórz z AI",
@@ -864,7 +869,8 @@
         "clicked": "kliknięto",
         "showing": "Wyświetlono {shown} z {total}",
         "prev": "Poprzednia strona",
-        "next": "Następna strona"
+        "next": "Następna strona",
+        "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
       },
       "engagement": {
         "opened": "Otwarte",
@@ -1032,7 +1038,8 @@
         "badge": "Na żywo",
         "updated": "zaktualizowano {time}",
         "queued": "{count} czeka na wysyłkę",
-        "processing": "{count} jest właśnie wysyłanych"
+        "processing": "{count} jest właśnie wysyłanych",
+        "held": "{count} wstrzymano z powodu godzin ciszy"
       },
       "statistics": {
         "loadFailed": "Nie udało się wczytać statystyk.",
@@ -1164,7 +1171,10 @@
         "pacing_range": "Sprawdź Smart Delivery: najdłuższe opóźnienie jest krótsze od najkrótszego albo ustawiono tylko jedną z dwóch godzin wysyłki.",
         "follow_up_template_required": "Wybierz szablon wysyłany w każdej wiadomości uzupełniającej.",
         "follow_up_flow_required": "Wybierz przepływ uruchamiany w każdej wiadomości uzupełniającej.",
-        "follow_up_cloud_api_only": "Wiadomości uzupełniające działają tylko z numerem WhatsApp Cloud API. Wybierz taki numer w kroku 1 lub usuń wiadomości uzupełniające."
+        "follow_up_cloud_api_only": "Wiadomości uzupełniające działają tylko z numerem WhatsApp Cloud API. Wybierz taki numer w kroku 1 lub usuń wiadomości uzupełniające.",
+        "sequence_not_recurring": "Szablony wysyłane na zmianę działają tylko z kampanią cykliczną. Wybierz harmonogram cykliczny lub usuń dodatkowe szablony.",
+        "sequence_with_ab": "Szablonów na zmianę nie można łączyć z testem A/B. Wyłącz test A/B lub usuń dodatkowe szablony.",
+        "sequence_template_required": "Wybierz szablon dla każdego kroku kolejności lub usuń puste."
       },
       "template": {
         "previewOnline": "online",
@@ -1249,7 +1259,8 @@
           "contacts": "Kontakty",
           "groups": "Grupy",
           "segments": "Segmenty",
-          "csv": "Plik CSV"
+          "csv": "Plik CSV",
+          "previous": "Poprzednie wysyłki"
         },
         "groupsHint": "Grupy to Twoje listy marketingowe. Uwzględniani są wszyscy z zaznaczonych grup.",
         "segmentsHint": "Segmenty wypełniają się same na podstawie reguł. Uwzględniani są wszyscy z zaznaczonych segmentów.",
@@ -1345,7 +1356,10 @@
         },
         "csvIssuesMore": "Kolejnych {count} jest w pobranym pliku.",
         "csvConsentOn": "Potwierdziłeś zgodę dla tych numerów. Zostaną zapisane jako zgadzające się po uruchomieniu wysyłki.",
-        "csvConsentVersion": "Wersja informacji: {version}."
+        "csvConsentVersion": "Wersja informacji: {version}.",
+        "modePrevious": "Wyślij do poprzednich wysyłek",
+        "previousHint": "Ponownie dotrzyj do osób, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko tych, które przeczytały, nie przeczytały, odpowiedziały lub kliknęły.",
+        "chipPrevious": "{count, plural, one {# wcześniejsza wysyłka} few {# wcześniejsze wysyłki} many {# wcześniejszych wysyłek} other {# wcześniejszej wysyłki}} ({outcome})"
       },
       "review": {
         "intro": "Sprawdź koszt, wskaż, czym wypełnić każdą zmienną szablonu, i przejrzyj wiadomość masową.",
@@ -1423,7 +1437,9 @@
         "estimatedCostFull": "Szacowany koszt (pełny)",
         "chargedPlan": "Pobrano teraz z Twojego portfela: {amount} (Twój plan pokrywa {covered} tych wiadomości)",
         "chargedWallet": "Pobrano z Twojego portfela: {amount}",
-        "sumFollowUps": "Wiadomości uzupełniające"
+        "sumFollowUps": "Wiadomości uzupełniające",
+        "sumSequence": "Wysyła na zmianę",
+        "sumPrevious": "Poprzednie wysyłki: {names} ({outcome})"
       },
       "test": {
         "title": "Wyślij testową wiadomość WhatsApp",
@@ -1459,9 +1475,11 @@
           "sent": "Wysłane",
           "delivered": "Dostarczone",
           "read": "Odczytane",
-          "failed": "Nieudane"
+          "failed": "Nieudane",
+          "held": "Wstrzymano"
         },
-        "charged": "Naliczono {amount}"
+        "charged": "Naliczono {amount}",
+        "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
       },
       "send": {
         "whenTitle": "Kiedy wysłać",
@@ -1586,7 +1604,8 @@
           "sent": "Wysłane",
           "delivered": "Dostarczone",
           "failed": "Nieudane",
-          "retries": "Ponowienia"
+          "retries": "Ponowienia",
+          "template": "Szablon"
         },
         "retrySummary": "oczekuje: {pending}, odzyskano: {recovered}, zaniechano: {exhausted}",
         "openRun": "Otwórz uruchomienie",
@@ -1646,7 +1665,9 @@
             "skipped": "Warunek nie został spełniony w chwili sprawdzenia, więc sekwencja zakończyła się w tym miejscu.",
             "lapsed": "Czas obserwacji minął, zanim kontakt odpowiedział lub przeczytał wiadomość, więc sekwencja zakończyła się w tym miejscu."
           }
-        }
+        },
+        "templatesTitle": "Szablony",
+        "templatesInTurn": "{count, plural, one {# szablon na zmianę} few {# szablony na zmianę} many {# szablonów na zmianę} other {# szablonu na zmianę}}"
       },
       "panel": {
         "title": "Utworzone przez Utwórz wiadomość masową",
@@ -1657,7 +1678,8 @@
           "recurring": "Cykliczne"
         },
         "recipients": "{count, plural, one {# odbiorca} few {# odbiorców} many {# odbiorców} other {# odbiorcy}}",
-        "next": "Następne uruchomienie: {when}"
+        "next": "Następne uruchomienie: {when}",
+        "moreTemplates": "+{count} więcej"
       },
       "pickers": {
         "selectDate": "Wybierz datę",
@@ -1743,6 +1765,29 @@
           "hours": "{count, plural, one {godzina} few {godziny} many {godzin} other {godziny}}",
           "days": "{count, plural, one {dzień} few {dni} many {dni} other {dnia}}"
         }
+      },
+      "sequence": {
+        "title": "Szablony w kolejności",
+        "intro": "Każde uruchomienie wysyła kolejny szablon z tej listy. Uruchomienie 1 wysyła pierwszy, 2 drugi, a po ostatnim lista zaczyna się od pierwszego.",
+        "notRecurring": "Tylko cykliczna wysyłka używa szablonów na zmianę. Wybierz harmonogram cykliczny lub usuń te szablony.",
+        "withAb": "Szablonów na zmianę nie można używać z testem A/B, który już wysyła dwa szablony. Wyłącz test A/B, aby ich użyć.",
+        "templateLabel": "Szablon {position}",
+        "firstMissing": "Jeszcze nie wybrano",
+        "firstHint": "Szablon wybrany dla kampanii. Zmienisz go w kroku szablonu.",
+        "pick": "Wybierz szablon",
+        "loading": "Ładowanie...",
+        "unavailable": "Już niedostępny",
+        "up": "W górę",
+        "down": "W dół",
+        "moveUp": "Przenieś szablon {position} w górę",
+        "moveDown": "Przenieś szablon {position} w dół",
+        "remove": "Usuń szablon {position}",
+        "removeShort": "Usuń",
+        "removeAll": "Usuń wszystkie",
+        "add": "Dodaj szablon",
+        "count": "{used} z {max} szablonów",
+        "limitReached": "Osiągnięto limit: {max} szablonów.",
+        "variablesTitle": "Zmienne szablonu {position}: {name}"
       }
     },
     "history": {
@@ -1879,6 +1924,58 @@
       "loading": "Wczytywanie Twoich numerów",
       "noAccessTitle": "Nie możesz tworzyć kampanii",
       "noAccess": "Poproś administratora przestrzeni roboczej o uprawnienie do tworzenia kampanii."
+    },
+    "previousSends": {
+      "title": "Poprzednie wysyłki",
+      "empty": "Nie ma jeszcze wcześniejszych broadcastów ani kampanii",
+      "outcomeLabel": "Kto z tych wysyłek",
+      "outcomes": {
+        "all": "Wszyscy odbiorcy",
+        "delivered": "Dostarczone",
+        "read": "Przeczytane",
+        "not_read": "Nieprzeczytane",
+        "replied": "Odpowiedzi",
+        "not_replied": "Bez odpowiedzi",
+        "clicked": "Kliknięto link",
+        "failed": "Nieudane"
+      },
+      "outcomeOff": "{name} (niedostępne dla broadcastów)",
+      "outcomeHint": {
+        "all": "Wszyscy odbiorcy: wszystkie osoby, do których skierowano wiadomość. Kontakty, które zrezygnowały, i pominięte wiersze nie są uwzględniane.",
+        "delivered": "Dostarczone: osoby, do których wiadomość dotarła.",
+        "read": "Przeczytane: osoby, które ją przeczytały.",
+        "not_read": "Nieprzeczytane: osoby, do których wysłano wiadomość, a które jeszcze jej nie przeczytały.",
+        "replied": "Odpowiedzi: osoby, które na nią odpowiedziały.",
+        "not_replied": "Bez odpowiedzi: osoby, do których wysłano wiadomość, a które jeszcze nie odpowiedziały.",
+        "clicked": "Kliknięto link: osoby, które kliknęły śledzony link w wiadomości.",
+        "failed": "Nieudane: osoby, do których nie udało się dostarczyć wiadomości."
+      },
+      "broadcastNote": "Broadcast rejestruje tylko dostarczenie i odczyt, więc odpowiedzi i kliknięcia są niedostępne, gdy jest zaznaczony.",
+      "broadcastOff": "Broadcast nie ma odpowiedzi ani kliknięć. Wybierz inny wynik, aby go zaznaczyć.",
+      "search": "Szukaj w poprzednich wysyłkach",
+      "searchPlaceholder": "Szukaj",
+      "listLabel": "Wcześniejsze broadcasty i kampanie",
+      "noMatch": "Nic nie pasuje do wyszukiwania.",
+      "chosen": "Wybrano {count} z {max}",
+      "limit": "Możesz wybrać maksymalnie {max} wysyłek. Odznacz jedną, aby wybrać inną.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Kampania"
+      },
+      "wentOut": "Wysłano {date}",
+      "wentOutUnknown": "Data nieznana",
+      "recipients": "{count, plural, one {# odbiorca} few {# odbiorców} many {# odbiorców} other {# odbiorcy}}",
+      "notRecorded": "Nie rejestrowane dla broadcastu",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# osoba} few {# osoby} many {# osób} other {# osoby}}",
+        "delivered": "{count, plural, one {# osoba je otrzymała} few {# osoby je otrzymały} many {# osób je otrzymało} other {# osoby je otrzymały}}",
+        "read": "{count, plural, one {# osoba ją przeczytała} few {# osoby ją przeczytały} many {# osób ją przeczytało} other {# osoby ją przeczytały}}",
+        "not_read": "{count, plural, one {# osoba jej nie przeczytała} few {# osoby jej nie przeczytały} many {# osób jej nie przeczytało} other {# osoby jej nie przeczytały}}",
+        "replied": "{count, plural, one {# osoba odpowiedziała} few {# osoby odpowiedziały} many {# osób odpowiedziało} other {# osoby odpowiedziały}}",
+        "not_replied": "{count, plural, one {# osoba nie odpowiedziała} few {# osoby nie odpowiedziały} many {# osób nie odpowiedziało} other {# osoby nie odpowiedziały}}",
+        "clicked": "{count, plural, one {# osoba kliknęła link} few {# osoby kliknęły link} many {# osób kliknęło link} other {# osoby kliknęły link}}",
+        "failed": "{count, plural, one {# osoba, do której nie dotarło} few {# osoby, do których nie dotarło} many {# osób, do których nie dotarło} other {# osoby, do których nie dotarło}}"
+      }
     }
   }
 }

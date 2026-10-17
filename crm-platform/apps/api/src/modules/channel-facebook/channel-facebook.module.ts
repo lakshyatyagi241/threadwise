@@ -33,13 +33,15 @@ import { SenderService } from './sender.service';
 import { SetupController } from './setup.controller';
 import { SetupService } from './setup.service';
 import { FacebookPublicController } from './webhook.controller';
+import { SendWindowModule } from '../compliance-center';
+import { ContactConsentModule } from '../contact-consent';
 
 /**
  * The Facebook Pages channel (FB). The shims below stand in for services other domains own; each is replaced by binding the real
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule, CrmModule],
+  imports: [ChatConversationsModule, CrmModule, SendWindowModule, ContactConsentModule],
   controllers: [
     PagesController,
     FbBroadcastsController,
@@ -78,6 +80,8 @@ import { FacebookPublicController } from './webhook.controller';
     BackfillService,
     SenderService,
     FbBroadcastSenderService,
+    // The Meta app's settings (id, secret, Graph version): the Meta lead ads door reads them from the same place.
+    FACEBOOK_GRAPH,
   ],
 })
 export class ChannelFacebookModule implements OnModuleInit {

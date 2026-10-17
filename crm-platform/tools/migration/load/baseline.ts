@@ -53,6 +53,16 @@ export const BULK_TABLES = new Set([
   'lead_sources',
   'lead_events',
   'contact_attributions',
+  // the later bulk steps (templates, segments and saved views, knowledge sources, forms, the API library, outbound webhooks, chat labels):
+  // every row is compared column by column through the generic fingerprint of reconcile/index.ts, so the baseline digest must not flag them
+  'wa_templates',
+  'segments',
+  'contact_views',
+  'ai_training_sources',
+  'wa_forms',
+  'api_library_apis',
+  'webhooks',
+  'conversation_tag',
 ]);
 
 export async function orgTables(tx: TenantTx | Database): Promise<string[]> {

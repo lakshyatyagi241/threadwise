@@ -39,7 +39,7 @@ export const FbGalleryForm: FormComponent = (p) => {
               <span className="font-mono text-[10px] text-muted-foreground">
                 {t('card', { n: i + 1 })}
               </span>
-              <span className="ml-auto">
+              <span className="ms-auto">
                 <RemoveButton
                   onClick={() =>
                     p.set(
@@ -120,7 +120,7 @@ export const FbProductsForm: FormComponent = (p) => {
               <span className="font-mono text-[10px] text-muted-foreground">
                 {t('product', { n: i + 1 })}
               </span>
-              <span className="ml-auto">
+              <span className="ms-auto">
                 <RemoveButton
                   onClick={() =>
                     p.set(

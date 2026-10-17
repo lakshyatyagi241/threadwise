@@ -231,20 +231,20 @@ export function PostsScreen() {
               </button>
             ))}
             <form
-              className="relative ml-1"
+              className="relative ms-1"
               onSubmit={(e) => {
                 e.preventDefault();
                 go({ q: draft.trim() });
               }}
             >
-              <SearchIcon className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+              <SearchIcon className="absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="search"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder={t('search')}
                 aria-label={t('search')}
-                className="w-full rounded-full border border-border bg-background py-1.5 pl-9 pr-3 text-xs outline-none focus:border-brand lg:w-60"
+                className="w-full rounded-full border border-border bg-background py-1.5 ps-9 pe-3 text-xs outline-none focus:border-brand lg:w-60"
               />
             </form>
           </div>
@@ -253,13 +253,13 @@ export function PostsScreen() {
             <div className="overflow-x-auto">
               <table className="w-full text-[13px]">
                 <thead>
-                  <tr className="border-b border-border text-left font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                  <tr className="border-b border-border text-start font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
                     {(['post', 'page', 'type', 'status', 'when'] as const).map((c) => (
                       <th key={c} className="px-4 py-3 font-medium">
                         {t(`cols.${c}`)}
                       </th>
                     ))}
-                    <th className="px-4 py-3 text-right font-medium">{t('cols.actions')}</th>
+                    <th className="px-4 py-3 text-end font-medium">{t('cols.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">

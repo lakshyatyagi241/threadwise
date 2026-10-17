@@ -17,19 +17,23 @@ import {
   CONVERSATION_STATUSES,
   INBOX_TABS,
   type ChannelResponse,
+  type ConversationPriority,
+  type ConversationSummary,
   type InboxTab,
 } from '@crm/contracts';
 import {
   DEFAULT_FILTERS,
   isFiltered,
   tabCount,
+  windowFilterCount,
   type ListFilters,
   type ListState,
 } from '../lib/list';
 import type { Selection } from '../lib/selection';
 import { ConversationRow } from './conversation-row';
 import { TagFilter } from './tag-filter';
-import { FlaskIcon, RefreshIcon, SearchIcon } from './icons';
+import { FiltersDialog } from './filters-dialog';
+import { FilterIcon, FlaskIcon, RefreshIcon, SearchIcon } from './icons';
 import { useErrorText } from './parts';
 
 const SEARCH_DEBOUNCE_MS = 300;
@@ -49,12 +53,16 @@ export interface ConversationListProps {
   canManageChannels: boolean;
   simulatorAvailable: boolean;
   onOpenSimulator: () => void;
+  /** Present when the caller may change priority: the row's three-dot menu offers Low, Normal, High and Urgent. */
+  onRowPriority?: (row: ConversationSummary, priority: ConversationPriority) => void;
   /** Present when the caller may use bulk actions: the "Select" button, the selection and the bar shown while rows are picked. */
   bulk?: {
     selecting: boolean;
     selection: Selection;
     onToggleSelecting: () => void;
     onSelect: (id: string, shift: boolean) => void;
+    /** The tick that appears on a row under the pointer: starts or extends the selection. */
+    onPick: (id: string, shift: boolean) => void;
     bar: ReactNode;
   };
 }
@@ -70,6 +78,8 @@ export function ConversationList(props: ConversationListProps) {
   const tabsId = useId();
   const listId = useId();
   const showChannel = (channels?.length ?? 0) > 1;
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const active = windowFilterCount(filters);
 
   const filtered = isFiltered(filters);
   const noChannels = props.channelsLoaded && (channels?.length ?? 0) === 0;
@@ -137,14 +147,38 @@ export function ConversationList(props: ConversationListProps) {
         />
 
         <div className="flex gap-2">
+          <button
+            type="button"
+            data-testid="inbox-filters-open"
+            aria-haspopup="dialog"
+            aria-label={active > 0 ? t('filters.openActive', { count: active }) : t('filters.open')}
+            title={t('filters.open')}
+            onClick={() => setFiltersOpen(true)}
+            className={cn(
+              'relative flex size-8 shrink-0 items-center justify-center rounded-md border border-border hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+              active > 0 && 'border-primary text-primary',
+            )}
+          >
+            <FilterIcon className="size-4" />
+            {active > 0 && (
+              <span className="absolute -end-1.5 -top-1.5 grid size-4 place-items-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+                {active}
+              </span>
+            )}
+          </button>
           <Select
             aria-label={t('statusFilter')}
-            value={filters.status}
-            onChange={(e) => props.onFilters({ status: e.target.value as ListFilters['status'] })}
+            value={filters.statuses.length > 0 ? '' : filters.status}
+            onChange={(e) =>
+              props.onFilters({ status: e.target.value as ListFilters['status'], statuses: [] })
+            }
             className="h-8 text-xs"
           >
+            {filters.statuses.length > 0 && <option value="">{t('filters.status')}</option>}
             <option value="open">{t('statusOpen')}</option>
-            {CONVERSATION_STATUSES.filter((s) => s !== 'open' && s !== 'closed').map((s) => (
+            {CONVERSATION_STATUSES.filter(
+              (s) => s !== 'open' && s !== 'closed' && s !== 'spam',
+            ).map((s) => (
               <option key={s} value={s}>
                 {t(`status.${s}`)}
               </option>
@@ -160,8 +194,10 @@ export function ConversationList(props: ConversationListProps) {
           {showChannel && (
             <Select
               aria-label={t('channelFilter')}
-              value={filters.channelId ?? ''}
-              onChange={(e) => props.onFilters({ channelId: e.target.value || null })}
+              value={filters.channelIds.length > 0 ? '' : (filters.channelId ?? '')}
+              onChange={(e) =>
+                props.onFilters({ channelId: e.target.value || null, channelIds: [] })
+              }
               className="h-8 text-xs"
             >
               <option value="">{t('allChannels')}</option>
@@ -176,6 +212,14 @@ export function ConversationList(props: ConversationListProps) {
             </Select>
           )}
         </div>
+
+        <FiltersDialog
+          open={filtersOpen}
+          onClose={() => setFiltersOpen(false)}
+          filters={filters}
+          onApply={props.onFilters}
+          channels={channels}
+        />
 
         {list.counts && list.counts.archived > 0 && (
           <button
@@ -267,6 +311,8 @@ export function ConversationList(props: ConversationListProps) {
                 selecting={props.bulk?.selecting ?? false}
                 selected={props.bulk?.selection.has(row.id) ?? false}
                 onSelect={props.bulk?.onSelect}
+                onPriority={props.onRowPriority}
+                onPick={props.bulk?.onPick}
               />
             ))}
           </ul>

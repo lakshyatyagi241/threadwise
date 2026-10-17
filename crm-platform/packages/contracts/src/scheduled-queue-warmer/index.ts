@@ -4,6 +4,7 @@
  */
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { sendHoldReasonSchema } from '../compliance/send-window';
 import { composeTemplateSchema } from '../broadcasts/broadcast-compose';
 import { scheduleMediaSchema } from './media';
 
@@ -204,6 +205,9 @@ export const scheduleRecipientSchema = z.object({
   sentAt: z.string().datetime().nullable(),
   deliveredAt: z.string().datetime().nullable(),
   readAt: z.string().datetime().nullable(),
+  /** While the recipient waits for the workspace's quiet hours to end (BL-177): when it may go and why. Null otherwise. */
+  heldUntil: z.string().datetime().nullable().optional(),
+  heldReason: sendHoldReasonSchema.nullable().optional(),
 });
 
 export const scheduleDetailSchema = scheduleSummarySchema.extend({
@@ -255,7 +259,15 @@ export const scheduleOptionsSchema = z.object({
   ),
   groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.number().int() })),
   tags: z.array(z.object({ id: uuidSchema, name: z.string(), contacts: z.number().int() })),
-  queues: z.array(z.object({ id: uuidSchema, name: z.string(), recipients: z.number().int() })),
+  /** Earlier sends that can be the recipients: broadcasts and campaigns (a campaign's id is a campaign uuid). */
+  queues: z.array(
+    z.object({
+      id: uuidSchema,
+      name: z.string(),
+      recipients: z.number().int(),
+      kind: z.enum(['broadcast', 'campaign']).default('broadcast'),
+    }),
+  ),
   templates: z.array(scheduleTemplateSchema),
   minLeadMinutes: z.number().int(),
 });
@@ -339,7 +351,10 @@ export const scheduleRecipientListSchema = z.object({
   items: z.array(scheduleRecipientSchema),
   /** Rows matching the filter and the search. */
   total: z.number().int(),
-  /** Counts by status over the whole schedule, ignoring the search, for the filter chips. */
+  /**
+   * Counts by status over the whole schedule, ignoring the search, for the filter chips. The key `held` counts the pending recipients
+   * waiting for the end of the quiet hours (BL-177); it is not a status.
+   */
   counts: z.record(z.number().int()),
 });
 export type ScheduleRecipientList = z.infer<typeof scheduleRecipientListSchema>;

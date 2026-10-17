@@ -43,7 +43,7 @@
       "how": "startRuntimeMonitor('worker') in worker.ts",
       "meaningOfLoopBlock": "Every queue's jobs and the outbox drain in this process wait; interactive API traffic is NOT affected (separate process).",
       "gaps": [
-        "No processor calls RuntimeMonitor.observeJob yet, so job duration and wait histograms are empty."
+        "Job wait/duration/outcome are fed by JobMetricsModule (one hook on every WorkerHost). Verified on a real BullMQ worker against Redis AND in the booted WorkerModule (e2e: 20+ processors carry the listeners, a real job through TemplateSweepProcessor and a real database is recorded). Retried attempts are invisible as events (BullMQ reports final states only); crm_queue_job_retries_total counts the extra starts of jobs that finished."
       ]
     },
     {
@@ -68,7 +68,7 @@
       "reason": "By design: they exit; their synchronous work cannot block live traffic."
     }
   ],
-  "workerThreads": "None. No import of worker_threads or new Worker( in apps/*/src or packages/*/src (git grep).",
+  "workerThreads": "One place: apps/api/src/infra/sandbox/code-sandbox.ts starts a node:worker_threads Worker per run of the flow Code node (author JavaScript in a node:vm context, wall-clock timeout, hard kill, heap cap). It is short-lived and killed on timeout, so it is not given a long-running monitor; its cost shows up as the calling process's job duration. The first version of this inventory said there were none: that grep used a pathspec that matched nothing, and was corrected on 2026-10-15 with a plain `git grep` inside apps/api.",
   "scheduledTasks": "@nestjs/schedule and BullMQ repeatable jobs run inside api/worker above; there is no separate scheduler process.",
   "existingTelemetryBeforeThisChange": [
     "Sentry (@sentry/node) error and span reporting",

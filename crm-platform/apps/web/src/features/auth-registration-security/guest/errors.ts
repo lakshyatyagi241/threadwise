@@ -87,6 +87,11 @@ const BY_CODE: Record<string, { key: string; field?: string }> = {
   [ERROR_CODES.AUTH_IP_BLOCKED]: { key: 'ipBlocked' },
   [ERROR_CODES.AUTH_WORKSPACE_NOT_AVAILABLE]: { key: 'workspaceUnavailable' },
   [ERROR_CODES.AUTH_WORKSPACE_REQUIRED]: { key: 'workspaceRequired', field: 'orgSlug' },
+  // `identityExists(email, phone)` on the server returns a plain boolean with no indication of which
+  // one matched (a pre-existing, already-ledgered gap — not fixed here): the copy must stay generic
+  // rather than committing to "email" the way `emailTaken` (AUTH_EMAIL_TAKEN, a real email-only check
+  // elsewhere) does.
+  [ERROR_CODES.AUTH_IDENTITY_EXISTS]: { key: 'identityExists', field: 'email' },
 };
 
 function retryAfter(err: ApiError): number | undefined {

@@ -21,12 +21,11 @@ const TABS: readonly Tab[] = [
   { id: 'test', view: 'test', needs: 'faq.entries.read' },
   { id: 'unanswered', view: 'unanswered', needs: 'faq.insights.read' },
   { id: 'insights', view: 'insights', needs: 'faq.insights.read' },
-  { id: 'settings', view: 'settings', needs: 'faq.entries.read' },
 ];
 
 /**
- * The frame of a flow's FAQs tab: the strip of its screens (FAQs, Test, Unanswered, Insights, Settings, with the Unanswered
- * count of this flow) and the state banner. Each screen is a link to `?tab=faqs&view=...`, so back, forward and reload work.
+ * The frame of a flow's FAQs tab: the strip of its screens (FAQs, Test, Unanswered, Insights, with the Unanswered count of this
+ * flow) and the state banner. Each screen is a link to `?tab=faqs&view=...`, so back, forward and reload work.
  */
 export function FaqShell({ location, children }: { location: FaqLocation; children: ReactNode }) {
   const t = useTranslations('faq.nav');
@@ -69,7 +68,7 @@ export function FaqShell({ location, children }: { location: FaqLocation; childr
           ))}
         </ul>
       </nav>
-      {current !== 'settings' && <StateBanner />}
+      <StateBanner />
       {children}
     </div>
   );

@@ -110,3 +110,11 @@ half a second between calls). Viber's `failed_list` names the users it refused: 
 call's message token on their row. A call Viber rejects as a whole fails every user of that batch and the broadcast (`lastError`). Each
 sent copy is mirrored into the user's thread as an outbound message (`source: broadcast`). Counters are recomputed from the rows. Events:
 `viber.broadcast.created|started|paused|retry_requested|deleted`.
+
+## Quiet hours (BL-191)
+
+Viber broadcasts are marketing, so a recipient whose contact's local time is inside the workspace's quiet hours (Compliance center) is held, not denied: the recipient stays `pending`, the rest of the audience is sent, the broadcast stays `sending`, and a delayed job takes the held recipients up at the first opening, asking the ConsentGate again. `GET` of the broadcast list returns `held` (how many wait) and `heldUntil` (the first instant one of them may be messaged) on each broadcast. See [compliance.md](compliance.md).
+
+## Consent (BL-141 follow-up)
+
+Every Viber recipient goes through the ConsentGate before a message is sent, on the first send and on a release from the quiet hours alike (purpose marketing, consent channel `viber`). A withdrawal (the **Unsubscribed** flag, or STOP on any channel) always refuses; with the workspace switch "Require recorded consent for marketing sends" off (the default) nobody else is refused; with it on a recorded grant on `viber` is needed (a recipient with no contact has none); a contact flagged as a minor is refused when the workspace's children setting says so. A reply typed in the inbox and a utility notice are service messages and are never held back by a marketing STOP. A refused user is left out of the batch's one `broadcast_message` call and recorded `failed` with `error` = `Not messaged: consent (<reason>)` (Viber's recipient statuses have no `blocked`); a retry asks the gate again.

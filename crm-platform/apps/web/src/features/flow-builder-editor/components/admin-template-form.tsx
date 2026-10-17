@@ -193,7 +193,7 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
           className="rounded-xl border border-danger/40 bg-danger/10 px-4 py-3 text-[13px] text-danger"
         >
           <div className="font-semibold">{t('errorsTitle')}</div>
-          <ul className="mt-1 list-disc pl-5">
+          <ul className="mt-1 list-disc ps-5">
             {errors.map((m, i) => (
               <li key={i}>{m}</li>
             ))}
@@ -268,7 +268,7 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
                   type="file"
                   accept="application/json,.json"
                   onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                  className="block w-full text-[12.5px] file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-brand file:px-3 file:py-1.5 file:text-[12px] file:font-semibold file:text-brand-foreground"
+                  className="block w-full text-[12.5px] file:me-3 file:cursor-pointer file:rounded-full file:border-0 file:bg-brand file:px-3 file:py-1.5 file:text-[12px] file:font-semibold file:text-brand-foreground"
                 />
               </label>
               <label className="block space-y-1.5">

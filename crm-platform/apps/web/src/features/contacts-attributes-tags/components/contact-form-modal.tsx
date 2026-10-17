@@ -20,6 +20,7 @@ import {
   type PhoneValue,
 } from '@/features/auth-registration-security/shared/phone-field';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { CompanyPicker, useCanPickCompany } from '@/features/companies';
 import { LeadScoreField, isScoreInvalid } from '@/features/lead-scoring';
 import {
   createContact,
@@ -55,6 +56,7 @@ import {
 import { CustomFieldsSection, isFormField } from './custom-fields-section';
 import { ErrorLine } from './error-line';
 import { LostReasonFields, useLostReasonChoices } from './lost-reason';
+import { TimezoneSelect } from './timezone-select';
 import {
   OTHER_REASON,
   isLostStage,
@@ -118,6 +120,8 @@ function ContactForm({
   const t = useTranslations('contacts-attributes-tags.form');
   const tt = useTranslations('contacts-attributes-tags.tags');
   const tl = useTranslations('contacts-attributes-tags.lost');
+  const tz = useTranslations('contacts-attributes-tags.timezone');
+  const canPickCompany = useCanPickCompany();
   const qc = useQueryClient();
   const { toast } = useToast();
   const canCreateTags = useCan('record.tags.create');
@@ -267,6 +271,8 @@ function ContactForm({
             lostPayload,
             contact.leadScore,
             contact.ownerId,
+            contact.companyId,
+            contact.timezone,
           ),
         );
         const before = initialGroups.current;
@@ -403,6 +409,8 @@ function ContactForm({
   // The server refuses an owner the person's record scope does not reach (403 with the field `ownerId`): say it at the field.
   const ownerRefused =
     save.isError && errorKind(save.error) === 'forbidden' && !!serverFields.ownerId;
+  // The same for a company the person's record scope does not reach (the server names the field `companyId`).
+  const companyRefused = save.isError && !!serverFields.companyId;
   const people = owners.data ?? [];
   // Only people the caller may hand a contact to; the contact's current owner stays selectable so saving never silently drops them.
   const ownerChoices = people.filter((p) => p.canAssign || p.id === values.ownerId);
@@ -424,7 +432,9 @@ function ContactForm({
           </Button>
         </Alert>
       )}
-      {save.isError && !conflict && !ownerRefused && <ErrorLine error={save.error} />}
+      {save.isError && !conflict && !ownerRefused && !companyRefused && (
+        <ErrorLine error={save.error} />
+      )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Field label={t('title')} htmlFor={id('title')}>
@@ -509,6 +519,23 @@ function ContactForm({
             maxLength={80}
             placeholder={t('languagePlaceholder')}
             onChange={(e) => set('language', e.target.value)}
+          />
+        </Field>
+        <Field label={tz('title')} htmlFor={id('timezone')} hint={tz('hint')}>
+          <TimezoneSelect
+            id={id('timezone')}
+            value={values.timezone}
+            onChange={(zone) => set('timezone', zone)}
+          />
+        </Field>
+        <Field label={t('dateOfBirth')} htmlFor={id('dob')} hint={t('dateOfBirthHint')}>
+          <Input
+            id={id('dob')}
+            type="date"
+            value={values.dateOfBirth}
+            min="1900-01-01"
+            max={new Date().toISOString().slice(0, 10)}
+            onChange={(e) => set('dateOfBirth', e.target.value)}
           />
         </Field>
       </div>
@@ -645,6 +672,25 @@ function ContactForm({
             ))}
           </Select>
         </Field>
+        {canPickCompany && (
+          <Field
+            label={t('company')}
+            htmlFor={id('company')}
+            hint={t('companyHint')}
+            error={companyRefused ? t('companyRefused') : undefined}
+            className="sm:col-span-2"
+          >
+            <CompanyPicker
+              id={id('company')}
+              value={values.companyId ? { id: values.companyId } : null}
+              invalid={companyRefused}
+              onChange={(c) => {
+                set('companyId', c?.id ?? '');
+                setServerFields(({ companyId: _gone, ...rest }) => rest);
+              }}
+            />
+          </Field>
+        )}
       </div>
 
       {isLost && (

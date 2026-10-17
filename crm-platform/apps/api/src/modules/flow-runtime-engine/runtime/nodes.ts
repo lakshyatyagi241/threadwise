@@ -9,6 +9,7 @@ import type {
   OutboundMessage,
   SendOutcome,
 } from './types';
+import { haltOf } from './halt';
 
 const obj = (v: unknown): Record<string, unknown> =>
   v !== null && typeof v === 'object' ? (v as Record<string, unknown>) : {};
@@ -21,7 +22,7 @@ function failed(
   mode: 'skip' | 'end',
   ctx: NodeContext,
 ): NodeResult | null {
-  if (out.halt) return { kind: 'halt', reason: out.error };
+  if (out.halt) return haltOf(out);
   ctx.note(`send failed: ${out.error}`);
   return mode === 'end' ? { kind: 'fail', code: out.code, reason: out.error } : null;
 }

@@ -25,6 +25,36 @@ export function parseFormToken(token: string): { formId: number; runRef: string 
 }
 
 /**
+ * A field's `mapsTo` plus its own `kind` and `label` -- the privacy mappings (age/date-of-birth/consent) are only valid on one
+ * kind each, and a consent grant's ledger evidence keeps the field's label as the wording the contact actually saw and ticked.
+ */
+export interface FieldMapping {
+  mapsTo: string;
+  kind: string;
+  label: string;
+}
+
+/** Field id -> `{mapsTo, kind, label}` out of a form's stored `definition_json`, however malformed; never throws. */
+export function extractFieldMappings(definitionJson: unknown): Record<string, FieldMapping> {
+  const def = definitionJson as
+    | { screens?: Array<{ fields?: Array<{ id?: unknown; kind?: unknown; label?: unknown; mapsTo?: unknown }> }> }
+    | null
+    | undefined;
+  const out: Record<string, FieldMapping> = {};
+  for (const screen of def?.screens ?? []) {
+    for (const field of screen.fields ?? []) {
+      if (typeof field.id === 'string' && typeof field.mapsTo === 'string' && field.mapsTo)
+        out[field.id] = {
+          mapsTo: field.mapsTo,
+          kind: typeof field.kind === 'string' ? field.kind : '',
+          label: typeof field.label === 'string' ? field.label : '',
+        };
+    }
+  }
+  return out;
+}
+
+/**
  * The WhatsApp Form tables as the flow runtime needs them (TW-FLR-043): which form a node names and whether it can be sent, and where
  * a submission is written. The forms domain (forms, links and groups) owns the authoring screens and the Meta publishing; the tables
  * are in the schema, and until that domain exposes a facade this reads and writes just these two, always inside one organization.
@@ -63,6 +93,16 @@ export class WaFormRecords {
       );
       const r = rowsOf(res)[0];
       return r ? String(r.title ?? '') : null;
+    });
+  }
+
+  /** Field id -> `{mapsTo, kind}` for every field of this form that has one set, read straight off its stored definition. */
+  async fieldMappings(orgId: number, formId: number): Promise<Record<string, FieldMapping>> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const res = await tx.execute(
+        sql`SELECT definition_json FROM wa_forms WHERE org_id = ${orgId} AND id = ${formId}`,
+      );
+      return extractFieldMappings(rowsOf(res)[0]?.definition_json);
     });
   }
 

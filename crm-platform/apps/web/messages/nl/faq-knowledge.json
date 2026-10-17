@@ -6,8 +6,7 @@
         "faqs": "FAQ's",
         "test": "Testen",
         "unanswered": "Onbeantwoord",
-        "insights": "Inzichten",
-        "settings": "Instellingen"
+        "insights": "Inzichten"
       },
       "unansweredCount": "{count, plural, one {# onbeantwoord bericht} other {# onbeantwoorde berichten}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Deze flow heeft de FAQ-limiet bereikt. Verwijder ongebruikte FAQs of variaties, of vraag je platformbeheerder de limiet te verhogen."
     },
     "banner": {
-      "enabledToast": "FAQ-antwoorden staan aan.",
-      "engineOff": "FAQ-antwoorden zijn door het platform uitgeschakeld. Klanten krijgen geen FAQ-antwoorden totdat ze weer zijn ingeschakeld.",
-      "modelChanged": "Het platform heeft het AI-model gewijzigd nadat je deze drempel afstelde. De scores zijn verschoven, controleer dus je gevoeligheid.",
-      "reviewSensitivity": "Gevoeligheid controleren",
-      "offNoRight": "Vraag iemand met de machtiging faq.settings.manage (meestal een workspace-beheerder) om dit in te schakelen.",
-      "enable": "FAQ-antwoorden inschakelen",
-      "offTitle": "FAQ-beantwoording staat UIT voor deze flow",
-      "offBody": "Je kunt de FAQs van deze flow schrijven en testen, maar klanten krijgen pas antwoorden als je dit inschakelt."
+      "engineOff": "FAQ-antwoorden zijn door het platform uitgeschakeld. Klanten krijgen geen FAQ-antwoorden totdat ze weer zijn ingeschakeld."
     },
     "list": {
       "title": "FAQ's",
@@ -51,25 +43,15 @@
         "total": "FAQ's",
         "active": "Actief",
         "paused": "Gepauzeerd",
-        "variations": "Formuleringen",
-        "pending": "Indexeren",
-        "pendingHint": "Binnen enkele seconden live",
-        "failed": "Indexeren mislukt",
-        "failedHint": "Aandacht nodig"
+        "variations": "Formuleringen"
       },
-      "failedBanner": "{count, plural, one {# formulering is} other {# formuleringen zijn}} niet geïndexeerd en {count, plural, one {kan} other {kunnen}} dus nog niet overeenkomen met klantberichten.",
-      "showFailed": "FAQ's met fouten tonen",
       "search": "FAQ's zoeken",
       "searchPlaceholder": "Zoek in vragen en formuleringen",
       "filter": {
         "status": "Status",
         "anyStatus": "Elke status",
         "category": "Categorie",
-        "anyCategory": "Elke categorie",
-        "indexing": "Indexeren",
-        "anyIndexing": "Alle",
-        "pending": "Nog bezig met indexeren",
-        "failed": "Mislukt"
+        "anyCategory": "Elke categorie"
       },
       "status": {
         "active": "Actief",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Vraag",
         "answer": "Antwoord",
-        "indexing": "Live formuleringen",
         "answered": "Beantwoord (90 dagen)",
         "status": "Status",
         "actions": "Acties"
@@ -130,12 +111,6 @@
         "rowBody": "\"{question}\" en alle formuleringen worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.",
         "delete": "Verwijderen",
         "cancel": "Annuleren"
-      },
-      "indexing": {
-        "summary": "{ready} live, {pending} indexeren, {failed} mislukt",
-        "ready": "{count} live",
-        "pending": "{count} indexeren",
-        "failed": "{count} mislukt"
       },
       "stepMissing": "Stap ontbreekt",
       "subtitle": "Vragen die klanten stellen in {flow} en wat de bot antwoordt. Deze FAQs beantwoorden alleen binnen deze flow.",
@@ -202,14 +177,6 @@
           "other": "Een stap van een andere flow",
           "otherHint": "Draag het gesprek over aan een andere flow."
         }
-      },
-      "advanced": {
-        "title": "Geavanceerd: gevoeligheid alleen voor deze FAQ",
-        "custom": "Eigen gevoeligheid gebruiken voor deze FAQ",
-        "sliderLabel": "Overeenkomst vanaf",
-        "body": "Standaard gebruikt elke FAQ de gevoeligheid van deze flow. Gebruik een eigen waarde als deze te vaak (verhoog) of te zelden (verlaag) overeenkomt.",
-        "workspace": "De gevoeligheid van deze flow is {value}%.",
-        "following": "Volgt de gevoeligheid van deze flow ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Toevoegen",
       "pasteMany": "Meerdere plakken",
       "full": "Deze FAQ heeft de limiet van {max} formuleringen bereikt.",
-      "failedNotice": "{count, plural, one {# formulering} other {# formuleringen}} niet geïndexeerd. Bewerk en sla de formulering op om het opnieuw te proberen.",
       "suggest": "Voorstellen met AI",
       "suggestSaveFirst": "Sla de FAQ eerst op. Daarna kan AI formuleringen voorstellen.",
       "suggesting": "AI om suggesties vragen",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# regel past} other {# regels passen}} niet binnen de formuleringslimiet en {count, plural, one {is} other {zijn}} weggelaten.",
         "more": "en nog {count}",
         "add": "{count, plural, one {# formulering} other {# formuleringen}} toevoegen"
-      },
-      "state": {
-        "ready": "Live",
-        "pending": "Indexeren",
-        "pendingHint": "Opgeslagen. Binnen enkele seconden wordt er gematcht.",
-        "failed": "Mislukt",
-        "failedHint": "Bewerk en sla de formulering op om het opnieuw te proberen.",
-        "noReason": "Er is geen reden opgegeven"
       },
       "confirm": {
         "title": "Deze formulering verwijderen?",
@@ -539,9 +497,7 @@
       },
       "hist": {
         "title": "Hoe goed berichten scoorden",
-        "hint": "Elke balk is een scorebereik. De stippellijn is je huidige gevoeligheid.",
-        "advice": "Verhoog de drempel als er foute antwoorden doorkomen, verlaag hem als te veel berichten onbeantwoord blijven.",
-        "tune": "Gevoeligheid wijzigen"
+        "hint": "Elke balk is een scorebereik. De stippellijn is je huidige gevoeligheid."
       },
       "top": {
         "title": "Top-FAQ's",
@@ -568,98 +524,6 @@
         "bucketTooltip": "{from}-{to}%: {answered} beantwoord, {unanswered} onbeantwoord",
         "thresholdMarker": "Drempel {value}%"
       }
-    },
-    "settings": {
-      "title": "FAQ-instellingen",
-      "unsaved": "Niet-opgeslagen wijzigingen",
-      "discard": "Verwerpen",
-      "save": "Instellingen opslaan",
-      "saved": "Instellingen opgeslagen.",
-      "readOnly": "Je kunt deze instellingen bekijken. Voor wijzigen is de machtiging faq.settings.manage nodig, meestal bij workspace-beheerders.",
-      "engineOff": "FAQ-antwoorden zijn door het platform uitgeschakeld. Wat je hier instelt, geldt zodra ze weer aanstaan.",
-      "conflict": "Iemand anders heeft deze instellingen opgeslagen. Laad opnieuw om hun versie te zien en voer je wijziging dan opnieuw door.",
-      "reload": "Instellingen opnieuw laden",
-      "modelChanged": {
-        "title": "Controleer je gevoeligheid",
-        "body": "Het platform heeft het AI-model gewijzigd nadat je deze drempel afstelde. De scores zijn verschoven, controleer dus je gevoeligheid. Opslaan bevestigt dit."
-      },
-      "enable": {
-        "title": "FAQ-antwoorden",
-        "on": "Aan",
-        "off": "Uit",
-        "label": "Beantwoord klanten met de FAQs van deze flow",
-        "onBody": "Zolang deze flow live is, wordt een klantbericht dat door geen trefwoordtrigger of lopende flow is opgepakt, vergeleken met de FAQs van deze flow. De bot antwoordt met het beste antwoord of stuurt de klant naar de stap waar de FAQ naar verwijst.",
-        "offBody": "De FAQs van deze flow beantwoorden geen klanten. Je kunt ze nog wel schrijven en testen."
-      },
-      "sens": {
-        "title": "Gevoeligheid",
-        "hint": "Hoe nauw een bericht moet overeenkomen. Scores horen bij het model {model}.",
-        "label": "Antwoorden als de overeenkomst minstens",
-        "presets": "Gevoeligheidsvoorinstellingen",
-        "preset": {
-          "strict": "Streng",
-          "balanced": "Gebalanceerd",
-          "forgiving": "Soepel"
-        },
-        "looser": "Antwoordt vaker",
-        "stricter": "Antwoordt minder vaak",
-        "recommendedMark": "aanbevolen {value}%",
-        "explain": "Bij {value}% wordt een bericht alleen beantwoord als de beste overeenkomst {value}% of hoger scoort. Hoger betekent minder maar veiligere antwoorden; lager betekent meer antwoorden en meer kans op een fout antwoord.",
-        "useRecommended": "Aanbevolen waarde gebruiken ({value}%)",
-        "modelScale": "Scores zijn alleen binnen één model vergelijkbaar. Als het platform het model ({model}) wijzigt, controleer dan dit getal."
-      },
-      "margin": {
-        "title": "Dubbelzinnigheidsbeveiliging",
-        "hint": "Voorkomt dat de bot gokt tussen twee FAQ's die bijna gelijk scoren.",
-        "label": "Minimale voorsprong op de nummer twee",
-        "off": "Uit",
-        "explain": "Als de beste FAQ minder dan dit voorsprong heeft op de nummer twee, zwijgt de bot en logt hij het bericht als onbeantwoord. Laat dit uit als je FAQ's zelden overlappen."
-      },
-      "log": {
-        "title": "Klantberichten in het logboek",
-        "label": "Klantberichten bewaren in het matchlogboek",
-        "onBody": "De tekst van elk bericht wordt 90 dagen bewaard, zodat je kunt zien waarom het wel of niet is beantwoord en ervan kunt leren. Daarna wordt hij verwijderd.",
-        "offBody": "Alleen scores en uitkomsten worden bewaard, nooit de tekst. Je ziet nog wel hoe vaak de bot antwoordt, maar je kunt niet leren van onbeantwoorde berichten."
-      },
-      "facts": {
-        "title": "Model en limieten",
-        "model": "AI-model voor matching",
-        "faqs": "FAQ's",
-        "variations": "Formuleringen in gebruik",
-        "perFaq": "Toegestane formuleringen per FAQ",
-        "of": "{used} van {max}"
-      },
-      "how": {
-        "title": "Hoe matching werkt",
-        "exact": "Exact: het bericht is gelijk aan een opgeslagen formulering, ongeacht hoofdletters en spaties.",
-        "semantic": "Betekenis: het bericht wordt op betekenis vergeleken met elke live formulering, dus andere woorden kunnen overeenkomen.",
-        "trigram": "Terugval op spelling: als de AI-provider niet beschikbaar is, worden letters vergeleken, wat alleen typefouten opvangt.",
-        "threshold": "De beste score wordt vergeleken met de gevoeligheid. Erboven antwoordt de FAQ; eronder komt het bericht bij Onbeantwoord te staan.",
-        "verify": "Tweede controle (optioneel): een overeenkomst die de gevoeligheid net haalt, kan door een klein chatmodel worden gecontroleerd. Dat model kan een antwoord alleen tegenhouden."
-      },
-      "who": "Voor het wijzigen van deze instellingen is de machtiging faq.settings.manage nodig.",
-      "leave": {
-        "title": "Verlaten zonder op te slaan?",
-        "body": "Je wijzigingen aan deze instellingen zijn niet opgeslagen.",
-        "leave": "Verlaten",
-        "stay": "Blijven"
-      },
-      "verify": {
-        "title": "Tweede controle bij twijfelgevallen",
-        "hint": "Een klein chatmodel controleert overeenkomsten die de drempel net halen.",
-        "unavailable": "Het platform heeft de tweede controle uitgeschakeld, dus ze draait niet, ook niet als je haar hier aanzet. Vraag het aan je platformbeheerder.",
-        "label": "Twijfelgevallen laten controleren door een tweede mening",
-        "on": "Aan",
-        "off": "Uit",
-        "onBody": "Als een overeenkomst de drempel net haalt, leest een klein chatmodel het bericht van de klant en de FAQ en beoordeelt het of het antwoord past. Het kan alleen nee zeggen: het zorgt er nooit voor dat er een antwoord komt.",
-        "offBody": "Elke overeenkomst die de drempel haalt, wordt beantwoord zonder tweede controle.",
-        "bandLabel": "Wanneer telt iets als twijfelgeval",
-        "bandValue": "+{value}%",
-        "explainOn": "Overeenkomsten met een score van {from}% tot {to}% worden gecontroleerd door {model}. Bij \"nee\" wordt er geen antwoord verstuurd en verschijnt het bericht onder Onbeantwoord.",
-        "explainOff": "Elke overeenkomst met een score van {threshold}% of hoger wordt beantwoord. Zet de tweede controle aan om de twijfelgevallen te laten controleren.",
-        "cost": "Elke controle stuurt het bericht van de klant en de vraag van de FAQ naar het model: een paar honderd tokens, en het kost ongeveer een seconde extra bij een grensgeval. Overeenkomsten buiten het bereik worden nooit gecontroleerd. Als de controle mislukt, niet beschikbaar is of de limiet per uur is bereikt, blijft de overeenkomst gelden alsof er geen controle was."
-      },
-      "subtitle": "Schakel FAQ-beantwoording in voor {flow} en stel af hoe nauw een bericht moet overeenkomen."
     },
     "flowNode": {
       "start": "Het begin van de flow",

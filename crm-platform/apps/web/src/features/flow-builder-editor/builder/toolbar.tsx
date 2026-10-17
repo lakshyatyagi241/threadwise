@@ -49,7 +49,7 @@ export function Toolbar({
       >
         <Icon d="M10 4l-4 4 4 4" className="h-3.5 w-3.5" />
       </Link>
-      <div className="flex min-w-0 items-center gap-2.5 py-1 pr-1 pl-1">
+      <div className="flex min-w-0 items-center gap-2.5 py-1 pe-1 ps-1">
         <span className="grid h-9 w-9 place-items-center rounded-md bg-brand text-brand-foreground">
           <svg
             viewBox="0 0 16 16"
@@ -72,7 +72,7 @@ export function Toolbar({
             value={flowName}
             onChange={(e) => setFlowName(e.target.value)}
             aria-label={t('flowName')}
-            className="-ml-px w-[220px] border-0 bg-transparent px-0 py-0 font-serif text-[16px] leading-tight tracking-[-0.01em] outline-none"
+            className="-ms-px w-[220px] border-0 bg-transparent px-0 py-0 font-serif text-[16px] leading-tight tracking-[-0.01em] outline-none"
           />
         </div>
       </div>

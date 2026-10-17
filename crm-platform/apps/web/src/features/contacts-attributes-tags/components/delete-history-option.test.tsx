@@ -58,7 +58,7 @@ describe.each(['en', 'ar'])('contact delete dialog history option (%s)', (locale
     });
     const words = erase(locale);
     expect(host.textContent).toContain(words.scope);
-    const box = host.querySelector<HTMLInputElement>('#keep-history')!;
+    const box = host.querySelector<HTMLInputElement>('input[type=checkbox]')!;
     expect(box.checked).toBe(false);
     expect(host.textContent).toContain(words.keepHistory);
 

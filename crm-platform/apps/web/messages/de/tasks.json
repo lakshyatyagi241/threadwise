@@ -100,7 +100,8 @@
       "views": {
         "list": "Liste",
         "board": "Board nach Fälligkeitsdatum"
-      }
+      },
+      "linkCompany": "Ein Unternehmen"
     },
     "table": {
       "scrollArea": "Aufgabentabelle",
@@ -204,7 +205,8 @@
         "notesTooLong": "Die Notizen sind zu lang (höchstens 5000 Zeichen).",
         "dueInvalid": "Dieses Datum ist ungültig.",
         "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace."
-      }
+      },
+      "company": "Unternehmen"
     },
     "drawer": {
       "loading": "Aufgabe wird geladen",
@@ -268,7 +270,8 @@
       "searching": "Suche läuft",
       "unavailable": "Die Suche ist derzeit nicht verfügbar.",
       "none": "Keine Treffer.",
-      "unlink": "Verknüpfung entfernen"
+      "unlink": "Verknüpfung entfernen",
+      "searchCompany": "Unternehmen suchen"
     },
     "errors": {
       "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
@@ -323,7 +326,21 @@
       "loadMore": "Mehr laden",
       "loadMoreDone": "Weitere abgeschlossene laden",
       "showDone": "Abgeschlossene anzeigen",
-      "hideDone": "Abgeschlossene ausblenden"
+      "hideDone": "Abgeschlossene ausblenden",
+      "gone": "Der Datensatz, zu dem diese Aufgaben gehören, ist nicht mehr verfügbar."
+    },
+    "inline": {
+      "addTask": "Aufgabe hinzufügen",
+      "rowLabel": "Eine Aufgabe hinzufügen",
+      "titleLabel": "Aufgabentitel",
+      "titlePlaceholder": "Aufgabentitel, dann zum Speichern Enter drücken",
+      "due": "Fälligkeitsdatum und -uhrzeit",
+      "assignee": "Zuweisen an",
+      "priority": "Priorität (optional)",
+      "hint": "Enter speichert, Escape schließt.",
+      "save": "Aufgabe hinzufügen",
+      "cancel": "Abbrechen",
+      "failed": "Die Aufgabe konnte nicht gespeichert werden. Ihr Text steht wieder im Feld."
     }
   }
 }

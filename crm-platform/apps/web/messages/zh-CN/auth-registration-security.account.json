@@ -558,7 +558,8 @@
             "sms": "SMS",
             "help_agent": "帮助助手",
             "email_channel": "电子邮件(Gmail)渠道",
-            "personal_history_full": "完整历史记录导入（个人 WhatsApp）"
+            "personal_history_full": "完整历史记录导入（个人 WhatsApp）",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "cta": {
             "continueFree": "继续免费使用",

@@ -634,8 +634,21 @@ export function oracleWidgets(
       actionText: hexOf(btn.text) ?? '#FFFFFF',
       model: aiOn ? (filled(ai.model) ?? filled(c.modelName) ?? 'gpt-4o-mini') : null,
       prompt: aiOn ? (filled(ai.prompt) ?? filled(c.prompt) ?? filled(bot.prompt)) : null,
+      // a field NAMED like a key can hold something harmless: Karma's `openRouterKey` is the model name ("openai/gpt-4o-mini", equal to the
+      // config's own model), which the assistant row carries on purpose. A model name is not a credential: a real OpenRouter / OpenAI key has
+      // a prefix and is far longer, and never has the shape provider/model.
       secretValues: Object.entries(ai)
-        .filter(([k, v]) => /key|token|secret/i.test(k) && typeof v === 'string' && v.length >= 8)
+        .filter(
+          ([k, v]) =>
+            /key|token|secret/i.test(k) &&
+            typeof v === 'string' &&
+            v.length >= 8 &&
+            !(
+              v === ai.model ||
+              v === ai.modelName ||
+              (v.length < 60 && /^[\w.-]+\/[\w.:-]+$/.test(v))
+            ),
+        )
         .map(([, v]) => v as string),
       configKey: cfg ? keyOf(cfg) : null,
       themeKey: th ? keyOf(th) : null,

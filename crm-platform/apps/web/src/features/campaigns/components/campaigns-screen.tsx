@@ -215,14 +215,15 @@ export function CampaignsScreen() {
             data-testid="campaigns-sticky-header"
             className="sticky top-14 z-20 -mx-2 mb-4 flex flex-wrap items-end justify-between gap-4 border-b border-border/60 bg-background/95 px-2 pb-3 pt-2 backdrop-blur"
           >
-            <div>
-              <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            {/* The heading block is Inter, weight 600, like the operator dashboard's. */}
+            <div className="font-[family-name:var(--font-inter)] font-semibold">
+              <div className="mb-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t('workspace')} · {session.org.name}
               </div>
-              <h1 className="text-2xl font-normal leading-none tracking-tight lg:text-[32px]">
+              <h1 className="text-[32px] leading-none tracking-tight">
                 {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
               </h1>
-              <p className="mt-1 hidden max-w-xl text-sm text-muted-foreground xl:block">
+              <p className="mt-1 hidden max-w-xl text-sm font-semibold text-muted-foreground xl:block">
                 {t('intro')}
               </p>
             </div>

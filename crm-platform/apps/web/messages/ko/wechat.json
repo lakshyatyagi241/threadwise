@@ -10,6 +10,7 @@
       "intro": "WeChat 공식 계정(인증된 서비스 계정)을 연결하세요. 수신 메시지는 공유 팀 인박스로 들어오며, 답장, 키워드 규칙, 자동 응답은 다른 채널과 똑같이 작동합니다.",
       "broadcasts": "일괄 발송",
       "loadError": "WeChat 채널을 불러오지 못했습니다.",
+      "unavailableCountry": "고객님의 국가에서는 WeChat을 사용할 수 없습니다. 이 워크스페이스에서는 WeChat 채널을 연결하거나 WeChat 메시지를 보낼 수 없습니다.",
       "connectTitle": "채널 연결",
       "connectBody": "WeChat 공식 계정 플랫폼(설정 → 기본 설정)에서 AppID, AppSecret, 서버 Token을 복사해 붙여넣으세요.",
       "connect": "WeChat 연결",

@@ -95,7 +95,28 @@
         "required": "لازمی",
         "removeField": "ہٹائیں",
         "options": "اختیارات (کوما سے الگ)",
-        "optionsPlaceholder": "اختیار 1، اختیار 2، اختیار 3"
+        "optionsPlaceholder": "اختیار 1، اختیار 2، اختیار 3",
+        "mapsTo": "یہاں میپ ہوتا ہے",
+        "mapsToHint": "فارم جمع کرنے پر یہ جواب رابطہ کی خاصیت میں محفوظ کرتا ہے۔",
+        "mapsToNone": "رابطہ کی خاصیت میں محفوظ نہ کریں",
+        "mapsToSystemGroup": "رابطہ فیلڈز",
+        "mapsToCustomGroup": "مخصوص خصائص",
+        "mapsToSystem": {
+          "name": "پورا نام",
+          "first_name": "پہلا نام",
+          "last_name": "آخری نام",
+          "email": "ای میل",
+          "title": "عہدہ",
+          "language": "زبان",
+          "address": "پتہ"
+        },
+        "mapsToPrivacyGroup": "رازداری اور رضامندی",
+        "mapsToPrivacy": {
+          "age": "عمر (نابالغ تصدیق)",
+          "date_of_birth": "تاریخ پیدائش (نابالغ تصدیق)",
+          "consent_marketing": "مارکیٹنگ رضامندی (واٹس ایپ)",
+          "consent_service": "سروس معاہدہ (مارکیٹنگ نہیں)"
+        }
       },
       "fieldKind": {
         "heading": "عنوان",
@@ -130,15 +151,24 @@
       "loading": "لنکس لوڈ ہو رہے ہیں…",
       "retry": "دوبارہ کوشش کریں",
       "searchPlaceholder": "نام یا لنک سے تلاش کریں",
-      "create": { "cta": "نیا لنک" },
+      "create": {
+        "cta": "نیا لنک"
+      },
       "stats": {
         "all": "تمام لنکس",
         "live": "فعال",
         "totalClicks": "کُل کلکس",
         "avgClicks": "اوسط کلکس / لنک"
       },
-      "tabs": { "all": "تمام", "live": "فعال", "paused": "رکا ہوا" },
-      "status": { "live": "فعال", "paused": "رکا ہوا" },
+      "tabs": {
+        "all": "تمام",
+        "live": "فعال",
+        "paused": "رکا ہوا"
+      },
+      "status": {
+        "live": "فعال",
+        "paused": "رکا ہوا"
+      },
       "empty": {
         "title": "ابھی تک کوئی لنک نہیں",
         "description": "اشتہارات، بائیوز یا QR کوڈ میں شیئر کرنے کے لیے ایک لنک بنائیں۔"
@@ -170,7 +200,11 @@
       "builder": {
         "back": "لنکس پر واپس جائیں",
         "newHeading": "نیا لنک",
-        "step": { "destination": "منزل", "message": "ابتدائی پیغام", "tracking": "ٹریکنگ" },
+        "step": {
+          "destination": "منزل",
+          "message": "ابتدائی پیغام",
+          "tracking": "ٹریکنگ"
+        },
         "name": "نام",
         "status": "حیثیت",
         "countryCode": "کنٹری کوڈ",
@@ -194,6 +228,14 @@
         "shortUrl": "مختصر لنک",
         "waUrl": "WhatsApp لنک",
         "qrAlt": "اس لنک کا QR کوڈ"
+      },
+      "public": {
+        "missingTitle": "لنک نہیں ملا",
+        "missingBody": "یہ لنک موجود نہیں ہے، یا حذف کر دیا گیا ہے۔",
+        "goneTitle": "لنک اب فعال نہیں",
+        "goneBody": "یہ لنک معطل ہے یا میعاد ختم ہو چکی ہے۔",
+        "errorTitle": "کچھ غلط ہو گیا",
+        "errorBody": "ہم یہ لنک نہیں کھول سکے۔ براہ مہربانی کوشش کریں۔"
       }
     }
   }

@@ -522,12 +522,14 @@ describe('manual connect (TW-WABA-006)', () => {
     expect(calls.some((c) => c.url.endsWith(`/${numeric.waba}/subscribed_apps`))).toBe(false);
   });
 
-  it('refuses a WABA the token cannot read at all (somebody else\'s), and saves nothing', async () => {
+  it("refuses a WABA the token cannot read at all (somebody else's), and saves nothing", async () => {
     useNumericIds();
     rules.unshift(phoneProbe(), {
       match: new RegExp(`GET .*/${numeric.waba}/phone_numbers`),
       status: 400,
-      body: { error: { message: '(#100) Object does not exist or missing permissions', code: 100 } },
+      body: {
+        error: { message: '(#100) Object does not exist or missing permissions', code: 100 },
+      },
     });
     const t = await api.signup('my');
     const res = await post(t, '/v2/waba/numbers/connect/manual', manual());

@@ -17,7 +17,8 @@
       "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
       "exportInProgress": "동의 증빙 파일을 이미 준비하는 중입니다. 완료될 때까지 기다린 후 다시 시도하세요.",
       "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 파일을 준비하세요.",
-      "noticeTargetMissing": "해당 위젯, 예약 페이지 또는 스토어가 더 이상 없습니다."
+      "noticeTargetMissing": "해당 위젯, 예약 페이지 또는 스토어가 더 이상 없습니다.",
+      "notMinor": "보호자 동의는 미성년자로 표시된 연락처에만 기록할 수 있습니다."
     },
     "settings": {
       "title": "수신 동의 및 STOP 답장",
@@ -142,7 +143,10 @@
         "widget": "웹사이트 채팅",
         "booking": "예약 페이지",
         "commerce": "스토어 결제",
-        "lead": "리드 수집"
+        "lead": "리드 수집",
+        "gpc": "글로벌 프라이버시 컨트롤",
+        "dob": "생년월일 또는 나이",
+        "declaration": "나이 미확인"
       },
       "by": "{name}님이 기록",
       "evidence": {
@@ -165,7 +169,8 @@
         "storeFlag": "스토어 설정",
         "leadSourceId": "리드 소스",
         "leadFormId": "리드 양식",
-        "adId": "광고"
+        "adId": "광고",
+        "guardianConsentRef": "보호자 동의 참조"
       },
       "dialog": {
         "titleGranted": "수신 중으로 표시",
@@ -181,6 +186,52 @@
         "close": "닫기",
         "savedGranted": "수신 중으로 표시되었습니다.",
         "savedWithdrawn": "수신 거부로 표시되었습니다."
+      },
+      "privacy": {
+        "title": "개인정보 표시",
+        "saved": "저장했습니다.",
+        "minorLabel": "미성년자",
+        "minorOn": "{date}부터 미성년자로 표시됨.",
+        "minorOff": "미성년자로 표시되지 않음.",
+        "rule": {
+          "off": "워크스페이스가 컴플라이언스 센터에서 아동 관련 질문에 답하지 않았으므로 이 연락처에 대한 마케팅은 보류되지 않습니다.",
+          "guardian": "부모 또는 보호자의 동의가 기록될 때까지 이 연락처에 대한 마케팅이 보류됩니다.",
+          "block": "워크스페이스가 미성년자 정보를 처리하지 않는다고 밝혔기 때문에 이 연락처에 대한 마케팅이 보류됩니다."
+        },
+        "guardianBadge": "보호자 동의 기록됨",
+        "guardianLabel": "부모 또는 보호자 동의",
+        "guardianOn": "{date}부터 기록됨. 증빙일 뿐이며 연락처를 구독시키지 않습니다.",
+        "guardianOff": "기록되지 않음.",
+        "recordGuardian": "보호자 동의 기록",
+        "clearGuardian": "삭제",
+        "dnsLabel": "판매 또는 공유 금지",
+        "dnsOn": "{date}부터 거부함({source}).",
+        "dnsOff": "거부하지 않음.",
+        "history": "개인정보 이력",
+        "event": {
+          "minor": {
+            "on": "미성년자로 표시함",
+            "off": "미성년자 표시 해제"
+          },
+          "guardian_consent": {
+            "on": "보호자 동의 기록함",
+            "off": "보호자 동의 삭제함"
+          },
+          "sale_share_opt_out": {
+            "on": "판매 및 공유 거부",
+            "off": "거부 해제"
+          }
+        },
+        "dialog": {
+          "title": "보호자 동의 기록",
+          "intro": "부모 또는 보호자가 동의했음을 기록합니다. 증빙일 뿐이며 연락처를 마케팅에 구독시키지 않습니다.",
+          "note": "어떻게 동의했나요? (필수)",
+          "noteHint": "예: 창구에서 종이 양식에 서명함. 보호자의 이름이나 연락처는 적지 마세요.",
+          "ref": "참조(선택)",
+          "refHint": "나중에 찾아볼 수 있는 양식 번호나 문서 ID."
+        },
+        "minorFrom": "입력된 생년월일 또는 나이에 따라 설정되었습니다. 담당자가 유지하지 않는 한 {date}에 자동으로 해제됩니다.",
+        "minorFromDeclaration": "양식에서 나이가 확인되지 않아 설정되었습니다. 담당자가 해제할 때까지 유지됩니다."
       }
     },
     "composer": {
@@ -302,7 +353,10 @@
         "consent_evidence_recorded": "허용: 안내문이 전달되었고 상대가 동의했습니다.",
         "purpose_not_enabled": "허용되지 않음: 워크스페이스에서 켜지 않았습니다.",
         "consent_declined": "허용되지 않음: 상대가 거부했습니다.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "허용되지 않음: 이 연락처는 미성년자로 표시되어 있으며 워크스페이스가 마케팅을 보류합니다.",
+        "sale_share_opted_out": "허용되지 않음: 연락처가 데이터의 판매 또는 공유를 거부했습니다.",
+        "on_dnc_list": "\"수신 거부\" 목록에 있음: 이 번호로 마케팅 통화나 문자를 보내지 않습니다"
       }
     },
     "notice": {

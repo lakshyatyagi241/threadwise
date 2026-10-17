@@ -44,9 +44,6 @@
         "unassigned": "असौंपी गई",
         "unread": "अपठित"
       },
-      "statusFilter": "स्थिति",
-      "statusOpen": "खुली",
-      "statusAll": "हर स्थिति",
       "status": {
         "open": "खुली",
         "pending": "लंबित",
@@ -61,7 +58,6 @@
         "high": "उच्च",
         "urgent": "तत्काल"
       },
-      "channelFilter": "चैनल",
       "allChannels": "सभी चैनल",
       "archived": "संग्रहीत",
       "backToInbox": "इनबॉक्स पर वापस जाएं",
@@ -107,7 +103,49 @@
         }
       },
       "select": "चुनें",
-      "selectDone": "पूरा हुआ"
+      "selectDone": "पूरा हुआ",
+      "filters": {
+        "open": "फ़िल्टर",
+        "openActive": "फ़िल्टर ({count} चालू)",
+        "title": "फ़िल्टर",
+        "close": "बंद करें",
+        "reset": "रीसेट",
+        "cancel": "रद्द करें",
+        "apply": "लागू करें",
+        "status": "चैट की स्थिति",
+        "statusHint": "कुछ न चुनने पर खुली और लंबित चैट दिखती हैं।",
+        "conversation": "बातचीत",
+        "any": "कोई भी",
+        "assigned": "असाइन की गई",
+        "unassigned": "असाइन नहीं",
+        "unattended": "अनदेखी",
+        "labels": "टैग",
+        "channels": "चैनल",
+        "agents": "एजेंट",
+        "sortBy": "क्रम",
+        "recent": "नवीनतम",
+        "old": "पुरानी",
+        "dateRange": "तारीख़ सीमा (आख़िरी गतिविधि)",
+        "from": "से",
+        "to": "तक",
+        "select": "एक विकल्प चुनें",
+        "search": "खोजें",
+        "noMatch": "कोई मेल नहीं",
+        "today": "आज",
+        "last7": "पिछले 7 दिन",
+        "last30": "पिछले 30 दिन",
+        "thisMonth": "इस महीने",
+        "clearDates": "तारीख़ें हटाएँ",
+        "previousMonth": "पिछला महीना",
+        "nextMonth": "अगला महीना"
+      },
+      "rowMenu": "{name} के लिए और विकल्प",
+      "priorityMenu": "प्राथमिकता",
+      "statusFilter": "स्थिति",
+      "statusOpen": "खुली",
+      "statusAll": "हर स्थिति",
+      "channelFilter": "चैनल",
+      "selectRow": "{name} चुनें"
     },
     "status": {
       "received": "प्राप्त",
@@ -232,7 +270,9 @@
         "undone": "चरण बदलाव पूर्ववत: वापस {stage} पर।",
         "undoneToast": "चरण वापस {stage} पर कर दिया गया।",
         "couldNotUndo": "यह बदलाव अब पूर्ववत नहीं हो सकता: संपर्क आगे बढ़ चुका है या पहले ही पूर्ववत हो चुका है।"
-      }
+      },
+      "heldUntil": "{when} तक रोका गया",
+      "heldWhy": "यह मार्केटिंग संदेश आपके शांत घंटों के खत्म होने का इंतज़ार कर रहा है। तब तक संपर्क ने सदस्यता नहीं छोड़ी हो, तो यह उसी समय भेज दिया जाएगा।"
     },
     "media": {
       "openImage": "इमेज {name} खोलें",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "नया संदेश: {text}",
       "attachment": "एक संलग्नक",
       "jumpLatest": "नवीनतम पर जाएं",
-      "jumpLatestNew": "{count, plural, one {# नया संदेश} other {# नए संदेश}}"
+      "jumpLatestNew": "{count, plural, one {# नया संदेश} other {# नए संदेश}}",
+      "searchOpen": "इस चैट में खोजें",
+      "searchPlaceholder": "इस चैट में खोजें",
+      "searchCount": "{total} में से {current}",
+      "searchNone": "कोई मेल नहीं",
+      "searchPrev": "पिछला परिणाम",
+      "searchNext": "अगला परिणाम",
+      "searchClose": "खोज बंद करें"
     },
     "groupThread": {
       "openGroup": "ग्रुप खोलें",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "सहेजे गए उत्तर",
-      "savedReplyIssues": "भरे नहीं गए और जैसे लिखे थे वैसे ही छोड़े गए ({count}): {list}। भेजने से पहले ठीक करें।"
+      "savedReplyIssues": "भरे नहीं गए और जैसे लिखे थे वैसे ही छोड़े गए ({count}): {list}। भेजने से पहले ठीक करें।",
+      "toolbar": {
+        "label": "संदेश फ़ॉर्मैटिंग",
+        "bold": "बोल्ड",
+        "italic": "इटैलिक",
+        "underline": "रेखांकित",
+        "strike": "स्ट्राइकथ्रू",
+        "bullets": "बुलेट सूची",
+        "numbers": "क्रमांकित सूची",
+        "ai": {
+          "open": "स्मार्ट एआई सहायक",
+          "noModel": "इस वर्कस्पेस के लिए कोई एआई मॉडल चालू नहीं है",
+          "title": "स्मार्ट एआई सहायक",
+          "condense": "संक्षिप्त करें",
+          "condenseHint": "टेक्स्ट को छोटा और सटीक बनाएँ",
+          "fix": "व्याकरण सुधारें",
+          "fixHint": "व्याकरण और वर्तनी की गलतियाँ ठीक करें",
+          "positive": "सकारात्मक लहजा",
+          "positiveHint": "टेक्स्ट को अधिक सकारात्मक और उत्साहपूर्ण बनाएँ",
+          "translate": "अनुवाद करें",
+          "translateHint": "अलग-अलग भाषाओं में अनुवाद करें",
+          "selectLanguage": "भाषा चुनें",
+          "searchLanguages": "भाषाएँ खोजें…",
+          "noLanguage": "कोई भाषा नहीं मिली",
+          "working": "काम चल रहा है…",
+          "empty": "पहले संदेश लिखें।",
+          "failed": "एआई टेक्स्ट नहीं बदल सका। फिर कोशिश करें।"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "नोट्स और टाइमलाइन",
@@ -452,7 +527,13 @@
         "pickTeam": "इस बातचीत के लिए टीम चुनें",
         "noTeam": "कोई टीम नहीं",
         "onLeave": "छुट्टी पर",
-        "onLeaveUntil": "{date} तक छुट्टी पर"
+        "onLeaveUntil": "{date} तक छुट्टी पर",
+        "availability": {
+          "online": "ऑनलाइन",
+          "away": "दूर",
+          "busy": "व्यस्त",
+          "offline": "ऑफ़लाइन"
+        }
       },
       "presence": {
         "online": "ऑनलाइन",

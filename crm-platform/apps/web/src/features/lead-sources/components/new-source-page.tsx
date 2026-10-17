@@ -24,11 +24,11 @@ import {
   type WizardStep,
 } from '../lib/draft';
 import { issuesByPath, leadError, type LeadError } from '../lib/errors';
-import type { HookUrlEnv } from '../lib/hook-url';
 import { LEADS_MANAGE, useLeadsCan } from '../lib/permissions';
 import { dismissReveal, needsLeaveGuard, revealOf, type Reveal } from '../lib/reveal';
 import { ROUTES, sourceHref } from '../lib/source-view';
 import { MappingStudio, usePathFocus } from './mapping-studio';
+import { HookAddressNotice } from './hook-address-notice';
 import { RevealPanel } from './reveal-panel';
 import { BasicsFields, DefaultsFields, type SetDraft } from './source-fields';
 import { FirstLeadWatch, TestLeadPanel } from './test-lead-panel';
@@ -49,13 +49,13 @@ const LINK =
  * source alone, so the token is never in the query cache; it is not written to storage, the address or the console, and the page
  * asks before it unloads while it is still on screen.
  */
-export function NewSourcePage({ hookEnv }: { hookEnv: HookUrlEnv }) {
+export function NewSourcePage() {
   const can = useLeadsCan();
   if (!can.manage) return <NoAccess permission={LEADS_MANAGE} />;
-  return <Wizard hookEnv={hookEnv} />;
+  return <Wizard />;
 }
 
-function Wizard({ hookEnv }: { hookEnv: HookUrlEnv }) {
+function Wizard() {
   const t = useTranslations('lead-sources.wizard');
   const router = useRouter();
   const qc = useQueryClient();
@@ -188,9 +188,17 @@ function Wizard({ hookEnv }: { hookEnv: HookUrlEnv }) {
         ))}
       </ol>
 
+      {beforeCreate && can.manage && <HookAddressNotice />}
+
       {planFailure && failure && (
         <Alert tone="warning" className="space-y-2" data-testid="plan-problem">
-          <p>{t(failure.kind === 'planLimit' ? 'planLimit' : 'planLocked')}</p>
+          <p>
+            {failure.kind === 'planLimit'
+              ? failure.key === 'planLimitUsed'
+                ? t('planLimitUsed', failure.values)
+                : t('planLimit')
+              : t('planLocked')}
+          </p>
           <Link
             href={failure.upgradeUrl ?? PLAN_UPGRADE_PATH}
             className="font-medium underline underline-offset-2"
@@ -239,7 +247,6 @@ function Wizard({ hookEnv }: { hookEnv: HookUrlEnv }) {
         <ConnectStep
           source={created}
           reveal={reveal}
-          hookEnv={hookEnv}
           canManage={can.manage}
           onReveal={setReveal}
           onDone={() => {
@@ -297,7 +304,6 @@ function Wizard({ hookEnv }: { hookEnv: HookUrlEnv }) {
 export function ConnectStep({
   source,
   reveal,
-  hookEnv,
   canManage,
   onReveal,
   onDone,
@@ -305,7 +311,6 @@ export function ConnectStep({
 }: {
   source: LeadSourceResponse;
   reveal: Reveal | null;
-  hookEnv: HookUrlEnv;
   canManage: boolean;
   onReveal: (next: Reveal | null) => void;
   onDone: () => void;
@@ -321,7 +326,6 @@ export function ConnectStep({
       {reveal ? (
         <RevealPanel
           reveal={reveal}
-          env={hookEnv}
           hasSecret={source.hasSecret}
           onChange={onReveal}
           onDone={onDone}

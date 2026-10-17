@@ -3,15 +3,15 @@
  * the fixed screens, or the FAQ's own id to edit it. Nothing else is stored in the address, so a reload or the browser's back
  * button lands on the same screen.
  */
-export type FaqView = 'list' | 'new' | 'test' | 'unanswered' | 'insights' | 'settings';
+export type FaqView = 'list' | 'new' | 'test' | 'unanswered' | 'insights';
 
 /** The strip of the panel: the list, the editor and "new" all belong to its first tab. */
-export type FaqTabId = 'faqs' | 'test' | 'unanswered' | 'insights' | 'settings';
+export type FaqTabId = 'faqs' | 'test' | 'unanswered' | 'insights';
 
 export type FaqLocation = { view: FaqView } | { view: 'edit'; id: string };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const NAMED: readonly FaqView[] = ['list', 'new', 'test', 'unanswered', 'insights', 'settings'];
+const NAMED: readonly FaqView[] = ['list', 'new', 'test', 'unanswered', 'insights'];
 
 /** What `?view=` asks for; a missing, unknown or malformed value opens the list. */
 export function parseFaqLocation(view: string | null): FaqLocation {

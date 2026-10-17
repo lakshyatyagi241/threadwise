@@ -27,6 +27,8 @@ WeChat connects a WeChat Official Account to this workspace, so the messages fol
 
 You need a certified WeChat Service Account. Subscription accounts and accounts that are not verified cannot use the messaging APIs.
 
+WeChat is not available in every country. A workspace whose country is **India** cannot connect a WeChat channel, start a broadcast or send WeChat messages, because WeChat is banned there. The country is the billing country of the workspace's latest paid order, or the country it gave when it was set up. The screen says so, and channels connected before are kept but do not send.
+
 ## How to use it
 
 1. In the WeChat Official Accounts Platform, open **Settings and development**, then **Basic configuration**. Copy the **AppID** and generate the **AppSecret**.
@@ -68,6 +70,10 @@ Followers who message you, follow you or tap a custom menu item appear in the in
 WeChat sends the message to the whole audience in one call, so there is no progress bar. When people were picked from the inbox, a copy of the message is added to each of their conversations.
 
 > WeChat allows a Service Account about 4 mass sends a month. This app does not count or block them: WeChat decides, and a refused send shows as Failed with WeChat's reason.
+
+## Quiet hours
+
+A WeChat broadcast is one mass send to followers that WeChat chooses, so it cannot be held person by person. If your workspace has quiet hours in the [Compliance center](help:compliance-center) and it is inside them on your workspace clock (the fallback time zone you chose there, else your workspace time zone), the broadcast stays **Sending** with a note that it is held until the hours end, and it is sent by itself then. Retry does not appear while it waits.
 
 ## Plan and access
 

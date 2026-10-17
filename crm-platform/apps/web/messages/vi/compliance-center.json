@@ -18,7 +18,8 @@
       "notices": "Thông báo",
       "links": "Liên kết quyền riêng tư và điều khoản",
       "subprocessors": "Bên xử lý phụ",
-      "windows": "Giờ yên tĩnh và cuộc gọi"
+      "windows": "Giờ yên tĩnh và cuộc gọi",
+      "dnc": "Không gọi"
     },
     "saveBar": {
       "unsaved": "Bạn có thay đổi chưa lưu.",
@@ -35,7 +36,8 @@
       "duplicate": "Bạn đã có một bên xử lý phụ với tên này trong danh sách.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
       "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "dncInvalid": "Không thể đọc tệp: tệp không có số điện thoại nào, hoặc có quá nhiều số trong một lần."
     },
     "problems": {
       "httpsOnly": "Hãy dùng địa chỉ bắt đầu bằng https://.",
@@ -165,7 +167,7 @@
             "unset": "Hãy trả lời câu hỏi về trẻ em trong mục Liên hệ và trẻ em.",
             "minorsNoParental": "Có thể có người chưa thành niên, nhưng sự đồng ý của cha mẹ đang tắt. Hồ sơ này coi người dưới {age} tuổi là người chưa thành niên.",
             "no_minors": "Bạn không cố ý xử lý dữ liệu của người chưa thành niên. Hồ sơ này coi người dưới {age} tuổi là người chưa thành niên.",
-            "may_include_minors": "Sự đồng ý của cha mẹ đã được bật cho người dưới {age} tuổi. Việc lưu bằng chứng cho từng liên hệ chưa được xây dựng."
+            "may_include_minors": "Sự đồng ý của cha mẹ được bật cho người dưới {age} tuổi. Hãy đánh dấu liên hệ là chưa thành niên trên thẻ đồng ý của họ và ghi nhận sự đồng ý của người giám hộ tại đó."
           }
         },
         "opt_out_notice": {
@@ -220,9 +222,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Giờ yên tĩnh và khung giờ gọi chưa được áp dụng",
+          "title": "Giờ yên tĩnh và khung giờ gọi đang được áp dụng",
           "detail": {
-            "notEnforced": "Giờ yên tĩnh và khung giờ gọi của bạn đã được lưu, nhưng hiện chưa có gì giữ lại tin nhắn hoặc chặn cuộc gọi ngoài các khung giờ đó. Hãy tự lên kế hoạch theo các khung giờ này."
+            "enforced": "Tin nhắn tiếp thị trong giờ yên tĩnh được giữ lại đến khi hết giờ, còn cuộc gọi ngoài khung giờ gọi bị từ chối kèm thời điểm khung mở. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ. Sổ đăng ký DND chỉ là ghi chú: hiện chưa đối chiếu gì với nó."
           }
         }
       }
@@ -322,7 +324,9 @@
         "hint": "Đạo luật DPDP cho phép mọi người quản lý sự đồng ý thông qua một bên quản lý sự đồng ý đã đăng ký. Hãy ghi tên bên bạn dùng tại đây nếu có.",
         "managerName": "Bên quản lý sự đồng ý",
         "managerUrl": "Liên kết bên quản lý sự đồng ý",
-        "placeholderNote": "Đây chỉ là ghi chú. Hiện chưa kết nối với bên quản lý sự đồng ý nào."
+        "placeholderNote": "Đây chỉ là ghi chú. Hiện chưa kết nối với bên quản lý sự đồng ý nào.",
+        "managerRegistration": "Số đăng ký của Consent Manager",
+        "managerRegistrationHint": "Số mà Hội đồng Bảo vệ Dữ liệu đã đăng ký cho Consent Manager của bạn. Chỉ để ghi chú."
       }
     },
     "contacts": {
@@ -344,7 +348,7 @@
       },
       "children": {
         "title": "Dữ liệu của trẻ em",
-        "hint": "Sản phẩm này dành cho doanh nghiệp. Hãy cho biết bạn có thể lưu dữ liệu của người chưa thành niên hay không, để hiển thị đúng các quy tắc.",
+        "hint": "Sản phẩm này dành cho doanh nghiệp. Hãy cho biết bạn có thể lưu dữ liệu của người chưa thành niên hay không để hiển thị đúng quy tắc. Sau khi bạn trả lời, hoạt động tiếp thị tới liên hệ được đánh dấu là chưa thành niên sẽ bị giữ lại: luôn luôn nếu bạn không cố ý xử lý dữ liệu của người chưa thành niên, và cho đến khi ghi nhận sự đồng ý của người giám hộ nếu có thể có người chưa thành niên.",
         "policy": "Người chưa thành niên trong danh sách liên hệ",
         "policies": {
           "unset": "Chưa trả lời",
@@ -352,7 +356,7 @@
           "may_include_minors": "Có thể có người chưa thành niên trong danh sách liên hệ của chúng tôi"
         },
         "parental": "Người chưa thành niên cần có sự đồng ý của cha mẹ",
-        "parentalHint": "Một cờ ghi lại chính sách của bạn. Việc thu thập và lưu bằng chứng đồng ý của cha mẹ cho từng liên hệ chưa được xây dựng.",
+        "parentalHint": "Ghi lại chính sách của bạn và giữ lại hoạt động tiếp thị tới các liên hệ được đánh dấu là chưa thành niên cho đến khi ghi nhận sự đồng ý của người giám hộ. Bạn đánh dấu liên hệ là chưa thành niên và ghi nhận sự đồng ý đó trên thẻ đồng ý của họ.",
         "age": "Các hồ sơ bạn đã bật coi người dưới {age} tuổi là người chưa thành niên.",
         "dpdpNeedsAnswer": "Hồ sơ DPDP yêu cầu bạn trả lời câu hỏi này."
       }
@@ -379,18 +383,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Các cài đặt này đã được lưu nhưng chưa được áp dụng. Tin nhắn không bị giữ lại và cuộc gọi không bị chặn ngoài các giờ bạn đặt. Hãy tự lên kế hoạch gửi tin và gọi điện theo các giờ này.",
-      "intro": "Một số quy tắc hạn chế thời điểm tin nhắn và cuộc gọi tiếp thị được phép đến với mọi người. Hãy ghi lại tại đây các giờ làm việc của bạn.",
+      "intro": "Một số quy định giới hạn thời điểm tin nhắn tiếp thị và cuộc gọi được phép đến với mọi người. Hãy đặt giờ của bạn tại đây: tin nhắn tiếp thị gửi trong giờ yên tĩnh sẽ chờ và được gửi khi hết giờ, còn cuộc gọi ngoài khung giờ gọi sẽ không được thực hiện.",
       "quiet": {
         "title": "Giờ yên tĩnh cho tin nhắn",
-        "hint": "Khoảng giờ bạn không muốn tin nhắn tiếp thị đến với mọi người. Khoảng thời gian này có thể qua nửa đêm.",
+        "hint": "Khoảng giờ không gửi tin nhắn tiếp thị. Tin sẽ chờ và được gửi khi hết khoảng giờ này. Khoảng giờ có thể vắt qua nửa đêm.",
         "enabled": "Bật giờ yên tĩnh",
         "start": "Yên tĩnh từ",
         "end": "Yên tĩnh đến"
       },
       "calling": {
         "title": "Khung giờ gọi",
-        "hint": "Chỉ những giờ được phép thực hiện cuộc gọi tiếp thị, vào các ngày bạn chọn.",
+        "hint": "Những giờ duy nhất được gọi điện tiếp thị, vào các ngày bạn chọn. Cuộc gọi ngoài khung giờ này bị từ chối và cho biết khi nào khung mở.",
         "enabled": "Bật khung giờ gọi",
         "start": "Gọi từ",
         "end": "Gọi đến",
@@ -407,8 +410,8 @@
       },
       "suggested": "Các luật bạn đã bật gợi ý {start} đến {end}.",
       "zone": {
-        "label": "Múi giờ",
-        "hint": "Các khung giờ được hiểu theo múi giờ này. Múi giờ của không gian làm việc là {zone}.",
+        "label": "Múi giờ dự phòng",
+        "hint": "Giờ được đọc theo đồng hồ của từng liên hệ: thuộc tính múi giờ của họ, nếu không có thì dùng mã quốc gia của số điện thoại. Múi giờ này được dùng khi cả hai đều không rõ. Múi giờ của không gian làm việc của bạn là {zone}.",
         "workspace": "Múi giờ của không gian làm việc ({zone})"
       },
       "dnd": {
@@ -421,8 +424,10 @@
           "sg_dnc": "Danh sách Không gọi của Singapore",
           "custom": "Danh sách của riêng bạn"
         },
-        "note": "Đây chỉ là ghi chú. Hiện chưa có đối chiếu nào với danh sách."
-      }
+        "note": "Đây chỉ là ghi chú. Hiện chưa có đối chiếu nào với danh sách.",
+        "listNote": "Các số trong danh sách Không gọi của bạn (tab cuối cùng) đã bị loại khỏi các cuộc gọi và tin nhắn tiếp thị."
+      },
+      "enforcedNote": "Giờ yên tĩnh giữ tin nhắn tiếp thị lại cho đến khi kết thúc, còn khung giờ gọi sẽ từ chối cuộc gọi nằm ngoài khung. Hệ thống dùng giờ của từng liên hệ. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ."
     },
     "subprocessors": {
       "intro": "Các nhà cung cấp xử lý dữ liệu cá nhân cho không gian làm việc của bạn: họ làm gì, nhận dữ liệu gì và ở đâu. Bạn có thể công bố danh sách này trên một trang công khai.",
@@ -487,6 +492,55 @@
       "privacy": "Chính sách quyền riêng tư",
       "terms": "Điều khoản",
       "notFound": "Không tìm thấy trang"
+    },
+    "hold": {
+      "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)",
+      "heldCount": "{count} đang tạm giữ vì giờ yên tĩnh"
+    },
+    "dnc": {
+      "intro": "Các số trong danh sách này không nhận tiếp thị qua cuộc gọi thoại hoặc SMS, bất kể lịch sử đồng ý ra sao. WhatsApp, email và tin nhắn dịch vụ không bị giữ lại bởi danh sách này. Không có việc đối chiếu với danh sách quốc gia nào từ đây: hãy thêm bản trích xuất mà bạn được phép tải về.",
+      "addTitle": "Thêm số",
+      "numbers": "Số điện thoại",
+      "numbersHint": "Mỗi dòng một số, hoặc phân tách bằng dấu phẩy. Tối đa {max} số mỗi lần; dùng tệp nếu nhiều hơn.",
+      "country": "Mã quốc gia cho số nội địa",
+      "countryHint": "Số viết không có mã quốc gia sẽ được hiểu theo mã này.",
+      "note": "Ghi chú",
+      "noteHint": "Không bắt buộc. Lý do các số này nằm trong danh sách.",
+      "add": "Thêm vào danh sách",
+      "adding": "Đang thêm...",
+      "or": "hoặc",
+      "import": "Thêm từ tệp CSV",
+      "importing": "Đang đọc tệp...",
+      "importHint": "Cột có tên phone, mobile hoặc number, nếu không có thì lấy cột đầu tiên. Tệp lớn được đọc theo từng phần.",
+      "fromRegistry": "Tệp là bản trích xuất từ một danh sách quốc gia mà tôi được phép sử dụng",
+      "progress": "Đang gửi phần {done} trên {of}...",
+      "added": "{count, plural, =0 {Không có số mới để thêm} one {Đã thêm # số} other {Đã thêm # số}}",
+      "result": "Đã thêm {added}, {already} đã có trong danh sách, {invalid} không phải số điện thoại.",
+      "invalidSamples": "Ví dụ: {samples}",
+      "listTitle": "Các số trong danh sách",
+      "total": "{count, plural, =0 {Chưa có số nào trong danh sách} one {# số trong danh sách} other {# số trong danh sách}}",
+      "search": "Tìm một số",
+      "loading": "Đang tải danh sách...",
+      "empty": "Chưa có số nào",
+      "emptyHint": "Thêm các số đã yêu cầu không bị gọi hoặc nhắn tin, hoặc một bản trích xuất từ danh sách mà bạn được phép dùng.",
+      "noMatch": "Không có số nào khớp",
+      "source": {
+        "manual": "Thêm thủ công",
+        "import": "Từ tệp",
+        "contact_request": "Người đó yêu cầu",
+        "registry_export": "Trích xuất từ danh sách quốc gia"
+      },
+      "remove": "Xóa",
+      "removeLabel": "Xóa {phone} khỏi danh sách",
+      "removed": "Đã xóa số khỏi danh sách",
+      "newer": "Mới hơn",
+      "older": "Cũ hơn",
+      "confirm": {
+        "title": "Xóa số này?",
+        "message": "{phone} có thể nhận lại các cuộc gọi và tin nhắn tiếp thị, trừ khi liên hệ đã rút lại sự đồng ý. Chỉ xóa khi người đó yêu cầu hoặc số được thêm nhầm.",
+        "confirm": "Xóa số",
+        "cancel": "Giữ lại"
+      }
     }
   }
 }

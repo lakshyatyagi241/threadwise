@@ -122,6 +122,7 @@ export function publicForm(over: Record<string, unknown> = {}): PublicForm {
     consent: { enabled: false, text: 'I agree.', required: true, version: 1 },
     theme: d.theme,
     payment: null,
+    ageGate: null,
     honeypotField: 'website_url',
     captcha: { required: false, version: null, siteKey: null },
     poweredBy: { show: true, label: 'Forms' },

@@ -4,6 +4,7 @@
 # Paging rule: a critical alert needs SUSTAINED loop degradation AND user impact (slow API, slow webhook ack, or a queue wait
 # climbing). A lone spike is recorded in the metrics and the "event loop blocked" log line, and does not page.
 # Thresholds are the initial engineering targets, not measured limits: tune them from the baselines before making them gates.
+# Tested with promtool: event-loop.rules.test.yml next to this file. Change a threshold or add an alert only together with a case there.
 groups:
   - name: event-loop
     rules:
@@ -61,13 +62,19 @@ groups:
           )
           and on (service, instance)
           (
+            # Impact, two ways. (1) The loop itself delays every request: a request waits at least as long as the loop is busy, so a
+            # loop-delay p95 of 250 ms means at least 5% of requests wait 250 ms. The request histogram CANNOT show this: its timer
+            # starts when the handler runs, after the request has queued behind the block (measured: loop p95 0.6 s, request p95 5 ms).
+            # (2) Handlers are slow for any reason while the loop is also degraded.
+            avg_over_time(crm_event_loop_delay_p95_seconds{service="api"}[5m]) > 0.250
+            or
             histogram_quantile(0.95, sum by (le, service, instance) (rate(crm_http_request_duration_seconds_bucket[5m]))) > 0.5
           )
         for: 5m
         labels: { severity: critical }
         annotations:
-          summary: 'API event loop blocked and request p95 over 500 ms on {{ $labels.instance }}'
-          description: 'Sustained loop delay with slow requests. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+          summary: 'API event loop blocked and requests are waiting on {{ $labels.instance }}'
+          description: 'Sustained loop delay with either the loop delay p95 over 250 ms (requests queue behind it) or request p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
 
       - alert: WorkerEventLoopBlockingWithQueueImpact
         expr: |
@@ -91,6 +98,42 @@ groups:
         annotations:
           summary: 'Heap above 90% of the limit on {{ $labels.service }} {{ $labels.instance }}: OOM risk'
 
+      # ---- one long stall is enough: no hold (EL-B13) ----------------------------------------------------------------------
+      # A single block of several seconds leaves one huge max-delay window and no sustained average, and a block long enough to fail the
+      # scrape (about 5 s) does not hold TargetDown's 2 minutes. Everything in that process waited at least as long as the stall.
+      # The thresholds are judgement, not measurement: 2 s is past any normal handler, 10 s is past most webhook and ingress timeouts.
+      - alert: EventLoopLongStallWarning
+        expr: max_over_time(crm_event_loop_delay_max_seconds[5m]) > 2
+        labels: { severity: warning }
+        annotations:
+          summary: 'Event loop stalled for {{ $value | humanizeDuration }} on {{ $labels.service }} {{ $labels.instance }}'
+          description: 'One reporting window saw a single stall over 2 s: every request or job in that process waited at least that long. The blocked-loop log line of that window names the slowest routes.'
+
+      - alert: EventLoopLongStallCritical
+        expr: max_over_time(crm_event_loop_delay_max_seconds[5m]) > 10
+        labels: { severity: critical }
+        annotations:
+          summary: 'Event loop stalled for {{ $value | humanizeDuration }} on {{ $labels.service }} {{ $labels.instance }}'
+          description: 'A single stall over 10 s: webhook acknowledgements and ingress timeouts were missed. Capture a CPU profile if it recurs (runbook, section Capture evidence).'
+
+      # ---- caller-visible latency, from the probe in its own process (EL-B12) -----------------------------------------------
+      # The API's request histogram cannot see time queued behind a blocked loop; the probe can.
+      - alert: ApiCallerLatencyHigh
+        expr: histogram_quantile(0.95, sum by (le, target) (rate(crm_probe_http_duration_seconds_bucket[5m]))) > 1
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Callers wait over 1 s at p95 for the {{ $labels.target }} probe'
+          description: 'Measured from outside the API process. With loop delay also high this is a blocked loop; with loop delay low it is a slow dependency or the network.'
+
+      - alert: ApiProbeFailing
+        expr: crm_probe_up == 0
+        for: 3m
+        labels: { severity: critical }
+        annotations:
+          summary: 'The {{ $labels.target }} probe has failed for 3 minutes: callers get no answer'
+          description: 'The probe could not get a 2xx/3xx answer. If the metrics scrape of the API also fails the process is down or blocked; if only /ready fails a dependency is down.'
+
       # ---- the monitor itself --------------------------------------------------------------------------------------------
       - alert: RuntimeMetricsStale
         expr: time() - crm_runtime_last_report_timestamp_seconds > 60
@@ -98,10 +141,10 @@ groups:
         labels: { severity: critical }
         annotations:
           summary: '{{ $labels.service }} {{ $labels.instance }} stopped reporting runtime metrics'
-          description: 'The monitor window stopped completing. A loop blocked for over a minute looks exactly like this; check the process before the scrape.'
+          description: 'The monitor window stopped completing while the process is still being scraped. A process that is gone does not look like this (its series vanish and RuntimeMetricsTargetDown fires), and a loop blocked long enough to fail the scrape shows as a failed scrape; check the process itself.'
 
       - alert: RuntimeMetricsTargetDown
-        expr: up{job=~"crm-(api|worker)"} == 0
+        expr: up{job=~"crm-(api|worker|probe)"} == 0
         for: 2m
         labels: { severity: critical }
         annotations:

@@ -149,12 +149,17 @@ export class CalendarReconcileService {
       const calendarId = row.calendarId ?? conn.calendarId;
       let verdict: DriftVerdict;
       try {
-        let event = await this.calendar.readEvent(orgId, calendarId, row.calendarEventId!);
+        let event = await this.calendar.readEvent(
+          orgId,
+          calendarId,
+          row.calendarEventId!,
+          'google',
+        );
         if (event.kind === 'missing') {
           // A 404 for the event may be a 404 for the whole calendar (deleted, access lost): ask once per calendar before blaming the event.
           let there = calendarExists.get(calendarId);
           if (there === undefined) {
-            there = await this.calendar.calendarExists(orgId, calendarId);
+            there = await this.calendar.calendarExists(orgId, calendarId, 'google');
             calendarExists.set(calendarId, there);
           }
           if (!there) {

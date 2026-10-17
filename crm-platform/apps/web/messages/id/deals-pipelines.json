@@ -181,7 +181,10 @@
         "valueInvalid": "Masukkan angka, misalnya 1250.50.",
         "valueTooLarge": "Nilai tersebut terlalu besar.",
         "stageInvalid": "Pilih tahap dari pipeline ini."
-      }
+      },
+      "company": "Perusahaan",
+      "companyHint": "Biarkan kosong untuk memakai perusahaan kontak.",
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom."
     },
     "contact": {
       "unlink": "Hapus kontak",
@@ -221,7 +224,9 @@
       "deleteTitle": "Hapus Deal ini?",
       "deleteMessage": "\"{title}\" dan linimasanya akan dihapus. Tindakan ini tidak dapat dibatalkan.",
       "cancel": "Batal",
-      "company": "Perusahaan: {name}"
+      "company": "Perusahaan: {name}",
+      "companyLabel": "Perusahaan",
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu."
     },
     "activity": {
       "title": "Aktivitas",

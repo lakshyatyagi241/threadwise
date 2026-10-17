@@ -21,12 +21,15 @@ import {
   createMarketCategorySchema,
   grandfatherSubscriptionsSchema,
   killMarketAppSchema,
+  unlockSubscriptionPriceSchema,
   marketAppRefSchema,
   marketOperatorAppDetailQuerySchema,
   marketOperatorAppListQuerySchema,
   marketOperatorRequestListQuerySchema,
   marketOperatorSubscriptionListQuerySchema,
+  prorateSubscriptionSchema,
   publishMarketAppSchema,
+  refundWithdrawnAppSchema,
   rejectMarketVersionSchema,
   saveMarketVersionSchema,
   setMarketPricingSchema,
@@ -44,7 +47,10 @@ import {
   type MarketOperatorAppListQuery,
   type MarketOperatorRequestListQuery,
   type MarketOperatorSubscriptionListQuery,
+  type ProrateSubscriptionInput,
   type PublishMarketAppInput,
+  type RefundWithdrawnAppInput,
+  type UnlockSubscriptionPriceInput,
   type RejectMarketVersionInput,
   type SaveMarketVersionInput,
   type SetMarketPricingInput,
@@ -56,11 +62,12 @@ import { ActorKinds } from '../../common/decorators';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
-import { OperatorGuard } from '../auth';
+import { OperatorGuard, OperatorRoles } from '../auth';
 import { PlatformPermission, PlatformPermissionGuard } from '../roles-permissions';
 import { OperatorCatalogueService } from './operator-catalogue.service';
 import { OperatorInsightsService } from './operator-insights.service';
 import { OperatorPricingService } from './operator-pricing.service';
+import { ProrationService } from './proration.service';
 
 function operatorId(): number {
   const id = RequestContextStore.require().actorId;
@@ -87,6 +94,7 @@ export class PlatformMarketplaceController {
     private readonly catalogue: OperatorCatalogueService,
     private readonly insights: OperatorInsightsService,
     private readonly pricing: OperatorPricingService,
+    private readonly proration: ProrationService,
   ) {}
 
   // --- categories -----------------------------------------------------------------------------------------------------------------
@@ -404,6 +412,50 @@ export class PlatformMarketplaceController {
     @Body(zodPipe(grandfatherSubscriptionsSchema)) body: GrandfatherSubscriptionsInput,
   ) {
     return this.pricing.grandfather(ref, body, operatorId());
+  }
+
+  @Post('subscriptions/:id/prorate')
+  @OperatorRoles('super_admin')
+  @PlatformPermission('platform.market.pricing')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Return the unused part of the last payment of one subscription through the payment provider (dry run by default), optionally ending the subscription. Audited; super admins only, like every refund.',
+  })
+  prorate(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+    @Body(zodPipe(prorateSubscriptionSchema)) body: ProrateSubscriptionInput,
+  ) {
+    return this.proration.prorate(id, body, operatorId());
+  }
+
+  @Post('apps/:ref/refund-unused')
+  @OperatorRoles('super_admin')
+  @PlatformPermission('platform.market.pricing')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      'Return every subscriber of a withdrawn (killed) app the share of their last payment from the moment it was withdrawn (dry run by default, 200 subscriptions per call). Audited; super admins only.',
+  })
+  refundWithdrawn(
+    @Param('ref', zodPipe(marketAppRefSchema)) ref: string,
+    @Body(zodPipe(refundWithdrawnAppSchema)) body: RefundWithdrawnAppInput,
+  ) {
+    return this.proration.refundWithdrawnApp(ref, body, operatorId());
+  }
+
+  @Post('subscriptions/:id/unlock-price')
+  @PlatformPermission('platform.market.pricing')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary:
+      "Release one subscriber from their locked (grandfathered) price: the next payment is the listing's price. A card renewal is ended at the end of the paid period (the provider keeps the old price). Audited.",
+  })
+  unlockPrice(
+    @Param('id', zodPipe(uuidSchema)) id: string,
+    @Body(zodPipe(unlockSubscriptionPriceSchema)) body: UnlockSubscriptionPriceInput,
+  ) {
+    return this.pricing.unlockPrice(id, body, operatorId());
   }
 
   @Post('subscriptions/:id/cancel')

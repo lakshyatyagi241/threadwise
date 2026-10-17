@@ -95,7 +95,28 @@
         "required": "Required",
         "removeField": "Remove",
         "options": "Options (comma separated)",
-        "optionsPlaceholder": "Option 1, Option 2, Option 3"
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Maps to",
+        "mapsToHint": "Save this answer onto a contact property when the form is submitted.",
+        "mapsToNone": "Don't save to a contact property",
+        "mapsToSystemGroup": "Contact fields",
+        "mapsToCustomGroup": "Custom properties",
+        "mapsToSystem": {
+          "name": "Full name",
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "title": "Job title",
+          "language": "Language",
+          "address": "Address"
+        },
+        "mapsToPrivacyGroup": "Privacy & consent",
+        "mapsToPrivacy": {
+          "age": "Age (minor check)",
+          "date_of_birth": "Date of birth (minor check)",
+          "consent_marketing": "Marketing consent (WhatsApp)",
+          "consent_service": "Service agreement (not marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Heading",
@@ -170,7 +191,11 @@
       "builder": {
         "back": "Back to links",
         "newHeading": "New link",
-        "step": { "destination": "Destination", "message": "Starter message", "tracking": "Tracking" },
+        "step": {
+          "destination": "Destination",
+          "message": "Starter message",
+          "tracking": "Tracking"
+        },
         "name": "Name",
         "status": "Status",
         "countryCode": "Country code",
@@ -194,6 +219,14 @@
         "shortUrl": "Short link",
         "waUrl": "WhatsApp link",
         "qrAlt": "QR code for this link"
+      },
+      "public": {
+        "missingTitle": "Link not found",
+        "missingBody": "This link doesn't exist, or has been deleted.",
+        "goneTitle": "Link no longer active",
+        "goneBody": "This link is paused or has expired.",
+        "errorTitle": "Something went wrong",
+        "errorBody": "We couldn't open this link. Please try again."
       }
     }
   }

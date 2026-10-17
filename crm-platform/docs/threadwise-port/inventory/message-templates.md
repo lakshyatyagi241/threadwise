@@ -1890,3 +1890,10 @@ Exposes:
   }
 }
 ```
+
+### TW-TPL-017: one vocabulary for template header and button values (ADDITION, resolves the audit's item 16)
+
+- **Source:** the audit's "template header and button values" item: three vocabularies (Meta upper-case, campaign lower-case, the broadcast overrides' send-time kinds) and no one wrong field to point at. A repro (a template made with our own form, sent through the broadcast path) found several: a link button's parameter went out empty, a blank link or code parameter had no fallback, `FLOW`/`OTP`/`MPM`/`SPM` were sent as quick replies, Messenger and Telegram broadcasts turned Meta's `URL`/`PHONE_NUMBER` buttons into plain replies, and the inbox bubble knew only Meta's spelling.
+- **Rule:** one reading of every spelling (`template-vocab.ts`; the table is in [docs/api/message-templates.md](../../api/message-templates.md#button-and-header-vocabulary-one-reading-everywhere)), used by the send path, the broadcast overrides, the wizard's slots, the inbox preview, the Messenger and Telegram broadcasts and the override panel; the web keeps the same table.
+- **Question left for the product owner:** for a link button of Reference's spelling (`value` holds the whole address) the send path still sends the whole resolved address as the parameter, as Reference does; Meta's dynamic-link parameter is only the part that changes. Nothing was changed there without a real Reference send to compare.
+- **Tests:** `apps/api/test/unit/whatsapp/template-vocab.spec.ts` and `apps/web/src/features/broadcasts/lib/overrides-model.test.ts`.

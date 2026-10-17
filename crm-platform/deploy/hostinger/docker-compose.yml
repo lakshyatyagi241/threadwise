@@ -87,6 +87,13 @@ x-api-env: &api-env
   WABOO_RUNNER_PICKUP_MIN: ${WABOO_RUNNER_PICKUP_MIN:-}
   WABOO_RUNNER_SILENCE_MIN: ${WABOO_RUNNER_SILENCE_MIN:-}
   WABOO_MIGRATE_TIMEOUT_MIN: ${WABOO_MIGRATE_TIMEOUT_MIN:-}
+  # Event-loop and runtime metrics (docs/performance/event-loop). Every process measures itself; this only decides whether /metrics
+  # is served. Off by default (port 0): deploying this file changes nothing. observability.compose.yml turns it on together with a
+  # Prometheus, an Alertmanager and a probe. The listener refuses to open on a non-loopback host without a token, so setting the port
+  # alone cannot expose it unauthenticated.
+  OBS_METRICS_PORT: ${OBS_METRICS_PORT:-0}
+  OBS_METRICS_HOST: ${OBS_METRICS_HOST:-0.0.0.0}
+  OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:-}
 
 services:
   postgres:

@@ -1,4 +1,4 @@
-import type { MailAuthKind, MailProvider } from '@crm/contracts';
+import type { MailAuthKind, MailConnectionTestResponse, MailProvider } from '@crm/contracts';
 import type {
   MailAccountProfile,
   NormalisedMail,
@@ -172,6 +172,12 @@ export interface PasswordMailDriver extends MailDriverBase {
    * `imap` or `smtp` for a refused password, `unreachable` for a server that does not answer or fails TLS.
    */
   verify(connection: PasswordConnection): Promise<MailAccountProfile>;
+  /**
+   * "Test credentials": the same two connections as {@link verify}, but BOTH sides are always tried and each answers on its own, so one run
+   * tells the person everything that is wrong. Connects, signs in, opens the INBOX (IMAP) and greets and signs in (SMTP); sends and stores
+   * nothing. Never throws for a server that refuses or cannot be reached: that is the answer.
+   */
+  test(connection: PasswordConnection): Promise<MailConnectionTestResponse>;
 }
 
 export type MailDriver = OAuthMailDriver | PasswordMailDriver;

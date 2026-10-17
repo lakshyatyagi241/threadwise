@@ -18,7 +18,7 @@ A schedule sends one message to recipients at a time you choose, once or on a re
 
 1. Open **Scheduled** and select **Schedule message**. It takes five steps, and each is checked before **Next**.
 2. **Basics.** Name the schedule (an internal label), tick the sender or senders, and pick the type: **Plain text**, **Template**, **With media** or **Location**. If you tick several senders, each runs its own schedule with a fair share of the audience.
-3. **Recipients.** Choose a source: saved **Group**s, **Tags**, an **Audience queue** (the recipients of past broadcasts) or **Numbers** that you paste with the country code and no plus sign. The total is shown, and contacts who opted out or are archived are left out.
+3. **Recipients.** Choose a source: saved **Group**s, **Tags**, an **Audience queue** (the recipients of past broadcasts and campaigns, each marked **Broadcast** or **Campaign**) or **Numbers** that you paste with the country code and no plus sign. The total is shown, and contacts who opted out or are archived are left out.
 4. **Message.** Write the text, pick an approved template and fill its variables (you see it with sample values), upload a file or give a link, or enter latitude and longitude, depending on the type. A WhatsApp Cloud API number sends an approved template even outside the 24-hour window; a file must fit the limits shown for the numbers you ticked. Use `{name}`, `{phone}` or `{email}` to personalise. You see an estimated send time and a live preview.
 5. **When.** Choose **Send once** with a date, time and timezone, or **Recurring** every number of days, weeks or months. Weekly schedules need at least one weekday, and you can end never or on a date. The time must be a few minutes ahead.
 6. **Review.** Check the summary. You can tick **Send a test first** and enter a number to receive one preview message. Then select **Schedule message**.
@@ -27,6 +27,7 @@ A schedule sends one message to recipients at a time you choose, once or on a re
 
 - The list has status tabs, a search box and a **Next to fire** card. Row actions depend on status: **Pause**, **Resume**, **Run now**, **Cancel**, **Retry with new time** and **Delete**.
 - While a schedule is waiting or paused you can **Edit** it: the same five steps, opened on what you saved. If someone else changed it meanwhile you are asked to reload.
+- **Quiet hours.** If your workspace set quiet hours in the [Compliance center](help:compliance-center), a marketing schedule does not message a recipient inside them. That recipient is marked **Held until** a time, the others are sent, and the schedule pauses and carries on by itself when the first held recipient may be messaged. A schedule of utility templates is never held.
 - A schedule's page shows a chart of delivery over time (queued, sent, delivered, read, failed) and a recipients table you can filter by status and search. Numbers that are warming up follow the [WhatsApp warmer](help:whatsapp-warmer-overview).
 
 ## Plan and access

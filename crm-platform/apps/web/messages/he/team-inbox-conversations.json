@@ -44,9 +44,6 @@
         "unassigned": "לא משויך",
         "unread": "לא נקרא"
       },
-      "statusFilter": "סטטוס",
-      "statusOpen": "פתוחה",
-      "statusAll": "כל הסטטוסים",
       "status": {
         "open": "פתוחה",
         "pending": "ממתינה",
@@ -61,7 +58,6 @@
         "high": "גבוהה",
         "urgent": "דחופה"
       },
-      "channelFilter": "ערוץ",
       "allChannels": "כל הערוצים",
       "archived": "בארכיון",
       "backToInbox": "חזרה לתיבת ההודעות",
@@ -107,7 +103,49 @@
         }
       },
       "select": "בחירה",
-      "selectDone": "סיום"
+      "selectDone": "סיום",
+      "filters": {
+        "open": "מסננים",
+        "openActive": "מסננים ({count} פעילים)",
+        "title": "מסננים",
+        "close": "סגירה",
+        "reset": "איפוס",
+        "cancel": "ביטול",
+        "apply": "החלה",
+        "status": "סטטוס צ׳אט",
+        "statusHint": "ללא בחירה יוצגו צ׳אטים פתוחים וממתינים.",
+        "conversation": "שיחה",
+        "any": "הכול",
+        "assigned": "משויכת",
+        "unassigned": "לא משויכת",
+        "unattended": "ללא מענה",
+        "labels": "תגיות",
+        "channels": "ערוצים",
+        "agents": "סוכנים",
+        "sortBy": "מיון לפי",
+        "recent": "אחרונים",
+        "old": "ישנים",
+        "dateRange": "טווח תאריכים (פעילות אחרונה)",
+        "from": "מתאריך",
+        "to": "עד תאריך",
+        "select": "בחירת אפשרות",
+        "search": "חיפוש",
+        "noMatch": "אין התאמות",
+        "today": "היום",
+        "last7": "7 הימים האחרונים",
+        "last30": "30 הימים האחרונים",
+        "thisMonth": "החודש",
+        "clearDates": "ניקוי תאריכים",
+        "previousMonth": "החודש הקודם",
+        "nextMonth": "החודש הבא"
+      },
+      "rowMenu": "פעולות נוספות עבור {name}",
+      "priorityMenu": "עדיפות",
+      "statusFilter": "סטטוס",
+      "statusOpen": "פתוחה",
+      "statusAll": "כל הסטטוסים",
+      "channelFilter": "ערוץ",
+      "selectRow": "בחירת {name}"
     },
     "status": {
       "received": "התקבלה",
@@ -232,7 +270,9 @@
         "undone": "שינוי השלב בוטל: חזרה ל-{stage}.",
         "undoneToast": "השלב הוחזר ל-{stage}.",
         "couldNotUndo": "אי אפשר עוד לבטל את השינוי הזה: איש הקשר התקדם או שהשינוי כבר בוטל."
-      }
+      },
+      "heldUntil": "מוחזק עד {when}",
+      "heldWhy": "הודעת השיווק הזו ממתינה לסיום שעות השקט שלכם. היא תישלח אז, אם איש הקשר לא ביטל את ההרשמה בינתיים."
     },
     "media": {
       "openImage": "פתח תמונה {name}",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "הודעה חדשה: {text}",
       "attachment": "קובץ מצורף",
       "jumpLatest": "עבור להודעה האחרונה",
-      "jumpLatestNew": "{count, plural, one {הודעה חדשה אחת} two {# הודעות חדשות} other {# הודעות חדשות}}"
+      "jumpLatestNew": "{count, plural, one {הודעה חדשה אחת} two {# הודעות חדשות} other {# הודעות חדשות}}",
+      "searchOpen": "חיפוש בצ׳אט הזה",
+      "searchPlaceholder": "חיפוש בצ׳אט הזה",
+      "searchCount": "{current} מתוך {total}",
+      "searchNone": "אין התאמות",
+      "searchPrev": "התוצאה הקודמת",
+      "searchNext": "התוצאה הבאה",
+      "searchClose": "סגירת החיפוש"
     },
     "groupThread": {
       "openGroup": "פתיחת הקבוצה",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "תגובות שמורות",
-      "savedReplyIssues": "לא מולאו ונשארו כפי שנכתבו ({count}): {list}. יש לתקן לפני השליחה."
+      "savedReplyIssues": "לא מולאו ונשארו כפי שנכתבו ({count}): {list}. יש לתקן לפני השליחה.",
+      "toolbar": {
+        "label": "עיצוב הודעה",
+        "bold": "מודגש",
+        "italic": "נטוי",
+        "underline": "קו תחתון",
+        "strike": "קו חוצה",
+        "bullets": "רשימת תבליטים",
+        "numbers": "רשימה ממוספרת",
+        "ai": {
+          "open": "עוזר AI חכם",
+          "noModel": "לא הופעל מודל AI למרחב העבודה הזה",
+          "title": "עוזר AI חכם",
+          "condense": "קיצור",
+          "condenseHint": "קיצור הטקסט והפיכתו לתמציתי",
+          "fix": "תיקון דקדוק",
+          "fixHint": "תיקון שגיאות דקדוק וכתיב",
+          "positive": "טון חיובי",
+          "positiveHint": "הפיכת הטקסט לחיובי ונלהב יותר",
+          "translate": "תרגום",
+          "translateHint": "תרגום לשפות שונות",
+          "selectLanguage": "בחירת שפה",
+          "searchLanguages": "חיפוש שפות…",
+          "noLanguage": "אין שפה תואמת",
+          "working": "בעבודה…",
+          "empty": "כתבו הודעה קודם.",
+          "failed": "ה-AI לא הצליח לשנות את הטקסט. נסו שוב."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "הערות וציר זמן",
@@ -452,7 +527,13 @@
         "pickTeam": "בחר צוות לשיחה זו",
         "noTeam": "ללא צוות",
         "onLeave": "בחופשה",
-        "onLeaveUntil": "בחופשה עד {date}"
+        "onLeaveUntil": "בחופשה עד {date}",
+        "availability": {
+          "online": "מחובר",
+          "away": "לא זמין",
+          "busy": "עסוק",
+          "offline": "לא מחובר"
+        }
       },
       "presence": {
         "online": "מחובר",

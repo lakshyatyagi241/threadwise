@@ -4,7 +4,9 @@
       "companies": "Şirketler"
     },
     "common": {
-      "dismiss": "Kapat"
+      "dismiss": "Kapat",
+      "yes": "Evet",
+      "no": "Hayır"
     },
     "errors": {
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
@@ -18,7 +20,10 @@
       "planDisabled": "Planınız şirketleri içermiyor. Kilidini açmak için yükseltin.",
       "ownerInvalid": "Sahibi bu çalışma alanının etkin bir üyesi olmalıdır.",
       "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
-      "retry": "Tekrar dene"
+      "retry": "Tekrar dene",
+      "filterInvalid": "Özellik koşullarından biri kullanılamıyor. Özelliği ve değerini kontrol edin.",
+      "exportTooLarge": "Tek dosya için çok fazla şirket var. Listeyi bir filtreyle daraltın ve yeniden dışa aktarın.",
+      "importInvalid": "Bu dosya içe aktarılamıyor. Sütunları adlandıran bir ilk satır gerekir; bu satırda name veya website sütunu bulunmalı ve en fazla 1.000 şirket olmalıdır."
     },
     "list": {
       "eyebrow": "CRM · Kuruluşlar",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Şirketleri sil",
       "deleteManyMessage": "{count, plural, one {Bu şirket silinsin mi? Kişileri ve fırsatları korunur, yalnızca bağlantıları kaldırılır.} other {Bu # şirket silinsin mi? Kişileri ve fırsatları korunur, yalnızca bağlantıları kaldırılır.}}",
       "delete": "Sil",
-      "keep": "Koru"
+      "keep": "Koru",
+      "export": "Dışa aktar",
+      "import": "İçe aktar"
     },
     "toolbar": {
       "label": "Şirketleri filtrele",
@@ -69,7 +76,14 @@
         "name": "Ad A'dan Z'ye"
       },
       "clear": "Temizle",
-      "refresh": "Yenile"
+      "refresh": "Yenile",
+      "sortByProperty": "Ekleyen: {name}",
+      "direction": "Yön",
+      "directions": {
+        "default": "Olağan yön",
+        "asc": "Artan",
+        "desc": "Azalan"
+      }
     },
     "table": {
       "label": "Şirketler",
@@ -82,7 +96,13 @@
       "wonValue": "Kazanılan değer",
       "actions": "İşlemler",
       "delete": "Şirketi sil",
-      "deleteNamed": "{name} şirketini sil"
+      "deleteNamed": "{name} şirketini sil",
+      "website": "Web sitesi",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "size": "Boyut",
+      "owner": "Sahip",
+      "created": "Oluşturulma"
     },
     "form": {
       "eyebrow": "Şirket",
@@ -112,6 +132,17 @@
         "email": "Geçerli bir e-posta adresi girin.",
         "invalid": "Girilenlerin bir kısmı geçerli değil.",
         "ownerInvalid": "Sahibi bu çalışma alanının etkin bir üyesi olmalıdır."
+      },
+      "propertiesTitle": "Özellikler",
+      "propertiesHint": "Ayarlar, Şirket özellikleri altında kurulur",
+      "propertyProblems": {
+        "invalid": "Bu değer özelliğe uymuyor.",
+        "notEditable": "Bu özellik artık düzenlenemiyor. Formu kapatıp yeniden açın.",
+        "required": "Bu özellik zorunludur.",
+        "number": "Bir sayı girin.",
+        "integer": "Bir tam sayı girin.",
+        "email": "Geçerli bir e-posta adresi girin.",
+        "url": "http:// veya https:// ile başlayan tam bir bağlantı girin."
       }
     },
     "toast": {
@@ -125,7 +156,8 @@
       "contactUnlinkFailed": "Kişi çıkarılamadı. Tekrar deneyin.",
       "contactsLinked": "{count, plural, one {# kişi şirkete eklendi.} other {# kişi şirkete eklendi.}}",
       "contactsLinkedSome": "{count, plural, one {# kişi eklendi} other {# kişi eklendi}}, {failed, plural, one {# tanesi eklenemedi.} other {# tanesi eklenemedi.}}",
-      "contactsLinkFailed": "Kişiler eklenemedi. Tekrar deneyin."
+      "contactsLinkFailed": "Kişiler eklenemedi. Tekrar deneyin.",
+      "exportFailed": "Dışa aktarma oluşturulamadı. Birazdan tekrar deneyin."
     },
     "detail": {
       "back": "Tüm şirketler",
@@ -149,7 +181,11 @@
       "address": "Adres",
       "createdBy": "Oluşturan",
       "created": "Oluşturulma",
-      "updated": "Son değişiklik"
+      "updated": "Son değişiklik",
+      "properties": "Özellikler",
+      "yes": "Evet",
+      "no": "Hayır",
+      "generateBrief": "Özet oluştur"
     },
     "contacts": {
       "title": "Kişiler",
@@ -211,6 +247,130 @@
         "address": "Adres",
         "notes": "Notlar",
         "owner": "Sahip"
+      },
+      "propertiesChanged": "Değişen özellikler:"
+    },
+    "picker": {
+      "search": "Şirket ara",
+      "results": "Şirketler",
+      "searching": "Aranıyor",
+      "none": "Eşleşen şirket yok.",
+      "unavailable": "Şirketler şu anda aranamıyor.",
+      "create": "“{name}” oluştur",
+      "creating": "Şirket oluşturuluyor",
+      "clear": "Şirketi kaldır",
+      "loading": "Şirket yükleniyor",
+      "unknown": "Şirket kullanılamıyor",
+      "createFailed": "Şirket oluşturulamadı. Tekrar deneyin.",
+      "createForbidden": "Şirket oluşturma izniniz yok."
+    },
+    "properties": {
+      "title": "Şirket özellikleri",
+      "subtitle": "Bir şirketin saklayabildiği her şey tek yerde: kendi özelliklerin, bölümlere göre gruplanmış.",
+      "section": {
+        "hint": "Bölümler, şirket formunda ve şirket sayfasında özellikleri gruplar."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# şirket} other {# şirket}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# şirketin} other {# şirketin}} bu özellik için bir değeri var. Değerler korunur, ancak özellik şirket formundan ve şirket sayfasından kalkar.",
+        "unused": "Henüz hiçbir şirketin bu özellik için değeri yok."
+      },
+      "modal": {
+        "newTitle": "Şirket özelliği ekle",
+        "descriptionHint": "Şirket formunda alanın altında gösterilir.",
+        "optionsNote": "Bir seçeneği kaldırmak, onu zaten taşıyan şirketleri değiştirmez; kayıtlı değeri korurlar.",
+        "requiredHint": "Şirket formu değer olmadan kaydedilmez.",
+        "visibleHint": "Şirket formunda ve şirket sayfasında göster.",
+        "conditionsHint": "Başka bir özelliğin değeri olana kadar bu özelliği şirket formunda gizle.",
+        "deactivateNote": "Kaydetmek bu özelliği formdan ve şirket sayfasından gizler. Şirketlerin taşıdığı değerler korunur."
+      }
+    },
+    "columns": {
+      "button": "Sütunlar",
+      "label": "Sütun seçin",
+      "hint": "Tablo seçiminizi bu tarayıcıda hatırlar.",
+      "reset": "Olağan sütunlara dön"
+    },
+    "propertyFilters": {
+      "button": "Özellikler",
+      "label": "Şirket özelliklerine göre filtrele",
+      "hint": "Aşağıdakilerin hepsini sağlayan şirketleri göster.",
+      "none": "Henüz koşul yok.",
+      "noProperties": "Henüz filtrelenebilir bir şirket özelliği yok. Ayarlar, Şirket özellikleri bölümünden ekleyin.",
+      "property": "{n}. koşulun özelliği",
+      "operator": "{n}. koşulun işleci",
+      "value": "{n}. koşulun değeri",
+      "remove": "{n}. koşulu kaldır",
+      "add": "Koşul ekle",
+      "clear": "Tümünü temizle",
+      "apply": "Uygula"
+    },
+    "import": {
+      "eyebrow": "Şirketler",
+      "title": "Şirketleri içe aktar",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "done": "Bitti",
+      "start": "İçe aktar",
+      "file": "CSV dosyası",
+      "choose": "CSV dosyası seçin",
+      "change": "Başka dosya seçin",
+      "tooBig": "Bu dosya çok büyük. Bölüp parçalar halinde içe aktarın.",
+      "intro": "İlk satır sütunları adlandırır: name (veya website), email, phone, industry, size, address, notes, owner (bir üyenin e-postası veya adı) ve etiketiyle herhangi bir şirket özelliği. Dosya başına en fazla {max} şirket.",
+      "match": "Mevcut şirketleri tamamla",
+      "matchHint": "Aynı web sitesine (yoksa aynı ada) sahip şirketin boş alanları doldurulur. Zaten dolu olan hiçbir şey değiştirilmez.",
+      "summary": "{total, plural, one {# satır okundu} other {# satır okundu}}: {created} oluşturuldu, {updated} tamamlandı, {unchanged} değişmedi, {failed} içe aktarılamadı.",
+      "ignored": "Bu sütunlar tanınmadı ve atlandı: {columns}.",
+      "failedTitle": "{count, plural, one {# satır içe aktarılamadı} other {# satır içe aktarılamadı}}",
+      "line": "Satır {line}",
+      "moreFailed": "{count, plural, one {Ve # tane daha.} other {Ve # tane daha.}}"
+    },
+    "brief": {
+      "title": "Hesap özeti",
+      "subtitle": "Görebildiğiniz CRM verilerinden AI tarafından yazıldı. Güvenmeden önce kontrol edin.",
+      "loading": "Özet yükleniyor",
+      "unavailableTitle": "Bu çalışma alanı için AI kurulmamış",
+      "unavailable": "Özeti bir AI modeli yazar ve bu çalışma alanında AI anahtarı yok, bu yüzden hiçbir yere veri gönderilmedi.",
+      "addKey": "AI anahtarı ekle",
+      "askAdmin": "Bir yöneticiden AI anahtarı eklemesini isteyin.",
+      "empty": "Bu şirketin kısa bir özetini alın: kim olduğu, fırsatları ve görevleri, görüşmenin ne kadar hareketli olduğu, riskler ve sonraki adımlar.",
+      "generate": "Özet oluştur",
+      "regenerate": "Yeniden yaz",
+      "copy": "Kopyala",
+      "copied": "Özet kopyalandı.",
+      "copyFailed": "Özet kopyalanamadı. Metni seçip elle kopyalayın.",
+      "copyTitle": "{name}: hesap özeti",
+      "stale": "Bu özet yazıldığından beri CRM değişti. Güncel özet için yeniden yazın.",
+      "writtenBy": "{date} tarihinde {model} tarafından yazıldı. AI yanılabilir.",
+      "notice": "Model sayıları, tarihleri, tutarları ve kısa başlıkları alır. Kişi adlarını, e-posta adreslerini, telefon numaralarını, şirket notlarını veya mesaj metnini hiçbir zaman almaz; başlıklardaki sayılar ve e-posta adresleri de önce kaldırılır.",
+      "basedOn": "Dayanak: {kinds}. Yalnızca rolünüzün görmenize izin verdikleri sayılır.",
+      "basedOnNone": "Yalnızca şirket ayrıntılarına dayanır: rolünüz kişileri, fırsatları, görevleri veya görüşmeleri göstermiyor.",
+      "errors": {
+        "tooSoon": "Az önce bir özet yazıldı. Tekrar istemeden önce biraz bekleyin.",
+        "providerFailed": "AI hizmeti özeti yazamadı. Birazdan tekrar deneyin.",
+        "limit": "AI kullanım hakkı şimdilik doldu. Daha sonra tekrar deneyin veya bir yöneticiye danışın.",
+        "forbidden": "Bunu yapmaya izniniz yok.",
+        "notFound": "Bu şirket artık mevcut değil.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin."
+      },
+      "sections": {
+        "activity": "Son etkinlik",
+        "deals": "Fırsatlar",
+        "tasks": "Görevler",
+        "conversations": "Görüşmeler",
+        "properties": "Temel özellikler",
+        "risks": "Riskler",
+        "nextSteps": "Sonraki adımlar"
+      },
+      "source": {
+        "properties": "şirket özellikleri",
+        "contacts": "kişiler",
+        "deals": "fırsatlar",
+        "tasks": "görevler",
+        "conversations": "görüşmeler"
       }
     }
   }

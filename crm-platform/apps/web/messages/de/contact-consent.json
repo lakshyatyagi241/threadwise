@@ -17,7 +17,8 @@
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
       "exportInProgress": "Eine Nachweisdatei wird bereits erstellt. Warte, bis sie fertig ist, und versuche es dann erneut.",
       "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Erstelle eine neue.",
-      "noticeTargetMissing": "Dieses Widget, diese Buchungsseite oder dieser Shop existiert nicht mehr."
+      "noticeTargetMissing": "Dieses Widget, diese Buchungsseite oder dieser Shop existiert nicht mehr.",
+      "notMinor": "Die Einwilligung eines Vormunds kann nur für einen als minderjährig markierten Kontakt erfasst werden."
     },
     "settings": {
       "title": "Einwilligung und STOP-Antworten",
@@ -142,7 +143,10 @@
         "widget": "Website-Chat",
         "booking": "Buchungsseite",
         "commerce": "Shop-Kasse",
-        "lead": "Lead-Erfassung"
+        "lead": "Lead-Erfassung",
+        "gpc": "Global Privacy Control",
+        "dob": "Geburtsdatum oder Alter",
+        "declaration": "Alter nicht bestätigt"
       },
       "by": "von {name}",
       "evidence": {
@@ -165,7 +169,8 @@
         "storeFlag": "Shop-Einstellung",
         "leadSourceId": "Lead-Quelle",
         "leadFormId": "Lead-Formular",
-        "adId": "Anzeige"
+        "adId": "Anzeige",
+        "guardianConsentRef": "Referenz der Vormund-Einwilligung"
       },
       "dialog": {
         "titleGranted": "Als angemeldet markieren",
@@ -181,6 +186,52 @@
         "close": "Schließen",
         "savedGranted": "Als angemeldet markiert.",
         "savedWithdrawn": "Als abgemeldet markiert."
+      },
+      "privacy": {
+        "title": "Datenschutz-Markierungen",
+        "saved": "Gespeichert.",
+        "minorLabel": "Minderjährig",
+        "minorOn": "Seit {date} als minderjährig markiert.",
+        "minorOff": "Nicht als minderjährig markiert.",
+        "rule": {
+          "off": "Ihr Arbeitsbereich hat die Frage zu Kindern im Compliance-Center nicht beantwortet, daher wird Marketing an diesen Kontakt nicht zurückgehalten.",
+          "guardian": "Marketing an diesen Kontakt wird zurückgehalten, bis die Einwilligung eines Elternteils oder Vormunds dokumentiert ist.",
+          "block": "Marketing an diesen Kontakt wird zurückgehalten, weil Ihr Arbeitsbereich angibt, keine Minderjährigen zu verarbeiten."
+        },
+        "guardianBadge": "Einwilligung des Vormunds dokumentiert",
+        "guardianLabel": "Einwilligung von Elternteil oder Vormund",
+        "guardianOn": "Dokumentiert seit {date}. Sie dient nur als Nachweis und abonniert den Kontakt nicht.",
+        "guardianOff": "Nicht dokumentiert.",
+        "recordGuardian": "Einwilligung des Vormunds erfassen",
+        "clearGuardian": "Entfernen",
+        "dnsLabel": "Nicht verkaufen oder teilen",
+        "dnsOn": "Widerspruch seit {date} ({source}).",
+        "dnsOff": "Kein Widerspruch.",
+        "history": "Datenschutz-Verlauf",
+        "event": {
+          "minor": {
+            "on": "Als minderjährig markiert",
+            "off": "Markierung als minderjährig entfernt"
+          },
+          "guardian_consent": {
+            "on": "Einwilligung des Vormunds erfasst",
+            "off": "Einwilligung des Vormunds entfernt"
+          },
+          "sale_share_opt_out": {
+            "on": "Dem Verkauf und der Weitergabe widersprochen",
+            "off": "Widerspruch entfernt"
+          }
+        },
+        "dialog": {
+          "title": "Einwilligung des Vormunds erfassen",
+          "intro": "Halten Sie fest, dass ein Elternteil oder Vormund zugestimmt hat. Das ist nur ein Nachweis: Der Kontakt wird dadurch nicht für Marketing abonniert.",
+          "note": "Wie wurde zugestimmt? (erforderlich)",
+          "noteHint": "Zum Beispiel: Papierformular am Schalter unterschrieben. Schreiben Sie weder Namen noch Kontaktdaten des Vormunds.",
+          "ref": "Referenz (optional)",
+          "refHint": "Eine Formularnummer oder Dokument-ID, die Sie später nachschlagen können."
+        },
+        "minorFrom": "Aus dem angegebenen Geburtsdatum oder Alter gesetzt. Wird am {date} automatisch aufgehoben, sofern keine Person es beibehält.",
+        "minorFromDeclaration": "Gesetzt, weil das Alter in einem Formular nicht bestätigt wurde. Bleibt bestehen, bis eine Person es aufhebt."
       }
     },
     "composer": {
@@ -302,7 +353,10 @@
         "consent_evidence_recorded": "Erlaubt: Der Hinweis wurde übermittelt und die Person hat zugestimmt.",
         "purpose_not_enabled": "Nicht erlaubt: Der Arbeitsbereich hat dies nicht eingeschaltet.",
         "consent_declined": "Nicht erlaubt: Die Person hat abgelehnt.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Nicht erlaubt: Dieser Kontakt ist als minderjährig markiert und Ihr Arbeitsbereich hält Marketing zurück.",
+        "sale_share_opted_out": "Nicht erlaubt: Der Kontakt hat dem Verkauf oder der Weitergabe seiner Daten widersprochen.",
+        "on_dnc_list": "Auf Ihrer „Nicht anrufen“-Liste: keine Marketinganrufe oder -SMS an diese Nummer"
       }
     },
     "notice": {

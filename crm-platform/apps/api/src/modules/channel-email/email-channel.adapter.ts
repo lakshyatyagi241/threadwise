@@ -20,6 +20,7 @@ import { MailOutboundPreparer } from './mail-outbound.preparer';
 import { MailPlan } from './mail-plan';
 import { ConsentUnsubscribeService } from '../contact-consent';
 import { MailSendGuard } from './mail-send.guard';
+import { MailTimeline } from './mail-timeline.service';
 import { MailTokens } from './mail-tokens.service';
 
 /**
@@ -61,6 +62,7 @@ export class EmailChannelAdapter implements ChannelAdapter {
     private readonly preparer: MailOutboundPreparer,
     private readonly guard: MailSendGuard,
     private readonly unsubscribe: ConsentUnsubscribeService,
+    private readonly timeline: MailTimeline,
   ) {}
 
   externalIdOf(): string | null {
@@ -178,6 +180,18 @@ Unsubscribe: ${link.pageUrl}`;
           .get(mailbox.provider)
           .send({ orgId: channel.orgId, mailbox, access }, mail);
         await this.guard.recordSent(channel.orgId, mailbox, everyone);
+        // The contact's timeline (E-19). Once per Message-ID, so a send the dispatcher repeats after the provider already accepted it adds
+        // nothing; never throws.
+        await this.timeline.recordOutbound(channel.orgId, mailbox, {
+          channelUuid: channel.uuid,
+          peerKey: `t:${email.threadId}`,
+          messageId: draft.messageId,
+          subject: email.subject,
+          to,
+          text: envelope.body,
+          sentBy: email.sentBy ?? null,
+          at: new Date(),
+        });
         const meta = await this.preparer.sent(
           { orgId: channel.orgId, mailbox, email, unsubscribeUrl },
           mail,

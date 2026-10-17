@@ -40,6 +40,7 @@ export const MKT_ERROR_KINDS = [
   'trialUnavailable',
   'subscriptionNotFound',
   'subscriptionState',
+  'renewalNotStopped',
   'unexpected',
 ] as const;
 export type MktErrorKind = (typeof MKT_ERROR_KINDS)[number];
@@ -150,6 +151,8 @@ function kindOf(err: ApiError): MktErrorKind {
       return 'subscriptionNotFound';
     case ERROR_CODES.MKT_SUBSCRIPTION_STATE:
       return 'subscriptionState';
+    case ERROR_CODES.MKT_RENEWAL_NOT_STOPPED:
+      return 'renewalNotStopped';
   }
   // A route that is not deployed answers 404 or 501 without one of our codes for it.
   if (err.status === 404 || err.status === 501) return 'unavailable';

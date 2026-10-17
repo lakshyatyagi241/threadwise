@@ -233,6 +233,10 @@ for (const k of [
   'landing_page_enabled',
   'landing_page_title',
   'landing_page_description',
+  'landing_page_heading',
+  'landing_page_sub_heading',
+  'landing_page_button_text',
+  'landing_page_button_link',
 ])
   CONFIG_FIELDS[k] = `drop:${NOT_PRESENT} (the key name is listed in CONFIG_NOT_PRESENT)`;
 CONFIG_FIELDS.ai_configuration =

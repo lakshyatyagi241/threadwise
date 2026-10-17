@@ -25,6 +25,8 @@ export interface IssueContext {
   slots: readonly string[];
   /** Variant B's placeholders (an A/B test). */
   slotsB?: readonly string[];
+  /** The placeholders of each template of the sequence, in order. */
+  slotsSequence?: ReadonlyArray<readonly string[]>;
   now: Date;
   /** The live count of step 2 (null until it answers). */
   count?: Pick<WizardAudienceCount, 'recipients'> | null;
@@ -42,6 +44,8 @@ export function stepOfPath(path: string): WizardView {
     return 1;
   if (head === 'audience') return 2;
   if (head === 'variables' || head === 'variablesB') return 3;
+  // A sequence template's mapping is read with the other mappings (step 3); the template itself and the list belong to step 4.
+  if (head === 'templateSequence' && path.split('.')[2] === 'variables') return 3;
   // 'followUps' (and 'followUps.<i>.action') belong to step 4 with the schedule and retries.
   return 4;
 }
@@ -74,6 +78,7 @@ export function stepIssues(step: WizardView, draft: WizardDraft, ctx: IssueConte
       shared = wizardStepIssues(step, draft, {
         slots: ctx.slots,
         slotsB: ctx.slotsB ?? [],
+        slotsSequence: ctx.slotsSequence ?? [],
         now: ctx.now,
       });
     } catch {
@@ -102,3 +107,15 @@ export const unmappedSlots = (issues: readonly StepIssue[]): string[] =>
 
 export const issueFor = (issues: readonly StepIssue[], path: string): StepIssue | undefined =>
   issues.find((i) => i.path === path);
+
+/**
+ * The issues of one sequence template's mapping, with the path rewritten to `variables.<slot>` so the entry's variables card reads them
+ * as it reads the draft's own.
+ */
+export const sequenceMappingIssues = (issues: readonly StepIssue[], index: number): StepIssue[] =>
+  issues
+    .filter((i) => i.path.startsWith(`templateSequence.${index}.variables.`))
+    .map((i) => ({
+      ...i,
+      path: i.path.replace(`templateSequence.${index}.variables.`, 'variables.'),
+    }));

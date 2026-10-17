@@ -85,7 +85,8 @@
       "outsideWindow": "Fuera de 24 h",
       "selected": "{count, plural, one {# seleccionada} other {# seleccionadas}}",
       "sent": "Difusión de Instagram enviada: {sent} entregados{failed, plural, =0 {} one {, # fallido} other {, # fallidos}}.",
-      "sentNone": "No se pudo enviar a ningún destinatario. Comprueba la conexión con Instagram."
+      "sentNone": "No se pudo enviar a ningún destinatario. Comprueba la conexión con Instagram.",
+      "skipped": "Sin mensaje por el consentimiento: {count}"
     }
   }
 }

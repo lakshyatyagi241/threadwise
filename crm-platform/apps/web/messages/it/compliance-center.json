@@ -18,7 +18,8 @@
       "notices": "Informative",
       "links": "Link a privacy e termini",
       "subprocessors": "Sub-responsabili",
-      "windows": "Orari di silenzio e chiamate"
+      "windows": "Orari di silenzio e chiamate",
+      "dnc": "Non chiamare"
     },
     "saveBar": {
       "unsaved": "Hai modifiche non salvate.",
@@ -35,7 +36,8 @@
       "duplicate": "Hai già un sub-responsabile con quel nome.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
       "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
-      "unexpected": "Qualcosa è andato storto. Riprova."
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "dncInvalid": "Impossibile leggere il file: non contiene numeri di telefono, oppure ne contiene troppi in una volta sola."
     },
     "problems": {
       "httpsOnly": "Usa un indirizzo che inizia con https://.",
@@ -165,7 +167,7 @@
             "unset": "Rispondi alla domanda sui minori in Contatti e minori.",
             "minorsNoParental": "Possono esserci minori, ma il consenso dei genitori è disattivato. Questo profilo considera minore chiunque abbia meno di {age} anni.",
             "no_minors": "Non tratti consapevolmente i dati di minori. Questo profilo considera minore chiunque abbia meno di {age} anni.",
-            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. La conservazione delle prove per ogni contatto non è ancora disponibile."
+            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. Contrassegna un contatto come minorenne sulla sua scheda di consenso e registra lì il consenso del tutore."
           }
         },
         "opt_out_notice": {
@@ -220,9 +222,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Orari di silenzio e fasce di chiamata non sono ancora applicati",
+          "title": "Ore di silenzio e finestre di chiamata sono applicate",
           "detail": {
-            "notEnforced": "I tuoi orari di silenzio e la tua fascia di chiamata sono salvati, ma per ora nulla trattiene un messaggio né blocca una chiamata al di fuori di essi. Organizzati di conseguenza."
+            "enforced": "I messaggi di marketing durante le ore di silenzio vengono trattenuti fino alla loro fine, e una chiamata fuori dalla finestra di chiamata viene rifiutata indicando quando si apre. Le risposte entro la finestra di 24 ore e gli avvisi di servizio non vengono mai trattenuti. Il registro DND è solo una nota: per ora non viene verificato nulla."
           }
         }
       }
@@ -322,7 +324,9 @@
         "hint": "La legge DPDP consente alle persone di gestire il consenso tramite un gestore del consenso registrato. Indica qui il tuo, se ne usi uno.",
         "managerName": "Gestore del consenso",
         "managerUrl": "Link del gestore del consenso",
-        "placeholderNote": "È solo una nota. Per ora nulla è collegato a un gestore del consenso."
+        "placeholderNote": "È solo una nota. Per ora nulla è collegato a un gestore del consenso.",
+        "managerRegistration": "Numero di registrazione del gestore del consenso",
+        "managerRegistrationHint": "Il numero con cui l'Autorità per la protezione dei dati ha registrato il tuo gestore del consenso. Solo una nota."
       }
     },
     "contacts": {
@@ -344,7 +348,7 @@
       },
       "children": {
         "title": "Dati dei minori",
-        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi detenere dati di minori, così vengono mostrate le regole giuste.",
+        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi trattenere dati di minori, così vengono mostrate le regole giuste. Dopo la risposta, il marketing verso un contatto contrassegnato come minorenne viene trattenuto: sempre se non tratti consapevolmente dati di minori, e finché non è registrato il consenso del tutore se possono esserci minori.",
         "policy": "Minori tra i tuoi contatti",
         "policies": {
           "unset": "Nessuna risposta ancora",
@@ -352,7 +356,7 @@
           "may_include_minors": "Tra i nostri contatti possono esserci minori"
         },
         "parental": "Per i minori è richiesto il consenso dei genitori",
-        "parentalHint": "Un indicatore che registra la tua politica. Raccogliere e conservare le prove del consenso dei genitori per ogni contatto non è ancora disponibile.",
+        "parentalHint": "Registra la tua politica e trattiene il marketing verso i contatti contrassegnati come minorenni finché non è registrato il consenso del tutore. Contrassegni un contatto come minorenne e registri quel consenso sulla sua scheda di consenso.",
         "age": "I profili che hai attivato considerano minore chiunque abbia meno di {age} anni.",
         "dpdpNeedsAnswer": "Il profilo DPDP ti chiede di rispondere a questa domanda."
       }
@@ -379,18 +383,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Queste impostazioni sono salvate, ma non ancora applicate. Un messaggio non viene trattenuto e una chiamata non viene bloccata al di fuori degli orari che imposti. Pianifica invii e chiamate di conseguenza.",
-      "intro": "Alcune norme limitano quando i messaggi e le chiamate di marketing possono raggiungere le persone. Registra qui i tuoi orari di lavoro.",
+      "intro": "Alcune regole limitano quando i messaggi di marketing e le chiamate possono raggiungere le persone. Imposta qui i tuoi orari: un messaggio di marketing inviato nelle ore di silenzio attende e parte quando finiscono, e una chiamata fuori dalla finestra di chiamata non viene effettuata.",
       "quiet": {
         "title": "Orari di silenzio per i messaggi",
-        "hint": "Orari in cui non vuoi che i messaggi di marketing raggiungano le persone. Il periodo può attraversare la mezzanotte.",
+        "hint": "Ore in cui i messaggi di marketing non partono. Attendono e vengono inviati quando le ore finiscono. Il periodo può superare la mezzanotte.",
         "enabled": "Orari di silenzio attivi",
         "start": "Silenzio dalle",
         "end": "Silenzio fino alle"
       },
       "calling": {
         "title": "Fascia di chiamata",
-        "hint": "Gli unici orari in cui effettuare chiamate di marketing, nei giorni che scegli.",
+        "hint": "Le uniche ore in cui si effettuano chiamate di marketing, nei giorni che scegli. Una chiamata fuori da esse viene rifiutata e indica quando si apre la finestra.",
         "enabled": "Fascia di chiamata attiva",
         "start": "Chiamate dalle",
         "end": "Chiamate fino alle",
@@ -407,8 +410,8 @@
       },
       "suggested": "Le leggi che hai attivato suggeriscono dalle {start} alle {end}.",
       "zone": {
-        "label": "Fuso orario",
-        "hint": "Gli orari vengono letti in questo fuso. Il fuso del tuo spazio di lavoro è {zone}.",
+        "label": "Fuso orario di riserva",
+        "hint": "Gli orari si leggono sull’orologio del singolo contatto: la sua proprietà del fuso orario, altrimenti il prefisso internazionale del numero. Questo fuso si usa quando nessuno dei due è noto. Il fuso del tuo spazio di lavoro è {zone}.",
         "workspace": "Fuso orario dello spazio di lavoro ({zone})"
       },
       "dnd": {
@@ -421,8 +424,10 @@
           "sg_dnc": "Do Not Call di Singapore",
           "custom": "Il tuo elenco"
         },
-        "note": "È solo una nota. Per ora non viene verificato nulla su alcun registro."
-      }
+        "note": "È solo una nota. Per ora non viene verificato nulla su alcun registro.",
+        "listNote": "I numeri del tuo elenco \"Non chiamare\" (l'ultima scheda) sono già esclusi dalle chiamate e dagli SMS di marketing."
+      },
+      "enforcedNote": "Le ore di silenzio trattengono un messaggio di marketing fino alla loro fine, e la finestra di chiamata rifiuta una chiamata fuori da essa. Si usa l’orologio di ciascun contatto. Le risposte entro la finestra di 24 ore e gli avvisi di servizio non vengono mai trattenuti."
     },
     "subprocessors": {
       "intro": "I fornitori che trattano dati personali per il tuo spazio di lavoro: che cosa fanno, quali dati ricevono e dove. Puoi pubblicare l'elenco su una pagina pubblica.",
@@ -487,6 +492,55 @@
       "privacy": "Informativa sulla privacy",
       "terms": "Termini",
       "notFound": "Pagina non trovata"
+    },
+    "hold": {
+      "heldUntil": "Trattenuto fino a {when} (ore di silenzio)",
+      "heldCount": "{count} trattenuti per le ore di silenzio"
+    },
+    "dnc": {
+      "intro": "I numeri di questo elenco non ricevono marketing via voce o SMS, qualunque sia la cronologia del consenso. WhatsApp, email e messaggi di servizio non vengono trattenuti da questo elenco. Da qui non viene controllato nulla in un registro nazionale: aggiungi l'estratto che hai il diritto di scaricare.",
+      "addTitle": "Aggiungi numeri",
+      "numbers": "Numeri di telefono",
+      "numbersHint": "Uno per riga, oppure separati da virgole. Fino a {max} alla volta; per averne di più usa il file.",
+      "country": "Prefisso internazionale per i numeri locali",
+      "countryHint": "Un numero scritto senza prefisso internazionale viene letto con questo.",
+      "note": "Nota",
+      "noteHint": "Facoltativa. Perché questi numeri sono nell'elenco.",
+      "add": "Aggiungi all'elenco",
+      "adding": "Aggiunta in corso...",
+      "or": "oppure",
+      "import": "Aggiungi da un file CSV",
+      "importing": "Lettura del file...",
+      "importHint": "La colonna chiamata phone, mobile o number, altrimenti la prima colonna. Un file grande viene letto a parti.",
+      "fromRegistry": "Il file è un estratto di un registro che ho il diritto di usare",
+      "progress": "Invio della parte {done} di {of}...",
+      "added": "{count, plural, =0 {Niente di nuovo da aggiungere} one {# numero aggiunto} other {# numeri aggiunti}}",
+      "result": "{added} aggiunti, {already} già nell'elenco, {invalid} non sono numeri di telefono.",
+      "invalidSamples": "Ad esempio: {samples}",
+      "listTitle": "Numeri nell'elenco",
+      "total": "{count, plural, =0 {Nessun numero nell'elenco} one {# numero nell'elenco} other {# numeri nell'elenco}}",
+      "search": "Cerca un numero",
+      "loading": "Caricamento dell'elenco...",
+      "empty": "Ancora nessun numero",
+      "emptyHint": "Aggiungi i numeri che hanno chiesto di non essere chiamati né contattati via SMS, oppure un estratto di un registro che puoi usare.",
+      "noMatch": "Nessun numero corrisponde",
+      "source": {
+        "manual": "Aggiunto a mano",
+        "import": "Da un file",
+        "contact_request": "Su richiesta della persona",
+        "registry_export": "Estratto di registro"
+      },
+      "remove": "Rimuovi",
+      "removeLabel": "Rimuovi {phone} dall'elenco",
+      "removed": "Numero rimosso dall'elenco",
+      "newer": "Più recenti",
+      "older": "Meno recenti",
+      "confirm": {
+        "title": "Rimuovere questo numero?",
+        "message": "{phone} potrà tornare a ricevere chiamate e SMS di marketing, a meno che il contatto non abbia revocato il consenso. Rimuovilo solo se la persona te lo ha chiesto o se è stato aggiunto per errore.",
+        "confirm": "Rimuovi il numero",
+        "cancel": "Mantienilo"
+      }
     }
   }
 }

@@ -95,7 +95,28 @@
         "required": "Verplicht",
         "removeField": "Verwijderen",
         "options": "Opties (gescheiden door komma's)",
-        "optionsPlaceholder": "Optie 1, Optie 2, Optie 3"
+        "optionsPlaceholder": "Optie 1, Optie 2, Optie 3",
+        "mapsTo": "Koppelt aan",
+        "mapsToHint": "Slaat dit antwoord op in een contacteigenschap wanneer het formulier wordt verzonden.",
+        "mapsToNone": "Niet opslaan in een contacteigenschap",
+        "mapsToSystemGroup": "Contactvelden",
+        "mapsToCustomGroup": "Aangepaste eigenschappen",
+        "mapsToSystem": {
+          "name": "Volledige naam",
+          "first_name": "Voornaam",
+          "last_name": "Achternaam",
+          "email": "E-mail",
+          "title": "Functietitel",
+          "language": "Taal",
+          "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Privacy & toestemming",
+        "mapsToPrivacy": {
+          "age": "Leeftijd (minderjarigheidscontrole)",
+          "date_of_birth": "Geboortedatum (minderjarigheidscontrole)",
+          "consent_marketing": "Marketingtoestemming (WhatsApp)",
+          "consent_service": "Service-overeenkomst (geen marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Koptekst",
@@ -130,15 +151,24 @@
       "loading": "Links laden…",
       "retry": "Opnieuw proberen",
       "searchPlaceholder": "Zoek op naam of link",
-      "create": { "cta": "Nieuwe link" },
+      "create": {
+        "cta": "Nieuwe link"
+      },
       "stats": {
         "all": "Alle links",
         "live": "Actief",
         "totalClicks": "Totaal aantal klikken",
         "avgClicks": "Gem. klikken / link"
       },
-      "tabs": { "all": "Alle", "live": "Actief", "paused": "Gepauzeerd" },
-      "status": { "live": "Actief", "paused": "Gepauzeerd" },
+      "tabs": {
+        "all": "Alle",
+        "live": "Actief",
+        "paused": "Gepauzeerd"
+      },
+      "status": {
+        "live": "Actief",
+        "paused": "Gepauzeerd"
+      },
       "empty": {
         "title": "Nog geen links",
         "description": "Maak een link om te delen in advertenties, bio's of een QR-code."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "Terug naar links",
         "newHeading": "Nieuwe link",
-        "step": { "destination": "Bestemming", "message": "Startbericht", "tracking": "Tracking" },
+        "step": {
+          "destination": "Bestemming",
+          "message": "Startbericht",
+          "tracking": "Tracking"
+        },
         "name": "Naam",
         "status": "Status",
         "countryCode": "Landcode",
@@ -194,6 +228,14 @@
         "shortUrl": "Verkorte link",
         "waUrl": "WhatsApp-link",
         "qrAlt": "QR-code voor deze link"
+      },
+      "public": {
+        "missingTitle": "Link niet gevonden",
+        "missingBody": "Deze link bestaat niet of is verwijderd.",
+        "goneTitle": "Link niet meer actief",
+        "goneBody": "Deze link is gepauzeerd of verlopen.",
+        "errorTitle": "Er is iets misgegaan",
+        "errorBody": "We konden deze link niet openen. Probeer het opnieuw."
       }
     }
   }

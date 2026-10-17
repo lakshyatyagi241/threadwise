@@ -477,3 +477,13 @@ export function plain(v: unknown): unknown {
   }
   return v;
 }
+
+/**
+ * The first n UTF-16 units of s, never ending in half of an emoji. A text cut by character count can leave a lone high surrogate,
+ * which Postgres refuses inside JSON (SQLSTATE 22P02) and which no chat can show. Use this for every cut of text that came from a client.
+ */
+export function cutText(s: string, n: number): string {
+  if (s.length <= n) return s;
+  const c = s.charCodeAt(n - 1);
+  return s.slice(0, c >= 0xd800 && c <= 0xdbff ? n - 1 : n);
+}

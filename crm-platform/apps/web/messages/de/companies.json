@@ -4,7 +4,9 @@
       "companies": "Unternehmen"
     },
     "common": {
-      "dismiss": "Ausblenden"
+      "dismiss": "Ausblenden",
+      "yes": "Ja",
+      "no": "Nein"
     },
     "errors": {
       "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
@@ -18,7 +20,10 @@
       "planDisabled": "Ihr Tarif enthält keine Unternehmen. Wechseln Sie auf einen höheren Tarif, um sie freizuschalten.",
       "ownerInvalid": "Der Eigentümer muss ein aktives Mitglied dieses Workspace sein.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
-      "retry": "Erneut versuchen"
+      "retry": "Erneut versuchen",
+      "filterInvalid": "Eine der Eigenschaftsbedingungen kann nicht verwendet werden. Prüfen Sie die Eigenschaft und ihren Wert.",
+      "exportTooLarge": "Das sind zu viele Unternehmen für eine Datei. Grenzen Sie die Liste mit einem Filter ein und exportieren Sie erneut.",
+      "importInvalid": "Diese Datei kann nicht importiert werden. Sie braucht eine erste Zeile mit den Spaltennamen, darunter eine Spalte name oder website, und höchstens 1.000 Unternehmen."
     },
     "list": {
       "eyebrow": "CRM · Organisationen",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Unternehmen löschen",
       "deleteManyMessage": "{count, plural, one {Dieses Unternehmen löschen? Seine Kontakte und Deals bleiben erhalten und werden nur getrennt.} other {Diese # Unternehmen löschen? Ihre Kontakte und Deals bleiben erhalten und werden nur getrennt.}}",
       "delete": "Löschen",
-      "keep": "Behalten"
+      "keep": "Behalten",
+      "export": "Exportieren",
+      "import": "Importieren"
     },
     "toolbar": {
       "label": "Unternehmen filtern",
@@ -69,7 +76,14 @@
         "name": "Name A bis Z"
       },
       "clear": "Zurücksetzen",
-      "refresh": "Aktualisieren"
+      "refresh": "Aktualisieren",
+      "sortByProperty": "Von {name}",
+      "direction": "Richtung",
+      "directions": {
+        "default": "Übliche Richtung",
+        "asc": "Aufsteigend",
+        "desc": "Absteigend"
+      }
     },
     "table": {
       "label": "Unternehmen",
@@ -82,7 +96,13 @@
       "wonValue": "Gewonnener Wert",
       "actions": "Aktionen",
       "delete": "Unternehmen löschen",
-      "deleteNamed": "Unternehmen {name} löschen"
+      "deleteNamed": "Unternehmen {name} löschen",
+      "website": "Website",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "size": "Größe",
+      "owner": "Eigentümer",
+      "created": "Erstellt"
     },
     "form": {
       "eyebrow": "Unternehmen",
@@ -112,6 +132,17 @@
         "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
         "invalid": "Einige Eingaben sind ungültig.",
         "ownerInvalid": "Der Eigentümer muss ein aktives Mitglied dieses Workspace sein."
+      },
+      "propertiesTitle": "Eigenschaften",
+      "propertiesHint": "einzurichten unter Einstellungen, Unternehmenseigenschaften",
+      "propertyProblems": {
+        "invalid": "Dieser Wert passt nicht zur Eigenschaft.",
+        "notEditable": "Diese Eigenschaft kann nicht mehr bearbeitet werden. Schließen Sie das Formular und öffnen Sie es erneut.",
+        "required": "Diese Eigenschaft ist erforderlich.",
+        "number": "Geben Sie eine Zahl ein.",
+        "integer": "Geben Sie eine ganze Zahl ein.",
+        "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+        "url": "Geben Sie einen vollständigen Link ein, der mit http:// oder https:// beginnt."
       }
     },
     "toast": {
@@ -125,7 +156,8 @@
       "contactUnlinkFailed": "Der Kontakt konnte nicht entfernt werden. Versuchen Sie es erneut.",
       "contactsLinked": "{count, plural, one {# Kontakt zum Unternehmen hinzugefügt.} other {# Kontakte zum Unternehmen hinzugefügt.}}",
       "contactsLinkedSome": "{count, plural, one {# Kontakt hinzugefügt} other {# Kontakte hinzugefügt}}, {failed, plural, one {# konnte nicht hinzugefügt werden.} other {# konnten nicht hinzugefügt werden.}}",
-      "contactsLinkFailed": "Die Kontakte konnten nicht hinzugefügt werden. Versuchen Sie es erneut."
+      "contactsLinkFailed": "Die Kontakte konnten nicht hinzugefügt werden. Versuchen Sie es erneut.",
+      "exportFailed": "Der Export konnte nicht erstellt werden. Versuchen Sie es gleich noch einmal."
     },
     "detail": {
       "back": "Alle Unternehmen",
@@ -149,7 +181,11 @@
       "address": "Adresse",
       "createdBy": "Erstellt von",
       "created": "Erstellt",
-      "updated": "Zuletzt geändert"
+      "updated": "Zuletzt geändert",
+      "properties": "Eigenschaften",
+      "yes": "Ja",
+      "no": "Nein",
+      "generateBrief": "Kurzübersicht erstellen"
     },
     "contacts": {
       "title": "Kontakte",
@@ -211,6 +247,130 @@
         "address": "Adresse",
         "notes": "Notizen",
         "owner": "Eigentümer"
+      },
+      "propertiesChanged": "Geänderte Eigenschaften:"
+    },
+    "picker": {
+      "search": "Unternehmen suchen",
+      "results": "Unternehmen",
+      "searching": "Suche läuft",
+      "none": "Kein Unternehmen passt.",
+      "unavailable": "Die Unternehmen können gerade nicht durchsucht werden.",
+      "create": "„{name}“ anlegen",
+      "creating": "Unternehmen wird angelegt",
+      "clear": "Unternehmen entfernen",
+      "loading": "Unternehmen wird geladen",
+      "unknown": "Unternehmen nicht verfügbar",
+      "createFailed": "Das Unternehmen konnte nicht angelegt werden. Versuchen Sie es erneut.",
+      "createForbidden": "Sie dürfen keine Unternehmen anlegen."
+    },
+    "properties": {
+      "title": "Unternehmenseigenschaften",
+      "subtitle": "Alles, was ein Unternehmen speichern kann, an einem Ort: Ihre eigenen Eigenschaften, in Abschnitte gegliedert.",
+      "section": {
+        "hint": "Abschnitte gruppieren die Eigenschaften im Unternehmensformular und auf der Unternehmensseite."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# Unternehmen} other {# Unternehmen}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# Unternehmen hat} other {# Unternehmen haben}} einen Wert für diese Eigenschaft. Die Werte bleiben erhalten, aber die Eigenschaft verschwindet aus dem Unternehmensformular und von der Unternehmensseite.",
+        "unused": "Noch kein Unternehmen hat einen Wert für diese Eigenschaft."
+      },
+      "modal": {
+        "newTitle": "Unternehmenseigenschaft hinzufügen",
+        "descriptionHint": "Wird im Unternehmensformular unter dem Feld angezeigt.",
+        "optionsNote": "Das Entfernen einer Option ändert Unternehmen, die sie bereits haben, nicht; sie behalten den gespeicherten Wert.",
+        "requiredHint": "Das Unternehmensformular lässt sich ohne Wert nicht speichern.",
+        "visibleHint": "Im Unternehmensformular und auf der Unternehmensseite anzeigen.",
+        "conditionsHint": "Diese Eigenschaft im Unternehmensformular ausblenden, bis eine andere Eigenschaft einen Wert hat.",
+        "deactivateNote": "Beim Speichern wird diese Eigenschaft im Formular und auf der Unternehmensseite ausgeblendet. Die Werte der Unternehmen bleiben erhalten."
+      }
+    },
+    "columns": {
+      "button": "Spalten",
+      "label": "Spalten auswählen",
+      "hint": "Die Tabelle merkt sich Ihre Auswahl in diesem Browser.",
+      "reset": "Zurück zu den üblichen Spalten"
+    },
+    "propertyFilters": {
+      "button": "Eigenschaften",
+      "label": "Nach Unternehmenseigenschaften filtern",
+      "hint": "Unternehmen anzeigen, auf die alle diese Bedingungen zutreffen.",
+      "none": "Noch keine Bedingung.",
+      "noProperties": "Nach Unternehmenseigenschaften kann noch nicht gefiltert werden. Fügen Sie in den Einstellungen unter Unternehmenseigenschaften eine hinzu.",
+      "property": "Eigenschaft von Bedingung {n}",
+      "operator": "Operator von Bedingung {n}",
+      "value": "Wert von Bedingung {n}",
+      "remove": "Bedingung {n} entfernen",
+      "add": "Bedingung hinzufügen",
+      "clear": "Alle löschen",
+      "apply": "Anwenden"
+    },
+    "import": {
+      "eyebrow": "Unternehmen",
+      "title": "Unternehmen importieren",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "done": "Fertig",
+      "start": "Importieren",
+      "file": "CSV-Datei",
+      "choose": "CSV-Datei auswählen",
+      "change": "Andere Datei auswählen",
+      "tooBig": "Die Datei ist zu groß. Teilen Sie sie auf und importieren Sie die Teile.",
+      "intro": "Die erste Zeile nennt die Spalten: name (oder website), email, phone, industry, size, address, notes, owner (E-Mail-Adresse oder Name eines Mitglieds) und jede Unternehmenseigenschaft mit ihrer Bezeichnung. Bis zu {max} Unternehmen pro Datei.",
+      "match": "Bereits vorhandene Unternehmen ergänzen",
+      "matchHint": "Bei einem Unternehmen mit derselben Website (ohne Website: demselben Namen) werden die leeren Felder ausgefüllt. Vorhandene Angaben bleiben unverändert.",
+      "summary": "{total, plural, one {# Zeile gelesen} other {# Zeilen gelesen}}: {created} erstellt, {updated} ergänzt, {unchanged} unverändert, {failed} nicht importiert.",
+      "ignored": "Diese Spalten wurden nicht erkannt und übersprungen: {columns}.",
+      "failedTitle": "{count, plural, one {# Zeile wurde nicht importiert} other {# Zeilen wurden nicht importiert}}",
+      "line": "Zeile {line}",
+      "moreFailed": "{count, plural, one {Und # weitere.} other {Und # weitere.}}"
+    },
+    "brief": {
+      "title": "Konto-Kurzübersicht",
+      "subtitle": "Von AI aus den CRM-Daten geschrieben, die Sie sehen können. Prüfen Sie sie, bevor Sie sich darauf verlassen.",
+      "loading": "Kurzübersicht wird geladen",
+      "unavailableTitle": "AI ist für diesen Arbeitsbereich nicht eingerichtet",
+      "unavailable": "Eine Kurzübersicht wird von einem AI-Modell geschrieben, und dieser Arbeitsbereich hat keinen AI-Schlüssel, daher wurde nichts versendet.",
+      "addKey": "AI-Schlüssel hinzufügen",
+      "askAdmin": "Bitten Sie einen Admin, einen AI-Schlüssel hinzuzufügen.",
+      "empty": "Erhalten Sie eine kurze Zusammenfassung dieses Unternehmens: wer es ist, seine Deals und Aufgaben, wie aktiv die Kommunikation ist, die Risiken und was als Nächstes zu tun ist.",
+      "generate": "Kurzübersicht erstellen",
+      "regenerate": "Neu schreiben",
+      "copy": "Kopieren",
+      "copied": "Kurzübersicht kopiert.",
+      "copyFailed": "Die Kurzübersicht konnte nicht kopiert werden. Markieren Sie den Text und kopieren Sie ihn von Hand.",
+      "copyTitle": "{name}: Konto-Kurzübersicht",
+      "stale": "Das CRM hat sich seit dem Schreiben dieser Kurzübersicht geändert. Schreiben Sie sie neu, um eine aktuelle zu erhalten.",
+      "writtenBy": "Geschrieben am {date} von {model}. AI kann sich irren.",
+      "notice": "Das Modell erhält Anzahlen, Daten, Beträge und kurze Titel. Es erhält nie Kontaktnamen, E-Mail-Adressen, Telefonnummern, Unternehmensnotizen oder Nachrichtentexte, und Zahlen und E-Mail-Adressen in Titeln werden vorher entfernt.",
+      "basedOn": "Basiert auf: {kinds}. Gezählt wird nur, was Ihre Rolle sehen darf.",
+      "basedOnNone": "Basiert nur auf den Unternehmensdaten: Ihre Rolle zeigt keine Kontakte, Deals, Aufgaben oder Unterhaltungen.",
+      "errors": {
+        "tooSoon": "Vor einem Moment wurde eine Kurzübersicht geschrieben. Warten Sie etwas, bevor Sie erneut fragen.",
+        "providerFailed": "Der AI-Dienst konnte die Kurzübersicht nicht schreiben. Versuchen Sie es gleich noch einmal.",
+        "limit": "Das AI-Kontingent ist vorerst aufgebraucht. Versuchen Sie es später oder fragen Sie einen Admin.",
+        "forbidden": "Dazu fehlt Ihnen die Berechtigung.",
+        "notFound": "Dieses Unternehmen existiert nicht mehr.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal."
+      },
+      "sections": {
+        "activity": "Letzte Aktivität",
+        "deals": "Deals",
+        "tasks": "Aufgaben",
+        "conversations": "Unterhaltungen",
+        "properties": "Wichtige Eigenschaften",
+        "risks": "Risiken",
+        "nextSteps": "Nächste Schritte"
+      },
+      "source": {
+        "properties": "Unternehmenseigenschaften",
+        "contacts": "Kontakte",
+        "deals": "Deals",
+        "tasks": "Aufgaben",
+        "conversations": "Unterhaltungen"
       }
     }
   }

@@ -19,7 +19,9 @@
       "checkbox_group": "다중 선택",
       "checkbox": "체크박스",
       "rating": "평점",
-      "hidden": "숨김 필드"
+      "hidden": "숨김 필드",
+      "date_of_birth": "생년월일",
+      "age": "나이"
     },
     "errors": {
       "network": "서버에 연결할 수 없습니다. 연결 상태를 확인한 후 다시 시도하세요.",

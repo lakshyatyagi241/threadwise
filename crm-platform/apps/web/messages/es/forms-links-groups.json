@@ -95,7 +95,28 @@
         "required": "Obligatorio",
         "removeField": "Quitar",
         "options": "Opciones (separadas por comas)",
-        "optionsPlaceholder": "Opción 1, Opción 2, Opción 3"
+        "optionsPlaceholder": "Opción 1, Opción 2, Opción 3",
+        "mapsTo": "Se asigna a",
+        "mapsToHint": "Guarda esta respuesta en una propiedad del contacto al enviar el formulario.",
+        "mapsToNone": "No guardar en una propiedad del contacto",
+        "mapsToSystemGroup": "Campos del contacto",
+        "mapsToCustomGroup": "Propiedades personalizadas",
+        "mapsToSystem": {
+          "name": "Nombre completo",
+          "first_name": "Nombre",
+          "last_name": "Apellido",
+          "email": "Correo electrónico",
+          "title": "Cargo",
+          "language": "Idioma",
+          "address": "Dirección"
+        },
+        "mapsToPrivacyGroup": "Privacidad y consentimiento",
+        "mapsToPrivacy": {
+          "age": "Edad (verificación de menores)",
+          "date_of_birth": "Fecha de nacimiento (verificación de menores)",
+          "consent_marketing": "Consentimiento de marketing (WhatsApp)",
+          "consent_service": "Acuerdo de servicio (no marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Encabezado",
@@ -130,15 +151,24 @@
       "loading": "Cargando enlaces…",
       "retry": "Reintentar",
       "searchPlaceholder": "Buscar por nombre o enlace",
-      "create": { "cta": "Nuevo enlace" },
+      "create": {
+        "cta": "Nuevo enlace"
+      },
       "stats": {
         "all": "Todos los enlaces",
         "live": "Activos",
         "totalClicks": "Clics totales",
         "avgClicks": "Clics prom. / enlace"
       },
-      "tabs": { "all": "Todos", "live": "Activos", "paused": "Pausados" },
-      "status": { "live": "Activo", "paused": "Pausado" },
+      "tabs": {
+        "all": "Todos",
+        "live": "Activos",
+        "paused": "Pausados"
+      },
+      "status": {
+        "live": "Activo",
+        "paused": "Pausado"
+      },
       "empty": {
         "title": "Aún no hay enlaces",
         "description": "Genera un enlace para compartir en anuncios, biografías o un código QR."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "Volver a enlaces",
         "newHeading": "Nuevo enlace",
-        "step": { "destination": "Destino", "message": "Mensaje inicial", "tracking": "Seguimiento" },
+        "step": {
+          "destination": "Destino",
+          "message": "Mensaje inicial",
+          "tracking": "Seguimiento"
+        },
         "name": "Nombre",
         "status": "Estado",
         "countryCode": "Código de país",
@@ -194,6 +228,14 @@
         "shortUrl": "Enlace corto",
         "waUrl": "Enlace de WhatsApp",
         "qrAlt": "Código QR para este enlace"
+      },
+      "public": {
+        "missingTitle": "Enlace no encontrado",
+        "missingBody": "Este enlace no existe o ha sido eliminado.",
+        "goneTitle": "Enlace ya no activo",
+        "goneBody": "Este enlace está pausado o ha caducado.",
+        "errorTitle": "Algo salió mal",
+        "errorBody": "No pudimos abrir este enlace. Inténtalo de nuevo."
       }
     }
   }

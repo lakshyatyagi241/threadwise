@@ -129,7 +129,7 @@ export const NodeCard = memo(function NodeCard({
 
       {node.isStart ? (
         <div
-          className="absolute -top-2.5 left-3 z-10 inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[9.5px] font-semibold"
+          className="absolute -top-2.5 start-3 z-10 inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[9.5px] font-semibold"
           style={{ background: 'var(--brand)', color: '#fff' }}
         >
           <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="currentColor">

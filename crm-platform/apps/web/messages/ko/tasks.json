@@ -100,7 +100,8 @@
       "views": {
         "list": "목록",
         "board": "마감일별 보드"
-      }
+      },
+      "linkCompany": "회사"
     },
     "table": {
       "scrollArea": "작업 표",
@@ -204,7 +205,8 @@
         "notesTooLong": "메모가 너무 깁니다(최대 5000자).",
         "dueInvalid": "유효하지 않은 날짜입니다.",
         "assigneeInvalid": "이 워크스페이스의 활성 구성원이 아닙니다."
-      }
+      },
+      "company": "회사"
     },
     "drawer": {
       "loading": "작업을 불러오는 중",
@@ -268,7 +270,8 @@
       "searching": "검색 중",
       "unavailable": "지금은 검색을 사용할 수 없습니다.",
       "none": "일치하는 항목이 없습니다.",
-      "unlink": "연결 해제"
+      "unlink": "연결 해제",
+      "searchCompany": "회사 검색"
     },
     "errors": {
       "network": "서버에 연결할 수 없습니다. 네트워크 연결을 확인한 후 다시 시도하세요.",
@@ -323,7 +326,21 @@
       "loadMore": "더 보기",
       "loadMoreDone": "완료된 항목 더 보기",
       "showDone": "완료된 항목 표시",
-      "hideDone": "완료된 항목 숨기기"
+      "hideDone": "완료된 항목 숨기기",
+      "gone": "이 작업이 속한 레코드를 더 이상 사용할 수 없습니다."
+    },
+    "inline": {
+      "addTask": "작업 추가",
+      "rowLabel": "작업 추가",
+      "titleLabel": "작업 제목",
+      "titlePlaceholder": "작업 제목을 입력하고 Enter 키를 눌러 저장하세요",
+      "due": "마감 날짜 및 시간",
+      "assignee": "담당자 지정",
+      "priority": "우선순위(선택)",
+      "hint": "Enter 키는 저장, Escape 키는 닫기입니다.",
+      "save": "작업 추가",
+      "cancel": "취소",
+      "failed": "작업을 저장하지 못했습니다. 입력한 내용은 입력란에 그대로 있습니다."
     }
   }
 }

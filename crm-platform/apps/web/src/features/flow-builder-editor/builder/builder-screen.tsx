@@ -689,7 +689,7 @@ function BuilderInner({
             <button
               type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="absolute top-1/2 left-0 z-20 grid h-12 w-5 -translate-y-1/2 place-items-center rounded-r-md border border-l-0 border-border bg-background hover:bg-muted"
+              className="absolute top-1/2 start-0 z-20 grid h-12 w-5 -translate-y-1/2 place-items-center rounded-e-md border border-s-0 border-border bg-background hover:bg-muted"
               title={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
               aria-label={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
             >
@@ -703,7 +703,7 @@ function BuilderInner({
               <button
                 type="button"
                 onClick={() => setSidebarOpen(true)}
-                className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
+                className="absolute bottom-4 start-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
                 title={tb('addNodeTitle')}
               >
                 <Icon d="M8 3v10M3 8h10" />
@@ -719,7 +719,7 @@ function BuilderInner({
               viewport={viewport}
             />
 
-            <div className="absolute right-4 bottom-4 z-20 flex items-center gap-2">
+            <div className="absolute end-4 bottom-4 z-20 flex items-center gap-2">
               <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
                 <button
                   type="button"
@@ -774,7 +774,7 @@ function BuilderInner({
                     setZoom(1);
                     setPan({ x: 40, y: 40 });
                   }}
-                  className="grid h-9 w-9 place-items-center border-l border-border hover:bg-muted"
+                  className="grid h-9 w-9 place-items-center border-s border-border hover:bg-muted"
                   title={tb('reset')}
                   aria-label={tb('resetView')}
                 >
@@ -857,7 +857,7 @@ function BuilderInner({
         />
         {toastMsg ? (
           <div
-            className="fixed top-20 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-[12px] font-medium text-background shadow-lg"
+            className="fixed top-20 start-1/2 z-[60] -translate-x-1/2 rtl:translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-[12px] font-medium text-background shadow-lg"
             role="status"
           >
             {toastMsg}

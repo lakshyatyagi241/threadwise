@@ -95,7 +95,28 @@
         "required": "שדה חובה",
         "removeField": "הסרה",
         "options": "אפשרויות (מופרדות בפסיקים)",
-        "optionsPlaceholder": "אפשרות 1, אפשרות 2, אפשרות 3"
+        "optionsPlaceholder": "אפשרות 1, אפשרות 2, אפשרות 3",
+        "mapsTo": "ממופה ל׾",
+        "mapsToHint": "שומר תשובה זו במאפיין איש הקשר בעת שליחת הטופס.",
+        "mapsToNone": "אל תשמור במאפיין איש הקשר",
+        "mapsToSystemGroup": "שדות איש הקשר",
+        "mapsToCustomGroup": "מאפיינים מותאמים אישית",
+        "mapsToSystem": {
+          "name": "שם מלא",
+          "first_name": "שם פרטי",
+          "last_name": "שם משפחה",
+          "email": "אימייל",
+          "title": "תפקיד",
+          "language": "שפה",
+          "address": "כתובת"
+        },
+        "mapsToPrivacyGroup": "פרטיות והסכמה",
+        "mapsToPrivacy": {
+          "age": "גיל (בדיקת קטינים)",
+          "date_of_birth": "תאריך לידה (בדיקת קטינים)",
+          "consent_marketing": "הסכמה שיווקית (WhatsApp)",
+          "consent_service": "הסכמת שירות (לא שיווק)"
+        }
       },
       "fieldKind": {
         "heading": "כותרת",
@@ -130,15 +151,24 @@
       "loading": "טוען קישורים…",
       "retry": "ניסיון חוזר",
       "searchPlaceholder": "חיפוש לפי שם או קישור",
-      "create": { "cta": "קישור חדש" },
+      "create": {
+        "cta": "קישור חדש"
+      },
       "stats": {
         "all": "כל הקישורים",
         "live": "פעילים",
         "totalClicks": "סך הקליקים",
         "avgClicks": "קליקים בממוצע / קישור"
       },
-      "tabs": { "all": "הכול", "live": "פעילים", "paused": "מושהים" },
-      "status": { "live": "פעיל", "paused": "מושהה" },
+      "tabs": {
+        "all": "הכול",
+        "live": "פעילים",
+        "paused": "מושהים"
+      },
+      "status": {
+        "live": "פעיל",
+        "paused": "מושהה"
+      },
       "empty": {
         "title": "אין עדיין קישורים",
         "description": "צרו קישור לשיתוף בפרסומות, בביוגרפיה או בקוד QR."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "חזרה לקישורים",
         "newHeading": "קישור חדש",
-        "step": { "destination": "יעד", "message": "הודעת פתיחה", "tracking": "מעקב" },
+        "step": {
+          "destination": "יעד",
+          "message": "הודעת פתיחה",
+          "tracking": "מעקב"
+        },
         "name": "שם",
         "status": "סטטוס",
         "countryCode": "קוד מדינה",
@@ -194,6 +228,14 @@
         "shortUrl": "קישור מקוצר",
         "waUrl": "קישור WhatsApp",
         "qrAlt": "קוד QR לקישור זה"
+      },
+      "public": {
+        "missingTitle": "הקישור לא נמצא",
+        "missingBody": "הקישור הזה אינו קיים או שנמחק.",
+        "goneTitle": "הקישור אינו פעיל עוד",
+        "goneBody": "הקישור הזה מושהה או פג תוקף.",
+        "errorTitle": "משהו השתבש",
+        "errorBody": "לא הצלחנו לפתוח את הקישור הזה. אנא נסה שוב."
       }
     }
   }

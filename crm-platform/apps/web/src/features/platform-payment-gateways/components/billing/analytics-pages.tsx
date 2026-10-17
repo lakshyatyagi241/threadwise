@@ -205,13 +205,13 @@ export function BillingAnalyticsPage() {
             <table className="w-full text-sm">
               <thead className="border-b border-border bg-muted/50 text-xs text-muted-foreground">
                 <tr>
-                  <th scope="col" className="px-4 py-3 text-left font-medium">
+                  <th scope="col" className="px-4 py-3 text-start font-medium">
                     {tb('topPayers.workspace')}
                   </th>
-                  <th scope="col" className="w-[100px] px-3 py-3 text-left font-medium">
+                  <th scope="col" className="w-[100px] px-3 py-3 text-start font-medium">
                     {tb('topPayers.orders')}
                   </th>
-                  <th scope="col" className="w-[140px] px-4 py-3 text-left font-medium">
+                  <th scope="col" className="w-[140px] px-4 py-3 text-start font-medium">
                     {tb('topPayers.total')}
                   </th>
                 </tr>

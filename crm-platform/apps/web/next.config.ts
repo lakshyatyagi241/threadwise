@@ -99,7 +99,9 @@ const nextConfig: NextConfig = {
       // The visitor's booking pages (/book/<org>/<service>) and manage pages (/b/manage/<token>): a manage link is a secret and
       // the pages hold a customer's name and time, so the same rules as /q.
       // The email unsubscribe page (/u/<token>) is a bearer link too.
-      ...['/book/:path*', '/b/:path*', '/u/:path*'].map((source) => ({
+      // The click-to-chat short link (/l/<slug>) counts a click on every real visit — a cached response would under-count
+      // and could forward a visitor to a destination the link no longer points at.
+      ...['/book/:path*', '/b/:path*', '/u/:path*', '/l/:path*'].map((source) => ({
         source,
         headers: [
           ...noStore,
@@ -107,15 +109,6 @@ const nextConfig: NextConfig = {
           { key: 'Referrer-Policy', value: 'no-referrer' },
         ],
       })),
-    ];
-  },
-  // The chat widget's pages (`/widget/<token>/chat`, `/embed`, its assets) are served by the API. The snippet and the Preview link point
-  // at the app's own address, so the app hands those paths to the API; without this the Preview opens the app's "Page not found".
-  async rewrites() {
-    const api = (process.env.API_URL ?? 'http://localhost:3000').replace(/\/+$/, '');
-    return [
-      { source: '/widget/:token/:path*', destination: `${api}/widget/:token/:path*` },
-      { source: '/widget-assets/:path*', destination: `${api}/widget-assets/:path*` },
     ];
   },
   // Addresses Reference bookmarks and old emails may still carry. Query strings travel along with each redirect.

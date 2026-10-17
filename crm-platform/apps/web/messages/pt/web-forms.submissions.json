@@ -115,7 +115,14 @@
         "consentAt": "Dado em",
         "noConsent": "Este formulário não pediu consentimento.",
         "links": "Registros",
-        "actions": "Ações"
+        "actions": "Ações",
+        "ageCheck": "Verificação de idade",
+        "ageOutcome": "Resultado",
+        "ageUnder": "Abaixo da idade mínima. O envio foi aceito e o contato foi marcado como menor; o consentimento de marketing não foi registrado.",
+        "guardianName": "Pais ou responsável",
+        "guardianEmail": "E-mail do responsável",
+        "guardianPhone": "Telefone do responsável",
+        "guardianNote": "Informado pelo visitante, não verificado. O consentimento deles não consta até que uma pessoa o registre no cartão de Consentimento do contato."
       },
       "actions": {
         "retry": "Tentar novamente",

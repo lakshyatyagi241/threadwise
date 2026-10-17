@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
@@ -22,12 +22,35 @@ import { ContactsTable, type ListHandlers } from './contacts-list';
 import { DEFAULT_FILTERS } from '../api/contacts';
 import { ContactsPagination } from './contacts-pagination';
 import { ContactsToolbar, type ContactsToolbarProps } from './contacts-toolbar';
+import { AppliedFilters } from './applied-filters';
+import { FirstRun } from './first-run';
+import { SelectionBar } from './selection-bar';
 import { SlashTextarea } from './slash-picker';
 import { TagsEditor } from './tags-editor';
 
-const messages = JSON.parse(
-  readFileSync(join(process.cwd(), 'messages', 'en', 'contacts-attributes-tags.json'), 'utf8'),
-) as Record<string, unknown>;
+/** The domain's English strings: the main file and the `contacts-attributes-tags.<part>.json` slices the app merges with it. */
+function merge(
+  base: Record<string, unknown>,
+  over: Record<string, unknown>,
+): Record<string, unknown> {
+  const out = { ...base };
+  for (const [k, v] of Object.entries(over)) {
+    const b = out[k];
+    out[k] =
+      typeof v === 'object' && v !== null && typeof b === 'object' && b !== null
+        ? merge(b as Record<string, unknown>, v as Record<string, unknown>)
+        : v;
+  }
+  return out;
+}
+const messages = readdirSync(join(process.cwd(), 'messages', 'en'))
+  .filter((f) => /^contacts-attributes-tags(\..+)?\.json$/.test(f) || f === 'segments.json')
+  .sort()
+  .reduce<Record<string, unknown>>(
+    (all, f) =>
+      merge(all, JSON.parse(readFileSync(join(process.cwd(), 'messages', 'en', f), 'utf8'))),
+    {},
+  );
 
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
@@ -46,7 +69,13 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   status: '',
   stage: 'qualified',
   ownerId: null,
+  companyId: null,
   optedOut: false,
+  whatsappOptIn: 'yes',
+  smsOptIn: 'no',
+  emailOptIn: 'out',
+  source: 'Meta lead ads',
+  lastActivityAt: '2026-03-06T08:30:00.000Z',
   groups: [{ id: 'g1', name: 'VIP', color: '#7C3AED' }],
   tags: [{ id: 't1', name: 'Hot lead', color: '#2E7D32' }],
   attributes: [{ key: 'order_id', label: 'Order Id', text: 'A12', full: 'Order Id: A12' }],
@@ -55,6 +84,8 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   leadScore: null,
   leadScoreSource: null,
   leadScoredAt: null,
+  dateOfBirth: null,
+  isMinor: false,
   ...over,
 });
 
@@ -222,25 +253,219 @@ describe('ContactsTable', () => {
     ]);
   });
 
-  it('puts call, WhatsApp, email and the menu beside the name', () => {
-    const out = table([row()]);
-    expect(out).toContain('href="tel:+919876543210"');
-    expect(out).toContain('href="https://wa.me/919876543210"');
-    expect(out).toContain('target="_blank"');
-    expect(out).toContain('href="mailto:aarav@example.com"');
-    expect(out).toContain('aria-label="WhatsApp Aarav Sharma"');
-    expect(out).toContain('aria-label="More actions for Aarav Sharma"');
+  describe('the hover actions over the name', () => {
+    const send = { onSend: () => undefined, onChat: () => undefined, onOpenQuick: () => undefined };
+
+    it('offers only Message, Call, the quick add and the "..." menu: at most three icons', () => {
+      const out = table([row()], send);
+      expect(out).toContain('aria-label="Message Aarav Sharma"');
+      expect(out).toContain('aria-label="Call Aarav Sharma"');
+      expect(out).toContain('aria-label="Add a note, task or meeting for Aarav Sharma"');
+      expect(out).toContain('aria-label="More actions for Aarav Sharma"');
+      // what used to sit beside the name is in the menu now, not an icon of its own
+      for (const gone of [
+        'Open the details of',
+        'Edit Aarav',
+        'Add a note to',
+        'Email Aarav',
+        'WhatsApp Aarav',
+        'Chat with',
+      ]) {
+        expect(out, gone).not.toContain(`aria-label="${gone}`);
+      }
+    });
+
+    it('lays the strip over the end of the name cell, so showing it moves nothing', () => {
+      const out = table([row()], send);
+      // overlaid (absolute, at the end edge), with a fade behind it, not a sibling that takes width
+      expect(out).toContain('absolute inset-y-0 end-0');
+      expect(out).toContain('bg-[linear-gradient(to_right,transparent');
+      expect(out).toContain('rtl:bg-[linear-gradient(to_left,transparent');
+      // the name is not squeezed while the strip is on screen (the old rule truncated it on hover)
+      expect(out).not.toContain('group-hover:max-w-');
+      expect(out).not.toContain('group-focus-within:max-w-');
+    });
+
+    it('shows on hover and keyboard focus, and keeps the menu in view on a narrow or touch screen', () => {
+      const out = table([row()], send);
+      expect(out).toContain('group-hover:opacity-100');
+      expect(out).toContain('focus-within:opacity-100');
+      expect(out).toContain('max-sm:!opacity-100');
+      // icons only where a pointer can hover and there is room; the menu (drawn when opened) repeats them everywhere else
+      expect(out).toContain('hidden sm:[@media(hover:hover)]:flex');
+      // the name leaves room for the always-visible menu on a narrow or touch screen
+      expect(out).toContain('max-sm:max-w-[calc(100%-2rem)]');
+    });
+
+    it('draws an icon only where the person has the permission for it', () => {
+      const out = table([row()], {
+        ...send,
+        canEdit: false,
+        can: { note: false, task: false, call: false, send: false, chat: false },
+      });
+      for (const gone of ['Message Aarav', 'Call Aarav', 'Add a note, task or meeting']) {
+        expect(out, gone).not.toContain(`aria-label="${gone}`);
+      }
+      // the menu is still there, with "View"
+      expect(out).toContain('aria-label="More actions for Aarav Sharma"');
+    });
+
+    it('keeps the quick add for creating tasks alone (no contact update needed)', () => {
+      const out = table([row()], {
+        ...send,
+        canEdit: false,
+        can: { note: false, task: true, call: false, send: false, chat: false },
+      });
+      expect(out).toContain('aria-label="Add a note, task or meeting for Aarav Sharma"');
+    });
+
+    it('has no call or message icon without a handler for them', () => {
+      const out = table([row()]);
+      expect(out).not.toContain('Call Aarav Sharma');
+      expect(out).not.toContain('Message Aarav Sharma');
+      expect(out).not.toContain('href="tel:');
+      expect(out).not.toContain('wa.me');
+    });
+
+    it('disables Message and Call, with the reason as the tip, when the contact cannot be reached', () => {
+      const out = table([row({ phone: '', email: '' })], send);
+      expect(out).toContain('aria-label="No phone number or email address"');
+      expect(out).toContain('aria-label="No phone number"');
+      expect(out.match(/disabled=""/g)?.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('says why Message is off when no channel is connected', () => {
+      const out = table([row()], { ...send, connected: { whatsapp: false, email: false } });
+      expect(out).toContain(
+        'aria-label="No connected WhatsApp number or mailbox for this contact"',
+      );
+    });
+
+    it('keeps the name a link to the details page, opening the quick view on a plain click', () => {
+      const out = table([row()], send);
+      expect(out).toContain('href="/contacts/294dca7c-5806-4548-9035-dcca9befc7b1"');
+    });
   });
 
-  it('disables call, WhatsApp and email instead of hiding them when the contact has no phone or email', () => {
-    const out = table([row({ phone: '', email: '' })]);
+  it('shows WhatsApp, SMS and email opt-in as quiet marks: a green tick, a faint dot, a red cross when opted out', () => {
+    const cols = visibleColumns(['name', 'whatsapp', 'sms', 'emailOptIn'], ATTRS);
+    const out = table([row()], {}, 'none', cols);
+    // the headings are full labels in tooltips (WhatsApp is shortened in the heading itself)
+    for (const title of ['WhatsApp opt-in', 'SMS opt-in', 'Email opt-in']) {
+      expect(out, title).toContain(title);
+    }
+    expect(out).toContain('bg-success/15 text-success');
+    expect(out).toContain('text-muted-foreground/50');
+    expect(out).toContain('bg-danger/10 text-danger');
+    // tooltips say the state with the channel; the word is for screen readers only, never printed on every row
+    expect(out).toContain('title="WhatsApp opt-in: Yes"');
+    expect(out).toContain('title="SMS opt-in: No"');
+    expect(out).toContain('title="Opted out of marketing messages"');
+    expect(out.match(/<span class="sr-only">Yes<\/span>/g)).toHaveLength(1);
+    expect(out.match(/<span class="sr-only">No<\/span>/g)).toHaveLength(2);
+    expect(out).not.toContain('border-success/30 bg-success/10 text-success');
+  });
+
+  it('shortens the headings that were cut off, with the full label as the tooltip', () => {
+    const chosen: ColumnId[] = [
+      'name',
+      'phone',
+      'email',
+      'stage',
+      'whatsapp',
+      'owner',
+      'createdOn',
+    ];
+    const out = html(
+      <ContactsTable
+        rows={[row()]}
+        columns={visibleColumns(chosen, ATTRS)}
+        headerState="none"
+        onToggleAll={() => undefined}
+        sort={{ key: 'createdAt', order: 'desc' }}
+        onSort={() => undefined}
+        {...handlers()}
+      />,
+    );
+    for (const short of ['Phone', 'Email', 'Stage', 'WhatsApp', 'Owner', 'Created']) {
+      expect(out, short).toContain(`<span class="truncate">${short}</span>`);
+    }
+    expect(out).not.toContain('<span class="truncate">Phone Number</span>');
+    expect(out).not.toContain('<span class="truncate">Lifecycle Stage</span>');
+    // the full label is still one hover away
+    expect(out).toContain('title="Sort by Phone Number. Drag');
+    expect(out).toContain('title="Sort by Created On. Drag');
+  });
+
+  it('draws the stage caret only on hover or focus of the row, but always on a touch screen', () => {
+    const out = table([row()], { onStageChange: () => undefined, stageChoices: [] });
+    expect(out).toContain('opacity-0 transition-opacity group-hover:opacity-100');
+    expect(out).toContain('group-focus-within:opacity-100');
+    expect(out).toContain('[@media(hover:none)]:opacity-100');
+  });
+
+  it('mutes the owner avatar', () => {
+    const out = table([row({ ownerId: '11111111-1111-4111-8111-111111111111' })], {
+      ownerLabel: () => 'Asha Rao',
+    });
+    expect(out).toContain('opacity-70 saturate-50');
+  });
+
+  it('shows the source and the last activity, and a dash for a contact with neither', () => {
+    const cols = visibleColumns(['name', 'source', 'lastActivity'], ATTRS);
+    const out = table([row()], {}, 'none', cols);
+    expect(out).toContain('Meta lead ads');
+    expect(out).toContain('06 Mar 2026, 08:30 AM');
+    const empty = table([row({ source: '', lastActivityAt: null })], {}, 'none', cols);
+    expect(empty.match(/>-<\/span>/g)?.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('ends the header row with the add-column picker and gives each column its menu', () => {
+    const out = html(
+      <ContactsTable
+        rows={[row()]}
+        columns={visibleColumns(['name', 'phone', 'email'], ATTRS)}
+        headerState="none"
+        onToggleAll={() => undefined}
+        sort={{ key: 'email', order: 'desc' }}
+        onSort={() => undefined}
+        onSortTo={() => undefined}
+        columnTools={{
+          addable: [],
+          onAdd: () => undefined,
+          onHide: () => undefined,
+          hasFilter: () => true,
+          onFilter: () => undefined,
+        }}
+        {...handlers()}
+      />,
+    );
+    expect(out).toContain('aria-label="Add column"');
+    expect(out).toContain('aria-label="Options for the Email ID column"');
+    // the name column has a menu too (sort and filter), but nothing to hide
+    expect(out).toContain('aria-label="Options for the Contact Name column"');
+    // one extra header cell and one extra, empty body cell for the "+"
+    expect(out.match(/<th /g)).toHaveLength(5);
+  });
+
+  it('has no add-column header without the tools (the read-only listing)', () => {
+    const out = table([row()]);
+    expect(out).not.toContain('aria-label="Add column"');
+  });
+
+  it('disables Call and keeps Message off the chat (never a dead link) for a masked phone number', () => {
+    // Needs a send handler, same as the hover-actions describe block above, or the whole strip
+    // (message/call) is absent regardless of masking and these assertions are vacuous.
+    const out = table([row({ phone: '+xxxxxxxx0025' })], {
+      onSend: () => undefined,
+      onChat: () => undefined,
+      onOpenQuick: () => undefined,
+    });
     expect(out).not.toContain('href="tel:');
     expect(out).not.toContain('wa.me');
-    expect(out).not.toContain('href="mailto:');
     expect(out.match(/aria-label="No phone number"/g)).toHaveLength(1);
-    expect(out).toContain('aria-label="No phone number for WhatsApp"');
-    expect(out).toContain('aria-label="No email address"');
-    expect(out.match(/disabled=""/g)?.length).toBeGreaterThanOrEqual(3);
+    // the email is still reachable, so Message is on (as an email), and the menu offers no copy of the masked number
+    expect(out).toContain('aria-label="Message Aarav Sharma"');
   });
 
   it('freezes the checkbox and the name cell and keeps the scroll area focusable', () => {
@@ -427,52 +652,57 @@ describe('ContactsPagination', () => {
     html(
       <ContactsPagination
         page={1}
-        total={5000}
-        limit={200}
+        total={30442}
+        limit={50}
+        rowsOnPage={50}
         loading={false}
         onPage={() => undefined}
         onLimit={() => undefined}
-        onRecount={() => undefined}
         {...over}
       />,
     );
 
-  it('shows Previous, 1 2 3 4 5 ... 25, Next, the total count and the page-size select', () => {
+  it('says "Showing 1-50 of 30,442" and offers 1 2 3 4 5, arrows and the page-size select', () => {
     const out = footer();
-    for (const text of ['>Previous<', '>Next<', '>Total count<', '>5,000<', '200 per page']) {
-      expect(out, text).toContain(text);
-    }
-    for (const n of [1, 2, 3, 4, 5, 25]) expect(out).toContain(`aria-label="Page ${n}"`);
+    expect(out).toContain('Showing 1-50 of 30,442');
+    for (const n of [1, 2, 3, 4, 5]) expect(out).toContain(`aria-label="Page ${n}"`);
+    // the API is cursor-only: pages beyond the reach are not drawn as buttons, the footer says where the end is
     expect(out).not.toContain('aria-label="Page 6"');
+    expect(out).not.toContain('aria-label="Page 609"');
+    expect(out).toContain('Page 1 of 609');
     expect(out).toContain('aria-current="page"');
+    expect(out).toContain('aria-label="Previous page"');
+    expect(out).toContain('aria-label="Next page"');
     for (const n of [10, 25, 50, 100, 200]) expect(out).toContain(`${n} per page`);
     expect(out).not.toContain('500 per page');
   });
 
-  it('mutes Previous on the first page and Next on the last', () => {
+  it('numbers the rows of a later and a short last page', () => {
+    expect(footer({ page: 3 })).toContain('Showing 101-150 of 30,442');
+    expect(footer({ page: 609, rowsOnPage: 42 })).toContain('Showing 30,401-30,442 of 30,442');
+    expect(footer({ total: 0, rowsOnPage: 0 })).toContain('Showing 0-0 of 0');
+  });
+
+  it('is a footer that stays put: it does not shrink and sits under the scrolling rows', () => {
+    expect(footer()).toContain('shrink-0 flex-wrap');
+  });
+
+  it('turns Previous off on the first page and Next off on the last', () => {
     expect(footer({ page: 1 })).toMatch(/<button[^>]*disabled=""[^>]*aria-label="Previous page"/);
-    expect(footer({ page: 25 })).toMatch(/<button[^>]*disabled=""[^>]*aria-label="Next page"/);
+    expect(footer({ page: 609 })).toMatch(/<button[^>]*disabled=""[^>]*aria-label="Next page"/);
     expect(footer({ page: 3 })).not.toContain('disabled=""');
   });
 
-  it('has one page and a dash while the total is unknown', () => {
-    const out = footer({ total: undefined, page: 1 });
-    expect(out).toContain('>-<');
+  it('shows "about" for an estimated total, and a dash while the total is unknown', () => {
+    expect(footer({ approximate: true })).toContain('of about 30,442');
+    const out = footer({ total: undefined, rowsOnPage: 0 });
+    expect(out).toContain('of -');
     expect(out).toMatch(/aria-label="Next page"/);
   });
 });
 
 describe('ContactsToolbar', () => {
   const noop = () => undefined;
-  const none = {
-    update: false,
-    delete: false,
-    export: false,
-    import: false,
-    merge: false,
-    createGroups: false,
-    createTags: false,
-  };
   const OWNERS = [
     {
       id: '11111111-1111-4111-8111-111111111111',
@@ -480,100 +710,191 @@ describe('ContactsToolbar', () => {
       email: 'asha@x.test',
       canAssign: true,
     },
-    {
-      id: '22222222-2222-4222-8222-222222222222',
-      fullName: 'Ravi Nair',
-      email: 'ravi@x.test',
-      canAssign: false,
-    },
   ];
   const toolbar = (
-    can: Partial<ContactsToolbarProps['can']>,
-    owner = '',
-    reassign: (() => void) | undefined = undefined,
+    over: Partial<ContactsToolbarProps> = {},
+    filters: Partial<ContactsToolbarProps['filter']['filters']> = {},
   ) =>
     html(
       <QueryClientProvider client={new QueryClient()}>
         <ContactsToolbar
           q=""
           onQ={noop}
-          segment=""
-          onSegment={noop}
-          stats={undefined}
-          groups={[]}
-          segments={[]}
-          segmentsState="ready"
-          onRetrySegments={noop}
-          canCreateSegment={false}
-          rules=""
-          onRules={noop}
-          onUpdateSelected={noop}
-          tag=""
-          onTag={noop}
-          tags={[]}
-          owner={owner}
-          onOwner={noop}
-          owners={OWNERS}
-          meId={OWNERS[0]!.id}
-          onReassignView={reassign}
-          stage=""
-          onStage={noop}
-          stages={[]}
-          consent=""
-          onConsent={noop}
-          order="desc"
-          onOrder={noop}
-          selectedCount={0}
-          anySelected={false}
-          busy={false}
-          onClearSelection={noop}
-          onSendCampaign={noop}
-          can={{ ...none, ...can }}
-          exporting={false}
-          onExportAll={noop}
-          onExportSelected={noop}
-          onImport={noop}
-          onDedupe={noop}
-          onNewGroup={noop}
-          onDeleteSelected={noop}
-          picker={null}
-          onPicker={noop}
-          onGroup={async () => true}
-          onTagApply={async () => true}
+          focusSearch={0}
+          filter={{
+            filters: {
+              group: '',
+              imported: false,
+              segment: '',
+              tag: '',
+              owner: '',
+              lifecycleStage: '',
+              status: '',
+              minor: '',
+              consent: '',
+              source: '',
+              rules: '',
+              ...filters,
+            },
+            onChange: noop,
+            stats: undefined,
+            groups: [],
+            segments: [],
+            segmentsState: 'ready',
+            onRetrySegments: noop,
+            canCreateSegment: false,
+            tags: [],
+            owners: OWNERS,
+            meId: OWNERS[0]!.id,
+            stages: [],
+            statuses: [],
+            onAiSummary: noop,
+            conditionCount: 0,
+          }}
           allColumns={allColumns([])}
-          columnIds={['name'] as ColumnId[]}
+          columnIds={
+            ['name', 'phone', 'email', 'stage', 'whatsapp', 'owner', 'createdOn'] as ColumnId[]
+          }
           onApplyColumns={noop}
           onResetColumns={noop}
           view="list"
           onView={noop}
+          can={{ export: false, import: false, merge: false, createGroups: false }}
+          exporting={false}
+          onExportAll={noop}
+          onImport={noop}
+          onDedupe={noop}
+          onNewGroup={noop}
+          showStats={false}
+          onToggleStats={noop}
           onRefresh={noop}
           refreshing={false}
+          {...over}
         />
       </QueryClientProvider>,
     );
 
-  it('a viewer, who can do none of the actions, gets no empty "More Actions" dropdown', () => {
-    expect(toolbar({})).not.toContain('More Actions');
+  it('is one slim row: search, Filter, Columns with a count, the layout toggle, the "..." menu and refresh', () => {
+    const out = toolbar();
+    expect(out).toContain('placeholder="Search contacts..."');
+    expect(out).toContain('>Filter<');
+    expect(out).toContain('>Columns<');
+    expect(out).toContain('aria-label="7 columns shown"');
+    expect(out).toContain('aria-label="List view"');
+    expect(out).toContain('aria-label="Board view (by stage)"');
+    expect(out).toContain('aria-label="More Actions"');
+    expect(out).toContain('aria-label="Refresh"');
   });
 
-  it('shows a labelled Columns button and keeps Import only inside More Actions', () => {
-    const out = toolbar({ import: true });
-    expect(out).toContain('Columns');
-    expect(out).toContain('More Actions');
-    expect(out).not.toContain('>Import<');
+  it('has none of the separate dropdowns the old toolbar had', () => {
+    const out = toolbar();
+    for (const gone of [
+      'Select Segment',
+      'Select Tag',
+      'Send Campaign',
+      '>More Actions<',
+      '>Sort<',
+    ]) {
+      expect(out, gone).not.toContain(gone);
+    }
   });
 
-  it('shows "More Actions" as soon as one action is allowed', () => {
-    expect(toolbar({ export: true })).toContain('More Actions');
-    expect(toolbar({ delete: true })).toContain('More Actions');
+  it('shows Add Contact and Create View only when the person may', () => {
+    expect(toolbar()).not.toContain('Add Contact');
+    expect(toolbar()).not.toContain('Create View');
+    const out = toolbar({ onAdd: noop, onCreateView: noop });
+    expect(out).toContain('Add Contact');
+    expect(out).toContain('Create View');
   });
 
-  it('offers an Owner filter that reads Owner, then the person, "My contacts", "Unassigned" or a count', () => {
-    expect(toolbar({})).toContain('>Owner<');
-    expect(toolbar({}, OWNERS[1]!.id)).toContain('Ravi Nair');
-    expect(toolbar({}, OWNERS[0]!.id)).toContain('My contacts');
-    expect(toolbar({}, 'none')).toContain('>Unassigned<');
-    expect(toolbar({}, `${OWNERS[0]!.id},${OWNERS[1]!.id},none`)).toContain('3 owners');
+  it('counts the filters that are on in a badge on the Filter button', () => {
+    expect(toolbar()).not.toContain('bg-brand px-1.5');
+    const out = toolbar({}, { tag: 'abc', lifecycleStage: 'new', owner: 'none' });
+    expect(out).toContain('bg-brand px-1.5 text-[11px] leading-5 text-brand-foreground">3<');
+  });
+});
+
+describe('applied filters and the selection bar', () => {
+  const noop = () => undefined;
+
+  it('draws one removable chip per filter, Clear all and Save as segment', () => {
+    const out = html(
+      <AppliedFilters
+        chips={[
+          { id: 'tag:1', kind: 'tag', label: 'Tag: VIP', value: 'VIP', clear: { tag: '' } },
+          {
+            id: 'rules',
+            kind: 'rules',
+            label: 'Conditions: 2',
+            value: 'Conditions: 2',
+            clear: { rules: '' },
+          },
+        ]}
+        onRemove={noop}
+        onClearAll={noop}
+        onSaveAsSegment={noop}
+      />,
+    );
+    expect(out).toContain('Tag: VIP');
+    expect(out).toContain('aria-label="Remove filter: Tag: VIP"');
+    expect(out).toContain('aria-label="Remove filter: Conditions: 2"');
+    expect(out).toContain('>Clear all<');
+    expect(out).toContain('>Save as segment<');
+  });
+
+  it('draws nothing when no filter is on', () => {
+    expect(html(<AppliedFilters chips={[]} onRemove={noop} onClearAll={noop} />)).toBe('');
+  });
+
+  const bar = (over: Partial<Parameters<typeof SelectionBar>[0]> = {}) =>
+    html(
+      <QueryClientProvider client={new QueryClient()}>
+        <SelectionBar
+          count={3}
+          busy={false}
+          can={{ update: true, delete: true, export: true, createTags: true }}
+          onClear={noop}
+          onSendCampaign={noop}
+          onExport={noop}
+          onDelete={noop}
+          onAssignOwner={noop}
+          onChangeStage={noop}
+          onUpdate={noop}
+          picker={null}
+          onPicker={noop}
+          onGroup={async () => true}
+          onTagApply={async () => true}
+          {...over}
+        />
+      </QueryClientProvider>,
+    );
+
+  it('offers Send campaign, Tag, Assign owner, Change stage, Export, Delete and More', () => {
+    const out = bar();
+    expect(out).toContain('3 selected');
+    for (const action of [
+      'Send campaign',
+      'Tag',
+      'Assign owner',
+      'Change stage',
+      'Export',
+      'Delete',
+      'More',
+    ]) {
+      expect(out, action).toContain(action);
+    }
+  });
+
+  it('says "All matching selected" for a selection that stands for the whole filter', () => {
+    expect(bar({ count: null })).toContain('All matching selected');
+  });
+
+  it('shows only what the permissions allow', () => {
+    const out = bar({ can: { update: false, delete: false, export: false, createTags: false } });
+    expect(out).toContain('Send campaign');
+    for (const gone of ['Assign owner', 'Change stage', '>Tag<', 'Export', 'Delete', '>More<']) {
+      expect(out, gone).not.toContain(gone);
+    }
   });
 });
 
@@ -587,5 +908,28 @@ describe('SlashTextarea', () => {
     expect(markup).toContain('aria-label="Message"');
     expect(markup).toContain('aria-autocomplete="list"');
     expect(markup).not.toContain('aria-expanded');
+  });
+});
+
+describe('FirstRun', () => {
+  it('offers the three ways to start, each only where the person may', () => {
+    const all = html(
+      <FirstRun
+        onAdd={() => undefined}
+        onImport={() => undefined}
+        connectHref="/channels/whatsapp"
+      />,
+    );
+    expect(all).toContain('Add your first contacts');
+    expect(all).toContain('Create Contacts');
+    expect(all).toContain('Import a CSV file');
+    expect(all).toContain('href="/channels/whatsapp"');
+    expect(all).toContain('Connect WhatsApp');
+    const some = html(<FirstRun onAdd={() => undefined} />);
+    expect(some).not.toContain('Import a CSV file');
+    expect(some).not.toContain('Connect WhatsApp');
+    const none = html(<FirstRun />);
+    expect(none).not.toContain('<button');
+    expect(none).toContain('Add your first contact, or import a CSV file to get started.');
   });
 });

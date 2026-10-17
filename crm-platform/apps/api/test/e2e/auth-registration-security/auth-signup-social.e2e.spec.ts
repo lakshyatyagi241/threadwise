@@ -5,7 +5,13 @@ import { OtpTemplateService } from '../../../src/modules/auth/platform/otp-templ
 import { PlatformSettingsService } from '../../../src/modules/auth/platform/platform-settings.service';
 import { SocialAuthService } from '../../../src/modules/auth/flows/social-auth.service';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
-import { OPERATOR_EMAIL, OPERATOR_PASSWORD, startHarness, type Harness } from './harness';
+import {
+  OPERATOR_EMAIL,
+  OPERATOR_PASSWORD,
+  seedAnotherWorkspace,
+  startHarness,
+  type Harness,
+} from './harness';
 import {
   BRIDGE_SENDER,
   BRIDGE_TOKEN,
@@ -234,9 +240,26 @@ describe('sign-up announces itself to the other domains', () => {
       `INSERT INTO referral_codes (owner_org_id, user_id, code) VALUES ($1, $2, 'SELF000000000001')`,
       [o.org, o.user],
     );
-    // the same person signs up again, in another workspace, with their own code
-    const again = await signup({ email: own.email, referralCode: 'SELF000000000001' });
-    expect(again.slug).not.toBe(own.slug);
+    // the same person signing up again with their own code: public sign-up refuses the address
+    // outright now (one identity, one account)...
+    const refused = await api().post('/v2/auth/signup').set('x-forwarded-for', nextIp()).send({
+      orgName: 'Self Ref Co',
+      fullName: 'Test Person',
+      email: own.email,
+      password: PASSWORD,
+      acceptTerms: true,
+      referralCode: 'SELF000000000001',
+    });
+    expect(refused.status, JSON.stringify(refused.body)).toBe(409);
+    expect(refused.body.code).toBe('AUTH_IDENTITY_EXISTS');
+    // ...and should a second workspace for them be provisioned anyway, the code still pays nothing.
+    const again = await seedAnotherWorkspace(h, {
+      email: own.email,
+      orgName: 'Self Ref Co',
+      password: PASSWORD,
+      referralCode: 'SELF000000000001',
+    });
+    expect(again.orgSlug).not.toBe(own.slug);
     const all = await h.owner.query(
       `SELECT 1 FROM event_outbox e JOIN users u ON u.org_id = e.org_id
        WHERE u.email = $1 AND e.event_type = 'referral.attributed'`,
@@ -624,6 +647,54 @@ describe('social sign-in', () => {
     expect(login.rows[0].delta).toMatchObject({ method: 'social', remember: true });
   });
 
+  it('starts and completes a social sign-up with no workspace name at all, naming it from the profile', async () => {
+    // The three-step sign-up redesign collects no workspace name up front (TW-AUTH-006): `start` no
+    // longer requires one for mode=signup, and `callback` falls back to a provisional name.
+    const email = uniqueEmail('soc-noorg');
+    h.socialProfiles.set(
+      'no-org',
+      profile('g-no-org', { email, emailVerified: true, name: 'Nia Noorg' }),
+    );
+    const started = await start({ mode: 'signup' });
+    expect(started.status, JSON.stringify(started.body)).toBe(200);
+    const done = await callback(stateOf(started.body.url), 'no-org');
+    expect(done.status, JSON.stringify(done.body)).toBe(201);
+    expect(done.body.landing).toBe('onboarding');
+    const session = await api().get('/v2/auth/session').set(bearer(done.body.tokens.accessToken));
+    expect(session.body.org.name).toBe('Nia Noorg workspace');
+
+    // a normal callback still completes afterwards: the provisional workspace is a real, usable one
+    const again = await api().get('/v2/auth/session').set(bearer(done.body.tokens.accessToken));
+    expect(again.status).toBe(200);
+  });
+
+  it('refuses a social sign-up whose email already has an account in another org', async () => {
+    const existing = await signup();
+    h.socialProfiles.set(
+      'dup-1',
+      profile('g-dup-1', { email: existing.email, emailVerified: true }),
+    );
+    const started = await start({ mode: 'signup', orgName: 'Dup Co' });
+    const res = await callback(stateOf(started.body.url), 'dup-1');
+    expect(res.status, JSON.stringify(res.body)).toBe(409);
+    expect(res.body.code).toBe('AUTH_IDENTITY_EXISTS');
+    expect(res.body.errors).toEqual([
+      {
+        path: 'email',
+        message:
+          'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+      },
+    ]);
+    const count = await h.owner.query(`SELECT count(*)::int AS c FROM users WHERE email = $1`, [
+      existing.email,
+    ]);
+    expect(count.rows[0].c).toBe(1);
+
+    // a returning user signing in via Google to their own org still works
+    const login = await signIn(existing.slug, 'dup-1');
+    expect(login.status, JSON.stringify(login.body)).toBe(201);
+  });
+
   describe('profile picture', () => {
     const social = () => h.app.get(SocialAuthService);
     let original: SocialAuthService['avatarFetch'];
@@ -787,7 +858,12 @@ describe('workspace switch', () => {
     try {
       const email = uniqueEmail('multi');
       const one = await signup({ email, orgName: 'First Workspace' });
-      const two = await signup({ email, orgName: 'Second Workspace' });
+      // public sign-up refuses a second account for one email (one identity, one account)
+      const two = {
+        slug: (
+          await seedAnotherWorkspace(h, { email, orgName: 'Second Workspace', password: PASSWORD })
+        ).orgSlug,
+      };
       return { email, one, two };
     } finally {
       await patchRegistration({ emailVerification: 'banner' });

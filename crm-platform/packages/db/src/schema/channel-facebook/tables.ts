@@ -2,7 +2,9 @@
  * channel-facebook: tables ported from Reference. Mirrors migrations/20261001104000_fb_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
+  check,
   bigint,
   foreignKey,
   index,
@@ -184,6 +186,9 @@ export const facebookBroadcastRecipients = pgTable(
     providerMessageId: text('provider_message_id'),
     error: text('error'),
     sentAt: timestamp('sent_at', { withTimezone: true }),
+    /** BL-191: the instant this recipient may be messaged after the workspace's quiet hours, and why. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -208,6 +213,13 @@ export const facebookBroadcastRecipients = pgTable(
     }).onDelete('set null'),
     index('idx_facebook_broadcast_recipients_psid').on(t.orgId, t.psid),
     index('idx_facebook_broadcast_recipients_status').on(t.orgId, t.status),
+    check(
+      'ck_facebook_broadcast_recipients_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
+    index('idx_facebook_broadcast_recipients_held')
+      .on(t.orgId, t.facebookBroadcastId, t.heldUntil)
+      .where(sql`${t.heldUntil} IS NOT NULL`),
     index('idx_facebook_broadcast_recipients_facebook_broadcast_id_status').on(
       t.orgId,
       t.facebookBroadcastId,

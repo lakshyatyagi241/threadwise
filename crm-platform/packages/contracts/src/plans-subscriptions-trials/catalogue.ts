@@ -161,6 +161,10 @@ export const PLAN_FEATURE_DEFS = [
   // The FULL history choice of the opt-in import of a personal WhatsApp number (TW-WAHIST; owner decision 2026-10-14). The `recent` choice is open to every workspace that
   // may use personal numbers; only `full` needs this. Default false, switched on for the plans with the most generous personal-number allowance (migration 20261204090100).
   { key: 'personal_history_full', group: 'messaging', default: false },
+  // The AI CRM Copilot (TW-AICRM-016): a chat assistant that runs the CRM by tool-calling. Default false: it spends AI tokens like `help_agent`,
+  // so the owner hands it to chosen plans. Reference's `access_ai_agents` column — deliberately NOT `ai_assistants` (Reference's own, different,
+  // `access_ai_chat_assistant` flag already mapped to that key for the AI Training/chat-assistants domain).
+  { key: 'ai_crm_copilot', group: 'aiCalling', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -200,6 +204,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   help_agent: 'Help assistant',
   email_channel: 'Email (Gmail) channel',
   personal_history_full: 'Full history import (personal WhatsApp)',
+  ai_crm_copilot: 'AI CRM Copilot',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -242,6 +247,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'help_agent',
   'email_channel',
   'personal_history_full',
+  'ai_crm_copilot',
 ];
 export const PLAN_CHIP_MAX = 3;
 

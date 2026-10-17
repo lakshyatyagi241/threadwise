@@ -1439,7 +1439,8 @@
             "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
             "help_agent": "Asisten Bantuan dalam aplikasi: pengguna meminta tugas dengan kata-kata biasa, lalu asisten memandu atau mengerjakannya di sesi mereka sendiri dan bertanya dulu sebelum hal berisiko. Memakai token AI.",
             "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini.",
-            "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi."
+            "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi.",
+            "ai_crm_copilot": "Mencari dan menilai prospek dengan AI dari kontak Anda."
           },
           "units": {
             "days": "Hari",
@@ -1624,7 +1625,8 @@
             "sms": "Kanal SMS",
             "help_agent": "Asisten Bantuan (AI, memakai token)",
             "email_channel": "Kanal email (Gmail)",
-            "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)"
+            "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)",
+            "ai_crm_copilot": "AI CRM Copilot"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1727,6 +1729,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Warna berpendar lembut di belakang kartu buram."
+          },
+          "geta": {
+            "name": "Geta terbagi",
+            "description": "Formulir di satu sisi, panel merek animasi dengan statistik di sisi lain."
           }
         },
         "fields": {

@@ -44,9 +44,6 @@
         "unassigned": "Chưa giao",
         "unread": "Chưa đọc"
       },
-      "statusFilter": "Trạng thái",
-      "statusOpen": "Đang mở",
-      "statusAll": "Mọi trạng thái",
       "status": {
         "open": "Đang mở",
         "pending": "Đang chờ",
@@ -61,7 +58,6 @@
         "high": "Cao",
         "urgent": "Khẩn cấp"
       },
-      "channelFilter": "Kênh",
       "allChannels": "Mọi kênh",
       "archived": "Đã lưu trữ",
       "backToInbox": "Quay lại hộp thư",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Chọn",
-      "selectDone": "Xong"
+      "selectDone": "Xong",
+      "filters": {
+        "open": "Bộ lọc",
+        "openActive": "Bộ lọc (đang bật {count})",
+        "title": "Bộ lọc",
+        "close": "Đóng",
+        "reset": "Đặt lại",
+        "cancel": "Hủy",
+        "apply": "Áp dụng",
+        "status": "Trạng thái chat",
+        "statusHint": "Không chọn gì sẽ hiện các chat đang mở và đang chờ.",
+        "conversation": "Cuộc trò chuyện",
+        "any": "Bất kỳ",
+        "assigned": "Đã giao",
+        "unassigned": "Chưa giao",
+        "unattended": "Chưa xử lý",
+        "labels": "Thẻ",
+        "channels": "Kênh",
+        "agents": "Nhân viên",
+        "sortBy": "Sắp xếp theo",
+        "recent": "Mới nhất",
+        "old": "Cũ nhất",
+        "dateRange": "Khoảng ngày (hoạt động cuối)",
+        "from": "Từ",
+        "to": "Đến",
+        "select": "Chọn một mục",
+        "search": "Tìm kiếm",
+        "noMatch": "Không có kết quả",
+        "today": "Hôm nay",
+        "last7": "7 ngày qua",
+        "last30": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "clearDates": "Xóa ngày",
+        "previousMonth": "Tháng trước",
+        "nextMonth": "Tháng sau"
+      },
+      "rowMenu": "Thêm thao tác cho {name}",
+      "priorityMenu": "Mức ưu tiên",
+      "statusFilter": "Trạng thái",
+      "statusOpen": "Đang mở",
+      "statusAll": "Mọi trạng thái",
+      "channelFilter": "Kênh",
+      "selectRow": "Chọn {name}"
     },
     "status": {
       "received": "Đã nhận",
@@ -232,7 +270,9 @@
         "undone": "Đã hoàn tác thay đổi giai đoạn: quay lại {stage}.",
         "undoneToast": "Đã đưa giai đoạn về {stage}.",
         "couldNotUndo": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển tiếp hoặc đã được hoàn tác."
-      }
+      },
+      "heldUntil": "Tạm giữ đến {when}",
+      "heldWhy": "Tin nhắn tiếp thị này đang chờ giờ yên tĩnh của bạn kết thúc. Tin sẽ được gửi khi đó, nếu trong lúc chờ liên hệ chưa hủy đăng ký."
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "Tin nhắn mới: {text}",
       "attachment": "một tệp đính kèm",
       "jumpLatest": "Đến tin nhắn mới nhất",
-      "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}"
+      "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}",
+      "searchOpen": "Tìm trong cuộc trò chuyện này",
+      "searchPlaceholder": "Tìm trong cuộc trò chuyện này",
+      "searchCount": "{current} trên {total}",
+      "searchNone": "Không có kết quả",
+      "searchPrev": "Kết quả trước",
+      "searchNext": "Kết quả sau",
+      "searchClose": "Đóng tìm kiếm"
     },
     "groupThread": {
       "openGroup": "Mở nhóm",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "Trả lời nhanh",
-      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi."
+      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi.",
+      "toolbar": {
+        "label": "Định dạng tin nhắn",
+        "bold": "In đậm",
+        "italic": "In nghiêng",
+        "underline": "Gạch chân",
+        "strike": "Gạch ngang",
+        "bullets": "Danh sách gạch đầu dòng",
+        "numbers": "Danh sách đánh số",
+        "ai": {
+          "open": "Trợ lý AI thông minh",
+          "noModel": "Không gian làm việc này chưa bật mô hình AI nào",
+          "title": "Trợ lý AI thông minh",
+          "condense": "Rút gọn",
+          "condenseHint": "Làm văn bản ngắn gọn, súc tích hơn",
+          "fix": "Sửa ngữ pháp",
+          "fixHint": "Sửa lỗi ngữ pháp và chính tả",
+          "positive": "Giọng tích cực",
+          "positiveHint": "Làm văn bản tích cực và vui vẻ hơn",
+          "translate": "Dịch",
+          "translateHint": "Dịch sang các ngôn ngữ khác",
+          "selectLanguage": "Chọn ngôn ngữ",
+          "searchLanguages": "Tìm ngôn ngữ…",
+          "noLanguage": "Không có ngôn ngữ phù hợp",
+          "working": "Đang xử lý…",
+          "empty": "Hãy viết tin nhắn trước.",
+          "failed": "AI không thể thay đổi văn bản. Hãy thử lại."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",
@@ -452,7 +527,13 @@
         "pickTeam": "Chọn nhóm cho cuộc trò chuyện này",
         "noTeam": "Không có nhóm",
         "onLeave": "Đang nghỉ phép",
-        "onLeaveUntil": "Nghỉ phép đến {date}"
+        "onLeaveUntil": "Nghỉ phép đến {date}",
+        "availability": {
+          "online": "Trực tuyến",
+          "away": "Vắng mặt",
+          "busy": "Bận",
+          "offline": "Ngoại tuyến"
+        }
       },
       "presence": {
         "online": "Trực tuyến",

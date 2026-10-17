@@ -19,6 +19,7 @@ import {
 } from '../lib/model';
 import { ChecklistTab } from './checklist-tab';
 import { ContactsTab } from './contacts-tab';
+import { DncTab } from './dnc-tab';
 import { LinksTab } from './links-tab';
 import { NoticesTab } from './notices-tab';
 import { PhiNotice } from './phi-notice';
@@ -34,6 +35,7 @@ export const TAB_IDS = [
   'links',
   'subprocessors',
   'windows',
+  'dnc',
 ] as const;
 type TabId = (typeof TAB_IDS)[number];
 const isTab = (v: string | null): v is TabId =>
@@ -207,6 +209,7 @@ function Body({
         />
       ),
     },
+    { id: 'dnc', label: t('tabs.dnc'), content: <DncTab canManage={canManage} /> },
   ];
 
   return (

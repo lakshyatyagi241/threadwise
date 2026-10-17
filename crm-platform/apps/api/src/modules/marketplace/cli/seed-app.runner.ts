@@ -138,6 +138,7 @@ export async function runSeedApp(
           amount: opts.price,
           currency: opts.currency,
           annualAmount: p.annualAmount,
+          billingMode: p.billingMode,
           trialDays: p.trialDays,
           purchasable: p.purchasable,
           includedPlanFeature: p.includedPlanFeature,

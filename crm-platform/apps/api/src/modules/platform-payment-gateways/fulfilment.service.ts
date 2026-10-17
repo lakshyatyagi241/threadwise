@@ -61,6 +61,21 @@ export class FulfilmentService {
         );
       }
     }
+    // A card renewal of a Marketplace app REPLACES the one the workspace had for it (same rule, same reasons, same place).
+    if (outcome.applied && order.kind === 'addon' && order.autoRenew && order.planSlug) {
+      try {
+        await this.cancel.endSupersededAppSubscriptions(
+          order.orgId,
+          order.planSlug,
+          order.orderNumber,
+        );
+      } catch (err) {
+        this.logger.error(
+          { err, order: order.orderNumber },
+          'ending the replaced app subscription failed',
+        );
+      }
+    }
     return outcome;
   }
 
@@ -130,6 +145,7 @@ export class FulfilmentService {
         orgId: order.orgId,
         pack: order.planSlug,
         orderId: order.id,
+        period: order.billingPeriod,
       });
       return res.created ? 'addon_granted' : 'nothing';
     }

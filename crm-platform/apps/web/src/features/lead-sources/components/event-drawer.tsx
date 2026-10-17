@@ -10,6 +10,7 @@ import { fetchEvent, leadKeys } from '../api';
 import { guidanceFor, isRetryable, reasonView } from '../lib/event-view';
 import { formatPayload } from '../lib/payload';
 import { contactHref } from '../lib/source-view';
+import { FirstReply } from './first-reply';
 import { ErrorText, EventStatusChip, When } from './ui';
 import type { RetryState } from './use-retry';
 
@@ -116,6 +117,11 @@ export function EventDrawer({
             <Item label={t('duplicates')}>{t('deliveredAgain', { count: e.duplicateCount })}</Item>
           )}
           {reason && <Item label={t('reason')}>{reason.known ? tr(reason.code) : reason.raw}</Item>}
+          {e.firstReply && (
+            <Item label={t('firstReply')}>
+              <FirstReply reply={e.firstReply} />
+            </Item>
+          )}
           {e.contactId && (
             <Item label={t('contact')}>
               <Link

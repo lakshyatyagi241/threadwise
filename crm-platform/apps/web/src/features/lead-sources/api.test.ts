@@ -27,13 +27,21 @@ import {
 
 beforeEach(() => apiFetch.mockReset());
 
+const SECRETS = {
+  token: SECRET_TOKEN,
+  hookPath: SECRET_PATH,
+  hookUrl: `https://api.acme.test${SECRET_PATH}`,
+  hookUrlProblem: null,
+};
+
 describe('secrets are split off the source', () => {
   it('createSource returns the source without a token and the token on its own', async () => {
-    apiFetch.mockResolvedValueOnce({ ...source(), token: SECRET_TOKEN, hookPath: SECRET_PATH });
+    apiFetch.mockResolvedValueOnce({ ...source(), ...SECRETS });
     const res = await createSource(buildCreateBody({ ...emptyDraft(), name: 'Zapier' }));
-    expect(res.secrets).toEqual({ token: SECRET_TOKEN, hookPath: SECRET_PATH });
+    expect(res.secrets).toEqual(SECRETS);
     expect(Object.keys(res.source)).not.toContain('token');
     expect(Object.keys(res.source)).not.toContain('hookPath');
+    expect(Object.keys(res.source)).not.toContain('hookUrl');
     expect(JSON.stringify(res.source)).not.toContain(SECRET_TOKEN);
     const [path, req] = apiFetch.mock.calls[0]!;
     expect(path).toBe('/lead-sources');
@@ -43,7 +51,7 @@ describe('secrets are split off the source', () => {
   });
 
   it('rotateToken does the same for the new token', async () => {
-    apiFetch.mockResolvedValueOnce({ ...source(), token: SECRET_TOKEN, hookPath: SECRET_PATH });
+    apiFetch.mockResolvedValueOnce({ ...source(), ...SECRETS });
     const res = await rotateToken(ID(1));
     expect(res.secrets.token).toBe(SECRET_TOKEN);
     expect(JSON.stringify(res.source)).not.toContain(SECRET_TOKEN);
@@ -53,9 +61,12 @@ describe('secrets are split off the source', () => {
 });
 
 describe('requests', () => {
-  it('lists the sources and unwraps the data', async () => {
-    apiFetch.mockResolvedValueOnce({ data: [source()] });
-    expect(await fetchSources()).toHaveLength(1);
+  it('lists the sources together with the server-built webhook address', async () => {
+    const hookAddress = { baseUrl: 'https://api.acme.test', problem: null };
+    apiFetch.mockResolvedValueOnce({ data: [source()], hookAddress });
+    const res = await fetchSources();
+    expect(res.data).toHaveLength(1);
+    expect(res.hookAddress).toEqual(hookAddress);
     expect(apiFetch.mock.calls[0]![0]).toBe('/lead-sources');
   });
 

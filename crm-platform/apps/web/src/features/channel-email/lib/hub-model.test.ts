@@ -7,6 +7,7 @@ import {
   scopeRights,
   sendLimitDraft,
   sharingDirty,
+  canRemove,
   canSync,
   connectState,
   inboxHref,
@@ -33,6 +34,13 @@ describe('mailbox status chip', () => {
     expect(needsReconnect({ status: 'disconnected' })).toBe(true);
     expect(needsReconnect({ status: 'connected' })).toBe(false);
     expect(needsReconnect({ status: 'error' })).toBe(false);
+  });
+
+  it('offers Remove until the mailbox is already disconnected, where it would be a silent no-op', () => {
+    expect(canRemove({ status: 'connected' })).toBe(true);
+    expect(canRemove({ status: 'error' })).toBe(true);
+    expect(canRemove({ status: 'needs_reauth' })).toBe(true);
+    expect(canRemove({ status: 'disconnected' })).toBe(false);
   });
 });
 

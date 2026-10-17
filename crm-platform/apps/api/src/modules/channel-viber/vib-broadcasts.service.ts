@@ -14,6 +14,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
+import { HELD_TABLES, heldOf, heldSummaries, type HeldSummary } from '../compliance-center';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { VIBER_TEMPLATES, type ViberTemplates } from './_shims/tokens';
@@ -57,7 +58,7 @@ export class VibBroadcastsService {
     @InjectQueue(QUEUES.VIBER_BROADCAST) private readonly queue: Queue<VibBroadcastJob>,
   ) {}
 
-  private toResponse(r: VibBroadcastRow): VibBroadcast {
+  private toResponse(r: VibBroadcastRow, held?: HeldSummary): VibBroadcast {
     return {
       id: r.uuid,
       name: r.name,
@@ -71,6 +72,8 @@ export class VibBroadcastsService {
       delivered: r.delivered,
       seen: r.seen,
       progress: progressPct(r.sent, r.failed, r.total),
+      held: held?.count ?? 0,
+      heldUntil: held?.next?.toISOString() ?? null,
       hasMedia: r.mediaPath !== null,
       lastError: r.lastError,
       startedAt: r.startedAt?.toISOString() ?? null,
@@ -120,7 +123,13 @@ export class VibBroadcastsService {
     return this.db.tx(async (tx) => {
       const rows = await this.repo.list(tx, orgId, LIST_LIMIT);
       const stats = await this.repo.stats(tx, orgId);
-      return { data: rows.map((r) => this.toResponse(r)), stats };
+      const held = await heldSummaries(
+        tx,
+        orgId,
+        HELD_TABLES.viber,
+        rows.map((r) => r.id),
+      );
+      return { data: rows.map((r) => this.toResponse(r, heldOf(held, r.id))), stats };
     });
   }
 

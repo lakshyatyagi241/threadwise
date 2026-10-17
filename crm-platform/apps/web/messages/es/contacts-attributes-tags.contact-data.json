@@ -1,0 +1,99 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Negocios",
+        "loading": "Cargando negocios",
+        "empty": "Este contacto aún no tiene negocios.",
+        "unavailable": "Los negocios no están disponibles en tu plan o tu rol no incluye acceso a ellos.",
+        "listLabel": "Negocios de este contacto",
+        "openRollup": "{count, plural, one {# negocio abierto} other {# negocios abiertos}}",
+        "wonRollup": "{count, plural, one {# negocio ganado} other {# negocios ganados}}",
+        "noValue": "Sin valor",
+        "capped": "Se muestran los primeros {count} negocios. Los totales de arriba incluyen todos.",
+        "pipeline": "Embudo {name}",
+        "closes": "Cierre previsto {date}",
+        "owner": "Responsable {name}",
+        "status": {
+          "open": "Abierto",
+          "won": "Ganado",
+          "lost": "Perdido"
+        }
+      },
+      "conversations": {
+        "title": "Conversaciones",
+        "loading": "Cargando conversaciones",
+        "empty": "No se encontraron conversaciones de este contacto.",
+        "listLabel": "Conversaciones de este contacto",
+        "unread": "{count, plural, one {# mensaje sin leer} other {# mensajes sin leer}}",
+        "open": "Abrir",
+        "openLabel": "Abrir la conversación {title}",
+        "noPreview": "Aún no hay mensajes",
+        "lastMessage": "Último mensaje {time}",
+        "assignedTo": "Asignada a {name}",
+        "unassigned": "Sin asignar",
+        "footnote": "Se encuentran por el teléfono, el correo electrónico o el nombre del contacto. Las conversaciones archivadas no aparecen.",
+        "status": {
+          "open": "Abierta",
+          "pending": "Pendiente",
+          "snoozed": "Pospuesta",
+          "resolved": "Resuelta",
+          "closed": "Cerrada",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Historial de campos del contacto",
+        "title": "Historial de campos del contacto",
+        "close": "Cerrar",
+        "loading": "Cargando el historial",
+        "empty": "Aún no se han registrado cambios de campos de este contacto.",
+        "loadMore": "Cargar más",
+        "changedTo": "cambió a",
+        "noValue": "vacío",
+        "by": "Por {actor}",
+        "actor": {
+          "user": "un usuario",
+          "system": "el sistema",
+          "api": "la API"
+        },
+        "fields": {
+          "name": "Nombre",
+          "firstName": "Nombre",
+          "lastName": "Apellido",
+          "email": "Correo electrónico",
+          "phone": "Teléfono",
+          "companyId": "Empresa",
+          "ownerId": "Responsable",
+          "lifecycleStage": "Etapa del ciclo de vida",
+          "lifecycleState": "Estado del ciclo de vida",
+          "status": "Estado",
+          "lostReason": "Motivo de pérdida",
+          "leadScore": "Puntuación del lead",
+          "source": "Origen",
+          "isUnsubscribed": "Cancelada la suscripción"
+        }
+      },
+      "stats": {
+        "title": "Estadísticas de comunicación",
+        "loading": "Cargando las estadísticas",
+        "conversations": "Conversaciones",
+        "unread": "Mensajes sin leer",
+        "lastInbound": "Último mensaje recibido",
+        "lastOutbound": "Último mensaje enviado",
+        "calls": "Llamadas",
+        "callsAnswered": "Llamadas contestadas",
+        "callsMissed": "Llamadas perdidas",
+        "callMinutes": "Minutos de llamada",
+        "openTasks": "Tareas abiertas",
+        "leadScore": "Puntuación del lead",
+        "lastActivity": "Última actividad",
+        "created": "Creado",
+        "none": "Ninguno todavía",
+        "atLeast": "{count}+",
+        "footnote": "Las cifras de mensajes abarcan las conversaciones encontradas para este contacto (por teléfono, correo electrónico o nombre). Las cifras de llamadas abarcan el último año, según el teléfono o el nombre.",
+        "callsPartial": "Había más llamadas de las que se pudieron leer, por lo que las cifras de llamadas pueden quedarse cortas."
+      }
+    }
+  }
+}

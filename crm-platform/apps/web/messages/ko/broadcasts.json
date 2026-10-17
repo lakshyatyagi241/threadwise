@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "일시 중지됨: 일일 발송 한도에 도달했습니다. {when} 이후 자동으로 재개됩니다.",
         "halt": "일시 중지됨: 이 워크스페이스의 발송이 중단되었습니다. 중단이 해제되면 재개됩니다.",
-        "manual": "일시 중지됨."
+        "manual": "일시 중지됨.",
+        "quiet_hours": "일시 중지됨: 일부 수신자가 방해 금지 시간대입니다. {when} 이후에 자동으로 다시 시작됩니다."
       },
       "delete": "삭제",
       "deleteTitle": "브로드캐스트를 삭제할까요?",
@@ -145,7 +146,8 @@
         "queued": "대기 중",
         "queuedHint": "발송 대기",
         "failed": "실패",
-        "failedPct": "실패율 {pct}%"
+        "failedPct": "실패율 {pct}%",
+        "queuedHeld": "{count}건이 방해 금지 시간 때문에 보류됨"
       },
       "tab": {
         "overview": "개요",
@@ -193,7 +195,8 @@
         "lastClick": "마지막 클릭: {when}",
         "empty": "연결된 수신자가 없습니다.",
         "more": "더 보기",
-        "loading": "로드 중"
+        "loading": "로드 중",
+        "heldUntil": "{when}까지 보류됨 (방해 금지 시간)"
       },
       "failures": {
         "kicker": "실패 사유",

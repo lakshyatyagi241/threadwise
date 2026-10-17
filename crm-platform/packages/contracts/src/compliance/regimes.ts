@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_MINOR_AGE } from '../contact-consent/age';
 import type { ConsentRegime } from '../contact-consent/vocabulary';
 
 /**
@@ -213,14 +214,54 @@ export const GDPR_EU_COUNTRIES: readonly string[] = [
  * form takes free text (up to 80 characters), so the code or the common name is accepted.
  */
 const COUNTRY_NAMES: Readonly<Record<string, string>> = {
-  austria: 'AT', belgium: 'BE', bulgaria: 'BG', croatia: 'HR', cyprus: 'CY', czechia: 'CZ', 'czech republic': 'CZ',
-  denmark: 'DK', estonia: 'EE', finland: 'FI', france: 'FR', germany: 'DE', deutschland: 'DE', greece: 'GR',
-  hungary: 'HU', ireland: 'IE', italy: 'IT', latvia: 'LV', lithuania: 'LT', luxembourg: 'LU', malta: 'MT',
-  netherlands: 'NL', 'the netherlands': 'NL', poland: 'PL', portugal: 'PT', romania: 'RO', slovakia: 'SK',
-  slovenia: 'SI', spain: 'ES', sweden: 'SE', iceland: 'IS', liechtenstein: 'LI', norway: 'NO',
-  'united kingdom': 'GB', uk: 'GB', 'great britain': 'GB', britain: 'GB', england: 'GB', scotland: 'GB', wales: 'GB',
-  india: 'IN', 'united states': 'US', 'united states of america': 'US', usa: 'US', america: 'US',
-  brazil: 'BR', brasil: 'BR', singapore: 'SG',
+  austria: 'AT',
+  belgium: 'BE',
+  bulgaria: 'BG',
+  croatia: 'HR',
+  cyprus: 'CY',
+  czechia: 'CZ',
+  'czech republic': 'CZ',
+  denmark: 'DK',
+  estonia: 'EE',
+  finland: 'FI',
+  france: 'FR',
+  germany: 'DE',
+  deutschland: 'DE',
+  greece: 'GR',
+  hungary: 'HU',
+  ireland: 'IE',
+  italy: 'IT',
+  latvia: 'LV',
+  lithuania: 'LT',
+  luxembourg: 'LU',
+  malta: 'MT',
+  netherlands: 'NL',
+  'the netherlands': 'NL',
+  poland: 'PL',
+  portugal: 'PT',
+  romania: 'RO',
+  slovakia: 'SK',
+  slovenia: 'SI',
+  spain: 'ES',
+  sweden: 'SE',
+  iceland: 'IS',
+  liechtenstein: 'LI',
+  norway: 'NO',
+  'united kingdom': 'GB',
+  uk: 'GB',
+  'great britain': 'GB',
+  britain: 'GB',
+  england: 'GB',
+  scotland: 'GB',
+  wales: 'GB',
+  india: 'IN',
+  'united states': 'US',
+  'united states of america': 'US',
+  usa: 'US',
+  america: 'US',
+  brazil: 'BR',
+  brasil: 'BR',
+  singapore: 'SG',
 };
 
 /** An ISO 3166-1 alpha-2 code from what a form holds: a two-letter code, or the name of a country a profile covers. Else null. */
@@ -259,6 +300,11 @@ const minutes = (hhmm: string): number => {
   const [h, m] = hhmm.split(':');
   return Number(h) * 60 + Number(m);
 };
+
+/** The age below which a person is a minor in this workspace: the highest of the switched-on profiles' ages, else 18 (BL-217, spec 11.10). */
+export function workspaceMinorAge(regimes: readonly ComplianceRegime[]): number {
+  return effectivePolicy(regimes).minorAge ?? DEFAULT_MINOR_AGE;
+}
 
 export interface EffectivePolicy {
   /** Opt-in before marketing: true as soon as one profile asks for it. */
@@ -313,7 +359,7 @@ export function effectivePolicy(regimes: readonly ComplianceRegime[]): Effective
 
 /**
  * Is `minutesOfDay` (0 to 1439) inside a window `start` to `end`? A window whose end is before its start wraps midnight (a quiet period
- * 21:00 to 08:00). Equal start and end is an empty window. Pure and tested; the dispatcher that uses it to defer a send is BL-177.
+ * 21:00 to 08:00). Equal start and end is an empty window. Pure and tested; `decideSendWindow` (send-window.ts) builds the hold decision on it.
  */
 export function isInsideWindow(
   minutesOfDay: number,
@@ -325,7 +371,7 @@ export function isInsideWindow(
   return s < e ? minutesOfDay >= s && minutesOfDay < e : minutesOfDay >= s || minutesOfDay < e;
 }
 
-/** Minutes since midnight of `at` in the IANA zone `timeZone` (the workspace's, or the contact's once BL-177 has one). */
+/** Minutes since midnight of `at` in the IANA zone `timeZone` (the contact's, the fallback zone or the workspace's: see `resolveContactZones`). */
 export function minutesOfDayIn(at: Date, timeZone: string): number {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone,

@@ -193,6 +193,7 @@
         "signupClosed": "O cadastro está fechado. Peça um convite a um administrador.",
         "slugTaken": "Esse endereço de espaço de trabalho já está em uso.",
         "emailTaken": "Esse e-mail já é usado neste espaço de trabalho.",
+        "identityExists": "Já existe uma conta com esse e-mail ou número de telefone.",
         "passwordPolicy": "Essa senha não atende à política de segurança:",
         "tokenInvalid": "Este link é inválido ou expirou.",
         "emailUnverified": "Confirme primeiro seu endereço de e-mail.",
@@ -364,7 +365,9 @@
         "resendIn": "Reenviar código em {time}",
         "resending": "Enviando",
         "resent": "Um novo código está a caminho do seu WhatsApp.",
+        "resentEmail": "Um novo código está a caminho do seu e-mail.",
         "wrongNumber": "Número errado?",
+        "wrongEmail": "E-mail errado?",
         "goBack": "Voltar",
         "addressTakenHint": "Esse endereço de espaço de trabalho foi usado enquanto você verificava. Escolha outro e enviaremos um novo código.",
         "chooseAnotherAddress": "Escolher outro endereço"

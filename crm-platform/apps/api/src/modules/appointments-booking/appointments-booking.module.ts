@@ -4,6 +4,9 @@ import {
   APPOINTMENT_CALENDAR,
   APPOINTMENT_MESSENGER,
   GoogleCalendarClient,
+  HttpIcsFeedFetcher,
+  ICS_FEED_FETCHER,
+  MicrosoftCalendarClient,
   NoAppointmentMessenger,
 } from '../../infra/providers/appointments-booking';
 import { ContactConsentModule } from '../contact-consent';
@@ -19,10 +22,23 @@ import { AppointmentsSupport } from './appointments.support';
 import { AppointmentBookingGuard, AppointmentPlan } from './booking-plan';
 import { BookingOffersService } from './booking-offers.service';
 import { BookingService } from './booking.service';
+import { BookingsFeedService } from './bookings-feed.service';
 import { BookingTypesController } from './booking-types.controller';
 import { BookingTypesRepository } from './booking-types.repository';
 import { BookingTypesService } from './booking-types.service';
+import { CalendarBackfillQueue } from './calendar-backfill.jobs';
+import { CalendarBackfillService } from './calendar-backfill.service';
+import { CalendarOverviewService } from './calendar-overview.service';
+import {
+  BookingsFeedController,
+  BookingsFeedPublicController,
+  IcsFeedsController,
+} from './calendar-feeds.controller';
+import { CalendarProviders } from './calendar-providers.service';
 import { ContactLinkService } from './contact-link.service';
+import { IcsBusySource } from './ics-busy.source';
+import { IcsFeedsRepository } from './ics-feeds.repository';
+import { IcsFeedsService } from './ics-feeds.service';
 import { GoogleConsentRepository } from './google-consent.repository';
 import { GoogleConsentService } from './google-consent.service';
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
@@ -32,6 +48,17 @@ import { GoogleCalendarConnectService } from './google-calendar-connect.service'
 import { GoogleCalendarConnectionRepository } from './google-calendar-connection.repository';
 import { GoogleCalendarController } from './google-calendar.controller';
 import { GoogleCalendarTokens } from './google-calendar-tokens.service';
+import { MicrosoftCalendarAdapter } from './microsoft-calendar.adapter';
+import { MicrosoftCalendarConfig } from './microsoft-calendar-config.service';
+import { MicrosoftCalendarConnectService } from './microsoft-calendar-connect.service';
+import { MicrosoftCalendarConnectionRepository } from './microsoft-calendar-connection.repository';
+import {
+  CalendarProvidersController,
+  MicrosoftCalendarCallbackController,
+  MicrosoftCalendarController,
+} from './microsoft-calendar.controller';
+import { MicrosoftCalendarTokens } from './microsoft-calendar-tokens.service';
+import { MultiCalendarAdapter } from './multi-calendar.adapter';
 import {
   PublicBookingController,
   PublicBookingManageController,
@@ -44,15 +71,16 @@ import { SlotsService } from './slots.service';
  * Appointments and booking (TW-APPT). Booking types, the slot engine, appointments with a guarded status machine, and the customer's
  * public booking and manage pages.
  *
- * The calendar and the customer messages go through two ports (`infra/providers/appointments-booking`). The calendar is served by the
- * Google Calendar adapter (a workspace with nothing connected behaves as the old stub did); the customer messages still have the stub
+ * The calendar and the customer messages go through two ports (`infra/providers/appointments-booking`). The calendar port is fronted by
+ * `MultiCalendarAdapter`: busy time from every connected Google and Outlook calendar, events written to one (a workspace with nothing
+ * connected behaves as the old stub did); the customer messages still have the stub
  * the channel domain replaces under the same token: a booking message is reported as skipped.
  *
  * The sweeps and the outbox consumers live in `AppointmentsBookingWorkerModule` (the worker process only).
  */
 @Module({
   // CrmModule: contacts (find-or-create by phone and email). PlansCoreModule: the `appointment_booking` flag and the `appointments` cap.
-  // PlatformSettingsModule: the operator's Google OAuth client (console, Google Calendar).
+  // PlatformSettingsModule: the operator's Google and Microsoft OAuth clients (console, Google Calendar / Microsoft Calendar).
   imports: [ContactConsentModule, CrmModule, PlansCoreModule, PlatformSettingsModule],
   controllers: [
     // `booking-types/options`, `preview-slots` and `appointments/counts`, `calendar` are literal paths declared before `:id` inside
@@ -65,6 +93,14 @@ import { SlotsService } from './slots.service';
     // `appointments/calendar/google/...` (staff) and the public OAuth callback.
     GoogleCalendarController,
     GoogleCalendarCallbackController,
+    // `appointments/calendar/microsoft/...`, its public callback, and the cross-provider overview and choice.
+    MicrosoftCalendarController,
+    MicrosoftCalendarCallbackController,
+    CalendarProvidersController,
+    // Read-only iCal subscriptions, a person's own bookings feed, and the public feed a calendar app reads.
+    IcsFeedsController,
+    BookingsFeedController,
+    BookingsFeedPublicController,
   ],
   providers: [
     CryptoService,
@@ -91,7 +127,24 @@ import { SlotsService } from './slots.service';
     GoogleConsentRepository,
     GoogleConsentService,
     GoogleCalendarConnectService,
-    { provide: APPOINTMENT_CALENDAR, useExisting: GoogleCalendarAdapter },
+    MicrosoftCalendarClient,
+    MicrosoftCalendarConfig,
+    MicrosoftCalendarConnectionRepository,
+    MicrosoftCalendarTokens,
+    MicrosoftCalendarAdapter,
+    MicrosoftCalendarConnectService,
+    CalendarProviders,
+    CalendarBackfillService,
+    CalendarBackfillQueue,
+    CalendarOverviewService,
+    IcsFeedsRepository,
+    IcsFeedsService,
+    IcsBusySource,
+    BookingsFeedService,
+    { provide: ICS_FEED_FETCHER, useClass: HttpIcsFeedFetcher },
+    MultiCalendarAdapter,
+    // The booking code talks to ONE port; it fronts the workspace's Google and Outlook calendars.
+    { provide: APPOINTMENT_CALENDAR, useExisting: MultiCalendarAdapter },
     { provide: APPOINTMENT_MESSENGER, useClass: NoAppointmentMessenger },
   ],
   exports: [
@@ -110,6 +163,13 @@ import { SlotsService } from './slots.service';
     GoogleConsentService,
     GoogleCalendarTokens,
     GoogleCalendarConnectionRepository,
+    CalendarProviders,
+    CalendarBackfillQueue,
+    // The worker's back-fill job runs it.
+    CalendarBackfillService,
+    // The worker's iCal feed read runs them.
+    IcsFeedsService,
+    IcsFeedsRepository,
   ],
 })
 export class AppointmentsBookingModule {}

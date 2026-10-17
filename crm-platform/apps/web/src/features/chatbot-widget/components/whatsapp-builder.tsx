@@ -249,7 +249,7 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
                       aria-expanded={open}
                       aria-controls={`wgt-card-body-${n}`}
                       onClick={() => p.onOpenCard(open ? 0 : n)}
-                      className="flex w-full items-center gap-3 px-5 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                      className="flex w-full items-center gap-3 px-5 py-4 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                     >
                       <span className="min-w-0 flex-1">
                         <span className="block text-[15px] font-semibold leading-tight">
@@ -335,7 +335,7 @@ function ButtonSample({ type, colour }: { type: LauncherButtonType; colour: stri
   const t = useTranslations('chatbotWidget.whatsappBuilder');
   return type === 'pill' ? (
     <span
-      className="inline-flex h-11 items-center gap-2 rounded-full pl-3 pr-4 text-[13px] font-bold text-white shadow-md"
+      className="inline-flex h-11 items-center gap-2 rounded-full ps-3 pe-4 text-[13px] font-bold text-white shadow-md"
       style={{ background: gradient(colour) }}
     >
       <WhatsappGlyph className="size-6" />
@@ -870,9 +870,9 @@ function SpacingInput({
           value={value}
           aria-invalid={flash === field || undefined}
           onChange={(e) => onChange(e.target.value)}
-          className={cn(INPUT, 'pr-10', ring(flash, field))}
+          className={cn(INPUT, 'pe-10', ring(flash, field))}
         />
-        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[12px] text-muted-foreground">
+        <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-[12px] text-muted-foreground">
           {t('px')}
         </span>
       </div>

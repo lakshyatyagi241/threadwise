@@ -27,13 +27,13 @@ No SECURITY DEFINER lookup: the public callback carries workspace and admin in i
 
 ## Settings and environment read
 
-| Setting                                                                    | Where                                 | Reader                                  |
-| -------------------------------------------------------------------------- | ------------------------------------- | --------------------------------------- |
-| `googleMail` `{enabled, clientId, redirectUri}` + secret `clientSecret`    | platform settings (operator console)  | `GoogleMailConfig` (env fallback below) |
-| `microsoftMail` `{enabled, clientId, tenant, redirectUri}` + secret `clientSecret` | platform settings (operator console) | `MicrosoftMailConfig` (env `MICROSOFT_MAIL_*` fallback) |
-| `GOOGLE_MAIL_CLIENT_ID/SECRET/REDIRECT_URI`                                | environment                           | `GoogleMailConfig` fallback             |
-| `GOOGLE_OAUTH_*`, `GMAIL_API_URL`, `GOOGLE_MAIL_HTTP_TIMEOUT_MS`, `MAIL_*` | `config/domains/channel-email.env.ts` | provider clients, sync, ingest          |
-| plan feature `email_channel`, limit `email_mailboxes`                      | plan catalogue                        | `@RequirePlanFeature`, `MailPlan`       |
+| Setting                                                                            | Where                                 | Reader                                                  |
+| ---------------------------------------------------------------------------------- | ------------------------------------- | ------------------------------------------------------- |
+| `googleMail` `{enabled, clientId, redirectUri}` + secret `clientSecret`            | platform settings (operator console)  | `GoogleMailConfig` (env fallback below)                 |
+| `microsoftMail` `{enabled, clientId, tenant, redirectUri}` + secret `clientSecret` | platform settings (operator console)  | `MicrosoftMailConfig` (env `MICROSOFT_MAIL_*` fallback) |
+| `GOOGLE_MAIL_CLIENT_ID/SECRET/REDIRECT_URI`                                        | environment                           | `GoogleMailConfig` fallback                             |
+| `GOOGLE_OAUTH_*`, `GMAIL_API_URL`, `GOOGLE_MAIL_HTTP_TIMEOUT_MS`, `MAIL_*`         | `config/domains/channel-email.env.ts` | provider clients, sync, ingest                          |
+| plan feature `email_channel`, limit `email_mailboxes`                              | plan catalogue                        | `@RequirePlanFeature`, `MailPlan`                       |
 
 ## Queues and workers
 
@@ -119,3 +119,30 @@ Deviation from Reference: Reference has no personal mailboxes. Runbook: if a wor
 ## Campaign engine (TW-CAMP-028, email half)
 
 `EmailEngineSender` (`channel-email/email-engine.sender.ts`, pure rules `email-engine.rules.ts`) is the `email` engine of `EngineSenderRegistry`: campaigns send through a mailbox (`email:<uuid>`) with the mailbox's own `MailTokens.withAccess`, `MailDriverRegistry`, `MailSendGuard` (bounce list, hourly cap and burst) and the consent gate / unsubscribe link. New seams: `ChannelEmailModule` imports `BroadcastsModule` (the registry); `MailPlan.monthlyLimit` (plan limit `email_monthly`); `MailboxesRepository.byId`, `sentSince`, `contactUuid`. No new table or permission. See wiring/campaigns.md (Email campaigns).
+
+## E-19 wiring (mail on the contact timeline)
+
+- Writer: `MailTimeline` (`channel-email/mail-timeline.service.ts`; pure rules `mail-timeline-rules.ts`, data access `mail-timeline.repository.ts`). It is NOT in `crm/contact-activities`; it inserts through the CRM barrel (`ContactActivitiesRepository.insert`, `ContactsRepository.bumpLastActivity`), so `ChannelEmailModule` imports `CrmModule`.
+- Inbound: `MailIngestService.store` -> `ExternalChannelIngest.inbound` returns `stored` -> `MailTimeline.recordInbound` (also for the quiet backfill/repair; a thread with no contact is skipped). Outbound: `EmailChannelAdapter.send`, after the provider accepted -> `MailTimeline.recordOutbound` (thread = `t:<threadId>` on the channel).
+- Table `mail_timeline_entries` (owned; RLS enabled + forced; migration `20261225090000`): ledger `(org_id, dedupe_key)` unique, FK `(org_id, activity_id)` -> `contact_activities` ON DELETE CASCADE. Key = `<mailbox uuid>:in:<provider message id>` / `<mailbox uuid>:out:<Message-ID>`; one advisory lock per key makes check-then-write atomic. Holds no personal data (ids only; no privacy-registry entry needed).
+- Rows written: `contact_activities` with `activity_type` `email_received` (source `system`) or `email_sent` (source `user` + actor, or `bot` for an automation), title "Email received from X: subject" / "Email sent to X (+N): subject", body = first 240 characters of the text without quoted earlier mail, `occurred_at` = when the mail was sent. `contacts.last_activity_at` is bumped.
+- Rules: shared mailboxes only (a personal mailbox leaves nothing: the timeline is read by everyone who may read the contact); `automated` mail (auto-reply, list, flood-limited) excluded; bounce reports never get here (consumed first); never throws (a failure is logged and the mail is unaffected). No audit row and no outbox event per mail (the mail is itself the log; same as the speed-to-lead and form-submission timeline writers).
+- Read: unchanged and the CRM's: `GET /v2/contacts/:id/activities` applies the caller's `record.contacts.read` scope. Web: the contact detail Timeline already renders title and body, so no web change.
+- Not covered: campaign mail (`EmailEngineSender` records its own recipient rows), mail of the quiet first import when the thread had no contact yet, deep link from an entry to its conversation (BL-227).
+- Tests: `test/unit/channel-email/mail-timeline-rules.spec.ts`, `test/e2e/channel-email/mail-timeline.e2e.spec.ts`.
+
+## E-17 wiring (Microsoft Graph change notifications)
+
+- Route: `POST /v2/public/email/microsoft/push` (`MailGraphPushController`, public, in `tools/auth-audit/baseline/public-routes.json`). `?validationToken=` -> 200 `text/plain` echo (only while push is configured; else 404); a JSON `{value:[...]}` body -> 202 at once, then `MailGraphPushService.handle`.
+- Verification: `clientState` = `<orgId>.<mailbox uuid>.<HMAC>` (`graph-push-rules.ts`, key = the mail state key, an HKDF of `CREDENTIALS_ENCRYPTION_KEY`; the signed text starts with `graph-push:` so it cannot be confused with an OAuth state) AND `subscriptionId` equal to `mail_mailboxes.push_state.id` AND mailbox connected AND plan feature `email_channel`; anything else is dropped. A valid change/`missed` -> `MailSyncPublisher.enqueue` (job id per mailbox); `reauthorizationRequired` -> `push_state.renewNow = true`; `subscriptionRemoved` -> `push_state = null`.
+- Subscription life: `MicrosoftMailDriver.push` (`MailPushSupport`: `start` renews in place or creates, `stop` deletes) driven by `MailPushService.sweep` (every 2 minutes in the worker, now over `google` and `microsoft`), `GraphMailClient.createSubscription/renewSubscription/deleteSubscription`, `MicrosoftMailConfig.push()`. `MailboxesService.disconnect` already calls `driver.push.stop`. `MailSyncSweep` skips a push-active mailbox synced within `MAIL_PUSH_RECONCILE_MINUTES` (provider-agnostic).
+- Settings/env: `MAIL_GRAPH_PUSH_ENABLED` (default off), `MICROSOFT_MAIL_NOTIFICATION_URL` (optional override; otherwise the redirect URI's origin + the path, which must be public https), `MAIL_PUSH_RENEW_BEFORE_HOURS`. No operator-console field, no migration, no new permission. Runbook: `docs/runbooks/microsoft-mail-setup.md` section 5.
+- Tests: `test/unit/channel-email/graph-push-rules.spec.ts`, `test/e2e/channel-email/microsoft-push.e2e.spec.ts` against `fake-graph.ts` (`/subscriptions`, validation handshake driven through the real route). Never run against Microsoft.
+
+## E-08 / E-11 wiring (Test credentials, sync lag)
+
+- Routes: `POST /v2/email/mailboxes/test-imap` (settings in the body) and `POST /v2/email/mailboxes/:id/test` (saved login), both `mail.mailboxes.manage` | `mail.mailboxes.manage_personal`, plan feature `email_channel`; the stored one needs the same right as Sync now (`mayAct(..., 'sync')`) and works on `connected`, `error` and `needs_reauth`. Limit 6 runs a minute per workspace (Redis `mail:test:<org>`, 429 `MAIL_RATE_LIMITED`).
+- Code: `MailConnectionTester` (`mail-connection-test.service.ts`), `PasswordMailDriver.test` implemented by `ImapMailDriver.test` (both sides always tried; connect, sign in, open the INBOX and read its count; SMTP connect/greet/sign in, nothing sent), pure wording rules `mail-test-rules.ts`, shared connection builder `passwordConnectionOf`. The SSRF guard and certificate rules of connect/sync apply. Answers carry only our sentences and reason codes (never a host, banner or password). No audit row (nothing changes); the run is logged with workspace and user.
+- Contract: `testImapMailboxSchema`, `mailConnectionTestResponseSchema` (+ step/reason enums), `MailboxResponse.syncLagSeconds` (seconds since the last successful sync of a connected mailbox; null otherwise and on summary rows).
+- Web: `ImapConnectDialog` ("Test credentials", result under the form), `MailboxCard` ("Test connection" on IMAP mailboxes that are not disconnected, "Behind by" row, orange past 10 minutes), `connection-test-result.tsx`, `lib/test-view.ts`, `buildTestInput` in `lib/imap-form.ts`, strings `email.imap.test.*` and `email.card.test|testing|lag*` in 21 languages, help guide `email-mailboxes.md`.
+- Tests: `imap-test-credentials.spec.ts`, `mail-test-rules.spec.ts`, `mail-test-credentials.e2e.spec.ts`, web `connection-test.render.test.tsx`, `test-view.test.ts`, `imap-form.test.ts`, `hub-screen.render.test.tsx`.

@@ -18,7 +18,8 @@
       "notices": "Pemberitahuan",
       "links": "Tautan privasi dan ketentuan",
       "subprocessors": "Sub-pemroses",
-      "windows": "Jam tenang dan panggilan"
+      "windows": "Jam tenang dan panggilan",
+      "dnc": "Jangan hubungi"
     },
     "saveBar": {
       "unsaved": "Anda memiliki perubahan yang belum disimpan.",
@@ -35,7 +36,8 @@
       "duplicate": "Anda sudah mencantumkan sub-pemroses dengan nama itu.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
-      "unexpected": "Terjadi kesalahan. Coba lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "dncInvalid": "Berkas tidak dapat dibaca: tidak berisi nomor telepon, atau terlalu banyak nomor sekaligus."
     },
     "problems": {
       "httpsOnly": "Gunakan alamat yang diawali dengan https://.",
@@ -165,7 +167,7 @@
             "unset": "Jawab pertanyaan tentang anak-anak di bagian Kontak dan anak-anak.",
             "minorsNoParental": "Anak di bawah umur mungkin termasuk, tetapi persetujuan orang tua nonaktif. Profil ini menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
             "no_minors": "Anda tidak dengan sengaja memproses data anak di bawah umur. Profil ini menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
-            "may_include_minors": "Persetujuan orang tua diaktifkan untuk orang di bawah {age} tahun. Penyimpanan bukti per kontak belum tersedia."
+            "may_include_minors": "Persetujuan orang tua aktif untuk orang di bawah {age} tahun. Tandai kontak sebagai di bawah umur di kartu persetujuannya dan catat persetujuan wali di sana."
           }
         },
         "opt_out_notice": {
@@ -220,9 +222,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Jam tenang dan jendela panggilan belum diberlakukan",
+          "title": "Jam tenang dan jendela panggilan diberlakukan",
           "detail": {
-            "notEnforced": "Jam tenang dan jendela panggilan Anda sudah disimpan, tetapi belum ada yang menahan pesan atau memblokir panggilan di luar jam tersebut. Atur sendiri jadwal Anda."
+            "enforced": "Pesan pemasaran dalam jam tenang Anda ditahan sampai jam itu berakhir, dan panggilan di luar jendela panggilan ditolak disertai waktu pembukaannya. Balasan dalam jendela 24 jam dan pemberitahuan layanan tidak pernah ditahan. Registri DND hanya catatan: belum ada yang diperiksa terhadapnya."
           }
         }
       }
@@ -322,7 +324,9 @@
         "hint": "UU DPDP memungkinkan orang mengelola persetujuan melalui pengelola persetujuan terdaftar. Sebutkan milik Anda di sini jika Anda menggunakannya.",
         "managerName": "Pengelola persetujuan",
         "managerUrl": "Tautan pengelola persetujuan",
-        "placeholderNote": "Ini hanya catatan. Belum ada yang terhubung ke pengelola persetujuan."
+        "placeholderNote": "Ini hanya catatan. Belum ada yang terhubung ke pengelola persetujuan.",
+        "managerRegistration": "Nomor registrasi Consent Manager",
+        "managerRegistrationHint": "Nomor yang diberikan Dewan Perlindungan Data saat mendaftarkan Consent Manager Anda. Hanya sebagai catatan."
       }
     },
     "contacts": {
@@ -344,7 +348,7 @@
       },
       "children": {
         "title": "Data anak-anak",
-        "hint": "Produk ini untuk bisnis. Tentukan apakah Anda mungkin menyimpan data anak di bawah umur, agar aturan yang tepat ditampilkan.",
+        "hint": "Produk ini untuk bisnis. Katakan apakah Anda boleh menyimpan data anak di bawah umur agar aturan yang tepat ditampilkan. Setelah Anda menjawab, pemasaran ke kontak yang ditandai di bawah umur ditahan: selalu jika Anda tidak dengan sengaja memproses data anak di bawah umur, dan sampai persetujuan wali tercatat jika anak di bawah umur mungkin termasuk.",
         "policy": "Anak di bawah umur di antara kontak Anda",
         "policies": {
           "unset": "Belum dijawab",
@@ -352,7 +356,7 @@
           "may_include_minors": "Anak di bawah umur mungkin ada di antara kontak kami"
         },
         "parental": "Persetujuan orang tua diperlukan untuk anak di bawah umur",
-        "parentalHint": "Penanda yang mencatat kebijakan Anda. Pengumpulan dan penyimpanan bukti persetujuan orang tua per kontak belum tersedia.",
+        "parentalHint": "Mencatat kebijakan Anda, dan menahan pemasaran ke kontak yang ditandai di bawah umur sampai persetujuan wali tercatat. Anda menandai kontak sebagai di bawah umur dan mencatat persetujuan itu di kartu persetujuannya.",
         "age": "Profil yang Anda aktifkan menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
         "dpdpNeedsAnswer": "Profil DPDP meminta Anda menjawab pertanyaan ini."
       }
@@ -379,18 +383,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Pengaturan ini tersimpan, tetapi belum diberlakukan. Pesan tidak ditahan dan panggilan tidak diblokir di luar jam yang Anda atur. Rencanakan pengiriman dan panggilan Anda sesuai jam tersebut.",
-      "intro": "Beberapa aturan membatasi kapan pesan dan panggilan pemasaran boleh sampai ke orang. Catat jam kerja Anda di sini.",
+      "intro": "Beberapa aturan membatasi kapan pesan pemasaran dan panggilan boleh sampai ke orang. Atur jam Anda di sini: pesan pemasaran yang dikirim saat jam tenang menunggu dan terkirim setelah jam itu berakhir, dan panggilan di luar jendela panggilan tidak dilakukan.",
       "quiet": {
         "title": "Jam tenang untuk pesan",
-        "hint": "Jam saat Anda tidak ingin pesan pemasaran sampai ke orang. Periode ini boleh melewati tengah malam.",
+        "hint": "Jam ketika pesan pemasaran tidak dikirim. Pesan menunggu, lalu dikirim saat jam itu berakhir. Rentang waktu boleh melewati tengah malam.",
         "enabled": "Jam tenang aktif",
         "start": "Tenang dari",
         "end": "Tenang sampai"
       },
       "calling": {
         "title": "Jendela panggilan",
-        "hint": "Satu-satunya jam panggilan pemasaran boleh dilakukan, pada hari yang Anda pilih.",
+        "hint": "Satu-satunya jam panggilan pemasaran dilakukan, pada hari yang Anda pilih. Panggilan di luarnya ditolak dan menyebutkan kapan jendela dibuka.",
         "enabled": "Jendela panggilan aktif",
         "start": "Panggilan dari",
         "end": "Panggilan sampai",
@@ -407,8 +410,8 @@
       },
       "suggested": "Hukum yang Anda aktifkan menyarankan {start} sampai {end}.",
       "zone": {
-        "label": "Zona waktu",
-        "hint": "Jam dibaca menurut zona ini. Zona ruang kerja Anda adalah {zone}.",
+        "label": "Zona waktu cadangan",
+        "hint": "Jam dibaca menurut jam masing-masing kontak: properti zona waktunya, atau jika tidak ada, kode negara nomornya. Zona ini dipakai bila keduanya tidak diketahui. Zona ruang kerja Anda adalah {zone}.",
         "workspace": "Zona waktu ruang kerja ({zone})"
       },
       "dnd": {
@@ -421,8 +424,10 @@
           "sg_dnc": "Do Not Call Singapura",
           "custom": "Daftar Anda sendiri"
         },
-        "note": "Ini hanya catatan. Belum ada yang diperiksa terhadap suatu daftar."
-      }
+        "note": "Ini hanya catatan. Belum ada yang diperiksa terhadap suatu daftar.",
+        "listNote": "Nomor pada daftar Jangan hubungi Anda (tab terakhir) sudah dikecualikan dari panggilan dan pesan teks pemasaran."
+      },
+      "enforcedNote": "Jam tenang menahan pesan pemasaran sampai selesai, dan jendela panggilan menolak panggilan di luarnya. Jam masing-masing kontak yang dipakai. Balasan dalam jendela 24 jam dan pemberitahuan layanan tidak pernah ditahan."
     },
     "subprocessors": {
       "intro": "Vendor yang memproses data pribadi untuk ruang kerja Anda: apa yang mereka lakukan, data apa yang mereka terima, dan di mana. Anda dapat menerbitkan daftar ini di halaman publik.",
@@ -487,6 +492,55 @@
       "privacy": "Kebijakan privasi",
       "terms": "Ketentuan",
       "notFound": "Halaman tidak ditemukan"
+    },
+    "hold": {
+      "heldUntil": "Ditahan sampai {when} (jam tenang)",
+      "heldCount": "{count} ditahan karena jam tenang"
+    },
+    "dnc": {
+      "intro": "Nomor pada daftar ini tidak mendapat pemasaran lewat suara atau SMS, apa pun riwayat persetujuannya. WhatsApp, email, dan pesan layanan tidak ditahan olehnya. Tidak ada pemeriksaan ke registri nasional dari sini: tambahkan ekstrak yang berhak Anda unduh.",
+      "addTitle": "Tambah nomor",
+      "numbers": "Nomor telepon",
+      "numbersHint": "Satu per baris, atau dipisahkan koma. Maksimal {max} sekaligus; gunakan berkas untuk lebih banyak.",
+      "country": "Kode negara untuk nomor lokal",
+      "countryHint": "Nomor yang ditulis tanpa kode negara dibaca dengan kode ini.",
+      "note": "Catatan",
+      "noteHint": "Opsional. Alasan nomor-nomor ini dicantumkan.",
+      "add": "Tambahkan ke daftar",
+      "adding": "Menambahkan...",
+      "or": "atau",
+      "import": "Tambahkan dari berkas CSV",
+      "importing": "Membaca berkas...",
+      "importHint": "Kolom bernama phone, mobile, atau number, jika tidak ada maka kolom pertama. Berkas besar dibaca bertahap.",
+      "fromRegistry": "Berkas ini adalah ekstrak dari registri yang berhak saya gunakan",
+      "progress": "Mengirim bagian {done} dari {of}...",
+      "added": "{count, plural, =0 {Tidak ada nomor baru untuk ditambahkan} one {# nomor ditambahkan} other {# nomor ditambahkan}}",
+      "result": "{added} ditambahkan, {already} sudah ada di daftar, {invalid} bukan nomor telepon.",
+      "invalidSamples": "Contoh: {samples}",
+      "listTitle": "Nomor dalam daftar",
+      "total": "{count, plural, =0 {Tidak ada nomor dalam daftar} one {# nomor dalam daftar} other {# nomor dalam daftar}}",
+      "search": "Cari nomor",
+      "loading": "Memuat daftar...",
+      "empty": "Belum ada nomor",
+      "emptyHint": "Tambahkan nomor yang meminta untuk tidak dihubungi lewat telepon atau pesan teks, atau ekstrak dari registri yang boleh Anda gunakan.",
+      "noMatch": "Tidak ada nomor yang cocok",
+      "source": {
+        "manual": "Ditambahkan manual",
+        "import": "Dari berkas",
+        "contact_request": "Diminta oleh orangnya",
+        "registry_export": "Ekstrak registri"
+      },
+      "remove": "Hapus",
+      "removeLabel": "Hapus {phone} dari daftar",
+      "removed": "Nomor dihapus dari daftar",
+      "newer": "Terbaru",
+      "older": "Terlama",
+      "confirm": {
+        "title": "Hapus nomor ini?",
+        "message": "{phone} dapat kembali menerima panggilan dan pesan teks pemasaran, kecuali kontak telah menarik persetujuannya. Hapus hanya jika orangnya memintanya atau nomor ini ditambahkan karena kesalahan.",
+        "confirm": "Hapus nomor",
+        "cancel": "Pertahankan"
+      }
     }
   }
 }

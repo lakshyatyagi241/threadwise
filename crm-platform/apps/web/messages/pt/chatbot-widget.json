@@ -254,7 +254,34 @@
         "off": "Desativada",
         "none": "Nenhum"
       },
-      "colorSwatch": "{label} (amostra)"
+      "colorSwatch": "{label} (amostra)",
+      "age": {
+        "enable": "Pedir a idade antes de iniciar o chat",
+        "enableHint": "Desativado por padrão. Use somente se as regras do seu espaço de trabalho exigirem ou se seus visitantes puderem ser menores. O chat nunca informa qual resposta é aceita.",
+        "mode": "Como perguntar",
+        "modes": {
+          "declaration": "Uma caixa: \"Confirmo que tenho pelo menos N anos\"",
+          "age": "Pedir a idade",
+          "dob": "Pedir a data de nascimento"
+        },
+        "modeHints": {
+          "declaration": "Nada sobre a idade é guardado. O mínimo de dados.",
+          "age": "Um número inteiro. É usado na verificação; apenas o resultado é guardado.",
+          "dob": "Salva no contato como data de nascimento. Use somente se precisar da data."
+        },
+        "minAge": "Idade mínima",
+        "minAgeHint": "Deixe vazio para usar a idade do seu espaço de trabalho na Central de conformidade (18 se nenhuma estiver definida). Entre 1 e 21.",
+        "whenUnder": "Se o visitante tiver menos que essa idade",
+        "actions": {
+          "block": "Não iniciar o chat",
+          "flag": "Iniciar o chat e marcar o contato como menor"
+        },
+        "actionHints": {
+          "block": "Nada sobre o visitante é armazenado e ele vê uma mensagem neutra. Com a caixa, o visitante só precisa marcá-la.",
+          "flag": "O chat continua e, assim que o visitante informar um telefone ou e-mail, o contato é marcado como menor."
+        },
+        "contactNote": "A idade só é registrada em um contato depois que o visitante informar um telefone ou endereço de e-mail."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widget do WhatsApp",

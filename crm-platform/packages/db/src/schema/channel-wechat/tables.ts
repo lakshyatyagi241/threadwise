@@ -2,7 +2,9 @@
  * channel-wechat: tables ported from Reference. Mirrors migrations/20261001104300_wech_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
+  check,
   boolean,
   foreignKey,
   index,
@@ -94,6 +96,9 @@ export const wechatBroadcasts = pgTable(
     lastError: text('last_error'),
     startedAt: timestamp('started_at', { withTimezone: true }),
     finishedAt: timestamp('finished_at', { withTimezone: true }),
+    /** BL-191: a mass send is one call, so the whole broadcast waits for the workspace's quiet hours to end. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -121,6 +126,10 @@ export const wechatBroadcasts = pgTable(
       columns: [t.orgId, t.templateId],
       foreignColumns: [waTemplates.orgId, waTemplates.id],
     }).onDelete('set null'),
+    check(
+      'ck_wechat_broadcasts_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
     index('idx_wechat_broadcasts_status').on(t.orgId, t.status),
     index('idx_wechat_broadcasts_wechat_channel_id').on(t.orgId, t.wechatChannelId),
   ],

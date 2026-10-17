@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { LEAD_HOOK_SECRET_HEADER } from '@crm/contracts';
 import { Alert, Button, Checkbox } from '@crm/ui';
-import { leadHookUrl, type HookUrlEnv } from '../lib/hook-url';
 import { canDismiss, confirmReveal, sampleCurl, type Reveal } from '../lib/reveal';
 import { CopyButton } from './ui';
 
@@ -15,14 +14,12 @@ import { CopyButton } from './ui';
  */
 export function RevealPanel({
   reveal,
-  env,
   hasSecret,
   onChange,
   onDone,
   extra,
 }: {
   reveal: Reveal;
-  env: HookUrlEnv;
   hasSecret: boolean;
   onChange: (next: Reveal) => void;
   onDone: () => void;
@@ -30,8 +27,9 @@ export function RevealPanel({
   extra?: ReactNode;
 }) {
   const t = useTranslations('lead-sources.reveal');
-  const hook = leadHookUrl(reveal.hookPath, env);
-  const shown = hook.url ?? hook.path;
+  // The server builds the complete address from the platform's configured public API address. Without one only the path is shown,
+  // with the reason: a guessed origin would be a wrong address that never receives a lead.
+  const shown = reveal.hookUrl ?? reveal.hookPath;
 
   return (
     <section
@@ -57,7 +55,11 @@ export function RevealPanel({
           {shown}
         </code>
         <CopyButton text={shown} label={t('copyUrl')} />
-        {hook.source === 'none' && <p className="text-xs text-muted-foreground">{t('noOrigin')}</p>}
+        {reveal.hookUrl === null && (
+          <Alert tone="warning" className="text-xs" data-testid="hook-address-problem">
+            {t(reveal.hookUrlProblem === 'base_url_not_public' ? 'notPublic' : 'noOrigin')}
+          </Alert>
+        )}
       </div>
 
       <div className="space-y-1.5">
@@ -84,7 +86,7 @@ export function RevealPanel({
           dir="ltr"
           className="overflow-x-auto rounded-md border border-border bg-background p-3 text-start text-xs"
         >
-          {sampleCurl(hook.url, hasSecret)}
+          {sampleCurl(reveal.hookUrl, hasSecret)}
         </pre>
       </div>
 

@@ -115,7 +115,14 @@
         "consentAt": "동의 시각",
         "noConsent": "이 폼은 동의를 요청하지 않았습니다.",
         "links": "기록",
-        "actions": "작업"
+        "actions": "작업",
+        "ageCheck": "연령 확인",
+        "ageOutcome": "결과",
+        "ageUnder": "최소 연령 미만입니다. 제출은 접수되었고 연락처는 미성년자로 표시되었습니다. 마케팅 동의는 기록되지 않았습니다.",
+        "guardianName": "부모 또는 보호자",
+        "guardianEmail": "보호자 이메일",
+        "guardianPhone": "보호자 전화번호",
+        "guardianNote": "방문자가 입력한 내용이며 확인되지 않았습니다. 담당자가 연락처의 동의 카드에 기록할 때까지 이들의 동의는 기록되지 않습니다."
       },
       "actions": {
         "retry": "재시도",

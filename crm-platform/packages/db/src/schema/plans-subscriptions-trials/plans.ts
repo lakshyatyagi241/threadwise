@@ -45,6 +45,8 @@ export const plans = pgTable(
       .$type<'one_time' | 'recurring'>()
       .notNull()
       .default('one_time'),
+    /** Add-ons only: the price of a year, when the add-on can be bought yearly (20261225090200); null = monthly only. */
+    annualAmount: numeric('annual_amount', { precision: 12, scale: 2 }),
     isFree: boolean('is_free').notNull().default(false),
     isLifetime: boolean('is_lifetime').notNull().default(false),
     isActive: boolean('is_active').notNull().default(true),

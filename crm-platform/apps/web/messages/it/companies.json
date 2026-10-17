@@ -4,7 +4,9 @@
       "companies": "Aziende"
     },
     "common": {
-      "dismiss": "Chiudi"
+      "dismiss": "Chiudi",
+      "yes": "Sì",
+      "no": "No"
     },
     "errors": {
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -18,7 +20,10 @@
       "planDisabled": "Il tuo piano non include le aziende. Passa a un piano superiore per sbloccarle.",
       "ownerInvalid": "Il responsabile deve essere un membro attivo di questo Workspace.",
       "unexpected": "Qualcosa è andato storto. Riprova tra un momento.",
-      "retry": "Riprova"
+      "retry": "Riprova",
+      "filterInvalid": "Una delle condizioni sulle proprietà non può essere usata. Controlla la proprietà e il suo valore.",
+      "exportTooLarge": "Sono troppe aziende per un solo file. Restringi l'elenco con un filtro ed esporta di nuovo.",
+      "importInvalid": "Impossibile importare il file. Serve una prima riga con i nomi delle colonne, tra cui una colonna name o website, e al massimo 1.000 aziende."
     },
     "list": {
       "eyebrow": "CRM · Organizzazioni",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Elimina aziende",
       "deleteManyMessage": "{count, plural, one {Eliminare questa azienda? I suoi contatti e le sue trattative vengono conservati e semplicemente scollegati.} other {Eliminare queste # aziende? I loro contatti e le loro trattative vengono conservati e semplicemente scollegati.}}",
       "delete": "Elimina",
-      "keep": "Mantieni"
+      "keep": "Mantieni",
+      "export": "Esporta",
+      "import": "Importa"
     },
     "toolbar": {
       "label": "Filtra aziende",
@@ -69,7 +76,14 @@
         "name": "Nome dalla A alla Z"
       },
       "clear": "Cancella",
-      "refresh": "Aggiorna"
+      "refresh": "Aggiorna",
+      "sortByProperty": "Di {name}",
+      "direction": "Direzione",
+      "directions": {
+        "default": "Direzione abituale",
+        "asc": "Crescente",
+        "desc": "Decrescente"
+      }
     },
     "table": {
       "label": "Aziende",
@@ -82,7 +96,13 @@
       "wonValue": "Valore conquistato",
       "actions": "Azioni",
       "delete": "Elimina azienda",
-      "deleteNamed": "Elimina l'azienda {name}"
+      "deleteNamed": "Elimina l'azienda {name}",
+      "website": "Sito web",
+      "email": "Email",
+      "phone": "Telefono",
+      "size": "Dimensione",
+      "owner": "Responsabile",
+      "created": "Creata"
     },
     "form": {
       "eyebrow": "Azienda",
@@ -112,6 +132,17 @@
         "email": "Inserisci un indirizzo email valido.",
         "invalid": "Alcuni dei dati inseriti non sono validi.",
         "ownerInvalid": "Il responsabile deve essere un membro attivo di questo Workspace."
+      },
+      "propertiesTitle": "Proprietà",
+      "propertiesHint": "configurate in Impostazioni, Proprietà delle aziende",
+      "propertyProblems": {
+        "invalid": "Questo valore non è adatto alla proprietà.",
+        "notEditable": "Questa proprietà non può più essere modificata. Chiudi il modulo e riaprilo.",
+        "required": "Questa proprietà è obbligatoria.",
+        "number": "Inserisci un numero.",
+        "integer": "Inserisci un numero intero.",
+        "email": "Inserisci un indirizzo email valido.",
+        "url": "Inserisci un link completo che inizi con http:// o https://."
       }
     },
     "toast": {
@@ -125,7 +156,8 @@
       "contactUnlinkFailed": "Impossibile rimuovere il contatto. Riprova.",
       "contactsLinked": "{count, plural, one {# contatto aggiunto all'azienda.} other {# contatti aggiunti all'azienda.}}",
       "contactsLinkedSome": "{count, plural, one {# contatto aggiunto} other {# contatti aggiunti}}, {failed, plural, one {# non è stato possibile aggiungerlo.} other {# non è stato possibile aggiungerli.}}",
-      "contactsLinkFailed": "Impossibile aggiungere i contatti. Riprova."
+      "contactsLinkFailed": "Impossibile aggiungere i contatti. Riprova.",
+      "exportFailed": "Impossibile creare l'esportazione. Riprova tra un momento."
     },
     "detail": {
       "back": "Tutte le aziende",
@@ -149,7 +181,11 @@
       "address": "Indirizzo",
       "createdBy": "Creata da",
       "created": "Creata",
-      "updated": "Ultima modifica"
+      "updated": "Ultima modifica",
+      "properties": "Proprietà",
+      "yes": "Sì",
+      "no": "No",
+      "generateBrief": "Genera riepilogo"
     },
     "contacts": {
       "title": "Contatti",
@@ -211,6 +247,130 @@
         "address": "Indirizzo",
         "notes": "Note",
         "owner": "Responsabile"
+      },
+      "propertiesChanged": "Proprietà modificate:"
+    },
+    "picker": {
+      "search": "Cerca aziende",
+      "results": "Aziende",
+      "searching": "Ricerca in corso",
+      "none": "Nessuna azienda corrisponde.",
+      "unavailable": "Al momento non è possibile cercare le aziende.",
+      "create": "Crea «{name}»",
+      "creating": "Creazione dell’azienda",
+      "clear": "Rimuovi l’azienda",
+      "loading": "Caricamento azienda",
+      "unknown": "Azienda non disponibile",
+      "createFailed": "Impossibile creare l’azienda. Riprova.",
+      "createForbidden": "Non hai l’autorizzazione per creare aziende."
+    },
+    "properties": {
+      "title": "Proprietà delle aziende",
+      "subtitle": "Tutto ciò che un’azienda può contenere, in un unico posto: le tue proprietà personalizzate, raggruppate in sezioni.",
+      "section": {
+        "hint": "Le sezioni raggruppano le proprietà nel modulo dell’azienda e nella sua pagina."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# azienda} other {# aziende}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# azienda ha} other {# aziende hanno}} un valore per questa proprietà. I valori vengono conservati, ma la proprietà scompare dal modulo dell’azienda e dalla sua pagina.",
+        "unused": "Nessuna azienda ha ancora un valore per questa proprietà."
+      },
+      "modal": {
+        "newTitle": "Aggiungi una proprietà dell’azienda",
+        "descriptionHint": "Mostrato sotto il campo nel modulo dell’azienda.",
+        "optionsNote": "Rimuovere un’opzione non modifica le aziende che già la hanno; mantengono il valore salvato.",
+        "requiredHint": "Il modulo dell’azienda non si salva senza un valore.",
+        "visibleHint": "Mostrala nel modulo dell’azienda e nella sua pagina.",
+        "conditionsHint": "Nascondi questa proprietà nel modulo dell’azienda finché un’altra proprietà non ha un valore.",
+        "deactivateNote": "Il salvataggio nasconderà questa proprietà dal modulo e dalla pagina dell’azienda. I valori che le aziende hanno vengono conservati."
+      }
+    },
+    "columns": {
+      "button": "Colonne",
+      "label": "Scegli le colonne",
+      "hint": "La tabella ricorda la tua scelta in questo browser.",
+      "reset": "Torna alle colonne abituali"
+    },
+    "propertyFilters": {
+      "button": "Proprietà",
+      "label": "Filtra per proprietà dell'azienda",
+      "hint": "Mostra le aziende in cui valgono tutte queste condizioni.",
+      "none": "Nessuna condizione per ora.",
+      "noProperties": "Per ora nessuna proprietà dell'azienda può essere filtrata. Aggiungine una in Impostazioni, Proprietà aziendali.",
+      "property": "Proprietà della condizione {n}",
+      "operator": "Operatore della condizione {n}",
+      "value": "Valore della condizione {n}",
+      "remove": "Rimuovi la condizione {n}",
+      "add": "Aggiungi una condizione",
+      "clear": "Cancella tutto",
+      "apply": "Applica"
+    },
+    "import": {
+      "eyebrow": "Aziende",
+      "title": "Importa aziende",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "done": "Fatto",
+      "start": "Importa",
+      "file": "File CSV",
+      "choose": "Scegli un file CSV",
+      "change": "Scegli un altro file",
+      "tooBig": "Il file è troppo grande. Dividilo e importa le parti.",
+      "intro": "La prima riga contiene i nomi delle colonne: name (o website), email, phone, industry, size, address, notes, owner (email o nome di un membro) e qualsiasi proprietà dell'azienda con la sua etichetta. Fino a {max} aziende per file.",
+      "match": "Completa le aziende già esistenti",
+      "matchHint": "Un'azienda con lo stesso sito web (o, se manca, lo stesso nome) viene completata nei campi vuoti. Quello che ha già non viene modificato.",
+      "summary": "{total, plural, one {# riga letta} other {# righe lette}}: {created} create, {updated} completate, {unchanged} invariate, {failed} non importate.",
+      "ignored": "Queste colonne non sono state riconosciute e sono state ignorate: {columns}.",
+      "failedTitle": "{count, plural, one {# riga non importata} other {# righe non importate}}",
+      "line": "Riga {line}",
+      "moreFailed": "{count, plural, one {E # altra.} other {E altre #.}}"
+    },
+    "brief": {
+      "title": "Riepilogo dell'account",
+      "subtitle": "Scritto dall'AI con i dati del CRM che puoi vedere. Controllalo prima di fidarti.",
+      "loading": "Caricamento del riepilogo",
+      "unavailableTitle": "L'AI non è configurata per questo workspace",
+      "unavailable": "Il riepilogo è scritto da un modello AI e questo workspace non ha una chiave AI, quindi non è stato inviato nulla.",
+      "addKey": "Aggiungi una chiave AI",
+      "askAdmin": "Chiedi a un amministratore di aggiungere una chiave AI.",
+      "empty": "Ottieni un breve riepilogo di questa azienda: chi è, le sue trattative e attività, quanto è attiva la conversazione, i rischi e cosa fare dopo.",
+      "generate": "Genera riepilogo",
+      "regenerate": "Riscrivi",
+      "copy": "Copia",
+      "copied": "Riepilogo copiato.",
+      "copyFailed": "Impossibile copiare il riepilogo. Seleziona il testo e copialo a mano.",
+      "copyTitle": "{name}: riepilogo dell'account",
+      "stale": "Il CRM è cambiato da quando è stato scritto questo riepilogo. Riscrivilo per averne uno aggiornato.",
+      "writtenBy": "Scritto il {date} da {model}. L'AI può sbagliare.",
+      "notice": "Il modello riceve conteggi, date, importi e titoli brevi. Non riceve mai nomi dei contatti, indirizzi e-mail, numeri di telefono, note aziendali o testo dei messaggi, e i numeri e gli indirizzi e-mail nei titoli vengono prima rimossi.",
+      "basedOn": "Basato su: {kinds}. Viene conteggiato solo ciò che il tuo ruolo ti permette di vedere.",
+      "basedOnNone": "Basato solo sui dettagli dell'azienda: il tuo ruolo non mostra contatti, trattative, attività o conversazioni.",
+      "errors": {
+        "tooSoon": "Un riepilogo è stato scritto poco fa. Aspetta un po' prima di chiederne un altro.",
+        "providerFailed": "Il servizio AI non è riuscito a scrivere il riepilogo. Riprova tra un momento.",
+        "limit": "Il limite AI è esaurito per ora. Riprova più tardi o chiedi a un amministratore.",
+        "forbidden": "Non hai il permesso di farlo.",
+        "notFound": "Quell'azienda non esiste più.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "unexpected": "Qualcosa è andato storto. Riprova tra un momento."
+      },
+      "sections": {
+        "activity": "Attività recente",
+        "deals": "Trattative",
+        "tasks": "Attività",
+        "conversations": "Conversazioni",
+        "properties": "Proprietà chiave",
+        "risks": "Rischi",
+        "nextSteps": "Prossimi passi"
+      },
+      "source": {
+        "properties": "proprietà aziendali",
+        "contacts": "contatti",
+        "deals": "trattative",
+        "tasks": "attività",
+        "conversations": "conversazioni"
       }
     }
   }

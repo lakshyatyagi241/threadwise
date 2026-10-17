@@ -22,9 +22,11 @@ import {
 } from '../lib/stage-flow';
 import { BulkPropertiesSection } from './bulk-properties-section';
 import { LostReasonFields } from './lost-reason';
+import { TimezoneSelect } from './timezone-select';
 
 const KEEP = '';
 const UNASSIGN = '__none__';
+const CLEAR_ZONE = '__clear__';
 
 /**
  * "Update" on the selected contacts: set the stage, the status, the owner and any custom properties of all of them at
@@ -34,6 +36,7 @@ export function BulkUpdateDialog({
   open,
   count,
   ownerOnly = false,
+  focus,
   busy,
   onApply,
   onClose,
@@ -46,6 +49,8 @@ export function BulkUpdateDialog({
    * handed to a new owner (the API moves a whole filter in one request), so the other fields are not offered.
    */
   ownerOnly?: boolean;
+  /** The field to put the cursor on: the selection bar's "Assign owner" and "Change stage" open this dialog on theirs. */
+  focus?: 'owner' | 'stage';
   busy: boolean;
   onApply: (values: BulkUpdateValues) => Promise<boolean>;
   onClose: () => void;
@@ -59,7 +64,14 @@ export function BulkUpdateDialog({
       closeLabel={t('close')}
     >
       {open && (
-        <Form count={count} ownerOnly={ownerOnly} busy={busy} onApply={onApply} onClose={onClose} />
+        <Form
+          count={count}
+          ownerOnly={ownerOnly}
+          focus={focus}
+          busy={busy}
+          onApply={onApply}
+          onClose={onClose}
+        />
       )}
     </Modal>
   );
@@ -68,18 +80,21 @@ export function BulkUpdateDialog({
 function Form({
   count,
   ownerOnly,
+  focus,
   busy,
   onApply,
   onClose,
 }: {
   count: number | null;
   ownerOnly: boolean;
+  focus?: 'owner' | 'stage';
   busy: boolean;
   onApply: (values: BulkUpdateValues) => Promise<boolean>;
   onClose: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.bulkUpdate');
   const tf = useTranslations('contacts-attributes-tags.form');
+  const tz = useTranslations('contacts-attributes-tags.timezone');
   const uid = useId();
   const options = useStatusOptions();
   const owners = useOwners();
@@ -87,6 +102,7 @@ function Form({
   const [stage, setStage] = useState(KEEP);
   const [status, setStatus] = useState(KEEP);
   const [owner, setOwner] = useState(KEEP);
+  const [zone, setZone] = useState(KEEP);
   const [reason, setReason] = useState<LostReasonAnswer>({ pick: '', text: '' });
   const [showProblems, setShowProblems] = useState(false);
   const registry = useContactFields();
@@ -108,7 +124,11 @@ function Form({
   const lost = stage !== KEEP && isLostStage(stages, stage);
   const problem = lost ? lostReasonProblem(reason, reasons.length > 0) : null;
   const nothing =
-    stage === KEEP && status === KEEP && owner === KEEP && Object.keys(changes).length === 0;
+    stage === KEEP &&
+    status === KEEP &&
+    owner === KEEP &&
+    zone === KEEP &&
+    Object.keys(changes).length === 0;
 
   async function submit(e: FormEvent) {
     e.preventDefault();
@@ -120,6 +140,7 @@ function Form({
       ...(stage !== KEEP ? { lifecycleStage: stage } : {}),
       ...(status !== KEEP ? { status } : {}),
       ...(owner !== KEEP ? { ownerId: owner === UNASSIGN ? null : owner } : {}),
+      ...(zone !== KEEP ? { timezone: zone === CLEAR_ZONE ? null : zone } : {}),
       ...(lost ? lostReasonPayload(reason, reasons.length > 0) : {}),
       ...(customFields ? { customFields } : {}),
     };
@@ -137,6 +158,7 @@ function Form({
           <Field label={t('stage')} htmlFor={`${uid}-stage`}>
             <Select
               id={`${uid}-stage`}
+              autoFocus={focus === 'stage'}
               value={stage}
               onChange={(e) => {
                 setStage(e.target.value);
@@ -173,7 +195,12 @@ function Form({
         </>
       )}
       <Field label={t('owner')} htmlFor={`${uid}-owner`}>
-        <Select id={`${uid}-owner`} value={owner} onChange={(e) => setOwner(e.target.value)}>
+        <Select
+          id={`${uid}-owner`}
+          autoFocus={focus === 'owner' || (focus === 'stage' && ownerOnly)}
+          value={owner}
+          onChange={(e) => setOwner(e.target.value)}
+        >
           <option value={KEEP}>{t('keep')}</option>
           <option value={UNASSIGN}>{t('unassign')}</option>
           {(owners.data ?? [])
@@ -185,6 +212,17 @@ function Form({
             ))}
         </Select>
       </Field>
+      {!ownerOnly && (
+        <Field label={tz('title')} htmlFor={`${uid}-zone`}>
+          <TimezoneSelect
+            id={`${uid}-zone`}
+            value={zone}
+            onChange={setZone}
+            emptyLabel={t('keep')}
+            extra={[{ value: CLEAR_ZONE, label: tz('clear') }]}
+          />
+        </Field>
+      )}
       {!ownerOnly && (
         <BulkPropertiesSection
           fields={registry.data ?? []}

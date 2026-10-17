@@ -306,7 +306,11 @@
         "numbersCount": "{count} numara",
         "emailNote": "E-postalar her kişinin adresine gider. E-posta adresi olmayan kişiler, yinelenen adresler ve abonelikten çıkmış kişiler atlanır.",
         "emailSkipped": "E-posta adresi olmadığı için atlanacak seçili alıcılar: {count}",
-        "emailNoAddress": "Elle yazılan numaraların ve CSV satırlarının e-posta adresi yoktur, bu yüzden atlanırlar. Bunun yerine kişileri, grupları, etiketleri veya segmentleri seçin."
+        "emailNoAddress": "Elle yazılan numaraların ve CSV satırlarının e-posta adresi yoktur, bu yüzden atlanırlar. Bunun yerine kişileri, grupları, etiketleri veya segmentleri seçin.",
+        "previousTitle": "Önceki gönderimler",
+        "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri ekleyin; isterseniz yalnızca okuyan, yanıtlayan veya tıklayanları seçin.",
+        "previousEstimate": "{count, plural, one {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).} other {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).}}",
+        "previousEditHint": "Düzenlerken önceki gönderim seçiminiz gösterilmez: bu kampanya alıcılarını zaten kişi olarak tutuyor. Daha fazla kişi eklemek için yeniden seçin."
       },
       "message": {
         "title": "Mesaj",
@@ -594,7 +598,8 @@
         "subject": "Konu",
         "subjectFallback": "Kampanya adı",
         "skippedNoEmail": "Atlananlar (e-posta adresi yok)",
-        "estimateEmail": "Bu bir tahmindir: iki grupta olan kişi iki kez sayılır. Gruplardaki, etiketlerdeki ve segmentlerdeki e-posta adresi olmayan kişiler kampanya çalışırken atlanır."
+        "estimateEmail": "Bu bir tahmindir: iki grupta olan kişi iki kez sayılır. Gruplardaki, etiketlerdeki ve segmentlerdeki e-posta adresi olmayan kişiler kampanya çalışırken atlanır.",
+        "previousSends": "Önceki gönderimler (en fazla)"
       },
       "ai": {
         "open": "Yapay zeka ile oluştur",
@@ -864,7 +869,8 @@
         "clicked": "tıklandı",
         "showing": "{total} içinden {shown} gösteriliyor",
         "prev": "Önceki sayfa",
-        "next": "Sonraki sayfa"
+        "next": "Sonraki sayfa",
+        "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
       },
       "engagement": {
         "opened": "Açıldı",
@@ -1032,7 +1038,8 @@
         "badge": "Canlı",
         "updated": "güncellendi {time}",
         "queued": "{count} gönderim bekliyor",
-        "processing": "{count} şu anda gönderiliyor"
+        "processing": "{count} şu anda gönderiliyor",
+        "held": "{count} kişi sessiz saatler nedeniyle bekletiliyor"
       },
       "statistics": {
         "loadFailed": "İstatistikler yüklenemedi.",
@@ -1164,7 +1171,10 @@
         "pacing_range": "Smart Delivery'yi kontrol edin: en uzun gecikme en kısadan kısa ya da iki gönderim saatinden yalnızca biri ayarlı.",
         "follow_up_template_required": "Her takip mesajının göndereceği şablonu seçin.",
         "follow_up_flow_required": "Her takip mesajının başlatacağı akışı seçin.",
-        "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın."
+        "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın.",
+        "sequence_not_recurring": "Sırayla gönderilen şablonlar yalnızca yinelenen bir kampanyayla çalışır. Yinelenen bir zamanlama seçin veya ek şablonları kaldırın.",
+        "sequence_with_ab": "Sırayla gönderilen şablonlar A/B testiyle birlikte kullanılamaz. A/B testini kapatın veya ek şablonları kaldırın.",
+        "sequence_template_required": "Sıradaki her adım için bir şablon seçin veya boş olanları kaldırın."
       },
       "template": {
         "previewOnline": "çevrimiçi",
@@ -1249,7 +1259,8 @@
           "contacts": "Kişiler",
           "groups": "Gruplar",
           "segments": "Segmentler",
-          "csv": "CSV dosyası"
+          "csv": "CSV dosyası",
+          "previous": "Önceki gönderimler"
         },
         "groupsHint": "Gruplar pazarlama listelerinizdir. İşaretlediğiniz gruplardaki herkes dahil edilir.",
         "segmentsHint": "Segmentler kurallardan kendiliğinden dolar. İşaretlediğiniz segmentlerdeki herkes dahil edilir.",
@@ -1345,7 +1356,10 @@
         },
         "csvIssuesMore": "{count} tane daha indirmede.",
         "csvConsentOn": "Bu numaralar için onayı doğruladınız. Yayın başlatıldığında kabul etmiş olarak kaydedilecekler.",
-        "csvConsentVersion": "Bildirim sürümü: {version}."
+        "csvConsentVersion": "Bildirim sürümü: {version}.",
+        "modePrevious": "Önceki gönderimlere gönder",
+        "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri yeniden hedefleyin; isterseniz yalnızca okuyan, okumayan, yanıtlayan veya tıklayanları seçin.",
+        "chipPrevious": "{count, plural, one {# önceki gönderim} other {# önceki gönderim}} ({outcome})"
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",
@@ -1423,7 +1437,9 @@
         "estimatedCostFull": "Tahmini maliyet (tam)",
         "chargedPlan": "Şimdi cüzdanınızdan tahsil edilen: {amount} (planınız bu mesajların {covered} tanesini karşılıyor)",
         "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}",
-        "sumFollowUps": "Takip mesajları"
+        "sumFollowUps": "Takip mesajları",
+        "sumSequence": "Sırayla gönderilir",
+        "sumPrevious": "Önceki gönderimler: {names} ({outcome})"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1459,9 +1475,11 @@
           "sent": "Gönderildi",
           "delivered": "İletildi",
           "read": "Okundu",
-          "failed": "Başarısız"
+          "failed": "Başarısız",
+          "held": "Bekletiliyor"
         },
-        "charged": "Ücretlendirilen: {amount}"
+        "charged": "Ücretlendirilen: {amount}",
+        "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
       },
       "send": {
         "whenTitle": "Ne zaman gönderilsin",
@@ -1586,7 +1604,8 @@
           "sent": "Gönderildi",
           "delivered": "İletildi",
           "failed": "Başarısız",
-          "retries": "Yeniden denemeler"
+          "retries": "Yeniden denemeler",
+          "template": "Şablon"
         },
         "retrySummary": "{pending} bekliyor, {recovered} kurtarıldı, {exhausted} vazgeçildi",
         "openRun": "Çalıştırmayı aç",
@@ -1646,7 +1665,9 @@
             "skipped": "Koşul kontrol edildiğinde sağlanmamıştı, bu yüzden dizi orada sona erdi.",
             "lapsed": "Kişi yanıtlamadan veya okumadan izleme süresi doldu, bu yüzden dizi orada sona erdi."
           }
-        }
+        },
+        "templatesTitle": "Şablonlar",
+        "templatesInTurn": "{count, plural, one {# şablon sırayla} other {# şablon sırayla}}"
       },
       "panel": {
         "title": "Toplu gönderim oluştur ile oluşturuldu",
@@ -1657,7 +1678,8 @@
           "recurring": "Yinelenen"
         },
         "recipients": "{count, plural, one {# alıcı} other {# alıcı}}",
-        "next": "Sonraki çalıştırma {when}"
+        "next": "Sonraki çalıştırma {when}",
+        "moreTemplates": "+{count} daha"
       },
       "pickers": {
         "selectDate": "Tarih seç",
@@ -1743,6 +1765,29 @@
           "hours": "{count, plural, one {saat} other {saat}}",
           "days": "{count, plural, one {gün} other {gün}}"
         }
+      },
+      "sequence": {
+        "title": "Sırayla şablonlar",
+        "intro": "Her çalıştırma bu listedeki bir sonraki şablonu gönderir. 1. çalıştırma ilkini, 2. çalıştırma ikincisini gönderir; sonuncudan sonra liste yeniden ilkinden başlar.",
+        "notRecurring": "Şablonları sırayla yalnızca yinelenen bir gönderim kullanır. Yinelenen bir zamanlama seçin veya bu şablonları kaldırın.",
+        "withAb": "Sırayla gönderilen şablonlar, zaten iki şablon gönderen bir A/B testiyle birlikte kullanılamaz. Kullanmak için A/B testini kapatın.",
+        "templateLabel": "Şablon {position}",
+        "firstMissing": "Henüz seçilmedi",
+        "firstHint": "Kampanya için seçilen şablon. Şablon adımında değiştirin.",
+        "pick": "Şablon seçin",
+        "loading": "Yükleniyor...",
+        "unavailable": "Artık kullanılamıyor",
+        "up": "Yukarı",
+        "down": "Aşağı",
+        "moveUp": "{position}. şablonu yukarı taşı",
+        "moveDown": "{position}. şablonu aşağı taşı",
+        "remove": "{position}. şablonu kaldır",
+        "removeShort": "Kaldır",
+        "removeAll": "Tümünü kaldır",
+        "add": "Şablon ekle",
+        "count": "{used} / {max} şablon",
+        "limitReached": "Sınıra ulaşıldı: {max} şablon.",
+        "variablesTitle": "{position}. şablonun değişkenleri: {name}"
       }
     },
     "history": {
@@ -1879,6 +1924,58 @@
       "loading": "Numaralarınız yükleniyor",
       "noAccessTitle": "Kampanya oluşturamazsınız",
       "noAccess": "Kampanya oluşturma izni için çalışma alanı yöneticisine başvurun."
+    },
+    "previousSends": {
+      "title": "Önceki gönderimler",
+      "empty": "Henüz önceki bir toplu mesaj veya kampanya yok",
+      "outcomeLabel": "Bu gönderimlerden kimler",
+      "outcomes": {
+        "all": "Gönderilen herkes",
+        "delivered": "Teslim edildi",
+        "read": "Okudu",
+        "not_read": "Okumadı",
+        "replied": "Yanıtladı",
+        "not_replied": "Yanıtlamadı",
+        "clicked": "Bağlantıya tıkladı",
+        "failed": "Başarısız"
+      },
+      "outcomeOff": "{name} (toplu mesajlar için geçerli değil)",
+      "outcomeHint": {
+        "all": "Gönderilen herkes: mesajın hedeflendiği tüm kişiler. Abonelikten çıkan kişiler ve atlanan satırlar dahil değildir.",
+        "delivered": "Teslim edildi: mesajın ulaştığı kişiler.",
+        "read": "Okudu: mesajı okuyan kişiler.",
+        "not_read": "Okumadı: mesajın gönderildiği ve henüz okumayan kişiler.",
+        "replied": "Yanıtladı: mesajı yanıtlayan kişiler.",
+        "not_replied": "Yanıtlamadı: mesajın gönderildiği ve henüz yanıtlamayan kişiler.",
+        "clicked": "Bağlantıya tıkladı: mesajdaki izlenen bağlantıya tıklayan kişiler.",
+        "failed": "Başarısız: mesajın teslim edilemediği kişiler."
+      },
+      "broadcastNote": "Toplu mesaj yalnızca teslimat ve okunma bilgisini kaydeder; bu yüzden biri işaretliyken yanıtlar ve tıklamalar kullanılamaz.",
+      "broadcastOff": "Toplu mesajda yanıt veya tıklama yoktur. İşaretlemek için başka bir sonuç seçin.",
+      "search": "Önceki gönderimlerde ara",
+      "searchPlaceholder": "Ara",
+      "listLabel": "Önceki toplu mesajlar ve kampanyalar",
+      "noMatch": "Aramanızla eşleşen bir sonuç yok.",
+      "chosen": "{count} / {max} seçildi",
+      "limit": "En fazla {max} gönderim seçebilirsiniz. Başka birini seçmek için bir işareti kaldırın.",
+      "kind": {
+        "broadcast": "Toplu mesaj",
+        "campaign": "Kampanya"
+      },
+      "wentOut": "{date} tarihinde gönderildi",
+      "wentOutUnknown": "Tarih bilinmiyor",
+      "recipients": "{count, plural, one {# alıcı} other {# alıcı}}",
+      "notRecorded": "Toplu mesaj için kaydedilmez",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# kişi} other {# kişi}}",
+        "delivered": "{count, plural, one {# kişiye ulaştı} other {# kişiye ulaştı}}",
+        "read": "{count, plural, one {# kişi okudu} other {# kişi okudu}}",
+        "not_read": "{count, plural, one {# kişi okumadı} other {# kişi okumadı}}",
+        "replied": "{count, plural, one {# kişi yanıtladı} other {# kişi yanıtladı}}",
+        "not_replied": "{count, plural, one {# kişi yanıtlamadı} other {# kişi yanıtlamadı}}",
+        "clicked": "{count, plural, one {# kişi bağlantıya tıkladı} other {# kişi bağlantıya tıkladı}}",
+        "failed": "{count, plural, one {# kişi için başarısız oldu} other {# kişi için başarısız oldu}}"
+      }
     }
   }
 }

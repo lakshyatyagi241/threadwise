@@ -53,7 +53,9 @@
           "crm_required_unbound": "Biểu mẫu thiếu một thuộc tính mà không gian làm việc của bạn yêu cầu.",
           "no_contact_point": "Hãy thêm trường email hoặc số điện thoại được liên kết với liên hệ, để mỗi lượt gửi có thể khớp với một người.",
           "payment_no_gateway": "Hãy kết nối cổng thanh toán có thể tạo liên kết thanh toán, hoặc tắt thanh toán.",
-          "captcha_not_configured": "CAPTCHA được đặt là luôn bật, nhưng nền tảng chưa có CAPTCHA. Hãy chọn cài đặt khác, hoặc nhờ quản trị viên nền tảng thêm CAPTCHA."
+          "captcha_not_configured": "CAPTCHA được đặt là luôn bật, nhưng nền tảng chưa có CAPTCHA. Hãy chọn cài đặt khác, hoặc nhờ quản trị viên nền tảng thêm CAPTCHA.",
+          "age_gate_field_missing": "Kiểm tra tuổi cần có câu hỏi của nó: hãy thêm trường ngày sinh hoặc tuổi, hoặc chọn ô đánh dấu.",
+          "age_gate_field_not_required": "Câu hỏi mà phần kiểm tra tuổi đánh giá phải là bắt buộc."
         },
         "code": {
           "no_fields": "Hãy thêm ít nhất một trường.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Không gian làm việc của bạn yêu cầu thuộc tính CRM \"{property}\": hãy thêm vào biểu mẫu và đánh dấu bắt buộc.",
           "crm_required_optional": "Trường được liên kết với thuộc tính CRM bắt buộc phải là trường bắt buộc.",
           "redirect_not_https": "Địa chỉ chuyển hướng phải bắt đầu bằng https://.",
-          "too_large": "Biểu mẫu quá lớn. Hãy xóa bớt một số trường."
+          "too_large": "Biểu mẫu quá lớn. Hãy xóa bớt một số trường.",
+          "age_gate_field_missing": "Kiểm tra tuổi cần có câu hỏi của nó: hãy thêm trường ngày sinh hoặc tuổi, hoặc chọn ô đánh dấu.",
+          "age_gate_field_optional": "Câu hỏi mà phần kiểm tra tuổi đánh giá phải là bắt buộc."
         }
       },
       "versionsTitle": "Phiên bản",

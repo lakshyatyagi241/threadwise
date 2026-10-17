@@ -1,6 +1,8 @@
 import { sql } from 'drizzle-orm';
 import {
   boolean,
+  check,
+  date,
   index,
   integer,
   jsonb,
@@ -122,6 +124,8 @@ export const contacts = pgTable(
     language: text('language'),
     address: text('address'),
     countryCode: text('country_code'),
+    /** Built-in personal property (BL-217): a calendar day, no time. Read as text ('YYYY-MM-DD'), never as a JS Date. */
+    dateOfBirth: date('date_of_birth', { mode: 'string' }),
     channel: text('channel'),
     channelUid: text('channel_uid'),
     imageUrl: text('image_url'),
@@ -129,6 +133,9 @@ export const contacts = pgTable(
     message: text('message'),
     isUnsubscribed: boolean('is_unsubscribed').notNull().default(false),
     unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true }),
+    /** BL-193: the contact's own IANA time zone (the quiet hours are read on it), and who set it: staff | import | api. Both null, or both set. */
+    timezone: text('timezone'),
+    timezoneSource: text('timezone_source'),
     /** Where the contact came from (the import's source knob, "import", ...). */
     source: text('source'),
     /** The CSV import that created the contact; null for everything else. */
@@ -152,6 +159,18 @@ export const contacts = pgTable(
     index('idx_contacts_org_import_job')
       .on(t.orgId, t.importJobId)
       .where(sql`${t.importJobId} IS NOT NULL`),
+    check(
+      'ck_contacts_timezone_source',
+      sql`timezone_source IS NULL OR timezone_source IN ('staff', 'import', 'api')`,
+    ),
+    check('ck_contacts_timezone_pair', sql`(timezone IS NULL) = (timezone_source IS NULL)`),
+    check(
+      'ck_contacts_timezone_len',
+      sql`timezone IS NULL OR char_length(timezone) BETWEEN 1 AND 64`,
+    ),
+    index('idx_contacts_org_timezone')
+      .on(t.orgId, t.timezone)
+      .where(sql`${t.timezone} IS NOT NULL`),
     index('idx_contacts_org_source')
       .on(t.orgId, t.source)
       .where(sql`${t.source} IS NOT NULL`),
@@ -159,6 +178,9 @@ export const contacts = pgTable(
     index('idx_contacts_org_owner').on(t.orgId, t.ownerId, t.createdAt),
     index('idx_contacts_org_stage').on(t.orgId, t.lifecycleStage, t.createdAt),
     index('idx_contacts_org_last_activity').on(t.orgId, t.lastActivityAt),
+    index('idx_contacts_date_of_birth')
+      .on(t.orgId, t.dateOfBirth.desc())
+      .where(sql`${t.dateOfBirth} IS NOT NULL`),
   ],
 );
 

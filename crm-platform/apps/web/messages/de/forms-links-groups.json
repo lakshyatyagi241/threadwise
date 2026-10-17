@@ -95,7 +95,28 @@
         "required": "Erforderlich",
         "removeField": "Entfernen",
         "options": "Optionen (durch Kommas getrennt)",
-        "optionsPlaceholder": "Option 1, Option 2, Option 3"
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Zuordnung zu",
+        "mapsToHint": "Speichert diese Antwort beim Absenden des Formulars in einer Kontakteigenschaft.",
+        "mapsToNone": "Nicht in einer Kontakteigenschaft speichern",
+        "mapsToSystemGroup": "Kontaktfelder",
+        "mapsToCustomGroup": "Benutzerdefinierte Eigenschaften",
+        "mapsToSystem": {
+          "name": "Vollständiger Name",
+          "first_name": "Vorname",
+          "last_name": "Nachname",
+          "email": "E-Mail",
+          "title": "Berufsbezeichnung",
+          "language": "Sprache",
+          "address": "Adresse"
+        },
+        "mapsToPrivacyGroup": "Datenschutz & Einwilligung",
+        "mapsToPrivacy": {
+          "age": "Alter (Minderjährigenprüfung)",
+          "date_of_birth": "Geburtsdatum (Minderjährigenprüfung)",
+          "consent_marketing": "Marketing-Einwilligung (WhatsApp)",
+          "consent_service": "Diensteinwilligung (kein Marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Überschrift",
@@ -130,15 +151,24 @@
       "loading": "Links werden geladen…",
       "retry": "Erneut versuchen",
       "searchPlaceholder": "Nach Name oder Link suchen",
-      "create": { "cta": "Neuer Link" },
+      "create": {
+        "cta": "Neuer Link"
+      },
       "stats": {
         "all": "Alle Links",
         "live": "Live",
         "totalClicks": "Klicks gesamt",
         "avgClicks": "Ø Klicks / Link"
       },
-      "tabs": { "all": "Alle", "live": "Live", "paused": "Pausiert" },
-      "status": { "live": "Live", "paused": "Pausiert" },
+      "tabs": {
+        "all": "Alle",
+        "live": "Live",
+        "paused": "Pausiert"
+      },
+      "status": {
+        "live": "Live",
+        "paused": "Pausiert"
+      },
       "empty": {
         "title": "Noch keine Links",
         "description": "Erstellen Sie einen Link zum Teilen in Anzeigen, Bios oder einem QR-Code."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "Zurück zu Links",
         "newHeading": "Neuer Link",
-        "step": { "destination": "Ziel", "message": "Starternachricht", "tracking": "Tracking" },
+        "step": {
+          "destination": "Ziel",
+          "message": "Starternachricht",
+          "tracking": "Tracking"
+        },
         "name": "Name",
         "status": "Status",
         "countryCode": "Landesvorwahl",
@@ -194,6 +228,14 @@
         "shortUrl": "Kurzlink",
         "waUrl": "WhatsApp-Link",
         "qrAlt": "QR-Code für diesen Link"
+      },
+      "public": {
+        "missingTitle": "Link nicht gefunden",
+        "missingBody": "Dieser Link existiert nicht oder wurde gelöscht.",
+        "goneTitle": "Link nicht mehr aktiv",
+        "goneBody": "Dieser Link ist pausiert oder abgelaufen.",
+        "errorTitle": "Etwas ist schiefgelaufen",
+        "errorBody": "Dieser Link konnte nicht geöffnet werden. Bitte versuche es erneut."
       }
     }
   }

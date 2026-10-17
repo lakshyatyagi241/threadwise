@@ -95,7 +95,28 @@
         "required": "आवश्यक",
         "removeField": "हटाएं",
         "options": "विकल्प (कॉमा से अलग करें)",
-        "optionsPlaceholder": "विकल्प 1, विकल्प 2, विकल्प 3"
+        "optionsPlaceholder": "विकल्प 1, विकल्प 2, विकल्प 3",
+        "mapsTo": "यहाँ मैप होता है",
+        "mapsToHint": "फॉर्म जमा होने पर इस उत्तर को संपर्क संपत्ति पर सहेजें।",
+        "mapsToNone": "संपर्क संपत्ति में न सहेजें",
+        "mapsToSystemGroup": "संपर्क फील्ड",
+        "mapsToCustomGroup": "कस्टम संपत्तियाँ",
+        "mapsToSystem": {
+          "name": "पूरा नाम",
+          "first_name": "पहला नाम",
+          "last_name": "अंतिम नाम",
+          "email": "ईमेल",
+          "title": "पदनाम",
+          "language": "भाषा",
+          "address": "पتा"
+        },
+        "mapsToPrivacyGroup": "गोपनीयता और सहमति",
+        "mapsToPrivacy": {
+          "age": "आयु (नाबालिग जांच)",
+          "date_of_birth": "जन्म तिथि (नाबालिग जांच)",
+          "consent_marketing": "मार्केटिंग सहमति (व्हॉट्सऐप)",
+          "consent_service": "सेवा समझौता (मार्केटिंग नहीं)"
+        }
       },
       "fieldKind": {
         "heading": "शीर्षक",
@@ -130,15 +151,24 @@
       "loading": "लिंक लोड हो रहे हैं…",
       "retry": "फिर से कोशिश करें",
       "searchPlaceholder": "नाम या लिंक से खोजें",
-      "create": { "cta": "नया लिंक" },
+      "create": {
+        "cta": "नया लिंक"
+      },
       "stats": {
         "all": "सभी लिंक",
         "live": "लाइव",
         "totalClicks": "कुल क्लिक",
         "avgClicks": "औसत क्लिक / लिंक"
       },
-      "tabs": { "all": "सभी", "live": "लाइव", "paused": "रुके हुए" },
-      "status": { "live": "लाइव", "paused": "रुका हुआ" },
+      "tabs": {
+        "all": "सभी",
+        "live": "लाइव",
+        "paused": "रुके हुए"
+      },
+      "status": {
+        "live": "लाइव",
+        "paused": "रुका हुआ"
+      },
       "empty": {
         "title": "अभी तक कोई लिंक नहीं",
         "description": "विज्ञापनों, बायो या QR कोड में शेयर करने के लिए एक लिंक बनाएं।"
@@ -170,7 +200,11 @@
       "builder": {
         "back": "लिंक पर वापस जाएं",
         "newHeading": "नया लिंक",
-        "step": { "destination": "डेस्टिनेशन", "message": "शुरुआती संदेश", "tracking": "ट्रैकिंग" },
+        "step": {
+          "destination": "डेस्टिनेशन",
+          "message": "शुरुआती संदेश",
+          "tracking": "ट्रैकिंग"
+        },
         "name": "नाम",
         "status": "स्थिति",
         "countryCode": "कंट्री कोड",
@@ -194,6 +228,14 @@
         "shortUrl": "शॉर्ट लिंक",
         "waUrl": "WhatsApp लिंक",
         "qrAlt": "इस लिंक का QR कोड"
+      },
+      "public": {
+        "missingTitle": "लिंक नहीं मिला",
+        "missingBody": "यह लिंक मौजूद नहीं है, या हटा दिया गया है।",
+        "goneTitle": "लिंक अब सक्रिय नहीं",
+        "goneBody": "यह लिंक रोकी हुई है या समाप्त हो चुकी है।",
+        "errorTitle": "कुछ गलत हो गया",
+        "errorBody": "हम यह लिंक नहीं खोल सके। कृपया पुनः प्रयास करें।"
       }
     }
   }

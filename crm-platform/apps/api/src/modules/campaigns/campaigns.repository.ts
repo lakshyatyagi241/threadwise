@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { assemblePhone } from '../broadcasts';
+import type { PreviousSendsAudience } from '@crm/contracts';
+import { assemblePhone, previousSendContactsSql } from '../broadcasts';
 import { hasGrantedConsentSql } from '../contact-consent';
 import { DUPLICATE_EMAIL, NO_EMAIL_ADDRESS } from './email-campaign-rules';
 
@@ -294,6 +295,8 @@ export interface ClaimedRecipient {
   countryCode: string | null;
   /** The contact's email address, read for the recipients of an email campaign. */
   email: string | null;
+  /** The recipient was held for the quiet hours and is being released now (BL-177). */
+  wasHeld: boolean;
 }
 
 export interface RecipientRow {
@@ -317,6 +320,9 @@ export interface RecipientRow {
   respondedAt: Date | null;
   response: string | null;
   error: string | null;
+  /** Held for the quiet hours (BL-177): when this recipient may go and why; null when it is not held. */
+  heldUntil: Date | null;
+  heldReason: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -622,20 +628,35 @@ export class CampaignsRepository {
     id: number,
     maxAttempts: number,
     limit: number,
+    /** BL-192: the catch-up of a recurring campaign takes only the recipients the quiet hours held back, whose hour has come. */
+    onlyHeld = false,
+    /** Recipients this run already held for the quiet hours: not claimed again by it, whatever the clocks say. */
+    skip: readonly number[] = [],
   ): Promise<ClaimedRecipient[]> {
+    const skipSql =
+      skip.length === 0
+        ? sql``
+        : sql`AND r.id NOT IN (${sql.join(
+            skip.map((n) => sql`${n}::bigint`),
+            sql`, `,
+          )})`;
     const res = await tx.execute(sql`
       WITH picked AS MATERIALIZED (
-        SELECT r.id FROM wp_campaign_contacts r
+        SELECT r.id, (r.held_until IS NOT NULL) AS was_held FROM wp_campaign_contacts r
         WHERE r.org_id = ${orgId} AND r.campaign_id = ${id}
+          -- A recipient held for the quiet hours (BL-177) is left alone until its hour has come.
+          AND (r.held_until IS NULL OR r.held_until <= now())
+          AND (${onlyHeld}::boolean = false OR r.held_until IS NOT NULL)
+          ${skipSql}
           AND (r.status = 'queued'
-               OR (r.status = 'failed' AND r.send_attempts < ${maxAttempts}
+               OR (r.status = 'failed' AND ${onlyHeld}::boolean = false AND r.send_attempts < ${maxAttempts}
                    AND (r.next_attempt_at IS NULL OR r.next_attempt_at <= now())))
         ORDER BY r.id LIMIT ${limit} FOR UPDATE SKIP LOCKED
       )
-      UPDATE wp_campaign_contacts r SET status = 'pending'
+      UPDATE wp_campaign_contacts r SET status = 'pending', held_until = NULL, held_reason = NULL
       FROM picked, contacts c
       WHERE r.org_id = ${orgId} AND r.id = picked.id AND c.org_id = r.org_id AND c.id = r.contact_id
-      RETURNING r.id, r.contact_id, r.variant, r.send_attempts, c.phone, c.country_code, c.email::text AS email`);
+      RETURNING r.id, r.contact_id, r.variant, r.send_attempts, c.phone, c.country_code, c.email::text AS email, picked.was_held`);
     return (res.rows as Raw[])
       .map((r) => ({
         id: Number(r.id),
@@ -645,6 +666,7 @@ export class CampaignsRepository {
         phone: str(r.phone),
         countryCode: str(r.country_code),
         email: str(r.email),
+        wasHeld: r.was_held === true,
       }))
       .sort((a, b) => a.id - b.id);
   }
@@ -679,6 +701,51 @@ export class CampaignsRepository {
     await tx.execute(
       sql`UPDATE wp_campaign_contacts SET status = ${status} WHERE org_id = ${orgId} AND id = ${rowId}`,
     );
+  }
+
+  /**
+   * A claimed recipient the quiet hours stop for now (BL-177): back to `queued` with the instant it may go and why. Not a failure and not
+   * a skip; the claim leaves it alone until `held_until`.
+   */
+  async hold(
+    tx: Tx,
+    orgId: number,
+    rowId: number,
+    hold: { until: string; reason: string },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'queued', held_until = ${hold.until}::timestamptz, held_reason = ${hold.reason}
+      WHERE org_id = ${orgId} AND id = ${rowId}`);
+  }
+
+  /** The recipients held for the quiet hours whose hour has come (BL-192): the ones a catch-up is about to send. */
+  async heldCandidates(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<Array<{ id: number; contactId: number }>> {
+    const res = await tx.execute(sql`
+      SELECT id, contact_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued'
+        AND held_until IS NOT NULL AND held_until <= now()
+      ORDER BY id`);
+    return (res.rows as Raw[]).map((r) => ({ id: Number(r.id), contactId: Number(r.contact_id) }));
+  }
+
+  /** The earliest instant a held recipient may go, or null when none is held (BL-192). */
+  async nextHeldAt(tx: Tx, orgId: number, id: number): Promise<Date | null> {
+    const res = await tx.execute(sql`
+      SELECT min(held_until) AS at FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued' AND held_until IS NOT NULL`);
+    return date((res.rows[0] as Raw | undefined)?.at);
+  }
+
+  /** The recipients waiting for the end of the quiet hours (BL-177). */
+  async heldCount(tx: Tx, orgId: number, id: number): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued' AND held_until IS NOT NULL`);
+    return Number((res.rows[0] as { n: number } | undefined)?.n ?? 0);
   }
 
   /** Rows every recipient not yet sent becomes failed at the cap (the campaign ended before they were reached). */
@@ -728,7 +795,11 @@ export class CampaignsRepository {
     };
   }
 
-  /** A fresh cadence: every recipient is queued again with its retries and backoff cleared. */
+  /**
+   * A fresh cadence: every recipient is queued again with its retries and backoff cleared. A recipient the quiet hours still hold keeps
+   * its `held_until` (BL-192): the catch-up of the occurrence that just ended sends it at its first opening, and if that job is lost the
+   * next run takes it, because the claim takes a held recipient once its hour has come.
+   */
   async requeueAll(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(sql`
       UPDATE wp_campaign_contacts SET status = 'queued', send_attempts = 0, next_attempt_at = NULL
@@ -952,6 +1023,18 @@ export class CampaignsRepository {
   // -------------------------------------------------------------- audience
 
   /** Ids of the contacts named by uuid, in the order sent. Another organization's ids are dropped. */
+  /** The contacts the named earlier sends went to, narrowed by the outcome (see `previousSendContactsSql`). */
+  async previousSendContactIds(
+    tx: Tx,
+    orgId: number,
+    previous: PreviousSendsAudience | null | undefined,
+  ): Promise<number[]> {
+    const q = previousSendContactsSql(orgId, previous);
+    if (!q) return [];
+    const res = await tx.execute(q);
+    return (res.rows as Array<{ contact_id: number | string }>).map((r) => Number(r.contact_id));
+  }
+
   async contactIdsByUuid(tx: Tx, orgId: number, uuids: readonly string[]): Promise<number[]> {
     const byUuid = new Map<string, number>();
     for (const part of chunks(uuids)) {
@@ -1094,7 +1177,7 @@ export class CampaignsRepository {
           : sql``;
     const res = await tx.execute(sql`
       UPDATE wp_campaign_contacts
-      SET status = 'queued', sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, error_code = NULL, send_attempts = 0,
+      SET status = 'queued', held_until = NULL, held_reason = NULL, sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, error_code = NULL, send_attempts = 0,
           next_attempt_at = NULL, retry_state = NULL, retry_count = 0, retry_first_sent_at = NULL, retry_next_at = NULL,
           follow_up_state = NULL, follow_up_next = NULL, follow_up_base_at = NULL, follow_up_check_at = NULL
       WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND retry_state IS DISTINCT FROM 'sending' ${scopeSql}
@@ -1463,7 +1546,7 @@ const RECIPIENT_SELECT = sql`
   SELECT r.id, r.uuid, r.contact_id, c.uuid AS contact_uuid, r.variant, r.status, r.send_attempts, r.next_attempt_at,
          coalesce(nullif(r.phone_number, ''), ${REACHED_AT}) AS phone_number, coalesce(nullif(r.recipient_name, ''), c.name) AS recipient_name,
          r.whatsapp_message_id, r.clicked, r.click_count, r.clicked_at, r.sent_at, r.delivered_at, r.read_at, r.responded_at, r.response,
-         r.error_message, r.created_at, r.updated_at
+         r.error_message, r.held_until, r.held_reason, r.created_at, r.updated_at
   FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id`;
 
 function toRecipient(r: Raw): RecipientRow {
@@ -1488,6 +1571,8 @@ function toRecipient(r: Raw): RecipientRow {
     respondedAt: date(r.responded_at),
     response: str(r.response),
     error: str(r.error_message),
+    heldUntil: r.status === 'queued' ? date(r.held_until) : null,
+    heldReason: r.status === 'queued' ? str(r.held_reason) : null,
     createdAt: new Date(r.created_at as string),
     updatedAt: new Date(r.updated_at as string),
   };

@@ -145,11 +145,6 @@
         "description": "编辑交易销售管道、阶段和丢失原因。",
         "keywords": "交易, 销售阶段, 看板, 丢失原因, 漏斗"
       },
-      "tags": {
-        "label": "标签",
-        "description": "创建和整理用于联系人与聊天的标签。",
-        "keywords": "标记, 颜色, color"
-      },
       "saved-replies": {
         "label": "快捷回复",
         "description": "撰写可重复使用的回复，团队成员一键即可发送。",
@@ -374,6 +369,11 @@
         "label": "合规中心",
         "description": "帮助您履行隐私保护义务的工具:您适用的法律、隐私联系人、告知声明和链接、子处理者、免打扰时段,以及已落实事项的清单。",
         "keywords": "合规, 隐私, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, 投诉处理官, 子处理者, dpa, 条款, 隐私政策, 免打扰时段, 禁止来电, 清单, 儿童"
+      },
+      "company-properties": {
+        "label": "公司属性",
+        "description": "添加您希望为每家公司保存的字段。",
+        "keywords": "自定义字段, 字段, 必填, 下拉, 组织, 账户"
       }
     },
     "backToMarketplace": "返回应用市场"

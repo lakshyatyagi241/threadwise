@@ -1,5 +1,9 @@
 import {
   complianceChecklistSchema,
+  dncAddResultSchema,
+  dncListSchema,
+  type AddDncInput,
+  type ImportDncInput,
   complianceLinksSchema,
   complianceSettingsSchema,
   subprocessorListSchema,
@@ -37,4 +41,11 @@ export const complianceApi = {
     }),
   removeSubprocessor: (id: string) =>
     apiFetch(`${BASE}/subprocessors/${enc(id)}`, { method: 'DELETE' }),
+  dnc: (query: { q?: string; cursor?: string; limit?: number }, signal?: AbortSignal) =>
+    apiFetch(`${BASE}/dnc`, { schema: dncListSchema, signal, query }),
+  addDnc: (input: AddDncInput) =>
+    apiFetch(`${BASE}/dnc`, { method: 'POST', body: input, schema: dncAddResultSchema }),
+  importDnc: (input: ImportDncInput) =>
+    apiFetch(`${BASE}/dnc/import`, { method: 'POST', body: input, schema: dncAddResultSchema }),
+  removeDnc: (id: string) => apiFetch(`${BASE}/dnc/${enc(id)}`, { method: 'DELETE' }),
 };

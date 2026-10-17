@@ -64,8 +64,15 @@ export interface ContactRow {
   emailSubscriptionStatus: string | null;
   emailConfirmed: boolean;
   faxNumber: string | null;
+  /** ISO day (`YYYY-MM-DD`) or null. Built-in personal property (BL-217). */
+  dateOfBirth: string | null;
+  /** Flagged as a minor (BL-190), read from the privacy flags in the same statement. */
+  isMinor: boolean;
   lastActivityAt: Date | null;
   data: Record<string, unknown>;
+  /** BL-193: the contact's own IANA time zone and who set it (staff | import | api); both null when none is stored. */
+  timezone: string | null;
+  timezoneSource: string | null;
   source: string | null;
   isUnsubscribed: boolean;
   isArchived: boolean;
@@ -182,8 +189,12 @@ export class ContactsRepository {
       emailSubscriptionStatus: contacts.emailSubscriptionStatus,
       emailConfirmed: contacts.emailConfirmed,
       faxNumber: contacts.faxNumber,
+      dateOfBirth: contacts.dateOfBirth,
+      isMinor: sql<boolean>`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`,
       lastActivityAt: contacts.lastActivityAt,
       data: contacts.data,
+      timezone: contacts.timezone,
+      timezoneSource: contacts.timezoneSource,
       source: contacts.source,
       isUnsubscribed: contacts.isUnsubscribed,
       isArchived: contacts.isArchived,
@@ -405,6 +416,14 @@ export class ContactsRepository {
     return rows[0] as ContactRow | undefined;
   }
 
+  /**
+   * Locks the contact row for the rest of the transaction. A delete takes it before erasing the history, so a new conversation
+   * cannot link to the contact in between and keep its messages after the contact is gone.
+   */
+  async lockById(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`SELECT 1 FROM contacts WHERE org_id = ${orgId} AND id = ${id} FOR UPDATE`);
+  }
+
   /** uuid -> internal id for every uuid that exists in the workspace, in one query. Unknown uuids are simply absent. */
   async idsByUuid(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, number>> {
     if (uuids.length === 0) return new Map();
@@ -445,7 +464,10 @@ export class ContactsRepository {
       emailSubscriptionStatus?: string | null;
       emailConfirmed?: boolean;
       faxNumber?: string | null;
+      dateOfBirth?: string | null;
       source?: string | null;
+      timezone?: string | null;
+      timezoneSource?: string | null;
       isUnsubscribed?: boolean;
       unsubscribedAt?: Date | null;
       data: Record<string, unknown>;
@@ -485,7 +507,10 @@ export class ContactsRepository {
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
         emailConfirmed: values.emailConfirmed ?? false,
         faxNumber: values.faxNumber ?? null,
+        dateOfBirth: values.dateOfBirth ?? null,
         source: values.source ?? null,
+        timezone: values.timezone ?? null,
+        timezoneSource: values.timezone ? (values.timezoneSource ?? 'staff') : null,
         isUnsubscribed: values.isUnsubscribed ?? false,
         unsubscribedAt: values.unsubscribedAt ?? null,
         data: values.data,

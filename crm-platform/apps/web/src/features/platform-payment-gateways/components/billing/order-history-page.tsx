@@ -403,11 +403,11 @@ function OrderRow({
         <div className="text-[11px] text-muted-foreground">{o.itemSub ?? '—'}</div>
       </td>
       <td
-        className={`px-3 py-3 text-right font-mono ${lost ? 'text-danger' : o.status === 'paid' ? 'text-success' : ''}`}
+        className={`px-3 py-3 text-end font-mono ${lost ? 'text-danger' : o.status === 'paid' ? 'text-success' : ''}`}
       >
         {o.status === 'paid' ? `+${amount}` : lost ? `-${amount}` : '—'}
       </td>
-      <td className={`px-3 py-3 text-right font-mono ${o.status === 'paid' ? 'text-success' : ''}`}>
+      <td className={`px-3 py-3 text-end font-mono ${o.status === 'paid' ? 'text-success' : ''}`}>
         {amount}
       </td>
       <td className="px-3 py-3 text-center">

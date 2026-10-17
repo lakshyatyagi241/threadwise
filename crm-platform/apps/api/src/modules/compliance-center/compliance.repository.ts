@@ -49,7 +49,11 @@ function toSettings(r: Raw): SettingsRow {
       parentalConsentRequired: r.parental_consent_required === true,
       offerSaleShareOptOut: r.offer_sale_share_opt_out === true,
       optOutNoticeUrl: strOrNull(r.opt_out_notice_url),
-      consentManager: { name: str(r.consent_manager_name), url: strOrNull(r.consent_manager_url) },
+      consentManager: {
+        name: str(r.consent_manager_name),
+        url: strOrNull(r.consent_manager_url),
+        registrationId: str(r.consent_manager_registration),
+      },
       quietHours: {
         enabled: r.quiet_hours_enabled === true,
         start: str(r.quiet_start),
@@ -70,6 +74,14 @@ function toSettings(r: Raw): SettingsRow {
     rowVersion: Number(r.row_version),
     updatedAt: iso(r.updated_at),
   };
+}
+
+/** The window columns of the settings row, with the workspace time zone (see `windowFacts`). */
+export interface WindowFacts {
+  quietHours: ComplianceSettingsValues['quietHours'];
+  callingWindow: ComplianceSettingsValues['callingWindow'];
+  windowTimezone: string | null;
+  workspaceTimezone: string | null;
 }
 
 interface SubRow extends Subprocessor {
@@ -104,6 +116,31 @@ export class ComplianceRepository {
     return r ? toSettings(r) : null;
   }
 
+  /** What the send-window decision needs, in one cheap statement: the window columns and the workspace time zone. */
+  async windowFacts(tx: Tx, orgId: number): Promise<WindowFacts> {
+    const res = await tx.execute(sql`
+      SELECT s.quiet_hours_enabled, s.quiet_start, s.quiet_end, s.calling_window_enabled, s.calling_start, s.calling_end,
+             s.calling_days, s.window_timezone, o.settings->>'timezone' AS workspace_timezone
+      FROM organizations o LEFT JOIN compliance_settings s ON s.org_id = o.id
+      WHERE o.id = ${orgId}`);
+    const r = (res.rows[0] ?? {}) as Raw;
+    return {
+      quietHours: {
+        enabled: r.quiet_hours_enabled === true,
+        start: str(r.quiet_start) || '21:00',
+        end: str(r.quiet_end) || '08:00',
+      },
+      callingWindow: {
+        enabled: r.calling_window_enabled === true,
+        start: str(r.calling_start) || '08:00',
+        end: str(r.calling_end) || '21:00',
+        days: (Array.isArray(r.calling_days) ? r.calling_days : []).map(Number),
+      },
+      windowTimezone: strOrNull(r.window_timezone),
+      workspaceTimezone: strOrNull(r.workspace_timezone),
+    };
+  }
+
   /**
    * First save inserts (no version); later saves need the version they read. False on a conflict. `confirmed` says whether the
    * profile choice is confirmed by this save (any non-empty list); an empty list resets it.
@@ -125,6 +162,7 @@ export class ComplianceRepository {
       children_policy = ${v.childrenPolicy}, parental_consent_required = ${v.parentalConsentRequired},
       offer_sale_share_opt_out = ${v.offerSaleShareOptOut}, opt_out_notice_url = ${v.optOutNoticeUrl},
       consent_manager_name = ${v.consentManager.name}, consent_manager_url = ${v.consentManager.url},
+      consent_manager_registration = ${v.consentManager.registrationId},
       quiet_hours_enabled = ${v.quietHours.enabled}, quiet_start = ${v.quietHours.start}, quiet_end = ${v.quietHours.end},
       calling_window_enabled = ${v.callingWindow.enabled}, calling_start = ${v.callingWindow.start}, calling_end = ${v.callingWindow.end},
       calling_days = ${pgArray(v.callingWindow.days)}::smallint[],
@@ -136,13 +174,14 @@ export class ComplianceRepository {
         INSERT INTO compliance_settings (org_id, regimes, regimes_confirmed_at, privacy_url, terms_url,
           dpo_name, dpo_email, dpo_phone, dpo_address, grievance_name, grievance_email, grievance_phone, grievance_address,
           children_policy, parental_consent_required, offer_sale_share_opt_out, opt_out_notice_url, consent_manager_name, consent_manager_url,
+          consent_manager_registration,
           quiet_hours_enabled, quiet_start, quiet_end, calling_window_enabled, calling_start, calling_end, calling_days,
           window_timezone, dnd_registry, secondary_notice_locale, subprocessors_public)
         VALUES (${orgId}, ${pgArray(v.regimes)}::text[], ${confirmed ? sql`now()` : sql`NULL`}, ${v.privacyUrl}, ${v.termsUrl},
           ${v.dpo.name}, ${v.dpo.email}, ${v.dpo.phone}, ${v.dpo.address},
           ${v.grievanceOfficer.name}, ${v.grievanceOfficer.email}, ${v.grievanceOfficer.phone}, ${v.grievanceOfficer.address},
           ${v.childrenPolicy}, ${v.parentalConsentRequired}, ${v.offerSaleShareOptOut}, ${v.optOutNoticeUrl},
-          ${v.consentManager.name}, ${v.consentManager.url},
+          ${v.consentManager.name}, ${v.consentManager.url}, ${v.consentManager.registrationId},
           ${v.quietHours.enabled}, ${v.quietHours.start}, ${v.quietHours.end},
           ${v.callingWindow.enabled}, ${v.callingWindow.start}, ${v.callingWindow.end}, ${pgArray(v.callingWindow.days)}::smallint[],
           ${v.windowTimezone}, ${v.dndRegistry}, ${v.secondaryNoticeLocale}, ${v.subprocessorsPublic})

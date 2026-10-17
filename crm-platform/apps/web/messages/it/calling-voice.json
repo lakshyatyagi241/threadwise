@@ -89,7 +89,8 @@
       "NETWORK": "Errore di rete: riprova.",
       "UNEXPECTED": "Qualcosa è andato storto. Riprova.",
       "CALL_PLAYBACK_LINK_INVALID": "Questo link della registrazione è scaduto. Premi di nuovo riproduci per ottenerne uno nuovo.",
-      "CALL_RANGE_INVALID": "Queste date non sono valide: l'inizio non può essere successivo alla fine, un intervallo può coprire al massimo un anno e il fuso orario deve essere reale."
+      "CALL_RANGE_INVALID": "Queste date non sono valide: l'inizio non può essere successivo alla fine, un intervallo può coprire al massimo un anno e il fuso orario deve essere reale.",
+      "CALL_OUTSIDE_WINDOW": "Questo contatto è fuori dal tuo orario di chiamata, quindi la chiamata non è stata effettuata. La finestra di chiamata si apre {when}."
     },
     "settings": {
       "title": "Chiamate",

@@ -2,7 +2,9 @@
  * channel-viber: tables ported from Reference. Mirrors migrations/20261001104400_vib_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
+  check,
   bigint,
   boolean,
   foreignKey,
@@ -139,6 +141,9 @@ export const viberBroadcastRecipients = pgTable(
     status: text('status').notNull().default('pending'),
     error: text('error'),
     sentAt: timestamp('sent_at', { withTimezone: true }),
+    /** BL-191: the instant this recipient may be messaged after the workspace's quiet hours, and why. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     /** Viber's token for the send; a batch of up to 300 shares one, so a receipt is matched on token and user id. */
     messageToken: text('message_token'),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
@@ -171,6 +176,13 @@ export const viberBroadcastRecipients = pgTable(
       t.status,
     ),
     index('idx_viber_broadcast_recipients_status').on(t.orgId, t.status),
+    check(
+      'ck_viber_broadcast_recipients_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
+    index('idx_viber_broadcast_recipients_held')
+      .on(t.orgId, t.viberBroadcastId, t.heldUntil)
+      .where(sql`${t.heldUntil} IS NOT NULL`),
     index('idx_viber_broadcast_recipients_viber_user_id').on(t.orgId, t.viberUserId),
     index('idx_viber_broadcast_recipients_message_token').on(
       t.orgId,

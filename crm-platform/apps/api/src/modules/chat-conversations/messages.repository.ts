@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { MessageKind, MessageSenderKind, MessageStatus } from '@crm/contracts';
+import type { MessageKind, MessageSenderKind, MessageStatus, SendHold } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { channelOwnerSql } from '../../realtime';
 import { STATUS_RANK_SQL, type ReceiptStatusStep } from './message-rules';
@@ -566,13 +566,31 @@ export class MessagesRepository {
     }));
   }
 
+  /**
+   * A queued marketing message waits for the end of the quiet hours (BL-177): the reason and the instant go on its `meta.hold` so the
+   * thread can say so. The message stays `queued`. False when it had already moved on.
+   */
+  async setHold(
+    tx: Tx,
+    orgId: number,
+    ref: { id: number; createdAt: string },
+    hold: SendHold,
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE messages SET meta = meta || jsonb_build_object('hold', ${JSON.stringify(hold)}::jsonb)
+      WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
+        AND direction = 'out' AND status = 'queued'
+      RETURNING id`);
+    return rowsOf(res).length > 0;
+  }
+
   // --- the event log -----------------------------------------------------------------------------------------------------------
 
   async insertEvent(
     tx: Tx,
     orgId: number,
     ref: { id: number; createdAt: string },
-    event: 'queued' | 'attempt' | 'retry' | 'sent' | 'delivered' | 'read' | 'failed',
+    event: 'queued' | 'attempt' | 'retry' | 'held' | 'sent' | 'delivered' | 'read' | 'failed',
     detail: Record<string, unknown> = {},
   ): Promise<void> {
     await tx.execute(sql`
@@ -629,6 +647,8 @@ export class MessagesRepository {
       FROM messages
       WHERE status = 'queued' AND direction = 'out'
         AND created_at < now() - make_interval(secs => ${olderThanSeconds})
+        -- A message held for the quiet hours waits on purpose (a delayed job): it is overdue only once its hold has passed.
+        AND NOT (meta ? 'hold' AND (meta -> 'hold' ->> 'until')::timestamptz > now())
         AND created_at > now() - make_interval(hours => ${maxAgeHours})
       ORDER BY created_at LIMIT ${limit}`);
     return rowsOf(res).map((r) => ({

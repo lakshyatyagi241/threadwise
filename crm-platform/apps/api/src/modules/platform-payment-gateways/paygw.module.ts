@@ -69,6 +69,7 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     SubscriptionLifecycleService,
     SubscriptionCancelService,
     SubscriptionReconcilerService,
+    RefundService,
   ],
 })
 export class PlatformPaymentGatewaysModule {}

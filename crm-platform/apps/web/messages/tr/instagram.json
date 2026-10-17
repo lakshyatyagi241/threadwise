@@ -85,7 +85,8 @@
       "outsideWindow": "24 saat dışında",
       "selected": "{count, plural, other {# seçildi}}",
       "sent": "Instagram toplu gönderimi gönderildi — {sent} iletildi{failed, plural, =0 {} other {, # başarısız}}.",
-      "sentNone": "Hiçbir alıcıya gönderilemedi. Instagram bağlantısını kontrol edin."
+      "sentNone": "Hiçbir alıcıya gönderilemedi. Instagram bağlantısını kontrol edin.",
+      "skipped": "Onay nedeniyle mesaj gönderilmedi: {count}"
     }
   }
 }

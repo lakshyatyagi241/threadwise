@@ -21,6 +21,7 @@ import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
 import { MKT_ERROR_CODES } from '../marketplace/errors';
 import { LEAD_ERROR_CODES } from '../leads/errors';
+import { MLA_ERROR_CODES } from '../meta-lead-ads/errors';
 import { FLB_ERROR_CODES } from '../flow-builder-editor/errors';
 import { CHK_ERROR_CODES } from '../checkout-orders-merchant-payments/errors';
 import { FORMS_ERROR_CODES } from '../forms-builder/errors';
@@ -39,6 +40,7 @@ import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log
 import { REVENUE_ERROR_CODES } from '../crm/revenue-report';
 import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
+import { AICRM_ERROR_CODES } from '../ai-copilot-lead-finder/errors';
 
 export const ERROR_CODES = {
   ...FAQ_ERROR_CODES,
@@ -51,6 +53,7 @@ export const ERROR_CODES = {
   ...REVENUE_ERROR_CODES,
   ...PQL_ERROR_CODES,
   ...WFL_ERROR_CODES,
+  ...AICRM_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...GOOGLE_ERROR_CODES,
@@ -71,6 +74,7 @@ export const ERROR_CODES = {
   ...FLR_ERROR_CODES,
   ...MKT_ERROR_CODES,
   ...LEAD_ERROR_CODES,
+  ...MLA_ERROR_CODES,
   ...FLB_ERROR_CODES,
   ...CHK_ERROR_CODES,
   ...FORMS_ERROR_CODES,
@@ -140,6 +144,9 @@ export const ERROR_CODES = {
   AUTH_ACCOUNT_SUSPENDED: 'AUTH_ACCOUNT_SUSPENDED',
   AUTH_CAPTCHA_FAILED: 'AUTH_CAPTCHA_FAILED',
   AUTH_SIGNUP_CLOSED: 'AUTH_SIGNUP_CLOSED',
+  AUTH_IDENTITY_EXISTS: 'AUTH_IDENTITY_EXISTS',
+  /** Three-step sign-up: the set-password step was reached before the emailed code was confirmed. 403. */
+  AUTH_EMAIL_NOT_VERIFIED: 'AUTH_EMAIL_NOT_VERIFIED',
   AUTH_SLUG_TAKEN: 'AUTH_SLUG_TAKEN',
   AUTH_EMAIL_TAKEN: 'AUTH_EMAIL_TAKEN',
   AUTH_PASSWORD_POLICY: 'AUTH_PASSWORD_POLICY',
@@ -484,6 +491,24 @@ export const ERROR_CODES = {
   // companies (TW-CTP)
   /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
   COMPANY_OWNER_INVALID: 'COMPANY_OWNER_INVALID',
+  /** A custom value names a company property that is not editable here (not defined, inactive, hidden, read-only or computed). */
+  COMPANY_PROPERTY_NOT_EDITABLE: 'COMPANY_PROPERTY_NOT_EDITABLE',
+  /** A custom value does not fit its property's type (not a number, not one of the options, not a date, ...). */
+  COMPANY_PROPERTY_INVALID: 'COMPANY_PROPERTY_INVALID',
+  /** A property the workspace marked required has no value (honouring its "show only when" rule). */
+  COMPANY_REQUIRED_PROPERTY_MISSING: 'COMPANY_REQUIRED_PROPERTY_MISSING',
+  /** A condition or order on the companies list names a property that does not exist, is inactive, is computed or does not suit the operator. */
+  COMPANY_FILTER_INVALID: 'COMPANY_FILTER_INVALID',
+  /** The CSV of a company import cannot be read at all (no header, no name column, too many rows). Row-level problems are reported per row. */
+  COMPANY_IMPORT_INVALID: 'COMPANY_IMPORT_INVALID',
+  /** A company export would hold more rows than one file may (COMPANY_EXPORT_MAX): narrow it with the filters. */
+  COMPANY_EXPORT_TOO_LARGE: 'COMPANY_EXPORT_TOO_LARGE',
+  /** "Generate brief": no AI key is available to this workspace (its own, or the platform's), so nothing was sent anywhere. */
+  COMPANY_BRIEF_AI_UNAVAILABLE: 'COMPANY_BRIEF_AI_UNAVAILABLE',
+  /** "Generate brief": the AI provider refused the key or failed; the previous brief, if any, is kept. */
+  COMPANY_BRIEF_PROVIDER_FAILED: 'COMPANY_BRIEF_PROVIDER_FAILED',
+  /** "Generate brief": the company was asked for a brief again too soon. */
+  COMPANY_BRIEF_RATE_LIMITED: 'COMPANY_BRIEF_RATE_LIMITED',
   // platform settings, branding and storage (TW-SET)
   SET_MAINTENANCE: 'SET_MAINTENANCE',
   // localization and translation (TW-I18N)
@@ -677,6 +702,18 @@ export const ERROR_CODES = {
   APPT_CALENDAR_NOT_CONNECTED: 'APPT_CALENDAR_NOT_CONNECTED',
   /** Google did not answer or refused the request (details are logged, not returned). */
   APPT_CALENDAR_PROVIDER_FAILED: 'APPT_CALENDAR_PROVIDER_FAILED',
+  /** Confirming a calendar connection that someone else started (a forwarded link), or in another workspace. Nothing was requested from the provider. */
+  APPT_CALENDAR_CONFIRM_NOT_YOURS: 'APPT_CALENDAR_CONFIRM_NOT_YOURS',
+  /** The calendar connection ticket is malformed, expired or already used: press Connect again. */
+  APPT_CALENDAR_CONFIRM_INVALID: 'APPT_CALENDAR_CONFIRM_INVALID',
+  /** The iCal feed address is not an address we can read (not http/https/webcal, credentials in it, too long). */
+  APPT_ICS_FEED_INVALID: 'APPT_ICS_FEED_INVALID',
+  /** The feed address was fetched and is not a usable calendar (details: one path `url` with the reason code: unreachable, not_a_calendar, too_large, ...). */
+  APPT_ICS_FEED_UNREADABLE: 'APPT_ICS_FEED_UNREADABLE',
+  /** The workspace already subscribes to that address. */
+  APPT_ICS_FEED_DUPLICATE: 'APPT_ICS_FEED_DUPLICATE',
+  /** The workspace is at its limit of iCal feeds. */
+  APPT_ICS_FEED_LIMIT: 'APPT_ICS_FEED_LIMIT',
 
   // catalog and products (TW-CAT)
   /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */

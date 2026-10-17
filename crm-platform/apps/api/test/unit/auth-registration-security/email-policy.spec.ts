@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { checkEmailDomain, emailDomain } from '../../../src/modules/auth/support/email-policy';
 
-const on = { businessEmailOnly: true, blockDisposableEmail: true, blockedEmailDomains: [] as string[] };
+const on = {
+  businessEmailOnly: true,
+  blockDisposableEmail: true,
+  blockedEmailDomains: [] as string[],
+};
 
 describe('email policy', () => {
   it('accepts a company address', () => {
@@ -25,7 +29,9 @@ describe('email policy', () => {
   });
 
   it('lets free providers through when businessEmailOnly is off', () => {
-    expect(checkEmailDomain('a@gmail.com', { ...on, businessEmailOnly: false })).toEqual({ ok: true });
+    expect(checkEmailDomain('a@gmail.com', { ...on, businessEmailOnly: false })).toEqual({
+      ok: true,
+    });
   });
 
   it('rejects malformed addresses', () => {

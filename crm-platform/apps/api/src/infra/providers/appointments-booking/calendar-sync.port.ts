@@ -57,6 +57,8 @@ export interface CalendarEventResult {
   meetUrl: string | null;
   /** The provider's version tag of the event as we left it (Google's `etag`): the echo guard of the reconcile. */
   etag?: string | null;
+  /** Which provider holds the event (`google`, `microsoft`): the appointment remembers it, so a later change goes to the same calendar. */
+  provider?: string;
 }
 
 /**
@@ -76,10 +78,20 @@ export type CalendarEventState =
       etag: string | null;
     };
 
+/** The provider that holds an event, from what the appointment stored: none recorded means Google, the only provider that existed. */
+export function eventProviderOf(stored: string | null | undefined): 'google' | 'microsoft' {
+  return stored === 'microsoft' ? 'microsoft' : 'google';
+}
+
 export interface CalendarSyncPort {
-  /** The provider key ("google", "none"). */
+  /** The provider key ("google", "microsoft", "none"; the router that fronts several is "multi"). */
   readonly provider: string;
   status(orgId: number): Promise<CalendarStatus>;
+  /**
+   * Which provider a NEW event for this workspace would be written to right now (`google`, `microsoft`), or null for none. Optional: an
+   * adapter that serves one provider need not answer; the caller then keeps an existing event with the provider that holds it.
+   */
+  writeTarget?(orgId: number): Promise<string | null>;
   /** Busy intervals of a calendar in a range; the slot engine blocks them (with buffers). */
   freeBusy(
     orgId: number,
@@ -88,17 +100,31 @@ export interface CalendarSyncPort {
     to: Date,
     options?: CalendarFreeBusyOptions,
   ): Promise<CalendarBusyInterval[]>;
-  /** Creates the event, or updates `existingEventId`. Null = nothing was written (not connected). */
+  /**
+   * Creates the event, or updates `existingEventId`. Null = nothing was written (not connected). `provider` on the delete and read calls names
+   * the calendar that holds the event when it is not the one new events go to (a workspace that changed provider); an adapter that serves one
+   * provider ignores it.
+   */
   upsertEvent(request: CalendarEventRequest): Promise<CalendarEventResult | null>;
-  deleteEvent(orgId: number, calendarId: string | null, eventId: string): Promise<void>;
+  deleteEvent(
+    orgId: number,
+    calendarId: string | null,
+    eventId: string,
+    provider?: string,
+  ): Promise<void>;
   /**
    * Reads one event by id and reports what it holds (never throws for "gone": that is an answer). Throws for a failure to ask (provider
    * down, rate limit, grant refused) so the caller can stop and back off instead of reading "could not look" as "drifted".
    */
-  readEvent(orgId: number, calendarId: string | null, eventId: string): Promise<CalendarEventState>;
+  readEvent(
+    orgId: number,
+    calendarId: string | null,
+    eventId: string,
+    provider?: string,
+  ): Promise<CalendarEventState>;
   /**
    * Whether the calendar itself still exists and is visible to the connected account. A 404 on an EVENT of a calendar that is gone is not
    * the event's drift, so the reconcile asks this before it reads "missing" as an answer about one appointment. Throws like `readEvent`.
    */
-  calendarExists(orgId: number, calendarId: string | null): Promise<boolean>;
+  calendarExists(orgId: number, calendarId: string | null, provider?: string): Promise<boolean>;
 }

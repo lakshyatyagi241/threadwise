@@ -1,6 +1,11 @@
-import type { ArgumentsHost } from '@nestjs/common';
-import { describe, expect, it } from 'vitest';
+import { HttpStatus, Logger, type ArgumentsHost } from '@nestjs/common';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { ERROR_CODES } from '@crm/contracts';
+import { AppError } from '../../../src/common/errors/app-error';
 import { ProblemExceptionFilter } from '../../../src/common/filters/problem-exception.filter';
+import { reportServerError } from '../../../src/modules/platform-infrastructure';
+
+vi.mock('../../../src/modules/platform-infrastructure', () => ({ reportServerError: vi.fn() }));
 
 /** Runs the filter against a fake response and returns what it sent. */
 function run(exception: unknown) {
@@ -55,5 +60,45 @@ describe('ProblemExceptionFilter body-parser errors', () => {
   it('does not treat an arbitrary object with status 413 as a body-parser error', () => {
     const { status } = run({ status: 413 });
     expect(status).toBe(500);
+  });
+});
+
+describe('ProblemExceptionFilter expected 5xx', () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  const switchedOff = (expected: boolean) =>
+    new AppError(
+      ERROR_CODES.FLB_INTEGRATION_DISABLED,
+      'Google integration is not set up for this platform.',
+      HttpStatus.SERVICE_UNAVAILABLE,
+      undefined,
+      expected,
+    );
+
+  it('answers an expected 503 to the client but neither logs an error nor reports it', () => {
+    const error = vi.spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
+    vi.mocked(reportServerError).mockClear();
+    const { status, body } = run(switchedOff(true));
+    expect(status).toBe(503);
+    expect(body).toMatchObject({ code: 'FLB_INTEGRATION_DISABLED' });
+    expect(error).not.toHaveBeenCalled();
+    expect(reportServerError).not.toHaveBeenCalled();
+  });
+
+  it('still logs and reports a 503 that is not flagged expected', () => {
+    const error = vi.spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
+    vi.mocked(reportServerError).mockClear();
+    const { status } = run(switchedOff(false));
+    expect(status).toBe(503);
+    expect(error).toHaveBeenCalledTimes(1);
+    expect(reportServerError).toHaveBeenCalledTimes(1);
+  });
+
+  it('still logs and reports an unknown error', () => {
+    const error = vi.spyOn(Logger.prototype, 'error').mockImplementation(() => undefined);
+    vi.mocked(reportServerError).mockClear();
+    run(new Error('boom'));
+    expect(error).toHaveBeenCalledTimes(1);
+    expect(reportServerError).toHaveBeenCalledTimes(1);
   });
 });

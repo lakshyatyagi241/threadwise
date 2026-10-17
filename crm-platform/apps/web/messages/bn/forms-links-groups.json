@@ -95,7 +95,28 @@
         "required": "আবশ্যক",
         "removeField": "সরান",
         "options": "অপশন (কমা দিয়ে আলাদা করা)",
-        "optionsPlaceholder": "অপশন ১, অপশন ২, অপশন ৩"
+        "optionsPlaceholder": "অপশন ১, অপশন ২, অপশন ৩",
+        "mapsTo": "ম্যাপ হয়",
+        "mapsToHint": "ফর্ম জমা দেওয়া হলে এই উত্তরটি যোগাযোগ বৈশিষ্ট্যে সংরক্ষণ করুন।",
+        "mapsToNone": "যোগাযোগ বৈশিষ্ট্যে সংরক্ষণ করবেন না",
+        "mapsToSystemGroup": "যোগাযোগ ফিল্ড",
+        "mapsToCustomGroup": "কাস্টম বৈশিষ্ট্য",
+        "mapsToSystem": {
+          "name": "পুরো নাম",
+          "first_name": "প্রথম নাম",
+          "last_name": "শেষ নাম",
+          "email": "ইমেইল",
+          "title": "পদবী",
+          "language": "ভাষা",
+          "address": "ঈকলাস"
+        },
+        "mapsToPrivacyGroup": "গোপনীয়তা ও সম্মতি",
+        "mapsToPrivacy": {
+          "age": "বয়स (নাবালক যাচাই)",
+          "date_of_birth": "জন্মতারিখ (নাবালক যাচাই)",
+          "consent_marketing": "মার্কেটিং সম্মতি (ক্যাটসঅ্যাপ)",
+          "consent_service": "পরিষেবা চুক্তি (মার্কেটিং নয়)"
+        }
       },
       "fieldKind": {
         "heading": "শিরোনাম",
@@ -130,15 +151,24 @@
       "loading": "লিংক লোড হচ্ছে…",
       "retry": "আবার চেষ্টা করুন",
       "searchPlaceholder": "নাম বা লিংক দিয়ে খুঁজুন",
-      "create": { "cta": "নতুন লিংক" },
+      "create": {
+        "cta": "নতুন লিংক"
+      },
       "stats": {
         "all": "সব লিংক",
         "live": "লাইভ",
         "totalClicks": "মোট ক্লিক",
         "avgClicks": "গড় ক্লিক / লিংক"
       },
-      "tabs": { "all": "সব", "live": "লাইভ", "paused": "পজ করা" },
-      "status": { "live": "লাইভ", "paused": "পজ করা" },
+      "tabs": {
+        "all": "সব",
+        "live": "লাইভ",
+        "paused": "পজ করা"
+      },
+      "status": {
+        "live": "লাইভ",
+        "paused": "পজ করা"
+      },
       "empty": {
         "title": "এখনো কোনো লিংক নেই",
         "description": "বিজ্ঞাপন, বায়ো বা QR কোডে শেয়ার করার জন্য একটি লিংক তৈরি করুন।"
@@ -170,7 +200,11 @@
       "builder": {
         "back": "লিংকে ফিরে যান",
         "newHeading": "নতুন লিংক",
-        "step": { "destination": "গন্তব্য", "message": "শুরুর বার্তা", "tracking": "ট্র্যাকিং" },
+        "step": {
+          "destination": "গন্তব্য",
+          "message": "শুরুর বার্তা",
+          "tracking": "ট্র্যাকিং"
+        },
         "name": "নাম",
         "status": "স্ট্যাটাস",
         "countryCode": "কান্ট্রি কোড",
@@ -194,6 +228,14 @@
         "shortUrl": "শর্ট লিংক",
         "waUrl": "WhatsApp লিংক",
         "qrAlt": "এই লিংকের QR কোড"
+      },
+      "public": {
+        "missingTitle": "লিংক খুঁজে পাওয়া যায়নি",
+        "missingBody": "এই লিংকটি বিদ্যমান নেই, বা মুছে ফেলা হয়েছে।",
+        "goneTitle": "লিংকটি আর সক্রিয় নেই",
+        "goneBody": "এই লিংকটি বিরতি আছে বা মেয়াদ উত্তীর্ণ হয়েছে।",
+        "errorTitle": "কিছু একটা ভুল হয়েছে",
+        "errorBody": "আমরা এই লিংকটি খুলতে পারিনি। অনুগ্রহ করে আবার চেষ্টা করুন।"
       }
     }
   }

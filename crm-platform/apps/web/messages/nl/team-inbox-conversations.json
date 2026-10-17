@@ -44,9 +44,6 @@
         "unassigned": "Niet toegewezen",
         "unread": "Ongelezen"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Open",
-      "statusAll": "Alle statussen",
       "status": {
         "open": "Open",
         "pending": "In behandeling",
@@ -61,7 +58,6 @@
         "high": "Hoog",
         "urgent": "Urgent"
       },
-      "channelFilter": "Kanaal",
       "allChannels": "Alle kanalen",
       "archived": "Gearchiveerd",
       "backToInbox": "Terug naar de inbox",
@@ -107,7 +103,49 @@
         }
       },
       "select": "Selecteren",
-      "selectDone": "Klaar"
+      "selectDone": "Klaar",
+      "filters": {
+        "open": "Filters",
+        "openActive": "Filters ({count} aan)",
+        "title": "Filters",
+        "close": "Sluiten",
+        "reset": "Herstellen",
+        "cancel": "Annuleren",
+        "apply": "Toepassen",
+        "status": "Chatstatus",
+        "statusHint": "Zonder keuze zie je open en wachtende chats.",
+        "conversation": "Gesprek",
+        "any": "Alle",
+        "assigned": "Toegewezen",
+        "unassigned": "Niet toegewezen",
+        "unattended": "Onbeantwoord",
+        "labels": "Tags",
+        "channels": "Kanalen",
+        "agents": "Medewerkers",
+        "sortBy": "Sorteren op",
+        "recent": "Recent",
+        "old": "Oud",
+        "dateRange": "Periode (laatste activiteit)",
+        "from": "Van",
+        "to": "Tot",
+        "select": "Kies een optie",
+        "search": "Zoeken",
+        "noMatch": "Geen resultaten",
+        "today": "Vandaag",
+        "last7": "Laatste 7 dagen",
+        "last30": "Laatste 30 dagen",
+        "thisMonth": "Deze maand",
+        "clearDates": "Datums wissen",
+        "previousMonth": "Vorige maand",
+        "nextMonth": "Volgende maand"
+      },
+      "rowMenu": "Meer acties voor {name}",
+      "priorityMenu": "Prioriteit",
+      "statusFilter": "Status",
+      "statusOpen": "Open",
+      "statusAll": "Alle statussen",
+      "channelFilter": "Kanaal",
+      "selectRow": "{name} selecteren"
     },
     "status": {
       "received": "Ontvangen",
@@ -232,7 +270,9 @@
         "undone": "Fasewijziging ongedaan gemaakt: terug naar {stage}.",
         "undoneToast": "Fase teruggezet naar {stage}.",
         "couldNotUndo": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is doorgegaan of het is al ongedaan gemaakt."
-      }
+      },
+      "heldUntil": "Vastgehouden tot {when}",
+      "heldWhy": "Dit marketingbericht wacht tot uw stille uren voorbij zijn. Het wordt dan verstuurd, tenzij het contact zich ondertussen heeft afgemeld."
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -283,7 +323,14 @@
       "newMessageAnnounce": "Nieuw bericht: {text}",
       "attachment": "een bijlage",
       "jumpLatest": "Naar het laatste bericht",
-      "jumpLatestNew": "{count, plural, one {# nieuw bericht} other {# nieuwe berichten}}"
+      "jumpLatestNew": "{count, plural, one {# nieuw bericht} other {# nieuwe berichten}}",
+      "searchOpen": "Zoeken in deze chat",
+      "searchPlaceholder": "Zoeken in deze chat",
+      "searchCount": "{current} van {total}",
+      "searchNone": "Geen resultaten",
+      "searchPrev": "Vorige treffer",
+      "searchNext": "Volgende treffer",
+      "searchClose": "Zoeken sluiten"
     },
     "groupThread": {
       "openGroup": "Groep openen",
@@ -421,7 +468,35 @@
         }
       },
       "savedReplies": "Opgeslagen antwoorden",
-      "savedReplyIssues": "Niet ingevuld en gelaten zoals geschreven ({count}): {list}. Los dit op voordat u verzendt."
+      "savedReplyIssues": "Niet ingevuld en gelaten zoals geschreven ({count}): {list}. Los dit op voordat u verzendt.",
+      "toolbar": {
+        "label": "Berichtopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "underline": "Onderstrepen",
+        "strike": "Doorgestreept",
+        "bullets": "Lijst met opsommingstekens",
+        "numbers": "Genummerde lijst",
+        "ai": {
+          "open": "Slimme AI-assistent",
+          "noModel": "Voor deze werkruimte is geen AI-model ingeschakeld",
+          "title": "Slimme AI-assistent",
+          "condense": "Inkorten",
+          "condenseHint": "Maak de tekst korter en bondiger",
+          "fix": "Grammatica corrigeren",
+          "fixHint": "Grammatica- en spelfouten verbeteren",
+          "positive": "Positieve toon",
+          "positiveHint": "Maak de tekst positiever en opgewekter",
+          "translate": "Vertalen",
+          "translateHint": "Vertalen naar andere talen",
+          "selectLanguage": "Taal kiezen",
+          "searchLanguages": "Talen zoeken…",
+          "noLanguage": "Geen taal gevonden",
+          "working": "Bezig…",
+          "empty": "Schrijf eerst een bericht.",
+          "failed": "De AI kon de tekst niet aanpassen. Probeer het opnieuw."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",
@@ -452,7 +527,13 @@
         "pickTeam": "Kies een team voor dit gesprek",
         "noTeam": "Geen team",
         "onLeave": "Met verlof",
-        "onLeaveUntil": "Met verlof tot {date}"
+        "onLeaveUntil": "Met verlof tot {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Afwezig",
+          "busy": "Bezet",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",

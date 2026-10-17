@@ -57,9 +57,18 @@ describe('recipient modes', () => {
       groupIds: [],
       tagIds: [],
       segmentIds: [],
+      previousSends: { sends: [], outcome: 'all' },
       manualNumbers: '',
     });
     expect(withRecipientMode(f, 'audience')).toEqual({ csvText: '', manualNumbers: '' });
+  });
+
+  it('switching away from the audience mode also drops the picked previous sends', () => {
+    const f = form({ previousSends: { sends: [{ kind: 'campaign', id: 'x' }], outcome: 'read' } });
+    expect(withRecipientMode(f, 'manual')).toMatchObject({
+      previousSends: { sends: [], outcome: 'all' },
+    });
+    expect(withRecipientMode(f, 'audience')).not.toHaveProperty('previousSends');
   });
 
   it('counts numbers and CSV rows', () => {
@@ -79,8 +88,37 @@ describe('recipient modes', () => {
       groups: 15,
       contacts: 2,
       numbers: 2,
+      previous: 0,
       total: 19,
     });
+  });
+
+  it('adds up to what the picked previous sends held for the chosen outcome, as an estimate', () => {
+    const opt = (id: string, recipients: number, read: number) => ({
+      kind: 'campaign' as const,
+      id,
+      name: id,
+      at: null,
+      recipients,
+      delivered: recipients,
+      read,
+      replied: 0,
+      clicked: 0,
+      failed: 0,
+    });
+    const f = form({
+      contactIds: ['c1'],
+      previousSends: {
+        sends: [
+          { kind: 'campaign', id: 'a' },
+          { kind: 'campaign', id: 'b' },
+        ],
+        outcome: 'read',
+      },
+    });
+    expect(
+      recipientTotals(f, { groups: {}, tags: {}, previous: [opt('a', 100, 40), opt('b', 50, 5)] }),
+    ).toMatchObject({ previous: 45, total: 46 });
   });
 });
 

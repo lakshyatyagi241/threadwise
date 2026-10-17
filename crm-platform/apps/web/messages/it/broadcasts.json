@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "In pausa: è stato raggiunto il limite giornaliero di invio. Riprende automaticamente dopo {when}.",
         "halt": "In pausa: l'invio è sospeso per questo Workspace. Riprende quando la sospensione viene rimossa.",
-        "manual": "In pausa."
+        "manual": "In pausa.",
+        "quiet_hours": "In pausa: alcuni destinatari sono nelle loro ore di silenzio. Riprende da solo dopo {when}."
       },
       "delete": "Elimina",
       "deleteTitle": "Eliminare il broadcast?",
@@ -145,7 +146,8 @@
         "queued": "In coda",
         "queuedHint": "in attesa di invio",
         "failed": "Non riusciti",
-        "failedPct": "{pct}% di tasso di errore"
+        "failedPct": "{pct}% di tasso di errore",
+        "queuedHeld": "{count} trattenuti per le ore di silenzio"
       },
       "tab": {
         "overview": "Panoramica",
@@ -193,7 +195,8 @@
         "lastClick": "Ultimo clic: {when}",
         "empty": "Nessun destinatario associato.",
         "more": "Carica altri",
-        "loading": "Caricamento"
+        "loading": "Caricamento",
+        "heldUntil": "Trattenuto fino a {when} (ore di silenzio)"
       },
       "failures": {
         "kicker": "Motivi degli errori",

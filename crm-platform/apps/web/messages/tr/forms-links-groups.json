@@ -95,7 +95,28 @@
         "required": "Zorunlu",
         "removeField": "Kaldır",
         "options": "Seçenekler (virgülle ayrılmış)",
-        "optionsPlaceholder": "Seçenek 1, Seçenek 2, Seçenek 3"
+        "optionsPlaceholder": "Seçenek 1, Seçenek 2, Seçenek 3",
+        "mapsTo": "Eşleşir",
+        "mapsToHint": "Form gönderildiğinde bu yanıtı bir kişi özelliğine kaydeder.",
+        "mapsToNone": "Bir kişi özelliğine kaydetme",
+        "mapsToSystemGroup": "Kişi alanları",
+        "mapsToCustomGroup": "Özel özellikler",
+        "mapsToSystem": {
+          "name": "Tam ad",
+          "first_name": "Ad",
+          "last_name": "Soyad",
+          "email": "E-posta",
+          "title": "Unvan",
+          "language": "Dil",
+          "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Gizlilik ve onay",
+        "mapsToPrivacy": {
+          "age": "Yaş (reşit olmayan kontrolü)",
+          "date_of_birth": "Doğum tarihi (reşit olmayan kontrolü)",
+          "consent_marketing": "Pazarlama onayı (WhatsApp)",
+          "consent_service": "Hizmet anlaşması (pazarlama değil)"
+        }
       },
       "fieldKind": {
         "heading": "Başlık",
@@ -130,15 +151,24 @@
       "loading": "Bağlantılar yükleniyor…",
       "retry": "Tekrar dene",
       "searchPlaceholder": "Ada veya bağlantıya göre ara",
-      "create": { "cta": "Yeni bağlantı" },
+      "create": {
+        "cta": "Yeni bağlantı"
+      },
       "stats": {
         "all": "Tüm bağlantılar",
         "live": "Aktif",
         "totalClicks": "Toplam tıklama",
         "avgClicks": "Ort. tıklama / bağlantı"
       },
-      "tabs": { "all": "Tümü", "live": "Aktif", "paused": "Duraklatıldı" },
-      "status": { "live": "Aktif", "paused": "Duraklatıldı" },
+      "tabs": {
+        "all": "Tümü",
+        "live": "Aktif",
+        "paused": "Duraklatıldı"
+      },
+      "status": {
+        "live": "Aktif",
+        "paused": "Duraklatıldı"
+      },
       "empty": {
         "title": "Henüz bağlantı yok",
         "description": "Reklamlarda, biyografilerde veya bir QR kodunda paylaşmak için bir bağlantı oluşturun."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "Bağlantılara dön",
         "newHeading": "Yeni bağlantı",
-        "step": { "destination": "Hedef", "message": "Başlangıç mesajı", "tracking": "Takip" },
+        "step": {
+          "destination": "Hedef",
+          "message": "Başlangıç mesajı",
+          "tracking": "Takip"
+        },
         "name": "Ad",
         "status": "Durum",
         "countryCode": "Ülke kodu",
@@ -194,6 +228,14 @@
         "shortUrl": "Kısa bağlantı",
         "waUrl": "WhatsApp bağlantısı",
         "qrAlt": "Bu bağlantı için QR kodu"
+      },
+      "public": {
+        "missingTitle": "Bağlantı bulunamadı",
+        "missingBody": "Bu bağlantı mevcut değil veya silinmiş.",
+        "goneTitle": "Bağlantı artık aktif değil",
+        "goneBody": "Bu bağlantı duraklatılmış veya süresi dolmuş.",
+        "errorTitle": "Bir şeyler yanlış gitti",
+        "errorBody": "Bu bağlantı açılamadı. Lütfen tekrar deneyin."
       }
     }
   }

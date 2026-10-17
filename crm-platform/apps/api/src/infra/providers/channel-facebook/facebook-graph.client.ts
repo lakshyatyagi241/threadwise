@@ -20,6 +20,7 @@ import {
   type PublishSpec,
   type TokenDebug,
 } from './facebook.port';
+import { subscribedFieldsOf } from '../meta-lead-ads/meta-lead-ads.parse';
 
 const HOST = 'https://graph.facebook.com';
 const TIMEOUT_MS = 20_000;
@@ -58,7 +59,8 @@ async function call(
   } = {},
 ): Promise<GraphResult<Json>> {
   const url = new URL(path.startsWith('http') ? path : `${HOST}/${version}/${path}`);
-  if (!isMetaUrl(url)) return { ok: false, error: 'Refused: the address is not a Facebook address.' };
+  if (!isMetaUrl(url))
+    return { ok: false, error: 'Refused: the address is not a Facebook address.' };
   for (const [k, v] of Object.entries(o.query ?? {})) url.searchParams.set(k, v);
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (o.token) headers.Authorization = `Bearer ${o.token}`;
@@ -90,6 +92,9 @@ async function call(
     return { ok: false, error: e instanceof Error ? e.message : 'Facebook could not be reached' };
   }
 }
+
+/** The one place the Graph is called from: the lead ads adapter reuses it, so a token always travels in a header and never in an address. */
+export { call as graphCall };
 
 const clip = (s: string, n: number) => s.slice(0, n);
 
@@ -174,6 +179,7 @@ class PageApi implements FacebookPageApi {
     private readonly version: string,
     private readonly token: string,
     private readonly pageId: string,
+    private readonly appId: string | null = null,
   ) {}
 
   private get(path: string, query: Record<string, string> = {}) {
@@ -189,10 +195,18 @@ class PageApi implements FacebookPageApi {
       : { ok: false, error: r.error, code: r.code };
   }
 
-  subscribeWebhooks(): Promise<GraphResult> {
+  /**
+   * Meta replaces the whole field list on a subscribe, so a Page that also has lead ads switched on (`leadgen`, added by the Meta lead
+   * ads door) would lose it every time this ran (a reconnect, "Fix inbound"). The field is read first and kept.
+   */
+  async subscribeWebhooks(): Promise<GraphResult> {
+    const held = await this.get(`${this.pageId}/subscribed_apps`);
+    const keepLeadgen = held.ok && subscribedFieldsOf(held.data, this.appId).includes('leadgen');
     return call(this.version, 'POST', `${this.pageId}/subscribed_apps`, {
       token: this.token,
-      form: { subscribed_fields: FB_SUBSCRIBED_FIELDS },
+      form: {
+        subscribed_fields: keepLeadgen ? `${FB_SUBSCRIBED_FIELDS},leadgen` : FB_SUBSCRIBED_FIELDS,
+      },
     });
   }
 
@@ -513,6 +527,6 @@ export class FacebookGraphClients implements FacebookGraphFactory {
   }
 
   forPage(token: string, pageId: string): FacebookPageApi {
-    return new PageApi(this.settings.graphVersion, token, pageId);
+    return new PageApi(this.settings.graphVersion, token, pageId, this.settings.appId);
   }
 }

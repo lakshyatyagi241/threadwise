@@ -9,7 +9,25 @@ export { Registry, Gauge, Counter, Histogram } from './prometheus-text';
 export { startMetricsServer, type MetricsServerOptions } from './metrics-server';
 export { httpMetricsMiddleware } from './http-metrics.middleware';
 export {
+  attachJobMetrics,
+  jobTimings,
+  type JobTimingFields,
+  type JobTimings,
+  type ObservableWorker,
+} from './job-metrics';
+export { JobMetricsModule, JobMetricsService } from './job-metrics.module';
+export {
+  Prober,
+  parseProbeTargets,
+  probeOnce,
+  type ProbeOutcome,
+  type ProbeResult,
+  type ProbeTarget,
+} from './probe';
+export {
   getRuntimeMonitor,
+  metricsListenerDecision,
   startRuntimeMonitor,
   stopRuntimeMonitor,
+  type ListenerDecision,
 } from './start-runtime-monitor';

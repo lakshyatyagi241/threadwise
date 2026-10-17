@@ -7,7 +7,13 @@ import type { MarketOperatorSubscription } from '@crm/contracts';
 import { Button, Field, Input, Modal, Select, Spinner } from '@crm/ui';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { fetchWorkspacePlans } from '@/features/plans-subscriptions-trials/api';
-import { cancelSubscription, compSubscription, fetchSubscriptionSummary, marketKeys } from '../api';
+import {
+  cancelSubscription,
+  compSubscription,
+  fetchSubscriptionSummary,
+  marketKeys,
+  unlockSubscriptionPrice,
+} from '../api';
 import { marketError } from '../lib/errors';
 import {
   cancelCheck,
@@ -19,6 +25,8 @@ import {
   initialCompDraft,
   paidApps,
   parseMonths,
+  unlockCheck,
+  unlockPayload,
   type CancelChoice,
   type CancelDraft,
   type CompDraft,
@@ -159,6 +167,95 @@ export function CancelSubscriptionDialog({
         />
 
         <ErrorLine error={cancel.error} />
+      </form>
+    </Modal>
+  );
+}
+
+// --- unlock the price -------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Releases one subscriber from their locked price: their next payment is the listing's price. When the card renews the app the old price
+ * lives at the payment provider, so that card renewal is ended at the end of the period they paid for and they subscribe again at the new
+ * price; the dialog says which of the two applies.
+ */
+export function UnlockPriceDialog({
+  subscription,
+  onClose,
+}: {
+  subscription: MarketOperatorSubscription;
+  onClose: () => void;
+}) {
+  const t = useTranslations('marketplace.operator.unlockDialog');
+  const format = useFormatter();
+  const toast = useToast();
+  const refresh = useRefreshSubscriptions();
+  const [reason, setReason] = useState('');
+  const check = unlockCheck(reason);
+  const formId = 'unlock-price-form';
+  const end = subscription.currentPeriodEnd
+    ? format.dateTime(new Date(subscription.currentPeriodEnd), { dateStyle: 'medium' })
+    : '';
+  const names = { workspace: subscription.workspace.name, app: subscription.app.name, date: end };
+
+  const unlock = useMutation({
+    mutationFn: () => unlockSubscriptionPrice(subscription.id, unlockPayload(reason)),
+    onSuccess: () => {
+      toast.success(t('done', names));
+      refresh();
+      onClose();
+    },
+    onError: (e) => {
+      if (marketError(e).kind === 'general') refresh();
+    },
+  });
+
+  return (
+    <Modal
+      open
+      size="md"
+      eyebrow={t('eyebrow')}
+      title={t('title', { workspace: subscription.workspace.name })}
+      closeLabel={t('close')}
+      onClose={() => {
+        if (!unlock.isPending) onClose();
+      }}
+      footer={
+        <>
+          <Button variant="secondary" onClick={onClose} disabled={unlock.isPending}>
+            {t('back')}
+          </Button>
+          <Button type="submit" form={formId} disabled={!check.canSubmit || unlock.isPending}>
+            {unlock.isPending && <Spinner />}
+            {t('confirm')}
+          </Button>
+        </>
+      }
+    >
+      <form
+        id={formId}
+        noValidate
+        className="space-y-4 text-sm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (check.canSubmit) unlock.mutate();
+        }}
+      >
+        <p className="text-muted-foreground" dir="auto">
+          {t('summary', names)}
+        </p>
+        <p dir="auto" data-testid="unlock-effect">
+          {subscription.autoRenew ? t('effectCard', names) : t('effectPrepaid', names)}
+        </p>
+        <NoteField
+          id="unlock-reason"
+          label={t('reason')}
+          value={reason}
+          rule={check.reason}
+          disabled={unlock.isPending}
+          onChange={setReason}
+        />
+        <ErrorLine error={unlock.error} />
       </form>
     </Modal>
   );

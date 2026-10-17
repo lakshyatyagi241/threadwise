@@ -283,14 +283,15 @@ export function profileItems(
     }
   }
 
-  // Quiet hours and calling windows are stored and shown, not enforced (BL-177). Said once, plainly, whenever one is switched on.
+  // Quiet hours and calling windows are enforced (BL-177): a marketing message is held, a call outside the window is refused. Said once,
+  // plainly, whenever one is switched on, with what it does not do.
   if (s.quietHours.enabled || s.callingWindow.enabled) {
     out.push(
       item(
         'windows_enforcement',
         'profile',
-        'partial',
-        'notEnforced',
+        'built',
+        'enforced',
         tab('windows'),
         {},
         regimes.filter(

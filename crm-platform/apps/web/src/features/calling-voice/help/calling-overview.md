@@ -72,6 +72,10 @@ When calling is on and the number is not blocked, **Place a test call** appears 
 
 The Calling tile needs the **WhatsApp calling** plan feature and the right to use calling. Without that right you cannot call at all. Turning calling on or off needs the calling management right. Without it you can see each number's state, but the buttons are hidden.
 
+## Calling hours
+
+If your workspace turned on a calling window in the [Compliance center](help:compliance-center), a call you place outside it is not made. The message says when the window opens, read on the contact's own clock. A call back to someone who messaged or called you in the last 24 hours is not refused.
+
 ## If something looks wrong
 
 - **The Call button is missing.** Check that calling is enabled for the number, that the contact has a phone number, and that you have the right to use calling.

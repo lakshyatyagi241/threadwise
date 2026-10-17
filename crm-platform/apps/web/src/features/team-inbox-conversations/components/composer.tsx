@@ -75,6 +75,8 @@ import {
   SmileIcon,
   TemplateIcon,
 } from './icons';
+import { HighlightedText, hasFormatting } from './formatted-text';
+import { ComposerToolbar, type AiModelChoice } from './composer-toolbar';
 import { EmojiPicker } from './emoji-picker';
 import { QuotePreview } from './quote-preview';
 import {
@@ -113,6 +115,8 @@ export interface ComposerHandle {
 }
 
 export interface ComposerProps {
+  /** The model of the Smart AI Assistant in the formatting row; none: the assistant button is off. */
+  aiModel?: AiModelChoice | null;
   conversationId: string;
   mode: ComposerMode;
   onMode: (mode: ComposerMode) => void;
@@ -184,6 +188,7 @@ export function Composer(props: ComposerProps) {
   const [fileError, setFileError] = useState<string | null>(null);
   const [savingNote, setSavingNote] = useState(false);
   const [emojiOpen, setEmojiOpen] = useState(false);
+  const [areaScroll, setAreaScroll] = useState(0);
   const [extras, setExtras] = useState<ExtrasDraft>(EMPTY_EXTRAS);
   const [extrasTried, setExtrasTried] = useState(false);
   const [html, setHtml] = useState(() => HTML_DRAFTS.get(conversationId) ?? '');
@@ -510,6 +515,81 @@ export function Composer(props: ComposerProps) {
     });
   }
 
+  // A chat message with marks in it is drawn over the box: bold words bold, italic italic (the real text stays underneath).
+  const drawn = !isEmail && hasFormatting(text);
+
+  // Attach, saved replies and emoji sit in the row under the box with the formatting buttons.
+  const toolbarExtras = (
+    <>
+      {!isNote && !groupBlocked && props.canAttach && !isEmail && (
+        <>
+          <input
+            ref={input}
+            type="file"
+            accept={accept}
+            onChange={pick}
+            className="sr-only"
+            tabIndex={-1}
+            data-testid="inbox-file-input"
+            aria-label={t('attach')}
+          />
+          <button
+            type="button"
+            title={t('attach')}
+            aria-label={t('attach')}
+            disabled={disabled}
+            onClick={() => input.current?.click()}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          >
+            <PaperclipIcon />
+          </button>
+        </>
+      )}
+      {showSavedReplies && (
+        <button
+          type="button"
+          title={t('savedReplies')}
+          aria-label={t('savedReplies')}
+          aria-haspopup="listbox"
+          aria-expanded={picker.open}
+          aria-controls={picker.open ? picker.listId : undefined}
+          data-testid="inbox-saved-replies-button"
+          disabled={disabled}
+          onClick={() => pickerRef.current?.toggle()}
+          className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+        >
+          <SavedReplyIcon />
+        </button>
+      )}
+      {!groupBlocked && !isEmail && (
+        <>
+          <button
+            type="button"
+            title={t('emoji')}
+            aria-label={t('emoji')}
+            aria-haspopup="dialog"
+            aria-expanded={emojiOpen}
+            data-testid="inbox-emoji-button"
+            disabled={disabled}
+            onClick={() => setEmojiOpen((v) => !v)}
+            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          >
+            <SmileIcon />
+          </button>
+          {emojiOpen && !disabled && (
+            <EmojiPicker
+              onPick={addEmoji}
+              onClose={() => {
+                setEmojiOpen(false);
+                area.current?.focus();
+              }}
+            />
+          )}
+        </>
+      )}
+    </>
+  );
+
   return (
     <div
       className={cn(
@@ -723,72 +803,6 @@ export function Composer(props: ComposerProps) {
             </button>
           </>
         )}
-        {!isNote && !groupBlocked && props.canAttach && !isEmail && (
-          <>
-            <input
-              ref={input}
-              type="file"
-              accept={accept}
-              onChange={pick}
-              className="sr-only"
-              tabIndex={-1}
-              data-testid="inbox-file-input"
-              aria-label={t('attach')}
-            />
-            <button
-              type="button"
-              title={t('attach')}
-              aria-label={t('attach')}
-              disabled={disabled}
-              onClick={() => input.current?.click()}
-              className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
-            >
-              <PaperclipIcon />
-            </button>
-          </>
-        )}
-        {showSavedReplies && (
-          <button
-            type="button"
-            title={t('savedReplies')}
-            aria-label={t('savedReplies')}
-            aria-haspopup="listbox"
-            aria-expanded={picker.open}
-            aria-controls={picker.open ? picker.listId : undefined}
-            data-testid="inbox-saved-replies-button"
-            disabled={disabled}
-            onClick={() => pickerRef.current?.toggle()}
-            className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
-          >
-            <SavedReplyIcon />
-          </button>
-        )}
-        {!groupBlocked && !isEmail && (
-          <>
-            <button
-              type="button"
-              title={t('emoji')}
-              aria-label={t('emoji')}
-              aria-haspopup="dialog"
-              aria-expanded={emojiOpen}
-              data-testid="inbox-emoji-button"
-              disabled={disabled}
-              onClick={() => setEmojiOpen((v) => !v)}
-              className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
-            >
-              <SmileIcon />
-            </button>
-            {emojiOpen && !disabled && (
-              <EmojiPicker
-                onPick={addEmoji}
-                onClose={() => {
-                  setEmojiOpen(false);
-                  area.current?.focus();
-                }}
-              />
-            )}
-          </>
-        )}
         {richEmail && !groupBlocked ? (
           <RichEditor
             handleRef={editor}
@@ -803,61 +817,81 @@ export function Composer(props: ComposerProps) {
             testId="inbox-composer"
           />
         ) : (
-          <textarea
-            ref={area}
-            onPaste={
-              isEmail
-                ? (e) => {
-                    const files = Array.from(e.clipboardData.files);
-                    if (files.length === 0) return;
-                    e.preventDefault();
-                    staged.add(files);
-                  }
-                : undefined
-            }
-            data-testid="inbox-composer"
-            rows={1}
-            dir="auto"
-            value={text}
-            maxLength={max}
-            disabled={disabled}
-            aria-label={isNote ? t('noteLabel') : t('replyLabel')}
-            aria-describedby={hintId}
-            placeholder={
-              disabled && !isNote
-                ? t('replyDisabledPlaceholder')
-                : isNote
-                  ? t('notePlaceholder')
-                  : t('replyPlaceholder')
-            }
-            onChange={(e) => {
-              change(e.target.value);
-              syncMention(e.target);
-              if (showSavedReplies) {
-                pickerRef.current?.textChanged(e.target.value, e.target.selectionStart);
+          <div className="relative min-w-0 flex-1">
+            <textarea
+              ref={area}
+              onPaste={
+                isEmail
+                  ? (e) => {
+                      const files = Array.from(e.clipboardData.files);
+                      if (files.length === 0) return;
+                      e.preventDefault();
+                      staged.add(files);
+                    }
+                  : undefined
               }
-            }}
-            // The caret moved without typing (arrows, a click): a `/query` it left stops being a query.
-            onSelect={(e) => {
-              syncMention(e.currentTarget);
-              if (showSavedReplies) {
-                pickerRef.current?.textChanged(
-                  e.currentTarget.value,
-                  e.currentTarget.selectionStart,
-                );
+              data-testid="inbox-composer"
+              rows={1}
+              dir="auto"
+              value={text}
+              maxLength={max}
+              disabled={disabled}
+              aria-label={isNote ? t('noteLabel') : t('replyLabel')}
+              aria-describedby={hintId}
+              placeholder={
+                disabled && !isNote
+                  ? t('replyDisabledPlaceholder')
+                  : isNote
+                    ? t('notePlaceholder')
+                    : t('replyPlaceholder')
               }
-            }}
-            onKeyDown={onKey}
-            role={showSavedReplies && picker.open ? 'combobox' : undefined}
-            aria-expanded={showSavedReplies && picker.open ? true : undefined}
-            aria-controls={showSavedReplies && picker.open ? picker.listId : undefined}
-            aria-activedescendant={showSavedReplies && picker.open ? picker.activeId : undefined}
-            aria-autocomplete={showSavedReplies && picker.open ? 'list' : undefined}
-            className={cn(
-              'max-h-36 min-h-10 w-full flex-1 resize-none rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-70',
-              isNote ? 'border-warning/50 bg-warning/5' : 'border-border',
+              onChange={(e) => {
+                change(e.target.value);
+                syncMention(e.target);
+                if (showSavedReplies) {
+                  pickerRef.current?.textChanged(e.target.value, e.target.selectionStart);
+                }
+              }}
+              // The caret moved without typing (arrows, a click): a `/query` it left stops being a query.
+              onSelect={(e) => {
+                syncMention(e.currentTarget);
+                if (showSavedReplies) {
+                  pickerRef.current?.textChanged(
+                    e.currentTarget.value,
+                    e.currentTarget.selectionStart,
+                  );
+                }
+              }}
+              onKeyDown={onKey}
+              onScroll={(e) => setAreaScroll(e.currentTarget.scrollTop)}
+              role={showSavedReplies && picker.open ? 'combobox' : undefined}
+              aria-expanded={showSavedReplies && picker.open ? true : undefined}
+              aria-controls={showSavedReplies && picker.open ? picker.listId : undefined}
+              aria-activedescendant={showSavedReplies && picker.open ? picker.activeId : undefined}
+              aria-autocomplete={showSavedReplies && picker.open ? 'list' : undefined}
+              className={cn(
+                'block max-h-36 min-h-10 w-full resize-none rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-70',
+                isNote ? 'border-warning/50 bg-warning/5' : 'border-border',
+                drawn && 'text-transparent caret-foreground',
+              )}
+            />
+            {drawn && (
+              <div
+                aria-hidden="true"
+                data-testid="inbox-composer-format"
+                className="pointer-events-none absolute inset-0 overflow-hidden rounded-md border border-transparent px-3 py-2 text-sm"
+              >
+                <div
+                  dir="auto"
+                  className="whitespace-pre-wrap break-words"
+                  style={{ transform: `translateY(-${areaScroll}px)` }}
+                >
+                  <HighlightedText text={text} />
+                  {text.endsWith('\n') ? '\u200b' : ''}
+                </div>
+              </div>
             )}
-          />
+          </div>
         )}
         <Button
           data-testid="inbox-send"
@@ -870,6 +904,17 @@ export function Composer(props: ComposerProps) {
           <span className="hidden sm:inline">{isNote ? t('addNote') : t('send')}</span>
         </Button>
       </div>
+      {!groupBlocked && !isEmail && (
+        <ComposerToolbar
+          extras={toolbarExtras}
+          model={props.aiModel ?? null}
+          area={area}
+          text={text}
+          max={max}
+          disabled={disabled}
+          onText={change}
+        />
+      )}
       {isEmail && !isNote && !groupBlocked && props.email?.channelId && (
         <SignaturePicker
           channelId={props.email.channelId}

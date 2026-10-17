@@ -283,8 +283,9 @@ export class StatusOptionsService {
     this.requireModulePermission(input.moduleKey, 'update');
     await this.db.tx(async (tx) => {
       const ids: number[] = [];
+      const rows = await this.repo.findByUuids(tx, ctx.orgId, input.orderedIds);
       for (const uuid of input.orderedIds) {
-        const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+        const row = rows.get(uuid);
         if (!row || row.moduleKey !== input.moduleKey)
           throw AppError.notFound('StatusOption', uuid);
         ids.push(row.id);

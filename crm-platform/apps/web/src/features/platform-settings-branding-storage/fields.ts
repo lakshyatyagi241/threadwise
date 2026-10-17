@@ -543,6 +543,24 @@ export const GROUP_SPECS: GroupSpec[] = [
     ],
   },
   {
+    id: 'microsoftCalendar',
+    group: 'microsoftCalendar',
+    slug: 'microsoft-calendar',
+    guide: ['registration', 'redirect', 'permissions', 'workspaces'],
+    sections: [
+      {
+        id: 'oauth',
+        eyebrow: 'microsoft-oauth',
+        custom: 'microsoftCallback',
+        fields: [
+          f('enabled', 'toggle'),
+          ...halves(f('clientId', 'text', { mono: true }), f('clientSecret', 'secret')),
+          ...halves(f('tenant', 'text', { mono: true }), f('redirectUri', 'url', { mono: true })),
+        ],
+      },
+    ],
+  },
+  {
     id: 'microsoftMail',
     group: 'microsoftMail',
     slug: 'microsoft-mail',
@@ -648,5 +666,6 @@ export const HUB_ORDER = [
   'flowBuilder',
   'googleCalendar',
   'googleMail',
+  'microsoftCalendar',
   'microsoftMail',
 ] as const;

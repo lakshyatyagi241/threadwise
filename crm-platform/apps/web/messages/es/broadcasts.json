@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "En pausa: se alcanzó el límite diario de envíos. Se reanuda sola después de {when}.",
         "halt": "En pausa: los envíos están detenidos para este espacio de trabajo. Se reanuda cuando se levante la detención.",
-        "manual": "En pausa."
+        "manual": "En pausa.",
+        "quiet_hours": "En pausa: algunos destinatarios están en sus horas de silencio. Se reanuda solo después de {when}."
       },
       "delete": "Eliminar",
       "deleteTitle": "¿Eliminar la difusión?",
@@ -145,7 +146,8 @@
         "queued": "En cola",
         "queuedHint": "pendientes de envío",
         "failed": "Fallidos",
-        "failedPct": "{pct}% de tasa de fallos"
+        "failedPct": "{pct}% de tasa de fallos",
+        "queuedHeld": "{count} en espera por las horas de silencio"
       },
       "tab": {
         "overview": "Resumen",
@@ -193,7 +195,8 @@
         "lastClick": "Último clic: {when}",
         "empty": "No hay destinatarios adjuntos.",
         "more": "Cargar más",
-        "loading": "Cargando"
+        "loading": "Cargando",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "failures": {
         "kicker": "Motivos de los fallos",

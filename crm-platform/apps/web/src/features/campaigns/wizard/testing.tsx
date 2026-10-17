@@ -6,6 +6,7 @@ import type {
   SessionResponse,
   WizardAudience,
   WizardAudienceCount,
+  PreviousSendOption,
   WizardAudienceSources,
   WizardCreditCheck,
   WizardDraft,
@@ -160,7 +161,36 @@ export const sources = (): WizardAudienceSources => ({
     { id: uuid(12), name: 'Newsletter', color: null, memberCount: 4300 },
   ],
   segments: [{ id: uuid(21), name: 'Active last 30 days', color: null, memberCount: null }],
+  previousSends: [],
 });
+
+/** Earlier sends for the "Previous sends" source: a broadcast (no replies or clicks recorded) and a campaign. */
+export const previousSends = (): PreviousSendOption[] => [
+  {
+    kind: 'broadcast',
+    id: uuid(31),
+    name: 'Diwali offer',
+    at: '2026-10-01T09:00:00.000Z',
+    recipients: 500,
+    delivered: 480,
+    read: 300,
+    replied: null,
+    clicked: null,
+    failed: 20,
+  },
+  {
+    kind: 'campaign',
+    id: uuid(32),
+    name: 'Spring win-back',
+    at: '2026-09-20T09:00:00.000Z',
+    recipients: 200,
+    delivered: 190,
+    read: 120,
+    replied: 30,
+    clicked: 45,
+    failed: 10,
+  },
+];
 
 export const count = (over: Partial<WizardAudienceCount> = {}): WizardAudienceCount => ({
   matching: 1000,

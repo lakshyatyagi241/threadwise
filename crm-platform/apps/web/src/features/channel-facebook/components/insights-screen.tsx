@@ -408,7 +408,7 @@ export function InsightsScreen() {
                         )}
                       </div>
                     </div>
-                    <div className="flex shrink-0 items-center gap-5 text-right">
+                    <div className="flex shrink-0 items-center gap-5 text-end">
                       <div>
                         <div className="text-lg leading-none">
                           {formatCount(p.stats.impressions, locale)}

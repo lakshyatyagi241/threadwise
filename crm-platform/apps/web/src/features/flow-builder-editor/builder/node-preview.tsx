@@ -374,7 +374,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             }}
           >
             <span
-              className="mr-1 inline-block h-1.5 w-1.5 rounded-full"
+              className="me-1 inline-block h-1.5 w-1.5 rounded-full"
               style={{ background: swatch }}
             />
             {name}
@@ -588,7 +588,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               ),
             )}
             {items.length > 3 ? (
-              <span className="ml-1 text-[10.5px] text-muted-foreground">+{items.length - 3}</span>
+              <span className="ms-1 text-[10.5px] text-muted-foreground">+{items.length - 3}</span>
             ) : null}
           </div>
           <Count>{tp('productCount', { count: items.length })}</Count>

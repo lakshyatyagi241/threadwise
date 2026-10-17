@@ -103,3 +103,39 @@ export function buildIcs(e: IcsInput): string {
   lines.push('END:VEVENT', 'END:VCALENDAR');
   return `${lines.map(foldLine).join('\r\n')}\r\n`;
 }
+
+/**
+ * Several bookings as one calendar a person subscribes to (BL-035): the same VEVENT as `buildIcs`, in one VCALENDAR with no METHOD (a
+ * subscription is a feed, not an invitation), a name, and the refresh hint calendar apps honour (`REFRESH-INTERVAL`, `X-PUBLISHED-TTL`).
+ * A cancelled booking is simply not in the list: a subscription's events disappear when they are no longer in the feed.
+ */
+export function buildIcsCalendar(
+  events: Array<Omit<IcsInput, 'prodId'>>,
+  meta: { name: string; refreshMinutes: number },
+): string {
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Booking//Appointments feed//EN',
+    'CALSCALE:GREGORIAN',
+    `X-WR-CALNAME:${icsEscape(meta.name)}`,
+    `REFRESH-INTERVAL;VALUE=DURATION:PT${meta.refreshMinutes}M`,
+    `X-PUBLISHED-TTL:PT${meta.refreshMinutes}M`,
+  ];
+  for (const e of events) {
+    lines.push(
+      'BEGIN:VEVENT',
+      `UID:${icsEscape(e.uid)}`,
+      `DTSTAMP:${icsDateTime(e.stampedAt)}`,
+      `DTSTART:${icsDateTime(e.startsAt)}`,
+      `DTEND:${icsDateTime(e.endsAt)}`,
+      `SEQUENCE:${Math.max(0, e.sequence)}`,
+      `SUMMARY:${icsEscape(e.title)}`,
+      `STATUS:${STATUS[e.status]}`,
+    );
+    if (e.location) lines.push(`LOCATION:${icsEscape(e.location)}`);
+    lines.push('END:VEVENT');
+  }
+  lines.push('END:VCALENDAR');
+  return `${lines.map(foldLine).join('\r\n')}\r\n`;
+}

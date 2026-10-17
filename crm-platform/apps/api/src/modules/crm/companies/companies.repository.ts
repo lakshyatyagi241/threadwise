@@ -1,13 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { CompanySort, RecordScope } from '@crm/contracts';
+import type {
+  CompanySort,
+  CompanySortDir,
+  FieldType,
+  RecordScope,
+  SegmentFieldKind,
+  SegmentOperator,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { propertyPredicate, type PropertySort } from '../property-predicates';
 import {
   companyDomainSpellings,
+  companySortId,
   decodeCompanyCursor,
   decodeIdCursor,
   escapeLike,
+  type CursorKeyType,
 } from './company-rules';
+import type { CompanyPropertyDef } from './company-properties';
 
 /** One company as the SQL returns it, with the owner and the creator already joined (names and uuids, never ids on the wire). */
 export interface CompanyRow {
@@ -19,6 +30,8 @@ export interface CompanyRow {
   nameKey: string;
   /** The keyset key of the created order, with microseconds. */
   createdAtIso: string;
+  /** The keyset key of a property order (the sort expression as text); null in any other order. */
+  sortKey: string | null;
   website: string | null;
   email: string | null;
   phone: string | null;
@@ -26,6 +39,8 @@ export interface CompanyRow {
   sizeRange: string | null;
   address: string | null;
   notes: string | null;
+  /** The values of the workspace's company properties (the `data` column), by property key. */
+  data: Record<string, unknown>;
   ownerId: number | null;
   ownerUuid: string | null;
   ownerName: string | null;
@@ -53,7 +68,17 @@ export interface CompanyPatch {
   size_range?: string | null;
   address?: string | null;
   notes?: string | null;
+  /** The whole object to store (the caller merged it). */
+  data?: Record<string, unknown>;
   owner_id?: number | null;
+}
+
+/** One condition on a company property, already checked against the registry (the kind decides the SQL). */
+export interface ResolvedPropertyFilter {
+  key: string;
+  kind: SegmentFieldKind;
+  operator: SegmentOperator;
+  value?: unknown;
 }
 
 /** A filter with every uuid already resolved to the internal id the SQL needs. */
@@ -63,12 +88,17 @@ export interface CompanyFilter {
   unassigned?: boolean;
   industry?: string;
   hasOpenDeals?: boolean;
+  props?: ResolvedPropertyFilter[];
 }
 
 export interface CompanyListInput {
   filter: CompanyFilter;
   scope?: SQL;
   sort: CompanySort;
+  /** The order of a `property` sort: how to compute its key. */
+  property?: { key: string; sort: PropertySort };
+  /** Defaults to newest first for `created`, ascending for the others. */
+  dir?: CompanySortDir;
   cursor?: string;
   limit: number;
 }
@@ -84,6 +114,7 @@ const toRow = (r: Raw): CompanyRow => ({
   name: r.name as string,
   nameKey: r.name_key as string,
   createdAtIso: r.created_at_iso as string,
+  sortKey: s(r.sort_key),
   website: s(r.domain),
   email: s(r.email),
   phone: s(r.phone),
@@ -91,6 +122,10 @@ const toRow = (r: Raw): CompanyRow => ({
   sizeRange: s(r.size_range),
   address: s(r.address),
   notes: s(r.notes),
+  data:
+    r.data && typeof r.data === 'object' && !Array.isArray(r.data)
+      ? (r.data as Record<string, unknown>)
+      : {},
   ownerId: n(r.owner_id),
   ownerUuid: s(r.owner_uuid),
   ownerName: s(r.owner_name),
@@ -104,10 +139,12 @@ const toRow = (r: Raw): CompanyRow => ({
 
 const ISO = `'YYYY-MM-DD"T"HH24:MI:SS.US"Z"'`;
 
-const SELECT = sql`
+/** The shape of a company row; `sortKey` is the extra column of a property order (the key the cursor carries), `null` otherwise. */
+const selectWith = (sortKey: SQL = sql`NULL::text`) => sql`
   SELECT c.id, c.uuid, c.display_id, c.name, lower(c.name) AS name_key,
          to_char(c.created_at at time zone 'UTC', ${sql.raw(ISO)}) AS created_at_iso,
-         c.domain, c.email::text AS email, c.phone, c.industry, c.size_range, c.address, c.notes,
+         ${sortKey} AS sort_key,
+         c.domain, c.email::text AS email, c.phone, c.industry, c.size_range, c.address, c.notes, c.data,
          c.owner_id, ou.uuid AS owner_uuid, ou.full_name AS owner_name,
          c.created_by, cu.uuid AS created_by_uuid, cu.full_name AS created_by_name,
          c.row_version, c.created_at, c.updated_at
@@ -115,6 +152,7 @@ const SELECT = sql`
   LEFT JOIN users ou ON ou.org_id = c.org_id AND ou.id = c.owner_id
   LEFT JOIN users cu ON cu.org_id = c.org_id AND cu.id = c.created_by
 `;
+const SELECT = selectWith();
 
 /**
  * The record scope of a company is a condition on the PEOPLE of the company: `own` is "owned by me or created by me" (so the person
@@ -146,6 +184,11 @@ function filterConds(orgId: number, f: CompanyFilter, scope?: SQL): SQL[] {
   if (f.unassigned) conds.push(sql`c.owner_id IS NULL`);
   if (f.industry) conds.push(sql`lower(c.industry) = lower(${f.industry})`);
   if (f.hasOpenDeals) conds.push(OPEN_DEAL);
+  // Conditions on company properties go through the predicates contacts and segments use (property-predicates.ts).
+  for (const p of f.props ?? []) {
+    const predicate = propertyPredicate(sql`c.data`, p.key, p.kind, p.operator, p.value);
+    if (predicate) conds.push(predicate);
+  }
   return conds;
 }
 
@@ -162,18 +205,31 @@ const idList = (ids: number[]) =>
 export class CompaniesRepository {
   async list(tx: Tx, orgId: number, input: CompanyListInput): Promise<CompanyRow[]> {
     const conds = filterConds(orgId, input.filter, input.scope);
-    const byName = input.sort === 'name';
-    if (input.cursor) {
-      const c = decodeCompanyCursor(input.cursor, input.sort);
-      conds.push(
-        byName
-          ? sql`(lower(c.name), c.id) > (${c.key}, ${c.id})`
-          : sql`(c.created_at, c.id) < (${c.key}::timestamptz, ${c.id})`,
-      );
+    const dir = input.dir ?? (input.sort === 'created' ? 'desc' : 'asc');
+    // The sort key as SQL, the type it is cast to when the cursor's key is bound back, and the id the cursor is checked against.
+    let keyExpr: SQL;
+    let keyType: CursorKeyType;
+    const sortId = companySortId(input.sort, input.property?.key, dir);
+    if (input.sort === 'property' && input.property) {
+      keyExpr = input.property.sort.expr;
+      keyType = input.property.sort.type;
+    } else if (input.sort === 'name') {
+      keyExpr = sql`lower(c.name)`;
+      keyType = 'text';
+    } else {
+      keyExpr = sql`c.created_at`;
+      keyType = 'created';
     }
-    const order = byName ? sql`lower(c.name) ASC, c.id ASC` : sql`c.created_at DESC, c.id DESC`;
+    if (input.cursor) {
+      const c = decodeCompanyCursor(input.cursor, sortId, keyType);
+      const cast = keyType === 'text' ? 'text' : keyType === 'created' ? 'timestamptz' : keyType;
+      const op = sql.raw(dir === 'asc' ? '>' : '<');
+      conds.push(sql`(${keyExpr}, c.id) ${op} (${c.key}::${sql.raw(cast)}, ${c.id})`);
+    }
+    const way = sql.raw(dir === 'asc' ? 'ASC' : 'DESC');
+    const select = input.sort === 'property' ? selectWith(sql`(${keyExpr})::text`) : SELECT;
     const res = await tx.execute(
-      sql`${SELECT} WHERE ${where(conds)} ORDER BY ${order} LIMIT ${input.limit + 1}`,
+      sql`${select} WHERE ${where(conds)} ORDER BY ${keyExpr} ${way}, c.id ${way} LIMIT ${input.limit + 1}`,
     );
     return (res.rows as Raw[]).map(toRow);
   }
@@ -328,15 +384,16 @@ export class CompaniesRepository {
       sizeRange: string | null;
       address: string | null;
       notes: string | null;
+      data: Record<string, unknown>;
       ownerId: number | null;
       createdBy: number | null;
       displayId: string;
     },
   ): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO companies (org_id, name, domain, email, phone, industry, size_range, address, notes, owner_id, created_by, display_id)
+      INSERT INTO companies (org_id, name, domain, email, phone, industry, size_range, address, notes, data, owner_id, created_by, display_id)
       VALUES (${orgId}, ${v.name}, ${v.domain}, ${v.email}, ${v.phone}, ${v.industry}, ${v.sizeRange}, ${v.address}, ${v.notes},
-              ${v.ownerId}, ${v.createdBy}, ${v.displayId})
+              ${JSON.stringify(v.data)}::jsonb, ${v.ownerId}, ${v.createdBy}, ${v.displayId})
       RETURNING id
     `);
     return Number((res.rows[0] as { id: number | string }).id);
@@ -351,21 +408,24 @@ export class CompaniesRepository {
     tx: Tx,
     orgId: number,
     q: { host?: string | null; name?: string | null },
+    /** Only companies inside this condition (a caller's record scope): the CSV import must not touch what its owner may not edit. */
+    scope?: SQL,
   ): Promise<CompanyRow | undefined> {
+    const inScope = scope ? sql` AND ${scope}` : sql``;
     if (q.host) {
       const spellings = sql.join(
         companyDomainSpellings(q.host).map((h) => sql`${h}`),
         sql`, `,
       );
       const res = await tx.execute(
-        sql`${SELECT} WHERE c.org_id = ${orgId} AND lower(c.domain) IN (${spellings}) ORDER BY c.id LIMIT 1`,
+        sql`${SELECT} WHERE c.org_id = ${orgId} AND lower(c.domain) IN (${spellings})${inScope} ORDER BY c.id LIMIT 1`,
       );
       const r = (res.rows as Raw[])[0];
       if (r) return toRow(r);
     }
     if (q.name) {
       const res = await tx.execute(
-        sql`${SELECT} WHERE c.org_id = ${orgId} AND lower(c.name) = lower(${q.name}) ORDER BY c.id LIMIT 1`,
+        sql`${SELECT} WHERE c.org_id = ${orgId} AND lower(c.name) = lower(${q.name})${inScope} ORDER BY c.id LIMIT 1`,
       );
       const r = (res.rows as Raw[])[0];
       if (r) return toRow(r);
@@ -441,7 +501,12 @@ export class CompaniesRepository {
   ): Promise<boolean> {
     const sets: SQL[] = [];
     for (const [col, value] of Object.entries(patch)) {
-      if (value !== undefined) sets.push(sql`${sql.raw(col)} = ${value}`);
+      if (value === undefined) continue;
+      sets.push(
+        col === 'data'
+          ? sql`data = ${JSON.stringify(value)}::jsonb`
+          : sql`${sql.raw(col)} = ${value}`,
+      );
     }
     if (sets.length === 0) return true;
     const res = await tx.execute(sql`
@@ -540,6 +605,26 @@ export class CompaniesRepository {
     return r ? { id: Number(r.id), name: r.full_name } : undefined;
   }
 
+  /**
+   * The active members a spreadsheet cell names as an owner: by email, or by full name (case-insensitive). More than one row means the
+   * name is ambiguous, and the caller refuses it instead of guessing.
+   */
+  async activeUsersByLogin(
+    tx: Tx,
+    orgId: number,
+    login: string,
+  ): Promise<Array<{ id: number; uuid: string; name: string }>> {
+    const res = await tx.execute(sql`
+      SELECT id, uuid, full_name FROM users
+      WHERE org_id = ${orgId} AND status = 'active'
+        AND (lower(email::text) = lower(${login}) OR lower(full_name) = lower(${login}))
+      LIMIT 2
+    `);
+    return (res.rows as Array<{ id: number | string; uuid: string; full_name: string }>).map(
+      (r) => ({ id: Number(r.id), uuid: r.uuid, name: r.full_name }),
+    );
+  }
+
   /** Any user (active or not) by uuid, for filters: an ex-member's companies are still filterable. */
   async resolveUserId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
     const res = await tx.execute(
@@ -594,6 +679,57 @@ export class CompaniesRepository {
     for (const r of res.rows as Array<{ uuid: string; name: string | null }>)
       out.set(r.uuid, r.name);
     return out;
+  }
+
+  /**
+   * The workspace's company properties (the field registry, module `companies`) with their pickable options and their "show only when"
+   * conditions, in registry order, inactive ones included (the write rules decide what each state allows).
+   */
+  async propertyDefs(tx: Tx, orgId: number): Promise<CompanyPropertyDef[]> {
+    const rows = (
+      await tx.execute(sql`
+        SELECT id, key, label, field_type, is_required, is_hidden, is_read_only, is_active, is_system, is_masked
+        FROM fields WHERE org_id = ${orgId} AND module_key = 'companies' ORDER BY position, id
+      `)
+    ).rows as Raw[];
+    if (rows.length === 0) return [];
+    const optionRows = (
+      await tx.execute(sql`
+        SELECT o.field_id, o.value FROM field_options o
+        JOIN fields f ON f.org_id = o.org_id AND f.id = o.field_id
+        WHERE o.org_id = ${orgId} AND f.module_key = 'companies' AND NOT o.is_hidden
+      `)
+    ).rows as Raw[];
+    const depRows = (
+      await tx.execute(sql`
+        SELECT d.field_id, p.key AS parent_key, d.depends_on_value, po.value AS option_value
+        FROM field_dependencies d
+        JOIN fields f ON f.org_id = d.org_id AND f.id = d.field_id
+        JOIN fields p ON p.org_id = d.org_id AND p.id = d.depends_on_field_id
+        LEFT JOIN field_options po ON po.org_id = d.org_id AND po.id = d.depends_on_option_id
+        WHERE d.org_id = ${orgId} AND f.module_key = 'companies'
+      `)
+    ).rows as Raw[];
+    return rows.map((r) => ({
+      key: r.key as string,
+      label: r.label as string,
+      fieldType: r.field_type as FieldType,
+      isRequired: r.is_required === true,
+      isHidden: r.is_hidden === true,
+      isReadOnly: r.is_read_only === true,
+      isActive: r.is_active === true,
+      isSystem: r.is_system === true,
+      isMasked: r.is_masked === true,
+      options: optionRows
+        .filter((o) => Number(o.field_id) === Number(r.id))
+        .map((o) => o.value as string),
+      conditions: depRows
+        .filter((d) => Number(d.field_id) === Number(r.id))
+        .map((d) => ({
+          parentKey: d.parent_key as string,
+          wanted: s(d.depends_on_value) ?? s(d.option_value),
+        })),
+    }));
   }
 
   /** True if `userId` is on a team `actorUserId` is also on: the 'team' record-scope check for one company. */

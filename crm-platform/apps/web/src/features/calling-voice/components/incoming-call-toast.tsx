@@ -48,7 +48,7 @@ export function IncomingCallToast() {
       role="alertdialog"
       aria-live="assertive"
       aria-label={t('title')}
-      className="fixed right-4 top-4 z-50 w-72 rounded-xl border border-border bg-background p-4 shadow-lg"
+      className="fixed end-4 top-4 z-50 w-72 rounded-xl border border-border bg-background p-4 shadow-lg"
     >
       <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
         <PhoneIcon className="size-3.5 text-success" />

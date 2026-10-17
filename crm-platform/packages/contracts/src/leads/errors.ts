@@ -15,4 +15,12 @@ export const LEAD_ERROR_CODES = {
   LEAD_PAYLOAD_PURGED: 'LEAD_PAYLOAD_PURGED',
   /** The source is paused; a lead cannot be tested or retried through it. */
   LEAD_SOURCE_PAUSED: 'LEAD_SOURCE_PAUSED',
+  /** The source cannot be pulled (a webhook sends its own leads), or cannot backfill (its source keeps no date-based history). */
+  LEAD_SYNC_NOT_SUPPORTED: 'LEAD_SYNC_NOT_SUPPORTED',
+  /** A sync or a backfill of this source is already queued or running: one at a time per source. */
+  LEAD_SYNC_IN_PROGRESS: 'LEAD_SYNC_IN_PROGRESS',
+  /** The source's own rate limit: ask again after `retryAfterSeconds`. */
+  LEAD_SYNC_TOO_SOON: 'LEAD_SYNC_TOO_SOON',
+  /** The backfill range reaches back further than the source keeps leads, or into the future. */
+  LEAD_BACKFILL_RANGE_INVALID: 'LEAD_BACKFILL_RANGE_INVALID',
 } as const;

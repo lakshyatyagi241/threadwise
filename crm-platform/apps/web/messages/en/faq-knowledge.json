@@ -6,8 +6,7 @@
         "faqs": "FAQs",
         "test": "Test",
         "unanswered": "Unanswered",
-        "insights": "Insights",
-        "settings": "Settings"
+        "insights": "Insights"
       },
       "unansweredCount": "{count, plural, one {# unanswered message} other {# unanswered messages}}"
     },
@@ -34,14 +33,7 @@
       "flowNodeNotFound": "The chosen step is no longer in this flow. Pick another step, or start at the flow's start."
     },
     "banner": {
-      "enabledToast": "FAQ answering is on.",
-      "engineOff": "FAQ answering has been switched off by the platform. Customers get no FAQ answers until it is switched back on.",
-      "modelChanged": "The platform changed the AI model after you tuned this threshold. Scores moved, so review your sensitivity.",
-      "reviewSensitivity": "Review sensitivity",
-      "offTitle": "FAQ answering is OFF for this flow",
-      "offBody": "You can write and test this flow's FAQs, but customers do not get answers until you switch it on.",
-      "offNoRight": "Ask someone with the permission faq.settings.manage (usually a workspace admin) to switch it on.",
-      "enable": "Turn on FAQ answering"
+      "engineOff": "FAQ answering has been switched off by the platform. Customers get no FAQ answers until it is switched back on."
     },
     "list": {
       "title": "FAQs",
@@ -52,25 +44,15 @@
         "total": "FAQs",
         "active": "Active",
         "paused": "Paused",
-        "variations": "Phrasings",
-        "pending": "Indexing",
-        "pendingHint": "Live within seconds",
-        "failed": "Indexing failed",
-        "failedHint": "Needs attention"
+        "variations": "Phrasings"
       },
-      "failedBanner": "{count, plural, one {# phrasing failed} other {# phrasings failed}} to index, so they cannot match customer messages yet.",
-      "showFailed": "Show FAQs with failures",
       "search": "Search FAQs",
       "searchPlaceholder": "Search questions and phrasings",
       "filter": {
         "status": "Status",
         "anyStatus": "Any status",
         "category": "Category",
-        "anyCategory": "Any category",
-        "indexing": "Indexing",
-        "anyIndexing": "Any",
-        "pending": "Still indexing",
-        "failed": "Failed"
+        "anyCategory": "Any category"
       },
       "status": {
         "active": "Active",
@@ -109,7 +91,6 @@
       "col": {
         "question": "Question",
         "answer": "Answer",
-        "indexing": "Live phrasings",
         "answered": "Answered (90 days)",
         "status": "Status",
         "actions": "Actions"
@@ -131,12 +112,6 @@
         "rowBody": "\"{question}\" and all its phrasings will be deleted for good. This cannot be undone.",
         "delete": "Delete",
         "cancel": "Cancel"
-      },
-      "indexing": {
-        "summary": "{ready} live, {pending} indexing, {failed} failed",
-        "ready": "{count} live",
-        "pending": "{count} indexing",
-        "failed": "{count} failed"
       },
       "stepMissing": "Step missing",
       "startsAt": "Goes to: {step}",
@@ -203,14 +178,6 @@
           "other": "A step of another flow",
           "otherHint": "Hand the conversation over to a different flow."
         }
-      },
-      "advanced": {
-        "title": "Advanced: sensitivity for this FAQ only",
-        "body": "By default every FAQ uses this flow's sensitivity. Use a custom value when this one matches too eagerly (raise it) or too rarely (lower it).",
-        "custom": "Use a custom sensitivity for this FAQ",
-        "sliderLabel": "Match at or above",
-        "workspace": "This flow's sensitivity is {value}%.",
-        "following": "Following this flow's sensitivity ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Add",
       "pasteMany": "Paste many",
       "full": "This FAQ is at its limit of {max} phrasings.",
-      "failedNotice": "{count, plural, one {# phrasing failed} other {# phrasings failed}} to index. Edit and save the phrasing to try again.",
       "suggest": "Suggest with AI",
       "suggestSaveFirst": "Save the FAQ first, then AI can suggest phrasings.",
       "suggesting": "Asking the AI for suggestions",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# line does} other {# lines do}} not fit under the phrasing limit and left out.",
         "more": "and {count} more",
         "add": "Add {count, plural, one {# phrasing} other {# phrasings}}"
-      },
-      "state": {
-        "ready": "Live",
-        "pending": "Indexing",
-        "pendingHint": "Saved. It starts matching in a few seconds.",
-        "failed": "Failed",
-        "failedHint": "Edit and save the phrasing to retry.",
-        "noReason": "No reason was given"
       },
       "confirm": {
         "title": "Remove this phrasing?",
@@ -539,9 +497,7 @@
       },
       "hist": {
         "title": "How well messages scored",
-        "hint": "Each bar is a score range. The dashed line is your current sensitivity.",
-        "advice": "Raise the threshold if wrong answers slip in, lower it if too many messages go unanswered.",
-        "tune": "Change sensitivity"
+        "hint": "Each bar is a score range. The dashed line is your current sensitivity."
       },
       "top": {
         "title": "Top FAQs",
@@ -567,98 +523,6 @@
         "scoreRange": "Score",
         "bucketTooltip": "{from}-{to}%: {answered} answered, {unanswered} unanswered",
         "thresholdMarker": "Threshold {value}%"
-      }
-    },
-    "settings": {
-      "title": "FAQ settings",
-      "subtitle": "Switch FAQ answering on for {flow} and tune how closely a message has to match.",
-      "unsaved": "Unsaved changes",
-      "discard": "Discard",
-      "save": "Save settings",
-      "saved": "Settings saved.",
-      "readOnly": "You can view these settings. Changing them needs the permission faq.settings.manage, usually held by workspace admins.",
-      "engineOff": "FAQ answering is switched off by the platform. Whatever you set here applies once it is back on.",
-      "conflict": "Someone else saved these settings. Reload to see their version, then make your change again.",
-      "reload": "Reload settings",
-      "modelChanged": {
-        "title": "Review your sensitivity",
-        "body": "The platform changed the AI model after you tuned this threshold. Scores moved, so review your sensitivity. Saving confirms it."
-      },
-      "enable": {
-        "title": "FAQ answering",
-        "label": "Answer customers with this flow's FAQs",
-        "on": "On",
-        "off": "Off",
-        "onBody": "While this flow is live, a customer message that no keyword trigger or running flow took is compared with this flow's FAQs. The bot replies with the best answer, or sends the customer to the step the FAQ points at.",
-        "offBody": "This flow's FAQs do not answer customers. You can still write and test them."
-      },
-      "sens": {
-        "title": "Sensitivity",
-        "hint": "How closely a message must match. Scores belong to the model {model}.",
-        "label": "Answer when the match is at least",
-        "presets": "Sensitivity presets",
-        "preset": {
-          "strict": "Strict",
-          "balanced": "Balanced",
-          "forgiving": "Forgiving"
-        },
-        "looser": "Answers more",
-        "stricter": "Answers less",
-        "recommendedMark": "recommended {value}%",
-        "explain": "At {value}%, a message is answered only when its best match scores {value}% or more. Higher means fewer but safer answers; lower means more answers and a higher chance of a wrong one.",
-        "useRecommended": "Use the recommended value ({value}%)",
-        "modelScale": "Scores are only comparable within one model. If the platform changes the model ({model}), review this number."
-      },
-      "margin": {
-        "title": "Ambiguity guard",
-        "hint": "Stops the bot guessing between two FAQs that score almost the same.",
-        "label": "Minimum lead over the second best",
-        "off": "Off",
-        "explain": "When the best FAQ leads the runner-up by less than this, the bot stays quiet and logs the message as unanswered. Leave it off if your FAQs rarely overlap."
-      },
-      "log": {
-        "title": "Customer messages in the log",
-        "label": "Keep customer messages in the match log",
-        "onBody": "The text of each message is kept for 90 days so you can see why it was or was not answered and learn from it. After that it is deleted.",
-        "offBody": "Only scores and outcomes are kept, never the text. You can still see how often the bot answers, but you cannot learn from unanswered messages."
-      },
-      "facts": {
-        "title": "Model and limits",
-        "model": "Embedding model",
-        "faqs": "FAQs",
-        "variations": "Phrasings in use",
-        "perFaq": "Phrasings allowed per FAQ",
-        "of": "{used} of {max}"
-      },
-      "how": {
-        "title": "How matching works",
-        "exact": "Exact: the message equals a saved phrasing, ignoring case and spacing.",
-        "semantic": "Meaning: the message is compared by meaning with every live phrasing, so different words can match.",
-        "trigram": "Spelling fallback: if the AI provider is unavailable, letters are compared instead, which catches typos only.",
-        "threshold": "The best score is compared with the sensitivity. Above it, the FAQ answers; below it, the message is listed under Unanswered.",
-        "verify": "Second check (optional): a match that only just reached the sensitivity can be double-checked by a small chat model, which can only withhold an answer."
-      },
-      "who": "Changing these settings needs the permission faq.settings.manage.",
-      "leave": {
-        "title": "Leave without saving?",
-        "body": "Your changes to these settings are not saved.",
-        "leave": "Leave",
-        "stay": "Stay"
-      },
-      "verify": {
-        "title": "Second check for close calls",
-        "hint": "A small chat model double-checks matches that only just reached the bar.",
-        "unavailable": "The platform has switched the second check off, so it does not run even if you turn it on here. Ask your platform admin.",
-        "label": "Check close calls with a second opinion",
-        "on": "On",
-        "off": "Off",
-        "onBody": "When a match only just clears the bar, a small chat model reads the customer's message and the FAQ and says whether the answer fits. It can only say no: it never makes an answer happen.",
-        "offBody": "Every match that reaches the bar is answered without a second look.",
-        "bandLabel": "How close counts as a close call",
-        "bandValue": "+{value}%",
-        "explainOn": "Matches scoring from {from}% up to {to}% are checked by {model}. A \"no\" means no answer is sent and the message appears under Unanswered.",
-        "explainOff": "Every match scoring {threshold}% or more is answered. Turn the second check on to have the closest calls double-checked.",
-        "cost": "Each check sends the customer's message and the FAQ's question to the model: a few hundred tokens, and it adds about a second to a borderline reply. Matches outside the band are never checked. If the check fails, is not available or the hourly limit is reached, the match stands as if there were no check."
       }
     },
     "flowNode": {

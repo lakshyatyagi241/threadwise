@@ -95,7 +95,28 @@
         "required": "مطلوب",
         "removeField": "إزالة",
         "options": "الخيارات (مفصولة بفواصل)",
-        "optionsPlaceholder": "خيار 1، خيار 2، خيار 3"
+        "optionsPlaceholder": "خيار 1، خيار 2، خيار 3",
+        "mapsTo": "يُربط بـ",
+        "mapsToHint": "احفظ هذه الإجابة في خاصية جهة اتصال عند إرسال النموذج.",
+        "mapsToNone": "عدم الحفظ في خاصية جهة اتصال",
+        "mapsToSystemGroup": "حقول جهة الاتصال",
+        "mapsToCustomGroup": "خصائص مخصصة",
+        "mapsToSystem": {
+          "name": "الاسم الكامل",
+          "first_name": "الاسم الأول",
+          "last_name": "اسم العائلة",
+          "email": "البريد الإلكتروني",
+          "title": "المسمى الوظيفي",
+          "language": "اللغة",
+          "address": "العنوان"
+        },
+        "mapsToPrivacyGroup": "الخصوصية والموافقة",
+        "mapsToPrivacy": {
+          "age": "العمر (فحص القاصرين)",
+          "date_of_birth": "تاريخ الميلاد (فحص القاصرين)",
+          "consent_marketing": "موافقة التسويق (واتساب)",
+          "consent_service": "اتفاقية الخدمة (غير تسويقية)"
+        }
       },
       "fieldKind": {
         "heading": "عنوان",
@@ -130,15 +151,24 @@
       "loading": "جارٍ تحميل الروابط…",
       "retry": "حاول مرة أخرى",
       "searchPlaceholder": "ابحث بالاسم أو الرابط",
-      "create": { "cta": "رابط جديد" },
+      "create": {
+        "cta": "رابط جديد"
+      },
       "stats": {
         "all": "كل الروابط",
         "live": "نشطة",
         "totalClicks": "إجمالي النقرات",
         "avgClicks": "متوسط النقرات / رابط"
       },
-      "tabs": { "all": "الكل", "live": "نشطة", "paused": "متوقفة" },
-      "status": { "live": "نشط", "paused": "متوقف" },
+      "tabs": {
+        "all": "الكل",
+        "live": "نشطة",
+        "paused": "متوقفة"
+      },
+      "status": {
+        "live": "نشط",
+        "paused": "متوقف"
+      },
       "empty": {
         "title": "لا توجد روابط بعد",
         "description": "أنشئ رابطًا لمشاركته في الإعلانات أو السيرة الذاتية أو رمز QR."
@@ -170,7 +200,11 @@
       "builder": {
         "back": "العودة إلى الروابط",
         "newHeading": "رابط جديد",
-        "step": { "destination": "الوجهة", "message": "رسالة البداية", "tracking": "التتبع" },
+        "step": {
+          "destination": "الوجهة",
+          "message": "رسالة البداية",
+          "tracking": "التتبع"
+        },
         "name": "الاسم",
         "status": "الحالة",
         "countryCode": "رمز الدولة",
@@ -194,6 +228,14 @@
         "shortUrl": "الرابط المختصر",
         "waUrl": "رابط واتساب",
         "qrAlt": "رمز QR لهذا الرابط"
+      },
+      "public": {
+        "missingTitle": "الرابط غير موجود",
+        "missingBody": "هذا الرابط غير موجود أو تم حذفه.",
+        "goneTitle": "الرابط لم يعد نشطًا",
+        "goneBody": "هذا الرابط متوقف مؤقتًا أو انتهت صلاحيته.",
+        "errorTitle": "حدث خطأ ما",
+        "errorBody": "لم نتمكن من فتح هذا الرابط. يرجى المحاولة مرة أخرى."
       }
     }
   }

@@ -18,7 +18,8 @@
       "notices": "Bildirimler",
       "links": "Gizlilik ve şart bağlantıları",
       "subprocessors": "Alt işleyiciler",
-      "windows": "Sessiz saatler ve aramalar"
+      "windows": "Sessiz saatler ve aramalar",
+      "dnc": "Aranmayacaklar"
     },
     "saveBar": {
       "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
@@ -35,7 +36,8 @@
       "duplicate": "Bu adla listelenmiş bir alt işleyiciniz zaten var.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "dncInvalid": "Dosya okunamadı: içinde telefon numarası yok veya tek seferde çok fazla numara var."
     },
     "problems": {
       "httpsOnly": "https:// ile başlayan bir adres kullanın.",
@@ -165,7 +167,7 @@
             "unset": "Çocuklar sorusunu Kişiler ve çocuklar bölümünde yanıtlayın.",
             "minorsNoParental": "Reşit olmayanlar dahil olabilir, ancak ebeveyn onayı kapalı. Bu profil, {age} yaşından küçük herkesi reşit olmayan sayar.",
             "no_minors": "Reşit olmayanların verilerini bilerek işlemiyorsunuz. Bu profil, {age} yaşından küçük herkesi reşit olmayan sayar.",
-            "may_include_minors": "{age} yaşından küçük kişiler için ebeveyn onayı açık. Kişi başına kanıt saklama henüz geliştirilmedi."
+            "may_include_minors": "{age} yaşın altındaki kişiler için ebeveyn onayı açık. Kişiyi onay kartında reşit olmayan olarak işaretleyin ve vasi onayını orada kaydedin."
           }
         },
         "opt_out_notice": {
@@ -220,9 +222,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Sessiz saatler ve arama aralıkları henüz uygulanmıyor",
+          "title": "Sessiz saatler ve arama pencereleri uygulanıyor",
           "detail": {
-            "notEnforced": "Sessiz saatleriniz ve arama aralığınız kaydedildi, ancak henüz hiçbir şey bunların dışında bir mesajı bekletmiyor veya bir aramayı engellemiyor. Planlamanızı kendiniz buna göre yapın."
+            "enforced": "Sessiz saatlerinizdeki pazarlama mesajları bitene kadar bekletilir, arama pencerenizin dışındaki arama ise pencerenin ne zaman açılacağı belirtilerek reddedilir. 24 saatlik pencere içindeki yanıtlar ve hizmet bildirimleri asla bekletilmez. DND kaydı yalnızca bir nottur: henüz onunla hiçbir şey kontrol edilmiyor."
           }
         }
       }
@@ -322,7 +324,9 @@
         "hint": "DPDP Yasası, kişilerin onayı kayıtlı bir onay yöneticisi aracılığıyla yönetmesine izin verir. Kullanıyorsanız buraya kendinizinkini yazın.",
         "managerName": "Onay yöneticisi",
         "managerUrl": "Onay yöneticisi bağlantısı",
-        "placeholderNote": "Bu yalnızca bir nottur. Henüz hiçbir şey bir onay yöneticisine bağlı değil."
+        "placeholderNote": "Bu yalnızca bir nottur. Henüz hiçbir şey bir onay yöneticisine bağlı değil.",
+        "managerRegistration": "Onay Yöneticisi kayıt numarası",
+        "managerRegistrationHint": "Veri Koruma Kurulunun Onay Yöneticinizi kaydettiği numara. Yalnızca not amaçlıdır."
       }
     },
     "contacts": {
@@ -344,7 +348,7 @@
       },
       "children": {
         "title": "Çocukların verileri",
-        "hint": "Bu ürün işletmeler içindir. Doğru kuralların gösterilmesi için reşit olmayanların verilerini tutup tutamayacağınızı belirtin.",
+        "hint": "Bu ürün işletmeler içindir. Doğru kuralların gösterilmesi için reşit olmayanların verilerini tutup tutamayacağınızı belirtin. Yanıtladıktan sonra reşit olmayan olarak işaretlenen kişiye pazarlama engellenir: reşit olmayanların verilerini bilerek işlemiyorsanız her zaman, reşit olmayanlar bulunabiliyorsa vasi onayı kaydedilene kadar.",
         "policy": "Kişileriniz arasındaki reşit olmayanlar",
         "policies": {
           "unset": "Henüz yanıtlanmadı",
@@ -352,7 +356,7 @@
           "may_include_minors": "Kişilerimiz arasında reşit olmayanlar bulunabilir"
         },
         "parental": "Reşit olmayanlar için ebeveyn onayı gereklidir",
-        "parentalHint": "Politikanızı kaydeden bir işaret. Kişi başına ebeveyn onayı kanıtının toplanması ve saklanması henüz geliştirilmedi.",
+        "parentalHint": "Politikanızı kaydeder ve reşit olmayan olarak işaretlenen kişilere vasi onayı kaydedilene kadar pazarlamayı engeller. Kişiyi onay kartında reşit olmayan olarak işaretler ve o onayı orada kaydedersiniz.",
         "age": "Açtığınız profiller, {age} yaşından küçük herkesi reşit olmayan sayar.",
         "dpdpNeedsAnswer": "DPDP profili bu soruyu yanıtlamanızı ister."
       }
@@ -379,18 +383,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Bu ayarlar kaydedildi ancak henüz uygulanmıyor. Belirlediğiniz saatlerin dışında bir mesaj bekletilmez ve bir arama engellenmez. Gönderim ve aramalarınızı buna göre planlayın.",
-      "intro": "Bazı kurallar, pazarlama mesajlarının ve aramaların kişilere ne zaman ulaşabileceğini kısıtlar. Çalıştığınız saatleri buraya kaydedin.",
+      "intro": "Bazı kurallar pazarlama mesajlarının ve aramaların insanlara ne zaman ulaşabileceğini sınırlar. Saatlerinizi buradan belirleyin: sessiz saatlerde gönderilen pazarlama mesajı bekler ve saatler bitince gider, arama penceresi dışında ise arama yapılmaz.",
       "quiet": {
         "title": "Mesajlar için sessiz saatler",
-        "hint": "Pazarlama mesajlarının kişilere ulaşmasını istemediğiniz saatler. Süre gece yarısını aşabilir.",
+        "hint": "Pazarlama mesajlarının gönderilmediği saatler. Mesajlar bekler ve saatler bitince gönderilir. Aralık gece yarısını geçebilir.",
         "enabled": "Sessiz saatler açık",
         "start": "Sessizlik başlangıcı",
         "end": "Sessizlik bitişi"
       },
       "calling": {
         "title": "Arama aralığı",
-        "hint": "Seçtiğiniz günlerde pazarlama aramalarının yapılabileceği tek saatler.",
+        "hint": "Pazarlama aramalarının yapıldığı tek saatler, seçtiğiniz günlerde. Bunların dışındaki arama reddedilir ve pencerenin ne zaman açılacağı söylenir.",
         "enabled": "Arama aralığı açık",
         "start": "Aramaların başlangıcı",
         "end": "Aramaların bitişi",
@@ -407,8 +410,8 @@
       },
       "suggested": "Açtığınız yasalar {start} ile {end} arasını önerir.",
       "zone": {
-        "label": "Saat dilimi",
-        "hint": "Saatler bu dilime göre okunur. Çalışma alanınızın saat dilimi {zone}.",
+        "label": "Yedek saat dilimi",
+        "hint": "Saatler her kişinin kendi saatine göre okunur: saat dilimi özelliği, yoksa numarasının ülke kodu. İkisi de bilinmiyorsa bu dilim kullanılır. Çalışma alanı diliminiz {zone}.",
         "workspace": "Çalışma alanı saat dilimi ({zone})"
       },
       "dnd": {
@@ -421,8 +424,10 @@
           "sg_dnc": "Singapur Do Not Call",
           "custom": "Kendi listeniz"
         },
-        "note": "Bu yalnızca bir nottur. Henüz hiçbir şey bir kayıtla karşılaştırılmıyor."
-      }
+        "note": "Bu yalnızca bir nottur. Henüz hiçbir şey bir kayıtla karşılaştırılmıyor.",
+        "listNote": "Aranmayacaklar listenizdeki numaralar (son sekme) pazarlama aramalarından ve mesajlarından zaten hariç tutulur."
+      },
+      "enforcedNote": "Sessiz saatler bir pazarlama mesajını bitene kadar bekletir, arama penceresi de dışındaki aramaları reddeder. Her kişinin kendi saati kullanılır. 24 saatlik pencere içindeki yanıtlar ve hizmet bildirimleri asla bekletilmez."
     },
     "subprocessors": {
       "intro": "Çalışma alanınız için kişisel veri işleyen tedarikçiler: ne yaptıkları, hangi verileri aldıkları ve nerede. Listeyi herkese açık bir sayfada yayımlayabilirsiniz.",
@@ -487,6 +492,55 @@
       "privacy": "Gizlilik politikası",
       "terms": "Şartlar",
       "notFound": "Sayfa bulunamadı"
+    },
+    "hold": {
+      "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)",
+      "heldCount": "{count} kişi sessiz saatler nedeniyle bekletiliyor"
+    },
+    "dnc": {
+      "intro": "Bu listedeki numaralara, onay geçmişi ne olursa olsun sesli veya SMS ile pazarlama yapılmaz. WhatsApp, e-posta ve hizmet mesajları bundan etkilenmez. Buradan bir ulusal kayıtla karşılaştırma yapılmaz: indirme hakkınız olan listeyi ekleyin.",
+      "addTitle": "Numara ekle",
+      "numbers": "Telefon numaraları",
+      "numbersHint": "Her satıra bir numara veya virgülle ayırın. Bir seferde en fazla {max}; daha fazlası için dosyayı kullanın.",
+      "country": "Yerel numaralar için ülke kodu",
+      "countryHint": "Ülke kodu olmadan yazılmış bir numara bu kodla okunur.",
+      "note": "Not",
+      "noteHint": "İsteğe bağlı. Bu numaraların neden listelendiği.",
+      "add": "Listeye ekle",
+      "adding": "Ekleniyor...",
+      "or": "veya",
+      "import": "CSV dosyasından ekle",
+      "importing": "Dosya okunuyor...",
+      "importHint": "phone, mobile veya number adlı sütun, yoksa ilk sütun. Büyük dosya parçalar hâlinde okunur.",
+      "fromRegistry": "Dosya, kullanma hakkım olan bir kayıttan alınmış listedir",
+      "progress": "{of} parçadan {done}. gönderiliyor...",
+      "added": "{count, plural, =0 {Eklenecek yeni numara yok} one {# numara eklendi} other {# numara eklendi}}",
+      "result": "{added} eklendi, {already} zaten listede, {invalid} telefon numarası değil.",
+      "invalidSamples": "Örneğin: {samples}",
+      "listTitle": "Listedeki numaralar",
+      "total": "{count, plural, =0 {Listede numara yok} one {Listede # numara var} other {Listede # numara var}}",
+      "search": "Numara bul",
+      "loading": "Liste yükleniyor...",
+      "empty": "Henüz numara yok",
+      "emptyHint": "Aranmak veya mesaj almak istemeyenlerin numaralarını ya da kullanabileceğiniz bir kayıttan alınmış listeyi ekleyin.",
+      "noMatch": "Eşleşen numara yok",
+      "source": {
+        "manual": "Elle eklendi",
+        "import": "Dosyadan",
+        "contact_request": "Kişi talep etti",
+        "registry_export": "Kayıttan alınan liste"
+      },
+      "remove": "Kaldır",
+      "removeLabel": "{phone} numarasını listeden kaldır",
+      "removed": "Numara listeden kaldırıldı",
+      "newer": "Daha yeni",
+      "older": "Daha eski",
+      "confirm": {
+        "title": "Bu numara kaldırılsın mı?",
+        "message": "Kişi onayını geri çekmediyse {phone} numarası yeniden pazarlama arama ve mesajları alabilir. Yalnızca kişi istediyse veya yanlışlıkla eklendiyse kaldırın.",
+        "confirm": "Numarayı kaldır",
+        "cancel": "Tut"
+      }
     }
   }
 }

@@ -57,7 +57,7 @@ Your billing country, or the country you gave when you opened the workspace, sug
 
 ## Contacts and children
 
-Name a **data protection officer or privacy contact** and, for India, a **grievance officer**, with an email and optionally a phone and an address. The profile you switched on marks the ones it asks for. Then say whether minors may be among your contacts. If they may, you can record that parental consent is required. This is a flag that states your policy; keeping parental consent evidence for each contact is not built yet.
+Name a **data protection officer or privacy contact** and, for India, a **grievance officer**, with an email and optionally a phone and an address. The profile you switched on marks the ones it asks for. Then say whether minors may be among your contacts. If they may, you can record that parental consent is required. Your answer also decides what happens to a contact you mark as a minor on its Consent card: with "we do not knowingly process the data of minors", marketing to that contact is held back; with "minors may be included", or when parental consent is required, it is held back until a parent or guardian's consent is recorded on the same card. Until you answer, the mark is only recorded. See [consent settings](help:contact-consent).
 
 ## Notices and links
 
@@ -72,9 +72,36 @@ List the vendors that process personal data for you: what they do, which data th
 
 ## Quiet hours and calls
 
-Set quiet hours for messages, a calling window with days, the time zone they are read in, and the Do Not Call or DND registry you check against.
+Set quiet hours for messages, a calling window with days, a fallback time zone, and the Do Not Call or DND registry you note.
 
-> These settings are saved but not enforced yet. A message is not held back and a call is not blocked outside the hours you set. Plan your sending and calling around them.
+Both windows are off until you switch them on and save. Once they are on:
+
+- **Quiet hours hold marketing messages; they never refuse them.** A marketing message that falls inside the quiet hours waits and is sent when they end. This covers marketing templates sent from the inbox, broadcasts (WhatsApp, LINE, Messenger, Telegram, Viber, WeChat and Instagram), the offers and win-back messages of your store, campaigns (and their follow-up steps), scheduled messages, the test sends of the broadcast wizard and the marketing messages of a flow. The screen that shows the message says it is held and until when. When it is released the consent is checked again, so a contact who unsubscribed meanwhile is not messaged.
+- **Replies and notices are never held.** A reply inside the 24-hour window, a utility or authentication template, a booking notice, and a note to a colleague's number go out at any hour.
+- **The calling window refuses a call outside it.** A call cannot wait in a queue, so a call placed outside the window is not made and the message says when the window opens. A call back to someone who messaged or called you in the last 24 hours is not refused.
+- **The hours are read on the contact's own clock.** First the contact's own time zone (set on the contact, in a bulk edit, in a CSV import or through the API, and shown on the contact's page with where it came from; an older contact property of type time zone, or one named `timezone`, still counts), then the country code of their number (a country with several time zones waits until the hours are right in all of them), then the fallback time zone you choose, then your workspace time zone.
+- **Your laws only suggest hours.** The profiles you switched on show the hours they suggest, but nothing is held until you switch the quiet hours or the calling window on yourself.
+
+> The Do Not Call or DND registry is a note. Nothing is checked against it yet. A recurring campaign sends the recipients it held as soon as their hours end, then goes on with its normal schedule.
+
+## Do not call list
+
+The **Do not call** tab holds the phone numbers that must get no marketing by voice call or SMS, whatever their consent history says. A number on the list is refused for those two kinds of marketing with the reason "on the do not call list". WhatsApp, email and service messages (replies, order and appointment notices) are not held back by it.
+
+- **Add numbers** by typing or pasting them, one per line or separated by commas. A number without its country code is read with the **Country code for local numbers** you pick. You can add a short note, such as why they are listed.
+- **Add from a CSV file** reads the column named phone, mobile or number, else the first column. A big file is sent in parts and the screen shows the progress. Tick the box when the file is an extract from a registry you are entitled to use; the numbers are then shown as "Registry extract".
+- The result says how many numbers were added, how many were already on the list and how many were not a phone number, with a few examples.
+- **Remove** takes a number off the list after a confirmation. Remove one only if the person asked you to or it was added by mistake. It can then get marketing again unless the contact withdrew consent.
+
+> Nothing is checked against a national registry (for example India NDNC or the United States Do Not Call registry) from here. Download the extract you are entitled to and add it to the list. A live registry check needs credentials from the registry and is not built yet.
+
+Seeing the list needs permission to read the Compliance center. Adding and removing numbers needs permission to manage it, and each change is recorded in the audit log.
+
+## The age at which a person counts as a minor
+
+Under **Laws and regions**, "Treat a person as a minor under" shows the age used in your workspace: the highest age among the profiles you switched on (13 for the United States, 16 for the EU, 18 for India DPDP and when no profile is on). Forms, the website chat and flows start from this age, and each can use its own. See [forms](help:forms-builder) and [website chat bots](help:website-chat-bots) for how an age is asked.
+
+The consent manager note for India DPDP also has a registration number field. It is a note only: nothing is connected to a consent manager yet.
 
 ## Who can do what
 

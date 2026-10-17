@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   HttpCode,
+  Header,
   HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
   Post,
   Query,
+  StreamableFile,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -18,6 +20,8 @@ import {
   companySelectQuerySchema,
   companyStatsQuerySchema,
   createCompanySchema,
+  exportCompaniesQuerySchema,
+  importCompaniesSchema,
   linkCompanyContactsSchema,
   listCompaniesQuerySchema,
   listCompanyActivityQuerySchema,
@@ -27,6 +31,8 @@ import {
   type CompanySelectQuery,
   type CompanyStatsQuery,
   type CreateCompanyInput,
+  type ExportCompaniesQuery,
+  type ImportCompaniesInput,
   type LinkCompanyContactsInput,
   type ListCompaniesQuery,
   type ListCompanyActivityQuery,
@@ -42,6 +48,7 @@ import {
 } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';
+import { CompaniesCsvService } from './companies-csv.service';
 import { CompaniesService } from './companies.service';
 
 /**
@@ -56,14 +63,17 @@ import { CompaniesService } from './companies.service';
 @UseGuards(SalesPipelineGuard)
 @Controller({ path: 'companies', version: '2' })
 export class CompaniesController {
-  constructor(private readonly companies: CompaniesService) {}
+  constructor(
+    private readonly companies: CompaniesService,
+    private readonly csv: CompaniesCsvService,
+  ) {}
 
   @Get()
   @RequirePermission('record.companies.read')
   @ApiOperation({
     summary: 'List companies (cursor paginated)',
     description:
-      'Newest first by default (sort=name for A to Z). Filters: q (substring of the name), ownerId, unassigned, industry, hasOpenDeals. Every row carries its rollup: contact count, deal counts and open / won value per currency (null for a kind the caller cannot read).',
+      'Newest first by default (sort=name for A to Z, sort=property&sortKey=<property key> by a company property, sortDir=asc|desc). Filters: q (substring of the name), ownerId, unassigned, industry, hasOpenDeals, props (a JSON array of conditions on company properties, in the operators of segment rules). Every row carries its rollup: contact count, deal counts and open / won value per currency (null for a kind the caller cannot read).',
   })
   async list(
     @Query(zodPipe(listCompaniesQuerySchema)) query: ListCompaniesQuery,
@@ -103,6 +113,36 @@ export class CompaniesController {
     @GrantedScope('record.companies.read') scope: RecordScope,
   ) {
     return this.companies.selectData(query, scope);
+  }
+
+  @Get('export')
+  @RequirePermission('record.companies.export')
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="companies-export.csv"')
+  @ApiOperation({
+    summary:
+      'Export companies as CSV (the list filters, the chosen columns, company properties included)',
+    description:
+      'Same filters and order as the list, inside the caller export scope; at most 5000 companies (422 COMPANY_EXPORT_TOO_LARGE otherwise). `columns` is a comma separated list of built-in columns and `property:<key>`; omitted means all. Audited.',
+  })
+  async exportCsv(
+    @Query(zodPipe(exportCompaniesQuerySchema)) query: ExportCompaniesQuery,
+    @GrantedScope('record.companies.export') scope: RecordScope,
+  ): Promise<StreamableFile> {
+    return new StreamableFile(Buffer.from(await this.csv.export(query, scope), 'utf8'));
+  }
+
+  @Post('import')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('record.companies.import')
+  @ApiOperation({
+    summary: 'Import companies from the text of a CSV file',
+    description:
+      'Needs record.companies.create too. The header names the columns (name or website, email, phone, industry, size, address, notes, owner and any company property by label or key). Up to 1000 rows; each is checked like the form and a bad row is listed in `failed` with its line while the others are kept. With matchExisting a company with the same website (or name) has its blanks filled and nothing overwritten, inside the caller record.companies.update scope.',
+  })
+  async importCsv(@Body(zodPipe(importCompaniesSchema)) body: ImportCompaniesInput) {
+    return this.csv.import(body);
   }
 
   @Post()

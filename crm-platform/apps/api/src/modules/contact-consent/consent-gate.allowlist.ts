@@ -174,16 +174,17 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
       'Registry of broadcast engines; the audience is gated in BroadcastsService.resolveAudience.',
   },
   {
-    path: 'modules/broadcasts/broadcast-dispatch.service.ts',
-    reason: `${GAP} the audience is gated when the broadcast is created; a send-time re-check of the recipients is still to do.`,
-  },
-  {
     path: 'modules/channel-email/drivers/driver-providers.ts',
     reason: 'Provider wiring of the mail drivers; reached only through the email adapter.',
   },
   {
     path: 'modules/channel-email/drivers/google-mail.driver.ts',
     reason: 'Provider driver; reached only through the email adapter.',
+  },
+  {
+    path: 'modules/channel-email/mail-connection-test.service.ts',
+    reason:
+      'Test credentials for an IMAP/SMTP mailbox (E-08): tries the two logins and reports the result; stores and sends nothing to a contact.',
   },
   {
     path: 'modules/channel-email/mail-push.service.ts',
@@ -218,18 +219,5 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   {
     path: 'modules/shopify-woocommerce/_shims/engine-commerce-sender.ts',
     reason: `${GAP} commerce broadcasts (abandoned cart, order updates) send through the engine registry; they honour the contact flag only.`,
-  },
-  // --- open gaps ----------------------------------------------------------------------------------------------------------------
-  {
-    path: 'modules/channel-wechat/broadcast-sender.service.ts',
-    reason: `${GAP} a WeChat mass send is ONE call whose audience (all followers, a tag) WeChat resolves, so it cannot be screened per contact; the picked-users audience could be, and is not yet.`,
-  },
-  {
-    path: 'modules/channel-telegram/tg-broadcast-sender.service.ts',
-    reason: `${GAP} Telegram broadcasts go to bot subscribers by chat id with no contact link; needs the chat to contact mapping first.`,
-  },
-  {
-    path: 'modules/channel-viber/vib-broadcast-sender.service.ts',
-    reason: `${GAP} Viber broadcasts go to channel subscribers by Viber user id; the contact link exists (contacts.channel_uid) but the send-time consent check is still to do.`,
   },
 ];

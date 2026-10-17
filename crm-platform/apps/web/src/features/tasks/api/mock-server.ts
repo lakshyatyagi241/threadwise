@@ -290,7 +290,9 @@ export async function mockCall<T>(path: string, req: ApiRequest<T>): Promise<T> 
   if (path === '/users')
     return out({ data: [{ id: mockState.me.id, fullName: mockState.me.name }, ...MEMBERS] });
 
-  const linked = /^\/(contacts|deals)\/([^/]+)\/tasks$/.exec(path);
+  const linked = /^\/(contacts|deals|companies)\/([^/]+)\/tasks$/.exec(path);
+  // The stand-in keeps no company on its tasks, so a company's list is empty.
+  if (linked && linked[1] === 'companies' && method === 'GET') return out(page([], q));
   if (linked && method === 'GET') {
     const kind = linked[1] === 'contacts' ? 'contact' : 'deal';
     const list = filterRows(q, false, { kind, id: linked[2]! });

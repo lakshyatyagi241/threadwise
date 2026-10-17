@@ -20,6 +20,14 @@ export type LeadErrorKind =
   | 'field'
   | 'notFound'
   | 'signedOut'
+  /** Meta lead ads: the Page lacks a lead permission; the way out is the "Grant lead access" login. */
+  | 'grantAccess'
+  /** Meta lead ads: the Page's token no longer works; the way out is the "Reconnect" login. */
+  | 'reconnect'
+  /** Meta lead ads: Meta did not answer or refused; trying again may work. */
+  | 'metaRetry'
+  /** Meta lead ads: lead sync is off for the Page. */
+  | 'syncOff'
   | 'general';
 
 export interface LeadFieldIssue {
@@ -43,6 +51,8 @@ export interface LeadError {
   upgradeUrl?: string;
   /** Plan problems: the plan feature or limit key that stopped the call (`lead_sources`). */
   feature?: string;
+  /** Meta's own words for a refusal (only for the two codes that carry them), shown as "Meta said". */
+  metaSaid?: string;
 }
 
 /** The short codes the API puts in `errors[].message` for LEAD_MAPPING_INVALID and LEAD_DEFAULTS_INVALID. */
@@ -55,6 +65,10 @@ export const LEAD_DETAIL_CODES = [
   'pipeline_required',
   'unknown_or_lost_stage',
   'unknown_or_inactive_user',
+  'template_required',
+  'template_not_found',
+  'template_not_sendable',
+  'sender_not_found',
 ] as const;
 const DETAIL_SET: ReadonlySet<string> = new Set(LEAD_DETAIL_CODES);
 
@@ -80,15 +94,43 @@ function planValues(err: ApiError) {
   };
 }
 
+/** `used` and `limit` as text for a message, only when the problem carries both as whole numbers (never a guess). */
+function planCounts(err: ApiError): { used: string; limit: string } | undefined {
+  const used = Number(detail(err, 'used'));
+  const limit = Number(detail(err, 'limitValue'));
+  return Number.isInteger(used) && Number.isInteger(limit) && used >= 0 && limit > 0
+    ? { used: String(used), limit: String(limit) }
+    : undefined;
+}
+
 /** The issues of a problem that name a field: the contract's own validation messages and the API's detail codes. */
 function issuesOf(err: ApiError, translateCodes: boolean): LeadFieldIssue[] {
   return err.fieldErrors
-    .filter((f) => !['upgradeUrl', 'feature', 'reason', 'retryAfterSeconds'].includes(f.path))
+    .filter(
+      (f) =>
+        ![
+          'upgradeUrl',
+          'feature',
+          'reason',
+          'retryAfterSeconds',
+          'limit',
+          'limitValue',
+          'used',
+        ].includes(f.path),
+    )
     .map((f) =>
       translateCodes
         ? detailIssue(f.path, f.message)
         : { path: f.path, key: 'validationField', values: { message: f.message } },
     );
+}
+
+const META_WORDS_MAX = 300;
+
+/** Meta's refusal in its own words: the problem's detail, cut short. Shown only beside a code that says it carries them. */
+function metaWords(err: ApiError): string | undefined {
+  const text = err.message.trim();
+  return text === '' ? undefined : text.slice(0, META_WORDS_MAX);
 }
 
 export function leadError(err: unknown): LeadError {
@@ -108,8 +150,13 @@ export function leadError(err: unknown): LeadError {
       return { ...base, kind: 'signedOut', key: 'signedOut' };
     case ERROR_CODES.PLAN_FEATURE_LOCKED:
       return { ...base, kind: 'locked', key: 'planLocked', ...planValues(err) };
-    case ERROR_CODES.PLAN_LIMIT_REACHED:
-      return { ...base, kind: 'planLimit', key: 'planLimit', ...planValues(err) };
+    case ERROR_CODES.PLAN_LIMIT_REACHED: {
+      // The problem carries `used` (how many the workspace has) and `limitValue` (the cap): "You have used 5 of 5 lead sources".
+      const counts = planCounts(err);
+      return counts
+        ? { ...base, kind: 'planLimit', key: 'planLimitUsed', values: counts, ...planValues(err) }
+        : { ...base, kind: 'planLimit', key: 'planLimit', ...planValues(err) };
+    }
     case ERROR_CODES.LEAD_SOURCE_NAME_TAKEN:
       return {
         ...base,
@@ -132,6 +179,32 @@ export function leadError(err: unknown): LeadError {
       return { ...base, kind: 'general', key: 'payloadPurged' };
     case ERROR_CODES.LEAD_SOURCE_PAUSED:
       return { ...base, kind: 'general', key: 'sourcePaused' };
+    case ERROR_CODES.LEAD_SYNC_NOT_SUPPORTED:
+      return { ...base, kind: 'general', key: 'syncNotSupported' };
+    case ERROR_CODES.LEAD_SYNC_IN_PROGRESS:
+      return { ...base, kind: 'general', key: 'syncInProgress' };
+    case ERROR_CODES.LEAD_SYNC_TOO_SOON: {
+      const seconds = detail(err, 'retryAfterSeconds');
+      return seconds
+        ? { ...base, kind: 'general', key: 'syncTooSoon', values: { seconds } }
+        : { ...base, kind: 'general', key: 'syncTooSoonNoWait' };
+    }
+    case ERROR_CODES.LEAD_BACKFILL_RANGE_INVALID:
+      return { ...base, kind: 'general', key: 'backfillRange' };
+    case ERROR_CODES.MLA_NOT_CONFIGURED:
+      return { ...base, kind: 'general', key: 'mlaNotConfigured' };
+    case ERROR_CODES.MLA_LEAD_ACCESS_MISSING:
+      return { ...base, kind: 'grantAccess', key: 'mlaLeadAccessMissing' };
+    case ERROR_CODES.MLA_PAGE_RECONNECT:
+      return { ...base, kind: 'reconnect', key: 'mlaPageReconnect' };
+    case ERROR_CODES.MLA_SUBSCRIBE_FAILED:
+      return { ...base, kind: 'metaRetry', key: 'mlaSubscribeFailed', metaSaid: metaWords(err) };
+    case ERROR_CODES.MLA_FORMS_UNAVAILABLE:
+      return { ...base, kind: 'metaRetry', key: 'mlaFormsUnavailable', metaSaid: metaWords(err) };
+    case ERROR_CODES.MLA_FORM_NOT_FOUND:
+      return { ...base, kind: 'metaRetry', key: 'mlaFormNotFound' };
+    case ERROR_CODES.MLA_SYNC_OFF:
+      return { ...base, kind: 'syncOff', key: 'mlaSyncOff' };
     case ERROR_CODES.NOT_FOUND:
       return { ...base, kind: 'notFound', key: 'notFound' };
     case ERROR_CODES.RATE_LIMITED: {
@@ -172,12 +245,18 @@ export const LEAD_ERROR_KEYS = [
   'signedOut',
   'planLocked',
   'planLimit',
+  'planLimitUsed',
   'nameTaken',
   'mappingInvalid',
   'defaultsInvalid',
   'notRetryable',
   'payloadPurged',
   'sourcePaused',
+  'syncNotSupported',
+  'syncInProgress',
+  'syncTooSoon',
+  'syncTooSoonNoWait',
+  'backfillRange',
   'notFound',
   'rateLimited',
   'rateLimitedWait',
@@ -188,4 +267,11 @@ export const LEAD_ERROR_KEYS = [
   'network',
   'unexpected',
   'request',
+  'mlaNotConfigured',
+  'mlaLeadAccessMissing',
+  'mlaPageReconnect',
+  'mlaSubscribeFailed',
+  'mlaFormsUnavailable',
+  'mlaFormNotFound',
+  'mlaSyncOff',
 ] as const;

@@ -57,7 +57,7 @@ export class LeadSourceDirectoryService implements LeadSourceDirectoryPort {
         name = `${input.name.slice(0, 110)} (${n})`;
       }
       const id = await this.sources.insert(tx, orgId, {
-        kind: 'connector',
+        kind: input.kind ?? 'connector',
         providerKey: input.providerKey,
         externalRef: input.externalRef,
         name,

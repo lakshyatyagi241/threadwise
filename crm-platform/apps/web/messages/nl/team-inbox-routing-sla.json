@@ -49,7 +49,8 @@
       "delete": "Verwijderen",
       "cancel": "Annuleren",
       "deleted": "Regel verwijderd.",
-      "deleteFailed": "De regel kon niet worden verwijderd."
+      "deleteFailed": "De regel kon niet worden verwijderd.",
+      "businessHours": "Werktijden"
     },
     "rules": {
       "someone": "een medewerker",
@@ -397,6 +398,38 @@
       },
       "testSkipped": "Overgeslagen omdat niemand beschikbaar was: {names}",
       "testOff": "De schakelaar hierboven staat uit, dus dit is alleen wat er zou gebeuren zodra hij aan staat."
+    },
+    "businessHours": {
+      "eyebrow": "Automatische toewijzing",
+      "title": "Werktijden",
+      "subtitle": "Regels en SLA-doelen die werktijden gebruiken, tellen alleen de tijd binnen deze uren.",
+      "close": "Sluiten",
+      "loading": "Werktijden laden",
+      "loadFailed": "Werktijden konden niet worden geladen.",
+      "timezone": "Tijdzone",
+      "timezoneHint": "Alle dagen en tijden hierboven gelden in deze tijdzone.",
+      "timezoneOwnerOnly": "Alleen de eigenaar van de werkruimte kan de tijdzone wijzigen.",
+      "days": "Openingstijden",
+      "day": {
+        "mon": "Maandag",
+        "tue": "Dinsdag",
+        "wed": "Woensdag",
+        "thu": "Donderdag",
+        "fri": "Vrijdag",
+        "sat": "Zaterdag",
+        "sun": "Zondag"
+      },
+      "from": "Van",
+      "to": "Tot",
+      "problem": {
+        "required": "Vul beide tijden in.",
+        "order": "De sluitingstijd moet later zijn dan de openingstijd."
+      },
+      "note": "Een uitgeschakelde dag is de hele dag gesloten. Totdat je opslaat, wordt de werkruimte altijd als open beschouwd.",
+      "cancel": "Annuleren",
+      "save": "Tijden opslaan",
+      "saved": "Werktijden opgeslagen",
+      "saveFailed": "Opslaan mislukt"
     }
   }
 }

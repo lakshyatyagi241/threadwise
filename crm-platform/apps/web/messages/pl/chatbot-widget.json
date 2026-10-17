@@ -254,7 +254,34 @@
         "off": "Wył.",
         "none": "Brak"
       },
-      "colorSwatch": "{label} (próbka)"
+      "colorSwatch": "{label} (próbka)",
+      "age": {
+        "enable": "Zapytaj o wiek przed rozpoczęciem czatu",
+        "enableHint": "Domyślnie wyłączone. Używaj tego tylko wtedy, gdy wymagają tego zasady Twojego obszaru roboczego lub Twoimi odwiedzającymi mogą być osoby niepełnoletnie. Czat nigdy nie mówi, która odpowiedź przechodzi.",
+        "mode": "Jak pytać",
+        "modes": {
+          "declaration": "Pole wyboru: „Potwierdzam, że mam co najmniej N lat”",
+          "age": "Zapytaj o wiek",
+          "dob": "Zapytaj o datę urodzenia"
+        },
+        "modeHints": {
+          "declaration": "Nic o wieku nie jest zapisywane. Najmniej danych.",
+          "age": "Liczba całkowita. Służy do sprawdzenia; zapisywany jest tylko wynik.",
+          "dob": "Zapisywana w kontakcie jako data urodzenia. Używaj tylko wtedy, gdy potrzebujesz daty."
+        },
+        "minAge": "Minimalny wiek",
+        "minAgeHint": "Zostaw puste, aby użyć wieku z Centrum zgodności Twojego obszaru roboczego (18, jeśli nie ustawiono). Od 1 do 21.",
+        "whenUnder": "Jeśli odwiedzający jest poniżej tego wieku",
+        "actions": {
+          "block": "Nie rozpoczynaj czatu",
+          "flag": "Rozpocznij czat i oznacz kontakt jako niepełnoletni"
+        },
+        "actionHints": {
+          "block": "Nic o odwiedzającym nie jest zapisywane, a on widzi neutralną wiadomość. Przy polu wyboru odwiedzający musi je tylko zaznaczyć.",
+          "flag": "Czat trwa dalej, a gdy odwiedzający poda numer telefonu lub adres e-mail, kontakt zostaje oznaczony jako niepełnoletni."
+        },
+        "contactNote": "Wiek jest zapisywany w kontakcie dopiero wtedy, gdy odwiedzający poda numer telefonu lub adres e-mail."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widżet WhatsApp",

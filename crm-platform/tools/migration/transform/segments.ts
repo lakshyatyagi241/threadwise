@@ -269,6 +269,10 @@ export const savedViews: HandlerSpec = {
     modified_time: 'col:updated_at',
     deleted_time: 'drop:soft-delete timestamp',
     is_deleted: 'drop:soft-delete flag; deleted views are excluded and counted',
+    columns: 'drop:the columns a view shows: contact_views has no column for it (recorded in missing-in-wadesk-log.md)',
+    is_favorite: 'drop:the favorite star of a view: contact_views has no such column (recorded in missing-in-wadesk-log.md)',
+    user_list:
+      'drop:the users a view is shared with one by one: WaDesk shares a view with everyone or keeps it private (shared_with = everyone / me)',
   },
   transform(doc: Doc, ctx: Ctx): Outcome {
     if (isDeleted(doc)) return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'is_deleted or deleted_time is set' };

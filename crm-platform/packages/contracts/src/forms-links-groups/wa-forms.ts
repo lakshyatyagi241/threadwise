@@ -50,6 +50,54 @@ export const WA_FORM_CHOICE_FIELD_KINDS: readonly WaFormFieldKind[] = [
   'checkbox',
 ];
 
+/**
+ * A field's `mapsTo`, when it names one of these, writes the submitted answer onto that contact column instead of (or as well
+ * as) a custom property — the same set the flow engine's "Update contact field" step writes
+ * (`FLOW_CONTACT_COLUMNS` in `apps/api/.../crm/contacts/contacts.service.ts`; keep the two in sync). Phone is deliberately not
+ * here: it is the contact's identity key and is never overwritten by a form answer.
+ */
+export const WA_FORM_SYSTEM_MAP_FIELDS = [
+  'name',
+  'first_name',
+  'last_name',
+  'email',
+  'title',
+  'language',
+  'address',
+] as const;
+export type WaFormSystemMapField = (typeof WA_FORM_SYSTEM_MAP_FIELDS)[number];
+
+/**
+ * A field's `mapsTo`, when it names one of these, does not write a contact property at all: it answers a privacy question instead
+ * (TW-WFL, net addition — WhatsApp Forms had neither a consent capture nor an age/minor check). The `privacy:` prefix can never
+ * collide with a custom attribute key (`ATTRIBUTE_KEY_PATTERN` forbids `:`) or a `WA_FORM_SYSTEM_MAP_FIELDS` entry.
+ *
+ * - `privacy:age` — a `number` field's answer is judged as an age.
+ * - `privacy:date_of_birth` — a `date` field's answer is judged as a date of birth.
+ * - `privacy:consent_marketing` — a `checkbox` field's answer (ticked = non-empty) grants WhatsApp marketing consent.
+ * - `privacy:consent_service` — a `checkbox` field's answer records a service (non-marketing) agreement.
+ *
+ * The builder only offers the pairing that fits the field's own `kind` (see `wa-form-builder-screen.tsx`); the submission handler
+ * (`CommerceResume.applyFieldMappings`) re-checks it and skips a mismatched mapping rather than misreading the answer.
+ */
+export const WA_FORM_PRIVACY_MAP_FIELDS = [
+  'privacy:age',
+  'privacy:date_of_birth',
+  'privacy:consent_marketing',
+  'privacy:consent_service',
+] as const;
+export type WaFormPrivacyMapField = (typeof WA_FORM_PRIVACY_MAP_FIELDS)[number];
+
+/** The field `kind` each `WA_FORM_PRIVACY_MAP_FIELDS` entry is valid on. */
+export const WA_FORM_PRIVACY_MAP_KIND: Record<WaFormPrivacyMapField, WaFormFieldKind> = {
+  'privacy:age': 'number',
+  'privacy:date_of_birth': 'date',
+  'privacy:consent_marketing': 'checkbox',
+  'privacy:consent_service': 'checkbox',
+};
+
+export const WA_FORM_MAPS_TO_MAX = 64;
+
 export const waFormFieldSchema = z.object({
   /** Client-generated (`fld_<6-char-random>`), stable across autosaves — never server-assigned. */
   id: z.string().min(1).max(40),
@@ -59,6 +107,15 @@ export const waFormFieldSchema = z.object({
   placeholder: z.string().trim().max(300).optional(),
   helperText: z.string().trim().max(300).optional(),
   options: z.array(z.string().trim().min(1).max(200)).max(50).optional(),
+  /**
+   * Writes the answer onto this contact property at submission time: one of `WA_FORM_SYSTEM_MAP_FIELDS`, the key of an active
+   * custom contact attribute, or one of `WA_FORM_PRIVACY_MAP_FIELDS` (age/date-of-birth minor check, marketing/service consent —
+   * these write a privacy fact, not a contact property). Unmapped (the default) leaves the contact untouched — Reference never
+   * does this mapping at all, so a blank `mapsTo` keeps the submission exactly as before. A key typed by hand that names nothing
+   * active, or a privacy key on the wrong field `kind`, is silently skipped at submission time (same rule as the flow engine's
+   * own field writer), not an error: a deleted attribute or a mismatched mapping must not break future submissions.
+   */
+  mapsTo: z.string().trim().min(1).max(WA_FORM_MAPS_TO_MAX).optional(),
 });
 export type WaFormField = z.infer<typeof waFormFieldSchema>;
 

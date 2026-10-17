@@ -336,11 +336,11 @@ export function TimePicker({
           >
             <span
               aria-hidden="true"
-              className="absolute left-1/2 top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand"
+              className="absolute start-1/2 top-1/2 size-1.5 -translate-x-1/2 rtl:translate-x-1/2 -translate-y-1/2 rounded-full bg-brand"
             />
             <span
               aria-hidden="true"
-              className="absolute left-1/2 top-1/2 h-0.5 origin-left bg-brand"
+              className="absolute start-1/2 top-1/2 h-0.5 origin-left bg-brand"
               style={{
                 width: `${Math.hypot(hand.x, hand.y)}%`,
                 transform: `rotate(${(current / marks) * 360 - 90}deg)`,

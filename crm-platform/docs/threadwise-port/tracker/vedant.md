@@ -442,6 +442,9 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CAMP-036 | done |  | ADDITION: follow-up steps after a campaign message (replied, read, not replied, not read; template or flow; up to 3); not in Reference, built from the meeting; sandbox only, real Meta read reports unverified |
 | TW-CAMP-037 | todo |  | ADDITION, pending: A/B auto-winner (pick the better variant and send it to the rest). Not in Reference; meeting said "ship A/B now, rebuild auto-winner later". Needs decisions on measure, test share, duration, ties |
 | TW-CAMP-038 | done |  | ADDITION: Build with AI in the guided wizard (template draft handed to the template form) and a generated picture in the classic builder; real vendors unverified |
+| TW-CAMP-039 | done |  | ADDITION: step icons on both steppers; one template list in the wizard and the classic builder, per number |
+| TW-CAMP-040 | done |  | ADDITION: recurring broadcast sends several templates in turn, each with its own mapping; not in Reference; sandbox only |
+| TW-CAMP-041 | done |  | ADDITION: previous broadcasts and campaigns as an audience source (with an outcome filter) in the wizard, the classic builder and the Scheduled composer; Reference has it in the Scheduled composer only |
 
 ## scheduled-queue-warmer (sched)
 

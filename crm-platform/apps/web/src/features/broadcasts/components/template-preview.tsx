@@ -30,7 +30,7 @@ export function TemplatePreview({
             <span className="truncate text-[11px] font-semibold">{template.name}</span>
           </div>
           <div className="min-h-[200px] p-3">
-            <div className="ms-auto max-w-[255px] rounded-2xl rounded-tr-md border border-border bg-background px-3 py-2 shadow-sm">
+            <div className="ms-auto max-w-[255px] rounded-2xl rounded-se-md border border-border bg-background px-3 py-2 shadow-sm">
               {template.header && <div className="text-xs font-semibold">{template.header}</div>}
               <p className="mt-1 whitespace-pre-wrap text-xs leading-relaxed">{template.body}</p>
               {template.footer && (

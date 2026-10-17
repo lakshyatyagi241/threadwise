@@ -46,6 +46,10 @@ export const QUEUES = {
   VIBER_BROADCAST: 'viber-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */
   FB_BACKFILL: 'fb-backfill',
+  /** One job per `leadgen` webhook event of a Facebook Page (BL-011): fetches the lead from Meta and hands it to the lead pipeline. Own queue: a slow Meta must not hold a Messenger message. */
+  META_LEADGEN: 'meta-leadgen',
+  /** One job per Page with Meta lead ads on: re-reads its forms' recent leads so a missed webhook never loses one (BL-011). Own queue: a long read must not hold a live lead. */
+  META_LEAD_SWEEP: 'meta-lead-sweep',
   /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (TW-FB-013). */
   FB_BROADCAST: 'fb-broadcast',
   /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (TW-IG-009). */
@@ -68,6 +72,8 @@ export const QUEUES = {
   MKT_PULL: 'mkt-pull',
   /** One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll. */
   MKT_INBOUND: 'mkt-inbound',
+  /** One job per "Sync now" or backfill of a pull-capable lead source (lead inbox, L-18): pulls the source's leads and hands them to the pipeline. Own queue: a portal's rate limit makes a backfill take minutes, and it must not hold a lead from another door. */
+  LEAD_SYNC: 'lead-sync',
   /** One job per bell row that may deserve a browser (Web Push) notification (BL-097). Own queue: a slow push service must not hold the outbox consumers or any other job. */
   WEB_PUSH: 'web-push',
   /** One job per connected Gmail mailbox (TW-MAIL-021): reads what arrived since the last sync and stores it in the inbox. Own queue: a slow Google must not hold any other job. */
@@ -90,6 +96,10 @@ export const QUEUES = {
   CALLING_READINESS: 'calling-readiness',
   /** One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message. */
   CALENDAR_RECONCILE: 'calendar-reconcile',
+  /** One job per workspace that just (re)connected a calendar or changed where bookings go: writes the events its upcoming bookings are missing (BL-035). Own queue: a slow calendar must not hold a booking message. */
+  CALENDAR_BACKFILL: 'calendar-backfill',
+  /** One job per iCal feed that is due: reads the subscribed calendar's busy time (BL-035). Own queue: somebody else's slow server must not hold a booking message. */
+  CALENDAR_ICS_REFRESH: 'calendar-ics-refresh',
   /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
   WECHAT_BROADCAST: 'wechat-broadcast',
 } as const;
