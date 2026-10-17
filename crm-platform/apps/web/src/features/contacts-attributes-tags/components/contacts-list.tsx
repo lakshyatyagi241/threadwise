@@ -129,7 +129,7 @@ const CHIPS_SHOWN = 2;
 
 /** Column widths in px; the table is fixed-layout and scrolls sideways inside its card when they do not fit. */
 const WIDTH: Record<string, number> = {
-  name: 280,
+  name: 270,
   phone: 160,
   attr: 150,
   email: 210,
@@ -142,7 +142,7 @@ const WIDTH: Record<string, number> = {
   memo: 220,
   dateOfBirth: 150,
   minor: 110,
-  createdOn: 140,
+  createdOn: 170,
   whatsapp: 140,
   sms: 130,
   emailOptIn: 130,
@@ -979,7 +979,7 @@ export function ContactsTable({
           {columns.map((c) => (
             <col
               key={c.id}
-              className={c.id === 'name' ? 'w-[200px] sm:w-[280px]' : undefined}
+              className={c.id === 'name' ? 'w-[200px] sm:w-[270px]' : undefined}
               style={c.id === 'name' ? undefined : { width: widthOf(c.id) }}
             />
           ))}

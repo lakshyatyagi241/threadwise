@@ -67,7 +67,7 @@ export function formatDate(
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
   try {
-    if (/^en/i.test(locale)) {
+    if (/^en\b/i.test(locale)) {
       const parts = new Intl.DateTimeFormat('en-US', {
         day: '2-digit',
         month: 'short',
