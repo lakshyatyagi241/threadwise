@@ -165,6 +165,12 @@
         "titleNoName": "Notifikasi uji",
         "bodyNoActor": "Jika Anda bisa membaca ini, notifikasi langsung berfungsi."
       },
+      "snooze_wake": {
+        "title": "{name} kembali ke daftar Anda",
+        "titleNoName": "Chat yang ditunda kembali ke daftar Anda",
+        "titleTeam": "{name} kembali untuk tim Anda",
+        "titleTeamNoName": "Chat yang ditunda kembali untuk tim Anda"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} diperpanjang pada {date, date, medium}",
         "bodyAuto": "Kartu Anda akan ditagih otomatis pada tanggal itu untuk memperpanjang {name}. Batalkan sebelum tanggal itu untuk menghentikannya.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Permintaan bergabung ke grup",
         "device_group_removed": "Dikeluarkan dari grup WhatsApp",
         "test": "Notifikasi uji",
+        "snooze_wake": "Chat yang ditunda kembali",
         "marketplace_renewal_due": "Perpanjangan aplikasi berbayar segera tiba",
         "marketplace_payment_failed": "Pembayaran aplikasi berbayar gagal",
         "marketplace_subscription_ended": "Langganan aplikasi berbayar berakhir"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Janji temu tidak sinkron dengan Google Calendar",
           "hint": "Acara Google Calendar dari janji temu mendatang dihapus, dipindahkan, atau tamunya diubah. Janji temu tidak diubah; Anda yang memilih tindakan selanjutnya."
+        },
+        "snooze_wake": {
+          "label": "Chat yang ditunda kembali",
+          "hint": "Chat yang ditunda dibuka lagi pada waktunya dan diberikan kepada Anda atau tim Anda."
         },
         "marketplace_renewal_due": {
           "label": "Pengingat perpanjangan aplikasi berbayar",

@@ -6,6 +6,7 @@ import { Alert, Badge, Button, Spinner, cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useLscRuns, useScoreContact } from '../api/hooks';
 import { formatCostUsd, formatCount } from '../lib/cost';
+import { useLeadScoringOn } from '../lib/use-enabled';
 import { errorKey, type ErrorKey } from '../lib/errors';
 import { bandOf, isManualScore, type ScoreFields } from '../lib/score';
 import { LinkButton, SparkleIcon, useFormatDate } from './parts';
@@ -31,7 +32,9 @@ export function ScoreCard({ contactId, contact, onScored, className }: ScoreCard
   const t = useTranslations('lead-scoring.card');
   const locale = useLocale();
   const fmt = useFormatDate();
-  const canScore = useCan('lsc.contacts.score');
+  // The AI side (the button, the log, the settings link) needs the app; the number and who set it are part of the contact.
+  const on = useLeadScoringOn();
+  const canScore = useCan('lsc.contacts.score') && on;
   const score = useScoreContact(contactId, onScored);
   const manualId = useId();
   const manual = isManualScore(contact);
@@ -150,7 +153,8 @@ export function ScoreCard({ contactId, contact, onScored, className }: ScoreCard
 /** One precise message per failure; the ones the person can fix come with the screen that fixes them. */
 function ScoreError({ error }: { error: unknown }) {
   const t = useTranslations('lead-scoring.scoreErrors');
-  const canSettings = useCan('lsc.runs.read');
+  const on = useLeadScoringOn();
+  const canSettings = useCan('lsc.runs.read') && on;
   const canKeys = useCan('aiadm.keys.read');
   const key: ErrorKey = errorKey(error);
   const tone =
@@ -169,7 +173,8 @@ function ScoreError({ error }: { error: unknown }) {
 /** The contact's own scoring log: when, the score change, what triggered it, tokens and cost. Needs `lsc.runs.read`. */
 function History({ contactId }: { contactId: string }) {
   const t = useTranslations('lead-scoring.card');
-  const canRead = useCan('lsc.runs.read');
+  const on = useLeadScoringOn();
+  const canRead = useCan('lsc.runs.read') && on;
   const [open, setOpen] = useState(false);
   const regionId = useId();
   const runs = useLscRuns({ contactId }, canRead && open, HISTORY_SIZE);

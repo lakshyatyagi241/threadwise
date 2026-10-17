@@ -35,7 +35,6 @@
         "footnote": "Gefunden über Telefonnummer, E-Mail-Adresse oder Name des Kontakts. Archivierte Gespräche werden nicht angezeigt.",
         "status": {
           "open": "Offen",
-          "pending": "Ausstehend",
           "snoozed": "Zurückgestellt",
           "resolved": "Gelöst",
           "closed": "Geschlossen",

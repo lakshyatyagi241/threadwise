@@ -1,8 +1,8 @@
-import { HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
-  ERROR_CODES,
   type ConversationStatus,
   type ConversationSummary,
+  type MarkSpamConversationInput,
   type SetConversationPriorityInput,
   type SnoozeConversationInput,
 } from '@crm/contracts';
@@ -18,9 +18,6 @@ import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service'
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
 
 const MODULE_KEY = 'conversations';
-
-/** A snooze parks a live thread: a resolved, closed or spam one has nothing to wait for. */
-const SNOOZABLE: readonly ConversationStatus[] = ['open', 'pending', 'snoozed'];
 
 interface Published {
   uuid: string;
@@ -91,7 +88,10 @@ export class InboxTriageService {
     return toConversationSummary(result.row);
   }
 
-  /** Park a live thread until `until` (it wakes by itself: `wakeDue`). Snoozing a snoozed thread moves the wake time. */
+  /**
+   * Park a thread until `until` (it wakes by itself: `wakeDue`), from any status, as Reference does: a resolved, closed or spam thread
+   * snoozed here comes back as open at the wake time. Snoozing a snoozed thread moves the wake time.
+   */
   async snooze(uuid: string, input: SnoozeConversationInput): Promise<ConversationSummary> {
     const ctx = RequestContextStore.require();
     const until = new Date(input.until);
@@ -111,14 +111,6 @@ export class InboxTriageService {
         return { changed: false as const, row: before };
       }
       if (locked.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Conversation');
-      if (!SNOOZABLE.includes(from)) {
-        throw new AppError(
-          ERROR_CODES.CONVERSATION_STATUS_INVALID,
-          `A ${from} conversation cannot be snoozed`,
-          HttpStatus.UNPROCESSABLE_ENTITY,
-          [{ path: 'status', message: `${from} -> snoozed is not allowed` }],
-        );
-      }
 
       await this.repo.snooze(tx, ctx.orgId, locked.id, until);
       await this.events.append(tx, ctx.orgId, {
@@ -135,6 +127,42 @@ export class InboxTriageService {
           status: { old: from, new: 'snoozed' },
           snoozedUntil: { old: before.snoozedUntil, new: until.toISOString() },
         },
+      });
+      return { changed: true as const, row: (await this.repo.byUuid(tx, ctx.orgId, uuid))! };
+    });
+    if (result.changed) await this.publish(ctx.orgId, result.row, ['status', 'snoozedUntil']);
+    return toConversationSummary(result.row);
+  }
+
+  /**
+   * Marks a thread as spam, from any status (Reference: the bulk "Mark as spam"). It leaves every live list, its wake time is dropped, and
+   * the timeline and audit record it. Marking a spam thread again is a no-op. Taking it off spam is the status route (spam to open).
+   */
+  async markSpam(uuid: string, input: MarkSpamConversationInput): Promise<ConversationSummary> {
+    const ctx = RequestContextStore.require();
+    const result = await this.db.tx(async (tx) => {
+      const locked = await this.repo.lockByUuid(tx, ctx.orgId, uuid);
+      if (!locked) throw conversationNotFound();
+      this.access.assertVisible(await this.access.viewer(tx, ctx), locked);
+      await this.access.assertCan(tx, ctx, PERM.resolve, locked);
+
+      const from = locked.status as ConversationStatus;
+      const before = (await this.repo.byUuid(tx, ctx.orgId, uuid))!;
+      if (from === 'spam') return { changed: false as const, row: before };
+      if (locked.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Conversation');
+
+      await this.repo.markSpam(tx, ctx.orgId, locked.id);
+      await this.events.append(tx, ctx.orgId, {
+        conversationId: locked.id,
+        type: 'spam_flagged',
+        actorUserId: ctx.userId,
+        payload: { from },
+      });
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: locked.id,
+        action: 'update',
+        delta: { status: { old: from, new: 'spam' } },
       });
       return { changed: true as const, row: (await this.repo.byUuid(tx, ctx.orgId, uuid))! };
     });

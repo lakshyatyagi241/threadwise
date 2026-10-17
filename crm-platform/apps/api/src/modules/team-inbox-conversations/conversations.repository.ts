@@ -81,7 +81,7 @@ export interface LockedConversation {
 
 export interface ListFilter {
   tab: InboxTab;
-  /** `undefined`: the open and pending threads. `'all'`: no filter. */
+  /** `undefined`: the open threads. `'all'`: no filter. */
   status?: string;
   channelId?: number;
   /** Several channels at once: threads on any of them (the Filters window). */
@@ -279,7 +279,7 @@ export class ConversationsRepository {
             sql`, `,
           )})`,
         );
-      } else if (f.status === undefined) where.push(sql`c.status IN ('open', 'pending')`);
+      } else if (f.status === undefined) where.push(sql`c.status = 'open'`);
       // Resolved and closed are one thing to an agent (the same Resolve button, the same reopen), so the Resolved view lists both.
       else if (f.status === 'resolved') where.push(sql`c.status IN ('resolved', 'closed')`);
       else if (f.status !== 'all') where.push(sql`c.status = ${f.status}`);
@@ -347,7 +347,7 @@ export class ConversationsRepository {
     channelId?: number,
   ): Promise<InboxCounts> {
     const channel = channelId === undefined ? sql`TRUE` : sql`c.channel_id = ${channelId}`;
-    const active = sql`c.archived = FALSE AND c.status IN ('open', 'pending')`;
+    const active = sql`c.archived = FALSE AND c.status = 'open'`;
     const res = await tx.execute(sql`
       SELECT
         count(*) FILTER (WHERE ${active})::int AS "all",
@@ -534,6 +534,13 @@ export class ConversationsRepository {
       assigneeTeamId: int(r.assignee_team_id),
       channelOwnerUserId: int(r.channel_owner_user_id),
     }));
+  }
+
+  /** Mark a thread as spam: the status moves, the wake time is dropped (a spam thread has nothing to wake for). */
+  async markSpam(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET status = 'spam', snoozed_until = NULL
+      WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
   /** Wake a snoozed thread: open again, wake time cleared. */

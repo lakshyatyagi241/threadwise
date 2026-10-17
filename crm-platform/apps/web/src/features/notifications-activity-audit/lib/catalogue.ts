@@ -85,6 +85,7 @@ const LOOK: Record<NotificationPrefType, Look> = {
   new_message: look('chat', 'info', 'conversation'),
   chat_waiting: look('waiting', 'info', 'conversation'),
   conversation_assigned: look('assign', 'info', 'conversation'),
+  snooze_wake: look('waiting', 'info', 'conversation'),
   mention: look('mention', 'info', 'conversation'),
   task_assigned: look('task', 'info'),
   task_due: look('task', 'info'),

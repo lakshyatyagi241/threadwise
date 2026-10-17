@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useContactGrowth, useGrowthSettings } from '../api/hooks';
 import { CARD, useFormatDate } from './parts';
 
@@ -13,7 +14,9 @@ export interface ContactGrowthCardProps {
 
 /** The growth pilot's two facts about one contact: how likely they are to convert, and what the enrichment lookup found. */
 export function ContactGrowthCard({ contactId, className }: ContactGrowthCardProps) {
-  const canRead = useCan('lsc.runs.read');
+  // The growth pilot is built on AI lead scoring: a workspace without the app is not in it.
+  const scoringOn = usePlanFeature('lead_scoring');
+  const canRead = useCan('lsc.runs.read') && scoringOn;
   const settings = useGrowthSettings(canRead);
   const f = settings.data;
   const on = !!f && f.available && (f.features.propensity || f.features.enrichment);

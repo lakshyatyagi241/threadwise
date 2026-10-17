@@ -29,7 +29,8 @@
       "priorityChanged": "Zaktualizowano priorytet",
       "snoozed": "Rozmowa została odłożona",
       "tagAdded": "Dodano tag",
-      "tagRemoved": "Usunięto tag"
+      "tagRemoved": "Usunięto tag",
+      "spammed": "Rozmowa oznaczona jako spam."
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Otwarte",
-        "pending": "Oczekujące",
         "snoozed": "Odroczone",
         "resolved": "Zakończone",
         "closed": "Zakończone",
@@ -113,7 +113,7 @@
         "cancel": "Anuluj",
         "apply": "Zastosuj",
         "status": "Status czatu",
-        "statusHint": "Bez wyboru widać czaty otwarte i oczekujące.",
+        "statusHint": "Bez wyboru pokazywane są otwarte czaty.",
         "conversation": "Rozmowa",
         "any": "Dowolna",
         "assigned": "Przypisana",
@@ -145,7 +145,15 @@
       "statusOpen": "Otwarte",
       "statusAll": "Wszystkie statusy",
       "channelFilter": "Kanał",
-      "selectRow": "Zaznacz {name}"
+      "selectRow": "Zaznacz {name}",
+      "snoozedFor": "Odłożona · {left}",
+      "snoozeLeft": {
+        "due": "teraz",
+        "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+        "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
+        "days": "{count, plural, one {# dzień} other {# dni}}"
+      },
+      "unsnoozesAt": "Wróci {time}"
     },
     "status": {
       "received": "Odebrano",
@@ -166,6 +174,7 @@
       "mediaNotFound": "Załącznik wygasł lub został usunięty. Dołącz go ponownie.",
       "statusInvalid": "Ta zmiana nie jest dozwolona przy obecnym statusie rozmowy.",
       "assigneeInvalid": "Tej osoby nie można przypisać do tej rozmowy.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "simulatorDisabled": "Symulator kanałów jest wyłączony na tym serwerze.",
@@ -317,6 +326,7 @@
       },
       "readOnly": "Możesz czytać tę rozmowę, ale nie masz uprawnień do odpowiadania.",
       "resolvedBanner": "Ta rozmowa jest rozwiązana. Otwórz ją ponownie, aby odpowiedzieć.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
       "messagesLabel": "Wiadomości",
       "loadOlder": "Wczytaj wcześniejsze wiadomości",
@@ -578,6 +588,8 @@
           "tag_removed": "Tag usunięty przez {actor}",
           "first_response": "Wysłano pierwszą odpowiedź",
           "sla_breach": "Przekroczono termin odpowiedzi",
+          "spam_flagged": "Oznaczono jako spam przez {actor}",
+          "escalated": "Eskalowano",
           "unknown": "{what}, przez {actor}"
         },
         "actors": {
@@ -594,7 +606,6 @@
         "noMessages": "Brak wiadomości",
         "status": {
           "open": "Otwarte",
-          "pending": "Oczekujące",
           "snoozed": "Odroczone",
           "resolved": "Zakończone",
           "closed": "Zamknięte",
@@ -1013,7 +1024,9 @@
     "triage": {
       "priority": "Priorytet",
       "snooze": "Odłóż",
-      "wake": "Przywróć teraz"
+      "wake": "Przywróć teraz",
+      "markSpam": "Oznacz jako spam",
+      "notSpam": "To nie spam"
     },
     "bulk": {
       "barLabel": "Działania zbiorcze",
@@ -1046,7 +1059,8 @@
       "tagAdd": "Dodaj tag",
       "tagRemove": "Usuń tag",
       "onLeave": "na urlopie",
-      "onLeaveUntil": "na urlopie do {date}"
+      "onLeaveUntil": "na urlopie do {date}",
+      "spam": "Oznacz jako spam"
     },
     "tags": {
       "tag": "Tag",

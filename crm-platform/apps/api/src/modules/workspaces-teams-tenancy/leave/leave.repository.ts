@@ -257,7 +257,7 @@ export class LeaveRepository {
     const res = await tx.execute(sql`
       SELECT (SELECT count(*)::int FROM contacts WHERE org_id = ${orgId} AND owner_id = ${userId}) AS contacts,
              (SELECT count(*)::int FROM conversations WHERE org_id = ${orgId} AND assignee_user_id = ${userId}
-                AND archived = FALSE AND status IN ('open', 'pending')) AS conversations`);
+                AND archived = FALSE AND status = 'open') AS conversations`);
     const r = res.rows[0] as Raw;
     return { ownedContacts: Number(r.contacts), openConversations: Number(r.conversations) };
   }

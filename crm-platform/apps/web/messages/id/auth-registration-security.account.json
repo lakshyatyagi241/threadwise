@@ -559,7 +559,8 @@
             "help_agent": "Asisten Bantuan",
             "email_channel": "Kanal email (Gmail)",
             "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Penilaian prospek dengan AI"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

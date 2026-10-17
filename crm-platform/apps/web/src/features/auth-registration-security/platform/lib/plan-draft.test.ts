@@ -123,6 +123,7 @@ const stored: PlanAdminItem = {
     email_channel: false,
     personal_history_full: false,
     ai_crm_copilot: false,
+    lead_scoring: false,
   },
   moduleFeatures: {},
   moduleLimits: {},

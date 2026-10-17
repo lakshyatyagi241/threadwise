@@ -35,7 +35,6 @@
         "footnote": "Encontradas pelo telefone, e-mail ou nome do contato. Conversas arquivadas não aparecem.",
         "status": {
           "open": "Aberta",
-          "pending": "Pendente",
           "snoozed": "Adiada",
           "resolved": "Resolvida",
           "closed": "Fechada",

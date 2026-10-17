@@ -36,12 +36,18 @@ export const snoozeConversationSchema = z.object({
 });
 export type SnoozeConversationInput = z.infer<typeof snoozeConversationSchema>;
 
+/** Marks a thread as spam (from any status). Taking it off spam is the status route: spam to open. */
+export const markSpamConversationSchema = z.object({
+  rowVersion: z.number().int().positive(),
+});
+export type MarkSpamConversationInput = z.infer<typeof markSpamConversationSchema>;
+
 // --- bulk -----------------------------------------------------------------------------------------------------------------
 
 /** One request names at most this many conversations. A larger selection is sent in several requests by the client. */
 export const BULK_MAX_CONVERSATIONS = 200;
 
-export const BULK_STATUS_TARGETS = ['open', 'pending', 'resolved', 'closed'] as const;
+export const BULK_STATUS_TARGETS = ['open', 'resolved', 'closed'] as const;
 
 /** What a bulk request does to every conversation it names. `reopen` is `status: open`. */
 export const bulkConversationActionSchema = z.discriminatedUnion('type', [
@@ -55,6 +61,8 @@ export const bulkConversationActionSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('mark_read') }),
   z.object({ type: z.literal('priority'), priority: conversationPrioritySchema }),
   z.object({ type: z.literal('snooze'), until: snoozeUntilSchema }),
+  /** Marks every named conversation as spam (the single route is `POST .../spam`). */
+  z.object({ type: z.literal('spam') }),
   /** Add or take off one tag (by id) on every conversation. */
   z.object({ type: z.literal('tag'), mode: z.enum(['add', 'remove']), tagId: uuidSchema }),
   /** The original name of `tag`, still accepted so existing clients keep working. */

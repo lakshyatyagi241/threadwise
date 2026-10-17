@@ -82,7 +82,8 @@
       "help_agent": "Help assistant",
       "email_channel": "Email (Gmail) channel",
       "personal_history_full": "Full history import (personal WhatsApp)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI lead scoring"
     },
     "limitGroups": {
       "messaging": "Messaging",
@@ -563,6 +564,8 @@
       "talk": "Talk to sales",
       "continueFree": "Continue free",
       "choose": "Choose {name}",
+      "appHint": "{feature} is also sold as an app in the Marketplace.",
+      "appLink": "See the app",
       "back": "Go back",
       "compare": "Compare all plans"
     }

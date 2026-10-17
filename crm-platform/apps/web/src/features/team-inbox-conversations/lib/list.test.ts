@@ -27,9 +27,9 @@ const assignedTo = (userId: string) => ({
 });
 
 describe('matchesFilters', () => {
-  it('the default view is open and pending, not resolved', () => {
+  it('the default view is the open threads, not resolved, snoozed or spam', () => {
     expect(matchesFilters(summary({ status: 'open' }), f(), ME)).toBe(true);
-    expect(matchesFilters(summary({ status: 'pending' }), f(), ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'snoozed' }), f(), ME)).toBe(false);
     expect(matchesFilters(summary({ status: 'resolved' }), f(), ME)).toBe(false);
     expect(matchesFilters(summary({ status: 'resolved' }), f({ status: 'resolved' }), ME)).toBe(
       true,
@@ -259,14 +259,14 @@ describe("the Filters window's filters", () => {
     expect(
       listQuery(
         f({
-          statuses: ['pending', 'spam'],
+          statuses: ['snoozed', 'spam'],
           assignment: 'assigned',
           sort: 'old',
           from: '2026-10-01',
         }),
       ),
     ).toMatchObject({
-      statuses: 'pending,spam',
+      statuses: 'snoozed,spam',
       assignment: 'assigned',
       sort: 'old',
       from: '2026-10-01',

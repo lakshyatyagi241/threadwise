@@ -89,7 +89,14 @@
       "delete": "删除",
       "startsFlow": "同时启动流程 {name}",
       "flowOff": "流程已关闭",
-      "flowGone": "同时启动一个已被删除的流程"
+      "flowGone": "同时启动一个已被删除的流程",
+      "markSpamSummary": "将会话标记为垃圾信息",
+      "prioritySummary": "将优先级设为 {priority}",
+      "tagsSummary": "添加标签：{tags}",
+      "escalationSummary": "如果 {minutes} 分钟内无人回复：",
+      "escalationReassign": "重新分配给本规则的客服",
+      "escalationPriority": "将优先级设为 {priority}",
+      "autoReplySummary": "发送回复：{body}"
     },
     "form": {
       "back": "自动分配",
@@ -118,7 +125,14 @@
         "contactIncomplete": "请完成或删除未填写完整的联系人条件。",
         "keywordsMany": "最多使用 20 个词。",
         "targets": "请至少选择一名客服或一个团队。",
-        "specific": "选择“指定客服”时，请只选择一名客服。"
+        "specific": "选择“指定客服”时，请只选择一名客服。",
+        "actions": "请选择规则的动作。",
+        "tagsMany": "最多使用 5 个标签。",
+        "escalationMinutes": "请输入 1 到 1440 之间的整数分钟。",
+        "escalationAction": "重新分配、设置优先级，或两者都做。",
+        "escalationAgents": "重新分配需要本规则中的客服，请在上方选择。",
+        "autoReplyEmpty": "请填写回复内容，或取消勾选此项。",
+        "autoReplyLong": "回复太长（最多 1024 个字符）。"
       },
       "whenTitle": "有新会话到达时",
       "whenHint": "您设置的每个条件都必须匹配。留空的部分将被忽略。",
@@ -188,7 +202,23 @@
         "loadFailed": "无法加载流程，所以列表可能不完整。"
       },
       "onLeave": "休假中",
-      "onLeaveUntil": "休假至 {date}"
+      "onLeaveUntil": "休假至 {date}",
+      "actions": "规则的动作",
+      "actionsHint": "选择一项或两项。规则可以分配会话、标记为垃圾信息，或两者都做。",
+      "actionAssign": "分配给客服或团队",
+      "actionMarkSpam": "将会话标记为垃圾信息",
+      "setPriority": "设置优先级",
+      "priorityKeep": "保持优先级不变",
+      "addTags": "添加标签",
+      "addTagsHint": "用逗号分隔。尚不存在的标签会被创建。",
+      "escalate": "如果没人及时回复，则升级",
+      "escalateHint": "从规则触发起的分钟数，最多 1440（一天）。我们先回复则取消。",
+      "escalateMinutes": "无回复的分钟数",
+      "escalateReassign": "重新分配给本规则的客服",
+      "escalatePriority": "然后设置优先级",
+      "autoReply": "发送自动回复",
+      "autoReplyBody": "回复内容",
+      "autoReplyHint": "以企业名义发送给客户。超出 24 小时窗口时，自由格式回复不会发送。"
     },
     "sla": {
       "back": "返回设置",
@@ -206,8 +236,6 @@
       "resolution": "解决时限（分钟）",
       "minutesHint": "留空表示无目标。60 为一小时，1440 为一天。",
       "minutesInvalid": "请输入不小于 1 的整数。",
-      "pause": "等待客户期间暂停",
-      "pauseHint": "设为待处理的会话不会被标记。",
       "businessHours": "仅计算营业时间",
       "businessHoursHint": "使用工作区设置中的营业时间和时区。",
       "makeDefault": "设为默认策略",

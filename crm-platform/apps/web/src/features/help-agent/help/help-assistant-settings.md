@@ -35,3 +35,7 @@ The assistant is a plan feature. If your plan does not include it, this tile is 
 
 - The switch is on but a person sees no Ask button: check that their role has the permission **Use the Help assistant**.
 - People see "The assistant is not set up yet": the platform owner has not connected an AI provider. Ask them.
+
+## Get it as an app
+
+The Help assistant is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

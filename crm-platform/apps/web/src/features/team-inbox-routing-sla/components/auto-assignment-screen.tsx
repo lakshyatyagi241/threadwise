@@ -333,10 +333,11 @@ export function RuleRow({
 }) {
   const t = useTranslations('team-inbox-routing-sla.rules');
   const tc = useTranslations('team-inbox-routing-sla.channels');
+  const tp = useTranslations('team-inbox-conversations.list');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const chips = whenChips(rule, (k) => tc(k));
-  const people = [...rule.assign.userIds, ...rule.assign.teamIds].map(
+  const people = [...(rule.assign?.userIds ?? []), ...(rule.assign?.teamIds ?? [])].map(
     (id) => names.get(id) ?? t('someone'),
   );
   const { shown, more } = namesSummary(people);
@@ -408,10 +409,47 @@ export function RuleRow({
         </dd>
         <dt className="font-medium text-muted-foreground">{t('thenLabel')}</dt>
         <dd>
-          {t(`strategy.${rule.assign.strategy}`)}
-          {': '}
-          {shown.join(', ')}
-          {more > 0 && ` ${t('andMore', { count: more })}`}
+          {rule.assign && (
+            <>
+              {t(`strategy.${rule.assign.strategy}`)}
+              {': '}
+              {shown.join(', ')}
+              {more > 0 && ` ${t('andMore', { count: more })}`}
+            </>
+          )}
+          {rule.markSpam && (
+            <span className={rule.assign ? 'mt-1 block' : undefined}>{t('markSpamSummary')}</span>
+          )}
+          {rule.priority && (
+            <span className="mt-1 block">
+              {t('prioritySummary', { priority: tp(`priority.${rule.priority}`) })}
+            </span>
+          )}
+          {rule.autoReply && (
+            <span className="mt-1 block">
+              {t('autoReplySummary', { body: rule.autoReply.body })}
+            </span>
+          )}
+          {rule.escalation && (
+            <span className="mt-1 block">
+              {t('escalationSummary', { minutes: rule.escalation.minutes })}{' '}
+              {[
+                rule.escalation.reassign ? t('escalationReassign') : null,
+                rule.escalation.priority
+                  ? t('escalationPriority', {
+                      priority: tp(`priority.${rule.escalation.priority}`),
+                    })
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(', ')}
+            </span>
+          )}
+          {rule.addTags.length > 0 && (
+            <span className="mt-1 block">
+              {t('tagsSummary', { tags: rule.addTags.map((x) => x.name).join(', ') })}
+            </span>
+          )}
           {rule.triggerFlow && (
             <span className="mt-1 flex flex-wrap items-center gap-2">
               {rule.triggerFlow.name === null

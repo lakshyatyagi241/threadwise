@@ -33,7 +33,8 @@
       "browse": "Pazar yerine göz at",
       "back": "Panele dön",
       "unofficialTitle": "{app} kullanılamıyor",
-      "unofficialBody": "{app} yalnızca QR kodla eşleştirilmiş kişisel WhatsApp numaralarıyla kullanılır; bu özellik çalışma alanınızda etkin değil. WhatsApp, resmi WhatsApp Business API üzerinden bağlanır."
+      "unofficialBody": "{app} yalnızca QR kodla eşleştirilmiş kişisel WhatsApp numaralarıyla kullanılır; bu özellik çalışma alanınızda etkin değil. WhatsApp, resmi WhatsApp Business API üzerinden bağlanır.",
+      "viewApp": "{app} uygulamasını Pazar yerinde gör"
     },
     "closeMenu": "Menüyü kapat",
     "mainMenu": "Ana menü",

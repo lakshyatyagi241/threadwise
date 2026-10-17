@@ -26,6 +26,7 @@ const UNDERLYING: Record<BulkConversationAction['type'], readonly string[]> = {
   mark_read: [PERM.read],
   priority: [PERM.priority],
   snooze: [PERM.snooze],
+  spam: [PERM.resolve],
   tag: [PERM.tag],
   label: [PERM.tag],
 };
@@ -145,6 +146,10 @@ export class BulkActionsService {
       }
       case 'snooze': {
         const after = await this.triage.snooze(id, { until: action.until, rowVersion });
+        return after.rowVersion === rowVersion ? 'unchanged' : 'done';
+      }
+      case 'spam': {
+        const after = await this.triage.markSpam(id, { rowVersion });
         return after.rowVersion === rowVersion ? 'unchanged' : 'done';
       }
       case 'tag':

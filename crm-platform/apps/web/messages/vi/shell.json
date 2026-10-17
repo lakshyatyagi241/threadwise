@@ -33,7 +33,8 @@
       "browse": "Xem Chợ ứng dụng",
       "back": "Quay lại bảng điều khiển",
       "unofficialTitle": "{app} không khả dụng",
-      "unofficialBody": "{app} chỉ dùng với số WhatsApp cá nhân ghép nối bằng mã QR, và các số này chưa được bật cho không gian làm việc của bạn. WhatsApp kết nối qua WhatsApp Business API chính thức."
+      "unofficialBody": "{app} chỉ dùng với số WhatsApp cá nhân ghép nối bằng mã QR, và các số này chưa được bật cho không gian làm việc của bạn. WhatsApp kết nối qua WhatsApp Business API chính thức.",
+      "viewApp": "Xem {app} trong Chợ ứng dụng"
     },
     "closeMenu": "Đóng menu",
     "mainMenu": "Menu chính",

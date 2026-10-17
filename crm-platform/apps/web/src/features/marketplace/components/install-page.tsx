@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -8,6 +9,7 @@ import type { MarketAppDetail, MarketScopeSummary } from '@crm/contracts';
 import { Alert, Button, Checkbox, EmptyState, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { fetchApp, installApp, mktKeys } from '../api';
+import { appHomeFor } from '../lib/app-home';
 import { acceptedScopesFor, installerGaps, scopeChanges, type ScopeChanges } from '../lib/consent';
 import { mktError, type MktError } from '../lib/errors';
 import { installGate } from '../lib/install-state';
@@ -101,6 +103,7 @@ export function InstallFlow({
   const access = useMarketAccess();
   const session = useSession();
   const qc = useQueryClient();
+  const router = useRouter();
   const action = useAsyncAction();
 
   const fields: SetupField[] = app.setup?.authFields ?? [];
@@ -222,6 +225,8 @@ export function InstallFlow({
     void qc.invalidateQueries({ queryKey: mktKeys.appsAll });
     void qc.invalidateQueries({ queryKey: mktKeys.app(app.slug) });
     void qc.invalidateQueries({ queryKey: ['marketplace', 'shelves'] });
+    // An app turns its screens and permissions on once installed. The menu is read on the server, so it is read again.
+    router.refresh();
   };
 
   // The call failed, so nothing was installed: decide what the person sees and where they go next.
@@ -497,6 +502,8 @@ export function DoneStep({
   onReveal: (s: RevealState) => void;
 }) {
   const t = useTranslations('marketplace.install.done');
+  const td = useTranslations('marketplace.detail');
+  const open = appHomeFor(app.slug, 'active');
   return (
     <div className="space-y-5" data-testid="install-done">
       <Alert tone="success">
@@ -506,7 +513,16 @@ export function DoneStep({
       <SecretReveal state={reveal} onState={onReveal} doneLabel={t('saved')} />
       {reveal.phase !== 'shown' && (
         <div className="flex flex-wrap gap-2">
-          <Link href={mktRoutes.manage(done.installationId)} className={LINK_BUTTON_PRIMARY}>
+          {open && (
+            <Link href={open} className={LINK_BUTTON_PRIMARY} data-testid="done-open">
+              {td('open')}
+              <span className="sr-only"> — {app.name}</span>
+            </Link>
+          )}
+          <Link
+            href={mktRoutes.manage(done.installationId)}
+            className={open ? LINK_BUTTON : LINK_BUTTON_PRIMARY}
+          >
             {t('manage')}
           </Link>
           <Link href={mktRoutes.browse(app.kind)} className={LINK_BUTTON}>

@@ -420,6 +420,44 @@ every workspace that has booking types or appointments (a usage probe, because t
 plan or override grants it; (4) publish. Between deploy and step 3 a workspace on a catalogue plan has no booking, so do steps 2 and 3 in the same
 window as the deploy. Workspaces on a plan the catalogue does not know stay open (nothing is locked for them) and are not comped.
 
+### Optional tools as apps, information listings and planned drafts (the listings audit)
+
+An audit of what the product has against what the catalogue lists (survey: [wiring/marketplace.md](../threadwise-port/wiring/marketplace.md), "Listings audit") added
+19 listings in three migrations. **Every one is a draft**, so nothing is visible to a workspace until the operator publishes it, and every paid one has **no price**
+(`409 MKT_VERSION_STATE` / `price_not_set` until it is set). Re-seeding never overwrites an operator's edit.
+
+| Kind of listing                                      | Slugs                                                                                                                                               | Pricing and grant                                                                                                                                                                 | Migration                                      |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **Gated by install, grandfathered in the migration** | `lead-scoring` (mini app, Sales tools)                                                                                                              | `paid_monthly`, price unset, grants the **new** plan feature `lead_scoring` (default off), comp existing users                                                                    | `20261228090000_mkt_lead_scoring_app`          |
+| **Gated by install, zero loss**                      | `ai-crm-copilot`, `chatbot-widget`, `help-assistant`, `whatsapp-catalog`, `whatsapp-groups` (mini apps) and `sms` (integration, connector `client`) | `paid_monthly`, price unset, grants the plan feature each already had (`ai_crm_copilot`, `chatbot_widgets`, `help_agent`, `wa_storefront`, `waba_groups`, `sms`; all default off) | `20261228090100_mkt_optional_tool_listings`    |
+| **Information** (core, not gated)                    | `whatsapp-devices`, `meta-lead-forms` (integrations, connector `client`)                                                                            | free, grants nothing, no plan feature, no permission key tied to them                                                                                                             | `20261228090200_mkt_info_and_planned_listings` |
+| **Planned, unbuilt, cannot be published**            | `lead-finder`, `ai-call-assistant`, `openai-ads`, `meta-ads`, `tiktok`, `hubspot`, `slack`, `trello`, `linkedin-lead-gen`, `google-ads-leads`       | free, grants nothing, connector `oauth` (framework only), version `0.1.0`, no recipe                                                                                              | same                                           |
+
+**Why nothing is lost.** (1) For the six zero-loss tools the feature was already off by default, so a workspace has it only through its plan or an override, and an
+app adds a way to get it without touching either (`app-grants.ts`); no plan row, permission key or gate changes. A workspace whose plan already has the feature
+keeps it with no purchase or install; set `includedPlanFeature` to the same key on the listing so the app shows as included for it. (2) `lead_scoring` is a new key
+and off, but scoring was open to every workspace that opted in, so the migration writes `overrides.features.lead_scoring = true` into the plan state of every
+workspace that **uses** it (the switch is on, a run is in the log, or the growth pilot has a row; `USAGE_PROBES.lead_scoring`), in the same transaction, so
+there is no window between the deploy and the operator's comp. An override an operator already set is never touched, other overrides are kept, and running the file
+again touches no row. **Comp existing users** (dry run first, then for real) then records a subscription for the same workspaces; they keep working on the override
+until the operator removes it. (3) The information listings do not touch any gate.
+
+**What a workspace without the feature gets.** Every `lead-scoring` route answers `422 PLAN_FEATURE_LOCKED` (reads included; `reason: feature_disabled`, or
+`app_not_installed` with `app` and `installUrl` once it has paid but not installed). The growth pilot (`/v2/growth/*`) is built on scoring, so `GrowthGateService` treats a
+workspace without the feature as outside the pilot: `settings` answers `available: false` and every other route `403 GRW_NOT_AVAILABLE`. Background work does nothing for it: automatic
+scoring and the backfill (`LeadScoringService.enqueueIfAuto`, `.score`), the chat reading (`LeadChatDigestService.digest`) and every growth sweeper and listener. The entitlement
+is read **after** the cheap per-workspace checks, so only a workspace that switched scoring on pays for the read. The `lsc.%` permission keys carry `plan_feature = 'lead_scoring'` and
+`app_slug = 'lead-scoring'`, so the Roles editor says "install the app" for a workspace without it.
+
+**Operator rollout.** For each gated listing: (1) `PUT /apps/:ref/pricing` (price and currency; send the listing's `grantsPlanFeatures` and `grandfatherExisting` again, the call replaces the pricing), (2) show the add-on on the plans that
+should offer it (a paid app is visible only to workspaces on a plan that lists its add-on), (3) `includedPlanFeature` where a plan already has the feature, (4)
+`POST /apps/lead-scoring/subscriptions/grandfather` with `dryRun: true`, then `false`, (5) approve version `1.0.0` and publish. `pnpm --filter @crm/api seed:lead-scoring` does 1 to 5 on a developer database
+([../runbooks/dev-seed-marketplace-apps.md](../runbooks/dev-seed-marketplace-apps.md)). Publish `whatsapp-devices` only when the unofficial engine is on for the platform.
+
+**Planned drafts are unpublishable on purpose.** `POST /apps/:ref/publish` answers `409 MKT_VERSION_STATE` (nothing approved), and once a version is approved
+`MKT_RECIPE_INVALID` (an integration needs a recipe); a complete OAuth recipe still ends in `409 MKT_CONNECTOR_NOT_AVAILABLE` until the first OAuth integration is verified and `implemented` is flipped on
+the connector. "Coming soon, not built" and the backlog id appear only in the version's changelog (operator-facing). The ids are recorded as `blocked`: BL-259 to BL-268.
+
 ### Operator API additions
 
 | Method and path                             | Permission                | What                                                                                                                                                                                                      |
@@ -647,7 +685,8 @@ changed and never a value or a payment detail.
 
 ## Not built yet
 
-Third-party (out-of-process) mini apps, app tokens and OAuth for apps, iframe surfaces, the developer portal, revenue share and payouts for paid
+Listed as planned drafts that cannot be published (BL-259 to BL-268): the lead finder, the AI call assistant, OpenAI Ads (no definition exists), Meta Ads (Click-to-WhatsApp), TikTok, HubSpot, Slack,
+Trello, LinkedIn lead gen and Google Ads leads. Third-party (out-of-process) mini apps, app tokens and OAuth for apps, iframe surfaces, the developer portal, revenue share and payouts for paid
 third-party apps, a wallet payment, usage-based pricing, and ratings (spec phases 3
 and 4; backlog BL-070 to BL-075); the OAuth and email-parse connectors; first-party mini app screens. Lead portals: Collegedunia, NoBroker, Quikr, CarDekho and
 Naukri (no mechanism found, or not leads), email-alert parsing, a replay tool for stored deliveries, and every portal's verification against a real account

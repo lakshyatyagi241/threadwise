@@ -378,6 +378,17 @@ export function InboxScreen() {
     if (ok) toast(t('reopened'));
   }, [detail.detail, can.resolve, guarded, toast, t]);
 
+  const markSpam = useCallback(async () => {
+    const d = detail.detail;
+    if (!d || !can.resolve || d.status === 'spam') return;
+    setTriaging(true);
+    const ok = await guarded(async () => {
+      list.placeRow(await inboxApi.markSpam(d.id, d.rowVersion));
+    });
+    setTriaging(false);
+    if (ok) toast(t('spammed'));
+  }, [detail.detail, can.resolve, guarded, list, toast, t]);
+
   const [tagging, setTagging] = useState(false);
   const applyTag = useCallback(
     async (input: { tagId: string } | { name: string }) => {
@@ -682,6 +693,7 @@ export function InboxScreen() {
                 onPriority: (p) => void setPriority(p),
                 onSnooze: (p) => void snooze(p),
                 onWake: () => void wake(),
+                onSpam: () => void markSpam(),
               }}
               mode={mode}
               onMode={setMode}

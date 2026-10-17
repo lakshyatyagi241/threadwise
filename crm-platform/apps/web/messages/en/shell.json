@@ -31,6 +31,7 @@
       "body": "{app} is an optional app. Subscribe to it and install it from the Marketplace (if you already subscribed, press Install) and it will appear in your menu.",
       "bodyNoMarketplace": "{app} is an optional app that this workspace doesn't have. Ask a workspace admin to add it from the Marketplace.",
       "browse": "Browse the Marketplace",
+      "viewApp": "See {app} in the Marketplace",
       "back": "Back to the dashboard",
       "unofficialTitle": "{app} isn't available",
       "unofficialBody": "{app} is only used with personal WhatsApp numbers paired by QR code, which are not enabled for your workspace. WhatsApp connects through the official WhatsApp Business API."

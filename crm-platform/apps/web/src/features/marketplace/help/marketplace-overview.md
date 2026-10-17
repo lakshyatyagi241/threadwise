@@ -35,9 +35,15 @@ The Marketplace is where you add mini apps and connect outside services to your 
 4. Select a card to read the app page, including **What it can access** (each permission has a risk level), **What you will need to set up** and **Your data**.
 5. Select **Install**. Step one is **Permissions**: read the list and tick the box that allows them. Step two is **Set up**, where you fill in the fields the app needs. Keys are stored sealed and cannot be read back. Step three confirms the install.
 6. Some connections show a secret or a private address once. Copy it, tick the box that says you saved it, and then continue.
-7. Select **Installed** at the top to see your apps. Filter by **Type** or **Status**, and select **Manage** on an app.
+7. Select **Installed** at the top to see your apps. Filter by **Type** or **Status**, and select **Manage** on an app. An app that has a screen of its own, such as Forms, Appointments or AI lead scoring, also has **Open** on its page, on the last step of the install and on its manage page; it takes you straight to that screen.
 8. On the manage page you can **Pause** or **Resume** the app, review the permissions it holds, change **Credentials and settings**, use **Test connection**, **Send sample lead** or **Rotate secret** where they apply, read **Recent deliveries**, and **Uninstall**. Uninstalling asks whether to keep or delete the data the app created, though today its contacts stay either way.
 9. Missing something? Select **Request an integration**, describe it, and vote on what others asked for.
+
+## Apps that switch on a feature
+
+Some apps are how a feature is added to a workspace: Appointments, Forms, Email, SMS, AI lead scoring, AI CRM Copilot, Chat widget, Help assistant, WhatsApp catalog and orders, and WhatsApp groups. The feature's screens, menu entries and Settings tiles appear when the app is installed and running, and go away when it is paused or uninstalled. Subscribing alone does not switch it on. A workspace whose plan already includes the feature keeps it and does not need to install the app, and a feature that was open to every workspace before it became an app stays with the workspaces that already used it.
+
+If you open a screen of an app the workspace does not have, the page says it isn't part of your workspace and links to the app's page in the Marketplace, where you can subscribe and install it. A few listings only describe a feature that is already part of the product, such as **Personal WhatsApp numbers** and **Meta lead forms**; installing them changes nothing about who can use the feature.
 
 ## Available add-ons
 

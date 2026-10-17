@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
@@ -33,6 +33,7 @@ import {
 } from '../lib/group-thread';
 import type { MentionMember } from '../lib/mentions';
 import type { SnoozePreset } from '../lib/selection';
+import { fullStamp, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { GroupCostLine } from './group-cost-line';
@@ -117,6 +118,7 @@ export interface ThreadPaneProps {
     onPriority: (priority: ConversationPriority) => void;
     onSnooze: (preset: SnoozePreset) => void;
     onWake: () => void;
+    onSpam: () => void;
   };
   /** Tags of the open conversation: present when the caller may put tags on threads. */
   tags?: {
@@ -136,10 +138,22 @@ export interface ThreadPaneProps {
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const tg = useTranslations('team-inbox-conversations.groupThread');
+  const tl = useTranslations('team-inbox-conversations.list');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   const canManageChannels = useCan('inbox.channel.manage');
   const canExportLogs = useCan('inbox.logs.export');
   const canOpenGroups = useCan('wa.groups.read');
   const { detail, thread } = props;
+  // A chat assigned to another agent is theirs to answer: replying is locked until it is assigned to the viewer (notes stay open).
+  // Unknown viewer (no `assignMenu`) or no assignee: not locked. The API refuses the send as well (CONVERSATION_ASSIGNED_TO_OTHER).
+  const meId = props.assignMenu?.meId;
+  const lockedToOther =
+    props.can.reply &&
+    meId !== undefined &&
+    detail?.assignment.user != null &&
+    detail.assignment.user.id !== meId;
+  const canReply = props.can.reply && !lockedToOther;
   const [searching, setSearching] = useState(false);
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
@@ -152,7 +166,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   // A group of a personal (linked) number reads its members from the group directory for the @mention picker.
   const personalGroup = isPersonalGroupThread(detail?.peerKey, detail?.channel.kind);
   const groupBlock = personalGroup ? personalGroupBlock(detail?.personalGroup) : null;
-  const mentionsOn = personalGroup && props.can.reply && groupBlock === null;
+  const mentionsOn = personalGroup && canReply && groupBlock === null;
   const conversationId = props.conversationId;
   const searchMembers = useCallback(
     async (q: string): Promise<MentionMember[]> =>
@@ -198,25 +212,27 @@ export function ThreadPane(props: ThreadPaneProps) {
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
     !resolved &&
-    props.can.reply &&
+    canReply &&
     !channelDown &&
     !groupSendBlocked &&
     detail?.channel.kind !== 'email' &&
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail &&
-    !resolved &&
-    props.can.reply &&
-    !channelDown &&
-    !groupLimited &&
-    props.mode === 'reply'
+    detail && !resolved && canReply && !channelDown && !groupLimited && props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
           ...(detail.capabilities.interactive ? (['buttons'] as const) : []),
         ]
       : [];
+  const snoozeLabel =
+    detail?.status === 'snoozed' && detail.snoozedUntil
+      ? (() => {
+          const m = snoozeLeftMessage(snoozeLeft(detail.snoozedUntil, props.nowMs));
+          return tl('snoozedFor', { left: tl(m.key, m.values) });
+        })()
+      : null;
   // Email: the reply box adds Cc, Bcc and a subject; templates, shares and files are not part of an email reply (yet).
   const isEmail = detail?.channel.kind === 'email';
   const emailSubject = isEmail ? latestEmailSubject(thread.state.messages, detail?.title) : '';
@@ -242,7 +258,21 @@ export function ThreadPane(props: ThreadPaneProps) {
                   {detail.title}
                 </h2>
                 {resolved && <Badge tone="success">{t(`status.${detail.status}`)}</Badge>}
-                {detail.status === 'snoozed' && <Badge tone="warning">{t('status.snoozed')}</Badge>}
+                {detail.status === 'snoozed' && (
+                  <Badge
+                    tone="warning"
+                    title={
+                      detail.snoozedUntil
+                        ? tl('unsnoozesAt', {
+                            time: fullStamp(detail.snoozedUntil, locale, timeZone),
+                          })
+                        : undefined
+                    }
+                  >
+                    {snoozeLabel ?? t('status.snoozed')}
+                  </Badge>
+                )}
+                {detail.status === 'spam' && <Badge tone="danger">{t('status.spam')}</Badge>}
                 {win && <WindowBadge view={win} />}
                 <SlaBadge status={detail.slaStatus} nowMs={props.nowMs} />
               </div>
@@ -317,13 +347,16 @@ export function ThreadPane(props: ThreadPaneProps) {
               <TriageMenu
                 priority={detail.priority}
                 snoozed={detail.status === 'snoozed'}
+                spam={detail.status === 'spam'}
                 canPriority={props.can.priority ?? false}
                 canSnooze={props.can.snooze ?? false}
                 canWake={props.can.resolve}
+                canSpam={props.can.resolve}
                 busy={props.triage.busy}
                 onPriority={props.triage.onPriority}
                 onSnooze={props.triage.onSnooze}
                 onWake={props.triage.onWake}
+                onSpam={props.triage.onSpam}
               />
             )}
             {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
@@ -413,7 +446,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
         onReply={
-          props.can.reply && !replyDisabled && !groupLimited
+          canReply && !replyDisabled && !groupLimited
             ? (message) => {
                 setReply({ conversationId: props.conversationId, message });
                 props.onMode('reply');
@@ -421,7 +454,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         onReact={
-          props.can.reply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
+          canReply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
             ? props.onReact
             : undefined
         }
@@ -455,14 +488,14 @@ export function ThreadPane(props: ThreadPaneProps) {
         </div>
       ) : (
         <>
-          {channelDown && props.channel && props.can.reply && props.mode === 'reply' && (
+          {channelDown && props.channel && canReply && props.mode === 'reply' && (
             <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
           )}
           {win &&
             windowClosed &&
             !channelDown &&
             !groupLimited &&
-            props.can.reply &&
+            canReply &&
             props.mode === 'reply' && (
               <div
                 role="status"
@@ -487,7 +520,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 </div>
               </div>
             )}
-          {groupBlock !== null && props.can.reply && props.mode === 'reply' && (
+          {groupBlock !== null && canReply && props.mode === 'reply' && (
             <div
               role="status"
               data-testid="inbox-group-readonly"
@@ -497,13 +530,11 @@ export function ThreadPane(props: ThreadPaneProps) {
               <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
               <div>
                 <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
-                <p className="text-xs text-muted-foreground">
-                  {tg(`readOnly.${groupBlock}.message`)}
-                </p>
+                <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
               </div>
             </div>
           )}
-          {cloudBlock !== null && props.can.reply && props.mode === 'reply' && (
+          {cloudBlock !== null && canReply && props.mode === 'reply' && (
             <div
               role="status"
               data-testid="inbox-group-cloud-block"
@@ -521,9 +552,30 @@ export function ThreadPane(props: ThreadPaneProps) {
           )}
           {detail?.cloudGroup &&
             cloudBlock === null &&
-            props.can.reply &&
+            canReply &&
             props.mode === 'reply' &&
             !channelDown && <GroupCostLine group={detail.cloudGroup} />}
+          {lockedToOther && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-assigned-lock"
+              className="flex items-center gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="shrink-0 text-muted-foreground" />
+              <p className="min-w-0 flex-1">{t('assignedToOther')}</p>
+              {props.can.assignSelf && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  data-testid="inbox-assigned-lock-assign"
+                  disabled={props.assignMenu?.busy}
+                  onClick={props.onAssignSelf}
+                >
+                  {t('assignToMe')}
+                </Button>
+              )}
+            </div>
+          )}
           {!props.can.reply && props.mode === 'reply' && (
             <p
               role="status"
@@ -539,9 +591,10 @@ export function ThreadPane(props: ThreadPaneProps) {
             mode={props.mode}
             onMode={props.onMode}
             replyDisabled={replyDisabled}
-            canReply={props.can.reply}
+            lockedHint={lockedToOther ? t('assignedToOther') : undefined}
+            canReply={canReply}
             canNote={props.can.note}
-            canAttach={isEmail ? props.can.reply : (detail?.capabilities.media.length ?? 0) > 0}
+            canAttach={isEmail ? canReply : (detail?.capabilities.media.length ?? 0) > 0}
             email={
               isEmail
                 ? {
@@ -559,7 +612,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
                 : undefined
             }
-            savedReplies={props.can.reply ? { channelKind: detail?.channel.kind } : undefined}
+            savedReplies={canReply ? { channelKind: detail?.channel.kind } : undefined}
             canTemplate={canTemplate}
             onTemplate={() => setTemplatesOpen(true)}
             canShare={shareKinds.length > 0}

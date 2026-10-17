@@ -21,7 +21,7 @@ type Raw = Record<string, unknown>;
  * them ("On leave until <date>"). A manual assignment to them is still allowed; routing never picks them.
  *
  * Availability is the stored status (online, away, busy, offline; no row means offline, as Reference). The load is a live count of open and
- * pending conversations: Reference kept a counter that drifted whenever a thread was resolved or snoozed.
+ * open conversations: Reference kept a counter that drifted whenever a thread was resolved or snoozed.
  */
 @Injectable()
 export class AssigneesService {
@@ -41,7 +41,7 @@ export class AssigneesService {
                COALESCE(s.status, 'offline') AS availability,
                (SELECT count(*)::int FROM conversations c
                  WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND c.archived = FALSE
-                   AND c.status IN ('open', 'pending')) AS open_conversations
+                   AND c.status = 'open') AS open_conversations
         FROM users u
         LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
         WHERE u.org_id = ${ctx.orgId} AND u.status = 'active'

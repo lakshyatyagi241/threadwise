@@ -82,7 +82,8 @@
       "help_agent": "Assistant d’aide",
       "email_channel": "Canal e-mail (Gmail)",
       "personal_history_full": "Import complet de l'historique (WhatsApp personnel)",
-      "ai_crm_copilot": "AI CRM Copilot"
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Scoring des leads par IA"
     },
     "limitGroups": {
       "messaging": "Messagerie",
@@ -564,7 +565,9 @@
       "continueFree": "Continuer gratuitement",
       "choose": "Choisir {name}",
       "back": "Retour",
-      "compare": "Comparer tous les forfaits"
+      "compare": "Comparer tous les forfaits",
+      "appHint": "{feature} est aussi vendu comme application dans le Marketplace.",
+      "appLink": "Voir l’application"
     }
   }
 }

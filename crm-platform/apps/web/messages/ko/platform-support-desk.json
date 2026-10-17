@@ -292,7 +292,6 @@
       "firstLabel": "첫 응답 (분)",
       "resolveLabel": "해결 (분)",
       "bizOnly": "영업시간에만 적용",
-      "pause": "고객 대기 중 일시정지",
       "setDefault": "기본값으로 설정",
       "addPolicy": "정책 추가",
       "savePolicy": "정책 저장",

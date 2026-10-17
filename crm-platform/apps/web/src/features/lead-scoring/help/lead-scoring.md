@@ -4,7 +4,7 @@ title: AI lead scoring
 summary: Give every contact a score from 0 to 100 with AI, see why, and keep track of what it costs.
 area: automation
 order: 8
-documents: [tile:lead-scoring]
+documents: [tile:lead-scoring, nav:lead-scoring]
 keywords:
   [
     lead score,
@@ -27,6 +27,12 @@ keywords:
 AI lead scoring gives each contact a number from 0 to 100 that says how promising the contact looks. The number is written to the contact's **Lead score**, so it shows in the contact list, on the board and on the contact's page. Scores are grouped by colour and name: **Cold** below 34, **Warm** from 34 to 66 and **Hot** from 67. The number is always printed too, and a small sparkle marks a score the AI wrote.
 
 Scoring is **off** until you switch it on, because it sends facts about your contacts to an AI provider.
+
+## Get the app
+
+AI lead scoring is an app. A workspace that already used scoring keeps it exactly as it was, with nothing to buy or install. Any other workspace adds it from the **Marketplace**: open **AI lead scoring** under **Mini apps**, **Subscribe** if the app has a price, then select **Install** and confirm its permissions. Paying for the app is not enough on its own; it has to be installed.
+
+Until then the **AI lead scoring** tile is not in Settings, the page `/lead-scoring` says it isn't part of your workspace and links to the app, and a contact's **Lead score** card shows the score a person typed with no **Score with AI** button. Pausing or uninstalling the app switches scoring off again; the scores already written stay on the contacts.
 
 ## What is sent
 

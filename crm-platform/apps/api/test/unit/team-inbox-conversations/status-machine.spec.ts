@@ -10,12 +10,8 @@ import {
 /** The transition guard (TW-TIB1-034): every pair of statuses, decided once, shared by the API and the web. */
 describe('canMoveConversationStatus', () => {
   const allowed: Array<[ConversationStatus, ConversationStatus]> = [
-    ['open', 'pending'],
     ['open', 'resolved'],
     ['open', 'closed'],
-    ['pending', 'open'],
-    ['pending', 'resolved'],
-    ['pending', 'closed'],
     ['snoozed', 'open'],
     ['snoozed', 'resolved'],
     ['snoozed', 'closed'],
@@ -56,7 +52,7 @@ describe('canMoveConversationStatus', () => {
   });
 
   it('the request body only accepts the statuses an agent can set', () => {
-    expect([...SETTABLE_CONVERSATION_STATUSES]).toEqual(['open', 'pending', 'resolved', 'closed']);
+    expect([...SETTABLE_CONVERSATION_STATUSES]).toEqual(['open', 'resolved', 'closed']);
     expect(
       setConversationStatusSchema.safeParse({ rowVersion: 1, status: 'snoozed' }).success,
     ).toBe(false);

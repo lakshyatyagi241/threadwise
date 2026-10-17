@@ -305,7 +305,8 @@
         "terms": "Ketentuan",
         "status": "Halaman status",
         "email": "Dukungan lewat email"
-      }
+      },
+      "open": "Buka"
     },
     "install": {
       "backToMarketplace": "Kembali ke Marketplace",

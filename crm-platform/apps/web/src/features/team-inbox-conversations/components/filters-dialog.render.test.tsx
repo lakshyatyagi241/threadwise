@@ -88,7 +88,7 @@ describe('the inbox Filters window', () => {
       expect(text).toContain(w);
     }
     await click(q('[data-testid="inbox-filters-status-snoozed"]'));
-    await click(q('[data-testid="inbox-filters-status-pending"]'));
+    await click(q('[data-testid="inbox-filters-status-spam"]'));
     await click(q('[data-testid="inbox-filters-sort-old"]'));
     await click(q('[data-testid="inbox-filters-conversation-unassigned"]'));
     await click(q('[data-testid="inbox-filters-agents"]'));
@@ -96,7 +96,7 @@ describe('the inbox Filters window', () => {
     await click(q('[data-testid="inbox-filters-apply"]'));
     expect(p.onApply).toHaveBeenCalledWith(
       expect.objectContaining({
-        statuses: ['snoozed', 'pending'],
+        statuses: ['snoozed', 'spam'],
         sort: 'old',
         status: 'open',
         assignment: 'unassigned',
@@ -125,9 +125,9 @@ describe('the inbox Filters window', () => {
     );
   });
 
-  it('does not offer Spam: nothing in the inbox marks a thread as spam', async () => {
+  it('offers Spam, so an agent can find the threads that were marked', async () => {
     await show();
-    expect(document.querySelector('[data-testid="inbox-filters-status-spam"]')).toBeNull();
+    expect(document.querySelector('[data-testid="inbox-filters-status-spam"]')).not.toBeNull();
   });
 
   it('renders nothing while closed', async () => {

@@ -22,6 +22,7 @@ import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { ContactsService } from '../crm';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   LeadChatDigestRepository,
   toSuggestion,
@@ -49,7 +50,7 @@ import {
 import { LeadStageLineService } from './lead-stage-line.service';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository, type RunWrite } from './lead-scoring.repository';
-import { AI_PROVIDER, resolveCost } from './lead-scoring.rules';
+import { AI_PROVIDER, LEAD_SCORING_FEATURE, resolveCost } from './lead-scoring.rules';
 
 const SUGGESTION_MODULE_KEY = 'lifecycle_stage_suggestions';
 const CONTACTS_MODULE_KEY = 'contacts';
@@ -90,6 +91,7 @@ export class LeadChatDigestService {
     private readonly contacts: ContactsService,
     private readonly listeners: ChatDigestListeners,
     private readonly stageLines: LeadStageLineService,
+    private readonly plans: PlanEntitlementService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadDigestJob>,
   ) {}
@@ -156,6 +158,13 @@ export class LeadChatDigestService {
         'LSC_NOT_ENABLED',
         'Switch AI lead scoring on in Settings first. Contact details are sent to an AI provider, so it is off until you choose.',
         'not_enabled',
+      );
+    }
+    if (!(await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))) {
+      return stop(
+        'PLAN_FEATURE_LOCKED',
+        'AI lead scoring is not part of your workspace. Install the AI lead scoring app from the Marketplace.',
+        'feature_off',
       );
     }
     if (!isChatDigestPilot(gate.slug) || !gate.settings.chatDigest) {

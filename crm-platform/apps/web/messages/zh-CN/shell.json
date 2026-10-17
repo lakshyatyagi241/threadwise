@@ -33,7 +33,8 @@
       "browse": "浏览应用市场",
       "back": "返回仪表板",
       "unofficialTitle": "{app} 不可用",
-      "unofficialBody": "{app} 仅用于通过二维码配对的个人 WhatsApp 号码，您的工作区未启用此功能。WhatsApp 通过官方 WhatsApp Business API 连接。"
+      "unofficialBody": "{app} 仅用于通过二维码配对的个人 WhatsApp 号码，您的工作区未启用此功能。WhatsApp 通过官方 WhatsApp Business API 连接。",
+      "viewApp": "在应用市场查看{app}"
     },
     "closeMenu": "关闭菜单",
     "mainMenu": "主菜单",

@@ -207,6 +207,29 @@ export const messageKey = (eventId: string): string => `message.received:${event
 export const collapseKeyFor = (conversationUuid: string): string => `msg:${conversationUuid}`;
 export const assignedKey = (conversationUuid: string, userUuid: string, eventId: string): string =>
   `assigned:${conversationUuid}:${userUuid}:${eventId}`;
+export const snoozeWakeKey = (
+  conversationUuid: string,
+  userUuid: string,
+  eventId: string,
+): string => `snooze_wake:${conversationUuid}:${userUuid}:${eventId}`;
+
+/**
+ * A snoozed thread came back by the clock: the people told are its assignee, or the team it is assigned to (the members who may read it).
+ * A thread with no assignee tells nobody; the thread shows up in the open list for whoever looks.
+ */
+export function recipientsForSnoozeWake(
+  record: ConversationRecord,
+  readers: readonly ConversationViewer[],
+): { userIds: number[]; team: boolean } {
+  if (record.assigneeUserId !== null) {
+    const may = readersOf(readers, record).some((v) => v.userId === record.assigneeUserId);
+    return { userIds: may ? [record.assigneeUserId] : [], team: false };
+  }
+  if (record.assigneeTeamId !== null) {
+    return { userIds: teamMembersWhoSee(readers, record).map((v) => v.userId), team: true };
+  }
+  return { userIds: [], team: false };
+}
 /**
  * One nudge per conversation and customer message: a redelivered or repeated sweep writes the same key (a no-op), while a new customer
  * message after someone answered is a new message id and so a new episode.

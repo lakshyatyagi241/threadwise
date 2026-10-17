@@ -279,7 +279,7 @@ export class InboxConversationsService {
     return { conversationId: uuid, unreadCount };
   }
 
-  /** Resolve, close, reopen, or park as pending, along the legal moves (`canMoveConversationStatus`). */
+  /** Resolve, close, or reopen, along the legal moves (`canMoveConversationStatus`). */
   async setStatus(uuid: string, input: SetConversationStatusInput): Promise<ConversationSummary> {
     const ctx = RequestContextStore.require();
     const result = await this.db.tx(async (tx) => {

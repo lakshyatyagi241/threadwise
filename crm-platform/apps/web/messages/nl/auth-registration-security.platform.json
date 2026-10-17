@@ -1440,7 +1440,8 @@
             "help_agent": "De Hulpassistent in de app: mensen vragen in gewone woorden om een taak en de assistent begeleidt of voert die uit op hun eigen sessie, en vraagt eerst toestemming bij alles wat risicovol is. Verbruikt AI-tokens.",
             "email_channel": "Koppel Gmail- en Google Workspace-postvakken aan de teaminbox. De betaalde E-mail-app beheert deze schakelaar.",
             "personal_history_full": "Laat een persoonlijk WhatsApp-nummer de volledige chatgeschiedenis importeren bij de eerste koppeling. Het importeren van recente chats is beschikbaar voor elk abonnement met persoonlijke nummers.",
-            "ai_crm_copilot": "Vindt en scoort leads met AI uit je contacten."
+            "ai_crm_copilot": "Vindt en scoort leads met AI uit je contacten.",
+            "lead_scoring": "Scoort contacten met AI en voedt de groeipilot. De app AI-leadscoring beheert deze schakelaar."
           },
           "units": {
             "days": "Dagen",
@@ -1626,7 +1627,8 @@
             "help_agent": "Hulpassistent (AI, verbruikt tokens)",
             "email_channel": "E-mailkanaal (Gmail)",
             "personal_history_full": "Volledige chatgeschiedenis importeren (persoonlijke WhatsApp)",
-            "ai_crm_copilot": "AI CRM Copilot"
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI-leadscoring"
           },
           "problems": {
             "required": "Dit veld is verplicht.",

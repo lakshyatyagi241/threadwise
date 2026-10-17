@@ -29,7 +29,8 @@
       "priorityChanged": "Priority updated",
       "snoozed": "Conversation snoozed",
       "tagAdded": "Tag added",
-      "tagRemoved": "Tag removed"
+      "tagRemoved": "Tag removed",
+      "spammed": "Conversation marked as spam."
     },
     "list": {
       "title": "Inbox",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Open",
-        "pending": "Pending",
         "snoozed": "Snoozed",
         "resolved": "Resolved",
         "closed": "Resolved",
@@ -113,7 +113,7 @@
         "cancel": "Cancel",
         "apply": "Apply",
         "status": "Chat status",
-        "statusHint": "Nothing chosen shows open and pending chats.",
+        "statusHint": "Nothing chosen shows open chats.",
         "conversation": "Conversation",
         "any": "Any",
         "assigned": "Assigned",
@@ -145,7 +145,15 @@
       "statusOpen": "Open",
       "statusAll": "Every status",
       "channelFilter": "Channel",
-      "selectRow": "Select {name}"
+      "selectRow": "Select {name}",
+      "snoozedFor": "Snoozed · {left}",
+      "snoozeLeft": {
+        "due": "due now",
+        "minutes": "{count, plural, one {# minute} other {# minutes}}",
+        "hours": "{count, plural, one {# hour} other {# hours}}",
+        "days": "{count, plural, one {# day} other {# days}}"
+      },
+      "unsnoozesAt": "Un-snoozes {time}"
     },
     "status": {
       "received": "Received",
@@ -166,6 +174,7 @@
       "mediaNotFound": "The attachment expired or was removed. Attach it again.",
       "statusInvalid": "That change is not allowed from the conversation's current status.",
       "assigneeInvalid": "That person cannot be assigned this conversation.",
+      "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to reply.",
       "forbidden": "You do not have permission to do that.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "simulatorDisabled": "The channel simulator is turned off on this server.",
@@ -317,6 +326,7 @@
       },
       "readOnly": "You can read this conversation but you do not have permission to reply.",
       "resolvedBanner": "This conversation is resolved. Reopen it to reply.",
+      "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
       "messagesLabel": "Messages",
       "loadOlder": "Load earlier messages",
@@ -578,6 +588,8 @@
           "tag_removed": "Tag removed by {actor}",
           "first_response": "First reply sent",
           "sla_breach": "Response deadline missed",
+          "spam_flagged": "Marked as spam by {actor}",
+          "escalated": "Escalated",
           "unknown": "{what} by {actor}"
         },
         "actors": {
@@ -594,7 +606,6 @@
         "noMessages": "No messages",
         "status": {
           "open": "Open",
-          "pending": "Pending",
           "snoozed": "Snoozed",
           "resolved": "Resolved",
           "closed": "Closed",
@@ -1013,7 +1024,9 @@
     "triage": {
       "priority": "Priority",
       "snooze": "Snooze",
-      "wake": "Wake now"
+      "wake": "Wake now",
+      "markSpam": "Mark as spam",
+      "notSpam": "Not spam"
     },
     "bulk": {
       "barLabel": "Bulk actions",
@@ -1046,7 +1059,8 @@
       "tagAdd": "Add tag",
       "tagRemove": "Remove tag",
       "onLeave": "on leave",
-      "onLeaveUntil": "on leave until {date}"
+      "onLeaveUntil": "on leave until {date}",
+      "spam": "Mark as spam"
     },
     "tags": {
       "tag": "Tag",

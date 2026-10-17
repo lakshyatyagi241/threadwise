@@ -21,7 +21,6 @@ interface Draft {
   firstResponseMinutes: string;
   resolutionMinutes: string;
   respectBusinessHours: boolean;
-  pauseWhenWaitingOnCustomer: boolean;
   isDefault: boolean;
 }
 const NEW_DRAFT: Draft = {
@@ -29,7 +28,6 @@ const NEW_DRAFT: Draft = {
   firstResponseMinutes: '60',
   resolutionMinutes: '1440',
   respectBusinessHours: true,
-  pauseWhenWaitingOnCustomer: false,
   isDefault: false,
 };
 const toDraft = (p: SlaPolicy): Draft => ({
@@ -37,7 +35,6 @@ const toDraft = (p: SlaPolicy): Draft => ({
   firstResponseMinutes: String(p.firstResponseMinutes),
   resolutionMinutes: String(p.resolutionMinutes),
   respectBusinessHours: p.respectBusinessHours,
-  pauseWhenWaitingOnCustomer: p.pauseWhenWaitingOnCustomer,
   isDefault: p.isDefault,
 });
 
@@ -79,7 +76,6 @@ export function SlaPage() {
         firstResponseMinutes: Number(draft.firstResponseMinutes),
         resolutionMinutes: Number(draft.resolutionMinutes),
         respectBusinessHours: draft.respectBusinessHours,
-        pauseWhenWaitingOnCustomer: draft.pauseWhenWaitingOnCustomer,
         isDefault: draft.isDefault,
       };
       return editing
@@ -278,11 +274,6 @@ export function SlaPage() {
                     label={t('bizOnly')}
                     checked={draft.respectBusinessHours}
                     onChange={(v) => set('respectBusinessHours', v)}
-                  />
-                  <Toggle
-                    label={t('pause')}
-                    checked={draft.pauseWhenWaitingOnCustomer}
-                    onChange={(v) => set('pauseWhenWaitingOnCustomer', v)}
                   />
                   <Toggle
                     label={t('setDefault')}
