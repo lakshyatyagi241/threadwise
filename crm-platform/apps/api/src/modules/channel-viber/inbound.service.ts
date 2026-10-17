@@ -28,7 +28,8 @@ const ack: Ack = { status: 0 };
  * The tenant is found through a narrow SECURITY DEFINER lookup, then the signature (`X-Viber-Content-Signature`, the hex HMAC-SHA256 of
  * the RAW body with the auth token) is checked before anything is read. Viber retries anything but a 2xx, so every outcome after the
  * signature, an unknown channel, a paused one and an event of a kind we do not use included, answers 200 and does nothing. A wrong
- * signature is refused (403) as Reference did; only a flood is throttled (429).
+ * signature is refused (403) as Reference did; only a flood is throttled (429). An event we could not store answers 503 so Viber
+ * redelivers it (ASYNC-017): never a 200 for a message that was not kept.
  */
 @Injectable()
 export class InboundService {
@@ -71,8 +72,14 @@ export class InboundService {
       await this.db.txAs({ orgId }, (tx) => this.repo.touchInbound(tx, orgId, channel.id));
       await this.dispatch(orgId, channel, event);
     } catch (err) {
-      // Viber must still get its 200: the failure is logged, not retried into a loop.
+      // A 2xx tells Viber the message is ours, so it is never sent again: answering 200 here lost the customer's message for good.
+      // The inbox write is idempotent per provider message id, so a 503 and Viber's own redelivery is safe and bounded by Viber's retry window.
       this.logger.error({ err, orgId, channel: channel.id }, 'viber ingest failed');
+      throw new AppError(
+        ERROR_CODES.INTERNAL,
+        'Could not store the event, please retry',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
     }
     return ack;
   }

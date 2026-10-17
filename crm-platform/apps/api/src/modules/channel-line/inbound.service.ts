@@ -89,12 +89,23 @@ export class InboundService {
     const apiOf = async (): Promise<LineApi> =>
       (api ??= this.line.forToken(await this.tokens.accessToken(orgId, channel)));
 
+    // Every event is tried even if an earlier one failed. A 2xx tells LINE the whole delivery is ours and it is never sent again, so a
+    // failed store answers 503 after the loop: the inbox write is idempotent per webhook event id, so LINE redelivering the batch is safe.
+    let failed = 0;
     for (const event of eventsOf(body)) {
       try {
         await this.handle(orgId, channel, event, apiOf);
       } catch (err) {
+        failed += 1;
         this.logger.error({ err, orgId, channel: channel.id }, 'line event ingest failed');
       }
+    }
+    if (failed > 0) {
+      throw new AppError(
+        ERROR_CODES.INTERNAL,
+        'Could not store the delivery, please retry',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
     }
     return ack('ok');
   }

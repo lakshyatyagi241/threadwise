@@ -1,9 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { sql } from 'drizzle-orm';
 import type { Queue } from 'bullmq';
-import { META_LEADGEN_JOB, type MetaLeadgenJob } from '@crm/contracts';
+import { ERROR_CODES, META_LEADGEN_JOB, type MetaLeadgenJob } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
 import {
@@ -71,18 +72,29 @@ export class InboundService {
       this.logger.warn('facebook webhook signature verification failed');
       return 'forbidden';
     }
+    // Every entry and event is tried even if an earlier one failed. A 2xx tells Meta the delivery is ours and it is never sent again,
+    // so a failed store answers 503 after the loop: every write is idempotent per Meta id, so Meta redelivering the batch is safe.
+    const failed = { count: 0 };
     for (const entry of readEntries(payload)) {
       try {
-        await this.fanOut(entry);
+        await this.fanOut(entry, failed);
       } catch (err) {
+        failed.count += 1;
         this.logger.error({ err, page: entry.pageId }, 'facebook entry failed');
       }
+    }
+    if (failed.count > 0) {
+      throw new AppError(
+        ERROR_CODES.INTERNAL,
+        'Could not store the delivery, please retry',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
     }
     return 'ok';
   }
 
   /** One webhook per Page, delivered to every organization that connected it. */
-  private async fanOut(entry: PageEntry): Promise<void> {
+  private async fanOut(entry: PageEntry, failed: { count: number }): Promise<void> {
     const found = await this.db.primary.execute(sql`SELECT * FROM fb_page_lookup(${entry.pageId})`);
     const hits = found.rows as Array<{
       page_org_id: number | string;
@@ -95,18 +107,19 @@ export class InboundService {
       );
       if (!page || page.status !== 'connected') continue;
       for (const ev of entry.messaging) {
-        await this.guard(orgId, page, 'messaging', () => this.messaging(orgId, page, ev));
+        await this.guard(failed, orgId, page, 'messaging', () => this.messaging(orgId, page, ev));
       }
       for (const value of entry.feed) {
-        await this.guard(orgId, page, 'feed', () => this.comment(orgId, page, value));
+        await this.guard(failed, orgId, page, 'feed', () => this.comment(orgId, page, value));
       }
       for (const value of entry.leadgen) {
-        await this.guard(orgId, page, 'leadgen', () => this.queueLead(orgId, page, value));
+        await this.guard(failed, orgId, page, 'leadgen', () => this.queueLead(orgId, page, value));
       }
     }
   }
 
   private async guard(
+    failed: { count: number },
     orgId: number,
     page: PageRow,
     what: string,
@@ -115,6 +128,7 @@ export class InboundService {
     try {
       await fn();
     } catch (err) {
+      failed.count += 1;
       this.logger.warn({ err, orgId, page: page.id }, `facebook ${what} ingest failed`);
     }
   }

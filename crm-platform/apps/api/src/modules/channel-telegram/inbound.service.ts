@@ -51,7 +51,7 @@ const dict = (x: unknown): Record<string, unknown> =>
  * The public Telegram webhook (TW-TG-003 to 006): one signed address per bot.
  *
  * Telegram retries anything but a 2xx, so every outcome, a wrong secret and an unknown bot included, answers 200 with a note
- * and does nothing. Only a flood is refused (429). The tenant is found through a narrow SECURITY DEFINER lookup; from there on
+ * and does nothing. Only a flood is refused (429), and an update we could not store answers 503 so it is redelivered (ASYNC-017). The tenant is found through a narrow SECURITY DEFINER lookup; from there on
  * everything runs under that organization's context.
  */
 @Injectable()
@@ -93,9 +93,14 @@ export class InboundService {
     try {
       return await this.dispatch(orgId, bot, update);
     } catch (err) {
-      // Telegram must still get its 200: the message is logged, not retried into a loop.
+      // A 2xx tells Telegram the update is ours, so it is never sent again: answering 200 here lost the message for good. The inbox
+      // write is idempotent per update, so a 503 and Telegram's own redelivery (with its backoff) is safe.
       this.logger.error({ err, orgId, bot: bot.id }, 'telegram ingest failed');
-      return ack('ok');
+      throw new AppError(
+        ERROR_CODES.INTERNAL,
+        'Could not store the update, please retry',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
     }
   }
 
