@@ -200,6 +200,11 @@
     "reason": "worker/cron only (no controller reaches it); two fixed-predicate UPDATEs retire expired/stuck export rows across tenants",
     "reviewedOn": "2026-10-14"
   },
+  "modules/contact-consent/minor-detection.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (MinorSweepService @Cron, contact-consent-worker module; no controller reaches it); the sweep reads only (org_id, contact_id) pairs by fixed predicates, then evaluates each contact in its own workspace transaction",
+    "reviewedOn": "2026-10-16"
+  },
   "modules/crm/invoicing/invoice-overdue-sweep.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
