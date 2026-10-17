@@ -1,7 +1,7 @@
 ---
 id: contact-details-page
 title: Contact details page
-summary: One contact in three columns: who they are and one row of actions, the timeline with a quick note, task, call and meeting box, and small cards for tasks, deals, company and consent.
+summary: One contact in three columns: profile and actions, the timeline with a note, task, call and meeting box, and small cards for tasks, deals and company.
 area: audience
 order: 12
 documents: [nav:contacts]
