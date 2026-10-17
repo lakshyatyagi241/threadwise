@@ -685,6 +685,7 @@
         "anotherPart": "Bagian lain dari alur ini. Dijalankan saat tombol atau baris daftar menuju ke sini{lost, select, true {: belum ada yang menuju ke sini, sehingga tidak akan pernah dijalankan.} other {.}}",
         "addFirstStep": "Tambahkan langkah pertama",
         "branchingEnds": "{kind, select, list {Daftar} other {Kumpulan tombol}} ini mengakhiri bagian ini: apa yang dikirim berikutnya bergantung pada pilihan pelanggan.",
+        "optionsCarryOn": "Setiap {kind, select, list {baris} other {tombol}} dapat memulai alurnya sendiri atau melanjutkan ke langkah berikutnya di bawah.",
         "thenGoTo": "Lalu ke",
         "confirmImport": {
           "title": "Ganti alur ini dengan berkas tersebut?",
@@ -720,7 +721,7 @@
             "answer": "Jawaban",
             "action": "Aksi"
           },
-          "blockedTitle": "Tombol dan daftar mengakhiri alur, sehingga hanya boleh di posisi terakhir.",
+          "blockedTitle": "Langkah ini mengakhiri bagian ini, jadi hanya bisa diletakkan paling akhir.",
           "blockedTitleFaq": "Jawab dari FAQ punya dua jalur keluar, jadi hanya bisa di posisi terakhir."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "Tujuan",
           "linkEnds": "Berakhir di sini (tidak ada yang dikirim lagi)",
+          "linkNext": "Lanjut ke langkah berikutnya",
           "linkOption": "{stage} · {label}{self, select, true { (langkah ini)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Arahkan ke alur baru…",
           "question": "Pertanyaan",

@@ -53,6 +53,8 @@ import type { FormComponent, FormEnv } from '../inspector/types';
 import { MediaUpload } from './media-upload';
 import {
   BRANCHING,
+  LINK_NEXT,
+  OPTION_STEPS,
   LIMITS,
   stageIn,
   groupsOf,
@@ -93,6 +95,14 @@ export function LinkSelect({
       onChange={(e) => onChange(e.target.value === '' ? null : e.target.value)}
     >
       <option value="">{t('linkEnds')}</option>
+      {/* A buttons / list step with a step after it can carry on with that step. */}
+      {(() => {
+        const own = doc.journeys.find((j) => j.steps.some((x) => x.id === stepId));
+        const at = own?.steps.findIndex((x) => x.id === stepId) ?? -1;
+        return own && OPTION_STEPS.has(own.steps[at]!.type) && own.steps[at + 1] ? (
+          <option value={LINK_NEXT}>{t('linkNext')}</option>
+        ) : null;
+      })()}
       {groupsOf(doc).map((g) => (
         <optgroup key={g.key} label={groupText(g, tf)}>
           {g.chains.flatMap((ci) =>

@@ -21,6 +21,7 @@ import {
   stepLabel,
   removeStep,
   stageLabel,
+  LINK_NEXT,
   toGraph,
   toSimple,
   unreachable,
@@ -206,12 +207,53 @@ describe('editing a simple doc', () => {
     return doc;
   };
 
-  it('a step cannot be added after a buttons / list step, and a buttons step has to be last', () => {
+  it('a step cannot follow a condition, and a condition has to be last; buttons / list may go anywhere', () => {
+    let doc = insertStep(emptyDoc(), 0, 0, newStep('message', []));
+    doc = insertStep(doc, 0, 1, newStep('condition', allSteps(doc)));
+    expect(allSteps(insertStep(doc, 0, 2, newStep('message', [])))).toHaveLength(2);
+    expect(allSteps(insertStep(doc, 0, 0, newStep('condition', [])))).toHaveLength(2);
+    const before = insertStep(base(), 0, 0, newStep('list', []));
+    expect(allSteps(before)).toHaveLength(3);
+    expect(allSteps(before)[0]!.type).toBe('list');
+  });
+
+  it('a step added after buttons is what every button carries on with, and it round-trips', () => {
     const doc = base();
-    const after = insertStep(doc, 0, 2, newStep('message', []));
-    expect(allSteps(after)).toHaveLength(2);
-    const before = insertStep(doc, 0, 0, newStep('list', []));
-    expect(allSteps(before)).toHaveLength(2);
+    const b = allSteps(doc)[1]!;
+    const next = newStep('message', allSteps(doc));
+    const after = insertStep(doc, 0, 2, next);
+    expect(allSteps(after).map((s) => s.id)).toEqual([allSteps(doc)[0]!.id, b.id, next.id]);
+    expect(allSteps(after)[1]!.links).toEqual([LINK_NEXT]);
+    const graph = toGraph(after);
+    expect(
+      graph.flowEdges.some(
+        (e) => e.source === b.id && e.sourceHandle === 'p0' && e.target === next.id,
+      ),
+    ).toBe(true);
+    const back = toSimple(graph);
+    expect(back.ok).toBe(true);
+    if (back.ok) {
+      expect(back.doc.journeys).toHaveLength(1);
+      expect(allSteps(back.doc).map((s) => s.id)).toEqual([allSteps(doc)[0]!.id, b.id, next.id]);
+      expect(allSteps(back.doc)[1]!.links).toEqual([LINK_NEXT]);
+      expect(allSteps(back.doc)[1]!.data.carryOn).toBeUndefined();
+    }
+  });
+
+  it('a button set to end stays ended when a step follows, and removing the next step ends the rest', () => {
+    const doc = base();
+    const b = allSteps(doc)[1]!;
+    const two = updateStep(doc, b.id, { data: { options: ['A', 'B'] } });
+    const next = newStep('message', allSteps(two));
+    let after = insertStep(two, 0, 2, next);
+    after = updateStep(after, b.id, { links: [LINK_NEXT, null] });
+    const graph = toGraph(after);
+    expect(graph.flowEdges.filter((e) => e.source === b.id).map((e) => e.sourceHandle)).toEqual([
+      'p0',
+    ]);
+    const back = toSimple(graph);
+    expect(back.ok && allSteps(back.doc)[1]!.links).toEqual([LINK_NEXT, null]);
+    expect(allSteps(removeStep(after, next.id))[1]!.links).toEqual([null, null]);
   });
 
   it('keeps one link per button when the buttons change', () => {
@@ -238,13 +280,18 @@ describe('editing a simple doc', () => {
   it('moves a step up or down but never past the end buttons step; duplicates a plain step', () => {
     let doc = base();
     const [a, b] = allSteps(doc);
-    expect(allSteps(moveStep(doc, a!.id, 1)).map((s) => s.id)).toEqual([a!.id, b!.id]);
+    expect(allSteps(moveStep(doc, a!.id, 1)).map((s) => s.id)).toEqual([b!.id, a!.id]);
     doc = insertStep(doc, 0, 1, newStep('delay', allSteps(doc)));
     const [x, d] = allSteps(doc);
     expect(allSteps(moveStep(doc, x!.id, 1)).map((s) => s.id)[0]).toBe(d!.id);
     const dup = duplicateStep(doc, x!.id);
     expect(allSteps(dup)).toHaveLength(4);
-    expect(duplicateStep(doc, allSteps(doc).at(-1)!.id)).toBe(doc);
+    const c = newStep('condition', allSteps(doc));
+    const withCond = insertStep(doc, 0, 3, c);
+    expect(duplicateStep(withCond, c.id)).toBe(withCond);
+    expect(allSteps(moveStep(withCond, allSteps(withCond)[1]!.id, 1)).map((s) => s.id)[2]).not.toBe(
+      c.id,
+    );
   });
 
   it('gives every new question and menu its own variable name', () => {

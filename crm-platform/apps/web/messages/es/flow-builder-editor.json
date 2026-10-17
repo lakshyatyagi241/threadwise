@@ -685,6 +685,7 @@
         "anotherPart": "Otra parte de este flujo. Se ejecuta cuando un botón o fila de lista lleva aquí{lost, select, true {: aún no lleva nada aquí, así que nunca se ejecutaría.} other {.}}",
         "addFirstStep": "Añade el primer paso",
         "branchingEnds": "Este {kind, select, list {lista} other {conjunto de botones}} cierra esta parte: lo que se envíe después depende de lo que elija el cliente.",
+        "optionsCarryOn": "Cada {kind, select, list {fila} other {botón}} puede iniciar su propio flujo o continuar con el siguiente paso de abajo.",
         "thenGoTo": "Luego ir a",
         "confirmImport": {
           "title": "¿Reemplazar este flujo con el archivo?",
@@ -720,7 +721,7 @@
             "answer": "Responder",
             "action": "Acciones"
           },
-          "blockedTitle": "Los botones y las listas cierran un flujo, así que solo pueden ir al final.",
+          "blockedTitle": "Este paso termina esta parte, por lo que solo puede ir al final.",
           "blockedTitleFaq": "Responder con FAQ tiene dos salidas, por lo que solo puede ir al final."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "A dónde lleva",
           "linkEnds": "Termina aquí (no se envía nada más)",
+          "linkNext": "Continúa con el siguiente paso",
           "linkOption": "{stage} · {label}{self, select, true { (este paso)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Llevar a un flujo nuevo…",
           "question": "Pregunta",
