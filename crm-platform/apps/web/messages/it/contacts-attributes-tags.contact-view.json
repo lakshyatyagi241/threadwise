@@ -1,0 +1,183 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Anteprima rapida del contatto",
+        "loading": "Caricamento del contatto...",
+        "notFoundTitle": "Contatto non trovato",
+        "notFound": "Potrebbe essere stato eliminato oppure potresti non avere accesso.",
+        "close": "Chiudi",
+        "seeAll": "Vedi tutti i dettagli",
+        "previous": "Contatto precedente",
+        "next": "Contatto successivo",
+        "position": "{index} di {total}",
+        "rail": "Sezioni del contatto",
+        "moreTabs": "Altre sezioni",
+        "more": "+{count} altre",
+        "tab_overview": "Panoramica",
+        "tab_activities": "Attività",
+        "tab_notes": "Note",
+        "tab_tasks": "Task",
+        "tab_meetings": "Riunioni",
+        "tab_files": "File",
+        "tab_conversations": "Conversazioni",
+        "tab_stats": "Statistiche di comunicazione",
+        "tab_details": "Proprietà",
+        "openFull": "Apri nella pagina dei dettagli"
+      },
+      "actions": {
+        "note": "Nota",
+        "task": "Attività",
+        "meeting": "Riunione",
+        "addCompany": "Aggiungi azienda",
+        "changeCompany": "Cambia azienda",
+        "channels": "Scrivi o chiama questo contatto",
+        "more": "Altre azioni",
+        "edit": "Modifica contatto",
+        "delete": "Elimina contatto",
+        "conflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
+        "deleteFailed": "Impossibile eliminare il contatto."
+      },
+      "header": {
+        "jobTitle": "Qualifica",
+        "jobTitlePlaceholder": "Aggiungi qualifica...",
+        "editJobTitle": "Modifica qualifica",
+        "jobTitleConflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
+        "jobTitleFailed": "Impossibile salvare la qualifica. Riprova.",
+        "leadScore": "Punteggio del lead",
+        "leadScoreAria": "Punteggio del lead {score}. Mostra i dettagli del punteggio.",
+        "owner": "Responsabile"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Sito web",
+        "open": "Apri il profilo {network}"
+      },
+      "subscription": {
+        "title": "Stato dell'iscrizione",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "E-mail",
+          "sms": "SMS"
+        },
+        "yes": "Sì",
+        "no": "No",
+        "optedOut": "Ha rifiutato i messaggi di marketing",
+        "optedOutNote": "Questo contatto ha rifiutato i messaggi di marketing, quindi tutti i canali mostrano No.",
+        "proof": "La prova di ogni opt-in è nel registro del consenso.",
+        "openConsent": "Apri la scheda del consenso"
+      },
+      "score": {
+        "title": "Punteggio del lead",
+        "details": "Dettagli del punteggio",
+        "hideDetails": "Nascondi dettagli",
+        "none": "Non ancora valutato",
+        "aria": "Punteggio del lead {score}, {band}"
+      },
+      "owner": {
+        "title": "Responsabile e assegnazione",
+        "owner": "Responsabile",
+        "tags": "Tag",
+        "groups": "Gruppi"
+      },
+      "location": {
+        "title": "Posizione",
+        "address": "Indirizzo",
+        "country": "Paese",
+        "timeZone": "Fuso orario",
+        "language": "Lingua"
+      },
+      "compliance": {
+        "title": "Privacy",
+        "optedOut": "Ha rifiutato il marketing",
+        "allowed": "Marketing consentito",
+        "noFlags": "Nessun indicatore di privacy"
+      },
+      "overview": {
+        "information": "Contatto"
+      },
+      "tabs": {
+        "info": "Informazioni di contatto",
+        "social": "Social media",
+        "source": "Origine del lead",
+        "custom": "Campi personalizzati"
+      },
+      "info": {
+        "firstName": "Nome",
+        "lastName": "Cognome",
+        "email": "E-mail",
+        "phone": "Telefono",
+        "fax": "Fax",
+        "company": "Azienda",
+        "jobTitle": "Qualifica",
+        "language": "Lingua",
+        "address": "Indirizzo",
+        "memo": "Promemoria",
+        "contactId": "ID contatto",
+        "createdAt": "Creato il",
+        "lastActivity": "Ultima attività",
+        "source": "Origine",
+        "noCustomFields": "Questo contatto non ha ancora valori nei campi personalizzati.",
+        "noLeadSource": "Nessuna origine del lead registrata per questo contatto.",
+        "dateOfBirth": "Data di nascita"
+      },
+      "details": {
+        "title": "Dettagli del contatto",
+        "stage": "Fase del ciclo di vita",
+        "otherProperties": "Altre proprietà"
+      },
+      "company": {
+        "title": "Azienda",
+        "none": "Questo contatto non è collegato a nessuna azienda.",
+        "hint": "Cerca un'azienda, oppure scrivi un nuovo nome per crearla.",
+        "saved": "Azienda salvata.",
+        "removed": "Azienda rimossa da questo contatto.",
+        "failed": "Impossibile salvare l'azienda. Riprova.",
+        "conflict": "Qualcuno ha modificato prima questo contatto. È stato ricaricato; riprova."
+      },
+      "sections": {
+        "lead-source": "Origine del lead"
+      },
+      "nav": {
+        "back": "Torna all'elenco",
+        "label": "Sezioni del contatto",
+        "contactDetails": "Dettagli del contatto",
+        "related": "Correlati",
+        "section": {
+          "overview": "Panoramica",
+          "activities": "Attività",
+          "conversations": "Conversazioni",
+          "details": "Dettagli del contatto",
+          "stats": "Statistiche di comunicazione",
+          "notes": "Note",
+          "meetings": "Riunioni",
+          "files": "File",
+          "tasks": "Attività da svolgere",
+          "deals": "Trattative",
+          "appointments": "Appuntamenti",
+          "sales": "Fatture e documenti",
+          "lead-source": "Origine del lead",
+          "company": "Azienda",
+          "consent": "Consenso",
+          "history": "Cronologia dei campi"
+        }
+      },
+      "stages": {
+        "title": "Ciclo di vita",
+        "stages": "Fase del ciclo di vita",
+        "status": "Stato",
+        "noStatuses": "Questa fase non ha stati.",
+        "statusChanged": "Stato impostato su {status}.",
+        "conflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
+        "forbidden": "Non hai il permesso di modificare questo contatto.",
+        "statusFailed": "Impossibile cambiare lo stato. Riprova."
+      }
+    }
+  }
+}

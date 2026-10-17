@@ -292,10 +292,15 @@ describe('response clocks', () => {
         { enabled: true, from: '09:00', to: '17:00' },
       ]),
     );
+    // The zone is the one the owner sets on the workspace (organizations.settings), not workspace_settings.timezone.
     await h.owner.query(
-      `INSERT INTO workspace_settings (org_id, business_hours, timezone) VALUES ($1, $2::jsonb, 'Asia/Kolkata')
-       ON CONFLICT (org_id) DO UPDATE SET business_hours = $2::jsonb, timezone = 'Asia/Kolkata'`,
+      `INSERT INTO workspace_settings (org_id, business_hours) VALUES ($1, $2::jsonb)
+       ON CONFLICT (org_id) DO UPDATE SET business_hours = $2::jsonb`,
       [t2.orgId, JSON.stringify({ days })],
+    );
+    await h.owner.query(
+      `UPDATE organizations SET settings = settings || '{"timezone":"Asia/Kolkata"}'::jsonb WHERE id = $1`,
+      [t2.orgId],
     );
     const c = await inbox.conversation(t2, ch2.id, {});
     // Monday 12 October 2026 10:00Z is 15:30 in Kolkata: 90 minutes remain today, 30 carry to Tuesday 09:00 IST (03:30Z)

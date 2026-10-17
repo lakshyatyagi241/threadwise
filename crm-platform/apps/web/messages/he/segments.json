@@ -23,13 +23,18 @@
       "imported": "יובא מקובץ",
       "createdAt": "נוצר",
       "updatedAt": "עודכן לאחרונה",
-      "lastActivityAt": "פעילות אחרונה"
+      "lastActivityAt": "פעילות אחרונה",
+      "minor": "מסומן כקטין",
+      "dateOfBirth": "תאריך לידה",
+      "age": "גיל (שנים)",
+      "timezone": "אזור זמן"
     },
     "fieldGroups": {
       "journey": "מסלול",
       "who": "מי",
       "activity": "פעילות",
-      "properties": "מאפיינים"
+      "properties": "מאפיינים",
+      "company": "מאפיין חברה"
     },
     "operators": {
       "equals": "הוא",

@@ -1,0 +1,98 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Deals",
+        "loading": "Deals werden geladen",
+        "empty": "Für diesen Kontakt gibt es noch keine Deals.",
+        "unavailable": "Deals sind in Ihrem Tarif nicht verfügbar, oder Ihre Rolle hat keinen Zugriff darauf.",
+        "listLabel": "Deals dieses Kontakts",
+        "openRollup": "{count, plural, one {# offener Deal} other {# offene Deals}}",
+        "wonRollup": "{count, plural, one {# gewonnener Deal} other {# gewonnene Deals}}",
+        "noValue": "Kein Wert",
+        "capped": "Die ersten {count} Deals werden angezeigt. Die Summen oben gelten für alle Deals.",
+        "pipeline": "Pipeline {name}",
+        "closes": "Voraussichtlicher Abschluss {date}",
+        "owner": "Verantwortlicher {name}",
+        "status": {
+          "open": "Offen",
+          "won": "Gewonnen",
+          "lost": "Verloren"
+        }
+      },
+      "conversations": {
+        "title": "Gespräche",
+        "loading": "Gespräche werden geladen",
+        "empty": "Für diesen Kontakt wurden keine Gespräche gefunden.",
+        "listLabel": "Gespräche dieses Kontakts",
+        "unread": "{count, plural, one {# ungelesene Nachricht} other {# ungelesene Nachrichten}}",
+        "open": "Öffnen",
+        "openLabel": "Gespräch {title} öffnen",
+        "noPreview": "Noch keine Nachrichten",
+        "lastMessage": "Letzte Nachricht {time}",
+        "assignedTo": "Zugewiesen an {name}",
+        "unassigned": "Nicht zugewiesen",
+        "footnote": "Gefunden über Telefonnummer, E-Mail-Adresse oder Name des Kontakts. Archivierte Gespräche werden nicht angezeigt.",
+        "status": {
+          "open": "Offen",
+          "snoozed": "Zurückgestellt",
+          "resolved": "Gelöst",
+          "closed": "Geschlossen",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Feldverlauf",
+        "title": "Feldverlauf des Kontakts",
+        "close": "Schließen",
+        "loading": "Verlauf wird geladen",
+        "empty": "Für diesen Kontakt wurden noch keine Feldänderungen aufgezeichnet.",
+        "loadMore": "Mehr laden",
+        "changedTo": "geändert zu",
+        "noValue": "leer",
+        "by": "Von {actor}",
+        "actor": {
+          "user": "einem Benutzer",
+          "system": "dem System",
+          "api": "der API"
+        },
+        "fields": {
+          "name": "Name",
+          "firstName": "Vorname",
+          "lastName": "Nachname",
+          "email": "E-Mail",
+          "phone": "Telefon",
+          "companyId": "Unternehmen",
+          "ownerId": "Verantwortlicher",
+          "lifecycleStage": "Lebenszyklusphase",
+          "lifecycleState": "Lebenszyklusstatus",
+          "status": "Status",
+          "lostReason": "Verlustgrund",
+          "leadScore": "Lead-Score",
+          "source": "Quelle",
+          "isUnsubscribed": "Abgemeldet"
+        }
+      },
+      "stats": {
+        "title": "Kommunikationsstatistik",
+        "loading": "Statistik wird geladen",
+        "conversations": "Gespräche",
+        "unread": "Ungelesene Nachrichten",
+        "lastInbound": "Letzte empfangene Nachricht",
+        "lastOutbound": "Letzte gesendete Nachricht",
+        "calls": "Anrufe",
+        "callsAnswered": "Angenommene Anrufe",
+        "callsMissed": "Verpasste Anrufe",
+        "callMinutes": "Anrufminuten",
+        "openTasks": "Offene Aufgaben",
+        "leadScore": "Lead-Score",
+        "lastActivity": "Letzte Aktivität",
+        "created": "Erstellt",
+        "none": "Noch keine",
+        "atLeast": "{count}+",
+        "footnote": "Die Nachrichtenzahlen beziehen sich auf die Gespräche, die für diesen Kontakt gefunden wurden (nach Telefonnummer, E-Mail-Adresse oder Name). Die Anrufzahlen beziehen sich auf das letzte Jahr und werden nach Telefonnummer oder Name zugeordnet.",
+        "callsPartial": "Es wurden mehr Anrufe gefunden, als gelesen werden konnten, daher können die Anrufzahlen zu niedrig sein."
+      }
+    }
+  }
+}

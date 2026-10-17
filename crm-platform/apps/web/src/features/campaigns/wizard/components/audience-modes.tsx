@@ -6,7 +6,7 @@ import { cn } from '@crm/ui';
 import { Chip } from './parts';
 import type { AudienceTally } from '../lib/audience';
 
-export const AUDIENCE_MODES = ['contacts', 'groups', 'segments', 'csv'] as const;
+export const AUDIENCE_MODES = ['contacts', 'groups', 'segments', 'csv', 'previous'] as const;
 export type AudienceMode = (typeof AUDIENCE_MODES)[number];
 
 /** What a mode's pill shows beside its name: how much it holds right now (nothing when it holds nothing). */
@@ -20,6 +20,8 @@ export function modeBadge(mode: AudienceMode, t: AudienceTally): string | null {
       return t.segments > 0 ? String(t.segments) : null;
     case 'csv':
       return t.csv > 0 ? t.csv.toLocaleString() : null;
+    case 'previous':
+      return t.previous > 0 ? String(t.previous) : null;
   }
 }
 
@@ -62,6 +64,7 @@ export function AudienceModes({
     groups: t('modeGroups'),
     segments: t('modeSegments'),
     csv: t('modeCsv'),
+    previous: t('modePrevious'),
   };
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -120,6 +123,7 @@ export function AudienceSummary({
   allTotal: number | null;
 }) {
   const t = useTranslations('campaigns.wizard.audience');
+  const tp = useTranslations('campaigns.previousSends');
   const chips: ReactNode[] = [];
   if (tally.contacts > 0) chips.push(t('chipContacts', { count: tally.contacts }));
   if (tally.allMatching)
@@ -129,6 +133,13 @@ export function AudienceSummary({
   if (tally.groups > 0) chips.push(t('chipGroups', { count: tally.groups }));
   if (tally.segments > 0) chips.push(t('chipSegments', { count: tally.segments }));
   if (tally.csv > 0) chips.push(t('chipCsv', { count: tally.csv }));
+  if (tally.previous > 0)
+    chips.push(
+      t('chipPrevious', {
+        count: tally.previous,
+        outcome: tp(`outcomes.${tally.previousOutcome}`),
+      }),
+    );
   if (tally.hubSelection) chips.push(t('chipHub'));
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5" data-testid="audience-summary">

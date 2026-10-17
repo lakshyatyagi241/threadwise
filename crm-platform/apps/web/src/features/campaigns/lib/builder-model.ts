@@ -3,7 +3,9 @@ import {
   type CampaignConfig,
   type CampaignType,
   type CreateCampaignInput,
+  type PreviousSendsAudience,
 } from '@crm/contracts';
+import { EMPTY_PREVIOUS, hasPrevious, sanitizePrevious } from './previous-sends';
 
 /** What the campaign builder decides without the network (TW-CAMP-003 to 010). Pure. */
 
@@ -16,6 +18,9 @@ export interface ButtonRow {
 export interface BuilderForm {
   name: string;
   senderKey: string;
+  /** The numbers a send is shared across when more than one is ticked (empty: the one number in `senderKey`), and their share weights. */
+  senderKeys: string[];
+  senderShare: Record<string, number>;
   type: CampaignType;
   customMessage: string;
   customMessageB: string;
@@ -53,11 +58,15 @@ export interface BuilderForm {
   segmentIds: string[];
   manualNumbers: string;
   csvText: string;
+  /** Earlier broadcasts and campaigns whose recipients are added (not rebuilt on edit: the campaign holds its recipients as contacts). */
+  previousSends: PreviousSendsAudience;
 }
 
 export const EMPTY_FORM: BuilderForm = {
   name: '',
   senderKey: '',
+  senderKeys: [],
+  senderShare: {},
   type: 'text',
   customMessage: '',
   customMessageB: '',
@@ -95,6 +104,7 @@ export const EMPTY_FORM: BuilderForm = {
   segmentIds: [],
   manualNumbers: '',
   csvText: '',
+  previousSends: EMPTY_PREVIOUS,
 };
 
 /** Types whose message is typed in the builder. */
@@ -146,6 +156,8 @@ export function fromConfig(c: CampaignConfig, zone: string): BuilderForm {
     ...EMPTY_FORM,
     name: c.name,
     senderKey: c.senderKey ?? '',
+    senderKeys: c.senderKeys ?? [],
+    senderShare: c.senderShare ?? {},
     type: c.type,
     customMessage: c.customMessage ?? '',
     customMessageB: c.customMessageB ?? '',
@@ -203,6 +215,10 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
   return {
     name: f.name.trim(),
     senderKey: f.senderKey || null,
+    // Sharing needs a typed or template message from phone numbers: a mailbox or a flow has no number to share.
+    ...(f.senderKeys.length > 1 && !email && f.type !== 'flow'
+      ? { senderKeys: f.senderKeys, senderShare: f.senderShare }
+      : {}),
     type: f.type,
     status: opts.draft ? 'draft' : null,
     abTesting: email ? false : f.abTesting,
@@ -246,6 +262,7 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     segmentIds: f.segmentIds,
     manualNumbers: f.manualNumbers,
     csvText: f.csvText,
+    ...(hasPrevious(f.previousSends) ? { previousSends: sanitizePrevious(f.previousSends) } : {}),
   };
 }
 
@@ -291,6 +308,7 @@ export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[]
     f.groupIds.length +
     f.tagIds.length +
     f.segmentIds.length +
+    f.previousSends.sends.length +
     f.manualNumbers.trim().length +
     f.csvText.trim().length;
   if (!o.draft && audience === 0) out.push('audience');

@@ -144,7 +144,10 @@
         "booking": "Buchungsseite",
         "commerce": "Shop-Kasse",
         "lead": "Lead-Erfassung",
-        "gpc": "Global Privacy Control"
+        "wa_form": "WhatsApp-Formular",
+        "gpc": "Global Privacy Control",
+        "dob": "Geburtsdatum oder Alter",
+        "declaration": "Alter nicht bestätigt"
       },
       "by": "von {name}",
       "evidence": {
@@ -227,7 +230,9 @@
           "noteHint": "Zum Beispiel: Papierformular am Schalter unterschrieben. Schreiben Sie weder Namen noch Kontaktdaten des Vormunds.",
           "ref": "Referenz (optional)",
           "refHint": "Eine Formularnummer oder Dokument-ID, die Sie später nachschlagen können."
-        }
+        },
+        "minorFrom": "Aus dem angegebenen Geburtsdatum oder Alter gesetzt. Wird am {date} automatisch aufgehoben, sofern keine Person es beibehält.",
+        "minorFromDeclaration": "Gesetzt, weil das Alter in einem Formular nicht bestätigt wurde. Bleibt bestehen, bis eine Person es aufhebt."
       }
     },
     "composer": {
@@ -351,7 +356,8 @@
         "consent_declined": "Nicht erlaubt: Die Person hat abgelehnt.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Nicht erlaubt: Dieser Kontakt ist als minderjährig markiert und Ihr Arbeitsbereich hält Marketing zurück.",
-        "sale_share_opted_out": "Nicht erlaubt: Der Kontakt hat dem Verkauf oder der Weitergabe seiner Daten widersprochen."
+        "sale_share_opted_out": "Nicht erlaubt: Der Kontakt hat dem Verkauf oder der Weitergabe seiner Daten widersprochen.",
+        "on_dnc_list": "Auf Ihrer „Nicht anrufen“-Liste: keine Marketinganrufe oder -SMS an diese Nummer"
       }
     },
     "notice": {

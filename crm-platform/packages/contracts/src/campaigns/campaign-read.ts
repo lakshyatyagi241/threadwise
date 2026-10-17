@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { previousSendOptionSchema } from '../broadcasts/previous-sends';
 import { sendHoldReasonSchema } from '../compliance/send-window';
+import { senderBreakdownLineSchema } from './sender-split';
 import {
   composeSenderSchema,
   composeTemplateSchema,
@@ -114,6 +116,8 @@ export const campaignBuilderSchema = z.object({
     }),
   ),
   flows: z.array(z.object({ id: uuidSchema, name: z.string() })),
+  /** Earlier broadcasts and campaigns that went out, newest first (the "Previous sends" source). */
+  previousSends: z.array(previousSendOptionSchema).default([]),
   /** True when the default engine is WABA: only Meta-approved templates may be sent. */
   requiresApprovedTemplates: z.boolean(),
 });
@@ -157,6 +161,8 @@ export const campaignDetailSchema = z.object({
       clicks: z.number().int(),
     }),
   ),
+  /** Per number: recipients, sent, delivered and failed, when the send was shared across several numbers; empty for one number. */
+  senders: z.array(senderBreakdownLineSchema).default([]),
   preview: z.object({
     body: z.string(),
     header: z.string().nullable(),

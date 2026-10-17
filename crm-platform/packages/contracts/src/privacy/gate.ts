@@ -50,6 +50,11 @@ export const CONSENT_GATE_REASONS = [
   'subject_minor',
   /** The contact opted out of the sale or sharing of their personal information (CCPA / CPRA, or the Global Privacy Control signal). */
   'sale_share_opted_out',
+  /**
+   * Marketing by voice or SMS to a number on the workspace's Do-Not-Call list (BL-181). Checked after a withdrawal and before the minor
+   * hold; WhatsApp, email and service messages are never held by it.
+   */
+  'on_dnc_list',
   // needs_notice
   /** The purpose needs its versioned notice delivered first (a recording announcement, an AI disclosure). */
   'notice_required',

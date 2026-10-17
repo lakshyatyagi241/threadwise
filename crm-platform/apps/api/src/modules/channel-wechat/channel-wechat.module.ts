@@ -22,6 +22,8 @@ import { InboundService } from './inbound.service';
 import { WebhookController } from './webhook.controller';
 import { WechatChannelAdapter } from './wechat-channel.adapter';
 import { WechatTokenService } from './wechat-token.service';
+import { SendWindowModule } from '../compliance-center';
+import { ContactConsentModule } from '../contact-consent';
 
 /** WeChat sends `text/xml`: the Express body parsers of the API read JSON and forms only. A packet is a few kilobytes (64 KiB is far above any). */
 const XML_BODY_LIMIT = '64kb';
@@ -31,7 +33,7 @@ const XML_BODY_LIMIT = '64kb';
  * through the channel adapter, and mass-send broadcasts.
  */
 @Module({
-  imports: [ChatConversationsModule],
+  imports: [ChatConversationsModule, SendWindowModule, ContactConsentModule],
   controllers: [ChannelsController, BroadcastsController, WebhookController],
   providers: [
     CryptoService,

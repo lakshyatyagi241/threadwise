@@ -170,6 +170,26 @@
         "titleNoName": "Une conversation reportée est de retour dans votre liste",
         "titleTeam": "{name} est de retour pour votre équipe",
         "titleTeamNoName": "Une conversation reportée est de retour pour votre équipe"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "Renouvellement de {name} le {date, date, medium}",
+        "bodyAuto": "Votre carte sera débitée automatiquement à cette date pour renouveler {name}. Résiliez avant cette date pour l’éviter.",
+        "titleManual": "Période de {name} payée jusqu’au {date, date, medium}",
+        "bodyManual": "{name} ne se renouvelle pas automatiquement. Payez à nouveau avant cette date pour que l’application continue de fonctionner sans interruption.",
+        "titleEnding": "{name} prend fin le {date, date, medium}",
+        "bodyEnding": "Vous avez résilié {name} : l’application cessera de fonctionner à cette date. Abonnez-vous de nouveau avant cette date pour la conserver.",
+        "title": "{name} : renouvellement à venir",
+        "titleNoName": "Renouvellement d’une application payante à venir"
+      },
+      "marketplace_payment_failed": {
+        "title": "Échec du paiement de {name}",
+        "body": "Le paiement par carte n’a pas abouti. L’application continue de fonctionner quelques jours pendant que le prestataire de paiement réessaie. Payez maintenant, ou corrigez votre moyen de paiement, pour éviter une suspension.",
+        "titleNoName": "Échec du paiement d’une application payante"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Abonnement à {name} terminé",
+        "body": "L’application est en pause et ses données et paramètres sont conservés. Abonnez-vous de nouveau pour la réactiver.",
+        "titleNoName": "Abonnement à une application payante terminé"
       }
     },
     "live": {
@@ -202,7 +222,10 @@
         "device_group_join_request": "Demande d'adhésion à un groupe",
         "device_group_removed": "Retiré d'un groupe WhatsApp",
         "test": "Notification de test",
-        "snooze_wake": "Conversation reportée de retour"
+        "snooze_wake": "Conversation reportée de retour",
+        "marketplace_renewal_due": "Renouvellement d’une application payante à venir",
+        "marketplace_payment_failed": "Échec du paiement d’une application payante",
+        "marketplace_subscription_ended": "Abonnement d’une application payante terminé"
       },
       "generic": "Vous avez une nouvelle notification",
       "paused": "Les mises à jour en direct sont en pause, les nouvelles alertes peuvent donc arriver avec jusqu’à une minute de retard. Rechargez la page pour vous reconnecter."
@@ -394,6 +417,18 @@
         "snooze_wake": {
           "label": "La conversation reportée revient",
           "hint": "Une conversation reportée se rouvre à l'heure choisie et vous est attribuée, ou à votre équipe."
+        },
+        "marketplace_renewal_due": {
+          "label": "Rappel de renouvellement d’une application payante",
+          "hint": "La période d’une application payante se termine dans quelques jours : elle se renouvelle par carte, est payée jusqu’à une date, ou a été résiliée et prend fin."
+        },
+        "marketplace_payment_failed": {
+          "label": "Échec du paiement d’une application payante",
+          "hint": "Le renouvellement par carte d’une application payante n’a pas abouti et nécessite votre attention."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Abonnement d’une application payante terminé",
+          "hint": "L’abonnement d’une application payante est terminé et l’application a été mise en pause."
         }
       },
       "loading": "Chargement de vos préférences",

@@ -4,6 +4,8 @@
  */
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { pageInfoSchema } from '../common/pagination';
+import { callLogSourceSchema, callOutcomeSchema } from './call-logging';
 import { callRecordingLifecycleSchema } from './recording';
 
 // --- vocabulary --------------------------------------------------------------------------------------------------------
@@ -62,6 +64,8 @@ export const callLogListQuerySchema = z.object({
   agentId: uuidSchema.optional(),
   /** A phone number (digits, a plus or spaces are ignored) or part of the contact's name. */
   q: z.string().trim().max(80).optional(),
+  /** Only calls that reached the log this way (`whatsapp` or one of the call log entry sources). Absent: all of them. */
+  source: callLogSourceSchema.optional(),
   page: z.coerce.number().int().min(1).max(100000).default(1),
   pageSize: z.coerce.number().int().min(1).max(CALL_LOG_MAX_PAGE_SIZE).default(CALL_LOG_PAGE_SIZE),
 });
@@ -86,6 +90,12 @@ export const callLogRowSchema = z.object({
   durationSec: z.number().int().nonnegative(),
   endReason: z.string().nullable(),
   hasRecording: z.boolean(),
+  /** How the call reached the log. Absent (an older server) means `whatsapp`. */
+  source: callLogSourceSchema.optional(),
+  /** What came of a call that is not a WhatsApp call (the WhatsApp ones are read from `status` and `endReason`). */
+  outcome: callOutcomeSchema.nullable().optional(),
+  /** The first words of the notes a person wrote on a logged call. */
+  notesPreview: z.string().nullable().optional(),
 });
 export type CallLogRow = z.infer<typeof callLogRowSchema>;
 
@@ -150,6 +160,9 @@ export const callLogDetailSchema = z.object({
     /** Why the call failed, when it did (the reason Meta or the dial gave). */
     failureReason: z.string().nullable(),
     conversationId: uuidSchema.nullable(),
+    /** The notes on a logged call (call log entries only). */
+    notes: z.string().nullable().optional(),
+    followUpTaskId: uuidSchema.nullable().optional(),
   }),
   timeline: z.array(callTimelineEntrySchema),
   recording: z.object({
@@ -175,6 +188,8 @@ export type CallPlayback = z.infer<typeof callPlaybackSchema>;
 export const callAnalyticsQuerySchema = z.object({
   ...rangeFields,
   numberId: uuidSchema.optional(),
+  /** Only calls that reached the log this way. Absent: all of them. */
+  source: callLogSourceSchema.optional(),
 });
 export type CallAnalyticsQuery = z.infer<typeof callAnalyticsQuerySchema>;
 
@@ -212,6 +227,17 @@ export const callAnalyticsSchema = z.object({
       totalMinutes: z.number().int().nonnegative(),
     }),
   ),
+  /** The calls of the range by how they reached the log; only the sources with a call. Absent on an older server. */
+  bySource: z
+    .array(
+      z.object({
+        source: callLogSourceSchema,
+        calls: z.number().int().nonnegative(),
+        answered: z.number().int().nonnegative(),
+        missed: z.number().int().nonnegative(),
+      }),
+    )
+    .optional(),
   /** Calls started in each hour of each weekday (0 = Sunday, 0 to 23): only the cells with a call. */
   heatmap: z.array(
     z.object({
@@ -222,3 +248,12 @@ export const callAnalyticsSchema = z.object({
   ),
 });
 export type CallAnalytics = z.infer<typeof callAnalyticsSchema>;
+
+// --- a contact's calls ---------------------------------------------------------------------------------------------------------
+
+/** `GET /v2/contacts/:id/calls`: the WhatsApp calls and the logged calls of one contact, newest first. */
+export const contactCallsPageSchema = z.object({
+  data: z.array(callLogRowSchema),
+  page: pageInfoSchema,
+});
+export type ContactCallsPage = z.infer<typeof contactCallsPageSchema>;

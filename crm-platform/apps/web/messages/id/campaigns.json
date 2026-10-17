@@ -306,7 +306,11 @@
         "numbersCount": "{count} nomor",
         "emailNote": "Email dikirim ke alamat setiap kontak. Kontak tanpa alamat email, alamat ganda, dan kontak yang berhenti berlangganan dilewati.",
         "emailSkipped": "Penerima terpilih tanpa alamat email (akan dilewati): {count}",
-        "emailNoAddress": "Nomor yang diketik dan baris CSV tidak memiliki alamat email, sehingga dilewati. Pilih kontak, grup, tag, atau segmen."
+        "emailNoAddress": "Nomor yang diketik dan baris CSV tidak memiliki alamat email, sehingga dilewati. Pilih kontak, grup, tag, atau segmen.",
+        "previousTitle": "Pengiriman sebelumnya",
+        "previousHint": "Tambahkan orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, membalas, atau mengklik.",
+        "previousEstimate": "{count, plural, other {Hingga # orang dari pengiriman sebelumnya (perkiraan: orang yang ada di dua pengiriman dihitung dua kali).}}",
+        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang."
       },
       "message": {
         "title": "Pesan",
@@ -594,7 +598,8 @@
         "subject": "Subjek",
         "subjectFallback": "Nama kampanye",
         "skippedNoEmail": "Dilewati (tanpa alamat email)",
-        "estimateEmail": "Ini perkiraan: kontak yang ada di dua grup dihitung dua kali. Kontak tanpa alamat email di grup, tag, dan segmen dilewati saat kampanye berjalan."
+        "estimateEmail": "Ini perkiraan: kontak yang ada di dua grup dihitung dua kali. Kontak tanpa alamat email di grup, tag, dan segmen dilewati saat kampanye berjalan.",
+        "previousSends": "Pengiriman sebelumnya (hingga)"
       },
       "ai": {
         "open": "Buat dengan AI",
@@ -1205,7 +1210,12 @@
         "pickSender": "Pilih nomor",
         "classicOption": "pembuat klasik",
         "buildWithAi": "Buat dengan AI",
-        "aiNote": "Buat draf templat baru dengan AI. Anda meninjaunya di halaman templat; setelah itu Meta meninjaunya sebelum dapat dikirim, jadi kembali dan pilih templat ini setelah disetujui."
+        "aiNote": "Buat draf templat baru dengan AI. Anda meninjaunya di halaman templat; setelah itu Meta meninjaunya sebelum dapat dikirim, jadi kembali dan pilih templat ini setelah disetujui.",
+        "shareToggle": "Bagi pengiriman ini ke beberapa nomor",
+        "shareHint": "Centang nomor pengirim dan beri masing-masing bagian. Audiens dibagi menurut bagian tersebut dan setiap kontak menerima pesan dari satu nomor saja. Bagian yang kosong atau 0 dihitung 1.",
+        "shareWeight": "Bagian",
+        "shareWeightLabel": "Bagian {name}",
+        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang."
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
@@ -1254,7 +1264,8 @@
           "contacts": "Kontak",
           "groups": "Grup",
           "segments": "Segmen",
-          "csv": "File CSV"
+          "csv": "File CSV",
+          "previous": "Pengiriman sebelumnya"
         },
         "groupsHint": "Grup adalah daftar pemasaran Anda. Semua orang di grup yang Anda centang disertakan.",
         "segmentsHint": "Segmen terisi sendiri berdasarkan aturan. Semua orang di segmen yang Anda centang disertakan.",
@@ -1350,7 +1361,10 @@
         },
         "csvIssuesMore": "{count} lainnya ada di unduhan.",
         "csvConsentOn": "Anda mengonfirmasi persetujuan untuk nomor-nomor ini. Nomor ini dicatat sebagai setuju saat siaran diluncurkan.",
-        "csvConsentVersion": "Versi pemberitahuan: {version}."
+        "csvConsentVersion": "Versi pemberitahuan: {version}.",
+        "modePrevious": "Kirim ke pengiriman sebelumnya",
+        "previousHint": "Targetkan ulang orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, tidak membaca, membalas, atau mengklik.",
+        "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})"
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",
@@ -1429,7 +1443,11 @@
         "chargedPlan": "Dibebankan ke dompet Anda sekarang: {amount} (paket Anda menanggung {covered} dari pesan ini)",
         "chargedWallet": "Dibebankan ke dompet Anda: {amount}",
         "sumFollowUps": "Tindak lanjut",
-        "sumSequence": "Dikirim bergiliran"
+        "sumSequence": "Dikirim bergiliran",
+        "sumPrevious": "Pengiriman sebelumnya: {names} ({outcome})",
+        "sumSplit": "Pembagian antar nomor",
+        "sumSplitCount": "{count, plural, other {# penerima}} ({percent}%)",
+        "sumSplitPercent": "{percent}% dari audiens"
       },
       "test": {
         "title": "Kirim pesan WhatsApp uji coba",
@@ -1465,9 +1483,11 @@
           "sent": "Terkirim",
           "delivered": "Tersampaikan",
           "read": "Terbaca",
-          "failed": "Gagal"
+          "failed": "Gagal",
+          "held": "Ditahan"
         },
-        "charged": "Dikenakan {amount}"
+        "charged": "Dikenakan {amount}",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "send": {
         "whenTitle": "Kapan dikirim",
@@ -1912,6 +1932,70 @@
       "loading": "Memuat nomor Anda",
       "noAccessTitle": "Anda tidak dapat membuat kampanye",
       "noAccess": "Minta izin membuat kampanye kepada admin ruang kerja."
+    },
+    "previousSends": {
+      "title": "Pengiriman sebelumnya",
+      "empty": "Belum ada broadcast atau kampanye sebelumnya",
+      "outcomeLabel": "Siapa dari pengiriman tersebut",
+      "outcomes": {
+        "all": "Semua penerima",
+        "delivered": "Terkirim",
+        "read": "Dibaca",
+        "not_read": "Tidak dibaca",
+        "replied": "Membalas",
+        "not_replied": "Tidak membalas",
+        "clicked": "Mengklik tautan",
+        "failed": "Gagal"
+      },
+      "outcomeOff": "{name} (tidak untuk broadcast)",
+      "outcomeHint": {
+        "all": "Semua penerima: semua orang yang dituju pesan ini. Kontak yang berhenti berlangganan dan baris yang dilewati tidak disertakan.",
+        "delivered": "Terkirim: orang yang menerima pesan.",
+        "read": "Dibaca: orang yang membacanya.",
+        "not_read": "Tidak dibaca: orang yang dikirimi pesan tetapi belum membacanya.",
+        "replied": "Membalas: orang yang membalas pesan.",
+        "not_replied": "Tidak membalas: orang yang dikirimi pesan tetapi belum membalas.",
+        "clicked": "Mengklik tautan: orang yang mengklik tautan terlacak di dalamnya.",
+        "failed": "Gagal: orang yang pesannya tidak dapat dikirim."
+      },
+      "broadcastNote": "Broadcast hanya mencatat pengiriman dan pembacaan, sehingga balasan dan klik tidak tersedia selama broadcast dicentang.",
+      "broadcastOff": "Broadcast tidak memiliki balasan atau klik. Pilih hasil lain untuk mencentangnya.",
+      "search": "Cari pengiriman sebelumnya",
+      "searchPlaceholder": "Cari",
+      "listLabel": "Broadcast dan kampanye sebelumnya",
+      "noMatch": "Tidak ada yang cocok dengan pencarian Anda.",
+      "chosen": "{count} dari {max} dipilih",
+      "limit": "Anda dapat memilih hingga {max} pengiriman. Hapus centang satu untuk memilih yang lain.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Kampanye"
+      },
+      "wentOut": "Dikirim {date}",
+      "wentOutUnknown": "Tanggal tidak diketahui",
+      "recipients": "{count, plural, other {# penerima}}",
+      "notRecorded": "Tidak dicatat untuk broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, other {# orang}}",
+        "delivered": "{count, plural, other {# orang menerimanya}}",
+        "read": "{count, plural, other {# orang membacanya}}",
+        "not_read": "{count, plural, other {# orang tidak membacanya}}",
+        "replied": "{count, plural, other {# orang membalas}}",
+        "not_replied": "{count, plural, other {# orang tidak membalas}}",
+        "clicked": "{count, plural, other {# orang mengklik tautan}}",
+        "failed": "{count, plural, other {# orang yang pengirimannya gagal}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "Terkirim dari tiap nomor",
+      "hint": "Pengiriman ini dibagi ke beberapa nomor. Setiap baris adalah satu nomor dan penerima yang diberikan kepadanya.",
+      "cols": {
+        "number": "Nomor",
+        "recipients": "Penerima",
+        "sent": "Terkirim",
+        "delivered": "Tersampaikan",
+        "failed": "Gagal"
+      },
+      "removed": "(nomor yang telah dihapus)"
     }
   }
 }

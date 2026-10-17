@@ -49,7 +49,8 @@
       "delete": "Elimina",
       "cancel": "Annulla",
       "deleted": "Regola eliminata.",
-      "deleteFailed": "Impossibile eliminare la regola."
+      "deleteFailed": "Impossibile eliminare la regola.",
+      "businessHours": "Orario di lavoro"
     },
     "rules": {
       "someone": "un agente",
@@ -425,6 +426,38 @@
       },
       "testSkipped": "Saltata perché nessuno era disponibile: {names}",
       "testOff": "L’interruttore qui sopra è disattivato, quindi questo mostra solo cosa succederebbe una volta attivato."
+    },
+    "businessHours": {
+      "eyebrow": "Assegnazione automatica",
+      "title": "Orario di lavoro",
+      "subtitle": "Le regole e gli obiettivi SLA che usano l'orario di lavoro contano il tempo solo entro questi orari.",
+      "close": "Chiudi",
+      "loading": "Caricamento dell'orario di lavoro",
+      "loadFailed": "Impossibile caricare l'orario di lavoro.",
+      "timezone": "Fuso orario",
+      "timezoneHint": "Tutti i giorni e gli orari sopra sono nel fuso orario indicato.",
+      "timezoneOwnerOnly": "Solo il proprietario dell'area di lavoro può cambiare il fuso orario.",
+      "days": "Orari di apertura",
+      "day": {
+        "mon": "Lunedì",
+        "tue": "Martedì",
+        "wed": "Mercoledì",
+        "thu": "Giovedì",
+        "fri": "Venerdì",
+        "sat": "Sabato",
+        "sun": "Domenica"
+      },
+      "from": "Dalle",
+      "to": "Alle",
+      "problem": {
+        "required": "Inserisci entrambi gli orari.",
+        "order": "L'orario di chiusura deve essere dopo quello di apertura."
+      },
+      "note": "Un giorno disattivato è chiuso tutto il giorno. Finché non salvi, l'area di lavoro risulta aperta sempre.",
+      "cancel": "Annulla",
+      "save": "Salva orari",
+      "saved": "Orario di lavoro salvato",
+      "saveFailed": "Salvataggio non riuscito"
     }
   }
 }

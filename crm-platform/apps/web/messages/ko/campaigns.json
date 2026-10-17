@@ -306,7 +306,11 @@
         "numbersCount": "번호 {count}개",
         "emailNote": "이메일은 각 연락처의 주소로 발송됩니다. 이메일 주소가 없는 연락처, 중복된 주소, 수신 거부한 연락처는 건너뜁니다.",
         "emailSkipped": "이메일 주소가 없어 건너뛸 선택된 수신자: {count}명",
-        "emailNoAddress": "직접 입력한 번호와 CSV 행에는 이메일 주소가 없으므로 건너뜁니다. 대신 연락처, 그룹, 태그 또는 세그먼트를 선택하세요."
+        "emailNoAddress": "직접 입력한 번호와 CSV 행에는 이메일 주소가 없으므로 건너뜁니다. 대신 연락처, 그룹, 태그 또는 세그먼트를 선택하세요.",
+        "previousTitle": "이전 발송",
+        "previousHint": "이전 브로드캐스트와 캠페인을 받은 사람을 추가하세요. 읽었거나 답장했거나 클릭한 사람만 선택할 수도 있습니다.",
+        "previousEstimate": "{count, plural, other {이전 발송에서 최대 #명 (추정치: 두 발송에 모두 포함된 사람은 두 번 계산됩니다).}}",
+        "previousEditHint": "수정할 때는 이전에 선택한 발송이 표시되지 않습니다. 이 캠페인은 이미 수신자를 연락처로 보유하고 있습니다. 더 추가하려면 다시 선택하세요."
       },
       "message": {
         "title": "메시지",
@@ -594,7 +598,8 @@
         "subject": "제목",
         "subjectFallback": "캠페인 이름",
         "skippedNoEmail": "건너뜀 (이메일 주소 없음)",
-        "estimateEmail": "추정치입니다. 두 그룹에 속한 연락처는 두 번 계산됩니다. 그룹, 태그, 세그먼트에 있는 이메일 주소가 없는 연락처는 캠페인 실행 시 건너뜁니다."
+        "estimateEmail": "추정치입니다. 두 그룹에 속한 연락처는 두 번 계산됩니다. 그룹, 태그, 세그먼트에 있는 이메일 주소가 없는 연락처는 캠페인 실행 시 건너뜁니다.",
+        "previousSends": "이전 발송 (최대)"
       },
       "ai": {
         "open": "AI로 만들기",
@@ -1205,7 +1210,12 @@
         "pickSender": "번호 선택",
         "classicOption": "클래식 빌더",
         "buildWithAi": "AI로 만들기",
-        "aiNote": "AI로 새 템플릿 초안을 작성합니다. 템플릿 페이지에서 검토하며, 발송 전에 Meta의 검토를 거치므로 승인된 후 다시 돌아와 선택하세요."
+        "aiNote": "AI로 새 템플릿 초안을 작성합니다. 템플릿 페이지에서 검토하며, 발송 전에 Meta의 검토를 거치므로 승인된 후 다시 돌아와 선택하세요.",
+        "shareToggle": "이 발송을 여러 번호로 나누기",
+        "shareHint": "발송할 번호를 선택하고 각각에 비율을 지정하세요. 대상 그룹은 이 비율대로 나뉘며 각 연락처는 한 번호에서만 메시지를 받습니다. 비율이 비어 있거나 0이면 1로 계산됩니다.",
+        "shareWeight": "비율",
+        "shareWeightLabel": "{name}의 비율",
+        "shareKeepOne": "번호를 하나 이상 선택한 상태로 두세요."
       },
       "audience": {
         "selectionTitle": "연락처 허브에서 선택됨",
@@ -1254,7 +1264,8 @@
           "contacts": "연락처",
           "groups": "그룹",
           "segments": "세그먼트",
-          "csv": "CSV 파일"
+          "csv": "CSV 파일",
+          "previous": "이전 발송"
         },
         "groupsHint": "그룹은 마케팅 목록입니다. 선택한 그룹의 모든 사람이 포함됩니다.",
         "segmentsHint": "세그먼트는 규칙에 따라 자동으로 채워집니다. 선택한 세그먼트의 모든 사람이 포함됩니다.",
@@ -1350,7 +1361,10 @@
         },
         "csvIssuesMore": "{count}개가 더 다운로드 파일에 있습니다.",
         "csvConsentOn": "이 번호들의 동의를 확인했습니다. 브로드캐스트를 시작할 때 동의한 것으로 기록됩니다.",
-        "csvConsentVersion": "고지 버전: {version}."
+        "csvConsentVersion": "고지 버전: {version}.",
+        "modePrevious": "이전 발송 대상에게 보내기",
+        "previousHint": "이전 브로드캐스트와 캠페인을 받은 사람을 다시 대상으로 지정하세요. 읽었거나, 읽지 않았거나, 답장했거나, 클릭한 사람만 선택할 수도 있습니다.",
+        "chipPrevious": "{count, plural, other {이전 발송 #개}} ({outcome})"
       },
       "review": {
         "intro": "비용을 확인하고, 각 템플릿 변수를 무엇으로 채울지 알려 주시고, 브로드캐스트를 검토하세요.",
@@ -1429,7 +1443,11 @@
         "chargedPlan": "지금 지갑에서 차감: {amount} (요금제가 이 메시지 중 {covered}건을 충당합니다)",
         "chargedWallet": "지갑에서 차감: {amount}",
         "sumFollowUps": "후속 메시지",
-        "sumSequence": "순서대로 발송"
+        "sumSequence": "순서대로 발송",
+        "sumPrevious": "이전 발송: {names} ({outcome})",
+        "sumSplit": "번호별 분배",
+        "sumSplitCount": "{count, plural, other {수신자 #명}} ({percent}%)",
+        "sumSplitPercent": "대상 그룹의 {percent}%"
       },
       "test": {
         "title": "WhatsApp 테스트 메시지 보내기",
@@ -1465,9 +1483,11 @@
           "sent": "발송됨",
           "delivered": "전달됨",
           "read": "읽음",
-          "failed": "실패"
+          "failed": "실패",
+          "held": "보류됨"
         },
-        "charged": "{amount} 차감됨"
+        "charged": "{amount} 차감됨",
+        "heldUntil": "{when}까지 보류됨 (방해 금지 시간)"
       },
       "send": {
         "whenTitle": "발송 시점",
@@ -1912,6 +1932,70 @@
       "loading": "번호를 불러오는 중",
       "noAccessTitle": "캠페인을 만들 수 없습니다",
       "noAccess": "캠페인 생성 권한은 워크스페이스 관리자에게 요청하세요."
+    },
+    "previousSends": {
+      "title": "이전 발송",
+      "empty": "아직 이전 브로드캐스트나 캠페인이 없습니다",
+      "outcomeLabel": "해당 발송의 대상자",
+      "outcomes": {
+        "all": "발송된 모든 사람",
+        "delivered": "전달됨",
+        "read": "읽음",
+        "not_read": "읽지 않음",
+        "replied": "답장함",
+        "not_replied": "답장하지 않음",
+        "clicked": "링크 클릭",
+        "failed": "실패"
+      },
+      "outcomeOff": "{name} (브로드캐스트에는 해당 없음)",
+      "outcomeHint": {
+        "all": "발송된 모든 사람: 메시지를 받기로 한 모든 사람입니다. 수신 거부한 연락처와 건너뛴 행은 제외됩니다.",
+        "delivered": "전달됨: 메시지가 도달한 사람입니다.",
+        "read": "읽음: 메시지를 읽은 사람입니다.",
+        "not_read": "읽지 않음: 메시지를 받았지만 아직 읽지 않은 사람입니다.",
+        "replied": "답장함: 메시지에 답장한 사람입니다.",
+        "not_replied": "답장하지 않음: 메시지를 받았지만 아직 답장하지 않은 사람입니다.",
+        "clicked": "링크 클릭: 메시지 속 추적 링크를 클릭한 사람입니다.",
+        "failed": "실패: 메시지를 전달하지 못한 사람입니다."
+      },
+      "broadcastNote": "브로드캐스트는 전달과 읽음만 기록하므로, 브로드캐스트를 선택한 동안에는 답장과 클릭을 사용할 수 없습니다.",
+      "broadcastOff": "브로드캐스트에는 답장이나 클릭이 없습니다. 선택하려면 다른 결과를 고르세요.",
+      "search": "이전 발송 검색",
+      "searchPlaceholder": "검색",
+      "listLabel": "이전 브로드캐스트 및 캠페인",
+      "noMatch": "검색과 일치하는 항목이 없습니다.",
+      "chosen": "{max}개 중 {count}개 선택됨",
+      "limit": "발송은 최대 {max}개까지 선택할 수 있습니다. 다른 것을 선택하려면 하나를 해제하세요.",
+      "kind": {
+        "broadcast": "브로드캐스트",
+        "campaign": "캠페인"
+      },
+      "wentOut": "{date} 발송",
+      "wentOutUnknown": "날짜 알 수 없음",
+      "recipients": "{count, plural, other {수신자 #명}}",
+      "notRecorded": "브로드캐스트에는 기록되지 않음",
+      "outcomeCounts": {
+        "all": "{count, plural, other {#명}}",
+        "delivered": "{count, plural, other {#명이 받음}}",
+        "read": "{count, plural, other {#명이 읽음}}",
+        "not_read": "{count, plural, other {#명이 읽지 않음}}",
+        "replied": "{count, plural, other {#명이 답장함}}",
+        "not_replied": "{count, plural, other {#명이 답장하지 않음}}",
+        "clicked": "{count, plural, other {#명이 링크를 클릭함}}",
+        "failed": "{count, plural, other {#명에게 실패함}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "번호별 발송 현황",
+      "hint": "이 발송은 여러 번호로 나뉘었습니다. 각 행은 번호 하나와 그 번호에 배정된 수신자입니다.",
+      "cols": {
+        "number": "번호",
+        "recipients": "수신자",
+        "sent": "발송됨",
+        "delivered": "전달됨",
+        "failed": "실패"
+      },
+      "removed": "(삭제된 번호)"
     }
   }
 }

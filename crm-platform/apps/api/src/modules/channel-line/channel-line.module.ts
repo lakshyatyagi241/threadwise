@@ -21,13 +21,14 @@ import { LineSenderService } from './line-sender.service';
 import { LineTokenService } from './line-token.service';
 import { ReplyTokensRepository } from './reply-tokens.repository';
 import { WebhookController } from './webhook.controller';
+import { SendWindowModule } from '../compliance-center';
 
 /**
  * The LINE channel. The shims stand in for what another domain owns (the flow runtime and automation hooks, the template lookup); each
  * is replaced by binding the real one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule, ContactConsentModule],
+  imports: [ChatConversationsModule, ContactConsentModule, SendWindowModule],
   controllers: [ChannelsController, LineBroadcastsController, WebhookController],
   providers: [
     CryptoService,

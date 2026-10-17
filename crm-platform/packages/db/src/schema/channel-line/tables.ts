@@ -2,7 +2,9 @@
  * channel-line: tables ported from Reference. Mirrors migrations/20261001104200_line_threadwise_schema.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
+import { sql } from 'drizzle-orm';
 import {
+  check,
   boolean,
   foreignKey,
   index,
@@ -17,7 +19,6 @@ import {
 } from 'drizzle-orm/pg-core';
 import { conversations } from '../chat-conversations/tables';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
-import { flows } from '../flow-builder-editor/tables';
 import { organizations, users } from '../foundation';
 import { waTemplates } from '../message-templates/tables';
 
@@ -74,62 +75,6 @@ export const lineChannels = pgTable(
 
 export type LineChannelsRow = typeof lineChannels.$inferSelect;
 export type NewLineChannelsRow = typeof lineChannels.$inferInsert;
-
-export const lineFlowSessions = pgTable(
-  'line_flow_sessions',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    conversationId: idColumn('conversation_id').notNull(),
-    lineChannelId: idColumn('line_channel_id').notNull(),
-    lineUserId: text('line_user_id').notNull(),
-    flowId: idColumn('flow_id'),
-    nodeId: text('node_id'),
-    status: text('status').notNull().default('running'),
-    awaitVar: text('await_var'),
-    awaitOptions: jsonb('await_options'),
-    vars: jsonb('vars'),
-    lastError: text('last_error'),
-    expiresAt: timestamp('expires_at', { withTimezone: true }),
-    lastMessageId: text('last_message_id'),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_line_flow_sessions_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_line_flow_sessions_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    unique('uq_line_flow_sessions_conversation_id').on(t.orgId, t.conversationId),
-    foreignKey({
-      name: 'fk_line_flow_sessions_conversation_id',
-      columns: [t.orgId, t.conversationId],
-      foreignColumns: [conversations.orgId, conversations.id],
-    }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_line_flow_sessions_line_channel_id',
-      columns: [t.orgId, t.lineChannelId],
-      foreignColumns: [lineChannels.orgId, lineChannels.id],
-    }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_line_flow_sessions_flow_id',
-      columns: [t.orgId, t.flowId],
-      foreignColumns: [flows.orgId, flows.id],
-    }).onDelete('set null'),
-    index('idx_line_flow_sessions_expires_at').on(t.orgId, t.expiresAt),
-    index('idx_line_flow_sessions_flow_id').on(t.orgId, t.flowId),
-    index('idx_line_flow_sessions_line_channel_id').on(t.orgId, t.lineChannelId),
-    index('idx_line_flow_sessions_status').on(t.orgId, t.status),
-  ],
-);
-
-export type LineFlowSessionsRow = typeof lineFlowSessions.$inferSelect;
-export type NewLineFlowSessionsRow = typeof lineFlowSessions.$inferInsert;
 
 export const lineRichMenus = pgTable(
   'line_rich_menus',
@@ -252,6 +197,9 @@ export const lineBroadcastRecipients = pgTable(
     providerMessageId: text('provider_message_id'),
     error: text('error'),
     sentAt: timestamp('sent_at', { withTimezone: true }),
+    /** BL-191: the instant this recipient may be messaged after the workspace's quiet hours, and why. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -281,6 +229,13 @@ export const lineBroadcastRecipients = pgTable(
     ),
     index('idx_line_broadcast_recipients_line_user_id').on(t.orgId, t.lineUserId),
     index('idx_line_broadcast_recipients_status').on(t.orgId, t.status),
+    check(
+      'ck_line_broadcast_recipients_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
+    index('idx_line_broadcast_recipients_held')
+      .on(t.orgId, t.lineBroadcastId, t.heldUntil)
+      .where(sql`${t.heldUntil} IS NOT NULL`),
   ],
 );
 

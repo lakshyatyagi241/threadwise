@@ -121,6 +121,9 @@ const LOOK: Record<NotificationPrefType, Look> = {
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
   device_group_join_request: look('group', 'info', 'device_group'),
   device_group_removed: look('group', 'danger', 'device_group'),
+  marketplace_renewal_due: look('wallet', 'info'),
+  marketplace_payment_failed: look('wallet', 'danger'),
+  marketplace_subscription_ended: look('wallet', 'danger'),
   test: look('generic', 'info'),
 };
 

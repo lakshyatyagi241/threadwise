@@ -95,7 +95,28 @@
         "required": "必須",
         "removeField": "削除",
         "options": "選択肢（カンマ区切り）",
-        "optionsPlaceholder": "選択肢1、選択肢2、選択肢3"
+        "optionsPlaceholder": "選択肢1、選択肢2、選択肢3",
+        "mapsTo": "マップ先",
+        "mapsToHint": "フォーム送信時にこの回答を連絡先プロパティに保存します。",
+        "mapsToNone": "連絡先プロパティに保存しない",
+        "mapsToSystemGroup": "連絡先フィールド",
+        "mapsToCustomGroup": "カスタムプロパティ",
+        "mapsToSystem": {
+          "name": "氏名",
+          "first_name": "名",
+          "last_name": "姓",
+          "email": "メールアドレス",
+          "title": "役職",
+          "language": "言語",
+          "address": "住所"
+        },
+        "mapsToPrivacyGroup": "プライバシーと同意",
+        "mapsToPrivacy": {
+          "age": "年齢（未成年者チェック）",
+          "date_of_birth": "生年月日（未成年者チェック）",
+          "consent_marketing": "マーケティング同意（WhatsApp）",
+          "consent_service": "サービス合意（マーケティングではない）"
+        }
       },
       "fieldKind": {
         "heading": "見出し",

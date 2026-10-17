@@ -1,0 +1,183 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Contact quick view",
+        "loading": "Loading contact...",
+        "notFoundTitle": "Contact not found",
+        "notFound": "It may have been deleted, or you may not have access to it.",
+        "close": "Close",
+        "seeAll": "See all details",
+        "previous": "Previous contact",
+        "next": "Next contact",
+        "position": "{index} of {total}",
+        "rail": "Contact sections",
+        "moreTabs": "More sections",
+        "more": "+{count} more",
+        "tab_overview": "Overview",
+        "tab_activities": "Activity",
+        "tab_notes": "Notes",
+        "tab_tasks": "Tasks",
+        "tab_meetings": "Meetings",
+        "tab_files": "Files",
+        "tab_conversations": "Conversations",
+        "tab_stats": "Communication stats",
+        "tab_details": "Properties",
+        "openFull": "Open on the details page"
+      },
+      "actions": {
+        "note": "Note",
+        "task": "Task",
+        "meeting": "Meeting",
+        "addCompany": "Add company",
+        "changeCompany": "Change company",
+        "channels": "Message or call this contact",
+        "more": "More actions",
+        "edit": "Edit contact",
+        "delete": "Delete contact",
+        "conflict": "Someone else changed this contact first. It was reloaded; try again.",
+        "deleteFailed": "The contact could not be deleted."
+      },
+      "header": {
+        "jobTitle": "Job title",
+        "jobTitlePlaceholder": "Add job title...",
+        "editJobTitle": "Edit job title",
+        "jobTitleConflict": "Someone else changed this contact first. It was reloaded; try again.",
+        "jobTitleFailed": "The job title could not be saved. Try again.",
+        "leadScore": "Lead score",
+        "leadScoreAria": "Lead score {score}. Show the score details.",
+        "owner": "Owner"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Website",
+        "open": "Open the {network} profile"
+      },
+      "subscription": {
+        "title": "Subscription status",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "Email",
+          "sms": "SMS"
+        },
+        "yes": "Yes",
+        "no": "No",
+        "optedOut": "Opted out of marketing messages",
+        "optedOutNote": "This contact opted out of marketing messages, so every channel reads No.",
+        "proof": "The proof of each opt-in is in the consent record.",
+        "openConsent": "Open the consent card"
+      },
+      "score": {
+        "title": "Lead score",
+        "details": "Score details",
+        "hideDetails": "Hide details",
+        "none": "Not scored yet",
+        "aria": "Lead score {score}, {band}"
+      },
+      "owner": {
+        "title": "Owner and assignment",
+        "owner": "Owner",
+        "tags": "Tags",
+        "groups": "Groups"
+      },
+      "location": {
+        "title": "Location",
+        "address": "Address",
+        "country": "Country",
+        "timeZone": "Time zone",
+        "language": "Language"
+      },
+      "compliance": {
+        "title": "Privacy",
+        "optedOut": "Opted out of marketing",
+        "allowed": "Marketing allowed",
+        "noFlags": "No privacy flags"
+      },
+      "overview": {
+        "information": "Contact"
+      },
+      "tabs": {
+        "info": "Contact information",
+        "social": "Social media",
+        "source": "Lead source",
+        "custom": "Custom fields"
+      },
+      "info": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "fax": "Fax",
+        "company": "Company",
+        "jobTitle": "Job title",
+        "language": "Language",
+        "address": "Address",
+        "memo": "Memo",
+        "contactId": "Contact ID",
+        "createdAt": "Created at",
+        "lastActivity": "Last activity",
+        "source": "Source",
+        "noCustomFields": "This contact has no custom field values yet.",
+        "noLeadSource": "No lead source is recorded for this contact.",
+        "dateOfBirth": "Date of birth"
+      },
+      "details": {
+        "title": "Contact details",
+        "stage": "Lifecycle stage",
+        "otherProperties": "Other properties"
+      },
+      "company": {
+        "title": "Company",
+        "none": "This contact is not linked to a company.",
+        "hint": "Search for a company, or type a new name to create it.",
+        "saved": "Company saved.",
+        "removed": "Company removed from this contact.",
+        "failed": "The company could not be saved. Try again.",
+        "conflict": "Someone else changed this contact first. It was reloaded; try again."
+      },
+      "sections": {
+        "lead-source": "Lead source"
+      },
+      "nav": {
+        "back": "Back to listing",
+        "label": "Contact sections",
+        "contactDetails": "Contact details",
+        "related": "Related",
+        "section": {
+          "overview": "Overview",
+          "activities": "Activities",
+          "conversations": "Conversations",
+          "details": "Contact details",
+          "stats": "Communication stats",
+          "notes": "Notes",
+          "meetings": "Meetings",
+          "files": "Files",
+          "tasks": "Tasks",
+          "deals": "Deals",
+          "appointments": "Appointments",
+          "sales": "Invoices and documents",
+          "lead-source": "Lead source",
+          "company": "Company",
+          "consent": "Consent",
+          "history": "Field history"
+        }
+      },
+      "stages": {
+        "title": "Lifecycle",
+        "stages": "Lifecycle stage",
+        "status": "Status",
+        "noStatuses": "This stage has no statuses.",
+        "statusChanged": "Status set to {status}.",
+        "conflict": "Someone else changed this contact first. It was reloaded; try again.",
+        "forbidden": "You do not have permission to change this contact.",
+        "statusFailed": "The status could not be changed. Try again."
+      }
+    }
+  }
+}

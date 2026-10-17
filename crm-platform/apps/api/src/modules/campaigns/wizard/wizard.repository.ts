@@ -133,8 +133,22 @@ export interface TestSendRow {
   providerMessageId: string | null;
   errorCode: string | null;
   errorMessage: string | null;
+  /** BL-191: when a test held for the quiet hours goes out; null otherwise. */
+  heldUntil: Date | null;
   createdAt: Date;
 }
+
+const toTestSend = (r: Raw): TestSendRow => ({
+  id: Number(r.id),
+  uuid: String(r.uuid),
+  to: String(r.to_phone),
+  status: String(r.status),
+  providerMessageId: str(r.provider_message_id),
+  errorCode: str(r.error_code),
+  errorMessage: str(r.error_message),
+  heldUntil: r.held_until ? new Date(r.held_until as string) : null,
+  createdAt: new Date(r.created_at as string),
+});
 
 const toCampaign = (r: Raw): WizardCampaignRow => ({
   id: Number(r.id),
@@ -861,13 +875,16 @@ export class WizardRepository {
       errorMessage: string | null;
       renderedBody: string | null;
       createdBy: number | null;
+      /** Held for the quiet hours (BL-191): the instant it may go and why. */
+      held?: { until: string; reason: string };
     },
   ): Promise<{ id: number; uuid: string; createdAt: Date }> {
     const res = await tx.execute(sql`
       INSERT INTO camp_test_sends (org_id, campaign_id, template_id, provider, to_phone, status, provider_message_id, error_code,
-                                   error_message, rendered_body, created_by)
+                                   error_message, rendered_body, created_by, held_until, held_reason)
       VALUES (${orgId}, ${v.campaignId}, ${v.templateId}, ${v.provider}, ${v.to}, ${v.status}, ${v.providerMessageId}, ${v.errorCode},
-              ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, ${v.renderedBody}, ${v.createdBy})
+              ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, ${v.renderedBody}, ${v.createdBy},
+              ${v.held?.until ?? null}::timestamptz, ${v.held?.reason ?? null})
       RETURNING id, uuid, created_at`);
     const r = res.rows[0] as Raw;
     return { id: Number(r.id), uuid: String(r.uuid), createdAt: new Date(r.created_at as string) };
@@ -880,19 +897,10 @@ export class WizardRepository {
     limit: number,
   ): Promise<TestSendRow[]> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, created_at
+      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, held_until, created_at
       FROM camp_test_sends WHERE org_id = ${orgId} AND campaign_id = ${campaignId}
       ORDER BY id DESC LIMIT ${limit}`);
-    return (res.rows as Raw[]).map((r) => ({
-      id: Number(r.id),
-      uuid: String(r.uuid),
-      to: String(r.to_phone),
-      status: String(r.status),
-      providerMessageId: str(r.provider_message_id),
-      errorCode: str(r.error_code),
-      errorMessage: str(r.error_message),
-      createdAt: new Date(r.created_at as string),
-    }));
+    return (res.rows as Raw[]).map(toTestSend);
   }
 
   async testSendsByIds(tx: Tx, orgId: number, ids: readonly number[]): Promise<TestSendRow[]> {
@@ -902,18 +910,55 @@ export class WizardRepository {
       sql`, `,
     );
     const res = await tx.execute(sql`
-      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, created_at
+      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, held_until, created_at
       FROM camp_test_sends WHERE org_id = ${orgId} AND id IN (${list}) ORDER BY id`);
-    return (res.rows as Raw[]).map((r) => ({
-      id: Number(r.id),
-      uuid: String(r.uuid),
-      to: String(r.to_phone),
-      status: String(r.status),
-      providerMessageId: str(r.provider_message_id),
-      errorCode: str(r.error_code),
-      errorMessage: str(r.error_message),
-      createdAt: new Date(r.created_at as string),
-    }));
+    return (res.rows as Raw[]).map(toTestSend);
+  }
+
+  /** A test the quiet hours held back, with the draft it belongs to (BL-191). */
+  async heldTestSend(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<{ status: string; to: string; campaignUuid: string } | undefined> {
+    const res = await tx.execute(sql`
+      SELECT t.status, t.to_phone, c.uuid AS campaign_uuid
+      FROM camp_test_sends t JOIN wpcampaigns c ON c.org_id = t.org_id AND c.id = t.campaign_id
+      WHERE t.org_id = ${orgId} AND t.id = ${id}`);
+    const r = res.rows[0] as Raw | undefined;
+    return r
+      ? { status: String(r.status), to: String(r.to_phone), campaignUuid: String(r.campaign_uuid) }
+      : undefined;
+  }
+
+  /** The recipient is still inside their own hours: the test waits for the next opening. */
+  async holdTestSend(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    hold: { until: string; reason: string },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE camp_test_sends SET held_until = ${hold.until}::timestamptz, held_reason = ${hold.reason}
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'held'`);
+  }
+
+  /** The held test went out (or was refused): the row takes the real status and is no longer held. */
+  async finishHeldTestSend(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    v: {
+      status: 'sent' | 'failed';
+      providerMessageId: string | null;
+      errorCode: string | null;
+      errorMessage: string | null;
+    },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE camp_test_sends SET status = ${v.status}, provider_message_id = ${v.providerMessageId}, error_code = ${v.errorCode},
+             error_message = ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, held_until = NULL, held_reason = NULL
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'held'`);
   }
 
   /** What the wallet charged for each of these provider messages (hundredths); absent when nothing was charged. */

@@ -55,3 +55,11 @@ Instagram only lets an account message someone who already wrote to it, so recip
 | `POST /instagram/composer/send` | Body `{body (1 to 4096), threadIds (1 to 200), templateId?}`. A template's body and buttons replace the typed text; an unknown template is ignored. 200 `{sent, failed, errors}`. 422 `IG_NOT_CONNECTED`.                                                                    |
 
 `errors` holds up to five reasons, each cut to 120 characters ("IgDesk HTTP 400: Outside the 24 hour window"). A thread that is not the organization's or not an Instagram thread counts as failed. Every message that went is shown in its thread at once, with the engine's id so the pull does not show it again. Nothing is kept as a broadcast record.
+
+## Quiet hours (BL-191)
+
+`POST /v2/instagram/broadcasts` is marketing: a thread whose contact's local time is inside the workspace's quiet hours is held, not denied. The answer is `{ sent, failed, errors, held, heldUntil }` and a delayed job sends the held threads at the opening (the ConsentGate and the 24 hour window are asked again then). `POST /v2/instagram/composer/send` (a person answering in the inbox) is never held. See [compliance.md](compliance.md).
+
+## Consent (BL-141 follow-up)
+
+Every Instagram recipient goes through the ConsentGate before a message is sent, on the first send and on a release from the quiet hours alike (purpose marketing, consent channel `instagram`). A withdrawal (the **Unsubscribed** flag, or STOP on any channel) always refuses; with the workspace switch "Require recorded consent for marketing sends" off (the default) nobody else is refused; with it on a recorded grant on `instagram` is needed (a recipient with no contact has none); a contact flagged as a minor is refused when the workspace's children setting says so. A reply typed in the inbox and a utility notice are service messages and are never held back by a marketing STOP. The broadcasts page asks for every picked thread; a refused person is not messaged and the answer counts them in `skipped` with `skippedReasons` (`[{ reason, count }]`, the gate's reason codes) beside `sent`, `failed` and `held`. The inbox composer is a reply and is never asked.

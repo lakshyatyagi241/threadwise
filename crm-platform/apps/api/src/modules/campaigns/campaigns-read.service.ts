@@ -1,3 +1,4 @@
+import type { Tx } from '@crm/db';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CAMPAIGN_PAGE_SIZE,
@@ -23,6 +24,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   BroadcastsComposeService,
+  PreviousSendsService,
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
   type SenderDirectory,
@@ -36,6 +38,7 @@ import {
   utcToLocalDateTime,
 } from './campaign-rules';
 import { toCampaign, toConfig } from './campaigns.mapper';
+import { SenderSharesService } from './sender-shares.service';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 import { WizardReadService } from './wizard/wizard-read.service';
 
@@ -68,6 +71,8 @@ export class CampaignsReadService {
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     private readonly wizardRead: WizardReadService,
+    private readonly previousSends: PreviousSendsService,
+    private readonly shares: SenderSharesService,
   ) {}
 
   async list(q: ListCampaignsQuery): Promise<CampaignListResponse> {
@@ -184,6 +189,7 @@ export class CampaignsReadService {
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),
       flows: await this.repo.flowsForOrg(tx, orgId),
+      previousSends: await this.previousSends.options(tx, orgId),
       requiresApprovedTemplates: (await this.senders.defaultEngine(tx, orgId)) === 'waba',
     }));
   }
@@ -204,8 +210,27 @@ export class CampaignsReadService {
         mediaUrl: c.customImage ?? c.customVideo ?? c.customDocument,
         expiresAtLocal: utcToLocalDateTime(c.expiresAt, c.timezone ?? 'UTC'),
         recipientContactIds: await this.repo.recipientContactIds(tx, orgId, c.id),
+        ...(await this.sharedSenders(tx, orgId, c.id, sender.key)),
       });
     });
+  }
+
+  /** The numbers of a shared send for the edit form: the campaign's own first, each weighted by the recipients it was given. */
+  private async sharedSenders(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    primary: string | null,
+  ): Promise<{ senderKeys: string[]; senderShare: Record<string, number> }> {
+    const lines = (await this.shares.breakdown(tx, orgId, [campaignId])).filter(
+      (l): l is typeof l & { key: string } => l.key !== null,
+    );
+    if (lines.length < 2) return { senderKeys: [], senderShare: {} };
+    lines.sort((a, b) => Number(b.key === primary) - Number(a.key === primary));
+    return {
+      senderKeys: lines.map((l) => l.key),
+      senderShare: Object.fromEntries(lines.map((l) => [l.key, l.recipients])),
+    };
   }
 
   async detail(uuid: string): Promise<CampaignDetail> {
@@ -239,6 +264,7 @@ export class CampaignsReadService {
       const buttonClicks = await this.repo.clicksByUrl(tx, orgId, c.id);
       return {
         campaign,
+        senders: await this.shares.breakdown(tx, orgId, [c.id]),
         rates: {
           delivered: pct(n.delivered, n.recipients),
           read: pct(n.read, n.delivered),

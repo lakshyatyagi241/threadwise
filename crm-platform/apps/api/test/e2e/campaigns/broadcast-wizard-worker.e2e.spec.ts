@@ -1,4 +1,12 @@
+import { getQueueToken } from '@nestjs/bullmq';
+import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { RequestContextStore } from '../../../src/common/context/request-context';
+import { QUEUES } from '../../../src/infra/queue/queues';
+import {
+  TEST_SEND_RELEASE_JOB,
+  WizardTestSendService,
+} from '../../../src/modules/campaigns/wizard/wizard-test-send.service';
 import {
   MESSAGE_DELIVERY_EVENT,
   walletDeliveryReportedSchema,
@@ -1220,5 +1228,111 @@ describe('the test send', () => {
       code: 'CAMP_WIZARD_INCOMPLETE',
       errors: [{ path: 'variables.body.1', message: 'variable_unmapped' }],
     });
+  });
+});
+
+describe('BL-191: a test send is held, not denied, in the quiet hours', () => {
+  /** 2030-10-15 16:00 UTC: 21:30 in India (quiet 21:00 to 09:00), 17:00 in London (open). */
+  const EVENING = '2030-10-15T16:00:00Z';
+  const MORNING = '2030-10-16T03:31:00Z';
+  const OPENS = '2030-10-16T03:30:00.000Z';
+  const INDIA = '+919876543210';
+  const LONDON = '+442071838750';
+
+  async function ready(label: string, category = 'marketing') {
+    const w = await world(lab, label, { category });
+    await payPerMessage(lab, w.t, 5_000_000);
+    const ids = await people(lab, w.t, [{ name: 'Aarav Sharma' }]);
+    await owner().query(`UPDATE contacts SET first_name = 'Aarav' WHERE uuid = $1`, [ids[0]]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(lab, w, readyDraft(w, g));
+    await owner().query(
+      `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, '21:00', '09:00')`,
+      [w.t.orgId],
+    );
+    return { w, d };
+  }
+  const send = (w: World, draftId: string, recipients: string) =>
+    wiz(lab, w.t.admin).post('/test-send', { draftId, recipients });
+  const release = (orgId: number, id: number) =>
+    RequestContextStore.run(
+      { requestId: 'test-release', orgId, actorType: 'system', actorId: null, userId: null },
+      () => lab.h.app.get(WizardTestSendService, { strict: false }).release(orgId, id),
+    );
+  const row = async (id: number) =>
+    (
+      await owner().query(
+        `SELECT status, held_until, held_reason, provider_message_id FROM camp_test_sends WHERE id = $1`,
+        [id],
+      )
+    ).rows[0];
+
+  it('sends the number that is awake, holds the one in its quiet hours, and says when', async () => {
+    const { w, d } = await ready('bwt-q1');
+    at(EVENING);
+    lab.sent.length = 0;
+    const res = await send(w, d.id, `${INDIA}, ${LONDON}`);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const out = wizardTestSendResponseSchema.parse(res.body);
+    expect(out.results.map((r) => [r.to, r.status, r.heldUntil])).toEqual([
+      [INDIA, 'held', OPENS],
+      [LONDON, 'sent', null],
+    ]);
+    expect(lab.sent.map((m) => m.to)).toEqual([LONDON.replace('+', '')]);
+
+    // The log says so too, and a job waits for the opening on the campaign queue.
+    const log = wizardTestLogSchema.parse(
+      (await wiz(lab, w.t.admin).get(`/drafts/${d.id}/test-sends`)).body,
+    );
+    expect(log.data.find((r) => r.to === INDIA)).toMatchObject({
+      status: 'held',
+      heldUntil: OPENS,
+    });
+    const held = (
+      await owner().query(`SELECT id FROM camp_test_sends WHERE org_id = $1 AND status = 'held'`, [
+        w.t.orgId,
+      ])
+    ).rows[0];
+    const queue = lab.h.app.get<Queue>(getQueueToken(QUEUES.CAMPAIGN), { strict: false });
+    const job = (await queue.getDelayed()).find(
+      (j) => j.name === TEST_SEND_RELEASE_JOB && j.data.testSendId === Number(held.id),
+    );
+    expect(job, 'the release job').toBeDefined();
+    expect(job!.opts.delay).toBeGreaterThan(11 * 3_600_000);
+  });
+
+  it('waits again when released too early, then sends at the opening and stops being held', async () => {
+    const { w, d } = await ready('bwt-q2');
+    at(EVENING);
+    lab.sent.length = 0;
+    await send(w, d.id, INDIA);
+    const id = Number(
+      (await owner().query(`SELECT id FROM camp_test_sends WHERE org_id = $1`, [w.t.orgId])).rows[0]
+        .id,
+    );
+
+    expect(await release(w.t.orgId, id)).toBe('held');
+    expect(lab.sent).toHaveLength(0);
+    expect(await row(id)).toMatchObject({ status: 'held' });
+
+    at(MORNING);
+    expect(await release(w.t.orgId, id)).toBe('sent');
+    expect(lab.sent.map((m) => m.to)).toEqual([INDIA.replace('+', '')]);
+    expect(lab.sent[0]!.clientReference).toMatch(/^camptest-/);
+    const after = await row(id);
+    expect(after).toMatchObject({ status: 'sent', held_until: null, held_reason: null });
+    expect(after.provider_message_id).toBeTruthy();
+    // Released twice: the second finds nothing held and sends nothing more.
+    expect(await release(w.t.orgId, id)).toBe('skipped');
+    expect(lab.sent).toHaveLength(1);
+  });
+
+  it('a utility template is never held', async () => {
+    const { w, d } = await ready('bwt-q3', 'utility');
+    at(EVENING);
+    lab.sent.length = 0;
+    const out = wizardTestSendResponseSchema.parse((await send(w, d.id, INDIA)).body);
+    expect(out.results[0]).toMatchObject({ status: 'sent', heldUntil: null });
+    expect(lab.sent).toHaveLength(1);
   });
 });

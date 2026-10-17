@@ -89,7 +89,6 @@ describe('flows: schema, constraints and isolation', () => {
     it('RLS is enabled and forced with a tenant policy on every tenant flows table, and flow_templates is read-all, operator-write', async () => {
       for (const table of [
         'flows',
-        'flow_connected_devices',
         'flow_subscribers',
         'flow_retry_logs',
       ]) {

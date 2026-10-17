@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
 import type { ChannelListResponse, ChannelResponse } from '@crm/contracts';
-import { makeSession, renderAccount, type Seed } from '@/features/auth-registration-security/account/render-test-utils';
+import {
+  makeSession,
+  renderAccount,
+  type Seed,
+} from '@/features/auth-registration-security/account/render-test-utils';
 import { sendKeys } from '../api/single-send';
 import type { RowView } from '../lib/row-view';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
@@ -16,7 +20,13 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   status: '',
   stage: 'qualified',
   ownerId: null,
+  companyId: null,
   optedOut: false,
+  whatsappOptIn: 'no',
+  smsOptIn: 'no',
+  emailOptIn: 'no',
+  source: '',
+  lastActivityAt: null,
   groups: [],
   tags: [],
   attributes: [],
@@ -25,6 +35,8 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   leadScore: null,
   leadScoreSource: null,
   leadScoredAt: null,
+  dateOfBirth: null,
+  isMinor: false,
   ...over,
 });
 
@@ -72,7 +84,9 @@ function render(target: SingleSendTarget, channels: ChannelResponse[], seed: See
 
 describe('SingleSendDrawer — email', () => {
   it('shows there is no mailbox to send from when none is connected', () => {
-    const html = render({ row: row(), channel: 'email' }, [channel({ kind: 'whatsapp_cloud', status: 'connected' })]);
+    const html = render({ row: row(), channel: 'email' }, [
+      channel({ kind: 'whatsapp_cloud', status: 'connected' }),
+    ]);
     expect(html).toContain('No mailbox is connected');
   });
 
@@ -81,7 +95,12 @@ describe('SingleSendDrawer — email', () => {
     const html = render(
       { row: row(), channel: 'email' },
       [mailbox],
-      [[sendKeys.conversation('294dca7c-5806-4548-9035-dcca9befc7b1', mailbox.id), { id: 'conv-1' }]],
+      [
+        [
+          sendKeys.conversation('294dca7c-5806-4548-9035-dcca9befc7b1', mailbox.id),
+          { id: 'conv-1' },
+        ],
+      ],
     );
     expect(html).toContain('sales@acme.test');
     expect(html).toContain('Subject');
@@ -91,5 +110,20 @@ describe('SingleSendDrawer — email', () => {
   it('blocks sending to a contact with no email address', () => {
     const html = render({ row: row({ email: '' }), channel: 'email' }, [channel()]);
     expect(html).toContain('This contact has no email address.');
+  });
+});
+
+describe('SingleSendDrawer — sms', () => {
+  it('offers a live sms: link to open the person\'s own app for a real number', () => {
+    const html = render({ row: row(), channel: 'sms' }, []);
+    expect(html).toContain('href="sms:+91 98765 43210"');
+    expect(html).not.toContain('Number is hidden for your role.');
+  });
+
+  it('disables the link instead of building a dead sms: href for a masked number', () => {
+    const html = render({ row: row({ phone: '+xxxxxxxx0025' }), channel: 'sms' }, []);
+    expect(html).not.toContain('href="sms:');
+    expect(html).toContain('aria-disabled="true"');
+    expect(html).toContain('Number is hidden for your role.');
   });
 });

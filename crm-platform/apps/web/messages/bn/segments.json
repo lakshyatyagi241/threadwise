@@ -23,13 +23,18 @@
       "imported": "ফাইল থেকে আমদানি করা",
       "createdAt": "তৈরির সময়",
       "updatedAt": "সর্বশেষ আপডেট",
-      "lastActivityAt": "সর্বশেষ কার্যকলাপ"
+      "lastActivityAt": "সর্বশেষ কার্যকলাপ",
+      "minor": "নাবালক হিসেবে চিহ্নিত",
+      "dateOfBirth": "জন্মতারিখ",
+      "age": "বয়স (বছর)",
+      "timezone": "সময় অঞ্চল"
     },
     "fieldGroups": {
       "journey": "যাত্রা",
       "who": "কে",
       "activity": "কার্যকলাপ",
-      "properties": "বৈশিষ্ট্য"
+      "properties": "বৈশিষ্ট্য",
+      "company": "কোম্পানি প্রপার্টি"
     },
     "operators": {
       "equals": "হয়",

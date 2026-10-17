@@ -458,26 +458,6 @@ export const invoiceTaxSummary = pgTable(
 export type InvoiceTaxSummaryRow = typeof invoiceTaxSummary.$inferSelect;
 export type NewInvoiceTaxSummaryRow = typeof invoiceTaxSummary.$inferInsert;
 
-export const invoiceWebhookEvents = pgTable(
-  'invoice_webhook_events',
-  {
-    id: idColumn('id').notNull().primaryKey().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().unique().defaultRandom(),
-    source: text('source').notNull(),
-    deliveryId: text('delivery_id').notNull(),
-    topic: text('topic'),
-    externalOrderId: text('external_order_id'),
-    receivedAt: timestamp('received_at', { withTimezone: true }),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [unique('uq_invoice_webhook_events_source_delivery_id').on(t.source, t.deliveryId)],
-);
-
-export type InvoiceWebhookEventsRow = typeof invoiceWebhookEvents.$inferSelect;
-export type NewInvoiceWebhookEventsRow = typeof invoiceWebhookEvents.$inferInsert;
-
 export const invoiceGatewayConnections = pgTable(
   'invoice_gateway_connections',
   {

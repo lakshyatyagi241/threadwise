@@ -49,7 +49,8 @@
       "delete": "Sil",
       "cancel": "İptal",
       "deleted": "Kural silindi.",
-      "deleteFailed": "Kural silinemedi."
+      "deleteFailed": "Kural silinemedi.",
+      "businessHours": "Çalışma saatleri"
     },
     "rules": {
       "someone": "bir temsilci",
@@ -425,6 +426,38 @@
       },
       "testSkipped": "Müsait kimse olmadığı için atlandı: {names}",
       "testOff": "Yukarıdaki anahtar kapalı, bu yüzden bu yalnızca açıldığında olacakları gösterir."
+    },
+    "businessHours": {
+      "eyebrow": "Otomatik atama",
+      "title": "Çalışma saatleri",
+      "subtitle": "Çalışma saatlerini kullanan kurallar ve SLA hedefleri yalnızca bu saatler içindeki süreyi sayar.",
+      "close": "Kapat",
+      "loading": "Çalışma saatleri yükleniyor",
+      "loadFailed": "Çalışma saatleri yüklenemedi.",
+      "timezone": "Saat dilimi",
+      "timezoneHint": "Yukarıdaki tüm gün ve saatler bu saat diliminde geçerlidir.",
+      "timezoneOwnerOnly": "Saat dilimini yalnızca çalışma alanı sahibi değiştirebilir.",
+      "days": "Çalışma günleri ve saatleri",
+      "day": {
+        "mon": "Pazartesi",
+        "tue": "Salı",
+        "wed": "Çarşamba",
+        "thu": "Perşembe",
+        "fri": "Cuma",
+        "sat": "Cumartesi",
+        "sun": "Pazar"
+      },
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "problem": {
+        "required": "Her iki saati de girin.",
+        "order": "Bitiş saati başlangıç saatinden sonra olmalıdır."
+      },
+      "note": "Kapalı olarak işaretlenen gün tam gün kapalıdır. Kaydedene kadar çalışma alanı sürekli açık kabul edilir.",
+      "cancel": "İptal",
+      "save": "Saatleri kaydet",
+      "saved": "Çalışma saatleri kaydedildi",
+      "saveFailed": "Kaydedilemedi"
     }
   }
 }

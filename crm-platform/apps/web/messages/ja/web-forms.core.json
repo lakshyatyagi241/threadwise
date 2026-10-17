@@ -19,7 +19,9 @@
       "checkbox_group": "複数選択",
       "checkbox": "チェックボックス",
       "rating": "評価",
-      "hidden": "非表示フィールド"
+      "hidden": "非表示フィールド",
+      "date_of_birth": "生年月日",
+      "age": "年齢"
     },
     "errors": {
       "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",

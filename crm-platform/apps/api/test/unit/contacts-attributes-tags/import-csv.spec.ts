@@ -188,6 +188,31 @@ describe('row validation (TW-CON-027)', () => {
   });
 });
 
+describe('the time zone column (BL-193)', () => {
+  const header = ['name', 'mobile', 'Time Zone'];
+  const mapping = resolveMapping(header);
+  const row = (zone: string) =>
+    extractRow({ line: 2, cells: ['A', '+919812345678', zone] }, mapping, header, {});
+
+  it('is recognised by its header and read in its canonical spelling', () => {
+    expect(mapping.timezone).toBe(2);
+    const r = row('asia/kolkata');
+    expect(r.ok && r.row.timezone).toBe('Asia/Kolkata');
+  });
+
+  it('a blank cell is no zone, and a cell that is not a zone rejects the row with its reason', () => {
+    const blank = row('');
+    expect(blank.ok && blank.row.timezone).toBeUndefined();
+    expect(row('Mars/Olympus')).toMatchObject({ ok: false, reason: 'invalid_timezone' });
+  });
+
+  it('a file with no time zone column leaves it out', () => {
+    const h = ['name', 'mobile'];
+    const r = extractRow({ line: 2, cells: ['A', '+919812345678'] }, resolveMapping(h), h, {});
+    expect(r.ok && 'timezone' in r.row).toBe(false);
+  });
+});
+
 describe('analyzing a whole file (TW-CON-027)', () => {
   it('TW-CON-027 #4: a header with no recognisable phone column is reported as missing, not "imported 0"', () => {
     const a = analyzeCsv('Name,Colour\nA,red\n', opts());

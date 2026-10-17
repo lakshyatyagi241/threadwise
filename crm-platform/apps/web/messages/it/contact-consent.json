@@ -144,7 +144,10 @@
         "booking": "Pagina di prenotazione",
         "commerce": "Checkout del negozio",
         "lead": "Acquisizione lead",
-        "gpc": "Global Privacy Control"
+        "wa_form": "Modulo WhatsApp",
+        "gpc": "Global Privacy Control",
+        "dob": "Data di nascita o età",
+        "declaration": "Età non confermata"
       },
       "by": "da {name}",
       "evidence": {
@@ -227,7 +230,9 @@
           "noteHint": "Per esempio: ha firmato il modulo cartaceo allo sportello. Non scrivere nome o recapiti del tutore.",
           "ref": "Riferimento (facoltativo)",
           "refHint": "Un numero di modulo o un id documento da poter ritrovare in seguito."
-        }
+        },
+        "minorFrom": "Impostato in base alla data di nascita o all'età indicata. Si rimuove da solo il {date}, a meno che una persona non lo mantenga.",
+        "minorFromDeclaration": "Impostato perché l'età non è stata confermata in un modulo. Resta finché una persona non lo rimuove."
       }
     },
     "composer": {
@@ -351,7 +356,8 @@
         "consent_declined": "Non consentito: la persona ha rifiutato.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Non consentito: questo contatto è contrassegnato come minorenne e il tuo spazio di lavoro trattiene il marketing.",
-        "sale_share_opted_out": "Non consentito: il contatto si è opposto alla vendita o alla condivisione dei suoi dati."
+        "sale_share_opted_out": "Non consentito: il contatto si è opposto alla vendita o alla condivisione dei suoi dati.",
+        "on_dnc_list": "Nel tuo elenco \"Non chiamare\": nessuna chiamata né SMS di marketing a questo numero"
       }
     },
     "notice": {

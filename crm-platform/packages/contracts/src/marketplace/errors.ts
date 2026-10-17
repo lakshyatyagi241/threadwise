@@ -53,4 +53,6 @@ export const MKT_ERROR_CODES = {
   MKT_SUBSCRIPTION_NOT_FOUND: 'MKT_SUBSCRIPTION_NOT_FOUND',
   /** The action does not fit the subscription's state (cancelling a comp, comping a workspace that already pays, resuming what was not cancelled). */
   MKT_SUBSCRIPTION_STATE: 'MKT_SUBSCRIPTION_STATE',
+  /** The card renewal could not be stopped at the payment provider, so nothing was changed. Try again; the card is still going to be charged. */
+  MKT_RENEWAL_NOT_STOPPED: 'MKT_RENEWAL_NOT_STOPPED',
 } as const;

@@ -139,7 +139,8 @@
         "cancel": "Annuleren",
         "retry": "Opnieuw proberen met nieuw tijdstip",
         "delete": "Verwijderen",
-        "deleteHistory": "Verwijderen uit geschiedenis"
+        "deleteHistory": "Verwijderen uit geschiedenis",
+        "edit": "Bewerken"
       },
       "empty": {
         "title": "Geen planningen",
@@ -207,7 +208,8 @@
         "noSenders": "Geen verbonden afzender. Verbind eerst een nummer.",
         "warming": "Opwarmen",
         "splitHint": "Elke aangevinkte afzender draait zijn eigen planning met een eerlijk deel van het publiek.",
-        "messageType": "Berichttype"
+        "messageType": "Berichttype",
+        "editSenderHint": "Een planning heeft één nummer. Kies je een ander nummer, dan verhuist de planning ernaartoe en wordt het opwarmbudget opnieuw gereserveerd."
       },
       "audience": {
         "title": "Ontvangers",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Doelgroepwachtrij",
-            "hint": "Ontvangers van een eerdere broadcast opnieuw kiezen."
+            "hint": "Bereik opnieuw de ontvangers van eerdere broadcasts en campagnes."
           },
           "number": {
             "title": "Nummers",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Kies groep(en)",
         "chooseTags": "Kies een of meer tags",
-        "chooseQueues": "Kies een of meer eerdere broadcasts",
+        "chooseQueues": "Kies een of meer eerdere broadcasts of campagnes",
         "tickAny": "(vink zoveel nummers aan als je wilt)",
         "noGroups": "Nog geen groepen",
         "noTags": "Nog geen tags",
-        "noQueues": "Nog geen voltooide broadcasts",
+        "noQueues": "Nog geen eerdere broadcasts of campagnes",
         "contacts": "Ga naar Contacten",
         "broadcast": "Ga naar Broadcasts",
         "tagsHint": "Ontvangers worden opnieuw berekend wanneer de planning start, dus nieuw getagde contacten worden meegenomen.",
-        "queuesHint": "Vink zoveel broadcasts aan als je wilt. Ontvangers worden vóór het verzenden automatisch ontdubbeld.",
+        "queuesHint": "Vink een willekeurig aantal broadcasts of campagnes aan. Ontvangers worden vóór het verzenden automatisch ontdubbeld.",
         "paste": "Plak nummers",
         "pasteHint": "Eerst de landcode, zonder + ervoor. Nieuwe regels of komma's scheiden de invoer.",
         "pastePlaceholder": "Één nummer per regel, met landcode, zonder plusteken",
         "total": "Totaal ontvangers:",
-        "optedOut": "{n} weggelaten: afgemeld of gearchiveerd"
+        "optedOut": "{n} weggelaten: afgemeld of gearchiveerd",
+        "kind": {
+          "broadcast": "Broadcast",
+          "campaign": "Campagne"
+        }
       },
       "message": {
         "title": "Bericht opstellen",
@@ -275,7 +281,34 @@
         "pickerSearch": "Zoeken op naam of taal…",
         "pickerEmpty": "Geen sjablonen gevonden.",
         "manageTemplates": "Sjablonen beheren →",
-        "cancel": "Annuleren"
+        "cancel": "Annuleren",
+        "pickToPreview": "Kies een sjabloon om het te bekijken.",
+        "headerMedia": "{kind}-header",
+        "windowNote": "Een Cloud API-nummer levert een goedgekeurd sjabloon ook af als de klant de afgelopen 24 uur niet heeft geschreven.",
+        "previewSamples": "Voorbeeld met voorbeeldwaarden",
+        "pickerCategories": "Sjablooncategorie",
+        "categories": {
+          "all": "Alle",
+          "marketing": "Marketing",
+          "utility": "Utility"
+        },
+        "pickerHidden": "{n, plural, one {# ander sjabloon is verborgen omdat een aangevinkt nummer het niet kan verzenden.} other {# andere sjablonen zijn verborgen omdat een aangevinkt nummer ze niet kan verzenden.}}",
+        "file": "Bestand",
+        "chooseFile": "Kies een bestand om te verzenden",
+        "fileHint": "Afbeelding, video, audio of document. Het wordt privé opgeslagen in je werkruimte.",
+        "limits": "Op de gekozen nummers: tot {image} MB voor afbeeldingen, {video} MB voor video, {audio} MB voor audio en {document} MB voor documenten.",
+        "tooBigUpload": "Het bestand is groter dan {mb} MB.",
+        "uploadFailed": "Het bestand kon niet worden geüpload. Probeer het opnieuw.",
+        "uploading": "Uploaden…",
+        "replace": "Vervangen",
+        "remove": "Verwijderen",
+        "kinds": {
+          "image": "Afbeelding",
+          "video": "Video",
+          "audio": "Audio",
+          "document": "Document"
+        },
+        "orLink": "Of plak een link naar het bestand"
       },
       "when": {
         "title": "Wanneer verzenden",
@@ -356,7 +389,18 @@
         "daysRequired": "Kies de dagen van de week.",
         "endDateRequired": "Kies de laatste dag.",
         "endBeforeStart": "De einddatum ligt vóór de eerste verzending.",
-        "testNumber": "Voer het nummer in met landcode."
+        "testNumber": "Voer het nummer in met landcode.",
+        "mediaTooLarge": "Dit bestand is groter dan een aangevinkt nummer accepteert. Kies een kleiner bestand.",
+        "mediaType": "Een aangevinkt nummer accepteert dit bestandstype niet voor dit soort media.",
+        "templateNotForSender": "Een aangevinkt nummer kan dit sjabloon niet verzenden: een WhatsApp Cloud API-nummer verzendt alleen sjablonen die Meta heeft goedgekeurd. Kies een ander sjabloon of nummer."
+      },
+      "edit": {
+        "title": "Geplande boodschap bewerken",
+        "saved": "Planning bijgewerkt.",
+        "submit": "Wijzigingen opslaan",
+        "stale": "Iemand heeft deze planning gewijzigd terwijl je bezig was. Laad hem opnieuw om de wijzigingen te zien; wat je hier hebt getypt gaat verloren.",
+        "reload": "Planning opnieuw laden",
+        "backToSchedule": "Terug naar de planning"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Nu uitvoeren",
         "cancel": "Annuleren",
         "retry": "Opnieuw proberen met nieuw tijdstip",
-        "delete": "Verwijderen"
+        "delete": "Verwijderen",
+        "edit": "Bewerken"
       },
       "kpi": {
         "recipients": "Ontvangers",
@@ -434,7 +479,11 @@
           "delivered": "Afgeleverd",
           "read": "Gelezen",
           "failed": "Mislukt"
-        }
+        },
+        "search": "Zoek op naam of nummer",
+        "range": "{from}–{to} van {total}",
+        "prev": "Vorige",
+        "next": "Volgende"
       },
       "config": {
         "eyebrow": "Plandetails",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Berichtvoorbeeld",
         "title": "Wat ontvangers zien",
-        "empty": "(lege tekst)"
+        "empty": "(lege tekst)",
+        "template": "Sjabloon {name} ({language})",
+        "file": "Bestand: {name}"
       },
-      "another": "Nog een planning maken"
+      "another": "Nog een planning maken",
+      "engagement": {
+        "eyebrow": "Betrokkenheid",
+        "title": "Aflevering in de tijd",
+        "legend": "Legenda",
+        "steps": {
+          "queued": "In wachtrij",
+          "sent": "Verzonden",
+          "delivered": "Afgeleverd",
+          "read": "Gelezen",
+          "failed": "Mislukt"
+        },
+        "empty": "Er is nog niets verzonden, dus er valt niets in een grafiek te tonen.",
+        "perHour": "Lopende totalen aan het begin van elk uur, in {zone}.",
+        "perDay": "Lopende totalen aan het begin van elke dag, in {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} aan het opwarmen",

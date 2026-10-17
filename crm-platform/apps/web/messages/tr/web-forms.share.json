@@ -299,6 +299,41 @@
           "held": "{count, plural, one {1 gönderim spam olarak bekletiliyor.} other {# gönderim spam olarak bekletiliyor.}}",
           "review": "İncele"
         }
+      },
+      "age": {
+        "title": "Yaş kontrolü",
+        "description": "Yaşı yalnızca ihtiyaç duyduğunuz yerde sorun. Çoğu form için bunu kapalı bırakın.",
+        "enable": "Ziyaretçinin yaşını kontrol et",
+        "enableHint": "Varsayılan olarak kapalıdır. Çalışma alanınızın kuralları gerektiriyorsa veya işletmeniz reşit olmayanlara hizmet veriyorsa açın. Form ziyaretçiye hangi yanıtın geçtiğini asla söylemez.",
+        "mode": "Nasıl sorulsun",
+        "modes": {
+          "declaration": "Bir kutu: “En az N yaşında olduğumu onaylıyorum”",
+          "age": "Yaşını sor",
+          "dob": "Doğum tarihini sor"
+        },
+        "modeHints": {
+          "declaration": "Yaşla ilgili hiçbir şey saklanmaz. En az veri.",
+          "age": "Bir tam sayı. Kontrol için kullanılır; yalnızca sonuç saklanır.",
+          "dob": "Kişide doğum tarihi olarak kaydedilir. Yalnızca tarihe ihtiyacınız varsa kullanın."
+        },
+        "minAge": "En düşük yaş",
+        "minAgeHint": "Boş bırakırsanız çalışma alanınızın yaşı kullanılır ({age}). 1 ile 21 arasında olmalıdır.",
+        "minAgeInvalid": "{min} ile {max} arasında bir tam sayı girin.",
+        "whenUnder": "Ziyaretçi bu yaşın altındaysa",
+        "actions": {
+          "block": "Gönderimi kabul etme",
+          "flag": "Kabul et, kişiyi reşit olmayan olarak işaretle, pazarlama onayı kaydetme",
+          "guardian": "Yukarıdaki gibi, ayrıca ebeveyn veya vasi bilgisi iste"
+        },
+        "actionHints": {
+          "block": "Hiçbir şey saklanmaz ve ziyaretçi tarafsız bir mesaj görür. Kutuyla ziyaretçinin yalnızca kutuyu işaretlemesi yeterlidir.",
+          "flag": "Kişi reşit olmayan olarak işaretlenir. Bu gönderimin onay satırı gösterildiği gibi saklanır, ancak pazarlama onayı kaydedilmez.",
+          "guardian": "Ebeveyn veya vasinin adı ve iletişim bilgisi gönderimle birlikte ve kişinin zaman çizelgesinde saklanır. Onayları, biri Onay kartında kaydedene kadar kaydedilmez."
+        },
+        "declarationBlockNote": "Kutu ve bu ayarla kimse geri çevrilmez: formu göndermek için kutunun işaretlenmesi gerekir.",
+        "childrenUnanswered": "Uyumluluk merkeziniz çocuklarla ilgili soruyu henüz yanıtlamadı; bu yüzden işaretli bir reşit olmayanın pazarlaması kaydedilir ancak engellenmez.",
+        "childrenLink": "Uyumluluk merkezini aç",
+        "neutralNote": "En düşük yaşı bir alanın yardım metnine veya açıklamaya yazmayın: sayfa hangi yanıtın geçtiğini söylememelidir."
       }
     }
   }

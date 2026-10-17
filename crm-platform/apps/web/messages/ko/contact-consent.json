@@ -144,7 +144,10 @@
         "booking": "예약 페이지",
         "commerce": "스토어 결제",
         "lead": "리드 수집",
-        "gpc": "글로벌 프라이버시 컨트롤"
+        "wa_form": "WhatsApp 양식",
+        "gpc": "글로벌 프라이버시 컨트롤",
+        "dob": "생년월일 또는 나이",
+        "declaration": "나이 미확인"
       },
       "by": "{name}님이 기록",
       "evidence": {
@@ -227,7 +230,9 @@
           "noteHint": "예: 창구에서 종이 양식에 서명함. 보호자의 이름이나 연락처는 적지 마세요.",
           "ref": "참조(선택)",
           "refHint": "나중에 찾아볼 수 있는 양식 번호나 문서 ID."
-        }
+        },
+        "minorFrom": "입력된 생년월일 또는 나이에 따라 설정되었습니다. 담당자가 유지하지 않는 한 {date}에 자동으로 해제됩니다.",
+        "minorFromDeclaration": "양식에서 나이가 확인되지 않아 설정되었습니다. 담당자가 해제할 때까지 유지됩니다."
       }
     },
     "composer": {
@@ -351,7 +356,8 @@
         "consent_declined": "허용되지 않음: 상대가 거부했습니다.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "허용되지 않음: 이 연락처는 미성년자로 표시되어 있으며 워크스페이스가 마케팅을 보류합니다.",
-        "sale_share_opted_out": "허용되지 않음: 연락처가 데이터의 판매 또는 공유를 거부했습니다."
+        "sale_share_opted_out": "허용되지 않음: 연락처가 데이터의 판매 또는 공유를 거부했습니다.",
+        "on_dnc_list": "\"수신 거부\" 목록에 있음: 이 번호로 마케팅 통화나 문자를 보내지 않습니다"
       }
     },
     "notice": {

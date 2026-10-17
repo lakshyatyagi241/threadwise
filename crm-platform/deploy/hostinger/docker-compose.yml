@@ -6,9 +6,11 @@
 
 name: desk
 
-# Docker's json-file driver keeps every log line forever unless told otherwise, on a host shared with many other apps. The three
-# app containers are recreated on every release, so setting this on them costs nothing; postgres, redis and minio are left
-# alone so that adding it never restarts the database.
+# Docker's json-file driver keeps every log line forever unless told otherwise, on a host shared with many other apps. Every
+# container has this block. The app containers are recreated on every release, so it cost nothing there; postgres, redis and
+# minio were first left without it so that adding it would not restart the database. They have it now (the slow-query log and
+# pg_stat_statements make postgres the chattiest container): the FIRST `docker compose up -d` after this change recreates them
+# (a few seconds of downtime, data is on the named volumes), so take that release at a quiet hour. Later releases do not touch them.
 x-app-logging: &app-logging
   driver: json-file
   options:
@@ -85,6 +87,13 @@ x-api-env: &api-env
   WABOO_RUNNER_PICKUP_MIN: ${WABOO_RUNNER_PICKUP_MIN:-}
   WABOO_RUNNER_SILENCE_MIN: ${WABOO_RUNNER_SILENCE_MIN:-}
   WABOO_MIGRATE_TIMEOUT_MIN: ${WABOO_MIGRATE_TIMEOUT_MIN:-}
+  # Event-loop and runtime metrics (docs/performance/event-loop). Every process measures itself; this only decides whether /metrics
+  # is served. Off by default (port 0): deploying this file changes nothing. observability.compose.yml turns it on together with a
+  # Prometheus, an Alertmanager and a probe. The listener refuses to open on a non-loopback host without a token, so setting the port
+  # alone cannot expose it unauthenticated.
+  OBS_METRICS_PORT: ${OBS_METRICS_PORT:-0}
+  OBS_METRICS_HOST: ${OBS_METRICS_HOST:-0.0.0.0}
+  OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:-}
 
 services:
   postgres:
@@ -98,6 +107,7 @@ services:
       WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
     # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
     mem_limit: 1g
+    logging: *app-logging
     command:
       - postgres
       - -c
@@ -129,6 +139,7 @@ services:
     restart: unless-stopped
     # noeviction: BullMQ job state is not a cache.
     mem_limit: 256m
+    logging: *app-logging
     command:
       [
         'redis-server',
@@ -153,6 +164,7 @@ services:
     pull_policy: never
     restart: unless-stopped
     mem_limit: 256m
+    logging: *app-logging
     command: ['server', '/data']
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
@@ -292,6 +304,7 @@ services:
     working_dir: /app
     command: ['node', 'node_modules/@crm/db/dist/cli/migrate.js', 'up']
     restart: 'no'
+    logging: *app-logging
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}

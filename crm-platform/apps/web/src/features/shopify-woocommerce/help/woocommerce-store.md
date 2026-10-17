@@ -44,6 +44,10 @@ The WooCommerce screen connects your WordPress store to this workspace. After co
 - **Settings** shows the store address, the WooCommerce version and the number of registered webhooks. It also has a **WordPress plugin** card: download the zip made for this store, upload it in WordPress under Plugins, Add New, Upload Plugin, and activate it. The plugin recovers abandoned carts before an order exists and passes on failed subscription payments and custom order statuses. The file holds the store's secret key, so keep it private. **Disconnect** removes the registered webhooks.
 - **Invoices** lists the invoices made from this store's orders. Turn on **Invoice this store's orders automatically** and choose when: placed, paid (the default) or fulfilled. Each order is invoiced once, even if the store sends the event again, and the buyer's copy is queued on WhatsApp, or by email without a phone number. It needs the invoicing feature on your plan.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), an offer or a win-back message that uses a marketing template is not sent to a customer while it is night for them. The rest of the audience is sent, and the held customers are sent when their hours end. The result keeps the totals of both. Customers who unsubscribed meanwhile are skipped. A template in the utility category is never held. Order and abandoned cart messages are not affected.
+
 ## Plan and access
 
 You need the WooCommerce permission to open the screen. Connecting, syncing and disconnecting need the connect permission. Automations and offers need their own permissions. The WooCommerce integration must be included in your plan.

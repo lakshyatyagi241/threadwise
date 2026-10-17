@@ -10,6 +10,12 @@ import {
 
 export { escapeLike };
 
+/** The contact is (or is not) flagged as a minor: one primary-key lookup in `contact_privacy_flags` per contact. */
+export function minorCondition(isMinor: boolean): SQL {
+  const exists = sql`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`;
+  return isMinor ? exists : sql`NOT ${exists}`;
+}
+
 const { contacts, teamMembers } = schema;
 
 /**
@@ -31,8 +37,13 @@ export interface ResolvedContactFilter {
   tagMode: 'any' | 'all';
   imported?: boolean;
   unsubscribed?: boolean;
+  /** true: flagged as a minor; false: not flagged (BL-190). */
+  minor?: boolean;
   source?: string;
   status?: string;
+  /** BL-193: the stored time zone is this one / no time zone is stored. */
+  timezone?: string;
+  noTimezone?: boolean;
   /** Date windows, both ends inclusive (a bare day covers the whole day, UTC). */
   createdFrom?: string;
   createdTo?: string;
@@ -117,6 +128,8 @@ export function contactConditions(
   if (f.lifecycleStage) c.push(eq(contacts.lifecycleStage, f.lifecycleStage));
   if (f.status) c.push(eq(contacts.status, f.status));
   if (f.source) c.push(eq(contacts.source, f.source));
+  if (f.timezone) c.push(eq(contacts.timezone, f.timezone));
+  if (f.noTimezone === true) c.push(isNull(contacts.timezone));
   if (f.q) for (const token of searchTokens(f.q)) c.push(tokenCondition(token));
 
   if (f.groupId !== undefined)
@@ -150,6 +163,7 @@ export function contactConditions(
     );
   }
   if (f.unsubscribed !== undefined) c.push(eq(contacts.isUnsubscribed, f.unsubscribed));
+  if (f.minor !== undefined) c.push(minorCondition(f.minor));
 
   if (f.uuids) c.push(f.uuids.length > 0 ? inArray(contacts.uuid, f.uuids) : sql`false`);
   if (f.excludeUuids && f.excludeUuids.length > 0)

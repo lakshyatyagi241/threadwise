@@ -306,7 +306,11 @@
         "numbersCount": "{count} numeri",
         "emailNote": "Le e-mail vanno all'indirizzo di ogni contatto. I contatti senza indirizzo e-mail, gli indirizzi duplicati e i contatti che hanno annullato l'iscrizione vengono saltati.",
         "emailSkipped": "{count, plural, one {# destinatario scelto non ha un indirizzo e-mail e verrà saltato.} other {# destinatari scelti non hanno un indirizzo e-mail e verranno saltati.}}",
-        "emailNoAddress": "I numeri digitati e le righe del CSV non hanno un indirizzo e-mail, quindi vengono saltati. Scegli invece contatti, gruppi, tag o segmenti."
+        "emailNoAddress": "I numeri digitati e le righe del CSV non hanno un indirizzo e-mail, quindi vengono saltati. Scegli invece contatti, gruppi, tag o segmenti.",
+        "previousTitle": "Invii precedenti",
+        "previousHint": "Aggiungi le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, risposto o cliccato.",
+        "previousEstimate": "{count, plural, one {Fino a # persona dagli invii precedenti (una stima: chi è in due invii viene contato due volte).} other {Fino a # persone dagli invii precedenti (una stima: chi è in due invii viene contato due volte).}}",
+        "previousEditHint": "La tua scelta precedente di invii non viene mostrata in modifica: questa campagna conserva già i suoi destinatari come contatti. Scegli di nuovo per aggiungere altre persone."
       },
       "message": {
         "title": "Messaggio",
@@ -594,7 +598,8 @@
         "subject": "Oggetto",
         "subjectFallback": "Il nome della campagna",
         "skippedNoEmail": "Saltati (senza indirizzo e-mail)",
-        "estimateEmail": "È una stima: un contatto in due gruppi viene contato due volte. I contatti senza indirizzo e-mail in gruppi, tag e segmenti vengono saltati all'avvio della campagna."
+        "estimateEmail": "È una stima: un contatto in due gruppi viene contato due volte. I contatti senza indirizzo e-mail in gruppi, tag e segmenti vengono saltati all'avvio della campagna.",
+        "previousSends": "Invii precedenti (fino a)"
       },
       "ai": {
         "open": "Crea con l'IA",
@@ -1205,7 +1210,12 @@
         "pickSender": "Scegli un numero",
         "classicOption": "builder classico",
         "buildWithAi": "Crea con AI",
-        "aiNote": "Crea la bozza di un nuovo template con l'AI. Lo rivedi nella pagina del template; poi Meta lo esamina prima che possa essere inviato, quindi torna a selezionarlo dopo l'approvazione."
+        "aiNote": "Crea la bozza di un nuovo template con l'AI. Lo rivedi nella pagina del template; poi Meta lo esamina prima che possa essere inviato, quindi torna a selezionarlo dopo l'approvazione.",
+        "shareToggle": "Dividi questo invio su più numeri",
+        "shareHint": "Seleziona i numeri da cui inviare e assegna una quota a ciascuno. Il pubblico viene diviso in base a queste quote e ogni contatto riceve il messaggio da un solo numero. Una quota vuota o 0 vale 1.",
+        "shareWeight": "Quota",
+        "shareWeightLabel": "Quota di {name}",
+        "shareKeepOne": "Almeno un numero deve restare selezionato."
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",
@@ -1254,7 +1264,8 @@
           "contacts": "Contatti",
           "groups": "Gruppi",
           "segments": "Segmenti",
-          "csv": "File CSV"
+          "csv": "File CSV",
+          "previous": "Invii precedenti"
         },
         "groupsHint": "I gruppi sono le tue liste marketing. Tutti i membri dei gruppi che selezioni sono inclusi.",
         "segmentsHint": "I segmenti si popolano da soli in base a regole. Tutti i membri dei segmenti che selezioni sono inclusi.",
@@ -1350,7 +1361,10 @@
         },
         "csvIssuesMore": "Altri {count} sono nel file scaricabile.",
         "csvConsentOn": "Hai confermato il consenso per questi numeri. Verranno registrati come consenzienti al lancio della trasmissione.",
-        "csvConsentVersion": "Versione dell'informativa: {version}."
+        "csvConsentVersion": "Versione dell'informativa: {version}.",
+        "modePrevious": "Invia agli invii precedenti",
+        "previousHint": "Raggiungi di nuovo le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, non ha letto, ha risposto o ha cliccato.",
+        "chipPrevious": "{count, plural, one {# invio precedente} other {# invii precedenti}} ({outcome})"
       },
       "review": {
         "intro": "Controlla il costo, indicaci con cosa viene compilata ogni variabile del template e rivedi il broadcast.",
@@ -1429,7 +1443,11 @@
         "chargedPlan": "Addebitato ora sul tuo wallet: {amount} (il tuo piano copre {covered} di questi messaggi)",
         "chargedWallet": "Addebitato sul tuo wallet: {amount}",
         "sumFollowUps": "Follow-up",
-        "sumSequence": "Inviato a rotazione"
+        "sumSequence": "Inviato a rotazione",
+        "sumPrevious": "Invii precedenti: {names} ({outcome})",
+        "sumSplit": "Ripartizione tra i numeri",
+        "sumSplitCount": "{count, plural, one {# destinatario} other {# destinatari}} ({percent}%)",
+        "sumSplitPercent": "{percent}% del pubblico"
       },
       "test": {
         "title": "Invia un messaggio WhatsApp di prova",
@@ -1465,9 +1483,11 @@
           "sent": "Inviato",
           "delivered": "Consegnato",
           "read": "Letto",
-          "failed": "Non riuscito"
+          "failed": "Non riuscito",
+          "held": "Trattenuto"
         },
-        "charged": "Addebitati {amount}"
+        "charged": "Addebitati {amount}",
+        "heldUntil": "Trattenuto fino a {when} (ore di silenzio)"
       },
       "send": {
         "whenTitle": "Quando inviare",
@@ -1912,6 +1932,70 @@
       "loading": "Caricamento dei tuoi numeri",
       "noAccessTitle": "Non puoi creare campagne",
       "noAccess": "Chiedi a un amministratore del workspace l’autorizzazione a creare campagne."
+    },
+    "previousSends": {
+      "title": "Invii precedenti",
+      "empty": "Nessun broadcast o campagna precedente",
+      "outcomeLabel": "Chi tra quegli invii",
+      "outcomes": {
+        "all": "Tutti i destinatari",
+        "delivered": "Consegnato",
+        "read": "Letto",
+        "not_read": "Non letto",
+        "replied": "Ha risposto",
+        "not_replied": "Non ha risposto",
+        "clicked": "Ha cliccato un link",
+        "failed": "Non riuscito"
+      },
+      "outcomeOff": "{name} (non disponibile per i broadcast)",
+      "outcomeHint": {
+        "all": "Tutti i destinatari: tutte le persone a cui era destinato il messaggio. I contatti che hanno annullato l'iscrizione e le righe saltate sono esclusi.",
+        "delivered": "Consegnato: le persone a cui è arrivato.",
+        "read": "Letto: le persone che lo hanno letto.",
+        "not_read": "Non letto: le persone a cui è stato inviato che non lo hanno ancora letto.",
+        "replied": "Ha risposto: le persone che hanno risposto.",
+        "not_replied": "Non ha risposto: le persone a cui è stato inviato che non hanno ancora risposto.",
+        "clicked": "Ha cliccato un link: le persone che hanno cliccato un link tracciato al suo interno.",
+        "failed": "Non riuscito: le persone a cui non è stato possibile consegnarlo."
+      },
+      "broadcastNote": "Un broadcast registra solo consegna e lettura, quindi risposte e clic non sono disponibili finché ne è selezionato uno.",
+      "broadcastOff": "Un broadcast non ha risposte né clic. Scegli un altro esito per selezionarlo.",
+      "search": "Cerca negli invii precedenti",
+      "searchPlaceholder": "Cerca",
+      "listLabel": "Broadcast e campagne precedenti",
+      "noMatch": "Nessun risultato per la tua ricerca.",
+      "chosen": "{count} di {max} selezionati",
+      "limit": "Puoi scegliere fino a {max} invii. Deseleziona un invio per sceglierne un altro.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Campagna"
+      },
+      "wentOut": "Inviato il {date}",
+      "wentOutUnknown": "Data sconosciuta",
+      "recipients": "{count, plural, one {# destinatario} other {# destinatari}}",
+      "notRecorded": "Non registrato per un broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# persona} other {# persone}}",
+        "delivered": "{count, plural, one {# persona lo ha ricevuto} other {# persone lo hanno ricevuto}}",
+        "read": "{count, plural, one {# persona lo ha letto} other {# persone lo hanno letto}}",
+        "not_read": "{count, plural, one {# persona non lo ha letto} other {# persone non lo hanno letto}}",
+        "replied": "{count, plural, one {# persona ha risposto} other {# persone hanno risposto}}",
+        "not_replied": "{count, plural, one {# persona non ha risposto} other {# persone non hanno risposto}}",
+        "clicked": "{count, plural, one {# persona ha cliccato un link} other {# persone hanno cliccato un link}}",
+        "failed": "{count, plural, one {# persona per cui non è riuscito} other {# persone per cui non è riuscito}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "Inviato da ogni numero",
+      "hint": "Questo invio è stato diviso su più numeri. Ogni riga è un numero con i destinatari che ha ricevuto.",
+      "cols": {
+        "number": "Numero",
+        "recipients": "Destinatari",
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "failed": "Falliti"
+      },
+      "removed": "(un numero rimosso)"
     }
   }
 }

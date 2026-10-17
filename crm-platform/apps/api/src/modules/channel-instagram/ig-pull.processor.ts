@@ -3,6 +3,7 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import type { Job } from 'bullmq';
 import { RequestContextStore } from '../../common/context/request-context';
 import { QUEUES } from '../../infra/queue/queues';
+import { IG_HELD_JOB, BroadcastsService, type IgHeldJob } from './broadcasts.service';
 import { PullService, type PullJob, type PullResult } from './pull.service';
 
 /**
@@ -14,12 +15,31 @@ import { PullService, type PullJob, type PullResult } from './pull.service';
 export class IgPullProcessor extends WorkerHost {
   private readonly logger = new Logger(IgPullProcessor.name);
 
-  constructor(private readonly pull: PullService) {
+  constructor(
+    private readonly pull: PullService,
+    private readonly broadcasts: BroadcastsService,
+  ) {
     super();
   }
 
-  process(job: Job<PullJob>): Promise<PullResult> {
-    const { orgId, force } = job.data;
+  process(
+    job: Job<PullJob | IgHeldJob>,
+  ): Promise<PullResult | { sent: number; failed: number; held: number }> {
+    // The send the quiet hours held back (BL-191) travels on this queue too: it is a delayed job for the first opening.
+    if (job.name === IG_HELD_JOB) {
+      const held = job.data as IgHeldJob;
+      return RequestContextStore.run(
+        {
+          requestId: `ig-held-${held.orgId}`,
+          orgId: held.orgId,
+          actorType: 'system',
+          actorId: null,
+          userId: held.userId,
+        },
+        () => this.broadcasts.releaseHeld(held),
+      );
+    }
+    const { orgId, force } = job.data as PullJob;
     return RequestContextStore.run(
       {
         requestId: `ig-pull-${orgId}`,

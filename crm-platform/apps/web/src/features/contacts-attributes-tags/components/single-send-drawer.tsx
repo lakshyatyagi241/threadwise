@@ -23,6 +23,7 @@ import {
   type SendChannel,
 } from '../lib/single-send';
 import type { RowView } from '../lib/row-view';
+import { isMaskedPhone } from '../lib/row-actions';
 import { MailIcon, PhoneIcon, SmsIcon, WhatsAppIcon } from './icons';
 
 const NS = 'contacts-attributes-tags.singleSend';
@@ -406,6 +407,24 @@ function CallPanel({ row }: { row: RowView }) {
 
 function NotAvailable({ row, channel }: { row: RowView; channel: 'sms' }) {
   const t = useTranslations(NS);
+  // A masked number (no contacts.phone.reveal) is not a real target: an `sms:` link built from it would open the
+  // person's messaging app on a meaningless string instead of the contact. Disabled, with the reason, rather than
+  // a dead link — the same "disabled, not hidden" rule the list's own quick actions follow (row-actions.ts).
+  if (isMaskedPhone(row.phone)) {
+    return (
+      <div className="space-y-3">
+        <p className="text-sm text-muted-foreground">{t(`later.${channel}`)}</p>
+        <span
+          aria-disabled="true"
+          title={t('phoneMasked')}
+          aria-label={t('phoneMasked')}
+          className="inline-flex h-9 cursor-not-allowed items-center rounded-md border border-border bg-background px-3 text-sm font-medium text-muted-foreground/40"
+        >
+          {t(`openApp.${channel}`)}
+        </span>
+      </div>
+    );
+  }
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground">{t(`later.${channel}`)}</p>
@@ -458,7 +477,8 @@ function EmailForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   if (mailboxes.length === 0)
     return <p className="text-sm text-muted-foreground">{t('noMailbox')}</p>;
 
-  const canSend = Boolean(conversation.data) && subject.trim() !== '' && body.trim() !== '' && !send.isPending;
+  const canSend =
+    Boolean(conversation.data) && subject.trim() !== '' && body.trim() !== '' && !send.isPending;
 
   return (
     <form
@@ -472,11 +492,7 @@ function EmailForm({ row, onClose }: { row: RowView; onClose: () => void }) {
         <label htmlFor="ss-mailbox" className="text-sm font-medium">
           {t('mailbox')}
         </label>
-        <Select
-          id="ss-mailbox"
-          value={mailboxId}
-          onChange={(e) => setMailboxId(e.target.value)}
-        >
+        <Select id="ss-mailbox" value={mailboxId} onChange={(e) => setMailboxId(e.target.value)}>
           {mailboxes.length > 1 && <option value="">{t('mailboxPlaceholder')}</option>}
           {mailboxes.map((m) => (
             <option key={m.id} value={m.id}>

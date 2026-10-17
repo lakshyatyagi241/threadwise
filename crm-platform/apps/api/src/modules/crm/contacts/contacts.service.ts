@@ -12,6 +12,7 @@ import type {
   BulkUpdateContactsInput,
   ContactListResponse,
   ContactResponse,
+  ContactSendWindow,
   ContactSelectItem,
   ContactSelectQuery,
   CreateContactInput,
@@ -43,6 +44,7 @@ import { missingRequired, requiredPropertiesError } from './required-properties'
 import {
   ConsentIntakeService,
   ContactConsentService,
+  MinorDetectionService,
   hasProof,
   intakeEvidence,
   planIntakeGrants,
@@ -52,6 +54,7 @@ import { PersonalDataErasureService } from '../../privacy';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
+import { SendWindowService } from '../../compliance-center';
 import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
@@ -89,6 +92,14 @@ export interface ContactConsentContext {
    * Omitted, every write that carries a claim records its own event.
    */
   dedupeKey?: string;
+}
+
+/** Who set a contact's time zone (BL-193): an API key (or a caller that says `api`) or a person in the app. */
+function timezoneSourceOf(
+  ctx: { actorType?: string },
+  via?: ContactConsentContext,
+): 'staff' | 'api' {
+  return via?.source === 'api' || ctx.actorType === 'api_key' ? 'api' : 'staff';
 }
 
 /** The statuses a write carries, by channel (undefined: not part of the write). */
@@ -192,10 +203,37 @@ export class ContactsService {
     private readonly consent: ContactConsentService,
     private readonly intake: ConsentIntakeService,
     private readonly erasure: PersonalDataErasureService,
+    private readonly sendWindow: SendWindowService,
+    private readonly minors: MinorDetectionService,
   ) {}
 
-  async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
+  /**
+   * The clock marketing messages to this contact are read on and what the quiet hours say about it right now (BL-193): the contact's
+   * stored zone and who set it, the zone the sender would really use, the next allowed send time when it would be held, and how many
+   * messages already wait. Same record scope as reading the contact.
+   */
+  async sendWindowOf(uuid: string): Promise<ContactSendWindow> {
     const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+      if (!row) throw AppError.notFound('Contact', uuid);
+      const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      return this.sendWindow.contactWindow(ctx.orgId, row.id, { tx });
+    });
+  }
+
+  async list(
+    query: ListContactsQuery,
+    scope: RecordScope,
+    opts?: { canRevealPhone?: boolean },
+  ): Promise<ContactListResponse> {
+    const ctx = RequestContextStore.require();
+    // `opts.canRevealPhone` lets a caller that is a different surface entirely (Developer REST
+    // API v1: "a key sees the whole workspace", see its own read()) keep its pre-existing
+    // behaviour instead of inheriting the Contacts-screen grant check below.
+    const canRevealPhone =
+      opts?.canRevealPhone ?? this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
 
     return this.db.tx(async (tx) => {
       const resolution = await resolveContactFilter(tx, ctx.orgId, query);
@@ -237,6 +275,7 @@ export class ContactsService {
         toContactResponse(row, {
           groups: groupChips?.filter((c) => c.contactId === row.id),
           tags: tagChips?.filter((c) => c.contactId === row.id),
+          canRevealPhone,
         }),
       );
 
@@ -286,7 +325,8 @@ export class ContactsService {
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
       await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
-      return toContactResponse(row);
+      const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
+      return toContactResponse(row, { canRevealPhone });
     });
   }
 
@@ -323,6 +363,13 @@ export class ContactsService {
     via?: ContactConsentContext,
   ): Promise<{ contact: ContactResponse; created: boolean }> {
     const ctx = RequestContextStore.require();
+    // A worker/system actor (the inbound-message pipeline below) carries no grants at all and is
+    // never the one a masking rule is meant to restrict — only an HTTP request from a staff user
+    // goes through the permission guard that populates `ctx.grants`, same convention as the
+    // scope fallback a few methods down.
+    const canRevealPhone = ctx.grants
+      ? this.rbac.can(ctx.grants, 'contacts.phone.reveal').allowed
+      : true;
 
     // One canonicaliser for create, import and dedupe (TW-CON-013). The contract already insists
     // on E.164, so this normally changes nothing; it is what keeps the identity key identical to
@@ -379,10 +426,14 @@ export class ContactsService {
           // The same person agreeing again is still an agreement: the grant lands on the contact they already are.
           const regranted = await this.grantOnMatch(tx, ctx, existing, input, via);
           return {
+            // This can return an EXISTING contact matched by email alone — its phone may be
+            // something the caller never typed, so it goes through the same grant check as
+            // list/detail rather than being treated as "the caller already knows this".
             contact: toContactResponse(
               regranted
                 ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
                 : existing,
+              { canRevealPhone },
             ),
             created: false,
           };
@@ -457,7 +508,10 @@ export class ContactsService {
           (plan.fillStatus.includes('email') ? 'subscribed' : undefined),
         emailConfirmed: input.emailConfirmed,
         faxNumber: input.faxNumber,
+        dateOfBirth: input.dateOfBirth,
         source: input.source,
+        timezone: input.timezone,
+        timezoneSource: timezoneSourceOf(ctx, via),
         isUnsubscribed: input.isUnsubscribed === true,
         unsubscribedAt: input.isUnsubscribed === true ? new Date() : null,
         data: input.customFields,
@@ -477,6 +531,10 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
+      // A date of birth that makes the contact a minor sets the flag in the same transaction (BL-217).
+      if (input.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, ctx.orgId, created.id, new Date(), { dobChanged: true });
+      }
       // A contact created already opted out leaves its proof in the consent ledger (it is never invented for the other case).
       if (input.isUnsubscribed === true) {
         await this.consent.recordInTx(tx, ctx.orgId, {
@@ -511,7 +569,7 @@ export class ContactsService {
       });
 
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
-      return { contact: toContactResponse(row!), created: true };
+      return { contact: toContactResponse(row!, { canRevealPhone }), created: true };
     });
   }
 
@@ -746,6 +804,83 @@ export class ContactsService {
         payload: { uuid: row.uuid, via: 'flow', fieldKeys: [clean] },
       });
       return { stored };
+    });
+  }
+
+  /**
+   * An automated intake path (not a staff request) already decided the person agreed: a WhatsApp Form field mapped to a consent
+   * privacy key today (TW-WFL net addition), the same role form-submit's own private `subscribe`/`recordServiceAgreement` play for
+   * web forms. `marketing` goes through `ConsentIntakeService` (the canonical intake-grant door) and marks the channel subscribed
+   * if its status was blank, never over an existing one, including unsubscribed; `utility` writes the ledger directly (never a
+   * marketing grant, changes no subscription label, announces no opt-in), matching `recordServiceAgreement`'s own rule. No RBAC
+   * check: the caller already is the automated system that decided the grant is real. Returns whether anything was written.
+   */
+  async grantFromIntake(
+    orgId: number,
+    contactId: number,
+    input: {
+      channel: IntakeChannel;
+      purpose: 'marketing' | 'utility';
+      source: ConsentSource;
+      text?: string;
+      evidence?: Record<string, string | null | undefined>;
+      idempotencyKey: string;
+    },
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const found = await tx.execute(
+        sql`SELECT uuid FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      const row = found.rows[0] as { uuid: string } | undefined;
+      if (!row) return false;
+
+      if (input.purpose === 'utility') {
+        const out = await this.consent.recordInTx(tx, orgId, {
+          contactId,
+          channel: input.channel,
+          purpose: 'utility',
+          action: 'granted',
+          source: input.source,
+          evidence: input.evidence,
+          note: input.text,
+          idempotencyKey: input.idempotencyKey,
+          respectWithdrawn: true,
+        });
+        return out.recorded;
+      }
+
+      const recorded = await this.intake.grant(tx, orgId, {
+        contactId,
+        channels: [input.channel],
+        source: input.source,
+        proof: input.text ? { text: input.text } : undefined,
+        evidence: input.evidence,
+        keyBase: input.idempotencyKey,
+      });
+      if (recorded.length === 0) return false;
+      const column = STATUS_COLUMN[input.channel];
+      const existing = await tx.execute(
+        sql`SELECT ${sql.raw(column)} AS status FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      const status = (existing.rows[0] as { status: string | null } | undefined)?.status;
+      if ((status ?? '').trim()) return true;
+      await tx.execute(
+        sql`UPDATE contacts SET ${sql.raw(column)} = 'subscribed' WHERE org_id = ${orgId} AND id = ${contactId}`,
+      );
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: contactId,
+        action: 'update',
+        delta: { [column]: { old: null, new: 'subscribed' } },
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: MODULE_KEY,
+        aggregateId: contactId,
+        eventType: 'contact.opt_in',
+        payload: { contactId: row.uuid, optedIn: true, action: 'subscribed', source: input.source },
+      });
+      return true;
     });
   }
 
@@ -1048,6 +1183,7 @@ export class ContactsService {
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Contact', uuid);
+      const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
       const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
       await assertContactScope(
         tx,
@@ -1106,7 +1242,13 @@ export class ContactsService {
       }
       if (input.emailConfirmed !== undefined) values.emailConfirmed = input.emailConfirmed;
       if (input.faxNumber !== undefined) values.faxNumber = input.faxNumber;
+      if (input.dateOfBirth !== undefined) values.dateOfBirth = input.dateOfBirth;
       if (input.source !== undefined) values.source = input.source;
+      // The contact's own time zone (BL-193): who set it is recorded with it, so a zone read from the number never replaces a chosen one.
+      if (input.timezone !== undefined) {
+        values.timezone = input.timezone;
+        values.timezoneSource = input.timezone === null ? null : timezoneSourceOf(ctx, via);
+      }
       // Marketing opt-out (TW-CON-017): the timestamp is written with the flag, on every change, so the evidence is never
       // missing (Reference left it empty on a manual change). No change, nothing touched.
       if (input.isUnsubscribed !== undefined && input.isUnsubscribed !== existing.isUnsubscribed) {
@@ -1246,6 +1388,13 @@ export class ContactsService {
         });
       }
 
+      // The date of birth moved: the flag follows it (flagged, kept, or lifted once the contact is of age).
+      if (input.dateOfBirth !== undefined && input.dateOfBirth !== existing.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, ctx.orgId, existing.id, new Date(), {
+          dobChanged: true,
+        });
+      }
+
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);
 
       await this.audit.record(tx, {
@@ -1272,7 +1421,7 @@ export class ContactsService {
         },
       });
 
-      return toContactResponse(after!);
+      return toContactResponse(after!, { canRevealPhone });
     });
   }
 
@@ -1603,6 +1752,11 @@ export class ContactsService {
           });
           if (plan.status !== undefined) values.status = plan.status;
         }
+        // The contact's own time zone (BL-193), set on every contact of the selection; `null` clears it. Recorded as set by staff.
+        if (input.values.timezone !== undefined) {
+          values.timezone = input.values.timezone;
+          values.timezoneSource = input.values.timezone === null ? null : 'staff';
+        }
         let changedKeys: string[] = [];
         if (propertyPlan) {
           // Merge, don't replace: the contact's other properties stay. A cleared key is removed.
@@ -1620,13 +1774,22 @@ export class ContactsService {
         }
 
         await this.repo.updateFieldsById(rowTx, ctx.orgId, id, values);
-        // The keys that changed are recorded, never their values.
+        // The keys that changed are recorded, never their values (a time zone is not personal data, so its change is).
         await this.audit.record(rowTx, {
           module: MODULE_KEY,
           recordId: id,
           action: 'update',
-          ...(changedKeys.length > 0
-            ? { delta: { customFieldKeys: { old: null, new: changedKeys } } }
+          ...(changedKeys.length > 0 || input.values.timezone !== undefined
+            ? {
+                delta: {
+                  ...(changedKeys.length > 0
+                    ? { customFieldKeys: { old: null, new: changedKeys } }
+                    : {}),
+                  ...(input.values.timezone !== undefined
+                    ? { timezone: { old: existing.timezone, new: input.values.timezone } }
+                    : {}),
+                },
+              }
             : {}),
         });
         await this.outbox.emit(rowTx, {

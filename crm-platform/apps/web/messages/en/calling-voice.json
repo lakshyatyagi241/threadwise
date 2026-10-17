@@ -90,7 +90,17 @@
       "UNEXPECTED": "Something went wrong. Please try again.",
       "CALL_PLAYBACK_LINK_INVALID": "This recording link has expired. Press play again to get a new one.",
       "CALL_RANGE_INVALID": "These dates do not make sense: the start must not be after the end, a range can cover at most a year, and the time zone must be a real one.",
-      "CALL_OUTSIDE_WINDOW": "This contact is outside your calling hours, so no call was placed. The calling window opens {when}."
+      "CALL_OUTSIDE_WINDOW": "This contact is outside your calling hours, so no call was placed. The calling window opens {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "This call could not be found.",
+      "CALL_LOG_CONTACT_REQUIRED": "Give the contact, or a phone number that can be read as a phone number.",
+      "CALL_LOG_TIME_INVALID": "A call cannot start in the future or more than 400 days ago.",
+      "CALL_LOG_NOT_EDITABLE": "This call was reported by a phone or a telephony provider, so it cannot be changed.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "The time allowed for changing this call has passed.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "A follow-up task needs a contact. Give a number that belongs to one of your contacts.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "This telephony connection could not be found.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "This telephony provider is not available.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "This telephony connection cannot place calls.",
+      "TELEPHONY_CALL_FAILED": "The telephony provider could not place the call."
     },
     "settings": {
       "title": "Calling",

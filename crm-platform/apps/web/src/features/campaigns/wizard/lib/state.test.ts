@@ -270,3 +270,105 @@ describe('template sequence', () => {
     expect(wizardReducer(none, { type: 'sequenceClear' })).toBe(none);
   });
 });
+
+describe('previous sends in the audience', () => {
+  const c = (n: number) => ({ kind: 'campaign' as const, id: uuid(n) });
+
+  it('sets the picked sends and the outcome, next to the other sources', () => {
+    let s = wizardReducer(initialState(), { type: 'audience', patch: { groupIds: [uuid(11)] } });
+    s = wizardReducer(s, {
+      type: 'audience',
+      patch: { previous: { sends: [c(1)], outcome: 'read' } },
+    });
+    expect(s.draft.audience.groupIds).toEqual([uuid(11)]);
+    expect(s.draft.audience.previous).toEqual({ sends: [c(1)], outcome: 'read' });
+  });
+
+  it('keeps at most 20 sends, no repeats, and drops an outcome a ticked broadcast cannot give', () => {
+    const many = Array.from({ length: 25 }, (_, i) => c(i + 1));
+    const s = wizardReducer(initialState(), {
+      type: 'audience',
+      patch: { previous: { sends: [...many, c(1)], outcome: 'read' } },
+    });
+    expect(s.draft.audience.previous?.sends).toHaveLength(20);
+    const b = wizardReducer(initialState(), {
+      type: 'audience',
+      patch: { previous: { sends: [{ kind: 'broadcast', id: uuid(1) }], outcome: 'clicked' } },
+    });
+    expect(b.draft.audience.previous?.outcome).toBe('all');
+  });
+
+  it('clears with null, and a patch of another source leaves it alone', () => {
+    let s = wizardReducer(initialState(), {
+      type: 'audience',
+      patch: { previous: { sends: [c(1)], outcome: 'all' } },
+    });
+    s = wizardReducer(s, { type: 'audience', patch: { groupIds: [uuid(11)] } });
+    expect(s.draft.audience.previous?.sends).toHaveLength(1);
+    s = wizardReducer(s, { type: 'audience', patch: { previous: null } });
+    expect(s.draft.audience.previous).toBeNull();
+  });
+
+  it('is part of the save patch when it changes, and a resumed draft opens with it', () => {
+    const before = draft();
+    const after = draft({
+      audience: audience({ previous: { sends: [c(1)], outcome: 'replied' } }),
+    });
+    expect(Object.keys(draftPatch(before, after))).toEqual(['audience']);
+    const hydrated = wizardReducer(initialState(), { type: 'hydrate', draft: after });
+    expect(hydrated.draft.audience.previous?.outcome).toBe('replied');
+  });
+});
+
+describe('sharing a send across several numbers', () => {
+  const A = 'waba:a';
+  const B = 'waba:b';
+  const C = 'waba:c';
+
+  it('two or more ticked numbers become senderKeys with their weights, the first being the primary', () => {
+    const s = initialState(draft({ senderKey: A }));
+    const n = wizardReducer(s, {
+      type: 'senders',
+      keys: [B, A],
+      share: { [A]: 2, [B]: 3, [C]: 9 },
+    });
+    expect(n.draft.senderKey).toBe(B);
+    expect(n.draft.senderKeys).toEqual([B, A]);
+    // A weight for a number that is not ticked is not kept.
+    expect(n.draft.senderShare).toEqual({ [A]: 2, [B]: 3 });
+  });
+
+  it('one ticked number is the single number: no senderKeys, no weights', () => {
+    const s = wizardReducer(initialState(draft({ senderKey: A })), {
+      type: 'senders',
+      keys: [A, B],
+      share: { [A]: 1 },
+    });
+    const one = wizardReducer(s, { type: 'senders', keys: [B], share: { [B]: 4 } });
+    expect(one.draft.senderKey).toBe(B);
+    expect(one.draft.senderKeys).toEqual([]);
+    expect(one.draft.senderShare).toEqual({});
+  });
+
+  it('picking one number from the list ends the sharing', () => {
+    const s = wizardReducer(initialState(draft({ senderKey: A })), {
+      type: 'senders',
+      keys: [A, B],
+      share: {},
+    });
+    const one = wizardReducer(s, { type: 'sender', senderKey: C });
+    expect(one.draft).toMatchObject({ senderKey: C, senderKeys: [], senderShare: {} });
+    // The same single number again is a no-op.
+    expect(wizardReducer(one, { type: 'sender', senderKey: C })).toBe(one);
+  });
+
+  it('the save patch carries the numbers and weights as their own keys', () => {
+    const before = initialState(draft({ senderKey: A })).draft;
+    const after = wizardReducer(initialState(before), {
+      type: 'senders',
+      keys: [A, B],
+      share: { [A]: 2 },
+    }).draft;
+    expect(draftPatch(before, after)).toEqual({ senderKeys: [A, B], senderShare: { [A]: 2 } });
+  });
+});

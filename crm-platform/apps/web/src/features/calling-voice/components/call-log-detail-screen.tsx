@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useFormatter, useTranslations } from 'next-intl';
 import type { CallLogDetail } from '@crm/contracts';
-import { Alert, Button, Spinner, StatTile } from '@crm/ui';
+import { Alert, Badge, Button, Spinner, StatTile } from '@crm/ui';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -68,6 +68,7 @@ function Back() {
 function Detail({ data, canPlay }: { data: CallLogDetail; canPlay: boolean }) {
   const t = useTranslations('calling-voice.logs.detail');
   const tt = useTranslations('calling-voice.logs.table');
+  const ts = useTranslations('calling-voice.logs.source');
   const format = useFormatter();
   const { call } = data;
   const when = (iso: string | null) =>
@@ -105,6 +106,9 @@ function Detail({ data, canPlay }: { data: CallLogDetail; canPlay: boolean }) {
           )}
           <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
             <StatusBadge status={call.status} />
+            {call.source && call.source !== 'whatsapp' && (
+              <Badge tone="neutral">{ts(call.source)}</Badge>
+            )}
             <span>
               {who ? t('handledBy', { name: who }) : t('handler.none')}
               {' · '}
@@ -154,6 +158,20 @@ function Detail({ data, canPlay }: { data: CallLogDetail; canPlay: boolean }) {
           hint={endReason ? t(`reasons.${endReason}`) : (call.endReason ?? undefined)}
         />
       </div>
+
+      {call.notes && (
+        <section
+          aria-labelledby="call-notes-title"
+          className="mb-5 rounded-xl border border-border bg-background p-5"
+        >
+          <h2 id="call-notes-title" className="text-base font-medium">
+            {t('notes')}
+          </h2>
+          <p className="mt-2 whitespace-pre-wrap break-words text-sm" {...AGENT_PII}>
+            {call.notes}
+          </p>
+        </section>
+      )}
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_340px]">
         <section

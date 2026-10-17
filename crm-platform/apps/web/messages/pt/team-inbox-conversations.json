@@ -710,6 +710,8 @@
         "format": "{label} não pode conter quebra de linha, tabulação ou quatro espaços seguidos."
       },
       "reason": {
+        "other_number": "Pertence a outro número de WhatsApp, por isso não pode ser enviado a partir desta conversa.",
+        "not_linked": "O canal desta conversa não está vinculado a um número de WhatsApp, por isso nenhum modelo pode ser enviado a partir dele.",
         "paused": "Pausado pelo WhatsApp. Poderá ser enviado novamente quando a pausa terminar.",
         "media_header": "Tem um cabeçalho de imagem, vídeo ou documento, que ainda não pode ser enviado pela caixa de entrada.",
         "header_variable": "Tem uma variável no cabeçalho, que ainda não pode ser preenchida pela caixa de entrada.",

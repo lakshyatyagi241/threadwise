@@ -20,13 +20,15 @@ import { VibBroadcastsController } from './vib-broadcasts.controller';
 import { VibBroadcastsRepository } from './vib-broadcasts.repository';
 import { VibBroadcastsService } from './vib-broadcasts.service';
 import { WebhookController } from './webhook.controller';
+import { SendWindowModule } from '../compliance-center';
+import { ContactConsentModule } from '../contact-consent';
 
 /**
  * The Viber channel (VIB). The shims below stand in for what another domain owns; each is replaced by binding the real service to the
  * same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule],
+  imports: [ChatConversationsModule, SendWindowModule, ContactConsentModule],
   controllers: [ChannelsController, VibBroadcastsController, InsightsController, WebhookController],
   providers: [
     CryptoService,

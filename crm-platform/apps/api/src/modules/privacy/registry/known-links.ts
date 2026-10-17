@@ -30,9 +30,4 @@ export const KNOWN_NO_FK_LINKS: readonly KnownLink[] = [
   { table: 'wa_call_permissions', column: 'contact_phone', holds: 'the contact number as text' },
   { table: 'keyword_reply_logs', column: 'contact_phone', holds: 'the sender number as text' },
   { table: 'auto_reply_lookups', column: 'contact_phone', holds: 'the sender number as text' },
-  {
-    table: 'google_form_sessions',
-    column: 'contact_phone',
-    holds: 'the respondent number as text',
-  },
 ];

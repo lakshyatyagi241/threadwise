@@ -85,7 +85,8 @@
       "outsideWindow": "Di luar 24 jam",
       "selected": "{count, plural, other {# dipilih}}",
       "sent": "Broadcast Instagram terkirim — {sent} terkirim{failed, plural, =0 {} other {, # gagal}}.",
-      "sentNone": "Tidak dapat mengirim ke penerima mana pun. Periksa koneksi Instagram."
+      "sentNone": "Tidak dapat mengirim ke penerima mana pun. Periksa koneksi Instagram.",
+      "skipped": "Tidak dikirimi pesan karena persetujuan: {count}"
     }
   }
 }

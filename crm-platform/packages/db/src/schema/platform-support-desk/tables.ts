@@ -70,72 +70,6 @@ export const platformNotes = pgTable(
 export type PlatformNotesRow = typeof platformNotes.$inferSelect;
 export type NewPlatformNotesRow = typeof platformNotes.$inferInsert;
 
-export const playbooks = pgTable(
-  'playbooks',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    name: text('name').notNull(),
-    slug: text('slug').notNull(),
-    triggerType: text('trigger_type').notNull().default('manual'),
-    triggerValue: text('trigger_value'),
-    steps: jsonb('steps'),
-    isActive: boolean('is_active').notNull().default(true),
-    useCount: integer('use_count').notNull().default(0),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_playbooks_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_playbooks_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    unique('uq_playbooks_slug').on(t.orgId, t.slug),
-  ],
-);
-
-export type PlaybooksRow = typeof playbooks.$inferSelect;
-export type NewPlaybooksRow = typeof playbooks.$inferInsert;
-
-export const supportAgents = pgTable(
-  'support_agents',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    userId: idColumn('user_id'),
-    isActive: boolean('is_active').notNull().default(true),
-    specialty: text('specialty'),
-    currentLoad: integer('current_load').notNull().default(0),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_support_agents_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_support_agents_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    unique('uq_support_agents_user_id').on(t.orgId, t.userId),
-    foreignKey({
-      name: 'fk_support_agents_user_id',
-      columns: [t.orgId, t.userId],
-      foreignColumns: [users.orgId, users.id],
-    }).onDelete('cascade'),
-  ],
-);
-
-export type SupportAgentsRow = typeof supportAgents.$inferSelect;
-export type NewSupportAgentsRow = typeof supportAgents.$inferInsert;
-
 export const supportTickets = pgTable(
   'support_tickets',
   {
@@ -196,47 +130,6 @@ export const supportTickets = pgTable(
 
 export type SupportTicketsRow = typeof supportTickets.$inferSelect;
 export type NewSupportTicketsRow = typeof supportTickets.$inferInsert;
-
-export const supportAssignments = pgTable(
-  'support_assignments',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    ticketId: idColumn('ticket_id').notNull(),
-    agentUserId: idColumn('agent_user_id'),
-    assignedAt: timestamp('assigned_at', { withTimezone: true }).notNull().defaultNow(),
-    releasedAt: timestamp('released_at', { withTimezone: true }),
-    outcome: text('outcome'),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_support_assignments_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_support_assignments_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_support_assignments_ticket_id',
-      columns: [t.orgId, t.ticketId],
-      foreignColumns: [supportTickets.orgId, supportTickets.id],
-    }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_support_assignments_agent_user_id',
-      columns: [t.orgId, t.agentUserId],
-      foreignColumns: [users.orgId, users.id],
-    }).onDelete('cascade'),
-    index('idx_support_assignments_agent_user_id').on(t.orgId, t.agentUserId),
-    index('idx_support_assignments_ticket_id_released_at').on(t.orgId, t.ticketId, t.releasedAt),
-  ],
-);
-
-export type SupportAssignmentsRow = typeof supportAssignments.$inferSelect;
-export type NewSupportAssignmentsRow = typeof supportAssignments.$inferInsert;
 
 export const supportMessages = pgTable(
   'support_messages',

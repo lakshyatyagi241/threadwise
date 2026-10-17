@@ -63,7 +63,9 @@
         "agent": "טופל על ידי",
         "allAgents": "כולם",
         "apply": "סנן",
-        "clear": "נקה"
+        "clear": "נקה",
+        "source": "מקור",
+        "allSources": "כל המקורות"
       },
       "table": {
         "caption": "שיחות, מהחדשה לישנה",
@@ -136,12 +138,14 @@
           "reject_sent": "השיחה נדחתה",
           "terminate_sent": "בקשת ניתוק נשלחה",
           "terminate": "השיחה הסתיימה",
-          "recording_stored": "ההקלטה נשמרה"
+          "recording_stored": "ההקלטה נשמרה",
+          "logged": "השיחה נרשמה"
         },
         "noRecording": {
           "title": "הקלטה",
           "message": "אין הקלטה לשיחה הזו."
-        }
+        },
+        "notes": "הערות"
       },
       "recording": {
         "title": "הקלטה",
@@ -154,6 +158,53 @@
         "linkUntil": "הקישור הזה תקף עד {time}. לאחר מכן לחצו שוב על הפעלה.",
         "playFailed": "לא ניתן היה להפעיל את ההקלטה.",
         "retry": "נסו שוב"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "נרשמה ידנית",
+        "telephony": "קו טלפון",
+        "mobile_app": "אפליקציית נייד",
+        "web_click_to_call": "לחיצה לחיוג"
+      },
+      "logCall": {
+        "button": "רישום שיחה",
+        "title": "רישום שיחה",
+        "close": "סגירה",
+        "with": "שיחה עם",
+        "phone": "מספר טלפון",
+        "phoneHint": "השיחה תקושר לאיש הקשר שיש לו את המספר הזה.",
+        "phoneHintContact": "אופציונלי. השיחה תקושר לאיש הקשר הזה.",
+        "direction": "כיוון",
+        "outcome": "איך זה הלך",
+        "outcomes": {
+          "connected": "התחברה",
+          "no_answer": "אין מענה",
+          "busy": "תפוס",
+          "left_voicemail": "הושארה הודעה קולית",
+          "wrong_number": "מספר שגוי",
+          "declined": "נדחתה",
+          "failed": "נכשלה"
+        },
+        "when": "מתי התחילה",
+        "minutes": "משך בדקות",
+        "notes": "הערות",
+        "notesHint": "גלויות לכל מי שרואה את השיחה הזו. עד 2,000 תווים.",
+        "followUp": "צרו גם משימת מעקב",
+        "followUpDue": "מעקב בתאריך",
+        "followUpHint": "המשימה תוקצה אליכם ותקושר לאיש הקשר.",
+        "cancel": "ביטול",
+        "save": "שמירת שיחה",
+        "saving": "שומר...",
+        "saved": "השיחה נרשמה.",
+        "savedNoContact": "השיחה נרשמה. עדיין אין איש קשר עם המספר הזה.",
+        "problems": {
+          "noWho": "הזינו מספר טלפון.",
+          "badWhen": "בחרו מתי השיחה התחילה.",
+          "futureWhen": "שיחה לא יכולה להתחיל בעתיד.",
+          "badMinutes": "הזינו את המשך בדקות, עד 1,440.",
+          "noDue": "בחרו תאריך למעקב.",
+          "badDue": "בחרו תאריך תקין למעקב."
+        }
       }
     },
     "analytics": {

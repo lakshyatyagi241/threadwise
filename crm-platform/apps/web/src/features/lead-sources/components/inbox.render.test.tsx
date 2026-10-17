@@ -23,7 +23,7 @@ vi.mock('next/navigation', () => ({
 
 import { InboxDrawer } from './inbox-drawer';
 import { LeadInboxTab, RetryResult } from './lead-inbox-tab';
-import { RunLine } from './pull-panel';
+import { BackfillDialog, RunLine } from './pull-panel';
 
 /**
  * The lead inbox rendered to static HTML with the real English and Arabic messages: complete text (a missing message throws), what a
@@ -273,11 +273,38 @@ describe('sync and backfill', () => {
     });
   }
 
+  for (const locale of LOCALES) {
+    it(`the backfill dialog says, before it starts, that backfilled leads are not sent the first message in ${locale}`, () => {
+      const out = renderAccount(
+        <ToastProvider>
+          <BackfillDialog
+            open
+            sources={[
+              pull({ sourceName: 'Diwali form', sourceKind: 'meta_lead_ads', maxBackfillDays: 90 }),
+            ]}
+            onClose={() => undefined}
+          />
+        </ToastProvider>,
+        { locale },
+      );
+      expect(out).toContain('data-testid="backfill-speed-note"');
+      expect(out).toContain('Diwali form');
+      if (locale === 'en') {
+        expect(out).toContain('They are not sent the automatic first message');
+        expect(out).toContain('up to 90 days');
+      }
+    });
+  }
+
   it('says why a run stopped in words, and shows no code it does not know', () => {
     const known = renderAccount(
       <RunLine run={run({ status: 'failed', error: 'credentials_refused' })} />,
     );
     expect(known).toContain('The source refused the credentials');
+    const denied = renderAccount(
+      <RunLine run={run({ status: 'failed', error: 'permission_missing' })} />,
+    );
+    expect(denied).toContain('Grant lead access under Meta lead forms');
     const unknown = renderAccount(
       <RunLine run={run({ status: 'failed', error: 'portal said no' })} />,
     );

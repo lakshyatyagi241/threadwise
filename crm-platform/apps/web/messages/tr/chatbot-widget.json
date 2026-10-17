@@ -254,7 +254,34 @@
         "off": "Kapalı",
         "none": "Yok"
       },
-      "colorSwatch": "{label} (renk örneği)"
+      "colorSwatch": "{label} (renk örneği)",
+      "age": {
+        "enable": "Sohbet başlamadan önce yaş sor",
+        "enableHint": "Varsayılan olarak kapalıdır. Yalnızca çalışma alanınızın kuralları gerektiriyorsa veya ziyaretçileriniz reşit olmayan kişiler olabilirse kullanın. Sohbet hangi yanıtın geçtiğini asla söylemez.",
+        "mode": "Nasıl sorulsun",
+        "modes": {
+          "declaration": "Bir kutu: “En az N yaşında olduğumu onaylıyorum”",
+          "age": "Yaşını sor",
+          "dob": "Doğum tarihini sor"
+        },
+        "modeHints": {
+          "declaration": "Yaşla ilgili hiçbir şey saklanmaz. En az veri.",
+          "age": "Bir tam sayı. Kontrol için kullanılır; yalnızca sonuç saklanır.",
+          "dob": "Kişide doğum tarihi olarak kaydedilir. Yalnızca tarihe ihtiyacınız varsa kullanın."
+        },
+        "minAge": "En düşük yaş",
+        "minAgeHint": "Boş bırakırsanız Uyumluluk merkezindeki çalışma alanı yaşı kullanılır (hiçbiri ayarlı değilse 18). 1 ile 21 arasında olmalıdır.",
+        "whenUnder": "Ziyaretçi bu yaşın altındaysa",
+        "actions": {
+          "block": "Sohbeti başlatma",
+          "flag": "Sohbeti başlat ve kişiyi reşit olmayan olarak işaretle"
+        },
+        "actionHints": {
+          "block": "Ziyaretçi hakkında hiçbir şey saklanmaz ve tarafsız bir mesaj görür. Kutuyla ziyaretçinin yalnızca kutuyu işaretlemesi yeterlidir.",
+          "flag": "Sohbet devam eder ve ziyaretçi bir telefon numarası veya e-posta verdiğinde kişi reşit olmayan olarak işaretlenir."
+        },
+        "contactNote": "Yaş, ziyaretçi bir telefon numarası veya e-posta adresi verdikten sonra kişiye kaydedilir."
+      }
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp widget'ı",

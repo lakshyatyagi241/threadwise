@@ -1,5 +1,6 @@
 import type { ContactResponse } from '@crm/contracts';
 import type { ContactChip, ContactRow } from './contacts.repository';
+import { maskPhone } from './phone-mask';
 
 /**
  * Row -> API shape.
@@ -8,10 +9,18 @@ import type { ContactChip, ContactRow } from './contacts.repository';
  * camelCase, and internal bigint ids are replaced by uuids. Nothing outside
  * this function is allowed to put an internal id in a response — keeping the
  * translation in one place is what makes that rule checkable.
+ *
+ * `canRevealPhone` (the caller's `contacts.phone.reveal` grant, resolved by
+ * the service from the request's RBAC context) decides whether `phone` goes
+ * out raw or masked. This is the ONLY point in the contacts read path where
+ * the response body is built, which is what makes the masking a real
+ * server-side control rather than something a client could bypass by reading
+ * the network response — the raw number is simply never put in the payload
+ * for a caller who lacks the grant.
  */
 export function toContactResponse(
   row: ContactRow,
-  chips?: { groups?: ContactChip[]; tags?: ContactChip[] },
+  opts?: { groups?: ContactChip[]; tags?: ContactChip[]; canRevealPhone?: boolean },
 ): ContactResponse {
   const chip = (c: ContactChip) => ({ id: c.uuid, name: c.name, color: c.color });
   return {
@@ -21,7 +30,7 @@ export function toContactResponse(
     firstName: row.firstName,
     lastName: row.lastName,
     email: row.email,
-    phone: row.phone,
+    phone: row.phone && !opts?.canRevealPhone ? maskPhone(row.phone) : row.phone,
     companyId: row.companyUuid,
     ownerId: row.ownerUuid,
     lifecycleState: row.lifecycleState,
@@ -44,13 +53,22 @@ export function toContactResponse(
     emailSubscriptionStatus: row.emailSubscriptionStatus,
     emailConfirmed: row.emailConfirmed,
     faxNumber: row.faxNumber,
+    dateOfBirth: row.dateOfBirth,
+    isMinor: row.isMinor === true,
     lastActivityAt: row.lastActivityAt?.toISOString() ?? null,
     customFields: row.data ?? {},
     source: row.source,
+    timezone: row.timezone,
+    timezoneSource:
+      row.timezone === null
+        ? null
+        : row.timezoneSource === 'import' || row.timezoneSource === 'api'
+          ? row.timezoneSource
+          : 'staff',
     isUnsubscribed: row.isUnsubscribed,
     isArchived: row.isArchived,
-    ...(chips?.groups ? { groups: chips.groups.map(chip) } : {}),
-    ...(chips?.tags ? { tags: chips.tags.map(chip) } : {}),
+    ...(opts?.groups ? { groups: opts.groups.map(chip) } : {}),
+    ...(opts?.tags ? { tags: opts.tags.map(chip) } : {}),
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

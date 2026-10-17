@@ -15,6 +15,7 @@ import type {
   NodeResult,
   SendOutcome,
 } from '../../types';
+import { haltOf } from '../../halt';
 
 /**
  * "Ask for file / image" (`AskFile`) and "Ask for location" (`AskLocation`): not Reference nodes, an addition the project owner asked
@@ -252,7 +253,7 @@ export class AskMediaNodes implements NodeExecutor {
   }
 
   private sendFailed(out: Extract<SendOutcome, { ok: false }>, ctx: NodeContext): NodeResult {
-    if (out.halt) return { kind: 'halt', reason: out.error };
+    if (out.halt) return haltOf(out);
     ctx.note(`send failed: ${out.error}`);
     return { kind: 'fail', code: out.code, reason: out.error };
   }

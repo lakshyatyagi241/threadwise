@@ -3,6 +3,7 @@ import { getQueueToken } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { QUEUES } from '../../../src/infra/queue/queues';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import {
   COMMERCE_SENDER,
   type CommerceSender,
@@ -267,5 +268,105 @@ describe('win-back (TW-ECOM-015)', () => {
       .set(bearer(t.admin))
       .send({ templateUuid: s.templateUuid, days: 60 });
     expect(none.body).toEqual({ ok: false, message: 'No customers match this segment.' });
+  });
+});
+
+describe('BL-191: an offer is held, not denied, in the quiet hours', () => {
+  /** 2030-10-15 16:00 UTC: 21:30 in India (quiet 21:00 to 09:00), 17:00 in London (open). */
+  const EVENING = new Date('2030-10-15T16:00:00Z');
+  const MORNING = new Date('2030-10-16T03:31:00Z');
+  const OPENS = '2030-10-16T03:30:00.000Z';
+
+  async function arrange(label: string, category = 'marketing') {
+    const t = await api.signup(label);
+    const s = await setup(t);
+    await h.owner.query(`UPDATE wa_templates SET category = $2 WHERE uuid = $1`, [
+      s.templateUuid,
+      category,
+    ]);
+    await h.owner.query(
+      `INSERT INTO compliance_settings (org_id, quiet_hours_enabled, quiet_start, quiet_end) VALUES ($1, true, '21:00', '09:00')`,
+      [t.orgId],
+    );
+    const g = await group(t, [
+      { phone: '+91 98765 43210', name: 'Asha Rao' },
+      { phone: '+44 20 7183 8750', name: 'Ned Hill' },
+    ]);
+    return { t, s, g };
+  }
+  const offer = (t: Tenant, s: { storeUuid: string; templateUuid: string }, groupUuid: string) =>
+    api
+      .http()
+      .post(`/v2/shopify/stores/${s.storeUuid}/offer`)
+      .set(bearer(t.admin))
+      .send({ templateUuid: s.templateUuid, groupUuid });
+  const jobsOf = async (orgId: number) => (await queued()).filter((j) => j.orgId === orgId);
+
+  it('sends whoever is awake, keeps the log processed with the held count, and queues the rest for the opening', async () => {
+    const { t, s, g } = await arrange('ebq1');
+    h.app.get(SendWindowService).now = () => EVENING;
+    expect((await offer(t, s, g)).body).toEqual({ ok: true, total: 2, queued: true });
+    const [first] = await jobsOf(t.orgId);
+    await svc.run(first!);
+
+    expect(sent.map((m) => m.to)).toEqual(['442071838750']);
+    expect(await log(t, 'offer/broadcast')).toMatchObject({
+      status: 'processed',
+      response: { sent: 1, failed: 0, held: 1, heldUntil: OPENS },
+    });
+    const resume = (await jobsOf(t.orgId)).find((j) => j.resume);
+    expect(resume?.resume).toMatchObject({
+      sent: 1,
+      failed: 0,
+      audience: [{ phone: '+91 98765 43210', name: 'Asha Rao' }],
+    });
+  });
+
+  it('the delayed run sends the held customer at the opening and ends the log with the totals of both runs', async () => {
+    const { t, s, g } = await arrange('ebq2');
+    h.app.get(SendWindowService).now = () => EVENING;
+    await offer(t, s, g);
+    await svc.run((await jobsOf(t.orgId))[0]!);
+    const resume = (await jobsOf(t.orgId)).find((j) => j.resume)!;
+
+    // Too early: waits for the same opening again.
+    sent.length = 0;
+    await svc.run(resume);
+    expect(sent).toHaveLength(0);
+    expect(await log(t, 'offer/broadcast')).toMatchObject({ status: 'processed' });
+
+    h.app.get(SendWindowService).now = () => MORNING;
+    await svc.run(resume);
+    expect(sent.map((m) => m.to)).toEqual(['919876543210']);
+    expect(await log(t, 'offer/broadcast')).toMatchObject({
+      status: 'sent',
+      response: { sent: 2, failed: 0 },
+    });
+  });
+
+  it('a customer who left while the message waited is not messaged on release', async () => {
+    const { t, s, g } = await arrange('ebq3');
+    h.app.get(SendWindowService).now = () => EVENING;
+    await offer(t, s, g);
+    await svc.run((await jobsOf(t.orgId))[0]!);
+    const resume = (await jobsOf(t.orgId)).find((j) => j.resume)!;
+    await h.owner.query(
+      `UPDATE contacts SET is_unsubscribed = true WHERE org_id = $1 AND name = 'Asha Rao'`,
+      [t.orgId],
+    );
+    sent.length = 0;
+    h.app.get(SendWindowService).now = () => MORNING;
+    await svc.run(resume);
+    expect(sent).toHaveLength(0);
+    expect(await log(t, 'offer/broadcast')).toMatchObject({ response: { sent: 1, failed: 0 } });
+  });
+
+  it('a utility template is never held', async () => {
+    const { t, s, g } = await arrange('ebq4', 'utility');
+    h.app.get(SendWindowService).now = () => EVENING;
+    await offer(t, s, g);
+    await svc.run((await jobsOf(t.orgId))[0]!);
+    expect(sent.map((m) => m.to).sort()).toEqual(['442071838750', '919876543210']);
+    expect(await log(t, 'offer/broadcast')).toMatchObject({ status: 'sent' });
   });
 });

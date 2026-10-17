@@ -47,6 +47,7 @@ export function source(overrides: Partial<LeadSourceResponse> = {}): LeadSourceR
         senderId: null,
         delayMinutes: 0,
         businessHoursOnly: false,
+        maxLeadAgeMinutes: 60,
       },
     },
     rawRetentionDays: 30,

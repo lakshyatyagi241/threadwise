@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
+import { previousSendsAudienceSchema } from '../broadcasts/previous-sends';
 import { marketingMediaSchema } from '../broadcasts/marketing-media';
+import { WIZARD_SENDERS_MAX, senderShareSchema } from './sender-split';
 
 /**
  * Campaigns (CAMP, Reference `wa-campaigns`): a bulk send of a custom message, a template or a flow, with A/B testing, a schedule,
@@ -70,6 +72,13 @@ const campaignFields = {
   name: z.string().trim().min(1).max(191),
   /** `<engine>:<uuid>`. None picked leaves the campaign on the workspace's default engine. */
   senderKey: senderKeySchema.nullish(),
+  /**
+   * Sending from several numbers (an addition carried over from the broadcast composer, TW-BCAST-006): the whole list when more than one
+   * is picked, the first being `senderKey`; empty or absent is the one number in `senderKey`. The recipients are split across them by
+   * `senderShare` (weight per key; missing or non-positive counts as 1).
+   */
+  senderKeys: z.array(senderKeySchema).max(WIZARD_SENDERS_MAX).nullish(),
+  senderShare: senderShareSchema.nullish(),
   type: z.enum(CAMPAIGN_TYPES),
   /** Only `draft` is accepted: Reference took any string and let a client start a campaign past the checks. */
   status: z.literal('draft').nullish(),
@@ -126,6 +135,8 @@ const audienceFields = {
   manualNumbers: z.string().max(500_000).default(''),
   /** The text of an uploaded CSV (`name,country_code,phone` plus any attribute columns). */
   csvText: z.string().max(CAMPAIGN_CSV_MAX_CHARS).default(''),
+  /** Who earlier broadcasts and campaigns went to, optionally only those who did (or did not) read, reply or click. */
+  previousSends: previousSendsAudienceSchema.nullish(),
 };
 
 type Shape = {
@@ -176,6 +187,7 @@ export const updateCampaignSchema = z
     segmentIds: audienceFields.segmentIds.optional(),
     manualNumbers: audienceFields.manualNumbers.optional(),
     csvText: audienceFields.csvText.optional(),
+    previousSends: audienceFields.previousSends,
   })
   .superRefine(refine);
 export type UpdateCampaignInput = z.infer<typeof updateCampaignSchema>;
@@ -258,6 +270,9 @@ export type Campaign = z.infer<typeof campaignSchema>;
 /** Everything the edit form needs: the whole configuration and who is on the list. */
 export const campaignConfigSchema = campaignSchema.extend({
   senderKey: z.string().nullable(),
+  /** The numbers a shared send goes out from (the first is `senderKey`), with weights equal to their recipient counts; empty for one number. */
+  senderKeys: z.array(z.string()).default([]),
+  senderShare: z.record(z.number()).default({}),
   abSplit: z.number().int(),
   customMessage: z.string().nullable(),
   customMessageB: z.string().nullable(),

@@ -306,7 +306,11 @@
         "numbersCount": "{count} 个号码",
         "emailNote": "邮件会发送到每位联系人的邮箱地址。没有邮箱地址的联系人、重复的地址和已退订的联系人会被跳过。",
         "emailSkipped": "所选收件人中没有邮箱地址、将被跳过的人数：{count}",
-        "emailNoAddress": "手动输入的号码和 CSV 行没有邮箱地址，因此会被跳过。请改为选择联系人、群组、标签或细分。"
+        "emailNoAddress": "手动输入的号码和 CSV 行没有邮箱地址，因此会被跳过。请改为选择联系人、群组、标签或细分。",
+        "previousTitle": "以往发送",
+        "previousHint": "添加以往群发和活动的收件人，也可以只选择已读、已回复或点击过的人。",
+        "previousEstimate": "{count, plural, other {来自以往发送的最多 # 人（估算值：同时在两次发送中的人会被重复计算）。}}",
+        "previousEditHint": "编辑时不会显示您之前选择的以往发送：此活动已将收件人保存为联系人。如需添加更多人，请重新选择。"
       },
       "message": {
         "title": "消息",
@@ -594,7 +598,8 @@
         "subject": "主题",
         "subjectFallback": "活动名称",
         "skippedNoEmail": "已跳过（没有邮箱地址）",
-        "estimateEmail": "这是估算值：同时在两个群组中的联系人会被计算两次。群组、标签和细分中没有邮箱地址的联系人会在活动运行时被跳过。"
+        "estimateEmail": "这是估算值：同时在两个群组中的联系人会被计算两次。群组、标签和细分中没有邮箱地址的联系人会在活动运行时被跳过。",
+        "previousSends": "以往发送（最多）"
       },
       "ai": {
         "open": "使用 AI 创建",
@@ -1205,7 +1210,12 @@
         "pickSender": "选择号码",
         "classicOption": "经典构建器",
         "buildWithAi": "使用 AI 生成",
-        "aiNote": "使用 AI 起草新模板。您可在模板页面查看；随后 Meta 会对其进行审核，通过后才能发送，请在审核通过后返回选择。"
+        "aiNote": "使用 AI 起草新模板。您可在模板页面查看；随后 Meta 会对其进行审核，通过后才能发送，请在审核通过后返回选择。",
+        "shareToggle": "将本次发送分配到多个号码",
+        "shareHint": "勾选要发送的号码，并为每个号码设置份额。受众按份额拆分，每位联系人只会收到来自一个号码的消息。份额为空或为 0 时按 1 计算。",
+        "shareWeight": "份额",
+        "shareWeightLabel": "{name} 的份额",
+        "shareKeepOne": "至少保留一个号码处于勾选状态。"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",
@@ -1254,7 +1264,8 @@
           "contacts": "联系人",
           "groups": "分组",
           "segments": "细分",
-          "csv": "CSV 文件"
+          "csv": "CSV 文件",
+          "previous": "以往发送"
         },
         "groupsHint": "分组是您的营销列表。您勾选的分组中的所有人都会被包含。",
         "segmentsHint": "细分会根据规则自动填充。您勾选的细分中的所有人都会被包含。",
@@ -1350,7 +1361,10 @@
         },
         "csvIssuesMore": "下载文件中还有 {count} 条。",
         "csvConsentOn": "您已确认这些号码的同意。发起群发时将记录为已同意。",
-        "csvConsentVersion": "告知版本:{version}。"
+        "csvConsentVersion": "告知版本:{version}。",
+        "modePrevious": "发送给以往发送的收件人",
+        "previousHint": "重新触达以往群发和活动的收件人，也可以只选择已读、未读、已回复或点击过的人。",
+        "chipPrevious": "{count, plural, other {# 个以往发送}}（{outcome}）"
       },
       "review": {
         "intro": "核对费用，告诉我们每个模板变量的填充内容，并检查群发。",
@@ -1429,7 +1443,11 @@
         "chargedPlan": "现从您的钱包扣款：{amount}（您的套餐覆盖其中 {covered} 条消息）",
         "chargedWallet": "从您的钱包扣款：{amount}",
         "sumFollowUps": "跟进",
-        "sumSequence": "轮流发送"
+        "sumSequence": "轮流发送",
+        "sumPrevious": "以往发送：{names}（{outcome}）",
+        "sumSplit": "按号码拆分",
+        "sumSplitCount": "{count, plural, other {# 位收件人}} ({percent}%)",
+        "sumSplitPercent": "占受众的 {percent}%"
       },
       "test": {
         "title": "发送 WhatsApp 测试消息",
@@ -1465,9 +1483,11 @@
           "sent": "已发送",
           "delivered": "已送达",
           "read": "已读",
-          "failed": "失败"
+          "failed": "失败",
+          "held": "暂缓"
         },
-        "charged": "已扣费 {amount}"
+        "charged": "已扣费 {amount}",
+        "heldUntil": "暂缓至 {when}（免打扰时段）"
       },
       "send": {
         "whenTitle": "发送时间",
@@ -1912,6 +1932,70 @@
       "loading": "正在加载您的号码",
       "noAccessTitle": "您无法创建营销活动",
       "noAccess": "请向工作区管理员申请创建营销活动的权限。"
+    },
+    "previousSends": {
+      "title": "以往发送",
+      "empty": "暂无以往的群发或活动",
+      "outcomeLabel": "这些发送中的哪些人",
+      "outcomes": {
+        "all": "所有收件人",
+        "delivered": "已送达",
+        "read": "已读",
+        "not_read": "未读",
+        "replied": "已回复",
+        "not_replied": "未回复",
+        "clicked": "点击了链接",
+        "failed": "失败"
+      },
+      "outcomeOff": "{name}（不适用于群发）",
+      "outcomeHint": {
+        "all": "所有收件人：消息的全部目标对象。已退订的联系人和被跳过的行不包括在内。",
+        "delivered": "已送达：消息成功送达的人。",
+        "read": "已读：阅读了消息的人。",
+        "not_read": "未读：收到消息但尚未阅读的人。",
+        "replied": "已回复：回复了消息的人。",
+        "not_replied": "未回复：收到消息但尚未回复的人。",
+        "clicked": "点击了链接：点击了消息中跟踪链接的人。",
+        "failed": "失败：消息无法送达的人。"
+      },
+      "broadcastNote": "群发只记录送达和已读，因此勾选群发时无法使用回复和点击。",
+      "broadcastOff": "群发没有回复或点击数据。请选择其他结果后再勾选。",
+      "search": "搜索以往发送",
+      "searchPlaceholder": "搜索",
+      "listLabel": "以往的群发和活动",
+      "noMatch": "没有符合搜索条件的结果。",
+      "chosen": "已选 {count}/{max}",
+      "limit": "最多可选择 {max} 个发送。取消勾选一个后才能选择其他的。",
+      "kind": {
+        "broadcast": "群发",
+        "campaign": "活动"
+      },
+      "wentOut": "发送于 {date}",
+      "wentOutUnknown": "日期未知",
+      "recipients": "{count, plural, other {# 位收件人}}",
+      "notRecorded": "群发未记录",
+      "outcomeCounts": {
+        "all": "{count, plural, other {# 人}}",
+        "delivered": "{count, plural, other {# 人已收到}}",
+        "read": "{count, plural, other {# 人已读}}",
+        "not_read": "{count, plural, other {# 人未读}}",
+        "replied": "{count, plural, other {# 人已回复}}",
+        "not_replied": "{count, plural, other {# 人未回复}}",
+        "clicked": "{count, plural, other {# 人点击了链接}}",
+        "failed": "{count, plural, other {# 人发送失败}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "各号码的发送情况",
+      "hint": "本次发送已分配到多个号码。每一行是一个号码及其分到的收件人。",
+      "cols": {
+        "number": "号码",
+        "recipients": "收件人",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "failed": "失败"
+      },
+      "removed": "（已移除的号码）"
     }
   }
 }

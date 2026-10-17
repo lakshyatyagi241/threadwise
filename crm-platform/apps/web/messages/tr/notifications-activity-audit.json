@@ -170,6 +170,26 @@
         "titleNoName": "Ertelenen bir sohbet listenize geri döndü",
         "titleTeam": "{name} ekibiniz için geri döndü",
         "titleTeamNoName": "Ertelenen bir sohbet ekibiniz için geri döndü"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name}, {date, date, medium} tarihinde yenilenir",
+        "bodyAuto": "{name} uygulamasını yenilemek için kartınızdan o tarihte otomatik olarak ücret alınır. Durdurmak için o tarihten önce iptal edin.",
+        "titleManual": "{name}, {date, date, medium} tarihine kadar ödendi",
+        "bodyManual": "{name} kendiliğinden yenilenmez. Duraksamadan çalışmaya devam etmesi için o tarihten önce yeniden ödeme yapın.",
+        "titleEnding": "{name}, {date, date, medium} tarihinde sona eriyor",
+        "bodyEnding": "{name} aboneliğini iptal ettiniz, bu yüzden o tarihte çalışmayı bırakır. Korumak için o tarihten önce yeniden abone olun.",
+        "title": "{name}: yenileme yaklaşıyor",
+        "titleNoName": "Ücretli uygulama yenilemesi yaklaşıyor"
+      },
+      "marketplace_payment_failed": {
+        "title": "{name} ödemesi başarısız",
+        "body": "Kartla yapılan ödeme gerçekleşmedi. Ödeme sağlayıcısı yeniden denerken uygulama birkaç gün çalışmaya devam eder. Duraklatılmaması için şimdi ödeyin veya ödeme yönteminizi düzeltin.",
+        "titleNoName": "Ücretli uygulama ödemesi başarısız"
+      },
+      "marketplace_subscription_ended": {
+        "title": "{name} aboneliği sona erdi",
+        "body": "Uygulama duraklatıldı; verileri ve ayarları korunur. Yeniden açmak için yeniden abone olun.",
+        "titleNoName": "Ücretli uygulama aboneliği sona erdi"
       }
     },
     "live": {
@@ -202,7 +222,10 @@
         "device_group_join_request": "Gruba katılma isteği",
         "device_group_removed": "Bir WhatsApp grubundan çıkarıldınız",
         "test": "Test bildirimi",
-        "snooze_wake": "Ertelenen sohbet geri döndü"
+        "snooze_wake": "Ertelenen sohbet geri döndü",
+        "marketplace_renewal_due": "Ücretli uygulama yenilemesi yaklaşıyor",
+        "marketplace_payment_failed": "Ücretli uygulama ödemesi başarısız",
+        "marketplace_subscription_ended": "Ücretli uygulama aboneliği sona erdi"
       },
       "generic": "Yeni bir bildiriminiz var",
       "paused": "Canlı güncellemeler duraklatıldı, bu yüzden yeni uyarılar bir dakikaya kadar geç gelebilir. Yeniden bağlanmak için sayfayı yenileyin."
@@ -394,6 +417,18 @@
         "snooze_wake": {
           "label": "Ertelenen sohbet geri döner",
           "hint": "Ertelenen bir sohbet belirlenen saatte yeniden açılır ve size ya da ekibinize atanır."
+        },
+        "marketplace_renewal_due": {
+          "label": "Ücretli uygulama yenileme hatırlatması",
+          "hint": "Ücretli bir uygulamanın dönemi birkaç gün içinde bitiyor: kartla yenileniyor, belirli bir tarihe kadar ödenmiş durumda ya da iptal edilmiş olup sona eriyor."
+        },
+        "marketplace_payment_failed": {
+          "label": "Ücretli uygulama ödemesi başarısız",
+          "hint": "Ücretli bir uygulamanın kartla yenilenmesi gerçekleşmedi ve ilgilenmeniz gerekiyor."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Ücretli uygulama aboneliği sona erdi",
+          "hint": "Ücretli bir uygulamanın aboneliği sona erdi ve uygulama duraklatıldı."
         }
       },
       "loading": "Tercihleriniz yükleniyor",

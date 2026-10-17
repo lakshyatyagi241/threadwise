@@ -28,9 +28,21 @@ describe('the filters in the address', () => {
       direction: undefined,
       numberId: undefined,
       agentId: undefined,
+      source: undefined,
       q: undefined,
       page: 1,
     });
+  });
+
+  it('reads how a call reached the log, keeps it in the address and sends it to the list and the analytics', () => {
+    expect(parseLogParams(sp('source=mobile_app')).source).toBe('mobile_app');
+    expect(parseLogParams(sp('source=whatsapp')).source).toBe('whatsapp');
+    expect(parseLogParams(sp('source=carrier_pigeon')).source).toBeUndefined();
+    const p = parseLogParams(sp('source=telephony&status=completed'));
+    expect(logSearch(p)).toBe('?status=completed&source=telephony');
+    expect(logSearch({ ...p, source: undefined })).toBe('?status=completed');
+    expect(toListQuery(p, 'UTC').source).toBe('telephony');
+    expect(toAnalyticsQuery(p, 'UTC').source).toBe('telephony');
   });
 
   it('reads every filter, and ignores what is not valid', () => {

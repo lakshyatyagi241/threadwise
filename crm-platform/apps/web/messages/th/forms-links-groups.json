@@ -95,7 +95,28 @@
         "required": "จำเป็นต้องกรอก",
         "removeField": "ลบ",
         "options": "ตัวเลือก (คั่นด้วยจุลภาค)",
-        "optionsPlaceholder": "ตัวเลือก 1, ตัวเลือก 2, ตัวเลือก 3"
+        "optionsPlaceholder": "ตัวเลือก 1, ตัวเลือก 2, ตัวเลือก 3",
+        "mapsTo": "แมปไปยัง",
+        "mapsToHint": "บันทึกคำตอบนี้ลงในคุณสมบัติของผู้ติดต่อเมื่อส่งแบบฟอร์ม",
+        "mapsToNone": "ไม่บันทึกลงคุณสมบัติของผู้ติดต่อ",
+        "mapsToSystemGroup": "ฟิลด์ผู้ติดต่อ",
+        "mapsToCustomGroup": "คุณสมบัติแบบกำหนดเอง",
+        "mapsToSystem": {
+          "name": "ชื่อเต็ม",
+          "first_name": "ชื่อ",
+          "last_name": "นามสกุล",
+          "email": "อีเมล",
+          "title": "ตำแหน่ง",
+          "language": "ภาษา",
+          "address": "ที่อยู่"
+        },
+        "mapsToPrivacyGroup": "ความเป็นส่วนตัวและการยินยอม",
+        "mapsToPrivacy": {
+          "age": "อายุ (ตรวจสอบผู้เยาว์)",
+          "date_of_birth": "วันเกิด (ตรวจสอบผู้เยาว์)",
+          "consent_marketing": "การยินยอมการตลาด (WhatsApp)",
+          "consent_service": "ข้อตกลงบริการ (ไม่ใช่การตลาด)"
+        }
       },
       "fieldKind": {
         "heading": "หัวข้อ",

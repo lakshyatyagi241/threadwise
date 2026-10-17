@@ -710,6 +710,8 @@
         "format": "{label} satır sonu, sekme veya art arda dört boşluk içeremez."
       },
       "reason": {
+        "other_number": "Başka bir WhatsApp numarasına ait, bu sohbetten gönderilemez.",
+        "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez.",
         "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
         "media_header": "Görsel, video veya belge üstbilgisi var; bu, gelen kutusundan henüz gönderilemiyor.",
         "header_variable": "Üstbilgide bir değişken var; bu, gelen kutusundan henüz doldurulamıyor.",

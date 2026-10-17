@@ -170,6 +170,26 @@
         "titleNoName": "Cuộc trò chuyện hoãn đã quay lại danh sách của bạn",
         "titleTeam": "{name} đã quay lại cho nhóm của bạn",
         "titleTeamNoName": "Cuộc trò chuyện hoãn đã quay lại cho nhóm của bạn"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} gia hạn vào {date, date, medium}",
+        "bodyAuto": "Thẻ của bạn sẽ tự động bị trừ tiền vào ngày đó để gia hạn {name}. Hãy hủy trước ngày đó để dừng lại.",
+        "titleManual": "{name} đã trả đến {date, date, medium}",
+        "bodyManual": "{name} không tự động gia hạn. Hãy thanh toán lại trước ngày đó để ứng dụng tiếp tục hoạt động không bị tạm dừng.",
+        "titleEnding": "{name} kết thúc vào {date, date, medium}",
+        "bodyEnding": "Bạn đã hủy {name}, nên ứng dụng sẽ ngừng hoạt động vào ngày đó. Hãy đăng ký lại trước ngày đó để giữ lại.",
+        "title": "{name}: sắp đến hạn gia hạn",
+        "titleNoName": "Sắp đến hạn gia hạn ứng dụng trả phí"
+      },
+      "marketplace_payment_failed": {
+        "title": "Thanh toán cho {name} thất bại",
+        "body": "Thanh toán bằng thẻ không thành công. Ứng dụng vẫn hoạt động thêm vài ngày trong khi nhà cung cấp thanh toán thử lại. Hãy thanh toán ngay, hoặc sửa phương thức thanh toán, để tránh bị tạm dừng.",
+        "titleNoName": "Thanh toán ứng dụng trả phí thất bại"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Đăng ký {name} đã kết thúc",
+        "body": "Ứng dụng đã bị tạm dừng, dữ liệu và cài đặt vẫn được giữ. Hãy đăng ký lại để bật lại.",
+        "titleNoName": "Đăng ký ứng dụng trả phí đã kết thúc"
       }
     },
     "live": {
@@ -202,7 +222,10 @@
         "device_group_join_request": "Yêu cầu tham gia nhóm",
         "device_group_removed": "Bị xóa khỏi nhóm WhatsApp",
         "test": "Thông báo thử",
-        "snooze_wake": "Cuộc trò chuyện hoãn đã quay lại"
+        "snooze_wake": "Cuộc trò chuyện hoãn đã quay lại",
+        "marketplace_renewal_due": "Sắp đến hạn gia hạn ứng dụng trả phí",
+        "marketplace_payment_failed": "Thanh toán ứng dụng trả phí thất bại",
+        "marketplace_subscription_ended": "Đăng ký ứng dụng trả phí đã kết thúc"
       },
       "generic": "Bạn có một thông báo mới",
       "paused": "Cập nhật trực tiếp đang tạm dừng nên cảnh báo mới có thể đến chậm tới một phút. Hãy tải lại trang để kết nối lại."
@@ -394,6 +417,18 @@
         "snooze_wake": {
           "label": "Cuộc trò chuyện hoãn quay lại",
           "hint": "Cuộc trò chuyện hoãn mở lại đúng giờ và được giao cho bạn hoặc nhóm của bạn."
+        },
+        "marketplace_renewal_due": {
+          "label": "Nhắc gia hạn ứng dụng trả phí",
+          "hint": "Kỳ đã trả của một ứng dụng trả phí sắp kết thúc trong vài ngày: tự gia hạn bằng thẻ, đã trả đến một ngày nhất định, hoặc đã hủy và sắp kết thúc."
+        },
+        "marketplace_payment_failed": {
+          "label": "Thanh toán ứng dụng trả phí thất bại",
+          "hint": "Lần gia hạn bằng thẻ của một ứng dụng trả phí không thành công và cần bạn xử lý."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Đăng ký ứng dụng trả phí đã kết thúc",
+          "hint": "Gói đăng ký của một ứng dụng trả phí đã kết thúc và ứng dụng đã bị tạm dừng."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import {
   WIZARD_CONTACT_FIELDS,
+  senderSplit,
+  wizardSenderPicks,
   type WizardAudienceCount,
   type WizardCreditCheck,
   type WizardDraft,
@@ -15,6 +17,7 @@ import { useSegmentCatalog } from '@/features/segments/api/lookups';
 import { summarize } from '@/features/segments/lib/summary';
 import { useSummaryContext } from '@/features/segments/components/use-summary';
 import { audienceNames, editorFromRules, selectionKind } from '../lib/audience';
+import { hasPrevious, previousNames } from '../../lib/previous-sends';
 import { formatMinor } from '../lib/money';
 import type { WizardView } from '../lib/state';
 import { useWaitText } from './follow-ups-card';
@@ -59,6 +62,7 @@ export function SummaryCard({
   draft,
   template,
   sender,
+  senders,
   sources,
   count,
   credit,
@@ -69,6 +73,8 @@ export function SummaryCard({
   draft: WizardDraft;
   template: WizardTemplate | null;
   sender: WizardSender | null;
+  /** Every connected number, to name the ones a shared send is split across. */
+  senders?: readonly WizardSender[] | undefined;
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: WizardCreditCheck | undefined;
@@ -80,6 +86,7 @@ export function SummaryCard({
   const t = useTranslations('campaigns.wizard.review');
   const ta = useTranslations('campaigns.wizard.audience');
   const tc = useTranslations('campaigns.wizard.categories');
+  const tp = useTranslations('campaigns.previousSends');
   const tf = useTranslations('campaigns.wizard.fields');
   const locale = useLocale();
   const tf2 = useTranslations('campaigns.wizard.followUps');
@@ -91,6 +98,9 @@ export function SummaryCard({
   const sentence = all?.rules ? summarize(editorFromRules(all.rules), ctx) : '';
   const allWhat = [all?.search ? `"${all.search}"` : '', sentence].filter(Boolean).join(', ');
   const recipients = credit?.recipients ?? count?.recipients;
+  // A send shared across several numbers: how many recipients each gets (the same split the server cuts, so what is shown is what is sent).
+  const picks = wizardSenderPicks(draft);
+  const split = picks.length > 1 ? senderSplit(recipients ?? 0, picks, draft.senderShare) : null;
   const skipped = count ? count.optedOut + count.invalidNumber : null;
   const slots = template?.slots ?? [];
   const list = (xs: Array<{ name: string; found: boolean }>) =>
@@ -137,6 +147,25 @@ export function SummaryCard({
             <span className="text-muted-foreground">{t('none')}</span>
           )}
         </Row>
+        {split && (
+          <Row label={t('sumSplit')} step={1} onEdit={onEdit}>
+            <ul className="space-y-0.5" data-testid="sum-split">
+              {split.map((x) => {
+                const s = senders?.find((y) => y.key === x.key);
+                return (
+                  <li key={x.key}>
+                    <span className="font-medium">{s ? s.label : t('missingSource')}</span>
+                    {s?.phone ? ` (${s.phone})` : ''}
+                    {': '}
+                    {recipients === undefined
+                      ? t('sumSplitPercent', { percent: x.percent })
+                      : t('sumSplitCount', { count: x.count, percent: x.percent })}
+                  </li>
+                );
+              })}
+            </ul>
+          </Row>
+        )}
         <Row label={t('sumAudience')} step={2} onEdit={onEdit}>
           <ul className="space-y-0.5">
             {draft.audience.contactIds.length > 0 && (
@@ -160,6 +189,19 @@ export function SummaryCard({
             {names.groups.length > 0 && <li>{t('sumGroups', { names: list(names.groups) })}</li>}
             {names.segments.length > 0 && (
               <li>{t('sumSegments', { names: list(names.segments) })}</li>
+            )}
+            {hasPrevious(draft.audience.previous) && (
+              <li>
+                {t('sumPrevious', {
+                  names: list(
+                    previousNames(draft.audience.previous, sources?.previousSends).map((x) => ({
+                      name: x.name,
+                      found: x.found,
+                    })),
+                  ),
+                  outcome: tp(`outcomes.${draft.audience.previous?.outcome ?? 'all'}`),
+                })}
+              </li>
             )}
             {draft.audience.csv && (
               <li>

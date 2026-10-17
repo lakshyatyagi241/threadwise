@@ -95,7 +95,28 @@
         "required": "Verplicht",
         "removeField": "Verwijderen",
         "options": "Opties (gescheiden door komma's)",
-        "optionsPlaceholder": "Optie 1, Optie 2, Optie 3"
+        "optionsPlaceholder": "Optie 1, Optie 2, Optie 3",
+        "mapsTo": "Koppelt aan",
+        "mapsToHint": "Slaat dit antwoord op in een contacteigenschap wanneer het formulier wordt verzonden.",
+        "mapsToNone": "Niet opslaan in een contacteigenschap",
+        "mapsToSystemGroup": "Contactvelden",
+        "mapsToCustomGroup": "Aangepaste eigenschappen",
+        "mapsToSystem": {
+          "name": "Volledige naam",
+          "first_name": "Voornaam",
+          "last_name": "Achternaam",
+          "email": "E-mail",
+          "title": "Functietitel",
+          "language": "Taal",
+          "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Privacy & toestemming",
+        "mapsToPrivacy": {
+          "age": "Leeftijd (minderjarigheidscontrole)",
+          "date_of_birth": "Geboortedatum (minderjarigheidscontrole)",
+          "consent_marketing": "Marketingtoestemming (WhatsApp)",
+          "consent_service": "Service-overeenkomst (geen marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Koptekst",

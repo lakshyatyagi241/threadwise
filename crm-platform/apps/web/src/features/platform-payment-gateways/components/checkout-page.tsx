@@ -17,6 +17,7 @@ import {
 } from '../api';
 import { formatMoney } from '../lib/money';
 import { nextStep, type NextStep } from '../lib/next-action';
+import { afterPaymentPath, safeReturnPath } from '../lib/return-path';
 import { openCashfree, openPaddle, postForm } from '../lib/provider-widgets';
 import { openRazorpay } from '../lib/razorpay';
 import { BraintreeWidget, HyperpayWidget } from './card-widgets';
@@ -183,7 +184,9 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
           setProblem(te('widgetBlocked'));
         }
       } else {
-        router.push(`/billing/orders?payment=success&order=${encodeURIComponent(res.orderNumber)}`);
+        router.push(
+          afterPaymentPath('success', res.orderNumber, safeReturnPath(params.get('return'))),
+        );
       }
     },
     onError: (e) => setProblem(explain(e)),

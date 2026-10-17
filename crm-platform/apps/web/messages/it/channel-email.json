@@ -120,7 +120,13 @@
       "limitDefault": "Predefinito della piattaforma",
       "limitPerHour": "{count, plural, one {# email all'ora} other {# email all'ora}}",
       "limitSaved": "Limite di invii salvato.",
-      "needsReauthImap": "Il server di posta ha rifiutato la password salvata. Ricollega e inserisci di nuovo la password."
+      "needsReauthImap": "Il server di posta ha rifiutato la password salvata. Ricollega e inserisci di nuovo la password.",
+      "test": "Prova la connessione",
+      "testing": "Prova in corso",
+      "lag": "Ritardo",
+      "lagUnderMinute": "Meno di un minuto",
+      "lagMinutes": "{count, plural, one {# minuto} other {# minuti}}",
+      "lagHours": "{count, plural, one {# ora} other {# ore}}"
     },
     "outcome": {
       "connected": "Casella collegata. Le email degli ultimi 7 giorni vengono recuperate nell’inbox.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Il server in uscita (SMTP) ha rifiutato nome utente o password. Controllali e riprova.",
         "unreachable": "Impossibile raggiungere il server di posta o il suo certificato non è valido. Controlla server, porta e sicurezza.",
         "generic": "Impossibile collegare la casella. Riprova."
+      },
+      "test": {
+        "button": "Prova le credenziali",
+        "testing": "Prova in corso",
+        "imap": "In entrata (IMAP)",
+        "smtp": "In uscita (SMTP)",
+        "ok": "Accesso riuscito.",
+        "inbox": "Accesso riuscito. La posta in arrivo contiene {count, plural, one {# messaggio} other {# messaggi}}.",
+        "smtpOk": "Accesso riuscito. Non è stato inviato nulla.",
+        "note": "Non è stato salvato nulla e non è stata inviata alcuna e-mail.",
+        "tooMany": "Troppe prove in poco tempo. Attendi un minuto e riprova.",
+        "failed": "Impossibile eseguire la prova. Riprova.",
+        "reasons": {
+          "auth_failed": "Il server ha rifiutato il nome utente o la password.",
+          "tls": "Non è stato possibile verificare la connessione sicura. Controlla il nome del server e l’impostazione di sicurezza.",
+          "unreachable": "Impossibile raggiungere il server. Controlla server, porta e impostazione di sicurezza.",
+          "blocked_address": "Questo indirizzo del server non è consentito.",
+          "rejected": "Il server ha rifiutato la richiesta.",
+          "unknown": "Il server non ha risposto come previsto."
+        }
       }
     },
     "sharing": {

@@ -341,6 +341,9 @@ export const wpCampaignContacts = pgTable(
     followUpNext: smallint('follow_up_next'),
     followUpBaseAt: timestamp('follow_up_base_at', { withTimezone: true }),
     followUpCheckAt: timestamp('follow_up_check_at', { withTimezone: true }),
+    /** The number this recipient is sent from when a send is split across several (both null: the campaign's own number). */
+    senderProvider: text('sender_provider'),
+    senderDeviceId: idColumn('sender_device_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -348,6 +351,13 @@ export const wpCampaignContacts = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_wp_campaign_contacts_org_id_uuid').on(t.orgId, t.uuid),
+    check(
+      'ck_wp_campaign_contacts_sender',
+      sql`(sender_provider IS NULL) = (sender_device_id IS NULL)`,
+    ),
+    index('idx_wp_campaign_contacts_sender')
+      .on(t.orgId, t.campaignId, t.senderProvider, t.senderDeviceId)
+      .where(sql`sender_provider IS NOT NULL`),
     check(
       'ck_wp_campaign_contacts_follow_up_state',
       sql`follow_up_state IS NULL OR follow_up_state IN ('active', 'done')`,
@@ -539,6 +549,9 @@ export const campTestSends = pgTable(
     errorMessage: text('error_message'),
     renderedBody: text('rendered_body'),
     createdBy: idColumn('created_by'),
+    /** BL-191: a test of a marketing template inside the quiet hours is held until this instant (status `held`), and why. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -546,7 +559,10 @@ export const campTestSends = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('camp_test_sends_org_id_uuid_key').on(t.orgId, t.uuid),
-    check('ck_camp_test_sends_status', sql`status IN ('sent', 'delivered', 'read', 'failed')`),
+    check(
+      'ck_camp_test_sends_status',
+      sql`status IN ('held', 'sent', 'delivered', 'read', 'failed')`,
+    ),
     foreignKey({
       name: 'fk_camp_test_sends_org',
       columns: [t.orgId],
@@ -567,6 +583,10 @@ export const campTestSends = pgTable(
       columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    check(
+      'ck_camp_test_sends_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
     index('idx_camp_test_sends_campaign').on(t.orgId, t.campaignId, t.id.desc()),
     index('idx_camp_test_sends_message')
       .on(t.providerMessageId)

@@ -365,6 +365,8 @@ function WizardBody({
             name={draft.name}
             templateId={draft.templateId}
             senderKey={draft.senderKey}
+            senderKeys={draft.senderKeys}
+            senderShare={draft.senderShare}
             senders={sendersList}
             hidden={hidden}
             templates={templates}
@@ -372,6 +374,7 @@ function WizardBody({
             onName={(name) => w.dispatch({ type: 'name', name })}
             onTemplate={(tpl) => w.dispatch({ type: 'template', template: tpl })}
             onSender={pickSender}
+            onSenders={(keys, share) => w.dispatch({ type: 'senders', keys, share })}
           />
         )}
         {view === 2 && (
@@ -392,6 +395,7 @@ function WizardBody({
             draft={draft}
             template={template}
             sender={sendersList?.find((x) => x.key === draft.senderKey) ?? null}
+            senders={sendersList}
             sources={sources.data}
             count={count.data}
             credit={credit}

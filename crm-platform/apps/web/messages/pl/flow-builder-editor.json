@@ -2019,6 +2019,18 @@
         "groupContact": "Właściwości kontaktu",
         "groupFlow": "Zapisane w tym przepływie",
         "variableNone": "Nie znaleziono zmiennych"
+      },
+      "askAge": {
+        "minAge": "Minimalny wiek",
+        "minAgeHint": "Zostaw puste, aby użyć wieku z Centrum zgodności Twojego obszaru roboczego (18, jeśli nie ustawiono). Od 1 do 21.",
+        "whenUnder": "Jeśli odpowiedź wskazuje wiek poniżej tego progu",
+        "whenUnderHint": "Kontakt zostaje oznaczony jako niepełnoletni w obu przypadkach. Klient nigdy nie dowiaduje się, która odpowiedź przechodzi.",
+        "end": "Zakończ przepływ krótkim, neutralnym zdaniem",
+        "continue": "Kontynuuj i pozwól mi rozgałęzić przepływ według odpowiedzi",
+        "endText": "Zdanie końcowe",
+        "endTextHint": "Wysyłane przed zakończeniem przepływu. Nie wspominaj o wieku. Puste pole używa tekstu „Nie możemy kontynuować.”",
+        "continueNote": "Kolejne kroki mogą odczytać zmienną odpowiedzi z dopiskiem _age_gate (na przykład answer_age_gate), która ma wartość under lub adult. Dodaj Warunek, aby rozgałęzić, na przykład by poprosić o rodzica lub opiekuna.",
+        "note": "Pytaj o wiek tylko tam, gdzie jest potrzebny. Odpowiedź jest zapisywana w kontakcie: data urodzenia jako data urodzenia, a odpowiedź wskazująca wiek poniżej progu oznacza kontakt jako niepełnoletni."
       }
     },
     "contracts": {
@@ -2329,7 +2341,9 @@
         "phone": "Numer telefonu",
         "number": "Liczba",
         "alphanumeric": "Litery i cyfry",
-        "date": "Data"
+        "date": "Data",
+        "age": "Wiek",
+        "date_of_birth": "Data urodzenia"
       },
       "askInputWrong": {
         "text": "Spróbuj ponownie",
@@ -2338,7 +2352,9 @@
         "phone": "Podaj prawidłowy numer telefonu",
         "number": "Podaj prawidłową liczbę",
         "alphanumeric": "Używaj tylko liter i cyfr",
-        "date": "Podaj prawidłową datę ({format})"
+        "date": "Podaj prawidłową datę ({format})",
+        "age": "Podaj swój wiek jako liczbę całkowitą",
+        "date_of_birth": "Podaj prawidłową datę ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

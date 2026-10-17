@@ -9,6 +9,58 @@
     "common": {
       "dismiss": "Dismiss"
     },
+    "previousSends": {
+      "title": "Previous sends",
+      "empty": "No earlier broadcasts or campaigns yet",
+      "outcomeLabel": "Who from those sends",
+      "outcomes": {
+        "all": "Everyone it went to",
+        "delivered": "Delivered",
+        "read": "Read",
+        "not_read": "Did not read",
+        "replied": "Replied",
+        "not_replied": "Did not reply",
+        "clicked": "Clicked a link",
+        "failed": "Failed"
+      },
+      "outcomeOff": "{name} (not for broadcasts)",
+      "outcomeHint": {
+        "all": "Everyone it went to: all the people the message was meant for. Opted-out contacts and skipped rows are left out.",
+        "delivered": "Delivered: the people it reached.",
+        "read": "Read: the people who read it.",
+        "not_read": "Did not read: the people it was sent to who have not read it.",
+        "replied": "Replied: the people who replied to it.",
+        "not_replied": "Did not reply: the people it was sent to who have not replied.",
+        "clicked": "Clicked a link: the people who clicked a tracked link in it.",
+        "failed": "Failed: the people it could not be delivered to."
+      },
+      "broadcastNote": "A broadcast records delivery and reading only, so replies and clicks are not available while one is ticked.",
+      "broadcastOff": "A broadcast has no replies or clicks. Choose another outcome to tick it.",
+      "search": "Search previous sends",
+      "searchPlaceholder": "Search",
+      "listLabel": "Earlier broadcasts and campaigns",
+      "noMatch": "Nothing matches your search.",
+      "chosen": "{count} of {max} chosen",
+      "limit": "You can pick up to {max} sends. Untick one to pick another.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Campaign"
+      },
+      "wentOut": "Sent {date}",
+      "wentOutUnknown": "Date unknown",
+      "recipients": "{count, plural, one {# recipient} other {# recipients}}",
+      "notRecorded": "Not recorded for a broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# person} other {# people}}",
+        "delivered": "{count, plural, one {# person received it} other {# people received it}}",
+        "read": "{count, plural, one {# person read it} other {# people read it}}",
+        "not_read": "{count, plural, one {# person did not read it} other {# people did not read it}}",
+        "replied": "{count, plural, one {# person replied} other {# people replied}}",
+        "not_replied": "{count, plural, one {# person did not reply} other {# people did not reply}}",
+        "clicked": "{count, plural, one {# person clicked a link} other {# people clicked a link}}",
+        "failed": "{count, plural, one {# person it failed for} other {# people it failed for}}"
+      }
+    },
     "list": {
       "workspace": "Workspace",
       "title": "WhatsApp",
@@ -297,7 +349,11 @@
         "numbersCount": "{count} numbers",
         "emailNote": "Emails go to the address on each contact. Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
         "emailSkipped": "{count, plural, one {# chosen recipient has no email address and will be skipped.} other {# chosen recipients have no email address and will be skipped.}}",
-        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead."
+        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead.",
+        "previousTitle": "Previous sends",
+        "previousHint": "Add the people earlier broadcasts and campaigns went to, optionally only those who read it, replied or clicked.",
+        "previousEstimate": "{count, plural, one {Up to # person from the previous sends (an estimate: someone in two sends is counted twice).} other {Up to # people from the previous sends (an estimate: someone in two sends is counted twice).}}",
+        "previousEditHint": "Your earlier choice of previous sends is not shown when you edit: this campaign already holds its recipients as contacts. Pick again to add more people."
       },
       "message": {
         "title": "Message",
@@ -585,7 +641,8 @@
         "subject": "Subject",
         "subjectFallback": "The campaign name",
         "skippedNoEmail": "Skipped (no email address)",
-        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs."
+        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs.",
+        "previousSends": "Previous sends (up to)"
       },
       "ai": {
         "open": "Build with AI",
@@ -1193,6 +1250,11 @@
         "previewEmpty": "Choose a template to see how the message looks.",
         "senderLabel": "Send from",
         "senderHint": "The WhatsApp number this campaign is sent from.",
+        "shareToggle": "Share this send across several numbers",
+        "shareHint": "Tick the numbers to send from and give each a share. The audience is split by those shares and every contact is messaged from one number only. A share that is empty or 0 counts as 1.",
+        "shareWeight": "Share",
+        "shareWeightLabel": "Share of {name}",
+        "shareKeepOne": "At least one number stays ticked.",
         "pickSender": "Choose a number",
         "classicOption": "classic builder",
         "buildWithAi": "Build with AI",
@@ -1241,20 +1303,24 @@
         "modeGroups": "Send to groups",
         "modeSegments": "Send to segments",
         "modeCsv": "Send via CSV",
+        "modePrevious": "Send to previous sends",
         "mode": {
           "contacts": "Contacts",
           "groups": "Groups",
           "segments": "Segments",
-          "csv": "CSV file"
+          "csv": "CSV file",
+          "previous": "Previous sends"
         },
         "groupsHint": "Groups are your marketing lists. Everyone in the groups you tick is included.",
         "segmentsHint": "Segments fill themselves from rules. Everyone in the segments you tick is included.",
+        "previousHint": "Re-target the people earlier broadcasts and campaigns went to, optionally only those who read, did not read, replied or clicked.",
         "chipContacts": "{count, plural, one {# contact} other {# contacts}}",
         "chipAllMatching": "All matching contacts",
         "chipAllMatchingN": "{count, plural, one {All # matching contact} other {All # matching contacts}}",
         "chipGroups": "{count, plural, one {# group} other {# groups}}",
         "chipSegments": "{count, plural, one {# segment} other {# segments}}",
         "chipCsv": "{count} from CSV",
+        "chipPrevious": "{count, plural, one {# earlier send} other {# earlier sends}} ({outcome})",
         "chipHub": "Contact Hub view",
         "nothingSelected": "Nothing selected yet.",
         "unionRule": "Everyone selected in any option is messaged once. Opted-out and invalid numbers are skipped.",
@@ -1411,10 +1477,14 @@
         "sumField": "is filled from {field}",
         "sumFieldFallback": "is filled from {field}, or \"{fallback}\" when empty",
         "sumSender": "Send from",
+        "sumSplit": "Split across numbers",
+        "sumSplitCount": "{count, plural, one {# recipient} other {# recipients}} ({percent}%)",
+        "sumSplitPercent": "{percent}% of the audience",
         "sumContacts": "{count, plural, one {# contact picked in the table} other {# contacts picked in the table}}",
         "sumAllMatching": "All contacts matching {what}",
         "sumAllContacts": "All contacts",
         "sumCsv": "CSV file {name}: {count, plural, one {# valid number} other {# valid numbers}}",
+        "sumPrevious": "Previous sends: {names} ({outcome})",
         "estimatedCostFull": "Estimated cost (full)",
         "chargedPlan": "Charged to your wallet now: {amount} (your plan covers {covered} of these messages)",
         "chargedWallet": "Charged to your wallet: {amount}",
@@ -1455,9 +1525,11 @@
           "sent": "Sent",
           "delivered": "Delivered",
           "read": "Read",
-          "failed": "Failed"
+          "failed": "Failed",
+          "held": "Held"
         },
-        "charged": "Charged {amount}"
+        "charged": "Charged {amount}",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "send": {
         "whenTitle": "When to send",
@@ -1902,6 +1974,18 @@
           "action": "Open the Email page"
         }
       }
+    },
+    "senderBreakdown": {
+      "title": "Sent from each number",
+      "hint": "This send was shared across several numbers. Each row is one number and the recipients it was given.",
+      "cols": {
+        "number": "Number",
+        "recipients": "Recipients",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed"
+      },
+      "removed": "(a number that was removed)"
     }
   }
 }

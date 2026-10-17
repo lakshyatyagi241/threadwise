@@ -72,6 +72,7 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
 | TW-CAMP-033 | ADDITION. Wizard schedule: now, scheduled, recurring series with runs       | implemented | P1       | L      |
 | TW-CAMP-034 | ADDITION. Frequency-cap (131049) retries every 24 h until an end date       | implemented | P1       | L      |
 | TW-CAMP-035 | ADDITION. Wizard broadcasts: list, status, pause, resume, cancel            | implemented | P2       | M      |
+| TW-CAMP-042 | ADDITION. Share a wizard send across several numbers (TW-BCAST-006/014)     | implemented | P1       | L      |
 
 ## Features
 
@@ -305,6 +306,33 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 - **Acceptance:** Given a daily series with two extra templates, run 1 sends the first, run 2 the second, run 3 the third and run 4 the first again, each with its own mapping; a sequence on a non-recurring schedule, with an A/B test, with an empty entry or an unmapped placeholder is refused at launch.
 - **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-sequence.e2e.spec.ts` and the web sequence tests.
 - **Not verified:** nothing was run against the real WhatsApp Cloud API.
+
+### TW-CAMP-041: target previous sends in every audience (ADDITION)
+
+- **Source:** the meeting's "target previous broadcast" audience option. Reference has it only in the Scheduled composer (recipients "queue": broadcasts, whole), reading the broadcasts table; the classic campaign builder and the guided wizard could not target it.
+- **Rules:** a source "Previous sends" in the wizard's audience step, in the classic builder's recipients step and in the Scheduled composer; a send is a broadcast or a campaign (every run of a recurring broadcast is a campaign); up to 20; narrowed by an outcome (all, delivered, read, not read, replied, not replied, clicked, failed; a broadcast has no replies or clicks). It is a source of the union like a group, so opted-out and unusable numbers are left out and a contact counts once. The count the wizard shows and the recipients a launch writes come from the same function.
+- **Acceptance:** Given a campaign sent to five people of whom one read it, one replied and one clicked, a new broadcast aimed at its "not read" outcome messages exactly the people who neither read nor replied; a send of another workspace reaches nobody; a broadcast cannot be narrowed by replies.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-previous-sends.e2e.spec.ts` and the web tests of the picker, the wizard step, the classic step and the composer.
+- **Not done:** the Scheduled composer has no outcome filter (Reference parity); the classic edit form does not re-show the choice (its recipients are the resolved contacts).
+
+### TW-CAMP-042: share one send across several numbers (ADDITION; carries TW-BCAST-006 and TW-BCAST-014 into the Campaign wizard and the classic builder)
+
+- **Source:** Reference's broadcast composer let an admin tick several numbers and give each a share weight (TW-BCAST-006); the audience was split across them and every contact was messaged from one (TW-BCAST-014). `/broadcasts/create` now redirects to `/campaigns/create`, so that composer became unreachable and the guided wizard sent from one number only. This restores the behaviour inside the wizard; the old compose screen was deleted.
+- **Rules:**
+  1. Step 1 keeps the **Send from** select. With two or more connected numbers (Meta, Twilio or personal device numbers), a **Share this send across several numbers** option swaps it for a tick list: a share weight beside each ticked number and its live percentage. At least one number stays ticked; one tick is the ordinary single number.
+  2. A missing, empty, 0 or negative weight counts as 1 (the server's rule, `senderWeight`); weights go up to 1000. Documented deviation: Reference's badge showed 0% for a ticked 0 while the server sent with weight 1; the wizard shows the share that will really be sent.
+  3. The draft holds `senderKey` (the first number, the campaign's own) plus `senderKeys` (the whole list once more than one is ticked) and `senderShare`. A draft saved before this has neither and behaves as a single number.
+  4. At launch the recipients (contact order) are cut into sequential slices by `splitSizes` (floor of each share, the leftover to the largest fractions, ties to the number picked first), so every contact is in exactly one slice and the sizes add up. Each recipient row stores its number (`wp_campaign_contacts.sender_provider`, `sender_device_id`); a single-number send writes null in both and behaves as before. Fewer contacts than numbers leaves some numbers with nobody.
+  5. The Review step shows the same split (recipients and percent per number) before launch; the launch result stores it in `wizard.launch.split`.
+  6. Every picked number must be connected (422 on the draft otherwise, path `senderKeys.<n>`); any engine the sender directory resolves can share a send except a mailbox, and a personal number needs the platform switch on. The template (and variant B, the sequence templates, the follow-up templates) must be sendable from every picked number: a template tied to one WhatsApp connection goes out only from Cloud API numbers of the same Meta account (`meta_json.waba_id`; personal and other engines are never held to an account), else 422 `CAMP_TEMPLATE_NOT_ALLOWED` with `errors[].path = senderKeys.<n>`, `message = template_not_on_sender`, nothing written, the draft stays editable.
+  7. The run sends each number's recipients as its own lane, side by side: own sender, own sender lock, own pacing and warm-up; the campaign lock, the daily limit and the final state (completed, paused for the wallet, scheduled again) are the campaign's, decided once after all lanes. A number that cannot be opened fails only its own recipients (`Sender unavailable: ...`); if none can be opened the campaign fails like an ordinary one. A number another run is using is skipped for now and the campaign is scheduled again shortly.
+  8. The wallet check is one check for the whole audience (the template's category is the same for every number). The 131049 retry and the follow-up steps send from the number the recipient was first sent from (falling back to the campaign's number when the row has none). The test send goes from the first number.
+  9. A recurring broadcast splits every run the same way; a run whose numbers are gone or no longer fit the template is recorded as a refused run, like any other refusal.
+- **Acceptance:** Given three connected numbers of one Meta account with shares 2/1/1 and eight contacts, the launch writes 4/2/2 recipients, each contact once, and the run sends each from the number on its row. Given one of the numbers belongs to another Meta account, the launch is refused with 422 and writes nothing. Given one number, nothing differs from before.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-shares.e2e.spec.ts`, `apps/api/test/unit/campaigns/sender-split.spec.ts`, the web `sender-share-picker.dom.test.tsx`, `builder/step-setup-share.dom.test.tsx` and the reducer tests in `wizard/lib/state.test.ts`.
+- **Classic builder:** the same picker sits in Setup next to the **Send from** select (a mail or a flow campaign has none). `POST/PUT /campaigns` take `senderKeys` and `senderShare`; the create splits the recipients with the same rule and stores each recipient's number, an edit that changes the numbers cuts the recipients already on the campaign again, and `GET /campaigns/:id/config` returns the numbers (the campaign's own first) with weights equal to the recipients each was given. The run, resend and retry paths are the shared ones, so each recipient goes out from its own number.
+- **Per-number breakdown:** `GET /v2/campaigns/:id` (`senders`) and `GET /v2/broadcast-wizard/broadcasts/:id` (`senders`, all runs of a series together) list recipients, sent, delivered and failed per number; empty for a send from one number, where the page shows nothing.
+- **Not done:** the test send goes from the first number only. Not verified against the real WhatsApp Cloud API or a real personal-number session (the sandbox sender stands in for both engines).
 
 ### Reference comparison (live Reference, read-only)
 

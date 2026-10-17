@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { assemblePhone } from '../broadcasts';
+import type { PreviousSendsAudience } from '@crm/contracts';
+import { assemblePhone, previousSendContactsSql } from '../broadcasts';
 import { hasGrantedConsentSql } from '../contact-consent';
 import { DUPLICATE_EMAIL, NO_EMAIL_ADDRESS } from './email-campaign-rules';
 
@@ -284,6 +285,12 @@ export interface NewCampaign {
 }
 
 const json = (v: unknown) => (v === null || v === undefined ? null : JSON.stringify(v));
+
+/** The number a recipient of a split send is messaged from: the engine and its id in the engine's own table. */
+export interface RecipientSender {
+  provider: string;
+  deviceId: number;
+}
 
 export interface ClaimedRecipient {
   id: number;
@@ -627,15 +634,33 @@ export class CampaignsRepository {
     id: number,
     maxAttempts: number,
     limit: number,
+    /** BL-192: the catch-up of a recurring campaign takes only the recipients the quiet hours held back, whose hour has come. */
+    onlyHeld = false,
+    /** Recipients this run already held for the quiet hours: not claimed again by it, whatever the clocks say. */
+    skip: readonly number[] = [],
+    /** A split send's lane: only the recipients sent from this number. Null (an ordinary campaign): every recipient. */
+    lane: RecipientSender | null = null,
   ): Promise<ClaimedRecipient[]> {
+    const skipSql =
+      skip.length === 0
+        ? sql``
+        : sql`AND r.id NOT IN (${sql.join(
+            skip.map((n) => sql`${n}::bigint`),
+            sql`, `,
+          )})`;
+    const laneSql = lane
+      ? sql`AND r.sender_provider = ${lane.provider} AND r.sender_device_id = ${lane.deviceId}`
+      : sql``;
     const res = await tx.execute(sql`
       WITH picked AS MATERIALIZED (
         SELECT r.id, (r.held_until IS NOT NULL) AS was_held FROM wp_campaign_contacts r
-        WHERE r.org_id = ${orgId} AND r.campaign_id = ${id}
+        WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} ${laneSql}
           -- A recipient held for the quiet hours (BL-177) is left alone until its hour has come.
           AND (r.held_until IS NULL OR r.held_until <= now())
+          AND (${onlyHeld}::boolean = false OR r.held_until IS NOT NULL)
+          ${skipSql}
           AND (r.status = 'queued'
-               OR (r.status = 'failed' AND r.send_attempts < ${maxAttempts}
+               OR (r.status = 'failed' AND ${onlyHeld}::boolean = false AND r.send_attempts < ${maxAttempts}
                    AND (r.next_attempt_at IS NULL OR r.next_attempt_at <= now())))
         ORDER BY r.id LIMIT ${limit} FOR UPDATE SKIP LOCKED
       )
@@ -704,6 +729,28 @@ export class CampaignsRepository {
       WHERE org_id = ${orgId} AND id = ${rowId}`);
   }
 
+  /** The recipients held for the quiet hours whose hour has come (BL-192): the ones a catch-up is about to send. */
+  async heldCandidates(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<Array<{ id: number; contactId: number }>> {
+    const res = await tx.execute(sql`
+      SELECT id, contact_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued'
+        AND held_until IS NOT NULL AND held_until <= now()
+      ORDER BY id`);
+    return (res.rows as Raw[]).map((r) => ({ id: Number(r.id), contactId: Number(r.contact_id) }));
+  }
+
+  /** The earliest instant a held recipient may go, or null when none is held (BL-192). */
+  async nextHeldAt(tx: Tx, orgId: number, id: number): Promise<Date | null> {
+    const res = await tx.execute(sql`
+      SELECT min(held_until) AS at FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'queued' AND held_until IS NOT NULL`);
+    return date((res.rows[0] as Raw | undefined)?.at);
+  }
+
   /** The recipients waiting for the end of the quiet hours (BL-177). */
   async heldCount(tx: Tx, orgId: number, id: number): Promise<number> {
     const res = await tx.execute(sql`
@@ -759,10 +806,14 @@ export class CampaignsRepository {
     };
   }
 
-  /** A fresh cadence: every recipient is queued again with its retries and backoff cleared. */
+  /**
+   * A fresh cadence: every recipient is queued again with its retries and backoff cleared. A recipient the quiet hours still hold keeps
+   * its `held_until` (BL-192): the catch-up of the occurrence that just ended sends it at its first opening, and if that job is lost the
+   * next run takes it, because the claim takes a held recipient once its hour has come.
+   */
   async requeueAll(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(sql`
-      UPDATE wp_campaign_contacts SET status = 'queued', send_attempts = 0, next_attempt_at = NULL, held_until = NULL, held_reason = NULL
+      UPDATE wp_campaign_contacts SET status = 'queued', send_attempts = 0, next_attempt_at = NULL
       WHERE org_id = ${orgId} AND campaign_id = ${id}`);
   }
 
@@ -983,6 +1034,18 @@ export class CampaignsRepository {
   // -------------------------------------------------------------- audience
 
   /** Ids of the contacts named by uuid, in the order sent. Another organization's ids are dropped. */
+  /** The contacts the named earlier sends went to, narrowed by the outcome (see `previousSendContactsSql`). */
+  async previousSendContactIds(
+    tx: Tx,
+    orgId: number,
+    previous: PreviousSendsAudience | null | undefined,
+  ): Promise<number[]> {
+    const q = previousSendContactsSql(orgId, previous);
+    if (!q) return [];
+    const res = await tx.execute(q);
+    return (res.rows as Array<{ contact_id: number | string }>).map((r) => Number(r.contact_id));
+  }
+
   async contactIdsByUuid(tx: Tx, orgId: number, uuids: readonly string[]): Promise<number[]> {
     const byUuid = new Map<string, number>();
     for (const part of chunks(uuids)) {
@@ -1092,16 +1155,66 @@ export class CampaignsRepository {
     tx: Tx,
     orgId: number,
     campaignId: number,
-    rows: ReadonlyArray<{ contactId: number; variant: string | null }>,
+    rows: ReadonlyArray<{
+      contactId: number;
+      variant: string | null;
+      /** The number this recipient is sent from when a send is split across several; null (or absent): the campaign's own number. */
+      sender?: RecipientSender | null;
+    }>,
   ): Promise<void> {
     for (const part of chunks(rows, CHUNK)) {
       await tx.execute(sql`
-        INSERT INTO wp_campaign_contacts (org_id, campaign_id, contact_id, status, variant)
+        INSERT INTO wp_campaign_contacts (org_id, campaign_id, contact_id, status, variant, sender_provider, sender_device_id)
         VALUES ${sql.join(
-          part.map((r) => sql`(${orgId}, ${campaignId}, ${r.contactId}, 'queued', ${r.variant})`),
+          part.map(
+            (r) =>
+              sql`(${orgId}, ${campaignId}, ${r.contactId}, 'queued', ${r.variant}, ${r.sender?.provider ?? null}, ${r.sender?.deviceId ?? null})`,
+          ),
           sql`, `,
         )}`);
     }
+  }
+
+  /** The number one recipient row is sent from, when the send was split across several; null: the campaign's own number. */
+  async recipientSender(tx: Tx, orgId: number, rowId: number): Promise<RecipientSender | null> {
+    const res = await tx.execute(sql`
+      SELECT sender_provider, sender_device_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND id = ${rowId} AND sender_provider IS NOT NULL`);
+    const r = res.rows[0] as
+      { sender_provider: string; sender_device_id: string | number } | undefined;
+    return r ? { provider: r.sender_provider, deviceId: Number(r.sender_device_id) } : null;
+  }
+
+  /**
+   * The numbers a split send still has something to do for: the distinct senders among the recipients that are queued or failed.
+   * Empty for an ordinary campaign (no recipient names a number), which is the single-lane run it always was.
+   */
+  async senderLanes(tx: Tx, orgId: number, campaignId: number): Promise<RecipientSender[]> {
+    const res = await tx.execute(sql`
+      SELECT DISTINCT sender_provider, sender_device_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND sender_provider IS NOT NULL
+        AND status IN ('queued', 'failed')
+      ORDER BY sender_provider, sender_device_id`);
+    return (res.rows as Array<{ sender_provider: string; sender_device_id: string | number }>).map(
+      (r) => ({ provider: r.sender_provider, deviceId: Number(r.sender_device_id) }),
+    );
+  }
+
+  /** A number that cannot send: its recipients fail for good with the reason, and the other numbers carry on. Returns how many. */
+  async failLane(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    lane: RecipientSender,
+    maxAttempts: number,
+    error: string,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET status = 'failed', send_attempts = ${maxAttempts}, next_attempt_at = NULL, error_message = ${error}
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND status IN ('queued', 'failed')
+        AND sender_provider = ${lane.provider} AND sender_device_id = ${lane.deviceId}
+      RETURNING id`);
+    return res.rows.length;
   }
 
   /**
@@ -1141,6 +1254,77 @@ export class CampaignsRepository {
         WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND recipient_id IN (${list(ids, 'bigint')})`);
     }
     return ids.length;
+  }
+
+  /** Recipients, sent, delivered and failed per sending number across the given campaigns (only rows that name a number). */
+  async senderCounts(
+    tx: Tx,
+    orgId: number,
+    campaignIds: readonly number[],
+  ): Promise<
+    Array<{
+      provider: string;
+      deviceId: number;
+      recipients: number;
+      sent: number;
+      delivered: number;
+      failed: number;
+    }>
+  > {
+    if (campaignIds.length === 0) return [];
+    const rows = await tx.execute(sql`
+      SELECT r.sender_provider, r.sender_device_id, count(*)::int AS recipients,
+             count(*) FILTER (WHERE ${sql.raw(AGG_SENT)})::int AS sent,
+             count(*) FILTER (WHERE ${sql.raw(AGG_DELIVERED)})::int AS delivered,
+             count(*) FILTER (WHERE r.status = 'failed')::int AS failed
+      FROM wp_campaign_contacts r
+      WHERE r.org_id = ${orgId} AND r.sender_provider IS NOT NULL
+        AND r.campaign_id IN (${sql.join(
+          campaignIds.map((id) => sql`${id}::bigint`),
+          sql`, `,
+        )})
+      GROUP BY r.sender_provider, r.sender_device_id
+      ORDER BY min(r.id)`);
+    return (rows.rows as Array<Record<string, string | number>>).map((r) => ({
+      provider: String(r.sender_provider),
+      deviceId: Number(r.sender_device_id),
+      recipients: Number(r.recipients),
+      sent: Number(r.sent),
+      delivered: Number(r.delivered),
+      failed: Number(r.failed),
+    }));
+  }
+
+  /** The contacts of a campaign's recipient rows, in contact order (the order a split send is cut in). */
+  async recipientContactRowIds(tx: Tx, orgId: number, campaignId: number): Promise<number[]> {
+    const res = await tx.execute(sql`
+      SELECT contact_id FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND contact_id IS NOT NULL ORDER BY contact_id`);
+    return (res.rows as Array<{ contact_id: string | number }>).map((r) => Number(r.contact_id));
+  }
+
+  /** Writes (or, for contacts not in the map, clears) the number each recipient is sent from. */
+  async setRecipientSenders(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    senderOf: ReadonlyMap<number, RecipientSender>,
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wp_campaign_contacts SET sender_provider = NULL, sender_device_id = NULL
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND sender_provider IS NOT NULL`);
+    for (const part of chunks([...senderOf.entries()], CHUNK)) {
+      await tx.execute(sql`
+        UPDATE wp_campaign_contacts r SET sender_provider = v.provider, sender_device_id = v.device_id
+        FROM (VALUES ${sql.join(
+          part.map(
+            ([contactId, s]) =>
+              sql`(${contactId}::bigint, ${s.provider}::text, ${s.deviceId}::bigint)`,
+          ),
+          sql`, `,
+        )}) AS v(contact_id, provider, device_id)
+        WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND r.contact_id = v.contact_id`);
+    }
   }
 
   async deleteRecipients(tx: Tx, orgId: number, campaignId: number): Promise<void> {

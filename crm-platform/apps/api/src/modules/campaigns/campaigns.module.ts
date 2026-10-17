@@ -41,6 +41,7 @@ import { CampaignsRepository } from './campaigns.repository';
 import { CampaignsService } from './campaigns.service';
 import { FixtureRegistrar } from './fixture/fixture-registrar';
 import { FixtureReceiptQueue } from './fixture/fixture-receipts';
+import { SenderSharesService } from './sender-shares.service';
 import { WizardAudienceService } from './wizard/wizard-audience.service';
 import { WizardBroadcastsService } from './wizard/wizard-broadcasts.service';
 import { WizardContactsService } from './wizard/wizard-contacts.service';
@@ -100,6 +101,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignMirrorService,
     CampaignCallbacksService,
     CampaignReceiptsService,
+    SenderSharesService,
     WizardRepository,
     WizardAudienceService,
     WizardCsvService,
@@ -133,6 +135,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignJobs,
     CampaignMirrorService,
     CampaignReceiptsService,
+    SenderSharesService,
     WizardRepository,
     WizardRunService,
     WizardTestSendService,

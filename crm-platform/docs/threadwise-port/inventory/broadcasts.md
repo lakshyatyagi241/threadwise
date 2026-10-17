@@ -258,6 +258,7 @@ Read this before rebuilding (highest-impact quirks, details in the features and 
   - Given one row is unticked, When weights change, Then its badge shows a dash and its weight input is non-interactive.
 - **Source refs:** `resources/views/user/broadcasts/create.blade.php`, `resources/js/charts/user-broadcasts-create.js` (recalcSharePcts), `app/Services/WorkspaceEngine.php`.
 - **Port notes:** Sender list belongs to WADEV/WABA. Require at least one sender server-side in the rebuild (Reference's silent legacy fallback is surprising); keep weights >= 0 with 0 meaning "skip".
+- **Carry-over:** `/broadcasts/create` redirects to `/campaigns/create`, and the share picker now lives in the Campaign wizard's step 1 (TW-CAMP-042, [campaigns inventory](campaigns.md)); the old composer screen was removed. In the wizard a weight of 0 counts as 1, as on the server.
 
 ### TW-BCAST-007 — Audience picker: contacts, groups and tags
 

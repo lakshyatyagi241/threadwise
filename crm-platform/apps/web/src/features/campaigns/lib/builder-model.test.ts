@@ -64,6 +64,56 @@ describe('problems', () => {
   });
 });
 
+describe('previous sends', () => {
+  const picked = { sends: [{ kind: 'campaign' as const, id: 'c1' }], outcome: 'read' as const };
+
+  it('count as an audience', () => {
+    const f = { ...ok, contactIds: [], previousSends: picked };
+    expect(problems(f)).toEqual([]);
+    expect(problems({ ...f, previousSends: { sends: [], outcome: 'read' } })).toEqual(['audience']);
+  });
+
+  it('are sent with the outcome, and left out of the body when none is picked', () => {
+    expect(toInput({ ...ok, previousSends: picked }).previousSends).toEqual(picked);
+    expect(toInput(ok)).not.toHaveProperty('previousSends');
+  });
+
+  it('are cleaned the way the server wants them before they are sent', () => {
+    const bad = {
+      sends: [
+        { kind: 'broadcast' as const, id: 'b1' },
+        { kind: 'broadcast' as const, id: 'b1' },
+      ],
+      outcome: 'clicked' as const,
+    };
+    expect(toInput({ ...ok, previousSends: bad }).previousSends).toEqual({
+      sends: [{ kind: 'broadcast', id: 'b1' }],
+      outcome: 'all',
+    });
+  });
+});
+
+describe('sharing a send across several numbers', () => {
+  const shared = {
+    ...ok,
+    senderKeys: ['baileys:1', 'waba:2'],
+    senderShare: { 'baileys:1': 2, 'waba:2': 1 },
+  };
+
+  it('ships the numbers and their weights only when more than one is ticked', () => {
+    const body = toInput(shared);
+    expect(body.senderKeys).toEqual(['baileys:1', 'waba:2']);
+    expect(body.senderShare).toEqual({ 'baileys:1': 2, 'waba:2': 1 });
+    expect(toInput(ok)).not.toHaveProperty('senderKeys');
+    expect(toInput({ ...ok, senderKeys: ['baileys:1'] })).not.toHaveProperty('senderKeys');
+  });
+
+  it('a mail or a flow has no number to share, so nothing is shipped', () => {
+    expect(toInput({ ...shared, senderKey: 'email:1' })).not.toHaveProperty('senderKeys');
+    expect(toInput({ ...shared, type: 'flow' })).not.toHaveProperty('senderKeys');
+  });
+});
+
 describe('toInput', () => {
   it('ships a copy-code button with its code', () => {
     const body = toInput({

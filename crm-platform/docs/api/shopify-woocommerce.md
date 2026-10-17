@@ -116,3 +116,7 @@ No HTTP route. The flow runtime's Commerce shop node (Shopify, WooCommerce) call
 | `checkoutLink` | Shopify: Storefront cart (store with `metadata.storefrontAccessToken`) else draft order, note `threadwise-flow:<run>`. WooCommerce: pending order with meta `_wa_flow_session` = run. `null` when the store, product or API fails. |
 
 `orders/create`, `orders/paid` (Shopify) and `order.created`, `order.updated` (WooCommerce) carrying the run reference advance the waiting run through `purchased`; the reference is a run uuid only, in the same workspace.
+
+## Quiet hours (BL-191)
+
+The offer and win-back broadcasts hold customers whose local time is inside the workspace's quiet hours when the template is MARKETING. The log row stays `processed` with `{ sent, failed, held, heldUntil }` until a delayed run sends the held customers at the opening and ends it with the totals. A utility template is never held. See [compliance.md](compliance.md).

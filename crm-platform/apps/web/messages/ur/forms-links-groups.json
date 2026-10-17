@@ -95,7 +95,28 @@
         "required": "لازمی",
         "removeField": "ہٹائیں",
         "options": "اختیارات (کوما سے الگ)",
-        "optionsPlaceholder": "اختیار 1، اختیار 2، اختیار 3"
+        "optionsPlaceholder": "اختیار 1، اختیار 2، اختیار 3",
+        "mapsTo": "یہاں میپ ہوتا ہے",
+        "mapsToHint": "فارم جمع کرنے پر یہ جواب رابطہ کی خاصیت میں محفوظ کرتا ہے۔",
+        "mapsToNone": "رابطہ کی خاصیت میں محفوظ نہ کریں",
+        "mapsToSystemGroup": "رابطہ فیلڈز",
+        "mapsToCustomGroup": "مخصوص خصائص",
+        "mapsToSystem": {
+          "name": "پورا نام",
+          "first_name": "پہلا نام",
+          "last_name": "آخری نام",
+          "email": "ای میل",
+          "title": "عہدہ",
+          "language": "زبان",
+          "address": "پتہ"
+        },
+        "mapsToPrivacyGroup": "رازداری اور رضامندی",
+        "mapsToPrivacy": {
+          "age": "عمر (نابالغ تصدیق)",
+          "date_of_birth": "تاریخ پیدائش (نابالغ تصدیق)",
+          "consent_marketing": "مارکیٹنگ رضامندی (واٹس ایپ)",
+          "consent_service": "سروس معاہدہ (مارکیٹنگ نہیں)"
+        }
       },
       "fieldKind": {
         "heading": "عنوان",

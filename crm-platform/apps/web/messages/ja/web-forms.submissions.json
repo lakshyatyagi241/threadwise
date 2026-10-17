@@ -115,7 +115,14 @@
         "consentAt": "同意日時",
         "noConsent": "このフォームでは同意を求めていません。",
         "links": "件数",
-        "actions": "操作"
+        "actions": "操作",
+        "ageCheck": "年齢確認",
+        "ageOutcome": "結果",
+        "ageUnder": "最低年齢未満です。送信は受け付けられ、連絡先は未成年として設定されました。マーケティング同意は記録されていません。",
+        "guardianName": "親または保護者",
+        "guardianEmail": "保護者のメールアドレス",
+        "guardianPhone": "保護者の電話番号",
+        "guardianNote": "訪問者が入力したもので、確認はされていません。担当者が連絡先の同意カードで記録するまで、その同意は記録されません。"
       },
       "actions": {
         "retry": "再試行",

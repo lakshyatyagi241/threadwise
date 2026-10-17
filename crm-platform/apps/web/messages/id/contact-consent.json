@@ -144,7 +144,10 @@
         "booking": "Halaman pemesanan",
         "commerce": "Checkout toko",
         "lead": "Penangkapan lead",
-        "gpc": "Global Privacy Control"
+        "wa_form": "Formulir WhatsApp",
+        "gpc": "Global Privacy Control",
+        "dob": "Tanggal lahir atau usia",
+        "declaration": "Usia belum dikonfirmasi"
       },
       "by": "oleh {name}",
       "evidence": {
@@ -227,7 +230,9 @@
           "noteHint": "Contoh: menandatangani formulir kertas di loket. Jangan tulis nama atau kontak wali.",
           "ref": "Referensi (opsional)",
           "refHint": "Nomor formulir atau id dokumen yang bisa Anda cari nanti."
-        }
+        },
+        "minorFrom": "Ditetapkan dari tanggal lahir atau usia yang diberikan. Tanda ini hilang sendiri pada {date}, kecuali seseorang mempertahankannya.",
+        "minorFromDeclaration": "Ditetapkan karena usia tidak dikonfirmasi pada formulir. Tetap ada sampai seseorang menghapusnya."
       }
     },
     "composer": {
@@ -351,7 +356,8 @@
         "consent_declined": "Tidak diizinkan: orang tersebut menolak.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Tidak diizinkan: kontak ini ditandai di bawah umur dan ruang kerja Anda menahan pemasaran.",
-        "sale_share_opted_out": "Tidak diizinkan: kontak menolak penjualan atau pembagian datanya."
+        "sale_share_opted_out": "Tidak diizinkan: kontak menolak penjualan atau pembagian datanya.",
+        "on_dnc_list": "Ada di daftar Jangan Hubungi Anda: tidak ada panggilan atau pesan teks pemasaran ke nomor ini"
       }
     },
     "notice": {

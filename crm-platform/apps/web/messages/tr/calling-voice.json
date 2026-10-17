@@ -90,7 +90,17 @@
       "UNEXPECTED": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
       "CALL_PLAYBACK_LINK_INVALID": "Bu kayıt bağlantısının süresi doldu. Yeni bir bağlantı almak için tekrar oynat'a basın.",
       "CALL_RANGE_INVALID": "Bu tarihler geçerli değil: başlangıç bitişten sonra olamaz, aralık en fazla bir yıl olabilir ve saat dilimi geçerli bir dilim olmalıdır.",
-      "CALL_OUTSIDE_WINDOW": "Bu kişi arama saatlerinizin dışında olduğundan arama yapılmadı. Arama penceresi {when} açılacak."
+      "CALL_OUTSIDE_WINDOW": "Bu kişi arama saatlerinizin dışında olduğundan arama yapılmadı. Arama penceresi {when} açılacak.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Bu arama bulunamadı.",
+      "CALL_LOG_CONTACT_REQUIRED": "Kişiyi veya telefon numarası olarak okunabilen bir numara girin.",
+      "CALL_LOG_TIME_INVALID": "Bir arama gelecekte ya da 400 günden daha önce başlayamaz.",
+      "CALL_LOG_NOT_EDITABLE": "Bu aramayı bir telefon veya telefon hizmeti sağlayıcısı bildirdi, bu yüzden değiştirilemez.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Bu aramayı değiştirmek için tanınan süre doldu.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Takip görevi için bir kişi gerekir. Kişilerinizden birine ait bir numara girin.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Bu telefon bağlantısı bulunamadı.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Bu telefon hizmeti sağlayıcısı kullanılamıyor.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Bu telefon bağlantısı arama yapamaz.",
+      "TELEPHONY_CALL_FAILED": "Telefon hizmeti sağlayıcısı aramayı yapamadı."
     },
     "settings": {
       "title": "Arama",

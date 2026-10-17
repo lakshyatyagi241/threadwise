@@ -1,7 +1,7 @@
 ---
 id: campaigns-create
 title: Create a campaign
-summary: Choose the WhatsApp number, then send a template or a message to contacts, groups, segments or a CSV of numbers, now, later or on repeat.
+summary: Choose the number, then send to contacts, groups, segments, a CSV or earlier sends, now, later or on repeat.
 area: campaigns
 order: 20
 documents: [nav:campaigns]
@@ -26,6 +26,9 @@ keywords:
     groups,
     segments,
     csv,
+    previous sends,
+    re-target,
+    did not read,
     filter,
     schedule,
     recurring,
@@ -40,6 +43,10 @@ keywords:
     build with ai,
     picture,
     image,
+    several numbers,
+    share,
+    split,
+    weight,
   ]
 ---
 
@@ -51,7 +58,7 @@ Campaigns have one place to start: **Create campaign** on the Campaigns screen (
 
 **Create campaign** opens the campaign builder on the number the campaign is sent from (your default number is selected). The five steps along the top are **Setup**, **Compose**, **Recipients**, **Schedule** and **Review**, with the live preview on the right. The **Send from** select in **Setup** decides what the steps hold:
 
-- **A verified WhatsApp Cloud API (Meta) number** keeps everything the classic builder has and adds the broadcast logic, described below. **Setup** has the **Campaign type** cards and **Enable A/B test**. **Compose** is a **Template** dropdown (name and language, only the approved templates of that number) with the variable mapping right under it, and a second dropdown and mapping for variant B when A/B is on. **Recipients** offers contacts, groups, segments and a CSV, with the filter panel and the live count. **Schedule** sends now, later or on a rule, with retries, the **Auto-end date**, **Smart Delivery** and **Track link clicks**. **Review** shows the cost, the summary and a test send, and the last button sends. The live preview shows your template as WhatsApp will. A number counts as verified when it is connected to Meta and Meta has not blocked it (banned, restricted, deleted, migrated or still pending), its code is verified and its display name was not declined.
+- **A verified WhatsApp Cloud API (Meta) number** keeps everything the classic builder has and adds the broadcast logic, described below. **Setup** has the **Campaign type** cards and **Enable A/B test**. **Compose** is a **Template** dropdown (name and language, only the approved templates of that number) with the variable mapping right under it, and a second dropdown and mapping for variant B when A/B is on. **Recipients** offers contacts, groups, segments, a CSV and previous sends, with the filter panel and the live count. **Schedule** sends now, later or on a rule, with retries, the **Auto-end date**, **Smart Delivery** and **Track link clicks**. **Review** shows the cost, the summary and a test send, and the last button sends. The live preview shows your template as WhatsApp will. A number counts as verified when it is connected to Meta and Meta has not blocked it (banned, restricted, deleted, migrated or still pending), its code is verified and its display name was not declined.
 - **Any other number** (Twilio, SMS, or a personal number when your platform allows them) keeps the classic steps: custom message, template or flow, A/B test, groups, tags, a CSV or typed numbers, and the classic live preview. See [Campaigns](help:campaigns-overview).
 - **A mailbox** (an email campaign, opened from the **Email** card in **New campaign**) keeps the classic steps with only what an email can carry; see **Email campaigns** below.
 - **A Meta number that is not verified yet** also keeps the classic steps, and a line next to the select says the guided steps are available once the number is verified.
@@ -89,10 +96,11 @@ With a verified Meta number the builder walks you through sending an approved Wh
 
 1. **Setup.** Enter a campaign name and check the WhatsApp number to **Send from** (the one you chose is preselected, and you can change it). **Campaign type** shows a custom message, a template and a flow. On the WhatsApp Cloud API only a template can be sent from a campaign, so the other two are shown greyed out with the reason; choose another kind of number to use them. Turn on **Enable A/B test** to split the recipients between two templates and set the share that gets variant A.
 2. **Compose.** Choose a template from the **Template** dropdown. It lists the approved templates of the number, by name and language, the same ones the guided flow offers. For each variable of the template, choose **Contact field** (with a fallback for contacts that lack it) or **Fixed text**. Sample messages show the message for a few real contacts, and flag any placeholder that came out empty. With A/B on, choose the variant B template too and map its variables the same way. The live preview on the right shows the message.
-3. **Recipients.** Under **Send to** choose one of four ways to pick who gets the campaign. Each keeps its own selection, and the campaign goes to everyone selected in any of them, once. The chips above the panel count what each holds. Opted-out contacts and invalid numbers are always skipped. The **Matching contacts** panel shows who matches, who is skipped and who **will be messaged**, and the phone preview shows your template.
+3. **Recipients.** Under **Send to** choose one of five ways to pick who gets the campaign. Each keeps its own selection, and the campaign goes to everyone selected in any of them, once. The chips above the panel count what each holds. Opted-out contacts and invalid numbers are always skipped. The **Matching contacts** panel shows who matches, who is skipped and who **will be messaged**, and the phone preview shows your template.
    - **Send to contacts** is a table of your contacts. Search by name, email or phone, or press **Filter** to open the filter panel: add conditions (country code, tags, a custom property...), then **Apply**; **Clear** removes them. The table and its total are worked out on the server. Tick rows, tick the box in the header for the whole page, and when the page is ticked choose **Select all N matching** to take every contact the search and filter found. Opted-out contacts are listed but cannot be ticked. The footer has the total, the pages and how many rows per page.
    - **Send to groups** lists your contact groups (your marketing lists) with their member counts. Tick any number.
    - **Send to segments** lists your saved segments. Tick any number.
+   - **Send to previous sends** re-targets the people earlier broadcasts and campaigns went to (each run of a recurring broadcast is listed too). Tick up to 20 from the list, which shows each send's name, a **Broadcast** or **Campaign** badge, when it went out, how many recipients it had and how many people the chosen outcome holds. Then choose **Who from those sends**: everyone it went to, delivered, read, did not read, replied, did not reply, clicked a link or failed; a line under the select says what the outcome means. A broadcast records delivery and reading only, so while one is ticked the outcomes about replies and clicks are off, and while one of those is chosen the broadcasts cannot be ticked. A contact in several sends is messaged once, and opted-out contacts and skipped rows are never taken. With no earlier send yet the list says so.
    - **Send via CSV** takes a file of numbers (up to 2 MB and 10,000 rows) with a column named `phone`, and optionally `first_name`, `last_name` or `name` and `country_code`. Download the template from the panel. The file is checked on the server: numbers are put in international format, repeated numbers are kept once, and rows that cannot be used are listed with their line number (the whole list downloads as a CSV). You see how many numbers are valid, duplicate, invalid, opted out and new. Numbers that are already contacts are matched by phone. New numbers are added as contacts when you launch. The upload is kept for 7 days.
 4. **Schedule.** Choose **When to send** (see below). You can also set an **Auto-end date** (a send stops at that moment; a recurring campaign ends by its own rule instead), turn on **Activate Retries**, tune **Smart Delivery** (a random delay between messages, batches with a pause, a daily limit and the hours it may send in; blank uses the platform default) untick **Retry failed messages automatically** to send each message once (it is on by default: a message that fails for a temporary reason is tried again a few times), and untick **Track link clicks** if you do not want links wrapped to count clicks. On a Cloud API number the **Follow-ups** card sits here too (see below).
 5. **Review.** The credit check compares your wallet with the estimated cost, with a breakdown by country. If the balance is too low, **Next** is blocked and **Top up** takes you to add credit. The summary lists everything, with **Edit** links back to the step that owns each value. You can send a test first (see below). The last button sends, schedules or starts the recurring campaign.
@@ -105,9 +113,19 @@ With a verified Meta number the builder walks you through sending an approved Wh
 - **Also create a picture.** Tick it to have one image drawn from the same brief and attached as the campaign's **Attachment** once the text is in. Pick the shape: square, landscape or portrait. Pictures are drawn by OpenAI only, so the box is off until you choose an OpenAI model, and off for senders that cannot carry an image (SMS and email). If the picture fails (no OpenAI key, the monthly allowance used, or OpenAI refusing the request), the text stays in the form and the dialog shows a separate message with **Try the picture again**, which draws only the picture.
 - **Guided flow.** Next to the template list, **Build with AI** drafts a new WhatsApp template (marketing, in US English) and opens the new-template form with the draft filled in. Meta reviews every template before it can be sent, so come back to your draft campaign (it was saved as you went) and pick the template once it is approved. The button shows only if you may create templates.
 
+## Send from several numbers
+
+When you have two or more connected numbers (Meta, Twilio or personal numbers), step 1 of the guided flow shows **Share this send across several numbers** under **Send from**. Tick it to see your numbers as a list. Tick each number to send from and give it a **Share**: the audience is split by those shares, and the percentage beside each number shows the part it gets. Shares of 7 and 3 send 70% and 30% of the audience; a share that is empty or 0 counts as 1. At least one number stays ticked, and one ticked number is the same as picking it in the list.
+
+Every contact is messaged from one number only, never from two. The classic builder has the same option in **Setup**, under **Send from**; a mail campaign or a flow cannot be shared. The **Check and variables** step lists how many recipients each number will send, using the same split the launch uses. The template has to be sendable from every number you ticked: a template made on one Meta account cannot go out from a Meta number of another account, and the launch tells you which number is the problem and sends nothing. Personal numbers are not held to an account. Frequency-cap retries and follow-ups go out from the number that sent the first message, and **Send Test** goes from the first number you ticked. If one number stops being able to send while the campaign runs, only its recipients fail; the others carry on. When the send used several numbers, the campaign page and the broadcast status page show a **Sent from each number** table with recipients, sent, delivered and failed per number.
+
 ## Send a test
 
 Type one or more phone numbers in the format `+91xxxxxxxxxx`, separated by commas (up to 10). **Send Test** stays off until every number is valid. Tracking is not enabled for tests, and credits are deducted for the WhatsApp messages the test sends. Each number shows sent, delivered, read or failed, with the error and the amount charged. You need the permission to test campaigns to use this.
+
+## Quiet hours and the test
+
+A test of a marketing template to a number whose local time is inside your quiet hours (Compliance center) is held, not refused: its row in the test log says Held until a time, and it is sent then. A utility template is sent at once.
 
 ## When to send
 

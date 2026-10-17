@@ -122,6 +122,7 @@ extra keys are refused (`422 VALIDATION_FAILED`, one `errors[]` entry per proble
 | `search`                                   | search                 | `matches`                                                                                                                               | the contacts search box: every word in name/email/phone digits |
 | `createdAt`, `updatedAt`, `lastActivityAt` | date                   | `equals`, `before`, `after`, `on_or_before`, `on_or_after`, `between`, `in_last_days`, `more_than_days_ago`, `is_empty`, `is_not_empty` | `YYYY-MM-DD` or an ISO instant; days as a whole number         |
 | `custom.<key>`                             | by the property's type | the operators of its kind (below)                                                                                                       | as its kind                                                    |
+| `company.<key>`                            | by the property's type | the operators of its kind, on a **company** property of the contact's company (BL-196)                                                  | as its kind                                                    |
 
 A custom property's kind comes from the registry: `text`, `long_text`, `url`, `email`, `phone`, `timezone`, `lookup` are text;
 `integer`, `big_integer`, `decimal`, `percentage`, `currency`, `rating` are numbers; `date`, `datetime` are dates; `select`, `radio` are

@@ -3,12 +3,148 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "apps/api/test/integration/with-tenant.spec.ts (new) and rls.spec.ts, real Postgres 16 via testcontainers, restricted application role",
+      "status": "PASSED (7 and 8)",
+      "ranOn": "2026-10-17",
+      "note": "withTenant against the real database: each tenant sees only its own rows, a cross-tenant insert is refused by the policy, org and user settings are visible to the callback's first statement, an empty user is empty, the act-as settings arrive in the same transaction, no setting leaks to the next user of a pooled connection, and without withTenant no rows are visible. On this Windows host testcontainers needed TESTCONTAINERS_HOST_OVERRIDE=127.0.0.1: without it the existing rls.spec.ts failed identically with ECONNRESET (localhost resolved to IPv6, which Docker Desktop does not forward)."
+    },
+    {
+      "suite": "apps/api full unit suite (vitest run test/unit) on the branch with EL-012",
+      "status": "FAILED elsewhere (18 tests in 3 files, none touching this change)",
+      "tests": 11400,
+      "passed": 11380,
+      "failed": 18,
+      "skipped": 2,
+      "failures": [
+        {
+          "file": "test/unit/roles-permissions/key-coverage.spec.ts",
+          "tests": 15,
+          "reason": "permission keys registered that nothing checks (for example org.owner_settings.manage)"
+        },
+        {
+          "file": "test/unit/infra/boundaries.matrix.spec.ts",
+          "tests": 2,
+          "reason": "outbox consumer files not explained or listed in the idempotency audit; Windows path separators"
+        },
+        {
+          "file": "test/unit/notifications/web-push-enqueue.spec.ts",
+          "tests": 1,
+          "reason": "marketplace_payment_failed default preference expectation"
+        }
+      ],
+      "attribution": "None of these files touch withTenant, RbacService or the account gate, and the first two are the same kinds of failure seen before on main. Not re-run on main to prove it; treat as other work, not as passed."
+    },
+    {
+      "suite": "run-load.mjs --trace (idle, normal 5 req/s, peak 20 req/s, 1,500 contacts) after the three round-trip changes (EL-012), compared with the previous run on the same host mood",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-round-trips",
+      "rawData": "evidence/auth-path-trace-round-trips.json (after), evidence/auth-path-trace-after.json (before)",
+      "observed": {
+        "contactsListAt20rps": "statements 5.2 to 4.1, Redis commands 6.0 to 5.0, awaited sequential round trips about 10 to 7, handler mean 33.5 to 25.2 ms, caller p50 35.7 to 27.2 ms, p95 66.1 to 54.7 ms, 0 failed, pool wait 0.1 ms",
+        "contactsListAt5rps": "handler mean 39.7 to 29.0 ms, caller p95 85.2 to 62.4 ms"
+      },
+      "caveat": "Both runs were in a healthy host mood (round trips p50 2 to 3 ms), but they are two runs on a laptop: the counts are exact, the milliseconds are indicative."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-rbac-read.ts (the real RbacService cache read against a real Redis, stub database)",
+      "status": "PASSED",
+      "checks": 12,
+      "note": "Cold cache loads once and caches under the version; warm cache touches nothing; another user loads only their own grants; a roles-version bump makes the old grant set unreachable and the next read reloads under the new version; then cached again."
+    },
+    {
+      "suite": "apps/api unit: with-tenant.spec.ts 5, rbac-cache-read.spec.ts 5, rbac-merge.spec.ts 4, org-suspension-gate.spec.ts 24",
+      "status": "PASSED",
+      "tests": 38,
+      "passed": 38,
+      "ranOn": "2026-10-17",
+      "note": "withTenant: one statement, bind parameters, empty user, act-as settings in the same statement, still refuses org 0. Gate: both Redis reads are started before the workspace verdict arrives, and the workspace error still wins when the user-gate read fails. eslint clean on the touched files."
+    },
+    {
+      "suite": "run-load.mjs --trace (idle, normal, peak at 5 and 20 req/s, 1,500 contacts), before and after the duplicate-lookup fix, plus rtt-drift.mjs",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-auth-path-latency",
+      "rawData": "evidence/auth-path-trace-before.json, evidence/auth-path-trace-after.json, evidence/rtt-drift.json",
+      "observed": {
+        "roundTripsPerRequest": "about 12 for a request with one data query: 5 SQL statements and 7 Redis commands before the fix, 6 Redis commands after",
+        "slowHost": "round trips p50 38 to 48 ms: caller p50 1.9 s, p95 11.8 s at 14.5 req/s, pool wait mean 1.5 s, loop delay p99 39 ms",
+        "healthyHost": "round trips p50 2 to 3 ms: caller p50 36 ms, p95 66 ms at 20.3 req/s, 0 failed, pool wait 0.1 ms",
+        "control": "rtt-drift: SELECT 1 p50 2.5 to 4.3 ms and PING 1.7 to 4.4 ms for the whole run, including 210 idle connections and 20 busy loops"
+      },
+      "caveat": "The before and after runs were not in the same host mood, so their latencies are not compared; only the per-request counts are (get auth:org-susp 2 to 1, Redis commands 7.1 to 6.1 for the contacts list). The cause of the slow-host runs is NOT VERIFIED."
+    },
+    {
+      "suite": "apps/api/test/unit/auth-registration-security/org-suspension-gate.spec.ts",
+      "status": "PASSED",
+      "tests": 22,
+      "passed": 22,
+      "ranOn": "2026-10-17",
+      "note": "Three new: the guard asks about the workspace once and calls stateFor with includeOrgSuspension false; stateFor includes the workspace verdict by default and skips it when asked. eslint and tsc on the touched files clean."
+    },
+    {
+      "suite": "tools/event-loop-audit/load/run-load.mjs (k6 0.49.0, the built API and worker, Postgres and Redis containers; idle, normal, peak, spike, 10 minute soak)",
+      "status": "RAN; baselines recorded, NOT stable",
+      "ranOn": "2026-10-16, branch claude/event-loop-load-baselines, commit 18f84c6 (before the rebase onto main)",
+      "rawData": "evidence/load-baseline.json (final run), evidence/load-run1-collapse-10-40-120.json (first run at higher rates)",
+      "history": [
+        "First full run at 10 / 40 / 120 req/s: the stack answered at 10 req/s (p50 0.8 s) and collapsed at 40 (16 % failed, 2,425 iterations dropped) with the API's loop delay p99 near 43 ms throughout. Rates lowered to 5 / 20 / 60.",
+        "Three diagnostic runs showed the same workload giving caller p50 of 39 ms, 226 ms and 235 ms on different occasions; Postgres sessions were mostly idle in transaction, waiting on the API. A host-to-container round-trip calibration, a /health control and a pg_stat_activity sampler were added.",
+        "Final run at 5 / 20 / 60 req/s: normal p95 0.5 s, peak p95 6.3 s (1 % failed), spike p50 12.7 s (12 % failed), soak 10 minutes 0 failures with flat memory; loop delay p99 25 to 33 ms in every profile."
+      ],
+      "notShown": [
+        "a repeatable result (the environment moved several-fold between runs)",
+        "production-shaped rates",
+        "12 h or 24 h soak",
+        "webhooks, broadcasts, automations, reporting, a populated inbox",
+        "the cause of the seconds-long wait in the authenticated path (EL-B16)"
+      ]
+    },
+    {
       "suite": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
       "command": "vitest run test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
       "status": "PASSED",
       "tests": 27,
       "passed": 27,
       "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
+    },
+    {
+      "suite": "tools/event-loop-audit/scrape-demo.mjs --stall (real Prometheus v2.55.0 + Alertmanager v0.27.0, the built API, worker and probe as separate processes, Postgres and Redis containers, a local HTTP receiver)",
+      "status": "PASSED after one fix to the demo itself",
+      "ranOn": "2026-10-16, branch claude/event-loop-ops-wiring",
+      "rawData": "evidence/scrape-demo.json",
+      "history": [
+        "Earlier branch (API and worker only, no Alertmanager, no probe): run 1 21/21, run 2 23/24 (EventLoopBlockingWithImpact did not fire because the request histogram cannot see queueing; rule fixed), run 3 25/25.",
+        "This branch, full run with --stall (about 35 minutes): 40/41. The one FAIL, 'a healthy /health reads fast from the probe', read the quantile before rate() had two samples (n/a): a timing bug in the demo, not in the probe. Every other check passed, including WorkerEventLoopBlockingWithQueueImpact from a real worker stall with 20,000 queued jobs, EventLoopLongStallCritical from a real 12 s block, ApiCallerLatencyHigh, and firing plus resolved notifications at the receiver.",
+        "Fix: the demo waits for the quantile (up to 60 s). Rerun without the stall phases (about 10 minutes): 26/26, the probe's healthy /health p95 reads 0.024 s. The stall phases were NOT rerun after that fix; evidence/scrape-demo.json is the 40/41 full run."
+      ],
+      "observed": {
+        "apiStall": "1.5 s busy every 1.7 s: loop delay p95 1.515 s, callers 1.474 s, probe 2.258 s, API request histogram 0.007 s",
+        "workerStall": "600 ms busy every 0.7 s with 20,000 queued jobs: loop delay p95 0.607 s, job wait p95 1,283 s, 4,193 jobs done",
+        "longBlock": "one 12.0 s block: delay max 12.088 s, EventLoopLongStallCritical and EventLoopLongStallWarning fired, up dipped to 0, RuntimeMetricsTargetDown stayed inactive"
+      },
+      "notShown": [
+        "a production deployment (the overlay was validated, not run on a server)",
+        "delivery to a real chat or pager destination (the receiver is a local HTTP server in the script)",
+        "any realistic traffic: the load was the stall driver, a /health poller and queue jobs",
+        "the probe through the public ingress"
+      ]
+    },
+    {
+      "suite": "apps/api/test/unit/platform-infrastructure (probe.spec.ts 11 + job-metrics.spec.ts 17 + event-loop-monitor.spec.ts 27)",
+      "status": "PASSED",
+      "tests": 55,
+      "passed": 55,
+      "ranOn": "2026-10-16, branch claude/event-loop-ops-wiring",
+      "note": "probe.spec.ts covers the metrics-listener guard (loopback / token), the target parser, probeOnce and Prober against real local HTTP servers (ok, 5xx, hang, closed port, slow), no-overlap rounds, and a child-process server whose loop is blocked 400 ms of every 600 ms: the probe sees over 200 ms. The first run had 11 failures because the new exports were missing from the module's index.ts; fixed. eslint clean; tsc --noEmit on the API clean after rebuilding the shared packages (stale dist of @crm/contracts caused unrelated errors before)."
+    },
+    {
+      "suite": "deploy/hostinger (observability.compose.yml, observability-up.sh, docker-compose.yml)",
+      "status": "PASSED (static)",
+      "note": "docker compose config on the base file and on base+overlay with dummy env and secret files; bash -n on observability-up.sh (run in a bash container). The script itself has not been run, and nothing was deployed."
+    },
+    {
+      "suite": "deploy/observability/event-loop.rules.yml with promtool, after the rule change",
+      "status": "PASSED",
+      "note": "check rules: 15 rules; test rules: SUCCESS on the extended file (added: probe job down, a 3 s stall (warning only, resolves), a 12 s stall (critical on the worker), a quiet 0.1 s, ApiCallerLatencyHigh slow / pending / fine, ApiProbeFailing). Earlier: 11 rules, 11 case groups."
     },
     {
       "suite": "apps/api/test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (booted worker module, Postgres and Redis containers)",
@@ -156,11 +292,10 @@
     }
   ],
   "notVerified": [
-    "Prometheus rules (promtool)",
-    "scrape of a real container",
+    "a Prometheus/Alertmanager/probe stack on a real server",
+    "delivery to a real chat or pager destination",
     "dashboards",
-    "any load, spike or soak test of the real application",
-    "queue job metrics",
+    "a 12 h or 24 h soak, or any load test on a dedicated host",
     "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
   ]
 }

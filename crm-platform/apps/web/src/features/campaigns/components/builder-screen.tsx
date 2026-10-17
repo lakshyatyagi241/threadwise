@@ -198,7 +198,7 @@ function Builder({
       if (JSON.stringify({ ...stored, name: '', senderKey: '' }) === pristine)
         onGuided(key, stored.name);
       else setSwitchTo(key);
-    } else patch({ senderKey: key });
+    } else patch({ senderKey: key, senderKeys: [], senderShare: {} });
   };
   const minDate = useMemo(
     () => defaultSchedule(new Date(), stored.timezone).sendDate,
@@ -281,8 +281,9 @@ function Builder({
     () => ({
       groups: Object.fromEntries((data?.groups ?? []).map((g) => [g.id, g.members])),
       tags: Object.fromEntries((data?.tags ?? []).map((x) => [x.id, x.members])),
+      previous: data?.previousSends ?? [],
     }),
-    [data?.groups, data?.tags],
+    [data?.groups, data?.tags, data?.previousSends],
   );
   const totals = recipientTotals(form, sizes);
   // An email campaign only reaches contacts with an address: what the screen can already tell is counted as skipped.
@@ -388,6 +389,8 @@ function Builder({
                   }}
                   engine={engine}
                   skipped={skipped}
+                  previousOptions={data?.previousSends ?? []}
+                  editing={editing}
                   onSample={() => void sampleCsv()}
                   onCsvTooBig={() => toast(t('audience.csvTooBig'), 'danger')}
                 />

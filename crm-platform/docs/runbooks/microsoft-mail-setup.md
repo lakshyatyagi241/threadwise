@@ -44,6 +44,52 @@ connect Microsoft 365** on. Or set the environment fallbacks (used for a field l
 
 Until both a client id and a secret exist the provider card in Email shows "Ask your platform administrator" and connecting answers `not_configured`.
 
+## 5. Live updates: Graph change notifications (optional, off by default)
+
+Without this, every Microsoft mailbox is read by the one-minute sweep. With it, Microsoft tells the platform when mail arrives and the mailbox is synced within seconds (the sweep then
+only reconciles every `MAIL_PUSH_RECONCILE_MINUTES`, default 10). The hub shows the **Live updates** chip on a mailbox that has a subscription.
+
+**What it needs (this is the part that is not in the Entra app):**
+
+1. **A public HTTPS address that Microsoft can reach.** Microsoft's servers POST to it from the internet, so it must be `https://`, on a public host name, with a certificate from a public CA
+   (a self-signed or private-CA certificate is refused), and not behind a login, a VPN, an IP allow-list or a WAF challenge. `localhost`, private addresses and `*.local`, `*.internal` or
+   `*.test` names can never work; the platform does not even try them.
+2. **The route is `POST /v2/public/email/microsoft/push`** on the API (public by design: it is authenticated by the `clientState` each subscription carries). By default the address is the
+   origin of the **Redirect URI** above plus that path, for example `https://api.example.com/v2/public/email/microsoft/push`, so a platform whose sign-in callback already works usually needs
+   nothing more. If a reverse proxy or a tunnel (staging) fronts the API differently, set `MICROSOFT_MAIL_NOTIFICATION_URL` to the full address. The proxy must pass the POST body **and the
+   query string** (Microsoft's validation request is `POST ...?validationToken=...`) and answer within Microsoft's limits: the validation within 10 seconds, notifications within 3 seconds
+   (the route answers `202` at once and queues the sync).
+3. **No new Graph permission.** A subscription on `me/mailFolders('inbox')/messages` with a delegated token needs `Mail.Read`, which the app already has. Nothing in the Entra app changes.
+4. **Switch it on:** `MAIL_GRAPH_PUSH_ENABLED=true` on the API **and** the worker, then restart both. Until then the route answers `404` and no subscription is created.
+
+| Variable                          | Meaning                                                                                                           |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `MAIL_GRAPH_PUSH_ENABLED`         | `true` to use change notifications (default `false`)                                                              |
+| `MICROSOFT_MAIL_NOTIFICATION_URL` | the full public address, when it is not the redirect URI's origin plus `/v2/public/email/microsoft/push`          |
+| `MAIL_PUSH_RENEW_BEFORE_HOURS`    | renew a subscription when less than this is left (default 24; never later than half its lifetime, about 35 hours) |
+| `MAIL_PUSH_RECONCILE_MINUTES`     | a mailbox with a live subscription is still polled at least this often (default 10): the net behind a lost event  |
+
+**How it works.** Every two minutes the push sweep (worker) creates a subscription for each connected Microsoft mailbox that has none, renews the ones near their end (Graph keeps a mail
+subscription under three days; we ask for 70 hours), and recreates one that Graph no longer has. Creating a subscription makes Microsoft call the address with `?validationToken=` and expect the
+token back as plain text; if that fails the create is refused (`400 ValidationError`), the mailbox simply stays polled and the sweep tries again two minutes later (the API log says "mail push
+could not be started or renewed"). A notification carries the subscription id and a `clientState` that names the workspace and mailbox and is signed (HMAC) with a key derived from
+`CREDENTIALS_ENCRYPTION_KEY`; a notification whose signature or subscription id does not match what the mailbox stores is dropped without a sound. A valid one queues the normal sync job (one job
+per mailbox, a burst collapses) and the sync reads the Inbox through the delta cursor. The notification's own message id is **not** used to fetch the mail: Graph sends mutable ids while our ledger
+key is the immutable id, and reading around the cursor could store a message twice or out of order.
+
+Lifecycle events go to the same address: `reauthorizationRequired` flags the subscription for renewal (the sweep does it within two minutes) and syncs; `subscriptionRemoved` forgets it (the sweep
+makes a new one) and syncs; `missed` syncs. Disconnecting a mailbox deletes its subscription at Microsoft; a notification that still arrives for it is ignored.
+
+**Rotating `CREDENTIALS_ENCRYPTION_KEY`** changes the `clientState` key: the notifications of existing subscriptions no longer verify, so those mailboxes fall back to polling until their
+subscriptions are recreated (clear `push_state` of the Microsoft mailboxes after the rotation, or wait for the 70-hour subscriptions to lapse).
+
+| What you see                                     | Cause and fix                                                                                                                                      |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No **Live updates** chip on a Microsoft mailbox  | push is off (`MAIL_GRAPH_PUSH_ENABLED`), the address is not public https, or Microsoft could not validate it (see the log)                         |
+| Log: "mail push could not be started or renewed" | usually the validation: the address is unreachable from the internet, the certificate is not from a public CA, or the proxy drops the query string |
+| The chip is there but mail still takes a minute  | notifications are not arriving (firewall, WAF); the reconcile poll and the sweep still deliver the mail                                            |
+| A notification never syncs anything              | the mailbox is not connected, its add-on lapsed, or the subscription id it stores is not the one Microsoft sent (it was replaced)                  |
+
 ## How it behaves (what to tell support)
 
 - **Sync**: the Inbox is read with Graph delta queries (`/me/mailFolders/inbox/messages/delta`), once a minute by the sweep. The first run reads the last `MAIL_BACKFILL_DAYS`
@@ -62,6 +108,10 @@ Until both a client id and a secret exist the provider card in Email shows "Ask 
 
 ## Not verified here
 
-Everything was built from Microsoft's documentation and run against a local stand-in; nothing has been run against a real Entra tenant. Before the first customer, connect one
-work account and one personal Outlook.com account and check: consent, first sync, a threaded reply (does Outlook show the thread?), an attachment above 3 MB, and a reconnect.
-Two assumptions to confirm live: that Graph accepts `internetMessageId` on a draft PATCH and keeps it on send, and that the immutable id of a sent draft stays the same.
+Everything was built from Microsoft's documentation and run against a local stand-in; nothing has been run against a real Entra tenant. That includes change notifications
+(section 5): the subscription calls, the validation handshake, the lifecycle events and the `clientState` check were run against `fake-graph.ts` only. Before the first customer,
+connect one work account and one personal Outlook.com account and check: consent, first sync, a threaded reply (does Outlook show the thread?), an attachment above 3 MB, and a reconnect.
+Then switch push on in staging (it needs the public https address of section 5), connect a mailbox, confirm the **Live updates** chip, send a mail to it and watch it arrive within
+seconds, and let a subscription pass its renewal point.
+Assumptions to confirm live: that Graph accepts `internetMessageId` on a draft PATCH and keeps it on send, that the immutable id of a sent draft stays the same, that a delegated
+subscription's notifications carry the `clientState` we set, that `lifecycleNotificationUrl` may equal `notificationUrl`, and that Graph accepts the 70-hour lifetime.

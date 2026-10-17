@@ -87,7 +87,8 @@
       "customFieldsTooMany": "Ánh xạ tối đa {max} thuộc tính tùy chỉnh.",
       "contract": "{message}",
       "speedTemplateRequired": "Hãy chọn mẫu tin cần gửi.",
-      "speedDelayRange": "Hãy nhập số phút nguyên từ 0 đến {max}."
+      "speedDelayRange": "Hãy nhập số phút nguyên từ 0 đến {max}.",
+      "speedMaxAgeRange": "Chọn độ tuổi tối đa của một lead, từ 1 phút đến 90 ngày."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -341,6 +342,8 @@
         },
         "delay": "Chờ trước khi gửi (phút)",
         "delayHint": "Số phút nguyên từ 0 đến {max}. 0 là gửi ngay.",
+        "maxAge": "Không nhắn cho lead cũ hơn",
+        "maxAgeHint": "Lead đến muộn (nạp bù, thử lại, đồng bộ bị lỡ) vẫn được lưu, phân công và thông báo, nhưng không nhận tin nhắn đầu tiên nếu cũ hơn mức này. Chỉ chọn khoảng thời gian dài hơn nếu bạn muốn nhắn cho lead cũ. Các quy tắc về sự đồng ý luôn được áp dụng.",
         "businessHours": "Chỉ trong giờ làm việc",
         "businessHoursHint": "Ngoài giờ làm việc đã đặt trong không gian làm việc của bạn, tin nhắn sẽ chờ đến khi giờ làm việc bắt đầu.",
         "optionsFailed": "Không tải được các mẫu tin và người gửi. Hãy thử lại sau giây lát."
@@ -646,6 +649,7 @@
         "no_sender": "Không có người gửi nào được kết nối",
         "template_unavailable": "Không thể gửi mẫu tin",
         "missing_value": "Liên hệ này thiếu một giá trị của mẫu tin",
+        "lead_too_old": "Lead cũ hơn mức cài đặt cho phép",
         "provider_error": "Nhà cung cấp đã từ chối",
         "interrupted": "Bị gián đoạn",
         "expired": "Đã chờ quá lâu",
@@ -791,6 +795,7 @@
           "not_now": "Nguồn chưa sẵn sàng: yêu cầu quá sớm hoặc kết nối đang tạm dừng.",
           "provider_error": "Nguồn từ chối hoặc gặp lỗi.",
           "credentials_refused": "Nguồn từ chối thông tin xác thực. Hãy kết nối lại.",
+          "permission_missing": "Meta không cho phép Trang này đọc lead. Hãy cấp quyền truy cập lead trong Biểu mẫu lead của Meta, rồi chạy lại.",
           "interrupted": "Đã bị gián đoạn. Hãy chạy lại.",
           "internal_error": "Lỗi nội bộ. Hãy chạy lại.",
           "incomplete": "Một số khách hàng tiềm năng chưa được chuyển. Hãy chạy lại để hoàn tất.",
@@ -829,7 +834,8 @@
           "tooWide": "Tối đa {days} ngày mỗi lần.",
           "noSource": "Hãy chọn ít nhất một nguồn."
         },
-        "safe": "Chạy lại cũng không mất hay trùng dữ liệu; chỉ những khách còn thiếu mới được thêm vào."
+        "safe": "Chạy lại cũng không mất hay trùng dữ liệu; chỉ những khách còn thiếu mới được thêm vào.",
+        "speedNote": "Lead được nạp bù trở thành liên hệ, được giao cho người phụ trách và thông báo cho nhóm của bạn, giống lead mới. Chúng không nhận tin nhắn đầu tiên tự động nếu cũ hơn giới hạn của nguồn (một giờ, trừ khi bạn đã đổi trong cài đặt tin nhắn đầu tiên của nguồn)."
       }
     },
     "meta": {

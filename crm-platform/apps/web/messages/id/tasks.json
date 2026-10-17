@@ -328,6 +328,19 @@
       "showDone": "Tampilkan yang selesai",
       "hideDone": "Sembunyikan yang selesai",
       "gone": "Rekaman tempat tugas-tugas ini berada sudah tidak tersedia."
+    },
+    "inline": {
+      "addTask": "Tambah tugas",
+      "rowLabel": "Tambah tugas",
+      "titleLabel": "Judul tugas",
+      "titlePlaceholder": "Judul tugas, lalu tekan Enter untuk menyimpan",
+      "due": "Tanggal dan waktu tenggat",
+      "assignee": "Tetapkan ke",
+      "priority": "Prioritas (opsional)",
+      "hint": "Enter menyimpan, Escape menutup.",
+      "save": "Tambah tugas",
+      "cancel": "Batal",
+      "failed": "Tugas tidak dapat disimpan. Teks Anda dikembalikan ke kotak input."
     }
   }
 }

@@ -1,0 +1,128 @@
+{
+ "generatedAt": "2026-10-17T05:04:32.024Z",
+ "node": "v22.17.0",
+ "quietSeconds": 60,
+ "busySeconds": 30,
+ "buckets": [
+  {
+   "fromSecond": 0,
+   "phase": "quiet-1",
+   "samples": 30,
+   "postgresSelect1Ms": {
+    "p50": 3.06,
+    "p95": 4.12,
+    "max": 5.67
+   },
+   "redisPingMs": {
+    "p50": 1.92,
+    "p95": 2.97,
+    "max": 3.57
+   }
+  },
+  {
+   "fromSecond": 30,
+   "phase": "quiet-1",
+   "samples": 30,
+   "postgresSelect1Ms": {
+    "p50": 3.31,
+    "p95": 7.96,
+    "max": 12.55
+   },
+   "redisPingMs": {
+    "p50": 1.87,
+    "p95": 10.79,
+    "max": 12.46
+   }
+  },
+  {
+   "fromSecond": 60,
+   "phase": "idle-connections",
+   "samples": 29,
+   "postgresSelect1Ms": {
+    "p50": 3.17,
+    "p95": 4.35,
+    "max": 5.03
+   },
+   "redisPingMs": {
+    "p50": 1.85,
+    "p95": 2.7,
+    "max": 2.73
+   }
+  },
+  {
+   "fromSecond": 90,
+   "phase": "idle-connections",
+   "samples": 30,
+   "postgresSelect1Ms": {
+    "p50": 3.35,
+    "p95": 5.75,
+    "max": 29.15
+   },
+   "redisPingMs": {
+    "p50": 1.97,
+    "p95": 3.08,
+    "max": 3.24
+   }
+  },
+  {
+   "fromSecond": 120,
+   "phase": "idle-connections",
+   "samples": 30,
+   "postgresSelect1Ms": {
+    "p50": 3.04,
+    "p95": 5.89,
+    "max": 9.25
+   },
+   "redisPingMs": {
+    "p50": 2.72,
+    "p95": 4.31,
+    "max": 4.43
+   }
+  },
+  {
+   "fromSecond": 150,
+   "phase": "busy",
+   "samples": 29,
+   "postgresSelect1Ms": {
+    "p50": 2.91,
+    "p95": 5.5,
+    "max": 9.42
+   },
+   "redisPingMs": {
+    "p50": 1.89,
+    "p95": 4.07,
+    "max": 4.61
+   }
+  },
+  {
+   "fromSecond": 180,
+   "phase": "quiet-2",
+   "samples": 30,
+   "postgresSelect1Ms": {
+    "p50": 3.23,
+    "p95": 4.57,
+    "max": 16.53
+   },
+   "redisPingMs": {
+    "p50": 1.89,
+    "p95": 2.71,
+    "max": 3.14
+   }
+  },
+  {
+   "fromSecond": 210,
+   "phase": "quiet-2",
+   "samples": 3,
+   "postgresSelect1Ms": {
+    "p50": 2.52,
+    "p95": 3.02,
+    "max": 3.02
+   },
+   "redisPingMs": {
+    "p50": 1.74,
+    "p95": 1.83,
+    "max": 1.83
+   }
+  }
+ ]
+}

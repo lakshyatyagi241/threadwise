@@ -9,6 +9,16 @@
     "reason": "org-keyed roles_version read/bump; callers pass the authenticated org; returns an integer for a cache key",
     "reviewedOn": "2026-10-11"
   },
+  "modules/analytics/rollup/rollup.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (AnalyticsWorkerModule is imported by WorkersModule alone; no controller reaches it); the rollup pass, nightly reconcile and hour trim read and write the analytics event stream and rollups across tenants by design. Every statement is fixed in code from the rollup rules, org_id is taken from the events themselves, and the only caller input is the reconcile day, validated against YYYY-MM-DD",
+    "reviewedOn": "2026-10-16"
+  },
+  "modules/data-retention/partition-archiver.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (DataRetentionWorkerModule is imported by WorkersModule alone; no controller reaches it); it exports a whole closed monthly partition of a registered stream, across tenants by design, to one object per workspace and drops the partition through drop_closed_partition. Stream and column names come from the code registry (checked against ^[a-z][a-z0-9_]*$ and passed as identifiers, never interpolated), the month is validated as YYYY-MM, workspace ids from the data are checked to be plain integers before they become object names, and the drop function itself refuses any stream not in archivable_streams()",
+    "reviewedOn": "2026-10-17"
+  },
   "modules/api-library/api-library-retention.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
@@ -199,6 +209,11 @@
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); two fixed-predicate UPDATEs retire expired/stuck export rows across tenants",
     "reviewedOn": "2026-10-14"
+  },
+  "modules/contact-consent/minor-detection.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (MinorSweepService @Cron, contact-consent-worker module; no controller reaches it); the sweep reads only (org_id, contact_id) pairs by fixed predicates, then evaluates each contact in its own workspace transaction",
+    "reviewedOn": "2026-10-16"
   },
   "modules/crm/invoicing/invoice-overdue-sweep.service.ts": {
     "status": "reviewed",

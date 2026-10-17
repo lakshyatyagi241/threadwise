@@ -19,7 +19,9 @@
       "checkbox_group": "Opción múltiple",
       "checkbox": "Casilla",
       "rating": "Valoración",
-      "hidden": "Campo oculto"
+      "hidden": "Campo oculto",
+      "date_of_birth": "Fecha de nacimiento",
+      "age": "Edad"
     },
     "errors": {
       "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",

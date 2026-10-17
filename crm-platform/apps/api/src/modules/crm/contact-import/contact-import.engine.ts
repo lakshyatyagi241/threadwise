@@ -15,7 +15,12 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
-import { ContactConsentService, intakeEvidence } from '../../contact-consent';
+import {
+  ContactConsentService,
+  ContactPrivacyService,
+  MinorDetectionService,
+  intakeEvidence,
+} from '../../contact-consent';
 import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
@@ -93,6 +98,8 @@ export class ContactImportEngine {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly consent: ContactConsentService,
+    private readonly privacy: ContactPrivacyService,
+    private readonly minors: MinorDetectionService,
   ) {}
 
   /** Runs (or resumes) an import job to the end. Needs a request context (the processor sets one). */
@@ -422,10 +429,13 @@ export class ContactImportEngine {
           language: o.row.language ?? null,
           title: o.row.title ?? null,
           address: o.row.address ?? null,
+          dateOfBirth: o.row.dateOfBirth ?? null,
           message: o.row.memo ?? null,
           status: o.row.status ?? options.status ?? null,
           // "import" when nothing says otherwise, so the Imported filter and the source column agree
           source: o.row.source ?? options.source ?? 'import',
+          timezone: o.row.timezone ?? null,
+          timezoneSource: o.row.timezone ? 'import' : null,
           importJobId: job.id,
           ownerId: userId,
           createdBy: userId,
@@ -475,6 +485,13 @@ export class ContactImportEngine {
       if (o.row.title) patch.title = o.row.title;
       if (o.row.address) patch.address = o.row.address;
       if (o.row.memo) patch.message = o.row.memo;
+      // A zone in the file fills a contact that has none (or one an earlier import set); it never replaces a zone a person or the API chose.
+      if (o.row.timezone) {
+        patch.timezone = sql`CASE WHEN ${contacts.timezone} IS NULL OR ${contacts.timezoneSource} = 'import' THEN ${o.row.timezone} ELSE ${contacts.timezone} END`;
+        patch.timezoneSource = sql`CASE WHEN ${contacts.timezone} IS NULL OR ${contacts.timezoneSource} = 'import' THEN 'import' ELSE ${contacts.timezoneSource} END`;
+      }
+      // The importer's date replaces the stored one: a file is a person's deliberate correction (the sweep reads the new date).
+      if (o.row.dateOfBirth) patch.dateOfBirth = o.row.dateOfBirth;
       await tx
         .update(contacts)
         .set(patch)
@@ -483,6 +500,26 @@ export class ContactImportEngine {
         sql`(${orgId}, ${o.contactId}, 'phone', ${o.row.phone}, true)`,
         ...(o.row.email ? [sql`(${orgId}, ${o.contactId}, 'email', ${o.row.email}, true)`] : []),
       ]);
+    }
+
+    // 5a. age (BL-190): a date of birth brings the minor flag in line with it (source `dob`); a yes in the minor column flags the contact
+    //     (source `import`, the file as evidence). A no, a blank and a word nobody knows change nothing, and a file never clears a flag.
+    for (const o of ops.values()) {
+      if (o.contactId === undefined) continue;
+      if (o.row.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, orgId, o.contactId, new Date(), { dobChanged: true });
+      }
+      if (o.row.minor) {
+        await this.privacy.changeInTx(tx, orgId, {
+          contactId: o.contactId,
+          kind: 'minor',
+          value: true,
+          source: 'import',
+          evidence: { fileName: job.fileName, reference: job.uuid },
+          actorUserId: userId,
+          idempotencyKey: `import:${job.uuid}:${o.contactId}:minor`,
+        });
+      }
     }
 
     // 5b. consent: the importer confirmed they have it, so contacts of the batch get ledger grants (never over an opt-out). The proof is
@@ -671,9 +708,11 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
     'memo',
     'status',
     'source',
+    'dateOfBirth',
   ] as const) {
     if (b[key]) (out as unknown as Record<string, unknown>)[key] = b[key];
   }
+  if (b.minor) out.minor = true;
   // A later row for the same number refines the answer, except with a blank cell.
   if (b.consent) out.consent = b.consent;
   if (b.consentSms) out.consentSms = b.consentSms;

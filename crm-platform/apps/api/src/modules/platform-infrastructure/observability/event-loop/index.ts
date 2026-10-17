@@ -17,7 +17,17 @@ export {
 } from './job-metrics';
 export { JobMetricsModule, JobMetricsService } from './job-metrics.module';
 export {
+  Prober,
+  parseProbeTargets,
+  probeOnce,
+  type ProbeOutcome,
+  type ProbeResult,
+  type ProbeTarget,
+} from './probe';
+export {
   getRuntimeMonitor,
+  metricsListenerDecision,
   startRuntimeMonitor,
   stopRuntimeMonitor,
+  type ListenerDecision,
 } from './start-runtime-monitor';

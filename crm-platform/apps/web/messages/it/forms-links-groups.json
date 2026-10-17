@@ -95,7 +95,28 @@
         "required": "Obbligatorio",
         "removeField": "Rimuovi",
         "options": "Opzioni (separate da virgole)",
-        "optionsPlaceholder": "Opzione 1, Opzione 2, Opzione 3"
+        "optionsPlaceholder": "Opzione 1, Opzione 2, Opzione 3",
+        "mapsTo": "Associa a",
+        "mapsToHint": "Salva questa risposta in una proprietà del contatto all'invio del modulo.",
+        "mapsToNone": "Non salvare in una proprietà del contatto",
+        "mapsToSystemGroup": "Campi del contatto",
+        "mapsToCustomGroup": "Proprietà personalizzate",
+        "mapsToSystem": {
+          "name": "Nome completo",
+          "first_name": "Nome",
+          "last_name": "Cognome",
+          "email": "Email",
+          "title": "Qualifica",
+          "language": "Lingua",
+          "address": "Indirizzo"
+        },
+        "mapsToPrivacyGroup": "Privacy e consenso",
+        "mapsToPrivacy": {
+          "age": "Età (verifica minorenni)",
+          "date_of_birth": "Data di nascita (verifica minorenni)",
+          "consent_marketing": "Consenso marketing (WhatsApp)",
+          "consent_service": "Accordo di servizio (non marketing)"
+        }
       },
       "fieldKind": {
         "heading": "Titolo",

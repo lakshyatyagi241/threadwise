@@ -22,6 +22,13 @@ if (not c) or (tonumber(c) < tonumber(ARGV[1])) then
 end
 return 1`;
 
+/** KEYS[1] = rbac:version:<org>; ARGV = org id, user id. Returns {version, grants} with false for whatever is not cached. */
+const READ_CACHED_LUA = `
+local v = redis.call('GET', KEYS[1])
+if not v then return {false, false} end
+local g = redis.call('GET', 'rbac:' .. ARGV[1] .. ':v' .. v .. ':u' .. ARGV[2])
+return {v, g}`;
+
 /**
  * RBAC v3.
  *
@@ -54,10 +61,12 @@ export class RbacService {
   ) {}
 
   async grantsForUser(orgId: number, userId: number): Promise<GrantSet> {
-    const version = await this.rolesVersion(orgId);
+    // The usual case is a hit on both keys: one round trip for the version and the grant set together (see READ_CACHED_LUA).
+    const fast = await this.readCached(orgId, userId);
+    const version = fast ? fast.version : await this.rolesVersion(orgId);
     const cacheKey = `rbac:${orgId}:v${version}:u${userId}`;
 
-    const cached = await this.redis.get(cacheKey).catch(() => null);
+    const cached = fast ? fast.grants : await this.redis.get(cacheKey).catch(() => null);
     if (cached) {
       return new Map(Object.entries(JSON.parse(cached) as Record<string, Grant>));
     }
@@ -123,6 +132,37 @@ export class RbacService {
         throw new Error('Role change saved, but the permission cache could not be refreshed.');
       }
       this.logger.warn({ err, orgId }, 'rbac version cache could not be primed');
+    }
+  }
+
+  /**
+   * The cached roles version and, under it, the cached grant set: one script, one round trip, where two dependent reads
+   * (version, then the key built from it) used to be two. Reads exactly the keys `rolesVersion` and `grantsForUser` use and
+   * nothing else, so a version bump still invalidates every grant set at once.
+   *
+   * Returns null when the version is not cached or Redis fails; the caller then takes the original path (database for the
+   * version, plain GET for the grants), so behaviour on a miss or an error is unchanged. The grant key is built inside the
+   * script, so this needs a single Redis (or Sentinel) deployment, which is what REDIS_URL names; Redis Cluster would need
+   * both keys on one hash slot.
+   */
+  private async readCached(
+    orgId: number,
+    userId: number,
+  ): Promise<{ version: number; grants: string | null } | null> {
+    try {
+      const res = (await this.redis.eval(
+        READ_CACHED_LUA,
+        1,
+        `rbac:version:${orgId}`,
+        String(orgId),
+        String(userId),
+      )) as [string | null, string | null] | null;
+      const version = res?.[0] ? Number(res[0]) : NaN;
+      if (!Number.isFinite(version)) return null;
+      return { version, grants: res?.[1] ?? null };
+    } catch (err) {
+      this.logger.warn({ err }, 'rbac cache read failed; reading the version separately');
+      return null;
     }
   }
 

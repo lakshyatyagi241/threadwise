@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { PgDialect } from 'drizzle-orm/pg-core';
 import type { SQL } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
-import type { FieldType, SegmentGroup } from '@crm/contracts';
+import { segmentFieldSchema, type FieldType, type SegmentGroup } from '@crm/contracts';
 import {
   collectRuleRefs,
   compileRules,
@@ -325,3 +325,80 @@ import { sql } from 'drizzle-orm';
 function sqlCol(): SQL {
   return sql`c.col`;
 }
+
+describe('rules on the company of a contact (BL-196)', () => {
+  const rc = () =>
+    ctx({
+      fields: new Map<string, { type: FieldType }>([['tier', { type: 'text' }]]),
+      companyFields: new Map<string, { type: FieldType }>([
+        ['tier', { type: 'select' }],
+        ['seats', { type: 'integer' }],
+        ['channels', { type: 'multiselect' }],
+      ]),
+    });
+
+  it('reads the property off the company row of the contact, with the key and the value bound', () => {
+    const { invalid, sql, params } = compile(
+      group('and', cond('company.tier', 'equals', 'gold')),
+      rc(),
+    );
+    expect(invalid).toEqual([]);
+    expect(sql).toContain('FROM companies co');
+    expect(sql).toContain('co.org_id = "contacts"."org_id"');
+    expect(sql).not.toContain('gold');
+    expect(params).toEqual(expect.arrayContaining(['tier', 'gold']));
+  });
+
+  it('a contact property and a company property of the same key are different conditions', () => {
+    const own = compile(group('and', cond('custom.tier', 'equals', 'x')), rc());
+    const company = compile(group('and', cond('company.tier', 'equals', 'x')), rc());
+    expect(own.sql).not.toContain('companies');
+    expect(company.sql).toContain('companies');
+  });
+
+  it('number and list properties use the same predicates as contact properties', () => {
+    const { invalid, sql } = compile(
+      group(
+        'and',
+        cond('company.seats', 'gte', 50),
+        cond('company.channels', 'has_any', ['email']),
+      ),
+      rc(),
+    );
+    expect(invalid).toEqual([]);
+    expect(sql).toContain('segment_safe_numeric');
+    expect(sql).toContain('?|');
+  });
+
+  it('a company property that does not exist (or was deleted) is an invalid condition, never a throw', () => {
+    const r = compile(group('and', cond('company.ghost', 'equals', 'x')), rc());
+    expect(r.invalid).toHaveLength(1);
+    expect(r.invalid[0]).toMatchObject({ reason: 'field_deleted', field: 'company.ghost' });
+    expect(r.sql).toContain('false');
+  });
+
+  it('collects the company property keys apart from the contact ones', () => {
+    const refs = collectRuleRefs(
+      group('and', cond('company.tier', 'equals', 'a'), cond('custom.plan', 'equals', 'b')),
+    );
+    expect([...refs.companyFieldKeys]).toEqual(['tier']);
+    expect([...refs.fieldKeys]).toEqual(['plan']);
+  });
+
+  it('the schema accepts company.<key> and refuses a malformed one', () => {
+    expect(segmentFieldSchema.safeParse('company.tier').success).toBe(true);
+    expect(segmentFieldSchema.safeParse('company.Tier').success).toBe(false);
+    expect(segmentFieldSchema.safeParse('company.').success).toBe(false);
+    expect(segmentFieldSchema.safeParse('companies.tier').success).toBe(false);
+  });
+
+  it('segment usage tells a company property from a contact property of the same key', () => {
+    const row = (rules: unknown, name: string) => ({ id: 1, name, rules }) as unknown as SegmentRow;
+    const rows = [
+      row(group('and', cond('company.tier', 'equals', 'a')), 'ByCompany'),
+      row(group('and', cond('custom.tier', 'equals', 'a')), 'ByContact'),
+    ];
+    expect(segmentsUsing(rows, 'field', 'company.tier').map((r) => r.name)).toEqual(['ByCompany']);
+    expect(segmentsUsing(rows, 'field', 'tier').map((r) => r.name)).toEqual(['ByContact']);
+  });
+});

@@ -156,7 +156,11 @@ export interface ContactFormValues {
   phone: string | null;
   email: string;
   language: string;
+  /** The contact's IANA time zone (BL-193); '' = none stored (read from the number's country, then the workspace). */
+  timezone: string;
   address: string;
+  /** `YYYY-MM-DD` or '' (BL-217). A date that makes the contact a minor sets the minor flag when it is saved. */
+  dateOfBirth: string;
   memo: string;
   status: string;
   lifecycleStage: string;
@@ -188,7 +192,9 @@ export const EMPTY_FORM: ContactFormValues = {
   phone: null,
   email: '',
   language: '',
+  timezone: '',
   address: '',
+  dateOfBirth: '',
   memo: '',
   status: '',
   lifecycleStage: '',
@@ -227,7 +233,9 @@ export function contactToForm(
     phone: c.phone,
     email: clean(c.email),
     language: str(cf[EXTRA_KEYS.language]),
+    timezone: clean(c.timezone),
     address: str(cf[EXTRA_KEYS.address]),
+    dateOfBirth: c.dateOfBirth ?? '',
     memo: str(cf[EXTRA_KEYS.memo]),
     status: clean(c.status),
     lifecycleStage: clean(c.lifecycleStage),
@@ -295,6 +303,8 @@ export function toCreatePayload(
     ...lost,
     ...(clean(v.status) ? { status: clean(v.status) } : {}),
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
+    ...(clean(v.timezone) ? { timezone: clean(v.timezone) } : {}),
+    ...(clean(v.dateOfBirth) ? { dateOfBirth: clean(v.dateOfBirth) } : {}),
     // Always explicit: '' is "nobody" (null), not "the creator" which is what omitting it would mean.
     ownerId: v.ownerId || null,
     ...(v.companyId ? { companyId: v.companyId } : {}),
@@ -319,6 +329,8 @@ export function toUpdatePayload(
   previousOwnerId: string | null = null,
   /** The company the contact has now: sent only when the form changed it (null clears it), so saving an unrelated field never re-links. */
   previousCompanyId: string | null = null,
+  /** The time zone the contact has now: sent only when the form changed it (null clears it), so an unrelated save never re-labels who set it. */
+  previousTimezone: string | null = null,
 ) {
   const name = composeName(v);
   const lead = scoreChange(v.leadScore, previousLeadScore);
@@ -332,8 +344,10 @@ export function toUpdatePayload(
     ...lost,
     status: orNull(v.status),
     source: orNull(v.source),
+    dateOfBirth: orNull(v.dateOfBirth),
     ...(v.ownerId !== (previousOwnerId ?? '') ? { ownerId: v.ownerId || null } : {}),
     ...(v.companyId !== (previousCompanyId ?? '') ? { companyId: v.companyId || null } : {}),
+    ...(v.timezone !== (previousTimezone ?? '') ? { timezone: v.timezone || null } : {}),
     // Only a change to the switch touches the consent flag; saving an unrelated field must not flip it.
     ...(v.optedOut !== wasOptedOut ? { isUnsubscribed: v.optedOut } : {}),
     // Only a typed change touches the score: saving an unrelated field must not turn an AI score into a manual one.

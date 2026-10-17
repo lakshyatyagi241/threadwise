@@ -33,7 +33,7 @@ Every controller carries `@RequirePlanFeature('extra_channels')`, `@ActorKinds('
 
 ## Tables read or written
 
-`viber_channels`, `viber_broadcasts`, `viber_broadcast_recipients` (additive columns `message_token`, `delivered_at`, `seen_at`; on broadcasts `delivered`, `seen`, `media_size`, migration `20261203090200_vib_receipt_tokens.sql`), `channels` (kind `viber`, mirrored), `conversations`, `messages`, `contacts` (`channel = 'viber'`, `channel_uid` = the Viber user id), `wa_templates` (channel `viber`), `permission_defs`/`role_grants` (migration `20261203090000_vib_permissions.sql`), function `vib_channel_lookup` (`20261203090100_vib_channel_lookup.sql`, granted to `crm_app_user` and `crm_worker_user`). `viber_flow_sessions` exists and is not used here.
+`viber_channels`, `viber_broadcasts`, `viber_broadcast_recipients` (additive columns `message_token`, `delivered_at`, `seen_at`; on broadcasts `delivered`, `seen`, `media_size`, migration `20261203090200_vib_receipt_tokens.sql`), `channels` (kind `viber`, mirrored), `conversations`, `messages`, `contacts` (`channel = 'viber'`, `channel_uid` = the Viber user id), `wa_templates` (channel `viber`), `permission_defs`/`role_grants` (migration `20261203090000_vib_permissions.sql`), function `vib_channel_lookup` (`20261203090100_vib_channel_lookup.sql`, granted to `crm_app_user` and `crm_worker_user`). `viber_flow_sessions` was dropped by `20261216090000_drop_dormant_tables.sql` (Reference keeps Viber flow sessions in Node memory and never writes it; flow state is `flow_runs`, TW-FLR-070 wontfix, TW-NODE-050). Pending owner confirmation: punya.
 
 ## Queues and workers
 
@@ -47,8 +47,8 @@ Every controller carries `@RequirePlanFeature('extra_channels')`, `@ActorKinds('
 
 - Inbox: the `viber` `ChannelAdapter` (registered in `ChannelAdapterRegistry`, API and worker) carries replies; threads and unread come from `ExternalChannelIngest`.
 - Flow builder: `viber_channels` is read for the channel list of the Trigger node (`flow-builder-editor`); flow runtime launches `viber` flows from stored messages (`launch.service.ts`, `channel-render.ts`).
-- Consent: `viber` is a consent channel; the send paths are listed in `consent-gate.allowlist.ts` (the broadcast sender as a known gap).
-- Privacy: manifests for `viber_broadcast_recipients` and `viber_flow_sessions` (`modules/privacy/manifests/inbox.ts`).
+- Consent: `viber` is a consent channel; the broadcast sender asks the ConsentGate for every user (see "Consent on the first send").
+- Privacy: manifest for `viber_broadcast_recipients` (`modules/privacy/manifests/inbox.ts`); the `viber_flow_sessions` manifest went with the table (`20261216090000_drop_dormant_tables.sql`).
 - Provider port: token `VIBER_API` (`infra/providers/channel-viber/viber.port.ts`), client `ViberBotApiFactory`.
 
 ## Shims, owners and blocked consumers
@@ -56,4 +56,11 @@ Every controller carries `@RequirePlanFeature('extra_channels')`, `@ActorKinds('
 - `SqlViberTemplates` reads `wa_templates` where the channel is viber until message-templates exports a channel-aware lookup.
 - No plan-gate shim: the plan feature `extra_channels` gates the controllers (Reference's `access_viber` and `viber_broadcasts` are one flag here).
 - TW-VIB-017 (flow hand-off, flow-log, flow-node): blocked on flow-runtime-engine; not recreated here.
-- Send-time consent check on the broadcast sender: KNOWN GAP, as Telegram's.
+
+## Quiet hours (BL-191, product extension)
+
+Not in Reference. `VibBroadcastSenderService` asks `SendWindowService` (compliance-center) through `splitByQuietHours` for each claimed batch: the broadcast is always marketing, so there is no purpose to read. A recipient whose contact (the conversation's `contact_id`; none means the workspace fallback clock) is inside the workspace's quiet hours goes back to `pending` with `viber_broadcast_recipients.held_until` / `held_reason` (`holdRecipient`); `claim` skips it until then; the rest of the audience is sent. When only held recipients are left the run ends, the broadcast stays `sending`, and `scheduleWake` queues a delayed job on `viber-broadcast` (job id `<uuid>-held-<opening>`, so one per opening). A held user is left out of the batch's one `broadcast_message` call; the rest of the batch goes. Every user, held or not, is checked with the ConsentGate (see below). The list carries `held` and `heldUntil` (`heldSummaries`), shown under the counts with `compliance-center.hold.*`. Pausing a held broadcast makes the wake-up a no-op. Migration `20261225090000`. Spec: privacy-and-data-governance.md 11.5.
+
+## Consent on the first send (BL-141 follow-up, product extension)
+
+Not in Reference. Every claimed batch of Viber users is put through the ConsentGate before anything is sent, on the first send and on a release from the quiet hours alike: `gateRecipients(gate, orgId, batch, 'viber')` in `contact-consent/consent-gate.recipients.ts` (marketing purpose, consent channel `viber`, one `checkMany` for the slice; a recipient with no contact is asked as an anonymous subject). The rule is the gate's own: a withdrawal (the roll-up flag, or STOP on any channel) always refuses; with the workspace switch "Require recorded consent for marketing sends" OFF (the default) nobody else is refused; with it ON a recorded grant on `viber` is needed, so a recipient with no contact is refused too; a flagged minor is refused by the workspace's children setting (`subject_minor`); the Do-Not-Call list does not apply to this channel. Service and utility messages are never asked here: a broadcast is marketing by nature, and a reply typed in the inbox goes through the dispatcher (service purpose, never blocked by a marketing STOP). A refused user is left out of the batch's one `broadcast_message` call and recorded `failed` with `error = 'Not messaged: consent (<reason>)'`: Viber's recipient statuses have no `blocked`, so the broadcast's `failed` count includes them and a retry asks the gate again (a still-refused user fails again, a user who agreed again goes). The broadcast itself still ends `done`. The gate is asked BEFORE the quiet hours: a refused recipient is never merely held. There is no migration: `viber` was already a consent channel (`consentChannelOfKind`) and the ledger's channel column is a free pattern check. Allow-list: none needed. Tests: `test/unit/contact-consent/consent-gate-recipients.spec.ts` (truth table per channel), `test/e2e/channel-viber/viber-broadcasts.e2e.spec.ts` (BL-141 block)`.

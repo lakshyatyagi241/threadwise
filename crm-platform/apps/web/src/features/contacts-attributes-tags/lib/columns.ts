@@ -15,7 +15,16 @@ export const FIXED_COLUMN_IDS = [
   'leadScore',
   'language',
   'memo',
+  // BL-190 / BL-217: offered, hidden until chosen. Neither can be sorted.
+  'dateOfBirth',
+  'minor',
   'createdOn',
+  'whatsapp',
+  'sms',
+  'emailOptIn',
+  'company',
+  'lastActivity',
+  'source',
 ] as const;
 export type FixedColumnId = (typeof FIXED_COLUMN_IDS)[number];
 export type ColumnId = FixedColumnId | `attr:${string}`;
@@ -24,23 +33,21 @@ export type ColumnId = FixedColumnId | `attr:${string}`;
 export const LOCKED_COLUMNS: readonly ColumnId[] = ['name'];
 
 /**
- * Visible on first visit (plus the first two custom attributes, see `defaultColumns`). The owner column is offered but starts
- * hidden: Reference's contact list has no owner column (its `user_id` is the creator and is never shown), so a workspace that
- * does not use owners sees the table it always had.
+ * Visible on first visit: the seven of the Contact Hub's slim table (name, phone, email, lifecycle stage, WhatsApp opt-in,
+ * owner, created at). Everything else is one click away in the "+" picker; a person's own choice always wins.
  */
 export const DEFAULT_FIXED: readonly FixedColumnId[] = [
   'name',
   'phone',
   'email',
-  'tags',
   'stage',
-  'status',
-  'leadScore',
+  'whatsapp',
+  'owner',
   'createdOn',
 ];
 
-/** How many custom attribute columns a first-time visitor sees. */
-export const DEFAULT_ATTRIBUTE_COLUMNS = 2;
+/** How many custom attribute columns a first-time visitor sees: none, the add-column picker offers them. */
+export const DEFAULT_ATTRIBUTE_COLUMNS = 0;
 
 export const STORAGE_KEY = 'cat:contacts:columns';
 /** The left-to-right order the person arranged (a list of column ids); absent until they move one. */
@@ -55,11 +62,15 @@ export interface ColumnDef {
   id: ColumnId;
   /** Fixed columns: a message key under `contacts-attributes-tags.list`. Attributes: their own name. */
   label: { key: string } | { text: string };
+  /** A shorter heading for the table (the full label is its tooltip), so a narrow column never reads "PHONE NU...". */
+  short?: { key: string };
   attributeKey?: string;
 }
 
 export const attrId = (key: string): ColumnId => `attr:${key}`;
 export const isAttrId = (id: string): id is `attr:${string}` => id.startsWith('attr:');
+
+const NO_COLUMNS: ReadonlySet<ColumnId> = new Set();
 
 const FIXED_LABEL: Record<FixedColumnId, string> = {
   name: 'colContactName',
@@ -67,40 +78,74 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   email: 'colEmailId',
   tags: 'colTags',
   groups: 'colGroups',
-  stage: 'colStage',
+  stage: 'colLifecycleStage',
   status: 'colStatus',
   owner: 'colOwner',
   leadScore: 'colLeadScore',
   language: 'colLanguage',
   memo: 'colMemo',
+  dateOfBirth: 'colDateOfBirth',
+  minor: 'colMinor',
   createdOn: 'colCreatedOn',
+  whatsapp: 'colWhatsapp',
+  sms: 'colSms',
+  emailOptIn: 'colEmailOptIn',
+  company: 'colCompany',
+  lastActivity: 'colLastActivity',
+  source: 'colSource',
+};
+
+/** The columns whose heading is shortened in the table header; the full label stays in the picker and as the tooltip. */
+const SHORT_LABEL: Partial<Record<FixedColumnId, string>> = {
+  phone: 'shortPhone',
+  email: 'shortEmail',
+  stage: 'shortStage',
+  whatsapp: 'shortWhatsapp',
+  createdOn: 'shortCreated',
 };
 
 /**
  * Every column that can exist, in display order: name, phone, the workspace's attributes, then email, tags, and the
  * rest. Attribute columns sit next to the phone because order-style attributes read as part of the contact's identity.
  */
-export function allColumns(attributes: readonly AttributeColumn[]): ColumnDef[] {
-  const fixed = (id: FixedColumnId): ColumnDef => ({ id, label: { key: FIXED_LABEL[id] } });
-  return [
-    fixed('name'),
-    fixed('phone'),
-    ...attributes.map((a): ColumnDef => ({
-      id: attrId(a.key),
-      label: { text: a.name },
-      attributeKey: a.key,
-    })),
-    fixed('email'),
-    fixed('tags'),
-    fixed('groups'),
-    fixed('stage'),
-    fixed('status'),
-    fixed('owner'),
-    fixed('leadScore'),
-    fixed('language'),
-    fixed('memo'),
-    fixed('createdOn'),
-  ];
+export function allColumns(
+  attributes: readonly AttributeColumn[],
+  omit: ReadonlySet<ColumnId> = NO_COLUMNS,
+): ColumnDef[] {
+  const fixed = (id: FixedColumnId): ColumnDef => ({
+    id,
+    label: { key: FIXED_LABEL[id] },
+    ...(SHORT_LABEL[id] ? { short: { key: SHORT_LABEL[id]! } } : {}),
+  });
+  return (
+    [
+      fixed('name'),
+      fixed('phone'),
+      ...attributes.map((a): ColumnDef => ({
+        id: attrId(a.key),
+        label: { text: a.name },
+        attributeKey: a.key,
+      })),
+      fixed('email'),
+      fixed('tags'),
+      fixed('groups'),
+      fixed('stage'),
+      fixed('status'),
+      fixed('whatsapp'),
+      fixed('sms'),
+      fixed('emailOptIn'),
+      fixed('owner'),
+      fixed('leadScore'),
+      fixed('company'),
+      fixed('language'),
+      fixed('memo'),
+      fixed('source'),
+      fixed('dateOfBirth'),
+      fixed('minor'),
+      fixed('lastActivity'),
+      fixed('createdOn'),
+    ] as ColumnDef[]
+  ).filter((c) => !omit.has(c.id));
 }
 
 export function defaultColumns(attributes: readonly AttributeColumn[]): ColumnId[] {
@@ -134,9 +179,11 @@ export function visibleColumns(
   stored: readonly ColumnId[] | null,
   attributes: readonly AttributeColumn[],
   order: readonly ColumnId[] | null = null,
+  /** Columns this person cannot have (the company column without access to companies). */
+  omit: ReadonlySet<ColumnId> = NO_COLUMNS,
 ): ColumnDef[] {
   const chosen = new Set<ColumnId>([...(stored ?? defaultColumns(attributes)), ...LOCKED_COLUMNS]);
-  const canonical = allColumns(attributes).filter((c) => chosen.has(c.id));
+  const canonical = allColumns(attributes, omit).filter((c) => chosen.has(c.id));
   if (!order || order.length === 0) return canonical;
   // Arranged columns first, in the arranged order; one the person never placed (turned on later, a new attribute)
   // follows in its usual order. The name column stays first: the checkbox column and the freeze edge sit beside it.
@@ -185,6 +232,14 @@ export function sortKeyOf(id: ColumnId): string | null {
     case 'groups':
     case 'leadScore':
     case 'owner':
+    case 'whatsapp':
+    case 'sms':
+    case 'emailOptIn':
+    case 'company':
+    case 'lastActivity':
+    case 'source':
+    case 'dateOfBirth':
+    case 'minor':
       return null;
     case 'createdOn':
       return 'createdAt';
@@ -198,4 +253,74 @@ export function toggleColumn(current: readonly ColumnId[], id: ColumnId, on: boo
   if (LOCKED_COLUMNS.includes(id)) return [...current];
   const rest = current.filter((c) => c !== id);
   return on ? [...rest, id] : rest;
+}
+
+/** The groups of the add-column picker, in the order it lists them. */
+export const COLUMN_GROUPS = [
+  'contact',
+  'lifecycle',
+  'related',
+  'consent',
+  'activity',
+  'custom',
+] as const;
+export type ColumnGroup = (typeof COLUMN_GROUPS)[number];
+
+/** Which picker group a column belongs to. */
+export function columnGroup(id: ColumnId): ColumnGroup {
+  if (isAttrId(id)) return 'custom';
+  switch (id) {
+    case 'name':
+    case 'phone':
+    case 'email':
+    case 'language':
+    case 'memo':
+    case 'source':
+    case 'dateOfBirth':
+      return 'contact';
+    case 'stage':
+    case 'status':
+    case 'owner':
+    case 'leadScore':
+      return 'lifecycle';
+    case 'company':
+    case 'tags':
+    case 'groups':
+      return 'related';
+    case 'whatsapp':
+    case 'sms':
+    case 'emailOptIn':
+    case 'minor':
+      return 'consent';
+    case 'lastActivity':
+    case 'createdOn':
+      return 'activity';
+  }
+}
+
+/**
+ * The columns the add-column picker can still add, grouped: every column that exists and is not shown yet, in the
+ * canonical order, empty groups left out.
+ */
+export function addableColumns(
+  all: readonly ColumnDef[],
+  shown: readonly ColumnId[],
+): Array<{ group: ColumnGroup; columns: ColumnDef[] }> {
+  const on = new Set(shown);
+  const out: Array<{ group: ColumnGroup; columns: ColumnDef[] }> = [];
+  for (const group of COLUMN_GROUPS) {
+    const columns = all.filter((c) => !on.has(c.id) && columnGroup(c.id) === group);
+    if (columns.length > 0) out.push({ group, columns });
+  }
+  return out;
+}
+
+/** The shown columns with `id` taken out (the header menu's "Hide"); the locked ones stay. */
+export function hideColumn(shown: readonly ColumnId[], id: ColumnId): ColumnId[] {
+  return LOCKED_COLUMNS.includes(id) ? [...shown] : shown.filter((c) => c !== id);
+}
+
+/** The shown columns with `id` added at the end (the "+" picker). Already shown: unchanged. */
+export function showColumn(shown: readonly ColumnId[], id: ColumnId): ColumnId[] {
+  return shown.includes(id) ? [...shown] : [...shown, id];
 }

@@ -2,7 +2,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../../config/env.schema';
-import { DEFAULT_JOB_OPTIONS, QUEUES } from './queues';
+import { DEFAULT_JOB_OPTIONS, QUEUES, jobOptionsFor } from './queues';
 
 /**
  * BullMQ wiring.
@@ -35,7 +35,10 @@ import { DEFAULT_JOB_OPTIONS, QUEUES } from './queues';
         };
       },
     }),
-    BullModule.registerQueue(...Object.values(QUEUES).map((name) => ({ name }))),
+    // A queue-level `defaultJobOptions` replaces the root one whole, so each queue gets the full set (jobOptionsFor spreads the defaults).
+    BullModule.registerQueue(
+      ...Object.values(QUEUES).map((name) => ({ name, defaultJobOptions: jobOptionsFor(name) })),
+    ),
   ],
   exports: [BullModule],
 })

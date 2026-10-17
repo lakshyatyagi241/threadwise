@@ -34,7 +34,8 @@
         "too_long": "Inserisci al massimo {max} caratteri.",
         "pattern": "Il formato non è quello previsto.",
         "invalid_option": "Scegli una delle opzioni elencate.",
-        "invalid_amount": "Inserisci un importo compreso nell'intervallo consentito."
+        "invalid_amount": "Inserisci un importo compreso nell'intervallo consentito.",
+        "guardian_required": "Aggiungi il nome e un indirizzo email o un numero di telefono di un genitore o di un tutore."
       },
       "closedTitle": "Questo modulo è chiuso",
       "payTitle": "Un ultimo passaggio",
@@ -59,7 +60,15 @@
         "missingTitle": "Non abbiamo trovato questo pagamento",
         "missingBody": "Il link potrebbe essere errato o troppo vecchio."
       },
-      "termsOfService": "Termini"
+      "termsOfService": "Termini",
+      "ageDeclaration": "Confermo di avere almeno {age} anni",
+      "ageBlockedTitle": "Non possiamo continuare",
+      "ageBlockedBody": "Grazie per il tuo interesse. Non siamo in grado di accettare questo invio.",
+      "guardianTitle": "Un genitore o un tutore",
+      "guardianIntro": "Aggiungi i dati di un genitore o di un tutore.",
+      "guardianName": "Nome",
+      "guardianEmail": "Email",
+      "guardianPhone": "Telefono"
     }
   }
 }

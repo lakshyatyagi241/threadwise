@@ -18,6 +18,19 @@ export class SubscriptionSweepService {
 
   constructor(private readonly lifecycle: MarketSubscriptionLifecycle) {}
 
+  /** Every hour: the renewal reminders (idempotent: a period is reminded once). */
+  @Cron('0 15 * * * *')
+  async remind(): Promise<number> {
+    try {
+      const n = await this.lifecycle.remindDue();
+      if (n > 0) this.logger.log({ reminded: n }, '[MKT] renewal reminders');
+      return n;
+    } catch (err) {
+      this.logger.error({ err }, '[MKT] renewal reminders failed');
+      return 0;
+    }
+  }
+
   @Cron('0 * * * * *')
   async run(): Promise<{ lapsed: number; paused: number }> {
     if (this.running) return { lapsed: 0, paused: 0 };

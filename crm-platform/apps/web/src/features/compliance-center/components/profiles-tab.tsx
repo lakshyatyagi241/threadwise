@@ -143,6 +143,24 @@ export function ProfilesTab({
                 }
               />
             </Field>
+            <Field
+              label={t('dpdp.managerRegistration')}
+              htmlFor="cm-reg"
+              hint={t('dpdp.managerRegistrationHint')}
+            >
+              <Input
+                id="cm-reg"
+                dir="ltr"
+                value={form.consentManager.registrationId}
+                maxLength={60}
+                disabled={!canManage}
+                onChange={(e) =>
+                  patch({
+                    consentManager: { ...form.consentManager, registrationId: e.target.value },
+                  })
+                }
+              />
+            </Field>
             <UrlField
               id="cm-url"
               label={t('dpdp.managerUrl')}

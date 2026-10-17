@@ -139,7 +139,8 @@
         "cancel": "キャンセル",
         "retry": "新しい時刻で再試行",
         "delete": "削除",
-        "deleteHistory": "履歴から削除"
+        "deleteHistory": "履歴から削除",
+        "edit": "編集"
       },
       "empty": {
         "title": "予約はありません",
@@ -207,7 +208,8 @@
         "noSenders": "接続済みの送信元がありません。先に番号を接続してください。",
         "warming": "ウォームアップ中",
         "splitHint": "選択した送信元ごとに、宛先を均等に分けて個別に予約を実行します。",
-        "messageType": "メッセージの種類"
+        "messageType": "メッセージの種類",
+        "editSenderHint": "1つのスケジュールに設定できる番号は1つです。別の番号を選ぶとスケジュールがその番号に移り、ウォームアップ枠が再度確保されます。"
       },
       "audience": {
         "title": "宛先",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "宛先キュー",
-            "hint": "過去の一斉送信の宛先を再指定します。"
+            "hint": "過去の一斉配信やキャンペーンの受信者に再度送信します。"
           },
           "number": {
             "title": "番号",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "グループを選択",
         "chooseTags": "タグを1つ以上選択",
-        "chooseQueues": "過去の一斉送信を1つ以上選択",
+        "chooseQueues": "過去の一斉配信またはキャンペーンを1つ以上選択",
         "tickAny": "（いくつでも選択可）",
         "noGroups": "グループはまだありません",
         "noTags": "タグはまだありません",
-        "noQueues": "完了した一斉送信はまだありません",
+        "noQueues": "過去の一斉配信やキャンペーンはまだありません",
         "contacts": "連絡先へ移動",
         "broadcast": "一斉送信へ移動",
         "tagsHint": "宛先は予約の実行時に再計算されるため、新たにタグが付いた連絡先も含まれます。",
-        "queuesHint": "一斉送信をいくつでも選択できます。送信前に宛先は自動的に重複排除されます。",
+        "queuesHint": "一斉配信やキャンペーンはいくつでもチェックできます。受信者の重複は送信前に自動で除外されます。",
         "paste": "番号を貼り付け",
         "pasteHint": "先頭に国番号を付け、+は付けないでください。改行またはカンマで区切ります。",
         "pastePlaceholder": "1行に1つの番号を入力し、国番号を含めてください。+記号は不要です",
         "total": "宛先の合計:",
-        "optedOut": "{n}件を除外: 配信停止またはアーカイブ済み"
+        "optedOut": "{n}件を除外: 配信停止またはアーカイブ済み",
+        "kind": {
+          "broadcast": "一斉配信",
+          "campaign": "キャンペーン"
+        }
       },
       "message": {
         "title": "メッセージを作成",
@@ -275,7 +281,34 @@
         "pickerSearch": "名前または言語で検索…",
         "pickerEmpty": "一致するテンプレートはありません。",
         "manageTemplates": "テンプレートを管理 →",
-        "cancel": "キャンセル"
+        "cancel": "キャンセル",
+        "pickToPreview": "テンプレートを選ぶとプレビューが表示されます。",
+        "headerMedia": "{kind}ヘッダー",
+        "windowNote": "Cloud API の番号なら、顧客が過去24時間以内にメッセージを送っていなくても、承認済みテンプレートを配信できます。",
+        "previewSamples": "サンプル値でプレビュー",
+        "pickerCategories": "テンプレートのカテゴリ",
+        "categories": {
+          "all": "すべて",
+          "marketing": "マーケティング",
+          "utility": "ユーティリティ"
+        },
+        "pickerHidden": "{n, plural, other {チェックした番号では送信できないため、さらに#件のテンプレートが非表示になっています。}}",
+        "file": "ファイル",
+        "chooseFile": "送信するファイルを選択",
+        "fileHint": "画像、動画、音声、ドキュメントに対応しています。ファイルはワークスペース内に非公開で保存されます。",
+        "limits": "選択した番号の上限: 画像 {image} MB、動画 {video} MB、音声 {audio} MB、ドキュメント {document} MB。",
+        "tooBigUpload": "ファイルが {mb} MB を超えています。",
+        "uploadFailed": "ファイルをアップロードできませんでした。もう一度お試しください。",
+        "uploading": "アップロード中…",
+        "replace": "置き換え",
+        "remove": "削除",
+        "kinds": {
+          "image": "画像",
+          "video": "動画",
+          "audio": "音声",
+          "document": "ドキュメント"
+        },
+        "orLink": "またはファイルのリンクを貼り付け"
       },
       "when": {
         "title": "送信タイミング",
@@ -356,7 +389,18 @@
         "daysRequired": "曜日を選択してください。",
         "endDateRequired": "最終日を選択してください。",
         "endBeforeStart": "終了日が初回送信日より前になっています。",
-        "testNumber": "国番号を付けて番号を入力してください。"
+        "testNumber": "国番号を付けて番号を入力してください。",
+        "mediaTooLarge": "このファイルは、チェックした番号が受け付けるサイズを超えています。より小さいファイルを選んでください。",
+        "mediaType": "チェックした番号は、このメディアの種類ではこのファイル形式を受け付けません。",
+        "templateNotForSender": "チェックした番号ではこのテンプレートを送信できません。WhatsApp Cloud API の番号は Meta が承認したテンプレートのみ送信できます。別のテンプレートまたは番号を選んでください。"
+      },
+      "edit": {
+        "title": "予約メッセージを編集",
+        "saved": "スケジュールを更新しました。",
+        "submit": "変更を保存",
+        "stale": "編集中に、他のユーザーがこのスケジュールを変更しました。再読み込みして変更内容を確認してください。ここで入力した内容は失われます。",
+        "reload": "スケジュールを再読み込み",
+        "backToSchedule": "スケジュールに戻る"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "今すぐ実行",
         "cancel": "キャンセル",
         "retry": "新しい時刻で再試行",
-        "delete": "削除"
+        "delete": "削除",
+        "edit": "編集"
       },
       "kpi": {
         "recipients": "宛先",
@@ -434,7 +479,11 @@
           "delivered": "配信済み",
           "read": "既読",
           "failed": "失敗"
-        }
+        },
+        "search": "名前または番号で検索",
+        "range": "{total}件中 {from}–{to}件",
+        "prev": "前へ",
+        "next": "次へ"
       },
       "config": {
         "eyebrow": "予約の詳細",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "メッセージのプレビュー",
         "title": "宛先に表示される内容",
-        "empty": "（本文なし）"
+        "empty": "（本文なし）",
+        "template": "テンプレート {name}（{language}）",
+        "file": "ファイル: {name}"
       },
-      "another": "別の予約を作成"
+      "another": "別の予約を作成",
+      "engagement": {
+        "eyebrow": "エンゲージメント",
+        "title": "配信の推移",
+        "legend": "凡例",
+        "steps": {
+          "queued": "キュー待ち",
+          "sent": "送信済み",
+          "delivered": "配信済み",
+          "read": "既読",
+          "failed": "失敗"
+        },
+        "empty": "まだ何も送信されていないため、表示するグラフがありません。",
+        "perHour": "各時間の開始時点の累計です（{zone}）。",
+        "perDay": "各日の開始時点の累計です（{zone}）。"
+      }
     },
     "warmer": {
       "warming": "{n}件ウォームアップ中",

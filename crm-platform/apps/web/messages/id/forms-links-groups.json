@@ -95,7 +95,28 @@
         "required": "Wajib diisi",
         "removeField": "Hapus",
         "options": "Pilihan (dipisahkan dengan koma)",
-        "optionsPlaceholder": "Pilihan 1, Pilihan 2, Pilihan 3"
+        "optionsPlaceholder": "Pilihan 1, Pilihan 2, Pilihan 3",
+        "mapsTo": "Dipetakan ke",
+        "mapsToHint": "Menyimpan jawaban ini ke properti kontak saat formulir dikirim.",
+        "mapsToNone": "Jangan simpan ke properti kontak",
+        "mapsToSystemGroup": "Bidang kontak",
+        "mapsToCustomGroup": "Properti khusus",
+        "mapsToSystem": {
+          "name": "Nama lengkap",
+          "first_name": "Nama depan",
+          "last_name": "Nama belakang",
+          "email": "Email",
+          "title": "Jabatan",
+          "language": "Bahasa",
+          "address": "Alamat"
+        },
+        "mapsToPrivacyGroup": "Privasi & persetujuan",
+        "mapsToPrivacy": {
+          "age": "Usia (pemeriksaan anak di bawah umur)",
+          "date_of_birth": "Tanggal lahir (pemeriksaan anak di bawah umur)",
+          "consent_marketing": "Persetujuan pemasaran (WhatsApp)",
+          "consent_service": "Perjanjian layanan (bukan pemasaran)"
+        }
       },
       "fieldKind": {
         "heading": "Judul",

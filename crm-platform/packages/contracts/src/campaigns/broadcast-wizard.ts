@@ -1,6 +1,17 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import {
+  hasPreviousSends,
+  previousSendOptionSchema,
+  previousSendsAudienceSchema,
+} from '../broadcasts/previous-sends';
 import { senderKeySchema } from '../broadcasts/broadcast';
+import {
+  WIZARD_SENDERS_MAX,
+  senderBreakdownLineSchema,
+  senderShareSchema,
+  wizardSenderPicks,
+} from './sender-split';
 import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
 import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
@@ -105,6 +116,8 @@ export const wizardAudienceSchema = z.object({
   selection: contactSelectionSchema.nullish(),
   /** The valid numbers of an uploaded CSV. Numbers that are not contacts yet become contacts when the broadcast is launched. */
   csv: wizardCsvRefSchema.nullable().default(null),
+  /** Who earlier broadcasts and campaigns went to, optionally only those who did (or did not) read, reply or click. */
+  previous: previousSendsAudienceSchema.nullish(),
 });
 export type WizardAudience = z.infer<typeof wizardAudienceSchema>;
 export const EMPTY_WIZARD_AUDIENCE: WizardAudience = {
@@ -124,7 +137,8 @@ export const wizardAudienceHasSource = (a: WizardAudience): boolean =>
   a.contactIds.length > 0 ||
   a.allMatching !== null ||
   a.csv !== null ||
-  Boolean(a.selection);
+  Boolean(a.selection) ||
+  hasPreviousSends(a.previous);
 
 // ---------------------------------------------------------------------------------------- variables
 
@@ -280,6 +294,13 @@ export const wizardDraftSchema = z.object({
   templateId: uuidSchema.nullable().default(null),
   /** The WhatsApp number it is sent from, as the broadcast composer keys it: `<engine>:<uuid>` (`waba:...`). Required to launch. */
   senderKey: senderKeySchema.nullable().default(null),
+  /**
+   * Sending from several numbers (an addition carried over from Reference's broadcast composer, TW-BCAST-006): when more than one is
+   * ticked this is the whole list, the first being `senderKey`; empty means the one number in `senderKey` (every older draft).
+   */
+  senderKeys: z.array(senderKeySchema).max(WIZARD_SENDERS_MAX).default([]),
+  /** Share weights of the ticked numbers by key; a missing or non-positive weight counts as 1. The audience is split by them. */
+  senderShare: senderShareSchema.default({}),
   /** Step 2. */
   audience: wizardAudienceSchema.default({}),
   /** Step 3. Keys are the template's placeholders. */
@@ -390,6 +411,8 @@ export const wizardSegmentSourceSchema = z.object({
 export const wizardAudienceSourcesSchema = z.object({
   groups: z.array(wizardGroupSourceSchema),
   segments: z.array(wizardSegmentSourceSchema),
+  /** Earlier broadcasts and campaigns that went out, newest first (the "Previous sends" source). */
+  previousSends: z.array(previousSendOptionSchema).default([]),
 });
 export type WizardAudienceSources = z.infer<typeof wizardAudienceSourcesSchema>;
 
@@ -607,7 +630,7 @@ export const wizardTestSendRequestSchema = z.object({
 });
 export type WizardTestSendRequest = z.infer<typeof wizardTestSendRequestSchema>;
 
-export const WIZARD_TEST_STATUSES = ['sent', 'delivered', 'read', 'failed'] as const;
+export const WIZARD_TEST_STATUSES = ['held', 'sent', 'delivered', 'read', 'failed'] as const;
 
 export const wizardTestResultSchema = z.object({
   id: uuidSchema,
@@ -618,6 +641,8 @@ export const wizardTestResultSchema = z.object({
   errorMessage: z.string().nullable(),
   /** What the wallet was charged for it (0 until delivery is reported, and when the plan covers it). */
   chargedMinor: z.number().int(),
+  /** BL-191: a test of a marketing template held for the workspace's quiet hours goes out at this instant (status `held`). */
+  heldUntil: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),
 });
 export type WizardTestResult = z.infer<typeof wizardTestResultSchema>;
@@ -756,6 +781,8 @@ export const wizardBroadcastDetailSchema = wizardBroadcastSchema.extend({
   draft: wizardDraftSchema,
   /** A series' runs, newest first (a one-off campaign lists itself). */
   runList: z.array(wizardRunSchema),
+  /** Per number (all runs together), when the send was shared across several numbers; empty for one number. */
+  senders: z.array(senderBreakdownLineSchema).default([]),
 });
 export type WizardBroadcastDetail = z.infer<typeof wizardBroadcastDetailSchema>;
 
@@ -938,7 +965,8 @@ export function wizardStepIssues(
   if (step === 1) {
     if (draft.name.trim() === '') out.push({ path: 'name', code: 'name_required' });
     if (draft.templateId === null) out.push({ path: 'templateId', code: 'template_required' });
-    if (draft.senderKey === null) out.push({ path: 'senderKey', code: 'sender_required' });
+    if (wizardSenderPicks(draft).length === 0)
+      out.push({ path: 'senderKey', code: 'sender_required' });
     if (draft.abTesting && draft.templateIdB === null)
       out.push({ path: 'templateIdB', code: 'template_b_required' });
   }
@@ -1039,11 +1067,7 @@ export function wizardStepIssues(
         out.push({ path: `followUps.${i}.action`, code: 'follow_up_flow_required' });
     });
     // Read and reply tracking comes from Meta's delivery reports: a follow-up needs a Cloud API sender.
-    if (
-      draft.followUps.length > 0 &&
-      draft.senderKey !== null &&
-      !draft.senderKey.startsWith('waba:')
-    )
+    if (draft.followUps.length > 0 && wizardSenderPicks(draft).some((k) => !k.startsWith('waba:')))
       out.push({ path: 'followUps', code: 'follow_up_cloud_api_only' });
   }
   return out;

@@ -1,0 +1,183 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "رابطے کا فوری منظر",
+        "loading": "رابطہ لوڈ ہو رہا ہے...",
+        "notFoundTitle": "رابطہ نہیں ملا",
+        "notFound": "ہو سکتا ہے اسے حذف کر دیا گیا ہو، یا آپ کو اس تک رسائی حاصل نہ ہو۔",
+        "close": "بند کریں",
+        "seeAll": "تمام تفصیلات دیکھیں",
+        "previous": "پچھلا رابطہ",
+        "next": "اگلا رابطہ",
+        "position": "{total} میں سے {index}",
+        "rail": "رابطے کے حصے",
+        "moreTabs": "مزید حصے",
+        "more": "+{count} مزید",
+        "tab_overview": "جائزہ",
+        "tab_activities": "سرگرمی",
+        "tab_notes": "نوٹس",
+        "tab_tasks": "ٹاسکس",
+        "tab_meetings": "میٹنگز",
+        "tab_files": "فائلیں",
+        "tab_conversations": "گفتگو",
+        "tab_stats": "رابطے کے اعداد و شمار",
+        "tab_details": "پراپرٹیز",
+        "openFull": "تفصیلات کے صفحے پر کھولیں"
+      },
+      "actions": {
+        "note": "نوٹ",
+        "task": "ٹاسک",
+        "meeting": "میٹنگ",
+        "addCompany": "کمپنی شامل کریں",
+        "changeCompany": "کمپنی بدلیں",
+        "channels": "اس رابطے کو پیغام بھیجیں یا کال کریں",
+        "more": "مزید اقدامات",
+        "edit": "رابطے میں ترمیم کریں",
+        "delete": "رابطہ حذف کریں",
+        "conflict": "کسی اور نے پہلے یہ رابطہ بدل دیا۔ اسے دوبارہ لوڈ کر دیا گیا ہے؛ دوبارہ کوشش کریں۔",
+        "deleteFailed": "رابطہ حذف نہیں ہو سکا۔"
+      },
+      "header": {
+        "jobTitle": "عہدہ",
+        "jobTitlePlaceholder": "عہدہ شامل کریں...",
+        "editJobTitle": "عہدے میں ترمیم کریں",
+        "jobTitleConflict": "کسی اور نے پہلے یہ رابطہ بدل دیا۔ اسے دوبارہ لوڈ کر دیا گیا ہے؛ دوبارہ کوشش کریں۔",
+        "jobTitleFailed": "عہدہ محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+        "leadScore": "لیڈ اسکور",
+        "leadScoreAria": "لیڈ اسکور {score}۔ اسکور کی تفصیلات دکھائیں۔",
+        "owner": "مالک"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "ویب سائٹ",
+        "open": "{network} پروفائل کھولیں"
+      },
+      "subscription": {
+        "title": "سبسکرپشن کی حالت",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "ای میل",
+          "sms": "SMS"
+        },
+        "yes": "ہاں",
+        "no": "نہیں",
+        "optedOut": "مارکیٹنگ پیغامات سے آپٹ آؤٹ",
+        "optedOutNote": "اس رابطے نے مارکیٹنگ پیغامات سے آپٹ آؤٹ کیا ہے، اس لیے ہر چینل پر “نہیں” دکھایا جاتا ہے۔",
+        "proof": "ہر آپٹ اِن کا ثبوت رضامندی کے ریکارڈ میں ہے۔",
+        "openConsent": "رضامندی کارڈ کھولیں"
+      },
+      "score": {
+        "title": "لیڈ اسکور",
+        "details": "اسکور کی تفصیلات",
+        "hideDetails": "تفصیلات چھپائیں",
+        "none": "ابھی اسکور نہیں ہوا",
+        "aria": "لیڈ اسکور {score}، {band}"
+      },
+      "owner": {
+        "title": "مالک اور تفویض",
+        "owner": "مالک",
+        "tags": "ٹیگز",
+        "groups": "گروپس"
+      },
+      "location": {
+        "title": "مقام",
+        "address": "پتہ",
+        "country": "ملک",
+        "timeZone": "ٹائم زون",
+        "language": "زبان"
+      },
+      "compliance": {
+        "title": "رازداری",
+        "optedOut": "مارکیٹنگ سے آپٹ آؤٹ",
+        "allowed": "مارکیٹنگ کی اجازت ہے",
+        "noFlags": "رازداری کا کوئی فلیگ نہیں"
+      },
+      "overview": {
+        "information": "رابطہ"
+      },
+      "tabs": {
+        "info": "رابطے کی معلومات",
+        "social": "سوشل میڈیا",
+        "source": "لیڈ کا ماخذ",
+        "custom": "حسب ضرورت فیلڈز"
+      },
+      "info": {
+        "firstName": "پہلا نام",
+        "lastName": "آخری نام",
+        "email": "ای میل",
+        "phone": "فون",
+        "fax": "فیکس",
+        "company": "کمپنی",
+        "jobTitle": "عہدہ",
+        "language": "زبان",
+        "address": "پتہ",
+        "memo": "میمو",
+        "contactId": "رابطے کی ID",
+        "createdAt": "بنانے کا وقت",
+        "lastActivity": "آخری سرگرمی",
+        "source": "ماخذ",
+        "noCustomFields": "اس رابطے میں ابھی کوئی حسب ضرورت فیلڈ ویلیو نہیں ہے۔",
+        "noLeadSource": "اس رابطے کا کوئی لیڈ ماخذ درج نہیں ہے۔",
+        "dateOfBirth": "تاریخِ پیدائش"
+      },
+      "details": {
+        "title": "رابطے کی تفصیلات",
+        "stage": "لائف سائیکل مرحلہ",
+        "otherProperties": "دیگر پراپرٹیز"
+      },
+      "company": {
+        "title": "کمپنی",
+        "none": "یہ رابطہ کسی کمپنی سے منسلک نہیں ہے۔",
+        "hint": "کمپنی تلاش کریں، یا نیا نام لکھ کر اسے بنائیں۔",
+        "saved": "کمپنی محفوظ ہو گئی۔",
+        "removed": "کمپنی کو اس رابطے سے ہٹا دیا گیا۔",
+        "failed": "کمپنی محفوظ نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
+        "conflict": "کسی اور نے پہلے اس رابطے کو بدل دیا۔ رابطہ دوبارہ لوڈ کر دیا گیا ہے؛ دوبارہ کوشش کریں۔"
+      },
+      "sections": {
+        "lead-source": "لیڈ کا ماخذ"
+      },
+      "nav": {
+        "back": "فہرست پر واپس جائیں",
+        "label": "رابطے کے حصے",
+        "contactDetails": "رابطے کی تفصیلات",
+        "related": "متعلقہ",
+        "section": {
+          "overview": "جائزہ",
+          "activities": "سرگرمیاں",
+          "conversations": "گفتگو",
+          "details": "رابطے کی تفصیلات",
+          "stats": "رابطے کے اعداد و شمار",
+          "notes": "نوٹس",
+          "meetings": "میٹنگز",
+          "files": "فائلیں",
+          "tasks": "ٹاسکس",
+          "deals": "ڈیلز",
+          "appointments": "اپائنٹمنٹس",
+          "sales": "انوائسز اور دستاویزات",
+          "lead-source": "لیڈ کا ماخذ",
+          "company": "کمپنی",
+          "consent": "رضامندی",
+          "history": "فیلڈ کی تاریخ"
+        }
+      },
+      "stages": {
+        "title": "لائف سائیکل",
+        "stages": "لائف سائیکل مرحلہ",
+        "status": "حالت",
+        "noStatuses": "اس مرحلے کی کوئی حالت نہیں ہے۔",
+        "statusChanged": "حالت {status} پر سیٹ کر دی گئی۔",
+        "conflict": "کسی اور نے پہلے یہ رابطہ بدل دیا۔ اسے دوبارہ لوڈ کر دیا گیا ہے؛ دوبارہ کوشش کریں۔",
+        "forbidden": "آپ کو اس رابطے کو بدلنے کی اجازت نہیں ہے۔",
+        "statusFailed": "حالت بدلی نہیں جا سکی۔ دوبارہ کوشش کریں۔"
+      }
+    }
+  }
+}

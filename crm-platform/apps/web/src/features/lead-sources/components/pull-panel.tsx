@@ -188,7 +188,7 @@ export function RunLine({ run, withSource = false }: { run: LeadSyncRun; withSou
   );
 }
 
-function BackfillDialog({
+export function BackfillDialog({
   open,
   sources,
   onClose,
@@ -337,6 +337,9 @@ function BackfillDialog({
                 </Alert>
               )}
               {go.isError && <ErrorText mapped={leadError(go.error)} />}
+              <Alert tone="info" className="text-xs" data-testid="backfill-speed-note">
+                {t('speedNote')}
+              </Alert>
               <p className="text-xs text-muted-foreground">{t('safe')}</p>
             </>
           )}

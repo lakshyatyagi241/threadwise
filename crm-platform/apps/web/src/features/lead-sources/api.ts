@@ -258,3 +258,17 @@ export const useContactProperties = (enabled = true) =>
     retry: false,
     enabled,
   });
+
+/**
+ * A contact's lead attribution (first and latest touch). Failing quietly (`retry: false`) is deliberate: a contact page must look
+ * the same for someone without access, on a plan without the lead pipeline, or against a server that lacks the route.
+ */
+export function useContactAttribution(contactId: string, enabled = true) {
+  return useQuery({
+    queryKey: leadKeys.attribution(contactId),
+    queryFn: ({ signal }) => fetchAttribution(contactId, signal),
+    enabled,
+    retry: false,
+    staleTime: 60_000,
+  });
+}

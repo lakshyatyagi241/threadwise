@@ -112,6 +112,8 @@ export interface ListFilter {
   connectionUuid?: string;
   /** Internal id of the WhatsApp connection: for a caller that already holds it (the team inbox), instead of its uuid. */
   providerConfigId?: number;
+  /** This connection's templates first, then the rest, each group newest first. For a caller whose page is shared with other numbers. */
+  preferProviderConfigId?: number;
   q?: string;
 }
 
@@ -235,6 +237,9 @@ export class TemplatesRepository {
     if (sort === 'oldest') order = sql`t.created_at ASC, t.id ASC`;
     else if (sort === 'name-asc') order = sql`lower(t.template_name) ASC, t.id ASC`;
     else if (sort === 'name-desc') order = sql`lower(t.template_name) DESC, t.id DESC`;
+    if (f.preferProviderConfigId !== undefined && !f.cursor && sort === 'newest') {
+      order = sql`(t.provider_config_id = ${f.preferProviderConfigId}) DESC, t.created_at DESC, t.id DESC`;
+    }
     const res = await tx.execute(sql`
       SELECT ${SELECT} FROM ${FROM}
       WHERE ${sql.join(where, sql` AND `)}

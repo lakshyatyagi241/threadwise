@@ -306,7 +306,11 @@
         "numbersCount": "{count} numara",
         "emailNote": "E-postalar her kişinin adresine gider. E-posta adresi olmayan kişiler, yinelenen adresler ve abonelikten çıkmış kişiler atlanır.",
         "emailSkipped": "E-posta adresi olmadığı için atlanacak seçili alıcılar: {count}",
-        "emailNoAddress": "Elle yazılan numaraların ve CSV satırlarının e-posta adresi yoktur, bu yüzden atlanırlar. Bunun yerine kişileri, grupları, etiketleri veya segmentleri seçin."
+        "emailNoAddress": "Elle yazılan numaraların ve CSV satırlarının e-posta adresi yoktur, bu yüzden atlanırlar. Bunun yerine kişileri, grupları, etiketleri veya segmentleri seçin.",
+        "previousTitle": "Önceki gönderimler",
+        "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri ekleyin; isterseniz yalnızca okuyan, yanıtlayan veya tıklayanları seçin.",
+        "previousEstimate": "{count, plural, one {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).} other {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).}}",
+        "previousEditHint": "Düzenlerken önceki gönderim seçiminiz gösterilmez: bu kampanya alıcılarını zaten kişi olarak tutuyor. Daha fazla kişi eklemek için yeniden seçin."
       },
       "message": {
         "title": "Mesaj",
@@ -594,7 +598,8 @@
         "subject": "Konu",
         "subjectFallback": "Kampanya adı",
         "skippedNoEmail": "Atlananlar (e-posta adresi yok)",
-        "estimateEmail": "Bu bir tahmindir: iki grupta olan kişi iki kez sayılır. Gruplardaki, etiketlerdeki ve segmentlerdeki e-posta adresi olmayan kişiler kampanya çalışırken atlanır."
+        "estimateEmail": "Bu bir tahmindir: iki grupta olan kişi iki kez sayılır. Gruplardaki, etiketlerdeki ve segmentlerdeki e-posta adresi olmayan kişiler kampanya çalışırken atlanır.",
+        "previousSends": "Önceki gönderimler (en fazla)"
       },
       "ai": {
         "open": "Yapay zeka ile oluştur",
@@ -1205,7 +1210,12 @@
         "pickSender": "Bir numara seçin",
         "classicOption": "klasik oluşturucu",
         "buildWithAi": "Yapay zekayla oluştur",
-        "aiNote": "Yapay zekayla yeni bir şablon taslağı hazırlayın. Şablon sayfasında inceleyin; gönderilebilmesi için önce Meta onaylar, bu yüzden onaylandıktan sonra geri gelip seçin."
+        "aiNote": "Yapay zekayla yeni bir şablon taslağı hazırlayın. Şablon sayfasında inceleyin; gönderilebilmesi için önce Meta onaylar, bu yüzden onaylandıktan sonra geri gelip seçin.",
+        "shareToggle": "Bu gönderimi birden çok numara arasında paylaştır",
+        "shareHint": "Gönderilecek numaraları işaretleyin ve her birine bir pay verin. Kitle bu paylara göre bölünür ve her kişiye mesaj yalnızca tek bir numaradan gönderilir. Boş veya 0 olan pay 1 sayılır.",
+        "shareWeight": "Pay",
+        "shareWeightLabel": "{name} payı",
+        "shareKeepOne": "En az bir numara işaretli kalmalı."
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",
@@ -1254,7 +1264,8 @@
           "contacts": "Kişiler",
           "groups": "Gruplar",
           "segments": "Segmentler",
-          "csv": "CSV dosyası"
+          "csv": "CSV dosyası",
+          "previous": "Önceki gönderimler"
         },
         "groupsHint": "Gruplar pazarlama listelerinizdir. İşaretlediğiniz gruplardaki herkes dahil edilir.",
         "segmentsHint": "Segmentler kurallardan kendiliğinden dolar. İşaretlediğiniz segmentlerdeki herkes dahil edilir.",
@@ -1350,7 +1361,10 @@
         },
         "csvIssuesMore": "{count} tane daha indirmede.",
         "csvConsentOn": "Bu numaralar için onayı doğruladınız. Yayın başlatıldığında kabul etmiş olarak kaydedilecekler.",
-        "csvConsentVersion": "Bildirim sürümü: {version}."
+        "csvConsentVersion": "Bildirim sürümü: {version}.",
+        "modePrevious": "Önceki gönderimlere gönder",
+        "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri yeniden hedefleyin; isterseniz yalnızca okuyan, okumayan, yanıtlayan veya tıklayanları seçin.",
+        "chipPrevious": "{count, plural, one {# önceki gönderim} other {# önceki gönderim}} ({outcome})"
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",
@@ -1429,7 +1443,11 @@
         "chargedPlan": "Şimdi cüzdanınızdan tahsil edilen: {amount} (planınız bu mesajların {covered} tanesini karşılıyor)",
         "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}",
         "sumFollowUps": "Takip mesajları",
-        "sumSequence": "Sırayla gönderilir"
+        "sumSequence": "Sırayla gönderilir",
+        "sumPrevious": "Önceki gönderimler: {names} ({outcome})",
+        "sumSplit": "Numaralara göre dağılım",
+        "sumSplitCount": "{count, plural, one {# alıcı} other {# alıcı}} (%{percent})",
+        "sumSplitPercent": "Kitlenin %{percent}'i"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1465,9 +1483,11 @@
           "sent": "Gönderildi",
           "delivered": "İletildi",
           "read": "Okundu",
-          "failed": "Başarısız"
+          "failed": "Başarısız",
+          "held": "Bekletiliyor"
         },
-        "charged": "Ücretlendirilen: {amount}"
+        "charged": "Ücretlendirilen: {amount}",
+        "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)"
       },
       "send": {
         "whenTitle": "Ne zaman gönderilsin",
@@ -1912,6 +1932,70 @@
       "loading": "Numaralarınız yükleniyor",
       "noAccessTitle": "Kampanya oluşturamazsınız",
       "noAccess": "Kampanya oluşturma izni için çalışma alanı yöneticisine başvurun."
+    },
+    "previousSends": {
+      "title": "Önceki gönderimler",
+      "empty": "Henüz önceki bir toplu mesaj veya kampanya yok",
+      "outcomeLabel": "Bu gönderimlerden kimler",
+      "outcomes": {
+        "all": "Gönderilen herkes",
+        "delivered": "Teslim edildi",
+        "read": "Okudu",
+        "not_read": "Okumadı",
+        "replied": "Yanıtladı",
+        "not_replied": "Yanıtlamadı",
+        "clicked": "Bağlantıya tıkladı",
+        "failed": "Başarısız"
+      },
+      "outcomeOff": "{name} (toplu mesajlar için geçerli değil)",
+      "outcomeHint": {
+        "all": "Gönderilen herkes: mesajın hedeflendiği tüm kişiler. Abonelikten çıkan kişiler ve atlanan satırlar dahil değildir.",
+        "delivered": "Teslim edildi: mesajın ulaştığı kişiler.",
+        "read": "Okudu: mesajı okuyan kişiler.",
+        "not_read": "Okumadı: mesajın gönderildiği ve henüz okumayan kişiler.",
+        "replied": "Yanıtladı: mesajı yanıtlayan kişiler.",
+        "not_replied": "Yanıtlamadı: mesajın gönderildiği ve henüz yanıtlamayan kişiler.",
+        "clicked": "Bağlantıya tıkladı: mesajdaki izlenen bağlantıya tıklayan kişiler.",
+        "failed": "Başarısız: mesajın teslim edilemediği kişiler."
+      },
+      "broadcastNote": "Toplu mesaj yalnızca teslimat ve okunma bilgisini kaydeder; bu yüzden biri işaretliyken yanıtlar ve tıklamalar kullanılamaz.",
+      "broadcastOff": "Toplu mesajda yanıt veya tıklama yoktur. İşaretlemek için başka bir sonuç seçin.",
+      "search": "Önceki gönderimlerde ara",
+      "searchPlaceholder": "Ara",
+      "listLabel": "Önceki toplu mesajlar ve kampanyalar",
+      "noMatch": "Aramanızla eşleşen bir sonuç yok.",
+      "chosen": "{count} / {max} seçildi",
+      "limit": "En fazla {max} gönderim seçebilirsiniz. Başka birini seçmek için bir işareti kaldırın.",
+      "kind": {
+        "broadcast": "Toplu mesaj",
+        "campaign": "Kampanya"
+      },
+      "wentOut": "{date} tarihinde gönderildi",
+      "wentOutUnknown": "Tarih bilinmiyor",
+      "recipients": "{count, plural, one {# alıcı} other {# alıcı}}",
+      "notRecorded": "Toplu mesaj için kaydedilmez",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# kişi} other {# kişi}}",
+        "delivered": "{count, plural, one {# kişiye ulaştı} other {# kişiye ulaştı}}",
+        "read": "{count, plural, one {# kişi okudu} other {# kişi okudu}}",
+        "not_read": "{count, plural, one {# kişi okumadı} other {# kişi okumadı}}",
+        "replied": "{count, plural, one {# kişi yanıtladı} other {# kişi yanıtladı}}",
+        "not_replied": "{count, plural, one {# kişi yanıtlamadı} other {# kişi yanıtlamadı}}",
+        "clicked": "{count, plural, one {# kişi bağlantıya tıkladı} other {# kişi bağlantıya tıkladı}}",
+        "failed": "{count, plural, one {# kişi için başarısız oldu} other {# kişi için başarısız oldu}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "Her numaradan gönderilen",
+      "hint": "Bu gönderim birden çok numara arasında paylaştırıldı. Her satır bir numara ve ona verilen alıcılardır.",
+      "cols": {
+        "number": "Numara",
+        "recipients": "Alıcı",
+        "sent": "Gönderildi",
+        "delivered": "İletildi",
+        "failed": "Başarısız"
+      },
+      "removed": "(kaldırılmış bir numara)"
     }
   }
 }

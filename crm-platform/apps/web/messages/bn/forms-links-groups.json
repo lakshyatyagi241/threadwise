@@ -95,7 +95,28 @@
         "required": "আবশ্যক",
         "removeField": "সরান",
         "options": "অপশন (কমা দিয়ে আলাদা করা)",
-        "optionsPlaceholder": "অপশন ১, অপশন ২, অপশন ৩"
+        "optionsPlaceholder": "অপশন ১, অপশন ২, অপশন ৩",
+        "mapsTo": "ম্যাপ হয়",
+        "mapsToHint": "ফর্ম জমা দেওয়া হলে এই উত্তরটি যোগাযোগ বৈশিষ্ট্যে সংরক্ষণ করুন।",
+        "mapsToNone": "যোগাযোগ বৈশিষ্ট্যে সংরক্ষণ করবেন না",
+        "mapsToSystemGroup": "যোগাযোগ ফিল্ড",
+        "mapsToCustomGroup": "কাস্টম বৈশিষ্ট্য",
+        "mapsToSystem": {
+          "name": "পুরো নাম",
+          "first_name": "প্রথম নাম",
+          "last_name": "শেষ নাম",
+          "email": "ইমেইল",
+          "title": "পদবী",
+          "language": "ভাষা",
+          "address": "ঈকলাস"
+        },
+        "mapsToPrivacyGroup": "গোপনীয়তা ও সম্মতি",
+        "mapsToPrivacy": {
+          "age": "বয়स (নাবালক যাচাই)",
+          "date_of_birth": "জন্মতারিখ (নাবালক যাচাই)",
+          "consent_marketing": "মার্কেটিং সম্মতি (ক্যাটসঅ্যাপ)",
+          "consent_service": "পরিষেবা চুক্তি (মার্কেটিং নয়)"
+        }
       },
       "fieldKind": {
         "heading": "শিরোনাম",

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AiCrmProviderModule } from '../../infra/providers/ai-copilot-lead-finder/ai-crm-provider.module';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
 import { ChatConversationsModule } from '../chat-conversations';
+import { CompanyBriefsModule } from '../company-briefs';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WorkspacesTeamsTenancyModule } from '../workspaces-teams-tenancy';
@@ -21,6 +22,7 @@ import { AiCrmToolkitService } from './ai-crm-toolkit.service';
     AiCrmProviderModule,
     AiKeysUsageAdminModule,
     CrmModule,
+    CompanyBriefsModule,
     ChatConversationsModule,
     WorkspacesTeamsTenancyModule,
   ],

@@ -144,7 +144,10 @@
         "booking": "Rezervasyon sayfası",
         "commerce": "Mağaza ödeme sayfası",
         "lead": "Potansiyel müşteri toplama",
-        "gpc": "Global Privacy Control"
+        "wa_form": "WhatsApp formu",
+        "gpc": "Global Privacy Control",
+        "dob": "Doğum tarihi veya yaş",
+        "declaration": "Yaş doğrulanmadı"
       },
       "by": "{name} tarafından",
       "evidence": {
@@ -227,7 +230,9 @@
           "noteHint": "Örneğin: gişede kâğıt formu imzaladı. Vasinin adını veya iletişim bilgilerini yazmayın.",
           "ref": "Referans (isteğe bağlı)",
           "refHint": "Daha sonra bulabileceğiniz bir form numarası veya belge kimliği."
-        }
+        },
+        "minorFrom": "Verilen doğum tarihi veya yaştan ayarlandı. Biri tutmadıkça {date} tarihinde kendiliğinden kalkar.",
+        "minorFromDeclaration": "Bir formda yaş doğrulanmadığı için ayarlandı. Biri kaldırana kadar durur."
       }
     },
     "composer": {
@@ -351,7 +356,8 @@
         "consent_declined": "İzin verilmedi: kişi reddetti.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "İzin verilmez: bu kişi reşit olmayan olarak işaretli ve çalışma alanınız pazarlamayı engelliyor.",
-        "sale_share_opted_out": "İzin verilmez: kişi verilerinin satılmasından veya paylaşılmasından vazgeçti."
+        "sale_share_opted_out": "İzin verilmez: kişi verilerinin satılmasından veya paylaşılmasından vazgeçti.",
+        "on_dnc_list": "Aranmayacaklar listenizde: bu numaraya pazarlama araması veya mesajı yapılmaz"
       }
     },
     "notice": {

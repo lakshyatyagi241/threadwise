@@ -58,6 +58,8 @@ export interface Lab {
   clock: { now: Date };
   /** Every message the sandbox accepted, in order. */
   sent: OutgoingMessage[];
+  /** The same messages with the number (its id in `wa_provider_configs`) each one went out from. */
+  sentFrom: Array<{ to: string; senderId: number; engine: string }>;
   /** What the sandbox queued to report (delivery or failure), until `flush` applies it. */
   reports: FixtureReceipt[];
   dispatch: CampaignDispatchService;
@@ -86,6 +88,7 @@ export function buildLab(h: Harness): Lab {
   runtime.random = () => 0.5;
 
   const sent: OutgoingMessage[] = [];
+  const sentFrom: Lab['sentFrom'] = [];
   const reports: FixtureReceipt[] = [];
   const sandbox = new FixtureEngineSender(
     {
@@ -96,20 +99,23 @@ export function buildLab(h: Harness): Lab {
     },
     () => clock.now,
   );
-  get<EngineSenderRegistry>(EngineSenderRegistry).register('waba', {
-    open: async (orgId, sender) => {
+  const sandboxAdapter = {
+    open: async (orgId: number, sender: { id: number; engine: string }) => {
       const opened = await sandbox.open();
       void orgId;
-      void sender;
       return {
-        send: async (m) => {
+        send: async (m: OutgoingMessage) => {
           const out = await opened.send(m);
           sent.push(m);
+          sentFrom.push({ to: m.to, senderId: sender.id, engine: sender.engine });
           return out;
         },
       };
     },
-  });
+  };
+  // The personal (device) engine is the sandbox too, so a split send over a Cloud API number and a device can be checked per number.
+  for (const engine of ['waba', 'baileys'])
+    get<EngineSenderRegistry>(EngineSenderRegistry).register(engine, sandboxAdapter as never);
 
   const enqueued: Array<{ orgId: number; campaignId: number }> = [];
   const jobs = new CampaignJobs({
@@ -201,6 +207,7 @@ export function buildLab(h: Harness): Lab {
     runtime,
     clock,
     sent,
+    sentFrom,
     reports,
     dispatch,
     series,

@@ -39,6 +39,9 @@ const password: MailDriver = {
   authKind: 'password',
   label: 'IMAP',
   verify: async () => ({ address: 'a@b', sub: null, name: null }),
+  test: async () => {
+    throw new Error('unused');
+  },
 };
 
 describe('MailDriverRegistry', () => {

@@ -17,6 +17,7 @@ import {
   parsePresetFavorites,
   PRESET_FAVORITES_KEY,
   PRESET_VIEWS,
+  QUICK_PRESETS,
   togglePresetFavorite,
   type PresetView,
 } from '../lib/preset-views';
@@ -39,6 +40,7 @@ export function ViewsBar({
   onSelect,
   onPreset,
   meId,
+  count,
   can,
 }: {
   /** The filters on screen now (what "Create view" and "Save current filters" keep). */
@@ -56,6 +58,8 @@ export function ViewsBar({
   onPreset: (preset: PresetView) => void;
   /** The signed-in person (what "My contacts" means). */
   meId: string;
+  /** How many contacts the open view holds, shown in a pill beside its name; absent while that is not known. */
+  count?: number;
   can: { create: boolean; update: boolean; delete: boolean };
 }) {
   const t = useTranslations(NS);
@@ -79,7 +83,7 @@ export function ViewsBar({
     toast(t('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <div className="relative shrink-0">
         <button
           type="button"
@@ -87,7 +91,7 @@ export function ViewsBar({
           aria-expanded={pickerOpen}
           aria-label={t('picker.title')}
           onClick={() => setPickerOpen((o) => !o)}
-          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-primary bg-background px-4 text-sm font-medium text-primary outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           <span className="truncate">
             {activeId === ''
@@ -96,6 +100,11 @@ export function ViewsBar({
                 : t('all')
               : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
           </span>
+          {count !== undefined && (
+            <span className="rounded-full bg-primary/10 px-2 text-[11px] font-semibold leading-5 tabular-nums">
+              {count.toLocaleString()}
+            </span>
+          )}
           <ChevronDownIcon className="size-3.5" />
         </button>
         <Popover
@@ -132,6 +141,32 @@ export function ViewsBar({
             }}
           />
         </Popover>
+      </div>
+      <div
+        role="group"
+        aria-label={t('quick.label')}
+        className="flex flex-wrap items-center gap-1.5"
+      >
+        {QUICK_PRESETS.map((p) => {
+          const on = activeId === '' && preset === p;
+          return (
+            <button
+              key={p}
+              type="button"
+              aria-pressed={on}
+              // Choosing the chip that is on again goes back to all contacts.
+              onClick={() => (on ? onSelect(null) : onPreset(p))}
+              className={cn(
+                'inline-flex h-8 items-center rounded-full border px-3 text-[13px] font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
+                on
+                  ? 'border-brand bg-brand/10 text-brand dark:text-primary'
+                  : 'border-border text-muted-foreground hover:bg-muted hover:text-foreground',
+              )}
+            >
+              {t(`presets.${p}`)}
+            </button>
+          );
+        })}
       </div>
       {tabs
         .filter((v) => v.id === activeId)

@@ -63,7 +63,9 @@
         "agent": "Atendida por",
         "allAgents": "Todos",
         "apply": "Filtrar",
-        "clear": "Borrar"
+        "clear": "Borrar",
+        "source": "Origen",
+        "allSources": "Todos los orígenes"
       },
       "table": {
         "caption": "Llamadas, las más recientes primero",
@@ -136,12 +138,14 @@
           "reject_sent": "Llamada rechazada",
           "terminate_sent": "Colgado enviado",
           "terminate": "Llamada finalizada",
-          "recording_stored": "Grabación guardada"
+          "recording_stored": "Grabación guardada",
+          "logged": "Llamada registrada"
         },
         "noRecording": {
           "title": "Grabación",
           "message": "Esta llamada no tiene grabación."
-        }
+        },
+        "notes": "Notas"
       },
       "recording": {
         "title": "Grabación",
@@ -154,6 +158,53 @@
         "linkUntil": "Este enlace funciona hasta {time}. Pulsa reproducir de nuevo después.",
         "playFailed": "No se pudo reproducir la grabación.",
         "retry": "Reintentar"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Registrada a mano",
+        "telephony": "Línea telefónica",
+        "mobile_app": "App móvil",
+        "web_click_to_call": "Clic para llamar"
+      },
+      "logCall": {
+        "button": "Registrar una llamada",
+        "title": "Registrar una llamada",
+        "close": "Cerrar",
+        "with": "Llamada con",
+        "phone": "Número de teléfono",
+        "phoneHint": "La llamada se vincula al contacto que tiene este número.",
+        "phoneHintContact": "Opcional. La llamada se vincula a este contacto.",
+        "direction": "Dirección",
+        "outcome": "Cómo fue",
+        "outcomes": {
+          "connected": "Conectada",
+          "no_answer": "Sin respuesta",
+          "busy": "Ocupado",
+          "left_voicemail": "Dejó un mensaje de voz",
+          "wrong_number": "Número equivocado",
+          "declined": "Rechazada",
+          "failed": "Fallida"
+        },
+        "when": "Cuándo empezó",
+        "minutes": "Duración en minutos",
+        "notes": "Notas",
+        "notesHint": "Visible para todos los que pueden ver esta llamada. Hasta 2000 caracteres.",
+        "followUp": "Crear también una tarea de seguimiento",
+        "followUpDue": "Dar seguimiento el",
+        "followUpHint": "La tarea se te asigna a ti y se vincula al contacto.",
+        "cancel": "Cancelar",
+        "save": "Guardar llamada",
+        "saving": "Guardando...",
+        "saved": "Llamada registrada.",
+        "savedNoContact": "Llamada registrada. Ningún contacto tiene este número todavía.",
+        "problems": {
+          "noWho": "Indica un número de teléfono.",
+          "badWhen": "Elige cuándo empezó la llamada.",
+          "futureWhen": "La llamada no puede empezar en el futuro.",
+          "badMinutes": "Indica la duración en minutos, hasta 1440.",
+          "noDue": "Elige una fecha para el seguimiento.",
+          "badDue": "Elige una fecha válida para el seguimiento."
+        }
       }
     },
     "analytics": {

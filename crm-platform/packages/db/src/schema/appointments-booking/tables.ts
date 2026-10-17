@@ -272,8 +272,6 @@ export const appointments = pgTable(
     index('idx_appointments_hold_expiry').on(t.holdExpiresAt),
     index('idx_appointments_pending_ends').on(t.endsAt),
     index('idx_appointments_booking_type_id_starts_at').on(t.orgId, t.bookingTypeId, t.startsAt),
-    index('idx_appointments_starts_at').on(t.orgId, t.startsAt),
-    index('idx_appointments_status').on(t.orgId, t.status),
     index('idx_appointments_provider').on(t.orgId, t.provider),
   ],
 );

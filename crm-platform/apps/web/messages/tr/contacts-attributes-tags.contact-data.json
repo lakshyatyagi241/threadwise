@@ -1,0 +1,98 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Fırsatlar",
+        "loading": "Fırsatlar yükleniyor",
+        "empty": "Bu kişi için henüz fırsat yok.",
+        "unavailable": "Fırsatlar planınızda yok ya da rolünüz bunlara erişimi içermiyor.",
+        "listLabel": "Bu kişinin fırsatları",
+        "openRollup": "{count, plural, one {# açık fırsat} other {# açık fırsat}}",
+        "wonRollup": "{count, plural, one {# kazanılan fırsat} other {# kazanılan fırsat}}",
+        "noValue": "Değer yok",
+        "capped": "İlk {count} fırsat gösteriliyor. Yukarıdaki toplamlar hepsini kapsar.",
+        "pipeline": "Satış hattı {name}",
+        "closes": "Beklenen kapanış {date}",
+        "owner": "Sahip {name}",
+        "status": {
+          "open": "Açık",
+          "won": "Kazanıldı",
+          "lost": "Kaybedildi"
+        }
+      },
+      "conversations": {
+        "title": "Görüşmeler",
+        "loading": "Görüşmeler yükleniyor",
+        "empty": "Bu kişi için görüşme bulunamadı.",
+        "listLabel": "Bu kişinin görüşmeleri",
+        "unread": "{count, plural, one {# okunmamış mesaj} other {# okunmamış mesaj}}",
+        "open": "Aç",
+        "openLabel": "{title} görüşmesini aç",
+        "noPreview": "Henüz mesaj yok",
+        "lastMessage": "Son mesaj {time}",
+        "assignedTo": "Atanan: {name}",
+        "unassigned": "Atanmamış",
+        "footnote": "Kişinin telefon numarası, e-posta adresi veya adıyla bulundu. Arşivlenmiş görüşmeler listelenmez.",
+        "status": {
+          "open": "Açık",
+          "snoozed": "Ertelendi",
+          "resolved": "Çözüldü",
+          "closed": "Kapalı",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Kişi alan geçmişi",
+        "title": "Kişi alan geçmişi",
+        "close": "Kapat",
+        "loading": "Geçmiş yükleniyor",
+        "empty": "Bu kişi için henüz alan değişikliği kaydedilmedi.",
+        "loadMore": "Daha fazla yükle",
+        "changedTo": "şuna değişti",
+        "noValue": "boş",
+        "by": "{actor} tarafından",
+        "actor": {
+          "user": "bir kullanıcı",
+          "system": "sistem",
+          "api": "API"
+        },
+        "fields": {
+          "name": "Ad soyad",
+          "firstName": "Ad",
+          "lastName": "Soyad",
+          "email": "E-posta",
+          "phone": "Telefon",
+          "companyId": "Şirket",
+          "ownerId": "Sahip",
+          "lifecycleStage": "Yaşam döngüsü aşaması",
+          "lifecycleState": "Yaşam döngüsü durumu",
+          "status": "Durum",
+          "lostReason": "Kayıp nedeni",
+          "leadScore": "Potansiyel puanı",
+          "source": "Kaynak",
+          "isUnsubscribed": "Abonelikten çıkmış"
+        }
+      },
+      "stats": {
+        "title": "İletişim istatistikleri",
+        "loading": "İstatistikler yükleniyor",
+        "conversations": "Görüşmeler",
+        "unread": "Okunmamış mesajlar",
+        "lastInbound": "Son alınan mesaj",
+        "lastOutbound": "Son gönderilen mesaj",
+        "calls": "Aramalar",
+        "callsAnswered": "Yanıtlanan aramalar",
+        "callsMissed": "Cevapsız aramalar",
+        "callMinutes": "Arama dakikası",
+        "openTasks": "Açık görevler",
+        "leadScore": "Potansiyel puanı",
+        "lastActivity": "Son etkinlik",
+        "created": "Oluşturulma",
+        "none": "Henüz yok",
+        "atLeast": "{count}+",
+        "footnote": "Mesaj rakamları, bu kişi için bulunan görüşmeleri kapsar (telefon numarası, e-posta adresi veya ada göre). Arama rakamları son bir yılı kapsar ve telefon numarası veya ada göre eşleşir.",
+        "callsPartial": "Okunabilenden fazla arama eşleşti, bu yüzden arama rakamları eksik olabilir."
+      }
+    }
+  }
+}

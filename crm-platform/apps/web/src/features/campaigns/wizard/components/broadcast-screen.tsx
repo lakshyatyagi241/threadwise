@@ -1,5 +1,6 @@
 'use client';
 
+import { SenderBreakdown } from '../../components/sender-breakdown';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Fragment, useState } from 'react';
@@ -347,6 +348,8 @@ export function BroadcastScreen({ id }: { id: string }) {
           </header>
 
           <SummaryCard b={b} />
+
+          <SenderBreakdown lines={b.senders} />
 
           <WizardCard title={t('scheduleTitle')} id="status-schedule">
             <dl className="grid gap-3 sm:grid-cols-3">

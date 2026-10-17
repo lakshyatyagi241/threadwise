@@ -9,6 +9,8 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { SendWindowService } from '../compliance-center';
 import { ConsentGate, ConsentPolicyService, purposeOfCategory } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
+import { wakeDelayMs } from '../compliance-center';
+import { CampaignJobs } from './campaign-jobs';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
   EngineSenderRegistry,
@@ -66,6 +68,7 @@ import {
   CampaignsRepository,
   type CampaignRow,
   type ClaimedRecipient,
+  type RecipientSender,
 } from './campaigns.repository';
 import {
   INVALID_EMAIL,
@@ -94,6 +97,45 @@ export type CampaignRunResult =
 
 /** `rate`: the sender's own cap (a mailbox's sends per hour) is spent for now; the campaign is scheduled again when a slot frees. */
 type Stop = 'cap' | 'window' | 'wallet' | 'rate' | 'quiet' | null;
+
+/** A catch-up that a daily cap, a closed window or a spent sender cap stopped is tried again after this long (BL-192). */
+const CATCH_UP_RETRY_MS = 15 * 60_000;
+
+/** Everything one pass over a campaign's recipients needs: the campaign, one number opened, and the content. */
+interface LoopInput {
+  orgId: number;
+  c: CampaignRow;
+  maxAttempts: number;
+  settings: CampaignSettings;
+  deadline: Date | null;
+  sender: { engine: string; id: number; phoneDigits: string };
+  opened: OpenedSender;
+  bundles: Bundles;
+  pacing: PacingSettings;
+  warm: { min: number; max: number } | null;
+  base: Omit<MergeContext, 'contact'>;
+  /** A MARKETING campaign is held for the quiet hours; one that sends only utility templates is not (BL-177). */
+  marketing: boolean;
+  locks: Array<[string, string]>;
+  /** BL-192: the catch-up of a recurring campaign (see `catchUp`): only held recipients, the campaign's schedule left alone. */
+  catchUp?: boolean;
+  /** A split send's lane: only the recipients sent from this number. Null (the usual campaign): all of them. */
+  lane?: RecipientSender | null;
+  /** Messages sent so far in this run, shared by the lanes of a split send so the daily limit stays the campaign's. */
+  sent?: { n: number };
+}
+
+/** Why one pass over the recipients stopped. */
+interface LaneEnd {
+  stop: Stop;
+  halted: boolean;
+  expired: boolean;
+  rateWaitMs: number;
+  quietUntil: Date | null;
+}
+
+/** How long a split send waits before it looks again at a number another run was using. */
+const BUSY_LANE_WAIT_MS = 30_000;
 
 const PERMANENT_SENDER_MESSAGES = {
   waba: 'WhatsApp Cloud (Official API) campaigns must use an approved template. This campaign sends a custom message, which Meta only permits inside an open 24-hour customer session.',
@@ -139,6 +181,8 @@ export class CampaignDispatchService {
     @Optional() private readonly consentGate?: ConsentGate,
     // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
     @Optional() private readonly sendWindow?: SendWindowService,
+    // BL-192: queues the catch-up of a recurring campaign's held recipients. Optional like the window: without it nothing is queued.
+    @Optional() private readonly jobs?: CampaignJobs,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -147,6 +191,117 @@ export class CampaignDispatchService {
     if (!token) return 'busy';
     try {
       return await this.runLocked(orgId, campaignId, key, token);
+    } finally {
+      await this.lease.release(key, token);
+    }
+  }
+
+  /**
+   * BL-192: the catch-up of a recurring campaign. A recurring campaign whose occurrence ended with recipients held for the quiet hours moves
+   * to its next date at once (the cadence is untouched), and this job, queued for the first opening, sends only those recipients. It
+   * leaves the campaign's status and schedule alone, asks the ConsentGate again (a released recipient is re-checked in the send) and, if
+   * some are still inside their own hours, queues itself again for the next opening. Skipped when the next occurrence is already running:
+   * that run takes any held recipient whose hour has come.
+   */
+  async catchUp(orgId: number, campaignId: number): Promise<CampaignRunResult> {
+    const key = `camp:run:${orgId}:${campaignId}`;
+    const token = await this.lease.acquire(key);
+    if (!token) return 'busy';
+    try {
+      const prep = await this.db.txAs({ orgId }, async (t) => {
+        const c = await this.repo.findById(t, orgId, campaignId);
+        if (!c || (c.status !== 'scheduled' && c.status !== 'completed') || c.type === 'flow')
+          return null;
+        if (c.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabledFor(orgId)))
+          return null;
+        if ((await this.repo.heldCount(t, orgId, campaignId)) === 0) return null;
+        // A recipient released from a hold may have unsubscribed while it waited: the ConsentGate is asked again, as at the start of a run.
+        if (this.consentGate) {
+          const due = await this.repo.heldCandidates(t, orgId, campaignId);
+          if (due.length > 0) {
+            const verdict = await this.consentGate.checkMany(
+              orgId,
+              due.map((r) => r.contactId),
+              isEmailProvider(c.provider) ? 'email' : 'whatsapp',
+              'marketing_messaging',
+              undefined,
+              { tx: t },
+            );
+            const withdrawn = due.filter(
+              (r) => verdict.decisions.get(r.contactId)?.reason === 'withdrawn',
+            );
+            const missing = due.filter(
+              (r) =>
+                verdict.decisions.get(r.contactId)?.decision === 'deny' && !withdrawn.includes(r),
+            );
+            await this.repo.markScreened(
+              t,
+              orgId,
+              withdrawn.map((r) => r.id),
+              'unsubscribed',
+            );
+            await this.repo.markScreened(
+              t,
+              orgId,
+              missing.map((r) => r.id),
+              'skipped',
+            );
+          }
+        }
+        return { c, settings: await this.settingsSource.get(t, orgId) };
+      });
+      if (!prep) return 'skipped';
+      const { c, settings } = prep;
+      // A split send's held recipients are caught up number by number, through the same lanes a run uses.
+      const lanes = await this.db.txAs({ orgId }, (t) => this.repo.senderLanes(t, orgId, c.id));
+      if (lanes.length > 0) {
+        return await this.runLanes({
+          orgId,
+          c,
+          lanes,
+          maxAttempts: Math.max(1, settings.retryAttempts),
+          settings,
+          deadline: null,
+          key,
+          token,
+          catchUp: true,
+        });
+      }
+      const setup = await this.setup(orgId, c);
+      if ('failed' in setup) {
+        this.logger.warn(
+          { orgId, campaign: c.uuid, reason: (setup as { failed: string }).failed },
+          '[CAMP] catch-up of held recipients could not start',
+        );
+        return 'failed';
+      }
+      const { sender, opened, bundles, pacing, warm, base, marketing } = setup;
+      const senderKey = SenderLease.key(orgId, sender.engine, sender.id);
+      const senderToken = await this.lease.acquire(senderKey);
+      if (!senderToken) return 'busy';
+      try {
+        return await this.loop({
+          orgId,
+          c,
+          maxAttempts: Math.max(1, settings.retryAttempts),
+          settings,
+          deadline: null,
+          sender,
+          opened,
+          bundles,
+          pacing,
+          warm,
+          base,
+          marketing,
+          catchUp: true,
+          locks: [
+            [key, token],
+            [senderKey, senderToken],
+          ],
+        });
+      } finally {
+        await this.lease.release(senderKey, senderToken);
+      }
     } finally {
       await this.lease.release(key, token);
     }
@@ -221,6 +376,12 @@ export class CampaignDispatchService {
     }
 
     if (c.type === 'flow') return this.runFlow(orgId, c, maxAttempts, key, token);
+
+    // A send split across several numbers (the wizard's share picker): each number sends its own recipients, side by side.
+    const lanes = await this.db.txAs({ orgId }, (t) => this.repo.senderLanes(t, orgId, c.id));
+    if (lanes.length > 0) {
+      return this.runLanes({ orgId, c, lanes, maxAttempts, settings, deadline, key, token });
+    }
 
     // The sender and everything the run needs about it.
     const setup = await this.setup(orgId, c);
@@ -307,11 +468,11 @@ export class CampaignDispatchService {
     return first ? new Date(first.getTime() + settings.defaultExpiryHours * 3_600_000) : null;
   }
 
-  private async setup(orgId: number, c: CampaignRow) {
+  private async setup(orgId: number, c: CampaignRow, lane: RecipientSender | null = null) {
     return this.db.txAs({ orgId }, async (t) => {
       const sender = await this.senders.resolveForDispatch(t, orgId, {
-        provider: c.provider,
-        deviceId: c.deviceId,
+        provider: lane ? lane.provider : c.provider,
+        deviceId: lane ? lane.deviceId : c.deviceId,
       });
       if (!sender) return { failed: 'no sender' };
       if (!sender.phoneDigits)
@@ -406,22 +567,16 @@ export class CampaignDispatchService {
 
   // ---------------------------------------------------------------- the loop
 
-  private async loop(o: {
-    orgId: number;
-    c: CampaignRow;
-    maxAttempts: number;
-    settings: CampaignSettings;
-    deadline: Date | null;
-    sender: { engine: string; id: number; phoneDigits: string };
-    opened: OpenedSender;
-    bundles: Bundles;
-    pacing: PacingSettings;
-    warm: { min: number; max: number } | null;
-    base: Omit<MergeContext, 'contact'>;
-    /** A MARKETING campaign is held for the quiet hours; one that sends only utility templates is not (BL-177). */
-    marketing: boolean;
-    locks: Array<[string, string]>;
-  }): Promise<CampaignRunResult> {
+  /** One lane's run to its end, then the campaign's end: what an ordinary (one-number) campaign does. */
+  private async loop(o: LoopInput): Promise<CampaignRunResult> {
+    return this.finish({ ...o, ...(await this.drain(o)) });
+  }
+
+  /**
+   * Sends every recipient of the campaign (or of one lane of a split send) that can go now, and reports why it stopped. It does not
+   * decide what happens to the campaign: that is {@link finish}, called once, after all lanes.
+   */
+  private async drain(o: LoopInput): Promise<LaneEnd> {
     const { orgId, c, maxAttempts } = o;
     // Providers that take the rate themselves and need no human-like gap: SMS is sent one message at a time with no pacing.
     const official =
@@ -439,7 +594,7 @@ export class CampaignDispatchService {
     const zone = c.timezone ?? 'UTC';
 
     let paceIdx = 0;
-    let sentThisRun = 0;
+    const sent = o.sent ?? { n: 0 };
     let sinceCounters = 0;
     let stop: Stop = null;
     let halted = false;
@@ -448,10 +603,20 @@ export class CampaignDispatchService {
     // Recipients the quiet hours keep back, and the first instant one of them opens (BL-177).
     let heldCount = 0;
     let quietUntil: Date | null = null;
+    const heldIds: number[] = [];
 
     batches: for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
-        this.repo.claim(t, orgId, c.id, c.retryFailed ? maxAttempts : 0, BATCH),
+        this.repo.claim(
+          t,
+          orgId,
+          c.id,
+          c.retryFailed ? maxAttempts : 0,
+          BATCH,
+          o.catchUp === true,
+          heldIds,
+          o.lane ?? null,
+        ),
       );
       if (batch.length === 0) break;
 
@@ -474,7 +639,11 @@ export class CampaignDispatchService {
 
         // The operator cancelled or paused, or the end date passed: put the rest of the slice back and stop.
         const live = await this.db.txAs({ orgId }, (t) => this.repo.liveStatus(t, orgId, c.id));
-        if (live !== 'running') {
+        // The catch-up of a recurring campaign runs while the campaign waits for its next date (or has finished its last).
+        const alive = o.catchUp
+          ? live === 'running' || live === 'scheduled' || live === 'completed'
+          : live === 'running';
+        if (!alive) {
           halted = true;
           await putBack(batch.slice(i));
           break batches;
@@ -493,7 +662,7 @@ export class CampaignDispatchService {
           await putBack(batch.slice(i));
           break batches;
         }
-        if (dailyLimit > 0 && sentThisRun >= dailyLimit) {
+        if (dailyLimit > 0 && sent.n >= dailyLimit) {
           stop = 'cap';
           await putBack(batch.slice(i));
           break batches;
@@ -503,6 +672,7 @@ export class CampaignDispatchService {
         const hold = windows?.held.get(r.contactId);
         if (hold) {
           await this.db.txAs({ orgId }, (t) => this.repo.hold(t, orgId, r.id, hold));
+          heldIds.push(r.id);
           heldCount++;
           const at = new Date(hold.until);
           if (quietUntil === null || at.getTime() < quietUntil.getTime()) quietUntil = at;
@@ -527,21 +697,21 @@ export class CampaignDispatchService {
         }
         paceIdx++;
 
-        const sent = await this.sendOne(o, r, sentThisRun);
-        if (typeof sent === 'object') {
+        const outcome = await this.sendOne(o, r, sent.n);
+        if (typeof outcome === 'object') {
           // The sender's own cap is spent: this recipient and the rest go back, and the campaign continues when a slot frees.
           stop = 'rate';
-          rateWaitMs = sent.throttledMs;
+          rateWaitMs = outcome.throttledMs;
           await putBack(batch.slice(i));
           break batches;
         }
-        if (sent === 'wallet') {
+        if (outcome === 'wallet') {
           // The wallet cannot pay for the next message: this recipient and the rest go back, the campaign pauses (a top-up and Resume continue it).
           stop = 'wallet';
           await putBack(batch.slice(i));
           break batches;
         }
-        if (sent) sentThisRun++;
+        if (outcome) sent.n++;
         if (++sinceCounters >= COUNTER_EVERY) {
           sinceCounters = 0;
           await this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, c.id));
@@ -551,12 +721,12 @@ export class CampaignDispatchService {
 
     // Everyone who could go has gone: with only held recipients left the campaign sleeps until the first of them opens.
     if (stop === null && heldCount > 0) stop = 'quiet';
-    return this.finish({ ...o, stop, halted, expired, rateWaitMs, quietUntil });
+    return { stop, halted, expired, rateWaitMs, quietUntil };
   }
 
   /** One recipient. Returns true when it counted toward the daily limit (a real attempt, not bad data). */
   private async sendOne(
-    o: Parameters<CampaignDispatchService['loop']>[0],
+    o: LoopInput,
     r: ClaimedRecipient,
     sentThisRun: number,
   ): Promise<boolean | 'wallet' | { throttledMs: number }> {
@@ -749,7 +919,7 @@ export class CampaignDispatchService {
 
   /** The Cloud API template object for one recipient: the shared builder (see campaign-payload.ts), so a retry and a test send match. */
   private async components(
-    o: Parameters<CampaignDispatchService['loop']>[0],
+    o: LoopInput,
     content: VariantContent,
     tpl: TemplateRecord,
     r: ClaimedRecipient,
@@ -831,17 +1001,153 @@ export class CampaignDispatchService {
     return 'finished';
   }
 
+  // ---------------------------------------------------------------- a send split across several numbers
+
+  /**
+   * The run of a campaign whose recipients were split across several numbers (TW-BCAST-006 and 014, carried into the wizard). Each
+   * number is a lane: it opens its own sender, holds its own sender lock, paces itself, and sends only the recipients assigned to it,
+   * all lanes at once. They share the campaign's lock, its daily limit and its end: the campaign is finished once, after every lane
+   * has stopped, so it is completed, paused for the wallet or scheduled again by what is left across ALL lanes.
+   *
+   * A number that cannot be opened fails only its own recipients (the others still go); if no number can be opened the campaign
+   * fails like an ordinary one and nobody is touched. A number another run is using right now is skipped for the moment: its
+   * recipients stay queued and the campaign is scheduled again shortly.
+   */
+  private async runLanes(i: {
+    orgId: number;
+    c: CampaignRow;
+    lanes: RecipientSender[];
+    maxAttempts: number;
+    settings: CampaignSettings;
+    deadline: Date | null;
+    key: string;
+    token: string;
+    /** BL-192: the catch-up of held recipients; the campaign's status and schedule are left alone. */
+    catchUp?: boolean;
+  }): Promise<CampaignRunResult> {
+    const { orgId, c, maxAttempts } = i;
+    const opened: Array<{
+      lane: RecipientSender;
+      setup: Exclude<Awaited<ReturnType<CampaignDispatchService['setup']>>, { failed: string }>;
+      lock: [string, string];
+    }> = [];
+    const broken: Array<{ lane: RecipientSender; reason: string }> = [];
+    let busy = 0;
+    try {
+      for (const lane of i.lanes) {
+        // The personal-number engine switched off: that number's recipients wait (as a whole campaign on it would) until it is back on.
+        if (lane.provider === UNOFFICIAL_ENGINE && !(await this.unofficial.isEnabledFor(orgId))) {
+          busy++;
+          continue;
+        }
+        const setup = await this.setup(orgId, c, lane);
+        if ('failed' in setup) {
+          broken.push({ lane, reason: (setup as { failed: string }).failed });
+          continue;
+        }
+        // The directory falls back to another connected number when the named one is gone; a lane must never send from a different
+        // number than its recipients were assigned to.
+        if (setup.sender.id !== lane.deviceId) {
+          broken.push({ lane, reason: 'the number is no longer available' });
+          continue;
+        }
+        const lockKey = SenderLease.key(orgId, setup.sender.engine, setup.sender.id);
+        const lockToken = await this.lease.acquire(lockKey);
+        if (!lockToken) {
+          busy++;
+          continue;
+        }
+        opened.push({ lane, setup, lock: [lockKey, lockToken] });
+      }
+      if (opened.length === 0 && busy === 0) {
+        if (!i.catchUp) await this.failRun(orgId, c, broken[0]?.reason ?? 'no sender');
+        return 'failed';
+      }
+      if (opened.length === 0) return 'busy';
+      for (const b of i.catchUp ? [] : broken) {
+        const n = await this.db.txAs({ orgId }, (t) =>
+          this.repo.failLane(
+            t,
+            orgId,
+            c.id,
+            b.lane,
+            maxAttempts,
+            `Sender unavailable: ${b.reason}`,
+          ),
+        );
+        this.logger.warn(
+          { orgId, campaign: c.uuid, lane: b.lane, recipients: n, reason: b.reason },
+          '[CAMP] a number of a split send cannot send; its recipients failed',
+        );
+      }
+
+      const sent = { n: 0 };
+      const settled = await Promise.allSettled(
+        opened.map((x) =>
+          this.drain({
+            orgId,
+            c,
+            maxAttempts,
+            settings: i.settings,
+            deadline: i.deadline,
+            sender: x.setup.sender,
+            opened: x.setup.opened,
+            bundles: x.setup.bundles,
+            pacing: x.setup.pacing,
+            warm: x.setup.warm,
+            base: x.setup.base,
+            marketing: x.setup.marketing,
+            locks: [[i.key, i.token], x.lock],
+            lane: x.lane,
+            sent,
+            ...(i.catchUp ? { catchUp: true } : {}),
+          }),
+        ),
+      );
+      const failure = settled.find((r): r is PromiseRejectedResult => r.status === 'rejected');
+      if (failure) throw failure.reason;
+      const ends = settled.map((r) => (r as PromiseFulfilledResult<LaneEnd>).value);
+
+      // One end for the campaign: a campaign-wide stop (wallet, window, daily limit) wins over a number's own cap, which wins over nothing.
+      const order: Stop[] = ['wallet', 'window', 'cap', 'quiet', 'rate'];
+      let stop = order.find((s) => ends.some((e) => e.stop === s)) ?? null;
+      let rateWaitMs = Math.max(0, ...ends.map((e) => e.rateWaitMs));
+      if (stop === null && busy > 0) {
+        stop = 'rate';
+        rateWaitMs = Math.max(rateWaitMs, BUSY_LANE_WAIT_MS);
+      }
+      const quiets = ends.flatMap((e) => (e.quietUntil ? [e.quietUntil] : []));
+      const first = opened[0]!.setup;
+      return await this.finish({
+        orgId,
+        c,
+        maxAttempts,
+        settings: i.settings,
+        deadline: i.deadline,
+        sender: first.sender,
+        opened: first.opened,
+        bundles: first.bundles,
+        pacing: first.pacing,
+        warm: first.warm,
+        base: first.base,
+        marketing: first.marketing,
+        locks: [[i.key, i.token]],
+        ...(i.catchUp ? { catchUp: true } : {}),
+        stop,
+        halted: ends.some((e) => e.halted),
+        expired: ends.some((e) => e.expired),
+        rateWaitMs,
+        quietUntil: quiets.length ? new Date(Math.min(...quiets.map((d) => d.getTime()))) : null,
+      });
+    } finally {
+      for (const x of opened) await this.lease.release(x.lock[0], x.lock[1]);
+    }
+  }
+
   // ---------------------------------------------------------------- the end of a run
 
-  private async finish(
-    o: Parameters<CampaignDispatchService['loop']>[0] & {
-      stop: Stop;
-      halted: boolean;
-      expired: boolean;
-      rateWaitMs: number;
-      quietUntil?: Date | null;
-    },
-  ): Promise<CampaignRunResult> {
+  private async finish(o: LoopInput & LaneEnd): Promise<CampaignRunResult> {
+    if (o.catchUp) return this.finishCatchUp(o);
     const { orgId, c, maxAttempts, settings } = o;
     const left = await this.db.txAs({ orgId }, (t) =>
       this.repo.remaining(t, orgId, c.id, c.retryFailed ? maxAttempts : 0),
@@ -911,8 +1217,59 @@ export class CampaignDispatchService {
       }
       await this.events.statusChanged(t, orgId, c.id, previous);
     });
+    // BL-192: a recurring campaign moved to its next date without waiting for its held recipients; they get their own job at the first
+    // opening. Queued after the commit so the job never runs before the state it reads is visible.
+    if (recurring && o.quietUntil) {
+      await this.queueCatchUp(orgId, c, o.quietUntil);
+    }
     this.logger.log({ orgId, campaign: c.uuid, result, stop: o.stop }, '[CAMP] run finished');
     return result;
+  }
+
+  /** Queues the catch-up of a recurring campaign for the instant its first held recipient may be messaged. */
+  private async queueCatchUp(orgId: number, c: CampaignRow, at: Date): Promise<void> {
+    if (!this.jobs) return;
+    const queued = await this.jobs.enqueue(
+      orgId,
+      c.id,
+      c.uuid,
+      wakeDelayMs(at, this.runtime.now()),
+      true,
+    );
+    if (!queued) {
+      this.logger.error(
+        { orgId, campaign: c.uuid },
+        '[CAMP] could not queue the catch-up of held recipients; the next occurrence takes them',
+      );
+    }
+  }
+
+  /**
+   * The end of a catch-up (BL-192): the counters are recounted and nothing else of the campaign is touched. Recipients still inside their
+   * own hours get another catch-up at the next opening; a cap, a closed window or a spent sender cap retries in a quarter of an hour. A
+   * spent wallet ends it: the held recipients are taken by the next occurrence's run, like any recipient the wallet could not pay for.
+   */
+  private async finishCatchUp(
+    o: LoopInput & { stop: Stop; halted: boolean; quietUntil?: Date | null },
+  ): Promise<CampaignRunResult> {
+    const { orgId, c } = o;
+    await this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, c.id));
+    if (o.halted || o.stop === 'wallet') return 'halted';
+    const now = this.runtime.now();
+    // A daily cap, a closed window or a spent sender cap stopped it with held recipients whose hour has come: try again later.
+    if (o.stop === 'cap' || o.stop === 'window' || o.stop === 'rate') {
+      await this.queueCatchUp(orgId, c, new Date(now.getTime() + CATCH_UP_RETRY_MS));
+      return 'rearmed';
+    }
+    // Recipients still inside their own hours (asked a little early, or a country with several zones): the next opening.
+    const next = await this.db.txAs({ orgId }, (t) => this.repo.nextHeldAt(t, orgId, c.id));
+    if (next) {
+      await this.queueCatchUp(orgId, c, next);
+      this.logger.log({ orgId, campaign: c.uuid }, '[CAMP] catch-up: some recipients wait again');
+      return 'rearmed';
+    }
+    this.logger.log({ orgId, campaign: c.uuid }, '[CAMP] catch-up finished');
+    return 'finished';
   }
 
   private slotAt(at: Date, zone: string): { sendDate: string; sendTime: string } {

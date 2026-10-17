@@ -41,6 +41,10 @@ Messenger broadcasts send one message to several people who recently chatted wit
 - Each row shows the counts for sent, failed and blocked, and a progress bar.
 - **Inbox** opens the team inbox to see the replies.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), a broadcast does not message someone while it is night for them. Their message waits, the rest of the list is sent, and the row shows how many are held and until when. The broadcast stays **Sending** while anyone waits and finishes by itself when the hours end, so you do not need to press anything. Consent is checked again at that moment, so a person who unsubscribed meanwhile is not messaged. The hours are read on the person's own clock: their contact's time zone, else the country of their number, else your fallback time zone. Pausing a broadcast also stops the held messages. Messenger only lets a Page message someone within 24 hours of their last message; if that window closes while a message waits, the person is shown as blocked.
+
 ## Plan and access
 
 You need the view permission for Messenger broadcasts to open the screen. Creating, starting, pausing, retrying and deleting need the manage permission, and those controls are hidden without it. Connect a Page first in [Facebook Pages](help:facebook-pages).

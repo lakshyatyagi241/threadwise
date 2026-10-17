@@ -219,7 +219,6 @@ export const dealActivities = pgTable(
       columns: [t.orgId, t.userId],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
-    index('idx_deal_activities_deal_id_created_at').on(t.orgId, t.dealId, t.createdAt),
     index('idx_deal_activities_due_at').on(t.orgId, t.dueAt),
     index('idx_deal_activities_type').on(t.orgId, t.type),
     foreignKey({

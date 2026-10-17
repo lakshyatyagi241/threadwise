@@ -53,7 +53,9 @@
           "crm_required_unbound": "Çalışma alanınızın zorunlu tuttuğu bir özellik forma eklenmemiş.",
           "no_contact_point": "Her yanıtın bir kişiyle eşleştirilebilmesi için kişiye bağlı bir e-posta veya telefon alanı ekleyin.",
           "payment_no_gateway": "Ödeme bağlantısı oluşturabilen bir ödeme geçidi bağlayın veya ödemeyi kapatın.",
-          "captcha_not_configured": "CAPTCHA her zaman açık olarak ayarlı, ancak platformda CAPTCHA yok. Başka bir ayar seçin veya platform yöneticinizden bir tane eklemesini isteyin."
+          "captcha_not_configured": "CAPTCHA her zaman açık olarak ayarlı, ancak platformda CAPTCHA yok. Başka bir ayar seçin veya platform yöneticinizden bir tane eklemesini isteyin.",
+          "age_gate_field_missing": "Yaş kontrolünün bir soruya ihtiyacı var: bir doğum tarihi veya yaş alanı ekleyin ya da kutuyu seçin.",
+          "age_gate_field_not_required": "Yaş kontrolünün değerlendirdiği soru zorunlu olmalıdır."
         },
         "code": {
           "no_fields": "En az bir alan ekleyin.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Çalışma alanınız \"{property}\" CRM özelliğini zorunlu kılıyor: bunu forma ekleyin ve zorunlu olarak işaretleyin.",
           "crm_required_optional": "Zorunlu bir CRM özelliğine bağlı alan zorunlu olmalı.",
           "redirect_not_https": "Yönlendirme adresi https:// ile başlamalı.",
-          "too_large": "Form çok büyük. Bazı alanları kaldırın."
+          "too_large": "Form çok büyük. Bazı alanları kaldırın.",
+          "age_gate_field_missing": "Yaş kontrolünün bir soruya ihtiyacı var: bir doğum tarihi veya yaş alanı ekleyin ya da kutuyu seçin.",
+          "age_gate_field_optional": "Yaş kontrolünün değerlendirdiği soru zorunlu olmalıdır."
         }
       },
       "versionsTitle": "Sürümler",

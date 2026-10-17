@@ -931,6 +931,18 @@
         "branchAdd": "Add a step for “{title}”",
         "faqEnds": "This step ends this part: what is sent next depends on whether an FAQ answered."
       },
+      "askAge": {
+        "minAge": "Minimum age",
+        "minAgeHint": "Leave empty to use your workspace's age from the Compliance center (18 when none is set). Between 1 and 21.",
+        "whenUnder": "If the answer is under that age",
+        "whenUnderHint": "The contact is flagged as a minor either way. The customer is never told which answer passes.",
+        "end": "End the flow with a short, neutral line",
+        "continue": "Carry on, and let me branch on the answer",
+        "endText": "Closing line",
+        "endTextHint": "Sent before the flow ends. Do not mention the age. Empty uses \"We are not able to continue.\"",
+        "continueNote": "The next steps can read the variable of the answer followed by _age_gate (for example answer_age_gate), which is under or adult. Add a Condition to branch, for example to ask for a parent or guardian.",
+        "note": "Ask for an age only where you need it. The answer is written to the contact: a date of birth as the date of birth, and an under-age answer flags the contact as a minor."
+      },
       "formsCore": {
         "helpers": {
           "flowFallback": "Flow",
@@ -2328,7 +2340,9 @@
         "phone": "Phone number",
         "number": "Number",
         "alphanumeric": "Letters and numbers",
-        "date": "Date"
+        "date": "Date",
+        "age": "Age",
+        "date_of_birth": "Date of birth"
       },
       "askInputWrong": {
         "text": "Please try again",
@@ -2337,7 +2351,9 @@
         "phone": "Please enter a valid phone number",
         "number": "Please enter a valid number",
         "alphanumeric": "Please use letters and numbers only",
-        "date": "Please enter a valid date ({format})"
+        "date": "Please enter a valid date ({format})",
+        "age": "Please enter your age as a whole number",
+        "date_of_birth": "Please enter a valid date ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",

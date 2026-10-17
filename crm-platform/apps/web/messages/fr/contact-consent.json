@@ -144,7 +144,10 @@
         "booking": "Page de réservation",
         "commerce": "Paiement en boutique",
         "lead": "Capture de leads",
-        "gpc": "Global Privacy Control"
+        "wa_form": "Formulaire WhatsApp",
+        "gpc": "Global Privacy Control",
+        "dob": "Date de naissance ou âge",
+        "declaration": "Âge non confirmé"
       },
       "by": "par {name}",
       "evidence": {
@@ -227,7 +230,9 @@
           "noteHint": "Par exemple : a signé le formulaire papier au comptoir. N'écrivez ni le nom ni les coordonnées du tuteur.",
           "ref": "Référence (facultatif)",
           "refHint": "Un numéro de formulaire ou un identifiant de document que vous pourrez retrouver."
-        }
+        },
+        "minorFrom": "Défini d'après la date de naissance ou l'âge indiqué. Levé automatiquement le {date}, sauf si une personne le maintient.",
+        "minorFromDeclaration": "Défini parce que l'âge n'a pas été confirmé dans un formulaire. Il reste jusqu'à ce qu'une personne le lève."
       }
     },
     "composer": {
@@ -351,7 +356,8 @@
         "consent_declined": "Non autorisé : la personne a refusé.",
         "notice_required": "A notice must be delivered first.",
         "subject_minor": "Non autorisé : ce contact est marqué comme mineur et votre espace de travail retient le marketing.",
-        "sale_share_opted_out": "Non autorisé : le contact a refusé la vente ou le partage de ses données."
+        "sale_share_opted_out": "Non autorisé : le contact a refusé la vente ou le partage de ses données.",
+        "on_dnc_list": "Sur votre liste « Ne pas appeler » : aucun appel ni SMS marketing vers ce numéro"
       }
     },
     "notice": {

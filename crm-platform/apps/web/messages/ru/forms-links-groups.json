@@ -95,7 +95,28 @@
         "required": "Обязательное",
         "removeField": "Удалить",
         "options": "Варианты (через запятую)",
-        "optionsPlaceholder": "Вариант 1, Вариант 2, Вариант 3"
+        "optionsPlaceholder": "Вариант 1, Вариант 2, Вариант 3",
+        "mapsTo": "Сопоставляется с",
+        "mapsToHint": "Сохраняет этот ответ в свойстве контакта при отправке формы.",
+        "mapsToNone": "Не сохранять в свойстве контакта",
+        "mapsToSystemGroup": "Поля контакта",
+        "mapsToCustomGroup": "Пользовательские свойства",
+        "mapsToSystem": {
+          "name": "Полное имя",
+          "first_name": "Имя",
+          "last_name": "Фамилия",
+          "email": "Email",
+          "title": "Должность",
+          "language": "Язык",
+          "address": "Адрес"
+        },
+        "mapsToPrivacyGroup": "Конфиденциальность и согласие",
+        "mapsToPrivacy": {
+          "age": "Возраст (проверка несовершеннолетия)",
+          "date_of_birth": "Дата рождения (проверка несовершеннолетия)",
+          "consent_marketing": "Согласие на маркетинг (WhatsApp)",
+          "consent_service": "Соглашение на обслуживание (не маркетинг)"
+        }
       },
       "fieldKind": {
         "heading": "Заголовок",

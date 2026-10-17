@@ -49,7 +49,8 @@
       "delete": "Eliminar",
       "cancel": "Cancelar",
       "deleted": "Regla eliminada.",
-      "deleteFailed": "No se pudo eliminar la regla."
+      "deleteFailed": "No se pudo eliminar la regla.",
+      "businessHours": "Horario laboral"
     },
     "rules": {
       "someone": "un agente",
@@ -425,6 +426,38 @@
       },
       "testSkipped": "Se omitió porque nadie estaba disponible: {names}",
       "testOff": "El interruptor de arriba está desactivado, así que esto es solo lo que ocurriría una vez activado."
+    },
+    "businessHours": {
+      "eyebrow": "Asignación automática",
+      "title": "Horario laboral",
+      "subtitle": "Las reglas y los objetivos de SLA que usan el horario laboral solo cuentan el tiempo dentro de estas horas.",
+      "close": "Cerrar",
+      "loading": "Cargando horario laboral",
+      "loadFailed": "No se pudo cargar el horario laboral.",
+      "timezone": "Zona horaria",
+      "timezoneHint": "Zona horaria en la que están todos los días y horas de arriba.",
+      "timezoneOwnerOnly": "Solo el propietario del espacio de trabajo puede cambiar la zona horaria.",
+      "days": "Horario de apertura",
+      "day": {
+        "mon": "Lunes",
+        "tue": "Martes",
+        "wed": "Miércoles",
+        "thu": "Jueves",
+        "fri": "Viernes",
+        "sat": "Sábado",
+        "sun": "Domingo"
+      },
+      "from": "Desde",
+      "to": "Hasta",
+      "problem": {
+        "required": "Indique ambas horas.",
+        "order": "La hora de cierre debe ser posterior a la de apertura."
+      },
+      "note": "Un día desactivado está cerrado todo el día. Hasta que guarde, el espacio de trabajo se considera abierto todo el tiempo.",
+      "cancel": "Cancelar",
+      "save": "Guardar horario",
+      "saved": "Horario laboral guardado",
+      "saveFailed": "No se pudo guardar"
     }
   }
 }

@@ -4,7 +4,12 @@ import {
   flbCleanAskFileExtensions,
   type FlbAskGiveUp,
 } from './ask-media';
-import { flbCleanAskInputType, flbCleanDateFormat } from './ask-input';
+import {
+  flbCleanAgeWhenUnder,
+  flbCleanAskInputType,
+  flbCleanDateFormat,
+  flbCleanMinAge,
+} from './ask-input';
 import { flbSanitizeConditionGroup } from './condition-group';
 import type { FlbNodeData } from './node-catalogue';
 
@@ -411,6 +416,10 @@ const SHAPERS: Record<string, Shaper> = {
       inputType: flbCleanAskInputType(d.validate),
       dateFormat: flbCleanDateFormat(d.dateFormat),
       wrongReplyText: s(d.wrongReply).trim(),
+      // The age question (BL-218): its own minimum (null = the workspace's), what to do when under, and the neutral closing line.
+      ageMinAge: flbCleanMinAge(d.ageMinAge),
+      ageWhenUnder: flbCleanAgeWhenUnder(d.ageWhenUnder),
+      ageEndText: s(d.ageEndText).trim(),
       maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
       onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode) ? mode : 'continue',
       savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',

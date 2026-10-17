@@ -710,6 +710,8 @@
         "format": "{label} no puede contener un salto de línea, un tabulador ni cuatro espacios seguidos."
       },
       "reason": {
+        "other_number": "Pertenece a otro número de WhatsApp, así que no se puede enviar desde esta conversación.",
+        "not_linked": "El canal de esta conversación no está vinculado a un número de WhatsApp, así que no se puede enviar ninguna plantilla.",
         "paused": "Pausada por WhatsApp. Se podrá enviar de nuevo cuando termine la pausa.",
         "media_header": "Tiene una cabecera de imagen, vídeo o documento, que todavía no se puede enviar desde la bandeja.",
         "header_variable": "Tiene una variable en la cabecera, que todavía no se puede rellenar desde la bandeja.",

@@ -715,6 +715,7 @@ const EXPORT_HEADER = [
   'unsubscribed',
   'created_at',
   'owner_email',
+  'timezone',
 ];
 
 describe('AUTHZ-050 / AUTHZ-071 exports need the export grant, respect record scope and never carry another workspace', () => {

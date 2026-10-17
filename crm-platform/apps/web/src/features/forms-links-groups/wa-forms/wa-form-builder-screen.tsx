@@ -14,8 +14,12 @@ import {
   WA_FORM_AUDIENCE_TYPES,
   WA_FORM_CHOICE_FIELD_KINDS,
   WA_FORM_FIELD_KINDS,
+  WA_FORM_PRIVACY_MAP_FIELDS,
+  WA_FORM_PRIVACY_MAP_KIND,
+  WA_FORM_SYSTEM_MAP_FIELDS,
 } from '@crm/contracts';
 import { Alert, Button, Card, Checkbox, Field, Input, Select, Spinner, Textarea } from '@crm/ui';
+import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useSaveWaForm, usePublishWaForm, useWaForm } from '../api/wa-forms-hooks';
 import { useErrorText } from '../components/use-error-text';
 
@@ -64,6 +68,7 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
   const errorText = useErrorText();
   const save = useSaveWaForm(id);
   const publish = usePublishWaForm(id);
+  const feed = usePickerFeed();
 
   const [title, setTitle] = useState(initial.title);
   const [purpose, setPurpose] = useState(initial.purpose ?? '');
@@ -336,6 +341,49 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                         }
                         placeholder={t('builder.optionsPlaceholder')}
                       />
+                    </Field>
+                  )}
+                  {field.kind !== 'heading' && (
+                    <Field label={t('builder.mapsTo')} hint={t('builder.mapsToHint')} className="mt-2">
+                      <Select
+                        value={field.mapsTo ?? ''}
+                        onChange={(e) =>
+                          updateField(screenIndex, fieldIndex, {
+                            mapsTo: e.target.value || undefined,
+                          })
+                        }
+                      >
+                        <option value="">{t('builder.mapsToNone')}</option>
+                        <optgroup label={t('builder.mapsToSystemGroup')}>
+                          {WA_FORM_SYSTEM_MAP_FIELDS.map((key) => (
+                            <option key={key} value={key}>
+                              {t(`builder.mapsToSystem.${key}`)}
+                            </option>
+                          ))}
+                        </optgroup>
+                        {(feed.data?.custom.length ?? 0) > 0 && (
+                          <optgroup label={t('builder.mapsToCustomGroup')}>
+                            {feed.data!.custom.map((a) => (
+                              <option key={a.key} value={a.key}>
+                                {a.name}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )}
+                        {WA_FORM_PRIVACY_MAP_FIELDS.filter(
+                          (key) => WA_FORM_PRIVACY_MAP_KIND[key] === field.kind,
+                        ).length > 0 && (
+                          <optgroup label={t('builder.mapsToPrivacyGroup')}>
+                            {WA_FORM_PRIVACY_MAP_FIELDS.filter(
+                              (key) => WA_FORM_PRIVACY_MAP_KIND[key] === field.kind,
+                            ).map((key) => (
+                              <option key={key} value={key}>
+                                {t(`builder.mapsToPrivacy.${key.replace('privacy:', '')}`)}
+                              </option>
+                            ))}
+                          </optgroup>
+                        )}
+                      </Select>
                     </Field>
                   )}
                 </div>

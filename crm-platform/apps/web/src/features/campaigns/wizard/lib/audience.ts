@@ -1,8 +1,10 @@
 import {
   EMPTY_WIZARD_AUDIENCE,
+  hasPreviousSends,
   WIZARD_CSV_TEMPLATE_HEADERS,
   WIZARD_CSV_TEMPLATE_ROWS,
   wizardAudienceHasSource,
+  type PreviousSendOutcome,
   type SegmentGroup,
   type WizardAudience,
   type WizardAudienceSources,
@@ -80,6 +82,9 @@ export interface AudienceTally {
   groups: number;
   segments: number;
   csv: number;
+  /** Earlier broadcasts and campaigns picked, and the outcome that narrows them. */
+  previous: number;
+  previousOutcome: PreviousSendOutcome;
   /** The Contact Hub handed over a filter-based selection (ticked rows arrive as `contacts`). */
   hubSelection: boolean;
 }
@@ -92,6 +97,8 @@ export function audienceTally(a: WizardAudience): AudienceTally {
     groups: a.groupIds.length,
     segments: a.segmentIds.length,
     csv: a.csv ? a.csv.valid : 0,
+    previous: hasPreviousSends(a.previous) ? (a.previous?.sends.length ?? 0) : 0,
+    previousOutcome: a.previous?.outcome ?? 'all',
     hubSelection: Boolean(a.selection),
   };
 }
@@ -103,6 +110,7 @@ export const tallyIsEmpty = (t: AudienceTally): boolean =>
   t.groups === 0 &&
   t.segments === 0 &&
   t.csv === 0 &&
+  t.previous === 0 &&
   !t.hubSelection;
 
 /** The CSV template as a file the browser saves (built from the same constants the API serves). */

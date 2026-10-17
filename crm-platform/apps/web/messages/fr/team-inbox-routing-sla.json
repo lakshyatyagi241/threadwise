@@ -49,7 +49,8 @@
       "delete": "Supprimer",
       "cancel": "Annuler",
       "deleted": "Règle supprimée.",
-      "deleteFailed": "Impossible de supprimer la règle."
+      "deleteFailed": "Impossible de supprimer la règle.",
+      "businessHours": "Heures d'ouverture"
     },
     "rules": {
       "someone": "un agent",
@@ -425,6 +426,38 @@
       },
       "testSkipped": "Ignoré faute de personne disponible : {names}",
       "testOff": "Le commutateur ci-dessus est désactivé : voici seulement ce qui se passerait une fois activé."
+    },
+    "businessHours": {
+      "eyebrow": "Attribution automatique",
+      "title": "Heures d'ouverture",
+      "subtitle": "Les règles et objectifs SLA qui tiennent compte des heures d'ouverture ne comptent le temps qu'à l'intérieur de ces heures.",
+      "close": "Fermer",
+      "loading": "Chargement des heures d'ouverture",
+      "loadFailed": "Impossible de charger les heures d'ouverture.",
+      "timezone": "Fuseau horaire",
+      "timezoneHint": "Tous les jours et horaires ci-dessus sont exprimés dans ce fuseau horaire.",
+      "timezoneOwnerOnly": "Seul le propriétaire de l'espace de travail peut modifier le fuseau horaire.",
+      "days": "Horaires d'ouverture",
+      "day": {
+        "mon": "Lundi",
+        "tue": "Mardi",
+        "wed": "Mercredi",
+        "thu": "Jeudi",
+        "fri": "Vendredi",
+        "sat": "Samedi",
+        "sun": "Dimanche"
+      },
+      "from": "De",
+      "to": "À",
+      "problem": {
+        "required": "Saisissez les deux heures.",
+        "order": "L'heure de fermeture doit être après l'heure d'ouverture."
+      },
+      "note": "Un jour désactivé est fermé toute la journée. Tant que vous n'avez pas enregistré, l'espace de travail est considéré comme ouvert en permanence.",
+      "cancel": "Annuler",
+      "save": "Enregistrer les heures",
+      "saved": "Heures d'ouverture enregistrées",
+      "saveFailed": "Échec de l'enregistrement"
     }
   }
 }

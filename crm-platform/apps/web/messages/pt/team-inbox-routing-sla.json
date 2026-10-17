@@ -49,7 +49,8 @@
       "delete": "Excluir",
       "cancel": "Cancelar",
       "deleted": "Regra excluída.",
-      "deleteFailed": "Não foi possível excluir a regra."
+      "deleteFailed": "Não foi possível excluir a regra.",
+      "businessHours": "Horário comercial"
     },
     "rules": {
       "someone": "um agente",
@@ -425,6 +426,38 @@
       },
       "testSkipped": "Ignorada porque ninguém estava disponível: {names}",
       "testOff": "A chave acima está desativada, então isto mostra apenas o que aconteceria depois de ativá-la."
+    },
+    "businessHours": {
+      "eyebrow": "Atribuição automática",
+      "title": "Horário comercial",
+      "subtitle": "As regras e metas de SLA que usam o horário comercial contam o tempo apenas dentro destas horas.",
+      "close": "Fechar",
+      "loading": "Carregando horário comercial",
+      "loadFailed": "Não foi possível carregar o horário comercial.",
+      "timezone": "Fuso horário",
+      "timezoneHint": "O fuso horário de todos os dias e horários acima.",
+      "timezoneOwnerOnly": "Somente o proprietário do workspace pode alterar o fuso horário.",
+      "days": "Horário de funcionamento",
+      "day": {
+        "mon": "Segunda-feira",
+        "tue": "Terça-feira",
+        "wed": "Quarta-feira",
+        "thu": "Quinta-feira",
+        "fri": "Sexta-feira",
+        "sat": "Sábado",
+        "sun": "Domingo"
+      },
+      "from": "De",
+      "to": "Até",
+      "problem": {
+        "required": "Informe os dois horários.",
+        "order": "O horário de fechamento deve ser depois do de abertura."
+      },
+      "note": "Um dia desativado fica fechado o dia inteiro. Até você salvar, o workspace é considerado aberto o tempo todo.",
+      "cancel": "Cancelar",
+      "save": "Salvar horário",
+      "saved": "Horário comercial salvo",
+      "saveFailed": "Não foi possível salvar"
     }
   }
 }
