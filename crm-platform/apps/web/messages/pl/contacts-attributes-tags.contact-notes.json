@@ -16,6 +16,7 @@
         "loadMore": "Wczytaj więcej",
         "loadingMore": "Wczytywanie kolejnych notatek",
         "added": "Dodano {when}",
+        "addedBy": "Dodano {when}, autor: {name}",
         "edited": "Edytowano {when}",
         "edit": "Edytuj",
         "editAria": "Edytuj notatkę dodaną {when}",

@@ -315,7 +315,9 @@ function NoteItem({
           </p>
           <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
             <p className="text-xs text-muted-foreground">
-              {t('added', { when: added })}
+              {note.createdByName
+                ? t('addedBy', { when: added, name: note.createdByName })
+                : t('added', { when: added })}
               {wasEdited && <> &middot; {t('edited', { when: when(note.updatedAt) })}</>}
             </p>
             {canUpdate && (

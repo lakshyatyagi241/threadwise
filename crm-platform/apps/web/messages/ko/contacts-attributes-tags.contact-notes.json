@@ -16,6 +16,7 @@
         "loadMore": "더 보기",
         "loadingMore": "노트 더 불러오는 중",
         "added": "추가: {when}",
+        "addedBy": "{name}님이 {when}에 추가",
         "edited": "수정: {when}",
         "edit": "수정",
         "editAria": "{when}에 추가한 노트 수정",

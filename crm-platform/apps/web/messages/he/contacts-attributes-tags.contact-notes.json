@@ -16,6 +16,7 @@
         "loadMore": "טען עוד",
         "loadingMore": "טוען עוד הערות",
         "added": "נוספה {when}",
+        "addedBy": "נוספה {when} על ידי {name}",
         "edited": "נערכה {when}",
         "edit": "ערוך",
         "editAria": "ערוך את ההערה שנוספה {when}",

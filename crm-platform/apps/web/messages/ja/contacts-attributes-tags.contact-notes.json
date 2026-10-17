@@ -16,6 +16,7 @@
         "loadMore": "さらに読み込む",
         "loadingMore": "ノートをさらに読み込み中",
         "added": "追加日時: {when}",
+        "addedBy": "{name} が {when} に追加",
         "edited": "編集日時: {when}",
         "edit": "編集",
         "editAria": "{when}に追加したノートを編集",

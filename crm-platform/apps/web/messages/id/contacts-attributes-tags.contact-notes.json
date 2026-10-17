@@ -16,6 +16,7 @@
         "loadMore": "Muat lebih banyak",
         "loadingMore": "Memuat catatan lainnya",
         "added": "Ditambahkan {when}",
+        "addedBy": "Ditambahkan {when} oleh {name}",
         "edited": "Diedit {when}",
         "edit": "Edit",
         "editAria": "Edit catatan yang ditambahkan {when}",

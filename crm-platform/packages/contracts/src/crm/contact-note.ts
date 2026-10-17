@@ -8,6 +8,8 @@ export const contactNoteResponseSchema = z.object({
   contactId: uuidSchema,
   body: z.string(),
   createdBy: uuidSchema.nullable(),
+  /** The author's name, for the notes list; null once the user is gone. */
+  createdByName: z.string().nullable(),
   updatedBy: uuidSchema.nullable(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),

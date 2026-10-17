@@ -16,6 +16,7 @@
         "loadMore": "Carregar mais",
         "loadingMore": "Carregando mais observações",
         "added": "Adicionada {when}",
+        "addedBy": "Adicionada {when} por {name}",
         "edited": "Editada {when}",
         "edit": "Editar",
         "editAria": "Editar a observação adicionada {when}",
