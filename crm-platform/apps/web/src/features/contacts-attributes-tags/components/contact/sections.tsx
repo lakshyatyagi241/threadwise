@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ConsentCard } from '@/features/contact-consent';
 import { LinkedAppointments } from '@/features/appointments';
@@ -8,7 +7,7 @@ import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedTasks } from '@/features/tasks';
 import { displayName } from '../../lib/contact-model';
-import type { FocusRequest, SectionId } from '../../lib/sections';
+import type { AddTarget, FocusRequest, SectionId } from '../../lib/sections';
 import { GroupChip } from '../chips';
 import { ConversationsSection } from './conversations-section';
 import { DealsSection } from './deals-section';
@@ -20,39 +19,8 @@ import { NotesSection } from './notes-section';
 import { ContactOverview } from './overview';
 import { LeadSourceRows, useCustomGroups, useInfoRows } from './info-tabs';
 import { KeyValueList, Panel, useRefreshContact, type SectionProps } from './shared';
-import { ActivityFeed } from './timeline/activity-feed';
-import { ComposeBox } from './timeline/compose-box';
+import { ActivityWorkspace } from './timeline/activity-workspace';
 import { StatsSection } from './stats-section';
-
-/**
- * Activity: the compose box (Note, Task, Call, Meeting, inline) and, under it, the timeline: "Up next", then Today, Yesterday, This week
- * and Earlier, with filter pills, a search and "Load more". The timeline comes FIRST on this page: nothing else stands between the
- * header and it but the compose box (and, after a click on a phone number, the quiet "How did the call go?" line).
- */
-function ActivitiesSection({
-  contact,
-  focus,
-}: SectionProps & {
-  /** A request from the action bar (or a link) to open a compose tab with the cursor in it. */
-  focus?: FocusRequest | null;
-}) {
-  // What the page itself asks for (the prompt's "Log it", the empty state's buttons) is a request like the action bar's.
-  const [own, setOwn] = useState<FocusRequest | null>(null);
-  const [seen, setSeen] = useState<FocusRequest | null>(null);
-  let request = own;
-  if (focus && focus !== seen) {
-    setSeen(focus);
-    setOwn(focus);
-    request = focus;
-  }
-  const ask = (target: FocusRequest['target']) => setOwn((r) => ({ target, n: (r?.n ?? 0) + 1 }));
-  return (
-    <div className="space-y-3">
-      <ComposeBox contact={contact} focus={request} />
-      <ActivityFeed contact={contact} onCompose={(tab) => ask(tab)} />
-    </div>
-  );
-}
 
 /** Contact details: every field of the contact in one list, its groups, and the workspace's custom property sections. */
 function DetailsSection({ contact }: SectionProps) {
@@ -134,9 +102,12 @@ export function ContactSection({
   contact,
   variant,
   onOpenSection,
+  onAdd,
   focus,
 }: SectionProps & {
   section: SectionId;
+  /** Opens a compose tab of the Activity workspace (the tasks card's "+ Add"). */
+  onAdd?: (target: AddTarget) => void;
   onOpenSection?: (section: SectionId) => void;
   /** Asks the section's inline composer (note, task, meeting, company) to take the cursor: the action bar's buttons and the list's quick add. */
   focus?: FocusRequest | null;
@@ -151,12 +122,14 @@ export function ContactSection({
       return (
         <ContactOverview
           {...props}
+          focus={focus}
+          onAdd={onAdd}
           onOpenSection={onOpenSection}
           companyFocusSignal={signal('company')}
         />
       );
     case 'activities':
-      return <ActivitiesSection {...props} focus={focus} />;
+      return <ActivityWorkspace contact={contact} focus={focus} />;
     case 'conversations':
       return <ConversationsSection {...props} />;
     case 'details':

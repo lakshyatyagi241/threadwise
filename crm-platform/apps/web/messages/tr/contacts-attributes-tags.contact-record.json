@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Kişi bölümleri",
-          "group": {
-            "contact": "Kişi",
-            "related": "İlgili",
-            "record": "Kayıt"
-          },
           "section": {
             "overview": "Genel bakış",
             "activities": "Etkinlik",
@@ -46,7 +41,6 @@
           "noStatus": "Durum yok"
         },
         "keyDetails": {
-          "title": "Önemli bilgiler",
           "editAll": "Tümünü düzenle",
           "edit": "{field} düzenle",
           "add": "{field} ekle",
@@ -62,8 +56,6 @@
           "leadSource": "Bu kişi nereden geldi"
         },
         "cards": {
-          "tags": "Etiketler ve gruplar",
-          "tagsSummary": "{tags, plural, =0 {Etiket yok} one {1 etiket} other {# etiket}} · {groups, plural, =0 {grup yok} one {1 grup} other {# grup}}",
           "company": "Şirket",
           "companyNone": "Henüz yok",
           "timezone": "Saat dilimi ve konum",

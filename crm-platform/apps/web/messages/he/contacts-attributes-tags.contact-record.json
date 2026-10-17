@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "אזורי איש הקשר",
-          "group": {
-            "contact": "איש קשר",
-            "related": "קשור",
-            "record": "רשומה"
-          },
           "section": {
             "overview": "סקירה",
             "activities": "פעילות",
@@ -46,7 +41,6 @@
           "noStatus": "ללא סטטוס"
         },
         "keyDetails": {
-          "title": "פרטים עיקריים",
           "editAll": "ערוך הכול",
           "edit": "ערוך {field}",
           "add": "הוסף {field}",
@@ -62,8 +56,6 @@
           "leadSource": "מאיפה הגיע איש הקשר הזה"
         },
         "cards": {
-          "tags": "תגיות וקבוצות",
-          "tagsSummary": "{tags, plural, =0 {אין תגיות} one {תגית אחת} two {שתי תגיות} other {# תגיות}} · {groups, plural, =0 {אין קבוצות} one {קבוצה אחת} two {שתי קבוצות} other {# קבוצות}}",
           "company": "חברה",
           "companyNone": "עדיין אין",
           "timezone": "אזור זמן ומיקום",

@@ -6,8 +6,8 @@ import {
 import type { ContactRow } from '../../api/schemas';
 import { ContactQuickView, QuickTabs } from '../contact-quick-view';
 import { NOTE_KEYS } from '../../api/notes';
-import { navGroups, quickTabs } from '../../lib/sections';
-import { SectionNav } from '../contact-detail';
+import { pageTabs, quickTabs } from '../../lib/sections';
+import { ContactTabs } from '../contact-detail';
 import { ComplianceBody, LocationBody, SubscriptionBody } from './cards';
 import { OptInPill, ScoreRing, SocialIcons } from './parts';
 
@@ -146,48 +146,52 @@ describe('LocationBody and ComplianceBody', () => {
   });
 });
 
-describe('details page sub-nav', () => {
-  const nav = (current: 'overview' | 'notes', permissions: string[]) =>
+describe('details page tab bar', () => {
+  const bar = (current: 'overview' | 'notes', permissions: string[]) =>
     renderAccount(
-      <SectionNav
+      <ContactTabs
         contactId={ID}
         current={current}
-        groups={navGroups((p) => permissions.includes(p))}
-        counts={{ notes: { n: 3, more: false }, tasks: { n: 12, more: true } }}
+        tabs={pageTabs((p) => permissions.includes(p))}
+        counts={{ activities: 3, deals: 2, files: 0 }}
       />,
       { session: can(...permissions) },
     );
 
-  it('lists the sections in three groups with the current one marked and a link each', () => {
-    const out = nav('notes', ['record.deals.read']);
-    for (const group of ['Contact', 'Related', 'Record']) expect(out).toContain(`>${group}<`);
+  it('has Overview, Activity and Files, the permitted tabs and a More menu, each tab a link', () => {
+    const out = bar('overview', ['record.deals.read', 'inbox.conversation.read']);
+    for (const name of ['Overview', 'Activity', 'Conversations', 'Deals', 'Files']) {
+      expect(out, name).toContain(`>${name}`);
+    }
     expect(out).toContain(`href="/contacts/${ID}"`);
-    expect(out).toContain(`href="/contacts/${ID}/notes"`);
+    expect(out).toContain(`href="/contacts/${ID}/activities"`);
     expect(out).toContain(`href="/contacts/${ID}/deals"`);
-    expect(out).toContain(`href="/contacts/${ID}/history"`);
+    expect(out).toContain('aria-label="More sections"');
     expect(out.match(/aria-current="page"/g)).toHaveLength(1);
   });
 
-  it('uses short labels and shows counts as small badges, a + when there are more', () => {
-    const out = nav('overview', ['record.tasks.read']);
-    expect(out).toMatch(/Notes<span[^>]*>3<\/span>/);
-    expect(out).toMatch(/Tasks<span[^>]*>12\+<\/span>/);
-    expect(out).toContain('>Source<');
-    expect(out).not.toContain('Contact details');
+  it('puts a small count on Activity and Deals only, and none for zero', () => {
+    const out = bar('overview', ['record.deals.read']);
+    expect(out).toMatch(/Activity<span[^>]*>3<\/span>/);
+    expect(out).toMatch(/Deals<span[^>]*>2<\/span>/);
+    expect(out).not.toMatch(/Files<span/);
+    expect(out).not.toMatch(/Overview<span/);
   });
 
-  it('leaves out a section the person may not open', () => {
-    const out = nav('overview', []);
+  it('leaves out a tab the person may not open, and names the open section on the menu when it is behind More', () => {
+    const out = bar('overview', []);
     expect(out).not.toContain('/deals');
-    expect(out).not.toContain('/tasks');
-    expect(out).not.toContain('/consent');
-    expect(out).not.toContain('>Related<');
+    expect(out).not.toContain('Conversations');
+    const inMore = bar('notes', []);
+    expect(inMore).toContain('Notes');
+    expect(inMore).not.toMatch(/>More</);
   });
 
-  it('scrolls sideways on a phone and stacks on a wide screen', () => {
-    const out = nav('overview', []);
+  it('scrolls sideways on a phone without a scroll bar, and sticks to the top of the column', () => {
+    const out = bar('overview', []);
     expect(out).toContain('overflow-x-auto');
-    expect(out).toContain('lg:flex-col');
+    expect(out).toContain('[&amp;::-webkit-scrollbar]:hidden');
+    expect(out).toContain('sticky top-0');
   });
 });
 

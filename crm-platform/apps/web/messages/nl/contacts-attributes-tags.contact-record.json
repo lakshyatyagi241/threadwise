@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Contactgedeelten",
-          "group": {
-            "contact": "Contact",
-            "related": "Gerelateerd",
-            "record": "Gegevens"
-          },
           "section": {
             "overview": "Overzicht",
             "activities": "Activiteit",
@@ -46,7 +41,6 @@
           "noStatus": "Geen status"
         },
         "keyDetails": {
-          "title": "Belangrijkste gegevens",
           "editAll": "Alles bewerken",
           "edit": "{field} bewerken",
           "add": "{field} toevoegen",
@@ -62,8 +56,6 @@
           "leadSource": "Waar dit contact vandaan komt"
         },
         "cards": {
-          "tags": "Tags en groepen",
-          "tagsSummary": "{tags, plural, =0 {Geen tags} one {1 tag} other {# tags}} · {groups, plural, =0 {geen groepen} one {1 groep} other {# groepen}}",
           "company": "Bedrijf",
           "companyNone": "Nog geen",
           "timezone": "Tijdzone en locatie",

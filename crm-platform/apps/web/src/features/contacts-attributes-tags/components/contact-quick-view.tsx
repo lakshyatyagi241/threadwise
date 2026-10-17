@@ -38,7 +38,7 @@ import {
   ExternalLinkIcon,
   XIcon,
 } from './icons';
-import { StageMenu } from './stage-menu';
+import { StagePicker } from './stage-picker';
 
 const iconBtn =
   'inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40';
@@ -217,13 +217,17 @@ function QuickViewBody({
             </div>
             <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
               {contact.lifecycleStage && (
-                <StageMenu
+                <StagePicker
                   value={contact.lifecycleStage}
-                  choices={stage.stages}
+                  status={contact.status}
+                  stages={stage.stages}
+                  statusesOf={stage.statusesOf}
+                  defaultStatusOf={stage.defaultStatusOf}
+                  hint={stage.hint}
                   name={name}
                   busy={stage.busy}
-                  statusHint={stage.hint}
-                  onChange={canUpdate ? stage.changeStage : undefined}
+                  readOnly={!canUpdate}
+                  onPick={(s, status) => stage.changeStage(s, status)}
                 />
               )}
               {contact.status && (
@@ -323,6 +327,7 @@ function QuickViewBody({
           contact={contact}
           variant="drawer"
           focus={focus}
+          onAdd={(target) => onPanel(ACTION_SECTION[target], { focus: target })}
           onOpenSection={(s) => {
             if ((shown as SectionId[]).includes(s)) onPanel(s);
             else router.push(sectionHref(contact.id, s));

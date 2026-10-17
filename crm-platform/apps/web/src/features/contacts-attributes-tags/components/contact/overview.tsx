@@ -1,40 +1,55 @@
 'use client';
 
-import type { SectionId } from '../../lib/sections';
-import { ContactSideCards } from './side-cards';
+import type { AddTarget, FocusRequest, SectionId } from '../../lib/sections';
+import { AssociationCards } from './association-cards';
+import { KeyDetails } from './key-details';
 import { type SectionProps } from './shared';
-import { ActivityFeed } from './timeline/activity-feed';
+import { SummaryStrip } from './summary-strip';
+import { ActivityWorkspace } from './timeline/activity-workspace';
 
 /**
- * The overview of a contact, the same in the quick view and on the details page: the side column (Key details, the subscription
- * status, and the folded cards: tags and groups, company, time zone and location, privacy, lead score) and "Recent activity", the
- * latest few entries of the timeline with a link to all of it. The two columns appear once the container is wide enough, so the
- * narrow drawer and a phone get one column in the same order: who they are first, then what happened.
+ * The overview of a contact. On the page it is the middle column's first tab: a short summary strip (open tasks, next meeting, last
+ * activity, deals), the compose box and the timeline right under it, which stretches to the bottom so the page is never half empty;
+ * the profile card and the association cards are the page's side columns. In the quick view's drawer, which has no side columns, it is
+ * the summary, "About this contact" and the association cards in one column.
  */
 export function ContactOverview({
   contact,
+  variant,
+  focus,
+  onAdd,
   onOpenSection,
   companyFocusSignal,
 }: SectionProps & {
-  /** Changes whenever something outside (the action bar's "Add company") wants the cursor in the company search. */
+  focus?: FocusRequest | null;
+  onAdd?: (target: AddTarget) => void;
+  /** Changes whenever something outside (the action menu's "Add company") wants the cursor in the company search. */
   companyFocusSignal?: number;
   /** Moves to a section in place (the details page and the drawer's tabs). */
   onOpenSection?: (section: SectionId) => void;
 }) {
-  return (
-    <div className="@container">
-      <div className="grid gap-4 @3xl:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] @3xl:items-start">
-        <ContactSideCards
+  if (variant === 'drawer') {
+    return (
+      <div className="space-y-3">
+        <SummaryStrip contact={contact} onOpenSection={onOpenSection} />
+        <KeyDetails
+          contact={contact}
+          onEditCompany={onAdd ? () => onAdd('company') : undefined}
+          onOpenSection={onOpenSection}
+        />
+        <AssociationCards
           contact={contact}
           onOpenSection={onOpenSection}
+          onAdd={onAdd}
           companyFocusSignal={companyFocusSignal}
         />
-        <ActivityFeed
-          contact={contact}
-          preview
-          onViewAll={onOpenSection ? () => onOpenSection('activities') : undefined}
-        />
       </div>
+    );
+  }
+  return (
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
+      <SummaryStrip contact={contact} onOpenSection={onOpenSection} />
+      <ActivityWorkspace contact={contact} focus={focus} bare />
     </div>
   );
 }

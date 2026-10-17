@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "কন্টাক্টের বিভাগ",
-          "group": {
-            "contact": "কন্টাক্ট",
-            "related": "সম্পর্কিত",
-            "record": "রেকর্ড"
-          },
           "section": {
             "overview": "ওভারভিউ",
             "activities": "কার্যকলাপ",
@@ -46,7 +41,6 @@
           "noStatus": "কোনো স্ট্যাটাস নেই"
         },
         "keyDetails": {
-          "title": "মূল বিবরণ",
           "editAll": "সব সম্পাদনা করুন",
           "edit": "{field} সম্পাদনা করুন",
           "add": "{field} যোগ করুন",
@@ -62,8 +56,6 @@
           "leadSource": "এই কন্টাক্ট কোথা থেকে এসেছে"
         },
         "cards": {
-          "tags": "ট্যাগ ও গ্রুপ",
-          "tagsSummary": "{tags, plural, =0 {কোনো ট্যাগ নেই} one {১টি ট্যাগ} other {#টি ট্যাগ}} · {groups, plural, =0 {কোনো গ্রুপ নেই} one {১টি গ্রুপ} other {#টি গ্রুপ}}",
           "company": "কোম্পানি",
           "companyNone": "এখনও নেই",
           "timezone": "টাইম জোন ও অবস্থান",

@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Sections du contact",
-          "group": {
-            "contact": "Contact",
-            "related": "Associés",
-            "record": "Fiche"
-          },
           "section": {
             "overview": "Aperçu",
             "activities": "Activité",
@@ -46,7 +41,6 @@
           "noStatus": "Aucun statut"
         },
         "keyDetails": {
-          "title": "Infos clés",
           "editAll": "Tout modifier",
           "edit": "Modifier : {field}",
           "add": "Ajouter : {field}",
@@ -62,8 +56,6 @@
           "leadSource": "D'où vient ce contact"
         },
         "cards": {
-          "tags": "Étiquettes et groupes",
-          "tagsSummary": "{tags, plural, =0 {Aucune étiquette} one {1 étiquette} other {# étiquettes}} · {groups, plural, =0 {aucun groupe} one {1 groupe} other {# groupes}}",
           "company": "Entreprise",
           "companyNone": "Aucune pour l'instant",
           "timezone": "Fuseau horaire et localisation",

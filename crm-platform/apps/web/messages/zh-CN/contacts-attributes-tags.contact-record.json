@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "联系人分区",
-          "group": {
-            "contact": "联系人",
-            "related": "相关",
-            "record": "记录"
-          },
           "section": {
             "overview": "概览",
             "activities": "活动",
@@ -46,7 +41,6 @@
           "noStatus": "无状态"
         },
         "keyDetails": {
-          "title": "关键信息",
           "editAll": "全部编辑",
           "edit": "编辑{field}",
           "add": "添加{field}",
@@ -62,8 +56,6 @@
           "leadSource": "此联系人的来源"
         },
         "cards": {
-          "tags": "标签和分组",
-          "tagsSummary": "{tags, plural, =0 {无标签} other {# 个标签}} · {groups, plural, =0 {无分组} other {# 个分组}}",
           "company": "公司",
           "companyNone": "暂无",
           "timezone": "时区和位置",

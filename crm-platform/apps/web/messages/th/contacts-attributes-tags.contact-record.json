@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "ส่วนต่าง ๆ ของผู้ติดต่อ",
-          "group": {
-            "contact": "ผู้ติดต่อ",
-            "related": "ที่เกี่ยวข้อง",
-            "record": "ข้อมูลระเบียน"
-          },
           "section": {
             "overview": "ภาพรวม",
             "activities": "กิจกรรม",
@@ -46,7 +41,6 @@
           "noStatus": "ไม่มีสถานะ"
         },
         "keyDetails": {
-          "title": "รายละเอียดสำคัญ",
           "editAll": "แก้ไขทั้งหมด",
           "edit": "แก้ไข{field}",
           "add": "เพิ่ม{field}",
@@ -62,8 +56,6 @@
           "leadSource": "ผู้ติดต่อรายนี้มาจากไหน"
         },
         "cards": {
-          "tags": "แท็กและกลุ่ม",
-          "tagsSummary": "{tags, plural, =0 {ไม่มีแท็ก} other {# แท็ก}} · {groups, plural, =0 {ไม่มีกลุ่ม} other {# กลุ่ม}}",
           "company": "บริษัท",
           "companyNone": "ยังไม่มี",
           "timezone": "เขตเวลาและที่ตั้ง",

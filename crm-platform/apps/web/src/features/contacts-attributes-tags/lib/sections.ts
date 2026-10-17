@@ -147,25 +147,37 @@ export function sectionHref(contactId: string, section: SectionId): string {
 }
 
 /**
- * The sub-nav's three groups, in order: what the contact is working on (Contact), what is connected to them (Related) and the
- * contact's own record data (Record). A group a person sees nothing in is left out. Every section of `CORE_SECTIONS` and
- * `RELATED_SECTIONS` is in exactly one of them.
+ * The details page's tab bar: five tabs people work in, then a "More" menu with every other section. Every section is in exactly one
+ * of them and keeps its own URL (`/contacts/<id>/<section>`), so nothing is lost by being behind "More".
  */
-export const NAV_GROUPS = [
-  {
-    id: 'contact',
-    sections: ['overview', 'activities', 'conversations', 'notes', 'tasks', 'meetings', 'files'],
-  },
-  { id: 'related', sections: ['deals', 'appointments', 'sales', 'company'] },
-  { id: 'record', sections: ['details', 'stats', 'lead-source', 'consent', 'history'] },
-] as const satisfies readonly { id: string; sections: readonly SectionId[] }[];
-export type NavGroupId = (typeof NAV_GROUPS)[number]['id'];
+export const PAGE_TABS = [
+  'overview',
+  'activities',
+  'conversations',
+  'deals',
+  'files',
+] as const satisfies readonly SectionId[];
+export const PAGE_MORE = [
+  'notes',
+  'tasks',
+  'meetings',
+  'appointments',
+  'sales',
+  'company',
+  'lead-source',
+  'consent',
+  'stats',
+  'details',
+  'history',
+] as const satisfies readonly SectionId[];
 
-export function navGroups(
-  has: (permission: string) => boolean,
-): Array<{ id: NavGroupId; sections: SectionId[] }> {
-  return NAV_GROUPS.map((g) => ({
-    id: g.id,
-    sections: (g.sections as readonly SectionId[]).filter((s) => sectionAllowed(s, has)),
-  })).filter((g) => g.sections.length > 0);
+/** The tabs a person sees and the sections in their "More" menu; what their permissions do not allow is left out. */
+export function pageTabs(has: (permission: string) => boolean): {
+  primary: SectionId[];
+  more: SectionId[];
+} {
+  return {
+    primary: PAGE_TABS.filter((s) => sectionAllowed(s, has)),
+    more: PAGE_MORE.filter((s) => sectionAllowed(s, has)),
+  };
 }

@@ -19,9 +19,6 @@ import { TimelineRow } from './timeline-row';
 import { useTimelineFeed } from './use-timeline-feed';
 import { useComposeTabs, type ComposeTab } from './compose-box';
 
-/** How many entries the overview's "Recent activity" shows before "View all activity". */
-const PREVIEW = 6;
-
 function Heading({ children }: { children: string }) {
   return (
     <h3 className="mb-0.5 mt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground first:mt-0">
@@ -51,19 +48,17 @@ function List({
 /**
  * The contact's history, newest first, under the compose box: "Up next" (open tasks and meetings still to come), then Today,
  * Yesterday, This week and Earlier. Filter pills (All, Messages, Calls, Notes, Tasks, Meetings, Changes), a search box over what is
- * loaded, compact entries and "Load more". With `preview` it is the overview's "Recent activity": the latest few, no filters, and a
- * link to the whole timeline.
+ * loaded, compact entries and "Load more". `bare` (the Overview) leaves out the pills and the search. The card stretches to the bottom of the
+ * column, so a short history never leaves a blank page under it.
  */
 export function ActivityFeed({
   contact,
-  preview,
-  onViewAll,
+  bare,
   onCompose,
 }: {
   contact: ContactRow;
-  preview?: boolean;
-  /** The preview's "View all activity". */
-  onViewAll?: () => void;
+  /** The Overview's timeline: the same history without the filter pills and the search box. */
+  bare?: boolean;
   /** The empty state's actions: open that tab of the compose box. */
   onCompose?: (tab: ComposeTab) => void;
 }) {
@@ -73,15 +68,15 @@ export function ActivityFeed({
   const [filter, setFilter] = useState<TimelineFilter>('all');
   const [text, setText] = useState('');
   const query = useDebounced(text.trim(), 200);
-  const feed = useTimelineFeed(contact, preview ? 'all' : filter, preview ? '' : query);
+  const feed = useTimelineFeed(contact, bare ? 'all' : filter, bare ? '' : query);
 
   const now = new Date();
-  const buckets = groupByDay(preview ? feed.dated.slice(0, PREVIEW) : feed.dated, now, timeZone);
-  const upNext = preview ? feed.upNext.slice(0, 3) : feed.upNext;
+  const buckets = groupByDay(feed.dated, now, timeZone);
+  const upNext = feed.upNext;
   const nothing = feed.dated.length === 0 && feed.upNext.length === 0;
   const filtering = filter !== 'all' || query !== '';
 
-  const toolbar = !preview && (
+  const toolbar = !bare && (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
       <div role="group" aria-label={t('filterLabel')} className="flex flex-wrap gap-1.5">
         {TIMELINE_FILTERS.map((f) => {
@@ -181,25 +176,10 @@ export function ActivityFeed({
 
   return (
     <section
-      aria-label={preview ? t('recent') : t('title')}
-      className="space-y-3 rounded-xl border border-border bg-background p-3 sm:p-4"
+      aria-label={t('title')}
+      className="flex min-h-48 flex-1 flex-col space-y-3 rounded-xl border border-border bg-background p-3 sm:p-4"
     >
-      {preview ? (
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold">{t('recent')}</h2>
-          {onViewAll && !feed.empty && (
-            <button
-              type="button"
-              onClick={onViewAll}
-              className="rounded text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              {t('viewAll')}
-            </button>
-          )}
-        </div>
-      ) : (
-        <h2 className="sr-only">{t('title')}</h2>
-      )}
+      <h2 className="sr-only">{t('title')}</h2>
       {toolbar}
       {feed.partial && (
         <p
@@ -216,27 +196,16 @@ export function ActivityFeed({
           </button>
         </p>
       )}
-      {query !== '' && feed.canLoadMore && !preview && (
+      {query !== '' && feed.canLoadMore && (
         <p className="text-xs text-muted-foreground">{t('searchHint')}</p>
       )}
       {body}
-      {!preview && feed.canLoadMore && !feed.failed && (
+      {feed.canLoadMore && !feed.failed && (
         <div className="flex justify-center pt-1">
           <Button variant="secondary" size="sm" disabled={feed.loadingMore} onClick={feed.loadMore}>
             {feed.loadingMore && <Spinner />}
             {t('loadMore')}
           </Button>
-        </div>
-      )}
-      {preview && feed.canLoadMore && onViewAll && !nothing && (
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={onViewAll}
-            className="rounded text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            {t('viewAll')}
-          </button>
         </div>
       )}
     </section>
@@ -263,7 +232,7 @@ function EmptyFeed({
         .map((tab) => ({ tab, label: t(tab) }))
     : [];
   return (
-    <div className="px-4 py-8 text-center">
+    <div className="flex flex-1 flex-col items-center justify-center px-4 py-8 text-center">
       <p className="text-base font-semibold">{t('title')}</p>
       <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground" dir="auto">
         {first ? t('message', { name: first }) : t('messageNoName')}

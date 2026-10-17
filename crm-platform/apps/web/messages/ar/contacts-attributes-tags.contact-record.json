@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "أقسام جهة الاتصال",
-          "group": {
-            "contact": "جهة الاتصال",
-            "related": "ذات صلة",
-            "record": "السجل"
-          },
           "section": {
             "overview": "نظرة عامة",
             "activities": "النشاط",
@@ -46,7 +41,6 @@
           "noStatus": "بلا حالة"
         },
         "keyDetails": {
-          "title": "التفاصيل الرئيسية",
           "editAll": "تعديل الكل",
           "edit": "تعديل {field}",
           "add": "إضافة {field}",
@@ -62,8 +56,6 @@
           "leadSource": "من أين جاءت جهة الاتصال هذه"
         },
         "cards": {
-          "tags": "الوسوم والمجموعات",
-          "tagsSummary": "{tags, plural, =0 {لا توجد وسوم} one {وسم واحد} two {وسمان} few {# وسوم} many {# وسمًا} other {# وسم}} · {groups, plural, =0 {لا توجد مجموعات} one {مجموعة واحدة} two {مجموعتان} few {# مجموعات} many {# مجموعة} other {# مجموعة}}",
           "company": "الشركة",
           "companyNone": "لا يوجد بعد",
           "timezone": "المنطقة الزمنية والموقع",

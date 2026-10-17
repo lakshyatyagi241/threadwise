@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "連絡先のセクション",
-          "group": {
-            "contact": "連絡先",
-            "related": "関連",
-            "record": "レコード"
-          },
           "section": {
             "overview": "概要",
             "activities": "アクティビティ",
@@ -46,7 +41,6 @@
           "noStatus": "ステータスなし"
         },
         "keyDetails": {
-          "title": "主な情報",
           "editAll": "すべて編集",
           "edit": "{field}を編集",
           "add": "{field}を追加",
@@ -62,8 +56,6 @@
           "leadSource": "この連絡先の入手元"
         },
         "cards": {
-          "tags": "タグとグループ",
-          "tagsSummary": "{tags, plural, =0 {タグなし} other {# 件のタグ}} · {groups, plural, =0 {グループなし} other {# 件のグループ}}",
           "company": "会社",
           "companyNone": "まだありません",
           "timezone": "タイムゾーンと所在地",

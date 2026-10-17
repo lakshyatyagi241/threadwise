@@ -36,6 +36,7 @@ import {
 import { SingleSendDrawer, type SingleSendTarget } from '../single-send-drawer';
 import { notifyCallClick, rememberPhoneClick } from './call-nudge';
 import { FieldHistoryDrawer } from './field-history';
+import { ContactPrivacyMenuItems } from '@/features/privacy-requests';
 
 const button =
   'inline-flex h-9 items-center gap-1.5 whitespace-nowrap border border-border bg-background px-2.5 text-[13px] font-medium outline-none transition hover:bg-muted focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
@@ -92,8 +93,11 @@ export function ContactActionBar({
   onAdd,
   onDeleted,
   className,
+  variant = 'row',
 }: {
   contact: ContactRow;
+  /** `row`: labelled buttons in one row (the quick view). `round`: the profile card's centered row of round icons with a small label under each. */
+  variant?: 'row' | 'round';
   /** Note, Task, Call, Meeting and Add company: show that composer with the cursor in it. */
   onAdd: (target: AddTarget) => void;
   /** After the contact was deleted from the "..." menu: leave the screen. */
@@ -236,6 +240,168 @@ export function ContactActionBar({
     else if (route.kind === 'email') send('email');
   };
 
+  // The "..." menu's items: the same in both looks.
+  const moreItems = (
+    <>
+      {canUpdate && (
+        <MenuItem onSelect={() => setEditing(true)}>
+          <PencilIcon /> {t('edit')}
+        </MenuItem>
+      )}
+      {canUpdate && canPickCompany && (
+        <MenuItem onSelect={() => onAdd('company')}>
+          <BuildingIcon /> {contact.companyId ? t('changeCompany') : t('addCompany')}
+        </MenuItem>
+      )}
+      <MenuItem onSelect={() => setHistory(true)}>
+        <HistoryIcon /> {tr('fieldHistory')}
+      </MenuItem>
+      <ContactPrivacyMenuItems contactId={contact.id} />
+      {canDelete && <MenuSeparator />}
+      {canDelete && (
+        <MenuItem danger onSelect={() => setDeleting(true)}>
+          <TrashIcon /> {t('delete')}
+        </MenuItem>
+      )}
+    </>
+  );
+  const overlays = (
+    <>
+      <ContactFormModal open={editing} contact={contact} onClose={() => setEditing(false)} />
+      <FieldHistoryDrawer open={history} onClose={() => setHistory(false)} contactId={contact.id} />
+      <SingleSendDrawer target={target} onClose={() => setTarget(null)} />
+      <ConfirmDialog
+        open={deleting}
+        tone="danger"
+        busy={remove.isPending}
+        title={tl('deleteTitle')}
+        message={
+          <>
+            <p>{tl('deleteMessage', { name })}</p>
+            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
+          </>
+        }
+        confirmLabel={tl('delete')}
+        cancelLabel={tl('keep')}
+        onClose={() => {
+          setDeleting(false);
+          setKeepHistory(false);
+        }}
+        onConfirm={() => remove.mutate()}
+      />
+    </>
+  );
+
+  if (variant === 'round') {
+    const callItems = callWays.map((way) => (
+      <MenuItem key={way} onSelect={() => runCall(way)}>
+        {callIcon[way]} {callText[way]}
+      </MenuItem>
+    ));
+    const messageWays: MessageWay[] = [
+      ...(route.kind === 'chat' ? (['chat'] as const) : route.kind === 'email' ? (['email'] as const) : []),
+      ...messageOthers,
+    ];
+    const messageItems = messageWays.map((way) => (
+      <MenuItem key={way} onSelect={() => runMessage(way)}>
+        {messageIcon[way]} {messageText[way]}
+      </MenuItem>
+    ));
+    return (
+      <div
+        role="group"
+        aria-label={tr('label')}
+        className={cn('flex flex-wrap items-start justify-center gap-x-3 gap-y-2', className)}
+      >
+        {canUpdate && (
+          <RoundAction label={t('note')}>
+            <button type="button" className={roundButton} onClick={() => onAdd('note')} title={t('note')} aria-label={t('note')}>
+              <NoteIcon className="size-4" />
+            </button>
+          </RoundAction>
+        )}
+        {canSend && (
+          <RoundAction label={tr('message')}>
+            {messageItems.length > 1 ? (
+              <Menu
+                label={tr('messageMore')}
+                placement="fixed"
+                triggerClassName={roundMenu}
+                triggerProps={{ 'aria-label': tr('message'), title: tr('message') }}
+                trigger={<ChatIcon className="size-4" />}
+              >
+                {messageItems}
+              </Menu>
+            ) : (
+              <button
+                type="button"
+                disabled={messageBlocked || chat.isPending}
+                title={messageBlocked ? whyNoMessage : tr('message')}
+                aria-label={messageBlocked ? whyNoMessage : tr('message')}
+                onClick={messageMain}
+                className={roundButton}
+              >
+                <ChatIcon className="size-4" />
+              </button>
+            )}
+          </RoundAction>
+        )}
+        {showCall && (
+          <RoundAction label={tr('call')}>
+            {callItems.length > 1 ? (
+              <Menu
+                label={tr('callMore')}
+                placement="fixed"
+                triggerClassName={roundMenu}
+                triggerProps={{ 'aria-label': tr('call'), title: tr('call') }}
+                trigger={<PhoneIcon className="size-4" />}
+              >
+                {callItems}
+              </Menu>
+            ) : (
+              <button
+                type="button"
+                disabled={callMain === undefined}
+                title={callMain === undefined ? tl('noPhone') : callLabel}
+                aria-label={callMain === undefined ? tl('noPhone') : callLabel}
+                onClick={() => callMain && runCall(callMain)}
+                className={roundButton}
+              >
+                <PhoneIcon className="size-4" />
+              </button>
+            )}
+          </RoundAction>
+        )}
+        {canTask && tasksOpen && (
+          <RoundAction label={t('task')}>
+            <button type="button" className={roundButton} onClick={() => onAdd('task')} title={t('task')} aria-label={t('task')}>
+              <CheckIcon className="size-4" />
+            </button>
+          </RoundAction>
+        )}
+        {canUpdate && (
+          <RoundAction label={t('meeting')}>
+            <button type="button" className={roundButton} onClick={() => onAdd('meeting')} title={t('meeting')} aria-label={t('meeting')}>
+              <CalendarIcon className="size-4" />
+            </button>
+          </RoundAction>
+        )}
+        <RoundAction label={tr('more')}>
+          <Menu
+            label={t('more')}
+            placement="fixed"
+            triggerClassName={roundMenu}
+            triggerProps={{ 'aria-label': t('more'), title: t('more') }}
+            trigger={<MoreIcon className="size-4" />}
+          >
+            {moreItems}
+          </Menu>
+        </RoundAction>
+        {overlays}
+      </div>
+    );
+  }
+
   return (
     <div className={cn('flex flex-wrap items-center gap-2 max-sm:flex-nowrap', className)}>
       <span
@@ -332,50 +498,26 @@ export function ContactActionBar({
           triggerProps={{ 'aria-label': t('more'), title: t('more') }}
           trigger={<MoreIcon />}
         >
-          {canUpdate && (
-            <MenuItem onSelect={() => setEditing(true)}>
-              <PencilIcon /> {t('edit')}
-            </MenuItem>
-          )}
-          {canUpdate && canPickCompany && (
-            <MenuItem onSelect={() => onAdd('company')}>
-              <BuildingIcon /> {contact.companyId ? t('changeCompany') : t('addCompany')}
-            </MenuItem>
-          )}
-          <MenuItem onSelect={() => setHistory(true)}>
-            <HistoryIcon /> {tr('fieldHistory')}
-          </MenuItem>
-          {canDelete && <MenuSeparator />}
-          {canDelete && (
-            <MenuItem danger onSelect={() => setDeleting(true)}>
-              <TrashIcon /> {t('delete')}
-            </MenuItem>
-          )}
+          {moreItems}
         </Menu>
       </span>
 
-      <ContactFormModal open={editing} contact={contact} onClose={() => setEditing(false)} />
-      <FieldHistoryDrawer open={history} onClose={() => setHistory(false)} contactId={contact.id} />
-      <SingleSendDrawer target={target} onClose={() => setTarget(null)} />
-      <ConfirmDialog
-        open={deleting}
-        tone="danger"
-        busy={remove.isPending}
-        title={tl('deleteTitle')}
-        message={
-          <>
-            <p>{tl('deleteMessage', { name })}</p>
-            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
-          </>
-        }
-        confirmLabel={tl('delete')}
-        cancelLabel={tl('keep')}
-        onClose={() => {
-          setDeleting(false);
-          setKeepHistory(false);
-        }}
-        onConfirm={() => remove.mutate()}
-      />
+      {overlays}
     </div>
+  );
+}
+
+const roundButton =
+  'inline-flex size-10 items-center justify-center rounded-full border border-border bg-background text-foreground outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
+const roundMenu =
+  'size-10 gap-0 rounded-full border-border bg-background px-0 text-foreground hover:bg-muted';
+
+/** A round icon with its small name under it (HubSpot's profile card row). */
+function RoundAction({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <span className="flex w-12 flex-col items-center gap-1">
+      {children}
+      <span className="max-w-full truncate text-[11px] leading-none text-muted-foreground">{label}</span>
+    </span>
   );
 }

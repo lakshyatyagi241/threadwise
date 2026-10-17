@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Các mục của liên hệ",
-          "group": {
-            "contact": "Liên hệ",
-            "related": "Liên quan",
-            "record": "Hồ sơ"
-          },
           "section": {
             "overview": "Tổng quan",
             "activities": "Hoạt động",
@@ -46,7 +41,6 @@
           "noStatus": "Không có trạng thái"
         },
         "keyDetails": {
-          "title": "Thông tin chính",
           "editAll": "Sửa tất cả",
           "edit": "Sửa {field}",
           "add": "Thêm {field}",
@@ -62,8 +56,6 @@
           "leadSource": "Liên hệ này đến từ đâu"
         },
         "cards": {
-          "tags": "Thẻ và nhóm",
-          "tagsSummary": "{tags, plural, =0 {Chưa có thẻ} other {# thẻ}} · {groups, plural, =0 {chưa có nhóm} other {# nhóm}}",
           "company": "Công ty",
           "companyNone": "Chưa có",
           "timezone": "Múi giờ và vị trí",

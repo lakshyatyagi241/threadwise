@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Bagian kontak",
-          "group": {
-            "contact": "Kontak",
-            "related": "Terkait",
-            "record": "Catatan data"
-          },
           "section": {
             "overview": "Ringkasan",
             "activities": "Aktivitas",
@@ -46,7 +41,6 @@
           "noStatus": "Tanpa status"
         },
         "keyDetails": {
-          "title": "Detail utama",
           "editAll": "Edit semua",
           "edit": "Edit {field}",
           "add": "Tambah {field}",
@@ -62,8 +56,6 @@
           "leadSource": "Dari mana kontak ini berasal"
         },
         "cards": {
-          "tags": "Tag dan grup",
-          "tagsSummary": "{tags, plural, =0 {Tidak ada tag} other {# tag}} · {groups, plural, =0 {tidak ada grup} other {# grup}}",
           "company": "Perusahaan",
           "companyNone": "Belum ada",
           "timezone": "Zona waktu dan lokasi",

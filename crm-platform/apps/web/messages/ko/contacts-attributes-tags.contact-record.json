@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "연락처 섹션",
-          "group": {
-            "contact": "연락처",
-            "related": "관련 항목",
-            "record": "레코드"
-          },
           "section": {
             "overview": "개요",
             "activities": "활동",
@@ -46,7 +41,6 @@
           "noStatus": "상태 없음"
         },
         "keyDetails": {
-          "title": "주요 정보",
           "editAll": "모두 수정",
           "edit": "{field} 수정",
           "add": "{field} 추가",
@@ -62,8 +56,6 @@
           "leadSource": "이 연락처의 유입 경로"
         },
         "cards": {
-          "tags": "태그 및 그룹",
-          "tagsSummary": "{tags, plural, =0 {태그 없음} other {태그 #개}} · {groups, plural, =0 {그룹 없음} other {그룹 #개}}",
           "company": "회사",
           "companyNone": "아직 없음",
           "timezone": "시간대 및 위치",

@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "رابطے کے حصے",
-          "group": {
-            "contact": "رابطہ",
-            "related": "متعلقہ",
-            "record": "ریکارڈ"
-          },
           "section": {
             "overview": "جائزہ",
             "activities": "سرگرمی",
@@ -46,7 +41,6 @@
           "noStatus": "کوئی حالت نہیں"
         },
         "keyDetails": {
-          "title": "اہم تفصیلات",
           "editAll": "سب میں ترمیم کریں",
           "edit": "{field} میں ترمیم کریں",
           "add": "{field} شامل کریں",
@@ -62,8 +56,6 @@
           "leadSource": "یہ رابطہ کہاں سے آیا"
         },
         "cards": {
-          "tags": "ٹیگز اور گروپس",
-          "tagsSummary": "{tags, plural, =0 {کوئی ٹیگ نہیں} one {1 ٹیگ} other {# ٹیگز}} · {groups, plural, =0 {کوئی گروپ نہیں} one {1 گروپ} other {# گروپس}}",
           "company": "کمپنی",
           "companyNone": "ابھی کوئی نہیں",
           "timezone": "ٹائم زون اور مقام",

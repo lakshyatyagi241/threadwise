@@ -269,13 +269,12 @@ describe('ActivityFeed', () => {
     seed: Array<[readonly unknown[], unknown]>,
     permissions: string[] = ['record.contacts.read'],
     locale: 'en' | 'ar' = 'en',
-    preview = false,
+    bare = false,
   ) =>
     renderAccount(
       <ActivityFeed
         contact={contact}
-        preview={preview}
-        onViewAll={() => undefined}
+        bare={bare}
         onCompose={() => undefined}
       />,
       {
@@ -344,15 +343,15 @@ describe('ActivityFeed', () => {
     expect(out).toContain('Quote sent');
   });
 
-  it('as the overview preview: recent activity, a link to all of it, no filters', () => {
+  it('as the Overview timeline (bare): the history and Load more, no filters and no search', () => {
     const out = draw(
       [[[...NOTE_KEYS.list(ID), {}], page([note('First note')])]],
       ['record.contacts.read'],
       'en',
       true,
     );
-    expect(out).toContain('Recent activity');
-    expect(out).toContain('View all activity');
+    expect(out).toContain('Note: First note');
+    expect(out).not.toContain('Recent activity');
     expect(out).not.toContain('aria-pressed');
     expect(out).not.toContain('type="search"');
   });

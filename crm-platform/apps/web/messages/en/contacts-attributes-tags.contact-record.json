@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Contact sections",
-          "group": {
-            "contact": "Contact",
-            "related": "Related",
-            "record": "Record"
-          },
           "section": {
             "overview": "Overview",
             "activities": "Activity",
@@ -26,7 +21,9 @@
             "lead-source": "Source",
             "consent": "Consent",
             "history": "History"
-          }
+          },
+          "more": "More",
+          "moreLabel": "More sections"
         },
         "actions": {
           "label": "Things to do with this contact",
@@ -40,13 +37,13 @@
           "messageTemplate": "Send a WhatsApp template",
           "messageEmail": "Send an email",
           "messageMore": "Other ways to write",
-          "fieldHistory": "Field history"
+          "fieldHistory": "Field history",
+          "more": "More"
         },
         "stageStrip": {
           "noStatus": "No status"
         },
         "keyDetails": {
-          "title": "Key details",
           "editAll": "Edit all",
           "edit": "Edit {field}",
           "add": "Add {field}",
@@ -59,11 +56,10 @@
           "showAll": "Show all details",
           "showLess": "Show less",
           "social": "Social media",
-          "leadSource": "Where this contact came from"
+          "leadSource": "Where this contact came from",
+          "aboutTitle": "About this contact"
         },
         "cards": {
-          "tags": "Tags and groups",
-          "tagsSummary": "{tags, plural, =0 {No tags} one {1 tag} other {# tags}} · {groups, plural, =0 {no groups} one {1 group} other {# groups}}",
           "company": "Company",
           "companyNone": "None yet",
           "timezone": "Time zone and location",
@@ -71,7 +67,14 @@
           "privacy": "Privacy",
           "privacyMinor": "Minor",
           "score": "Lead score",
-          "scoreNone": "Not scored yet"
+          "scoreNone": "Not scored yet",
+          "label": "Related to this contact",
+          "tasks": "Open tasks",
+          "tasksNone": "Nothing is waiting.",
+          "deals": "Deals",
+          "dealsNone": "No deals yet.",
+          "add": "+ Add",
+          "viewAll": "View all"
         },
         "compose": {
           "label": "Add to the activity",
@@ -106,6 +109,35 @@
           "question": "How did the call with {name} go?",
           "log": "Log it",
           "dismiss": "Not now"
+        },
+        "profile": {
+          "label": "Contact profile"
+        },
+        "stagePicker": {
+          "label": "Stage: {stage}",
+          "menu": "Choose a stage",
+          "search": "Find a stage",
+          "none": "No stage matches.",
+          "moveTo": "Move to {stage}",
+          "statusIn": "Status in {stage}",
+          "default": "default",
+          "progress": "{current} of {total}",
+          "undo": "Undo",
+          "undone": "Moved back to {stage}.",
+          "statusSet": "Status set to {status}."
+        },
+        "summary": {
+          "label": "Summary",
+          "tasks": "Open tasks",
+          "overdue": "{count} overdue",
+          "nextDue": "Next due {when}",
+          "noDue": "No due dates",
+          "meeting": "Next meeting",
+          "noMeeting": "None planned",
+          "lastActivity": "Last activity",
+          "noActivity": "No activity yet",
+          "deals": "Open deals",
+          "wonDeals": "{count, plural, =0 {none won} one {1 won} other {# won}}"
         }
       },
       "timeline": {

@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "संपर्क के सेक्शन",
-          "group": {
-            "contact": "संपर्क",
-            "related": "संबंधित",
-            "record": "रिकॉर्ड"
-          },
           "section": {
             "overview": "ओवरव्यू",
             "activities": "गतिविधि",
@@ -46,7 +41,6 @@
           "noStatus": "कोई स्थिति नहीं"
         },
         "keyDetails": {
-          "title": "मुख्य विवरण",
           "editAll": "सब संपादित करें",
           "edit": "{field} संपादित करें",
           "add": "{field} जोड़ें",
@@ -62,8 +56,6 @@
           "leadSource": "यह संपर्क कहाँ से आया"
         },
         "cards": {
-          "tags": "टैग और ग्रुप",
-          "tagsSummary": "{tags, plural, =0 {कोई टैग नहीं} one {1 टैग} other {# टैग}} · {groups, plural, =0 {कोई ग्रुप नहीं} one {1 ग्रुप} other {# ग्रुप}}",
           "company": "कंपनी",
           "companyNone": "अभी तक नहीं",
           "timezone": "टाइम ज़ोन और स्थान",

@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Sekcje kontaktu",
-          "group": {
-            "contact": "Kontakt",
-            "related": "Powiązane",
-            "record": "Rekord"
-          },
           "section": {
             "overview": "Przegląd",
             "activities": "Aktywność",
@@ -46,7 +41,6 @@
           "noStatus": "Brak statusu"
         },
         "keyDetails": {
-          "title": "Najważniejsze dane",
           "editAll": "Edytuj wszystko",
           "edit": "Edytuj: {field}",
           "add": "Dodaj: {field}",
@@ -62,8 +56,6 @@
           "leadSource": "Skąd pochodzi ten kontakt"
         },
         "cards": {
-          "tags": "Tagi i grupy",
-          "tagsSummary": "{tags, plural, =0 {Brak tagów} one {1 tag} few {# tagi} many {# tagów} other {# tagu}} · {groups, plural, =0 {brak grup} one {1 grupa} few {# grupy} many {# grup} other {# grupy}}",
           "company": "Firma",
           "companyNone": "Jeszcze brak",
           "timezone": "Strefa czasowa i lokalizacja",

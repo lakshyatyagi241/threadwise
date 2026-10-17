@@ -23,7 +23,7 @@ vi.mock('next/navigation', () => ({
 import { ContactActionBar } from './action-bar';
 import { CollapseCard } from './collapse-card';
 import { KeyDetails, cityKey } from './key-details';
-import { ContactSideCards } from './side-cards';
+import { AssociationCards, ChannelTicks } from './association-cards';
 
 /** The one action row, Key details and the folded cards, in English and Arabic from the real messages. */
 
@@ -171,10 +171,11 @@ describe('KeyDetails', () => {
     expect(labels).toEqual([
       'Phone',
       'Email',
-      'Company',
       'Owner',
+      'Company',
       'Address',
       'Source',
+      'Created at',
       'Last activity',
     ]);
     expect(out).toContain('priya@example.com');
@@ -217,39 +218,61 @@ describe('KeyDetails', () => {
   });
 });
 
-describe('ContactSideCards', () => {
+describe('AssociationCards', () => {
   const draw = (permissions: string[], c = contact(), locale: 'en' | 'ar' = 'en') =>
-    renderAccount(<ContactSideCards contact={c} />, {
+    renderAccount(<AssociationCards contact={c} />, {
       locale,
       session: can(...permissions),
       seed: [[['cat', 'fields', false], []]],
     });
 
-  it('opens Key details and the subscription status and folds the rest into one line each', () => {
-    const out = draw([
-      'record.contacts.read',
-      'record.contacts.update',
-      'contacts.consent.read',
-      'record.companies.read',
-    ]);
-    expect(out).toContain('Key details');
-    expect(out).toContain('Subscription status');
-    // subscription is open: its content is drawn and it has no summary line
-    expect(out).toContain('The proof of each opt-in');
-    for (const folded of ['Tags and groups', 'Time zone and location', 'Privacy', 'Lead score']) {
-      expect(out).toMatch(new RegExp(`aria-expanded="false"[^>]*>[\\s\\S]*?${folded}`));
+  const all = [
+    'record.contacts.read',
+    'record.contacts.update',
+    'contacts.consent.read',
+    'record.companies.read',
+    'record.tasks.read',
+    'record.tasks.create',
+  ];
+
+  it('is a stack of one-line cards: Open tasks and Subscription open, the rest folded', () => {
+    const out = draw(all);
+    for (const title of ['Open tasks', 'Subscription status', 'Lead score', 'Time zone and location', 'Privacy']) {
+      expect(out, title).toContain(title);
     }
-    // the folded ones say what is inside
+    // two open by default: tasks and subscription
+    expect(out.match(/aria-expanded="true"/g)).toHaveLength(2);
+    for (const folded of ['Lead score', 'Time zone and location', 'Privacy']) {
+      expect(out).toMatch(new RegExp(`aria-expanded="false"[^>]*>[\s\S]*?${folded}`));
+    }
+    // folded cards say what is inside, and none of their content is drawn
     expect(out).toContain('Marketing allowed');
     expect(out).toContain('72 ·');
-    // and none of their content is drawn
     expect(out).not.toContain('No privacy flags');
+    // no card is taller than about 200 px open
+    expect(out).toContain('max-h-[200px]');
+  });
+
+  it('puts the three channel ticks in the Subscription row, folded or open', () => {
+    const out = draw(all, contact({ whatsappSubscriptionStatus: 'subscribed' }));
+    expect(out).toContain('WhatsApp: Yes');
+    expect(out).toContain('Email: No');
+    expect(out).toContain('SMS: No');
+    const out2 = renderAccount(<ChannelTicks contact={contact({ isUnsubscribed: true })} />);
+    expect(out2).toContain('Opted out of marketing messages');
+  });
+
+  it('offers + Add on Open tasks only to someone who may create tasks, and on Company only without a company', () => {
+    expect(draw(all)).toContain('+ Add');
+    const readOnly = draw(['record.contacts.read', 'record.tasks.read']);
+    expect(readOnly).not.toContain('+ Add');
   });
 
   it('leaves out the cards a person has no access to', () => {
     const out = draw([]);
     expect(out).not.toContain('Time zone and location');
-    expect(out).not.toContain('None yet');
+    expect(out).not.toContain('Open tasks');
+    expect(out).not.toContain('Deals');
     expect(out).toContain('Subscription status');
   });
 

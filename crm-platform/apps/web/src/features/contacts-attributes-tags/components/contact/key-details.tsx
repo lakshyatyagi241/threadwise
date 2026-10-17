@@ -14,6 +14,7 @@ import { socialLinks } from '../../lib/contact-overview';
 import { isMaskedPhone } from '../../lib/row-actions';
 import { errorKind } from '../../lib/errors';
 import { ContactFormModal } from '../contact-form-modal';
+import { ContactQuickTags } from '../contact-quick-tags';
 import { PencilIcon } from '../icons';
 import { OwnerControl } from '../owner-control';
 import { CustomFields, SocialRows, useInfoRows } from './info-tabs';
@@ -224,12 +225,12 @@ export function KeyDetails({
 
   return (
     <section
-      aria-label={t('title')}
+      aria-label={t('aboutTitle')}
       className="rounded-xl border border-border bg-background"
       data-testid="key-details"
     >
       <header className="flex min-h-11 items-center justify-between gap-3 px-4 pt-2.5">
-        <h2 className="text-sm font-semibold">{t('title')}</h2>
+        <h2 className="text-sm font-semibold">{t('aboutTitle')}</h2>
         {canUpdate && (
           <button
             type="button"
@@ -271,6 +272,14 @@ export function KeyDetails({
             onSave={(next) => saveField({ email: next === '' ? null : next })}
           />
         </Row>
+        <Row label={t('owner')}>
+          <OwnerControl
+            contactId={contact.id}
+            ownerId={contact.ownerId}
+            rowVersion={contact.rowVersion}
+            canEdit={canUpdate}
+          />
+        </Row>
         <Row label={ti('company')}>
           <span className="flex min-w-0 items-center gap-2">
             {contact.companyId ? (
@@ -299,14 +308,6 @@ export function KeyDetails({
             )}
           </span>
         </Row>
-        <Row label={t('owner')}>
-          <OwnerControl
-            contactId={contact.id}
-            ownerId={contact.ownerId}
-            rowVersion={contact.rowVersion}
-            canEdit={canUpdate}
-          />
-        </Row>
         <Row label={city ? t('city') : ti('address')}>
           <EditableText
             label={city ? t('city') : ti('address')}
@@ -324,6 +325,17 @@ export function KeyDetails({
             onSave={(next) => saveField({ source: next === '' ? null : next })}
           />
         </Row>
+        <Row label={ti('createdAt')}>
+          <time
+            dateTime={contact.createdAt}
+            title={format.dateTime(new Date(contact.createdAt), {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+            })}
+          >
+            {format.relativeTime(new Date(contact.createdAt), now)}
+          </time>
+        </Row>
         <Row label={ti('lastActivity')}>
           {contact.lastActivityAt ? (
             <time
@@ -340,6 +352,9 @@ export function KeyDetails({
           )}
         </Row>
       </dl>
+      <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-4 py-2.5">
+        <ContactQuickTags contactId={contact.id} labelled />
+      </div>
       <div className="border-t border-border/60 px-4 py-2">
         <button
           type="button"

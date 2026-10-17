@@ -4,11 +4,6 @@
       "record": {
         "nav": {
           "label": "Разделы контакта",
-          "group": {
-            "contact": "Контакт",
-            "related": "Связанное",
-            "record": "Запись"
-          },
           "section": {
             "overview": "Обзор",
             "activities": "Активность",
@@ -46,7 +41,6 @@
           "noStatus": "Нет статуса"
         },
         "keyDetails": {
-          "title": "Главное",
           "editAll": "Изменить всё",
           "edit": "Изменить: {field}",
           "add": "Добавить: {field}",
@@ -62,8 +56,6 @@
           "leadSource": "Откуда этот контакт"
         },
         "cards": {
-          "tags": "Теги и группы",
-          "tagsSummary": "{tags, plural, =0 {Нет тегов} one {# тег} few {# тега} many {# тегов} other {# тега}} · {groups, plural, =0 {нет групп} one {# группа} few {# группы} many {# групп} other {# группы}}",
           "company": "Компания",
           "companyNone": "Пока нет",
           "timezone": "Часовой пояс и местоположение",
