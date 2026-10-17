@@ -87,7 +87,7 @@ export const expectNone = (
         id,
         title,
         `${findings.length} finding(s)`,
-        findings.slice(0, 40),
+        findings.slice(0, Number(process.env.QA_MAX_EVIDENCE) || 40),
       );
 
 // Live environment. Everything live is opt-in: no URL / no database means the check is reported as skipped, never as passed.
