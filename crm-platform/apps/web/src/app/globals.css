@@ -69,3 +69,27 @@
     outline: 2px solid var(--color-primary, #6366f1);
   }
 }
+
+/* Full-height screens (<PageFill>, components/shell/page-fill.tsx). By default the window scrolls and <main> grows with the page. When
+   the page holds a PageFill the shell is exactly one window tall and <main> is the column that PageFill fills, so the top bar, the
+   trial / billing / impersonation / error bars and the page's own header are all subtracted by the layout and nothing needs a
+   hand-counted `calc(100dvh - Nrem)`. <main> only scrolls (never the window) when the window is shorter than the screen's minimum. */
+.app-shell:has([data-page-fill]) {
+  height: 100dvh;
+}
+.app-shell:has([data-page-fill]) > .app-shell-col {
+  min-height: 0;
+}
+.app-shell:has([data-page-fill]) .app-shell-main {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Inside a PageFill nothing shrinks except the card that opts in with `min-h-0 shrink` (a bar with its own overflow would otherwise collapse). */
+@layer components {
+  [data-page-fill] > * {
+    flex-shrink: 0;
+  }
+}

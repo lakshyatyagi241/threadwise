@@ -50,6 +50,7 @@ import { TasksTable } from './tasks-table';
 import { TasksTabs } from './tasks-tabs';
 import { SEARCH_ID, TasksToolbar } from './tasks-toolbar';
 import { useTaskActions } from './use-task-actions';
+import { PageFill } from '@/components/shell/page-fill';
 
 /**
  * `/tasks`, the Tasks hub (TW-TASK-002..009). The tab, the filters and the open task live in the address; the visible columns
@@ -268,7 +269,7 @@ export function TasksScreen() {
   const settled = !list.isPending;
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="36rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -328,7 +329,7 @@ export function TasksScreen() {
         aria-label={t('tableLabel')}
         aria-busy={list.isFetching}
         // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
-        className="flex max-h-[max(26rem,calc(100dvh-19rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         {can.create && filters.tab !== 'completed' && (
           <div className="shrink-0 border-b border-border p-3">
@@ -493,7 +494,7 @@ export function TasksScreen() {
         onClose={() => setConfirmBulkDelete(false)}
         onConfirm={() => void bulkDelete()}
       />
-    </div>
+    </PageFill>
   );
 }
 
