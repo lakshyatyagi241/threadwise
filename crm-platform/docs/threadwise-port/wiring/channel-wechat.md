@@ -33,7 +33,7 @@ All behind `@RequirePlanFeature('extra_channels')` except the two public routes.
 
 ## Tables read or written
 
-`wechat_channels`, `wechat_broadcasts`, `wechat_broadcast_recipients`; `channels` (kind `wechat`, one per channel row, external id the row id), `conversations`, `messages`, `contacts` (channel `wechat`, channel uid = OpenID), `wa_templates` (channel `wechat`, read); `wech_channel_lookup()` (SECURITY DEFINER). `wechat_flow_sessions` is declared and unused (flow hand-off blocked).
+`wechat_channels`, `wechat_broadcasts`, `wechat_broadcast_recipients`; `channels` (kind `wechat`, one per channel row, external id the row id), `conversations`, `messages`, `contacts` (channel `wechat`, channel uid = OpenID), `wa_templates` (channel `wechat`, read); `wech_channel_lookup()` (SECURITY DEFINER). `wechat_flow_sessions` was dropped by `20261216090000_drop_dormant_tables.sql` (Reference keeps these sessions in Node memory and never writes the table; flow state is `flow_runs`, TW-FLR-070 wontfix, TW-NODE-050; pending owner confirmation: punya).
 
 ## Queues and workers
 
@@ -52,7 +52,7 @@ All behind `@RequirePlanFeature('extra_channels')` except the two public routes.
 ## Shims, owners and blocked consumers
 
 - BLOCKED `TW-WECH-017` custom menu builder, `TW-WECH-018` follower insights: Reference pages not built yet (outside the first channel port).
-- BLOCKED `TW-WECH-019` Node flow bridge (`flow-send`, `flow-node`) and flow sessions: depends on the flow runtime and the node bridge.
+- BLOCKED `TW-WECH-019` Node flow bridge (`flow-send`, `flow-node`): depends on the flow runtime and the node bridge. Flow sessions need no table here (`wechat_flow_sessions` was dropped, see above).
 - The inbox's template picker lists WhatsApp templates only: no inbox screen sends a WeChat template message yet (the adapter accepts one).
 - Plan flags `access_wechat`, `wechat_broadcasts`, `wechat_channels_limit` and the platform switch `wechat_enabled` collapse into `extra_channels`; the cap and the switch are not enforced.
 

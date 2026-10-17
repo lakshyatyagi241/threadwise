@@ -1,3 +1,5 @@
+import type { JobsOptions } from 'bullmq';
+
 /**
  * Every queue in the system, in one place.
  *
@@ -109,13 +111,30 @@ export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
 /**
  * Default job options.
  *
- * `removeOnComplete` is bounded rather than `true`: keeping the last few
- * thousand completions is what makes "did that campaign actually send?"
- * answerable at 2am, without letting Redis grow without limit.
+ * `removeOnComplete` is bounded rather than `true`: keeping the last thousand
+ * completions for an hour is what makes "did that campaign actually send?"
+ * answerable at 2am, without letting Redis grow without limit. Redis here is
+ * a small `noeviction` instance and every queue keeps its own history, so the
+ * numbers are per queue and small: a failed job keeps its data for three days,
+ * enough to debug over a weekend.
  */
 export const DEFAULT_JOB_OPTIONS = {
   attempts: 5,
   backoff: { type: 'exponential' as const, delay: 2_000 },
-  removeOnComplete: { count: 5_000, age: 24 * 3600 },
-  removeOnFail: { count: 20_000, age: 7 * 24 * 3600 },
+  removeOnComplete: { count: 1_000, age: 3_600 },
+  removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
 };
+
+/**
+ * Queues whose job data is personal (message text, phone numbers, the raw webhook body) drop a job the moment it completes. A failed
+ * job still keeps its data for `removeOnFail`, which is the point of keeping failures.
+ */
+const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, { removeOnComplete: true }>> = {
+  [QUEUES.WABA_INGEST]: { removeOnComplete: true },
+  [QUEUES.WEBHOOK_FORWARD]: { removeOnComplete: true },
+};
+
+/** The default job options of one queue. A queue-level setting replaces the module-level one whole, so this spreads the defaults. */
+export function jobOptionsFor(queue: QueueName): JobsOptions {
+  return { ...DEFAULT_JOB_OPTIONS, ...QUEUE_JOB_OPTIONS[queue] };
+}

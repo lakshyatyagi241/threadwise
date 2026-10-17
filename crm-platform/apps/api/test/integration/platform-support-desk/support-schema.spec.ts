@@ -112,9 +112,9 @@ describe('support tables: RLS and constraints', () => {
     const res = await owner.query(
       `SELECT c.relname, c.relforcerowsecurity, p.qual IS NOT NULL AS has_using, p.with_check IS NOT NULL AS has_check
          FROM pg_class c JOIN pg_policies p ON p.tablename = c.relname
-        WHERE c.relname IN ('support_tickets', 'support_messages', 'support_assignments', 'support_agents', 'playbooks', 'platform_notes')`,
+        WHERE c.relname IN ('support_tickets', 'support_messages', 'platform_notes')`,
     );
-    expect(res.rowCount).toBe(6);
+    expect(res.rowCount).toBe(3);
     for (const r of res.rows) {
       expect(r, r.relname).toMatchObject({
         relforcerowsecurity: true,

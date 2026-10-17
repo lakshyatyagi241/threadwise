@@ -11,6 +11,10 @@
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
   },
+  "an_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
   "audit_log_pkey": {
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
@@ -88,10 +92,6 @@
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   },
   "uq_crm_briefs_public_token": {
-    "category": "secret-or-token",
-    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
-  },
-  "uq_google_form_sessions_webhook_token": {
     "category": "secret-or-token",
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   },

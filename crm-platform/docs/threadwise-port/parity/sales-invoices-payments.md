@@ -132,6 +132,12 @@ schedule (run now, pause, delete; a start date years back is `REC_START_TOO_OLD`
 invoice 4 of 10, 7 more refused `SO_QUANTITY_EXCEEDS`, the rest, fulfil, the order closes; a draft quote is refused). 550 malformed
 bodies across 25 write routes gave no 5xx. The 171 end-to-end and 70 integration tests of the two modules pass.
 
+## Deviations (schema; intended)
+
+| Where                    | Reference                                                                                                    | Here                                                                                                                                                                                         | Reason                                                                                                             |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `invoice_webhook_events` | Platform-wide ledger of store webhook delivery ids (`handleWebhookOrder`), no workspace column; 0 rows there | table dropped by migration `20261216090000_drop_dormant_tables.sql`; the delivery ledger and the auto-invoice hand-off are `ecom_invoice_handoffs` (tenant data, shopify-woocommerce module) | nothing writes the old table; the replacement is tenant scoped. Approved by the project owner (Lakshya) 2026-10-16 |
+
 ## Decisions for the owner
 
 The table in [sales-proposals-estimates.md](sales-proposals-estimates.md#decisions-for-the-owner) covers both files. The ones that

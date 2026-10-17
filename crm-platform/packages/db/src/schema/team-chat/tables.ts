@@ -237,39 +237,6 @@ export const teamChatReactions = pgTable(
 export type TeamChatReactionsRow = typeof teamChatReactions.$inferSelect;
 export type NewTeamChatReactionsRow = typeof teamChatReactions.$inferInsert;
 
-export const teamChatReads = pgTable(
-  'team_chat_reads',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    userId: idColumn('user_id'),
-    lastReadMessageId: idColumn('last_read_message_id').notNull().default(0),
-    lastReadAt: timestamp('last_read_at', { withTimezone: true }),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_team_chat_reads_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_team_chat_reads_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    unique('uq_team_chat_reads_user_id').on(t.orgId, t.userId),
-    foreignKey({
-      name: 'fk_team_chat_reads_user_id',
-      columns: [t.orgId, t.userId],
-      foreignColumns: [users.orgId, users.id],
-    }).onDelete('cascade'),
-  ],
-);
-
-export type TeamChatReadsRow = typeof teamChatReads.$inferSelect;
-export type NewTeamChatReadsRow = typeof teamChatReads.$inferInsert;
-
 export const teamChatChannelMembers = pgTable(
   'team_chat_channel_members',
   {

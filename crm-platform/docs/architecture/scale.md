@@ -40,7 +40,9 @@ CREATE TABLE event_outbox (
 
 **Retention is dropping a partition**, not deleting rows. `DROP TABLE
 messages_202601` is instant; `DELETE FROM messages WHERE created_at < ...` is
-hours of I/O plus bloat plus a vacuum.
+hours of I/O plus bloat plus a vacuum. This is built for the streams registered
+in the retention policy list (the analytics event store `an_events` today): see
+"Partition retention" below. A stream that is not registered is never dropped.
 
 ### Hash by `org_id` (64 buckets) — entities
 
@@ -73,6 +75,16 @@ any table where the count is non-zero.
 
 A non-empty default partition also blocks creating new partitions for the
 ranges it covers, so it must be drained, not ignored.
+
+## Partition retention
+
+`RetentionWorker` (worker process, daily 03:50, off until `RETENTION_ENABLED=true`) closes the loop that maintenance opens: a month whose
+end is older than the stream's live window (`an_events`: 60 days) is exported to the cold archive as one gzipped NDJSON object per
+workspace, read back and checked against a manifest (rows and SHA-256 per workspace), and only then dropped. The drop goes through
+`drop_closed_partition()`, another `SECURITY DEFINER` function: it refuses any stream not named in `archivable_streams()`, any month that
+closed less than seven days ago, and the default partition, and it waits at most three seconds for its lock. The job locks the partition
+against writers and recounts it just before the drop, so a row that arrives after the export blocks the drop and the month is exported
+again the next night. Rows in a `_default` partition are never archived or dropped. Operations: [runbooks/data-retention.md](../runbooks/data-retention.md).
 
 ## Hot-row avoidance
 
@@ -127,9 +139,14 @@ centre.
 
 ## Where this design stops
 
-Analytics. Reporting over 25M rows/month does not belong on the OLTP database
-regardless of how it is indexed. The plan is CDC into ClickHouse, with
-`metric_counters` covering the sub-5-second dashboard numbers in the meantime.
+Live analytics queries. Reporting over 25M rows/month does not belong on the OLTP
+database regardless of how it is indexed. The decision (2026-10-16) is an event
+stream with incremental rollups in the same PostgreSQL, not CDC into ClickHouse
+and not `metric_counters`: see [analytics.md](analytics.md) and
+[the design](../superpowers/specs/2026-10-16-event-based-analytics-design.md).
+ClickHouse stays a later swap behind `AnalyticsQueryService` if Postgres stops
+being enough. The sub-5-second numbers (unread badges, wallet balance) remain
+live counters.
 
 ## Ceilings to watch
 

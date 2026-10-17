@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { QUEUES, DEFAULT_JOB_OPTIONS } from '../../../src/infra/queue/queues';
+import { QUEUES, DEFAULT_JOB_OPTIONS, jobOptionsFor } from '../../../src/infra/queue/queues';
 
 /**
  * Boundary matrices (QA task 7), the parts that need no database: they read the source and check that the pieces at the
@@ -128,6 +128,30 @@ describe('default job options', () => {
       count: expect.any(Number),
       age: expect.any(Number),
     });
+  });
+
+  it('keeps Redis history small: an hour of completions, three days of failures', () => {
+    // Redis runs as a small noeviction instance and every queue keeps its own history (cost hygiene, event-based analytics plan B7).
+    expect(DEFAULT_JOB_OPTIONS.removeOnComplete.count).toBeLessThanOrEqual(1_000);
+    expect(DEFAULT_JOB_OPTIONS.removeOnComplete.age).toBeLessThanOrEqual(3_600);
+    expect(DEFAULT_JOB_OPTIONS.removeOnFail.count).toBeLessThanOrEqual(2_000);
+    expect(DEFAULT_JOB_OPTIONS.removeOnFail.age).toBeLessThanOrEqual(3 * 24 * 3_600);
+  });
+
+  it('drops a completed job at once on the queues that carry message text, phone numbers or raw webhook bodies', () => {
+    for (const queue of [QUEUES.WABA_INGEST, QUEUES.WEBHOOK_FORWARD]) {
+      expect(jobOptionsFor(queue).removeOnComplete, queue).toBe(true);
+      // Failures stay, bounded, so a dead job can still be debugged.
+      expect(jobOptionsFor(queue).removeOnFail, queue).toEqual(DEFAULT_JOB_OPTIONS.removeOnFail);
+      expect(jobOptionsFor(queue).attempts, queue).toBe(DEFAULT_JOB_OPTIONS.attempts);
+    }
+  });
+
+  it('gives every other queue exactly the defaults', () => {
+    for (const queue of Object.values(QUEUES)) {
+      if (queue === QUEUES.WABA_INGEST || queue === QUEUES.WEBHOOK_FORWARD) continue;
+      expect(jobOptionsFor(queue), queue).toEqual(DEFAULT_JOB_OPTIONS);
+    }
   });
 });
 

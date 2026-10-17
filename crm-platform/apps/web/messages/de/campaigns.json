@@ -1210,7 +1210,12 @@
         "pickSender": "Nummer auswählen",
         "classicOption": "klassischer Builder",
         "buildWithAi": "Mit KI erstellen",
-        "aiNote": "Erstellen Sie mit KI den Entwurf einer neuen Vorlage. Sie prüfen ihn auf der Vorlagenseite; anschließend prüft Meta die Vorlage, bevor sie gesendet werden kann. Kommen Sie nach der Genehmigung zurück und wählen Sie sie aus."
+        "aiNote": "Erstellen Sie mit KI den Entwurf einer neuen Vorlage. Sie prüfen ihn auf der Vorlagenseite; anschließend prüft Meta die Vorlage, bevor sie gesendet werden kann. Kommen Sie nach der Genehmigung zurück und wählen Sie sie aus.",
+        "shareToggle": "Diesen Versand auf mehrere Nummern aufteilen",
+        "shareHint": "Wählen Sie die Absendernummern aus und geben Sie jeder einen Anteil. Die Zielgruppe wird nach diesen Anteilen aufgeteilt, und jeder Kontakt erhält die Nachricht von genau einer Nummer. Ein leerer Anteil oder 0 zählt als 1.",
+        "shareWeight": "Anteil",
+        "shareWeightLabel": "Anteil von {name}",
+        "shareKeepOne": "Mindestens eine Nummer bleibt ausgewählt."
       },
       "audience": {
         "selectionTitle": "Im Contact Hub ausgewählt",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Ihrem Wallet belastet: {amount}",
         "sumFollowUps": "Folgenachrichten",
         "sumSequence": "Wird im Wechsel gesendet",
-        "sumPrevious": "Frühere Sendungen: {names} ({outcome})"
+        "sumPrevious": "Frühere Sendungen: {names} ({outcome})",
+        "sumSplit": "Aufteilung auf Nummern",
+        "sumSplitCount": "{count, plural, one {# Empfänger} other {# Empfänger}} ({percent}%)",
+        "sumSplitPercent": "{percent}% der Zielgruppe"
       },
       "test": {
         "title": "Eine WhatsApp-Testnachricht senden",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# Person hat einen Link angeklickt} other {# Personen haben einen Link angeklickt}}",
         "failed": "{count, plural, one {# Person, bei der es fehlschlug} other {# Personen, bei denen es fehlschlug}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Von jeder Nummer gesendet",
+      "hint": "Dieser Versand wurde auf mehrere Nummern aufgeteilt. Jede Zeile ist eine Nummer mit den Empfängern, die sie erhalten hat.",
+      "cols": {
+        "number": "Nummer",
+        "recipients": "Empfänger",
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "failed": "Fehlgeschlagen"
+      },
+      "removed": "(eine entfernte Nummer)"
     }
   }
 }

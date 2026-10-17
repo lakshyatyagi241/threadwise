@@ -24,7 +24,6 @@ export const WIPE_TABLES: readonly string[] = [
   'scheduled_message_contacts',
   'scheduled_messages',
   'flow_retry_logs',
-  'flow_connected_devices',
   'flow_subscribers',
   'flows',
   'keyword_reply_logs',

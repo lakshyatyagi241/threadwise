@@ -1,5 +1,9 @@
 # Database column analysis
 
+> **Note, 2026-10-16.** Migration `packages/db/migrations/20261216090000_drop_dormant_tables.sql` dropped 15 tables that this analysis lists as dormant or unused: `line_flow_sessions`, `telegram_flow_sessions`, `viber_flow_sessions`, `wechat_flow_sessions`, `sla_breaches`, `support_agents`, `support_assignments`, `team_chat_reads`, `google_form_sessions`, `invoice_webhook_events`, `chat_templates`, `flow_connected_devices`, `playbooks`, `package_features`, `packages` (the reason for each is in the migration header and in `docs/threadwise-port/schema/README.md`, "Dropped after the port"). The per-domain files and `all-columns.csv` below are generated from the schema as it stood at commit `21ffc10dc` and still list them; they were not regenerated. The columns `subscriptions.package_id` and `orders.package_id` stay (unused, no foreign key any more).
+>
+> The earlier claim in this README that the line, telegram, viber and wechat `*_broadcast_recipients` tables are dormant is stale: each has a writer (`apps/api/src/modules/channel-*/*-broadcasts.repository.ts`) and a queue processor (`*-broadcast.processor.ts`), so they are **not** dropped. The same holds for the matching `*_broadcasts` tables.
+
 Every table and column in the Threadwise Postgres schema: what it is for, what can go in it, best practice, which features use it, and whether anything in the code actually uses it.
 
 **Coverage: 374 tables, 6140 columns, 0 missing** (checked by script against `pg_catalog` after applying all 332 migrations in `packages/db/migrations` to a clean database, at commit `21ffc10dc`). Partition children are folded into their parent (`event_outbox`, `audit_log`, ...).
@@ -35,10 +39,10 @@ Every table and column in the Threadwise Postgres schema: what it is for, what c
 
 ### Tables with no production code at all (drop or decide)
 
-- `packages`, `package_features` — replaced by `plans`; `subscriptions.package_id` and `orders.package_id` still point at the dead `packages` (never written).
-- `invoice_webhook_events` — superseded by `ecom_invoice_handoffs`; also has no `org_id`.
-- `telegram_flow_sessions`, `wechat_flow_sessions`, `line_flow_sessions` — `flow_runs` serves every channel; do not build them. `flow_connected_devices` dead in Reference too.
-- `chat_templates`, `team_chat_reads`, `sla_breaches` (dup of `support_sla_breaches`), `playbooks`, `support_agents`, `support_assignments` — replaced or never written.
+- `packages`, `package_features` — replaced by `plans`; dropped by `20261216090000_drop_dormant_tables.sql`. `subscriptions.package_id` and `orders.package_id` remain as unused columns with no foreign key (never written).
+- `invoice_webhook_events` — superseded by `ecom_invoice_handoffs`; dropped by `20261216090000_drop_dormant_tables.sql`.
+- `telegram_flow_sessions`, `wechat_flow_sessions`, `line_flow_sessions` (and `viber_flow_sessions`) — `flow_runs` serves every channel; dropped by `20261216090000_drop_dormant_tables.sql`. `flow_connected_devices` dead in Reference too; dropped by the same migration.
+- `chat_templates`, `team_chat_reads`, `sla_breaches` (dup of `support_sla_breaches`), `playbooks`, `support_agents`, `support_assignments` — replaced or never written; dropped by `20261216090000_drop_dormant_tables.sql`. `google_form_sessions` is dropped by it too (the waiting flow run is the session).
 - `outbound_webhooks` — only a plan-limit COUNT uses it; the port uses `webhooks`. `notifications` overlaps `inbox_notifications`: merge or drop.
 - `workspace_email_accounts` — legacy; `mail_mailboxes` is the chosen design.
 
@@ -55,7 +59,7 @@ Every table and column in the Threadwise Postgres schema: what it is for, what c
 
 - Money stored two ways: `numeric` major units (`wallets`, `wallet_transactions`, `orders`, `coupons`, `meta_campaigns`) vs `bigint` minor units (`payments`, `usage_charges`, `credit_packages`, `deals`). Pick minor units.
 - Status / type / provider columns as free text with no CHECK or FK: most of Shopify/Woo, TikTok, Viber, `wa_forms`, `wa_chat_links`, `wa_orders`, `wa_templates`, `subscriptions`, `organizations.status/plan`, `event_outbox.status`, many more.
-- Secrets in plaintext: `incoming_webhooks.token`, `google_form_sessions.webhook_token`, `wa_provider_configs.meta_json` (`dlr_secret`), `line_channels.webhook_token`, Meta ad tokens in `meta_campaigns`.
+- Secrets in plaintext: `incoming_webhooks.token`, `google_form_sessions.webhook_token` (table since dropped), `wa_provider_configs.meta_json` (`dlr_secret`), `line_channels.webhook_token`, Meta ad tokens in `meta_campaigns`.
 - Binary files in Postgres `bytea` (`team_chat_attachment_blobs`, `contact_exports`, up to 20 MB each).
 - JSON in `text` columns (`admin_ai_keys.extra_config`, `usage_charges.meta`, several `workspace_settings` fields): use `jsonb`.
 - Nullable column inside a unique key (`user_id` in several team-chat and `agent_statuses` keys): NULLs never collide.
@@ -65,13 +69,13 @@ Every table and column in the Threadwise Postgres schema: what it is for, what c
 
 ### Unbuilt clusters (PLANNED, not waste)
 
-HubSpot / Slack / Trello / incoming webhooks (INTG), LINE, Telegram, WeChat, Viber, TikTok channels, Meta Ads, AI call assistants and call logs, AI copilot / lead finder, auto-reply keywords, forms-links-groups authoring, projects, Google-form sessions. Their tables exist because the Reference data model was ported first.
+HubSpot / Slack / Trello / incoming webhooks (INTG), LINE, Telegram, WeChat, Viber, TikTok channels, Meta Ads, AI call assistants and call logs, AI copilot / lead finder, auto-reply keywords, forms-links-groups authoring, projects (Google-form sessions are not one of them any more: `google_form_sessions` was dropped, the waiting flow run is the session). Their tables exist because the Reference data model was ported first.
 
 ## Dormant tables (scan found no production reference to any column)
 
 `ai_call_assistant_tools`, `ai_crm_actions`, `ai_voice_usage_daily`, `chat_templates`, `crm_briefs`, `hubspot_integration_logs`, `invoice_number_sequences`, `invoice_webhook_events`, `line_broadcast_recipients`, `line_broadcasts`, `line_flow_sessions`, `line_rich_menus`, `meta_campaigns`, `package_features`, `sla_breaches`, `slack_integration_logs`, `support_agents`, `support_assignments`, `team_chat_reads`, `telegram_accounts`, `telegram_flow_sessions`, `tiktok_posts`, `tiktok_shops`, `trello_integration_logs`, `user_device_tokens`, `viber_broadcast_recipients`, `viber_broadcasts`, `viber_flow_sessions`, `wechat_broadcast_recipients`, `wechat_broadcasts`, `wechat_flow_sessions`, `workspace_preset_baseline`
 
-(32 tables; some are PLANNED, see their notes.)
+(32 tables; some are PLANNED, see their notes. Update 2026-10-16: 11 of them are dropped by `20261216090000_drop_dormant_tables.sql` (`chat_templates`, `invoice_webhook_events`, `line_flow_sessions`, `package_features`, `sla_breaches`, `support_agents`, `support_assignments`, `team_chat_reads`, `telegram_flow_sessions`, `viber_flow_sessions`, `wechat_flow_sessions`); the six line, viber and wechat `*_broadcasts` and `*_broadcast_recipients` tables are not dormant, they have writers and queue processors. The rest stay, blocked on their feature: see "Looked dormant but kept" in `docs/threadwise-port/schema/README.md`.)
 
 ## Columns to review for removal (usage UNUSED and useful NO or MAYBE)
 

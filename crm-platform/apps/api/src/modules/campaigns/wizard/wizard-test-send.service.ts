@@ -6,6 +6,7 @@ import {
   ERROR_CODES,
   WIZARD_TEST_MAX_RECIPIENTS,
   parseTestRecipients,
+  wizardSenderPicks,
   wizardStepIssues,
   type WizardTestLog,
   type WizardTestResult,
@@ -223,7 +224,7 @@ export class WizardTestSendService {
           issues.map((i) => ({ path: i.path, message: i.code })),
         );
       }
-      const via = await this.runs.sender(tx, orgId, template, draft.senderKey);
+      const via = await this.runs.sender(tx, orgId, template, wizardSenderPicks(draft)[0] ?? null);
       const dispatch = await this.senders.resolveForDispatch(tx, orgId, {
         provider: via.provider,
         deviceId: via.deviceId,

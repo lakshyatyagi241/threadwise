@@ -1210,7 +1210,12 @@
         "pickSender": "番号を選択",
         "classicOption": "クラシックビルダー",
         "buildWithAi": "AIで作成",
-        "aiNote": "AIで新しいテンプレートの下書きを作成します。内容はテンプレートのページで確認できます。送信前にMetaの審査があるため、承認されたら戻って選択してください。"
+        "aiNote": "AIで新しいテンプレートの下書きを作成します。内容はテンプレートのページで確認できます。送信前にMetaの審査があるため、承認されたら戻って選択してください。",
+        "shareToggle": "この配信を複数の番号に分ける",
+        "shareHint": "送信元にする番号を選び、それぞれにシェアを設定します。オーディエンスはそのシェアで分けられ、各連絡先には1つの番号からだけメッセージが届きます。シェアが空または0の場合は1として扱われます。",
+        "shareWeight": "シェア",
+        "shareWeightLabel": "{name}のシェア",
+        "shareKeepOne": "少なくとも1つの番号を選択したままにしてください。"
       },
       "audience": {
         "selectionTitle": "連絡先ハブで選択済み",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "ウォレットから請求される金額: {amount}",
         "sumFollowUps": "フォローアップ",
         "sumSequence": "順番に送信",
-        "sumPrevious": "過去の配信: {names}({outcome})"
+        "sumPrevious": "過去の配信: {names}({outcome})",
+        "sumSplit": "番号ごとの振り分け",
+        "sumSplitCount": "{count, plural, other {#件の宛先}} ({percent}%)",
+        "sumSplitPercent": "オーディエンスの{percent}%"
       },
       "test": {
         "title": "WhatsAppテストメッセージを送信",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, other {#人がリンクをクリック}}",
         "failed": "{count, plural, other {#人に配信失敗}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "番号ごとの送信状況",
+      "hint": "この配信は複数の番号に分けられました。各行は1つの番号と、その番号に割り当てられた宛先です。",
+      "cols": {
+        "number": "番号",
+        "recipients": "宛先",
+        "sent": "送信済み",
+        "delivered": "配信済み",
+        "failed": "失敗"
+      },
+      "removed": "(削除された番号)"
     }
   }
 }

@@ -18,6 +18,9 @@ export interface ButtonRow {
 export interface BuilderForm {
   name: string;
   senderKey: string;
+  /** The numbers a send is shared across when more than one is ticked (empty: the one number in `senderKey`), and their share weights. */
+  senderKeys: string[];
+  senderShare: Record<string, number>;
   type: CampaignType;
   customMessage: string;
   customMessageB: string;
@@ -62,6 +65,8 @@ export interface BuilderForm {
 export const EMPTY_FORM: BuilderForm = {
   name: '',
   senderKey: '',
+  senderKeys: [],
+  senderShare: {},
   type: 'text',
   customMessage: '',
   customMessageB: '',
@@ -151,6 +156,8 @@ export function fromConfig(c: CampaignConfig, zone: string): BuilderForm {
     ...EMPTY_FORM,
     name: c.name,
     senderKey: c.senderKey ?? '',
+    senderKeys: c.senderKeys ?? [],
+    senderShare: c.senderShare ?? {},
     type: c.type,
     customMessage: c.customMessage ?? '',
     customMessageB: c.customMessageB ?? '',
@@ -208,6 +215,10 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
   return {
     name: f.name.trim(),
     senderKey: f.senderKey || null,
+    // Sharing needs a typed or template message from phone numbers: a mailbox or a flow has no number to share.
+    ...(f.senderKeys.length > 1 && !email && f.type !== 'flow'
+      ? { senderKeys: f.senderKeys, senderShare: f.senderShare }
+      : {}),
     type: f.type,
     status: opts.draft ? 'draft' : null,
     abTesting: email ? false : f.abTesting,

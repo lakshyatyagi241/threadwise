@@ -1210,7 +1210,12 @@
         "pickSender": "Bir numara seçin",
         "classicOption": "klasik oluşturucu",
         "buildWithAi": "Yapay zekayla oluştur",
-        "aiNote": "Yapay zekayla yeni bir şablon taslağı hazırlayın. Şablon sayfasında inceleyin; gönderilebilmesi için önce Meta onaylar, bu yüzden onaylandıktan sonra geri gelip seçin."
+        "aiNote": "Yapay zekayla yeni bir şablon taslağı hazırlayın. Şablon sayfasında inceleyin; gönderilebilmesi için önce Meta onaylar, bu yüzden onaylandıktan sonra geri gelip seçin.",
+        "shareToggle": "Bu gönderimi birden çok numara arasında paylaştır",
+        "shareHint": "Gönderilecek numaraları işaretleyin ve her birine bir pay verin. Kitle bu paylara göre bölünür ve her kişiye mesaj yalnızca tek bir numaradan gönderilir. Boş veya 0 olan pay 1 sayılır.",
+        "shareWeight": "Pay",
+        "shareWeightLabel": "{name} payı",
+        "shareKeepOne": "En az bir numara işaretli kalmalı."
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}",
         "sumFollowUps": "Takip mesajları",
         "sumSequence": "Sırayla gönderilir",
-        "sumPrevious": "Önceki gönderimler: {names} ({outcome})"
+        "sumPrevious": "Önceki gönderimler: {names} ({outcome})",
+        "sumSplit": "Numaralara göre dağılım",
+        "sumSplitCount": "{count, plural, one {# alıcı} other {# alıcı}} (%{percent})",
+        "sumSplitPercent": "Kitlenin %{percent}'i"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# kişi bağlantıya tıkladı} other {# kişi bağlantıya tıkladı}}",
         "failed": "{count, plural, one {# kişi için başarısız oldu} other {# kişi için başarısız oldu}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Her numaradan gönderilen",
+      "hint": "Bu gönderim birden çok numara arasında paylaştırıldı. Her satır bir numara ve ona verilen alıcılardır.",
+      "cols": {
+        "number": "Numara",
+        "recipients": "Alıcı",
+        "sent": "Gönderildi",
+        "delivered": "İletildi",
+        "failed": "Başarısız"
+      },
+      "removed": "(kaldırılmış bir numara)"
     }
   }
 }

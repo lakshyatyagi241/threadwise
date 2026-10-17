@@ -198,7 +198,7 @@ function Builder({
       if (JSON.stringify({ ...stored, name: '', senderKey: '' }) === pristine)
         onGuided(key, stored.name);
       else setSwitchTo(key);
-    } else patch({ senderKey: key });
+    } else patch({ senderKey: key, senderKeys: [], senderShare: {} });
   };
   const minDate = useMemo(
     () => defaultSchedule(new Date(), stored.timezone).sendDate,

@@ -384,54 +384,82 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-BCAST-001 | todo |  |  |
-| TW-BCAST-002 | todo |  |  |
-| TW-BCAST-003 | todo |  |  |
-| TW-BCAST-004 | todo |  |  |
-| TW-BCAST-005 | todo |  |  |
-| TW-BCAST-006 | todo |  |  |
-| TW-BCAST-007 | todo |  |  |
-| TW-BCAST-008 | todo |  |  |
-| TW-BCAST-009 | todo |  |  |
-| TW-BCAST-010 | todo |  |  |
-| TW-BCAST-011 | todo |  |  |
-| TW-BCAST-012 | todo |  |  |
-| TW-BCAST-013 | todo |  |  |
-| TW-BCAST-014 | todo |  |  |
-| TW-BCAST-015 | todo |  |  |
-| TW-BCAST-016 | todo |  |  |
-| TW-BCAST-017 | todo |  |  |
-| TW-BCAST-018 | todo |  |  |
-| TW-BCAST-019 | todo |  |  |
-| TW-BCAST-020 | todo |  |  |
-| TW-BCAST-021 | todo |  |  |
-| TW-BCAST-022 | todo |  |  |
-| TW-BCAST-023 | todo |  |  |
-| TW-BCAST-024 | todo |  |  |
-| TW-BCAST-025 | todo |  |  |
-| TW-BCAST-026 | todo |  |  |
-| TW-BCAST-027 | todo |  |  |
-| TW-BCAST-028 | todo |  |  |
-| TW-BCAST-029 | todo |  |  |
-| TW-BCAST-030 | todo |  |  |
-| TW-BCAST-031 | todo |  |  |
-| TW-BCAST-032 | todo |  |  |
-| TW-BCAST-033 | todo |  |  |
-| TW-BCAST-034 | todo |  |  |
-| TW-BCAST-035 | todo |  |  |
-| TW-BCAST-036 | todo |  |  |
-| TW-BCAST-037 | todo |  |  |
-| TW-BCAST-038 | todo |  |  |
-| TW-BCAST-039 | todo |  |  |
-| TW-BCAST-040 | todo |  |  |
-| TW-BCAST-041 | todo |  |  |
-| TW-BCAST-042 | todo |  |  |
-| TW-BCAST-043 | todo |  |  |
+| TW-BCAST-001 | done |  | built; not parity-verified |
+| TW-BCAST-002 | done |  | built; not parity-verified |
+| TW-BCAST-003 | done |  | built; not parity-verified |
+| TW-BCAST-004 | done |  | built; not parity-verified |
+| TW-BCAST-005 | done |  | built; not parity-verified |
+| TW-BCAST-006 | done |  | built; not parity-verified |
+| TW-BCAST-007 | done |  | built; not parity-verified |
+| TW-BCAST-008 | done |  | built; not parity-verified |
+| TW-BCAST-009 | done |  | built; not parity-verified |
+| TW-BCAST-010 | done |  | built; not parity-verified |
+| TW-BCAST-011 | done |  | built; not parity-verified |
+| TW-BCAST-012 | done |  | built; not parity-verified |
+| TW-BCAST-013 | done |  | built; not parity-verified |
+| TW-BCAST-014 | done |  | built; not parity-verified |
+| TW-BCAST-015 | done |  | built; not parity-verified |
+| TW-BCAST-016 | done |  | built; not parity-verified |
+| TW-BCAST-017 | done |  | built; not parity-verified |
+| TW-BCAST-018 | done |  | built; not parity-verified |
+| TW-BCAST-019 | done |  | built; not parity-verified |
+| TW-BCAST-020 | done |  | built; not parity-verified |
+| TW-BCAST-021 | done |  | built; not parity-verified |
+| TW-BCAST-022 | done |  | built; not parity-verified |
+| TW-BCAST-023 | done |  | built; not parity-verified |
+| TW-BCAST-024 | done |  | built; not parity-verified |
+| TW-BCAST-025 | done |  | built; not parity-verified |
+| TW-BCAST-026 | done |  | built; not parity-verified |
+| TW-BCAST-027 | done |  | built; not parity-verified |
+| TW-BCAST-028 | done |  | built; not parity-verified |
+| TW-BCAST-029 | done |  | built; not parity-verified |
+| TW-BCAST-030 | done |  | built; not parity-verified |
+| TW-BCAST-031 | done |  | built; not parity-verified |
+| TW-BCAST-032 | done |  | built; not parity-verified |
+| TW-BCAST-033 | done |  | built; not parity-verified |
+| TW-BCAST-034 | done |  | built; not parity-verified |
+| TW-BCAST-035 | done |  | built; not parity-verified |
+| TW-BCAST-036 | done |  | built; not parity-verified |
+| TW-BCAST-037 | done |  | built; not parity-verified |
+| TW-BCAST-038 | done |  | built; not parity-verified |
+| TW-BCAST-039 | done |  | built; not parity-verified |
+| TW-BCAST-040 | done |  | built; not parity-verified |
+| TW-BCAST-041 | done |  | built; not parity-verified |
+| TW-BCAST-042 | done |  | built; not parity-verified |
+| TW-BCAST-043 | done |  | built; not parity-verified |
 
 ## campaigns (camp)
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
+| TW-CAMP-001 | done |  | built; not parity-verified |
+| TW-CAMP-002 | done |  | built; not parity-verified |
+| TW-CAMP-003 | done |  | built; not parity-verified |
+| TW-CAMP-004 | done |  | built; not parity-verified |
+| TW-CAMP-005 | done |  | built; not parity-verified |
+| TW-CAMP-006 | done |  | built; not parity-verified |
+| TW-CAMP-007 | done |  | built; not parity-verified |
+| TW-CAMP-008 | done |  | built; not parity-verified |
+| TW-CAMP-009 | done |  | built; not parity-verified |
+| TW-CAMP-010 | done |  | built; not parity-verified |
+| TW-CAMP-011 | done |  | built; not parity-verified |
+| TW-CAMP-012 | done |  | built; not parity-verified |
+| TW-CAMP-013 | done |  | built; not parity-verified |
+| TW-CAMP-014 | done |  | built; not parity-verified |
+| TW-CAMP-015 | done |  | built; not parity-verified |
+| TW-CAMP-016 | done |  | built; not parity-verified |
+| TW-CAMP-017 | done |  | built; not parity-verified |
+| TW-CAMP-018 | done |  | built; not parity-verified |
+| TW-CAMP-019 | done |  | built; not parity-verified |
+| TW-CAMP-020 | done |  | built; not parity-verified |
+| TW-CAMP-021 | done |  | built; not parity-verified |
+| TW-CAMP-022 | done |  | built; not parity-verified |
+| TW-CAMP-023 | done |  | built; not parity-verified |
+| TW-CAMP-024 | done |  | built; not parity-verified |
+| TW-CAMP-025 | done |  | built; not parity-verified |
+| TW-CAMP-026 | done |  | built; not parity-verified |
+| TW-CAMP-027 | done |  | built; not parity-verified |
+| TW-CAMP-028 | done |  | built; not parity-verified |
 | TW-CAMP-029 | done |  | ADDITION (not in Reference): Create-broadcast wizard shell, draft, resume. api+web+e2e on akshay/campaigns/broadcast-wizard; not parity-checked against a Reference twin (none exists) |
 | TW-CAMP-030 | done |  | ADDITION: audience groups+segments+rules, count, exclusions |
 | TW-CAMP-031 | done |  | ADDITION: credit check, variable mapping, sample messages |
@@ -611,7 +639,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-075 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-076 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-077 | done |  | owned by FLR, built there (TW-FLR-052..058) |
-| TW-FLB-078 | wontfix |  | dead code in Reference: table kept, no screen or writer |
+| TW-FLB-078 | wontfix |  | dead code in Reference: no screen or writer; the table flow_connected_devices was dropped by 20261216090000_drop_dormant_tables.sql |
 | TW-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
 | TW-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
 | TW-FLB-081 | done |  | addition beyond Reference (owner request): Ask for file / image. Contracts, FLR executor, editor card/panel/form, test runner, en+ar; unit + API e2e (simulator channel, no real WhatsApp) |

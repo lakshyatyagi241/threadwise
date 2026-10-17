@@ -1,6 +1,6 @@
 'use client';
 
-import type { WizardDraft } from '@crm/contracts';
+import { wizardSenderPicks, type WizardDraft } from '@crm/contracts';
 import type { WizardAction } from '../lib/state';
 import type { StepIssue } from '../lib/issues';
 import { useBuilder } from '../../api/campaigns';
@@ -74,7 +74,8 @@ export function StepSend({
       />
       <FollowUpsCard
         followUps={draft.followUps}
-        senderKey={draft.senderKey}
+        // Read and reply tracking is Meta's: any picked number that is not a Cloud API one turns the follow-ups off.
+        senderKey={wizardSenderPicks(draft).find((k) => !k.startsWith('waba:')) ?? draft.senderKey}
         templates={templates}
         flows={{
           data: builder.data?.flows,

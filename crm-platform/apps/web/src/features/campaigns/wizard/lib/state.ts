@@ -30,6 +30,11 @@ export type WizardAction =
   | { type: 'name'; name: string }
   | { type: 'template'; template: WizardTemplate | null }
   | { type: 'sender'; senderKey: string | null }
+  /**
+   * The numbers a send is shared across (TW-BCAST-006): the ticked keys in the order picked and each one's weight. One key, or none,
+   * is the ordinary single number (`senderKeys` is then empty); the first key is always the draft's `senderKey`.
+   */
+  | { type: 'senders'; keys: readonly string[]; share: Readonly<Record<string, number>> }
   | { type: 'audience'; patch: Partial<WizardAudience> }
   | { type: 'variable'; slot: string; source: WizardVariableSource | null }
   | { type: 'variables'; variables: WizardVariables }
@@ -110,9 +115,28 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
       };
     }
     case 'sender':
-      return action.senderKey === d.senderKey
+      // Picking one number in the list ends any sharing: the draft is back to a single number.
+      return action.senderKey === d.senderKey && d.senderKeys.length === 0
         ? state
-        : { ...state, draft: { ...d, senderKey: action.senderKey } };
+        : {
+            ...state,
+            draft: { ...d, senderKey: action.senderKey, senderKeys: [], senderShare: {} },
+          };
+    case 'senders': {
+      const keys = [...new Set(action.keys)];
+      const share = Object.fromEntries(
+        keys.flatMap((k) => (k in action.share ? [[k, action.share[k]!]] : [])),
+      );
+      return {
+        ...state,
+        draft: {
+          ...d,
+          senderKey: keys[0] ?? d.senderKey,
+          senderKeys: keys.length > 1 ? keys : [],
+          senderShare: keys.length > 1 ? share : {},
+        },
+      };
+    }
     case 'audience': {
       const patch =
         action.patch.previous === undefined

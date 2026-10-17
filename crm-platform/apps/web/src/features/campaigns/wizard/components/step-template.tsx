@@ -15,6 +15,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { stashAiDraft } from '@/features/message-templates/lib/ai-draft';
 import { SparkIcon } from '@/features/message-templates/components/icons';
 import { TemplateAiModal } from '@/features/message-templates/components/template-ai-modal';
+import { SenderSharePicker } from './sender-share-picker';
 import { SenderEmptyNotice, SenderLoading } from '../../components/sender-empty';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { TemplatePicker, type TemplatesQuery } from './template-picker';
@@ -40,6 +41,8 @@ export function StepTemplate({
   name,
   templateId,
   senderKey,
+  senderKeys = [],
+  senderShare = {},
   senders,
   hidden,
   templates,
@@ -48,10 +51,15 @@ export function StepTemplate({
   onName,
   onTemplate,
   onSender,
+  onSenders,
 }: {
   name: string;
   templateId: string | null;
   senderKey: string | null;
+  /** The numbers a send is shared across when more than one is ticked (empty: the single number in `senderKey`). */
+  senderKeys?: readonly string[];
+  /** Their share weights by key. */
+  senderShare?: Readonly<Record<string, number>>;
   /** The connected numbers (undefined while they load). */
   senders: readonly WizardSender[] | undefined;
   /** The numbers the server left out, so an empty list can say why. */
@@ -63,6 +71,8 @@ export function StepTemplate({
   onName: (name: string) => void;
   onTemplate: (t: WizardTemplate) => void;
   onSender: (key: string) => void;
+  /** Ticking numbers to share the send across (TW-BCAST-006); absent: the share picker is not offered. */
+  onSenders?: (keys: string[], share: Record<string, number>) => void;
 }) {
   const t = useTranslations('campaigns.wizard.template');
   const ti = useTranslations('campaigns.wizard.issues');
@@ -79,6 +89,11 @@ export function StepTemplate({
   const nameIssue = issueFor(issues, 'name');
   const tplIssue = issueFor(issues, 'templateId');
   const senderIssue = issueFor(issues, 'senderKey');
+  // Sharing needs two connected numbers (a personal number can share a send too). It is open when the draft already shares, or once the person asks for it.
+  const shareable = senders ?? [];
+  const [askedShare, setAskedShare] = useState(false);
+  const sharing = senderKeys.length > 1 || askedShare;
+  const ticked = senderKeys.length > 1 ? senderKeys : senderKey ? [senderKey] : [];
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <div className="min-w-0 space-y-5">
@@ -109,6 +124,14 @@ export function StepTemplate({
             <SenderLoading id="wizard-sender" />
           ) : senders.length === 0 ? (
             <SenderEmptyNotice id="wizard-sender" hidden={hidden} />
+          ) : sharing && onSenders ? (
+            <SenderSharePicker
+              senders={shareable}
+              keys={ticked}
+              share={senderShare}
+              disabled={disabled}
+              onChange={onSenders}
+            />
           ) : (
             <Select
               id="wizard-sender"
@@ -128,6 +151,22 @@ export function StepTemplate({
             </Select>
           )}
         </Field>
+        {onSenders && senders && shareable.length > 1 && (
+          <label className="-mt-3 flex cursor-pointer items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              className="size-4 accent-[var(--brand)]"
+              checked={sharing}
+              disabled={disabled}
+              onChange={(e) => {
+                setAskedShare(e.target.checked);
+                // Turning it off leaves the first ticked number as the one number.
+                if (!e.target.checked && senderKeys.length > 1) onSender(senderKeys[0]!);
+              }}
+            />
+            <span>{t('shareToggle')}</span>
+          </label>
+        )}
         <div className="space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-sm font-medium">{t('pickTitle')}</h2>

@@ -87,42 +87,6 @@ export const flows = pgTable(
 export type FlowsRow = typeof flows.$inferSelect;
 export type NewFlowsRow = typeof flows.$inferInsert;
 
-export const flowConnectedDevices = pgTable(
-  'flow_connected_devices',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    flowId: idColumn('flow_id').notNull(),
-    deviceNumber: text('device_number').notNull(),
-    deviceName: text('device_name'),
-    status: text('status').notNull().default('active'),
-    connectedAt: timestamp('connected_at', { withTimezone: true }),
-    lastActiveAt: timestamp('last_active_at', { withTimezone: true }),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_flow_connected_devices_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_flow_connected_devices_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_flow_connected_devices_flow_id',
-      columns: [t.orgId, t.flowId],
-      foreignColumns: [flows.orgId, flows.id],
-    }).onDelete('cascade'),
-    index('idx_flow_connected_devices_flow_id_status').on(t.orgId, t.flowId, t.status),
-  ],
-);
-
-export type FlowConnectedDevicesRow = typeof flowConnectedDevices.$inferSelect;
-export type NewFlowConnectedDevicesRow = typeof flowConnectedDevices.$inferInsert;
-
 export const flowTemplates = pgTable(
   'flow_templates',
   {

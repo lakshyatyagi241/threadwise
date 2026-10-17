@@ -4,6 +4,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import {
   WIZARD_CONTACT_FIELDS,
+  senderSplit,
+  wizardSenderPicks,
   type WizardAudienceCount,
   type WizardCreditCheck,
   type WizardDraft,
@@ -60,6 +62,7 @@ export function SummaryCard({
   draft,
   template,
   sender,
+  senders,
   sources,
   count,
   credit,
@@ -70,6 +73,8 @@ export function SummaryCard({
   draft: WizardDraft;
   template: WizardTemplate | null;
   sender: WizardSender | null;
+  /** Every connected number, to name the ones a shared send is split across. */
+  senders?: readonly WizardSender[] | undefined;
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: WizardCreditCheck | undefined;
@@ -93,6 +98,9 @@ export function SummaryCard({
   const sentence = all?.rules ? summarize(editorFromRules(all.rules), ctx) : '';
   const allWhat = [all?.search ? `"${all.search}"` : '', sentence].filter(Boolean).join(', ');
   const recipients = credit?.recipients ?? count?.recipients;
+  // A send shared across several numbers: how many recipients each gets (the same split the server cuts, so what is shown is what is sent).
+  const picks = wizardSenderPicks(draft);
+  const split = picks.length > 1 ? senderSplit(recipients ?? 0, picks, draft.senderShare) : null;
   const skipped = count ? count.optedOut + count.invalidNumber : null;
   const slots = template?.slots ?? [];
   const list = (xs: Array<{ name: string; found: boolean }>) =>
@@ -139,6 +147,25 @@ export function SummaryCard({
             <span className="text-muted-foreground">{t('none')}</span>
           )}
         </Row>
+        {split && (
+          <Row label={t('sumSplit')} step={1} onEdit={onEdit}>
+            <ul className="space-y-0.5" data-testid="sum-split">
+              {split.map((x) => {
+                const s = senders?.find((y) => y.key === x.key);
+                return (
+                  <li key={x.key}>
+                    <span className="font-medium">{s ? s.label : t('missingSource')}</span>
+                    {s?.phone ? ` (${s.phone})` : ''}
+                    {': '}
+                    {recipients === undefined
+                      ? t('sumSplitPercent', { percent: x.percent })
+                      : t('sumSplitCount', { count: x.count, percent: x.percent })}
+                  </li>
+                );
+              })}
+            </ul>
+          </Row>
+        )}
         <Row label={t('sumAudience')} step={2} onEdit={onEdit}>
           <ul className="space-y-0.5">
             {draft.audience.contactIds.length > 0 && (

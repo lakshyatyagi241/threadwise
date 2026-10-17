@@ -3,6 +3,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
+import { AnalyticsWorkerModule } from '../modules/analytics';
+import { DataRetentionWorkerModule } from '../modules/data-retention';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CallingVoiceWorkerModule } from '../modules/calling-voice';
@@ -82,6 +84,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
   imports: [
     ScheduleModule.forRoot(),
     AuthModule,
+    AnalyticsWorkerModule,
+    DataRetentionWorkerModule,
     ContactImportWorkerModule,
     TasksWorkerModule,
     BspBillingEngineWorkerModule,
