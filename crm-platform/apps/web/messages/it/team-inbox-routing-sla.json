@@ -451,13 +451,13 @@
       "to": "Alle",
       "problem": {
         "required": "Inserisci entrambi gli orari.",
-        "order": "L'orario di chiusura deve essere dopo quello di apertura."
+        "same": "L'orario di apertura e di chiusura devono essere diversi."
       },
-      "note": "Un giorno disattivato è chiuso tutto il giorno. Finché non salvi, l'area di lavoro risulta aperta sempre.",
       "cancel": "Annulla",
       "save": "Salva orari",
       "saved": "Orario di lavoro salvato",
-      "saveFailed": "Salvataggio non riuscito"
+      "saveFailed": "Salvataggio non riuscito",
+      "note": "Un giorno disattivato è chiuso tutto il giorno. Finché non salvi, lo spazio di lavoro risulta sempre aperto. Pause, orari notturni e festività si impostano in Impostazioni > Generale > Orari di lavoro."
     }
   }
 }

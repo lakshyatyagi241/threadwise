@@ -75,7 +75,7 @@ beforeEach(() => {
   HTMLDialogElement.prototype.close = function close() {
     this.removeAttribute('open');
   };
-  state.hours = { timezone: 'Asia/Kolkata', canEditTimezone: true, days: WEEK };
+  state.hours = { timezone: 'Asia/Kolkata', canEditTimezone: true, days: WEEK, holidays: [] };
   state.saved = [];
   host = document.createElement('div');
   document.body.appendChild(host);
@@ -125,11 +125,11 @@ describe('the business hours dialog', () => {
     expect((host.querySelector('#bh-sat-enabled') as HTMLInputElement).checked).toBe(false);
   });
 
-  it('refuses a closing time before the opening time and does not call the server', async () => {
+  it('refuses equal opening and closing times and does not call the server', async () => {
     await render();
-    setTime('bh-thu-to', '08:00');
+    setTime('bh-thu-to', '09:00');
     submit();
-    expect(host.textContent).toContain('The closing time must be after the opening time.');
+    expect(host.textContent).toContain('The opening and closing times must differ.');
     expect(state.saved).toEqual([]);
   });
 

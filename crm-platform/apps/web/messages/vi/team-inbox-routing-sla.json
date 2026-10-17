@@ -451,13 +451,13 @@
       "to": "Đến",
       "problem": {
         "required": "Nhập cả hai giờ.",
-        "order": "Giờ đóng cửa phải sau giờ mở cửa."
+        "same": "Giờ mở cửa và giờ đóng cửa phải khác nhau."
       },
-      "note": "Ngày đã tắt sẽ đóng cửa cả ngày. Cho đến khi bạn lưu, không gian làm việc được coi là mở cửa suốt thời gian.",
       "cancel": "Hủy",
       "save": "Lưu giờ",
       "saved": "Đã lưu giờ làm việc",
-      "saveFailed": "Lưu không thành công"
+      "saveFailed": "Lưu không thành công",
+      "note": "Ngày bị tắt sẽ đóng cửa cả ngày. Cho đến khi bạn lưu, không gian làm việc được tính là luôn mở cửa. Giờ nghỉ, giờ qua đêm và ngày lễ được đặt tại Cài đặt > Chung > Giờ làm việc."
     }
   }
 }

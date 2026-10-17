@@ -54,7 +54,7 @@ A rule needs at least one condition, unless it is the fallback.
 
 ## Business hours
 
-Select **Business hours** at the top of the page to set when your team is open. Each day of the week has a switch, an opening time and a closing time. A day that is switched off is closed all day. The closing time must be after the opening time, so a day cannot run past midnight. A shift that does needs two days.
+Select **Business hours** at the top of the page to set when your team is open. Each day of the week has a switch, an opening time and a closing time. A day that is switched off is closed all day. The closing time must differ from the opening time; a closing time before the opening time is a night shift that runs into the next morning. Breaks (more than one set of hours a day) and holidays are not shown here: set them under **Settings > General > Working hours**, which edits this same schedule, and they are kept when you save here.
 
 The **Time zone** is the one your workspace uses for every day and time. Only the workspace owner can change it; for anyone else the field is shown but cannot be changed. The same hours and time zone are used for the **Outside business hours** condition here and for the response targets of an SLA policy that respects business hours.
 

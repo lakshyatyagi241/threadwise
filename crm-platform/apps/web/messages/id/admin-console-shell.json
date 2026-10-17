@@ -232,12 +232,49 @@
         "loadFailed": "Pengaturan tidak dapat dimuat.",
         "hours": {
           "title": "Jam kerja",
-          "note": "Ditampilkan sebagai referensi. Jam kerja belum diberlakukan, sehingga kontrol ini hanya-baca.",
-          "weekdays": "Sen - Jum",
-          "saturday": "Sabtu",
-          "sunday": "Minggu",
           "from": "Dari",
-          "to": "Sampai"
+          "to": "Sampai",
+          "note": "Jam buka tim Anda, dalam {timezone}. Aturan perutean kotak masuk, pengatur waktu SLA, alur, dan balasan prospek yang bergantung pada jam kerja menggunakan jadwal ini.",
+          "ownerOnly": "Hanya pemilik workspace yang dapat mengubah ini.",
+          "loadFailed": "Jam kerja tidak dapat dimuat.",
+          "day": {
+            "mon": "Senin",
+            "tue": "Selasa",
+            "wed": "Rabu",
+            "thu": "Kamis",
+            "fri": "Jumat",
+            "sat": "Sabtu",
+            "sun": "Minggu"
+          },
+          "closed": "Tutup",
+          "openAllDay": "Buka sepanjang hari",
+          "allDay": "Buka sepanjang hari",
+          "overnight": "Tutup keesokan paginya",
+          "addWindow": "Tambah jam",
+          "remove": "Hapus",
+          "removeWindow": "Hapus jam ini untuk hari {day}",
+          "copyMonday": "Salin Senin ke Selasa-Jumat",
+          "problem": {
+            "required": "Isi kedua waktu.",
+            "same": "Waktu buka dan waktu tutup harus berbeda.",
+            "overlap": "Jam pada hari yang sama tidak boleh tumpang tindih."
+          },
+          "holidays": {
+            "title": "Hari libur",
+            "note": "Workspace dianggap tutup sepanjang hari pada tanggal-tanggal ini, apa pun pengaturan jam mingguannya.",
+            "none": "Belum ada hari libur.",
+            "date": "Tanggal",
+            "label": "Nama (opsional)",
+            "add": "Tambah hari libur",
+            "removeFor": "Hapus hari libur pada {date}",
+            "problem": {
+              "date": "Bukan tanggal yang valid.",
+              "duplicate": "Tanggal ini sudah ada dalam daftar."
+            }
+          },
+          "save": "Simpan jam kerja",
+          "saved": "Jam kerja disimpan.",
+          "saveFailed": "Jam kerja tidak dapat disimpan."
         },
         "preferences": {
           "title": "Ringkasan AI otomatis",

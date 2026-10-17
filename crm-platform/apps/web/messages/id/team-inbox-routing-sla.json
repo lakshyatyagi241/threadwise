@@ -451,13 +451,13 @@
       "to": "Sampai",
       "problem": {
         "required": "Isi kedua jam.",
-        "order": "Jam tutup harus setelah jam buka."
+        "same": "Waktu buka dan waktu tutup harus berbeda."
       },
-      "note": "Hari yang dinonaktifkan tutup sepanjang hari. Sampai Anda menyimpan, ruang kerja dianggap buka sepanjang waktu.",
       "cancel": "Batal",
       "save": "Simpan jam",
       "saved": "Jam kerja disimpan",
-      "saveFailed": "Gagal menyimpan"
+      "saveFailed": "Gagal menyimpan",
+      "note": "Hari yang dinonaktifkan berarti tutup sepanjang hari. Sebelum Anda menyimpan, workspace dianggap buka setiap saat. Istirahat, jam lintas tengah malam, dan hari libur diatur di Pengaturan > Umum > Jam kerja."
     }
   }
 }

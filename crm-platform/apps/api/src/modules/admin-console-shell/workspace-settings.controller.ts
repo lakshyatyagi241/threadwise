@@ -25,6 +25,7 @@ import {
   saveNotificationPrefsRequestSchema,
   savePreferencesRequestSchema,
   updateBrandingFieldsSchema,
+  updateWorkingHoursSchema,
   updateWorkspaceSettingsRequestSchema,
   type DeleteWorkspaceRequest,
   type SaveNotificationPrefsRequest,
@@ -32,6 +33,7 @@ import {
   type BrandSlot,
   type SaveResidencyRequest,
   type UpdateBrandingFields,
+  type UpdateWorkingHoursInput,
   type UpdateWorkspaceSettingsRequest,
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
@@ -68,6 +70,25 @@ export class WorkspaceSettingsController {
     @Body(zodPipe(updateWorkspaceSettingsRequestSchema)) body: UpdateWorkspaceSettingsRequest,
   ) {
     return this.settings.update(body);
+  }
+
+  @Get('working-hours')
+  @ApiOperation({
+    summary:
+      'The weekly working hours and holidays (General tab); the business hours the inbox, SLA and flows read',
+  })
+  workingHours() {
+    return this.settings.workingHours();
+  }
+
+  @Put('working-hours')
+  @ApiOperation({
+    summary: 'Save the working hours and holidays (owner only)',
+    description:
+      'Seven days, each with a window and up to two extra windows; a closing time before the opening time is an overnight window; 24:00 closes at the end of the day. Holidays are closed all day and are kept when omitted.',
+  })
+  saveWorkingHours(@Body(zodPipe(updateWorkingHoursSchema)) body: UpdateWorkingHoursInput) {
+    return this.settings.saveWorkingHours(body);
   }
 
   @Get('notifications')
