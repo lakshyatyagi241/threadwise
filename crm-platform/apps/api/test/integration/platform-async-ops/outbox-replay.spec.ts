@@ -140,7 +140,9 @@ describe('outbox replay', () => {
   it('a second replay after the first finds nothing', async () => {
     await seed(activeOrg, 'wallet.charge', 'dead', 2);
     await svc.replayOutbox({ eventType: 'wallet.charge', limit: 200 }, 1);
-    expect((await svc.replayOutbox({ eventType: 'wallet.charge', limit: 200 }, 1)).replayed).toBe(0);
+    expect((await svc.replayOutbox({ eventType: 'wallet.charge', limit: 200 }, 1)).replayed).toBe(
+      0,
+    );
   });
 
   it('lists dead events grouped by type, oldest first, with no payload', async () => {

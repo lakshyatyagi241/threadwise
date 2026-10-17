@@ -8,12 +8,12 @@ Not done: no process was run, `node_modules` is absent in this worktree (so `@ne
 
 Two mechanisms side by side, not one:
 
-| Mechanism | Role | Evidence |
-| --- | --- | --- |
-| Postgres `event_outbox` + polling drain (`FOR UPDATE SKIP LOCKED`) | domain events, fan-out to in-process subscribers | `apps/api/src/workers/outbox-drain.service.ts:62-146` |
-| BullMQ on Redis, 48 queue names registered, 42 with a `@Processor` | per-job work (sends, ingest, exports, syncs) | `apps/api/src/infra/queue/queues.ts:10-107`, `queue.module.ts:39-41` |
-| `@nestjs/schedule` (`@Interval`/`@Cron`) | 79 files, about 90 timers: sweeps, recovery, retention, cron | `ScheduleModule.forRoot()` at `workers/workers.module.ts:85` |
-| DB-state-as-truth + sweeper | the "no lost job" mechanism for BullMQ enqueues (see 2.2, D6) | e.g. `chat-conversations/queued-message-recovery.service.ts:36-80` |
+| Mechanism                                                          | Role                                                          | Evidence                                                             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Postgres `event_outbox` + polling drain (`FOR UPDATE SKIP LOCKED`) | domain events, fan-out to in-process subscribers              | `apps/api/src/workers/outbox-drain.service.ts:62-146`                |
+| BullMQ on Redis, 48 queue names registered, 42 with a `@Processor` | per-job work (sends, ingest, exports, syncs)                  | `apps/api/src/infra/queue/queues.ts:10-107`, `queue.module.ts:39-41` |
+| `@nestjs/schedule` (`@Interval`/`@Cron`)                           | 79 files, about 90 timers: sweeps, recovery, retention, cron  | `ScheduleModule.forRoot()` at `workers/workers.module.ts:85`         |
+| DB-state-as-truth + sweeper                                        | the "no lost job" mechanism for BullMQ enqueues (see 2.2, D6) | e.g. `chat-conversations/queued-message-recovery.service.ts:36-80`   |
 
 The outbox is NOT a BullMQ queue. `QUEUES.OUTBOX = 'outbox'` (`queues.ts:12`) is registered but has no processor; the comment "Drains event_outbox" is stale. Six registered queues have no `@Processor`: `outbox`, `billing-posting`, `sla-sweep`, `counter-flush`, `partition-maintenance`, `bulk-jobs`.
 
@@ -39,15 +39,17 @@ Status values: `pending | processing | done | dead` (comment only, no CHECK cons
 Verdict: **OK for "no lost event between commit and publish"** (event is durable with the change). Test: none dedicated; exercised incidentally through e2e specs.
 
 BullMQ enqueues are NOT transactional. Pattern found (about 50 `queue.add` sites): commit DB state, then `queue.add`; recovery = a sweep re-reading DB state. Verified examples with recovery:
+
 - outbound message: `chat-conversations/outbound.service.ts:348-364` (swallow enqueue error, "recovery sweep will") + `queued-message-recovery.service.ts:36-80` every 30 s, deterministic jobId.
 - media fetch: `media-fetch-recovery.service.ts:37`; broadcasts: `broadcast-due.service.ts:37-69`; scheduled messages: `scheduled-due.service.ts:50`.
-Unverified (not read): every other publisher. See D6.
+  Unverified (not read): every other publisher. See D6.
 
 ### 2.3 Dispatcher / claimer (`outbox-drain.service.ts:86-146`)
 
 One `db.privileged` transaction per batch does: CTE `SELECT ... WHERE status='pending' AND available_at<=now() ORDER BY created_at,id LIMIT 200 FOR UPDATE SKIP LOCKED` then `UPDATE ... SET status='processing'`, then dispatches all handlers INSIDE that transaction, then one `UPDATE` per row to `done`/`pending`(retry)/`dead`, then commits.
 
 Consequences, from reading the code:
+
 - `processing` is never committed, so no other session ever sees it. The row lock IS the lease. A crashed worker rolls back and rows return to `pending` on their own. The runbook's "stuck in processing" recovery (`docs/runbooks/outbox-backlog.md:45-62`) and the compose comment "its outbox rows stay in 'processing'" (`deploy/hostinger/docker-compose.yml:351-352`) describe a state that cannot occur; doc drift. Crash recovery: **OK** (by rollback), at-least-once: side effects done before the crash are redone. Test: none.
 - No visibility timeout is needed, but there is also no handler timeout (D3).
 - Ordering: only within one claimed batch per aggregate (`dispatchAll`, lines 153-176). Across workers, after a retry, or across batches, order is not kept; the code comment promises order only inside a batch. Test: none.
@@ -70,6 +72,7 @@ None. `grep` finds no `DELETE FROM event_outbox`, and `archivable_streams()` is 
 ## 3. Schedulers and duplicate-execution protection
 
 All `@Interval`/`@Cron` timers run in EVERY worker process. There is no scheduler abstraction, no leader election, no run ledger, no missed-run catch-up, no timezone-pinned cron. Protection is per-sweep and ad hoc. Of 79 files, a keyword scan (`SKIP LOCKED|advisory|'NX'|jobId|RedisLock|lease`) found a guard in 33; 46 have none by keyword (list in section 8), where safety depends on idempotent SQL, which I verified only for these:
+
 - `appointments-booking/appointment-reminder-sweep.service.ts:51-103`: `INSERT ... ON CONFLICT DO NOTHING RETURNING` plus `outbox.emit` in the same tx. OK.
 - `flow-runtime-engine/triggers/schedule.sweeper.ts:90-105`: compare-and-set on `flows.trigger_last_occurrence` committed in its own tx BEFORE enrolment. Duplicate-safe, but loses the occurrence if the process dies after the CAS (D5).
 - `analytics/rollup/rollup.service.ts:73` `pg_try_advisory_xact_lock`; `notifications/notification-retention.service.ts:124` same.
@@ -77,7 +80,7 @@ All `@Interval`/`@Cron` timers run in EVERY worker process. There is no schedule
 - BullMQ deterministic `jobId` per tick slot: `message-templates/template-sweep.processor.ts:42`.
 - `@nestjs/schedule`'s overlapping-tick problem is handled by a hand-rolled `running` boolean in each service; this only protects within one process.
 - A reusable `RedisLockService` exists (`platform-infrastructure/coordination/redis-lock.service.ts`, lease with renew and fencing flag) but the hand-grepped usage is limited to the platform module; most sweeps do not use it.
-Test: none for the scheduler layer; per-sweep e2e only where noted by module (not enumerated here).
+  Test: none for the scheduler layer; per-sweep e2e only where noted by module (not enumerated here).
 
 BullMQ repeatable jobs / `upsertJobScheduler`: not used (grep: no `repeat:`/`upsertJobScheduler`). The `repeat_every` hit is a DB column of scheduled messages.
 
@@ -114,23 +117,24 @@ Job names seen: `message.send`, `payload` (waba), `deliver`, `score`, `sync`, `p
 Outbox consumers (subscribers): ai-agents-training source-ingest, appointments calendar/message/backfill, calling-voice call-realtime and calling-readiness, workspaces lifecycle-notification, outbound-webhooks dispatch, chat-conversations waba-group-retitle / waba-channel-sync / device-group-retitle, and about 14 notifications consumers (task, sla, send-outcome, salesdoc, conversation, team-chat, waba-group, member-leave, email-bounce, device, device-group, appointment-drift, ...).
 
 Timers (`@Interval` ms / `@Cron`):
+
 - Intervals: outbox drain 2 s; broadcast-due 3 s; scheduled-due 3 s; campaign-sweeper 5 s; wizard-worker 5/10/5 s and 1 h; faq-embed 5 s; webhook-forward 5 s; lead-first-reply 10 s; flow-sweeper 15 s; queued-message-recovery 30 s; auto-attach-sweep 30 s; rollup 30 s; lead-sync 30 s; inbox-snooze-wake 30 s; and 60 s: appointment-lifecycle, appointment-reminder, google-consent, broadcast-resume, broadcast-retry-sweeper, catalog-sweeps, media-fetch-recovery, segment-count, task-due, schedule.sweeper, cart-recovery, sla-sweep; 5 min: recurring-invoice, owner-restore, sales-doc-expiry, leave-sweep; 10 min invoice-overdue; 1 h wallet reconcile; plus TICK_MS-based: calendar-reconcile, ics-feeds, calling-readiness, tpl-sweep, device-runtime, paygw, waba click sync, device-groups, history-import, mail-sync/mail-push/mail-outbound-attachments sweeps.
 - Crons: auth-maintenance 03:00; otp-template-refresh */5 min; partition-maintenance 02:00; rollup 02:15; audit-log-export-sweep 02:47; consent-export-sweep 02:41; message-log-archive 02:17; revenue-export-sweep 03:23; retention sweeps (api-library 03:41, call-log 03:41, call-recording 03:23, faq 03:17, flow-run 03:41, lead-scoring 03:41, plan 03:17, forms 03:17, minor 03:35, webhook-forward 03:00, notification 03:30, push-subscriptions 03:40, data-retention worker 03:50, lead-retention hourly :07, privacy 02:47 and every minute); lifecycle-sweep 03:15; storage-purge */10 min; growth-pilot :23 hourly and 02:37; lead-chat-digest */3 min; support-sla-scan */5 min; form-payment-sweep */30 min; marketplace inbound */20 s and :37, pull */30 s and :17, subscription-sweep hourly and minutely; meta-lead-sweep */10 min; ig pull-sweep */20 s; page-health hourly; waiting-nudge minutely.
 
 ## 8. Controls scorecard
 
-| Control | Verdict | Basis |
-| --- | --- | --- |
-| Durable accept (outbox) | OK | `emit(tx)` same tx; no test |
-| Durable accept (webhooks via BullMQ) | Weak | acked after `queue.add` to Redis only (`waba-webhook.service.ts:157`); Redis AOF everysec, 192 MB cap (D7) |
-| No lost job between commit and publish | Outbox OK. BullMQ: pattern per feature, verified for message send, media fetch, broadcasts only | D6 |
-| Crash recovery | Outbox OK by rollback. BullMQ: default stall settings; no test | D12 |
-| Bounded retries with backoff and jitter | Partial | outbox bounded, no jitter, window about 4 min (D1); BullMQ default 5 attempts, 2 s exponential, window 30 s, jitter only on `mail-sync` (`mail-sync.publisher.ts:34`) (D10) |
-| Permanent vs retryable vs ambiguous | Partial | message-dispatch has `ChannelError.retryable` and `IN_FLIGHT`; outbox none; 16 processors none (D9) |
-| DLQ + authorized safe replay | Missing | outbox: SQL runbook; BullMQ failed set kept 3 days, no replay endpoint (D4, D11) |
-| Per-tenant fairness / backpressure | Missing | global FIFO in outbox and every queue; no per-org caps (D13) |
-| Graceful shutdown | Partial | D14 |
-| Observability | Partial | D4 |
+| Control                                 | Verdict                                                                                         | Basis                                                                                                                                                                       |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Durable accept (outbox)                 | OK                                                                                              | `emit(tx)` same tx; no test                                                                                                                                                 |
+| Durable accept (webhooks via BullMQ)    | Weak                                                                                            | acked after `queue.add` to Redis only (`waba-webhook.service.ts:157`); Redis AOF everysec, 192 MB cap (D7)                                                                  |
+| No lost job between commit and publish  | Outbox OK. BullMQ: pattern per feature, verified for message send, media fetch, broadcasts only | D6                                                                                                                                                                          |
+| Crash recovery                          | Outbox OK by rollback. BullMQ: default stall settings; no test                                  | D12                                                                                                                                                                         |
+| Bounded retries with backoff and jitter | Partial                                                                                         | outbox bounded, no jitter, window about 4 min (D1); BullMQ default 5 attempts, 2 s exponential, window 30 s, jitter only on `mail-sync` (`mail-sync.publisher.ts:34`) (D10) |
+| Permanent vs retryable vs ambiguous     | Partial                                                                                         | message-dispatch has `ChannelError.retryable` and `IN_FLIGHT`; outbox none; 16 processors none (D9)                                                                         |
+| DLQ + authorized safe replay            | Missing                                                                                         | outbox: SQL runbook; BullMQ failed set kept 3 days, no replay endpoint (D4, D11)                                                                                            |
+| Per-tenant fairness / backpressure      | Missing                                                                                         | global FIFO in outbox and every queue; no per-org caps (D13)                                                                                                                |
+| Graceful shutdown                       | Partial                                                                                         | D14                                                                                                                                                                         |
+| Observability                           | Partial                                                                                         | D4                                                                                                                                                                          |
 
 ## 9. Defects
 

@@ -89,8 +89,7 @@ export class WorkerHeartbeatService implements OnApplicationBootstrap, OnApplica
              LIMIT ${READY_CAP}) d)::int AS dead
       `);
       const row = res.rows[0] as
-        | { ready: number; lag_seconds: number | null; dead?: number }
-        | undefined;
+        { ready: number; lag_seconds: number | null; dead?: number } | undefined;
       return {
         ready: Number(row?.ready ?? 0),
         lagSeconds: Math.max(0, Number(row?.lag_seconds ?? 0)),

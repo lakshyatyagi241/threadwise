@@ -26,7 +26,12 @@ describe('platform async ops access', () => {
       resolve(__dirname, '../../../../../packages/contracts/src/platform-async-ops/index.ts'),
       'utf8',
     );
-    const requests = contracts.split('export const').filter((b) => b.startsWith(' outboxReplayRequestSchema') || b.startsWith(' wabaReplayRequestSchema'));
+    const requests = contracts
+      .split('export const')
+      .filter(
+        (b) =>
+          b.startsWith(' outboxReplayRequestSchema') || b.startsWith(' wabaReplayRequestSchema'),
+      );
     expect(requests).toHaveLength(2);
     for (const r of requests) expect(r).not.toMatch(/payload|data|body/i);
   });

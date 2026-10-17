@@ -9,7 +9,10 @@ import { InboundService } from './inbound.service';
  * with 200, so Telegram never redelivered and the message was lost. The inbox write is idempotent per update ("a redelivered update is
  * stored once"), so letting Telegram redeliver is safe.
  */
-const update = { update_id: 1, message: { message_id: 10, chat: { id: 5, type: 'private' }, from: { id: 5 }, text: 'hi' } };
+const update = {
+  update_id: 1,
+  message: { message_id: 10, chat: { id: 5, type: 'private' }, from: { id: 5 }, text: 'hi' },
+};
 
 function build(recordInbound: () => Promise<unknown>) {
   const bot = { id: 3, active: true, secretToken: null, botToken: 'enc' };
@@ -32,7 +35,13 @@ function build(recordInbound: () => Promise<unknown>) {
 
 describe('telegram InboundService durability', () => {
   it('acknowledges a message that was stored', async () => {
-    const svc = build(async () => ({ stored: true, newContact: false, contactId: 1, conversationId: 1, newThread: false }));
+    const svc = build(async () => ({
+      stored: true,
+      newContact: false,
+      contactId: 1,
+      conversationId: 1,
+      newThread: false,
+    }));
     await expect(svc.ingest('tok', '', update as never)).resolves.toEqual({ ok: true, note: 'ok' });
   });
 

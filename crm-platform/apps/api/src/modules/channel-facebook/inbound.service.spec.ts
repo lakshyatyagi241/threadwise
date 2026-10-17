@@ -41,7 +41,9 @@ const stored = { stored: false, newThread: false, conversationId: 1, contactId: 
 describe('facebook InboundService durability', () => {
   it('acknowledges a delivery whose events were all stored', async () => {
     const svc = build(async () => stored);
-    await expect(svc.receive(Buffer.from('{}'), '', payload(dm('m1'), dm('m2')))).resolves.toBe('ok');
+    await expect(svc.receive(Buffer.from('{}'), '', payload(dm('m1'), dm('m2')))).resolves.toBe(
+      'ok',
+    );
   });
 
   it('still tries every event of the batch, then does NOT acknowledge if one failed to store', async () => {
