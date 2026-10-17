@@ -165,6 +165,12 @@
         "titleNoName": "Test bildirimi",
         "bodyNoActor": "Bunu okuyabiliyorsanız canlı bildirimler çalışıyor."
       },
+      "snooze_wake": {
+        "title": "{name} listenize geri döndü",
+        "titleNoName": "Ertelenen bir sohbet listenize geri döndü",
+        "titleTeam": "{name} ekibiniz için geri döndü",
+        "titleTeamNoName": "Ertelenen bir sohbet ekibiniz için geri döndü"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name}, {date, date, medium} tarihinde yenilenir",
         "bodyAuto": "{name} uygulamasını yenilemek için kartınızdan o tarihte otomatik olarak ücret alınır. Durdurmak için o tarihten önce iptal edin.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Gruba katılma isteği",
         "device_group_removed": "Bir WhatsApp grubundan çıkarıldınız",
         "test": "Test bildirimi",
+        "snooze_wake": "Ertelenen sohbet geri döndü",
         "marketplace_renewal_due": "Ücretli uygulama yenilemesi yaklaşıyor",
         "marketplace_payment_failed": "Ücretli uygulama ödemesi başarısız",
         "marketplace_subscription_ended": "Ücretli uygulama aboneliği sona erdi"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "Randevu, Google Calendar ile senkronize değil",
           "hint": "Yaklaşan bir randevunun Google Calendar etkinliği silindi, taşındı veya konukları değiştirildi. Randevu değiştirilmez; ne yapacağınıza siz karar verirsiniz."
+        },
+        "snooze_wake": {
+          "label": "Ertelenen sohbet geri döner",
+          "hint": "Ertelenen bir sohbet belirlenen saatte yeniden açılır ve size ya da ekibinize atanır."
         },
         "marketplace_renewal_due": {
           "label": "Ücretli uygulama yenileme hatırlatması",

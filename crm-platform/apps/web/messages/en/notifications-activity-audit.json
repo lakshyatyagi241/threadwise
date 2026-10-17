@@ -165,6 +165,12 @@
         "titleNoName": "Test notification",
         "bodyNoActor": "If you can read this, live notifications are working."
       },
+      "snooze_wake": {
+        "title": "{name} is back in your list",
+        "titleNoName": "A snoozed chat is back in your list",
+        "titleTeam": "{name} is back for your team",
+        "titleTeamNoName": "A snoozed chat is back for your team"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} renews on {date, date, medium}",
         "bodyAuto": "Your card will be charged automatically on that date to renew {name}. Cancel before then to stop it.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "Request to join a group",
         "device_group_removed": "Removed from a WhatsApp group",
         "test": "Test notification",
+        "snooze_wake": "Snoozed chat is back",
         "marketplace_renewal_due": "Paid app renewal coming up",
         "marketplace_payment_failed": "Paid app payment failed",
         "marketplace_subscription_ended": "Paid app subscription ended"
@@ -406,6 +413,10 @@
         "test": {
           "label": "Test notification",
           "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."
+        },
+        "snooze_wake": {
+          "label": "Snoozed chat comes back",
+          "hint": "A snoozed chat reopens at its time and goes to you or to your team."
         },
         "marketplace_renewal_due": {
           "label": "Paid app renewal reminder",

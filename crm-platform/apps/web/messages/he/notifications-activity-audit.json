@@ -165,6 +165,12 @@
         "titleNoName": "התראת בדיקה",
         "bodyNoActor": "אם אתם יכולים לקרוא את זה, ההתראות החיות עובדות."
       },
+      "snooze_wake": {
+        "title": "{name} חזר לרשימה שלך",
+        "titleNoName": "שיחה שנדחתה חזרה לרשימה שלך",
+        "titleTeam": "{name} חזר לצוות שלך",
+        "titleTeamNoName": "שיחה שנדחתה חזרה לצוות שלך"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} מתחדשת ב-{date, date, medium}",
         "bodyAuto": "הכרטיס שלך יחויב אוטומטית בתאריך הזה כדי לחדש את {name}. בטל לפני כן כדי לעצור זאת.",
@@ -216,6 +222,7 @@
         "device_group_join_request": "בקשה להצטרף לקבוצה",
         "device_group_removed": "הוסרתם מקבוצת WhatsApp",
         "test": "התראת בדיקה",
+        "snooze_wake": "שיחה שנדחתה חזרה",
         "marketplace_renewal_due": "חידוש של אפליקציה בתשלום מתקרב",
         "marketplace_payment_failed": "התשלום על אפליקציה בתשלום נכשל",
         "marketplace_subscription_ended": "המנוי לאפליקציה בתשלום הסתיים"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "פגישה לא מסונכרנת עם Google Calendar",
           "hint": "האירוע ב-Google Calendar של פגישה קרובה נמחק, הועבר או שרשימת המוזמנים שלו השתנתה. הפגישה עצמה לא משתנה; אתם בוחרים מה לעשות."
+        },
+        "snooze_wake": {
+          "label": "שיחה שנדחתה חוזרת",
+          "hint": "שיחה שנדחתה נפתחת שוב בזמן שנבחר ומוקצית לך או לצוות שלך."
         },
         "marketplace_renewal_due": {
           "label": "תזכורת לחידוש אפליקציה בתשלום",

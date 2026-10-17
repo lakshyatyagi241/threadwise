@@ -29,7 +29,8 @@
       "priorityChanged": "Prioritas diperbarui",
       "snoozed": "Percakapan ditunda",
       "tagAdded": "Tag ditambahkan",
-      "tagRemoved": "Tag dihapus"
+      "tagRemoved": "Tag dihapus",
+      "spammed": "Percakapan ditandai sebagai spam."
     },
     "list": {
       "title": "Inbox",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Terbuka",
-        "pending": "Tertunda",
         "snoozed": "Ditunda",
         "resolved": "Selesai",
         "closed": "Selesai",
@@ -113,7 +113,7 @@
         "cancel": "Batal",
         "apply": "Terapkan",
         "status": "Status chat",
-        "statusHint": "Tanpa pilihan, chat terbuka dan tertunda ditampilkan.",
+        "statusHint": "Jika tidak ada yang dipilih, chat yang terbuka ditampilkan.",
         "conversation": "Percakapan",
         "any": "Apa saja",
         "assigned": "Ditugaskan",
@@ -145,7 +145,15 @@
       "statusOpen": "Terbuka",
       "statusAll": "Semua status",
       "channelFilter": "Channel",
-      "selectRow": "Pilih {name}"
+      "selectRow": "Pilih {name}",
+      "snoozedFor": "Ditunda · {left}",
+      "snoozeLeft": {
+        "due": "sekarang",
+        "minutes": "{count} menit",
+        "hours": "{count} jam",
+        "days": "{count} hari"
+      },
+      "unsnoozesAt": "Dibuka lagi {time}"
     },
     "status": {
       "received": "Diterima",
@@ -579,6 +587,8 @@
           "tag_removed": "Tag dihapus oleh {actor}",
           "first_response": "Balasan pertama terkirim",
           "sla_breach": "Tenggat respons terlewat",
+          "spam_flagged": "Ditandai spam oleh {actor}",
+          "escalated": "Dieskalasi",
           "unknown": "{what} oleh {actor}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "Tidak ada pesan",
         "status": {
           "open": "Terbuka",
-          "pending": "Tertunda",
           "snoozed": "Ditunda",
           "resolved": "Selesai",
           "closed": "Ditutup",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "Prioritas",
       "snooze": "Tunda",
-      "wake": "Aktifkan sekarang"
+      "wake": "Aktifkan sekarang",
+      "markSpam": "Tandai sebagai spam",
+      "notSpam": "Bukan spam"
     },
     "bulk": {
       "barLabel": "Tindakan massal",
@@ -1047,7 +1058,8 @@
       "tagAdd": "Tambah tag",
       "tagRemove": "Hapus tag",
       "onLeave": "sedang cuti",
-      "onLeaveUntil": "cuti hingga {date}"
+      "onLeaveUntil": "cuti hingga {date}",
+      "spam": "Tandai sebagai spam"
     },
     "tags": {
       "tag": "Tag",

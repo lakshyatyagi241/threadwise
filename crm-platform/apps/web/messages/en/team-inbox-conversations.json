@@ -29,7 +29,8 @@
       "priorityChanged": "Priority updated",
       "snoozed": "Conversation snoozed",
       "tagAdded": "Tag added",
-      "tagRemoved": "Tag removed"
+      "tagRemoved": "Tag removed",
+      "spammed": "Conversation marked as spam."
     },
     "list": {
       "title": "Inbox",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Open",
-        "pending": "Pending",
         "snoozed": "Snoozed",
         "resolved": "Resolved",
         "closed": "Resolved",
@@ -113,7 +113,7 @@
         "cancel": "Cancel",
         "apply": "Apply",
         "status": "Chat status",
-        "statusHint": "Nothing chosen shows open and pending chats.",
+        "statusHint": "Nothing chosen shows open chats.",
         "conversation": "Conversation",
         "any": "Any",
         "assigned": "Assigned",
@@ -145,7 +145,15 @@
       "statusOpen": "Open",
       "statusAll": "Every status",
       "channelFilter": "Channel",
-      "selectRow": "Select {name}"
+      "selectRow": "Select {name}",
+      "snoozedFor": "Snoozed · {left}",
+      "snoozeLeft": {
+        "due": "due now",
+        "minutes": "{count, plural, one {# minute} other {# minutes}}",
+        "hours": "{count, plural, one {# hour} other {# hours}}",
+        "days": "{count, plural, one {# day} other {# days}}"
+      },
+      "unsnoozesAt": "Un-snoozes {time}"
     },
     "status": {
       "received": "Received",
@@ -579,6 +587,8 @@
           "tag_removed": "Tag removed by {actor}",
           "first_response": "First reply sent",
           "sla_breach": "Response deadline missed",
+          "spam_flagged": "Marked as spam by {actor}",
+          "escalated": "Escalated",
           "unknown": "{what} by {actor}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "No messages",
         "status": {
           "open": "Open",
-          "pending": "Pending",
           "snoozed": "Snoozed",
           "resolved": "Resolved",
           "closed": "Closed",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "Priority",
       "snooze": "Snooze",
-      "wake": "Wake now"
+      "wake": "Wake now",
+      "markSpam": "Mark as spam",
+      "notSpam": "Not spam"
     },
     "bulk": {
       "barLabel": "Bulk actions",
@@ -1047,7 +1058,8 @@
       "tagAdd": "Add tag",
       "tagRemove": "Remove tag",
       "onLeave": "on leave",
-      "onLeaveUntil": "on leave until {date}"
+      "onLeaveUntil": "on leave until {date}",
+      "spam": "Mark as spam"
     },
     "tags": {
       "tag": "Tag",

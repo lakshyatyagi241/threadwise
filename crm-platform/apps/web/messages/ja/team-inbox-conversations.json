@@ -29,7 +29,8 @@
       "priorityChanged": "優先度を更新しました",
       "snoozed": "会話をスヌーズしました",
       "tagAdded": "タグを追加しました",
-      "tagRemoved": "タグを外しました"
+      "tagRemoved": "タグを外しました",
+      "spammed": "会話をスパムとしてマークしました。"
     },
     "list": {
       "title": "受信箱",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "未対応",
-        "pending": "保留中",
         "snoozed": "スヌーズ中",
         "resolved": "解決済み",
         "closed": "解決済み",
@@ -113,7 +113,7 @@
         "cancel": "キャンセル",
         "apply": "適用",
         "status": "チャットの状態",
-        "statusHint": "何も選ばない場合は、オープンと保留のチャットが表示されます。",
+        "statusHint": "何も選ばないと、オープンなチャットを表示します。",
         "conversation": "会話",
         "any": "すべて",
         "assigned": "割り当て済み",
@@ -145,7 +145,15 @@
       "statusOpen": "未対応",
       "statusAll": "すべてのステータス",
       "channelFilter": "チャネル",
-      "selectRow": "{name} を選択"
+      "selectRow": "{name} を選択",
+      "snoozedFor": "スヌーズ中 · {left}",
+      "snoozeLeft": {
+        "due": "まもなく",
+        "minutes": "{count}分",
+        "hours": "{count}時間",
+        "days": "{count}日"
+      },
+      "unsnoozesAt": "{time} に再開"
     },
     "status": {
       "received": "受信済み",
@@ -579,6 +587,8 @@
           "tag_removed": "{actor}がタグを外しました",
           "first_response": "最初の返信を送信しました",
           "sla_breach": "返信期限を超過しました",
+          "spam_flagged": "{actor} がスパムとしてマーク",
+          "escalated": "エスカレートしました",
           "unknown": "{actor} による{what}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "メッセージなし",
         "status": {
           "open": "未対応",
-          "pending": "保留中",
           "snoozed": "スヌーズ中",
           "resolved": "解決済み",
           "closed": "終了",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "優先度",
       "snooze": "スヌーズ",
-      "wake": "今すぐ再開"
+      "wake": "今すぐ再開",
+      "markSpam": "スパムとしてマーク",
+      "notSpam": "スパムではない"
     },
     "bulk": {
       "barLabel": "一括操作",
@@ -1047,7 +1058,8 @@
       "tagAdd": "タグを追加",
       "tagRemove": "タグを外す",
       "onLeave": "休暇中",
-      "onLeaveUntil": "{date}まで休暇中"
+      "onLeaveUntil": "{date}まで休暇中",
+      "spam": "スパムとしてマーク"
     },
     "tags": {
       "tag": "タグ",

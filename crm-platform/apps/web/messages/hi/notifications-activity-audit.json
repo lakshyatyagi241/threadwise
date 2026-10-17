@@ -165,6 +165,12 @@
         "titleNoName": "परीक्षण सूचना",
         "bodyNoActor": "अगर आप यह पढ़ पा रहे हैं, तो लाइव सूचनाएँ काम कर रही हैं।"
       },
+      "snooze_wake": {
+        "title": "{name} आपकी सूची में वापस है",
+        "titleNoName": "स्थगित चैट आपकी सूची में वापस है",
+        "titleTeam": "{name} आपकी टीम के लिए वापस है",
+        "titleTeamNoName": "स्थगित चैट आपकी टीम के लिए वापस है"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} का {date, date, medium} को नवीनीकरण होगा",
         "bodyAuto": "{name} का नवीनीकरण करने के लिए उस तारीख को आपके कार्ड से अपने आप शुल्क लिया जाएगा। इसे रोकने के लिए उससे पहले रद्द करें।",
@@ -216,6 +222,7 @@
         "device_group_join_request": "ग्रुप में जुड़ने का अनुरोध",
         "device_group_removed": "WhatsApp ग्रुप से हटाया गया",
         "test": "परीक्षण सूचना",
+        "snooze_wake": "स्थगित चैट वापस आ गई",
         "marketplace_renewal_due": "सशुल्क ऐप का नवीनीकरण नज़दीक है",
         "marketplace_payment_failed": "सशुल्क ऐप का भुगतान विफल रहा",
         "marketplace_subscription_ended": "सशुल्क ऐप का सब्सक्रिप्शन समाप्त हुआ"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "अपॉइंटमेंट Google Calendar से सिंक से बाहर",
           "hint": "किसी आगामी अपॉइंटमेंट का Google Calendar इवेंट हटा दिया गया, दूसरे समय पर ले जाया गया या उसके मेहमान बदले गए। अपॉइंटमेंट में कोई बदलाव नहीं होता; क्या करना है यह आप तय करते हैं।"
+        },
+        "snooze_wake": {
+          "label": "स्थगित चैट वापस आती है",
+          "hint": "स्थगित चैट तय समय पर फिर खुलती है और आपको या आपकी टीम को भेजी जाती है।"
         },
         "marketplace_renewal_due": {
           "label": "सशुल्क ऐप नवीनीकरण रिमाइंडर",

@@ -29,7 +29,8 @@
       "priorityChanged": "Öncelik güncellendi",
       "snoozed": "Konuşma ertelendi",
       "tagAdded": "Etiket eklendi",
-      "tagRemoved": "Etiket kaldırıldı"
+      "tagRemoved": "Etiket kaldırıldı",
+      "spammed": "Konuşma spam olarak işaretlendi."
     },
     "list": {
       "title": "Gelen kutusu",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Açık",
-        "pending": "Beklemede",
         "snoozed": "Ertelendi",
         "resolved": "Çözüldü",
         "closed": "Çözüldü",
@@ -113,7 +113,7 @@
         "cancel": "İptal",
         "apply": "Uygula",
         "status": "Sohbet durumu",
-        "statusHint": "Seçim yapılmazsa açık ve bekleyen sohbetler görünür.",
+        "statusHint": "Hiçbir şey seçilmezse açık sohbetler gösterilir.",
         "conversation": "Konuşma",
         "any": "Herhangi",
         "assigned": "Atanmış",
@@ -145,7 +145,15 @@
       "statusOpen": "Açık",
       "statusAll": "Tüm durumlar",
       "channelFilter": "Kanal",
-      "selectRow": "{name} seç"
+      "selectRow": "{name} seç",
+      "snoozedFor": "Ertelendi · {left}",
+      "snoozeLeft": {
+        "due": "şimdi",
+        "minutes": "{count} dakika",
+        "hours": "{count} saat",
+        "days": "{count} gün"
+      },
+      "unsnoozesAt": "{time} için yeniden açılır"
     },
     "status": {
       "received": "Alındı",
@@ -579,6 +587,8 @@
           "tag_removed": "Etiket {actor} tarafından kaldırıldı",
           "first_response": "İlk yanıt gönderildi",
           "sla_breach": "Yanıt süresi kaçırıldı",
+          "spam_flagged": "{actor} tarafından spam olarak işaretlendi",
+          "escalated": "Yükseltildi",
           "unknown": "{actor} tarafından: {what}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "Mesaj yok",
         "status": {
           "open": "Açık",
-          "pending": "Beklemede",
           "snoozed": "Ertelendi",
           "resolved": "Çözüldü",
           "closed": "Kapalı",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "Öncelik",
       "snooze": "Ertele",
-      "wake": "Şimdi göster"
+      "wake": "Şimdi göster",
+      "markSpam": "Spam olarak işaretle",
+      "notSpam": "Spam değil"
     },
     "bulk": {
       "barLabel": "Toplu işlemler",
@@ -1047,7 +1058,8 @@
       "tagAdd": "Etiket ekle",
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
-      "onLeaveUntil": "{date} tarihine kadar izinli"
+      "onLeaveUntil": "{date} tarihine kadar izinli",
+      "spam": "Spam olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",

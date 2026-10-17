@@ -29,7 +29,8 @@
       "priorityChanged": "Prioriteit bijgewerkt",
       "snoozed": "Gesprek uitgesteld",
       "tagAdded": "Tag toegevoegd",
-      "tagRemoved": "Tag verwijderd"
+      "tagRemoved": "Tag verwijderd",
+      "spammed": "Gesprek als spam gemarkeerd."
     },
     "list": {
       "title": "Inbox",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Open",
-        "pending": "In behandeling",
         "snoozed": "Gesnoozed",
         "resolved": "Opgelost",
         "closed": "Opgelost",
@@ -113,7 +113,7 @@
         "cancel": "Annuleren",
         "apply": "Toepassen",
         "status": "Chatstatus",
-        "statusHint": "Zonder keuze zie je open en wachtende chats.",
+        "statusHint": "Zonder keuze worden open chats getoond.",
         "conversation": "Gesprek",
         "any": "Alle",
         "assigned": "Toegewezen",
@@ -145,7 +145,15 @@
       "statusOpen": "Open",
       "statusAll": "Alle statussen",
       "channelFilter": "Kanaal",
-      "selectRow": "{name} selecteren"
+      "selectRow": "{name} selecteren",
+      "snoozedFor": "Gesnoozed · {left}",
+      "snoozeLeft": {
+        "due": "nu",
+        "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+        "hours": "{count, plural, one {# uur} other {# uur}}",
+        "days": "{count, plural, one {# dag} other {# dagen}}"
+      },
+      "unsnoozesAt": "Wordt weer open {time}"
     },
     "status": {
       "received": "Ontvangen",
@@ -579,6 +587,8 @@
           "tag_removed": "Tag verwijderd door {actor}",
           "first_response": "Eerste antwoord verzonden",
           "sla_breach": "Reactietermijn verlopen",
+          "spam_flagged": "Als spam gemarkeerd door {actor}",
+          "escalated": "Geëscaleerd",
           "unknown": "{what} door {actor}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "Geen berichten",
         "status": {
           "open": "Open",
-          "pending": "In behandeling",
           "snoozed": "Gesnoozed",
           "resolved": "Opgelost",
           "closed": "Gesloten",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "Prioriteit",
       "snooze": "Uitstellen",
-      "wake": "Nu terugzetten"
+      "wake": "Nu terugzetten",
+      "markSpam": "Markeer als spam",
+      "notSpam": "Geen spam"
     },
     "bulk": {
       "barLabel": "Bulkacties",
@@ -1047,7 +1058,8 @@
       "tagAdd": "Tag toevoegen",
       "tagRemove": "Tag verwijderen",
       "onLeave": "met verlof",
-      "onLeaveUntil": "met verlof tot {date}"
+      "onLeaveUntil": "met verlof tot {date}",
+      "spam": "Markeer als spam"
     },
     "tags": {
       "tag": "Tag",

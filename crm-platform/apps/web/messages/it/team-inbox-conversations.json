@@ -29,7 +29,8 @@
       "priorityChanged": "Priorità aggiornata",
       "snoozed": "Conversazione posticipata",
       "tagAdded": "Tag aggiunto",
-      "tagRemoved": "Tag rimosso"
+      "tagRemoved": "Tag rimosso",
+      "spammed": "Conversazione segnata come spam."
     },
     "list": {
       "title": "Inbox",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "Aperta",
-        "pending": "In attesa",
         "snoozed": "Posticipata",
         "resolved": "Risolta",
         "closed": "Risolte",
@@ -113,7 +113,7 @@
         "cancel": "Annulla",
         "apply": "Applica",
         "status": "Stato della chat",
-        "statusHint": "Senza scelta si vedono le chat aperte e in sospeso.",
+        "statusHint": "Senza selezione vengono mostrate le chat aperte.",
         "conversation": "Conversazione",
         "any": "Qualsiasi",
         "assigned": "Assegnata",
@@ -145,7 +145,15 @@
       "statusOpen": "Aperte",
       "statusAll": "Tutti gli stati",
       "channelFilter": "Canale",
-      "selectRow": "Seleziona {name}"
+      "selectRow": "Seleziona {name}",
+      "snoozedFor": "Posticipata · {left}",
+      "snoozeLeft": {
+        "due": "scaduta",
+        "minutes": "{count, plural, one {# minuto} other {# minuti}}",
+        "hours": "{count, plural, one {# ora} other {# ore}}",
+        "days": "{count, plural, one {# giorno} other {# giorni}}"
+      },
+      "unsnoozesAt": "Riapre {time}"
     },
     "status": {
       "received": "Ricevuto",
@@ -579,6 +587,8 @@
           "tag_removed": "Tag rimosso da {actor}",
           "first_response": "Prima risposta inviata",
           "sla_breach": "Scadenza di risposta mancata",
+          "spam_flagged": "Segnata come spam da {actor}",
+          "escalated": "Escalata",
           "unknown": "{what} da {actor}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "Nessun messaggio",
         "status": {
           "open": "Aperta",
-          "pending": "In attesa",
           "snoozed": "Posticipata",
           "resolved": "Risolta",
           "closed": "Chiusa",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "Priorità",
       "snooze": "Posticipa",
-      "wake": "Riattiva ora"
+      "wake": "Riattiva ora",
+      "markSpam": "Segna come spam",
+      "notSpam": "Non è spam"
     },
     "bulk": {
       "barLabel": "Azioni di gruppo",
@@ -1047,7 +1058,8 @@
       "tagAdd": "Aggiungi tag",
       "tagRemove": "Rimuovi tag",
       "onLeave": "in ferie",
-      "onLeaveUntil": "in ferie fino al {date}"
+      "onLeaveUntil": "in ferie fino al {date}",
+      "spam": "Segna come spam"
     },
     "tags": {
       "tag": "Tag",

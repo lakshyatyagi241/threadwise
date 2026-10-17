@@ -292,7 +292,6 @@
       "firstLabel": "Pierwsza odpowiedź (min)",
       "resolveLabel": "Rozwiązanie (min)",
       "bizOnly": "Tylko w godzinach pracy",
-      "pause": "Wstrzymaj przy oczekiwaniu klienta",
       "setDefault": "Ustaw jako domyślną",
       "addPolicy": "Dodaj zasadę",
       "savePolicy": "Zapisz zasadę",

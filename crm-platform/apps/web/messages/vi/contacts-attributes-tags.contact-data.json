@@ -35,7 +35,6 @@
         "footnote": "Tìm theo số điện thoại, địa chỉ email hoặc tên của liên hệ. Hội thoại đã lưu trữ không được liệt kê.",
         "status": {
           "open": "Đang mở",
-          "pending": "Đang chờ",
           "snoozed": "Tạm hoãn",
           "resolved": "Đã giải quyết",
           "closed": "Đã đóng",

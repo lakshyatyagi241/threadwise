@@ -35,7 +35,6 @@
         "footnote": "Se encuentran por el teléfono, el correo electrónico o el nombre del contacto. Las conversaciones archivadas no aparecen.",
         "status": {
           "open": "Abierta",
-          "pending": "Pendiente",
           "snoozed": "Pospuesta",
           "resolved": "Resuelta",
           "closed": "Cerrada",

@@ -292,7 +292,6 @@
       "firstLabel": "首次回复（分钟）",
       "resolveLabel": "解决时限（分钟）",
       "bizOnly": "仅工作时间",
-      "pause": "客户等待时暂停计时",
       "setDefault": "设为默认",
       "addPolicy": "添加策略",
       "savePolicy": "保存策略",

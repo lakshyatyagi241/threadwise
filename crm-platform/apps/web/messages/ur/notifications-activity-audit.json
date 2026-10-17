@@ -165,6 +165,12 @@
         "titleNoName": "ٹیسٹ اطلاع",
         "bodyNoActor": "اگر آپ یہ پڑھ سکتے ہیں تو لائیو اطلاعات کام کر رہی ہیں۔"
       },
+      "snooze_wake": {
+        "title": "{name} آپ کی فہرست میں واپس آ گیا",
+        "titleNoName": "مؤخر چیٹ آپ کی فہرست میں واپس آ گئی",
+        "titleTeam": "{name} آپ کی ٹیم کے لیے واپس آ گیا",
+        "titleTeamNoName": "مؤخر چیٹ آپ کی ٹیم کے لیے واپس آ گئی"
+      },
       "marketplace_renewal_due": {
         "titleAuto": "{name} کی تجدید {date, date, medium} کو ہوگی",
         "bodyAuto": "اس تاریخ کو {name} کی تجدید کے لیے آپ کے کارڈ سے خودکار طور پر رقم لی جائے گی۔ اسے روکنے کے لیے اس سے پہلے منسوخ کریں۔",
@@ -216,6 +222,7 @@
         "device_group_join_request": "گروپ میں شمولیت کی درخواست",
         "device_group_removed": "WhatsApp گروپ سے خارج کیا گیا",
         "test": "ٹیسٹ اطلاع",
+        "snooze_wake": "مؤخر چیٹ واپس آ گئی",
         "marketplace_renewal_due": "ادائیگی والی ایپ کی تجدید قریب ہے",
         "marketplace_payment_failed": "ادائیگی والی ایپ کی ادائیگی ناکام",
         "marketplace_subscription_ended": "ادائیگی والی ایپ کی سبسکرپشن ختم"
@@ -406,6 +413,10 @@
         "appointment_calendar_drift": {
           "label": "اپائنٹمنٹ Google Calendar کے ساتھ ہم آہنگ نہیں ہے",
           "hint": "آنے والی اپائنٹمنٹ کا Google Calendar ایونٹ حذف، منتقل یا اس کے مہمان تبدیل کر دیے گئے۔ اپائنٹمنٹ خود تبدیل نہیں ہوئی؛ آپ فیصلہ کرتے ہیں کہ کیا کرنا ہے۔"
+        },
+        "snooze_wake": {
+          "label": "مؤخر چیٹ واپس آتی ہے",
+          "hint": "مؤخر چیٹ مقررہ وقت پر دوبارہ کھلتی ہے اور آپ یا آپ کی ٹیم کو تفویض ہوتی ہے۔"
         },
         "marketplace_renewal_due": {
           "label": "ادائیگی والی ایپ کی تجدید کی یاد دہانی",

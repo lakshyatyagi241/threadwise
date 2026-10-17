@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
@@ -33,6 +33,7 @@ import {
 } from '../lib/group-thread';
 import type { MentionMember } from '../lib/mentions';
 import type { SnoozePreset } from '../lib/selection';
+import { fullStamp, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { GroupCostLine } from './group-cost-line';
@@ -117,6 +118,7 @@ export interface ThreadPaneProps {
     onPriority: (priority: ConversationPriority) => void;
     onSnooze: (preset: SnoozePreset) => void;
     onWake: () => void;
+    onSpam: () => void;
   };
   /** Tags of the open conversation: present when the caller may put tags on threads. */
   tags?: {
@@ -136,6 +138,9 @@ export interface ThreadPaneProps {
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const tg = useTranslations('team-inbox-conversations.groupThread');
+  const tl = useTranslations('team-inbox-conversations.list');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   const canManageChannels = useCan('inbox.channel.manage');
   const canExportLogs = useCan('inbox.logs.export');
   const canOpenGroups = useCan('wa.groups.read');
@@ -219,6 +224,13 @@ export function ThreadPane(props: ThreadPaneProps) {
         ]
       : [];
   const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  const snoozeLabel =
+    detail?.status === 'snoozed' && detail.snoozedUntil
+      ? (() => {
+          const m = snoozeLeftMessage(snoozeLeft(detail.snoozedUntil, props.nowMs));
+          return tl('snoozedFor', { left: tl(m.key, m.values) });
+        })()
+      : null;
   // Email: the reply box adds Cc, Bcc and a subject; templates, shares and files are not part of an email reply (yet).
   const isEmail = detail?.channel.kind === 'email';
   const emailSubject = isEmail ? latestEmailSubject(thread.state.messages, detail?.title) : '';
@@ -244,7 +256,21 @@ export function ThreadPane(props: ThreadPaneProps) {
                   {detail.title}
                 </h2>
                 {resolved && <Badge tone="success">{t(`status.${detail.status}`)}</Badge>}
-                {detail.status === 'snoozed' && <Badge tone="warning">{t('status.snoozed')}</Badge>}
+                {detail.status === 'snoozed' && (
+                  <Badge
+                    tone="warning"
+                    title={
+                      detail.snoozedUntil
+                        ? tl('unsnoozesAt', {
+                            time: fullStamp(detail.snoozedUntil, locale, timeZone),
+                          })
+                        : undefined
+                    }
+                  >
+                    {snoozeLabel ?? t('status.snoozed')}
+                  </Badge>
+                )}
+                {detail.status === 'spam' && <Badge tone="danger">{t('status.spam')}</Badge>}
                 {win && <WindowBadge view={win} />}
                 <SlaBadge status={detail.slaStatus} nowMs={props.nowMs} />
               </div>
@@ -319,13 +345,16 @@ export function ThreadPane(props: ThreadPaneProps) {
               <TriageMenu
                 priority={detail.priority}
                 snoozed={detail.status === 'snoozed'}
+                spam={detail.status === 'spam'}
                 canPriority={props.can.priority ?? false}
                 canSnooze={props.can.snooze ?? false}
                 canWake={props.can.resolve}
+                canSpam={props.can.resolve}
                 busy={props.triage.busy}
                 onPriority={props.triage.onPriority}
                 onSnooze={props.triage.onSnooze}
                 onWake={props.triage.onWake}
+                onSpam={props.triage.onSpam}
               />
             )}
             {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (

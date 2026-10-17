@@ -34,6 +34,7 @@ const HIGH_URGENCY_TYPES = new Set([
   'chat_waiting',
   'mention',
   'conversation_assigned',
+  'snooze_wake',
   'teamchat_mention',
   'teamchat_message',
 ]);

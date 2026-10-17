@@ -11,7 +11,6 @@ export interface SlaPolicyRow {
   name: string;
   firstResponseMinutes: number | null;
   resolutionMinutes: number | null;
-  pauseWhenWaitingOnCustomer: boolean;
   respectBusinessHours: boolean;
   priorityOverrides: SlaPriorityOverrides;
   isDefault: boolean;
@@ -22,7 +21,7 @@ export interface SlaPolicyRow {
 }
 
 const SELECT = sql`
-  SELECT p.id, p.uuid, p.name, p.first_response_minutes, p.resolution_minutes, p.pause_when_waiting_on_customer,
+  SELECT p.id, p.uuid, p.name, p.first_response_minutes, p.resolution_minutes,
          p.respect_business_hours, p.priority_overrides, p.is_default, p.row_version,
          to_char(p.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS created_at,
          to_char(p.updated_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS updated_at,
@@ -37,7 +36,6 @@ const toRow = (r: Raw): SlaPolicyRow => ({
   name: r.name as string,
   firstResponseMinutes: int(r.first_response_minutes),
   resolutionMinutes: int(r.resolution_minutes),
-  pauseWhenWaitingOnCustomer: r.pause_when_waiting_on_customer === true,
   respectBusinessHours: r.respect_business_hours === true,
   priorityOverrides: (r.priority_overrides as SlaPriorityOverrides | null) ?? {},
   isDefault: r.is_default === true,
@@ -51,7 +49,6 @@ export interface PolicyValues {
   name: string;
   firstResponseMinutes: number | null;
   resolutionMinutes: number | null;
-  pauseWhenWaitingOnCustomer: boolean;
   respectBusinessHours: boolean;
   priorityOverrides: SlaPriorityOverrides;
   isDefault: boolean;
@@ -104,9 +101,9 @@ export class SlaPoliciesRepository {
 
   async insert(tx: Tx, orgId: number, v: PolicyValues): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO sla_policies (org_id, name, first_response_minutes, resolution_minutes, pause_when_waiting_on_customer,
+      INSERT INTO sla_policies (org_id, name, first_response_minutes, resolution_minutes,
                                 respect_business_hours, priority_overrides, is_default)
-      VALUES (${orgId}, ${v.name}, ${v.firstResponseMinutes}, ${v.resolutionMinutes}, ${v.pauseWhenWaitingOnCustomer},
+      VALUES (${orgId}, ${v.name}, ${v.firstResponseMinutes}, ${v.resolutionMinutes},
               ${v.respectBusinessHours}, ${JSON.stringify(v.priorityOverrides)}::jsonb, ${v.isDefault})
       RETURNING id`);
     return Number((res.rows as Raw[])[0]!.id);
@@ -122,7 +119,7 @@ export class SlaPoliciesRepository {
   ): Promise<boolean> {
     const res = await tx.execute(sql`
       UPDATE sla_policies SET name = ${v.name}, first_response_minutes = ${v.firstResponseMinutes},
-        resolution_minutes = ${v.resolutionMinutes}, pause_when_waiting_on_customer = ${v.pauseWhenWaitingOnCustomer},
+        resolution_minutes = ${v.resolutionMinutes},
         respect_business_hours = ${v.respectBusinessHours}, priority_overrides = ${JSON.stringify(v.priorityOverrides)}::jsonb,
         is_default = ${v.isDefault}
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${rowVersion}

@@ -130,6 +130,29 @@ export function listTime(
 }
 
 /** The full stamp in a tooltip ("5 Jul 2026, 14:05"). */
+/**
+ * How long a snooze still has, for the row and the header ("Snoozed · 2 hours"). `due` when the time has come (the wake-up sweep runs
+ * every 30 seconds, so a thread can sit at due for a moment).
+ */
+export type SnoozeLeft = { kind: 'due' } | { kind: 'minutes' | 'hours' | 'days'; count: number };
+
+export function snoozeLeft(iso: string, nowMs: number): SnoozeLeft {
+  const ms = Date.parse(iso) - nowMs;
+  if (!Number.isFinite(ms) || ms <= 0) return { kind: 'due' };
+  const m = Math.max(1, Math.round(ms / 60_000));
+  if (m < 60) return { kind: 'minutes', count: m };
+  const h = Math.round(m / 60);
+  if (h < 24) return { kind: 'hours', count: h };
+  return { kind: 'days', count: Math.round(h / 24) };
+}
+
+/** The message key and values that say a snooze's time left (`list.snoozeLeft.*`). */
+export function snoozeLeftMessage(left: SnoozeLeft): { key: string; values: { count?: number } } {
+  return left.kind === 'due'
+    ? { key: 'snoozeLeft.due', values: {} }
+    : { key: `snoozeLeft.${left.kind}`, values: { count: left.count } };
+}
+
 export function fullStamp(iso: string | null, locale: string, timeZone?: string): string {
   if (!iso) return '';
   return new Date(iso).toLocaleString(locale, {

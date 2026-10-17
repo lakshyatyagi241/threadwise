@@ -10,7 +10,7 @@ import type { SlaTimer } from '@crm/contracts';
  *     server zone, so the two disagreed).
  * Kept: the customer's workspace hours apply (never the operator's); a missing day falls back to Mon-Fri 09:00-17:00; the
  * running-timer severity is `breach` past due, `warn` inside the last max(5 min, a quarter of the window), else `ok`;
- * `pause_when_waiting_on_customer` is stored but not honoured; status `pending` or `closed` never stops a timer.
+ * There is no pause: a ticket's timer runs until it is answered or closed (the "waiting on customer" pause was removed).
  */
 
 export const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;

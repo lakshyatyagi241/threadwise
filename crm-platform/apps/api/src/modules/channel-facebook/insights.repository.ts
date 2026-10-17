@@ -30,7 +30,7 @@ export interface LocalPost {
 export class InsightsRepository {
   async stats(tx: Tx, orgId: number, pageId: string, pageRowId: number): Promise<LocalStats> {
     const convos = await tx.execute(sql`
-      SELECT count(*)::int AS convos, count(*) FILTER (WHERE c.status IN ('open', 'pending'))::int AS open
+      SELECT count(*)::int AS convos, count(*) FILTER (WHERE c.status = 'open')::int AS open
       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
       WHERE c.org_id = ${orgId} AND ch.kind = 'facebook' AND ch.external_id = ${pageId}`);
     const msgs = await tx.execute(sql`

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
+import { routingAssignSchema, type ConversationPriority, type RoutingAssign } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { onLeaveOnSql } from '../../common/workspace-calendar';
 
@@ -417,7 +418,7 @@ export class RoutingRulesRepository {
   /**
    * Of these people, the ones who can take a conversation now: active members who are not marked offline or busy (nobody has set a
    * status until the availability screen exists, and no row counts as available, as Reference's routing did), with the open and
-   * pending conversations each holds right now.
+   * open conversations each holds right now.
    */
   async available(
     tx: Tx,
@@ -430,7 +431,7 @@ export class RoutingRulesRepository {
       SELECT u.id, u.uuid,
              (SELECT count(*)::int FROM conversations c
                WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived
-                 AND c.status IN ('open', 'pending')) AS open
+                 AND c.status = 'open') AS open
       FROM users u
       LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
       WHERE u.org_id = ${orgId} AND u.status = 'active'
@@ -447,5 +448,133 @@ export class RoutingRulesRepository {
       uuid: r.uuid as string,
       open: Number(r.open),
     }));
+  }
+
+  /**
+   * The workspace tag with this name (case-insensitive, as the tag library is), created when it does not exist. Returns its id.
+   * Reference's add_tag does the same (firstOrCreate by slug).
+   */
+  async findOrCreateTag(
+    tx: Tx,
+    orgId: number,
+    name: string,
+    color: string | null,
+  ): Promise<number> {
+    const created = rowsOf(
+      await tx.execute(sql`
+        INSERT INTO tags (org_id, uuid, name, color)
+        VALUES (${orgId}, gen_random_uuid(), ${name}, ${color ?? '#075E54'})
+        ON CONFLICT (org_id, name) DO NOTHING
+        RETURNING id`),
+    );
+    if (created[0]) return Number(created[0].id);
+    const found = rowsOf(
+      await tx.execute(sql`SELECT id FROM tags WHERE org_id = ${orgId} AND name = ${name}`),
+    );
+    return Number(found[0]!.id);
+  }
+
+  /** True when the tag was put on the conversation now, false when it already had it. */
+  async attachTag(tx: Tx, orgId: number, conversationId: number, tagId: number): Promise<boolean> {
+    const res = rowsOf(
+      await tx.execute(sql`
+        INSERT INTO conversation_tag (org_id, conversation_id, tag_id, added_by)
+        VALUES (${orgId}, ${conversationId}, ${tagId}, NULL)
+        ON CONFLICT (org_id, conversation_id, tag_id) DO NOTHING
+        RETURNING id`),
+    );
+    return res.length > 0;
+  }
+
+  /** Schedules the deferred action (Reference's escalation): it runs at `dueAt` unless the thread gets a reply first. */
+  async setEscalation(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    dueAt: Date,
+    action: { ruleId: string; ruleName: string; priority: string | null; assign: unknown },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET escalation_due_at = ${dueAt.toISOString()}::timestamptz,
+        escalation_action = ${JSON.stringify(action)}::jsonb
+      WHERE org_id = ${orgId} AND id = ${conversationId}`);
+  }
+
+  async clearEscalation(tx: Tx, orgId: number, conversationId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE conversations SET escalation_due_at = NULL, escalation_action = NULL
+      WHERE org_id = ${orgId} AND id = ${conversationId}`);
+  }
+
+  /**
+   * The deferred action of this conversation, when it is due and still applies: the thread is open and nobody from us has replied
+   * (`first_response_at` is empty). Null otherwise. The caller holds the row lock.
+   */
+  async dueEscalation(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    now: Date,
+  ): Promise<{
+    ruleId: string;
+    ruleName: string;
+    priority: ConversationPriority | null;
+    assign: RoutingAssign | null;
+  } | null> {
+    const res = rowsOf(
+      await tx.execute(sql`
+        SELECT escalation_action FROM conversations
+        WHERE org_id = ${orgId} AND id = ${conversationId}
+          AND escalation_due_at IS NOT NULL AND escalation_due_at <= ${now.toISOString()}::timestamptz
+          AND status = 'open' AND first_response_at IS NULL`),
+    );
+    const raw = res[0]?.escalation_action as Raw | null | undefined;
+    if (!raw || typeof raw.ruleId !== 'string') return null;
+    const assign = routingAssignSchema.nullable().safeParse(raw.assign ?? null);
+    const priority =
+      raw.priority === 'low' ||
+      raw.priority === 'normal' ||
+      raw.priority === 'high' ||
+      raw.priority === 'urgent'
+        ? raw.priority
+        : null;
+    return {
+      ruleId: raw.ruleId,
+      ruleName: typeof raw.ruleName === 'string' ? raw.ruleName : '',
+      priority,
+      assign: assign.success ? assign.data : null,
+    };
+  }
+
+  /** Conversations whose deferred action is due (every workspace; the sweep applies each one in its own workspace's scope). */
+  async dueEscalations(tx: Tx, limit: number): Promise<Array<{ orgId: number; uuid: string }>> {
+    const res = rowsOf(
+      await tx.execute(sql`
+        SELECT org_id, uuid FROM conversations
+        WHERE escalation_due_at IS NOT NULL AND escalation_due_at <= now()
+          AND status = 'open' AND first_response_at IS NULL
+        ORDER BY escalation_due_at, id
+        LIMIT ${limit}`),
+    );
+    return res.map((r) => ({ orgId: Number(r.org_id), uuid: r.uuid as string }));
+  }
+
+  /** Moves the conversation's row version (the touch trigger) so a client holding the old row sees the change. */
+  async touchConversation(tx: Tx, orgId: number, conversationId: number): Promise<void> {
+    await tx.execute(
+      sql`UPDATE conversations SET updated_at = now() WHERE org_id = ${orgId} AND id = ${conversationId}`,
+    );
+  }
+
+  /** The conversation's priority column; the touch trigger moves its row version. */
+  async setPriority(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    priority: string,
+  ): Promise<void> {
+    await tx.execute(
+      sql`UPDATE conversations SET priority = ${priority} WHERE org_id = ${orgId} AND id = ${conversationId}`,
+    );
   }
 }

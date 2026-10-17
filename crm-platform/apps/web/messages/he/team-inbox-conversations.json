@@ -29,7 +29,8 @@
       "priorityChanged": "העדיפות עודכנה",
       "snoozed": "השיחה נדחתה",
       "tagAdded": "התגית נוספה",
-      "tagRemoved": "התגית הוסרה"
+      "tagRemoved": "התגית הוסרה",
+      "spammed": "השיחה סומנה כספאם."
     },
     "list": {
       "title": "תיבת הודעות",
@@ -46,7 +47,6 @@
       },
       "status": {
         "open": "פתוחה",
-        "pending": "ממתינה",
         "snoozed": "בהשהיה",
         "resolved": "נפתרה",
         "closed": "נפתרה",
@@ -113,7 +113,7 @@
         "cancel": "ביטול",
         "apply": "החלה",
         "status": "סטטוס צ׳אט",
-        "statusHint": "ללא בחירה יוצגו צ׳אטים פתוחים וממתינים.",
+        "statusHint": "אם לא בוחרים דבר, מוצגות שיחות פתוחות.",
         "conversation": "שיחה",
         "any": "הכול",
         "assigned": "משויכת",
@@ -145,7 +145,15 @@
       "statusOpen": "פתוחה",
       "statusAll": "כל הסטטוסים",
       "channelFilter": "ערוץ",
-      "selectRow": "בחירת {name}"
+      "selectRow": "בחירת {name}",
+      "snoozedFor": "נדחה · {left}",
+      "snoozeLeft": {
+        "due": "הגיע הזמן",
+        "minutes": "{count, plural, one {דקה אחת} two {# דקות} other {# דקות}}",
+        "hours": "{count, plural, one {שעה אחת} two {שעתיים} other {# שעות}}",
+        "days": "{count, plural, one {יום אחד} two {יומיים} other {# ימים}}"
+      },
+      "unsnoozesAt": "ייפתח מחדש ב-{time}"
     },
     "status": {
       "received": "התקבלה",
@@ -579,6 +587,8 @@
           "tag_removed": "תגית הוסרה על ידי {actor}",
           "first_response": "התשובה הראשונה נשלחה",
           "sla_breach": "מועד המענה הוחמץ",
+          "spam_flagged": "סומן כספאם על ידי {actor}",
+          "escalated": "הוסלם",
           "unknown": "{what} על ידי {actor}"
         },
         "actors": {
@@ -595,7 +605,6 @@
         "noMessages": "אין הודעות",
         "status": {
           "open": "פתוחה",
-          "pending": "ממתינה",
           "snoozed": "בהשהיה",
           "resolved": "נפתרה",
           "closed": "סגורה",
@@ -1014,7 +1023,9 @@
     "triage": {
       "priority": "עדיפות",
       "snooze": "דחייה",
-      "wake": "החזר עכשיו"
+      "wake": "החזר עכשיו",
+      "markSpam": "סמן כספאם",
+      "notSpam": "לא ספאם"
     },
     "bulk": {
       "barLabel": "פעולות מרוכזות",
@@ -1047,7 +1058,8 @@
       "tagAdd": "הוספת תגית",
       "tagRemove": "הסרת תגית",
       "onLeave": "בחופשה",
-      "onLeaveUntil": "בחופשה עד {date}"
+      "onLeaveUntil": "בחופשה עד {date}",
+      "spam": "סמן כספאם"
     },
     "tags": {
       "tag": "תגית",

@@ -89,7 +89,14 @@
       "delete": "Löschen",
       "startsFlow": "Startet außerdem den Flow {name}",
       "flowOff": "Der Flow ist ausgeschaltet",
-      "flowGone": "Startet außerdem einen gelöschten Flow"
+      "flowGone": "Startet außerdem einen gelöschten Flow",
+      "markSpamSummary": "Markiert die Unterhaltung als Spam",
+      "prioritySummary": "Setzt die Priorität auf {priority}",
+      "tagsSummary": "Fügt die Tags hinzu: {tags}",
+      "escalationSummary": "Wenn niemand innerhalb von {minutes} Minuten antwortet:",
+      "escalationReassign": "an die Mitarbeitenden dieser Regel neu zuweisen",
+      "escalationPriority": "die Priorität auf {priority} setzen",
+      "autoReplySummary": "Sendet die Antwort: {body}"
     },
     "form": {
       "back": "Automatische Zuweisung",
@@ -118,7 +125,14 @@
         "contactIncomplete": "Vervollständigen oder entfernen Sie die unvollständigen Kontaktbedingungen.",
         "keywordsMany": "Verwenden Sie höchstens 20 Wörter.",
         "targets": "Wählen Sie mindestens einen Agenten oder ein Team aus.",
-        "specific": "Wählen Sie für einen bestimmten Agenten genau einen Agenten aus."
+        "specific": "Wählen Sie für einen bestimmten Agenten genau einen Agenten aus.",
+        "actions": "Wählen Sie, was die Regel tut.",
+        "tagsMany": "Höchstens 5 Tags verwenden.",
+        "escalationMinutes": "Ganze Minuten von 1 bis 1440 eingeben.",
+        "escalationAction": "Neu zuweisen, Priorität setzen oder beides.",
+        "escalationAgents": "Neu zuweisen braucht Mitarbeitende in dieser Regel: oben auswählen.",
+        "autoReplyEmpty": "Antwort schreiben oder die Option abwählen.",
+        "autoReplyLong": "Die Antwort ist zu lang (höchstens 1024 Zeichen)."
       },
       "whenTitle": "Wenn eine neue Unterhaltung eingeht",
       "whenHint": "Jede festgelegte Bedingung muss zutreffen. Lassen Sie einen Teil leer, um ihn zu ignorieren.",
@@ -188,7 +202,23 @@
         "loadFailed": "Die Flows konnten nicht geladen werden, die Auswahl ist deshalb eventuell unvollständig."
       },
       "onLeave": "abwesend",
-      "onLeaveUntil": "abwesend bis {date}"
+      "onLeaveUntil": "abwesend bis {date}",
+      "actions": "Was die Regel tut",
+      "actionsHint": "Wählen Sie eins oder beides. Eine Regel kann die Unterhaltung zuweisen, als Spam markieren oder beides tun.",
+      "actionAssign": "Mitarbeitenden oder Teams zuweisen",
+      "actionMarkSpam": "Unterhaltung als Spam markieren",
+      "setPriority": "Priorität festlegen",
+      "priorityKeep": "Priorität unverändert lassen",
+      "addTags": "Tags hinzufügen",
+      "addTagsHint": "Mit Kommas trennen. Ein Tag, den es noch nicht gibt, wird angelegt.",
+      "escalate": "Wenn niemand rechtzeitig antwortet, eskalieren",
+      "escalateHint": "Minuten ab dem Auslösen der Regel, bis 1440 (ein Tag). Eine frühere Antwort von uns hebt es auf.",
+      "escalateMinutes": "Minuten ohne Antwort",
+      "escalateReassign": "An die Mitarbeitenden dieser Regel neu zuweisen",
+      "escalatePriority": "Dann die Priorität setzen",
+      "autoReply": "Eine automatische Antwort senden",
+      "autoReplyBody": "Antworttext",
+      "autoReplyHint": "Wird im Namen des Unternehmens an den Kunden gesendet. Außerhalb des 24-Stunden-Fensters wird keine freie Antwort gesendet."
     },
     "sla": {
       "back": "Zurück zu den Einstellungen",
@@ -206,8 +236,6 @@
       "resolution": "Lösung innerhalb von (Minuten)",
       "minutesHint": "Leer lassen, wenn es kein Ziel gibt. 60 ist eine Stunde, 1440 ist ein Tag.",
       "minutesInvalid": "Verwenden Sie ganze Zahlen ab 1.",
-      "pause": "Pausieren, solange auf den Kunden gewartet wird",
-      "pauseHint": "Eine Unterhaltung mit Status „Ausstehend“ wird nicht markiert.",
       "businessHours": "Nur Geschäftszeiten zählen",
       "businessHoursHint": "Nutzt die Zeiten und die Zeitzone aus den Einstellungen Ihres Arbeitsbereichs.",
       "makeDefault": "Diese Richtlinie zur Standardrichtlinie machen",
