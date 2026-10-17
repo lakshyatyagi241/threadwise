@@ -476,3 +476,55 @@ new place): [wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) se
 | A tooltip stayed on screen after a tap or a click (it showed on any focus)                                            | it shows on keyboard focus only                                               |
 | The date was cut by the frozen "+" column                                                                             | the column shows the day; widths re-set                                       |
 | Lint: state set inside effects (`?add=`, the task row)                                                                | derived while rendering; the effects only touch the address bar and the focus |
+
+## Contact record redesign (owner feedback 2026-10-17): Activity first, one action row, calls logged in place
+
+Not a "same UI as Reference" screen: an owner-requested extension on top of the redesign above, to make the contact page easy for small businesses. Reference's
+contact page is not the model here (the competitor patterns are: HubSpot, Freshsales, Bigin, Zoho, read in the owner's browser, layout only). Control mapping:
+[wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) section 8. Intended differences from the page of the previous round (all owner-requested):
+
+| Row | Before                                                                                  | Now (intended)                                                                                                    |
+| --- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1   | Two rows of buttons (Note, Task, Meeting, Add company, four round channel icons, "...") | One row: Note, Task, Call, Meeting, Message, "..." (Call and Message are split buttons)                           |
+| 2   | Big lifecycle block and big status block                                                | One thin stage line with a small Status menu                                                                      |
+| 3   | Activities: Meetings card, Time zone card, then a timeline of the activity feed only    | Compose box, then one timeline of nine sources: Up next, day groups, filter pills, search, Load more              |
+| 4   | Overview: tabs of fields and seven cards                                                | Key details (edit in place, Show all) and folded one-line cards; Recent activity                                  |
+| 5   | Sub-nav of two groups with long labels                                                  | Three groups, short labels, counts                                                                                |
+| 6   | Calls could only be logged on the Call logs screen                                      | Log a call inline on the contact (compose Call tab, Call button menu), "How did the call go?" after a phone click |
+| 7   | "Contact Field History" button in the header                                            | "..." menu and the History section (same drawer and panel)                                                        |
+
+- Verified here: `tsc --noEmit` of apps/web exit 0; ESLint of the 43 changed web files exit 0; Prettier check of the 71 changed files exit 0; the repo's 21-locale check
+  (`i18n-translate-sync/scripts/check.sh`) exit 0; vitest of the contacts, tasks, calling-voice, help-center, contact-consent and i18n folders: 98 files passed and the
+  one dead-strings failure that run showed was fixed (nine unused strings removed in 21 locales), then `messages.test.ts` 6 of 6. New tests: the timeline model
+  (merge horizon, up next, day groups on a zone, filters, search, one task counted once), the call prompt rules and storage, the timeline row, feed, compose box, action
+  row, key details, side cards and collapse card (English and Arabic, from the real messages), the prompt's behaviour in jsdom with fake timers, the section groups.
+  The calling-voice domain's own tests (log-call rules) stay green: the form reuses them.
+- Browser (Playwright, installed Chromium 1228) on a private stack (API :3410 from `origin/main` plus the call logging branch, web :3411, scratch Postgres :55921,
+  seeded through the real API: a showcase contact with 4 notes, 5 tasks, 2 meetings, 3 logged calls, a chat and 35 field changes, and a contact with no history).
+  Screenshots and scripts: `C:\project\wadesk-port\_work\parity\contact-record-redesign\` (`shots\NN-before|after-what-device.png`, `check.mjs`, `stack\`). 34 checks, all pass:
+  - Before and after of the Activities page (01 and 02): the first timeline entry now starts at 607 px of a 900 px window (before, at about 1,000 px: below the fold, after the header, two button rows, the lifecycle and status blocks, the Meetings card and the Time zone card).
+  - Overview, Key details expanded, a folded card opened, compose tabs (note, task, call, meeting), filter pill, search, empty state, quick view (Activity and Overview),
+    390 px (Activity, Overview, empty, quick view), dark, right-to-left (Arabic), each captured and looked at.
+  - Working, with the request seen on the wire: a note (Ctrl+Enter), a task added and then completed in place, a call logged with a follow-up task (`POST /v2/calls/log`)
+    and its line on the timeline, a meeting scheduled; the timeline grew each time.
+  - "How did the call go?": the click on **Call on your phone** is remembered, the line shows after 30 seconds, **Log it** opens the Call tab inline at the time of the click.
+  - Keyboard: arrow keys and End move between compose tabs and keep the focus on the strip, Space toggles a filter pill, Tab order of the action row, the Call menu opens with
+    Enter and closes with Escape, a folded card opens with Enter. No sideways page scroll at 390 px. No page errors.
+- Not verified (BL-260): a screen-reader pass; a workspace with a connected WhatsApp number (the stack has only the dev simulator channel, so Message showed its reason and
+  the chat path is covered by the route tests only); a real telephony provider (the framework's own parity note covers its side); native review of the 154 machine-drafted
+  strings per language. Headless Chromium leaves client-side navigation stuck after a `tel:` link (there is no phone app to hand it to), so the prompt check carries the
+  remembered click to a fresh tab, as a real person's tab would still hold it.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                      | Fix                                                                                          |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| The sub-nav's group headings touched the item above them                                    | a gap before each group                                                                      |
+| A logged call said "by Demo Admin" twice (the server's line already names the person)       | the person is left out of those lines                                                        |
+| A task just completed was in the open and the done list for a moment: two rows with one key | the timeline counts a task once, as done                                                     |
+| A busy edit made dozens of "N details updated" lines                                        | edits by the same person within five minutes are one line                                    |
+| The call form offered "They called me" before "I called them"                               | outgoing first                                                                               |
+| In dark mode the Message button and the open sub-nav item were unreadable                   | the primary colour in dark                                                                   |
+| "Save note" wrapped to two lines at 390 px                                                  | no wrap                                                                                      |
+| Arrow keys on the compose tabs moved the cursor into the form, so the next arrow was lost   | the focus is given back to the tab strip; clicking a tab is what puts the cursor in its form |
+| The active stage could be out of sight on a phone                                           | the stage line scrolls to it                                                                 |
