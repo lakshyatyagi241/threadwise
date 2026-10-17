@@ -36,6 +36,10 @@ In-app Help guides: one customer guide (`support-customer`, documents `nav:suppo
   a fraud or tos_violation flag still blocks the workspace like a suspension (kept from Reference, shown in the UI).
 - Inbox permissions map to the operator roles: auditors reach the queue, drawer and audit feed; notes, spam, flags and suspension need support or super admin
   (suspend: super admin only).
+- Dormant tables dropped (migration `20261216090000_drop_dormant_tables.sql`, approved by the project owner 2026-10-16; nothing writes them, and the first block of the migration refuses to run if any holds a row):
+  - `support_agents` (Reference: a roster of promoted platform users): replaced by `support_agent_roster`, keyed by platform operator. Reason: operators are not workspace users.
+  - `support_assignments` (Reference: an assignment history table that Reference never wrote either): dropped; the current assignee is `support_tickets.assigned_agent_id`. Assignment history, if wanted, needs an operator-keyed table. Reason: dead in both.
+  - `playbooks` (Reference: the playbook list): replaced by `support_playbooks`. Reason: same data, the operator-console table already exists.
 
 ## Screens (operator console menu group "Support")
 

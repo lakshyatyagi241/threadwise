@@ -363,7 +363,6 @@ export async function verifyFlows(a: Args): Promise<void> {
       'flow_runs',
       'flow_run_steps',
       'flow_subscribers',
-      'flow_connected_devices',
       'flb_geta_publish_syncs',
       'keyword_reply_contents',
       'keyword_reply_logs',

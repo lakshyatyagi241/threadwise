@@ -74,6 +74,8 @@ function walk(dir: string, out: string[] = []): string[] {
 const PLATFORM_LOCKS: Record<string, string> = {
   'modules/addons-extension-registry/extension-store.ts':
     'the extension registry is platform-wide, keyed by slug',
+  'modules/analytics/rollup/rollup.service.ts':
+    'serialises the one platform-wide analytics rollup: a single watermark covers every workspace, so the pass and the nightly reconcile share one lock',
   'modules/auth/platform/impersonation.service.ts': 'keyed by the platform operator id',
   'modules/auth/platform/operator-auth.service.ts': 'keyed by the platform operator id',
   'modules/platform-payment-gateways/billing-settings.service.ts':

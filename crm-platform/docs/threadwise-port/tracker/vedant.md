@@ -611,7 +611,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-075 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-076 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-077 | done |  | owned by FLR, built there (TW-FLR-052..058) |
-| TW-FLB-078 | wontfix |  | dead code in Reference: table kept, no screen or writer |
+| TW-FLB-078 | wontfix |  | dead code in Reference: no screen or writer; the table flow_connected_devices was dropped by 20261216090000_drop_dormant_tables.sql |
 | TW-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
 | TW-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
 | TW-FLB-081 | done |  | addition beyond Reference (owner request): Ask for file / image. Contracts, FLR executor, editor card/panel/form, test runner, en+ar; unit + API e2e (simulator channel, no real WhatsApp) |

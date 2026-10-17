@@ -8,6 +8,7 @@
  *    in the API repository layer, not here.
  *  - Internal bigint ids never appear. Every identifier on the wire is a uuid.
  */
+export * from './analytics';
 export * from './common/ids';
 export * from './common/pagination';
 export * from './common/errors';

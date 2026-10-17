@@ -430,7 +430,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-PLAN-025 | done |  | GET /v2/platform/plan-analytics/export CSV of the same numbers |
 | TW-PLAN-026 | done |  | GET /v2/platform/financial: revenue, MRR, ARR, refunds, outstanding, charts, latest orders; unknown window = 30d |
 | TW-PLAN-027 | done |  | GET /v2/platform/premium: paid vs free, ARPU, conversion, plan mix, revenue by plan |
-| TW-PLAN-028 | wontfix |  | dead feature (package_features table has no UI and nothing reads it); bullets come from the catalogue per the port note |
+| TW-PLAN-028 | wontfix |  | dead feature (package_features table has no UI and nothing reads it; the table was dropped by 20261216090000_drop_dormant_tables.sql); bullets come from the catalogue per the port note |
 
 ## wallet-message-billing (wallet)
 

@@ -74,6 +74,7 @@ import {
 } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
+import { AnalyticsModule } from './modules/analytics';
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
@@ -189,6 +190,7 @@ import { HealthModule } from './health/health.module';
     LocalizationTranslationModule,
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
+    AnalyticsModule,
     AiKeysUsageAdminModule,
     AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,

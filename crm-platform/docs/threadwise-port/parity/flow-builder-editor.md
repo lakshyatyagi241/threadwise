@@ -85,6 +85,7 @@ round trip including malformed files and both exporters' file formats.
 - Reference's middleware stores empty strings as null in node data; ours stores the empty string (the runtime reads both as unset).
 - Web app serves a page shell for an anonymous visitor and redirects on the client (no content served); the Next.js dev indicator is the one Tab stop without a ring.
 - Literal backslash-n in two Reference placeholders is not reproduced.
+- **`flow_connected_devices` (TW-FLB-078) dropped.** Reference: a table and two endpoints that nothing calls (dead code, wontfix). Here: table dropped by migration `20261216090000_drop_dormant_tables.sql`; the sender binding is on the flow row itself (`flows.trigger_channel_id`, which replaced the polymorphic `flows.trigger_device_id`; see parity/flow-runtime-engine.md row 001). Reason: dead in Reference and nothing here writes it. Approved by the project owner 2026-10-16.
 
 ## Channel links and the Facebook switch (verified against the other domains, 2026-10-08)
 

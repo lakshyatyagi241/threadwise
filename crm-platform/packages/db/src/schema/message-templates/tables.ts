@@ -18,46 +18,6 @@ import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../colu
 import { organizations, users } from '../foundation';
 import { waProviderConfigs } from '../whatsapp-devices-baileys/tables';
 
-export const chatTemplates = pgTable(
-  'chat_templates',
-  {
-    orgId: orgIdColumn(),
-    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
-    uuid: uuid('uuid').notNull().defaultRandom(),
-    userId: idColumn('user_id'),
-    title: text('title').notNull(),
-    category: text('category').notNull(),
-    tone: text('tone'),
-    body: text('body').notNull(),
-    mediaPath: text('media_path'),
-    mediaType: text('media_type'),
-    status: text('status').notNull().default('approved'),
-    createdAt: createdAt(),
-    updatedAt: updatedAt(),
-    rowVersion: rowVersion(),
-  },
-  (t) => [
-    primaryKey({ columns: [t.orgId, t.id] }),
-    unique('uq_chat_templates_org_id_uuid').on(t.orgId, t.uuid),
-    foreignKey({
-      name: 'fk_chat_templates_org',
-      columns: [t.orgId],
-      foreignColumns: [organizations.id],
-    }).onDelete('cascade'),
-    foreignKey({
-      name: 'fk_chat_templates_user_id',
-      columns: [t.orgId, t.userId],
-      foreignColumns: [users.orgId, users.id],
-    }).onDelete('set null'),
-    index('idx_chat_templates_category').on(t.orgId, t.category),
-    index('idx_chat_templates_status').on(t.orgId, t.status),
-    index('idx_chat_templates_user_id').on(t.orgId, t.userId),
-  ],
-);
-
-export type ChatTemplatesRow = typeof chatTemplates.$inferSelect;
-export type NewChatTemplatesRow = typeof chatTemplates.$inferInsert;
-
 export const waTemplates = pgTable(
   'wa_templates',
   {

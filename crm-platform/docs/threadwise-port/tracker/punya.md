@@ -238,5 +238,5 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WECH-016 | in-progress |  | gated by the extra_channels plan feature; access_wechat, wechat_broadcasts, wechat_channels_limit and the wechat_enabled platform switch are not separate here |
 | TW-WECH-017 | blocked |  | custom menu builder not built (outside the first port); needs a screen and three endpoints over /cgi-bin/menu |
 | TW-WECH-018 | blocked |  | follower insights not built (outside the first port); needs one endpoint over /datacube |
-| TW-WECH-019 | blocked |  | Node flow bridge and flow sessions need the flow runtime and node bridge; wechat_flow_sessions unused |
+| TW-WECH-019 | blocked |  | Node flow bridge needs the flow runtime and node bridge; wechat_flow_sessions dropped by 20261216090000_drop_dormant_tables.sql (flow_runs serves every channel, TW-FLR-070 wontfix; pending owner confirmation: punya) |
 | TW-WECH-020 | wontfix |  | dead code in Reference: nothing calls createQrCode or showTyping |
