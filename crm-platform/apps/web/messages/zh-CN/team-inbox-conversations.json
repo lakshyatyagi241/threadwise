@@ -325,6 +325,7 @@
         "sendTemplate": "发送模板"
       },
       "readOnly": "您可以查看此会话，但没有回复的权限。",
+      "resolvedBanner": "此会话已解决。请重新打开后再回复。",
       "assignedToOther": "此聊天已分配给其他客服。请先将其分配给自己，然后再回复。",
       "typing": "{count, plural, other {# 位团队成员正在输入}}",
       "messagesLabel": "消息",

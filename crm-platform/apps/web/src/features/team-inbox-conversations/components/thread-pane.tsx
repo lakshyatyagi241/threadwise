@@ -205,10 +205,13 @@ export function ThreadPane(props: ThreadPaneProps) {
   const cloudBlock = cloudGroupBlock(detail?.cloudGroup);
   const groupSendBlocked =
     isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
-  const replyDisabled = windowClosed || channelDown || groupBlock !== null;
+  // A resolved or closed thread takes no message from any agent: the input is gone until someone reopens it (the API refuses too).
+  const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  const replyDisabled = windowClosed || channelDown || groupBlock !== null || resolved;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
+    !resolved &&
     canReply &&
     !channelDown &&
     !groupSendBlocked &&
@@ -216,14 +219,13 @@ export function ThreadPane(props: ThreadPaneProps) {
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail && canReply && !channelDown && !groupLimited && props.mode === 'reply'
+    detail && !resolved && canReply && !channelDown && !groupLimited && props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
           ...(detail.capabilities.interactive ? (['buttons'] as const) : []),
         ]
       : [];
-  const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
   const snoozeLabel =
     detail?.status === 'snoozed' && detail.snoozedUntil
       ? (() => {
@@ -464,146 +466,170 @@ export function ThreadPane(props: ThreadPaneProps) {
         onReload={() => void thread.sync()}
       />
 
-      {channelDown && props.channel && canReply && props.mode === 'reply' && (
-        <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
-      )}
-      {win &&
-        windowClosed &&
-        !channelDown &&
-        !groupLimited &&
-        canReply &&
-        props.mode === 'reply' && (
-          <div
-            role="status"
-            data-testid="inbox-window-banner"
-            className="flex items-start gap-2 border-t border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger"
-          >
-            <AlertIcon className="mt-0.5 shrink-0" />
-            <div>
-              <p className="font-medium">{t('windowBanner.title')}</p>
-              <p className="text-xs">{t('windowBanner.message')}</p>
-              {canTemplate && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  data-testid="inbox-window-template"
-                  className="mt-2"
-                  onClick={() => setTemplatesOpen(true)}
-                >
-                  {t('windowBanner.sendTemplate')}
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-      {groupBlock !== null && canReply && props.mode === 'reply' && (
+      {resolved ? (
         <div
           role="status"
-          data-testid="inbox-group-readonly"
-          data-reason={groupBlock}
-          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+          data-testid="inbox-resolved-bar"
+          className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground"
         >
-          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
-          <div>
-            <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
-            <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
-          </div>
-        </div>
-      )}
-      {cloudBlock !== null && canReply && props.mode === 'reply' && (
-        <div
-          role="status"
-          data-testid="inbox-group-cloud-block"
-          data-reason={cloudBlock}
-          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
-        >
-          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
-          <div>
-            <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
-            <p className="text-xs text-muted-foreground">
-              {tg(`cloudBlock.${cloudBlock}.message`)}
-            </p>
-          </div>
-        </div>
-      )}
-      {detail?.cloudGroup &&
-        cloudBlock === null &&
-        canReply &&
-        props.mode === 'reply' &&
-        !channelDown && <GroupCostLine group={detail.cloudGroup} />}
-      {lockedToOther && props.mode === 'reply' && (
-        <div
-          role="status"
-          data-testid="inbox-assigned-lock"
-          className="flex items-center gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
-        >
-          <AlertIcon className="shrink-0 text-muted-foreground" />
-          <p className="min-w-0 flex-1">{t('assignedToOther')}</p>
-          {props.can.assignSelf && (
+          <span>{t('resolvedBanner')}</span>
+          {props.can.resolve && (
             <Button
+              type="button"
               variant="secondary"
               size="sm"
-              data-testid="inbox-assigned-lock-assign"
-              disabled={props.assignMenu?.busy}
-              onClick={props.onAssignSelf}
+              data-testid="inbox-resolved-reopen"
+              disabled={props.resolving}
+              onClick={props.onToggleResolved}
             >
-              {t('assignToMe')}
+              {t('reopen')}
             </Button>
           )}
         </div>
-      )}
-      {!props.can.reply && props.mode === 'reply' && (
-        <p
-          role="status"
-          className="border-t border-border bg-muted/40 px-4 py-2 text-xs text-muted-foreground"
-        >
-          {t('readOnly')}
-        </p>
-      )}
+      ) : (
+        <>
+          {channelDown && props.channel && canReply && props.mode === 'reply' && (
+            <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
+          )}
+          {win &&
+            windowClosed &&
+            !channelDown &&
+            !groupLimited &&
+            canReply &&
+            props.mode === 'reply' && (
+              <div
+                role="status"
+                data-testid="inbox-window-banner"
+                className="flex items-start gap-2 border-t border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger"
+              >
+                <AlertIcon className="mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium">{t('windowBanner.title')}</p>
+                  <p className="text-xs">{t('windowBanner.message')}</p>
+                  {canTemplate && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      data-testid="inbox-window-template"
+                      className="mt-2"
+                      onClick={() => setTemplatesOpen(true)}
+                    >
+                      {t('windowBanner.sendTemplate')}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+          {groupBlock !== null && canReply && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-group-readonly"
+              data-reason={groupBlock}
+              className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+              <div>
+                <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
+                <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
+              </div>
+            </div>
+          )}
+          {cloudBlock !== null && canReply && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-group-cloud-block"
+              data-reason={cloudBlock}
+              className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+              <div>
+                <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {tg(`cloudBlock.${cloudBlock}.message`)}
+                </p>
+              </div>
+            </div>
+          )}
+          {detail?.cloudGroup &&
+            cloudBlock === null &&
+            canReply &&
+            props.mode === 'reply' &&
+            !channelDown && <GroupCostLine group={detail.cloudGroup} />}
+          {lockedToOther && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-assigned-lock"
+              className="flex items-center gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="shrink-0 text-muted-foreground" />
+              <p className="min-w-0 flex-1">{t('assignedToOther')}</p>
+              {props.can.assignSelf && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  data-testid="inbox-assigned-lock-assign"
+                  disabled={props.assignMenu?.busy}
+                  onClick={props.onAssignSelf}
+                >
+                  {t('assignToMe')}
+                </Button>
+              )}
+            </div>
+          )}
+          {!props.can.reply && props.mode === 'reply' && (
+            <p
+              role="status"
+              className="border-t border-border bg-muted/40 px-4 py-2 text-xs text-muted-foreground"
+            >
+              {t('readOnly')}
+            </p>
+          )}
 
-      <Composer
-        aiModel={props.aiModel}
-        conversationId={props.conversationId}
-        mode={props.mode}
-        onMode={props.onMode}
-        replyDisabled={replyDisabled}
-        lockedHint={lockedToOther ? t('assignedToOther') : undefined}
-        canReply={canReply}
-        canNote={props.can.note}
-        canAttach={isEmail ? canReply : (detail?.capabilities.media.length ?? 0) > 0}
-        email={
-          isEmail
-            ? {
-                defaultSubject: defaultReplySubject(emailSubject),
-                channelId: detail?.channel.id,
-                sendProblem: emailSendProblem(thread.state.pending),
-              }
-            : undefined
-        }
-        groupSendBlocked={groupSendBlocked}
-        groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
-        groupMentions={mentionsOn ? { search: searchMembers } : undefined}
-        attachments={
-          detail
-            ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
-            : undefined
-        }
-        savedReplies={canReply ? { channelKind: detail?.channel.kind } : undefined}
-        canTemplate={canTemplate}
-        onTemplate={() => setTemplatesOpen(true)}
-        canShare={shareKinds.length > 0}
-        onShare={() => setShareOpen(true)}
-        onSend={(draft) => {
-          props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
-          setReply(null);
-        }}
-        replyTo={replyTo}
-        onCancelReply={() => setReply(null)}
-        onNote={props.onNote}
-        handleRef={props.composerRef}
-      />
+          <Composer
+            aiModel={props.aiModel}
+            conversationId={props.conversationId}
+            mode={props.mode}
+            onMode={props.onMode}
+            replyDisabled={replyDisabled}
+            lockedHint={lockedToOther ? t('assignedToOther') : undefined}
+            canReply={canReply}
+            canNote={props.can.note}
+            canAttach={isEmail ? canReply : (detail?.capabilities.media.length ?? 0) > 0}
+            email={
+              isEmail
+                ? {
+                    defaultSubject: defaultReplySubject(emailSubject),
+                    channelId: detail?.channel.id,
+                    sendProblem: emailSendProblem(thread.state.pending),
+                  }
+                : undefined
+            }
+            groupSendBlocked={groupSendBlocked}
+            groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
+            groupMentions={mentionsOn ? { search: searchMembers } : undefined}
+            attachments={
+              detail
+                ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
+                : undefined
+            }
+            savedReplies={canReply ? { channelKind: detail?.channel.kind } : undefined}
+            canTemplate={canTemplate}
+            onTemplate={() => setTemplatesOpen(true)}
+            canShare={shareKinds.length > 0}
+            onShare={() => setShareOpen(true)}
+            onSend={(draft) => {
+              props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
+              setReply(null);
+            }}
+            replyTo={replyTo}
+            onCancelReply={() => setReply(null)}
+            onNote={props.onNote}
+            handleRef={props.composerRef}
+          />
+        </>
+      )}
       <ShareDialog
-        open={shareOpen}
+        open={shareOpen && !resolved}
         onClose={() => setShareOpen(false)}
         kinds={shareKinds}
         onSend={thread.sendShare}
@@ -612,7 +638,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         conversationId={props.conversationId}
         contactName={detail?.title}
         contactFields={contactFieldsOf(detail?.contactSummary)}
-        open={templatesOpen}
+        open={templatesOpen && !resolved}
         onClose={() => setTemplatesOpen(false)}
         onSend={thread.sendTemplate}
       />

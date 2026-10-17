@@ -325,6 +325,7 @@
         "sendTemplate": "テンプレートを送信"
       },
       "readOnly": "この会話は閲覧できますが、返信する権限がありません。",
+      "resolvedBanner": "この会話は解決済みです。返信するには再開してください。",
       "assignedToOther": "このチャットは別の担当者に割り当てられています。返信するには、先に自分に割り当ててください。",
       "typing": "{count, plural, other {# 人のチームメイトが入力中}}",
       "messagesLabel": "メッセージ",

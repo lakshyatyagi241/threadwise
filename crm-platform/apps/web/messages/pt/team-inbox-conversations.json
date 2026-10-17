@@ -325,6 +325,7 @@
         "sendTemplate": "Enviar um modelo"
       },
       "readOnly": "Você pode ler esta conversa, mas não tem permissão para responder.",
+      "resolvedBanner": "Esta conversa foi resolvida. Reabra-a para responder.",
       "assignedToOther": "Este chat está atribuído a outro agente. Atribua-o a você primeiro para responder.",
       "typing": "{count, plural, one {Um membro da equipe está digitando} other {# membros da equipe estão digitando}}",
       "messagesLabel": "Mensagens",

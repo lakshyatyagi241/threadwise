@@ -325,6 +325,7 @@
         "sendTemplate": "Invia un template"
       },
       "readOnly": "Puoi leggere questa conversazione, ma non hai l’autorizzazione per rispondere.",
+      "resolvedBanner": "Questa conversazione è risolta. Riaprila per rispondere.",
       "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnala prima a te stesso per rispondere.",
       "typing": "{count, plural, one {Un collega sta scrivendo} other {# colleghi stanno scrivendo}}",
       "messagesLabel": "Messaggi",

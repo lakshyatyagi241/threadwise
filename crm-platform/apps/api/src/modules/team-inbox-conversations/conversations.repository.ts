@@ -224,6 +224,8 @@ function toRow(r: Raw): InboxConversationRow {
 /** The visibility columns of one conversation (`ConversationRecord` plus its id). */
 export interface ConversationRecordRow {
   id: number;
+  /** The thread's status: a `resolved` or `closed` thread takes no agent reply (see `InboxThreadService.assertCanReply`). */
+  status: string;
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
   channelOwnerUserId: number | null;
@@ -231,6 +233,7 @@ export interface ConversationRecordRow {
 
 const toRecord = (r: Raw): ConversationRecordRow => ({
   id: Number(r.id),
+  status: String(r.status),
   assigneeUserId: int(r.assignee_user_id),
   assigneeTeamId: int(r.assignee_team_id),
   channelOwnerUserId: int(r.channel_owner_user_id),
@@ -401,7 +404,7 @@ export class ConversationsRepository {
   /** The visibility columns of a conversation by uuid, without a lock (the cheap "may this person see it" check for reads). */
   async recordByUuid(tx: Tx, orgId: number, uuid: string): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(
-      sql`SELECT c.id, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+      sql`SELECT c.id, c.status, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
           FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}`,
     );
     const r = rowsOf(res)[0];
@@ -418,7 +421,7 @@ export class ConversationsRepository {
     messageUuid: string,
   ): Promise<ConversationRecordRow | null> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
+      SELECT c.id, c.status, c.assignee_user_id, c.assignee_team_id, ${channelOwnerSql('c')} AS channel_owner_user_id
       FROM conversations c
       WHERE c.org_id = ${orgId}
         AND c.id = (SELECT m.conversation_id FROM messages m WHERE m.org_id = ${orgId} AND m.uuid = ${messageUuid} LIMIT 1)`);

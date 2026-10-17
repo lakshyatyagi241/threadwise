@@ -325,6 +325,7 @@
         "sendTemplate": "Send a template"
       },
       "readOnly": "You can read this conversation but you do not have permission to reply.",
+      "resolvedBanner": "This conversation is resolved. Reopen it to reply.",
       "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
       "messagesLabel": "Messages",

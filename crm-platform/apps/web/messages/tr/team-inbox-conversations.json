@@ -325,6 +325,7 @@
         "sendTemplate": "Şablon gönder"
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
+      "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
       "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
