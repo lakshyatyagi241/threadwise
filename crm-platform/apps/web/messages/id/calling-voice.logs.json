@@ -63,7 +63,9 @@
         "agent": "Ditangani oleh",
         "allAgents": "Semua orang",
         "apply": "Filter",
-        "clear": "Hapus"
+        "clear": "Hapus",
+        "source": "Sumber",
+        "allSources": "Semua sumber"
       },
       "table": {
         "caption": "Panggilan, terbaru dulu",
@@ -136,12 +138,14 @@
           "reject_sent": "Panggilan ditolak",
           "terminate_sent": "Perintah tutup telepon dikirim",
           "terminate": "Panggilan berakhir",
-          "recording_stored": "Rekaman disimpan"
+          "recording_stored": "Rekaman disimpan",
+          "logged": "Panggilan dicatat"
         },
         "noRecording": {
           "title": "Rekaman",
           "message": "Panggilan ini tidak memiliki rekaman."
-        }
+        },
+        "notes": "Catatan"
       },
       "recording": {
         "title": "Rekaman",
@@ -154,6 +158,53 @@
         "linkUntil": "Tautan ini berlaku sampai {time}. Tekan putar lagi setelah itu.",
         "playFailed": "Rekaman tidak dapat diputar.",
         "retry": "Coba lagi"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Dicatat manual",
+        "telephony": "Saluran telepon",
+        "mobile_app": "Aplikasi seluler",
+        "web_click_to_call": "Klik untuk menelepon"
+      },
+      "logCall": {
+        "button": "Catat panggilan",
+        "title": "Catat panggilan",
+        "close": "Tutup",
+        "with": "Panggilan dengan",
+        "phone": "Nomor telepon",
+        "phoneHint": "Panggilan dihubungkan ke kontak yang memiliki nomor ini.",
+        "phoneHintContact": "Opsional. Panggilan dihubungkan ke kontak ini.",
+        "direction": "Arah",
+        "outcome": "Hasilnya",
+        "outcomes": {
+          "connected": "Tersambung",
+          "no_answer": "Tidak dijawab",
+          "busy": "Sibuk",
+          "left_voicemail": "Meninggalkan pesan suara",
+          "wrong_number": "Nomor salah",
+          "declined": "Ditolak",
+          "failed": "Gagal"
+        },
+        "when": "Kapan dimulai",
+        "minutes": "Lama dalam menit",
+        "notes": "Catatan",
+        "notesHint": "Terlihat oleh semua orang yang dapat melihat panggilan ini. Hingga 2.000 karakter.",
+        "followUp": "Buat juga tugas tindak lanjut",
+        "followUpDue": "Tindak lanjut pada",
+        "followUpHint": "Tugas ditugaskan kepada Anda dan dihubungkan ke kontak.",
+        "cancel": "Batal",
+        "save": "Simpan panggilan",
+        "saving": "Menyimpan...",
+        "saved": "Panggilan dicatat.",
+        "savedNoContact": "Panggilan dicatat. Belum ada kontak dengan nomor ini.",
+        "problems": {
+          "noWho": "Isi nomor telepon.",
+          "badWhen": "Pilih kapan panggilan dimulai.",
+          "futureWhen": "Panggilan tidak dapat dimulai di masa depan.",
+          "badMinutes": "Isi lama panggilan dalam menit, paling banyak 1.440.",
+          "noDue": "Pilih tanggal untuk tindak lanjut.",
+          "badDue": "Pilih tanggal yang valid untuk tindak lanjut."
+        }
       }
     },
     "analytics": {

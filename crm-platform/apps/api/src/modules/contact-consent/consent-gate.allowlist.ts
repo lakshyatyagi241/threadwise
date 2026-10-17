@@ -15,6 +15,8 @@ export const SEND_PRIMITIVES = [
   'VIBER_API',
   'WECHAT_API',
   'CALLING_GRAPH',
+  // Asks a telephony vendor to ring a customer (click-to-call): only the click-to-call service may, after its gate check.
+  'clickToCall',
   'APPOINTMENT_MESSENGER',
   'MailDriverRegistry',
   'EngineSenderRegistry',

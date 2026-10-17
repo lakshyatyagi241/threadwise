@@ -63,7 +63,9 @@
         "agent": "Afgehandeld door",
         "allAgents": "Iedereen",
         "apply": "Filteren",
-        "clear": "Wissen"
+        "clear": "Wissen",
+        "source": "Bron",
+        "allSources": "Alle bronnen"
       },
       "table": {
         "caption": "Gesprekken, nieuwste eerst",
@@ -136,12 +138,14 @@
           "reject_sent": "Gesprek geweigerd",
           "terminate_sent": "Ophangverzoek verzonden",
           "terminate": "Gesprek beëindigd",
-          "recording_stored": "Opname opgeslagen"
+          "recording_stored": "Opname opgeslagen",
+          "logged": "Gesprek vastgelegd"
         },
         "noRecording": {
           "title": "Opname",
           "message": "Dit gesprek heeft geen opname."
-        }
+        },
+        "notes": "Notities"
       },
       "recording": {
         "title": "Opname",
@@ -154,6 +158,53 @@
         "linkUntil": "Deze link werkt tot {time}. Druk daarna opnieuw op afspelen.",
         "playFailed": "De opname kon niet worden afgespeeld.",
         "retry": "Opnieuw proberen"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Handmatig vastgelegd",
+        "telephony": "Telefoonlijn",
+        "mobile_app": "Mobiele app",
+        "web_click_to_call": "Klik om te bellen"
+      },
+      "logCall": {
+        "button": "Gesprek vastleggen",
+        "title": "Gesprek vastleggen",
+        "close": "Sluiten",
+        "with": "Gesprek met",
+        "phone": "Telefoonnummer",
+        "phoneHint": "Het gesprek wordt gekoppeld aan het contact met dit nummer.",
+        "phoneHintContact": "Optioneel. Het gesprek wordt aan dit contact gekoppeld.",
+        "direction": "Richting",
+        "outcome": "Hoe het ging",
+        "outcomes": {
+          "connected": "Verbonden",
+          "no_answer": "Geen antwoord",
+          "busy": "In gesprek",
+          "left_voicemail": "Voicemail achtergelaten",
+          "wrong_number": "Verkeerd nummer",
+          "declined": "Geweigerd",
+          "failed": "Mislukt"
+        },
+        "when": "Wanneer het begon",
+        "minutes": "Duur in minuten",
+        "notes": "Notities",
+        "notesHint": "Zichtbaar voor iedereen die dit gesprek kan zien. Maximaal 2.000 tekens.",
+        "followUp": "Maak ook een vervolgtaak",
+        "followUpDue": "Opvolgen op",
+        "followUpHint": "De taak wordt aan jou toegewezen en aan het contact gekoppeld.",
+        "cancel": "Annuleren",
+        "save": "Gesprek opslaan",
+        "saving": "Opslaan...",
+        "saved": "Gesprek vastgelegd.",
+        "savedNoContact": "Gesprek vastgelegd. Nog geen contact heeft dit nummer.",
+        "problems": {
+          "noWho": "Geef een telefoonnummer.",
+          "badWhen": "Kies wanneer het gesprek begon.",
+          "futureWhen": "Het gesprek kan niet in de toekomst beginnen.",
+          "badMinutes": "Geef de duur in minuten, maximaal 1.440.",
+          "noDue": "Kies een datum voor de opvolging.",
+          "badDue": "Kies een geldige datum voor de opvolging."
+        }
       }
     },
     "analytics": {

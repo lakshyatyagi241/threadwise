@@ -21,7 +21,7 @@ keywords:
 
 ## What it is for
 
-Call logs lists every WhatsApp call to or from your numbers, with its length, who handled it and how it ended. Open a call to see what happened step by step and, if it was recorded, to play the recording. The Analytics tab turns the same calls into figures.
+Call logs lists every WhatsApp call to or from your numbers, with its length, who handled it and how it ended. It also lists the calls that were not on WhatsApp and were written down with [Log a call](help:log-a-call); pick a **Source** in the filter to see one kind only. Open a call to see what happened step by step and, if it was recorded, to play the recording. The Analytics tab turns the same calls into figures.
 
 ## How to use it
 

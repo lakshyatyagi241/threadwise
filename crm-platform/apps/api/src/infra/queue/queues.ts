@@ -100,6 +100,8 @@ export const QUEUES = {
   CALENDAR_ICS_REFRESH: 'calendar-ics-refresh',
   /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
   WECHAT_BROADCAST: 'wechat-broadcast',
+  /** One job per finished call a telephony provider reported (call logging): finds the contact and writes the call log entry. Own queue: a slow database write must not make a provider retry its callback, and a call burst must not hold WhatsApp ingest. */
+  TELEPHONY_INGEST: 'telephony-ingest',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

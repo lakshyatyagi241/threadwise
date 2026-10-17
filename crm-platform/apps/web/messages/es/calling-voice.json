@@ -90,7 +90,17 @@
       "UNEXPECTED": "Algo salió mal. Inténtalo de nuevo.",
       "CALL_PLAYBACK_LINK_INVALID": "El enlace de esta grabación ha caducado. Pulsa reproducir de nuevo para obtener uno nuevo.",
       "CALL_RANGE_INVALID": "Estas fechas no tienen sentido: el inicio no puede ser posterior al fin, un rango puede abarcar como máximo un año y la zona horaria debe ser válida.",
-      "CALL_OUTSIDE_WINDOW": "Este contacto está fuera de tu horario de llamadas, así que no se realizó la llamada. La ventana de llamadas se abre {when}."
+      "CALL_OUTSIDE_WINDOW": "Este contacto está fuera de tu horario de llamadas, así que no se realizó la llamada. La ventana de llamadas se abre {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "No se encontró esta llamada.",
+      "CALL_LOG_CONTACT_REQUIRED": "Indica el contacto o un número de teléfono válido.",
+      "CALL_LOG_TIME_INVALID": "Una llamada no puede empezar en el futuro ni hace más de 400 días.",
+      "CALL_LOG_NOT_EDITABLE": "Esta llamada la informó un teléfono o un proveedor de telefonía, así que no se puede cambiar.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Ya pasó el tiempo permitido para cambiar esta llamada.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Una tarea de seguimiento necesita un contacto. Indica un número que pertenezca a uno de tus contactos.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "No se encontró esta conexión de telefonía.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Este proveedor de telefonía no está disponible.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Esta conexión de telefonía no puede realizar llamadas.",
+      "TELEPHONY_CALL_FAILED": "El proveedor de telefonía no pudo realizar la llamada."
     },
     "settings": {
       "title": "Llamadas",

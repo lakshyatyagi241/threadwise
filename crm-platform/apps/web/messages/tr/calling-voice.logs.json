@@ -63,7 +63,9 @@
         "agent": "İlgilenen",
         "allAgents": "Herkes",
         "apply": "Filtrele",
-        "clear": "Temizle"
+        "clear": "Temizle",
+        "source": "Kaynak",
+        "allSources": "Tüm kaynaklar"
       },
       "table": {
         "caption": "Çağrılar, en yeniden başlayarak",
@@ -136,12 +138,14 @@
           "reject_sent": "Çağrı reddedildi",
           "terminate_sent": "Kapatma gönderildi",
           "terminate": "Çağrı sona erdi",
-          "recording_stored": "Kayıt kaydedildi"
+          "recording_stored": "Kayıt kaydedildi",
+          "logged": "Arama kaydedildi"
         },
         "noRecording": {
           "title": "Kayıt",
           "message": "Bu çağrının kaydı yok."
-        }
+        },
+        "notes": "Notlar"
       },
       "recording": {
         "title": "Kayıt",
@@ -154,6 +158,53 @@
         "linkUntil": "Bu bağlantı {time} saatine kadar geçerlidir. Sonrasında tekrar oynat'a basın.",
         "playFailed": "Kayıt oynatılamadı.",
         "retry": "Tekrar dene"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Elle kaydedildi",
+        "telephony": "Telefon hattı",
+        "mobile_app": "Mobil uygulama",
+        "web_click_to_call": "Tıkla ve ara"
+      },
+      "logCall": {
+        "button": "Arama kaydet",
+        "title": "Arama kaydet",
+        "close": "Kapat",
+        "with": "Görüşülen kişi",
+        "phone": "Telefon numarası",
+        "phoneHint": "Arama, bu numaraya sahip kişiyle ilişkilendirilir.",
+        "phoneHintContact": "İsteğe bağlı. Arama bu kişiyle ilişkilendirilir.",
+        "direction": "Yön",
+        "outcome": "Nasıl geçti",
+        "outcomes": {
+          "connected": "Bağlandı",
+          "no_answer": "Cevap yok",
+          "busy": "Meşgul",
+          "left_voicemail": "Sesli mesaj bırakıldı",
+          "wrong_number": "Yanlış numara",
+          "declined": "Reddedildi",
+          "failed": "Başarısız"
+        },
+        "when": "Ne zaman başladı",
+        "minutes": "Süre (dakika)",
+        "notes": "Notlar",
+        "notesHint": "Bu aramayı görebilen herkes görür. En fazla 2.000 karakter.",
+        "followUp": "Ayrıca bir takip görevi oluştur",
+        "followUpDue": "Takip tarihi",
+        "followUpHint": "Görev size atanır ve kişiyle ilişkilendirilir.",
+        "cancel": "İptal",
+        "save": "Aramayı kaydet",
+        "saving": "Kaydediliyor...",
+        "saved": "Arama kaydedildi.",
+        "savedNoContact": "Arama kaydedildi. Henüz hiçbir kişide bu numara yok.",
+        "problems": {
+          "noWho": "Bir telefon numarası girin.",
+          "badWhen": "Aramanın ne zaman başladığını seçin.",
+          "futureWhen": "Arama gelecekte başlayamaz.",
+          "badMinutes": "Süreyi dakika olarak girin, en fazla 1.440.",
+          "noDue": "Takip için bir tarih seçin.",
+          "badDue": "Takip için geçerli bir tarih seçin."
+        }
       }
     },
     "analytics": {
