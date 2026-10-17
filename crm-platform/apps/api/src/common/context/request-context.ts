@@ -16,6 +16,18 @@ export interface ImpersonationContext {
   expiresAt: Date;
 }
 
+/**
+ * Raw answers of Redis reads started early for the guards that follow (see auth-prefetch.ts). `PREFETCH_FAILED` (a symbol) stands
+ * for a read that errored; `grants` carries RbacService's own result and is opaque here.
+ */
+export interface AuthPrefetch {
+  readonly orgId: number;
+  readonly userId: number;
+  orgSuspended?: Promise<string | null | symbol>;
+  gate?: Promise<string | null | symbol>;
+  grants?: Promise<unknown>;
+}
+
 export interface RequestContext {
   requestId: string;
   orgId: number;
@@ -24,6 +36,8 @@ export interface RequestContext {
   actorId: number | null;
   /** Staff user id — only set when actorType is 'user'. Written to audit rows. */
   userId: number | null;
+  /** Redis reads started early for the guards that follow; set by JwtAuthGuard, consumed once each. */
+  prefetch?: AuthPrefetch;
   /** Resolved capability keys, populated by the permissions guard. */
   grants?: Map<string, { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'own' }>;
   ip?: string;

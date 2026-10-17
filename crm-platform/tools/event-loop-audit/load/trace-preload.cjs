@@ -81,7 +81,28 @@ http.Server.prototype.emit = function (event, request, response) {
     rec.dur = now() - rec.t0;
     rec.status = response.statusCode;
     delete rec.t0;
-    for (const k of ['dur', 'qms', 'cw', 'txw', 'txq', 'rms'])
+    // Wall time during which at least one Redis command was in flight: commands sent together overlap, so this is smaller than
+    // `rms` (the sum of their individual round trips) exactly when they were pipelined.
+    // `rg` is how many separate stretches that was: commands that overlap form one group, so `rg` counts the Redis waits the request
+    // really made one after another. It does not depend on how fast the host was, which `rw` and `rms` do.
+    rec.rw = 0;
+    rec.rg = 0;
+    if (rec.rints) {
+      const iv = rec.rints.sort((a, b) => a[0] - b[0]);
+      let [s, e] = iv[0];
+      rec.rg = 1;
+      for (const [a, b] of iv.slice(1)) {
+        if (a <= e) e = Math.max(e, b);
+        else {
+          rec.rw += e - s;
+          rec.rg++;
+          [s, e] = [a, b];
+        }
+      }
+      rec.rw += e - s;
+      delete rec.rints;
+    }
+    for (const k of ['dur', 'qms', 'cw', 'txw', 'txq', 'rms', 'rw'])
       rec[k] = Math.round(rec[k] * 100) / 100;
     buffer.push(JSON.stringify(rec));
   });
@@ -175,8 +196,10 @@ function patchRedis(mod) {
     rec.rc++;
     const sig = `${String(command.name).toLowerCase()} ${command.args && command.args.length ? keySig(command.args[0]) : ''}`;
     const done = () => {
-      const d = now() - t;
+      const end = now();
+      const d = end - t;
       rec.rms += d;
+      (rec.rints ??= []).push([t, end]);
       note('redis', rec.route, sig, d);
     };
     r.then(done, done);
@@ -191,5 +214,18 @@ Module._load = function (request) {
   const exported = origLoad.apply(this, arguments);
   if (request === 'pg' && exported && exported.Pool) patchPg(exported);
   if (request === 'ioredis' && exported) patchRedis(exported);
+  // A/B switch for measurements only (run-load.mjs --no-prefetch): turns the guard's early Redis reads off, leaving every other
+  // behaviour as built, so the same stack can be measured with and without them back to back.
+  if (
+    process.env.TRACE_NO_PREFETCH === '1' &&
+    typeof request === 'string' &&
+    /jwt-auth\.guard$/.test(request) &&
+    exported &&
+    exported.JwtAuthGuard &&
+    !exported.JwtAuthGuard.prototype.__noPrefetch
+  ) {
+    exported.JwtAuthGuard.prototype.__noPrefetch = true;
+    exported.JwtAuthGuard.prototype.startPrefetch = function () {};
+  }
   return exported;
 };

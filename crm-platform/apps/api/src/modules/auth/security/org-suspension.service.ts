@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
+import { takeAuthPrefetch } from '../../../common/context/auth-prefetch';
 import type { RequestContext } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -32,7 +33,10 @@ export class OrgSuspensionService {
     if (!(orgId > 0)) return false;
     const key = AuthKeys.orgSuspended(orgId);
     try {
-      const cached = await this.redis.get(key);
+      // JwtAuthGuard may have sent this read together with its own (auth-prefetch.ts); a failed one is simply read again here.
+      const early = await takeAuthPrefetch('orgSuspended', orgId);
+      const cached =
+        early === undefined || typeof early === 'symbol' ? await this.redis.get(key) : early;
       if (cached !== null) return cached === '1';
     } catch (err) {
       this.logger.warn({ err, orgId }, 'org status cache read failed; using the database');
