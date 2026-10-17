@@ -26,6 +26,7 @@ import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
 import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
 import { LSC_OPERATOR_NAV } from '../../lead-scoring/platform/operator-nav';
 import { RETENTION_OPERATOR_NAV } from '../../data-retention/operator-nav';
+import { DPDP_OPERATOR_NAV } from '../../dpdp-register/platform/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -147,6 +148,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...FAQ_OPERATOR_NAV,
   // AI lead scoring (LSC, not a Reference feature): messages/en/lead-scoring-admin.json
   ...LSC_OPERATOR_NAV,
+  // DPDP compliance register (not a Reference feature): messages/en/dpdp-register-admin.json
+  ...DPDP_OPERATOR_NAV,
   // Webhook forwarding (WFWD, not a Reference feature): messages/en/webhook-fanout.json
   {
     id: 'webhook-forwarding',
