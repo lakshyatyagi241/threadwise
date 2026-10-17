@@ -130,7 +130,7 @@ dpdp_register_attestations(
   result text not null check (result in ('pass','fail')),
   note text not null check (length(note) >= 10),
   evidence_url text null,
-  attested_by uuid not null references platform_operators(id),
+  attested_by bigint not null references platform_operators(id),
   attested_at timestamptz not null default now(),
   expires_at timestamptz not null
 )
