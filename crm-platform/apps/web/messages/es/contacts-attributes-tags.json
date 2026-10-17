@@ -97,6 +97,9 @@
       "colGroups": "Grupos",
       "colTags": "Etiquetas",
       "colMemo": "Nota",
+      "colDateOfBirth": "Fecha de nacimiento",
+      "colMinor": "Menor",
+      "minorBadge": "Menor",
       "tagFilter": "Filtrar por etiqueta",
       "allTags": "Todas las etiquetas",
       "consentFilter": "Filtrar por consentimiento",
@@ -123,6 +126,7 @@
       "colEmailId": "Correo electrónico",
       "colStage": "Etapa",
       "colStatus": "Estado",
+      "colLeadScore": "Puntuación del lead",
       "colLanguage": "Idioma",
       "colCreatedOn": "Creado el",
       "pagination": "Paginación",
@@ -139,6 +143,22 @@
       "emailNamed": "Enviar correo a {name}",
       "noEmail": "Sin dirección de correo electrónico",
       "moreFor": "Más acciones para {name}",
+      "message": "Mensaje",
+      "messageNamed": "Enviar mensaje a {name}",
+      "noMessage_noContact": "Sin número de teléfono ni correo electrónico",
+      "noMessage_noChannel": "No hay un número de WhatsApp conectado ni un buzón para este contacto",
+      "noMessage_optedOut": "Este contacto dejó de recibir mensajes",
+      "quickAdd": "Añadir una nota, tarea o reunión",
+      "quickAddNamed": "Añadir una nota, tarea o reunión para {name}",
+      "addTask": "Añadir tarea",
+      "addMeeting": "Programar reunión",
+      "moreTip": "Más",
+      "openNewTab": "Abrir en una pestaña nueva",
+      "sendEmail": "Enviar correo",
+      "copyPhone": "Copiar número de teléfono",
+      "copyEmail": "Copiar dirección de correo",
+      "copied": "Copiado",
+      "copyFailed": "No se pudo copiar",
       "view": "Ver",
       "addToGroup": "Añadir al grupo",
       "tag": "Etiquetar",
@@ -166,7 +186,6 @@
       "columns": "Columnas",
       "addColumnField": "Añadir un campo personalizado como columna",
       "kanbanView": "Vista de tablero (por etapa)",
-      "colLeadScore": "Puntuación del lead",
       "colOwner": "Responsable",
       "unassigned": "Sin responsable",
       "ownerFilter": "Filtrar por responsable",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "Contactos con la etiqueta {tag} sin actividad en 30 días",
       "pqlExampleStage": "Contactos en {stage} creados en los últimos 7 días",
       "pqlExampleNoOwner": "Contactos sin propietario",
-      "colDateOfBirth": "Fecha de nacimiento",
-      "colMinor": "Menor",
-      "minorBadge": "Menor",
       "breadcrumb": "Ruta de navegación",
       "breadcrumbContacts": "Contactos",
       "breadcrumbList": "Lista",
@@ -256,10 +272,7 @@
       "yes": "Sí",
       "no": "No",
       "optInOut": "Rechazó los mensajes de marketing",
-      "openDetails": "Abrir detalles",
-      "openDetailsNamed": "Abrir los detalles de {name}",
       "addNote": "Añadir nota",
-      "addNoteNamed": "Añadir una nota a {name}",
       "chatNamed": "Chatear con {name}",
       "openChat": "Abrir chat",
       "sendSms": "Enviar SMS",
@@ -267,7 +280,21 @@
       "minorFilter": "Filtrar por marca de menor",
       "minorYes": "Marcado como menor",
       "minorNo": "No marcado como menor",
-      "allMinor": "Todos"
+      "allMinor": "Todos",
+      "shortPhone": "Teléfono",
+      "shortEmail": "Correo",
+      "shortStage": "Etapa",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "Creado",
+      "firstRun": {
+        "title": "Añade tus primeros contactos",
+        "message": "Trae a las personas con las que hablas. Los contactos se usan para mensajes, campañas, tareas y negocios.",
+        "addBody": "Escribe a una persona: un nombre y un número de teléfono o una dirección de correo electrónico.",
+        "importCsv": "Importar un archivo CSV",
+        "importBody": "Sube una hoja de cálculo y relaciona sus columnas con los campos de contacto.",
+        "connect": "Conectar WhatsApp",
+        "connectBody": "Conecta tu número para que los contactos puedan responder y tú puedas escribirles."
+      }
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "Notas sobre este contacto",
       "address": "Dirección",
       "addressPlaceholder": "Introduce la dirección",
+      "dateOfBirth": "Fecha de nacimiento",
+      "dateOfBirthHint": "Opcional. Si lo convierte en menor, el contacto se marca como tal.",
       "status": "Estado",
       "statusNone": "- ninguno -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona.",
       "company": "Empresa",
       "companyHint": "Agrupa este contacto bajo una organización.",
-      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
-      "dateOfBirth": "Fecha de nacimiento",
-      "dateOfBirthHint": "Opcional. Si lo convierte en menor, el contacto se marca como tal."
+      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo."
     },
     "tags": {
       "title": "Etiquetas",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "nombre de etiqueta demasiado largo",
         "plan_limit_reached": "se alcanzó el límite de contactos del plan",
         "tag_limit_reached": "se alcanzó el límite de etiquetas del plan",
-        "duplicate_in_file": "número repetido, combinado con una fila anterior",
         "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento",
+        "duplicate_in_file": "número repetido, combinado con una fila anterior",
         "invalid_timezone": "zona horaria no válida"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
@@ -628,6 +655,7 @@
       "language": "Idioma",
       "source": "Origen",
       "address": "Dirección",
+      "dateOfBirth": "Fecha de nacimiento",
       "memo": "Nota",
       "groups": "Grupos",
       "consent": "Mensajes de marketing",
@@ -647,8 +675,7 @@
       "ownerForbidden": "Tu acceso no te permite asignar este contacto a esa persona.",
       "ownerFailed": "No se pudo cambiar el responsable. Inténtalo de nuevo.",
       "ownerMe": "{name} (yo)",
-      "ownerFormer": "Ex miembro",
-      "dateOfBirth": "Fecha de nacimiento"
+      "ownerFormer": "Ex miembro"
     },
     "attributes": {
       "eyebrow": "Más / Atributos",
@@ -1391,17 +1418,17 @@
       "changed": "Los filtros han cambiado desde que se guardó esta vista",
       "more": "Más para {name}",
       "picker": {
-        "title": "Selecciona una vista",
-        "create": "Crear vista nueva",
-        "search": "Buscar vistas...",
-        "empty": "No se encontraron vistas",
-        "pinned": "En pestañas",
         "favorites": "Favoritas",
         "defaultFilters": "Filtros predeterminados",
         "createdViews": "Vistas creadas",
         "addView": "Añadir vista",
         "markFavorite": "Marcar como favorita",
-        "unmarkFavorite": "Quitar de favoritas"
+        "unmarkFavorite": "Quitar de favoritas",
+        "title": "Selecciona una vista",
+        "create": "Crear vista nueva",
+        "search": "Buscar vistas...",
+        "empty": "No se encontraron vistas",
+        "pinned": "En pestañas"
       },
       "menu": {
         "rename": "Renombrar vista",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "Mis contactos",
+        "unassigned": "Sin responsable",
+        "hotLeads": "Leads calientes",
         "newThisWeek": "Nuevos esta semana",
         "newLastWeek": "Nuevos la semana pasada",
         "recentlyCreated": "Creados recientemente",
@@ -1496,6 +1525,9 @@
         "inactive": "Inactivos",
         "unsubscribed": "Dados de baja",
         "minors": "Menores"
+      },
+      "quick": {
+        "label": "Vistas rápidas"
       }
     },
     "erase": {

@@ -97,6 +97,9 @@
       "colGroups": "المجموعات",
       "colTags": "الوسوم",
       "colMemo": "ملاحظة",
+      "colDateOfBirth": "تاريخ الميلاد",
+      "colMinor": "قاصر",
+      "minorBadge": "قاصر",
       "tagFilter": "التصفية حسب الوسم",
       "allTags": "كل الوسوم",
       "consentFilter": "التصفية حسب الموافقة",
@@ -123,6 +126,7 @@
       "colEmailId": "البريد الإلكتروني",
       "colStage": "المرحلة",
       "colStatus": "الحالة",
+      "colLeadScore": "تقييم العميل المحتمل",
       "colLanguage": "اللغة",
       "colCreatedOn": "تاريخ الإنشاء",
       "pagination": "ترقيم الصفحات",
@@ -139,6 +143,22 @@
       "emailNamed": "راسل {name} بالبريد",
       "noEmail": "لا يوجد بريد إلكتروني",
       "moreFor": "المزيد من الإجراءات لـ {name}",
+      "message": "رسالة",
+      "messageNamed": "مراسلة {name}",
+      "noMessage_noContact": "لا يوجد رقم هاتف أو بريد إلكتروني",
+      "noMessage_noChannel": "لا يتوفر رقم WhatsApp متصل أو صندوق بريد لجهة الاتصال هذه",
+      "noMessage_optedOut": "ألغت جهة الاتصال هذه الاشتراك في الرسائل",
+      "quickAdd": "إضافة ملاحظة أو مهمة أو اجتماع",
+      "quickAddNamed": "إضافة ملاحظة أو مهمة أو اجتماع لـ {name}",
+      "addTask": "إضافة مهمة",
+      "addMeeting": "جدولة اجتماع",
+      "moreTip": "المزيد",
+      "openNewTab": "فتح في علامة تبويب جديدة",
+      "sendEmail": "إرسال بريد إلكتروني",
+      "copyPhone": "نسخ رقم الهاتف",
+      "copyEmail": "نسخ عنوان البريد الإلكتروني",
+      "copied": "تم النسخ",
+      "copyFailed": "تعذّر النسخ",
       "view": "عرض",
       "addToGroup": "إضافة إلى مجموعة",
       "tag": "وسم",
@@ -166,7 +186,6 @@
       "columns": "الأعمدة",
       "addColumnField": "إضافة حقل مخصص كعمود",
       "kanbanView": "عرض اللوحة (حسب المرحلة)",
-      "colLeadScore": "تقييم العميل المحتمل",
       "colOwner": "المالك",
       "unassigned": "بدون مالك",
       "ownerFilter": "تصفية حسب المالك",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "جهات اتصال بوسم {tag} غير نشطة منذ 30 يومًا",
       "pqlExampleStage": "جهات اتصال {stage} أُنشئت في آخر 7 أيام",
       "pqlExampleNoOwner": "جهات اتصال بلا مالك",
-      "colDateOfBirth": "تاريخ الميلاد",
-      "colMinor": "قاصر",
-      "minorBadge": "قاصر",
       "breadcrumb": "مسار التنقل",
       "breadcrumbContacts": "جهات الاتصال",
       "breadcrumbList": "قائمة",
@@ -256,10 +272,7 @@
       "yes": "نعم",
       "no": "لا",
       "optInOut": "ألغى الاشتراك في الرسائل التسويقية",
-      "openDetails": "فتح التفاصيل",
-      "openDetailsNamed": "فتح تفاصيل {name}",
       "addNote": "إضافة ملاحظة",
-      "addNoteNamed": "إضافة ملاحظة إلى {name}",
       "chatNamed": "الدردشة مع {name}",
       "openChat": "فتح الدردشة",
       "sendSms": "إرسال SMS",
@@ -267,7 +280,21 @@
       "minorFilter": "التصفية حسب علامة القاصر",
       "minorYes": "مصنَّف كقاصر",
       "minorNo": "غير مصنَّف كقاصر",
-      "allMinor": "الجميع"
+      "allMinor": "الجميع",
+      "shortPhone": "الهاتف",
+      "shortEmail": "البريد",
+      "shortStage": "المرحلة",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "الإنشاء",
+      "firstRun": {
+        "title": "أضف أول جهات اتصال لك",
+        "message": "أضف الأشخاص الذين تتواصل معهم. تُستخدم جهات الاتصال في الرسائل والحملات والمهام والصفقات.",
+        "addBody": "أدخل شخصًا واحدًا: الاسم مع رقم هاتف أو بريد إلكتروني.",
+        "importCsv": "استيراد ملف CSV",
+        "importBody": "ارفع جدول بيانات وطابق أعمدته مع حقول جهة الاتصال.",
+        "connect": "ربط WhatsApp",
+        "connectBody": "اربط رقمك ليتمكن العملاء من الرد وتتمكن من مراسلتهم."
+      }
     },
     "bulk": {
       "label": "إجراءات على جهات الاتصال المحددة",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "ملاحظات عن جهة الاتصال هذه",
       "address": "العنوان",
       "addressPlaceholder": "أدخل العنوان",
+      "dateOfBirth": "تاريخ الميلاد",
+      "dateOfBirthHint": "اختياري. إذا جعل ذلك جهة الاتصال قاصرًا، تُصنَّف جهة الاتصال كذلك.",
       "status": "الحالة",
       "statusNone": "- بلا -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "لا تسمح لك صلاحياتك بتعيين هذه الجهة لهذا الشخص.",
       "company": "الشركة",
       "companyHint": "يضم جهة الاتصال هذه تحت مؤسسة.",
-      "companyRefused": "لا يمكنك استخدام هذه الشركة. اختر شركة أخرى أو امسح الحقل.",
-      "dateOfBirth": "تاريخ الميلاد",
-      "dateOfBirthHint": "اختياري. إذا جعل ذلك جهة الاتصال قاصرًا، تُصنَّف جهة الاتصال كذلك."
+      "companyRefused": "لا يمكنك استخدام هذه الشركة. اختر شركة أخرى أو امسح الحقل."
     },
     "tags": {
       "title": "الوسوم",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "اسم الوسم طويل جدًا",
         "plan_limit_reached": "بلغت حد جهات الاتصال في الباقة",
         "tag_limit_reached": "بلغت حد الوسوم في الباقة",
-        "duplicate_in_file": "رقم مكرر، تم دمجه في صف سابق",
         "invalid_date_of_birth": "تاريخ الميلاد ليس تاريخًا بصيغة السنة أولًا يصلح أن يكون تاريخ ميلاد",
+        "duplicate_in_file": "رقم مكرر، تم دمجه في صف سابق",
         "invalid_timezone": "منطقة زمنية غير صالحة"
       },
       "statusHint": "تُطبَّق على جهات الاتصال التي ينشئها هذا الملف.",
@@ -628,6 +655,7 @@
       "language": "اللغة",
       "source": "المصدر",
       "address": "العنوان",
+      "dateOfBirth": "تاريخ الميلاد",
       "memo": "ملاحظة",
       "groups": "المجموعات",
       "consent": "الرسائل التسويقية",
@@ -647,8 +675,7 @@
       "ownerForbidden": "لا تسمح لك صلاحياتك بتعيين هذه الجهة لهذا الشخص.",
       "ownerFailed": "تعذّر تغيير المالك. حاول مرة أخرى.",
       "ownerMe": "{name} (أنا)",
-      "ownerFormer": "عضو سابق",
-      "dateOfBirth": "تاريخ الميلاد"
+      "ownerFormer": "عضو سابق"
     },
     "attributes": {
       "eyebrow": "المزيد / السمات",
@@ -1391,17 +1418,17 @@
       "changed": "تغيّرت عوامل التصفية منذ حفظ هذا العرض",
       "more": "المزيد لـ {name}",
       "picker": {
-        "title": "اختر عرضًا",
-        "create": "إنشاء عرض جديد",
-        "search": "ابحث في العروض...",
-        "empty": "لا توجد عروض",
-        "pinned": "في التبويبات",
         "favorites": "المفضلة",
         "defaultFilters": "عوامل التصفية الافتراضية",
         "createdViews": "طرق العرض المنشأة",
         "addView": "إضافة طريقة عرض",
         "markFavorite": "وضع علامة كمفضلة",
-        "unmarkFavorite": "إزالة من المفضلة"
+        "unmarkFavorite": "إزالة من المفضلة",
+        "title": "اختر عرضًا",
+        "create": "إنشاء عرض جديد",
+        "search": "ابحث في العروض...",
+        "empty": "لا توجد عروض",
+        "pinned": "في التبويبات"
       },
       "menu": {
         "rename": "إعادة تسمية العرض",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "جهات اتصالي",
+        "unassigned": "بدون مالك",
+        "hotLeads": "عملاء محتملون ساخنون",
         "newThisWeek": "جديدة هذا الأسبوع",
         "newLastWeek": "جديدة الأسبوع الماضي",
         "recentlyCreated": "أُنشئت مؤخرًا",
@@ -1496,6 +1525,9 @@
         "inactive": "غير نشطة",
         "unsubscribed": "ألغت الاشتراك",
         "minors": "القاصرون"
+      },
+      "quick": {
+        "label": "عروض سريعة"
       }
     },
     "erase": {

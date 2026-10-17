@@ -97,6 +97,9 @@
       "colGroups": "Grup",
       "colTags": "Tag",
       "colMemo": "Memo",
+      "colDateOfBirth": "Tanggal lahir",
+      "colMinor": "Di bawah umur",
+      "minorBadge": "Di bawah umur",
       "tagFilter": "Filter berdasarkan tag",
       "allTags": "Semua tag",
       "consentFilter": "Filter berdasarkan persetujuan",
@@ -123,6 +126,7 @@
       "colEmailId": "ID Email",
       "colStage": "Tahap",
       "colStatus": "Status",
+      "colLeadScore": "Skor prospek",
       "colLanguage": "Bahasa",
       "colCreatedOn": "Dibuat Pada",
       "pagination": "Paginasi",
@@ -139,6 +143,22 @@
       "emailNamed": "Email {name}",
       "noEmail": "Tidak ada alamat email",
       "moreFor": "Tindakan lainnya untuk {name}",
+      "message": "Pesan",
+      "messageNamed": "Kirim pesan ke {name}",
+      "noMessage_noContact": "Tidak ada nomor telepon atau alamat email",
+      "noMessage_noChannel": "Tidak ada nomor WhatsApp atau kotak surat yang terhubung untuk kontak ini",
+      "noMessage_optedOut": "Kontak ini berhenti menerima pesan",
+      "quickAdd": "Tambah catatan, tugas, atau rapat",
+      "quickAddNamed": "Tambah catatan, tugas, atau rapat untuk {name}",
+      "addTask": "Tambah tugas",
+      "addMeeting": "Jadwalkan rapat",
+      "moreTip": "Lainnya",
+      "openNewTab": "Buka di tab baru",
+      "sendEmail": "Kirim email",
+      "copyPhone": "Salin nomor telepon",
+      "copyEmail": "Salin alamat email",
+      "copied": "Disalin",
+      "copyFailed": "Tidak dapat menyalin",
       "view": "Lihat",
       "addToGroup": "Tambah ke grup",
       "tag": "Tag",
@@ -166,7 +186,6 @@
       "columns": "Kolom",
       "addColumnField": "Tambah kolom kustom sebagai kolom tabel",
       "kanbanView": "Tampilan papan (berdasarkan tahap)",
-      "colLeadScore": "Skor prospek",
       "colOwner": "Pemilik",
       "unassigned": "Belum ditetapkan",
       "ownerFilter": "Filter berdasarkan pemilik",
@@ -197,9 +216,6 @@
       "pqlExampleTag": "Kontak dengan tag {tag} yang tidak aktif 30 hari",
       "pqlExampleStage": "Kontak {stage} yang dibuat dalam 7 hari terakhir",
       "pqlExampleNoOwner": "Kontak tanpa pemilik",
-      "colDateOfBirth": "Tanggal lahir",
-      "colMinor": "Di bawah umur",
-      "minorBadge": "Di bawah umur",
       "breadcrumb": "Jejak navigasi",
       "breadcrumbContacts": "Kontak",
       "breadcrumbList": "Daftar",
@@ -256,10 +272,7 @@
       "yes": "Ya",
       "no": "Tidak",
       "optInOut": "Berhenti menerima pesan pemasaran",
-      "openDetails": "Buka detail",
-      "openDetailsNamed": "Buka detail {name}",
       "addNote": "Tambah catatan",
-      "addNoteNamed": "Tambah catatan untuk {name}",
       "chatNamed": "Chat dengan {name}",
       "openChat": "Buka chat",
       "sendSms": "Kirim SMS",
@@ -267,7 +280,21 @@
       "minorFilter": "Filter berdasarkan tanda di bawah umur",
       "minorYes": "Ditandai di bawah umur",
       "minorNo": "Tidak ditandai di bawah umur",
-      "allMinor": "Semua orang"
+      "allMinor": "Semua orang",
+      "shortPhone": "Telepon",
+      "shortEmail": "Email",
+      "shortStage": "Tahap",
+      "shortWhatsapp": "WhatsApp",
+      "shortCreated": "Dibuat",
+      "firstRun": {
+        "title": "Tambahkan kontak pertama Anda",
+        "message": "Bawa masuk orang-orang yang Anda ajak bicara. Kontak dipakai untuk pesan, kampanye, tugas, dan deal.",
+        "addBody": "Ketik satu orang: nama dan nomor telepon atau alamat email.",
+        "importCsv": "Impor file CSV",
+        "importBody": "Unggah spreadsheet dan cocokkan kolomnya dengan kolom kontak.",
+        "connect": "Hubungkan WhatsApp",
+        "connectBody": "Hubungkan nomor Anda agar kontak bisa membalas dan Anda bisa mengirim pesan kepada mereka."
+      }
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -351,6 +378,8 @@
       "memoPlaceholder": "Catatan tentang kontak ini",
       "address": "Alamat",
       "addressPlaceholder": "Masukkan alamat",
+      "dateOfBirth": "Tanggal lahir",
+      "dateOfBirthHint": "Opsional. Jika membuat kontak tergolong di bawah umur, kontak ditandai demikian.",
       "status": "Status",
       "statusNone": "- tidak ada -",
       "statuses": {
@@ -413,9 +442,7 @@
       "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
       "company": "Perusahaan",
       "companyHint": "Mengelompokkan kontak ini di bawah sebuah organisasi.",
-      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom.",
-      "dateOfBirth": "Tanggal lahir",
-      "dateOfBirthHint": "Opsional. Jika membuat kontak tergolong di bawah umur, kontak ditandai demikian."
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom."
     },
     "tags": {
       "title": "Tag",
@@ -585,8 +612,8 @@
         "tag_name_too_long": "nama tag terlalu panjang",
         "plan_limit_reached": "batas kontak paket tercapai",
         "tag_limit_reached": "batas tag paket tercapai",
-        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
         "invalid_date_of_birth": "tanggal lahir bukan tanggal berformat tahun lebih dulu yang bisa menjadi tanggal lahir",
+        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
         "invalid_timezone": "zona waktu tidak valid"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
@@ -628,6 +655,7 @@
       "language": "Bahasa",
       "source": "Sumber",
       "address": "Alamat",
+      "dateOfBirth": "Tanggal lahir",
       "memo": "Catatan",
       "groups": "Grup",
       "consent": "Pesan pemasaran",
@@ -647,8 +675,7 @@
       "ownerForbidden": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
       "ownerFailed": "Pemilik tidak dapat diubah. Coba lagi.",
       "ownerMe": "{name} (saya)",
-      "ownerFormer": "Mantan anggota",
-      "dateOfBirth": "Tanggal lahir"
+      "ownerFormer": "Mantan anggota"
     },
     "attributes": {
       "eyebrow": "Lainnya / Atribut",
@@ -1391,17 +1418,17 @@
       "changed": "Filter berubah sejak tampilan ini disimpan",
       "more": "Opsi lainnya untuk {name}",
       "picker": {
-        "title": "Pilih tampilan",
-        "create": "Buat tampilan baru",
-        "search": "Cari tampilan...",
-        "empty": "Tampilan tidak ditemukan",
-        "pinned": "Di tab",
         "favorites": "Favorit",
         "defaultFilters": "Filter default",
         "createdViews": "Tampilan yang dibuat",
         "addView": "Tambah tampilan",
         "markFavorite": "Tandai sebagai favorit",
-        "unmarkFavorite": "Hapus dari favorit"
+        "unmarkFavorite": "Hapus dari favorit",
+        "title": "Pilih tampilan",
+        "create": "Buat tampilan baru",
+        "search": "Cari tampilan...",
+        "empty": "Tampilan tidak ditemukan",
+        "pinned": "Di tab"
       },
       "menu": {
         "rename": "Ubah nama tampilan",
@@ -1485,6 +1512,8 @@
       },
       "presets": {
         "myContacts": "Kontak saya",
+        "unassigned": "Belum ditetapkan",
+        "hotLeads": "Lead panas",
         "newThisWeek": "Baru minggu ini",
         "newLastWeek": "Baru minggu lalu",
         "recentlyCreated": "Baru dibuat",
@@ -1496,6 +1525,9 @@
         "inactive": "Tidak aktif",
         "unsubscribed": "Berhenti berlangganan",
         "minors": "Anak di bawah umur"
+      },
+      "quick": {
+        "label": "Tampilan cepat"
       }
     },
     "erase": {
