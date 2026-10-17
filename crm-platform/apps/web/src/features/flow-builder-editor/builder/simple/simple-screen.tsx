@@ -58,6 +58,8 @@ import {
   type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
+import { StepPreview } from './step-preview';
+import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
 import { lookOf } from '../../lib/node-ui';
 
@@ -1602,14 +1604,24 @@ function StepCard(p: {
                 })}
               </p>
             ) : null}
-            {str(s.data.var).trim() ? (
-              <p className="mt-2">
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand">
-                  {`{{${str(s.data.var).trim()}}}`}
-                </code>
+            {variableNames(s.data).length > 0 ? (
+              <p className="mt-2 flex flex-wrap gap-1">
+                {variableNames(s.data).map((v) => (
+                  <code
+                    key={v}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand"
+                  >
+                    {v}
+                  </code>
+                ))}
               </p>
             ) : null}
           </button>
+        ) : null}
+        {!p.active ? (
+          <div className="px-4 pb-4 empty:hidden">
+            <StepPreview step={s} />
+          </div>
         ) : null}
         {p.active ? (
           <div className="border-t border-border p-4">

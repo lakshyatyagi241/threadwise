@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { flbCleanVarName } from '@crm/contracts';
 import { Check, controlClass, Field, TextInput } from '../kit';
 import type { FormProps } from '../types';
+import { NewPropertyInline } from '../../new-property';
 
 /**
  * "Save the selected option as variable" for a List or Quick replies. Reference kept the choice in a run variable (default `choice`)
@@ -57,6 +58,7 @@ export function SaveToAttributeField({
               </option>
             ))}
           </select>
+          <NewPropertyInline onCreated={(k) => set('propertyKey', k)} />
           {key === '' ? (
             <div role="alert" className="mt-1 text-[10.5px] font-semibold text-[#E87A5D]">
               {t('propertyRequired')}
