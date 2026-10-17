@@ -72,7 +72,10 @@ export class AccountGateGuard implements CanActivate {
     // resolve: an operator acting as the owner must reach the workspace to help, and cannot resolve them (the routes are forbidden).
     if (isOperatorImpersonation(ctx)) return true;
 
-    const state = await this.gates.stateFor(ctx.orgId, ctx.userId);
+    // The workspace was checked above and this guard only reads the person's own gates, so do not look the workspace up a second time.
+    const state = await this.gates.stateFor(ctx.orgId, ctx.userId, {
+      includeOrgSuspension: false,
+    });
 
     if (state.suspended && !opts?.suspended) {
       throw new AppError(

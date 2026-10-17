@@ -90,7 +90,17 @@
       "UNEXPECTED": "Đã xảy ra lỗi. Vui lòng thử lại.",
       "CALL_PLAYBACK_LINK_INVALID": "Liên kết bản ghi âm này đã hết hạn. Hãy nhấn phát lại để lấy liên kết mới.",
       "CALL_RANGE_INVALID": "Các ngày này không hợp lệ: ngày bắt đầu không được sau ngày kết thúc, khoảng thời gian tối đa một năm và múi giờ phải hợp lệ.",
-      "CALL_OUTSIDE_WINDOW": "Liên hệ này nằm ngoài giờ gọi của bạn nên cuộc gọi chưa được thực hiện. Khung giờ gọi sẽ mở lúc {when}."
+      "CALL_OUTSIDE_WINDOW": "Liên hệ này nằm ngoài giờ gọi của bạn nên cuộc gọi chưa được thực hiện. Khung giờ gọi sẽ mở lúc {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Không tìm thấy cuộc gọi này.",
+      "CALL_LOG_CONTACT_REQUIRED": "Hãy nhập liên hệ hoặc một số điện thoại hợp lệ.",
+      "CALL_LOG_TIME_INVALID": "Cuộc gọi không thể bắt đầu trong tương lai hoặc cách đây hơn 400 ngày.",
+      "CALL_LOG_NOT_EDITABLE": "Cuộc gọi này do điện thoại hoặc nhà cung cấp dịch vụ điện thoại báo cáo, nên không thể thay đổi.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Đã hết thời gian cho phép thay đổi cuộc gọi này.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Công việc theo dõi cần có liên hệ. Hãy nhập số thuộc về một trong các liên hệ của bạn.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Không tìm thấy kết nối điện thoại này.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Nhà cung cấp dịch vụ điện thoại này không khả dụng.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Kết nối điện thoại này không thể thực hiện cuộc gọi.",
+      "TELEPHONY_CALL_FAILED": "Nhà cung cấp dịch vụ điện thoại không thể thực hiện cuộc gọi."
     },
     "settings": {
       "title": "Gọi điện",

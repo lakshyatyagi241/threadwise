@@ -701,6 +701,8 @@
         "format": "{label} 不可包含换行、制表符或连续四个空格。"
       },
       "reason": {
+        "other_number": "属于另一个 WhatsApp 号码，因此无法从此会话发送。",
+        "not_linked": "此会话的渠道未关联 WhatsApp 号码，因此无法从此发送任何模板。",
         "paused": "已被 WhatsApp 暂停。暂停结束后可再次发送。",
         "media_header": "包含图片、视频或文档页眉，目前无法从收件箱发送。",
         "header_variable": "页眉包含变量，目前无法在收件箱中填写。",

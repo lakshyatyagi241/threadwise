@@ -160,6 +160,21 @@ says whether the process itself was the delay. Callers waiting seconds while loo
 wait is somewhere else (database, Redis, the network path), not a blocked loop. Compare two runs only if their round-trip
 calibration is similar. The rates are chosen, not taken from production, and the soak is minutes, not 12 or 24 hours.
 
+### A slow request with a quiet event loop: where did it wait?
+
+```bash
+node tools/event-loop-audit/load/run-load.mjs --trace --profiles=normal,peak --seconds=90 --contacts=1500
+node tools/event-loop-audit/load/rtt-drift.mjs        # the host's container round trips with no application, ~5 minutes
+```
+
+`--trace` loads `trace-preload.cjs` into the API (`node -r`, no code change). Per route it reports requests, statements,
+transactions, connections taken, Redis commands, and how long each request spent waiting for a pooled connection, inside statements,
+inside Redis commands and holding a transaction open between statements, plus the individual statements and commands ranked by time
+(`roundTrips`). Read `meanMsPerRequest` against `handlerMs.mean`: what remains is JS work and event-loop queueing. If the sum of
+round trips times the round-trip time explains the handler time, the request is waiting on the network path, and the lever is fewer
+sequential round trips (EL-B17) or a faster path. `roundTripsDuringProfile` is the host's own `SELECT 1` and `PING` while the profile
+ran, with the highest container CPU seen. The tracer adds a little overhead of its own: do not leave it on in production.
+
 ## Check the job metrics against a real BullMQ worker
 
 Needs Docker (a throwaway Redis; no data of the app is touched):

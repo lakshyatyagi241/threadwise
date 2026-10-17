@@ -63,7 +63,9 @@
         "agent": "Gestita da",
         "allAgents": "Tutti",
         "apply": "Filtra",
-        "clear": "Cancella"
+        "clear": "Cancella",
+        "source": "Origine",
+        "allSources": "Tutte le origini"
       },
       "table": {
         "caption": "Chiamate, dalla più recente",
@@ -136,12 +138,14 @@
           "reject_sent": "Chiamata rifiutata",
           "terminate_sent": "Richiesta di chiusura inviata",
           "terminate": "Chiamata terminata",
-          "recording_stored": "Registrazione salvata"
+          "recording_stored": "Registrazione salvata",
+          "logged": "Chiamata registrata"
         },
         "noRecording": {
           "title": "Registrazione",
           "message": "Questa chiamata non ha una registrazione."
-        }
+        },
+        "notes": "Note"
       },
       "recording": {
         "title": "Registrazione",
@@ -154,6 +158,53 @@
         "linkUntil": "Questo link funziona fino alle {time}. Dopo, premi di nuovo riproduci.",
         "playFailed": "Impossibile riprodurre la registrazione.",
         "retry": "Riprova"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Registrata a mano",
+        "telephony": "Linea telefonica",
+        "mobile_app": "App mobile",
+        "web_click_to_call": "Clic per chiamare"
+      },
+      "logCall": {
+        "button": "Registra una chiamata",
+        "title": "Registra una chiamata",
+        "close": "Chiudi",
+        "with": "Chiamata con",
+        "phone": "Numero di telefono",
+        "phoneHint": "La chiamata viene collegata al contatto che ha questo numero.",
+        "phoneHintContact": "Facoltativo. La chiamata viene collegata a questo contatto.",
+        "direction": "Direzione",
+        "outcome": "Com'è andata",
+        "outcomes": {
+          "connected": "Connessa",
+          "no_answer": "Nessuna risposta",
+          "busy": "Occupato",
+          "left_voicemail": "Messaggio in segreteria",
+          "wrong_number": "Numero sbagliato",
+          "declined": "Rifiutata",
+          "failed": "Non riuscita"
+        },
+        "when": "Inizio",
+        "minutes": "Durata in minuti",
+        "notes": "Note",
+        "notesHint": "Visibili a chiunque possa vedere questa chiamata. Fino a 2.000 caratteri.",
+        "followUp": "Crea anche un'attività di follow-up",
+        "followUpDue": "Ricontattare il",
+        "followUpHint": "L'attività viene assegnata a te e collegata al contatto.",
+        "cancel": "Annulla",
+        "save": "Salva chiamata",
+        "saving": "Salvataggio...",
+        "saved": "Chiamata registrata.",
+        "savedNoContact": "Chiamata registrata. Nessun contatto ha ancora questo numero.",
+        "problems": {
+          "noWho": "Indica un numero di telefono.",
+          "badWhen": "Scegli quando è iniziata la chiamata.",
+          "futureWhen": "La chiamata non può iniziare nel futuro.",
+          "badMinutes": "Indica la durata in minuti, al massimo 1.440.",
+          "noDue": "Scegli una data per il follow-up.",
+          "badDue": "Scegli una data valida per il follow-up."
+        }
       }
     },
     "analytics": {

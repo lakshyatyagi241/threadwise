@@ -45,6 +45,23 @@ export const callsLogs = defineHolder({
         'The call row is kept (billing, the log). The recording file is deleted by the daily sweep after the workspace window (default 90 days, 7 to 365; BL-144) unless a legal hold is set, by hand with call.recordings.manage, or when the person declines recording; an erasure also removes it. The consent evidence on the row (answer, method, time, notice version and hash) holds no personal value and stays. Transcripts: none stored yet (BL-146).',
     },
     {
+      table: 'call_log_entries',
+      link: [CONTACT, { by: 'phone', column: 'customer_phone' }],
+      disposition: 'anonymise',
+      set: {
+        customer_phone: 'null',
+        our_phone: 'null',
+        notes: 'null',
+        external_id: 'null',
+        recording_ref: 'null',
+      },
+      tier: 'history',
+      categories: ['identifier', 'communications', 'voice'],
+      pii: ['customer_phone', 'our_phone', 'notes', 'external_id', 'recording_ref'],
+      retention:
+        'The call row is kept (the log, the analytics). Calls that are not WhatsApp calls: logged by hand, reported by the mobile app or by a telephony provider. The notes are free text written by a teammate; the recording reference is a pointer on the provider (never audio), cleared by the daily sweep after the workspace recording window (default 90 days) and only ever stored after the recording consent rules allowed it. An erasure clears the number, the notes, the provider call id and the reference.',
+    },
+    {
       table: 'ai_call_logs',
       link: [
         { by: 'conversation', column: 'conversation_id' },

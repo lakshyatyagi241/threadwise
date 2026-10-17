@@ -90,7 +90,17 @@
       "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer.",
       "CALL_PLAYBACK_LINK_INVALID": "Ce lien d'enregistrement a expiré. Appuyez à nouveau sur lecture pour en obtenir un nouveau.",
       "CALL_RANGE_INVALID": "Ces dates sont incohérentes : le début ne doit pas être après la fin, la période ne peut pas dépasser un an et le fuseau horaire doit être valide.",
-      "CALL_OUTSIDE_WINDOW": "Ce contact est en dehors de vos heures d’appel, aucun appel n’a donc été passé. La plage d’appel s’ouvre {when}."
+      "CALL_OUTSIDE_WINDOW": "Ce contact est en dehors de vos heures d’appel, aucun appel n’a donc été passé. La plage d’appel s’ouvre {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Cet appel est introuvable.",
+      "CALL_LOG_CONTACT_REQUIRED": "Indiquez le contact ou un numéro de téléphone valide.",
+      "CALL_LOG_TIME_INVALID": "Un appel ne peut pas commencer dans le futur ni il y a plus de 400 jours.",
+      "CALL_LOG_NOT_EDITABLE": "Cet appel a été signalé par un téléphone ou un fournisseur de téléphonie, il ne peut donc pas être modifié.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Le délai pour modifier cet appel est dépassé.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Une tâche de suivi a besoin d'un contact. Indiquez un numéro qui appartient à l'un de vos contacts.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Cette connexion de téléphonie est introuvable.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Ce fournisseur de téléphonie n'est pas disponible.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Cette connexion de téléphonie ne peut pas passer d'appels.",
+      "TELEPHONY_CALL_FAILED": "Le fournisseur de téléphonie n'a pas pu passer l'appel."
     },
     "settings": {
       "title": "Appels",

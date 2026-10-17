@@ -2,11 +2,13 @@ import {
   CALL_LOG_DEFAULT_RANGE,
   CALL_LOG_DIRECTIONS,
   CALL_LOG_RANGES,
+  CALL_LOG_SOURCES,
   CALL_LOG_STATUSES,
   type CallAnalyticsQuery,
   type CallLogDirection,
   type CallLogListQuery,
   type CallLogRange,
+  type CallLogSource,
   type CallLogStatus,
 } from '@crm/contracts';
 
@@ -24,6 +26,8 @@ export interface LogParams {
   direction?: CallLogDirection;
   numberId?: string;
   agentId?: string;
+  /** How the call reached the log: WhatsApp, or one of the ways a call that is not a WhatsApp call is logged. */
+  source?: CallLogSource;
   q?: string;
   page: number;
 }
@@ -54,6 +58,7 @@ export function parseLogParams(sp: Params): LogParams {
     direction: oneOf(CALL_LOG_DIRECTIONS, sp.get('direction')),
     numberId: number && UUID.test(number) ? number : undefined,
     agentId: agent && UUID.test(agent) ? agent : undefined,
+    source: oneOf(CALL_LOG_SOURCES, sp.get('source')),
     q: q || undefined,
     page: Number.isInteger(page) && page > 1 ? Math.min(page, 100000) : 1,
   };
@@ -71,6 +76,7 @@ export function logSearch(p: Partial<LogParams>): string {
   if (p.direction) sp.set('direction', p.direction);
   if (p.numberId) sp.set('numberId', p.numberId);
   if (p.agentId) sp.set('agentId', p.agentId);
+  if (p.source) sp.set('source', p.source);
   if (p.q?.trim()) sp.set('q', p.q.trim());
   if (p.page && p.page > 1) sp.set('page', String(p.page));
   const s = sp.toString();
@@ -88,6 +94,7 @@ export function toListQuery(p: LogParams, tz: string): Partial<CallLogListQuery>
     direction: p.direction,
     numberId: p.numberId,
     agentId: p.agentId,
+    source: p.source,
     q: p.q,
     page: p.page,
   };
@@ -101,6 +108,7 @@ export function toAnalyticsQuery(p: LogParams, tz: string): Partial<CallAnalytic
     to: p.to,
     tz,
     numberId: p.numberId,
+    source: p.source,
   };
 }
 
@@ -167,6 +175,8 @@ export const KNOWN_STEPS = [
   'recording_deleted',
   'recording_hold_set',
   'recording_hold_lifted',
+  // A call that is not a WhatsApp call has one step: the line it wrote when it was logged.
+  'logged',
 ] as const;
 export const knownStep = (type: string): string | null =>
   (KNOWN_STEPS as readonly string[]).includes(type) ? type : null;

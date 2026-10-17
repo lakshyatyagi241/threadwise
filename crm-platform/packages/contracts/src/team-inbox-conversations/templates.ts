@@ -3,13 +3,17 @@ import { uuidSchema } from '../common/ids';
 
 /**
  * Templates an agent can send from a conversation (`GET /v2/inbox/conversations/:id/templates`, then `POST .../messages` with
- * `kind: 'template'`). The list is already narrowed to the WhatsApp number the conversation runs on, so the picker offers nothing
- * that Meta would refuse for that number. A template the inbox cannot fill in yet is still listed, with the reason, so it is not a
- * mystery why a template known from the library is missing.
+ * `kind: 'template'`). Every approved template of the workspace is listed, as Reference does. One that cannot be sent from this
+ * conversation is listed too, disabled, with the reason: a template of another WhatsApp number, or a conversation whose channel is
+ * not linked to a number, so it is never a mystery why a template known from the library is not offered.
  */
 
 /** Why an approved template cannot be sent from the inbox (yet). */
 export const INBOX_TEMPLATE_BLOCK_REASONS = [
+  /** The template belongs to another WhatsApp number than the conversation's. Meta would refuse it for this number. */
+  'other_number',
+  /** The conversation's channel is not linked to a WhatsApp number, so no template can be sent from it. */
+  'not_linked',
   /** Approved, but paused by Meta (quality) until the pause ends. */
   'paused',
   /** The header is an image, video, document or location: the inbox has nowhere to put the file. */

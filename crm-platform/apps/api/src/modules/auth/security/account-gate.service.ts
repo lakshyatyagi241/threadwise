@@ -49,8 +49,18 @@ export class AccountGateService {
     private readonly orgs: OrgSuspensionService,
   ) {}
 
-  async stateFor(orgId: number, userId: number): Promise<AccountGateState> {
+  /**
+   * `includeOrgSuspension: false` skips the workspace-suspension lookup (a Redis round trip) for a caller that has already made it:
+   * AccountGateGuard checks the workspace first and never reads `orgSuspended` from this state, so asking again cost every
+   * authenticated request one extra sequential Redis call. The result then has no `orgSuspended` field.
+   */
+  async stateFor(
+    orgId: number,
+    userId: number,
+    opts: { includeOrgSuspension?: boolean } = {},
+  ): Promise<AccountGateState> {
     const own = await this.userState(orgId, userId);
+    if (opts.includeOrgSuspension === false) return own;
     const orgSuspended = isOperatorImpersonation(RequestContextStore.peek())
       ? false
       : await this.orgs.isSuspended(orgId);
