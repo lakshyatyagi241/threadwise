@@ -416,3 +416,63 @@ deals and field-history endpoints that already existed now have a screen.
 - Sending a WhatsApp, SMS or email message and placing a call from the new icons (no connected channel here); the chat icon's open-conversation path.
 - Translations of the new strings are machine-drafted: no native review (BL-234). Screen-reader use of the drawer was not tried.
 - Firefox and Safari; the footer's page buttons in right-to-left with a long page list.
+
+## Contacts polish (owner feedback 2026-10-17): few hover actions, no popups in the quick view, a calmer list
+
+The owner reviewed the redesign above and asked for fewer actions beside the name, for note, task, meeting and company to be written in the drawer itself
+(the side panel of the owner's other CRM lists tasks and adds them with a "+" and no pop-up), and, from the coordinator's UX review, for a list that
+does not shout. Still the owner's own patterns, not Reference. No migration, endpoint or contract. Control-by-control mapping (every old control and its
+new place): [wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) section 7.
+
+### Intended differences from the redesign above and from Reference
+
+| #   | Where                            | Before (redesign of 2026-10-16)                                                                                         | Now, and why                                                                                                                                                                                                                       |
+| --- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P01 | Row hover actions                | open, edit, note, call, email, WhatsApp, chat and "..." beside the name; the name was truncated while they showed (R06) | Message, Call, "+" (note, task, meeting) and "...", laid over the end of the cell with a fade: no row or column moves. Everything else is in "..." (new: open in a new tab, copy phone, copy email). Supersedes R06                |
+| P02 | Message                          | a WhatsApp icon (template drawer) and a chat icon                                                                       | One Message icon: the WhatsApp chat, or an email when there is no number or no connected number; disabled with the reason as its tip otherwise. The WhatsApp template drawer is "Send WhatsApp message" in "..."                   |
+| P03 | Narrow and touch                 | only "..." on touch                                                                                                     | "..." always visible below 640 px and on touch, holding Message, Call, Add note, Add task, Schedule meeting and the rest                                                                                                           |
+| P04 | Quick view sections              | a vertical icon rail of seven                                                                                           | A tab strip (Overview, Activity, Notes, Tasks, Meetings, Files, "+3 more" with Conversations, Communication stats, Properties) with counts, like the owner's reference panel; scrolls sideways at 390 px, the menu stays in view   |
+| P05 | Task, Meeting, Add company, Note | dialogs (and the Notes tab)                                                                                             | Shortcuts that open the section with the inline row focused. Tasks and meetings are added and edited in the list; the company is searched, created and cleared in a card. Only the delete confirmations are still dialogs (BL-246) |
+| P06 | Task row                         | a title box that opened the New task form                                                                               | Title, due date (tomorrow 17:00 to begin with: a task with no date never comes due), assignee (me), optional priority; Enter saves, Esc closes; optimistic with rollback; the checkbox completes at once with rollback             |
+| P07 | Meetings                         | inside Activity, with Log meeting and Edit dialogs                                                                      | Their own tab and section; Schedule meeting and Edit as rows: title, start (next full hour), duration, link or place; upcoming, past and undated groups; a web address is a link that opens in a new tab                           |
+| P08 | Table headings                   | "PHONE NU...", "LIFECYC...", "WHATS..."; the date clipped                                                               | Short headings with the full label as the tooltip; Created shows the day, the time is the tooltip                                                                                                                                  |
+| P09 | Row noise                        | a caret on every stage chip; "x No" on most rows; bright owner avatar                                                   | Caret on hover or focus (always on touch); opt-in as a tick, a faint dot or a red cross with a tooltip; muted owner avatar                                                                                                         |
+| P10 | Saved views                      | picker only                                                                                                             | Five quick chips (My contacts, Unassigned, New this week, Needs follow-up, Hot leads), built-in views, not stored, not deletable                                                                                                   |
+| P11 | Counts                           | "All contacts 20" and "Total: 20"                                                                                       | One: the pill; "Total" only while a filter is on and no view is open                                                                                                                                                               |
+| P12 | Empty workspace                  | "No contacts yet" and one button                                                                                        | First-run panel: Create Contacts, Import a CSV file, Connect WhatsApp (each by permission)                                                                                                                                         |
+
+### Checks run (2026-10-17, our own app on a scratch stack: web 3301, API 3300, Postgres 55850, Redis 56390; signed in as a seeded workspace admin, no MFA)
+
+- Unit, DOM and render tests: the hover strip (permissions, overlay classes, no hover truncation, disabled reasons, masked phone), `messageRoute`, the tab
+  strip (permissions, counts, Arabic), sections and add targets, the inline task row (jsdom: opens in place, saves on Enter with the row in the list before the
+  answer, restores the title and the list when refused, requires a due date, Escape closes only the row), the optimistic add and complete helpers with exact
+  rollback, the meeting row helpers (duration, groups, links), meetings render, short headings, quiet opt-in, quiet caret, first run, quick presets.
+  Exit codes (2026-10-17): `tsc --noEmit` of apps/web 0; ESLint of the changed web files 0; Prettier check of the 131 changed files 0; the repo's
+  21-locale check (`i18n-translate-sync/scripts/check.sh`) 0; vitest of the contacts, tasks, companies, lead-scoring, help-center and i18n folders 0
+  (97 files, 1,012 tests). The whole web suite: 10,782 passed and one failure that is not this branch's (`contact-consent` messages test: the key
+  `contact-consent.card.source.wa_form` is missing on origin/main; handed off as its own task).
+- Browser (Playwright, installed Chromium 1228), desktop 1440 px and 390 px, light, dark and right-to-left (Arabic). Screenshots and the scripts:
+  `C:\project\wadesk-port\_work\parity\contacts-ui-polish\` (`list-check.mjs`, `drawer-check.mjs`, `extras-check.mjs`, `visual-check.mjs`; PNG names
+  `NN-what-device-scheme[-locale].png`).
+  - List: hover strip measured before and after hover (row, name cell, name link, table, every column heading: identical boxes), four controls, keyboard focus
+    shows the strip and Tab enters it, tooltips, the "+" and "..." menus, 390 px menu with nothing moving, no heading cut off, quick chips (filter, pressed
+    state, press again to clear), one count, last activity in the picker, the first-run panel (the list answered empty), stage caret on hover only.
+  - Quick view: tab strip, counts, "+3 more", Task, Note, Meeting and Add company shortcuts each focus their inline form and open no dialog (`dialog[open]`
+    count stays one: the drawer), task added (in the list before the server answered, POST sent), completed by the checkbox (instant, POST sent), refused save
+    (the API answered 500 through a route override: the row left the list and the title came back with the message), Escape closes the row and not the drawer,
+    note saved with Ctrl+Enter, meeting added with a link and edited in place, company picked and removed.
+  - Details page: sub-nav with Meetings, the four shortcuts land on their section with the form focused, `?add=` removed after use.
+- Not verified: a workspace with a connected WhatsApp number (the stack has none: Message showed its disabled reason; the chat path is covered by tests of
+  the route only), the Message picker with several numbers, native review of the 73 new or changed strings per language (machine drafted, BL-247), a screen-reader pass.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                                                | Fix                                                                           |
+| --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| The Task button opened the Tasks tab but not the row (a request already there when the row mounted was taken as seen) | the row starts "unseen"; same for the meeting row                             |
+| The company chip drew a giant building icon (the picker's icon lost its size class)                                   | `size-4` in `CompanyPicker`                                                   |
+| At 390 px the "+3 more" menu scrolled out of sight with the tabs and the open tab could hide                          | the menu sits outside the scrolling strip; the open tab scrolls into view     |
+| A disabled Message item in the touch menu drew its reason over its label                                              | the reason is a second line under the label                                   |
+| A tooltip stayed on screen after a tap or a click (it showed on any focus)                                            | it shows on keyboard focus only                                               |
+| The date was cut by the frozen "+" column                                                                             | the column shows the day; widths re-set                                       |
+| Lint: state set inside effects (`?add=`, the task row)                                                                | derived while rendering; the effects only touch the address bar and the focus |
