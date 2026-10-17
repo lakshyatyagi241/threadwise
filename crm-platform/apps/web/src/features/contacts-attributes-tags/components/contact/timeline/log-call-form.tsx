@@ -1,23 +1,47 @@
 'use client';
 
 import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
-import { useTimeZone, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
+import { CALL_ENTRY_DIRECTIONS, CALL_NOTES_MAX, type CallOutcome } from '@crm/contracts';
 import { Button, Input, Spinner, Switch, Textarea, cn, useToast } from '@crm/ui';
-import { useLogCall } from '../../../api/call-log';
-import type { ContactRow } from '../../../api/schemas';
 import {
-  CALL_DIRECTIONS,
-  CALL_NOTES_MAX,
-  CALL_OUTCOMES,
-  buildLogCallRequest,
-  emptyCallDraft,
-  type CallDraft,
-  type CallProblem,
-} from '../../../lib/call-log';
+  buildLogCallInput,
+  localDateTimeValue,
+  tomorrowMorning,
+  useLogCall,
+  type LogCallProblem,
+} from '@/features/calling-voice';
+import { useRefreshAfterCall } from '../../../api/call-log';
+import type { ContactRow } from '../../../api/schemas';
+import { FORM_OUTCOMES } from '../../../lib/call-log';
 import { errorKind } from '../../../lib/errors';
 import { addMinutes } from '../../../lib/meeting-inline';
-import { isoToZonedLocal } from '../../../lib/meeting-time';
 import { settlePendingCall } from '../call-nudge';
+
+type Direction = (typeof CALL_ENTRY_DIRECTIONS)[number];
+
+interface Draft {
+  direction: Direction;
+  outcome: CallOutcome;
+  /** `YYYY-MM-DDTHH:mm`, the person's own clock. */
+  when: string;
+  /** Minutes as typed; empty means not known. */
+  minutes: string;
+  notes: string;
+  followUp: boolean;
+  due: string;
+}
+
+/** A fresh form: an outgoing call that happened just now and connected (what is logged most often), nothing else filled. */
+const emptyDraft = (at: Date = new Date()): Draft => ({
+  direction: 'outbound',
+  outcome: 'connected',
+  when: localDateTimeValue(at),
+  minutes: '',
+  notes: '',
+  followUp: false,
+  due: localDateTimeValue(tomorrowMorning(new Date())),
+});
 
 const choice =
   'inline-flex h-8 items-center rounded-full border px-3 text-[13px] font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary';
@@ -102,13 +126,14 @@ export function LogCallForm({
   onSaved?: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.record.logCall');
+  const tl = useTranslations('calling-voice.logs.logCall');
   const { toast } = useToast();
-  const timeZone = useTimeZone();
-  const log = useLogCall(contact.id);
+  const log = useLogCall();
+  const refreshAfter = useRefreshAfterCall(contact.id);
   const id = useId();
   const root = useRef<HTMLFormElement>(null);
   const notes = useRef<HTMLTextAreaElement>(null);
-  const [draft, setDraft] = useState<CallDraft>(() => emptyCallDraft(new Date(), timeZone));
+  const [draft, setDraft] = useState<Draft>(() => emptyDraft());
   const [tried, setTried] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
   // A client's own id for this attempt, so a double click (or a retry after a lost answer) logs one call.
@@ -122,7 +147,7 @@ export function LogCallForm({
       setDraft((d) => ({
         ...d,
         direction: 'outbound',
-        when: isoToZonedLocal(new Date(clickedAt).toISOString(), timeZone),
+        when: localDateTimeValue(new Date(clickedAt)),
       }));
     }
   }
@@ -136,14 +161,24 @@ export function LogCallForm({
     return () => window.cancelAnimationFrame(frame);
   }, [focusSignal]);
 
-  const built = buildLogCallRequest(contact.id, draft, {
-    now: new Date(),
-    timeZone,
-    source: clickedAt ? 'web_click_to_call' : 'manual',
-  });
-  const problem: CallProblem | null = built.ok ? null : built.problem;
+  const buildNow = () =>
+    buildLogCallInput({
+      contactId: contact.id,
+      phone: '',
+      direction: draft.direction,
+      outcome: draft.outcome,
+      when: draft.when,
+      minutes: draft.minutes,
+      notes: draft.notes,
+      followUp: draft.followUp ? { due: draft.due } : null,
+      source: clickedAt ? 'web_click_to_call' : undefined,
+    });
+  const problem: LogCallProblem | null = (() => {
+    const built = buildNow();
+    return built.ok ? null : built.problem;
+  })();
   const shown = tried ? problem : null;
-  const set = (patch: Partial<CallDraft>) => {
+  const set = (patch: Partial<Draft>) => {
     setDraft((d) => ({ ...d, ...patch }));
     if (failure) setFailure(null);
   };
@@ -152,14 +187,16 @@ export function LogCallForm({
     e.preventDefault();
     if (log.isPending) return;
     setTried(true);
+    const built = buildNow();
     if (!built.ok) return;
     log.mutate(
       { ...built.input, externalId: attempt },
       {
-        onSuccess: () => {
+        onSuccess: (result) => {
           toast(t('saved'), 'success');
           settlePendingCall(contact.id);
-          setDraft(emptyCallDraft(new Date(), timeZone));
+          void refreshAfter(result.followUpTaskId !== null);
+          setDraft(emptyDraft());
           setTried(false);
           setFailure(null);
           setAttempt(crypto.randomUUID());
@@ -179,8 +216,9 @@ export function LogCallForm({
     );
   };
 
-  const problemText = (p: CallProblem | null) => (p ? t(`problem.${p}`) : undefined);
-  const dueOf = (days: number) => addMinutes(`${draft.when.slice(0, 10)}T09:00`, days * 24 * 60);
+  const problemText = (p: LogCallProblem | null) => (p ? tl(`problems.${p}`) : undefined);
+  const dueOf = (days: number) =>
+    addMinutes(`${localDateTimeValue(new Date()).slice(0, 10)}T09:00`, days * 24 * 60);
 
   return (
     <form ref={root} aria-label={t('label')} noValidate onSubmit={submit} className="space-y-3">
@@ -190,24 +228,27 @@ export function LogCallForm({
           value={draft.direction}
           disabled={log.isPending}
           onChange={(direction) => set({ direction })}
-          options={CALL_DIRECTIONS.map((v) => ({ value: v, text: t(`directionOption.${v}`) }))}
+          options={CALL_ENTRY_DIRECTIONS.map((v) => ({
+            value: v,
+            text: t(`directionOption.${v}`),
+          }))}
         />
       </div>
       <div className="space-y-1.5">
         <p className="text-xs font-medium text-muted-foreground" id={`${id}-outcome`}>
-          {t('outcome')}
+          {tl('outcome')}
         </p>
         <Choices
-          label={t('outcome')}
+          label={tl('outcome')}
           value={draft.outcome}
           disabled={log.isPending}
           onChange={(outcome) => set({ outcome })}
-          options={CALL_OUTCOMES.map((v) => ({ value: v, text: t(`outcomeOption.${v}`) }))}
+          options={FORM_OUTCOMES.map((v) => ({ value: v, text: tl(`outcomes.${v}`) }))}
         />
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <label className="block space-y-1" htmlFor={`${id}-when`}>
-          <span className="text-xs font-medium text-muted-foreground">{t('when')}</span>
+          <span className="text-xs font-medium text-muted-foreground">{tl('when')}</span>
           <Input
             id={`${id}-when`}
             type="datetime-local"
@@ -218,7 +259,7 @@ export function LogCallForm({
           />
         </label>
         <label className="block space-y-1" htmlFor={`${id}-minutes`}>
-          <span className="text-xs font-medium text-muted-foreground">{t('minutes')}</span>
+          <span className="text-xs font-medium text-muted-foreground">{tl('minutes')}</span>
           <Input
             id={`${id}-minutes`}
             inputMode="decimal"
@@ -237,7 +278,7 @@ export function LogCallForm({
       )}
       <div>
         <label htmlFor={`${id}-notes`} className="sr-only">
-          {t('notes')}
+          {tl('notes')}
         </label>
         <Textarea
           ref={notes}
@@ -258,17 +299,17 @@ export function LogCallForm({
             checked={draft.followUp}
             disabled={log.isPending}
             onCheckedChange={(followUp) => set({ followUp })}
-            label={t('followUp')}
+            label={tl('followUp')}
           />
           <label htmlFor={`${id}-follow`} className="text-sm">
-            {t('followUp')}
+            {tl('followUp')}
           </label>
         </div>
         {draft.followUp && (
           <div className="flex flex-wrap items-center gap-2 ps-14">
             <Input
               type="datetime-local"
-              aria-label={t('due')}
+              aria-label={tl('followUpDue')}
               value={draft.due}
               invalid={shown === 'noDue' || shown === 'badDue'}
               disabled={log.isPending}
@@ -301,7 +342,7 @@ export function LogCallForm({
       <div className="flex justify-end">
         <Button type="submit" size="sm" disabled={log.isPending}>
           {log.isPending && <Spinner />}
-          {t('save')}
+          {tl('save')}
         </Button>
       </div>
     </form>

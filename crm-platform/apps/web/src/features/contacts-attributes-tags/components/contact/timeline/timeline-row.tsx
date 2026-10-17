@@ -407,7 +407,10 @@ export function TimelineRow({
           ) : described.href ? (
             <Link
               href={described.href}
-              className="min-w-0 flex-1 truncate rounded text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+              className={cn(
+                'min-w-0 flex-1 truncate rounded text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary',
+                d.type === 'task' && d.done && 'text-muted-foreground line-through',
+              )}
               dir="auto"
             >
               {described.summary}

@@ -90,38 +90,17 @@
             "outbound": "I called them",
             "inbound": "They called me"
           },
-          "outcome": "How did it go?",
-          "outcomeOption": {
-            "connected": "Connected",
-            "no_answer": "No answer",
-            "busy": "Busy",
-            "left_voicemail": "Left voicemail",
-            "wrong_number": "Wrong number"
-          },
-          "when": "When",
-          "minutes": "How long (minutes)",
           "minutesPlaceholder": "Optional",
-          "notes": "Notes about the call",
           "notesPlaceholder": "What was said? (optional)",
-          "followUp": "Create a follow-up task",
-          "due": "Follow-up due",
           "duePreset": {
             "1": "Tomorrow",
             "3": "In 3 days",
             "7": "In a week"
           },
-          "save": "Log call",
           "saved": "Call logged.",
           "forbidden": "You cannot log calls.",
           "unavailable": "Logging calls is not available here yet.",
-          "failed": "The call could not be logged. Nothing was lost: try again.",
-          "problem": {
-            "badWhen": "Choose when the call happened.",
-            "futureWhen": "A call cannot start in the future.",
-            "badMinutes": "Enter the length in minutes, up to 1440, or leave it empty.",
-            "noDue": "Choose when the follow-up is due.",
-            "badDue": "That due date is not valid."
-          }
+          "failed": "The call could not be logged. Nothing was lost: try again."
         },
         "callNudge": {
           "question": "How did the call with {name} go?",

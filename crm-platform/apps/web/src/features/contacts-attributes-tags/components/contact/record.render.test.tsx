@@ -1,0 +1,259 @@
+import { describe, expect, it, vi } from 'vitest';
+import { ToastProvider } from '@crm/ui';
+import {
+  makeSession,
+  renderAccount as render,
+} from '@/features/auth-registration-security/account/render-test-utils';
+import type { ReactElement } from 'react';
+
+/** The screens ask for a toast; a ToastProvider stands around every render. */
+const renderAccount: typeof render = (element: ReactElement, options) =>
+  render(<ToastProvider dismissLabel="Dismiss">{element}</ToastProvider>, options).replace(
+    /<div aria-live="polite"[^>]*><\/div>/,
+    '',
+  );
+import type { ContactRow } from '../../api/schemas';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: () => undefined, replace: () => undefined }),
+  usePathname: () => '/contacts/x',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
+import { ContactActionBar } from './action-bar';
+import { CollapseCard } from './collapse-card';
+import { KeyDetails, cityKey } from './key-details';
+import { ContactSideCards } from './side-cards';
+
+/** The one action row, Key details and the folded cards, in English and Arabic from the real messages. */
+
+const ID = '294dca7c-5806-4548-9035-dcca9befc7b1';
+const can = (...keys: string[]) =>
+  makeSession({ permissions: Object.fromEntries(keys.map((k) => [k, 'all'])) });
+
+const contact = (over: Partial<ContactRow> = {}) =>
+  ({
+    id: ID,
+    displayId: null,
+    name: 'Priya Sharma',
+    firstName: 'Priya',
+    lastName: 'Sharma',
+    email: 'priya@example.com',
+    phone: '+919876543210',
+    companyId: null,
+    ownerId: null,
+    lifecycleState: 'active',
+    lifecycleStage: 'new',
+    status: null,
+    leadScore: 72,
+    whatsappSubscriptionStatus: 'subscribed',
+    smsSubscriptionStatus: null,
+    emailSubscriptionStatus: null,
+    isUnsubscribed: false,
+    isMinor: false,
+    dateOfBirth: null,
+    lastActivityAt: '2026-10-10T10:00:00.000Z',
+    source: 'Instagram',
+    customFields: { address: 'Pune' },
+    rowVersion: 1,
+    createdAt: '2026-03-05T12:00:00.000Z',
+    updatedAt: '2026-03-05T12:00:00.000Z',
+    ...over,
+  }) as unknown as ContactRow;
+
+const bar = (permissions: string[], c = contact(), locale: 'en' | 'ar' = 'en') =>
+  renderAccount(
+    <ContactActionBar contact={c} onAdd={() => undefined} onDeleted={() => undefined} />,
+    {
+      locale,
+      session: can(...permissions),
+    },
+  );
+
+describe('ContactActionBar', () => {
+  const all = [
+    'record.contacts.update',
+    'record.contacts.delete',
+    'record.tasks.create',
+    'record.tasks.read',
+    'inbox.conversation.reply',
+    'call.calls.use',
+    'call.logs.create',
+  ];
+
+  it('is ONE row: Note, Task, Call, Meeting, Message and the ... menu, nothing else', () => {
+    const out = bar(all);
+    const labels = [...out.matchAll(/<button[^>]*title="([^"]+)"/g)].map((m) => m[1]);
+    for (const name of ['Note', 'Task', 'Meeting']) expect(labels).toContain(name);
+    expect(out).toContain('>Call<');
+    expect(out).toContain('>Message<');
+    expect(out).toContain('aria-label="More actions"');
+    // the company is no longer a button of the row: it is in the menu
+    expect(out).not.toContain('>Add company<');
+    expect(out).not.toContain('flex-wrap items-center gap-2 border');
+    expect(out.match(/role="group"/g)).toHaveLength(1);
+  });
+
+  it('draws a Call arrow with the other ways when there are several, and none when there is one', () => {
+    expect(bar(all)).toContain('aria-label="Other ways to call"');
+    // only logging: the button is "Log a call" and there is no arrow
+    const logOnly = bar(['call.logs.create'], contact({ phone: null }));
+    expect(logOnly).toContain('>Log a call<');
+    expect(logOnly).not.toContain('Other ways to call');
+  });
+
+  it('shows no Call without calling or call logging, and no Message without the inbox reply permission', () => {
+    const out = bar(['record.contacts.update']);
+    expect(out).not.toContain('>Call<');
+    expect(out).not.toContain('>Message<');
+    expect(out).toContain('>Note<');
+  });
+
+  it('disables Call with the reason when the number cannot be dialled (masked), and shows the reason for Message', () => {
+    const out = bar(
+      ['call.calls.use', 'inbox.conversation.reply'],
+      contact({ phone: '+9198xxxxxx10', email: null }),
+    );
+    expect(out).toMatch(/<button[^>]*disabled=""[^>]*>[\s\S]*?Call/);
+    expect(out).toContain('No phone number');
+  });
+
+  it('reads in Arabic', () => {
+    expect(bar(all, contact(), 'ar')).toContain('role="group"');
+  });
+});
+
+describe('CollapseCard', () => {
+  it('shows its title and what is inside when folded, and draws nothing of the content', () => {
+    const out = renderAccount(
+      <CollapseCard id="t-closed" title="Privacy" summary="Marketing allowed">
+        <p>SECRET CONTENT</p>
+      </CollapseCard>,
+    );
+    expect(out).toContain('Privacy');
+    expect(out).toContain('Marketing allowed');
+    expect(out).toContain('aria-expanded="false"');
+    expect(out).not.toContain('SECRET CONTENT');
+  });
+
+  it('draws the content when it starts open, and then no summary', () => {
+    const out = renderAccount(
+      <CollapseCard id="t-open" title="Subscription status" summary="WhatsApp Yes" defaultOpen>
+        <p>OPEN CONTENT</p>
+      </CollapseCard>,
+    );
+    expect(out).toContain('OPEN CONTENT');
+    expect(out).toContain('aria-expanded="true"');
+    expect(out).not.toContain('WhatsApp Yes');
+  });
+
+  it('opens when something outside asks for it', () => {
+    const out = renderAccount(
+      <CollapseCard id="t-signal" title="Company" openSignal={1}>
+        <p>COMPANY SEARCH</p>
+      </CollapseCard>,
+    );
+    expect(out).toContain('COMPANY SEARCH');
+  });
+});
+
+describe('KeyDetails', () => {
+  const draw = (permissions: string[], c = contact(), locale: 'en' | 'ar' = 'en') =>
+    renderAccount(<KeyDetails contact={c} />, {
+      locale,
+      session: can(...permissions),
+      seed: [[['cat', 'fields', false], []]],
+    });
+
+  it('lists the few things people look up first, in order', () => {
+    const out = draw([]);
+    const labels = [...out.matchAll(/<dt[^>]*>([^<]+)<\/dt>/g)].map((m) => m[1]);
+    expect(labels).toEqual([
+      'Phone',
+      'Email',
+      'Company',
+      'Owner',
+      'Address',
+      'Source',
+      'Last activity',
+    ]);
+    expect(out).toContain('priya@example.com');
+    expect(out).toContain('Instagram');
+    expect(out).toContain('Pune');
+  });
+
+  it('offers a pencil beside each editable value only to someone who may update contacts', () => {
+    const editable = draw(['record.contacts.update']);
+    expect(editable).toContain('aria-label="Edit Phone"');
+    expect(editable).toContain('aria-label="Edit Email"');
+    expect(editable).toContain('aria-label="Edit Source"');
+    expect(editable).toContain('Edit all');
+    const readOnly = draw([]);
+    expect(readOnly).not.toContain('aria-label="Edit ');
+    expect(readOnly).not.toContain('Edit all');
+  });
+
+  it('never offers to edit a masked phone number', () => {
+    const out = draw(['record.contacts.update'], contact({ phone: '+9198xxxxxx10' }));
+    expect(out).not.toContain('aria-label="Edit Phone"');
+    expect(out).toContain('xxxxxx10');
+  });
+
+  it('shows "Add ..." for an empty value and a way to show everything', () => {
+    const out = draw(['record.contacts.update'], contact({ source: null, customFields: {} }));
+    expect(out).toContain('Add source');
+    expect(out).toContain('Show all details');
+    expect(out).toContain('aria-expanded="false"');
+  });
+
+  it('uses the workspace city property when it has one', () => {
+    expect(cityKey([{ key: 'City' }, { key: 'x' }])).toBe('City');
+    expect(cityKey([{ key: 'x' }])).toBeNull();
+    expect(cityKey(undefined)).toBeNull();
+  });
+
+  it('reads in Arabic', () => {
+    expect(draw([], contact(), 'ar')).toContain('priya@example.com');
+  });
+});
+
+describe('ContactSideCards', () => {
+  const draw = (permissions: string[], c = contact(), locale: 'en' | 'ar' = 'en') =>
+    renderAccount(<ContactSideCards contact={c} />, {
+      locale,
+      session: can(...permissions),
+      seed: [[['cat', 'fields', false], []]],
+    });
+
+  it('opens Key details and the subscription status and folds the rest into one line each', () => {
+    const out = draw([
+      'record.contacts.read',
+      'record.contacts.update',
+      'contacts.consent.read',
+      'record.companies.read',
+    ]);
+    expect(out).toContain('Key details');
+    expect(out).toContain('Subscription status');
+    // subscription is open: its content is drawn and it has no summary line
+    expect(out).toContain('The proof of each opt-in');
+    for (const folded of ['Tags and groups', 'Time zone and location', 'Privacy', 'Lead score']) {
+      expect(out).toMatch(new RegExp(`aria-expanded="false"[^>]*>[\\s\\S]*?${folded}`));
+    }
+    // the folded ones say what is inside
+    expect(out).toContain('Marketing allowed');
+    expect(out).toContain('72 ·');
+    // and none of their content is drawn
+    expect(out).not.toContain('No privacy flags');
+  });
+
+  it('leaves out the cards a person has no access to', () => {
+    const out = draw([]);
+    expect(out).not.toContain('Time zone and location');
+    expect(out).not.toContain('None yet');
+    expect(out).toContain('Subscription status');
+  });
+
+  it('reads in Arabic', () => {
+    expect(draw(['record.contacts.read'], contact(), 'ar')).toContain('aria-expanded');
+  });
+});

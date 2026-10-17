@@ -1,141 +1,27 @@
-import { addMinutes } from './meeting-inline';
-import { isoToZonedLocal, zonedLocalToIso } from './meeting-time';
+import { CALL_CLICK_NUDGE, type CallOutcome } from '@crm/contracts';
 
 /**
- * "Log a call" on the contact page: the form's values become the request of `POST /v2/calls/log`, and the "How did the call go?"
- * prompt that follows a click on a phone number is decided here. Pure, so each rule is tested without a browser.
- *
- * The vocabulary and limits are those of the call logging framework (docs/specs/call-logging.md on the branch
- * `lakshya/next/call-logging-framework`); see `api/call-log.ts` for why they are named here and not imported yet.
+ * The compose box's "Log a call" and the "How did the call go?" line that follows a click on a phone number. The request is built by
+ * the framework's own form rules (`buildLogCallInput` of the calling-voice domain, the Log a call dialog's too); what is decided here is
+ * which outcomes the inline form offers and when the prompt is asked. Pure, so each rule is tested without a browser.
  */
 
-export const CALL_DIRECTIONS = ['outbound', 'inbound'] as const;
-export type CallDirection = (typeof CALL_DIRECTIONS)[number];
-
-/** The five outcomes the form offers, most common first (the framework also has `declined` and `failed`, which phones and providers report). */
-export const CALL_OUTCOMES = [
+/** The five outcomes the inline form offers, most common first (the framework also has `declined` and `failed`, which phones and providers report). */
+export const FORM_OUTCOMES = [
   'connected',
   'no_answer',
   'busy',
   'left_voicemail',
   'wrong_number',
-] as const;
-export type CallOutcome = (typeof CALL_OUTCOMES)[number];
-
-export const CALL_NOTES_MAX = 2000;
-/** The longest call the API takes: a day. */
-export const CALL_MAX_DURATION_SEC = 86_400;
-/** A call may not start later than this many minutes from now (clocks differ). */
-export const CALL_FUTURE_TOLERANCE_MINUTES = 5;
-
-export interface CallDraft {
-  direction: CallDirection;
-  outcome: CallOutcome;
-  /** `YYYY-MM-DDTHH:mm` in the viewer's zone. */
-  when: string;
-  /** Minutes as typed (decimals allowed); empty is "not known". */
-  minutes: string;
-  notes: string;
-  /** Make a follow-up task together with the call. */
-  followUp: boolean;
-  /** The follow-up's due date, `YYYY-MM-DDTHH:mm`. */
-  due: string;
-}
-
-export type CallProblem = 'badWhen' | 'futureWhen' | 'badMinutes' | 'noDue' | 'badDue';
-
-/** Tomorrow at nine on the viewer's clock: where a follow-up starts. */
-export function tomorrowMorning(now: Date, timeZone?: string): string {
-  const today = isoToZonedLocal(now.toISOString(), timeZone).slice(0, 10);
-  return addMinutes(`${today}T09:00`, 24 * 60);
-}
-
-/** A fresh form: an outgoing call that happened just now and connected (what is logged most often), nothing else filled. */
-export function emptyCallDraft(now: Date, timeZone?: string): CallDraft {
-  return {
-    direction: 'outbound',
-    outcome: 'connected',
-    when: isoToZonedLocal(now.toISOString(), timeZone),
-    minutes: '',
-    notes: '',
-    followUp: false,
-    due: tomorrowMorning(now, timeZone),
-  };
-}
-
-/** The request body the form stands for (the shape of the framework's `logCallInputSchema`). */
-export interface LogCallRequest {
-  contactId: string;
-  direction: CallDirection;
-  outcome: CallOutcome;
-  startedAt: string;
-  durationSec: number;
-  notes?: string;
-  source: 'manual' | 'web_click_to_call';
-  followUp?: { dueAt: string };
-  suggestStageNudge: false;
-}
-
-/**
- * The request for a contact's draft, or the first thing that is wrong with it (a stable key the screen words). The call may not start
- * in the future, the length is optional, and a follow-up needs its due date.
- */
-export function buildLogCallRequest(
-  contactId: string,
-  draft: CallDraft,
-  opts: { now: Date; timeZone?: string; source?: LogCallRequest['source'] },
-): { ok: true; input: LogCallRequest } | { ok: false; problem: CallProblem } {
-  const startedAt = zonedLocalToIso(draft.when, opts.timeZone);
-  if (!startedAt) return { ok: false, problem: 'badWhen' };
-  if (Date.parse(startedAt) > opts.now.getTime() + CALL_FUTURE_TOLERANCE_MINUTES * 60_000) {
-    return { ok: false, problem: 'futureWhen' };
-  }
-
-  let durationSec = 0;
-  if (draft.minutes.trim() !== '') {
-    const minutes = Number(draft.minutes.replace(',', '.'));
-    if (!Number.isFinite(minutes) || minutes < 0 || minutes * 60 > CALL_MAX_DURATION_SEC) {
-      return { ok: false, problem: 'badMinutes' };
-    }
-    durationSec = Math.round(minutes * 60);
-  }
-
-  let followUp: LogCallRequest['followUp'];
-  if (draft.followUp) {
-    if (draft.due.trim() === '') return { ok: false, problem: 'noDue' };
-    const dueAt = zonedLocalToIso(draft.due, opts.timeZone);
-    if (!dueAt) return { ok: false, problem: 'badDue' };
-    followUp = { dueAt };
-  }
-
-  const notes = draft.notes.trim().slice(0, CALL_NOTES_MAX);
-  return {
-    ok: true,
-    input: {
-      contactId,
-      direction: draft.direction,
-      outcome: draft.outcome,
-      startedAt,
-      durationSec,
-      ...(notes ? { notes } : {}),
-      source: opts.source ?? 'manual',
-      ...(followUp ? { followUp } : {}),
-      suggestStageNudge: false,
-    },
-  };
-}
+] as const satisfies readonly CallOutcome[];
 
 // --- "How did the call go?" ---------------------------------------------------------------------------------------------
 
-/** What the prompt waits for, as the framework's spec says (a `tel:` link click cannot be told apart from a dialled call). */
-export const CALL_NUDGE = {
-  /** The tab was away at least this long before it counts as "went to make the call". */
-  minAwaySeconds: 15,
-  /** A tab that never went away still asks this long after the click. */
-  idleSeconds: 30,
-  /** Nothing is asked about a click older than this. */
-  maxAgeMinutes: 30,
-} as const;
+/**
+ * What the prompt waits for. The away time and the age limit are the framework's (`CALL_CLICK_NUDGE`: a `tel:` click cannot be told
+ * apart from a dialled call); a tab that never went away asks `idleSeconds` after the click, which the framework leaves to the screen.
+ */
+export const CALL_NUDGE = { ...CALL_CLICK_NUDGE, idleSeconds: 30 } as const;
 
 /** A click on a phone number, remembered until the prompt has been answered or dismissed. */
 export interface PendingCall {
