@@ -232,12 +232,49 @@
         "loadFailed": "Nie udało się załadować ustawień.",
         "hours": {
           "title": "Godziny pracy",
-          "note": "Wyświetlane poglądowo. Godziny pracy nie są jeszcze egzekwowane, więc te kontrolki są tylko do odczytu.",
-          "weekdays": "pon. - pt.",
-          "saturday": "Sobota",
-          "sunday": "Niedziela",
           "from": "Od",
-          "to": "Do"
+          "to": "Do",
+          "note": "Godziny otwarcia Twojego zespołu w strefie {timezone}. Reguły kierowania skrzynki, liczniki SLA, przepływy i odpowiedzi do leadów zależne od godzin pracy korzystają z tego harmonogramu.",
+          "ownerOnly": "Tylko właściciel przestrzeni roboczej może to edytować.",
+          "loadFailed": "Nie udało się wczytać godzin pracy.",
+          "day": {
+            "mon": "Poniedziałek",
+            "tue": "Wtorek",
+            "wed": "Środa",
+            "thu": "Czwartek",
+            "fri": "Piątek",
+            "sat": "Sobota",
+            "sun": "Niedziela"
+          },
+          "closed": "Zamknięte",
+          "openAllDay": "Otwarte całą dobę",
+          "allDay": "Otwarte całą dobę",
+          "overnight": "Zamyka się następnego ranka",
+          "addWindow": "Dodaj godziny",
+          "remove": "Usuń",
+          "removeWindow": "Usuń te godziny dla dnia {day}",
+          "copyMonday": "Kopiuj poniedziałek na wtorek-piątek",
+          "problem": {
+            "required": "Podaj obie godziny.",
+            "same": "Godziny otwarcia i zamknięcia muszą się różnić.",
+            "overlap": "Godziny w tym samym dniu nie mogą się nakładać."
+          },
+          "holidays": {
+            "title": "Dni wolne",
+            "note": "W tych dniach przestrzeń robocza jest zamknięta przez cały dzień, niezależnie od tygodniowych godzin.",
+            "none": "Nie dodano dni wolnych.",
+            "date": "Data",
+            "label": "Nazwa (opcjonalnie)",
+            "add": "Dodaj dzień wolny",
+            "removeFor": "Usuń dzień wolny w dniu {date}",
+            "problem": {
+              "date": "To nie jest prawidłowa data.",
+              "duplicate": "Ta data jest już na liście."
+            }
+          },
+          "save": "Zapisz godziny pracy",
+          "saved": "Zapisano godziny pracy.",
+          "saveFailed": "Nie udało się zapisać godzin pracy."
         },
         "preferences": {
           "title": "Automatyczne podsumowanie AI",

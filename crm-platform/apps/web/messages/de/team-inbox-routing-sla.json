@@ -451,13 +451,13 @@
       "to": "Bis",
       "problem": {
         "required": "Bitte beide Uhrzeiten eingeben.",
-        "order": "Die Schließzeit muss nach der Öffnungszeit liegen."
+        "same": "Öffnungs- und Schließzeit müssen sich unterscheiden."
       },
-      "note": "Ein deaktivierter Tag ist den ganzen Tag geschlossen. Bis Sie speichern, gilt der Arbeitsbereich als rund um die Uhr geöffnet.",
       "cancel": "Abbrechen",
       "save": "Zeiten speichern",
       "saved": "Geschäftszeiten gespeichert",
-      "saveFailed": "Speichern fehlgeschlagen"
+      "saveFailed": "Speichern fehlgeschlagen",
+      "note": "Ein ausgeschalteter Tag ist ganztägig geschlossen. Bis Sie speichern, gilt der Workspace als durchgehend geöffnet. Pausen, Nachtzeiten und Feiertage legen Sie unter Einstellungen > Allgemein > Arbeitszeiten fest."
     }
   }
 }

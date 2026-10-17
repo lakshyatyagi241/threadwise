@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Button, Select, Spinner, cn } from '@crm/ui';
+import { Button, Spinner, cn } from '@crm/ui';
 import { ScoreBadge } from '@/features/lead-scoring';
 import type { ContactRow } from '../api/schemas';
 import { useStageColumn, type ContactFilters } from '../api/contacts';
 import type { Choice } from '../lib/option-sets';
 import type { RowView } from '../lib/row-view';
 import { ContactAvatar, MoreChip, TagChip } from './chips';
+import { StagePicker } from './stage-picker';
 
 const DRAG_TYPE = 'application/x-contact-id';
 
@@ -229,19 +230,14 @@ function Card({
         </div>
       )}
       {onStageChange && (
-        <Select
-          aria-label={t('moveTo', { name: view.name || tl('unnamed') })}
+        <StagePicker
+          look="field"
           value={view.stage}
-          disabled={busy}
-          onChange={(e) => onStageChange(view.id, e.target.value)}
-          className="h-8 text-xs"
-        >
-          {stages.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </Select>
+          stages={stages}
+          busy={busy}
+          name={view.name || tl('unnamed')}
+          onPick={(stage) => onStageChange(view.id, stage)}
+        />
       )}
     </li>
   );

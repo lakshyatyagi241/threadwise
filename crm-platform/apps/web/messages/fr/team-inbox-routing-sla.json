@@ -451,13 +451,13 @@
       "to": "À",
       "problem": {
         "required": "Saisissez les deux heures.",
-        "order": "L'heure de fermeture doit être après l'heure d'ouverture."
+        "same": "Les heures d'ouverture et de fermeture doivent être différentes."
       },
-      "note": "Un jour désactivé est fermé toute la journée. Tant que vous n'avez pas enregistré, l'espace de travail est considéré comme ouvert en permanence.",
       "cancel": "Annuler",
       "save": "Enregistrer les heures",
       "saved": "Heures d'ouverture enregistrées",
-      "saveFailed": "Échec de l'enregistrement"
+      "saveFailed": "Échec de l'enregistrement",
+      "note": "Un jour désactivé est fermé toute la journée. Tant que vous n'enregistrez pas, l'espace de travail est considéré comme ouvert en permanence. Les pauses, les horaires de nuit et les jours fériés se règlent dans Paramètres > Général > Horaires de travail."
     }
   }
 }

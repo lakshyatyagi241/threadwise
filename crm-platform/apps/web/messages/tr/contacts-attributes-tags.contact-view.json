@@ -44,8 +44,6 @@
         "editJobTitle": "İş unvanını düzenle",
         "jobTitleConflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
         "jobTitleFailed": "İş unvanı kaydedilemedi. Tekrar deneyin.",
-        "leadScore": "Potansiyel puanı",
-        "leadScoreAria": "Potansiyel puanı {score}. Puan ayrıntılarını göster.",
         "owner": "Sahip"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "Pazarlamaya izin var",
         "noFlags": "Gizlilik işareti yok"
       },
-      "overview": {
-        "information": "Kişi"
-      },
+      "overview": {},
       "tabs": {
         "info": "Kişi bilgileri",
         "social": "Sosyal medya",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "Listeye dön",
         "label": "Kişi bölümleri",
-        "contactDetails": "Kişi ayrıntıları",
         "related": "İlgili",
         "section": {
           "overview": "Genel bakış",
@@ -172,11 +167,8 @@
         "title": "Yaşam döngüsü",
         "stages": "Yaşam döngüsü aşaması",
         "status": "Durum",
-        "noStatuses": "Bu aşamanın durumu yok.",
-        "statusChanged": "Durum {status} olarak ayarlandı.",
         "conflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
-        "forbidden": "Bu kişiyi değiştirme izniniz yok.",
-        "statusFailed": "Durum değiştirilemedi. Tekrar deneyin."
+        "forbidden": "Bu kişiyi değiştirme izniniz yok."
       }
     }
   }

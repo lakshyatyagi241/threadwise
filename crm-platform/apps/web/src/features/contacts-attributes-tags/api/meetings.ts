@@ -17,11 +17,13 @@ export const MEETING_KEYS = {
 };
 
 /** A contact's logged meetings, in the order the API returns them, fifty at a time. */
-export function useContactMeetings(contactId: string) {
+export function useContactMeetings(contactId: string, enabled = true) {
   return useCursorList(
     MEETING_KEYS.list(contactId),
     `/contacts/${contactId}/meetings`,
     contactMeetingResponseSchema,
+    {},
+    { enabled },
   );
 }
 

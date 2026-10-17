@@ -451,13 +451,13 @@
       "to": "Até",
       "problem": {
         "required": "Informe os dois horários.",
-        "order": "O horário de fechamento deve ser depois do de abertura."
+        "same": "Os horários de abertura e fechamento devem ser diferentes."
       },
-      "note": "Um dia desativado fica fechado o dia inteiro. Até você salvar, o workspace é considerado aberto o tempo todo.",
       "cancel": "Cancelar",
       "save": "Salvar horário",
       "saved": "Horário comercial salvo",
-      "saveFailed": "Não foi possível salvar"
+      "saveFailed": "Não foi possível salvar",
+      "note": "Um dia desativado fica fechado o dia todo. Até você salvar, o espaço de trabalho é considerado aberto o tempo todo. Intervalos, horários noturnos e feriados são definidos em Configurações > Geral > Horário de trabalho."
     }
   }
 }

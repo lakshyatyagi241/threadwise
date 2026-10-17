@@ -114,7 +114,7 @@ describe('SingleSendDrawer — email', () => {
 });
 
 describe('SingleSendDrawer — sms', () => {
-  it('offers a live sms: link to open the person\'s own app for a real number', () => {
+  it("offers a live sms: link to open the person's own app for a real number", () => {
     const html = render({ row: row(), channel: 'sms' }, []);
     expect(html).toContain('href="sms:+91 98765 43210"');
     expect(html).not.toContain('Number is hidden for your role.');

@@ -12,6 +12,7 @@ import {
   defaultEventFlags,
   normalizeFlags,
   type BrandSlot,
+  type BusinessHours,
   type DeleteWorkspaceRequest,
   type NotificationPrefsResponse,
   type IntegrationsSummaryResponse,
@@ -22,11 +23,19 @@ import {
   type SavePreferencesRequest,
   type StoredNotificationPrefs,
   type UpdateBrandingFields,
+  type UpdateWorkingHoursInput,
   type UpdateWorkspaceSettingsRequest,
   type WorkspaceBrand,
   type WorkspaceBrandingResponse,
   type WorkspaceSettingsResponse,
 } from '@crm/contracts';
+import {
+  mergeBusinessHours,
+  readBusinessHoursDays,
+  readBusinessHoursHolidays,
+  sameDays,
+  sameHolidays,
+} from '../../common/business-hours-schedule';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
@@ -323,6 +332,81 @@ export class WorkspaceSettingsService {
     return (
       (res.rows[0] as unknown as { mime: string; bytes: Buffer; etag: string } | undefined) ?? null
     );
+  }
+
+  // --- Working hours (TW-ASHELL-034) ------------------------------------------------------------------------------------
+
+  /**
+   * The weekly schedule and the holidays on the General tab. They are the business hours the routing condition, the SLA clock, the
+   * flows' out-of-hours trigger and the lead first reply read (`workspace_settings.business_hours`, the same JSON the Auto-assignment
+   * dialog edits), in the zone the General tab sets. Reference's card was static; here it saves. A workspace that never saved one
+   * sees the default week, and the engine keeps treating "nothing saved" as always open until the first save.
+   */
+  async workingHours(): Promise<BusinessHours> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      const stored = await this.storedHours(tx, orgId);
+      return this.hoursView(row, stored);
+    });
+  }
+
+  async saveWorkingHours(body: UpdateWorkingHoursInput): Promise<BusinessHours> {
+    const { orgId, userId } = this.actor();
+    return this.db.txAs({ orgId, userId }, async (tx) => {
+      const row = await this.org(tx, orgId, userId);
+      this.mustOwn(row);
+      const before = await this.storedHours(tx, orgId);
+      const oldDays = readBusinessHoursDays(before);
+      const oldHolidays = readBusinessHoursHolidays(before);
+      const holidays = body.holidays ?? oldHolidays;
+      const next = mergeBusinessHours(before, body.days, body.holidays);
+      await tx.execute(sql`
+        INSERT INTO workspace_settings (org_id, business_hours) VALUES (${orgId}, ${next})
+        ON CONFLICT (org_id) DO UPDATE SET business_hours = EXCLUDED.business_hours
+      `);
+      const daysChanged = !sameDays(oldDays, body.days);
+      const holidaysChanged = !sameHolidays(oldHolidays, holidays);
+      if (daysChanged || holidaysChanged) {
+        await this.audit.record(tx, {
+          event: 'workspace.working_hours_updated',
+          status: 'success',
+          orgId,
+          actorType: 'user',
+          actorId: userId,
+          recordId: userId,
+          payload: { days: daysChanged, holidays: holidaysChanged },
+        });
+        await this.outbox.emit(tx, {
+          orgId,
+          aggregateModule: 'business_hours',
+          aggregateId: orgId,
+          eventType: 'business_hours.updated',
+          payload: {
+            timezone: (row.settings as StoredOrgSettings).timezone || 'UTC',
+            days: body.days,
+            holidays,
+          },
+        });
+      }
+      return this.hoursView(row, next);
+    });
+  }
+
+  private async storedHours(tx: Tx, orgId: number): Promise<unknown> {
+    const res = await tx.execute(
+      sql`SELECT business_hours FROM workspace_settings WHERE org_id = ${orgId}`,
+    );
+    return (res.rows[0] as { business_hours?: unknown } | undefined)?.business_hours ?? null;
+  }
+
+  private hoursView(row: OrgRow, stored: unknown): BusinessHours {
+    return {
+      timezone: (row.settings as StoredOrgSettings).timezone || 'UTC',
+      canEditTimezone: ownerMay(row),
+      days: readBusinessHoursDays(stored),
+      holidays: readBusinessHoursHolidays(stored),
+    };
   }
 
   // --- Data residency (TW-ASHELL-045) ----------------------------------------------------------------------------------

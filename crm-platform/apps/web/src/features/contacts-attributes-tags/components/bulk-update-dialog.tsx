@@ -21,6 +21,7 @@ import {
   type LostReasonAnswer,
 } from '../lib/stage-flow';
 import { BulkPropertiesSection } from './bulk-properties-section';
+import { StagePicker } from './stage-picker';
 import { LostReasonFields } from './lost-reason';
 import { TimezoneSelect } from './timezone-select';
 
@@ -156,22 +157,21 @@ function Form({
       {!ownerOnly && (
         <>
           <Field label={t('stage')} htmlFor={`${uid}-stage`}>
-            <Select
+            <StagePicker
+              look="field"
               id={`${uid}-stage`}
               autoFocus={focus === 'stage'}
-              value={stage}
-              onChange={(e) => {
-                setStage(e.target.value);
-                setStatus(KEEP);
+              value={stage === KEEP ? '' : stage}
+              stages={stages}
+              keepLabel={t('keep')}
+              statusesOf={(st) =>
+                statusChoices(options.data, (v) => tf(`statuses.${v}`), undefined, st)
+              }
+              onPick={(next, picked) => {
+                setStage(next === '' ? KEEP : next);
+                setStatus(picked ? picked : KEEP);
               }}
-            >
-              <option value={KEEP}>{t('keep')}</option>
-              {stages.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </Select>
+            />
           </Field>
           {lost && (
             <LostReasonFields

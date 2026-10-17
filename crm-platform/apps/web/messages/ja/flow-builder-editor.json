@@ -685,6 +685,7 @@
         "anotherPart": "このフローの別の部分です。ボタンまたはリスト行がここに誘導したときに実行されます{lost, select, true {(まだどこからも誘導されていないため、実行されません)。} other {。}}",
         "addFirstStep": "最初のステップを追加",
         "branchingEnds": "この{kind, select, list {リスト} other {ボタン群}}でこの部分は終わります。次に送信される内容は、顧客が選んだものによって決まります。",
+        "optionsCarryOn": "各{kind, select, list {行} other {ボタン}}は、独自のフローを開始するか、下の次のステップに進めます。",
         "thenGoTo": "次の移動先",
         "confirmImport": {
           "title": "このフローをファイルで置き換えますか?",
@@ -720,7 +721,7 @@
             "answer": "回答",
             "action": "アクション"
           },
-          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
+          "blockedTitle": "このステップはこのパートを終了するため、最後にのみ配置できます。",
           "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "この後の移動先",
           "linkEnds": "ここで終了(これ以上は送信されません)",
+          "linkNext": "次のステップに進む",
           "linkOption": "{stage} · {label}{self, select, true {(このステップ)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ 新しいフローへ誘導…",
           "question": "質問",

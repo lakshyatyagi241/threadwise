@@ -1,0 +1,251 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Seções do contato",
+          "section": {
+            "overview": "Visão geral",
+            "activities": "Atividade",
+            "conversations": "Conversas",
+            "notes": "Observações",
+            "tasks": "Tarefas",
+            "meetings": "Reuniões",
+            "files": "Arquivos",
+            "deals": "Negócios",
+            "appointments": "Compromissos",
+            "sales": "Faturas",
+            "company": "Empresa",
+            "details": "Detalhes",
+            "stats": "Estatísticas",
+            "lead-source": "Origem",
+            "consent": "Consentimento",
+            "history": "Histórico"
+          },
+          "more": "Mais",
+          "moreLabel": "Mais seções"
+        },
+        "actions": {
+          "label": "O que você pode fazer com este contato",
+          "call": "Ligar",
+          "callWhatsapp": "Ligar pelo WhatsApp",
+          "callPhone": "Ligar pelo seu telefone",
+          "logCall": "Registrar uma ligação",
+          "callMore": "Outras formas de ligar",
+          "message": "Mensagem",
+          "messageChat": "Abrir o chat do WhatsApp",
+          "messageTemplate": "Enviar um modelo do WhatsApp",
+          "messageEmail": "Enviar um e-mail",
+          "messageMore": "Outras formas de escrever",
+          "fieldHistory": "Histórico de campos",
+          "more": "Mais"
+        },
+        "stageStrip": {
+          "noStatus": "Sem status"
+        },
+        "keyDetails": {
+          "editAll": "Editar tudo",
+          "edit": "Editar {field}",
+          "add": "Adicionar {field}",
+          "conflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
+          "invalid": "Isso não parece um valor válido para {field}.",
+          "forbidden": "Você não pode alterar este contato.",
+          "failed": "Não foi possível salvar. Tente novamente.",
+          "owner": "Responsável",
+          "city": "Cidade",
+          "showAll": "Ver todos os detalhes",
+          "showLess": "Ver menos",
+          "social": "Redes sociais",
+          "leadSource": "De onde veio este contato",
+          "aboutTitle": "Sobre este contato"
+        },
+        "cards": {
+          "company": "Empresa",
+          "companyNone": "Ainda nenhuma",
+          "timezone": "Fuso horário e localização",
+          "timezoneNone": "Ainda não se sabe",
+          "privacy": "Privacidade",
+          "privacyMinor": "Menor de idade",
+          "score": "Pontuação do lead",
+          "scoreNone": "Ainda sem pontuação",
+          "label": "Relacionado a este contato",
+          "tasks": "Tarefas em aberto",
+          "tasksNone": "Nada pendente.",
+          "deals": "Negócios",
+          "dealsNone": "Ainda não há negócios.",
+          "add": "+ Adicionar",
+          "viewAll": "Ver tudo"
+        },
+        "compose": {
+          "label": "Adicionar à atividade",
+          "tabs": "O que adicionar",
+          "tab": {
+            "note": "Observação",
+            "task": "Tarefa",
+            "call": "Ligação",
+            "meeting": "Reunião"
+          }
+        },
+        "logCall": {
+          "label": "Registrar uma ligação",
+          "direction": "Quem ligou",
+          "directionOption": {
+            "outbound": "Eu liguei para ele",
+            "inbound": "Ele ligou para mim"
+          },
+          "minutesPlaceholder": "Opcional",
+          "notesPlaceholder": "O que foi dito? (opcional)",
+          "duePreset": {
+            "1": "Amanhã",
+            "3": "Em 3 dias",
+            "7": "Em uma semana"
+          },
+          "saved": "Ligação registrada.",
+          "forbidden": "Você não pode registrar ligações.",
+          "unavailable": "Registrar ligações ainda não está disponível aqui.",
+          "failed": "Não foi possível registrar a ligação. Nada foi perdido: tente novamente."
+        },
+        "callNudge": {
+          "question": "Como foi a ligação com {name}?",
+          "log": "Registrar",
+          "dismiss": "Agora não"
+        },
+        "profile": {
+          "label": "Perfil do contato"
+        },
+        "stagePicker": {
+          "menu": "Escolha um estágio",
+          "search": "Buscar um estágio",
+          "none": "Nenhum estágio encontrado.",
+          "moveTo": "Mover para {stage}",
+          "statusIn": "Status em {stage}",
+          "default": "padrão",
+          "progress": "{current} de {total}",
+          "undo": "Desfazer",
+          "undone": "Voltou para {stage}.",
+          "statusSet": "Status definido como {status}.",
+          "prefix": "Estágio"
+        },
+        "summary": {
+          "label": "Resumo",
+          "tasks": "Tarefas em aberto",
+          "overdue": "{count} atrasadas",
+          "nextDue": "Próximo vencimento {when}",
+          "noDue": "Sem datas de vencimento",
+          "meeting": "Próxima reunião",
+          "noMeeting": "Nada planejado",
+          "lastActivity": "Última atividade",
+          "noActivity": "Ainda não há atividade",
+          "deals": "Negócios em aberto",
+          "wonDeals": "{count, plural, =0 {nenhum ganho} one {1 ganho} other {# ganhos}}"
+        },
+        "scoreChip": {
+          "title": "Pontuação do lead {score} · {band}",
+          "aria": "Pontuação do lead {score}, {band}. Mostrar os detalhes da pontuação."
+        }
+      },
+      "timeline": {
+        "title": "Atividade",
+        "viewAll": "Ver toda a atividade",
+        "filterLabel": "Mostrar",
+        "filters": {
+          "all": "Tudo",
+          "messages": "Mensagens",
+          "calls": "Ligações",
+          "notes": "Observações",
+          "tasks": "Tarefas",
+          "meetings": "Reuniões",
+          "changes": "Alterações"
+        },
+        "searchLabel": "Pesquisar na atividade deste contato",
+        "searchPlaceholder": "Pesquisar atividade",
+        "clearSearch": "Limpar a pesquisa",
+        "searchHint": "A pesquisa é feita só no que já foi carregado. Carregue mais para olhar mais para trás.",
+        "groups": {
+          "upNext": "A seguir",
+          "today": "Hoje",
+          "yesterday": "Ontem",
+          "thisWeek": "Esta semana",
+          "earlier": "Antes"
+        },
+        "loading": "Carregando atividade...",
+        "loadMore": "Carregar mais",
+        "noMatch": "Nada corresponde.",
+        "emptyShort": "Ainda não há nada aqui.",
+        "showAll": "Mostrar toda a atividade",
+        "noneYet": "Nada mais recente por enquanto. Carregue mais para olhar mais para trás.",
+        "partial": "Não foi possível carregar parte da atividade.",
+        "retry": "Tentar novamente",
+        "empty": {
+          "title": "Ainda não há atividade",
+          "message": "Tudo o que você fizer com {name} vai aparecer aqui: observações, ligações, mensagens, tarefas e reuniões.",
+          "messageNoName": "Tudo o que você fizer com este contato vai aparecer aqui: observações, ligações, mensagens, tarefas e reuniões.",
+          "note": "Adicionar uma observação",
+          "call": "Registrar uma ligação",
+          "task": "Adicionar uma tarefa",
+          "meeting": "Agendar uma reunião"
+        },
+        "entry": {
+          "note": "Observação: {text}",
+          "edited": "Editada",
+          "task": {
+            "done": "Tarefa concluída: {title}",
+            "overdue": "Atrasada, venceu {when}",
+            "due": "Vence {when}",
+            "noDue": "Sem data de vencimento"
+          },
+          "meeting": {
+            "upcoming": "Reunião: {title}",
+            "past": "Reunião realizada: {title}"
+          },
+          "call": {
+            "inbound": "Ligação recebida",
+            "outbound": "Ligação feita",
+            "call": "Ligação",
+            "seconds": "{seconds} s",
+            "minutes": "{minutes} min",
+            "outcome": {
+              "connected": "Atendida",
+              "noAnswer": "Sem resposta",
+              "busy": "Ocupado",
+              "voicemail": "Deixou recado",
+              "wrongNumber": "Número errado",
+              "declined": "Recusada",
+              "failed": "Falhou",
+              "inProgress": "Em andamento"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Registrada",
+              "telephony": "Sistema telefônico",
+              "mobile_app": "App para celular",
+              "web_click_to_call": "Telefone"
+            }
+          },
+          "message": {
+            "summary": "Conversa no {channel}",
+            "unread": "{count} não lidas"
+          },
+          "email": {
+            "sent": "E-mail enviado: {title}",
+            "received": "E-mail recebido: {title}"
+          },
+          "change": {
+            "stage": "Estágio alterado de {from} para {to}",
+            "field": "{field} alterado de {from} para {to}",
+            "stageAndMore": "Estágio alterado de {from} para {to}, e {count, plural, one {mais 1 detalhe} other {mais # detalhes}}",
+            "several": "{count, plural, one {1 detalhe atualizado} other {# detalhes atualizados}}"
+          },
+          "consent": {
+            "granted": "Consentimento de {channel} concedido",
+            "withdrawn": "Consentimento de {channel} retirado",
+            "service": "Mensagens de serviço",
+            "marketing": "Mensagens de marketing"
+          },
+          "by": "por {name}",
+          "system": "Sistema"
+        }
+      }
+    }
+  }
+}

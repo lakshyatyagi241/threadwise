@@ -232,12 +232,49 @@
         "loadFailed": "Les paramètres n’ont pas pu être chargés.",
         "hours": {
           "title": "Heures de travail",
-          "note": "Affichées à titre indicatif. Les heures de travail ne sont pas encore appliquées, ces commandes sont donc en lecture seule.",
-          "weekdays": "Lun - Ven",
-          "saturday": "Samedi",
-          "sunday": "Dimanche",
           "from": "De",
-          "to": "À"
+          "to": "À",
+          "note": "Les horaires d'ouverture de votre équipe, en {timezone}. Les règles de routage de la boîte de réception, les minuteurs SLA, les flux et les réponses aux leads qui dépendent des heures ouvrables utilisent ce planning.",
+          "ownerOnly": "Seul le propriétaire de l'espace de travail peut les modifier.",
+          "loadFailed": "Impossible de charger les horaires de travail.",
+          "day": {
+            "mon": "Lundi",
+            "tue": "Mardi",
+            "wed": "Mercredi",
+            "thu": "Jeudi",
+            "fri": "Vendredi",
+            "sat": "Samedi",
+            "sun": "Dimanche"
+          },
+          "closed": "Fermé",
+          "openAllDay": "Ouvert toute la journée",
+          "allDay": "Ouvert toute la journée",
+          "overnight": "Ferme le lendemain matin",
+          "addWindow": "Ajouter des horaires",
+          "remove": "Supprimer",
+          "removeWindow": "Supprimer ces horaires pour {day}",
+          "copyMonday": "Copier lundi sur mardi-vendredi",
+          "problem": {
+            "required": "Saisissez les deux heures.",
+            "same": "Les heures d'ouverture et de fermeture doivent être différentes.",
+            "overlap": "Les horaires d'un même jour ne doivent pas se chevaucher."
+          },
+          "holidays": {
+            "title": "Jours fériés",
+            "note": "L'espace de travail est considéré comme fermé toute la journée à ces dates, quels que soient les horaires hebdomadaires.",
+            "none": "Aucun jour férié ajouté.",
+            "date": "Date",
+            "label": "Nom (facultatif)",
+            "add": "Ajouter un jour férié",
+            "removeFor": "Supprimer le jour férié du {date}",
+            "problem": {
+              "date": "Date invalide.",
+              "duplicate": "Cette date figure déjà dans la liste."
+            }
+          },
+          "save": "Enregistrer les horaires de travail",
+          "saved": "Horaires de travail enregistrés.",
+          "saveFailed": "Impossible d'enregistrer les horaires de travail."
         },
         "preferences": {
           "title": "Résumé IA automatique",

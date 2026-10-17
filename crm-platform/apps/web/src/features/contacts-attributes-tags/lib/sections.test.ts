@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ACTION_SECTION,
   ADD_TARGETS,
   CORE_SECTIONS,
+  pageTabs,
   SECTION_OF_TARGET,
   TAB_MORE,
   TAB_PRIMARY,
@@ -111,6 +113,8 @@ describe('sections', () => {
       task: 'tasks',
       meeting: 'meetings',
       company: 'overview',
+      call: 'activities',
+      score: 'overview',
     });
     for (const t of ADD_TARGETS) expect(parseAddTarget(t)).toBe(t);
     for (const bad of [null, undefined, '', 'Task', 'tasks', 'constructor']) {
@@ -120,6 +124,41 @@ describe('sections', () => {
     for (const s of Object.values(SECTION_OF_TARGET)) {
       expect([...TAB_PRIMARY, ...TAB_MORE]).toContain(s);
     }
+  });
+
+  it('sends the action bar to the compose box of the Activity tab, and the company and the lead score to the overview', () => {
+    expect(ACTION_SECTION).toEqual({
+      note: 'activities',
+      task: 'activities',
+      meeting: 'activities',
+      call: 'activities',
+      company: 'overview',
+      score: 'overview',
+    });
+    for (const s of Object.values(ACTION_SECTION)) {
+      expect([...TAB_PRIMARY, ...TAB_MORE]).toContain(s);
+    }
+  });
+
+  it('puts every section in exactly one place of the tab bar: five tabs, then More', () => {
+    const { primary, more } = pageTabs(() => true);
+    expect(primary).toEqual(['overview', 'activities', 'conversations', 'deals', 'files']);
+    const listed = [...primary, ...more];
+    expect([...listed].sort()).toEqual([...CORE_SECTIONS, ...RELATED_SECTIONS].sort());
+    expect(new Set(listed).size).toBe(listed.length);
+  });
+
+  it('leaves out what a person may not open', () => {
+    const none = pageTabs(() => false);
+    expect(none.primary).toEqual(['overview', 'activities', 'files']);
+    expect(none.more).toContain('notes');
+    expect(none.more).toContain('history');
+    for (const gated of ['tasks', 'appointments', 'sales', 'company', 'consent']) {
+      expect(none.more).not.toContain(gated);
+    }
+    const inbox = pageTabs((p) => p === 'inbox.conversation.read' || p === 'record.deals.read');
+    expect(inbox.primary).toContain('conversations');
+    expect(inbox.primary).toContain('deals');
   });
 
   it('puts the overview on the bare contact URL and every other section after it', () => {

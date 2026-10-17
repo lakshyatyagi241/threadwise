@@ -74,7 +74,7 @@ export function NotesSection({
     >
       <div className="space-y-4">
         {canUpdate && (
-          <Composer
+          <NoteComposer
             focusSignal={focusSignal}
             pending={create.isPending}
             onSave={(body, done) =>
@@ -163,7 +163,8 @@ export function NotesSection({
   );
 }
 
-function Composer({
+/** The note box: grows to three lines, Ctrl/Cmd + Enter saves, the counter shows near the limit. Used by the Notes section and the compose box. */
+export function NoteComposer({
   focusSignal,
   pending,
   onSave,
@@ -220,7 +221,12 @@ function Composer({
         <p id={hintId} className="text-xs text-muted-foreground" aria-live="polite">
           {left <= COUNTER_FROM ? t('charsLeft', { count: left }) : t('composerHint')}
         </p>
-        <Button size="sm" disabled={empty || pending} onClick={save}>
+        <Button
+          size="sm"
+          className="shrink-0 whitespace-nowrap"
+          disabled={empty || pending}
+          onClick={save}
+        >
           {pending && <Spinner />}
           {t('save')}
         </Button>

@@ -63,6 +63,15 @@ export const BRANCHING: ReadonlySet<string> = new Set([
  * A branching step whose exits are fixed by the step, not written by the author: the graph port each exit leaves by, in the order of
  * the step's `links`. The other branching steps have one exit per button / row, on ports `p0`, `p1`, ...
  */
+/**
+ * Buttons and list: the customer's tap picks the exit, and an exit that leads nowhere in particular can carry on with the step
+ * that follows in the same chain (`LINK_NEXT`). The other branching steps end their chain: nothing follows them.
+ */
+export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list']);
+export const endsChain = (type: string): boolean => BRANCHING.has(type) && !OPTION_STEPS.has(type);
+/** A button / row link that means "carry on with the next step of this chain" (never a step id). */
+export const LINK_NEXT = '__next';
+
 export const FIXED_EXITS: Readonly<Record<string, readonly string[]>> = {
   faq: ['matched', 'no_match'],
   condition: ['yes', 'no'],
@@ -88,7 +97,10 @@ export interface SimpleStep {
   id: string;
   type: SimpleType;
   data: Record<string, unknown>;
-  /** For buttons and list steps: the step each button / row leads to (a step id), `null` = the conversation ends there. */
+  /**
+   * For buttons and list steps: the step each button / row leads to (a step id), `LINK_NEXT` = carry on with the step after this one,
+   * `null` = the conversation ends there.
+   */
   links: (string | null)[];
   /**
    * For the last step of a part that is not buttons or a list: the step it carries on with, anywhere in the flow (a "node to node"
@@ -282,13 +294,23 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
 
   // Journeys: the trigger's chain first, then every other chain by where its first step sits on the canvas. A step continues its
   // chain only when it is reached by that one wire and does not start a named flow; any other `out` wire is a "carry on at" jump.
+  /** The step a buttons / list node carries on with (the one after it in its chain), when it is there. */
+  const carryOf = (n: FlowNode): string | undefined => {
+    const id = n.data.carryOn;
+    return OPTION_STEPS.has(n.type) && typeof id === 'string' && id !== n.id && nodes.has(id)
+      ? id
+      : undefined;
+  };
+  const carried = new Set(graph.flowNodes.map(carryOf).filter((id): id is string => !!id));
   const mainHead = next.get(trigger.id);
   const continues = (id: string): boolean =>
     id !== mainHead &&
     nodes.get(id)!.data.journeyName === undefined &&
     (feeders.get(id)?.length ?? 0) === 1;
   const others = graph.flowNodes
-    .filter((n) => n.type !== 'trigger' && n.id !== mainHead && !continues(n.id))
+    .filter(
+      (n) => n.type !== 'trigger' && n.id !== mainHead && !continues(n.id) && !carried.has(n.id),
+    )
     .sort((a, b) => a.x - b.x || a.y - b.y);
 
   const seen = new Set<string>();
@@ -299,14 +321,20 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       seen.add(cur);
       const n = nodes.get(cur)!;
       const links: (string | null)[] = [];
+      const carry = carryOf(n);
       if (BRANCHING.has(n.type)) {
         const wired = option.get(n.id) ?? [];
         for (let i = 0; i < optionCount({ type: n.type as SimpleType, data: n.data }); i++)
-          links.push(wired[i] ?? null);
+          links.push(carry && wired[i] === carry ? LINK_NEXT : (wired[i] ?? null));
       }
       const step: SimpleStep = { id: n.id, type: n.type as SimpleType, data: { ...n.data }, links };
+      delete step.data.carryOn;
       if (errorEnds.has(n.id)) step.data.errorEnds = true;
       steps.push(step);
+      if (carry && !seen.has(carry)) {
+        cur = carry;
+        continue;
+      }
       const nx = next.get(cur);
       if (!nx) break;
       if (continues(nx) && !seen.has(nx)) cur = nx;
@@ -338,7 +366,7 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
   const ids = new Set(journeys.flatMap((j) => j.steps.map((s) => s.id)));
   for (const j of journeys)
     for (const s of j.steps) {
-      s.links = s.links.map((l) => (l && ids.has(l) ? l : null));
+      s.links = s.links.map((l) => (l === LINK_NEXT || (l && ids.has(l)) ? l : null));
       if (s.goto && !ids.has(s.goto)) delete s.goto;
     }
 
@@ -375,6 +403,10 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       // The journey's name rides on its first step (the graph has no place for it); the main flow's is fixed.
       if (si === 0 && ji > 0) data.journeyName = j.name.trim();
       else delete data.journeyName;
+      // The step a buttons / list step carries on with rides on its node (the graph has only the tapped exits).
+      const following = j.steps[si + 1];
+      if (OPTION_STEPS.has(s.type) && following) data.carryOn = following.id;
+      else delete data.carryOn;
       nodes.push({
         id: s.id,
         type: s.type,
@@ -395,7 +427,8 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto))
         for (const h of exits) edge(s.id, h, s.goto);
       if (BRANCHING.has(s.type)) {
-        s.links.forEach((target, i) => {
+        s.links.forEach((link, i) => {
+          const target = link === LINK_NEXT ? following?.id : link;
           if (target && known.has(target)) edge(s.id, exitHandle(s.type, i), target);
         });
       }
@@ -597,16 +630,25 @@ const mapJourney = (
   journeys: doc.journeys.map((j, i) => (i === ji ? f(j) : j)),
 });
 
-/** Insert a step into a journey at `at` (a step may not follow a buttons or list step: they end the journey). */
+/**
+ * Insert a step into a journey at `at`. A step may not follow a condition, carousel or FAQ step (they end the journey), and those
+ * can only go last. After buttons or a list the new step is what every button that leads nowhere carries on with.
+ */
 export function insertStep(doc: SimpleDoc, ji: number, at: number, step: SimpleStep): SimpleDoc {
   const j = doc.journeys[ji];
   if (!j) return doc;
   const prev = j.steps[at - 1];
-  if (prev && BRANCHING.has(prev.type)) return doc;
-  // A branching step inserted before others would cut them off from the journey: it has to be the last one.
-  if (BRANCHING.has(step.type) && at < j.steps.length) return doc;
+  if (prev && endsChain(prev.type)) return doc;
+  // A step that ends the journey inserted before others would cut them off from it: it has to be the last one.
+  if (endsChain(step.type) && at < j.steps.length) return doc;
   return mapJourney(doc, ji, (jj) => {
-    const steps = [...jj.steps.slice(0, at), step, ...jj.steps.slice(at)];
+    let steps = [...jj.steps.slice(0, at), step, ...jj.steps.slice(at)];
+    // A step added after the buttons / list step at the end of the journey is what every button that leads nowhere carries on with.
+    if (prev && OPTION_STEPS.has(prev.type) && at === jj.steps.length) {
+      steps = steps.map((x) =>
+        x.id === prev.id ? { ...x, links: x.links.map((l) => l ?? LINK_NEXT) } : x,
+      );
+    }
     // The jump ("carry on at") belongs to the last step: a step added at the end takes it over.
     if (at === jj.steps.length && prev?.goto && !BRANCHING.has(step.type)) {
       return {
@@ -669,7 +711,18 @@ export function removeStep(doc: SimpleDoc, id: string): SimpleDoc {
         }),
       };
     })
-    .filter((j, i) => i === 0 || j.steps.length > 0);
+    .filter((j, i) => i === 0 || j.steps.length > 0)
+    // A buttons / list step left last has nothing to carry on with.
+    .map((j) => {
+      const last = j.steps[j.steps.length - 1];
+      if (!last || !OPTION_STEPS.has(last.type) || !last.links.includes(LINK_NEXT)) return j;
+      return {
+        ...j,
+        steps: j.steps.map((x) =>
+          x.id === last.id ? { ...x, links: x.links.map((l) => (l === LINK_NEXT ? null : l)) } : x,
+        ),
+      };
+    });
   return { ...doc, journeys };
 }
 
@@ -678,13 +731,13 @@ export function duplicateStep(doc: SimpleDoc, id: string): SimpleDoc {
     const si = doc.journeys[ji]!.steps.findIndex((s) => s.id === id);
     if (si < 0) continue;
     const src = doc.journeys[ji]!.steps[si]!;
-    // A copy of a buttons / list step is only allowed at the end, which is where the original is.
-    if (BRANCHING.has(src.type)) return doc;
+    // A copy of a step that ends its journey is only allowed at the end, which is where the original is.
+    if (endsChain(src.type)) return doc;
     const copy: SimpleStep = {
       ...src,
       id: flbNewNodeId(),
       data: structuredClone(src.data),
-      links: [],
+      links: src.links.map(() => null),
       goto: null,
     };
     return insertStep(doc, ji, si + 1, copy);
@@ -701,8 +754,8 @@ export function moveStep(doc: SimpleDoc, id: string, dir: -1 | 1): SimpleDoc {
     if (to < 0 || to >= steps.length) return doc;
     const next = steps.slice();
     [next[si], next[to]] = [next[to]!, next[si]!];
-    // A branching step has to stay last.
-    if (next.some((s, i) => BRANCHING.has(s.type) && i < next.length - 1)) return doc;
+    // A step that ends the journey has to stay last.
+    if (next.some((s, i) => endsChain(s.type) && i < next.length - 1)) return doc;
     // The jump belongs to whichever step is now last.
     const oldLast = steps[steps.length - 1]!;
     const newLast = next[next.length - 1]!;

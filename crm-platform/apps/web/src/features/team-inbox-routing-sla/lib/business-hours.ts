@@ -18,8 +18,8 @@ export interface BusinessHoursDraft {
   days: Record<BusinessHoursDay, BusinessHoursDayDraft>;
 }
 
-/** What is wrong with one day, as a message key of the dialog ("required" for an empty time, "order" for a closing time not after opening). */
-export type DayProblem = 'required' | 'order';
+/** What is wrong with one day, as a message key of the dialog ("required" for an empty time, "same" for equal times; a closing time before the opening one is an overnight window). */
+export type DayProblem = 'required' | 'same';
 export type DayProblems = Partial<Record<BusinessHoursDay, DayProblem>>;
 
 export function draftFrom(hours: BusinessHours): BusinessHoursDraft {
@@ -41,7 +41,7 @@ export function checkDraft(draft: BusinessHoursDraft): DayProblems {
       continue;
     }
     const parsed = businessHoursDaySchema.safeParse(day);
-    if (!parsed.success) problems[k] = 'order';
+    if (!parsed.success) problems[k] = 'same';
   }
   return problems;
 }

@@ -44,7 +44,27 @@ const validZone = (tz: string): boolean => {
 };
 
 /**
- * `workspaces.business_hours` is `{ tz?, days?: { mon: ["09:00","17:00"], sat: null, ... } }` (a JSON string or an object).
+ * One saved day as the helpdesk reads it: Reference's `["09:00","17:00"]` pair, or the Settings "Working hours" shape
+ * `{ enabled, from, to }` (a switched-off day is closed). Only the first window counts here: this clock has no overnight or split days.
+ */
+function windowOf(w: unknown): DayWindow {
+  if (Array.isArray(w)) {
+    return w.length >= 2 && typeof w[0] === 'string' && typeof w[1] === 'string'
+      ? [w[0], w[1]]
+      : null;
+  }
+  if (w && typeof w === 'object') {
+    const d = w as { enabled?: unknown; from?: unknown; to?: unknown };
+    if (d.enabled !== true || typeof d.from !== 'string' || typeof d.to !== 'string') return null;
+    if (d.to === '24:00') return [d.from, '23:59'];
+    return d.to > d.from ? [d.from, d.to] : null;
+  }
+  return null;
+}
+
+/**
+ * `workspaces.business_hours` is `{ tz?, days?: { mon: ["09:00","17:00"], sat: null, ... } }` or the Settings shape `{ days: { mon: { enabled, from, to } } }`
+ * (a JSON string or an object).
  * Anything unreadable falls back to the default week; a day that is present replaces that day's default (null = closed).
  */
 export function businessHoursFor(raw: unknown, workspaceTz: string | null): BusinessHours {
@@ -64,11 +84,7 @@ export function businessHoursFor(raw: unknown, workspaceTz: string | null): Busi
   const days = { ...DEFAULT_DAYS };
   for (const key of DAY_KEYS) {
     if (!(key in given)) continue;
-    const w = given[key];
-    days[key] =
-      Array.isArray(w) && w.length >= 2 && typeof w[0] === 'string' && typeof w[1] === 'string'
-        ? [w[0], w[1]]
-        : null;
+    days[key] = windowOf(given[key]);
   }
   return { tz, days };
 }

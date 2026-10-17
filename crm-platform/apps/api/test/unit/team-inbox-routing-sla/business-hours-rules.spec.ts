@@ -26,7 +26,7 @@ describe('business hours defaults and reading', () => {
     const saved = JSON.stringify({
       days: {
         mon: { enabled: true, from: '08:30', to: '17:00' },
-        tue: { enabled: false, from: '10:00', to: '09:00' }, // closing before opening
+        tue: { enabled: false, from: '10:00', to: '10:00' }, // equal times
         wed: { enabled: true, from: '9:00', to: '18:00' }, // not HH:MM
       },
     });
@@ -103,9 +103,9 @@ describe('the request schema', () => {
     expect(updateBusinessHoursSchema.safeParse({ days }).success).toBe(true);
   });
 
-  it('refuses a closing time that is not after the opening time, so a window never crosses midnight', () => {
-    const bad = { ...days, mon: { enabled: true, from: '18:00', to: '09:00' } };
-    expect(updateBusinessHoursSchema.safeParse({ days: bad }).success).toBe(false);
+  it('accepts an overnight window and refuses equal opening and closing times', () => {
+    const night = { ...days, mon: { enabled: true, from: '18:00', to: '09:00' } };
+    expect(updateBusinessHoursSchema.safeParse({ days: night }).success).toBe(true);
     const equal = { ...days, mon: { enabled: true, from: '09:00', to: '09:00' } };
     expect(updateBusinessHoursSchema.safeParse({ days: equal }).success).toBe(false);
   });

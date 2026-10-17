@@ -368,7 +368,9 @@ export class FlowTriggerService {
   ): Promise<number> {
     const kinds = await this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(
-        sql`SELECT inbox_away, business_hours, timezone FROM workspace_settings WHERE org_id = ${orgId}`,
+        sql`SELECT ws.inbox_away, ws.business_hours, COALESCE(o.settings ->> 'timezone', 'UTC') AS timezone
+              FROM organizations o LEFT JOIN workspace_settings ws ON ws.org_id = o.id
+             WHERE o.id = ${orgId}`,
       )) as unknown as Rows;
       const org = res.rows[0];
       if (!org) return [] as string[];

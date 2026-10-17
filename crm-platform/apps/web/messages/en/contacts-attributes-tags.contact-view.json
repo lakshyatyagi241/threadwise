@@ -44,8 +44,6 @@
         "editJobTitle": "Edit job title",
         "jobTitleConflict": "Someone else changed this contact first. It was reloaded; try again.",
         "jobTitleFailed": "The job title could not be saved. Try again.",
-        "leadScore": "Lead score",
-        "leadScoreAria": "Lead score {score}. Show the score details.",
         "owner": "Owner"
       },
       "social": {
@@ -99,9 +97,7 @@
         "allowed": "Marketing allowed",
         "noFlags": "No privacy flags"
       },
-      "overview": {
-        "information": "Contact"
-      },
+      "overview": {},
       "tabs": {
         "info": "Contact information",
         "social": "Social media",
@@ -147,7 +143,6 @@
       "nav": {
         "back": "Back to listing",
         "label": "Contact sections",
-        "contactDetails": "Contact details",
         "related": "Related",
         "section": {
           "overview": "Overview",
@@ -172,11 +167,8 @@
         "title": "Lifecycle",
         "stages": "Lifecycle stage",
         "status": "Status",
-        "noStatuses": "This stage has no statuses.",
-        "statusChanged": "Status set to {status}.",
         "conflict": "Someone else changed this contact first. It was reloaded; try again.",
-        "forbidden": "You do not have permission to change this contact.",
-        "statusFailed": "The status could not be changed. Try again."
+        "forbidden": "You do not have permission to change this contact."
       }
     }
   }

@@ -23,10 +23,13 @@ export function TimezoneCard({
   contactId,
   rowVersion,
   className,
+  bare,
 }: {
   contactId: string;
   rowVersion: number;
   className?: string;
+  /** Inside a card that has its own title and border (the contact page's collapsible "Time zone" card): draw only the content. */
+  bare?: boolean;
 }) {
   const t = useTranslations('contacts-attributes-tags.timezone');
   const locale = useLocale();
@@ -72,12 +75,22 @@ export function TimezoneCard({
 
   return (
     <section
-      className={`rounded-md border border-border bg-background p-4 ${className ?? ''}`}
+      className={
+        bare
+          ? (className ?? '')
+          : `rounded-md border border-border bg-background p-4 ${className ?? ''}`
+      }
       data-testid="contact-timezone-card"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+          <h2
+            className={
+              bare
+                ? 'sr-only'
+                : 'text-[11px] font-medium uppercase tracking-wider text-muted-foreground'
+            }
+          >
             {t('title')}
           </h2>
           <p className="mt-1 text-sm font-medium" data-testid="timezone-zone">

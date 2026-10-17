@@ -6,6 +6,7 @@
 //   node tools/event-loop-audit/scrape-demo.mjs                  # steady state, probe, receiver, worker killed
 //   node tools/event-loop-audit/scrape-demo.mjs --stall          # + API stall, worker stall with a backlog, a 12 s block
 //   node tools/event-loop-audit/scrape-demo.mjs --phases=api,long   # pick phases (api, worker, long)
+//   node tools/event-loop-audit/scrape-demo.mjs --grafana        # + a real Grafana loads the four dashboards and runs every panel query (EL-B04)
 //
 // It starts throwaway Postgres + Redis containers, migrates, runs the BUILT api (dist/src/main.js), worker (dist/src/worker.js) and
 // probe (dist/src/tools/event-loop-probe.js) as separate processes, then runs prom/prometheus and prom/alertmanager with the files
@@ -48,6 +49,7 @@ const PHASES = new Set(
   (phaseArg ?? (argv.includes('--stall') ? 'api,worker,long' : '')).split(',').filter(Boolean),
 );
 const INSPECT = PHASES.size > 0;
+const GRAFANA = argv.includes('--grafana');
 
 const P = {
   pg: 55433,
@@ -58,6 +60,7 @@ const P = {
   probeMetrics: 9466,
   prom: 9099,
   receiver: 9500,
+  grafana: 3990,
   inspectApi: 9229,
   inspectWorker: 9230,
 };
@@ -66,6 +69,7 @@ const NAMES = {
   redis: 'el-scrape-redis',
   prom: 'el-scrape-prom',
   am: 'el-scrape-am',
+  grafana: 'el-scrape-grafana',
   net: 'el-scrape-net',
 };
 const token = randomBytes(24).toString('hex');
@@ -111,7 +115,7 @@ function cleanup() {
   } catch {
     /* not started */
   }
-  for (const n of [NAMES.pg, NAMES.redis, NAMES.prom, NAMES.am]) {
+  for (const n of [NAMES.pg, NAMES.redis, NAMES.prom, NAMES.am, NAMES.grafana]) {
     try {
       docker('rm', '-f', n);
     } catch {
@@ -398,9 +402,184 @@ async function longBlockPhase() {
   );
 }
 
+// ---- Grafana: the four dashboards, loaded by provisioning and run against the live Prometheus (EL-B04) -----------------------------
+// The files mounted are the ones that ship (deploy/observability/grafana); the data source address `prometheus` is the network alias
+// the demo gives its Prometheus container. Template variables are filled in here the way Grafana's front end fills them (All = .*);
+// everything else, including $__rate_interval, is left for Grafana's own Prometheus backend to expand.
+const PANEL_MUST_HAVE_DATA = new Set([
+  'Event loop delay',
+  'Event loop utilization',
+  'Heap used against its limit',
+  'Memory',
+  'GC pause',
+  'CPU and throttling',
+  'Probe latency by target',
+  'Metrics target',
+  'Instances reporting',
+  'Seconds since last report',
+  'Open handles (sockets, timers, requests)',
+]);
+async function grafanaPhase() {
+  console.log('\n== Grafana: dashboards against the live stack ==');
+  const gdir = join(root, 'deploy/observability/grafana');
+  const password = randomBytes(12).toString('hex');
+  docker(
+    'run',
+    '-d',
+    '--rm',
+    '--name',
+    NAMES.grafana,
+    '--network',
+    NAMES.net,
+    '-p',
+    `127.0.0.1:${P.grafana}:3000`,
+    '-e',
+    `GF_SECURITY_ADMIN_PASSWORD=${password}`,
+    '-e',
+    'GF_ANALYTICS_REPORTING_ENABLED=false',
+    '-e',
+    'GF_ANALYTICS_CHECK_FOR_UPDATES=false',
+    '-e',
+    'GF_USERS_ALLOW_SIGN_UP=false',
+    '-v',
+    `${join(gdir, 'provisioning')}:/etc/grafana/provisioning:ro`,
+    '-v',
+    `${join(gdir, 'dashboards')}:/var/lib/grafana/dashboards:ro`,
+    'grafana/grafana:11.3.0',
+  );
+  const base = `http://127.0.0.1:${P.grafana}`;
+  const auth = { Authorization: `Basic ${Buffer.from(`admin:${password}`).toString('base64')}` };
+  const g = async (path, init = {}) => {
+    const r = await fetch(`${base}${path}`, {
+      ...init,
+      headers: { ...auth, 'content-type': 'application/json', ...(init.headers ?? {}) },
+    });
+    const body = await r.json().catch(() => ({}));
+    return { ok: r.ok, status: r.status, body };
+  };
+  await waitFor(
+    'grafana healthy',
+    async () => (await fetch(`${base}/api/health`)).ok,
+    120_000,
+    2000,
+  );
+  const found = await waitFor(
+    'four dashboards provisioned',
+    async () => {
+      const r = await g('/api/search?type=dash-db');
+      return r.ok && r.body.length >= 4 ? r.body : null;
+    },
+    60_000,
+    2000,
+  );
+  const uids = found.map((d) => d.uid).sort();
+  check(
+    'Grafana provisioned the four dashboards',
+    uids.join() === 'crm-api,crm-realtime,crm-release-comparison,crm-workers',
+    uids.join(),
+  );
+  const dsHealth = await g('/api/datasources/uid/crm-prometheus/health');
+  check(
+    'the provisioned data source reaches Prometheus',
+    dsHealth.ok && dsHealth.body.status === 'OK',
+    dsHealth.body.message,
+  );
+
+  // some traffic, so rate() has samples to work on
+  const stopLoad = startLoad();
+  await sleep(75_000);
+  await stopLoad();
+
+  // what the drop-downs would offer, asked of Prometheus the way label_values() does
+  const labelValues = async (label, match) =>
+    (await prom(`/api/v1/label/${label}/values?match[]=${encodeURIComponent(match)}`)) ?? [];
+  const vars = {
+    instance: await labelValues(
+      'instance',
+      'crm_runtime_last_report_timestamp_seconds{service="api"}',
+    ),
+    route: await labelValues('route', 'crm_http_request_duration_seconds_count{service="api"}'),
+    queue: await labelValues('queue', 'crm_queue_jobs_total{service="worker"}'),
+  };
+  check(
+    'the instance drop-down has a value for the API',
+    vars.instance.length >= 1,
+    vars.instance.join(),
+  );
+  observe(
+    `route values: ${vars.route.join(' ') || 'none'}; queue values: ${vars.queue.join(' ') || 'none'}`,
+  );
+
+  const fill = (expr, service) =>
+    expr
+      .replaceAll('$instance', '.*')
+      .replaceAll('$route', '.*')
+      .replaceAll('$queue', '.*')
+      .replaceAll('$service', service)
+      .replaceAll('$compare', '1m');
+  const now = Date.now();
+  let panelsRun = 0;
+  const emptyOnes = [];
+  const errors = [];
+  for (const uid of uids) {
+    const dash = (await g(`/api/dashboards/uid/${uid}`)).body.dashboard;
+    const services = uid === 'crm-release-comparison' ? ['api', 'worker'] : ['-'];
+    for (const panel of dash.panels.filter((x) => x.targets?.length)) {
+      for (const service of services) {
+        const queries = panel.targets.map((t) => ({
+          refId: t.refId,
+          datasource: t.datasource,
+          expr: fill(t.expr, service),
+          instant: Boolean(t.instant),
+          range: t.range ?? !t.instant,
+          format: t.format ?? 'time_series',
+          intervalMs: 15000,
+          maxDataPoints: 500,
+        }));
+        const r = await g('/api/ds/query', {
+          method: 'POST',
+          body: JSON.stringify({ queries, from: String(now - 600_000), to: String(now) }),
+        });
+        const where = `${uid} / ${panel.title}${services.length > 1 ? ` [${service}]` : ''}`;
+        const results = Object.values(r.body.results ?? {});
+        if (!r.ok || results.some((x) => x.error)) {
+          errors.push(
+            `${where}: ${
+              r.body.message ??
+              results
+                .map((x) => x.error)
+                .filter(Boolean)
+                .join('; ')
+            }`,
+          );
+          continue;
+        }
+        panelsRun += 1;
+        const points = results.reduce(
+          (n, x) =>
+            n + (x.frames ?? []).reduce((m, f) => m + (f.data?.values?.[0]?.length ?? 0), 0),
+          0,
+        );
+        if (points === 0) emptyOnes.push(where);
+        if (PANEL_MUST_HAVE_DATA.has(panel.title) && uid !== 'crm-release-comparison') {
+          check(`${where} has data`, points > 0, points > 0 ? `${points} points` : 'no points');
+        }
+      }
+    }
+  }
+  check(
+    `every panel query runs without an error (${panelsRun} run)`,
+    errors.length === 0,
+    errors.join(' | '),
+  );
+  observe(
+    `panels with no data in this run (not an error: they need traffic or failures this demo does not make): ${emptyOnes.join('; ') || 'none'}`,
+  );
+}
+
 // ---- main ----------------------------------------------------------------------------------------------------------------------
 async function main() {
-  for (const n of [NAMES.pg, NAMES.redis, NAMES.prom, NAMES.am]) {
+  for (const n of [NAMES.pg, NAMES.redis, NAMES.prom, NAMES.am, NAMES.grafana]) {
     try {
       docker('rm', '-f', n);
     } catch {
@@ -595,6 +774,8 @@ async function main() {
     NAMES.prom,
     '--network',
     NAMES.net,
+    '--network-alias',
+    'prometheus',
     '-p',
     `${P.prom}:9090`,
     '-v',
@@ -742,6 +923,8 @@ async function main() {
     idle.length === 0,
     idle.map((a) => a.labels.alertname).join(),
   );
+
+  if (GRAFANA) await grafanaPhase();
 
   // ---- stalls ---------------------------------------------------------------------------------------------------------------------
   if (PHASES.has('api')) await apiStallPhase();
