@@ -16,9 +16,8 @@ import { subscriptionRows, type OptInChannel } from '../../lib/subscription';
 import { ContactQuickTags } from '../contact-quick-tags';
 import { GroupChip } from '../chips';
 import { MailIcon, SmsIcon, WhatsAppIcon } from '../icons';
-import { OwnerControl } from '../owner-control';
 import { OptInPill, ScoreRing } from './parts';
-import { KeyValueList, Panel, useRefreshContact, type KeyValueRow } from './shared';
+import { KeyValueList, useRefreshContact, type KeyValueRow } from './shared';
 
 const CHANNEL_ICON: Record<OptInChannel, typeof SmsIcon> = {
   whatsapp: WhatsAppIcon,
@@ -32,7 +31,7 @@ const CHANNEL_TINT: Record<OptInChannel, string> = {
 };
 
 /** The lead score as a ring with its band, and the scoring card (AI score, reasons, history) behind "Score details". */
-export function LeadScoreCard({ contact }: { contact: ContactRow }) {
+export function LeadScoreBody({ contact }: { contact: ContactRow }) {
   const t = useTranslations('contacts-attributes-tags.contact.score');
   const tb = useTranslations('lead-scoring.card.band');
   const refresh = useRefreshContact(contact.id);
@@ -40,20 +39,7 @@ export function LeadScoreCard({ contact }: { contact: ContactRow }) {
   const [open, setOpen] = useState(contact.leadScore === null);
   const band = contact.leadScore === null ? null : bandOf(contact.leadScore);
   return (
-    <Panel
-      id={`score-${contact.id}`}
-      title={t('title')}
-      action={
-        <button
-          type="button"
-          aria-expanded={open}
-          onClick={() => setOpen((o) => !o)}
-          className="rounded px-1 text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          {open ? t('hideDetails') : t('details')}
-        </button>
-      }
-    >
+    <>
       <div className="flex flex-col items-center gap-2 py-2">
         <ScoreRing
           score={contact.leadScore}
@@ -64,6 +50,14 @@ export function LeadScoreCard({ contact }: { contact: ContactRow }) {
           }
         />
         <p className="text-sm text-muted-foreground">{band ? tb(band) : t('none')}</p>
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+          className="rounded px-1 text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {open ? t('hideDetails') : t('details')}
+        </button>
       </div>
       {open && (
         <ScoreCard
@@ -73,12 +67,12 @@ export function LeadScoreCard({ contact }: { contact: ContactRow }) {
           onScored={refresh}
         />
       )}
-    </Panel>
+    </>
   );
 }
 
 /** WhatsApp, email and SMS opt-in as Yes / No (from the contact's subscription labels and opt-out), with the way to the Consent card. */
-export function SubscriptionCard({
+export function SubscriptionBody({
   contact,
   onOpenConsent,
 }: {
@@ -90,7 +84,7 @@ export function SubscriptionCard({
   const canConsent = useCan('contacts.consent.read');
   const rows = subscriptionRows(contact);
   return (
-    <Panel id={`subs-${contact.id}`} title={t('title')}>
+    <>
       <ul className="divide-y divide-border">
         {rows.map(({ channel, optIn }) => {
           const Icon = CHANNEL_ICON[channel];
@@ -129,58 +123,44 @@ export function SubscriptionCard({
           )}
         </p>
       )}
-    </Panel>
+    </>
   );
 }
 
-/** Owner (changeable by those who may), the contact's tags with "Add tag", and its groups. */
-export function OwnerCard({ contact }: { contact: ContactRow }) {
+/** The contact's tags with "Add tag", and its groups, as the body of the "Tags and groups" card. */
+export function TagsGroupsBody({ contact }: { contact: ContactRow }) {
   const t = useTranslations('contacts-attributes-tags.contact.owner');
-  const canUpdate = useCan('record.contacts.update');
   const groups = contact.groups ?? [];
   return (
-    <Panel id={`owner-${contact.id}`} title={t('title')}>
-      <dl className="divide-y divide-border text-sm">
-        <div className="grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-3 pb-3">
-          <dt className="text-muted-foreground">{t('owner')}</dt>
-          <dd className="min-w-0">
-            <OwnerControl
-              contactId={contact.id}
-              ownerId={contact.ownerId}
-              rowVersion={contact.rowVersion}
-              canEdit={canUpdate}
-            />
-          </dd>
-        </div>
-        <div className="grid grid-cols-[5rem_minmax(0,1fr)] items-start gap-3 py-3">
-          <dt className="pt-1 text-muted-foreground">{t('tags')}</dt>
-          <dd className="min-w-0">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <ContactQuickTags contactId={contact.id} labelled />
-            </div>
-          </dd>
-        </div>
-        <div className="grid grid-cols-[5rem_minmax(0,1fr)] items-start gap-3 pt-3">
-          <dt className="text-muted-foreground">{t('groups')}</dt>
-          <dd className="min-w-0">
-            {groups.length === 0 ? (
-              <span className="text-muted-foreground">&mdash;</span>
-            ) : (
-              <span className="flex flex-wrap gap-1">
-                {groups.map((g) => (
-                  <GroupChip key={g.id} name={g.name} color={g.color} />
-                ))}
-              </span>
-            )}
-          </dd>
-        </div>
-      </dl>
-    </Panel>
+    <dl className="divide-y divide-border text-sm">
+      <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-start gap-3 pb-3">
+        <dt className="pt-1 text-muted-foreground">{t('tags')}</dt>
+        <dd className="min-w-0">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <ContactQuickTags contactId={contact.id} labelled />
+          </div>
+        </dd>
+      </div>
+      <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-start gap-3 pt-3">
+        <dt className="text-muted-foreground">{t('groups')}</dt>
+        <dd className="min-w-0">
+          {groups.length === 0 ? (
+            <span className="text-muted-foreground">&mdash;</span>
+          ) : (
+            <span className="flex flex-wrap gap-1">
+              {groups.map((g) => (
+                <GroupChip key={g.id} name={g.name} color={g.color} />
+              ))}
+            </span>
+          )}
+        </dd>
+      </div>
+    </dl>
   );
 }
 
 /** Where the contact is: the address they gave, the country their number belongs to, their time zone and language. */
-export function LocationCard({ contact }: { contact: ContactRow }) {
+export function LocationBody({ contact, narrow }: { contact: ContactRow; narrow?: boolean }) {
   const t = useTranslations('contacts-attributes-tags.contact.location');
   const locale = useLocale();
   const fields = useContactFields();
@@ -192,34 +172,33 @@ export function LocationCard({ contact }: { contact: ContactRow }) {
     { key: 'timeZone', label: t('timeZone'), value: timeZoneOf(contact, fields.data), ltr: true },
     { key: 'language', label: t('language'), value: text(EXTRA_KEYS.language) },
   ];
-  return (
-    <Panel id={`loc-${contact.id}`} title={t('title')}>
-      <KeyValueList rows={rows} />
-    </Panel>
-  );
+  return <KeyValueList rows={rows} narrow={narrow} />;
+}
+
+/** Whether the privacy card has anything to say to this person (the consent record, or the contact's own opt-out). */
+export function useComplianceVisible(contact: ContactRow): boolean {
+  const canRead = useCan('contacts.consent.read');
+  return canRead || contact.isUnsubscribed;
 }
 
 /** The privacy side of the contact: marketing opt-out, minor, guardian consent and do-not-sell-or-share, from the consent record. */
-export function ComplianceCard({ contact }: { contact: ContactRow }) {
+export function ComplianceBody({ contact }: { contact: ContactRow }) {
   const t = useTranslations('contacts-attributes-tags.contact.compliance');
   const tp = useTranslations('contact-consent.card.privacy');
   const canRead = useCan('contacts.consent.read');
   const q = useContactConsent(contact.id, canRead);
   const p = q.data?.privacy;
-  if (!canRead && !contact.isUnsubscribed) return null;
   return (
-    <Panel id={`comp-${contact.id}`} title={t('title')}>
-      <div className="flex flex-wrap items-center gap-1.5 text-sm">
-        <Badge tone={contact.isUnsubscribed ? 'danger' : 'success'}>
-          {contact.isUnsubscribed ? t('optedOut') : t('allowed')}
-        </Badge>
-        {(contact.isMinor || p?.isMinor) && <Badge tone="warning">{tp('minorLabel')}</Badge>}
-        {p?.isMinor && p.guardianConsent && <Badge tone="neutral">{tp('guardianBadge')}</Badge>}
-        {p?.doNotSellShare && <Badge tone="danger">{tp('dnsLabel')}</Badge>}
-        {canRead && p && !contact.isMinor && !p.isMinor && !p.doNotSellShare && (
-          <span className="text-xs text-muted-foreground">{t('noFlags')}</span>
-        )}
-      </div>
-    </Panel>
+    <div className="flex flex-wrap items-center gap-1.5 text-sm">
+      <Badge tone={contact.isUnsubscribed ? 'danger' : 'success'}>
+        {contact.isUnsubscribed ? t('optedOut') : t('allowed')}
+      </Badge>
+      {(contact.isMinor || p?.isMinor) && <Badge tone="warning">{tp('minorLabel')}</Badge>}
+      {p?.isMinor && p.guardianConsent && <Badge tone="neutral">{tp('guardianBadge')}</Badge>}
+      {p?.doNotSellShare && <Badge tone="danger">{tp('dnsLabel')}</Badge>}
+      {canRead && p && !contact.isMinor && !p.isMinor && !p.doNotSellShare && (
+        <span className="text-xs text-muted-foreground">{t('noFlags')}</span>
+      )}
+    </div>
   );
 }

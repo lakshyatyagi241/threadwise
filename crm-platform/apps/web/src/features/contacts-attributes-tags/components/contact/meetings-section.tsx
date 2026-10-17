@@ -45,7 +45,7 @@ const WHEN = { dateStyle: 'medium', timeStyle: 'short' } as const;
  * link or place if there is one. Enter saves, Escape closes the row. It reports back what the person typed (as the request body
  * builders read it), and keeps the row open with the reason when the server refuses, so nothing typed is lost.
  */
-function MeetingRow({
+export function MeetingRow({
   meeting,
   focusSignal,
   pending,

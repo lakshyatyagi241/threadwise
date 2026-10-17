@@ -69,7 +69,7 @@ export function NotesSection({
     >
       <div className="space-y-4">
         {canUpdate && (
-          <Composer
+          <NoteComposer
             focusSignal={focusSignal}
             pending={create.isPending}
             onSave={(body, done) =>
@@ -158,7 +158,8 @@ export function NotesSection({
   );
 }
 
-function Composer({
+/** The note box: grows to three lines, Ctrl/Cmd + Enter saves, the counter shows near the limit. Used by the Notes section and the compose box. */
+export function NoteComposer({
   focusSignal,
   pending,
   onSave,

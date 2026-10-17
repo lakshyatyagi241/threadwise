@@ -13,7 +13,7 @@ import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import { neighbourKey } from '../lib/quick-view';
 import {
-  SECTION_OF_TARGET,
+  ACTION_SECTION,
   quickTabs,
   sectionHref,
   type AddTarget,
@@ -23,6 +23,7 @@ import {
 } from '../lib/sections';
 import { ContactAvatar } from './chips';
 import { ContactActionBar } from './contact/action-bar';
+import { CallNudge } from './contact/call-nudge';
 import { JobTitle, SocialIcons } from './contact/parts';
 import { ContactSection } from './contact/sections';
 import { useStageChange } from './contact/use-stage-change';
@@ -53,7 +54,7 @@ export interface QuickViewProps {
   /** "3 of 50": where the contact stands among the loaded rows, when it is among them. */
   position: { index: number; total: number } | null;
   onNavigate: (id: string) => void;
-  onPanel: (section: SectionId, opts?: { focus?: AddTarget }) => void;
+  onPanel: (section: SectionId, opts?: { focus?: AddTarget; clickedAt?: number }) => void;
   onClose: () => void;
 }
 
@@ -281,11 +282,17 @@ function QuickViewBody({
       <div className="shrink-0 border-b border-border px-4 py-2.5 sm:px-5">
         <ContactActionBar
           contact={contact}
-          // Note, Task, Meeting and Add company stay in the drawer: the tab that holds the composer opens with the cursor in it.
-          onAdd={(target) => onPanel(SECTION_OF_TARGET[target], { focus: target })}
+          // Note, Task, Call, Meeting and Add company stay in the drawer: the tab that holds the composer opens with the cursor in it.
+          onAdd={(target) => onPanel(ACTION_SECTION[target], { focus: target })}
           onDeleted={onClose}
         />
       </div>
+      <CallNudge
+        className="mx-3 mt-2 sm:mx-5"
+        contactId={contact.id}
+        name={name}
+        onLog={(clickedAt) => onPanel('activities', { focus: 'call', clickedAt })}
+      />
 
       <QuickTabs
         contactId={contact.id}

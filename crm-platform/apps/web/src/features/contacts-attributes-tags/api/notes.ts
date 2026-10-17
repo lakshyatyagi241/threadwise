@@ -19,11 +19,13 @@ export const NOTE_KEYS = {
 };
 
 /** A contact's notes, newest first (the order the API returns), fifty at a time. */
-export function useContactNotes(contactId: string) {
+export function useContactNotes(contactId: string, enabled = true) {
   return useCursorList(
     NOTE_KEYS.list(contactId),
     `/contacts/${contactId}/notes`,
     contactNoteResponseSchema,
+    {},
+    { enabled },
   );
 }
 

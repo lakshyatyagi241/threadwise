@@ -21,7 +21,7 @@ import { contactCallsKey, contactOpenTasksKey } from '../../api/stats';
 import type { ContactRow } from '../../api/schemas';
 import { ConversationsSection } from './conversations-section';
 import { DealsSection } from './deals-section';
-import { FieldHistoryButton, FieldHistoryPanel } from './field-history';
+import { FieldHistoryPanel } from './field-history';
 import { StatsSection } from './stats-section';
 
 /** Deals, conversations, field history and communication stats of a contact, rendered from a pre-seeded cache (no network). */
@@ -449,15 +449,6 @@ describe('FieldHistoryPanel', () => {
         qc: empty,
       }),
     ).toContain('No field changes have been recorded for this contact yet.');
-  });
-
-  it('puts the history behind a "Contact Field History" button that is closed until it is pressed', () => {
-    const out = render(<FieldHistoryButton contactId={CONTACT_ID} />, {
-      permissions: ['record.contacts.read'],
-    });
-    expect(out).toContain('Contact Field History');
-    expect(out).toContain('<button');
-    expect(out).not.toContain('Loading the history');
   });
 });
 

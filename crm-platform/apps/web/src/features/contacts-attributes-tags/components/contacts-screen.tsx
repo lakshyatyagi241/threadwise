@@ -178,7 +178,8 @@ export function ContactsScreen() {
   /** A request to put the cursor in an inline composer of the quick view (the row's quick add, the action bar's buttons). */
   const [focus, setFocus] = useState<FocusRequest | null>(null);
   const askFocus = useCallback(
-    (target: AddTarget | null) => setFocus(target ? { target, n: Date.now() } : null),
+    (target: AddTarget | null, clickedAt?: number) =>
+      setFocus(target ? { target, n: Date.now(), ...(clickedAt ? { clickedAt } : {}) } : null),
     [],
   );
   /** Changing any filter, the sort or the page size starts again from page 1 and closes the quick view; only `page` keeps the position. */
@@ -1115,7 +1116,7 @@ export function ContactsScreen() {
             goQuick(id, quickPanel, 'replace');
           }}
           onPanel={(section, opts) => {
-            askFocus(opts?.focus ?? null);
+            askFocus(opts?.focus ?? null, opts?.clickedAt);
             goQuick(quickId, section, 'replace');
           }}
           onClose={() => {

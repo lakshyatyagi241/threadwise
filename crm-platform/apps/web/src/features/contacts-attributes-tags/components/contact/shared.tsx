@@ -78,16 +78,24 @@ const isEmpty = (v: ReactNode) => v === '' || v === null || v === undefined || v
 export function KeyValueList({
   rows,
   className,
+  narrow,
 }: {
   rows: readonly KeyValueRow[];
   className?: string;
+  /** A narrower label column, for the side column of the overview. */
+  narrow?: boolean;
 }) {
   return (
     <dl className={cn('divide-y divide-border text-sm', className)}>
       {rows.map((r) => (
         <div
           key={r.key}
-          className="grid grid-cols-[minmax(6rem,9rem)_minmax(0,1fr)] items-start gap-x-4 py-2.5 first:pt-0 last:pb-0"
+          className={cn(
+            'grid items-start gap-x-4 py-2.5 first:pt-0 last:pb-0',
+            narrow
+              ? 'grid-cols-[minmax(4.5rem,6rem)_minmax(0,1fr)] gap-x-3'
+              : 'grid-cols-[minmax(6rem,9rem)_minmax(0,1fr)]',
+          )}
         >
           <dt className="text-muted-foreground">{r.label}</dt>
           <dd className="min-w-0 break-words" dir={r.ltr ? 'ltr' : 'auto'}>

@@ -1,0 +1,237 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Contact sections",
+          "group": {
+            "contact": "Contact",
+            "related": "Related",
+            "record": "Record"
+          },
+          "section": {
+            "overview": "Overview",
+            "activities": "Activity",
+            "conversations": "Conversations",
+            "notes": "Notes",
+            "tasks": "Tasks",
+            "meetings": "Meetings",
+            "files": "Files",
+            "deals": "Deals",
+            "appointments": "Appointments",
+            "sales": "Invoices",
+            "company": "Company",
+            "details": "Details",
+            "stats": "Stats",
+            "lead-source": "Source",
+            "consent": "Consent",
+            "history": "History"
+          }
+        },
+        "actions": {
+          "label": "Things to do with this contact",
+          "call": "Call",
+          "callWhatsapp": "Call on WhatsApp",
+          "callPhone": "Call on your phone",
+          "logCall": "Log a call",
+          "callMore": "Other ways to call",
+          "message": "Message",
+          "messageChat": "Open the WhatsApp chat",
+          "messageTemplate": "Send a WhatsApp template",
+          "messageEmail": "Send an email",
+          "messageMore": "Other ways to write",
+          "fieldHistory": "Field history"
+        },
+        "stageStrip": {
+          "noStatus": "No status"
+        },
+        "keyDetails": {
+          "title": "Key details",
+          "editAll": "Edit all",
+          "edit": "Edit {field}",
+          "add": "Add {field}",
+          "conflict": "Someone else changed this contact first. It was reloaded; try again.",
+          "invalid": "That does not look like a valid {field}.",
+          "forbidden": "You cannot change this contact.",
+          "failed": "It could not be saved. Try again.",
+          "owner": "Owner",
+          "city": "City",
+          "showAll": "Show all details",
+          "showLess": "Show less",
+          "social": "Social media",
+          "leadSource": "Where this contact came from"
+        },
+        "cards": {
+          "tags": "Tags and groups",
+          "tagsSummary": "{tags, plural, =0 {No tags} one {1 tag} other {# tags}} · {groups, plural, =0 {no groups} one {1 group} other {# groups}}",
+          "company": "Company",
+          "companyNone": "None yet",
+          "timezone": "Time zone and location",
+          "timezoneNone": "Not known yet",
+          "privacy": "Privacy",
+          "privacyMinor": "Minor",
+          "score": "Lead score",
+          "scoreNone": "Not scored yet"
+        },
+        "compose": {
+          "label": "Add to the activity",
+          "tabs": "What to add",
+          "tab": {
+            "note": "Note",
+            "task": "Task",
+            "call": "Call",
+            "meeting": "Meeting"
+          }
+        },
+        "logCall": {
+          "label": "Log a call",
+          "direction": "Who called",
+          "directionOption": {
+            "outbound": "I called them",
+            "inbound": "They called me"
+          },
+          "outcome": "How did it go?",
+          "outcomeOption": {
+            "connected": "Connected",
+            "no_answer": "No answer",
+            "busy": "Busy",
+            "left_voicemail": "Left voicemail",
+            "wrong_number": "Wrong number"
+          },
+          "when": "When",
+          "minutes": "How long (minutes)",
+          "minutesPlaceholder": "Optional",
+          "notes": "Notes about the call",
+          "notesPlaceholder": "What was said? (optional)",
+          "followUp": "Create a follow-up task",
+          "due": "Follow-up due",
+          "duePreset": {
+            "1": "Tomorrow",
+            "3": "In 3 days",
+            "7": "In a week"
+          },
+          "save": "Log call",
+          "saved": "Call logged.",
+          "forbidden": "You cannot log calls.",
+          "unavailable": "Logging calls is not available here yet.",
+          "failed": "The call could not be logged. Nothing was lost: try again.",
+          "problem": {
+            "badWhen": "Choose when the call happened.",
+            "futureWhen": "A call cannot start in the future.",
+            "badMinutes": "Enter the length in minutes, up to 1440, or leave it empty.",
+            "noDue": "Choose when the follow-up is due.",
+            "badDue": "That due date is not valid."
+          }
+        },
+        "callNudge": {
+          "question": "How did the call with {name} go?",
+          "log": "Log it",
+          "dismiss": "Not now"
+        }
+      },
+      "timeline": {
+        "title": "Activity",
+        "recent": "Recent activity",
+        "viewAll": "View all activity",
+        "filterLabel": "Show",
+        "filters": {
+          "all": "All",
+          "messages": "Messages",
+          "calls": "Calls",
+          "notes": "Notes",
+          "tasks": "Tasks",
+          "meetings": "Meetings",
+          "changes": "Changes"
+        },
+        "searchLabel": "Search this contact's activity",
+        "searchPlaceholder": "Search activity",
+        "clearSearch": "Clear the search",
+        "searchHint": "Searching what is loaded so far. Load more to look further back.",
+        "groups": {
+          "upNext": "Up next",
+          "today": "Today",
+          "yesterday": "Yesterday",
+          "thisWeek": "This week",
+          "earlier": "Earlier"
+        },
+        "loading": "Loading activity...",
+        "loadMore": "Load more",
+        "noMatch": "Nothing matches.",
+        "emptyShort": "Nothing here yet.",
+        "showAll": "Show all activity",
+        "noneYet": "Nothing newer yet. Load more to look further back.",
+        "partial": "Some of the activity could not be loaded.",
+        "retry": "Try again",
+        "empty": {
+          "title": "No activity yet",
+          "message": "Everything you do with {name} will show up here: notes, calls, messages, tasks and meetings.",
+          "messageNoName": "Everything you do with this contact will show up here: notes, calls, messages, tasks and meetings.",
+          "note": "Add a note",
+          "call": "Log a call",
+          "task": "Add a task",
+          "meeting": "Schedule a meeting"
+        },
+        "entry": {
+          "note": "Note: {text}",
+          "edited": "Edited",
+          "task": {
+            "done": "Task done: {title}",
+            "overdue": "Overdue, was due {when}",
+            "due": "Due {when}",
+            "noDue": "No due date"
+          },
+          "meeting": {
+            "upcoming": "Meeting: {title}",
+            "past": "Met: {title}"
+          },
+          "call": {
+            "inbound": "Incoming call",
+            "outbound": "Outgoing call",
+            "call": "Call",
+            "seconds": "{seconds} sec",
+            "minutes": "{minutes} min",
+            "outcome": {
+              "connected": "Connected",
+              "noAnswer": "No answer",
+              "busy": "Busy",
+              "voicemail": "Left voicemail",
+              "wrongNumber": "Wrong number",
+              "declined": "Declined",
+              "failed": "Failed",
+              "inProgress": "In progress"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Logged",
+              "telephony": "Phone system",
+              "mobile_app": "Mobile app",
+              "web_click_to_call": "Phone"
+            }
+          },
+          "message": {
+            "summary": "Conversation on {channel}",
+            "unread": "{count} unread"
+          },
+          "email": {
+            "sent": "Email sent: {title}",
+            "received": "Email received: {title}"
+          },
+          "change": {
+            "stage": "Stage changed from {from} to {to}",
+            "field": "{field} changed from {from} to {to}",
+            "stageAndMore": "Stage changed from {from} to {to}, and {count, plural, one {1 more detail} other {# more details}}",
+            "several": "{count, plural, one {1 detail} other {# details}} updated"
+          },
+          "consent": {
+            "granted": "{channel} consent given",
+            "withdrawn": "{channel} consent withdrawn",
+            "service": "Service messages",
+            "marketing": "Marketing messages"
+          },
+          "by": "by {name}",
+          "system": "System"
+        }
+      }
+    }
+  }
+}

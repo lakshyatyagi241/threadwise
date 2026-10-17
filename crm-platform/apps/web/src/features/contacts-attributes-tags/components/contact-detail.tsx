@@ -11,39 +11,43 @@ import { CompanyLink } from '@/features/companies';
 import { ContactPrivacyBadges } from '@/features/contact-consent';
 import { bandOf } from '@/features/lead-scoring';
 import { ContactPrivacyMenu } from '@/features/privacy-requests';
+import { useTasksList } from '@/features/tasks';
+import { useContactFiles } from '../api/files';
+import { useContactMeetings } from '../api/meetings';
+import { useContactNotes } from '../api/notes';
 import { useContact } from '../api/contacts';
 import { useOwnerNames } from '../api/owners';
 import type { ContactRow } from '../api/schemas';
 import { displayName, formatPhone, isOptedOut } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import {
-  SECTION_OF_TARGET,
+  ACTION_SECTION,
+  navGroups,
   parseAddTarget,
+  sectionAllowed,
   sectionHref,
-  visibleSections,
   type AddTarget,
-  type CoreSection,
   type FocusRequest,
-  type RelatedSection,
+  type NavGroupId,
   type SectionId,
 } from '../lib/sections';
 import { ContactAvatar } from './chips';
 import { ContactActionBar } from './contact/action-bar';
-import { FieldHistoryButton } from './contact/field-history';
+import { CallNudge } from './contact/call-nudge';
 import { SocialIcons } from './contact/parts';
 import { ContactSection } from './contact/sections';
-import { useStageChange, type StageChange } from './contact/use-stage-change';
+import { StageStrip } from './contact/stage-strip';
+import { useStageChange } from './contact/use-stage-change';
 import { ContactQuickTags } from './contact-quick-tags';
 import { ErrorLine } from './error-line';
-import { BuildingIcon, ChevronLeftIcon, MailIcon, PhoneIcon, StarIcon, UserIcon } from './icons';
+import { ChevronLeftIcon, MailIcon, PhoneIcon, StarIcon, UserIcon } from './icons';
 import { StageMenu } from './stage-menu';
-import { optionColor } from '../lib/stage-model';
 
 /**
- * `/contacts/[id]` and `/contacts/[id]/[section]` (TW-CON-018): the contact's page. A sub-nav on the start side (Back to listing,
- * the contact's sections, then the related ones), the header (avatar, name, lifecycle stage, lead-score star, how to reach them,
- * owner, social links, tags, the action bar), the lifecycle stage stepper with the status bar of that stage, and the section the URL
- * names (the overview by default). The same section components fill the quick view's drawer.
+ * `/contacts/[id]` and `/contacts/[id]/[section]` (TW-CON-018): the contact's page. A sub-nav on the start side (Back to listing, then
+ * the sections in three groups with counts; a strip of tabs on a phone), a compact header (avatar, name, stage, lead score, how to
+ * reach them, owner, tags) with ONE row of actions, the thin stage line, and the section the URL names (the overview by default). The
+ * same section components fill the quick view's drawer.
  */
 export function ContactDetail({ id, section }: { id: string; section: SectionId }) {
   const t = useTranslations('contacts-attributes-tags.detail');
@@ -53,23 +57,32 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
   const router = useRouter();
   const pathname = usePathname();
   const search = useSearchParams();
-  const nav = useMemo(
-    () => visibleSections((permission) => permission in session.permissions),
+  const groups = useMemo(
+    () => navGroups((permission) => permission in session.permissions),
     [session.permissions],
   );
 
   /** A request to put the cursor in an inline composer of the section on screen (the action bar's buttons, `?add=` from a link). */
   const [focus, setFocus] = useState<FocusRequest | null>(null);
-  // `?add=task` (or note, meeting, company) opens that section's composer; the parameter is dropped so a reload does not repeat it.
+  // `?add=task` (or note, meeting, call, company) opens that composer; the parameter is dropped so a reload does not repeat it.
   const addParam = parseAddTarget(search.get('add'));
+  // A call asked for by the "How did the call go?" line carries the time of the click (`&at=`).
+  const atParam = Number(search.get('at'));
   const [seenAdd, setSeenAdd] = useState<AddTarget | null>(null);
   if (addParam !== seenAdd) {
     setSeenAdd(addParam);
-    if (addParam) setFocus((f) => ({ target: addParam, n: (f?.n ?? 0) + 1 }));
+    if (addParam) {
+      setFocus((f) => ({
+        target: addParam,
+        n: (f?.n ?? 0) + 1,
+        ...(addParam === 'call' && atParam > 0 ? { clickedAt: atParam } : {}),
+      }));
+    }
   }
   useEffect(() => {
     if (addParam) window.history.replaceState(null, '', pathname);
   }, [addParam, pathname]);
+  const counts = useNavCounts(id);
 
   const back = (
     <Link
@@ -105,31 +118,46 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
 
   const c = contact.data;
   // A section this person cannot open (no permission) falls back to the overview.
-  const allowed = [...nav.core, ...nav.related] as SectionId[];
+  const allowed = groups.flatMap((g) => g.sections);
   const current: SectionId = allowed.includes(section) ? section : 'overview';
-  // Note, Task, Meeting and Add company are shortcuts: this page's section that holds the composer opens with the cursor in it.
-  const onAdd = (target: AddTarget) => {
-    const to = SECTION_OF_TARGET[target];
-    if (to === current) setFocus((f) => ({ target, n: (f?.n ?? 0) + 1 }));
-    else router.push(`${sectionHref(id, allowed.includes(to) ? to : 'overview')}?add=${target}`);
+  // Note, Task, Call, Meeting and Add company are shortcuts: the section that holds the composer opens with the cursor in it.
+  const onAdd = (target: AddTarget, opts?: { clickedAt?: number }) => {
+    const to = ACTION_SECTION[target];
+    const request = (f: FocusRequest | null): FocusRequest => ({
+      target,
+      n: (f?.n ?? 0) + 1,
+      ...(opts?.clickedAt ? { clickedAt: opts.clickedAt } : {}),
+    });
+    if (to === current) setFocus(request);
+    else {
+      const next = allowed.includes(to) ? to : 'overview';
+      router.push(
+        `${sectionHref(id, next)}?add=${target}${opts?.clickedAt ? `&at=${opts.clickedAt}` : ''}`,
+      );
+    }
   };
 
   return (
     <CallingProvider>
-      <div className="grid gap-4 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-6">
+      <div className="grid gap-3 lg:grid-cols-[11.5rem_minmax(0,1fr)] lg:gap-6">
         <aside aria-label={tn('label')} className="min-w-0 lg:sticky lg:top-20 lg:self-start">
-          <div className="mb-3">{back}</div>
-          <SectionNav contactId={id} current={current} core={nav.core} related={nav.related} />
+          <div className="mb-2 lg:mb-3">{back}</div>
+          <SectionNav contactId={id} current={current} groups={groups} counts={counts} />
         </aside>
 
-        <div className="min-w-0 space-y-4">
+        <div className="min-w-0 space-y-3">
           <DetailHeader
             contact={c}
             onOpenSection={(s) => router.push(sectionHref(id, s))}
             onAdd={onAdd}
             onDeleted={() => router.replace('/contacts')}
           />
-          <StageStepper contact={c} />
+          <StageStrip contact={c} />
+          <CallNudge
+            contactId={c.id}
+            name={displayName(c)}
+            onLog={(clickedAt) => onAdd('call', { clickedAt })}
+          />
           <ContactSection
             section={current}
             contact={c}
@@ -144,53 +172,98 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
   );
 }
 
-/** The sub-nav: a vertical list on a wide screen, a scrolling strip of tabs on a narrow one. */
+/** How many things a section holds, for the small badge beside its name; only the sections that are cheap to count have one. */
+export type NavCounts = Partial<Record<SectionId, { n: number; more: boolean }>>;
+
+/**
+ * The counts of the sub-nav: notes, open tasks, meetings and files. They are the lists those sections (and the timeline) read, so a
+ * count costs no request the page would not make anyway; a section the person may not open is not asked for.
+ */
+export function useNavCounts(contactId: string): NavCounts {
+  const { permissions } = useSession();
+  const has = (p: string) => p in permissions;
+  const notes = useContactNotes(contactId, sectionAllowed('notes', has));
+  const meetings = useContactMeetings(contactId, sectionAllowed('meetings', has));
+  const files = useContactFiles(contactId, sectionAllowed('files', has));
+  const tasks = useTasksList(
+    { kind: 'contact', id: contactId },
+    { status: 'open' },
+    { limit: 50, enabled: sectionAllowed('tasks', has) },
+  );
+  return {
+    notes: { n: notes.items.length, more: notes.hasNextPage },
+    meetings: { n: meetings.items.length, more: meetings.hasNextPage },
+    files: { n: files.items.length, more: files.hasNextPage },
+    tasks: { n: tasks.items.length, more: tasks.hasNextPage },
+  };
+}
+
+/** The sub-nav: three small groups down the start side on a wide screen, one scrolling strip of tabs on a narrow one. */
 export function SectionNav({
   contactId,
   current,
-  core,
-  related,
+  groups,
+  counts,
 }: {
   contactId: string;
   current: SectionId;
-  core: readonly CoreSection[];
-  related: readonly RelatedSection[];
+  groups: ReadonlyArray<{ id: NavGroupId; sections: readonly SectionId[] }>;
+  /** The badges (`useNavCounts`); none draws none. */
+  counts?: NavCounts;
 }) {
-  const t = useTranslations('contacts-attributes-tags.contact.nav');
-  const item = (s: SectionId) => (
-    <Link
-      key={s}
-      href={sectionHref(contactId, s)}
-      aria-current={current === s ? 'page' : undefined}
-      className={cn(
-        'block shrink-0 whitespace-nowrap rounded-md px-3 py-2 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
-        current === s
-          ? 'bg-brand/10 font-semibold text-brand'
-          : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-      )}
-    >
-      {t(`section.${s}`)}
-    </Link>
-  );
-  const heading = (text: string) => (
-    <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground max-lg:hidden">
-      {text}
-    </p>
-  );
+  const t = useTranslations('contacts-attributes-tags.contact.record.nav');
+  const item = (s: SectionId) => {
+    const count = counts?.[s];
+    return (
+      <Link
+        key={s}
+        href={sectionHref(contactId, s)}
+        aria-current={current === s ? 'page' : undefined}
+        className={cn(
+          'flex shrink-0 items-center justify-between gap-2 whitespace-nowrap rounded-md px-3 py-1.5 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
+          current === s
+            ? 'bg-brand/10 font-semibold text-brand'
+            : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+        )}
+      >
+        {t(`section.${s}`)}
+        {count && count.n > 0 && (
+          <span className="rounded-full bg-muted px-1.5 py-px text-[10px] font-semibold tabular-nums text-muted-foreground">
+            {count.n}
+            {count.more ? '+' : ''}
+          </span>
+        )}
+      </Link>
+    );
+  };
   return (
     <nav
       aria-label={t('label')}
-      className="thin-scrollbar flex gap-1 overflow-x-auto max-lg:pb-1 lg:flex-col lg:overflow-visible"
+      className="thin-scrollbar -mx-1 flex gap-1 overflow-x-auto px-1 max-lg:pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0"
     >
-      {heading(t('contactDetails'))}
-      {core.map(item)}
-      {related.length > 0 && heading(t('related'))}
-      {related.map(item)}
+      {groups.map((g, i) => (
+        <div
+          key={g.id}
+          className={cn(
+            'flex gap-1 lg:flex-col',
+            // On a phone the groups are told apart by a thin line, on a wide screen by a small heading.
+            i > 0 && 'max-lg:ms-1 max-lg:border-s max-lg:border-border max-lg:ps-2',
+          )}
+        >
+          <p className="px-3 pb-0.5 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground first:pt-0 max-lg:hidden">
+            {t(`group.${g.id}`)}
+          </p>
+          {g.sections.map(item)}
+        </div>
+      ))}
     </nav>
   );
 }
 
-/** Avatar, name and lifecycle stage; email, phone, company and owner in one line; social links, privacy chips and tags; the action bar. */
+/**
+ * Avatar and name with the lifecycle stage and lead score beside it; phone, email, company and owner in one line; the privacy chips and
+ * tags; and the ONE row of actions. Compact on purpose: the history and the work are below.
+ */
 function DetailHeader({
   contact,
   onOpenSection,
@@ -213,91 +286,87 @@ function DetailHeader({
   const band = contact.leadScore === null ? null : bandOf(contact.leadScore);
 
   return (
-    <header className="rounded-xl border border-border bg-background p-4 sm:p-5">
-      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
-        <div className="flex min-w-0 flex-[1_1_18rem] items-start gap-4">
-          <ContactAvatar
-            id={contact.id}
-            name={name}
-            size="lg"
-            className="size-14 text-lg sm:size-16 sm:text-xl"
-          />
-          <div className="min-w-0 flex-1">
-            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1.5">
-              <h1 className="min-w-0 truncate text-2xl font-semibold leading-tight" dir="auto">
-                {name}
-              </h1>
-              {contact.lifecycleStage && (
-                <StageMenu
-                  value={contact.lifecycleStage}
-                  choices={stage.stages}
-                  name={name}
-                  busy={stage.busy}
-                  statusHint={stage.hint}
-                  onChange={canUpdate ? stage.changeStage : undefined}
-                />
-              )}
-              {band && (
-                <button
-                  type="button"
-                  onClick={() => onOpenSection('overview')}
-                  title={th('leadScore')}
-                  aria-label={th('leadScoreAria', { score: contact.leadScore ?? 0 })}
-                  className={cn(
-                    'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                    band === 'hot' && 'border-success/30 bg-success/10 text-success',
-                    band === 'warm' && 'border-warning/30 bg-warning/10 text-warning',
-                    band === 'cold' && 'border-border bg-muted text-muted-foreground',
-                  )}
+    <header className="rounded-xl border border-border bg-background p-3 sm:p-4">
+      <div className="flex items-start gap-3">
+        <ContactAvatar
+          id={contact.id}
+          name={name}
+          size="lg"
+          className="size-11 text-base sm:size-12 sm:text-lg"
+        />
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
+            <h1 className="min-w-0 truncate text-xl font-semibold leading-tight" dir="auto">
+              {name}
+            </h1>
+            {contact.lifecycleStage && (
+              <StageMenu
+                value={contact.lifecycleStage}
+                choices={stage.stages}
+                name={name}
+                busy={stage.busy}
+                statusHint={stage.hint}
+                onChange={canUpdate ? stage.changeStage : undefined}
+              />
+            )}
+            {band && (
+              <button
+                type="button"
+                onClick={() => onOpenSection('overview')}
+                title={th('leadScore')}
+                aria-label={th('leadScoreAria', { score: contact.leadScore ?? 0 })}
+                className={cn(
+                  'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                  band === 'hot' && 'border-success/30 bg-success/10 text-success',
+                  band === 'warm' && 'border-warning/30 bg-warning/10 text-warning',
+                  band === 'cold' && 'border-border bg-muted text-muted-foreground',
+                )}
+              >
+                <StarIcon className="size-3.5" />
+                {contact.leadScore}
+              </button>
+            )}
+            {isOptedOut(contact) && <Badge tone="warning">{t('optedOut')}</Badge>}
+            <ContactPrivacyBadges contactId={contact.id} />
+          </div>
+          <ul className="mt-1 flex flex-wrap items-center gap-x-3.5 gap-y-0.5 text-sm text-muted-foreground">
+            {phone && (
+              <li className="inline-flex items-center gap-1.5" dir="ltr">
+                <PhoneIcon className="size-3.5 shrink-0" />
+                <span className="font-mono">{phone}</span>
+              </li>
+            )}
+            {contact.email && (
+              <li className="inline-flex min-w-0 items-center gap-1.5" dir="ltr">
+                <MailIcon className="size-3.5 shrink-0" />
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="truncate hover:text-foreground hover:underline"
                 >
-                  <StarIcon className="size-3.5" />
-                  {contact.leadScore}
-                </button>
-              )}
-              {isOptedOut(contact) && <Badge tone="warning">{t('optedOut')}</Badge>}
-              <ContactPrivacyBadges contactId={contact.id} />
-            </div>
-            <ul className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-              {contact.email && (
-                <li className="inline-flex min-w-0 items-center gap-1.5" dir="ltr">
-                  <MailIcon className="size-3.5 shrink-0" />
-                  <a
-                    href={`mailto:${contact.email}`}
-                    className="truncate hover:text-foreground hover:underline"
-                  >
-                    {contact.email}
-                  </a>
-                </li>
-              )}
-              {phone && (
-                <li className="inline-flex items-center gap-1.5" dir="ltr">
-                  <PhoneIcon className="size-3.5 shrink-0" />
-                  <span className="font-mono">{phone}</span>
-                </li>
-              )}
-              {contact.companyId && (
-                <li className="inline-flex items-center gap-1.5">
-                  <BuildingIcon className="size-3.5 shrink-0" />
-                  <CompanyLink id={contact.companyId} />
-                </li>
-              )}
+                  {contact.email}
+                </a>
+              </li>
+            )}
+            {contact.companyId && (
               <li className="inline-flex items-center gap-1.5">
-                <UserIcon className="size-3.5 shrink-0" />
-                <span>
-                  {th('owner')}: {contact.ownerId ? (owner ?? '') : t('ownerNone')}
-                </span>
+                <CompanyLink id={contact.companyId} />
               </li>
-              <li>
-                <SocialIcons contact={contact} />
-              </li>
-            </ul>
-            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-              <ContactQuickTags contactId={contact.id} labelled />
-            </div>
+            )}
+            <li className="inline-flex items-center gap-1.5">
+              <UserIcon className="size-3.5 shrink-0" />
+              <span>
+                {th('owner')}: {contact.ownerId ? (owner ?? '') : t('ownerNone')}
+              </span>
+            </li>
+            <li>
+              <SocialIcons contact={contact} />
+            </li>
+          </ul>
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+            <ContactQuickTags contactId={contact.id} labelled />
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <FieldHistoryButton contactId={contact.id} />
+        <div className="shrink-0">
           <ContactPrivacyMenu contactId={contact.id} />
         </div>
       </div>
@@ -305,121 +374,9 @@ function DetailHeader({
         contact={contact}
         onAdd={onAdd}
         onDeleted={onDeleted}
-        className="mt-4 border-t border-border pt-3"
+        className="mt-3 border-t border-border pt-3"
       />
       {stage.dialog}
     </header>
-  );
-}
-
-/**
- * The lifecycle stages as a stepper (the contact's stage highlighted, the ones before it tinted) with the status bar of that stage
- * under it. Clicking a stage is the stage menu's change (a lost stage asks why first and the toast says what happened to the status);
- * clicking a status sets it, among the statuses valid in the stage, which is the linking rule the API enforces.
- */
-function StageStepper({ contact }: { contact: ContactRow }) {
-  const t = useTranslations('contacts-attributes-tags.contact.stages');
-  const canUpdate = useCan('record.contacts.update');
-  const stage = useStageChange(contact);
-  const current = contact.lifecycleStage;
-  const at = stage.stages.findIndex((s) => s.value === current);
-  if (stage.stages.length === 0) return null;
-  return (
-    <section
-      aria-label={t('title')}
-      className="space-y-3 rounded-xl border border-border bg-background p-4 sm:p-5"
-    >
-      <div>
-        <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-          {t('stages')}
-        </h2>
-        <ol className="thin-scrollbar flex gap-1.5 overflow-x-auto pb-1">
-          {stage.stages.map((s, i) => {
-            const active = s.value === current;
-            const done = at >= 0 && i < at;
-            const hint = canUpdate && !active ? stage.hint(s.value) : null;
-            return (
-              <li key={s.value} className="min-w-[7.5rem] flex-1">
-                <button
-                  type="button"
-                  disabled={!canUpdate || stage.busy}
-                  aria-current={active ? 'step' : undefined}
-                  title={hint ?? undefined}
-                  onClick={() => stage.changeStage(s.value)}
-                  className={cn(
-                    'relative flex h-10 w-full items-center justify-center gap-2 rounded-md border px-3 text-sm outline-none transition focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-default',
-                    active
-                      ? 'border-brand bg-brand font-semibold text-brand-foreground'
-                      : done
-                        ? 'border-brand/30 bg-brand/10 text-foreground hover:bg-brand/15'
-                        : 'border-border bg-background text-muted-foreground hover:bg-muted',
-                  )}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="size-2 shrink-0 rounded-full"
-                    style={{
-                      background: active
-                        ? 'currentColor'
-                        : optionColor({ value: s.value, color: s.color }),
-                    }}
-                  />
-                  <span className="truncate">{s.label}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
-      </div>
-      <StatusBar stage={stage} current={contact.status} canUpdate={canUpdate} />
-      {stage.dialog}
-    </section>
-  );
-}
-
-function StatusBar({
-  stage,
-  current,
-  canUpdate,
-}: {
-  stage: StageChange;
-  current: string | null;
-  canUpdate: boolean;
-}) {
-  const t = useTranslations('contacts-attributes-tags.contact.stages');
-  return (
-    <div>
-      <h2 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        {t('status')}
-      </h2>
-      {stage.statuses.length === 0 ? (
-        <p className="text-sm text-muted-foreground">{t('noStatuses')}</p>
-      ) : (
-        <ul className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={t('status')}>
-          {stage.statuses.map((s) => {
-            const on = s.value === current;
-            return (
-              <li key={s.value}>
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked={on}
-                  disabled={!canUpdate || stage.busy}
-                  onClick={() => stage.changeStatus(s.value)}
-                  className={cn(
-                    'inline-flex h-8 items-center rounded-full border px-3 text-xs font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-default',
-                    on
-                      ? 'border-success/40 bg-success/10 text-success'
-                      : 'border-border text-muted-foreground hover:bg-muted',
-                  )}
-                >
-                  {s.label}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
   );
 }

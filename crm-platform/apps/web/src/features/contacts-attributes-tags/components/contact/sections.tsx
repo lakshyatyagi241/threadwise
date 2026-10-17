@@ -1,19 +1,14 @@
 'use client';
 
-import { useFormatter, useTranslations } from 'next-intl';
-import { contactActivityResponseSchema } from '@crm/contracts';
-import { Button, Spinner } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { ConsentCard } from '@/features/contact-consent';
 import { LinkedAppointments } from '@/features/appointments';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedTasks } from '@/features/tasks';
-import { AGENT_IGNORE } from '@/lib/agent-marks';
-import { useCursorList } from '@/lib/api/use-cursor-list';
 import { displayName } from '../../lib/contact-model';
 import type { FocusRequest, SectionId } from '../../lib/sections';
-import { ErrorLine } from '../error-line';
 import { GroupChip } from '../chips';
 import { ConversationsSection } from './conversations-section';
 import { DealsSection } from './deals-section';
@@ -24,83 +19,37 @@ import { MeetingsPanel } from './meetings-section';
 import { NotesSection } from './notes-section';
 import { ContactOverview } from './overview';
 import { LeadSourceRows, useCustomGroups, useInfoRows } from './info-tabs';
-import { EmptyLine, KeyValueList, Panel, useRefreshContact, type SectionProps } from './shared';
+import { KeyValueList, Panel, useRefreshContact, type SectionProps } from './shared';
+import { ActivityFeed } from './timeline/activity-feed';
+import { ComposeBox } from './timeline/compose-box';
 import { StatsSection } from './stats-section';
-import { TimezoneCard } from '../timezone-card';
 
-/** The contact's activity timeline (what the old page called "Activity timeline"), newest first, with "Load more". */
-export function TimelinePanel({ contactId }: { contactId: string }) {
-  const t = useTranslations('contacts-attributes-tags.detail');
-  const format = useFormatter();
-  const list = useCursorList(
-    ['cat', 'activities', contactId],
-    `/contacts/${contactId}/activities`,
-    contactActivityResponseSchema,
-  );
+/**
+ * Activity: the compose box (Note, Task, Call, Meeting, inline) and, under it, the timeline: "Up next", then Today, Yesterday, This week
+ * and Earlier, with filter pills, a search and "Load more". The timeline comes FIRST on this page: nothing else stands between the
+ * header and it but the compose box (and, after a click on a phone number, the quiet "How did the call go?" line).
+ */
+function ActivitiesSection({
+  contact,
+  focus,
+}: SectionProps & {
+  /** A request from the action bar (or a link) to open a compose tab with the cursor in it. */
+  focus?: FocusRequest | null;
+}) {
+  // What the page itself asks for (the prompt's "Log it", the empty state's buttons) is a request like the action bar's.
+  const [own, setOwn] = useState<FocusRequest | null>(null);
+  const [seen, setSeen] = useState<FocusRequest | null>(null);
+  let request = own;
+  if (focus && focus !== seen) {
+    setSeen(focus);
+    setOwn(focus);
+    request = focus;
+  }
+  const ask = (target: FocusRequest['target']) => setOwn((r) => ({ target, n: (r?.n ?? 0) + 1 }));
   return (
-    <Panel id={`tl-${contactId}`} title={t('timeline')}>
-      {list.isPending ? (
-        <div role="status" className="flex items-center gap-2 py-6 text-muted-foreground">
-          <Spinner /> {t('loading')}
-        </div>
-      ) : list.isError ? (
-        <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
-      ) : list.items.length === 0 ? (
-        <EmptyLine>{t('noActivity')}</EmptyLine>
-      ) : (
-        <ol
-          {...AGENT_IGNORE}
-          className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border"
-        >
-          {list.items.map((a) => (
-            <li key={a.id} className="relative">
-              <span className="absolute -start-6 top-1 size-[18px] rounded-full border border-border bg-background" />
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-semibold" dir="auto">
-                  {a.title}
-                </span>
-                <time
-                  dateTime={a.occurredAt}
-                  className="shrink-0 font-mono text-[11px] text-muted-foreground"
-                >
-                  {format.dateTime(new Date(a.occurredAt), {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  })}
-                </time>
-              </div>
-              {a.body && (
-                <p className="mt-0.5 text-sm leading-snug text-muted-foreground" dir="auto">
-                  {a.body}
-                </p>
-              )}
-            </li>
-          ))}
-        </ol>
-      )}
-      {list.hasNextPage && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="mt-4"
-          onClick={() => void list.fetchNextPage()}
-          disabled={list.isFetchingNextPage}
-        >
-          {t('loadMore')}
-        </Button>
-      )}
-    </Panel>
-  );
-}
-
-/** Activities: the clock marketing messages are read on, then the timeline of everything that happened (meetings have their own section). */
-function ActivitiesSection({ contact }: SectionProps) {
-  const canRead = useCan('record.contacts.read');
-  return (
-    <div className="space-y-4">
-      {/* The clock marketing messages are read on and the next time one may go (BL-193), right above the history. */}
-      {canRead && <TimezoneCard contactId={contact.id} rowVersion={contact.rowVersion} />}
-      <TimelinePanel contactId={contact.id} />
+    <div className="space-y-3">
+      <ComposeBox contact={contact} focus={request} />
+      <ActivityFeed contact={contact} onCompose={(tab) => ask(tab)} />
     </div>
   );
 }
@@ -207,7 +156,7 @@ export function ContactSection({
         />
       );
     case 'activities':
-      return <ActivitiesSection {...props} />;
+      return <ActivitiesSection {...props} focus={focus} />;
     case 'conversations':
       return <ConversationsSection {...props} />;
     case 'details':
