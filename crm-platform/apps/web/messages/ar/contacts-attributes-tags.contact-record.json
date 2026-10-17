@@ -21,7 +21,9 @@
             "lead-source": "المصدر",
             "consent": "الموافقة",
             "history": "السجل"
-          }
+          },
+          "more": "المزيد",
+          "moreLabel": "أقسام أخرى"
         },
         "actions": {
           "label": "ما يمكنك فعله مع جهة الاتصال هذه",
@@ -35,7 +37,8 @@
           "messageTemplate": "إرسال قالب WhatsApp",
           "messageEmail": "إرسال بريد إلكتروني",
           "messageMore": "طرق أخرى للمراسلة",
-          "fieldHistory": "سجل الحقول"
+          "fieldHistory": "سجل الحقول",
+          "more": "المزيد"
         },
         "stageStrip": {
           "noStatus": "بلا حالة"
@@ -53,7 +56,8 @@
           "showAll": "عرض كل التفاصيل",
           "showLess": "عرض أقل",
           "social": "وسائل التواصل الاجتماعي",
-          "leadSource": "من أين جاءت جهة الاتصال هذه"
+          "leadSource": "من أين جاءت جهة الاتصال هذه",
+          "aboutTitle": "عن جهة الاتصال هذه"
         },
         "cards": {
           "company": "الشركة",
@@ -63,7 +67,14 @@
           "privacy": "الخصوصية",
           "privacyMinor": "قاصر",
           "score": "تقييم العميل المحتمل",
-          "scoreNone": "لم يتم التقييم بعد"
+          "scoreNone": "لم يتم التقييم بعد",
+          "label": "ما يتعلق بجهة الاتصال هذه",
+          "tasks": "المهام المفتوحة",
+          "tasksNone": "لا شيء في الانتظار.",
+          "deals": "الصفقات",
+          "dealsNone": "لا توجد صفقات بعد.",
+          "add": "+ إضافة",
+          "viewAll": "عرض الكل"
         },
         "compose": {
           "label": "إضافة إلى النشاط",
@@ -98,11 +109,39 @@
           "question": "كيف كانت المكالمة مع {name}؟",
           "log": "تسجيلها",
           "dismiss": "ليس الآن"
+        },
+        "profile": {
+          "label": "ملف جهة الاتصال"
+        },
+        "stagePicker": {
+          "menu": "اختر مرحلة",
+          "search": "ابحث عن مرحلة",
+          "none": "لا توجد مرحلة مطابقة.",
+          "moveTo": "النقل إلى {stage}",
+          "statusIn": "الحالة في {stage}",
+          "default": "الافتراضية",
+          "progress": "{current} من {total}",
+          "undo": "تراجع",
+          "undone": "تمت العودة إلى {stage}.",
+          "statusSet": "تم تعيين الحالة إلى {status}.",
+          "prefix": "المرحلة"
+        },
+        "summary": {
+          "label": "الملخص",
+          "tasks": "المهام المفتوحة",
+          "overdue": "{count} متأخرة",
+          "nextDue": "الموعد التالي {when}",
+          "noDue": "لا توجد مواعيد نهائية",
+          "meeting": "الاجتماع التالي",
+          "noMeeting": "لا شيء مخطط",
+          "lastActivity": "آخر نشاط",
+          "noActivity": "لا يوجد نشاط بعد",
+          "deals": "الصفقات المفتوحة",
+          "wonDeals": "{count, plural, =0 {لا صفقات رابحة} one {صفقة رابحة واحدة} two {صفقتان رابحتان} few {# صفقات رابحة} many {# صفقة رابحة} other {# صفقة رابحة}}"
         }
       },
       "timeline": {
         "title": "النشاط",
-        "recent": "النشاط الأخير",
         "viewAll": "عرض كل النشاط",
         "filterLabel": "عرض",
         "filters": {

@@ -42,12 +42,16 @@ export interface StagePickerProps {
   defaultStatusOf?: (stage: string) => string | null;
   /** What moving to a stage does to the status already held ("Status becomes X"), shown under the stage. */
   hint?: (stage: string) => string | null;
+  /** The stage's label when the caller already resolved it (the list's cell); else the one in `stages`. */
+  label?: string;
   /** The person may not change it: the same thing is drawn, as plain text. */
   readOnly?: boolean;
   busy?: boolean;
   look?: StagePickerLook;
   /** The contact's name, for the accessible name of the control. */
   name?: string;
+  /** A small word before the label of the field look ("Stage"). */
+  prefix?: string;
   /** Text of the trigger when the caller already worded it ("Stage: Qualified"); the chip look uses the stage's own label. */
   triggerText?: string;
   /** Adds a first choice that means "change nothing" (value `''`), worded like this (the bulk form's "Keep"). */
@@ -77,18 +81,27 @@ export function StagePicker(p: StagePickerProps) {
   const [open, setOpen] = useState(false);
   const current = p.stages.find((s) => s.value === p.value);
   const text =
-    p.triggerText ?? (p.value === '' && p.keepLabel ? p.keepLabel : (current?.label ?? p.value));
+    p.triggerText ??
+    (p.value === '' && p.keepLabel ? p.keepLabel : (current?.label ?? p.label ?? p.value));
   const index = p.stages.findIndex((s) => s.value === p.value);
   const aria = p.name ? tm('change', { name: p.name }) : t('menu');
 
   const badge = p.value ? (
-    <StageBadge stage={p.value} label={current?.label ?? p.value} color={current?.color} />
+    <StageBadge
+      stage={p.value}
+      label={current?.label ?? p.label ?? p.value}
+      color={current?.color}
+    />
   ) : null;
 
   if (p.readOnly) {
     return (
       <span className={cn('inline-flex min-w-0 items-center gap-2', p.className)}>
-        {p.look === 'field' ? <span className="truncate text-[13px] font-medium">{text}</span> : badge}
+        {p.look === 'field' ? (
+          <span className="truncate text-[13px] font-medium">{text}</span>
+        ) : (
+          badge
+        )}
         {p.progress && index >= 0 && (
           <span className="text-[11px] tabular-nums text-muted-foreground">
             {t('progress', { current: index + 1, total: p.stages.length })}
@@ -99,7 +112,15 @@ export function StagePicker(p: StagePickerProps) {
   }
 
   return (
-    <Trigger {...p} open={open} setOpen={setOpen} aria={aria} text={text} badge={badge} index={index} />
+    <Trigger
+      {...p}
+      open={open}
+      setOpen={setOpen}
+      aria={aria}
+      text={text}
+      badge={badge}
+      index={index}
+    />
   );
 }
 
@@ -143,7 +164,10 @@ function Trigger({
       >
         {field ? (
           <>
-            <span className="truncate">{text}</span>
+            <span className="truncate">
+              {p.prefix && <span className="font-normal text-muted-foreground">{p.prefix} </span>}
+              {text}
+            </span>
             <ChevronDownIcon className="size-3.5 shrink-0 text-muted-foreground" />
           </>
         ) : (
@@ -282,7 +306,9 @@ function Panel({
       role="dialog"
       aria-label={t('menu')}
       onKeyDown={onKey}
-      style={sheet ? undefined : { top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: PANEL_W }}
+      style={
+        sheet ? undefined : { top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: PANEL_W }
+      }
       className={cn(
         'z-[70] flex flex-col overflow-hidden border border-border bg-background text-foreground shadow-xl',
         sheet
@@ -306,7 +332,10 @@ function Panel({
           />
         </div>
       )}
-      <ul className="thin-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-1 pb-1" role="menu">
+      <ul
+        className="thin-scrollbar min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-1 pb-1"
+        role="menu"
+      >
         {p.keepLabel && query === '' && (
           <Row
             id={`${uid}-keep`}
@@ -343,7 +372,11 @@ function Panel({
                   <p className="mb-1.5 text-[11px] font-medium text-muted-foreground">
                     {t('statusIn', { stage: s.label })}
                   </p>
-                  <div role="group" aria-label={t('statusIn', { stage: s.label })} className="flex flex-wrap gap-1.5">
+                  <div
+                    role="group"
+                    aria-label={t('statusIn', { stage: s.label })}
+                    className="flex flex-wrap gap-1.5"
+                  >
                     {statuses.map((st) => {
                       const isDefault = p.defaultStatusOf?.(s.value) === st.value;
                       const held = s.value === p.value && p.status === st.value;
@@ -362,18 +395,16 @@ function Panel({
                         >
                           {st.label}
                           {isDefault && (
-                            <span className="text-[10px] text-muted-foreground">{t('default')}</span>
+                            <span className="text-[10px] text-muted-foreground">
+                              {t('default')}
+                            </span>
                           )}
                         </button>
                       );
                     })}
                   </div>
                   {s.value !== p.value && (
-                    <Button
-                      size="sm"
-                      className="mt-2 h-7 w-full"
-                      onClick={() => pick(s.value)}
-                    >
+                    <Button size="sm" className="mt-2 h-7 w-full" onClick={() => pick(s.value)}>
                       {t('moveTo', { stage: s.label })}
                     </Button>
                   )}
@@ -389,13 +420,18 @@ function Panel({
   return createPortal(
     sheet ? (
       <>
-        <div aria-hidden="true" className="fixed inset-0 z-[69] bg-black/40" onClick={() => onClose(true)} />
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 z-[69] bg-black/40"
+          onClick={() => onClose(true)}
+        />
         {body}
       </>
     ) : (
       body
     ),
-    document.body,
+    // Inside a modal dialog (the bulk form, the quick view's drawer) it must be drawn inside it: only the dialog is on top and clickable.
+    (anchor.current?.closest('dialog') as HTMLElement | null) ?? document.body,
   );
 }
 
@@ -441,7 +477,10 @@ function Row({
       {checked && <CheckIcon className="size-3.5 shrink-0 text-primary" />}
       {expandable && (
         <ChevronDownIcon
-          className={cn('size-3 shrink-0 text-muted-foreground transition', expanded && 'rotate-180')}
+          className={cn(
+            'size-3 shrink-0 text-muted-foreground transition',
+            expanded && 'rotate-180',
+          )}
         />
       )}
     </button>

@@ -299,7 +299,11 @@ export function ContactActionBar({
       </MenuItem>
     ));
     const messageWays: MessageWay[] = [
-      ...(route.kind === 'chat' ? (['chat'] as const) : route.kind === 'email' ? (['email'] as const) : []),
+      ...(route.kind === 'chat'
+        ? (['chat'] as const)
+        : route.kind === 'email'
+          ? (['email'] as const)
+          : []),
       ...messageOthers,
     ];
     const messageItems = messageWays.map((way) => (
@@ -311,11 +315,17 @@ export function ContactActionBar({
       <div
         role="group"
         aria-label={tr('label')}
-        className={cn('flex flex-wrap items-start justify-center gap-x-3 gap-y-2', className)}
+        className={cn('flex flex-wrap items-start justify-between gap-y-2', className)}
       >
         {canUpdate && (
           <RoundAction label={t('note')}>
-            <button type="button" className={roundButton} onClick={() => onAdd('note')} title={t('note')} aria-label={t('note')}>
+            <button
+              type="button"
+              className={roundButton}
+              onClick={() => onAdd('note')}
+              title={t('note')}
+              aria-label={t('note')}
+            >
               <NoteIcon className="size-4" />
             </button>
           </RoundAction>
@@ -374,14 +384,26 @@ export function ContactActionBar({
         )}
         {canTask && tasksOpen && (
           <RoundAction label={t('task')}>
-            <button type="button" className={roundButton} onClick={() => onAdd('task')} title={t('task')} aria-label={t('task')}>
+            <button
+              type="button"
+              className={roundButton}
+              onClick={() => onAdd('task')}
+              title={t('task')}
+              aria-label={t('task')}
+            >
               <CheckIcon className="size-4" />
             </button>
           </RoundAction>
         )}
         {canUpdate && (
           <RoundAction label={t('meeting')}>
-            <button type="button" className={roundButton} onClick={() => onAdd('meeting')} title={t('meeting')} aria-label={t('meeting')}>
+            <button
+              type="button"
+              className={roundButton}
+              onClick={() => onAdd('meeting')}
+              title={t('meeting')}
+              aria-label={t('meeting')}
+            >
               <CalendarIcon className="size-4" />
             </button>
           </RoundAction>
@@ -508,16 +530,18 @@ export function ContactActionBar({
 }
 
 const roundButton =
-  'inline-flex size-10 items-center justify-center rounded-full border border-border bg-background text-foreground outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex size-9 items-center justify-center rounded-full border border-border bg-background text-foreground outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50';
 const roundMenu =
-  'size-10 gap-0 rounded-full border-border bg-background px-0 text-foreground hover:bg-muted';
+  'size-9 gap-0 rounded-full border-border bg-background px-0 text-foreground hover:bg-muted';
 
 /** A round icon with its small name under it (HubSpot's profile card row). */
 function RoundAction({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <span className="flex w-12 flex-col items-center gap-1">
+    <span className="flex w-11 flex-col items-center gap-1">
       {children}
-      <span className="max-w-full truncate text-[11px] leading-none text-muted-foreground">{label}</span>
+      <span className="max-w-full truncate text-[10px] leading-none text-muted-foreground">
+        {label}
+      </span>
     </span>
   );
 }

@@ -21,7 +21,9 @@
             "lead-source": "Origen",
             "consent": "Consentimiento",
             "history": "Historial"
-          }
+          },
+          "more": "Más",
+          "moreLabel": "Más secciones"
         },
         "actions": {
           "label": "Qué puedes hacer con este contacto",
@@ -35,7 +37,8 @@
           "messageTemplate": "Enviar una plantilla de WhatsApp",
           "messageEmail": "Enviar un correo electrónico",
           "messageMore": "Otras formas de escribir",
-          "fieldHistory": "Historial de campos"
+          "fieldHistory": "Historial de campos",
+          "more": "Más"
         },
         "stageStrip": {
           "noStatus": "Sin estado"
@@ -53,7 +56,8 @@
           "showAll": "Ver todos los detalles",
           "showLess": "Ver menos",
           "social": "Redes sociales",
-          "leadSource": "De dónde viene este contacto"
+          "leadSource": "De dónde viene este contacto",
+          "aboutTitle": "Sobre este contacto"
         },
         "cards": {
           "company": "Empresa",
@@ -63,7 +67,14 @@
           "privacy": "Privacidad",
           "privacyMinor": "Menor de edad",
           "score": "Puntuación del lead",
-          "scoreNone": "Aún sin puntuar"
+          "scoreNone": "Aún sin puntuar",
+          "label": "Relacionado con este contacto",
+          "tasks": "Tareas abiertas",
+          "tasksNone": "No hay nada pendiente.",
+          "deals": "Negocios",
+          "dealsNone": "Aún no hay negocios.",
+          "add": "+ Añadir",
+          "viewAll": "Ver todo"
         },
         "compose": {
           "label": "Añadir a la actividad",
@@ -98,11 +109,39 @@
           "question": "¿Cómo fue la llamada con {name}?",
           "log": "Registrarla",
           "dismiss": "Ahora no"
+        },
+        "profile": {
+          "label": "Perfil del contacto"
+        },
+        "stagePicker": {
+          "menu": "Elige una etapa",
+          "search": "Buscar una etapa",
+          "none": "Ninguna etapa coincide.",
+          "moveTo": "Mover a {stage}",
+          "statusIn": "Estado en {stage}",
+          "default": "predeterminada",
+          "progress": "{current} de {total}",
+          "undo": "Deshacer",
+          "undone": "Devuelto a {stage}.",
+          "statusSet": "Estado cambiado a {status}.",
+          "prefix": "Etapa"
+        },
+        "summary": {
+          "label": "Resumen",
+          "tasks": "Tareas abiertas",
+          "overdue": "{count} vencidas",
+          "nextDue": "Próximo vencimiento {when}",
+          "noDue": "Sin fechas de vencimiento",
+          "meeting": "Próxima reunión",
+          "noMeeting": "Nada planificado",
+          "lastActivity": "Última actividad",
+          "noActivity": "Aún no hay actividad",
+          "deals": "Negocios abiertos",
+          "wonDeals": "{count, plural, =0 {ninguno ganado} one {1 ganado} other {# ganados}}"
         }
       },
       "timeline": {
         "title": "Actividad",
-        "recent": "Actividad reciente",
         "viewAll": "Ver toda la actividad",
         "filterLabel": "Mostrar",
         "filters": {

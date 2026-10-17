@@ -169,10 +169,8 @@
         "title": "Siklus hidup",
         "stages": "Tahap siklus hidup",
         "status": "Status",
-        "statusChanged": "Status diatur ke {status}.",
         "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
-        "forbidden": "Anda tidak memiliki izin untuk mengubah kontak ini.",
-        "statusFailed": "Status tidak dapat diubah. Coba lagi."
+        "forbidden": "Anda tidak memiliki izin untuk mengubah kontak ini."
       }
     }
   }

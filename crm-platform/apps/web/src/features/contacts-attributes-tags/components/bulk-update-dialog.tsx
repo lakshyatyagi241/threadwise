@@ -164,7 +164,9 @@ function Form({
               value={stage === KEEP ? '' : stage}
               stages={stages}
               keepLabel={t('keep')}
-              statusesOf={(st) => statusChoices(options.data, (v) => tf(`statuses.${v}`), undefined, st)}
+              statusesOf={(st) =>
+                statusChoices(options.data, (v) => tf(`statuses.${v}`), undefined, st)
+              }
               onPick={(next, picked) => {
                 setStage(next === '' ? KEEP : next);
                 setStatus(picked ? picked : KEEP);

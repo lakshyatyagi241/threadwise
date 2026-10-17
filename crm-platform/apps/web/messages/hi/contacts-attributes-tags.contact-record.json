@@ -21,7 +21,9 @@
             "lead-source": "स्रोत",
             "consent": "सहमति",
             "history": "इतिहास"
-          }
+          },
+          "more": "और",
+          "moreLabel": "और भाग"
         },
         "actions": {
           "label": "इस संपर्क के साथ आप क्या कर सकते हैं",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsApp टेम्पलेट भेजें",
           "messageEmail": "ईमेल भेजें",
           "messageMore": "लिखने के अन्य तरीके",
-          "fieldHistory": "फ़ील्ड इतिहास"
+          "fieldHistory": "फ़ील्ड इतिहास",
+          "more": "और"
         },
         "stageStrip": {
           "noStatus": "कोई स्थिति नहीं"
@@ -53,7 +56,8 @@
           "showAll": "पूरा विवरण देखें",
           "showLess": "कम दिखाएँ",
           "social": "सोशल मीडिया",
-          "leadSource": "यह संपर्क कहाँ से आया"
+          "leadSource": "यह संपर्क कहाँ से आया",
+          "aboutTitle": "इस संपर्क के बारे में"
         },
         "cards": {
           "company": "कंपनी",
@@ -63,7 +67,14 @@
           "privacy": "गोपनीयता",
           "privacyMinor": "नाबालिग",
           "score": "लीड स्कोर",
-          "scoreNone": "अभी स्कोर नहीं हुआ"
+          "scoreNone": "अभी स्कोर नहीं हुआ",
+          "label": "इस संपर्क से जुड़ा",
+          "tasks": "खुले टास्क",
+          "tasksNone": "कुछ भी बाकी नहीं है।",
+          "deals": "डील",
+          "dealsNone": "अभी कोई डील नहीं।",
+          "add": "+ जोड़ें",
+          "viewAll": "सब देखें"
         },
         "compose": {
           "label": "गतिविधि में जोड़ें",
@@ -98,11 +109,39 @@
           "question": "{name} के साथ कॉल कैसी रही?",
           "log": "लॉग करें",
           "dismiss": "अभी नहीं"
+        },
+        "profile": {
+          "label": "संपर्क की प्रोफ़ाइल"
+        },
+        "stagePicker": {
+          "menu": "चरण चुनें",
+          "search": "चरण खोजें",
+          "none": "कोई चरण मेल नहीं खाता।",
+          "moveTo": "{stage} में ले जाएँ",
+          "statusIn": "{stage} में स्थिति",
+          "default": "डिफ़ॉल्ट",
+          "progress": "{total} में से {current}",
+          "undo": "पूर्ववत करें",
+          "undone": "वापस {stage} में रखा गया।",
+          "statusSet": "स्थिति {status} कर दी गई।",
+          "prefix": "चरण"
+        },
+        "summary": {
+          "label": "सारांश",
+          "tasks": "खुले टास्क",
+          "overdue": "{count} देर से",
+          "nextDue": "अगली अंतिम तारीख {when}",
+          "noDue": "कोई अंतिम तारीख नहीं",
+          "meeting": "अगली मीटिंग",
+          "noMeeting": "कोई नियोजित नहीं",
+          "lastActivity": "आखिरी गतिविधि",
+          "noActivity": "अभी कोई गतिविधि नहीं",
+          "deals": "खुली डील",
+          "wonDeals": "{count, plural, =0 {कोई नहीं जीती} one {1 जीती} other {# जीतीं}}"
         }
       },
       "timeline": {
         "title": "गतिविधि",
-        "recent": "हाल की गतिविधि",
         "viewAll": "सारी गतिविधि देखें",
         "filterLabel": "दिखाएँ",
         "filters": {

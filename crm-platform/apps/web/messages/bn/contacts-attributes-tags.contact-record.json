@@ -21,7 +21,9 @@
             "lead-source": "উৎস",
             "consent": "সম্মতি",
             "history": "ইতিহাস"
-          }
+          },
+          "more": "আরও",
+          "moreLabel": "আরও বিভাগ"
         },
         "actions": {
           "label": "এই কন্টাক্টের সঙ্গে আপনি যা করতে পারেন",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsApp টেমপ্লেট পাঠান",
           "messageEmail": "ইমেইল পাঠান",
           "messageMore": "লেখার অন্য উপায়",
-          "fieldHistory": "ফিল্ডের ইতিহাস"
+          "fieldHistory": "ফিল্ডের ইতিহাস",
+          "more": "আরও"
         },
         "stageStrip": {
           "noStatus": "কোনো স্ট্যাটাস নেই"
@@ -53,7 +56,8 @@
           "showAll": "সব বিবরণ দেখুন",
           "showLess": "কম দেখান",
           "social": "সোশ্যাল মিডিয়া",
-          "leadSource": "এই কন্টাক্ট কোথা থেকে এসেছে"
+          "leadSource": "এই কন্টাক্ট কোথা থেকে এসেছে",
+          "aboutTitle": "এই কন্টাক্ট সম্পর্কে"
         },
         "cards": {
           "company": "কোম্পানি",
@@ -63,7 +67,14 @@
           "privacy": "গোপনীয়তা",
           "privacyMinor": "নাবালক",
           "score": "লিড স্কোর",
-          "scoreNone": "এখনও স্কোর হয়নি"
+          "scoreNone": "এখনও স্কোর হয়নি",
+          "label": "এই কন্টাক্টের সঙ্গে সম্পর্কিত",
+          "tasks": "খোলা টাস্ক",
+          "tasksNone": "কিছুই অপেক্ষায় নেই।",
+          "deals": "ডিল",
+          "dealsNone": "এখনও কোনো ডিল নেই।",
+          "add": "+ যোগ করুন",
+          "viewAll": "সব দেখুন"
         },
         "compose": {
           "label": "কার্যকলাপে যোগ করুন",
@@ -98,11 +109,39 @@
           "question": "{name}-এর সঙ্গে কলটি কেমন হলো?",
           "log": "লগ করুন",
           "dismiss": "এখন নয়"
+        },
+        "profile": {
+          "label": "কন্টাক্টের প্রোফাইল"
+        },
+        "stagePicker": {
+          "menu": "একটি ধাপ বেছে নিন",
+          "search": "ধাপ খুঁজুন",
+          "none": "কোনো ধাপ মেলেনি।",
+          "moveTo": "{stage}-এ সরান",
+          "statusIn": "{stage}-এ স্ট্যাটাস",
+          "default": "ডিফল্ট",
+          "progress": "{total}-এর মধ্যে {current}",
+          "undo": "পূর্বাবস্থায় ফেরান",
+          "undone": "{stage}-এ ফিরিয়ে আনা হয়েছে।",
+          "statusSet": "স্ট্যাটাস {status} করা হয়েছে।",
+          "prefix": "ধাপ"
+        },
+        "summary": {
+          "label": "সারসংক্ষেপ",
+          "tasks": "খোলা টাস্ক",
+          "overdue": "{count}টি মেয়াদ পেরিয়েছে",
+          "nextDue": "পরের শেষ তারিখ {when}",
+          "noDue": "কোনো শেষ তারিখ নেই",
+          "meeting": "পরের মিটিং",
+          "noMeeting": "কিছু পরিকল্পিত নেই",
+          "lastActivity": "শেষ কার্যকলাপ",
+          "noActivity": "এখনও কোনো কার্যকলাপ নেই",
+          "deals": "খোলা ডিল",
+          "wonDeals": "{count, plural, =0 {কোনোটি জেতা হয়নি} one {১টি জেতা} other {#টি জেতা}}"
         }
       },
       "timeline": {
         "title": "কার্যকলাপ",
-        "recent": "সাম্প্রতিক কার্যকলাপ",
         "viewAll": "সব কার্যকলাপ দেখুন",
         "filterLabel": "দেখান",
         "filters": {

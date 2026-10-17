@@ -237,13 +237,19 @@ describe('AssociationCards', () => {
 
   it('is a stack of one-line cards: Open tasks and Subscription open, the rest folded', () => {
     const out = draw(all);
-    for (const title of ['Open tasks', 'Subscription status', 'Lead score', 'Time zone and location', 'Privacy']) {
+    for (const title of [
+      'Open tasks',
+      'Subscription status',
+      'Lead score',
+      'Time zone and location',
+      'Privacy',
+    ]) {
       expect(out, title).toContain(title);
     }
     // two open by default: tasks and subscription
     expect(out.match(/aria-expanded="true"/g)).toHaveLength(2);
     for (const folded of ['Lead score', 'Time zone and location', 'Privacy']) {
-      expect(out).toMatch(new RegExp(`aria-expanded="false"[^>]*>[\s\S]*?${folded}`));
+      expect(out).toMatch(new RegExp(`aria-expanded="false"[^>]*>[\\s\\S]*?${folded}`));
     }
     // folded cards say what is inside, and none of their content is drawn
     expect(out).toContain('Marketing allowed');

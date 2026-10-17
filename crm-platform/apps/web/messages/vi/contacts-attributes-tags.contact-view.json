@@ -169,10 +169,8 @@
         "title": "Vòng đời",
         "stages": "Giai đoạn vòng đời",
         "status": "Trạng thái",
-        "statusChanged": "Đã đặt trạng thái thành {status}.",
         "conflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
-        "forbidden": "Bạn không có quyền thay đổi liên hệ này.",
-        "statusFailed": "Không thể đổi trạng thái. Hãy thử lại."
+        "forbidden": "Bạn không có quyền thay đổi liên hệ này."
       }
     }
   }

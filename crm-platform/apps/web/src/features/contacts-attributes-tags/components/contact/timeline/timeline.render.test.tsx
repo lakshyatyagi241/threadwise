@@ -271,24 +271,17 @@ describe('ActivityFeed', () => {
     locale: 'en' | 'ar' = 'en',
     bare = false,
   ) =>
-    renderAccount(
-      <ActivityFeed
-        contact={contact}
-        bare={bare}
-        onCompose={() => undefined}
-      />,
-      {
-        locale,
-        session: can(...permissions),
-        seed: [
-          [[...NOTE_KEYS.list(ID), {}], page([])],
-          [[...MEETING_KEYS.list(ID), {}], page([])],
-          [[...FIELD_HISTORY_KEY(ID), { limit: 50 }], page([])],
-          [['cat', 'activities', ID, {}], page([])],
-          ...seed,
-        ],
-      },
-    );
+    renderAccount(<ActivityFeed contact={contact} bare={bare} onCompose={() => undefined} />, {
+      locale,
+      session: can(...permissions),
+      seed: [
+        [[...NOTE_KEYS.list(ID), {}], page([])],
+        [[...MEETING_KEYS.list(ID), {}], page([])],
+        [[...FIELD_HISTORY_KEY(ID), { limit: 50 }], page([])],
+        [['cat', 'activities', ID, {}], page([])],
+        ...seed,
+      ],
+    });
 
   it('puts the filter pills and the search first, then the groups, newest first', () => {
     const today = new Date().toISOString();

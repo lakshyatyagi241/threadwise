@@ -114,7 +114,6 @@
           "label": "Contact profile"
         },
         "stagePicker": {
-          "label": "Stage: {stage}",
           "menu": "Choose a stage",
           "search": "Find a stage",
           "none": "No stage matches.",
@@ -124,7 +123,8 @@
           "progress": "{current} of {total}",
           "undo": "Undo",
           "undone": "Moved back to {stage}.",
-          "statusSet": "Status set to {status}."
+          "statusSet": "Status set to {status}.",
+          "prefix": "Stage"
         },
         "summary": {
           "label": "Summary",
@@ -142,7 +142,6 @@
       },
       "timeline": {
         "title": "Activity",
-        "recent": "Recent activity",
         "viewAll": "View all activity",
         "filterLabel": "Show",
         "filters": {

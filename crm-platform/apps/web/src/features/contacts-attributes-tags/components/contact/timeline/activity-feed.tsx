@@ -99,7 +99,7 @@ export function ActivityFeed({
           );
         })}
       </div>
-      <div className="relative ms-auto w-full min-w-40 sm:w-56">
+      <div className="relative min-w-40 flex-1 sm:max-w-64">
         <SearchIcon className="pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <input
           type="search"

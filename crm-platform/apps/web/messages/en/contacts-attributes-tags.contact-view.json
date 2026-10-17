@@ -169,10 +169,8 @@
         "title": "Lifecycle",
         "stages": "Lifecycle stage",
         "status": "Status",
-        "statusChanged": "Status set to {status}.",
         "conflict": "Someone else changed this contact first. It was reloaded; try again.",
-        "forbidden": "You do not have permission to change this contact.",
-        "statusFailed": "The status could not be changed. Try again."
+        "forbidden": "You do not have permission to change this contact."
       }
     }
   }

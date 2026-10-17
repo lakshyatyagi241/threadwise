@@ -30,8 +30,7 @@ export function ActivityWorkspace({
     setOwn(focus);
     request = focus;
   }
-  const ask = (target: FocusRequest['target']) =>
-    setOwn((r) => ({ target, n: (r?.n ?? 0) + 1 }));
+  const ask = (target: FocusRequest['target']) => setOwn((r) => ({ target, n: (r?.n ?? 0) + 1 }));
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <ComposeBox contact={contact} focus={request} />

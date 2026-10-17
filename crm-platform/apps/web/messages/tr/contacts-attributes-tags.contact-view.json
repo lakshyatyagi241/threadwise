@@ -169,10 +169,8 @@
         "title": "Yaşam döngüsü",
         "stages": "Yaşam döngüsü aşaması",
         "status": "Durum",
-        "statusChanged": "Durum {status} olarak ayarlandı.",
         "conflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
-        "forbidden": "Bu kişiyi değiştirme izniniz yok.",
-        "statusFailed": "Durum değiştirilemedi. Tekrar deneyin."
+        "forbidden": "Bu kişiyi değiştirme izniniz yok."
       }
     }
   }

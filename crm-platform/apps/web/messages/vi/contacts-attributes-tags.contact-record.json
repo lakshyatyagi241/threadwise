@@ -21,7 +21,9 @@
             "lead-source": "Nguồn",
             "consent": "Sự đồng ý",
             "history": "Lịch sử"
-          }
+          },
+          "more": "Thêm",
+          "moreLabel": "Các mục khác"
         },
         "actions": {
           "label": "Những việc bạn có thể làm với liên hệ này",
@@ -35,7 +37,8 @@
           "messageTemplate": "Gửi mẫu WhatsApp",
           "messageEmail": "Gửi email",
           "messageMore": "Các cách nhắn khác",
-          "fieldHistory": "Lịch sử trường"
+          "fieldHistory": "Lịch sử trường",
+          "more": "Thêm"
         },
         "stageStrip": {
           "noStatus": "Không có trạng thái"
@@ -53,7 +56,8 @@
           "showAll": "Hiện tất cả chi tiết",
           "showLess": "Thu gọn",
           "social": "Mạng xã hội",
-          "leadSource": "Liên hệ này đến từ đâu"
+          "leadSource": "Liên hệ này đến từ đâu",
+          "aboutTitle": "Về liên hệ này"
         },
         "cards": {
           "company": "Công ty",
@@ -63,7 +67,14 @@
           "privacy": "Quyền riêng tư",
           "privacyMinor": "Chưa thành niên",
           "score": "Điểm khách hàng tiềm năng",
-          "scoreNone": "Chưa chấm điểm"
+          "scoreNone": "Chưa chấm điểm",
+          "label": "Liên quan đến liên hệ này",
+          "tasks": "Tác vụ đang mở",
+          "tasksNone": "Không có gì đang chờ.",
+          "deals": "Giao dịch",
+          "dealsNone": "Chưa có giao dịch.",
+          "add": "+ Thêm",
+          "viewAll": "Xem tất cả"
         },
         "compose": {
           "label": "Thêm vào hoạt động",
@@ -98,11 +109,39 @@
           "question": "Cuộc gọi với {name} thế nào?",
           "log": "Ghi lại",
           "dismiss": "Để sau"
+        },
+        "profile": {
+          "label": "Hồ sơ liên hệ"
+        },
+        "stagePicker": {
+          "menu": "Chọn giai đoạn",
+          "search": "Tìm giai đoạn",
+          "none": "Không có giai đoạn nào khớp.",
+          "moveTo": "Chuyển sang {stage}",
+          "statusIn": "Trạng thái trong {stage}",
+          "default": "mặc định",
+          "progress": "{current} trên {total}",
+          "undo": "Hoàn tác",
+          "undone": "Đã chuyển lại về {stage}.",
+          "statusSet": "Đã đặt trạng thái thành {status}.",
+          "prefix": "Giai đoạn"
+        },
+        "summary": {
+          "label": "Tóm tắt",
+          "tasks": "Tác vụ đang mở",
+          "overdue": "{count} quá hạn",
+          "nextDue": "Hạn tiếp theo {when}",
+          "noDue": "Không có hạn",
+          "meeting": "Cuộc họp tiếp theo",
+          "noMeeting": "Chưa lên kế hoạch",
+          "lastActivity": "Hoạt động gần nhất",
+          "noActivity": "Chưa có hoạt động",
+          "deals": "Giao dịch đang mở",
+          "wonDeals": "{count, plural, =0 {chưa thắng} other {thắng #}}"
         }
       },
       "timeline": {
         "title": "Hoạt động",
-        "recent": "Hoạt động gần đây",
         "viewAll": "Xem tất cả hoạt động",
         "filterLabel": "Hiển thị",
         "filters": {

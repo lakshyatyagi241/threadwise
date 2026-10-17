@@ -21,7 +21,9 @@
             "lead-source": "来源",
             "consent": "同意",
             "history": "历史"
-          }
+          },
+          "more": "更多",
+          "moreLabel": "更多部分"
         },
         "actions": {
           "label": "可对此联系人执行的操作",
@@ -35,7 +37,8 @@
           "messageTemplate": "发送 WhatsApp 模板",
           "messageEmail": "发送电子邮件",
           "messageMore": "其他联系方式",
-          "fieldHistory": "字段历史"
+          "fieldHistory": "字段历史",
+          "more": "更多"
         },
         "stageStrip": {
           "noStatus": "无状态"
@@ -53,7 +56,8 @@
           "showAll": "显示全部详情",
           "showLess": "收起",
           "social": "社交媒体",
-          "leadSource": "此联系人的来源"
+          "leadSource": "此联系人的来源",
+          "aboutTitle": "关于此联系人"
         },
         "cards": {
           "company": "公司",
@@ -63,7 +67,14 @@
           "privacy": "隐私",
           "privacyMinor": "未成年人",
           "score": "线索评分",
-          "scoreNone": "尚未评分"
+          "scoreNone": "尚未评分",
+          "label": "与此联系人相关",
+          "tasks": "未完成任务",
+          "tasksNone": "暂无待办。",
+          "deals": "交易",
+          "dealsNone": "暂无交易。",
+          "add": "+ 添加",
+          "viewAll": "查看全部"
         },
         "compose": {
           "label": "添加到活动",
@@ -98,11 +109,39 @@
           "question": "与{name}的通话怎么样？",
           "log": "记录",
           "dismiss": "稍后再说"
+        },
+        "profile": {
+          "label": "联系人资料"
+        },
+        "stagePicker": {
+          "menu": "选择阶段",
+          "search": "查找阶段",
+          "none": "没有匹配的阶段。",
+          "moveTo": "移至{stage}",
+          "statusIn": "{stage}中的状态",
+          "default": "默认",
+          "progress": "{current} / {total}",
+          "undo": "撤销",
+          "undone": "已移回{stage}。",
+          "statusSet": "状态已设为{status}。",
+          "prefix": "阶段"
+        },
+        "summary": {
+          "label": "摘要",
+          "tasks": "未完成任务",
+          "overdue": "{count} 项已逾期",
+          "nextDue": "下次截止 {when}",
+          "noDue": "无截止日期",
+          "meeting": "下次会议",
+          "noMeeting": "暂无安排",
+          "lastActivity": "最近活动",
+          "noActivity": "暂无活动",
+          "deals": "进行中的交易",
+          "wonDeals": "{count, plural, =0 {暂无成交} other {成交 # 笔}}"
         }
       },
       "timeline": {
         "title": "活动",
-        "recent": "最近活动",
         "viewAll": "查看全部活动",
         "filterLabel": "显示",
         "filters": {

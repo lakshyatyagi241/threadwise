@@ -169,10 +169,8 @@
         "title": "Ciclo de vida",
         "stages": "Etapa del ciclo de vida",
         "status": "Estado",
-        "statusChanged": "Estado cambiado a {status}.",
         "conflict": "Otra persona cambió antes este contacto. Se recargó; inténtalo de nuevo.",
-        "forbidden": "No tienes permiso para modificar este contacto.",
-        "statusFailed": "No se pudo cambiar el estado. Inténtalo de nuevo."
+        "forbidden": "No tienes permiso para modificar este contacto."
       }
     }
   }

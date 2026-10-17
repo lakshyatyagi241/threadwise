@@ -21,7 +21,9 @@
             "lead-source": "Quelle",
             "consent": "Einwilligung",
             "history": "Verlauf"
-          }
+          },
+          "more": "Mehr",
+          "moreLabel": "Weitere Bereiche"
         },
         "actions": {
           "label": "Was Sie mit diesem Kontakt tun können",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsApp-Vorlage senden",
           "messageEmail": "E-Mail senden",
           "messageMore": "Weitere Wege zum Schreiben",
-          "fieldHistory": "Feldverlauf"
+          "fieldHistory": "Feldverlauf",
+          "more": "Mehr"
         },
         "stageStrip": {
           "noStatus": "Kein Status"
@@ -53,7 +56,8 @@
           "showAll": "Alle Details anzeigen",
           "showLess": "Weniger anzeigen",
           "social": "Soziale Medien",
-          "leadSource": "Woher dieser Kontakt kommt"
+          "leadSource": "Woher dieser Kontakt kommt",
+          "aboutTitle": "Über diesen Kontakt"
         },
         "cards": {
           "company": "Unternehmen",
@@ -63,7 +67,14 @@
           "privacy": "Datenschutz",
           "privacyMinor": "Minderjährig",
           "score": "Lead-Score",
-          "scoreNone": "Noch nicht bewertet"
+          "scoreNone": "Noch nicht bewertet",
+          "label": "Zu diesem Kontakt gehörig",
+          "tasks": "Offene Aufgaben",
+          "tasksNone": "Nichts steht an.",
+          "deals": "Deals",
+          "dealsNone": "Noch keine Deals.",
+          "add": "+ Hinzufügen",
+          "viewAll": "Alle anzeigen"
         },
         "compose": {
           "label": "Zur Aktivität hinzufügen",
@@ -98,11 +109,39 @@
           "question": "Wie lief der Anruf mit {name}?",
           "log": "Erfassen",
           "dismiss": "Jetzt nicht"
+        },
+        "profile": {
+          "label": "Kontaktprofil"
+        },
+        "stagePicker": {
+          "menu": "Phase wählen",
+          "search": "Phase suchen",
+          "none": "Keine Phase gefunden.",
+          "moveTo": "Nach {stage} verschieben",
+          "statusIn": "Status in {stage}",
+          "default": "Standard",
+          "progress": "{current} von {total}",
+          "undo": "Rückgängig",
+          "undone": "Zurück nach {stage} verschoben.",
+          "statusSet": "Status auf {status} gesetzt.",
+          "prefix": "Phase"
+        },
+        "summary": {
+          "label": "Zusammenfassung",
+          "tasks": "Offene Aufgaben",
+          "overdue": "{count} überfällig",
+          "nextDue": "Nächste Fälligkeit {when}",
+          "noDue": "Keine Fälligkeiten",
+          "meeting": "Nächstes Meeting",
+          "noMeeting": "Nichts geplant",
+          "lastActivity": "Letzte Aktivität",
+          "noActivity": "Noch keine Aktivität",
+          "deals": "Offene Deals",
+          "wonDeals": "{count, plural, =0 {keiner gewonnen} one {1 gewonnen} other {# gewonnen}}"
         }
       },
       "timeline": {
         "title": "Aktivität",
-        "recent": "Letzte Aktivität",
         "viewAll": "Alle Aktivitäten anzeigen",
         "filterLabel": "Anzeigen",
         "filters": {

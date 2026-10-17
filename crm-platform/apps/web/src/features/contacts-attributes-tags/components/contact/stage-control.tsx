@@ -38,8 +38,8 @@ export function StageControl({ contact, className }: { contact: ContactRow; clas
           readOnly={!canUpdate}
           busy={stage.busy}
           name={contact.name ?? undefined}
-          triggerText={t('label', { stage: label })}
-          progress
+          prefix={t('prefix')}
+          triggerText={label}
           onPick={(s, status) => stage.changeStage(s, status)}
         />
         {stage.statuses.length > 0 && (
@@ -64,7 +64,12 @@ export function StageControl({ contact, className }: { contact: ContactRow; clas
         )}
       </div>
       {at >= 0 && stage.stages.length > 1 && (
-        <div aria-hidden="true" className="flex items-center gap-1 px-0.5">
+        <div
+          role="img"
+          aria-label={t('progress', { current: at + 1, total: stage.stages.length })}
+          title={t('progress', { current: at + 1, total: stage.stages.length })}
+          className="flex items-center gap-1 px-0.5"
+        >
           {stage.stages.map((s, i) => (
             <span
               key={s.value}

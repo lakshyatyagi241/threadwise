@@ -103,17 +103,15 @@ export function SummaryStrip({
       {canTasks && !tasks.isError && (
         <Tile
           label={t('tasks')}
-          value={
-            tasks.isSuccess
-              ? `${tasks.items.length}${tasks.hasNextPage ? '+' : ''}`
-              : '…'
-          }
+          value={tasks.isSuccess ? `${tasks.items.length}${tasks.hasNextPage ? '+' : ''}` : '…'}
           tone={overdue > 0 ? 'danger' : undefined}
           sub={
             overdue > 0
               ? t('overdue', { count: overdue })
               : nextDue?.dueAt
-                ? t('nextDue', { when: format.dateTime(new Date(nextDue.dueAt), { dateStyle: 'medium' }) })
+                ? t('nextDue', {
+                    when: format.dateTime(new Date(nextDue.dueAt), { dateStyle: 'medium' }),
+                  })
                 : tasks.isSuccess
                   ? t('noDue')
                   : undefined

@@ -169,10 +169,8 @@
         "title": "Lebenszyklus",
         "stages": "Lebenszyklusphase",
         "status": "Status",
-        "statusChanged": "Status auf {status} gesetzt.",
         "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
-        "forbidden": "Sie haben keine Berechtigung, diesen Kontakt zu ändern.",
-        "statusFailed": "Der Status konnte nicht geändert werden. Versuchen Sie es erneut."
+        "forbidden": "Sie haben keine Berechtigung, diesen Kontakt zu ändern."
       }
     }
   }

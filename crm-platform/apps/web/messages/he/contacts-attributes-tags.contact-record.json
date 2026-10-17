@@ -21,7 +21,9 @@
             "lead-source": "מקור",
             "consent": "הסכמה",
             "history": "היסטוריה"
-          }
+          },
+          "more": "עוד",
+          "moreLabel": "עוד מקטעים"
         },
         "actions": {
           "label": "מה אפשר לעשות עם איש הקשר הזה",
@@ -35,7 +37,8 @@
           "messageTemplate": "שלח תבנית WhatsApp",
           "messageEmail": "שלח אימייל",
           "messageMore": "דרכים נוספות לכתוב",
-          "fieldHistory": "היסטוריית שדות"
+          "fieldHistory": "היסטוריית שדות",
+          "more": "עוד"
         },
         "stageStrip": {
           "noStatus": "ללא סטטוס"
@@ -53,7 +56,8 @@
           "showAll": "הצג את כל הפרטים",
           "showLess": "הצג פחות",
           "social": "רשתות חברתיות",
-          "leadSource": "מאיפה הגיע איש הקשר הזה"
+          "leadSource": "מאיפה הגיע איש הקשר הזה",
+          "aboutTitle": "על איש הקשר הזה"
         },
         "cards": {
           "company": "חברה",
@@ -63,7 +67,14 @@
           "privacy": "פרטיות",
           "privacyMinor": "קטין",
           "score": "דירוג ליד",
-          "scoreNone": "עדיין לא דורג"
+          "scoreNone": "עדיין לא דורג",
+          "label": "קשור לאיש הקשר הזה",
+          "tasks": "משימות פתוחות",
+          "tasksNone": "שום דבר לא ממתין.",
+          "deals": "עסקאות",
+          "dealsNone": "עדיין אין עסקאות.",
+          "add": "+ הוסף",
+          "viewAll": "הצג הכול"
         },
         "compose": {
           "label": "הוסף לפעילות",
@@ -98,11 +109,39 @@
           "question": "איך הלכה השיחה עם {name}?",
           "log": "תעד",
           "dismiss": "לא עכשיו"
+        },
+        "profile": {
+          "label": "פרופיל איש הקשר"
+        },
+        "stagePicker": {
+          "menu": "בחר שלב",
+          "search": "חפש שלב",
+          "none": "אין שלב תואם.",
+          "moveTo": "העבר ל-{stage}",
+          "statusIn": "סטטוס ב-{stage}",
+          "default": "ברירת מחדל",
+          "progress": "{current} מתוך {total}",
+          "undo": "בטל",
+          "undone": "הוחזר ל-{stage}.",
+          "statusSet": "הסטטוס עודכן ל-{status}.",
+          "prefix": "שלב"
+        },
+        "summary": {
+          "label": "סיכום",
+          "tasks": "משימות פתוחות",
+          "overdue": "{count} באיחור",
+          "nextDue": "המועד הבא {when}",
+          "noDue": "אין מועדי יעד",
+          "meeting": "הפגישה הבאה",
+          "noMeeting": "אין מתוכנן",
+          "lastActivity": "פעילות אחרונה",
+          "noActivity": "עדיין אין פעילות",
+          "deals": "עסקאות פתוחות",
+          "wonDeals": "{count, plural, =0 {אף אחת לא נסגרה} one {נסגרה אחת} two {נסגרו שתיים} other {נסגרו #}}"
         }
       },
       "timeline": {
         "title": "פעילות",
-        "recent": "פעילות אחרונה",
         "viewAll": "הצג את כל הפעילות",
         "filterLabel": "הצג",
         "filters": {

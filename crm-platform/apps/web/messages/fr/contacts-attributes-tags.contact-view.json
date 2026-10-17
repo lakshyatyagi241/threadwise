@@ -169,10 +169,8 @@
         "title": "Cycle de vie",
         "stages": "Étape du cycle de vie",
         "status": "Statut",
-        "statusChanged": "Statut défini sur {status}.",
         "conflict": "Quelqu'un d'autre a d'abord modifié ce contact. Il a été rechargé ; réessayez.",
-        "forbidden": "Vous n'avez pas l'autorisation de modifier ce contact.",
-        "statusFailed": "Impossible de modifier le statut. Réessayez."
+        "forbidden": "Vous n'avez pas l'autorisation de modifier ce contact."
       }
     }
   }

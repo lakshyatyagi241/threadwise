@@ -21,7 +21,9 @@
             "lead-source": "แหล่งที่มา",
             "consent": "การยินยอม",
             "history": "ประวัติ"
-          }
+          },
+          "more": "เพิ่มเติม",
+          "moreLabel": "ส่วนอื่น ๆ"
         },
         "actions": {
           "label": "สิ่งที่ทำได้กับผู้ติดต่อรายนี้",
@@ -35,7 +37,8 @@
           "messageTemplate": "ส่งเทมเพลต WhatsApp",
           "messageEmail": "ส่งอีเมล",
           "messageMore": "วิธีส่งข้อความอื่น ๆ",
-          "fieldHistory": "ประวัติฟิลด์"
+          "fieldHistory": "ประวัติฟิลด์",
+          "more": "เพิ่มเติม"
         },
         "stageStrip": {
           "noStatus": "ไม่มีสถานะ"
@@ -53,7 +56,8 @@
           "showAll": "แสดงรายละเอียดทั้งหมด",
           "showLess": "แสดงน้อยลง",
           "social": "โซเชียลมีเดีย",
-          "leadSource": "ผู้ติดต่อรายนี้มาจากไหน"
+          "leadSource": "ผู้ติดต่อรายนี้มาจากไหน",
+          "aboutTitle": "เกี่ยวกับผู้ติดต่อรายนี้"
         },
         "cards": {
           "company": "บริษัท",
@@ -63,7 +67,14 @@
           "privacy": "ความเป็นส่วนตัว",
           "privacyMinor": "ผู้เยาว์",
           "score": "คะแนนลีด",
-          "scoreNone": "ยังไม่ได้ให้คะแนน"
+          "scoreNone": "ยังไม่ได้ให้คะแนน",
+          "label": "ที่เกี่ยวข้องกับผู้ติดต่อรายนี้",
+          "tasks": "งานที่ยังเปิดอยู่",
+          "tasksNone": "ไม่มีอะไรค้างอยู่",
+          "deals": "ดีล",
+          "dealsNone": "ยังไม่มีดีล",
+          "add": "+ เพิ่ม",
+          "viewAll": "ดูทั้งหมด"
         },
         "compose": {
           "label": "เพิ่มในกิจกรรม",
@@ -98,11 +109,39 @@
           "question": "การโทรกับ {name} เป็นอย่างไรบ้าง",
           "log": "บันทึก",
           "dismiss": "ไว้ทีหลัง"
+        },
+        "profile": {
+          "label": "โปรไฟล์ผู้ติดต่อ"
+        },
+        "stagePicker": {
+          "menu": "เลือกขั้นตอน",
+          "search": "ค้นหาขั้นตอน",
+          "none": "ไม่พบขั้นตอนที่ตรงกัน",
+          "moveTo": "ย้ายไปที่ {stage}",
+          "statusIn": "สถานะใน {stage}",
+          "default": "ค่าเริ่มต้น",
+          "progress": "{current} จาก {total}",
+          "undo": "เลิกทำ",
+          "undone": "ย้ายกลับไปที่ {stage} แล้ว",
+          "statusSet": "ตั้งสถานะเป็น {status} แล้ว",
+          "prefix": "ขั้นตอน"
+        },
+        "summary": {
+          "label": "สรุป",
+          "tasks": "งานที่ยังเปิดอยู่",
+          "overdue": "เลยกำหนด {count}",
+          "nextDue": "ครบกำหนดถัดไป {when}",
+          "noDue": "ไม่มีกำหนดส่ง",
+          "meeting": "การประชุมถัดไป",
+          "noMeeting": "ยังไม่มีแผน",
+          "lastActivity": "กิจกรรมล่าสุด",
+          "noActivity": "ยังไม่มีกิจกรรม",
+          "deals": "ดีลที่ยังเปิดอยู่",
+          "wonDeals": "{count, plural, =0 {ยังไม่มีที่ชนะ} other {ชนะ #}}"
         }
       },
       "timeline": {
         "title": "กิจกรรม",
-        "recent": "กิจกรรมล่าสุด",
         "viewAll": "ดูกิจกรรมทั้งหมด",
         "filterLabel": "แสดง",
         "filters": {

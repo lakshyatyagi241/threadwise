@@ -21,7 +21,9 @@
             "lead-source": "Sumber",
             "consent": "Persetujuan",
             "history": "Riwayat"
-          }
+          },
+          "more": "Lainnya",
+          "moreLabel": "Bagian lainnya"
         },
         "actions": {
           "label": "Yang bisa Anda lakukan dengan kontak ini",
@@ -35,7 +37,8 @@
           "messageTemplate": "Kirim templat WhatsApp",
           "messageEmail": "Kirim email",
           "messageMore": "Cara lain untuk menulis",
-          "fieldHistory": "Riwayat kolom"
+          "fieldHistory": "Riwayat kolom",
+          "more": "Lainnya"
         },
         "stageStrip": {
           "noStatus": "Tanpa status"
@@ -53,7 +56,8 @@
           "showAll": "Tampilkan semua detail",
           "showLess": "Tampilkan lebih sedikit",
           "social": "Media sosial",
-          "leadSource": "Dari mana kontak ini berasal"
+          "leadSource": "Dari mana kontak ini berasal",
+          "aboutTitle": "Tentang kontak ini"
         },
         "cards": {
           "company": "Perusahaan",
@@ -63,7 +67,14 @@
           "privacy": "Privasi",
           "privacyMinor": "Di bawah umur",
           "score": "Skor prospek",
-          "scoreNone": "Belum diberi skor"
+          "scoreNone": "Belum diberi skor",
+          "label": "Terkait kontak ini",
+          "tasks": "Tugas terbuka",
+          "tasksNone": "Tidak ada yang menunggu.",
+          "deals": "Transaksi",
+          "dealsNone": "Belum ada transaksi.",
+          "add": "+ Tambah",
+          "viewAll": "Lihat semua"
         },
         "compose": {
           "label": "Tambahkan ke aktivitas",
@@ -98,11 +109,39 @@
           "question": "Bagaimana panggilan dengan {name}?",
           "log": "Catat",
           "dismiss": "Nanti saja"
+        },
+        "profile": {
+          "label": "Profil kontak"
+        },
+        "stagePicker": {
+          "menu": "Pilih tahap",
+          "search": "Cari tahap",
+          "none": "Tidak ada tahap yang cocok.",
+          "moveTo": "Pindahkan ke {stage}",
+          "statusIn": "Status di {stage}",
+          "default": "bawaan",
+          "progress": "{current} dari {total}",
+          "undo": "Urungkan",
+          "undone": "Dikembalikan ke {stage}.",
+          "statusSet": "Status diatur ke {status}.",
+          "prefix": "Tahap"
+        },
+        "summary": {
+          "label": "Ringkasan",
+          "tasks": "Tugas terbuka",
+          "overdue": "{count} terlambat",
+          "nextDue": "Jatuh tempo berikutnya {when}",
+          "noDue": "Tanpa tenggat",
+          "meeting": "Rapat berikutnya",
+          "noMeeting": "Belum ada yang direncanakan",
+          "lastActivity": "Aktivitas terakhir",
+          "noActivity": "Belum ada aktivitas",
+          "deals": "Transaksi terbuka",
+          "wonDeals": "{count, plural, =0 {belum ada yang menang} other {# menang}}"
         }
       },
       "timeline": {
         "title": "Aktivitas",
-        "recent": "Aktivitas terbaru",
         "viewAll": "Lihat semua aktivitas",
         "filterLabel": "Tampilkan",
         "filters": {

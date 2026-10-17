@@ -609,6 +609,7 @@ function StatusCell({
           value={row.stage}
           status={row.status || null}
           stages={h.stageChoices ?? []}
+          label={h.stageLabel(row.stage)}
           statusesOf={h.stageStatusesOf}
           defaultStatusOf={h.stageDefaultStatusOf}
           name={row.name || t('unnamed')}

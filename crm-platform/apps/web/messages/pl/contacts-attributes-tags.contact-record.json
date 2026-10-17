@@ -21,7 +21,9 @@
             "lead-source": "Źródło",
             "consent": "Zgoda",
             "history": "Historia"
-          }
+          },
+          "more": "Więcej",
+          "moreLabel": "Więcej sekcji"
         },
         "actions": {
           "label": "Co możesz zrobić z tym kontaktem",
@@ -35,7 +37,8 @@
           "messageTemplate": "Wyślij szablon WhatsApp",
           "messageEmail": "Wyślij e-mail",
           "messageMore": "Inne sposoby kontaktu",
-          "fieldHistory": "Historia pól"
+          "fieldHistory": "Historia pól",
+          "more": "Więcej"
         },
         "stageStrip": {
           "noStatus": "Brak statusu"
@@ -53,7 +56,8 @@
           "showAll": "Pokaż wszystkie szczegóły",
           "showLess": "Pokaż mniej",
           "social": "Media społecznościowe",
-          "leadSource": "Skąd pochodzi ten kontakt"
+          "leadSource": "Skąd pochodzi ten kontakt",
+          "aboutTitle": "O tym kontakcie"
         },
         "cards": {
           "company": "Firma",
@@ -63,7 +67,14 @@
           "privacy": "Prywatność",
           "privacyMinor": "Osoba niepełnoletnia",
           "score": "Ocena leada",
-          "scoreNone": "Jeszcze nieoceniony"
+          "scoreNone": "Jeszcze nieoceniony",
+          "label": "Powiązane z tym kontaktem",
+          "tasks": "Otwarte zadania",
+          "tasksNone": "Nic nie czeka.",
+          "deals": "Transakcje",
+          "dealsNone": "Jeszcze brak transakcji.",
+          "add": "+ Dodaj",
+          "viewAll": "Zobacz wszystkie"
         },
         "compose": {
           "label": "Dodaj do aktywności",
@@ -98,11 +109,39 @@
           "question": "Jak poszła rozmowa z kontaktem {name}?",
           "log": "Zapisz",
           "dismiss": "Nie teraz"
+        },
+        "profile": {
+          "label": "Profil kontaktu"
+        },
+        "stagePicker": {
+          "menu": "Wybierz etap",
+          "search": "Znajdź etap",
+          "none": "Żaden etap nie pasuje.",
+          "moveTo": "Przenieś do: {stage}",
+          "statusIn": "Status w: {stage}",
+          "default": "domyślny",
+          "progress": "{current} z {total}",
+          "undo": "Cofnij",
+          "undone": "Przywrócono etap: {stage}.",
+          "statusSet": "Status ustawiono na: {status}.",
+          "prefix": "Etap"
+        },
+        "summary": {
+          "label": "Podsumowanie",
+          "tasks": "Otwarte zadania",
+          "overdue": "Po terminie: {count}",
+          "nextDue": "Najbliższy termin: {when}",
+          "noDue": "Brak terminów",
+          "meeting": "Następne spotkanie",
+          "noMeeting": "Nic nie zaplanowano",
+          "lastActivity": "Ostatnia aktywność",
+          "noActivity": "Jeszcze brak aktywności",
+          "deals": "Otwarte transakcje",
+          "wonDeals": "{count, plural, =0 {brak wygranych} one {1 wygrana} few {# wygrane} many {# wygranych} other {# wygranej}}"
         }
       },
       "timeline": {
         "title": "Aktywność",
-        "recent": "Ostatnia aktywność",
         "viewAll": "Zobacz całą aktywność",
         "filterLabel": "Pokaż",
         "filters": {

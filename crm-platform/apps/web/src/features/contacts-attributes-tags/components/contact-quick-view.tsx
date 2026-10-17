@@ -21,6 +21,7 @@ import {
   type QuickSection,
   type SectionId,
 } from '../lib/sections';
+import { CatProviders } from './cat-providers';
 import { ContactAvatar } from './chips';
 import { ContactActionBar } from './contact/action-bar';
 import { CallNudge } from './contact/call-nudge';
@@ -138,32 +139,41 @@ export function ContactQuickView(p: QuickViewProps) {
       tabIndex={-1}
       className="crm-drawer fixed inset-y-0 start-auto end-0 m-0 h-dvh max-h-none w-[min(72rem,100vw)] max-w-none overflow-hidden outline-none border-s border-border bg-background p-0 text-foreground shadow-2xl backdrop:bg-black/40 lg:w-[60vw]"
     >
-      {open &&
-        (contact.isSuccess ? (
-          <QuickViewBody key={contact.data.id} contact={contact.data} {...p} />
-        ) : (
-          <div className="flex h-full flex-col">
-            <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
-              <p className="text-sm text-muted-foreground" role="status">
-                {contact.isError ? t('notFoundTitle') : t('loading')}
-              </p>
-              <button type="button" className={iconBtn} onClick={p.onClose} aria-label={t('close')}>
-                <XIcon />
-              </button>
-            </header>
-            <div className="flex-1 p-5">
-              {contact.isPending ? (
-                <div role="status" className="flex items-center gap-2 text-muted-foreground">
-                  <Spinner /> {t('loading')}
-                </div>
-              ) : contact.isError && errorKind(contact.error) === 'unavailable' ? (
-                <p className="text-sm text-muted-foreground">{t('notFound')}</p>
-              ) : contact.isError ? (
-                <ErrorLine error={contact.error} onRetry={() => void contact.refetch()} />
-              ) : null}
+      {/* A modal dialog makes everything outside it inert: the drawer hosts its own toasts, so a message (and an Undo) raised here can be read and pressed. */}
+      {open && (
+        <CatProviders>
+          {contact.isSuccess ? (
+            <QuickViewBody key={contact.data.id} contact={contact.data} {...p} />
+          ) : (
+            <div className="flex h-full flex-col">
+              <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
+                <p className="text-sm text-muted-foreground" role="status">
+                  {contact.isError ? t('notFoundTitle') : t('loading')}
+                </p>
+                <button
+                  type="button"
+                  className={iconBtn}
+                  onClick={p.onClose}
+                  aria-label={t('close')}
+                >
+                  <XIcon />
+                </button>
+              </header>
+              <div className="flex-1 p-5">
+                {contact.isPending ? (
+                  <div role="status" className="flex items-center gap-2 text-muted-foreground">
+                    <Spinner /> {t('loading')}
+                  </div>
+                ) : contact.isError && errorKind(contact.error) === 'unavailable' ? (
+                  <p className="text-sm text-muted-foreground">{t('notFound')}</p>
+                ) : contact.isError ? (
+                  <ErrorLine error={contact.error} onRetry={() => void contact.refetch()} />
+                ) : null}
+              </div>
             </div>
-          </div>
-        ))}
+          )}
+        </CatProviders>
+      )}
     </dialog>
   );
 }

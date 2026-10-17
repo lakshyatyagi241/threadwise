@@ -21,7 +21,9 @@
             "lead-source": "출처",
             "consent": "동의",
             "history": "기록"
-          }
+          },
+          "more": "더보기",
+          "moreLabel": "더 많은 섹션"
         },
         "actions": {
           "label": "이 연락처로 할 수 있는 일",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsApp 템플릿 보내기",
           "messageEmail": "이메일 보내기",
           "messageMore": "다른 연락 방법",
-          "fieldHistory": "필드 기록"
+          "fieldHistory": "필드 기록",
+          "more": "더보기"
         },
         "stageStrip": {
           "noStatus": "상태 없음"
@@ -53,7 +56,8 @@
           "showAll": "모든 세부 정보 보기",
           "showLess": "간단히 보기",
           "social": "소셜 미디어",
-          "leadSource": "이 연락처의 유입 경로"
+          "leadSource": "이 연락처의 유입 경로",
+          "aboutTitle": "이 연락처 정보"
         },
         "cards": {
           "company": "회사",
@@ -63,7 +67,14 @@
           "privacy": "개인정보",
           "privacyMinor": "미성년자",
           "score": "리드 점수",
-          "scoreNone": "아직 점수 없음"
+          "scoreNone": "아직 점수 없음",
+          "label": "이 연락처와 관련된 항목",
+          "tasks": "진행 중인 작업",
+          "tasksNone": "대기 중인 항목이 없습니다.",
+          "deals": "거래",
+          "dealsNone": "아직 거래가 없습니다.",
+          "add": "+ 추가",
+          "viewAll": "모두 보기"
         },
         "compose": {
           "label": "활동에 추가",
@@ -98,11 +109,39 @@
           "question": "{name}님과의 통화는 어땠나요?",
           "log": "기록하기",
           "dismiss": "나중에"
+        },
+        "profile": {
+          "label": "연락처 프로필"
+        },
+        "stagePicker": {
+          "menu": "단계 선택",
+          "search": "단계 찾기",
+          "none": "일치하는 단계가 없습니다.",
+          "moveTo": "{stage}(으)로 이동",
+          "statusIn": "{stage}의 상태",
+          "default": "기본",
+          "progress": "{total} 중 {current}",
+          "undo": "실행 취소",
+          "undone": "{stage}(으)로 되돌렸습니다.",
+          "statusSet": "상태가 {status}(으)로 설정되었습니다.",
+          "prefix": "단계"
+        },
+        "summary": {
+          "label": "요약",
+          "tasks": "진행 중인 작업",
+          "overdue": "{count}건 기한 지남",
+          "nextDue": "다음 기한 {when}",
+          "noDue": "기한 없음",
+          "meeting": "다음 미팅",
+          "noMeeting": "예정 없음",
+          "lastActivity": "마지막 활동",
+          "noActivity": "아직 활동 없음",
+          "deals": "진행 중인 거래",
+          "wonDeals": "{count, plural, =0 {성사 없음} other {# 건 성사}}"
         }
       },
       "timeline": {
         "title": "활동",
-        "recent": "최근 활동",
         "viewAll": "모든 활동 보기",
         "filterLabel": "표시",
         "filters": {

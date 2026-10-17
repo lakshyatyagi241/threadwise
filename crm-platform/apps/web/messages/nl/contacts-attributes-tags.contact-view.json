@@ -169,10 +169,8 @@
         "title": "Levenscyclus",
         "stages": "Levenscyclusfase",
         "status": "Status",
-        "statusChanged": "Status ingesteld op {status}.",
         "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
-        "forbidden": "Je hebt geen toestemming om dit contact te wijzigen.",
-        "statusFailed": "De status kon niet worden gewijzigd. Probeer het opnieuw."
+        "forbidden": "Je hebt geen toestemming om dit contact te wijzigen."
       }
     }
   }

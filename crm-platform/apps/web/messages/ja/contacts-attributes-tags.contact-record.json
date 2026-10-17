@@ -21,7 +21,9 @@
             "lead-source": "ソース",
             "consent": "同意",
             "history": "履歴"
-          }
+          },
+          "more": "その他",
+          "moreLabel": "その他のセクション"
         },
         "actions": {
           "label": "この連絡先に対してできること",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsAppテンプレートを送信",
           "messageEmail": "メールを送信",
           "messageMore": "その他の連絡方法",
-          "fieldHistory": "フィールド履歴"
+          "fieldHistory": "フィールド履歴",
+          "more": "その他"
         },
         "stageStrip": {
           "noStatus": "ステータスなし"
@@ -53,7 +56,8 @@
           "showAll": "すべての詳細を表示",
           "showLess": "表示を減らす",
           "social": "ソーシャルメディア",
-          "leadSource": "この連絡先の入手元"
+          "leadSource": "この連絡先の入手元",
+          "aboutTitle": "この連絡先について"
         },
         "cards": {
           "company": "会社",
@@ -63,7 +67,14 @@
           "privacy": "プライバシー",
           "privacyMinor": "未成年",
           "score": "リードスコア",
-          "scoreNone": "未スコア"
+          "scoreNone": "未スコア",
+          "label": "この連絡先に関連",
+          "tasks": "未完了のタスク",
+          "tasksNone": "待機中のものはありません。",
+          "deals": "取引",
+          "dealsNone": "取引はまだありません。",
+          "add": "+ 追加",
+          "viewAll": "すべて表示"
         },
         "compose": {
           "label": "アクティビティに追加",
@@ -98,11 +109,39 @@
           "question": "{name}さんとの通話はいかがでしたか？",
           "log": "記録する",
           "dismiss": "あとで"
+        },
+        "profile": {
+          "label": "連絡先プロフィール"
+        },
+        "stagePicker": {
+          "menu": "ステージを選択",
+          "search": "ステージを検索",
+          "none": "一致するステージがありません。",
+          "moveTo": "{stage}に移動",
+          "statusIn": "{stage}でのステータス",
+          "default": "既定",
+          "progress": "{current} / {total}",
+          "undo": "元に戻す",
+          "undone": "{stage}に戻しました。",
+          "statusSet": "ステータスを{status}に設定しました。",
+          "prefix": "ステージ"
+        },
+        "summary": {
+          "label": "サマリー",
+          "tasks": "未完了のタスク",
+          "overdue": "期限切れ {count}件",
+          "nextDue": "次の期限：{when}",
+          "noDue": "期限なし",
+          "meeting": "次のミーティング",
+          "noMeeting": "予定なし",
+          "lastActivity": "最終アクティビティ",
+          "noActivity": "アクティビティはまだありません",
+          "deals": "進行中の取引",
+          "wonDeals": "{count, plural, =0 {成約なし} other {成約 # 件}}"
         }
       },
       "timeline": {
         "title": "アクティビティ",
-        "recent": "最近のアクティビティ",
         "viewAll": "すべてのアクティビティを表示",
         "filterLabel": "表示",
         "filters": {

@@ -134,13 +134,14 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
     <CallingProvider>
       <div
         className={cn(
-          'grid gap-4 md:grid-cols-[18.5rem_minmax(0,1fr)] xl:grid-cols-[19rem_minmax(0,1fr)_18.5rem]',
+          'grid gap-4 md:grid-cols-[20rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)_18rem]',
           // From 1280 px the columns fill the window height and scroll on their own.
           'xl:h-[calc(100dvh-7rem)] xl:min-h-[34rem] xl:overflow-hidden',
         )}
       >
         <aside
           aria-label={tr('profile.label')}
+          data-testid="contact-left"
           className="thin-scrollbar min-w-0 md:col-start-1 md:row-span-2 md:row-start-1 xl:row-span-1 xl:min-h-0 xl:overflow-y-auto"
         >
           <ProfileColumn
@@ -151,7 +152,10 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
           />
         </aside>
 
-        <div className="thin-scrollbar flex min-w-0 flex-col md:col-start-2 md:row-start-1 xl:min-h-0 xl:overflow-y-auto">
+        <div
+          data-testid="contact-center"
+          className="thin-scrollbar flex min-w-0 flex-col md:col-start-2 md:row-start-1 xl:min-h-0 xl:overflow-y-auto"
+        >
           <ContactTabs contactId={id} current={current} tabs={tabs} counts={counts} />
           <div className="flex min-h-0 flex-1 flex-col gap-3 pt-3">
             <CallNudge
@@ -172,6 +176,7 @@ export function ContactDetail({ id, section }: { id: string; section: SectionId 
 
         <aside
           aria-label={tr('cards.label')}
+          data-testid="contact-right"
           className="thin-scrollbar min-w-0 md:col-start-2 md:row-start-2 xl:col-start-3 xl:row-span-1 xl:row-start-1 xl:min-h-0 xl:overflow-y-auto"
         >
           <AssociationCards
@@ -208,7 +213,8 @@ export function useTabCounts(contactId: string): TabCounts {
   );
   const now = Date.now();
   const waiting =
-    tasks.items.length + meetings.items.filter((m) => m.startsAt && Date.parse(m.startsAt) > now).length;
+    tasks.items.length +
+    meetings.items.filter((m) => m.startsAt && Date.parse(m.startsAt) > now).length;
   return {
     activities: waiting,
     files: files.items.length,

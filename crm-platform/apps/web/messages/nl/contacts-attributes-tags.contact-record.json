@@ -21,7 +21,9 @@
             "lead-source": "Bron",
             "consent": "Toestemming",
             "history": "Geschiedenis"
-          }
+          },
+          "more": "Meer",
+          "moreLabel": "Meer onderdelen"
         },
         "actions": {
           "label": "Wat je met dit contact kunt doen",
@@ -35,7 +37,8 @@
           "messageTemplate": "Een WhatsApp-sjabloon sturen",
           "messageEmail": "Een e-mail sturen",
           "messageMore": "Andere manieren om te schrijven",
-          "fieldHistory": "Veldgeschiedenis"
+          "fieldHistory": "Veldgeschiedenis",
+          "more": "Meer"
         },
         "stageStrip": {
           "noStatus": "Geen status"
@@ -53,7 +56,8 @@
           "showAll": "Alle details tonen",
           "showLess": "Minder tonen",
           "social": "Sociale media",
-          "leadSource": "Waar dit contact vandaan komt"
+          "leadSource": "Waar dit contact vandaan komt",
+          "aboutTitle": "Over dit contact"
         },
         "cards": {
           "company": "Bedrijf",
@@ -63,7 +67,14 @@
           "privacy": "Privacy",
           "privacyMinor": "Minderjarig",
           "score": "Leadscore",
-          "scoreNone": "Nog niet beoordeeld"
+          "scoreNone": "Nog niet beoordeeld",
+          "label": "Gerelateerd aan dit contact",
+          "tasks": "Openstaande taken",
+          "tasksNone": "Er staat niets open.",
+          "deals": "Deals",
+          "dealsNone": "Nog geen deals.",
+          "add": "+ Toevoegen",
+          "viewAll": "Alles bekijken"
         },
         "compose": {
           "label": "Toevoegen aan de activiteit",
@@ -98,11 +109,39 @@
           "question": "Hoe ging het gesprek met {name}?",
           "log": "Vastleggen",
           "dismiss": "Niet nu"
+        },
+        "profile": {
+          "label": "Contactprofiel"
+        },
+        "stagePicker": {
+          "menu": "Kies een fase",
+          "search": "Zoek een fase",
+          "none": "Geen fase gevonden.",
+          "moveTo": "Verplaatsen naar {stage}",
+          "statusIn": "Status in {stage}",
+          "default": "standaard",
+          "progress": "{current} van {total}",
+          "undo": "Ongedaan maken",
+          "undone": "Teruggezet naar {stage}.",
+          "statusSet": "Status ingesteld op {status}.",
+          "prefix": "Fase"
+        },
+        "summary": {
+          "label": "Samenvatting",
+          "tasks": "Openstaande taken",
+          "overdue": "{count} te laat",
+          "nextDue": "Volgende deadline {when}",
+          "noDue": "Geen einddatums",
+          "meeting": "Volgende vergadering",
+          "noMeeting": "Niets gepland",
+          "lastActivity": "Laatste activiteit",
+          "noActivity": "Nog geen activiteit",
+          "deals": "Openstaande deals",
+          "wonDeals": "{count, plural, =0 {geen gewonnen} one {1 gewonnen} other {# gewonnen}}"
         }
       },
       "timeline": {
         "title": "Activiteit",
-        "recent": "Recente activiteit",
         "viewAll": "Alle activiteit bekijken",
         "filterLabel": "Tonen",
         "filters": {

@@ -169,10 +169,8 @@
         "title": "生命周期",
         "stages": "生命周期阶段",
         "status": "状态",
-        "statusChanged": "状态已设为 {status}。",
         "conflict": "其他人已先更改了此联系人。已重新加载，请重试。",
-        "forbidden": "您没有更改此联系人的权限。",
-        "statusFailed": "无法更改状态。请重试。"
+        "forbidden": "您没有更改此联系人的权限。"
       }
     }
   }

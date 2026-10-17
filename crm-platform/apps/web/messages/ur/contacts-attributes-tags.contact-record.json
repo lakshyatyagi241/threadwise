@@ -21,7 +21,9 @@
             "lead-source": "ماخذ",
             "consent": "رضامندی",
             "history": "تاریخ"
-          }
+          },
+          "more": "مزید",
+          "moreLabel": "مزید حصے"
         },
         "actions": {
           "label": "اس رابطے کے ساتھ آپ کیا کر سکتے ہیں",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsApp ٹیمپلیٹ بھیجیں",
           "messageEmail": "ای میل بھیجیں",
           "messageMore": "لکھنے کے دیگر طریقے",
-          "fieldHistory": "فیلڈ کی تاریخ"
+          "fieldHistory": "فیلڈ کی تاریخ",
+          "more": "مزید"
         },
         "stageStrip": {
           "noStatus": "کوئی حالت نہیں"
@@ -53,7 +56,8 @@
           "showAll": "تمام تفصیلات دیکھیں",
           "showLess": "کم دکھائیں",
           "social": "سوشل میڈیا",
-          "leadSource": "یہ رابطہ کہاں سے آیا"
+          "leadSource": "یہ رابطہ کہاں سے آیا",
+          "aboutTitle": "اس رابطے کے بارے میں"
         },
         "cards": {
           "company": "کمپنی",
@@ -63,7 +67,14 @@
           "privacy": "رازداری",
           "privacyMinor": "نابالغ",
           "score": "لیڈ اسکور",
-          "scoreNone": "ابھی اسکور نہیں ہوا"
+          "scoreNone": "ابھی اسکور نہیں ہوا",
+          "label": "اس رابطے سے متعلق",
+          "tasks": "کھلے ٹاسکس",
+          "tasksNone": "کچھ بھی زیرِ انتظار نہیں۔",
+          "deals": "ڈیلز",
+          "dealsNone": "ابھی کوئی ڈیل نہیں۔",
+          "add": "+ شامل کریں",
+          "viewAll": "سب دیکھیں"
         },
         "compose": {
           "label": "سرگرمی میں شامل کریں",
@@ -98,11 +109,39 @@
           "question": "{name} کے ساتھ کال کیسی رہی؟",
           "log": "درج کریں",
           "dismiss": "ابھی نہیں"
+        },
+        "profile": {
+          "label": "رابطے کی پروفائل"
+        },
+        "stagePicker": {
+          "menu": "مرحلہ منتخب کریں",
+          "search": "مرحلہ تلاش کریں",
+          "none": "کوئی مرحلہ نہیں ملا۔",
+          "moveTo": "{stage} میں منتقل کریں",
+          "statusIn": "{stage} میں حالت",
+          "default": "ڈیفالٹ",
+          "progress": "{total} میں سے {current}",
+          "undo": "واپس کریں",
+          "undone": "{stage} میں واپس کر دیا گیا۔",
+          "statusSet": "حالت {status} پر سیٹ کر دی گئی۔",
+          "prefix": "مرحلہ"
+        },
+        "summary": {
+          "label": "خلاصہ",
+          "tasks": "کھلے ٹاسکس",
+          "overdue": "{count} تاخیر سے",
+          "nextDue": "اگلی آخری تاریخ {when}",
+          "noDue": "کوئی آخری تاریخ نہیں",
+          "meeting": "اگلی میٹنگ",
+          "noMeeting": "کوئی منصوبہ نہیں",
+          "lastActivity": "آخری سرگرمی",
+          "noActivity": "ابھی کوئی سرگرمی نہیں",
+          "deals": "کھلی ڈیلز",
+          "wonDeals": "{count, plural, =0 {کوئی نہیں جیتی} one {1 جیتی} other {# جیتی}}"
         }
       },
       "timeline": {
         "title": "سرگرمی",
-        "recent": "حالیہ سرگرمی",
         "viewAll": "تمام سرگرمی دیکھیں",
         "filterLabel": "دکھائیں",
         "filters": {

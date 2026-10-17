@@ -224,5 +224,15 @@ export function useStageMove() {
     />
   );
 
-  return { move, busyId, dialog, stages, stageLabel, statusLabel, statusesOf, hintFor, defaultStatusOf };
+  return {
+    move,
+    busyId,
+    dialog,
+    stages,
+    stageLabel,
+    statusLabel,
+    statusesOf,
+    hintFor,
+    defaultStatusOf,
+  };
 }

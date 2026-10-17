@@ -21,7 +21,9 @@
             "lead-source": "Kaynak",
             "consent": "Onay",
             "history": "Geçmiş"
-          }
+          },
+          "more": "Daha fazla",
+          "moreLabel": "Diğer bölümler"
         },
         "actions": {
           "label": "Bu kişiyle yapabilecekleriniz",
@@ -35,7 +37,8 @@
           "messageTemplate": "WhatsApp şablonu gönder",
           "messageEmail": "E-posta gönder",
           "messageMore": "Yazmanın diğer yolları",
-          "fieldHistory": "Alan geçmişi"
+          "fieldHistory": "Alan geçmişi",
+          "more": "Daha fazla"
         },
         "stageStrip": {
           "noStatus": "Durum yok"
@@ -53,7 +56,8 @@
           "showAll": "Tüm ayrıntıları göster",
           "showLess": "Daha az göster",
           "social": "Sosyal medya",
-          "leadSource": "Bu kişi nereden geldi"
+          "leadSource": "Bu kişi nereden geldi",
+          "aboutTitle": "Bu kişi hakkında"
         },
         "cards": {
           "company": "Şirket",
@@ -63,7 +67,14 @@
           "privacy": "Gizlilik",
           "privacyMinor": "Reşit değil",
           "score": "Potansiyel puanı",
-          "scoreNone": "Henüz puanlanmadı"
+          "scoreNone": "Henüz puanlanmadı",
+          "label": "Bu kişiyle ilgili",
+          "tasks": "Açık görevler",
+          "tasksNone": "Bekleyen bir şey yok.",
+          "deals": "Fırsatlar",
+          "dealsNone": "Henüz fırsat yok.",
+          "add": "+ Ekle",
+          "viewAll": "Tümünü gör"
         },
         "compose": {
           "label": "Etkinliğe ekle",
@@ -98,11 +109,39 @@
           "question": "{name} ile görüşme nasıl geçti?",
           "log": "Kaydet",
           "dismiss": "Şimdi değil"
+        },
+        "profile": {
+          "label": "Kişi profili"
+        },
+        "stagePicker": {
+          "menu": "Aşama seçin",
+          "search": "Aşama bul",
+          "none": "Eşleşen aşama yok.",
+          "moveTo": "{stage} aşamasına taşı",
+          "statusIn": "{stage} aşamasındaki durum",
+          "default": "varsayılan",
+          "progress": "{current} / {total}",
+          "undo": "Geri al",
+          "undone": "{stage} aşamasına geri alındı.",
+          "statusSet": "Durum {status} olarak ayarlandı.",
+          "prefix": "Aşama"
+        },
+        "summary": {
+          "label": "Özet",
+          "tasks": "Açık görevler",
+          "overdue": "{count} gecikmiş",
+          "nextDue": "Sonraki son tarih {when}",
+          "noDue": "Son tarih yok",
+          "meeting": "Sonraki toplantı",
+          "noMeeting": "Planlanan yok",
+          "lastActivity": "Son etkinlik",
+          "noActivity": "Henüz etkinlik yok",
+          "deals": "Açık fırsatlar",
+          "wonDeals": "{count, plural, =0 {kazanılan yok} one {1 kazanıldı} other {# kazanıldı}}"
         }
       },
       "timeline": {
         "title": "Etkinlik",
-        "recent": "Son etkinlikler",
         "viewAll": "Tüm etkinlikleri gör",
         "filterLabel": "Göster",
         "filters": {

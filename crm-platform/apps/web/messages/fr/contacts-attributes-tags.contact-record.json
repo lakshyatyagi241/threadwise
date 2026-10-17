@@ -21,7 +21,9 @@
             "lead-source": "Source",
             "consent": "Consentement",
             "history": "Historique"
-          }
+          },
+          "more": "Plus",
+          "moreLabel": "Autres sections"
         },
         "actions": {
           "label": "Ce que vous pouvez faire avec ce contact",
@@ -35,7 +37,8 @@
           "messageTemplate": "Envoyer un modèle WhatsApp",
           "messageEmail": "Envoyer un e-mail",
           "messageMore": "Autres façons d'écrire",
-          "fieldHistory": "Historique des champs"
+          "fieldHistory": "Historique des champs",
+          "more": "Plus"
         },
         "stageStrip": {
           "noStatus": "Aucun statut"
@@ -53,7 +56,8 @@
           "showAll": "Afficher tous les détails",
           "showLess": "Afficher moins",
           "social": "Réseaux sociaux",
-          "leadSource": "D'où vient ce contact"
+          "leadSource": "D'où vient ce contact",
+          "aboutTitle": "À propos de ce contact"
         },
         "cards": {
           "company": "Entreprise",
@@ -63,7 +67,14 @@
           "privacy": "Confidentialité",
           "privacyMinor": "Mineur",
           "score": "Score du lead",
-          "scoreNone": "Pas encore noté"
+          "scoreNone": "Pas encore noté",
+          "label": "Lié à ce contact",
+          "tasks": "Tâches ouvertes",
+          "tasksNone": "Rien en attente.",
+          "deals": "Opportunités",
+          "dealsNone": "Aucune opportunité pour l'instant.",
+          "add": "+ Ajouter",
+          "viewAll": "Tout voir"
         },
         "compose": {
           "label": "Ajouter à l'activité",
@@ -98,11 +109,39 @@
           "question": "Comment s'est passé l'appel avec {name} ?",
           "log": "L'enregistrer",
           "dismiss": "Pas maintenant"
+        },
+        "profile": {
+          "label": "Profil du contact"
+        },
+        "stagePicker": {
+          "menu": "Choisir une étape",
+          "search": "Rechercher une étape",
+          "none": "Aucune étape ne correspond.",
+          "moveTo": "Déplacer vers {stage}",
+          "statusIn": "Statut dans {stage}",
+          "default": "par défaut",
+          "progress": "{current} sur {total}",
+          "undo": "Annuler",
+          "undone": "Remis dans {stage}.",
+          "statusSet": "Statut défini sur {status}.",
+          "prefix": "Étape"
+        },
+        "summary": {
+          "label": "Résumé",
+          "tasks": "Tâches ouvertes",
+          "overdue": "{count} en retard",
+          "nextDue": "Prochaine échéance {when}",
+          "noDue": "Aucune échéance",
+          "meeting": "Prochaine réunion",
+          "noMeeting": "Rien de prévu",
+          "lastActivity": "Dernière activité",
+          "noActivity": "Aucune activité pour l'instant",
+          "deals": "Opportunités ouvertes",
+          "wonDeals": "{count, plural, =0 {aucune gagnée} one {1 gagnée} other {# gagnées}}"
         }
       },
       "timeline": {
         "title": "Activité",
-        "recent": "Activité récente",
         "viewAll": "Voir toute l'activité",
         "filterLabel": "Afficher",
         "filters": {

@@ -1,4 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: () => undefined, replace: () => undefined }),
+  usePathname: () => '/contacts/x',
+  useSearchParams: () => new URLSearchParams(),
+}));
 import {
   makeSession,
   renderAccount,
