@@ -3,6 +3,27 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "run-load.mjs --trace (idle, normal, peak at 5 and 20 req/s, 1,500 contacts), before and after the duplicate-lookup fix, plus rtt-drift.mjs",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-auth-path-latency",
+      "rawData": "evidence/auth-path-trace-before.json, evidence/auth-path-trace-after.json, evidence/rtt-drift.json",
+      "observed": {
+        "roundTripsPerRequest": "about 12 for a request with one data query: 5 SQL statements and 7 Redis commands before the fix, 6 Redis commands after",
+        "slowHost": "round trips p50 38 to 48 ms: caller p50 1.9 s, p95 11.8 s at 14.5 req/s, pool wait mean 1.5 s, loop delay p99 39 ms",
+        "healthyHost": "round trips p50 2 to 3 ms: caller p50 36 ms, p95 66 ms at 20.3 req/s, 0 failed, pool wait 0.1 ms",
+        "control": "rtt-drift: SELECT 1 p50 2.5 to 4.3 ms and PING 1.7 to 4.4 ms for the whole run, including 210 idle connections and 20 busy loops"
+      },
+      "caveat": "The before and after runs were not in the same host mood, so their latencies are not compared; only the per-request counts are (get auth:org-susp 2 to 1, Redis commands 7.1 to 6.1 for the contacts list). The cause of the slow-host runs is NOT VERIFIED."
+    },
+    {
+      "suite": "apps/api/test/unit/auth-registration-security/org-suspension-gate.spec.ts",
+      "status": "PASSED",
+      "tests": 22,
+      "passed": 22,
+      "ranOn": "2026-10-17",
+      "note": "Three new: the guard asks about the workspace once and calls stateFor with includeOrgSuspension false; stateFor includes the workspace verdict by default and skips it when asked. eslint and tsc on the touched files clean."
+    },
+    {
       "suite": "tools/event-loop-audit/load/run-load.mjs (k6 0.49.0, the built API and worker, Postgres and Redis containers; idle, normal, peak, spike, 10 minute soak)",
       "status": "RAN; baselines recorded, NOT stable",
       "ranOn": "2026-10-16, branch claude/event-loop-load-baselines, commit 18f84c6 (before the rebase onto main)",
