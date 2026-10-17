@@ -451,13 +451,13 @@
       "to": "Hasta",
       "problem": {
         "required": "Indique ambas horas.",
-        "order": "La hora de cierre debe ser posterior a la de apertura."
+        "same": "Las horas de apertura y cierre deben ser distintas."
       },
-      "note": "Un día desactivado está cerrado todo el día. Hasta que guarde, el espacio de trabajo se considera abierto todo el tiempo.",
       "cancel": "Cancelar",
       "save": "Guardar horario",
       "saved": "Horario laboral guardado",
-      "saveFailed": "No se pudo guardar"
+      "saveFailed": "No se pudo guardar",
+      "note": "Un día desactivado permanece cerrado todo el día. Hasta que guardes, el espacio de trabajo se considera abierto en todo momento. Los descansos, los horarios nocturnos y los festivos se configuran en Ajustes > General > Horario laboral."
     }
   }
 }

@@ -232,12 +232,49 @@
         "loadFailed": "Die Einstellungen konnten nicht geladen werden.",
         "hours": {
           "title": "Arbeitszeiten",
-          "note": "Nur zur Orientierung angezeigt. Arbeitszeiten werden noch nicht durchgesetzt, daher sind diese Steuerelemente schreibgeschützt.",
-          "weekdays": "Mo - Fr",
-          "saturday": "Samstag",
-          "sunday": "Sonntag",
           "from": "Von",
-          "to": "Bis"
+          "to": "Bis",
+          "note": "Die Öffnungszeiten Ihres Teams in {timezone}. Regeln für die Posteingangs-Zuweisung, SLA-Timer, Flows und Antworten an Leads, die von den Geschäftszeiten abhängen, nutzen diesen Zeitplan.",
+          "ownerOnly": "Nur der Workspace-Inhaber kann diese bearbeiten.",
+          "loadFailed": "Die Arbeitszeiten konnten nicht geladen werden.",
+          "day": {
+            "mon": "Montag",
+            "tue": "Dienstag",
+            "wed": "Mittwoch",
+            "thu": "Donnerstag",
+            "fri": "Freitag",
+            "sat": "Samstag",
+            "sun": "Sonntag"
+          },
+          "closed": "Geschlossen",
+          "openAllDay": "Ganztägig geöffnet",
+          "allDay": "Ganztägig geöffnet",
+          "overnight": "Schließt am nächsten Morgen",
+          "addWindow": "Zeiten hinzufügen",
+          "remove": "Entfernen",
+          "removeWindow": "Diese Zeiten für {day} entfernen",
+          "copyMonday": "Montag auf Dienstag–Freitag kopieren",
+          "problem": {
+            "required": "Geben Sie beide Zeiten ein.",
+            "same": "Öffnungs- und Schließzeit müssen sich unterscheiden.",
+            "overlap": "Zeiten am selben Tag dürfen sich nicht überschneiden."
+          },
+          "holidays": {
+            "title": "Feiertage",
+            "note": "An diesen Tagen gilt der Workspace ganztägig als geschlossen, unabhängig von den wöchentlichen Zeiten.",
+            "none": "Keine Feiertage hinzugefügt.",
+            "date": "Datum",
+            "label": "Name (optional)",
+            "add": "Feiertag hinzufügen",
+            "removeFor": "Feiertag am {date} entfernen",
+            "problem": {
+              "date": "Kein gültiges Datum.",
+              "duplicate": "Dieses Datum ist bereits aufgeführt."
+            }
+          },
+          "save": "Arbeitszeiten speichern",
+          "saved": "Arbeitszeiten gespeichert.",
+          "saveFailed": "Die Arbeitszeiten konnten nicht gespeichert werden."
         },
         "preferences": {
           "title": "Automatische KI-Zusammenfassung",

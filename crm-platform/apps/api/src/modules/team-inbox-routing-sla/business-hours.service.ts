@@ -8,7 +8,9 @@ import {
   mayEditTimezone,
   mergeBusinessHours,
   readBusinessHoursDays,
+  readBusinessHoursHolidays,
   sameDays,
+  sameHolidays,
 } from './business-hours-rules';
 import { RoutingRulesRepository } from './routing-rules.repository';
 
@@ -41,6 +43,7 @@ export class BusinessHoursService {
         timezone: row.timezone,
         canEditTimezone: mayEditTimezone(owner, me),
         days: readBusinessHoursDays(row.hours),
+        holidays: readBusinessHoursHolidays(row.hours),
       };
     });
   }
@@ -54,18 +57,26 @@ export class BusinessHoursService {
       const canZone = mayEditTimezone(owner, me);
       const zone = canZone && input.timezone !== undefined ? input.timezone : before.timezone;
       const oldDays = readBusinessHoursDays(before.hours);
+      const oldHolidays = readBusinessHoursHolidays(before.hours);
+      const holidays = input.holidays ?? oldHolidays;
 
-      await this.repo.setBusinessHours(tx, orgId, mergeBusinessHours(before.hours, input.days));
+      await this.repo.setBusinessHours(
+        tx,
+        orgId,
+        mergeBusinessHours(before.hours, input.days, input.holidays),
+      );
       if (zone !== before.timezone) await this.repo.setOrgTimezone(tx, orgId, zone);
 
       const daysChanged = !sameDays(oldDays, input.days);
-      if (daysChanged || zone !== before.timezone) {
+      const holidaysChanged = !sameHolidays(oldHolidays, holidays);
+      if (daysChanged || holidaysChanged || zone !== before.timezone) {
         await this.audit.record(tx, {
           module: MODULE_KEY,
           recordId: orgId,
           action: 'update',
           delta: {
             ...(daysChanged ? { days: { old: oldDays, new: input.days } } : {}),
+            ...(holidaysChanged ? { holidays: { old: oldHolidays, new: holidays } } : {}),
             ...(zone !== before.timezone ? { timezone: { old: before.timezone, new: zone } } : {}),
           },
         });
@@ -73,10 +84,10 @@ export class BusinessHoursService {
           aggregateModule: MODULE_KEY,
           aggregateId: orgId,
           eventType: 'business_hours.updated',
-          payload: { timezone: zone, days: input.days },
+          payload: { timezone: zone, days: input.days, holidays },
         });
       }
-      return { timezone: zone, canEditTimezone: canZone, days: input.days };
+      return { timezone: zone, canEditTimezone: canZone, days: input.days, holidays };
     });
   }
 }

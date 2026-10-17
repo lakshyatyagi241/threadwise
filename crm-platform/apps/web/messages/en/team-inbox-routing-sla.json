@@ -451,9 +451,9 @@
       "to": "To",
       "problem": {
         "required": "Enter both times.",
-        "order": "The closing time must be after the opening time."
+        "same": "The opening and closing times must differ."
       },
-      "note": "A day that is switched off is closed all day. Until you save, the workspace counts as open all the time.",
+      "note": "A day that is switched off is closed all day. Until you save, the workspace counts as open all the time. Breaks, overnight hours and holidays are set in Settings > General > Working hours.",
       "cancel": "Cancel",
       "save": "Save hours",
       "saved": "Business hours saved",

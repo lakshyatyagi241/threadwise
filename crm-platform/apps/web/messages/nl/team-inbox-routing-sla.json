@@ -451,13 +451,13 @@
       "to": "Tot",
       "problem": {
         "required": "Vul beide tijden in.",
-        "order": "De sluitingstijd moet later zijn dan de openingstijd."
+        "same": "De openings- en sluitingstijd moeten verschillen."
       },
-      "note": "Een uitgeschakelde dag is de hele dag gesloten. Totdat je opslaat, wordt de werkruimte altijd als open beschouwd.",
       "cancel": "Annuleren",
       "save": "Tijden opslaan",
       "saved": "Werktijden opgeslagen",
-      "saveFailed": "Opslaan mislukt"
+      "saveFailed": "Opslaan mislukt",
+      "note": "Een uitgeschakelde dag is de hele dag gesloten. Totdat je opslaat, geldt de werkruimte als altijd open. Pauzes, nachtelijke tijden en feestdagen stel je in via Instellingen > Algemeen > Werktijden."
     }
   }
 }

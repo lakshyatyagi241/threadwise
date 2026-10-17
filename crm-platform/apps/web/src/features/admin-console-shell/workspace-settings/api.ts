@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  businessHoursSchema,
   exportCountsResponseSchema,
   notificationPrefsResponseSchema,
   preferencesResponseSchema,
@@ -10,12 +11,14 @@ import {
   type DataResidency,
   type DeleteWorkspaceRequest,
   type SaveNotificationPrefsRequest,
+  type UpdateWorkingHoursInput,
   type UpdateWorkspaceSettingsRequest,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 
 const GENERAL = ['shell', 'workspace'] as const;
+const HOURS = ['shell', 'workspace', 'working-hours'] as const;
 const NOTIFS = ['shell', 'workspace', 'notifications'] as const;
 const PREFS = ['shell', 'preferences'] as const;
 const EXPORT = ['shell', 'workspace', 'export'] as const;
@@ -37,6 +40,27 @@ export function useSaveWorkspaceSettings() {
         schema: workspaceSettingsResponseSchema,
       }),
     onSuccess: (data) => qc.setQueryData(GENERAL, data),
+  });
+}
+
+/** The weekly working hours and holidays: the business hours the inbox rules, SLA timers and flows read. */
+export const useWorkingHours = () =>
+  useQuery({
+    queryKey: HOURS,
+    queryFn: ({ signal }) =>
+      apiFetch('/shell/workspace/working-hours', { schema: businessHoursSchema, signal }),
+  });
+
+export function useSaveWorkingHours() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: UpdateWorkingHoursInput) =>
+      apiFetch('/shell/workspace/working-hours', {
+        method: 'PUT',
+        body,
+        schema: businessHoursSchema,
+      }),
+    onSuccess: (data) => qc.setQueryData(HOURS, data),
   });
 }
 

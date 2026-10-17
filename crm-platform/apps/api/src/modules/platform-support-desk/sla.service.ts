@@ -90,7 +90,9 @@ export class SlaService {
   /** The customer workspace's hours (never the operator's); a missing row or column falls back to Mon-Fri 09-17 UTC. */
   async hoursIn(tx: Tx, orgId: number): Promise<BusinessHours> {
     const res = await tx.execute(
-      sql`SELECT timezone, business_hours FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
+      sql`SELECT COALESCE(o.settings ->> 'timezone', ws.timezone) AS timezone, ws.business_hours
+            FROM organizations o LEFT JOIN workspace_settings ws ON ws.org_id = o.id
+           WHERE o.id = ${orgId} LIMIT 1`,
     );
     const r = res.rows[0] as unknown as
       { timezone: string | null; business_hours: string | null } | undefined;
