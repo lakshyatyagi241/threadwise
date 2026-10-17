@@ -99,9 +99,7 @@
         "allowed": "Pemasaran diizinkan",
         "noFlags": "Tanpa penanda privasi"
       },
-      "overview": {
-        "information": "Kontak"
-      },
+      "overview": {},
       "tabs": {
         "info": "Informasi kontak",
         "social": "Media sosial",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "Kembali ke daftar",
         "label": "Bagian kontak",
-        "contactDetails": "Detail kontak",
         "related": "Terkait",
         "section": {
           "overview": "Ringkasan",
@@ -172,7 +169,6 @@
         "title": "Siklus hidup",
         "stages": "Tahap siklus hidup",
         "status": "Status",
-        "noStatuses": "Tahap ini tidak memiliki status.",
         "statusChanged": "Status diatur ke {status}.",
         "conflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
         "forbidden": "Anda tidak memiliki izin untuk mengubah kontak ini.",

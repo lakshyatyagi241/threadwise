@@ -99,9 +99,7 @@
         "allowed": "Marketing dozwolony",
         "noFlags": "Brak flag prywatności"
       },
-      "overview": {
-        "information": "Kontakt"
-      },
+      "overview": {},
       "tabs": {
         "info": "Informacje o kontakcie",
         "social": "Media społecznościowe",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "Wróć do listy",
         "label": "Sekcje kontaktu",
-        "contactDetails": "Szczegóły kontaktu",
         "related": "Powiązane",
         "section": {
           "overview": "Przegląd",
@@ -172,7 +169,6 @@
         "title": "Cykl życia",
         "stages": "Etap cyklu życia",
         "status": "Status",
-        "noStatuses": "Ten etap nie ma statusów.",
         "statusChanged": "Ustawiono status: {status}.",
         "conflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
         "forbidden": "Nie masz uprawnień do zmiany tego kontaktu.",

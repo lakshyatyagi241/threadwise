@@ -99,9 +99,7 @@
         "allowed": "マーケティング許可",
         "noFlags": "プライバシーフラグなし"
       },
-      "overview": {
-        "information": "連絡先"
-      },
+      "overview": {},
       "tabs": {
         "info": "連絡先情報",
         "social": "ソーシャルメディア",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "一覧に戻る",
         "label": "連絡先のセクション",
-        "contactDetails": "連絡先の詳細",
         "related": "関連",
         "section": {
           "overview": "概要",
@@ -172,7 +169,6 @@
         "title": "ライフサイクル",
         "stages": "ライフサイクルステージ",
         "status": "ステータス",
-        "noStatuses": "このステージにはステータスがありません。",
         "statusChanged": "ステータスを{status}に設定しました。",
         "conflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
         "forbidden": "この連絡先を変更する権限がありません。",

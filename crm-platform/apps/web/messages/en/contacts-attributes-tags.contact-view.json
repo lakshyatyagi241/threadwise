@@ -99,9 +99,7 @@
         "allowed": "Marketing allowed",
         "noFlags": "No privacy flags"
       },
-      "overview": {
-        "information": "Contact"
-      },
+      "overview": {},
       "tabs": {
         "info": "Contact information",
         "social": "Social media",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "Back to listing",
         "label": "Contact sections",
-        "contactDetails": "Contact details",
         "related": "Related",
         "section": {
           "overview": "Overview",
@@ -172,7 +169,6 @@
         "title": "Lifecycle",
         "stages": "Lifecycle stage",
         "status": "Status",
-        "noStatuses": "This stage has no statuses.",
         "statusChanged": "Status set to {status}.",
         "conflict": "Someone else changed this contact first. It was reloaded; try again.",
         "forbidden": "You do not have permission to change this contact.",

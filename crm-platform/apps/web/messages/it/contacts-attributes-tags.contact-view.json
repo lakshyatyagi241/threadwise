@@ -99,9 +99,7 @@
         "allowed": "Marketing consentito",
         "noFlags": "Nessun indicatore di privacy"
       },
-      "overview": {
-        "information": "Contatto"
-      },
+      "overview": {},
       "tabs": {
         "info": "Informazioni di contatto",
         "social": "Social media",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "Torna all'elenco",
         "label": "Sezioni del contatto",
-        "contactDetails": "Dettagli del contatto",
         "related": "Correlati",
         "section": {
           "overview": "Panoramica",
@@ -172,7 +169,6 @@
         "title": "Ciclo di vita",
         "stages": "Fase del ciclo di vita",
         "status": "Stato",
-        "noStatuses": "Questa fase non ha stati.",
         "statusChanged": "Stato impostato su {status}.",
         "conflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
         "forbidden": "Non hai il permesso di modificare questo contatto.",

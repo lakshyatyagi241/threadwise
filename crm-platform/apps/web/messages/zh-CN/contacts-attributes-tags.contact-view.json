@@ -99,9 +99,7 @@
         "allowed": "允许营销",
         "noFlags": "无隐私标记"
       },
-      "overview": {
-        "information": "联系人"
-      },
+      "overview": {},
       "tabs": {
         "info": "联系人信息",
         "social": "社交媒体",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "返回列表",
         "label": "联系人分区",
-        "contactDetails": "联系人详情",
         "related": "相关",
         "section": {
           "overview": "概览",
@@ -172,7 +169,6 @@
         "title": "生命周期",
         "stages": "生命周期阶段",
         "status": "状态",
-        "noStatuses": "该阶段没有状态。",
         "statusChanged": "状态已设为 {status}。",
         "conflict": "其他人已先更改了此联系人。已重新加载，请重试。",
         "forbidden": "您没有更改此联系人的权限。",

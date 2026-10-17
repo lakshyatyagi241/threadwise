@@ -99,9 +99,7 @@
         "allowed": "Marketing toegestaan",
         "noFlags": "Geen privacymarkeringen"
       },
-      "overview": {
-        "information": "Contact"
-      },
+      "overview": {},
       "tabs": {
         "info": "Contactgegevens",
         "social": "Sociale media",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "Terug naar overzicht",
         "label": "Contactsecties",
-        "contactDetails": "Contactdetails",
         "related": "Gerelateerd",
         "section": {
           "overview": "Overzicht",
@@ -172,7 +169,6 @@
         "title": "Levenscyclus",
         "stages": "Levenscyclusfase",
         "status": "Status",
-        "noStatuses": "Deze fase heeft geen statussen.",
         "statusChanged": "Status ingesteld op {status}.",
         "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
         "forbidden": "Je hebt geen toestemming om dit contact te wijzigen.",

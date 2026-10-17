@@ -99,9 +99,7 @@
         "allowed": "Marketing erlaubt",
         "noFlags": "Keine Datenschutzmarkierungen"
       },
-      "overview": {
-        "information": "Kontakt"
-      },
+      "overview": {},
       "tabs": {
         "info": "Kontaktinformationen",
         "social": "Soziale Medien",
@@ -147,7 +145,6 @@
       "nav": {
         "back": "Zurück zur Liste",
         "label": "Kontaktbereiche",
-        "contactDetails": "Kontaktdetails",
         "related": "Verknüpft",
         "section": {
           "overview": "Übersicht",
@@ -172,7 +169,6 @@
         "title": "Lebenszyklus",
         "stages": "Lebenszyklusphase",
         "status": "Status",
-        "noStatuses": "Diese Phase hat keine Status.",
         "statusChanged": "Status auf {status} gesetzt.",
         "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
         "forbidden": "Sie haben keine Berechtigung, diesen Kontakt zu ändern.",
