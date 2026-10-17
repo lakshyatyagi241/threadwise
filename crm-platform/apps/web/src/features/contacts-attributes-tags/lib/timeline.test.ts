@@ -42,6 +42,7 @@ const note = (id: string, createdAt: string, body = 'Called back'): ContactNoteR
   contactId: ID,
   body,
   createdBy: null,
+  createdByName: null,
   updatedBy: null,
   rowVersion: 1,
   createdAt,

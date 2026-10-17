@@ -78,6 +78,7 @@ const note = (body: string, createdAt = new Date().toISOString()): ContactNoteRe
   contactId: ID,
   body,
   createdBy: null,
+  createdByName: null,
   updatedBy: null,
   rowVersion: 1,
   createdAt,
