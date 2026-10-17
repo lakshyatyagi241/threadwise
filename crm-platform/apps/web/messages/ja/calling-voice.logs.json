@@ -63,7 +63,9 @@
         "agent": "対応者",
         "allAgents": "全員",
         "apply": "絞り込む",
-        "clear": "クリア"
+        "clear": "クリア",
+        "source": "ソース",
+        "allSources": "すべてのソース"
       },
       "table": {
         "caption": "通話（新しい順）",
@@ -136,12 +138,14 @@
           "reject_sent": "通話を拒否しました",
           "terminate_sent": "切断を送信しました",
           "terminate": "通話が終了しました",
-          "recording_stored": "録音を保存しました"
+          "recording_stored": "録音を保存しました",
+          "logged": "通話を記録しました"
         },
         "noRecording": {
           "title": "録音",
           "message": "この通話には録音がありません。"
-        }
+        },
+        "notes": "メモ"
       },
       "recording": {
         "title": "録音",
@@ -154,6 +158,53 @@
         "linkUntil": "このリンクは{time}まで有効です。その後はもう一度再生を押してください。",
         "playFailed": "録音を再生できませんでした。",
         "retry": "再試行"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "手動で記録",
+        "telephony": "電話回線",
+        "mobile_app": "モバイルアプリ",
+        "web_click_to_call": "クリックで発信"
+      },
+      "logCall": {
+        "button": "通話を記録",
+        "title": "通話を記録",
+        "close": "閉じる",
+        "with": "通話相手",
+        "phone": "電話番号",
+        "phoneHint": "この番号を持つ連絡先に通話を関連付けます。",
+        "phoneHintContact": "任意。この連絡先に通話を関連付けます。",
+        "direction": "方向",
+        "outcome": "結果",
+        "outcomes": {
+          "connected": "接続",
+          "no_answer": "応答なし",
+          "busy": "話し中",
+          "left_voicemail": "留守電に残した",
+          "wrong_number": "番号違い",
+          "declined": "拒否",
+          "failed": "失敗"
+        },
+        "when": "開始日時",
+        "minutes": "通話時間（分）",
+        "notes": "メモ",
+        "notesHint": "この通話を見られる全員に表示されます。最大2,000文字。",
+        "followUp": "フォローアップのタスクも作成する",
+        "followUpDue": "フォローアップ日",
+        "followUpHint": "タスクはあなたに割り当てられ、連絡先に関連付けられます。",
+        "cancel": "キャンセル",
+        "save": "通話を保存",
+        "saving": "保存中...",
+        "saved": "通話を記録しました。",
+        "savedNoContact": "通話を記録しました。この番号を持つ連絡先はまだありません。",
+        "problems": {
+          "noWho": "電話番号を入力してください。",
+          "badWhen": "通話の開始日時を選んでください。",
+          "futureWhen": "通話の開始を未来の日時にはできません。",
+          "badMinutes": "通話時間は分で、1,440分以内で入力してください。",
+          "noDue": "フォローアップの日付を選んでください。",
+          "badDue": "フォローアップの正しい日付を選んでください。"
+        }
       }
     },
     "analytics": {

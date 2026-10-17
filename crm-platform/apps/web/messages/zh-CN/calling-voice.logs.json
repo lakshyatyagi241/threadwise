@@ -63,7 +63,9 @@
         "agent": "处理人",
         "allAgents": "所有人",
         "apply": "筛选",
-        "clear": "清除"
+        "clear": "清除",
+        "source": "来源",
+        "allSources": "所有来源"
       },
       "table": {
         "caption": "通话，最新的在前",
@@ -136,12 +138,14 @@
           "reject_sent": "通话已拒绝",
           "terminate_sent": "已发送挂断请求",
           "terminate": "通话已结束",
-          "recording_stored": "录音已保存"
+          "recording_stored": "录音已保存",
+          "logged": "通话已记录"
         },
         "noRecording": {
           "title": "录音",
           "message": "此通话没有录音。"
-        }
+        },
+        "notes": "备注"
       },
       "recording": {
         "title": "录音",
@@ -154,6 +158,53 @@
         "linkUntil": "此链接在 {time} 前有效。之后请再次点击播放。",
         "playFailed": "无法播放录音。",
         "retry": "重试"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "手动记录",
+        "telephony": "电话线路",
+        "mobile_app": "手机应用",
+        "web_click_to_call": "点击拨号"
+      },
+      "logCall": {
+        "button": "记录通话",
+        "title": "记录通话",
+        "close": "关闭",
+        "with": "通话对象",
+        "phone": "电话号码",
+        "phoneHint": "通话会关联到使用此号码的联系人。",
+        "phoneHintContact": "可选。通话会关联到此联系人。",
+        "direction": "方向",
+        "outcome": "结果",
+        "outcomes": {
+          "connected": "已接通",
+          "no_answer": "无人接听",
+          "busy": "忙线",
+          "left_voicemail": "已留语音信箱",
+          "wrong_number": "号码错误",
+          "declined": "已拒接",
+          "failed": "失败"
+        },
+        "when": "开始时间",
+        "minutes": "时长（分钟）",
+        "notes": "备注",
+        "notesHint": "所有能看到这通电话的人都可见。最多 2,000 个字符。",
+        "followUp": "同时创建跟进任务",
+        "followUpDue": "跟进日期",
+        "followUpHint": "任务会分配给你，并关联到该联系人。",
+        "cancel": "取消",
+        "save": "保存通话",
+        "saving": "正在保存...",
+        "saved": "通话已记录。",
+        "savedNoContact": "通话已记录。暂时没有联系人使用此号码。",
+        "problems": {
+          "noWho": "请提供电话号码。",
+          "badWhen": "请选择通话开始的时间。",
+          "futureWhen": "通话不能在未来开始。",
+          "badMinutes": "请以分钟为单位填写时长，最多 1,440。",
+          "noDue": "请选择跟进日期。",
+          "badDue": "请选择有效的跟进日期。"
+        }
       }
     },
     "analytics": {

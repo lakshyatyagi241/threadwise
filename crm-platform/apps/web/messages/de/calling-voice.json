@@ -90,7 +90,17 @@
       "UNEXPECTED": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       "CALL_PLAYBACK_LINK_INVALID": "Dieser Aufnahme-Link ist abgelaufen. Drücke erneut auf Wiedergabe, um einen neuen zu erhalten.",
       "CALL_RANGE_INVALID": "Diese Daten ergeben keinen Sinn: Der Beginn darf nicht nach dem Ende liegen, ein Zeitraum darf höchstens ein Jahr umfassen und die Zeitzone muss gültig sein.",
-      "CALL_OUTSIDE_WINDOW": "Dieser Kontakt liegt außerhalb Ihrer Anrufzeiten, daher wurde kein Anruf getätigt. Das Anruffenster öffnet {when}."
+      "CALL_OUTSIDE_WINDOW": "Dieser Kontakt liegt außerhalb Ihrer Anrufzeiten, daher wurde kein Anruf getätigt. Das Anruffenster öffnet {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Dieser Anruf wurde nicht gefunden.",
+      "CALL_LOG_CONTACT_REQUIRED": "Gib den Kontakt oder eine lesbare Telefonnummer an.",
+      "CALL_LOG_TIME_INVALID": "Ein Anruf kann nicht in der Zukunft oder vor mehr als 400 Tagen beginnen.",
+      "CALL_LOG_NOT_EDITABLE": "Dieser Anruf wurde von einem Telefon oder einem Telefonie-Anbieter gemeldet und kann deshalb nicht geändert werden.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Die Zeit zum Ändern dieses Anrufs ist abgelaufen.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Eine Folgeaufgabe braucht einen Kontakt. Gib eine Nummer an, die zu einem deiner Kontakte gehört.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Diese Telefonie-Verbindung wurde nicht gefunden.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Dieser Telefonie-Anbieter ist nicht verfügbar.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Diese Telefonie-Verbindung kann keine Anrufe tätigen.",
+      "TELEPHONY_CALL_FAILED": "Der Telefonie-Anbieter konnte den Anruf nicht tätigen."
     },
     "settings": {
       "title": "Anrufe",

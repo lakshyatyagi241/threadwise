@@ -7,11 +7,12 @@ import { useFormatter, useNow, useTranslations } from 'next-intl';
 import {
   CALL_LOG_DIRECTIONS,
   CALL_LOG_RANGES,
+  CALL_LOG_SOURCES,
   CALL_LOG_STATUSES,
   type CallLogRow,
 } from '@crm/contracts';
 import { Alert, Badge, Button, EmptyState, Input, Select, Spinner, StatTile, cn } from '@crm/ui';
-import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { useCallLogFilters, useCallLogs, useCallLogsLive } from '../api/call-logs';
 import {
@@ -24,6 +25,7 @@ import {
   toListQuery,
   type LogParams,
 } from '../lib/call-logs';
+import { LogCallDialog } from './log-call-dialog';
 import { useErrorText } from './use-error-text';
 
 const RANGE_KEY = { '24h': 'last24h', '7d': 'last7d', '30d': 'last30d' } as const;
@@ -76,6 +78,8 @@ export function CallLogsScreen() {
   const tz = useSession().effectiveTimezone || 'UTC';
   const logs = useCallLogs(toListQuery(params, tz));
   const filters = useCallLogFilters();
+  const canLog = useCan('call.logs.create');
+  const [logging, setLogging] = useState(false);
 
   const go = (patch: Partial<LogParams>, keepPage = false) =>
     router.replace(
@@ -88,7 +92,12 @@ export function CallLogsScreen() {
   const data = logs.data;
   const pages = data ? pageCount(data.total, data.pageSize) : 1;
   const hasFilters = Boolean(
-    params.status || params.direction || params.numberId || params.agentId || params.q,
+    params.status ||
+    params.direction ||
+    params.numberId ||
+    params.agentId ||
+    params.source ||
+    params.q,
   );
 
   return (
@@ -113,8 +122,16 @@ export function CallLogsScreen() {
               </h1>
               <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
             </div>
-            <CallLogsTabs active="log" />
+            <div className="flex flex-wrap items-center gap-3">
+              {canLog && (
+                <Button variant="brand" onClick={() => setLogging(true)}>
+                  {t('logCall.button')}
+                </Button>
+              )}
+              <CallLogsTabs active="log" />
+            </div>
           </div>
+          {canLog && <LogCallDialog open={logging} onClose={() => setLogging(false)} />}
 
           {logs.isPending && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
@@ -181,6 +198,7 @@ export function CallLogsScreen() {
                       direction: undefined,
                       numberId: undefined,
                       agentId: undefined,
+                      source: undefined,
                       q: undefined,
                     })
                   }
@@ -201,6 +219,7 @@ export function CallLogsScreen() {
                                 direction: undefined,
                                 numberId: undefined,
                                 agentId: undefined,
+                                source: undefined,
                                 q: undefined,
                               })
                             }
@@ -379,10 +398,13 @@ function FilterBar({
   const [direction, setDirection] = useState(params.direction ?? '');
   const [numberId, setNumberId] = useState(params.numberId ?? '');
   const [agentId, setAgentId] = useState(params.agentId ?? '');
+  const [source, setSource] = useState(params.source ?? '');
+  const ts = useTranslations('calling-voice.logs.source');
   const submit = (e: FormEvent) => {
     e.preventDefault();
     onApply({
       q: q.trim() || undefined,
+      source: (source || undefined) as LogParams['source'],
       direction: (direction || undefined) as LogParams['direction'],
       numberId: numberId || undefined,
       agentId: agentId || undefined,
@@ -412,6 +434,17 @@ function FilterBar({
           {CALL_LOG_DIRECTIONS.map((d) => (
             <option key={d} value={d}>
               {t(d)}
+            </option>
+          ))}
+        </Select>
+      </label>
+      <label className="text-xs">
+        <span className="sr-only">{t('source')}</span>
+        <Select value={source} onChange={(e) => setSource(e.target.value)} className="w-auto">
+          <option value="">{t('allSources')}</option>
+          {CALL_LOG_SOURCES.map((x) => (
+            <option key={x} value={x}>
+              {ts(x)}
             </option>
           ))}
         </Select>
@@ -461,6 +494,7 @@ export function StatusBadge({ status }: { status: CallLogRow['status'] }) {
 
 function LogTable({ rows }: { rows: CallLogRow[] }) {
   const t = useTranslations('calling-voice.logs.table');
+  const ts = useTranslations('calling-voice.logs.source');
   const format = useFormatter();
   const now = useNow({ updateInterval: 60_000 });
   return (
@@ -499,6 +533,11 @@ function LogTable({ rows }: { rows: CallLogRow[] }) {
                 >
                   {t(r.direction)} · {phoneText(r.customerPhone)}
                 </div>
+                {r.source && r.source !== 'whatsapp' && (
+                  <div className="mt-1">
+                    <Badge tone="neutral">{ts(r.source)}</Badge>
+                  </div>
+                )}
               </td>
               <td className="max-w-[10rem] truncate px-4 py-3 text-xs">
                 {r.numberLabel || t('none')}

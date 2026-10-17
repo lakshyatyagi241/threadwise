@@ -63,7 +63,9 @@
         "agent": "Atendida por",
         "allAgents": "Todos",
         "apply": "Filtrar",
-        "clear": "Limpar"
+        "clear": "Limpar",
+        "source": "Origem",
+        "allSources": "Todas as origens"
       },
       "table": {
         "caption": "Chamadas, mais recentes primeiro",
@@ -136,12 +138,14 @@
           "reject_sent": "Chamada recusada",
           "terminate_sent": "Desligamento enviado",
           "terminate": "Chamada encerrada",
-          "recording_stored": "Gravação salva"
+          "recording_stored": "Gravação salva",
+          "logged": "Chamada registrada"
         },
         "noRecording": {
           "title": "Gravação",
           "message": "Esta chamada não tem gravação."
-        }
+        },
+        "notes": "Notas"
       },
       "recording": {
         "title": "Gravação",
@@ -154,6 +158,53 @@
         "linkUntil": "Este link funciona até {time}. Depois disso, toque em reproduzir novamente.",
         "playFailed": "Não foi possível reproduzir a gravação.",
         "retry": "Tentar novamente"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Registrada manualmente",
+        "telephony": "Linha telefônica",
+        "mobile_app": "App de celular",
+        "web_click_to_call": "Clique para ligar"
+      },
+      "logCall": {
+        "button": "Registrar uma chamada",
+        "title": "Registrar uma chamada",
+        "close": "Fechar",
+        "with": "Chamada com",
+        "phone": "Número de telefone",
+        "phoneHint": "A chamada é vinculada ao contato que tem este número.",
+        "phoneHintContact": "Opcional. A chamada é vinculada a este contato.",
+        "direction": "Direção",
+        "outcome": "Como foi",
+        "outcomes": {
+          "connected": "Atendida",
+          "no_answer": "Sem resposta",
+          "busy": "Ocupado",
+          "left_voicemail": "Deixou recado",
+          "wrong_number": "Número errado",
+          "declined": "Recusada",
+          "failed": "Falhou"
+        },
+        "when": "Quando começou",
+        "minutes": "Duração em minutos",
+        "notes": "Notas",
+        "notesHint": "Visíveis para todos que podem ver esta chamada. Até 2.000 caracteres.",
+        "followUp": "Criar também uma tarefa de acompanhamento",
+        "followUpDue": "Acompanhar em",
+        "followUpHint": "A tarefa é atribuída a você e vinculada ao contato.",
+        "cancel": "Cancelar",
+        "save": "Salvar chamada",
+        "saving": "Salvando...",
+        "saved": "Chamada registrada.",
+        "savedNoContact": "Chamada registrada. Nenhum contato tem este número ainda.",
+        "problems": {
+          "noWho": "Informe um número de telefone.",
+          "badWhen": "Escolha quando a chamada começou.",
+          "futureWhen": "A chamada não pode começar no futuro.",
+          "badMinutes": "Informe a duração em minutos, até 1.440.",
+          "noDue": "Escolha uma data para o acompanhamento.",
+          "badDue": "Escolha uma data válida para o acompanhamento."
+        }
       }
     },
     "analytics": {

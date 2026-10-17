@@ -90,7 +90,17 @@
       "UNEXPECTED": "問題が発生しました。もう一度お試しください。",
       "CALL_PLAYBACK_LINK_INVALID": "この録音リンクの有効期限が切れました。もう一度再生を押して新しいリンクを取得してください。",
       "CALL_RANGE_INVALID": "日付が正しくありません。開始日は終了日より後にできず、期間は最大1年で、タイムゾーンは実在するものを指定してください。",
-      "CALL_OUTSIDE_WINDOW": "この連絡先は通話可能な時間帯の外のため、発信しませんでした。通話可能な時間帯は {when} に始まります。"
+      "CALL_OUTSIDE_WINDOW": "この連絡先は通話可能な時間帯の外のため、発信しませんでした。通話可能な時間帯は {when} に始まります。",
+      "CALL_LOG_ENTRY_NOT_FOUND": "この通話が見つかりません。",
+      "CALL_LOG_CONTACT_REQUIRED": "連絡先を指定するか、電話番号として読み取れる番号を入力してください。",
+      "CALL_LOG_TIME_INVALID": "通話の開始は、未来の日時や400日より前にはできません。",
+      "CALL_LOG_NOT_EDITABLE": "この通話は電話または通信事業者から報告されたもののため、変更できません。",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "この通話を変更できる期間は過ぎました。",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "フォローアップのタスクには連絡先が必要です。連絡先のいずれかに属する番号を入力してください。",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "この電話接続が見つかりません。",
+      "TELEPHONY_PROVIDER_UNKNOWN": "この電話プロバイダーは利用できません。",
+      "TELEPHONY_CLICK_UNSUPPORTED": "この電話接続では発信できません。",
+      "TELEPHONY_CALL_FAILED": "電話プロバイダーが発信できませんでした。"
     },
     "settings": {
       "title": "通話",

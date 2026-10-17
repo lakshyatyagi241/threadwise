@@ -63,7 +63,9 @@
         "agent": "Pris en charge par",
         "allAgents": "Tout le monde",
         "apply": "Filtrer",
-        "clear": "Effacer"
+        "clear": "Effacer",
+        "source": "Source",
+        "allSources": "Toutes les sources"
       },
       "table": {
         "caption": "Appels, du plus récent au plus ancien",
@@ -136,12 +138,14 @@
           "reject_sent": "Appel refusé",
           "terminate_sent": "Raccrochage envoyé",
           "terminate": "Appel terminé",
-          "recording_stored": "Enregistrement sauvegardé"
+          "recording_stored": "Enregistrement sauvegardé",
+          "logged": "Appel enregistré"
         },
         "noRecording": {
           "title": "Enregistrement",
           "message": "Cet appel n'a pas d'enregistrement."
-        }
+        },
+        "notes": "Notes"
       },
       "recording": {
         "title": "Enregistrement",
@@ -154,6 +158,53 @@
         "linkUntil": "Ce lien fonctionne jusqu'à {time}. Appuyez à nouveau sur lecture ensuite.",
         "playFailed": "Impossible de lire l'enregistrement.",
         "retry": "Réessayer"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Saisi à la main",
+        "telephony": "Ligne téléphonique",
+        "mobile_app": "Application mobile",
+        "web_click_to_call": "Clic pour appeler"
+      },
+      "logCall": {
+        "button": "Enregistrer un appel",
+        "title": "Enregistrer un appel",
+        "close": "Fermer",
+        "with": "Appel avec",
+        "phone": "Numéro de téléphone",
+        "phoneHint": "L'appel est lié au contact qui a ce numéro.",
+        "phoneHintContact": "Facultatif. L'appel est lié à ce contact.",
+        "direction": "Sens",
+        "outcome": "Résultat",
+        "outcomes": {
+          "connected": "Abouti",
+          "no_answer": "Sans réponse",
+          "busy": "Occupé",
+          "left_voicemail": "Message vocal laissé",
+          "wrong_number": "Mauvais numéro",
+          "declined": "Refusé",
+          "failed": "Échoué"
+        },
+        "when": "Début",
+        "minutes": "Durée en minutes",
+        "notes": "Notes",
+        "notesHint": "Visibles par toutes les personnes qui peuvent voir cet appel. Jusqu'à 2 000 caractères.",
+        "followUp": "Créer aussi une tâche de suivi",
+        "followUpDue": "Relancer le",
+        "followUpHint": "La tâche vous est attribuée et liée au contact.",
+        "cancel": "Annuler",
+        "save": "Enregistrer l'appel",
+        "saving": "Enregistrement...",
+        "saved": "Appel enregistré.",
+        "savedNoContact": "Appel enregistré. Aucun contact n'a encore ce numéro.",
+        "problems": {
+          "noWho": "Indiquez un numéro de téléphone.",
+          "badWhen": "Choisissez le début de l'appel.",
+          "futureWhen": "L'appel ne peut pas commencer dans le futur.",
+          "badMinutes": "Indiquez la durée en minutes, 1 440 au plus.",
+          "noDue": "Choisissez une date pour le suivi.",
+          "badDue": "Choisissez une date valide pour le suivi."
+        }
       }
     },
     "analytics": {

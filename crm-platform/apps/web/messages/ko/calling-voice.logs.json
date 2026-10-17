@@ -63,7 +63,9 @@
         "agent": "담당자",
         "allAgents": "모두",
         "apply": "필터",
-        "clear": "지우기"
+        "clear": "지우기",
+        "source": "출처",
+        "allSources": "모든 출처"
       },
       "table": {
         "caption": "통화 (최신순)",
@@ -136,12 +138,14 @@
           "reject_sent": "통화 거절됨",
           "terminate_sent": "통화 종료 요청 전송됨",
           "terminate": "통화 종료됨",
-          "recording_stored": "녹음 저장됨"
+          "recording_stored": "녹음 저장됨",
+          "logged": "통화 기록됨"
         },
         "noRecording": {
           "title": "녹음",
           "message": "이 통화에는 녹음이 없습니다."
-        }
+        },
+        "notes": "메모"
       },
       "recording": {
         "title": "녹음",
@@ -154,6 +158,53 @@
         "linkUntil": "이 링크는 {time}까지 유효합니다. 그 이후에는 재생을 다시 누르세요.",
         "playFailed": "녹음을 재생하지 못했습니다.",
         "retry": "다시 시도"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "직접 기록",
+        "telephony": "전화 회선",
+        "mobile_app": "모바일 앱",
+        "web_click_to_call": "클릭하여 전화"
+      },
+      "logCall": {
+        "button": "통화 기록",
+        "title": "통화 기록",
+        "close": "닫기",
+        "with": "통화 상대",
+        "phone": "전화번호",
+        "phoneHint": "이 번호를 가진 연락처에 통화가 연결됩니다.",
+        "phoneHintContact": "선택 사항. 이 연락처에 통화가 연결됩니다.",
+        "direction": "방향",
+        "outcome": "결과",
+        "outcomes": {
+          "connected": "연결됨",
+          "no_answer": "응답 없음",
+          "busy": "통화 중",
+          "left_voicemail": "음성 메시지 남김",
+          "wrong_number": "잘못된 번호",
+          "declined": "거절됨",
+          "failed": "실패"
+        },
+        "when": "시작 시각",
+        "minutes": "통화 시간(분)",
+        "notes": "메모",
+        "notesHint": "이 통화를 볼 수 있는 모든 사람에게 보입니다. 최대 2,000자.",
+        "followUp": "후속 작업도 만들기",
+        "followUpDue": "후속 조치 날짜",
+        "followUpHint": "작업은 나에게 배정되고 연락처에 연결됩니다.",
+        "cancel": "취소",
+        "save": "통화 저장",
+        "saving": "저장 중...",
+        "saved": "통화가 기록되었습니다.",
+        "savedNoContact": "통화가 기록되었습니다. 아직 이 번호를 가진 연락처가 없습니다.",
+        "problems": {
+          "noWho": "전화번호를 입력하세요.",
+          "badWhen": "통화가 시작된 시각을 선택하세요.",
+          "futureWhen": "통화는 미래 시각에 시작할 수 없습니다.",
+          "badMinutes": "통화 시간을 분 단위로 입력하세요. 최대 1,440분입니다.",
+          "noDue": "후속 조치 날짜를 선택하세요.",
+          "badDue": "올바른 후속 조치 날짜를 선택하세요."
+        }
       }
     },
     "analytics": {
