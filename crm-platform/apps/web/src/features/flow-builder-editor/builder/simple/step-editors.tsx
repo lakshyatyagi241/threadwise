@@ -44,11 +44,12 @@ import { useFaqSummary } from '../../api/hooks';
 import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
-import { AiForm, CodeForm, ConditionGroupEditor } from '../inspector/forms-core/logic';
+import { AiForm, CodeForm, ConditionGroupEditor, WebhookForm } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { Field, Input, Select, Textarea, useToast } from '@crm/ui';
 import { NewPropertyInline } from '../new-property';
 import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
+import { TemplatePreview } from '../inspector/forms-core/previews';
 import type { FormComponent, FormEnv } from '../inspector/types';
 import { MediaUpload } from './media-upload';
 import {
@@ -189,6 +190,8 @@ export function StepEditor(p: EditorProps) {
       return <AssignEditor {...p} />;
     case 'api_library':
       return <NodeFormEditor {...p} Form={ApiLibraryForm} />;
+    case 'webhook':
+      return <NodeFormEditor {...p} Form={WebhookForm} />;
     case 'code':
       return <NodeFormEditor {...p} Form={CodeForm} />;
     case 'ai':
@@ -1287,9 +1290,15 @@ function LocationEditor({ step, set }: EditorProps) {
   );
 }
 
+/** What a template button opens, for the list under the preview: the phone number, the link or the copied code. */
+const buttonTarget = (b: Record<string, unknown>): string =>
+  str(b.value ?? b.phone_number ?? b.phone ?? b.url ?? b.example);
+
 function TemplateEditor({ step, ctx, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const chosen = ctx.templates.find((x) => x.name === str(step.data.tpl));
+  const buttons = (chosen?.buttons ?? []) as Array<Record<string, unknown>>;
+  const variables = chosen?.variables ?? [];
   return (
     <div className="space-y-3">
       <Field label={t('template.label')} hint={t('template.hint')}>
@@ -1308,9 +1317,42 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
           ))}
         </Select>
       </Field>
-      {chosen?.body ? (
-        <div className="whitespace-pre-wrap rounded-xl bg-[var(--flb-bubble)] p-3 text-[12.5px]">
-          {chosen.body}
+      {chosen ? <TemplatePreview d={step.data} templates={ctx.templates} /> : null}
+      {buttons.length > 0 ? (
+        <div className="space-y-1">
+          <div className="text-[12px] font-medium text-muted-foreground">
+            {t('template.buttons')}
+          </div>
+          {buttons.map((b, i) => (
+            <div
+              key={i}
+              className="flex items-baseline justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-[12.5px]"
+            >
+              <span className="font-semibold">{str(b.text ?? b.title ?? b.label)}</span>
+              <span className="truncate font-mono text-[11px] text-muted-foreground">
+                {buttonTarget(b)}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {variables.length > 0 ? (
+        <div className="space-y-1">
+          <div className="text-[12px] font-medium text-muted-foreground">
+            {t('template.variables')}
+          </div>
+          {variables.map((v) => (
+            <div
+              key={`${v.section}-${v.slot}`}
+              className="flex items-baseline justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-[12.5px]"
+            >
+              <span className="font-mono">{`{{${v.slot}}}`}</span>
+              <span className="truncate font-mono text-[11px] text-muted-foreground">
+                {v.field}
+              </span>
+            </div>
+          ))}
+          <p className="text-[11.5px] text-muted-foreground">{t('template.variablesHint')}</p>
         </div>
       ) : null}
     </div>
@@ -1319,6 +1361,12 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
 
 const CTA_KINDS = ['url', 'phone', 'email'] as const;
 const CTA_MAX = 3;
+/** The name a new button of each kind starts with. */
+const CTA_DEFAULT_LABEL: Record<string, string> = {
+  url: 'Visit website',
+  phone: 'Call us',
+  email: 'Email us',
+};
 
 /**
  * The buttons of a Link button step: up to three, each opening a web page, a phone call or an email. The website chat window draws
@@ -1335,6 +1383,16 @@ function CtaEditor({ step, set }: EditorProps) {
     );
   const holder = (kind: string) =>
     kind === 'phone' ? '+91 98765 43210' : kind === 'email' ? 'name@example.com' : 'https://';
+  // Switching what a button opens swaps its stock name too (an untouched "Visit website" becomes "Call us") and drops the old
+  // address, which is no phone number or email; a name the author wrote is kept.
+  const switchKind = (i: number, from: string, to: string) =>
+    patch(i, {
+      type: to,
+      value: '',
+      ...(!str(actions[i]?.label).trim() || str(actions[i]?.label) === CTA_DEFAULT_LABEL[from]
+        ? { label: CTA_DEFAULT_LABEL[to] }
+        : {}),
+    });
   return (
     <div className="space-y-3">
       <Field label={t('message.label')}>
@@ -1348,16 +1406,27 @@ function CtaEditor({ step, set }: EditorProps) {
         const kind = (CTA_KINDS as readonly string[]).includes(str(a.type)) ? str(a.type) : 'url';
         return (
           <Row key={i}>
-            <div className="grid gap-3 sm:grid-cols-[9rem_1fr_1fr_auto]">
-              <Field label={t('cta.type')}>
-                <Select value={kind} onChange={(e) => patch(i, { type: e.target.value })}>
-                  {CTA_KINDS.map((k) => (
-                    <option key={k} value={k}>
-                      {t(`cta.kinds.${k}`)}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
+            <div className="space-y-3">
+              <div className="flex items-end gap-2">
+                <div className="min-w-0 flex-1">
+                  <Field label={t('cta.type')}>
+                    <Select value={kind} onChange={(e) => switchKind(i, kind, e.target.value)}>
+                      {CTA_KINDS.map((k) => (
+                        <option key={k} value={k}>
+                          {t(`cta.kinds.${k}`)}
+                        </option>
+                      ))}
+                    </Select>
+                  </Field>
+                </div>
+                <div className="pb-1">
+                  <RemoveBtn
+                    label={t('cta.remove')}
+                    disabled={actions.length <= 1}
+                    onClick={() => setAll(actions.filter((_, j) => j !== i))}
+                  />
+                </div>
+              </div>
               <Field label={t('cta.buttonText')}>
                 <Input
                   value={str(a.label)}
@@ -1380,13 +1449,6 @@ function CtaEditor({ step, set }: EditorProps) {
                   onChange={(e) => patch(i, { value: e.target.value })}
                 />
               </Field>
-              <div className="flex items-end pb-1">
-                <RemoveBtn
-                  label={t('cta.remove')}
-                  disabled={actions.length <= 1}
-                  onClick={() => setAll(actions.filter((_, j) => j !== i))}
-                />
-              </div>
             </div>
             <div className="mt-2">
               <ButtonIcon value={str(a.icon)} onChange={(v) => patch(i, { icon: v })} />

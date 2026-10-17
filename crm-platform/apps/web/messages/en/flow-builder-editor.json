@@ -875,7 +875,10 @@
           "template": {
             "label": "Approved template",
             "hint": "Only templates your WhatsApp number has approved are listed.",
-            "choose": "Choose a template…"
+            "choose": "Choose a template…",
+            "buttons": "Buttons",
+            "variables": "Filled in from the contact",
+            "variablesHint": "Each number is filled in when the message is sent, from the contact detail named here. Change this on the template."
           },
           "cta": {
             "buttonText": "Button text",
@@ -2626,7 +2629,8 @@
         "faqMinScore": "Step {stage}: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
         "chooseFlow": "Step {stage}: choose the flow the button starts.",
         "chooseApi": "Step {stage}: choose the API to call.",
-        "writeCode": "Step {stage}: write the code to run."
+        "writeCode": "Step {stage}: write the code to run.",
+        "webhookUrl": "Step {stage}: add the address (URL) to call."
       },
       "faqSummary": "{hasCategory, select, true {From your FAQs · {category}} other {From your FAQs}}"
     },

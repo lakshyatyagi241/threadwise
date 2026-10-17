@@ -690,6 +690,7 @@ describe('steps per channel', () => {
         'ask_file',
         'delay',
         'cta',
+        'webhook',
       ]),
     );
   });
@@ -965,5 +966,40 @@ describe('API call and JS function steps (the Actions list)', () => {
       'out',
     ]);
     expect(toSimple(g).ok).toBe(true);
+  });
+});
+
+describe('Webhook step and the Actions group', () => {
+  it('Wait sits with the other actions (API call, Webhook, JS function), not under Send', () => {
+    const group = (type: string) => STEP_KINDS.find((k) => k.type === type)?.group;
+    for (const t of ['delay', 'api_library', 'webhook', 'code']) expect(group(t)).toBe('action');
+  });
+
+  it('Webhook is offered on WhatsApp and on the website chat, and saves its answer under its own name', () => {
+    expect(stepKindsFor('chat').map((k) => k.type)).toContain('webhook');
+    expect(stepKindsFor('web').map((k) => k.type)).toContain('webhook');
+    const first = newStep('webhook', []);
+    expect(first.data.save).toBe('webhook_response_1');
+    expect(first.data.method).toBe('POST');
+    expect(newStep('webhook', [first]).data.save).toBe('webhook_response_2');
+  });
+
+  it('says the address is missing, shows it on the card and reads back as a plain step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    m.data.text = 'hello';
+    const w = newStep('webhook', [m]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, w);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: add the address (URL) to call.',
+    );
+    d = updateStep(d, w.id, { data: { url: 'https://api.example.com/stock' } });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+    const back = toSimple(toGraph(d));
+    expect(back.ok).toBe(true);
+    if (back.ok)
+      expect(back.doc.journeys[0]!.steps.map((s) => s.type)).toEqual(['message', 'webhook']);
   });
 });

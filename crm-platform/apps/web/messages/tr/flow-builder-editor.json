@@ -864,7 +864,10 @@
           "template": {
             "label": "Onaylı şablon",
             "hint": "Yalnızca WhatsApp numaranızın onayladığı şablonlar listelenir.",
-            "choose": "Bir şablon seçin…"
+            "choose": "Bir şablon seçin…",
+            "buttons": "Düğmeler",
+            "variables": "Kişi bilgisinden doldurulur",
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı.",
         "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
         "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
-        "writeCode": "Adım {stage}: çalıştırılacak kodu yazın."
+        "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
+        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },

@@ -864,7 +864,10 @@
           "template": {
             "label": "Plantilla aprobada",
             "hint": "Solo se listan las plantillas que tu número de WhatsApp tiene aprobadas.",
-            "choose": "Elige una plantilla…"
+            "choose": "Elige una plantilla…",
+            "buttons": "Botones",
+            "variables": "Se rellena con datos del contacto",
+            "variablesHint": "Cada número se rellena al enviar el mensaje con el dato del contacto indicado aquí. Cámbialo en la plantilla."
           },
           "cta": {
             "buttonText": "Texto del botón",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Paso {stage}: la puntuación mínima debe estar entre 0.05 y 0.99, o usa la configuración del flujo.",
         "chooseFlow": "Paso {stage}: elige el flujo que inicia el botón.",
         "chooseApi": "Paso {stage}: elige la API a la que llamar.",
-        "writeCode": "Paso {stage}: escribe el código que se ejecutará."
+        "writeCode": "Paso {stage}: escribe el código que se ejecutará.",
+        "webhookUrl": "Paso {stage}: añade la dirección (URL) a la que llamar."
       },
       "faqSummary": "{hasCategory, select, true {De tus FAQ · {category}} other {De tus FAQ}}"
     },

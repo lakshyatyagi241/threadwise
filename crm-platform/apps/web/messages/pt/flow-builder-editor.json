@@ -864,7 +864,10 @@
           "template": {
             "label": "Template aprovado",
             "hint": "Somente templates aprovados para o seu número de WhatsApp são listados.",
-            "choose": "Escolha um template…"
+            "choose": "Escolha um template…",
+            "buttons": "Botões",
+            "variables": "Preenchido com dados do contato",
+            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo."
           },
           "cta": {
             "buttonText": "Texto do botão",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do fluxo.",
         "chooseFlow": "Passo {stage}: escolha o fluxo que o botão inicia.",
         "chooseApi": "Passo {stage}: escolha a API a chamar.",
-        "writeCode": "Passo {stage}: escreva o código a executar."
+        "writeCode": "Passo {stage}: escreva o código a executar.",
+        "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar."
       },
       "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },

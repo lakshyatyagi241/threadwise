@@ -864,7 +864,10 @@
           "template": {
             "label": "承認済みテンプレート",
             "hint": "お使いのWhatsApp番号で承認されたテンプレートのみ表示されます。",
-            "choose": "テンプレートを選択…"
+            "choose": "テンプレートを選択…",
+            "buttons": "ボタン",
+            "variables": "連絡先の情報で入力されます",
+            "variablesHint": "各番号はメッセージの送信時に、ここに示された連絡先の情報で入力されます。変更はテンプレートで行ってください。"
           },
           "cta": {
             "buttonText": "ボタンのテキスト",
@@ -2627,7 +2630,8 @@
         "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
         "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
-        "writeCode": "ステップ {stage}: 実行するコードを書いてください。"
+        "writeCode": "ステップ {stage}: 実行するコードを書いてください。",
+        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
