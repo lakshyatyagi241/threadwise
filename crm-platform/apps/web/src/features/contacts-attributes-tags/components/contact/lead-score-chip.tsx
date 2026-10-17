@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { bandOf, isManualScore, useLeadScoringOn, type ScoreBand } from '@/features/lead-scoring';
+import { bandOf, useLeadScoringEnabled, type ScoreBand } from '@/features/lead-scoring';
 import type { ContactRow } from '../../api/schemas';
 import { StarIcon } from '../icons';
 
@@ -14,16 +14,14 @@ const TONES: Record<ScoreBand, string> = {
 };
 
 /**
- * Whether the contact's lead score is shown as a chip: it has a score, the person may read contacts, and the workspace has AI lead
- * scoring. A score a person typed is part of the contact and stays when the app is off (the list column and the Lead score card show
- * it too); a score the AI wrote is hidden with the app, so nothing here claims a feature the workspace does not have.
+ * Whether the contact's lead score is shown as a chip: it has a score, the person may read contacts, and lead scoring is on for the
+ * workspace (`useLeadScoringEnabled`: the app and the workspace switch). Off hides every score, a typed one included, and the
+ * values come back when scoring is switched on again.
  */
-export function useShowLeadScore(
-  contact: Pick<ContactRow, 'leadScore' | 'leadScoreSource'>,
-): boolean {
+export function useShowLeadScore(contact: Pick<ContactRow, 'leadScore'>): boolean {
   const canRead = useCan('record.contacts.read');
-  const on = useLeadScoringOn();
-  return contact.leadScore !== null && canRead && (on || isManualScore(contact));
+  const on = useLeadScoringEnabled();
+  return contact.leadScore !== null && canRead && on;
 }
 
 /**

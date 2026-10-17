@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Input, MultiSelect, Select, cn, useToast } from '@crm/ui';
 import type { ViewAccessType, ViewShareMode } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { RulesEditor, usePeople, useRulesDraft } from '@/features/segments';
 import { useAttributes } from '../api/attributes';
 import { useContactViews, useViewMutations } from '../api/views';
@@ -16,6 +17,8 @@ import {
   LOCKED_COLUMNS,
   moveColumn,
   nudgeColumn,
+  omittedColumns,
+  restoreOmitted,
   type ColumnDef,
   type ColumnId,
 } from '../lib/columns';
@@ -105,7 +108,10 @@ function Editor({ view }: { view?: View }) {
       (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
-  const catalog = useMemo(() => allColumns(attrCols), [attrCols]);
+  // Lead scoring off: the Lead score column is not offered. A view that already lists it keeps it (it comes back with scoring).
+  const scoringOn = useLeadScoringEnabled();
+  const omitted = useMemo(() => omittedColumns({ canCompany: true, scoringOn }), [scoringOn]);
+  const catalog = useMemo(() => allColumns(attrCols, omitted), [attrCols, omitted]);
   const known = useMemo(() => new Set(catalog.map((c) => c.id)), [catalog]);
   // Until the person changes the selection: what the view saved (only columns that still exist), else the usual defaults.
   const [picked, setPicked] = useState<ColumnId[] | null>(null);
@@ -167,7 +173,11 @@ function Editor({ view }: { view?: View }) {
   const submit = () => {
     setTried(true);
     if (!nameOk || !filterOk || !peopleOk || busy) return;
-    const filter = composeViewFilter(view?.filter ?? null, rules.summary.rules, selected);
+    const filter = composeViewFilter(
+      view?.filter ?? null,
+      rules.summary.rules,
+      restoreOmitted(selected, view ? viewColumnsOf(view.filter) : null, omitted),
+    );
     if (!view) {
       create.mutate(
         {

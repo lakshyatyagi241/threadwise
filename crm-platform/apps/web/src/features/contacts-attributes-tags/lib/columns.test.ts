@@ -10,6 +10,8 @@ import {
   serializeColumns,
   moveColumn,
   nudgeColumn,
+  omittedColumns,
+  restoreOmitted,
   sortKeyOf,
   toggleColumn,
   visibleColumns,
@@ -241,5 +243,54 @@ describe('owner column', () => {
   it('sits after the status column when shown', () => {
     const shown = ids(visibleColumns(['owner', 'status', 'email'], attrs));
     expect(shown).toEqual(['name', 'email', 'status', 'owner']);
+  });
+});
+
+describe('columns while lead scoring is off', () => {
+  const off = omittedColumns({ canCompany: true, scoringOn: false });
+
+  it('omits the Lead score column, and the company column only without access to companies', () => {
+    expect([...off]).toEqual(['leadScore']);
+    expect([...omittedColumns({ canCompany: false, scoringOn: false })].sort()).toEqual([
+      'company',
+      'leadScore',
+    ]);
+    expect([...omittedColumns({ canCompany: false, scoringOn: true })]).toEqual(['company']);
+    expect(omittedColumns({ canCompany: true, scoringOn: true }).size).toBe(0);
+  });
+
+  it('takes Lead score out of the picker and out of the table, even when a person had chosen it', () => {
+    expect(ids(allColumns(attrs, off))).not.toContain('leadScore');
+    const chosen: ColumnId[] = ['name', 'leadScore', 'email'];
+    expect(ids(visibleColumns(chosen, attrs, null, off))).toEqual(['name', 'email']);
+    const shown = ids(visibleColumns(chosen, attrs, null, off)) as ColumnId[];
+    const offered = addableColumns(allColumns(attrs, off), shown).flatMap((g) =>
+      g.columns.map((c) => c.id),
+    );
+    expect(offered).not.toContain('leadScore');
+    // the first-visit columns never had it
+    expect(defaultColumns(attrs)).not.toContain('leadScore');
+  });
+
+  it('gives the column back, in the place the person had put it, when scoring is on again', () => {
+    const chosen: ColumnId[] = ['name', 'leadScore', 'email'];
+    const on = omittedColumns({ canCompany: true, scoringOn: true });
+    expect(ids(visibleColumns(chosen, attrs, null, on))).toEqual(['name', 'email', 'leadScore']);
+  });
+
+  it('writes a saved view back whole: the omitted column keeps its place', () => {
+    const saved = ['name', 'phone', 'leadScore', 'email'];
+    const shown: ColumnId[] = ['name', 'phone', 'email'];
+    expect(restoreOmitted(shown, saved, off)).toEqual(saved);
+    // other edits survive, only the omitted id is put back
+    expect(restoreOmitted(['name', 'email'], saved, off)).toEqual(['name', 'email', 'leadScore']);
+    // nothing omitted, or nothing saved: as shown
+    expect(restoreOmitted(shown, saved, new Set())).toEqual(shown);
+    expect(restoreOmitted(shown, null, off)).toEqual(shown);
+    // already there: not doubled
+    expect(restoreOmitted(['name', 'leadScore'], ['name', 'leadScore'], off)).toEqual([
+      'name',
+      'leadScore',
+    ]);
   });
 });

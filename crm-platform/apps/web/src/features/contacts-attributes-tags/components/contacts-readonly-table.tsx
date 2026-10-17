@@ -3,11 +3,17 @@
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
 import { useOwnerNames } from '../api/owners';
 import type { ContactRow } from '../api/schemas';
-import { parseStoredColumns, STORAGE_KEY as COLUMNS_KEY, visibleColumns } from '../lib/columns';
+import {
+  omittedColumns,
+  parseStoredColumns,
+  STORAGE_KEY as COLUMNS_KEY,
+  visibleColumns,
+} from '../lib/columns';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { rowView } from '../lib/row-view';
 import { ContactsTable } from './contacts-list';
@@ -32,9 +38,16 @@ export function ContactsReadonlyTable({ rows }: { rows: readonly ContactRow[] })
       (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
+  const scoringOn = useLeadScoringEnabled();
   const columns = useMemo(
-    () => visibleColumns(parseStoredColumns(storedColumns), attributeColumns),
-    [storedColumns, attributeColumns],
+    () =>
+      visibleColumns(
+        parseStoredColumns(storedColumns),
+        attributeColumns,
+        null,
+        omittedColumns({ canCompany: true, scoringOn }),
+      ),
+    [storedColumns, attributeColumns, scoringOn],
   );
   const attrLabels = useMemo(
     () => new Map((attributes.data ?? []).map((a) => [a.key, a.name])),

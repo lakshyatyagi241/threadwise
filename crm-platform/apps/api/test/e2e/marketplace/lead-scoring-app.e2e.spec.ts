@@ -137,6 +137,7 @@ describe('(a) a new workspace is locked until it has bought and installed the ap
     expect(await on(N)).toBe(false);
     for (const res of [
       await settings(N),
+      await api.as(N.admin).get('/v2/lead-scoring/status'),
       await api.as(N.admin).get('/v2/lead-scoring/runs'),
       await api.as(N.admin).get('/v2/lead-scoring/suggestions'),
       await api.as(N.admin).patch('/v2/lead-scoring/settings').send({ enabled: true }),

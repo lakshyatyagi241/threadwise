@@ -12,6 +12,7 @@ import { lscApi } from './service';
 export const KEYS = {
   all: ['lead-scoring'] as const,
   settings: ['lead-scoring', 'settings'] as const,
+  status: ['lead-scoring', 'status'] as const,
   runs: ['lead-scoring', 'runs'] as const,
   insight: (contactId: string) => ['lead-scoring', 'insight', contactId] as const,
   suggestions: ['lead-scoring', 'suggestions'] as const,
@@ -26,6 +27,20 @@ export function useLscSettings(enabled: boolean) {
     retry: false,
     staleTime: 15_000,
     queryFn: ({ signal }) => lscApi.settings(signal),
+  });
+}
+
+/**
+ * Whether the workspace has switched AI lead scoring on (`GET /lead-scoring/status`, open to everyone who reads contacts). `enabled` is
+ * the plan side: without the feature the route is refused, so it is not asked. The settings screen refreshes it when the switch is saved.
+ */
+export function useLscStatus(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.status,
+    enabled,
+    retry: false,
+    staleTime: 60_000,
+    queryFn: ({ signal }) => lscApi.status(signal),
   });
 }
 

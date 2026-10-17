@@ -52,6 +52,17 @@ export class LeadScoringController {
     return this.scoring.getSettings();
   }
 
+  @Get('status')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({
+    summary: 'Whether the workspace has AI lead scoring switched on',
+    description:
+      'For every member who can read contacts: while it is off the screens hide the lead score everywhere, a typed one included. The cost, the model and the counts stay behind GET settings.',
+  })
+  status() {
+    return this.scoring.getStatus();
+  }
+
   @Patch('settings')
   @RequirePermission('lsc.settings.manage')
   @ApiOperation({

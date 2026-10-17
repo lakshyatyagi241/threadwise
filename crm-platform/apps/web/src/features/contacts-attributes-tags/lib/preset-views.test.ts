@@ -3,6 +3,7 @@ import { segmentRulesSchema } from '@crm/contracts';
 import { DEFAULT_FILTERS } from '../api/contacts';
 import {
   activePreset,
+  availablePresets,
   parsePresetFavorites,
   presetFilters,
   PRESET_VIEWS,
@@ -67,5 +68,23 @@ describe('built-in contact views', () => {
     expect(parsePresetFavorites(togglePresetFavorite(two, 'active'))).toEqual(['inactive']);
     expect(parsePresetFavorites('active,bogus,active')).toEqual(['active']);
     expect(parsePresetFavorites(null)).toEqual([]);
+  });
+});
+
+describe('built-in views while lead scoring is off', () => {
+  it('drops Hot leads from the quick chips and from the picker, and nothing else', () => {
+    expect(availablePresets(QUICK_PRESETS, false)).toEqual([
+      'myContacts',
+      'unassigned',
+      'newThisWeek',
+      'needsFollowUp',
+    ]);
+    expect(availablePresets(PRESET_VIEWS, false)).not.toContain('hotLeads');
+    expect(availablePresets(PRESET_VIEWS, false)).toHaveLength(PRESET_VIEWS.length - 1);
+  });
+
+  it('keeps them all while it is on', () => {
+    expect(availablePresets(QUICK_PRESETS, true)).toEqual([...QUICK_PRESETS]);
+    expect(availablePresets(PRESET_VIEWS, true)).toEqual([...PRESET_VIEWS]);
   });
 });

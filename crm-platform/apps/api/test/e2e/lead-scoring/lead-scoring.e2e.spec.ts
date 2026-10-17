@@ -46,6 +46,7 @@ async function setPlatformKey(on: boolean): Promise<void> {
 
 const platform = (body: Record<string, unknown>) => ops('patch', '/lead-scoring').send(body);
 const ws = (t: string) => ({
+  status: () => api.as(t).get('/v2/lead-scoring/status'),
   settings: () => api.as(t).get('/v2/lead-scoring/settings'),
   save: (body: Record<string, unknown>) => api.as(t).patch('/v2/lead-scoring/settings').send(body),
   runs: (qs = '') => api.as(t).get(`/v2/lead-scoring/runs${qs}`),
@@ -137,6 +138,7 @@ describe('permissions', () => {
   it('without a sign-in every route is 401', async () => {
     const id = '00000000-0000-4000-8000-000000000000';
     for (const [verb, path] of [
+      ['get', '/v2/lead-scoring/status'],
       ['get', '/v2/lead-scoring/settings'],
       ['patch', '/v2/lead-scoring/settings'],
       ['get', '/v2/lead-scoring/runs'],
@@ -161,6 +163,34 @@ describe('permissions', () => {
     expect((await ws(reader.token).runs()).status).toBe(200);
     expect((await ws(reader.token).save({ enabled: true })).status).toBe(403);
     expect((await ws(reader.token).backfill()).status).toBe(403);
+  });
+
+  it('the switch alone (GET status) is open to whoever reads contacts, and shows nothing else', async () => {
+    const t = await api.signup('lscstatus');
+    // A Viewer-like member holds no lsc key: the full settings are refused, the status is not.
+    const reader = await api.member(t, 'contactreader', [['record.contacts.read']]);
+    expect((await ws(reader.token).settings()).status).toBe(403);
+    const before = await ws(reader.token).status();
+    expect(before.status, JSON.stringify(before.body)).toBe(200);
+    // No settings row yet: off.
+    expect(before.body).toEqual({ enabled: false });
+
+    await enableWorkspace(t);
+    const after = await ws(reader.token).status();
+    expect(after.status).toBe(200);
+    // Only the switch: no cost, model, key source or counts.
+    expect(after.body).toEqual({ enabled: true });
+
+    // Someone who cannot read contacts is refused.
+    const nobody = await api.member(t, 'nobody', [['lsc.runs.read']]);
+    expect((await ws(nobody.token).status()).status).toBe(403);
+
+    // Switching it off again is followed.
+    const cur = await ws(t.admin).settings();
+    expect(
+      (await ws(t.admin).save({ enabled: false, rowVersion: cur.body.rowVersion })).status,
+    ).toBe(200);
+    expect((await ws(reader.token).status()).body).toEqual({ enabled: false });
   });
 
   it('the platform controls are for platform operators only', async () => {

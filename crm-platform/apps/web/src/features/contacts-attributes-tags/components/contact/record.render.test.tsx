@@ -237,11 +237,20 @@ describe('KeyDetails', () => {
 });
 
 describe('AssociationCards', () => {
-  const draw = (permissions: string[], c = contact(), locale: 'en' | 'ar' = 'en') =>
+  const draw = (
+    permissions: string[],
+    c = contact(),
+    locale: 'en' | 'ar' = 'en',
+    scoringOn = true,
+  ) =>
     renderAccount(<AssociationCards contact={c} />, {
       locale,
       session: can(...permissions),
-      seed: [[['cat', 'fields', false], []]],
+      seed: [
+        [['cat', 'fields', false], []],
+        // GET /lead-scoring/status: the workspace switch.
+        [['lead-scoring', 'status'], { enabled: scoringOn }],
+      ],
     });
 
   const all = [
@@ -275,6 +284,17 @@ describe('AssociationCards', () => {
     expect(out).not.toContain('No privacy flags');
     // no card is taller than about 200 px open
     expect(out).toContain('max-h-[200px]');
+  });
+
+  it('leaves out the Lead score card while lead scoring is off, a typed score included', () => {
+    for (const source of ['ai', 'manual'] as const) {
+      const out = draw(all, contact({ leadScoreSource: source }), 'en', false);
+      expect(out).not.toContain('Lead score');
+      expect(out).not.toContain('72 ·');
+      // the other cards are all still there
+      for (const title of ['Open tasks', 'Subscription status', 'Time zone and location'])
+        expect(out, title).toContain(title);
+    }
   });
 
   it('puts the three channel ticks in the Subscription row, folded or open', () => {

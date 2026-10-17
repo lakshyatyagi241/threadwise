@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Spinner, cn } from '@crm/ui';
-import { ScoreBadge } from '@/features/lead-scoring';
+import { ScoreBadge, useLeadScoringEnabled } from '@/features/lead-scoring';
 import type { ContactRow } from '../api/schemas';
 import { useStageColumn, type ContactFilters } from '../api/contacts';
 import type { Choice } from '../lib/option-sets';
@@ -174,6 +174,7 @@ function Card({
 }) {
   const t = useTranslations('contacts-attributes-tags.kanban');
   const tl = useTranslations('contacts-attributes-tags.list');
+  const scoringOn = useLeadScoringEnabled();
   return (
     <li
       draggable={Boolean(onStageChange) && !busy}
@@ -205,7 +206,7 @@ function Card({
             {t('optedOut')}
           </span>
         )}
-        {view.leadScore !== null && (
+        {scoringOn && view.leadScore !== null && (
           <ScoreBadge
             score={view.leadScore}
             source={view.leadScoreSource}
