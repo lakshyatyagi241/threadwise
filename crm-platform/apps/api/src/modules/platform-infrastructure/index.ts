@@ -53,6 +53,7 @@ export {
 } from './observability/worker-status.service';
 export {
   initSentry,
+  sentryEnabled,
   NO_EXTRA_DATA,
   reportServerError,
   flushSentry,
