@@ -84,11 +84,11 @@ export function SummaryStrip({
   const deals = useContactDeals(contact.id, canDeals);
 
   const nextMeeting = useMemo(() => {
-    const at = Date.now();
+    const at = now.getTime();
     return meetings.items
       .filter((m) => m.startsAt && Date.parse(m.startsAt) > at)
       .sort((a, b) => Date.parse(a.startsAt!) - Date.parse(b.startsAt!))[0];
-  }, [meetings.items]);
+  }, [meetings.items, now]);
   const dueTasks = tasks.items.filter((x) => x.dueAt);
   const nextDue = [...dueTasks].sort((a, b) => Date.parse(a.dueAt!) - Date.parse(b.dueAt!))[0];
   const overdue = tasks.items.filter((x) => x.overdue).length;

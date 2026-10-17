@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useNow, useTranslations } from 'next-intl';
 import { EmptyState, Menu, MenuItem, Spinner, cn } from '@crm/ui';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
@@ -211,7 +211,7 @@ export function useTabCounts(contactId: string): TabCounts {
     { status: 'open' },
     { limit: 50, enabled: sectionAllowed('tasks', has) },
   );
-  const now = Date.now();
+  const now = useNow().getTime();
   const waiting =
     tasks.items.length +
     meetings.items.filter((m) => m.startsAt && Date.parse(m.startsAt) > now).length;

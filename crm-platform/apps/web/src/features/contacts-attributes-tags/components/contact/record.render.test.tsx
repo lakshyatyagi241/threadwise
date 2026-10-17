@@ -207,6 +207,24 @@ describe('KeyDetails', () => {
     expect(out).toContain('aria-expanded="false"');
   });
 
+  it('shows the tags line and the groups of the contact under the rows', () => {
+    const out = draw(
+      ['record.contacts.update'],
+      contact({ groups: [{ id: 'g1', name: 'Wholesale buyers', color: null }] } as never),
+    );
+    expect(out).toContain('Add tag');
+    expect(out).toContain('Groups');
+    expect(out).toContain('Wholesale buyers');
+    expect(draw([]).includes('Groups')).toBe(false);
+  });
+
+  it('can fold on a phone: the title is a button that says whether the list is open', () => {
+    const out = draw([]);
+    expect(out).toContain('aria-expanded="true"');
+    expect(out).toContain('About this contact');
+    expect(out).toContain('md:hidden');
+  });
+
   it('uses the workspace city property when it has one', () => {
     expect(cityKey([{ key: 'City' }, { key: 'x' }])).toBe('City');
     expect(cityKey([{ key: 'x' }])).toBeNull();

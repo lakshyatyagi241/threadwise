@@ -13,8 +13,6 @@ import { countryOfPhone, timeZoneOf } from '../../lib/contact-overview';
 import { EXTRA_KEYS } from '../../lib/contact-model';
 import { sectionHref } from '../../lib/sections';
 import { subscriptionRows, type OptInChannel } from '../../lib/subscription';
-import { ContactQuickTags } from '../contact-quick-tags';
-import { GroupChip } from '../chips';
 import { MailIcon, SmsIcon, WhatsAppIcon } from '../icons';
 import { OptInPill, ScoreRing } from './parts';
 import { KeyValueList, useRefreshContact, type KeyValueRow } from './shared';
@@ -124,38 +122,6 @@ export function SubscriptionBody({
         </p>
       )}
     </>
-  );
-}
-
-/** The contact's tags with "Add tag", and its groups, as the body of the "Tags and groups" card. */
-export function TagsGroupsBody({ contact }: { contact: ContactRow }) {
-  const t = useTranslations('contacts-attributes-tags.contact.owner');
-  const groups = contact.groups ?? [];
-  return (
-    <dl className="divide-y divide-border text-sm">
-      <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-start gap-3 pb-3">
-        <dt className="pt-1 text-muted-foreground">{t('tags')}</dt>
-        <dd className="min-w-0">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <ContactQuickTags contactId={contact.id} labelled />
-          </div>
-        </dd>
-      </div>
-      <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] items-start gap-3 pt-3">
-        <dt className="text-muted-foreground">{t('groups')}</dt>
-        <dd className="min-w-0">
-          {groups.length === 0 ? (
-            <span className="text-muted-foreground">&mdash;</span>
-          ) : (
-            <span className="flex flex-wrap gap-1">
-              {groups.map((g) => (
-                <GroupChip key={g.id} name={g.name} color={g.color} />
-              ))}
-            </span>
-          )}
-        </dd>
-      </div>
-    </dl>
   );
 }
 

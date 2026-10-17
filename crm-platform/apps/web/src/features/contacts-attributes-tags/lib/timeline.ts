@@ -332,6 +332,16 @@ export function fromConversation(c: ConversationSummary): TimelineEntry {
   };
 }
 
+/** The audit trail also records the row's own bookkeeping with every save; it is not something a person did, so the timeline leaves it out. */
+export const INTERNAL_FIELDS: ReadonlySet<string> = new Set([
+  'updatedAt',
+  'createdAt',
+  'rowVersion',
+  'lifecycleStageDate',
+  'previousLifecycleStage',
+  'previousLifecycleStageDate',
+]);
+
 /** Edits by the same person within this long of the first one of the group read as one line. */
 const CHANGE_WINDOW_MS = 5 * 60_000;
 
@@ -342,6 +352,7 @@ const CHANGE_WINDOW_MS = 5 * 60_000;
 export function fromFieldHistory(entries: readonly FieldHistoryEntry[]): TimelineEntry[] {
   const groups: Array<{ key: string; newest: number; list: FieldHistoryEntry[] }> = [];
   for (const e of entries) {
+    if (INTERNAL_FIELDS.has(e.fieldKey)) continue;
     const who = e.changedByUserId ?? e.actorType;
     const at = ms(e.changedAt);
     const open = groups.find((g) => g.key === who && Math.abs(g.newest - at) <= CHANGE_WINDOW_MS);

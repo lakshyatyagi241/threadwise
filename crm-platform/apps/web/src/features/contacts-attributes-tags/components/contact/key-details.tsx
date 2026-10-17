@@ -14,8 +14,9 @@ import { socialLinks } from '../../lib/contact-overview';
 import { isMaskedPhone } from '../../lib/row-actions';
 import { errorKind } from '../../lib/errors';
 import { ContactFormModal } from '../contact-form-modal';
+import { GroupChip } from '../chips';
 import { ContactQuickTags } from '../contact-quick-tags';
-import { PencilIcon } from '../icons';
+import { ChevronDownIcon, PencilIcon } from '../icons';
 import { OwnerControl } from '../owner-control';
 import { CustomFields, SocialRows, useInfoRows } from './info-tabs';
 import { KeyValueList, useRefreshContact } from './shared';
@@ -189,12 +190,18 @@ export function KeyDetails({
 }) {
   const t = useTranslations('contacts-attributes-tags.contact.record.keyDetails');
   const ti = useTranslations('contacts-attributes-tags.contact.info');
+  const tg = useTranslations('contacts-attributes-tags.contact.owner');
   const format = useFormatter();
   const now = useNow();
   const canUpdate = useCan('record.contacts.update');
   const canPickCompany = useCanPickCompany();
   const fields = useContactFields();
   const [all, setAll] = useState(false);
+  // On a phone the list starts folded so the tabs and the timeline are not pushed down the page; from 768 px it is always open.
+  const [mobileOpen, setMobileOpen] = useState(
+    () =>
+      typeof window === 'undefined' || (window.matchMedia?.('(min-width: 768px)').matches ?? true),
+  );
   const [editing, setEditing] = useState(false);
   const allId = useId();
 
@@ -230,7 +237,22 @@ export function KeyDetails({
       data-testid="key-details"
     >
       <header className="flex min-h-11 items-center justify-between gap-3 px-4 pt-2.5">
-        <h2 className="text-sm font-semibold">{t('aboutTitle')}</h2>
+        <h2 className="min-w-0 flex-1 text-sm font-semibold">
+          <button
+            type="button"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="flex items-center gap-1.5 rounded text-start outline-none focus-visible:ring-2 focus-visible:ring-primary max-md:w-full md:pointer-events-none"
+          >
+            {t('aboutTitle')}
+            <ChevronDownIcon
+              className={cn(
+                'size-3.5 text-muted-foreground transition md:hidden',
+                mobileOpen && 'rotate-180',
+              )}
+            />
+          </button>
+        </h2>
         {canUpdate && (
           <button
             type="button"
@@ -241,156 +263,166 @@ export function KeyDetails({
           </button>
         )}
       </header>
-      <dl className="divide-y divide-border/60 px-4 pb-1 pt-1">
-        <Row label={ti('phone')}>
-          <EditableText
-            label={ti('phone')}
-            value={contact.phone ?? ''}
-            display={formatPhone(contact.phone)}
-            kind="tel"
-            ltr
-            maxLength={32}
-            canEdit={canUpdate && !phoneMasked}
-            onSave={(next) => saveField({ phone: next === '' ? null : next })}
-          />
-        </Row>
-        <Row label={ti('email')}>
-          <EditableText
-            label={ti('email')}
-            value={contact.email ?? ''}
-            display={
-              <a
-                href={`mailto:${contact.email}`}
-                className="break-all text-primary underline-offset-2 hover:underline"
-              >
-                {contact.email}
-              </a>
-            }
-            kind="email"
-            ltr
-            canEdit={canUpdate}
-            onSave={(next) => saveField({ email: next === '' ? null : next })}
-          />
-        </Row>
-        <Row label={t('owner')}>
-          <OwnerControl
-            contactId={contact.id}
-            ownerId={contact.ownerId}
-            rowVersion={contact.rowVersion}
-            canEdit={canUpdate}
-          />
-        </Row>
-        <Row label={ti('company')}>
-          <span className="flex min-w-0 items-center gap-2">
-            {contact.companyId ? (
-              <CompanyLink id={contact.companyId} />
-            ) : canUpdate && canPickCompany && onEditCompany ? (
-              <button
-                type="button"
-                onClick={onEditCompany}
-                className="rounded text-xs italic text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {t('add', { field: ti('company').toLowerCase() })}
-              </button>
-            ) : (
-              <span className="text-muted-foreground">&mdash;</span>
-            )}
-            {contact.companyId && canUpdate && canPickCompany && onEditCompany && (
-              <button
-                type="button"
-                onClick={onEditCompany}
-                aria-label={t('edit', { field: ti('company') })}
-                title={t('edit', { field: ti('company') })}
-                className="inline-flex size-5 shrink-0 items-center justify-center rounded text-muted-foreground opacity-60 outline-none transition hover:opacity-100 focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                <PencilIcon className="size-3" />
-              </button>
-            )}
-          </span>
-        </Row>
-        <Row label={city ? t('city') : ti('address')}>
-          <EditableText
-            label={city ? t('city') : ti('address')}
-            value={text(place)}
-            canEdit={canUpdate}
-            onSave={(next) => saveField({ customFields: { [place]: next } })}
-          />
-        </Row>
-        <Row label={ti('source')}>
-          <EditableText
-            label={ti('source')}
-            value={source}
-            canEdit={canUpdate}
-            maxLength={128}
-            onSave={(next) => saveField({ source: next === '' ? null : next })}
-          />
-        </Row>
-        <Row label={ti('createdAt')}>
-          <time
-            dateTime={contact.createdAt}
-            title={format.dateTime(new Date(contact.createdAt), {
-              dateStyle: 'medium',
-              timeStyle: 'short',
-            })}
-          >
-            {format.relativeTime(new Date(contact.createdAt), now)}
-          </time>
-        </Row>
-        <Row label={ti('lastActivity')}>
-          {contact.lastActivityAt ? (
+      <div className={cn(!mobileOpen && 'max-md:hidden')}>
+        <dl className="divide-y divide-border/60 px-4 pb-1 pt-1">
+          <Row label={ti('phone')}>
+            <EditableText
+              label={ti('phone')}
+              value={contact.phone ?? ''}
+              display={formatPhone(contact.phone)}
+              kind="tel"
+              ltr
+              maxLength={32}
+              canEdit={canUpdate && !phoneMasked}
+              onSave={(next) => saveField({ phone: next === '' ? null : next })}
+            />
+          </Row>
+          <Row label={ti('email')}>
+            <EditableText
+              label={ti('email')}
+              value={contact.email ?? ''}
+              display={
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="break-all text-primary underline-offset-2 hover:underline"
+                >
+                  {contact.email}
+                </a>
+              }
+              kind="email"
+              ltr
+              canEdit={canUpdate}
+              onSave={(next) => saveField({ email: next === '' ? null : next })}
+            />
+          </Row>
+          <Row label={t('owner')}>
+            <OwnerControl
+              contactId={contact.id}
+              ownerId={contact.ownerId}
+              rowVersion={contact.rowVersion}
+              canEdit={canUpdate}
+            />
+          </Row>
+          <Row label={ti('company')}>
+            <span className="flex min-w-0 items-center gap-2">
+              {contact.companyId ? (
+                <CompanyLink id={contact.companyId} />
+              ) : canUpdate && canPickCompany && onEditCompany ? (
+                <button
+                  type="button"
+                  onClick={onEditCompany}
+                  className="rounded text-xs italic text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {t('add', { field: ti('company').toLowerCase() })}
+                </button>
+              ) : (
+                <span className="text-muted-foreground">&mdash;</span>
+              )}
+              {contact.companyId && canUpdate && canPickCompany && onEditCompany && (
+                <button
+                  type="button"
+                  onClick={onEditCompany}
+                  aria-label={t('edit', { field: ti('company') })}
+                  title={t('edit', { field: ti('company') })}
+                  className="inline-flex size-5 shrink-0 items-center justify-center rounded text-muted-foreground opacity-60 outline-none transition hover:opacity-100 focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <PencilIcon className="size-3" />
+                </button>
+              )}
+            </span>
+          </Row>
+          <Row label={city ? t('city') : ti('address')}>
+            <EditableText
+              label={city ? t('city') : ti('address')}
+              value={text(place)}
+              canEdit={canUpdate}
+              onSave={(next) => saveField({ customFields: { [place]: next } })}
+            />
+          </Row>
+          <Row label={ti('source')}>
+            <EditableText
+              label={ti('source')}
+              value={source}
+              canEdit={canUpdate}
+              maxLength={128}
+              onSave={(next) => saveField({ source: next === '' ? null : next })}
+            />
+          </Row>
+          <Row label={ti('createdAt')}>
             <time
-              dateTime={contact.lastActivityAt}
-              title={format.dateTime(new Date(contact.lastActivityAt), {
+              dateTime={contact.createdAt}
+              title={format.dateTime(new Date(contact.createdAt), {
                 dateStyle: 'medium',
                 timeStyle: 'short',
               })}
             >
-              {format.relativeTime(new Date(contact.lastActivityAt), now)}
+              {format.relativeTime(new Date(contact.createdAt), now)}
             </time>
-          ) : (
-            <span className="text-muted-foreground">&mdash;</span>
-          )}
-        </Row>
-      </dl>
-      <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-4 py-2.5">
-        <ContactQuickTags contactId={contact.id} labelled />
-      </div>
-      <div className="border-t border-border/60 px-4 py-2">
-        <button
-          type="button"
-          aria-expanded={all}
-          aria-controls={allId}
-          onClick={() => setAll((v) => !v)}
-          className="rounded text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          {all ? t('showLess') : t('showAll')}
-        </button>
-      </div>
-      {all && (
-        <div id={allId} className="space-y-4 border-t border-border px-4 py-3">
-          <KeyValueList rows={infoRows} narrow />
-          {hasSocial && (
-            <div className="space-y-2">
-              <h3 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-                {t('social')}
-              </h3>
-              <SocialRows contact={contact} />
-            </div>
-          )}
-          <div className="space-y-2">
-            <CustomFields contact={contact} />
-          </div>
-          {onOpenSection && (
-            <button
-              type="button"
-              onClick={() => onOpenSection('lead-source')}
-              className="rounded text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              {t('leadSource')}
-            </button>
-          )}
+          </Row>
+          <Row label={ti('lastActivity')}>
+            {contact.lastActivityAt ? (
+              <time
+                dateTime={contact.lastActivityAt}
+                title={format.dateTime(new Date(contact.lastActivityAt), {
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                })}
+              >
+                {format.relativeTime(new Date(contact.lastActivityAt), now)}
+              </time>
+            ) : (
+              <span className="text-muted-foreground">&mdash;</span>
+            )}
+          </Row>
+        </dl>
+        <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-4 py-2.5">
+          <ContactQuickTags contactId={contact.id} labelled />
         </div>
-      )}
+        {(contact.groups ?? []).length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-border/60 px-4 py-2.5">
+            <span className="text-xs text-muted-foreground">{tg('groups')}</span>
+            {(contact.groups ?? []).map((g) => (
+              <GroupChip key={g.id} name={g.name} color={g.color} />
+            ))}
+          </div>
+        )}
+        <div className="border-t border-border/60 px-4 py-2">
+          <button
+            type="button"
+            aria-expanded={all}
+            aria-controls={allId}
+            onClick={() => setAll((v) => !v)}
+            className="rounded text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {all ? t('showLess') : t('showAll')}
+          </button>
+        </div>
+        {all && (
+          <div id={allId} className="space-y-4 border-t border-border px-4 py-3">
+            <KeyValueList rows={infoRows} narrow />
+            {hasSocial && (
+              <div className="space-y-2">
+                <h3 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  {t('social')}
+                </h3>
+                <SocialRows contact={contact} />
+              </div>
+            )}
+            <div className="space-y-2">
+              <CustomFields contact={contact} />
+            </div>
+            {onOpenSection && (
+              <button
+                type="button"
+                onClick={() => onOpenSection('lead-source')}
+                className="rounded text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                {t('leadSource')}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
       <ContactFormModal open={editing} contact={contact} onClose={() => setEditing(false)} />
     </section>
   );

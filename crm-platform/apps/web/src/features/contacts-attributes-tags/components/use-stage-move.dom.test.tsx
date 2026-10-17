@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
-import { act, type ReactNode } from 'react';
+import { act, useEffect, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ToastProvider } from '@crm/ui';
@@ -78,9 +78,10 @@ let root: Root;
 let qc: QueryClient;
 let hook: ReturnType<typeof useStageMove>;
 
-function Probe() {
-  hook = useStageMove();
-  return <>{hook.dialog}</>;
+function Probe({ onHook }: { onHook: (h: ReturnType<typeof useStageMove>) => void }) {
+  const h = useStageMove();
+  useEffect(() => onHook(h));
+  return <>{h.dialog}</>;
 }
 
 function mount(ui: ReactNode) {
@@ -114,7 +115,13 @@ beforeEach(() => {
   api.update.mockReset();
   qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   qc.setQueryData(KEYS.contact(ID), contact());
-  mount(<Probe />);
+  mount(
+    <Probe
+      onHook={(h) => {
+        hook = h;
+      }}
+    />,
+  );
 });
 afterEach(() => {
   act(() => root.unmount());

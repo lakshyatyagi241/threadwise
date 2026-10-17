@@ -31,7 +31,6 @@ import {
   KEYS,
   useContactsPage,
   useContactStats,
-  updateContact,
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';

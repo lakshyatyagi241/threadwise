@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
@@ -51,6 +51,10 @@ export function useStageMove() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [lost, setLost] = useState<LostPrompt | null>(null);
   const waiting = useRef<{ target: StageTarget; to: StageMoveTo } | null>(null);
+  // Undo moves again; it reaches `move` through this ref because `move` is declared after it.
+  const moveAgain = useRef<
+    ((t: StageTarget, to: StageMoveTo, r?: undefined, undoing?: boolean) => Promise<boolean>) | null
+  >(null);
 
   const stages = useMemo(() => stageChoices(options.data), [options.data]);
   const stageLabel = useCallback(
@@ -172,7 +176,7 @@ export function useStageMove() {
                 className="rounded font-semibold underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => {
                   dismiss(id.current);
-                  void move(
+                  void moveAgain.current?.(
                     {
                       ...target,
                       rowVersion: saved.rowVersion,
@@ -208,6 +212,10 @@ export function useStageMove() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stages, stageLabel, statusLabel, options.data, qc, toast, dismiss, ts, tr],
   );
+
+  useEffect(() => {
+    moveAgain.current = move;
+  }, [move]);
 
   const dialog = (
     <LostReasonDialog

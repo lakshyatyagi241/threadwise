@@ -213,8 +213,8 @@ function Panel({
   const t = useTranslations('contacts-attributes-tags.contact.record.stagePicker');
   const uid = useId();
   const panel = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
-  const [sheet, setSheet] = useState(false);
+  // A phone gets a bottom sheet, decided once when it opens.
+  const [sheet] = useState(() => window.innerWidth < SHEET_BELOW);
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
   const searchable = p.stages.length > SEARCH_FROM;
@@ -224,18 +224,21 @@ function Panel({
     return p.stages.filter((s) => q === '' || s.label.toLowerCase().includes(q));
   }, [p.stages, query]);
 
+  // The popover is placed from the button, by hand on the element (no state: it is measured, not rendered).
   useLayoutEffect(() => {
-    const narrow = window.innerWidth < SHEET_BELOW;
-    setSheet(narrow);
-    if (narrow || !anchor.current) return;
+    const el = panel.current;
+    if (sheet || !anchor.current || !el) return;
     const r = anchor.current.getBoundingClientRect();
-    const height = panel.current?.offsetHeight ?? 320;
     const below = r.bottom + 4;
-    const top = below + height > window.innerHeight - 8 ? Math.max(8, r.top - height - 4) : below;
+    const top =
+      below + el.offsetHeight > window.innerHeight - 8
+        ? Math.max(8, r.top - el.offsetHeight - 4)
+        : below;
     const rtl = getComputedStyle(anchor.current).direction === 'rtl';
     const left = rtl ? r.right - PANEL_W : r.left;
-    setPos({ top, left: Math.min(Math.max(8, left), window.innerWidth - PANEL_W - 8) });
-  }, [anchor, expanded]);
+    el.style.top = `${top}px`;
+    el.style.left = `${Math.min(Math.max(8, left), window.innerWidth - PANEL_W - 8)}px`;
+  }, [anchor, expanded, sheet]);
 
   const focusables = () => [
     ...(panel.current?.querySelectorAll<HTMLElement>('[data-stage-row]') ?? []),
@@ -306,9 +309,7 @@ function Panel({
       role="dialog"
       aria-label={t('menu')}
       onKeyDown={onKey}
-      style={
-        sheet ? undefined : { top: pos?.top ?? -9999, left: pos?.left ?? -9999, width: PANEL_W }
-      }
+      style={sheet ? undefined : { width: PANEL_W }}
       className={cn(
         'z-[70] flex flex-col overflow-hidden border border-border bg-background text-foreground shadow-xl',
         sheet

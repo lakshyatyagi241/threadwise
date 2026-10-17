@@ -119,6 +119,31 @@ describe('entries', () => {
     expect(fromMeeting(meeting({}), now).at).toBe('2026-10-02T09:00:00.000Z');
   });
 
+  it('leaves out the row bookkeeping the audit trail records with every save', () => {
+    const e = (fieldKey: string): FieldHistoryEntry => ({
+      fieldKey,
+      oldValue: 'a',
+      newValue: 'b',
+      actorType: 'user',
+      changedByUserId: ID,
+      changedAt: '2026-10-03T10:00:00.000Z',
+    });
+    const out = fromFieldHistory([
+      e('updatedAt'),
+      e('rowVersion'),
+      e('lifecycleStage'),
+      e('lifecycleStageDate'),
+      e('previousLifecycleStage'),
+      e('previousLifecycleStageDate'),
+    ]);
+    expect(out).toHaveLength(1);
+    expect(out[0]!.data.type === 'change' && out[0]!.data.fields.map((f) => f.key)).toEqual([
+      'lifecycleStage',
+    ]);
+    // a save that only touched bookkeeping is no entry at all
+    expect(fromFieldHistory([e('updatedAt'), e('rowVersion')])).toEqual([]);
+  });
+
   it('marks an edited note', () => {
     const n = fromNote({
       ...note('a', '2026-10-01T10:00:00.000Z'),
