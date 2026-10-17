@@ -1,4 +1,5 @@
-import { DEFAULT_FILTERS, type ContactFilters } from '../api/contacts';
+import { HOT_FROM } from '@/features/lead-scoring';
+import { DEFAULT_FILTERS, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
 import { sameFilters } from './views';
 
 /**
@@ -8,6 +9,8 @@ import { sameFilters } from './views';
  */
 export const PRESET_VIEWS = [
   'myContacts',
+  'unassigned',
+  'hotLeads',
   'newThisWeek',
   'newLastWeek',
   'recentlyCreated',
@@ -21,6 +24,15 @@ export const PRESET_VIEWS = [
   'minors',
 ] as const;
 export type PresetView = (typeof PRESET_VIEWS)[number];
+
+/** The built-in views drawn as quick chips beside the view picker: what a small business reaches for first. */
+export const QUICK_PRESETS = [
+  'myContacts',
+  'unassigned',
+  'newThisWeek',
+  'needsFollowUp',
+  'hotLeads',
+] as const satisfies readonly PresetView[];
 
 type Cond = { field: string; operator: string; value?: number | string };
 
@@ -58,6 +70,11 @@ export function presetFilters(preset: PresetView, meId: string): Partial<Contact
   switch (preset) {
     case 'myContacts':
       return { owner: meId };
+    case 'unassigned':
+      return { owner: UNASSIGNED_OWNER };
+    case 'hotLeads':
+      // A lead score in the "hot" band of the score badge (67 and up).
+      return { rules: rulesOf({ field: 'leadScore', operator: 'gte', value: HOT_FROM }) };
     case 'newThisWeek':
       return { rules: rulesOf(days('createdAt', 'in_last_days', 7)) };
     case 'newLastWeek':

@@ -5,44 +5,39 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
-import { Spinner, cn } from '@crm/ui';
+import { Menu, MenuItem, Spinner, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { fetchContact, KEYS, useContact } from '../api/contacts';
 import type { ContactRow } from '../api/schemas';
 import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
 import { neighbourKey } from '../lib/quick-view';
-import { railSections, sectionHref, type RailSection, type SectionId } from '../lib/sections';
+import {
+  SECTION_OF_TARGET,
+  quickTabs,
+  sectionHref,
+  type AddTarget,
+  type FocusRequest,
+  type QuickSection,
+  type SectionId,
+} from '../lib/sections';
 import { ContactAvatar } from './chips';
 import { ContactActionBar } from './contact/action-bar';
 import { JobTitle, SocialIcons } from './contact/parts';
 import { ContactSection } from './contact/sections';
 import { useStageChange } from './contact/use-stage-change';
 import { ErrorLine } from './error-line';
+import { useContactNotes } from '../api/notes';
+import { useContactMeetings } from '../api/meetings';
+import { useTasksList } from '@/features/tasks/api/hooks';
 import {
-  ChatIcon,
+  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ClockIcon,
   ExternalLinkIcon,
-  FileIcon,
-  HistoryIcon,
-  NoteIcon,
-  SettingsIcon,
-  UserIcon,
   XIcon,
 } from './icons';
 import { StageMenu } from './stage-menu';
-
-const RAIL_ICON: Record<RailSection, typeof NoteIcon> = {
-  overview: UserIcon,
-  activities: HistoryIcon,
-  conversations: ChatIcon,
-  notes: NoteIcon,
-  stats: ClockIcon,
-  files: FileIcon,
-  details: SettingsIcon,
-};
 
 const iconBtn =
   'inline-flex size-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40';
@@ -51,21 +46,22 @@ export interface QuickViewProps {
   /** The contact to show; empty keeps the drawer shut. */
   contactId: string;
   panel: SectionId;
-  /** Open Notes with the cursor in the composer (the row's note icon, the "Note" button). */
-  composer: boolean;
+  /** Puts the cursor in an inline composer of the section that is open (the row's quick add, the action bar's Note, Task, Meeting, Add company). */
+  focus: FocusRequest | null;
   previousId: string | null;
   nextId: string | null;
   /** "3 of 50": where the contact stands among the loaded rows, when it is among them. */
   position: { index: number; total: number } | null;
   onNavigate: (id: string) => void;
-  onPanel: (section: SectionId, opts?: { composer?: boolean }) => void;
+  onPanel: (section: SectionId, opts?: { focus?: AddTarget }) => void;
   onClose: () => void;
 }
 
 /**
  * The quick view: a right-hand drawer (about 60% of the window) over the contacts list, which stays visible and dimmed behind it.
  * Header (avatar, name, social links, job title, lifecycle stage, previous and next contact, "See all details", close), the action
- * bar, an icon rail of the contact's sections and the section itself. It is controlled by the URL (`?contact=` and `&panel=`): the
+ * bar (Note, Task, Meeting and Add company are shortcuts to the inline composers, never dialogs), a tab strip (Overview, Activity,
+ * Notes, Tasks, Meetings, Files and a "+N more" menu with the rest, counts as small badges) and the section itself. It is controlled by the URL (`?contact=` and `&panel=`): the
  * page owns that, this component only asks for changes. Escape or a click on the dimmed list closes it; the arrow keys (or the two
  * arrow buttons) walk the contacts of the loaded page.
  */
@@ -174,7 +170,7 @@ export function ContactQuickView(p: QuickViewProps) {
 function QuickViewBody({
   contact,
   panel,
-  composer,
+  focus,
   previousId,
   nextId,
   position,
@@ -190,11 +186,12 @@ function QuickViewBody({
   const stage = useStageChange(contact);
   const body = useRef<HTMLDivElement>(null);
 
-  const rail = useMemo(
-    () => railSections((permission) => permission in session.permissions),
+  const tabs = useMemo(
+    () => quickTabs((permission) => permission in session.permissions),
     [session.permissions],
   );
-  const current: SectionId = (rail as SectionId[]).includes(panel) ? panel : 'overview';
+  const shown: QuickSection[] = [...tabs.primary, ...tabs.more];
+  const current: SectionId = (shown as SectionId[]).includes(panel) ? panel : 'overview';
   const name = displayName(contact) || tl('unnamed');
 
   // A new section starts at the top of the scrolling body.
@@ -284,71 +281,192 @@ function QuickViewBody({
       <div className="shrink-0 border-b border-border px-4 py-2.5 sm:px-5">
         <ContactActionBar
           contact={contact}
-          onOpenSection={(s, opts) => {
-            // Note, Task and Meeting stay in the drawer; a section the rail has not got lives on the details page.
-            if ((rail as SectionId[]).includes(s)) onPanel(s, opts);
-            else router.push(sectionHref(contact.id, s));
-          }}
+          // Note, Task, Meeting and Add company stay in the drawer: the tab that holds the composer opens with the cursor in it.
+          onAdd={(target) => onPanel(SECTION_OF_TARGET[target], { focus: target })}
           onDeleted={onClose}
         />
       </div>
 
-      <div className="flex min-h-0 flex-1">
-        <nav
-          aria-label={t('rail')}
-          className="flex w-12 shrink-0 flex-col items-center gap-1.5 border-e border-border py-3"
-        >
-          {rail.map((s) => {
-            const Icon = RAIL_ICON[s];
-            const active = current === s;
-            return (
-              <button
-                key={s}
-                type="button"
-                aria-current={active ? 'page' : undefined}
-                aria-label={t(`rail_${s}`)}
-                title={t(`rail_${s}`)}
-                onClick={() => onPanel(s)}
-                className={cn(
-                  'inline-flex size-9 items-center justify-center rounded-lg outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
-                  active
-                    ? 'bg-brand text-brand-foreground'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                )}
-              >
-                <Icon className="size-[18px]" />
-              </button>
-            );
-          })}
-        </nav>
-        <div
-          ref={body}
-          className="thin-scrollbar min-w-0 flex-1 overflow-y-auto bg-muted/30 p-3 sm:p-4"
-        >
-          {current !== 'overview' && (
-            <div className="mb-3 flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold">{t(`rail_${current as RailSection}`)}</h3>
-              <Link
-                href={sectionHref(contact.id, current)}
-                className="text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {t('openFull')}
-              </Link>
-            </div>
-          )}
-          <ContactSection
-            section={current}
-            contact={contact}
-            variant="drawer"
-            composer={composer}
-            onOpenSection={(s) => {
-              if ((rail as SectionId[]).includes(s)) onPanel(s);
-              else router.push(sectionHref(contact.id, s));
-            }}
-          />
-        </div>
+      <QuickTabs
+        contactId={contact.id}
+        tabs={tabs}
+        current={current}
+        onSelect={(section) => onPanel(section)}
+      />
+      <div
+        ref={body}
+        role="tabpanel"
+        id={`qv-panel-${contact.id}`}
+        aria-labelledby={`qv-tab-${current}`}
+        tabIndex={-1}
+        className="thin-scrollbar min-h-0 min-w-0 flex-1 overflow-y-auto bg-muted/30 p-3 outline-none sm:p-4"
+      >
+        {current !== 'overview' && (
+          <div className="mb-3 flex items-center justify-end gap-2">
+            <Link
+              href={sectionHref(contact.id, current)}
+              className="text-xs font-medium text-primary underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {t('openFull')}
+            </Link>
+          </div>
+        )}
+        <ContactSection
+          section={current}
+          contact={contact}
+          variant="drawer"
+          focus={focus}
+          onOpenSection={(s) => {
+            if ((shown as SectionId[]).includes(s)) onPanel(s);
+            else router.push(sectionHref(contact.id, s));
+          }}
+        />
       </div>
       {stage.dialog}
+    </div>
+  );
+}
+
+/** A small count beside a tab's name; nothing while it is loading or zero. */
+function Count({ n, more }: { n: number; more?: boolean }) {
+  if (n <= 0) return null;
+  return (
+    <span className="ms-1.5 rounded-full bg-muted px-1.5 py-px text-[10px] font-semibold tabular-nums text-muted-foreground">
+      {n}
+      {more ? '+' : ''}
+    </span>
+  );
+}
+
+function NotesCount({ contactId }: { contactId: string }) {
+  const list = useContactNotes(contactId);
+  return <Count n={list.isSuccess ? list.items.length : 0} more={list.hasNextPage} />;
+}
+
+function MeetingsCount({ contactId }: { contactId: string }) {
+  const list = useContactMeetings(contactId);
+  return <Count n={list.isSuccess ? list.items.length : 0} more={list.hasNextPage} />;
+}
+
+/** Open tasks of the contact: the same query the Tasks tab lists, so the badge costs no extra request once it is open. */
+function TasksCount({ contactId }: { contactId: string }) {
+  const open = useTasksList({ kind: 'contact', id: contactId }, { status: 'open' }, { limit: 50 });
+  return <Count n={open.isSuccess ? open.items.length : 0} more={open.hasNextPage} />;
+}
+
+/**
+ * The drawer's tab strip: the sections people work in as tabs (arrow keys, Home and End move between them), then a menu for the
+ * rest. On a narrow screen the strip scrolls sideways instead of wrapping.
+ */
+export function QuickTabs({
+  contactId,
+  tabs,
+  current,
+  onSelect,
+}: {
+  contactId: string;
+  tabs: { primary: QuickSection[]; more: QuickSection[] };
+  current: SectionId;
+  onSelect: (section: QuickSection) => void;
+}) {
+  const t = useTranslations('contacts-attributes-tags.contact.quick');
+  const list = useRef<HTMLDivElement>(null);
+  const inMore = (tabs.more as SectionId[]).includes(current);
+
+  // On a narrow screen the strip scrolls: keep the open tab in view.
+  useEffect(() => {
+    list.current
+      ?.querySelector<HTMLElement>('[aria-selected="true"]')
+      ?.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+  }, [current]);
+
+  const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!keys.includes(e.key) || e.altKey || e.ctrlKey || e.metaKey) return;
+    const buttons = [...(list.current?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [])];
+    const at = buttons.indexOf(document.activeElement as HTMLElement);
+    if (at < 0) return;
+    const rtl = getComputedStyle(list.current!).direction === 'rtl';
+    const step =
+      e.key === 'ArrowRight' ? (rtl ? -1 : 1) : e.key === 'ArrowLeft' ? (rtl ? 1 : -1) : 0;
+    const to =
+      e.key === 'Home'
+        ? 0
+        : e.key === 'End'
+          ? buttons.length - 1
+          : (at + step + buttons.length) % buttons.length;
+    e.preventDefault();
+    e.stopPropagation();
+    buttons[to]?.focus();
+    buttons[to]?.click();
+  };
+
+  const tab = (s: QuickSection) => {
+    const active = current === s;
+    return (
+      <button
+        key={s}
+        type="button"
+        role="tab"
+        id={`qv-tab-${s}`}
+        aria-selected={active}
+        aria-controls={`qv-panel-${contactId}`}
+        tabIndex={active ? 0 : -1}
+        onClick={() => onSelect(s)}
+        className={cn(
+          'relative inline-flex h-10 shrink-0 items-center whitespace-nowrap px-3 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+          active
+            ? 'text-foreground after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-brand'
+            : 'text-muted-foreground hover:text-foreground',
+        )}
+      >
+        {t(`tab_${s}`)}
+        {s === 'notes' && <NotesCount contactId={contactId} />}
+        {s === 'tasks' && <TasksCount contactId={contactId} />}
+        {s === 'meetings' && <MeetingsCount contactId={contactId} />}
+      </button>
+    );
+  };
+
+  return (
+    <div className="flex shrink-0 items-center border-b border-border px-1 sm:px-2">
+      <div
+        ref={list}
+        role="tablist"
+        aria-label={t('rail')}
+        onKeyDown={onKey}
+        className="thin-scrollbar flex min-w-0 flex-1 items-center overflow-x-auto"
+      >
+        {tabs.primary.map(tab)}
+      </div>
+      {tabs.more.length > 0 && (
+        <div className="shrink-0">
+          <Menu
+            label={t('moreTabs')}
+            align="end"
+            placement="fixed"
+            triggerClassName={cn(
+              'h-10 shrink-0 gap-1 rounded-none border-0 bg-transparent px-3 text-sm font-medium shadow-none hover:bg-transparent',
+              inMore ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+            triggerProps={{ 'aria-label': t('moreTabs') }}
+            trigger={
+              <>
+                {inMore
+                  ? t(`tab_${current as QuickSection}`)
+                  : t('more', { count: tabs.more.length })}
+                <ChevronDownIcon className="size-3.5" />
+              </>
+            }
+          >
+            {tabs.more.map((s) => (
+              <MenuItem key={s} onSelect={() => onSelect(s)}>
+                {t(`tab_${s}`)}
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
+      )}
     </div>
   );
 }

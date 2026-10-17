@@ -8,6 +8,7 @@ export {
   scoreToText,
   isManualScore,
   bandOf,
+  HOT_FROM,
   SCORE_MAX,
   type ScoreBand,
 } from './lib/score';
