@@ -50,6 +50,8 @@ const COOLDOWN_SECONDS = 20;
 const SETTLE_SECONDS = Number(arg('settle-seconds', 60));
 // --trace: load trace-preload.cjs into the API and attribute each request's time (see that file). Adds a little overhead of its own.
 const TRACE = process.argv.includes('--trace');
+// --no-prefetch (with --trace): switch off JwtAuthGuard's early Redis reads, to measure the same build with and without them.
+const NO_PREFETCH = process.argv.includes('--no-prefetch');
 
 const P = { pg: 55434, redis: 56381, api: 3997, apiMetrics: 9474, workerMetrics: 9475 };
 const NAMES = { pg: 'el-load-pg', redis: 'el-load-redis' };
@@ -530,12 +532,14 @@ function summariseTrace(file, fromMs, toMs, aggBefore) {
       transactions: round(mean(rs.map((r) => r.tx))),
       connectionsTaken: round(mean(rs.map((r) => r.cn))),
       redisCommands: round(mean(rs.map((r) => r.rc))),
+      redisSequentialGroups: round(mean(rs.map((r) => r.rg ?? 0))),
     },
     meanMsPerRequest: {
       waitingForPoolConnection: round(mean(rs.map((r) => r.cw))),
       insideStatements: round(mean(rs.map((r) => r.qms))),
       transactionOpenOutsideStatements: round(mean(rs.map((r) => Math.max(0, r.txw - r.txq)))),
       insideRedisCommands: round(mean(rs.map((r) => r.rms))),
+      redisInFlightWallTime: round(mean(rs.map((r) => r.rw ?? 0))),
     },
     poolWaitMs: {
       p95: round(
@@ -682,7 +686,11 @@ try {
   start(
     'api',
     'dist/src/main.js',
-    { OBS_METRICS_PORT: String(P.apiMetrics), ...(TRACE ? { TRACE_OUT: traceFile } : {}) },
+    {
+      OBS_METRICS_PORT: String(P.apiMetrics),
+      ...(TRACE ? { TRACE_OUT: traceFile } : {}),
+      ...(TRACE && NO_PREFETCH ? { TRACE_NO_PREFETCH: '1' } : {}),
+    },
     TRACE ? ['-r', join(here, 'trace-preload.cjs')] : [],
   );
   start('worker', 'dist/src/worker.js', {

@@ -3,6 +3,26 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "run-load.mjs --trace with and without the guard prefetch (--no-prefetch), same build, normal profile 5 req/s, 300 contacts, contacts list",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-auth-prefetch",
+      "rawData": "evidence/auth-prefetch-on.json, evidence/auth-prefetch-off.json",
+      "observed": {
+        "awaitedRedisWaits": "redisSequentialGroups 3.1 (off) to 2.1 (on); the remaining group is the fire-and-forget activity SET. Whole-request average 2.7 to 1.9",
+        "redisCommands": "5.1 both: the same reads, sent together instead of one after another",
+        "redisInFlightWallVsSum": "an earlier 120 s peak A/B: 37 to 41 % of the summed round trips with the prefetch, 64 to 68 % without"
+      },
+      "caveat": "Not a latency comparison. Back-to-back runs on this laptop swung between host round trips of 0.5 ms and 80 ms (p95 over 1 s), so milliseconds between runs mean nothing here; the group count does not depend on the host's speed."
+    },
+    {
+      "suite": "apps/api unit: auth-prefetch.spec.ts (14) plus the auth-registration-security, workspaces-teams-tenancy, rbac and roles-permissions suites",
+      "status": "PASSED",
+      "tests": 664,
+      "passed": 664,
+      "ranOn": "2026-10-17",
+      "note": "New: who gets a prefetch (workspace member only; not partner agent, operator or act-as), consumed once and only for the same org and user, a failed read becomes a fresh read, a miss goes to the service's own path without a second Redis read, the prefetch never changes a revoked-session refusal, works without the RBAC service and with a redis double that has no get(). eslint and tsc clean; dependency-cruiser 0 errors. verify-rbac-read.ts now 15/15 against a real Redis (adds: the early read returns the same version and grants). A broader name filter (realtime, chat-conversations) also matched e2e directories needing Docker and was discarded as a measurement; the unit files that reference the changed classes are the seven listed in the PR."
+    },
+    {
       "suite": "apps/api/test/integration/with-tenant.spec.ts (new) and rls.spec.ts, real Postgres 16 via testcontainers, restricted application role",
       "status": "PASSED (7 and 8)",
       "ranOn": "2026-10-17",

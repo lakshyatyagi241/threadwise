@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import type { RecordScope } from '@crm/contracts';
+import { takeAuthPrefetch } from '../../common/context/auth-prefetch';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 
@@ -11,6 +12,9 @@ export interface Grant {
 }
 
 export type GrantSet = Map<string, Grant>;
+
+/** The cached roles version and, when present, the serialized grant set stored under it. */
+export type CachedRead = { version: number; grants: string | null };
 
 const CACHE_TTL_SECONDS = 600;
 
@@ -62,7 +66,10 @@ export class RbacService {
 
   async grantsForUser(orgId: number, userId: number): Promise<GrantSet> {
     // The usual case is a hit on both keys: one round trip for the version and the grant set together (see READ_CACHED_LUA).
-    const fast = await this.readCached(orgId, userId);
+    // JwtAuthGuard may already have started this read (auth-prefetch.ts); `readCached` never rejects, so the result is final.
+    const early = await takeAuthPrefetch('grants', orgId, userId);
+    const fast =
+      early === undefined ? await this.readCached(orgId, userId) : (early as CachedRead | null);
     const version = fast ? fast.version : await this.rolesVersion(orgId);
     const cacheKey = `rbac:${orgId}:v${version}:u${userId}`;
 
@@ -145,10 +152,12 @@ export class RbacService {
    * script, so this needs a single Redis (or Sentinel) deployment, which is what REDIS_URL names; Redis Cluster would need
    * both keys on one hash slot.
    */
-  private async readCached(
-    orgId: number,
-    userId: number,
-  ): Promise<{ version: number; grants: string | null } | null> {
+  /** Starts the cached read now, so a caller can send it together with its own Redis reads; `grantsForUser` then takes the result. */
+  startCachedRead(orgId: number, userId: number): Promise<CachedRead | null> {
+    return this.readCached(orgId, userId);
+  }
+
+  private async readCached(orgId: number, userId: number): Promise<CachedRead | null> {
     try {
       const res = (await this.redis.eval(
         READ_CACHED_LUA,
