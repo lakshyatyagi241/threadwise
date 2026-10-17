@@ -138,7 +138,7 @@ export function SegmentsScreen() {
   const actions = useSegmentActions({ taken: () => all.map((s) => s.name) });
 
   return (
-    <PageFill minHeight="36rem" className="space-y-3">
+    <PageFill minHeight="28rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span

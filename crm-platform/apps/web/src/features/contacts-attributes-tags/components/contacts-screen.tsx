@@ -757,7 +757,7 @@ export function ContactsScreen() {
   return (
     <CallingProvider>
       {/* The content area fills the window under the top bar and any notice bars (the shell subtracts them): the rows scroll inside the card and its footer stays put. */}
-      <PageFill minHeight="34rem" className="gap-3">
+      <PageFill minHeight="26rem" className="gap-3">
         <div className="shrink-0 space-y-3">
           <nav aria-label={t('breadcrumb')} className="text-sm text-muted-foreground">
             <ol className="flex items-center gap-1.5">
