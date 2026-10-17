@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import { act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
@@ -6,6 +7,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { SessionResponse } from '@crm/contracts';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { HOT_FROM } from '@/features/lead-scoring';
+import { KEYS } from '@/features/lead-scoring/api/hooks';
+import { lscApi } from '@/features/lead-scoring/api/service';
 import { loadMessages } from '@/i18n/messages';
 import { PlanFeaturesProvider } from '@/lib/plan-features';
 import type { ContactRow } from '../../api/schemas';
@@ -38,17 +41,28 @@ function mount(
     perms = ['record.contacts.read'],
     features = ['lead_scoring'] as string[] | null,
     locale = 'en',
+    /** The workspace switch as `GET /lead-scoring/status` answers it; 'pending' and 'error' are the other two states. */
+    switchIs = 'on' as 'on' | 'off' | 'pending' | 'error',
   } = {},
 ) {
+  const client = new QueryClient();
+  if (switchIs === 'on' || switchIs === 'off')
+    client.setQueryData(KEYS.status, { enabled: switchIs === 'on' });
+  else
+    vi.spyOn(lscApi, 'status').mockImplementation(() =>
+      switchIs === 'error' ? Promise.reject(new Error('down')) : new Promise(() => undefined),
+    );
   host = document.createElement('div');
   document.body.appendChild(host);
   root = createRoot(host);
   act(() => {
     root.render(
       <NextIntlClientProvider locale={locale} messages={loadMessages(locale)} timeZone="UTC">
-        <SessionProvider session={session(perms)}>
-          <PlanFeaturesProvider features={features}>{ui}</PlanFeaturesProvider>
-        </SessionProvider>
+        <QueryClientProvider client={client}>
+          <SessionProvider session={session(perms)}>
+            <PlanFeaturesProvider features={features}>{ui}</PlanFeaturesProvider>
+          </SessionProvider>
+        </QueryClientProvider>
       </NextIntlClientProvider>,
     );
   });
@@ -57,6 +71,7 @@ function mount(
 afterEach(() => {
   act(() => root.unmount());
   host.remove();
+  vi.restoreAllMocks();
 });
 
 const chip = () => host.querySelector<HTMLElement>('[data-testid="lead-score-chip"]');
@@ -111,22 +126,54 @@ describe('LeadScoreChip', () => {
     expect(host.innerHTML).toBe('');
   });
 
-  it('draws nothing when the workspace has no AI lead scoring and the AI wrote the score', () => {
+  it('draws nothing when the workspace has no AI lead scoring, whoever wrote the score', () => {
     mount(<LeadScoreChip contact={contact()} onOpen={() => undefined} />, { features: ['inbox'] });
     expect(host.innerHTML).toBe('');
-  });
-
-  it('keeps a score a person typed when the workspace has no AI lead scoring (it is part of the contact)', () => {
+    act(() => root.unmount());
+    host.remove();
     mount(
       <LeadScoreChip contact={contact({ leadScoreSource: 'manual' })} onOpen={() => undefined} />,
       { features: ['inbox'] },
     );
+    expect(host.innerHTML).toBe('');
+  });
+
+  it('draws nothing when the workspace switched lead scoring off, a typed score included', () => {
+    for (const source of ['ai', 'manual', null] as const) {
+      mount(
+        <LeadScoreChip contact={contact({ leadScoreSource: source })} onOpen={() => undefined} />,
+        { switchIs: 'off' },
+      );
+      expect(host.innerHTML).toBe('');
+      act(() => root.unmount());
+      host.remove();
+    }
+  });
+
+  it('shows the typed score again once lead scoring is switched back on (nothing was deleted)', () => {
+    mount(
+      <LeadScoreChip contact={contact({ leadScoreSource: 'manual' })} onOpen={() => undefined} />,
+    );
     expect(chip()?.textContent).toBe('78');
   });
 
-  it('shows the chip when the plan features are not known yet (nothing is hidden on a guess)', () => {
-    mount(<LeadScoreChip contact={contact()} onOpen={() => undefined} />, { features: null });
-    expect(chip()?.textContent).toBe('78');
+  it('keeps the score hidden while the switch is not known yet, and when it cannot be read', async () => {
+    mount(<LeadScoreChip contact={contact()} onOpen={() => undefined} />, { switchIs: 'pending' });
+    expect(host.innerHTML).toBe('');
+    act(() => root.unmount());
+    host.remove();
+    mount(<LeadScoreChip contact={contact()} onOpen={() => undefined} />, { switchIs: 'error' });
+    await act(async () => undefined);
+    expect(host.innerHTML).toBe('');
+  });
+
+  it('does not ask for the switch when the workspace has no AI lead scoring app', () => {
+    const asked = vi.spyOn(lscApi, 'status');
+    mount(<LeadScoreChip contact={contact()} onOpen={() => undefined} />, {
+      features: ['inbox'],
+      switchIs: 'pending',
+    });
+    expect(asked).not.toHaveBeenCalled();
   });
 
   it('reads in Arabic with the band in Arabic', () => {

@@ -32,7 +32,11 @@ Scoring is **off** until you switch it on, because it sends facts about your con
 
 AI lead scoring is an app. A workspace that already used scoring keeps it exactly as it was, with nothing to buy or install. Any other workspace adds it from the **Marketplace**: open **AI lead scoring** under **Mini apps**, **Subscribe** if the app has a price, then select **Install** and confirm its permissions. Paying for the app is not enough on its own; it has to be installed.
 
-Until then the **AI lead scoring** tile is not in Settings, the page `/lead-scoring` says it isn't part of your workspace and links to the app, and a contact's **Lead score** card shows the score a person typed with no **Score with AI** button. Pausing or uninstalling the app switches scoring off again; the scores already written stay on the contacts.
+Until then the **AI lead scoring** tile is not in Settings, the page `/lead-scoring` says it isn't part of your workspace and links to the app, and the lead score is not shown anywhere. Pausing or uninstalling the app switches scoring off again; the scores already written stay stored on the contacts, and they show again when scoring is back on.
+
+## When scoring is off, no score is shown
+
+The lead score is shown only while scoring is **on** for your workspace: the app is there and you switched it on under **Settings** > **AI lead scoring**. While it is off, nothing about the score is drawn, a score a person typed included: no score chip beside a contact's name, no **Lead score** card on the contact page, the quick view or the Inbox, no **Lead score** tile in the communication figures, no **Lead score** column in the Contacts list (it is also left out of **Columns** and the **+** at the end of the headings), no **Hot leads** chip or view, no lead score condition in the filters and segments, no lead score box in the contact form, and no lead score changes in the field history. Nothing is deleted: the scores stay on the contacts, and everything above comes back, with the numbers, when you switch scoring on again.
 
 ## What is sent
 
@@ -68,7 +72,7 @@ A few workspaces can also let the AI **read a contact's chat**. It is a pilot: y
 
 ## A score you typed is yours
 
-You can type a score yourself in the contact's edit form. A typed score is **Manual**: the AI never overwrites it, and the Score with AI button is disabled with an explanation. To hand the contact back to the AI, edit the contact and clear the lead score. Saving the form without touching the score leaves an AI score as it is.
+You can type a score yourself in the contact's edit form (while scoring is on; with scoring off the form has no lead score box). A typed score is **Manual**: the AI never overwrites it, and the Score with AI button is disabled with an explanation. To hand the contact back to the AI, edit the contact and clear the lead score. Saving the form without touching the score leaves an AI score as it is.
 
 ## Score the contacts you already have
 

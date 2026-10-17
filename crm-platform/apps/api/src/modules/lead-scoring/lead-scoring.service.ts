@@ -13,6 +13,7 @@ import {
   type LscRunTrigger,
   type LscScoreResult,
   type LscSettings,
+  type LscStatus,
   type UpdateLscSettingsInput,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -441,6 +442,13 @@ export class LeadScoringService {
       rowVersion: row?.rowVersion ?? null,
       updatedAt: row ? row.updatedAt.toISOString() : null,
     };
+  }
+
+  /** The workspace switch alone (no cost, model or counts), readable by anyone who reads contacts. */
+  async getStatus(): Promise<LscStatus> {
+    const orgId = RequestContextStore.orgId();
+    const row = await this.db.tx((tx) => this.repo.getSettings(tx, orgId));
+    return { enabled: row?.enabled ?? false };
   }
 
   async updateSettings(input: UpdateLscSettingsInput): Promise<LscSettings> {

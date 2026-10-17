@@ -7,7 +7,7 @@ import { cn } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CompanyLink, useCanPickCompany } from '@/features/companies';
 import { ContactGrowthCard } from '@/features/growth';
-import { ChatInsightCard, bandOf } from '@/features/lead-scoring';
+import { ChatInsightCard, bandOf, useLeadScoringEnabled } from '@/features/lead-scoring';
 import { TaskCompleteCheck, useTasksList } from '@/features/tasks';
 import { useContactDeals } from '../../api/deals';
 import { useContactFields } from '../../api/properties';
@@ -231,6 +231,8 @@ export function AssociationCards({
   const tp = useTranslations('contacts-attributes-tags.contact.compliance');
   const locale = useLocale();
   const canRead = useCan('record.contacts.read');
+  // Lead scoring off: no Lead score card, a typed score included (the value is kept; it comes back with scoring).
+  const scoringOn = useLeadScoringEnabled();
   const canPickCompany = useCanPickCompany();
   const canUpdate = useCan('record.contacts.update');
   const canConsent = useCan('contacts.consent.read');
@@ -274,14 +276,16 @@ export function AssociationCards({
           onOpenConsent={onOpenSection && canConsent ? () => onOpenSection('consent') : undefined}
         />
       </CollapseCard>
-      <CollapseCard
-        id="score"
-        openSignal={scoreFocusSignal}
-        title={t('score')}
-        summary={score === null ? t('scoreNone') : `${score} · ${tb(bandOf(score))}`}
-      >
-        <LeadScoreBody contact={contact} />
-      </CollapseCard>
+      {scoringOn && (
+        <CollapseCard
+          id="score"
+          openSignal={scoreFocusSignal}
+          title={t('score')}
+          summary={score === null ? t('scoreNone') : `${score} · ${tb(bandOf(score))}`}
+        >
+          <LeadScoreBody contact={contact} />
+        </CollapseCard>
+      )}
       {canRead && (
         <CollapseCard id="timezone" title={t('timezone')} summary={place || t('timezoneNone')}>
           <div className="space-y-3">

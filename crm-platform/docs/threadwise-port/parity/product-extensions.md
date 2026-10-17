@@ -200,7 +200,8 @@ against the catalogue; the survey and every decision are in [../wiring/marketpla
 - **AI lead scoring is an app (item 24).** Reference has no AI scoring (it stores a hand-typed `lead_score`, still ported unchanged); the scoring added here was open to every workspace that opted
   in. It now needs the plan feature `lead_scoring`, granted by the installed Marketplace app. **No workspace loses it:** migration `20261228090000` writes an override into the plan state of each
   workspace that uses scoring (the switch is on, a run is logged, or the growth pilot has a row), and the operator's Comp existing users action finds the same workspaces. A contact's typed
-  lead score is a Reference field and stays visible and editable for everyone; only the AI controls need the app.
+  lead score is a Reference field and stays stored for everyone, but it is **shown** only while lead scoring is on (the app and the workspace's own switch): off, it is hidden everywhere, a typed
+  score included, and comes back when scoring is switched on again (owner decision 2026-10-17; see the contacts parity file, "The lead score is hidden everywhere while lead scoring is off").
 - **Six built tools are also sold as apps; nothing changes for a workspace that has them.** Their plan flags are Reference's (`access_ai_agents`, `access_chatbot_widgets`, `access_wa_storefront`,
   `access_sms` and this build's `help_agent` and `waba_groups`), all off by default, so a plan that grants one keeps it. The app is an extra way to get the feature.
 - **Connected devices (personal WhatsApp numbers) are not gated by an app.** They are already off for every workspace unless the platform allows them (owner decision 2026-10-05); the listing is

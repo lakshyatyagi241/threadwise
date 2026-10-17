@@ -98,6 +98,8 @@ function SettingsBody({
     mutationFn: () => lscApi.saveSettings(toSettingsInput(form, settings)),
     onSuccess: (saved) => {
       qc.setQueryData(KEYS.settings, saved);
+      // Every screen that draws a contact's score follows this switch.
+      qc.setQueryData(KEYS.status, { enabled: saved.enabled });
       onSaved();
       toast(t('saved'), 'success');
     },

@@ -11,6 +11,9 @@ const state = vi.hoisted(() => ({
   score: {} as Record<string, unknown>,
   runs: {} as Record<string, unknown>,
   mutate: vi.fn(),
+  /** The workspace switch (`GET /lead-scoring/status`): on by default; the asked-for `enabled` is kept to see what is requested. */
+  status: { data: { enabled: true } } as { data?: { enabled: boolean }; isError?: boolean },
+  statusAsked: [] as boolean[],
 }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
@@ -18,6 +21,10 @@ vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
 vi.mock('../api/hooks', () => ({
   useScoreContact: () => state.score,
   useLscRuns: () => state.runs,
+  useLscStatus: (enabled: boolean) => {
+    state.statusAsked.push(enabled);
+    return state.status;
+  },
 }));
 
 import { ScoreCard } from './score-card';
@@ -43,6 +50,8 @@ let m: Mounted | null = null;
 beforeEach(() => {
   state.perms = new Set(['lsc.contacts.score', 'lsc.runs.read']);
   state.mutate = vi.fn();
+  state.status = { data: { enabled: true } };
+  state.statusAsked = [];
   state.score = { mutate: state.mutate, isPending: false, isError: false, isSuccess: false };
   state.runs = {
     isPending: false,
@@ -241,38 +250,51 @@ describe('ScoreCard', () => {
   });
 });
 
-describe('ScoreCard in a workspace that does not have the AI lead scoring app', () => {
-  const showWithout = async (contact: ScoreFields) => {
+describe('ScoreCard while lead scoring is off for the workspace', () => {
+  /** Nothing of the card is drawn (the toast region the harness adds around it is not the card). */
+  const drawsNothing = (host: HTMLElement) => {
+    expect(host.querySelector('section')).toBeNull();
+    expect(host.querySelector('[data-testid="lsc-score"]')).toBeNull();
+    expect(host.querySelector('button')).toBeNull();
+    expect(host.textContent).toBe('');
+  };
+
+  const showWith = async (contact: ScoreFields, features: string[] | null = ['lead_scoring']) => {
     m = await mount(
-      <PlanFeaturesProvider features={['marketplace']}>
+      <PlanFeaturesProvider features={features}>
         <ScoreCard contactId={ID} contact={contact} />
       </PlanFeaturesProvider>,
     );
     return m.host;
   };
 
-  it('keeps the score a person typed and drops every AI control, even for a role that holds the keys', async () => {
-    const host = await showWithout(MANUAL);
+  it('draws nothing when the workspace switch is off: no card, no number, a typed score included', async () => {
+    state.status = { data: { enabled: false } };
+    for (const contact of [MANUAL, AI, NEVER]) {
+      drawsNothing(await showWith(contact));
+      await m?.unmount();
+    }
+  });
+
+  it('draws nothing in a workspace without the AI lead scoring app, and does not ask for the switch', async () => {
+    drawsNothing(await showWith(MANUAL, ['marketplace']));
+    expect(state.statusAsked.every((asked) => asked === false)).toBe(true);
+  });
+
+  it('draws nothing until the switch is known, and when it cannot be read', async () => {
+    state.status = {};
+    drawsNothing(await showWith(AI));
+    await m?.unmount();
+    state.status = { isError: true };
+    drawsNothing(await showWith(AI));
+  });
+
+  it('shows the card and the button once the app is there and the switch is on, and brings a typed score back', async () => {
+    const host = await showWith(MANUAL);
     expect(host.querySelector('[data-testid="lsc-score"]')?.textContent).toBe('40');
-    expect(host.textContent).toContain('Manual');
-    expect(scoreButton(host)).toBeUndefined();
-    expect(host.textContent).not.toContain(text('card.showHistory'));
-    expect(host.textContent).toContain(text('card.manualNote'));
-  });
-
-  it('shows an AI score it already holds, without the button or the history', async () => {
-    const host = await showWithout(AI);
-    expect(host.querySelector('[data-testid="lsc-score"]')?.textContent).toBe('72');
-    expect(scoreButton(host)).toBeUndefined();
-    expect(host.textContent).not.toContain(text('card.showHistory'));
-  });
-
-  it('shows the button once the workspace has the feature', async () => {
-    m = await mount(
-      <PlanFeaturesProvider features={['marketplace', 'lead_scoring']}>
-        <ScoreCard contactId={ID} contact={NEVER} />
-      </PlanFeaturesProvider>,
-    );
-    expect(scoreButton(m.host)).toBeDefined();
+    await m?.unmount();
+    const fresh = await showWith(NEVER, ['marketplace', 'lead_scoring']);
+    expect(scoreButton(fresh)).toBeDefined();
+    expect(state.statusAsked).toContain(true);
   });
 });

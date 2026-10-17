@@ -13,6 +13,7 @@ import {
   useStatusOptions,
   useTags,
 } from '@/features/contacts-attributes-tags';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { buildCatalog, type Choice, type FieldDef, type Lookups } from '../lib/fields';
 import { fetchAll } from './http';
 import { personSchema, teamOptionSchema } from './schemas';
@@ -67,6 +68,8 @@ export function useSegmentCatalog(): SegmentCatalog {
   // Company properties are offered to someone who may read their definitions; a refusal just leaves the group out (it is not a failure
   // of the builder, so it is not counted in `ready` or `failed`).
   const companyFields = useModuleFields('companies', false);
+  // Lead scoring off: the Lead score field is not offered for a new condition.
+  const scoringOn = useLeadScoringEnabled();
 
   const all = [statusOptions, tags, groups, fields, people];
   // A rule on a company property is judged deleted only once the company properties have answered (or been refused).
@@ -97,6 +100,7 @@ export function useSegmentCatalog(): SegmentCatalog {
           .sort((a, b) => a.position - b.position)
           .map((o) => ({ value: o.value, label: o.label })),
       })),
+      leadScoring: scoringOn,
       companyProperties: (companyFields.data ?? []).filter(isUsableProperty).map((f) => ({
         key: f.key,
         label: f.label,
@@ -107,7 +111,16 @@ export function useSegmentCatalog(): SegmentCatalog {
           .map((o) => ({ value: o.value, label: o.label })),
       })),
     }),
-    [statusOptions.data, tags.data, groups.data, fields.data, people.data, companyFields.data, tf],
+    [
+      statusOptions.data,
+      tags.data,
+      groups.data,
+      fields.data,
+      people.data,
+      companyFields.data,
+      scoringOn,
+      tf,
+    ],
   );
   const catalog = useMemo(() => buildCatalog(lookups), [lookups]);
   const names = useMemo(

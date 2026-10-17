@@ -47,6 +47,28 @@ describe('the field catalog', () => {
     expect(ids('activity')).toEqual(['createdAt', 'updatedAt', 'lastActivityAt']);
   });
 
+  it('does not offer the Lead score field while lead scoring is off, but still knows it for rules that use it', () => {
+    const off = buildCatalog({ ...lookups, leadScoring: false });
+    const journey = fieldsByGroup(off)
+      .find((g) => g.group === 'journey')!
+      .fields.map((f) => f.id);
+    expect(journey).toEqual(['lifecycleStage', 'status']);
+    // a saved segment that tests the score still reads: the field is not flagged as deleted
+    expect(findField(off, 'leadScore')?.hidden).toBe(true);
+    const r = emptyRoot();
+    const tree = addCondition(
+      r,
+      r.id,
+      newCondition({ id: 'leadScore', kind: 'number', operators: ['gte'] }),
+    );
+    expect(invalidConditions(tree, off, true).size).toBe(0);
+    // on (or not said): offered as before
+    for (const l of [lookups, { ...lookups, leadScoring: true }]) {
+      const on = buildCatalog(l);
+      expect(findField(on, 'leadScore')?.hidden).toBeUndefined();
+    }
+  });
+
   it('has only fields the contract knows (so the API accepts every rule the builder draws)', () => {
     for (const f of catalog) expect(f.kind, f.id).toBeTruthy();
   });

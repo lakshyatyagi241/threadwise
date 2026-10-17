@@ -9,6 +9,7 @@ import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from
 import type { ContactViewResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
@@ -49,6 +50,8 @@ import {
   ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
   moveColumn,
   nudgeColumn,
+  omittedColumns,
+  restoreOmitted,
   visibleColumns,
   type ColumnId,
 } from '../lib/columns';
@@ -317,9 +320,11 @@ export function ContactsScreen() {
       (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
+  // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).
+  const scoringOn = useLeadScoringEnabled();
   const omitted = useMemo(
-    () => new Set<ColumnId>(canReadCompanies ? [] : ['company']),
-    [canReadCompanies],
+    () => omittedColumns({ canCompany: canReadCompanies, scoringOn }),
+    [canReadCompanies, scoringOn],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
   // A saved view can keep its own columns: while it is open they replace the person's, and edits to them stay on this
@@ -363,6 +368,11 @@ export function ContactsScreen() {
     [viewCols, stored, attributeColumns, storedOrder, omitted],
   );
   const columnIds = useMemo(() => columns.map((c) => c.id), [columns]);
+  /** What the views bar compares with and saves into the open view: the view's own columns left out only for now are kept in it. */
+  const viewColumnIds = useMemo(
+    () => (savedViewCols ? restoreOmitted(columnIds, savedViewCols, omitted) : columnIds),
+    [columnIds, savedViewCols, omitted],
+  );
   /** Where a column change goes: the open view's draft, or the person's own stored columns. */
   const chooseColumns = (ids: ColumnId[], order: boolean) => {
     if (viewCols) setColDraft({ viewId, ids });
@@ -840,7 +850,7 @@ export function ContactsScreen() {
                   filters={filters}
                   defaultLimit={sizeDefault}
                   activeId={viewId}
-                  columnIds={columnIds}
+                  columnIds={viewColumnIds}
                   keepsColumns={savedViewCols !== null}
                   onSelect={selectView}
                   onPreset={selectPreset}

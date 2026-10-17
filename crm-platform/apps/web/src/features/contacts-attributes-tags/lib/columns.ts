@@ -148,6 +148,37 @@ export function allColumns(
   ).filter((c) => !omit.has(c.id));
 }
 
+/**
+ * The columns this person cannot have right now: the company column without access to companies, and the lead score while lead
+ * scoring is off for the workspace (it is then neither shown nor offered in the picker; a stored choice or a saved view that lists
+ * it keeps the id and gets the column back when scoring is switched on).
+ */
+export function omittedColumns(o: { canCompany: boolean; scoringOn: boolean }): Set<ColumnId> {
+  const out = new Set<ColumnId>();
+  if (!o.canCompany) out.add('company');
+  if (!o.scoringOn) out.add('leadScore');
+  return out;
+}
+
+/**
+ * `shown` with the columns of `saved` that are only left out for this person (`omit`) put back at their saved places, so what a saved
+ * view lists is compared and written back whole: opening a view that has the lead score column while scoring is off does not mark it
+ * changed, and updating it does not drop the column. Without a saved list, or without omissions, `shown` as it is.
+ */
+export function restoreOmitted(
+  shown: readonly ColumnId[],
+  saved: readonly string[] | null,
+  omit: ReadonlySet<string>,
+): ColumnId[] {
+  const out = [...shown];
+  if (!saved) return out;
+  saved.forEach((id, at) => {
+    if (omit.has(id) && !out.includes(id as ColumnId))
+      out.splice(Math.min(at, out.length), 0, id as ColumnId);
+  });
+  return out;
+}
+
 export function defaultColumns(attributes: readonly AttributeColumn[]): ColumnId[] {
   return [
     ...DEFAULT_FIXED,

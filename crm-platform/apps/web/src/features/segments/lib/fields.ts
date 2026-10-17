@@ -45,6 +45,11 @@ export interface FieldDef {
   /** Choices of an `option`, `user`, `tags`, `groups` or `multi` field. */
   options?: readonly Choice[];
   optionsFrom?: OptionSource;
+  /**
+   * Known (so a rule that already uses it still reads and is not flagged as a deleted field) but not offered for a new condition: the
+   * lead score while lead scoring is off for the workspace.
+   */
+  hidden?: boolean;
 }
 
 /** The workspace's custom property as the catalog needs it (a `FieldResponse` of the contacts module, trimmed). */
@@ -64,6 +69,8 @@ export interface Lookups {
   properties: readonly PropertyLookup[];
   /** The workspace's company properties: a rule on one reads the company the contact belongs to (BL-196). */
   companyProperties?: readonly PropertyLookup[];
+  /** Lead scoring is off for the workspace: the Lead score field is not offered. Absent counts as on. */
+  leadScoring?: boolean;
 }
 
 const without = (ops: readonly Operator[], drop: readonly Operator[]) =>
@@ -88,7 +95,8 @@ export function buildCatalog(l: Lookups): FieldDef[] {
   const system: FieldDef[] = [
     sys('lifecycleStage', 'journey', { options: l.stages, optionsFrom: 'stage' }),
     sys('status', 'journey', { options: l.statuses, optionsFrom: 'status' }),
-    sys('leadScore', 'journey'),
+    // Off: not offered for a new condition, but a segment or view that already tests it still resolves the field.
+    sys('leadScore', 'journey', l.leadScoring === false ? { hidden: true } : {}),
     sys('name', 'who'),
     sys('email', 'who'),
     sys('phone', 'who'),
@@ -142,7 +150,7 @@ export function fieldsByGroup(
 ): Array<{ group: FieldGroup; fields: FieldDef[] }> {
   return FIELD_GROUPS.map((group) => ({
     group,
-    fields: catalog.filter((f) => f.group === group),
+    fields: catalog.filter((f) => f.group === group && !f.hidden),
   })).filter((g) => g.fields.length > 0);
 }
 

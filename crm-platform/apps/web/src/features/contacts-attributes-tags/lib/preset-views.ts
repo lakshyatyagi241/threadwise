@@ -34,6 +34,17 @@ export const QUICK_PRESETS = [
   'hotLeads',
 ] as const satisfies readonly PresetView[];
 
+/** The built-in views that filter by the lead score: they are offered only while lead scoring is on for the workspace. */
+const SCORE_PRESETS: readonly PresetView[] = ['hotLeads'];
+
+/** `presets` without the ones that need lead scoring while it is off (the "Hot leads" quick chip and its row in the view picker). */
+export function availablePresets<T extends PresetView>(
+  presets: readonly T[],
+  scoringOn: boolean,
+): T[] {
+  return presets.filter((p) => scoringOn || !SCORE_PRESETS.includes(p));
+}
+
 type Cond = { field: string; operator: string; value?: number | string };
 
 type Node = Cond | { any: Cond[] };
