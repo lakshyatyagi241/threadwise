@@ -25,7 +25,7 @@
       "Seeding 5,000 contacts took 2.3, 9 and 7.6 minutes in three runs with identical code.",
       "Host-to-Postgres `SELECT 1` round trips (100 sequential): p99 110.8 ms before the first profile and 43.9 ms after the spike, 2.5 to 4.3 ms in the other four calibrations (p50 1.2 to 3 ms throughout)."
     ],
-    "likelyCause": "NOT VERIFIED. The path from the host to the database containers (Docker Desktop on Windows) and the OneDrive-hosted checkout are suspects; a dedicated Linux host would answer it."
+    "likelyCause": "Partly attributed (EL-011). Latency of an authenticated request tracks the host-to-container round-trip time times the roughly 12 sequential round trips each request makes: the same 20 req/s gave caller p95 66 ms when round trips were 2 to 3 ms and p95 11.8 s when they were 38 to 48 ms (evidence/auth-path-trace-after.json and auth-path-trace-before.json). Why the round trips were slow in some runs is NOT VERIFIED: a control with no application held 3 to 4 ms for five minutes (evidence/rtt-drift.json). A dedicated Linux host would answer it."
   },
   "results": {
     "idle": {
@@ -144,7 +144,7 @@
   },
   "findings": [
     "The event loop was not what callers waited on. At 16.7 req/s callers saw p95 6.3 s while the API's loop delay p99 stayed near 33 ms (ELU median 0.29) and the unauthenticated /health control answered with p95 0.44 s. In the spike the loop delay p99 max was 93 ms while callers waited 12.7 s (median). The loop-delay alerts would not have paged in either profile; ApiCallerLatencyHigh (the probe) would have.",
-    "The wait is in the authenticated, database-backed path. Postgres showed no long-running statements; its non-idle sessions were mostly 'idle in transaction' waiting on the client between statements. Not diagnosed beyond that (EL-B16).",
+    "The wait is in the authenticated path's sequential round trips to Postgres and Redis (about 12 per request: 5 SQL statements and 7 Redis commands), not in the process; Postgres showed no long-running statements and its sessions showed 'idle in transaction' only for the round trip back to the API between a transaction's statements (EL-011). One redundant Redis lookup per request was removed; more are listed as EL-B17.",
     "Client-side capacity on this machine: about 5 req/s is comfortable (p95 0.5 s), 17 req/s is degraded (p95 6.3 s, 1 % failed), 60 req/s collapses (12 % failed, 1,048 iterations dropped). These are properties of this laptop and this Docker setup, not of the product.",
     "Soak at 5 req/s for ten minutes: no failures, memory flat."
   ],
@@ -175,6 +175,6 @@
     "a run on a dedicated Linux host, without Docker Desktop and OneDrive in the path",
     "per-module baselines for webhooks, broadcasts, automations, reporting and a populated inbox",
     "worker saturation baseline (the worker only idled and processed outbox events during these runs)",
-    "why the authenticated path waits seconds at 17 req/s (EL-B16)"
+    "why the host's round trips were slow in some runs (EL-011 shows the effect, not the cause)"
   ]
 }

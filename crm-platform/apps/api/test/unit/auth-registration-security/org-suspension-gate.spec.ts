@@ -7,6 +7,7 @@ import {
 import { AppError } from '../../../src/common/errors/app-error';
 import { AccountGateGuard } from '../../../src/modules/auth/guards/account-gate.guard';
 import { suspendedPathAllowed } from '../../../src/modules/auth/guards/suspended-paths';
+import { AccountGateService } from '../../../src/modules/auth/security/account-gate.service';
 import { OrgSuspensionService } from '../../../src/modules/auth/security/org-suspension.service';
 
 const ctx = (over: Partial<RequestContext> & Record<string, unknown> = {}) =>
@@ -48,7 +49,7 @@ function guardFor(opts: { suspended: boolean; routeOpts?: { suspended?: boolean 
         switchToHttp: () => ({ getRequest: () => ({ originalUrl: url, url, method }) }),
       } as never),
     );
-  return { run, orgs };
+  return { run, orgs, gates };
 }
 
 describe('suspended workspace gate', () => {
@@ -91,6 +92,13 @@ describe('suspended workspace gate', () => {
   it('passes an active workspace', async () => {
     const { run } = guardFor({ suspended: false });
     await expect(run('/v2/contacts', 'GET', ctx())).resolves.toBe(true);
+  });
+
+  it('asks Redis about the workspace once per request, not again inside the gate state', async () => {
+    const { run, orgs, gates } = guardFor({ suspended: false });
+    await expect(run('/v2/contacts', 'GET', ctx())).resolves.toBe(true);
+    expect(orgs.isSuspended).toHaveBeenCalledTimes(1);
+    expect(gates.stateFor).toHaveBeenCalledWith(7, 1, { includeOrgSuspension: false });
   });
 
   it('never gates a platform operator', async () => {
@@ -136,6 +144,30 @@ describe('suspended path allow-list', () => {
     ['/', 'GET', false],
   ])('%s %s -> %s', (url, method, allowed) => {
     expect(suspendedPathAllowed(url, method)).toBe(allowed);
+  });
+});
+
+describe('AccountGateService.stateFor and the workspace lookup', () => {
+  function build() {
+    const own = JSON.stringify({ ...activeUser });
+    const redis = { get: vi.fn(async () => own), setex: vi.fn() };
+    const orgs = { isSuspended: vi.fn().mockResolvedValue(true) };
+    const svc = new AccountGateService({} as never, {} as never, redis as never, orgs as never);
+    return { svc, orgs };
+  }
+
+  it('includes the workspace verdict by default (the flags a login returns need it)', async () => {
+    const { svc, orgs } = build();
+    expect(await svc.stateFor(7, 1)).toMatchObject({ orgSuspended: true });
+    expect(orgs.isSuspended).toHaveBeenCalledTimes(1);
+  });
+
+  it('skips the workspace lookup when the caller says it has made it', async () => {
+    const { svc, orgs } = build();
+    const state = await svc.stateFor(7, 1, { includeOrgSuspension: false });
+    expect(orgs.isSuspended).not.toHaveBeenCalled();
+    expect(state).toEqual(activeUser);
+    expect('orgSuspended' in state).toBe(false);
   });
 });
 
