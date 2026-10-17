@@ -104,7 +104,7 @@ Not a Reference feature: asked for by the owner. Spec: [call-logging.md](../../s
 
 - **No real telephony vendor.** The generic and fake adapters are tested end to end (signed callback, worker, click-to-call, Do-Not-Call); a vendor's own callback shape, signature and click-to-call API are not (BL-252).
 - **The mobile app does not sync yet.** The batch route is tested with the contract the app will use; Android's call log and the iOS prompt are not built (BL-251).
-- **The Log a call dialog and the Source filter are unit-tested (the form's request, the address) and type-checked, and were not looked at in a browser** in this change: the 390 px, right-to-left and dark mode passes are open (BL-250).
+- **The Log a call dialog and the Source filter** were exercised by hand in a browser against a local API on a scratch database (a call saved by number, matched to a contact, a follow-up task made, the row shown with its "Logged by hand" chip, the dialog at desktop and 375 px width). Right-to-left, dark mode, keyboard-only and screen-reader passes are open (BL-250).
 - **The 20 non-English translations are machine-drafted** and need a native read (same practice as BL-234).
 
 ## Not done, and what it costs
