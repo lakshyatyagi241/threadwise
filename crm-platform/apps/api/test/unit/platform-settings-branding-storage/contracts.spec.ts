@@ -72,6 +72,34 @@ describe('settings group schemas', () => {
     expect(b.parse({ colors: { 'wa-deep': '#7C3AED' } }).colors['wa-deep']).toBe('#7C3AED');
   });
 
+  it('a colour can never carry markup or CSS out of the <style> block it is written into (QA task 31)', () => {
+    // themeCss() writes each colour straight into a <style> tag on every public page, so what the schema lets through is the only guard.
+    const b = SET_GROUP_SCHEMAS.branding;
+    const breakouts = [
+      'red}</style><script>alert(1)</script>',
+      '#fff;}</style><script>alert(1)</script>',
+      '#fff}</style>',
+      '#fff;background:url(javascript:alert(1))',
+      '#fff /* x */',
+      '#ggg',
+      '#12',
+      '#123456789',
+      'expression(alert(1))',
+      '#fff\n}',
+      '</style>',
+      'url(//evil.test/x.css)',
+    ];
+    for (const value of breakouts) {
+      expect(b.safeParse({ colors: { 'wa-deep': value } }).success, JSON.stringify(value)).toBe(
+        false,
+      );
+    }
+    // What is accepted is #RGB through #RRGGBBAA hex and nothing else: no brace, semicolon, angle bracket or quote can appear.
+    for (const value of ['#fff', '#FFFF', '#7C3AED', '#7C3AEDFF', '']) {
+      expect(b.safeParse({ colors: { 'wa-deep': value } }).success, value).toBe(true);
+    }
+  });
+
   it('TW-SET-039: provider must be one of the six, visibility one of two', () => {
     const s = SET_GROUP_SCHEMAS.storage;
     expect(s.safeParse({ provider: 'dropbox' }).success).toBe(false);
