@@ -178,6 +178,10 @@ export class TemplatesService {
       buttons: d.buttons,
       variableMap: d.variableMap,
       parameterFormat: d.parameterFormat,
+      templateType: row.templateType,
+      attachmentType: row.attachmentType,
+      headerMediaUrl: /^https?:\/\//i.test(row.headerSampleUrl ?? '') ? row.headerSampleUrl : null,
+      headerLocation: row.headerLocation,
     };
   }
 

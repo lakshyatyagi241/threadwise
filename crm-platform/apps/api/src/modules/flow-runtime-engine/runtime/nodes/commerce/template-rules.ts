@@ -1,3 +1,8 @@
+import {
+  buildSend,
+  type TemplateShape,
+} from '../../../../../infra/providers/whatsapp/meta-send-payload';
+import { buildRecipientVars } from '../../../../broadcasts';
 import type { FlowTemplate } from '../../../../message-templates';
 import type { MenuItem } from '../../types';
 
@@ -98,4 +103,39 @@ export function quickReplies(t: FlowTemplate, nodeId: string): MenuItem[] {
     })
     .slice(0, 10)
     .map((b, i) => ({ id: `tpl_${nodeId}_p${i}`, text: String(b.text ?? `Button ${i + 1}`) }));
+}
+
+/**
+ * The Cloud API component list of a template that needs more than a body and a text header: a picture, video, document or location
+ * header, or a button that takes a value (a link with a variable, a copy code). Without them Meta refuses the send (#132012,
+ * #132000) and the node only logs it, so the flow carried on as if the template had gone. Built by the same payload builder
+ * broadcasts use, from the same variable map. Null when the template is plain and `variables` and `templateComponents` are enough.
+ */
+export function richComponents(
+  t: FlowTemplate,
+  render: (tpl: string) => string,
+): Array<Record<string, unknown>> | null {
+  const shape: TemplateShape & { headerLocation: unknown } = {
+    templateName: t.name,
+    language: t.language,
+    templateType: t.templateType ?? 'text',
+    templateBody: t.body,
+    header: t.header,
+    attachmentType: t.attachmentType ?? null,
+    attachmentFile: t.headerMediaUrl ?? null,
+    parameterFormat: t.parameterFormat,
+    variableMap: t.variableMap,
+    buttons: t.buttons,
+    carouselData: null,
+    headerLocation: t.headerLocation ?? null,
+  };
+  const att = (t.attachmentType ?? '').toLowerCase();
+  const richHeader = att !== '' && att !== 'none' && att !== 'text';
+  const vars = buildRecipientVars(shape, {
+    pull: (key) => render(`{{${key}}}`).trim(),
+    mediaUrl: (path) => (/^https?:\/\//i.test(path) ? path : null),
+  });
+  if (!richHeader && (vars.buttons?.length ?? 0) === 0) return null;
+  const built = buildSend(shape, vars).components as Array<Record<string, unknown>>;
+  return built.length > 0 ? built : null;
 }
