@@ -3,6 +3,47 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "scrape-demo.mjs --grafana (real API, worker and probe, real Prometheus 2.55 and Alertmanager 0.27, real Grafana 11.3.0)",
+      "status": "PASSED (54 of 54 checks)",
+      "ranOn": "2026-10-17, branch claude/event-loop-dashboards",
+      "rawData": "evidence/scrape-demo-grafana.json",
+      "observed": {
+        "provisioned": "crm-api, crm-realtime, crm-release-comparison, crm-workers; data source crm-prometheus healthy",
+        "panelQueries": "70 run through Grafana /api/ds/query (the release dashboard once for api, once for worker), 0 errors",
+        "panelsWithData": "every panel in the must-have list (loop, utilization, heap, memory, GC, CPU, probe latency, target, report age, open handles) returned points",
+        "panelsWithoutData": "7 panels, 8 queries, all needing failures this demo does not make: 5xx share (two on the API dashboard, one on the release dashboard), failed share, retries stat, failed jobs per second, retries per second"
+      },
+      "caveat": "Layout and legibility were not viewed in a browser. The demo has two routes (/health, /ready) and one queue (tpl-sweep), so route and queue tables are only shown with those. Idle 5xx panels read \"no data\", not 0."
+    },
+    {
+      "suite": "apps/api unit: dashboards.spec.ts",
+      "status": "PASSED",
+      "tests": 7,
+      "passed": 7,
+      "ranOn": "2026-10-17",
+      "note": "Mutation-checked: a metric renamed to crm_event_loop_utilisation_ratio and an offset placed after a closing paren each failed the matching test; the file was restored and build.mjs --check is clean. eslint clean."
+    },
+    {
+      "suite": "run-load.mjs --trace with and without the guard prefetch (--no-prefetch), same build, normal profile 5 req/s, 300 contacts, contacts list",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-auth-prefetch",
+      "rawData": "evidence/auth-prefetch-on.json, evidence/auth-prefetch-off.json",
+      "observed": {
+        "awaitedRedisWaits": "redisSequentialGroups 3.1 (off) to 2.1 (on); the remaining group is the fire-and-forget activity SET. Whole-request average 2.7 to 1.9",
+        "redisCommands": "5.1 both: the same reads, sent together instead of one after another",
+        "redisInFlightWallVsSum": "an earlier 120 s peak A/B: 37 to 41 % of the summed round trips with the prefetch, 64 to 68 % without"
+      },
+      "caveat": "Not a latency comparison. Back-to-back runs on this laptop swung between host round trips of 0.5 ms and 80 ms (p95 over 1 s), so milliseconds between runs mean nothing here; the group count does not depend on the host's speed."
+    },
+    {
+      "suite": "apps/api unit: auth-prefetch.spec.ts (14) plus the auth-registration-security, workspaces-teams-tenancy, rbac and roles-permissions suites",
+      "status": "PASSED",
+      "tests": 664,
+      "passed": 664,
+      "ranOn": "2026-10-17",
+      "note": "New: who gets a prefetch (workspace member only; not partner agent, operator or act-as), consumed once and only for the same org and user, a failed read becomes a fresh read, a miss goes to the service's own path without a second Redis read, the prefetch never changes a revoked-session refusal, works without the RBAC service and with a redis double that has no get(). eslint and tsc clean; dependency-cruiser 0 errors. verify-rbac-read.ts now 15/15 against a real Redis (adds: the early read returns the same version and grants). A broader name filter (realtime, chat-conversations) also matched e2e directories needing Docker and was discarded as a measurement; the unit files that reference the changed classes are the seven listed in the PR."
+    },
+    {
       "suite": "apps/api/test/integration/with-tenant.spec.ts (new) and rls.spec.ts, real Postgres 16 via testcontainers, restricted application role",
       "status": "PASSED (7 and 8)",
       "ranOn": "2026-10-17",
@@ -224,7 +265,10 @@
       "passed": 9350,
       "failed": 8,
       "skipped": 2,
-      "files": { "passed": 598, "failed": 2 },
+      "files": {
+        "passed": 598,
+        "failed": 2
+      },
       "failures": [
         {
           "file": "test/unit/infra/boundaries.matrix.spec.ts",
@@ -250,7 +294,10 @@
       "status": "FAILED elsewhere",
       "note": "Two errors in test/integration/catalog-products/variant-channels.spec.ts and test/unit/chrome-extension-sheets-addon/addon-source.spec.ts, neither touched here. No error in the files of this change."
     },
-    { "suite": "eslint on changed API files", "status": "PASSED" },
+    {
+      "suite": "eslint on changed API files",
+      "status": "PASSED"
+    },
     {
       "suite": "dependency-cruiser (pnpm --filter @crm/api arch)",
       "status": "PASSED",
@@ -294,7 +341,7 @@
   "notVerified": [
     "a Prometheus/Alertmanager/probe stack on a real server",
     "delivery to a real chat or pager destination",
-    "dashboards",
+    "dashboards on a real server, viewed in a browser, or used during an incident (they load and every query runs against a real Grafana in the demo)",
     "a 12 h or 24 h soak, or any load test on a dedicated host",
     "the quality.yml event-loop job on GitHub (the workflow only runs manually and never has)"
   ]

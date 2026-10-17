@@ -14,7 +14,10 @@ import { flowsApi } from '../../api/flows';
 import { FLB_KEYS, useBuilderContext } from '../../api/hooks';
 import {
   BRANCHING,
+  endsChain,
   FIXED_EXITS,
+  LINK_NEXT,
+  OPTION_STEPS,
   stepKindsFor,
   stepLabel,
   addJourney,
@@ -58,6 +61,8 @@ import {
   type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
+import { StepPreview } from './step-preview';
+import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
 import { lookOf } from '../../lib/node-ui';
 
@@ -362,7 +367,7 @@ function Editor({
     const step = allSteps(doc).find((x) => x.id === stepId);
     if (!step) return;
     const options = Array.isArray(step.data.options) ? (step.data.options as unknown[]) : [];
-    let idx = options.findIndex((_, i) => !step.links[i]);
+    let idx = options.findIndex((_, i) => !step.links[i] || step.links[i] === LINK_NEXT);
     let data: Record<string, unknown> | undefined;
     if (idx < 0) {
       const max = step.type === 'list' ? LIMITS.rows : LIMITS.buttons;
@@ -971,9 +976,13 @@ function Editor({
                           <p className="my-3 text-center text-[11.5px] text-muted-foreground">
                             {s.type === 'faq'
                               ? t('faqEnds')
-                              : t('branchingEnds', {
-                                  kind: s.type === 'list' ? 'list' : 'buttons',
-                                })}
+                              : OPTION_STEPS.has(s.type)
+                                ? t('optionsCarryOn', {
+                                    kind: s.type === 'list' ? 'list' : 'buttons',
+                                  })
+                                : t('branchingEnds', {
+                                    kind: s.type === 'list' ? 'list' : 'buttons',
+                                  })}
                           </p>
                         ) : null}
                         {s.type === 'buttons' || s.type === 'list' ? (
@@ -985,7 +994,7 @@ function Editor({
                               {(Array.isArray(s.data.options) ? s.data.options : []).map(
                                 (o: unknown, i: number) => {
                                   // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
-                                  if (s.links[i]) return null;
+                                  if (s.links[i] && s.links[i] !== LINK_NEXT) return null;
                                   const label =
                                     typeof o === 'string'
                                       ? o
@@ -1004,6 +1013,11 @@ function Editor({
                               )}
                             </div>
                             <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
+                            <AddMenu
+                              channel={channel}
+                              onPick={(k) => add(ci, si + 1, k)}
+                              atEnd={si === journey.steps.length - 1}
+                            />
                           </>
                         ) : BRANCHING.has(s.type) ? null : (
                           <>
@@ -1357,7 +1371,7 @@ function AddMenu({
                   </div>
                   <div className="grid grid-cols-1 gap-x-3 gap-y-1 sm:grid-cols-2">
                     {kinds.map((k) => {
-                      const blocked = BRANCHING.has(k.type) && !atEnd;
+                      const blocked = endsChain(k.type) && !atEnd;
                       const look = lookOf(k.type);
                       return (
                         <button
@@ -1447,7 +1461,12 @@ function StepCard(p: {
   const stageOf = (id: string | null) => {
     if (!id) return null;
     for (let a = 0; a < p.doc.journeys.length; a++) {
-      const b = p.doc.journeys[a]!.steps.findIndex((x) => x.id === id);
+      const steps = p.doc.journeys[a]!.steps;
+      if (id === LINK_NEXT) {
+        const own = steps.findIndex((x) => x.id === s.id);
+        return own >= 0 && steps[own + 1] ? stageIn(p.doc, a, own + 1) : null;
+      }
+      const b = steps.findIndex((x) => x.id === id);
       if (b >= 0) return stageIn(p.doc, a, b);
     }
     return null;
@@ -1492,7 +1511,7 @@ function StepCard(p: {
       <IconBtn label={t('moveDown')} disabled={p.last} onClick={() => p.onMove(1)}>
         <Glyph d="M8 3v10M4 9l4 4 4-4" />
       </IconBtn>
-      {!BRANCHING.has(s.type) ? (
+      {!endsChain(s.type) ? (
         <IconBtn label={t('duplicate')} onClick={() => setConfirm('duplicate')}>
           <Glyph d="M5.5 5.5h7v7h-7zM3.5 10.5v-7h7" />
         </IconBtn>
@@ -1602,14 +1621,24 @@ function StepCard(p: {
                 })}
               </p>
             ) : null}
-            {str(s.data.var).trim() ? (
-              <p className="mt-2">
-                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand">
-                  {`{{${str(s.data.var).trim()}}}`}
-                </code>
+            {variableNames(s.data).length > 0 ? (
+              <p className="mt-2 flex flex-wrap gap-1">
+                {variableNames(s.data).map((v) => (
+                  <code
+                    key={v}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand"
+                  >
+                    {v}
+                  </code>
+                ))}
               </p>
             ) : null}
           </button>
+        ) : null}
+        {!p.active ? (
+          <div className="px-4 pb-4 empty:hidden">
+            <StepPreview step={s} />
+          </div>
         ) : null}
         {p.active ? (
           <div className="border-t border-border p-4">

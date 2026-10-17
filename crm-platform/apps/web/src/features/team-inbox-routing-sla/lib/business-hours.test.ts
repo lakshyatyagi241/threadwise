@@ -5,6 +5,7 @@ import { checkDraft, draftFrom, toUpdateInput } from './business-hours';
 const hours: BusinessHours = {
   timezone: 'Asia/Kolkata',
   canEditTimezone: true,
+  holidays: [],
   days: {
     mon: { enabled: true, from: '09:00', to: '18:00' },
     tue: { enabled: true, from: '09:00', to: '18:00' },
@@ -29,18 +30,18 @@ describe('business hours draft', () => {
     expect(checkDraft(draftFrom(hours))).toEqual({});
   });
 
-  it('flags an empty time as required and a closing time not after opening as order', () => {
+  it('flags an empty time as required and equal times as same, and lets an overnight window be', () => {
     const draft = draftFrom(hours);
     draft.days.wed.to = '';
-    draft.days.thu = { enabled: true, from: '18:00', to: '09:00' };
+    draft.days.thu = { enabled: true, from: '18:00', to: '09:00' }; // overnight: fine
     draft.days.fri = { enabled: false, from: '10:00', to: '10:00' };
-    expect(checkDraft(draft)).toEqual({ wed: 'required', thu: 'order', fri: 'order' });
+    expect(checkDraft(draft)).toEqual({ wed: 'required', fri: 'same' });
   });
 
   it('keeps a switched-off day in the check, as the server does', () => {
     const draft = draftFrom(hours);
-    draft.days.sun = { enabled: false, from: '20:00', to: '08:00' };
-    expect(checkDraft(draft)).toEqual({ sun: 'order' });
+    draft.days.sun = { enabled: false, from: '20:00', to: '20:00' };
+    expect(checkDraft(draft)).toEqual({ sun: 'same' });
   });
 });
 

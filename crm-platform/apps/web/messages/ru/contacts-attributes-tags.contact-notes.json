@@ -16,6 +16,7 @@
         "loadMore": "Загрузить ещё",
         "loadingMore": "Загрузка ещё заметок",
         "added": "Добавлено {when}",
+        "addedBy": "Добавлено {when}: {name}",
         "edited": "Изменено {when}",
         "edit": "Изменить",
         "editAria": "Изменить заметку, добавленную {when}",

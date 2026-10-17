@@ -1078,6 +1078,7 @@
         "anotherPart": "Un’altra parte di questo flow. Viene eseguita quando un pulsante o una voce di lista porta qui{lost, select, true {: nulla porta ancora qui, quindi non verrebbe mai eseguita.} other {.}}",
         "addFirstStep": "Aggiungi il primo passaggio",
         "branchingEnds": "Questo {kind, select, list {elenco} other {gruppo di pulsanti}} conclude questa parte: ciò che viene inviato dopo dipende dalla scelta del cliente.",
+        "optionsCarryOn": "Ogni {kind, select, list {riga} other {pulsante}} può avviare un proprio flusso o proseguire con il passaggio successivo qui sotto.",
         "thenGoTo": "Poi vai a",
         "confirmImport": {
           "title": "Sostituire questo flow con il file?",
@@ -1113,7 +1114,7 @@
             "answer": "Risposta",
             "action": "Azioni"
           },
-          "blockedTitle": "Pulsanti ed elenchi concludono un flow, quindi possono stare solo per ultimi.",
+          "blockedTitle": "Questo passaggio chiude questa parte, quindi può stare solo per ultimo.",
           "blockedTitleFaq": "Rispondi da FAQ ha due uscite, quindi può stare solo alla fine."
         },
         "card": {
@@ -1146,6 +1147,7 @@
         "editors": {
           "linkLabel": "Dove porta",
           "linkEnds": "Termina qui (non viene inviato altro)",
+          "linkNext": "Prosegue con il passaggio successivo",
           "linkOption": "{stage} · {label}{self, select, true { (questo passaggio)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Porta a un nuovo flow…",
           "question": "Domanda",

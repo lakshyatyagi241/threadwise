@@ -16,6 +16,7 @@
         "loadMore": "Carica altro",
         "loadingMore": "Caricamento di altre note",
         "added": "Aggiunta {when}",
+        "addedBy": "Aggiunta {when} da {name}",
         "edited": "Modificata {when}",
         "edit": "Modifica",
         "editAria": "Modifica la nota aggiunta {when}",

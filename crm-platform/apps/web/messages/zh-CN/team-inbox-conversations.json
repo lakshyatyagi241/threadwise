@@ -553,16 +553,8 @@
         "offline": "离线"
       },
       "notes": {
-        "tab": "备注",
-        "label": "新建内部备注",
-        "placeholder": "撰写仅团队可见的备注",
-        "hint": "按 Ctrl+Enter 添加备注。",
-        "add": "添加备注",
-        "addFailed": "无法保存备注。",
-        "loading": "正在加载备注",
-        "empty": "暂无备注。",
-        "unknownAuthor": "某位团队成员",
-        "delete": "删除此备注"
+        "tab": "联系人备注",
+        "noContact": "此对话没有可添加备注的联系人。"
       },
       "timeline": {
         "tab": "时间线",

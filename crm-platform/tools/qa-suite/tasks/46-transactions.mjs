@@ -1,11 +1,9 @@
 // #46 Transaction audit: audit + outbox writes join the caller's transaction; no network I/O while a transaction holds a connection.
 import { apiSrc, expectNone, read, rel } from '../lib/core.mjs';
 import { lineAt, maskCode, matchClose } from '../lib/code.mjs';
+import { ioCalls } from '../lib/tx-io.mjs';
 
 const TX_OPEN = /\b(?:this\.)?db\.(?:tx|txAs|privileged|txReplica)\s*\(/g;
-const IO =
-  /\b(?:fetch\(|axios\b|got\(|\.sendMail\(|this\.(?:provider|client|http|sender|mailer|bsp|gateway|senders|gateways)\w*\.(?:send|post|request|call|dispatch|charge|capture|create)\w*\()/;
-
 export default {
   id: 46,
   priority: 'P1',
@@ -37,10 +35,11 @@ export default {
         const open = mt.index + mt[0].length - 1,
           close = matchClose(m, open);
         if (close < 0) continue;
-        const body = m.slice(open, close),
-          io = body.match(IO);
-        if (io)
-          ioInTx.push(`${rel(f)}:${lineAt(raw, open + io.index)}  ${io[0]} inside ${mt[0].trim()}`);
+        const body = m.slice(open, close);
+        for (const io of ioCalls(body))
+          ioInTx.push(
+            `${rel(f)}:${lineAt(raw, open + io.index)}  ${io.text} inside ${mt[0].trim()}`,
+          );
       }
     }
     const checks = [

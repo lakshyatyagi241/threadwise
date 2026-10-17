@@ -685,6 +685,7 @@
         "anotherPart": "חלק נוסף של תהליך זה. הוא פועל כאשר כפתור או שורת רשימה מובילים לכאן{lost, select, true {: עדיין אין מוביל לכאן, ולכן הוא לעולם לא ירוץ.} other {.}}",
         "addFirstStep": "הוסף את השלב הראשון",
         "branchingEnds": "{kind, select, list {רשימה} other {קבוצת כפתורים}} זה מסיים חלק זה: מה שנשלח הבא תלוי במה שהלקוח בוחר.",
+        "optionsCarryOn": "כל {kind, select, list {שורה} other {כפתור}} יכול להתחיל זרימה משלו, או להמשיך לשלב הבא למטה.",
         "thenGoTo": "לאחר מכן עבור אל",
         "confirmImport": {
           "title": "להחליף תהליך זה בקובץ?",
@@ -720,7 +721,7 @@
             "answer": "מענה",
             "action": "פעולות"
           },
-          "blockedTitle": "כפתורים ורשימות מסיימים תהליך, ולכן הם יכולים להופיע רק בסוף.",
+          "blockedTitle": "השלב הזה מסיים את החלק הזה, ולכן אפשר למקם אותו רק בסוף.",
           "blockedTitleFaq": "מענה מתוך FAQ כולל שתי יציאות, ולכן אפשר למקם אותו רק אחרון."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "לאן זה מוביל",
           "linkEnds": "מסתיים כאן (לא נשלח דבר נוסף)",
+          "linkNext": "ממשיך לשלב הבא",
           "linkOption": "{stage} · {label}{self, select, true { (שלב זה)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ הובל לתהליך חדש…",
           "question": "שאלה",

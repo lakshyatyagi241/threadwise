@@ -220,8 +220,8 @@ export function ValidationPopup({
               </div>
             ) : null}
             {onGoTo && nodes.length > 0 ? (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {nodes.slice(0, 8).map((n) => (
+              <div className="mt-2 flex max-h-32 flex-wrap gap-1.5 overflow-y-auto">
+                {nodes.map((n) => (
                   <button
                     key={n.id}
                     type="button"

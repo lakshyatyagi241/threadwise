@@ -1078,6 +1078,7 @@
         "anotherPart": "Een ander onderdeel van deze flow. Het draait wanneer een knop of lijstrij hier naartoe leidt{lost, select, true {: er leidt nog niets hierheen, dus het zou nooit draaien.} other {.}}",
         "addFirstStep": "Voeg de eerste stap toe",
         "branchingEnds": "Deze {kind, select, list {lijst} other {set knoppen}} beëindigt dit onderdeel: wat daarna wordt verzonden, hangt af van wat de klant kiest.",
+        "optionsCarryOn": "Elke {kind, select, list {rij} other {knop}} kan een eigen flow starten of doorgaan met de volgende stap hieronder.",
         "thenGoTo": "Ga daarna naar",
         "confirmImport": {
           "title": "Deze flow vervangen door het bestand?",
@@ -1113,7 +1114,7 @@
             "answer": "Antwoord",
             "action": "Acties"
           },
-          "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen.",
+          "blockedTitle": "Deze stap sluit dit deel af, dus hij kan alleen als laatste staan.",
           "blockedTitleFaq": "Antwoord uit FAQ heeft twee uitgangen en kan daarom alleen als laatste staan."
         },
         "card": {
@@ -1146,6 +1147,7 @@
         "editors": {
           "linkLabel": "Waarheen dit leidt",
           "linkEnds": "Eindigt hier (er wordt niets meer verzonden)",
+          "linkNext": "Gaat verder met de volgende stap",
           "linkOption": "{stage} · {label}{self, select, true { (deze stap)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Leiden naar een nieuwe flow…",
           "question": "Vraag",

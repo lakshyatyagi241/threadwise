@@ -696,6 +696,7 @@
         "anotherPart": "Another part of this flow. It runs when a button or list row leads here{lost, select, true {: nothing leads here yet, so it would never run.} other {.}}",
         "addFirstStep": "Add the first step",
         "branchingEnds": "This {kind, select, list {list} other {set of buttons}} ends this part: what is sent next depends on what the customer picks.",
+        "optionsCarryOn": "Each {kind, select, list {row} other {button}} can start its own flow, or carry on with the next step below.",
         "thenGoTo": "Then go to",
         "confirmImport": {
           "title": "Replace this flow with the file?",
@@ -731,7 +732,7 @@
             "answer": "Answer",
             "action": "Actions"
           },
-          "blockedTitle": "Buttons and lists end a flow, so they can only go last.",
+          "blockedTitle": "This step ends this part, so it can only go last.",
           "blockedTitleFaq": "Answer from FAQ has two exits, so it can only go last."
         },
         "card": {
@@ -764,6 +765,7 @@
         "editors": {
           "linkLabel": "Where this leads",
           "linkEnds": "Ends here (nothing more is sent)",
+          "linkNext": "Carries on with the next step",
           "linkOption": "{stage} · {label}{self, select, true { (this step)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Lead to a new flow…",
           "question": "Question",

@@ -553,16 +553,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notatki",
-        "label": "Nowa notatka wewnętrzna",
-        "placeholder": "Napisz notatkę widoczną tylko dla zespołu",
-        "hint": "Ctrl+Enter dodaje notatkę.",
-        "add": "Dodaj notatkę",
-        "addFailed": "Nie udało się zapisać notatki.",
-        "loading": "Wczytywanie notatek",
-        "empty": "Brak notatek.",
-        "unknownAuthor": "Członek zespołu",
-        "delete": "Usuń tę notatkę"
+        "tab": "Notatki o kontakcie",
+        "noContact": "Ta rozmowa nie ma kontaktu, do którego można dodać notatki."
       },
       "timeline": {
         "tab": "Oś czasu",

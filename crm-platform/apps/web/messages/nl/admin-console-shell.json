@@ -232,12 +232,49 @@
         "loadFailed": "De instellingen konden niet worden geladen.",
         "hours": {
           "title": "Werktijden",
-          "note": "Alleen ter referentie weergegeven. Werktijden worden nog niet afgedwongen, dus deze besturingselementen zijn alleen-lezen.",
-          "weekdays": "Ma - Vr",
-          "saturday": "Zaterdag",
-          "sunday": "Zondag",
           "from": "Van",
-          "to": "Tot"
+          "to": "Tot",
+          "note": "De openingstijden van je team, in {timezone}. Routeringsregels voor de inbox, SLA-timers, flows en leadreacties die van werktijden afhangen, gebruiken dit rooster.",
+          "ownerOnly": "Alleen de eigenaar van de werkruimte kan dit bewerken.",
+          "loadFailed": "De werktijden konden niet worden geladen.",
+          "day": {
+            "mon": "Maandag",
+            "tue": "Dinsdag",
+            "wed": "Woensdag",
+            "thu": "Donderdag",
+            "fri": "Vrijdag",
+            "sat": "Zaterdag",
+            "sun": "Zondag"
+          },
+          "closed": "Gesloten",
+          "openAllDay": "De hele dag open",
+          "allDay": "De hele dag open",
+          "overnight": "Sluit de volgende ochtend",
+          "addWindow": "Tijden toevoegen",
+          "remove": "Verwijderen",
+          "removeWindow": "Deze tijden voor {day} verwijderen",
+          "copyMonday": "Maandag kopiëren naar dinsdag-vrijdag",
+          "problem": {
+            "required": "Vul beide tijden in.",
+            "same": "De openings- en sluitingstijd moeten verschillen.",
+            "overlap": "Tijden op dezelfde dag mogen elkaar niet overlappen."
+          },
+          "holidays": {
+            "title": "Feestdagen",
+            "note": "Op deze data geldt de werkruimte de hele dag als gesloten, wat de wekelijkse tijden ook zeggen.",
+            "none": "Geen feestdagen toegevoegd.",
+            "date": "Datum",
+            "label": "Naam (optioneel)",
+            "add": "Feestdag toevoegen",
+            "removeFor": "De feestdag op {date} verwijderen",
+            "problem": {
+              "date": "Geen geldige datum.",
+              "duplicate": "Deze datum staat er al in."
+            }
+          },
+          "save": "Werktijden opslaan",
+          "saved": "Werktijden opgeslagen.",
+          "saveFailed": "De werktijden konden niet worden opgeslagen."
         },
         "preferences": {
           "title": "Automatisch AI-samenvatten",

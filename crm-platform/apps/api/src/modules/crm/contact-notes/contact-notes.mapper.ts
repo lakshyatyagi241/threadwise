@@ -7,6 +7,7 @@ export function toContactNoteResponse(row: ContactNoteRow): ContactNoteResponse 
     contactId: row.contactUuid,
     body: row.body,
     createdBy: row.createdByUuid,
+    createdByName: row.createdByName,
     updatedBy: row.updatedByUuid,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),

@@ -685,6 +685,7 @@
         "anotherPart": "이 플로우의 다른 부분입니다. 버튼이나 목록 행이 여기로 연결되면 실행됩니다{lost, select, true {: 아직 연결된 곳이 없어 실행되지 않습니다.} other {.}}",
         "addFirstStep": "첫 단계 추가",
         "branchingEnds": "이 {kind, select, list {목록} other {버튼 모음}}이 이 부분을 끝냅니다. 다음에 전송되는 내용은 고객의 선택에 따라 달라집니다.",
+        "optionsCarryOn": "각 {kind, select, list {행} other {버튼}}은 자체 흐름을 시작하거나 아래의 다음 단계로 이어질 수 있습니다.",
         "thenGoTo": "다음 이동",
         "confirmImport": {
           "title": "이 플로우를 파일로 교체할까요?",
@@ -720,7 +721,7 @@
             "answer": "답변",
             "action": "액션"
           },
-          "blockedTitle": "버튼과 목록은 플로우를 끝내므로 마지막에만 둘 수 있습니다.",
+          "blockedTitle": "이 단계는 이 부분을 끝내므로 맨 마지막에만 둘 수 있습니다.",
           "blockedTitleFaq": "FAQ로 답변에는 출구가 두 개 있어 맨 마지막에만 둘 수 있습니다."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "연결 대상",
           "linkEnds": "여기서 종료(더 이상 전송되지 않음)",
+          "linkNext": "다음 단계로 이어짐",
           "linkOption": "{stage} · {label}{self, select, true {(이 단계)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ 새 플로우로 연결…",
           "question": "질문",

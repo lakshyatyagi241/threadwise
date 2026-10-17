@@ -137,17 +137,28 @@ export class CatalogSyncRepository {
     );
   }
 
-  async findByRetailerId(
+  /**
+   * The product for each Meta retailer id, in one query per 5000 ids (bind parameters are capped). When several products share an id
+   * the lowest product id wins, as the single-id lookup this replaces did (`ORDER BY p.id LIMIT 1`). Ids with no product are absent.
+   */
+  async findByRetailerIds(
     tx: Tx,
     orgId: number,
-    retailerId: string,
-  ): Promise<ProductRow | undefined> {
-    const res = await tx.execute(sql`
-      SELECT ${PRODUCT_SELECT} ${FROM}
-      WHERE p.org_id = ${orgId} AND p.meta_retailer_id = ${retailerId}
-      ORDER BY p.id LIMIT 1`);
-    const row = res.rows[0] as Raw | undefined;
-    return row ? toProductRow(row) : undefined;
+    retailerIds: readonly string[],
+  ): Promise<Map<string, ProductRow>> {
+    const out = new Map<string, ProductRow>();
+    const ids = [...new Set(retailerIds)];
+    for (let i = 0; i < ids.length; i += 5000) {
+      const res = await tx.execute(sql`
+        SELECT DISTINCT ON (p.meta_retailer_id) ${PRODUCT_SELECT} ${FROM}
+        WHERE p.org_id = ${orgId} AND p.meta_retailer_id = ANY(${textArray(ids.slice(i, i + 5000))})
+        ORDER BY p.meta_retailer_id, p.id`);
+      for (const row of res.rows as Raw[]) {
+        const product = toProductRow(row);
+        if (product.metaRetailerId) out.set(product.metaRetailerId, product);
+      }
+    }
+    return out;
   }
 
   /**

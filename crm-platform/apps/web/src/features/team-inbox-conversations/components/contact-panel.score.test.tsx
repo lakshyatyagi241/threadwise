@@ -13,6 +13,13 @@ import { contactSummary, detail, id } from '../lib/fixtures';
 const state = vi.hoisted(() => ({
   score: vi.fn(),
   insight: vi.fn(),
+  notes: vi.fn(),
+}));
+vi.mock('@/features/contacts-attributes-tags', () => ({
+  ContactNotesSection: (p: { contact: { id: string } }) => {
+    state.notes(p);
+    return <div data-testid="contact-notes" data-contact={p.contact.id} />;
+  },
 }));
 vi.mock('@/features/lead-scoring', () => ({
   ScoreCard: (p: { contactId: string; contact: unknown; onScored?: () => unknown }) => {
@@ -49,19 +56,13 @@ const messages = JSON.parse(
 const props = (over: Partial<ContactPanelProps> = {}): ContactPanelProps => ({
   detail: detail({ contact: null, contactSummary: contactSummary() }),
   meId: id(5),
-  can: { assign: false, assignSelf: false, resolve: false, note: false },
+  can: { assign: false, assignSelf: false, resolve: false },
   presence: new Map(),
-  notes: [],
-  notesLoading: false,
-  notesError: false,
   nowMs: Date.now(),
   assigning: false,
   resolving: false,
   onAssign: vi.fn(),
   onToggleResolved: vi.fn(),
-  onAddNote: () => Promise.resolve(true),
-  onDeleteNote: vi.fn(),
-  canDeleteNote: () => false,
   onOpenConversation: vi.fn(),
   ...over,
 });
@@ -72,6 +73,7 @@ let client: QueryClient;
 beforeEach(() => {
   state.score = vi.fn();
   state.insight = vi.fn();
+  state.notes = vi.fn();
   client = new QueryClient();
 });
 afterEach(async () => {
@@ -137,5 +139,23 @@ describe('the lead score in the inbox contact panel', () => {
     spy.mockClear();
     await click(el.querySelector('[data-testid="insight-card"]')!);
     expect(spy).toHaveBeenCalledWith({ queryKey: ['inbox', 'conversation', d.id] });
+  });
+});
+
+describe('the notes tab of the inbox contact panel', () => {
+  it('lists the contact\u2019s own notes, not the conversation\u2019s internal notes', async () => {
+    const summary = contactSummary();
+    const el = await show(props({ detail: detail({ contactSummary: summary }) }));
+    expect(el.querySelector('[data-testid="contact-notes"]')?.getAttribute('data-contact')).toBe(
+      summary.id,
+    );
+    expect(el.querySelector('[data-testid="inbox-note-input"]')).toBeNull();
+    expect(el.textContent).toContain('Contact notes');
+  });
+
+  it('says there is no contact to attach notes to when the thread has none', async () => {
+    const el = await show(props({ detail: detail({ contact: null, contactSummary: null }) }));
+    expect(el.querySelector('[data-testid="contact-notes"]')).toBeNull();
+    expect(el.textContent).toContain('no contact to attach notes to');
   });
 });

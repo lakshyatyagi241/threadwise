@@ -685,6 +685,7 @@
         "anotherPart": "Bu akışın başka bir bölümü. Bir düğme veya liste satırı buraya yönlendirdiğinde çalışır{lost, select, true {: henüz buraya hiçbir şey bağlı değil, bu yüzden hiç çalışmaz.} other {.}}",
         "addFirstStep": "İlk adımı ekleyin",
         "branchingEnds": "Bu {kind, select, list {liste} other {düğme seti}} bu bölümü sonlandırır: sonra ne gönderileceği müşterinin seçimine bağlıdır.",
+        "optionsCarryOn": "Her {kind, select, list {satır} other {düğme}} kendi akışını başlatabilir veya aşağıdaki sonraki adımla devam edebilir.",
         "thenGoTo": "Sonra şuraya git",
         "confirmImport": {
           "title": "Bu akış dosyayla değiştirilsin mi?",
@@ -720,7 +721,7 @@
             "answer": "Yanıt",
             "action": "Eylemler"
           },
-          "blockedTitle": "Düğmeler ve listeler akışı sonlandırır, bu yüzden yalnızca en sona konabilirler.",
+          "blockedTitle": "Bu adım bu bölümü bitirir, bu yüzden yalnızca en sona konabilir.",
           "blockedTitleFaq": "FAQ ile yanıtla adımının iki çıkışı vardır, bu yüzden yalnızca en sona konabilir."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "Bu nereye gider",
           "linkEnds": "Burada biter (başka bir şey gönderilmez)",
+          "linkNext": "Sonraki adımla devam eder",
           "linkOption": "{stage} · {label}{self, select, true { (bu adım)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Yeni bir akışa yönlendir…",
           "question": "Soru",

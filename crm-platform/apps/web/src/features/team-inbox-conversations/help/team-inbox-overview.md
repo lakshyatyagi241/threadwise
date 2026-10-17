@@ -18,7 +18,7 @@ The Team inbox gathers every customer conversation from your connected channels 
 1. Open **Inbox**. The left column lists conversations, the middle shows the open one, and the right holds the contact and notes. On a phone the list comes first and a conversation opens over it with a back button.
 2. Use the views **All**, **Mine**, **Unassigned** and **Unread**, and filter by **Status**, **Priority** and **Channel**. Search by name or number.
 3. Select a conversation to read it. Use **Load earlier messages** for older history, and **Jump to latest** when you have scrolled up.
-4. To answer, keep **Reply** selected, type in the box and press Enter. To leave a note only your team sees, choose **Internal note** first, then **Add note**.
+4. To answer, keep **Reply** selected, type in the box and press Enter. To leave a note about this conversation that only your team sees, choose **Internal note** first, then **Add note**.
    Above the box are formatting buttons for a chat message: **Bold**, **Italic**, **Underline**, **Strikethrough**, a **bulleted list** and a **numbered list**. They write WhatsApp's own marks into the text (`*bold*`, `_italic_`, `~strike~`, and `- ` or `1. ` at the start of a line), so the customer sees the formatting in WhatsApp; underline has no mark in WhatsApp, so it is drawn with a line under each letter (it can look different on some phones). The sparkle button opens the **Smart AI Assistant**: **Condense** (shorter), **Fix Grammar**, **Positive Tone** and **Translate** (pick a language from the searchable list). It works on the text you selected, or on the whole message when nothing is selected, and puts the result back in the box for you to read, edit and send; nothing is sent by it. It needs an AI model enabled for the workspace; without one the button is off.
 5. To send a place, contact cards, buttons or a list, select the **+** button next to the box. Pick **Location** (latitude and longitude, plus an optional place name; you can paste "28.6139, 77.2090" from a map), **Contact** (a name and a phone or email, up to 10 contacts) or **Buttons**: up to 3 reply buttons, one button that opens a link, or a list (one button that opens up to 10 rows in sections). Location and Contact work on every WhatsApp number; Buttons and lists work on a WhatsApp Cloud API number only, and, like any free-form message, only inside its 24 hour window.
 6. Select **Assign to me** to take the conversation, or pick a teammate or team in the contact panel. **Unassign** releases it.
@@ -34,7 +34,7 @@ Keyboard shortcuts work when you are not typing: `j` and `k` move through the li
 
 ## Options and settings
 
-- The contact panel has three tabs. **Contact** shows the customer's details and past conversations. **Notes** holds the internal notes. **Timeline** lists what happened, such as assignments, status changes and first replies.
+- The contact panel has three tabs. **Contact** shows the customer's details and past conversations. **Contact notes** holds the notes on the customer's contact record: the same list as the Notes tab of the contact page, shared by every conversation with that person. Internal notes written in the box under **Internal note** belong to this conversation only and appear in the thread. **Timeline** lists what happened, such as assignments, status changes and first replies.
 - Each conversation shows its status (Open, Snoozed, Resolved or Spam) and its priority. The status list above the conversations starts on **Open**, which shows the conversations still being worked on. **Resolved** also lists conversations the system closed (for example when a channel was removed): to an agent they are the same.
 - **Snoozed** sets a conversation aside. It hides the conversation until a time you pick, then it wakes by itself and returns to Open; it is not in the **Open** list while it sleeps. A snoozed row shows how long is left (for example "Snoozed · 2 hours"). You can snooze a resolved or spam conversation too; it comes back to Open at the time you picked, and its assignee (or its team) gets a notification that it is back. If you reply to a resolved, closed or spam conversation, it reopens to Open.
 - **Spam** takes a conversation out of the live lists without deleting it. Choose **Mark as spam** in the thread header, or select several conversations and choose **Mark as spam** in the bulk bar. To find them, pick **Spam** in the **Chat status** filter. **Not spam** in the thread header returns a conversation to **Open**.
@@ -53,7 +53,7 @@ The **Tags** filter above the list has a switch for **Conversation tags** and **
 
 ## Plan and access
 
-You need the right to read conversations to open the inbox. Replying, adding notes, assigning, assigning to yourself and resolving each need their own right. Without the reply right the box is read-only, and the screen says so. Managing channels needs its own right.
+You need the right to read conversations to open the inbox. Replying, adding internal notes, assigning, assigning to yourself and resolving each need their own right. Without the reply right the box is read-only, and the screen says so. Managing channels needs its own right.
 
 ## If something looks wrong
 

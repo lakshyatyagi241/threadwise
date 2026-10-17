@@ -232,12 +232,49 @@
         "loadFailed": "No se pudieron cargar los ajustes.",
         "hours": {
           "title": "Horario laboral",
-          "note": "Se muestra como referencia. El horario laboral aún no se aplica, por lo que estos controles son de solo lectura.",
-          "weekdays": "Lun - Vie",
-          "saturday": "Sábado",
-          "sunday": "Domingo",
           "from": "Desde",
-          "to": "Hasta"
+          "to": "Hasta",
+          "note": "Horario de apertura de tu equipo, en {timezone}. Las reglas de enrutamiento de la bandeja, los temporizadores de SLA, los flujos y las respuestas a leads que dependen del horario laboral usan este calendario.",
+          "ownerOnly": "Solo el propietario del espacio de trabajo puede editarlo.",
+          "loadFailed": "No se pudo cargar el horario laboral.",
+          "day": {
+            "mon": "Lunes",
+            "tue": "Martes",
+            "wed": "Miércoles",
+            "thu": "Jueves",
+            "fri": "Viernes",
+            "sat": "Sábado",
+            "sun": "Domingo"
+          },
+          "closed": "Cerrado",
+          "openAllDay": "Abierto todo el día",
+          "allDay": "Abierto las 24 horas",
+          "overnight": "Cierra a la mañana siguiente",
+          "addWindow": "Añadir horario",
+          "remove": "Quitar",
+          "removeWindow": "Quitar este horario del {day}",
+          "copyMonday": "Copiar lunes a martes-viernes",
+          "problem": {
+            "required": "Introduce ambas horas.",
+            "same": "Las horas de apertura y cierre deben ser distintas.",
+            "overlap": "Los horarios del mismo día no deben solaparse."
+          },
+          "holidays": {
+            "title": "Festivos",
+            "note": "El espacio de trabajo se considera cerrado todo el día en estas fechas, sea cual sea el horario semanal.",
+            "none": "No se han añadido festivos.",
+            "date": "Fecha",
+            "label": "Nombre (opcional)",
+            "add": "Añadir festivo",
+            "removeFor": "Quitar el festivo del {date}",
+            "problem": {
+              "date": "No es una fecha válida.",
+              "duplicate": "Esta fecha ya está en la lista."
+            }
+          },
+          "save": "Guardar horario laboral",
+          "saved": "Horario laboral guardado.",
+          "saveFailed": "No se pudo guardar el horario laboral."
         },
         "preferences": {
           "title": "Resumen automático con IA",

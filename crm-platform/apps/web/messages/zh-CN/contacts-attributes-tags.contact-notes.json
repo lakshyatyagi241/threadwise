@@ -16,6 +16,7 @@
         "loadMore": "加载更多",
         "loadingMore": "正在加载更多笔记",
         "added": "添加于 {when}",
+        "addedBy": "{name} 于 {when} 添加",
         "edited": "编辑于 {when}",
         "edit": "编辑",
         "editAria": "编辑 {when} 添加的笔记",

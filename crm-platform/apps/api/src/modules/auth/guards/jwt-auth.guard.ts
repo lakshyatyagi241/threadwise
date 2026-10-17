@@ -10,11 +10,13 @@ import { Reflector } from '@nestjs/core';
 import type { Request } from 'express';
 import { Redis } from 'ioredis';
 import { ACTOR_KINDS_KEY, IS_PUBLIC_KEY } from '../../../common/decorators';
+import { PREFETCH_FAILED } from '../../../common/context/auth-prefetch';
 import {
   RequestContextStore,
   type ActorType,
   type ImpersonationContext,
 } from '../../../common/context/request-context';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { ActivityService } from '../../../kernel/activity/activity.service';
@@ -68,6 +70,7 @@ export class JwtAuthGuard implements CanActivate {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly partners: PartnerAgentStatusService,
     @Optional() private readonly activity?: ActivityService,
+    @Optional() private readonly rbac?: RbacService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -101,6 +104,12 @@ export class JwtAuthGuard implements CanActivate {
     // Tokens issued before sessions existed carry no `sid`; one forced re-login
     // after deploy is the price of being able to revoke at all.
     if (sessionBacked && !claims.sid) throw AppError.unauthenticated('Invalid or expired token');
+
+    // A signed-in workspace member will go through the account gate and the permission check next. Send their Redis reads now,
+    // together with the session read below, instead of three round trips one after the other (common/context/auth-prefetch.ts).
+    if (claims.typ === 'user' && !claims.imp && claims.org > 0) {
+      this.startPrefetch(claims.org, claims.sub);
+    }
 
     // An act-as token (operator inside a workspace) has no auth_sessions row: its session is the impersonation row, checked
     // here on every request so stop, expiry and the operator losing access all take effect at once. It skips the idle timeout
@@ -141,6 +150,28 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     return true;
+  }
+
+  /**
+   * Starts the cache reads the account gate and the permission check will want. They only read; whatever they find (or do not
+   * find) is judged by the same code as before, in the same guards, after this one has accepted the session. A read that fails is
+   * replaced by that code's own read.
+   */
+  private startPrefetch(orgId: number, userId: number): void {
+    const ctx = RequestContextStore.peek();
+    if (!ctx) return;
+    try {
+      ctx.prefetch = {
+        orgId,
+        userId,
+        orgSuspended: this.redis.get(AuthKeys.orgSuspended(orgId)).catch(() => PREFETCH_FAILED),
+        gate: this.redis.get(AuthKeys.gate(orgId, userId)).catch(() => PREFETCH_FAILED),
+        grants: this.rbac?.startCachedRead(orgId, userId),
+      };
+    } catch {
+      // Best effort: with no prefetch every guard reads for itself, as it always did.
+      ctx.prefetch = undefined;
+    }
   }
 
   private async checkSession(

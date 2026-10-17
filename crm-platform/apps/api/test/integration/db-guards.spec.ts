@@ -12,6 +12,7 @@ import { runMigrations } from '@crm/db';
  *  - audit_log is append-only (migration 20261211090000): no UPDATE ever, DELETE only inside a privileged transaction, on every
  *    partition including ones created later.
  *  - pg_stat_statements is available (migration 20261211100000) once the server preloads it, as the compose files do.
+ *  - no constraint is left NOT VALID once every migration has run.
  *  - the seven redundant indexes are gone (migration 20261211110000), the wider index that replaced each is still there, and the
  *    planner still serves the old query shapes from an index.
  */
@@ -116,6 +117,17 @@ describe('database guards', () => {
     it('is preloaded by the server', async () => {
       const { rows } = await db.query(`SHOW shared_preload_libraries`);
       expect(rows[0].shared_preload_libraries).toContain('pg_stat_statements');
+    });
+  });
+
+  describe('constraints', () => {
+    it('no constraint is left NOT VALID once every migration has run', async () => {
+      // A CHECK added NOT VALID guards new writes and says nothing about rows already there until something validates it.
+      // 20261116090100_cat_validate_value_checks does that for the catalogue checks; this proves nothing else was left behind.
+      const { rows } = await db.query(
+        `SELECT conrelid::regclass::text || '.' || conname AS name FROM pg_constraint WHERE NOT convalidated ORDER BY 1`,
+      );
+      expect(rows.map((r) => r.name)).toEqual([]);
     });
   });
 

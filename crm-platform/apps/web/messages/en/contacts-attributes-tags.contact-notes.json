@@ -16,6 +16,7 @@
         "loadMore": "Load more",
         "loadingMore": "Loading more notes",
         "added": "Added {when}",
+        "addedBy": "Added {when} by {name}",
         "edited": "Edited {when}",
         "edit": "Edit",
         "editAria": "Edit the note added {when}",

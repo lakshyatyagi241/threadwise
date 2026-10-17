@@ -1,0 +1,761 @@
+{
+ "generatedAt": "2026-10-17T07:58:47.778Z",
+ "environment": {
+  "commit": "1cca6b0c78ccf55b1f2b0bd7eb36bd11a6a7391d",
+  "branch": "claude/event-loop-auth-prefetch",
+  "workingTreeClean": false,
+  "node": "v22.17.0",
+  "os": "win32 10.0.26200",
+  "cpu": "Intel(R) Core(TM) Ultra 7 155H, 22 logical cores, 31.4 GB",
+  "infrastructureProfile": "developer laptop; API, worker, Postgres, Redis and the k6 container all on one machine",
+  "loadGenerator": "grafana/k6:0.49.0",
+  "workload": "tools/event-loop-audit/load/workload.k6.js",
+  "mix": "contact list 52%, search 12%, get 15%, inbox list 8%, inbox counts 4%, create 4%, update 2%, /health 3% (control, no tenant work)",
+  "rates": "normal 5 req/s, peak 20 req/s, spike 5 to 60 req/s (3x peak), soak 5 req/s; open model (arrival rate)",
+  "profilesRequested": [
+   "normal"
+  ],
+  "seconds": {
+   "normalAndPeak": 60,
+   "idle": 60,
+   "soakMinutes": 10
+  }
+ },
+ "comparabilityWarning": "Valid only against runs from this same machine and Node version. The rates are chosen, not taken from production traffic. The soak is minutes, not hours.",
+ "profiles": {
+  "normal": {
+   "durationSeconds": 66,
+   "api": {
+    "windows": 15,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.43,
+      "mean": 15.44,
+      "max": 15.52
+     },
+     "p95": {
+      "median": 20.38,
+      "mean": 20.03,
+      "max": 23
+     },
+     "p99": {
+      "median": 24.9,
+      "mean": 25.02,
+      "max": 30
+     },
+     "max": {
+      "median": 34.67,
+      "mean": 38.24,
+      "max": 63.86
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.088,
+     "mean": 0.082,
+     "max": 0.13
+    },
+    "cpuCores": {
+     "median": 0.109,
+     "mean": 0.12,
+     "max": 0.243
+    },
+    "heapUsedMb": {
+     "median": 254.8,
+     "mean": 253.8,
+     "max": 274.2
+    },
+    "rssMb": {
+     "median": 378.6,
+     "mean": 374.1,
+     "max": 388.6
+    },
+    "gcPauseMaxMs": {
+     "median": 4.57,
+     "mean": 14.62,
+     "max": 55.9
+    }
+   },
+   "worker": {
+    "windows": 16,
+    "loopDelayMs": {
+     "p50": {
+      "median": 15.51,
+      "mean": 15.5,
+      "max": 15.56
+     },
+     "p95": {
+      "median": 19.12,
+      "mean": 19.08,
+      "max": 22.48
+     },
+     "p99": {
+      "median": 24.74,
+      "mean": 25.33,
+      "max": 37.85
+     },
+     "max": {
+      "median": 31.34,
+      "mean": 39.48,
+      "max": 135.53
+     }
+    },
+    "eventLoopUtilization": {
+     "median": 0.034,
+     "mean": 0.037,
+     "max": 0.116
+    },
+    "cpuCores": {
+     "median": 0.034,
+     "mean": 0.057,
+     "max": 0.316
+    },
+    "heapUsedMb": {
+     "median": 231.2,
+     "mean": 255.1,
+     "max": 436.4
+    },
+    "rssMb": {
+     "median": 312.5,
+     "mean": 337.7,
+     "max": 530.4
+    },
+    "gcPauseMaxMs": {
+     "median": 2.18,
+     "mean": 11.21,
+     "max": 129.29
+    }
+   },
+   "blockedWindows": {
+    "warn": 8,
+    "critical": 0
+   },
+   "postgres": {
+    "samples": 38,
+    "note": "non-idle sessions of the app database, summed over samples; \"Lock/...\" or \"Client/ClientRead\" waits and long-running statements show where requests wait",
+    "top": [
+     {
+      "perSample": 0.18,
+      "what": "idle in transaction | Client/ClientRead | begin"
+     },
+     {
+      "perSample": 0.16,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.org_id', $1, true), set_config('app.user_id', $2, true)"
+     },
+     {
+      "perSample": 0.11,
+      "what": "idle in transaction | Client/ClientRead | select set_config('app.privileged', 'on', true)"
+     },
+     {
+      "perSample": 0.08,
+      "what": "idle in transaction | Client/ClientRead |  WITH claimed AS ( SELECT id, created_at FROM event_outbox WHERE status = 'pending' AND av"
+     },
+     {
+      "perSample": 0.03,
+      "what": "active | -/- |  INSERT INTO auth_sessions (org_id, user_id, remember, mfa_verified, ip, user_agent, expir"
+     },
+     {
+      "perSample": 0.03,
+      "what": "active | -/- | SELECT 1"
+     },
+     {
+      "perSample": 0.03,
+      "what": "idle in transaction | Client/ClientRead |  SELECT (SELECT count(*) FROM ( SELECT 1 FROM event_outbox WHERE status = 'pending' AND av"
+     },
+     {
+      "perSample": 0.03,
+      "what": "idle in transaction | Client/ClientRead |  SELECT org_id, id, status, step_seq, CASE WHEN max_expires_at <= $1::timestamptz THEN 'li"
+     }
+    ]
+   },
+   "roundTripsDuringProfile": {
+    "postgresSelect1Ms": {
+     "samples": 75,
+     "p50": 6.95,
+     "p95": 100.39,
+     "max": 178.34
+    },
+    "redisPingMs": {
+     "samples": 75,
+     "p50": 4.63,
+     "p95": 48.64,
+     "max": 61.45
+    },
+    "dockerContainerCpuMaxPercent": {
+     "el-load-redis": 3.08,
+     "el-load-pg": 25.6,
+     "happy_carson": 0.91,
+     "fervent_mendel": 44.46,
+     "stoic_goldwasser": 8.84
+    }
+   },
+   "trace": {
+    "overall": {
+     "requests": 343,
+     "handlerMs": {
+      "p50": 47.7,
+      "p95": 490.3,
+      "mean": 127.5
+     },
+     "perRequest": {
+      "statements": 4.8,
+      "transactions": 1,
+      "connectionsTaken": 1,
+      "redisCommands": 4.5,
+      "redisSequentialGroups": 2.7
+     },
+     "meanMsPerRequest": {
+      "waitingForPoolConnection": 2,
+      "insideStatements": 69.3,
+      "transactionOpenOutsideStatements": 4.9,
+      "insideRedisCommands": 68.9,
+      "redisInFlightWallTime": 45.1
+     },
+     "poolWaitMs": {
+      "p95": 0.3,
+      "max": 216.9
+     },
+     "meanMsPerStatement": 14.42,
+     "meanMsPerRedisCommand": 15.44
+    },
+    "routes": {
+     "GET /metrics": {
+      "requests": 35,
+      "handlerMs": {
+       "p50": 1.3,
+       "p95": 2.7,
+       "mean": 1.5
+      },
+      "perRequest": {
+       "statements": 0,
+       "transactions": 0,
+       "connectionsTaken": 0,
+       "redisCommands": 0,
+       "redisSequentialGroups": 0
+      },
+      "meanMsPerRequest": {
+       "waitingForPoolConnection": 0,
+       "insideStatements": 0,
+       "transactionOpenOutsideStatements": 0,
+       "insideRedisCommands": 0,
+       "redisInFlightWallTime": 0
+      },
+      "poolWaitMs": {
+       "p95": 0,
+       "max": 0
+      },
+      "meanMsPerStatement": 0,
+      "meanMsPerRedisCommand": 0,
+      "roundTrips": {
+       "statements": [],
+       "redis": []
+      }
+     },
+     "GET /v2/contacts": {
+      "requests": 183,
+      "handlerMs": {
+       "p50": 52.4,
+       "p95": 359.8,
+       "mean": 107.6
+      },
+      "perRequest": {
+       "statements": 4.6,
+       "transactions": 1.1,
+       "connectionsTaken": 1.1,
+       "redisCommands": 5.1,
+       "redisSequentialGroups": 3.1
+      },
+      "meanMsPerRequest": {
+       "waitingForPoolConnection": 0.9,
+       "insideStatements": 55.6,
+       "transactionOpenOutsideStatements": 2.6,
+       "insideRedisCommands": 61.9,
+       "redisInFlightWallTime": 39.7
+      },
+      "poolWaitMs": {
+       "p95": 0.3,
+       "max": 152
+      },
+      "meanMsPerStatement": 12.16,
+      "meanMsPerRedisCommand": 12.18,
+      "roundTrips": {
+       "statements": [
+        {
+         "what": "select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at ti",
+         "perRequest": 1,
+         "meanMs": 16.58,
+         "msPerRequest": 16.58
+        },
+        {
+         "what": "commit",
+         "perRequest": 1.14,
+         "meanMs": 11.76,
+         "msPerRequest": 13.43
+        },
+        {
+         "what": "select set_config('app.org_id', $1, true), set_config('app.user_id', $2, true)",
+         "perRequest": 1.11,
+         "meanMs": 11.92,
+         "msPerRequest": 13.22
+        },
+        {
+         "what": "begin",
+         "perRequest": 1.14,
+         "meanMs": 9.2,
+         "msPerRequest": 10.51
+        },
+        {
+         "what": "SELECT o.plan AS plan_slug, s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.",
+         "perRequest": 0.06,
+         "meanMs": 12.45,
+         "msPerRequest": 0.75
+        },
+        {
+         "what": "SELECT key, value, is_secret FROM platform_settings WHERE key NOT LIKE 'set.asse",
+         "perRequest": 0.03,
+         "meanMs": 13.12,
+         "msPerRequest": 0.43
+        },
+        {
+         "what": "SELECT status FROM organizations WHERE id = $1",
+         "perRequest": 0.04,
+         "meanMs": 8.56,
+         "msPerRequest": 0.33
+        },
+        {
+         "what": "select set_config('app.privileged', 'on', true)",
+         "perRequest": 0.03,
+         "meanMs": 7.76,
+         "msPerRequest": 0.25
+        },
+        {
+         "what": "SELECT u.status, s.email_verified_at, s.force_password_change, s.password_change",
+         "perRequest": 0.01,
+         "meanMs": 5.27,
+         "msPerRequest": 0.06
+        }
+       ],
+       "redis": [
+        {
+         "what": "eval \nlocal v = redis.call('GET', KEYS[1])\nif not v then return {false, false} end\nlocal g = redis.call('GET', 'rbac:' .. ARGV[1] .. ':*",
+         "perRequest": 1,
+         "meanMs": 13.68,
+         "msPerRequest": 13.68
+        },
+        {
+         "what": "mget auth:rev:*",
+         "perRequest": 1,
+         "meanMs": 12.9,
+         "msPerRequest": 12.9
+        },
+        {
+         "what": "get auth:gate:*",
+         "perRequest": 1,
+         "meanMs": 11.63,
+         "msPerRequest": 11.63
+        },
+        {
+         "what": "get auth:org-susp:*",
+         "perRequest": 1,
+         "meanMs": 11.58,
+         "msPerRequest": 11.58
+        },
+        {
+         "what": "set auth:act:*",
+         "perRequest": 1,
+         "meanMs": 10.93,
+         "msPerRequest": 10.93
+        },
+        {
+         "what": "get auth:epoch",
+         "perRequest": 0.03,
+         "meanMs": 29.81,
+         "msPerRequest": 0.98
+        },
+        {
+         "what": "setex auth:org-susp:*",
+         "perRequest": 0.04,
+         "meanMs": 4.99,
+         "msPerRequest": 0.19
+        },
+        {
+         "what": "setex auth:gate:*",
+         "perRequest": 0.01,
+         "meanMs": 2.62,
+         "msPerRequest": 0.03
+        }
+       ]
+      }
+     },
+     "GET /v2/inbox/conversations": {
+      "requests": 31,
+      "handlerMs": {
+       "p50": 85.1,
+       "p95": 639.1,
+       "mean": 199.1
+      },
+      "perRequest": {
+       "statements": 7.4,
+       "transactions": 1.4,
+       "connectionsTaken": 1.4,
+       "redisCommands": 5.2,
+       "redisSequentialGroups": 3.2
+      },
+      "meanMsPerRequest": {
+       "waitingForPoolConnection": 5.7,
+       "insideStatements": 118,
+       "transactionOpenOutsideStatements": 1.3,
+       "insideRedisCommands": 100.4,
+       "redisInFlightWallTime": 65.5
+      },
+      "poolWaitMs": {
+       "p95": 48.2,
+       "max": 125.2
+      },
+      "meanMsPerStatement": 15.91,
+      "meanMsPerRedisCommand": 19.21,
+      "roundTrips": {
+       "statements": [
+        {
+         "what": "select set_config('app.org_id', $1, true), set_config('app.user_id', $2, true)",
+         "perRequest": 1.29,
+         "meanMs": 23.94,
+         "msPerRequest": 30.9
+        },
+        {
+         "what": "SELECT c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS channel_k",
+         "perRequest": 1,
+         "meanMs": 21.52,
+         "msPerRequest": 21.52
+        },
+        {
+         "what": "commit",
+         "perRequest": 1.35,
+         "meanMs": 11.94,
+         "msPerRequest": 16.18
+        },
+        {
+         "what": "begin",
+         "perRequest": 1.35,
+         "meanMs": 10.82,
+         "msPerRequest": 14.66
+        },
+        {
+         "what": "SELECT count(*) FILTER (WHERE c.archived = FALSE AND c.status IN ('open', 'pendi",
+         "perRequest": 1,
+         "meanMs": 13.58,
+         "msPerRequest": 13.58
+        },
+        {
+         "what": "SELECT admins_can_read_personal FROM mail_workspace_settings WHERE org_id = $1",
+         "perRequest": 1,
+         "meanMs": 9.78,
+         "msPerRequest": 9.78
+        },
+        {
+         "what": "SELECT o.plan AS plan_slug, s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.",
+         "perRequest": 0.13,
+         "meanMs": 59.7,
+         "msPerRequest": 7.7
+        },
+        {
+         "what": "SELECT status FROM organizations WHERE id = $1",
+         "perRequest": 0.16,
+         "meanMs": 20.04,
+         "msPerRequest": 3.23
+        },
+        {
+         "what": "SELECT key, value, is_secret FROM platform_settings WHERE key NOT LIKE 'set.asse",
+         "perRequest": 0.06,
+         "meanMs": 4.98,
+         "msPerRequest": 0.32
+        },
+        {
+         "what": "select set_config('app.privileged', 'on', true)",
+         "perRequest": 0.06,
+         "meanMs": 2.53,
+         "msPerRequest": 0.16
+        }
+       ],
+       "redis": [
+        {
+         "what": "mget auth:rev:*",
+         "perRequest": 1,
+         "meanMs": 24.96,
+         "msPerRequest": 24.96
+        },
+        {
+         "what": "eval \nlocal v = redis.call('GET', KEYS[1])\nif not v then return {false, false} end\nlocal g = redis.call('GET', 'rbac:' .. ARGV[1] .. ':*",
+         "perRequest": 1,
+         "meanMs": 20.71,
+         "msPerRequest": 20.71
+        },
+        {
+         "what": "set auth:act:*",
+         "perRequest": 1,
+         "meanMs": 17.6,
+         "msPerRequest": 17.6
+        },
+        {
+         "what": "get auth:gate:*",
+         "perRequest": 1,
+         "meanMs": 17.58,
+         "msPerRequest": 17.58
+        },
+        {
+         "what": "get auth:org-susp:*",
+         "perRequest": 1,
+         "meanMs": 17.58,
+         "msPerRequest": 17.58
+        },
+        {
+         "what": "setex auth:org-susp:*",
+         "perRequest": 0.16,
+         "meanMs": 11.24,
+         "msPerRequest": 1.81
+        },
+        {
+         "what": "get auth:epoch",
+         "perRequest": 0.06,
+         "meanMs": 2.39,
+         "msPerRequest": 0.15
+        }
+       ]
+      }
+     },
+     "GET /v2/contacts/:id": {
+      "requests": 46,
+      "handlerMs": {
+       "p50": 110.7,
+       "p95": 614.7,
+       "mean": 157.8
+      },
+      "perRequest": {
+       "statements": 4.3,
+       "transactions": 1.1,
+       "connectionsTaken": 1.1,
+       "redisCommands": 5,
+       "redisSequentialGroups": 3
+      },
+      "meanMsPerRequest": {
+       "waitingForPoolConnection": 0.2,
+       "insideStatements": 73.8,
+       "transactionOpenOutsideStatements": 1.4,
+       "insideRedisCommands": 101.4,
+       "redisInFlightWallTime": 67.9
+      },
+      "poolWaitMs": {
+       "p95": 0.2,
+       "max": 5.1
+      },
+      "meanMsPerStatement": 17.31,
+      "meanMsPerRedisCommand": 20.2,
+      "roundTrips": {
+       "statements": [
+        {
+         "what": "begin",
+         "perRequest": 1.07,
+         "meanMs": 21.43,
+         "msPerRequest": 22.83
+        },
+        {
+         "what": "select set_config('app.org_id', $1, true), set_config('app.user_id', $2, true)",
+         "perRequest": 1.02,
+         "meanMs": 16.93,
+         "msPerRequest": 17.3
+        },
+        {
+         "what": "select \"contacts\".\"id\", \"contacts\".\"uuid\", to_char(\"contacts\".\"created_at\" at ti",
+         "perRequest": 1,
+         "meanMs": 15.93,
+         "msPerRequest": 15.93
+        },
+        {
+         "what": "commit",
+         "perRequest": 1.07,
+         "meanMs": 14.32,
+         "msPerRequest": 15.26
+        },
+        {
+         "what": "select set_config('app.privileged', 'on', true)",
+         "perRequest": 0.04,
+         "meanMs": 31.18,
+         "msPerRequest": 1.36
+        },
+        {
+         "what": "SELECT o.plan AS plan_slug, s.trial_ends_at, s.plan_ends_at, s.billing_cycle, s.",
+         "perRequest": 0.02,
+         "meanMs": 28.17,
+         "msPerRequest": 0.61
+        },
+        {
+         "what": "SELECT key, value, is_secret FROM platform_settings WHERE key NOT LIKE 'set.asse",
+         "perRequest": 0.04,
+         "meanMs": 11.12,
+         "msPerRequest": 0.48
+        }
+       ],
+       "redis": [
+        {
+         "what": "eval \nlocal v = redis.call('GET', KEYS[1])\nif not v then return {false, false} end\nlocal g = redis.call('GET', 'rbac:' .. ARGV[1] .. ':*",
+         "perRequest": 1,
+         "meanMs": 29.67,
+         "msPerRequest": 29.67
+        },
+        {
+         "what": "mget auth:rev:*",
+         "perRequest": 1,
+         "meanMs": 20.39,
+         "msPerRequest": 20.39
+        },
+        {
+         "what": "get auth:gate:*",
+         "perRequest": 1,
+         "meanMs": 17.06,
+         "msPerRequest": 17.06
+        },
+        {
+         "what": "get auth:org-susp:*",
+         "perRequest": 1,
+         "meanMs": 16.98,
+         "msPerRequest": 16.98
+        },
+        {
+         "what": "set auth:act:*",
+         "perRequest": 1,
+         "meanMs": 16.84,
+         "msPerRequest": 16.84
+        },
+        {
+         "what": "get auth:epoch",
+         "perRequest": 0.02,
+         "meanMs": 23.23,
+         "msPerRequest": 0.51
+        }
+       ]
+      }
+     }
+    },
+    "note": "times are measured inside the API process by tools/event-loop-audit/load/trace-preload.cjs; the parts overlap only if a request runs statements in parallel, and handlerMs minus the parts is JS work plus event-loop queueing"
+   },
+   "serverRequestMs": {
+    "p50": 65,
+    "p95": 521.43,
+    "p99": 961.43,
+    "note": "timed from when the handler runs: excludes time queued behind a blocked loop"
+   },
+   "client": {
+    "requests": 308,
+    "requestsPerSecond": 5,
+    "failedRate": 0,
+    "droppedIterations": 0,
+    "checkPassRate": 1,
+    "maxVUs": 20,
+    "clientLatency": {
+     "avgMs": 173.61,
+     "p50Ms": 78,
+     "p90Ms": 427.04,
+     "p95Ms": 655.41,
+     "p99Ms": 972.34,
+     "maxMs": 1751.04
+    },
+    "clientLatencyByRoute": {
+     "inbox_counts": {
+      "avgMs": 132.5,
+      "p50Ms": 61.54,
+      "p90Ms": 263.13,
+      "p95Ms": 295.66,
+      "p99Ms": 343.22,
+      "maxMs": 355.11
+     },
+     "search": {
+      "avgMs": 155.73,
+      "p50Ms": 69.37,
+      "p90Ms": 318.26,
+      "p95Ms": 500.14,
+      "p99Ms": 872.99,
+      "maxMs": 973.28
+     },
+     "update": {
+      "avgMs": 218.25,
+      "p50Ms": 256.02,
+      "p90Ms": 292.35,
+      "p95Ms": 295.18,
+      "p99Ms": 297.43,
+      "maxMs": 298
+     },
+     "get": {
+      "avgMs": 187.26,
+      "p50Ms": 126.73,
+      "p90Ms": 463.97,
+      "p95Ms": 724.94,
+      "p99Ms": 876.71,
+      "maxMs": 953.24
+     },
+     "create": {
+      "avgMs": 597.65,
+      "p50Ms": 479.79,
+      "p90Ms": 1339.55,
+      "p95Ms": 1578.49,
+      "p99Ms": 1716.53,
+      "maxMs": 1751.04
+     },
+     "health": {
+      "avgMs": 29.68,
+      "p50Ms": 16.8,
+      "p90Ms": 75.5,
+      "p95Ms": 83.45,
+      "p99Ms": 94.88,
+      "maxMs": 97.74
+     },
+     "inbox_list": {
+      "avgMs": 219.46,
+      "p50Ms": 118.74,
+      "p90Ms": 541.21,
+      "p95Ms": 626.2,
+      "p99Ms": 869.35,
+      "maxMs": 959.8
+     },
+     "list": {
+      "avgMs": 141.25,
+      "p50Ms": 64.17,
+      "p90Ms": 365.02,
+      "p95Ms": 445.96,
+      "p99Ms": 697.92,
+      "maxMs": 1173.48
+     }
+    }
+   },
+   "k6ExitCode": 0,
+   "calibrationAfter": {
+    "postgresSelect1Ms": {
+     "p50": 1.07,
+     "p99": 11.97,
+     "max": 12.07
+    },
+    "redisPingMs": {
+     "p50": 1.02,
+     "p99": 13.33,
+     "max": 59.47
+    }
+   }
+  }
+ },
+ "dataset": {
+  "workspaces": 1,
+  "contacts": 300,
+  "conversations": 0,
+  "note": "inbox is empty: inbox routes measure framework, auth and database round-trip only"
+ },
+ "calibrationBefore": {
+  "postgresSelect1Ms": {
+   "p50": 1.93,
+   "p99": 39.88,
+   "max": 80.16
+  },
+  "redisPingMs": {
+   "p50": 3.23,
+   "p99": 80.21,
+   "max": 165.49
+  }
+ }
+}

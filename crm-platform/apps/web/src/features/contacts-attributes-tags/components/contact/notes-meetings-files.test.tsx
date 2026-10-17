@@ -85,6 +85,7 @@ const note = (over: Partial<ContactNoteResponse> = {}): ContactNoteResponse => (
   contactId: CONTACT_ID,
   body: 'Asked for a quote.\nCall back on Monday.',
   createdBy: ME,
+  createdByName: 'Asha Rao',
   updatedBy: null,
   rowVersion: 1,
   createdAt: '2026-10-16T09:30:00.000Z',
@@ -165,6 +166,7 @@ describe('Notes section', () => {
     expect(out).toContain('whitespace-pre-wrap');
     expect(out).toContain('dir="auto"');
     expect(out).toContain('Added Oct 16, 2026');
+    expect(out).toContain('by Asha Rao');
     expect(out).toContain('Edited Oct 17, 2026');
     expect(out).toContain('>Edit<');
     expect(out).toContain('>Delete<');

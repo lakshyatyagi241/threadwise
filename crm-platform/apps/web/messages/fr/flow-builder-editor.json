@@ -685,6 +685,7 @@
         "anotherPart": "Une autre partie de ce flux. Elle s’exécute quand un bouton ou une ligne de liste y mène{lost, select, true {: rien n’y mène encore, elle ne s’exécuterait donc jamais.} other {.}}",
         "addFirstStep": "Ajouter la première étape",
         "branchingEnds": "Cette {kind, select, list {liste} other {série de boutons}} termine cette partie : ce qui est envoyé ensuite dépend du choix du client.",
+        "optionsCarryOn": "Chaque {kind, select, list {ligne} other {bouton}} peut démarrer son propre parcours ou continuer avec l'étape suivante ci-dessous.",
         "thenGoTo": "Puis aller à",
         "confirmImport": {
           "title": "Remplacer ce flux par le fichier ?",
@@ -720,7 +721,7 @@
             "answer": "Réponse",
             "action": "Actions"
           },
-          "blockedTitle": "Les boutons et listes terminent un flux, ils ne peuvent donc être placés qu’en dernier.",
+          "blockedTitle": "Cette étape termine cette partie, elle ne peut donc venir qu'en dernier.",
           "blockedTitleFaq": "« Réponse depuis la FAQ » a deux sorties, elle ne peut donc venir qu'en dernier."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "Où cela mène",
           "linkEnds": "Se termine ici (plus rien n’est envoyé)",
+          "linkNext": "Continue avec l'étape suivante",
           "linkOption": "{stage} · {label}{self, select, true { (cette étape)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Mener à un nouveau flux…",
           "question": "Question",

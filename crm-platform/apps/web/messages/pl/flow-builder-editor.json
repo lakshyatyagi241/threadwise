@@ -685,6 +685,7 @@
         "anotherPart": "Kolejny fragment tego przepływu. Uruchamia się, gdy przycisk lub wiersz listy tu prowadzi{lost, select, true {: nic jeszcze tu nie prowadzi, więc nigdy się nie uruchomi.} other {.}}",
         "addFirstStep": "Dodaj pierwszy krok",
         "branchingEnds": "Ta {kind, select, list {lista} other {grupa przycisków}} kończy ten fragment: dalsze wysłanie zależy od tego, co klient wybierze.",
+        "optionsCarryOn": "Każdy {kind, select, list {wiersz} other {przycisk}} może uruchomić własny przepływ albo przejść do następnego kroku poniżej.",
         "thenGoTo": "Następnie przejdź do",
         "confirmImport": {
           "title": "Zastąpić ten przepływ plikiem?",
@@ -720,7 +721,7 @@
             "answer": "Odpowiedź",
             "action": "Akcje"
           },
-          "blockedTitle": "Przyciski i listy kończą przepływ, więc mogą być tylko na końcu.",
+          "blockedTitle": "Ten krok kończy tę część, więc może być tylko ostatni.",
           "blockedTitleFaq": "Odpowiedz z FAQ ma dwa wyjścia, więc może być tylko ostatnim krokiem."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "Dokąd to prowadzi",
           "linkEnds": "Kończy się tutaj (nic więcej nie zostanie wysłane)",
+          "linkNext": "Przechodzi do następnego kroku",
           "linkOption": "{stage} · {label}{self, select, true { (ten krok)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Prowadź do nowego przepływu…",
           "question": "Pytanie",

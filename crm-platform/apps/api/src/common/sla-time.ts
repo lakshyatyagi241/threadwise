@@ -6,7 +6,7 @@ import {
   type SlaState,
   type SlaStatus,
 } from '@crm/contracts';
-import { isOutsideBusinessHours, parseBusinessHours } from './business-hours';
+import { hasSplitDays, isOutsideBusinessHours, parseBusinessHours } from './business-hours';
 
 /**
  * The arithmetic of SLA clocks (TW-TIB2-026): which targets apply, when a clock runs out, and how a clock looks to the agent. Pure
@@ -42,7 +42,9 @@ export function effectiveTargets(
 const MINUTE = 60_000;
 /** While closed, look ahead this far at a time; on landing in an open stretch, step back to the exact minute it opened. */
 const CLOSED_JUMP_MINUTES = 10;
-/** While open, a whole hour that is open at both ends is open throughout (a day has one contiguous window). */
+/** The same with several windows a day: a short window must not be stepped over (a window under five minutes can still be missed). */
+const SPLIT_CLOSED_JUMP_MINUTES = 5;
+/** While open, a whole hour that is open at both ends is open throughout (true unless a day has several windows, see `hasSplitDays`). */
 const OPEN_JUMP_MINUTES = 60;
 /** No workspace is closed for longer than this: past it the hours are taken as unusable and the clock runs plain. */
 const MAX_SEARCH_DAYS = 14;
@@ -72,6 +74,8 @@ export function addBusinessMinutes(
   let t = Math.floor(start.getTime() / MINUTE) * MINUTE;
   const limit = t + (MAX_SEARCH_DAYS * 24 * 60 + minutes) * MINUTE * 4;
   let left = minutes;
+  // A day with a break (two windows) can be open at both ends of an hour and closed in between: count minute by minute then.
+  const split = hasSplitDays(hoursRaw);
 
   while (left > 0) {
     if (t > limit) return new Date(start.getTime() + minutes * MINUTE);
@@ -79,7 +83,7 @@ export function addBusinessMinutes(
       // Jump to the next opening: coarse steps while closed, then back to the exact minute.
       let probe = t;
       while (closed(probe)) {
-        probe += CLOSED_JUMP_MINUTES * MINUTE;
+        probe += (split ? SPLIT_CLOSED_JUMP_MINUTES : CLOSED_JUMP_MINUTES) * MINUTE;
         if (probe > limit) return new Date(start.getTime() + minutes * MINUTE);
       }
       while (!closed(probe - MINUTE) && probe > t) probe -= MINUTE;
@@ -87,7 +91,7 @@ export function addBusinessMinutes(
       continue;
     }
     // Open: take a whole hour when the far end is open too, else one minute.
-    const hour = Math.min(left, OPEN_JUMP_MINUTES);
+    const hour = Math.min(left, split ? 1 : OPEN_JUMP_MINUTES);
     if (
       hour === OPEN_JUMP_MINUTES &&
       !closed(t + (hour - 1) * MINUTE) &&

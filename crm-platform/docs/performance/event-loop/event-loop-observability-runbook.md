@@ -65,6 +65,8 @@ over a second, the server's request histogram sees 7 ms), a 600 ms worker stall 
 (`pnpm --filter @crm/api build`); about 10 minutes, 35 with `--stall`. `--phases=api,worker,long` picks phases. Results of the last
 run: `evidence/scrape-demo.json`.
 
+**Dashboards:** `deploy/observability/grafana/` (API, workers, realtime, release comparison; see its README for what each answers and does not show). `scrape-demo.mjs --grafana` starts a real Grafana next to the demo Prometheus, checks that it provisions the four dashboards and runs every panel query through Grafana's own API (last run: `evidence/scrape-demo-grafana.json`, 54 of 54). Edit `tools/event-loop-audit/dashboards/build.mjs`, never the JSON.
+
 Two things that differ from what the code emits, seen in the real scrape:
 
 - `instance` is the **scrape address** (`api:9464`), Prometheus's default; the process's own `host:pid` id arrives as

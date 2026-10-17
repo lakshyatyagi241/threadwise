@@ -685,6 +685,7 @@
         "anotherPart": "Một phần khác của luồng này. Phần này chạy khi một nút hoặc dòng danh sách dẫn tới đây{lost, select, true {: hiện chưa có gì dẫn tới, nên sẽ không bao giờ chạy.} other {.}}",
         "addFirstStep": "Thêm bước đầu tiên",
         "branchingEnds": "{kind, select, list {Danh sách} other {Nhóm nút}} này kết thúc phần này: nội dung gửi tiếp theo phụ thuộc vào lựa chọn của khách.",
+        "optionsCarryOn": "Mỗi {kind, select, list {dòng} other {nút}} có thể bắt đầu luồng riêng hoặc tiếp tục với bước kế tiếp bên dưới.",
         "thenGoTo": "Sau đó chuyển đến",
         "confirmImport": {
           "title": "Thay luồng này bằng tệp?",
@@ -720,7 +721,7 @@
             "answer": "Trả lời",
             "action": "Hành động"
           },
-          "blockedTitle": "Nhóm nút và danh sách kết thúc luồng, nên chỉ có thể đặt ở cuối.",
+          "blockedTitle": "Bước này kết thúc phần này nên chỉ có thể đặt ở cuối.",
           "blockedTitleFaq": "Trả lời từ FAQ có hai lối ra nên chỉ có thể đặt ở cuối."
         },
         "card": {
@@ -753,6 +754,7 @@
         "editors": {
           "linkLabel": "Nơi này dẫn tới",
           "linkEnds": "Kết thúc tại đây (không gửi thêm gì)",
+          "linkNext": "Tiếp tục với bước kế tiếp",
           "linkOption": "{stage} · {label}{self, select, true { (bước này)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Dẫn tới luồng mới…",
           "question": "Câu hỏi",

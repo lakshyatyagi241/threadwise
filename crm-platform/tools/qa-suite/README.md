@@ -54,6 +54,24 @@ Static checks read the code, the SQL migrations and the compose files. Live chec
 Heuristics produce review items. A reviewed item goes in `data/baseline.json` under its task number with a **reason**; an entry without a reason
 is ignored. The same idea for the SAST report is `tools/sast-report/baseline.json`.
 
+## Per-task reports
+
+```bash
+pnpm qa:reports                  # run tasks 30 31 36 40 41, write one HTML report per task + an index into docs/quality/qa-reports/
+pnpm qa:reports -- --pdf         # also print each to PDF (headless Chrome; set CHROME_PATH if it is not in the usual place)
+pnpm qa:reports -- --no-run      # reuse reports/qa-suite/latest/results.json instead of running the checks again
+pnpm qa:reports -- --tasks 36,40 # only those tasks
+node --test tools/qa-suite/report/report.test.mjs   # fast tests for the generator (no stack needed)
+```
+
+Each report has the verdict against the task target, every check run, the weak points, and how to finish the task. Numbers, lists and verdicts come
+from the check results, so a rerun on newer code gives a new report; the prose around them is reviewed commentary in `report/builders.mjs`. The
+`pnpm qa` run behind it passes `QA_MAX_EVIDENCE` so the appendices hold every finding (the runner's own report keeps the first 40).
+
+Set `API_URL`, `WEB_URL` or `DATABASE_URL` (see above) before running to include the live checks; without them they show as skipped, never as passed.
+The XSS report reads one verdict per HTML sink from `data/xss-sink-review.json`. A sink with no entry is shown as "not reviewed", so a new
+`dangerouslySetInnerHTML` appears in the next report until someone reads it and adds a line.
+
 ## What this does not do
 
 - It does not prove the targets by itself: a count of 3,000 Playwright scenarios is a count of scenarios that exist, and a green regression number

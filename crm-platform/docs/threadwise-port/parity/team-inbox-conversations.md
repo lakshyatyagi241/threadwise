@@ -86,3 +86,14 @@ create gated by the manage right and the cap counting every row. Wiring: [wiring
 Not verified: a side-by-side run against the live Reference screen (the Reference app was not started in this session), and a real browser run of the
 composer on a real WhatsApp channel. Evidence: `test/unit/team-inbox-conversations/saved-replies-rules.spec.ts`, `test/integration/team-inbox-conversations/saved-replies-schema.spec.ts`,
 `test/e2e/team-inbox-conversations/saved-replies.e2e.spec.ts`, `apps/web/.../components/saved-reply-picker.test.tsx`, `saved-replies-screen.test.tsx`, `lib/saved-replies.test.ts`.
+
+## Notes: contact notes and internal notes are separate — `intended` (owner request, 2026-10-17)
+
+| Item                     | Reference                                                                                    | Here                                                                                                                                                                 | Status                                                |
+| ------------------------ | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Composer "Internal note" | writes a `conversation_notes` row, shown in the thread                                       | same                                                                                                                                                                 | same                                                  |
+| Side panel "Notes" list  | the same conversation notes ("Internal notes ·", count, "+ Add note"), a second view of them | the contact's own notes (`contact_notes`, the contact page's Notes tab: add, edit, delete, shared by every conversation with the contact), tab named "Contact notes" | intended (the owner asked for the two to be separate) |
+| Thread with no contact   | n/a                                                                                          | the tab says there is no contact to attach notes to                                                                                                                  | intended                                              |
+
+Wiring: the panel reads and writes `/contacts/:id/notes` (permissions `record.contacts.read` / `record.contacts.update`), not `/conversations/:id/notes`
+(`inbox.conversation.note`). Existing conversation notes stay in the thread; none are copied into contact notes. Not verified: a side-by-side run on the live Reference screen.

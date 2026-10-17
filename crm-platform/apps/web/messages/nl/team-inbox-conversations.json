@@ -553,16 +553,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notities",
-        "label": "Nieuwe interne notitie",
-        "placeholder": "Schrijf een notitie die alleen je team kan zien",
-        "hint": "Ctrl+Enter voegt de notitie toe.",
-        "add": "Notitie toevoegen",
-        "addFailed": "De notitie kon niet worden opgeslagen.",
-        "loading": "Notities laden",
-        "empty": "Nog geen notities.",
-        "unknownAuthor": "Een teamgenoot",
-        "delete": "Deze notitie verwijderen"
+        "tab": "Contactnotities",
+        "noContact": "Dit gesprek heeft geen contact waaraan notities gekoppeld kunnen worden."
       },
       "timeline": {
         "tab": "Tijdlijn",

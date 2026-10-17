@@ -1,0 +1,164 @@
+[
+  {
+    "file": "blog/[slug]/page.tsx",
+    "contains": "JSON.stringify(jsonLd)",
+    "verdict": "safe",
+    "why": "JSON-LD from server data; `<` is escaped to `\\u003c`."
+  },
+  {
+    "file": "blog/[slug]/page.tsx",
+    "contains": "post.body",
+    "verdict": "safe*",
+    "why": "`post.body` is sanitised by HtmlSanitizerService on create, update and read (blog.service.ts)."
+  },
+  {
+    "file": "legal/[slug]/page.tsx",
+    "contains": "s.body",
+    "verdict": "safe*",
+    "why": "Legal sections are sanitised on save (legal.service.ts)."
+  },
+  {
+    "file": "workspace-brand.tsx",
+    "contains": "css",
+    "verdict": "safe",
+    "why": "CSS built by brandCss: only #RRGGBB values are ever written."
+  },
+  {
+    "file": "signature-picker.tsx",
+    "contains": "signaturePreviewHtml",
+    "verdict": "safe*",
+    "why": "Rebuilt by an allow-list sanitiser (no scripts, handlers, styles or unknown tags), per the code comment."
+  },
+  {
+    "file": "template-preview.tsx",
+    "contains": "sanitizeHtml",
+    "verdict": "safe*",
+    "why": "Wrapped in sanitizeHtml."
+  },
+  {
+    "file": "template-row.tsx",
+    "contains": "template.bodyHtml",
+    "verdict": "safe*",
+    "why": "Wrapped in sanitizeHtml."
+  },
+  {
+    "file": "forms-core/previews.tsx",
+    "contains": "renderWaText(t.header)",
+    "verdict": "safe",
+    "why": "renderWaText HTML-escapes first, then adds only b i s code br."
+  },
+  {
+    "file": "forms-core/previews.tsx",
+    "contains": "t.body",
+    "verdict": "safe",
+    "why": "Same helper."
+  },
+  {
+    "file": "inspector/kit.tsx",
+    "contains": "__html: html",
+    "verdict": "not traced",
+    "why": "A sanitiser/escape helper is in the file; the exact source of `html` was not traced."
+  },
+  {
+    "file": "site/site-frame.tsx",
+    "contains": "SOCIAL_ICONS",
+    "verdict": "safe",
+    "why": "Lookup in a constant table of SVG icons; the key never reaches the HTML."
+  },
+  {
+    "file": "site/site-ui.tsx",
+    "contains": "__html: value",
+    "verdict": "safe*",
+    "why": "CMS rich text: sanitised on write and on read (content.service.ts)."
+  },
+  {
+    "file": "site/site-head.tsx",
+    "contains": "set-theme",
+    "verdict": "not traced",
+    "why": "`themeCss` comes from settings; its builder was not traced."
+  },
+  {
+    "file": "site/site-head.tsx",
+    "contains": "set-font",
+    "verdict": "not traced",
+    "why": "`font.css` is built from the configured font family; builder not traced."
+  },
+  {
+    "file": "site/site-head.tsx",
+    "contains": "tw-custom-css",
+    "verdict": "accepted risk",
+    "why": "Public custom CSS: raw by design; only a super admin can save it (code comment)."
+  },
+  {
+    "file": "site/site-head.tsx",
+    "contains": "tw-custom-js",
+    "verdict": "accepted risk",
+    "why": "Public custom JavaScript: raw by design; only a super admin can save it."
+  },
+  {
+    "file": "components/footer.tsx",
+    "contains": "sf-foot-blurb",
+    "verdict": "safe*",
+    "why": "footerParts runs sanitizeHtml(..., 'inline')."
+  },
+  {
+    "file": "components/footer.tsx",
+    "contains": "__html: bottom",
+    "verdict": "safe*",
+    "why": "Same."
+  },
+  {
+    "file": "components/hero.tsx",
+    "contains": "sf-hero-title",
+    "verdict": "not traced",
+    "why": "A sanitiser is present in the file; the source of `heading` was not traced."
+  },
+  {
+    "file": "components/order-tracking.tsx",
+    "contains": "sf-ot-foot",
+    "verdict": "safe*",
+    "why": "Footer from footerParts, sanitised."
+  },
+  {
+    "file": "components/product-detail.tsx",
+    "contains": "sf-richtext",
+    "verdict": "not traced",
+    "why": "A sanitiser is present in the file; not traced to this value."
+  },
+  {
+    "file": "pages/product.tsx",
+    "contains": "jsonLdString",
+    "verdict": "safe",
+    "why": "jsonLdString escapes `<` (seo.ts)."
+  },
+  {
+    "file": "components/form-renderer.tsx",
+    "contains": "safeHtml",
+    "verdict": "safe*",
+    "why": "Wrapped in safeHtml."
+  },
+  {
+    "file": "public/pay-return.tsx",
+    "contains": "view.next.message",
+    "verdict": "safe*",
+    "why": "Wrapped in safeHtml."
+  },
+  {
+    "file": "guest/captcha.tsx",
+    "contains": "mount.innerHTML",
+    "verdict": "safe",
+    "why": "`innerHTML = ''` only clears the node."
+  },
+  {
+    "file": "components/rich-editor.tsx",
+    "contains": "sanitizeHtml(initialHtml)",
+    "verdict": "safe*",
+    "why": "Wrapped in sanitizeHtml."
+  },
+  {
+    "file": "site/preview-bridge.tsx",
+    "contains": "type === 'richtext'",
+    "verdict": "safe",
+    "why": "Restores the element's own earlier content."
+  }
+]
