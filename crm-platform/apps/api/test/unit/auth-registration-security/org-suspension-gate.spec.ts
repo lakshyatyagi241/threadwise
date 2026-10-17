@@ -94,6 +94,42 @@ describe('suspended workspace gate', () => {
     await expect(run('/v2/contacts', 'GET', ctx())).resolves.toBe(true);
   });
 
+  it('starts the user-gate read together with the workspace read, and still throws the workspace error first', async () => {
+    const orgs = { isSuspended: vi.fn() };
+    let release!: (v: boolean) => void;
+    orgs.isSuspended.mockReturnValue(
+      new Promise<boolean>((r) => {
+        release = r;
+      }),
+    );
+    // The user-gate read fails: with a suspended workspace that failure must neither win nor surface as an unhandled rejection.
+    const gates = { stateFor: vi.fn().mockRejectedValue(new Error('redis down')) };
+    const reflector = { getAllAndOverride: vi.fn(() => false) };
+    const guard = new AccountGateGuard(reflector as never, gates as never, orgs as never);
+    const pending = RequestContextStore.run(ctx(), () =>
+      guard.canActivate({
+        getType: () => 'http',
+        getHandler: () => undefined,
+        getClass: () => undefined,
+        switchToHttp: () => ({
+          getRequest: () => ({ originalUrl: '/v2/contacts', url: '/v2/contacts', method: 'GET' }),
+        }),
+      } as never),
+    );
+    // Both reads are out before the workspace verdict has arrived.
+    expect(gates.stateFor).toHaveBeenCalledTimes(1);
+    expect(orgs.isSuspended).toHaveBeenCalledTimes(1);
+    release(true);
+    const err = await pending.catch((e: unknown) => e);
+    expect((err as AppError).code).toBe(ERROR_CODES.WSP_ORG_SUSPENDED);
+  });
+
+  it('does not read the user gates for an operator impersonation or a non-user actor', async () => {
+    const { run, gates } = guardFor({ suspended: false });
+    await run('/v2/contacts', 'GET', ctx({ actorType: 'api_key', userId: null }));
+    expect(gates.stateFor).not.toHaveBeenCalled();
+  });
+
   it('asks Redis about the workspace once per request, not again inside the gate state', async () => {
     const { run, orgs, gates } = guardFor({ suspended: false });
     await expect(run('/v2/contacts', 'GET', ctx())).resolves.toBe(true);

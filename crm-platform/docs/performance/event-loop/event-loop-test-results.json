@@ -3,6 +3,63 @@
   "commit": "604c1db95bac5efb2245506552f95f4801b63461 + uncommitted working tree",
   "results": [
     {
+      "suite": "apps/api/test/integration/with-tenant.spec.ts (new) and rls.spec.ts, real Postgres 16 via testcontainers, restricted application role",
+      "status": "PASSED (7 and 8)",
+      "ranOn": "2026-10-17",
+      "note": "withTenant against the real database: each tenant sees only its own rows, a cross-tenant insert is refused by the policy, org and user settings are visible to the callback's first statement, an empty user is empty, the act-as settings arrive in the same transaction, no setting leaks to the next user of a pooled connection, and without withTenant no rows are visible. On this Windows host testcontainers needed TESTCONTAINERS_HOST_OVERRIDE=127.0.0.1: without it the existing rls.spec.ts failed identically with ECONNRESET (localhost resolved to IPv6, which Docker Desktop does not forward)."
+    },
+    {
+      "suite": "apps/api full unit suite (vitest run test/unit) on the branch with EL-012",
+      "status": "FAILED elsewhere (18 tests in 3 files, none touching this change)",
+      "tests": 11400,
+      "passed": 11380,
+      "failed": 18,
+      "skipped": 2,
+      "failures": [
+        {
+          "file": "test/unit/roles-permissions/key-coverage.spec.ts",
+          "tests": 15,
+          "reason": "permission keys registered that nothing checks (for example org.owner_settings.manage)"
+        },
+        {
+          "file": "test/unit/infra/boundaries.matrix.spec.ts",
+          "tests": 2,
+          "reason": "outbox consumer files not explained or listed in the idempotency audit; Windows path separators"
+        },
+        {
+          "file": "test/unit/notifications/web-push-enqueue.spec.ts",
+          "tests": 1,
+          "reason": "marketplace_payment_failed default preference expectation"
+        }
+      ],
+      "attribution": "None of these files touch withTenant, RbacService or the account gate, and the first two are the same kinds of failure seen before on main. Not re-run on main to prove it; treat as other work, not as passed."
+    },
+    {
+      "suite": "run-load.mjs --trace (idle, normal 5 req/s, peak 20 req/s, 1,500 contacts) after the three round-trip changes (EL-012), compared with the previous run on the same host mood",
+      "status": "RAN",
+      "ranOn": "2026-10-17, branch claude/event-loop-round-trips",
+      "rawData": "evidence/auth-path-trace-round-trips.json (after), evidence/auth-path-trace-after.json (before)",
+      "observed": {
+        "contactsListAt20rps": "statements 5.2 to 4.1, Redis commands 6.0 to 5.0, awaited sequential round trips about 10 to 7, handler mean 33.5 to 25.2 ms, caller p50 35.7 to 27.2 ms, p95 66.1 to 54.7 ms, 0 failed, pool wait 0.1 ms",
+        "contactsListAt5rps": "handler mean 39.7 to 29.0 ms, caller p95 85.2 to 62.4 ms"
+      },
+      "caveat": "Both runs were in a healthy host mood (round trips p50 2 to 3 ms), but they are two runs on a laptop: the counts are exact, the milliseconds are indicative."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-rbac-read.ts (the real RbacService cache read against a real Redis, stub database)",
+      "status": "PASSED",
+      "checks": 12,
+      "note": "Cold cache loads once and caches under the version; warm cache touches nothing; another user loads only their own grants; a roles-version bump makes the old grant set unreachable and the next read reloads under the new version; then cached again."
+    },
+    {
+      "suite": "apps/api unit: with-tenant.spec.ts 5, rbac-cache-read.spec.ts 5, rbac-merge.spec.ts 4, org-suspension-gate.spec.ts 24",
+      "status": "PASSED",
+      "tests": 38,
+      "passed": 38,
+      "ranOn": "2026-10-17",
+      "note": "withTenant: one statement, bind parameters, empty user, act-as settings in the same statement, still refuses org 0. Gate: both Redis reads are started before the workspace verdict arrives, and the workspace error still wins when the user-gate read fails. eslint clean on the touched files."
+    },
+    {
       "suite": "run-load.mjs --trace (idle, normal, peak at 5 and 20 req/s, 1,500 contacts), before and after the duplicate-lookup fix, plus rtt-drift.mjs",
       "status": "RAN",
       "ranOn": "2026-10-17, branch claude/event-loop-auth-path-latency",
