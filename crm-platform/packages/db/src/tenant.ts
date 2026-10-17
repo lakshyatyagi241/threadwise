@@ -37,18 +37,19 @@ export async function withTenant<T>(
   }
 
   return db.transaction(async (tx) => {
-    await tx.execute(sql`select set_config('app.org_id', ${String(ctx.orgId)}, true)`);
+    // One statement, not one per setting: every statement is a network round trip, and this runs in front of every
+    // request's transaction. Each value is still a bind parameter and `true` still makes it transaction-local.
     await tx.execute(
-      sql`select set_config('app.user_id', ${ctx.userId ? String(ctx.userId) : ''}, true)`,
+      ctx.impersonation
+        ? sql`select
+            set_config('app.org_id', ${String(ctx.orgId)}, true),
+            set_config('app.user_id', ${ctx.userId ? String(ctx.userId) : ''}, true),
+            set_config('app.impersonator_id', ${ctx.impersonation.operatorUuid}, true),
+            set_config('app.impersonation_id', ${ctx.impersonation.sessionUuid}, true)`
+        : sql`select
+            set_config('app.org_id', ${String(ctx.orgId)}, true),
+            set_config('app.user_id', ${ctx.userId ? String(ctx.userId) : ''}, true)`,
     );
-    if (ctx.impersonation) {
-      await tx.execute(
-        sql`select set_config('app.impersonator_id', ${ctx.impersonation.operatorUuid}, true)`,
-      );
-      await tx.execute(
-        sql`select set_config('app.impersonation_id', ${ctx.impersonation.sessionUuid}, true)`,
-      );
-    }
     return fn(tx);
   });
 }
