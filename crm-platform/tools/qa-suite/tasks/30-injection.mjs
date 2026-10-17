@@ -17,6 +17,7 @@ import {
 } from '../lib/core.mjs';
 import { lineAt, maskCode, matchClose } from '../lib/code.mjs';
 import { routes } from '../lib/routes.mjs';
+import { classify, templateOf } from '../lib/sql-template.mjs';
 
 export const SQLI = [
   `' OR '1'='1`,
@@ -71,19 +72,6 @@ const PARAMS = [
   'to',
 ];
 
-/** 'safe': literal, or every ${} is a module constant / number-ish; 'request': an interpolation reads request-shaped data; 'review': dynamic, needs a human. */
-const REQ =
-  /\b(req|request|body|query|params|dto|input|payload|filters?|search|searchTerm|q|sort|order|orderBy|dir|direction|column|field)\b/;
-export function classify(arg, consts) {
-  if (/^(['"])[^$]*\1$/.test(arg) || /^`[^$`]*`$/.test(arg)) return 'safe';
-  if (/^[A-Za-z_$][\w$]*$/.test(arg)) return consts.has(arg) ? 'safe' : 'review';
-  const exprs = [...arg.matchAll(/\$\{([^}]*)\}/g)].map((x) => x[1].trim());
-  if (!exprs.length) return 'review';
-  if (exprs.some((e) => REQ.test(e))) return 'request';
-  if (exprs.every((e) => consts.has(e.split(/[.(\[]/)[0]) || /^\d+$/.test(e))) return 'safe';
-  return 'review';
-}
-
 export default {
   id: 30,
   priority: 'P1',
@@ -126,7 +114,8 @@ export default {
         if (close < 0) continue;
         const body = raw.slice(mt.index, close);
         if (/sql`/.test(body)) continue;
-        const verdict = classify(body.slice(body.indexOf('`')), consts);
+        // Classify the template alone: what follows it is the argument array, not SQL.
+        const verdict = classify(templateOf(body.slice(body.indexOf('`'))), consts);
         const where = `${rel(f)}:${lineAt(raw, mt.index)}  ${body.replace(/\s+/g, ' ').slice(0, 90)}`;
         if (verdict === 'request') concatBad.push(where);
         else if (verdict === 'review') concat.push(where);
