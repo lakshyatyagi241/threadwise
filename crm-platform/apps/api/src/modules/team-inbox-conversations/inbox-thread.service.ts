@@ -353,6 +353,7 @@ export class InboxThreadService {
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
       this.assertNotResolved(record);
+      this.access.assertNotAssignedToOther(ctx, record);
     });
     return (
       await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
@@ -370,6 +371,7 @@ export class InboxThreadService {
     this.access.assertVisible(viewer, record);
     await this.access.assertCan(tx, ctx, PERM.reply, record);
     this.assertNotResolved(record);
+    this.access.assertNotAssignedToOther(ctx, record);
   }
 
   /** A resolved or closed thread takes no agent message (text, media, template, share, reaction, retry): reopen it first. */

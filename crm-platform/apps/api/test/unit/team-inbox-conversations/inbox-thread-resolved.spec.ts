@@ -28,6 +28,7 @@ function setup(status: string) {
       assertVisible: () => undefined,
       canSee: () => true,
       assertCan: async () => undefined,
+      assertNotAssignedToOther: () => undefined,
     } as never,
     {} as never,
     {} as never,
