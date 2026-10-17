@@ -15,6 +15,30 @@
     {
       "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `DECLARE rot NO SCROLL CURSOR FOR SELECT tableoid::regclass::text AS tbl, ctid::te",
       "reason": "identifiers go through quote(); batch is a number; maintenance CLI, not reachable from a request; reviewed 2026-10-14"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query(`FETCH ${batch} FROM rot`",
+      "reason": "batch comes from rotationBatchSize(), which accepts only an integer from 1 to 10000 and throws on anything else (a cursor FETCH cannot take a bound parameter); proven by test/unit/platform-infrastructure/rotation-batch.spec.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `UPDATE ${table} SET ${col} = $3 WHERE ctid = $1::tid AND ${col} = $2 RETURNING 1`",
+      "reason": "table and col are the identifiers built by quote() from the pg_class / pg_attribute catalog names (double quotes doubled), never request data; row values are bound as $1..$3; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `UPDATE ${table} SET ${col} = $3::jsonb WHERE ctid = $1::tid AND ${col} = $2::json",
+      "reason": "same quoted catalog identifiers as the text-column update above; row values are bound; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query(`ALTER TABLE ${table} DISABLE TRIGGER ${trg}`",
+      "reason": "table and trigger names come from a hard-coded list in a dev-only demo seeder CLI, never request data; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query(`ALTER TABLE ${table} ENABLE TRIGGER ${trg}`",
+      "reason": "same hard-coded list as DISABLE TRIGGER, in a dev-only demo seeder CLI; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query( `SELECT ${col} AS k, count(*)::int AS n FROM wa_orders WHERE org_id = $1 AND meta_",
+      "reason": "col is only ever the literals 'status' and 'source' passed by countDemo in the same dev-only demo seeder CLI; org id and marker are bound; reviewed 2026-10-17"
     }
   ],
   "43": [

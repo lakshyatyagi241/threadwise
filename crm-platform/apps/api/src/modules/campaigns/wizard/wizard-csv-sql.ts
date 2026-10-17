@@ -1,4 +1,5 @@
 import { sql, type SQL } from 'drizzle-orm';
+import { identifier } from '../../../common/sql/identifier';
 
 /**
  * SQL over a stored CSV upload and the contacts its numbers belong to. A number matches a contact by the digits of the contact's
@@ -6,10 +7,10 @@ import { sql, type SQL } from 'drizzle-orm';
  */
 
 /** The digits of a phone column pair, for the alias a query gives `contacts`. */
-const digitsOf = (alias: string) =>
-  sql.raw(
-    `regexp_replace(coalesce(${alias}.normalized_phone, ${alias}.phone, ''), '\\D', '', 'g')`,
-  );
+const digitsOf = (alias: string) => {
+  const a = identifier(alias);
+  return sql.raw(`regexp_replace(coalesce(${a}.normalized_phone, ${a}.phone, ''), '\\D', '', 'g')`);
+};
 
 /** The valid numbers of one upload, as a `SELECT r.line, r.phone, r.digits, r.name ...` body. */
 const validRows = (orgId: number, uploadId: number): SQL =>

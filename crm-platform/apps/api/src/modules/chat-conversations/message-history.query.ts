@@ -1,5 +1,6 @@
 import { sql, type SQL } from 'drizzle-orm';
 import type { MessageHistoryFilters } from '@crm/contracts';
+import { rawIdentifier } from '../../common/sql/identifier';
 import {
   likeEscape,
   phoneNeedle,
@@ -116,7 +117,7 @@ const digitsOf = (col: SQL): SQL => sql`NULLIF(regexp_replace(${col}, '\\D', '',
 
 /** May the caller read this contact? The contact row is `ct` (possibly NULL: a number with no saved contact). */
 function contactOpen(ctx: HistoryContext, ct: string): SQL {
-  const c = sql.raw(ct);
+  const c = rawIdentifier(ct);
   switch (ctx.contacts.scope) {
     case null:
       return sql`FALSE`;
@@ -140,7 +141,7 @@ function contactOpen(ctx: HistoryContext, ct: string): SQL {
 
 /** A saved contact's name: the contact's own, else first and last name. */
 const contactName = (ct: string): SQL => {
-  const c = sql.raw(ct);
+  const c = rawIdentifier(ct);
   return sql`COALESCE(NULLIF(${c}.name, ''), NULLIF(btrim(concat_ws(' ', ${c}.first_name, ${c}.last_name)), ''))`;
 };
 
@@ -308,15 +309,15 @@ function costJoin(ctx: HistoryContext, level: Level, alias: string, providerId: 
   return sql`LEFT JOIN LATERAL (
       SELECT u.credits, u.currency, u.status FROM usage_charges u
       WHERE u.org_id = ${ctx.orgId} AND u.wamid = ${providerId}
-      ORDER BY u.created_at DESC LIMIT 1) ${sql.raw(alias)} ON TRUE`;
+      ORDER BY u.created_at DESC LIMIT 1) ${rawIdentifier(alias)} ON TRUE`;
 }
 
 const costCols = (ctx: HistoryContext, alias: string): Record<string, SQL> =>
   ctx.cost
     ? {
-        cost_minor: sql`${sql.raw(alias)}.credits`,
-        cost_currency: sql`${sql.raw(alias)}.currency`,
-        cost_status: sql`${sql.raw(alias)}.status`,
+        cost_minor: sql`${rawIdentifier(alias)}.credits`,
+        cost_currency: sql`${rawIdentifier(alias)}.currency`,
+        cost_status: sql`${rawIdentifier(alias)}.status`,
       }
     : {
         cost_minor: sql`NULL::bigint`,
@@ -330,7 +331,7 @@ const costCols = (ctx: HistoryContext, alias: string): Record<string, SQL> =>
  * every number that counts messages, so the cards, the charts and the table agree.
  */
 const FEED_MESSAGES = (alias: string): SQL[] => {
-  const m = sql.raw(alias);
+  const m = rawIdentifier(alias);
   return [
     sql`${m}.kind NOT IN ('system', 'reaction') AND ${m}.deleted_at IS NULL`,
     sql`NOT (COALESCE(${m}.meta ->> 'source', '') = 'broadcast' AND ${m}.meta ->> 'broadcast_id' IS NOT NULL)`,
