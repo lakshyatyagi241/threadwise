@@ -701,6 +701,8 @@
         "format": "{label} darf keinen Zeilenumbruch, keinen Tabulator und keine vier Leerzeichen hintereinander enthalten."
       },
       "reason": {
+        "other_number": "Gehört zu einer anderen WhatsApp-Nummer und kann deshalb aus diesem Gespräch nicht gesendet werden.",
+        "not_linked": "Der Kanal dieses Gesprächs ist mit keiner WhatsApp-Nummer verbunden, daher kann keine Vorlage gesendet werden.",
         "paused": "Von WhatsApp pausiert. Sie kann erneut gesendet werden, sobald die Pause endet.",
         "media_header": "Hat einen Bild-, Video- oder Dokumentkopf, der im Posteingang noch nicht gesendet werden kann.",
         "header_variable": "Hat eine Variable im Kopf, die im Posteingang noch nicht ausgefüllt werden kann.",

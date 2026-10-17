@@ -701,6 +701,8 @@
         "format": "{label} non può contenere interruzioni di riga, tabulazioni o quattro spazi consecutivi."
       },
       "reason": {
+        "other_number": "Appartiene a un altro numero WhatsApp, quindi non può essere inviato da questa conversazione.",
+        "not_linked": "Il canale di questa conversazione non è collegato a un numero WhatsApp, quindi non si può inviare nessun modello.",
         "paused": "Sospeso da WhatsApp. Potrà essere inviato di nuovo al termine della sospensione.",
         "media_header": "Ha un’intestazione con immagine, video o documento, che non può ancora essere inviata dall’Inbox.",
         "header_variable": "Ha una variabile nell’intestazione, che non può ancora essere compilata dall’Inbox.",

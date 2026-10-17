@@ -701,6 +701,8 @@
         "format": "{label} cannot contain a line break, a tab or four spaces in a row."
       },
       "reason": {
+        "other_number": "Belongs to another WhatsApp number, so it cannot be sent from this conversation.",
+        "not_linked": "This conversation's channel is not linked to a WhatsApp number, so no template can be sent from it.",
         "paused": "Paused by WhatsApp. It can be sent again once the pause ends.",
         "media_header": "Has an image, video or document header, which cannot be sent from the inbox yet.",
         "header_variable": "Has a variable in the header, which cannot be filled in from the inbox yet.",

@@ -23,10 +23,10 @@ export interface TemplatePickerProps {
 }
 
 /**
- * The template picker: an approved template of this conversation's WhatsApp number, with a box for each `{{n}}` of its body and a
- * live preview of what the customer will read. A template does not need the 24 hour window, so this is how an agent reaches a
- * customer whose window has closed. A template the inbox cannot fill in (a media header, a link variable) is listed, disabled, with
- * the reason, so it is never a mystery why one known from the library is not offered.
+ * The template picker: an approved template of the workspace, with a box for each `{{n}}` of its body and a live preview of what the
+ * customer will read. A template does not need the 24 hour window, so this is how an agent reaches a customer whose window has closed.
+ * A template that cannot be sent from this conversation (another WhatsApp number, a media header, a link variable) is listed,
+ * disabled, with the reason, so it is never a mystery why one known from the library is not offered.
  */
 export function TemplatePicker(props: TemplatePickerProps) {
   // Mounted only while open: closing unmounts it, so the next opening starts at the list with nothing left over.
