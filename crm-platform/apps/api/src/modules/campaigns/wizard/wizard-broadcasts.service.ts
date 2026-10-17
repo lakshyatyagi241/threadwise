@@ -25,6 +25,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PacingRuntime, WALLET_GATE, type WalletGate } from '../../broadcasts';
+import { SenderSharesService } from '../sender-shares.service';
 import { CampaignEvents } from '../campaign-events';
 import { CampaignsActionsService } from '../campaigns-actions.service';
 import { CampaignJobs } from '../campaign-jobs';
@@ -61,6 +62,7 @@ export class WizardBroadcastsService {
     private readonly runtime: PacingRuntime,
     private readonly actions: CampaignsActionsService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
+    private readonly shares: SenderSharesService,
   ) {}
 
   // ------------------------------------------------------------------------------------------ reads
@@ -146,6 +148,11 @@ export class WizardBroadcastsService {
           ...(await this.seriesView(tx, orgId, series, children)),
           draft: wizardDraftSchema.parse(series.blueprint),
           runList: await Promise.all(children.map((c) => this.runView(tx, orgId, c))),
+          senders: await this.shares.breakdown(
+            tx,
+            orgId,
+            children.map((c) => c.id),
+          ),
         };
       }
       const c = await this.repo.campaignByUuid(tx, orgId, uuid);
@@ -154,6 +161,7 @@ export class WizardBroadcastsService {
         ...(await this.campaignView(tx, orgId, c)),
         draft: draftOf(c),
         runList: [await this.runView(tx, orgId, c)],
+        senders: await this.shares.breakdown(tx, orgId, [c.id]),
       };
     });
   }

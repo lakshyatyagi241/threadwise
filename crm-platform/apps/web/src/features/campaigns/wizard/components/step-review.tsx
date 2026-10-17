@@ -24,6 +24,7 @@ export function StepReview({
   draft,
   template,
   sender,
+  senders,
   sources,
   count,
   credit,
@@ -40,6 +41,8 @@ export function StepReview({
   draft: WizardDraft;
   template: WizardTemplate | null;
   sender: WizardSender | null;
+  /** Every connected number, to name the ones a shared send is split across. */
+  senders?: readonly WizardSender[] | undefined;
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: CreditQuery;
@@ -88,6 +91,7 @@ export function StepReview({
         draft={draft}
         template={template}
         sender={sender}
+        senders={senders}
         sources={sources}
         count={count}
         credit={credit.data}

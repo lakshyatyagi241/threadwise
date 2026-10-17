@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   wizardDraftSchema,
+  wizardSenderPicks,
   type SaveWizardDraftInput,
   type UpdateWizardDraftInput,
   type WizardAudience,
@@ -150,6 +151,16 @@ export class WizardDraftsService {
     if (draft.senderKey) {
       const [picked] = await this.senders.resolve(tx, orgId, [draft.senderKey]);
       if (!picked) throw field('senderKey', 'That number is not connected.');
+    }
+    // Several numbers sharing one send: each must be connected, and a mailbox cannot share a send.
+    const picks = wizardSenderPicks(draft);
+    if (draft.senderKeys.length > 0 && picks.length > 1) {
+      const found = new Set((await this.senders.resolve(tx, orgId, picks)).map((x) => x.key));
+      picks.forEach((key, i) => {
+        if (!found.has(key)) throw field(`senderKeys.${i}`, 'That number is not connected.');
+        if (key.startsWith('email:'))
+          throw field(`senderKeys.${i}`, 'A mailbox cannot share a send with phone numbers.');
+      });
     }
     await this.assertSources(tx, orgId, draft.audience);
     return templateId;

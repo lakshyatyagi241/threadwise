@@ -341,6 +341,9 @@ export const wpCampaignContacts = pgTable(
     followUpNext: smallint('follow_up_next'),
     followUpBaseAt: timestamp('follow_up_base_at', { withTimezone: true }),
     followUpCheckAt: timestamp('follow_up_check_at', { withTimezone: true }),
+    /** The number this recipient is sent from when a send is split across several (both null: the campaign's own number). */
+    senderProvider: text('sender_provider'),
+    senderDeviceId: idColumn('sender_device_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -348,6 +351,13 @@ export const wpCampaignContacts = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_wp_campaign_contacts_org_id_uuid').on(t.orgId, t.uuid),
+    check(
+      'ck_wp_campaign_contacts_sender',
+      sql`(sender_provider IS NULL) = (sender_device_id IS NULL)`,
+    ),
+    index('idx_wp_campaign_contacts_sender')
+      .on(t.orgId, t.campaignId, t.senderProvider, t.senderDeviceId)
+      .where(sql`sender_provider IS NOT NULL`),
     check(
       'ck_wp_campaign_contacts_follow_up_state',
       sql`follow_up_state IS NULL OR follow_up_state IN ('active', 'done')`,

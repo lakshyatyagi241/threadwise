@@ -274,9 +274,11 @@ export class WizardRetryService {
       if (!contactRow || contactRow.is_unsubscribed) return { skip: 'opted_out' as const };
       const to = assemblePhone(contactRow.phone, contactRow.country_code);
       if (!to) return { skip: 'gone' as const };
+      // A recipient of a split send is retried from the number it was sent from, not the campaign's primary one.
+      const own = await this.campaigns.recipientSender(tx, orgId, c.id);
       const sender = await this.senders.resolveForDispatch(tx, orgId, {
-        provider: camp.provider,
-        deviceId: camp.deviceId,
+        provider: own ? own.provider : camp.provider,
+        deviceId: own ? own.deviceId : camp.deviceId,
       });
       if (!sender) return { skip: 'no_sender' as const };
       const base = await this.merge.baseContext(tx, orgId);

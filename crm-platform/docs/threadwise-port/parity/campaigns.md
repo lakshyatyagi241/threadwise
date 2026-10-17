@@ -111,6 +111,17 @@ used on either side):
 | 10  | Test send                                             | none in the builder                                           | test to up to ten E.164 numbers, logged, charged on delivery                                    | addition                 |
 | 11  | A/B, Smart Delivery, end date, flows, custom messages | yes                                                           | not in the wizard                                                                               | classic builder only     |
 
+### Several numbers on one send (TW-CAMP-042)
+
+| #   | Behaviour                   | Reference (composer, TW-BCAST-006/014)                     | Wizard                                                                                 | Verdict                                                            |
+| --- | --------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 12  | Where                       | `/broadcasts/create` tick list                             | step 1 of the guided flow, under **Send from** (the composer redirects to Campaigns)   | same behaviour, new place                                          |
+| 13  | Weights                     | 0..1000, missing or non-positive counts as 1 on the server | same                                                                                   | same                                                               |
+| 14  | Percent badge of a ticked 0 | shows 0% while the server sends with weight 1              | shows the share that is really sent (weight 1)                                         | intended: documented bug fix (the Review step shows real counts)   |
+| 15  | Split                       | one broadcast row per number, sequential slices            | one campaign, sequential slices, the number stored per recipient                       | intended: one campaign keeps one status page and one set of totals |
+| 16  | At least one number         | not enforced (a device-less broadcast was possible)        | one number stays ticked; a pick must be connected and a Cloud API number               | intended                                                           |
+| 17  | Template on every number    | not checked                                                | refused when a template tied to one Meta account is sent from another account's number | addition                                                           |
+
 ### Automated evidence
 
 - `apps/api/test/unit/campaigns/recurrence.spec.ts` (23), `wizard-rules.spec.ts` (25), `wizard-contracts.spec.ts` (22), `whatsapp-fixture.spec.ts` (5).

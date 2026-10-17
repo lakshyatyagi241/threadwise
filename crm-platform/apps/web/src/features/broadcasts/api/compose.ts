@@ -3,29 +3,17 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
   attributeCatalogSchema,
-  broadcastComposeSchema,
   contactGroupResponseSchema,
   contactResponseSchema,
-  createBroadcastResponseSchema,
   pageResponseSchema,
   segmentResponseSchema,
   tagResponseSchema,
-  type CreateBroadcastInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { KEYS } from './broadcasts';
 
 /** Reference's picker listed the 500 newest contacts; a group or a tag reaches everyone else. */
 export const AUDIENCE_LIMIT = 500;
-
-export function useCompose() {
-  return useQuery({
-    queryKey: [...KEYS.all, 'compose'],
-    queryFn: ({ signal }) =>
-      apiFetch('/broadcasts/compose', { schema: broadcastComposeSchema, signal }),
-    retry: false,
-  });
-}
 
 /** The newest contacts, for the audience table. Needs the contacts permission; without it the table says so and groups and tags still work. */
 export function useAudienceContacts(enabled: boolean, filter: AudienceFilter = {}) {
@@ -99,9 +87,6 @@ export function useAudienceTags(enabled: boolean) {
       }),
   });
 }
-
-export const createBroadcast = (body: CreateBroadcastInput) =>
-  apiFetch('/broadcasts', { method: 'POST', body, schema: createBroadcastResponseSchema });
 
 /** The click-to-insert attributes: contact fields, custom fields, workspace values and system tokens, each with a sample. */
 export function useAttributeCatalog() {

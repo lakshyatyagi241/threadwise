@@ -1210,7 +1210,12 @@
         "pickSender": "Pilih nomor",
         "classicOption": "pembuat klasik",
         "buildWithAi": "Buat dengan AI",
-        "aiNote": "Buat draf templat baru dengan AI. Anda meninjaunya di halaman templat; setelah itu Meta meninjaunya sebelum dapat dikirim, jadi kembali dan pilih templat ini setelah disetujui."
+        "aiNote": "Buat draf templat baru dengan AI. Anda meninjaunya di halaman templat; setelah itu Meta meninjaunya sebelum dapat dikirim, jadi kembali dan pilih templat ini setelah disetujui.",
+        "shareToggle": "Bagi pengiriman ini ke beberapa nomor",
+        "shareHint": "Centang nomor pengirim dan beri masing-masing bagian. Audiens dibagi menurut bagian tersebut dan setiap kontak menerima pesan dari satu nomor saja. Bagian yang kosong atau 0 dihitung 1.",
+        "shareWeight": "Bagian",
+        "shareWeightLabel": "Bagian {name}",
+        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang."
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Dibebankan ke dompet Anda: {amount}",
         "sumFollowUps": "Tindak lanjut",
         "sumSequence": "Dikirim bergiliran",
-        "sumPrevious": "Pengiriman sebelumnya: {names} ({outcome})"
+        "sumPrevious": "Pengiriman sebelumnya: {names} ({outcome})",
+        "sumSplit": "Pembagian antar nomor",
+        "sumSplitCount": "{count, plural, other {# penerima}} ({percent}%)",
+        "sumSplitPercent": "{percent}% dari audiens"
       },
       "test": {
         "title": "Kirim pesan WhatsApp uji coba",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, other {# orang mengklik tautan}}",
         "failed": "{count, plural, other {# orang yang pengirimannya gagal}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Terkirim dari tiap nomor",
+      "hint": "Pengiriman ini dibagi ke beberapa nomor. Setiap baris adalah satu nomor dan penerima yang diberikan kepadanya.",
+      "cols": {
+        "number": "Nomor",
+        "recipients": "Penerima",
+        "sent": "Terkirim",
+        "delivered": "Tersampaikan",
+        "failed": "Gagal"
+      },
+      "removed": "(nomor yang telah dihapus)"
     }
   }
 }

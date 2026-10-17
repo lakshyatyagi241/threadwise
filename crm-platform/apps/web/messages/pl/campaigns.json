@@ -1210,7 +1210,12 @@
         "pickSender": "Wybierz numer",
         "classicOption": "kreator klasyczny",
         "buildWithAi": "Utwórz z AI",
-        "aiNote": "Przygotuj nowy szablon z pomocą AI. Sprawdzisz go na stronie szablonu, a następnie Meta go zweryfikuje, zanim będzie można go wysłać, więc wróć i wybierz go po zatwierdzeniu."
+        "aiNote": "Przygotuj nowy szablon z pomocą AI. Sprawdzisz go na stronie szablonu, a następnie Meta go zweryfikuje, zanim będzie można go wysłać, więc wróć i wybierz go po zatwierdzeniu.",
+        "shareToggle": "Podziel tę wysyłkę między kilka numerów",
+        "shareHint": "Zaznacz numery, z których ma iść wysyłka, i przypisz każdemu udział. Odbiorcy są dzieleni według tych udziałów, a każdy kontakt dostaje wiadomość tylko z jednego numeru. Pusty udział lub 0 liczy się jako 1.",
+        "shareWeight": "Udział",
+        "shareWeightLabel": "Udział numeru {name}",
+        "shareKeepOne": "Co najmniej jeden numer musi pozostać zaznaczony."
       },
       "audience": {
         "selectionTitle": "Wybrane w Centrum kontaktów",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Pobrano z Twojego portfela: {amount}",
         "sumFollowUps": "Wiadomości uzupełniające",
         "sumSequence": "Wysyła na zmianę",
-        "sumPrevious": "Poprzednie wysyłki: {names} ({outcome})"
+        "sumPrevious": "Poprzednie wysyłki: {names} ({outcome})",
+        "sumSplit": "Podział między numery",
+        "sumSplitCount": "{count, plural, one {# odbiorca} few {# odbiorców} many {# odbiorców} other {# odbiorcy}} ({percent}%)",
+        "sumSplitPercent": "{percent}% odbiorców"
       },
       "test": {
         "title": "Wyślij testową wiadomość WhatsApp",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# osoba kliknęła link} few {# osoby kliknęły link} many {# osób kliknęło link} other {# osoby kliknęły link}}",
         "failed": "{count, plural, one {# osoba, do której nie dotarło} few {# osoby, do których nie dotarło} many {# osób, do których nie dotarło} other {# osoby, do których nie dotarło}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Wysłano z każdego numeru",
+      "hint": "Ta wysyłka została podzielona między kilka numerów. Każdy wiersz to numer i przypisani mu odbiorcy.",
+      "cols": {
+        "number": "Numer",
+        "recipients": "Odbiorcy",
+        "sent": "Wysłane",
+        "delivered": "Dostarczone",
+        "failed": "Nieudane"
+      },
+      "removed": "(usunięty numer)"
     }
   }
 }

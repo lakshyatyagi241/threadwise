@@ -51,11 +51,15 @@ export function toConfig(
     mediaUrl: string | null;
     expiresAtLocal: string | null;
     recipientContactIds: string[];
+    senderKeys?: string[];
+    senderShare?: Record<string, number>;
   },
 ): CampaignConfig {
   return {
     ...toCampaign(r),
     senderKey: extra.senderKey,
+    senderKeys: extra.senderKeys ?? [],
+    senderShare: extra.senderShare ?? {},
     abSplit: r.abSplit,
     customMessage: extra.customMessage,
     customMessageB: extra.customMessageB,

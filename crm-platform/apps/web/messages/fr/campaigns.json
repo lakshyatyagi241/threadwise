@@ -1210,7 +1210,12 @@
         "pickSender": "Choisir un numéro",
         "classicOption": "éditeur classique",
         "buildWithAi": "Créer avec l'IA",
-        "aiNote": "Rédigez un nouveau modèle avec l'IA. Vous le relisez sur la page du modèle ; Meta l'examine ensuite avant qu'il puisse être envoyé, revenez donc le sélectionner une fois qu'il est approuvé."
+        "aiNote": "Rédigez un nouveau modèle avec l'IA. Vous le relisez sur la page du modèle ; Meta l'examine ensuite avant qu'il puisse être envoyé, revenez donc le sélectionner une fois qu'il est approuvé.",
+        "shareToggle": "Répartir cet envoi sur plusieurs numéros",
+        "shareHint": "Cochez les numéros d'envoi et donnez une part à chacun. L'audience est répartie selon ces parts et chaque contact reçoit le message depuis un seul numéro. Une part vide ou 0 compte pour 1.",
+        "shareWeight": "Part",
+        "shareWeightLabel": "Part de {name}",
+        "shareKeepOne": "Au moins un numéro doit rester coché."
       },
       "audience": {
         "selectionTitle": "Choisi dans le Hub de contacts",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Débité de votre portefeuille : {amount}",
         "sumFollowUps": "Relances",
         "sumSequence": "Envoyé en alternance",
-        "sumPrevious": "Envois précédents : {names} ({outcome})"
+        "sumPrevious": "Envois précédents : {names} ({outcome})",
+        "sumSplit": "Répartition entre les numéros",
+        "sumSplitCount": "{count, plural, one {# destinataire} other {# destinataires}} ({percent} %)",
+        "sumSplitPercent": "{percent} % de l'audience"
       },
       "test": {
         "title": "Envoyer un message WhatsApp de test",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# personne a cliqué sur un lien} many {# de personnes ont cliqué sur un lien} other {# personnes ont cliqué sur un lien}}",
         "failed": "{count, plural, one {# personne pour qui l'envoi a échoué} many {# de personnes pour qui l'envoi a échoué} other {# personnes pour qui l'envoi a échoué}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Envoyé depuis chaque numéro",
+      "hint": "Cet envoi a été réparti sur plusieurs numéros. Chaque ligne est un numéro et les destinataires qui lui ont été attribués.",
+      "cols": {
+        "number": "Numéro",
+        "recipients": "Destinataires",
+        "sent": "Envoyés",
+        "delivered": "Distribués",
+        "failed": "Échecs"
+      },
+      "removed": "(un numéro supprimé)"
     }
   }
 }

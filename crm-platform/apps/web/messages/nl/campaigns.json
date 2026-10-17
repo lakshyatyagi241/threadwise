@@ -1210,7 +1210,12 @@
         "pickSender": "Kies een nummer",
         "classicOption": "klassieke builder",
         "buildWithAi": "Bouwen met AI",
-        "aiNote": "Maak met AI een concept voor een nieuwe sjabloon. U controleert het op de sjabloonpagina; daarna beoordeelt Meta het voordat het kan worden verzonden, dus kom terug en kies het zodra het is goedgekeurd."
+        "aiNote": "Maak met AI een concept voor een nieuwe sjabloon. U controleert het op de sjabloonpagina; daarna beoordeelt Meta het voordat het kan worden verzonden, dus kom terug en kies het zodra het is goedgekeurd.",
+        "shareToggle": "Verdeel deze verzending over meerdere nummers",
+        "shareHint": "Vink de nummers aan waarmee je verzendt en geef elk een aandeel. De doelgroep wordt volgens die aandelen verdeeld en elk contact krijgt het bericht van slechts één nummer. Een leeg aandeel of 0 telt als 1.",
+        "shareWeight": "Aandeel",
+        "shareWeightLabel": "Aandeel van {name}",
+        "shareKeepOne": "Minstens één nummer blijft aangevinkt."
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -1439,7 +1444,10 @@
         "chargedWallet": "Van je portemonnee afgeschreven: {amount}",
         "sumFollowUps": "Follow-ups",
         "sumSequence": "Wordt om de beurt verzonden",
-        "sumPrevious": "Eerdere verzendingen: {names} ({outcome})"
+        "sumPrevious": "Eerdere verzendingen: {names} ({outcome})",
+        "sumSplit": "Verdeling over nummers",
+        "sumSplitCount": "{count, plural, one {# ontvanger} other {# ontvangers}} ({percent}%)",
+        "sumSplitPercent": "{percent}% van de doelgroep"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1976,6 +1984,18 @@
         "clicked": "{count, plural, one {# persoon heeft op een link geklikt} other {# personen hebben op een link geklikt}}",
         "failed": "{count, plural, one {# persoon voor wie het mislukte} other {# personen voor wie het mislukte}}"
       }
+    },
+    "senderBreakdown": {
+      "title": "Verzonden vanaf elk nummer",
+      "hint": "Deze verzending is verdeeld over meerdere nummers. Elke rij is een nummer met de ontvangers die het kreeg.",
+      "cols": {
+        "number": "Nummer",
+        "recipients": "Ontvangers",
+        "sent": "Verzonden",
+        "delivered": "Afgeleverd",
+        "failed": "Mislukt"
+      },
+      "removed": "(een verwijderd nummer)"
     }
   }
 }

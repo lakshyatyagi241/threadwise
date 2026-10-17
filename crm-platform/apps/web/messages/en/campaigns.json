@@ -1250,6 +1250,11 @@
         "previewEmpty": "Choose a template to see how the message looks.",
         "senderLabel": "Send from",
         "senderHint": "The WhatsApp number this campaign is sent from.",
+        "shareToggle": "Share this send across several numbers",
+        "shareHint": "Tick the numbers to send from and give each a share. The audience is split by those shares and every contact is messaged from one number only. A share that is empty or 0 counts as 1.",
+        "shareWeight": "Share",
+        "shareWeightLabel": "Share of {name}",
+        "shareKeepOne": "At least one number stays ticked.",
         "pickSender": "Choose a number",
         "classicOption": "classic builder",
         "buildWithAi": "Build with AI",
@@ -1472,6 +1477,9 @@
         "sumField": "is filled from {field}",
         "sumFieldFallback": "is filled from {field}, or \"{fallback}\" when empty",
         "sumSender": "Send from",
+        "sumSplit": "Split across numbers",
+        "sumSplitCount": "{count, plural, one {# recipient} other {# recipients}} ({percent}%)",
+        "sumSplitPercent": "{percent}% of the audience",
         "sumContacts": "{count, plural, one {# contact picked in the table} other {# contacts picked in the table}}",
         "sumAllMatching": "All contacts matching {what}",
         "sumAllContacts": "All contacts",
@@ -1966,6 +1974,18 @@
           "action": "Open the Email page"
         }
       }
+    },
+    "senderBreakdown": {
+      "title": "Sent from each number",
+      "hint": "This send was shared across several numbers. Each row is one number and the recipients it was given.",
+      "cols": {
+        "number": "Number",
+        "recipients": "Recipients",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed"
+      },
+      "removed": "(a number that was removed)"
     }
   }
 }
