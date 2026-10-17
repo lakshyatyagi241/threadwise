@@ -101,6 +101,10 @@
     {
       "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.settings.get(",
       "reason": "read once per workspace and memoised for the rest of the sweep (attemptsByOrg), so the call count is the number of workspaces, not campaigns; fixed and reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/catalog-products/catalog-sync.service.ts await this.repo.findByRetailerIds(",
+      "reason": "the only per-item lookup left in the import: it runs only when the same retailer id appears twice in one Meta listing and the first copy was created in this run (a few rows at most), so the second can update it; every other product is read once for the whole listing (findByRetailerIds + one variants read); proven by test/unit/catalog-products/catalog-import-lookup.spec.ts; reviewed 2026-10-17"
     }
   ],
   "36": [
