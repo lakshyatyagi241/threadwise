@@ -14,6 +14,8 @@ export interface OutboxSample {
   ready: number;
   /** Seconds the oldest due event has been due (0 when nothing is due). */
   lagSeconds: number;
+  /** Events that exhausted their retries (`status = 'dead'`) and wait for a replay, capped at {@link READY_CAP}. Alert on > 0. */
+  dead?: number;
   /** When the sample was taken, ms since epoch. */
   sampledAt: number;
 }

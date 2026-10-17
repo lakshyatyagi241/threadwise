@@ -22,6 +22,8 @@ export interface OutboxCheck {
   ready?: number;
   /** Seconds the oldest due event has been waiting. */
   lagSeconds?: number;
+  /** Events that ran out of retries and wait for a replay. Any value above 0 needs a person. */
+  dead?: number;
   /** How old the sample is, in seconds. */
   sampleAgeSeconds?: number;
 }
@@ -56,6 +58,7 @@ export class WorkerStatusService {
       status: sample.lagSeconds >= this.env.INFRA_OUTBOX_LAG_WARN_SECONDS ? 'lagging' : 'ok',
       ready: sample.ready,
       lagSeconds: sample.lagSeconds,
+      ...(typeof sample.dead === 'number' ? { dead: sample.dead } : {}),
       sampleAgeSeconds: Math.max(0, Math.round((now - sample.sampledAt) / 1000)),
     };
   }

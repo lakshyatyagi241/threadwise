@@ -69,6 +69,11 @@ describe('WorkerStatusService', () => {
     });
   });
 
+  it('surfaces the dead-lettered count so an alert can fire on any non-zero value', async () => {
+    await redis.set(OUTBOX_SAMPLE_KEY, sample({ dead: 3 }));
+    expect((await status().read(NOW)).outbox).toMatchObject({ status: 'ok', dead: 3 });
+  });
+
   it('says lagging from the warn threshold up', async () => {
     await redis.set(OUTBOX_SAMPLE_KEY, sample({ lagSeconds: 59 }));
     expect((await status().read(NOW)).outbox.status).toBe('ok');
@@ -107,12 +112,17 @@ describe('WorkerHeartbeatService', () => {
   const id = `${hostname()}:${process.pid}`;
 
   it('publishes the beat and the outbox sample', async () => {
-    const hb = new WorkerHeartbeatService(fakeDb([{ ready: 3, lag_seconds: 7 }]), redis, env);
+    const hb = new WorkerHeartbeatService(
+      fakeDb([{ ready: 3, lag_seconds: 7, dead: 2 }]),
+      redis,
+      env,
+    );
     await hb.beat(NOW);
     expect(Number(await redis.zscore(WORKERS_KEY, id))).toBe(NOW);
     expect(JSON.parse((await redis.get(OUTBOX_SAMPLE_KEY))!)).toEqual({
       ready: 3,
       lagSeconds: 7,
+      dead: 2,
       sampledAt: NOW,
     });
     expect(await redis.pttl(OUTBOX_SAMPLE_KEY)).toBeGreaterThan(0);
