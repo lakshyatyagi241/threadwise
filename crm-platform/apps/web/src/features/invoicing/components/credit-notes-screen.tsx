@@ -22,6 +22,7 @@ import { CloseIcon, InvoiceIcon, PlusIcon, RefreshIcon, SearchIcon } from './ico
 import { newCreditNoteHref, useCreditNoteDialogs } from './credit-notes-parts';
 import { CreditNotesTable } from './credit-notes-table';
 import { ErrorLine, useInvoicingCan } from './parts';
+import { PageFill } from '@/components/shell/page-fill';
 
 /**
  * `/credit-notes`: every credit note of the workspace. The tab, the search and the filters live in the address; the list is a
@@ -70,7 +71,7 @@ export function CreditNotesScreen() {
   };
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="36rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -142,7 +143,7 @@ export function CreditNotesScreen() {
         aria-label={t('tableLabel')}
         aria-busy={list.isFetching}
         // As tall as the window allows: the rows scroll inside it and the footer stays pinned.
-        className="flex max-h-[max(26rem,calc(100dvh-19rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         <div
           className={cn(
@@ -209,7 +210,7 @@ export function CreditNotesScreen() {
       </section>
 
       {dialogs.node}
-    </div>
+    </PageFill>
   );
 }
 

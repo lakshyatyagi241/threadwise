@@ -27,6 +27,7 @@ import { InvoicesToolbar } from './invoices-toolbar';
 import { OutstandingStrip } from './outstanding-strip';
 import { ErrorLine, useErrorText, useInvoicingCan } from './parts';
 import { useInvoiceDialogs } from './use-invoice-dialogs';
+import { PageFill } from '@/components/shell/page-fill';
 
 /**
  * `/invoices`: the invoice list. The tab, the filters and the sort live in the address; the selection and the open dialogs are
@@ -120,7 +121,7 @@ export function InvoicesScreen() {
   const settled = !list.isPending;
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="36rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -192,7 +193,7 @@ export function InvoicesScreen() {
         aria-label={t('tableLabel')}
         aria-busy={list.isFetching}
         // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
-        className="flex max-h-[max(26rem,calc(100dvh-19rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         <div
           className={cn(
@@ -296,7 +297,7 @@ export function InvoicesScreen() {
         onClose={() => setBulkConfirm(null)}
         onConfirm={() => void runBulk('delete')}
       />
-    </div>
+    </PageFill>
   );
 }
 

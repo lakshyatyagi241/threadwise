@@ -33,6 +33,7 @@ import { ErrorLine, useInvoicingCan } from './parts';
 import { useSalesOrderDialogs } from './sales-order-dialogs';
 import { newSalesOrderHref } from './sales-order-parts';
 import { SalesOrdersTable } from './sales-orders-table';
+import { PageFill } from '@/components/shell/page-fill';
 
 /**
  * `/sales-orders`: every order of the workspace. The tab, the quick filters ("To invoice", "To fulfil"), the search and the
@@ -82,7 +83,7 @@ export function SalesOrdersScreen() {
   };
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="36rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -158,7 +159,7 @@ export function SalesOrdersScreen() {
         aria-label={t('tableLabel')}
         aria-busy={list.isFetching}
         // As tall as the window allows: the rows scroll inside it and the footer stays pinned.
-        className="flex max-h-[max(26rem,calc(100dvh-22rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         <div
           className={cn(
@@ -225,7 +226,7 @@ export function SalesOrdersScreen() {
       </section>
 
       {dialogs.node}
-    </div>
+    </PageFill>
   );
 }
 

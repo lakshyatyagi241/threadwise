@@ -25,6 +25,7 @@ import { ErrorLine, useErrorText, useInvoicingCan } from './parts';
 import { RowMenu } from './row-menu';
 import { TaxPresetsDialog } from './tax-presets-dialog';
 import { TaxRateDialog } from './tax-rate-dialog';
+import { PageFill } from '@/components/shell/page-fill';
 
 const COL_W = [220, 100, 130, 100, 110, 140, 90, 70, 100, 56];
 const COLS = [
@@ -81,7 +82,7 @@ export function TaxRatesScreen() {
   }
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="36rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -109,7 +110,7 @@ export function TaxRatesScreen() {
 
       <section
         aria-label={t('tableLabel')}
-        className="flex max-h-[max(24rem,calc(100dvh-13rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         {rates.isPending ? (
           <div role="status" className="flex items-center gap-2 p-6 text-muted-foreground">
@@ -202,7 +203,7 @@ export function TaxRatesScreen() {
           );
         }}
       />
-    </div>
+    </PageFill>
   );
 }
 
