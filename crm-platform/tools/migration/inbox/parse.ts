@@ -211,7 +211,8 @@ export function sentInteractiveFrom(
     const buttons = raw
       .map((b) => ({
         type: str(obj(b)?.type),
-        title: str(obj(obj(b)?.value)?.text),
+        // Waboo's own shape is value.text; the Cloud API's is reply.title (a button saved as sent to Meta)
+        title: str(obj(obj(b)?.value)?.text) ?? str(obj(obj(b)?.reply)?.title) ?? str(obj(b)?.title),
         url: str(obj(obj(b)?.value)?.url),
       }))
       .filter((b): b is { type: string | null; title: string; url: string | null } => b.title !== null);

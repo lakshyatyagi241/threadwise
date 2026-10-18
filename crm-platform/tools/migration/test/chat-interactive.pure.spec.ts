@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { parseTurn } from '../inbox/parse';
+import { parseTurn, sentInteractiveFrom } from '../inbox/parse';
 import { previewOf } from '../inbox/peer';
 import { elementShapes, repairOf } from '../load/chatreparse';
 import { oracleChat } from '../reconcile/oracle-chat';
@@ -176,5 +176,28 @@ describe('chat-reparse: repairOf on a saved row', () => {
   it('preview rule: the preview the loader derived from the empty body, and the one after', () => {
     expect(previewOf({ kind: 'interactive', body: null })).toBe('📎 Interactive');
     expect(previewOf({ kind: 'interactive', body: 'Pick one\nTap below' })).toBe('Pick one Tap below');
+  });
+});
+
+describe('buttons under a message with a header file (F-001)', () => {
+  const replyButtons = {
+    type: 'whatsapp_interactive',
+    interactive: {
+      type: 'button',
+      header: { type: 'image', link: IMG },
+      body: 'This is test bot',
+      action: {
+        buttons: ['Welcome', 'Feedback', 'No more'].map((t, i) => ({ id: `r${i}`, type: 'reply', reply: { id: `r${i}`, title: t } })),
+      },
+    },
+  };
+  it('an image-header button message is kind image and still yields its buttons, in order', () => {
+    const t = parseTurn(turn(replyButtons));
+    expect(t.kind).toBe('image');
+    expect(sentInteractiveFrom(t.legacy.interactive, t.body)).toEqual({
+      type: 'buttons',
+      body: 'This is test bot',
+      buttons: [{ title: 'Welcome' }, { title: 'Feedback' }, { title: 'No more' }],
+    });
   });
 });

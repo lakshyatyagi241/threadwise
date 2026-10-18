@@ -668,16 +668,25 @@ async function runVerify(ctx) {
   const { db, org, cfg, state, s3, flags } = ctx;
   const prefix = (flags['base-folder'] || '').replace(/^\/+|\/+$/g, '');
   const head = Boolean(flags['head-only']);
-  const [msgs, cfs, left] = await tenant(
+  const [msgs, cfs, left, noSource] = await tenant(
     db,
     org.id,
     async () => [
-      (await db.query(`SELECT media_key AS key, media_size AS size, media_sha256 AS sha FROM messages WHERE org_id = $1 AND media_key LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows,
+      (await db.query(`SELECT media_key AS key, media_size AS size, media_sha256 AS sha, kind FROM messages WHERE org_id = $1 AND media_key LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows,
       (await db.query(`SELECT storage_key AS key, file_size_bytes AS size FROM contact_files WHERE org_id = $1 AND storage_key LIKE $2`, [org.id, `contact-files/${org.id}/waboo/%`])).rows,
       (await db.query(
         `SELECT 'messages' AS t, COALESCE(meta->'legacy'->>'mediaUrl', media_key) AS url FROM messages
           WHERE org_id = $1 AND (media_key IS NULL OR media_key ~* '^https?://') AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND COALESCE(meta->'legacy'->>'mediaUrl', media_key) ~* '^https?://'
          UNION ALL SELECT 'contact_files', storage_key FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`,
+        [org.id],
+      )).rows,
+      // media-kind messages (a header image of a button message included) that have neither a stored object nor a URL to copy it from:
+      // nothing can ever serve them, so they are listed as a problem instead of passing unnoticed
+      (await db.query(
+        `SELECT kind, count(*)::int AS n FROM messages
+          WHERE org_id = $1 AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND media_key IS NULL
+            AND COALESCE(meta->'legacy'->>'mediaUrl', '') !~* '^https?://' AND meta->'legacy' IS NOT NULL AND meta->'legacy'->>'src' = 'waboo'
+          GROUP BY kind`,
         [org.id],
       )).rows,
     ],
@@ -689,6 +698,9 @@ async function runVerify(ctx) {
     ...cfs.map((r) => ({ bucket: s3.bucket.contact_files, ...r, sha: shaByKey.get(r.key) || null })),
   ];
   const bad = new Map();
+  const byKind = new Map();
+  for (const r of noSource) bad.set(`NO_SOURCE_${String(r.kind).toUpperCase()}`, r.n);
+  for (const j of msgs) tally(byKind, j.kind);
   const q = [...jobs];
   await Promise.all(
     Array.from({ length: Math.max(1, Number(flags.concurrency || 3)) }, async () => {
@@ -710,6 +722,7 @@ async function runVerify(ctx) {
   const failedByReason = new Map();
   for (const e of state.values()) if (e.status === 'failed') tally(failedByReason, e.reason);
   say(`objects checked=${jobs.length} (${head ? 'size only' : 'size + sha256 where known'}) problems: ${lines(bad)}`);
+  say(`stored message files by kind: ${lines(byKind)}`);
   say(`rows still pointing at a URL: ${left.length}  by table@host: ${lines(pointing)}`);
   say(`last recorded failure per file (state): ${lines(failedByReason)}`);
   return bad.size || left.length ? 1 : 0;
