@@ -1,7 +1,7 @@
 'use client';
 
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
 import { agentReactions, buildItems, lastSeq, type ThreadState } from '../lib/thread';
@@ -16,12 +16,52 @@ const NEAR_BOTTOM_PX = 120;
 /** Ask for older history when the reader gets this close to the top. */
 const NEAR_TOP_PX = 80;
 
+/**
+ * The centred system line above an outbound template message ("Template “welcome” sent via Official (WhatsApp Cloud API)"). It
+ * is drawn from the stored message, so it needs no extra record, and only once the provider accepted the template.
+ */
+export function TemplateSentLine({
+  message,
+  channelKind,
+}: {
+  message: MessageResponse;
+  channelKind?: string;
+}) {
+  const t = useTranslations('team-inbox-conversations.bubble');
+  const tType = useTranslations('team-inbox-conversations.channelType');
+  if (
+    message.kind !== 'template' ||
+    message.direction !== 'out' ||
+    !message.template ||
+    message.status === 'queued' ||
+    message.status === 'failed'
+  ) {
+    return null;
+  }
+  const engine =
+    channelKind === 'whatsapp_cloud'
+      ? tType('officialFull')
+      : channelKind === 'whatsapp_qr'
+        ? tType('unofficialFull')
+        : null;
+  const name = message.template.name;
+  return (
+    <li data-testid="inbox-template-sent" className="flex justify-center">
+      <p className="max-w-[80%] rounded-md bg-muted px-3 py-1 text-center text-xs text-muted-foreground">
+        {engine ? t('templateSent', { name, channel: engine }) : t('templateSentPlain', { name })}
+      </p>
+    </li>
+  );
+}
+
 export function nearBottom(scrollHeight: number, scrollTop: number, clientHeight: number): boolean {
   return scrollHeight - scrollTop - clientHeight < NEAR_BOTTOM_PX;
 }
 
 export interface MessageStreamProps {
   conversationId: string;
+  /** The conversation's channel kind: the "template sent" line says which WhatsApp engine carried the template. */
+  channelKind?: string;
   state: ThreadState;
   notes: ConversationNote[];
   progress: Record<string, number>;
@@ -275,21 +315,23 @@ export function MessageStream(props: MessageStreamProps) {
                 );
               case 'message':
                 return (
-                  <MessageBubble
-                    key={item.key}
-                    message={item.message}
-                    quoted={quotedOf(item.message, byId)}
-                    onReply={props.onReply}
-                    onReact={props.onReact}
-                    agentReaction={reactions.get(item.message.id) ?? null}
-                    onRetry={props.onRetryMessage}
-                    canManageChannel={props.canManageChannel}
-                    onOpenLog={setLogMessageId}
-                    stageUndone={
-                      item.message.systemEvent?.event === 'stage_change' &&
-                      undoneStages.has(item.message.systemEvent.suggestionId)
-                    }
-                  />
+                  <Fragment key={item.key}>
+                    <TemplateSentLine message={item.message} channelKind={props.channelKind} />
+                    <MessageBubble
+                      message={item.message}
+                      quoted={quotedOf(item.message, byId)}
+                      onReply={props.onReply}
+                      onReact={props.onReact}
+                      agentReaction={reactions.get(item.message.id) ?? null}
+                      onRetry={props.onRetryMessage}
+                      canManageChannel={props.canManageChannel}
+                      onOpenLog={setLogMessageId}
+                      stageUndone={
+                        item.message.systemEvent?.event === 'stage_change' &&
+                        undoneStages.has(item.message.systemEvent.suggestionId)
+                      }
+                    />
+                  </Fragment>
                 );
               case 'note':
                 return (

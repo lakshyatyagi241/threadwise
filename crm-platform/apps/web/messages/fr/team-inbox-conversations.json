@@ -281,7 +281,9 @@
         "couldNotUndo": "Ce changement ne peut plus être annulé : le contact a avancé ou il a déjà été annulé."
       },
       "heldUntil": "Retenu jusqu’à {when}",
-      "heldWhy": "Ce message marketing attend la fin de vos heures de silence. Il sera envoyé à ce moment-là, si le contact ne s’est pas désabonné entre-temps."
+      "heldWhy": "Ce message marketing attend la fin de vos heures de silence. Il sera envoyé à ce moment-là, si le contact ne s’est pas désabonné entre-temps.",
+      "templateSent": "Modèle « {name} » envoyé via {channel}",
+      "templateSentPlain": "Modèle « {name} » envoyé"
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind} : manqué (échéance {time})",
       "titleOpen": "{kind} : échéance {time}"
+    },
+    "channelType": {
+      "official": "Officiel",
+      "unofficial": "Non officiel",
+      "officialFull": "Officiel (API WhatsApp Cloud)",
+      "unofficialFull": "Non officiel (QR / Baileys)"
     }
   }
 }

@@ -281,7 +281,9 @@
         "couldNotUndo": "이 변경은 더 이상 취소할 수 없습니다. 연락처가 이미 다음 단계로 갔거나 이미 취소되었습니다."
       },
       "heldUntil": "{when}까지 보류",
-      "heldWhy": "이 마케팅 메시지는 방해 금지 시간이 끝나기를 기다리고 있습니다. 그동안 연락처가 수신을 거부하지 않았다면 그때 전송됩니다."
+      "heldWhy": "이 마케팅 메시지는 방해 금지 시간이 끝나기를 기다리고 있습니다. 그동안 연락처가 수신을 거부하지 않았다면 그때 전송됩니다.",
+      "templateSent": "템플릿 “{name}”을(를) {channel}(으)로 전송함",
+      "templateSentPlain": "템플릿 “{name}”을(를) 전송함"
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: 미달성 (마감 {time})",
       "titleOpen": "{kind}: 마감 {time}"
+    },
+    "channelType": {
+      "official": "공식",
+      "unofficial": "비공식",
+      "officialFull": "공식 (WhatsApp Cloud API)",
+      "unofficialFull": "비공식 (QR / Baileys)"
     }
   }
 }

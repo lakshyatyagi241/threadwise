@@ -281,7 +281,9 @@
         "couldNotUndo": "Diese Änderung lässt sich nicht mehr rückgängig machen: Der Kontakt ist weitergerückt oder sie wurde schon rückgängig gemacht."
       },
       "heldUntil": "Zurückgehalten bis {when}",
-      "heldWhy": "Diese Marketing-Nachricht wartet, bis Ihre Ruhezeiten enden. Sie wird dann gesendet, sofern sich der Kontakt in der Zwischenzeit nicht abgemeldet hat."
+      "heldWhy": "Diese Marketing-Nachricht wartet, bis Ihre Ruhezeiten enden. Sie wird dann gesendet, sofern sich der Kontakt in der Zwischenzeit nicht abgemeldet hat.",
+      "templateSent": "Vorlage „{name}“ gesendet über {channel}",
+      "templateSentPlain": "Vorlage „{name}“ gesendet"
     },
     "media": {
       "openImage": "Bild {name} öffnen",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: verfehlt (fällig war {time})",
       "titleOpen": "{kind}: fällig {time}"
+    },
+    "channelType": {
+      "official": "Offiziell",
+      "unofficial": "Inoffiziell",
+      "officialFull": "Offiziell (WhatsApp Cloud API)",
+      "unofficialFull": "Inoffiziell (QR / Baileys)"
     }
   }
 }

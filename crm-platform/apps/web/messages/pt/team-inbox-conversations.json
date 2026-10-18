@@ -281,7 +281,9 @@
         "couldNotUndo": "Esta mudança não pode mais ser desfeita: o contato avançou ou já foi desfeita."
       },
       "heldUntil": "Retida até {when}",
-      "heldWhy": "Esta mensagem de marketing aguarda o fim do seu horário de silêncio. Será enviada então, se o contato não tiver cancelado a inscrição nesse meio-tempo."
+      "heldWhy": "Esta mensagem de marketing aguarda o fim do seu horário de silêncio. Será enviada então, se o contato não tiver cancelado a inscrição nesse meio-tempo.",
+      "templateSent": "Modelo “{name}” enviado via {channel}",
+      "templateSentPlain": "Modelo “{name}” enviado"
     },
     "media": {
       "openImage": "Abrir imagem {name}",
@@ -1119,6 +1121,12 @@
       },
       "titleBreached": "{kind}: descumprida (venceu {time})",
       "titleOpen": "{kind}: vence {time}"
+    },
+    "channelType": {
+      "official": "Oficial",
+      "unofficial": "Não oficial",
+      "officialFull": "Oficial (API do WhatsApp Cloud)",
+      "unofficialFull": "Não oficial (QR / Baileys)"
     }
   }
 }
