@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AuthProvidersModule } from '../../infra/providers/auth-registration-security/auth-providers.module';
 import { OTP_SENDER_PORT } from '../../infra/providers/auth-registration-security/otp-sender.port';
+import { PersonaModule } from '../persona';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { AccountService } from './account/account.service';
 import { PlanFeatureGate } from './account/plan-feature-gate';
@@ -79,7 +80,7 @@ import { TokenService } from './token.service';
  */
 @Global()
 @Module({
-  imports: [JwtModule.register({}), AuthProvidersModule, PlansCoreModule],
+  imports: [JwtModule.register({}), AuthProvidersModule, PlansCoreModule, PersonaModule],
   controllers: [
     AuthController,
     RegistrationController,

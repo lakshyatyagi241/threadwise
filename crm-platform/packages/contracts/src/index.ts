@@ -110,3 +110,4 @@ export * from './privacy';
 export * from './compliance';
 export * from './waboo-migration';
 export * from './channel-wechat';
+export * from './persona';

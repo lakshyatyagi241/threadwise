@@ -1,7 +1,7 @@
 # Persona profiles: one product for many kinds of business (design only)
 
-Status: **proposal, nothing built** (backlog BL-280). Written 2026-10-18 from a read-only investigation of `origin/main`. Docs only: no code, no
-migration, no behaviour change comes with this note. Owner direction: the product stays ONE generic system; a **persona** (doctor, dentist, sales
+Status: **phase P0 built, P1 to P6 not built** (backlog BL-280; see section 15). Written 2026-10-18 from a read-only investigation of `origin/main`.
+The design below is unchanged by P0; P0 itself changes no behaviour. Owner direction: the product stays ONE generic system; a **persona** (doctor, dentist, sales
 team, real estate, retail store, salon, education...) decides which words, which modules and which starter setup a workspace sees. It is an
 owner-requested extension in the sense of [product-extensions.md](../threadwise-port/parity/product-extensions.md): the default persona
 (`generic`) shows exactly what every workspace sees today, so Hard Rule 1 of the porting rules (no feature lost or changed) holds for every
@@ -479,3 +479,33 @@ Risks:
 | 14  | Salon: "Appointment" or "Booking"                                           | Appointment (one model, one word); "Service" for booking type.                                                                               |
 | 15  | Who may grant a module that needs an add-on while overriding                | Only operators holding the existing comp/plan-override permission, from the existing screens, never from the Persona tab.                    |
 | 16  | Clinic persona and health data: consent prompt and PHI notice on by default | Yes; owner to confirm with legal before launch.                                                                                              |
+
+## 15. Build status
+
+| Phase | State                                                                           |
+| ----- | ------------------------------------------------------------------------------- |
+| P0    | **Built** (branch `lakshya/next/persona-p0`, no visible change). Details below. |
+| P1-P6 | Not built. P1 (visibility runtime) is next and only needs P0.                   |
+
+What P0 delivers, and where it differs from the sketches above:
+
+- **Contracts** (`packages/contracts/src/persona/`): `moduleIdSchema` and the five module kinds, `personaDefinitionSchema` with
+  `GENERIC_PERSONA_DEFINITION`, the two override documents (`operatorOverridesSchema` requires a reason of 5+ characters and may `lock`;
+  `workspaceOverridesSchema` rejects `locked`), `resolvePersona` / `explainModule` / `isModuleHidden` / `hiddenModuleIds` / `resolveNouns` (pure),
+  `personaViewSchema`, and `org.persona` (optional) on `sessionOrgSchema`.
+- **Module catalog**: `apps/web/scripts/gen-registry.mjs` writes `_registry/module-catalog.generated.ts` (and `home-cards.generated.ts`) from the nav,
+  Settings, planned, home-card and contact-page registries. The Home cards are declared in `dashboards-analytics-charts/home-cards.ts` (phase 1
+  makes the dashboard read them). A test holds every id a seeded persona names to the catalog.
+- **Migrations** `20261230090000..090200`: all five tables of 4.1 and 4.2, the `generic` persona v1, the four `platform.persona.*` keys (no tenant
+  key), and the batched, idempotent backfill. Differences from the sketch: `personas.key` is `text` with the pattern check (the pattern already
+  forces lower case, so `citext` added nothing); `workspace_persona_applied` has `entity_gone_at` (the "marked gone" of 4.4); the log's tenant
+  policies also hide every `actor_kind = 'operator'` row, not only layer `operator` (an operator-made persona switch carries the operator's
+  reason, and a workspace must not read it) and its append policy binds `actor_id` to the acting user while the database stamps `created_at`;
+  a workspace cannot DELETE its `workspace_persona` row (that would drop the operator's overrides); deleting a platform operator clears the
+  operator references on versions and workspace rows instead of failing.
+- **API**: `apps/api/src/modules/persona/` with `PersonaService.resolve(orgId)`, no controller yet; `TenantDirectory.provisionOrganization` and the
+  dev seed give a new workspace its row; `AccountService.sessionInfo` adds `org.persona`. Caching differs from 7.3 on purpose: the one query that
+  reads the workspace row also joins `personas.current_version`, so "follow the latest" needs no catalog TTL; a published definition is immutable
+  and is kept, the resolved view is memoised by `(org, row creation time, rev, version)` for 30 s, and a missing version is remembered for 5 s.
+- **Not in P0**: any UI, any endpoint, onboarding, the seat-driven `auto` solo mode (`solo` is true only for an explicit `on`), the `persona.enabled`
+  flag (rollback in P0 is not reading `org.persona`, which nothing does), the vocabulary overlay.
