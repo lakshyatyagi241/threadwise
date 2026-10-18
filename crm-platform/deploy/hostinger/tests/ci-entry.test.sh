@@ -29,7 +29,7 @@ case "$*" in
   *"ps --status running --services"*) [ "${STUB_BACKUP_RUNNING:-1}" = 1 ] && echo backup; exit 0 ;;
   *"exec -T backup test -x"*) [ "${STUB_BACKUP_SCRIPT:-1}" = 1 ]; exit $? ;;
   *"exec -T backup desk-backup once"*) [ "${STUB_DUMP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
-  *"run --rm migrate"*) [ "${STUB_MIGRATE_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
+  *"run --rm migrate"*) echo "migrate-image-tag=${IMAGE_TAG:-unset}" >> "$STUB_LOG"; [ "${STUB_MIGRATE_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"up -d --no-deps worker"*) [ "${STUB_WORKER_UP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"up -d --no-deps api-"*) [ "${STUB_SLOT_UP_FAIL:-0}" = 1 ] && exit 1; exit 0 ;;
   *"ps -q worker"*) echo workerid; exit 0 ;;
@@ -75,6 +75,7 @@ check "the new tag is the default image and the blue slot's image" grep -q '^IMA
 check "the blue slot's tag is recorded" grep -q '^SLOT_BLUE_TAG=bbbbbbb' "$WORK/.env"
 check "a pre-release dump is taken" has "desk-backup once pre-bbbbbbb"
 check "the dump happens before the migration" test "$(line_of 'desk-backup once')" -lt "$(line_of 'run --rm migrate')"
+check "the migration runs from the NEW image, not the previous release's" has "migrate-image-tag=bbbbbbb"
 check "the migration happens before the blue slot starts" test "$(line_of 'run --rm migrate')" -lt "$(line_of 'up -d --no-deps api-blue')"
 check "the blue slot starts before the worker is restarted" test "$(line_of 'up -d --no-deps api-blue')" -lt "$(line_of 'up -d --no-deps worker')"
 check "the public check runs" has "curl -fsSk"
