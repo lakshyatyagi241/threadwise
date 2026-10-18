@@ -17,16 +17,12 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { assertContactScope, ContactsRepository } from '../contacts';
 import { toContactMeetingResponse } from './contact-meetings.mapper';
-<<<<<<< HEAD
-import { ContactMeetingsRepository } from './contact-meetings.repository';
-import { ContactTouchService } from '../lead-handling/contact-touch.service';
-=======
 import {
   ContactMeetingsRepository,
   type ContactMeetingListRow,
   type ContactMeetingRow,
 } from './contact-meetings.repository';
->>>>>>> origin/main
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const MODULE_KEY = 'contact_meetings';
 
