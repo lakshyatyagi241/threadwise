@@ -40,7 +40,7 @@ The key figures also show Reference's four: collected in the period, collected a
 
 ## Downloading
 
-If your role allows exports you will see **Download this report**. Choose a CSV of the payments (one line per payment and refund of the period), a CSV of the table on screen, or a PDF. The file is prepared in the background with the filters on screen and announced by email. It stays on the page for 7 days, and only you can download it.
+If your role allows exports you will see **Download this report**. Choose a CSV of the payments (one line per payment and refund of the period), a CSV of the table on screen, or a PDF. The file is prepared in the background with the filters on screen and announced by email. It stays on the page for 7 days, and only you can download it. After that the file is deleted; the page keeps only a line saying it was made. A downloaded file is a temporary copy of your invoices and payments, not a record: if the person who prepared it is removed from the workspace, or a customer is erased under a data request or deleted from the CRM, the unexpired files are deleted at once and you can prepare them again. Your invoices and payments themselves are kept as the law requires.
 
 > A file never holds more than the report shows you. A member whose scope is "own" gets only the invoices they own, in the screen and in the file.
 

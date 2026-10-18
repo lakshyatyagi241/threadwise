@@ -91,7 +91,7 @@ export class RevenueExportRunner {
 
     try {
       const built = await this.build(claimed, now);
-      await this.db.txAs({ orgId }, (tx) =>
+      const stored = await this.db.txAs({ orgId }, (tx) =>
         this.exports.finish(tx, orgId, claimed.id, {
           fileName: built.fileName,
           file: built.file,
@@ -99,6 +99,8 @@ export class RevenueExportRunner {
           expiresAt: new Date(now.getTime() + REVENUE_EXPORT_TTL_DAYS * DAY_MS),
         }),
       );
+      // An erasure deleted the row while the file was being built: nothing was stored, and nobody is told a file is ready.
+      if (!stored) return 'skipped';
       await this.notify(claimed, 'ready', built.rows);
       return 'done';
     } catch (err) {

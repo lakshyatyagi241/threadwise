@@ -15,7 +15,11 @@ import type { PrivacyErasureLine, PrivacyHistoryMode } from '@crm/contracts';
  * reason, when a declaration names a column or a foreign key that does not exist, or when a registered table has disappeared.
  */
 
-/** Whose data a holder keeps. `user` is a staff member of the workspace (declared; its handlers are a follow-up, see the wiring map). */
+/**
+ * Whose data a holder keeps. `user` is a staff member of the workspace: only the derived copies a staff member leaves behind (revenue
+ * export files, AI briefs) are erased through the registry so far (`PersonalDataErasureService.eraseStaff`); the rest of the staff
+ * subject (login, sessions) is a follow-up, see the wiring map.
+ */
 export type SubjectKind = 'contact' | 'lead' | 'user';
 
 /** What kind of personal data a table keeps (the classes of spec section 4.7). */
@@ -60,6 +64,10 @@ export type Link =
   | { by: 'phone'; column: string }
   /** An email address: compared lower-cased against every address the person has. */
   | { by: 'email'; column: string }
+  /** A column holding `users.id` of a staff member (a subject of kind `user`; matches nothing for a contact). */
+  | { by: 'user'; column: string }
+  /** An email address compared lower-cased against the address of the staff member (`userEmails`), never against a contact's. */
+  | { by: 'user_email'; column: string }
   /** A column holding the key of a row of another table that belongs to the person (`invoice_id` of the person's invoices). */
   | { by: 'via'; column: string; table: string; key: string; link: Link | readonly Link[] }
   /** Anything the other kinds cannot say; `column` names the main column so the registry test can check it exists. */
@@ -105,6 +113,14 @@ interface TableSpecBase {
   order?: number;
   /** Extra condition the rows must meet to belong to the person (SQL fragment on the table, e.g. a type column). */
   where?: SQL;
+  /**
+   * The rows put in the person's export, when that is narrower than the rows an erasure removes (default: `link`). A derived copy that
+   * an erasure purges only because it MAY have been built from the person's data (a revenue export file that could list a buyer, a brief
+   * of the company they belong to) is not their own data: it is never put in their export, and never exposes another member's rows.
+   */
+  exportLink?: Link | readonly Link[];
+  /** An erasure that removes rows of this table writes one audit row (module = the table, the count only, never a value). */
+  audited?: boolean;
 }
 
 /** The rows are deleted. In `anonymise` history mode, `whenAnonymising` is applied instead (the rows are kept without the person's identity). */
@@ -168,6 +184,10 @@ export interface ResolvedSubject {
   orgId: number;
   contactIds: readonly number[];
   contactUuids: readonly string[];
+  /** Staff members (`users.id`) of a subject of kind `user`; empty for a contact or a lead. */
+  userIds: readonly number[];
+  /** Lower-cased email addresses of those staff members. */
+  userEmails: readonly string[];
   leadIds: readonly number[];
   conversationIds: readonly number[];
   conversationUuids: readonly string[];
