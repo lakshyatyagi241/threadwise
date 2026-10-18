@@ -610,3 +610,12 @@ Not a reference feature: Reference connects Google Calendar only and never back-
 ## Minor detection and the Do-Not-Call list (BL-217, BL-218, BL-190, BL-181)
 
 Not in Reference (it has no date of birth, no minor flag and no DNC list). Built: the `date_of_birth` contact property; form fields Date of birth and Age and the form age check (block, flag, guardian) and the box; the nightly birthday sweep; the chat widget intake age question; the flow Ask node validated as Age or Date of birth; the minor filter, segment fields, list columns, the "Minors" view, the import columns and the customer API (`date_of_birth`, `is_minor`, `/privacy`); the workspace Do-Not-Call list read by the ConsentGate (`on_dnc_list`); the consent manager registration note. Intended differences from any "age gate" a reader might expect: nothing asks for an age by default; the page never says which answer passes; a refused visitor leaves no trace on the server; a flag a person set is never lifted by a birthday. Spec 11.10 and 11.11.
+
+## Persona profiles: business type hides modules (BL-280, phase 1): not in Reference
+
+Not a reference feature: Reference shows every module to every workspace. Requested by the project owner (one product for doctors, real estate, sales...). Status: **owner-requested, pending sign-off**. Spec: [persona-profiles.md](../../specs/persona-profiles.md); API: [persona-profiles.md](../../api/persona-profiles.md); wiring: [persona-profiles.md](../wiring/persona-profiles.md).
+
+- **New:** a workspace has a business type (persona). The web app hides the modules it names from the main menu, the Settings tiles, Help, the command palette, the contact page (tabs, quick-view tabs, action buttons, Tasks / Deals / Company / Lead score cards) and the Home cards. The default, `generic`, hides nothing, so every existing workspace and every Reference behaviour is unchanged (a golden test holds the registries to that).
+- **Intended difference:** none for any workspace today. Only the `generic` persona exists until phase 2 (platform console), so nothing is hidden for anyone yet.
+- **Hidden is not locked:** nothing is deleted, no route or API is closed, entitlement (role, channel, app, plan feature) is applied after and wins, and a hidden module that the plan would lock shows no lock and no upsell.
+- **Not verified / open:** the Business type tile with Show more modules and its endpoint; a browser pass with a non-generic persona (none can be set yet); the 21-locale vocabulary overlay (phase 5).

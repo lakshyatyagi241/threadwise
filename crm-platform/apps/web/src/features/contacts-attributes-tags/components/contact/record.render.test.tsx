@@ -13,6 +13,8 @@ const renderAccount: typeof render = (element: ReactElement, options) =>
     '',
   );
 import type { ContactRow } from '../../api/schemas';
+import { PersonaProvider } from '@/features/persona';
+import { denyList, genericView, viewFrom } from '@/features/persona/testing';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: () => undefined, replace: () => undefined }),
@@ -322,5 +324,68 @@ describe('AssociationCards', () => {
 
   it('reads in Arabic', () => {
     expect(draw(['record.contacts.read'], contact(), 'ar')).toContain('aria-expanded');
+  });
+});
+
+describe('hidden by the workspace persona', () => {
+  const perms = [
+    'record.contacts.read',
+    'record.contacts.update',
+    'record.companies.read',
+    'record.tasks.read',
+    'record.tasks.create',
+    'inbox.conversation.reply',
+    'call.calls.use',
+    'call.logs.create',
+  ];
+  const persona = (ids: string[]) => viewFrom({ definition: denyList(ids) });
+  const actionBar = (view: ReturnType<typeof persona> | null) =>
+    renderAccount(
+      <PersonaProvider view={view}>
+        <ContactActionBar contact={contact()} onAdd={() => undefined} onDeleted={() => undefined} />
+      </PersonaProvider>,
+      { session: can(...perms) },
+    );
+  const cards = (view: ReturnType<typeof persona> | null) =>
+    renderAccount(
+      <PersonaProvider view={view}>
+        <AssociationCards contact={contact()} />
+      </PersonaProvider>,
+      {
+        session: can(...perms, 'record.deals.read'),
+        seed: [
+          [['cat', 'fields', false], []],
+          [['lead-scoring', 'status'], { enabled: true }],
+        ],
+      },
+    );
+
+  it('the generic persona draws exactly what no persona draws (action bar and cards)', () => {
+    expect(actionBar(genericView())).toBe(actionBar(null));
+    expect(cards(genericView())).toBe(cards(null));
+  });
+
+  it('leaves out the action buttons the persona hides, and only those', () => {
+    const out = actionBar(persona(['action:contact.meeting', 'action:contact.note']));
+    expect(out).not.toContain('>Meeting<');
+    expect(out).not.toContain('>Note<');
+    for (const kept of ['>Task<', '>Call<', '>Message<']) expect(out, kept).toContain(kept);
+  });
+
+  it('leaves out the Tasks, Deals and Company cards and the Lead score card the persona hides', () => {
+    const before = cards(null);
+    expect(before).toContain('Open tasks');
+    expect(before).toContain('Lead score');
+    const out = cards(
+      persona([
+        'section:contact.tasks',
+        'section:contact.deals',
+        'section:contact.company',
+        'action:contact.score',
+      ]),
+    );
+    expect(out).not.toContain('Open tasks');
+    expect(out).not.toContain('Lead score');
+    expect(out).toContain('Subscription status');
   });
 });

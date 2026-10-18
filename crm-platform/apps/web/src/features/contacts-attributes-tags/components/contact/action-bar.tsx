@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { ConfirmDialog, Menu, MenuItem, MenuSeparator, useToast, cn } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useCanPickCompany } from '@/features/companies';
+import { usePersonaVisibility } from '@/features/persona';
 import { useCanLogCall } from '../../api/call-log';
 import type { ContactTouchChannel } from '@crm/contracts';
 import { reportContactTouch, setUncontacted } from '../../api/lead-handling';
@@ -121,6 +122,11 @@ export function ContactActionBar({
   const canPickCompany = useCanPickCompany();
   const { permissions } = useSession();
   const tasksOpen = sectionAllowed(SECTION_OF_TARGET.task, (p) => p in permissions);
+  // Buttons the workspace's persona hides (`action:contact.<id>`). Only what is drawn changes; the endpoints behind them stay open.
+  const { isActionHidden } = usePersonaVisibility();
+  const showNote = canUpdate && !isActionHidden('note');
+  const showTask = canTask && tasksOpen && !isActionHidden('task');
+  const showMeeting = canUpdate && !isActionHidden('meeting');
   const qc = useQueryClient();
   const router = useRouter();
   const channels = useChannels(canSend);
@@ -221,7 +227,7 @@ export function ContactActionBar({
       {callIcon[way]} {callText[way]}
     </MenuItem>
   ));
-  const showCall = canCall || canLogCall;
+  const showCall = (canCall || canLogCall) && !isActionHidden('call');
   const callLabel = callMain === 'log' ? tr('logCall') : tr('call');
 
   // --- Message: the chat (else the mailbox) is the button, the template message and e-mail are in the menu ----------------
@@ -272,7 +278,7 @@ export function ContactActionBar({
           <PencilIcon /> {t('edit')}
         </MenuItem>
       )}
-      {canUpdate && canPickCompany && (
+      {canUpdate && canPickCompany && !isActionHidden('company') && (
         <MenuItem onSelect={() => onAdd('company')}>
           <BuildingIcon /> {contact.companyId ? t('changeCompany') : t('addCompany')}
         </MenuItem>
@@ -346,7 +352,7 @@ export function ContactActionBar({
         aria-label={tr('label')}
         className={cn('flex flex-wrap items-start justify-between gap-y-2', className)}
       >
-        {canUpdate && (
+        {showNote && (
           <RoundAction label={t('note')}>
             <button
               type="button"
@@ -411,7 +417,7 @@ export function ContactActionBar({
             )}
           </RoundAction>
         )}
-        {canTask && tasksOpen && (
+        {showTask && (
           <RoundAction label={t('task')}>
             <button
               type="button"
@@ -424,7 +430,7 @@ export function ContactActionBar({
             </button>
           </RoundAction>
         )}
-        {canUpdate && (
+        {showMeeting && (
           <RoundAction label={t('meeting')}>
             <button
               type="button"
@@ -460,7 +466,7 @@ export function ContactActionBar({
         aria-label={tr('label')}
         className="thin-scrollbar flex min-w-0 flex-1 items-center gap-1.5 max-sm:overflow-x-auto"
       >
-        {canUpdate && (
+        {showNote && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}
@@ -471,7 +477,7 @@ export function ContactActionBar({
             <Label>{t('note')}</Label>
           </button>
         )}
-        {canTask && tasksOpen && (
+        {showTask && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}
@@ -504,7 +510,7 @@ export function ContactActionBar({
             }
           />
         )}
-        {canUpdate && (
+        {showMeeting && (
           <button
             type="button"
             className={cn(button, 'rounded-md')}

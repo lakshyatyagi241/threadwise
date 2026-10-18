@@ -8,6 +8,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { CompanyLink, useCanPickCompany } from '@/features/companies';
 import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, bandOf, useLeadScoringEnabled } from '@/features/lead-scoring';
+import { usePersonaVisibility } from '@/features/persona';
 import { TaskCompleteCheck, useTasksList } from '@/features/tasks';
 import { useContactDeals } from '../../api/deals';
 import { useContactFields } from '../../api/properties';
@@ -239,6 +240,8 @@ export function AssociationCards({
   const complianceVisible = useComplianceVisible(contact);
   const fields = useContactFields();
   const refresh = useRefreshContact(contact.id);
+  // What the workspace's persona hides (`section:contact.<id>`, `action:contact.score`) is not drawn; the data and the endpoints stay.
+  const persona = usePersonaVisibility();
   // The company's "+ Add" and the action menu's "Add company" both open the card and put the cursor in its search.
   const [nudge, setNudge] = useState(0);
   const companySignal = (companyFocusSignal ?? 0) + nudge || undefined;
@@ -248,9 +251,13 @@ export function AssociationCards({
 
   return (
     <div className={cn('space-y-2', className)}>
-      <TasksCard contact={contact} onAdd={onAdd} onOpenSection={onOpenSection} />
-      <DealsCard contact={contact} onOpenSection={onOpenSection} />
-      {canPickCompany && (
+      {!persona.isSectionHidden('tasks') && (
+        <TasksCard contact={contact} onAdd={onAdd} onOpenSection={onOpenSection} />
+      )}
+      {!persona.isSectionHidden('deals') && (
+        <DealsCard contact={contact} onOpenSection={onOpenSection} />
+      )}
+      {canPickCompany && !persona.isSectionHidden('company') && (
         <CollapseCard
           id="company"
           title={t('company')}
@@ -276,7 +283,7 @@ export function AssociationCards({
           onOpenConsent={onOpenSection && canConsent ? () => onOpenSection('consent') : undefined}
         />
       </CollapseCard>
-      {scoringOn && (
+      {scoringOn && !persona.isActionHidden('score') && (
         <CollapseCard
           id="score"
           openSignal={scoreFocusSignal}
