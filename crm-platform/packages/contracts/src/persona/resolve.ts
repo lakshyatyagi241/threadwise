@@ -180,3 +180,56 @@ export function resolveNouns(
   }
   return out;
 }
+
+/** Where the wording of one noun in one locale comes from (the Settings "Words we use" row). `null` = the product's own wording. */
+export type NounSource = 'workspace' | 'operator' | 'persona';
+
+export function explainNoun(
+  input: ResolveInput,
+  noun: string,
+  locale: string,
+): { forms: NounForms; source: NounSource } | null {
+  const ws = input.workspace?.vocab[noun]?.[locale];
+  if (ws) return { forms: ws, source: 'workspace' };
+  const op = input.operator?.vocab[noun]?.[locale];
+  if (op) return { forms: op, source: 'operator' };
+  const personaNouns = input.definition.vocabulary.nouns;
+  const personaComplete = Object.values(personaNouns).every(
+    (byLocale) => byLocale[locale] !== undefined,
+  );
+  const p = personaComplete ? personaNouns[noun]?.[locale] : undefined;
+  return p ? { forms: p, source: 'persona' } : null;
+}
+
+/**
+ * Every locale in which any layer names a noun. `resolveNouns` answers per locale; the session view needs all of them, because the
+ * web picks the person's language at render time.
+ */
+export function vocabularyLocales(input: ResolveInput): string[] {
+  const out = new Set<string>();
+  for (const byLocale of Object.values(input.definition.vocabulary.nouns)) {
+    for (const locale of Object.keys(byLocale)) out.add(locale);
+  }
+  for (const layer of [input.operator, input.workspace]) {
+    for (const byLocale of Object.values(layer?.vocab ?? {})) {
+      for (const locale of Object.keys(byLocale)) out.add(locale);
+    }
+  }
+  return [...out].sort();
+}
+
+/**
+ * The words of every locale that has any, for `org.persona.nouns`: `{ en: { contact: { one: 'Patient', other: 'Patients' } } }`. A locale
+ * where nothing is renamed is left out, and so is the whole result when no locale has anything: a workspace with no vocabulary gets
+ * `undefined`, and the web then shows the product's own wording byte for byte.
+ */
+export function resolveAllNouns(
+  input: ResolveInput,
+): Record<string, Partial<Record<PersonaNoun, NounForms>>> | undefined {
+  const out: Record<string, Partial<Record<PersonaNoun, NounForms>>> = {};
+  for (const locale of vocabularyLocales(input)) {
+    const nouns = resolveNouns(input, locale);
+    if (Object.keys(nouns).length > 0) out[locale] = nouns;
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
+}
