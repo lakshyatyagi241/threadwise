@@ -150,8 +150,43 @@ export type FollowUpSettings = FollowUpSettingsValues & {
   updatedAt: string | null;
 };
 
+// --- duplicate leads ----------------------------------------------------------------------------------------------------------
+
+/**
+ * What happens to a new lead from a lead source whose phone number or e-mail already belongs to a contact: `merge` (what has always
+ * happened: the lead fills the contact's blanks and adds a touch) or `create_new` (a separate contact is made).
+ */
+export const duplicateSettingsSchema = z.object({
+  mode: z.enum(['merge', 'create_new']),
+  /** Leave a line on the contact's timeline when a lead is merged into it. */
+  noteOnMerge: z.boolean(),
+});
+export type DuplicateSettingsValues = z.infer<typeof duplicateSettingsSchema>;
+
+/** The defaults are the code's behaviour before this setting existed: merge, and no timeline line. */
+export const DUPLICATE_DEFAULTS: DuplicateSettingsValues = { mode: 'merge', noteOnMerge: false };
+
+export function mergeDuplicateSettings(stored: unknown): DuplicateSettingsValues {
+  const s = obj(stored);
+  return {
+    mode: s.mode === 'create_new' || s.mode === 'merge' ? s.mode : DUPLICATE_DEFAULTS.mode,
+    noteOnMerge: flag(s.noteOnMerge, DUPLICATE_DEFAULTS.noteOnMerge),
+  };
+}
+
+export const updateDuplicateSettingsSchema = duplicateSettingsSchema.extend({
+  rowVersion: z.number().int().positive().optional(),
+});
+export type UpdateDuplicateSettingsInput = z.infer<typeof updateDuplicateSettingsSchema>;
+
+export type DuplicateSettings = DuplicateSettingsValues & {
+  rowVersion: number | null;
+  updatedAt: string | null;
+};
+
 /** `GET /lead-handling/settings`: every section, each with its own version. */
 export interface LeadHandlingSettings {
   uncontacted: UncontactedSettings;
   followUps: FollowUpSettings;
+  duplicates: DuplicateSettings;
 }

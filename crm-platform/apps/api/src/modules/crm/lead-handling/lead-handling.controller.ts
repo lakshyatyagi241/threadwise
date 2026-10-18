@@ -16,6 +16,7 @@ import {
   setUncontactedSchema,
   snoozeFollowUpSchema,
   touchContactSchema,
+  updateDuplicateSettingsSchema,
   updateFollowUpSettingsSchema,
   updateUncontactedSettingsSchema,
   type RecordScope,
@@ -23,6 +24,7 @@ import {
   type SetUncontactedInput,
   type SnoozeFollowUpInput,
   type TouchContactInput,
+  type UpdateDuplicateSettingsInput,
   type UpdateFollowUpSettingsInput,
   type UpdateUncontactedSettingsInput,
 } from '@crm/contracts';
@@ -71,6 +73,19 @@ export class LeadHandlingController {
   })
   updateFollowUps(@Body(zodPipe(updateFollowUpSettingsSchema)) body: UpdateFollowUpSettingsInput) {
     return this.settings.updateFollowUps(body);
+  }
+
+  @Put('settings/duplicates')
+  @RequirePermission('admin.settings.manage')
+  @ApiOperation({
+    summary: 'Save the duplicate leads section',
+    description:
+      'Replaces the whole section. Needs the rowVersion read (absent on the first save). 409 ROW_VERSION_CONFLICT.',
+  })
+  updateDuplicates(
+    @Body(zodPipe(updateDuplicateSettingsSchema)) body: UpdateDuplicateSettingsInput,
+  ) {
+    return this.settings.updateDuplicates(body);
   }
 }
 
