@@ -109,8 +109,8 @@ describe('cards show the real price', () => {
       expect(
         html.includes(
           locale === 'en'
-            ? 'Included in your plan&#x27;s catalogue, buy it to use it.'
-            : 'مشمول في كتالوج باقتك، اشتره لاستخدامه.',
+            ? 'Subscribe first. Install unlocks once your payment is complete.'
+            : 'اشترك أولاً. يصبح التثبيت متاحًا بعد اكتمال الدفع.',
         ),
       ).toBe(true);
       expect(disabledButtonWith(html, locale === 'en' ? 'Install' : 'تثبيت')).toBe(true);

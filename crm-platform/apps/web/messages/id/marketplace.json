@@ -803,7 +803,7 @@
         "minPlan": "Paket Anda, atau paket yang lebih tinggi, mencakup aplikasi ini, jadi tidak ada yang perlu dibayar.",
         "plan": "Paket Anda mencakup aplikasi ini, jadi tidak ada yang perlu dibayar."
       },
-      "needsPurchase": "Termasuk dalam katalog paket Anda, beli untuk menggunakannya.",
+      "needsPurchase": "Berlangganan dulu. Instal tersedia setelah pembayaran selesai.",
       "subscribedNote": "Workspace Anda memiliki langganan untuk aplikasi ini.",
       "trialOffer": "Coba gratis selama {days, plural, other {# hari}}. Tidak ada tagihan sampai Anda memilih berlangganan.",
       "prepaidNote": "Ditagih bulanan melalui penagihan workspace Anda. Setiap pembayaran mencakup satu bulan dan tidak ditagih otomatis: bayar lagi sebelum tanggal yang ditampilkan agar aplikasi tetap berjalan.",

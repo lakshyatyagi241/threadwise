@@ -803,7 +803,7 @@
         "minPlan": "Je abonnement, of een hoger abonnement, omvat deze app, dus je hoeft niets te betalen.",
         "plan": "Je abonnement omvat deze app, dus je hoeft niets te betalen."
       },
-      "needsPurchase": "Inbegrepen in de catalogus van je abonnement, koop hem om hem te gebruiken.",
+      "needsPurchase": "Abonneer je eerst. Installeren kan zodra de betaling is voltooid.",
       "subscribedNote": "Je workspace heeft een abonnement op deze app.",
       "trialOffer": "Probeer hem gratis {days, plural, one {# dag} other {# dagen}}. Er wordt niets in rekening gebracht totdat je kiest om je te abonneren.",
       "prepaidNote": "Maandelijks gefactureerd via de facturatie van je workspace. Elke betaling dekt één maand en wordt niet automatisch afgeschreven: betaal opnieuw vóór de getoonde datum om de app te laten doorlopen.",

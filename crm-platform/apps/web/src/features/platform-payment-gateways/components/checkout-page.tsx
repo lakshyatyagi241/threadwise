@@ -474,6 +474,11 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
               {t('tlsNote')}
             </p>
           )}
+          {selected?.mode === 'sandbox' && (
+            <Alert tone="warning" data-testid="checkout-sandbox-note">
+              {t('sandboxNote')}
+            </Alert>
+          )}
           {selected?.autoRenew && q.kind === 'addon' && (
             <p className="text-sm text-muted-foreground" data-testid="addon-renews">
               {t('addonRenews')}

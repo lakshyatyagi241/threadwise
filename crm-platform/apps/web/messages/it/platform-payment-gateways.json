@@ -107,6 +107,7 @@
       "noGateway": "Nessun gateway di pagamento è ancora configurato per {currency}. Chiedi al tuo amministratore di attivarne uno.",
       "noGatewayButton": "Nessun gateway configurato",
       "sandbox": "sandbox",
+      "sandboxNote": "Modalità di prova: non viene addebitato denaro reale. Paga con la carta di prova indicata nella documentazione del tuo gateway. La pagina della password monouso (OTP) è mostrata dal gateway, non da questa app.",
       "pay": "Paga {amount}",
       "processing": "Avvio del pagamento",
       "summary": "Riepilogo ordine",

@@ -803,7 +803,7 @@
         "minPlan": "Votre forfait, ou un forfait supérieur, comprend cette application : aucun paiement n’est requis.",
         "plan": "Votre forfait comprend cette application : aucun paiement n’est requis."
       },
-      "needsPurchase": "Incluse dans le catalogue de votre forfait ; achetez-la pour l’utiliser.",
+      "needsPurchase": "Abonnez-vous d’abord. L’installation est disponible une fois le paiement effectué.",
       "subscribedNote": "Votre espace de travail est abonné à cette application.",
       "trialOffer": "Essayez-la gratuitement pendant {days, plural, one {# jour} other {# jours}}. Aucun montant n’est facturé tant que vous ne choisissez pas de vous abonner.",
       "prepaidNote": "Facturation mensuelle via la facturation de votre espace de travail. Chaque paiement couvre un mois et n’est pas prélevé automatiquement : payez de nouveau avant la date indiquée pour que l’application continue de fonctionner.",

@@ -107,6 +107,7 @@
       "noGateway": "Aucune passerelle de paiement n’est encore configurée pour {currency}. Demandez à votre administrateur d’en activer une.",
       "noGatewayButton": "Aucune passerelle configurée",
       "sandbox": "bac à sable",
+      "sandboxNote": "Mode test : aucun argent réel n’est débité. Payez avec la carte de test indiquée dans la documentation de votre passerelle. La page du mot de passe à usage unique (OTP) est affichée par la passerelle, pas par cette application.",
       "pay": "Payer {amount}",
       "processing": "Démarrage du paiement",
       "summary": "Récapitulatif de la commande",
