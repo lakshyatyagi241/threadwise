@@ -62,7 +62,8 @@
       "field_match": "Alan eşleşmesi",
       "date_field_match": "Tarih eşleşmesi",
       "schedule": "Zamanlama",
-      "ecom_event": "Mağaza olayı"
+      "ecom_event": "Mağaza olayı",
+      "segment_leave": "Segmentten çık"
     },
     "endReason": {
       "end_node": "Akışın sonuna ulaşıldı",

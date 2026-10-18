@@ -5,6 +5,21 @@
         "label": "Google-Konto",
         "description": "Verbinden Sie ein Google-Konto für Calendar, Sheets, Docs, Forms und Meet in Ihren Flows.",
         "keywords": "google, google-konto, kalender, calendar, tabellen, sheets, dokumente, docs, formulare, forms, meet, drive, oauth, google verbinden"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Fügen Sie in Ihren Flows Zeilen hinzu, suchen Sie Zeilen und speichern Sie Kontakte aus einer Tabelle. Nutzt Ihre Google-Konto-Verbindung.",
+        "keywords": "google sheets, Tabelle, Zeilen, Zellen, oauth, Google verbinden"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Kopieren Sie ein Vorlagendokument, füllen Sie es aus und teilen Sie es aus Ihren Flows. Nutzt Ihre Google-Konto-Verbindung.",
+        "keywords": "google docs, Dokument, Vorlage, teilen, oauth, Google verbinden"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Senden Sie einem Kunden ein Formular und machen Sie weiter, sobald es ausgefüllt wurde. Nutzt Ihre Google-Konto-Verbindung.",
+        "keywords": "google forms, Formular, Umfrage, Antworten, oauth, Google verbinden"
       }
     }
   },

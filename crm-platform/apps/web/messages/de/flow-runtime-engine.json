@@ -62,7 +62,8 @@
       "field_match": "Feldübereinstimmung",
       "date_field_match": "Datumsübereinstimmung",
       "schedule": "Zeitplan",
-      "ecom_event": "Shop-Ereignis"
+      "ecom_event": "Shop-Ereignis",
+      "segment_leave": "Segment verlassen"
     },
     "endReason": {
       "end_node": "Ende des Flows erreicht",

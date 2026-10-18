@@ -5,6 +5,21 @@
         "label": "Conta do Google",
         "description": "Conecte uma conta do Google para Agenda, Sheets, Docs, Forms e Meet nos seus fluxos.",
         "keywords": "google, conta do google, agenda, calendar, sheets, planilhas, docs, documentos, forms, formulários, meet, drive, oauth, conectar google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Adicione linhas, pesquise linhas e salve contatos de uma planilha nos seus fluxos. Usa a conexão da sua conta Google.",
+        "keywords": "google sheets, planilha, linhas, células, oauth, conectar google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Copie um documento modelo, preencha-o e compartilhe-o nos seus fluxos. Usa a conexão da sua conta Google.",
+        "keywords": "google docs, documento, modelo, compartilhar, oauth, conectar google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Envie um formulário a um cliente e continue quando ele o preencher. Usa a conexão da sua conta Google.",
+        "keywords": "google forms, formulário, pesquisa, respostas, oauth, conectar google"
       }
     }
   },

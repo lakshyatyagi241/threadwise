@@ -5,6 +5,21 @@
         "label": "Account Google",
         "description": "Collega un account Google per Calendar, Sheets, Docs, Forms e Meet nei tuoi flow.",
         "keywords": "google, account google, calendario, calendar, fogli, sheets, documenti, docs, moduli, forms, meet, drive, oauth, collega google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Aggiungi righe, cerca righe e salva contatti da un foglio nei tuoi flussi. Usa la connessione al tuo account Google.",
+        "keywords": "google sheets, foglio di calcolo, righe, celle, oauth, collega google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Copia un documento modello, compilalo e condividilo dai tuoi flussi. Usa la connessione al tuo account Google.",
+        "keywords": "google docs, documento, modello, condividi, oauth, collega google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Invia un modulo a un cliente e prosegui quando lo compila. Usa la connessione al tuo account Google.",
+        "keywords": "google forms, modulo, sondaggio, risposte, oauth, collega google"
       }
     }
   },

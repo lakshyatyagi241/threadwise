@@ -5,6 +5,21 @@
         "label": "Google অ্যাকাউন্ট",
         "description": "আপনার ফ্লোতে Calendar, Sheets, Docs, Forms ও Meet-এর জন্য একটি Google অ্যাকাউন্ট সংযুক্ত করুন।",
         "keywords": "google, google অ্যাকাউন্ট, ক্যালেন্ডার, calendar, sheets, docs, forms, ফর্ম, meet, drive, oauth, google সংযুক্ত করুন"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "আপনার ফ্লোতে শিট থেকে সারি যোগ করুন, সারি খুঁজুন এবং কন্টাক্ট সংরক্ষণ করুন। আপনার Google অ্যাকাউন্ট সংযোগ ব্যবহার করে।",
+        "keywords": "google sheets, স্প্রেডশিট, সারি, ঘর, oauth, google সংযুক্ত করুন"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "একটি টেমপ্লেট ডকুমেন্ট কপি করুন, পূরণ করুন এবং আপনার ফ্লো থেকে শেয়ার করুন। আপনার Google অ্যাকাউন্ট সংযোগ ব্যবহার করে।",
+        "keywords": "google docs, ডকুমেন্ট, টেমপ্লেট, শেয়ার, oauth, google সংযুক্ত করুন"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "গ্রাহককে একটি ফর্ম পাঠান এবং তারা পূরণ করলে এগিয়ে যান। আপনার Google অ্যাকাউন্ট সংযোগ ব্যবহার করে।",
+        "keywords": "google forms, ফর্ম, সমীক্ষা, উত্তর, oauth, google সংযুক্ত করুন"
       }
     }
   },

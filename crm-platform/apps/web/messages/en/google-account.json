@@ -5,6 +5,21 @@
         "label": "Google account",
         "description": "Connect one Google account for Calendar, Sheets, Docs, Forms and Meet in your flows.",
         "keywords": "google, google account, calendar, sheets, docs, forms, meet, drive, oauth, connect google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Add rows, look up rows and save contacts from a sheet in your flows. Uses your Google account connection.",
+        "keywords": "google sheets, spreadsheet, rows, cells, oauth, connect google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Copy a template document, fill it in and share it from your flows. Uses your Google account connection.",
+        "keywords": "google docs, document, template, share, oauth, connect google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Send a form to a customer and carry on when they fill it. Uses your Google account connection.",
+        "keywords": "google forms, form, survey, responses, oauth, connect google"
       }
     }
   },

@@ -5,6 +5,21 @@
         "label": "Google 账户",
         "description": "为你的流程连接一个 Google 账户，用于 Google 日历、Sheets、Docs、Forms 和 Meet。",
         "keywords": "google, 谷歌, google 账户, 日历, calendar, 表格, sheets, 文档, docs, 表单, forms, meet, drive, 云端硬盘, oauth, 连接 google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "在流程中添加行、查找行，并保存表格中的联系人。使用您的 Google 账号连接。",
+        "keywords": "google sheets, 电子表格, 行, 单元格, oauth, 连接 google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "复制模板文档、填写内容并在流程中共享。使用您的 Google 账号连接。",
+        "keywords": "google docs, 文档, 模板, 共享, oauth, 连接 google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "向客户发送表单，并在其填写后继续执行。使用您的 Google 账号连接。",
+        "keywords": "google forms, 表单, 调查, 回复, oauth, 连接 google"
       }
     }
   },

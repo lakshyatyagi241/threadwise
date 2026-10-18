@@ -89,6 +89,24 @@ const PATHS: Record<string, ReactNode> = {
   puzzle: (
     <path d="M6 3.5a1.5 1.5 0 0 1 3 0V5h3.5v3h-1.2a1.4 1.4 0 1 0 0 2.8h1.2v3H9v-1.3a1.4 1.4 0 1 0-2.8 0V14H2.5v-3.5h1.3a1.4 1.4 0 1 0 0-2.8H2.5V5H6z" />
   ),
+  'google-sheets': (
+    <>
+      <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" />
+      <path d="M2.5 6.5h11M2.5 10h11M7 2.5v11" />
+    </>
+  ),
+  'google-docs': (
+    <>
+      <path d="M4 2h5.5L12.5 5v9H4z" />
+      <path d="M9.5 2v3h3M6 8h4.5M6 10.5h4.5" />
+    </>
+  ),
+  'google-forms': (
+    <>
+      <rect x="3" y="2.5" width="10" height="11" rx="1.5" />
+      <path d="M5.5 6l.8.8 1.4-1.6M9 6h2M5.5 10l.8.8 1.4-1.6M9 10h2" />
+    </>
+  ),
   globe: (
     <>
       <circle cx="8" cy="8" r="6" />

@@ -14,4 +14,22 @@ export const settings = [
     order: 55,
     gates: { permission: 'google.account.read' },
   }),
+  // Sheets, Docs and Forms are cards of their own in the Marketplace Integrations tab, like Shopify and WooCommerce, but they have no
+  // connection of their own: each opens the one Google account page, where the permission for that app is allowed.
+  ...(
+    [
+      ['google-sheets', 56],
+      ['google-docs', 57],
+      ['google-forms', 58],
+    ] as const
+  ).map(([id, order]) =>
+    settingsTile({
+      id,
+      section: 'integrations',
+      href: '/google-account',
+      icon: id,
+      order,
+      gates: { permission: 'google.account.read' },
+    }),
+  ),
 ];

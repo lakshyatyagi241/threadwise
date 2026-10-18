@@ -24,21 +24,27 @@ const ALL = [
   'webhooks',
   'rest-api',
   'google-calendar',
+  'google-sheets',
+  'google-docs',
+  'google-forms',
 ].map((id) => tile(id));
 
 describe('toolTilesFor', () => {
-  it('puts Shopify, WooCommerce, the Google account and Email on the Integrations tab, in that order', () => {
+  it('puts Shopify, WooCommerce, the Google apps and Email on the Integrations tab, in that order', () => {
     expect(toolTilesFor('integrations', ALL).map((t) => t.id)).toEqual([
       'shopify',
       'woocommerce',
       'google-account',
+      'google-sheets',
+      'google-docs',
+      'google-forms',
+      'google-calendar',
       'email',
     ]);
   });
 
-  it('puts Google Calendar, REST API, Webhooks, Geta publishing, Translation and Add-ons on the Add-ons tab, in that order', () => {
+  it('puts REST API, Webhooks, Geta publishing, Translation and Add-ons on the Add-ons tab, in that order', () => {
     expect(toolTilesFor('addons', ALL).map((t) => t.id)).toEqual([
-      'google-calendar',
       'rest-api',
       'webhooks',
       'geta-publishing',

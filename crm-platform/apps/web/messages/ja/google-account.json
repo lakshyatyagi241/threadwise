@@ -5,6 +5,21 @@
         "label": "Google アカウント",
         "description": "フローで使う Calendar、Sheets、Docs、Forms、Meet のために、Google アカウントを 1 つ接続します。",
         "keywords": "google, google アカウント, カレンダー, calendar, スプレッドシート, sheets, ドキュメント, docs, フォーム, forms, meet, drive, oauth, google 接続"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "フロー内でスプレッドシートの行の追加、行の検索、連絡先の保存ができます。Google アカウント接続を使用します。",
+        "keywords": "google sheets, スプレッドシート, 行, セル, oauth, google に接続"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "テンプレートドキュメントをコピーして入力し、フローから共有します。Google アカウント接続を使用します。",
+        "keywords": "google docs, ドキュメント, テンプレート, 共有, oauth, google に接続"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "顧客にフォームを送信し、回答されたら処理を続行します。Google アカウント接続を使用します。",
+        "keywords": "google forms, フォーム, アンケート, 回答, oauth, google に接続"
       }
     }
   },
